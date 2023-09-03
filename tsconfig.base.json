@@ -19,7 +19,8 @@
       "@coldpbc/components": ["./libs/react/src/components/index.ts"],
       "@coldpbc/context": ["./libs/react/src/context/index.ts"],
       "@coldpbc/providers": ["./libs/react/src/providers/index.ts"],
-      "@coldpbc/routes": ["./libs/react/src/routes/index.ts"]
+      "@coldpbc/routes": ["./libs/react/src/routes/index.ts"],
+      "@coldpbc/themes": ["./libs/react/src/themes/index.ts"]
     }
   },
   "files": [

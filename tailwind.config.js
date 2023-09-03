@@ -1,8 +1,38 @@
-/** @type {import('tailwindcss').Config} */
-import {tailwindPresets} from "./libs/react/src";
+import { themeColors, fontSizes } from "@coldpbc/themes";
 
-module.exports = {
-  presets: [
-    tailwindPresets
+const defaultTheme = require("tailwindcss/defaultTheme");
+
+export const tailwindPresets = {
+  content: [
+    "./src/**/*.{html,js}",
+    "./src/pages/**/*.{js,ts,jsx,tsx}",
+    "./src/components/**/*.{js,ts,jsx,tsx}",
+    "./src/themes/**/*.{js,ts,jsx,tsx}",
+    "./node_modules/flowbite-react/**/*.{js,jsx,ts,tsx}",
+    "./node_modules/flowbite/**/*.js",
+  ],
+  mode: 'jit',
+  theme: {
+    extend: {
+      colors: {
+        ...themeColors()
+      },
+      fontFamily: {
+        sans: ['Inter', ...defaultTheme.fontFamily.sans],
+      },
+      fontSize: {
+        ...fontSizes()
+      },
+    },
+    minHeight: (theme) => ({
+      ...theme('spacing'),
+    }),
+    minWidth: (theme) => ({
+      ...theme('spacing'),
+    }),
+  },
+  plugins: [
+    require('flowbite/plugin'),
+    require('@tailwindcss/forms'),
   ],
 };
