@@ -1,7 +1,7 @@
 import {StrictMode} from 'react';
 import * as ReactDOM from 'react-dom/client';
 import {Home} from './app/home';
-import { ColdContextProvider } from "@coldpbc/components";
+import { ColdContextProvider } from '@coldpbc/providers';
 
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement

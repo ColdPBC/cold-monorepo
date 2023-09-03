@@ -1,7 +1,7 @@
 import React from "react";
 import { withKnobs } from "@storybook/addon-knobs";
 import { Meta, StoryObj } from "@storybook/react";
-import {Home} from '@coldpbc/components';
+import { Home } from './home';
 
 const meta = {
     title: "Pages/Home",

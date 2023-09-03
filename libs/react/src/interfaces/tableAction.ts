@@ -1,4 +1,4 @@
-import {ToastMessageTypes} from '@coldpbc/components';
+import { ToastMessageTypes } from './toastMessage';
 
 
 export interface TableActionType {
@@ -7,7 +7,7 @@ export interface TableActionType {
     url: string;
     urls?: string[];
     method: string;
-    data: Object;
+    data: object;
     type: string;
     toastMessage: TableActionToastMessageType;
 }

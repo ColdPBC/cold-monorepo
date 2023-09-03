@@ -1,6 +1,5 @@
-/* eslint-disable @nx/enforce-module-boundaries */
 import React from 'react';
-import {IconProps} from '@coldpbc/components';
+import { IconProps } from '../../../interfaces/icons/iconProps';
 
 export const ColdTeamMembersIcon = (props: IconProps) => {
     const className = props.className ? props.className : "hover:stroke-cold-starkWhite hover:fill-cold-starkWhite stroke-cold-limestone fill-cold-limestone";

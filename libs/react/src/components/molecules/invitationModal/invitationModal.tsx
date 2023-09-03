@@ -1,9 +1,9 @@
 import React from "react";
 import { User } from "@auth0/auth0-spa-js/src/global";
-import { axiosFetcher } from '@coldpbc/components';
-import { Modal } from '@coldpbc/components';
-import { useAddToastMessage } from '@coldpbc/components';
-import { InviteMemberForm } from '@coldpbc/components';
+import { axiosFetcher } from '../../../fetchers/axiosFetcher';
+import { Modal } from '../modal/modal';
+import { useAddToastMessage } from '../../../hooks/useToastMessage';
+import { InviteMemberForm } from './inviteMemberForm/inviteMemberForm';
 import {isAxiosError} from 'axios';
 
 export interface InvitationModalProps {

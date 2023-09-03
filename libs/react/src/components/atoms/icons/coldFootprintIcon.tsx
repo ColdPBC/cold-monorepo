@@ -1,6 +1,5 @@
-/* eslint-disable @nx/enforce-module-boundaries */
 import React from "react";
-import {IconProps} from '@coldpbc/components';
+import { IconProps } from '../../../interfaces/icons/iconProps';
 
 
 export const ColdFootprintIcon = (props: IconProps) => {

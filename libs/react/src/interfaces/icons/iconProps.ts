@@ -1,5 +1,5 @@
-import {DefaultHexColors} from '@coldpbc/components';
-import {IconNames} from '@coldpbc/components';
+import { DefaultHexColors } from '../../enums/colors';
+import { IconNames } from '../../enums/iconNames';
 
 export interface IconProps {
     name?: IconNames;

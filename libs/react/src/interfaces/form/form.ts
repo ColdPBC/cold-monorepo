@@ -1,5 +1,5 @@
-import {InputTypes} from '@coldpbc/components';
-import {InputOption} from '@coldpbc/components';
+import { InputTypes } from '../../enums/inputs';
+import { InputOption } from '../input';
 
 export interface IFormBuilderProps {
   sections: Array<ISectionProps>;

@@ -1,7 +1,7 @@
 import React from "react";
 import {withKnobs} from "@storybook/addon-knobs";
 import {Meta, StoryObj} from "@storybook/react";
-import {SelectOption, SelectOptionProps} from '@coldpbc/components';
+import { SelectOption, SelectOptionProps } from './selectOption';
 
 const meta = {
     title: "Molecules/SelectOption",

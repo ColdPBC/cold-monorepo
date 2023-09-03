@@ -2,7 +2,7 @@ import React, {createContext} from "react";
 import { withKnobs } from "@storybook/addon-knobs";
 import { Meta, StoryObj } from "@storybook/react";
 import { SWRConfig } from "swr";
-import {Application} from '@coldpbc/components';
+import {Application} from './application';
 import {Auth0Context} from '@auth0/auth0-react';
 import {BrowserRouter} from 'react-router-dom';
 
@@ -19,7 +19,7 @@ type Story = StoryObj<typeof meta>;
 // TODO: Refactor this to use separate storybook LD environment instead of mocking LD flags. Add env variables with STORYBOOK_ prefix
 
 export const Default: Story = {
-    render: (args) => {
+    render: (args: any) => {
         const context = createContext({ flags: {}, flagKeyMap: {}, ldClient: undefined });
         const { Provider } = context;
         return (
@@ -47,7 +47,7 @@ export const Default: Story = {
 };
 
 export const Loading: Story = {
-    render: (args) => {
+    render: (args: any) => {
         return (
             <BrowserRouter>
                 <Application/>

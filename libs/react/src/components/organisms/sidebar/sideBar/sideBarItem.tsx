@@ -1,10 +1,10 @@
 import React, {ReactElement, useState} from "react";
 import {SidebarItem} from 'flowbite-react/lib/esm/components/Sidebar/SidebarItem';
-import { IconNames } from '@coldpbc/components';
-import { ColdIcon } from '@coldpbc/components';
-import { flowbiteThemeOverride } from '@coldpbc/components';
+import { IconNames } from '../../../../enums/iconNames';
+import { ColdIcon } from '../../../atoms/icons/coldIcon';
+import { flowbiteThemeOverride } from '../../../../themes/flowbiteThemeOverride';
 import {Link, useLinkClickHandler} from 'react-router-dom';
-import {NavbarItem} from '@coldpbc/components';
+import {NavbarItem} from '../../../../interfaces/sideBar';
 
 export interface SideBarItemProps {
     item: NavbarItem;

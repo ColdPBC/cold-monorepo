@@ -1,7 +1,6 @@
-/* eslint-disable @nx/enforce-module-boundaries */
 import React, { useEffect }from "react";
 import useSWR, {mutate, useSWRConfig} from "swr";
-import {Toaster} from '@coldpbc/components';
+import { Toaster } from '../../atoms/toaster/toaster';
 
 export const ApplicationToaster = () => {
     const { data, error, isLoading } = useSWR('messages', {

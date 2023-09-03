@@ -1,7 +1,7 @@
 import React from "react";
-import {ButtonTypes} from '@coldpbc/components';
-import {GlobalSizes} from '@coldpbc/components';
-import {IconNames} from '@coldpbc/components';
+import { ButtonTypes } from '../../enums/buttons';
+import { GlobalSizes } from '../../enums/sizes';
+import { IconNames } from '../../enums/iconNames';
 
 export interface IButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     size?: GlobalSizes;

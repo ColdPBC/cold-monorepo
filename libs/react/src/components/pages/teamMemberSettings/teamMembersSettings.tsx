@@ -1,15 +1,15 @@
-import { BaseButton } from '@coldpbc/components';
-import { ColorNames } from '@coldpbc/components';
+import { BaseButton } from '../../atoms/button/button';
+import { ColorNames } from '../../../enums/colors';
 import React, { useState } from "react";
-import { TeamMembersDataGrid } from '@coldpbc/components';
+import { TeamMembersDataGrid } from '../../organisms/teamMemberDataGrid/teamMembersDataGrid';
 import useSWR from "swr";
-import { InvitationModal } from '@coldpbc/components';
-import { Spinner } from '@coldpbc/components';
-import { axiosFetcher } from '@coldpbc/components';
+import { InvitationModal } from '../../molecules/invitationModal/invitationModal';
+import { Spinner } from '../../atoms/spinner/spinner';
+import { axiosFetcher } from '../../../fetchers/axiosFetcher';
 import { useAuth0 } from '@auth0/auth0-react';
 import {useFlags} from 'launchdarkly-react-client-sdk';
 import {Organization} from 'auth0';
-import {Header} from '@coldpbc/components';
+import { Header } from '../../organisms/header/header';
 
 export const TeamMembersSettings = (props: { user?: any }) => {
     const auth0 = useAuth0();

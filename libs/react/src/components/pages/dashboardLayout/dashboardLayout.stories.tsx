@@ -1,7 +1,7 @@
 import React from "react";
 import { withKnobs } from "@storybook/addon-knobs";
 import { Meta, StoryObj } from "@storybook/react";
-import { DashboardLayout } from '@coldpbc/components';
+import { DashboardLayout } from '../dashboardLayout/dashboardLayout';
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 const meta = {

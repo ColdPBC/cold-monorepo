@@ -1,11 +1,11 @@
 import React, {PropsWithChildren, useRef, useEffect, useState} from 'react';
 import { Chart } from 'react-chartjs-2';
 import {Chart as ChartJS, RadarController, LineElement, PointElement, RadialLinearScale, Title, Filler, ChartArea, ChartData, ChartOptions} from 'chart.js';
-import {hexAToRGBA, HexColors, rgbaToHex} from '@coldpbc/components';
+import { hexAToRGBA, HexColors, rgbaToHex } from '../../../themes/cold_theme';
 import {isEmpty, isString, forEach, isNumber, cloneDeep} from 'lodash';
 import useSWR from 'swr';
-import {axiosFetcher} from '@coldpbc/components';
-import {Spinner} from '@coldpbc/components';
+import { axiosFetcher } from '../../../fetchers/axiosFetcher';
+import { Spinner } from '../../atoms/spinner/spinner';
 
 ChartJS.register(RadarController, LineElement, PointElement, RadialLinearScale, Title, Filler);
 //todo:fix JourneySpiderChartProps

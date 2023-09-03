@@ -1,5 +1,5 @@
 
-export let messages: any[] = [
+export const messages: any[] = [
     {
         "message": "Here is an example message in a toaster"
     }

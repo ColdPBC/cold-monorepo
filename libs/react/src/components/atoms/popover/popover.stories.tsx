@@ -1,12 +1,11 @@
-/* eslint-disable @nx/enforce-module-boundaries */
 import React from "react";
-import {Popover} from '@coldpbc/components';
+import { Popover } from './popover';
 import {withKnobs} from "@storybook/addon-knobs";
 import {Meta, StoryObj} from "@storybook/react";
-import {Positions} from '@coldpbc/components';
-import {ColorNames} from '@coldpbc/components';
-import {GlobalSizes} from '@coldpbc/components';
-import {Avatar} from '@coldpbc/components';
+import { Positions } from '../../../enums/positions';
+import { ColorNames } from '../../../enums/colors';
+import { GlobalSizes } from '../../../enums/sizes';
+import { Avatar } from '../avatar/avatar';
 
 const meta: Meta<typeof Popover> = {
     title: "Atoms/Popover",

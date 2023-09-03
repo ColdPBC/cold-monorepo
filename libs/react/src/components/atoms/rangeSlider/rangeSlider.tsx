@@ -1,6 +1,6 @@
 import React from "react";
 import {Range} from 'react-range';
-import {HexColors} from '@coldpbc/components';
+import { HexColors } from '../../../themes/cold_theme';
 
 export interface RangeSliderProps {
     min: number;

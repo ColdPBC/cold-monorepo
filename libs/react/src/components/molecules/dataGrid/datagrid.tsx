@@ -1,14 +1,14 @@
 import React from "react";
 import { Table } from "flowbite-react";
 import useSWR from "swr";
-import { ColorNames } from '@coldpbc/components';
-import { Spinner } from '@coldpbc/components';
-import { GlobalSizes } from '@coldpbc/components';
-import { TableActions } from '@coldpbc/components';
-import { axiosFetcher } from '@coldpbc/components';
-import { flowbiteThemeOverride } from '@coldpbc/components';
+import { ColorNames } from '../../../enums/colors';
+import { Spinner } from '../../atoms/spinner/spinner';
+import { GlobalSizes } from '../../../enums/sizes';
+import { TableActions } from './actions/tableActions';
+import { axiosFetcher } from '../../../fetchers/axiosFetcher';
+import { flowbiteThemeOverride } from '../../../themes/flowbiteThemeOverride';
 import { cloneDeep } from "lodash";
-import {getAccessToken} from '@coldpbc/components';
+import { getAccessToken } from '../../../hooks/useCookies';
 
 export interface DatagridProps {
   definitionURL: string;

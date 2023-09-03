@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { withKnobs } from "@storybook/addon-knobs";
 import { StoryObj } from "@storybook/react";
-import { Input } from '@coldpbc/components';
-import { InputTypes } from '@coldpbc/components';
-import {IInputProps} from '@coldpbc/components';
-import {FormInput} from '@coldpbc/components';
-import {FormInputProps} from '@coldpbc/components';
+import { Input } from '../../atoms/input/input';
+import { InputTypes } from '../../../enums/inputs';
+import { IInputProps } from '../../../interfaces/input';
+import { FormInput } from './formInput';
+import { FormInputProps } from '../../../interfaces/form/form';
 
 const meta = {
     title: "Molecules/FormInput",

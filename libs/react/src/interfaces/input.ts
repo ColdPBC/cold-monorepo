@@ -1,4 +1,4 @@
-import {InputTypes} from '@coldpbc/components';
+import { InputTypes } from '../enums/inputs';
 import {InputHTMLAttributes, LabelHTMLAttributes} from 'react';
 import {NumericFormatProps} from 'react-number-format';
 
@@ -18,9 +18,7 @@ export interface BaseInputProps extends InputHTMLAttributes<HTMLInputElement> {
     onValueChange: (value: any) => void;
 }
 
-export interface NumericInputProps extends NumericFormatProps {
-
-}
+export type NumericInputProps = NumericFormatProps
 
 export interface LabelProps extends LabelHTMLAttributes<HTMLLabelElement> {
     key?: string;

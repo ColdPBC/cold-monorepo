@@ -1,7 +1,7 @@
 import {withKnobs} from '@storybook/addon-knobs';
 import {Meta, StoryObj} from '@storybook/react';
 import React from 'react';
-import {JourneySpiderChart} from '@coldpbc/components';
+import { JourneySpiderChart } from './journeySpiderChart';
 
 
 const meta = {

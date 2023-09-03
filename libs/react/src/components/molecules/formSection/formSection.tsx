@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { Input } from '@coldpbc/components';
-import { ISectionProps } from '@coldpbc/components';
-import { BaseButton } from '@coldpbc/components';
-import { ColorNames } from '@coldpbc/components';
-import { axiosFetcher } from '@coldpbc/components';
-import {FormInput} from '@coldpbc/components';
+import { Input } from '../../atoms/input/input';
+import { ISectionProps } from '../../../interfaces/form/form';
+import { BaseButton } from '../../atoms/button/button';
+import { ColorNames } from '../../../enums/colors';
+import { axiosFetcher } from '../../../fetchers/axiosFetcher';
+import { FormInput } from '../formInput/formInput';
 
 export function FormSection(props: ISectionProps) {
   const [sectionData, setSectionData] = useState<Record<string, any>>(

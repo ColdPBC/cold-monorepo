@@ -1,8 +1,8 @@
 import React from "react";
-import { Spinner } from '@coldpbc/components';
+import { Spinner } from './spinner';
 import { withKnobs } from "@storybook/addon-knobs";
 import { Meta, StoryObj } from "@storybook/react";
-import { GlobalSizes } from '@coldpbc/components';
+import { GlobalSizes } from '../../../enums/sizes';
 
 const meta = {
   title: "Atoms/Spinner",

@@ -1,11 +1,11 @@
 import React from "react";
-import { BaseButton } from '@coldpbc/components';
+import { BaseButton } from '../../atoms/button/button';
 import { withKnobs } from "@storybook/addon-knobs";
 import { StoryObj } from "@storybook/react";
-import { ToastMessageTypes } from '@coldpbc/components';
-import { ApplicationToaster } from '@coldpbc/components';
-import { GlobalSizes } from '@coldpbc/components';
-import { useAddToastMessage } from '@coldpbc/components';
+import { ToastMessageTypes } from '../../../interfaces/toastMessage';
+import { ApplicationToaster } from './applicationToaster';
+import { GlobalSizes } from '../../../enums/sizes';
+import { useAddToastMessage } from '../../../hooks/useToastMessage';
 import { SWRConfig } from "swr";
 
 const meta = {

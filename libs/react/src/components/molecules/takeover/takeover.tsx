@@ -1,7 +1,7 @@
 import React, {PropsWithChildren, useState} from 'react';
-import {BaseButton} from '@coldpbc/components';
-import {CloseModalIcon} from '@coldpbc/components';
-import {ColorNames} from '@coldpbc/components';
+import { BaseButton } from '../../atoms/button/button';
+import { CloseModalIcon } from '../../atoms/icons/closeModalIcon';
+import { ColorNames } from '../../../enums/colors';
 
 export interface TakeoverProps {
     show: boolean;

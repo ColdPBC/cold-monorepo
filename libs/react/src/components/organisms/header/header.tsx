@@ -1,7 +1,7 @@
 import React from "react";
-import { Avatar } from '@coldpbc/components';
+import { Avatar } from '../../atoms/avatar/avatar';
 import {useAuth0, User} from "@auth0/auth0-react";
-import { GlobalSizes } from '@coldpbc/components';
+import { GlobalSizes } from '../../../enums/sizes';
 import { Dropdown } from "flowbite-react";
 import cookie from 'js-cookie';
 

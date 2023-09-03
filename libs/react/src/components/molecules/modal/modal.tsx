@@ -1,7 +1,7 @@
 import React, { ReactElement } from "react";
 import { Modal as FBModal } from "flowbite-react";
-import { BaseButton } from '@coldpbc/components';
-import { IButtonProps } from '@coldpbc/components';
+import { BaseButton } from '../../atoms/button/button';
+import { IButtonProps } from '../../../interfaces/buttons/baseButton';
 
 export interface ModalHeader {
   title: string;

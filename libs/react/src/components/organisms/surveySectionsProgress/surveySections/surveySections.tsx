@@ -1,10 +1,9 @@
 import React from 'react';
-/* eslint-disable @nx/enforce-module-boundaries */
-import {SurveySectionType} from '@coldpbc/components';
+import { SurveySectionType } from '../../../../interfaces/survey/survey';
 import Lottie from 'react-lottie';
-import * as checkBoxAnimation from '@coldpbc/animations/checkbox.json';
-import {ColdIcon} from '@coldpbc/components';
-import {IconNames} from '@coldpbc/components';
+import * as checkBoxAnimation from '../../../../animations/checkbox.json';
+import { ColdIcon } from '../../../atoms/icons/coldIcon';
+import { IconNames } from '../../../../enums/iconNames';
 
 interface SurveySectionsProps {
     sections: SurveySectionType[];
@@ -29,16 +28,12 @@ export const SurveySections = ({
                     {
                         getSectionPoint(section, index)
                     }
-                    <>
-                        {
+                    {
                             getSectionTitle(section, index)
                         }
-                    </>
-                    <>
-                        {
+                    {
                             getSurveySectionDescription(section, index)
                         }
-                    </>
                 </div>
             )
         } else if (index < activeIndex - 1 || index > activeIndex) {
@@ -47,11 +42,9 @@ export const SurveySections = ({
                     {
                         getSectionPoint(section, index)
                     }
-                    <>
-                        {
+                    {
                             getSectionTitle(section, index)
                         }
-                    </>
                 </div>
             )
         } else if (index === activeIndex && followUp){
@@ -60,16 +53,12 @@ export const SurveySections = ({
                     {
                         getSectionPoint(section, index)
                     }
-                    <>
-                        {
+                    {
                             getSectionTitle(section, index)
                         }
-                    </>
-                    <>
-                        {
+                    {
                             getSurveySectionDescription(section, index)
                         }
-                    </>
                 </div>
             )
         }

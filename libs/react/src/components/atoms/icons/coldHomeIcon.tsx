@@ -1,7 +1,5 @@
-/* eslint-disable @nx/enforce-module-boundaries */
 import React from "react";
-import {DefaultHexColors} from '@coldpbc/components';
-import {IconProps} from '@coldpbc/components';
+import { IconProps } from '../../../interfaces/icons/iconProps';
 
 
 export const ColdHomeIcon = (props: IconProps) => {

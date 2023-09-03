@@ -1,5 +1,5 @@
-import { axiosFetcher } from '@coldpbc/components';
-import {TableActionType} from '@coldpbc/components';
+import { axiosFetcher } from '../fetchers/axiosFetcher';
+import { TableActionType } from '../interfaces/tableAction';
 
 export function useExecuteAction() {
   const executeAction = (action: TableActionType) => {

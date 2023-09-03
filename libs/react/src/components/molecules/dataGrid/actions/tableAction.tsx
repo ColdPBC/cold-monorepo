@@ -1,9 +1,9 @@
 import React from "react";
-import { BaseButton } from '@coldpbc/components';
-import { ModalAction } from '@coldpbc/components';
-import { useAddToastMessage } from '@coldpbc/components';
-import { useExecuteAction } from '@coldpbc/components';
-import {TableActionType} from '@coldpbc/components';
+import { BaseButton } from '../../../atoms/button/button';
+import { ModalAction } from '../../../organisms/teamMemberDataGrid/actions/modalAction'
+import { useAddToastMessage } from '../../../../hooks/useToastMessage';
+import { useExecuteAction } from '../../../../hooks/useExecuteAction';
+import { TableActionType } from '../../../../interfaces/tableAction';
 
 export interface TableActionProps {
   action: TableActionType;

@@ -1,9 +1,9 @@
 import React from "react"
-import {YesNo} from '@coldpbc/components';
-import {Input} from '@coldpbc/components';
-import {PercentSlider} from '@coldpbc/components';
-import {SelectOption} from '@coldpbc/components';
-import {InputTypes} from '@coldpbc/components';
+import { YesNo } from '../yesNo/yesNo';
+import { Input } from '../../atoms/input/input';
+import { PercentSlider } from '../percentSlider/percentSlider';
+import { SelectOption } from '../selectOption/selectOption';
+import { InputTypes } from '../../../enums/inputs';
 import {NumericFormat} from 'react-number-format';
 
 

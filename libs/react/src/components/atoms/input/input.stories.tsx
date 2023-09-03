@@ -1,10 +1,9 @@
-/* eslint-disable @nx/enforce-module-boundaries */
 import React, { useState } from "react";
 import { withKnobs } from "@storybook/addon-knobs";
 import { StoryObj } from "@storybook/react";
-import { Input } from '@coldpbc/components';
-import { InputTypes } from '@coldpbc/components';
-import {IInputProps} from '@coldpbc/components';
+import { Input } from './input';
+import { InputTypes } from '../../../enums/inputs';
+import { IInputProps } from '../../../interfaces/input';
 
 const meta = {
   title: "Atoms/Input",

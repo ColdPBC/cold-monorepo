@@ -1,8 +1,7 @@
-/* eslint-disable @nx/enforce-module-boundaries */
 import React, {Fragment} from "react";
 import { NumericFormat } from "react-number-format";
-import {Select} from '@coldpbc/components';
-import {IInputProps} from '@coldpbc/components';
+import { Select } from './select/select';
+import { IInputProps } from '../../../interfaces/input';
 
 export const Input = (props: IInputProps) => {
   const {
@@ -73,6 +72,7 @@ export const Input = (props: IInputProps) => {
   }
 
   function renderText(): JSX.Element {
+    // eslint-disable-next-line no-restricted-globals
     const key = `${name}_${idx}`;
     return (
       <div key={key} className={container_classname || "col-span-full"}>

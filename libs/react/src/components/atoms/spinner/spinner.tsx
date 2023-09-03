@@ -1,5 +1,5 @@
 import React from "react";
-import {GlobalSizes} from '@coldpbc/components';
+import { GlobalSizes } from '../../../enums/sizes';
 import {Spinner as FBSpinner} from 'flowbite-react';
 
 export function Spinner({

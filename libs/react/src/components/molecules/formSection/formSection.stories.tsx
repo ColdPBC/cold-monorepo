@@ -1,7 +1,6 @@
-import React from "react";
 import { withKnobs } from "@storybook/addon-knobs";
 import { Meta, StoryObj } from "@storybook/react";
-import { FormSection } from '@coldpbc/components';
+import { FormSection } from './formSection';
 
 const meta = {
     title: "Molecules/FormSection",

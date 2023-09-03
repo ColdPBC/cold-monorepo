@@ -1,7 +1,7 @@
 import React from "react";
 import { withKnobs } from "@storybook/addon-knobs";
 import { Meta, StoryObj } from "@storybook/react";
-import {JourneyOverviewCard} from '@coldpbc/components';
+import { JourneyOverviewCard } from './journeyOverviewCard';
 import {BrowserRouter} from 'react-router-dom';
 
 const meta = {

@@ -1,14 +1,12 @@
-/* eslint-disable @nx/enforce-module-boundaries */
 import axios from 'axios';
 import { set } from 'lodash';
-import { useCookies } from '@coldpbc/components';
+import { useCookies } from '../hooks/useCookies';
 
 const baseURL = process.env.VITE_API_BASE_URL || "http://localhost:7001";
 
 // path, method, data
 export const axiosFetcher = (params: Array<string>) => {
     try {
-        // eslint-disable-next-line react-hooks/rules-of-hooks
         const {getCookieData} = useCookies();
         const cookie = getCookieData();
 

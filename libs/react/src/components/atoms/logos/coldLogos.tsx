@@ -1,7 +1,7 @@
 import * as React from "react";
-import {ColdLogoNames} from '@coldpbc/components';
-import {ColdClimateWordmark} from '@coldpbc/components';
-import {ColdWordmark} from '@coldpbc/components';
+import { ColdLogoNames } from '../../../enums/logoNames';
+import { ColdClimateWordmark } from './coldClimateWordmark';
+import { ColdWordmark } from './coldWordmark';
 
 export const ColdLogos = (props: { name: ColdLogoNames, color: string, stroke?: string }) => {
     switch(props.name){

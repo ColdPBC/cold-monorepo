@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import { withKnobs } from "@storybook/addon-knobs";
 import { Meta, StoryObj } from "@storybook/react";
 // eslint-disable-next-line @nx/enforce-module-boundaries
-import {RangeSlider} from '@coldpbc/components';
+import {RangeSlider} from './rangeSlider';
 
 const meta = {
     title: "Atoms/RangeSlider",
@@ -15,7 +15,7 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-    render: (args) => {
+    render: (args: any) => {
         const [values, setValues] = useState([0] as number[]);
 
         const onChange = (values: number[]) => {

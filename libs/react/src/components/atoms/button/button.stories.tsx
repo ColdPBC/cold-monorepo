@@ -1,8 +1,8 @@
-import { BaseButton } from '@coldpbc/components';
+import { BaseButton } from './button';
 import { withKnobs } from "@storybook/addon-knobs";
 import { StoryObj } from "@storybook/react";
-import { ButtonTypes } from '@coldpbc/components';
-import {IconNames} from '@coldpbc/components';
+import { ButtonTypes } from '../../../enums/buttons';
+import { IconNames } from '../../../enums/iconNames';
 
 const meta = {
   title: "Atoms/Button",

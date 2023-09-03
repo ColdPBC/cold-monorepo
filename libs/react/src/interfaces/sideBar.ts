@@ -1,4 +1,4 @@
-import {IconNames} from '@coldpbc/components';
+import { IconNames } from '../enums/iconNames';
 
 export interface NavbarItem {
     icon?: { name: IconNames };

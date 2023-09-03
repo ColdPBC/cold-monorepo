@@ -1,5 +1,5 @@
 {
-  "compileOnSave": true,
+  "compileOnSave": false,
   "compilerOptions": {
     "rootDir": ".",
     "sourceMap": true,
@@ -15,9 +15,16 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@coldpbc/components": ["./libs/react/src/index.ts"],
       "@coldpbc/animations/*": ["./libs/react/src/animations/*"],
+      "@coldpbc/components": ["./libs/react/src/components/index.ts"],
+      "@coldpbc/context": ["./libs/react/src/context/index.ts"],
+      "@coldpbc/providers": ["./libs/react/src/providers/index.ts"],
+      "@coldpbc/routes": ["./libs/react/src/routes/index.ts"]
     }
   },
-  "exclude": ["node_modules", "tmp"],
+  "files": [
+    "./node_modules/@nx/react/typings/cssmodule.d.ts",
+    "./node_modules/@nx/react/typings/image.d.ts"
+  ],
+  "exclude": ["node_modules", "tmp"]
 }

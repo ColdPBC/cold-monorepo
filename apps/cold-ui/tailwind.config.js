@@ -1,10 +1,8 @@
 /** @type {import('tailwindcss').Config} */
-
-// eslint-disable-next-line @nx/enforce-module-boundaries
-import {tailwindPresets} from "../../libs/react/src";
+//import {tailwindPresets} from "@coldpbc/components";
 
 module.exports = {
   presets: [
-    tailwindPresets
+   // tailwindPresets
   ],
 };

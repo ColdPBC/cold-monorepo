@@ -1,7 +1,5 @@
-/* eslint-disable @nx/enforce-module-boundaries */
-import {IconProps} from '@coldpbc/components';
+import { IconProps } from '../../../interfaces/icons/iconProps';
 import React, {ReactNode} from "react";
-import {DefaultHexColors} from '@coldpbc/components';
 
 export const ColdReportIcon = (props: IconProps) => {
     const className = props.className ? props.className : "hover:stroke-cold-starkWhite hover:fill-cold-starkWhite stroke-1 stroke-cold-limestone fill-cold-limestone";

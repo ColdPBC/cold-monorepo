@@ -1,17 +1,16 @@
-/* eslint-disable @nx/enforce-module-boundaries */
 import React from "react";
-import {IconProps} from '@coldpbc/components';
-import {ColdHomeIcon} from '@coldpbc/components';
-import {ColdFootprintIcon} from '@coldpbc/components';
-import {ColdActionsIcon} from '@coldpbc/components';
-import {ColdReportIcon} from '@coldpbc/components';
-import {ColdSettingsIcon} from '@coldpbc/components';
-import {IconNames} from '@coldpbc/components';
-import {CloseModalIcon} from '@coldpbc/components';
-import {ColdBillingIcon} from '@coldpbc/components';
-import {ColdTeamMembersIcon} from '@coldpbc/components';
-import {ColdJourneyIcon} from '@coldpbc/components';
-import {ColdSmallCheckBoxIcon} from '@coldpbc/components';
+import { IconProps } from '../../../interfaces/icons/iconProps';
+import { ColdHomeIcon } from './coldHomeIcon';
+import { ColdFootprintIcon } from './coldFootprintIcon';
+import { ColdActionsIcon } from './coldActionsIcon';
+import { ColdReportIcon } from './coldReportIcon';
+import { ColdSettingsIcon } from './coldSettingsIcon'
+import { IconNames } from '../../../enums/iconNames';
+import { CloseModalIcon } from './closeModalIcon';
+import { ColdBillingIcon } from './coldBillingIcon';
+import { ColdTeamMembersIcon } from './coldTeamMembersIcon';
+import { ColdJourneyIcon } from './coldJourneyIcon';
+import { ColdSmallCheckBoxIcon } from './coldSmallCheckBoxIcon';
 
 
 // TODO: Take the color attribute out of the IconProps

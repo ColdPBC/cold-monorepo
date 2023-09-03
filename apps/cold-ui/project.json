@@ -9,6 +9,7 @@
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
       "options": {
+        "postcssConfig": "apps/cold-ui/postcss.config.js",
         "outputPath": "dist/apps/cold-ui"
       },
       "configurations": {

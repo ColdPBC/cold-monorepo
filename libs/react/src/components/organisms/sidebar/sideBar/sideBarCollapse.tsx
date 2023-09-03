@@ -1,10 +1,10 @@
 
 import React, {useEffect, useState} from "react";
 import {Sidebar} from "flowbite-react";
-import {ColdIcon} from '@coldpbc/components';
-import { flowbiteThemeOverride } from '@coldpbc/components';
-import {SideBarItem} from '@coldpbc/components';
-import {NavbarItem} from '@coldpbc/components';
+import {ColdIcon} from '../../../atoms/icons/coldIcon';
+import { flowbiteThemeOverride } from '../../../../themes/flowbiteThemeOverride';
+import {SideBarItem} from './sideBarItem';
+import {NavbarItem} from '../../../../interfaces/sideBar';
 
 export interface SideBarCollapseProps {
     item: NavbarItem;

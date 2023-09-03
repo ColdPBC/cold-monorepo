@@ -1,5 +1,5 @@
 import React, { PropsWithChildren } from "react";
-import { SideBar } from '@coldpbc/components';
+import { SideBar } from '../../organisms/sidebar/sideBar';
 
 
 export const DashboardLayout = (props: PropsWithChildren<any>) => {

@@ -1,7 +1,7 @@
 import {Listbox, Transition} from '@headlessui/react';
 import React, {ChangeEventHandler, Fragment} from 'react';
 import {ChevronDownIcon} from '@heroicons/react/20/solid'
-import {InputOption} from '@coldpbc/components';
+import { InputOption } from '../../../../interfaces/input';
 
 export interface SelectProps{
     options?: Array<InputOption>;

@@ -1,6 +1,6 @@
 import React, {PropsWithChildren} from "react";
-import {BaseButton} from '@coldpbc/components';
-import { ButtonTypes } from '@coldpbc/components';
+import { BaseButton } from '../../atoms/button/button';
+import { ButtonTypes } from '../../../enums/buttons';
 
 export interface CardProps {
     glow?:boolean,

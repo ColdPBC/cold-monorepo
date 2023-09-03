@@ -1,13 +1,13 @@
 import React from "react";
-import { Datagrid } from '@coldpbc/components';
+import { Datagrid } from '../../molecules/dataGrid/datagrid';
 import useSWR from "swr";
-import { TeamMemberName } from '@coldpbc/components';
-import { GlobalSizes } from '@coldpbc/components';
-import { Spinner } from '@coldpbc/components';
-import { ColorNames } from '@coldpbc/components';
+import { TeamMemberName } from '../../molecules/teamMemberName/teamMemberName';
+import { GlobalSizes } from '../../../enums/sizes';
+import { Spinner } from '../../atoms/spinner/spinner';
+import { ColorNames } from '../../../enums/colors';
 import { orderBy, startCase } from "lodash";
-import { Avatar } from '@coldpbc/components';
-import { axiosFetcher } from '@coldpbc/components';
+import { Avatar } from '../../atoms/avatar/avatar';
+import { axiosFetcher } from '../../../fetchers/axiosFetcher';
 import { useAuth0 } from "@auth0/auth0-react";
 import { format } from "date-fns";
 

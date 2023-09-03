@@ -1,4 +1,4 @@
-import {DefaultHexColors} from '@coldpbc/components';
+import {DefaultHexColors} from '../enums/colors';
 import {set} from "lodash";
 
 // Core color palette from Turtle design project July - Aug 2023

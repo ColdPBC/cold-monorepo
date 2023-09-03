@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { Meta, StoryObj } from "@storybook/react";
-import { BaseButton } from '@coldpbc/components';
-import { ColorNames } from '@coldpbc/components';
-import { GlobalSizes } from '@coldpbc/components';
-import {InvitationModal, InvitationModalProps} from '@coldpbc/components';
-import {auth0UserMock} from '@coldpbc/components';
+import { BaseButton } from '../../atoms/button/button';
+import { ColorNames } from '../../../enums/colors';
+import { GlobalSizes } from '../../../enums/sizes';
+import { InvitationModal, InvitationModalProps } from './invitationModal';
+import { auth0UserMock } from '../../../__mocks__/userMock';
 
 const meta: Meta<typeof InvitationModal> = {
     /* 👇 The title prop is optional.

@@ -1,6 +1,6 @@
 import {findIndex, orderBy} from 'lodash';
 import React from 'react';
-import {SurveySectionType, SurveySectionsProgressSectionType} from '@coldpbc/components';
+import { SurveySectionType, SurveySectionsProgressSectionType } from '../../../../interfaces/survey/survey';
 
 
 export interface SurveySectionsProgressBarProps {

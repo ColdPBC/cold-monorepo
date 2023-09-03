@@ -1,8 +1,8 @@
 import React, { useState }from 'react';
-import {DataGridPopover} from '@coldpbc/components';
-import {TableActionButton} from '@coldpbc/components';
-import {TableActionType} from '@coldpbc/components';
-import {TableAction} from '@coldpbc/components';
+import { DataGridPopover } from '../../datagridPopover/dataGridPopover';
+import { TableActionButton } from './tableActionButton';
+import { TableActionType } from '../../../../interfaces/tableAction';
+import { TableAction } from './tableAction';
 
 export interface TableActionsProps {
     actions : TableActionType[]

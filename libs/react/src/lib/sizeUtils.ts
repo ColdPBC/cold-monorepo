@@ -1,5 +1,5 @@
-import {GlobalSizes} from '@coldpbc/components';
-import {IButtonProps} from '@coldpbc/components';
+import { GlobalSizes } from '../enums/sizes';
+import { IButtonProps } from '../interfaces/buttons/baseButton';
 
 export const getButtonSize = (props: IButtonProps) => {
     switch (props.size) {

@@ -1,10 +1,10 @@
 import React from "react";
-import {Avatar} from '@coldpbc/components';
+import { Avatar } from './avatar';
 import {withKnobs} from "@storybook/addon-knobs";
 import {Meta, StoryObj} from "@storybook/react";
-import {GlobalSizes} from '@coldpbc/components';
+import { GlobalSizes } from '../../../enums/sizes';
 import {User} from '@auth0/auth0-react';
-import {fullUser, invalidUser, userWithEmail, userWithNames} from '@coldpbc/components';
+import { fullUser, invalidUser, userWithEmail, userWithNames } from '../../../__mocks__/userMock';
 
 
 const meta = {

@@ -1,8 +1,8 @@
 import React from "react";
-import {CenterColumnContent} from '@coldpbc/components';
-import {RightColumnContent} from '@coldpbc/components';
+import { CenterColumnContent } from '../../organisms/centerColumnContent/centerColumnContent';
+import { RightColumnContent } from '../../organisms/rightColumnContent/rightColumnContent';
 import {useAuth0} from '@auth0/auth0-react';
-import {Spinner} from '@coldpbc/components';
+import { Spinner } from '../../atoms/spinner/spinner';
 
 export function Home() {
     const auth0 = useAuth0();

@@ -1,7 +1,8 @@
 import React, {PropsWithChildren} from 'react';
-import {Card} from '@coldpbc/components';
+import { Card } from '../card/card';
 import {useNavigate} from 'react-router-dom';
 
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface FootprintOverviewCardProps {
 
 }

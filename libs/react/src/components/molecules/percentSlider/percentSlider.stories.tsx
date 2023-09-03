@@ -1,7 +1,7 @@
 import React from "react";
 import { withKnobs } from "@storybook/addon-knobs";
 import { Meta, StoryObj } from "@storybook/react";
-import {PercentSlider} from '@coldpbc/components';
+import { PercentSlider } from './percentSlider';
 
 const meta = {
     title: "Molecules/PercentSlider",

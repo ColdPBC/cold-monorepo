@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { withKnobs } from "@storybook/addon-knobs";
 import { StoryObj } from "@storybook/react";
-import {SurveyInput, SurveyInputProps} from '@coldpbc/components';
+import {SurveyInput, SurveyInputProps} from './surveyInput';
 
 const meta = {
     title: "Molecules/SurveyInput",
@@ -143,7 +143,7 @@ const SurveyInputStory = (props: SurveyInputProps) => {
     return (
         <SurveyInput
             {...props}
-            onFieldUpdated={(name, value) => {
+            onFieldUpdated={(name: string, value: any) => {
                 setStateValue(value);
             }}
             value={stateValue}

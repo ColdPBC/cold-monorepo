@@ -1,6 +1,4 @@
-/* eslint-disable @nx/enforce-module-boundaries */
-import {IconProps} from '@coldpbc/components';
-import {DefaultHexColors} from '@coldpbc/components';
+import { IconProps } from '../../../interfaces/icons/iconProps';
 import React from "react";
 
 export const ColdBillingIcon = (props: IconProps) => {

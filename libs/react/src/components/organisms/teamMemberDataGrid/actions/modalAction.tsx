@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { Modal } from '@coldpbc/components';
-import { BaseButton } from '@coldpbc/components';
-import { useAddToastMessage } from '@coldpbc/components';
-import { useExecuteAction } from '@coldpbc/components';
+import { Modal } from '../../../molecules/modal/modal';
+import { BaseButton } from '../../../atoms/button/button';
+import { useAddToastMessage } from '../../../../hooks/useToastMessage';
+import { useExecuteAction } from '../../../../hooks/useExecuteAction';
 
 export interface ModalActionProps {
   action: any;

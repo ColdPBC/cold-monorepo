@@ -1,7 +1,7 @@
 import React from "react";
 import { withKnobs } from "@storybook/addon-knobs";
 import { Meta, StoryObj } from "@storybook/react";
-import {FootprintOverviewCard} from '@coldpbc/components';
+import { FootprintOverviewCard } from './footprintOverviewCard';
 import {BrowserRouter} from 'react-router-dom';
 
 const meta = {

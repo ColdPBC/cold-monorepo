@@ -1,11 +1,12 @@
 import React, {ReactNode, useEffect, useRef, useState} from 'react';
-import { Positions } from '@coldpbc/components';
-import { ColorNames } from '@coldpbc/components';
-import { GlobalSizes } from '@coldpbc/components';
+import { Positions } from '../../../enums/positions';
+import { ColorNames } from '../../../enums/colors';
+import { GlobalSizes } from '../../../enums/sizes';
 import {Tooltip} from 'flowbite-react';
 import ReactMarkdown from 'react-markdown';
-import {getA11yTextColorStyle, getBackgroundColorStyle, getBorderColorStyle, getTextColorStyle} from '@coldpbc/components';
-import { flowbiteThemeOverride } from '@coldpbc/components';
+import { getA11yTextColorStyle, getBackgroundColorStyle, getBorderColorStyle } from '../../../lib/colorUtils';
+import { getTextColorStyle } from '../../../lib/colorUtils';
+import { flowbiteThemeOverride } from '../../../themes/flowbiteThemeOverride';
 import {cloneDeep} from 'lodash';
 
 interface PopoverProps {

@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {RangeSlider} from '@coldpbc/components';
+import { RangeSlider } from '../../atoms/rangeSlider/rangeSlider';
 import {NumericFormat} from 'react-number-format';
 
 export interface PercentSliderProps {

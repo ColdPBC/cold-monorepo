@@ -1,14 +1,14 @@
 import React, {useState, useEffect} from 'react'
-import { ColdWordmark } from '@coldpbc/components';
+import { ColdWordmark } from '../../atoms/logos/coldWordmark';
 import { Sidebar as FBSidebar} from "flowbite-react";
 import useSWR from "swr";
-import { axiosFetcher } from '@coldpbc/components';
-import { SideBarItem } from '@coldpbc/components';
-import { flowbiteThemeOverride } from '@coldpbc/components';
-import { SideBarCollapse } from '@coldpbc/components';
-import { NavbarItem } from '@coldpbc/components';
-import { Spinner } from '@coldpbc/components';
-import {HexColors} from '@coldpbc/components';
+import { axiosFetcher } from '../../../fetchers/axiosFetcher';
+import { SideBarItem } from './sideBar/sideBarItem';
+import { flowbiteThemeOverride } from '../../../themes/flowbiteThemeOverride';
+import { SideBarCollapse } from './sideBar/sideBarCollapse';
+import { NavbarItem } from '../../../interfaces/sideBar';
+import { Spinner } from '../../atoms/spinner/spinner';
+import { HexColors } from '../../../themes/cold_theme';
 import {clone, remove} from 'lodash';
 
 export const SideBar = () : JSX.Element => {
@@ -22,9 +22,9 @@ export const SideBar = () : JSX.Element => {
 
     if(data?.definition?.items) {
         // Separate the items into top and bottom nav items
-        let topItems:NavbarItem[] = clone(data.definition.items);
+        const topItems:NavbarItem[] = clone(data.definition.items);
 
-        let bottomItems = remove(topItems, (item: NavbarItem) => {
+        const bottomItems = remove(topItems, (item: NavbarItem) => {
             return (item.placement && item.placement === "bottom");
         });
 

@@ -1,12 +1,11 @@
-/* eslint-disable @nx/enforce-module-boundaries */
 import React, { useRef, useState, ReactElement } from "react";
 import { Meta, StoryObj } from "@storybook/react";
 
-import { BaseButton } from '@coldpbc/components';
-import { ColorNames } from '@coldpbc/components';
-import { GlobalSizes } from '@coldpbc/components';
-import { Modal } from '@coldpbc/components';
-import {Takeover} from '@coldpbc/components';
+import { BaseButton } from '../../atoms/button/button';
+import { ColorNames } from '../../../enums/colors';
+import { GlobalSizes } from '../../../enums/sizes';
+import { Modal } from '../modal/modal';
+import { Takeover } from './takeover';
 
 const meta: Meta<typeof Modal> = {
     /* 👇 The title prop is optional.

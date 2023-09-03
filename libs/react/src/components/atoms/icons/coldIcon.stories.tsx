@@ -1,10 +1,8 @@
-/* eslint-disable @nx/enforce-module-boundaries */
-import React from "react";
 import { withKnobs } from "@storybook/addon-knobs";
 import { StoryObj } from "@storybook/react";
-import { DefaultHexColors } from '@coldpbc/components';
-import { ColdIcon } from '@coldpbc/components';
-import { IconNames } from '@coldpbc/components';
+import { DefaultHexColors } from '../../../enums/colors';
+import { ColdIcon } from './coldIcon';
+import { IconNames } from '../../../enums/iconNames';
 
 const meta = {
     title: "Atoms/Icons/ColdIcon",

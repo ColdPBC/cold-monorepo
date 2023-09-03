@@ -1,8 +1,8 @@
 import React from "react";
-import { ColdClimateWordmark } from '@coldpbc/components';
+import { ColdClimateWordmark } from './coldClimateWordmark';
 import { withKnobs } from "@storybook/addon-knobs";
 import { Meta, StoryObj } from "@storybook/react";
-import {HexColors} from '@coldpbc/components';
+import { HexColors } from '../../../themes/cold_theme';
 
 const meta = {
   title: "Atoms/Logos/ColdClimateWordmark",

@@ -1,7 +1,7 @@
 import React from "react";
 import { withKnobs } from "@storybook/addon-knobs";
 import { Meta, StoryObj } from "@storybook/react";
-import { TeamMembersDataGrid } from '@coldpbc/components';
+import { TeamMembersDataGrid } from './teamMembersDataGrid';
 import { SWRConfig } from "swr";
 
 const meta = {

@@ -1,7 +1,6 @@
-/* eslint-disable @nx/enforce-module-boundaries */
 import React from "react";
-import { FormSection } from '@coldpbc/components';
-import {IFormBuilderProps} from '@coldpbc/components';
+import { FormSection } from '../formSection/formSection';
+import { IFormBuilderProps } from '../../../interfaces/form/form';
 
 export function Form(props: IFormBuilderProps) {
 

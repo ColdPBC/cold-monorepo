@@ -1,10 +1,10 @@
 import React from "react";
-import {NumericFormat} from "react-number-format";
-import {FormInputProps} from '@coldpbc/components';
-import {Select} from '@coldpbc/components';
-import {InputTypes} from '@coldpbc/components';
-import {Input} from '@coldpbc/components';
-import {NumericInputProps} from '@coldpbc/components';
+import { NumericFormat } from "react-number-format";
+import { FormInputProps } from '../../../interfaces/form/form';
+import { Select } from '../../atoms/input/select/select';
+import { InputTypes } from '../../../enums/inputs';
+import { Input } from '../../atoms/input/input';
+import { NumericInputProps } from '../../../interfaces/input';
 
 export const FormInput = ({
     onFieldUpdated,

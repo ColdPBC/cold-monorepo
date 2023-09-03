@@ -1,11 +1,10 @@
-/* eslint-disable @nx/enforce-module-boundaries */
 import React from "react";
-import { BaseButton } from '@coldpbc/components';
+import { BaseButton } from '../button/button';
 import { withKnobs } from "@storybook/addon-knobs";
 import { Meta, StoryObj } from "@storybook/react";
-import {Toaster} from '@coldpbc/components';
+import { Toaster } from './toaster';
 import {mutate} from 'swr';
-import {ToastMessageTypes} from '@coldpbc/components';
+import { ToastMessageTypes } from '../../../interfaces/toastMessage';
 
 const meta = {
     title: "Atoms/Toaster",

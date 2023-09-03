@@ -1,7 +1,7 @@
 import React, {PropsWithChildren} from 'react';
-import {Card} from '@coldpbc/components';
+import { Card } from '../card/card';
 import {useNavigate} from 'react-router-dom';
-import {JourneySpiderChart} from '@coldpbc/components';
+import { JourneySpiderChart } from '../journeySpiderChart/journeySpiderChart';
 
 export interface JourneyOverviewCardProps {
 

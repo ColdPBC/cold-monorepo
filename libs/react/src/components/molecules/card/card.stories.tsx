@@ -1,8 +1,8 @@
 import React from "react";
 import { withKnobs } from "@storybook/addon-knobs";
 import { Meta, StoryObj } from "@storybook/react";
-import {Card} from '@coldpbc/components';
-import {ButtonTypes} from '@coldpbc/components';
+import { Card } from './card';
+import { ButtonTypes } from '../../../enums/buttons';
 
 const meta = {
     title: "Molecules/Card",

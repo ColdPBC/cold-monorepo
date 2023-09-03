@@ -1,14 +1,19 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "allowJs": true,
     "resolveJsonModule": true,
-    "outDir": "../../dist/out-tsc",
-    "types": ["node", "vite/client"]
+    "outDir": "../../dist/libs",
+    "types": [
+      "node",
+      "vite/client",
+      "@nx/react/typings/cssmodule.d.ts",
+      "@nx/react/typings/image.d.ts"
+    ],
   },
-  "paths": {
-    "@coldpbc/components": ["./src"],
-  },
+  "files": [
+    "../../node_modules/@nx/react/typings/cssmodule.d.ts",
+    "../../node_modules/@nx/react/typings/image.d.ts"
+  ],
   "exclude": [
     "**/*.spec.ts",
     "**/*.test.ts",

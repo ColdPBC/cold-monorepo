@@ -1,6 +1,6 @@
 import * as React from "react";
 import { SVGProps } from "react";
-import {HexColors} from '@coldpbc/components';
+import { HexColors } from '../../../themes/cold_theme';
 
 export const ColdWordmark = (props:{ color: string, stroke?: string } & React.SVGProps<SVGSVGElement>) => {
     const color:string = props.color || HexColors.white;

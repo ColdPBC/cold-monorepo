@@ -1,5 +1,5 @@
 import React from "react";
-import { SideBar } from '@coldpbc/components';
+import { SideBar } from './sideBar';
 import { withKnobs } from "@storybook/addon-knobs";
 import { Meta, StoryObj } from "@storybook/react";
 import {BrowserRouter} from 'react-router-dom';

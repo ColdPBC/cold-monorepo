@@ -1,8 +1,8 @@
 import React, {Ref, useEffect} from 'react';
-import {SurveySectionType, SurveySectionsProgressSectionType} from '@coldpbc/components';
+import { SurveySectionType, SurveySectionsProgressSectionType } from '../../../interfaces/survey/survey';
 import {findIndex} from 'lodash';
-import {SurveySections} from '@coldpbc/components';
-import {SurveySectionsProgressBar} from '@coldpbc/components';
+import { SurveySections } from './surveySections/surveySections';
+import { SurveySectionsProgressBar } from './surveySectionsProgressBar/surveySectionsProgressBar';
 
 export interface SurveySectionsProgressProps {
     sections: SurveySectionType[];
@@ -88,7 +88,7 @@ export const SurveySectionsProgress = ({sections, activeKey, setActiveKey}: Surv
     }
 
     useEffect(() => {
-        let newSectionLocations: SurveySectionsProgressSectionType[] = [];
+        const newSectionLocations: SurveySectionsProgressSectionType[] = [];
         sectionHeights.map((sectionHeight, index) => {
             newSectionLocations.push({
                 key: sections[index].category_key,

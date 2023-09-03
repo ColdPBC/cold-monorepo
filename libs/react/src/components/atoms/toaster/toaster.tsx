@@ -1,11 +1,6 @@
-/* eslint-disable @nx/enforce-module-boundaries */
 import React, { useEffect, useState }from "react";
 import { Toast } from "flowbite-react";
-import { flowbiteThemeOverride } from '@coldpbc/components';
-import {cloneDeep, isEmpty} from 'lodash';
-import {ToastMessageProps} from '@coldpbc/components';
-import {getA11yTextColorStyle, getBackgroundColorStyle} from '@coldpbc/components';
-import {ColorNames} from '@coldpbc/components';
+import { ToastMessageProps } from '../../../interfaces/toastMessage';
 import { CheckIcon, ExclamationTriangleIcon } from '@heroicons/react/24/solid'
 
 export const Toaster = (props: ToastMessageProps) => {
