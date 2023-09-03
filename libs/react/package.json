@@ -1,0 +1,12 @@
+{
+  "name": "@coldpbc/components",
+  "version": "1.13.0",
+  "main": "./index.ts",
+  "types": "./index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./index.mjs",
+      "require": "./index.js"
+    }
+  }
+}

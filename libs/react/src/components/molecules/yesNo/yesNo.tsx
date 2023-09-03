@@ -1,0 +1,35 @@
+import React from 'react';
+
+
+export const YesNo = ({onChange, value} : {onChange: (value: any) => void, value: any}) => {
+    const onClick = (newValue: any) => {
+        if(newValue === value) {
+            onChange(null);
+        } else {
+            onChange(newValue);
+        }
+    }
+
+    const getClassName = (newValue: any) => {
+        let className = "text-sm not-italic font-semibold h-[72px] w-full rounded-lg bg-bgc-accent grid grid-cols-1 place-content-center";
+        if(newValue === value){
+            className += " bg-primary-300 hover:bg-primary-200";
+        } else {
+            className += " bg-bgc-accent hover:bg-gray-50";
+        }
+
+
+        return className;
+    }
+
+    return (
+        <div className={"w-full space-x-4 flex text-center text-tc-primary"}>
+            <div className={getClassName(true)} onClick={() => onClick(true)}>
+                Yes
+            </div>
+            <div className={getClassName(false)} onClick={() => onClick(false)}>
+                No
+            </div>
+        </div>
+    )
+}

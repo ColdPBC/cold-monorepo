@@ -1,0 +1,198 @@
+import React from 'react';
+/* eslint-disable @nx/enforce-module-boundaries */
+import {SurveySectionType} from '@coldpbc/components';
+import Lottie from 'react-lottie';
+import * as checkBoxAnimation from '@coldpbc/animations/checkbox.json';
+import {ColdIcon} from '@coldpbc/components';
+import {IconNames} from '@coldpbc/components';
+
+interface SurveySectionsProps {
+    sections: SurveySectionType[];
+    section: SurveySectionType;
+    sectionIndex: number;
+    activeKey: string;
+    getActiveSectionIndex: () => number;
+    isFollowUp: (key: string) => boolean;
+}
+
+export const SurveySections = ({
+    sections, section, sectionIndex, activeKey, getActiveSectionIndex, isFollowUp
+}: SurveySectionsProps) => {
+
+    const getSurveySectionDescriptionAndTitle = (section: SurveySectionType, index: number) => {
+        const activeIndex = getActiveSectionIndex();
+        const followUp = isFollowUp(activeKey);
+
+        if((index === activeIndex && !followUp) || index == activeIndex - 1){
+            return (
+                <div className={"pb-[40px] relative"}>
+                    {
+                        getSectionPoint(section, index)
+                    }
+                    <>
+                        {
+                            getSectionTitle(section, index)
+                        }
+                    </>
+                    <>
+                        {
+                            getSurveySectionDescription(section, index)
+                        }
+                    </>
+                </div>
+            )
+        } else if (index < activeIndex - 1 || index > activeIndex) {
+            return (
+                <div className={"pb-[40px] relative"}>
+                    {
+                        getSectionPoint(section, index)
+                    }
+                    <>
+                        {
+                            getSectionTitle(section, index)
+                        }
+                    </>
+                </div>
+            )
+        } else if (index === activeIndex && followUp){
+            return (
+                <div className={"pb-[40px] relative"}>
+                    {
+                        getSectionPoint(section, index)
+                    }
+                    <>
+                        {
+                            getSectionTitle(section, index)
+                        }
+                    </>
+                    <>
+                        {
+                            getSurveySectionDescription(section, index)
+                        }
+                    </>
+                </div>
+            )
+        }
+    }
+
+    const getSectionPoint = (section: SurveySectionType, currentIndex: number) => {
+        const className = "absolute";
+        const activeIndex = getActiveSectionIndex();
+        const followUp = isFollowUp(activeKey);
+        if(currentIndex > activeIndex){
+            return (
+                <div className={className + " top-[10px] -left-[40px]"}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <circle cx="8" cy="8" r="8" fill="#282C3E"/>
+                    </svg>
+                </div>
+            )
+        } else if (currentIndex === activeIndex){
+            if(followUp && currentIndex === sections.length - 1){
+                const followUpIndex = section.follow_up.findIndex((followUp) => followUp.key === activeKey);
+                if(followUpIndex === section.follow_up.length - 1){
+                    return (
+                        <div className={className + " top-[8px] -left-[48px]"}>
+                            <Lottie
+                                options={{
+                                    loop: false,
+                                    autoplay: true,
+                                    animationData: checkBoxAnimation,
+                                }}
+                            />
+                        </div>
+                    )
+                } else {
+                    return (
+                        <div className={className + " top-[16px] -left-[40px]"}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <circle cx="8" cy="8" r="8" fill="#282C3E"/>
+                            </svg>
+                        </div>
+                    )
+                }
+            } else {
+                return (
+                    <div className={className + " top-[16px] -left-[40px]"}>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                            <circle cx="8" cy="8" r="8" fill="#282C3E"/>
+                        </svg>
+                    </div>
+                )
+            }
+        } else if(currentIndex === activeIndex - 1){
+            if(!followUp){
+                return (
+                    <div className={className + " -left-[48px] top-[2px]"}>
+                        <Lottie
+                            options={{
+                                loop: false,
+                                autoplay: true,
+                                animationData: checkBoxAnimation,
+                            }}
+                        />
+                    </div>
+                )
+            } else {
+                return (
+                    <div className={className + " -left-[48px] top-[2px]"}>
+                        <ColdIcon className={" "} name={IconNames.ColdSmallCheckBoxIcon} />
+                    </div>
+                )
+            }
+        } else {
+            return (
+                <div className={className + " -left-[48px] top-[2px]"}>
+                    <ColdIcon className={" "} name={IconNames.ColdSmallCheckBoxIcon} />
+                </div>
+            )
+        }
+    }
+
+    const getSectionTitle = (section: SurveySectionType, index: number) => {
+        const activeIndex = getActiveSectionIndex();
+        if(index === activeIndex){
+            return (
+                <div className={"text-left text-h2 text-tc-primary"}>
+                    {
+                        section.title
+                    }
+                </div>
+            )
+        } else {
+            return (
+                <div className={"text-left text-h3 text-tc-primary"}>
+                    {
+                        section.title
+                    }
+                </div>
+            )
+        }
+    }
+
+    const getSurveySectionDescription = (section: SurveySectionType, index: number) => {
+        const activeIndex = getActiveSectionIndex();
+        if(index != activeIndex){
+            return (
+                <></>
+            )
+        } else {
+            return (
+                <div className={"text-tc-primary text-sm not-italic font-medium pt-[8px]"}>
+                    {
+                        section.category_description
+                    }
+                </div>
+            )
+        }
+    }
+
+    return (
+        <>
+            {
+                getSurveySectionDescriptionAndTitle(section, sectionIndex)
+            }
+        </>
+    )
+}
+

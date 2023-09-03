@@ -1,0 +1,58 @@
+import React from "react";
+import {ButtonTypes} from '@coldpbc/components';
+import {GlobalSizes} from '@coldpbc/components';
+import {IconNames} from '@coldpbc/components';
+
+export interface IButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+    size?: GlobalSizes;
+    /**
+     * Boolean value to make the button text uppercase
+     */
+    upperCase?: boolean;
+
+    /**
+     * Label for the button text
+     */
+    label?: string;
+
+    /**
+     * Boolean value to make the button text bold
+     */
+    bold?: boolean;
+
+    /**
+     * Size of the button text
+     */
+    textSize?: GlobalSizes;
+
+    /**
+     * Button click action
+     */
+    onClick: (event?: any) => void;
+
+    /**
+     * Tailwinds css styles
+     */
+    className?: string;
+
+    /**
+     * Button variant that will define specific styles
+     */
+    variant?: ButtonTypes;
+
+    /**
+     * ColdIcon to be displayed on the button's left side
+     */
+    iconLeft?: IconNames;
+
+    /**
+     * ColdIcon to be displayed on the button's right side
+     */
+    iconRight?: IconNames;
+
+    icon?: JSX.Element;
+    /**
+     * Boolean value to round the button's corners
+     */
+    rounded?: boolean;
+}

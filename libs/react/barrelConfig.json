@@ -1,0 +1,8 @@
+{
+  "directory": ["./src"],
+  "exclude": ["stories","test"],
+  "structure": "flat",
+  "singleQuotes": true,
+  "location": "branch",
+  "delete": true
+}
