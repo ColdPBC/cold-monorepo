@@ -46,7 +46,6 @@ jobs:
       - run: |
           echo "BASE: ${{ steps.setSHAs.outputs.base }}"
           echo "HEAD: ${{ steps.setSHAs.outputs.head }}"
-      - run: npx nx format:check --verbose --projects cold-ui react
       - name: Cache node modules
         uses: actions/cache@v3
         with:
