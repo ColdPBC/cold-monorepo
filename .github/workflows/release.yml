@@ -52,12 +52,14 @@ jobs:
           path: ./node_modules
           key: ${{ runner.os }}-build-${{ env.CACHE_NAME }}-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-build-${{ env.CACHE_NAME }}-
-            ${{ runner.os }}-build-
-            ${{ runner.os }}-
+            ${{ runner.os }}--${{ hashFiles('**/yarn.lock') }}--build
+            ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+            ${{ runner.os }}
       - run: yarn install --frozen-lockfile
       - run: npx nx format:check
-      - run: git branch --track main origin/main
+      - name: Ensure main branch is tracked when building feature branch
+        if: github.ref != 'refs/heads/main'
+        run: git branch --track main origin/main
       - run: npx nx affected -t lint --parallel=3
       - run: npx nx affected -t test --parallel=3 --configuration=ci
       - run: npx nx affected -t build --parallel=3
