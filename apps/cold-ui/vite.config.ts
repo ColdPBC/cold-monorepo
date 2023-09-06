@@ -69,11 +69,41 @@ export default defineConfig({
     }),
   ],
 
+  build: {
+    sourcemap: true,
+    lib: {
+      // Could also be a dictionary or array of multiple entry points.
+      entry: 'src/main.tsx',
+      name: 'cold-ui',
+      fileName: 'cold-ui.ts',
+      // Change this to the formats you want to support.
+      // Don't forget to update your package.json as well.
+      formats: ['es'],
+    },
+    rollupOptions: {
+      output: {
+        format: 'es',
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            return id
+                .toString()
+                .split('node_modules/')[1]
+                .split('/')[0]
+                .toString();
+          }
+        },
+      },
+      // External packages that should not be bundled into your library.
+      external: ['react', 'react-dom', 'react/jsx-runtime'],
+    },
+  },
   // Uncomment this if you are using workers.
   // worker: {
   //  plugins: [ nxViteTsPaths() ],
   // },
 
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   test: {
     globals: true,
     cache: {

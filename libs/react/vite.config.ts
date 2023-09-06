@@ -4,6 +4,7 @@ import react from '@vitejs/plugin-react';
 import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
 import dts from 'vite-plugin-dts';
 import * as path from 'path';
+import {get} from 'lodash';
 
 export default defineConfig({
   cacheDir: '../../node_modules/.vite/react',
@@ -23,19 +24,33 @@ export default defineConfig({
   //  plugins: [ nxViteTsPaths() ],
   // },
 
+
   // Configuration for building your library.
   // See: https://vitejs.dev/guide/build.html#library-mode
   build: {
+    sourcemap: true,
     lib: {
       // Could also be a dictionary or array of multiple entry points.
       entry: 'src/index.ts',
       name: 'react',
-      fileName: 'index',
+      fileName: 'library',
       // Change this to the formats you want to support.
       // Don't forget to update your package.json as well.
-      formats: ['es', 'cjs'],
+      formats: ['es'],
     },
     rollupOptions: {
+      output: {
+        format: 'esm',
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            return id
+                .toString()
+                .split('node_modules/')[1]
+                .split('/')[0]
+                .toString();
+          }
+        },
+      },
       // External packages that should not be bundled into your library.
       external: ['react', 'react-dom', 'react/jsx-runtime'],
     },
