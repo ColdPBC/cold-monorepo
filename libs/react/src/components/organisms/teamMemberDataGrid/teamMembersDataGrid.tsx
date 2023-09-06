@@ -12,6 +12,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { format } from "date-fns";
 
 //TODO:Why the empty interface?
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface TeamMembersDataGridProps {
 }
 
