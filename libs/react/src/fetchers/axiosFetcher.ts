@@ -1,8 +1,9 @@
 import axios from 'axios';
 import { set } from 'lodash';
 import { useCookies } from '../hooks/useCookies';
+import get from "lodash/get";
 
-const baseURL = process.env.VITE_API_BASE_URL || "http://localhost:7001";
+const baseURL = get(import.meta.env, 'VITE_API_BASE_URL', 'http://localhost:7001');
 
 // path, method, data
 export const axiosFetcher = (params: Array<string>) => {
