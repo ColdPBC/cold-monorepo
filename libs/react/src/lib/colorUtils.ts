@@ -248,3 +248,4 @@ export const getA11yTextColorStyle = (color: ColorNames) => {
             return `text-cold-red-a11y`;
     }
 }
+
