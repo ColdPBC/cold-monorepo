@@ -1,6 +1,6 @@
 {
   "name": "cold-monorepo-nx",
-  "version": "1.13.0",
+  "version": "1.0.0",
   "license": "MIT",
   "scripts": {
     "prebuild": "npx barrelsby -D -d ./libs/react/src -l all -e stories.tsx -e react-app-env -e test.tsx -e private.tsx",
