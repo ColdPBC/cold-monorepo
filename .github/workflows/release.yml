@@ -50,10 +50,10 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ./node_modules
-          key: ${{ runner.os }}-build-${{ env.CACHE_NAME }}-${{ hashFiles('**/yarn.lock') }}
+          key: ${{ runner.os }}--${{ hashFiles('**/yarn.lock') }}--build
           restore-keys: |
             ${{ runner.os }}--${{ hashFiles('**/yarn.lock') }}--build
-            ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+            ${{ runner.os }}--${{ hashFiles('**/yarn.lock') }}
             ${{ runner.os }}
       - run: yarn install --frozen-lockfile
       - run: npx nx format:check
