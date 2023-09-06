@@ -1,6 +1,6 @@
 import { themeColors, fontSizes } from "./themes/cold_theme";
 
-const defaultTheme = require("tailwindcss/defaultTheme");
+import * as defaultTheme from "tailwindcss/defaultTheme";
 
  export const tailwindPresets = {
    content: [

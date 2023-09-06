@@ -1,5 +1,4 @@
 import { rest } from "msw";
-import get from "lodash/get";
 import { getSidebarMock } from "./sidebarMock";
 import {getFootprintJourneyMock} from './footprintJourneyMock';
 import {
@@ -11,7 +10,6 @@ import {
   getOrganizationMock,
   getTeamMemberDataGridMock,
 } from "./datagridMock";
-import { cache } from "swr/_internal";
 import {
   changeUserRoles,
   deleteUserInvitation,
@@ -91,13 +89,10 @@ export const handlers = [
   }),
 
   rest.get(`${apiBaseURL}/organizations/:orgId`, (req, res, ctx) => {
-    const { orgId } = req.params;
     return res(ctx.json({ ...getOrganizationMock() }));
   }),
 
   rest.get(`${apiBaseURL}/organizations/:orgId/members`, (req, res, ctx) => {
-    const { orgId } = req.params;
-    const mock = getOrganizationMembersMock();
     return res(ctx.json({ ...getOrganizationMembersMock() }));
   }),
 
