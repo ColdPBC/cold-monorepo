@@ -20,6 +20,7 @@ import {
   sendInvitation,
 } from "./helper";
 import {getRoles} from './roleMock';
+import {getFormDefinitionByName} from "./formDefinition";
 
 // Even if this uses vite as a bundler, it still uses the NODE_ENV variable
 const apiBaseURL = process.env.VITE_API_BASE_URL || "http://localhost:7001";
@@ -189,9 +190,21 @@ export const handlers = [
     return res(ctx.json({}));
   }),
 
-    rest.get(`${apiBaseURL}/roles`, async (req, res, ctx) => {
-        return res(
-            ctx.json(getRoles())
-        );
-    }),
+  rest.get(`${apiBaseURL}/roles`, async (req, res, ctx) => {
+      return res(
+          ctx.json(getRoles())
+      );
+  }),
+
+  rest.get(`${apiBaseURL}/form-definitions/:name`, (req, res, ctx) => {
+    const { name } = req.params;
+
+    return res(ctx.json(getFormDefinitionByName(name as string)));
+  }),
+
+  rest.patch(`${apiBaseURL}/form-definitions/:name`, async (req, res, ctx) => {
+    const {data} = await req.json();
+
+    return res(ctx.json({}));
+  }),
 ];

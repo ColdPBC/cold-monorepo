@@ -1,3 +1,121 @@
+# [1.15.0-COLD-130.5](https://github.com/coldpbc/cold_components/compare/v1.15.0-COLD-130.4...v1.15.0-COLD-130.5) (2023-09-06)
+
+
+### Features
+
+* Update transition to 150ms ([a9dd957](https://github.com/coldpbc/cold_components/commit/a9dd957693b70ba65d9213b48ef849ed547803b3))
+
+# [1.15.0-COLD-130.4](https://github.com/coldpbc/cold_components/compare/v1.15.0-COLD-130.3...v1.15.0-COLD-130.4) (2023-09-06)
+
+
+### Features
+
+* added cursor pointer to select and multi-select and yes/no inputs ([d3a9743](https://github.com/coldpbc/cold_components/commit/d3a9743f2799b165a764a91745bb57c0a2c3fd6a))
+* Updated the transition speed and timing ([f6f7e97](https://github.com/coldpbc/cold_components/commit/f6f7e97bf26a6294706530028e521c44b02a9e7f))
+
+# [1.15.0-COLD-130.3](https://github.com/coldpbc/cold_components/compare/v1.15.0-COLD-130.2...v1.15.0-COLD-130.3) (2023-09-06)
+
+
+### Features
+
+* Update to better button handling and added Skip feature ([a4a9805](https://github.com/coldpbc/cold_components/commit/a4a9805cf000ef95fab36531dfd814410686fe9a))
+
+# [1.15.0-COLD-130.2](https://github.com/coldpbc/cold_components/compare/v1.15.0-COLD-130.1...v1.15.0-COLD-130.2) (2023-09-06)
+
+
+### Features
+
+* added logic when prompt is empty as well ([030ca3b](https://github.com/coldpbc/cold_components/commit/030ca3b36bbdb3fa2c5e85456373d784b77080a4))
+
+# [1.15.0-COLD-130.1](https://github.com/coldpbc/cold_components/compare/v1.14.1...v1.15.0-COLD-130.1) (2023-09-06)
+
+
+### Features
+
+* Added survey question container component ([aaf898d](https://github.com/coldpbc/cold_components/commit/aaf898d8012b5de66c146d4599b8e5be0426e3e6))
+
+## [1.14.1](https://github.com/coldpbc/cold_components/compare/v1.14.0...v1.14.1) (2023-09-05)
+
+
+### Bug Fixes
+
+* resolve localhost api calls in non local environment ([#99](https://github.com/coldpbc/cold_components/issues/99)) ([aa54825](https://github.com/coldpbc/cold_components/commit/aa548256b7cb7addb3b2b941709b9e2ad8355725)), closes [#94](https://github.com/coldpbc/cold_components/issues/94)
+* set fixed widths for lottie animation ([#102](https://github.com/coldpbc/cold_components/issues/102)) ([c152fb0](https://github.com/coldpbc/cold_components/commit/c152fb060e4651ec9afe3a9051e21e0eae5de511))
+
+## [1.14.1-COLD-224.1](https://github.com/coldpbc/cold_components/compare/v1.14.0...v1.14.1-COLD-224.1) (2023-09-03)
+
+
+### Bug Fixes
+
+* resolve localhost api calls in non local environment ([#99](https://github.com/coldpbc/cold_components/issues/99)) ([aa54825](https://github.com/coldpbc/cold_components/commit/aa548256b7cb7addb3b2b941709b9e2ad8355725)), closes [#94](https://github.com/coldpbc/cold_components/issues/94)
+* set fixed widths for lottie animation ([2d544a8](https://github.com/coldpbc/cold_components/commit/2d544a8156b7ae3dceb7df395a6c65d15c585b3a))
+
+## [1.14.1-COLD-221.2](https://github.com/coldpbc/cold_components/compare/v1.14.1-COLD-221.1...v1.14.1-COLD-221.2) (2023-09-01)
+
+
+### Bug Fixes
+
+* Corrected fetching import.meta env variable API BASE URL ([48bcd66](https://github.com/coldpbc/cold_components/commit/48bcd6670528099be409b219f3578a5319bb91f9))
+* resolve localhost api calls in non local environment ([#99](https://github.com/coldpbc/cold_components/issues/99)) ([aa54825](https://github.com/coldpbc/cold_components/commit/aa548256b7cb7addb3b2b941709b9e2ad8355725)), closes [#94](https://github.com/coldpbc/cold_components/issues/94)
+
+## [1.14.1-COLD-221.1](https://github.com/coldpbc/cold_components/compare/v1.14.0...v1.14.1-COLD-221.1) (2023-09-01)
+
+
+### Bug Fixes
+
+* resolve localhost api calls in non local environment ([013e362](https://github.com/coldpbc/cold_components/commit/013e3620bbcda7d7010ec4cfb65dbe08d859773d))
+
+# [1.14.0](https://github.com/coldpbc/cold_components/compare/v1.13.0...v1.14.0) (2023-09-01)
+
+
+### Bug Fixes
+
+* Fix files after broken merge ([ae2896f](https://github.com/coldpbc/cold_components/commit/ae2896f09ea388a6de5eb0156ac0684c8de71968))
+* Missed some files from the merge ([960d4c5](https://github.com/coldpbc/cold_components/commit/960d4c53e7da7d8fbd5b645c85669dcb56fba58f))
+* Storybook wants the DoughnutController to be registered ([8ce7dcc](https://github.com/coldpbc/cold_components/commit/8ce7dcca132f91a374eee4b4466701e517bd9eaa))
+
+
+### Features
+
+* add start for footprint overview chart ([fda6e55](https://github.com/coldpbc/cold_components/commit/fda6e553e1ff1e1562c81665346f6d3afc70ee0d))
+* Cold 170 ([#94](https://github.com/coldpbc/cold_components/issues/94)) ([d89d73f](https://github.com/coldpbc/cold_components/commit/d89d73f1f9d2addabbf7b95807ce380c317cb95f))
+* horizontal footprint overview chart. No hover states, empty state, or vertical orientation yet ([6400ba0](https://github.com/coldpbc/cold_components/commit/6400ba0698bacd7d129468b87abe8c70f8f37672))
+
+# [1.14.0-cold-193-create-footprintoverviewchart-component.1](https://github.com/coldpbc/cold_components/compare/v1.13.0...v1.14.0-cold-193-create-footprintoverviewchart-component.1) (2023-09-01)
+
+
+### Bug Fixes
+
+* Fix files after broken merge ([ae2896f](https://github.com/coldpbc/cold_components/commit/ae2896f09ea388a6de5eb0156ac0684c8de71968))
+* Missed some files from the merge ([960d4c5](https://github.com/coldpbc/cold_components/commit/960d4c53e7da7d8fbd5b645c85669dcb56fba58f))
+* Storybook wants the DoughnutController to be registered ([8ce7dcc](https://github.com/coldpbc/cold_components/commit/8ce7dcca132f91a374eee4b4466701e517bd9eaa))
+
+
+### Features
+
+* add start for footprint overview chart ([fda6e55](https://github.com/coldpbc/cold_components/commit/fda6e553e1ff1e1562c81665346f6d3afc70ee0d))
+* Cold 170 ([#94](https://github.com/coldpbc/cold_components/issues/94)) ([d89d73f](https://github.com/coldpbc/cold_components/commit/d89d73f1f9d2addabbf7b95807ce380c317cb95f))
+* horizontal footprint overview chart. No hover states, empty state, or vertical orientation yet ([6400ba0](https://github.com/coldpbc/cold_components/commit/6400ba0698bacd7d129468b87abe8c70f8f37672))
+
+# [1.14.0-COLD-223.2](https://github.com/coldpbc/cold_components/compare/v1.14.0-COLD-223.1...v1.14.0-COLD-223.2) (2023-08-31)
+
+
+### Bug Fixes
+
+* Add missing chartjs packages ([936b756](https://github.com/coldpbc/cold_components/commit/936b75674f960a0dda37945cb3e37f24ce0effb8))
+
+# [1.14.0-COLD-223.1](https://github.com/coldpbc/cold_components/compare/v1.13.0...v1.14.0-COLD-223.1) (2023-08-31)
+
+
+### Bug Fixes
+
+* Refactored checkbox to be exported for bundler compatibility ([0753af9](https://github.com/coldpbc/cold_components/commit/0753af976776639abdb7ce39ded0d651585f4980))
+
+
+### Features
+
+* Cold 170 ([#94](https://github.com/coldpbc/cold_components/issues/94)) ([d89d73f](https://github.com/coldpbc/cold_components/commit/d89d73f1f9d2addabbf7b95807ce380c317cb95f))
+
 # [1.14.0-COLD-170.2](https://github.com/coldpbc/cold_components/compare/v1.14.0-COLD-170.1...v1.14.0-COLD-170.2) (2023-08-30)
 
 

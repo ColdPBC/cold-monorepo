@@ -48,6 +48,7 @@
     "react-lottie": "^1.2.3",
     "react-markdown": "^8.0.7",
     "react-number-format": "^5.1.4",
+    "react-transition-group": "^4.4.5",
     "react-range": "^1.8.14",
     "react-router": "^6.12.1",
     "react-router-dom": "^6.12.1",
