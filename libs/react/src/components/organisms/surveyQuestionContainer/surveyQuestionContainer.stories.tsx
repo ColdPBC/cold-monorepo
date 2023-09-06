@@ -2,7 +2,6 @@
 import React from "react";
 import { withKnobs } from "@storybook/addon-knobs";
 import { Meta, StoryObj } from "@storybook/react";
-import {SurveyFormDefinitionType} from '../../../interfaces/survey/survey';
 import {SurveyQuestionContainer, SurveyQuestionContainerProps} from './surveyQuestionContainer';
 import {getTestingSurveyFormDefinition} from '../../../__mocks__/formDefinition';
 
