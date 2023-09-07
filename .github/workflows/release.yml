@@ -38,6 +38,15 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: "lts/*"
+      - name: Cache node modules
+        uses: actions/cache@v3
+        with:
+          path: ./node_modules
+          key: cold-${{ runner.os }}-${{ env.CACHE_NAME }}-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.CACHE_NAME }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
       - run: yarn
       - name: Compile Typescript
         run: yarn build:prod
