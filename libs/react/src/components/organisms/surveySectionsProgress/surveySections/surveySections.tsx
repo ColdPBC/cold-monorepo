@@ -81,7 +81,7 @@ export const SurveySections = ({
                 const followUpIndex = section.follow_up.findIndex((followUp) => followUp.key === activeKey);
                 if(followUpIndex === section.follow_up.length - 1){
                     return (
-                        <div className={className + " top-[8px] -left-[48px]"}>
+                        <div className={className + " w-[32px] h-[32px] top-[8px] -left-[48px]"}>
                           <Lottie
                             loop={false}
                             animationData={getCheckboxAnimation()}
@@ -125,7 +125,7 @@ export const SurveySections = ({
             }
         } else {
             return (
-                <div className={className + " -left-[48px] top-[2px]"}>
+                <div className={className + " w-[32px] h-[32px] -left-[48px] top-[2px]"}>
                     <ColdIcon className={" "} name={IconNames.ColdSmallCheckBoxIcon} />
                 </div>
             )
