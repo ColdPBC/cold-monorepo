@@ -45,3 +45,5 @@ yalc.*
 /libs/react/src/**/**/index.ts
 /.yarnrc.yml
 /.yarn/
+/.pnp.loader.mjs
+/.pnp.cjs
