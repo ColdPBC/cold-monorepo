@@ -1,8 +1,6 @@
 import documentationTemplate from './documentationTemplate.mdx';
 import "../src/styles.css";
 import 'flowbite';
-
-import {cookieDecorator} from 'storybook-addon-cookie';
 import {auth0UserMock, worker} from '../../../libs/react/src';
 
 // Storybook executes this module in both bootstap phase (Node)
@@ -68,28 +66,28 @@ export default {
             }
         },
         auth0AddOn: {
-            isLoading: false,
-            isAuthenticated: true,
-            getAccessTokenSilently: () => {
-                return "accessToken"
-            },
-            // eslint-disable-next-line @typescript-eslint/no-empty-function
-            getAccessTokenWithPopup: ()  => {},
-            // eslint-disable-next-line @typescript-eslint/no-empty-function
-            getIdTokenClaims: ()  => {},
-            // eslint-disable-next-line @typescript-eslint/no-empty-function
-            loginWithRedirect: ()  => {},
-            // eslint-disable-next-line @typescript-eslint/no-empty-function
-            loginWithPopup: ()  => {},
-            // eslint-disable-next-line @typescript-eslint/no-empty-function
-            logout: ()  => {},
-            // eslint-disable-next-line @typescript-eslint/no-empty-function
-            handleRedirectCallback: ()  => {},
-            // eslint-disable-next-line @typescript-eslint/no-empty-function
-            buildAuthorizeUrl: ()  => {},
-            // eslint-disable-next-line @typescript-eslint/no-empty-function
-            buildLogoutUrl: ()  => {},
-            user: auth0UserMock,
+          isLoading: false,
+          isAuthenticated: true,
+          getAccessTokenSilently: () => {
+              return "accessToken"
+          },
+          // eslint-disable-next-line @typescript-eslint/no-empty-function
+          getAccessTokenWithPopup: ()  => {},
+          // eslint-disable-next-line @typescript-eslint/no-empty-function
+          getIdTokenClaims: ()  => {},
+          // eslint-disable-next-line @typescript-eslint/no-empty-function
+          loginWithRedirect: ()  => {},
+          // eslint-disable-next-line @typescript-eslint/no-empty-function
+          loginWithPopup: ()  => {},
+          // eslint-disable-next-line @typescript-eslint/no-empty-function
+          logout: ()  => {},
+          // eslint-disable-next-line @typescript-eslint/no-empty-function
+          handleRedirectCallback: ()  => {},
+          // eslint-disable-next-line @typescript-eslint/no-empty-function
+          buildAuthorizeUrl: ()  => {},
+          // eslint-disable-next-line @typescript-eslint/no-empty-function
+          buildLogoutUrl: ()  => {},
+          user: auth0UserMock,
         }
     },
     decorators: [

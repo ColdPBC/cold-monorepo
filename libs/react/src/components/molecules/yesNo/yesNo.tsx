@@ -11,7 +11,7 @@ export const YesNo = ({onChange, value} : {onChange: (value: any) => void, value
     }
 
     const getClassName = (newValue: any) => {
-        let className = "text-sm not-italic font-semibold h-[72px] w-full rounded-lg bg-bgc-accent grid grid-cols-1 place-content-center";
+        let className = "text-sm not-italic font-semibold h-[72px] w-full rounded-lg bg-bgc-accent grid grid-cols-1 place-content-center cursor-pointer";
         if(newValue === value){
             className += " bg-primary-300 hover:bg-primary-200";
         } else {

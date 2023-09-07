@@ -1,6 +1,4 @@
 import React from 'react';
-import ReactMarkdown from 'react-markdown';
-import className = ReactMarkdown.propTypes.className;
 
 export interface SelectOptionProps {
     options: string[],
@@ -45,7 +43,7 @@ export const SelectOption = ({options, onChange, value, isMultiSelect = false}: 
 
     const getClassName = (index: number) => {
         let className = vertical ? "whitespace-pre" : "";
-        className += " text-sm not-italic font-semibold text-center text-tc-primary";
+        className += " text-sm not-italic font-semibold text-center text-tc-primary cursor-pointer";
 
         if(vertical){
             className += " p-2";
