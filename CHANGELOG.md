@@ -1,3 +1,10 @@
+# [1.1.0-COLD-230.1](https://github.com/ColdPBC/Cold-MonoRepo/compare/v1.0.1...v1.1.0-COLD-230.1) (2023-09-07)
+
+
+### Features
+
+* survey question container component ([78384af](https://github.com/ColdPBC/Cold-MonoRepo/commit/78384af49f1ec7cbb9345786baca7dc221b37565))
+
 ## [1.0.1](https://github.com/ColdPBC/Cold-MonoRepo/compare/v1.0.0...v1.0.1) (2023-09-07)
 
 
