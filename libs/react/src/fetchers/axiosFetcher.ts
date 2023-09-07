@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { set } from 'lodash';
-import { useCookies } from '../hooks/useCookies';
+import { useCookies } from '@coldpbc/hooks';
 import get from "lodash/get";
 
 const baseURL = get(import.meta.env, 'VITE_API_BASE_URL', 'http://localhost:7001');

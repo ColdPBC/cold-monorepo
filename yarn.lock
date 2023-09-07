@@ -14266,7 +14266,6 @@ __metadata:
     storybook-addon-designs: ^6.3.1
     storybook-addon-launchdarkly: ^2.0.0
     storybook-addon-mock: ^4.0.0
-    storybook-addon-react-router-v6: ^1.0.2
     storybook-design-token: ^2.9.0
     storybook-icon-gallery: ^1.2.1
     swr: ^2.1.5
@@ -30514,7 +30513,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-inspector@npm:^6.0.0, react-inspector@npm:^6.0.1":
+"react-inspector@npm:^6.0.0":
   version: 6.0.2
   resolution: "react-inspector@npm:6.0.2"
   peerDependencies:
@@ -33374,32 +33373,6 @@ __metadata:
     react-dom:
       optional: true
   checksum: 0b1c96443f7e1ca3a6375ff4b682787673802f1b4cc0b8a536212c3c636512c3b6a19e85c15779228c628a9e2020d61a5533c0f9017b2e7f94855f42936381da
-  languageName: node
-  linkType: hard
-
-"storybook-addon-react-router-v6@npm:^1.0.2":
-  version: 1.0.2
-  resolution: "storybook-addon-react-router-v6@npm:1.0.2"
-  dependencies:
-    react-inspector: ^6.0.1
-  peerDependencies:
-    "@storybook/blocks": ^7.0.0
-    "@storybook/components": ^7.0.0
-    "@storybook/core-events": ^7.0.0
-    "@storybook/manager-api": ^7.0.0
-    "@storybook/preview-api": ^7.0.0
-    "@storybook/theming": ^7.0.0
-    "@storybook/types": ^7.0.0
-    react: ^16.8.0 || ^17.0.0 || ^18.0.0
-    react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-    react-router: ^6.3.0
-    react-router-dom: ^6.3.0
-  peerDependenciesMeta:
-    react:
-      optional: true
-    react-dom:
-      optional: true
-  checksum: 1a786c3d16c21b1f4408145b4f86bb4fe9a5c8627d9d60152380de53e7f9497540c68d8112eb2e9ade1ba3138bb7671630afef65c13bd430243211fe6516ee9b
   languageName: node
   linkType: hard
 
