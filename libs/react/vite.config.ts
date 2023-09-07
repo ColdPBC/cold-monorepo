@@ -4,7 +4,6 @@ import react from '@vitejs/plugin-react';
 import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
 import dts from 'vite-plugin-dts';
 import * as path from 'path';
-import {get} from 'lodash';
 
 export default defineConfig({
   cacheDir: '../../node_modules/.vite/react',
@@ -36,11 +35,10 @@ export default defineConfig({
       fileName: 'library',
       // Change this to the formats you want to support.
       // Don't forget to update your package.json as well.
-      formats: ['es'],
+      formats: ['es', 'cjs'],
     },
     rollupOptions: {
       output: {
-        format: 'esm',
         manualChunks(id) {
           if (id.includes('node_modules')) {
             return id
