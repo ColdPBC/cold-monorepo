@@ -510,6 +510,10 @@ export const fontSizes = (): any => {
     }],
     body: ['0.875rem',{
       lineHeight: '1.3125rem',
+      fontWeight: 400,
+    }],
+    label: ['0.625rem',{
+      lineHeight: '0.9375rem',
       fontWeight: 500,
     }],
 

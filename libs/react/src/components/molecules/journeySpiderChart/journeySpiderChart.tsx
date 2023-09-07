@@ -1,4 +1,4 @@
-import React, {PropsWithChildren, useRef, useEffect, useState} from 'react';
+import React, {useRef, useEffect, useState} from 'react';
 import { Chart } from 'react-chartjs-2';
 import {Chart as ChartJS, RadarController, LineElement, PointElement, RadialLinearScale, Title, Filler, ChartArea, ChartData, ChartOptions} from 'chart.js';
 import { hexAToRGBA, HexColors, rgbaToHex } from '../../../themes/cold_theme';
@@ -8,11 +8,6 @@ import { axiosFetcher } from '../../../fetchers/axiosFetcher';
 import { Spinner } from '../../atoms/spinner/spinner';
 
 ChartJS.register(RadarController, LineElement, PointElement, RadialLinearScale, Title, Filler);
-//todo:fix JourneySpiderChartProps
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface JourneySpiderChartProps {
-
-}
 
 export const fetchedChartData: ChartData = {
     datasets: [{
@@ -124,7 +119,7 @@ function pickGradientValue(hexColor1:string, hexColor2:string, percent:number) {
         b: Math.round(color1.b * w1 + color2.b * w2)});
 }
 
-export function JourneySpiderChart(props: PropsWithChildren<JourneySpiderChartProps>) {
+export function JourneySpiderChart() {
     const chartRef = useRef<ChartJS>(null);
 
     const [chartOptions, setChartOptions] = useState<ChartOptions>(options);
@@ -143,7 +138,7 @@ export function JourneySpiderChart(props: PropsWithChildren<JourneySpiderChartPr
         const chartOptions:ChartOptions= {
             ...options,
             backgroundColor: createGradient( chart.ctx, chart.chartArea, HexColors.white+"00", HexColors.primary.DEFAULT+"40"), // 25% transparency
-            borderColor: createGradient( chart.ctx, chart.chartArea, "#E1E2EB", HexColors.primary.DEFAULT),
+            borderColor: createGradient( chart.ctx, chart.chartArea, HexColors.gray['130'], HexColors.primary.DEFAULT),
         };
 
         // Get the right color for each of the points based on their value

@@ -1,6 +1,6 @@
 import { rest } from "msw";
 import { getSidebarMock } from "./sidebarMock";
-import {getFootprintJourneyMock} from './footprintJourneyMock';
+import {getCategoriesDataMock, getFootprintDataMock} from './categoriesMock';
 import {
   getDataGridCompaniesMock,
   getDataGridUsersMock,
@@ -47,11 +47,19 @@ export const handlers = [
     }
   ),
 
-  // Mock data for footprint and journey modules
+  // Mock data for journey modules
   rest.get(
     getApiUrl("/categories"),
     (req, res, ctx) => {
-      return res(ctx.json({ ...getFootprintJourneyMock() }));
+      return res(ctx.json({ ...getCategoriesDataMock() }));
+    }
+  ),
+
+  // Mock data for footprint modules
+  rest.get(
+    getApiUrl("/categories/company_decarbonization"),
+    (req, res, ctx) => {
+      return res(ctx.json({ ...getFootprintDataMock() }));
     }
   ),
 
@@ -88,10 +96,13 @@ export const handlers = [
   }),
 
   rest.get(`${apiBaseURL}/organizations/:orgId`, (req, res, ctx) => {
+    const { orgId } = req.params;
     return res(ctx.json({ ...getOrganizationMock() }));
   }),
 
   rest.get(`${apiBaseURL}/organizations/:orgId/members`, (req, res, ctx) => {
+    const { orgId } = req.params;
+    const mock = getOrganizationMembersMock();
     return res(ctx.json({ ...getOrganizationMembersMock() }));
   }),
 
@@ -147,19 +158,19 @@ export const handlers = [
       roleId: string;
     };
     try {
-        if (data) {
-            const { org_id, user_email, inviter_name, roleId } = data;
-            await sendInvitation(org_id, user_email, inviter_name, roleId);
-        }
-        return res(ctx.json({}));
+      if (data) {
+        const { org_id, user_email, inviter_name, roleId } = data;
+        await sendInvitation(org_id, user_email, inviter_name, roleId);
+      }
+      return res(ctx.json({}));
     } catch(error) {
-        let message
-        if (error instanceof Error) message = error.message
-        else message = String(error)
-        return res(
-            ctx.status(500),
-            ctx.json({ message: message })
-        );
+      let message
+      if (error instanceof Error) message = error.message
+      else message = String(error)
+      return res(
+        ctx.status(500),
+        ctx.json({ message: message })
+      );
     }
   }),
 
@@ -184,9 +195,9 @@ export const handlers = [
     return res(ctx.json({}));
   }),
 
-    rest.get(`${apiBaseURL}/roles`, async (req, res, ctx) => {
-        return res(
-            ctx.json(getRoles())
-        );
-    }),
+  rest.get(`${apiBaseURL}/roles`, async (req, res, ctx) => {
+    return res(
+      ctx.json(getRoles())
+    );
+  }),
 ];

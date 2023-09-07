@@ -1,4 +1,5 @@
-export function getFootprintJourneyMock() {
+import {find} from 'lodash';
+export function getCategoriesDataMock() {
   return {
     "categories": [
       {
@@ -38,7 +39,24 @@ export function getFootprintJourneyMock() {
               },
               {
                 "activity_key": "electricity_leased",
-                "activity_description": "Electricity consumption at all company leased facilities"
+                "activity_description": "Electricity consumption at all company leased facilities",
+                "footprint": [
+                  {
+                    "period": 2022,
+                    "period_type": "year",
+                    "value": 47
+                  },
+                  {
+                    "period": 2023,
+                    "period_type": "year",
+                    "value": 11.4
+                  },
+                  {
+                    "period": "2023-q4",
+                    "period_type": "quarter",
+                    "value": 3.2
+                  }
+                ]
               },
               {
                 "activity_key": "fuel_leased",
@@ -52,7 +70,24 @@ export function getFootprintJourneyMock() {
             "activities": [
               {
                 "activity_key": "vehicle_fuel",
-                "activity_description": "Sales, Executive, Delivery, and Operational Fleet Vehicles either owned or leased"
+                "activity_description": "Sales, Executive, Delivery, and Operational Fleet Vehicles either owned or leased",
+                "footprint": [
+                  {
+                    "period": 2022,
+                    "period_type": "year",
+                    "value": 90
+                  },
+                  {
+                    "period": 2023,
+                    "period_type": "year",
+                    "value": 11.4
+                  },
+                  {
+                    "period": "2023-q4",
+                    "period_type": "quarter",
+                    "value": 3.2
+                  }
+                ]
               },
               {
                 "activity_key": "vehicle_electricity",
@@ -79,7 +114,24 @@ export function getFootprintJourneyMock() {
             "activities": [
               {
                 "activity_key": "machinery_fuel",
-                "activity_description": "Forklifts, excavators, cranes, other heavy machinery."
+                "activity_description": "Forklifts, excavators, cranes, other heavy machinery.",
+                "footprint": [
+                  {
+                    "period": 2022,
+                    "period_type": "year",
+                    "value": 22
+                  },
+                  {
+                    "period": 2023,
+                    "period_type": "year",
+                    "value": 11.4
+                  },
+                  {
+                    "period": "2023-q4",
+                    "period_type": "quarter",
+                    "value": 3.2
+                  }
+                ]
               },
               {
                 "activity_key": "machinery_electricity",
@@ -114,7 +166,24 @@ export function getFootprintJourneyMock() {
             "activities": [
               {
                 "activity_key": "manufacturing_energy",
-                "activity_description": "Process energy (electric + heat) used for making products.  "
+                "activity_description": "Process energy (electric + heat) used for making products.",
+                "footprint": [
+                  {
+                    "period": 2022,
+                    "period_type": "year",
+                    "value": 22
+                  },
+                  {
+                    "period": 2023,
+                    "period_type": "year",
+                    "value": 11.4
+                  },
+                  {
+                    "period": "2023-q4",
+                    "period_type": "quarter",
+                    "value": 3.2
+                  }
+                ]
               },
               {
                 "activity_key": "materials",
@@ -252,4 +321,8 @@ export function getFootprintJourneyMock() {
       }
     ]
   };
+}
+
+export function getFootprintDataMock() {
+  return find(getCategoriesDataMock().categories,{'category_key':'company_decarbonization'} );
 }
