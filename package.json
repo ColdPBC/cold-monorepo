@@ -7,8 +7,8 @@
     "prebuild": "npx barrelsby -D -d ./libs/react/src -l all -e stories.tsx -e react-app-env -e test.tsx -e private.tsx",
     "start": "nx serve",
     "start:prod": "nx serve-static",
-    "storybook": "npx nx storybook cold-ui",
-    "build-storybook": "npx nx build-storybook cold-ui",
+    "storybook": "yarn build-storybook && npx nx storybook cold-ui",
+    "build-storybook": "yarn prebuild && npx nx build-storybook cold-ui",
     "build:dev": "yarn prebuild && npx nx run cold-ui:build:development --resolveJsonModule",
     "build:prod": "yarn prebuild && npx nx run cold-ui:build:production --resolveJsonModule",
     "test": "nx test"
@@ -54,6 +54,7 @@
     "react-range": "^1.8.14",
     "react-router": "^6.12.1",
     "react-router-dom": "^6.12.1",
+    "react-transition-group": "^4.4.5",
     "storybook-addon-auth0-react": "^1.2.0",
     "swr": "^2.1.5",
     "tslib": "^2.3.0",

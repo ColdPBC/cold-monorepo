@@ -14260,6 +14260,7 @@ __metadata:
     react-router-dom: ^6.12.1
     react-scripts: 5.0.1
     react-test-renderer: 18.2.0
+    react-transition-group: ^4.4.5
     rollup: ^3.21.0
     rollup-plugin-dts: ^5.3.0
     rollup-plugin-peer-deps-external: ^2.2.4
@@ -30924,7 +30925,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-transition-group@npm:^4.3.0":
+"react-transition-group@npm:^4.3.0, react-transition-group@npm:^4.4.5":
   version: 4.4.5
   resolution: "react-transition-group@npm:4.4.5"
   dependencies:

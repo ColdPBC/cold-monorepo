@@ -26,7 +26,6 @@
       "@coldpbc/lib": ["./libs/react/src/lib/index.ts"],
       "@coldpbc/mocks": ["./libs/react/src/__mocks__/index.ts"],
       "@coldpbc/providers": ["./libs/react/src/providers/index.ts"],
-      "@coldpbc/react": ["libs/react/src/index.ts"],
       "@coldpbc/routes": ["./libs/react/src/routes/index.ts"],
       "@coldpbc/styles": ["./libs/react/src/styles/index.ts"],
       "@coldpbc/themes": ["./libs/react/src/themes/index.ts"]
