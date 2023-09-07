@@ -46,15 +46,12 @@ jobs:
       - run: |
           echo "BASE: ${{ steps.setSHAs.outputs.base }}"
           echo "HEAD: ${{ steps.setSHAs.outputs.head }}"
-      - name: Cache node modules
-        uses: actions/cache@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
         with:
-          path: ./node_modules
-          key: cold-${{ runner.os }}--${{ hashFiles('**/yarn.lock') }}--${{ env.NX_HEAD }}
-          restore-keys: |
-            cold-${{ runner.os }}--${{ hashFiles('**/yarn.lock') }}--${{ env.NX_HEAD }}
-      - run: yarn cache clean
-      - run: npm install
+          node-version: "lts/*"
+      - run: yarn
       - name: Ensure main branch is tracked when building feature branch
         if: github.ref != 'refs/heads/main'
         run: git branch --track main origin/main
