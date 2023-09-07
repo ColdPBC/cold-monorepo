@@ -124,6 +124,30 @@
           "buildTarget": "cold-ui:build-storybook:ci"
         }
       }
+    },
+    "e2e": {
+      "executor": "@nx/cypress:cypress",
+      "options": {
+        "cypressConfig": "apps/cold-ui/cypress.config.ts",
+        "testingType": "e2e",
+        "devServerTarget": "cold-ui:serve",
+        "port": 6006
+      },
+      "configurations": {
+        "production": {
+          "devServerTarget": "cold-ui:serve:production"
+        },
+        "ci": {
+          "devServerTarget": "cold-ui:serve-static"
+        }
+      }
+    },
+    "component-test": {
+      "executor": "@nx/cypress:cypress",
+      "options": {
+        "cypressConfig": "apps/cold-ui/cypress.config.ts",
+        "testingType": "component"
+      }
     }
   },
   "tags": []
