@@ -1,3 +1,12 @@
+## [1.0.1](https://github.com/ColdPBC/Cold-MonoRepo/compare/v1.0.0...v1.0.1) (2023-09-07)
+
+
+### Bug Fixes
+
+* add mockServiceWorker.js ([4ab5b50](https://github.com/ColdPBC/Cold-MonoRepo/commit/4ab5b50ca009490368100b02156dce3d7b71f4a9))
+* issues causing invalid URI error ([5b7e457](https://github.com/ColdPBC/Cold-MonoRepo/commit/5b7e45720f39b59668f0ba1ab8f9fe74e81c34d5))
+* storybook issues ([d9a59ba](https://github.com/ColdPBC/Cold-MonoRepo/commit/d9a59ba229c1b662376d676104d1f24e8eddd495))
+
 # 1.0.0 (2023-09-06)
 
 ### Bug Fixes
