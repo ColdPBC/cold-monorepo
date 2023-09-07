@@ -8,3 +8,4 @@ export default create({
     brandImage: './cold.svg',
     brandTarget: '_self',
 });
+
