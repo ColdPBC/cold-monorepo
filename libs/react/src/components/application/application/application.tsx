@@ -2,10 +2,10 @@ import React, {useEffect, useState} from "react";
 import cookies from 'js-cookie';
 import {useAuth0} from '@auth0/auth0-react';
 import {ColdRoutes} from '../routes';
-import {useCookies} from '../../../hooks/useCookies';
-import {Spinner} from '../../atoms/spinner/spinner';
+import {useCookies} from '@coldpbc/hooks';
+import {Spinner} from '../../atoms';
 import {useLDClient} from 'launchdarkly-react-client-sdk';
-import {GlobalSizes} from '../../../enums/sizes';
+import {GlobalSizes} from '@coldpbc/enums';
 
 export const Application = () => {
     const {user, error, loginWithRedirect, isAuthenticated, isLoading, logout, getAccessTokenSilently} = useAuth0();
