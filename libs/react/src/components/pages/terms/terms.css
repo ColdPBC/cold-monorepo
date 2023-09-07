@@ -1,3 +1,5 @@
+@import url(http://fonts.googleapis.com/css?family=Merriweather:300italic,300);
+
 @media print {
   .markdown-terms *,
   .markdown-terms *:before,
@@ -140,8 +142,6 @@
 .markdown-terms textarea {
   max-width: 100%;
 }
-
-@import url(http://fonts.googleapis.com/css?family=Merriweather:300italic,300);
 
 .markdown-terms html {
   font-size: 18px;

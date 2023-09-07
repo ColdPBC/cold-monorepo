@@ -4,3 +4,23 @@
 @tailwind utilities;
 @tailwind components;
 /* You can add global styles to this file, and also import other style files */
+
+/* Accommodations to account for flowbite sidebar styling not overwriting appropriately */
+@layer components {
+  .sidebar-item span {
+    @apply px-0 !important;
+  }
+  .shrink-sidebar-item svg, .shrink-sidebar-item span {
+    @apply -translate-x-0.5 !important;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* For IE, Edge and Firefox */
+  .scrollbar-hide {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+}

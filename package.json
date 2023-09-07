@@ -1,5 +1,6 @@
 {
   "name": "cold-monorepo-nx",
+  "packageManager": "yarn@3.6.3",
   "version": "1.0.1",
   "license": "MIT",
   "scripts": {
