@@ -1,9 +1,9 @@
 import React from 'react';
-import { SurveySectionType } from '../../../../interfaces/survey/survey';
-import Lottie from 'react-lottie';
-import * as checkBoxAnimation from '../../../../animations/checkbox.json';
-import { ColdIcon } from '../../../atoms/icons/coldIcon';
-import { IconNames } from '../../../../enums/iconNames';
+import { SurveySectionType } from '@coldpbc/interfaces';
+import Lottie from "lottie-react";
+import { ColdIcon } from '../../../atoms';
+import { IconNames } from '@coldpbc/enums';
+import {getCheckboxAnimation} from "@coldpbc/animations";
 
 interface SurveySectionsProps {
     sections: SurveySectionType[];
@@ -82,13 +82,10 @@ export const SurveySections = ({
                 if(followUpIndex === section.follow_up.length - 1){
                     return (
                         <div className={className + " top-[8px] -left-[48px]"}>
-                            <Lottie
-                                options={{
-                                    loop: false,
-                                    autoplay: true,
-                                    animationData: checkBoxAnimation,
-                                }}
-                            />
+                          <Lottie
+                            loop={false}
+                            animationData={getCheckboxAnimation()}
+                          />
                         </div>
                     )
                 } else {
@@ -112,19 +109,16 @@ export const SurveySections = ({
         } else if(currentIndex === activeIndex - 1){
             if(!followUp){
                 return (
-                    <div className={className + " -left-[48px] top-[2px]"}>
+                    <div className={className + " w-[32px] h-[32px] -left-[48px] top-[2px]"}>
                         <Lottie
-                            options={{
-                                loop: false,
-                                autoplay: true,
-                                animationData: checkBoxAnimation,
-                            }}
+                          loop={false}
+                          animationData={getCheckboxAnimation()}
                         />
                     </div>
                 )
             } else {
                 return (
-                    <div className={className + " -left-[48px] top-[2px]"}>
+                    <div className={className + " w-[32px] h-[32px] -left-[48px] top-[2px]"}>
                         <ColdIcon className={" "} name={IconNames.ColdSmallCheckBoxIcon} />
                     </div>
                 )

@@ -1,8 +1,8 @@
 import React, {Ref, useEffect} from 'react';
-import { SurveySectionType, SurveySectionsProgressSectionType } from '../../../interfaces/survey/survey';
+import { SurveySectionType, SurveySectionsProgressSectionType } from '@coldpbc/interfaces';
 import {findIndex} from 'lodash';
-import { SurveySections } from './surveySections/surveySections';
-import { SurveySectionsProgressBar } from './surveySectionsProgressBar/surveySectionsProgressBar';
+import { SurveySections } from './surveySections';
+import { SurveySectionsProgressBar } from './surveySectionsProgressBar';
 
 export interface SurveySectionsProgressProps {
     sections: SurveySectionType[];

@@ -15,7 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@coldpbc/animations/*": ["./libs/react/src/animations/*"],
+      "@coldpbc/animations": ["./libs/react/src/animations/index.ts"],
       "@coldpbc/assets": ["./libs/react/src/assets/index.ts"],
       "@coldpbc/components": ["./libs/react/src/components/index.ts"],
       "@coldpbc/context": ["./libs/react/src/context/index.ts"],
