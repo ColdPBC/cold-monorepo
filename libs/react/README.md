@@ -1,10 +1,65 @@
-# ColdPBC React Component Library
+<div align="center">
+<p style="margin-bottom: 1px"><a href="http://nestjs.com/" target="blank"><img src="https://cold-public-assets.s3.us-east-2.amazonaws.com/Asset+4Logotype_Preferred.svg" width="699" alt="Cold Climate Logo" title="Cold Climate Logo"/></a></p>
+<div style="font-size: 40px;"> @coldpbc/react : Component Library </div>
+</div>
+
+# 
+
+### Getting Started
+1. Install dependencies
+
+```zsh
+yarn 
+```
+
+2. Build Library
+
+```zsh
+yarn build:dev
+```
+
+3. Build Storybook
+
+```zsh
+yarn build-storybook
+```
+4. Start Storybook
+    
+```zsh
+yarn storybook
+```
 
 ## Available Scripts
 
-### 1. start
+### Prebuild 
+Generates Barrel Files For Library (`index.ts`)
 
-Run storybook locally to test your components.
+**NOTE: This is run automatically before `build:dev` or `build:prod`)**
+```zsh
+yarn prebuild
+```
+### Build:dev
+Builds the library in development mode.
+
+```zsh
+yarn build:dev
+```
+### Build:prod
+Builds the library in production mode.
+
+```zsh
+yarn build:prod
+```
+
+### Build Storybook
+```zsh
+yarn build-storybook
+```
+
+### Start Storybook
+```zsh
+yarn storybook
+```
 
 ### How to use
 
