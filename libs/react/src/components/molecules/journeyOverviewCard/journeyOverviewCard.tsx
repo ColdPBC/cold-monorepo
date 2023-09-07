@@ -3,6 +3,7 @@ import { Card } from '../card/card';
 import {useNavigate} from 'react-router-dom';
 import { JourneySpiderChart } from '../journeySpiderChart/journeySpiderChart';
 
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface JourneyOverviewCardProps {
 
 }

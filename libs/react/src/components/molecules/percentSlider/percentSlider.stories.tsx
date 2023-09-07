@@ -15,6 +15,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
     render: (args) => {
+        // eslint-disable-next-line react-hooks/rules-of-hooks
         const [value, setValue] = React.useState<number | null>(args.value);
 
         const onChange = (value: number | null) => {

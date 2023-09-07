@@ -4,7 +4,14 @@
     "default": {
       "runner": "nx-cloud",
       "options": {
-        "cacheableOperations": ["build", "lint", "test", "e2e"],
+        "cacheableOperations": [
+          "build",
+          "lint",
+          "test",
+          "e2e",
+          "build-storybook",
+          "component-test"
+        ],
         "accessToken": "MDRkMWE4MTAtNGJiYS00Y2FlLWIzNmItZTc4MGEyNzM3MWM5fHJlYWQtd3JpdGU="
       }
     }
@@ -26,6 +33,12 @@
         "{workspaceRoot}/.eslintrc.json",
         "{workspaceRoot}/.eslintignore"
       ]
+    },
+    "build-storybook": {
+      "inputs": ["default", "^production", "!{projectRoot}/.storybook/**/*"]
+    },
+    "component-test": {
+      "inputs": ["default", "^production"]
     }
   },
   "namedInputs": {
@@ -34,7 +47,12 @@
       "default",
       "!{projectRoot}/**/?(*.)+(spec|test).[jt]s?(x)?(.snap)",
       "!{projectRoot}/tsconfig.spec.json",
-      "!{projectRoot}/.eslintrc.json"
+      "!{projectRoot}/.eslintrc.json",
+      "!{projectRoot}/**/*.stories.@(js|jsx|ts|tsx|mdx)",
+      "!{projectRoot}/.storybook/**/*",
+      "!{projectRoot}/cypress/**/*",
+      "!{projectRoot}/**/*.cy.[jt]s?(x)",
+      "!{projectRoot}/cypress.config.[jt]s"
     ],
     "sharedGlobals": ["{workspaceRoot}/babel.config.json"]
   },

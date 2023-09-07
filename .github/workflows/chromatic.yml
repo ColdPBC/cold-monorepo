@@ -5,7 +5,7 @@ name: 'Chromatic'
 # Event for the workflow
 on:
   push:
-    paths: ["libs/react/src/**", ".storybook/**", "public/**"] # Trigger the action only when files change in the folders defined here
+    paths: ["libs/react/src/**", "apps/cold-ui/.storybook/**", "public/**"] # Trigger the action only when files change in the folders defined here
 
 env:
   GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
@@ -26,14 +26,12 @@ jobs:
         uses: actions/cache@v2
         with:
             path: ./node_modules
-            key: ${{ runner.os }}-build-${{ env.CACHE_NAME }}-${{ hashFiles('**/yarn.lock') }}
+            key: cold-${{ runner.os }}-${{ env.CACHE_NAME }}-${{ hashFiles('**/yarn.lock') }}
             restore-keys: |
-              ${{ runner.os }}-build-${{ env.CACHE_NAME }}-
-              ${{ runner.os }}-build-
-              ${{ runner.os }}-
+              cold-${{ runner.os }}-${{ env.CACHE_NAME }}-${{ hashFiles('**/yarn.lock') }}
       - name: Install dependencies
         # 👇 Install dependencies with the same package manager used in the project (replace it as needed), e.g. yarn, npm, pnpm
-        run: yarn
+        run: npm install
         # 👇 Adds Chromatic as a step in the workflow
       - name: Publish to Chromatic
         uses: chromaui/action@v1

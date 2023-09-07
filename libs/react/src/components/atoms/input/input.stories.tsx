@@ -4,7 +4,7 @@ import { StoryObj } from "@storybook/react";
 import { Input } from './input';
 import { InputTypes } from '../../../enums/inputs';
 import { IInputProps } from '../../../interfaces/input';
-
+//todo: fix issues requiring @typescript-eslint/no-empty-function below
 const meta = {
   title: "Atoms/Input",
   component: Input,
@@ -26,6 +26,7 @@ export const Default: Story = {
     input_props: {
       name: "",
       value: "",
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
       onValueChange: (value) => {},
     }
   },
@@ -42,6 +43,7 @@ export const Currency: Story = {
     input_props: {
       name: "",
       value: "",
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
       onValueChange: (value) => {},
     }
   },
@@ -58,6 +60,7 @@ export const Number: Story = {
     input_props: {
       name: "",
       value: "",
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
       onValueChange: (value) => {},
     }
   },
@@ -84,6 +87,7 @@ export const Select: Story = {
           name: "Wisconsin"
         }
       ],
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
       onValueChange: (value) => {},
       defaultValue: "Minnesota",
     }

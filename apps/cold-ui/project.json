@@ -61,6 +61,14 @@
         "reportsDirectory": "../../coverage/apps/cold-ui"
       }
     },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["tsc -p tsconfig.app.json --noEmit"],
+        "cwd": "apps/cold-ui",
+        "forwardAllArgs": false
+      }
+    },
     "lint": {
       "executor": "@nx/linter:eslint",
       "outputs": ["{options.outputFile}"],
@@ -72,6 +80,73 @@
       "executor": "@nx/web:file-server",
       "options": {
         "buildTarget": "cold-ui:build"
+      }
+    },
+    "storybook": {
+      "executor": "@nx/storybook:storybook",
+      "options": {
+        "port": 4400,
+        "configDir": "apps/cold-ui/.storybook"
+      },
+      "configurations": {
+        "ci": {
+          "quiet": true
+        }
+      }
+    },
+    "build-storybook": {
+      "executor": "@nx/storybook:build",
+      "outputs": ["{options.outputDir}"],
+      "options": {
+        "outputDir": "dist/storybook/cold-ui",
+        "configDir": "apps/cold-ui/.storybook"
+      },
+      "configurations": {
+        "ci": {
+          "quiet": true
+        }
+      }
+    },
+    "test-storybook": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "test-storybook -c apps/cold-ui/.storybook --url=http://localhost:4400"
+      }
+    },
+    "static-storybook": {
+      "executor": "@nx/web:file-server",
+      "options": {
+        "buildTarget": "cold-ui:build-storybook",
+        "staticFilePath": "dist/storybook/cold-ui"
+      },
+      "configurations": {
+        "ci": {
+          "buildTarget": "cold-ui:build-storybook:ci"
+        }
+      }
+    },
+    "e2e": {
+      "executor": "@nx/cypress:cypress",
+      "options": {
+        "cypressConfig": "apps/cold-ui/cypress.config.ts",
+        "testingType": "e2e",
+        "devServerTarget": "cold-ui:serve",
+        "port": 6006
+      },
+      "configurations": {
+        "production": {
+          "devServerTarget": "cold-ui:serve:production"
+        },
+        "ci": {
+          "devServerTarget": "cold-ui:serve-static"
+        }
+      }
+    },
+    "component-test": {
+      "executor": "@nx/cypress:cypress",
+      "options": {
+        "cypressConfig": "apps/cold-ui/cypress.config.ts",
+        "testingType": "component"
       }
     }
   },

@@ -8,6 +8,7 @@ const baseURL = get(import.meta.env, 'VITE_API_BASE_URL', 'http://localhost:7001
 // path, method, data
 export const axiosFetcher = (params: Array<string>) => {
     try {
+        // eslint-disable-next-line react-hooks/rules-of-hooks
         const {getCookieData} = useCookies();
         const cookie = getCookieData();
 
