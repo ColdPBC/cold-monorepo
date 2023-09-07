@@ -34,6 +34,18 @@ jobs:
         with:
           persist-credentials: false
           fetch-depth: 0
+      #NX STEPS
+      - name: Derive appropriate SHAs for base and head for `nx affected` commands
+        uses: nrwl/nx-set-shas@v3
+      - run: |
+          echo "BASE: ${{ env.NX_BASE }}"
+          echo "HEAD: ${{ env.NX_HEAD }}"
+      - name: Derive appropriate SHAs for base and head for `nx affected` commands
+        id: setSHAs
+        uses: nrwl/nx-set-shas@v3
+      - run: |
+          echo "BASE: ${{ steps.setSHAs.outputs.base }}"
+          echo "HEAD: ${{ steps.setSHAs.outputs.head }}"
       - name: Cache node modules
         uses: actions/cache@v3
         with:
@@ -43,6 +55,15 @@ jobs:
             ${{ runner.os }}--${{ hashFiles('**/yarn.lock') }}--${{ env.NX_HEAD }}
             ${{ runner.os }}--${{ hashFiles('**/yarn.lock') }}
             ${{ runner.os }}
+      - run: yarn cache clean
+      - run: npm install
+      - name: Ensure main branch is tracked when building feature branch
+        if: github.ref != 'refs/heads/main'
+        run: git branch --track main origin/main
+      - run: npx nx affected -t lint --parallel=3
+      - run: npx nx affected -t test --parallel=3 --configuration=ci
+      - run: npx nx affected -t build --parallel=3
+
       - name: Compile Typescript
         run: yarn build:prod
       - name: Release
