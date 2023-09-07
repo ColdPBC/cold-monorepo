@@ -43,5 +43,4 @@ yalc.*
 
 # Ignore all index barrel files
 /libs/react/src/**/**/index.ts
-/.yarnrc.yml
 /.yarn/
