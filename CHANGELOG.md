@@ -1,3 +1,10 @@
+# [1.1.0-COLD-230-1.2](https://github.com/ColdPBC/Cold-MonoRepo/compare/v1.1.0-COLD-230-1.1...v1.1.0-COLD-230-1.2) (2023-09-07)
+
+
+### Bug Fixes
+
+* Added back addons for the cookie, auth0 and launchadarkly ([b10b951](https://github.com/ColdPBC/Cold-MonoRepo/commit/b10b95123533b968ceab4805a2d9e68663a937ac))
+
 # [1.1.0-COLD-230-1.1](https://github.com/ColdPBC/Cold-MonoRepo/compare/v1.0.1...v1.1.0-COLD-230-1.1) (2023-09-07)
 
 
