@@ -1,7 +1,7 @@
 {
   "name": "cold-monorepo-nx",
   "packageManager": "yarn@3.6.3",
-  "version": "1.1.0",
+  "version": "1.2.0-COLD-126.1",
   "license": "MIT",
   "scripts": {
     "prebuild": "npx barrelsby -D -d ./libs/react/src -l all -e stories.tsx -e react-app-env -e test.tsx -e private.tsx",
@@ -192,6 +192,5 @@
     "vitest": "~0.32.0",
     "web-vitals": "^2.1.4"
   },
-  "readme": "ERROR: No README data found!",
-  "_id": "cold-monorepo-nx@1.1.0"
+  "readme": "ERROR: No README data found!"
 }

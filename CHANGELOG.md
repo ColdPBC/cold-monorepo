@@ -1,3 +1,10 @@
+# [1.2.0-COLD-126.1](https://github.com/ColdPBC/Cold-MonoRepo/compare/v1.1.0...v1.2.0-COLD-126.1) (2023-09-08)
+
+
+### Features
+
+* surveyleftnav component ([b19a35a](https://github.com/ColdPBC/Cold-MonoRepo/commit/b19a35ae96b3161e4f2bb74323c779cd6d7d60c7))
+
 # [1.1.0](https://github.com/ColdPBC/Cold-MonoRepo/compare/v1.0.1...v1.1.0) (2023-09-07)
 
 
