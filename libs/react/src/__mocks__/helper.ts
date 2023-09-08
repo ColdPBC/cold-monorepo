@@ -8,7 +8,7 @@ export const changeUserRoles = (
   roleName: string
 ) => {
   return mutate(
-    [`/organizations/${orgId}/members/`, "GET"],
+    [`/organizations/${orgId}/members`, "GET"],
     (memberData) => ({
       ...memberData,
       members: cloneDeep(memberData.members).map((member: any) => {
@@ -37,7 +37,7 @@ export const removeUserFromOrganization = (
   orgId: string
 ) => {
   return mutate(
-    [`/organizations/${orgId}/members/`, "GET"],
+    [`/organizations/${orgId}/members`, "GET"],
     (memberData) => ({
       ...memberData,
       members: cloneDeep(memberData.members).filter((member: any) => {
@@ -52,7 +52,7 @@ export const removeUserFromOrganization = (
 
 export const deleteUserInvitation = (org_id: string, user_email: string) => {
   mutate(
-    [`/organizations/${org_id}/members/`, "GET"],
+    [`/organizations/${org_id}/members`, "GET"],
     (memberData) => ({
       ...memberData,
       members: cloneDeep(memberData.members).filter((member: any) => {
@@ -69,7 +69,7 @@ export const resendInvitation = async (org_id: string, user_email: string) => {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   return mutate(
-    [`/organizations/${org_id}/members/`, "GET"],
+    [`/organizations/${org_id}/members`, "GET"],
     (memberData) => ({
       ...memberData,
       members: cloneDeep(memberData.members).map((member: any) => {
@@ -106,7 +106,7 @@ export const sendInvitation = async (
         family_name: "Smith",
     }
     return mutate(
-        [`/organizations/${org_id}/members/`, "GET"],
+        [`/organizations/${org_id}/members`, "GET"],
         (memberData) => ({
           ...memberData,
           members: () => {
