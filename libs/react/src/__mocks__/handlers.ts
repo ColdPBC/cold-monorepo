@@ -69,7 +69,7 @@ export const handlers = [
   }),
 
   rest.get(
-    getApiUrl('form-definitions/team_member_table'),
+    getApiUrl('/form-definitions/team_member_table'),
     (req, res, ctx) => {
       return res(ctx.json(getTeamMemberDataGridMock()));
     }
@@ -175,8 +175,7 @@ export const handlers = [
     }
   }),
 
-  rest.patch(
-    getApiUrl('/organizations/invitation'),
+  rest.patch(getApiUrl('/organizations/invitation'),
     async (req, res, ctx) => {
       const data = req.body as {
         org_id: string;
