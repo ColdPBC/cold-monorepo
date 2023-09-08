@@ -1,9 +1,9 @@
 import axios from 'axios';
 import { set } from 'lodash';
 import { useCookies } from '@coldpbc/hooks';
-import get from "lodash/get";
+import {resolveAPIUrl} from "./helper";
 
-const baseURL = get(import.meta.env, 'VITE_API_BASE_URL', 'https://api.coldclimate.online');
+const baseURL = resolveAPIUrl();
 
 // path, method, data
 export const axiosFetcher = (params: Array<string>) => {
