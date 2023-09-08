@@ -5,7 +5,7 @@ name: 'Chromatic'
 # Event for the workflow
 on:
   push:
-    paths: ["libs/react/src/**", "apps/cold-ui/.storybook/**", "public/**"] # Trigger the action only when files change in the folders defined here
+    paths: ["libs/react/src/**", "apps/cold-ui/.storybook/**", "apps/cold-ui/src/**", "apps/cold-ui/public/**"] # Trigger the action only when files change in the folders defined here
 
 env:
   GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
