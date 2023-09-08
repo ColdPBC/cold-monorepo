@@ -3,13 +3,12 @@
 import React from "react";
 import { withKnobs } from "@storybook/addon-knobs";
 import { Meta, StoryObj } from "@storybook/react";
-import { SurveySectionsProgress } from './surveySectionsProgress';
-import { BaseButton } from '../../atoms/button/button';
-import { getSurveySectionMock, getSurveySectionScrollableMock } from '../../../__mocks__/surveyMock';
-import { SurveySectionType } from '../../../interfaces/survey/survey';
+import { SurveySectionsProgress } from '@coldpbc/components';
+import { getSurveySectionMock, getSurveySectionScrollableMock } from '@coldpbc/mocks';
+import { SurveySectionType } from '@coldpbc/interfaces';
 
 const meta = {
-    title: "Organisms/SurveySectionsProgress",
+    title: "Molecules/SurveySectionsProgress",
     component: SurveySectionsProgress,
     tags: ["autodocs"],
     decorators: [withKnobs],
