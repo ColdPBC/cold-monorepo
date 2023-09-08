@@ -1,3 +1,10 @@
+# [1.2.0-cold-116-create-footprintoverviewcard.1](https://github.com/ColdPBC/Cold-MonoRepo/compare/v1.1.0...v1.2.0-cold-116-create-footprintoverviewcard.1) (2023-09-08)
+
+
+### Features
+
+* COLD-193, COLD-116 ([ba0a14a](https://github.com/ColdPBC/Cold-MonoRepo/commit/ba0a14ad9b0d42a35b1f3c57dd8cb69245861842))
+
 # [1.1.0](https://github.com/ColdPBC/Cold-MonoRepo/compare/v1.0.1...v1.1.0) (2023-09-07)
 
 
