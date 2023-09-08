@@ -3,7 +3,6 @@ import {axiosFetcher} from "../../../fetchers";
 import useSWR from "swr";
 import {Spinner} from "../../atoms";
 import ReactMarkdown from "react-markdown";
-import './terms.css'
 
 export interface TermsProps {
   type:string,
