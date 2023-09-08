@@ -21,7 +21,16 @@ import {getFormDefinitionByName} from "./formDefinition";
 import {getRoles} from './roleMock';
 
 // Even if this uses vite as a bundler, it still uses the NODE_ENV variable
-const apiBaseURL = process.env.VITE_API_BASE_URL || "http://localhost:7001";
+
+let apiBaseURL: string;
+
+// if running in browser, use the mock api url
+if (typeof global.process === 'undefined' || global.process.title === 'browser'){
+  apiBaseURL = "https://api.coldclimate.test";
+} else { // if running in node, use the api url from the .env file
+  apiBaseURL = process.env.VITE_API_BASE_URL || "http://localhost:7001";
+}
+
 
 export const getApiUrl = (path: string) => {
   return `${apiBaseURL}${path}`;
