@@ -14,7 +14,7 @@ if (typeof global.process === 'undefined' || global.process.title === 'browser')
     worker.start({
         onUnhandledRequest(req) {
           const reqToSelf = req.url.href.includes('http://localhost:4400') || req.url.href.includes('chromatic.com');
-          const reqToApi = req.url.href.includes('http://localhost:7001') || req.url.href.includes('api.coldclimate.');
+          const reqToApi = req.url.href.includes('http://localhost:7001') || req.url.href.includes('https://api.coldclimate.test');
 
             if(!reqToSelf && reqToApi) {
               console.warn(
