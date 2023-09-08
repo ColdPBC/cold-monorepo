@@ -199,8 +199,10 @@ export function FootprintOverviewChart(props: PropsWithChildren<FootprintOvervie
 
     chartData.labels?.push(info.name);
     chartData.datasets[0].data.push(info.value);
-    // @ts-ignore
-    chartData.datasets[0].backgroundColor?.push(info.color);
+    
+    if (isArray(chartData.datasets[0].backgroundColor)) {
+      chartData.datasets[0].backgroundColor?.push(info.color);
+    }
 
     // Add a spacer
     chartData.labels?.push(null);
