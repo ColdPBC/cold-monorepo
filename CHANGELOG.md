@@ -1,3 +1,24 @@
+# [1.2.0-COLD-126.3](https://github.com/ColdPBC/Cold-MonoRepo/compare/v1.2.0-COLD-126.2...v1.2.0-COLD-126.3) (2023-09-08)
+
+
+### Bug Fixes
+
+* improve msw logging ([7ee3c86](https://github.com/ColdPBC/Cold-MonoRepo/commit/7ee3c86c16a16284b325a346b47430b52fd410cf))
+
+# [1.2.0-COLD-126.2](https://github.com/ColdPBC/Cold-MonoRepo/compare/v1.2.0-COLD-126.1...v1.2.0-COLD-126.2) (2023-09-08)
+
+
+### Features
+
+* Updated background image style to match figma design ([069d4f0](https://github.com/ColdPBC/Cold-MonoRepo/commit/069d4f0785d471e1fe2d982f154d92e465e7dad1))
+
+# [1.2.0-COLD-126.1](https://github.com/ColdPBC/Cold-MonoRepo/compare/v1.1.0...v1.2.0-COLD-126.1) (2023-09-08)
+
+
+### Features
+
+* surveyleftnav component ([b19a35a](https://github.com/ColdPBC/Cold-MonoRepo/commit/b19a35ae96b3161e4f2bb74323c779cd6d7d60c7))
+
 ## [1.1.1](https://github.com/ColdPBC/Cold-MonoRepo/compare/v1.1.0...v1.1.1) (2023-09-08)
 
 
