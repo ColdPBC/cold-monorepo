@@ -42,7 +42,7 @@ export const handlers = [
 
   //Mock SideBar Request
   rest.get(
-    getApiUrl("/form-definitions/sidebar_navigation"),
+    getApiUrl("/form-definitions/sidebar_navigation/"),
     (req, res, ctx) => {
       return res(ctx.json({ ...getSidebarMock() }));
     }
@@ -50,7 +50,7 @@ export const handlers = [
 
   // Mock data for journey modules
   rest.get(
-    getApiUrl("/categories"),
+    getApiUrl("/categories/"),
     (req, res, ctx) => {
       return res(ctx.json({ ...getCategoriesDataMock() }));
     }
@@ -58,57 +58,57 @@ export const handlers = [
 
   // Mock data for footprint modules
   rest.get(
-    getApiUrl("/categories/company_decarbonization"),
+    getApiUrl("/categories/company_decarbonization/"),
     (req, res, ctx) => {
       return res(ctx.json({ ...getFootprintDataMock() }));
     }
   ),
 
-  rest.get(`${apiBaseURL}/company-users`, (req, res, ctx) => {
+  rest.get(`${apiBaseURL}/company-users/`, (req, res, ctx) => {
     return res(ctx.json(getDataGridUsersMock()));
   }),
 
   rest.get(
-    `${apiBaseURL}/form-definitions/team_member_table`,
+    `${apiBaseURL}/form-definitions/team_member_table/`,
     (req, res, ctx) => {
       return res(ctx.json(getTeamMemberDataGridMock()));
     }
   ),
 
-  rest.get(`${apiBaseURL}/form-definitions/datagrid`, (req, res, ctx) => {
+  rest.get(`${apiBaseURL}/form-definitions/datagrid/`, (req, res, ctx) => {
     return res(ctx.json(getDefaultFormDefinitionGridMock()));
   }),
 
-  rest.get(`${apiBaseURL}/data/datagrid`, (req, res, ctx) => {
+  rest.get(`${apiBaseURL}/data/datagrid/`, (req, res, ctx) => {
     return res(ctx.json({ ...getDefaultFormDataGridMock() }));
   }),
 
-  rest.post(`${apiBaseURL}/invites`, (req, res, ctx) => {
+  rest.post(`${apiBaseURL}/invites/`, (req, res, ctx) => {
     return res(ctx.json({}));
   }),
 
-  rest.delete(`${apiBaseURL}/invites/:id`, (req, res, ctx) => {
+  rest.delete(`${apiBaseURL}/invites/:id/`, (req, res, ctx) => {
     return res(ctx.json({ ...getDefaultFormDataGridMock() }));
   }),
 
-  rest.get(`${apiBaseURL}/companies/:id`, (req, res, ctx) => {
+  rest.get(`${apiBaseURL}/companies/:id/`, (req, res, ctx) => {
     const { id } = req.params;
     return res(ctx.json({ ...getDataGridCompaniesMock(id as string) }));
   }),
 
-  rest.get(`${apiBaseURL}/organizations/:orgId`, (req, res, ctx) => {
+  rest.get(`${apiBaseURL}/organizations/:orgId/`, (req, res, ctx) => {
     const { orgId } = req.params;
     return res(ctx.json({ ...getOrganizationMock() }));
   }),
 
-  rest.get(`${apiBaseURL}/organizations/:orgId/members`, (req, res, ctx) => {
+  rest.get(`${apiBaseURL}/organizations/:orgId/members/`, (req, res, ctx) => {
     const { orgId } = req.params;
     const mock = getOrganizationMembersMock();
     return res(ctx.json({ ...getOrganizationMembersMock() }));
   }),
 
   rest.post(
-    `${apiBaseURL}/organizations/:orgId/members/:userId/role/:roleName`,
+    `${apiBaseURL}/organizations/:orgId/members/:userId/role/:roleName/`,
     async (req, res, ctx) => {
       const { orgId, userId, roleName } = req.params;
       await changeUserRoles(
@@ -121,7 +121,7 @@ export const handlers = [
   ),
 
   rest.delete(
-    `${apiBaseURL}/organizations/:orgId/member`,
+    `${apiBaseURL}/organizations/:orgId/member/`,
     async (req, res, ctx) => {
       const { orgId } = req.params;
       let data: { members: string[] };
@@ -134,7 +134,7 @@ export const handlers = [
   ),
 
   rest.delete(
-    `${apiBaseURL}/organizations/invitation`,
+    `${apiBaseURL}/organizations/invitation/`,
     async (req, res, ctx) => {
       let data: {
         org_id: string;
@@ -151,7 +151,7 @@ export const handlers = [
     }
   ),
 
-  rest.post(`${apiBaseURL}/organizations/invitation`, async (req, res, ctx) => {
+  rest.post(`${apiBaseURL}/organizations/invitation/`, async (req, res, ctx) => {
     const data = req.body as {
       org_id: string;
       user_email: string;
@@ -176,7 +176,7 @@ export const handlers = [
   }),
 
   rest.patch(
-    `${apiBaseURL}/organizations/invitation`,
+    `${apiBaseURL}/organizations/invitation/`,
     async (req, res, ctx) => {
       const data = req.body as {
         org_id: string;
@@ -192,7 +192,7 @@ export const handlers = [
     }
   ),
 
-  rest.post(`${apiBaseURL}/resources/:name`, async (req, res, ctx) => {
+  rest.post(`${apiBaseURL}/resources/:name/`, async (req, res, ctx) => {
     return res(ctx.json({}));
   }),
 
@@ -202,13 +202,13 @@ export const handlers = [
     );
   }),
 
-  rest.get(`${apiBaseURL}/form-definitions/:name`, (req, res, ctx) => {
+  rest.get(`${apiBaseURL}/form-definitions/:name/`, (req, res, ctx) => {
     const { name } = req.params;
 
     return res(ctx.json(getFormDefinitionByName(name as string)));
   }),
 
-  rest.patch(`${apiBaseURL}/form-definitions/:name`, async (req, res, ctx) => {
+  rest.patch(`${apiBaseURL}/form-definitions/:name/`, async (req, res, ctx) => {
     const {data} = await req.json();
 
     return res(ctx.json({}));
