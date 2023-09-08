@@ -1,3 +1,10 @@
+# [1.2.0-COLD-126.3](https://github.com/ColdPBC/Cold-MonoRepo/compare/v1.2.0-COLD-126.2...v1.2.0-COLD-126.3) (2023-09-08)
+
+
+### Bug Fixes
+
+* improve msw logging ([7ee3c86](https://github.com/ColdPBC/Cold-MonoRepo/commit/7ee3c86c16a16284b325a346b47430b52fd410cf))
+
 # [1.2.0-COLD-126.2](https://github.com/ColdPBC/Cold-MonoRepo/compare/v1.2.0-COLD-126.1...v1.2.0-COLD-126.2) (2023-09-08)
 
 
