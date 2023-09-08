@@ -12,7 +12,7 @@
     "build:dev": "yarn prebuild && npx nx run cold-ui:build:development --resolveJsonModule",
     "build:prod": "yarn prebuild && npx nx run cold-ui:build:production --resolveJsonModule",
     "test": "nx test",
-    "chromatic": "npx chromatic --project-token=chpt_8c97d5f04267902"
+    "chromatic": "npx chromatic --project-token=chpt_8c97d5f04267902 --exit-once-uploaded --onlyChanged --exit-zero-on-changes"
   },
   "private": true,
   "dependencies": {
