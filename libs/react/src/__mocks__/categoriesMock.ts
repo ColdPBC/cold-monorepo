@@ -326,3 +326,36 @@ export function getCategoriesDataMock() {
 export function getFootprintDataMock() {
   return find(getCategoriesDataMock().categories,{'category_key':'company_decarbonization'} );
 }
+
+export function getFootprintDataMockTwoSubCats() {
+  const data = find(getCategoriesDataMock().categories,{'category_key':'company_decarbonization'} );
+  if (data?.subcategories) data.subcategories = data?.subcategories.slice(0, 2);
+
+  return data;
+}
+
+export function getFootprintDataMockThreeSubCats() {
+  const data = find(getCategoriesDataMock().categories,{'category_key':'company_decarbonization'} );
+  if (data?.subcategories) data.subcategories = data?.subcategories.slice(0, 3);
+
+  return data;
+}
+
+export function getFootprintDataMockFiveSubCats() {
+  const data = find(getCategoriesDataMock().categories,{'category_key':'company_decarbonization'} );
+  if (data?.subcategories) {
+    data.subcategories.push({
+      ...data.subcategories[0],
+      subcategory_name: 'Private jets',
+      subcategory_key: 'private-jets'
+    });
+  }
+
+  return data;
+}
+
+export function getFootprintEmptyDataMock() {
+  return {
+    "subcategories": []
+  };
+}
