@@ -1,3 +1,10 @@
+## [1.2.1-COLD-84.2](https://github.com/ColdPBC/Cold-MonoRepo/compare/v1.2.1-COLD-84.1...v1.2.1-COLD-84.2) (2023-09-10)
+
+
+### Bug Fixes
+
+* corrected http to https for STORYBOOK API URL ([bae1edc](https://github.com/ColdPBC/Cold-MonoRepo/commit/bae1edc6a3a5056c95a25807aaf06f8398b08e98))
+
 ## [1.2.1-COLD-84.1](https://github.com/ColdPBC/Cold-MonoRepo/compare/v1.2.0...v1.2.1-COLD-84.1) (2023-09-10)
 
 
