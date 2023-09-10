@@ -1,3 +1,10 @@
+## [1.2.1-COLD-84.1](https://github.com/ColdPBC/Cold-MonoRepo/compare/v1.2.0...v1.2.1-COLD-84.1) (2023-09-10)
+
+
+### Bug Fixes
+
+* fix for Safari logging loop, UI application api URL env variable incorrect, removed ldclient code throwing error due to undefined user id ([ed36174](https://github.com/ColdPBC/Cold-MonoRepo/commit/ed36174a80951e1b9de1e1120538618644539fb7))
+
 # [1.2.0](https://github.com/ColdPBC/Cold-MonoRepo/compare/v1.1.1...v1.2.0) (2023-09-08)
 
 
