@@ -12,15 +12,19 @@ const clientId = import.meta.env.VITE_AUTH0_CLIENT_ID;
 const audience = import.meta.env.VITE_COLD_API_AUDIENCE;
 const launchDarklyClientSideId = import.meta.env.VITE_LD_CLIENT_SIDE_ID;
 root.render(
-    <StrictMode>
-        <ColdContextProvider
-            domain={domain}
-            clientId={clientId}
-            redirectUri={window.location.origin + '/callback'}
-            audience={audience}
-            launchDarklyClientSideId={launchDarklyClientSideId}
-        >
-            <Home />
-        </ColdContextProvider>
-    </StrictMode>
+  <StrictMode>
+    <ColdContextProvider
+      auth0Options={{
+        domain: domain,
+        clientId: clientId,
+        authorizationParams: {
+          redirect_uri: window.location.origin + '/callback',
+          audience: audience,
+        }
+      }}
+      launchDarklyClientSideId={launchDarklyClientSideId}
+    >
+      <Home />
+    </ColdContextProvider>
+  </StrictMode>
 );

@@ -6,7 +6,9 @@
       <script value="storybook" />
     </scripts>
     <node-interpreter value="project" />
-    <envs />
+    <envs>
+      <env name="STORYBOOK_API_URL" value="https://api.coldclimate.test" />
+    </envs>
     <method v="2">
       <option name="NpmBeforeRunTask" enabled="true">
         <package-json value="$PROJECT_DIR$/package.json" />

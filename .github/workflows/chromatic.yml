@@ -45,3 +45,5 @@ jobs:
           # 👇 Chromatic projectToken, refer to the manage page to obtain it.
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
           externals: /(public|.storybook|tailwind.config.js)/**
+        env:
+          STORYBOOK_API_URL: "http://api.coldclimate.test/"
