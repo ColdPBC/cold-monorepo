@@ -19,13 +19,13 @@ import {
 } from "./helper";
 import {getFormDefinitionByName} from "./formDefinition";
 import {getRoles} from './roleMock';
+import {resolveAPIUrl} from "../fetchers/helper";
 
 // Even if this uses vite as a bundler, it still uses the NODE_ENV variable
-const apiBaseURL = process.env.VITE_API_BASE_URL || "http://localhost:7001";
-
 export const getApiUrl = (path: string) => {
-  return `${apiBaseURL}${path}`;
+  return `${resolveAPIUrl()}${path}`;
 };
+
 export const handlers = [
   /*
      How To Test Your Components Against The API:
@@ -64,51 +64,51 @@ export const handlers = [
     }
   ),
 
-  rest.get(`${apiBaseURL}/company-users`, (req, res, ctx) => {
+  rest.get(getApiUrl('/company-users'), (req, res, ctx) => {
     return res(ctx.json(getDataGridUsersMock()));
   }),
 
   rest.get(
-    `${apiBaseURL}/form-definitions/team_member_table`,
+    getApiUrl('/form-definitions/team_member_table'),
     (req, res, ctx) => {
       return res(ctx.json(getTeamMemberDataGridMock()));
     }
   ),
 
-  rest.get(`${apiBaseURL}/form-definitions/datagrid`, (req, res, ctx) => {
+  rest.get(getApiUrl('/form-definitions/datagrid'), (req, res, ctx) => {
     return res(ctx.json(getDefaultFormDefinitionGridMock()));
   }),
 
-  rest.get(`${apiBaseURL}/data/datagrid`, (req, res, ctx) => {
+  rest.get(getApiUrl('/data/datagrid'), (req, res, ctx) => {
     return res(ctx.json({ ...getDefaultFormDataGridMock() }));
   }),
 
-  rest.post(`${apiBaseURL}/invites`, (req, res, ctx) => {
+  rest.post(getApiUrl('/invites'), (req, res, ctx) => {
     return res(ctx.json({}));
   }),
 
-  rest.delete(`${apiBaseURL}/invites/:id`, (req, res, ctx) => {
+  rest.delete(getApiUrl('/invites/:id'), (req, res, ctx) => {
     return res(ctx.json({ ...getDefaultFormDataGridMock() }));
   }),
 
-  rest.get(`${apiBaseURL}/companies/:id`, (req, res, ctx) => {
+  rest.get(getApiUrl('/companies/:id'), (req, res, ctx) => {
     const { id } = req.params;
     return res(ctx.json({ ...getDataGridCompaniesMock(id as string) }));
   }),
 
-  rest.get(`${apiBaseURL}/organizations/:orgId`, (req, res, ctx) => {
+  rest.get(getApiUrl('/organizations/:orgId'), (req, res, ctx) => {
     const { orgId } = req.params;
     return res(ctx.json({ ...getOrganizationMock() }));
   }),
 
-  rest.get(`${apiBaseURL}/organizations/:orgId/members`, (req, res, ctx) => {
+  rest.get(getApiUrl('/organizations/:orgId/members'), (req, res, ctx) => {
     const { orgId } = req.params;
     const mock = getOrganizationMembersMock();
     return res(ctx.json({ ...getOrganizationMembersMock() }));
   }),
 
   rest.post(
-    `${apiBaseURL}/organizations/:orgId/members/:userId/role/:roleName`,
+    getApiUrl('/organizations/:orgId/members/:userId/role/:roleName'),
     async (req, res, ctx) => {
       const { orgId, userId, roleName } = req.params;
       await changeUserRoles(
@@ -121,7 +121,7 @@ export const handlers = [
   ),
 
   rest.delete(
-    `${apiBaseURL}/organizations/:orgId/member`,
+    getApiUrl('/organizations/:orgId/member'),
     async (req, res, ctx) => {
       const { orgId } = req.params;
       let data: { members: string[] };
@@ -134,7 +134,7 @@ export const handlers = [
   ),
 
   rest.delete(
-    `${apiBaseURL}/organizations/invitation`,
+    getApiUrl('/organizations/invitation'),
     async (req, res, ctx) => {
       let data: {
         org_id: string;
@@ -151,7 +151,7 @@ export const handlers = [
     }
   ),
 
-  rest.post(`${apiBaseURL}/organizations/invitation`, async (req, res, ctx) => {
+  rest.post(getApiUrl('/organizations/invitation'), async (req, res, ctx) => {
     const data = req.body as {
       org_id: string;
       user_email: string;
@@ -175,8 +175,7 @@ export const handlers = [
     }
   }),
 
-  rest.patch(
-    `${apiBaseURL}/organizations/invitation`,
+  rest.patch(getApiUrl('/organizations/invitation'),
     async (req, res, ctx) => {
       const data = req.body as {
         org_id: string;
@@ -192,23 +191,23 @@ export const handlers = [
     }
   ),
 
-  rest.post(`${apiBaseURL}/resources/:name`, async (req, res, ctx) => {
+  rest.post(getApiUrl('/resources/:name'), async (req, res, ctx) => {
     return res(ctx.json({}));
   }),
 
-  rest.get(`${apiBaseURL}/roles`, async (req, res, ctx) => {
+  rest.get(getApiUrl('/roles'), async (req, res, ctx) => {
     return res(
       ctx.json(getRoles())
     );
   }),
 
-  rest.get(`${apiBaseURL}/form-definitions/:name`, (req, res, ctx) => {
+  rest.get(getApiUrl('/form-definitions/:name'), (req, res, ctx) => {
     const { name } = req.params;
 
     return res(ctx.json(getFormDefinitionByName(name as string)));
   }),
 
-  rest.patch(`${apiBaseURL}/form-definitions/:name`, async (req, res, ctx) => {
+  rest.patch(getApiUrl('/form-definitions/:name'), async (req, res, ctx) => {
     const {data} = await req.json();
 
     return res(ctx.json({}));

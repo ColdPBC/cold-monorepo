@@ -13,20 +13,16 @@ if (typeof global.process === 'undefined' || global.process.title === 'browser')
     // but check whether there's an existing once, reusing it, if so.
     worker.start({
         onUnhandledRequest(req) {
-            if(!req.url.href.includes('http://localhost:4400')){
-                console.warn(
-                    'Found an unhandled %s request to %s',
-                    req.method,
-                    req.url.href,
-                )
-            } else {
-                console.warn(
-                    'Found an unhandled %s request to %s',
-                    req.method,
-                    req.url.href,
-                )
-            }
+          const reqToSelf = req.url.href.includes('http://localhost:4400') || req.url.href.includes('chromatic.com');
+          const reqToApi = req.url.href.includes('http://localhost:7001') || req.url.href.includes('https://api.coldclimate.test');
 
+            if(!reqToSelf && reqToApi) {
+              console.warn(
+                'Found an unhandled API Request:  %s request to %s',
+                req.method,
+                req.url.href,
+              )
+            }
         },
     }).then((r) => console.log(r));
 }
