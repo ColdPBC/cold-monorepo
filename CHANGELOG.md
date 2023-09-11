@@ -1,3 +1,15 @@
+## [1.3.1-COLD-84.1](https://github.com/ColdPBC/Cold-MonoRepo/compare/v1.3.0...v1.3.1-COLD-84.1) (2023-09-11)
+
+
+### Bug Fixes
+
+* corrected http to https for STORYBOOK API URL ([bae1edc](https://github.com/ColdPBC/Cold-MonoRepo/commit/bae1edc6a3a5056c95a25807aaf06f8398b08e98))
+* fix for Safari logging loop, UI application api URL env variable incorrect, removed ldclient code throwing error due to undefined user id ([ed36174](https://github.com/ColdPBC/Cold-MonoRepo/commit/ed36174a80951e1b9de1e1120538618644539fb7))
+* installed missing packages ([758f7c1](https://github.com/ColdPBC/Cold-MonoRepo/commit/758f7c12d94e7b6413e90b88ac54312c5fdef29d))
+* To fix build and trigger storybook build ([b0f15a6](https://github.com/ColdPBC/Cold-MonoRepo/commit/b0f15a6ddae8c9ca2b4a139d76bb44792e6a0710))
+* update chromatic yml to use storybook variable in secrets ([04f4f98](https://github.com/ColdPBC/Cold-MonoRepo/commit/04f4f98f7718cc244f1207ecd7a16965404396ac))
+* Use email as identifier for ldclient and added organization ([6e6e495](https://github.com/ColdPBC/Cold-MonoRepo/commit/6e6e495bbe1678e72fd48019ebb43d78eec4b025))
+
 # [1.3.0](https://github.com/ColdPBC/Cold-MonoRepo/compare/v1.2.0...v1.3.0) (2023-09-11)
 
 
