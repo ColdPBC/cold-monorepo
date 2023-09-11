@@ -7,7 +7,7 @@
     </scripts>
     <node-interpreter value="project" />
     <envs>
-      <env name="STORYBOOK_API_URL" value="https://api.coldclimate.test" />
+      <env name="STORYBOOK_API_URL" value="https://api.coldclimate.storybook" />
     </envs>
     <method v="2">
       <option name="NpmBeforeRunTask" enabled="true">

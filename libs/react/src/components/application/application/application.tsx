@@ -6,6 +6,7 @@ import {useCookies} from '@coldpbc/hooks';
 import {Spinner} from '../../atoms';
 import {GlobalSizes} from '@coldpbc/enums';
 import ColdContext from "../../../context/coldContext";
+import {useLDClient} from "launchdarkly-react-client-sdk";
 
 export const Application = () => {
     const {user, error, loginWithRedirect, isAuthenticated, isLoading, logout, getAccessTokenSilently} = useAuth0();
@@ -15,6 +16,8 @@ export const Application = () => {
     const [accessToken, setAccessTokenState] = useState<string>('');
 
     const { setCookieData } = useCookies();
+
+    const ldClient = useLDClient()
 
     // For redirecting to the correct URL after login refresh
     const appState = {
@@ -39,7 +42,16 @@ export const Application = () => {
                         cookies.set('coldpbc', JSON.stringify({accessToken, expires: expiresAt}), {expires: 1, secure: false, sameSite: 'lax'});
                         setCookieData(user, accessToken);
                         setAccessTokenState(accessToken);
-                        // todo: add ldclient identify here. User user id as key
+                        if(ldClient){
+                          await ldClient.identify({
+                            kind: 'user',
+                            key: user.email,
+                            firstName: user.given_name,
+                            lastName: user.family_name,
+                            organizationId: user.coldclimate_claims.org_id,
+                          }
+                        )
+                      }
                     }
                 } else {
                     if(!isLoading && !isAuthenticated) {
