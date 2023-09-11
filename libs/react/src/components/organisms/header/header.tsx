@@ -1,17 +1,15 @@
-import React from "react";
-import { Avatar } from '../../atoms/avatar/avatar';
-import {useAuth0, User} from "@auth0/auth0-react";
-import { GlobalSizes } from '../../../enums/sizes';
-import { Dropdown } from "flowbite-react";
+import React from 'react';
+import {Avatar} from '../../atoms/avatar/avatar';
+import {useAuth0} from '@auth0/auth0-react';
+import {GlobalSizes} from '../../../enums/sizes';
+import {Dropdown} from 'flowbite-react';
 import cookie from 'js-cookie';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface HeaderProps {
-
-}
+export interface HeaderProps {}
 
 export const Header = (props: HeaderProps) => {
-  const { user, logout: auth0Logout} = useAuth0();
+  const { user, logout: auth0Logout } = useAuth0();
   const headerUser = user;
 
   const getHeaderName = () => {
@@ -28,7 +26,7 @@ export const Header = (props: HeaderProps) => {
     cookie.remove('coldpbc');
 
     auth0Logout();
-  }
+  };
 
   if (headerUser) {
     return (

@@ -1,16 +1,14 @@
-
 export interface SurveySectionType {
   title: string;
   prompt: string;
   component: string | null;
   follow_up: SurveySectionFollowUpType[];
-  image_url:  string;
+  image_url: string;
   category_idx: number;
   category_key: string;
   category_description: string;
   value: any | null;
 }
-
 
 export interface SurveySectionFollowUpType {
   idx: number;

@@ -1,7 +1,7 @@
-import React, {useState, useEffect} from 'react'
+import React, { useState } from 'react';
 import { ColdWordmark } from '../../atoms/logos/coldWordmark';
-import { Sidebar as FBSidebar} from "flowbite-react";
-import useSWR from "swr";
+import { Sidebar as FBSidebar } from 'flowbite-react';
+import useSWR from 'swr';
 import { axiosFetcher } from '../../../fetchers/axiosFetcher';
 import { SideBarItem } from './sideBar/sideBarItem';
 import { flowbiteThemeOverride } from '../../../themes/flowbiteThemeOverride';
@@ -9,66 +9,98 @@ import { SideBarCollapse } from './sideBar/sideBarCollapse';
 import { NavbarItem } from '../../../interfaces/sideBar';
 import { Spinner } from '../../atoms/spinner/spinner';
 import { HexColors } from '../../../themes/cold_theme';
-import {clone, remove} from 'lodash';
+import { clone, remove } from 'lodash';
 
-export const SideBar = () : JSX.Element => {
-    type SWRResponse = { definition: { items: Array<NavbarItem> } };
-    const {data, error, isLoading}: { data: any, error: any, isLoading: boolean} = useSWR( ["/form-definitions/sidebar_navigation", 'GET'], axiosFetcher );
-    const [activeChild, setActiveChild] = useState("");
+export const SideBar = (): JSX.Element => {
+  type SWRResponse = { definition: { items: Array<NavbarItem> } };
+  const {
+    data,
+    error,
+    isLoading,
+  }: {
+    data: any;
+    error: any;
+    isLoading: boolean;
+  } = useSWR(['/form-definitions/sidebar_navigation', 'GET'], axiosFetcher);
+  const [activeChild, setActiveChild] = useState('');
 
-    if(isLoading) return <div><Spinner /></div>
+  if (isLoading)
+    return (
+      <div>
+        <Spinner />
+      </div>
+    );
 
-    if(error) console.error( error );
+  if (error) console.error(error);
 
-    if(data?.definition?.items) {
-        // Separate the items into top and bottom nav items
-        const topItems:NavbarItem[] = clone(data.definition.items);
+  if (data?.definition?.items) {
+    // Separate the items into top and bottom nav items
+    const topItems: NavbarItem[] = clone(data.definition.items);
 
-        const bottomItems = remove(topItems, (item: NavbarItem) => {
-            return (item.placement && item.placement === "bottom");
-        });
+    const bottomItems = remove(topItems, (item: NavbarItem) => {
+      return item.placement && item.placement === 'bottom';
+    });
 
-        return (
-            <FBSidebar theme={flowbiteThemeOverride.sidebar} >
-                <div className="flex px-4 self-stretch items-center">
-                    <div className="h-6 w-[76px]">
-                        <ColdWordmark color={HexColors.white}/>
-                    </div>
-                </div>
-                <FBSidebar.Items className="gap-2 mb-auto">
-                    <FBSidebar.ItemGroup className="mt-0 overflow-visible flex-grow">
-                        {
-                            topItems.map( ( item: NavbarItem, index: number ) => {
-                                if(item.items) {
-                                    return (
-                                        <SideBarCollapse setActiveChild={setActiveChild} activeChild={activeChild} item={item} key={item.key}/>
-                                    )
-                                } else {
-                                    return <SideBarItem setActiveChild={setActiveChild} activeChild={activeChild} item={item} key={item.key}/>
-                                }
-
-                            } )
-                        }
-                    </FBSidebar.ItemGroup>
-                </FBSidebar.Items>
-                <FBSidebar.Items className="gap-2">
-                    <FBSidebar.ItemGroup className="mt-0 border-t-0 overflow-visible">
-                        {
-                            bottomItems.map( ( item: NavbarItem, index: number ) => {
-                                if(item.items) {
-                                    return (
-                                        <SideBarCollapse setActiveChild={setActiveChild} activeChild={activeChild} item={item} key={item.key}/>
-                                    )
-                                } else {
-                                    return <SideBarItem setActiveChild={setActiveChild} activeChild={activeChild} item={item} key={item.key}/>
-                                }
-                            } )
-                        }
-                    </FBSidebar.ItemGroup>
-                </FBSidebar.Items>
-            </FBSidebar>
-        )
-    } else {
-        return <div></div>
-    }
-}
+    return (
+      <FBSidebar theme={flowbiteThemeOverride.sidebar}>
+        <div className="flex px-4 self-stretch items-center">
+          <div className="h-6 w-[76px]">
+            <ColdWordmark color={HexColors.white} />
+          </div>
+        </div>
+        <FBSidebar.Items className="gap-2 mb-auto">
+          <FBSidebar.ItemGroup className="mt-0 overflow-visible flex-grow">
+            {topItems.map((item: NavbarItem, index: number) => {
+              if (item.items) {
+                return (
+                  <SideBarCollapse
+                    setActiveChild={setActiveChild}
+                    activeChild={activeChild}
+                    item={item}
+                    key={item.key}
+                  />
+                );
+              } else {
+                return (
+                  <SideBarItem
+                    setActiveChild={setActiveChild}
+                    activeChild={activeChild}
+                    item={item}
+                    key={item.key}
+                  />
+                );
+              }
+            })}
+          </FBSidebar.ItemGroup>
+        </FBSidebar.Items>
+        <FBSidebar.Items className="gap-2">
+          <FBSidebar.ItemGroup className="mt-0 border-t-0 overflow-visible">
+            {bottomItems.map((item: NavbarItem, index: number) => {
+              if (item.items) {
+                return (
+                  <SideBarCollapse
+                    setActiveChild={setActiveChild}
+                    activeChild={activeChild}
+                    item={item}
+                    key={item.key}
+                  />
+                );
+              } else {
+                return (
+                  <SideBarItem
+                    setActiveChild={setActiveChild}
+                    activeChild={activeChild}
+                    item={item}
+                    key={item.key}
+                  />
+                );
+              }
+            })}
+          </FBSidebar.ItemGroup>
+        </FBSidebar.Items>
+      </FBSidebar>
+    );
+  } else {
+    return <div></div>;
+  }
+};

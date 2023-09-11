@@ -1,18 +1,17 @@
-import React, { useState } from "react";
-import { Meta, StoryObj } from "@storybook/react";
+import React, { useState } from 'react';
+import { Meta, StoryObj } from '@storybook/react';
 import { BaseButton } from '../../atoms/button/button';
-import { ColorNames } from '../../../enums/colors';
 import { GlobalSizes } from '../../../enums/sizes';
 import { InvitationModal, InvitationModalProps } from './invitationModal';
 import { auth0UserMock } from '../../../__mocks__/userMock';
 
 const meta: Meta<typeof InvitationModal> = {
-    /* 👇 The title prop is optional.
-     * See https://storybook.js.org/docs/react/configure/overview#configure-story-loading
-     * to learn how to generate automatic titles
-     */
-    title: "Molecules/InvitationModal",
-    component: InvitationModal,
+  /* 👇 The title prop is optional.
+   * See https://storybook.js.org/docs/react/configure/overview#configure-story-loading
+   * to learn how to generate automatic titles
+   */
+  title: 'Molecules/InvitationModal',
+  component: InvitationModal,
 };
 export default meta;
 
@@ -23,30 +22,25 @@ type Story = StoryObj<typeof InvitationModal>;
  * See note below related to this example.
  */
 const DefaultComponent = (args: InvitationModalProps) => {
-    const [isShow, setIsShow] = useState(false);
-    return (
-        <div>
-            <BaseButton
-                textSize={GlobalSizes.medium}
-                onClick={() => {
-                    setIsShow(true);
-                }}
-                label="Open Modal"
-            />
-            <InvitationModal
-                {...args}
-                setShown={setIsShow}
-                shown={isShow}
-            />
-        </div>
-    );
+  const [isShow, setIsShow] = useState(false);
+  return (
+    <div>
+      <BaseButton
+        textSize={GlobalSizes.medium}
+        onClick={() => {
+          setIsShow(true);
+        }}
+        label="Open Modal"
+      />
+      <InvitationModal {...args} setShown={setIsShow} shown={isShow} />
+    </div>
+  );
 };
 
 export const Default: Story = {
-    render: (args) => <DefaultComponent {...args} />,
-    args: {
-        companyName: "Cold Climate",
-        user: auth0UserMock,
-    }
+  render: (args) => <DefaultComponent {...args} />,
+  args: {
+    companyName: 'Cold Climate',
+    user: auth0UserMock,
+  },
 };
-

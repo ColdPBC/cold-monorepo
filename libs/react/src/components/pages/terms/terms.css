@@ -189,6 +189,7 @@
 .markdown-terms ol {
   list-style-type: decimal;
 }
+
 .markdown-terms ol ol {
   list-style-type: lower-alpha;
 }

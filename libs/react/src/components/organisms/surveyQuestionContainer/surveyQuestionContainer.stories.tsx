@@ -1,42 +1,45 @@
-import React from "react";
-import { withKnobs } from "@storybook/addon-knobs";
-import { Meta, StoryObj } from "@storybook/react";
-import {SurveyQuestionContainer, SurveyQuestionContainerProps} from '@coldpbc/components';
-import {getTestingSurveyFormDefinition} from '@coldpbc/mocks';
+import React from 'react';
+import { withKnobs } from '@storybook/addon-knobs';
+import { Meta, StoryObj } from '@storybook/react';
+import {
+  SurveyQuestionContainer,
+  SurveyQuestionContainerProps,
+} from '@coldpbc/components';
+import { getTestingSurveyFormDefinition } from '@coldpbc/mocks';
 
 const meta = {
-  title: "Organisms/SurveyQuestionContainer",
+  title: 'Organisms/SurveyQuestionContainer',
   component: SurveyQuestionContainer,
-  tags: ["autodocs"],
+  tags: ['autodocs'],
   decorators: [withKnobs],
-  argTypes: {
-
-  },
+  argTypes: {},
 } satisfies Meta<typeof SurveyQuestionContainer>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 const SurveyQuestionContainerStory = (args: SurveyQuestionContainerProps) => {
-
   const [activeKey, setActiveKey] = React.useState(args.activeKey);
-  const [surveyFormDefinition, setSurveyFormDefinition] = React.useState(args.surveyFormDefinition);
+  const [surveyFormDefinition, setSurveyFormDefinition] = React.useState(
+    args.surveyFormDefinition,
+  );
 
-  return <SurveyQuestionContainer
-    {...args}
-    surveyFormDefinition={surveyFormDefinition}
-    setSurveyFormDefinition={setSurveyFormDefinition}
-    activeKey={activeKey}
-    setActiveKey={setActiveKey}
-  />
-}
+  return (
+    <SurveyQuestionContainer
+      {...args}
+      surveyFormDefinition={surveyFormDefinition}
+      setSurveyFormDefinition={setSurveyFormDefinition}
+      activeKey={activeKey}
+      setActiveKey={setActiveKey}
+    />
+  );
+};
 
 export const Default: Story = {
   render: (args) => <SurveyQuestionContainerStory {...args} />,
   args: {
-    activeKey: "product",
+    activeKey: 'product',
     surveyFormDefinition: getTestingSurveyFormDefinition().definition,
-    surveyName: "qaalib_test",
+    surveyName: 'qaalib_test',
   },
 };
-

@@ -1,5 +1,5 @@
-import React, { ReactElement } from "react";
-import { Modal as FBModal } from "flowbite-react";
+import React, { ReactElement } from 'react';
+import { Modal as FBModal } from 'flowbite-react';
 import { BaseButton } from '../../atoms/button/button';
 import { IButtonProps } from '../../../interfaces/buttons/baseButton';
 

@@ -1,5 +1,5 @@
-import React, {Fragment} from "react";
-import { NumericFormat } from "react-number-format";
+import React from 'react';
+import { NumericFormat } from 'react-number-format';
 import { Select } from './select/select';
 import { IInputProps } from '../../../interfaces/input';
 
@@ -12,33 +12,37 @@ export const Input = (props: IInputProps) => {
     container_classname,
     idx,
     type,
-  } = props
+  } = props;
 
   function renderCurrency(): JSX.Element {
     const key = `${numeric_input_props?.name}_${idx}`;
     return (
-      <div className={container_classname || "col-span-full"}>
-        {
-            input_label && (
-                <label
-                    {...input_label_props}
-                    htmlFor={numeric_input_props?.name}
-                    className={input_label_props?.className || "block text-sm font-medium leading-6 text-gray-900"}
-                >
-                  {input_label}
-                </label>
-            )
-        }
-          <NumericFormat
-              {...numeric_input_props}
-              className={ numeric_input_props?.className || "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"}
-              id={numeric_input_props?.name}
-              key={`input_${key}`}
-              name={numeric_input_props?.name}
-              value={numeric_input_props?.value}
-              prefix="$"
-              thousandSeparator={numeric_input_props?.thousandSeparator || ","}
-          />
+      <div className={container_classname || 'col-span-full'}>
+        {input_label && (
+          <label
+            {...input_label_props}
+            htmlFor={numeric_input_props?.name}
+            className={
+              input_label_props?.className ||
+              'block text-sm font-medium leading-6 text-gray-900'
+            }
+          >
+            {input_label}
+          </label>
+        )}
+        <NumericFormat
+          {...numeric_input_props}
+          className={
+            numeric_input_props?.className ||
+            'block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
+          }
+          id={numeric_input_props?.name}
+          key={`input_${key}`}
+          name={numeric_input_props?.name}
+          value={numeric_input_props?.value}
+          prefix="$"
+          thousandSeparator={numeric_input_props?.thousandSeparator || ','}
+        />
       </div>
     );
   }
@@ -46,28 +50,32 @@ export const Input = (props: IInputProps) => {
   function renderNumber(): JSX.Element {
     const key = `${input_props.name}_${idx}`;
     return (
-      <div className={container_classname || "col-span-full"}>
-        {
-          input_label && (
-                <label
-                    {...input_label_props}
-                    htmlFor={numeric_input_props?.name}
-                    className={input_label_props?.className || "block text-sm font-medium leading-6 text-gray-900"}
-                >
-                  {input_label}
-                </label>
-            )
-        }
-          <NumericFormat
-              {...numeric_input_props}
-            className={numeric_input_props?.className || "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"}
-            id={numeric_input_props?.name}
-            key={`input_${key}`}
-            name={numeric_input_props?.name}
-            value={numeric_input_props?.value}
-            thousandSeparator={numeric_input_props?.thousandSeparator || ","}
-          />
-        </div>
+      <div className={container_classname || 'col-span-full'}>
+        {input_label && (
+          <label
+            {...input_label_props}
+            htmlFor={numeric_input_props?.name}
+            className={
+              input_label_props?.className ||
+              'block text-sm font-medium leading-6 text-gray-900'
+            }
+          >
+            {input_label}
+          </label>
+        )}
+        <NumericFormat
+          {...numeric_input_props}
+          className={
+            numeric_input_props?.className ||
+            'block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
+          }
+          id={numeric_input_props?.name}
+          key={`input_${key}`}
+          name={numeric_input_props?.name}
+          value={numeric_input_props?.value}
+          thousandSeparator={numeric_input_props?.thousandSeparator || ','}
+        />
+      </div>
     );
   }
 
@@ -75,28 +83,28 @@ export const Input = (props: IInputProps) => {
     // eslint-disable-next-line no-restricted-globals
     const key = `${name}_${idx}`;
     return (
-      <div key={key} className={container_classname || "col-span-full"}>
+      <div key={key} className={container_classname || 'col-span-full'}>
         {input_label && (
           <label
-              {...input_label_props}
-              key={`lbl_${key}`}
-              htmlFor={input_props.name}
-              className={
-                input_label_props?.className ||
-                "block text-sm font-medium leading-6 text-gray-900"
-              }
+            {...input_label_props}
+            key={`lbl_${key}`}
+            htmlFor={input_props.name}
+            className={
+              input_label_props?.className ||
+              'block text-sm font-medium leading-6 text-gray-900'
+            }
           >
             {input_label}
           </label>
         )}
         <input
           {...input_props}
-          type={type || "text"}
+          type={type || 'text'}
           key={`input_txt_${key}`}
           autoComplete={input_props.autoComplete || input_props.name}
           className={
-              input_props?.className ||
-            "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+            input_props?.className ||
+            'block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
           }
         />
       </div>
@@ -104,27 +112,28 @@ export const Input = (props: IInputProps) => {
   }
 
   function renderSelect(): JSX.Element {
-    return <Select
+    return (
+      <Select
         options={input_props.options}
         name={input_props.name}
         label={input_label}
         value={input_props.value}
         onChange={(value) => {
-          input_props.onValueChange(value.name)
+          input_props.onValueChange(value.name);
         }}
-    />
+      />
+    );
   }
 
-
   switch (type) {
-    case "currency":
+    case 'currency':
       return renderCurrency();
-    case "number":
+    case 'number':
       return renderNumber();
-    case "select":
-        return renderSelect();
+    case 'select':
+      return renderSelect();
     default:
-    case "text":
+    case 'text':
       return renderText();
   }
 };

@@ -1,29 +1,44 @@
-import React from "react";
-import {IButtonProps} from "../../../interfaces/buttons/baseButton";
-import {GlobalSizes} from "../../../enums/sizes";
-import {ButtonTypes} from '../../../enums/buttons';
-import {IconNames} from '../../../enums/iconNames';
-import {ColdIcon} from '../../atoms/icons/coldIcon';
+import React from 'react';
+import { IButtonProps } from '../../../interfaces/buttons/baseButton';
+import { GlobalSizes } from '../../../enums/sizes';
+import { ButtonTypes } from '../../../enums/buttons';
+import { IconNames } from '../../../enums/iconNames';
+import { ColdIcon } from '../../atoms/icons/coldIcon';
 
 export function BaseButton(props: IButtonProps): JSX.Element {
-
-  const { onClick = () => {window.alert(`${props.label} button clicked!`)}, variant= ButtonTypes.primary, iconLeft, iconRight, textSize, label, bold= true, upperCase, className} = props;
+  const {
+    onClick = () => {
+      window.alert(`${props.label} button clicked!`);
+    },
+    variant = ButtonTypes.primary,
+    iconLeft,
+    iconRight,
+    textSize,
+    label,
+    bold = true,
+    upperCase,
+    className,
+  } = props;
 
   return (
-      <button onClick={onClick} className={ className ? className : `${getClassName(props)}`} disabled={!!props.disabled} >
-        <>
-          {iconLeft && getIconComponent(iconLeft,props)}
-          {label && <span>{label}</span>}
-          {iconRight && getIconComponent(iconRight,props)}
-        </>
-      </button>
+    <button
+      onClick={onClick}
+      className={className ? className : `${getClassName(props)}`}
+      disabled={!!props.disabled}
+    >
+      <>
+        {iconLeft && getIconComponent(iconLeft, props)}
+        {label && <span>{label}</span>}
+        {iconRight && getIconComponent(iconRight, props)}
+      </>
+    </button>
   );
 }
 
 /*
  Utility functions
  */
-function getTextSizeStyle(props: IButtonProps ) {
+function getTextSizeStyle(props: IButtonProps) {
   switch (props.textSize) {
     case GlobalSizes.xxxSmall:
     case GlobalSizes.xxSmall:
@@ -46,51 +61,63 @@ function getTextSizeStyle(props: IButtonProps ) {
 }
 
 function getVariantStyle(props: IButtonProps) {
-  switch(props.variant) {
+  switch (props.variant) {
     default:
     case ButtonTypes.primary:
-      if(props.disabled)
+      if (props.disabled)
         return `px-4 py-2 leading-[24px] rounded-lg bg-gray-50 text-tc-disabled`;
-      else return `px-4 py-2 leading-[24px] rounded-lg bg-primary text-tc-primary hover:bg-primary-200 focus-visible:border-4 focus-visible:border-gray-70 focus-visible:px-3 focus-visible:py-1 active:bg-primary-100`;
+      else
+        return `px-4 py-2 leading-[24px] rounded-lg bg-primary text-tc-primary hover:bg-primary-200 focus-visible:border-4 focus-visible:border-gray-70 focus-visible:px-3 focus-visible:py-1 active:bg-primary-100`;
     case ButtonTypes.secondary:
-      if(props.disabled)
+      if (props.disabled)
         return `px-4 py-2 leading-[24px] rounded-lg bg-transparent text-tc-disabled`;
-      else return `px-4 py-2 leading-[24px] rounded-lg bg-bgc-accent text-tc-primary hover:bg-gray-50 focus-visible:border-4 focus-visible:border-gray-70 focus-visible:px-3 focus-visible:py-1 active:bg-gray-60`;
+      else
+        return `px-4 py-2 leading-[24px] rounded-lg bg-bgc-accent text-tc-primary hover:bg-gray-50 focus-visible:border-4 focus-visible:border-gray-70 focus-visible:px-3 focus-visible:py-1 active:bg-gray-60`;
     case ButtonTypes.warning:
-      if(props.disabled)
+      if (props.disabled)
         return `px-4 py-2 leading-[24px] rounded-lg bg-gray-50 text-tc-disabled`;
-      else return `px-4 py-2 leading-[24px] rounded-lg bg-red-300 text-tc-primary hover:bg-red-200 focus-visible:border-4 focus-visible:border-gray-70 focus-visible:px-3 focus-visible:py-1 focus-visible:bg-gray-30 active:bg-red-100`;
+      else
+        return `px-4 py-2 leading-[24px] rounded-lg bg-red-300 text-tc-primary hover:bg-red-200 focus-visible:border-4 focus-visible:border-gray-70 focus-visible:px-3 focus-visible:py-1 focus-visible:bg-gray-30 active:bg-red-100`;
     case ButtonTypes.hyperlink:
-      if(props.disabled)
+      if (props.disabled)
         return `leading-[24px] bg-transparent text-tc-disabled underline`;
-      else return `leading-[24px] text-tc-primary hover:border-b hover:border-b-white active:border-b active:border-tc-secondary active:text-tc-secondary focus-visible:underline focus-visible:border-4 focus-visible:border-gray-70 focus-visible:bg-gray-30`;
+      else
+        return `leading-[24px] text-tc-primary hover:border-b hover:border-b-white active:border-b active:border-tc-secondary active:text-tc-secondary focus-visible:underline focus-visible:border-4 focus-visible:border-gray-70 focus-visible:bg-gray-30`;
   }
 }
 
-export function getUpperStyle(props: IButtonProps) { return props.label && props.upperCase ? "uppercase" : ""; }
-
-export function getBoldStyle(props: IButtonProps) { return props.label && props.bold ? "font-bold" : "font-medium" }
-
-export function getClassName(props: IButtonProps) {
-  return `flex items-center gap-2 transition-colors ease-in-out ${getUpperStyle(props)} ${getBoldStyle(props)} ${getVariantStyle(props)} ${getTextSizeStyle(props)}`;
+export function getUpperStyle(props: IButtonProps) {
+  return props.label && props.upperCase ? 'uppercase' : '';
 }
 
-export function getIconComponent(icon:IconNames, props: IButtonProps){
+export function getBoldStyle(props: IButtonProps) {
+  return props.label && props.bold ? 'font-bold' : 'font-medium';
+}
+
+export function getClassName(props: IButtonProps) {
+  return `flex items-center gap-2 transition-colors ease-in-out ${getUpperStyle(
+    props,
+  )} ${getBoldStyle(props)} ${getVariantStyle(props)} ${getTextSizeStyle(
+    props,
+  )}`;
+}
+
+export function getIconComponent(icon: IconNames, props: IButtonProps) {
   let iconClassName = '';
 
-  if(props.disabled) {
-      iconClassName = `stroke-tc-disabled fill-tc-disabled`;
+  if (props.disabled) {
+    iconClassName = `stroke-tc-disabled fill-tc-disabled`;
   } else {
-    switch(props.variant) {
+    switch (props.variant) {
       default: // make sure this matches the default variant in the getVariantStyle as well
       case ButtonTypes.primary:
       case ButtonTypes.warning:
       case ButtonTypes.secondary:
         iconClassName = `stroke-tc-primary fill-tc-primary`;
         break;
-        // hyperlink button type will not show icons
+      // hyperlink button type will not show icons
     }
   }
 
-  return <ColdIcon name={icon} className={iconClassName}/>;
+  return <ColdIcon name={icon} className={iconClassName} />;
 }
