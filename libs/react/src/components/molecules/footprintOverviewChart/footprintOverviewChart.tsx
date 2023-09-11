@@ -71,7 +71,7 @@ export interface FootprintOverviewChartProps {
   setIsEmptyData?: (isEmpty: boolean) => void;
 }
 
-const gapStylingConstant:number = 100;
+const gapStylingConstant = 100;
 
 type ActiveSegmentMedium = 'segment' | 'legend';
 interface ActiveSegment {
@@ -166,17 +166,17 @@ export function FootprintOverviewChart(props: PropsWithChildren<FootprintOvervie
   }
 
   // Add up all the information from the footprint
-  let subcategoryTotals:{value:number, color:string, name:string, percent?:number}[] = [];
-  let colorArray:string[] = [HexColors.purple.DEFAULT, HexColors.teal.DEFAULT, HexColors.green.DEFAULT, HexColors.lightblue.DEFAULT];
-  let hoverColorArray:string[] = [HexColors.purple.DEFAULT_BRIGHTEN, HexColors.lightblue.DEFAULT_BRIGHTEN, HexColors.teal.DEFAULT_BRIGHTEN, HexColors.green.DEFAULT_BRIGHTEN];
-  let totalFootprint:number = 0;
+  const subcategoryTotals:{value:number, color:string, name:string, percent?:number}[] = [];
+  const colorArray:string[] = [HexColors.purple.DEFAULT, HexColors.teal.DEFAULT, HexColors.green.DEFAULT, HexColors.lightblue.DEFAULT];
+  const hoverColorArray:string[] = [HexColors.purple.DEFAULT_BRIGHTEN, HexColors.lightblue.DEFAULT_BRIGHTEN, HexColors.teal.DEFAULT_BRIGHTEN, HexColors.green.DEFAULT_BRIGHTEN];
+  let totalFootprint = 0;
   forEach(data.subcategories?.slice(0, MAX_CATEGORIES), (subcategory) => {
-    let value:number = 0, color:string;
-    color = colorArray.reverse().pop() || HexColors.primary.DEFAULT;
+    let value = 0;
+    const color = colorArray.reverse().pop() || HexColors.primary.DEFAULT;
 
     forEach(subcategory.activities, (activity) => {
       if (activity.footprint) {
-        let footprint = find(activity.footprint, {'period': period, 'period_type': periodType});
+        const footprint = find(activity.footprint, {'period': period, 'period_type': periodType});
         if (footprint) {
           value += footprint.value;
           totalFootprint += footprint.value;
@@ -187,10 +187,10 @@ export function FootprintOverviewChart(props: PropsWithChildren<FootprintOvervie
   });
 
   // Set spacer width
-  let spacerValue = totalFootprint/gapStylingConstant;
+  const spacerValue = totalFootprint/gapStylingConstant;
 
   // Reset the chart data
-  let chartData:ChartData<'doughnut'> = {
+  const chartData:ChartData<'doughnut'> = {
     datasets:[{
       data: [],
       borderRadius: 2,
@@ -219,8 +219,8 @@ export function FootprintOverviewChart(props: PropsWithChildren<FootprintOvervie
     // @ts-ignore
     chartData.datasets[0].backgroundColor?.push("#FFFFFF00"); // make spacer transparent
 
-    let leftAlign = detailViews.length < 2;
-    let bottomAlign = detailViews.length === 1 || detailViews.length === 2;
+    const leftAlign = detailViews.length < 2;
+    const bottomAlign = detailViews.length === 1 || detailViews.length === 2;
     detailViews.push(
       <div
           key={info.name}
