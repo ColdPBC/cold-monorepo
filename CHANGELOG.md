@@ -1,52 +1,23 @@
-## [1.2.1-COLD-84.2](https://github.com/ColdPBC/Cold-MonoRepo/compare/v1.2.1-COLD-84.1...v1.2.1-COLD-84.2) (2023-09-10)
-
-
-### Bug Fixes
-
-* corrected http to https for STORYBOOK API URL ([bae1edc](https://github.com/ColdPBC/Cold-MonoRepo/commit/bae1edc6a3a5056c95a25807aaf06f8398b08e98))
-
-## [1.2.1-COLD-84.1](https://github.com/ColdPBC/Cold-MonoRepo/compare/v1.2.0...v1.2.1-COLD-84.1) (2023-09-10)
-
-
-### Bug Fixes
-
-* fix for Safari logging loop, UI application api URL env variable incorrect, removed ldclient code throwing error due to undefined user id ([ed36174](https://github.com/ColdPBC/Cold-MonoRepo/commit/ed36174a80951e1b9de1e1120538618644539fb7))
-
-# [1.2.0](https://github.com/ColdPBC/Cold-MonoRepo/compare/v1.1.1...v1.2.0) (2023-09-08)
+# [1.3.0](https://github.com/ColdPBC/Cold-MonoRepo/compare/v1.2.0...v1.3.0) (2023-09-11)
 
 
 ### Features
 
-* surveyleftnav component ([b19a35a](https://github.com/ColdPBC/Cold-MonoRepo/commit/b19a35ae96b3161e4f2bb74323c779cd6d7d60c7))
-* Updated background image style to match figma design ([069d4f0](https://github.com/ColdPBC/Cold-MonoRepo/commit/069d4f0785d471e1fe2d982f154d92e465e7dad1))
+* COLD-193, COLD-116 ([ba0a14a](https://github.com/ColdPBC/Cold-MonoRepo/commit/ba0a14ad9b0d42a35b1f3c57dd8cb69245861842))
 
-# [1.2.0-COLD-126.3](https://github.com/ColdPBC/Cold-MonoRepo/compare/v1.2.0-COLD-126.2...v1.2.0-COLD-126.3) (2023-09-08)
-
-
-### Bug Fixes
-
-* improve msw logging ([7ee3c86](https://github.com/ColdPBC/Cold-MonoRepo/commit/7ee3c86c16a16284b325a346b47430b52fd410cf))
-
-# [1.2.0-COLD-126.2](https://github.com/ColdPBC/Cold-MonoRepo/compare/v1.2.0-COLD-126.1...v1.2.0-COLD-126.2) (2023-09-08)
+# [1.3.0-cold-116-create-footprintoverviewcard.1](https://github.com/ColdPBC/Cold-MonoRepo/compare/v1.2.0...v1.3.0-cold-116-create-footprintoverviewcard.1) (2023-09-11)
 
 
 ### Features
 
-* Updated background image style to match figma design ([069d4f0](https://github.com/ColdPBC/Cold-MonoRepo/commit/069d4f0785d471e1fe2d982f154d92e465e7dad1))
+* COLD-193, COLD-116 ([ba0a14a](https://github.com/ColdPBC/Cold-MonoRepo/commit/ba0a14ad9b0d42a35b1f3c57dd8cb69245861842))
 
-# [1.2.0-COLD-126.1](https://github.com/ColdPBC/Cold-MonoRepo/compare/v1.1.0...v1.2.0-COLD-126.1) (2023-09-08)
+# [1.2.0-cold-116-create-footprintoverviewcard.1](https://github.com/ColdPBC/Cold-MonoRepo/compare/v1.1.0...v1.2.0-cold-116-create-footprintoverviewcard.1) (2023-09-08)
 
 
 ### Features
 
-* surveyleftnav component ([b19a35a](https://github.com/ColdPBC/Cold-MonoRepo/commit/b19a35ae96b3161e4f2bb74323c779cd6d7d60c7))
-
-## [1.1.1](https://github.com/ColdPBC/Cold-MonoRepo/compare/v1.1.0...v1.1.1) (2023-09-08)
-
-
-### Bug Fixes
-
-* improve msw logging ([7ee3c86](https://github.com/ColdPBC/Cold-MonoRepo/commit/7ee3c86c16a16284b325a346b47430b52fd410cf))
+* COLD-193, COLD-116 ([ba0a14a](https://github.com/ColdPBC/Cold-MonoRepo/commit/ba0a14ad9b0d42a35b1f3c57dd8cb69245861842))
 
 # [1.1.0](https://github.com/ColdPBC/Cold-MonoRepo/compare/v1.0.1...v1.1.0) (2023-09-07)
 

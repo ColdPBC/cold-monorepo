@@ -29,6 +29,7 @@ const FoundationalHexColors = {
   },
   "lightblue": {
     DEFAULT: "#31B5FF",
+    DEFAULT_BRIGHTEN: "#6ECBFF",
     "100": "#99DAFF",
     "200": "#66C8FF",
     "300": "#31B5FF",
@@ -55,6 +56,7 @@ const FoundationalHexColors = {
   },
   "green": {
     DEFAULT: "#00F16A",
+    DEFAULT_BRIGHTEN: "#4CF596",
     "100": "#B2FFD4",
     "200": "#66FFA9",
     "300": "#00F16A",
@@ -68,6 +70,7 @@ const FoundationalHexColors = {
   },
   "teal": {
     DEFAULT: "#00E0CB",
+    DEFAULT_BRIGHTEN: "#4CE9DA",
     "100": "#ADFFF7",
     "200": "#47FFEE",
     "300": "#00E0CB",
@@ -81,6 +84,7 @@ const FoundationalHexColors = {
   },
   "purple": {
     DEFAULT: "#A15EE5",
+    DEFAULT_BRIGHTEN: "#BD8EEC",
     "100": "#E0CAF6",
     "200": "#C79EEF",
     "300": "#A15EE5",

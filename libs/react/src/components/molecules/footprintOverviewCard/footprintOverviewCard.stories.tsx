@@ -1,8 +1,10 @@
 import React from "react";
 import { withKnobs } from "@storybook/addon-knobs";
 import { Meta, StoryObj } from "@storybook/react";
-import { FootprintOverviewCard } from './footprintOverviewCard';
+import {FootprintOverviewCard} from './footprintOverviewCard';
 import {BrowserRouter} from 'react-router-dom';
+import { FootprintOverviewVariants } from "../footprintOverviewChart/footprintOverviewChart";
+import { StoryMockProvider, getFootprintHandler } from '../../../';
 
 const meta = {
     title: "Molecules/FootprintOverviewCard",
@@ -25,3 +27,39 @@ export const Default: Story = {
         );
     },
 };
+
+export const Headerless: Story = {
+    render: (args) => {
+        return (
+            <BrowserRouter>
+                <div className="w-[668px]">
+                    <FootprintOverviewCard headerless />
+                </div>
+            </BrowserRouter>
+        );
+    },
+};
+
+export const Vertical: Story = {
+    render: (args) => {
+        return (
+            <BrowserRouter>
+                <div className="w-[668px]">
+                    <FootprintOverviewCard chartVariant={FootprintOverviewVariants.vertical} />
+                </div>
+            </BrowserRouter>
+        );
+    },
+};
+
+export const EmptyData = () => {
+    return (
+      <StoryMockProvider handlers={[getFootprintHandler.empty]}>
+         <BrowserRouter>
+            <div className="w-[668px]">
+                <FootprintOverviewCard />
+            </div>
+        </BrowserRouter>
+      </StoryMockProvider>
+    )
+}

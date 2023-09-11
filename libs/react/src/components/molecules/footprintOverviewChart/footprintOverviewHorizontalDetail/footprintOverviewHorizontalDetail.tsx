@@ -1,10 +1,7 @@
 import React, {PropsWithChildren} from 'react';
+import { FootprintOverviewDetail, FootprintOverviewDetailChip } from '../footprintOverviewChart';
 
-export interface FootprintOverviewHorizontalDetailProps {
-  color:string,
-  title:string,
-  percent:number,
-  emissions:number,
+export interface FootprintOverviewHorizontalDetailProps extends FootprintOverviewDetail {
   leftAlign: boolean, // if it's not left aligned, it's right aligned
 }
 
@@ -15,9 +12,9 @@ export function FootprintOverviewHorizontalDetail(props:PropsWithChildren<Footpr
       <div className={"flex flex-col justify-center gap-1 " + (props.leftAlign ? "items-start" : "items-end")}>
         <div className={"text-body font-bold text-tc-primary"}>{props.title}</div>
         <div className={"flex justify-center items-center gap-2"}>
-          {!props.leftAlign && <FootprintOverviewHorizontalDetailChip emissions={props.emissions}/>}
+          {!props.leftAlign && <FootprintOverviewDetailChip emissions={props.emissions}/>}
           <div className={"text-body text-tc-primary"}>{props.percent.toFixed(0) + "%"}</div>
-          {props.leftAlign && <FootprintOverviewHorizontalDetailChip emissions={props.emissions}/>}
+          {props.leftAlign && <FootprintOverviewDetailChip emissions={props.emissions}/>}
         </div>
       </div>
       {!props.leftAlign && <FootprintOverviewHorizontalDetailRectangle color={props.color} />}
@@ -28,13 +25,5 @@ export function FootprintOverviewHorizontalDetail(props:PropsWithChildren<Footpr
 function FootprintOverviewHorizontalDetailRectangle(props:{color:string}) {
   return (
     <div className="w-1 self-stretch rounded-lg" style={{backgroundColor: props.color}} />
-  );
-}
-
-function FootprintOverviewHorizontalDetailChip(props:{emissions:number}) {
-  return (
-    <div className="flex px-2 py-1 items-center gap-2 rounded-2xl bg-bgc-accent">
-      <div className="text-label text-tc-primary">{props.emissions.toFixed(2)} tCO2e</div>
-    </div>
   );
 }
