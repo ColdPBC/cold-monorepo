@@ -2,7 +2,7 @@ import React from "react";
 import { withKnobs } from "@storybook/addon-knobs";
 import { Meta, StoryObj } from "@storybook/react";
 import {SurveyQuestionContainer, SurveyQuestionContainerProps} from '@coldpbc/components';
-import {getTestingSurveyFormDefinition} from '@coldpbc/mocks';
+import {getTestingSurveyData} from '@coldpbc/mocks';
 
 const meta = {
   title: "Organisms/SurveyQuestionContainer",
@@ -35,7 +35,7 @@ export const Default: Story = {
   render: (args) => <SurveyQuestionContainerStory {...args} />,
   args: {
     activeKey: "product",
-    surveyFormDefinition: getTestingSurveyFormDefinition().definition,
+    surveyFormDefinition: getTestingSurveyData().definition,
     surveyName: "qaalib_test",
   },
 };

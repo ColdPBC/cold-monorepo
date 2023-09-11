@@ -17,9 +17,9 @@ import {
   resendInvitation,
   sendInvitation,
 } from "./helper";
-import {getFormDefinitionByName} from "./formDefinition";
+import {getSurveyDataByName} from "./surveyDataMock";
 import {getRoles} from './roleMock';
-import {resolveAPIUrl} from "../fetchers/helper";
+import {resolveAPIUrl} from "@coldpbc/fetchers";
 
 // Even if this uses vite as a bundler, it still uses the NODE_ENV variable
 export const getApiUrl = (path: string) => {
@@ -201,13 +201,13 @@ export const handlers = [
     );
   }),
 
-  rest.get(getApiUrl('/form-definitions/:name'), (req, res, ctx) => {
+  rest.get(getApiUrl('/survey-data/:name'), (req, res, ctx) => {
     const { name } = req.params;
 
-    return res(ctx.json(getFormDefinitionByName(name as string)));
+    return res(ctx.json(getSurveyDataByName(name as string)));
   }),
 
-  rest.patch(getApiUrl('/form-definitions/:name'), async (req, res, ctx) => {
+  rest.patch(getApiUrl('/survey-data/:name'), async (req, res, ctx) => {
     const {data} = await req.json();
 
     return res(ctx.json({}));

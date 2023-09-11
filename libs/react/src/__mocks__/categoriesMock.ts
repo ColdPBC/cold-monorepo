@@ -99,6 +99,7 @@ export function getCategoriesDataMock():any {
           },
           "operations": {
             "journey_score": 72,
+            "idx": 2,
             "activities": {
               "machinery_fuel": {
                 "activity_description": "Forklifts, excavators, cranes, other heavy machinery.",
@@ -147,6 +148,7 @@ export function getCategoriesDataMock():any {
           },
           "product": {
             "journey_score": 71,
+            "idx":3,
             "activities": {
               "manufacturing_energy": {
                 "activity_description": "Process energy (electric + heat) used for making products.",
@@ -209,6 +211,7 @@ export function getCategoriesDataMock():any {
         "subcategories": {
           "employee_footprint": {
             "journey_score": 100,
+            "idx":0,
             "activities": {
               "home": {
                 "activity_description": "Empower employees to reduce their carbon footprint at home, through energy efficiency, renewable energy, and other reduction opportunities.",
@@ -227,6 +230,7 @@ export function getCategoriesDataMock():any {
           },
           "employee_activation": {
             "journey_score": 33,
+            "idx":1,
             "activities": {
               "workplace": {
                 "activity_description": "Enable employees to become climate and environmental leaders in the office/workplace through education and other opportunities. ",
@@ -247,6 +251,7 @@ export function getCategoriesDataMock():any {
         "subcategories": {
           "internal_alignment": {
             "journey_score": 66,
+            "idx":0,
             "activities": {
               "finance": {
                 "activity_description": "Climate friendly financial stewardship (banking and investments) and decision making. ",
@@ -281,6 +286,7 @@ export function getCategoriesDataMock():any {
           },
           "community_impact": {
             "journey_score": 36,
+            "idx":1,
             "activities": {
               "collective_action_and_advocacy": {
                 "activity_description": "Non-financial contribution of time or influence to a group or cause that the company believes in",

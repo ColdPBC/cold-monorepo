@@ -96,7 +96,7 @@ export const SurveyQuestionContainer = ({
       const sectionIndex = findIndex(sections, {category_key: newSection.category_key});
       const newSections = [...sections];
       newSections[sectionIndex] = newSection;
-      postSurveyData(newSections)
+      patchSurveyData(newSections)
       setSurveyFormDefinition( {
         ...surveyFormDefinition,
         sections: newSections
@@ -284,10 +284,10 @@ export const SurveyQuestionContainer = ({
     updateTransitionClassNames(false)
   }
 
-  const postSurveyData = (sections: SurveySectionType[]) => {
+  const patchSurveyData = (sections: SurveySectionType[]) => {
     surveyFormDefinition.sections = sections;
     axiosFetcher(
-      [`/form-definitions/${surveyName}`,
+      [`/survey-data/${surveyName}`,
         "PATCH", JSON.stringify(surveyFormDefinition)])
   }
 
