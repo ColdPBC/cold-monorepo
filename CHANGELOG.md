@@ -1,3 +1,11 @@
+# [1.4.0](https://github.com/ColdPBC/ui/compare/v1.3.1...v1.4.0) (2023-09-11)
+
+
+### Features
+
+* Add empty state for Journey Chart and Card ([db3114a](https://github.com/ColdPBC/ui/commit/db3114ae77325ecff867c2bfe5148b7500d7d42a))
+* Add empty state for Journey Chart and Card ([#21](https://github.com/ColdPBC/ui/issues/21)) ([7ee0aa7](https://github.com/ColdPBC/ui/commit/7ee0aa72c1e71755ee4fb0ec266b0a0771e03345))
+
 # [1.4.0-cold-117-create-journeyoverviewcard.1](https://github.com/ColdPBC/Cold-MonoRepo/compare/v1.3.1...v1.4.0-cold-117-create-journeyoverviewcard.1) (2023-09-11)
 
 
