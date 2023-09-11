@@ -2,11 +2,11 @@ import React, {PropsWithChildren, useEffect, useState} from 'react';
 import {Chart as ChartJS, ArcElement, ChartData, ChartOptions, DoughnutController, Plugin as PluginType, ChartEvent} from 'chart.js';
 import {Chart} from 'react-chartjs-2';
 import useSWR from 'swr';
-import {axiosFetcher} from '../../../fetchers/axiosFetcher';
+import {axiosFetcher} from '@coldpbc/fetchers';
 import {Spinner} from '../../atoms';
-import {HexColors} from '../../../themes/cold_theme';
+import {HexColors} from '@coldpbc/themes';
 import {find, forEach, isArray} from 'lodash';
-import {FootprintOverviewHorizontalDetail} from './footprintOverviewHorizontalDetail/footprintOverviewHorizontalDetail';
+import {FootprintOverviewHorizontalDetail} from './footprintOverviewHorizontalDetail';
 import clsx from 'clsx';
 import { FootprintOverviewVerticalDetail } from './footprintOverviewVerticalDetail';
 
