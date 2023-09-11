@@ -5,7 +5,10 @@ import {resolveAPIUrl} from "./helper";
 
 const baseURL = resolveAPIUrl();
 
-// path, method, data
+/**
+ * Axios Fetcher function
+ * @param params - Array of strings that represent the url path, method, and data to be passed to the fetcher
+ */
 export const axiosFetcher = (params: Array<string>) => {
     try {
         // eslint-disable-next-line react-hooks/rules-of-hooks

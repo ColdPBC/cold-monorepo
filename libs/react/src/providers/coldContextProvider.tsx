@@ -1,23 +1,21 @@
 import React, {PropsWithChildren} from 'react';
 import ColdContext from '../context/coldContext';
-import {ColdAuthProvider} from '../providers/coldAuthProvider';
+import {ColdAuthProvider} from './coldAuthProvider';
 import {BrowserRouter} from 'react-router-dom';
-import {ColdLDProvider} from '../providers/coldLDProvider';
+import {ColdLDProvider} from './coldLDProvider';
+import {Auth0ProviderOptions} from "@auth0/auth0-react";
 
 export interface ColdContextProviderProps{
-    domain: string;
-    clientId: string;
-    redirectUri: string;
-    audience: string;
+    auth0Options: Auth0ProviderOptions;
     launchDarklyClientSideId: string;
 }
 
 export const ColdContextProvider = (props: PropsWithChildren<ColdContextProviderProps>) => {
-    const { domain, clientId, redirectUri, audience, launchDarklyClientSideId, children} = props;
+    const { auth0Options, launchDarklyClientSideId, children} = props;
 
     return (
         <BrowserRouter>
-            <ColdContext.Provider value={{domain: domain, clientId: clientId, redirectUri: redirectUri, audience: audience, launchDarklyClientSideId: launchDarklyClientSideId}}>
+            <ColdContext.Provider value={{auth0Options: auth0Options, launchDarklyClientSideId: launchDarklyClientSideId}}>
                 <ColdAuthProvider>
                     <ColdLDProvider>
                         {children}

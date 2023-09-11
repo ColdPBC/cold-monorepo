@@ -5,10 +5,8 @@ import { get } from 'lodash';
  * Moved the logic here since it was already in two places
  */
 export const resolveAPIUrl = (): string => {
-  // if running in storybook then use bogus url that isn't localhost
-  if(typeof global.process === 'undefined' || global.process.title === 'browser') {
-    return "https://api.coldclimate.test";
-  }
-
-  return process.env.VITE_API_BASE_URL || get(import.meta.env, 'VITE_API_BASE_URL', 'http://localhost:7001');
+  // get the api url from the environment variable.
+  // If storybook is running then use STORYBOOK_API_URL.
+  // Otherwise when running locally and other environments use VITE_API_BASE_URL.
+  return import.meta.env.STORYBOOK_API_URL || get(import.meta.env, 'VITE_API_BASE_URL', 'http://localhost:7001');
 }

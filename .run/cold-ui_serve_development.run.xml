@@ -9,6 +9,7 @@
       <env name="VITE_AUTH0_COLD_ORGANIZATION" value="org_g2zzR5rwTKVAIwCn" />
       <env name="VITE_AUTH0_DOMAIN" value="cold-climate-staging.us.auth0.com" />
       <env name="VITE_COLD_API_AUDIENCE" value="https://api.coldclimate.online/" />
+      <env name="VITE_LD_CLIENT_SIDE_ID" value="644ff1af639dda130d202037" />
     </envs>
     <option name="arguments" value="" />
     <method v="2" />
