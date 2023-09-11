@@ -1,6 +1,8 @@
+import { StoryMockProvider, getCategoriesHandler } from '@coldpbc/mocks';
 import {withKnobs} from '@storybook/addon-knobs';
 import {Meta, StoryObj} from '@storybook/react';
 import React from 'react';
+import { render } from 'react-dom';
 import { JourneySpiderChart } from './journeySpiderChart';
 
 
@@ -21,3 +23,11 @@ export const Default: Story = {
         );
     },
 };
+
+export const EmptyData = () => {
+    return (
+        <StoryMockProvider handlers={[getCategoriesHandler.empty]}>
+            <JourneySpiderChart />
+        </StoryMockProvider>
+    )
+}

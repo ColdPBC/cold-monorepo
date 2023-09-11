@@ -305,6 +305,12 @@ export function getCategoriesDataMock():any {
   };
 }
 
+export function getCategoriesEmptyDataMock() {
+  return {
+    categories: [],
+  }
+}
+
 export function getFootprintDataMock() {
   return getCategoriesDataMock().categories.company_decarbonization;
 }
