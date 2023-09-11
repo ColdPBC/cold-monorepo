@@ -46,4 +46,4 @@ jobs:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
           externals: /(public|.storybook|tailwind.config.js)/**
         env:
-          STORYBOOK_API_URL: "https://api.coldclimate.test"
+          STORYBOOK_API_URL: ${{ secrets.STORYBOOK_API_URL }}
