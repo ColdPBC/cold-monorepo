@@ -4,7 +4,14 @@
     "sourceMap": false,
     "outDir": "../../dist/out-tsc",
     "allowJs": true,
-    "types": ["cypress", "node"]
+    "types": [
+      "cypress",
+      "node"
+    ]
   },
-  "include": ["cypress/**/*.ts", "cypress/**/*.js", "cypress.config.ts"]
+  "include": [
+    "cypress/**/*.ts",
+    "cypress/**/*.js",
+    "cypress.config.ts"
+  ]
 }

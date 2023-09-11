@@ -1,10 +1,10 @@
-import {StrictMode} from 'react';
+import { StrictMode } from 'react';
 import * as ReactDOM from 'react-dom/client';
-import {Home} from './app/home';
+import { Home } from './app/home';
 import { ColdContextProvider } from '@coldpbc/providers';
 
 const root = ReactDOM.createRoot(
-    document.getElementById('root') as HTMLElement
+  document.getElementById('root') as HTMLElement,
 );
 
 const domain = import.meta.env.VITE_AUTH0_DOMAIN;
@@ -20,11 +20,11 @@ root.render(
         authorizationParams: {
           redirect_uri: window.location.origin + '/callback',
           audience: audience,
-        }
+        },
       }}
       launchDarklyClientSideId={launchDarklyClientSideId}
     >
       <Home />
     </ColdContextProvider>
-  </StrictMode>
+  </StrictMode>,
 );
