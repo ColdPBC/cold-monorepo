@@ -2,11 +2,11 @@ import React, {PropsWithChildren, useState} from 'react';
 import {Chart as ChartJS, ArcElement, ChartData, ChartOptions, DoughnutController, Plugin as PluginType, ChartEvent} from 'chart.js';
 import {Chart} from 'react-chartjs-2';
 import useSWR from 'swr';
-import {axiosFetcher} from '../../../fetchers/axiosFetcher';
+import {axiosFetcher} from '@coldpbc/fetchers';
 import {Spinner} from '../../atoms';
-import {HexColors} from '../../../themes/cold_theme';
-import {find, forEach, isArray} from 'lodash';
-import {FootprintOverviewHorizontalDetail} from './footprintOverviewHorizontalDetail/footprintOverviewHorizontalDetail';
+import {HexColors} from '@coldpbc/themes';
+import {forEach, isArray, some} from 'lodash';
+import {FootprintOverviewHorizontalDetail} from './footprintOverviewHorizontalDetail';
 import clsx from 'clsx';
 import { FootprintOverviewVerticalDetail } from './footprintOverviewVerticalDetail';
 
@@ -70,14 +70,14 @@ export interface FootprintOverviewChartProps {
   periodType?:string, // year should be the default
 }
 
-const gapStylingConstant:number = 100;
+const gapStylingConstant = 100;
 
 type ActiveSegmentMedium = 'segment' | 'legend';
 interface ActiveSegment {
   index?: number; // which segment
   thickness?: number; // how thick currently (I use timeout to animate)
   medium?: ActiveSegmentMedium; // method by which this segment was activated
-};
+}
 
 export function FootprintOverviewChart(props: PropsWithChildren<FootprintOverviewChartProps>) {
   const [activeSegment, setActiveSegment] = useState<null | ActiveSegment>(null);
@@ -129,10 +129,9 @@ export function FootprintOverviewChart(props: PropsWithChildren<FootprintOvervie
     activeSegment,
   }
 
-  const isEmptyFootprintData = !isLoading && !data.subcategories?.some(
-    (subcategory: any) => subcategory.activities?.some(
-        (activity: any) => activity.footprint?.some(
-            (footprint: any) => footprint.period === props.period)));
+  const isEmptyFootprintData = !isLoading && !some(data.subcategories, (
+    (subcategory: any) => some(subcategory.activities, (
+        (activity: any) => activity.footprint[props.period]))));
 
   if(isLoading) {
     return (
@@ -158,31 +157,32 @@ export function FootprintOverviewChart(props: PropsWithChildren<FootprintOvervie
   }
 
   // Add up all the information from the footprint
-  let subcategoryTotals:{value:number, color:string, name:string, percent?:number}[] = [];
-  let colorArray:string[] = [HexColors.purple.DEFAULT, HexColors.teal.DEFAULT, HexColors.green.DEFAULT, HexColors.lightblue.DEFAULT];
-  let hoverColorArray:string[] = [HexColors.purple.DEFAULT_BRIGHTEN, HexColors.lightblue.DEFAULT_BRIGHTEN, HexColors.teal.DEFAULT_BRIGHTEN, HexColors.green.DEFAULT_BRIGHTEN];
-  let totalFootprint:number = 0;
-  forEach(data.subcategories?.slice(0, MAX_CATEGORIES), (subcategory) => {
-    let value:number = 0, color:string;
-    color = colorArray.reverse().pop() || HexColors.primary.DEFAULT;
+  const subcategoryTotals:{value:number, color:string, name:string, percent?:number}[] = [];
+  const colorArray:string[] = [HexColors.purple.DEFAULT, HexColors.teal.DEFAULT, HexColors.green.DEFAULT, HexColors.lightblue.DEFAULT];
+  const hoverColorArray:string[] = [HexColors.purple.DEFAULT_BRIGHTEN, HexColors.lightblue.DEFAULT_BRIGHTEN, HexColors.teal.DEFAULT_BRIGHTEN, HexColors.green.DEFAULT_BRIGHTEN];
+  let totalFootprint = 0;
+  forEach(data.subcategories, (subcategory) => {
+    let value = 0;
+    const color = colorArray.reverse().pop() || HexColors.primary.DEFAULT;
 
     forEach(subcategory.activities, (activity) => {
-      if (activity.footprint) {
-        let footprint = find(activity.footprint, {'period': period, 'period_type': periodType});
+      if (activity.footprint && period in activity.footprint) {
+        const footprint = activity.footprint[period];
         if (footprint) {
           value += footprint.value;
           totalFootprint += footprint.value;
         }
       }
     })
+    if (subcategoryTotals.length >= MAX_CATEGORIES) return;
     subcategoryTotals.push({value: value, color: color, name:subcategory.subcategory_name});
   });
 
   // Set spacer width
-  let spacerValue = totalFootprint/gapStylingConstant;
+  const spacerValue = totalFootprint/gapStylingConstant;
 
   // Reset the chart data
-  let chartData:ChartData<'doughnut'> = {
+  const chartData:ChartData<'doughnut'> = {
     datasets:[{
       data: [],
       borderRadius: 2,
@@ -199,7 +199,7 @@ export function FootprintOverviewChart(props: PropsWithChildren<FootprintOvervie
 
     chartData.labels?.push(info.name);
     chartData.datasets[0].data.push(info.value);
-    
+
     if (isArray(chartData.datasets[0].backgroundColor)) {
       chartData.datasets[0].backgroundColor?.push(info.color);
     }
@@ -210,13 +210,13 @@ export function FootprintOverviewChart(props: PropsWithChildren<FootprintOvervie
     // @ts-ignore
     chartData.datasets[0].backgroundColor?.push("#FFFFFF00"); // make spacer transparent
 
-    let leftAlign = detailViews.length < 2;
-    let bottomAlign = detailViews.length === 1 || detailViews.length === 2;
+    const leftAlign = detailViews.length < 2;
+    const bottomAlign = detailViews.length === 1 || detailViews.length === 2;
     detailViews.push(
       <div
           key={info.name}
           className={clsx({
-            "absolute w-[210px] inline-flex gap-2 items-start": variant === FootprintOverviewVariants.horizontal, 
+            "absolute w-[210px] inline-flex gap-2 items-start": variant === FootprintOverviewVariants.horizontal,
             "left-1/2 translate-x-[104px] justify-start": variant === FootprintOverviewVariants.horizontal && leftAlign,
             "right-1/2 translate-x-[-104px] justify-end": variant === FootprintOverviewVariants.horizontal && !leftAlign,
             "bottom-0": bottomAlign })
@@ -256,7 +256,7 @@ export function FootprintOverviewChart(props: PropsWithChildren<FootprintOvervie
         chart.getDatasetMeta(0).data.forEach((slice, index) => {
           // @ts-ignore
           const chartActiveSegment = chart.config.options?.activeSegment as ActiveSegment;
-          
+
           if (chartActiveSegment && index === chartActiveSegment.index) {
             // @ts-ignore
             slice.outerRadius = chartActiveSegment.thickness;
@@ -274,14 +274,14 @@ export function FootprintOverviewChart(props: PropsWithChildren<FootprintOvervie
     <div className="w-full">
       <div className='h-[255px] w-full relative'>
         {variant === FootprintOverviewVariants.horizontal && detailViews}
-        {variant === FootprintOverviewVariants.vertical && 
+        {variant === FootprintOverviewVariants.vertical &&
           <div className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2'>
             <FootprintOverviewDetailChip emissions={totalFootprint} large />
           </div>
         }
         <Chart options={chartOptions} type="doughnut" data={chartData} plugins={chartPlugins} />
       </div>
-      {variant === FootprintOverviewVariants.vertical && 
+      {variant === FootprintOverviewVariants.vertical &&
         <div className='max-w-md m-auto -mt-6 -mb-3'>
           {detailViews}
         </div>

@@ -44,7 +44,7 @@ export const Vertical: Story = {
     render: (args) => {
         return (
             <BrowserRouter>
-                <div className="w-[668px]">
+                <div className="w-[437px]">
                     <FootprintOverviewCard chartVariant={FootprintOverviewVariants.vertical} />
                 </div>
             </BrowserRouter>
