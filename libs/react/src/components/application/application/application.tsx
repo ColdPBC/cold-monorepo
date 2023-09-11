@@ -19,7 +19,6 @@ export const Application = () => {
 
     const ldClient = useLDClient()
 
-    // For redirecting to the correct URL after login refresh
     const appState = {
         returnTo: window.location.pathname,
     };
