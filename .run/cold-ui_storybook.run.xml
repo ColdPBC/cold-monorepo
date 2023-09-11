@@ -1,23 +1,23 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="cold-ui:storybook" type="js.build_tools.npm">
-    <package-json value="$PROJECT_DIR$/package.json" />
-    <command value="run" />
+    <package-json value="$PROJECT_DIR$/package.json"/>
+    <command value="run"/>
     <scripts>
-      <script value="storybook" />
+      <script value="storybook"/>
     </scripts>
-    <node-interpreter value="project" />
+    <node-interpreter value="project"/>
     <envs>
-      <env name="STORYBOOK_API_URL" value="https://api.coldclimate.storybook" />
+      <env name="STORYBOOK_API_URL" value="https://api.coldclimate.storybook"/>
     </envs>
     <method v="2">
       <option name="NpmBeforeRunTask" enabled="true">
-        <package-json value="$PROJECT_DIR$/package.json" />
-        <command value="run" />
+        <package-json value="$PROJECT_DIR$/package.json"/>
+        <command value="run"/>
         <scripts>
-          <script value="build-storybook" />
+          <script value="build-storybook"/>
         </scripts>
-        <node-interpreter value="project" />
-        <envs />
+        <node-interpreter value="project"/>
+        <envs/>
       </option>
     </method>
   </configuration>

@@ -1,1 +1,1 @@
-web: bin/start-nginx-solo
+web: nx run cold-ui:serve:production

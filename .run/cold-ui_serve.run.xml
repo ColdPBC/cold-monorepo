@@ -1,10 +1,10 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="cold-ui:serve" type="NxRunConfigurationType">
-    <option name="nx-projects" value="cold-ui" />
-    <option name="nx-targets" value="serve" />
-    <option name="nx-target-configuration" value="" />
-    <envs />
-    <option name="arguments" value="" />
-    <method v="2" />
+    <option name="nx-projects" value="cold-ui"/>
+    <option name="nx-targets" value="serve"/>
+    <option name="nx-target-configuration" value=""/>
+    <envs/>
+    <option name="arguments" value=""/>
+    <method v="2"/>
   </configuration>
 </component>
