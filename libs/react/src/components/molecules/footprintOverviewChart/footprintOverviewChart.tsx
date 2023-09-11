@@ -126,6 +126,7 @@ export function FootprintOverviewChart(props: PropsWithChildren<FootprintOvervie
         setActiveSegment(null);
       }
     },
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore - inject this into the chart options
     activeSegment,
   }
@@ -214,6 +215,7 @@ export function FootprintOverviewChart(props: PropsWithChildren<FootprintOvervie
     // Add a spacer
     chartData.labels?.push(null);
     chartData.datasets[0].data.push(spacerValue);
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     chartData.datasets[0].backgroundColor?.push("#FFFFFF00"); // make spacer transparent
 
@@ -261,14 +263,18 @@ export function FootprintOverviewChart(props: PropsWithChildren<FootprintOvervie
       id: 'sliceThickness',
       beforeDraw( chart: ChartJS): boolean | void {
         chart.getDatasetMeta(0).data.forEach((slice, index) => {
+
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           const chartActiveSegment = chart.config.options?.activeSegment as ActiveSegment;
           
           if (chartActiveSegment && index === chartActiveSegment.index) {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             slice.outerRadius = chartActiveSegment.thickness;
             slice.options.backgroundColor = hoverColorArray[index === 0 ? 0 : index / 2];
           } else {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             slice.outerRadius = DEFAULT_SEGMENT_THICKNESS
           }
