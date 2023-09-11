@@ -26,7 +26,7 @@ export function JourneySpiderChart({ setIsEmptyData }: Props) {
 
     // Update chart data on receiving new data
     useEffect(() => {
-        if (data?.categories.length !== 0) {
+        if (data?.categories?.length !== 0) {
             const newLabels:string[] = [], newData:number[] = [];
             // Transform chart data
             forEach(data?.categories, (category) => {
