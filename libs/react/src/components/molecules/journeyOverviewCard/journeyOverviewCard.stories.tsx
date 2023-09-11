@@ -3,6 +3,9 @@ import { withKnobs } from "@storybook/addon-knobs";
 import { Meta, StoryObj } from "@storybook/react";
 import { JourneyOverviewCard } from './journeyOverviewCard';
 import {BrowserRouter} from 'react-router-dom';
+import { StoryMockProvider, getFootprintHandler, getCategoriesHandler } from "@coldpbc/mocks";
+import { render } from "react-dom";
+import { FootprintOverviewChart } from "../footprintOverviewChart";
 
 const meta = {
     title: "Molecules/JourneyOverviewCard",
@@ -25,3 +28,15 @@ export const Default: Story = {
         );
     },
 };
+
+export const EmptyData = () => {
+    return (
+            <BrowserRouter>
+                <StoryMockProvider handlers={[getCategoriesHandler.empty]}>
+                    <div className="w-[668px]">
+                        <JourneyOverviewCard />
+                    </div>
+                </StoryMockProvider>
+            </BrowserRouter>
+    )
+}

@@ -323,6 +323,12 @@ export function getCategoriesDataMock() {
   };
 }
 
+export function getCategoriesEmptyDataMock() {
+  return {
+    categories: [],
+  }
+}
+
 export function getFootprintDataMock() {
   return find(getCategoriesDataMock().categories,{'category_key':'company_decarbonization'} );
 }
