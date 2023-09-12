@@ -1,3 +1,10 @@
+# [1.6.0-COLD-129.2](https://github.com/ColdPBC/ui/compare/v1.6.0-COLD-129.1...v1.6.0-COLD-129.2) (2023-09-12)
+
+
+### Features
+
+* update to better match font ([25e4951](https://github.com/ColdPBC/ui/commit/25e4951897de1e55d3878156b958fdfcfbae17a4))
+
 # [1.6.0-COLD-129.1](https://github.com/ColdPBC/ui/compare/v1.5.0...v1.6.0-COLD-129.1) (2023-09-12)
 
 
