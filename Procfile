@@ -1,2 +1,1 @@
-web: yarn serve dist/apps/cold-ui
-
+web: bin/start-nginx-solo
