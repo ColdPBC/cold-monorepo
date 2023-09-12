@@ -1,42 +1,42 @@
 import { BaseButton } from './button';
-import { withKnobs } from "@storybook/addon-knobs";
-import { StoryObj } from "@storybook/react";
+import { withKnobs } from '@storybook/addon-knobs';
+import { StoryObj } from '@storybook/react';
 import { ButtonTypes } from '../../../enums/buttons';
 import { IconNames } from '../../../enums/iconNames';
 
 const meta = {
-  title: "Atoms/Button",
+  title: 'Atoms/Button',
   component: BaseButton,
-  tags: ["autodocs"],
+  tags: ['autodocs'],
   decorators: [withKnobs],
   argTypes: {
     variant: {
-      control: "select",
+      control: 'select',
       options: ButtonTypes,
     },
   },
-}
+};
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    label: "Button"
+    label: 'Button',
   },
 };
 
 export const DefaultIcon: Story = {
   args: {
-    label: "Button",
-    iconRight:IconNames.ColdJourneyIcon
+    label: 'Button',
+    iconRight: IconNames.ColdJourneyIcon,
   },
 };
 
 export const DefaultDisabled: Story = {
   args: {
     variant: ButtonTypes.primary,
-    label: "Button",
+    label: 'Button',
     disabled: true,
   },
 };
@@ -44,20 +44,20 @@ export const DefaultDisabled: Story = {
 export const Secondary: Story = {
   args: {
     variant: ButtonTypes.secondary,
-    label: "Button",
+    label: 'Button',
   },
 };
 
 export const Warning: Story = {
   args: {
     variant: ButtonTypes.warning,
-    label: "Cancel",
+    label: 'Cancel',
   },
 };
 
 export const Link: Story = {
   args: {
     variant: ButtonTypes.hyperlink,
-    label: "This is a link",
+    label: 'This is a link',
   },
 };

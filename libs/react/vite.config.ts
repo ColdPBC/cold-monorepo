@@ -23,7 +23,6 @@ export default defineConfig({
   //  plugins: [ nxViteTsPaths() ],
   // },
 
-
   // Configuration for building your library.
   // See: https://vitejs.dev/guide/build.html#library-mode
   build: {
@@ -42,10 +41,10 @@ export default defineConfig({
         manualChunks(id) {
           if (id.includes('node_modules')) {
             return id
-                .toString()
-                .split('node_modules/')[1]
-                .split('/')[0]
-                .toString();
+              .toString()
+              .split('node_modules/')[1]
+              .split('/')[0]
+              .toString();
           }
         },
       },
@@ -53,8 +52,8 @@ export default defineConfig({
       external: ['react', 'react-dom', 'react/jsx-runtime'],
     },
   },
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   test: {
     globals: true,
     cache: {

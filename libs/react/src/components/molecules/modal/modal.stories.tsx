@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Meta, StoryObj } from "@storybook/react";
+import React, { useState } from 'react';
+import { Meta, StoryObj } from '@storybook/react';
 import { BaseButton } from '../../atoms/button/button';
 import { ColorNames } from '../../../enums/colors';
 import { GlobalSizes } from '../../../enums/sizes';
@@ -10,7 +10,7 @@ const meta: Meta<typeof Modal> = {
    * See https://storybook.js.org/docs/react/configure/overview#configure-story-loading
    * to learn how to generate automatic titles
    */
-  title: "Molecules/Modal",
+  title: 'Molecules/Modal',
   component: Modal,
 };
 export default meta;
@@ -36,7 +36,7 @@ const DefaultComponent = () => {
         show={isShow}
         setShowModal={setIsShow}
         header={{
-          title: "Modal Title",
+          title: 'Modal Title',
         }}
         body={
           <div className="bg-white px-3 pb-10 flex justify-center">
@@ -66,7 +66,7 @@ const ModalWithContentComponent = () => {
       <BaseButton
         textSize={GlobalSizes.medium}
         onClick={() => {
-        setIsShow(true);
+          setIsShow(true);
         }}
         label="Open Modal"
       />
@@ -75,22 +75,22 @@ const ModalWithContentComponent = () => {
         setShowModal={setIsShow}
         body={modelBody()}
         header={{
-          title: "Modal Title",
+          title: 'Modal Title',
         }}
         footer={{
           rejectButton: {
-              label: "Cancel",
-              color: ColorNames.alert,
-              textSize: GlobalSizes.medium,
-              onClick: () => {
+            label: 'Cancel',
+            color: ColorNames.alert,
+            textSize: GlobalSizes.medium,
+            onClick: () => {
               setIsShow(false);
             },
           },
           resolveButton: {
-              label: "Confirm",
-              color: ColorNames.jetBlack,
-              textSize: GlobalSizes.medium,
-              onClick: () => {
+            label: 'Confirm',
+            color: ColorNames.jetBlack,
+            textSize: GlobalSizes.medium,
+            onClick: () => {
               setIsShow(false);
             },
           },

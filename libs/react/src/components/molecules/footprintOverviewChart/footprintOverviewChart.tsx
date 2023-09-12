@@ -1,4 +1,4 @@
-import React, {PropsWithChildren, useState} from 'react';
+import React, {PropsWithChildren, useEffect, useState} from 'react';
 import {Chart as ChartJS, ArcElement, ChartData, ChartOptions, DoughnutController, Plugin as PluginType, ChartEvent} from 'chart.js';
 import {Chart} from 'react-chartjs-2';
 import useSWR from 'swr';
@@ -68,6 +68,7 @@ export interface FootprintOverviewChartProps {
   variant?:FootprintOverviewVariants,
   period:number|string,
   periodType?:string, // year should be the default
+  setIsEmptyData?: (isEmpty: boolean) => void;
 }
 
 const gapStylingConstant = 100;
@@ -132,6 +133,12 @@ export function FootprintOverviewChart(props: PropsWithChildren<FootprintOvervie
   const isEmptyFootprintData = !isLoading && !some(data.subcategories, (
     (subcategory: any) => some(subcategory.activities, (
         (activity: any) => activity.footprint[props.period]))));
+
+  useEffect(() => {
+    if (props.setIsEmptyData) {
+      props.setIsEmptyData(isEmptyFootprintData);
+    }
+  }, [isEmptyFootprintData]);
 
   if(isLoading) {
     return (

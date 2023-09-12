@@ -3,9 +3,10 @@
 <div style="font-size: 40px;"> @coldpbc/react : Component Library </div>
 </div>
 
-# 
+#  
 
 ### Getting Started
+
 1. Install dependencies
 
 ```zsh
@@ -23,28 +24,35 @@ yarn build:dev
 ```zsh
 yarn build-storybook
 ```
+
 4. Start Storybook
-    
+
 ```zsh
 yarn storybook
 ```
 
 ## Available Scripts
 
-### Prebuild 
+### Prebuild
+
 Generates Barrel Files For Library (`index.ts`)
 
 **NOTE: This is run automatically before `build:dev` or `build:prod`)**
+
 ```zsh
 yarn prebuild
 ```
+
 ### Build:dev
+
 Builds the library in development mode.
 
 ```zsh
 yarn build:dev
 ```
+
 ### Build:prod
+
 Builds the library in production mode.
 
 ```zsh
@@ -52,11 +60,13 @@ yarn build:prod
 ```
 
 ### Build Storybook
+
 ```zsh
 yarn build-storybook
 ```
 
 ### Start Storybook
+
 ```zsh
 yarn storybook
 ```
@@ -70,7 +80,6 @@ yarn storybook
 5. Wrap the 'Application' component in the ColdContextProvider.
 6. Pass in the Auth0 domain, clientId, redirectUri, and audience as props to the ColdContextProvider.
 7. Pass in the LaunchDarkly clientSideId as a prop to the ColdContextProvider.
-
 
 #### Example Code
 

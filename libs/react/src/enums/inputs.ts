@@ -1,8 +1,6 @@
-
-
 export enum InputTypes {
-    Text = 'text',
-    Currency = 'currency',
-    Number = 'number',
-    Select = 'select',
+  Text = 'text',
+  Currency = 'currency',
+  Number = 'number',
+  Select = 'select',
 }

@@ -27,7 +27,7 @@ export interface SectionFieldProps {
   label_classname?: string;
   container_classname?: string;
   options?: Array<InputOption>;
-  auto_complete?:string;
+  auto_complete?: string;
 }
 
 export interface FormInputProps {
@@ -43,5 +43,5 @@ export interface FormInputProps {
   options?: Array<InputOption>;
   name: string;
   value?: any;
-  auto_complete?:string;
+  auto_complete?: string;
 }

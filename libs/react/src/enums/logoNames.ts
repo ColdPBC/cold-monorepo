@@ -1,4 +1,4 @@
-export enum ColdLogoNames{
-    ColdWordmark = "ColdWordmark",
-    ColdClimateWordmark = "ColdClimateWordmark",
+export enum ColdLogoNames {
+  ColdWordmark = 'ColdWordmark',
+  ColdClimateWordmark = 'ColdClimateWordmark',
 }

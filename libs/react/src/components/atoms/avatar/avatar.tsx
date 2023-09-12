@@ -1,11 +1,11 @@
-import React from "react";
-import { GlobalSizes } from "../../../enums/sizes";
-import { Avatar as FlowBiteAvatar, Spinner } from "flowbite-react";
-import { useAuth0 } from "@auth0/auth0-react";
-import { User } from "@auth0/auth0-spa-js/src/global";
-import { toUpper } from "lodash";
-import * as z from "zod";
-import flowbiteThemeOverride from "../../../themes/flowbiteThemeOverride";
+import React from 'react';
+import { GlobalSizes } from '../../../enums/sizes';
+import { Avatar as FlowBiteAvatar, Spinner } from 'flowbite-react';
+import { useAuth0 } from '@auth0/auth0-react';
+import { User } from '@auth0/auth0-spa-js/src/global';
+import { toUpper } from 'lodash';
+import * as z from 'zod';
+import flowbiteThemeOverride from '../../../themes/flowbiteThemeOverride';
 
 export type AvatarProps = {
   size?:
@@ -56,8 +56,8 @@ const AvatarPropsSchema: z.ZodSchema<AvatarProps> = z
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           message:
-            "If user.picture is null then it must a family_name and given_name or a email",
-          path: ["user"],
+            'If user.picture is null then it must a family_name and given_name or a email',
+          path: ['user'],
         });
       }
     }
@@ -75,7 +75,7 @@ export function Avatar(props: AvatarProps): React.JSX.Element {
   if (user || props.user) {
     const avatarUser: User = props.user ? props.user : (user as User);
 
-    if (avatarUser.picture && avatarUser.picture !== "null")
+    if (avatarUser.picture && avatarUser.picture !== 'null')
       return (
         <FlowBiteAvatar
           size={size}
@@ -92,14 +92,14 @@ export function Avatar(props: AvatarProps): React.JSX.Element {
         ? toUpper(
             `${avatarUser.given_name.slice(0, 1)}${avatarUser.family_name.slice(
               0,
-              1
-            )}`
+              1,
+            )}`,
           )
         : toUpper(avatarUser.email?.slice(0, 2));
 
     return (
       <FlowBiteAvatar
-        color={"midnightBlue"}
+        color={'midnightBlue'}
         placeholderInitials={initials}
         size={size}
         rounded={props.circle}

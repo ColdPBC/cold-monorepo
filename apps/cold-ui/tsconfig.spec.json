@@ -3,7 +3,12 @@
   "compilerOptions": {
     "resolveJsonModule": true,
     "outDir": "../../dist/out-tsc",
-    "types": ["vitest/globals", "vitest/importMeta", "vite/client", "node"]
+    "types": [
+      "vitest/globals",
+      "vitest/importMeta",
+      "vite/client",
+      "node"
+    ]
   },
   "include": [
     "vite.config.ts",
