@@ -329,8 +329,7 @@ export function FootprintOverviewChart(
         chart.getDatasetMeta(0).data.forEach((slice, index) => {
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
-          const chartActiveSegment = chart.config.options
-            ?.activeSegment as ActiveSegment;
+          const chartActiveSegment = chart.config.options?.activeSegment;
 
           if (chartActiveSegment && index === chartActiveSegment.index) {
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
