@@ -1,1 +1,1 @@
-web: bin/start-nginx-solo
+web: npx nx run cold-ui:serve-static
