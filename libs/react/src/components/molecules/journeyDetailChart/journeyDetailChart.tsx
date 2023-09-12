@@ -1,0 +1,261 @@
+import { useEffect, useRef, useState } from 'react';
+import { Chart } from 'react-chartjs-2';
+import {
+  Chart as ChartJS,
+  ChartData,
+  ChartOptions,
+  Plugin as PluginType,
+} from 'chart.js';
+import { HexColors } from '../../../themes/cold_theme';
+import useSWR from 'swr';
+import { axiosFetcher } from '../../../fetchers/axiosFetcher';
+import { Spinner } from '../../atoms/spinner/spinner';
+import { defaultChartData, emptyChartData } from './constants';
+import { createGradient } from './helpers';
+import { CustomFlowbiteTheme, Table } from 'flowbite-react';
+import { useActiveSegment } from '@coldpbc/hooks';
+
+export const tableTheme: CustomFlowbiteTheme = {
+  table: {
+    "root": {
+      "base": "w-full text-left text-sm text-gray-500 dark:text-gray-400",
+      "shadow": "absolute dark:bg-black w-full h-full top-0 left-0 rounded-lg drop-shadow-md -z-10",
+      "wrapper": "relative"
+    },
+    "body": {
+      "base": "group/body",
+      "cell": {
+        "base": "group-first/body:group-first/row:first:rounded-tl-lg group-first/body:group-first/row:last:rounded-tr-lg group-last/body:group-last/row:first:rounded-bl-lg group-last/body:group-last/row:last:rounded-br-lg px-6 py-4 bg-bgc-elevated"
+      }
+    },
+    "head": {
+      "base": "group/head text-xs uppercase text-gray-700 dark:text-gray-400",
+      "cell": {
+        "base": "group-first/head:first:rounded-tl-lg group-first/head:last:rounded-tr-lg bg-gray-50 dark:bg-gray-700 px-6 py-3 font-normal"
+      }
+    },
+    "row": {
+      "base": "group/row",
+      "hovered": "hover:bg-gray-50 dark:hover:bg-gray-600",
+      "striped": "odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700"
+    }
+  }
+}
+
+interface LegendRow {
+  value: number;
+  color: string;
+  name: string;
+  percent?: number;
+};
+
+interface Props {
+  setIsEmptyData?: (isEmpty: boolean) => void;
+  colors: string[];
+  subcategory_key: string;
+  period: number;
+}
+
+export function JourneyDetailChart({ setIsEmptyData, colors, subcategory_key, period }: Props) {
+  const chartRef = useRef<ChartJS>(null);
+
+  const {
+    activeSegment,
+    setActiveSegment,
+    animateSegmentThickness,
+    segmentOnHover,
+    chartBeforeDraw
+  } = useActiveSegment(); 
+
+  const [chartData, setChartData] = useState<ChartData>(defaultChartData);
+  const [legendRows, setLegendRows] = useState<LegendRow[]>([]);
+
+  // Get footprint data from SWR
+  const { data, error, isLoading } = useSWR<any>(
+    ['/categories/company_decarbonization', 'GET'],
+    axiosFetcher,
+  );
+
+  // Update chart data on receiving new data
+  useEffect(() => {
+    if (data?.subcategories?.length !== 0) {
+      const newLabels: string[] = [];
+      const newData: number[] = [];
+      let totalFootprint = 0;
+      const newLegendRows: LegendRow[] = [];
+
+      // Transform chart data
+      Object.keys(data?.subcategories[subcategory_key].activities).forEach(
+          (activityKey: any) => {
+            const activity = data?.subcategories[subcategory_key].activities[activityKey];
+            const activityFootprint = activity.footprint?.[period]?.value ?? 0;
+            
+            newLabels.push(activity.activity_name);
+            newData.push(activityFootprint);
+            totalFootprint += activityFootprint;
+          })
+
+      // Populate legend rows
+      newData.forEach((nD, i) => {
+        newLegendRows.push({
+          value: nD,
+          color: colors[i],
+          name: newLabels[i],
+          percent: Math.round((nD / totalFootprint) * 100)
+        })
+      })
+
+      const backgroundColors = newData.map((_, i) => colors[i]);
+
+      const newChartData: ChartData = {
+        datasets: [{
+          data: newData,
+          backgroundColor: backgroundColors,
+          borderColor: backgroundColors,
+          borderWidth: 1,
+        }],
+        labels: newLabels,
+      };
+
+      const chart = chartRef.current;
+
+      if (!chart) {
+        return;
+      }
+
+      setChartData(newChartData);
+      setLegendRows(newLegendRows);
+
+      if (setIsEmptyData) setIsEmptyData(false);
+    } else {
+      if (setIsEmptyData) setIsEmptyData(true);
+    }
+  }, [data, chartRef.current]);
+
+  // Create plugins for chart
+  const chartPlugins: PluginType<'pie'>[] = [
+    {
+      id: 'sliceThickness',
+      beforeDraw: (chart: ChartJS) => chartBeforeDraw(chart),
+    },
+  ];
+
+  const chartOptions: ChartOptions<'pie'> = {
+    responsive: true,
+    maintainAspectRatio: false,
+    backgroundColor: '#FF0000',
+    onHover: segmentOnHover,
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore - inject this into the chart options
+    activeSegment,
+  };
+
+  if (isLoading) {
+    return (
+      <div className="h-[284px] flex items-center">
+        <Spinner />
+      </div>
+    );
+  } else if (chartData.datasets[0].data.length === 0) {
+    return (
+      <div className="relative h-[150px] w-full">
+        <Chart
+          ref={chartRef}
+          options={{
+            ...chartOptions,
+            backgroundColor: chartRef.current
+              ? createGradient(
+                  chartRef.current.ctx,
+                  chartRef.current.chartArea,
+                  HexColors.white + '00',
+                  HexColors.white + '60',
+                )
+              : undefined,
+            elements: {
+              line: {
+                borderWidth: 3,
+                borderColor: '#FFFFFF',
+              },
+              point: {
+                backgroundColor: '#FFFFFF',
+                borderColor: '#FFFFFF',
+                radius: 1,
+              },
+            },
+          }}
+          type="radar"
+          data={emptyChartData}
+        />
+      </div>
+    );
+  } else if (error) {
+    return <div></div>;
+  }
+
+  return (
+    <div className="relative w-full flex items-center">
+      <div
+        className="h-[200px]"
+        onMouseLeave={() => {
+          setTimeout(() => {
+            setActiveSegment(null);
+          }, 100)
+        }}
+      >
+        <Chart
+          ref={chartRef}
+          options={chartOptions}
+          type="pie"
+          data={chartData}
+          plugins={chartPlugins}
+        />
+      </div>
+      <Table
+        className='text-white'
+        theme={tableTheme.table}
+      >
+        <Table.Head className='text-white normal-case'>
+          <Table.HeadCell className='w-[225px]' theme={tableTheme.table?.head?.cell}>
+            Category
+          </Table.HeadCell>
+          <Table.HeadCell theme={tableTheme.table?.head?.cell}>
+            Breakdown
+          </Table.HeadCell>
+          <Table.HeadCell theme={tableTheme.table?.head?.cell}>
+            tCO2e
+          </Table.HeadCell>
+        </Table.Head>
+          <Table.Body className="divide-y">
+            {legendRows.map((row, i) => (
+              <Table.Row
+                key={`${row.name}-${i}`}
+                onMouseEnter={() => {
+                  animateSegmentThickness(i, 'legend');
+                }}
+                onMouseLeave={() => {
+                  setActiveSegment(null);
+                }}
+              >
+                <Table.Cell className='flex items-center font-bold' theme={tableTheme.table?.body?.cell}>
+                  <div 
+                    style={{
+                      background: row.color,
+                      border: '2px solid rgba(0, 0, 0, 0.2)'
+                    }}
+                    className='mr-2 h-[10px] w-[10px] rounded-xl'
+                  />
+                  {row.name}
+                </Table.Cell>
+                <Table.Cell theme={tableTheme.table?.body?.cell}>
+                  {row.percent}%
+                </Table.Cell>
+                <Table.Cell theme={tableTheme.table?.body?.cell}>
+                  {row.value}
+                </Table.Cell>
+              </Table.Row>
+            ))}
+          </Table.Body>
+        </Table>
+    </div>
+  );
+}
