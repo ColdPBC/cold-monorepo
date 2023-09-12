@@ -15,7 +15,11 @@ export const SurveyIntro = (props: SurveyIntroProps) => {
 
   return (
     <div className={'w-[580px] space-y-[32px]'}>
-      <ReactMarkdown className={'text-tc-primary whitespace-pre-line'}>
+      <ReactMarkdown
+        className={
+          'text-tc-primary text-sm not-italic font-medium whitespace-pre-line'
+        }
+      >
         {intro_markdown}
       </ReactMarkdown>
       <div className={'w-full flex justify-start'}>
