@@ -1,6 +1,6 @@
 {
   "name": "cold-ui",
-  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "$schema": "/node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/cold-ui/src",
   "projectType": "application",
   "targets": {
@@ -89,7 +89,7 @@
     "serve-static": {
       "executor": "@nx/web:file-server",
       "options": {
-        "buildTarget": "cold-ui:build"
+        "buildTarget": "cold-ui:build:production"
       }
     },
     "storybook": {

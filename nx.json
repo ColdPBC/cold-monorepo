@@ -5,6 +5,7 @@
 
     }
   },
+  "defaultProject": "cold-ui",
   "targetDefaults": {
     "build": {
       "dependsOn": [
