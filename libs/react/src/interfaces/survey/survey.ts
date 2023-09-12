@@ -31,4 +31,5 @@ export interface SurveyFormDefinitionType {
   title: string;
   sections: SurveySectionType[];
   image_url: string;
+  intro_markdown: string;
 }
