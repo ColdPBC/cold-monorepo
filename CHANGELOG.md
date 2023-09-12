@@ -1,3 +1,10 @@
+## [1.4.1](https://github.com/ColdPBC/ui/compare/v1.4.0...v1.4.1) (2023-09-12)
+
+
+### Bug Fixes
+
+* ts-ignore not being honored ([2867465](https://github.com/ColdPBC/ui/commit/2867465febb59864eccc32eebd56cf77dca5f7f4))
+
 # [1.4.0](https://github.com/ColdPBC/ui/compare/v1.3.1...v1.4.0) (2023-09-11)
 
 ### Features
