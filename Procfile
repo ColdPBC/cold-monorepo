@@ -1,1 +1,2 @@
-web: npx nx run cold-ui:serve-static
+web: yarn serve dist/apps/cold-ui
+
