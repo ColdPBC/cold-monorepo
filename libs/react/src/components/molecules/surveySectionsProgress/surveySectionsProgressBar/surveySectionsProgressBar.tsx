@@ -1,16 +1,18 @@
 import { findIndex, orderBy } from 'lodash';
 import React from 'react';
 import {
-  SurveySectionsProgressSectionType,
   SurveySectionType,
+  SurveySectionsProgressSectionType,
+  SurveyActiveKeyType,
 } from '@coldpbc/interfaces';
 
 export interface SurveySectionsProgressBarProps {
-  sections: SurveySectionType[];
+  sections: {
+    [key: string]: SurveySectionType;
+  };
   sectionLocations: SurveySectionsProgressSectionType[];
-  activeKey: string;
+  activeKey: SurveyActiveKeyType;
   getActiveSectionIndex: () => number;
-  isFollowUp: (key: string) => boolean;
 }
 
 export const SurveySectionsProgressBar = ({
@@ -18,87 +20,51 @@ export const SurveySectionsProgressBar = ({
   sectionLocations,
   activeKey,
   getActiveSectionIndex,
-  isFollowUp,
 }: SurveySectionsProgressBarProps) => {
   const getProgressBarColorGradientSection = (
     sectionKey: string,
     currentSectionIndex: number,
   ) => {
     const activeSectionIndex = getActiveSectionIndex();
-    const followUp = isFollowUp(activeKey);
     let className = 'w-[4px] h-full';
-    if (currentSectionIndex === sections.length - 1) {
+    if (currentSectionIndex === Object.keys(sections).length - 1) {
       className += ' rounded-b';
     }
-    if (!followUp) {
+    if (!activeKey.isFollowUp) {
       if (currentSectionIndex >= activeSectionIndex) {
         return (
           <div className={'w-[4px] h-full bg-bgc-accent' + className}></div>
         );
       } else {
-        if (currentSectionIndex === activeSectionIndex - 1) {
-          const currentSectionFollowUps =
-            sections[currentSectionIndex].follow_up.length + 1;
-          const changePercentage = 1 / currentSectionFollowUps;
-          const changePercentageString = changePercentage * 100 + '%';
-          const oldPercentage = 1 - changePercentage;
-          const oldPercentageString = oldPercentage * 100 + '%';
-          return (
-            <div className={'w-[4px] h-full'}>
-              <div
-                className={'w-full bg-primary-300'}
-                style={{
-                  height: `${oldPercentageString}`,
-                }}
-              ></div>
-
-              <div
-                className={'w-full'}
-                style={{
-                  height: `${changePercentageString}`,
-                }}
-              >
-                <div
-                  className={'w-full bg-primary-300 h-full rounded-b-sm'}
-                ></div>
-              </div>
-            </div>
-          );
-        } else {
-          return <div className={'w-[4px] bg-primary-300 h-full'}></div>;
-        }
+        return <div className={'w-[4px] bg-primary-300 h-full'}></div>;
       }
     } else {
       if (activeSectionIndex === currentSectionIndex) {
         const totalCurrentSectionFollowUps =
-          activeSectionIndex === sections.length - 1
-            ? sections[currentSectionIndex].follow_up.length
-            : sections[currentSectionIndex].follow_up.length + 1;
+          activeSectionIndex === Object.keys(sections).length - 1
+            ? Object.keys(sections[sectionKey].follow_up).length
+            : Object.keys(sections[sectionKey].follow_up).length + 1;
         const activeFollowUpIndex = findIndex(
-          sections[activeSectionIndex].follow_up,
-          { key: activeKey },
+          Object.keys(sections[sectionKey].follow_up),
+          (followUpKey) => {
+            return followUpKey === activeKey.value;
+          },
         );
         const changePercentage = 1 / totalCurrentSectionFollowUps;
         const changePercentageString = changePercentage * 100 + '%';
         const previousPercentage =
           activeFollowUpIndex / totalCurrentSectionFollowUps;
         const previousPercentageString = previousPercentage * 100 + '%';
+        const percentageString =
+          (previousPercentage + 1 / totalCurrentSectionFollowUps) * 100 + '%';
         return (
           <div className={'w-[4px] h-full'}>
             <div
-              className={'w-full bg-primary-300'}
+              className={'w-full bg-primary-300 ' + className}
               style={{
-                height: `${previousPercentageString}`,
+                height: `${percentageString}`,
               }}
             ></div>
-            <div
-              className={'w-full'}
-              style={{
-                height: `${changePercentageString}`,
-              }}
-            >
-              <div className={'h-full bg-primary-300 rounded-b-sm'}></div>
-            </div>
           </div>
         );
       } else if (currentSectionIndex > activeSectionIndex) {
@@ -119,7 +85,7 @@ export const SurveySectionsProgressBar = ({
     );
     const activeIndex = getActiveSectionIndex();
     let offSet = 0;
-    if (activeIndex == 0) {
+    if (activeIndex === 0) {
       offSet = 24;
     } else {
       offSet = 18;
@@ -128,7 +94,10 @@ export const SurveySectionsProgressBar = ({
       <div className={'relative w-[16px] z-10 px-[4px]'}>
         {sectionLocationsSorted.map((sectionLocation, index) => {
           let adjustedHeight = sectionLocation.height;
-          if (index !== sections.length - 1 && index === activeIndex) {
+          if (
+            index !== Object.keys(sections).length - 1 &&
+            index === activeIndex
+          ) {
             adjustedHeight -= 6;
           } else if (activeIndex === index + 1) {
             adjustedHeight += 6;
@@ -143,7 +112,6 @@ export const SurveySectionsProgressBar = ({
 
           if (index === sectionLocationsSorted.length - 1) {
             if (activeIndex === index) {
-              console.log(adjustedHeight);
               return (
                 <div
                   key={'progress_bar_' + index}
