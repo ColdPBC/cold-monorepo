@@ -1,5 +1,5 @@
 /// <reference types="vitest" />
-import { defineConfig } from 'vite';
+import { defineConfig, searchForWorkspaceRoot } from 'vite';
 import react from '@vitejs/plugin-react';
 import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
 import { nodePolyfills } from 'vite-plugin-node-polyfills';
@@ -10,6 +10,12 @@ export default defineConfig({
   server: {
     port: 4200,
     host: 'localhost',
+    fs: {
+      // Allow serving files from one level up to the project root
+      allow: [
+        searchForWorkspaceRoot(process.cwd()),
+        '../../libs/react'],
+    },
   },
 
   preview: {
