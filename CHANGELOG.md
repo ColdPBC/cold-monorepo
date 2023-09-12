@@ -1,3 +1,10 @@
+# [1.6.0-COLD-129.3](https://github.com/ColdPBC/ui/compare/v1.6.0-COLD-129.2...v1.6.0-COLD-129.3) (2023-09-12)
+
+
+### Bug Fixes
+
+* removed unnecessary code ([f2ff907](https://github.com/ColdPBC/ui/commit/f2ff907936898d79ac617f2b97b752562d364aa7))
+
 # [1.6.0-COLD-129.2](https://github.com/ColdPBC/ui/compare/v1.6.0-COLD-129.1...v1.6.0-COLD-129.2) (2023-09-12)
 
 
