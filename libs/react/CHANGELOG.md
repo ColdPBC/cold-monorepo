@@ -1,12 +1,10 @@
 # [1.14.0-COLD-170.2](https://github.com/coldpbc/cold_components/compare/v1.14.0-COLD-170.1...v1.14.0-COLD-170.2) (2023-08-30)
 
-
 ### Bug Fixes
 
 * yarn install to fix broken build ([5c28e02](https://github.com/coldpbc/cold_components/commit/5c28e02b0efa743e6d28db95584a63699759c4af))
 
 # [1.14.0-COLD-170.1](https://github.com/coldpbc/cold_components/compare/v1.13.0...v1.14.0-COLD-170.1) (2023-08-30)
-
 
 ### Bug Fixes
 
@@ -14,16 +12,14 @@
 * removed double imaging ([a50c1ea](https://github.com/coldpbc/cold_components/commit/a50c1eaa12d473e3e673a99c203c049e86b9d972))
 * update gradient settings ([e085721](https://github.com/coldpbc/cold_components/commit/e085721e2a2cbf1983e2a596be89ec5e2e246144))
 
-
 ### Features
 
-*  Create survey sections progress component ([1bf86f3](https://github.com/coldpbc/cold_components/commit/1bf86f330cce6507d2cba6fec6bd3420e43c65f7))
+* Create survey sections progress component ([1bf86f3](https://github.com/coldpbc/cold_components/commit/1bf86f330cce6507d2cba6fec6bd3420e43c65f7))
 * Added onClick and scrollable functionality ([e94b206](https://github.com/coldpbc/cold_components/commit/e94b206de2bc7f0f9eeeedf19de95792c8114f14))
 * refactored svg code, added animations to tsconfig, removed logic using incorrect key convention ([befa9a8](https://github.com/coldpbc/cold_components/commit/befa9a8ad9f595b91dde36660789b0ea569ab049))
 * Update progress bar to not pass the section description height ([5430642](https://github.com/coldpbc/cold_components/commit/5430642c970922b47842e69f004bdc04d40d78ab))
 
 # [1.13.0](https://github.com/coldpbc/cold_components/compare/v1.12.0...v1.13.0) (2023-08-30)
-
 
 ### Bug Fixes
 
@@ -33,14 +29,12 @@
 * make sure gradients get rendered on initial data population ([aa828dc](https://github.com/coldpbc/cold_components/commit/aa828dc90eef463ff4d0bc4ddfa85fdc8fcf10d2))
 * set glow to default true ([8727763](https://github.com/coldpbc/cold_components/commit/872776379a3b37520bd7269a2fd4f83a7440bbd9))
 
-
 ### Features
 
 * basic first cut of the climate journey spider chart. Need to remove hardcoded values ([35e1c6f](https://github.com/coldpbc/cold_components/commit/35e1c6f547418fca45b0e631d8140880a2a1b2f9))
 * spider chart now looks more or less like the mock ([a69a365](https://github.com/coldpbc/cold_components/commit/a69a3650c3837f66677262972b3254e249a687b7))
 
 # [1.13.0-cold-201-create-journeyspiderchart-component.3](https://github.com/coldpbc/cold_components/compare/v1.13.0-cold-201-create-journeyspiderchart-component.2...v1.13.0-cold-201-create-journeyspiderchart-component.3) (2023-08-30)
-
 
 ### Bug Fixes
 
@@ -50,18 +44,15 @@
 
 # [1.13.0-cold-201-create-journeyspiderchart-component.2](https://github.com/coldpbc/cold_components/compare/v1.13.0-cold-201-create-journeyspiderchart-component.1...v1.13.0-cold-201-create-journeyspiderchart-component.2) (2023-08-30)
 
-
 ### Bug Fixes
 
 * make sure gradients get rendered on initial data population ([aa828dc](https://github.com/coldpbc/cold_components/commit/aa828dc90eef463ff4d0bc4ddfa85fdc8fcf10d2))
 
 # [1.13.0-cold-201-create-journeyspiderchart-component.1](https://github.com/coldpbc/cold_components/compare/v1.12.0...v1.13.0-cold-201-create-journeyspiderchart-component.1) (2023-08-30)
 
-
 ### Bug Fixes
 
 * set glow to default true ([8727763](https://github.com/coldpbc/cold_components/commit/872776379a3b37520bd7269a2fd4f83a7440bbd9))
-
 
 ### Features
 
@@ -70,7 +61,6 @@
 
 # [1.12.0](https://github.com/coldpbc/cold_components/compare/v1.11.0...v1.12.0) (2023-08-29)
 
-
 ### Features
 
 * added footprint overview card ([b691108](https://github.com/coldpbc/cold_components/commit/b691108d48b0c81f1b777ec33e6cc3bff2c1e2e1))
@@ -78,18 +68,15 @@
 
 # [1.12.0-cold-116-create-footprintoverviewcard.1](https://github.com/coldpbc/cold_components/compare/v1.11.0...v1.12.0-cold-116-create-footprintoverviewcard.1) (2023-08-29)
 
-
 ### Features
 
 * added footprint overview card ([b691108](https://github.com/coldpbc/cold_components/commit/b691108d48b0c81f1b777ec33e6cc3bff2c1e2e1))
 
 # [1.11.0](https://github.com/coldpbc/cold_components/compare/v1.10.2...v1.11.0) (2023-08-28)
 
-
 ### Bug Fixes
 
 * removed need for callback component and route ([3cbe2bb](https://github.com/coldpbc/cold_components/commit/3cbe2bb0c297039405edcf9669c7590b674d7333))
-
 
 ### Features
 
@@ -97,13 +84,11 @@
 
 # [1.11.0-cold-216-fix-routing-for-callbacks-from-auth0.4](https://github.com/coldpbc/cold_components/compare/v1.11.0-cold-216-fix-routing-for-callbacks-from-auth0.3...v1.11.0-cold-216-fix-routing-for-callbacks-from-auth0.4) (2023-08-28)
 
-
 ### Bug Fixes
 
 * removed need for callback component and route ([3cbe2bb](https://github.com/coldpbc/cold_components/commit/3cbe2bb0c297039405edcf9669c7590b674d7333))
 
 # [1.11.0-cold-216-fix-routing-for-callbacks-from-auth0.3](https://github.com/coldpbc/cold_components/compare/v1.11.0-cold-216-fix-routing-for-callbacks-from-auth0.2...v1.11.0-cold-216-fix-routing-for-callbacks-from-auth0.3) (2023-08-28)
-
 
 ### Bug Fixes
 
@@ -114,7 +99,6 @@
 
 ## [1.10.2](https://github.com/coldpbc/cold_components/compare/v1.10.1...v1.10.2) (2023-08-28)
 
-
 ### Bug Fixes
 
 * a few more sidebar tweaks ([87c7cdd](https://github.com/coldpbc/cold_components/commit/87c7cdd66b754a4ad50bda88120c52387cf402c1))
@@ -123,7 +107,6 @@
 * update a few more styling pieces to get a consistent look. Had to duplicate some pieces over to the UI for now. Will file a ticket to clean up at a future point. ([53b822b](https://github.com/coldpbc/cold_components/commit/53b822be2215c4b02142a2c93ae40a6f8f0621c5))
 
 ## [1.10.2-cold-213-make-sidebar-fixed-position-and-scroll-if-viewport-is-too.1](https://github.com/coldpbc/cold_components/compare/v1.10.1...v1.10.2-cold-213-make-sidebar-fixed-position-and-scroll-if-viewport-is-too.1) (2023-08-28)
-
 
 ### Bug Fixes
 
@@ -134,20 +117,17 @@
 
 ## [1.10.1](https://github.com/coldpbc/cold_components/compare/v1.10.0...v1.10.1) (2023-08-28)
 
-
 ### Bug Fixes
 
 * cards now support multiple buttons and primary button type ([95cc93d](https://github.com/coldpbc/cold_components/commit/95cc93d84b5dd39d6dfb8b95b8f50a4f6df62246))
 
 ## [1.10.1-cold-214-update-card-component-with-two-ctas-and-ability-to-use.1](https://github.com/coldpbc/cold_components/compare/v1.10.0...v1.10.1-cold-214-update-card-component-with-two-ctas-and-ability-to-use.1) (2023-08-28)
 
-
 ### Bug Fixes
 
 * cards now support multiple buttons and primary button type ([95cc93d](https://github.com/coldpbc/cold_components/commit/95cc93d84b5dd39d6dfb8b95b8f50a4f6df62246))
 
 # [1.10.0](https://github.com/coldpbc/cold_components/compare/v1.9.1...v1.10.0) (2023-08-25)
-
 
 ### Bug Fixes
 
@@ -161,29 +141,27 @@
 
 ## [1.9.2-COLD-212.1](https://github.com/coldpbc/cold_components/compare/v1.9.1...v1.9.2-COLD-212.1) (2023-08-25)
 
-
 ### Bug Fixes
 
 * Removed unnecesary top margin for the input ([49a78eb](https://github.com/coldpbc/cold_components/commit/49a78eb8f3ef633dca0393f371364e57bc154649))
 
 ## [1.9.1](https://github.com/coldpbc/cold_components/compare/v1.9.0...v1.9.1) (2023-08-24)
 
-
 ### Bug Fixes
 
 * update some of the readme ([f73331c](https://github.com/coldpbc/cold_components/commit/f73331c6b64c6b4417757dd09d59aab12cd3ff5d))
-* update some of the readme ([#86](https://github.com/coldpbc/cold_components/issues/86)) ([a55edb5](https://github.com/coldpbc/cold_components/commit/a55edb59a53bf1d9aa9321fa681eb474be752234)), closes [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68)
+* update some of the readme ([#86](https://github.com/coldpbc/cold_components/issues/86)) ([a55edb5](https://github.com/coldpbc/cold_components/commit/a55edb59a53bf1d9aa9321fa681eb474be752234)),
+  closes [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68)
 
 ## [1.9.1-COLD-10000001.1](https://github.com/coldpbc/cold_components/compare/v1.9.0...v1.9.1-COLD-10000001.1) (2023-08-24)
 
-
 ### Bug Fixes
 
 * update some of the readme ([f73331c](https://github.com/coldpbc/cold_components/commit/f73331c6b64c6b4417757dd09d59aab12cd3ff5d))
-* update some of the readme ([#86](https://github.com/coldpbc/cold_components/issues/86)) ([a55edb5](https://github.com/coldpbc/cold_components/commit/a55edb59a53bf1d9aa9321fa681eb474be752234)), closes [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68)
+* update some of the readme ([#86](https://github.com/coldpbc/cold_components/issues/86)) ([a55edb5](https://github.com/coldpbc/cold_components/commit/a55edb59a53bf1d9aa9321fa681eb474be752234)),
+  closes [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68)
 
 ## [1.9.1-COLD-100000000000.1](https://github.com/coldpbc/cold_components/compare/v1.9.0...v1.9.1-COLD-100000000000.1) (2023-08-23)
-
 
 ### Bug Fixes
 
@@ -191,31 +169,29 @@
 
 # [1.9.0](https://github.com/coldpbc/cold_components/compare/v1.8.0...v1.9.0) (2023-08-23)
 
-
 ### Bug Fixes
 
 * update some of the readme ([06055a9](https://github.com/coldpbc/cold_components/commit/06055a9e475eee6faecf1ded2c9c436395c5b17e))
-* update some of the readme ([#84](https://github.com/coldpbc/cold_components/issues/84)) ([a3cbe1b](https://github.com/coldpbc/cold_components/commit/a3cbe1b858da1656c59078d32ac34370ed89c076)), closes [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68)
-
+* update some of the readme ([#84](https://github.com/coldpbc/cold_components/issues/84)) ([a3cbe1b](https://github.com/coldpbc/cold_components/commit/a3cbe1b858da1656c59078d32ac34370ed89c076)),
+  closes [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68)
 
 ### Features
 
-* (Cold 168) Set sidebar styling to match mock ([#82](https://github.com/coldpbc/cold_components/issues/82)) ([49ee3b9](https://github.com/coldpbc/cold_components/commit/49ee3b9f470d3140d8fac485ce26da31d07b2c16)), closes [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68)
+* (Cold 168) Set sidebar styling to match mock ([#82](https://github.com/coldpbc/cold_components/issues/82)) ([49ee3b9](https://github.com/coldpbc/cold_components/commit/49ee3b9f470d3140d8fac485ce26da31d07b2c16)),
+  closes [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68)
 
 # [1.9.0-COLD-00000000.1](https://github.com/coldpbc/cold_components/compare/v1.8.0...v1.9.0-COLD-00000000.1) (2023-08-23)
-
 
 ### Bug Fixes
 
 * update some of the readme ([f5dd1cd](https://github.com/coldpbc/cold_components/commit/f5dd1cdf698ee21189aae61f3745300cc3dc5179))
 
-
 ### Features
 
-* (Cold 168) Set sidebar styling to match mock ([#82](https://github.com/coldpbc/cold_components/issues/82)) ([49ee3b9](https://github.com/coldpbc/cold_components/commit/49ee3b9f470d3140d8fac485ce26da31d07b2c16)), closes [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68)
+* (Cold 168) Set sidebar styling to match mock ([#82](https://github.com/coldpbc/cold_components/issues/82)) ([49ee3b9](https://github.com/coldpbc/cold_components/commit/49ee3b9f470d3140d8fac485ce26da31d07b2c16)),
+  closes [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68)
 
 # [1.9.0-COLD-168.3](https://github.com/coldpbc/cold_components/compare/v1.9.0-COLD-168.2...v1.9.0-COLD-168.3) (2023-08-23)
-
 
 ### Bug Fixes
 
@@ -223,13 +199,11 @@
 
 # [1.9.0-COLD-168.2](https://github.com/coldpbc/cold_components/compare/v1.9.0-COLD-168.1...v1.9.0-COLD-168.2) (2023-08-23)
 
-
 ### Bug Fixes
 
 * add gray 05 for use in image gradients ([c127d9c](https://github.com/coldpbc/cold_components/commit/c127d9c447534b4b0e17649d2b101489ce85dc43))
 
 # [1.9.0-COLD-168.1](https://github.com/coldpbc/cold_components/compare/v1.8.0...v1.9.0-COLD-168.1) (2023-08-23)
-
 
 ### Bug Fixes
 
@@ -239,7 +213,6 @@
 * remove some of the console log statements ([6895247](https://github.com/coldpbc/cold_components/commit/6895247a6b9b68fb00f70940a4eb3a181f08e0cc))
 * update the main application loader to the design spec ([16650c0](https://github.com/coldpbc/cold_components/commit/16650c09df70607d62b8db7b4690dbcb2d9c1cad))
 
-
 ### Features
 
 * adjust cold logos, tweak styling on sidebar ([9b45dab](https://github.com/coldpbc/cold_components/commit/9b45dabc4630843f102798f05974003a8d7b55c0))
@@ -247,13 +220,11 @@
 
 # [1.8.0-COLD-168.5](https://github.com/coldpbc/cold_components/compare/v1.8.0-COLD-168.4...v1.8.0-COLD-168.5) (2023-08-23)
 
-
 ### Features
 
 * set sidebar styling to match the mock ([4bb0fd8](https://github.com/coldpbc/cold_components/commit/4bb0fd852c54e294b2cd47185deae09fdf341ca8))
 
 # [1.8.0-COLD-168.4](https://github.com/coldpbc/cold_components/compare/v1.8.0-COLD-168.3...v1.8.0-COLD-168.4) (2023-08-23)
-
 
 ### Bug Fixes
 
@@ -261,13 +232,11 @@
 
 # [1.8.0-COLD-168.3](https://github.com/coldpbc/cold_components/compare/v1.8.0-COLD-168.2...v1.8.0-COLD-168.3) (2023-08-23)
 
-
 ### Features
 
 * adjust cold logos, tweak styling on sidebar ([9b45dab](https://github.com/coldpbc/cold_components/commit/9b45dabc4630843f102798f05974003a8d7b55c0))
 
 # [1.8.0-COLD-168.2](https://github.com/coldpbc/cold_components/compare/v1.8.0-COLD-168.1...v1.8.0-COLD-168.2) (2023-08-22)
-
 
 ### Bug Fixes
 
@@ -282,14 +251,12 @@
 * update the main application loader to the design spec ([16650c0](https://github.com/coldpbc/cold_components/commit/16650c09df70607d62b8db7b4690dbcb2d9c1cad))
 * add common config for tailwind ([4aa2dc4](https://github.com/coldpbc/cold_components/commit/4aa2dc43f32501696ea266b299c153e80a26571b))
 
-
 ### Features
 
 * Cold 171 ([#74](https://github.com/coldpbc/cold_components/issues/74)) ([635a29a](https://github.com/coldpbc/cold_components/commit/635a29a411bf7c30d1765bae8289b64a7b962452)), closes [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68)
 * refactored code to proposed library structure ([#77](https://github.com/coldpbc/cold_components/issues/77)) ([51c080e](https://github.com/coldpbc/cold_components/commit/51c080e4d570b517b8e6aafcca065764507c353a)), closes [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68)
 
 # [1.8.0-COLD-180.3](https://github.com/coldpbc/cold_components/compare/v1.8.0-COLD-180.2...v1.8.0-COLD-180.3) (2023-08-21)
-
 
 ### Features
 
@@ -303,11 +270,12 @@
 
 # [1.8.0-COLD-172.7](https://github.com/coldpbc/cold_components/compare/v1.8.0-COLD-172.6...v1.8.0-COLD-172.7) (2023-08-21)
 
-
 ### Bug Fixes
+
 * move minheight and minwidth to common tailwind config ([3918d91](https://github.com/coldpbc/cold_components/commit/3918d91af12d3c84f1e4de57f3a8a6260b3b6b61))
 
 # [1.8.0-COLD-180.1](https://github.com/coldpbc/cold_components/compare/v1.7.0...v1.8.0-COLD-180.1) (2023-08-21)
+
 * revert /api change in fetcher and handler ([70d63a1](https://github.com/coldpbc/cold_components/commit/70d63a178733f5464ddcc1ea2705ccf33b6d1dee))
 
 # [1.8.0-COLD-172.6](https://github.com/coldpbc/cold_components/compare/v1.8.0-COLD-172.5...v1.8.0-COLD-172.6) (2023-08-21)
@@ -325,18 +293,15 @@
 
 # [1.8.0-COLD-171.2](https://github.com/coldpbc/cold_components/compare/v1.8.0-COLD-171.1...v1.8.0-COLD-171.2) (2023-08-20)
 
-
 ### Bug Fixes
 
 * Resolve viewport incorrectly misconfigured for input components ([08181aa](https://github.com/coldpbc/cold_components/commit/08181aac6756251cea2ab6a6bc838eb749cad85b))
 
 # [1.8.0-COLD-171.1](https://github.com/coldpbc/cold_components/compare/v1.7.0...v1.8.0-COLD-171.1) (2023-08-18)
 
-
 ### Bug Fixes
 
 * Style text at the input component level instead of the higher level SurveyInput component ([5573b56](https://github.com/coldpbc/cold_components/commit/5573b56f882f0d938b7c0a8abe6cbb4409c2118f))
-
 
 ### Features
 
@@ -351,11 +316,9 @@
 
 # [1.7.0](https://github.com/coldpbc/cold_components/compare/v1.6.0...v1.7.0) (2023-08-18)
 
-
 ### Bug Fixes
 
 * just changing some text to kick a build ([5035e0c](https://github.com/coldpbc/cold_components/commit/5035e0c209dbedbdba20e04bf551eb1b4ba37e9e))
-
 
 ### Features
 
@@ -366,15 +329,14 @@
 * Updated percent slider to current design ([#71](https://github.com/coldpbc/cold_components/issues/71)) ([ed6db49](https://github.com/coldpbc/cold_components/commit/ed6db49a749ce346fdab2afbedf20fcdeaefb448)), closes [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68)
 
 # [1.7.0-COLD-162.9](https://github.com/coldpbc/cold_components/compare/v1.7.0-COLD-162.8...v1.7.0-COLD-162.9) (2023-08-17)
+
 * Updated percent slider to current design ([#71](https://github.com/coldpbc/cold_components/issues/71)) ([ed6db49](https://github.com/coldpbc/cold_components/commit/ed6db49a749ce346fdab2afbedf20fcdeaefb448)), closes [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68)
 
 # [1.7.0-COLD-177.1](https://github.com/coldpbc/cold_components/compare/v1.6.0...v1.7.0-COLD-177.1) (2023-08-18)
 
-
 ### Bug Fixes
 
 * make the icons consistent with the text color ([cddf121](https://github.com/coldpbc/cold_components/commit/cddf121dd9d34653ff66831c560c5962566ac94f))
-
 
 ### Features
 
@@ -384,13 +346,11 @@
 
 # [1.7.0-COLD-167.3](https://github.com/coldpbc/cold_components/compare/v1.7.0-COLD-167.2...v1.7.0-COLD-167.3) (2023-08-18)
 
-
 ### Features
 
 * Updated percent slider to current design ([#71](https://github.com/coldpbc/cold_components/issues/71)) ([ed6db49](https://github.com/coldpbc/cold_components/commit/ed6db49a749ce346fdab2afbedf20fcdeaefb448)), closes [#68](https://github.com/coldpbc/cold_components/issues/68) [#68](https://github.com/coldpbc/cold_components/issues/68)
 
 # [1.7.0-COLD-167.2](https://github.com/coldpbc/cold_components/compare/v1.7.0-COLD-167.1...v1.7.0-COLD-167.2) (2023-08-18)
-
 
 ### Bug Fixes
 
@@ -398,13 +358,11 @@
 
 # [1.7.0-COLD-162.8](https://github.com/coldpbc/cold_components/compare/v1.7.0-COLD-162.7...v1.7.0-COLD-162.8) (2023-08-17)
 
-
 ### Features
 
 * remove unnecessary const export for the hexcolors ([7d556fc](https://github.com/coldpbc/cold_components/commit/7d556fc963a5f8474e48562e81a76e4ee5394ffe))
 
 # [1.7.0-COLD-162.7](https://github.com/coldpbc/cold_components/compare/v1.7.0-COLD-162.6...v1.7.0-COLD-162.7) (2023-08-17)
-
 
 ### Features
 
@@ -412,13 +370,11 @@
 
 # [1.7.0-COLD-162.6](https://github.com/coldpbc/cold_components/compare/v1.7.0-COLD-162.5...v1.7.0-COLD-162.6) (2023-08-17)
 
-
 ### Features
 
 * Update percent design ([2458f80](https://github.com/coldpbc/cold_components/commit/2458f808b18873df5f30f3d82e81e3505f769b20))
 
 # [1.7.0-COLD-162.5](https://github.com/coldpbc/cold_components/compare/v1.7.0-COLD-162.4...v1.7.0-COLD-162.5) (2023-08-17)
-
 
 ### Features
 
@@ -426,13 +382,11 @@
 
 # [1.7.0-COLD-162.4](https://github.com/coldpbc/cold_components/compare/v1.7.0-COLD-162.3...v1.7.0-COLD-162.4) (2023-08-16)
 
-
 ### Bug Fixes
 
 * Cleaned up code and added better support for grabbing the range thumb ([a5087c2](https://github.com/coldpbc/cold_components/commit/a5087c26fb57bedae03c894e44416c1eed73bd89))
 
 # [1.7.0-COLD-162.3](https://github.com/coldpbc/cold_components/compare/v1.7.0-COLD-162.2...v1.7.0-COLD-162.3) (2023-08-16)
-
 
 ### Features
 
@@ -440,13 +394,11 @@
 
 # [1.7.0-COLD-162.2](https://github.com/coldpbc/cold_components/compare/v1.7.0-COLD-162.1...v1.7.0-COLD-162.2) (2023-08-16)
 
-
 ### Features
 
 * Updated percent slider to match design better ([fecba1b](https://github.com/coldpbc/cold_components/commit/fecba1b3bd54c0ae236766f2abe2f55e8152cd0c))
 
 # [1.7.0-COLD-162.1](https://github.com/coldpbc/cold_components/compare/v1.6.0...v1.7.0-COLD-162.1) (2023-08-15)
-
 
 ### Features
 
@@ -454,19 +406,16 @@
 
 # [1.7.0-COLD-132.3](https://github.com/coldpbc/cold_components/compare/v1.7.0-COLD-132.2...v1.7.0-COLD-132.3) (2023-08-15)
 
-
 ### Bug Fixes
 
 * add a short button transition and use border instead of underline for link button style ([a3eb5f8](https://github.com/coldpbc/cold_components/commit/a3eb5f8dcde87fc9a1e188df0084190d63d1e354))
 
 # [1.7.0-COLD-167.1](https://github.com/coldpbc/cold_components/compare/v1.6.0...v1.7.0-COLD-167.1) (2023-08-17)
 
-
 ### Bug Fixes
 
 * add cold background colors to storybook ([06a9bd5](https://github.com/coldpbc/cold_components/commit/06a9bd5615d6cfa312c0bc7fa798f33b0a14be56))
 * refactor IconNames to be consistent with other enums ([9f8bdd1](https://github.com/coldpbc/cold_components/commit/9f8bdd11b37cc5cff7777b489acb495a91c3ac14))
-
 
 ### Features
 
@@ -475,7 +424,6 @@
 * fix naming of background colors enum ([4c8c980](https://github.com/coldpbc/cold_components/commit/4c8c980f6986acbc297a7db21c046172389ae269))
 
 # [1.7.0-COLD-166.2](https://github.com/coldpbc/cold_components/compare/v1.7.0-COLD-166.1...v1.7.0-COLD-166.2) (2023-08-17)
-
 
 ### Features
 
@@ -489,13 +437,11 @@
 
 # [1.7.0-COLD-132.2](https://github.com/coldpbc/cold_components/compare/v1.7.0-COLD-132.1...v1.7.0-COLD-132.2) (2023-08-15)
 
-
 ### Features
 
 * COLD-153 ([#68](https://github.com/coldpbc/cold_components/issues/68)) ([54a52fd](https://github.com/coldpbc/cold_components/commit/54a52fdfff91729f2643716ec07c12a1f40d1b53))
 
 # [1.7.0-COLD-153.2](https://github.com/coldpbc/cold_components/compare/v1.7.0-COLD-153.1...v1.7.0-COLD-153.2) (2023-08-14)
-
 
 ### Bug Fixes
 
@@ -503,18 +449,15 @@
 
 # [1.7.0-COLD-153.1](https://github.com/coldpbc/cold_components/compare/v1.6.0...v1.7.0-COLD-153.1) (2023-08-10)
 
-
 ### Features
 
 * Added better handling of fetching access ([7c0997c](https://github.com/coldpbc/cold_components/commit/7c0997c8671d64e93b46f1a1fe0df15419931246))
 
 # [1.7.0-COLD-135.1](https://github.com/coldpbc/cold_components/compare/v1.6.0...v1.7.0-COLD-135.1) (2023-08-10)
 
-
 ### Bug Fixes
 
 * Updated multiselect and select to use the same code ([85a2f82](https://github.com/coldpbc/cold_components/commit/85a2f8224f23f40598320d393d2be33837427e8a))
-
 
 ### Features
 
@@ -524,20 +467,17 @@
 
 # [1.6.0-COLD-135.2](https://github.com/coldpbc/cold_components/compare/v1.6.0-COLD-135.1...v1.6.0-COLD-135.2) (2023-08-10)
 
-
 ### Bug Fixes
 
 * Updated multiselect and select to use the same code ([85a2f82](https://github.com/coldpbc/cold_components/commit/85a2f8224f23f40598320d393d2be33837427e8a))
 
 # [1.6.0-COLD-136.2](https://github.com/coldpbc/cold_components/compare/v1.6.0-COLD-136.1...v1.6.0-COLD-136.2) (2023-08-10)
 
-
 ### Features
 
 * Added support for horizontal options ([38930ac](https://github.com/coldpbc/cold_components/commit/38930ac1a12422b10f72820ee794a16eebdcb461))
 
 # [1.6.0-COLD-135.1](https://github.com/coldpbc/cold_components/compare/v1.5.2...v1.6.0-COLD-135.1) (2023-08-10)
-
 
 ### Features
 
@@ -548,7 +488,6 @@
 
 # [1.6.0-COLD-136.1](https://github.com/coldpbc/cold_components/compare/v1.5.2...v1.6.0-COLD-136.1) (2023-08-09)
 
-
 ### Features
 
 * COLD-131 ([#65](https://github.com/coldpbc/cold_components/issues/65)) ([60a8958](https://github.com/coldpbc/cold_components/commit/60a8958cb93d44b49c2c9fbfccfd13f2cc3626d7))
@@ -556,7 +495,6 @@
 * created Select Option component ([f5413b6](https://github.com/coldpbc/cold_components/commit/f5413b6d9242dc6119ea6603c176105c1010258b))
 
 # [1.6.0-COLD-137.6](https://github.com/coldpbc/cold_components/compare/v1.6.0-COLD-137.5...v1.6.0-COLD-137.6) (2023-08-09)
-
 
 ### Features
 
@@ -566,7 +504,6 @@
 * COLD-147 ([7cfdd40](https://github.com/coldpbc/cold_components/commit/7cfdd405b572b2dcacb1fe861ae57bcf35e81d49))
 
 # [1.6.0-COLD-131.1](https://github.com/coldpbc/cold_components/compare/v1.5.2...v1.6.0-COLD-131.1) (2023-08-08)
-
 
 ### Features
 
@@ -581,20 +518,17 @@
 
 # [1.6.0-COLD-137.4](https://github.com/coldpbc/cold_components/compare/v1.6.0-COLD-137.3...v1.6.0-COLD-137.4) (2023-08-08)
 
-
 ### Bug Fixes
 
 * Corrected percent slider props ([6bc9da0](https://github.com/coldpbc/cold_components/commit/6bc9da01ebe71fa81c58e889c8051e80b669a080))
 
 # [1.6.0-COLD-137.3](https://github.com/coldpbc/cold_components/compare/v1.6.0-COLD-137.2...v1.6.0-COLD-137.3) (2023-08-04)
 
-
 ### Bug Fixes
 
 * Update survey range slider to percent slider ([7118421](https://github.com/coldpbc/cold_components/commit/7118421104f0b9286a0366ddecc70d07b5675f47))
 
 # [1.6.0-COLD-137.2](https://github.com/coldpbc/cold_components/compare/v1.6.0-COLD-137.1...v1.6.0-COLD-137.2) (2023-08-02)
-
 
 ### Bug Fixes
 
@@ -615,13 +549,11 @@
 
 # [1.6.0-COLD-106.3](https://github.com/coldpbc/cold_components/compare/v1.6.0-COLD-106.2...v1.6.0-COLD-106.3) (2023-08-02)
 
-
 ### Bug Fixes
 
 * Added new lines and refactored settingsTeamMembers to /settings/teamMembers ([9a00456](https://github.com/coldpbc/cold_components/commit/9a0045691d774ba0b72a972a69ffb618fc00f16d))
 
 # [1.6.0-COLD-106.2](https://github.com/coldpbc/cold_components/compare/v1.6.0-COLD-106.1...v1.6.0-COLD-106.2) (2023-07-31)
-
 
 ### Bug Fixes
 
@@ -629,26 +561,22 @@
 
 # [1.6.0-COLD-106.1](https://github.com/coldpbc/cold_components/compare/v1.5.2...v1.6.0-COLD-106.1) (2023-07-31)
 
-
 ### Features
 
 * Refactored code and added Launch Darkly feature capability ([36cbeab](https://github.com/coldpbc/cold_components/commit/36cbeabd7f0fec487fd2b64c2f061c12013e8377))
 
 # [1.6.0-COLD-75.1](https://github.com/coldpbc/cold_components/compare/v1.5.2...v1.6.0-COLD-75.1) (2023-07-24)
 
-
 ### Bug Fixes
 
 * Fix project build adding missing files ([0ad8ca8](https://github.com/coldpbc/cold_components/commit/0ad8ca877553925dd067161f4ce8250f42c347e0))
 * Throw error when one promise is returned as error for invite member call ([a1150fb](https://github.com/coldpbc/cold_components/commit/a1150fb245cfea6e14aec891857cd8fe723a06da))
-
 
 ### Features
 
 * Allow role selection when inviting user ([b641be6](https://github.com/coldpbc/cold_components/commit/b641be6f333fa0264b8459f02c7a1e69bb81e6a4))
 
 ## [1.5.2](https://github.com/coldpbc/cold_components/compare/v1.5.1...v1.5.2) (2023-07-20)
-
 
 ### Bug Fixes
 
@@ -657,20 +585,17 @@
 
 ## [1.5.2-cold-80.3](https://github.com/coldpbc/cold_components/compare/v1.5.2-cold-80.2...v1.5.2-cold-80.3) (2023-07-20)
 
-
 ### Bug Fixes
 
 * Add cookie information to sidebar stories ([f401963](https://github.com/coldpbc/cold_components/commit/f401963070df718d797360340301c003141693cf))
 
 ## [1.5.2-cold-80.2](https://github.com/coldpbc/cold_components/compare/v1.5.2-cold-80.1...v1.5.2-cold-80.2) (2023-07-20)
 
-
 ### Bug Fixes
 
 * Resolve undefined email and cleaned up data grid code ([1e00e0a](https://github.com/coldpbc/cold_components/commit/1e00e0a5d70451de01f8353b23c78c0a7ea77e34))
 
 ## [1.5.2-cold-80.1](https://github.com/coldpbc/cold_components/compare/v1.5.1...v1.5.2-cold-80.1) (2023-07-20)
-
 
 ### Bug Fixes
 
@@ -684,13 +609,11 @@
 
 ## [1.5.2-COLD-105.3](https://github.com/coldpbc/cold_components/compare/v1.5.2-COLD-105.2...v1.5.2-COLD-105.3) (2023-07-19)
 
-
 ### Bug Fixes
 
 * Redirect to team member settings page since we do not have a main page yet ([9cfb6df](https://github.com/coldpbc/cold_components/commit/9cfb6dfe599e6d12f4be91737ec709891682ed92))
 
 ## [1.5.2-COLD-105.2](https://github.com/coldpbc/cold_components/compare/v1.5.2-COLD-105.1...v1.5.2-COLD-105.2) (2023-07-19)
-
 
 ### Reverts
 
@@ -699,13 +622,11 @@
 
 ## [1.5.1](https://github.com/coldpbc/cold_components/compare/v1.5.0...v1.5.1) (2023-07-19)
 
-
 ### Bug Fixes
 
 * Resolved issue with not seeing table items/throws error ([#44](https://github.com/coldpbc/cold_components/issues/44)) ([4df5180](https://github.com/coldpbc/cold_components/commit/4df51801246b62a98970f84f80a658033bdd174b))
 
 ## [1.5.1-COLD-79.1](https://github.com/coldpbc/cold_components/compare/v1.5.0...v1.5.1-COLD-79.1) (2023-07-19)
-
 
 ### Bug Fixes
 
@@ -714,7 +635,6 @@
 
 ## [1.5.1-COLD-76.1](https://github.com/coldpbc/cold_components/compare/v1.5.0...v1.5.1-COLD-76.1) (2023-07-18)
 
-
 ### Bug Fixes
 
 * Add Cold Admin to roles that will be displayed ([40727f8](https://github.com/coldpbc/cold_components/commit/40727f81f0364be559737b0b6acd9fbdc4000991))
@@ -722,20 +642,17 @@
 
 ## [1.5.1-COLD-80.1](https://github.com/coldpbc/cold_components/compare/v1.5.0...v1.5.1-COLD-80.1) (2023-07-17)
 
-
 ### Bug Fixes
 
 * Resolved issue with not seeing table items/throws error ([faabcd7](https://github.com/coldpbc/cold_components/commit/faabcd7685f33f1d965deeed233c7c821bfc2422))
 
 # [1.6.0-COLD-002.19](https://github.com/coldpbc/cold_components/compare/v1.6.0-COLD-002.18...v1.6.0-COLD-002.19) (2023-06-29)
 
-
 ### Bug Fixes
 
 * make code easier to debug ([5508e01](https://github.com/coldpbc/cold_components/commit/5508e01b23f74a20a4fb59c0cf50d300a0ada5fd))
 
 # [1.6.0-COLD-002.18](https://github.com/coldpbc/cold_components/compare/v1.6.0-COLD-002.17...v1.6.0-COLD-002.18) (2023-06-29)
-
 
 ### Bug Fixes
 
@@ -744,20 +661,17 @@
 
 # [1.6.0-COLD-002.17](https://github.com/coldpbc/cold_components/compare/v1.6.0-COLD-002.16...v1.6.0-COLD-002.17) (2023-06-29)
 
-
 ### Bug Fixes
 
 * make code easier to debug ([b3e9e79](https://github.com/coldpbc/cold_components/commit/b3e9e794cd5ff69ae0b2d6fe2b37b2e20de5a964))
 
 # [1.6.0-COLD-002.16](https://github.com/coldpbc/cold_components/compare/v1.6.0-COLD-002.15...v1.6.0-COLD-002.16) (2023-06-29)
 
-
 ### Bug Fixes
 
 * make code easier to debug ([94fbda7](https://github.com/coldpbc/cold_components/commit/94fbda70c1962d2e1ce4e3db32cba3d6cfd41aa6))
 
 # [1.6.0-COLD-002.15](https://github.com/coldpbc/cold_components/compare/v1.6.0-COLD-002.14...v1.6.0-COLD-002.15) (2023-06-29)
-
 
 ### Bug Fixes
 
@@ -767,13 +681,11 @@
 
 # [1.6.0-COLD-002.14](https://github.com/coldpbc/cold_components/compare/v1.6.0-COLD-002.13...v1.6.0-COLD-002.14) (2023-06-29)
 
-
 ### Bug Fixes
 
 * null reference bug ([84aa637](https://github.com/coldpbc/cold_components/commit/84aa6375a96bb393474e710427e572fde60bb834))
 
 # [1.6.0-COLD-002.13](https://github.com/coldpbc/cold_components/compare/v1.6.0-COLD-002.12...v1.6.0-COLD-002.13) (2023-06-29)
-
 
 ### Bug Fixes
 
@@ -782,20 +694,17 @@
 
 # [1.6.0-COLD-002.12](https://github.com/coldpbc/cold_components/compare/v1.6.0-COLD-002.11...v1.6.0-COLD-002.12) (2023-06-29)
 
-
 ### Bug Fixes
 
 * remove expiration as it's no longer needed ([439ba02](https://github.com/coldpbc/cold_components/commit/439ba022a9d9a722d7cb0f259a4b1e22b41af2f7))
 
 # [1.6.0-COLD-002.11](https://github.com/coldpbc/cold_components/compare/v1.6.0-COLD-002.10...v1.6.0-COLD-002.11) (2023-06-29)
 
-
 ### Bug Fixes
 
 * trying out cookies ([0f832cc](https://github.com/coldpbc/cold_components/commit/0f832cc33b2a59a3c528946fae050448e09bd63c))
 
 # [1.6.0-COLD-002.10](https://github.com/coldpbc/cold_components/compare/v1.6.0-COLD-002.9...v1.6.0-COLD-002.10) (2023-06-29)
-
 
 ### Bug Fixes
 
@@ -804,13 +713,11 @@
 
 # [1.6.0-COLD-002.9](https://github.com/coldpbc/cold_components/compare/v1.6.0-COLD-002.8...v1.6.0-COLD-002.9) (2023-06-29)
 
-
 ### Bug Fixes
 
 * session & cookie changes ([1b667de](https://github.com/coldpbc/cold_components/commit/1b667de43a467c7df1d91d5b4c369e234583828e))
 
 # [1.6.0-COLD-002.8](https://github.com/coldpbc/cold_components/compare/v1.6.0-COLD-002.7...v1.6.0-COLD-002.8) (2023-06-28)
-
 
 ### Bug Fixes
 
@@ -818,13 +725,11 @@
 
 # [1.6.0-COLD-002.7](https://github.com/coldpbc/cold_components/compare/v1.6.0-COLD-002.6...v1.6.0-COLD-002.7) (2023-06-28)
 
-
 ### Bug Fixes
 
 * return null token if expired ([7815418](https://github.com/coldpbc/cold_components/commit/781541818186b6734bf9a17ce08e330267fcd425))
 
 # [1.6.0-COLD-002.6](https://github.com/coldpbc/cold_components/compare/v1.6.0-COLD-002.5...v1.6.0-COLD-002.6) (2023-06-27)
-
 
 ### Bug Fixes
 
@@ -832,13 +737,11 @@
 
 # [1.6.0-COLD-002.5](https://github.com/coldpbc/cold_components/compare/v1.6.0-COLD-002.4...v1.6.0-COLD-002.5) (2023-06-27)
 
-
 ### Bug Fixes
 
 * missing accessToken ([29eddab](https://github.com/coldpbc/cold_components/commit/29eddabe54a618436a1b3fd6e37f7747e9af5dcf))
 
 # [1.6.0-COLD-002.4](https://github.com/coldpbc/cold_components/compare/v1.6.0-COLD-002.3...v1.6.0-COLD-002.4) (2023-06-27)
-
 
 ### Bug Fixes
 
@@ -846,13 +749,11 @@
 
 # [1.6.0-COLD-002.3](https://github.com/coldpbc/cold_components/compare/v1.6.0-COLD-002.2...v1.6.0-COLD-002.3) (2023-06-27)
 
-
 ### Bug Fixes
 
 * missing accessToken ([107354f](https://github.com/coldpbc/cold_components/commit/107354f657299bf0ec9ef7a189d8d13f80737c1b))
 
 # [1.6.0-COLD-002.2](https://github.com/coldpbc/cold_components/compare/v1.6.0-COLD-002.1...v1.6.0-COLD-002.2) (2023-06-27)
-
 
 ### Bug Fixes
 
@@ -860,7 +761,6 @@
 * missing accessToken ([33e5147](https://github.com/coldpbc/cold_components/commit/33e514797e3e67cecedfaa46fd0d9488d4e24493))
 
 # [1.6.0-COLD-002.1](https://github.com/coldpbc/cold_components/compare/v1.5.0...v1.6.0-COLD-002.1) (2023-06-26)
-
 
 ### Bug Fixes
 
@@ -884,7 +784,6 @@
 * Sidebar code cleanup ([2303d33](https://github.com/coldpbc/cold_components/commit/2303d33ddcc98a7c0db815e8f48086349004ea75))
 * Updated sidebar code to use sub_menus instead of items ([e7a665f](https://github.com/coldpbc/cold_components/commit/e7a665fe9976043cec3584f746be9f2e23567cb0))
 * using spinner when loading sidebar ([e88ac37](https://github.com/coldpbc/cold_components/commit/e88ac37eacdee0dfa008e022af6b8d000fcb6ed0))
-
 
 ### Features
 
@@ -919,13 +818,11 @@
 
 # [1.5.0-COLD-002.4](https://github.com/coldpbc/cold_components/compare/v1.5.0-COLD-002.3...v1.5.0-COLD-002.4) (2023-06-20)
 
-
 ### Features
 
 * Added axios token to default headers ([e393a69](https://github.com/coldpbc/cold_components/commit/e393a692514c4eb1637aedfb3ff0b90368aee85b))
 
 # [1.5.0-COLD-002.3](https://github.com/coldpbc/cold_components/compare/v1.5.0-COLD-002.2...v1.5.0-COLD-002.3) (2023-06-20)
-
 
 ### Features
 
@@ -933,13 +830,11 @@
 
 # [1.5.0-COLD-002.2](https://github.com/coldpbc/cold_components/compare/v1.5.0-COLD-002.1...v1.5.0-COLD-002.2) (2023-06-20)
 
-
 ### Bug Fixes
 
 * Resolve issue when not using correct user ([fb1925a](https://github.com/coldpbc/cold_components/commit/fb1925a3dd31856dac6ee90a918156c9a678b811))
 
 # [1.5.0-COLD-002.1](https://github.com/coldpbc/cold_components/compare/v1.4.0...v1.5.0-COLD-002.1) (2023-06-20)
-
 
 ### Bug Fixes
 
@@ -962,7 +857,6 @@
 * Sidebar code cleanup ([2303d33](https://github.com/coldpbc/cold_components/commit/2303d33ddcc98a7c0db815e8f48086349004ea75))
 * Updated sidebar code to use sub_menus instead of items ([e7a665f](https://github.com/coldpbc/cold_components/commit/e7a665fe9976043cec3584f746be9f2e23567cb0))
 * using spinner when loading sidebar ([e88ac37](https://github.com/coldpbc/cold_components/commit/e88ac37eacdee0dfa008e022af6b8d000fcb6ed0))
-
 
 ### Features
 
@@ -993,13 +887,11 @@
 
 # [1.5.0-COLD-000.17](https://github.com/coldpbc/cold_components/compare/v1.5.0-COLD-000.16...v1.5.0-COLD-000.17) (2023-06-07)
 
-
 ### Bug Fixes
 
 * deleted form section causing error ([765a0bd](https://github.com/coldpbc/cold_components/commit/765a0bd55c7dd150ac3db1fb9ed1efb23359cea6))
 
 # [1.5.0-COLD-000.16](https://github.com/coldpbc/cold_components/compare/v1.5.0-COLD-000.15...v1.5.0-COLD-000.16) (2023-06-07)
-
 
 ### Features
 
@@ -1007,11 +899,9 @@
 
 # [1.5.0-COLD-000.15](https://github.com/coldpbc/cold_components/compare/v1.5.0-COLD-000.14...v1.5.0-COLD-000.15) (2023-06-06)
 
-
 ### Bug Fixes
 
 * remove old toaster code ([113be51](https://github.com/coldpbc/cold_components/commit/113be51f7c8501481b1fb483021b2ede396a8034))
-
 
 ### Features
 
@@ -1019,13 +909,11 @@
 
 # [1.5.0-COLD-000.14](https://github.com/coldpbc/cold_components/compare/v1.5.0-COLD-000.13...v1.5.0-COLD-000.14) (2023-06-06)
 
-
 ### Features
 
 * Refactor toaster to use different types ([a6edcd5](https://github.com/coldpbc/cold_components/commit/a6edcd5a48c9f6d89cbd5d124f051414712074a8))
 
 # [1.5.0-COLD-000.13](https://github.com/coldpbc/cold_components/compare/v1.5.0-COLD-000.12...v1.5.0-COLD-000.13) (2023-06-06)
-
 
 ### Features
 
@@ -1033,13 +921,11 @@
 
 # [1.5.0-COLD-000.12](https://github.com/coldpbc/cold_components/compare/v1.5.0-COLD-000.11...v1.5.0-COLD-000.12) (2023-06-05)
 
-
 ### Bug Fixes
 
 * Removed company.data causing error ([6266773](https://github.com/coldpbc/cold_components/commit/62667738f8e9084f67a87ece8e1d3d002622ef41))
 
 # [1.5.0-COLD-000.11](https://github.com/coldpbc/cold_components/compare/v1.5.0-COLD-000.10...v1.5.0-COLD-000.11) (2023-06-05)
-
 
 ### Features
 
@@ -1047,13 +933,11 @@
 
 # [1.5.0-COLD-000.10](https://github.com/coldpbc/cold_components/compare/v1.5.0-COLD-000.9...v1.5.0-COLD-000.10) (2023-06-05)
 
-
 ### Bug Fixes
 
 * Correct organizations call from the team member data grid ([7b84453](https://github.com/coldpbc/cold_components/commit/7b84453b374d5f03454f0771f244911641b97a79))
 
 # [1.5.0-COLD-000.9](https://github.com/coldpbc/cold_components/compare/v1.5.0-COLD-000.8...v1.5.0-COLD-000.9) (2023-06-05)
-
 
 ### Features
 
@@ -1061,13 +945,11 @@
 
 # [1.5.0-COLD-000.8](https://github.com/coldpbc/cold_components/compare/v1.5.0-COLD-000.7...v1.5.0-COLD-000.8) (2023-06-05)
 
-
 ### Bug Fixes
 
 * Deconstruct axios response ([bd3dc55](https://github.com/coldpbc/cold_components/commit/bd3dc559adc460fe81889caa378ad3a68ce9ae17))
 
 # [1.5.0-COLD-000.7](https://github.com/coldpbc/cold_components/compare/v1.5.0-COLD-000.6...v1.5.0-COLD-000.7) (2023-06-01)
-
 
 ### Bug Fixes
 
@@ -1076,7 +958,6 @@
 * resolve issue with "null" user picture ([4fc8ca9](https://github.com/coldpbc/cold_components/commit/4fc8ca91ada2980193c9ce1de3a555d9f70cb462))
 * using spinner when loading sidebar ([e88ac37](https://github.com/coldpbc/cold_components/commit/e88ac37eacdee0dfa008e022af6b8d000fcb6ed0))
 
-
 ### Features
 
 * added border theme to datagrid ([9fd8497](https://github.com/coldpbc/cold_components/commit/9fd8497304e2d2649124bb3d1acee54ce803924a))
@@ -1084,13 +965,11 @@
 
 # [1.5.0-COLD-000.6](https://github.com/coldpbc/cold_components/compare/v1.5.0-COLD-000.5...v1.5.0-COLD-000.6) (2023-06-01)
 
-
 ### Bug Fixes
 
 * resolved issue with incorrect roles ([d8ecf74](https://github.com/coldpbc/cold_components/commit/d8ecf74d12b7aa97f91d9952e3bd742575fd6d75))
 
 # [1.5.0-COLD-000.5](https://github.com/coldpbc/cold_components/compare/v1.5.0-COLD-000.4...v1.5.0-COLD-000.5) (2023-05-31)
-
 
 ### Bug Fixes
 
@@ -1098,13 +977,11 @@
 
 # [1.5.0-COLD-000.4](https://github.com/coldpbc/cold_components/compare/v1.5.0-COLD-000.3...v1.5.0-COLD-000.4) (2023-05-31)
 
-
 ### Bug Fixes
 
 * Updated sidebar code to use sub_menus instead of items ([e7a665f](https://github.com/coldpbc/cold_components/commit/e7a665fe9976043cec3584f746be9f2e23567cb0))
 
 # [1.5.0-COLD-000.3](https://github.com/coldpbc/cold_components/compare/v1.5.0-COLD-000.2...v1.5.0-COLD-000.3) (2023-05-30)
-
 
 ### Bug Fixes
 
@@ -1112,13 +989,11 @@
 
 # [1.5.0-COLD-000.2](https://github.com/coldpbc/cold_components/compare/v1.5.0-COLD-000.1...v1.5.0-COLD-000.2) (2023-05-30)
 
-
 ### Features
 
 * added takeover component ([6df590d](https://github.com/coldpbc/cold_components/commit/6df590db3f2d72ff8fca8021046f1aee968db051))
 
 # [1.5.0-COLD-000.1](https://github.com/coldpbc/cold_components/compare/v1.4.0...v1.5.0-COLD-000.1) (2023-05-30)
-
 
 ### Features
 
@@ -1132,7 +1007,6 @@
 
 # [1.4.0](https://github.com/coldpbc/cold_components/compare/v1.3.0...v1.4.0) (2023-05-25)
 
-
 ### Bug Fixes
 
 * removed extra line ([019a8e0](https://github.com/coldpbc/cold_components/commit/019a8e0b140c4106e1c43ce314a0c710c12fb04f))
@@ -1140,11 +1014,11 @@
 ### Features
 
 # [1.4.0-COLD-000.1](https://github.com/coldpbc/cold_components/compare/v1.3.0...v1.4.0-COLD-000.1) (2023-05-24)
+
 * add new tootltip ([d13517f](https://github.com/coldpbc/cold_components/commit/d13517f5630eb2ad07c2e22cc2c9111e947b798d))
 * Created nav bar component ([29105fc](https://github.com/coldpbc/cold_components/commit/29105fc68f0879913f38601623d7fc6a0cecc9c7))
 
 # [1.4.0-COLD-59.8](https://github.com/coldpbc/cold_components/compare/v1.4.0-COLD-59.7...v1.4.0-COLD-59.8) (2023-05-23)
-
 
 ### Features
 
@@ -1156,13 +1030,11 @@
 
 # [1.4.0-COLD-44.3](https://github.com/coldpbc/cold_components/compare/v1.4.0-COLD-44.2...v1.4.0-COLD-44.3) (2023-05-18)
 
-
 ### Bug Fixes
 
 * tsconfig.json ([567bd38](https://github.com/coldpbc/cold_components/commit/567bd386f5fef0a753100f9fb607057522c1e406))
 
 # [1.4.0-COLD-44.2](https://github.com/coldpbc/cold_components/compare/v1.4.0-COLD-44.1...v1.4.0-COLD-44.2) (2023-05-18)
-
 
 ### Bug Fixes
 
@@ -1171,12 +1043,10 @@
 
 # [1.4.0-COLD-44.1](https://github.com/coldpbc/cold_components/compare/v1.3.0...v1.4.0-COLD-44.1) (2023-05-17)
 
-
 ### Bug Fixes
 
 * regenerated the barrelsby index file after merging ([b94dcf4](https://github.com/coldpbc/cold_components/commit/b94dcf4f38afd3cb7f1666282afcc4e24c70eef6))
 * resolved conflicts ([5f6b54a](https://github.com/coldpbc/cold_components/commit/5f6b54ac419d47f1b8f0da9cc0123e64f11149cf))
-
 
 ### Features
 
@@ -1188,13 +1058,11 @@
 
 # [1.4.0-COLD-24.3](https://github.com/coldpbc/cold_components/compare/v1.4.0-COLD-24.2...v1.4.0-COLD-24.3) (2023-05-17)
 
-
 ### Features
 
 * Added billing and team member icon, ability to resolve a component ([e6b1517](https://github.com/coldpbc/cold_components/commit/e6b151755be806f8d3e72062905e3cc106743e7b))
 
 # [1.4.0-COLD-24.2](https://github.com/coldpbc/cold_components/compare/v1.4.0-COLD-24.1...v1.4.0-COLD-24.2) (2023-05-17)
-
 
 ### Features
 
@@ -1202,19 +1070,16 @@
 
 # [1.4.0-COLD-24.1](https://github.com/coldpbc/cold_components/compare/v1.3.0...v1.4.0-COLD-24.1) (2023-05-16)
 
-
 ### Bug Fixes
 
 * match on [cCoOlLdD]-[0-9] for pre-release ([8e9b8bf](https://github.com/coldpbc/cold_components/commit/8e9b8bf25472bdb0cdde9e7bfe617f3092982556))
 * match on [cCoOlLdD]-[0-9] for pre-release ([405911a](https://github.com/coldpbc/cold_components/commit/405911aaf4d2a4f68b9daed5d879ac58549e45e2))
-
 
 ### Features
 
 * Created nav bar component ([898fcfa](https://github.com/coldpbc/cold_components/commit/898fcfac1c452125a1738ba88ff7103ddd1c9d05))
 
 # [1.3.0](https://github.com/coldpbc/cold_components/compare/v1.2.0...v1.3.0) (2023-05-11)
-
 
 ### Bug Fixes
 
@@ -1227,19 +1092,16 @@
 * removed unnecessary webpack config info ([bec8eaf](https://github.com/coldpbc/cold_components/commit/bec8eaffede37cab954c4f23680da98cf143cf2e))
 * update path alias ([18b89e9](https://github.com/coldpbc/cold_components/commit/18b89e93023f52c0ebb2fcae7cf754363b85cdd1))
 
-
 ### Features
 
 * add closeModalIcon component ([c15f7d1](https://github.com/coldpbc/cold_components/commit/c15f7d151fbf709f3c10025f9868174950a48ec3))
 
 # [1.2.0](https://github.com/coldpbc/cold_components/compare/v1.1.3...v1.2.0) (2023-05-10)
 
-
 ### Bug Fixes
 
 * removed unused import ([8de6138](https://github.com/coldpbc/cold_components/commit/8de6138732a4a097536e5dfca6c6f5170494d2ae))
 * return spinner if loading ([af2e30e](https://github.com/coldpbc/cold_components/commit/af2e30edbd0ac09568c0dae72840e9983d0b5ff0))
-
 
 ### Features
 
@@ -1253,13 +1115,11 @@
 * removed storybook-addon-designs because it doesn't work with ver 7 ([6fb94dc](https://github.com/coldpbc/cold_components/commit/6fb94dc26a60d2a408cbfb1c183b83fcab7486b3))
 * removed unnecessary imports ([6d12662](https://github.com/coldpbc/cold_components/commit/6d1266240030542ce596c008008bc6468c118648))
 
-
 ### Features
 
 * implement swr state management ([e64a25b](https://github.com/coldpbc/cold_components/commit/e64a25b52a94ad90fafe4fd88b0f7b04abf0fb43))
 
 ## [1.1.2](https://github.com/coldpbc/cold_components/compare/v1.1.1...v1.1.2) (2023-05-09)
-
 
 ### Bug Fixes
 
@@ -1267,13 +1127,11 @@
 
 ## [1.1.1](https://github.com/coldpbc/cold_components/compare/v1.1.0...v1.1.1) (2023-05-09)
 
-
 ### Bug Fixes
 
 * add cold branding to storybook ([283ea2e](https://github.com/coldpbc/cold_components/commit/283ea2e74211a2f49f4cd8dbcefe914cef1f4de7))
 
 # [1.1.0](https://github.com/coldpbc/cold_components/compare/v1.0.5...v1.1.0) (2023-05-09)
-
 
 ### Features
 
@@ -1282,13 +1140,11 @@
 
 # [1.1.0-cold-0.2](https://github.com/coldpbc/cold_components/compare/v1.1.0-cold-0.1...v1.1.0-cold-0.2) (2023-05-09)
 
-
 ### Bug Fixes
 
 * merge conflicts ([745b9a6](https://github.com/coldpbc/cold_components/commit/745b9a6c5f40edfbd3c660eb2e834722af715a85))
 
 # [1.1.0-cold-0.1](https://github.com/coldpbc/cold_components/compare/v1.0.5...v1.1.0-cold-0.1) (2023-05-09)
-
 
 ### Bug Fixes
 
@@ -1312,13 +1168,11 @@
 * strip alpha when not provided ([10f8f90](https://github.com/coldpbc/cold_components/commit/10f8f907960b1f1908636ce2d0ef80cee2855a35))
 * use new theme ([3ee8179](https://github.com/coldpbc/cold_components/commit/3ee8179d6868ff2c2fb1431b919154266b927e27))
 
-
 ### Features
 
 * Update to modal component ([#5](https://github.com/coldpbc/cold_components/issues/5)) ([f1a0367](https://github.com/coldpbc/cold_components/commit/f1a0367d68e97a8a32fe1e509cf39b91dabb0539))
 
 ## [1.0.5-cold-0.12](https://github.com/coldpbc/cold_components/compare/v1.0.5-cold-0.11...v1.0.5-cold-0.12) (2023-05-08)
-
 
 ### Bug Fixes
 
@@ -1326,20 +1180,17 @@
 
 ## [1.0.5-cold-0.11](https://github.com/coldpbc/cold_components/compare/v1.0.5-cold-0.10...v1.0.5-cold-0.11) (2023-05-08)
 
-
 ### Bug Fixes
 
 * mark fs as external ([8ca91c4](https://github.com/coldpbc/cold_components/commit/8ca91c4cd6a0d1aa96a1a935f2c5e2b0fee94eb7))
 
 ## [1.0.5-cold-0.10](https://github.com/coldpbc/cold_components/compare/v1.0.5-cold-0.9...v1.0.5-cold-0.10) (2023-05-08)
 
-
 ### Bug Fixes
 
 * mark backend deps as external ([5c8b510](https://github.com/coldpbc/cold_components/commit/5c8b510c861acd95c6d808eacf26e44b42efca65))
 
 ## [1.0.5-cold-0.9](https://github.com/coldpbc/cold_components/compare/v1.0.5-cold-0.8...v1.0.5-cold-0.9) (2023-05-08)
-
 
 ### Bug Fixes
 
@@ -1349,13 +1200,11 @@
 
 ## [1.0.5-cold-0.8](https://github.com/coldpbc/cold_components/compare/v1.0.5-cold-0.7...v1.0.5-cold-0.8) (2023-05-06)
 
-
 ### Bug Fixes
 
 * strip alpha when not provided ([10f8f90](https://github.com/coldpbc/cold_components/commit/10f8f907960b1f1908636ce2d0ef80cee2855a35))
 
 ## [1.0.5-cold-0.7](https://github.com/coldpbc/cold_components/compare/v1.0.5-cold-0.6...v1.0.5-cold-0.7) (2023-05-06)
-
 
 ### Bug Fixes
 
@@ -1363,13 +1212,11 @@
 
 ## [1.0.5-cold-0.6](https://github.com/coldpbc/cold_components/compare/v1.0.5-cold-0.5...v1.0.5-cold-0.6) (2023-05-06)
 
-
 ### Bug Fixes
 
 * config files rollup, ts, & package ([7b61f6a](https://github.com/coldpbc/cold_components/commit/7b61f6af3c68e327349e2bb533e6f2a6cce3de0c))
 
 ## [1.0.5-cold-0.5](https://github.com/coldpbc/cold_components/compare/v1.0.5-cold-0.4...v1.0.5-cold-0.5) (2023-05-05)
-
 
 ### Bug Fixes
 
@@ -1377,13 +1224,11 @@
 
 ## [1.0.5-cold-0.4](https://github.com/coldpbc/cold_components/compare/v1.0.5-cold-0.3...v1.0.5-cold-0.4) (2023-05-05)
 
-
 ### Bug Fixes
 
 * rollup config ([f667065](https://github.com/coldpbc/cold_components/commit/f667065f9effb6786e65f04a77c3df5d9b8e90d7))
 
 ## [1.0.5-cold-0.3](https://github.com/coldpbc/cold_components/compare/v1.0.5-cold-0.2...v1.0.5-cold-0.3) (2023-05-04)
-
 
 ### Bug Fixes
 
@@ -1391,14 +1236,12 @@
 
 ## [1.0.5-cold-0.2](https://github.com/coldpbc/cold_components/compare/v1.0.5-cold-0.1...v1.0.5-cold-0.2) (2023-05-04)
 
-
 ### Bug Fixes
 
 * broken import ([a3e36a2](https://github.com/coldpbc/cold_components/commit/a3e36a2bbdf6f56dc8e888014dfec1972a7c57e3))
 * removed default exports ([7190181](https://github.com/coldpbc/cold_components/commit/7190181e771394ecbd039d91388072770b4cbc15))
 
 ## [1.0.5-cold-0.1](https://github.com/coldpbc/cold_components/compare/v1.0.4...v1.0.5-cold-0.1) (2023-05-04)
-
 
 ### Bug Fixes
 
@@ -1411,13 +1254,11 @@
 
 ## [1.0.4](https://github.com/coldpbc/cold_components/compare/v1.0.3...v1.0.4) (2023-05-04)
 
-
 ### Bug Fixes
 
 * limit publish to ./build ([6eb9de5](https://github.com/coldpbc/cold_components/commit/6eb9de578f9f85106035a36654c7e0b988c901ed))
 
 ## [1.0.3](https://github.com/coldpbc/cold_components/compare/v1.0.2...v1.0.3) (2023-05-04)
-
 
 ### Bug Fixes
 
@@ -1426,20 +1267,17 @@
 
 ## [1.0.2](https://github.com/ColdPBC/cold_components/compare/v1.0.1...v1.0.2) (2023-05-04)
 
-
 ### Bug Fixes
 
 * enable package publishing ([b8b0ca4](https://github.com/ColdPBC/cold_components/commit/b8b0ca40243c468990c26d4858cf7738f66473f5))
 
 ## [1.0.1](https://github.com/ColdPBC/cold_components/compare/v1.0.0...v1.0.1) (2023-05-04)
 
-
 ### Bug Fixes
 
 * build / publish automation ([2828e47](https://github.com/ColdPBC/cold_components/commit/2828e47e0014b3c0fb14517783ac4adf9763b642))
 
 # 1.0.0 (2023-05-03)
-
 
 ### Bug Fixes
 
@@ -1453,7 +1291,6 @@
 * storybook colors working ([b06d07e](https://github.com/ColdPBC/cold_components/commit/b06d07ea3403a7727458e32436f4bdb971b30ba5))
 * storybook colors working ([8cd180a](https://github.com/ColdPBC/cold_components/commit/8cd180a057e8f6e16e0943a02cb963b15befdfb7))
 * styles ([0fae898](https://github.com/ColdPBC/cold_components/commit/0fae8986c8f9168a1701c5a252e9daf8830a80ed))
-
 
 ### Features
 

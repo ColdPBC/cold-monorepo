@@ -1,10 +1,10 @@
-import React from "react";
-import { User } from "@auth0/auth0-spa-js/src/global";
+import React from 'react';
+import { User } from '@auth0/auth0-spa-js/src/global';
 import { axiosFetcher } from '../../../fetchers/axiosFetcher';
 import { Modal } from '../modal/modal';
 import { useAddToastMessage } from '../../../hooks/useToastMessage';
 import { InviteMemberForm } from './inviteMemberForm/inviteMemberForm';
-import {isAxiosError} from 'axios';
+import { isAxiosError } from 'axios';
 
 export interface InvitationModalProps {
   shown: boolean;
@@ -19,35 +19,36 @@ export const InvitationModal = (props: InvitationModalProps) => {
 
   const inviteMembers = (emails: string, roleId: string) => {
     return Promise.all(
-        emails.split(",").map(( email: string ) => {
-          return axiosFetcher( [
-          "/organizations/invitation",
-          "POST",
-          JSON.stringify( {
+      emails.split(',').map((email: string) => {
+        return axiosFetcher([
+          '/organizations/invitation',
+          'POST',
+          JSON.stringify({
             user_email: email,
             org_id: user.coldclimate_claims.org_id,
             inviter_name: user.name,
             roleId: roleId,
-          } ),
-        ] );
-      })
-    ).then((response) => {
+          }),
+        ]);
+      }),
+    )
+      .then((response) => {
         // check if the response array contains any AxiosError objects
         // reject the promise if there are any errors
         const errors = response.filter((r) => isAxiosError(r));
         if (errors.length > 0) {
-            throw new Error("Invitation failed");
+          throw new Error('Invitation failed');
         }
         addToastMessage({
-          message: "Invitation sent successfully",
-          type: "success",
+          message: 'Invitation sent successfully',
+          type: 'success',
         });
         setShown(false);
       })
       .catch((error) => {
         addToastMessage({
-          message: "Invitation failed",
-          type: "failure",
+          message: 'Invitation failed',
+          type: 'failure',
         });
         setShown(false);
       });
@@ -55,7 +56,7 @@ export const InvitationModal = (props: InvitationModalProps) => {
 
   const body = () => {
     return (
-      <div className={"flex w-full h-full space-x-2 justify-center"}>
+      <div className={'flex w-full h-full space-x-2 justify-center'}>
         <InviteMemberForm inviteMembers={inviteMembers} />
       </div>
     );

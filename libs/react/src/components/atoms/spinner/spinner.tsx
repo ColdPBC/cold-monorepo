@@ -1,14 +1,11 @@
-import React from "react";
+import React from 'react';
 import { GlobalSizes } from '../../../enums/sizes';
-import {Spinner as FBSpinner} from 'flowbite-react';
+import { Spinner as FBSpinner } from 'flowbite-react';
 
-export function Spinner({
-  size = GlobalSizes.medium,
-  ...props
-}) {
+export function Spinner({ size = GlobalSizes.medium, ...props }) {
   return (
-      <>
-          <FBSpinner size={size} className="fill-primary text-bgc-accent" />
-      </>
+    <>
+      <FBSpinner size={size} className="fill-primary text-bgc-accent" />
+    </>
   );
 }

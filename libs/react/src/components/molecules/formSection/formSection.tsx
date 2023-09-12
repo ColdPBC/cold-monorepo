@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import { Input } from '../../atoms/input/input';
+import React, { useState } from 'react';
 import { ISectionProps } from '../../../interfaces/form/form';
 import { BaseButton } from '../../atoms/button/button';
 import { ColorNames } from '../../../enums/colors';
@@ -10,9 +9,9 @@ export function FormSection(props: ISectionProps) {
   const [sectionData, setSectionData] = useState<Record<string, any>>(
     props.fields.reduce(
       (obj, item) =>
-        Object.assign(obj, { [item.name]: item.default_value || "" }),
-      {}
-    )
+        Object.assign(obj, { [item.name]: item.default_value || '' }),
+      {},
+    ),
   );
 
   const handleFieldUpdated = async (name: string, value: any) => {
@@ -27,7 +26,7 @@ export function FormSection(props: ISectionProps) {
 
     await axiosFetcher([
       `/resources/${props.resource_name}`,
-      "POST",
+      'POST',
       JSON.stringify(sectionData),
     ]);
   };
@@ -41,7 +40,7 @@ export function FormSection(props: ISectionProps) {
         <h2
           className={
             props.title_classname ||
-            "text-base font-semibold leading-7 text-gray-900"
+            'text-base font-semibold leading-7 text-gray-900'
           }
         >
           {props.title}
@@ -50,7 +49,7 @@ export function FormSection(props: ISectionProps) {
           key={`form_container_description_${props.idx}`}
           className={
             props.description_classname ||
-            "mt-1 text-sm leading-6 text-gray-600"
+            'mt-1 text-sm leading-6 text-gray-600'
           }
         >
           {props.description}
@@ -88,7 +87,7 @@ export function FormSection(props: ISectionProps) {
             onSubmit={saveSectionData}
             onClick={saveSectionData}
             color={ColorNames.skyBlue}
-            label={"Save"}
+            label={'Save'}
           />
         </div>
       </form>

@@ -1,19 +1,29 @@
-import React, {PropsWithChildren} from 'react';
-import { FootprintOverviewDetail, FootprintOverviewDetailChip } from '../footprintOverviewChart';
+import React, { PropsWithChildren } from 'react';
+import {
+  FootprintOverviewDetail,
+  FootprintOverviewDetailChip,
+} from '../footprintOverviewChart';
 
 export type FootprintOverviewVerticalDetailProps = FootprintOverviewDetail;
 
-export function FootprintOverviewVerticalDetail(props:PropsWithChildren<FootprintOverviewVerticalDetailProps>) {
+export function FootprintOverviewVerticalDetail(
+  props: PropsWithChildren<FootprintOverviewVerticalDetailProps>,
+) {
   return (
-    <div className='mb-3'>
-      <div className={"text-body font-bold text-tc-primary"}>{props.title}</div>
-      <div className='flex items-center'>
+    <div className="mb-3">
+      <div className={'text-body font-bold text-tc-primary'}>{props.title}</div>
+      <div className="flex items-center">
         <div
           className="h-1 rounded-lg"
-          style={{backgroundColor: props.color, width: `${props.percent.toFixed(0)}%`}}
+          style={{
+            backgroundColor: props.color,
+            width: `${props.percent.toFixed(0)}%`,
+          }}
         />
-        <div className={"text-body text-tc-primary mx-1"}>{props.percent.toFixed(0) + "%"}</div>
-        <FootprintOverviewDetailChip emissions={props.emissions}/>
+        <div className={'text-body text-tc-primary mx-1'}>
+          {props.percent.toFixed(0) + '%'}
+        </div>
+        <FootprintOverviewDetailChip emissions={props.emissions} />
       </div>
     </div>
   );

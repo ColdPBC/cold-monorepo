@@ -9,7 +9,7 @@ export function useExecuteAction() {
       return Promise.all(
         urls.map((url: any) => {
           return axiosFetcher([url, method, JSON.stringify(data)]);
-        })
+        }),
       );
     } else {
       return axiosFetcher([url, method, JSON.stringify(data)]);

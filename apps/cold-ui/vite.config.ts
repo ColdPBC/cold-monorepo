@@ -1,8 +1,8 @@
 /// <reference types="vitest" />
-import { defineConfig } from 'vite';
+import { defineConfig, searchForWorkspaceRoot } from 'vite';
 import react from '@vitejs/plugin-react';
 import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
-import { nodePolyfills } from 'vite-plugin-node-polyfills'
+import { nodePolyfills } from 'vite-plugin-node-polyfills';
 
 export default defineConfig({
   cacheDir: '../../node_modules/.vite/cold-ui',
@@ -10,6 +10,12 @@ export default defineConfig({
   server: {
     port: 4200,
     host: 'localhost',
+    fs: {
+      // Allow serving files from one level up to the project root
+      allow: [
+        searchForWorkspaceRoot(process.cwd()),
+        '../../libs/react'],
+    },
   },
 
   preview: {
@@ -62,7 +68,7 @@ export default defineConfig({
         'vm',
         'timers/promises',
         // 'zlib',
-        'fs' // Excludes the polyfill for `fs` and `node:fs`.
+        'fs', // Excludes the polyfill for `fs` and `node:fs`.
       ],
       // Whether to polyfill `node:` protocol imports.
       protocolImports: false,
@@ -85,10 +91,10 @@ export default defineConfig({
         manualChunks(id) {
           if (id.includes('node_modules')) {
             return id
-                .toString()
-                .split('node_modules/')[1]
-                .split('/')[0]
-                .toString();
+              .toString()
+              .split('node_modules/')[1]
+              .split('/')[0]
+              .toString();
           }
         },
       },

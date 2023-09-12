@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react';
 import { BaseButton } from '../../../atoms/button/button';
-import { ModalAction } from '../../../organisms/teamMemberDataGrid/actions/modalAction'
+import { ModalAction } from '../../../organisms/teamMemberDataGrid/actions/modalAction';
 import { useAddToastMessage } from '../../../../hooks/useToastMessage';
 import { useExecuteAction } from '../../../../hooks/useExecuteAction';
 import { TableActionType } from '../../../../interfaces/tableAction';
@@ -16,7 +16,7 @@ export const TableAction = (props: TableActionProps) => {
   const { addToastMessage } = useAddToastMessage();
 
   switch (action.type) {
-    case "button":
+    case 'button':
       return (
         <BaseButton
           onClick={() => {
@@ -26,25 +26,25 @@ export const TableAction = (props: TableActionProps) => {
               .then(() => {
                 addToastMessage({
                   message: action.toastMessage.success,
-                  type: "success",
+                  type: 'success',
                 });
                 setActionsShown(false);
               })
               .catch(() => {
                 addToastMessage({
                   message: action.toastMessage.fail,
-                  type: "failure",
+                  type: 'failure',
                 });
                 setActionsShown(false);
               });
           }}
           label={action.label}
           className={
-            "px-3 py-3.5 text-md bg-cold-starkWhite text-cold-starkWhite-a11y text-left"
+            'px-3 py-3.5 text-md bg-cold-starkWhite text-cold-starkWhite-a11y text-left'
           }
         />
       );
-    case "modal":
+    case 'modal':
       return <ModalAction action={action} />;
     default:
       return <></>;

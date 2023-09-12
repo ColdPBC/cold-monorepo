@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import { Modal } from '../../../molecules/modal/modal';
 import { BaseButton } from '../../../atoms/button/button';
 import { useAddToastMessage } from '../../../../hooks/useToastMessage';
@@ -38,7 +38,7 @@ export const ModalAction = (props: ModalActionProps) => {
       .then(() => {
         addToastMessage({
           message: action.toastMessage.success,
-          type: "success",
+          type: 'success',
         });
         // addToastMessage({
         //   message: action.toastMessage.success,
@@ -49,7 +49,7 @@ export const ModalAction = (props: ModalActionProps) => {
       .catch(() => {
         addToastMessage({
           message: action.toastMessage.fail,
-          type: "failure",
+          type: 'failure',
         });
         setShowModal(false);
       });
@@ -63,7 +63,7 @@ export const ModalAction = (props: ModalActionProps) => {
         }}
         label={action.label}
         className={
-          "px-3 py-3.5 text-md bg-cold-starkWhite text-cold-starkWhite-a11y text-left"
+          'px-3 py-3.5 text-md bg-cold-starkWhite text-cold-starkWhite-a11y text-left'
         }
       />
       <Modal

@@ -1,14 +1,14 @@
-import React, { useState } from "react";
-import { withKnobs } from "@storybook/addon-knobs";
-import { StoryObj } from "@storybook/react";
-import { Input } from './input';
-import { InputTypes } from '../../../enums/inputs';
-import { IInputProps } from '../../../interfaces/input';
+import React, {useState} from 'react';
+import {withKnobs} from '@storybook/addon-knobs';
+import {StoryObj} from '@storybook/react';
+import {Input} from './input';
+import {InputTypes} from '../../../enums/inputs';
+import {IInputProps} from '../../../interfaces/input';
 //todo: fix issues requiring @typescript-eslint/no-empty-function below
 const meta = {
-  title: "Atoms/Input",
+  title: 'Atoms/Input',
   component: Input,
-  tags: ["autodocs"],
+  tags: ['autodocs'],
   decorators: [withKnobs],
 };
 
@@ -17,81 +17,81 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   render: (args) => {
-    return <InputStory {...args} />
+    return <InputStory {...args} />;
   },
   args: {
     idx: 1,
-    input_label: "Name",
+    input_label: 'Name',
     type: InputTypes.Text,
     input_props: {
-      name: "",
-      value: "",
+      name: '',
+      value: '',
       // eslint-disable-next-line @typescript-eslint/no-empty-function
       onValueChange: (value) => {},
-    }
+    },
   },
 };
 
 export const Currency: Story = {
   render: (args) => {
-    return <InputStory {...args} />
+    return <InputStory {...args} />;
   },
   args: {
     idx: 1,
-    input_label: "Currency",
+    input_label: 'Currency',
     type: InputTypes.Currency,
     input_props: {
-      name: "",
-      value: "",
+      name: '',
+      value: '',
       // eslint-disable-next-line @typescript-eslint/no-empty-function
       onValueChange: (value) => {},
-    }
+    },
   },
 };
 
 export const Number: Story = {
   render: (args) => {
-    return <InputStory {...args} />
+    return <InputStory {...args} />;
   },
   args: {
     idx: 1,
-    input_label: "Number",
+    input_label: 'Number',
     type: InputTypes.Number,
     input_props: {
-      name: "",
-      value: "",
+      name: '',
+      value: '',
       // eslint-disable-next-line @typescript-eslint/no-empty-function
       onValueChange: (value) => {},
-    }
+    },
   },
 };
 
 export const Select: Story = {
   render: (args) => {
-    return <InputStory {...args} />
+    return <InputStory {...args} />;
   },
-  args:{
+  args: {
     idx: 1,
-    input_label: "State",
+    input_label: 'State',
     type: InputTypes.Select,
     input_props: {
-      name: "state",
-      value: "",
+      name: 'state',
+      value: '',
       options: [
         {
           id: 1,
-          name: "Minnesota"
+          name: 'Minnesota',
         },
         {
           id: 2,
-          name: "Wisconsin"
-        }
+          name: 'Wisconsin',
+        },
       ],
       // eslint-disable-next-line @typescript-eslint/no-empty-function
       onValueChange: (value) => {},
-      defaultValue: "Minnesota",
-    }
-  }
+      defaultValue: 'Minnesota',
+    },
+  },
 };
 
 const InputStory = (props: IInputProps) => {
@@ -104,17 +104,17 @@ const InputStory = (props: IInputProps) => {
     idx,
     type,
   } = props;
-  const [value, setValue] = useState<any>("" || input_props.defaultValue);
+  const [value, setValue] = useState<any>('' || input_props.defaultValue);
   return (
-      <Input
-          {...props}
-          input_props={{
-            ...input_props,
-            value:value,
-            onValueChange: (value) => {
-                setValue(value);
-            }
-          }}
-      />
+    <Input
+      {...props}
+      input_props={{
+        ...input_props,
+        value: value,
+        onValueChange: (value) => {
+          setValue(value);
+        },
+      }}
+    />
   );
-}
+};

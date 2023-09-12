@@ -1,33 +1,33 @@
 const { createGlobPatternsForDependencies } = require('@nx/react/tailwind');
 const { join } = require('path');
-const { themeColors, fontSizes } = require( "../../libs/react/src/themes");
-const defaultTheme = require("tailwindcss/defaultTheme");
+const { themeColors, fontSizes } = require('../../libs/react/src/themes');
+const defaultTheme = require('tailwindcss/defaultTheme');
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
     join(
       __dirname,
-      '{src,pages,components,app}/**/*!(*.stories|*.spec).{ts,tsx,html}'
+      '{src,pages,components,app}/**/*!(*.stories|*.spec).{ts,tsx,html}',
     ),
     ...createGlobPatternsForDependencies(__dirname),
-    "./libs/react/src/**/*.{html,js}",
-    "./libs/react/src/pages/**/*.{js,ts,jsx,tsx}",
-    "./libs/react/src/components/**/*.{js,ts,jsx,tsx}",
-    "./libs/react/src/themes/**/*.{js,ts,jsx,tsx}",
-    "./node_modules/flowbite-react/**/*.{js,jsx,ts,tsx}",
-    "./node_modules/flowbite/**/*.js",
+    './libs/react/src/**/*.{html,js}',
+    './libs/react/src/pages/**/*.{js,ts,jsx,tsx}',
+    './libs/react/src/components/**/*.{js,ts,jsx,tsx}',
+    './libs/react/src/themes/**/*.{js,ts,jsx,tsx}',
+    './node_modules/flowbite-react/**/*.{js,jsx,ts,tsx}',
+    './node_modules/flowbite/**/*.js',
   ],
   theme: {
     extend: {
       colors: {
-        ...themeColors()
+        ...themeColors(),
       },
       fontFamily: {
         sans: ['Inter', ...defaultTheme.fontFamily.sans],
       },
       fontSize: {
-        ...fontSizes()
+        ...fontSizes(),
       },
     },
     minHeight: (theme) => ({
@@ -37,8 +37,5 @@ module.exports = {
       ...theme('spacing'),
     }),
   },
-  plugins: [
-    require('flowbite/plugin'),
-    require('@tailwindcss/forms'),
-  ],
+  plugins: [require('flowbite/plugin'), require('@tailwindcss/forms')],
 };

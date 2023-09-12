@@ -1,21 +1,20 @@
-import React from "react";
+import React from 'react';
 import { BaseButton } from '../../atoms/button/button';
-import { withKnobs } from "@storybook/addon-knobs";
-import { StoryObj } from "@storybook/react";
+import { withKnobs } from '@storybook/addon-knobs';
+import { StoryObj } from '@storybook/react';
 import { ToastMessageTypes } from '../../../interfaces/toastMessage';
 import { ApplicationToaster } from './applicationToaster';
-import { GlobalSizes } from '../../../enums/sizes';
 import { useAddToastMessage } from '../../../hooks/useToastMessage';
-import { SWRConfig } from "swr";
+import { SWRConfig } from 'swr';
 
 const meta = {
-  title: "Molecules/Application Toaster",
+  title: 'Molecules/Application Toaster',
   component: ApplicationToaster,
-  tags: ["autodocs"],
+  tags: ['autodocs'],
   decorators: [withKnobs],
   argTypes: {
     type: {
-      control: "select",
+      control: 'select',
       options: ToastMessageTypes,
     },
   },
@@ -28,17 +27,17 @@ const DefaultComponent = (args: any) => {
   const { addToastMessage } = useAddToastMessage();
   const addNewToasterMessage = (type: string) => {
     addToastMessage({
-      message: "New toaster message",
+      message: 'New toaster message',
       type: type,
       timeout: 3000,
     });
   };
   return (
-    <div className={"relative w-full h-screen"}>
+    <div className={'relative w-full h-screen'}>
       <SWRConfig
         value={{
           provider: (cache) => {
-            cache.delete("messages");
+            cache.delete('messages');
             return cache;
           },
         }}
@@ -46,21 +45,21 @@ const DefaultComponent = (args: any) => {
         <div className="space-x-2">
           <BaseButton
             onClick={() => {
-              addNewToasterMessage("success");
+              addNewToasterMessage('success');
             }}
-            label={"Add New Success Message"}
+            label={'Add New Success Message'}
           />
           <BaseButton
             onClick={() => {
-              addNewToasterMessage("failure");
+              addNewToasterMessage('failure');
             }}
-            label={"Add New Warning Message"}
+            label={'Add New Warning Message'}
           />
           <BaseButton
             onClick={() => {
-              addNewToasterMessage("info");
+              addNewToasterMessage('info');
             }}
-            label={"Add New Informational Message"}
+            label={'Add New Informational Message'}
           />
         </div>
         <ApplicationToaster />

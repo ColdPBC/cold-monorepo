@@ -22,12 +22,18 @@
     },
     "lint": {
       "executor": "@nx/linter:eslint",
-      "outputs": ["{options.outputFile}"],
+      "outputs": [
+        "{options.outputFile}"
+      ],
       "options": {
-        "lintFilePatterns": ["apps/cold-ui-e2e/**/*.{js,ts}"]
+        "lintFilePatterns": [
+          "apps/cold-ui-e2e/**/*.{js,ts}"
+        ]
       }
     }
   },
   "tags": [],
-  "implicitDependencies": ["cold-ui"]
+  "implicitDependencies": [
+    "cold-ui"
+  ]
 }

@@ -1,5 +1,6 @@
 /// <reference types="cypress" />
 
+
 // ***********************************************
 // This example commands.ts shows you how to
 // create various custom commands and overwrite
@@ -9,13 +10,15 @@
 // commands please read more here:
 // https://on.cypress.io/custom-commands
 // ***********************************************
-
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Cypress {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     interface Chainable<Subject> {
       login(email: string, password: string): void;
+
       // TODO: define a mount command
       // mount: typeof mount;
     }
@@ -26,6 +29,8 @@ declare global {
 
 //
 // -- This is a parent command --
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 Cypress.Commands.add('login', (email, password) => {
   console.log('Custom command example: Login', email, password);
 });

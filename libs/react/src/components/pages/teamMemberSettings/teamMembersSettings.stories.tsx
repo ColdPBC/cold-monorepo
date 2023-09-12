@@ -1,13 +1,13 @@
-import React from "react";
-import { withKnobs } from "@storybook/addon-knobs";
-import { Meta, StoryObj } from "@storybook/react";
-import { TeamMembersSettings } from "./teamMembersSettings";
-import { SWRConfig } from "swr";
+import React from 'react';
+import { withKnobs } from '@storybook/addon-knobs';
+import { Meta, StoryObj } from '@storybook/react';
+import { TeamMembersSettings } from './teamMembersSettings';
+import { SWRConfig } from 'swr';
 
 const meta = {
-  title: "Pages/TeamMembersSettings",
+  title: 'Pages/TeamMembersSettings',
   component: TeamMembersSettings,
-  tags: ["autodocs"],
+  tags: ['autodocs'],
   decorators: [withKnobs],
 } satisfies Meta<typeof TeamMembersSettings>;
 
@@ -20,7 +20,7 @@ export const Default: Story = {
       <SWRConfig
         value={{
           provider: (cache) => {
-            cache.delete("messages");
+            cache.delete('messages');
             return cache;
           },
         }}
@@ -32,9 +32,9 @@ export const Default: Story = {
   args: {
     user: {
       coldclimate_claims: {
-        org_id: "org_123",
+        org_id: 'org_123',
       },
-      name: "John Doe",
+      name: 'John Doe',
     },
   },
   parameters: {
@@ -43,5 +43,5 @@ export const Default: Story = {
         showTeamMemberTable: true,
       },
     },
-  }
+  },
 };
