@@ -1,3 +1,11 @@
+# [1.6.0-COLD-129.1](https://github.com/ColdPBC/ui/compare/v1.5.0...v1.6.0-COLD-129.1) (2023-09-12)
+
+
+### Features
+
+* created surveyintro component ([e02e7ee](https://github.com/ColdPBC/ui/commit/e02e7eeabac41a32282248a1e8b26004edc798f0))
+* update to use surveyDataMock file ([d5d0636](https://github.com/ColdPBC/ui/commit/d5d063651b03efce2499e1a9b8d5501d8b0cdfd8))
+
 # [1.5.0](https://github.com/ColdPBC/ui/compare/v1.4.1...v1.5.0) (2023-09-12)
 
 
