@@ -3,12 +3,9 @@ import { defineConfig, searchForWorkspaceRoot } from 'vite';
 import react from '@vitejs/plugin-react';
 import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
 import { nodePolyfills } from 'vite-plugin-node-polyfills';
-import path from 'path';
-import alias from '@rollup/plugin-alias';
 
 export default defineConfig({
   cacheDir: '../../node_modules/.vite/cold-ui',
-
   server: {
     port: 4200,
     host: 'localhost',
@@ -21,49 +18,6 @@ export default defineConfig({
   preview: {
     port: 4300,
     host: 'localhost',
-  },
-
-  resolve: {
-    alias: {
-      '@coldpbc/animations': path.resolve(
-        __dirname,
-        '../../libs/react/src/animations/index.ts',
-      ),
-      '@coldpbc/assets': path.resolve(
-        __dirname,
-        '../../libs/react/src/assets/index.ts',
-      ),
-      '@coldpbc/components': path.resolve(
-        __dirname,
-        '../../libs/react/src/components',
-      ),
-      '@coldpbc/context': path.resolve(
-        __dirname,
-        '../../libs/react/src/context',
-      ),
-      '@coldpbc/enums': path.resolve(__dirname, '../../libs/react/src/enums'),
-      '@coldpbc/fetchers': path.resolve(
-        __dirname,
-        '../../libs/react/src/fetchers',
-      ),
-      '@coldpbc/hooks': path.resolve(__dirname, '../../libs/react/src/hooks'),
-      '@coldpbc/interfaces': path.resolve(
-        __dirname,
-        '../../libs/react/src/interfaces',
-      ),
-      '@coldpbc/lib': path.resolve(__dirname, '../../libs/react/src/lib'),
-      '@coldpbc/mocks': path.resolve(
-        __dirname,
-        '../../libs/react/src/__mocks__',
-      ),
-      '@coldpbc/providers': path.resolve(
-        __dirname,
-        '../../libs/react/src/providers',
-      ),
-      '@coldpbc/routes': path.resolve(__dirname, '../../libs/react/src/routes'),
-      '@coldpbc/styles': path.resolve(__dirname, '../../libs/react/src/styles'),
-      '@coldpbc/themes': path.resolve(__dirname, '../../libs/react/src/themes'),
-    },
   },
   plugins: [
     react(),
@@ -116,18 +70,9 @@ export default defineConfig({
       protocolImports: false,
     }),
   ],
-
   build: {
+    manifest: true,
     sourcemap: true,
-    lib: {
-      // Could also be a dictionary or array of multiple entry points.
-      entry: 'src/main.tsx',
-      name: 'cold-ui',
-      fileName: 'cold-ui.ts',
-      // Change this to the formats you want to support.
-      // Don't forget to update your package.json as well.
-      formats: ['es', 'cjs'],
-    },
     rollupOptions: {
       output: {
         manualChunks(id) {
@@ -140,69 +85,9 @@ export default defineConfig({
           }
         },
       },
-      plugins: [
-        alias({
-          entries: {
-            '@coldpbc/animations': path.resolve(
-              __dirname,
-              '../../libs/react/src/animations/index.ts',
-            ),
-            '@coldpbc/assets': path.resolve(
-              __dirname,
-              '../../libs/react/src/assets/index.ts',
-            ),
-            '@coldpbc/components': path.resolve(
-              __dirname,
-              '../../libs/react/src/components',
-            ),
-            '@coldpbc/context': path.resolve(
-              __dirname,
-              '../../libs/react/src/context',
-            ),
-            '@coldpbc/enums': path.resolve(
-              __dirname,
-              '../../libs/react/src/enums',
-            ),
-            '@coldpbc/fetchers': path.resolve(
-              __dirname,
-              '../../libs/react/src/fetchers',
-            ),
-            '@coldpbc/hooks': path.resolve(
-              __dirname,
-              '../../libs/react/src/hooks',
-            ),
-            '@coldpbc/interfaces': path.resolve(
-              __dirname,
-              '../../libs/react/src/interfaces',
-            ),
-            '@coldpbc/lib': path.resolve(__dirname, '../../libs/react/src/lib'),
-            '@coldpbc/mocks': path.resolve(
-              __dirname,
-              '../../libs/react/src/__mocks__',
-            ),
-            '@coldpbc/providers': path.resolve(
-              __dirname,
-              '../../libs/react/src/providers',
-            ),
-            '@coldpbc/routes': path.resolve(
-              __dirname,
-              '../../libs/react/src/routes',
-            ),
-            '@coldpbc/styles': path.resolve(
-              __dirname,
-              '../../libs/react/src/styles',
-            ),
-            '@coldpbc/themes': path.resolve(
-              __dirname,
-              '../../libs/react/src/themes',
-            ),
-          },
-        }),
-      ],
-      // External packages that should not be bundled into your library.
-      external: ['react', 'react-dom', 'react/jsx-runtime'],
     },
   },
+
   // Uncomment this if you are using workers.
   // worker: {
   //  plugins: [ nxViteTsPaths() ],

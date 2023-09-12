@@ -9,6 +9,7 @@
     "start:prod": "nx serve-static",
     "storybook": "yarn build-storybook && npx nx storybook cold-ui",
     "build-storybook": "yarn prebuild && npx nx build-storybook cold-ui",
+    "build": "yarn prebuild && npx nx build",
     "build:dev": "yarn prebuild && npx nx run cold-ui:build:development --resolveJsonModule",
     "build:prod": "yarn prebuild && npx nx run cold-ui:build:production --resolveJsonModule",
     "test": "nx test",
