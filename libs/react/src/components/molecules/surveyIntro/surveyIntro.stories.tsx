@@ -24,10 +24,3 @@ export const Default: Story = {
     onSurveyStart: () => {},
   },
 };
-
-// const SurveyIntroStory = (props: SurveyIntroProps) => {  return (
-//     <SurveyIntro
-//       {...props}
-//     />
-//   );
-// }
