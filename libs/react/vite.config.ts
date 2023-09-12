@@ -7,7 +7,27 @@ import * as path from 'path';
 
 export default defineConfig({
   cacheDir: '../../node_modules/.vite/react',
-
+  resolve: {
+    alias: {
+      '@coldpbc/animations': path.resolve(
+        __dirname,
+        './src/animations/index.ts',
+      ),
+      '@coldpbc/assets': path.resolve(__dirname, './src/assets/index.ts'),
+      '@coldpbc/components': path.resolve(__dirname, './src/components'),
+      '@coldpbc/context': path.resolve(__dirname, './src/context'),
+      '@coldpbc/enums': path.resolve(__dirname, './src/enums'),
+      '@coldpbc/fetchers': path.resolve(__dirname, './src/fetchers'),
+      '@coldpbc/hooks': path.resolve(__dirname, './src/hooks'),
+      '@coldpbc/interfaces': path.resolve(__dirname, './src/interfaces'),
+      '@coldpbc/lib': path.resolve(__dirname, './src/lib'),
+      '@coldpbc/mocks': path.resolve(__dirname, './src/__mocks__'),
+      '@coldpbc/providers': path.resolve(__dirname, './src/providers'),
+      '@coldpbc/routes': path.resolve(__dirname, './src/routes'),
+      '@coldpbc/styles': path.resolve(__dirname, './src/styles'),
+      '@coldpbc/themes': path.resolve(__dirname, './src/themes'),
+    },
+  },
   plugins: [
     dts({
       entryRoot: 'src',
