@@ -1,17 +1,18 @@
 import React from 'react';
-import { SurveySectionType } from '@coldpbc/interfaces';
+import { SurveyActiveKeyType, SurveySectionType } from '@coldpbc/interfaces';
 import Lottie from 'lottie-react';
 import { ColdIcon } from '../../../atoms';
 import { IconNames } from '@coldpbc/enums';
 import { getCheckboxAnimation } from '@coldpbc/animations';
 
 interface SurveySectionsProps {
-  sections: SurveySectionType[];
+  sections: {
+    [key: string]: SurveySectionType;
+  };
   section: SurveySectionType;
   sectionIndex: number;
-  activeKey: string;
+  activeKey: SurveyActiveKeyType;
   getActiveSectionIndex: () => number;
-  isFollowUp: (key: string) => boolean;
 }
 
 export const SurveySections = ({
@@ -20,16 +21,15 @@ export const SurveySections = ({
   sectionIndex,
   activeKey,
   getActiveSectionIndex,
-  isFollowUp,
 }: SurveySectionsProps) => {
   const getSurveySectionDescriptionAndTitle = (
     section: SurveySectionType,
     index: number,
   ) => {
     const activeIndex = getActiveSectionIndex();
-    const followUp = isFollowUp(activeKey);
+    const followUp = activeKey.isFollowUp;
 
-    if ((index === activeIndex && !followUp) || index == activeIndex - 1) {
+    if ((index === activeIndex && !followUp) || index === activeIndex - 1) {
       return (
         <div className={'pb-[40px] relative'}>
           {getSectionPoint(section, index)}
@@ -61,7 +61,7 @@ export const SurveySections = ({
   ) => {
     const className = 'absolute';
     const activeIndex = getActiveSectionIndex();
-    const followUp = isFollowUp(activeKey);
+    const followUp = activeKey.isFollowUp;
     if (currentIndex > activeIndex) {
       return (
         <div className={className + ' top-[10px] -left-[40px]'}>
@@ -77,11 +77,11 @@ export const SurveySections = ({
         </div>
       );
     } else if (currentIndex === activeIndex) {
-      if (followUp && currentIndex === sections.length - 1) {
-        const followUpIndex = section.follow_up.findIndex(
-          (followUp) => followUp.key === activeKey,
+      if (followUp && currentIndex === Object.keys(sections).length - 1) {
+        const followUpIndex = Object.keys(section.follow_up).findIndex(
+          (followUpKey) => followUpKey === activeKey.value,
         );
-        if (followUpIndex === section.follow_up.length - 1) {
+        if (followUpIndex === Object.keys(section.follow_up).length - 1) {
           return (
             <div
               className={

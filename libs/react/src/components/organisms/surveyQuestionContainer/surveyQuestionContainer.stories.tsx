@@ -5,7 +5,7 @@ import {
   SurveyQuestionContainer,
   SurveyQuestionContainerProps,
 } from '@coldpbc/components';
-import { getTestingSurveyFormDefinition } from '@coldpbc/mocks';
+import { getTestingSurveyData } from '@coldpbc/mocks';
 
 const meta = {
   title: 'Organisms/SurveyQuestionContainer',
@@ -20,17 +20,15 @@ type Story = StoryObj<typeof meta>;
 
 const SurveyQuestionContainerStory = (args: SurveyQuestionContainerProps) => {
   const [activeKey, setActiveKey] = React.useState(args.activeKey);
-  const [surveyFormDefinition, setSurveyFormDefinition] = React.useState(
-    args.surveyFormDefinition,
-  );
+  const [surveyData, setSurveyData] = React.useState(args.surveyData);
 
   return (
     <SurveyQuestionContainer
       {...args}
-      surveyFormDefinition={surveyFormDefinition}
-      setSurveyFormDefinition={setSurveyFormDefinition}
       activeKey={activeKey}
       setActiveKey={setActiveKey}
+      surveyData={surveyData}
+      setSurveyData={setSurveyData}
     />
   );
 };
@@ -38,8 +36,10 @@ const SurveyQuestionContainerStory = (args: SurveyQuestionContainerProps) => {
 export const Default: Story = {
   render: (args) => <SurveyQuestionContainerStory {...args} />,
   args: {
-    activeKey: 'product',
-    surveyFormDefinition: getTestingSurveyFormDefinition().definition,
-    surveyName: 'qaalib_test',
+    activeKey: {
+      value: 'product',
+      isFollowUp: false,
+    },
+    surveyData: getTestingSurveyData(),
   },
 };

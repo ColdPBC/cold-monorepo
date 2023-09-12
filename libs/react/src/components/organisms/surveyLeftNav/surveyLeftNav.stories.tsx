@@ -2,7 +2,7 @@ import React from 'react';
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { SurveyLeftNav, SurveyLeftNavProps } from './surveyLeftNav';
-import { getTestingSurveyFormDefinition } from '@coldpbc/mocks';
+import { getTestingSurveyData } from '@coldpbc/mocks';
 
 const meta = {
   title: 'Organisms/SurveyLeftNav',
@@ -30,15 +30,21 @@ const SurveyLeftNavStory = (args: SurveyLeftNavProps) => {
 export const Intro: Story = {
   render: (args) => <SurveyLeftNavStory {...args} />,
   args: {
-    activeKey: '',
-    surveyFormDefinition: getTestingSurveyFormDefinition().definition,
+    activeKey: {
+      value: '',
+      isFollowUp: false,
+    },
+    surveyData: getTestingSurveyData(),
   },
 };
 
 export const InSurvey: Story = {
   render: (args) => <SurveyLeftNavStory {...args} />,
   args: {
-    activeKey: 'product',
-    surveyFormDefinition: getTestingSurveyFormDefinition().definition,
+    activeKey: {
+      value: 'product',
+      isFollowUp: false,
+    },
+    surveyData: getTestingSurveyData(),
   },
 };

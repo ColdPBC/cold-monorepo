@@ -1,7 +1,10 @@
 import React from 'react';
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
-import { SurveySectionsProgress } from '@coldpbc/components';
+import {
+  SurveySectionsProgress,
+  SurveySectionsProgressProps,
+} from '@coldpbc/components';
 import {
   getSurveySectionMock,
   getSurveySectionScrollableMock,
@@ -19,10 +22,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-const SurveySectionsStory = (args: {
-  sections: SurveySectionType[];
-  activeKey: string;
-}) => {
+const SurveySectionsStory = (args: SurveySectionsProgressProps) => {
   const [activeKey, setActiveKey] = React.useState(args.activeKey);
 
   return (
@@ -38,7 +38,10 @@ export const Default: Story = {
   render: (args) => <SurveySectionsStory {...args} />,
   args: {
     sections: getSurveySectionMock(),
-    activeKey: 'product',
+    activeKey: {
+      value: 'product',
+      isFollowUp: false,
+    },
   },
 };
 
@@ -46,7 +49,10 @@ export const SectionCompleted: Story = {
   render: (args) => <SurveySectionsStory {...args} />,
   args: {
     ...Default.args,
-    activeKey: 'facilities',
+    activeKey: {
+      value: 'facilities',
+      isFollowUp: false,
+    },
   },
 };
 
@@ -54,7 +60,10 @@ export const SectionWithFollowUp: Story = {
   render: (args) => <SurveySectionsStory {...args} />,
   args: {
     ...Default.args,
-    activeKey: 'facilities:0',
+    activeKey: {
+      value: 'facilities:0',
+      isFollowUp: true,
+    },
   },
 };
 
@@ -62,7 +71,10 @@ export const SurveyComplete: Story = {
   render: (args) => <SurveySectionsStory {...args} />,
   args: {
     ...Default.args,
-    activeKey: 'general:2',
+    activeKey: {
+      value: 'general:2',
+      isFollowUp: true,
+    },
   },
 };
 
@@ -70,7 +82,10 @@ export const LastSection: Story = {
   render: (args) => <SurveySectionsStory {...args} />,
   args: {
     ...Default.args,
-    activeKey: 'general',
+    activeKey: {
+      value: 'general',
+      isFollowUp: false,
+    },
   },
 };
 
@@ -78,6 +93,9 @@ export const LargerThanScrollBar: Story = {
   render: (args) => <SurveySectionsStory {...args} />,
   args: {
     sections: getSurveySectionScrollableMock(),
-    activeKey: 'product1',
+    activeKey: {
+      value: 'product1',
+      isFollowUp: false,
+    },
   },
 };

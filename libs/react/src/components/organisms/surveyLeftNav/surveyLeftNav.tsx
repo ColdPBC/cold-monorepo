@@ -1,20 +1,21 @@
 import React from 'react';
-import { SurveyFormDefinitionType } from '@coldpbc/interfaces';
+import { SurveyActiveKeyType, SurveyDataType } from '@coldpbc/interfaces';
 import { isEmpty } from 'lodash';
 import { HexColors } from '@coldpbc/themes';
 import { ColdWordmark, SurveySectionsProgress } from '@coldpbc/components';
 
 export interface SurveyLeftNavProps {
-  surveyFormDefinition: SurveyFormDefinitionType;
-  activeKey: string;
-  setActiveKey: (key: string) => void;
+  surveyData: SurveyDataType;
+  activeKey: SurveyActiveKeyType;
+  setActiveKey: (key: SurveyActiveKeyType) => void;
 }
 
 export const SurveyLeftNav = (props: SurveyLeftNavProps) => {
-  const { surveyFormDefinition, activeKey, setActiveKey } = props;
+  const { surveyData, activeKey, setActiveKey } = props;
+  const { definition: surveyFormDefinition } = surveyData;
   return (
     <>
-      {isEmpty(activeKey) ? (
+      {isEmpty(activeKey.value) ? (
         <div className={'pl-[40px] pt-[40px] pb-[37px] relative'}>
           <div
             className={'w-[668px] h-[963px] rounded-2xl'}

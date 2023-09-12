@@ -1,16 +1,19 @@
 import React, { useEffect } from 'react';
 import {
-  SurveySectionsProgressSectionType,
   SurveySectionType,
+  SurveySectionsProgressSectionType,
+  SurveyActiveKeyType,
 } from '@coldpbc/interfaces';
-import { findIndex } from 'lodash';
 import { SurveySections } from './surveySections';
 import { SurveySectionsProgressBar } from './surveySectionsProgressBar';
+import { getSectionIndex } from '@coldpbc/lib';
 
 export interface SurveySectionsProgressProps {
-  sections: SurveySectionType[];
-  activeKey: string;
-  setActiveKey: (key: string) => void;
+  sections: {
+    [key: string]: SurveySectionType;
+  };
+  activeKey: SurveyActiveKeyType;
+  setActiveKey: (key: SurveyActiveKeyType) => void;
 }
 
 export const SurveySectionsProgress = ({
@@ -19,87 +22,50 @@ export const SurveySectionsProgress = ({
   setActiveKey,
 }: SurveySectionsProgressProps) => {
   const [scrollable, setScrollable] = React.useState<boolean>(false);
-  const [sectionHeights, setSectionHeights] = React.useState(
-    Array(sections.length).fill(null),
+  const [sectionHeights, setSectionHeights] = React.useState<
+    (HTMLDivElement | null)[]
+  >(
+    new Array(Object.keys(sections).length).fill(null).map(() => {
+      return null;
+    }) as (HTMLDivElement | null)[],
   );
   const [sectionLocations, setSectionLocations] = React.useState<
     SurveySectionsProgressSectionType[]
   >([]);
 
-  const isFollowUp = (key: string) => {
-    const followUp = sections.filter((section) => {
-      return (
-        section.follow_up.filter((followUp) => {
-          return followUp.key === key;
-        }).length > 0
-      );
-    });
-
-    return followUp.length > 0;
-  };
-
   const getActiveSectionIndex = () => {
-    if (isFollowUp(activeKey)) {
-      let activeIndex = 0;
-      sections.forEach((section, index) => {
-        section.follow_up.forEach((followUp) => {
-          if (followUp.key === activeKey) {
-            activeIndex = index;
-          }
-        });
-      });
-      return activeIndex;
-    } else {
-      return findIndex(sections, { category_key: activeKey });
-    }
+    return getSectionIndex(sections, activeKey);
   };
 
   const getBackgroundImages = () => {
-    const activeIndex = getActiveSectionIndex();
-    const backgroundImageStyle = `url(${sections[activeIndex].image_url};) lightgray 50% / cover no-repeat`;
+    const activeSectionIndex = getActiveSectionIndex();
+    const backgroundImageStyle = `url(${
+      sections[Object.keys(sections)[activeSectionIndex]].image_url
+    };) lightgray 50% / cover no-repeat`;
     const className = 'flex-auto self-stretch rounded-2xl';
-    if (activeIndex === 0) {
-      return (
-        <div
-          className={className}
-          style={{
-            background: `${backgroundImageStyle}`,
-          }}
-        ></div>
-      );
-    } else {
-      if (isFollowUp(activeKey)) {
-        return (
-          <div
-            className={className}
-            style={{
-              background: `${backgroundImageStyle}`,
-            }}
-          ></div>
-        );
-      } else {
-        return (
-          <div
-            className={className}
-            style={{
-              background: `${backgroundImageStyle}`,
-            }}
-          ></div>
-        );
-      }
-    }
+    return (
+      <div
+        className={className}
+        style={{
+          background: `${backgroundImageStyle}`,
+        }}
+      ></div>
+    );
   };
 
   const isScrollable = () => {
     let totalHeight = 0;
     sectionHeights.map((sectionHeight, index) => {
-      totalHeight += sectionHeight.clientHeight;
+      totalHeight += sectionHeight?.clientHeight || 0;
     });
     return totalHeight > 920 - 128;
   };
 
   const setSectionToActive = (sectionIndex: number) => {
-    setActiveKey(sections[sectionIndex].category_key);
+    setActiveKey({
+      value: Object.keys(sections)[sectionIndex],
+      isFollowUp: false,
+    });
   };
 
   const scrollToActiveSection = (element: HTMLDivElement | null) => {
@@ -107,7 +73,7 @@ export const SurveySectionsProgress = ({
     if (scrollable && element) {
       let heightToSection = 0;
       for (let i = 0; i < activeSectionIndex; i++) {
-        heightToSection += sectionHeights[i].clientHeight;
+        heightToSection += sectionHeights[i]?.clientHeight || 0;
       }
       element.scrollTop = heightToSection;
     }
@@ -116,14 +82,14 @@ export const SurveySectionsProgress = ({
   useEffect(() => {
     const newSectionLocations: SurveySectionsProgressSectionType[] = [];
     sectionHeights.map((sectionHeight, index) => {
-      newSectionLocations.push({
-        key: sections[index].category_key,
+      return newSectionLocations.push({
+        key: Object.keys(sections)[index],
         sectionIndex: index,
-        height: sectionHeight.clientHeight,
+        height: sectionHeight?.clientHeight || 0,
       });
     });
     setSectionLocations(newSectionLocations);
-  }, [activeKey]);
+  }, [activeKey, sectionHeights, sections]);
 
   useEffect(() => {
     setScrollable(isScrollable());
@@ -159,10 +125,9 @@ export const SurveySectionsProgress = ({
               activeKey={activeKey}
               sectionLocations={sectionLocations}
               getActiveSectionIndex={getActiveSectionIndex}
-              isFollowUp={isFollowUp}
             />
             <div className={'z-10 pl-6'}>
-              {sections.map((section, index) => {
+              {Object.keys(sections).map((sectionKey, index) => {
                 return (
                   <div
                     key={'section_component_' + index}
@@ -171,11 +136,10 @@ export const SurveySectionsProgress = ({
                   >
                     <SurveySections
                       sections={sections}
-                      section={section}
+                      section={sections[sectionKey]}
                       sectionIndex={index}
                       activeKey={activeKey}
                       getActiveSectionIndex={getActiveSectionIndex}
-                      isFollowUp={isFollowUp}
                     />
                   </div>
                 );
@@ -191,10 +155,9 @@ export const SurveySectionsProgress = ({
               activeKey={activeKey}
               sectionLocations={sectionLocations}
               getActiveSectionIndex={getActiveSectionIndex}
-              isFollowUp={isFollowUp}
             />
             <div className={'z-10 pl-6'}>
-              {sections.map((section, index) => {
+              {Object.keys(sections).map((sectionKey, index) => {
                 return (
                   <div
                     key={'section_component_' + index}
@@ -204,11 +167,10 @@ export const SurveySectionsProgress = ({
                   >
                     <SurveySections
                       sections={sections}
-                      section={section}
+                      section={sections[sectionKey]}
                       sectionIndex={index}
                       activeKey={activeKey}
                       getActiveSectionIndex={getActiveSectionIndex}
-                      isFollowUp={isFollowUp}
                     />
                   </div>
                 );
