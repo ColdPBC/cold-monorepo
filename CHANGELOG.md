@@ -1,3 +1,10 @@
+# [1.6.0-COLD-129.4](https://github.com/ColdPBC/ui/compare/v1.6.0-COLD-129.3...v1.6.0-COLD-129.4) (2023-09-12)
+
+
+### Bug Fixes
+
+* to kickoff chromatic build ([aaca346](https://github.com/ColdPBC/ui/commit/aaca3462cfa5471f3f0ef961bb228469ff6583fa))
+
 # [1.6.0-COLD-129.3](https://github.com/ColdPBC/ui/compare/v1.6.0-COLD-129.2...v1.6.0-COLD-129.3) (2023-09-12)
 
 
