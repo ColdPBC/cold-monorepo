@@ -1,3 +1,16 @@
+# [1.5.0](https://github.com/ColdPBC/ui/compare/v1.4.1...v1.5.0) (2023-09-12)
+
+
+### Bug Fixes
+
+* some bugs fixed ([cd5a657](https://github.com/ColdPBC/ui/commit/cd5a657a8a56a40b47b6a0d1a54ff46c8145c4f4))
+
+
+### Features
+
+* Updated survey components to use new survey data structure ([87d92be](https://github.com/ColdPBC/ui/commit/87d92be7874bbe1ef9a9a632bd299b409922b75b))
+* updated SurveyLeftNav ([9c4273b](https://github.com/ColdPBC/ui/commit/9c4273bfaad61e448fffaad5547a5e766e357422))
+
 # [1.5.0-cold-226-update-retool-to-key-the-categories-and-the-questions-in-the.1](https://github.com/ColdPBC/ui/compare/v1.4.1...v1.5.0-cold-226-update-retool-to-key-the-categories-and-the-questions-in-the.1) (2023-09-12)
 
 
