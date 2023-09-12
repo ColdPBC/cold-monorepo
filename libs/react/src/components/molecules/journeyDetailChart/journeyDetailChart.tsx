@@ -20,7 +20,7 @@ export const tableTheme: CustomFlowbiteTheme = {
     "root": {
       "base": "w-full text-left text-sm text-gray-500 dark:text-gray-400",
       "shadow": "absolute dark:bg-black w-full h-full top-0 left-0 rounded-lg drop-shadow-md -z-10",
-      "wrapper": "relative"
+      "wrapper": "relative border-gray-50 border border-solid rounded-lg bg-gray-50"
     },
     "body": {
       "base": "group/body",
@@ -31,11 +31,11 @@ export const tableTheme: CustomFlowbiteTheme = {
     "head": {
       "base": "group/head text-xs uppercase text-gray-700 dark:text-gray-400",
       "cell": {
-        "base": "group-first/head:first:rounded-tl-lg group-first/head:last:rounded-tr-lg bg-gray-50 dark:bg-gray-700 px-6 py-3 font-normal"
+        "base": "group-first/head:first:rounded-tl-lg group-first/head:last:rounded-tr-lg bg-none dark:bg-gray-700 px-6 py-3 font-normal"
       }
     },
     "row": {
-      "base": "group/row",
+      "base": "group/row border-t border-gray-50",
       "hovered": "hover:bg-gray-50 dark:hover:bg-gray-600",
       "striped": "odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700"
     }
@@ -85,7 +85,7 @@ export function JourneyDetailChart({ setIsEmptyData, colors, subcategory_key, pe
       const newLegendRows: LegendRow[] = [];
 
       // Transform chart data
-      Object.keys(data?.subcategories[subcategory_key].activities).forEach(
+      Object.keys(data?.subcategories[subcategory_key].activities ?? {}).forEach(
           (activityKey: any) => {
             const activity = data?.subcategories[subcategory_key].activities[activityKey];
             const activityFootprint = activity.footprint?.[period]?.value ?? 0;
@@ -235,6 +235,7 @@ export function JourneyDetailChart({ setIsEmptyData, colors, subcategory_key, pe
                 onMouseLeave={() => {
                   setActiveSegment(null);
                 }}
+                theme={tableTheme.table?.row}
               >
                 <Table.Cell className='flex items-center font-bold' theme={tableTheme.table?.body?.cell}>
                   <div 
