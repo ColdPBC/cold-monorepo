@@ -1,1 +1,1 @@
-web: nx run cold-ui:serve-static
+web: ./startup.sh
