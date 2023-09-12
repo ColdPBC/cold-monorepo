@@ -1,13 +1,13 @@
-import React, { useState } from "react";
-import { withKnobs } from "@storybook/addon-knobs";
-import { StoryObj } from "@storybook/react";
-import {SurveyIntro} from "./surveyIntro";
-import {getTestingSurveyFormDefinition} from "@coldpbc/mocks";
+import React, { useState } from 'react';
+import { withKnobs } from '@storybook/addon-knobs';
+import { StoryObj } from '@storybook/react';
+import { SurveyIntro } from './surveyIntro';
+import { getTestingSurveyData } from '../../../__mocks__/surveyDataMock';
 
 const meta = {
-  title: "Molecules/SurveyIntro",
+  title: 'Molecules/SurveyIntro',
   component: SurveyIntro,
-  tags: ["autodocs"],
+  tags: ['autodocs'],
   decorators: [withKnobs],
 };
 
@@ -16,10 +16,10 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   render: (args) => {
-    return <SurveyIntro {...args} />
+    return <SurveyIntro {...args} />;
   },
   args: {
-    surveyFormDefinition: getTestingSurveyFormDefinition().definition,
+    surveyFormDefinition: getTestingSurveyData().definition,
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     onSurveyStart: () => {},
   },
