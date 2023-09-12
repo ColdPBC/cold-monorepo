@@ -1,28 +1,39 @@
-import {findIndex} from 'lodash';
-import {SurveySectionType} from '@coldpbc/interfaces';
+import { findIndex, forOwn } from 'lodash';
+import { SurveyActiveKeyType, SurveySectionType } from '@coldpbc/interfaces';
 
-export const getSectionIndex = (sections: SurveySectionType[], key: string) => {
-  if(isFollowUp(sections, key)){
+export const getSectionIndex = (
+  sections: {
+    [key: string]: SurveySectionType;
+  },
+  key: SurveyActiveKeyType,
+) => {
+  if (key.isFollowUp) {
     let activeIndex = 0;
-    sections.forEach((section, index) => {
-      section.follow_up.forEach((followUp) => {
-        if(followUp.key === key){
-          activeIndex = index;
-        }
-      })
-    })
+    Object.keys(sections).find((sectionKey, sectionIndex) => {
+      return Object.keys(sections[sectionKey].follow_up).find((followUpKey) => {
+        return followUpKey === key.value ? (activeIndex = sectionIndex) : null;
+      });
+    });
     return activeIndex;
   } else {
-    return findIndex( sections, {category_key: key} );
+    return findIndex(Object.keys(sections), (sectionKey) => {
+      return sectionKey === key.value;
+    });
   }
-}
+};
 
-export const isFollowUp = (sections: SurveySectionType[], key: string) => {
-  const followUp = sections.filter((section) => {
-    return section.follow_up.filter((followUp) => {
-      return followUp.key === key
-    }).length > 0
-  })
-
-  return followUp.length > 0;
-}
+export const isKeyValueFollowUp = (
+  key: string,
+  sections: {
+    [key: string]: SurveySectionType;
+  },
+) => {
+  // check all the keys in the sections for the follow_up key
+  let isFollowUp = false;
+  forOwn(sections, (section) => {
+    if (section.follow_up[key]) {
+      isFollowUp = true;
+    }
+  });
+  return isFollowUp;
+};

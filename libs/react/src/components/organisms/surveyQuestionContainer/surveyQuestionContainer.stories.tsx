@@ -1,42 +1,45 @@
-import React from "react";
-import { withKnobs } from "@storybook/addon-knobs";
-import { Meta, StoryObj } from "@storybook/react";
-import {SurveyQuestionContainer, SurveyQuestionContainerProps} from '@coldpbc/components';
-import {getTestingSurveyData} from '@coldpbc/mocks';
+import React from 'react';
+import { withKnobs } from '@storybook/addon-knobs';
+import { Meta, StoryObj } from '@storybook/react';
+import {
+  SurveyQuestionContainer,
+  SurveyQuestionContainerProps,
+} from '@coldpbc/components';
+import { getTestingSurveyData } from '@coldpbc/mocks';
 
 const meta = {
-  title: "Organisms/SurveyQuestionContainer",
+  title: 'Organisms/SurveyQuestionContainer',
   component: SurveyQuestionContainer,
-  tags: ["autodocs"],
+  tags: ['autodocs'],
   decorators: [withKnobs],
-  argTypes: {
-
-  },
+  argTypes: {},
 } satisfies Meta<typeof SurveyQuestionContainer>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 const SurveyQuestionContainerStory = (args: SurveyQuestionContainerProps) => {
-
   const [activeKey, setActiveKey] = React.useState(args.activeKey);
-  const [surveyFormDefinition, setSurveyFormDefinition] = React.useState(args.surveyFormDefinition);
+  const [surveyData, setSurveyData] = React.useState(args.surveyData);
 
-  return <SurveyQuestionContainer
-    {...args}
-    surveyFormDefinition={surveyFormDefinition}
-    setSurveyFormDefinition={setSurveyFormDefinition}
-    activeKey={activeKey}
-    setActiveKey={setActiveKey}
-  />
-}
+  return (
+    <SurveyQuestionContainer
+      {...args}
+      activeKey={activeKey}
+      setActiveKey={setActiveKey}
+      surveyData={surveyData}
+      setSurveyData={setSurveyData}
+    />
+  );
+};
 
 export const Default: Story = {
   render: (args) => <SurveyQuestionContainerStory {...args} />,
   args: {
-    activeKey: "product",
-    surveyFormDefinition: getTestingSurveyData().definition,
-    surveyName: "qaalib_test",
+    activeKey: {
+      value: 'product',
+      isFollowUp: false,
+    },
+    surveyData: getTestingSurveyData(),
   },
 };
-
