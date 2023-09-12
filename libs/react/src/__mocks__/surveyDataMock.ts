@@ -89,7 +89,7 @@ export const getTestingSurveyData = (): SurveyDataType => {
               options: ['Gray', 'Black', 'Orange', 'Blue', 'Purple'],
               tooltip:
                 'If carpets are multiple colors choose all colors that apply',
-              component: 'multi-select',
+              component: 'multi_select',
               placeholder: '',
               value: null,
             },
@@ -118,7 +118,7 @@ export const getTestingSurveyData = (): SurveyDataType => {
                 'Africa',
               ],
               tooltip: '',
-              component: 'multi-select',
+              component: 'multi_select',
               placeholder: '',
               value: null,
             },
