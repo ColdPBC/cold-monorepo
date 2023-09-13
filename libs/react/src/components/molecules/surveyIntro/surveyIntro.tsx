@@ -11,6 +11,7 @@ export interface SurveyIntroProps {
 
 export const SurveyIntro = (props: SurveyIntroProps) => {
   const { surveyFormDefinition, onSurveyStart } = props;
+
   const { intro_markdown } = surveyFormDefinition;
 
   return (
