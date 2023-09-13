@@ -1,18 +1,18 @@
 import {PropsWithChildren} from 'react';
 import {Card} from '../card/card';
 import {useNavigate} from 'react-router-dom';
-import { JourneyDetailChart } from '../journeyDetailChart';
+import { FootprintDetailChart } from '../footprintDetailChart';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import useSWR from 'swr';
 
-export interface JourneyDetailCardProps {
+export interface FootprintDetailCardProps {
   colors: string[];
   subcategory_key: string;
   period: number;
 }
 
-export function JourneyDetailCard(
-  props: PropsWithChildren<JourneyDetailCardProps>,
+export function FootprintDetailCard(
+  props: PropsWithChildren<FootprintDetailCardProps>,
 ) {
   const navigate = useNavigate();
 
@@ -41,7 +41,7 @@ export function JourneyDetailCard(
       ]}
     >
       <div className="flex items-center justify-center self-stretch flex-col">
-        <JourneyDetailChart {...props} />
+        <FootprintDetailChart {...props} />
       </div>
     </Card>
   );

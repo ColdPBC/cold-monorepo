@@ -4,7 +4,9 @@ import {
   Chart as ChartJS,
   ChartData,
   ChartOptions,
+  PieController,
   Plugin as PluginType,
+  ArcElement
 } from 'chart.js';
 import useSWR from 'swr';
 import { axiosFetcher } from '../../../fetchers/axiosFetcher';
@@ -54,7 +56,9 @@ interface Props {
   period: number;
 }
 
-export function JourneyDetailChart({ setIsEmptyData, colors, subcategory_key, period }: Props) {
+ChartJS.register(ArcElement, PieController);
+
+export function FootprintDetailChart({ setIsEmptyData, colors, subcategory_key, period }: Props) {
   const chartRef = useRef<ChartJS<'pie'>>(null);
 
   const {
