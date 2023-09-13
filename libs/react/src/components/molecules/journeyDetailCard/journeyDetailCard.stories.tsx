@@ -16,39 +16,33 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default = {
-  render: (args) => {
-    return (
-      <BrowserRouter>
-        <div className="w-[668px]">
-          <JourneyDetailCard colors={getSchemeForColor(HexColors.lightblue)} period={2022} subcategory_key='facilities' />
-        </div>
-      </BrowserRouter>
-    );
-  },
+export const Default = () => {
+  return (
+    <BrowserRouter>
+      <div className="w-[668px]">
+        <JourneyDetailCard colors={getSchemeForColor(HexColors.lightblue)} period={2022} subcategory_key='facilities' />
+      </div>
+    </BrowserRouter>
+  );
 };
 
-export const GreenProduct = {
-  render: (args) => {
-    return (
-      <BrowserRouter>
-        <div className="w-[668px]">
-          <JourneyDetailCard colors={getSchemeForColor(HexColors.green)} period={2022} subcategory_key='product' />
-        </div>
-      </BrowserRouter>
-    );
-  },
+export const GreenProduct = () => {
+  return (
+    <BrowserRouter>
+      <div className="w-[668px]">
+        <JourneyDetailCard colors={getSchemeForColor(HexColors.green)} period={2022} subcategory_key='product' />
+      </div>
+    </BrowserRouter>
+  );
 };
 
-export const EmptySubcategory = {
-  render: (args) => {
-    return (
-      <BrowserRouter>
-        <div className="w-[668px]">
-          <JourneyDetailCard colors={getSchemeForColor(HexColors.green)} period={2022} subcategory_key='no_data_for_this_key' />
-        </div>
-      </BrowserRouter>
-    );
-  },
+export const EmptySubcategory = () => {
+  return (
+    <BrowserRouter>
+      <div className="w-[668px]">
+        <JourneyDetailCard colors={getSchemeForColor(HexColors.green)} period={2022} subcategory_key='no_data_for_this_key' />
+      </div>
+    </BrowserRouter>
+  );
 };
 

@@ -74,18 +74,6 @@ export function JourneySpiderChart({ setIsEmptyData }: Props) {
 
       const chartOptions: ChartOptions = {
         ...options,
-        backgroundColor: createGradient(
-          chart.ctx,
-          chart.chartArea,
-          HexColors.white + '00',
-          HexColors.primary.DEFAULT + '40',
-        ), // 25% transparency
-        borderColor: createGradient(
-          chart.ctx,
-          chart.chartArea,
-          HexColors.gray['130'],
-          HexColors.primary.DEFAULT,
-        ),
       };
 
       // Get the right color for each of the points based on their value
@@ -159,7 +147,21 @@ export function JourneySpiderChart({ setIsEmptyData }: Props) {
     <div className="relative h-[284px] w-full">
       <Chart
         ref={chartRef}
-        options={chartOptions}
+        options={{
+          ...chartOptions,
+          backgroundColor: chartRef?.current ? createGradient(
+            chartRef.current.ctx,
+            chartRef.current.chartArea,
+            HexColors.white + '00',
+            HexColors.primary.DEFAULT + '40',
+          ) : '#FFFFFF',
+          borderColor: chartRef?.current ? createGradient(
+            chartRef?.current?.ctx,
+            chartRef?.current?.chartArea,
+            HexColors.gray['130'],
+            HexColors.primary.DEFAULT,
+          ) : '#FFFFFF',
+        }}
         type="radar"
         data={chartData}
       />
