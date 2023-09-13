@@ -9,7 +9,6 @@ import {
 import useSWR from 'swr';
 import { axiosFetcher } from '../../../fetchers/axiosFetcher';
 import { Spinner } from '../../atoms/spinner/spinner';
-import { defaultChartData } from './constants';
 import { CustomFlowbiteTheme, Table } from 'flowbite-react';
 import { FootprintDetailChip } from '../../atoms/footprintDetailChip/footprintDetailChip';
 import { useActiveSegment } from '../../../hooks/useActiveSegment';
@@ -56,7 +55,7 @@ interface Props {
 }
 
 export function JourneyDetailChart({ setIsEmptyData, colors, subcategory_key, period }: Props) {
-  const chartRef = useRef<ChartJS>(null);
+  const chartRef = useRef<ChartJS<'pie'>>(null);
 
   const {
     activeSegment,
@@ -66,7 +65,14 @@ export function JourneyDetailChart({ setIsEmptyData, colors, subcategory_key, pe
     chartBeforeDraw
   } = useActiveSegment(); 
 
-  const [chartData, setChartData] = useState<ChartData>(defaultChartData);
+  const [chartData, setChartData] = useState<ChartData<'pie'>>({
+    datasets: [
+      {
+        data: [],
+      },
+    ],
+  });
+  
   const [legendRows, setLegendRows] = useState<LegendRow[]>([]);
   const [totalFootprint, setTotalFootprint] = useState(0);
 
@@ -111,7 +117,7 @@ export function JourneyDetailChart({ setIsEmptyData, colors, subcategory_key, pe
 
       const backgroundColors = newData.map((_, i) => colors[i]);
 
-      const newChartData: ChartData = {
+      const newChartData: ChartData<'pie'> = {
         datasets: [{
           data: newData,
           backgroundColor: backgroundColors,

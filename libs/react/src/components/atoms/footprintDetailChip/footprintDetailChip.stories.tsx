@@ -11,7 +11,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = () => {
+export const Default = () => {
   return (
     <div>
       <FootprintDetailChip emissions={120} />
@@ -19,7 +19,7 @@ export const Default: Story = () => {
   )
 };
 
-export const Large: Story = () => {
+export const Large = () => {
   return (
     <div>
       <FootprintDetailChip emissions={120} large />
@@ -27,7 +27,7 @@ export const Large: Story = () => {
   )
 };
 
-export const Center: Story = () => {
+export const Center = () => {
   return (
     <div className='w-[200px] h-[200px] bg-red relative'>
       <FootprintDetailChip emissions={120} center />

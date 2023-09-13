@@ -16,7 +16,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
+export const Default = {
   render: (args) => {
     return (
       <BrowserRouter>
@@ -28,7 +28,7 @@ export const Default: Story = {
   },
 };
 
-export const GreenProduct: Story = {
+export const GreenProduct = {
   render: (args) => {
     return (
       <BrowserRouter>
@@ -40,7 +40,7 @@ export const GreenProduct: Story = {
   },
 };
 
-export const EmptySubcategory: Story = {
+export const EmptySubcategory = {
   render: (args) => {
     return (
       <BrowserRouter>
