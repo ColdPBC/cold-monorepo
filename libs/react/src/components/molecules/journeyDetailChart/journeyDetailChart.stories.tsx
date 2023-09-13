@@ -15,13 +15,13 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
+export const Default = {
   render: (args) => {
     return <JourneyDetailChart colors={getSchemeForColor(HexColors.lightblue)} period={2022} subcategory_key='facilities' />;
   },
 };
 
-export const GreenProduct: Story = {
+export const GreenProduct = {
   render: (args) => {
     return <JourneyDetailChart colors={getSchemeForColor(HexColors.green)} period={2022} subcategory_key='product' />;
   },
