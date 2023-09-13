@@ -23,15 +23,7 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 const SurveySectionsStory = (args: SurveySectionsProgressProps) => {
-  const [activeKey, setActiveKey] = React.useState(args.activeKey);
-
-  return (
-    <SurveySectionsProgress
-      {...args}
-      setActiveKey={setActiveKey}
-      activeKey={activeKey}
-    />
-  );
+  return <SurveySectionsProgress {...args} />;
 };
 
 export const Default: Story = {
