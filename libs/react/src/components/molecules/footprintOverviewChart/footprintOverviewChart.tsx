@@ -16,6 +16,7 @@ import { find, forEach, isArray, some } from 'lodash';
 import { FootprintOverviewHorizontalDetail } from './footprintOverviewHorizontalDetail';
 import clsx from 'clsx';
 import { FootprintOverviewVerticalDetail } from './footprintOverviewVerticalDetail';
+import { FootprintDetailChip } from '../../atoms/footprintDetailChip/footprintDetailChip';
 import { useActiveSegment } from '../../../hooks/useActiveSegment';
 
 export interface FootprintOverviewDetail {
@@ -23,22 +24,6 @@ export interface FootprintOverviewDetail {
   title: string;
   percent: number;
   emissions: number;
-}
-
-export function FootprintOverviewDetailChip(props: {
-  emissions: number;
-  large?: boolean;
-}) {
-  return (
-    <div className="flex px-2 py-1 items-center gap-2 rounded-2xl bg-bgc-accent">
-      <div className="text-label text-tc-primary">
-        <span className={clsx({ 'font-bold text-base': props.large })}>
-          {props.emissions.toFixed(props.large ? 1 : 2)}
-        </span>{' '}
-        tCO2e
-      </div>
-    </div>
-  );
 }
 
 const NO_DATA_CHART_DATA = [
@@ -289,9 +274,7 @@ export function FootprintOverviewChart(
       <div className="h-[255px] w-full relative">
         {variant === FootprintOverviewVariants.horizontal && detailViews}
         {variant === FootprintOverviewVariants.vertical && (
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-            <FootprintOverviewDetailChip emissions={totalFootprint} large />
-          </div>
+          <FootprintDetailChip emissions={totalFootprint} large center />
         )}
         <Chart
           options={chartOptions}

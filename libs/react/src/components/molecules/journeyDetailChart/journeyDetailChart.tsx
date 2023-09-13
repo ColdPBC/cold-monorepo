@@ -13,7 +13,8 @@ import { Spinner } from '../../atoms/spinner/spinner';
 import { defaultChartData, emptyChartData } from './constants';
 import { createGradient } from './helpers';
 import { CustomFlowbiteTheme, Table } from 'flowbite-react';
-import { useActiveSegment } from '@coldpbc/hooks';
+import { FootprintDetailChip } from '../../atoms/footprintDetailChip/footprintDetailChip';
+import { useActiveSegment } from '../../../hooks/useActiveSegment';
 
 export const tableTheme: CustomFlowbiteTheme = {
   table: {
@@ -69,6 +70,7 @@ export function JourneyDetailChart({ setIsEmptyData, colors, subcategory_key, pe
 
   const [chartData, setChartData] = useState<ChartData>(defaultChartData);
   const [legendRows, setLegendRows] = useState<LegendRow[]>([]);
+  const [totalFootprint, setTotalFootprint] = useState(0);
 
   // Get footprint data from SWR
   const { data, error, isLoading } = useSWR<any>(
@@ -81,7 +83,7 @@ export function JourneyDetailChart({ setIsEmptyData, colors, subcategory_key, pe
     if (data?.subcategories?.length !== 0) {
       const newLabels: string[] = [];
       const newData: number[] = [];
-      let totalFootprint = 0;
+      let newTotalFootprint = 0;
       const newLegendRows: LegendRow[] = [];
 
       // Transform chart data
@@ -92,16 +94,16 @@ export function JourneyDetailChart({ setIsEmptyData, colors, subcategory_key, pe
             
             newLabels.push(activity.activity_name);
             newData.push(activityFootprint);
-            totalFootprint += activityFootprint;
+            newTotalFootprint += activityFootprint;
           })
 
       // Populate legend rows
-      newData.forEach((nD, i) => {
+      newData.sort((a, b) => b - a).forEach((nD, i) => {
         newLegendRows.push({
           value: nD,
           color: colors[i],
           name: newLabels[i],
-          percent: Math.round((nD / totalFootprint) * 100)
+          percent: Math.round((nD / newTotalFootprint) * 100)
         })
       })
 
@@ -124,6 +126,7 @@ export function JourneyDetailChart({ setIsEmptyData, colors, subcategory_key, pe
       }
 
       setChartData(newChartData);
+      setTotalFootprint(newTotalFootprint);
       setLegendRows(newLegendRows);
 
       if (setIsEmptyData) setIsEmptyData(false);
@@ -195,7 +198,7 @@ export function JourneyDetailChart({ setIsEmptyData, colors, subcategory_key, pe
   return (
     <div className="relative w-full flex items-center">
       <div
-        className="h-[200px]"
+        className="h-[200px] w-[225px] relative"
         onMouseLeave={() => {
           setTimeout(() => {
             setActiveSegment(null);
@@ -209,10 +212,16 @@ export function JourneyDetailChart({ setIsEmptyData, colors, subcategory_key, pe
           data={chartData}
           plugins={chartPlugins}
         />
+        <FootprintDetailChip emissions={totalFootprint} large center />
       </div>
       <Table
         className='text-white'
         theme={tableTheme.table}
+        onMouseLeave={() => {
+          setTimeout(() => {
+            setActiveSegment(null);
+          }, 100)
+        }}
       >
         <Table.Head className='text-white normal-case'>
           <Table.HeadCell className='w-[225px]' theme={tableTheme.table?.head?.cell}>
@@ -243,7 +252,7 @@ export function JourneyDetailChart({ setIsEmptyData, colors, subcategory_key, pe
                       background: row.color,
                       border: '2px solid rgba(0, 0, 0, 0.2)'
                     }}
-                    className='mr-2 h-[10px] w-[10px] rounded-xl'
+                    className='mr-2 h-[10px] w-[10px] min-w-[10px] rounded-xl'
                   />
                   {row.name}
                 </Table.Cell>

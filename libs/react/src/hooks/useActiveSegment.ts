@@ -1,5 +1,5 @@
 import { ChartEvent, ActiveElement, ChartTypeRegistry, Point, BubbleDataPoint, Chart as ChartJS, } from "chart.js";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const DEFAULT_SEGMENT_THICKNESS = 80;
 
@@ -16,6 +16,15 @@ export const useActiveSegment = () => {
         null,
     );
 
+    const [timeoutIds, setTimeoutIds] = useState<NodeJS.Timeout[]>([]);
+
+    useEffect(() => {
+        if (activeSegment === null) {
+            timeoutIds.forEach(t => clearTimeout(t));
+            setTimeoutIds([]);
+        }
+    }, [activeSegment]);
+
     // set the index of the segment to animate in state
     // use setTimeout to animate the thickness outwards
     const animateSegmentThickness = (
@@ -23,13 +32,15 @@ export const useActiveSegment = () => {
         medium: ActiveSegmentMedium,
     ) => {
         for (let i = 1; i < 11; i++) {
-        setTimeout(() => {
-            setActiveSegment({
-            index,
-            medium,
-            thickness: DEFAULT_SEGMENT_THICKNESS + i,
-            });
-        }, 5 * i);
+            const timeoutId = setTimeout(() => {
+                setActiveSegment({
+                    index,
+                    medium,
+                    thickness: DEFAULT_SEGMENT_THICKNESS + i,
+                });
+            }, 5 * i);
+
+            setTimeoutIds([...timeoutIds, timeoutId]);
         }
     };
 
