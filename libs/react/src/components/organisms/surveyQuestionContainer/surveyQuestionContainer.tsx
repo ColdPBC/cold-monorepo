@@ -292,7 +292,6 @@ export const SurveyQuestionContainer = ({
           });
         }
       } else {
-        // get next follow up key
         const nextFollowUpKey = Object.keys(
           sections[activeSectionKey].follow_up,
         )[activeFollowUpIndex + 1];
