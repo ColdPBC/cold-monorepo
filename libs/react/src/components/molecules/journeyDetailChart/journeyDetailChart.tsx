@@ -200,9 +200,7 @@ export function JourneyDetailChart({ setIsEmptyData, colors, subcategory_key, pe
       <div
         className="h-[200px] w-[225px] relative"
         onMouseLeave={() => {
-          setTimeout(() => {
-            setActiveSegment(null);
-          }, 100)
+          setActiveSegment(null);
         }}
       >
         <Chart
@@ -218,9 +216,7 @@ export function JourneyDetailChart({ setIsEmptyData, colors, subcategory_key, pe
         className='text-white'
         theme={tableTheme.table}
         onMouseLeave={() => {
-          setTimeout(() => {
-            setActiveSegment(null);
-          }, 100)
+          setActiveSegment(null);
         }}
       >
         <Table.Head className='text-white normal-case'>

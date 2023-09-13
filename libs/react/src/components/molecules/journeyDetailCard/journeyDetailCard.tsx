@@ -23,14 +23,16 @@ export function JourneyDetailCard(
     axiosFetcher,
   );
 
+  const subcategoryName = data?.subcategories[props.subcategory_key].subcategory_name;
+
   return (
     <Card
-      title={data?.subcategories[props.subcategory_key].subcategory_name}
+      title={subcategoryName}
       ctas={[
         {
-          text: 'Learn More',
+          text: `View ${subcategoryName} Actions`,
           action: () => {
-            navigate('/journey');
+            navigate(`/actions/${props.subcategory_key}`);
           },
         },
       ]}
