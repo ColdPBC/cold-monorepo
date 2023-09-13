@@ -1,3 +1,10 @@
+# [1.6.0-COLD-129.5](https://github.com/ColdPBC/ui/compare/v1.6.0-COLD-129.4...v1.6.0-COLD-129.5) (2023-09-13)
+
+
+### Bug Fixes
+
+* kickoff chromatic deploy ([bbd3dd9](https://github.com/ColdPBC/ui/commit/bbd3dd94e431114dcfb6e0bb23587b3abb3bcf0d))
+
 # [1.6.0-COLD-129.4](https://github.com/ColdPBC/ui/compare/v1.6.0-COLD-129.3...v1.6.0-COLD-129.4) (2023-09-12)
 
 
