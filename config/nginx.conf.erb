@@ -34,6 +34,11 @@ http {
         server {
                 listen <%= ENV["PORT"] %>;
                 server_name _;
+                # redirect to https
+                if ($http_x_forwarded_proto != "https") {
+                  			return 301 https://$host$request_uri;
+                }
+
                 keepalive_timeout 5;
                 root /app/dist/apps/cold-ui;
 
