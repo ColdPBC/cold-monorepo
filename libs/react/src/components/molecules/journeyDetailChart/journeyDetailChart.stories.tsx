@@ -1,4 +1,4 @@
-import { getCategoriesHandler, StoryMockProvider } from '@coldpbc/mocks';
+import { getFootprintHandler, StoryMockProvider } from '@coldpbc/mocks';
 import { getSchemeForColor, HexColors } from '@coldpbc/themes';
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
@@ -29,8 +29,8 @@ export const GreenProduct: Story = {
 
 export const EmptyData = () => {
   return (
-    <StoryMockProvider handlers={[getCategoriesHandler.empty]}>
-      <JourneyDetailChart colors={getSchemeForColor(HexColors.lightblue)} />
+    <StoryMockProvider handlers={[getFootprintHandler.empty]}>
+      <JourneyDetailChart colors={getSchemeForColor(HexColors.lightblue)} period={2022} subcategory_key='product' />
     </StoryMockProvider>
   );
 };

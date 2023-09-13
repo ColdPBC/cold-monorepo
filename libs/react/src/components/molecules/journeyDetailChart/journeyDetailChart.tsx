@@ -6,12 +6,10 @@ import {
   ChartOptions,
   Plugin as PluginType,
 } from 'chart.js';
-import { HexColors } from '../../../themes/cold_theme';
 import useSWR from 'swr';
 import { axiosFetcher } from '../../../fetchers/axiosFetcher';
 import { Spinner } from '../../atoms/spinner/spinner';
-import { defaultChartData, emptyChartData } from './constants';
-import { createGradient } from './helpers';
+import { defaultChartData } from './constants';
 import { CustomFlowbiteTheme, Table } from 'flowbite-react';
 import { FootprintDetailChip } from '../../atoms/footprintDetailChip/footprintDetailChip';
 import { useActiveSegment } from '../../../hooks/useActiveSegment';
@@ -80,7 +78,9 @@ export function JourneyDetailChart({ setIsEmptyData, colors, subcategory_key, pe
 
   // Update chart data on receiving new data
   useEffect(() => {
-    if (data?.subcategories?.length !== 0) {
+
+      if (!data?.subcategories?.[subcategory_key]) return;
+
       const newLabels: string[] = [];
       const newData: number[] = [];
       let newTotalFootprint = 0;
@@ -88,14 +88,16 @@ export function JourneyDetailChart({ setIsEmptyData, colors, subcategory_key, pe
 
       // Transform chart data
       Object.keys(data?.subcategories[subcategory_key].activities ?? {}).forEach(
-          (activityKey: any) => {
-            const activity = data?.subcategories[subcategory_key].activities[activityKey];
-            const activityFootprint = activity.footprint?.[period]?.value ?? 0;
-            
+        (activityKey: any) => {
+          const activity = data?.subcategories[subcategory_key].activities[activityKey];
+          const activityFootprint = activity.footprint?.[period]?.value ?? 0;
+          
+          if (activityFootprint > 0) {
             newLabels.push(activity.activity_name);
             newData.push(activityFootprint);
             newTotalFootprint += activityFootprint;
-          })
+          }
+      })
 
       // Populate legend rows
       newData.sort((a, b) => b - a).forEach((nD, i) => {
@@ -128,12 +130,8 @@ export function JourneyDetailChart({ setIsEmptyData, colors, subcategory_key, pe
       setChartData(newChartData);
       setTotalFootprint(newTotalFootprint);
       setLegendRows(newLegendRows);
-
-      if (setIsEmptyData) setIsEmptyData(false);
-    } else {
-      if (setIsEmptyData) setIsEmptyData(true);
-    }
   }, [data, chartRef.current]);
+
 
   // Create plugins for chart
   const chartPlugins: PluginType<'pie'>[] = [
@@ -159,40 +157,10 @@ export function JourneyDetailChart({ setIsEmptyData, colors, subcategory_key, pe
         <Spinner />
       </div>
     );
-  } else if (chartData.datasets[0].data.length === 0) {
-    return (
-      <div className="relative h-[150px] w-full">
-        <Chart
-          ref={chartRef}
-          options={{
-            ...chartOptions,
-            backgroundColor: chartRef.current
-              ? createGradient(
-                  chartRef.current.ctx,
-                  chartRef.current.chartArea,
-                  HexColors.white + '00',
-                  HexColors.white + '60',
-                )
-              : undefined,
-            elements: {
-              line: {
-                borderWidth: 3,
-                borderColor: '#FFFFFF',
-              },
-              point: {
-                backgroundColor: '#FFFFFF',
-                borderColor: '#FFFFFF',
-                radius: 1,
-              },
-            },
-          }}
-          type="radar"
-          data={emptyChartData}
-        />
-      </div>
-    );
+  } else if (!data?.subcategories?.[subcategory_key]) {
+    return null;
   } else if (error) {
-    return <div></div>;
+    return null;
   }
 
   return (

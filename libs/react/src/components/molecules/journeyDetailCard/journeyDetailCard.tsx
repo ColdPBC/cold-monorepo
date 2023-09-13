@@ -1,4 +1,4 @@
-import React, {PropsWithChildren, useState} from 'react';
+import {PropsWithChildren} from 'react';
 import {Card} from '../card/card';
 import {useNavigate} from 'react-router-dom';
 import { JourneyDetailChart } from '../journeyDetailChart';
@@ -15,13 +15,16 @@ export function JourneyDetailCard(
   props: PropsWithChildren<JourneyDetailCardProps>,
 ) {
   const navigate = useNavigate();
-  const [isEmptyData, setIsEmptyData] = useState(false);
 
   // Get footprint data from SWR
-  const { data, error, isLoading } = useSWR<any>(
+  const { data } = useSWR<any>(
     ['/categories/company_decarbonization', 'GET'],
     axiosFetcher,
   );
+
+    if (!data?.subcategories[props.subcategory_key]) {
+      return null;
+    }
 
   const subcategoryName = data?.subcategories[props.subcategory_key].subcategory_name;
 
