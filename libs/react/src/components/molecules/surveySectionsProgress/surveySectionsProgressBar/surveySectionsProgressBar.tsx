@@ -50,11 +50,8 @@ export const SurveySectionsProgressBar = ({
             return followUpKey === activeKey.value;
           },
         );
-        const changePercentage = 1 / totalCurrentSectionFollowUps;
-        const changePercentageString = changePercentage * 100 + '%';
         const previousPercentage =
           activeFollowUpIndex / totalCurrentSectionFollowUps;
-        const previousPercentageString = previousPercentage * 100 + '%';
         const percentageString =
           (previousPercentage + 1 / totalCurrentSectionFollowUps) * 100 + '%';
         return (
