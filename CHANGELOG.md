@@ -1,4 +1,18 @@
-# [1.6.0-COLD-232.1](https://github.com/ColdPBC/ui/compare/v1.5.0...v1.6.0-COLD-232.1) (2023-09-13)
+# [1.7.0](https://github.com/ColdPBC/ui/compare/v1.6.0...v1.7.0) (2023-09-14)
+
+
+### Features
+
+* Add footprint details chart + card ([672d1f8](https://github.com/ColdPBC/ui/commit/672d1f8b2f96bde90d3c5a94133c5a1b9c059de6))
+
+# [1.7.0-cold-205-create-footprintdetailcard-component.1](https://github.com/ColdPBC/ui/compare/v1.6.0...v1.7.0-cold-205-create-footprintdetailcard-component.1) (2023-09-13)
+
+
+### Features
+
+* Add footprint details chart + card ([672d1f8](https://github.com/ColdPBC/ui/commit/672d1f8b2f96bde90d3c5a94133c5a1b9c059de6))
+
+# [1.6.0](https://github.com/ColdPBC/ui/compare/v1.5.0...v1.6.0) (2023-09-13)
 
 
 ### Bug Fixes
@@ -11,7 +25,6 @@
 ### Features
 
 * created surveyintro component ([e02e7ee](https://github.com/ColdPBC/ui/commit/e02e7eeabac41a32282248a1e8b26004edc798f0))
-* Survey Right Nav component ([cfd24db](https://github.com/ColdPBC/ui/commit/cfd24db8bbb4984ff5d626f8ca902731c2edc70c))
 * update to better match font ([25e4951](https://github.com/ColdPBC/ui/commit/25e4951897de1e55d3878156b958fdfcfbae17a4))
 * update to use surveyDataMock file ([d5d0636](https://github.com/ColdPBC/ui/commit/d5d063651b03efce2499e1a9b8d5501d8b0cdfd8))
 

@@ -155,7 +155,7 @@ export function getCategoriesDataMock():any {
                 "footprint": {
                   "2022": {
                     "period_type": "year",
-                    "value": 22
+                    "value": 15
                   },
                   "2023": {
                     "period_type": "year",
@@ -170,35 +170,83 @@ export function getCategoriesDataMock():any {
               },
               "materials": {
                 "activity_description": "Purchased raw materials and manufactured inputs.",
-                "activity_name": "Materials"
+                "activity_name": "Materials",
+                "footprint": {
+                  "2022": {
+                    "period_type": "year",
+                    "value": 18
+                  },
+                }
               },
               "engineering_and_innovation": {
                 "activity_description": "Design new products and services for environmental impact.",
-                "activity_name": "Engineering And Innovation"
+                "activity_name": "Engineering And Innovation",
+                "footprint": {
+                  "2022": {
+                    "period_type": "year",
+                    "value": 30
+                  },
+                }
               },
               "manufacturing_waste": {
                 "activity_description": "Reduce production-related materials waste. ",
-                "activity_name": "Manufacturing Waste"
+                "activity_name": "Manufacturing Waste",
+                "footprint": {
+                  "2022": {
+                    "period_type": "year",
+                    "value": 27
+                  },
+                }
               },
               "product_use": {
                 "activity_description": "Optimize product use impact through customer education and behavior change.  ",
-                "activity_name": "Product Use"
+                "activity_name": "Product Use",
+                "footprint": {
+                  "2022": {
+                    "period_type": "year",
+                    "value": 31
+                  },
+                }
               },
               "packaging_materials": {
                 "activity_description": "What raw materials + manufactured products are purchased for packaging. ",
-                "activity_name": "Packaging Materials"
+                "activity_name": "Packaging Materials",
+                "footprint": {
+                  "2022": {
+                    "period_type": "year",
+                    "value": 8
+                  },
+                }
               },
               "packaging_disposal": {
                 "activity_description": "Consumer disposal of packaging (recycling, composting, trash, etc.) ",
-                "activity_name": "Packaging Disposal"
+                "activity_name": "Packaging Disposal",
+                "footprint": {
+                  "2022": {
+                    "period_type": "year",
+                    "value": 16
+                  },
+                }
               },
               "upstream_shipping_and_freight": {
                 "activity_description": "Movement of materials and manufactured inputs to manufacturing facilities (includes import freight by land, air, or sea).  ",
-                "activity_name": "Upstream Shipping And Freight"
+                "activity_name": "Upstream Shipping And Freight",
+                "footprint": {
+                  "2022": {
+                    "period_type": "year",
+                    "value": 24
+                  },
+                }
               },
               "downstream_shipping_and_freight": {
                 "activity_description": "Movement of finished product to distributors, retailers, and customers by land, sea, or air.",
-                "activity_name": "Downstream Shipping And Freight"
+                "activity_name": "Downstream Shipping And Freight",
+                "footprint": {
+                  "2022": {
+                    "period_type": "year",
+                    "value": 7
+                  },
+                }
               }
             },
             "subcategory_name": "Product"
