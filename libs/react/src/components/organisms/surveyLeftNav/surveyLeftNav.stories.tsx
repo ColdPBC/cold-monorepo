@@ -2,7 +2,10 @@ import React from 'react';
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { SurveyLeftNav, SurveyLeftNavProps } from './surveyLeftNav';
-import { getTestingSurveyFormDefinitionData } from '@coldpbc/mocks';
+import {
+  getSurveyFormDataPayload,
+  getTestingSurveyFormDefinitionData,
+} from '@coldpbc/mocks';
 
 const meta = {
   title: 'Organisms/SurveyLeftNav',
@@ -34,7 +37,7 @@ export const Intro: Story = {
       value: '',
       isFollowUp: false,
     },
-    surveyData: getTestingSurveyFormDefinitionData(),
+    surveyData: getSurveyFormDataPayload(),
   },
 };
 
@@ -45,6 +48,6 @@ export const InSurvey: Story = {
       value: 'product',
       isFollowUp: false,
     },
-    surveyData: getTestingSurveyFormDefinitionData(),
+    surveyData: getSurveyFormDataPayload(),
   },
 };

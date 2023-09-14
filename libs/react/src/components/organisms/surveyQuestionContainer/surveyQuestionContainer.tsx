@@ -19,7 +19,6 @@ export interface SurveyQuestionContainerProps {
   submitSurvey: () => void;
   surveyData: SurveyFormDataPayloadType;
   setSurveyData: (surveyData: SurveyFormDataPayloadType) => void;
-  surveyFormDefinition?: SurveyFormDefinitionType;
 }
 
 export const SurveyQuestionContainer = ({
