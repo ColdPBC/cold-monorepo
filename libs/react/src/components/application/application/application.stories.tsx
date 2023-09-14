@@ -4,6 +4,9 @@ import { Meta, StoryObj } from '@storybook/react';
 import { SWRConfig } from 'swr';
 import { Application } from './application';
 import { BrowserRouter } from 'react-router-dom';
+import { StoryMockProvider, getFootprintHandler } from '@coldpbc/mocks';
+import { Provider } from 'launchdarkly-react-client-sdk/lib/context';
+import { render } from 'react-dom';
 
 const meta = {
   title: 'Application/Application',
@@ -59,5 +62,15 @@ export const Loading: Story = {
   },
   parameters: {
     auth0AddOn: null,
+  },
+};
+
+export const EmptyFootprintData: Story = {
+  render: (args: any) => {
+    return (
+      <StoryMockProvider handlers={[getFootprintHandler.empty]}>
+        <Application />
+      </StoryMockProvider>
+    );
   },
 };

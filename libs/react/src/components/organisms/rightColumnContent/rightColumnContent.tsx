@@ -7,8 +7,10 @@ export function RightColumnContent(
   props: PropsWithChildren<RightColumnContentProps>,
 ) {
   return (
-    <div className="w-[437px] sticky inline-flex flex-col pt-10 items-start gap-6 text-tc-primary">
-      {props.children}
+    <div className="col-span-2 inline-flex flex-col items-start gap-6 text-tc-primary">
+      <div className='sticky top-[40px] w-full'>
+        {props.children}
+      </div>
     </div>
   );
 }

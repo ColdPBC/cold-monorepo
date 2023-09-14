@@ -26,8 +26,10 @@ export function FootprintOverviewCard(
   let cardProps: CardProps = {};
   if (!props.headerless) {
     cardProps = {
-      title: `${PERIOD} Company Footprint`,
-      ctas: [{ text: 'Learn More', action: () => navigate('/footprint') }],
+      title: isEmptyData ? props.chartVariant === FootprintOverviewVariants.vertical ? 'Footprint Breakdown' : '' : `${PERIOD} Company Footprint`,
+      ctas: props.chartVariant === FootprintOverviewVariants.horizontal ? 
+        [{ text: 'Learn More', action: () => navigate('/footprint') }]
+        : [],
     };
   }
 
@@ -45,7 +47,7 @@ export function FootprintOverviewCard(
           period={PERIOD}
           setIsEmptyData={setIsEmptyData}
         />
-        {isEmptyData && (
+        {(isEmptyData && props.chartVariant === FootprintOverviewVariants.horizontal) && (
           <div className="m-auto -mt-6 table w-1">
             <h4 className="text-h4 text-center whitespace-nowrap">
               {isSurveyComplete
