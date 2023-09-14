@@ -1,14 +1,16 @@
-# [1.7.0-COLD-246.1](https://github.com/ColdPBC/ui/compare/v1.6.0...v1.7.0-COLD-246.1) (2023-09-13)
-
-
-### Bug Fixes
-
-* correct section progress dependents ([29434f5](https://github.com/ColdPBC/ui/commit/29434f5fc23e5171152a72c4de907360b5b6e06f))
+# [1.7.0](https://github.com/ColdPBC/ui/compare/v1.6.0...v1.7.0) (2023-09-14)
 
 
 ### Features
 
-* removed ability to go to section after clicking ([9cdbbfa](https://github.com/ColdPBC/ui/commit/9cdbbfa40283d425a7e5f2e62ce0771b12b5ba8f))
+* Add footprint details chart + card ([672d1f8](https://github.com/ColdPBC/ui/commit/672d1f8b2f96bde90d3c5a94133c5a1b9c059de6))
+
+# [1.7.0-cold-205-create-footprintdetailcard-component.1](https://github.com/ColdPBC/ui/compare/v1.6.0...v1.7.0-cold-205-create-footprintdetailcard-component.1) (2023-09-13)
+
+
+### Features
+
+* Add footprint details chart + card ([672d1f8](https://github.com/ColdPBC/ui/commit/672d1f8b2f96bde90d3c5a94133c5a1b9c059de6))
 
 # [1.6.0](https://github.com/ColdPBC/ui/compare/v1.5.0...v1.6.0) (2023-09-13)
 

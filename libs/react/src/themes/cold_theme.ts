@@ -571,3 +571,18 @@ export const fontSizes = (): any => {
     ],
   };
 };
+
+export const getSchemeForColor = (scheme: {[key: string]: string}) => {
+  return [
+    scheme['100'],
+    scheme['200'],
+    scheme['300'],
+    scheme['400'],
+    scheme['500'],
+    scheme['600'],
+    scheme['700'],
+    scheme['800'],
+    scheme['900'],
+    scheme['1000'],
+  ]
+}

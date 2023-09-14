@@ -1,7 +1,7 @@
 import React, { PropsWithChildren } from 'react';
+import { FootprintDetailChip } from '../../../atoms/footprintDetailChip/footprintDetailChip';
 import {
   FootprintOverviewDetail,
-  FootprintOverviewDetailChip,
 } from '../footprintOverviewChart';
 
 export interface FootprintOverviewHorizontalDetailProps
@@ -28,13 +28,13 @@ export function FootprintOverviewHorizontalDetail(
         </div>
         <div className={'flex justify-center items-center gap-2'}>
           {!props.leftAlign && (
-            <FootprintOverviewDetailChip emissions={props.emissions} />
+            <FootprintDetailChip emissions={props.emissions} />
           )}
           <div className={'text-body text-tc-primary'}>
             {props.percent.toFixed(0) + '%'}
           </div>
           {props.leftAlign && (
-            <FootprintOverviewDetailChip emissions={props.emissions} />
+            <FootprintDetailChip emissions={props.emissions} />
           )}
         </div>
       </div>
