@@ -124,7 +124,7 @@ export function FootprintOverviewChart(
     );
   } else if (isEmptyFootprintData) {
     return (
-      <div className="relative h-[255px] w-full">
+      <div className="relative h-[255px] w-full -my-6">
         <svg
           className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
           xmlns="http://www.w3.org/2000/svg"
