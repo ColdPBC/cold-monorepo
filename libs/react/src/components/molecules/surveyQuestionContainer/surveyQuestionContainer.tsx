@@ -1,10 +1,9 @@
 import React, { useEffect } from 'react';
-import { SurveyInput } from '../../molecules';
-import { cloneDeep, find, findIndex, findKey, forEach, forOwn } from 'lodash';
+import { SurveyInput } from '../index';
+import { cloneDeep, findIndex, forEach } from 'lodash';
 import {
   SurveyActiveKeyType,
   SurveyFormDataPayloadType,
-  SurveyFormDefinitionType,
   SurveySectionType,
 } from '@coldpbc/interfaces';
 import { BaseButton } from '../../atoms';
@@ -92,7 +91,7 @@ export const SurveyQuestionContainer = ({
       }
     }
     const newSurvey: SurveyFormDataPayloadType = cloneDeep(surveyData);
-    newSurvey.data.sections[key] = newSection;
+    newSurvey.data.sections[activeSectionKey] = newSection;
     setSurveyData(newSurvey);
   };
 
@@ -120,7 +119,7 @@ export const SurveyQuestionContainer = ({
             {...followUp}
             input_key={key.value}
             onFieldUpdated={onFieldUpdated}
-            value={followUp.value || null}
+            value={followUp.value === undefined ? null : followUp.value}
           />
         );
       }
@@ -136,7 +135,7 @@ export const SurveyQuestionContainer = ({
             options={[]}
             tooltip={''}
             placeholder={''}
-            value={section.value || null}
+            value={section.value === undefined ? null : section.value}
           />
         );
       }
@@ -222,31 +221,25 @@ export const SurveyQuestionContainer = ({
         sections[activeSectionKey].follow_up,
       )[activeFollowUpIndex];
       if (
-        sections[activeSectionKey].follow_up[activeFollowUpKey].value ===
-          null ||
-        sections[activeSectionKey].follow_up[activeFollowUpKey].value ===
-          undefined
+        activeSectionIndex === Object.keys(sections).length - 1 &&
+        activeFollowUpIndex ===
+          Object.keys(sections[activeSectionKey].follow_up).length - 1
       ) {
-        buttonProps.label = 'Skip';
+        buttonProps.label = 'Submit';
         buttonProps.onClick = () => {
-          onSkipButtonClicked();
+          onSubmitButtonClicked();
         };
       } else {
         if (
-          activeFollowUpIndex ===
-          Object.keys(sections[activeSectionKey].follow_up).length - 1
+          sections[activeSectionKey].follow_up[activeFollowUpKey].value ===
+            null ||
+          sections[activeSectionKey].follow_up[activeFollowUpKey].value ===
+            undefined
         ) {
-          if (activeSectionIndex === Object.keys(sections).length - 1) {
-            buttonProps.label = 'Submit';
-            buttonProps.onClick = () => {
-              submitSurvey();
-            };
-          } else {
-            buttonProps.label = 'Continue';
-            buttonProps.onClick = () => {
-              onNextButtonClicked();
-            };
-          }
+          buttonProps.label = 'Skip';
+          buttonProps.onClick = () => {
+            onSkipButtonClicked();
+          };
         } else {
           buttonProps.label = 'Continue';
           buttonProps.onClick = () => {
@@ -350,6 +343,13 @@ export const SurveyQuestionContainer = ({
     patchSurveyData();
   };
 
+  const onSubmitButtonClicked = () => {
+    updateSurveyQuestion(activeKey.value, { skipped: true });
+    updateTransitionClassNames(true);
+    patchSurveyData();
+    submitSurvey();
+  };
+
   const onPreviousButtonClicked = () => {
     const activeSectionIndex = getSectionIndex(sections, activeKey);
     const activeSectionKey = Object.keys(sections)[activeSectionIndex];
@@ -445,13 +445,14 @@ export const SurveyQuestionContainer = ({
     .flat();
 
   const getActiveQuestion = () => {
-    return questions.find((question) => {
+    const question = questions.find((question) => {
       return question.props.input_key === activeKey.value;
     });
+    setActiveQuestion(question);
   };
 
   useEffect(() => {
-    setActiveQuestion(getActiveQuestion());
+    getActiveQuestion();
   }, [activeKey, surveyData]);
 
   if (activeQuestion !== undefined) {

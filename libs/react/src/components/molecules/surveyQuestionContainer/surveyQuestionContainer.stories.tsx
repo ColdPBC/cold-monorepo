@@ -5,13 +5,10 @@ import {
   SurveyQuestionContainer,
   SurveyQuestionContainerProps,
 } from '@coldpbc/components';
-import {
-  getSurveyFormDataPayload,
-  getTestingSurveyFormDefinitionData,
-} from '@coldpbc/mocks';
+import { getSurveyFormDataPayload } from '@coldpbc/mocks';
 
 const meta = {
-  title: 'Organisms/SurveyQuestionContainer',
+  title: 'Molecules/SurveyQuestionContainer',
   component: SurveyQuestionContainer,
   tags: ['autodocs'],
   decorators: [withKnobs],
