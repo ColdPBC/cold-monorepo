@@ -1,3 +1,15 @@
+# [1.7.0-COLD-239.1](https://github.com/ColdPBC/ui/compare/v1.6.0...v1.7.0-COLD-239.1) (2023-09-14)
+
+
+### Bug Fixes
+
+* build fix ([cfd5b47](https://github.com/ColdPBC/ui/commit/cfd5b4704f0c41590b6a36bcde897aaecf36190b))
+
+
+### Features
+
+* Support survey form data endpoint change ([917cd9e](https://github.com/ColdPBC/ui/commit/917cd9e764cc135db5dc22a63f31296db50c4b01))
+
 # [1.6.0](https://github.com/ColdPBC/ui/compare/v1.5.0...v1.6.0) (2023-09-13)
 
 
