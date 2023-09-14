@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { SurveyInput } from '../../molecules';
-import { find, findIndex, findKey, forEach, forOwn } from 'lodash';
+import { cloneDeep, find, findIndex, findKey, forEach, forOwn } from 'lodash';
 import {
   SurveyActiveKeyType,
   SurveyFormDataPayloadType,
@@ -81,7 +81,7 @@ export const SurveyQuestionContainer = ({
       const section = sections[key];
       newSection = {
         ...section,
-        value: update.value,
+        ...update,
       };
       // the user clicks NO or they skip the question
       if (update.value === false || update.skipped === true) {
@@ -91,16 +91,8 @@ export const SurveyQuestionContainer = ({
         });
       }
     }
-    const newSurvey: SurveyFormDataPayloadType = {
-      ...surveyData,
-      data: {
-        ...surveyData.data,
-        sections: {
-          ...surveyData.data.sections,
-          [activeSectionKey]: newSection,
-        },
-      },
-    };
+    const newSurvey: SurveyFormDataPayloadType = cloneDeep(surveyData);
+    newSurvey.data.sections[key] = newSection;
     setSurveyData(newSurvey);
   };
 
@@ -230,7 +222,10 @@ export const SurveyQuestionContainer = ({
         sections[activeSectionKey].follow_up,
       )[activeFollowUpIndex];
       if (
-        sections[activeSectionKey].follow_up[activeFollowUpKey].value === null
+        sections[activeSectionKey].follow_up[activeFollowUpKey].value ===
+          null ||
+        sections[activeSectionKey].follow_up[activeFollowUpKey].value ===
+          undefined
       ) {
         buttonProps.label = 'Skip';
         buttonProps.onClick = () => {
@@ -260,7 +255,10 @@ export const SurveyQuestionContainer = ({
         }
       }
     } else {
-      if (sections[activeSectionKey].value === null) {
+      if (
+        sections[activeSectionKey].value === null ||
+        sections[activeSectionKey].value === undefined
+      ) {
         buttonProps.label = 'Skip';
         buttonProps.onClick = () => {
           onSkipButtonClicked();
