@@ -1,3 +1,10 @@
+# [1.8.0](https://github.com/ColdPBC/ui/compare/v1.7.0...v1.8.0) (2023-09-14)
+
+
+### Features
+
+* Survey Right Nav component ([cfd24db](https://github.com/ColdPBC/ui/commit/cfd24db8bbb4984ff5d626f8ca902731c2edc70c))
+
 # [1.7.0](https://github.com/ColdPBC/ui/compare/v1.6.0...v1.7.0) (2023-09-14)
 
 
