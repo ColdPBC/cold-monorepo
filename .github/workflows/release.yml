@@ -3,9 +3,7 @@ on:
   push:
     branches:
       - main
-      - 'cold-**'
-      - 'COLD-**'
-      - 'Cold-**'
+  workflow_dispatch:
 
 permissions:
   contents: read # for checkout

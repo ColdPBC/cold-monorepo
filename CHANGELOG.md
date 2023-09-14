@@ -1,21 +1,23 @@
-# [1.7.0-COLD-239.2](https://github.com/ColdPBC/ui/compare/v1.7.0-COLD-239.1...v1.7.0-COLD-239.2) (2023-09-14)
+# [1.8.0](https://github.com/ColdPBC/ui/compare/v1.7.0...v1.8.0) (2023-09-14)
 
 
 ### Features
 
-* better skip handling , added form-data endpoint ([ab9bc47](https://github.com/ColdPBC/ui/commit/ab9bc4768baed3e2194e4368eb89f29b7e341800))
+* Survey Right Nav component ([cfd24db](https://github.com/ColdPBC/ui/commit/cfd24db8bbb4984ff5d626f8ca902731c2edc70c))
 
-# [1.7.0-COLD-239.1](https://github.com/ColdPBC/ui/compare/v1.6.0...v1.7.0-COLD-239.1) (2023-09-14)
-
-
-### Bug Fixes
-
-* build fix ([cfd5b47](https://github.com/ColdPBC/ui/commit/cfd5b4704f0c41590b6a36bcde897aaecf36190b))
+# [1.7.0](https://github.com/ColdPBC/ui/compare/v1.6.0...v1.7.0) (2023-09-14)
 
 
 ### Features
 
-* Support survey form data endpoint change ([917cd9e](https://github.com/ColdPBC/ui/commit/917cd9e764cc135db5dc22a63f31296db50c4b01))
+* Add footprint details chart + card ([672d1f8](https://github.com/ColdPBC/ui/commit/672d1f8b2f96bde90d3c5a94133c5a1b9c059de6))
+
+# [1.7.0-cold-205-create-footprintdetailcard-component.1](https://github.com/ColdPBC/ui/compare/v1.6.0...v1.7.0-cold-205-create-footprintdetailcard-component.1) (2023-09-13)
+
+
+### Features
+
+* Add footprint details chart + card ([672d1f8](https://github.com/ColdPBC/ui/commit/672d1f8b2f96bde90d3c5a94133c5a1b9c059de6))
 
 # [1.6.0](https://github.com/ColdPBC/ui/compare/v1.5.0...v1.6.0) (2023-09-13)
 
