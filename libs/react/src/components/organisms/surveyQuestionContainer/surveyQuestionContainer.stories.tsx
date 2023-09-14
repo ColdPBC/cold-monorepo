@@ -5,7 +5,7 @@ import {
   SurveyQuestionContainer,
   SurveyQuestionContainerProps,
 } from '@coldpbc/components';
-import { getTestingSurveyData } from '@coldpbc/mocks';
+import { getTestingSurveyFormDefinitionData } from '@coldpbc/mocks';
 
 const meta = {
   title: 'Organisms/SurveyQuestionContainer',
@@ -40,6 +40,7 @@ export const Default: Story = {
       value: 'product',
       isFollowUp: false,
     },
-    surveyData: getTestingSurveyData(),
+    surveyData: getTestingSurveyFormDefinitionData(),
+    surveyFormDefinition: getTestingSurveyFormDefinitionData(),
   },
 };

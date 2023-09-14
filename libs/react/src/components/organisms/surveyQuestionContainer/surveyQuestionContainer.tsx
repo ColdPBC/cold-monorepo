@@ -3,7 +3,7 @@ import { SurveyInput } from '../../molecules';
 import { find, findIndex, findKey, forEach, forOwn } from 'lodash';
 import {
   SurveyActiveKeyType,
-  SurveyDataType,
+  SurveyFormDataPayloadType,
   SurveyFormDefinitionType,
   SurveySectionType,
 } from '@coldpbc/interfaces';
@@ -17,8 +17,9 @@ export interface SurveyQuestionContainerProps {
   activeKey: SurveyActiveKeyType;
   setActiveKey: (activeKey: SurveyActiveKeyType) => void;
   submitSurvey: () => void;
-  surveyData: SurveyDataType;
-  setSurveyData: (surveyData: SurveyDataType) => void;
+  surveyData: SurveyFormDataPayloadType;
+  setSurveyData: (surveyData: SurveyFormDataPayloadType) => void;
+  surveyFormDefinition?: SurveyFormDefinitionType;
 }
 
 export const SurveyQuestionContainer = ({
@@ -44,8 +45,8 @@ export const SurveyQuestionContainer = ({
   const [transitionClassNames, setTransitionClassNames] = React.useState<any>(
     nextQuestionTransitionClassNames,
   );
-  const { definition, name: surveyName } = surveyData;
-  const { sections } = definition;
+  const { data, id: surveyDataId } = surveyData;
+  const { sections } = data;
 
   const updateTransitionClassNames = (nextDirection: boolean) => {
     if (nextDirection) {
@@ -55,7 +56,13 @@ export const SurveyQuestionContainer = ({
     }
   };
 
-  const onFieldUpdated = (key: string, value: any) => {
+  const updateSurveyQuestion = (
+    key: string,
+    update: {
+      value?: any | null;
+      skipped?: boolean;
+    },
+  ) => {
     let newSection: SurveySectionType;
     const activeSectionIndex = getSectionIndex(sections, activeKey);
     const activeSectionKey = Object.keys(sections)[activeSectionIndex];
@@ -67,7 +74,7 @@ export const SurveyQuestionContainer = ({
           ...section.follow_up,
           [key]: {
             ...section.follow_up[key],
-            value: value,
+            ...update,
           },
         },
       };
@@ -75,26 +82,31 @@ export const SurveyQuestionContainer = ({
       const section = sections[key];
       newSection = {
         ...section,
-        value: value,
+        value: update.value,
       };
-      if (value === false) {
+      // the user clicks NO or they skip the question
+      if (update.value === false || update.skipped === true) {
         forEach(Object.keys(section.follow_up), (followUpKey) => {
           newSection.follow_up[followUpKey].value = null;
+          newSection.follow_up[followUpKey].skipped = true;
         });
       }
     }
-    const newSurvey: SurveyDataType = {
+    const newSurvey: SurveyFormDataPayloadType = {
       ...surveyData,
-      definition: {
-        ...surveyData.definition,
+      data: {
+        ...surveyData.data,
         sections: {
-          ...surveyData.definition.sections,
+          ...surveyData.data.sections,
           [activeSectionKey]: newSection,
         },
       },
     };
-    patchSurveyData(newSurvey);
     setSurveyData(newSurvey);
+  };
+
+  const onFieldUpdated = (key: string, value: any) => {
+    updateSurveyQuestion(key, { value });
   };
 
   const getQuestionForKey = (key: SurveyActiveKeyType) => {
@@ -117,6 +129,7 @@ export const SurveyQuestionContainer = ({
             {...followUp}
             input_key={key.value}
             onFieldUpdated={onFieldUpdated}
+            value={followUp.value || null}
           />
         );
       }
@@ -132,6 +145,7 @@ export const SurveyQuestionContainer = ({
             options={[]}
             tooltip={''}
             placeholder={''}
+            value={section.value || null}
           />
         );
       }
@@ -221,7 +235,7 @@ export const SurveyQuestionContainer = ({
       ) {
         buttonProps.label = 'Skip';
         buttonProps.onClick = () => {
-          onNextButtonClicked();
+          onSkipButtonClicked();
         };
       } else {
         if (
@@ -250,7 +264,7 @@ export const SurveyQuestionContainer = ({
       if (sections[activeSectionKey].value === null) {
         buttonProps.label = 'Skip';
         buttonProps.onClick = () => {
-          onNextButtonClicked();
+          onSkipButtonClicked();
         };
       } else {
         buttonProps.label = 'Continue';
@@ -263,7 +277,7 @@ export const SurveyQuestionContainer = ({
     return <BaseButton {...buttonProps} />;
   };
 
-  const onNextButtonClicked = () => {
+  const goToNextQuestion = () => {
     const activeSectionIndex = getSectionIndex(sections, activeKey);
     const activeSectionKey = Object.keys(sections)[activeSectionIndex];
     const nextSectionKey = Object.keys(sections)[activeSectionIndex + 1];
@@ -323,7 +337,20 @@ export const SurveyQuestionContainer = ({
         });
       }
     }
+  };
+
+  const onNextButtonClicked = () => {
+    goToNextQuestion();
+    updateSurveyQuestion(activeKey.value, { skipped: false });
     updateTransitionClassNames(true);
+    patchSurveyData();
+  };
+
+  const onSkipButtonClicked = () => {
+    goToNextQuestion();
+    updateSurveyQuestion(activeKey.value, { skipped: true });
+    updateTransitionClassNames(true);
+    patchSurveyData();
   };
 
   const onPreviousButtonClicked = () => {
@@ -392,11 +419,13 @@ export const SurveyQuestionContainer = ({
     updateTransitionClassNames(false);
   };
 
-  const patchSurveyData = (surveyData: SurveyDataType) => {
+  const patchSurveyData = () => {
     axiosFetcher([
-      `/survey-data/${surveyName}`,
+      `/form-data/${surveyDataId}`,
       'PATCH',
-      JSON.stringify(surveyData.definition),
+      JSON.stringify({
+        data: surveyData.data,
+      }),
     ]);
   };
 
