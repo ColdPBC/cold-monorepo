@@ -1,3 +1,10 @@
+# [1.7.0-COLD-239.2](https://github.com/ColdPBC/ui/compare/v1.7.0-COLD-239.1...v1.7.0-COLD-239.2) (2023-09-14)
+
+
+### Features
+
+* better skip handling , added form-data endpoint ([ab9bc47](https://github.com/ColdPBC/ui/commit/ab9bc4768baed3e2194e4368eb89f29b7e341800))
+
 # [1.7.0-COLD-239.1](https://github.com/ColdPBC/ui/compare/v1.6.0...v1.7.0-COLD-239.1) (2023-09-14)
 
 
