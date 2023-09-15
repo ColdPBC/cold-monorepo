@@ -54,3 +54,15 @@ jobs:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           NPM_TOKEN: ${{ secrets.GH_TOKEN }}
         run: npx semantic-release
+      - name: get new app version
+        run: echo "DD_VERSION=$(npm pkg get version)" >> $GITHUB_ENV
+      - name: set version in heroku
+        run: |
+          echo $DD_VERSION
+          curl --request POST \
+          --url "https://api.heroku.com/apps/$HEROKU_APP_NAME/config-vars" \
+          --header "Accept: application/vnd.heroku+json; version=3" \
+          --header "Authorization: Bearer $HEROKU_API_KEY" \
+          --data "{ "DD_VERSION": $DD_VERSION }"
+
+
