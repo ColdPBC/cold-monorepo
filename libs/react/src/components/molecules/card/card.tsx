@@ -1,7 +1,7 @@
 import React, { PropsWithChildren } from 'react';
 import { BaseButton } from '../../atoms/button/button';
 import { ButtonTypes } from '../../../enums/buttons';
-import clsx from 'clsx';
+import { twMerge } from 'tailwind-merge';
 
 export interface CardProps {
   glow?: boolean;
@@ -19,7 +19,7 @@ export function Card(props: PropsWithChildren<CardProps>) {
   const glow = props.glow !== undefined ? props.glow : true; // default glow to true
 
   return (
-    <div className={clsx("flex flex-col p-4 items-start gap-6 self-stretch bg-bgc-elevated rounded-2xl text-tc-primary relative overflow-hidden", props.className)}>
+    <div className={twMerge("flex flex-col p-4 items-start gap-6 self-stretch bg-bgc-elevated rounded-2xl text-tc-primary relative overflow-hidden", props.className)}>
       {glow && (
         <div className="w-[400px] h-20 justify-center flex items-center absolute top-[-40px] left-1/2 -translate-x-1/2 pointer-events-none">
           <div className="w-[400px] h-20 shrink-0 rounded-[200px] opacity-50 blur-[120px] bg-gradient-to-l from-primary via-primary via-[36.46%] to-bgc-accent" />

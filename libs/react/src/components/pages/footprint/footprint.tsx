@@ -63,8 +63,8 @@ export function Footprint() {
             </>
             :
             <>
-              <Card className='mb-6 gap-0'>
-                <p>
+              <Card className='gap-0'>
+                <p className='text-sm leading-normal'>
                   Your footprint is a snapshot of the greenhouse gases your company emitted over a specific timeframe. It is measured in tons of carbon dioxide equivalent, expressed as tCO2e.
                 </p>
                 <Link to={'#'} className='underline m-0'>Don't show again.</Link>

@@ -94,7 +94,7 @@ export function FootprintOverviewChart(
     return index === 0 ? 0 : index + index;
   };
 
-  const chartOptions: ChartOptions<'doughnut'> = {
+  const chartOptions: ChartOptions<'pie'> = {
     responsive: true,
     maintainAspectRatio: false,
     radius: 80,
@@ -124,7 +124,7 @@ export function FootprintOverviewChart(
     );
   } else if (isEmptyFootprintData) {
     return (
-      <div className="relative h-[255px] w-full -my-6">
+      <div className="relative h-[100px] w-full -my-2">
         <svg
           className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
           xmlns="http://www.w3.org/2000/svg"
@@ -133,12 +133,16 @@ export function FootprintOverviewChart(
           viewBox="0 0 81 80"
           fill="none"
         >
-          <rect x="37.5" y="21.5" width="6" height="22.5" rx="2" fill="white" />
-          <rect x="37.5" y="48.5" width="6" height="6" rx="2" fill="white" />
+          <rect x="38" y="29.5" width="4" height="15" rx="2" fill="white"/>
+          <rect x="38" y="46.5" width="4" height="4" rx="2" fill="white"/>
         </svg>
         <Chart
-          options={chartOptions}
-          type="doughnut"
+          options={{
+            ...chartOptions,
+            radius: 40,
+            cutout: 35, // Arc should be 30px wide
+          }}
+          type="pie"
           data={{ datasets: NO_DATA_CHART_DATA }}
         />
       </div>
