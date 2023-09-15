@@ -1,3 +1,15 @@
+# [1.9.0](https://github.com/ColdPBC/ui/compare/v1.8.0...v1.9.0) (2023-09-15)
+
+
+### Bug Fixes
+
+* correct section progress dependents ([29434f5](https://github.com/ColdPBC/ui/commit/29434f5fc23e5171152a72c4de907360b5b6e06f))
+
+
+### Features
+
+* removed ability to go to section after clicking ([9cdbbfa](https://github.com/ColdPBC/ui/commit/9cdbbfa40283d425a7e5f2e62ce0771b12b5ba8f))
+
 # [1.8.0](https://github.com/ColdPBC/ui/compare/v1.7.0...v1.8.0) (2023-09-14)
 
 
