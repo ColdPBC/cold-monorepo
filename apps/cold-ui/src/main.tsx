@@ -1,3 +1,4 @@
+import './tracer'; // must come before importing any instrumented module.
 import { StrictMode } from 'react';
 import * as ReactDOM from 'react-dom/client';
 import { Home } from './app/home';
