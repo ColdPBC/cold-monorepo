@@ -60,7 +60,6 @@ export interface FootprintOverviewChartProps {
   variant?: FootprintOverviewVariants;
   period: number | string;
   periodType?: string; // year should be the default
-  setIsEmptyData?: (isEmpty: boolean) => void;
 }
 
 const gapStylingConstant = 100;
@@ -94,7 +93,7 @@ export function FootprintOverviewChart(
     return index === 0 ? 0 : index + index;
   };
 
-  const chartOptions: ChartOptions<'pie'> = {
+  const chartOptions: ChartOptions<'doughnut'> = {
     responsive: true,
     maintainAspectRatio: false,
     radius: 80,
@@ -109,12 +108,6 @@ export function FootprintOverviewChart(
   const isEmptyFootprintData = !isLoading && !some(data.subcategories, (
     (subcategory: any) => some(subcategory.activities, (
         (activity: any) => activity.footprint[props.period]))));
-
-  useEffect(() => {
-    if (props.setIsEmptyData) {
-      props.setIsEmptyData(isEmptyFootprintData);
-    }
-  }, [isEmptyFootprintData]);
 
   if (isLoading) {
     return (
@@ -142,7 +135,7 @@ export function FootprintOverviewChart(
             radius: 40,
             cutout: 35, // Arc should be 30px wide
           }}
-          type="pie"
+          type="doughnut"
           data={{ datasets: NO_DATA_CHART_DATA }}
         />
       </div>

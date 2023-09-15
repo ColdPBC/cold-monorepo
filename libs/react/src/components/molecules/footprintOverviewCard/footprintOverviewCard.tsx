@@ -9,6 +9,7 @@ import useSWR from 'swr';
 import clsx from 'clsx';
 import { axiosFetcher } from '../../../fetchers/axiosFetcher';
 import { BaseButton } from '../../atoms';
+import { some } from 'lodash';
 
 export interface FootprintOverviewCardProps {
   headerless?: boolean;
@@ -21,19 +22,32 @@ export function FootprintOverviewCard(
   props: PropsWithChildren<FootprintOverviewCardProps>,
 ) {
   const navigate = useNavigate();
-  const [isEmptyData, setIsEmptyData] = useState(false);
+
+  // Get footprint data from SWR
+  const { data, isLoading } = useSWR<any>(
+    ['/categories/company_decarbonization', 'GET'],
+    axiosFetcher,
+  );
+
+  // TODO: find out if we can include this property in the SWR response, in a transform or something
+  // To do this, wrap all useSWR in custom wrappers like, useGetFootprint()
+  const isEmptyFootprintData = !isLoading && !some(data.subcategories, (
+    (subcategory: any) => some(subcategory.activities, (
+        (activity: any) => activity.footprint[PERIOD]))));
 
   let cardProps: CardProps = {};
   if (!props.headerless) {
     cardProps = {
-      title: isEmptyData ? props.chartVariant === FootprintOverviewVariants.vertical ? 'Footprint Breakdown' : '' : `${PERIOD} Company Footprint`,
-      ctas: (props.chartVariant === FootprintOverviewVariants.horizontal && !isEmptyData) ? 
+      title: isEmptyFootprintData ? props.chartVariant === FootprintOverviewVariants.vertical ? 'Footprint Breakdown' : '' : `${PERIOD} Company Footprint`,
+      ctas: (props.chartVariant === FootprintOverviewVariants.horizontal && !isEmptyFootprintData) ? 
         [{ text: 'Learn More', action: () => navigate('/footprint') }]
         : [],
     };
   }
 
   const isSurveyComplete = false;
+
+  if (isLoading) return null;
 
   return (
     <Card {...cardProps}>
@@ -43,9 +57,8 @@ export function FootprintOverviewCard(
         <FootprintOverviewChart
           variant={props.chartVariant ?? FootprintOverviewVariants.horizontal}
           period={PERIOD}
-          setIsEmptyData={setIsEmptyData}
         />
-        {(isEmptyData && props.chartVariant === FootprintOverviewVariants.horizontal) && (
+        {(isEmptyFootprintData && props.chartVariant === FootprintOverviewVariants.horizontal) && (
           <div className="m-auto table w-1">
             <h4 className="text-h4 text-center whitespace-nowrap m-4">
               {isSurveyComplete
