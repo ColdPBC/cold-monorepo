@@ -63,6 +63,6 @@ jobs:
           --header 'Accept: application/vnd.heroku+json; version=3' \
           --header 'Content-Type: application/json' \
           --header 'Authorization: Bearer ${{secrets.HEROKU_API_KEY}}' \
-          --data '{ "DD_VERSION": ""$env.DD_VERSION"" }'
+          --data "{\"DD_VERSION\":$(npm pkg get version)}"
 
 
