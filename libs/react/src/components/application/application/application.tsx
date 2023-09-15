@@ -96,7 +96,7 @@ export const Application = () => {
 
   if (isAuthenticated && user && accessToken) {
     return (
-      <div className='max-w-[1440px] m-auto overflow-x-hidden'>
+      <div className='max-w-[1440px] m-auto overflow-x-clip'>
         <ColdRoutes />
       </div>
     );

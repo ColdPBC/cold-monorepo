@@ -11,7 +11,7 @@ import { Chart } from 'react-chartjs-2';
 import useSWR from 'swr';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { Spinner } from '../../atoms';
-import { HexColors } from '@coldpbc/themes';
+import { footprintSubcategoryColors, HexColors } from '@coldpbc/themes';
 import { find, forEach, isArray, some } from 'lodash';
 import { FootprintOverviewHorizontalDetail } from './footprintOverviewHorizontalDetail';
 import clsx from 'clsx';
@@ -152,22 +152,11 @@ export function FootprintOverviewChart(
     name: string;
     percent?: number;
   }[] = [];
-  const colorArray: string[] = [
-    HexColors.purple.DEFAULT,
-    HexColors.teal.DEFAULT,
-    HexColors.green.DEFAULT,
-    HexColors.lightblue.DEFAULT,
-  ];
-  const hoverColorArray: string[] = [
-    HexColors.purple.DEFAULT_BRIGHTEN,
-    HexColors.lightblue.DEFAULT_BRIGHTEN,
-    HexColors.teal.DEFAULT_BRIGHTEN,
-    HexColors.green.DEFAULT_BRIGHTEN,
-  ];
   let totalFootprint = 0;
-  forEach(data.subcategories, (subcategory) => {
+  Object.keys(data.subcategories).forEach((subcategoryKey) => {
+    const subcategory = data.subcategories[subcategoryKey];
     let value = 0;
-    const color = colorArray.reverse().pop() || HexColors.primary.DEFAULT;
+    const color = HexColors[footprintSubcategoryColors[subcategoryKey]]?.DEFAULT || HexColors.primary.DEFAULT;
 
     forEach(subcategory.activities, (activity) => {
       if (activity.footprint && period in activity.footprint) {
@@ -179,7 +168,7 @@ export function FootprintOverviewChart(
       }
     })
     if (subcategoryTotals.length >= MAX_CATEGORIES) return;
-    subcategoryTotals.push({value: value, color: color, name:subcategory.subcategory_name});
+    subcategoryTotals.push({value: value, color, name: subcategory.subcategory_name});
   });
 
   // Set spacer width
@@ -262,7 +251,12 @@ export function FootprintOverviewChart(
   const chartPlugins: PluginType<'doughnut'>[] = [
     {
       id: 'sliceThickness',
-      beforeDraw: (chart: ChartJS) => chartBeforeDraw(chart, hoverColorArray),
+      beforeDraw: (chart: ChartJS) => chartBeforeDraw(
+        chart,
+        Object.keys(data.subcategories).map((subcategoryKey) => {
+          return HexColors[footprintSubcategoryColors[subcategoryKey]]?.DEFAULT_BRIGHTEN || HexColors.primary.DEFAULT
+        }),
+      )
     },
   ];
 

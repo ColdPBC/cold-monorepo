@@ -50,7 +50,6 @@ interface LegendRow {
 };
 
 interface Props {
-  setIsEmptyData?: (isEmpty: boolean) => void;
   colors: string[];
   subcategory_key: string;
   period: number;
@@ -58,7 +57,7 @@ interface Props {
 
 ChartJS.register(ArcElement, PieController);
 
-export function FootprintDetailChart({ setIsEmptyData, colors, subcategory_key, period }: Props) {
+export function FootprintDetailChart({ colors, subcategory_key, period }: Props) {
   const chartRef = useRef<ChartJS<'pie'>>(null);
 
   const {
