@@ -24,7 +24,7 @@
         env: '%VITE_NODE_ENV%',
         allowedTracingUrls: [(url) => url.startsWith("<https://api.coldclimate>")],
         // Specify a version number to identify the deployed version of your application in Datadog
-        version: '%VITE_APP_VERSION%',
+        version: '%VITE_DD_VERSION%',
         sessionSampleRate: 100,
         premiumSampleRate: 100,
         defaultPrivacyLevel: 'mask-user-input',
