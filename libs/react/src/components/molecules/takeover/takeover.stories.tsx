@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { Meta, StoryObj } from '@storybook/react';
 
-import { BaseButton } from '../../atoms/button/button';
-import { ColorNames } from '../../../enums/colors';
-import { GlobalSizes } from '../../../enums/sizes';
+import { BaseButton } from '@coldpbc/components';
+import { ButtonTypes, GlobalSizes } from '@coldpbc/enums';
 import { Modal } from '../modal/modal';
 import { Takeover } from './takeover';
 
@@ -37,11 +36,20 @@ const DefaultComponent = () => {
           setIsShow(true);
         }}
         label="Open Take Over"
-        color={ColorNames.primary}
         rounded={true}
+        variant={ButtonTypes.primary}
       />
       {isShow && (
-        <Takeover show={isShow} setShow={setIsShow}>
+        <Takeover
+          show={isShow}
+          setShow={setIsShow}
+          dismiss={{
+            label: 'close',
+            dismissible: true,
+          }}
+          title={'Takeover Title'}
+          logo_shown={true}
+        >
           {content()}
         </Takeover>
       )}
