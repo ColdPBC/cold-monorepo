@@ -82,7 +82,6 @@ export const SurveyQuestionContainer = ({
         ...section,
         ...update,
       };
-      // the user clicks NO or they skip the question
       if (update.value === false || update.skipped === true) {
         forEach(Object.keys(section.follow_up), (followUpKey) => {
           newSection.follow_up[followUpKey].value = null;
