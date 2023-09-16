@@ -69,7 +69,7 @@ export function Footprint() {
                 </p>
                 <Link to={'#'} className='underline m-0'>Don't show again.</Link>
               </Card>
-              <FootprintOverviewCard chartVariant={FootprintOverviewVariants.horizontal}/>
+              <FootprintOverviewCard chartVariant={FootprintOverviewVariants.horizontal} headerless />
             </>
           } 
         </CenterColumnContent>

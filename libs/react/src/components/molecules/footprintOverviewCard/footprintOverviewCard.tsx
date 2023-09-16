@@ -38,8 +38,8 @@ export function FootprintOverviewCard(
   let cardProps: CardProps = {};
   if (!props.headerless) {
     cardProps = {
-      title: isEmptyFootprintData ? props.chartVariant === FootprintOverviewVariants.vertical ? 'Footprint Breakdown' : '' : `${PERIOD} Company Footprint`,
-      ctas: (props.chartVariant === FootprintOverviewVariants.horizontal && !isEmptyFootprintData) ? 
+      title: (props.chartVariant === FootprintOverviewVariants.vertical && isEmptyFootprintData) ? 'Footprint Breakdown' : `${PERIOD} Company Footprint`,
+      ctas: props.chartVariant === FootprintOverviewVariants.horizontal ? 
         [{ text: 'Learn More', action: () => navigate('/footprint') }]
         : [],
     };

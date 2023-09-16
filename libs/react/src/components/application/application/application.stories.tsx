@@ -4,7 +4,7 @@ import { Meta, StoryObj } from '@storybook/react';
 import { SWRConfig } from 'swr';
 import { Application } from './application';
 import { BrowserRouter } from 'react-router-dom';
-import { StoryMockProvider, getFootprintHandler } from '@coldpbc/mocks';
+import { StoryMockProvider, getFootprintHandler, getCategoriesHandler } from '@coldpbc/mocks';
 import { Provider } from 'launchdarkly-react-client-sdk/lib/context';
 import { render } from 'react-dom';
 
@@ -68,7 +68,7 @@ export const Loading: Story = {
 export const EmptyFootprintData: Story = {
   render: () => {
     return (
-      <StoryMockProvider handlers={[getFootprintHandler.empty]}>
+      <StoryMockProvider handlers={[getFootprintHandler.empty, getCategoriesHandler.empty]}>
         <Application />
       </StoryMockProvider>
     );
