@@ -1,10 +1,9 @@
 import React, { useEffect } from 'react';
-import { SurveyInput } from '../../molecules';
-import { find, findIndex, findKey, forEach, forOwn } from 'lodash';
+import { SurveyInput } from '../index';
+import { cloneDeep, findIndex, forEach } from 'lodash';
 import {
   SurveyActiveKeyType,
-  SurveyDataType,
-  SurveyFormDefinitionType,
+  SurveyFormDataPayloadType,
   SurveySectionType,
 } from '@coldpbc/interfaces';
 import { BaseButton } from '../../atoms';
@@ -17,8 +16,8 @@ export interface SurveyQuestionContainerProps {
   activeKey: SurveyActiveKeyType;
   setActiveKey: (activeKey: SurveyActiveKeyType) => void;
   submitSurvey: () => void;
-  surveyData: SurveyDataType;
-  setSurveyData: (surveyData: SurveyDataType) => void;
+  surveyData: SurveyFormDataPayloadType;
+  setSurveyData: (surveyData: SurveyFormDataPayloadType) => void;
 }
 
 export const SurveyQuestionContainer = ({
@@ -44,8 +43,8 @@ export const SurveyQuestionContainer = ({
   const [transitionClassNames, setTransitionClassNames] = React.useState<any>(
     nextQuestionTransitionClassNames,
   );
-  const { definition, name: surveyName } = surveyData;
-  const { sections } = definition;
+  const { data, id: surveyDataId } = surveyData;
+  const { sections } = data;
 
   const updateTransitionClassNames = (nextDirection: boolean) => {
     if (nextDirection) {
@@ -55,7 +54,13 @@ export const SurveyQuestionContainer = ({
     }
   };
 
-  const onFieldUpdated = (key: string, value: any) => {
+  const updateSurveyQuestion = (
+    key: string,
+    update: {
+      value?: any | null;
+      skipped?: boolean;
+    },
+  ) => {
     let newSection: SurveySectionType;
     const activeSectionIndex = getSectionIndex(sections, activeKey);
     const activeSectionKey = Object.keys(sections)[activeSectionIndex];
@@ -67,7 +72,7 @@ export const SurveyQuestionContainer = ({
           ...section.follow_up,
           [key]: {
             ...section.follow_up[key],
-            value: value,
+            ...update,
           },
         },
       };
@@ -75,26 +80,22 @@ export const SurveyQuestionContainer = ({
       const section = sections[key];
       newSection = {
         ...section,
-        value: value,
+        ...update,
       };
-      if (value === false) {
+      if (update.value === false || update.skipped === true) {
         forEach(Object.keys(section.follow_up), (followUpKey) => {
           newSection.follow_up[followUpKey].value = null;
+          newSection.follow_up[followUpKey].skipped = true;
         });
       }
     }
-    const newSurvey: SurveyDataType = {
-      ...surveyData,
-      definition: {
-        ...surveyData.definition,
-        sections: {
-          ...surveyData.definition.sections,
-          [activeSectionKey]: newSection,
-        },
-      },
-    };
-    patchSurveyData(newSurvey);
+    const newSurvey: SurveyFormDataPayloadType = cloneDeep(surveyData);
+    newSurvey.data.sections[activeSectionKey] = newSection;
     setSurveyData(newSurvey);
+  };
+
+  const onFieldUpdated = (key: string, value: any) => {
+    updateSurveyQuestion(key, { value });
   };
 
   const getQuestionForKey = (key: SurveyActiveKeyType) => {
@@ -117,6 +118,7 @@ export const SurveyQuestionContainer = ({
             {...followUp}
             input_key={key.value}
             onFieldUpdated={onFieldUpdated}
+            value={followUp.value === undefined ? null : followUp.value}
           />
         );
       }
@@ -132,6 +134,7 @@ export const SurveyQuestionContainer = ({
             options={[]}
             tooltip={''}
             placeholder={''}
+            value={section.value === undefined ? null : section.value}
           />
         );
       }
@@ -217,28 +220,25 @@ export const SurveyQuestionContainer = ({
         sections[activeSectionKey].follow_up,
       )[activeFollowUpIndex];
       if (
-        sections[activeSectionKey].follow_up[activeFollowUpKey].value === null
+        activeSectionIndex === Object.keys(sections).length - 1 &&
+        activeFollowUpIndex ===
+          Object.keys(sections[activeSectionKey].follow_up).length - 1
       ) {
-        buttonProps.label = 'Skip';
+        buttonProps.label = 'Submit';
         buttonProps.onClick = () => {
-          onNextButtonClicked();
+          onSubmitButtonClicked();
         };
       } else {
         if (
-          activeFollowUpIndex ===
-          Object.keys(sections[activeSectionKey].follow_up).length - 1
+          sections[activeSectionKey].follow_up[activeFollowUpKey].value ===
+            null ||
+          sections[activeSectionKey].follow_up[activeFollowUpKey].value ===
+            undefined
         ) {
-          if (activeSectionIndex === Object.keys(sections).length - 1) {
-            buttonProps.label = 'Submit';
-            buttonProps.onClick = () => {
-              submitSurvey();
-            };
-          } else {
-            buttonProps.label = 'Continue';
-            buttonProps.onClick = () => {
-              onNextButtonClicked();
-            };
-          }
+          buttonProps.label = 'Skip';
+          buttonProps.onClick = () => {
+            onSkipButtonClicked();
+          };
         } else {
           buttonProps.label = 'Continue';
           buttonProps.onClick = () => {
@@ -247,10 +247,13 @@ export const SurveyQuestionContainer = ({
         }
       }
     } else {
-      if (sections[activeSectionKey].value === null) {
+      if (
+        sections[activeSectionKey].value === null ||
+        sections[activeSectionKey].value === undefined
+      ) {
         buttonProps.label = 'Skip';
         buttonProps.onClick = () => {
-          onNextButtonClicked();
+          onSkipButtonClicked();
         };
       } else {
         buttonProps.label = 'Continue';
@@ -263,7 +266,7 @@ export const SurveyQuestionContainer = ({
     return <BaseButton {...buttonProps} />;
   };
 
-  const onNextButtonClicked = () => {
+  const goToNextQuestion = () => {
     const activeSectionIndex = getSectionIndex(sections, activeKey);
     const activeSectionKey = Object.keys(sections)[activeSectionIndex];
     const nextSectionKey = Object.keys(sections)[activeSectionIndex + 1];
@@ -323,7 +326,27 @@ export const SurveyQuestionContainer = ({
         });
       }
     }
+  };
+
+  const onNextButtonClicked = () => {
+    goToNextQuestion();
+    updateSurveyQuestion(activeKey.value, { skipped: false });
     updateTransitionClassNames(true);
+    patchSurveyData();
+  };
+
+  const onSkipButtonClicked = () => {
+    goToNextQuestion();
+    updateSurveyQuestion(activeKey.value, { skipped: true });
+    updateTransitionClassNames(true);
+    patchSurveyData();
+  };
+
+  const onSubmitButtonClicked = () => {
+    updateSurveyQuestion(activeKey.value, { skipped: true });
+    updateTransitionClassNames(true);
+    patchSurveyData();
+    submitSurvey();
   };
 
   const onPreviousButtonClicked = () => {
@@ -392,11 +415,13 @@ export const SurveyQuestionContainer = ({
     updateTransitionClassNames(false);
   };
 
-  const patchSurveyData = (surveyData: SurveyDataType) => {
+  const patchSurveyData = () => {
     axiosFetcher([
-      `/survey-data/${surveyName}`,
+      `/form-data/${surveyDataId}`,
       'PATCH',
-      JSON.stringify(surveyData.definition),
+      JSON.stringify({
+        data: surveyData.data,
+      }),
     ]);
   };
 
@@ -419,13 +444,14 @@ export const SurveyQuestionContainer = ({
     .flat();
 
   const getActiveQuestion = () => {
-    return questions.find((question) => {
+    const question = questions.find((question) => {
       return question.props.input_key === activeKey.value;
     });
+    setActiveQuestion(question);
   };
 
   useEffect(() => {
-    setActiveQuestion(getActiveQuestion());
+    getActiveQuestion();
   }, [activeKey, surveyData]);
 
   if (activeQuestion !== undefined) {

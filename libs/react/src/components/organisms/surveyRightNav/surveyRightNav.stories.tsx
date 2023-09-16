@@ -1,7 +1,7 @@
 import React from 'react';
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
-import { getTestingSurveyData } from '@coldpbc/mocks';
+import { getSurveyFormDataPayload } from '@coldpbc/mocks';
 import { SurveyRightNav, SurveyRightNavProps } from './surveyRightNav';
 
 const meta = {
@@ -24,7 +24,7 @@ const SurveyRightNavStory = (args: SurveyRightNavProps) => {
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   const startSurvey = () => {
     setActiveKey({
-      value: Object.keys(surveyData.definition.sections)[0],
+      value: Object.keys(surveyData.data.sections)[0],
       isFollowUp: false,
     });
   };
@@ -49,6 +49,6 @@ export const Default: Story = {
       value: '',
       isFollowUp: false,
     },
-    surveyData: getTestingSurveyData(),
+    surveyData: getSurveyFormDataPayload(),
   },
 };
