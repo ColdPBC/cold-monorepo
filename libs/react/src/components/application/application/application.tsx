@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import cookies from 'js-cookie';
 import { useAuth0 } from '@auth0/auth0-react';
 import { ColdRoutes } from '../routes';
@@ -7,6 +7,8 @@ import { Spinner } from '../../atoms';
 import { GlobalSizes } from '@coldpbc/enums';
 import ColdContext from '../../../context/coldContext';
 import { useLDClient } from 'launchdarkly-react-client-sdk';
+import { matchRoutes, useLocation } from 'react-router-dom';
+import { GuidanceButton } from '../../molecules/guidanceButton/guidanceButton';
 
 export const Application = () => {
   const {
@@ -26,6 +28,17 @@ export const Application = () => {
   const { setCookieData } = useCookies();
 
   const ldClient = useLDClient();
+
+  const location = useLocation();
+  const shouldRenderGuidanceButton = matchRoutes(
+		[
+      { path: '/home' },
+      { path: '/footprint' },
+      { path: '/journey' },
+      { path: '/actions' },
+    ],
+		location
+	);
 
   const appState = {
     returnTo: window.location.pathname,
@@ -95,7 +108,14 @@ export const Application = () => {
   }
 
   if (isAuthenticated && user && accessToken) {
-    return <ColdRoutes />;
+    return (
+      <div className='max-w-[1440px] m-auto overflow-x-clip'>
+        <ColdRoutes />
+        {shouldRenderGuidanceButton &&
+          <GuidanceButton />
+        }
+      </div>
+    );
   } else {
     return (
       <div className="absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
