@@ -1,3 +1,18 @@
+# [1.10.0](https://github.com/ColdPBC/ui/compare/v1.9.1...v1.10.0) (2023-09-16)
+
+
+### Bug Fixes
+
+* build fix ([cfd5b47](https://github.com/ColdPBC/ui/commit/cfd5b4704f0c41590b6a36bcde897aaecf36190b))
+* refactored for survey data changes ([b759b24](https://github.com/ColdPBC/ui/commit/b759b2451ae0dc81e2ed50ba6821d856895961ba))
+
+
+### Features
+
+* added storybook scripts and moved component to molecules folder ([d9c34a1](https://github.com/ColdPBC/ui/commit/d9c34a12dceeb9945e52f186a0b0c3c6c67fcda5))
+* better skip handling , added form-data endpoint ([ab9bc47](https://github.com/ColdPBC/ui/commit/ab9bc4768baed3e2194e4368eb89f29b7e341800))
+* Support survey form data endpoint change ([917cd9e](https://github.com/ColdPBC/ui/commit/917cd9e764cc135db5dc22a63f31296db50c4b01))
+
 ## [1.9.1](https://github.com/ColdPBC/ui/compare/v1.9.0...v1.9.1) (2023-09-15)
 
 
