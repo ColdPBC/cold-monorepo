@@ -1,3 +1,10 @@
+## [1.9.1](https://github.com/ColdPBC/ui/compare/v1.9.0...v1.9.1) (2023-09-15)
+
+
+### Bug Fixes
+
+* update rum injection ([46829fe](https://github.com/ColdPBC/ui/commit/46829fea3550469dbcde89ba2c6496d74e40dc70))
+
 # [1.9.0](https://github.com/ColdPBC/ui/compare/v1.8.0...v1.9.0) (2023-09-15)
 
 
