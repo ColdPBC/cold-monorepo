@@ -7,7 +7,6 @@ import {
   getDefaultFormDataGridMock,
   getDefaultFormDefinitionGridMock,
   getOrganizationMembersMock,
-  getOrganizationMock,
   getTeamMemberDataGridMock,
 } from './datagridMock';
 import {
@@ -20,6 +19,7 @@ import {
 import { getSurveyDataByName } from './surveyDataMock';
 import { getRoles } from './roleMock';
 import { resolveAPIUrl } from '@coldpbc/fetchers';
+import { getOrganizationMock } from './organizationMock';
 
 // Even if this uses vite as a bundler, it still uses the NODE_ENV variable
 export const getApiUrl = (path: string) => {
