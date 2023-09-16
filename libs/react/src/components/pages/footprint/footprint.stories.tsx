@@ -29,3 +29,22 @@ export const EmptyData: Story = {
   ),
 };
   
+export const ThreeFootprintSubcats: Story = {
+  render: () => {
+    return (
+      <StoryMockProvider handlers={[getFootprintHandler.threeSubCats]}>
+        <Footprint />
+      </StoryMockProvider>
+    );
+  },
+};
+
+export const TwoFootprintSubcats: Story = {
+  render: () => {
+    return (
+      <StoryMockProvider handlers={[getFootprintHandler.twoSubCats]}>
+        <Footprint />
+      </StoryMockProvider>
+    );
+  },
+};
