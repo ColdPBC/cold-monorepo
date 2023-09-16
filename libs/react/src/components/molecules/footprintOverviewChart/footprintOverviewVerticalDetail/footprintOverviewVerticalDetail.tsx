@@ -1,7 +1,7 @@
 import React, { PropsWithChildren } from 'react';
+import { FootprintDetailChip } from '../../../atoms/footprintDetailChip/footprintDetailChip';
 import {
   FootprintOverviewDetail,
-  FootprintOverviewDetailChip,
 } from '../footprintOverviewChart';
 
 export type FootprintOverviewVerticalDetailProps = FootprintOverviewDetail;
@@ -23,7 +23,7 @@ export function FootprintOverviewVerticalDetail(
         <div className={'text-body text-tc-primary mx-1'}>
           {props.percent.toFixed(0) + '%'}
         </div>
-        <FootprintOverviewDetailChip emissions={props.emissions} />
+        <FootprintDetailChip emissions={props.emissions} />
       </div>
     </div>
   );

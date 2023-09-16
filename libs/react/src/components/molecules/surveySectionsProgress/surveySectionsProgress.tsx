@@ -13,13 +13,11 @@ export interface SurveySectionsProgressProps {
     [key: string]: SurveySectionType;
   };
   activeKey: SurveyActiveKeyType;
-  setActiveKey: (key: SurveyActiveKeyType) => void;
 }
 
 export const SurveySectionsProgress = ({
   sections,
   activeKey,
-  setActiveKey,
 }: SurveySectionsProgressProps) => {
   const [scrollable, setScrollable] = React.useState<boolean>(false);
   const [sectionHeights, setSectionHeights] = React.useState<
@@ -59,13 +57,6 @@ export const SurveySectionsProgress = ({
       totalHeight += sectionHeight?.clientHeight || 0;
     });
     return totalHeight > 920 - 128;
-  };
-
-  const setSectionToActive = (sectionIndex: number) => {
-    setActiveKey({
-      value: Object.keys(sections)[sectionIndex],
-      isFollowUp: false,
-    });
   };
 
   const scrollToActiveSection = (element: HTMLDivElement | null) => {
@@ -132,7 +123,6 @@ export const SurveySectionsProgress = ({
                   <div
                     key={'section_component_' + index}
                     ref={(elem) => (sectionHeights[index] = elem)}
-                    onClick={() => setSectionToActive(index)}
                   >
                     <SurveySections
                       sections={sections}
@@ -162,7 +152,6 @@ export const SurveySectionsProgress = ({
                   <div
                     key={'section_component_' + index}
                     ref={(elem) => (sectionHeights[index] = elem)}
-                    onClick={() => setSectionToActive(index)}
                     className={'w-[400px]'}
                   >
                     <SurveySections

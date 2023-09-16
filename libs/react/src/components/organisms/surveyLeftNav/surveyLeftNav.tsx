@@ -36,7 +36,6 @@ export const SurveyLeftNav = (props: SurveyLeftNavProps) => {
             <SurveySectionsProgress
               sections={surveyFormDefinition.sections}
               activeKey={activeKey}
-              setActiveKey={setActiveKey}
             />
           </div>
           <div className={'pt-[6px] pb-[16px] pr-[491px]'}>

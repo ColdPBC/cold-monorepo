@@ -1,3 +1,95 @@
+## [1.9.1](https://github.com/ColdPBC/ui/compare/v1.9.0...v1.9.1) (2023-09-15)
+
+
+### Bug Fixes
+
+* update rum injection ([46829fe](https://github.com/ColdPBC/ui/commit/46829fea3550469dbcde89ba2c6496d74e40dc70))
+
+# [1.9.0](https://github.com/ColdPBC/ui/compare/v1.8.0...v1.9.0) (2023-09-15)
+
+
+### Bug Fixes
+
+* correct section progress dependents ([29434f5](https://github.com/ColdPBC/ui/commit/29434f5fc23e5171152a72c4de907360b5b6e06f))
+
+
+### Features
+
+* removed ability to go to section after clicking ([9cdbbfa](https://github.com/ColdPBC/ui/commit/9cdbbfa40283d425a7e5f2e62ce0771b12b5ba8f))
+
+# [1.8.0](https://github.com/ColdPBC/ui/compare/v1.7.0...v1.8.0) (2023-09-14)
+
+
+### Features
+
+* Survey Right Nav component ([cfd24db](https://github.com/ColdPBC/ui/commit/cfd24db8bbb4984ff5d626f8ca902731c2edc70c))
+
+# [1.7.0](https://github.com/ColdPBC/ui/compare/v1.6.0...v1.7.0) (2023-09-14)
+
+
+### Features
+
+* Add footprint details chart + card ([672d1f8](https://github.com/ColdPBC/ui/commit/672d1f8b2f96bde90d3c5a94133c5a1b9c059de6))
+
+# [1.7.0-cold-205-create-footprintdetailcard-component.1](https://github.com/ColdPBC/ui/compare/v1.6.0...v1.7.0-cold-205-create-footprintdetailcard-component.1) (2023-09-13)
+
+
+### Features
+
+* Add footprint details chart + card ([672d1f8](https://github.com/ColdPBC/ui/commit/672d1f8b2f96bde90d3c5a94133c5a1b9c059de6))
+
+# [1.6.0](https://github.com/ColdPBC/ui/compare/v1.5.0...v1.6.0) (2023-09-13)
+
+
+### Bug Fixes
+
+* kickoff chromatic deploy ([bbd3dd9](https://github.com/ColdPBC/ui/commit/bbd3dd94e431114dcfb6e0bb23587b3abb3bcf0d))
+* removed unnecessary code ([f2ff907](https://github.com/ColdPBC/ui/commit/f2ff907936898d79ac617f2b97b752562d364aa7))
+* to kickoff chromatic build ([aaca346](https://github.com/ColdPBC/ui/commit/aaca3462cfa5471f3f0ef961bb228469ff6583fa))
+
+
+### Features
+
+* created surveyintro component ([e02e7ee](https://github.com/ColdPBC/ui/commit/e02e7eeabac41a32282248a1e8b26004edc798f0))
+* update to better match font ([25e4951](https://github.com/ColdPBC/ui/commit/25e4951897de1e55d3878156b958fdfcfbae17a4))
+* update to use surveyDataMock file ([d5d0636](https://github.com/ColdPBC/ui/commit/d5d063651b03efce2499e1a9b8d5501d8b0cdfd8))
+
+# [1.6.0-COLD-129.5](https://github.com/ColdPBC/ui/compare/v1.6.0-COLD-129.4...v1.6.0-COLD-129.5) (2023-09-13)
+
+
+### Bug Fixes
+
+* kickoff chromatic deploy ([bbd3dd9](https://github.com/ColdPBC/ui/commit/bbd3dd94e431114dcfb6e0bb23587b3abb3bcf0d))
+
+# [1.6.0-COLD-129.4](https://github.com/ColdPBC/ui/compare/v1.6.0-COLD-129.3...v1.6.0-COLD-129.4) (2023-09-12)
+
+
+### Bug Fixes
+
+* to kickoff chromatic build ([aaca346](https://github.com/ColdPBC/ui/commit/aaca3462cfa5471f3f0ef961bb228469ff6583fa))
+
+# [1.6.0-COLD-129.3](https://github.com/ColdPBC/ui/compare/v1.6.0-COLD-129.2...v1.6.0-COLD-129.3) (2023-09-12)
+
+
+### Bug Fixes
+
+* removed unnecessary code ([f2ff907](https://github.com/ColdPBC/ui/commit/f2ff907936898d79ac617f2b97b752562d364aa7))
+
+# [1.6.0-COLD-129.2](https://github.com/ColdPBC/ui/compare/v1.6.0-COLD-129.1...v1.6.0-COLD-129.2) (2023-09-12)
+
+
+### Features
+
+* update to better match font ([25e4951](https://github.com/ColdPBC/ui/commit/25e4951897de1e55d3878156b958fdfcfbae17a4))
+
+# [1.6.0-COLD-129.1](https://github.com/ColdPBC/ui/compare/v1.5.0...v1.6.0-COLD-129.1) (2023-09-12)
+
+
+### Features
+
+* created surveyintro component ([e02e7ee](https://github.com/ColdPBC/ui/commit/e02e7eeabac41a32282248a1e8b26004edc798f0))
+* update to use surveyDataMock file ([d5d0636](https://github.com/ColdPBC/ui/commit/d5d063651b03efce2499e1a9b8d5501d8b0cdfd8))
+
 # [1.5.0](https://github.com/ColdPBC/ui/compare/v1.4.1...v1.5.0) (2023-09-12)
 
 
