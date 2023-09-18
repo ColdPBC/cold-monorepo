@@ -1,4 +1,4 @@
-import { StoryMockProvider } from '@coldpbc/mocks';
+import { getCategoriesHandler, getFootprintHandler, StoryMockProvider } from '@coldpbc/mocks';
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { Home } from './home';
@@ -20,3 +20,14 @@ export const Default: Story = {
     </StoryMockProvider>
   )
 };
+
+export const EmptyFootprintData: Story = {
+  render: () => {
+    return (
+      <StoryMockProvider handlers={[getFootprintHandler.empty, getCategoriesHandler.empty]}>
+        <Home />
+      </StoryMockProvider>
+    );
+  },
+};
+
