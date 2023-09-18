@@ -209,24 +209,6 @@ export const getDataGridCompaniesMock = (id: string) => {
   return companies.filter((company: { id: string }) => company.id === id)[0];
 };
 
-export const getOrganizationMock = () => {
-  return {
-    id: 'fdf957d1-8ea4-4d2b-a4d0-4534490e77ae',
-    name: 'Cold Climate PBC',
-    email: 'info@coldclimate.com',
-    logo: null,
-    phone: null,
-    address: null,
-    city: null,
-    state: null,
-    zip: null,
-    country: null,
-    org_id: 'org_123',
-    created_at: '2023-05-21T20:14:11.458Z',
-    updated_at: '2023-05-21T20:14:11.471Z',
-  };
-};
-
 export const getOrganizationMembersMock = () => {
   return {
     id: 'fdf957d1-8ea4-4d2b-a4d0-4534490e77ae',
