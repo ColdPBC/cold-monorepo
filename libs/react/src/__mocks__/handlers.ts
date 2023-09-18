@@ -1,25 +1,25 @@
-import { rest } from "msw";
-import { getSidebarMock } from "./sidebarMock";
-import {getCategoriesDataMock, getFootprintDataMock} from './categoriesMock';
+import { rest } from 'msw';
+import { getSidebarMock } from './sidebarMock';
+import { getCategoriesDataMock, getFootprintDataMock } from './categoriesMock';
 import {
   getDataGridCompaniesMock,
   getDataGridUsersMock,
   getDefaultFormDataGridMock,
   getDefaultFormDefinitionGridMock,
   getOrganizationMembersMock,
-  getOrganizationMock,
   getTeamMemberDataGridMock,
-} from "./datagridMock";
+} from './datagridMock';
 import {
   changeUserRoles,
   deleteUserInvitation,
   removeUserFromOrganization,
   resendInvitation,
   sendInvitation,
-} from "./helper";
-import {getSurveyDataByName} from "./surveyDataMock";
-import {getRoles} from './roleMock';
-import {resolveAPIUrl} from "@coldpbc/fetchers";
+} from './helper';
+import { getSurveyDataByName } from './surveyDataMock';
+import { getRoles } from './roleMock';
+import { resolveAPIUrl } from '@coldpbc/fetchers';
+import { getOrganizationMock } from './organizationMock';
 
 // Even if this uses vite as a bundler, it still uses the NODE_ENV variable
 export const getApiUrl = (path: string) => {
@@ -42,26 +42,23 @@ export const handlers = [
 
   //Mock SideBar Request
   rest.get(
-    getApiUrl("/form-definitions/sidebar_navigation"),
+    getApiUrl('/form-definitions/sidebar_navigation'),
     (req, res, ctx) => {
       return res(ctx.json({ ...getSidebarMock() }));
-    }
+    },
   ),
 
   // Mock data for journey modules
-  rest.get(
-    getApiUrl("/categories"),
-    (req, res, ctx) => {
-      return res(ctx.json({ ...getCategoriesDataMock() }));
-    }
-  ),
+  rest.get(getApiUrl('/categories'), (req, res, ctx) => {
+    return res(ctx.json({ ...getCategoriesDataMock() }));
+  }),
 
   // Mock data for footprint modules
   rest.get(
-    getApiUrl("/categories/company_decarbonization"),
+    getApiUrl('/categories/company_decarbonization'),
     (req, res, ctx) => {
       return res(ctx.json({ ...getFootprintDataMock() }));
-    }
+    },
   ),
 
   rest.get(getApiUrl('/company-users'), (req, res, ctx) => {
@@ -72,7 +69,7 @@ export const handlers = [
     getApiUrl('/form-definitions/team_member_table'),
     (req, res, ctx) => {
       return res(ctx.json(getTeamMemberDataGridMock()));
-    }
+    },
   ),
 
   rest.get(getApiUrl('/form-definitions/datagrid'), (req, res, ctx) => {
@@ -114,10 +111,10 @@ export const handlers = [
       await changeUserRoles(
         orgId as string,
         userId as string,
-        roleName as string
+        roleName as string,
       );
       return res(ctx.json({}));
-    }
+    },
   ),
 
   rest.delete(
@@ -130,26 +127,23 @@ export const handlers = [
         await removeUserFromOrganization(data.members, orgId as string);
       }
       return res(ctx.json({}));
-    }
+    },
   ),
 
-  rest.delete(
-    getApiUrl('/organizations/invitation'),
-    async (req, res, ctx) => {
-      let data: {
+  rest.delete(getApiUrl('/organizations/invitation'), async (req, res, ctx) => {
+    let data: {
+      org_id: string;
+      user_email: string;
+    };
+    if (req.body) {
+      data = req.body as {
         org_id: string;
         user_email: string;
       };
-      if (req.body) {
-        data = req.body as {
-          org_id: string;
-          user_email: string;
-        };
-        await deleteUserInvitation(data.org_id, data.user_email);
-      }
-      return res(ctx.json({}));
+      await deleteUserInvitation(data.org_id, data.user_email);
     }
-  ),
+    return res(ctx.json({}));
+  }),
 
   rest.post(getApiUrl('/organizations/invitation'), async (req, res, ctx) => {
     const data = req.body as {
@@ -164,51 +158,44 @@ export const handlers = [
         await sendInvitation(org_id, user_email, inviter_name, roleId);
       }
       return res(ctx.json({}));
-    } catch(error) {
-      let message
-      if (error instanceof Error) message = error.message
-      else message = String(error)
-      return res(
-        ctx.status(500),
-        ctx.json({ message: message })
-      );
+    } catch (error) {
+      let message;
+      if (error instanceof Error) message = error.message;
+      else message = String(error);
+      return res(ctx.status(500), ctx.json({ message: message }));
     }
   }),
 
-  rest.patch(getApiUrl('/organizations/invitation'),
-    async (req, res, ctx) => {
-      const data = req.body as {
-        org_id: string;
-        user_email: string;
-        inviter_name: string;
-        roleId: string;
-      };
-      if (data) {
-        const { org_id, user_email, inviter_name, roleId } = data;
-        await resendInvitation(org_id, user_email);
-      }
-      return res(ctx.json({}));
+  rest.patch(getApiUrl('/organizations/invitation'), async (req, res, ctx) => {
+    const data = req.body as {
+      org_id: string;
+      user_email: string;
+      inviter_name: string;
+      roleId: string;
+    };
+    if (data) {
+      const { org_id, user_email, inviter_name, roleId } = data;
+      await resendInvitation(org_id, user_email);
     }
-  ),
+    return res(ctx.json({}));
+  }),
 
   rest.post(getApiUrl('/resources/:name'), async (req, res, ctx) => {
     return res(ctx.json({}));
   }),
 
   rest.get(getApiUrl('/roles'), async (req, res, ctx) => {
-    return res(
-      ctx.json(getRoles())
-    );
+    return res(ctx.json(getRoles()));
   }),
 
   rest.get(getApiUrl('/survey-data/:name'), (req, res, ctx) => {
     const { name } = req.params;
 
-    return res(ctx.json(getSurveyDataByName(name as string)));
+    return res(ctx.json(getSurveyFormDataByName(name as string)));
   }),
 
   rest.patch(getApiUrl('/survey-data/:name'), async (req, res, ctx) => {
-    const {data} = await req.json();
+    const { data } = await req.json();
 
     return res(ctx.json({}));
   }),
