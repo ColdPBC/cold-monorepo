@@ -1,14 +1,14 @@
 {
   "name": "cold-monorepo-nx",
   "packageManager": "yarn@3.6.3",
-  "version": "1.9.1",
+  "version": "1.10.0",
   "license": "MIT",
   "scripts": {
     "prebuild": "npx barrelsby -D -d ./libs/react/src -l all -e stories.tsx -e react-app-env -e test.tsx -e private.tsx",
     "start": "nx serve",
     "start:prod": "nx serve-static",
-    "storybook": "yarn build-storybook && npx nx storybook cold-ui",
-    "build-storybook": "yarn prebuild && npx nx build-storybook cold-ui",
+    "storybook": "yarn build-storybook && npx nx run cold-ui:static-storybook:ci",
+    "build-storybook": "yarn prebuild && npx nx run cold-ui:build-storybook:ci",
     "build": "yarn prebuild && npx nx build",
     "build:dev": "yarn prebuild && npx nx run cold-ui:build:development --resolveJsonModule",
     "build:prod": "yarn prebuild && npx nx run cold-ui:build:production --resolveJsonModule",

@@ -1,18 +1,21 @@
 import React from 'react';
-import { SurveyActiveKeyType, SurveyDataType } from '@coldpbc/interfaces';
+import {
+  SurveyActiveKeyType,
+  SurveyFormDataPayloadType,
+} from '@coldpbc/interfaces';
 import { isEmpty } from 'lodash';
 import { HexColors } from '@coldpbc/themes';
 import { ColdWordmark, SurveySectionsProgress } from '@coldpbc/components';
 
 export interface SurveyLeftNavProps {
-  surveyData: SurveyDataType;
+  surveyData: SurveyFormDataPayloadType;
   activeKey: SurveyActiveKeyType;
   setActiveKey: (key: SurveyActiveKeyType) => void;
 }
 
 export const SurveyLeftNav = (props: SurveyLeftNavProps) => {
   const { surveyData, activeKey, setActiveKey } = props;
-  const { definition: surveyFormDefinition } = surveyData;
+  const { data: surveyFormData } = surveyData;
   return (
     <>
       {isEmpty(activeKey.value) ? (
@@ -20,7 +23,7 @@ export const SurveyLeftNav = (props: SurveyLeftNavProps) => {
           <div
             className={'w-[668px] h-[963px] rounded-2xl'}
             style={{
-              background: `url(${surveyFormDefinition.image_url}), lightgray 50% / cover no-repeat`,
+              background: `url(${surveyFormData.image_url}), lightgray 50% / cover no-repeat`,
             }}
           ></div>
           <div className={'absolute top-[457px] left-[115px]'}>
@@ -34,7 +37,7 @@ export const SurveyLeftNav = (props: SurveyLeftNavProps) => {
         <div className={'pl-[40px]'}>
           <div className={'pr-[12px]'}>
             <SurveySectionsProgress
-              sections={surveyFormDefinition.sections}
+              sections={surveyFormData.sections}
               activeKey={activeKey}
             />
           </div>

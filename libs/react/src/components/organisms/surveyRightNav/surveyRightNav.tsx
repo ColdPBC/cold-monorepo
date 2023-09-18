@@ -1,14 +1,16 @@
 import React from 'react';
-import { SurveyActiveKeyType, SurveyDataType } from '@coldpbc/interfaces';
+import {
+  SurveyActiveKeyType,
+  SurveyFormDataPayloadType,
+} from '@coldpbc/interfaces';
 import { isEmpty } from 'lodash';
-import { SurveyQuestionContainer } from '../surveyQuestionContainer';
-import { SurveyIntro } from '../../molecules';
+import { SurveyIntro, SurveyQuestionContainer } from '../../molecules';
 
 export interface SurveyRightNavProps {
   activeKey: SurveyActiveKeyType;
   setActiveKey: (key: SurveyActiveKeyType) => void;
-  surveyData: SurveyDataType;
-  setSurveyData: (data: SurveyDataType) => void;
+  surveyData: SurveyFormDataPayloadType;
+  setSurveyData: (data: SurveyFormDataPayloadType) => void;
   submitSurvey: () => void;
   startSurvey: () => void;
 }
@@ -30,7 +32,7 @@ export const SurveyRightNav = ({
           }
         >
           <SurveyIntro
-            surveyFormDefinition={surveyData.definition}
+            surveyFormData={surveyData.data}
             onSurveyStart={startSurvey}
           />
         </div>

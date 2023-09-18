@@ -191,7 +191,7 @@ export const handlers = [
   rest.get(getApiUrl('/survey-data/:name'), (req, res, ctx) => {
     const { name } = req.params;
 
-    return res(ctx.json(getSurveyDataByName(name as string)));
+    return res(ctx.json(getSurveyFormDataByName(name as string)));
   }),
 
   rest.patch(getApiUrl('/survey-data/:name'), async (req, res, ctx) => {
