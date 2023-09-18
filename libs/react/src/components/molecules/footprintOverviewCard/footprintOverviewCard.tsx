@@ -52,7 +52,7 @@ export function FootprintOverviewCard(
   return (
     <Card {...cardProps}>
       <div
-        className={'flex flex-col items-start justify-center w-full'}
+        className={'flex flex-col items-start justify-center w-full py-4'}
       >
         <FootprintOverviewChart
           variant={props.chartVariant ?? FootprintOverviewVariants.horizontal}
@@ -71,7 +71,7 @@ export function FootprintOverviewCard(
                 : 'Please fill out the Footprint Overview survey using the link below to calculate your initial footprint.'}
             </p>
             {!isSurveyComplete && (
-              <div className="my-4 flex justify-center">
+              <div className="mt-4 flex justify-center">
                 <BaseButton
                   onClick={() => {}}
                   label={'Initial Footprint Survey'}
