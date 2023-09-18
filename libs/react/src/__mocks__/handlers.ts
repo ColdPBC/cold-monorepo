@@ -16,7 +16,7 @@ import {
   resendInvitation,
   sendInvitation,
 } from './helper';
-import { getSurveyDataByName } from './surveyDataMock';
+import { getSurveyFormDataByName } from './surveyDataMock';
 import { getRoles } from './roleMock';
 import { resolveAPIUrl } from '@coldpbc/fetchers';
 import { getOrganizationMock } from './organizationMock';
