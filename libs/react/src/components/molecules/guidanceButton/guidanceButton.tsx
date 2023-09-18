@@ -14,7 +14,28 @@ const closeBtnVariants = {
         delay: .1
       }
     }
-  }
+}
+
+const ctaBtnVariants = {
+    hidden: {
+        opacity: 0,
+        scale: 0,
+        transition: {
+            duration: 0.4,
+            delay: 0,
+            ease: [0.42, 0, 0.58, 1]
+          }
+    },
+    show: {
+      opacity: 1,
+      scale: 1,
+      transition: {
+        duration: 0.4,
+        delay: .15,
+        ease: [0.42, 0, 0.58, 1]
+      }
+    }
+}
 
 export const GuidanceButton = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -46,30 +67,35 @@ export const GuidanceButton = () => {
                 </div>
             </div>
                 <motion.div
-                    initial={false}
-                    animate={{
-                        y: isOpen ? '0px' : '100%',
-                    }}
-                    transition={{
-                        delay: !isOpen ? 0 : .3
-                    }}
                     className='flex w-full mt-2'
                 >
-                    <span className='flex-1 mr-2'>
+                    <motion.span
+                        className='flex-1 mr-2'
+                        initial="hidden"
+                        animate={isOpen ? "show" : "hidden"}
+                        exit="hidden"
+                        variants={ctaBtnVariants}
+                    >
                         <BaseButton
                             label={'Get in touch'}
                             variant={ButtonTypes.secondary}
                             href='mailto:support@coldclimate.com'
                         />
-                    </span>
-                    <span className='flex-1'>
+                    </motion.span>
+                    <motion.span
+                        className='flex-1'
+                        initial="hidden"
+                        animate={isOpen ? "show" : "hidden"}
+                        exit="hidden"
+                        variants={ctaBtnVariants}
+                    >
                         <BaseButton
                             label={'Schedule A Call'}
                             variant={ButtonTypes.secondary}
                             href='https://www.getclockwise.com/c/stuart-johnson-coldclimate-com/cold-climate-expert-discussion'
                             target={'_blank'}
                         />
-                    </span>
+                    </motion.span>
                 </motion.div>
                 <div className='absolute w-[400px]'>
                     {isOpen &&
