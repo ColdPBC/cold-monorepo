@@ -174,14 +174,14 @@ export const SignupForm = ({
               }}
             />
             <div>
-              I agree to Cold's{' '}
+              I agree to the Cold Climate Platform{' '}
               <a
                 className={'underline'}
                 href={'/terms'}
                 target={'_blank'}
                 rel="noreferrer"
               >
-                Terms of Service
+                Terms And Conditions
               </a>{' '}
               and{' '}
               <a
