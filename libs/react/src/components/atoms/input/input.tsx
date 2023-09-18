@@ -100,7 +100,7 @@ export const Input = (props: IInputProps) => {
         <input
           {...input_props}
           type={type || 'text'}
-          key={`input_txt_${key}`}
+          key={`input_${key}`}
           autoComplete={input_props.autoComplete || input_props.name}
           className={
             input_props?.className ||

@@ -1,31 +1,14 @@
-import React, { useState } from 'react';
+import React, { PropsWithChildren, useState } from 'react';
 import { Meta, StoryObj } from '@storybook/react';
-
-import { BaseButton } from '@coldpbc/components';
+import { BaseButton, TakeoverProps } from '@coldpbc/components';
 import { ButtonTypes, GlobalSizes } from '@coldpbc/enums';
-import { Modal } from '../modal/modal';
 import { Takeover } from './takeover';
+import { withKnobs } from '@storybook/addon-knobs';
 
-const meta: Meta<typeof Modal> = {
-  /* 👇 The title prop is optional.
-   * See https://storybook.js.org/docs/react/configure/overview#configure-story-loading
-   * to learn how to generate automatic titles
-   */
-  title: 'Atoms/TakeOver',
-  component: Modal,
-};
-export default meta;
-
-type Story = StoryObj<typeof Modal>;
-
-/*
- * Example Button story with React Hooks.
- * See note below related to this example.
- */
-const DefaultComponent = () => {
-  const [isShow, setIsShow] = useState(false);
+const TakeoverComponent = (args: TakeoverProps) => {
+  const [isShow, setIsShow] = useState(args.show);
   const content = () => {
-    return <div>Hello</div>;
+    return <div className={'text-tc-primary'}>Hello</div>;
   };
 
   return (
@@ -40,16 +23,7 @@ const DefaultComponent = () => {
         variant={ButtonTypes.primary}
       />
       {isShow && (
-        <Takeover
-          show={isShow}
-          setShow={setIsShow}
-          dismiss={{
-            label: 'close',
-            dismissible: true,
-          }}
-          title={'Takeover Title'}
-          logo_shown={true}
-        >
+        <Takeover {...args} show={isShow} setShow={setIsShow}>
           {content()}
         </Takeover>
       )}
@@ -57,6 +31,85 @@ const DefaultComponent = () => {
   );
 };
 
-export const Default: Story = {
-  render: () => <DefaultComponent />,
+const meta = {
+  title: 'Molecules/Takeover',
+  component: TakeoverComponent,
+  tags: ['autodocs'],
+  decorators: [withKnobs],
+  argTypes: {},
+} satisfies Meta<typeof TakeoverComponent>;
+
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const NoHeader: Story = {
+  render: (args) => <TakeoverComponent {...args} />,
+  args: {
+    show: true,
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    setShow: (show: boolean) => {},
+  },
+};
+export const HeaderWithButtonOnly: Story = {
+  render: (args) => <TakeoverComponent {...args} />,
+  args: {
+    show: true,
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    setShow: (show: boolean) => {},
+    header: {
+      dismiss: {
+        label: 'close',
+        dismissible: true,
+      },
+    },
+  },
+};
+
+export const HeaderWithButtonOnlyNoText: Story = {
+  render: (args) => <TakeoverComponent {...args} />,
+  args: {
+    show: true,
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    setShow: (show: boolean) => {},
+    header: {
+      dismiss: {
+        label: 'close',
+        dismissible: true,
+      },
+    },
+  },
+};
+
+export const HeaderWithButtonAndTitle: Story = {
+  render: (args) => <TakeoverComponent {...args} />,
+  args: {
+    show: true,
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    setShow: (show: boolean) => {},
+    header: {
+      title: {
+        text: 'Takeover Title',
+      },
+      dismiss: {
+        label: 'close',
+        dismissible: true,
+      },
+    },
+  },
+};
+
+export const HeaderWithButtonAndLogo: Story = {
+  render: (args) => <TakeoverComponent {...args} />,
+  args: {
+    show: true,
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    setShow: (show: boolean) => {},
+    header: {
+      title: {},
+      dismiss: {
+        label: 'close',
+        dismissible: true,
+      },
+    },
+  },
 };
