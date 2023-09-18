@@ -1,3 +1,28 @@
+# [1.12.0](https://github.com/ColdPBC/ui/compare/v1.11.0...v1.12.0) (2023-09-19)
+
+
+### Features
+
+* Add footprint page and route ([cdc71c1](https://github.com/ColdPBC/ui/commit/cdc71c1da4ab23a3f707b8cfc74f853cce1bf384))
+* Add footprint page and route ([#31](https://github.com/ColdPBC/ui/issues/31)) ([cea1ad5](https://github.com/ColdPBC/ui/commit/cea1ad5ae6cd032d9b0654b2b227fbb1a5765c0e))
+
+# [1.11.0](https://github.com/ColdPBC/ui/compare/v1.10.0...v1.11.0) (2023-09-18)
+
+
+### Bug Fixes
+
+* build fix ([ad77c66](https://github.com/ColdPBC/ui/commit/ad77c6661009e6a4b1fdce755c715854af179b00))
+* corrected build error ([5121eec](https://github.com/ColdPBC/ui/commit/5121eec023ad34bffebc58e95b62fab785f1ea8a))
+* remove empty user type file ([1b6853f](https://github.com/ColdPBC/ui/commit/1b6853f0f63df89d7173820be2c862e8fa0b1570))
+
+
+### Features
+
+* created signup form component ([3277c0d](https://github.com/ColdPBC/ui/commit/3277c0d4510590ee8cbd88a9c48cf4ef0491c414))
+* Update tos and privacy text ([13873b8](https://github.com/ColdPBC/ui/commit/13873b8772217c842ddbb12af638f6390c5daadd))
+* Updated takeover component ([168c074](https://github.com/ColdPBC/ui/commit/168c0746489ee37a11ee00ed1bc3b8f5ef9be54a))
+* Updated takeover to better handle logo or title ([aa7cd4d](https://github.com/ColdPBC/ui/commit/aa7cd4d41acc2d12183c34fea89de0679336bce4))
+
 # [1.10.0](https://github.com/ColdPBC/ui/compare/v1.9.1...v1.10.0) (2023-09-16)
 
 

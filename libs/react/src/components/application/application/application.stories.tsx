@@ -4,13 +4,16 @@ import { Meta, StoryObj } from '@storybook/react';
 import { SWRConfig } from 'swr';
 import { Application } from './application';
 import { BrowserRouter } from 'react-router-dom';
+import { StoryMockProvider, getFootprintHandler, getCategoriesHandler } from '@coldpbc/mocks';
+import { Provider } from 'launchdarkly-react-client-sdk/lib/context';
+import { render } from 'react-dom';
 
-const meta = {
+const meta: Meta<typeof Application> = {
   title: 'Application/Application',
   component: Application,
   tags: ['autodocs'],
   decorators: [withKnobs],
-} satisfies Meta<typeof Application>;
+};
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -18,7 +21,7 @@ type Story = StoryObj<typeof meta>;
 // TODO: Refactor this to use separate storybook LD environment instead of mocking LD flags. Add env variables with STORYBOOK_ prefix
 
 export const Default: Story = {
-  render: (args: any) => {
+  render: () => {
     const context = createContext({
       flags: {},
       flagKeyMap: {},
@@ -50,7 +53,7 @@ export const Default: Story = {
 };
 
 export const Loading: Story = {
-  render: (args: any) => {
+  render: () => {
     return (
       <BrowserRouter>
         <Application />
@@ -59,5 +62,15 @@ export const Loading: Story = {
   },
   parameters: {
     auth0AddOn: null,
+  },
+};
+
+export const EmptyFootprintData: Story = {
+  render: () => {
+    return (
+      <StoryMockProvider handlers={[getFootprintHandler.empty, getCategoriesHandler.empty]}>
+        <Application />
+      </StoryMockProvider>
+    );
   },
 };

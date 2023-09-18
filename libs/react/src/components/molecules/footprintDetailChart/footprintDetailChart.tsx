@@ -20,18 +20,18 @@ export const tableTheme: CustomFlowbiteTheme = {
     "root": {
       "base": "w-full text-left text-sm text-gray-500 dark:text-gray-400",
       "shadow": "absolute dark:bg-black w-full h-full top-0 left-0 rounded-lg drop-shadow-md -z-10",
-      "wrapper": "relative border-gray-50 border border-solid rounded-lg bg-gray-50"
+      "wrapper": "relative border-gray-50 border border-solid rounded-lg bg-gray-50 flex-1"
     },
     "body": {
       "base": "group/body",
       "cell": {
-        "base": "group-first/body:group-first/row:first:rounded-tl-lg group-first/body:group-first/row:last:rounded-tr-lg group-last/body:group-last/row:first:rounded-bl-lg group-last/body:group-last/row:last:rounded-br-lg px-6 py-4 bg-bgc-elevated"
+        "base": "group-first/body:group-first/row:first:rounded-tl-lg group-first/body:group-first/row:last:rounded-tr-lg group-last/body:group-last/row:first:rounded-bl-lg group-last/body:group-last/row:last:rounded-br-lg px-4 py-4 bg-bgc-elevated whitespace-pre"
       }
     },
     "head": {
       "base": "group/head text-xs uppercase text-gray-700 dark:text-gray-400",
       "cell": {
-        "base": "group-first/head:first:rounded-tl-lg group-first/head:last:rounded-tr-lg bg-none dark:bg-gray-700 px-6 py-3 font-normal"
+        "base": "group-first/head:first:rounded-tl-lg group-first/head:last:rounded-tr-lg bg-none dark:bg-gray-700 px-4 py-3 font-normal"
       }
     },
     "row": {
@@ -50,7 +50,6 @@ interface LegendRow {
 };
 
 interface Props {
-  setIsEmptyData?: (isEmpty: boolean) => void;
   colors: string[];
   subcategory_key: string;
   period: number;
@@ -58,7 +57,7 @@ interface Props {
 
 ChartJS.register(ArcElement, PieController);
 
-export function FootprintDetailChart({ setIsEmptyData, colors, subcategory_key, period }: Props) {
+export function FootprintDetailChart({ colors, subcategory_key, period }: Props) {
   const chartRef = useRef<ChartJS<'pie'>>(null);
 
   const {
@@ -127,6 +126,7 @@ export function FootprintDetailChart({ setIsEmptyData, colors, subcategory_key, 
           backgroundColor: backgroundColors,
           borderColor: backgroundColors,
           borderWidth: 1,
+          hoverBackgroundColor: backgroundColors
         }],
         labels: newLabels,
       };
@@ -159,6 +159,11 @@ export function FootprintDetailChart({ setIsEmptyData, colors, subcategory_key, 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore - inject this into the chart options
     activeSegment,
+    elements: {
+      arc: {
+          borderWidth: 0
+      }
+  }
   };
 
   if (isLoading) {
@@ -176,7 +181,7 @@ export function FootprintDetailChart({ setIsEmptyData, colors, subcategory_key, 
   return (
     <div className="relative w-full flex items-center">
       <div
-        className="h-[200px] w-[225px] relative"
+        className="h-[182px] w-[182px] relative ml-2 mr-6"
         onMouseLeave={() => {
           setActiveSegment(null);
         }}
@@ -198,7 +203,7 @@ export function FootprintDetailChart({ setIsEmptyData, colors, subcategory_key, 
         }}
       >
         <Table.Head className='text-white normal-case'>
-          <Table.HeadCell className='w-[225px]' theme={tableTheme.table?.head?.cell}>
+          <Table.HeadCell theme={tableTheme.table?.head?.cell}>
             Category
           </Table.HeadCell>
           <Table.HeadCell theme={tableTheme.table?.head?.cell}>

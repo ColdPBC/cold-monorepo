@@ -2,7 +2,6 @@ import React from 'react';
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { JourneyOverviewCard } from './journeyOverviewCard';
-import { BrowserRouter } from 'react-router-dom';
 import { getCategoriesHandler, StoryMockProvider } from '@coldpbc/mocks';
 
 const meta = {
@@ -18,23 +17,21 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   render: (args) => {
     return (
-      <BrowserRouter>
+      <StoryMockProvider handlers={[]}>
         <div className="w-[668px]">
           <JourneyOverviewCard />
         </div>
-      </BrowserRouter>
+      </StoryMockProvider>
     );
   },
 };
 
 export const EmptyData = () => {
   return (
-    <BrowserRouter>
-      <StoryMockProvider handlers={[getCategoriesHandler.empty]}>
-        <div className="w-[668px]">
-          <JourneyOverviewCard />
-        </div>
-      </StoryMockProvider>
-    </BrowserRouter>
+    <StoryMockProvider handlers={[getCategoriesHandler.empty]}>
+      <div className="w-[668px]">
+        <JourneyOverviewCard />
+      </div>
+    </StoryMockProvider>
   );
 };

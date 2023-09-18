@@ -1,7 +1,7 @@
 import { useCreateGradient } from "@coldpbc/hooks";
 import { HexColors } from "@coldpbc/themes";
 import { Chart as ChartJS, Filler, LineElement, PointElement, RadarController, RadialLinearScale, Title  } from "chart.js";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { emptyChartData, options } from "./constants";
 import { Chart } from 'react-chartjs-2';
 
@@ -16,6 +16,7 @@ ChartJS.register(
 
 export const EmptyChart = () => {
   const chartRef = useRef<ChartJS>(null);
+  const [chartData, setChartData] = useState(emptyChartData);
 
   const emptyDataChartBackgroundColor = useCreateGradient(
     chartRef.current?.ctx,
@@ -23,6 +24,23 @@ export const EmptyChart = () => {
     HexColors.white + '00',
     HexColors.white + '60',
   )
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setChartData({
+        ...chartData,
+        datasets: [
+          {
+            data: chartData.datasets[0].data.map(_ => Math.floor(Math.random() * (80 - 30 + 1) + 30))
+          }
+        ]
+      });
+    }, 1200);
+
+    return () => {
+      clearInterval(interval);
+    }
+  }, []);
 
   return (
         <div className="relative h-[150px] w-full">
@@ -44,7 +62,7 @@ export const EmptyChart = () => {
               },
             }}
             type="radar"
-            data={emptyChartData}
+            data={chartData}
           />
         </div>
       );
