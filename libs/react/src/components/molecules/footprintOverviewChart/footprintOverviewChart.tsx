@@ -11,7 +11,7 @@ import { Chart } from 'react-chartjs-2';
 import useSWR from 'swr';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { Spinner } from '../../atoms';
-import { HexColors } from '@coldpbc/themes';
+import { footprintSubcategoryColors, HexColors } from '@coldpbc/themes';
 import { find, forEach, isArray, some } from 'lodash';
 import { FootprintOverviewHorizontalDetail } from './footprintOverviewHorizontalDetail';
 import clsx from 'clsx';
@@ -60,7 +60,6 @@ export interface FootprintOverviewChartProps {
   variant?: FootprintOverviewVariants;
   period: number | string;
   periodType?: string; // year should be the default
-  setIsEmptyData?: (isEmpty: boolean) => void;
 }
 
 const gapStylingConstant = 100;
@@ -110,12 +109,6 @@ export function FootprintOverviewChart(
     (subcategory: any) => some(subcategory.activities, (
         (activity: any) => activity.footprint[props.period]))));
 
-  useEffect(() => {
-    if (props.setIsEmptyData) {
-      props.setIsEmptyData(isEmptyFootprintData);
-    }
-  }, [isEmptyFootprintData]);
-
   if (isLoading) {
     return (
       <div className="h-[284px] flex items-center">
@@ -124,7 +117,7 @@ export function FootprintOverviewChart(
     );
   } else if (isEmptyFootprintData) {
     return (
-      <div className="relative h-[255px] w-full">
+      <div className="relative h-[100px] w-full -my-2">
         <svg
           className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
           xmlns="http://www.w3.org/2000/svg"
@@ -133,11 +126,15 @@ export function FootprintOverviewChart(
           viewBox="0 0 81 80"
           fill="none"
         >
-          <rect x="37.5" y="21.5" width="6" height="22.5" rx="2" fill="white" />
-          <rect x="37.5" y="48.5" width="6" height="6" rx="2" fill="white" />
+          <rect x="38" y="29.5" width="4" height="15" rx="2" fill="white"/>
+          <rect x="38" y="46.5" width="4" height="4" rx="2" fill="white"/>
         </svg>
         <Chart
-          options={chartOptions}
+          options={{
+            ...chartOptions,
+            radius: 40,
+            cutout: 35, // Arc should be 30px wide
+          }}
           type="doughnut"
           data={{ datasets: NO_DATA_CHART_DATA }}
         />
@@ -155,22 +152,11 @@ export function FootprintOverviewChart(
     name: string;
     percent?: number;
   }[] = [];
-  const colorArray: string[] = [
-    HexColors.purple.DEFAULT,
-    HexColors.teal.DEFAULT,
-    HexColors.green.DEFAULT,
-    HexColors.lightblue.DEFAULT,
-  ];
-  const hoverColorArray: string[] = [
-    HexColors.purple.DEFAULT_BRIGHTEN,
-    HexColors.lightblue.DEFAULT_BRIGHTEN,
-    HexColors.teal.DEFAULT_BRIGHTEN,
-    HexColors.green.DEFAULT_BRIGHTEN,
-  ];
   let totalFootprint = 0;
-  forEach(data.subcategories, (subcategory) => {
+  Object.keys(data.subcategories).forEach((subcategoryKey) => {
+    const subcategory = data.subcategories[subcategoryKey];
     let value = 0;
-    const color = colorArray.reverse().pop() || HexColors.primary.DEFAULT;
+    const color = HexColors[footprintSubcategoryColors[subcategoryKey]]?.DEFAULT || HexColors.primary.DEFAULT;
 
     forEach(subcategory.activities, (activity) => {
       if (activity.footprint && period in activity.footprint) {
@@ -182,7 +168,7 @@ export function FootprintOverviewChart(
       }
     })
     if (subcategoryTotals.length >= MAX_CATEGORIES) return;
-    subcategoryTotals.push({value: value, color: color, name:subcategory.subcategory_name});
+    subcategoryTotals.push({value: value, color, name: subcategory.subcategory_name});
   });
 
   // Set spacer width
@@ -265,7 +251,12 @@ export function FootprintOverviewChart(
   const chartPlugins: PluginType<'doughnut'>[] = [
     {
       id: 'sliceThickness',
-      beforeDraw: (chart: ChartJS) => chartBeforeDraw(chart, hoverColorArray),
+      beforeDraw: (chart: ChartJS) => chartBeforeDraw(
+        chart,
+        Object.keys(data.subcategories).map((subcategoryKey) => {
+          return HexColors[footprintSubcategoryColors[subcategoryKey]]?.DEFAULT_BRIGHTEN || HexColors.primary.DEFAULT
+        }),
+      )
     },
   ];
 

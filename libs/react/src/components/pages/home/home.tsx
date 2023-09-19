@@ -3,6 +3,8 @@ import { CenterColumnContent } from '../../organisms/centerColumnContent/centerC
 import { RightColumnContent } from '../../organisms/rightColumnContent/rightColumnContent';
 import { useAuth0 } from '@auth0/auth0-react';
 import { Spinner } from '../../atoms/spinner/spinner';
+import { AppContent } from '../../organisms/appContent/appContent';
+import { FootprintOverviewCard, FootprintOverviewVariants, JourneyOverviewCard } from '../../molecules';
 
 export function Home() {
   const auth0 = useAuth0();
@@ -16,11 +18,14 @@ export function Home() {
 
   if (auth0.user) {
     return (
-      <>
-        <CenterColumnContent title={'Welcome, ' + auth0.user?.given_name} />
+      <AppContent title={'Welcome, ' + auth0.user?.given_name}>
+        <CenterColumnContent>
+          <FootprintOverviewCard chartVariant={FootprintOverviewVariants.horizontal} />
+          <JourneyOverviewCard />
+        </CenterColumnContent>
         <RightColumnContent />
-      </>
+      </AppContent>
     );
   }
-  return <></>;
+  return null;
 }
