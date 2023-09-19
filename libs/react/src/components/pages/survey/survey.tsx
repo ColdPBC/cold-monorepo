@@ -33,11 +33,22 @@ export const Survey = (props: SurveyProps) => {
     // get the first section
     // set the active key to the first section
     if (surveyData) {
-      const firstSection = Object.keys(surveyData.definition.sections)[0];
-      setActiveKey({
-        value: firstSection,
-        isFollowUp: false,
-      });
+      // go to the first section, check if the component is null and prompt is empty.
+      // if so, go to the first followup
+      const firstSectionKey = Object.keys(surveyData.definition.sections)[0];
+      const firstSection = surveyData.definition.sections[firstSectionKey];
+      if (firstSection.component === null && isEmpty(firstSection.prompt)) {
+        const firstFollowUpKey = Object.keys(firstSection.follow_up)[0];
+        setActiveKey({
+          value: firstFollowUpKey,
+          isFollowUp: true,
+        });
+      } else {
+        setActiveKey({
+          value: firstSectionKey,
+          isFollowUp: false,
+        });
+      }
     }
   };
 
@@ -99,53 +110,33 @@ export const Survey = (props: SurveyProps) => {
   if (surveyData) {
     return (
       <div>
-        {isEmpty(activeKey.value) ? (
-          <Takeover show={show} setShow={setShow}>
-            <div className={'flex'}>
-              <SurveyLeftNav
-                surveyData={surveyData}
-                activeKey={activeKey}
-                setActiveKey={setActiveKey}
-              />
-              <SurveyRightNav
-                activeKey={activeKey}
-                setActiveKey={setActiveKey}
-                surveyData={surveyData}
-                setSurveyData={setSurveyData}
-                submitSurvey={submitSurvey}
-                startSurvey={startSurvey}
-              />
-            </div>
-          </Takeover>
-        ) : (
-          <Takeover
-            show={show}
-            setShow={setShow}
-            header={{
-              title: {},
-              dismiss: {
-                label: 'close',
-                dismissible: true,
-              },
-            }}
-          >
-            <div className={'flex'}>
-              <SurveyLeftNav
-                surveyData={surveyData}
-                activeKey={activeKey}
-                setActiveKey={setActiveKey}
-              />
-              <SurveyRightNav
-                activeKey={activeKey}
-                setActiveKey={setActiveKey}
-                surveyData={surveyData}
-                setSurveyData={setSurveyData}
-                submitSurvey={submitSurvey}
-                startSurvey={startSurvey}
-              />
-            </div>
-          </Takeover>
-        )}
+        <Takeover
+          show={show}
+          setShow={setShow}
+          header={{
+            title: {},
+            dismiss: {
+              label: 'close',
+              dismissible: true,
+            },
+          }}
+        >
+          <div className={'flex'}>
+            <SurveyLeftNav
+              surveyData={surveyData}
+              activeKey={activeKey}
+              setActiveKey={setActiveKey}
+            />
+            <SurveyRightNav
+              activeKey={activeKey}
+              setActiveKey={setActiveKey}
+              surveyData={surveyData}
+              setSurveyData={setSurveyData}
+              submitSurvey={submitSurvey}
+              startSurvey={startSurvey}
+            />
+          </div>
+        </Takeover>
       </div>
     );
   } else {

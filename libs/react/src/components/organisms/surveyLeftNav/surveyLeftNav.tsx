@@ -18,7 +18,7 @@ export const SurveyLeftNav = (props: SurveyLeftNavProps) => {
       {isEmpty(activeKey.value) ? (
         <div className={'pb-[37px] relative'}>
           <div
-            className={'w-[668px] h-[963px] rounded-2xl'}
+            className={'w-[668px] h-[920px] rounded-2xl'}
             style={{
               background: `url(${surveyFormData.image_url}), lightgray 50% / cover no-repeat`,
             }}

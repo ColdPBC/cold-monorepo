@@ -39,7 +39,7 @@ export const SurveySectionsProgress = ({
     const activeSectionIndex = getActiveSectionIndex();
     const backgroundImageStyle = `url(${
       sections[Object.keys(sections)[activeSectionIndex]].image_url
-    };) lightgray 50% / cover no-repeat`;
+    }) lightgray 50% / cover no-repeat`;
     const className = 'flex-auto self-stretch rounded-2xl';
     return (
       <div
