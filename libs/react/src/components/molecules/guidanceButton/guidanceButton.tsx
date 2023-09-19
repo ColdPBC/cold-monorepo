@@ -30,9 +30,9 @@ const ctaBtnVariants = {
       opacity: 1,
       scale: 1,
       transition: {
-        duration: 0.4,
+        duration: 0.2,
         delay: .15,
-        ease: [0.42, 0, 0.58, 1]
+        ease: [1, .58, 0, .42]
       }
     }
 }
