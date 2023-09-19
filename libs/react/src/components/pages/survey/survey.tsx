@@ -29,12 +29,7 @@ export const Survey = (props: SurveyProps) => {
   };
 
   const startSurvey = () => {
-    console.log('start survey');
-    // get the first section
-    // set the active key to the first section
     if (surveyData) {
-      // go to the first section, check if the component is null and prompt is empty.
-      // if so, go to the first followup
       const firstSectionKey = Object.keys(surveyData.definition.sections)[0];
       const firstSection = surveyData.definition.sections[firstSectionKey];
       if (firstSection.component === null && isEmpty(firstSection.prompt)) {

@@ -332,20 +332,20 @@ export const SurveyQuestionContainer = ({
     goToNextQuestion();
     updateSurveyQuestion(activeKey.value, { skipped: false });
     updateTransitionClassNames(true);
-    patchSurveyData();
+    putSurveyData();
   };
 
   const onSkipButtonClicked = () => {
     goToNextQuestion();
-    updateSurveyQuestion(activeKey.value, { skipped: true });
+    updateSurveyQuestion(activeKey.value, { skipped: true, value: null });
     updateTransitionClassNames(true);
-    patchSurveyData();
+    putSurveyData();
   };
 
   const onSubmitButtonClicked = () => {
     updateSurveyQuestion(activeKey.value, { skipped: true });
     updateTransitionClassNames(true);
-    patchSurveyData();
+    putSurveyData();
     submitSurvey();
   };
 
@@ -419,10 +419,10 @@ export const SurveyQuestionContainer = ({
     updateTransitionClassNames(false);
   };
 
-  const patchSurveyData = () => {
+  const putSurveyData = () => {
     axiosFetcher([
       `/surveys/${name}`,
-      'PATCH',
+      'PUT',
       JSON.stringify({
         definition: surveyData.definition,
       }),
