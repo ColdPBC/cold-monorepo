@@ -586,3 +586,10 @@ export const getSchemeForColor = (scheme: {[key: string]: string}) => {
     scheme['1000'],
   ]
 }
+
+export const footprintSubcategoryColors: {[key: string]: 'lightblue' | 'purple' | 'green' | 'teal'} = {
+  "facilities": 'lightblue',
+  "travel": 'purple',
+  "operations": 'green',
+  "product": 'teal',
+};

@@ -2,7 +2,6 @@ import React from "react";
 import { withKnobs } from "@storybook/addon-knobs";
 import { Meta, StoryObj } from "@storybook/react";
 import {FootprintOverviewCard} from './footprintOverviewCard';
-import {BrowserRouter} from 'react-router-dom';
 import { FootprintOverviewVariants } from "../footprintOverviewChart/footprintOverviewChart";
 import { StoryMockProvider, getFootprintHandler } from '../../../';
 
@@ -19,11 +18,11 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
     render: (args) => {
         return (
-            <BrowserRouter>
+            <StoryMockProvider handlers={[]}>
                 <div className="w-[668px]">
                     <FootprintOverviewCard />
                 </div>
-            </BrowserRouter>
+            </StoryMockProvider>
         );
     },
 };
@@ -31,11 +30,11 @@ export const Default: Story = {
 export const Headerless: Story = {
     render: (args) => {
         return (
-            <BrowserRouter>
+            <StoryMockProvider handlers={[]}>
                 <div className="w-[668px]">
                     <FootprintOverviewCard headerless />
                 </div>
-            </BrowserRouter>
+            </StoryMockProvider>
         );
     },
 };
@@ -43,11 +42,11 @@ export const Headerless: Story = {
 export const Vertical: Story = {
     render: (args) => {
         return (
-            <BrowserRouter>
+            <StoryMockProvider handlers={[]}>
                 <div className="w-[437px]">
                     <FootprintOverviewCard chartVariant={FootprintOverviewVariants.vertical} />
                 </div>
-            </BrowserRouter>
+            </StoryMockProvider>
         );
     },
 };
@@ -55,11 +54,9 @@ export const Vertical: Story = {
 export const EmptyData = () => {
     return (
       <StoryMockProvider handlers={[getFootprintHandler.empty]}>
-         <BrowserRouter>
             <div className="w-[668px]">
                 <FootprintOverviewCard />
             </div>
-        </BrowserRouter>
       </StoryMockProvider>
     )
 }

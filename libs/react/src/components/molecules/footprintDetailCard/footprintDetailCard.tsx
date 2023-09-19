@@ -9,6 +9,7 @@ export interface FootprintDetailCardProps {
   colors: string[];
   subcategory_key: string;
   period: number;
+  className?: string;
 }
 
 export function FootprintDetailCard(
@@ -28,6 +29,8 @@ export function FootprintDetailCard(
 
   const subcategoryName = data?.subcategories[props.subcategory_key].subcategory_name;
 
+  const { className, ...rest } = props;
+
   return (
     <Card
       title={subcategoryName}
@@ -39,9 +42,10 @@ export function FootprintDetailCard(
           },
         },
       ]}
+      className={className}
     >
       <div className="flex items-center justify-center self-stretch flex-col">
-        <FootprintDetailChart {...props} />
+        <FootprintDetailChart {...rest} />
       </div>
     </Card>
   );

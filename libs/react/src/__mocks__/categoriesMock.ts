@@ -80,19 +80,43 @@ export function getCategoriesDataMock():any {
               },
               "vehicle_electricity": {
                 "activity_description": "Sales, Executive, Delivery, and Operational Fleet Vehicles either owned or leased",
-                "activity_name": "Vehicle Electricity"
+                "activity_name": "Vehicle Electricity",
+                "footprint": {
+                  "2022": {
+                    "period_type": "year",
+                    "value": 70
+                  },
+                }
               },
               "commuting": {
                 "activity_description": "Employee transportation to/from worksite (ICE, EV, bus, train, scooter, bike, walking, etc.) ",
-                "activity_name": "Commuting"
+                "activity_name": "Commuting",
+                "footprint": {
+                  "2022": {
+                    "period_type": "year",
+                    "value": 10
+                  },
+                }
               },
               "air_travel": {
                 "activity_description": "Business-related air travel, domestic and international. ",
-                "activity_name": "Air Travel"
+                "activity_name": "Air Travel",
+                "footprint": {
+                  "2022": {
+                    "period_type": "year",
+                    "value": 12
+                  },
+                }
               },
               "other_travel": {
                 "activity_description": "Rail, boat, taxi, and car service travel, hotel and boarding costs, food and expenses, etc.",
-                "activity_name": "Other Travel"
+                "activity_name": "Other Travel",
+                "footprint": {
+                  "2022": {
+                    "period_type": "year",
+                    "value": 45
+                  },
+                }
               }
             },
             "subcategory_name": "Travel"
@@ -121,27 +145,63 @@ export function getCategoriesDataMock():any {
               },
               "machinery_electricity": {
                 "activity_description": "Forklifts, excavators, cranes, other heavy machinery. ",
-                "activity_name": "Machinery Electricity"
+                "activity_name": "Machinery Electricity",
+                "footprint": {
+                  "2022": {
+                    "period_type": "year",
+                    "value": 30
+                  },
+                }
               },
               "cloud_computing": {
                 "activity_description": "Server & SaaS usage. ",
-                "activity_name": "Cloud Computing"
+                "activity_name": "Cloud Computing",
+                "footprint": {
+                  "2022": {
+                    "period_type": "year",
+                    "value": 42
+                  },
+                }
               },
               "professional_services": {
                 "activity_description": "Creative, marketing and communications, consultants, legal, etc. ",
-                "activity_name": "Professional Services"
+                "activity_name": "Professional Services",
+                "footprint": {
+                  "2022": {
+                    "period_type": "year",
+                    "value": 18
+                  },
+                }
               },
               "business_supplies": {
                 "activity_description": "Consumables and single-use items: Inks, papers, napkins & towels, etc.",
-                "activity_name": "Business Supplies"
+                "activity_name": "Business Supplies",
+                "footprint": {
+                  "2022": {
+                    "period_type": "year",
+                    "value": 22
+                  },
+                }
               },
               "business_equipment": {
                 "activity_description": "Printers, sinks & toilets, computers, printers, other electronic appliances. ",
-                "activity_name": "Business Equipment"
+                "activity_name": "Business Equipment",
+                "footprint": {
+                  "2022": {
+                    "period_type": "year",
+                    "value": 48
+                  },
+                }
               },
               "furniture": {
                 "activity_description": "Furniture for offices, company-owned or leased residences, and other worksites.  ",
-                "activity_name": "Furniture"
+                "activity_name": "Furniture",
+                "footprint": {
+                  "2022": {
+                    "period_type": "year",
+                    "value": 8
+                  },
+                }
               }
             },
             "subcategory_name": "Operations"
@@ -180,7 +240,7 @@ export function getCategoriesDataMock():any {
               },
               "engineering_and_innovation": {
                 "activity_description": "Design new products and services for environmental impact.",
-                "activity_name": "Engineering And Innovation",
+                "activity_name": "Engineering & Innovation",
                 "footprint": {
                   "2022": {
                     "period_type": "year",
@@ -230,7 +290,7 @@ export function getCategoriesDataMock():any {
               },
               "upstream_shipping_and_freight": {
                 "activity_description": "Movement of materials and manufactured inputs to manufacturing facilities (includes import freight by land, air, or sea).  ",
-                "activity_name": "Upstream Shipping And Freight",
+                "activity_name": "Upstream Shipping",
                 "footprint": {
                   "2022": {
                     "period_type": "year",
@@ -240,7 +300,7 @@ export function getCategoriesDataMock():any {
               },
               "downstream_shipping_and_freight": {
                 "activity_description": "Movement of finished product to distributors, retailers, and customers by land, sea, or air.",
-                "activity_name": "Downstream Shipping And Freight",
+                "activity_name": "Downstream Shipping",
                 "footprint": {
                   "2022": {
                     "period_type": "year",

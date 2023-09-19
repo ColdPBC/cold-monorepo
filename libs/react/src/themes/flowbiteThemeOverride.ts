@@ -879,11 +879,11 @@ export const flowbiteThemeOverride: FlowbiteTheme = {
       base: '',
       collapsed: {
         on: 'w-16',
-        off: 'w-52',
+        off: 'w-[208px] min-w-[208px]',
       },
       // The calculation here locking the sidebar height assumes the padding around the site remains at 40px
       inner:
-        'h-[calc(100vh-80px)] w-52 py-6 flex flex-col gap-6 bg-bgc-elevated rounded-2xl border-2 border-gray-30 fixed overflow-y-auto overflow-x-visible scrollbar-hide',
+        'h-[calc(100vh-80px)] w-[208px] min-w-[208px] py-6 flex flex-col gap-6 bg-bgc-elevated rounded-2xl border-2 border-gray-30 fixed overflow-y-auto overflow-x-visible scrollbar-hide',
     },
     collapse: {
       button:
