@@ -365,7 +365,11 @@ export const SurveyQuestionContainer = ({
           const previousSectionKey =
             Object.keys(sections)[activeSectionIndex - 1];
           const previousSection = sections[previousSectionKey];
-          if (previousSection.value !== true) {
+          if (
+            previousSection.value !== true &&
+            previousSection.component !== null &&
+            previousSection.prompt !== ''
+          ) {
             setActiveKey({
               value: previousSectionKey,
               isFollowUp: false,

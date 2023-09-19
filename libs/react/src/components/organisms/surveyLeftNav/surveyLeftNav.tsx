@@ -20,7 +20,7 @@ export const SurveyLeftNav = (props: SurveyLeftNavProps) => {
           <div
             className={'w-[668px] h-[920px] rounded-2xl'}
             style={{
-              background: `url(${surveyFormData.image_url}), lightgray 50% / cover no-repeat`,
+              background: `url('${surveyFormData.image_url}'), lightgray 50% / cover no-repeat`,
             }}
           ></div>
           <div className={'absolute top-[457px] left-[115px]'}>
