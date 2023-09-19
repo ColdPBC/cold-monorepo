@@ -1,3 +1,11 @@
+# [1.13.0](https://github.com/ColdPBC/ui/compare/v1.12.0...v1.13.0) (2023-09-19)
+
+
+### Features
+
+* Add GuidanceButton ([36f9bd4](https://github.com/ColdPBC/ui/commit/36f9bd4a0a6bad420d8a7c2ec8422838b1ca80f9))
+* Add GuidanceButton ([#33](https://github.com/ColdPBC/ui/issues/33)) ([01f3748](https://github.com/ColdPBC/ui/commit/01f374852fc7ad510c7afdb7e6fbde681f7506b8))
+
 # [1.12.0](https://github.com/ColdPBC/ui/compare/v1.11.0...v1.12.0) (2023-09-19)
 
 
