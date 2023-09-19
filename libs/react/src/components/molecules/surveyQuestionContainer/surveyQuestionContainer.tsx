@@ -3,7 +3,7 @@ import { SurveyInput } from '../index';
 import { cloneDeep, findIndex, forEach } from 'lodash';
 import {
   SurveyActiveKeyType,
-  SurveyFormDataPayloadType,
+  SurveyPayloadType,
   SurveySectionType,
 } from '@coldpbc/interfaces';
 import { BaseButton } from '../../atoms';
@@ -16,8 +16,8 @@ export interface SurveyQuestionContainerProps {
   activeKey: SurveyActiveKeyType;
   setActiveKey: (activeKey: SurveyActiveKeyType) => void;
   submitSurvey: () => void;
-  surveyData: SurveyFormDataPayloadType;
-  setSurveyData: (surveyData: SurveyFormDataPayloadType) => void;
+  surveyData: SurveyPayloadType;
+  setSurveyData: (surveyData: SurveyPayloadType) => void;
 }
 
 export const SurveyQuestionContainer = ({
@@ -43,8 +43,8 @@ export const SurveyQuestionContainer = ({
   const [transitionClassNames, setTransitionClassNames] = React.useState<any>(
     nextQuestionTransitionClassNames,
   );
-  const { data, id: surveyDataId } = surveyData;
-  const { sections } = data;
+  const { definition, id, name } = surveyData;
+  const { sections } = definition;
 
   const updateTransitionClassNames = (nextDirection: boolean) => {
     if (nextDirection) {
@@ -89,8 +89,8 @@ export const SurveyQuestionContainer = ({
         });
       }
     }
-    const newSurvey: SurveyFormDataPayloadType = cloneDeep(surveyData);
-    newSurvey.data.sections[activeSectionKey] = newSection;
+    const newSurvey: SurveyPayloadType = cloneDeep(surveyData);
+    newSurvey.definition.sections[activeSectionKey] = newSection;
     setSurveyData(newSurvey);
   };
 
@@ -417,10 +417,10 @@ export const SurveyQuestionContainer = ({
 
   const patchSurveyData = () => {
     axiosFetcher([
-      `/form-data/${surveyDataId}`,
+      `/surveys/${name}`,
       'PATCH',
       JSON.stringify({
-        data: surveyData.data,
+        definition: surveyData.definition,
       }),
     ]);
   };

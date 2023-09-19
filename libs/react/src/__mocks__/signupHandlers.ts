@@ -1,5 +1,4 @@
 import { rest } from 'msw';
-import { getFootprintDataMock } from './categoriesMock';
 
 export const getSignUpHandler = {
   DEFAULT: [

@@ -18,6 +18,7 @@
   "private": true,
   "dependencies": {
     "@auth0/auth0-react": "^2.1.0",
+    "@cypress/react": "^8.0.0",
     "@datadog/browser-rum": "^4.49.0",
     "@emotion/react": "^11.7.1",
     "@headlessui/react": "^1.7.15",
@@ -55,7 +56,7 @@
     "react-number-format": "^5.1.4",
     "react-range": "^1.8.14",
     "react-router": "^6.12.1",
-    "react-router-dom": "^6.12.1",
+    "react-router-dom": "^6.16.0",
     "react-transition-group": "^4.4.5",
     "swr": "^2.1.5",
     "url-loader": "^4.1.1",

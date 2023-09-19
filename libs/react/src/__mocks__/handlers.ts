@@ -188,13 +188,13 @@ export const handlers = [
     return res(ctx.json(getRoles()));
   }),
 
-  rest.get(getApiUrl('/survey-data/:name'), (req, res, ctx) => {
+  rest.get(getApiUrl('/surveys/:name'), (req, res, ctx) => {
     const { name } = req.params;
 
     return res(ctx.json(getSurveyFormDataByName(name as string)));
   }),
 
-  rest.patch(getApiUrl('/survey-data/:name'), async (req, res, ctx) => {
+  rest.patch(getApiUrl('/surveys/:name'), async (req, res, ctx) => {
     const { data } = await req.json();
 
     return res(ctx.json({}));

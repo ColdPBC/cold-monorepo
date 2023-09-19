@@ -1,15 +1,11 @@
 import React from 'react';
-import {
-  SurveyFormDataPayloadType,
-  SurveyFormDataType,
-  SurveyFormDefinitionType,
-} from '@coldpbc/interfaces';
+import { SurveyDefinitionType } from '@coldpbc/interfaces';
 import ReactMarkdown from 'react-markdown';
 import { BaseButton } from '@coldpbc/components';
 import { ButtonTypes, GlobalSizes } from '@coldpbc/enums';
 
 export interface SurveyIntroProps {
-  surveyFormData: SurveyFormDataType;
+  surveyFormData: SurveyDefinitionType;
   onSurveyStart: () => void;
 }
 
