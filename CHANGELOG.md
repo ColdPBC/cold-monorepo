@@ -1,3 +1,11 @@
+# [1.12.0](https://github.com/ColdPBC/ui/compare/v1.11.0...v1.12.0) (2023-09-19)
+
+
+### Features
+
+* Add footprint page and route ([cdc71c1](https://github.com/ColdPBC/ui/commit/cdc71c1da4ab23a3f707b8cfc74f853cce1bf384))
+* Add footprint page and route ([#31](https://github.com/ColdPBC/ui/issues/31)) ([cea1ad5](https://github.com/ColdPBC/ui/commit/cea1ad5ae6cd032d9b0654b2b227fbb1a5765c0e))
+
 # [1.11.0](https://github.com/ColdPBC/ui/compare/v1.10.0...v1.11.0) (2023-09-18)
 
 
