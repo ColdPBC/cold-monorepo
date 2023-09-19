@@ -8,6 +8,7 @@ import { ApplicationToaster } from '../molecules';
 import { Terms } from '../pages';
 import { Interceptor } from './interceptor';
 import { Footprint } from '../pages/footprint';
+import { Journey } from '../pages/journey';
 
 export const ColdRoutes = () => {
   return (
@@ -19,6 +20,7 @@ export const ColdRoutes = () => {
             <Route path="/" element={<Home />} />
             <Route path="/home" element={<Home />} />
             <Route path="/footprint" element={<Footprint />} />
+            <Route path="/journey" element={<Journey />} />
             <Route path="/settings" element={<TeamMembersSettings />} />
             <Route
               path="*"

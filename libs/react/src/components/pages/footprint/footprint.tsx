@@ -11,6 +11,7 @@ import { FootprintDetailCard } from '../../molecules/footprintDetailCard';
 import { getSchemeForColor, HexColors } from '@coldpbc/themes';
 import { Link } from 'react-router-dom';
 import { AppContent } from '../../organisms/appContent';
+import { DismissableInfoCard } from '../../molecules/dismissableInfoCard';
 
 const PERIOD = 2022;
 
@@ -63,12 +64,11 @@ export function Footprint() {
             </>
             :
             <>
-              <Card className='gap-0'>
-                <p className='text-sm leading-normal'>
-                  Your footprint is a snapshot of the greenhouse gases your company emitted over a specific timeframe. It is measured in tons of carbon dioxide equivalent, expressed as tCO2e.
-                </p>
-                <Link to={'#'} className='underline m-0'>Don't show again.</Link>
-              </Card>
+              <DismissableInfoCard 
+                text='Your footprint is a snapshot of the greenhouse gases your company emitted over a specific timeframe. It is measured in tons of carbon dioxide equivalent, expressed as tCO2e.'
+                onDismiss={() => {}}
+                dismissKey='footprint-page'
+              />
               <FootprintOverviewCard chartVariant={FootprintOverviewVariants.horizontal} headerless />
             </>
           } 
