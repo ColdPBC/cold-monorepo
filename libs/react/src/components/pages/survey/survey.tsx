@@ -57,7 +57,13 @@ export const Survey = (props: SurveyProps) => {
       // sort the sections and followups by the idx field
       // data.definition.sections is an object with keys as the section name
       // data.definition[section].followups is an object with keys as the followup name
-      const copy = cloneDeep(data);
+      const copy = {
+        ...data,
+        definition: {
+          ...data.definition,
+          sections: {},
+        },
+      } as SurveyPayloadType;
       // sort the sections and set the sorted sections in the copy
       Object.keys(data.definition.sections)
         .sort((a, b) => {
@@ -67,7 +73,10 @@ export const Survey = (props: SurveyProps) => {
           );
         })
         .forEach((key) => {
-          copy.definition.sections[key] = data.definition.sections[key];
+          copy.definition.sections[key] = {
+            ...data.definition.sections[key],
+            follow_up: {},
+          };
           // sort the followups and set the sorted followups in the copy
           Object.keys(data.definition.sections[key].follow_up)
             .sort((a, b) => {
