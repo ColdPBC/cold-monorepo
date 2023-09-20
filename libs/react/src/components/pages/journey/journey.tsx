@@ -18,7 +18,7 @@ export function Journey() {
     axiosFetcher,
   );
 
-  const isEmptyData = data?.categories?.length === 0;
+  const isEmptyData = (data?.definition && Object.keys(data.definition.categories).length === 0) || data?.response?.status === 404;
 
   const auth0 = useAuth0();
   if (auth0.isLoading) {

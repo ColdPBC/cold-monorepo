@@ -27,3 +27,12 @@ export const EmptyData = () => {
     </StoryMockProvider>
   );
 };
+
+export const Handle404 = () => {
+  return (
+    <StoryMockProvider handlers={[getCategoriesHandler.handle404]}>
+      <JourneySpiderChart />
+    </StoryMockProvider>
+  );
+};
+

@@ -60,3 +60,11 @@ export const EmptyData = () => {
     </StoryMockProvider>
   );
 };
+
+export const Handle404 = () => {
+  return (
+    <StoryMockProvider handlers={[getFootprintHandler.handle404]}>
+      <FootprintOverviewChart period={2022} />
+    </StoryMockProvider>
+  );
+};

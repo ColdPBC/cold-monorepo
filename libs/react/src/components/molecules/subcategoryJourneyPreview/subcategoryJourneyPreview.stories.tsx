@@ -55,3 +55,14 @@ export const Trailblazer: Story = {
     );
   },
 };
+
+export const Handle404 = () => {
+  return (
+    <StoryMockProvider handlers={[getCategoriesHandler.handle404]}>
+      <SubcategoryJourneyPreview
+        subcategory_key="employee_footprint"
+        category_key="employee_engagement"
+      />
+    </StoryMockProvider>
+  );
+};

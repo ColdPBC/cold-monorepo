@@ -41,9 +41,7 @@ export const SubcategoryJourneyPreview = ({
         axiosFetcher,
     );
 
-    const subcategoryData = data?.categories[category_key]?.subcategories[subcategory_key];
-
-    console.log({subcategory_key, subcategoryData})
+    const subcategoryData = data?.definition?.categories[category_key]?.subcategories[subcategory_key];
 
     if (!subcategoryData) {
         return null;
