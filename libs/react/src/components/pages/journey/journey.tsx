@@ -5,9 +5,10 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { Spinner } from '../../atoms/spinner/spinner';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import useSWR from 'swr';
-import { JourneyOverviewCard } from '../../molecules';
+import { Card, JourneyOverviewCard } from '../../molecules';
 import { AppContent } from '../../organisms/appContent/appContent';
 import { DismissableInfoCard } from '../../molecules/dismissableInfoCard';
+import { JourneyDetailView } from '../../molecules/journeyDetailView';
 
 const PERIOD = 2022;
 
@@ -34,7 +35,9 @@ export function Journey() {
         <CenterColumnContent>
           {!isEmptyData ?
             <>
-
+              <Card>
+                <JourneyDetailView />
+              </Card>
             </>
             :
             <>
