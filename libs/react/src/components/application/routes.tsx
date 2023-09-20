@@ -5,6 +5,7 @@ import { TeamMembersSettings } from '../pages';
 import { Home } from '../pages';
 import { ApplicationToaster } from '../molecules';
 import { Terms } from '../pages';
+import { Interceptor } from './interceptor';
 import { Footprint } from '../pages/';
 import { ProtectedRoute, Signup } from './authentication';
 
@@ -14,17 +15,19 @@ export const ColdRoutes = () => {
       <Routes>
         <Route path="/signup" element={<Signup />} />
         <Route element={<ProtectedRoute />}>
-          <Route element={<DashboardLayout />}>
-            <Route path="/" element={<Home />} />
-            <Route path="/home" element={<Home />} />
-            <Route path="/footprint" element={<Footprint />} />
-            <Route path="/settings" element={<TeamMembersSettings />} />
-            <Route path={'/privacy'} element={<Terms type={'privacy'} />} />
-            <Route path={'/terms'} element={<Terms type={'tos'} />} />
-            <Route
-              path="*"
-              element={<div className={'text-tc-primary'}>Pending...</div>}
-            />
+          <Route element={<Interceptor />}>
+            <Route element={<DashboardLayout />}>
+              <Route path="/" element={<Home />} />
+              <Route path="/home" element={<Home />} />
+              <Route path="/footprint" element={<Footprint />} />
+              <Route path="/settings" element={<TeamMembersSettings />} />
+              <Route path={'/privacy'} element={<Terms type={'privacy'} />} />
+              <Route path={'/terms'} element={<Terms type={'tos'} />} />
+              <Route
+                path="*"
+                element={<div className={'text-tc-primary'}>Pending...</div>}
+              />
+            </Route>
           </Route>
         </Route>
       </Routes>

@@ -79,36 +79,58 @@ export const SelectOption = ({
 
   if (vertical) {
     return (
-      <div className={'w-full space-y-4'}>
-        {options.map((option, index) => {
-          return (
-            <div
-              key={`select_option_${index}`}
-              className={getClassName(index)}
-              id={index.toString()}
-              onClick={() => onOptionClick(index)}
-            >
-              {option}
-            </div>
-          );
-        })}
+      <div className={'w-full'}>
+        {isMultiSelect && (
+          <div
+            className={
+              'text-left text-xs not-italic font-normal text-tc-primary'
+            }
+          >
+            Select all that apply
+          </div>
+        )}
+        <div className={'w-full space-y-4'}>
+          {options.map((option, index) => {
+            return (
+              <div
+                key={`select_option_${index}`}
+                className={getClassName(index)}
+                id={index.toString()}
+                onClick={() => onOptionClick(index)}
+              >
+                {option}
+              </div>
+            );
+          })}
+        </div>
       </div>
     );
   } else {
     return (
-      <div className={'w-full grid grid-cols-2 gap-4'}>
-        {options.map((option, index) => {
-          return (
-            <div
-              key={`select_option_${index}`}
-              className={getClassName(index)}
-              id={index.toString()}
-              onClick={() => onOptionClick(index)}
-            >
-              {option}
-            </div>
-          );
-        })}
+      <div className={'w-full'}>
+        {isMultiSelect && (
+          <div
+            className={
+              'text-left text-xs not-italic font-normal text-tc-primary'
+            }
+          >
+            Select all that apply
+          </div>
+        )}
+        <div className={'w-full grid grid-cols-2 gap-4'}>
+          {options.map((option, index) => {
+            return (
+              <div
+                key={`select_option_${index}`}
+                className={getClassName(index)}
+                id={index.toString()}
+                onClick={() => onOptionClick(index)}
+              >
+                {option}
+              </div>
+            );
+          })}
+        </div>
       </div>
     );
   }

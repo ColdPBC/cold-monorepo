@@ -1,12 +1,6 @@
-import {
-  SurveyFormDataPayloadType,
-  SurveyFormDefinitionPayloadType,
-  SurveySectionType,
-} from '@coldpbc/interfaces';
+import { SurveyPayloadType, SurveySectionType } from '@coldpbc/interfaces';
 
-export const getSurveyFormDataByName = (
-  name: string,
-): SurveyFormDefinitionPayloadType => {
+export const getSurveyFormDataByName = (name: string): SurveyPayloadType => {
   switch (name) {
     default:
     case 'qaalib_test':
@@ -14,144 +8,143 @@ export const getSurveyFormDataByName = (
   }
 };
 
-export const getTestingSurveyFormDefinitionData =
-  (): SurveyFormDefinitionPayloadType => {
-    return {
-      id: '622fe082-a490-49a3-97f1-9cb511b53581',
-      name: 'qaalib_test',
-      type: 'survey',
-      description:
-        'A survey that exercises lots of sections and components for Qaalib to test everything with the survey',
-      created_at: '2023-08-14T16:14:14.128Z',
-      updated_at: '2023-08-14T16:14:14.128Z',
-      definition: {
-        title: 'Qaalib Test',
-        image_url:
-          'https://images.unsplash.com/photo-1603437873662-dc1f44901825?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=3270&q=80',
-        intro_markdown:
-          "Welcome to Cold Climate!\n Let’s Start Your Journey to Absolute Zero™ \nWe will start with our basic company information survey. \nThis is a quick form to understand a little more about your company and what climate efforts you've already undertaken.",
-        sections: {
-          product: {
-            title: 'Product',
-            prompt: 'Does your company make a physical product?',
-            component: 'yes_no',
-            follow_up: {
-              'product:0': {
-                idx: 0,
-                prompt: 'Is your product made of metal?',
-                options: [],
-                tooltip: 'Select yes or no',
-                component: 'yes_no',
-                placeholder: '',
-              },
-              'product:1': {
-                idx: 1,
-                prompt: 'How much does your product cost, in dollars?',
-                options: [],
-                tooltip: 'Enter the cost to your company to produce',
-                component: 'currency',
-                placeholder: '45',
-              },
-              'product:2': {
-                idx: 2,
-                prompt: 'What percent of your product is leather?',
-                options: [],
-                tooltip: '',
-                component: 'percent_slider',
-                placeholder: '',
-              },
-              'product:3': {
-                idx: 3,
-                prompt: 'How many factories make your product?',
-                options: [],
-                tooltip: 'Choose the number across all countries',
-                component: 'number',
-                placeholder: '2',
-              },
+export const getTestingSurveyFormDefinitionData = (): SurveyPayloadType => {
+  return {
+    id: '622fe082-a490-49a3-97f1-9cb511b53581',
+    name: 'qaalib_test',
+    type: 'survey',
+    description:
+      'A survey that exercises lots of sections and components for Qaalib to test everything with the survey',
+    created_at: '2023-08-14T16:14:14.128Z',
+    updated_at: '2023-08-14T16:14:14.128Z',
+    definition: {
+      title: 'Qaalib Test',
+      image_url:
+        'https://images.unsplash.com/photo-1603437873662-dc1f44901825?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=3270&q=80',
+      intro_markdown:
+        "Welcome to Cold Climate!\n Let’s Start Your Journey to Absolute Zero™ \nWe will start with our basic company information survey. \nThis is a quick form to understand a little more about your company and what climate efforts you've already undertaken.",
+      sections: {
+        product: {
+          title: 'Product',
+          prompt: 'Does your company make a physical product?',
+          component: 'yes_no',
+          follow_up: {
+            'product:0': {
+              idx: 0,
+              prompt: 'Is your product made of metal?',
+              options: [],
+              tooltip: 'Select yes or no',
+              component: 'yes_no',
+              placeholder: '',
             },
-            image_url:
-              'https://images.unsplash.com/photo-1610891015188-5369212db097?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
-            category_idx: 1,
-            category_description:
-              'Questions about how your products are produced',
-          },
-          facilities: {
-            title: 'Facilities',
-            prompt:
-              'Do you own or lease any facilities like offices or warehouses?',
-            component: 'yes_no',
-            follow_up: {
-              'facilities:0': {
-                idx: 0,
-                prompt: 'What colors are your office carpets?',
-                options: ['Gray', 'Black', 'Orange', 'Blue', 'Purple'],
-                tooltip:
-                  'If carpets are multiple colors choose all colors that apply',
-                component: 'multi_select',
-                placeholder: '',
-              },
+            'product:1': {
+              idx: 1,
+              prompt: 'How much does your product cost, in dollars?',
+              options: [],
+              tooltip: 'Enter the cost to your company to produce',
+              component: 'currency',
+              placeholder: '45',
             },
-            image_url:
-              'https://images.unsplash.com/photo-1524758631624-e2822e304c36?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
-            category_idx: 2,
-            category_description:
-              'Questions about your the facilities you own or lease',
-          },
-          general: {
-            title: 'General',
-            prompt: '',
-            component: null,
-            follow_up: {
-              'general:0': {
-                idx: 0,
-                prompt: 'Which regions do you sell your product into?',
-                options: [
-                  'North America',
-                  'South America',
-                  'Europe',
-                  'Asia',
-                  'Australia',
-                  'Africa',
-                ],
-                tooltip: '',
-                component: 'multi_select',
-                placeholder: '',
-              },
-              'general:1': {
-                idx: 1,
-                prompt: "What is your company's name?",
-                options: [],
-                tooltip: 'Enter your company name',
-                component: 'text',
-                placeholder: 'Yourco',
-              },
-              'general:2': {
-                idx: 2,
-                prompt: 'What is your favorite color of the primary colors?',
-                options: ['Red', 'Blue', 'Yellow'],
-                tooltip: 'Pick the one you like the most',
-                component: 'select',
-                placeholder: '',
-              },
+            'product:2': {
+              idx: 2,
+              prompt: 'What percent of your product is leather?',
+              options: [],
+              tooltip: '',
+              component: 'percent_slider',
+              placeholder: '',
             },
-            image_url:
-              'https://images.unsplash.com/photo-1533038590840-1cde6e668a91?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1587&q=80',
-            category_idx: 0,
-            category_description: 'General questions about your business',
+            'product:3': {
+              idx: 3,
+              prompt: 'How many factories make your product?',
+              options: [],
+              tooltip: 'Choose the number across all countries',
+              component: 'number',
+              placeholder: '2',
+            },
           },
+          image_url:
+            'https://images.unsplash.com/photo-1610891015188-5369212db097?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
+          category_idx: 1,
+          category_description:
+            'Questions about how your products are produced',
+        },
+        facilities: {
+          title: 'Facilities',
+          prompt:
+            'Do you own or lease any facilities like offices or warehouses?',
+          component: 'yes_no',
+          follow_up: {
+            'facilities:0': {
+              idx: 0,
+              prompt: 'What colors are your office carpets?',
+              options: ['Gray', 'Black', 'Orange', 'Blue', 'Purple'],
+              tooltip:
+                'If carpets are multiple colors choose all colors that apply',
+              component: 'multi_select',
+              placeholder: '',
+            },
+          },
+          image_url:
+            'https://images.unsplash.com/photo-1524758631624-e2822e304c36?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
+          category_idx: 2,
+          category_description:
+            'Questions about your the facilities you own or lease',
+        },
+        general: {
+          title: 'General',
+          prompt: '',
+          component: null,
+          follow_up: {
+            'general:0': {
+              idx: 0,
+              prompt: 'Which regions do you sell your product into?',
+              options: [
+                'North America',
+                'South America',
+                'Europe',
+                'Asia',
+                'Australia',
+                'Africa',
+              ],
+              tooltip: '',
+              component: 'multi_select',
+              placeholder: '',
+            },
+            'general:1': {
+              idx: 1,
+              prompt: "What is your company's name?",
+              options: [],
+              tooltip: 'Enter your company name',
+              component: 'text',
+              placeholder: 'Yourco',
+            },
+            'general:2': {
+              idx: 2,
+              prompt: 'What is your favorite color of the primary colors?',
+              options: ['Red', 'Blue', 'Yellow'],
+              tooltip: 'Pick the one you like the most',
+              component: 'select',
+              placeholder: '',
+            },
+          },
+          image_url:
+            'https://images.unsplash.com/photo-1533038590840-1cde6e668a91?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1587&q=80',
+          category_idx: 0,
+          category_description: 'General questions about your business',
         },
       },
-    };
+    },
   };
+};
 
 export function getSurveySectionMock() {
-  return getSurveyFormDataPayload().data.sections;
+  return getSurveyFormDataPayload().definition.sections;
 }
 
 export function getSurveySectionScrollableMock(): {
   [key: string]: SurveySectionType;
 } {
-  const surveyData = getSurveyFormDataPayload().data.sections;
+  const surveyData = getSurveyFormDataPayload().definition.sections;
 
   const SECTIONS_TO_ADD = 16;
   for (let i = 1; i <= SECTIONS_TO_ADD; i++) {
@@ -169,13 +162,14 @@ export function getSurveySectionScrollableMock(): {
   return surveyData;
 }
 
-export function getSurveyFormDataPayload(): SurveyFormDataPayloadType {
+export function getSurveyFormDataPayload(): SurveyPayloadType {
   return {
     id: '622fe082-a490-49a3-97f1-9cb511b53581',
-    organization_id: '622fe082-a490-49a3-97f1-9cb511b53581',
-    form_name: 'qaalib_test',
+    name: 'qaalib_test',
+    type: 'ONBOARDING',
+    description: 'A survey that exercises lots of sections and components',
     created_at: '2023-08-14T16:14:14.128Z',
     updated_at: '2023-08-14T16:14:14.128Z',
-    data: getTestingSurveyFormDefinitionData().definition,
+    definition: getTestingSurveyFormDefinitionData().definition,
   };
 }
