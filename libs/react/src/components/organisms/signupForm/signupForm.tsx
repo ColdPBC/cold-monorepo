@@ -38,10 +38,8 @@ export const SignupForm = ({
   const [isAgreedToPrivacyAndTOS, setIsAgreedToPrivacyAndTOS] =
     React.useState<boolean>(tosSigned && privacySigned);
 
-  const onContinue = () => {
-    postUserData();
-    postCompanyData();
-    signTOSandPrivacy();
+  const onContinue = async () => {
+    await Promise.all([postUserData(), postCompanyData(), signTOSandPrivacy()]);
     onSubmit();
   };
 
@@ -72,7 +70,7 @@ export const SignupForm = ({
 
   const postUserData = () => {
     if (userData && !userData.given_name && !userData.family_name) {
-      axiosFetcher([
+      return axiosFetcher([
         `/users/${userData.email}`,
         'PATCH',
         JSON.stringify({
@@ -85,7 +83,7 @@ export const SignupForm = ({
 
   const postCompanyData = () => {
     if (!companyData) {
-      axiosFetcher([
+      return axiosFetcher([
         `/organizations`,
         'POST',
         JSON.stringify({
@@ -95,9 +93,11 @@ export const SignupForm = ({
     }
   };
 
-  const signTOSandPrivacy = () => {
-    axiosFetcher([`/policies/${tosData.id}/signed`, 'POST']);
-    axiosFetcher([`/policies/${privacyData.id}/signed`, 'POST']);
+  const signTOSandPrivacy = async () => {
+    return await Promise.all([
+      axiosFetcher([`/policies/${tosData.id}/signed`, 'POST']),
+      axiosFetcher([`/policies/${privacyData.id}/signed`, 'POST']),
+    ]);
   };
 
   return (

@@ -90,9 +90,31 @@ export const EmptyFootprintData: Story = {
 export const NeedsSignup: Story = {
   render: () => {
     return (
-      <BrowserRouter>
-        <Application />
-      </BrowserRouter>
+      <SWRConfig
+        value={{
+          provider: (cache) => {
+            cache.delete('messages');
+            return cache;
+          },
+        }}
+      >
+        <BrowserRouter>
+          <ColdContext.Provider
+            value={{
+              auth0Options: {
+                domain: '',
+                clientId: '',
+                authorizationParams: {
+                  audience: '',
+                },
+              } as Auth0ProviderOptions,
+              launchDarklyClientSideId: '',
+            }}
+          >
+            <Application />
+          </ColdContext.Provider>
+        </BrowserRouter>
+      </SWRConfig>
     );
   },
   parameters: {
