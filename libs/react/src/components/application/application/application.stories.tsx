@@ -74,3 +74,11 @@ export const EmptyFootprintData: Story = {
     );
   },
 };
+
+export const Handle404 = () => {
+  return (
+    <StoryMockProvider handlers={[getFootprintHandler.handle404, getCategoriesHandler.handle404]}>
+      <Application />
+    </StoryMockProvider>
+  );
+};

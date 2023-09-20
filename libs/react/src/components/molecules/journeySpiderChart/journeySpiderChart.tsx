@@ -62,11 +62,11 @@ export function JourneySpiderChart({ setIsEmptyData }: Props) {
 
   // Update chart data on receiving new data
   useEffect(() => {
-    if (data?.categories?.length !== 0) {
+    if (data?.definition && Object.keys(data.definition.categories).length !== 0) {
       const newLabels: string[] = [],
         newData: number[] = [];
       // Transform chart data
-      forEach(data?.categories, (category) => {
+      forEach(data?.definition.categories, (category) => {
         forEach(category.subcategories, (subcategory) => {
           if (subcategory.journey_score) {
             newLabels.push(subcategory.subcategory_name);
@@ -126,7 +126,7 @@ export function JourneySpiderChart({ setIsEmptyData }: Props) {
       </div>
     );
   } 
-  else if (data && data.categories?.length === 0) {
+  else if ((data?.definition && Object.keys(data.definition.categories).length === 0) || data.response?.status === 404) {
     return <EmptyChart />
   } 
   else if (error) {
