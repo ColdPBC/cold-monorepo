@@ -19,7 +19,7 @@ export const Default: Story = {
     return <SurveyIntro {...args} />;
   },
   args: {
-    surveyFormData: getSurveyFormDataPayload().data,
+    surveyFormData: getSurveyFormDataPayload().definition,
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     onSurveyStart: () => {},
   },

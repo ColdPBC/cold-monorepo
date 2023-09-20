@@ -24,7 +24,7 @@ const SurveyRightNavStory = (args: SurveyRightNavProps) => {
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   const startSurvey = () => {
     setActiveKey({
-      value: Object.keys(surveyData.data.sections)[0],
+      value: Object.keys(surveyData.definition.sections)[0],
       isFollowUp: false,
     });
   };

@@ -6,6 +6,7 @@ import { TeamMembersSettings } from '../pages';
 import { Home } from '../pages';
 import { ApplicationToaster } from '../molecules';
 import { Terms } from '../pages';
+import { Interceptor } from './interceptor';
 import { Footprint } from '../pages/';
 import { ProtectedRoute, Signup } from './authentication';
 import { Login } from './authentication';
@@ -18,7 +19,9 @@ export const ColdRoutes = () => {
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
         <Route element={<ProtectedRoute />}>
+        <Route element={<Interceptor />}>
           <Route element={<DashboardLayout />}>
+            <Route path="/logout" element={<Logout />} />
             <Route path="/" element={<Home />} />
             <Route path="/home" element={<Home />} />
             <Route path="/footprint" element={<Footprint />} />
@@ -30,6 +33,7 @@ export const ColdRoutes = () => {
           </Route>
           <Route path={'/privacy'} element={<Terms type={'privacy'} />} />
           <Route path={'/terms'} element={<Terms type={'tos'} />} />
+          </Route>
         </Route>
       </Routes>
       <ApplicationToaster />

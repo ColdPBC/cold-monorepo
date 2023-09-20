@@ -72,3 +72,20 @@ export interface SurveySectionFollowUpType {
   value?: any | null;
   skipped?: boolean;
 }
+
+export interface SurveyPayloadType {
+  id: string;
+  name: string;
+  type: string;
+  definition: SurveyDefinitionType;
+  description: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface SurveyDefinitionType {
+  title: string;
+  image_url: string;
+  intro_markdown: string;
+  sections: SurveySectionsType;
+}
