@@ -1,7 +1,7 @@
 {
   "name": "cold-monorepo-nx",
   "packageManager": "yarn@3.6.3",
-  "version": "1.12.0",
+  "version": "1.13.0",
   "license": "MIT",
   "scripts": {
     "prebuild": "npx barrelsby -D -d ./libs/react/src -l all -e stories.tsx -e react-app-env -e test.tsx -e private.tsx",
@@ -40,6 +40,7 @@
     "dd-trace": "^4.15.0",
     "flowbite": "^1.6.5",
     "flowbite-react": "^0.5.0",
+    "framer-motion": "^10.16.4",
     "js-cookie": "^3.0.5",
     "launchdarkly-react-client-sdk": "3.0.6",
     "lodash": "^4.17.21",
