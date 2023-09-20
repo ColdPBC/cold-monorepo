@@ -1,8 +1,8 @@
 import React from 'react';
-import {Avatar} from '../../atoms/avatar/avatar';
-import {useAuth0} from '@auth0/auth0-react';
-import {GlobalSizes} from '../../../enums/sizes';
-import {Dropdown} from 'flowbite-react';
+import { Avatar } from '../../atoms/avatar/avatar';
+import { useAuth0 } from '@auth0/auth0-react';
+import { GlobalSizes } from '../../../enums/sizes';
+import { Dropdown } from 'flowbite-react';
 import cookie from 'js-cookie';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
@@ -25,7 +25,11 @@ export const Header = (props: HeaderProps) => {
     // Remove the cookie
     cookie.remove('coldpbc');
 
-    auth0Logout();
+    auth0Logout({
+      logoutParams: {
+        returnTo: window.location.origin,
+      },
+    });
   };
 
   if (headerUser) {

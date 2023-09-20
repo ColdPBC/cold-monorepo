@@ -5,7 +5,7 @@ export const auth0UserMock: User = {
   given_name: 'Qaalib',
   family_name: 'Farah',
   picture: 'https://img.uefa.com/imgml/TP/players/1/2023/324x324/250103758.jpg',
-  email: 'qaalig.farah@coldclimate.com',
+  email: 'qaalib.farah@coldclimate.com',
   coldclimate_claims: {
     org_id: 'org_123',
   },

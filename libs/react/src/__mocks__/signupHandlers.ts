@@ -1,5 +1,9 @@
 import { rest } from 'msw';
-import { getFootprintDataMock } from './categoriesMock';
+import {
+  getEmptyPoliciesSignedMock,
+  getPoliciesSignedMock,
+  getPolicyMockByName,
+} from './policyMock';
 
 export const getSignUpHandler = {
   DEFAULT: [
@@ -17,6 +21,13 @@ export const getSignUpHandler = {
         name: string;
       };
       return res(ctx.json({}));
+    }),
+    rest.get('*/policies/signed/user', (req, res, ctx) => {
+      return res(ctx.json(getEmptyPoliciesSignedMock()));
+    }),
+    rest.get('*/policies/:name', (req, res, ctx) => {
+      const name = req.params.name as string;
+      return res(ctx.json(getPolicyMockByName(name)));
     }),
   ],
 };

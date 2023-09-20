@@ -4,9 +4,14 @@ import { Meta, StoryObj } from '@storybook/react';
 import { SWRConfig } from 'swr';
 import { Application } from './application';
 import { BrowserRouter } from 'react-router-dom';
-import { StoryMockProvider, getFootprintHandler, getCategoriesHandler } from '@coldpbc/mocks';
-import { Provider } from 'launchdarkly-react-client-sdk/lib/context';
-import { render } from 'react-dom';
+import {
+  StoryMockProvider,
+  getFootprintHandler,
+  getCategoriesHandler,
+  auth0UserMock,
+} from '@coldpbc/mocks';
+import ColdContext from '../../../context/coldContext';
+import { Auth0ProviderOptions } from '@auth0/auth0-react';
 
 const meta: Meta<typeof Application> = {
   title: 'Application/Application',
@@ -18,16 +23,8 @@ const meta: Meta<typeof Application> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-// TODO: Refactor this to use separate storybook LD environment instead of mocking LD flags. Add env variables with STORYBOOK_ prefix
-
 export const Default: Story = {
   render: () => {
-    const context = createContext({
-      flags: {},
-      flagKeyMap: {},
-      ldClient: undefined,
-    });
-    const { Provider } = context;
     return (
       <SWRConfig
         value={{
@@ -38,7 +35,20 @@ export const Default: Story = {
         }}
       >
         <BrowserRouter>
-          <Application />
+          <ColdContext.Provider
+            value={{
+              auth0Options: {
+                domain: '',
+                clientId: '',
+                authorizationParams: {
+                  audience: '',
+                },
+              } as Auth0ProviderOptions,
+              launchDarklyClientSideId: '',
+            }}
+          >
+            <Application />
+          </ColdContext.Provider>
         </BrowserRouter>
       </SWRConfig>
     );
@@ -68,9 +78,30 @@ export const Loading: Story = {
 export const EmptyFootprintData: Story = {
   render: () => {
     return (
-      <StoryMockProvider handlers={[getFootprintHandler.empty, getCategoriesHandler.empty]}>
+      <StoryMockProvider
+        handlers={[getFootprintHandler.empty, getCategoriesHandler.empty]}
+      >
         <Application />
       </StoryMockProvider>
     );
+  },
+};
+
+export const NeedsSignup: Story = {
+  render: () => {
+    return (
+      <BrowserRouter>
+        <Application />
+      </BrowserRouter>
+    );
+  },
+  parameters: {
+    auth0AddOn: {
+      user: {
+        ...auth0UserMock,
+        family_name: null,
+        given_name: null,
+      },
+    },
   },
 };

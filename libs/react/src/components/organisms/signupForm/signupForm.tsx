@@ -8,12 +8,13 @@ import { Organization } from 'auth0';
 import { PolicyType } from '@coldpbc/interfaces';
 
 export interface SignupFormProps {
-  userData: Auth0User;
+  userData?: Auth0User;
   companyData?: Organization;
   tosSigned: boolean;
   privacySigned: boolean;
   tosData: PolicyType;
   privacyData: PolicyType;
+  onSubmit: () => void;
 }
 
 export const SignupForm = ({
@@ -23,13 +24,13 @@ export const SignupForm = ({
   privacySigned,
   tosData,
   privacyData,
+  onSubmit,
 }: SignupFormProps) => {
-  const { user } = useAuth0();
   const [firstName, setFirstName] = React.useState<string | undefined>(
-    userData.given_name,
+    userData?.given_name,
   );
   const [lastName, setLastName] = React.useState<string | undefined>(
-    userData.family_name,
+    userData?.family_name,
   );
   const [companyName, setCompanyName] = React.useState<string>(
     companyData?.name || '',
@@ -38,13 +39,10 @@ export const SignupForm = ({
     React.useState<boolean>(tosSigned && privacySigned);
 
   const onContinue = () => {
-    // call api to update user with firstName, lastName, companyName
-    // if successful, redirect to /dashboard
-    // if unsuccessful, show error message
-    console.log('onContinue');
     postUserData();
     postCompanyData();
     signTOSandPrivacy();
+    onSubmit();
   };
 
   const getContinueButton = () => {
@@ -73,9 +71,9 @@ export const SignupForm = ({
   };
 
   const postUserData = () => {
-    if (user && !userData.given_name && !userData.family_name) {
+    if (userData && !userData.given_name && !userData.family_name) {
       axiosFetcher([
-        `/users/${user.email}`,
+        `/users/${userData.email}`,
         'PATCH',
         JSON.stringify({
           family_name: lastName,
@@ -86,7 +84,7 @@ export const SignupForm = ({
   };
 
   const postCompanyData = () => {
-    if (user && !companyData) {
+    if (!companyData) {
       axiosFetcher([
         `/organizations`,
         'POST',
@@ -98,10 +96,8 @@ export const SignupForm = ({
   };
 
   const signTOSandPrivacy = () => {
-    if (user) {
-      axiosFetcher([`/policies/${tosData.id}/signed`, 'POST']);
-      axiosFetcher([`/policies/${privacyData.id}/signed`, 'POST']);
-    }
+    axiosFetcher([`/policies/${tosData.id}/signed`, 'POST']);
+    axiosFetcher([`/policies/${privacyData.id}/signed`, 'POST']);
   };
 
   return (
