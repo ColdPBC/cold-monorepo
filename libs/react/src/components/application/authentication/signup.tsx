@@ -7,7 +7,8 @@ export const Signup = () => {
   const { loginWithRedirect } = useAuth0();
 
   const appState = {
-    returnTo: window.location.pathname,
+    returnTo:
+      window.location.pathname === '/logout' ? '/' : window.location.pathname,
   };
 
   useEffect(() => {
