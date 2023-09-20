@@ -3,7 +3,7 @@ import { SurveyInput } from '../index';
 import { cloneDeep, findIndex, forEach } from 'lodash';
 import {
   SurveyActiveKeyType,
-  SurveyFormDataPayloadType,
+  SurveyPayloadType,
   SurveySectionType,
 } from '@coldpbc/interfaces';
 import { BaseButton } from '../../atoms';
@@ -16,8 +16,8 @@ export interface SurveyQuestionContainerProps {
   activeKey: SurveyActiveKeyType;
   setActiveKey: (activeKey: SurveyActiveKeyType) => void;
   submitSurvey: () => void;
-  surveyData: SurveyFormDataPayloadType;
-  setSurveyData: (surveyData: SurveyFormDataPayloadType) => void;
+  surveyData: SurveyPayloadType;
+  setSurveyData: (surveyData: SurveyPayloadType) => void;
 }
 
 export const SurveyQuestionContainer = ({
@@ -43,8 +43,8 @@ export const SurveyQuestionContainer = ({
   const [transitionClassNames, setTransitionClassNames] = React.useState<any>(
     nextQuestionTransitionClassNames,
   );
-  const { data, id: surveyDataId } = surveyData;
-  const { sections } = data;
+  const { definition, id, name } = surveyData;
+  const { sections } = definition;
 
   const updateTransitionClassNames = (nextDirection: boolean) => {
     if (nextDirection) {
@@ -89,8 +89,8 @@ export const SurveyQuestionContainer = ({
         });
       }
     }
-    const newSurvey: SurveyFormDataPayloadType = cloneDeep(surveyData);
-    newSurvey.data.sections[activeSectionKey] = newSection;
+    const newSurvey: SurveyPayloadType = cloneDeep(surveyData);
+    newSurvey.definition.sections[activeSectionKey] = newSection;
     setSurveyData(newSurvey);
   };
 
@@ -332,20 +332,20 @@ export const SurveyQuestionContainer = ({
     goToNextQuestion();
     updateSurveyQuestion(activeKey.value, { skipped: false });
     updateTransitionClassNames(true);
-    patchSurveyData();
+    putSurveyData();
   };
 
   const onSkipButtonClicked = () => {
     goToNextQuestion();
-    updateSurveyQuestion(activeKey.value, { skipped: true });
+    updateSurveyQuestion(activeKey.value, { skipped: true, value: null });
     updateTransitionClassNames(true);
-    patchSurveyData();
+    putSurveyData();
   };
 
   const onSubmitButtonClicked = () => {
     updateSurveyQuestion(activeKey.value, { skipped: true });
     updateTransitionClassNames(true);
-    patchSurveyData();
+    putSurveyData();
     submitSurvey();
   };
 
@@ -365,7 +365,11 @@ export const SurveyQuestionContainer = ({
           const previousSectionKey =
             Object.keys(sections)[activeSectionIndex - 1];
           const previousSection = sections[previousSectionKey];
-          if (previousSection.value !== true) {
+          if (
+            previousSection.value !== true &&
+            previousSection.component !== null &&
+            previousSection.prompt !== ''
+          ) {
             setActiveKey({
               value: previousSectionKey,
               isFollowUp: false,
@@ -396,7 +400,11 @@ export const SurveyQuestionContainer = ({
     } else {
       const previousSectionKey = Object.keys(sections)[activeSectionIndex - 1];
       const previousSection = sections[previousSectionKey];
-      if (previousSection.value !== true) {
+      if (
+        previousSection.value !== true &&
+        previousSection.component !== null &&
+        previousSection.prompt !== ''
+      ) {
         setActiveKey({
           value: previousSectionKey,
           isFollowUp: false,
@@ -415,12 +423,12 @@ export const SurveyQuestionContainer = ({
     updateTransitionClassNames(false);
   };
 
-  const patchSurveyData = () => {
+  const putSurveyData = () => {
     axiosFetcher([
-      `/form-data/${surveyDataId}`,
-      'PATCH',
+      `/surveys/${name}`,
+      'PUT',
       JSON.stringify({
-        data: surveyData.data,
+        definition: surveyData.definition,
       }),
     ]);
   };

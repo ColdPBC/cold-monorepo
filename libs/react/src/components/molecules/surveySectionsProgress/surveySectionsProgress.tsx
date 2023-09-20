@@ -7,6 +7,12 @@ import {
 import { SurveySections } from './surveySections';
 import { SurveySectionsProgressBar } from './surveySectionsProgressBar';
 import { getSectionIndex } from '@coldpbc/lib';
+import {
+  SwitchTransition,
+  CSSTransition,
+  TransitionGroup,
+} from 'react-transition-group';
+import { isEmpty } from 'lodash';
 
 export interface SurveySectionsProgressProps {
   sections: {
@@ -37,17 +43,33 @@ export const SurveySectionsProgress = ({
 
   const getBackgroundImages = () => {
     const activeSectionIndex = getActiveSectionIndex();
-    const backgroundImageStyle = `url(${
+    // get the active section key
+    const activeSectionKey = Object.keys(sections)[activeSectionIndex];
+    const backgroundImageStyle = `url('${
       sections[Object.keys(sections)[activeSectionIndex]].image_url
-    };) lightgray 50% / cover no-repeat`;
+    }') lightgray 50% / cover no-repeat`;
     const className = 'flex-auto self-stretch rounded-2xl';
     return (
-      <div
-        className={className}
-        style={{
-          background: `${backgroundImageStyle}`,
-        }}
-      ></div>
+      <SwitchTransition mode={'out-in'}>
+        <CSSTransition
+          key={activeSectionKey}
+          timeout={200}
+          classNames={{
+            enter: 'opacity-0',
+            enterDone: 'transition-opacity ease-in duration-200 opacity-100',
+            exit: 'transition-opacity ease-in duration-200 opacity-100',
+            exitDone: 'transition-opacity ease-out duration-200 opacity-0',
+          }}
+        >
+          <div
+            key={backgroundImageStyle}
+            className={className}
+            style={{
+              background: `${backgroundImageStyle}`,
+            }}
+          ></div>
+        </CSSTransition>
+      </SwitchTransition>
     );
   };
 

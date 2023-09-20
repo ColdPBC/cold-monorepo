@@ -191,6 +191,7 @@ export const SurveyInput = (props: SurveyInputProps) => {
           {tooltip}
         </div>
       )}
+
       <div className="w-full justify-center">{inputComponent()}</div>
     </div>
   );
