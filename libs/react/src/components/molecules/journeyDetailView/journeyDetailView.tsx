@@ -10,7 +10,9 @@ export const JourneyDetailView = () => {
     );
 
     const showCompanySection = data?.categories['company_decarbonization']?.subcategories['facilities'] ||
-        data?.categories['company_decarbonization']?.subcategories['operations'];
+        data?.categories['company_decarbonization']?.subcategories['operations'] ||
+        data?.categories['company_decarbonization']?.subcategories['travel'] ||
+        data?.categories['company_decarbonization']?.subcategories['product'];
 
     const showEmployeeSection = data?.categories['employee_engagement']?.subcategories['employee_footprint'] ||
         data?.categories['employee_engagement']?.subcategories['employee_activation'];
