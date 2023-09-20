@@ -1,3 +1,19 @@
+# [1.14.0](https://github.com/ColdPBC/ui/compare/v1.13.0...v1.14.0) (2023-09-20)
+
+
+### Bug Fixes
+
+* Fix navigating to empty category section, fixed sorting ([c310477](https://github.com/ColdPBC/ui/commit/c310477586bc01f0340e16aa35da9e3808daa138))
+
+
+### Features
+
+* addd select all that apply message to multi select ([2729732](https://github.com/ColdPBC/ui/commit/2729732acd9b36522a9a4268ce2385fa2a9abf8c))
+* created Survey file and surveyName query param ([dd88453](https://github.com/ColdPBC/ui/commit/dd884534c4b5d7e7ab8d8884591bcc3f0b8353b3))
+* Transition for sections ([6163911](https://github.com/ColdPBC/ui/commit/61639114bc266874c703b0d0b3d28c59b830bcde))
+* Update to survey code to use smaller image, go to first follow up if the category has no prompt and updated styles ([e07fa18](https://github.com/ColdPBC/ui/commit/e07fa1825c55ba5b238787dd7365097f1ec822de))
+* Updated patch to put method and added transition to background images ([fb517d2](https://github.com/ColdPBC/ui/commit/fb517d2d3fda4e03faf9f5011512cc159fb3ae54))
+
 # [1.13.0](https://github.com/ColdPBC/ui/compare/v1.12.0...v1.13.0) (2023-09-19)
 
 
