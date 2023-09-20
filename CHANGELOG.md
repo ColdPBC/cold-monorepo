@@ -1,3 +1,11 @@
+# [1.15.0](https://github.com/ColdPBC/ui/compare/v1.14.0...v1.15.0) (2023-09-20)
+
+
+### Features
+
+* Add journey route and page ([bc05774](https://github.com/ColdPBC/ui/commit/bc05774c8f20c10fb8061b48ac211d60e85a5f34))
+* Add journey route and page ([#37](https://github.com/ColdPBC/ui/issues/37)) ([c791bec](https://github.com/ColdPBC/ui/commit/c791bec21a3395ff1e296dc6515ace58d5e95318))
+
 # [1.14.0](https://github.com/ColdPBC/ui/compare/v1.13.0...v1.14.0) (2023-09-20)
 
 
