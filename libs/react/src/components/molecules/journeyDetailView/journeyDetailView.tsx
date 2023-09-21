@@ -17,7 +17,7 @@ export const JourneyDetailView = () => {
     const showEmployeeSection = data?.definition.categories['employee_engagement']?.subcategories['employee_footprint'] ||
         data?.definition.categories['employee_engagement']?.subcategories['employee_activation'];
 
-    const showLeadershipSection = data?.definition.categories['climate_leadership']?.subcategories['management'] ||
+    const showLeadershipSection = data?.definition.categories['climate_leadership']?.subcategories['internal_alignment'] ||
         data?.definition.categories['climate_leadership']?.subcategories['community_impact'];
 
     return (
@@ -48,7 +48,7 @@ export const JourneyDetailView = () => {
                     </div>
                 </>
             }
-            {showEmployeeSection && 
+            {showEmployeeSection &&
                 <>
                     <h2 className="text-xl mt-6 mb-3 font-bold text-white">Employee Engagement</h2>
                     <div className="grid grid-cols-2 gap-4">
@@ -68,7 +68,7 @@ export const JourneyDetailView = () => {
                     <h2 className="text-xl mt-6 mb-3 font-bold text-white">Climate Leadership</h2>
                     <div className="grid grid-cols-2 gap-4">
                         <SubcategoryJourneyPreview
-                            subcategory_key="management"
+                            subcategory_key="internal_alignment"
                             category_key="climate_leadership"
                         />
                         <SubcategoryJourneyPreview

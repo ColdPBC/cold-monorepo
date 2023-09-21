@@ -23,9 +23,9 @@ export function FootprintDetailCard(
     axiosFetcher,
   );
 
-    if (!data?.subcategories[props.subcategory_key]) {
-      return null;
-    }
+  if (!data?.subcategories[props.subcategory_key]) {
+    return null;
+  }
 
   const subcategoryName = data?.subcategories[props.subcategory_key].subcategory_name;
 

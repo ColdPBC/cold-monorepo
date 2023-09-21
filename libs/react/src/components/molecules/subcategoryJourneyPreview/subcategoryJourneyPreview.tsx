@@ -43,17 +43,17 @@ export const SubcategoryJourneyPreview = ({
 
     const subcategoryData = data?.definition?.categories[category_key]?.subcategories[subcategory_key];
 
-    if (!subcategoryData) {
+    if (!subcategoryData || subcategoryData.journey_score === null) {
         return null;
     }
 
     const subcategoryName = subcategoryData.subcategory_name;
 
-    const curScoreQuadrantIndex = scoreQuadrants.findIndex(s => 
-        subcategoryData.journey_score >= s.bottom && 
+    const curScoreQuadrantIndex = scoreQuadrants.findIndex(s =>
+        subcategoryData.journey_score >= s.bottom &&
             subcategoryData.journey_score <= s.top);
 
-    const curScoreQuadrant = curScoreQuadrantIndex !== -1 ? 
+    const curScoreQuadrant = curScoreQuadrantIndex !== -1 ?
         scoreQuadrants[curScoreQuadrantIndex] : null;
 
     return (

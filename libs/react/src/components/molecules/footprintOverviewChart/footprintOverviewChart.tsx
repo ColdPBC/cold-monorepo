@@ -12,7 +12,7 @@ import useSWR from 'swr';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { Spinner } from '../../atoms';
 import { footprintSubcategoryColors, HexColors } from '@coldpbc/themes';
-import { find, forEach, isArray, some } from 'lodash';
+import { forEach, isArray, some} from 'lodash';
 import { FootprintOverviewHorizontalDetail } from './footprintOverviewHorizontalDetail';
 import clsx from 'clsx';
 import { FootprintOverviewVerticalDetail } from './footprintOverviewVerticalDetail';
@@ -74,7 +74,7 @@ export function FootprintOverviewChart(
     animateSegmentThickness,
     segmentOnHover,
     chartBeforeDraw
-  } = useActiveSegment(); 
+  } = useActiveSegment();
 
   const {
     variant = FootprintOverviewVariants.horizontal,
@@ -107,7 +107,7 @@ export function FootprintOverviewChart(
 
   const isEmptyFootprintData = !isLoading && !some(data.subcategories, (
     (subcategory: any) => some(subcategory.activities, (
-        (activity: any) => activity.footprint[props.period]))));
+        (activity: any) => activity.footprint && activity.footprint?.[props.period]?.value !== null ))));
 
   if (isLoading) {
     return (
@@ -158,17 +158,20 @@ export function FootprintOverviewChart(
     let value = 0;
     const color = HexColors[footprintSubcategoryColors[subcategoryKey]]?.DEFAULT || HexColors.primary.DEFAULT;
 
+    let nullFootprint = true;
     forEach(subcategory.activities, (activity) => {
       if (activity.footprint && period in activity.footprint) {
         const footprint = activity.footprint[period];
-        if (footprint) {
+        if (footprint && footprint.value !== null) {
           value += footprint.value;
           totalFootprint += footprint.value;
+          nullFootprint = false;
         }
       }
     })
     if (subcategoryTotals.length >= MAX_CATEGORIES) return;
-    subcategoryTotals.push({value: value, color, name: subcategory.subcategory_name});
+    if (!nullFootprint)
+      subcategoryTotals.push({value: value, color, name: subcategory.subcategory_name});
   });
 
   // Set spacer width

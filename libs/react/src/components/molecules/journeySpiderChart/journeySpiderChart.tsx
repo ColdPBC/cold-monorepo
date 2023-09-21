@@ -12,7 +12,7 @@ import {
   Title,
 } from 'chart.js';
 import { HexColors } from '../../../themes/cold_theme';
-import { forEach, isNumber, isString } from 'lodash';
+import {forEach, isNumber, isString, some} from 'lodash';
 import useSWR from 'swr';
 import { axiosFetcher } from '../../../fetchers/axiosFetcher';
 import { Spinner } from '../../atoms/spinner/spinner';
@@ -61,8 +61,10 @@ export function JourneySpiderChart({ setIsEmptyData }: Props) {
   );
 
   // Update chart data on receiving new data
+  const isEmpty = (data?.definition && Object.keys(data.definition.categories).length !== 0 && !some(data.definition.categories, (category: any) => some(category.subcategories, (
+    (subcategory: any) => subcategory.journey_score !== null)))) || data?.response?.status === 404;
   useEffect(() => {
-    if (data?.definition && Object.keys(data.definition.categories).length !== 0) {
+    if (!isEmpty) {
       const newLabels: string[] = [],
         newData: number[] = [];
       // Transform chart data
@@ -125,10 +127,10 @@ export function JourneySpiderChart({ setIsEmptyData }: Props) {
         <Spinner />
       </div>
     );
-  } 
-  else if ((data?.definition && Object.keys(data.definition.categories).length === 0) || data.response?.status === 404) {
+  }
+  else if (isEmpty) {
     return <EmptyChart />
-  } 
+  }
   else if (error) {
     return <div></div>;
   }
