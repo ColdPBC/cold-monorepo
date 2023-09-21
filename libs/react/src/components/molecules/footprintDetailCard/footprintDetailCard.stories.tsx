@@ -5,6 +5,7 @@ import { FootprintDetailCard } from './footprintDetailCard';
 import { BrowserRouter } from 'react-router-dom';
 import { getSchemeForColor, HexColors } from '@coldpbc/themes';
 import { render } from 'react-dom';
+import { getFootprintHandler, StoryMockProvider } from '@coldpbc/mocks';
 
 const meta = {
   title: 'Molecules/FootprintDetailCard',
@@ -46,3 +47,10 @@ export const EmptySubcategory = () => {
   );
 };
 
+export const GetFootprintDataFacilitiesAllFootprintsNull = () => {
+  return (
+    <StoryMockProvider handlers={[getFootprintHandler.getFootprintDataFacilitiesAllFootprintsNull]}>
+        <FootprintDetailCard colors={getSchemeForColor(HexColors.lightblue)} period={2022} subcategory_key='facilities' />
+    </StoryMockProvider>
+  );
+};

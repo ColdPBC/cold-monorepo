@@ -53,11 +53,12 @@ interface Props {
   colors: string[];
   subcategory_key: string;
   period: number;
+  setIsEmpty?: (isEmpty: boolean) => void;
 }
 
 ChartJS.register(ArcElement, PieController);
 
-export function FootprintDetailChart({ colors, subcategory_key, period }: Props) {
+export function FootprintDetailChart({ colors, subcategory_key, period, setIsEmpty }: Props) {
   const chartRef = useRef<ChartJS<'pie'>>(null);
 
   const {
@@ -85,10 +86,19 @@ export function FootprintDetailChart({ colors, subcategory_key, period }: Props)
     axiosFetcher,
   );
 
+  const isEmpty = !data?.subcategories?.[subcategory_key] || 
+    !Object.keys(data?.subcategories?.[subcategory_key].activities).some((activityKey) => {
+      const activity = data?.subcategories?.[subcategory_key].activities[activityKey];
+
+      return (
+        activity.footprint && activity.footprint.value !== null
+      );
+    });
+
   // Update chart data on receiving new data
   useEffect(() => {
-
-      if (!data?.subcategories?.[subcategory_key]) return;
+      if (setIsEmpty) setIsEmpty(isEmpty);
+      if (isEmpty) return;
 
       const newLabels: string[] = [];
       const newData: number[] = [];
@@ -172,7 +182,7 @@ export function FootprintDetailChart({ colors, subcategory_key, period }: Props)
         <Spinner />
       </div>
     );
-  } else if (!data?.subcategories?.[subcategory_key]) {
+  } else if (isEmpty) {
     return null;
   } else if (error) {
     return null;
