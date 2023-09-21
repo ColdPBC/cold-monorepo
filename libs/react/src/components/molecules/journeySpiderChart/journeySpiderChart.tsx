@@ -17,7 +17,7 @@ import useSWR from 'swr';
 import { axiosFetcher } from '../../../fetchers/axiosFetcher';
 import { Spinner } from '../../atoms/spinner/spinner';
 import { defaultChartData, options } from './constants';
-import { pickGradientValue } from './helpers';
+import { createGradient, pickGradientValue } from './helpers';
 import { useCreateGradient } from '../../../hooks';
 import { EmptyChart } from './emptyChart';
 
@@ -39,20 +39,6 @@ export function JourneySpiderChart({ setIsEmptyData }: Props) {
 
   const [chartOptions, setChartOptions] = useState<ChartOptions>(options);
   const [chartData, setChartData] = useState<ChartData>(defaultChartData);
-
-  const chartBackgroundColor = useCreateGradient(
-    chartRef.current?.ctx,
-    chartRef.current?.chartArea,
-    HexColors.white + '00',
-    HexColors.primary.DEFAULT + '40',
-  );
-
-  const chartBorderColor = useCreateGradient(
-    chartRef?.current?.ctx,
-    chartRef?.current?.chartArea,
-    HexColors.gray['130'],
-    HexColors.primary.DEFAULT,
-  );
 
   // Fetch chart data
   const { data, error, isLoading } = useSWR<any>(
@@ -88,12 +74,10 @@ export function JourneySpiderChart({ setIsEmptyData }: Props) {
         return;
       }
 
-      const maxAxisValue = options.scales?.r?.max || 100;
+      const maxAxisValue = chartOptions.scales?.r?.max || 100;
 
-      const chartOptions: ChartOptions = {
-        ...options,
-        backgroundColor: chartBackgroundColor,
-        borderColor: chartBorderColor,
+      const newChartOptions: ChartOptions = {
+        ...chartOptions,
       };
 
       // Get the right color for each of the points based on their value
@@ -110,16 +94,26 @@ export function JourneySpiderChart({ setIsEmptyData }: Props) {
           ),
         );
       });
-      if (chartOptions.elements?.point)
-        chartOptions.elements.point.backgroundColor = pointColors;
+      if (newChartOptions.elements?.point)
+        newChartOptions.elements.point.backgroundColor = pointColors;
 
-      setChartOptions(chartOptions);
+      setChartOptions(newChartOptions);
       setChartData(newChartData);
       if (setIsEmptyData) setIsEmptyData(false);
     } else {
       if (setIsEmptyData) setIsEmptyData(true);
     }
   }, [data, chartRef.current]);
+
+  const handleResize = (chart: ChartJS) => {
+    setTimeout(() => {
+      setChartOptions({
+        ...chartOptions,
+        backgroundColor: createGradient( chart.ctx, chart.chartArea, HexColors.white+"00", HexColors.primary.DEFAULT+"40"), // 25% transparency
+        borderColor: createGradient( chart.ctx, chart.chartArea, HexColors.gray['130'], HexColors.primary.DEFAULT),
+      });
+    }, 100)
+  }
 
   if (isLoading) {
     return (
@@ -139,7 +133,10 @@ export function JourneySpiderChart({ setIsEmptyData }: Props) {
     <div className="relative h-[284px] w-full">
       <Chart
         ref={chartRef}
-        options={chartOptions}
+        options={{
+          ...chartOptions,
+          onResize: handleResize,
+        }}
         type="radar"
         data={chartData}
       />
