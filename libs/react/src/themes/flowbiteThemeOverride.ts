@@ -1,4 +1,31 @@
-import type { FlowbiteTheme } from 'flowbite-react';
+import type { CustomFlowbiteTheme, FlowbiteTheme } from 'flowbite-react';
+
+export const darkTableTheme: CustomFlowbiteTheme = {
+  table: {
+    "root": {
+      "base": "w-full text-left text-sm text-gray-500 dark:text-gray-400",
+      "shadow": "absolute dark:bg-black w-full h-full top-0 left-0 rounded-lg drop-shadow-md -z-10",
+      "wrapper": "relative border-gray-50 border border-solid rounded-lg bg-gray-50 flex-1 w-full"
+    },
+    "body": {
+      "base": "group/body",
+      "cell": {
+        "base": "group-first/body:group-first/row:first:rounded-tl-lg group-first/body:group-first/row:last:rounded-tr-lg group-last/body:group-last/row:first:rounded-bl-lg group-last/body:group-last/row:last:rounded-br-lg px-4 py-4 bg-bgc-elevated whitespace-pre"
+      }
+    },
+    "head": {
+      "base": "group/head text-xs uppercase text-gray-700 dark:text-gray-400",
+      "cell": {
+        "base": "group-first/head:first:rounded-tl-lg group-first/head:last:rounded-tr-lg bg-none dark:bg-gray-700 px-4 py-3 font-normal"
+      }
+    },
+    "row": {
+      "base": "group/row border-t border-gray-50",
+      "hovered": "hover:bg-gray-50 dark:hover:bg-gray-600",
+      "striped": "odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700"
+    }
+  }
+}
 
 export const flowbiteThemeOverride: FlowbiteTheme = {
   accordion: {

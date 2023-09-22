@@ -10,6 +10,10 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import { Organization } from 'auth0';
 import { Header } from '../../organisms/header/header';
+import { MainContent } from '../../organisms/mainContent';
+import { UserSettings } from '../../molecules/userSettings';
+import { Card } from '../../molecules';
+import { ButtonTypes } from '@coldpbc/enums';
 
 export const TeamMembersSettings = (props: { user?: any }) => {
   const auth0 = useAuth0();
@@ -43,30 +47,36 @@ export const TeamMembersSettings = (props: { user?: any }) => {
 
   if (auth0.user && organization.data) {
     return (
-      <div>
-        <Header />
-        <div className="p-10 h-full w-full">
-          <div className="flex justify-between pb-6">
-            <div className="text-2xl font-light">Team Members</div>
-            <BaseButton
-              onClick={() => {
-                setShowModal(true);
-              }}
-              color={ColorNames.primary}
-              label={'Invite Member'}
-            />
-          </div>
-          <div>{showTeamMemberTable && <TeamMembersDataGrid />}</div>
-          {showModal && (
-            <InvitationModal
-              setShown={setShowModal}
-              shown={showModal}
-              companyName={organizationData.name}
-              user={auth0.user}
-            />
-          )}
-        </div>
-      </div>
+      <MainContent title='Settings'>
+        <UserSettings user={auth0.user} />
+
+        {showTeamMemberTable &&
+          <Card
+            title='Team Members' 
+            glow
+            ctas={[
+              {
+                text: 'Invite Member',
+                variant: ButtonTypes.primary,
+                action: () => {
+                  setShowModal(true);
+                }
+              }
+            ]}
+          >
+            <TeamMembersDataGrid />
+          </Card>
+        }
+
+        {showModal && (
+          <InvitationModal
+            setShown={setShowModal}
+            shown={showModal}
+            companyName={organizationData.name}
+            user={auth0.user}
+          />
+        )}
+      </MainContent>
     );
   } else {
     return <div></div>;
