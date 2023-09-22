@@ -20,7 +20,13 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   render: (args) => (
     <StoryMockProvider handlers={getSignUpHandler.DEFAULT}>
-      <SignupPage />
+      <SignupPage
+        userData={{
+          ...auth0UserMock,
+          given_name: undefined,
+          family_name: undefined,
+        }}
+      />
     </StoryMockProvider>
   ),
   parameters: {

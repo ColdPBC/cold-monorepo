@@ -1,15 +1,22 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { ColdLogos, SignupForm } from '@coldpbc/components';
-import { useAuth0 } from '@auth0/auth0-react';
+import { useAuth0, User } from '@auth0/auth0-react';
 import { axiosFetcher } from '@coldpbc/fetchers';
-import useSWR from 'swr';
+import useSWR, { mutate } from 'swr';
 import { PolicySignedDataType, PolicyType } from '@coldpbc/interfaces';
 import { HexColors } from '@coldpbc/themes';
 import { ColdLogoNames } from '@coldpbc/enums';
 import { useNavigate } from 'react-router-dom';
 import { isEmpty } from 'lodash';
+import { Organization } from 'auth0';
+import ColdContext from '../../../context/coldContext';
 
-export const SignupPage = () => {
+export interface SignupPageProps {
+  userData: User;
+}
+
+export const SignupPage = ({ userData }: SignupPageProps) => {
+  const { auth0Options } = useContext(ColdContext);
   const { user } = useAuth0();
   const navigate = useNavigate();
   const {
@@ -31,8 +38,14 @@ export const SignupPage = () => {
     axiosFetcher,
   );
 
-  const onSubmit = () => {
-    // navigate to the home page
+  const { data: organizationData } = useSWR<Organization, any, any>(
+    user?.coldclimate_claims.org_id
+      ? [`/organizations/${user.coldclimate_claims.org_id}`, 'GET']
+      : null,
+    axiosFetcher,
+  );
+
+  const onSubmit = async () => {
     navigate('/home?surveyName=journey_overview');
   };
 
@@ -72,7 +85,8 @@ export const SignupPage = () => {
         >
           <div className={'w-[540px]'}>
             <SignupForm
-              userData={user}
+              userData={userData}
+              companyData={organizationData}
               tosSigned={
                 policyData.some(
                   (policy) =>

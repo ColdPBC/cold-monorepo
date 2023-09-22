@@ -1,11 +1,13 @@
-import React from 'react';
-import { useAuth0, User as Auth0User } from '@auth0/auth0-react';
+import React, { useContext } from 'react';
+import { useAuth0, User, User as Auth0User } from '@auth0/auth0-react';
 import { BaseButton, Input } from '@coldpbc/components';
 import { ButtonTypes, InputTypes } from '@coldpbc/enums';
-import useSWR from 'swr';
+import useSWR, { mutate } from 'swr';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { Organization } from 'auth0';
 import { PolicyType } from '@coldpbc/interfaces';
+import ColdContext from '../../../context/coldContext';
+import { useCookies } from 'react-cookie';
 
 export interface SignupFormProps {
   userData?: Auth0User;
@@ -26,11 +28,13 @@ export const SignupForm = ({
   privacyData,
   onSubmit,
 }: SignupFormProps) => {
+  const { getAccessTokenSilently } = useAuth0();
+  const { auth0Options } = useContext(ColdContext);
   const [firstName, setFirstName] = React.useState<string | undefined>(
-    userData?.given_name,
+    userData?.given_name === 'null' ? '' : userData?.given_name,
   );
   const [lastName, setLastName] = React.useState<string | undefined>(
-    userData?.family_name,
+    userData?.family_name === 'null' ? '' : userData?.family_name,
   );
   const [companyName, setCompanyName] = React.useState<string>(
     companyData?.name || '',
@@ -38,8 +42,24 @@ export const SignupForm = ({
   const [isAgreedToPrivacyAndTOS, setIsAgreedToPrivacyAndTOS] =
     React.useState<boolean>(tosSigned && privacySigned);
 
+  const [coldpbc, setCookie] = useCookies(['coldpbc']);
+
   const onContinue = async () => {
-    await Promise.all([postUserData(), postCompanyData(), signTOSandPrivacy()]);
+    await Promise.all([signTOSandPrivacy()]);
+    const organization = (await postCompanyData()) as Organization;
+    const user = (await postUserData()) as User;
+    if (organization) {
+      const token = await getAccessTokenSilently({
+        authorizationParams: {
+          audience: auth0Options.authorizationParams?.audience,
+          scope: 'offline_access email profile openid',
+          organization: organization.id,
+        },
+        cacheMode: 'off',
+      });
+      setCookie('coldpbc', { user, accessToken: token });
+    }
+    mutate([`/users/${userData?.email}`, 'GET']);
     onSubmit();
   };
 
@@ -69,7 +89,11 @@ export const SignupForm = ({
   };
 
   const postUserData = () => {
-    if (userData && !userData.given_name && !userData.family_name) {
+    if (
+      userData &&
+      userData.given_name === 'null' &&
+      userData.family_name === 'null'
+    ) {
       return axiosFetcher([
         `/users/${userData.email}`,
         'PATCH',
@@ -87,17 +111,23 @@ export const SignupForm = ({
         `/organizations`,
         'POST',
         JSON.stringify({
-          name: companyName,
+          display_name: companyName,
         }),
       ]);
     }
   };
 
   const signTOSandPrivacy = async () => {
-    return await Promise.all([
-      axiosFetcher([`/policies/${tosData.id}/signed`, 'POST']),
-      axiosFetcher([`/policies/${privacyData.id}/signed`, 'POST']),
-    ]);
+    const promises = [];
+    if (!tosSigned) {
+      promises.push(axiosFetcher([`/policies/${tosData.id}/signed`, 'POST']));
+    }
+    if (!privacySigned) {
+      promises.push(
+        axiosFetcher([`/policies/${privacyData.id}/signed`, 'POST']),
+      );
+    }
+    return await Promise.all(promises);
   };
 
   return (
@@ -118,6 +148,7 @@ export const SignupForm = ({
               name: 'firstName',
               className:
                 'text-sm not-italic text-tc-primary font-medium bg-transparent w-full rounded-lg p-[16px] border border-bgc-accent focus:border focus:border-bgc-accent focus:ring-0',
+              disabled: userData?.given_name !== 'null',
             }}
             input_label_props={{
               className: 'text-sm not-italic text-tc-primary font-medium',
@@ -132,6 +163,7 @@ export const SignupForm = ({
               name: 'lastName',
               className:
                 'text-sm not-italic text-tc-primary font-medium bg-transparent w-full rounded-lg p-[16px] border border-bgc-accent focus:border focus:border-bgc-accent focus:ring-0',
+              disabled: userData?.family_name !== 'null',
             }}
             input_label_props={{
               className: 'text-sm not-italic text-tc-primary font-medium',
@@ -167,6 +199,7 @@ export const SignupForm = ({
                 name: 'isAgreedToPrivacyAndTOS',
                 className:
                   'w-6 h-6 rounded border border-bgc-accent bg-transparent focus:ring-0 focus:ring-offset-0',
+                disabled: tosSigned && privacySigned,
               }}
             />
             <div>

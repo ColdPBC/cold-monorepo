@@ -14,21 +14,22 @@ export const ColdRoutes = () => {
   return (
     <>
       <Routes>
-        <Route path="/signup" element={<Signup />} />
+        <Route path={'/signup'} element={<Signup />} />
         <Route element={<ProtectedRoute />}>
           <Route element={<Interceptor />}>
             <Route element={<DashboardLayout />}>
-              <Route path="/" element={<Home />} />
-              <Route path="/home" element={<Home />} />
-              <Route path="/footprint" element={<Footprint />} />
-              <Route path="/settings" element={<TeamMembersSettings />} />
-              <Route path={'/privacy'} element={<Terms type={'privacy'} />} />
-              <Route path={'/terms'} element={<Terms type={'tos'} />} />
+              <Route path={'/'} element={<Home />} />
+              <Route path={'/home'} element={<Home />} />
+              <Route path={'/footprint'} element={<Footprint />} />
+              <Route path={'/journey'} element={<Journey />} />
+              <Route path={'/settings'} element={<TeamMembersSettings />} />
               <Route
                 path="*"
                 element={<div className={'text-tc-primary'}>Pending...</div>}
               />
             </Route>
+            <Route path={'/privacy'} element={<Terms type={'privacy'} />} />
+            <Route path={'/terms'} element={<Terms type={'tos'} />} />
           </Route>
         </Route>
       </Routes>

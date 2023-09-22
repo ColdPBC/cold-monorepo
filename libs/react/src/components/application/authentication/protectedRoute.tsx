@@ -1,16 +1,15 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Outlet, useLocation, Navigate } from 'react-router-dom';
-import { useAuth0, User } from '@auth0/auth0-react';
+import { GetTokenSilentlyOptions, useAuth0, User } from '@auth0/auth0-react';
 import { ColdRoutes, SignupPage, Spinner } from '@coldpbc/components';
 import { GlobalSizes } from '@coldpbc/enums';
 import cookie from 'js-cookie';
-import { useCookies } from '@coldpbc/hooks';
 import ColdContext from '../../../context/coldContext';
 import { useLDClient } from 'launchdarkly-react-client-sdk';
 import useSWR, { SWRResponse } from 'swr';
 import { axiosFetcher } from '@coldpbc/fetchers';
-import cookies from 'js-cookie';
-import { isEmpty, isUndefined } from 'lodash';
+import { get, has, isEmpty, isUndefined } from 'lodash';
+import { useCookies } from 'react-cookie';
 
 export const ProtectedRoute = () => {
   const {
@@ -21,71 +20,132 @@ export const ProtectedRoute = () => {
     isLoading,
     getAccessTokenSilently,
   } = useAuth0();
-
   const { auth0Options } = useContext(ColdContext);
-  const [accessTokenState, setAccessTokenState] = useState<string>('');
 
-  const { setCookieData } = useCookies();
+  // const { setCookieData, getCookieData } = useCookies();
+  //
+  // const cookieData = getCookieData();
+
+  const [cookies, setCookie, removeCookie] = useCookies(['coldpbc']);
+
+  const { coldpbc } = cookies;
+
+  const userData = useSWR<User, any, any>(
+    user && coldpbc ? [`/users/${user.email}`, 'GET'] : null,
+    axiosFetcher,
+  );
 
   const ldClient = useLDClient();
+
   const appState = {
     returnTo: window.location.pathname,
   };
+
   const needsSignup = () => {
     const ifNoOrgId = isUndefined(user?.coldclimate_claims.org_id);
-    if (user) {
-      const ifNoName = !user.family_name || !user.given_name;
+    if (userData?.data) {
+      const ifNoName =
+        userData?.data.family_name === 'null' ||
+        userData?.data.given_name === 'null';
       return ifNoName || ifNoOrgId;
     } else {
       return ifNoOrgId || false;
     }
   };
 
+  const isLoggedIntoWithoutOrg = () => {
+    return isUndefined(user?.coldclimate_claims.org_id);
+  };
+
+  const isLoggedIntoAnOrg = () => {
+    return !isUndefined(user?.coldclimate_claims.org_id);
+  };
+
+  const hasSignedUp = () => {
+    // if user has signed up, they will not have org_id in their claims
+    // but they will have their names in the userData.data object
+    return (
+      !isUndefined(user?.coldclimate_claims.org_id) &&
+      !isEmpty(userData?.data?.family_name) &&
+      !isEmpty(userData?.data?.given_name)
+    );
+  };
+
   useEffect(() => {
     const getUserMetadata = async () => {
       try {
-        if (!isLoading && isAuthenticated && user) {
-          if (!accessTokenState) {
-            const accessToken = await getAccessTokenSilently({
-              authorizationParams: {
-                audience: auth0Options.authorizationParams?.audience,
-              },
-            });
+        if (!isLoading) {
+          if (isAuthenticated) {
+            if (!coldpbc && user) {
+              const options = {
+                authorizationParams: {
+                  audience: auth0Options.authorizationParams?.audience,
+                  scope: 'offline_access email profile openid',
+                },
+              } as GetTokenSilentlyOptions;
+              if (user.coldclimate_claims.org_id) {
+                options.authorizationParams = {
+                  ...options.authorizationParams,
+                  organization: user.coldclimate_claims.org_id,
+                };
+              }
+              const accessToken = await getAccessTokenSilently(options);
 
-            const now = new Date();
-            const expiresAt = new Date(now.getTime() + 1000 * 60 * 60);
+              setCookie('coldpbc', { user, accessToken });
 
-            cookies.set(
-              'coldpbc',
-              JSON.stringify({ accessToken, expires: expiresAt }),
-              {
-                expires: 1,
-                secure: false,
-                sameSite: 'lax',
-              },
-            );
-            setCookieData(user, accessToken);
-            setAccessTokenState(accessToken);
-            if (ldClient && user.coldclimate_claims.org_id) {
-              await ldClient.identify({
-                kind: 'user',
-                organizationId: user.coldclimate_claims.org_id,
+              if (ldClient && user.coldclimate_claims.org_id) {
+                await ldClient.identify({
+                  kind: 'user',
+                  organizationId: user.coldclimate_claims.org_id,
+                });
+              }
+            }
+            // else {
+            //   await loginWithRedirect({
+            //     appState: appState,
+            //     authorizationParams: {
+            //       audience: auth0Options.authorizationParams?.audience,
+            //       scope: 'offline_access email profile openid',
+            //     },
+            //   });
+            // }
+          } else {
+            if (!isAuthenticated) {
+              removeCookie('coldpbc');
+              await loginWithRedirect({
+                appState: appState,
+                authorizationParams: {
+                  audience: auth0Options.authorizationParams?.audience,
+                  scope: 'offline_access email profile openid',
+                },
               });
             }
           }
-        } else {
-          if (!isLoading && !isAuthenticated) {
-            await loginWithRedirect({ appState: appState });
-          }
         }
       } catch (e) {
+        if (has(e, 'error')) {
+          if (get(e, 'error') === 'login_required') {
+            await loginWithRedirect();
+          }
+          if (get(e, 'error') === 'consent_required') {
+            await loginWithRedirect();
+          }
+        }
         console.error(e);
       }
     };
-    getUserMetadata();
-  }, [getAccessTokenSilently, user, isAuthenticated, isLoading]);
 
-  if (isLoading) {
+    getUserMetadata();
+  }, [
+    getAccessTokenSilently,
+    user,
+    isAuthenticated,
+    isLoading,
+    appState,
+    coldpbc,
+  ]);
+
+  if (isLoading || userData.isLoading) {
     return (
       <div className="absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
         <Spinner size={GlobalSizes.xLarge} />
@@ -93,13 +153,15 @@ export const ProtectedRoute = () => {
     );
   }
 
-  if (error) {
-    return <div>Encountered error: {error.message}</div>;
+  if (error || userData.error) {
+    return (
+      <div>Encountered error: {error?.message || userData.error.message}</div>
+    );
   }
 
-  if (isAuthenticated && user && accessTokenState) {
+  if (isAuthenticated && user && userData.data) {
     if (needsSignup()) {
-      return <SignupPage />;
+      return <SignupPage userData={userData.data} />;
     } else {
       return <Outlet />;
     }
