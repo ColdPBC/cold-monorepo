@@ -46,7 +46,7 @@ export const axiosFetcher = (params: Array<string>) => {
         return res.data;
       })
       .catch((err) => {
-        throw err;
+        return err;
       });
   } catch (e) {
     console.error(e);
