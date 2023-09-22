@@ -23,8 +23,8 @@ export const Default: Story = {
       <SignupPage
         userData={{
           ...auth0UserMock,
-          given_name: undefined,
-          family_name: undefined,
+          given_name: 'null',
+          family_name: 'null',
         }}
       />
     </StoryMockProvider>
@@ -39,31 +39,3 @@ export const Default: Story = {
     },
   },
 };
-
-// export const EmptyData: Story = {
-//   render: (args) => (
-//     <StoryMockProvider {...args} handlers={[getFootprintHandler.empty]}>
-//       <Footprint />
-//     </StoryMockProvider>
-//   ),
-// };
-//
-// export const ThreeFootprintSubcats: Story = {
-//   render: () => {
-//     return (
-//       <StoryMockProvider handlers={[getFootprintHandler.threeSubCats]}>
-//         <Footprint />
-//       </StoryMockProvider>
-//     );
-//   },
-// };
-//
-// export const TwoFootprintSubcats: Story = {
-//   render: () => {
-//     return (
-//       <StoryMockProvider handlers={[getFootprintHandler.twoSubCats]}>
-//         <Footprint />
-//       </StoryMockProvider>
-//     );
-//   },
-// };

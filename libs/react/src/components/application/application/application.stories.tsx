@@ -9,6 +9,8 @@ import {
   getFootprintHandler,
   getCategoriesHandler,
   auth0UserMock,
+  getSignUpHandler,
+  getSignupHandlersForApplicationSignup,
 } from '@coldpbc/mocks';
 import ColdContext from '../../../context/coldContext';
 import { Auth0ProviderOptions } from '@auth0/auth0-react';
@@ -98,22 +100,11 @@ export const NeedsSignup: Story = {
           },
         }}
       >
-        <BrowserRouter>
-          <ColdContext.Provider
-            value={{
-              auth0Options: {
-                domain: '',
-                clientId: '',
-                authorizationParams: {
-                  audience: '',
-                },
-              } as Auth0ProviderOptions,
-              launchDarklyClientSideId: '',
-            }}
-          >
-            <Application />
-          </ColdContext.Provider>
-        </BrowserRouter>
+        <StoryMockProvider
+          handlers={getSignupHandlersForApplicationSignup.DEFAULT}
+        >
+          <Application />
+        </StoryMockProvider>
       </SWRConfig>
     );
   },
@@ -121,8 +112,11 @@ export const NeedsSignup: Story = {
     auth0AddOn: {
       user: {
         ...auth0UserMock,
-        family_name: null,
-        given_name: null,
+        coldclimate_claims: {
+          org_id: null,
+        },
+        family_name: 'null',
+        given_name: 'null',
       },
     },
   },

@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { set } from 'lodash';
 import { resolveAPIUrl } from './helper';
-import { useCookies } from '@coldpbc/hooks';
 import cookies from 'js-cookie';
 
 const baseURL = resolveAPIUrl();
@@ -12,10 +11,6 @@ const baseURL = resolveAPIUrl();
  */
 export const axiosFetcher = (params: Array<string>) => {
   try {
-    // const [cookies] = useCookies(['coldpbc']);
-    // const { coldpbc } = cookies;
-
-    // const {getCookieData} = useCookies();
     const raw = cookies.get('coldpbc');
     const coldpbc = raw ? JSON.parse(raw) : null;
     const token = coldpbc ? coldpbc.accessToken : null;

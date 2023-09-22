@@ -1,14 +1,13 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { Outlet, useLocation, Navigate } from 'react-router-dom';
+import React, { useContext, useEffect } from 'react';
+import { Outlet } from 'react-router-dom';
 import { GetTokenSilentlyOptions, useAuth0, User } from '@auth0/auth0-react';
-import { ColdRoutes, SignupPage, Spinner } from '@coldpbc/components';
+import { SignupPage, Spinner } from '@coldpbc/components';
 import { GlobalSizes } from '@coldpbc/enums';
-import cookie from 'js-cookie';
 import ColdContext from '../../../context/coldContext';
 import { useLDClient } from 'launchdarkly-react-client-sdk';
-import useSWR, { SWRResponse } from 'swr';
+import useSWR from 'swr';
 import { axiosFetcher } from '@coldpbc/fetchers';
-import { get, has, isEmpty, isUndefined } from 'lodash';
+import { get, has, isUndefined } from 'lodash';
 import { useCookies } from 'react-cookie';
 
 export const ProtectedRoute = () => {
@@ -21,10 +20,6 @@ export const ProtectedRoute = () => {
     getAccessTokenSilently,
   } = useAuth0();
   const { auth0Options } = useContext(ColdContext);
-
-  // const { setCookieData, getCookieData } = useCookies();
-  //
-  // const cookieData = getCookieData();
 
   const [cookies, setCookie, removeCookie] = useCookies(['coldpbc']);
 
@@ -51,24 +46,6 @@ export const ProtectedRoute = () => {
     } else {
       return ifNoOrgId || false;
     }
-  };
-
-  const isLoggedIntoWithoutOrg = () => {
-    return isUndefined(user?.coldclimate_claims.org_id);
-  };
-
-  const isLoggedIntoAnOrg = () => {
-    return !isUndefined(user?.coldclimate_claims.org_id);
-  };
-
-  const hasSignedUp = () => {
-    // if user has signed up, they will not have org_id in their claims
-    // but they will have their names in the userData.data object
-    return (
-      !isUndefined(user?.coldclimate_claims.org_id) &&
-      !isEmpty(userData?.data?.family_name) &&
-      !isEmpty(userData?.data?.given_name)
-    );
   };
 
   useEffect(() => {
@@ -100,15 +77,6 @@ export const ProtectedRoute = () => {
                 });
               }
             }
-            // else {
-            //   await loginWithRedirect({
-            //     appState: appState,
-            //     authorizationParams: {
-            //       audience: auth0Options.authorizationParams?.audience,
-            //       scope: 'offline_access email profile openid',
-            //     },
-            //   });
-            // }
           } else {
             if (!isAuthenticated) {
               removeCookie('coldpbc');

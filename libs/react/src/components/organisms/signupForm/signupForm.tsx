@@ -64,10 +64,6 @@ export const SignupForm = ({
   };
 
   const getContinueButton = () => {
-    // check if all fields are filled out
-    // check if isAgreedToPrivacyAndTOS is true
-    // if both are true, return a button that is enabled
-    // if either are false, return a button that is disabled
     if (isAgreedToPrivacyAndTOS && firstName && lastName && companyName) {
       return (
         <BaseButton
