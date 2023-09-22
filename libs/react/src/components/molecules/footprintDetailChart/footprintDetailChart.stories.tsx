@@ -30,3 +30,12 @@ export const EmptyData = () => {
     </StoryMockProvider>
   );
 };
+
+export const Handle404 = () => {
+  return (
+    <StoryMockProvider handlers={[getFootprintHandler.handle404]}>
+      <FootprintDetailChart colors={getSchemeForColor(HexColors[footprintSubcategoryColors['product']])} period={2022} subcategory_key='product' />
+    </StoryMockProvider>
+  );
+};
+

@@ -6,7 +6,8 @@ import { Home } from '../pages';
 import { ApplicationToaster } from '../molecules';
 import { Terms } from '../pages';
 import { Interceptor } from './interceptor';
-import { Footprint } from '../pages/';
+import { Footprint } from '../pages';
+import { Journey } from '../pages/journey';
 import { ProtectedRoute, Signup } from './authentication';
 
 export const ColdRoutes = () => {

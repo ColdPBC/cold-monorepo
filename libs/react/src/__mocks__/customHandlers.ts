@@ -13,6 +13,11 @@ export const getFootprintHandler = {
   default: rest.get('*/categories/company_decarbonization', (req, res, ctx) => {
     return res(ctx.json(getFootprintDataMock()));
   }),
+  handle404: rest.get('*/categories/company_decarbonization', (req, res, ctx) => {
+    return res(
+      ctx.status(404),
+    )
+  }),
   empty: rest.get('*/categories/company_decarbonization', (req, res, ctx) => {
     return res(ctx.json(getFootprintEmptyDataMock()));
   }),
@@ -39,6 +44,11 @@ export const getFootprintHandler = {
 export const getCategoriesHandler = {
   default: rest.get('*/categories', (req, res, ctx) => {
     return res(ctx.json(getCategoriesDataMock()));
+  }),
+  handle404: rest.get('*/categories', (req, res, ctx) => {
+    return res(
+      ctx.status(404),
+    )
   }),
   empty: rest.get('*/categories', (req, res, ctx) => {
     return res(ctx.json(getCategoriesEmptyDataMock()));

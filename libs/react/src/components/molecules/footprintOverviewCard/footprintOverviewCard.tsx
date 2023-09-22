@@ -33,13 +33,13 @@ export function FootprintOverviewCard(
   // To do this, wrap all useSWR in custom wrappers like, useGetFootprint()
   const isEmptyFootprintData = !isLoading && !some(data.subcategories, (
     (subcategory: any) => some(subcategory.activities, (
-        (activity: any) => activity.footprint[PERIOD]))));
+        (activity: any) => activity.footprint && activity.footprint?.[PERIOD]?.value !== null ))));
 
   let cardProps: CardProps = {};
   if (!props.headerless) {
     cardProps = {
       title: (props.chartVariant === FootprintOverviewVariants.vertical && isEmptyFootprintData) ? 'Footprint Breakdown' : `${PERIOD} Company Footprint`,
-      ctas: props.chartVariant === FootprintOverviewVariants.horizontal ? 
+      ctas: props.chartVariant === FootprintOverviewVariants.horizontal ?
         [{ text: 'Learn More', action: () => navigate('/footprint') }]
         : [],
     };

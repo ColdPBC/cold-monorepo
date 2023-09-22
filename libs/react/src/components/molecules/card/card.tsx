@@ -2,6 +2,7 @@ import React, { PropsWithChildren } from 'react';
 import { BaseButton } from '../../atoms/button/button';
 import { ButtonTypes } from '../../../enums/buttons';
 import { twMerge } from 'tailwind-merge';
+import {snakeCase} from "lodash";
 
 export interface CardProps {
   glow?: boolean;
@@ -37,7 +38,7 @@ export function Card(props: PropsWithChildren<CardProps>) {
               return (
                 cta.text &&
                 cta.action !== undefined && (
-                  <BaseButton
+                  <BaseButton key={"button_"+snakeCase(cta.text)}
                     label={cta.text}
                     onClick={cta.action}
                     variant={cta.variant || ButtonTypes.secondary}
