@@ -40,9 +40,14 @@ export const getSignUpHandler = {
     }),
     rest.post(`*/organizations`, (req, res, ctx) => {
       const body = req.body as {
-        name: string;
+        display_name: string;
       };
-      return res(ctx.json({}));
+      return res(
+        ctx.json({
+          ...getOrganizationMock(),
+          display_name: body.display_name,
+        }),
+      );
     }),
     rest.post(`*/policies/:id/signed`, (req, res, ctx) => {
       const body = req.body as {
@@ -56,6 +61,61 @@ export const getSignUpHandler = {
     rest.get('*/policies/:name', (req, res, ctx) => {
       const name = req.params.name as string;
       return res(ctx.json(getPolicyMockByName(name)));
+    }),
+    rest.get('*/users/:emailOrId', (req, res, ctx) => {
+      const emailOrId = req.params.emailOrId as string;
+      return res(
+        ctx.json({
+          ...auth0UserMock,
+          given_name: 'null',
+          family_name: 'null',
+        }),
+      );
+    }),
+  ],
+  newCompanyAndUser: [
+    rest.patch(`*/users/:emailOrId`, (req, res, ctx) => {
+      return res(
+        ctx.json({
+          ...auth0UserMock,
+          given_name: 'null',
+          family_name: 'null',
+        }),
+      );
+    }),
+    rest.post(`*/organizations`, (req, res, ctx) => {
+      const body = req.body as {
+        display_name: string;
+      };
+      return res(
+        ctx.json({
+          ...getOrganizationMock(),
+          display_name: body.display_name,
+        }),
+      );
+    }),
+    rest.post(`*/policies/:id/signed`, (req, res, ctx) => {
+      const body = req.body as {
+        name: string;
+      };
+      return res(ctx.json({}));
+    }),
+    rest.get('*/policies/signed/user', (req, res, ctx) => {
+      return res(ctx.json(getEmptyPoliciesSignedMock()));
+    }),
+    rest.get('*/policies/:name', (req, res, ctx) => {
+      const name = req.params.name as string;
+      return res(ctx.json(getPolicyMockByName(name)));
+    }),
+    rest.get('*/users/:emailOrId', (req, res, ctx) => {
+      const emailOrId = req.params.emailOrId as string;
+      return res(
+        ctx.json({
+          ...auth0UserMock,
+          given_name: 'null',
+          family_name: 'null',
+        }),
+      );
     }),
   ],
 };

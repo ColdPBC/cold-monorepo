@@ -17,9 +17,32 @@ const meta: Meta<typeof SignupPage> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
+export const NewUserExistingCompany: Story = {
   render: (args) => (
     <StoryMockProvider handlers={getSignUpHandler.DEFAULT}>
+      <SignupPage
+        userData={{
+          ...auth0UserMock,
+          given_name: 'null',
+          family_name: 'null',
+        }}
+      />
+    </StoryMockProvider>
+  ),
+  parameters: {
+    auth0AddOn: {
+      user: {
+        ...auth0UserMock,
+        given_name: null,
+        family_name: null,
+      },
+    },
+  },
+};
+
+export const NewCompany: Story = {
+  render: (args) => (
+    <StoryMockProvider handlers={getSignUpHandler.newCompanyAndUser}>
       <SignupPage
         userData={{
           ...auth0UserMock,

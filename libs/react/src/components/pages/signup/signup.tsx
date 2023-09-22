@@ -19,26 +19,22 @@ export const SignupPage = ({ userData }: SignupPageProps) => {
   const { auth0Options } = useContext(ColdContext);
   const { user } = useAuth0();
   const navigate = useNavigate();
-  const {
-    data: policyData,
-    error,
-    isLoading,
-  } = useSWR<PolicySignedDataType[], any, any>(
+  const signedPolicySWR = useSWR<PolicySignedDataType[], any, any>(
     ['/policies/signed/user', 'GET'],
     axiosFetcher,
   );
 
-  const { data: tos } = useSWR<PolicyType, any, any>(
+  const tosSWR = useSWR<PolicyType, any, any>(
     ['/policies/tos', 'GET'],
     axiosFetcher,
   );
 
-  const { data: privacy } = useSWR<PolicyType, any, any>(
+  const privacySWR = useSWR<PolicyType, any, any>(
     ['/policies/privacy', 'GET'],
     axiosFetcher,
   );
 
-  const { data: organizationData } = useSWR<Organization, any, any>(
+  const organizationSWR = useSWR<Organization, any, any>(
     user?.coldclimate_claims.org_id
       ? [`/organizations/${user.coldclimate_claims.org_id}`, 'GET']
       : null,
@@ -49,10 +45,28 @@ export const SignupPage = ({ userData }: SignupPageProps) => {
     navigate('/home?surveyName=journey_overview');
   };
 
-  if (isLoading) {
+  if (
+    signedPolicySWR.error ||
+    tosSWR.error ||
+    privacySWR.error ||
+    organizationSWR.error
+  ) {
+    return <div>error</div>;
+  }
+
+  if (
+    signedPolicySWR.isLoading ||
+    tosSWR.isLoading ||
+    privacySWR.isLoading ||
+    organizationSWR.isLoading
+  ) {
     return <div>loading</div>;
   }
 
+  const { data: policyData } = signedPolicySWR;
+  const { data: tos } = tosSWR;
+  const { data: privacy } = privacySWR;
+  const { data: organizationData } = organizationSWR;
   if (tos && privacy && policyData) {
     return (
       <div className={'flex h-full w-full'}>

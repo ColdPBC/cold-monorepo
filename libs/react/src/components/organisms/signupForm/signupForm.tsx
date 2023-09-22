@@ -36,8 +36,8 @@ export const SignupForm = ({
   const [lastName, setLastName] = React.useState<string | undefined>(
     userData?.family_name === 'null' ? '' : userData?.family_name,
   );
-  const [companyName, setCompanyName] = React.useState<string>(
-    companyData?.name || '',
+  const [companyName, setCompanyName] = React.useState<string | undefined>(
+    companyData?.name === undefined ? '' : companyData?.name,
   );
   const [isAgreedToPrivacyAndTOS, setIsAgreedToPrivacyAndTOS] =
     React.useState<boolean>(tosSigned && privacySigned);

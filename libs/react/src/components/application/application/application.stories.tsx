@@ -92,29 +92,18 @@ export const EmptyFootprintData: Story = {
 export const NeedsSignup: Story = {
   render: () => {
     return (
-      <SWRConfig
-        value={{
-          provider: (cache) => {
-            cache.delete('messages');
-            return cache;
-          },
-        }}
+      <StoryMockProvider
+        handlers={getSignupHandlersForApplicationSignup.DEFAULT}
       >
-        <StoryMockProvider
-          handlers={getSignupHandlersForApplicationSignup.DEFAULT}
-        >
-          <Application />
-        </StoryMockProvider>
-      </SWRConfig>
+        <Application />
+      </StoryMockProvider>
     );
   },
   parameters: {
     auth0AddOn: {
       user: {
         ...auth0UserMock,
-        coldclimate_claims: {
-          org_id: null,
-        },
+        coldclimate_claims: '',
         family_name: 'null',
         given_name: 'null',
       },
