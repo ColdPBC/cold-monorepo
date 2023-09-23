@@ -5,6 +5,7 @@ import { cloneDeep, isEmpty } from 'lodash';
 import useSWR from 'swr';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { GlobalSizes } from '@coldpbc/enums';
+import { useSearchParams } from 'react-router-dom';
 
 export interface SurveyProps {
   surveyName: string;
@@ -23,8 +24,13 @@ export const Survey = (props: SurveyProps) => {
     [`/surveys/${surveyName}`, 'GET'],
     axiosFetcher,
   );
-
+  const [searchParams, setSearchParams] = useSearchParams();
   const submitSurvey = () => {
+    const param = searchParams.get('surveyName');
+    if (param) {
+      searchParams.delete('surveyName');
+      setSearchParams(searchParams);
+    }
     setShow(false);
   };
 
