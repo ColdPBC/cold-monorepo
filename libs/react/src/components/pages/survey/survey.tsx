@@ -53,6 +53,15 @@ export const Survey = (props: SurveyProps) => {
     }
   };
 
+  const onSurveyClose = () => {
+    const param = searchParams.get('surveyName');
+    if (param) {
+      searchParams.delete('surveyName');
+      setSearchParams(searchParams);
+    }
+    setShow(false);
+  };
+
   useEffect(() => {
     if (data) {
       // sort the sections and followups by the idx field
@@ -107,6 +116,7 @@ export const Survey = (props: SurveyProps) => {
           dismiss: {
             label: 'close',
             dismissible: true,
+            onClick: onSurveyClose,
           },
         }}
       >
@@ -128,6 +138,7 @@ export const Survey = (props: SurveyProps) => {
             dismiss: {
               label: 'close',
               dismissible: true,
+              onClick: onSurveyClose,
             },
           }}
         >
