@@ -20,6 +20,8 @@ import { getSurveyFormDataByName } from './surveyDataMock';
 import { getRoles } from './roleMock';
 import { resolveAPIUrl } from '@coldpbc/fetchers';
 import { getOrganizationMock } from './organizationMock';
+import { getPoliciesSignedMock, getPolicyMockByName } from './policyMock';
+import { auth0UserMock } from './userMock';
 
 // Even if this uses vite as a bundler, it still uses the NODE_ENV variable
 export const getApiUrl = (path: string) => {
@@ -198,5 +200,36 @@ export const handlers = [
     const { data } = await req.json();
 
     return res(ctx.json({}));
+  }),
+
+  rest.patch(getApiUrl(`/users/:emailOrId`), (req, res, ctx) => {
+    return res(ctx.json({}));
+  }),
+
+  rest.post(getApiUrl(`/organizations`), (req, res, ctx) => {
+    const body = req.body as {
+      name: string;
+    };
+    return res(ctx.json({}));
+  }),
+
+  rest.post(getApiUrl(`/policies/:id/signed`), (req, res, ctx) => {
+    const body = req.body as {
+      name: string;
+    };
+    return res(ctx.json({}));
+  }),
+
+  rest.get(getApiUrl('/policies/signed/user'), (req, res, ctx) => {
+    return res(ctx.json(getPoliciesSignedMock()));
+  }),
+
+  rest.get(getApiUrl('/policies/:name'), (req, res, ctx) => {
+    const name = req.params.name as string;
+    return res(ctx.json(getPolicyMockByName(name)));
+  }),
+
+  rest.get(getApiUrl('/users/:emailOrId'), (req, res, ctx) => {
+    return res(ctx.json(auth0UserMock));
   }),
 ];

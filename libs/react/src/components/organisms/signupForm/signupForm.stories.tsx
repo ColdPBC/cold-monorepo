@@ -24,9 +24,11 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 const SignupFormStory = (args: SignupFormProps) => {
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  const onSubmit = () => {};
   return (
     <StoryMockProvider handlers={getSignUpHandler.DEFAULT}>
-      <SignupForm {...args} />
+      <SignupForm {...args} onSubmit={onSubmit} />
     </StoryMockProvider>
   );
 };
