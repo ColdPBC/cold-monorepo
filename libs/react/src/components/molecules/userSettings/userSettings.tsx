@@ -1,8 +1,10 @@
 import { User } from "@auth0/auth0-react";
 import { ButtonTypes } from "@coldpbc/enums";
+import { useState } from "react";
 import { useNavigate } from "react-router"
 import { BaseButton } from "../../atoms";
 import { Card } from "../card"
+import { Modal } from "../modal";
 
 interface Props {
     user: User;
@@ -12,6 +14,8 @@ export const UserSettings = ({
     user,
 }: Props) => {
     const navigate = useNavigate();
+    const [showFirstNameModal, setShowFirstNameModal] = useState(false);
+    const [showLastNameModal, setShowLastNameModal] = useState(false);
 
     const {
         picture,
@@ -30,6 +34,30 @@ export const UserSettings = ({
                 }
             ]}
         >
+            <Modal
+                setShowModal={setShowFirstNameModal}
+                show={showFirstNameModal}
+                header={{
+                    title: 'Set First Name',
+                }}
+                body={(
+                    <>
+                        hey
+                    </>
+                )}
+            />
+            <Modal
+                setShowModal={setShowLastNameModal}
+                show={showLastNameModal}
+                header={{
+                    title: 'Set Last Name',
+                }}
+                body={(
+                    <>
+                        hey
+                    </>
+                )}
+            />
             <div className="flex w-full">
                 <div className="flex justify-center items-center w-[400px] mr-10">
                     {picture ? 
@@ -58,7 +86,7 @@ export const UserSettings = ({
                                 value={given_name}
                             />
                             <div className="h-[60px] ml-2 flex items-center">
-                                <BaseButton label="Edit" onClick={() => {}} variant={ButtonTypes.secondary} />
+                                <BaseButton label="Edit" onClick={() => setShowFirstNameModal(true)} variant={ButtonTypes.secondary} />
                             </div>
                        </div>
                     </div>
@@ -67,8 +95,8 @@ export const UserSettings = ({
                             htmlFor='last-name'
                             className="text-bgc-accent mb-1 text-sm text-gray-110"
                         >
-                                Last Name
-                            </label>
+                            Last Name
+                        </label>
                        <div className="flex">
                             <input
                                 name='last-name'
@@ -77,7 +105,7 @@ export const UserSettings = ({
                                 value={family_name}
                             />
                             <div className="h-[60px] ml-2 flex items-center">
-                                <BaseButton label="Edit" onClick={() => {}} variant={ButtonTypes.secondary} />
+                                <BaseButton label="Edit" onClick={() => setShowLastNameModal(true)} variant={ButtonTypes.secondary} />
                             </div>
                        </div>
                     </div>

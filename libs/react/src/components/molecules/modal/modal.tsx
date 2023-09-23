@@ -2,6 +2,8 @@ import React, { ReactElement } from 'react';
 import { Modal as FBModal } from 'flowbite-react';
 import { BaseButton } from '../../atoms/button/button';
 import { IButtonProps } from '../../../interfaces/buttons/baseButton';
+import { flowbiteThemeOverride } from '@coldpbc/themes';
+import { Card } from '../card';
 
 export interface ModalHeader {
   title: string;
@@ -29,20 +31,29 @@ export const Modal = (props: IModalProps) => {
 
   const getModalFooter = () => {
     return (
-      <>
+      <div className='flex'>
         {footer?.rejectButton && <BaseButton {...footer.rejectButton} />}
         {footer?.resolveButton && <BaseButton {...footer.resolveButton} />}
-      </>
+      </div>
     );
   };
 
   return (
-    <FBModal dismissible show={show} onClose={() => props.setShowModal(false)}>
-      <FBModal.Header>{header.title}</FBModal.Header>
-      <FBModal.Body>
-        <div className="space-y-6">{getModelBody()}</div>
-      </FBModal.Body>
-      {footer && <FBModal.Footer>{getModalFooter()}</FBModal.Footer>}
+    <FBModal
+      dismissible
+      show={show}
+      onClose={() => props.setShowModal(false)}
+      theme={flowbiteThemeOverride.modal}
+      style={{
+        boxShadow: '0px 8px 32px 8px rgba(0, 0, 0, 0.70)'
+      }}
+    >
+      <Card title={header.title}>
+        <div className='flex flex-col'>
+          <div className="space-y-6">{getModelBody()}</div>
+          {footer && getModalFooter()}
+        </div>
+      </Card>
     </FBModal>
   );
 };

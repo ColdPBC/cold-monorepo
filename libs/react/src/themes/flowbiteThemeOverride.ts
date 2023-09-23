@@ -596,8 +596,8 @@ export const flowbiteThemeOverride: FlowbiteTheme = {
       },
     },
     content: {
-      base: 'relative h-full w-full m-auto p-4 md:h-auto',
-      inner: 'relative rounded-lg bg-white shadow dark:bg-gray-700',
+      base: 'relative h-full w-full m-auto md:h-auto rounded-2xl',
+      inner: 'relative',
     },
     body: {
       base: 'p-6',
