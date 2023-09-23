@@ -4,6 +4,8 @@ import { BaseButton } from '../../atoms/button/button';
 import { IButtonProps } from '../../../interfaces/buttons/baseButton';
 import { flowbiteThemeOverride } from '@coldpbc/themes';
 import { Card } from '../card';
+import { XMarkIcon } from '@heroicons/react/20/solid';
+import clsx from 'clsx';
 
 export interface ModalHeader {
   title: string;
@@ -31,8 +33,8 @@ export const Modal = (props: IModalProps) => {
 
   const getModalFooter = () => {
     return (
-      <div className='flex'>
-        {footer?.rejectButton && <BaseButton {...footer.rejectButton} />}
+      <div className='flex justify-end mt-11'>
+        {footer?.rejectButton && <span className={clsx({'mr-6': footer?.resolveButton})}><BaseButton {...footer.rejectButton} /></span>}
         {footer?.resolveButton && <BaseButton {...footer.resolveButton} />}
       </div>
     );
@@ -48,11 +50,19 @@ export const Modal = (props: IModalProps) => {
         boxShadow: '0px 8px 32px 8px rgba(0, 0, 0, 0.70)'
       }}
     >
-      <Card title={header.title}>
-        <div className='flex flex-col'>
+      <Card title={header.title} className='relative p-6'>
+        <div className='flex flex-col w-full'>
           <div className="space-y-6">{getModelBody()}</div>
           {footer && getModalFooter()}
         </div>
+        <button
+            className='w-[20px] h-[20px] absolute right-[24px] top-[24px]'
+            onClick={(e) => {
+                props.setShowModal(false)
+            }}
+        >
+            <XMarkIcon />
+        </button>
       </Card>
     </FBModal>
   );

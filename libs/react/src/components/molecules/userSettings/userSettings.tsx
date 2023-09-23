@@ -1,8 +1,9 @@
 import { User } from "@auth0/auth0-react";
 import { ButtonTypes } from "@coldpbc/enums";
-import { useState } from "react";
+import { axiosFetcher } from "@coldpbc/fetchers";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router"
-import { BaseButton } from "../../atoms";
+import { BaseButton, Input } from "../../atoms";
 import { Card } from "../card"
 import { Modal } from "../modal";
 
@@ -13,15 +14,45 @@ interface Props {
 export const UserSettings = ({
     user,
 }: Props) => {
-    const navigate = useNavigate();
-    const [showFirstNameModal, setShowFirstNameModal] = useState(false);
-    const [showLastNameModal, setShowLastNameModal] = useState(false);
-
     const {
         picture,
         given_name,
-        family_name
+        family_name,
+        email
     } = user;
+
+    const navigate = useNavigate();
+    const [showFirstNameModal, setShowFirstNameModal] = useState(false);
+    const [showLastNameModal, setShowLastNameModal] = useState(false);
+    const [firstName, setFirstName] = useState<string | undefined>(
+        given_name,
+    );
+      const [lastName, setLastName] = useState<string | undefined>(
+        family_name,
+    );
+    
+    // reset firstname on edit modal close
+    useEffect(() => {
+        if (!showFirstNameModal) {
+            setFirstName(given_name);
+        }
+    }, [showFirstNameModal]);
+
+    // reset lastname on edit modal close
+    useEffect(() => {
+        if (!showLastNameModal) {
+            setLastName(family_name);
+        }
+    }, [showLastNameModal]);
+    
+    // TODO: put inside a custom hook
+    const postUserData = (userData: User) => {
+        axiosFetcher([
+            `/users/${email}`,
+            'PATCH',
+            JSON.stringify(userData),
+        ]);
+    };
 
     return (
         <Card
@@ -41,10 +72,37 @@ export const UserSettings = ({
                     title: 'Set First Name',
                 }}
                 body={(
-                    <>
-                        hey
-                    </>
+                    <Input
+                        input_props={{
+                        value: firstName,
+                        onChange: (e) => setFirstName(e.target.value),
+                        onValueChange: (name) => setFirstName(name),
+                        name: 'firstName',
+                        className:
+                            'text-sm not-italic text-tc-primary font-medium bg-transparent w-full rounded-lg p-[16px] border border-bgc-accent focus:border focus:border-bgc-accent focus:ring-0 w-full',
+                        }}
+                        input_label_props={{
+                        className: 'text-sm not-italic text-tc-primary font-medium',
+                        }}
+                        input_label={'First Name'}
+                    />
                 )}
+                footer={{
+                    resolveButton: {
+                        label: 'Save',
+                        onClick: () => {
+                            postUserData({
+                                given_name: firstName
+                            });
+                            setShowFirstNameModal(false);
+                        }
+                    },
+                    rejectButton: {
+                        label: 'Cancel',
+                        variant: ButtonTypes.secondary,
+                        onClick: () => setShowFirstNameModal(false)
+                    }
+                }}
             />
             <Modal
                 setShowModal={setShowLastNameModal}
@@ -53,10 +111,37 @@ export const UserSettings = ({
                     title: 'Set Last Name',
                 }}
                 body={(
-                    <>
-                        hey
-                    </>
+                    <Input
+                        input_props={{
+                        value: lastName,
+                        onChange: (e) => setLastName(e.target.value),
+                        onValueChange: (name) => setLastName(name),
+                        name: 'lastName',
+                        className:
+                            'text-sm not-italic text-tc-primary font-medium bg-transparent w-full rounded-lg p-[16px] border border-bgc-accent focus:border focus:border-bgc-accent focus:ring-0 w-full',
+                        }}
+                        input_label_props={{
+                        className: 'text-sm not-italic text-tc-primary font-medium',
+                        }}
+                        input_label={'Last Name'}
+                    />
                 )}
+                footer={{
+                    resolveButton: {
+                        label: 'Save',
+                        onClick: () => {
+                            postUserData({
+                                family_name: lastName
+                            });
+                            setShowLastNameModal(false);
+                        }
+                    },
+                    rejectButton: {
+                        label: 'Cancel',
+                        variant: ButtonTypes.secondary,
+                        onClick: () => setShowLastNameModal(false)
+                    }
+                }}
             />
             <div className="flex w-full">
                 <div className="flex justify-center items-center w-[400px] mr-10">
