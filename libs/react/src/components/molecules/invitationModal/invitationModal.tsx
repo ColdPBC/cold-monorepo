@@ -56,7 +56,7 @@ export const InvitationModal = (props: InvitationModalProps) => {
     return isSuccess ?
       (
         <div className='flex items-center justify-between'>
-          <div>
+          <div className='flex items-center'>
             <div className='flex items-center justify-center w-[40px] h-[40px] rounded-full bg-primary-300 mr-4'>
               <CheckIcon className='w-[22px] h-[22px]' />
             </div>

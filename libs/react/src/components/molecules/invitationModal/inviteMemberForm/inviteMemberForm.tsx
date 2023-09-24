@@ -42,6 +42,14 @@ export const InviteMemberForm = (props: InviteMemberFormProps) => {
     inviteMembers(memberForm.email, memberForm.role);
   };
 
+  const isEmailValid = () => {
+    return String(memberForm.email)
+      .toLowerCase()
+      .match(
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      );
+  }
+
   // Filter out special case roles
   const filterRoles = (role: any) => {
     const filteredRoles = ['company:owner', 'cold:', 'default:'];
@@ -127,6 +135,7 @@ export const InviteMemberForm = (props: InviteMemberFormProps) => {
             onClick={() => {
               handleSubmit();
             }}
+            disabled={!isEmailValid()}
           />
         </div>
       </>
