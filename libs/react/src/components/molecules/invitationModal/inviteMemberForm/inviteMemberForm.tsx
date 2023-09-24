@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { BaseButton } from '../../../atoms/button/button';
-import { ColorNames } from '../../../../enums/colors';
 import { InputTypes } from '../../../../enums/inputs';
-import { GlobalSizes } from '../../../../enums/sizes';
 import { Input } from '../../../atoms/input/input';
 import useSWR from 'swr';
 import { axiosFetcher } from '../../../../fetchers/axiosFetcher';
@@ -11,15 +9,17 @@ import capitalize from 'lodash/capitalize';
 import includes from 'lodash/includes';
 import { Role } from 'auth0';
 import { isArray } from 'lodash';
+import { ButtonTypes } from '@coldpbc/enums';
 
 export interface InviteMemberFormProps {
-  inviteMembers: (emails: string, roleId: string) => void;
+  inviteMembers: (email: string, roleId: string) => void;
+  onCancel: () => void;
 }
 
 export const InviteMemberForm = (props: InviteMemberFormProps) => {
   const { inviteMembers } = props;
   const [memberForm, setMemberForm] = useState<any>({
-    emails: '',
+    email: '',
     role: '',
   });
   const {
@@ -39,7 +39,7 @@ export const InviteMemberForm = (props: InviteMemberFormProps) => {
   };
 
   const handleSubmit = () => {
-    inviteMembers(memberForm.emails, memberForm.role);
+    inviteMembers(memberForm.email, memberForm.role);
   };
 
   // Filter out special case roles
@@ -67,49 +67,63 @@ export const InviteMemberForm = (props: InviteMemberFormProps) => {
   if (isArray(data)) {
     return (
       <>
-        <div className="w-64">
-          <Input
-            input_props={{
-              placeholder: 'Emails, comma separated',
-              name: 'emails',
-              value: memberForm.emails,
-              onChange: (e) => handleChange('emails', e.target.value),
-              onValueChange: (value) => {
-                handleChange('emails', value);
-              },
-              required: true,
-            }}
-            idx={0}
-            type={InputTypes.Text}
-          />
+        <div className='flex items-end'>
+          <div className="flex-1">
+            <Input
+              input_props={{
+                name: 'email',
+                value: memberForm.email,
+                onChange: (e) => handleChange('email', e.target.value),
+                onValueChange: (value) => {
+                  handleChange('email', value);
+                },
+                required: true,
+                className:
+                  'text-sm not-italic text-tc-primary font-medium bg-transparent w-full rounded-lg p-[16px] border border-bgc-accent focus:border focus:border-bgc-accent focus:ring-0 w-full',
+              }}
+              input_label_props={{
+                className: 'text-sm not-italic text-tc-primary font-medium',
+              }}
+              idx={0}
+              type={InputTypes.Text}
+              input_label='Email Address'
+            />
+          </div>
+          <div className="w-40 ml-4 mb-2">
+            <Input
+              input_props={{
+                name: 'role',
+                value: memberForm.role,
+                onValueChange: (value) => {
+                  handleChange('role', value);
+                },
+                options: (data as Role[])
+                  .filter(filterRoles)
+                  .map((role: Role, index) => {
+                    return {
+                      id: index,
+                      name: capitalize(role.name?.replace('company:', '')),
+                    };
+                  }),
+              }}
+              idx={1}
+              type={InputTypes.Select}
+            />
+          </div>
         </div>
-        <div className="w-40">
-          <Input
-            input_props={{
-              name: 'role',
-              value: memberForm.role,
-              onValueChange: (value) => {
-                handleChange('role', value);
-              },
-              options: (data as Role[])
-                .filter(filterRoles)
-                .map((role: Role, index) => {
-                  return {
-                    id: index,
-                    name: capitalize(role.name?.replace('company:', '')),
-                  };
-                }),
-            }}
-            idx={1}
-            type={InputTypes.Select}
-          />
-        </div>
-        <div className="pl-6 mt-2">
+        <div className="mt-11 flex justify-end">
+          <span className='mr-4'>
+            <BaseButton
+              variant={ButtonTypes.secondary}
+              label={'Cancel'}
+              onClick={() => {
+                props.onCancel();
+              }}
+            />
+          </span>
           <BaseButton
             type={'submit'}
-            textSize={GlobalSizes.xSmall}
-            color={ColorNames.primary}
-            label={'Send Invite'}
+            label={'Invite'}
             onClick={() => {
               handleSubmit();
             }}

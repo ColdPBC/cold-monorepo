@@ -74,15 +74,15 @@ export const UserSettings = ({
                 body={(
                     <Input
                         input_props={{
-                        value: firstName,
-                        onChange: (e) => setFirstName(e.target.value),
-                        onValueChange: (name) => setFirstName(name),
-                        name: 'firstName',
-                        className:
-                            'text-sm not-italic text-tc-primary font-medium bg-transparent w-full rounded-lg p-[16px] border border-bgc-accent focus:border focus:border-bgc-accent focus:ring-0 w-full',
+                            value: firstName,
+                            onChange: (e) => setFirstName(e.target.value),
+                            onValueChange: (name) => setFirstName(name),
+                            name: 'firstName',
+                            className:
+                                'text-sm not-italic text-tc-primary font-medium bg-transparent w-full rounded-lg p-[16px] border border-bgc-accent focus:border focus:border-bgc-accent focus:ring-0 w-full',
                         }}
                         input_label_props={{
-                        className: 'text-sm not-italic text-tc-primary font-medium',
+                            className: 'text-sm not-italic text-tc-primary font-medium',
                         }}
                         input_label={'First Name'}
                     />
@@ -113,15 +113,15 @@ export const UserSettings = ({
                 body={(
                     <Input
                         input_props={{
-                        value: lastName,
-                        onChange: (e) => setLastName(e.target.value),
-                        onValueChange: (name) => setLastName(name),
-                        name: 'lastName',
-                        className:
-                            'text-sm not-italic text-tc-primary font-medium bg-transparent w-full rounded-lg p-[16px] border border-bgc-accent focus:border focus:border-bgc-accent focus:ring-0 w-full',
+                            value: lastName,
+                            onChange: (e) => setLastName(e.target.value),
+                            onValueChange: (name) => setLastName(name),
+                            name: 'lastName',
+                            className:
+                                'text-sm not-italic text-tc-primary font-medium bg-transparent w-full rounded-lg p-[16px] border border-bgc-accent focus:border focus:border-bgc-accent focus:ring-0 w-full',
                         }}
                         input_label_props={{
-                        className: 'text-sm not-italic text-tc-primary font-medium',
+                            className: 'text-sm not-italic text-tc-primary font-medium',
                         }}
                         input_label={'Last Name'}
                     />

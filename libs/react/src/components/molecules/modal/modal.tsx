@@ -52,7 +52,7 @@ export const Modal = (props: IModalProps) => {
     >
       <Card title={header.title} className='relative p-6'>
         <div className='flex flex-col w-full'>
-          <div className="space-y-6">{getModelBody()}</div>
+          <div className="">{getModelBody()}</div>
           {footer && getModalFooter()}
         </div>
         <button
