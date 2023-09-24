@@ -100,7 +100,7 @@ export const Datagrid = (props: DatagridProps) => {
           {items.map((row: any, rowIndex: number) => {
             {
               return (
-                <Table.Row key={`${row + ' ' + rowIndex}`} className="">
+                <Table.Row key={`${row + ' ' + rowIndex}`} theme={darkTableTheme.table?.row}>
                   {Object.keys(row).map((key, index) => {
                     return (
                       <Table.Cell

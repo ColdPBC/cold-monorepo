@@ -171,8 +171,14 @@ export const TeamMembersDataGrid = (props: TeamMembersDataGridProps) => {
   const getTransformedData = (data: any[]) => {
     return orderBy(data, ['email'], ['asc']).map((user) => {
       return {
-        picture: <Avatar size={GlobalSizes.medium} user={user} circle={true} />,
-        name: <TeamMemberName user={user} />,
+        name: (
+          <div className='flex'>
+            <span className='mr-4'>
+              <Avatar size={GlobalSizes.medium} user={user} />
+            </span>
+            <TeamMemberName user={user} />
+          </div>
+        ),
         role: getRole(user),
         status: getUserStatus(user),
         actions: getActions(user),
