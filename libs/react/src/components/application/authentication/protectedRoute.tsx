@@ -9,6 +9,7 @@ import useSWR from 'swr';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { get, has, isUndefined } from 'lodash';
 import { useCookies } from 'react-cookie';
+import { useAuth0Wrapper } from '../../../hooks/useAuth0Wrapper';
 
 export const ProtectedRoute = () => {
   const {
@@ -18,17 +19,12 @@ export const ProtectedRoute = () => {
     isAuthenticated,
     isLoading,
     getAccessTokenSilently,
-  } = useAuth0();
+  } = useAuth0Wrapper();
   const { auth0Options } = useContext(ColdContext);
 
   const [cookies, setCookie, removeCookie] = useCookies(['coldpbc']);
 
   const { coldpbc } = cookies;
-
-  const userData = useSWR<User, any, any>(
-    user && coldpbc ? [`/users/${user.email}`, 'GET'] : null,
-    axiosFetcher,
-  );
 
   const ldClient = useLDClient();
 
@@ -38,10 +34,9 @@ export const ProtectedRoute = () => {
 
   const needsSignup = () => {
     const ifNoOrgId = isUndefined(user?.coldclimate_claims.org_id);
-    if (userData?.data) {
+    if (user) {
       const ifNoName =
-        userData?.data.family_name === 'null' ||
-        userData?.data.given_name === 'null';
+        user.family_name === 'null' || user.given_name === 'null';
       return ifNoName || ifNoOrgId;
     } else {
       return ifNoOrgId || false;
@@ -113,7 +108,7 @@ export const ProtectedRoute = () => {
     coldpbc,
   ]);
 
-  if (isLoading || userData.isLoading) {
+  if (isLoading) {
     return (
       <div className="absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
         <Spinner size={GlobalSizes.xLarge} />
@@ -121,15 +116,13 @@ export const ProtectedRoute = () => {
     );
   }
 
-  if (error || userData.error) {
-    return (
-      <div>Encountered error: {error?.message || userData.error.message}</div>
-    );
+  if (error) {
+    return <div>Encountered error: {error.message}</div>;
   }
 
-  if (isAuthenticated && user && userData.data) {
+  if (isAuthenticated && user && coldpbc) {
     if (needsSignup()) {
-      return <SignupPage userData={userData.data} />;
+      return <SignupPage userData={user} />;
     } else {
       return <Outlet />;
     }
