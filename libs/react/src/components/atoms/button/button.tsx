@@ -20,13 +20,15 @@ export function BaseButton(props: IButtonProps): JSX.Element {
     upperCase,
     className,
     href,
-    target
+    target,
+    children
   } = props;
 
   const content = (
     <>
       {iconLeft && getIconComponent(iconLeft, props)}
       {label && <span>{label}</span>}
+      {children && <span>{children}</span>}
       {iconRight && getIconComponent(iconRight, props)}
     </>
   );

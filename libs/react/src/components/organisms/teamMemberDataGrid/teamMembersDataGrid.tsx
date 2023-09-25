@@ -10,6 +10,7 @@ import {Avatar} from '../../atoms/avatar/avatar';
 import {axiosFetcher} from '../../../fetchers/axiosFetcher';
 import {useAuth0} from '@auth0/auth0-react';
 import {format} from 'date-fns';
+import { ButtonTypes } from '@coldpbc/enums';
 
 //TODO:Why the empty interface?
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
@@ -82,22 +83,22 @@ export const TeamMembersDataGrid = (props: TeamMembersDataGridProps) => {
     } else if (user.roles === 'company:admin') {
       return [
         {
-          label: 'Delete Member',
+          label: 'Remove User',
           name: 'delete member',
-          title: 'Delete Member',
-          body: `Are you sure you want to delete ${user.name}?\n\nOnce confirmed, this action cannot be undone.`,
+          title: 'Remove User',
+          body: (
+            <span>
+              Are you sure you want to remove <span className='font-bold'>{user.name}</span> from your company?
+            </span>
+          ),
           footer: {
             resolveButton: {
-              label: 'Delete',
-              color: ColorNames.red,
-              size: GlobalSizes.small,
-              rounded: true,
+              label: 'Remove User',
+              variant: ButtonTypes.warning
             },
             rejectButton: {
               label: 'Cancel',
-              color: ColorNames.jetBlack,
-              size: GlobalSizes.small,
-              rounded: true,
+              variant: ButtonTypes.secondary
             },
           },
           url: `/organizations/${data.org_id}/member`,
@@ -112,22 +113,24 @@ export const TeamMembersDataGrid = (props: TeamMembersDataGridProps) => {
           },
         },
         {
-          label: 'Make Owner',
+          label: 'Transfer Ownership',
           name: 'make owner',
-          title: `Change Owner of ${data.name}`,
-          body: `There can only be one owner for ${data.name}.\n\nBy making this member the owner you will give up your permission as owner. Are you sure you want to make ${user.name} the owner?`,
+          title:'Transfer Ownership',
+          body: (
+            <span>
+              There can only be one owner for {data.name}
+              <br /><br />
+              By making this member the owner you will give up your permission as owner.
+              Are you sure you want to make <span className='font-bold'>{user.name}</span> the owner?
+            </span>
+          ),
           footer: {
             resolveButton: {
-              label: 'Confirm',
-              color: ColorNames.primary,
-              size: GlobalSizes.small,
-              rounded: true,
+              label: 'Transfer Ownership',
             },
             rejectButton: {
               label: 'Cancel',
-              color: ColorNames.jetBlack,
-              size: GlobalSizes.small,
-              rounded: true,
+              variant: ButtonTypes.secondary
             },
           },
           urls: user.identities.map((identity: string) => {
@@ -172,15 +175,16 @@ export const TeamMembersDataGrid = (props: TeamMembersDataGridProps) => {
     return orderBy(data, ['email'], ['asc']).map((user) => {
       return {
         name: (
-          <div className='flex'>
+          <div className='flex items-center'>
             <span className='mr-4'>
               <Avatar size={GlobalSizes.medium} user={user} />
             </span>
-            <TeamMemberName user={user} />
+            <span className='text-white font-bold text-sm leading-normal'>{user.name}</span>
           </div>
         ),
-        role: getRole(user),
-        status: getUserStatus(user),
+        email: <span className='text-white font-medium text-sm leading-normal'>{user.email}</span>,
+        role: <span className='text-white font-medium text-sm leading-normal'>{getRole(user)}</span>,
+        status: <span className='text-white font-medium text-sm leading-normal'>{getUserStatus(user)}</span>,
         actions: getActions(user),
       };
     });

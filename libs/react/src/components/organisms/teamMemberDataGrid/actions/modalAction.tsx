@@ -16,7 +16,7 @@ export const ModalAction = (props: ModalActionProps) => {
 
   const body = () => {
     return (
-      <div className="px-10 pb-24 pt-2 text-xs text-left whitespace-pre-wrap">
+      <div className="text-sm font-medium">
         {action.body}
       </div>
     );

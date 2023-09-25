@@ -33,17 +33,13 @@ export const TableActions = (props: TableActionsProps) => {
       </div>
     );
   };
-  return (
-    <>
-      {actions.length > 0 && (
-        <DataGridPopover content={content()} shown={shown} setShown={setShown}>
-          <TableActionButton
-            onClick={() => {
-              setShown(!shown);
-            }}
-          />
-        </DataGridPopover>
-      )}
-    </>
-  );
+  return actions.length > 0 ? (
+    <DataGridPopover content={content()} shown={shown} setShown={setShown}>
+      <TableActionButton
+        onClick={() => {
+          setShown(!shown);
+        }}
+      />
+    </DataGridPopover>
+  ) : null;
 };
