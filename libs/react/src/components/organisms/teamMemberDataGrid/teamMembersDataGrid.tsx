@@ -1,7 +1,5 @@
-import React from 'react';
 import {Datagrid} from '../../molecules/dataGrid/datagrid';
 import useSWR from 'swr';
-import {TeamMemberName} from '../../molecules/teamMemberName/teamMemberName';
 import {GlobalSizes} from '../../../enums/sizes';
 import {Spinner} from '../../atoms/spinner/spinner';
 import {ColorNames} from '../../../enums/colors';
@@ -11,12 +9,13 @@ import {axiosFetcher} from '../../../fetchers/axiosFetcher';
 import {useAuth0} from '@auth0/auth0-react';
 import {format} from 'date-fns';
 import { ButtonTypes } from '@coldpbc/enums';
+import { MemberStatusType } from '../../pages';
 
-//TODO:Why the empty interface?
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface TeamMembersDataGridProps {}
+export interface TeamMembersDataGridProps {
+  selectedMemberStatusType: MemberStatusType;
+}
 
-export const TeamMembersDataGrid = (props: TeamMembersDataGridProps) => {
+export const TeamMembersDataGrid = ({ selectedMemberStatusType }: TeamMembersDataGridProps) => {
   const { user: dataGridUser } = useAuth0();
 
   const getOrgURL = () => {
@@ -163,30 +162,24 @@ export const TeamMembersDataGrid = (props: TeamMembersDataGridProps) => {
     }
   };
 
-  const getUserStatus = (user: any) => {
-    if (user.status === 'invited') {
-      return 'Invited: ' + format(new Date(user.invited_at), 'MMM. dd');
-    } else {
-      return startCase(user.status);
-    }
-  };
-
   const getTransformedData = (data: any[]) => {
-    return orderBy(data, ['email'], ['asc']).map((user) => {
-      return {
-        name: (
-          <div className='flex items-center'>
-            <span className='mr-4'>
-              <Avatar size={GlobalSizes.medium} user={user} />
-            </span>
-            <span className='text-white font-bold text-sm leading-normal'>{user.name}</span>
-          </div>
-        ),
-        email: <span className='text-white font-medium text-sm leading-normal'>{user.email}</span>,
-        role: <span className='text-white font-medium text-sm leading-normal'>{getRole(user)}</span>,
-        status: <span className='text-white font-medium text-sm leading-normal'>{getUserStatus(user)}</span>,
-        actions: getActions(user),
-      };
+    return orderBy(data, ['email'], ['asc'])
+      .filter(user => (user.status === 'invited' && selectedMemberStatusType === 'Invitations')
+        || (selectedMemberStatusType === 'Members' && user.status !== 'invited'))
+      .map((user) => {
+        return {
+          name: (
+            <div className='flex items-center'>
+              <span className='mr-4'>
+                <Avatar size={GlobalSizes.medium} user={user} />
+              </span>
+              <span className='text-white font-bold text-sm leading-normal'>{user.name}</span>
+            </div>
+          ),
+          email: <span className='text-white font-medium text-sm leading-normal'>{user.email}</span>,
+          role: <span className='text-white font-medium text-sm leading-normal'>{getRole(user)}</span>,
+          actions: getActions(user),
+        };
     });
   };
 

@@ -31,13 +31,6 @@ export const getTeamMemberDataGridMock = () => {
           headerTitle: 'Role',
         },
         {
-          size: 'w-32',
-          field: 'status',
-          cellStyle: '',
-          headerStyle: '',
-          headerTitle: 'Status',
-        },
-        {
           size: 'w-8',
           field: 'actions',
           cellStyle: '',

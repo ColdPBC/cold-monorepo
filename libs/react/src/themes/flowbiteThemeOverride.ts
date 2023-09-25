@@ -427,7 +427,7 @@ export const flowbiteThemeOverride: FlowbiteTheme = {
   },
   dropdown: {
     arrowIcon: 'ml-2 h-4 w-4',
-    content: 'py-1',
+    content: '',
     floating: {
       animation: 'transition-opacity',
       arrow: {
@@ -441,18 +441,18 @@ export const flowbiteThemeOverride: FlowbiteTheme = {
       },
       base: 'z-10 w-fit rounded divide-y divide-gray-100 shadow',
       content: 'py-1 text-sm text-gray-700 dark:text-gray-200',
-      divider: 'my-1 h-px bg-gray-100 dark:bg-gray-600',
+      divider: 'my-1 h-px bg-bgc-accent',
       header: 'block py-2 px-4 text-sm text-gray-700 dark:text-gray-200',
       hidden: 'invisible opacity-0',
       item: {
-        base: 'flex items-center justify-start py-2 px-4 text-sm text-gray-700 cursor-pointer hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-white',
+        base: 'flex items-center justify-start py-4 px-4 text-white font-medium text-sm cursor-pointer',
         icon: 'mr-2 h-4 w-4',
         container: '',
       },
       style: {
         dark: 'bg-gray-900 text-white dark:bg-gray-700',
-        light: 'border border-gray-200 bg-white text-gray-900',
-        auto: 'border border-gray-200 bg-white text-gray-900 dark:border-none dark:bg-gray-700 dark:text-white',
+        light: 'border border-bgc-accent bg-bgc-elevated',
+        auto: 'border border-bgc-accent bg-bgc-elevated dark:border-none dark:bg-gray-700 dark:text-white',
       },
       target: 'w-fit',
     },
