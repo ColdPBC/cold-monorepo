@@ -86,14 +86,15 @@ export function FootprintDetailChart({ colors, subcategory_key, period, setIsEmp
     axiosFetcher,
   );
 
-  const isEmpty = !data?.subcategories?.[subcategory_key] || 
+  const isEmpty = !isLoading && (!data?.subcategories?.[subcategory_key] || 
     !Object.keys(data?.subcategories?.[subcategory_key].activities).some((activityKey) => {
       const activity = data?.subcategories?.[subcategory_key].activities[activityKey];
 
       return (
         activity.footprint && activity.footprint.value !== null
       );
-    });
+    }));
+
 
   // Update chart data on receiving new data
   useEffect(() => {
