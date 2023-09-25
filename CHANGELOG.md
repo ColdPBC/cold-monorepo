@@ -1,3 +1,11 @@
+# [1.17.0](https://github.com/ColdPBC/ui/compare/v1.16.0...v1.17.0) (2023-09-25)
+
+
+### Features
+
+* remove query params on survey close ([0aa804a](https://github.com/ColdPBC/ui/commit/0aa804a0276f9cd5b8273409ffb5f3c6219d7131))
+* removed the query params after submitting survey ([a333a96](https://github.com/ColdPBC/ui/commit/a333a960b74b3fb9c3645e31298ab2ff22cc98b6))
+
 # [1.16.0](https://github.com/ColdPBC/ui/compare/v1.15.0...v1.16.0) (2023-09-23)
 
 

@@ -19,6 +19,7 @@ export interface TakeoverProps {
     dismiss: {
       label?: string;
       dismissible: boolean;
+      onClick?: () => void;
     };
   };
 }
@@ -54,7 +55,11 @@ export const Takeover = (props: PropsWithChildren<TakeoverProps>) => {
           {header.dismiss.dismissible && (
             <BaseButton
               onClick={() => {
-                setShow(false);
+                if (header.dismiss.onClick) {
+                  header.dismiss.onClick();
+                } else {
+                  setShow(false);
+                }
               }}
               label={header.dismiss.label}
               iconRight={IconNames.CloseModalIcon}
