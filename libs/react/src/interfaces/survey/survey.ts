@@ -23,6 +23,7 @@ export interface SurveySectionsProgressSectionType {
 
 export interface SurveyActiveKeyType {
   value: string;
+  previousValue: string;
   isFollowUp: boolean;
 }
 

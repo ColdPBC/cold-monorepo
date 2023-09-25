@@ -51,16 +51,7 @@ export const SurveySectionsProgress = ({
     const className = 'flex-auto self-stretch rounded-2xl';
     return (
       <SwitchTransition mode={'out-in'}>
-        <CSSTransition
-          key={activeSectionKey}
-          timeout={200}
-          classNames={{
-            enter: 'opacity-0',
-            enterDone: 'transition-opacity ease-in duration-200 opacity-100',
-            exit: 'transition-opacity ease-in duration-200 opacity-100',
-            exitDone: 'transition-opacity ease-out duration-200 opacity-0',
-          }}
-        >
+        <CSSTransition key={activeSectionKey} timeout={300}>
           <div
             key={backgroundImageStyle}
             className={className}

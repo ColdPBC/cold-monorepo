@@ -14,6 +14,7 @@ export const Survey = (props: SurveyProps) => {
   const { surveyName } = props;
   const [activeKey, setActiveKey] = React.useState<SurveyActiveKeyType>({
     value: '',
+    previousValue: '',
     isFollowUp: false,
   });
   const [show, setShow] = React.useState<boolean>(true);
@@ -36,11 +37,13 @@ export const Survey = (props: SurveyProps) => {
         const firstFollowUpKey = Object.keys(firstSection.follow_up)[0];
         setActiveKey({
           value: firstFollowUpKey,
+          previousValue: '',
           isFollowUp: true,
         });
       } else {
         setActiveKey({
           value: firstSectionKey,
+          previousValue: '',
           isFollowUp: false,
         });
       }

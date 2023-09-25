@@ -2,7 +2,7 @@ import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { Survey } from '@coldpbc/components';
 import { StoryMockProvider } from '@coldpbc/mocks';
-import { getSurveyHandler } from '../../../__mocks__/surveyHandlers';
+import { getSurveyHandler } from '@coldpbc/mocks';
 
 const meta = {
   title: 'Pages/Survey',

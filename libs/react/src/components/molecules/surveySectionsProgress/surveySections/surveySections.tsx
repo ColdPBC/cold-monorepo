@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { SurveyActiveKeyType, SurveySectionType } from '@coldpbc/interfaces';
-import Lottie from 'lottie-react';
+import Lottie, { useLottie } from 'lottie-react';
 import { ColdIcon } from '../../../atoms';
 import { IconNames } from '@coldpbc/enums';
 import { getCheckboxAnimation } from '@coldpbc/animations';
+import { isPreviousKeyAhead } from '@coldpbc/lib';
 
 interface SurveySectionsProps {
   sections: {
@@ -82,15 +83,34 @@ export const SurveySections = ({
           (followUpKey) => followUpKey === activeKey.value,
         );
         if (followUpIndex === Object.keys(section.follow_up).length - 1) {
-          return (
-            <div
-              className={
-                className + ' w-[32px] h-[32px] top-[8px] -left-[48px]'
-              }
-            >
-              <Lottie loop={false} animationData={getCheckboxAnimation()} />
-            </div>
-          );
+          // check if the key value and previous value are not the same
+          if (
+            activeKey.value !== activeKey.previousValue &&
+            !isPreviousKeyAhead(activeKey, sections)
+          ) {
+            return (
+              <div
+                className={
+                  className + ' w-[32px] h-[32px] -left-[48px] top-[2px]'
+                }
+              >
+                <Lottie loop={false} animationData={getCheckboxAnimation()} />
+              </div>
+            );
+          } else {
+            return (
+              <div
+                className={
+                  className + ' w-[32px] h-[32px] -left-[48px] top-[2px]'
+                }
+              >
+                <ColdIcon
+                  className={' '}
+                  name={IconNames.ColdSmallCheckBoxIcon}
+                />
+              </div>
+            );
+          }
         } else {
           return (
             <div className={className + ' top-[16px] -left-[40px]'}>
@@ -123,13 +143,33 @@ export const SurveySections = ({
       }
     } else if (currentIndex === activeIndex - 1) {
       if (!followUp) {
-        return (
-          <div
-            className={className + ' w-[32px] h-[32px] -left-[48px] top-[2px]'}
-          >
-            <Lottie loop={false} animationData={getCheckboxAnimation()} />
-          </div>
-        );
+        if (
+          activeKey.value !== activeKey.previousValue &&
+          !isPreviousKeyAhead(activeKey, sections)
+        ) {
+          return (
+            <div
+              className={
+                className + ' w-[32px] h-[32px] -left-[48px] top-[2px]'
+              }
+            >
+              <Lottie loop={false} animationData={getCheckboxAnimation()} />
+            </div>
+          );
+        } else {
+          return (
+            <div
+              className={
+                className + ' w-[32px] h-[32px] -left-[48px] top-[2px]'
+              }
+            >
+              <ColdIcon
+                className={' '}
+                name={IconNames.ColdSmallCheckBoxIcon}
+              />
+            </div>
+          );
+        }
       } else {
         return (
           <div
