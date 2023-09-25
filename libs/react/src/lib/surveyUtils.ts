@@ -45,23 +45,16 @@ export const isPreviousKeyAhead = (
     [key: string]: SurveySectionType;
   },
 ) => {
-  // use the key.previousValue to find the index of the previous key
-  // check if the previousValue is a follow_up
-  // if it is a follow_up, check if the previousValue is ahead of the current key
-  // if it is not a follow_up, check if the previousValue is ahead of the current key
   if (key.value === key.previousValue) {
     return false;
   }
   const previousIsFollowUp = isKeyValueFollowUp(key.previousValue, sections);
-  // get the current section index
   const currentSectionIndex = getSectionIndex(sections, key);
-  // key is always a section key
   const previousSectionIndex = getSectionIndex(sections, {
     value: key.previousValue,
     previousValue: '',
     isFollowUp: previousIsFollowUp,
   });
-  // previous key is the same as current key, ahead of current key, or behind current key
   if (previousSectionIndex === currentSectionIndex) {
     const currentSection = sections[Object.keys(sections)[currentSectionIndex]];
     if (!key.isFollowUp) {
