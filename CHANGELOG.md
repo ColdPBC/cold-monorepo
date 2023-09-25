@@ -1,3 +1,19 @@
+# [1.16.0](https://github.com/ColdPBC/ui/compare/v1.15.0...v1.16.0) (2023-09-23)
+
+
+### Bug Fixes
+
+* redirect to / if last route was logout ([4fffc4d](https://github.com/ColdPBC/ui/commit/4fffc4dab26626fb9f701743ad16b3cae8eaa7da))
+* revert axios fetcher to return an error ([822d1fd](https://github.com/ColdPBC/ui/commit/822d1fdf1e7073f40500248cc508faced8abaa53))
+* syncing cookie issue, update routing logic, fix signup issue with user data not being updated ([04c6dec](https://github.com/ColdPBC/ui/commit/04c6decd1c8b9272c9ed84b5ae20c8113aa83e84))
+
+
+### Features
+
+* more updates ([55b3cbe](https://github.com/ColdPBC/ui/commit/55b3cbe407b5ec9e78feeacd0f1010296b807187))
+* signup page and authentication routes ([914d389](https://github.com/ColdPBC/ui/commit/914d3893861bab1f9b8dd413cc486b0b00bd3a01))
+* signup, login and logout routes ([fa6e6f2](https://github.com/ColdPBC/ui/commit/fa6e6f2ab7eb0abde0ed93a5d210d08129c9feb1))
+
 # [1.15.0](https://github.com/ColdPBC/ui/compare/v1.14.0...v1.15.0) (2023-09-20)
 
 

@@ -11,116 +11,21 @@ import { matchRoutes, useLocation } from 'react-router-dom';
 import { GuidanceButton } from '../../molecules/guidanceButton/guidanceButton';
 
 export const Application = () => {
-  const {
-    user,
-    error,
-    loginWithRedirect,
-    isAuthenticated,
-    isLoading,
-    logout,
-    getAccessTokenSilently,
-  } = useAuth0();
-
-  const { auth0Options } = useContext(ColdContext);
-
-  const [accessToken, setAccessTokenState] = useState<string>('');
-
-  const { setCookieData } = useCookies();
-
-  const ldClient = useLDClient();
-
   const location = useLocation();
   const shouldRenderGuidanceButton = matchRoutes(
-		[
+    [
       { path: '/home' },
       { path: '/footprint' },
       { path: '/journey' },
       { path: '/actions' },
     ],
-		location
-	);
+    location,
+  );
 
-  const appState = {
-    returnTo: window.location.pathname,
-  };
-
-  useEffect(() => {
-    const getUserMetadata = async () => {
-      try {
-        if (!isLoading && isAuthenticated && user) {
-          if (!accessToken && user.coldclimate_claims.org_id) {
-            const accessToken = await getAccessTokenSilently({
-              authorizationParams: {
-                audience: auth0Options.authorizationParams?.audience,
-              },
-            });
-
-            const now = new Date();
-            const expiresAt = new Date(now.getTime() + 1000 * 60 * 60);
-            sessionStorage.setItem(
-              'accessToken',
-              JSON.stringify({ accessToken, expires: expiresAt }),
-            );
-
-            cookies.set(
-              'coldpbc',
-              JSON.stringify({ accessToken, expires: expiresAt }),
-              {
-                expires: 1,
-                secure: false,
-                sameSite: 'lax',
-              },
-            );
-            setCookieData(user, accessToken);
-            setAccessTokenState(accessToken);
-            if (ldClient) {
-              await ldClient.identify({
-                kind: 'user',
-                key: user.email,
-                firstName: user.given_name,
-                lastName: user.family_name,
-                organizationId: user.coldclimate_claims.org_id,
-              });
-            }
-          }
-        } else {
-          if (!isLoading && !isAuthenticated) {
-            await loginWithRedirect({ appState: appState });
-          }
-        }
-      } catch (e) {
-        console.error(e);
-      }
-    };
-    getUserMetadata();
-  }, [getAccessTokenSilently, user, isAuthenticated, isLoading]);
-
-  if (isLoading) {
-    return (
-      <div className="absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
-        <Spinner size={GlobalSizes.xLarge} />
-      </div>
-    );
-  }
-
-  if (error) {
-    return <div>Encountered error: {error.message}</div>;
-  }
-
-  if (isAuthenticated && user && accessToken) {
-    return (
-      <div className='max-w-[1440px] m-auto overflow-x-clip'>
-        <ColdRoutes />
-        {shouldRenderGuidanceButton &&
-          <GuidanceButton />
-        }
-      </div>
-    );
-  } else {
-    return (
-      <div className="absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
-        <Spinner size={GlobalSizes.xLarge} />
-      </div>
-    );
-  }
+  return (
+    <div className="max-w-[1440px] m-auto overflow-x-clip">
+      <ColdRoutes />
+      {shouldRenderGuidanceButton && <GuidanceButton />}
+    </div>
+  );
 };
