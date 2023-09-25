@@ -11,6 +11,8 @@ const domain = import.meta.env.VITE_AUTH0_DOMAIN;
 const clientId = import.meta.env.VITE_AUTH0_CLIENT_ID;
 const audience = import.meta.env.VITE_COLD_API_AUDIENCE;
 const launchDarklyClientSideId = import.meta.env.VITE_LD_CLIENT_SIDE_ID;
+const urlParams = new URLSearchParams(document.location.search);
+
 root.render(
   <StrictMode>
     <ColdContextProvider
@@ -20,6 +22,9 @@ root.render(
         authorizationParams: {
           redirect_uri: window.location.origin + '/callback',
           audience: audience,
+          invitation: urlParams.get('invitation') || undefined,
+          organization: urlParams.get('organization') || undefined,
+          organization_name: urlParams.get('organization_name') || undefined,
         },
       }}
       launchDarklyClientSideId={launchDarklyClientSideId}
