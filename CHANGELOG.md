@@ -1,3 +1,11 @@
+## [1.17.2](https://github.com/ColdPBC/ui/compare/v1.17.1...v1.17.2) (2023-09-26)
+
+
+### Bug Fixes
+
+* Don't show footprint detail card if the footprint data is null ([ebed3e8](https://github.com/ColdPBC/ui/commit/ebed3e83ad1d891b7dbbd081348f5d8d150af3b3))
+* Don't show footprint detail card if the footprint data is null ([#39](https://github.com/ColdPBC/ui/issues/39)) ([56bf6bb](https://github.com/ColdPBC/ui/commit/56bf6bbffd9da720b5e55ca5cdb9ba9afafbc72f))
+
 ## [1.17.1](https://github.com/ColdPBC/ui/compare/v1.17.0...v1.17.1) (2023-09-26)
 
 

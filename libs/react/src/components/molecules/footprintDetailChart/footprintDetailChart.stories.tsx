@@ -39,3 +39,10 @@ export const Handle404 = () => {
   );
 };
 
+export const GetFootprintDataFacilitiesAllFootprintsNull = () => {
+  return (
+    <StoryMockProvider handlers={[getFootprintHandler.getFootprintDataFacilitiesAllFootprintsNull]}>
+      <FootprintDetailChart colors={getSchemeForColor(HexColors[footprintSubcategoryColors['facilities']])} period={2022} subcategory_key='facilities' />
+    </StoryMockProvider>
+  );
+};

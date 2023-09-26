@@ -9,16 +9,16 @@ export const JourneyDetailView = () => {
         axiosFetcher,
     );
 
-    const showCompanySection = data?.definition.categories['company_decarbonization']?.subcategories['facilities'] ||
-        data?.definition.categories['company_decarbonization']?.subcategories['operations'] ||
-        data?.definition.categories['company_decarbonization']?.subcategories['travel'] ||
-        data?.definition.categories['company_decarbonization']?.subcategories['product'];
+    const showCompanySection = data?.definition?.categories['company_decarbonization']?.subcategories['facilities'] ||
+        data?.definition?.categories['company_decarbonization']?.subcategories['operations'] ||
+        data?.definition?.categories['company_decarbonization']?.subcategories['travel'] ||
+        data?.definition?.categories['company_decarbonization']?.subcategories['product'];
 
-    const showEmployeeSection = data?.definition.categories['employee_engagement']?.subcategories['employee_footprint'] ||
-        data?.definition.categories['employee_engagement']?.subcategories['employee_activation'];
+    const showEmployeeSection = data?.definition?.categories['employee_engagement']?.subcategories['employee_footprint'] ||
+        data?.definition?.categories['employee_engagement']?.subcategories['employee_activation'];
 
-    const showLeadershipSection = data?.definition.categories['climate_leadership']?.subcategories['internal_alignment'] ||
-        data?.definition.categories['climate_leadership']?.subcategories['community_impact'];
+    const showLeadershipSection = data?.definition?.categories['climate_leadership']?.subcategories['internal_alignment'] ||
+        data?.definition?.categories['climate_leadership']?.subcategories['community_impact'];
 
     return (
         <div>

@@ -1,4 +1,4 @@
-import {PropsWithChildren} from 'react';
+import {PropsWithChildren, useState} from 'react';
 import {Card} from '../card/card';
 import {useNavigate} from 'react-router-dom';
 import { FootprintDetailChart } from '../footprintDetailChart';
@@ -16,6 +16,7 @@ export function FootprintDetailCard(
   props: PropsWithChildren<FootprintDetailCardProps>,
 ) {
   const navigate = useNavigate();
+  const [isEmpty, setIsEmpty] = useState(false);
 
   // Get footprint data from SWR
   const { data } = useSWR<any>(
@@ -23,11 +24,11 @@ export function FootprintDetailCard(
     axiosFetcher,
   );
 
-  if (!data?.subcategories[props.subcategory_key]) {
+  if (isEmpty) {
     return null;
   }
 
-  const subcategoryName = data?.subcategories[props.subcategory_key].subcategory_name;
+  const subcategoryName = data?.subcategories[props.subcategory_key]?.subcategory_name;
 
   const { className, ...rest } = props;
 
@@ -45,7 +46,7 @@ export function FootprintDetailCard(
       className={className}
     >
       <div className="flex items-center justify-center self-stretch flex-col">
-        <FootprintDetailChart {...rest} />
+        <FootprintDetailChart {...rest} setIsEmpty={setIsEmpty} />
       </div>
     </Card>
   );
