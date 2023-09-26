@@ -91,7 +91,7 @@ export const SurveySections = ({
             return (
               <div
                 className={
-                  className + ' w-[32px] h-[32px] -left-[48px] top-[2px]'
+                  className + ' w-[32px] h-[32px] -left-[48px] top-[8px]'
                 }
               >
                 <Lottie loop={false} animationData={getCheckboxAnimation()} />
@@ -101,7 +101,7 @@ export const SurveySections = ({
             return (
               <div
                 className={
-                  className + ' w-[32px] h-[32px] -left-[48px] top-[2px]'
+                  className + ' w-[32px] h-[32px] -left-[48px] top-[8px]'
                 }
               >
                 <ColdIcon
