@@ -464,3 +464,13 @@ export function getFootprintEmptyDataMock() {
     "subcategories": {}
   };
 }
+
+export function getFootprintDataFacilitiesAllFootprintsNull() {
+  const data = getCategoriesDataMock().definition.categories.company_decarbonization;
+  if (data?.subcategories) {
+    Object.keys(data.subcategories.facilities.activities).forEach((activityKey) => {
+      data.subcategories.facilities.activities[activityKey].footprint = null;
+    })
+  }
+  return data;
+}
