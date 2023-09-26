@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
-import { DataGridPopover } from '../../datagridPopover/dataGridPopover';
+import { useState } from 'react';
 import { TableActionButton } from './tableActionButton';
 import { TableActionType } from '../../../../interfaces/tableAction';
 import { TableAction } from './tableAction';
+import { Dropdown } from 'flowbite-react';
+import { flowbiteThemeOverride } from '@coldpbc/themes';
+import { Modal } from '../../modal';
+import { useAddToastMessage, useExecuteAction } from '@coldpbc/hooks';
 
 export interface TableActionsProps {
   actions: TableActionType[];
@@ -13,33 +16,92 @@ export interface TableActionsProps {
 export const TableActions = (props: TableActionsProps) => {
   const { actions } = props;
   const [shown, setShown] = useState(false);
+  const [actionModal, setActionModal] = useState<any | null>(null);
+  const { addToastMessage } = useAddToastMessage();
+  const { executeAction } = useExecuteAction();
 
-  const content = () => {
-    return (
-      <div
-        className={
-          'absolute z-10 flex flex-col w-36 border border-cold-gray rounded-lg shadow w-[200px]'
-        }
+  const onActionModalConfirm = () => {
+    // todo: fix this type issue
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    executeAction(actionModal)
+      .then(() => {
+        addToastMessage({
+          message: actionModal.toastMessage.success,
+          type: 'success',
+        });
+        setActionModal(null);
+      })
+      .catch(() => {
+        addToastMessage({
+          message: actionModal.toastMessage.fail,
+          type: 'failure',
+        });
+        setActionModal(null);
+      });
+  };
+
+  if (!actions.length) return null;
+
+  return (
+    <>
+       <Dropdown
+          inline={true}
+          label={
+            <TableActionButton
+              onClick={() => {
+                setShown(!shown);
+              }}
+            />
+          }
+        arrowIcon={false}
+        theme={flowbiteThemeOverride.dropdown}
       >
         {actions.map((action, index, array) => {
           return (
-            <TableAction
-              key={`${index}`}
-              action={action}
-              setActionsShown={setShown}
-            />
+            <>
+              <Dropdown.Item
+                theme={flowbiteThemeOverride.dropdown.floating.item}
+                className='p-0 w-full'
+              >
+                <TableAction
+                  key={`${index}`}
+                  action={action}
+                  setActionsShown={setShown}
+                  openActionModal={setActionModal}
+                />
+              </Dropdown.Item>
+              {index + 1 < actions.length && <div className='bg-bgc-accent h-[1px] w-full' />}
+            </>
           );
         })}
-      </div>
-    );
-  };
-  return actions.length > 0 ? (
-    <DataGridPopover content={content()} shown={shown} setShown={setShown}>
-      <TableActionButton
-        onClick={() => {
-          setShown(!shown);
+      </Dropdown>
+      <Modal
+        show={actionModal !== null}
+        setShowModal={() => setActionModal(null)}
+        header={{
+          title: actionModal?.title,
+        }}
+        body={(
+          <div className="text-sm font-medium">
+            {actionModal?.body}
+          </div>
+        )}
+        footer={{
+          rejectButton: {
+            ...actionModal?.footer?.rejectButton,
+            onClick: () => {
+              setActionModal(null);
+            },
+          },
+          resolveButton: {
+            ...actionModal?.footer?.resolveButton,
+            onClick: () => {
+              onActionModalConfirm();
+            },
+          },
         }}
       />
-    </DataGridPopover>
-  ) : null;
+    </>
+  )
 };
