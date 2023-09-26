@@ -36,7 +36,7 @@ export const TableAction = (props: TableActionProps) => {
                 setActionsShown(false);
               });
           }}
-          className=''
+          className='w-full text-left p-4'
         >
           {action.label}
         </button>
