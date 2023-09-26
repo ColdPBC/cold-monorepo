@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ColdWordmark } from '../../atoms/logos/coldWordmark';
 import { Sidebar as FBSidebar } from 'flowbite-react';
 import useSWR from 'swr';
@@ -10,6 +10,7 @@ import { NavbarItem } from '../../../interfaces/sideBar';
 import { Spinner } from '../../atoms/spinner/spinner';
 import { HexColors } from '../../../themes/cold_theme';
 import { clone, remove } from 'lodash';
+import { matchPath, useLocation } from 'react-router-dom';
 
 export const SideBar = (): JSX.Element => {
   type SWRResponse = { definition: { items: Array<NavbarItem> } };
@@ -22,7 +23,28 @@ export const SideBar = (): JSX.Element => {
     error: any;
     isLoading: boolean;
   } = useSWR(['/form-definitions/sidebar_navigation', 'GET'], axiosFetcher);
+  const location = useLocation();
   const [activeChild, setActiveChild] = useState('');
+
+  useEffect(() => {
+    if (data) {
+      data.definition.items.forEach((item: NavbarItem) => {
+        if (location.pathname === item.route && activeChild !== item.key) {
+          setActiveChild(item.key);
+        }
+        if (item.items) {
+          item.items.forEach((subItem: NavbarItem) => {
+            if (
+              location.pathname === subItem.route &&
+              activeChild !== subItem.key
+            ) {
+              setActiveChild(subItem.key);
+            }
+          });
+        }
+      });
+    }
+  }, [location.pathname, data]);
 
   if (isLoading)
     return (
