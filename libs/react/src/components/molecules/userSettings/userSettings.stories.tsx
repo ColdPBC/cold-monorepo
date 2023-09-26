@@ -1,7 +1,7 @@
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { UserSettings } from './userSettings';
-import { StoryMockProvider } from '@coldpbc/mocks';
+import { auth0UserMock, StoryMockProvider } from '@coldpbc/mocks';
 import { MainContent } from '../../organisms/mainContent';
 
 const meta: Meta<typeof UserSettings> = {
@@ -19,7 +19,7 @@ export const Default: Story = {
     return (
       <StoryMockProvider handlers={[]}>
         <MainContent>
-            <UserSettings />
+            <UserSettings user={auth0UserMock} />
         </MainContent>
       </StoryMockProvider>
     );

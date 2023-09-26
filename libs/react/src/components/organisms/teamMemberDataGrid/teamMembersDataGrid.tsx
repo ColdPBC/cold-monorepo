@@ -3,11 +3,10 @@ import useSWR from 'swr';
 import {GlobalSizes} from '../../../enums/sizes';
 import {Spinner} from '../../atoms/spinner/spinner';
 import {ColorNames} from '../../../enums/colors';
-import {orderBy, startCase} from 'lodash';
+import {orderBy} from 'lodash';
 import {Avatar} from '../../atoms/avatar/avatar';
 import {axiosFetcher} from '../../../fetchers/axiosFetcher';
 import {useAuth0} from '@auth0/auth0-react';
-import {format} from 'date-fns';
 import { ButtonTypes } from '@coldpbc/enums';
 import { MemberStatusType } from '../../pages';
 
