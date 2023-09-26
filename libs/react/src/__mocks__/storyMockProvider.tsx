@@ -2,7 +2,7 @@ import { PropsWithChildren, useEffect } from 'react';
 import { worker } from './browser';
 import { DefaultBodyType, MockedRequest, RestHandler } from 'msw';
 import { SWRConfig } from 'swr';
-import {BrowserRouter} from 'react-router-dom';
+import {MemoryRouter} from 'react-router-dom';
 
 export const StoryMockProvider = (
   props: PropsWithChildren<{
@@ -20,9 +20,9 @@ export const StoryMockProvider = (
   return (
     // so swr doesn't cache between stories
     <SWRConfig value={{ provider: () => new Map() }}>
-      <BrowserRouter>
+      <MemoryRouter>
         {props.children}
-      </BrowserRouter>
+      </MemoryRouter>
     </SWRConfig>
   );
 };
