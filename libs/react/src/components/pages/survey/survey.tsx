@@ -63,7 +63,7 @@ export const Survey = (props: SurveyProps) => {
   };
 
   const dismiss = {
-    label: 'close',
+    label: 'Close',
     dismissible: surveyName !== 'journey_overview',
     onClick: onSurveyClose,
   };
