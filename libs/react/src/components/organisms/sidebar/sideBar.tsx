@@ -10,6 +10,8 @@ import { NavbarItem } from '../../../interfaces/sideBar';
 import { Spinner } from '../../atoms/spinner/spinner';
 import { HexColors } from '../../../themes/cold_theme';
 import { clone, remove } from 'lodash';
+import { useFlags } from 'launchdarkly-react-client-sdk';
+import { matchPath } from 'react-router-dom';
 
 export const SideBar = (): JSX.Element => {
   type SWRResponse = { definition: { items: Array<NavbarItem> } };
@@ -22,6 +24,16 @@ export const SideBar = (): JSX.Element => {
     error: any;
     isLoading: boolean;
   } = useSWR(['/form-definitions/sidebar_navigation', 'GET'], axiosFetcher);
+  const { showActions261 } = useFlags();
+
+  const filterSidebar = (item: NavbarItem) => {
+    if (item.key === 'actions_key') {
+      return showActions261;
+    } else {
+      return true;
+    }
+  };
+
   const [activeChild, setActiveChild] = useState('');
 
   if (isLoading)
@@ -34,6 +46,7 @@ export const SideBar = (): JSX.Element => {
   if (error) console.error(error);
 
   if (data?.definition?.items) {
+    data.definition.items = data.definition.items.filter(filterSidebar);
     // Separate the items into top and bottom nav items
     const topItems: NavbarItem[] = clone(data.definition.items);
 
