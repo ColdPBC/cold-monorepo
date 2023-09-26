@@ -1,3 +1,10 @@
+## [1.17.1](https://github.com/ColdPBC/ui/compare/v1.17.0...v1.17.1) (2023-09-26)
+
+
+### Bug Fixes
+
+* merge api and auth0 user upon signup, do not load until coldpbc cookie is defined ([64d9363](https://github.com/ColdPBC/ui/commit/64d93636b190f537dc7a63c5f55bb4070b512fd2))
+
 # [1.17.0](https://github.com/ColdPBC/ui/compare/v1.16.0...v1.17.0) (2023-09-25)
 
 
