@@ -202,7 +202,7 @@ export const handlers = [
     return res(ctx.json({}));
   }),
 
-  rest.patch(getApiUrl(`/users/:emailOrId`), (req, res, ctx) => {
+  rest.patch(getApiUrl(`/members/:emailOrId`), (req, res, ctx) => {
     return res(ctx.json({}));
   }),
 
@@ -229,7 +229,7 @@ export const handlers = [
     return res(ctx.json(getPolicyMockByName(name)));
   }),
 
-  rest.get(getApiUrl('/users/:emailOrId'), (req, res, ctx) => {
+  rest.get(getApiUrl('/members/:emailOrId'), (req, res, ctx) => {
     return res(ctx.json(auth0UserMock));
   }),
 ];

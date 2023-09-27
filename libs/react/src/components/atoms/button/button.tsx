@@ -21,7 +21,7 @@ export function BaseButton(props: IButtonProps): JSX.Element {
     className,
     href,
     target,
-    children
+    children,
   } = props;
 
   const content = (
