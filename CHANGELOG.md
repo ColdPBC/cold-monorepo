@@ -1,3 +1,11 @@
+# [1.20.0](https://github.com/ColdPBC/ui/compare/v1.19.0...v1.20.0) (2023-09-27)
+
+
+### Features
+
+* remove ability to close survey during journey_overview survey ([dcfa3b3](https://github.com/ColdPBC/ui/commit/dcfa3b30085b62e51b2eca683879a9feccca441b))
+* Updated dismiss button label to capitalized ([42e41cf](https://github.com/ColdPBC/ui/commit/42e41cf8f82a93f15e7d9dc72644875b30478413))
+
 # [1.19.0](https://github.com/ColdPBC/ui/compare/v1.18.0...v1.19.0) (2023-09-27)
 
 
