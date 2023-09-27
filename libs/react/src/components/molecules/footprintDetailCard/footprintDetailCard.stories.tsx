@@ -6,6 +6,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { getSchemeForColor, HexColors } from '@coldpbc/themes';
 import { render } from 'react-dom';
 import { getFootprintHandler, StoryMockProvider } from '@coldpbc/mocks';
+import { InputTypes } from '@coldpbc/enums';
 
 const meta = {
   title: 'Molecules/FootprintDetailCard',
@@ -21,17 +22,52 @@ export const Default = () => {
   return (
     <BrowserRouter>
       <div className="w-[668px]">
-        <FootprintDetailCard colors={getSchemeForColor(HexColors.lightblue)} period={2022} subcategory_key='facilities' />
+        <FootprintDetailCard
+          colors={getSchemeForColor(HexColors.lightblue)}
+          period={2022}
+          subcategory_key="facilities"
+        />
       </div>
     </BrowserRouter>
   );
+};
+export const NoActionButton: Story = {
+  render: (args) => {
+    return (
+      <BrowserRouter>
+        <div className="w-[668px]">
+          <FootprintDetailCard
+            colors={getSchemeForColor(HexColors.lightblue)}
+            period={2022}
+            subcategory_key="facilities"
+          />
+        </div>
+      </BrowserRouter>
+    );
+  },
+  parameters: {
+    launchdarkly: {
+      flags: {
+        showActions261: false,
+      },
+    },
+  },
+  args: {
+    colors: getSchemeForColor(HexColors.lightblue),
+    period: 2022,
+    subcategory_key: 'facilities',
+  },
 };
 
 export const GreenProduct = () => {
   return (
     <BrowserRouter>
       <div className="w-[668px]">
-        <FootprintDetailCard colors={getSchemeForColor(HexColors.green)} period={2022} subcategory_key='product' />
+        <FootprintDetailCard
+          colors={getSchemeForColor(HexColors.green)}
+          period={2022}
+          subcategory_key="product"
+        />
       </div>
     </BrowserRouter>
   );
@@ -41,7 +77,11 @@ export const EmptySubcategory = () => {
   return (
     <BrowserRouter>
       <div className="w-[668px]">
-        <FootprintDetailCard colors={getSchemeForColor(HexColors.green)} period={2022} subcategory_key='no_data_for_this_key' />
+        <FootprintDetailCard
+          colors={getSchemeForColor(HexColors.green)}
+          period={2022}
+          subcategory_key="no_data_for_this_key"
+        />
       </div>
     </BrowserRouter>
   );
@@ -49,8 +89,16 @@ export const EmptySubcategory = () => {
 
 export const GetFootprintDataFacilitiesAllFootprintsNull = () => {
   return (
-    <StoryMockProvider handlers={[getFootprintHandler.getFootprintDataFacilitiesAllFootprintsNull]}>
-        <FootprintDetailCard colors={getSchemeForColor(HexColors.lightblue)} period={2022} subcategory_key='facilities' />
+    <StoryMockProvider
+      handlers={[
+        getFootprintHandler.getFootprintDataFacilitiesAllFootprintsNull,
+      ]}
+    >
+      <FootprintDetailCard
+        colors={getSchemeForColor(HexColors.lightblue)}
+        period={2022}
+        subcategory_key="facilities"
+      />
     </StoryMockProvider>
   );
 };

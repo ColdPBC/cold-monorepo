@@ -59,6 +59,7 @@ export const Default: Story = {
     launchdarkly: {
       flags: {
         showTeamMemberTable: true,
+        showActions261: true,
       },
     },
   },
