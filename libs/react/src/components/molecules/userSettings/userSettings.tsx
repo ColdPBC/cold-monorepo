@@ -2,6 +2,7 @@ import { User } from "@auth0/auth0-react";
 import { ButtonTypes } from "@coldpbc/enums";
 import { axiosFetcher } from "@coldpbc/fetchers";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router"
 import { BaseButton, Input } from "../../atoms";
 import { Card } from "../card"
 import { Modal } from "../modal";
@@ -20,6 +21,7 @@ export const UserSettings = ({
         email
     } = user;
 
+    const navigate = useNavigate();
     const [showFirstNameModal, setShowFirstNameModal] = useState(false);
     const [showLastNameModal, setShowLastNameModal] = useState(false);
     const [firstName, setFirstName] = useState<string | undefined>(
@@ -52,6 +54,8 @@ export const UserSettings = ({
         ]);
     };
 
+    const handleLogout = () => navigate('/logout');
+
     return (
         <Card
             glow
@@ -59,7 +63,7 @@ export const UserSettings = ({
             ctas={[
                 {
                     text: 'Log Out',
-                    action: () => console.log('Steve Austin')
+                    action: handleLogout
                 }
             ]}
         >
