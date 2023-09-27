@@ -89,4 +89,5 @@ export interface SurveyDefinitionType {
   image_url: string;
   intro_markdown: string;
   sections: SurveySectionsType;
+  submitted?: boolean;
 }
