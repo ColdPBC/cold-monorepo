@@ -14,7 +14,7 @@ import { Signup } from '../authentication';
 import { ProtectedRoute } from '../authentication';
 
 export const ColdRoutes = () => {
-  const { showActions261 } = useFlags();
+  const ldFlags = useFlags();
 
   return (
     <>
@@ -28,7 +28,7 @@ export const ColdRoutes = () => {
               <Route path={'/footprint'} element={<Footprint />} />
               <Route path={'/journey'} element={<Journey />} />
               <Route path={'/settings'} element={<TeamMembersSettings />} />
-              {showActions261 && ActionRoutes()}
+              {ldFlags.showActions261 && ActionRoutes()}
               <Route
                 path="*"
                 element={<div className={'text-tc-primary'}>Pending...</div>}

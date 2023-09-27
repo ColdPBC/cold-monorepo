@@ -24,11 +24,11 @@ export const SideBar = (): JSX.Element => {
     error: any;
     isLoading: boolean;
   } = useSWR(['/form-definitions/sidebar_navigation', 'GET'], axiosFetcher);
-  const { showActions261 } = useFlags();
+  const ldFlags = useFlags();
 
   const filterSidebar = (item: NavbarItem) => {
     if (item.key === 'actions_key') {
-      return showActions261;
+      return ldFlags.showActions261;
     } else {
       return true;
     }
