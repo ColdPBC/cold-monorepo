@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation, useSearchParams } from 'react-router-dom';
 import { GetTokenSilentlyOptions, useAuth0, User } from '@auth0/auth0-react';
 import { SignupPage, Spinner } from '@coldpbc/components';
 import { GlobalSizes } from '@coldpbc/enums';
@@ -28,14 +28,15 @@ export const ProtectedRoute = () => {
 
   const ldClient = useLDClient();
 
+  const location = useLocation();
+
   const appState = {
-    returnTo: window.location.pathname,
+    returnTo: location.pathname + location.search,
   };
 
   const needsSignup = () => {
     // check if company is already set
-    if (isUndefined(user?.coldclimate_claims.org_id))
-      return true;
+    if (isUndefined(user?.coldclimate_claims.org_id)) return true;
 
     // check if user names are already set
     return !user?.family_name || !user?.given_name;
