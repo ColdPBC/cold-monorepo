@@ -6,7 +6,7 @@ import { Spinner } from '../../atoms/spinner/spinner';
 import { GlobalSizes } from '../../../enums/sizes';
 import { TableActions } from './actions/tableActions';
 import { axiosFetcher } from '../../../fetchers/axiosFetcher';
-import { flowbiteThemeOverride } from '../../../themes/flowbiteThemeOverride';
+import { darkTableTheme } from '../../../themes/flowbiteThemeOverride';
 import { cloneDeep } from 'lodash';
 
 export interface DatagridProps {
@@ -75,14 +75,14 @@ export const Datagrid = (props: DatagridProps) => {
 
   if (data && data.definition?.items) {
     return (
-      <Table className="" theme={flowbiteThemeOverride.table}>
-        <Table.Head className="" theme={flowbiteThemeOverride.table.head}>
+      <Table theme={darkTableTheme.table}>
+        <Table.Head className='text-white normal-case'>
           {data?.definition?.items?.map((column: any, index: number) => {
             return (
               <Table.HeadCell
                 key={index}
                 className={`${getHeaderCellClassName(index)}`}
-                theme={flowbiteThemeOverride.table.head.cell}
+                theme={darkTableTheme.table?.head?.cell}
               >
                 {column.hideTitle ? (
                   <span className="sr-only">{column.headerTitle}</span>
@@ -95,18 +95,18 @@ export const Datagrid = (props: DatagridProps) => {
         </Table.Head>
         <Table.Body
           className="divide-y"
-          theme={flowbiteThemeOverride.table.body}
+          theme={darkTableTheme.table?.body}
         >
           {items.map((row: any, rowIndex: number) => {
             {
               return (
-                <Table.Row key={`${row + ' ' + rowIndex}`} className="">
+                <Table.Row key={`${row + ' ' + rowIndex}`} theme={darkTableTheme.table?.row}>
                   {Object.keys(row).map((key, index) => {
                     return (
                       <Table.Cell
                         key={`${key + ' ' + rowIndex}`}
                         className={`${getBodyCellClassName(index)}`}
-                        theme={flowbiteThemeOverride.table.body.cell}
+                        theme={darkTableTheme.table?.body?.cell}
                       >
                         {getTableRowCellItem(key, row[key])}
                       </Table.Cell>

@@ -1,4 +1,31 @@
-import type { FlowbiteTheme } from 'flowbite-react';
+import type { CustomFlowbiteTheme, FlowbiteTheme } from 'flowbite-react';
+
+export const darkTableTheme: CustomFlowbiteTheme = {
+  table: {
+    "root": {
+      "base": "w-full text-left text-sm text-gray-500 dark:text-gray-400",
+      "shadow": "absolute dark:bg-black w-full h-full top-0 left-0 rounded-lg drop-shadow-md -z-10",
+      "wrapper": "relative border-gray-50 border border-solid rounded-lg bg-gray-50 flex-1 w-full"
+    },
+    "body": {
+      "base": "group/body",
+      "cell": {
+        "base": "group-first/body:group-first/row:first:rounded-tl-lg group-first/body:group-first/row:last:rounded-tr-lg group-last/body:group-last/row:first:rounded-bl-lg group-last/body:group-last/row:last:rounded-br-lg px-4 py-4 bg-bgc-elevated whitespace-pre"
+      }
+    },
+    "head": {
+      "base": "group/head text-xs uppercase text-gray-700 dark:text-gray-400",
+      "cell": {
+        "base": "group-first/head:first:rounded-tl-lg group-first/head:last:rounded-tr-lg bg-none dark:bg-gray-700 px-4 py-3 font-normal"
+      }
+    },
+    "row": {
+      "base": "group/row border-t border-gray-50",
+      "hovered": "hover:bg-gray-50 dark:hover:bg-gray-600",
+      "striped": "odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700"
+    }
+  }
+}
 
 export const flowbiteThemeOverride: FlowbiteTheme = {
   accordion: {
@@ -400,7 +427,7 @@ export const flowbiteThemeOverride: FlowbiteTheme = {
   },
   dropdown: {
     arrowIcon: 'ml-2 h-4 w-4',
-    content: 'py-1',
+    content: '',
     floating: {
       animation: 'transition-opacity',
       arrow: {
@@ -414,18 +441,18 @@ export const flowbiteThemeOverride: FlowbiteTheme = {
       },
       base: 'z-10 w-fit rounded divide-y divide-gray-100 shadow',
       content: 'py-1 text-sm text-gray-700 dark:text-gray-200',
-      divider: 'my-1 h-px bg-gray-100 dark:bg-gray-600',
+      divider: 'my-1 h-px bg-bgc-accent',
       header: 'block py-2 px-4 text-sm text-gray-700 dark:text-gray-200',
       hidden: 'invisible opacity-0',
       item: {
-        base: 'flex items-center justify-start py-2 px-4 text-sm text-gray-700 cursor-pointer hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-white',
+        base: 'flex items-center justify-start py-4 px-4 text-white font-medium text-sm cursor-pointer',
         icon: 'mr-2 h-4 w-4',
         container: '',
       },
       style: {
         dark: 'bg-gray-900 text-white dark:bg-gray-700',
-        light: 'border border-gray-200 bg-white text-gray-900',
-        auto: 'border border-gray-200 bg-white text-gray-900 dark:border-none dark:bg-gray-700 dark:text-white',
+        light: 'border border-bgc-accent bg-bgc-elevated',
+        auto: 'border border-bgc-accent bg-bgc-elevated dark:border-none dark:bg-gray-700 dark:text-white',
       },
       target: 'w-fit',
     },
@@ -569,8 +596,8 @@ export const flowbiteThemeOverride: FlowbiteTheme = {
       },
     },
     content: {
-      base: 'relative h-full w-full m-auto p-4 md:h-auto',
-      inner: 'relative rounded-lg bg-white shadow dark:bg-gray-700',
+      base: 'relative h-full w-full m-auto md:h-auto rounded-2xl',
+      inner: 'relative',
     },
     body: {
       base: 'p-6',
