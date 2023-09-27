@@ -55,7 +55,7 @@ export function JourneySpiderChart({ setIsEmptyData }: Props) {
       // Transform chart data
       forEach(data?.definition.categories, (category) => {
         forEach(category.subcategories, (subcategory) => {
-          if (subcategory.journey_score) {
+          if (subcategory?.journey_score) {
             newLabels.push(subcategory.subcategory_name);
             newData.push(subcategory.journey_score);
           }
