@@ -144,7 +144,7 @@ export const SignupForm = ({
               name: 'firstName',
               className:
                 'text-sm not-italic text-tc-primary font-medium bg-transparent w-full rounded-lg p-[16px] border border-bgc-accent focus:border focus:border-bgc-accent focus:ring-0',
-              disabled: !userData?.given_name,
+              disabled: !!userData?.given_name,
             }}
             input_label_props={{
               className: 'text-sm not-italic text-tc-primary font-medium',
@@ -159,7 +159,7 @@ export const SignupForm = ({
               name: 'lastName',
               className:
                 'text-sm not-italic text-tc-primary font-medium bg-transparent w-full rounded-lg p-[16px] border border-bgc-accent focus:border focus:border-bgc-accent focus:ring-0',
-              disabled: !userData?.family_name,
+              disabled: !!userData?.family_name,
             }}
             input_label_props={{
               className: 'text-sm not-italic text-tc-primary font-medium',
@@ -181,7 +181,7 @@ export const SignupForm = ({
             input_label_props={{
               className: 'text-sm not-italic text-tc-primary font-medium',
             }}
-            input_label={'Company Name'}
+            input_label={'Company'}
           />
         </div>
         <div className={'py-[16px]'}>
