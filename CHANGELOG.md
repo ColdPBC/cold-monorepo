@@ -1,3 +1,10 @@
+# [1.21.0](https://github.com/ColdPBC/ui/compare/v1.20.0...v1.21.0) (2023-09-27)
+
+
+### Features
+
+* Build UserSettings component ([a8aa99a](https://github.com/ColdPBC/ui/commit/a8aa99ae799e82aa9948b40478d83b10752f5c08))
+
 # [1.20.0](https://github.com/ColdPBC/ui/compare/v1.19.0...v1.20.0) (2023-09-27)
 
 
