@@ -33,11 +33,13 @@ const SignupFormStory = (args: SignupFormProps) => {
   );
 };
 
-export const NoCompany: Story = {
+export const SignTOSAndPolicyOnly: Story = {
   render: (args) => <SignupFormStory {...args} />,
   args: {
     userData: auth0UserMock,
-    companyData: undefined,
+    companyData: {
+      ...getOrganizationMock(),
+    },
     tosSigned: false,
     privacySigned: false,
     tosData: getTosMock(),

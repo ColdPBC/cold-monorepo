@@ -92,6 +92,11 @@ export const SurveyQuestionContainer = ({
     const newSurvey: SurveyPayloadType = cloneDeep(surveyData);
     newSurvey.definition.sections[activeSectionKey] = newSection;
     setSurveyData(newSurvey);
+    setActiveKey({
+      value: activeKey.value,
+      previousValue: activeKey.value,
+      isFollowUp: activeKey.isFollowUp,
+    });
   };
 
   const onFieldUpdated = (key: string, value: any) => {
@@ -286,11 +291,13 @@ export const SurveyQuestionContainer = ({
         if (nextSection.component === null && nextSection.prompt === '') {
           setActiveKey({
             value: Object.keys(nextSection.follow_up)[0],
+            previousValue: activeKey.value,
             isFollowUp: true,
           });
         } else {
           setActiveKey({
             value: nextSectionKey,
+            previousValue: activeKey.value,
             isFollowUp: false,
           });
         }
@@ -300,6 +307,7 @@ export const SurveyQuestionContainer = ({
         )[activeFollowUpIndex + 1];
         setActiveKey({
           value: nextFollowUpKey,
+          previousValue: activeKey.value,
           isFollowUp: true,
         });
       }
@@ -308,11 +316,13 @@ export const SurveyQuestionContainer = ({
         if (nextSection.component === null && nextSection.prompt === '') {
           setActiveKey({
             value: Object.keys(nextSection.follow_up)[0],
+            previousValue: activeKey.value,
             isFollowUp: true,
           });
         } else {
           setActiveKey({
             value: nextSectionKey,
+            previousValue: activeKey.value,
             isFollowUp: false,
           });
         }
@@ -322,6 +332,7 @@ export const SurveyQuestionContainer = ({
         )[0];
         setActiveKey({
           value: nextFollowUpKey,
+          previousValue: activeKey.value,
           isFollowUp: true,
         });
       }
@@ -329,15 +340,15 @@ export const SurveyQuestionContainer = ({
   };
 
   const onNextButtonClicked = () => {
-    goToNextQuestion();
     updateSurveyQuestion(activeKey.value, { skipped: false });
+    goToNextQuestion();
     updateTransitionClassNames(true);
     putSurveyData();
   };
 
   const onSkipButtonClicked = () => {
-    goToNextQuestion();
     updateSurveyQuestion(activeKey.value, { skipped: true, value: null });
+    goToNextQuestion();
     updateTransitionClassNames(true);
     putSurveyData();
   };
@@ -372,6 +383,7 @@ export const SurveyQuestionContainer = ({
           ) {
             setActiveKey({
               value: previousSectionKey,
+              previousValue: activeKey.value,
               isFollowUp: false,
             });
           } else {
@@ -379,12 +391,14 @@ export const SurveyQuestionContainer = ({
               value: Object.keys(previousSection.follow_up)[
                 Object.keys(previousSection.follow_up).length - 1
               ],
+              previousValue: activeKey.value,
               isFollowUp: true,
             });
           }
         } else {
           setActiveKey({
             value: activeSectionKey,
+            previousValue: activeKey.value,
             isFollowUp: false,
           });
         }
@@ -394,6 +408,7 @@ export const SurveyQuestionContainer = ({
         )[activeFollowUpIndex - 1];
         setActiveKey({
           value: previousFollowUpKey,
+          previousValue: activeKey.value,
           isFollowUp: true,
         });
       }
@@ -407,6 +422,7 @@ export const SurveyQuestionContainer = ({
       ) {
         setActiveKey({
           value: previousSectionKey,
+          previousValue: activeKey.value,
           isFollowUp: false,
         });
       } else {
@@ -416,6 +432,7 @@ export const SurveyQuestionContainer = ({
 
         setActiveKey({
           value: previousSectionLastFollowUpKey,
+          previousValue: activeKey.value,
           isFollowUp: true,
         });
       }
@@ -437,12 +454,14 @@ export const SurveyQuestionContainer = ({
     .map((sectionKey) => {
       const category = getQuestionForKey({
         value: sectionKey,
+        previousValue: '',
         isFollowUp: false,
       });
       const followUps = Object.keys(sections[sectionKey].follow_up).map(
         (followUpKey) => {
           return getQuestionForKey({
             value: followUpKey,
+            previousValue: '',
             isFollowUp: true,
           });
         },

@@ -11,7 +11,7 @@ export interface SurveyLeftNavProps {
 }
 
 export const SurveyLeftNav = (props: SurveyLeftNavProps) => {
-  const { surveyData, activeKey, setActiveKey } = props;
+  const { surveyData, activeKey } = props;
   const { definition: surveyFormData } = surveyData;
   return (
     <>

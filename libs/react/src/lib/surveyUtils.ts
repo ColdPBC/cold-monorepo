@@ -37,3 +37,44 @@ export const isKeyValueFollowUp = (
   });
   return isFollowUp;
 };
+
+// function to check if the previous key value is ahead of the current key value
+export const isPreviousKeyAhead = (
+  key: SurveyActiveKeyType,
+  sections: {
+    [key: string]: SurveySectionType;
+  },
+) => {
+  if (key.value === key.previousValue) {
+    return false;
+  }
+  const previousIsFollowUp = isKeyValueFollowUp(key.previousValue, sections);
+  const currentSectionIndex = getSectionIndex(sections, key);
+  const previousSectionIndex = getSectionIndex(sections, {
+    value: key.previousValue,
+    previousValue: '',
+    isFollowUp: previousIsFollowUp,
+  });
+  if (previousSectionIndex === currentSectionIndex) {
+    const currentSection = sections[Object.keys(sections)[currentSectionIndex]];
+    if (!key.isFollowUp) {
+      return true;
+    } else {
+      // compare the index of the current follow_up to the index of the previous follow_up
+      const currentFollowUpIndex = findIndex(
+        Object.keys(currentSection.follow_up),
+        (followUpKey) => {
+          return followUpKey === key.value;
+        },
+      );
+      const previousFollowUpIndex = findIndex(
+        Object.keys(currentSection.follow_up),
+        (followUpKey) => {
+          return followUpKey === key.previousValue;
+        },
+      );
+      return previousFollowUpIndex > currentFollowUpIndex;
+    }
+  }
+  return previousSectionIndex > currentSectionIndex;
+};

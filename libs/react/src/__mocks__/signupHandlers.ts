@@ -29,7 +29,7 @@ import { getSurveyFormDataByName } from './surveyDataMock';
 
 export const getSignUpHandler = {
   DEFAULT: [
-    rest.patch(`*/users/:emailOrId`, (req, res, ctx) => {
+    rest.patch(`*/members/:emailOrId`, (req, res, ctx) => {
       return res(
         ctx.json({
           ...auth0UserMock,
@@ -62,7 +62,7 @@ export const getSignUpHandler = {
       const name = req.params.name as string;
       return res(ctx.json(getPolicyMockByName(name)));
     }),
-    rest.get('*/users/:emailOrId', (req, res, ctx) => {
+    rest.get('*/members/:emailOrId', (req, res, ctx) => {
       const emailOrId = req.params.emailOrId as string;
       return res(
         ctx.json({
@@ -74,7 +74,7 @@ export const getSignUpHandler = {
     }),
   ],
   newCompanyAndUser: [
-    rest.patch(`*/users/:emailOrId`, (req, res, ctx) => {
+    rest.patch(`*/members/:emailOrId`, (req, res, ctx) => {
       return res(
         ctx.json({
           ...auth0UserMock,
@@ -107,7 +107,47 @@ export const getSignUpHandler = {
       const name = req.params.name as string;
       return res(ctx.json(getPolicyMockByName(name)));
     }),
-    rest.get('*/users/:emailOrId', (req, res, ctx) => {
+    rest.get('*/members/:emailOrId', (req, res, ctx) => {
+      const emailOrId = req.params.emailOrId as string;
+      return res(
+        ctx.json({
+          ...auth0UserMock,
+          given_name: 'null',
+          family_name: 'null',
+        }),
+      );
+    }),
+  ],
+  server500Error: [
+    rest.patch(`*/members/:emailOrId`, (req, res, ctx) => {
+      return res(
+        ctx.json({
+          ...auth0UserMock,
+          given_name: 'null',
+          family_name: 'null',
+        }),
+      );
+    }),
+    rest.post(`*/organizations`, (req, res, ctx) => {
+      const body = req.body as {
+        display_name: string;
+      };
+      return res(ctx.status(500));
+    }),
+    rest.post(`*/policies/:id/signed`, (req, res, ctx) => {
+      const body = req.body as {
+        name: string;
+      };
+      return res(ctx.status(500));
+    }),
+    rest.get('*/policies/signed/user', (req, res, ctx) => {
+      return res(ctx.json(getEmptyPoliciesSignedMock()));
+    }),
+    rest.get('*/policies/:name', (req, res, ctx) => {
+      const name = req.params.name as string;
+      return res(ctx.json(getPolicyMockByName(name)));
+    }),
+    rest.get('*/members/:emailOrId', (req, res, ctx) => {
       const emailOrId = req.params.emailOrId as string;
       return res(
         ctx.json({

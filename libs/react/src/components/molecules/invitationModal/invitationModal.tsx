@@ -8,6 +8,7 @@ import useSWR from 'swr';
 import { useState } from 'react';
 import { CheckIcon } from '@heroicons/react/20/solid';
 import { BaseButton } from '../../atoms';
+import { ToastMessage } from '@coldpbc/interfaces';
 
 export interface InvitationModalProps {
   shown: boolean;
@@ -29,12 +30,14 @@ export const InvitationModal = (props: InvitationModalProps) => {
 
   const inviteMembers = async (email: string, roleId: string) => {
     try {
-      const response: any = await sendInvitation(JSON.stringify({
-        user_email: email,
-        org_id: user.coldclimate_claims.org_id,
-        inviter_name: user.name,
-        roleId: roleId,
-      }));
+      const response: any = await sendInvitation(
+        JSON.stringify({
+          user_email: email,
+          org_id: user.coldclimate_claims.org_id,
+          inviter_name: user.name,
+          roleId: roleId,
+        }),
+      );
 
       // check if the response array contains any AxiosError objects
       // reject the promise if there are any errors
@@ -47,38 +50,37 @@ export const InvitationModal = (props: InvitationModalProps) => {
     } catch (error) {
       addToastMessage({
         message: 'Invitation failed',
-        type: 'failure',
+        type: ToastMessage.FAILURE,
       });
     }
   };
 
   const body = () => {
-    return isSuccess ?
-      (
-        <div className='flex items-center justify-between'>
-          <div className='flex items-center'>
-            <div className='flex items-center justify-center w-[40px] h-[40px] rounded-full bg-primary-300 mr-4'>
-              <CheckIcon className='w-[22px] h-[22px]' />
-            </div>
-            <span className='text-sm font-medium'>An invite was sent to <span className='underline'>{email}</span></span>
+    return isSuccess ? (
+      <div className="flex items-center justify-between">
+        <div className="flex items-center">
+          <div className="flex items-center justify-center w-[40px] h-[40px] rounded-full bg-primary-300 mr-4">
+            <CheckIcon className="w-[22px] h-[22px]" />
           </div>
-          <BaseButton
-            type={'submit'}
-            label={'Invite Another user'}
-            onClick={() => {
-              setIsSuccess(false);
-              setEmail('');
-            }}
-          />
+          <span className="text-sm font-medium">
+            An invite was sent to <span className="underline">{email}</span>
+          </span>
         </div>
-      ) :
-      (
-        <InviteMemberForm
-          inviteMembers={inviteMembers}
-          onCancel={() => setShown(false)}
+        <BaseButton
+          type={'submit'}
+          label={'Invite Another user'}
+          onClick={() => {
+            setIsSuccess(false);
+            setEmail('');
+          }}
         />
-      )
-      ;
+      </div>
+    ) : (
+      <InviteMemberForm
+        inviteMembers={inviteMembers}
+        onCancel={() => setShown(false)}
+      />
+    );
   };
 
   return (

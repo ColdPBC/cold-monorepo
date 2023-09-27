@@ -1,11 +1,11 @@
 import React, { useContext } from 'react';
-import { ColdLogos, SignupForm } from '@coldpbc/components';
+import { ColdLogos, SignupForm, Spinner } from '@coldpbc/components';
 import { useAuth0, User } from '@auth0/auth0-react';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import useSWR, { mutate } from 'swr';
 import { PolicySignedDataType, PolicyType } from '@coldpbc/interfaces';
 import { HexColors } from '@coldpbc/themes';
-import { ColdLogoNames } from '@coldpbc/enums';
+import { ColdLogoNames, GlobalSizes } from '@coldpbc/enums';
 import { useNavigate } from 'react-router-dom';
 import { isEmpty } from 'lodash';
 import { Organization } from 'auth0';
@@ -13,26 +13,12 @@ import ColdContext from '../../../context/coldContext';
 
 export interface SignupPageProps {
   userData: User;
+  signedPolicyData?: PolicySignedDataType[];
 }
 
-export const SignupPage = ({ userData }: SignupPageProps) => {
-  const { auth0Options } = useContext(ColdContext);
+export const SignupPage = ({ userData, signedPolicyData }: SignupPageProps) => {
   const { user } = useAuth0();
   const navigate = useNavigate();
-  const signedPolicySWR = useSWR<PolicySignedDataType[], any, any>(
-    ['/policies/signed/user', 'GET'],
-    axiosFetcher,
-  );
-
-  const tosSWR = useSWR<PolicyType, any, any>(
-    ['/policies/tos', 'GET'],
-    axiosFetcher,
-  );
-
-  const privacySWR = useSWR<PolicyType, any, any>(
-    ['/policies/privacy', 'GET'],
-    axiosFetcher,
-  );
 
   const organizationSWR = useSWR<Organization, any, any>(
     user?.coldclimate_claims.org_id
@@ -45,29 +31,24 @@ export const SignupPage = ({ userData }: SignupPageProps) => {
     navigate('/home?surveyName=journey_overview');
   };
 
-  if (
-    signedPolicySWR.error ||
-    tosSWR.error ||
-    privacySWR.error ||
-    organizationSWR.error
-  ) {
-    return <div>error</div>;
+  if (organizationSWR.error) {
+    console.error(organizationSWR.error);
+    return <div></div>;
   }
 
-  if (
-    signedPolicySWR.isLoading ||
-    tosSWR.isLoading ||
-    privacySWR.isLoading ||
-    organizationSWR.isLoading
-  ) {
-    return <div>loading</div>;
+  if (organizationSWR.isLoading) {
+    return (
+      <div className="absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
+        <Spinner size={GlobalSizes.xLarge} />
+      </div>
+    );
   }
 
-  const { data: policyData } = signedPolicySWR;
-  const { data: tos } = tosSWR;
-  const { data: privacy } = privacySWR;
+  const tos = signedPolicyData?.find((policy) => policy.name === 'tos');
+  const privacy = signedPolicyData?.find((policy) => policy.name === 'privacy');
   const { data: organizationData } = organizationSWR;
-  if (tos && privacy && policyData) {
+
+  if (tos && privacy && signedPolicyData) {
     return (
       <div className={'flex h-full w-full'}>
         <div className={'pl-[40px] pb-[40px] pt-[40px] pr-[24px]'}>
@@ -101,18 +82,14 @@ export const SignupPage = ({ userData }: SignupPageProps) => {
             <SignupForm
               userData={userData}
               companyData={organizationData}
-              tosSigned={
-                policyData.some(
-                  (policy) =>
-                    policy.name === 'tos' && !isEmpty(policy.policy_data),
-                ) || false
-              }
-              privacySigned={
-                policyData.some(
-                  (policy) =>
-                    policy.name === 'privacy' && !isEmpty(policy.policy_data),
-                ) || false
-              }
+              tosSigned={signedPolicyData.some(
+                (policy) =>
+                  policy.name === 'tos' && !isEmpty(policy.policy_data),
+              )}
+              privacySigned={signedPolicyData.some(
+                (policy) =>
+                  policy.name === 'privacy' && !isEmpty(policy.policy_data),
+              )}
               tosData={tos}
               privacyData={privacy}
               onSubmit={onSubmit}

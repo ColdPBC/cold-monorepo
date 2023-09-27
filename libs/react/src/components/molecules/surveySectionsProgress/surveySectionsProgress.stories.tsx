@@ -32,6 +32,7 @@ export const Default: Story = {
     sections: getSurveySectionMock(),
     activeKey: {
       value: 'product',
+      previousValue: '',
       isFollowUp: false,
     },
   },
@@ -43,6 +44,7 @@ export const SectionCompleted: Story = {
     ...Default.args,
     activeKey: {
       value: 'facilities',
+      previousValue: 'product:3',
       isFollowUp: false,
     },
   },
@@ -54,6 +56,7 @@ export const SectionWithFollowUp: Story = {
     ...Default.args,
     activeKey: {
       value: 'facilities:0',
+      previousValue: 'facilities',
       isFollowUp: true,
     },
   },
@@ -65,6 +68,7 @@ export const SurveyComplete: Story = {
     ...Default.args,
     activeKey: {
       value: 'general:2',
+      previousValue: 'general:1',
       isFollowUp: true,
     },
   },
@@ -76,6 +80,7 @@ export const LastSection: Story = {
     ...Default.args,
     activeKey: {
       value: 'general',
+      previousValue: 'facilities:0',
       isFollowUp: false,
     },
   },
@@ -87,6 +92,7 @@ export const LargerThanScrollBar: Story = {
     sections: getSurveySectionScrollableMock(),
     activeKey: {
       value: 'product1',
+      previousValue: '',
       isFollowUp: false,
     },
   },

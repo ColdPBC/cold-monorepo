@@ -1,3 +1,15 @@
+# [1.22.0](https://github.com/ColdPBC/ui/compare/v1.21.0...v1.22.0) (2023-09-27)
+
+
+### Bug Fixes
+
+* Corrected unintended top offset styling ([0f26f17](https://github.com/ColdPBC/ui/commit/0f26f1769b1bd134484bb61751cac4e15678f77e))
+
+
+### Features
+
+* Added support to only show the animation after moving from previous section to the next ([a14d342](https://github.com/ColdPBC/ui/commit/a14d3425de3615b8e0ee856565c871b46cf01949))
+
 # [1.21.0](https://github.com/ColdPBC/ui/compare/v1.20.0...v1.21.0) (2023-09-27)
 
 

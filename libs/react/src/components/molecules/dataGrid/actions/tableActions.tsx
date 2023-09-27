@@ -6,6 +6,7 @@ import { Dropdown } from 'flowbite-react';
 import { flowbiteThemeOverride } from '@coldpbc/themes';
 import { Modal } from '../../modal';
 import { useAddToastMessage, useExecuteAction } from '@coldpbc/hooks';
+import { ToastMessage } from '@coldpbc/interfaces';
 
 export interface TableActionsProps {
   actions: TableActionType[];
@@ -28,14 +29,14 @@ export const TableActions = (props: TableActionsProps) => {
       .then(() => {
         addToastMessage({
           message: actionModal.toastMessage.success,
-          type: 'success',
+          type: ToastMessage.SUCCESS,
         });
         setActionModal(null);
       })
       .catch(() => {
         addToastMessage({
           message: actionModal.toastMessage.fail,
-          type: 'failure',
+          type: ToastMessage.FAILURE,
         });
         setActionModal(null);
       });
@@ -45,15 +46,15 @@ export const TableActions = (props: TableActionsProps) => {
 
   return (
     <>
-       <Dropdown
-          inline={true}
-          label={
-            <TableActionButton
-              onClick={() => {
-                setShown(!shown);
-              }}
-            />
-          }
+      <Dropdown
+        inline={true}
+        label={
+          <TableActionButton
+            onClick={() => {
+              setShown(!shown);
+            }}
+          />
+        }
         arrowIcon={false}
         theme={flowbiteThemeOverride.dropdown}
       >
@@ -62,7 +63,7 @@ export const TableActions = (props: TableActionsProps) => {
             <>
               <Dropdown.Item
                 theme={flowbiteThemeOverride.dropdown.floating.item}
-                className='p-0 w-full'
+                className="p-0 w-full"
               >
                 <TableAction
                   key={`${index}`}
@@ -71,7 +72,9 @@ export const TableActions = (props: TableActionsProps) => {
                   openActionModal={setActionModal}
                 />
               </Dropdown.Item>
-              {index + 1 < actions.length && <div className='bg-bgc-accent h-[1px] w-full' />}
+              {index + 1 < actions.length && (
+                <div className="bg-bgc-accent h-[1px] w-full" />
+              )}
             </>
           );
         })}
@@ -82,11 +85,7 @@ export const TableActions = (props: TableActionsProps) => {
         header={{
           title: actionModal?.title,
         }}
-        body={(
-          <div className="text-sm font-medium">
-            {actionModal?.body}
-          </div>
-        )}
+        body={<div className="text-sm font-medium">{actionModal?.body}</div>}
         footer={{
           rejectButton: {
             ...actionModal?.footer?.rejectButton,
@@ -103,5 +102,5 @@ export const TableActions = (props: TableActionsProps) => {
         }}
       />
     </>
-  )
+  );
 };

@@ -2,7 +2,7 @@ import React from 'react';
 import { BaseButton } from '../../atoms/button/button';
 import { withKnobs } from '@storybook/addon-knobs';
 import { StoryObj } from '@storybook/react';
-import { ToastMessageTypes } from '../../../interfaces/toastMessage';
+import { ToastMessage } from '../../../interfaces/toastMessage';
 import { ApplicationToaster } from './applicationToaster';
 import { useAddToastMessage } from '../../../hooks/useToastMessage';
 import { SWRConfig } from 'swr';
@@ -15,7 +15,7 @@ const meta = {
   argTypes: {
     type: {
       control: 'select',
-      options: ToastMessageTypes,
+      options: ToastMessage,
     },
   },
 };
@@ -25,7 +25,7 @@ type Story = StoryObj<typeof meta>;
 
 const DefaultComponent = (args: any) => {
   const { addToastMessage } = useAddToastMessage();
-  const addNewToasterMessage = (type: string) => {
+  const addNewToasterMessage = (type: ToastMessage) => {
     addToastMessage({
       message: 'New toaster message',
       type: type,
@@ -45,19 +45,19 @@ const DefaultComponent = (args: any) => {
         <div className="space-x-2">
           <BaseButton
             onClick={() => {
-              addNewToasterMessage('success');
+              addNewToasterMessage(ToastMessage.SUCCESS);
             }}
             label={'Add New Success Message'}
           />
           <BaseButton
             onClick={() => {
-              addNewToasterMessage('failure');
+              addNewToasterMessage(ToastMessage.FAILURE);
             }}
             label={'Add New Warning Message'}
           />
           <BaseButton
             onClick={() => {
-              addNewToasterMessage('info');
+              addNewToasterMessage(ToastMessage.INFO);
             }}
             label={'Add New Informational Message'}
           />
