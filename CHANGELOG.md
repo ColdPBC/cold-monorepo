@@ -1,3 +1,11 @@
+# [1.24.0](https://github.com/ColdPBC/ui/compare/v1.23.0...v1.24.0) (2023-09-27)
+
+
+### Features
+
+* added todo comment to handle submitted in the future ([d90a511](https://github.com/ColdPBC/ui/commit/d90a5114e734bf2ec56c7ca5adc2275a449c9f26))
+* submitted to true in survey definition ([e2ab1e3](https://github.com/ColdPBC/ui/commit/e2ab1e35ffaa65bd133e6d0473394eb345e00ca3))
+
 # [1.23.0](https://github.com/ColdPBC/ui/compare/v1.22.0...v1.23.0) (2023-09-27)
 
 
