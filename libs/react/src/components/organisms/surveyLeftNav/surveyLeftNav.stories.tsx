@@ -35,6 +35,7 @@ export const Intro: Story = {
   args: {
     activeKey: {
       value: '',
+      previousValue: '',
       isFollowUp: false,
     },
     surveyData: getSurveyFormDataPayload(),
@@ -46,6 +47,7 @@ export const InSurvey: Story = {
   args: {
     activeKey: {
       value: 'product',
+      previousValue: '',
       isFollowUp: false,
     },
     surveyData: getSurveyFormDataPayload(),

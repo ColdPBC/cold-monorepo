@@ -25,6 +25,7 @@ const SurveyRightNavStory = (args: SurveyRightNavProps) => {
   const startSurvey = () => {
     setActiveKey({
       value: Object.keys(surveyData.definition.sections)[0],
+      previousValue: '',
       isFollowUp: false,
     });
   };
@@ -47,6 +48,7 @@ export const Default: Story = {
   args: {
     activeKey: {
       value: '',
+      previousValue: '',
       isFollowUp: false,
     },
     surveyData: getSurveyFormDataPayload(),

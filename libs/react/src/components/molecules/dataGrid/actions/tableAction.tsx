@@ -1,6 +1,7 @@
 import { useAddToastMessage } from '../../../../hooks/useToastMessage';
 import { useExecuteAction } from '../../../../hooks/useExecuteAction';
 import { TableActionType } from '../../../../interfaces/tableAction';
+import { ToastMessage } from '@coldpbc/interfaces';
 
 export interface TableActionProps {
   action: TableActionType;
@@ -24,14 +25,14 @@ export const TableAction = (props: TableActionProps) => {
               .then(() => {
                 addToastMessage({
                   message: action.toastMessage.success,
-                  type: 'success',
+                  type: ToastMessage.SUCCESS,
                 });
                 setActionsShown(false);
               })
               .catch(() => {
                 addToastMessage({
                   message: action.toastMessage.fail,
-                  type: 'failure',
+                  type: ToastMessage.FAILURE,
                 });
                 setActionsShown(false);
               });

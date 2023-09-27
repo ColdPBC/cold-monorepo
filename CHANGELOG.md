@@ -1,3 +1,30 @@
+# [1.23.0](https://github.com/ColdPBC/ui/compare/v1.22.0...v1.23.0) (2023-09-27)
+
+
+### Bug Fixes
+
+* build failing after merge ([f506fa6](https://github.com/ColdPBC/ui/commit/f506fa6a2daab698ed2f8663ef8cfb6c2a22eb68))
+
+
+### Features
+
+* button change ([a30a29e](https://github.com/ColdPBC/ui/commit/a30a29e37a2a3221e86628be67feeeb1cfcff7e0))
+* sign tos and privacy individually, added more stories ([22f0b26](https://github.com/ColdPBC/ui/commit/22f0b26a1239be4672e8ad3f11d97d646658021b))
+* signup form handling ([4bed6dc](https://github.com/ColdPBC/ui/commit/4bed6dcbe01e86f56bd70399a2ea7bb5eac0c348))
+* updated button children code ([193ef4b](https://github.com/ColdPBC/ui/commit/193ef4b0ff5255c834ae7df688caef1968ce2030))
+
+# [1.22.0](https://github.com/ColdPBC/ui/compare/v1.21.0...v1.22.0) (2023-09-27)
+
+
+### Bug Fixes
+
+* Corrected unintended top offset styling ([0f26f17](https://github.com/ColdPBC/ui/commit/0f26f1769b1bd134484bb61751cac4e15678f77e))
+
+
+### Features
+
+* Added support to only show the animation after moving from previous section to the next ([a14d342](https://github.com/ColdPBC/ui/commit/a14d3425de3615b8e0ee856565c871b46cf01949))
+
 # [1.21.0](https://github.com/ColdPBC/ui/compare/v1.20.0...v1.21.0) (2023-09-27)
 
 
