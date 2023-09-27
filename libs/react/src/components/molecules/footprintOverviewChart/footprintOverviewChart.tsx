@@ -159,16 +159,18 @@ export function FootprintOverviewChart(
     const color = HexColors[footprintSubcategoryColors[subcategoryKey]]?.DEFAULT || HexColors.primary.DEFAULT;
 
     let nullFootprint = true;
-    forEach(subcategory.activities, (activity) => {
-      if (activity.footprint && period in activity.footprint) {
-        const footprint = activity.footprint[period];
-        if (footprint && footprint.value !== null) {
-          value += footprint.value;
-          totalFootprint += footprint.value;
-          nullFootprint = false;
+    if (subcategory?.footprint) {
+      forEach(subcategory.activities, (activity) => {
+        if (activity?.footprint && period in activity.footprint) {
+          const footprint = activity.footprint[period];
+          if (footprint && footprint.value !== null) {
+            value += footprint.value;
+            totalFootprint += footprint.value;
+            nullFootprint = false;
+          }
         }
-      }
-    })
+      })
+    }
     if (subcategoryTotals.length >= MAX_CATEGORIES) return;
     if (!nullFootprint)
       subcategoryTotals.push({value: value, color, name: subcategory.subcategory_name});
