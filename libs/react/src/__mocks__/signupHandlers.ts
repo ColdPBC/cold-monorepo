@@ -33,8 +33,8 @@ export const getSignUpHandler = {
       return res(
         ctx.json({
           ...auth0UserMock,
-          given_name: 'null',
-          family_name: 'null',
+          given_name: null,
+          family_name: null,
         }),
       );
     }),
@@ -67,8 +67,8 @@ export const getSignUpHandler = {
       return res(
         ctx.json({
           ...auth0UserMock,
-          given_name: 'null',
-          family_name: 'null',
+          given_name: null,
+          family_name: null,
         }),
       );
     }),
@@ -78,8 +78,8 @@ export const getSignUpHandler = {
       return res(
         ctx.json({
           ...auth0UserMock,
-          given_name: 'null',
-          family_name: 'null',
+          given_name: null,
+          family_name: null,
         }),
       );
     }),
@@ -112,8 +112,8 @@ export const getSignUpHandler = {
       return res(
         ctx.json({
           ...auth0UserMock,
-          given_name: 'null',
-          family_name: 'null',
+          given_name: null,
+          family_name: null,
         }),
       );
     }),
