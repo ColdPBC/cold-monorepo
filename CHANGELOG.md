@@ -1,3 +1,18 @@
+# [1.23.0](https://github.com/ColdPBC/ui/compare/v1.22.0...v1.23.0) (2023-09-27)
+
+
+### Bug Fixes
+
+* build failing after merge ([f506fa6](https://github.com/ColdPBC/ui/commit/f506fa6a2daab698ed2f8663ef8cfb6c2a22eb68))
+
+
+### Features
+
+* button change ([a30a29e](https://github.com/ColdPBC/ui/commit/a30a29e37a2a3221e86628be67feeeb1cfcff7e0))
+* sign tos and privacy individually, added more stories ([22f0b26](https://github.com/ColdPBC/ui/commit/22f0b26a1239be4672e8ad3f11d97d646658021b))
+* signup form handling ([4bed6dc](https://github.com/ColdPBC/ui/commit/4bed6dcbe01e86f56bd70399a2ea7bb5eac0c348))
+* updated button children code ([193ef4b](https://github.com/ColdPBC/ui/commit/193ef4b0ff5255c834ae7df688caef1968ce2030))
+
 # [1.22.0](https://github.com/ColdPBC/ui/compare/v1.21.0...v1.22.0) (2023-09-27)
 
 
