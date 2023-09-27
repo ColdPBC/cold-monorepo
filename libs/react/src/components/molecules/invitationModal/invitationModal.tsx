@@ -5,6 +5,7 @@ import { Modal } from '../modal/modal';
 import { useAddToastMessage } from '../../../hooks/useToastMessage';
 import { InviteMemberForm } from './inviteMemberForm/inviteMemberForm';
 import { isAxiosError } from 'axios';
+import { ToastMessage } from '@coldpbc/interfaces';
 
 export interface InvitationModalProps {
   shown: boolean;
@@ -41,14 +42,14 @@ export const InvitationModal = (props: InvitationModalProps) => {
         }
         addToastMessage({
           message: 'Invitation sent successfully',
-          type: 'success',
+          type: ToastMessage.SUCCESS,
         });
         setShown(false);
       })
       .catch((error) => {
         addToastMessage({
           message: 'Invitation failed',
-          type: 'failure',
+          type: ToastMessage.FAILURE,
         });
         setShown(false);
       });

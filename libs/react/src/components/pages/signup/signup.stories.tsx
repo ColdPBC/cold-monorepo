@@ -1,11 +1,12 @@
 import {
   auth0UserMock,
+  getPoliciesSignedMock,
   getSignUpHandler,
   StoryMockProvider,
 } from '@coldpbc/mocks';
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
-import { SignupPage } from '@coldpbc/components';
+import { ApplicationToaster, SignupPage } from '@coldpbc/components';
 
 const meta: Meta<typeof SignupPage> = {
   title: 'Pages/SignupPage',
@@ -26,6 +27,7 @@ export const NewUserExistingCompany: Story = {
           given_name: 'null',
           family_name: 'null',
         }}
+        signedPolicyData={getPoliciesSignedMock()}
       />
     </StoryMockProvider>
   ),
@@ -49,6 +51,7 @@ export const NewCompany: Story = {
           given_name: 'null',
           family_name: 'null',
         }}
+        signedPolicyData={getPoliciesSignedMock()}
       />
     </StoryMockProvider>
   ),
@@ -56,8 +59,37 @@ export const NewCompany: Story = {
     auth0AddOn: {
       user: {
         ...auth0UserMock,
-        given_name: null,
-        family_name: null,
+        coldclimate_claims: {
+          ...auth0UserMock.coldclimate_claims,
+          org_id: null,
+        },
+      },
+    },
+  },
+};
+
+export const OnOrgCreationError: Story = {
+  render: (args) => (
+    <StoryMockProvider handlers={getSignUpHandler.server500Error}>
+      <SignupPage
+        userData={{
+          ...auth0UserMock,
+          given_name: 'null',
+          family_name: 'null',
+        }}
+        signedPolicyData={getPoliciesSignedMock()}
+      />
+      <ApplicationToaster />
+    </StoryMockProvider>
+  ),
+  parameters: {
+    auth0AddOn: {
+      user: {
+        ...auth0UserMock,
+        coldclimate_claims: {
+          ...auth0UserMock.coldclimate_claims,
+          org_id: null,
+        },
       },
     },
   },

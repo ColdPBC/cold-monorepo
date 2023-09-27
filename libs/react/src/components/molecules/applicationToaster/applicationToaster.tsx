@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import useSWR, { mutate } from 'swr';
-import { Toaster } from '../../atoms/toaster/toaster';
+import { Toaster } from '../../atoms';
 
 export const ApplicationToaster = () => {
   const { data, error, isLoading } = useSWR('messages', {
@@ -33,7 +33,7 @@ export const ApplicationToaster = () => {
   }
 
   if (data) {
-    return <Toaster message={data.message} type={data.type} />;
+    return <Toaster toastMessage={data} />;
   } else {
     return <></>;
   }

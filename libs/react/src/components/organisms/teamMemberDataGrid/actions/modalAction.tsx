@@ -3,6 +3,7 @@ import { Modal } from '../../../molecules/modal/modal';
 import { BaseButton } from '../../../atoms/button/button';
 import { useAddToastMessage } from '../../../../hooks/useToastMessage';
 import { useExecuteAction } from '../../../../hooks/useExecuteAction';
+import { ToastMessage } from '@coldpbc/interfaces';
 
 export interface ModalActionProps {
   action: any;
@@ -38,7 +39,7 @@ export const ModalAction = (props: ModalActionProps) => {
       .then(() => {
         addToastMessage({
           message: action.toastMessage.success,
-          type: 'success',
+          type: ToastMessage.SUCCESS,
         });
         // addToastMessage({
         //   message: action.toastMessage.success,
@@ -49,7 +50,7 @@ export const ModalAction = (props: ModalActionProps) => {
       .catch(() => {
         addToastMessage({
           message: action.toastMessage.fail,
-          type: 'failure',
+          type: ToastMessage.FAILURE,
         });
         setShowModal(false);
       });

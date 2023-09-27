@@ -7,9 +7,10 @@ import ColdContext from '../../../context/coldContext';
 import { useLDClient } from 'launchdarkly-react-client-sdk';
 import useSWR from 'swr';
 import { axiosFetcher } from '@coldpbc/fetchers';
-import { get, has, isUndefined } from 'lodash';
+import { get, has, isEmpty, isUndefined } from 'lodash';
 import { useCookies } from 'react-cookie';
 import { useAuth0Wrapper } from '../../../hooks/useAuth0Wrapper';
+import { PolicySignedDataType } from '@coldpbc/interfaces';
 
 export const ProtectedRoute = () => {
   const {
@@ -32,10 +33,24 @@ export const ProtectedRoute = () => {
     returnTo: window.location.pathname,
   };
 
+  const signedPolicySWR = useSWR<PolicySignedDataType[], any, any>(
+    user && coldpbc ? ['/policies/signed/user', 'GET'] : null,
+    axiosFetcher,
+  );
+
   const needsSignup = () => {
+    if (signedPolicySWR.data) {
+      // check if user has signed both policies
+      const tos = signedPolicySWR.data.some(
+        (policy) => policy.name === 'tos' && !isEmpty(policy.policy_data),
+      );
+      const privacy = signedPolicySWR.data.some(
+        (policy) => policy.name === 'privacy' && !isEmpty(policy.policy_data),
+      );
+      return !tos || !privacy;
+    }
     // check if company is already set
-    if (isUndefined(user?.coldclimate_claims.org_id))
-      return true;
+    if (isUndefined(user?.coldclimate_claims.org_id)) return true;
 
     // check if user names are already set
     return !user?.family_name || !user?.given_name;
@@ -119,8 +134,10 @@ export const ProtectedRoute = () => {
   }
 
   if (isAuthenticated && user && coldpbc) {
-    if (needsSignup()) {
-      return <SignupPage userData={user} />;
+    if (needsSignup() && signedPolicySWR.data) {
+      return (
+        <SignupPage signedPolicyData={signedPolicySWR.data} userData={user} />
+      );
     } else {
       return <Outlet />;
     }

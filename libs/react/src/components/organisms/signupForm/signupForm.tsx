@@ -1,13 +1,13 @@
-import React, { useContext } from 'react';
-import { useAuth0, User, User as Auth0User } from '@auth0/auth0-react';
+import React, { useEffect } from 'react';
+import { User as Auth0User } from '@auth0/auth0-react';
 import { BaseButton, Input } from '@coldpbc/components';
 import { ButtonTypes, InputTypes } from '@coldpbc/enums';
-import useSWR, { mutate } from 'swr';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { Organization } from 'auth0';
-import { PolicyType } from '@coldpbc/interfaces';
-import ColdContext from '../../../context/coldContext';
-import { useCookies } from 'react-cookie';
+import { PolicyType, ToastMessage } from '@coldpbc/interfaces';
+import { useAddToastMessage } from '@coldpbc/hooks';
+import { isAxiosError } from 'axios';
+import { mutate } from 'swr';
 
 export interface SignupFormProps {
   userData?: Auth0User;
@@ -28,10 +28,8 @@ export const SignupForm = ({
   privacyData,
   onSubmit,
 }: SignupFormProps) => {
-  const { getAccessTokenSilently } = useAuth0();
-  const { auth0Options } = useContext(ColdContext);
   const [firstName, setFirstName] = React.useState<string | undefined>(
-    !userData?.given_name  ? '' : userData?.given_name,
+    !userData?.given_name ? '' : userData?.given_name,
   );
   const [lastName, setLastName] = React.useState<string | undefined>(
     !userData?.family_name ? '' : userData?.family_name,
@@ -41,77 +39,44 @@ export const SignupForm = ({
   );
   const [isAgreedToPrivacyAndTOS, setIsAgreedToPrivacyAndTOS] =
     React.useState<boolean>(tosSigned && privacySigned);
+  const [isValid, setIsValid] = React.useState<boolean>(false);
+  const [disabled, setDisabled] = React.useState<boolean>(false);
+  const { addToastMessage } = useAddToastMessage();
 
-  const [coldpbc, setCookie] = useCookies(['coldpbc']);
+  useEffect(() => {
+    if (isAgreedToPrivacyAndTOS && companyName && firstName && lastName) {
+      setIsValid(true);
+    } else {
+      setIsValid(false);
+    }
+  }, [firstName, lastName, companyName, isAgreedToPrivacyAndTOS]);
 
   const onContinue = async () => {
-    await Promise.all([signTOSandPrivacy()]);
-    const user = (await postUserData()) as User;
-
-    // Old organization creation code in case we ever switch back to users being able to create their own orgs
-    //const organization = (await postCompanyData()) as Organization;
-    /*if (organization) {
-      const token = await getAccessTokenSilently({
-        authorizationParams: {
-          audience: auth0Options.authorizationParams?.audience,
-          scope: 'offline_access email profile openid',
-          organization: organization.id,
-        },
-        cacheMode: 'off',
-      });
-      setCookie('coldpbc', { user, accessToken: token });
-    }*/
-
-    await mutate([`/members/${userData?.email}`, 'GET']);
-    onSubmit();
-  };
-
-  const getContinueButton = () => {
-    if (isAgreedToPrivacyAndTOS && firstName && lastName && companyName) {
-      return (
-        <BaseButton
-          onClick={onContinue}
-          label={'Continue'}
-          variant={ButtonTypes.primary}
-        />
-      );
+    setDisabled(true);
+    const promises = await Promise.all([signTOSandPrivacy(), postUserData()]);
+    // check if all promises are successful
+    if (promises.every((promise) => !isAxiosError(promise))) {
+      setDisabled(false);
+      await mutate([`/members/${userData?.email}`, 'GET']);
+      onSubmit();
     } else {
-      return (
-        <BaseButton
-          onClick={onContinue}
-          label={'Continue'}
-          variant={ButtonTypes.primary}
-          disabled
-        />
-      );
+      await addToastMessage({
+        message: 'Error creating account',
+        type: ToastMessage.FAILURE,
+        timeout: 5000,
+      });
+      setDisabled(false);
     }
   };
 
   const postUserData = () => {
-    if (
-      userData &&
-      !userData.given_name &&
-      !userData.family_name
-    ) {
+    if (userData) {
       return axiosFetcher([
         `/members/${userData.email}`,
         'PATCH',
         JSON.stringify({
           family_name: lastName,
           given_name: firstName,
-        }),
-      ]);
-    }
-    return;
-  };
-
-  const postCompanyData = () => {
-    if (!companyData) {
-      return axiosFetcher([
-        `/organizations`,
-        'POST',
-        JSON.stringify({
-          display_name: companyName,
         }),
       ]);
     }
@@ -128,7 +93,15 @@ export const SignupForm = ({
         axiosFetcher([`/policies/${privacyData.id}/signed`, 'POST']),
       );
     }
-    return await Promise.all(promises);
+    return (await Promise.all(promises)).flat();
+  };
+
+  const isButtonDisabled = () => {
+    if (disabled) {
+      return true;
+    } else {
+      return !isValid;
+    }
   };
 
   return (
@@ -226,7 +199,14 @@ export const SignupForm = ({
           </div>
         </div>
       </div>
-      <div>{getContinueButton()}</div>
+      <div>
+        <BaseButton
+          onClick={onContinue}
+          label={'Continue'}
+          variant={ButtonTypes.primary}
+          disabled={isButtonDisabled()}
+        />
+      </div>
     </div>
   );
 };
