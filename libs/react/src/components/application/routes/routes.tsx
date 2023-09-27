@@ -1,7 +1,7 @@
 import { DashboardLayout } from '../../pages';
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
-import { TeamMembersSettings } from '../../pages';
+import { Settings } from '../../pages';
 import { Home } from '../../pages';
 import { ApplicationToaster } from '../../molecules';
 import { Terms } from '../../pages';
@@ -27,7 +27,7 @@ export const ColdRoutes = () => {
               <Route path={'/home'} element={<Home />} />
               <Route path={'/footprint'} element={<Footprint />} />
               <Route path={'/journey'} element={<Journey />} />
-              <Route path={'/settings'} element={<TeamMembersSettings />} />
+              <Route path={'/settings'} element={<Settings />} />
               {ldFlags.showActions261 && ActionRoutes()}
               <Route
                 path="*"

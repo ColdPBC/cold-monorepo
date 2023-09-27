@@ -67,7 +67,7 @@ export const EmptyChart = () => {
   }
 
   return (
-        <div className="relative h-[150px] w-full">
+        <div className="relative h-[150px] w-full" data-chromatic="ignore">
           <Chart
             ref={chartRef}
             options={{
