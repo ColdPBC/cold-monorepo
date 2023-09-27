@@ -1,4 +1,3 @@
-import { useCreateGradient } from "@coldpbc/hooks";
 import { HexColors } from "@coldpbc/themes";
 import { Chart as ChartJS, Filler, LineElement, PointElement, RadarController, RadialLinearScale, Title  } from "chart.js";
 import { useEffect, useRef, useState } from "react";
