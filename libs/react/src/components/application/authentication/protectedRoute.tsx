@@ -33,14 +33,12 @@ export const ProtectedRoute = () => {
   };
 
   const needsSignup = () => {
-    const ifNoOrgId = isUndefined(user?.coldclimate_claims.org_id);
-    if (user) {
-      const ifNoName =
-        user.family_name === 'null' || user.given_name === 'null';
-      return ifNoName || ifNoOrgId;
-    } else {
-      return ifNoOrgId || false;
-    }
+    // check if company is already set
+    if (isUndefined(user?.coldclimate_claims.org_id))
+      return true;
+
+    // check if user names are already set
+    return !user?.family_name || !user?.given_name;
   };
 
   useEffect(() => {

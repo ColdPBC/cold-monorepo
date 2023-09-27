@@ -31,13 +31,13 @@ export const SignupForm = ({
   const { getAccessTokenSilently } = useAuth0();
   const { auth0Options } = useContext(ColdContext);
   const [firstName, setFirstName] = React.useState<string | undefined>(
-    userData?.given_name === 'null' ? '' : userData?.given_name,
+    !userData?.given_name  ? '' : userData?.given_name,
   );
   const [lastName, setLastName] = React.useState<string | undefined>(
-    userData?.family_name === 'null' ? '' : userData?.family_name,
+    !userData?.family_name ? '' : userData?.family_name,
   );
   const [companyName, setCompanyName] = React.useState<string | undefined>(
-    companyData?.name === undefined ? '' : companyData?.name,
+    companyData?.name === undefined ? '' : companyData?.display_name,
   );
   const [isAgreedToPrivacyAndTOS, setIsAgreedToPrivacyAndTOS] =
     React.useState<boolean>(tosSigned && privacySigned);
@@ -46,9 +46,11 @@ export const SignupForm = ({
 
   const onContinue = async () => {
     await Promise.all([signTOSandPrivacy()]);
-    const organization = (await postCompanyData()) as Organization;
     const user = (await postUserData()) as User;
-    if (organization) {
+
+    // Old organization creation code in case we ever switch back to users being able to create their own orgs
+    //const organization = (await postCompanyData()) as Organization;
+    /*if (organization) {
       const token = await getAccessTokenSilently({
         authorizationParams: {
           audience: auth0Options.authorizationParams?.audience,
@@ -58,8 +60,9 @@ export const SignupForm = ({
         cacheMode: 'off',
       });
       setCookie('coldpbc', { user, accessToken: token });
-    }
-    mutate([`/users/${userData?.email}`, 'GET']);
+    }*/
+
+    await mutate([`/members/${userData?.email}`, 'GET']);
     onSubmit();
   };
 
@@ -87,11 +90,11 @@ export const SignupForm = ({
   const postUserData = () => {
     if (
       userData &&
-      userData.given_name === 'null' &&
-      userData.family_name === 'null'
+      !userData.given_name &&
+      !userData.family_name
     ) {
       return axiosFetcher([
-        `/users/${userData.email}`,
+        `/members/${userData.email}`,
         'PATCH',
         JSON.stringify({
           family_name: lastName,
@@ -99,6 +102,7 @@ export const SignupForm = ({
         }),
       ]);
     }
+    return;
   };
 
   const postCompanyData = () => {
@@ -111,6 +115,7 @@ export const SignupForm = ({
         }),
       ]);
     }
+    return;
   };
 
   const signTOSandPrivacy = async () => {
@@ -144,7 +149,7 @@ export const SignupForm = ({
               name: 'firstName',
               className:
                 'text-sm not-italic text-tc-primary font-medium bg-transparent w-full rounded-lg p-[16px] border border-bgc-accent focus:border focus:border-bgc-accent focus:ring-0',
-              disabled: userData?.given_name !== 'null',
+              disabled: !!userData?.given_name,
             }}
             input_label_props={{
               className: 'text-sm not-italic text-tc-primary font-medium',
@@ -159,7 +164,7 @@ export const SignupForm = ({
               name: 'lastName',
               className:
                 'text-sm not-italic text-tc-primary font-medium bg-transparent w-full rounded-lg p-[16px] border border-bgc-accent focus:border focus:border-bgc-accent focus:ring-0',
-              disabled: userData?.family_name !== 'null',
+              disabled: !!userData?.family_name,
             }}
             input_label_props={{
               className: 'text-sm not-italic text-tc-primary font-medium',
@@ -181,7 +186,7 @@ export const SignupForm = ({
             input_label_props={{
               className: 'text-sm not-italic text-tc-primary font-medium',
             }}
-            input_label={'Company Name'}
+            input_label={'Company'}
           />
         </div>
         <div className={'py-[16px]'}>

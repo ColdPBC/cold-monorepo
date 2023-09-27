@@ -1,3 +1,18 @@
+# [1.18.0](https://github.com/ColdPBC/ui/compare/v1.17.2...v1.18.0) (2023-09-27)
+
+
+### Bug Fixes
+
+* Fix gradient on climate journey chart ([e60b379](https://github.com/ColdPBC/ui/commit/e60b37938d2a0076cf9b14fad1ec01a9d03c0d03))
+* Fix gradient on climate journey chart ([#40](https://github.com/ColdPBC/ui/issues/40)) ([3b89374](https://github.com/ColdPBC/ui/commit/3b893743e7125b5613ceb13205ee19699002b9ca))
+* remove useCreateGradient imports ([2804ed2](https://github.com/ColdPBC/ui/commit/2804ed280468ba35da4adbc042dab3267f05371a))
+* remove useCreateGradient imports ([#56](https://github.com/ColdPBC/ui/issues/56)) ([a73a276](https://github.com/ColdPBC/ui/commit/a73a2762cecc1e1637063124ed7f8992cdb1c210))
+
+
+### Features
+
+* Highlight sidebar item when users navigate ([c41f530](https://github.com/ColdPBC/ui/commit/c41f5306c9773f7e0efef729f450b0ed1a67fe34))
+
 ## [1.17.2](https://github.com/ColdPBC/ui/compare/v1.17.1...v1.17.2) (2023-09-26)
 
 

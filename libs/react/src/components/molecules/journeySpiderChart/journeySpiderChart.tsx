@@ -18,7 +18,6 @@ import { axiosFetcher } from '../../../fetchers/axiosFetcher';
 import { Spinner } from '../../atoms/spinner/spinner';
 import { defaultChartData, options } from './constants';
 import { createGradient, pickGradientValue } from './helpers';
-import { useCreateGradient } from '../../../hooks';
 import { EmptyChart } from './emptyChart';
 
 ChartJS.register(
