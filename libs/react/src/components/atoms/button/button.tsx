@@ -28,19 +28,10 @@ export function BaseButton(props: IButtonProps): JSX.Element {
     <>
       {iconLeft && getIconComponent(iconLeft, props)}
       {label && <span>{label}</span>}
+      {children && <span>{children}</span>}
       {iconRight && getIconComponent(iconRight, props)}
     </>
   );
-  if (children) {
-    return (
-      <button
-        className={className ? className : `${getClassName(props)}`}
-        {...props}
-      >
-        {children}
-      </button>
-    );
-  }
 
   if (!href) {
     return (
