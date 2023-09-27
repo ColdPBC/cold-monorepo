@@ -60,6 +60,7 @@ export const SurveyQuestionContainer = ({
       value?: any | null;
       skipped?: boolean;
     },
+    submit?: boolean,
   ) => {
     let newSection: SurveySectionType;
     const activeSectionIndex = getSectionIndex(sections, activeKey);
@@ -91,6 +92,7 @@ export const SurveyQuestionContainer = ({
     }
     const newSurvey: SurveyPayloadType = cloneDeep(surveyData);
     newSurvey.definition.sections[activeSectionKey] = newSection;
+    newSurvey.definition.submitted = submit;
     setSurveyData(newSurvey);
   };
 
@@ -343,7 +345,7 @@ export const SurveyQuestionContainer = ({
   };
 
   const onSubmitButtonClicked = () => {
-    updateSurveyQuestion(activeKey.value, { skipped: true });
+    updateSurveyQuestion(activeKey.value, { skipped: true }, true);
     updateTransitionClassNames(true);
     putSurveyData();
     submitSurvey();
