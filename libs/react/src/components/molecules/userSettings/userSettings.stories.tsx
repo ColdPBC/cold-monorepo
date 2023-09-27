@@ -1,8 +1,9 @@
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { UserSettings } from './userSettings';
-import { auth0UserMock, StoryMockProvider } from '@coldpbc/mocks';
+import { auth0UserMock } from '@coldpbc/mocks';
 import { MainContent } from '../../organisms/mainContent';
+import { BrowserRouter } from 'react-router-dom';
 
 const meta: Meta<typeof UserSettings> = {
   title: 'Molecules/UserSettings',
@@ -17,11 +18,11 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   render: (args) => {
     return (
-      <StoryMockProvider handlers={[]}>
+      <BrowserRouter>
         <MainContent>
             <UserSettings user={auth0UserMock} />
         </MainContent>
-      </StoryMockProvider>
+      </BrowserRouter>
     );
   },
 };
