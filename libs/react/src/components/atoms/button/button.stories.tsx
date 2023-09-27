@@ -1,11 +1,11 @@
 import { BaseButton } from './button';
 import { withKnobs } from '@storybook/addon-knobs';
 import { StoryObj } from '@storybook/react';
-import { ButtonTypes } from '../../../enums/buttons';
-import { IconNames } from '../../../enums/iconNames';
-import { Spinner } from 'flowbite-react';
+import { ButtonTypes } from '@coldpbc/enums';
+import { IconNames } from '@coldpbc/enums';
 import { GlobalSizes } from '@coldpbc/enums';
 import React from 'react';
+import { Spinner } from '@coldpbc/components';
 
 const meta = {
   title: 'Atoms/Button',
@@ -68,8 +68,10 @@ export const Link: Story = {
 export const ButtonWithSpinner: Story = {
   render: (args) => (
     <BaseButton {...args}>
-      <span>Button</span>
-      <Spinner size={GlobalSizes.small} />
+      <div className={'flex gap-2'}>
+        <span>Continue</span>
+        <Spinner size={GlobalSizes.small} />
+      </div>
     </BaseButton>
   ),
   args: {

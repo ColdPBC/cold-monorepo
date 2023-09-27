@@ -198,7 +198,10 @@ export const SignupForm = ({
           variant={ButtonTypes.primary}
           disabled={disabled}
         >
-          Continue {submitting && <Spinner size={GlobalSizes.xSmall} />}
+          <div className={'flex gap-2'}>
+            <span>Continue</span>
+            {submitting && <Spinner size={GlobalSizes.small} />}
+          </div>
         </BaseButton>
       </div>
     </div>
