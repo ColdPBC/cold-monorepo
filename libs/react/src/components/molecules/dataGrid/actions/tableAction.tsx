@@ -1,6 +1,3 @@
-import React from 'react';
-import { BaseButton } from '../../../atoms/button/button';
-import { ModalAction } from '../../../organisms/teamMemberDataGrid/actions/modalAction';
 import { useAddToastMessage } from '../../../../hooks/useToastMessage';
 import { useExecuteAction } from '../../../../hooks/useExecuteAction';
 import { TableActionType } from '../../../../interfaces/tableAction';
@@ -8,6 +5,7 @@ import { TableActionType } from '../../../../interfaces/tableAction';
 export interface TableActionProps {
   action: TableActionType;
   setActionsShown: (val: boolean) => void;
+  openActionModal: (action: any) => void;
 }
 
 export const TableAction = (props: TableActionProps) => {
@@ -18,7 +16,7 @@ export const TableAction = (props: TableActionProps) => {
   switch (action.type) {
     case 'button':
       return (
-        <BaseButton
+        <button
           onClick={() => {
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
@@ -38,15 +36,23 @@ export const TableAction = (props: TableActionProps) => {
                 setActionsShown(false);
               });
           }}
-          label={action.label}
-          className={
-            'px-3 py-3.5 text-md bg-cold-starkWhite text-cold-starkWhite-a11y text-left'
-          }
-        />
+          className='w-full text-left p-4'
+        >
+          {action.label}
+        </button>
       );
     case 'modal':
-      return <ModalAction action={action} />;
+      return (
+        <button
+          onClick={() => {
+            props.openActionModal(action);
+          }}
+          className='w-full text-left p-4'
+        >
+          {action.label}
+        </button>
+      );
     default:
-      return <></>;
+      return null;
   }
 };

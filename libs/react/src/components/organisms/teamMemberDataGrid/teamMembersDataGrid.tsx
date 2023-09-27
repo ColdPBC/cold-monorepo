@@ -1,21 +1,20 @@
-import React from 'react';
 import {Datagrid} from '../../molecules/dataGrid/datagrid';
 import useSWR from 'swr';
-import {TeamMemberName} from '../../molecules/teamMemberName/teamMemberName';
 import {GlobalSizes} from '../../../enums/sizes';
 import {Spinner} from '../../atoms/spinner/spinner';
 import {ColorNames} from '../../../enums/colors';
-import {orderBy, startCase} from 'lodash';
+import {orderBy} from 'lodash';
 import {Avatar} from '../../atoms/avatar/avatar';
 import {axiosFetcher} from '../../../fetchers/axiosFetcher';
 import {useAuth0} from '@auth0/auth0-react';
-import {format} from 'date-fns';
+import { ButtonTypes } from '@coldpbc/enums';
+import { MemberStatusType } from '../../pages';
 
-//TODO:Why the empty interface?
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface TeamMembersDataGridProps {}
+export interface TeamMembersDataGridProps {
+  selectedMemberStatusType: MemberStatusType;
+}
 
-export const TeamMembersDataGrid = (props: TeamMembersDataGridProps) => {
+export const TeamMembersDataGrid = ({ selectedMemberStatusType }: TeamMembersDataGridProps) => {
   const { user: dataGridUser } = useAuth0();
 
   const getOrgURL = () => {
@@ -82,22 +81,22 @@ export const TeamMembersDataGrid = (props: TeamMembersDataGridProps) => {
     } else if (user.roles === 'company:admin') {
       return [
         {
-          label: 'Delete Member',
+          label: 'Remove User',
           name: 'delete member',
-          title: 'Delete Member',
-          body: `Are you sure you want to delete ${user.name}?\n\nOnce confirmed, this action cannot be undone.`,
+          title: 'Remove User',
+          body: (
+            <span>
+              Are you sure you want to remove <span className='font-bold'>{user.name}</span> from your company?
+            </span>
+          ),
           footer: {
             resolveButton: {
-              label: 'Delete',
-              color: ColorNames.red,
-              size: GlobalSizes.small,
-              rounded: true,
+              label: 'Remove User',
+              variant: ButtonTypes.warning
             },
             rejectButton: {
               label: 'Cancel',
-              color: ColorNames.jetBlack,
-              size: GlobalSizes.small,
-              rounded: true,
+              variant: ButtonTypes.secondary
             },
           },
           url: `/organizations/${data.org_id}/member`,
@@ -112,22 +111,24 @@ export const TeamMembersDataGrid = (props: TeamMembersDataGridProps) => {
           },
         },
         {
-          label: 'Make Owner',
+          label: 'Transfer Ownership',
           name: 'make owner',
-          title: `Change Owner of ${data.name}`,
-          body: `There can only be one owner for ${data.name}.\n\nBy making this member the owner you will give up your permission as owner. Are you sure you want to make ${user.name} the owner?`,
+          title:'Transfer Ownership',
+          body: (
+            <span>
+              There can only be one owner for {data.name}
+              <br /><br />
+              By making this member the owner you will give up your permission as owner.
+              Are you sure you want to make <span className='font-bold'>{user.name}</span> the owner?
+            </span>
+          ),
           footer: {
             resolveButton: {
-              label: 'Confirm',
-              color: ColorNames.primary,
-              size: GlobalSizes.small,
-              rounded: true,
+              label: 'Transfer Ownership',
             },
             rejectButton: {
               label: 'Cancel',
-              color: ColorNames.jetBlack,
-              size: GlobalSizes.small,
-              rounded: true,
+              variant: ButtonTypes.secondary
             },
           },
           urls: user.identities.map((identity: string) => {
@@ -160,23 +161,24 @@ export const TeamMembersDataGrid = (props: TeamMembersDataGridProps) => {
     }
   };
 
-  const getUserStatus = (user: any) => {
-    if (user.status === 'invited') {
-      return 'Invited: ' + format(new Date(user.invited_at), 'MMM. dd');
-    } else {
-      return startCase(user.status);
-    }
-  };
-
   const getTransformedData = (data: any[]) => {
-    return orderBy(data, ['email'], ['asc']).map((user) => {
-      return {
-        picture: <Avatar size={GlobalSizes.medium} user={user} circle={true} />,
-        name: <TeamMemberName user={user} />,
-        role: getRole(user),
-        status: getUserStatus(user),
-        actions: getActions(user),
-      };
+    return orderBy(data, ['email'], ['asc'])
+      .filter(user => (user.status === 'invited' && selectedMemberStatusType === 'Invitations')
+        || (selectedMemberStatusType === 'Members' && user.status !== 'invited'))
+      .map((user) => {
+        return {
+          name: (
+            <div className='flex items-center'>
+              <span className='mr-4'>
+                <Avatar size={GlobalSizes.medium} user={user} />
+              </span>
+              <span className='text-white font-bold text-sm leading-normal'>{user.name}</span>
+            </div>
+          ),
+          email: <span className='text-white font-medium text-sm leading-normal'>{user.email}</span>,
+          role: <span className='text-white font-medium text-sm leading-normal'>{getRole(user)}</span>,
+          actions: getActions(user),
+        };
     });
   };
 
