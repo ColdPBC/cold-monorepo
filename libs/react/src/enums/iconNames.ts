@@ -1,6 +1,7 @@
 export enum IconNames {
   ColdHomeIcon = 'ColdHomeIcon',
   ColdFootprintIcon = 'ColdFootprintIcon',
+  ColdFootprintIconTwo = 'ColdFootprintIconTwo',
   ColdJourneyIcon = 'ColdJourneyIcon',
   ColdActionsIcon = 'ColdActionsIcon',
   ColdReportIcon = 'ColdReportIcon',
@@ -9,5 +10,6 @@ export enum IconNames {
   ColdBillingIcon = 'ColdBillingIcon',
   ColdTeamMembersIcon = 'ColdTeamMembersIcon',
   ColdSmallCheckBoxIcon = 'ColdSmallCheckBoxIcon',
-  ColdScoreIcon = 'coldScoreIcon',
+  ColdScoreIcon = 'ColdScoreIcon',
+  ColdActionsCompletedIcon = 'ColdActionsCompletedIcon'
 }
