@@ -1,3 +1,11 @@
+# [1.19.0](https://github.com/ColdPBC/ui/compare/v1.18.0...v1.19.0) (2023-09-27)
+
+
+### Features
+
+* added actions flag to footprintdetail and subcatjourneyprev ([2762da9](https://github.com/ColdPBC/ui/commit/2762da90d630bd63fad6c72370da5b56e3b84c71))
+* Added showactions261 flag ([dbb9955](https://github.com/ColdPBC/ui/commit/dbb99559bf0cae6315eb694cd912f4dda3ed0453))
+
 # [1.18.0](https://github.com/ColdPBC/ui/compare/v1.17.2...v1.18.0) (2023-09-27)
 
 
