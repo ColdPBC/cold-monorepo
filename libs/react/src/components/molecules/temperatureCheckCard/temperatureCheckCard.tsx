@@ -4,6 +4,8 @@ import { axiosFetcher } from "@coldpbc/fetchers";
 import useSWR from "swr";
 import { forEach, some } from "lodash";
 import { GlowPosition } from "../temperatureCheckItem";
+import { ColdFootprintIcon } from "../../atoms";
+import { ColdScoreIcon } from "../../atoms/icons/coldScoreIcon";
 
 // TODO: set default period in constants somewhere and replace all hard-coded values
 const PERIOD = 2022;
@@ -58,13 +60,9 @@ export const TemperatureCheckCard = ({
     const statComponentMapping: {[key in Stat]: (glowPosition: GlowPosition) => JSX.Element} = {
         cold_score: glowPosition => (
             <TemperatureCheckItem
-                title="Climate Journey"
+                title="Cold Score"
                 value={coldScore ?? null}
-                icon={(
-                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="24" viewBox="0 0 25 24" fill="none">
-                        <path fill-rule="evenodd" clip-rule="evenodd" d="M17.9529 6.1237L20.8138 2H18.1895L16.1642 4.91913C16.1641 4.91904 16.1639 4.91895 16.1637 4.91886L14.8054 6.87674C14.8056 6.87674 14.8058 6.87683 14.806 6.87692L7.92357 16.7971C6.76672 15.6886 6.04633 14.1421 6.04633 12.4324C6.04633 9.06962 8.82975 6.33372 12.2511 6.33372C12.3522 6.33372 12.4527 6.33653 12.5527 6.34123L14.0541 4.17704C13.4724 4.05443 12.8695 3.98847 12.2511 3.98847C7.51408 3.98847 3.66016 7.77637 3.66016 12.4324C3.66016 14.9466 4.78562 17.2063 6.56574 18.7542L3.71475 22.8636H6.33862L13.6647 12.3039H13.6651L16.5941 8.08221C17.742 9.1896 18.4559 10.7303 18.4559 12.4324C18.4559 15.7952 15.6725 18.5311 12.2511 18.5311C12.158 18.5311 12.0657 18.5281 11.9736 18.5241L10.4699 20.6915C11.0449 20.8112 11.6404 20.8752 12.2511 20.8752C16.9881 20.8752 20.842 17.0877 20.842 12.4324C20.842 9.92554 19.7236 7.67158 17.9529 6.1237Z" fill="white"/>
-                    </svg>
-                )}
+                icon={<ColdScoreIcon className="fill-white stroke-white" />}
                 glowPosition={glowPosition}
             />
         ),
@@ -90,15 +88,7 @@ export const TemperatureCheckCard = ({
             <TemperatureCheckItem
                 title="Emissions Avoided"
                 value={null}
-                icon={(
-                    <svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd" clip-rule="evenodd" d="M6.028 3H18.472C19.454 3 20.25 3.895 20.25 5V19C20.25 20.105 19.454 21 18.472 21H6.028C5.046 21 4.25 20.105 4.25 19V5C4.25 3.895 5.046 3 6.028 3Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M8.25 13.5H16.25" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M8.25 17H12.25" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M16.25 8V10H14.25" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M16.25 10L13.25 7L10.536 9L8.25 7" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                )}
+                icon={<ColdFootprintIcon className="fill-white stroke-white" />}
                 glowPosition={glowPosition}
             />
         ),

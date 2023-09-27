@@ -9,4 +9,5 @@ export enum IconNames {
   ColdBillingIcon = 'ColdBillingIcon',
   ColdTeamMembersIcon = 'ColdTeamMembersIcon',
   ColdSmallCheckBoxIcon = 'ColdSmallCheckBoxIcon',
+  ColdScoreIcon = 'coldScoreIcon',
 }

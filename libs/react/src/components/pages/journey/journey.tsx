@@ -53,7 +53,7 @@ export function Journey() {
         </CenterColumnContent>
         <RightColumnContent>
           <TemperatureCheckCard
-              cardTitle="Main Stats"
+              cardTitle="Temperature Check"
               stats={['cold_score','footprint']}
           />
         </RightColumnContent>

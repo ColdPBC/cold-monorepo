@@ -11,6 +11,7 @@ import {ColdBillingIcon} from './coldBillingIcon';
 import {ColdTeamMembersIcon} from './coldTeamMembersIcon';
 import {ColdJourneyIcon} from './coldJourneyIcon';
 import {ColdSmallCheckBoxIcon} from './coldSmallCheckBoxIcon';
+import { ColdScoreIcon } from './coldScoreIcon';
 
 // TODO: Take the color attribute out of the IconProps
 export const ColdIcon = (props: IconProps) => {
@@ -34,6 +35,8 @@ export const ColdIcon = (props: IconProps) => {
       return <ColdTeamMembersIcon {...props} />;
     case IconNames.ColdSmallCheckBoxIcon:
       return <ColdSmallCheckBoxIcon {...props} />;
+    case IconNames.ColdScoreIcon:
+      return <ColdScoreIcon {...props} />;
     default:
     case IconNames.ColdSettingsIcon:
       return <ColdSettingsIcon {...props} />;
