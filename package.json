@@ -148,7 +148,7 @@
     "babel-plugin-named-exports-order": "^0.0.2",
     "barrelsby": "^2.0.1",
     "chromatic": "^7.1.0",
-    "cypress": "^12.11.0",
+    "cypress": "13.2.0",
     "cz-conventional-changelog": "^3.3.0",
     "eslint": "~8.15.0",
     "eslint-config-prettier": "8.1.0",
@@ -192,6 +192,7 @@
     "vite-plugin-dts": "~2.3.0",
     "vite-plugin-eslint": "^1.8.1",
     "vite-plugin-node-polyfills": "^0.12.0",
+    "vite-plugin-turbosnap": "^1.0.3",
     "vite-tsconfig-paths": "^4.0.2",
     "vitest": "~0.32.0",
     "web-vitals": "^2.1.4"
