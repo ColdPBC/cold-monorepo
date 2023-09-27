@@ -1,15 +1,14 @@
-import React from 'react';
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
-import { TeamMembersSettings } from './teamMembersSettings';
-import { SWRConfig } from 'swr';
+import { Settings } from './settings';
+import { StoryMockProvider } from '@coldpbc/mocks';
 
-const meta = {
-  title: 'Pages/TeamMembersSettings',
-  component: TeamMembersSettings,
+const meta: Meta<typeof Settings> = {
+  title: 'Pages/Settings',
+  component: Settings,
   tags: ['autodocs'],
   decorators: [withKnobs],
-} satisfies Meta<typeof TeamMembersSettings>;
+};
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -17,16 +16,9 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   render: (args) => {
     return (
-      <SWRConfig
-        value={{
-          provider: (cache) => {
-            cache.delete('messages');
-            return cache;
-          },
-        }}
-      >
-        <TeamMembersSettings {...args} />
-      </SWRConfig>
+      <StoryMockProvider handlers={[]}>
+        <Settings {...args} />
+      </StoryMockProvider>
     );
   },
   args: {

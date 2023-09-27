@@ -1,8 +1,6 @@
-import React from 'react';
 import { BaseButton } from '../../../atoms/button/button';
-import { ColorNames } from '../../../../enums/colors';
-import { GlobalSizes } from '../../../../enums/sizes';
-import { TableControlsIcon } from '../../../atoms/icons/tableControlsIcon';
+import { ButtonTypes } from '@coldpbc/enums';
+import { EllipsisHorizontalIcon } from '@heroicons/react/20/solid';
 
 export interface TableActionButtonProps {
   onClick: () => void;
@@ -10,14 +8,13 @@ export interface TableActionButtonProps {
 
 export const TableActionButton = (props: TableActionButtonProps) => {
   const { onClick } = props;
+
   return (
-    <div className="">
-      <BaseButton
-        onClick={onClick}
-        color={ColorNames.starkWhite}
-        size={GlobalSizes.small}
-        icon={<TableControlsIcon />}
-      />
-    </div>
+    <BaseButton
+      onClick={onClick}
+      variant={ButtonTypes.secondary}
+    >
+      <EllipsisHorizontalIcon className='w-[24px]' />
+    </BaseButton>
   );
 };
