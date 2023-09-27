@@ -46,9 +46,11 @@ export const SignupForm = ({
 
   const onContinue = async () => {
     await Promise.all([signTOSandPrivacy()]);
-    const organization = (await postCompanyData()) as Organization;
     const user = (await postUserData()) as User;
-    if (organization) {
+
+    // Old organization creation code in case we ever switch back to users being able to create their own orgs
+    //const organization = (await postCompanyData()) as Organization;
+    /*if (organization) {
       const token = await getAccessTokenSilently({
         authorizationParams: {
           audience: auth0Options.authorizationParams?.audience,
@@ -58,8 +60,9 @@ export const SignupForm = ({
         cacheMode: 'off',
       });
       setCookie('coldpbc', { user, accessToken: token });
-    }
-    mutate([`/members/${userData?.email}`, 'GET']);
+    }*/
+
+    await mutate([`/members/${userData?.email}`, 'GET']);
     onSubmit();
   };
 
@@ -99,6 +102,7 @@ export const SignupForm = ({
         }),
       ]);
     }
+    return;
   };
 
   const postCompanyData = () => {
@@ -111,6 +115,7 @@ export const SignupForm = ({
         }),
       ]);
     }
+    return;
   };
 
   const signTOSandPrivacy = async () => {
