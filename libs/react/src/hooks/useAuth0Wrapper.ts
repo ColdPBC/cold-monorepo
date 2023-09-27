@@ -22,10 +22,10 @@ export const useAuth0Wrapper = () => {
   );
 
   if (userData.data && auth0Context.user) {
-    if (auth0Context.user.family_name === 'null') {
+    if (!auth0Context.user.family_name) {
       auth0Context.user.family_name = userData.data.family_name;
     }
-    if (auth0Context.user.given_name === 'null') {
+    if (!auth0Context.user.given_name) {
       auth0Context.user.given_name = userData.data.given_name;
     }
   }
