@@ -92,7 +92,13 @@ export default {
       buildLogoutUrl: () => {
       },
       user: auth0UserMock,
-    }
+    },
+    launchdarkly: {
+      flags: {
+        showTeamMemberTable: true,
+        showActions261: true,
+      },
+    },
   },
   decorators: [],
 };

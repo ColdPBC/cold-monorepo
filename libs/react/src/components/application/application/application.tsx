@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import cookies from 'js-cookie';
 import { useAuth0 } from '@auth0/auth0-react';
-import { ColdRoutes } from '../routes';
+import { ColdRoutes } from '../routes/routes';
 import { useCookies } from '@coldpbc/hooks';
 import { Spinner } from '../../atoms';
 import { GlobalSizes } from '@coldpbc/enums';

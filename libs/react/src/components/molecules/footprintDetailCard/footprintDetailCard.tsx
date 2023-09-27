@@ -1,9 +1,10 @@
-import {PropsWithChildren, useState} from 'react';
-import {Card} from '../card/card';
-import {useNavigate} from 'react-router-dom';
+import { PropsWithChildren, useState } from 'react';
+import { Card } from '../card/card';
+import { useNavigate } from 'react-router-dom';
 import { FootprintDetailChart } from '../footprintDetailChart';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import useSWR from 'swr';
+import { useFlags } from 'launchdarkly-react-client-sdk';
 
 export interface FootprintDetailCardProps {
   colors: string[];
@@ -15,6 +16,7 @@ export interface FootprintDetailCardProps {
 export function FootprintDetailCard(
   props: PropsWithChildren<FootprintDetailCardProps>,
 ) {
+  const ldFlags = useFlags();
   const navigate = useNavigate();
   const [isEmpty, setIsEmpty] = useState(false);
 
@@ -28,21 +30,28 @@ export function FootprintDetailCard(
     return null;
   }
 
-  const subcategoryName = data?.subcategories[props.subcategory_key]?.subcategory_name;
+  const subcategoryName =
+    data?.subcategories[props.subcategory_key]?.subcategory_name;
 
   const { className, ...rest } = props;
+
+  const getCtas = (subcategoryName: string) => {
+    const ctas = [];
+    if (ldFlags.showActions261) {
+      ctas.push({
+        text: `View ${subcategoryName} Actions`,
+        action: () => {
+          navigate(`/actions/${props.subcategory_key}`);
+        },
+      });
+    }
+    return ctas;
+  };
 
   return (
     <Card
       title={subcategoryName}
-      ctas={[
-        {
-          text: `View ${subcategoryName} Actions`,
-          action: () => {
-            navigate(`/actions/${props.subcategory_key}`);
-          },
-        },
-      ]}
+      ctas={getCtas(subcategoryName)}
       className={className}
     >
       <div className="flex items-center justify-center self-stretch flex-col">
