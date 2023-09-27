@@ -1,5 +1,6 @@
 import {
   auth0UserMock,
+  getEmptyPoliciesSignedMock,
   getPoliciesSignedMock,
   getSignUpHandler,
   StoryMockProvider,
@@ -24,73 +25,27 @@ export const NewUserExistingCompany: Story = {
       <SignupPage
         userData={{
           ...auth0UserMock,
-          given_name: 'null',
-          family_name: 'null',
+          given_name: undefined,
+          family_name: undefined,
         }}
-        signedPolicyData={getPoliciesSignedMock()}
+        signedPolicyData={getEmptyPoliciesSignedMock()}
       />
     </StoryMockProvider>
   ),
-  parameters: {
-    auth0AddOn: {
-      user: {
-        ...auth0UserMock,
-        given_name: null,
-        family_name: null,
-      },
-    },
-  },
 };
 
-export const NewCompany: Story = {
-  render: (args) => (
-    <StoryMockProvider handlers={getSignUpHandler.newCompanyAndUser}>
-      <SignupPage
-        userData={{
-          ...auth0UserMock,
-          given_name: 'null',
-          family_name: 'null',
-        }}
-        signedPolicyData={getPoliciesSignedMock()}
-      />
-    </StoryMockProvider>
-  ),
-  parameters: {
-    auth0AddOn: {
-      user: {
-        ...auth0UserMock,
-        coldclimate_claims: {
-          ...auth0UserMock.coldclimate_claims,
-          org_id: null,
-        },
-      },
-    },
-  },
-};
-
-export const OnOrgCreationError: Story = {
+export const OnSignupError: Story = {
   render: (args) => (
     <StoryMockProvider handlers={getSignUpHandler.server500Error}>
       <SignupPage
         userData={{
           ...auth0UserMock,
-          given_name: 'null',
-          family_name: 'null',
+          given_name: undefined,
+          family_name: undefined,
         }}
-        signedPolicyData={getPoliciesSignedMock()}
+        signedPolicyData={getEmptyPoliciesSignedMock()}
       />
       <ApplicationToaster />
     </StoryMockProvider>
   ),
-  parameters: {
-    auth0AddOn: {
-      user: {
-        ...auth0UserMock,
-        coldclimate_claims: {
-          ...auth0UserMock.coldclimate_claims,
-          org_id: null,
-        },
-      },
-    },
-  },
 };

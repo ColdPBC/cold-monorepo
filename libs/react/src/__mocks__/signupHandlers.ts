@@ -138,7 +138,7 @@ export const getSignUpHandler = {
       const body = req.body as {
         name: string;
       };
-      return res(ctx.json({}));
+      return res(ctx.status(500));
     }),
     rest.get('*/policies/signed/user', (req, res, ctx) => {
       return res(ctx.json(getEmptyPoliciesSignedMock()));

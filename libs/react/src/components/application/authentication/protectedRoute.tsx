@@ -47,13 +47,13 @@ export const ProtectedRoute = () => {
       const privacy = signedPolicySWR.data.some(
         (policy) => policy.name === 'privacy' && !isEmpty(policy.policy_data),
       );
-      return !tos || !privacy;
+      return !tos || !privacy || !user?.family_name || !user?.given_name;
+    } else {
+      return true;
     }
+    // todo - put this check back in when we need to check for company
     // check if company is already set
-    if (isUndefined(user?.coldclimate_claims.org_id)) return true;
-
-    // check if user names are already set
-    return !user?.family_name || !user?.given_name;
+    // if (isUndefined(user?.coldclimate_claims.org_id)) return true;
   };
 
   useEffect(() => {
@@ -121,7 +121,7 @@ export const ProtectedRoute = () => {
     coldpbc,
   ]);
 
-  if (isLoading) {
+  if (isLoading || signedPolicySWR.isLoading) {
     return (
       <div className="absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
         <Spinner size={GlobalSizes.xLarge} />
@@ -129,7 +129,7 @@ export const ProtectedRoute = () => {
     );
   }
 
-  if (error) {
+  if (error || signedPolicySWR.error) {
     return <div>Encountered error: {error.message}</div>;
   }
 

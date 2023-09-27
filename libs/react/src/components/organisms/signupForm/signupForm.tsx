@@ -53,12 +53,15 @@ export const SignupForm = ({
 
   const onContinue = async () => {
     setDisabled(true);
-    const promises = await Promise.all([signTOSandPrivacy(), postUserData()]);
+    const promises = await Promise.all([
+      signPolicy('tos'),
+      signPolicy('privacy'),
+      postUserData(),
+    ]);
     // check if all promises are successful
     if (promises.every((promise) => !isAxiosError(promise))) {
       setDisabled(false);
-      await mutate([`/members/${userData?.email}`, 'GET']);
-      onSubmit();
+      await onSubmit();
     } else {
       await addToastMessage({
         message: 'Error creating account',
@@ -67,6 +70,8 @@ export const SignupForm = ({
       });
       setDisabled(false);
     }
+    await mutate([`/members/${userData?.email}`, 'GET']);
+    await mutate(['/policies/signed/user', 'GET']);
   };
 
   const postUserData = () => {
@@ -83,17 +88,12 @@ export const SignupForm = ({
     return;
   };
 
-  const signTOSandPrivacy = async () => {
-    const promises = [];
-    if (!tosSigned) {
-      promises.push(axiosFetcher([`/policies/${tosData.id}/signed`, 'POST']));
+  const signPolicy = async (name: string) => {
+    if (name === 'tos' && !tosSigned) {
+      return axiosFetcher([`/policies/${tosData.id}/signed`, 'POST']);
+    } else if (name === 'privacy' && !privacySigned) {
+      return axiosFetcher([`/policies/${privacyData.id}/signed`, 'POST']);
     }
-    if (!privacySigned) {
-      promises.push(
-        axiosFetcher([`/policies/${privacyData.id}/signed`, 'POST']),
-      );
-    }
-    return (await Promise.all(promises)).flat();
   };
 
   const isButtonDisabled = () => {
