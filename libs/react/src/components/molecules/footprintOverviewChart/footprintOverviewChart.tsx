@@ -159,7 +159,7 @@ export function FootprintOverviewChart(
     const color = HexColors[footprintSubcategoryColors[subcategoryKey]]?.DEFAULT || HexColors.primary.DEFAULT;
 
     let nullFootprint = true;
-    if (subcategory?.footprint) {
+    if (subcategory?.activities) {
       forEach(subcategory.activities, (activity) => {
         if (activity?.footprint && period in activity.footprint) {
           const footprint = activity.footprint[period];
