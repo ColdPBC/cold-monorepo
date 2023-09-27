@@ -11,6 +11,7 @@ import {
   auth0UserMock,
   getSignUpHandler,
   getSignupHandlersForApplicationSignup,
+  getSurveyHandler,
 } from '@coldpbc/mocks';
 import ColdContext from '../../../context/coldContext';
 import { Auth0ProviderOptions } from '@auth0/auth0-react';
@@ -54,14 +55,6 @@ export const Default: Story = {
         </BrowserRouter>
       </SWRConfig>
     );
-  },
-  parameters: {
-    launchdarkly: {
-      flags: {
-        showTeamMemberTable: true,
-        showActions261: true,
-      },
-    },
   },
 };
 
@@ -120,4 +113,15 @@ export const Handle404 = () => {
       <Application />
     </StoryMockProvider>
   );
+};
+
+export const NeedsToCompleteInitialSurvey: Story = {
+  render: () => {
+    return (
+      <StoryMockProvider handlers={getSurveyHandler.initialIncomplete}>
+        <Application />
+      </StoryMockProvider>
+    );
+  },
+  parameters: {},
 };

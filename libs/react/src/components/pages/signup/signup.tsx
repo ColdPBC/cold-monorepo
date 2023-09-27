@@ -27,9 +27,8 @@ export const SignupPage = ({ userData, signedPolicyData }: SignupPageProps) => {
     axiosFetcher,
   );
 
-  const onSubmit = async () => {
-    navigate('/home?surveyName=journey_overview');
-  };
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  const onSubmit = async () => {};
 
   if (organizationSWR.error) {
     console.error(organizationSWR.error);
