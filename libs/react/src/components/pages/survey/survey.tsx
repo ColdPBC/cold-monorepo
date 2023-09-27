@@ -35,6 +35,7 @@ export const Survey = (props: SurveyProps) => {
   };
 
   const startSurvey = () => {
+    // todo: handle submitted surveys with submitted value
     if (surveyData) {
       const firstSectionKey = Object.keys(surveyData.definition.sections)[0];
       const firstSection = surveyData.definition.sections[firstSectionKey];
