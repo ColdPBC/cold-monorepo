@@ -11,36 +11,10 @@ import {
 import useSWR from 'swr';
 import { axiosFetcher } from '../../../fetchers/axiosFetcher';
 import { Spinner } from '../../atoms/spinner/spinner';
-import { CustomFlowbiteTheme, Table } from 'flowbite-react';
+import { Table } from 'flowbite-react';
 import { FootprintDetailChip } from '../../atoms/footprintDetailChip/footprintDetailChip';
 import { useActiveSegment } from '../../../hooks/useActiveSegment';
-
-export const tableTheme: CustomFlowbiteTheme = {
-  table: {
-    "root": {
-      "base": "w-full text-left text-sm text-gray-500 dark:text-gray-400",
-      "shadow": "absolute dark:bg-black w-full h-full top-0 left-0 rounded-lg drop-shadow-md -z-10",
-      "wrapper": "relative border-gray-50 border border-solid rounded-lg bg-gray-50 flex-1"
-    },
-    "body": {
-      "base": "group/body",
-      "cell": {
-        "base": "group-first/body:group-first/row:first:rounded-tl-lg group-first/body:group-first/row:last:rounded-tr-lg group-last/body:group-last/row:first:rounded-bl-lg group-last/body:group-last/row:last:rounded-br-lg px-4 py-4 bg-bgc-elevated whitespace-pre"
-      }
-    },
-    "head": {
-      "base": "group/head text-xs uppercase text-gray-700 dark:text-gray-400",
-      "cell": {
-        "base": "group-first/head:first:rounded-tl-lg group-first/head:last:rounded-tr-lg bg-none dark:bg-gray-700 px-4 py-3 font-normal"
-      }
-    },
-    "row": {
-      "base": "group/row border-t border-gray-50",
-      "hovered": "hover:bg-gray-50 dark:hover:bg-gray-600",
-      "striped": "odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700"
-    }
-  }
-}
+import { darkTableTheme } from '@coldpbc/themes';
 
 interface LegendRow {
   value: number;
@@ -208,19 +182,19 @@ export function FootprintDetailChart({ colors, subcategory_key, period, setIsEmp
       </div>
       <Table
         className='text-white'
-        theme={tableTheme.table}
+        theme={darkTableTheme.table}
         onMouseLeave={() => {
           setActiveSegment(null);
         }}
       >
         <Table.Head className='text-white normal-case'>
-          <Table.HeadCell theme={tableTheme.table?.head?.cell}>
+          <Table.HeadCell theme={darkTableTheme.table?.head?.cell}>
             Category
           </Table.HeadCell>
-          <Table.HeadCell theme={tableTheme.table?.head?.cell}>
+          <Table.HeadCell theme={darkTableTheme.table?.head?.cell}>
             Breakdown
           </Table.HeadCell>
-          <Table.HeadCell theme={tableTheme.table?.head?.cell}>
+          <Table.HeadCell theme={darkTableTheme.table?.head?.cell}>
             tCO2e
           </Table.HeadCell>
         </Table.Head>
@@ -234,9 +208,9 @@ export function FootprintDetailChart({ colors, subcategory_key, period, setIsEmp
                 onMouseLeave={() => {
                   setActiveSegment(null);
                 }}
-                theme={tableTheme.table?.row}
+                theme={darkTableTheme.table?.row}
               >
-                <Table.Cell className='flex items-center font-bold' theme={tableTheme.table?.body?.cell}>
+                <Table.Cell className='flex items-center font-bold' theme={darkTableTheme.table?.body?.cell}>
                   <div 
                     style={{
                       background: row.color,
@@ -246,10 +220,10 @@ export function FootprintDetailChart({ colors, subcategory_key, period, setIsEmp
                   />
                   {row.name}
                 </Table.Cell>
-                <Table.Cell theme={tableTheme.table?.body?.cell}>
+                <Table.Cell theme={darkTableTheme.table?.body?.cell}>
                   {row.percent}%
                 </Table.Cell>
-                <Table.Cell theme={tableTheme.table?.body?.cell}>
+                <Table.Cell theme={darkTableTheme.table?.body?.cell}>
                   {row.value}
                 </Table.Cell>
               </Table.Row>
