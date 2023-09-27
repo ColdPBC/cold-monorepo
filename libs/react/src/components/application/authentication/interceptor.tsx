@@ -1,6 +1,6 @@
 import React from 'react';
 import { Outlet, useSearchParams } from 'react-router-dom';
-import { Survey } from '../pages';
+import { Survey } from '../../pages';
 
 export const Interceptor = () => {
   const [params, setSearchParams] = useSearchParams();

@@ -17,9 +17,32 @@ export const Default: Story = {
   render: (args) => {
     return (
       <StoryMockProvider handlers={[]}>
-        <SubcategoryJourneyPreview subcategory_key='facilities' category_key='company_decarbonization' />
+        <SubcategoryJourneyPreview
+          subcategory_key="facilities"
+          category_key="company_decarbonization"
+        />
       </StoryMockProvider>
     );
+  },
+};
+
+export const NoAction: Story = {
+  render: (args) => {
+    return (
+      <StoryMockProvider handlers={[]}>
+        <SubcategoryJourneyPreview
+          subcategory_key="facilities"
+          category_key="company_decarbonization"
+        />
+      </StoryMockProvider>
+    );
+  },
+  parameters: {
+    launchdarkly: {
+      flags: {
+        showActions261: false,
+      },
+    },
   },
 };
 
@@ -27,7 +50,10 @@ export const Seeker: Story = {
   render: (args) => {
     return (
       <StoryMockProvider handlers={[]}>
-        <SubcategoryJourneyPreview subcategory_key='travel' category_key='company_decarbonization' />
+        <SubcategoryJourneyPreview
+          subcategory_key="travel"
+          category_key="company_decarbonization"
+        />
       </StoryMockProvider>
     );
   },
@@ -37,7 +63,10 @@ export const Adventurer: Story = {
   render: (args) => {
     return (
       <StoryMockProvider handlers={[]}>
-        <SubcategoryJourneyPreview subcategory_key='product' category_key='company_decarbonization' />
+        <SubcategoryJourneyPreview
+          subcategory_key="product"
+          category_key="company_decarbonization"
+        />
       </StoryMockProvider>
     );
   },

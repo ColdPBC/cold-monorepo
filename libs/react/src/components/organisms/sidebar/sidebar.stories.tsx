@@ -23,3 +23,20 @@ export const Default: Story = {
     );
   },
 };
+
+export const NoActions: Story = {
+  render: (args) => {
+    return (
+      <BrowserRouter>
+        <SideBar />
+      </BrowserRouter>
+    );
+  },
+  parameters: {
+    launchdarkly: {
+      flags: {
+        showActions261: false,
+      },
+    },
+  },
+};

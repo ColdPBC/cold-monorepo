@@ -10,6 +10,7 @@ import { NavbarItem } from '../../../interfaces/sideBar';
 import { Spinner } from '../../atoms/spinner/spinner';
 import { HexColors } from '../../../themes/cold_theme';
 import { clone, remove } from 'lodash';
+import { useFlags } from 'launchdarkly-react-client-sdk';
 import { matchPath, useLocation } from 'react-router-dom';
 
 export const SideBar = (): JSX.Element => {
@@ -23,6 +24,16 @@ export const SideBar = (): JSX.Element => {
     error: any;
     isLoading: boolean;
   } = useSWR(['/form-definitions/sidebar_navigation', 'GET'], axiosFetcher);
+  const ldFlags = useFlags();
+
+  const filterSidebar = (item: NavbarItem) => {
+    if (item.key === 'actions_key') {
+      return ldFlags.showActions261;
+    } else {
+      return true;
+    }
+  };
+
   const location = useLocation();
   const [activeChild, setActiveChild] = useState('');
 
@@ -56,6 +67,7 @@ export const SideBar = (): JSX.Element => {
   if (error) console.error(error);
 
   if (data?.definition?.items) {
+    data.definition.items = data.definition.items.filter(filterSidebar);
     // Separate the items into top and bottom nav items
     const topItems: NavbarItem[] = clone(data.definition.items);
 
