@@ -1,4 +1,6 @@
 import type { StorybookConfig } from '@storybook/react-vite';
+import turbosnap from 'vite-plugin-turbosnap';
+import { mergeConfig } from 'vite';
 
 const config: StorybookConfig = {
   stories: [
@@ -19,6 +21,19 @@ const config: StorybookConfig = {
         viteConfigPath: 'apps/cold-ui/vite.config.ts',
       },
     },
+  },
+  async viteFinal(config, { configType }) {
+    return mergeConfig(config, {
+      plugins:
+        configType === 'PRODUCTION'
+          ? [
+              turbosnap({
+                // This should be the base path of your storybook.  In monorepos, you may only need process.cwd().
+                rootDir: process.cwd(),
+              }),
+            ]
+          : [],
+    });
   },
 };
 
