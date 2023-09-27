@@ -16,7 +16,7 @@ export const useAuth0Wrapper = () => {
 
   const userData = useSWR<User, any, any>(
     auth0Context.user && coldpbc
-      ? [`/users/${auth0Context.user.email}`, 'GET']
+      ? [`/members/${auth0Context.user.email}`, 'GET']
       : null,
     axiosFetcher,
   );

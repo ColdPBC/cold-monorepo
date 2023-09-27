@@ -59,7 +59,7 @@ export const SignupForm = ({
       });
       setCookie('coldpbc', { user, accessToken: token });
     }
-    mutate([`/users/${userData?.email}`, 'GET']);
+    mutate([`/members/${userData?.email}`, 'GET']);
     onSubmit();
   };
 
@@ -91,7 +91,7 @@ export const SignupForm = ({
       !userData.family_name
     ) {
       return axiosFetcher([
-        `/users/${userData.email}`,
+        `/members/${userData.email}`,
         'PATCH',
         JSON.stringify({
           family_name: lastName,
