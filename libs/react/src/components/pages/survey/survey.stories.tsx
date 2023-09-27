@@ -24,3 +24,14 @@ export const Default: Story = {
     surveyName: 'qaalib_test',
   },
 };
+
+export const InitialSurvey: Story = {
+  render: (args) => (
+    <StoryMockProvider handlers={getSurveyHandler.DEFAULT}>
+      <Survey {...args} />
+    </StoryMockProvider>
+  ),
+  args: {
+    surveyName: 'journey_overview',
+  },
+};

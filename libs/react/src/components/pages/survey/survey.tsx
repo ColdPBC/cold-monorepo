@@ -65,6 +65,12 @@ export const Survey = (props: SurveyProps) => {
     setShow(false);
   };
 
+  const dismiss = {
+    label: 'Close',
+    dismissible: surveyName !== 'journey_overview',
+    onClick: onSurveyClose,
+  };
+
   useEffect(() => {
     if (data) {
       // sort the sections and followups by the idx field
@@ -116,11 +122,7 @@ export const Survey = (props: SurveyProps) => {
         setShow={setShow}
         header={{
           title: {},
-          dismiss: {
-            label: 'close',
-            dismissible: true,
-            onClick: onSurveyClose,
-          },
+          dismiss: dismiss,
         }}
       >
         <div className="absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
@@ -138,11 +140,7 @@ export const Survey = (props: SurveyProps) => {
           setShow={setShow}
           header={{
             title: {},
-            dismiss: {
-              label: 'close',
-              dismissible: true,
-              onClick: onSurveyClose,
-            },
+            dismiss: dismiss,
           }}
         >
           <div className={'flex'}>
