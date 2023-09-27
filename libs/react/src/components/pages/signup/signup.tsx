@@ -13,7 +13,7 @@ import ColdContext from '../../../context/coldContext';
 
 export interface SignupPageProps {
   userData: User;
-  signedPolicyData: PolicySignedDataType[];
+  signedPolicyData?: PolicySignedDataType[];
 }
 
 export const SignupPage = ({ userData, signedPolicyData }: SignupPageProps) => {
@@ -32,7 +32,8 @@ export const SignupPage = ({ userData, signedPolicyData }: SignupPageProps) => {
   };
 
   if (organizationSWR.error) {
-    return <div>error</div>;
+    console.error(organizationSWR.error);
+    return <div></div>;
   }
 
   if (organizationSWR.isLoading) {
@@ -43,11 +44,11 @@ export const SignupPage = ({ userData, signedPolicyData }: SignupPageProps) => {
     );
   }
 
-  const tos = signedPolicyData.find((policy) => policy.name === 'tos');
-  const privacy = signedPolicyData.find((policy) => policy.name === 'privacy');
+  const tos = signedPolicyData?.find((policy) => policy.name === 'tos');
+  const privacy = signedPolicyData?.find((policy) => policy.name === 'privacy');
   const { data: organizationData } = organizationSWR;
 
-  if (tos && privacy) {
+  if (tos && privacy && signedPolicyData) {
     return (
       <div className={'flex h-full w-full'}>
         <div className={'pl-[40px] pb-[40px] pt-[40px] pr-[24px]'}>
@@ -81,18 +82,14 @@ export const SignupPage = ({ userData, signedPolicyData }: SignupPageProps) => {
             <SignupForm
               userData={userData}
               companyData={organizationData}
-              tosSigned={
-                signedPolicyData.some(
-                  (policy) =>
-                    policy.name === 'tos' && !isEmpty(policy.policy_data),
-                ) || false
-              }
-              privacySigned={
-                signedPolicyData.some(
-                  (policy) =>
-                    policy.name === 'privacy' && !isEmpty(policy.policy_data),
-                ) || false
-              }
+              tosSigned={signedPolicyData.some(
+                (policy) =>
+                  policy.name === 'tos' && !isEmpty(policy.policy_data),
+              )}
+              privacySigned={signedPolicyData.some(
+                (policy) =>
+                  policy.name === 'privacy' && !isEmpty(policy.policy_data),
+              )}
               tosData={tos}
               privacyData={privacy}
               onSubmit={onSubmit}

@@ -134,7 +134,7 @@ export const ProtectedRoute = () => {
   }
 
   if (isAuthenticated && user && coldpbc) {
-    if (needsSignup() && signedPolicySWR.data) {
+    if (needsSignup()) {
       return (
         <SignupPage signedPolicyData={signedPolicySWR.data} userData={user} />
       );

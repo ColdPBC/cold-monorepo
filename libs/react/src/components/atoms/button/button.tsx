@@ -20,7 +20,8 @@ export function BaseButton(props: IButtonProps): JSX.Element {
     upperCase,
     className,
     href,
-    target
+    target,
+    children,
   } = props;
 
   const content = (
@@ -30,6 +31,16 @@ export function BaseButton(props: IButtonProps): JSX.Element {
       {iconRight && getIconComponent(iconRight, props)}
     </>
   );
+  if (children) {
+    return (
+      <button
+        className={className ? className : `${getClassName(props)}`}
+        {...props}
+      >
+        {children}
+      </button>
+    );
+  }
 
   if (!href) {
     return (

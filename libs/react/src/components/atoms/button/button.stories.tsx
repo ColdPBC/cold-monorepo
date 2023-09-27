@@ -3,6 +3,9 @@ import { withKnobs } from '@storybook/addon-knobs';
 import { StoryObj } from '@storybook/react';
 import { ButtonTypes } from '../../../enums/buttons';
 import { IconNames } from '../../../enums/iconNames';
+import { Spinner } from 'flowbite-react';
+import { GlobalSizes } from '@coldpbc/enums';
+import React from 'react';
 
 const meta = {
   title: 'Atoms/Button',
@@ -59,5 +62,18 @@ export const Link: Story = {
   args: {
     variant: ButtonTypes.hyperlink,
     label: 'This is a link',
+  },
+};
+
+export const ButtonWithSpinner: Story = {
+  render: (args) => (
+    <BaseButton {...args}>
+      <span>Button</span>
+      <Spinner size={GlobalSizes.small} />
+    </BaseButton>
+  ),
+  args: {
+    variant: ButtonTypes.primary,
+    disabled: true,
   },
 };

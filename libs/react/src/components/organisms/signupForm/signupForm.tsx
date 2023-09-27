@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { User as Auth0User } from '@auth0/auth0-react';
-import { BaseButton, Input } from '@coldpbc/components';
-import { ButtonTypes, InputTypes } from '@coldpbc/enums';
+import { BaseButton, Input, Spinner } from '@coldpbc/components';
+import { ButtonTypes, GlobalSizes, InputTypes } from '@coldpbc/enums';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { Organization } from 'auth0';
 import { PolicyType, ToastMessage } from '@coldpbc/interfaces';
@@ -39,20 +39,21 @@ export const SignupForm = ({
   );
   const [isAgreedToPrivacyAndTOS, setIsAgreedToPrivacyAndTOS] =
     React.useState<boolean>(tosSigned && privacySigned);
-  const [isValid, setIsValid] = React.useState<boolean>(false);
   const [disabled, setDisabled] = React.useState<boolean>(false);
+  const [submitting, setSubmitting] = React.useState<boolean>(false);
   const { addToastMessage } = useAddToastMessage();
 
   useEffect(() => {
     if (isAgreedToPrivacyAndTOS && companyName && firstName && lastName) {
-      setIsValid(true);
+      setDisabled(false);
     } else {
-      setIsValid(false);
+      setDisabled(true);
     }
   }, [firstName, lastName, companyName, isAgreedToPrivacyAndTOS]);
 
   const onContinue = async () => {
     setDisabled(true);
+    setSubmitting(true);
     const promises = await Promise.all([
       signPolicy('tos'),
       signPolicy('privacy'),
@@ -60,7 +61,6 @@ export const SignupForm = ({
     ]);
     // check if all promises are successful
     if (promises.every((promise) => !isAxiosError(promise))) {
-      setDisabled(false);
       await onSubmit();
     } else {
       await addToastMessage({
@@ -68,10 +68,11 @@ export const SignupForm = ({
         type: ToastMessage.FAILURE,
         timeout: 5000,
       });
-      setDisabled(false);
     }
     await mutate([`/members/${userData?.email}`, 'GET']);
     await mutate(['/policies/signed/user', 'GET']);
+    setDisabled(false);
+    setSubmitting(false);
   };
 
   const postUserData = () => {
@@ -93,14 +94,6 @@ export const SignupForm = ({
       return axiosFetcher([`/policies/${tosData.id}/signed`, 'POST']);
     } else if (name === 'privacy' && !privacySigned) {
       return axiosFetcher([`/policies/${privacyData.id}/signed`, 'POST']);
-    }
-  };
-
-  const isButtonDisabled = () => {
-    if (disabled) {
-      return true;
-    } else {
-      return !isValid;
     }
   };
 
@@ -202,10 +195,11 @@ export const SignupForm = ({
       <div>
         <BaseButton
           onClick={onContinue}
-          label={'Continue'}
           variant={ButtonTypes.primary}
-          disabled={isButtonDisabled()}
-        />
+          disabled={disabled}
+        >
+          Continue {submitting && <Spinner size={GlobalSizes.xSmall} />}
+        </BaseButton>
       </div>
     </div>
   );
