@@ -31,13 +31,13 @@ export const SignupForm = ({
   const { getAccessTokenSilently } = useAuth0();
   const { auth0Options } = useContext(ColdContext);
   const [firstName, setFirstName] = React.useState<string | undefined>(
-    userData?.given_name === 'null' ? '' : userData?.given_name,
+    !userData?.given_name  ? '' : userData?.given_name,
   );
   const [lastName, setLastName] = React.useState<string | undefined>(
-    userData?.family_name === 'null' ? '' : userData?.family_name,
+    !userData?.family_name ? '' : userData?.family_name,
   );
   const [companyName, setCompanyName] = React.useState<string | undefined>(
-    companyData?.name === undefined ? '' : companyData?.name,
+    companyData?.name === undefined ? '' : companyData?.display_name,
   );
   const [isAgreedToPrivacyAndTOS, setIsAgreedToPrivacyAndTOS] =
     React.useState<boolean>(tosSigned && privacySigned);
@@ -87,8 +87,8 @@ export const SignupForm = ({
   const postUserData = () => {
     if (
       userData &&
-      userData.given_name === 'null' &&
-      userData.family_name === 'null'
+      !userData.given_name &&
+      !userData.family_name
     ) {
       return axiosFetcher([
         `/users/${userData.email}`,

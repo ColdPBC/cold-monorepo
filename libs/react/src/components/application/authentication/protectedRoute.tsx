@@ -36,7 +36,7 @@ export const ProtectedRoute = () => {
     const ifNoOrgId = isUndefined(user?.coldclimate_claims.org_id);
     if (user) {
       const ifNoName =
-        user.family_name === 'null' || user.given_name === 'null';
+        !user.family_name || !user.given_name;
       return ifNoName || ifNoOrgId;
     } else {
       return ifNoOrgId || false;
