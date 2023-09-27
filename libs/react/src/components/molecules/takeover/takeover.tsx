@@ -32,7 +32,8 @@ export const Takeover = (props: PropsWithChildren<TakeoverProps>) => {
       return (
         <div
           className={
-            'w-full flex' + (header.title ? ' justify-between' : ' justify-end')
+            'w-full flex h-[40px]' +
+            (header.title ? ' justify-between' : ' justify-end')
           }
         >
           {header.title ? (
