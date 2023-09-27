@@ -1,3 +1,10 @@
+# [1.25.0](https://github.com/ColdPBC/ui/compare/v1.24.0...v1.25.0) (2023-09-27)
+
+
+### Features
+
+* add query param when redirecting back to application ([1021042](https://github.com/ColdPBC/ui/commit/1021042059d23c28a064d0bb560f70bf661bab5b))
+
 # [1.24.0](https://github.com/ColdPBC/ui/compare/v1.23.0...v1.24.0) (2023-09-27)
 
 
