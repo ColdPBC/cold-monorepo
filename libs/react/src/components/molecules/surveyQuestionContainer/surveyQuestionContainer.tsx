@@ -93,16 +93,17 @@ export const SurveyQuestionContainer = ({
     const newSurvey: SurveyPayloadType = cloneDeep(surveyData);
     newSurvey.definition.sections[activeSectionKey] = newSection;
     newSurvey.definition.submitted = submit;
-    setSurveyData(newSurvey);
+    return newSurvey;
+  };
+
+  const onFieldUpdated = (key: string, value: any) => {
     setActiveKey({
       value: activeKey.value,
       previousValue: activeKey.value,
       isFollowUp: activeKey.isFollowUp,
     });
-  };
-
-  const onFieldUpdated = (key: string, value: any) => {
-    updateSurveyQuestion(key, { value });
+    const survey = updateSurveyQuestion(key, { value });
+    setSurveyData(survey);
   };
 
   const getQuestionForKey = (key: SurveyActiveKeyType) => {
@@ -342,23 +343,33 @@ export const SurveyQuestionContainer = ({
   };
 
   const onNextButtonClicked = () => {
-    updateSurveyQuestion(activeKey.value, { skipped: false });
+    const newSurvey = updateSurveyQuestion(activeKey.value, { skipped: false });
+    setSurveyData(newSurvey);
     goToNextQuestion();
     updateTransitionClassNames(true);
-    putSurveyData();
+    putSurveyData(newSurvey);
   };
 
   const onSkipButtonClicked = () => {
-    updateSurveyQuestion(activeKey.value, { skipped: true, value: null });
+    const newSurvey = updateSurveyQuestion(activeKey.value, {
+      skipped: true,
+      value: null,
+    });
+    setSurveyData(newSurvey);
     goToNextQuestion();
     updateTransitionClassNames(true);
-    putSurveyData();
+    putSurveyData(newSurvey);
   };
 
   const onSubmitButtonClicked = () => {
-    updateSurveyQuestion(activeKey.value, { skipped: true }, true);
+    const newSurvey = updateSurveyQuestion(
+      activeKey.value,
+      { skipped: true },
+      true,
+    );
+    setSurveyData(newSurvey);
     updateTransitionClassNames(true);
-    putSurveyData();
+    putSurveyData(newSurvey);
     submitSurvey();
   };
 
@@ -442,12 +453,12 @@ export const SurveyQuestionContainer = ({
     updateTransitionClassNames(false);
   };
 
-  const putSurveyData = () => {
+  const putSurveyData = (survey: SurveyPayloadType) => {
     axiosFetcher([
       `/surveys/${name}`,
       'PUT',
       JSON.stringify({
-        definition: surveyData.definition,
+        definition: survey.definition,
       }),
     ]);
   };
