@@ -18,9 +18,7 @@ export const SurveyIntro = (props: SurveyIntroProps) => {
     <div className={'w-[580px] space-y-[32px]'}>
       <div className={'text-h2 text-tc-primary'}>{title}</div>
       <ReactMarkdown
-        className={
-          'text-tc-primary text-sm not-italic font-medium whitespace-pre-line'
-        }
+        className={'text-tc-primary text-body whitespace-pre-line'}
       >
         {intro_markdown}
       </ReactMarkdown>
