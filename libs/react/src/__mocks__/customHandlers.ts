@@ -10,6 +10,7 @@ import {
   getFootprintDataMockTwoSubCats,
   getFootprintEmptyDataMock,
 } from './categoriesMock';
+import { getMembersOnlyOneMember } from './membersMock';
 
 export const getFootprintHandler = {
   default: rest.get('*/categories/company_decarbonization', (req, res, ctx) => {
@@ -65,3 +66,9 @@ export const getCategoriesHandler = {
     return res(ctx.json(getCategoriesEmptyDataMock()));
   }),
 };
+
+export const getMembersHandler = {
+  onlyOneMember: rest.get('*/organizations/*/members', (req, res, ctx) => {
+    return res(ctx.json(getMembersOnlyOneMember()));
+  }),
+}

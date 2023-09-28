@@ -55,7 +55,7 @@ export const Settings = (props: { user?: any }) => {
   );
 
   const organizationData = organization.data as Organization;
-  const hasPendingInvitations = memberData?.some((user: any) => user.invitee);
+  const hasPendingInvitations = Array.isArray(memberData) ? memberData?.some((user: any) => user.invitee) : false;
 
   useEffect(() => {
     if (!hasPendingInvitations) {
