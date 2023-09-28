@@ -20,6 +20,8 @@ export const ColdRoutes = () => {
     <>
       <Routes>
         <Route path={'/signup'} element={<Signup />} />
+        <Route path={'/privacy'} element={<Terms type={'privacy'} />} />
+        <Route path={'/terms'} element={<Terms type={'tos'} />} />
         <Route element={<ProtectedRoute />}>
           <Route element={<Interceptor />}>
             <Route element={<DashboardLayout />}>
@@ -34,8 +36,6 @@ export const ColdRoutes = () => {
                 element={<div className={'text-tc-primary'}>Pending...</div>}
               />
             </Route>
-            <Route path={'/privacy'} element={<Terms type={'privacy'} />} />
-            <Route path={'/terms'} element={<Terms type={'tos'} />} />
           </Route>
         </Route>
       </Routes>
