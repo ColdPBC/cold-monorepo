@@ -5,6 +5,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { Spinner } from '../../atoms/spinner/spinner';
 import { AppContent } from '../../organisms/appContent/appContent';
 import { FootprintOverviewCard, FootprintOverviewVariants, JourneyOverviewCard } from '../../molecules';
+import { TemperatureCheckCard } from '../../molecules/temperatureCheckCard';
 
 export function Home() {
   const auth0 = useAuth0();
@@ -23,7 +24,12 @@ export function Home() {
           <FootprintOverviewCard chartVariant={FootprintOverviewVariants.horizontal} />
           <JourneyOverviewCard />
         </CenterColumnContent>
-        <RightColumnContent />
+        <RightColumnContent>
+          <TemperatureCheckCard
+              cardTitle="Temperature Check"
+              stats={['cold_score','footprint','emissions_avoided','actions_completed']}
+          />
+        </RightColumnContent>
       </AppContent>
     );
   }

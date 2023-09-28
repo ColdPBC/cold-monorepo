@@ -129,7 +129,7 @@ export function JourneySpiderChart({ setIsEmptyData }: Props) {
   }
 
   return (
-    <div className="relative h-[284px] w-full">
+    <div className="relative h-[284px] w-full" data-chromatic="ignore">
       <Chart
         ref={chartRef}
         options={{

@@ -1,4 +1,4 @@
-import { User } from "@auth0/auth0-react";
+import {useAuth0, User} from "@auth0/auth0-react";
 import { ButtonTypes } from "@coldpbc/enums";
 import { axiosFetcher } from "@coldpbc/fetchers";
 import { useEffect, useState } from "react";
@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { BaseButton, Input } from "../../atoms";
 import { Card } from "../card"
 import { Modal } from "../modal";
+import cookie from "js-cookie";
 
 interface Props {
     user: User;
@@ -14,6 +15,8 @@ interface Props {
 export const UserSettings = ({
     user,
 }: Props) => {
+  const {logout: auth0Logout} = useAuth0();
+
     const {
         picture,
         given_name,
@@ -21,7 +24,6 @@ export const UserSettings = ({
         email
     } = user;
 
-    const navigate = useNavigate();
     const [showFirstNameModal, setShowFirstNameModal] = useState(false);
     const [showLastNameModal, setShowLastNameModal] = useState(false);
     const [firstName, setFirstName] = useState<string | undefined>(
@@ -30,7 +32,7 @@ export const UserSettings = ({
       const [lastName, setLastName] = useState<string | undefined>(
         family_name,
     );
-    
+
     // reset firstname on edit modal close
     useEffect(() => {
         if (!showFirstNameModal) {
@@ -44,17 +46,27 @@ export const UserSettings = ({
             setLastName(family_name);
         }
     }, [showLastNameModal]);
-    
+
     // TODO: put inside a custom hook
     const postUserData = (userData: User) => {
         axiosFetcher([
-            `/users/${email}`,
+            `/members/${email}`,
             'PATCH',
             JSON.stringify(userData),
         ]);
     };
 
-    const handleLogout = () => navigate('/logout');
+    const handleLogout = () => {
+      sessionStorage.clear();
+      // Remove the cookie
+      cookie.remove('coldpbc');
+
+      auth0Logout({
+        logoutParams: {
+          returnTo: window.location.origin,
+        },
+      });
+    };
 
     return (
         <Card
@@ -147,8 +159,8 @@ export const UserSettings = ({
             />
             <div className="flex w-full">
                 <div className="flex justify-center items-center w-[400px] mr-10">
-                    {picture ? 
-                        <img className="w-[120px] h-auto rounded-2xl" src={picture} alt='profile' /> 
+                    {picture ?
+                        <img className="w-[120px] h-auto rounded-2xl" src={picture} alt='profile' />
                         :
                         <svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M0 16C0 7.16344 7.16345 0 16 0H104C112.837 0 120 7.16345 120 16V104C120 112.837 112.837 120 104 120H16C7.16344 120 0 112.837 0 104V16Z" fill="#282C3E"/>
