@@ -48,3 +48,13 @@ export const TwoFootprintSubcats: Story = {
     );
   },
 };
+
+export const AllNullFootprintValues: Story = {
+  render: () => {
+    return (
+      <StoryMockProvider handlers={[getFootprintHandler.allNullFootprintValues]}>
+        <Footprint />
+      </StoryMockProvider>
+    );
+  },
+};
