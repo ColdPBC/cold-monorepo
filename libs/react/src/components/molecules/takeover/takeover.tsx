@@ -78,11 +78,11 @@ export const Takeover = (props: PropsWithChildren<TakeoverProps>) => {
     return (
       <div
         className={
-          'fixed inset-0 h-screen w-screen rounded-2xl bg-bgc-main p-[40px] z-10'
+          'fixed inset-0 h-screen w-screen rounded-2xl bg-bgc-main p-[40px] z-10 flex flex-col overflow-y-scroll'
         }
       >
         {getHeaderComponent()}
-        <div>{children}</div>
+        <div className='flex-1 flex flex-col justify-center'>{children}</div>
       </div>
     );
   } else {

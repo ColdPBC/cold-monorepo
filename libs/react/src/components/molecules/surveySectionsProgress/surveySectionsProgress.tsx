@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
   SurveySectionType,
   SurveySectionsProgressSectionType,
@@ -37,6 +37,8 @@ export const SurveySectionsProgress = ({
     SurveySectionsProgressSectionType[]
   >([]);
 
+  const containerRef = useRef<HTMLDivElement | null>(null);
+
   const getActiveSectionIndex = () => {
     return getSectionIndex(sections, activeKey);
   };
@@ -65,11 +67,14 @@ export const SurveySectionsProgress = ({
   };
 
   const isScrollable = () => {
+    const containerHeight = containerRef?.current?.getBoundingClientRect().height;
+    if (!containerHeight) return false;
+
     let totalHeight = 0;
     sectionHeights.map((sectionHeight, index) => {
       totalHeight += sectionHeight?.clientHeight || 0;
     });
-    return totalHeight > 920 - 128;
+    return totalHeight > containerHeight - 128;
   };
 
   const scrollToActiveSection = (element: HTMLDivElement | null) => {
@@ -100,16 +105,16 @@ export const SurveySectionsProgress = ({
   }, [scrollable, activeKey]);
 
   return (
-    <div className={'w-[668px] h-[920px] rounded-2xl relative'}>
+    <div className={'w-[668px] h-full rounded-2xl relative'} ref={containerRef}>
       <div
         className={
-          'absolute w-[668px] h-[920px] rounded-2xl flex flex-col justify-center items-center'
+          'absolute w-[668px] h-full rounded-2xl flex flex-col justify-center items-center'
         }
       >
         {getBackgroundImages()}
       </div>
       <div
-        className={'absolute w-[668px] h-[920px] rounded-2xl'}
+        className={'absolute w-[668px] h-full rounded-2xl'}
         style={{
           boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.25)',
           background:

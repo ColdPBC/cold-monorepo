@@ -511,7 +511,7 @@ export const SurveyQuestionContainer = ({
     return (
       <div
         className={
-          'w-[668px] h-[923px] relative flex items-center justify-center overflow-hidden'
+          'w-[668px] h-full relative flex items-center justify-center overflow-hidden'
         }
       >
         <SwitchTransition>
