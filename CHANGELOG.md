@@ -1,3 +1,11 @@
+## [1.26.1](https://github.com/ColdPBC/ui/compare/v1.26.0...v1.26.1) (2023-09-28)
+
+
+### Bug Fixes
+
+* Fix usage of data on settings page ([2693660](https://github.com/ColdPBC/ui/commit/26936608fd57f656430ce122cb88342ec7623b60))
+* Fix usage of data on settings page ([#66](https://github.com/ColdPBC/ui/issues/66)) ([242593b](https://github.com/ColdPBC/ui/commit/242593b7497c91f659abe8b459e08f8987b8ad79))
+
 # [1.26.0](https://github.com/ColdPBC/ui/compare/v1.25.0...v1.26.0) (2023-09-28)
 
 
