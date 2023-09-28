@@ -1,3 +1,11 @@
+# [1.27.0](https://github.com/ColdPBC/ui/compare/v1.26.2...v1.27.0) (2023-09-28)
+
+
+### Features
+
+* adjust height for select components, updated surveyintro style ([ceef0dd](https://github.com/ColdPBC/ui/commit/ceef0dda9dff5e93e08c78582c17bed2a5beaf47))
+* updated style for intro paragraph text ([7d27ffb](https://github.com/ColdPBC/ui/commit/7d27ffbe8f56daa3bd124dc27641987da237f408))
+
 ## [1.26.2](https://github.com/ColdPBC/ui/compare/v1.26.1...v1.26.2) (2023-09-28)
 
 
