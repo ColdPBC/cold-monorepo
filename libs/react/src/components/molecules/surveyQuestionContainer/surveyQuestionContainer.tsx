@@ -67,6 +67,13 @@ export const SurveyQuestionContainer = ({
     const activeSectionKey = Object.keys(sections)[activeSectionIndex];
     if (isKeyValueFollowUp(key, sections)) {
       const section = sections[activeSectionKey];
+      if (submit) {
+        // check if the current follow up is answered. If not, set it update.skipped to true
+        // if it is answered, set update.skipped to false
+        const followUp = section.follow_up[key];
+        update.skipped =
+          followUp.value === null || followUp.value === undefined;
+      }
       newSection = {
         ...section,
         follow_up: {
@@ -79,6 +86,11 @@ export const SurveyQuestionContainer = ({
       };
     } else {
       const section = sections[key];
+      if (submit) {
+        // check if the current section is answered. If not, set it update.skipped to true
+        // if it is answered, set update.skipped to false
+        update.skipped = section.value === null || section.value === undefined;
+      }
       newSection = {
         ...section,
         ...update,
@@ -362,9 +374,10 @@ export const SurveyQuestionContainer = ({
   };
 
   const onSubmitButtonClicked = () => {
+    // tell the difference between a skipped question and a question that was answered
     const newSurvey = updateSurveyQuestion(
       activeKey.value,
-      { skipped: true },
+      { skipped: false },
       true,
     );
     setSurveyData(newSurvey);

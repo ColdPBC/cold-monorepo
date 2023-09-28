@@ -12,6 +12,7 @@
       <env name="VITE_DARKLY_CLIENT_ID" value="644ff27c2b1abf12a1723660" />
       <env name="VITE_DARKLY_SDK_KEY" value="sdk-cdeb76cd-7b71-4638-a00c-e5bfdfe4398a" />
       <env name="VITE_NODE_ENV" value="development" />
+      <env name="NODE_OPTIONS" value="--max-old-space-size=8192" />
     </envs>
     <option name="arguments" value="--max-old-space-size=8192" />
     <method v="2" />
