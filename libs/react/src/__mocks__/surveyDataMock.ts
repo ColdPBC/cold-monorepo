@@ -20,11 +20,11 @@ export const getTestingSurveyFormDefinitionData = (): SurveyPayloadType => {
     created_at: '2023-08-14T16:14:14.128Z',
     updated_at: '2023-08-14T16:14:14.128Z',
     definition: {
-      title: 'Qaalib Test',
+      title: 'Welcome to Cold Climate!',
       image_url:
         'https://images.unsplash.com/photo-1603437873662-dc1f44901825?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=3270&q=80',
       intro_markdown:
-        "Welcome to Cold Climate!\n Let’s Start Your Journey to Absolute Zero™ \nWe will start with our basic company information survey. \nThis is a quick form to understand a little more about your company and what climate efforts you've already undertaken.",
+        "Let’s Start Your Journey to Absolute Zero™ \nWe will start with our basic company information survey. \nThis is a quick form to understand a little more about your company and what climate efforts you've already undertaken.",
       sections: {
         product: {
           title: 'Product',

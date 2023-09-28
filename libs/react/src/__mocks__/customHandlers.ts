@@ -2,6 +2,7 @@ import { rest } from 'msw';
 import {
   getCategoriesDataMock,
   getCategoriesEmptyDataMock,
+  getFootprintAllNullFootprintValues,
   getFootprintDataFacilitiesAllFootprintsNull,
   getFootprintDataMock,
   getFootprintDataMockFiveSubCats,
@@ -41,6 +42,12 @@ export const getFootprintHandler = {
     '*/categories/company_decarbonization',
     (req, res, ctx) => {
       return res(ctx.json(getFootprintDataMockThreeSubCats()));
+    },
+  ),
+  allNullFootprintValues: rest.get(
+    '*/categories/company_decarbonization',
+    (req, res, ctx) => {
+      return res(ctx.json(getFootprintAllNullFootprintValues()));
     },
   ),
 };

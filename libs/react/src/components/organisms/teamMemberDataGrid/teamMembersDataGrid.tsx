@@ -41,7 +41,9 @@ export const TeamMembersDataGrid = ({ selectedMemberStatusType }: TeamMembersDat
   );
 
   const getActions = (user: any) => {
-    if (user.status === 'invited') {
+    // TODO: remove empty array after actions are refactored for new data structure 
+    return [];
+    if (user.invitee) {
       return [
         {
           name: 'resend invite',
@@ -76,9 +78,9 @@ export const TeamMembersDataGrid = ({ selectedMemberStatusType }: TeamMembersDat
           },
         },
       ];
-    } else if (user.roles === 'company:owner') {
+    } else if (user.role === 'company:owner') {
       return [];
-    } else if (user.roles === 'company:admin') {
+    } else if (user.role === 'company:admin') {
       return [
         {
           label: 'Remove User',
@@ -101,9 +103,7 @@ export const TeamMembersDataGrid = ({ selectedMemberStatusType }: TeamMembersDat
           },
           url: `/organizations/${data.org_id}/member`,
           method: 'DELETE',
-          data: {
-            members: user.identities,
-          },
+          data,
           type: 'modal',
           toastMessage: {
             success: 'Member deleted',
@@ -148,13 +148,13 @@ export const TeamMembersDataGrid = ({ selectedMemberStatusType }: TeamMembersDat
   };
 
   const getRole = (user: any) => {
-    if (user.roles === 'company:owner') {
+    if (user.role === 'company:owner') {
       return 'Owner';
-    } else if (user.roles === 'company:admin') {
+    } else if (user.role === 'company:admin') {
       return 'Admin';
-    } else if (user.roles === 'company:member') {
+    } else if (user.role === 'company:member') {
       return 'Member';
-    } else if (user.roles === 'cold:admin') {
+    } else if (user.role === 'cold:admin') {
       return 'Cold Admin';
     } else {
       return '';
@@ -163,8 +163,8 @@ export const TeamMembersDataGrid = ({ selectedMemberStatusType }: TeamMembersDat
 
   const getTransformedData = (data: any[]) => {
     return orderBy(data, ['email'], ['asc'])
-      .filter(user => (user.status === 'invited' && selectedMemberStatusType === 'Invitations')
-        || (selectedMemberStatusType === 'Members' && user.status !== 'invited'))
+      .filter(user => (user.invitee && selectedMemberStatusType === 'Invitations')
+        || (selectedMemberStatusType === 'Members' && !user.invitee))
       .map((user) => {
         return {
           name: (
@@ -194,10 +194,10 @@ export const TeamMembersDataGrid = ({ selectedMemberStatusType }: TeamMembersDat
     );
   }
 
-  if (data && data.members && dataGridUser) {
+  if (data && dataGridUser) {
     return (
       <Datagrid
-        items={getTransformedData(data.members)}
+        items={getTransformedData(data)}
         definitionURL={'/form-definitions/team_member_table'}
       />
     );
