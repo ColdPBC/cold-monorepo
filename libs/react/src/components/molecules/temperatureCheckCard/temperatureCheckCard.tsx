@@ -38,7 +38,7 @@ export const TemperatureCheckCard = ({
     }
 
     // Climate Journey value
-    const coldScore = data?.definition.cold_score;
+    const coldScore = data?.definition?.cold_score;
 
     // Footprint value
     const isEmptyFootprintData = !isFootprintDataLoading && !some(footprintData.subcategories, (
