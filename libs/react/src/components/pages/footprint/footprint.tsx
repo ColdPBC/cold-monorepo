@@ -24,7 +24,9 @@ export function Footprint() {
 
   const isEmptyFootprintData = !isLoading && !some(data.subcategories, (
     (subcategory: any) => some(subcategory.activities, (
-        (activity: any) => activity.footprint[PERIOD]))));
+        (activity: any) => activity.footprint?.[PERIOD] && activity.footprint?.[PERIOD].value !== null))));
+
+  console.log({isEmptyFootprintData, data})
 
   const auth0 = useAuth0();
   if (auth0.isLoading) {
