@@ -9,6 +9,7 @@ import { Card, JourneyOverviewCard } from '../../molecules';
 import { AppContent } from '../../organisms/appContent/appContent';
 import { DismissableInfoCard } from '../../molecules/dismissableInfoCard';
 import { JourneyDetailView } from '../../molecules/journeyDetailView';
+import { TemperatureCheckCard } from '../../molecules/temperatureCheckCard';
 
 const PERIOD = 2022;
 
@@ -51,7 +52,10 @@ export function Journey() {
           } 
         </CenterColumnContent>
         <RightColumnContent>
-
+          <TemperatureCheckCard
+              cardTitle="Temperature Check"
+              stats={['cold_score','footprint']}
+          />
         </RightColumnContent>
       </AppContent>
     );

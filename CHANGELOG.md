@@ -1,3 +1,26 @@
+# [1.26.0](https://github.com/ColdPBC/ui/compare/v1.25.0...v1.26.0) (2023-09-28)
+
+
+### Features
+
+* Create TemperatureCheckCard ([2bfc5d3](https://github.com/ColdPBC/ui/commit/2bfc5d3edd550e07ed2009e225c5563ea86b1ccf))
+* Create TemperatureCheckCard ([#58](https://github.com/ColdPBC/ui/issues/58)) ([6dedba0](https://github.com/ColdPBC/ui/commit/6dedba077c33d5f8bed97bd8e3d8c4e0a762f4bf))
+
+# [1.25.0](https://github.com/ColdPBC/ui/compare/v1.24.0...v1.25.0) (2023-09-27)
+
+
+### Features
+
+* add query param when redirecting back to application ([1021042](https://github.com/ColdPBC/ui/commit/1021042059d23c28a064d0bb560f70bf661bab5b))
+
+# [1.24.0](https://github.com/ColdPBC/ui/compare/v1.23.0...v1.24.0) (2023-09-27)
+
+
+### Features
+
+* added todo comment to handle submitted in the future ([d90a511](https://github.com/ColdPBC/ui/commit/d90a5114e734bf2ec56c7ca5adc2275a449c9f26))
+* submitted to true in survey definition ([e2ab1e3](https://github.com/ColdPBC/ui/commit/e2ab1e35ffaa65bd133e6d0473394eb345e00ca3))
+
 # [1.23.0](https://github.com/ColdPBC/ui/compare/v1.22.0...v1.23.0) (2023-09-27)
 
 

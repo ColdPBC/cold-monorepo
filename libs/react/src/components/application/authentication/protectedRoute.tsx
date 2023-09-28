@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation, useSearchParams } from 'react-router-dom';
 import { GetTokenSilentlyOptions, useAuth0, User } from '@auth0/auth0-react';
 import { SignupPage, Spinner } from '@coldpbc/components';
 import { GlobalSizes } from '@coldpbc/enums';
@@ -29,8 +29,10 @@ export const ProtectedRoute = () => {
 
   const ldClient = useLDClient();
 
+  const location = useLocation();
+
   const appState = {
-    returnTo: window.location.pathname,
+    returnTo: location.pathname + location.search,
   };
 
   const signedPolicySWR = useSWR<PolicySignedDataType[], any, any>(

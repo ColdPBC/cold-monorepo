@@ -73,7 +73,7 @@ export function FootprintOverviewCard(
             {!isSurveyComplete && (
               <div className="mt-4 flex justify-center">
                 <BaseButton
-                  onClick={() => {}}
+                  onClick={() => {navigate('?surveyName=footprint_overview');}}
                   label={'Initial Footprint Survey'}
                 />
               </div>
