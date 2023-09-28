@@ -67,6 +67,13 @@ export const SurveyQuestionContainer = ({
     const activeSectionKey = Object.keys(sections)[activeSectionIndex];
     if (isKeyValueFollowUp(key, sections)) {
       const section = sections[activeSectionKey];
+      if (submit) {
+        // check if the current follow up is answered. If not, set it update.skipped to true
+        // if it is answered, set update.skipped to false
+        const followUp = section.follow_up[key];
+        update.skipped =
+          followUp.value === null || followUp.value === undefined;
+      }
       newSection = {
         ...section,
         follow_up: {
@@ -79,6 +86,11 @@ export const SurveyQuestionContainer = ({
       };
     } else {
       const section = sections[key];
+      if (submit) {
+        // check if the current section is answered. If not, set it update.skipped to true
+        // if it is answered, set update.skipped to false
+        update.skipped = section.value === null || section.value === undefined;
+      }
       newSection = {
         ...section,
         ...update,
@@ -93,16 +105,17 @@ export const SurveyQuestionContainer = ({
     const newSurvey: SurveyPayloadType = cloneDeep(surveyData);
     newSurvey.definition.sections[activeSectionKey] = newSection;
     newSurvey.definition.submitted = submit;
-    setSurveyData(newSurvey);
+    return newSurvey;
+  };
+
+  const onFieldUpdated = (key: string, value: any) => {
     setActiveKey({
       value: activeKey.value,
       previousValue: activeKey.value,
       isFollowUp: activeKey.isFollowUp,
     });
-  };
-
-  const onFieldUpdated = (key: string, value: any) => {
-    updateSurveyQuestion(key, { value });
+    const survey = updateSurveyQuestion(key, { value });
+    setSurveyData(survey);
   };
 
   const getQuestionForKey = (key: SurveyActiveKeyType) => {
@@ -342,23 +355,34 @@ export const SurveyQuestionContainer = ({
   };
 
   const onNextButtonClicked = () => {
-    updateSurveyQuestion(activeKey.value, { skipped: false });
+    const newSurvey = updateSurveyQuestion(activeKey.value, { skipped: false });
+    setSurveyData(newSurvey);
     goToNextQuestion();
     updateTransitionClassNames(true);
-    putSurveyData();
+    putSurveyData(newSurvey);
   };
 
   const onSkipButtonClicked = () => {
-    updateSurveyQuestion(activeKey.value, { skipped: true, value: null });
+    const newSurvey = updateSurveyQuestion(activeKey.value, {
+      skipped: true,
+      value: null,
+    });
+    setSurveyData(newSurvey);
     goToNextQuestion();
     updateTransitionClassNames(true);
-    putSurveyData();
+    putSurveyData(newSurvey);
   };
 
   const onSubmitButtonClicked = () => {
-    updateSurveyQuestion(activeKey.value, { skipped: true }, true);
+    // tell the difference between a skipped question and a question that was answered
+    const newSurvey = updateSurveyQuestion(
+      activeKey.value,
+      { skipped: false },
+      true,
+    );
+    setSurveyData(newSurvey);
     updateTransitionClassNames(true);
-    putSurveyData();
+    putSurveyData(newSurvey);
     submitSurvey();
   };
 
@@ -442,12 +466,12 @@ export const SurveyQuestionContainer = ({
     updateTransitionClassNames(false);
   };
 
-  const putSurveyData = () => {
+  const putSurveyData = (survey: SurveyPayloadType) => {
     axiosFetcher([
       `/surveys/${name}`,
       'PUT',
       JSON.stringify({
-        definition: surveyData.definition,
+        definition: survey.definition,
       }),
     ]);
   };
