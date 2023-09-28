@@ -1,3 +1,10 @@
+## [1.29.1](https://github.com/ColdPBC/ui/compare/v1.29.0...v1.29.1) (2023-09-28)
+
+
+### Bug Fixes
+
+* Missing signed policy data ([ae102ad](https://github.com/ColdPBC/ui/commit/ae102ad093ce11cab221b0b32d2d475f6c545ce2))
+
 # [1.29.0](https://github.com/ColdPBC/ui/compare/v1.28.0...v1.29.0) (2023-09-28)
 
 
