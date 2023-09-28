@@ -12,10 +12,11 @@ export interface SurveyIntroProps {
 export const SurveyIntro = (props: SurveyIntroProps) => {
   const { surveyFormData, onSurveyStart } = props;
 
-  const { intro_markdown } = surveyFormData;
+  const { intro_markdown, title } = surveyFormData;
 
   return (
     <div className={'w-[580px] space-y-[32px]'}>
+      <div className={'text-h2 text-tc-primary'}>{title}</div>
       <ReactMarkdown
         className={
           'text-tc-primary text-sm not-italic font-medium whitespace-pre-line'

@@ -47,14 +47,13 @@ export const SelectOption = ({
   };
 
   const getClassName = (index: number) => {
-    let className = vertical ? 'whitespace-pre' : '';
-    className +=
-      ' text-sm not-italic font-semibold text-center text-tc-primary cursor-pointer';
+    let className =
+      'whitespace-normal text-sm not-italic font-semibold text-center text-tc-primary cursor-pointer';
 
     if (vertical) {
       className += ' p-2';
     } else {
-      className += ' h-[104px] py-16 px-8';
+      className += ' min-h-[104px] py-16 px-8';
     }
 
     if (isMultiSelect) {
