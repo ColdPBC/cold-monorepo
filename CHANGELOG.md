@@ -1,3 +1,11 @@
+## [1.26.2](https://github.com/ColdPBC/ui/compare/v1.26.1...v1.26.2) (2023-09-28)
+
+
+### Bug Fixes
+
+* handle all footprint null values ([e621d56](https://github.com/ColdPBC/ui/commit/e621d567f2cefc63cc09af993096bd0ce897524d))
+* handle all footprint null values ([#68](https://github.com/ColdPBC/ui/issues/68)) ([9990398](https://github.com/ColdPBC/ui/commit/999039801c5d20f4a075e4204f180517bfb796e7))
+
 ## [1.26.1](https://github.com/ColdPBC/ui/compare/v1.26.0...v1.26.1) (2023-09-28)
 
 
