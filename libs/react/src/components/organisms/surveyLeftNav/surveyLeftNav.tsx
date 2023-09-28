@@ -23,12 +23,6 @@ export const SurveyLeftNav = (props: SurveyLeftNavProps) => {
               background: `url('${surveyFormData.image_url}'), lightgray 50% / cover no-repeat`,
             }}
           ></div>
-          <div className={'absolute top-[457px] left-[115px]'}>
-            <ColdWordmark
-              color={HexColors.white}
-              className={'w-[152.276px] h-[48px]'}
-            />
-          </div>
         </div>
       ) : (
         <div className={''}>
