@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 import { Outlet, useLocation, useSearchParams } from 'react-router-dom';
 import { GetTokenSilentlyOptions, useAuth0, User } from '@auth0/auth0-react';
-import { SignupPage, Spinner } from '@coldpbc/components';
+import { SignupPage, Spinner, Survey } from '@coldpbc/components';
 import { GlobalSizes } from '@coldpbc/enums';
 import ColdContext from '../../../context/coldContext';
 import { useLDClient } from 'launchdarkly-react-client-sdk';
@@ -9,8 +9,10 @@ import useSWR from 'swr';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { get, has, isEmpty, isUndefined } from 'lodash';
 import { useCookies } from 'react-cookie';
-import { useAuth0Wrapper } from '../../../hooks/useAuth0Wrapper';
 import { PolicySignedDataType } from '@coldpbc/interfaces';
+import { useAuth0Wrapper } from '@coldpbc/hooks';
+// import { useInitialSurveyCheck } from '@coldpbc/hooks';
+import { SurveyPayloadType } from '@coldpbc/interfaces';
 
 export const ProtectedRoute = () => {
   const {
@@ -57,6 +59,13 @@ export const ProtectedRoute = () => {
     // check if company is already set
     // if (isUndefined(user?.coldclimate_claims.org_id)) return true;
   };
+
+  // const { needInitialSurvey } = useInitialSurveyCheck();
+
+  const initialSurveySWR = useSWR<SurveyPayloadType, any, any>(
+    coldpbc ? [`/surveys/journey_overview`, 'GET'] : null,
+    axiosFetcher,
+  );
 
   useEffect(() => {
     const getUserMetadata = async () => {
@@ -123,7 +132,7 @@ export const ProtectedRoute = () => {
     coldpbc,
   ]);
 
-  if (isLoading || signedPolicySWR.isLoading) {
+  if (isLoading || initialSurveySWR.isLoading || signedPolicySWR.isLoading) {
     return (
       <div className="absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
         <Spinner size={GlobalSizes.xLarge} />
@@ -131,18 +140,23 @@ export const ProtectedRoute = () => {
     );
   }
 
-  if (error || signedPolicySWR.error) {
-    return <div>Encountered error: {error.message}</div>;
+  if (error || initialSurveySWR.error || signedPolicySWR.error) {
+    const errorObj = error || initialSurveySWR.error || signedPolicySWR.error;
+    console.error(errorObj);
+    return <div></div>;
   }
 
   if (isAuthenticated && user && coldpbc) {
     if (needsSignup()) {
-      return (
-        <SignupPage signedPolicyData={signedPolicySWR.data} userData={user} />
-      );
-    } else {
-      return <Outlet />;
+      return <SignupPage userData={user} />;
     }
+    if (initialSurveySWR.data) {
+      if (!initialSurveySWR.data.definition.submitted) {
+        return <Survey surveyName={'journey_overview'} />;
+      }
+    }
+
+    return <Outlet />;
   } else {
     return (
       <div className="absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">

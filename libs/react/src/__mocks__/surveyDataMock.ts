@@ -135,6 +135,7 @@ export const getTestingSurveyFormDefinitionData = (): SurveyPayloadType => {
           category_description: 'General questions about your business',
         },
       },
+      submitted: true,
     },
   };
 };
@@ -712,6 +713,7 @@ export const getJourneyOverviewMock = (): SurveyPayloadType => {
         'https://cold-public-assets.s3.us-east-2.amazonaws.com/splash_images/General.png',
       intro_markdown:
         "We'll start with our initial overview questionnaire.\nThis is a short set of questions to help us understand where you are on your climate journey and where you might be able to go next.",
+      submitted: true,
     },
   };
 };
