@@ -82,7 +82,7 @@ export const SelectOption = ({
         {isMultiSelect && (
           <div
             className={
-              'text-left text-xs not-italic font-normal text-tc-primary'
+              'text-left text-xs not-italic font-normal text-tc-primary pb-2'
             }
           >
             Select all that apply
@@ -110,7 +110,7 @@ export const SelectOption = ({
         {isMultiSelect && (
           <div
             className={
-              'text-left text-xs not-italic font-normal text-tc-primary'
+              'text-left text-xs not-italic font-normal text-tc-primary pb-2'
             }
           >
             Select all that apply
