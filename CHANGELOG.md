@@ -1,3 +1,35 @@
+# [1.28.0](https://github.com/ColdPBC/ui/compare/v1.27.0...v1.28.0) (2023-09-28)
+
+
+### Features
+
+* skipped submit handling ([b290882](https://github.com/ColdPBC/ui/commit/b2908822ca7721dc453866915ed758b8b48bbb6f))
+* Use new survey data as source of truth to ensure correct submission ([d87107c](https://github.com/ColdPBC/ui/commit/d87107cc40e656b90bc9f04d7565b63517cab728))
+
+# [1.27.0](https://github.com/ColdPBC/ui/compare/v1.26.2...v1.27.0) (2023-09-28)
+
+
+### Features
+
+* adjust height for select components, updated surveyintro style ([ceef0dd](https://github.com/ColdPBC/ui/commit/ceef0dda9dff5e93e08c78582c17bed2a5beaf47))
+* updated style for intro paragraph text ([7d27ffb](https://github.com/ColdPBC/ui/commit/7d27ffbe8f56daa3bd124dc27641987da237f408))
+
+## [1.26.2](https://github.com/ColdPBC/ui/compare/v1.26.1...v1.26.2) (2023-09-28)
+
+
+### Bug Fixes
+
+* handle all footprint null values ([e621d56](https://github.com/ColdPBC/ui/commit/e621d567f2cefc63cc09af993096bd0ce897524d))
+* handle all footprint null values ([#68](https://github.com/ColdPBC/ui/issues/68)) ([9990398](https://github.com/ColdPBC/ui/commit/999039801c5d20f4a075e4204f180517bfb796e7))
+
+## [1.26.1](https://github.com/ColdPBC/ui/compare/v1.26.0...v1.26.1) (2023-09-28)
+
+
+### Bug Fixes
+
+* Fix usage of data on settings page ([2693660](https://github.com/ColdPBC/ui/commit/26936608fd57f656430ce122cb88342ec7623b60))
+* Fix usage of data on settings page ([#66](https://github.com/ColdPBC/ui/issues/66)) ([242593b](https://github.com/ColdPBC/ui/commit/242593b7497c91f659abe8b459e08f8987b8ad79))
+
 # [1.26.0](https://github.com/ColdPBC/ui/compare/v1.25.0...v1.26.0) (2023-09-28)
 
 

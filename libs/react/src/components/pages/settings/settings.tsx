@@ -55,8 +55,7 @@ export const Settings = (props: { user?: any }) => {
   );
 
   const organizationData = organization.data as Organization;
-
-  const hasPendingInvitations = memberData?.members.some((user: any) => user.status === 'invited');
+  const hasPendingInvitations = memberData?.some((user: any) => user.invitee);
 
   useEffect(() => {
     if (!hasPendingInvitations) {
