@@ -36,11 +36,11 @@ export const TemperatureCheckCard = ({
     if (isCategoryDataLoading || isFootprintDataLoading) {
         return null;
     }
-    
-    // Climate Journey value
-    const coldScore = data?.definition.cold_score;
 
-    // Footprint value    
+    // Climate Journey value
+    const coldScore = data?.definition?.cold_score;
+
+    // Footprint value
     const isEmptyFootprintData = !isFootprintDataLoading && !some(footprintData.subcategories, (
         (subcategory: any) => some(subcategory.activities, (
             (activity: any) => activity.footprint && activity.footprint?.[PERIOD]?.value !== null ))));
@@ -48,15 +48,17 @@ export const TemperatureCheckCard = ({
     let totalFootprint = 0;
     Object.keys(footprintData?.subcategories ?? {}).forEach((subcategoryKey) => {
       const subcategory = footprintData.subcategories[subcategoryKey];
-  
-      forEach(subcategory.activities, (activity) => {
-        if (activity.footprint && PERIOD in activity.footprint) {
-          const footprint = activity.footprint[PERIOD];
-          if (footprint && footprint.value !== null) {
-            totalFootprint += footprint.value;
+
+      if (subcategory?.activities) {
+        forEach(subcategory.activities, (activity) => {
+          if (activity.footprint && PERIOD in activity.footprint) {
+            const footprint = activity.footprint[PERIOD];
+            if (footprint && footprint.value !== null) {
+              totalFootprint += footprint.value;
+            }
           }
-        }
-      })
+        })
+      }
     });
 
     const statComponentMapping: {[key in Stat]: (glowPosition: GlowPosition) => JSX.Element} = {
