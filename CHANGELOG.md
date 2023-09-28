@@ -1,3 +1,11 @@
+# [1.28.0](https://github.com/ColdPBC/ui/compare/v1.27.0...v1.28.0) (2023-09-28)
+
+
+### Features
+
+* skipped submit handling ([b290882](https://github.com/ColdPBC/ui/commit/b2908822ca7721dc453866915ed758b8b48bbb6f))
+* Use new survey data as source of truth to ensure correct submission ([d87107c](https://github.com/ColdPBC/ui/commit/d87107cc40e656b90bc9f04d7565b63517cab728))
+
 # [1.27.0](https://github.com/ColdPBC/ui/compare/v1.26.2...v1.27.0) (2023-09-28)
 
 
