@@ -1,3 +1,11 @@
+# [1.26.0](https://github.com/ColdPBC/ui/compare/v1.25.0...v1.26.0) (2023-09-28)
+
+
+### Features
+
+* Create TemperatureCheckCard ([2bfc5d3](https://github.com/ColdPBC/ui/commit/2bfc5d3edd550e07ed2009e225c5563ea86b1ccf))
+* Create TemperatureCheckCard ([#58](https://github.com/ColdPBC/ui/issues/58)) ([6dedba0](https://github.com/ColdPBC/ui/commit/6dedba077c33d5f8bed97bd8e3d8c4e0a762f4bf))
+
 # [1.25.0](https://github.com/ColdPBC/ui/compare/v1.24.0...v1.25.0) (2023-09-27)
 
 
