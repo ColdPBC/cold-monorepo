@@ -1,3 +1,10 @@
+# [1.29.0](https://github.com/ColdPBC/ui/compare/v1.28.0...v1.29.0) (2023-09-28)
+
+
+### Features
+
+* add check for initial survey completion ([8bfc2a8](https://github.com/ColdPBC/ui/commit/8bfc2a8355a3393f36100b9f47cb011e670dcb2d))
+
 # [1.28.0](https://github.com/ColdPBC/ui/compare/v1.27.0...v1.28.0) (2023-09-28)
 
 
