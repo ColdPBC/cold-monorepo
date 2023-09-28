@@ -9,7 +9,7 @@ export const Interceptor = () => {
   if (surveyName !== null) {
     return (
       <div>
-        <Survey surveyName={surveyName} />;
+        <Survey surveyName={surveyName} />
         <Outlet />
       </div>
     );
