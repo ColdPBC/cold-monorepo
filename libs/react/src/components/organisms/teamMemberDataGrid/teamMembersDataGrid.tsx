@@ -197,7 +197,7 @@ export const TeamMembersDataGrid = ({ selectedMemberStatusType }: TeamMembersDat
   if (data && dataGridUser) {
     return (
       <Datagrid
-        items={getTransformedData(data)}
+        items={getTransformedData(Array.isArray(data) ? data : [data])}
         definitionURL={'/form-definitions/team_member_table'}
       />
     );

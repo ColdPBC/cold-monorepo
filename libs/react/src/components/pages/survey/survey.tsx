@@ -143,7 +143,7 @@ export const Survey = (props: SurveyProps) => {
             dismiss: dismiss,
           }}
         >
-          <div className={'flex'}>
+          <div className={'flex flex-1'}>
             <SurveyLeftNav
               surveyData={surveyData}
               activeKey={activeKey}

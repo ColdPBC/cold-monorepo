@@ -1,7 +1,7 @@
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { Settings } from './settings';
-import { StoryMockProvider } from '@coldpbc/mocks';
+import { getMembersHandler, StoryMockProvider } from '@coldpbc/mocks';
 
 const meta: Meta<typeof Settings> = {
   title: 'Pages/Settings',
@@ -17,6 +17,31 @@ export const Default: Story = {
   render: (args) => {
     return (
       <StoryMockProvider handlers={[]}>
+        <Settings {...args} />
+      </StoryMockProvider>
+    );
+  },
+  args: {
+    user: {
+      coldclimate_claims: {
+        org_id: 'org_123',
+      },
+      name: 'John Doe',
+    },
+  },
+  parameters: {
+    launchdarkly: {
+      flags: {
+        showTeamMemberTable: true,
+      },
+    },
+  },
+};
+
+export const OnlyOneMember: Story = {
+  render: (args) => {
+    return (
+      <StoryMockProvider handlers={[getMembersHandler.onlyOneMember]}>
         <Settings {...args} />
       </StoryMockProvider>
     );

@@ -29,7 +29,7 @@ export const SurveyRightNav = ({
       {isEmpty(activeKey.value) || submitted ? (
         <div
           className={
-            'w-[708px] h-[1040px] flex items-center justify-center px-[64px]'
+            'w-[708px] h-full flex items-center justify-center px-[64px]'
           }
         >
           <SurveyIntro
