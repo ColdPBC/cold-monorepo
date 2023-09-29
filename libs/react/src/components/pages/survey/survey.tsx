@@ -155,7 +155,7 @@ export const Survey = (props: SurveyProps) => {
       searchParams.delete('surveyName');
       setSearchParams(searchParams);
     }
-    await mutate([`/surveys/journey_overview`, 'GET'], {
+    await mutate([`/surveys/${surveyName}`, 'GET'], {
       ...surveyData,
     });
     setShow(false);
