@@ -1,3 +1,10 @@
+# [1.30.0](https://github.com/ColdPBC/ui/compare/v1.29.1...v1.30.0) (2023-09-29)
+
+
+### Features
+
+* Added last page ([02e8b9e](https://github.com/ColdPBC/ui/commit/02e8b9e88d5f4df1ed4ebb1c4a8a98a9d7d6a627))
+
 ## [1.29.1](https://github.com/ColdPBC/ui/compare/v1.29.0...v1.29.1) (2023-09-28)
 
 
