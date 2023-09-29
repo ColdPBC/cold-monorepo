@@ -78,7 +78,7 @@ export const Takeover = (props: PropsWithChildren<TakeoverProps>) => {
     return (
       <div
         className={
-          'fixed inset-0 h-screen w-screen rounded-2xl bg-bgc-main p-[40px] z-10 flex flex-col overflow-y-scroll'
+          'fixed inset-0 h-screen w-screen rounded-2xl bg-bgc-main px-[40px] pt-[40px] z-10 flex flex-col'
         }
       >
         {getHeaderComponent()}

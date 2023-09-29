@@ -29,6 +29,10 @@ module.exports = {
       fontSize: {
         ...fontSizes(),
       },
+      screens: {
+        'shortScreen': { 'raw': '(max-height: 1200px)' },
+        'shortWideScreen': { 'raw': '(max-height: 1200px) and (min-width: 1800px)' },
+      }
     },
     minHeight: (theme) => ({
       ...theme('spacing'),

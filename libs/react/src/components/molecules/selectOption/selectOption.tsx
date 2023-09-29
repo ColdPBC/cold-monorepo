@@ -53,7 +53,7 @@ export const SelectOption = ({
     if (vertical) {
       className += ' p-2';
     } else {
-      className += ' min-h-[104px] py-16 px-8';
+      className += ' min-h-[104px] shortScreen:min-h-0 py-16 px-8 shortScreen:p-4 shortWideScreen:py-16 shortWideScreen:px-8';
     }
 
     if (isMultiSelect) {
@@ -82,7 +82,7 @@ export const SelectOption = ({
         {isMultiSelect && (
           <div
             className={
-              'text-left text-xs not-italic font-normal text-tc-primary pb-2'
+              'text-left text-xs not-italic font-normal text-tc-primary mb-2'
             }
           >
             Select all that apply
@@ -110,7 +110,7 @@ export const SelectOption = ({
         {isMultiSelect && (
           <div
             className={
-              'text-left text-xs not-italic font-normal text-tc-primary pb-2'
+              'text-left text-xs not-italic font-normal text-tc-primary mb-2'
             }
           >
             Select all that apply

@@ -15,7 +15,7 @@ export const SurveyLeftNav = (props: SurveyLeftNavProps) => {
   const { surveyData, activeKey, submitted } = props;
   const { definition: surveyFormData } = surveyData;
   return (
-    <>
+    <div className='flex flex-col flex-1'>
       {isEmpty(activeKey.value) || submitted ? (
         <div className={'pb-[37px] relative'}>
           <div
@@ -26,20 +26,20 @@ export const SurveyLeftNav = (props: SurveyLeftNavProps) => {
           ></div>
         </div>
       ) : (
-        <div className={'flex flex-col'}>
-          <div className={'pr-[12px] flex-1'}>
+        <div className={'flex flex-col flex-1'}>
+          <div className={'pr-[12px] flex-1 flex flex-col'}>
             <SurveySectionsProgress
               sections={surveyFormData.sections}
               activeKey={activeKey}
             />
           </div>
-          <div className={'pt-[6px] pb-[16px] pr-[491px]'}>
+          <div className={'mt-[6px] mb-[16px] flex justify-start'}>
             <div className={'text-tc-primary text-sm font-medium'}>
               Your progress is auto-saved
             </div>
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 };
