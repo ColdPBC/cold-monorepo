@@ -15,7 +15,7 @@ export const SurveyLeftNav = (props: SurveyLeftNavProps) => {
   const { surveyData, activeKey, submitted } = props;
   const { definition: surveyFormData } = surveyData;
   return (
-    <div className='flex flex-col flex-1'>
+    <div className="flex flex-col">
       {isEmpty(activeKey.value) || submitted ? (
         <div className={'pb-[37px] relative flex-1'}>
           <div

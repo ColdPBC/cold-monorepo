@@ -19,7 +19,10 @@ export function Journey() {
     axiosFetcher,
   );
 
-  const isEmptyData = (data?.definition && Object.keys(data.definition.categories).length === 0) || data?.response?.status === 404;
+  const isEmptyData =
+    (data?.definition &&
+      Object.keys(data.definition.categories).length === 0) ||
+    data?.response?.status === 404;
 
   const auth0 = useAuth0();
   if (auth0.isLoading) {
@@ -32,29 +35,29 @@ export function Journey() {
 
   if (auth0.user) {
     return (
-      <AppContent title='Climate Journey'>
+      <AppContent title="Climate Journey">
         <CenterColumnContent>
-          {!isEmptyData ?
+          {!isEmptyData ? (
             <>
               <Card>
                 <JourneyDetailView />
               </Card>
             </>
-            :
+          ) : (
             <>
-              <DismissableInfoCard 
+              <DismissableInfoCard
                 text="Your Cold Score is a measure of your company's progress towards climate leadership. The higher your score, the more progress you've made!"
                 onDismiss={() => {}}
-                dismissKey='journey-page'
+                dismissKey="journey-page"
               />
-              <JourneyOverviewCard />
+              <JourneyOverviewCard omitCta={true} />
             </>
-          } 
+          )}
         </CenterColumnContent>
         <RightColumnContent>
           <TemperatureCheckCard
-              cardTitle="Temperature Check"
-              stats={['cold_score','footprint']}
+            cardTitle="Temperature Check"
+            stats={['cold_score', 'footprint']}
           />
         </RightColumnContent>
       </AppContent>

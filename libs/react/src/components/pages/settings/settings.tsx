@@ -15,14 +15,17 @@ import { Dropdown } from 'flowbite-react';
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import { CheckIcon } from '@heroicons/react/20/solid';
 import { flowbiteThemeOverride } from '@coldpbc/themes';
+import { useFlags } from 'launchdarkly-react-client-sdk';
 
 export type MemberStatusType = 'Members' | 'Invitations';
 
 export const Settings = (props: { user?: any }) => {
   const auth0 = useAuth0();
+  const ldFlags = useFlags();
 
   const [showModal, setShowModal] = useState(false);
-  const [selectedMemberStatusType, setSelectedMemberStatusType] = useState<MemberStatusType>('Members');
+  const [selectedMemberStatusType, setSelectedMemberStatusType] =
+    useState<MemberStatusType>('Members');
 
   const organization = useSWR(
     ['/organizations/' + auth0.user?.coldclimate_claims.org_id, 'GET'],
@@ -44,18 +47,15 @@ export const Settings = (props: { user?: any }) => {
     }
   };
 
-  const {
-    data: memberData,
-  }: { data: any; error: any; isLoading: boolean } = useSWR(
-    getOrgURL(),
-    axiosFetcher,
-    {
+  const { data: memberData }: { data: any; error: any; isLoading: boolean } =
+    useSWR(getOrgURL(), axiosFetcher, {
       revalidateOnFocus: false,
-    },
-  );
+    });
 
   const organizationData = organization.data as Organization;
-  const hasPendingInvitations = Array.isArray(memberData) ? memberData?.some((user: any) => user.invitee) : false;
+  const hasPendingInvitations = Array.isArray(memberData)
+    ? memberData?.some((user: any) => user.invitee)
+    : false;
 
   useEffect(() => {
     if (!hasPendingInvitations) {
@@ -77,57 +77,71 @@ export const Settings = (props: { user?: any }) => {
 
   if (auth0.user && organization.data) {
     return (
-      <MainContent title='Settings'>
+      <MainContent title="Settings">
         <UserSettings user={auth0.user} />
-        <Card
-          title='Team Members' 
-          glow
-          ctas={[
-            {
-              text: 'Invite Member',
-              variant: ButtonTypes.primary,
-              action: () => {
-                setShowModal(true);
-              }
-            }
-          ]}
-        >
-          {hasPendingInvitations && 
-            <div className='absolute top-4 right-40'>
-              <Dropdown
-                inline={true}
-                label={
-                  <BaseButton variant={ButtonTypes.secondary} onClick={() => {}}>
-                    <span className='flex items-center'>
-                      {selectedMemberStatusType} <ChevronDownIcon className='w-[18px] ml-2'/>
+        {ldFlags.showTeamMemberTable && (
+          <Card
+            title="Team Members"
+            glow
+            ctas={[
+              {
+                text: 'Invite Member',
+                variant: ButtonTypes.primary,
+                action: () => {
+                  setShowModal(true);
+                },
+              },
+            ]}
+          >
+            {hasPendingInvitations && (
+              <div className="absolute top-4 right-40">
+                <Dropdown
+                  inline={true}
+                  label={
+                    <BaseButton
+                      variant={ButtonTypes.secondary}
+                      onClick={() => {}}
+                    >
+                      <span className="flex items-center">
+                        {selectedMemberStatusType}{' '}
+                        <ChevronDownIcon className="w-[18px] ml-2" />
+                      </span>
+                    </BaseButton>
+                  }
+                  arrowIcon={false}
+                  theme={flowbiteThemeOverride.dropdown}
+                >
+                  <Dropdown.Item
+                    onClick={() => setSelectedMemberStatusType('Members')}
+                    theme={flowbiteThemeOverride.dropdown.floating.item}
+                  >
+                    <span className="w-[130px] flex justify-between">
+                      Members{' '}
+                      {selectedMemberStatusType === 'Members' && (
+                        <CheckIcon className="w-[14px]" />
+                      )}
                     </span>
-                  </BaseButton>
-                }
-                arrowIcon={false}
-                theme={flowbiteThemeOverride.dropdown}
-              >
-                <Dropdown.Item
-                  onClick={() => setSelectedMemberStatusType('Members')}
-                  theme={flowbiteThemeOverride.dropdown.floating.item}
-                >
-                  <span className='w-[130px] flex justify-between'>
-                    Members {selectedMemberStatusType === 'Members' && <CheckIcon className='w-[14px]' />}
-                  </span>
-                </Dropdown.Item>
-                <div className='bg-bgc-accent h-[1px] w-full' />
-                <Dropdown.Item
-                  onClick={() => setSelectedMemberStatusType('Invitations')}
-                  theme={flowbiteThemeOverride.dropdown.floating.item}
-                >
-                  <span className='w-[130px] flex justify-between'>
-                    Invitations {selectedMemberStatusType === 'Invitations' && <CheckIcon className='w-[14px]' />}
-                  </span>
-                </Dropdown.Item>
-              </Dropdown>
-            </div>
-          }
-          <TeamMembersDataGrid selectedMemberStatusType={selectedMemberStatusType} />
-        </Card>
+                  </Dropdown.Item>
+                  <div className="bg-bgc-accent h-[1px] w-full" />
+                  <Dropdown.Item
+                    onClick={() => setSelectedMemberStatusType('Invitations')}
+                    theme={flowbiteThemeOverride.dropdown.floating.item}
+                  >
+                    <span className="w-[130px] flex justify-between">
+                      Invitations{' '}
+                      {selectedMemberStatusType === 'Invitations' && (
+                        <CheckIcon className="w-[14px]" />
+                      )}
+                    </span>
+                  </Dropdown.Item>
+                </Dropdown>
+              </div>
+            )}
+            <TeamMembersDataGrid
+              selectedMemberStatusType={selectedMemberStatusType}
+            />
+          </Card>
+        )}
         {showModal && (
           <InvitationModal
             setShown={setShowModal}
