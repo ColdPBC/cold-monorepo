@@ -373,7 +373,7 @@ export const SurveyQuestionContainer = ({
     putSurveyData(newSurvey);
   };
 
-  const onSubmitButtonClicked = () => {
+  const onSubmitButtonClicked = async () => {
     // tell the difference between a skipped question and a question that was answered
     const newSurvey = updateSurveyQuestion(
       activeKey.value,
@@ -382,7 +382,7 @@ export const SurveyQuestionContainer = ({
     );
     setSurveyData(newSurvey);
     updateTransitionClassNames(true);
-    putSurveyData(newSurvey);
+    await putSurveyData(newSurvey);
     submitSurvey();
   };
 
