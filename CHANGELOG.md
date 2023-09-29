@@ -1,3 +1,10 @@
+## [1.30.1](https://github.com/ColdPBC/ui/compare/v1.30.0...v1.30.1) (2023-09-29)
+
+
+### Bug Fixes
+
+* make survey more responsive ([ee0f096](https://github.com/ColdPBC/ui/commit/ee0f096ca1189a6f6b64a08a9f1a1724bd660d04))
+
 # [1.30.0](https://github.com/ColdPBC/ui/compare/v1.29.1...v1.30.0) (2023-09-29)
 
 
