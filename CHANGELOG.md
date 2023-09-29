@@ -1,3 +1,11 @@
+# [1.31.0](https://github.com/ColdPBC/ui/compare/v1.30.2...v1.31.0) (2023-09-29)
+
+
+### Features
+
+* Remove mutating journey overview swr call if not in the specific survey ([1cf447c](https://github.com/ColdPBC/ui/commit/1cf447ca2ee3eb25112e3db3b28ddc5cadc7a0d1))
+* Removed journey_overview dependency ([70041ef](https://github.com/ColdPBC/ui/commit/70041ef7ff4e818b3c7b60334edc485991061a58))
+
 ## [1.30.2](https://github.com/ColdPBC/ui/compare/v1.30.1...v1.30.2) (2023-09-29)
 
 
