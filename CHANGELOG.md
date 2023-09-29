@@ -1,3 +1,11 @@
+## [1.30.2](https://github.com/ColdPBC/ui/compare/v1.30.1...v1.30.2) (2023-09-29)
+
+
+### Bug Fixes
+
+* make sure survey is submitted before checking survey completion ([e147399](https://github.com/ColdPBC/ui/commit/e147399ea6b568dd338112ead64047ffd6660f39))
+* mutate with current survey data ([4c0b0ab](https://github.com/ColdPBC/ui/commit/4c0b0ab35d847c18a89e6b65d87f52fafd0fa06f))
+
 ## [1.30.1](https://github.com/ColdPBC/ui/compare/v1.30.0...v1.30.1) (2023-09-29)
 
 
