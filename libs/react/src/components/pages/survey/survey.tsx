@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { SurveyActiveKeyType, SurveyPayloadType } from '@coldpbc/interfaces';
 import { Spinner, SurveyLeftNav, SurveyRightNav, Takeover } from '../../index';
 import { cloneDeep, isEmpty } from 'lodash';
-import useSWR from 'swr';
+import useSWR, { mutate } from 'swr';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { GlobalSizes } from '@coldpbc/enums';
 import { useSearchParams } from 'react-router-dom';
@@ -29,11 +29,6 @@ export const Survey = (props: SurveyProps) => {
   const [submitted, setSubmitted] = React.useState<boolean>(false);
 
   const submitSurvey = () => {
-    const param = searchParams.get('surveyName');
-    if (param) {
-      searchParams.delete('surveyName');
-      setSearchParams(searchParams);
-    }
     setSubmitted(true);
   };
 
@@ -58,12 +53,15 @@ export const Survey = (props: SurveyProps) => {
     }
   };
 
-  const onSurveyClose = () => {
+  const onSurveyClose = async () => {
     const param = searchParams.get('surveyName');
     if (param) {
       searchParams.delete('surveyName');
       setSearchParams(searchParams);
     }
+    await mutate([`/surveys/journey_overview`, 'GET'], {
+      ...surveyData,
+    });
     setShow(false);
   };
 

@@ -1,5 +1,10 @@
 import React, { useContext, useEffect } from 'react';
-import { Outlet, useLocation, useSearchParams } from 'react-router-dom';
+import {
+  Outlet,
+  useLocation,
+  useNavigate,
+  useSearchParams,
+} from 'react-router-dom';
 import { GetTokenSilentlyOptions, useAuth0, User } from '@auth0/auth0-react';
 import { SignupPage, Spinner, Survey } from '@coldpbc/components';
 import { GlobalSizes } from '@coldpbc/enums';
@@ -36,6 +41,10 @@ export const ProtectedRoute = () => {
   const appState = {
     returnTo: location.pathname + location.search,
   };
+
+  const navigate = useNavigate();
+
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const signedPolicySWR = useSWR<PolicySignedDataType[], any, any>(
     user && coldpbc ? ['/policies/signed/user', 'GET'] : null,
@@ -132,6 +141,18 @@ export const ProtectedRoute = () => {
     coldpbc,
   ]);
 
+  useEffect(() => {
+    if (initialSurveySWR.data && !needsSignup()) {
+      const surveyName = searchParams.get('surveyName');
+      if (
+        !initialSurveySWR.data.definition.submitted &&
+        (!surveyName || (surveyName && surveyName !== 'journey_overview'))
+      ) {
+        navigate('/home?surveyName=journey_overview');
+      }
+    }
+  });
+
   if (isLoading || initialSurveySWR.isLoading || signedPolicySWR.isLoading) {
     return (
       <div className="absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
@@ -151,11 +172,6 @@ export const ProtectedRoute = () => {
       return (
         <SignupPage signedPolicyData={signedPolicySWR.data} userData={user} />
       );
-    }
-    if (initialSurveySWR.data) {
-      if (!initialSurveySWR.data.definition.submitted) {
-        return <Survey surveyName={'journey_overview'} />;
-      }
     }
 
     return <Outlet />;
