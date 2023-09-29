@@ -10,6 +10,7 @@ import clsx from 'clsx';
 import { axiosFetcher } from '../../../fetchers/axiosFetcher';
 import { BaseButton } from '../../atoms';
 import { some } from 'lodash';
+import { SurveyPayloadType } from '@coldpbc/interfaces';
 
 export interface FootprintOverviewCardProps {
   headerless?: boolean;
@@ -29,57 +30,74 @@ export function FootprintOverviewCard(
     axiosFetcher,
   );
 
+  const surveyResponse = useSWR<SurveyPayloadType, any, any>(
+    [`/surveys/footprint_overview`, 'GET'],
+    axiosFetcher,
+  );
+
   // TODO: find out if we can include this property in the SWR response, in a transform or something
   // To do this, wrap all useSWR in custom wrappers like, useGetFootprint()
-  const isEmptyFootprintData = !isLoading && !some(data.subcategories, (
-    (subcategory: any) => some(subcategory.activities, (
-        (activity: any) => activity.footprint && activity.footprint?.[PERIOD]?.value !== null ))));
+  const isEmptyFootprintData =
+    !isLoading &&
+    !some(data.subcategories, (subcategory: any) =>
+      some(
+        subcategory.activities,
+        (activity: any) =>
+          activity.footprint && activity.footprint?.[PERIOD]?.value !== null,
+      ),
+    );
 
   let cardProps: CardProps = {};
   if (!props.headerless) {
     cardProps = {
-      title: (props.chartVariant === FootprintOverviewVariants.vertical && isEmptyFootprintData) ? 'Footprint Breakdown' : `${PERIOD} Company Footprint`,
-      ctas: props.chartVariant === FootprintOverviewVariants.horizontal ?
-        [{ text: 'Learn More', action: () => navigate('/footprint') }]
-        : [],
+      title:
+        props.chartVariant === FootprintOverviewVariants.vertical &&
+        isEmptyFootprintData
+          ? 'Footprint Breakdown'
+          : `${PERIOD} Company Footprint`,
+      ctas:
+        props.chartVariant === FootprintOverviewVariants.horizontal
+          ? [{ text: 'Learn More', action: () => navigate('/footprint') }]
+          : [],
     };
   }
 
-  const isSurveyComplete = false;
+  const isSurveyComplete = !!surveyResponse.data?.definition?.submitted;
 
   if (isLoading) return null;
 
   return (
     <Card {...cardProps}>
-      <div
-        className={'flex flex-col items-start justify-center w-full py-4'}
-      >
+      <div className={'flex flex-col items-start justify-center w-full py-4'}>
         <FootprintOverviewChart
           variant={props.chartVariant ?? FootprintOverviewVariants.horizontal}
           period={PERIOD}
         />
-        {(isEmptyFootprintData && props.chartVariant === FootprintOverviewVariants.horizontal) && (
-          <div className="m-auto table w-1">
-            <h4 className="text-h4 text-center whitespace-nowrap m-4">
-              {isSurveyComplete
-                ? 'We are reviewing your data'
-                : 'We need more data to show your footprint'}
-            </h4>
-            <p className="text-center text-sm leading-normal">
-              {isSurveyComplete
-                ? "We'll be in touch as soon as your initial footprint results are available."
-                : 'Please fill out the Footprint Overview survey using the link below to calculate your initial footprint.'}
-            </p>
-            {!isSurveyComplete && (
-              <div className="mt-4 flex justify-center">
-                <BaseButton
-                  onClick={() => {navigate('?surveyName=footprint_overview');}}
-                  label={'Initial Footprint Survey'}
-                />
-              </div>
-            )}
-          </div>
-        )}
+        {isEmptyFootprintData &&
+          props.chartVariant === FootprintOverviewVariants.horizontal && (
+            <div className="m-auto table w-1">
+              <h4 className="text-h4 text-center whitespace-nowrap m-4">
+                {isSurveyComplete
+                  ? 'We are reviewing your data'
+                  : 'We need more data to show your footprint'}
+              </h4>
+              <p className="text-center text-sm leading-normal">
+                {isSurveyComplete
+                  ? "We'll be in touch as soon as your initial footprint results are available."
+                  : 'Please fill out the Footprint Overview survey using the link below to calculate your initial footprint.'}
+              </p>
+              {!isSurveyComplete && (
+                <div className="mt-4 flex justify-center">
+                  <BaseButton
+                    onClick={() => {
+                      navigate('?surveyName=footprint_overview');
+                    }}
+                    label={'Initial Footprint Survey'}
+                  />
+                </div>
+              )}
+            </div>
+          )}
       </div>
     </Card>
   );
