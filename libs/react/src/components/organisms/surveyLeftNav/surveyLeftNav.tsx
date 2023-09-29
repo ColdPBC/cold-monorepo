@@ -8,14 +8,15 @@ export interface SurveyLeftNavProps {
   surveyData: SurveyPayloadType;
   activeKey: SurveyActiveKeyType;
   setActiveKey: (key: SurveyActiveKeyType) => void;
+  submitted: boolean;
 }
 
 export const SurveyLeftNav = (props: SurveyLeftNavProps) => {
-  const { surveyData, activeKey } = props;
+  const { surveyData, activeKey, submitted } = props;
   const { definition: surveyFormData } = surveyData;
   return (
     <>
-      {isEmpty(activeKey.value) ? (
+      {isEmpty(activeKey.value) || submitted ? (
         <div className={'pb-[37px] relative'}>
           <div
             className={'w-[668px] h-[920px] rounded-2xl'}

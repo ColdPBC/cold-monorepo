@@ -26,13 +26,15 @@ export const Survey = (props: SurveyProps) => {
     axiosFetcher,
   );
   const [searchParams, setSearchParams] = useSearchParams();
+  const [submitted, setSubmitted] = React.useState<boolean>(false);
+
   const submitSurvey = () => {
     const param = searchParams.get('surveyName');
     if (param) {
       searchParams.delete('surveyName');
       setSearchParams(searchParams);
     }
-    setShow(false);
+    setSubmitted(true);
   };
 
   const startSurvey = () => {
@@ -148,6 +150,7 @@ export const Survey = (props: SurveyProps) => {
               surveyData={surveyData}
               activeKey={activeKey}
               setActiveKey={setActiveKey}
+              submitted={submitted}
             />
             <SurveyRightNav
               activeKey={activeKey}
@@ -156,6 +159,8 @@ export const Survey = (props: SurveyProps) => {
               setSurveyData={setSurveyData}
               submitSurvey={submitSurvey}
               startSurvey={startSurvey}
+              submitted={submitted}
+              closeSurvey={onSurveyClose}
             />
           </div>
         </Takeover>

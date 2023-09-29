@@ -5,6 +5,7 @@ import { ColdIcon } from '../../../atoms';
 import { IconNames } from '@coldpbc/enums';
 import { getCheckboxAnimation } from '@coldpbc/animations';
 import { isPreviousKeyAhead } from '@coldpbc/lib';
+import { isEmpty } from 'lodash';
 
 interface SurveySectionsProps {
   sections: {
@@ -62,6 +63,7 @@ export const SurveySections = ({
   ) => {
     const className = 'absolute';
     const activeIndex = getActiveSectionIndex();
+    const activeSection = sections[Object.keys(sections)[activeIndex]];
     const followUp = activeKey.isFollowUp;
     if (currentIndex > activeIndex) {
       return (
@@ -79,53 +81,19 @@ export const SurveySections = ({
       );
     } else if (currentIndex === activeIndex) {
       if (followUp && currentIndex === Object.keys(sections).length - 1) {
-        const followUpIndex = Object.keys(section.follow_up).findIndex(
-          (followUpKey) => followUpKey === activeKey.value,
+        return (
+          <div className={className + ' top-[16px] -left-[40px]'}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+              fill="none"
+            >
+              <circle cx="8" cy="8" r="8" fill="#282C3E" />
+            </svg>
+          </div>
         );
-        if (followUpIndex === Object.keys(section.follow_up).length - 1) {
-          // check if the key value and previous value are not the same
-          if (
-            activeKey.value !== activeKey.previousValue &&
-            !isPreviousKeyAhead(activeKey, sections)
-          ) {
-            return (
-              <div
-                className={
-                  className + ' w-[32px] h-[32px] -left-[48px] top-[8px]'
-                }
-              >
-                <Lottie loop={false} animationData={getCheckboxAnimation()} />
-              </div>
-            );
-          } else {
-            return (
-              <div
-                className={
-                  className + ' w-[32px] h-[32px] -left-[48px] top-[8px]'
-                }
-              >
-                <ColdIcon
-                  className={' '}
-                  name={IconNames.ColdSmallCheckBoxIcon}
-                />
-              </div>
-            );
-          }
-        } else {
-          return (
-            <div className={className + ' top-[16px] -left-[40px]'}>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                viewBox="0 0 16 16"
-                fill="none"
-              >
-                <circle cx="8" cy="8" r="8" fill="#282C3E" />
-              </svg>
-            </div>
-          );
-        }
       } else {
         return (
           <div className={className + ' top-[16px] -left-[40px]'}>
@@ -142,6 +110,8 @@ export const SurveySections = ({
         );
       }
     } else if (currentIndex === activeIndex - 1) {
+      // if not follow up
+      // or is follow up and is the first follow up
       if (!followUp) {
         if (
           activeKey.value !== activeKey.previousValue &&
@@ -171,13 +141,37 @@ export const SurveySections = ({
           );
         }
       } else {
-        return (
-          <div
-            className={className + ' w-[32px] h-[32px] -left-[48px] top-[2px]'}
-          >
-            <ColdIcon className={' '} name={IconNames.ColdSmallCheckBoxIcon} />
-          </div>
+        const followUpIndex = Object.keys(activeSection.follow_up).findIndex(
+          (followUpKey) => followUpKey === activeKey.value,
         );
+        if (
+          followUpIndex === 0 &&
+          activeSection.component === null &&
+          isEmpty(activeSection.prompt)
+        ) {
+          return (
+            <div
+              className={
+                className + ' w-[32px] h-[32px] -left-[48px] top-[2px]'
+              }
+            >
+              <Lottie loop={false} animationData={getCheckboxAnimation()} />
+            </div>
+          );
+        } else {
+          return (
+            <div
+              className={
+                className + ' w-[32px] h-[32px] -left-[48px] top-[2px]'
+              }
+            >
+              <ColdIcon
+                className={' '}
+                name={IconNames.ColdSmallCheckBoxIcon}
+              />
+            </div>
+          );
+        }
       }
     } else {
       return (
