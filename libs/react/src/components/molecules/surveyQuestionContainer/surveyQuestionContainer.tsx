@@ -511,7 +511,7 @@ export const SurveyQuestionContainer = ({
     return (
       <div
         className={
-          'w-[668px] h-[923px] relative flex items-center justify-center overflow-hidden'
+          'w-full h-full relative flex items-center justify-center overflow-hidden pb-[93px]'
         }
       >
         <SwitchTransition>
@@ -521,7 +521,7 @@ export const SurveyQuestionContainer = ({
             classNames={transitionClassNames}
           >
             <div
-              className={'h-full w-[438px] flex items-center justify-center'}
+              className={'h-full w-full flex items-center justify-center px-[139px] shortScreen:px-[32px] shortWideScreen:px-[139px]'}
             >
               {activeQuestion}
             </div>
@@ -529,7 +529,7 @@ export const SurveyQuestionContainer = ({
         </SwitchTransition>
         <div
           className={
-            'absolute w-[540px] space-x-[15px] h-[40px] flex justify-end right-0 bottom-0'
+            'absolute w-[540px] space-x-[15px] h-[40px] flex justify-end right-0 bottom-0 mb-[37px]'
           }
         >
           {getPreviousButton()}
