@@ -17,7 +17,7 @@ export const SurveyLeftNav = (props: SurveyLeftNavProps) => {
   return (
     <div className='flex flex-col flex-1'>
       {isEmpty(activeKey.value) || submitted ? (
-        <div className={'pb-[37px] relative'}>
+        <div className={'pb-[37px] relative flex-1'}>
           <div
             className={'w-[668px] h-full rounded-2xl'}
             style={{
