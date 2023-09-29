@@ -10,6 +10,8 @@ export interface SurveyRightNavProps {
   setSurveyData: (data: SurveyPayloadType) => void;
   submitSurvey: () => void;
   startSurvey: () => void;
+  submitted: boolean;
+  closeSurvey: () => void;
 }
 
 export const SurveyRightNav = ({
@@ -19,10 +21,12 @@ export const SurveyRightNav = ({
   setSurveyData,
   submitSurvey,
   startSurvey,
+  submitted,
+  closeSurvey,
 }: SurveyRightNavProps) => {
   return (
     <>
-      {isEmpty(activeKey.value) ? (
+      {isEmpty(activeKey.value) || submitted ? (
         <div
           className={
             'w-[708px] h-[1040px] flex items-center justify-center px-[64px]'
@@ -30,7 +34,9 @@ export const SurveyRightNav = ({
         >
           <SurveyIntro
             surveyFormData={surveyData.definition}
-            onSurveyStart={startSurvey}
+            startSurvey={startSurvey}
+            submitted={submitted}
+            closeSurvey={closeSurvey}
           />
         </div>
       ) : (
