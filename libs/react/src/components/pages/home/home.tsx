@@ -4,7 +4,7 @@ import { RightColumnContent } from '../../organisms/rightColumnContent/rightColu
 import { useAuth0 } from '@auth0/auth0-react';
 import { Spinner } from '../../atoms/spinner/spinner';
 import { AppContent } from '../../organisms/appContent/appContent';
-import { FootprintOverviewCard, FootprintOverviewVariants, JourneyOverviewCard } from '../../molecules';
+import { FootprintOverviewCard, FootprintOverviewVariants, JourneyOverviewCard, NewsCard } from '../../molecules';
 import { TemperatureCheckCard } from '../../molecules/temperatureCheckCard';
 
 export function Home() {
@@ -23,6 +23,7 @@ export function Home() {
         <CenterColumnContent>
           <FootprintOverviewCard chartVariant={FootprintOverviewVariants.horizontal} />
           <JourneyOverviewCard />
+          <NewsCard />
         </CenterColumnContent>
         <RightColumnContent>
           <TemperatureCheckCard
