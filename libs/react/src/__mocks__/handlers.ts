@@ -104,7 +104,7 @@ export const handlers = [
   rest.get(getApiUrl('/organizations/:orgId/members'), (req, res, ctx) => {
     const { orgId } = req.params;
     const mock = getOrganizationMembersMock();
-    return res(ctx.json([...getOrganizationMembersMock()]));
+    return res(ctx.json({...getOrganizationMembersMock()}));
   }),
 
   rest.post(
