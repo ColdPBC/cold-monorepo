@@ -1,10 +1,12 @@
-import React, {PropsWithChildren, useState} from 'react';
-import {Card} from '../card/card';
-import {useNavigate} from 'react-router-dom';
-import {JourneySpiderChart} from '../journeySpiderChart/journeySpiderChart';
+import React, { PropsWithChildren, useState } from 'react';
+import { Card } from '../card/card';
+import { useNavigate } from 'react-router-dom';
+import { JourneySpiderChart } from '../journeySpiderChart/journeySpiderChart';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface JourneyOverviewCardProps {}
+export interface JourneyOverviewCardProps {
+  omitCta?: boolean;
+}
 
 export function JourneyOverviewCard(
   props: PropsWithChildren<JourneyOverviewCardProps>,
@@ -12,18 +14,19 @@ export function JourneyOverviewCard(
   const navigate = useNavigate();
   const [isEmptyData, setIsEmptyData] = useState(false);
 
-  return (
-    <Card
-      title="Climate Journey"
-      ctas={[
+  const cta = props.omitCta
+    ? []
+    : [
         {
           text: 'Learn More',
           action: () => {
             navigate('/journey');
           },
         },
-      ]}
-    >
+      ];
+
+  return (
+    <Card title="Climate Journey" ctas={cta}>
       <div className="flex items-center justify-center self-stretch flex-col">
         <JourneySpiderChart setIsEmptyData={setIsEmptyData} />
         {isEmptyData && (
