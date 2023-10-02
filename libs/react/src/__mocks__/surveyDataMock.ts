@@ -713,6 +713,7 @@ export const getJourneyOverviewMock = (): SurveyPayloadType => {
         'https://cold-public-assets.s3.us-east-2.amazonaws.com/splash_images/General.png',
       intro_markdown:
         "Thanks for joining Cold. We'll start with our initial overview questionnaire.\n\nThis is a short set of questions to help us understand where you are on your climate journey and where you might be able to go next.",
+      submitted: true,
     },
   };
 };
