@@ -38,10 +38,6 @@ export const ProtectedRoute = () => {
 
   const location = useLocation();
 
-  const appState = {
-    returnTo: location.pathname + location.search,
-  };
-
   const navigate = useNavigate();
 
   const [searchParams, setSearchParams] = useSearchParams();
@@ -69,12 +65,28 @@ export const ProtectedRoute = () => {
     // if (isUndefined(user?.coldclimate_claims.org_id)) return true;
   };
 
-  // const { needInitialSurvey } = useInitialSurveyCheck();
-
   const initialSurveySWR = useSWR<SurveyPayloadType, any, any>(
     coldpbc ? [`/surveys/journey_overview`, 'GET'] : null,
     axiosFetcher,
   );
+
+  const getAppState = () => {
+    const { pathname, search } = location;
+    let searchToBeAdded = '';
+    if (
+      !(
+        search.includes('invitation') &&
+        search.includes('organization') &&
+        search.includes('organization_name')
+      )
+    ) {
+      searchToBeAdded = search;
+    }
+    const returnTo = pathname + searchToBeAdded;
+    return { returnTo: returnTo };
+  };
+
+  const appState = getAppState();
 
   useEffect(() => {
     const getUserMetadata = async () => {
