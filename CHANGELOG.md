@@ -1,3 +1,16 @@
+# [1.34.0](https://github.com/ColdPBC/ui/compare/v1.33.0...v1.34.0) (2023-10-03)
+
+
+### Bug Fixes
+
+* Make trailblazer chip full width in journey details ([1342457](https://github.com/ColdPBC/ui/commit/1342457d40e01ab75555549fd2209d0f98b30b14))
+
+
+### Features
+
+* Create NewsCard and NewsItem components ([ddf2173](https://github.com/ColdPBC/ui/commit/ddf217378fb50a137fe69fe853f76cfdc84e7784))
+* Create NewsCard and NewsItem components ([#79](https://github.com/ColdPBC/ui/issues/79)) ([507f72e](https://github.com/ColdPBC/ui/commit/507f72e81828cb63b54880bd5bad8895daca1be6))
+
 # [1.33.0](https://github.com/ColdPBC/ui/compare/v1.32.0...v1.33.0) (2023-10-03)
 
 
