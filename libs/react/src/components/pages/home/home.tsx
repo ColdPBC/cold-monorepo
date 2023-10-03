@@ -4,11 +4,14 @@ import { RightColumnContent } from '../../organisms/rightColumnContent/rightColu
 import { useAuth0 } from '@auth0/auth0-react';
 import { Spinner } from '../../atoms/spinner/spinner';
 import { AppContent } from '../../organisms/appContent/appContent';
-import { FootprintOverviewCard, FootprintOverviewVariants, JourneyOverviewCard } from '../../molecules';
+import { FootprintOverviewCard, FootprintOverviewVariants, JourneyOverviewCard, NewsCard } from '../../molecules';
 import { TemperatureCheckCard } from '../../molecules/temperatureCheckCard';
+import { useFlags } from 'launchdarkly-react-client-sdk';
 
 export function Home() {
+  const ldFlags = useFlags();
   const auth0 = useAuth0();
+
   if (auth0.isLoading) {
     return (
       <div>
@@ -23,6 +26,7 @@ export function Home() {
         <CenterColumnContent>
           <FootprintOverviewCard chartVariant={FootprintOverviewVariants.horizontal} />
           <JourneyOverviewCard />
+          {ldFlags.showNewsModuleCOLD310 && <NewsCard />}
         </CenterColumnContent>
         <RightColumnContent>
           <TemperatureCheckCard

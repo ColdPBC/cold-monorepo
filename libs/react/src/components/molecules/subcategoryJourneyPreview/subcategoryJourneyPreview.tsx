@@ -103,12 +103,16 @@ export const SubcategoryJourneyPreview = ({
               : 100}
           </div>
         </div>
-        <ArrowRightIcon className="mx-2 w-[24px] text-bgc-accent" />
-        <div className="rounded-lg flex py-1.5 px-2 bg-bgc-accent">
-          {scoreQuadrants[curScoreQuadrantIndex + 1]
-            ? scoreQuadrants[curScoreQuadrantIndex + 1].name
-            : 'Trailblazer'}
-        </div>
+        {curScoreQuadrantIndex < 3 &&
+          <>
+            <ArrowRightIcon className="mx-2 w-[24px] text-bgc-accent" />
+            <div className="rounded-lg flex py-1.5 px-2 bg-bgc-accent">
+              {scoreQuadrants[curScoreQuadrantIndex + 1]
+                ? scoreQuadrants[curScoreQuadrantIndex + 1].name
+                : 'Trailblazer'}
+            </div>
+          </>
+        }
       </div>
     </div>
   );

@@ -22,6 +22,7 @@ import { resolveAPIUrl } from '@coldpbc/fetchers';
 import { getOrganizationMock } from './organizationMock';
 import { getPoliciesSignedMock, getPolicyMockByName } from './policyMock';
 import { auth0UserMock } from './userMock';
+import { getNewsDefault } from './newsMock';
 
 // Even if this uses vite as a bundler, it still uses the NODE_ENV variable
 export const getApiUrl = (path: string) => {
@@ -231,5 +232,9 @@ export const handlers = [
 
   rest.get(getApiUrl('/members/:emailOrId'), (req, res, ctx) => {
     return res(ctx.json(auth0UserMock));
+  }),
+
+  rest.get(getApiUrl('/news'), (req, res, ctx) => {
+    return res(ctx.json(getNewsDefault()));
   }),
 ];

@@ -11,6 +11,7 @@ import {
   getFootprintEmptyDataMock,
 } from './categoriesMock';
 import { getMembersOnlyOneMember } from './membersMock';
+import { getNewsAllMissingProperties, getNewsDefault, getNewsSomeMissingProperties } from './newsMock';
 
 export const getFootprintHandler = {
   default: rest.get('*/categories/company_decarbonization', (req, res, ctx) => {
@@ -70,5 +71,26 @@ export const getCategoriesHandler = {
 export const getMembersHandler = {
   onlyOneMember: rest.get('*/organizations/*/members', (req, res, ctx) => {
     return res(ctx.json(getMembersOnlyOneMember()));
+  }),
+}
+
+export const getNewsHandler = {
+  default: rest.get('*/news', (req, res, ctx) => {
+    return res(ctx.json(getNewsDefault()));
+  }),
+  empty: rest.get('*/news', (req, res, ctx) => {
+    return res(ctx.json([]));
+  }),
+  allMissingProperties: rest.get('*/news', (req, res, ctx) => {
+    return res(ctx.json(getNewsAllMissingProperties()));
+  }),
+  someMissingProperties: rest.get('*/news', (req, res, ctx) => {
+    return res(ctx.json(getNewsSomeMissingProperties()));
+  }),
+  fourNewsItems: rest.get('*/news', (req, res, ctx) => {
+    return res(ctx.json([
+      ...getNewsDefault(),
+      ...getNewsDefault()
+    ]));
   }),
 }
