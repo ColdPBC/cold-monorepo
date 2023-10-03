@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { SurveyActiveKeyType, SurveyPayloadType } from '@coldpbc/interfaces';
 import { Spinner, SurveyLeftNav, SurveyRightNav, Takeover } from '../../index';
-import { cloneDeep, isEmpty } from 'lodash';
+import { cloneDeep, find, first, isEmpty } from 'lodash';
 import useSWR, { mutate } from 'swr';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { GlobalSizes } from '@coldpbc/enums';
@@ -32,23 +32,119 @@ export const Survey = (props: SurveyProps) => {
     setSubmitted(true);
   };
 
+  const getStartKey = (surveyData: SurveyPayloadType) => {
+    // loop the sections and follow up and find the first question that has not been answered yet
+    let firstActiveKey: SurveyActiveKeyType | undefined = undefined;
+    find(Object.keys(surveyData.definition.sections), (key) => {
+      const section = surveyData.definition.sections[key];
+      if (section.component === null && isEmpty(section.prompt)) {
+        // check the followups
+        const foundInFollowUp = find(
+          Object.keys(section.follow_up),
+          (followUpKey) => {
+            const followUp = section.follow_up[followUpKey];
+            if (
+              followUp.value === undefined &&
+              followUp.skipped === undefined
+            ) {
+              firstActiveKey = {
+                value: followUpKey,
+                previousValue: '',
+                isFollowUp: true,
+              };
+              return true;
+            } else {
+              return false;
+            }
+          },
+        );
+        return foundInFollowUp !== undefined;
+      } else {
+        let foundQuestion =
+          section.value === undefined && section.skipped === undefined;
+        // check the followups
+        if (!foundQuestion) {
+          // use find
+          const foundInFollowUp = find(
+            Object.keys(section.follow_up),
+            (followUpKey) => {
+              const followUp = section.follow_up[followUpKey];
+              if (
+                followUp.value === undefined &&
+                followUp.skipped === undefined
+              ) {
+                firstActiveKey = {
+                  value: followUpKey,
+                  previousValue: '',
+                  isFollowUp: true,
+                };
+                return true;
+              } else {
+                return false;
+              }
+            },
+          );
+          foundQuestion = foundInFollowUp !== undefined;
+        } else {
+          firstActiveKey = {
+            value: key,
+            previousValue: '',
+            isFollowUp: false,
+          };
+        }
+        return foundQuestion;
+      }
+    });
+    return firstActiveKey;
+  };
+
   const startSurvey = () => {
     if (surveyData) {
-      const firstSectionKey = Object.keys(surveyData.definition.sections)[0];
-      const firstSection = surveyData.definition.sections[firstSectionKey];
-      if (firstSection.component === null && isEmpty(firstSection.prompt)) {
-        const firstFollowUpKey = Object.keys(firstSection.follow_up)[0];
-        setActiveKey({
-          value: firstFollowUpKey,
-          previousValue: '',
-          isFollowUp: true,
-        });
+      const firstQuestionKey = getStartKey(surveyData);
+      if (!firstQuestionKey) {
+        const firstSectionKey = Object.keys(surveyData.definition.sections)[0];
+        const firstSection = surveyData.definition.sections[firstSectionKey];
+        if (firstSection.component === null && isEmpty(firstSection.prompt)) {
+          const firstFollowUpKey = Object.keys(firstSection.follow_up)[0];
+          // get the first followup
+          setActiveKey({
+            value: firstFollowUpKey,
+            previousValue: '',
+            isFollowUp: true,
+          });
+        } else {
+          setActiveKey({
+            value: firstSectionKey,
+            previousValue: '',
+            isFollowUp: false,
+          });
+        }
       } else {
-        setActiveKey({
-          value: firstSectionKey,
-          previousValue: '',
-          isFollowUp: false,
-        });
+        setActiveKey(firstQuestionKey);
+      }
+    }
+  };
+
+  const hasSurveyBeenStarted = (surveyData: SurveyPayloadType) => {
+    // check if the survey has values and skipped values
+    // check the survey definition
+    if (surveyData) {
+      const sections = surveyData.definition.sections;
+      const sectionKeys = Object.keys(sections);
+      for (let i = 0; i < sectionKeys.length; i++) {
+        const section = sections[sectionKeys[i]];
+        if (section.component !== null && !isEmpty(section.prompt)) {
+          if (section.value !== undefined && section.skipped !== undefined) {
+            return true;
+          }
+        }
+        const followUpKeys = Object.keys(section.follow_up);
+        for (let j = 0; j < followUpKeys.length; j++) {
+          const followUp = section.follow_up[followUpKeys[j]];
+          if (followUp.value !== undefined && followUp.skipped !== undefined) {
+            return true;
+          }
+        }
       }
     }
   };
@@ -110,6 +206,12 @@ export const Survey = (props: SurveyProps) => {
             });
         });
       setSurveyData(copy);
+      // start the survey if the getStartKey returns a key
+      // only run once when the component is first rendered
+      const key = getStartKey(copy);
+      if (key && hasSurveyBeenStarted(copy)) {
+        setActiveKey(key);
+      }
     }
   }, [data]);
 

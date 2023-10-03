@@ -35,3 +35,14 @@ export const InitialSurvey: Story = {
     surveyName: 'journey_overview',
   },
 };
+
+export const IncompleteSurvey: Story = {
+  render: (args) => (
+    <StoryMockProvider handlers={getSurveyHandler.incompleteSurvey}>
+      <Survey {...args} />
+    </StoryMockProvider>
+  ),
+  args: {
+    surveyName: 'journey_overview',
+  },
+};
