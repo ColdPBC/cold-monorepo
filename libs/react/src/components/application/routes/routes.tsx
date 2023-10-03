@@ -1,5 +1,4 @@
 import { DashboardLayout } from '../../pages';
-import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { Settings } from '../../pages';
 import { Home } from '../../pages';

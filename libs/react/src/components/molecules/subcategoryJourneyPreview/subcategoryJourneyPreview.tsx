@@ -4,6 +4,8 @@ import clsx from 'clsx';
 import { Link } from 'react-router-dom';
 import useSWR from 'swr';
 import { useFlags } from 'launchdarkly-react-client-sdk';
+import { twMerge } from 'tailwind-merge';
+import { Card } from '../card';
 
 const scoreQuadrants = [
   {
@@ -31,11 +33,19 @@ const scoreQuadrants = [
 interface Props {
   subcategory_key: string;
   category_key: string;
+  cardTitle?: string;
+  to?: string;
+  containerClassName?: string;
+  glow?: boolean;
 }
 
 export const SubcategoryJourneyPreview = ({
   subcategory_key,
   category_key,
+  cardTitle,
+  to,
+  containerClassName,
+  glow
 }: Props) => {
   const ldFlags = useFlags();
   const { data } = useSWR<any>(['/categories', 'GET'], axiosFetcher);
@@ -59,22 +69,27 @@ export const SubcategoryJourneyPreview = ({
     curScoreQuadrantIndex !== -1 ? scoreQuadrants[curScoreQuadrantIndex] : null;
 
   return (
-    <div className="p-4 border-bgc-accent border rounded-lg w-[310px] text-white">
+    <Card
+      className={twMerge("gap-0 p-4 border-bgc-accent border rounded-lg w-[310px] text-white bg-bgc-elevated",
+        containerClassName
+      )}
+      glow={!!glow}
+    >
       <div
         className={
-          'flex h-[24px]' +
+          'flex h-[24px] w-full' +
           (ldFlags.showActions261 ? ' justify-between' : ' justify-start')
         }
       >
-        <h4 className="font-bold text-sm">{subcategoryName}</h4>
+        <h4 className="font-bold text-sm">{cardTitle ?? subcategoryName}</h4>
         {ldFlags.showActions261 && (
-          <Link to={`/actions/${subcategory_key}`} className="w-[24px]">
+          <Link to={to ?? `/actions/${subcategory_key}`} className="w-[24px]">
             <ArrowRightIcon />
           </Link>
         )}
       </div>
 
-      <div className="h-[12px] relative my-2 flex">
+      <div className="h-[12px] relative my-2 flex  w-full">
         <div
           className={clsx(
             'h-[8px] absolute rounded-lg top-[2px] left-[2px] right-[2px]',
@@ -93,7 +108,7 @@ export const SubcategoryJourneyPreview = ({
         <div className="bg-gray-30 flex-1 rounded-r-lg" />
       </div>
 
-      <div className="flex text-xs">
+      <div className="flex text-xs w-full">
         <div className="flex flex-1 rounded-lg flex justify-between py-1.5 px-2 bg-bgc-accent">
           <div>{curScoreQuadrant?.name}</div>
           <div>
@@ -114,6 +129,6 @@ export const SubcategoryJourneyPreview = ({
           </>
         }
       </div>
-    </div>
+    </Card>
   );
 };
