@@ -268,7 +268,11 @@ export function FootprintOverviewChart(
 
   return (
     <div className="w-full">
-      <div className="h-[255px] w-full relative">
+      <div className={
+        clsx("h-[255px] w-full relative", {
+          "mt-[-60px]": variant === FootprintOverviewVariants.vertical
+        })}
+      >
         {variant === FootprintOverviewVariants.horizontal && detailViews}
         {variant === FootprintOverviewVariants.vertical && (
           <FootprintDetailChip emissions={totalFootprint} large center />
