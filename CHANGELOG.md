@@ -1,3 +1,15 @@
+# [1.33.0](https://github.com/ColdPBC/ui/compare/v1.32.0...v1.33.0) (2023-10-03)
+
+
+### Bug Fixes
+
+* Added submitted to journeymock to support ([28b5886](https://github.com/ColdPBC/ui/commit/28b5886335ace67e22bff70974752039183d5e43))
+
+
+### Features
+
+* go to last survey question answered ([e1ae0e5](https://github.com/ColdPBC/ui/commit/e1ae0e53bdfce5333dc62920fc17a17a69f705b3))
+
 # [1.32.0](https://github.com/ColdPBC/ui/compare/v1.31.0...v1.32.0) (2023-10-02)
 
 
