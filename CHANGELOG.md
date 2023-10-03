@@ -1,3 +1,11 @@
+## [1.34.1](https://github.com/ColdPBC/ui/compare/v1.34.0...v1.34.1) (2023-10-03)
+
+
+### Bug Fixes
+
+* Consume new members data structure ([b6acc25](https://github.com/ColdPBC/ui/commit/b6acc25d4c7c763c9f91be168c954fad2c38a8e8))
+* Consume new members data structure ([#81](https://github.com/ColdPBC/ui/issues/81)) ([f66695e](https://github.com/ColdPBC/ui/commit/f66695e99fb4d2571d592ce5b275b407e9c59123))
+
 # [1.34.0](https://github.com/ColdPBC/ui/compare/v1.33.0...v1.34.0) (2023-10-03)
 
 
