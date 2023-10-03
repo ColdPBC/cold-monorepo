@@ -37,28 +37,3 @@ export const Default: Story = {
     },
   },
 };
-
-export const OnlyOneMember: Story = {
-  render: (args) => {
-    return (
-      <StoryMockProvider handlers={[getMembersHandler.onlyOneMember]}>
-        <Settings {...args} />
-      </StoryMockProvider>
-    );
-  },
-  args: {
-    user: {
-      coldclimate_claims: {
-        org_id: 'org_123',
-      },
-      name: 'John Doe',
-    },
-  },
-  parameters: {
-    launchdarkly: {
-      flags: {
-        showTeamMemberTable: true,
-      },
-    },
-  },
-};
