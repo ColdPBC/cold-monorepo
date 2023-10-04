@@ -1,3 +1,11 @@
+## [1.34.2](https://github.com/ColdPBC/ui/compare/v1.34.1...v1.34.2) (2023-10-04)
+
+
+### Bug Fixes
+
+* Too much space above chart in footprint overview vertical variant ([380be56](https://github.com/ColdPBC/ui/commit/380be564d498be174eb305f61a48d65d2b324e8d))
+* Too much space above chart in footprint overview vertical variant ([#83](https://github.com/ColdPBC/ui/issues/83)) ([771cbee](https://github.com/ColdPBC/ui/commit/771cbeebd692ef7589b859fe7de199be5aabd1cd))
+
 ## [1.34.1](https://github.com/ColdPBC/ui/compare/v1.34.0...v1.34.1) (2023-10-03)
 
 
