@@ -1,4 +1,4 @@
-import { ActionType } from '../../interfaces/actions/actions';
+import { ActionType } from '@coldpbc/interfaces';
 
 export const getActionMock = (): ActionType => {
   return {

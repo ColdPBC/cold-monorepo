@@ -1,9 +1,9 @@
 import { ActionItem, ActionItemProps } from './actionItem';
 import { withKnobs } from '@storybook/addon-knobs';
 import { StoryObj } from '@storybook/react';
-import { getActionMock } from '../../../__mocks__/actions/actionsMock';
 import { StoryMockProvider } from '@coldpbc/mocks';
 import { ActionItemVariants } from '../../../enums/actions';
+import { getActionMock } from '../../../__mocks__/action/actionMock';
 
 const meta = {
   title: 'Molecules/ActionItem',
