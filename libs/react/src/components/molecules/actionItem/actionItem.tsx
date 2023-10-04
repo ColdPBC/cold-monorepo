@@ -18,7 +18,6 @@ export const ActionItem = ({ action, variant }: ActionItemProps) => {
 
   const getCTAButton = () => {
     if (variant === ActionItemVariants.narrow) {
-      // return arrow button
       return (
         <BaseButton className={'bg-transparent w-6 h-6'} onClick={onCTAClick}>
           <ColdIcon name={IconNames.ColdRightArrowIcon} />
@@ -27,7 +26,7 @@ export const ActionItem = ({ action, variant }: ActionItemProps) => {
     } else {
       return (
         <BaseButton className={'bg-transparent'} onClick={onCTAClick}>
-          <span className={'text-tc-primary'}>View All Steps</span>
+          <span className={'text-tc-primary text-button'}>View All Steps</span>
         </BaseButton>
       );
     }
@@ -51,7 +50,7 @@ export const ActionItem = ({ action, variant }: ActionItemProps) => {
       progressPercent = 0;
     }
     return (
-      <div className={'w-full h-2 bg-bgc-accent rounded-lg'}>
+      <div className={'w-full h-[4px] bg-bgc-accent rounded-lg'}>
         <div
           className={'h-full bg-primary rounded-lg'}
           style={{ width: `${progressPercent * 100}%` }}
@@ -60,24 +59,48 @@ export const ActionItem = ({ action, variant }: ActionItemProps) => {
     );
   };
 
+  const getActionItemClass = () => {
+    if (variant === ActionItemVariants.narrow) {
+      return 'w-[405px] text-tc-primary flex space-x-4 rounded-2xl bg-transparent border-[1px] border-bgc-accent p-[16px]';
+    } else {
+      return 'w-[634px] text-tc-primary flex space-x-4 rounded-2xl bg-transparent border-[1px] border-bgc-accent p-[16px]';
+    }
+  };
+
+  const getImageClass = () => {
+    return 'rounded-lg w-[64px]';
+  };
+
+  const getContentClass = () => {
+    if (variant === ActionItemVariants.narrow) {
+      return 'space-y-4 w-[293px]';
+    } else {
+      return 'space-y-4 w-[522px]';
+    }
+  };
+
+  const getTitleClass = () => {
+    if (variant === ActionItemVariants.narrow) {
+      return 'text-body font-bold';
+    } else {
+      return 'text-h4';
+    }
+  };
+
   return (
-    <div
-      className={
-        'w-[405px] text-tc-primary flex space-x-4 rounded-2xl bg-transparent border-[1px] border-bgc-accent p-[16px]'
-      }
-    >
+    <div className={getActionItemClass()}>
       <div
-        className={'rounded w-[64px]'}
+        className={getImageClass()}
         style={{
           background: `url(${action.image_url})`,
         }}
       ></div>
-      <div className={'space-y-4'}>
+      <div className={getContentClass()}>
         <div className={'flex justify-between'}>
-          <div className={'text-h4'}>{action.title}</div>
+          <div className={getTitleClass()}>{action.title}</div>
           <div>{getCTAButton()}</div>
         </div>
-        <div>{action.overview}</div>
+        <div className={'text-body'}>{action.overview}</div>
         <div className={'space-y-2'}>
           <div className={'text-eyebrow flex justify-between'}>
             <div>Action Progress</div>

@@ -576,6 +576,13 @@ export const fontSizes = (): any => {
         fontWeight: 500,
       },
     ],
+    button: [
+      '0.875rem',
+      {
+        lineHeight: '1.313rem',
+        fontWeight: 600,
+      },
+    ],
   };
 };
 
