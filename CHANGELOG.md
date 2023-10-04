@@ -1,3 +1,11 @@
+# [1.35.0](https://github.com/ColdPBC/ui/compare/v1.34.2...v1.35.0) (2023-10-04)
+
+
+### Features
+
+* Create SubcategoryActionsList page ([49e65e3](https://github.com/ColdPBC/ui/commit/49e65e31efabb3b3bee33692b9b837fa91c08db1))
+* Create SubcategoryActionsList page ([#84](https://github.com/ColdPBC/ui/issues/84)) ([13da2df](https://github.com/ColdPBC/ui/commit/13da2dfebf736b29e2814c43c5c43dbbf1aa6ce4))
+
 ## [1.34.2](https://github.com/ColdPBC/ui/compare/v1.34.1...v1.34.2) (2023-10-04)
 
 

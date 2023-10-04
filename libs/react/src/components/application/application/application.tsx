@@ -17,7 +17,7 @@ export const Application = () => {
       { path: '/home' },
       { path: '/footprint' },
       { path: '/journey' },
-      { path: '/actions' },
+      { path: '/actions/*' },
     ],
     location,
   );
