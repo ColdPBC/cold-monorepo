@@ -1,5 +1,5 @@
-import React from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Route } from 'react-router-dom';
+import { SubcategoryActionsList } from '../../pages/subcategoryActionsList';
 
 export const ActionRoutes = () => {
   // get the /actions and /actions/:name routes
@@ -9,7 +9,7 @@ export const ActionRoutes = () => {
       <Route index element={<div className={'text-tc-primary'}>Actions</div>} />
       <Route
         path={':name'}
-        element={<div className={'text-tc-primary'}>Specific action</div>}
+        element={<SubcategoryActionsList />}
       />
     </Route>
   );
