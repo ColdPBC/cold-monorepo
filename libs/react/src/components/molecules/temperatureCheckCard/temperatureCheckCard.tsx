@@ -17,11 +17,13 @@ export type Stat = 'cold_score' | 'footprint' | 'emissions_avoided' | 'actions_c
 interface Props {
     stats: Stat[];
     cardTitle: string;
+    cornerGlow?: boolean;
 }
 
 export const TemperatureCheckCard = ({
     stats,
-    cardTitle
+    cardTitle,
+    cornerGlow
 }: Props) => {
     const { data, isLoading: isCategoryDataLoading } = useSWR<any>(
         ['/categories', 'GET'],
@@ -99,10 +101,10 @@ export const TemperatureCheckCard = ({
     }
 
     const getGlowPositionForIndex = (index: number): GlowPosition => {
-        if (index === 0 && stats.length > 2) return 'bottomRight'
+        if (index === 0 && (stats.length > 2 || cornerGlow)) return 'bottomRight'
         if (index === 0 && stats.length <= 2) return 'centerRight'
 
-        if (index === 1 && stats.length > 2) return 'bottomLeft'
+        if (index === 1 && (stats.length > 2 || cornerGlow)) return 'bottomLeft'
         if (index === 1 && stats.length <= 2) return 'centerLeft'
 
         if (index === 2 && stats.length > 2) return 'topRight'
