@@ -1,5 +1,5 @@
-import {DefaultHexColors} from '../enums/colors';
-import {set} from 'lodash';
+import { DefaultHexColors } from '../enums/colors';
+import { set } from 'lodash';
 
 // Core color palette from Turtle design project July - Aug 2023
 const FoundationalHexColors = {
@@ -569,10 +569,24 @@ export const fontSizes = (): any => {
         fontWeight: 500,
       },
     ],
+    eyebrow: [
+      '0.75rem',
+      {
+        lineHeight: '0.75rem',
+        fontWeight: 500,
+      },
+    ],
+    button: [
+      '0.875rem',
+      {
+        lineHeight: '1.313rem',
+        fontWeight: 600,
+      },
+    ],
   };
 };
 
-export const getSchemeForColor = (scheme: {[key: string]: string}) => {
+export const getSchemeForColor = (scheme: { [key: string]: string }) => {
   return [
     scheme['100'],
     scheme['200'],
@@ -584,12 +598,14 @@ export const getSchemeForColor = (scheme: {[key: string]: string}) => {
     scheme['800'],
     scheme['900'],
     scheme['1000'],
-  ]
-}
+  ];
+};
 
-export const footprintSubcategoryColors: {[key: string]: 'lightblue' | 'purple' | 'green' | 'teal'} = {
-  "facilities": 'lightblue',
-  "travel": 'purple',
-  "operations": 'green',
-  "product": 'teal',
+export const footprintSubcategoryColors: {
+  [key: string]: 'lightblue' | 'purple' | 'green' | 'teal';
+} = {
+  facilities: 'lightblue',
+  travel: 'purple',
+  operations: 'green',
+  product: 'teal',
 };
