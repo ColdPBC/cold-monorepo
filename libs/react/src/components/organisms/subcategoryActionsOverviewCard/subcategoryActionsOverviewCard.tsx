@@ -13,7 +13,7 @@ export const SubcategoryActionsOverviewCard = ({
   actions,
 }: SubcategoryActionsOverviewCardProps) => {
   return (
-    <Card glow={true}>
+    <Card className={'w-[666px]'} glow={true}>
       <div className={'text-tc-primary space-y-[16px]'}>
         <div className={'text-h3'}>{category}</div>
         {actions.map((action) => {
