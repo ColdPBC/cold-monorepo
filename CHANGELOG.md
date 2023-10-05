@@ -1,3 +1,18 @@
+# [1.36.0](https://github.com/ColdPBC/ui/compare/v1.35.0...v1.36.0) (2023-10-05)
+
+
+### Bug Fixes
+
+* build fix ([7fe3844](https://github.com/ColdPBC/ui/commit/7fe384480f6a14aebf340a1cd7d5e4f9e3bfcd18))
+
+
+### Features
+
+* Added button font to theme and update action item code ([4a6d396](https://github.com/ColdPBC/ui/commit/4a6d396fc183bc29511c74b33d69b40afa3ff357))
+* added ellipsis ([d7eae3b](https://github.com/ColdPBC/ui/commit/d7eae3bba08650eaaa74fe82f1eaefd3e18e46b3))
+* created actionitem component ([a7cc427](https://github.com/ColdPBC/ui/commit/a7cc4278b48ba2eebad90d99f85ef58d41cc3c22))
+* Update action types ([728a22f](https://github.com/ColdPBC/ui/commit/728a22fbf738b74153a813cfcb95f57c4eed485f))
+
 # [1.35.0](https://github.com/ColdPBC/ui/compare/v1.34.2...v1.35.0) (2023-10-04)
 
 
