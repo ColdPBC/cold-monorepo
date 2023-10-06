@@ -11,15 +11,10 @@ const baseURL = resolveAPIUrl();
  */
 export const axiosFetcher = (params: Array<string>) => {
   try {
-    const raw = cookies.get('coldpbc');
-    const coldpbc = raw ? JSON.parse(raw) : null;
-    const token = coldpbc ? coldpbc.accessToken : null;
-
     const config = {
       baseURL: baseURL,
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
       },
       method: 'GET',
     };
