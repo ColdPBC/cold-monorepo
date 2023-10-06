@@ -4,11 +4,14 @@ import {
   FootprintOverviewDetail,
 } from '../footprintOverviewChart';
 
-export type FootprintOverviewVerticalDetailProps = FootprintOverviewDetail;
+export interface FootprintOverviewVerticalDetailProps extends FootprintOverviewDetail {
+  percentWidth: number;
+};
 
 export function FootprintOverviewVerticalDetail(
   props: PropsWithChildren<FootprintOverviewVerticalDetailProps>,
 ) {
+
   return (
     <div className="mb-3">
       <div className={'text-body font-bold text-tc-primary'}>{props.title}</div>
@@ -17,13 +20,15 @@ export function FootprintOverviewVerticalDetail(
           className="h-1 rounded-lg"
           style={{
             backgroundColor: props.color,
-            width: `${props.percent.toFixed(0)}%`,
+            width: `calc((100% - 113px) * ${props.percentWidth})`,
           }}
         />
-        <div className={'text-body text-tc-primary mx-1'}>
-          {props.percent.toFixed(0) + '%'}
+        <div className='flex'>
+          <div className={'text-body text-tc-primary mx-1'}>
+            {props.percent.toFixed(0) + '%'}
+          </div>
+          <FootprintDetailChip emissions={props.emissions} />
         </div>
-        <FootprintDetailChip emissions={props.emissions} />
       </div>
     </div>
   );

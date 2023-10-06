@@ -63,7 +63,7 @@ export function FootprintOverviewChart(
     }
     if (subcategoryTotals.length >= MAX_CATEGORIES) return;
     if (!nullFootprint)
-      subcategoryTotals.push({value: value, color, name: subcategory.subcategory_name});
+      subcategoryTotals.push({value: value, color, name: subcategory.subcategory_name, subcategoryKey});
   });
 
   // Set spacer width
@@ -83,7 +83,7 @@ export function FootprintOverviewChart(
   };
 
   // Add data to the chart, determine total percentages
-  forEach(subcategoryTotals, (info, index) => {
+  forEach(subcategoryTotals.sort((a, b) => b.value - a.value), (info, index) => {
     info.percent = (info.value / totalFootprint) * 100;
 
     chartData.labels?.push(info.name);
@@ -108,8 +108,8 @@ export function FootprintOverviewChart(
       totalEmissions={totalFootprint}
       chartData={chartData}
       subcategoryTotals={subcategoryTotals}
-      hoverColorArray={Object.keys(data?.subcategories ?? {}).map((subcategoryKey) => {
-        return HexColors[footprintSubcategoryColors[subcategoryKey]]?.DEFAULT_BRIGHTEN || HexColors.primary.DEFAULT
+      hoverColorArray={subcategoryTotals.sort((a, b) => b.value - a.value).map((subcategory) => {
+        return HexColors[footprintSubcategoryColors[subcategory.subcategoryKey]]?.DEFAULT_BRIGHTEN || HexColors.primary.DEFAULT
       })}
     />
   );

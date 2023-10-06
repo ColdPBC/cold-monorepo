@@ -58,7 +58,7 @@ export const SubcategoryFootprintCard = ({
         const newLabels: (string | null)[] = [];
         const backgroundColor: string[] = [];
         const newData: number[] = [];
-        const newSubcategoryTotals: SubCategoryTotal[] = [];
+        let newSubcategoryTotals: SubCategoryTotal[] = [];
 
         let newTotalFootprint = 0;
 
@@ -70,23 +70,26 @@ export const SubcategoryFootprintCard = ({
             
             if (activityFootprint > 0) {
                 newTotalFootprint += activityFootprint;
-                newSubcategoryTotals.push({value: activityFootprint, color: colors[index], name: activity.activity_name});
+                newSubcategoryTotals.push({value: activityFootprint, color: colors[index], name: activity.activity_name, subcategoryKey: subcategory_key});
             }
         });
 
         // Set spacer width
         const spacerValue = newTotalFootprint / gapStylingConstant;
 
+        newSubcategoryTotals = newSubcategoryTotals.sort((a, b) => b.value - a.value);
+
         newSubcategoryTotals.forEach((sT, index) => {
             // Add percent of total footprint to each category
             newSubcategoryTotals[index] = {
                 ...sT,
                 percent: (sT.value / newTotalFootprint) * 100,
+                color: colors[index]
             };
 
             newLabels.push(sT.name);
             newData.push(sT.value);
-            backgroundColor.push(sT.color);
+            backgroundColor.push(colors[index]);
 
             // Add a spacer to chart
             newLabels.push(null);

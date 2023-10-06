@@ -42,6 +42,7 @@ export interface SubCategoryTotal {
     color: string;
     name: string;
     percent?: number;
+    subcategoryKey: string;
 };
 
 export enum EmissionsDonutChartVariants {
@@ -138,6 +139,8 @@ export const EmissionsDonutChart = ({
 
     const detailViews: JSX.Element[] = [];
 
+    const largestSubcategoryVal = subcategoryTotals.length ? Math.max(...subcategoryTotals.map(s => s.value)) : 0;
+
     subcategoryTotals.forEach((subcategoryTotal, index) => {
         const leftAlign = detailViews.length < 2;
         const bottomAlign = detailViews.length === 1 || detailViews.length === 2;
@@ -174,6 +177,7 @@ export const EmissionsDonutChart = ({
                 title={subcategoryTotal.name}
                 percent={subcategoryTotal.percent ?? 0}
                 emissions={subcategoryTotal.value}
+                percentWidth={(subcategoryTotal.value / largestSubcategoryVal)}
               />
             )}
           </div>,
@@ -182,17 +186,25 @@ export const EmissionsDonutChart = ({
 
     return (
         <div className="w-full">
-            <div className="h-[190px] w-full relative -mt-3">
-            {variant === EmissionsDonutChartVariants.horizontal && detailViews}
-            {variant === EmissionsDonutChartVariants.vertical && totalEmissions && (
-                <FootprintDetailChip emissions={totalEmissions} large center />
-            )}
-            <Chart
-                options={chartOptions}
-                type="doughnut"
-                data={chartData}
-                plugins={chartPlugins}
-            />
+            <div
+              className={clsx(
+                "w-full relative",
+                {
+                 "h-[255px] mt-2" : variant === EmissionsDonutChartVariants.horizontal,
+                 "h-[190px] -mt-3" : variant === EmissionsDonutChartVariants.vertical,
+                }
+              )}
+            >
+              {variant === EmissionsDonutChartVariants.horizontal && detailViews}
+              {variant === EmissionsDonutChartVariants.vertical && totalEmissions && (
+                  <FootprintDetailChip emissions={totalEmissions} large center />
+              )}
+              <Chart
+                  options={chartOptions}
+                  type="doughnut"
+                  data={chartData}
+                  plugins={chartPlugins}
+              />
             </div>
             {variant === EmissionsDonutChartVariants.vertical && (
                 <div className="max-w-md m-auto -mb-3 mt-2">{detailViews}</div>
