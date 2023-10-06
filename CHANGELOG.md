@@ -1,3 +1,24 @@
+# [1.38.0](https://github.com/ColdPBC/ui/compare/v1.37.0...v1.38.0) (2023-10-05)
+
+
+### Features
+
+* Create page with right column content for Qaalib to bring home … ([#88](https://github.com/ColdPBC/ui/issues/88)) ([56f298d](https://github.com/ColdPBC/ui/commit/56f298d05f70993e79a5e87dfdd5c3aa7aafbece))
+* Create page with right column content for Qaalib to bring home page with center ([b534e7b](https://github.com/ColdPBC/ui/commit/b534e7b9ea2815048db58c091c555a616fa4cdf1))
+
+# [1.37.0](https://github.com/ColdPBC/ui/compare/v1.36.0...v1.37.0) (2023-10-05)
+
+
+### Bug Fixes
+
+* fixed build issue ([94050d4](https://github.com/ColdPBC/ui/commit/94050d46d87c4d49c1a4b10a9aa69aaf66ee9c1b))
+
+
+### Features
+
+* adjusted width ([6008032](https://github.com/ColdPBC/ui/commit/60080321b32e43bf44628057c221a926d4c150a6))
+* Created subcategoryactionsoverviecard component ([5e28591](https://github.com/ColdPBC/ui/commit/5e2859175f8fe41d43f1b7a450b8a84dff54702c))
+
 # [1.36.0](https://github.com/ColdPBC/ui/compare/v1.35.0...v1.36.0) (2023-10-05)
 
 

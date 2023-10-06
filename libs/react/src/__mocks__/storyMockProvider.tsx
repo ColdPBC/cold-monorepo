@@ -2,15 +2,16 @@ import { PropsWithChildren, useEffect } from 'react';
 import { worker } from './browser';
 import { DefaultBodyType, MockedRequest, RestHandler } from 'msw';
 import { SWRConfig } from 'swr';
-import {BrowserRouter} from 'react-router-dom';
+import { MemoryRouter, MemoryRouterProps } from 'react-router-dom';
 
 export const StoryMockProvider = (
   props: PropsWithChildren<{
-    handlers: RestHandler<MockedRequest<DefaultBodyType>>[];
+    handlers?: RestHandler<MockedRequest<DefaultBodyType>>[];
+    memoryRouterProps?: MemoryRouterProps;
   }>,
 ) => {
   useEffect(() => {
-    worker && worker.use(...props.handlers);
+    worker && worker.use(...(props.handlers ?? []));
     return () => {
       // clear added handler on dismount, so stories that don't have custom handlers don't get this data
       worker && worker.resetHandlers();
@@ -20,9 +21,9 @@ export const StoryMockProvider = (
   return (
     // so swr doesn't cache between stories
     <SWRConfig value={{ provider: () => new Map() }}>
-      <BrowserRouter>
+      <MemoryRouter {...props.memoryRouterProps}>
         {props.children}
-      </BrowserRouter>
+      </MemoryRouter>
     </SWRConfig>
   );
 };

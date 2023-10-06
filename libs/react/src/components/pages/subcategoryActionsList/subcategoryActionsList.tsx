@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom"
 import { AppContent, CenterColumnContent, RightColumnContent } from "../../organisms"
 import useSWR from 'swr';
 import { axiosFetcher } from "@coldpbc/fetchers";
-import { Card, SubcategoryJourneyPreview } from "../../molecules";
+import { SubcategoryJourneyPreview } from "../../molecules";
 
 export const SubcategoryActionsList  = () => {
     const { name } = useParams();
