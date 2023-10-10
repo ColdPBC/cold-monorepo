@@ -163,12 +163,9 @@ export const getSignUpHandler = {
 export const getSignupHandlersForApplicationSignup = {
   DEFAULT: [
     [
-      rest.get(
-        getApiUrl('/form-definitions/sidebar_navigation'),
-        (req, res, ctx) => {
-          return res(ctx.json({ ...getSidebarMock() }));
-        },
-      ),
+      rest.get(getApiUrl('/components/sidebar_navigation'), (req, res, ctx) => {
+        return res(ctx.json({ ...getSidebarMock() }));
+      }),
 
       // Mock data for journey modules
       rest.get(getApiUrl('/categories'), (req, res, ctx) => {
@@ -187,14 +184,11 @@ export const getSignupHandlersForApplicationSignup = {
         return res(ctx.json(getDataGridUsersMock()));
       }),
 
-      rest.get(
-        getApiUrl('/form-definitions/team_member_table'),
-        (req, res, ctx) => {
-          return res(ctx.json(getTeamMemberDataGridMock()));
-        },
-      ),
+      rest.get(getApiUrl('/components/team_member_table'), (req, res, ctx) => {
+        return res(ctx.json(getTeamMemberDataGridMock()));
+      }),
 
-      rest.get(getApiUrl('/form-definitions/datagrid'), (req, res, ctx) => {
+      rest.get(getApiUrl('/components/datagrid'), (req, res, ctx) => {
         return res(ctx.json(getDefaultFormDefinitionGridMock()));
       }),
 

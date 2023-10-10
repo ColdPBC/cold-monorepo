@@ -1,12 +1,12 @@
-import {Datagrid} from '../../molecules/dataGrid/datagrid';
+import { Datagrid } from '../../molecules/dataGrid/datagrid';
 import useSWR from 'swr';
-import {GlobalSizes} from '../../../enums/sizes';
-import {Spinner} from '../../atoms/spinner/spinner';
-import {ColorNames} from '../../../enums/colors';
-import {orderBy} from 'lodash';
-import {Avatar} from '../../atoms/avatar/avatar';
-import {axiosFetcher} from '../../../fetchers/axiosFetcher';
-import {useAuth0} from '@auth0/auth0-react';
+import { GlobalSizes } from '../../../enums/sizes';
+import { Spinner } from '../../atoms/spinner/spinner';
+import { ColorNames } from '../../../enums/colors';
+import { orderBy } from 'lodash';
+import { Avatar } from '../../atoms/avatar/avatar';
+import { axiosFetcher } from '../../../fetchers/axiosFetcher';
+import { useAuth0 } from '@auth0/auth0-react';
 import { ButtonTypes } from '@coldpbc/enums';
 import { MemberStatusType } from '../../pages';
 
@@ -14,7 +14,9 @@ export interface TeamMembersDataGridProps {
   selectedMemberStatusType: MemberStatusType;
 }
 
-export const TeamMembersDataGrid = ({ selectedMemberStatusType }: TeamMembersDataGridProps) => {
+export const TeamMembersDataGrid = ({
+  selectedMemberStatusType,
+}: TeamMembersDataGridProps) => {
   const { user: dataGridUser } = useAuth0();
 
   const getOrgURL = () => {
@@ -41,7 +43,7 @@ export const TeamMembersDataGrid = ({ selectedMemberStatusType }: TeamMembersDat
   );
 
   const getActions = (user: any) => {
-    // TODO: remove empty array after actions are refactored for new data structure 
+    // TODO: remove empty array after actions are refactored for new data structure
     return [];
     if (user.invitee) {
       return [
@@ -88,17 +90,18 @@ export const TeamMembersDataGrid = ({ selectedMemberStatusType }: TeamMembersDat
           title: 'Remove User',
           body: (
             <span>
-              Are you sure you want to remove <span className='font-bold'>{user.name}</span> from your company?
+              Are you sure you want to remove{' '}
+              <span className="font-bold">{user.name}</span> from your company?
             </span>
           ),
           footer: {
             resolveButton: {
               label: 'Remove User',
-              variant: ButtonTypes.warning
+              variant: ButtonTypes.warning,
             },
             rejectButton: {
               label: 'Cancel',
-              variant: ButtonTypes.secondary
+              variant: ButtonTypes.secondary,
             },
           },
           url: `/organizations/${data.org_id}/member`,
@@ -113,13 +116,15 @@ export const TeamMembersDataGrid = ({ selectedMemberStatusType }: TeamMembersDat
         {
           label: 'Transfer Ownership',
           name: 'make owner',
-          title:'Transfer Ownership',
+          title: 'Transfer Ownership',
           body: (
             <span>
               There can only be one owner for {data.name}
-              <br /><br />
-              By making this member the owner you will give up your permission as owner.
-              Are you sure you want to make <span className='font-bold'>{user.name}</span> the owner?
+              <br />
+              <br />
+              By making this member the owner you will give up your permission
+              as owner. Are you sure you want to make{' '}
+              <span className="font-bold">{user.name}</span> the owner?
             </span>
           ),
           footer: {
@@ -128,7 +133,7 @@ export const TeamMembersDataGrid = ({ selectedMemberStatusType }: TeamMembersDat
             },
             rejectButton: {
               label: 'Cancel',
-              variant: ButtonTypes.secondary
+              variant: ButtonTypes.secondary,
             },
           },
           urls: user.identities.map((identity: string) => {
@@ -163,23 +168,36 @@ export const TeamMembersDataGrid = ({ selectedMemberStatusType }: TeamMembersDat
 
   const getTransformedData = (data: any[]) => {
     return orderBy(data, ['email'], ['asc'])
-      .filter(user => (user.invitee && selectedMemberStatusType === 'Invitations')
-        || (selectedMemberStatusType === 'Members' && !user.invitee))
+      .filter(
+        (user) =>
+          (user.invitee && selectedMemberStatusType === 'Invitations') ||
+          (selectedMemberStatusType === 'Members' && !user.invitee),
+      )
       .map((user) => {
         return {
           name: (
-            <div className='flex items-center'>
-              <span className='mr-4'>
+            <div className="flex items-center">
+              <span className="mr-4">
                 <Avatar size={GlobalSizes.medium} user={user} />
               </span>
-              <span className='text-white font-bold text-sm leading-normal'>{user.name}</span>
+              <span className="text-white font-bold text-sm leading-normal">
+                {user.name}
+              </span>
             </div>
           ),
-          email: <span className='text-white font-medium text-sm leading-normal'>{user.email}</span>,
-          role: <span className='text-white font-medium text-sm leading-normal'>{getRole(user)}</span>,
+          email: (
+            <span className="text-white font-medium text-sm leading-normal">
+              {user.email}
+            </span>
+          ),
+          role: (
+            <span className="text-white font-medium text-sm leading-normal">
+              {getRole(user)}
+            </span>
+          ),
           actions: getActions(user),
         };
-    });
+      });
   };
 
   if (error) {
@@ -198,7 +216,7 @@ export const TeamMembersDataGrid = ({ selectedMemberStatusType }: TeamMembersDat
     return (
       <Datagrid
         items={getTransformedData(data?.members ?? [])}
-        definitionURL={'/form-definitions/team_member_table'}
+        definitionURL={'/components/team_member_table'}
       />
     );
   } else {
