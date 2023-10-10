@@ -2,8 +2,8 @@ import React from "react";
 import { withKnobs } from "@storybook/addon-knobs";
 import { Meta, StoryObj } from "@storybook/react";
 import {FootprintOverviewCard} from './footprintOverviewCard';
-import { FootprintOverviewVariants } from "../footprintOverviewChart/footprintOverviewChart";
 import { StoryMockProvider, getFootprintHandler } from '../../../';
+import { EmissionsDonutChartVariants } from "../../atoms/emissionsDonutChart/emissionsDonutChart";
 
 const meta = {
     title: "Molecules/FootprintOverviewCard",
@@ -44,7 +44,7 @@ export const Vertical: Story = {
         return (
             <StoryMockProvider handlers={[]}>
                 <div className="w-[437px]">
-                    <FootprintOverviewCard chartVariant={FootprintOverviewVariants.vertical} />
+                    <FootprintOverviewCard chartVariant={EmissionsDonutChartVariants.vertical} />
                 </div>
             </StoryMockProvider>
         );

@@ -33,7 +33,8 @@ export const useActiveSegment = () => {
 
         if (
           currentHoveredElement &&
-          currentHoveredElement.index !== activeSegment?.index
+          currentHoveredElement.index !== activeSegment?.index &&
+          currentHoveredElement.index % 2 === 0 // spacer will be odd number
         ) {
           animateSegmentThickness(currentHoveredElement.index, 'segment');
         }
