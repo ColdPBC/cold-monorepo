@@ -17,7 +17,7 @@ export interface DatagridProps {
 
 export const Datagrid = (props: DatagridProps) => {
   const items = props.items;
-  const definitionURL = props.definitionURL || '/form-definitions/datagrid';
+  const definitionURL = props.definitionURL || '/components/datagrid';
   const {
     data,
     error,
@@ -76,7 +76,7 @@ export const Datagrid = (props: DatagridProps) => {
   if (data && data.definition?.items) {
     return (
       <Table theme={darkTableTheme.table}>
-        <Table.Head className='text-white normal-case'>
+        <Table.Head className="text-white normal-case">
           {data?.definition?.items?.map((column: any, index: number) => {
             return (
               <Table.HeadCell
@@ -93,14 +93,14 @@ export const Datagrid = (props: DatagridProps) => {
             );
           })}
         </Table.Head>
-        <Table.Body
-          className="divide-y"
-          theme={darkTableTheme.table?.body}
-        >
+        <Table.Body className="divide-y" theme={darkTableTheme.table?.body}>
           {items.map((row: any, rowIndex: number) => {
             {
               return (
-                <Table.Row key={`${row + ' ' + rowIndex}`} theme={darkTableTheme.table?.row}>
+                <Table.Row
+                  key={`${row + ' ' + rowIndex}`}
+                  theme={darkTableTheme.table?.row}
+                >
                   {Object.keys(row).map((key, index) => {
                     return (
                       <Table.Cell

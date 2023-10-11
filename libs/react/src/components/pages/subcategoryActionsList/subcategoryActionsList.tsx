@@ -2,7 +2,8 @@ import { useParams } from "react-router-dom"
 import { AppContent, CenterColumnContent, RightColumnContent } from "../../organisms"
 import useSWR from 'swr';
 import { axiosFetcher } from "@coldpbc/fetchers";
-import { Card, SubcategoryJourneyPreview } from "../../molecules";
+import { SubcategoryJourneyPreview } from "../../molecules";
+import { SubcategoryFootprintCard } from "../../molecules/subcategoryFootprintCard";
 
 export const SubcategoryActionsList  = () => {
     const { name } = useParams();
@@ -39,6 +40,12 @@ export const SubcategoryActionsList  = () => {
                     containerClassName="border-0 w-full rounded-2xl"
                     glow
                 />
+                {category === 'company_decarbonization' && 
+                    <SubcategoryFootprintCard
+                        period={2022}
+                        subcategory_key={name}
+                    />
+                }
             </RightColumnContent>
         </AppContent>
     )
