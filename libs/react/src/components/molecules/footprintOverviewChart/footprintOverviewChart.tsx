@@ -10,6 +10,13 @@ import { EmissionsDonutChart, EmissionsDonutChartVariants, SubCategoryTotal } fr
 
 const MAX_CATEGORIES = 4;
 
+export interface FootprintOverviewDetail {
+  color: string;
+  title: string;
+  percent: number;
+  emissions: number;
+}
+
 export interface FootprintOverviewChartProps {
   variant?: EmissionsDonutChartVariants;
   period: number | string;
