@@ -4,6 +4,7 @@ import { ColdAuthProvider } from './coldAuthProvider';
 import { BrowserRouter } from 'react-router-dom';
 import { ColdLDProvider } from './coldLDProvider';
 import { Auth0ProviderOptions } from '@auth0/auth0-react';
+import { ColdAxiosInterceptorProvider } from './coldAxiosInterceptorProvider';
 
 export interface ColdContextProviderProps {
   auth0Options: Auth0ProviderOptions;
@@ -24,7 +25,9 @@ export const ColdContextProvider = (
         }}
       >
         <ColdAuthProvider>
-          <ColdLDProvider>{children}</ColdLDProvider>
+          <ColdAxiosInterceptorProvider>
+            <ColdLDProvider>{children}</ColdLDProvider>
+          </ColdAxiosInterceptorProvider>
         </ColdAuthProvider>
       </ColdContext.Provider>
     </BrowserRouter>

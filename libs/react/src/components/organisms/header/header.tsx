@@ -3,7 +3,6 @@ import { Avatar } from '../../atoms/avatar/avatar';
 import { useAuth0 } from '@auth0/auth0-react';
 import { GlobalSizes } from '../../../enums/sizes';
 import { Dropdown } from 'flowbite-react';
-import cookie from 'js-cookie';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface HeaderProps {}
@@ -22,8 +21,6 @@ export const Header = (props: HeaderProps) => {
 
   const logout = () => {
     sessionStorage.clear();
-    // Remove the cookie
-    cookie.remove('coldpbc');
 
     auth0Logout({
       logoutParams: {

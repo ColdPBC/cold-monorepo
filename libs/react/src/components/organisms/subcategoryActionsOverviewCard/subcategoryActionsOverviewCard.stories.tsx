@@ -4,7 +4,7 @@ import { StoryObj } from '@storybook/react';
 import {
   SubcategoryActionsOverviewCard,
   SubcategoryActionsOverviewCardProps,
-} from '@coldpbc/components';
+} from './subcategoryActionsOverviewCard';
 import {
   getActionsMockBySubCategoryName,
   StoryMockProvider,
