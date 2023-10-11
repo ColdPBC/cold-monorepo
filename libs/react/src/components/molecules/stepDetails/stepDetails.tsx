@@ -90,12 +90,12 @@ export const StepDetails = ({
                           {open ? (
                             <ColdIcon
                               name={IconNames.ColdChevronUpIcon}
-                              className={'w-[8px] h-[8px]'}
+                              className={'h-[8px]'}
                             />
                           ) : (
                             <ColdIcon
                               name={IconNames.ColdChevronDownIcon}
-                              className={'w-[8px] h-[8px]'}
+                              className={'h-[8px]'}
                             />
                           )}
                         </span>
