@@ -3,7 +3,7 @@ import { ActionPayload } from '@coldpbc/interfaces';
 export const getActionMock = (): ActionPayload => {
   return {
     id: '1',
-    definition: {
+    action: {
       title: 'Renewable Energy Procurement',
       overview:
         'Reduce your company’s reliance on fossil fuels by purchasing renewable electricity for your facility.',
@@ -54,7 +54,7 @@ export const getActionsMock = (): ActionPayload[] => {
   return [
     {
       id: '1',
-      definition: {
+      action: {
         title: 'Renewable Energy Procurement',
         overview:
           'Reduce your company’s reliance on fossil fuels by purchasing renewable electricity for your facility.',
@@ -94,7 +94,7 @@ export const getActionsMock = (): ActionPayload[] => {
     },
     {
       id: '2',
-      definition: {
+      action: {
         title: 'Manage and record e-waste',
         overview:
           'Lorem ipsum dolor sit amet, consec tetur. Lorem ipsum dolor sit amet, consec tetur.',
@@ -133,7 +133,7 @@ export const getActionsMock = (): ActionPayload[] => {
     },
     {
       id: '3',
-      definition: {
+      action: {
         title: 'Waste Management',
         overview:
           'Create a full-scale waste diversion and management program within your offices and give your employees what they need to successfully recycle, compost, and divert waste items from landfill.',
@@ -167,7 +167,7 @@ export const getActionsMock = (): ActionPayload[] => {
     },
     {
       id: '4',
-      definition: {
+      action: {
         title: 'Personal Finance',
         overview: 'Test Overview',
         objective_description: 'Test Objective Description',
@@ -200,7 +200,7 @@ export const getActionsMock = (): ActionPayload[] => {
     },
     {
       id: '5',
-      definition: {
+      action: {
         title: 'Business Travel',
         overview: 'Test Overview',
         objective_description: 'Test Objective Description',
@@ -233,6 +233,6 @@ export const getActionsMockBySubCategoryName = (
   subCategoryName: string,
 ): ActionPayload[] => {
   return getActionsMock().filter(
-    (action) => action.definition.subcategory === subCategoryName,
+    (action) => action.action.subcategory === subCategoryName,
   );
 };

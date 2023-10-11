@@ -29,6 +29,6 @@ const StepDetailsCheckboxStory = (args: any) => {
 export const Default: Story = {
   render: (args) => <StepDetailsCheckboxStory {...args} />,
   args: {
-    complete: getActionMock().definition.steps[0].complete,
+    complete: getActionMock().action.steps[0].complete,
   },
 };

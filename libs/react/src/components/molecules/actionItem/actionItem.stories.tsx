@@ -2,8 +2,8 @@ import { ActionItem, ActionItemProps } from './actionItem';
 import { withKnobs } from '@storybook/addon-knobs';
 import { StoryObj } from '@storybook/react';
 import { StoryMockProvider } from '@coldpbc/mocks';
-import { ActionItemVariants } from '../../../enums/actions';
-import { getActionMock } from '../../../__mocks__/action/actionMock';
+import { ActionItemVariants } from '@coldpbc/enums';
+import { getActionMock } from '@coldpbc/mocks';
 
 const meta = {
   title: 'Molecules/ActionItem',
@@ -28,7 +28,7 @@ export const WideVariant: Story = {
     return <ActionItemTemplate {...args} />;
   },
   args: {
-    action: getActionMock(),
+    actionPayload: getActionMock(),
     variant: ActionItemVariants.wide,
   },
 };
@@ -38,7 +38,7 @@ export const NarrowVariant: Story = {
     return <ActionItemTemplate {...args} />;
   },
   args: {
-    action: getActionMock(),
+    actionPayload: getActionMock(),
     variant: ActionItemVariants.narrow,
   },
 };

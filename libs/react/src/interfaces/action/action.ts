@@ -35,5 +35,5 @@ export type DependentSurvey = {
 
 export type ActionPayload = {
   id: string;
-  definition: Action;
+  action: Action;
 };

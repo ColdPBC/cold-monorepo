@@ -11,10 +11,10 @@ export const ColdChevronUpIcon = (props: IconProps) => {
       {...props}
     >
       <path
-        d="M1 1L5 5L9 1"
+        d="M9 6L5 2L1 6"
         stroke="white"
-        strokeWidth="1.5"
-        strokeLinecap="round"
+        stroke-width="1.5"
+        stroke-linecap="round"
       />
     </svg>
   );

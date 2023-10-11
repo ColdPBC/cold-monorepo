@@ -55,20 +55,20 @@ export const AssigneeSelector = ({
       );
     } else {
       return (
-        <div
+        <BaseButton
           className={
-            'min-h-[40px] flex w-fit text-tc-primary rounded-lg p-[8px] space-x-[8px] relative border-[1px] border-bgc-accent'
+            'min-h-[40px] w-fit text-tc-primary rounded-lg p-[8px] border-[1px] border-bgc-accent'
           }
         >
-          <div className={'text-eyebrow flex items-center justify-center'}>
-            Add Steward
+          <div className={'flex space-x-[8px]'}>
+            <div className={'text-eyebrow flex items-center justify-center'}>
+              Add Steward
+            </div>
+            <div className={'bg-primary p-[8px] w-[24px] h-[24px] rounded-lg'}>
+              <ColdPlusIcon className={'w-[8px] h-[8px]'} />
+            </div>
           </div>
-          <BaseButton
-            className={'bg-primary p-[8px] w-[24px] h-[24px] rounded-lg'}
-          >
-            <ColdPlusIcon className={'w-[8px] h-[8px]'} />
-          </BaseButton>
-        </div>
+        </BaseButton>
       );
     }
   };

@@ -57,10 +57,14 @@ export const StepDetails = ({
           <div key={`step_detail_${index}_${snakeCase(step.overview)}`}>
             <Disclosure as="div">
               {({ open }) => (
-                <div className={'border-[1px] border-bgc-accent rounded-lg'}>
-                  <div
+                <div
+                  className={
+                    'border-[1px] border-bgc-accent rounded-lg bg-bgc-elevated'
+                  }
+                >
+                  <Disclosure.Button
                     className={
-                      'flex w-full text-tc-primary p-[16px] space-x-[16px] justify-between bg-transparent items-center'
+                      'flex w-full text-tc-primary p-[16px] space-x-[16px] justify-between items-center'
                     }
                   >
                     <div className={'flex space-x-[16px] items-center'}>
@@ -77,7 +81,11 @@ export const StepDetails = ({
                         {step.overview}
                       </div>
                     </div>
-                    <div className={'flex space-x-[16px]'}>
+                    <div
+                      className={
+                        'flex space-x-[16px] items-center justify-center'
+                      }
+                    >
                       <AssigneeSelector
                         assigneeList={assignees}
                         assignee={step.assignee}
@@ -85,23 +93,23 @@ export const StepDetails = ({
                           handleAssigneeSelection(step, assignee);
                         }}
                       />
-                      <Disclosure.Button>
-                        <span className="flex h-6 w-6 items-center justify-center">
-                          {open ? (
-                            <ColdIcon
-                              name={IconNames.ColdChevronUpIcon}
-                              className={'h-[8px]'}
-                            />
-                          ) : (
-                            <ColdIcon
-                              name={IconNames.ColdChevronDownIcon}
-                              className={'h-[8px]'}
-                            />
-                          )}
-                        </span>
-                      </Disclosure.Button>
+                      <div
+                        className={'flex items-center justify-center h-6 w-6'}
+                      >
+                        {open ? (
+                          <ColdIcon
+                            name={IconNames.ColdChevronUpIcon}
+                            className={'h-[8px]'}
+                          />
+                        ) : (
+                          <ColdIcon
+                            name={IconNames.ColdChevronDownIcon}
+                            className={'h-[8px]'}
+                          />
+                        )}
+                      </div>
                     </div>
-                  </div>
+                  </Disclosure.Button>
                   <Disclosure.Panel as="dd" className="px-[16px] pb-[16px]">
                     <p className="text-caption">{step.description}</p>
                   </Disclosure.Panel>

@@ -1,19 +1,19 @@
 import React from 'react';
-import { Action, ActionPayload } from '@coldpbc/interfaces';
+import { ActionPayload } from '@coldpbc/interfaces';
 import { BaseButton, ColdIcon } from '@coldpbc/components';
 import { IconNames } from '@coldpbc/enums';
 import { useNavigate } from 'react-router-dom';
 import { ActionItemVariants } from '@coldpbc/enums';
 
 export interface ActionItemProps {
-  action: ActionPayload;
+  actionPayload: ActionPayload;
   variant: ActionItemVariants;
 }
-export const ActionItem = ({ action, variant }: ActionItemProps) => {
+export const ActionItem = ({ actionPayload, variant }: ActionItemProps) => {
   const navigate = useNavigate();
-  const { definition } = action;
+  const { action } = actionPayload;
   const onCTAClick = () => {
-    navigate('?actionId=' + action.id);
+    navigate('?actionId=' + actionPayload.id);
   };
 
   const getCTAButton = () => {
@@ -33,7 +33,7 @@ export const ActionItem = ({ action, variant }: ActionItemProps) => {
   };
 
   const getProgressText = () => {
-    const steps = definition.steps;
+    const steps = action.steps;
     const completedSteps = steps.filter((step) => step.complete);
     const totalSteps = steps.length;
     return `${completedSteps.length}/${totalSteps}`;
@@ -41,7 +41,7 @@ export const ActionItem = ({ action, variant }: ActionItemProps) => {
 
   const getProgessBar = () => {
     let progressPercent = 0;
-    const steps = definition.steps;
+    const steps = action.steps;
     const completedSteps = steps.filter((step) => step.complete);
     const totalSteps = steps.length;
     if (completedSteps.length > 0) {
@@ -92,15 +92,15 @@ export const ActionItem = ({ action, variant }: ActionItemProps) => {
       <div
         className={getImageClass()}
         style={{
-          background: `url(${definition.image_url})`,
+          background: `url(${action.image_url})`,
         }}
       ></div>
       <div className={getContentClass()}>
         <div className={'flex justify-between'}>
-          <div className={getTitleClass()}>{definition.title}</div>
+          <div className={getTitleClass()}>{action.title}</div>
           <div>{getCTAButton()}</div>
         </div>
-        <div className={'text-body line-clamp-2'}>{definition.overview}</div>
+        <div className={'text-body line-clamp-2'}>{action.overview}</div>
         <div className={'space-y-2'}>
           <div className={'text-eyebrow flex justify-between'}>
             <div>Action Progress</div>
