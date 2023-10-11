@@ -20,7 +20,6 @@ const StepDetailComponent = (args: StepDetailsProps) => {
   const [steps, setSteps] = useState<Step[]>(args.steps);
 
   const handleStepsUpdate = (steps: Step[]) => {
-    console.log(steps);
     setSteps(steps);
   };
 

@@ -1,10 +1,8 @@
-import React, { useEffect } from 'react';
-import { Step } from '@coldpbc/interfaces';
+import React from 'react';
 import { ColdIcon } from '@coldpbc/components';
 import { IconNames } from '@coldpbc/enums';
-import Lottie from 'lottie-react';
-import { getCheckboxAnimation } from '@coldpbc/animations';
 import { StepDetailsEmptyCheckBox } from './stepDetailsEmptyCheckBox';
+import { StepDetailsAnimatedCheckbox } from './stepDetailsAnimatedCheckbox/stepDetailsAnimatedCheckbox';
 
 export type StepDetailsCheckboxProps = {
   complete: string | undefined;
@@ -27,15 +25,7 @@ export const StepDetailsCheckbox = ({
         );
       } else {
         return (
-          <div className={'w-[32px] h-[32px]'} onClick={onCheckboxClick}>
-            <Lottie
-              animationData={getCheckboxAnimation()}
-              autoplay={true}
-              loop={false}
-              width={32}
-              height={32}
-            />
-          </div>
+          <StepDetailsAnimatedCheckbox onCheckboxClick={onCheckboxClick} />
         );
       }
     } else {
