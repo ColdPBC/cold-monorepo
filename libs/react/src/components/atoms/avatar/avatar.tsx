@@ -41,10 +41,25 @@ export function Avatar(props: AvatarProps) {
       );
 
     return (
-      <svg className={clsx({'rounded-full': props.circle})} width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M0 8C0 3.58172 3.58172 0 8 0H32C36.4183 0 40 3.58172 40 8V32C40 36.4183 36.4183 40 32 40H8C3.58172 40 0 36.4183 0 32V8Z" fill="#282C3E"/>
-        <path d="M14 26C14 22.25 16.25 20 20 20C23.7499 20 26 22.25 26 26" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
-        <circle cx="20" cy="14" r="3" fill="white"/>
+      <svg
+        className={clsx({ 'rounded-full': props.circle })}
+        width="40"
+        height="40"
+        viewBox="0 0 40 40"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M0 8C0 3.58172 3.58172 0 8 0H32C36.4183 0 40 3.58172 40 8V32C40 36.4183 36.4183 40 32 40H8C3.58172 40 0 36.4183 0 32V8Z"
+          fill="#282C3E"
+        />
+        <path
+          d="M14 26C14 22.25 16.25 20 20 20C23.7499 20 26 22.25 26 26"
+          stroke="white"
+          strokeWidth="1.5"
+          stroke-linecap="round"
+        />
+        <circle cx="20" cy="14" r="3" fill="white" />
       </svg>
     );
   }

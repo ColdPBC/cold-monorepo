@@ -1,5 +1,4 @@
 import { useAuth0, User } from '@auth0/auth0-react';
-import { useCookies } from 'react-cookie';
 import useSWR from 'swr';
 import { axiosFetcher } from '@coldpbc/fetchers';
 
@@ -10,12 +9,8 @@ export const useAuth0Wrapper = () => {
   // return the user data
   const auth0Context = useAuth0();
 
-  const [cookies] = useCookies(['coldpbc']);
-
-  const { coldpbc } = cookies;
-
   const userData = useSWR<User, any, any>(
-    auth0Context.user && coldpbc
+    auth0Context.user && auth0Context.isAuthenticated
       ? [`/members/${auth0Context.user.email}`, 'GET']
       : null,
     axiosFetcher,

@@ -13,10 +13,8 @@ import { useLDClient } from 'launchdarkly-react-client-sdk';
 import useSWR from 'swr';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { get, has, isEmpty, isUndefined } from 'lodash';
-import { useCookies } from 'react-cookie';
 import { PolicySignedDataType } from '@coldpbc/interfaces';
 import { useAuth0Wrapper } from '@coldpbc/hooks';
-// import { useInitialSurveyCheck } from '@coldpbc/hooks';
 import { SurveyPayloadType } from '@coldpbc/interfaces';
 
 export const ProtectedRoute = () => {
@@ -30,10 +28,6 @@ export const ProtectedRoute = () => {
   } = useAuth0Wrapper();
   const { auth0Options } = useContext(ColdContext);
 
-  const [cookies, setCookie, removeCookie] = useCookies(['coldpbc']);
-
-  const { coldpbc } = cookies;
-
   const ldClient = useLDClient();
 
   const location = useLocation();
@@ -43,7 +37,7 @@ export const ProtectedRoute = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const signedPolicySWR = useSWR<PolicySignedDataType[], any, any>(
-    user && coldpbc ? ['/policies/signed/user', 'GET'] : null,
+    user && isAuthenticated ? ['/policies/signed/user', 'GET'] : null,
     axiosFetcher,
   );
 
@@ -66,7 +60,7 @@ export const ProtectedRoute = () => {
   };
 
   const initialSurveySWR = useSWR<SurveyPayloadType, any, any>(
-    coldpbc ? [`/surveys/journey_overview`, 'GET'] : null,
+    user && isAuthenticated ? [`/surveys/journey_overview`, 'GET'] : null,
     axiosFetcher,
   );
 
@@ -93,33 +87,14 @@ export const ProtectedRoute = () => {
       try {
         if (!isLoading) {
           if (isAuthenticated) {
-            if (!coldpbc && user) {
-              const options = {
-                authorizationParams: {
-                  audience: auth0Options.authorizationParams?.audience,
-                  scope: 'offline_access email profile openid',
-                },
-              } as GetTokenSilentlyOptions;
-              if (user.coldclimate_claims.org_id) {
-                options.authorizationParams = {
-                  ...options.authorizationParams,
-                  organization: user.coldclimate_claims.org_id,
-                };
-              }
-              const accessToken = await getAccessTokenSilently(options);
-
-              setCookie('coldpbc', { user, accessToken });
-
-              if (ldClient && user.coldclimate_claims.org_id) {
-                await ldClient.identify({
-                  kind: 'user',
-                  organizationId: user.coldclimate_claims.org_id,
-                });
-              }
+            if (ldClient && user?.coldclimate_claims.org_id) {
+              await ldClient.identify({
+                kind: 'organization',
+                key: user.coldclimate_claims.org_id,
+              });
             }
           } else {
             if (!isAuthenticated) {
-              removeCookie('coldpbc');
               await loginWithRedirect({
                 appState: appState,
                 authorizationParams: {
@@ -144,14 +119,7 @@ export const ProtectedRoute = () => {
     };
 
     getUserMetadata();
-  }, [
-    getAccessTokenSilently,
-    user,
-    isAuthenticated,
-    isLoading,
-    appState,
-    coldpbc,
-  ]);
+  }, [getAccessTokenSilently, user, isAuthenticated, isLoading, appState]);
 
   useEffect(() => {
     if (initialSurveySWR.data && !needsSignup()) {
@@ -179,7 +147,7 @@ export const ProtectedRoute = () => {
     return <div></div>;
   }
 
-  if (isAuthenticated && user && coldpbc) {
+  if (isAuthenticated && user) {
     if (needsSignup()) {
       return (
         <SignupPage signedPolicyData={signedPolicySWR.data} userData={user} />
