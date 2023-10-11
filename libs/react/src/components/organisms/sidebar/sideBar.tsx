@@ -23,7 +23,7 @@ export const SideBar = (): JSX.Element => {
     data: any;
     error: any;
     isLoading: boolean;
-  } = useSWR(['/form-definitions/sidebar_navigation', 'GET'], axiosFetcher);
+  } = useSWR(['/components/sidebar_navigation', 'GET'], axiosFetcher);
   const ldFlags = useFlags();
 
   const filterSidebar = (item: NavbarItem) => {

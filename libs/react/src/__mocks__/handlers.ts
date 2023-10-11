@@ -36,20 +36,17 @@ export const handlers = [
      url path of the mock below so that it doesn't match the url path you are requesting in your component.
 
      For example:
-     if you are requesting '/form-definitions/sidebar_navigation', and you want to see that it works with the API
-     then you will need to change the url path below to something like '/form-definitions/sidebar_navigations_disable'.
+     if you are requesting '/components/sidebar_navigation', and you want to see that it works with the API
+     then you will need to change the url path below to something like '/components/sidebar_navigations_disable'.
      then you can paste a valid accessToken in the textbox in storybook, and it should authenticate to the API and return the data.
 
      this is useful if you want to make sure your mocks match what the API is returning.
      */
 
   //Mock SideBar Request
-  rest.get(
-    getApiUrl('/form-definitions/sidebar_navigation'),
-    (req, res, ctx) => {
-      return res(ctx.json({ ...getSidebarMock() }));
-    },
-  ),
+  rest.get(getApiUrl('/components/sidebar_navigation'), (req, res, ctx) => {
+    return res(ctx.json({ ...getSidebarMock() }));
+  }),
 
   // Mock data for journey modules
   rest.get(getApiUrl('/categories'), (req, res, ctx) => {
@@ -68,14 +65,11 @@ export const handlers = [
     return res(ctx.json(getDataGridUsersMock()));
   }),
 
-  rest.get(
-    getApiUrl('/form-definitions/team_member_table'),
-    (req, res, ctx) => {
-      return res(ctx.json(getTeamMemberDataGridMock()));
-    },
-  ),
+  rest.get(getApiUrl('/components/team_member_table'), (req, res, ctx) => {
+    return res(ctx.json(getTeamMemberDataGridMock()));
+  }),
 
-  rest.get(getApiUrl('/form-definitions/datagrid'), (req, res, ctx) => {
+  rest.get(getApiUrl('/components/datagrid'), (req, res, ctx) => {
     return res(ctx.json(getDefaultFormDefinitionGridMock()));
   }),
 
@@ -104,7 +98,7 @@ export const handlers = [
   rest.get(getApiUrl('/organizations/:orgId/members'), (req, res, ctx) => {
     const { orgId } = req.params;
     const mock = getOrganizationMembersMock();
-    return res(ctx.json({...getOrganizationMembersMock()}));
+    return res(ctx.json({ ...getOrganizationMembersMock() }));
   }),
 
   rest.post(

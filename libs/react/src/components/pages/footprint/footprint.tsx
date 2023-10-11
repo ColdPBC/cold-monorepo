@@ -6,12 +6,12 @@ import { Spinner } from '../../atoms/spinner/spinner';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import useSWR from 'swr';
 import { some } from 'lodash';
-import { Card, FootprintOverviewCard, FootprintOverviewChart, FootprintOverviewVariants } from '../../molecules';
+import { FootprintOverviewCard } from '../../molecules';
 import { FootprintDetailCard } from '../../molecules/footprintDetailCard';
 import { getSchemeForColor, HexColors } from '@coldpbc/themes';
-import { Link } from 'react-router-dom';
 import { AppContent } from '../../organisms/appContent';
 import { DismissableInfoCard } from '../../molecules/dismissableInfoCard';
+import { EmissionsDonutChartVariants } from '../../atoms/emissionsDonutChart/emissionsDonutChart';
 
 const PERIOD = 2022;
 
@@ -71,12 +71,12 @@ export function Footprint() {
                 onDismiss={() => {}}
                 dismissKey='footprint-page'
               />
-              <FootprintOverviewCard chartVariant={FootprintOverviewVariants.horizontal} headerless />
+              <FootprintOverviewCard chartVariant={EmissionsDonutChartVariants.horizontal} headerless />
             </>
           } 
         </CenterColumnContent>
         <RightColumnContent>
-          <FootprintOverviewCard chartVariant={FootprintOverviewVariants.vertical} />
+          <FootprintOverviewCard chartVariant={EmissionsDonutChartVariants.vertical} />
         </RightColumnContent>
       </AppContent>
     );
