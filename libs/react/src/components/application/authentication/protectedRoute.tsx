@@ -108,7 +108,13 @@ export const ProtectedRoute = () => {
               }
               const accessToken = await getAccessTokenSilently(options);
 
-              setCookie('coldpbc', { user, accessToken });
+              setCookie(
+                'coldpbc',
+                { user, accessToken },
+                {
+                  maxAge: 60 * 60 * 24,
+                },
+              );
 
               if (ldClient && user.coldclimate_claims.org_id) {
                 await ldClient.identify({

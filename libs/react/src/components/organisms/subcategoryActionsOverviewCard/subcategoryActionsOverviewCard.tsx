@@ -1,11 +1,11 @@
 import React from 'react';
-import { ActionType } from '@coldpbc/interfaces';
+import { Action, ActionPayload } from '@coldpbc/interfaces';
 import { ActionItem, Card } from '@coldpbc/components';
 import { ActionItemVariants } from '@coldpbc/enums';
 
 export interface SubcategoryActionsOverviewCardProps {
   category: string;
-  actions: ActionType[];
+  actions: ActionPayload[];
 }
 
 export const SubcategoryActionsOverviewCard = ({
@@ -18,7 +18,7 @@ export const SubcategoryActionsOverviewCard = ({
         <div className={'text-h3'}>{category}</div>
         {actions.map((action) => {
           return (
-            <div key={action.id}>
+            <div key={`action_item_${action.definition.title}`}>
               <ActionItem action={action} variant={ActionItemVariants.wide} />
             </div>
           );

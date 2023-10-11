@@ -583,6 +583,13 @@ export const fontSizes = (): any => {
         fontWeight: 600,
       },
     ],
+    caption: [
+      '0.75rem',
+      {
+        lineHeight: '1.125rem',
+        fontWeight: 400,
+      },
+    ],
   };
 };
 

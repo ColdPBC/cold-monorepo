@@ -1,36 +1,39 @@
-export interface ActionType {
-  id: string;
+export type Action = {
   title: string;
   overview: string;
   objective_description: string;
   process_description?: string;
   image_url: string;
   subcategory: string;
-  assignee?: AssigneeType;
+  assignee?: Assignee;
   ready_to_execute: boolean;
   due_date?: Date;
-  steps: StepType[];
+  steps: Step[];
   areas_of_impact: string[];
-  dependent_surveys: DependentSurveyType[];
-}
+  dependent_surveys: DependentSurvey[];
+};
 
-export interface StepType {
-  id: string;
-  assignee?: AssigneeType;
+export type Step = {
+  assignee?: Assignee;
   overview: string;
   description: string;
-  complete: boolean;
-}
+  complete?: string;
+};
 
-export interface AssigneeType {
-  name: string;
-  given_name: string;
-  family_name: string;
-  picture: string;
-}
+export type Assignee = {
+  name?: string;
+  given_name?: string;
+  family_name?: string;
+  picture?: string;
+};
 
-export interface DependentSurveyType {
+export type DependentSurvey = {
   name: string;
   title: string;
   submitted: boolean;
-}
+};
+
+export type ActionPayload = {
+  id: string;
+  definition: Action;
+};

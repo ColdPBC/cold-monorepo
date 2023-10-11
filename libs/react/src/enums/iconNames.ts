@@ -1,3 +1,6 @@
+import { ColdEmptyCheckboxIcon } from '../components/atoms/icons/coldEmptyCheckboxIcon';
+import { ColdChevronUpIcon } from '../components/atoms/icons/coldChevronUpIcon';
+
 export enum IconNames {
   ColdHomeIcon = 'ColdHomeIcon',
   ColdFootprintIcon = 'ColdFootprintIcon',
@@ -13,4 +16,7 @@ export enum IconNames {
   ColdScoreIcon = 'ColdScoreIcon',
   ColdActionsCompletedIcon = 'ColdActionsCompletedIcon',
   ColdRightArrowIcon = 'ColdRightArrowIcon',
+  ColdEmptyCheckboxIcon = 'ColdEmptyCheckboxIcon',
+  ColdChevronUpIcon = 'ColdChevronUpIcon',
+  ColdChevronDownIcon = 'ColdChevronDownIcon',
 }
