@@ -1,6 +1,6 @@
 import { ActionPayload } from '@coldpbc/interfaces';
 import { BaseButton, ColdIcon } from '@coldpbc/components';
-import { IconNames } from '@coldpbc/enums';
+import { ButtonTypes, IconNames } from '@coldpbc/enums';
 import { useNavigate } from 'react-router-dom';
 import { ActionItemVariants } from '@coldpbc/enums';
 import { motion } from 'framer-motion';
@@ -25,7 +25,7 @@ export const ActionItem = ({ actionPayload, variant }: ActionItemProps) => {
       );
     } else {
       return (
-        <BaseButton className={'bg-transparent'} onClick={onCTAClick}>
+        <BaseButton className={'bg-transparent'} onClick={onCTAClick} variant={ButtonTypes.hyperlink}>
           <span className={'text-tc-primary text-button'}>View All Steps</span>
         </BaseButton>
       );

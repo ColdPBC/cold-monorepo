@@ -26,7 +26,7 @@ export const ActionDetail = ({
     const { user } = useAuth0();
     const [show, setShow] = useState(true);
 
-    const { data } = useSWR<ActionPayload, any, any>(
+    const { data, error, isLoading } = useSWR<ActionPayload, any, any>(
         [`/organizations/${user?.coldclimate_claims.org_id}/actions/${id}`, 'GET'],
         axiosFetcher,
     );
@@ -41,10 +41,15 @@ export const ActionDetail = ({
         }
     }
 
+    if (error && !isLoading) {
+        return null;
+    }
+
     return (
         <Takeover
             show={show}
             setShow={setShow}
+            isLoading={isLoading}
             header={{
                 title: {
                     text: 'Renewable Energy Procurement'

@@ -31,13 +31,13 @@ const TakeoverComponent = (args: TakeoverProps) => {
   );
 };
 
-const meta = {
+const meta: Meta<typeof TakeoverComponent> = {
   title: 'Molecules/Takeover',
   component: TakeoverComponent,
   tags: ['autodocs'],
   decorators: [withKnobs],
   argTypes: {},
-} satisfies Meta<typeof TakeoverComponent>;
+};
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -106,6 +106,22 @@ export const HeaderWithButtonAndLogo: Story = {
     setShow: (show: boolean) => {},
     header: {
       title: {},
+      dismiss: {
+        label: 'close',
+        dismissible: true,
+      },
+    },
+  },
+};
+
+export const Loading: Story = {
+  render: (args) => <TakeoverComponent {...args} />,
+  args: {
+    isLoading: true,
+    show: true,
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    setShow: (show: boolean) => {},
+    header: {
       dismiss: {
         label: 'close',
         dismissible: true,

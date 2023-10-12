@@ -1,5 +1,5 @@
 import React, { PropsWithChildren } from 'react';
-import { BaseButton } from '../../atoms';
+import { BaseButton, Spinner } from '../../atoms';
 import { ColdLogos } from '../../atoms';
 import {
   ButtonTypes,
@@ -22,13 +22,14 @@ export interface TakeoverProps {
       onClick?: () => void;
     };
   };
+  isLoading?: boolean;
 }
 
 export const Takeover = (props: PropsWithChildren<TakeoverProps>) => {
-  const { children, show, setShow, header } = props;
+  const { children, show, setShow, header, isLoading } = props;
 
   const getHeaderComponent = () => {
-    if (header) {
+    if (header && !isLoading) {
       return (
         <div
           className={
@@ -82,7 +83,16 @@ export const Takeover = (props: PropsWithChildren<TakeoverProps>) => {
         }
       >
         {getHeaderComponent()}
-        <div className='flex-1 flex flex-col'>{children}</div>
+        <div className='flex-1 flex flex-col'>
+          {isLoading ? 
+            (
+              <div className="h-full w-full flex items-center justify-center">
+                <Spinner size={GlobalSizes.xLarge} />
+              </div>
+            ) : 
+            children
+          }
+        </div>
       </div>
     );
   } else {
