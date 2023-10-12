@@ -1,18 +1,19 @@
 import React from 'react';
-import { ActionType } from '@coldpbc/interfaces';
+import { ActionPayload } from '@coldpbc/interfaces';
 import { BaseButton, ColdIcon } from '@coldpbc/components';
 import { IconNames } from '@coldpbc/enums';
 import { useNavigate } from 'react-router-dom';
 import { ActionItemVariants } from '@coldpbc/enums';
 
 export interface ActionItemProps {
-  action: ActionType;
+  actionPayload: ActionPayload;
   variant: ActionItemVariants;
 }
-export const ActionItem = ({ action, variant }: ActionItemProps) => {
+export const ActionItem = ({ actionPayload, variant }: ActionItemProps) => {
   const navigate = useNavigate();
+  const { action } = actionPayload;
   const onCTAClick = () => {
-    navigate('?actionId=' + action.id);
+    navigate('?actionId=' + actionPayload.id);
   };
 
   const getCTAButton = () => {

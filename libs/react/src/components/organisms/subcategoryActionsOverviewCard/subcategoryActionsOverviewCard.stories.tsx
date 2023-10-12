@@ -37,7 +37,7 @@ const SubcategoryActionsOverviewCardTemplate = (
 export const Default: Story = {
   render: SubcategoryActionsOverviewCardTemplate,
   args: {
-    actions: getActionsMockBySubCategoryName('facilities'),
+    actionPayloads: getActionsMockBySubCategoryName('facilities'),
     category: 'Facilities',
   },
 };
