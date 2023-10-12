@@ -1,6 +1,8 @@
 import type { CustomFlowbiteTheme, FlowbiteTheme } from 'flowbite-react';
+import { theme } from 'flowbite-react';
 
 export const darkTableTheme: CustomFlowbiteTheme = {
+  ...theme,
   table: {
     root: {
       base: 'w-full text-left text-sm text-gray-500 dark:text-gray-400',
@@ -31,6 +33,7 @@ export const darkTableTheme: CustomFlowbiteTheme = {
 };
 
 export const flowbiteThemeOverride: FlowbiteTheme = {
+  ...theme,
   accordion: {
     root: {
       base: 'divide-y divide-gray-200 border-gray-200 dark:divide-gray-700 dark:border-gray-700',
@@ -419,6 +422,7 @@ export const flowbiteThemeOverride: FlowbiteTheme = {
   },
   checkbox: {
     root: {
+      ...theme.checkbox.root,
       base: 'h-4 w-4 rounded border border-gray-300 bg-gray-100 focus:ring-2 focus:ring-cold-skyBlue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-cold-skyBlue-600',
     },
   },
@@ -878,6 +882,7 @@ export const flowbiteThemeOverride: FlowbiteTheme = {
       label: 'ml-3 text-sm font-medium text-gray-900 dark:text-gray-300',
     },
     toggle: {
+      ...theme.toggleSwitch.toggle,
       base: 'toggle-bg h-6 w-11 rounded-full border group-focus:ring-4 group-focus:ring-cold-skyBlue-500/25',
       checked: {
         on: 'after:translate-x-full after:border-white',
@@ -1029,6 +1034,7 @@ export const flowbiteThemeOverride: FlowbiteTheme = {
     },
   },
   tab: {
+    ...theme.tab,
     base: 'flex flex-col gap-2',
     tablist: {
       base: 'flex text-center',
