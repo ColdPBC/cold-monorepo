@@ -97,7 +97,7 @@ export const ActionItem = ({ actionPayload, variant }: ActionItemProps) => {
         }}
       ></div>
       <div className={getContentClass()}>
-        <div className={'flex justify-between'}>
+        <div className={'flex justify-between items-center'}>
           <div className={getTitleClass()}>{action.title}</div>
           <div>{getCTAButton()}</div>
         </div>
