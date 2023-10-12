@@ -1,4 +1,3 @@
-import React from 'react';
 import { withKnobs } from '@storybook/addon-knobs';
 import { StoryObj } from '@storybook/react';
 import {
@@ -6,7 +5,6 @@ import {
   SubcategoryActionsOverviewCardProps,
 } from './subcategoryActionsOverviewCard';
 import {
-  getActionsMockBySubCategoryName,
   StoryMockProvider,
 } from '@coldpbc/mocks';
 
@@ -37,7 +35,7 @@ const SubcategoryActionsOverviewCardTemplate = (
 export const Default: Story = {
   render: SubcategoryActionsOverviewCardTemplate,
   args: {
-    actionPayloads: getActionsMockBySubCategoryName('facilities'),
-    category: 'Facilities',
+    subcategory_key: 'facilities',
+    category_key: 'company_decarbonization'
   },
 };

@@ -81,7 +81,7 @@ export const EmissionsDonutChart = ({
         animateSegmentThickness,
         segmentOnHover,
         chartBeforeDraw
-    } = useActiveSegment();
+    } = useActiveSegment({ chartHasSpacers: true });
 
     const chartOptions: ChartOptions<'doughnut'> = {
         responsive: true,

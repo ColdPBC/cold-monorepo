@@ -1,15 +1,23 @@
-import React from 'react';
 import { Outlet, useSearchParams } from 'react-router-dom';
 import { Survey } from '../../pages';
+import { ActionDetail } from '../../pages/actionDetail/actionDetail';
 
 export const Interceptor = () => {
-  const [params, setSearchParams] = useSearchParams();
+  const [params] = useSearchParams();
   const surveyName = params.get('surveyName');
+  const actionId = params.get('actionId');
 
   if (surveyName !== null) {
     return (
       <div>
         <Survey surveyName={surveyName} />
+        <Outlet />
+      </div>
+    );
+  } else if (actionId !== null) {
+    return (
+      <div>
+        <ActionDetail id={actionId} />
         <Outlet />
       </div>
     );

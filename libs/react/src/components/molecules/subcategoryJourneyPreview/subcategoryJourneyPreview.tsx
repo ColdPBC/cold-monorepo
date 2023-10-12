@@ -6,6 +6,7 @@ import useSWR from 'swr';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import { twMerge } from 'tailwind-merge';
 import { Card } from '../card';
+import { motion } from 'framer-motion';
 
 const scoreQuadrants = [
   {
@@ -90,7 +91,7 @@ export const SubcategoryJourneyPreview = ({
       </div>
 
       <div className="h-[12px] relative my-2 flex  w-full">
-        <div
+        <motion.div
           className={clsx(
             'h-[8px] absolute rounded-lg top-[2px] left-[2px] right-[2px]',
             {
@@ -100,7 +101,15 @@ export const SubcategoryJourneyPreview = ({
               'bg-primary-300': curScoreQuadrantIndex === 3,
             },
           )}
-          style={{ width: `calc(${subcategoryData.journey_score}% - 4px)` }}
+          initial={{
+            width: 0
+          }}
+          animate={{
+            width: `calc(${subcategoryData.journey_score}% - 4px)`
+          }}
+          transition={{
+            duration: .5
+          }}
         />
         <div className="bg-gray-30 flex-1 rounded-l-lg mr-0.5" />
         <div className="bg-gray-30 flex-1 mr-0.5" />

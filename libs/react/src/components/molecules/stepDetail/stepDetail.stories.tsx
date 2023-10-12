@@ -5,12 +5,12 @@ import { getActionMock, getOrganizationMembersMock } from '@coldpbc/mocks';
 import { StepDetail, StepDetailProps } from '@coldpbc/components';
 import { Step } from '@coldpbc/interfaces';
 
-const meta = {
+const meta: Meta<typeof StepDetail> = {
   title: 'Molecules/StepDetail',
   component: StepDetail,
   tags: ['autodocs'],
   decorators: [withKnobs],
-} satisfies Meta<typeof StepDetail>;
+};
 
 export default meta;
 type Story = StoryObj<typeof meta>;

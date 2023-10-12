@@ -1,4 +1,5 @@
 import { rest } from 'msw';
+import { getActionAllStepsComplete, getActionMock, getActionMockNoResources } from './action';
 import {
   getCategoriesDataMock,
   getCategoriesEmptyDataMock,
@@ -92,5 +93,17 @@ export const getNewsHandler = {
       ...getNewsDefault(),
       ...getNewsDefault()
     ]));
+  }),
+}
+
+export const getActionHandler = {
+  default: rest.get('*/organizations/*/actions/*', (req, res, ctx) => {
+    return res(ctx.json(getActionMock()));
+  }),
+  noResources: rest.get('*/organizations/*/actions/*', (req, res, ctx) => {
+    return res(ctx.json(getActionMockNoResources()));
+  }),
+  allStepsComplete: rest.get('*/organizations/*/actions/*', (req, res, ctx) => {
+    return res(ctx.json(getActionAllStepsComplete()));
   }),
 }

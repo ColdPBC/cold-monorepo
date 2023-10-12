@@ -41,7 +41,7 @@ export function FootprintDetailChart({ colors, subcategory_key, period, setIsEmp
     animateSegmentThickness,
     segmentOnHover,
     chartBeforeDraw
-  } = useActiveSegment(); 
+  } = useActiveSegment({ chartHasSpacers: false }); 
 
   const [chartData, setChartData] = useState<ChartData<'pie'>>({
     datasets: [
