@@ -1,3 +1,20 @@
+# [1.40.0](https://github.com/ColdPBC/ui/compare/v1.39.0...v1.40.0) (2023-10-12)
+
+
+### Bug Fixes
+
+* remove old cookie handling ([c75687d](https://github.com/ColdPBC/ui/commit/c75687d6df1b76f923d1c5270bbf423b05d54d36))
+
+
+### Features
+
+* added cursor pointer on assignee select ([2289f0c](https://github.com/ColdPBC/ui/commit/2289f0cecc5aaf7930f7ebeab26f85e4f7bafb50))
+* allow whole step detail button to open dropdown ([5888954](https://github.com/ColdPBC/ui/commit/588895402e0c5775a8fb1635beaecaac8d0897e1))
+* Created stepdetails and assigneeselector component ([a19fb5d](https://github.com/ColdPBC/ui/commit/a19fb5dabdc60cb08f2b407bf993eedbbb03616d))
+* Minor tweaks ([56179c0](https://github.com/ColdPBC/ui/commit/56179c04305f4ef730f866961103970fdd39ab23))
+* remove restrict width for up down icon ([6ebc098](https://github.com/ColdPBC/ui/commit/6ebc0986c31c7b7fdbc7a226e7bda5844cd399ce))
+* Update to step detail work ([3b3ad2d](https://github.com/ColdPBC/ui/commit/3b3ad2d556a73dbc4415687fc9cd8cb502a92bb5))
+
 # [1.39.0](https://github.com/ColdPBC/ui/compare/v1.38.0...v1.39.0) (2023-10-11)
 
 
