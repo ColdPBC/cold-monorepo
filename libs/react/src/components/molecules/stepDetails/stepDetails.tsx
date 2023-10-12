@@ -6,6 +6,7 @@ import { ColdIcon } from '../../atoms';
 import { AssigneeSelector } from '../assigneeSelector';
 import { StepDetailsCheckbox } from '../stepDetailsCheckbox';
 import { cloneDeep, snakeCase } from 'lodash';
+import { StepDetail } from '../stepDetail/stepDetail';
 
 export interface StepDetailsProps {
   steps: Step[];
@@ -23,22 +24,7 @@ export const StepDetails = ({
   if (variant === StepDetailsVariants.SubcategoryActionDetailsCard) {
     steps = steps.slice(0, 2);
   }
-
-  const handleAssigneeSelection = (
-    step: Step,
-    assignee: Assignee | undefined,
-  ) => {
-    const index = steps.findIndex((s) => s.overview === step.overview);
-    const updatedStep = {
-      ...step,
-      assignee: assignee,
-    };
-    const updatedSteps = steps;
-    updatedSteps[index] = updatedStep;
-    handleStepsUpdate(updatedSteps);
-  };
-
-  const updateStepsWithStep = (newStep: Step) => {
+  const handleStepUpdate = (newStep: Step) => {
     const index = steps.findIndex((s) => s.overview === newStep.overview);
     const updatedSteps = steps.map((step, i) => {
       if (i === index) {
@@ -55,67 +41,11 @@ export const StepDetails = ({
       {steps.map((step, index) => {
         return (
           <div key={`step_detail_${index}_${snakeCase(step.overview)}`}>
-            <Disclosure as="div">
-              {({ open }) => (
-                <div
-                  className={
-                    'border-[1px] border-bgc-accent rounded-lg bg-bgc-elevated'
-                  }
-                >
-                  <Disclosure.Button
-                    className={
-                      'flex w-full text-tc-primary p-[16px] space-x-[16px] justify-between items-center'
-                    }
-                  >
-                    <div className={'flex space-x-[16px] items-center'}>
-                      <StepDetailsCheckbox
-                        complete={step.complete}
-                        setComplete={(complete) => {
-                          updateStepsWithStep({
-                            ...step,
-                            complete: complete,
-                          });
-                        }}
-                      />
-                      <div className={'text-body font-bold'}>
-                        {step.overview}
-                      </div>
-                    </div>
-                    <div
-                      className={
-                        'flex space-x-[16px] items-center justify-center'
-                      }
-                    >
-                      <AssigneeSelector
-                        assigneeList={assignees}
-                        assignee={step.assignee}
-                        handleAssigneeSelection={(assignee) => {
-                          handleAssigneeSelection(step, assignee);
-                        }}
-                      />
-                      <div
-                        className={'flex items-center justify-center h-6 w-6'}
-                      >
-                        {open ? (
-                          <ColdIcon
-                            name={IconNames.ColdChevronUpIcon}
-                            className={'h-[8px]'}
-                          />
-                        ) : (
-                          <ColdIcon
-                            name={IconNames.ColdChevronDownIcon}
-                            className={'h-[8px]'}
-                          />
-                        )}
-                      </div>
-                    </div>
-                  </Disclosure.Button>
-                  <Disclosure.Panel as="dd" className="px-[16px] pb-[16px]">
-                    <p className="text-caption">{step.description}</p>
-                  </Disclosure.Panel>
-                </div>
-              )}
-            </Disclosure>
+            <StepDetail
+              step={step}
+              handleStepUpdate={handleStepUpdate}
+              assignees={assignees}
+            />
           </div>
         );
       })}

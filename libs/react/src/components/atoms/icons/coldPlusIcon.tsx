@@ -18,8 +18,8 @@ export const ColdPlusIcon = (props: IconProps) => {
       <path
         d="M1 4.99984L4.99983 4.99886M4.99983 4.99886L4.99983 1M4.99983 4.99886L4.99983 9M4.99983 4.99886L9 4.99984"
         stroke="white"
-        stroke-width="1.5"
-        stroke-linecap="round"
+        strokeWidth="1.5"
+        strokeLinecap="round"
       />
     </svg>
   );

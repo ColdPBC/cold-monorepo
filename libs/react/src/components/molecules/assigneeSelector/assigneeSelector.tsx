@@ -41,7 +41,7 @@ export const AssigneeSelector = ({
             {stepAssignee.name}
           </div>
           <div>
-            <BaseButton
+            <div
               className={'p-[8px] w-[24px] h-[24px]'}
               onClick={() => {
                 setStepAssignee(undefined);
@@ -49,13 +49,13 @@ export const AssigneeSelector = ({
               }}
             >
               <ColdIcon name={IconNames.CloseModalIcon} />
-            </BaseButton>
+            </div>
           </div>
         </div>
       );
     } else {
       return (
-        <BaseButton
+        <div
           className={
             'min-h-[40px] w-fit text-tc-primary rounded-lg p-[8px] border-[1px] border-bgc-accent'
           }
@@ -68,7 +68,7 @@ export const AssigneeSelector = ({
               <ColdPlusIcon className={'w-[8px] h-[8px]'} />
             </div>
           </div>
-        </BaseButton>
+        </div>
       );
     }
   };

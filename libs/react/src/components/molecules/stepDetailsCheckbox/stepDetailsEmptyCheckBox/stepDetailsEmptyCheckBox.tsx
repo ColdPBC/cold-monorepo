@@ -1,10 +1,9 @@
 import React from 'react';
 import { ColdIcon } from '@coldpbc/components';
 import { IconNames } from '@coldpbc/enums';
-import { HexColors } from '@coldpbc/themes';
 
 export type HoverStateProps = {
-  onCheckboxClick: () => void;
+  onCheckboxClick: (event: React.MouseEvent<HTMLElement>) => void;
 };
 
 export const StepDetailsEmptyCheckBox = ({

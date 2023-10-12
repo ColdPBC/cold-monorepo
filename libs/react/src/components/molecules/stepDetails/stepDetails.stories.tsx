@@ -16,7 +16,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-const StepDetailComponent = (args: StepDetailsProps) => {
+const StepDetailsComponent = (args: StepDetailsProps) => {
   const [steps, setSteps] = useState<Step[]>(args.steps);
 
   const handleStepsUpdate = (steps: Step[]) => {
@@ -34,7 +34,7 @@ const StepDetailComponent = (args: StepDetailsProps) => {
 
 export const Default: Story = {
   render: (args) => {
-    return <StepDetailComponent {...args} />;
+    return <StepDetailsComponent {...args} />;
   },
   args: {
     steps: getActionMock().action.steps,
@@ -46,7 +46,7 @@ export const Default: Story = {
 
 export const SubcategoryActionDetailsCardVariant: Story = {
   render: (args) => {
-    return <StepDetailComponent {...args} />;
+    return <StepDetailsComponent {...args} />;
   },
   args: {
     steps: getActionMock().action.steps,

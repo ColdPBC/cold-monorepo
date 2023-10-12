@@ -3,7 +3,7 @@ import { getCheckboxAnimation } from '@coldpbc/animations';
 import React from 'react';
 
 export type StepDetailsAnimatedCheckboxProps = {
-  onCheckboxClick: () => void;
+  onCheckboxClick: (event: React.MouseEvent<HTMLElement>) => void;
 };
 export const StepDetailsAnimatedCheckbox = ({
   onCheckboxClick,
