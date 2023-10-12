@@ -26,13 +26,9 @@ export const StepDetails = ({
   }
   const handleStepUpdate = (newStep: Step) => {
     const index = steps.findIndex((s) => s.overview === newStep.overview);
-    const updatedSteps = steps.map((step, i) => {
-      if (i === index) {
-        return newStep;
-      } else {
-        return step;
-      }
-    });
+    const updatedSteps = [...steps];
+    updatedSteps[index] = newStep;
+
     handleStepsUpdate(updatedSteps);
   };
 
@@ -40,13 +36,12 @@ export const StepDetails = ({
     <div className={'text-tc-primary space-y-[16px] w-[835px]'}>
       {steps.map((step, index) => {
         return (
-          <div key={`step_detail_${index}_${snakeCase(step.overview)}`}>
-            <StepDetail
-              step={step}
-              handleStepUpdate={handleStepUpdate}
-              assignees={assignees}
-            />
-          </div>
+          <StepDetail
+            step={step}
+            handleStepUpdate={handleStepUpdate}
+            assignees={assignees}
+            key={`step_detail_${index}_${snakeCase(step.overview)}`}
+          />
         );
       })}
     </div>

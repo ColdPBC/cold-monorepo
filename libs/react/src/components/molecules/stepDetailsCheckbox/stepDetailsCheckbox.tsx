@@ -1,8 +1,8 @@
-import React from 'react';
 import { ColdIcon } from '@coldpbc/components';
 import { IconNames } from '@coldpbc/enums';
 import { StepDetailsEmptyCheckBox } from './stepDetailsEmptyCheckBox';
 import { StepDetailsAnimatedCheckbox } from './stepDetailsAnimatedCheckbox';
+import { MouseEvent, useState } from 'react';
 
 export type StepDetailsCheckboxProps = {
   complete: string | undefined;
@@ -13,7 +13,7 @@ export const StepDetailsCheckbox = ({
   complete,
   setComplete,
 }: StepDetailsCheckboxProps) => {
-  const [checkboxClicked, setCheckboxClicked] = React.useState(false);
+  const [checkboxClicked, setCheckboxClicked] = useState(false);
 
   const getStepCheckbox = () => {
     if (complete) {
@@ -33,7 +33,7 @@ export const StepDetailsCheckbox = ({
     }
   };
 
-  const onCheckboxClick = (event: React.MouseEvent<HTMLElement>) => {
+  const onCheckboxClick = (event: MouseEvent<HTMLElement>) => {
     if (complete) {
       setComplete(undefined);
       setCheckboxClicked(true);
