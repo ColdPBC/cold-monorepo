@@ -1,3 +1,19 @@
+# [1.39.0](https://github.com/ColdPBC/ui/compare/v1.38.0...v1.39.0) (2023-10-11)
+
+
+### Bug Fixes
+
+* Add FootprintOverviewDetail interface back ([2b455ec](https://github.com/ColdPBC/ui/commit/2b455ec4a774a21ac4bc332150141aff6010e45f))
+* Add FootprintOverviewDetail interface back ([#98](https://github.com/ColdPBC/ui/issues/98)) ([d74a253](https://github.com/ColdPBC/ui/commit/d74a253bd90bc69b57e1c32595564b138c1da5ca))
+
+
+### Features
+
+* Create subcategory footprint card variant ([bd5c9a4](https://github.com/ColdPBC/ui/commit/bd5c9a4e0397ee48779241be4dcfe427c2644327))
+* Create subcategory footprint card variant ([#89](https://github.com/ColdPBC/ui/issues/89)) ([6a7b0da](https://github.com/ColdPBC/ui/commit/6a7b0dababd771d00f58492aca77dd2d57c589d6))
+* Removed use of cookie to store accesstoken and cleaned up runtime console errors ([22b8793](https://github.com/ColdPBC/ui/commit/22b87930ba6750ade84d27e7041c0426b543d592))
+* updated fom-definitions to components api call ([a9fb52a](https://github.com/ColdPBC/ui/commit/a9fb52a1af89b229c545dccdfb83adf3a1d5f8d1))
+
 # [1.38.0](https://github.com/ColdPBC/ui/compare/v1.37.0...v1.38.0) (2023-10-05)
 
 
