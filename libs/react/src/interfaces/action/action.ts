@@ -7,10 +7,14 @@ export type Action = {
   subcategory: string;
   assignee?: Assignee;
   ready_to_execute: boolean;
-  due_date?: Date;
+  due_date?: string;
   steps: Step[];
   areas_of_impact: string[];
   dependent_surveys: DependentSurvey[];
+  resources?: {
+    title: string;
+    url: string;
+  }[];
 };
 
 export type Step = {
@@ -35,5 +39,6 @@ export type DependentSurvey = {
 
 export type ActionPayload = {
   id: string;
+  updated_at: string;
   action: Action;
 };

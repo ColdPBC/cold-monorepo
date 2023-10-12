@@ -10799,6 +10799,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/luxon@npm:^3.3.2":
+  version: 3.3.2
+  resolution: "@types/luxon@npm:3.3.2"
+  checksum: b9111132720eae0269538872a5a496b29587ecfc8edc3b0ff7d269aa93a5ff00a131b23d1e9d1f12ec39f2c779ad21bd8d9f90b122c85a182771aabde7f676b8
+  languageName: node
+  linkType: hard
+
 "@types/markdown-it@npm:^12.2.3":
   version: 12.2.3
   resolution: "@types/markdown-it@npm:12.2.3"
@@ -14492,6 +14499,7 @@ __metadata:
     "@types/jest": ^29.5.4
     "@types/js-cookie": ^3.0.3
     "@types/lodash": ^4.14.194
+    "@types/luxon": ^3.3.2
     "@types/node": 18.14.2
     "@types/react": 18.0.28
     "@types/react-dom": 18.0.11
@@ -14525,7 +14533,7 @@ __metadata:
     eslint-plugin-react: 7.32.2
     eslint-plugin-react-hooks: 4.6.0
     flowbite: ^1.6.5
-    flowbite-react: ^0.5.0
+    flowbite-react: latest
     framer-motion: ^10.16.4
     husky: ^8.0.3
     jest: ^29.6.4
@@ -14535,6 +14543,7 @@ __metadata:
     launchdarkly-react-client-sdk: 3.0.6
     lodash: ^4.17.21
     lottie-react: ^2.4.0
+    luxon: ^3.4.3
     msw: latest
     node-browserify: ^1.0.0
     nx: ^16.8.0
@@ -18655,9 +18664,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"flowbite-react@npm:^0.5.0":
-  version: 0.5.0
-  resolution: "flowbite-react@npm:0.5.0"
+"flowbite-react@npm:latest":
+  version: 0.6.4
+  resolution: "flowbite-react@npm:0.6.4"
   dependencies:
     "@floating-ui/react": ^0.24.3
     flowbite: ^1.6.6
@@ -18668,7 +18677,7 @@ __metadata:
     react: ^18
     react-dom: ^18
     tailwindcss: ^3
-  checksum: de1166fa3ad467ee0e5abfe83d653456a8c0b237d9dec8c3bbcdbf37c34d2476019ac1131a19a2cca7ba291f73654321d7e47a65933d92966281f5080640f740
+  checksum: 3830d2e6f85d4617d50bf5f91c6548661fc5fd6fa1a75a533179cfc57fcc25b65697eaa3809f85f6f2753e9b780714605e73b649b0ebb19ba756b7c44cbfb173
   languageName: node
   linkType: hard
 
@@ -24201,6 +24210,13 @@ __metadata:
   version: 7.18.3
   resolution: "lru-cache@npm:7.18.3"
   checksum: e550d772384709deea3f141af34b6d4fa392e2e418c1498c078de0ee63670f1f46f5eee746e8ef7e69e1c895af0d4224e62ee33e66a543a14763b0f2e74c1356
+  languageName: node
+  linkType: hard
+
+"luxon@npm:^3.4.3":
+  version: 3.4.3
+  resolution: "luxon@npm:3.4.3"
+  checksum: 3eade81506224d038ed24035a0cd0dd4887848d7eba9361dce9ad8ef81380596a68153240be3988721f9690c624fb449fcf8fd8c3fc0681a6a8496faf48e92a3
   languageName: node
   linkType: hard
 

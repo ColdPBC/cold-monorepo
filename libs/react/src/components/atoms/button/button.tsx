@@ -5,6 +5,7 @@ import { ButtonTypes } from '../../../enums/buttons';
 import { IconNames } from '../../../enums/iconNames';
 import { ColdIcon } from '../../atoms/icons/coldIcon';
 import { Link } from 'react-router-dom';
+import { twMerge } from 'tailwind-merge';
 
 export function BaseButton(props: IButtonProps): JSX.Element {
   const {
@@ -28,7 +29,7 @@ export function BaseButton(props: IButtonProps): JSX.Element {
     <>
       {iconLeft && getIconComponent(iconLeft, props)}
       {label && <span>{label}</span>}
-      {children && <span>{children}</span>}
+      {children && <span className='w-full'>{children}</span>}
       {iconRight && getIconComponent(iconRight, props)}
     </>
   );
@@ -37,7 +38,7 @@ export function BaseButton(props: IButtonProps): JSX.Element {
     return (
       <button
         onClick={onClick}
-        className={className ? className : `${getClassName(props)}`}
+        className={twMerge(getClassName(props), className)}
         disabled={!!props.disabled}
       >
         {content}
@@ -47,7 +48,7 @@ export function BaseButton(props: IButtonProps): JSX.Element {
     return (
       <Link
         to={href}
-        className={className ? className : `${getClassName(props)}`}
+        className={twMerge(getClassName(props), className)}
         target={target}
       >
         {content}

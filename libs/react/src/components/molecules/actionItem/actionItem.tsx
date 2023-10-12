@@ -1,9 +1,9 @@
-import React from 'react';
 import { ActionPayload } from '@coldpbc/interfaces';
 import { BaseButton, ColdIcon } from '@coldpbc/components';
 import { IconNames } from '@coldpbc/enums';
 import { useNavigate } from 'react-router-dom';
 import { ActionItemVariants } from '@coldpbc/enums';
+import { motion } from 'framer-motion';
 
 export interface ActionItemProps {
   actionPayload: ActionPayload;
@@ -19,7 +19,7 @@ export const ActionItem = ({ actionPayload, variant }: ActionItemProps) => {
   const getCTAButton = () => {
     if (variant === ActionItemVariants.narrow) {
       return (
-        <BaseButton className={'bg-transparent w-6 h-6'} onClick={onCTAClick}>
+        <BaseButton className={'bg-transparent w-6 h-6 p-0'} onClick={onCTAClick}>
           <ColdIcon name={IconNames.ColdRightArrowIcon} />
         </BaseButton>
       );
@@ -51,17 +51,18 @@ export const ActionItem = ({ actionPayload, variant }: ActionItemProps) => {
     }
     return (
       <div className={'w-full h-[4px] bg-bgc-accent rounded-lg'}>
-        <div
+        <motion.div
           className={'h-full bg-primary rounded-lg'}
-          style={{ width: `${progressPercent * 100}%` }}
-        ></div>
+          initial={{ width: 0 }}
+          animate={{ width: `${progressPercent * 100}%` }}
+        />
       </div>
     );
   };
 
   const getActionItemClass = () => {
     if (variant === ActionItemVariants.narrow) {
-      return 'w-[405px] text-tc-primary flex space-x-4 rounded-2xl bg-transparent border-[1px] border-bgc-accent p-[16px]';
+      return 'w-full max-w-[405px] text-tc-primary flex space-x-4 rounded-2xl bg-transparent border-[1px] border-bgc-accent p-[16px]';
     } else {
       return 'w-[634px] text-tc-primary flex space-x-4 rounded-2xl bg-transparent border-[1px] border-bgc-accent p-[16px]';
     }

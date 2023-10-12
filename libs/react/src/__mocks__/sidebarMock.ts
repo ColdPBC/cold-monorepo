@@ -37,51 +37,7 @@ export function getSidebarMock() {
             name: 'ColdActionsIcon',
           },
           items: [
-            {
-              key: 'overview_actions_key',
-              label: 'Overview',
-              route: '/actions',
-            },
-            {
-              key: 'facilities_actions_key',
-              label: 'Facilities',
-              route: '/actions/facilities',
-            },
-            {
-              key: 'travel_actions_key',
-              label: 'Travel',
-              route: '/actions/travel',
-            },
-            {
-              key: 'operations_actions_key',
-              label: 'Operations',
-              route: '/actions/operations',
-            },
-            {
-              key: 'product_actions_key',
-              label: 'Product',
-              route: '/actions/product',
-            },
-            {
-              key: 'employee_footprint_actions_key',
-              label: 'Employee Footprint',
-              route: '/actions/employee_footprint',
-            },
-            {
-              key: 'employee_activation_actions_key',
-              label: 'Employee Activation',
-              route: '/actions/employee_activation',
-            },
-            {
-              key: 'internal_alignment_actions_key',
-              label: 'Internal Alignment',
-              route: '/actions/internal_alignment',
-            },
-            {
-              key: 'community_impact_actions_key',
-              label: 'Community Impact',
-              route: '/actions/community_impact',
-            },
+
           ],
           label: 'Actions',
         },
