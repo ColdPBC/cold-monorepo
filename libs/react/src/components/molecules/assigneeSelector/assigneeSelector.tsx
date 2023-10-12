@@ -25,8 +25,12 @@ export const AssigneeSelector = ({
       return (
         <div
           className={
-            'min-h-[40px] flex w-fit text-tc-primary rounded-lg border-[1px] border-bgc-accent p-[8px] space-x-[8px]'
+            'min-h-[40px] flex w-fit text-tc-primary rounded-lg border-[1px] border-bgc-accent p-[8px] space-x-[8px] cursor-pointer'
           }
+          onClick={() => {
+            setStepAssignee(undefined);
+            handleAssigneeSelection(undefined);
+          }}
         >
           <Avatar
             size={GlobalSizes.xSmall}
@@ -40,16 +44,8 @@ export const AssigneeSelector = ({
           <div className={'text-eyebrow flex items-center justify-center'}>
             {stepAssignee.name}
           </div>
-          <div>
-            <div
-              className={'p-[8px] w-[24px] h-[24px]'}
-              onClick={() => {
-                setStepAssignee(undefined);
-                handleAssigneeSelection(undefined);
-              }}
-            >
-              <ColdIcon name={IconNames.CloseModalIcon} />
-            </div>
+          <div className={'flex items-center justify-center w-[24px] h-[24px]'}>
+            <ColdIcon name={IconNames.CloseModalIcon} />
           </div>
         </div>
       );
@@ -57,7 +53,7 @@ export const AssigneeSelector = ({
       return (
         <div
           className={
-            'min-h-[40px] w-fit text-tc-primary rounded-lg p-[8px] border-[1px] border-bgc-accent'
+            'min-h-[40px] w-fit text-tc-primary rounded-lg p-[8px] border-[1px] border-bgc-accent cursor-pointer'
           }
         >
           <div className={'flex space-x-[8px]'}>
