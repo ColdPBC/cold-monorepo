@@ -1,3 +1,10 @@
+# [1.42.0](https://github.com/ColdPBC/ui/compare/v1.41.0...v1.42.0) (2023-10-13)
+
+
+### Features
+
+* create SubcategoryActionDetailsCard component ([f24608a](https://github.com/ColdPBC/ui/commit/f24608a07c863d97a4ffa000d1a815c807e12f3e))
+
 # [1.41.0](https://github.com/ColdPBC/ui/compare/v1.40.0...v1.41.0) (2023-10-12)
 
 
