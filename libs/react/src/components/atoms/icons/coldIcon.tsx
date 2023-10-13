@@ -18,6 +18,7 @@ import { ColdRightArrowIcon } from './ColdRightArrowIcon';
 import { ColdEmptyCheckboxIcon } from './coldEmptyCheckboxIcon';
 import { ColdChevronUpIcon } from './coldChevronUpIcon';
 import { ColdChevronDownIcon } from './coldChevronDownIcon';
+import { ColdCheckIcon } from './coldCheckIcon';
 
 // TODO: Take the color attribute out of the IconProps
 export const ColdIcon = (props: IconProps) => {
@@ -55,6 +56,8 @@ export const ColdIcon = (props: IconProps) => {
       return <ColdChevronUpIcon {...props} />;
     case IconNames.ColdChevronDownIcon:
       return <ColdChevronDownIcon {...props} />;
+    case IconNames.ColdCheckIcon:
+      return <ColdCheckIcon {...props} />;
     default:
     case IconNames.ColdSettingsIcon:
       return <ColdSettingsIcon {...props} />;

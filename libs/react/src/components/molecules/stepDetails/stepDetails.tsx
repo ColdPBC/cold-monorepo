@@ -32,8 +32,17 @@ export const StepDetails = ({
     handleStepsUpdate(updatedSteps);
   };
 
+  const getClassName = () => {
+    switch (variant) {
+      case StepDetailsVariants.SubcategoryActionDetailsCard:
+        return 'w-[636px] space-y-[16px] bg-bgc-elevated text-tc-primary';
+      default:
+        return 'w-[869px] space-y-[16px] bg-bgc-elevated p-[16px] text-tc-primary';
+    }
+  };
+
   return (
-    <div className={'text-tc-primary space-y-[16px] w-[835px]'}>
+    <div className={getClassName()}>
       {steps.map((step, index) => {
         return (
           <StepDetail
