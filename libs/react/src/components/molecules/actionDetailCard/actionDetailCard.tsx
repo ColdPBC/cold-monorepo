@@ -97,7 +97,7 @@ export const ActionDetailCard = ({
                     height={24}
                   />
                 )}
-                <div>{survey.title}</div>
+                <div className={'flex items-center'}>{survey.title}</div>
               </div>
             </BaseButton>
           );
