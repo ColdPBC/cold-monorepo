@@ -33,11 +33,7 @@ export const SubcategoryActionsList = () => {
 
   return (
     <AppContent title={subcategoryName}>
-      <CenterColumnContent>
-        {/* <Card>
-                    Your _______ footprint is made up of lorem ipsum dolor sit amet, consec tetur adipiscing elit usmod tempor incididunt ut labore et dol.
-                </Card> */}
-      </CenterColumnContent>
+      <CenterColumnContent></CenterColumnContent>
       <RightColumnContent>
         <SubcategoryJourneyPreview
           category_key={category}
