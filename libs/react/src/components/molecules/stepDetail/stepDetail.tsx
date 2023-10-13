@@ -11,13 +11,11 @@ import { IconNames } from '@coldpbc/enums';
 export type StepDetailProps = {
   step: Step;
   handleStepUpdate: (step: Step) => void;
-  assignees: Assignee[];
 };
 
 export const StepDetail = ({
   step,
   handleStepUpdate,
-  assignees,
 }: StepDetailProps) => {
   const assigneeSelectorRef = React.useRef<HTMLDivElement>(null);
   const stepDetailsCheckboxRef = React.useRef<HTMLDivElement>(null);
@@ -82,7 +80,6 @@ export const StepDetail = ({
             >
               <div ref={assigneeSelectorRef}>
                 <StepDetailAssigneeSelector
-                  assigneeList={assignees}
                   assignee={step.assignee}
                   handleAssigneeSelection={(assignee) => {
                     handleAssigneeSelection(step, assignee);

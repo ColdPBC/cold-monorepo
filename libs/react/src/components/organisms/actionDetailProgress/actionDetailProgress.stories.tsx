@@ -62,7 +62,6 @@ export const NeedSurveys: Story = {
         ],
       },
     },
-    assignees: getOrganizationMembersMock().members,
   },
 };
 
@@ -90,7 +89,6 @@ export const NotReady: Story = {
         ready_to_execute: false,
       },
     },
-    assignees: getOrganizationMembersMock().members,
   },
 };
 
@@ -118,6 +116,5 @@ export const ReadyToExecute: Story = {
         ready_to_execute: true,
       },
     },
-    assignees: getOrganizationMembersMock().members,
   },
 };

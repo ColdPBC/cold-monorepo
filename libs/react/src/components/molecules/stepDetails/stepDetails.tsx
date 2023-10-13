@@ -1,23 +1,16 @@
-import React from 'react';
-import { Assignee, Step } from '@coldpbc/interfaces';
-import { Disclosure } from '@headlessui/react';
-import { IconNames, StepDetailsVariants } from '@coldpbc/enums';
-import { ColdIcon } from '../../atoms';
-import { AssigneeSelector } from '../assigneeSelector';
-import { StepDetailsCheckbox } from '../stepDetailsCheckbox';
-import { cloneDeep, snakeCase } from 'lodash';
+import { Step } from '@coldpbc/interfaces';
+import { StepDetailsVariants } from '@coldpbc/enums';
+import { snakeCase } from 'lodash';
 import { StepDetail } from '../stepDetail/stepDetail';
 
 export interface StepDetailsProps {
   steps: Step[];
-  assignees: Assignee[];
   handleStepsUpdate: (steps: Step[]) => void;
   variant?: StepDetailsVariants;
 }
 
 export const StepDetails = ({
   steps,
-  assignees,
   handleStepsUpdate,
   variant,
 }: StepDetailsProps) => {
@@ -48,7 +41,6 @@ export const StepDetails = ({
           <StepDetail
             step={step}
             handleStepUpdate={handleStepUpdate}
-            assignees={assignees}
             key={`step_detail_${index}_${snakeCase(step.overview)}`}
           />
         );

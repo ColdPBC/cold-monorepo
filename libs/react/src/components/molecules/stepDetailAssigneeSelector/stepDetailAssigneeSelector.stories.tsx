@@ -23,20 +23,6 @@ export const WithAssignee: Story = {
     },
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     handleAssigneeSelection: (assignee: Assignee | undefined) => {},
-    assigneeList: [
-      {
-        name: 'John Doe',
-        picture: 'https://picsum.photos/200',
-        given_name: 'John',
-        family_name: 'Doe',
-      },
-      {
-        name: 'John Doe',
-        picture: 'https://picsum.photos/200',
-        given_name: 'John',
-        family_name: 'Doe',
-      },
-    ],
   },
 };
 
@@ -44,19 +30,5 @@ export const WithoutUser: Story = {
   args: {
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     handleAssigneeSelection: (assignee: Assignee | undefined) => {},
-    assigneeList: [
-      {
-        name: 'John Doe',
-        picture: 'https://picsum.photos/200',
-        given_name: 'John',
-        family_name: 'Doe',
-      },
-      {
-        name: 'John Doe',
-        picture: 'https://picsum.photos/200',
-        given_name: 'John',
-        family_name: 'Doe',
-      },
-    ],
   },
 };

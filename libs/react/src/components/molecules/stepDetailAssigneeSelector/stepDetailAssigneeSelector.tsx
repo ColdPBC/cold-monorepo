@@ -11,24 +11,22 @@ import useSWR from 'swr';
 export interface StepDetailAssigneeSelectorProps {
   assignee?: Assignee;
   handleAssigneeSelection: (assignee: Assignee | undefined) => void;
-  assigneeList: Assignee[];
 }
 
 export const StepDetailAssigneeSelector = ({
   assignee,
   handleAssigneeSelection,
-  assigneeList,
 }: StepDetailAssigneeSelectorProps) => {
   const [stepAssignee, setStepAssignee] = React.useState<Assignee | undefined>(
     assignee,
   );
 
-  const { user: dataGridUser } = useAuth0();
+  const { user } = useAuth0();
 
   const getOrgURL = () => {
-    if (dataGridUser?.coldclimate_claims.org_id) {
+    if (user?.coldclimate_claims.org_id) {
       return [
-        '/organizations/' + dataGridUser.coldclimate_claims.org_id + '/members',
+        '/organizations/' + user.coldclimate_claims.org_id + '/members',
         'GET',
       ];
     } else {
