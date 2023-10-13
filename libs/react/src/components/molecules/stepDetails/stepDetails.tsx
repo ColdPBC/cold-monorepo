@@ -10,7 +10,7 @@ import { StepDetail } from '../stepDetail/stepDetail';
 
 export interface StepDetailsProps {
   steps: Step[];
-  assignees: Assignee[];
+  assignees?: Assignee[];
   handleStepsUpdate: (steps: Step[]) => void;
   variant?: StepDetailsVariants;
 }

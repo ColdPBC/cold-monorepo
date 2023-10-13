@@ -22,7 +22,7 @@ export type ActionDetailCardProps = {
   actionPayload: ActionPayload;
   setActionPayLoad: (actionPayload: ActionPayload) => void;
   variant: ActionDetailCardVariants;
-  assignees: Assignee[];
+  assignees?: Assignee[];
 };
 export const ActionDetailCard = ({
   actionPayload,

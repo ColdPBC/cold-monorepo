@@ -11,7 +11,7 @@ import { IconNames } from '@coldpbc/enums';
 export type StepDetailProps = {
   step: Step;
   handleStepUpdate: (step: Step) => void;
-  assignees: Assignee[];
+  assignees?: Assignee[];
 };
 
 export const StepDetail = ({

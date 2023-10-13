@@ -3,6 +3,7 @@ import { withKnobs } from '@storybook/addon-knobs';
 import { StoryObj } from '@storybook/react';
 import {
   getActionHandler,
+  getActionMock,
   getActionsMockBySubCategoryName,
   getOrganizationMembersMock,
   StoryMockProvider,
@@ -46,6 +47,22 @@ export const SurveysNotComplete: Story = {
   },
   args: {
     actionId: '1',
+    actionPayload: {
+      ...getActionMock(),
+      action: {
+        ...getActionMock().action,
+        dependent_surveys: [
+          {
+            ...getActionMock().action.dependent_surveys[0],
+            completed: true,
+          },
+          {
+            ...getActionMock().action.dependent_surveys[1],
+            completed: false,
+          },
+        ],
+      },
+    },
     assignees: getOrganizationMembersMock().members,
   },
 };

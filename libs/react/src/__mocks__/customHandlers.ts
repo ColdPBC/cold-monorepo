@@ -3,6 +3,7 @@ import {
   getActionAllStepsComplete,
   getActionMock,
   getActionMockNoResources,
+  getActionsMock,
 } from './action';
 import {
   getCategoriesDataMock,
@@ -114,9 +115,8 @@ export const getActionHandler = {
   allStepsComplete: rest.get('*/organizations/*/actions/*', (req, res, ctx) => {
     return res(ctx.json(getActionAllStepsComplete()));
   }),
-  surveysNotComplete: rest.get(
-    '*/organizations/*/actions/*',
-    (req, res, ctx) => {
+  surveysNotComplete: [
+    rest.get('*/organizations/*/actions/*', (req, res, ctx) => {
       return res(
         ctx.json({
           ...getActionMock(),
@@ -135,11 +135,13 @@ export const getActionHandler = {
           },
         }),
       );
-    },
-  ),
-  notReadyToExecute: rest.get(
-    '*/organizations/*/actions/*',
-    (req, res, ctx) => {
+    }),
+    rest.patch('*/organizations/*/actions/:actionId', (req, res, ctx) => {
+      return res(ctx.json({}));
+    }),
+  ],
+  notReadyToExecute: [
+    rest.get('*/organizations/*/actions/*', (req, res, ctx) => {
       return res(
         ctx.json({
           ...getActionMock(),
@@ -159,27 +161,65 @@ export const getActionHandler = {
           },
         } as ActionPayload),
       );
-    },
-  ),
-  readyToExecute: rest.get('*/organizations/*/actions/*', (req, res, ctx) => {
-    return res(
-      ctx.json({
-        ...getActionMock(),
-        action: {
-          ...getActionMock().action,
-          dependent_surveys: [
-            {
-              ...getActionMock().action.dependent_surveys[0],
-              submitted: true,
-            },
-            {
-              ...getActionMock().action.dependent_surveys[1],
-              submitted: true,
-            },
-          ],
-          ready_to_execute: true,
-        },
-      } as ActionPayload),
-    );
-  }),
+    }),
+    rest.patch('*/organizations/*/actions/:actionId', (req, res, ctx) => {
+      return res(ctx.json({}));
+    }),
+  ],
+  readyToExecute: [
+    rest.get('*/organizations/*/actions/*', (req, res, ctx) => {
+      return res(
+        ctx.json({
+          ...getActionMock(),
+          action: {
+            ...getActionMock().action,
+            dependent_surveys: [
+              {
+                ...getActionMock().action.dependent_surveys[0],
+                submitted: true,
+              },
+              {
+                ...getActionMock().action.dependent_surveys[1],
+                submitted: true,
+              },
+            ],
+            ready_to_execute: true,
+          },
+        } as ActionPayload),
+      );
+    }),
+    rest.patch('*/organizations/*/actions/:actionId', (req, res, ctx) => {
+      return res(ctx.json({}));
+    }),
+  ],
+  subCategoryActionsList: [
+    rest.patch('*/organizations/*/actions/:actionId', (req, res, ctx) => {
+      return res(ctx.json({}));
+    }),
+    rest.get('*/organizations/*/actions', (req, res, ctx) => {
+      const facilitiesActions = getActionsMock().filter(
+        (action) => action.action.subcategory === 'facilities',
+      );
+      facilitiesActions[0].action.dependent_surveys.forEach((survey) => {
+        survey.submitted = false;
+      });
+      facilitiesActions[1].action.dependent_surveys.forEach((survey) => {
+        survey.submitted = true;
+      });
+      facilitiesActions[1].action.ready_to_execute = false;
+      const actions = getActionsMock().map((actionPayload, index) => {
+        if (actionPayload.action.subcategory === 'facilities') {
+          if (facilitiesActions[0].id === actionPayload.id) {
+            return facilitiesActions[0];
+          } else {
+            return facilitiesActions[1];
+          }
+        } else {
+          return actionPayload;
+        }
+      });
+      console.log(actions);
+      return res(ctx.json(actions));
+    }),
+  ],
 };

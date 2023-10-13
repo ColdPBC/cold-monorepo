@@ -7,7 +7,7 @@ import { ColdPlusIcon } from '@coldpbc/components';
 export interface AssigneeSelectorProps {
   assignee?: Assignee;
   handleAssigneeSelection: (assignee: Assignee | undefined) => void;
-  assigneeList: Assignee[];
+  assigneeList?: Assignee[];
 }
 
 export const AssigneeSelector = ({

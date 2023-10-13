@@ -17,14 +17,17 @@ import useSWR from 'swr';
 import { axiosFetcher } from '@coldpbc/fetchers';
 
 export type SubcategoryActionDetailsCardProps = {
-  assignees: Assignee[];
+  assignees?: Assignee[];
   actionId: string;
+  actionPayload: ActionPayload;
 };
 export const SubcategoryActionDetailsCard = ({
   actionId,
   assignees,
+  actionPayload,
 }: SubcategoryActionDetailsCardProps) => {
-  const [actionData, setActionData] = React.useState<ActionPayload>();
+  const [actionData, setActionData] =
+    React.useState<ActionPayload>(actionPayload);
 
   const areSurveysComplete = (action: Action) => {
     return action.dependent_surveys.every((survey) => survey.submitted);
@@ -32,38 +35,20 @@ export const SubcategoryActionDetailsCard = ({
 
   const { user } = useAuth0();
 
-  const { data, error, isLoading } = useSWR<ActionPayload, any, any>(
-    user && user.coldclimate_claims.org_id
-      ? [
-          `/organizations/${user.coldclimate_claims.org_id}/actions/${actionId}`,
-          'GET',
-        ]
-      : null,
-    axiosFetcher,
-  );
+  const updateActionData = async (action: ActionPayload) => {
+    setActionData(action);
+    await patchAction(action);
+  };
 
-  const members = useSWR<User[], any, any>(['/members', 'GET'], axiosFetcher);
+  const patchAction = async (action: ActionPayload) => {
+    await axiosFetcher([
+      `/organizations/${user?.coldclimate_claims.org_id}/actions/${action.id}`,
+      'PATCH',
+      JSON.stringify(action),
+    ]);
+  };
 
-  useEffect(() => {
-    if (data) {
-      setActionData(data);
-    }
-  }, [data]);
-
-  if (isLoading || members.isLoading) {
-    return (
-      <div>
-        <Spinner />
-      </div>
-    );
-  }
-
-  if (error || members.error) {
-    console.error(error);
-    return <div></div>;
-  }
-
-  if (!actionData || !members.data) {
+  if (!actionData) {
     return (
       <div>
         <Spinner />
@@ -87,9 +72,11 @@ export const SubcategoryActionDetailsCard = ({
         />
         <ActionDetailCard
           actionPayload={actionData}
-          setActionPayLoad={setActionData}
+          setActionPayLoad={(actionPayload: ActionPayload) => {
+            updateActionData(actionPayload);
+          }}
           variant={ActionDetailCardVariants.SubcategoryActionDetailsCard}
-          assignees={members.data}
+          assignees={assignees}
         />
       </Card>
     );
