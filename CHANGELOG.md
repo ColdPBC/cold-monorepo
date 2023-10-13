@@ -1,3 +1,11 @@
+# [1.43.0](https://github.com/ColdPBC/ui/compare/v1.42.0...v1.43.0) (2023-10-13)
+
+
+### Features
+
+* create action detail progress component ([6037284](https://github.com/ColdPBC/ui/commit/6037284a55ad0e2a4d84d4cfcfcf9cb621f291b3))
+* Updated button text to be in the center ([6ea2445](https://github.com/ColdPBC/ui/commit/6ea2445efaf4276fb59817f99762644a036ee969))
+
 # [1.42.0](https://github.com/ColdPBC/ui/compare/v1.41.0...v1.42.0) (2023-10-13)
 
 
