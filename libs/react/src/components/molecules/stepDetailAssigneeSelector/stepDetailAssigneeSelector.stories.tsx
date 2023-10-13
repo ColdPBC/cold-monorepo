@@ -1,14 +1,14 @@
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
-import { AssigneeSelector } from './assigneeSelector';
+import { StepDetailAssigneeSelector } from './stepDetailAssigneeSelector';
 import { Assignee } from '@coldpbc/interfaces';
 
-const meta = {
-  title: 'Molecules/AssigneeSelector',
-  component: AssigneeSelector,
+const meta: Meta<typeof StepDetailAssigneeSelector> = {
+  title: 'Molecules/StepDetailAssigneeSelector',
+  component: StepDetailAssigneeSelector,
   tags: ['autodocs'],
   decorators: [withKnobs],
-} satisfies Meta<typeof AssigneeSelector>;
+};
 
 export default meta;
 type Story = StoryObj<typeof meta>;

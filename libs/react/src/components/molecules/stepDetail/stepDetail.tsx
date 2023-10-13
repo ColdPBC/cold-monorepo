@@ -2,7 +2,7 @@ import React from 'react';
 import { Assignee, Step } from '@coldpbc/interfaces';
 import { Disclosure } from '@headlessui/react';
 import {
-  AssigneeSelector,
+  StepDetailAssigneeSelector,
   ColdIcon,
   StepDetailsCheckbox,
 } from '@coldpbc/components';
@@ -26,6 +26,7 @@ export const StepDetail = ({
     step: Step,
     assignee: Assignee | undefined,
   ) => {
+
     const updatedStep = {
       ...step,
       assignee: assignee,
@@ -80,7 +81,7 @@ export const StepDetail = ({
               }
             >
               <div ref={assigneeSelectorRef}>
-                <AssigneeSelector
+                <StepDetailAssigneeSelector
                   assigneeList={assignees}
                   assignee={step.assignee}
                   handleAssigneeSelection={(assignee) => {
