@@ -22,13 +22,11 @@ export type ActionDetailCardProps = {
   actionPayload: ActionPayload;
   setActionPayLoad: (actionPayload: ActionPayload) => void;
   variant: ActionDetailCardVariants;
-  assignees: Assignee[];
 };
 export const ActionDetailCard = ({
   actionPayload,
   setActionPayLoad,
   variant,
-  assignees,
 }: ActionDetailCardProps) => {
   const { action } = actionPayload;
 
@@ -279,7 +277,6 @@ export const ActionDetailCard = ({
           <div>
             <StepDetails
               steps={action.steps}
-              assignees={assignees}
               handleStepsUpdate={handleStepsUpdate}
             />
           </div>
@@ -290,7 +287,6 @@ export const ActionDetailCard = ({
         <div className={'space-y-[16px] w-full'}>
           <StepDetails
             steps={action.steps}
-            assignees={assignees}
             handleStepsUpdate={handleStepsUpdate}
             variant={StepDetailsVariants.SubcategoryActionDetailsCard}
           />
