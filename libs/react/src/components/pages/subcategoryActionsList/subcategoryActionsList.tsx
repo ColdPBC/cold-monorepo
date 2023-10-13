@@ -31,17 +31,6 @@ export const SubcategoryActionsList = () => {
     axiosFetcher,
   );
 
-  const {
-    data: members,
-    error: membersError,
-    isLoading: membersIsLoading,
-  } = useSWR<User[], any, any>(
-    user?.coldclimate_claims.org_id
-      ? [`/organizations/${user.coldclimate_claims.org_id}/members`, 'GET']
-      : null,
-    axiosFetcher,
-  );
-
   if (!name) return null;
 
   const category = Object.keys(data?.definition?.categories ?? {}).find(
@@ -60,12 +49,12 @@ export const SubcategoryActionsList = () => {
 
   const subcategoryName = subcategoryData.subcategory_name;
 
-  if (actionsIsLoading || membersIsLoading) {
+  if (actionsIsLoading) {
     return <div>Spinner</div>;
   }
 
-  if (actionsError || membersError) {
-    console.log(actionsError, membersError);
+  if (actionsError) {
+    console.log(actionsError);
     return <div></div>;
   }
 
@@ -84,11 +73,7 @@ export const SubcategoryActionsList = () => {
           .map((actionPayload) => {
             return (
               <div key={actionPayload.id}>
-                <SubcategoryActionDetailsCard
-                  assignees={members}
-                  actionId={actionPayload.id}
-                  actionPayload={actionPayload}
-                />
+                <SubcategoryActionDetailsCard actionPayload={actionPayload} />
               </div>
             );
           })}

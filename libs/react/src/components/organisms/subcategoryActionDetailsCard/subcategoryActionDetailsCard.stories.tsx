@@ -40,7 +40,7 @@ type Story = StoryObj<typeof meta>;
 export const SurveysNotComplete: Story = {
   render: (args) => {
     return (
-      <StoryMockProvider handlers={[getActionHandler.surveysNotComplete]}>
+      <StoryMockProvider handlers={[]}>
         <SubcategoryActionDetailsCard {...args} />
       </StoryMockProvider>
     );
@@ -54,11 +54,11 @@ export const SurveysNotComplete: Story = {
         dependent_surveys: [
           {
             ...getActionMock().action.dependent_surveys[0],
-            completed: true,
+            submitted: true,
           },
           {
             ...getActionMock().action.dependent_surveys[1],
-            completed: false,
+            submitted: false,
           },
         ],
       },
@@ -69,25 +69,59 @@ export const SurveysNotComplete: Story = {
 export const NotReadyToExecute: Story = {
   render: (args) => {
     return (
-      <StoryMockProvider handlers={[getActionHandler.notReadyToExecute]}>
+      <StoryMockProvider handlers={[]}>
         <SubcategoryActionDetailsCard {...args} />
       </StoryMockProvider>
     );
   },
   args: {
     actionId: '1',
+    actionPayload: {
+      ...getActionMock(),
+      action: {
+        ...getActionMock().action,
+        dependent_surveys: [
+          {
+            ...getActionMock().action.dependent_surveys[0],
+            submitted: true,
+          },
+          {
+            ...getActionMock().action.dependent_surveys[1],
+            submitted: true,
+          },
+        ],
+        ready_to_execute: false,
+      },
+    },
   },
 };
 
 export const ReadyToExecute: Story = {
   render: (args) => {
     return (
-      <StoryMockProvider handlers={[getActionHandler.readyToExecute]}>
+      <StoryMockProvider handlers={[]}>
         <SubcategoryActionDetailsCard {...args} />
       </StoryMockProvider>
     );
   },
   args: {
     actionId: '1',
+    actionPayload: {
+      ...getActionMock(),
+      action: {
+        ...getActionMock().action,
+        dependent_surveys: [
+          {
+            ...getActionMock().action.dependent_surveys[0],
+            submitted: true,
+          },
+          {
+            ...getActionMock().action.dependent_surveys[1],
+            submitted: true,
+          },
+        ],
+        ready_to_execute: true,
+      },
+    },
   },
 };

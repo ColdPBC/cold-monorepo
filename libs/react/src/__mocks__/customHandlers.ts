@@ -200,8 +200,8 @@ export const getActionHandler = {
       const facilitiesActions = getActionsMock().filter(
         (action) => action.action.subcategory === 'facilities',
       );
-      facilitiesActions[0].action.dependent_surveys.forEach((survey) => {
-        survey.submitted = false;
+      facilitiesActions[0].action.dependent_surveys.forEach((survey, index) => {
+        survey.submitted = index === 0;
       });
       facilitiesActions[1].action.dependent_surveys.forEach((survey) => {
         survey.submitted = true;
