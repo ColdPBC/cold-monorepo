@@ -7,7 +7,7 @@ export const getActionMock = (): ActionPayload => {
     action: {
       title: 'Renewable Energy Procurement',
       overview:
-        'Reduce your company\'s reliance on fossil fuels by purchasing renewable electricity for your facility.',
+        "Reduce your company's reliance on fossil fuels by purchasing renewable electricity for your facility.",
       objective_description: `Purchasing RECs is the next best way to decarbonize your electricity footprint if you can’t develop renewable energy resources on-site. RECs - Renewable Energy Certificates - give your organization the right to claim the environmental benefits of renewable energy generated and delivered to the grid. Though they do not not physically alter the actual electricity powering your facilities, RECs can help to drive future market demand for renewables development in your grid region while also directly decreasing your carbon footprint. Not all RECs provide the same environmental benefit, however. Cold makes sure our RECs provide the maximum benefit possible in your electricity market.`,
       image_url:
         'https://images.unsplash.com/photo-1610891015188-5369212db097?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
@@ -18,7 +18,7 @@ export const getActionMock = (): ActionPayload => {
         {
           overview: 'Tell us how you pay your utility bills',
           description:
-            'How you pay for electricity impacts your organization\'s opportunities to purchase different types of RECs. If your electric usage is incorporated in your lease, for instance, you may not be able to determine your annual energy use. Select from the following options: \n' +
+            "How you pay for electricity impacts your organization's opportunities to purchase different types of RECs. If your electric usage is incorporated in your lease, for instance, you may not be able to determine your annual energy use. Select from the following options: \n" +
             'You directly pay your utility bills; \n' +
             'You pay your utility bills indirectly via your landlord;\n' +
             'You do not pay for utilities because the cost is incorporated into your rent.',
@@ -26,45 +26,50 @@ export const getActionMock = (): ActionPayload => {
         },
         {
           overview:
-            'Determine your facility\'s annual electricity consumption in kWh and send to Cold',
+            "Determine your facility's annual electricity consumption in kWh and send to Cold",
           description: 'Test Step 2',
           complete: '2022-09-27 18:00:00.000',
         },
         {
-          overview: 'Sign up for your utility\'s renewable energy program',
+          overview: "Sign up for your utility's renewable energy program",
           description: 'Test Step 3',
         },
         {
-          overview: 'Sign up for your utility\'s renewable energy program',
+          overview: "Sign up for your utility's renewable energy program",
           description: 'Test Step 4',
         },
       ],
       areas_of_impact: ['Test Area 1', 'Test Area 2'],
       dependent_surveys: [
         {
-          name: 'test_survey',
+          name: 'test_survey_1',
           title: 'Test Survey 1',
+          submitted: true,
+        },
+        {
+          name: 'test_survey_2',
+          title: 'Test Survey 2',
           submitted: false,
         },
       ],
       resources: [
         {
           title: 'How to give us your kWh',
-          url: '#'
+          url: '#',
         },
         {
           title: 'FAQ on purchasing renewable energy',
-          url: '#'
+          url: '#',
         },
         {
           title: 'Map of electricity markets',
-          url: '#'
+          url: '#',
         },
         {
           title: 'Cold Climate RECs database',
-          url: '#'
-        }
-      ]
+          url: '#',
+        },
+      ],
     },
   };
 };
@@ -77,7 +82,7 @@ export const getActionsMock = (): ActionPayload[] => {
       action: {
         title: 'Renewable Energy Procurement',
         overview:
-          'Reduce your company\'s reliance on fossil fuels by purchasing renewable electricity for your facility.',
+          "Reduce your company's reliance on fossil fuels by purchasing renewable electricity for your facility.",
         objective_description: 'Test Objective Description',
         image_url:
           'https://images.unsplash.com/photo-1610891015188-5369212db097?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
@@ -92,12 +97,12 @@ export const getActionsMock = (): ActionPayload[] => {
           },
           {
             overview:
-              'Determine your facility\'s annual electricity consumption in kWh and send to Cold',
+              "Determine your facility's annual electricity consumption in kWh and send to Cold",
             description: 'Test Step 2',
             complete: '2022-09-27 18:00:00.000',
           },
           {
-            overview: 'Sign up for your utility\'s renewable energy program',
+            overview: "Sign up for your utility's renewable energy program",
             description: 'Test Step 3',
             complete: '',
           },
@@ -127,12 +132,12 @@ export const getActionsMock = (): ActionPayload[] => {
         due_date: '2024-02-11T22:19:38.441Z',
         steps: [
           {
-            overview: 'Sign up for your utility\'s renewable energy program',
+            overview: "Sign up for your utility's renewable energy program",
             description: 'Test Step 1',
             complete: '',
           },
           {
-            overview: 'Sign up for your utility\'s renewable energy program',
+            overview: "Sign up for your utility's renewable energy program",
             description: 'Test Step 2',
             complete: '',
           },
@@ -167,12 +172,12 @@ export const getActionsMock = (): ActionPayload[] => {
         due_date: '2024-04-11T21:19:38.441Z',
         steps: [
           {
-            overview: 'Sign up for your utility\'s renewable energy program',
+            overview: "Sign up for your utility's renewable energy program",
             description: 'Test Step 1',
             complete: '2022-09-27 18:00:00.000',
           },
           {
-            overview: 'Sign up for your utility\'s renewable energy program',
+            overview: "Sign up for your utility's renewable energy program",
             description: 'Test Step 2',
             complete: '2022-09-27 18:00:00.000',
           },
@@ -201,12 +206,12 @@ export const getActionsMock = (): ActionPayload[] => {
         due_date: '2024-04-11T21:19:38.441Z',
         steps: [
           {
-            overview: 'Sign up for your utility\'s renewable energy program',
+            overview: "Sign up for your utility's renewable energy program",
             description: 'Test Step 1',
             complete: '',
           },
           {
-            overview: 'Sign up for your utility\'s renewable energy program',
+            overview: "Sign up for your utility's renewable energy program",
             description: 'Test Step 2',
             complete: '2022-09-27 18:00:00.000',
           },
@@ -235,7 +240,7 @@ export const getActionsMock = (): ActionPayload[] => {
         due_date: '2024-12-10T20:25:22.648Z',
         steps: [
           {
-            overview: 'Sign up for your utility\'s renewable energy program',
+            overview: "Sign up for your utility's renewable energy program",
             description: 'Test Step 1',
             complete: '2022-09-27 18:00:00.000',
           },
@@ -266,20 +271,20 @@ export const getActionMockNoResources = (): ActionPayload => {
     ...getActionMock(),
     action: {
       ...getActionMock().action,
-      resources: undefined
-    }
-  }
-}
+      resources: undefined,
+    },
+  };
+};
 
 export const getActionAllStepsComplete = (): ActionPayload => {
   return {
     ...getActionMock(),
     action: {
       ...getActionMock().action,
-      steps: getActionMock().action.steps.map(step => ({
-          ...step,
-          complete: '2023-12-10T20:25:22.648Z'
-      }))
-    }
-  }
-}
+      steps: getActionMock().action.steps.map((step) => ({
+        ...step,
+        complete: '2023-12-10T20:25:22.648Z',
+      })),
+    },
+  };
+};

@@ -16,4 +16,5 @@ export enum IconNames {
   ColdEmptyCheckboxIcon = 'ColdEmptyCheckboxIcon',
   ColdChevronUpIcon = 'ColdChevronUpIcon',
   ColdChevronDownIcon = 'ColdChevronDownIcon',
+  ColdCheckIcon = 'ColdCheckIcon',
 }

@@ -19,8 +19,6 @@ export const StepDetail = ({
   handleStepUpdate,
   assignees,
 }: StepDetailProps) => {
-  // create refs for disclosure button, AssigneeSelector, and StepDetailsCheckbox
-  const disclosureButtonRef = React.useRef<HTMLButtonElement>(null);
   const assigneeSelectorRef = React.useRef<HTMLDivElement>(null);
   const stepDetailsCheckboxRef = React.useRef<HTMLDivElement>(null);
 
@@ -72,10 +70,16 @@ export const StepDetail = ({
                   }}
                 />
               </div>
-              <div className={'text-body font-bold'}>{step.overview}</div>
+              <div className={'text-body text-left font-bold'}>
+                {step.overview}
+              </div>
             </div>
-            <div className={'flex space-x-[16px] items-center justify-center'}>
-              <div className={'z-10'} ref={assigneeSelectorRef}>
+            <div
+              className={
+                'flex grow-0 shrink-0 space-x-[16px] items-center justify-center'
+              }
+            >
+              <div ref={assigneeSelectorRef}>
                 <AssigneeSelector
                   assigneeList={assignees}
                   assignee={step.assignee}
