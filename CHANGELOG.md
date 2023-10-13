@@ -1,3 +1,11 @@
+# [1.44.0](https://github.com/ColdPBC/ui/compare/v1.43.0...v1.44.0) (2023-10-13)
+
+
+### Features
+
+* Use UserSelectDropdown inside stepDetailAssigneeSelector ([db61698](https://github.com/ColdPBC/ui/commit/db61698fdd8cd48357290ce4be172263945ba2e0))
+* Use UserSelectDropdown inside stepDetailAssigneeSelector ([#102](https://github.com/ColdPBC/ui/issues/102)) ([7dbee04](https://github.com/ColdPBC/ui/commit/7dbee04e2edabd1a595d347c4b492b6497c1f6b6))
+
 # [1.43.0](https://github.com/ColdPBC/ui/compare/v1.42.0...v1.43.0) (2023-10-13)
 
 

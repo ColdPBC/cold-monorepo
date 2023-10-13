@@ -35,7 +35,6 @@ export const WithoutUser: Story = {
     step: getActionMock().action.steps[0],
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     handleStepUpdate: (step: Step) => {},
-    assignees: getOrganizationMembersMock().members,
   },
 };
 
@@ -50,6 +49,5 @@ export const WithUser: Story = {
     },
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     handleStepUpdate: (step: Step) => {},
-    assignees: getOrganizationMembersMock().members,
   },
 };

@@ -2,7 +2,7 @@ import React from 'react';
 import { Assignee, Step } from '@coldpbc/interfaces';
 import { Disclosure } from '@headlessui/react';
 import {
-  AssigneeSelector,
+  StepDetailAssigneeSelector,
   ColdIcon,
   StepDetailsCheckbox,
 } from '@coldpbc/components';
@@ -11,13 +11,11 @@ import { IconNames } from '@coldpbc/enums';
 export type StepDetailProps = {
   step: Step;
   handleStepUpdate: (step: Step) => void;
-  assignees?: Assignee[];
 };
 
 export const StepDetail = ({
   step,
   handleStepUpdate,
-  assignees,
 }: StepDetailProps) => {
   const assigneeSelectorRef = React.useRef<HTMLDivElement>(null);
   const stepDetailsCheckboxRef = React.useRef<HTMLDivElement>(null);
@@ -26,6 +24,7 @@ export const StepDetail = ({
     step: Step,
     assignee: Assignee | undefined,
   ) => {
+
     const updatedStep = {
       ...step,
       assignee: assignee,
@@ -80,8 +79,7 @@ export const StepDetail = ({
               }
             >
               <div ref={assigneeSelectorRef}>
-                <AssigneeSelector
-                  assigneeList={assignees}
+                <StepDetailAssigneeSelector
                   assignee={step.assignee}
                   handleAssigneeSelection={(assignee) => {
                     handleAssigneeSelection(step, assignee);

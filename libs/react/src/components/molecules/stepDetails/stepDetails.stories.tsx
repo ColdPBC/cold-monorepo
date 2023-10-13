@@ -38,7 +38,6 @@ export const Default: Story = {
   },
   args: {
     steps: getActionMock().action.steps,
-    assignees: getOrganizationMembersMock().members,
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     handleStepsUpdate: (steps: Step[]) => {},
   },
@@ -50,7 +49,6 @@ export const SubcategoryActionDetailsCardVariant: Story = {
   },
   args: {
     steps: getActionMock().action.steps,
-    assignees: getOrganizationMembersMock().members,
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     handleStepsUpdate: (steps: Step[]) => {},
     variant: StepDetailsVariants.SubcategoryActionDetailsCard,

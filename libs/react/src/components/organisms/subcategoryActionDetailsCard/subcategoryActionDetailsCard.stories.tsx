@@ -63,7 +63,6 @@ export const SurveysNotComplete: Story = {
         ],
       },
     },
-    assignees: getOrganizationMembersMock().members,
   },
 };
 
@@ -77,7 +76,6 @@ export const NotReadyToExecute: Story = {
   },
   args: {
     actionId: '1',
-    assignees: getOrganizationMembersMock().members,
   },
 };
 
@@ -91,6 +89,5 @@ export const ReadyToExecute: Story = {
   },
   args: {
     actionId: '1',
-    assignees: getOrganizationMembersMock().members,
   },
 };

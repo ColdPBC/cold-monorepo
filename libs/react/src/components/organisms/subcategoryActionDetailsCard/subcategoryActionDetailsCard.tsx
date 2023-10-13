@@ -17,13 +17,11 @@ import useSWR from 'swr';
 import { axiosFetcher } from '@coldpbc/fetchers';
 
 export type SubcategoryActionDetailsCardProps = {
-  assignees?: Assignee[];
   actionId: string;
   actionPayload: ActionPayload;
 };
 export const SubcategoryActionDetailsCard = ({
   actionId,
-  assignees,
   actionPayload,
 }: SubcategoryActionDetailsCardProps) => {
   const [actionData, setActionData] =
@@ -76,7 +74,6 @@ export const SubcategoryActionDetailsCard = ({
             updateActionData(actionPayload);
           }}
           variant={ActionDetailCardVariants.SubcategoryActionDetailsCard}
-          assignees={assignees}
         />
       </Card>
     );
