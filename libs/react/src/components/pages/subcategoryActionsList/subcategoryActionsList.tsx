@@ -1,52 +1,56 @@
-import { useParams } from "react-router-dom"
-import { AppContent, CenterColumnContent, RightColumnContent } from "../../organisms"
+import { useParams } from 'react-router-dom';
+import {
+  AppContent,
+  CenterColumnContent,
+  RightColumnContent,
+} from '../../organisms';
 import useSWR from 'swr';
-import { axiosFetcher } from "@coldpbc/fetchers";
-import { SubcategoryJourneyPreview } from "../../molecules";
-import { SubcategoryFootprintCard } from "../../molecules/subcategoryFootprintCard";
+import { axiosFetcher } from '@coldpbc/fetchers';
+import { SubcategoryJourneyPreview } from '../../molecules';
+import { SubcategoryFootprintCard } from '../../molecules/subcategoryFootprintCard';
 
-export const SubcategoryActionsList  = () => {
-    const { name } = useParams();
-    const { data } = useSWR<any>(['/categories', 'GET'], axiosFetcher);
+export const SubcategoryActionsList = () => {
+  const { name } = useParams();
+  const { data } = useSWR<any>(['/categories', 'GET'], axiosFetcher);
 
-    if (!name) return null;
+  if (!name) return null;
 
-    const category = Object.keys(data?.definition?.categories ?? {}).find((category: any) => data?.definition?.categories[category].subcategories[name]);
+  const category = Object.keys(data?.definition?.categories ?? {}).find(
+    (category: any) =>
+      data?.definition?.categories[category].subcategories[name],
+  );
 
-    if (!category) return null;
+  if (!category) return null;
 
-    const subcategoryData =
-        data?.definition?.categories[category]?.subcategories[name];
+  const subcategoryData =
+    data?.definition?.categories[category]?.subcategories[name];
 
-    if (!subcategoryData) {
-        return null;
-    }
+  if (!subcategoryData) {
+    return null;
+  }
 
-    const subcategoryName = subcategoryData.subcategory_name;
+  const subcategoryName = subcategoryData.subcategory_name;
 
-    return (
-        <AppContent title={subcategoryName}>
-            <CenterColumnContent>
-                {/* <Card>
+  return (
+    <AppContent title={subcategoryName}>
+      <CenterColumnContent>
+        {/* <Card>
                     Your _______ footprint is made up of lorem ipsum dolor sit amet, consec tetur adipiscing elit usmod tempor incididunt ut labore et dol.
                 </Card> */}
-            </CenterColumnContent>
-            <RightColumnContent>
-                <SubcategoryJourneyPreview
-                    category_key={category}
-                    subcategory_key={name}
-                    cardTitle={`${subcategoryName} Score`}
-                    to='/journey'
-                    containerClassName="border-0 w-full rounded-2xl"
-                    glow
-                />
-                {category === 'company_decarbonization' && 
-                    <SubcategoryFootprintCard
-                        period={2022}
-                        subcategory_key={name}
-                    />
-                }
-            </RightColumnContent>
-        </AppContent>
-    )
-}
+      </CenterColumnContent>
+      <RightColumnContent>
+        <SubcategoryJourneyPreview
+          category_key={category}
+          subcategory_key={name}
+          cardTitle={`${subcategoryName} Score`}
+          to="/journey"
+          containerClassName="border-0 w-full rounded-2xl"
+          glow
+        />
+        {category === 'company_decarbonization' && (
+          <SubcategoryFootprintCard period={2022} subcategory_key={name} />
+        )}
+      </RightColumnContent>
+    </AppContent>
+  );
+};
