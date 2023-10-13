@@ -23,6 +23,7 @@ import {
   getNewsSomeMissingProperties,
 } from './newsMock';
 import { ActionPayload } from '@coldpbc/interfaces';
+import { SubcategoryActionDetailsCard } from '@coldpbc/components';
 
 export const getFootprintHandler = {
   default: rest.get('*/categories/company_decarbonization', (req, res, ctx) => {
@@ -115,79 +116,7 @@ export const getActionHandler = {
   allStepsComplete: rest.get('*/organizations/*/actions/*', (req, res, ctx) => {
     return res(ctx.json(getActionAllStepsComplete()));
   }),
-  surveysNotComplete: [
-    rest.get('*/organizations/*/actions/*', (req, res, ctx) => {
-      return res(
-        ctx.json({
-          ...getActionMock(),
-          action: {
-            ...getActionMock().action,
-            dependent_surveys: [
-              {
-                ...getActionMock().action.dependent_surveys[0],
-                completed: true,
-              },
-              {
-                ...getActionMock().action.dependent_surveys[1],
-                completed: false,
-              },
-            ],
-          },
-        }),
-      );
-    }),
-    rest.patch('*/organizations/*/actions/:actionId', (req, res, ctx) => {
-      return res(ctx.json({}));
-    }),
-  ],
-  notReadyToExecute: [
-    rest.get('*/organizations/*/actions/*', (req, res, ctx) => {
-      return res(
-        ctx.json({
-          ...getActionMock(),
-          action: {
-            ...getActionMock().action,
-            dependent_surveys: [
-              {
-                ...getActionMock().action.dependent_surveys[0],
-                submitted: true,
-              },
-              {
-                ...getActionMock().action.dependent_surveys[1],
-                submitted: true,
-              },
-            ],
-            ready_to_execute: false,
-          },
-        } as ActionPayload),
-      );
-    }),
-    rest.patch('*/organizations/*/actions/:actionId', (req, res, ctx) => {
-      return res(ctx.json({}));
-    }),
-  ],
-  readyToExecute: [
-    rest.get('*/organizations/*/actions/*', (req, res, ctx) => {
-      return res(
-        ctx.json({
-          ...getActionMock(),
-          action: {
-            ...getActionMock().action,
-            dependent_surveys: [
-              {
-                ...getActionMock().action.dependent_surveys[0],
-                submitted: true,
-              },
-              {
-                ...getActionMock().action.dependent_surveys[1],
-                submitted: true,
-              },
-            ],
-            ready_to_execute: true,
-          },
-        } as ActionPayload),
-      );
-    }),
+  subcategoryActionDetailsCard: [
     rest.patch('*/organizations/*/actions/:actionId', (req, res, ctx) => {
       return res(ctx.json({}));
     }),

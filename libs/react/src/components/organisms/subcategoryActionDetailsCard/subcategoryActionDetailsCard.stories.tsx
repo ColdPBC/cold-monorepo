@@ -12,6 +12,7 @@ import {
   SubcategoryActionDetailsCard,
   SubcategoryActionDetailsCardProps,
 } from './subcategoryActionDetailsCard';
+import { getCustomHasher } from 'nx/src/tasks-runner/utils';
 
 const meta = {
   title: 'Organisms/SubcategoryActionDetailsCard',
@@ -29,24 +30,17 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-// const SubcategoryActionsOverviewCardTemplate = (
-//   args: SubcategoryActionDetailsCardProps,
-// ) => (
-//   <StoryMockProvider handlers={[getActionHandler.default]}>
-//     <SubcategoryActionDetailsCard {...args} />
-//   </StoryMockProvider>
-// );
-
 export const SurveysNotComplete: Story = {
   render: (args) => {
     return (
-      <StoryMockProvider handlers={[]}>
+      <StoryMockProvider
+        handlers={getActionHandler.subcategoryActionDetailsCard}
+      >
         <SubcategoryActionDetailsCard {...args} />
       </StoryMockProvider>
     );
   },
   args: {
-    actionId: '1',
     actionPayload: {
       ...getActionMock(),
       action: {
@@ -69,13 +63,14 @@ export const SurveysNotComplete: Story = {
 export const NotReadyToExecute: Story = {
   render: (args) => {
     return (
-      <StoryMockProvider handlers={[]}>
+      <StoryMockProvider
+        handlers={getActionHandler.subcategoryActionDetailsCard}
+      >
         <SubcategoryActionDetailsCard {...args} />
       </StoryMockProvider>
     );
   },
   args: {
-    actionId: '1',
     actionPayload: {
       ...getActionMock(),
       action: {
@@ -99,13 +94,14 @@ export const NotReadyToExecute: Story = {
 export const ReadyToExecute: Story = {
   render: (args) => {
     return (
-      <StoryMockProvider handlers={[]}>
+      <StoryMockProvider
+        handlers={getActionHandler.subcategoryActionDetailsCard}
+      >
         <SubcategoryActionDetailsCard {...args} />
       </StoryMockProvider>
     );
   },
   args: {
-    actionId: '1',
     actionPayload: {
       ...getActionMock(),
       action: {
