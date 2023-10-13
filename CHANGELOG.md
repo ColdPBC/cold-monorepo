@@ -1,3 +1,16 @@
+# [1.41.0](https://github.com/ColdPBC/ui/compare/v1.40.0...v1.41.0) (2023-10-12)
+
+
+### Bug Fixes
+
+* fix type errors after flowbite update ([7e55bf1](https://github.com/ColdPBC/ui/commit/7e55bf1068b2e3cdb3c61df10757b5a815cb713f))
+* fix type errors after flowbite update ([#99](https://github.com/ColdPBC/ui/issues/99)) ([fc5c4ee](https://github.com/ColdPBC/ui/commit/fc5c4eed3afa6376b4fb33775af73d63060829f9))
+
+
+### Features
+
+* Create ActionsDetail Page ([cca244c](https://github.com/ColdPBC/ui/commit/cca244ce1d178f087bf6dfe351409dd95a80fff7))
+
 # [1.40.0](https://github.com/ColdPBC/ui/compare/v1.39.0...v1.40.0) (2023-10-12)
 
 
