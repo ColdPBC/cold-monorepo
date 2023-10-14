@@ -3,6 +3,7 @@ import { withKnobs } from '@storybook/addon-knobs';
 import { StoryObj } from '@storybook/react';
 import {
   getActionHandler,
+  getActionMock,
   getActionsMockBySubCategoryName,
   getOrganizationMembersMock,
   StoryMockProvider,
@@ -11,6 +12,7 @@ import {
   SubcategoryActionDetailsCard,
   SubcategoryActionDetailsCardProps,
 } from './subcategoryActionDetailsCard';
+import { getCustomHasher } from 'nx/src/tasks-runner/utils';
 
 const meta = {
   title: 'Organisms/SubcategoryActionDetailsCard',
@@ -28,49 +30,94 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-// const SubcategoryActionsOverviewCardTemplate = (
-//   args: SubcategoryActionDetailsCardProps,
-// ) => (
-//   <StoryMockProvider handlers={[getActionHandler.default]}>
-//     <SubcategoryActionDetailsCard {...args} />
-//   </StoryMockProvider>
-// );
-
 export const SurveysNotComplete: Story = {
   render: (args) => {
     return (
-      <StoryMockProvider handlers={[getActionHandler.surveysNotComplete]}>
+      <StoryMockProvider
+        handlers={getActionHandler.subcategoryActionDetailsCard}
+      >
         <SubcategoryActionDetailsCard {...args} />
       </StoryMockProvider>
     );
   },
   args: {
-    actionId: '1',
+    actionPayload: {
+      ...getActionMock(),
+      action: {
+        ...getActionMock().action,
+        dependent_surveys: [
+          {
+            ...getActionMock().action.dependent_surveys[0],
+            submitted: true,
+          },
+          {
+            ...getActionMock().action.dependent_surveys[1],
+            submitted: false,
+          },
+        ],
+      },
+    },
   },
 };
 
 export const NotReadyToExecute: Story = {
   render: (args) => {
     return (
-      <StoryMockProvider handlers={[getActionHandler.notReadyToExecute]}>
+      <StoryMockProvider
+        handlers={getActionHandler.subcategoryActionDetailsCard}
+      >
         <SubcategoryActionDetailsCard {...args} />
       </StoryMockProvider>
     );
   },
   args: {
-    actionId: '1',
+    actionPayload: {
+      ...getActionMock(),
+      action: {
+        ...getActionMock().action,
+        dependent_surveys: [
+          {
+            ...getActionMock().action.dependent_surveys[0],
+            submitted: true,
+          },
+          {
+            ...getActionMock().action.dependent_surveys[1],
+            submitted: true,
+          },
+        ],
+        ready_to_execute: false,
+      },
+    },
   },
 };
 
 export const ReadyToExecute: Story = {
   render: (args) => {
     return (
-      <StoryMockProvider handlers={[getActionHandler.readyToExecute]}>
+      <StoryMockProvider
+        handlers={getActionHandler.subcategoryActionDetailsCard}
+      >
         <SubcategoryActionDetailsCard {...args} />
       </StoryMockProvider>
     );
   },
   args: {
-    actionId: '1',
+    actionPayload: {
+      ...getActionMock(),
+      action: {
+        ...getActionMock().action,
+        dependent_surveys: [
+          {
+            ...getActionMock().action.dependent_surveys[0],
+            submitted: true,
+          },
+          {
+            ...getActionMock().action.dependent_surveys[1],
+            submitted: true,
+          },
+        ],
+        ready_to_execute: true,
+      },
+    },
   },
 };

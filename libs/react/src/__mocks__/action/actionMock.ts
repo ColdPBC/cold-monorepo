@@ -110,8 +110,13 @@ export const getActionsMock = (): ActionPayload[] => {
         areas_of_impact: ['Electricity'],
         dependent_surveys: [
           {
-            name: 'test_survey',
-            title: 'Test Survey 1',
+            name: 'footprint_survey',
+            title: 'Footprint Survey',
+            submitted: false,
+          },
+          {
+            name: 'energy_survey',
+            title: 'Energy Survey',
             submitted: false,
           },
         ],

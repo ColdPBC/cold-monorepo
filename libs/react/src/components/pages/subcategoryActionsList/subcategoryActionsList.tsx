@@ -3,15 +3,33 @@ import {
   AppContent,
   CenterColumnContent,
   RightColumnContent,
+  SubcategoryActionDetailsCard,
 } from '../../organisms';
 import useSWR from 'swr';
 import { axiosFetcher } from '@coldpbc/fetchers';
-import { SubcategoryJourneyPreview } from '../../molecules';
+import { Card, SubcategoryJourneyPreview } from '../../molecules';
 import { SubcategoryFootprintCard } from '../../molecules/subcategoryFootprintCard';
+import { useAuth0, User } from '@auth0/auth0-react';
+import { ActionPayload } from '@coldpbc/interfaces';
+import { lowerCase } from 'lodash';
 
 export const SubcategoryActionsList = () => {
+  const { user } = useAuth0();
+
   const { name } = useParams();
+
   const { data } = useSWR<any>(['/categories', 'GET'], axiosFetcher);
+
+  const {
+    data: actions,
+    error: actionsError,
+    isLoading: actionsIsLoading,
+  } = useSWR<ActionPayload[], any, any>(
+    user?.coldclimate_claims.org_id
+      ? [`/organizations/${user.coldclimate_claims.org_id}/actions`, 'GET']
+      : null,
+    axiosFetcher,
+  );
 
   if (!name) return null;
 
@@ -31,9 +49,35 @@ export const SubcategoryActionsList = () => {
 
   const subcategoryName = subcategoryData.subcategory_name;
 
+  if (actionsIsLoading) {
+    return <div>Spinner</div>;
+  }
+
+  if (actionsError) {
+    console.log(actionsError);
+    return <div></div>;
+  }
+
   return (
     <AppContent title={subcategoryName}>
-      <CenterColumnContent></CenterColumnContent>
+      <CenterColumnContent>
+        <Card glow>
+          <div className={'text-body text-tc-primary'}>
+            Your {lowerCase(subcategoryName)} footprint is made up of lorem
+            ipsum dolor sit amet, consec tetur adipiscing elit usmod tempor
+            incididunt ut labore et dol.
+          </div>
+        </Card>
+        {actions
+          ?.filter((actionPayload) => actionPayload.action.subcategory === name)
+          .map((actionPayload) => {
+            return (
+              <div key={actionPayload.id}>
+                <SubcategoryActionDetailsCard actionPayload={actionPayload} />
+              </div>
+            );
+          })}
+      </CenterColumnContent>
       <RightColumnContent>
         <SubcategoryJourneyPreview
           category_key={category}
