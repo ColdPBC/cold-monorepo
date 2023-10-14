@@ -64,7 +64,7 @@
     "swr": "^2.1.5",
     "tailwind-merge": "^1.14.0",
     "url-loader": "^4.1.1",
-    "zod": "^3.21.4"
+    "zod": "^3.22.3"
   },
   "devDependencies": {
     "@auth0/nextjs-auth0": "^2.5.0",
