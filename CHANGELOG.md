@@ -1,3 +1,16 @@
+# [1.45.0](https://github.com/ColdPBC/ui/compare/v1.44.0...v1.45.0) (2023-10-14)
+
+
+### Bug Fixes
+
+* corrected story arguments ([3ca581a](https://github.com/ColdPBC/ui/commit/3ca581a7683494653cc5d36384763d8478521acf))
+
+
+### Features
+
+* added sub category detail card to action list page ([e954a29](https://github.com/ColdPBC/ui/commit/e954a29ac020c0354700db31f4244102174eb2a6))
+* update subcategory actions list ([cb45421](https://github.com/ColdPBC/ui/commit/cb45421d40259e241a7236aed518bf7bced1f18e))
+
 # [1.44.0](https://github.com/ColdPBC/ui/compare/v1.43.0...v1.44.0) (2023-10-13)
 
 
