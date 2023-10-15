@@ -42,3 +42,13 @@ export const AllStepsComplete: Story = {
     </StoryMockProvider>
   ),
 };
+
+export const NoDueDateSet: Story = {
+  render: (args) => (
+    <StoryMockProvider handlers={[getActionHandler.noDueDateSet]}>
+      <ActionDetail
+        id={'1'}
+      />
+    </StoryMockProvider>
+  ),
+};

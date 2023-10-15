@@ -1,4 +1,4 @@
-import { useAuth0 } from "@auth0/auth0-react";
+import { useAuth0, User } from "@auth0/auth0-react";
 import { GlobalSizes } from "@coldpbc/enums";
 import { axiosFetcher } from "@coldpbc/fetchers";
 import { flowbiteThemeOverride } from "@coldpbc/themes";
@@ -51,11 +51,12 @@ export const UserSelectDropdown = ({
             className={twMerge('h-[225px] overflow-y-scroll w-[93%]', className)}
             {...rest}
         >
-            {data?.members.filter((member: any) => !member.invitee).map((member: any) => (
+            {data?.members.filter((member: User) => !member.invitee).map((member: User) => (
                 <>
                     <Dropdown.Item
                         onClick={() => onSelect(member.user_id)}
                         theme={flowbiteThemeOverride.dropdown.floating.item}
+                        value={member.user_id}
                     >
                         <span className="mr-4">
                             <Avatar size={GlobalSizes.xSmall} user={member} />
