@@ -240,4 +240,8 @@ export const handlers = [
   rest.get(getApiUrl('/organizations/:orgId/actions/:id'), (req, res, ctx) => {
     return res(ctx.json({...getActionMock()}));
   }),
+
+  rest.patch(getApiUrl('/organizations/:orgId/actions/:actionId'), (req, res, ctx) => {
+    return res(ctx.json({}));
+  }),
 ];
