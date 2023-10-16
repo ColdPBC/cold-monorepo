@@ -39,7 +39,7 @@ export function Home() {
               'actions_completed',
             ]}
           />
-          <NextActionsCard />
+          {ldFlags.showActions261 && <NextActionsCard />}
         </RightColumnContent>
       </AppContent>
     );
