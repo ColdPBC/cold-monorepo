@@ -57,8 +57,7 @@ export const ActionDetail = ({
     const handleUpdateAction = async (updatedAction: Partial<ActionPayload['action']>) => {
         if (!data) return;
 
-        const newAction: ActionPayload = {
-            ...data,
+        const newAction: Pick<ActionPayload, 'action'> = {
             action: {
                 ...data.action,
                 ...updatedAction
@@ -66,12 +65,15 @@ export const ActionDetail = ({
         }
 
         await axiosFetcher([
-            `/organizations/${user?.coldclimate_claims.org_id}/actions/${newAction.id}`,
+            `/organizations/${user?.coldclimate_claims.org_id}/actions/${data.id}`,
             'PATCH',
             JSON.stringify(newAction),
         ]);
 
-        await mutate(newAction, { revalidate: false });
+        await mutate({
+            ...data,
+            ...newAction
+        }, { revalidate: false });
     };
 
     const handleClose = () => {
