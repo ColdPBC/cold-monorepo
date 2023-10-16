@@ -1,3 +1,11 @@
+## [1.45.1](https://github.com/ColdPBC/ui/compare/v1.45.0...v1.45.1) (2023-10-16)
+
+
+### Bug Fixes
+
+* Put next actions card behind a feature flag ([87b908b](https://github.com/ColdPBC/ui/commit/87b908b481120b38b61295f355b3c9685e395bb7))
+* Put next actions card behind a feature flag ([#108](https://github.com/ColdPBC/ui/issues/108)) ([64e2181](https://github.com/ColdPBC/ui/commit/64e2181854ddc9b4478fa054ecb7807ebd9db623))
+
 # [1.45.0](https://github.com/ColdPBC/ui/compare/v1.44.0...v1.45.0) (2023-10-14)
 
 
