@@ -1,12 +1,12 @@
 import { Card, Takeover, UserSelectDropdown } from "../../molecules";
-import useSWR from 'swr';
-import { useAuth0 } from "@auth0/auth0-react";
+import useSWR, { useSWRConfig } from 'swr';
+import { useAuth0, User } from "@auth0/auth0-react";
 import { axiosFetcher } from "@coldpbc/fetchers";
-import { ActionPayload } from "@coldpbc/interfaces";
+import { ActionPayload, Assignee } from "@coldpbc/interfaces";
 import { ArrowRightIcon, ChevronDownIcon } from '@heroicons/react/20/solid';
 import { CompletedBanner } from "./completedBanner";
-import { BaseButton } from "../../atoms";
-import { ButtonTypes } from "@coldpbc/enums";
+import { Avatar, BaseButton } from "../../atoms";
+import { ButtonTypes, GlobalSizes } from "@coldpbc/enums";
 import { CheckIcon } from '@heroicons/react/20/solid';
 import { Datepicker } from 'flowbite-react';
 import { Dropdown } from 'flowbite-react';
@@ -26,12 +26,55 @@ export const ActionDetail = ({
     const { user } = useAuth0();
     const [show, setShow] = useState(true);
 
-    const { data, error, isLoading } = useSWR<ActionPayload, any, any>(
+    const getOrgURL = () => {
+      if (user?.coldclimate_claims.org_id) {
+        return [
+          '/organizations/' + user.coldclimate_claims.org_id + '/members',
+          'GET',
+        ];
+      } else {
+        return null;
+      }
+    };
+  
+    const {
+      data: userData,
+    }: { data: any; error: any; isLoading: boolean } = useSWR(
+      getOrgURL(),
+      axiosFetcher,
+      {
+        revalidateOnFocus: false,
+      },
+    );
+
+    const { data, error, isLoading, mutate } = useSWR<ActionPayload, any, any>(
         [`/organizations/${user?.coldclimate_claims.org_id}/actions/${id}`, 'GET'],
         axiosFetcher,
     );
 
     const isActionComplete = data?.action.steps.every(step => step.complete);
+    
+    const handleUpdateAction = async (updatedAction: Partial<ActionPayload['action']>) => {
+        if (!data) return;
+
+        const newAction: Pick<ActionPayload, 'action'> = {
+            action: {
+                ...data.action,
+                ...updatedAction
+            }
+        }
+
+        await axiosFetcher([
+            `/organizations/${user?.coldclimate_claims.org_id}/actions/${data.id}`,
+            'PATCH',
+            JSON.stringify(newAction),
+        ]);
+
+        await mutate({
+            ...data,
+            ...newAction
+        }, { revalidate: false });
+    };
 
     const handleClose = () => {
         const param = searchParams.get('actionId');
@@ -40,6 +83,29 @@ export const ActionDetail = ({
           setSearchParams(searchParams);
         }
     }
+
+    const handleAssigneeSelect = (userId: string) => {
+        const assignee: User | null = userData?.members.find((user: User) => (user.user_id === userId)) ?? null;
+
+        if (!assignee) return;
+
+        handleUpdateAction({ 
+            assignee: {
+                name: assignee.name,
+                family_name: assignee.family_name,
+                given_name: assignee.given_name,
+                picture: assignee.picture
+            }
+        });
+    }
+
+    const selectedAssignee: User | null = userData?.members.find((user: User) => (
+        user.name &&
+        user.name === data?.action.assignee?.name &&
+        user.given_name === data?.action.assignee?.given_name &&
+        user.family_name === data?.action.assignee?.family_name &&
+        user.picture === data?.action.assignee?.picture
+    )) ?? null;
 
     if (error && !isLoading) {
         return null;
@@ -97,61 +163,76 @@ export const ActionDetail = ({
                 <div className="w-[437px]">
                     <div className='sticky top-[40px] w-full grid gap-6'>
                         <Card glow className="gap-0 p-0 overflow-visible">
-                                <span className="p-4 w-full">
-                                    <UserSelectDropdown
-                                        onSelect={() => {}}
-                                        renderTrigger={() => (
-                                            <span>
-                                                <BaseButton
-                                                    variant={ButtonTypes.secondary}
-                                                    onClick={() => {}}
-                                                    className='w-full p-4 border border-bgc-accent bg-bgc-elevated'
-                                                >
-                                                    <span className="flex items-center justify-between">
-                                                        Add Steward
-                                                        <ChevronDownIcon className="w-[18px] ml-2" />
-                                                    </span>
-                                                </BaseButton>
-                                            </span>
-                                        )}
-                                    />
+                            <span className="p-4 w-full">
+                                {selectedAssignee && <div className="font-medium text-xs leading-none mb-2">Steward</div>}
+                                <UserSelectDropdown
+                                    onSelect={handleAssigneeSelect}
+                                    renderTrigger={() => 
+                                        (
+                                        <span>
+                                            <BaseButton
+                                                variant={ButtonTypes.secondary}
+                                                onClick={() => {}}
+                                                className='w-full p-4 border border-bgc-accent bg-bgc-elevated'
+                                            >
+                                                <span className="flex items-center justify-between">
+                                                    {selectedAssignee ? 
+                                                        (
+                                                            <div className="flex items-center">
+                                                                <span className="mr-4">
+                                                                    <Avatar size={GlobalSizes.xSmall} user={selectedAssignee} />
+                                                                </span>
+                                                                <span className="text-white font-bold text-sm leading-normal">
+                                                                    {selectedAssignee.name}
+                                                                </span>
+                                                            </div>
+                                                        )
+                                                        :
+                                                        'Add Steward'
+                                                    }
+                                                    <ChevronDownIcon className="w-[18px] ml-2" />
+                                                </span>
+                                            </BaseButton>
+                                        </span>
+                                    )}
+                                />
+                            </span>
+                            <div className="h-[1px] w-full bg-bgc-accent" />
+                            {data?.action.due_date &&
+                                <span className="font-medium leading-normal text-sm m-4 mb-0">
+                                    Target Date: {DateTime.fromISO(data?.action.due_date).toFormat('MMMM d, y')}
                                 </span>
-                                <div className="h-[1px] w-full bg-bgc-accent" />
-                                {data?.action.due_date &&
-                                    <span className="font-medium leading-normal text-sm m-4 mb-0">
-                                        Target Date: {DateTime.fromISO(data?.action.due_date).toFormat('MMMM d, y')}
+                            }
+                            <Dropdown
+                                inline
+                                label=''
+                                renderTrigger={() =>
+                                    <span className="p-4 w-full">
+                                        <BaseButton
+                                            label={data?.action.due_date ? "Edit Target Date" : "Add Target Date"}
+                                            variant={ButtonTypes.secondary}
+                                            className='w-full'
+                                            onClick={() => {}}
+                                        />
                                     </span>
                                 }
-                                <Dropdown
+                                arrowIcon={false}
+                                theme={flowbiteThemeOverride.dropdown}
+                            >
+                                <Datepicker
                                     inline
-                                    label=''
-                                    renderTrigger={() =>
-                                        <span className="p-4 w-full">
-                                            <BaseButton
-                                                label={data?.action.due_date ? "Edit Target Date" : "Add Target Date"}
-                                                variant={ButtonTypes.secondary}
-                                                className='w-full'
-                                                onClick={() => {}}
-                                            />
-                                        </span>
-                                    }
-                                    arrowIcon={false}
-                                    theme={flowbiteThemeOverride.dropdown}
-                                >
-                                    <Datepicker inline minDate={new Date()} theme={flowbiteThemeOverride.datepicker} />
-                                </Dropdown>
-                            <div className="h-[1px] w-full bg-bgc-accent" />
-                            <span className="p-4 w-full">
-                                {isActionComplete ? 
-                                    <BaseButton disabled className='w-full bg-gray-50' variant={ButtonTypes.secondary}>
-                                        <span className="flex items-center">Done <CheckIcon className="w-[14px] ml-2" /></span>
-                                    </BaseButton>
-                                    :
-                                    <BaseButton className='w-full'
-                                        label="Mark As Done"
-                                    />
-                                }
-                            </span>
+                                    minDate={new Date()}
+                                    theme={flowbiteThemeOverride.datepicker}
+                                    showClearButton={false}
+                                    onSelectedDateChanged={(date) => {
+                                        console.log({onInput: date.toISOString()})
+                                        handleUpdateAction({
+                                            due_date: date.toISOString()
+                                        });
+                                    }}
+                                    value={data?.action.due_date}
+                                />
+                            </Dropdown>
                         </Card>
                         {data?.action.resources &&
                             <Card title="Resources" glow className="gap-4">

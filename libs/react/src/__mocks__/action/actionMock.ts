@@ -293,3 +293,13 @@ export const getActionAllStepsComplete = (): ActionPayload => {
     },
   };
 };
+
+export const getActionNoDueDateSet = (): ActionPayload => {
+  return {
+    ...getActionMock(),
+    action: {
+      ...getActionMock().action,
+      due_date: undefined,
+    },
+  };
+};
