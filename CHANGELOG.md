@@ -1,3 +1,11 @@
+# [1.46.0](https://github.com/ColdPBC/ui/compare/v1.45.1...v1.46.0) (2023-10-16)
+
+
+### Features
+
+* Patch action with updated action settings ([cbd2ffa](https://github.com/ColdPBC/ui/commit/cbd2ffa7670df014c8e98ef6ada5cbeb7a461b46))
+* Patch action with updated action settings ([#106](https://github.com/ColdPBC/ui/issues/106)) ([5544b1b](https://github.com/ColdPBC/ui/commit/5544b1be00586ad999c8b73667bdd7397525541c))
+
 ## [1.45.1](https://github.com/ColdPBC/ui/compare/v1.45.0...v1.45.1) (2023-10-16)
 
 
