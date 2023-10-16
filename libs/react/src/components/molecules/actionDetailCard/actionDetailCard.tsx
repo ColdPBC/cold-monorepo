@@ -255,7 +255,7 @@ export const ActionDetailCard = ({
               className={'w-[198px] h-[198px]'}
             />
           </div>
-          <div className={'py-[16px] space-y-[16px] justify-start w-[451px]'}>
+          <div className={'py-[16px] space-y-[8px] justify-start w-[451px]'}>
             <div className={'text-h4'}>
               Hold tight while we build out your plan
             </div>
