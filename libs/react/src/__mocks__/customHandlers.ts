@@ -182,7 +182,4 @@ export const getActionHandler = {
       return res(ctx.json(actions));
     }),
   ],
-  noDueDateSet: rest.get('*/organizations/*/actions/*', (req, res, ctx) => {
-    return res(ctx.json(getActionNoDueDateSet()));
-  }),
 };

@@ -107,10 +107,7 @@ export const ActionDetailCard = ({
   const getSurveysNeedCompletion = (action: Action) => {
     if (variant === ActionDetailCardVariants.ActionDetailProgress) {
       return (
-        <Card
-          glow
-          className={'text-tc-primary p-0 gap-[8px] px-[16px] w-[899px]'}
-        >
+        <Card glow className={'text-tc-primary p-0 gap-[8px] px-[16px]'}>
           <div className={'flex justify-start space-y-[8px]'}>
             <div className={'w-[664px]'}>
               <div className={'text-h4'}>Get Started</div>
@@ -205,7 +202,7 @@ export const ActionDetailCard = ({
         <Card
           glow={false}
           className={
-            'h-[120px] p-0 px-[16px] text-tc-primary rounded-2xl border-[2px] border-bgc-accent bg-gray-10 w-[899px]'
+            'h-[120px] p-0 px-[16px] text-tc-primary rounded-2xl border-[2px] border-bgc-accent bg-gray-10'
           }
         >
           <div
@@ -243,7 +240,7 @@ export const ActionDetailCard = ({
         <Card
           glow={false}
           className={
-            'p-[16px] text-tc-primary rounded-lg border-[1px] border-bgc-accent bg-bgc-elevated w-full'
+            'p-[16px] text-tc-primary rounded-lg border-[1px] border-bgc-accent bg-bgc-elevated'
           }
         >
           <div
@@ -271,7 +268,7 @@ export const ActionDetailCard = ({
   const getActionIsReadyToExecute = (action: Action) => {
     if (variant === ActionDetailCardVariants.ActionDetailProgress) {
       return (
-        <Card glow className={'text-tc-primary w-[899px]'}>
+        <Card glow className={'text-tc-primary'}>
           <div className={'text-h4 text-left w-full'}>Steps</div>
           <div className={'w-full'}>{getProgress()}</div>
           <div>
