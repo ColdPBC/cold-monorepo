@@ -2,39 +2,25 @@ import { useAuth0, User } from '@auth0/auth0-react';
 import { ButtonTypes } from '@coldpbc/enums';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { BaseButton, Input } from '../../atoms';
 import { Card } from '../card';
 import { Modal } from '../modal';
-import cookie from 'js-cookie';
 
-interface Props {
-  user: User;
-}
+export const UserSettings = () => {
+  const { logout: auth0Logout, user } = useAuth0();
 
-export const UserSettings = ({ user }: Props) => {
-  const { logout: auth0Logout } = useAuth0();
+  const [updatedUser, setUpdatedUser] = useState(user ?? null);
 
-  const { picture, given_name, family_name, email } = user;
+  useEffect(() => {
+    if (user) {
+      setUpdatedUser(user);
+    }
+  }, [user]);
+
+  const { picture, given_name, family_name, email } = updatedUser ?? {};
 
   const [showFirstNameModal, setShowFirstNameModal] = useState(false);
   const [showLastNameModal, setShowLastNameModal] = useState(false);
-  const [firstName, setFirstName] = useState<string | undefined>(given_name);
-  const [lastName, setLastName] = useState<string | undefined>(family_name);
-
-  // reset firstname on edit modal close
-  useEffect(() => {
-    if (!showFirstNameModal) {
-      setFirstName(given_name);
-    }
-  }, [showFirstNameModal]);
-
-  // reset lastname on edit modal close
-  useEffect(() => {
-    if (!showLastNameModal) {
-      setLastName(family_name);
-    }
-  }, [showLastNameModal]);
 
   // TODO: put inside a custom hook
   const postUserData = (userData: User) => {
@@ -71,9 +57,9 @@ export const UserSettings = ({ user }: Props) => {
         body={
           <Input
             input_props={{
-              value: firstName,
-              onChange: (e) => setFirstName(e.target.value),
-              onValueChange: (name) => setFirstName(name),
+              value: updatedUser?.given_name,
+              onValueChange: () => {},
+              onChange: (e) => setUpdatedUser({...updatedUser, given_name: e.target.value}),
               name: 'firstName',
               className:
                 'text-sm not-italic text-tc-primary font-medium bg-transparent w-full rounded-lg p-[16px] border border-bgc-accent focus:border focus:border-bgc-accent focus:ring-0 w-full',
@@ -89,7 +75,7 @@ export const UserSettings = ({ user }: Props) => {
             label: 'Save',
             onClick: () => {
               postUserData({
-                given_name: firstName,
+                given_name: updatedUser?.given_name,
               });
               setShowFirstNameModal(false);
             },
@@ -97,7 +83,10 @@ export const UserSettings = ({ user }: Props) => {
           rejectButton: {
             label: 'Cancel',
             variant: ButtonTypes.secondary,
-            onClick: () => setShowFirstNameModal(false),
+            onClick: () => {
+              setShowFirstNameModal(false);
+              setUpdatedUser(user ?? null)
+            },
           },
         }}
       />
@@ -110,9 +99,9 @@ export const UserSettings = ({ user }: Props) => {
         body={
           <Input
             input_props={{
-              value: lastName,
-              onChange: (e) => setLastName(e.target.value),
-              onValueChange: (name) => setLastName(name),
+              value: updatedUser?.family_name,
+              onValueChange: () => {},
+              onChange: (e) => setUpdatedUser({...updatedUser, family_name: e.target.value}),
               name: 'lastName',
               className:
                 'text-sm not-italic text-tc-primary font-medium bg-transparent w-full rounded-lg p-[16px] border border-bgc-accent focus:border focus:border-bgc-accent focus:ring-0 w-full',
@@ -128,7 +117,7 @@ export const UserSettings = ({ user }: Props) => {
             label: 'Save',
             onClick: () => {
               postUserData({
-                family_name: lastName,
+                family_name: updatedUser?.family_name,
               });
               setShowLastNameModal(false);
             },
@@ -136,7 +125,10 @@ export const UserSettings = ({ user }: Props) => {
           rejectButton: {
             label: 'Cancel',
             variant: ButtonTypes.secondary,
-            onClick: () => setShowLastNameModal(false),
+            onClick: () => {
+              setShowFirstNameModal(false);
+              setUpdatedUser(user ?? null)
+            },
           },
         }}
       />
