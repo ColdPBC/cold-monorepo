@@ -74,7 +74,7 @@ export const StepDetailAssigneeSelector = ({
             picture: assignee.picture,
           });
         }}
-        label={
+        renderTrigger={() => (
           <div
             className={
               'min-h-[40px] w-fit text-tc-primary rounded-lg p-[8px] border-[1px] border-bgc-accent cursor-pointer'
@@ -91,7 +91,7 @@ export const StepDetailAssigneeSelector = ({
               </div>
             </div>
           </div>
-        }
+        )}
       />
     );
   }

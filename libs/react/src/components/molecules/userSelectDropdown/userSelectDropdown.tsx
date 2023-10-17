@@ -15,7 +15,7 @@ interface Props extends Omit<DropdownProps, 'onSelect' | 'label'> {
 export const UserSelectDropdown = ({ onSelect, className, ...rest }: Props) => {
   const { user: dataGridUser } = useAuth0();
 
-  const getOrgURL = () => {
+  const getMembersURL = () => {
     if (dataGridUser?.coldclimate_claims.org_id) {
       return [
         '/organizations/' + dataGridUser.coldclimate_claims.org_id + '/members',
@@ -31,7 +31,7 @@ export const UserSelectDropdown = ({ onSelect, className, ...rest }: Props) => {
     error,
     isLoading,
   }: { data: any; error: any; isLoading: boolean } = useSWR(
-    getOrgURL(),
+    getMembersURL(),
     axiosFetcher,
     {
       revalidateOnFocus: false,
