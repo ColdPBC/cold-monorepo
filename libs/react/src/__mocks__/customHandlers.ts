@@ -148,11 +148,38 @@ export const getActionHandler = {
           return actionPayload;
         }
       });
-      console.log(actions);
       return res(ctx.json(actions));
     }),
   ],
   noDueDateSet: rest.get('*/organizations/*/actions/*', (req, res, ctx) => {
     return res(ctx.json(getActionNoDueDateSet()));
   }),
+  subCategoryActionsListActionsStarted: [
+    rest.patch('*/organizations/*/actions/:actionId', (req, res, ctx) => {
+      return res(ctx.json({}));
+    }),
+    rest.get('*/organizations/*/actions', (req, res, ctx) => {
+      const facilitiesActions = getActionsMock().filter(
+        (action) => action.action.subcategory === 'facilities',
+      );
+      // set all facilities actions surveys to submitted and ready to execute to true
+      facilitiesActions.forEach((action) => {
+        action.action.dependent_surveys.forEach((survey) => {
+          survey.submitted = true;
+        });
+        action.action.ready_to_execute = true;
+      });
+      const actions = getActionsMock().map((actionPayload, index) => {
+        if (actionPayload.action.subcategory === 'facilities') {
+          // return the facilities action that matches the id
+          return facilitiesActions.find(
+            (facilityAction) => facilityAction.id === actionPayload.id,
+          );
+        } else {
+          return actionPayload;
+        }
+      });
+      return res(ctx.json(actions));
+    }),
+  ],
 };
