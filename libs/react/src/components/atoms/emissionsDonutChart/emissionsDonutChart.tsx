@@ -199,14 +199,13 @@ export const EmissionsDonutChart = ({
               {variant === EmissionsDonutChartVariants.vertical && totalEmissions && (
                   <FootprintDetailChip emissions={totalEmissions} large center />
               )}
-              <span data-chromatic="ignore">
-                <Chart
-                    options={chartOptions}
-                    type="doughnut"
-                    data={chartData}
-                    plugins={chartPlugins}
-                />
-              </span>
+              <Chart
+                  options={chartOptions}
+                  type="doughnut"
+                  data={chartData}
+                  plugins={chartPlugins}
+                  data-chromatic="ignore"
+              />
             </div>
             {variant === EmissionsDonutChartVariants.vertical && (
                 <div className="max-w-md m-auto -mb-3 mt-2">{detailViews}</div>
