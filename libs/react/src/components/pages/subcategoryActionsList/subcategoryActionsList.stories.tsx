@@ -31,3 +31,21 @@ export const Default: Story = {
     );
   },
 };
+
+export const ActionsStarted: Story = {
+  render: (args) => {
+    return (
+      <StoryMockProvider
+        memoryRouterProps={{ initialEntries: ['/actions/facilities'] }}
+        handlers={getActionHandler.subCategoryActionsList}
+      >
+        <Routes>
+          <Route
+            path="/actions/:name"
+            element={<SubcategoryActionsList {...args} />}
+          />
+        </Routes>
+      </StoryMockProvider>
+    );
+  },
+};

@@ -9,6 +9,7 @@ import {
 import { ActionDetailCardVariants, ActionItemVariants } from '@coldpbc/enums';
 import { useAuth0, User } from '@auth0/auth0-react';
 import { axiosFetcher } from '@coldpbc/fetchers';
+import { mutate } from 'swr';
 
 export type SubcategoryActionDetailsCardProps = {
   actionPayload: ActionPayload;
@@ -34,8 +35,15 @@ export const SubcategoryActionDetailsCard = ({
     await axiosFetcher([
       `/organizations/${user?.coldclimate_claims.org_id}/actions/${action.id}`,
       'PATCH',
-      JSON.stringify(action),
+      JSON.stringify({
+        action: action.action,
+      }),
     ]);
+    // revalidate for all actions
+    await mutate(
+      [`/organizations/${user?.coldclimate_claims.org_id}/actions`, 'GET'],
+      { revalidate: true },
+    );
   };
 
   return (

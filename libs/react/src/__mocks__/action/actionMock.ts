@@ -276,6 +276,13 @@ export const getActionMockNoResources = (): ActionPayload => {
     ...getActionMock(),
     action: {
       ...getActionMock().action,
+      dependent_surveys: getActionMock().action.dependent_surveys.map(
+        (survey) => ({
+          ...survey,
+          submitted: true,
+        }),
+      ),
+      ready_to_execute: true,
       resources: undefined,
     },
   };
@@ -286,6 +293,13 @@ export const getActionAllStepsComplete = (): ActionPayload => {
     ...getActionMock(),
     action: {
       ...getActionMock().action,
+      dependent_surveys: getActionMock().action.dependent_surveys.map(
+        (survey) => ({
+          ...survey,
+          submitted: true,
+        }),
+      ),
+      ready_to_execute: true,
       steps: getActionMock().action.steps.map((step) => ({
         ...step,
         complete: '2023-12-10T20:25:22.648Z',
@@ -299,6 +313,13 @@ export const getActionNoDueDateSet = (): ActionPayload => {
     ...getActionMock(),
     action: {
       ...getActionMock().action,
+      dependent_surveys: getActionMock().action.dependent_surveys.map(
+        (survey) => ({
+          ...survey,
+          submitted: true,
+        }),
+      ),
+      ready_to_execute: true,
       due_date: undefined,
     },
   };

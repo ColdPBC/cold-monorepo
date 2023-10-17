@@ -63,9 +63,7 @@ export const SubcategoryActionsList = () => {
       <CenterColumnContent>
         <Card glow>
           <div className={'text-body text-tc-primary'}>
-            Your {lowerCase(subcategoryName)} footprint is made up of lorem
-            ipsum dolor sit amet, consec tetur adipiscing elit usmod tempor
-            incididunt ut labore et dol.
+            {subcategoryData?.subcategory_description}
           </div>
         </Card>
         {actions
