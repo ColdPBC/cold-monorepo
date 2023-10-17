@@ -30,11 +30,6 @@ export const StepDetailAssigneeSelector = ({
     }
   };
 
-  const { data: members }: { data: any; error: any; isLoading: boolean } =
-    useSWR(getOrgURL(), axiosFetcher, {
-      revalidateOnFocus: false,
-    });
-
   if (assignee) {
     return (
       <div
