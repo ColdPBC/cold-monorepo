@@ -81,7 +81,7 @@ export const SideBar = (): JSX.Element => {
   let filteredSidebarItems = data.definition.items.filter(filterSidebar) ?? [];
 
   // filter nested action items
-  if (filteredSidebarItems.some((item: any) => item.key === 'actions_key')) {
+  if (ldFlags.showActions261 && filteredSidebarItems.some((item: any) => item.key === 'actions_key')) {
     filteredSidebarItems = filteredSidebarItems.map((item: any) => {
       if (item.key === 'actions_key') {
         return {
