@@ -11,7 +11,7 @@ import { Spinner } from '../../atoms/spinner/spinner';
 import { HexColors } from '../../../themes/cold_theme';
 import { clone, remove } from 'lodash';
 import { useFlags } from 'launchdarkly-react-client-sdk';
-import { matchPath, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { useAuth0 } from '@auth0/auth0-react';
 import { ActionPayload } from '@coldpbc/interfaces';
 
@@ -29,12 +29,11 @@ export const SideBar = (): JSX.Element => {
   } = useSWR(['/components/sidebar_navigation', 'GET'], axiosFetcher);
   const ldFlags = useFlags();
 
+  // Fetch actions if actions feature flag is present
   const { data: actionsData } = useSWR<ActionPayload[], any, any>(
-    [`/organizations/${user?.coldclimate_claims.org_id}/actions`, 'GET'],
+    ldFlags.showActions261 ? [`/organizations/${user?.coldclimate_claims.org_id}/actions`, 'GET'] : null,
     axiosFetcher,
   );
-
-  console.log({actionsData})
 
   const filterSidebar = (item: NavbarItem) => {
     if (item.key === 'actions_key') {
