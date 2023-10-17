@@ -1,3 +1,17 @@
+# [1.47.0](https://github.com/ColdPBC/ui/compare/v1.46.0...v1.47.0) (2023-10-17)
+
+
+### Bug Fixes
+
+* resolve conflicts ([87c1d26](https://github.com/ColdPBC/ui/commit/87c1d26c284c172dd80520c94dea947b72d14b37))
+
+
+### Features
+
+* add action detail progress ([0a6cf50](https://github.com/ColdPBC/ui/commit/0a6cf50bf439b11f493c418107e23197664227fc))
+* Patch action with updated action settings ([03fec88](https://github.com/ColdPBC/ui/commit/03fec88ecb553b061fc6649ad53c1cc8c80bc2df))
+* removed hard width restrictions for action detail progress ([0889163](https://github.com/ColdPBC/ui/commit/0889163db69fdfcdf0ba36294e0e9b32dca5dcd2))
+
 # [1.46.0](https://github.com/ColdPBC/ui/compare/v1.45.1...v1.46.0) (2023-10-16)
 
 
