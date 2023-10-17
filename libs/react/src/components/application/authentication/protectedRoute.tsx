@@ -44,10 +44,10 @@ export const ProtectedRoute = () => {
   const needsSignup = () => {
     if (signedPolicySWR.data) {
       // check if user has signed both policies
-      const tos = signedPolicySWR.data.some(
+      const tos = signedPolicySWR.data?.some(
         (policy) => policy.name === 'tos' && !isEmpty(policy.policy_data),
       );
-      const privacy = signedPolicySWR.data.some(
+      const privacy = signedPolicySWR.data?.some(
         (policy) => policy.name === 'privacy' && !isEmpty(policy.policy_data),
       );
       return !tos || !privacy || !user?.family_name || !user?.given_name;
@@ -122,7 +122,7 @@ export const ProtectedRoute = () => {
   }, [getAccessTokenSilently, user, isAuthenticated, isLoading, appState]);
 
   useEffect(() => {
-    if (initialSurveySWR.data && !needsSignup()) {
+    if (initialSurveySWR.data?.definition && !needsSignup()) {
       const surveyName = searchParams.get('surveyName');
       if (
         !initialSurveySWR.data.definition.submitted &&
