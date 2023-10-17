@@ -25,22 +25,6 @@ export const ActionDetail = ({ id }: Props) => {
   const { user } = useAuth0();
   const [show, setShow] = useState(true);
 
-  const getOrgURL = () => {
-    if (user?.coldclimate_claims.org_id) {
-      return [
-        '/organizations/' + user.coldclimate_claims.org_id + '/members',
-        'GET',
-      ];
-    } else {
-      return null;
-    }
-  };
-
-  const { data: userData }: { data: any; error: any; isLoading: boolean } =
-    useSWR(getOrgURL(), axiosFetcher, {
-      revalidateOnFocus: false,
-    });
-
   const { data, error, isLoading, mutate } = useSWR<ActionPayload, any, any>(
     [`/organizations/${user?.coldclimate_claims.org_id}/actions/${id}`, 'GET'],
     axiosFetcher,
@@ -83,12 +67,7 @@ export const ActionDetail = ({ id }: Props) => {
     }
   };
 
-  const handleAssigneeSelect = (userId: string) => {
-    const assignee: User | null =
-      userData?.members.find((user: User) => user.user_id === userId) ?? null;
-
-    if (!assignee) return;
-
+  const handleAssigneeSelect = (assignee: User) => {
     handleUpdateAction({
       assignee: {
         name: assignee.name,
@@ -99,15 +78,7 @@ export const ActionDetail = ({ id }: Props) => {
     });
   };
 
-  const selectedAssignee: User | null =
-    userData?.members.find(
-      (user: User) =>
-        user.name &&
-        user.name === data?.action.assignee?.name &&
-        user.given_name === data?.action.assignee?.given_name &&
-        user.family_name === data?.action.assignee?.family_name &&
-        user.picture === data?.action.assignee?.picture,
-    ) ?? null;
+  const selectedAssignee = data?.action.assignee;
 
   if (error && !isLoading) {
     return null;
