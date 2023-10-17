@@ -78,7 +78,7 @@ export const Settings = (props: { user?: any }) => {
   if (auth0.user && organization.data) {
     return (
       <MainContent title="Settings">
-        <UserSettings user={auth0.user} />
+        <UserSettings />
         {ldFlags.showTeamMemberTable && (
           <Card
             title="Team Members"

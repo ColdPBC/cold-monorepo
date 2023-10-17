@@ -20,7 +20,7 @@ export const Default: Story = {
     return (
       <BrowserRouter>
         <MainContent>
-            <UserSettings user={auth0UserMock} />
+            <UserSettings />
         </MainContent>
       </BrowserRouter>
     );
