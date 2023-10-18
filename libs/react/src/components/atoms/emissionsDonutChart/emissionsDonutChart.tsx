@@ -204,6 +204,7 @@ export const EmissionsDonutChart = ({
                   type="doughnut"
                   data={chartData}
                   plugins={chartPlugins}
+                  data-chromatic="ignore"
               />
             </div>
             {variant === EmissionsDonutChartVariants.vertical && (

@@ -11,10 +11,13 @@ import { Spinner } from '../../atoms/spinner/spinner';
 import { HexColors } from '../../../themes/cold_theme';
 import { clone, remove } from 'lodash';
 import { useFlags } from 'launchdarkly-react-client-sdk';
-import { matchPath, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+import { useAuth0 } from '@auth0/auth0-react';
+import { ActionPayload } from '@coldpbc/interfaces';
 
 export const SideBar = (): JSX.Element => {
-  type SWRResponse = { definition: { items: Array<NavbarItem> } };
+  const { user } = useAuth0();
+
   const {
     data,
     error,
@@ -26,9 +29,17 @@ export const SideBar = (): JSX.Element => {
   } = useSWR(['/components/sidebar_navigation', 'GET'], axiosFetcher);
   const ldFlags = useFlags();
 
+  // Fetch actions if actions feature flag is present
+  const { data: actionsData } = useSWR<ActionPayload[], any, any>(
+    ldFlags.showActions261 ? [`/organizations/${user?.coldclimate_claims.org_id}/actions`, 'GET'] : null,
+    axiosFetcher,
+  );
+
   const filterSidebar = (item: NavbarItem) => {
     if (item.key === 'actions_key') {
-      return ldFlags.showActions261;
+      const hasActions = actionsData && actionsData?.length > 0;
+
+      return ldFlags.showActions261 && hasActions;
     } else {
       return true;
     }
@@ -66,10 +77,28 @@ export const SideBar = (): JSX.Element => {
 
   if (error) console.error(error);
 
-  if (data?.definition?.items) {
-    data.definition.items = data.definition.items.filter(filterSidebar);
+  // filter top-level nav items
+  let filteredSidebarItems = data.definition.items.filter(filterSidebar) ?? [];
+
+  // filter nested action items
+  if (ldFlags.showActions261 && filteredSidebarItems.some((item: any) => item.key === 'actions_key')) {
+    filteredSidebarItems = filteredSidebarItems.map((item: any) => {
+      if (item.key === 'actions_key') {
+        return {
+          ...item,
+          items: item.items.filter((actionItem: any) => {
+            return actionItem.key === 'overview_actions_key' || actionsData?.some(action => actionItem.key === `${action.action.subcategory}_actions_key`)
+          })
+        }
+      } else {
+        return item;
+      }
+    })
+  }
+
+  if (filteredSidebarItems) {
     // Separate the items into top and bottom nav items
-    const topItems: NavbarItem[] = clone(data.definition.items);
+    const topItems: NavbarItem[] = clone(filteredSidebarItems);
 
     const bottomItems = remove(topItems, (item: NavbarItem) => {
       return item.placement && item.placement === 'bottom';

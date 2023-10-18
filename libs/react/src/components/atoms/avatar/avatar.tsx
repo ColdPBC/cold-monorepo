@@ -30,14 +30,16 @@ export function Avatar(props: AvatarProps) {
 
     if (avatarUser.picture && avatarUser.picture !== 'null')
       return (
-        <FlowBiteAvatar
-          size={size}
-          img={avatarUser.picture}
-          rounded={props.circle}
-          theme={flowbiteThemeOverride.avatar}
-        >
-          {props.children}
-        </FlowBiteAvatar>
+        <span data-chromatic="ignore">
+          <FlowBiteAvatar
+            size={size}
+            img={avatarUser.picture}
+            rounded={props.circle}
+            theme={flowbiteThemeOverride.avatar}
+          >
+            {props.children}
+          </FlowBiteAvatar>
+        </span>
       );
 
     return (
