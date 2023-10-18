@@ -128,6 +128,7 @@ export const ActionDetail = ({ id }: Props) => {
           onClick: handleClose,
         },
       }}
+      className={'z-10'}
     >
       <div className="flex gap-6 my-6">
         <div className="grid gap-6 w-[899px] flex flex-col">
