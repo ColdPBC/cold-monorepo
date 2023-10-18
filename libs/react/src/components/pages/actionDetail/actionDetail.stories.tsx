@@ -1,4 +1,8 @@
-import { StoryMockProvider, getCategoriesHandler, getActionHandler } from '@coldpbc/mocks';
+import {
+  StoryMockProvider,
+  getCategoriesHandler,
+  getActionHandler,
+} from '@coldpbc/mocks';
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { ActionDetail } from './actionDetail';
@@ -16,9 +20,7 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   render: (args) => (
     <StoryMockProvider>
-      <ActionDetail
-        id={'1'}
-      />
+      <ActionDetail id={'1'} />
     </StoryMockProvider>
   ),
 };
@@ -26,9 +28,7 @@ export const Default: Story = {
 export const NoResources: Story = {
   render: (args) => (
     <StoryMockProvider handlers={[getActionHandler.noResources]}>
-      <ActionDetail
-        id={'1'}
-      />
+      <ActionDetail id={'1'} />
     </StoryMockProvider>
   ),
 };
@@ -36,9 +36,7 @@ export const NoResources: Story = {
 export const AllStepsComplete: Story = {
   render: (args) => (
     <StoryMockProvider handlers={[getActionHandler.allStepsComplete]}>
-      <ActionDetail
-        id={'1'}
-      />
+      <ActionDetail id={'1'} />
     </StoryMockProvider>
   ),
 };
@@ -46,9 +44,15 @@ export const AllStepsComplete: Story = {
 export const NoDueDateSet: Story = {
   render: (args) => (
     <StoryMockProvider handlers={[getActionHandler.noDueDateSet]}>
-      <ActionDetail
-        id={'1'}
-      />
+      <ActionDetail id={'1'} />
+    </StoryMockProvider>
+  ),
+};
+
+export const ActionWithUsersAssigned: Story = {
+  render: (args) => (
+    <StoryMockProvider handlers={[getActionHandler.usersAssigned]}>
+      <ActionDetail id={'1'} />
     </StoryMockProvider>
   ),
 };

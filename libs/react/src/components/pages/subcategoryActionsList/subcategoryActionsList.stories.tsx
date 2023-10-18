@@ -37,7 +37,7 @@ export const ActionsStarted: Story = {
     return (
       <StoryMockProvider
         memoryRouterProps={{ initialEntries: ['/actions/facilities'] }}
-        handlers={getActionHandler.subCategoryActionsList}
+        handlers={getActionHandler.subCategoryActionsListActionsStarted}
       >
         <Routes>
           <Route
