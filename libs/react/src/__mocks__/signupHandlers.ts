@@ -247,7 +247,7 @@ export const getSignupHandlersForApplicationSignup = {
       ),
 
       rest.delete(
-        getApiUrl('/organizations/invitation'),
+        getApiUrl('/organizations/:orgId/invitation'),
         async (req, res, ctx) => {
           let data: {
             org_id: string;
@@ -265,7 +265,7 @@ export const getSignupHandlersForApplicationSignup = {
       ),
 
       rest.post(
-        getApiUrl('/organizations/invitation'),
+        getApiUrl('/organizations/:orgId/invitation'),
         async (req, res, ctx) => {
           const data = req.body as {
             org_id: string;
@@ -289,7 +289,7 @@ export const getSignupHandlersForApplicationSignup = {
       ),
 
       rest.patch(
-        getApiUrl('/organizations/invitation'),
+        getApiUrl('/organizations/:orgId/invitation'),
         async (req, res, ctx) => {
           const data = req.body as {
             org_id: string;

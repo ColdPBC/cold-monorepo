@@ -26,7 +26,7 @@ const _InvitationModal = (props: InvitationModalProps) => {
   const [email, setEmail] = useState('');
 
   const { mutate: sendInvitation } = useSWR<any>(
-    ['/organizations/invitation', 'POST'],
+    [`/organizations/${user.coldclimate_claims.org_id}/invitation`, 'POST'],
     axiosFetcher,
   );
 
@@ -35,7 +35,6 @@ const _InvitationModal = (props: InvitationModalProps) => {
       const response: any = await sendInvitation(
         JSON.stringify({
           user_email: email,
-          org_id: user.coldclimate_claims.org_id,
           inviter_name: user.name,
           roleId: roleId,
         }),
