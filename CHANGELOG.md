@@ -1,3 +1,19 @@
+# [1.48.0](https://github.com/ColdPBC/ui/compare/v1.47.0...v1.48.0) (2023-10-18)
+
+
+### Bug Fixes
+
+* remove unused code ([f6f5d25](https://github.com/ColdPBC/ui/commit/f6f5d2557a2a5bd27c702f7d01a27548fa68f6d1))
+* Updating first or last name in Settings does not show updated name ([5cae7f6](https://github.com/ColdPBC/ui/commit/5cae7f680a2e30e835ae70f2dbae815e1f2242b3))
+* Updating first or last name in Settings does not show updated name ([#110](https://github.com/ColdPBC/ui/issues/110)) ([6f2d242](https://github.com/ColdPBC/ui/commit/6f2d242d8da8bdef5b68c33f5a9ababb641edceb))
+
+
+### Features
+
+* Update sidebar to be dynamic based on a company's actions ([6f1ee7b](https://github.com/ColdPBC/ui/commit/6f1ee7b9528aa745c1fffbd6b98ca93afd85e5a7))
+* Update sidebar to be dynamic based on a company's actions ([#111](https://github.com/ColdPBC/ui/issues/111)) ([ac50424](https://github.com/ColdPBC/ui/commit/ac5042402e7390d1b56aebc97b9dcebb74ed34b5))
+* update user select dropdown ([2fb56c4](https://github.com/ColdPBC/ui/commit/2fb56c48272ee069f504253cf27a2fc5099635fe))
+
 # [1.47.0](https://github.com/ColdPBC/ui/compare/v1.46.0...v1.47.0) (2023-10-17)
 
 
