@@ -35,7 +35,7 @@ export const getActionMock = (): ActionPayload => {
           description: 'Test Step 3',
         },
         {
-          overview: "Sign up for your utility's renewable energy program",
+          overview: 'Test Step 4',
           description: 'Test Step 4',
         },
       ],
@@ -142,7 +142,7 @@ export const getActionsMock = (): ActionPayload[] => {
             complete: '',
           },
           {
-            overview: "Sign up for your utility's renewable energy program",
+            overview: 'Test Step 2',
             description: 'Test Step 2',
             complete: '',
           },
@@ -182,7 +182,7 @@ export const getActionsMock = (): ActionPayload[] => {
             complete: '2022-09-27 18:00:00.000',
           },
           {
-            overview: "Sign up for your utility's renewable energy program",
+            overview: 'Test Step 2',
             description: 'Test Step 2',
             complete: '2022-09-27 18:00:00.000',
           },
@@ -216,7 +216,7 @@ export const getActionsMock = (): ActionPayload[] => {
             complete: '',
           },
           {
-            overview: "Sign up for your utility's renewable energy program",
+            overview: 'Test Step 2',
             description: 'Test Step 2',
             complete: '2022-09-27 18:00:00.000',
           },

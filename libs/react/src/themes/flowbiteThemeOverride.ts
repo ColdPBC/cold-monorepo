@@ -446,7 +446,7 @@ export const flowbiteThemeOverride: FlowbiteTheme = {
         },
         placement: '-4px',
       },
-      base: 'z-10 w-fit rounded divide-y divide-gray-100 shadow !min-w-0',
+      base: 'z-10 w-fit rounded-lg divide-y divide-gray-100 shadow !min-w-0',
       content: 'py-1 text-sm text-gray-700 dark:text-gray-200',
       divider: 'h-[1.5px] bg-bgc-accent',
       header: 'block py-2 px-4 text-sm text-gray-700 dark:text-gray-200',
@@ -936,8 +936,8 @@ export const flowbiteThemeOverride: FlowbiteTheme = {
           base: 'h-6 w-6',
           open: {
             on: '',
-            off: ''
-          }
+            off: '',
+          },
         },
       },
       list: 'py-2',
@@ -1181,87 +1181,92 @@ export const flowbiteThemeOverride: FlowbiteTheme = {
     content: 'relative z-20',
   },
   datepicker: {
-    "root": {
-      "base": "relative"
+    root: {
+      base: 'relative',
     },
-    "popup": {
-      "root": {
-        "base": "absolute top-10 z-50 block",
-        "inline": "relative top-0 z-auto",
-        "inner": "inline-block rounded-lg bg-white p-4 shadow-lg dark:bg-gray-700"
+    popup: {
+      root: {
+        base: 'absolute top-10 z-50 block',
+        inline: 'relative top-0 z-auto',
+        inner:
+          'inline-block rounded-lg bg-white p-4 shadow-lg dark:bg-gray-700',
       },
-      "header": {
-        "base": "",
-        "title": "px-2 py-3 text-center font-semibold text-gray-900 dark:text-white",
-        "selectors": {
-          "base": "flex justify-between mb-2",
-          "button": {
-            "base": "text-sm rounded-lg text-bgc-accent dark:text-white bg-white dark:bg-gray-700 font-semibold py-2.5 px-5 hover:bg-bgc-accent hover:text-white dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-200 view-switch",
-            "prev": "",
-            "next": "",
-            "view": ""
-          }
-        }
-      },
-      "view": {
-        "base": "p-1"
-      },
-      "footer": {
-        "base": "flex mt-2 space-x-2",
-        "button": {
-          "base": "w-full rounded-lg px-5 py-2 text-center text-sm font-medium",
-          "today": "bg-primary text-white hover:bg-primary-200 dark:bg-cyan-600 dark:hover:bg-cyan-700",
-          "clear": "border border-gray-300 bg-white text-gray-900 hover:bg-bgc-accent hover:text-white dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600"
-        }
-      }
-    },
-    "views": {
-      "days": {
-        "header": {
-          "base": "grid grid-cols-7 mb-1",
-          "title": "dow h-6 text-center text-sm font-medium leading-6 text-gray-500 dark:text-gray-400"
+      header: {
+        base: '',
+        title:
+          'px-2 py-3 text-center font-semibold text-gray-900 dark:text-white',
+        selectors: {
+          base: 'flex justify-between mb-2',
+          button: {
+            base: 'text-sm rounded-lg text-bgc-accent dark:text-white bg-white dark:bg-gray-700 font-semibold py-2.5 px-5 hover:bg-bgc-accent hover:text-white dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-200 view-switch',
+            prev: '',
+            next: '',
+            view: '',
+          },
         },
-        "items": {
-          "base": "grid w-64 grid-cols-7",
-          "item": {
-            "base": "block flex-1 cursor-pointer rounded-lg border-0 text-center text-sm font-semibold leading-9 text-gray-900 hover:bg-primary-100 dark:text-white dark:hover:bg-gray-600 ",
-            "selected": "bg-primary text-white hover:bg-primary-200",
-            "disabled": "text-gray-500"
-          }
-        }
       },
-      "months": {
-        "items": {
-          "base": "grid w-64 grid-cols-4",
-          "item": {
-            "base": "block flex-1 cursor-pointer rounded-lg border-0 text-center text-sm font-semibold leading-9 text-gray-900 hover:bg-bgc-accent hover:text-white dark:text-white dark:hover:bg-gray-600",
-            "selected": "bg-primary text-white hover:bg-primary-200",
-            "disabled": "text-gray-500"
-          }
-        }
+      view: {
+        base: 'p-1',
       },
-      "years": {
-        "items": {
-          "base": "grid w-64 grid-cols-4",
-          "item": {
-            "base": "block flex-1 cursor-pointer rounded-lg border-0 text-center text-sm font-semibold leading-9 hover:bg-bgc-accent hover:text-white dark:text-white dark:hover:bg-gray-600 text-gray-900",
-            "selected": "bg-primary text-white hover:primary-200",
-            "disabled": "text-gray-500"
-          }
-        }
+      footer: {
+        base: 'flex mt-2 space-x-2',
+        button: {
+          base: 'w-full rounded-lg px-5 py-2 text-center text-sm font-medium',
+          today:
+            'bg-primary text-white hover:bg-primary-200 dark:bg-cyan-600 dark:hover:bg-cyan-700',
+          clear:
+            'border border-gray-300 bg-white text-gray-900 hover:bg-bgc-accent hover:text-white dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600',
+        },
       },
-      "decades": {
-        "items": {
-          "base": "grid w-64 grid-cols-4",
-          "item": {
-            "base": "block flex-1 cursor-pointer rounded-lg border-0 text-center text-sm font-semibold leading-9  hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600 text-gray-900",
-            "selected": "bg-primary text-white hover:bg-primary-200",
-            "disabled": "text-gray-500"
-          }
-        }
-      }
-    }
-  }
+    },
+    views: {
+      days: {
+        header: {
+          base: 'grid grid-cols-7 mb-1',
+          title:
+            'dow h-6 text-center text-sm font-medium leading-6 text-gray-500 dark:text-gray-400',
+        },
+        items: {
+          base: 'grid w-64 grid-cols-7',
+          item: {
+            base: 'block flex-1 cursor-pointer rounded-lg border-0 text-center text-sm font-semibold leading-9 text-gray-900 hover:bg-primary-100 dark:text-white dark:hover:bg-gray-600 ',
+            selected: 'bg-primary text-white hover:bg-primary-200',
+            disabled: 'text-gray-500',
+          },
+        },
+      },
+      months: {
+        items: {
+          base: 'grid w-64 grid-cols-4',
+          item: {
+            base: 'block flex-1 cursor-pointer rounded-lg border-0 text-center text-sm font-semibold leading-9 text-gray-900 hover:bg-bgc-accent hover:text-white dark:text-white dark:hover:bg-gray-600',
+            selected: 'bg-primary text-white hover:bg-primary-200',
+            disabled: 'text-gray-500',
+          },
+        },
+      },
+      years: {
+        items: {
+          base: 'grid w-64 grid-cols-4',
+          item: {
+            base: 'block flex-1 cursor-pointer rounded-lg border-0 text-center text-sm font-semibold leading-9 hover:bg-bgc-accent hover:text-white dark:text-white dark:hover:bg-gray-600 text-gray-900',
+            selected: 'bg-primary text-white hover:primary-200',
+            disabled: 'text-gray-500',
+          },
+        },
+      },
+      decades: {
+        items: {
+          base: 'grid w-64 grid-cols-4',
+          item: {
+            base: 'block flex-1 cursor-pointer rounded-lg border-0 text-center text-sm font-semibold leading-9  hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600 text-gray-900',
+            selected: 'bg-primary text-white hover:bg-primary-200',
+            disabled: 'text-gray-500',
+          },
+        },
+      },
+    },
+  },
 };
 
 export default flowbiteThemeOverride;

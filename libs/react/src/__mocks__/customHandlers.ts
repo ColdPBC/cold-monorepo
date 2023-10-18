@@ -25,6 +25,7 @@ import {
 } from './newsMock';
 import { ActionPayload } from '@coldpbc/interfaces';
 import { SubcategoryActionDetailsCard } from '@coldpbc/components';
+import { getOrganizationMembersMock } from './datagridMock';
 
 export const getFootprintHandler = {
   default: rest.get('*/categories/company_decarbonization', (req, res, ctx) => {
@@ -182,4 +183,41 @@ export const getActionHandler = {
       return res(ctx.json(actions));
     }),
   ],
+  usersAssigned: rest.get('*/organizations/*/actions/*', (req, res, ctx) => {
+    // set action assignees and some step assignees
+    const members = getOrganizationMembersMock().members;
+    return res(
+      ctx.json({
+        ...getActionAllStepsComplete(),
+        action: {
+          ...getActionAllStepsComplete().action,
+          assignee: {
+            name: members[0].name,
+            family_name: members[0].family_name,
+            given_name: members[0].given_name,
+            picture: members[0].picture,
+          },
+          steps: getActionAllStepsComplete().action.steps.map((step, index) => {
+            if (index === 0) {
+              return {
+                ...step,
+                assignee: {
+                  name: members[0].name,
+                  family_name: members[0].family_name,
+                  given_name: members[0].given_name,
+                  picture: members[0].picture,
+                },
+                complete: undefined,
+              };
+            } else {
+              return {
+                ...step,
+                complete: undefined,
+              };
+            }
+          }),
+        },
+      } as ActionPayload),
+    );
+  }),
 };
