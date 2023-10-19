@@ -36,7 +36,6 @@ export function Avatar(props: AvatarProps) {
             img={avatarUser.picture}
             rounded={props.circle}
             theme={flowbiteThemeOverride.avatar}
-            className='min-w-10'
           >
             {props.children}
           </FlowBiteAvatar>
