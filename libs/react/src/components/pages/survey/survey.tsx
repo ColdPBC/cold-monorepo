@@ -238,35 +238,34 @@ const _Survey = (props: SurveyProps) => {
 
   if (surveyData) {
     return (
-      <div>
-        <Takeover
-          show={show}
-          setShow={setShow}
-          header={{
-            title: {},
-            dismiss: dismiss,
-          }}
-        >
-          <div className={'flex flex-1'}>
-            <SurveyLeftNav
-              surveyData={surveyData}
-              activeKey={activeKey}
-              setActiveKey={setActiveKey}
-              submitted={submitted}
-            />
-            <SurveyRightNav
-              activeKey={activeKey}
-              setActiveKey={setActiveKey}
-              surveyData={surveyData}
-              setSurveyData={setSurveyData}
-              submitSurvey={submitSurvey}
-              startSurvey={startSurvey}
-              submitted={submitted}
-              closeSurvey={onSurveyClose}
-            />
-          </div>
-        </Takeover>
-      </div>
+      <Takeover
+        show={show}
+        setShow={setShow}
+        header={{
+          title: {},
+          dismiss: dismiss,
+        }}
+        className={'z-20'}
+      >
+        <div className={'flex flex-1'}>
+          <SurveyLeftNav
+            surveyData={surveyData}
+            activeKey={activeKey}
+            setActiveKey={setActiveKey}
+            submitted={submitted}
+          />
+          <SurveyRightNav
+            activeKey={activeKey}
+            setActiveKey={setActiveKey}
+            surveyData={surveyData}
+            setSurveyData={setSurveyData}
+            submitSurvey={submitSurvey}
+            startSurvey={startSurvey}
+            submitted={submitted}
+            closeSurvey={onSurveyClose}
+          />
+        </div>
+      </Takeover>
     );
   } else {
     return <></>;

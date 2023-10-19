@@ -8,6 +8,7 @@ import {
   IconNames,
 } from '@coldpbc/enums';
 import { HexColors } from '@coldpbc/themes';
+import { twMerge } from 'tailwind-merge';
 
 export interface TakeoverProps {
   show: boolean;
@@ -23,10 +24,11 @@ export interface TakeoverProps {
     };
   };
   isLoading?: boolean;
+  className?: string;
 }
 
 export const Takeover = (props: PropsWithChildren<TakeoverProps>) => {
-  const { children, show, setShow, header, isLoading } = props;
+  const { children, show, setShow, header, isLoading, className } = props;
 
   const getHeaderComponent = () => {
     if (header && !isLoading) {
@@ -78,20 +80,20 @@ export const Takeover = (props: PropsWithChildren<TakeoverProps>) => {
   if (show) {
     return (
       <div
-        className={
-          'fixed inset-0 h-screen w-screen bg-bgc-main px-[40px] pt-[40px] z-10 flex flex-col overflow-scroll'
-        }
+        className={twMerge(
+          'fixed inset-0 h-screen w-screen bg-bgc-main px-[40px] pt-[40px] z-10 flex flex-col overflow-scroll',
+          className,
+        )}
       >
         {getHeaderComponent()}
-        <div className='flex-1 flex flex-col'>
-          {isLoading ? 
-            (
-              <div className="h-full w-full flex items-center justify-center">
-                <Spinner size={GlobalSizes.xLarge} />
-              </div>
-            ) : 
+        <div className="flex-1 flex flex-col">
+          {isLoading ? (
+            <div className="h-full w-full flex items-center justify-center">
+              <Spinner size={GlobalSizes.xLarge} />
+            </div>
+          ) : (
             children
-          }
+          )}
         </div>
       </div>
     );

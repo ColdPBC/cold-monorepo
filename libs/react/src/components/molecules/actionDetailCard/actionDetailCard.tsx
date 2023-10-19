@@ -1,5 +1,5 @@
 import { Action, ActionPayload, Assignee, Step } from '@coldpbc/interfaces';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import {
   BaseButton,
   Card,
@@ -83,7 +83,9 @@ const _ActionDetailCard = ({
             <BaseButton
               onClick={() => {
                 if (!survey.submitted) {
-                  navigate(`?surveyName=${survey.name}`);
+                  navigate(
+                    `?surveyName=${survey.name}&actionId=${actionPayload.id}`,
+                  );
                 }
               }}
               disabled={survey.submitted}
