@@ -7,21 +7,11 @@ export const Interceptor = () => {
   const surveyName = params.get('surveyName');
   const actionId = params.get('actionId');
 
-  if (surveyName !== null) {
-    return (
-      <div>
-        <Survey surveyName={surveyName} />
-        <Outlet />
-      </div>
-    );
-  } else if (actionId !== null) {
-    return (
-      <div>
-        <ActionDetail id={actionId} />
-        <Outlet />
-      </div>
-    );
-  } else {
-    return <Outlet />;
-  }
+  return (
+    <div>
+      {surveyName && <Survey surveyName={surveyName} />}
+      {actionId && <ActionDetail id={actionId} />}
+      <Outlet />
+    </div>
+  );
 };

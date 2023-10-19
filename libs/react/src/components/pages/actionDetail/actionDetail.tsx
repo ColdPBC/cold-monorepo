@@ -7,7 +7,6 @@ import { ArrowRightIcon, ChevronDownIcon } from '@heroicons/react/20/solid';
 import { CompletedBanner } from './completedBanner';
 import { Avatar, BaseButton } from '../../atoms';
 import { ButtonTypes, GlobalSizes } from '@coldpbc/enums';
-import { CheckIcon } from '@heroicons/react/20/solid';
 import { Datepicker } from 'flowbite-react';
 import { Dropdown } from 'flowbite-react';
 import { flowbiteThemeOverride } from '@coldpbc/themes';
@@ -99,6 +98,7 @@ export const ActionDetail = ({ id }: Props) => {
           onClick: handleClose,
         },
       }}
+      className={'z-10'}
     >
       <div className="flex gap-6 my-6">
         <div className="grid gap-6 w-[899px] flex flex-col">
