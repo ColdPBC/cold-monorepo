@@ -264,7 +264,7 @@ const _ActionDetail = ({ id }: Props) => {
 };
 
 export const ActionDetail = withErrorBoundary(_ActionDetail, {
-  FallbackComponent: ErrorFallback,
+  FallbackComponent: (props) => <ErrorFallback />,
   onError: (error, info) => {
     console.error('Error occurred in ActionDetail: ', error);
   },

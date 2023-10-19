@@ -127,7 +127,7 @@ const _Datagrid = (props: DatagridProps) => {
 };
 
 export const Datagrid = withErrorBoundary(_Datagrid, {
-  FallbackComponent: ErrorFallback,
+  FallbackComponent: (props) => <ErrorFallback />,
   onError: (error, info) => {
     console.error('Error occurred in Datagrid: ', error);
   },

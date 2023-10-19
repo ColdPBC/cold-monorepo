@@ -37,7 +37,7 @@ function _Terms(props: PropsWithChildren<TermsProps>) {
 }
 
 export const Terms = withErrorBoundary(_Terms, {
-  FallbackComponent: ErrorFallback,
+  FallbackComponent: (props) => <ErrorFallback />,
   onError: (error, info) => {
     console.error('Error occurred in Terms: ', error);
   },

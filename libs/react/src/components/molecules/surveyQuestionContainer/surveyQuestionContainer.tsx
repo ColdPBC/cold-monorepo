@@ -549,7 +549,7 @@ const _SurveyQuestionContainer = ({
 export const SurveyQuestionContainer = withErrorBoundary(
   _SurveyQuestionContainer,
   {
-    FallbackComponent: ErrorFallback,
+    FallbackComponent: (props) => <ErrorFallback />,
     onError: (error, info) => {
       console.error('Error occurred in SurveyQuestionContainer: ', error);
     },

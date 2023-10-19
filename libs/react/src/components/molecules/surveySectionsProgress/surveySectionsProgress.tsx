@@ -205,7 +205,7 @@ const _SurveySectionsProgress = ({
 export const SurveySectionsProgress = withErrorBoundary(
   _SurveySectionsProgress,
   {
-    FallbackComponent: ErrorFallback,
+    FallbackComponent: (props) => <ErrorFallback />,
     onError: (error, info) => {
       console.error('Error occurred in SurveySectionsProgress: ', error);
     },

@@ -227,7 +227,7 @@ export const _TeamMembersDataGrid = ({
 };
 
 export const TeamMembersDataGrid = withErrorBoundary(_TeamMembersDataGrid, {
-  FallbackComponent: ErrorFallback,
+  FallbackComponent: (props) => <ErrorFallback />,
   onError: (error, info) => {
     console.error('Error occurred in TeamMembersDataGrid: ', error);
   },

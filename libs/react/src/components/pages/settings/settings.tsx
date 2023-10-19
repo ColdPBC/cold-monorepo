@@ -160,7 +160,7 @@ const _Settings = (props: { user?: any }) => {
 };
 
 export const Settings = withErrorBoundary(_Settings, {
-  FallbackComponent: ErrorFallback,
+  FallbackComponent: (props) => <ErrorFallback />,
   onError: (error, info) => {
     console.error('Error occurred in Settings: ', error);
   },

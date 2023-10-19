@@ -58,7 +58,7 @@ const _ActionsOverview = () => {
 };
 
 export const ActionsOverview = withErrorBoundary(_ActionsOverview, {
-  FallbackComponent: ErrorFallback,
+  FallbackComponent: (props) => <ErrorFallback />,
   onError: (error, info) => {
     console.error('Error occurred in ActionsOverview: ', error);
   },

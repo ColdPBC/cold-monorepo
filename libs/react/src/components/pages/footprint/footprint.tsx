@@ -100,7 +100,7 @@ function _Footprint() {
 }
 
 export const Footprint = withErrorBoundary(_Footprint, {
-  FallbackComponent: ErrorFallback,
+  FallbackComponent: (props) => <ErrorFallback />,
   onError: (error, info) => {
     console.error('Error occurred in Footprint: ', error);
   },

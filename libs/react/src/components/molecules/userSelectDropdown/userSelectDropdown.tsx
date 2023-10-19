@@ -73,7 +73,7 @@ const _UserSelectDropdown = ({ onSelect, className, ...rest }: Props) => {
 };
 
 export const UserSelectDropdown = withErrorBoundary(_UserSelectDropdown, {
-  FallbackComponent: ErrorFallback,
+  FallbackComponent: (props) => <ErrorFallback />,
   onError: (error, info) => {
     console.error('Error occurred in UserSelectDropdown: ', error);
   },

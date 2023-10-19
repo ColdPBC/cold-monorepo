@@ -98,7 +98,7 @@ const _InvitationModal = (props: InvitationModalProps) => {
 };
 
 export const InvitationModal = withErrorBoundary(_InvitationModal, {
-  FallbackComponent: ErrorFallback,
+  FallbackComponent: (props) => <ErrorFallback />,
   onError: (error, info) => {
     console.error('Error occurred in InvitationModal: ', error);
   },

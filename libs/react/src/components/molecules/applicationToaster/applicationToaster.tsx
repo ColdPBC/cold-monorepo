@@ -42,7 +42,7 @@ const _ApplicationToaster = () => {
 };
 
 export const ApplicationToaster = withErrorBoundary(_ApplicationToaster, {
-  FallbackComponent: ErrorFallback,
+  FallbackComponent: (props) => <ErrorFallback />,
   onError: (error, info) => {
     console.error('Error occurred in ApplicationToaster: ', error);
   },

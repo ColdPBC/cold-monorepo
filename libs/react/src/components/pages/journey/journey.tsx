@@ -68,7 +68,7 @@ function _Journey() {
 }
 
 export const Journey = withErrorBoundary(_Journey, {
-  FallbackComponent: ErrorFallback,
+  FallbackComponent: (props) => <ErrorFallback />,
   onError: (error, info) => {
     console.error('Error occurred in Journey: ', error);
   },

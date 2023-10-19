@@ -135,7 +135,7 @@ const _TemperatureCheckCard = ({ stats, cardTitle, cornerGlow }: Props) => {
 };
 
 export const TemperatureCheckCard = withErrorBoundary(_TemperatureCheckCard, {
-  FallbackComponent: ErrorFallback,
+  FallbackComponent: (props) => <ErrorFallback />,
   onError: (error, info) => {
     console.error('Error occurred in TemperatureCheckCard: ', error);
   },

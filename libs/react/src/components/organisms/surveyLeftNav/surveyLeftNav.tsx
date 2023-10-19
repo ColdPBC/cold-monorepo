@@ -47,7 +47,7 @@ const _SurveyLeftNav = (props: SurveyLeftNavProps) => {
 };
 
 export const SurveyLeftNav = withErrorBoundary(_SurveyLeftNav, {
-  FallbackComponent: ErrorFallback,
+  FallbackComponent: (props) => <ErrorFallback />,
   onError: (error, info) => {
     console.error('Error occurred in SurveyLeftNav: ', error);
   },

@@ -18,7 +18,7 @@ import React from 'react';
 import { Disclosure } from '@headlessui/react';
 import { HexColors } from '@coldpbc/themes';
 import { withErrorBoundary } from 'react-error-boundary';
-import { ErrorFallback } from '../../application';
+import { ErrorFallback } from '@coldpbc/components';
 
 export type ActionDetailCardProps = {
   actionPayload: ActionPayload;
@@ -317,5 +317,8 @@ const _ActionDetailCard = ({
 };
 
 export const ActionDetailCard = withErrorBoundary(_ActionDetailCard, {
-  FallbackComponent: ErrorFallback,
+  FallbackComponent: (props) => <ErrorFallback />,
+  onError: (error, info) => {
+    console.error('Error occurred in ActionDetailCard: ', error);
+  },
 });

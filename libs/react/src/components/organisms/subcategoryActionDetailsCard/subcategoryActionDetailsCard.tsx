@@ -76,7 +76,7 @@ const _SubcategoryActionDetailsCard = ({
 export const SubcategoryActionDetailsCard = withErrorBoundary(
   _SubcategoryActionDetailsCard,
   {
-    FallbackComponent: ErrorFallback,
+    FallbackComponent: (props) => <ErrorFallback />,
     onError: (error, info) => {
       console.error('Error occurred in SubcategoryActionDetailsCard: ', error);
     },

@@ -30,7 +30,7 @@ const _NewsCard = () => {
 };
 
 export const NewsCard = withErrorBoundary(_NewsCard, {
-  FallbackComponent: ErrorFallback,
+  FallbackComponent: (props) => <ErrorFallback />,
   onError: (error, info) => {
     console.error('Error occurred in NewsCard: ', error);
   },
