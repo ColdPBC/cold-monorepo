@@ -1,3 +1,10 @@
+# [1.49.0](https://github.com/ColdPBC/ui/compare/v1.48.0...v1.49.0) (2023-10-19)
+
+
+### Features
+
+* handle survey and action open at the same time ([3d599f6](https://github.com/ColdPBC/ui/commit/3d599f6866528761b0dba2425b4724306c3d2223))
+
 # [1.48.0](https://github.com/ColdPBC/ui/compare/v1.47.0...v1.48.0) (2023-10-18)
 
 
