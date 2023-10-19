@@ -8,6 +8,8 @@ import { PolicyType, ToastMessage } from '@coldpbc/interfaces';
 import { useAddToastMessage } from '@coldpbc/hooks';
 import { isAxiosError } from 'axios';
 import { mutate } from 'swr';
+import { withErrorBoundary } from 'react-error-boundary';
+import { ErrorFallback } from '../../application/errors/errorFallback';
 
 export interface SignupFormProps {
   userData?: Auth0User;
@@ -19,7 +21,7 @@ export interface SignupFormProps {
   onSubmit: () => void;
 }
 
-export const SignupForm = ({
+const _SignupForm = ({
   userData,
   companyData,
   tosSigned,
@@ -207,3 +209,10 @@ export const SignupForm = ({
     </div>
   );
 };
+
+export const SignupForm = withErrorBoundary(_SignupForm, {
+  FallbackComponent: (props) => <ErrorFallback />,
+  onError: (error, info) => {
+    console.error('Error occurred in SignupForm: ', error);
+  },
+});

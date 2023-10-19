@@ -9,6 +9,8 @@ import { useState } from 'react';
 import { CheckIcon } from '@heroicons/react/20/solid';
 import { BaseButton } from '../../atoms';
 import { ToastMessage } from '@coldpbc/interfaces';
+import { withErrorBoundary } from 'react-error-boundary';
+import { ErrorFallback } from '../../application/errors/errorFallback';
 
 export interface InvitationModalProps {
   shown: boolean;
@@ -17,7 +19,7 @@ export interface InvitationModalProps {
   user: User;
 }
 
-export const InvitationModal = (props: InvitationModalProps) => {
+const _InvitationModal = (props: InvitationModalProps) => {
   const { shown, setShown, user } = props;
   const { addToastMessage } = useAddToastMessage();
   const [isSuccess, setIsSuccess] = useState(false);
@@ -94,3 +96,10 @@ export const InvitationModal = (props: InvitationModalProps) => {
     />
   );
 };
+
+export const InvitationModal = withErrorBoundary(_InvitationModal, {
+  FallbackComponent: (props) => <ErrorFallback />,
+  onError: (error, info) => {
+    console.error('Error occurred in InvitationModal: ', error);
+  },
+});

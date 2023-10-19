@@ -12,21 +12,30 @@ import { getSchemeForColor, HexColors } from '@coldpbc/themes';
 import { AppContent } from '../../organisms/appContent';
 import { DismissableInfoCard } from '../../molecules/dismissableInfoCard';
 import { EmissionsDonutChartVariants } from '../../atoms/emissionsDonutChart/emissionsDonutChart';
+import { withErrorBoundary } from 'react-error-boundary';
+import { ErrorFallback } from '../../application/errors/errorFallback';
 
 const PERIOD = 2022;
 
-export function Footprint() {
+function _Footprint() {
   // Get footprint data from SWR
   const { data, error, isLoading } = useSWR<any>(
     ['/categories/company_decarbonization', 'GET'],
     axiosFetcher,
   );
 
-  const isEmptyFootprintData = !isLoading && !some(data.subcategories, (
-    (subcategory: any) => some(subcategory.activities, (
-        (activity: any) => activity.footprint?.[PERIOD] && activity.footprint?.[PERIOD].value !== null))));
+  const isEmptyFootprintData =
+    !isLoading &&
+    !some(data.subcategories, (subcategory: any) =>
+      some(
+        subcategory.activities,
+        (activity: any) =>
+          activity.footprint?.[PERIOD] &&
+          activity.footprint?.[PERIOD].value !== null,
+      ),
+    );
 
-  console.log({isEmptyFootprintData, data})
+  console.log({ isEmptyFootprintData, data });
 
   const auth0 = useAuth0();
   if (auth0.isLoading) {
@@ -39,44 +48,49 @@ export function Footprint() {
 
   if (auth0.user) {
     return (
-      <AppContent title='Footprint'>
+      <AppContent title="Footprint">
         <CenterColumnContent>
-          {!isEmptyFootprintData ?
+          {!isEmptyFootprintData ? (
             <>
               <FootprintDetailCard
                 colors={getSchemeForColor(HexColors.lightblue)}
                 period={PERIOD}
-                subcategory_key='facilities'
+                subcategory_key="facilities"
               />
               <FootprintDetailCard
                 colors={getSchemeForColor(HexColors.teal)}
                 period={PERIOD}
-                subcategory_key='product'
+                subcategory_key="product"
               />
               <FootprintDetailCard
                 colors={getSchemeForColor(HexColors.green)}
                 period={PERIOD}
-                subcategory_key='operations'
+                subcategory_key="operations"
               />
               <FootprintDetailCard
                 colors={getSchemeForColor(HexColors.purple)}
                 period={PERIOD}
-                subcategory_key='travel'
+                subcategory_key="travel"
               />
             </>
-            :
+          ) : (
             <>
-              <DismissableInfoCard 
-                text='Your footprint is a snapshot of the greenhouse gases your company emitted over a specific timeframe. It is measured in tons of carbon dioxide equivalent, expressed as tCO2e.'
+              <DismissableInfoCard
+                text="Your footprint is a snapshot of the greenhouse gases your company emitted over a specific timeframe. It is measured in tons of carbon dioxide equivalent, expressed as tCO2e."
                 onDismiss={() => {}}
-                dismissKey='footprint-page'
+                dismissKey="footprint-page"
               />
-              <FootprintOverviewCard chartVariant={EmissionsDonutChartVariants.horizontal} headerless />
+              <FootprintOverviewCard
+                chartVariant={EmissionsDonutChartVariants.horizontal}
+                headerless
+              />
             </>
-          } 
+          )}
         </CenterColumnContent>
         <RightColumnContent>
-          <FootprintOverviewCard chartVariant={EmissionsDonutChartVariants.vertical} />
+          <FootprintOverviewCard
+            chartVariant={EmissionsDonutChartVariants.vertical}
+          />
         </RightColumnContent>
       </AppContent>
     );
@@ -84,3 +98,10 @@ export function Footprint() {
 
   return null;
 }
+
+export const Footprint = withErrorBoundary(_Footprint, {
+  FallbackComponent: (props) => <ErrorFallback />,
+  onError: (error, info) => {
+    console.error('Error occurred in Footprint: ', error);
+  },
+});

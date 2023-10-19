@@ -2,6 +2,8 @@ import React from 'react';
 import { SurveyActiveKeyType, SurveyPayloadType } from '@coldpbc/interfaces';
 import { isEmpty } from 'lodash';
 import { SurveyIntro, SurveyQuestionContainer } from '../../molecules';
+import { withErrorBoundary } from 'react-error-boundary';
+import { ErrorFallback } from '../../application/errors/errorFallback';
 
 export interface SurveyRightNavProps {
   activeKey: SurveyActiveKeyType;
@@ -14,7 +16,7 @@ export interface SurveyRightNavProps {
   closeSurvey: () => void;
 }
 
-export const SurveyRightNav = ({
+const _SurveyRightNav = ({
   activeKey,
   setActiveKey,
   surveyData,
@@ -51,3 +53,10 @@ export const SurveyRightNav = ({
     </>
   );
 };
+
+export const SurveyRightNav = withErrorBoundary(_SurveyRightNav, {
+  FallbackComponent: (props) => <ErrorFallback />,
+  onError: (error, info) => {
+    console.error('Error occurred in SurveyRightNav: ', error);
+  },
+});

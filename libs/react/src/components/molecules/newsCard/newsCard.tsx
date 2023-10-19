@@ -2,10 +2,10 @@ import { Card } from '../card';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import useSWR from 'swr';
 import { NewsItem } from '../newsItem';
+import { withErrorBoundary } from 'react-error-boundary';
+import { ErrorFallback } from '../../application/errors/errorFallback';
 
-interface Props {}
-
-export const NewsCard = ({}: Props) => {
+const _NewsCard = () => {
   const { data, isLoading } = useSWR<any>(['/news', 'GET'], axiosFetcher);
 
   const filteredNewsItems = data
@@ -28,3 +28,10 @@ export const NewsCard = ({}: Props) => {
     </Card>
   );
 };
+
+export const NewsCard = withErrorBoundary(_NewsCard, {
+  FallbackComponent: (props) => <ErrorFallback />,
+  onError: (error, info) => {
+    console.error('Error occurred in NewsCard: ', error);
+  },
+});

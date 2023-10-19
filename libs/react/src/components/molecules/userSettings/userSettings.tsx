@@ -5,8 +5,10 @@ import { useEffect, useState } from 'react';
 import { BaseButton, Input } from '../../atoms';
 import { Card } from '../card';
 import { Modal } from '../modal';
+import { withErrorBoundary } from 'react-error-boundary';
+import { ErrorFallback } from '../../application';
 
-export const UserSettings = () => {
+const _UserSettings = () => {
   const { logout: auth0Logout, user } = useAuth0();
 
   const [updatedUser, setUpdatedUser] = useState(user ?? null);
@@ -59,7 +61,8 @@ export const UserSettings = () => {
             input_props={{
               value: updatedUser?.given_name,
               onValueChange: () => {},
-              onChange: (e) => setUpdatedUser({...updatedUser, given_name: e.target.value}),
+              onChange: (e) =>
+                setUpdatedUser({ ...updatedUser, given_name: e.target.value }),
               name: 'firstName',
               className:
                 'text-sm not-italic text-tc-primary font-medium bg-transparent w-full rounded-lg p-[16px] border border-bgc-accent focus:border focus:border-bgc-accent focus:ring-0 w-full',
@@ -85,7 +88,7 @@ export const UserSettings = () => {
             variant: ButtonTypes.secondary,
             onClick: () => {
               setShowFirstNameModal(false);
-              setUpdatedUser(user ?? null)
+              setUpdatedUser(user ?? null);
             },
           },
         }}
@@ -101,7 +104,8 @@ export const UserSettings = () => {
             input_props={{
               value: updatedUser?.family_name,
               onValueChange: () => {},
-              onChange: (e) => setUpdatedUser({...updatedUser, family_name: e.target.value}),
+              onChange: (e) =>
+                setUpdatedUser({ ...updatedUser, family_name: e.target.value }),
               name: 'lastName',
               className:
                 'text-sm not-italic text-tc-primary font-medium bg-transparent w-full rounded-lg p-[16px] border border-bgc-accent focus:border focus:border-bgc-accent focus:ring-0 w-full',
@@ -127,7 +131,7 @@ export const UserSettings = () => {
             variant: ButtonTypes.secondary,
             onClick: () => {
               setShowFirstNameModal(false);
-              setUpdatedUser(user ?? null)
+              setUpdatedUser(user ?? null);
             },
           },
         }}
@@ -214,3 +218,10 @@ export const UserSettings = () => {
     </Card>
   );
 };
+
+export const UserSettings = withErrorBoundary(_UserSettings, {
+  FallbackComponent: (props) => <ErrorFallback />,
+  onError: (error, info) => {
+    console.error('Error occurred in UserSettings: ', error);
+  },
+});

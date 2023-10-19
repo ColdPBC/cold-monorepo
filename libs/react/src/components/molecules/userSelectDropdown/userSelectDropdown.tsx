@@ -6,13 +6,15 @@ import { Dropdown, DropdownProps } from 'flowbite-react';
 import useSWR from 'swr';
 import { twMerge } from 'tailwind-merge';
 import { Avatar } from '../../atoms';
+import { withErrorBoundary } from 'react-error-boundary';
+import { ErrorFallback } from '../../application/errors/errorFallback';
 
 interface Props extends Omit<DropdownProps, 'onSelect' | 'label'> {
   onSelect: (user: User) => void;
   label?: string | JSX.Element;
 }
 
-export const UserSelectDropdown = ({ onSelect, className, ...rest }: Props) => {
+const _UserSelectDropdown = ({ onSelect, className, ...rest }: Props) => {
   const { user: dataGridUser } = useAuth0();
 
   const getMembersURL = () => {
@@ -69,3 +71,10 @@ export const UserSelectDropdown = ({ onSelect, className, ...rest }: Props) => {
     </Dropdown>
   );
 };
+
+export const UserSelectDropdown = withErrorBoundary(_UserSelectDropdown, {
+  FallbackComponent: (props) => <ErrorFallback />,
+  onError: (error, info) => {
+    console.error('Error occurred in UserSelectDropdown: ', error);
+  },
+});

@@ -10,13 +10,15 @@ import { useNavigate } from 'react-router-dom';
 import { isEmpty } from 'lodash';
 import { Organization } from 'auth0';
 import ColdContext from '../../../context/coldContext';
+import { withErrorBoundary } from 'react-error-boundary';
+import { ErrorFallback } from '../../application/errors/errorFallback';
 
 export interface SignupPageProps {
   userData: User;
   signedPolicyData?: PolicySignedDataType[];
 }
 
-export const SignupPage = ({ userData, signedPolicyData }: SignupPageProps) => {
+const _SignupPage = ({ userData, signedPolicyData }: SignupPageProps) => {
   const { user } = useAuth0();
   const navigate = useNavigate();
 
@@ -101,3 +103,10 @@ export const SignupPage = ({ userData, signedPolicyData }: SignupPageProps) => {
     return <div></div>;
   }
 };
+
+export const SignupPage = withErrorBoundary(_SignupPage, {
+  FallbackComponent: (props) => <ErrorFallback />,
+  onError: (error, info) => {
+    console.error('Error occurred in SignupPage: ', error);
+  },
+});

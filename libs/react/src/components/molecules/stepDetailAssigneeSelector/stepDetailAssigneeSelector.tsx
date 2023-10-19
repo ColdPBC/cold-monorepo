@@ -5,8 +5,6 @@ import { GlobalSizes, IconNames } from '@coldpbc/enums';
 import { ColdPlusIcon } from '@coldpbc/components';
 import { UserSelectDropdown } from '../userSelectDropdown';
 import { useAuth0, User } from '@auth0/auth0-react';
-import { axiosFetcher } from '@coldpbc/fetchers';
-import useSWR from 'swr';
 
 export interface StepDetailAssigneeSelectorProps {
   assignee?: Assignee;
@@ -17,19 +15,6 @@ export const StepDetailAssigneeSelector = ({
   assignee,
   handleAssigneeSelection,
 }: StepDetailAssigneeSelectorProps) => {
-  const { user } = useAuth0();
-
-  const getOrgURL = () => {
-    if (user?.coldclimate_claims.org_id) {
-      return [
-        '/organizations/' + user.coldclimate_claims.org_id + '/members',
-        'GET',
-      ];
-    } else {
-      return null;
-    }
-  };
-
   if (assignee) {
     return (
       <div

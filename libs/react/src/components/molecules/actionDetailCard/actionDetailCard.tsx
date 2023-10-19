@@ -17,13 +17,15 @@ import {
 import React from 'react';
 import { Disclosure } from '@headlessui/react';
 import { HexColors } from '@coldpbc/themes';
+import { withErrorBoundary } from 'react-error-boundary';
+import { ErrorFallback } from '@coldpbc/components';
 
 export type ActionDetailCardProps = {
   actionPayload: ActionPayload;
   setActionPayLoad: (actionPayload: ActionPayload) => void;
   variant: ActionDetailCardVariants;
 };
-export const ActionDetailCard = ({
+const _ActionDetailCard = ({
   actionPayload,
   setActionPayLoad,
   variant,
@@ -313,3 +315,10 @@ export const ActionDetailCard = ({
     }
   }
 };
+
+export const ActionDetailCard = withErrorBoundary(_ActionDetailCard, {
+  FallbackComponent: (props) => <ErrorFallback />,
+  onError: (error, info) => {
+    console.error('Error occurred in ActionDetailCard: ', error);
+  },
+});

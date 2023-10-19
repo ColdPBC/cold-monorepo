@@ -3,12 +3,14 @@ import { axiosFetcher } from '../../../fetchers';
 import useSWR from 'swr';
 import { Spinner } from '../../atoms';
 import ReactMarkdown from 'react-markdown';
+import { withErrorBoundary } from 'react-error-boundary';
+import { ErrorFallback } from '../../application/errors/errorFallback';
 
 export interface TermsProps {
   type: string;
 }
 
-export function Terms(props: PropsWithChildren<TermsProps>) {
+function _Terms(props: PropsWithChildren<TermsProps>) {
   const { data, error, isLoading } = useSWR<any>(
     ['/policy-content/' + props.type + '/content', 'GET'],
     axiosFetcher,
@@ -33,3 +35,10 @@ export function Terms(props: PropsWithChildren<TermsProps>) {
     </div>
   );
 }
+
+export const Terms = withErrorBoundary(_Terms, {
+  FallbackComponent: (props) => <ErrorFallback />,
+  onError: (error, info) => {
+    console.error('Error occurred in Terms: ', error);
+  },
+});

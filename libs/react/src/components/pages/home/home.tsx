@@ -4,12 +4,19 @@ import { RightColumnContent } from '../../organisms/rightColumnContent/rightColu
 import { useAuth0 } from '@auth0/auth0-react';
 import { Spinner } from '../../atoms/spinner/spinner';
 import { AppContent } from '../../organisms/appContent/appContent';
-import { FootprintOverviewCard, JourneyOverviewCard, NewsCard, NextActionsCard } from '../../molecules';
+import {
+  FootprintOverviewCard,
+  JourneyOverviewCard,
+  NewsCard,
+  NextActionsCard,
+} from '../../molecules';
 import { TemperatureCheckCard } from '../../molecules/temperatureCheckCard';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import { EmissionsDonutChartVariants } from '../../atoms/emissionsDonutChart/emissionsDonutChart';
+import { withErrorBoundary } from 'react-error-boundary';
+import { ErrorFallback } from '../../application/errors/errorFallback';
 
-export function Home() {
+function _Home() {
   const ldFlags = useFlags();
   const auth0 = useAuth0();
 
@@ -25,7 +32,9 @@ export function Home() {
     return (
       <AppContent title={'Welcome, ' + auth0.user?.given_name}>
         <CenterColumnContent>
-          <FootprintOverviewCard chartVariant={EmissionsDonutChartVariants.horizontal} />
+          <FootprintOverviewCard
+            chartVariant={EmissionsDonutChartVariants.horizontal}
+          />
           <JourneyOverviewCard />
           {ldFlags.showNewsModuleCold310 && <NewsCard />}
         </CenterColumnContent>
@@ -46,3 +55,10 @@ export function Home() {
   }
   return null;
 }
+
+export const Home = withErrorBoundary(_Home, {
+  FallbackComponent: (props) => <ErrorFallback />,
+  onError: (error, info) => {
+    console.error('Error occurred in Home: ', error);
+  },
+});

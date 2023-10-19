@@ -9,12 +9,14 @@ import { axiosFetcher } from '../../../fetchers/axiosFetcher';
 import { useAuth0 } from '@auth0/auth0-react';
 import { ButtonTypes } from '@coldpbc/enums';
 import { MemberStatusType } from '../../pages';
+import { withErrorBoundary } from 'react-error-boundary';
+import { ErrorFallback } from '../../application/errors/errorFallback';
 
 export interface TeamMembersDataGridProps {
   selectedMemberStatusType: MemberStatusType;
 }
 
-export const TeamMembersDataGrid = ({
+export const _TeamMembersDataGrid = ({
   selectedMemberStatusType,
 }: TeamMembersDataGridProps) => {
   const { user: dataGridUser } = useAuth0();
@@ -223,3 +225,10 @@ export const TeamMembersDataGrid = ({
     return <></>;
   }
 };
+
+export const TeamMembersDataGrid = withErrorBoundary(_TeamMembersDataGrid, {
+  FallbackComponent: (props) => <ErrorFallback />,
+  onError: (error, info) => {
+    console.error('Error occurred in TeamMembersDataGrid: ', error);
+  },
+});

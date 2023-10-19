@@ -10,11 +10,14 @@ import { ActionDetailCardVariants, ActionItemVariants } from '@coldpbc/enums';
 import { useAuth0, User } from '@auth0/auth0-react';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { mutate } from 'swr';
+import { withErrorBoundary } from 'react-error-boundary';
+import { ErrorFallback } from '../../application';
 
 export type SubcategoryActionDetailsCardProps = {
   actionPayload: ActionPayload;
 };
-export const SubcategoryActionDetailsCard = ({
+
+const _SubcategoryActionDetailsCard = ({
   actionPayload,
 }: SubcategoryActionDetailsCardProps) => {
   const [actionData, setActionData] =
@@ -69,3 +72,13 @@ export const SubcategoryActionDetailsCard = ({
     </Card>
   );
 };
+
+export const SubcategoryActionDetailsCard = withErrorBoundary(
+  _SubcategoryActionDetailsCard,
+  {
+    FallbackComponent: (props) => <ErrorFallback />,
+    onError: (error, info) => {
+      console.error('Error occurred in SubcategoryActionDetailsCard: ', error);
+    },
+  },
+);

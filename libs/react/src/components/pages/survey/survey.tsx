@@ -6,12 +6,14 @@ import useSWR, { mutate } from 'swr';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { GlobalSizes } from '@coldpbc/enums';
 import { useSearchParams } from 'react-router-dom';
+import { withErrorBoundary } from 'react-error-boundary';
+import { ErrorFallback } from '../../application/errors/errorFallback';
 
 export interface SurveyProps {
   surveyName: string;
 }
 
-export const Survey = (props: SurveyProps) => {
+const _Survey = (props: SurveyProps) => {
   const { surveyName } = props;
   const [activeKey, setActiveKey] = React.useState<SurveyActiveKeyType>({
     value: '',
@@ -269,3 +271,10 @@ export const Survey = (props: SurveyProps) => {
     return <></>;
   }
 };
+
+export const Survey = withErrorBoundary(_Survey, {
+  FallbackComponent: (props) => <ErrorFallback />,
+  onError: (error, info) => {
+    console.error('Error occurred in Survey: ', error);
+  },
+});

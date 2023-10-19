@@ -6,7 +6,7 @@ import {
   ChartOptions,
   PieController,
   Plugin as PluginType,
-  ArcElement
+  ArcElement,
 } from 'chart.js';
 import useSWR from 'swr';
 import { axiosFetcher } from '../../../fetchers/axiosFetcher';
@@ -15,13 +15,15 @@ import { Table } from 'flowbite-react';
 import { FootprintDetailChip } from '../../atoms/footprintDetailChip/footprintDetailChip';
 import { useActiveSegment } from '../../../hooks/useActiveSegment';
 import { darkTableTheme } from '@coldpbc/themes';
+import { withErrorBoundary } from 'react-error-boundary';
+import { ErrorFallback } from '../../application/errors/errorFallback';
 
 interface LegendRow {
   value: number;
   color: string;
   name: string;
   percent?: number;
-};
+}
 
 interface Props {
   colors: string[];
@@ -32,7 +34,12 @@ interface Props {
 
 ChartJS.register(ArcElement, PieController);
 
-export function FootprintDetailChart({ colors, subcategory_key, period, setIsEmpty }: Props) {
+function _FootprintDetailChart({
+  colors,
+  subcategory_key,
+  period,
+  setIsEmpty,
+}: Props) {
   const chartRef = useRef<ChartJS<'pie'>>(null);
 
   const {
@@ -40,8 +47,8 @@ export function FootprintDetailChart({ colors, subcategory_key, period, setIsEmp
     setActiveSegment,
     animateSegmentThickness,
     segmentOnHover,
-    chartBeforeDraw
-  } = useActiveSegment({ chartHasSpacers: false }); 
+    chartBeforeDraw,
+  } = useActiveSegment({ chartHasSpacers: false });
 
   const [chartData, setChartData] = useState<ChartData<'pie'>>({
     datasets: [
@@ -50,7 +57,7 @@ export function FootprintDetailChart({ colors, subcategory_key, period, setIsEmp
       },
     ],
   });
-  
+
   const [legendRows, setLegendRows] = useState<LegendRow[]>([]);
   const [totalFootprint, setTotalFootprint] = useState(0);
 
@@ -60,73 +67,80 @@ export function FootprintDetailChart({ colors, subcategory_key, period, setIsEmp
     axiosFetcher,
   );
 
-  const isEmpty = !isLoading && (!data?.subcategories?.[subcategory_key] || 
-    !Object.keys(data?.subcategories?.[subcategory_key].activities).some((activityKey) => {
-      const activity = data?.subcategories?.[subcategory_key].activities[activityKey];
+  const isEmpty =
+    !isLoading &&
+    (!data?.subcategories?.[subcategory_key] ||
+      !Object.keys(data?.subcategories?.[subcategory_key].activities).some(
+        (activityKey) => {
+          const activity =
+            data?.subcategories?.[subcategory_key].activities[activityKey];
 
-      return (
-        activity.footprint && activity.footprint.value !== null
-      );
-    }));
-
+          return activity.footprint && activity.footprint.value !== null;
+        },
+      ));
 
   // Update chart data on receiving new data
   useEffect(() => {
-      if (setIsEmpty) setIsEmpty(isEmpty);
-      if (isEmpty) return;
+    if (setIsEmpty) setIsEmpty(isEmpty);
+    if (isEmpty) return;
 
-      const newLabels: string[] = [];
-      const newData: number[] = [];
-      let newTotalFootprint = 0;
-      const newLegendRows: LegendRow[] = [];
+    const newLabels: string[] = [];
+    const newData: number[] = [];
+    let newTotalFootprint = 0;
+    const newLegendRows: LegendRow[] = [];
 
-      // Transform chart data
-      Object.keys(data?.subcategories[subcategory_key].activities ?? {}).forEach(
-        (activityKey: any) => {
-          const activity = data?.subcategories[subcategory_key].activities[activityKey];
-          const activityFootprint = activity.footprint?.[period]?.value ?? 0;
-          
-          if (activityFootprint > 0) {
-            newLabels.push(activity.activity_name);
-            newData.push(activityFootprint);
-            newTotalFootprint += activityFootprint;
-          }
-      })
+    // Transform chart data
+    Object.keys(data?.subcategories[subcategory_key].activities ?? {}).forEach(
+      (activityKey: any) => {
+        const activity =
+          data?.subcategories[subcategory_key].activities[activityKey];
+        const activityFootprint = activity.footprint?.[period]?.value ?? 0;
 
-      // Populate legend rows
-      newData.sort((a, b) => b - a).forEach((nD, i) => {
+        if (activityFootprint > 0) {
+          newLabels.push(activity.activity_name);
+          newData.push(activityFootprint);
+          newTotalFootprint += activityFootprint;
+        }
+      },
+    );
+
+    // Populate legend rows
+    newData
+      .sort((a, b) => b - a)
+      .forEach((nD, i) => {
         newLegendRows.push({
           value: nD,
           color: colors[i],
           name: newLabels[i],
-          percent: Math.round((nD / newTotalFootprint) * 100)
-        })
-      })
+          percent: Math.round((nD / newTotalFootprint) * 100),
+        });
+      });
 
-      const backgroundColors = newData.map((_, i) => colors[i]);
+    const backgroundColors = newData.map((_, i) => colors[i]);
 
-      const newChartData: ChartData<'pie'> = {
-        datasets: [{
+    const newChartData: ChartData<'pie'> = {
+      datasets: [
+        {
           data: newData,
           backgroundColor: backgroundColors,
           borderColor: backgroundColors,
           borderWidth: 1,
-          hoverBackgroundColor: backgroundColors
-        }],
-        labels: newLabels,
-      };
+          hoverBackgroundColor: backgroundColors,
+        },
+      ],
+      labels: newLabels,
+    };
 
-      const chart = chartRef.current;
+    const chart = chartRef.current;
 
-      if (!chart) {
-        return;
-      }
+    if (!chart) {
+      return;
+    }
 
-      setChartData(newChartData);
-      setTotalFootprint(newTotalFootprint);
-      setLegendRows(newLegendRows);
+    setChartData(newChartData);
+    setTotalFootprint(newTotalFootprint);
+    setLegendRows(newLegendRows);
   }, [data, chartRef.current]);
-
 
   // Create plugins for chart
   const chartPlugins: PluginType<'pie'>[] = [
@@ -146,9 +160,9 @@ export function FootprintDetailChart({ colors, subcategory_key, period, setIsEmp
     activeSegment,
     elements: {
       arc: {
-          borderWidth: 0
-      }
-  }
+        borderWidth: 0,
+      },
+    },
   };
 
   if (isLoading) {
@@ -181,13 +195,13 @@ export function FootprintDetailChart({ colors, subcategory_key, period, setIsEmp
         <FootprintDetailChip emissions={totalFootprint} large center />
       </div>
       <Table
-        className='text-white'
+        className="text-white"
         theme={darkTableTheme.table}
         onMouseLeave={() => {
           setActiveSegment(null);
         }}
       >
-        <Table.Head className='text-white normal-case'>
+        <Table.Head className="text-white normal-case">
           <Table.HeadCell theme={darkTableTheme.table?.head?.cell}>
             Category
           </Table.HeadCell>
@@ -198,38 +212,48 @@ export function FootprintDetailChart({ colors, subcategory_key, period, setIsEmp
             tCO2e
           </Table.HeadCell>
         </Table.Head>
-          <Table.Body className="divide-y">
-            {legendRows.map((row, i) => (
-              <Table.Row
-                key={`${row.name}-${i}`}
-                onMouseEnter={() => {
-                  animateSegmentThickness(i, 'legend');
-                }}
-                onMouseLeave={() => {
-                  setActiveSegment(null);
-                }}
-                theme={darkTableTheme.table?.row}
+        <Table.Body className="divide-y">
+          {legendRows.map((row, i) => (
+            <Table.Row
+              key={`${row.name}-${i}`}
+              onMouseEnter={() => {
+                animateSegmentThickness(i, 'legend');
+              }}
+              onMouseLeave={() => {
+                setActiveSegment(null);
+              }}
+              theme={darkTableTheme.table?.row}
+            >
+              <Table.Cell
+                className="flex items-center font-bold"
+                theme={darkTableTheme.table?.body?.cell}
               >
-                <Table.Cell className='flex items-center font-bold' theme={darkTableTheme.table?.body?.cell}>
-                  <div 
-                    style={{
-                      background: row.color,
-                      border: '2px solid rgba(0, 0, 0, 0.2)'
-                    }}
-                    className='mr-2 h-[10px] w-[10px] min-w-[10px] rounded-xl'
-                  />
-                  {row.name}
-                </Table.Cell>
-                <Table.Cell theme={darkTableTheme.table?.body?.cell}>
-                  {row.percent}%
-                </Table.Cell>
-                <Table.Cell theme={darkTableTheme.table?.body?.cell}>
-                  {row.value}
-                </Table.Cell>
-              </Table.Row>
-            ))}
-          </Table.Body>
-        </Table>
+                <div
+                  style={{
+                    background: row.color,
+                    border: '2px solid rgba(0, 0, 0, 0.2)',
+                  }}
+                  className="mr-2 h-[10px] w-[10px] min-w-[10px] rounded-xl"
+                />
+                {row.name}
+              </Table.Cell>
+              <Table.Cell theme={darkTableTheme.table?.body?.cell}>
+                {row.percent}%
+              </Table.Cell>
+              <Table.Cell theme={darkTableTheme.table?.body?.cell}>
+                {row.value}
+              </Table.Cell>
+            </Table.Row>
+          ))}
+        </Table.Body>
+      </Table>
     </div>
   );
 }
+
+export const FootprintDetailChart = withErrorBoundary(_FootprintDetailChart, {
+  FallbackComponent: (props) => <ErrorFallback />,
+  onError: (error, info) => {
+    console.error('Error occurred in FootprintDetailChart: ', error);
+  },
+});

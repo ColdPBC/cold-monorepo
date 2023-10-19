@@ -14,8 +14,10 @@ import { useFlags } from 'launchdarkly-react-client-sdk';
 import { useLocation } from 'react-router-dom';
 import { useAuth0 } from '@auth0/auth0-react';
 import { ActionPayload } from '@coldpbc/interfaces';
+import { withErrorBoundary } from 'react-error-boundary';
+import { ErrorFallback } from '../../application/errors/errorFallback';
 
-export const SideBar = (): JSX.Element => {
+const _SideBar = (): JSX.Element => {
   const { user } = useAuth0();
 
   const {
@@ -31,7 +33,9 @@ export const SideBar = (): JSX.Element => {
 
   // Fetch actions if actions feature flag is present
   const { data: actionsData } = useSWR<ActionPayload[], any, any>(
-    ldFlags.showActions261 ? [`/organizations/${user?.coldclimate_claims.org_id}/actions`, 'GET'] : null,
+    ldFlags.showActions261
+      ? [`/organizations/${user?.coldclimate_claims.org_id}/actions`, 'GET']
+      : null,
     axiosFetcher,
   );
 
@@ -81,19 +85,28 @@ export const SideBar = (): JSX.Element => {
   let filteredSidebarItems = data.definition.items.filter(filterSidebar) ?? [];
 
   // filter nested action items
-  if (ldFlags.showActions261 && filteredSidebarItems.some((item: any) => item.key === 'actions_key')) {
+  if (
+    ldFlags.showActions261 &&
+    filteredSidebarItems.some((item: any) => item.key === 'actions_key')
+  ) {
     filteredSidebarItems = filteredSidebarItems.map((item: any) => {
       if (item.key === 'actions_key') {
         return {
           ...item,
           items: item.items.filter((actionItem: any) => {
-            return actionItem.key === 'overview_actions_key' || actionsData?.some(action => actionItem.key === `${action.action.subcategory}_actions_key`)
-          })
-        }
+            return (
+              actionItem.key === 'overview_actions_key' ||
+              actionsData?.some(
+                (action) =>
+                  actionItem.key === `${action.action.subcategory}_actions_key`,
+              )
+            );
+          }),
+        };
       } else {
         return item;
       }
-    })
+    });
   }
 
   if (filteredSidebarItems) {
@@ -167,3 +180,10 @@ export const SideBar = (): JSX.Element => {
     return <div></div>;
   }
 };
+
+export const SideBar = withErrorBoundary(_SideBar, {
+  FallbackComponent: (props) => <ErrorFallback />,
+  onError: (error, info) => {
+    console.error('Error occurred in SideBar: ', error);
+  },
+});
