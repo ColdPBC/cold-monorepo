@@ -1,9 +1,7 @@
 import React, { PropsWithChildren, useState } from 'react';
 import { Card, CardProps } from '../card/card';
 import { useNavigate } from 'react-router-dom';
-import {
-  FootprintOverviewChart,
-} from '../footprintOverviewChart/footprintOverviewChart';
+import { FootprintOverviewChart } from '../footprintOverviewChart/footprintOverviewChart';
 import useSWR from 'swr';
 import clsx from 'clsx';
 import { axiosFetcher } from '../../../fetchers/axiosFetcher';
@@ -11,6 +9,8 @@ import { BaseButton } from '../../atoms';
 import { some } from 'lodash';
 import { SurveyPayloadType } from '@coldpbc/interfaces';
 import { EmissionsDonutChartVariants } from '../../atoms/emissionsDonutChart/emissionsDonutChart';
+import { withErrorBoundary } from 'react-error-boundary';
+import { ErrorFallback } from '../../application/errors/errorFallback';
 
 export interface FootprintOverviewCardProps {
   headerless?: boolean;
@@ -19,7 +19,7 @@ export interface FootprintOverviewCardProps {
 
 const PERIOD = 2022;
 
-export function FootprintOverviewCard(
+function _FootprintOverviewCard(
   props: PropsWithChildren<FootprintOverviewCardProps>,
 ) {
   const navigate = useNavigate();
@@ -102,3 +102,10 @@ export function FootprintOverviewCard(
     </Card>
   );
 }
+
+export const FootprintOverviewCard = withErrorBoundary(_FootprintOverviewCard, {
+  FallbackComponent: ErrorFallback,
+  onError: (error, info) => {
+    console.error('Error occurred in FootprintOverviewCard: ', error);
+  },
+});

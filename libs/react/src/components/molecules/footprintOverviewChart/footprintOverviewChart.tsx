@@ -1,12 +1,16 @@
 import { PropsWithChildren } from 'react';
-import {
-  ChartData,
-} from 'chart.js';
+import { ChartData } from 'chart.js';
 import useSWR from 'swr';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { footprintSubcategoryColors, HexColors } from '@coldpbc/themes';
-import { forEach, isArray, some} from 'lodash';
-import { EmissionsDonutChart, EmissionsDonutChartVariants, SubCategoryTotal } from '../../atoms/emissionsDonutChart/emissionsDonutChart';
+import { forEach, isArray, some } from 'lodash';
+import {
+  EmissionsDonutChart,
+  EmissionsDonutChartVariants,
+  SubCategoryTotal,
+} from '../../atoms/emissionsDonutChart/emissionsDonutChart';
+import { withErrorBoundary } from 'react-error-boundary';
+import { ErrorFallback } from '../../application/errors/errorFallback';
 
 const MAX_CATEGORIES = 4;
 
@@ -25,14 +29,10 @@ export interface FootprintOverviewChartProps {
 
 const gapStylingConstant = 100;
 
-export function FootprintOverviewChart(
+function _FootprintOverviewChart(
   props: PropsWithChildren<FootprintOverviewChartProps>,
 ) {
-
-  const {
-    variant = EmissionsDonutChartVariants.horizontal,
-    period,
-  } = props;
+  const { variant = EmissionsDonutChartVariants.horizontal, period } = props;
 
   // Get footprint data from SWR
   const { data, isLoading } = useSWR<any>(
@@ -42,9 +42,16 @@ export function FootprintOverviewChart(
 
   if (!data) return null;
 
-  const isEmptyFootprintData = !isLoading && !some(data?.subcategories, (
-    (subcategory: any) => some(subcategory.activities, (
-        (activity: any) => activity.footprint && activity.footprint?.[props.period]?.value !== null ))));
+  const isEmptyFootprintData =
+    !isLoading &&
+    !some(data?.subcategories, (subcategory: any) =>
+      some(
+        subcategory.activities,
+        (activity: any) =>
+          activity.footprint &&
+          activity.footprint?.[props.period]?.value !== null,
+      ),
+    );
 
   // Add up all the information from the footprint
   const subcategoryTotals: SubCategoryTotal[] = [];
@@ -52,7 +59,9 @@ export function FootprintOverviewChart(
   Object.keys(data?.subcategories ?? {}).forEach((subcategoryKey) => {
     const subcategory = data.subcategories[subcategoryKey];
     let value = 0;
-    const color = HexColors[footprintSubcategoryColors[subcategoryKey]]?.DEFAULT || HexColors.primary.DEFAULT;
+    const color =
+      HexColors[footprintSubcategoryColors[subcategoryKey]]?.DEFAULT ||
+      HexColors.primary.DEFAULT;
 
     let nullFootprint = true;
 
@@ -66,11 +75,16 @@ export function FootprintOverviewChart(
             nullFootprint = false;
           }
         }
-      })
+      });
     }
     if (subcategoryTotals.length >= MAX_CATEGORIES) return;
     if (!nullFootprint)
-      subcategoryTotals.push({value: value, color, name: subcategory.subcategory_name, subcategoryKey});
+      subcategoryTotals.push({
+        value: value,
+        color,
+        name: subcategory.subcategory_name,
+        subcategoryKey,
+      });
   });
 
   // Set spacer width
@@ -90,23 +104,26 @@ export function FootprintOverviewChart(
   };
 
   // Add data to the chart, determine total percentages
-  forEach(subcategoryTotals.sort((a, b) => b.value - a.value), (info, index) => {
-    info.percent = (info.value / totalFootprint) * 100;
+  forEach(
+    subcategoryTotals.sort((a, b) => b.value - a.value),
+    (info, index) => {
+      info.percent = (info.value / totalFootprint) * 100;
 
-    chartData.labels?.push(info.name);
-    chartData.datasets[0].data.push(info.value);
+      chartData.labels?.push(info.name);
+      chartData.datasets[0].data.push(info.value);
 
-    if (isArray(chartData.datasets[0].backgroundColor)) {
-      chartData.datasets[0].backgroundColor?.push(info.color);
-    }
+      if (isArray(chartData.datasets[0].backgroundColor)) {
+        chartData.datasets[0].backgroundColor?.push(info.color);
+      }
 
-    // Add a spacer
-    chartData.labels?.push(null);
-    chartData.datasets[0].data.push(spacerValue);
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    chartData.datasets[0].backgroundColor?.push('#FFFFFF00'); // make spacer transparent
-  });
+      // Add a spacer
+      chartData.labels?.push(null);
+      chartData.datasets[0].data.push(spacerValue);
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      chartData.datasets[0].backgroundColor?.push('#FFFFFF00'); // make spacer transparent
+    },
+  );
 
   return (
     <EmissionsDonutChart
@@ -115,9 +132,24 @@ export function FootprintOverviewChart(
       totalEmissions={totalFootprint}
       chartData={chartData}
       subcategoryTotals={subcategoryTotals}
-      hoverColorArray={subcategoryTotals.sort((a, b) => b.value - a.value).map((subcategory) => {
-        return HexColors[footprintSubcategoryColors[subcategory.subcategoryKey]]?.DEFAULT_BRIGHTEN || HexColors.primary.DEFAULT
-      })}
+      hoverColorArray={subcategoryTotals
+        .sort((a, b) => b.value - a.value)
+        .map((subcategory) => {
+          return (
+            HexColors[footprintSubcategoryColors[subcategory.subcategoryKey]]
+              ?.DEFAULT_BRIGHTEN || HexColors.primary.DEFAULT
+          );
+        })}
     />
   );
 }
+
+export const FootprintOverviewChart = withErrorBoundary(
+  _FootprintOverviewChart,
+  {
+    FallbackComponent: ErrorFallback,
+    onError: (error, info) => {
+      console.error('Error occurred in FootprintOverviewChart: ', error);
+    },
+  },
+);

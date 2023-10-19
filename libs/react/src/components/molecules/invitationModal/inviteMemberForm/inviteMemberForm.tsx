@@ -10,13 +10,15 @@ import includes from 'lodash/includes';
 import { Role } from 'auth0';
 import { isArray } from 'lodash';
 import { ButtonTypes } from '@coldpbc/enums';
+import { withErrorBoundary } from 'react-error-boundary';
+import { ErrorFallback } from '../../../application/errors/errorFallback';
 
 export interface InviteMemberFormProps {
   inviteMembers: (email: string, roleId: string) => void;
   onCancel: () => void;
 }
 
-export const InviteMemberForm = (props: InviteMemberFormProps) => {
+const Component = (props: InviteMemberFormProps) => {
   const { inviteMembers } = props;
   const [memberForm, setMemberForm] = useState<any>({
     email: '',
@@ -46,9 +48,9 @@ export const InviteMemberForm = (props: InviteMemberFormProps) => {
     return String(memberForm.email)
       .toLowerCase()
       .match(
-        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
       );
-  }
+  };
 
   // Filter out special case roles
   const filterRoles = (role: any) => {
@@ -75,7 +77,7 @@ export const InviteMemberForm = (props: InviteMemberFormProps) => {
   if (isArray(data)) {
     return (
       <>
-        <div className='flex items-end'>
+        <div className="flex items-end">
           <div className="flex-1">
             <Input
               input_props={{
@@ -94,7 +96,7 @@ export const InviteMemberForm = (props: InviteMemberFormProps) => {
               }}
               idx={0}
               type={InputTypes.Text}
-              input_label='Email Address'
+              input_label="Email Address"
             />
           </div>
           <div className="w-40 ml-4 mb-2">
@@ -120,7 +122,7 @@ export const InviteMemberForm = (props: InviteMemberFormProps) => {
           </div>
         </div>
         <div className="mt-11 flex justify-end">
-          <span className='mr-4'>
+          <span className="mr-4">
             <BaseButton
               variant={ButtonTypes.secondary}
               label={'Cancel'}
@@ -144,3 +146,10 @@ export const InviteMemberForm = (props: InviteMemberFormProps) => {
     return <></>;
   }
 };
+
+export const InviteMemberForm = withErrorBoundary(Component, {
+  FallbackComponent: ErrorFallback,
+  onError: (error, info) => {
+    console.error('Error occurred in InviteMemberForm: ', error);
+  },
+});

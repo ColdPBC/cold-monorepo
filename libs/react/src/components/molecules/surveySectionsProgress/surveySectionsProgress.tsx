@@ -13,6 +13,8 @@ import {
   TransitionGroup,
 } from 'react-transition-group';
 import { isEmpty } from 'lodash';
+import { withErrorBoundary } from 'react-error-boundary';
+import { ErrorFallback } from '../../application';
 
 export interface SurveySectionsProgressProps {
   sections: {
@@ -21,7 +23,7 @@ export interface SurveySectionsProgressProps {
   activeKey: SurveyActiveKeyType;
 }
 
-export const SurveySectionsProgress = ({
+const _SurveySectionsProgress = ({
   sections,
   activeKey,
 }: SurveySectionsProgressProps) => {
@@ -67,7 +69,8 @@ export const SurveySectionsProgress = ({
   };
 
   const isScrollable = () => {
-    const containerHeight = containerRef?.current?.getBoundingClientRect().height;
+    const containerHeight =
+      containerRef?.current?.getBoundingClientRect().height;
     if (!containerHeight) return false;
 
     let totalHeight = 0;
@@ -86,7 +89,7 @@ export const SurveySectionsProgress = ({
       }
 
       element.scrollTo({
-        top: heightToSection
+        top: heightToSection,
       });
     }
   };
@@ -112,7 +115,7 @@ export const SurveySectionsProgress = ({
       className={'w-[668px] h-full rounded-2xl relative overflow-hidden'}
       ref={containerRef}
       style={{
-        maxHeight: 'calc(100vh - 122px)' // full-height minus other els
+        maxHeight: 'calc(100vh - 122px)', // full-height minus other els
       }}
     >
       <div
@@ -137,9 +140,7 @@ export const SurveySectionsProgress = ({
             scrollToActiveSection(elem);
           }}
         >
-          <div
-            className="w-[540px]] pl-[64px] pr-[48px] pt-[164px] flex"
-          >
+          <div className="w-[540px]] pl-[64px] pr-[48px] pt-[164px] flex">
             <SurveySectionsProgressBar
               sections={sections}
               activeKey={activeKey}
@@ -200,3 +201,13 @@ export const SurveySectionsProgress = ({
     </div>
   );
 };
+
+export const SurveySectionsProgress = withErrorBoundary(
+  _SurveySectionsProgress,
+  {
+    FallbackComponent: ErrorFallback,
+    onError: (error, info) => {
+      console.error('Error occurred in SurveySectionsProgress: ', error);
+    },
+  },
+);

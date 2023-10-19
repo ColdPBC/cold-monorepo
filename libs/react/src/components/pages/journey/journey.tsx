@@ -10,10 +10,12 @@ import { AppContent } from '../../organisms/appContent/appContent';
 import { DismissableInfoCard } from '../../molecules/dismissableInfoCard';
 import { JourneyDetailView } from '../../molecules/journeyDetailView';
 import { TemperatureCheckCard } from '../../molecules/temperatureCheckCard';
+import { withErrorBoundary } from 'react-error-boundary';
+import { ErrorFallback } from '../../application/errors/errorFallback';
 
 const PERIOD = 2022;
 
-export function Journey() {
+function _Journey() {
   const { data, error, isLoading } = useSWR<any>(
     ['/categories/', 'GET'],
     axiosFetcher,
@@ -38,11 +40,9 @@ export function Journey() {
       <AppContent title="Climate Journey">
         <CenterColumnContent>
           {!isEmptyData ? (
-            <>
-              <Card>
-                <JourneyDetailView />
-              </Card>
-            </>
+            <Card>
+              <JourneyDetailView />
+            </Card>
           ) : (
             <>
               <DismissableInfoCard
@@ -66,3 +66,10 @@ export function Journey() {
 
   return null;
 }
+
+export const Journey = withErrorBoundary(_Journey, {
+  FallbackComponent: ErrorFallback,
+  onError: (error, info) => {
+    console.error('Error occurred in Journey: ', error);
+  },
+});

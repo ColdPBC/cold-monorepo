@@ -4,16 +4,17 @@ import {
   CenterColumnContent,
   RightColumnContent,
   SubcategoryActionDetailsCard,
-} from '../../organisms';
+  SubcategoryFootprintCard,
+} from '@coldpbc/components';
 import useSWR from 'swr';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { Card, SubcategoryJourneyPreview } from '../../molecules';
-import { SubcategoryFootprintCard } from '../../molecules/subcategoryFootprintCard';
 import { useAuth0, User } from '@auth0/auth0-react';
 import { ActionPayload } from '@coldpbc/interfaces';
-import { lowerCase } from 'lodash';
+import { withErrorBoundary } from 'react-error-boundary';
+import { ErrorFallback } from '../../application/errors/errorFallback';
 
-export const SubcategoryActionsList = () => {
+const _SubcategoryActionsList = () => {
   const { user } = useAuth0();
 
   const { name } = useParams();
@@ -92,3 +93,13 @@ export const SubcategoryActionsList = () => {
     </AppContent>
   );
 };
+
+export const SubcategoryActionsList = withErrorBoundary(
+  _SubcategoryActionsList,
+  {
+    FallbackComponent: ErrorFallback,
+    onError: (error, info) => {
+      console.error('Error occurred in SubcategoryActionsList: ', error);
+    },
+  },
+);

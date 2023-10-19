@@ -11,6 +11,8 @@ import { ButtonTypes, GlobalSizes } from '@coldpbc/enums';
 import { CSSTransition, SwitchTransition } from 'react-transition-group';
 import { getSectionIndex, isKeyValueFollowUp } from '@coldpbc/lib';
 import { axiosFetcher } from '@coldpbc/fetchers';
+import { withErrorBoundary } from 'react-error-boundary';
+import { ErrorFallback } from '../../application';
 
 export interface SurveyQuestionContainerProps {
   activeKey: SurveyActiveKeyType;
@@ -20,7 +22,7 @@ export interface SurveyQuestionContainerProps {
   setSurveyData: (surveyData: SurveyPayloadType) => void;
 }
 
-export const SurveyQuestionContainer = ({
+const _SurveyQuestionContainer = ({
   activeKey,
   setActiveKey,
   submitSurvey,
@@ -521,7 +523,9 @@ export const SurveyQuestionContainer = ({
             classNames={transitionClassNames}
           >
             <div
-              className={'h-full w-full flex items-center justify-center px-[139px] shortScreen:px-[32px] shortWideScreen:px-[139px]'}
+              className={
+                'h-full w-full flex items-center justify-center px-[139px] shortScreen:px-[32px] shortWideScreen:px-[139px]'
+              }
             >
               {activeQuestion}
             </div>
@@ -541,3 +545,13 @@ export const SurveyQuestionContainer = ({
     return <></>;
   }
 };
+
+export const SurveyQuestionContainer = withErrorBoundary(
+  _SurveyQuestionContainer,
+  {
+    FallbackComponent: ErrorFallback,
+    onError: (error, info) => {
+      console.error('Error occurred in SurveyQuestionContainer: ', error);
+    },
+  },
+);

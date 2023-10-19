@@ -1,8 +1,10 @@
 import React, { useEffect } from 'react';
 import useSWR, { mutate } from 'swr';
 import { Toaster } from '../../atoms';
+import { withErrorBoundary } from 'react-error-boundary';
+import { ErrorFallback } from '../../application';
 
-export const ApplicationToaster = () => {
+const _ApplicationToaster = () => {
   const { data, error, isLoading } = useSWR('messages', {
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
@@ -38,3 +40,10 @@ export const ApplicationToaster = () => {
     return <></>;
   }
 };
+
+export const ApplicationToaster = withErrorBoundary(_ApplicationToaster, {
+  FallbackComponent: ErrorFallback,
+  onError: (error, info) => {
+    console.error('Error occurred in ApplicationToaster: ', error);
+  },
+});

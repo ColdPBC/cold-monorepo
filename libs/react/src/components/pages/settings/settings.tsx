@@ -16,10 +16,12 @@ import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import { CheckIcon } from '@heroicons/react/20/solid';
 import { flowbiteThemeOverride } from '@coldpbc/themes';
 import { useFlags } from 'launchdarkly-react-client-sdk';
+import { withErrorBoundary } from 'react-error-boundary';
+import { ErrorFallback } from '../../application/errors/errorFallback';
 
 export type MemberStatusType = 'Members' | 'Invitations';
 
-export const Settings = (props: { user?: any }) => {
+const _Settings = (props: { user?: any }) => {
   const auth0 = useAuth0();
   const ldFlags = useFlags();
 
@@ -156,3 +158,10 @@ export const Settings = (props: { user?: any }) => {
     return <div></div>;
   }
 };
+
+export const Settings = withErrorBoundary(_Settings, {
+  FallbackComponent: ErrorFallback,
+  onError: (error, info) => {
+    console.error('Error occurred in Settings: ', error);
+  },
+});

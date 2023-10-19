@@ -4,21 +4,23 @@ import { ActionItemVariants } from '@coldpbc/enums';
 import { useAuth0 } from '@auth0/auth0-react';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import useSWR from 'swr';
+import { withErrorBoundary } from 'react-error-boundary';
+import { ErrorFallback } from '../../application/errors/errorFallback';
 
 export interface SubcategoryActionsOverviewCardProps {
   subcategory_key: string;
   category_key: string;
 }
 
-export const SubcategoryActionsOverviewCard = ({
+const _SubcategoryActionsOverviewCard = ({
   subcategory_key,
-  category_key
+  category_key,
 }: SubcategoryActionsOverviewCardProps) => {
   const { user } = useAuth0();
 
   const { data } = useSWR<ActionPayload[], any, any>(
-      [`/organizations/${user?.coldclimate_claims.org_id}/actions`, 'GET'],
-      axiosFetcher,
+    [`/organizations/${user?.coldclimate_claims.org_id}/actions`, 'GET'],
+    axiosFetcher,
   );
 
   const { data: categoryData } = useSWR<any>(
@@ -27,11 +29,14 @@ export const SubcategoryActionsOverviewCard = ({
   );
 
   const subcategoryName =
-    categoryData?.definition.categories[category_key].subcategories[subcategory_key]?.subcategory_name;
+    categoryData?.definition.categories[category_key].subcategories[
+      subcategory_key
+    ]?.subcategory_name;
 
-  const actions = data?.filter(actionPayload => 
-    actionPayload.action.subcategory === subcategory_key
-  ) ?? [];
+  const actions =
+    data?.filter(
+      (actionPayload) => actionPayload.action.subcategory === subcategory_key,
+    ) ?? [];
 
   if (!actions.length) {
     return null;
@@ -44,7 +49,10 @@ export const SubcategoryActionsOverviewCard = ({
         {actions.map((action) => {
           return (
             <div key={action.id}>
-              <ActionItem actionPayload={action} variant={ActionItemVariants.wide} />
+              <ActionItem
+                actionPayload={action}
+                variant={ActionItemVariants.wide}
+              />
             </div>
           );
         })}
@@ -52,3 +60,16 @@ export const SubcategoryActionsOverviewCard = ({
     </Card>
   );
 };
+
+export const SubcategoryActionsOverviewCard = withErrorBoundary(
+  _SubcategoryActionsOverviewCard,
+  {
+    FallbackComponent: ErrorFallback,
+    onError: (error, info) => {
+      console.error(
+        'Error occurred in SubcategoryActionsOverviewCard: ',
+        error,
+      );
+    },
+  },
+);

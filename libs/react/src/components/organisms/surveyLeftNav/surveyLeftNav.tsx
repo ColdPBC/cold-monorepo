@@ -3,6 +3,8 @@ import { SurveyActiveKeyType, SurveyPayloadType } from '@coldpbc/interfaces';
 import { isEmpty } from 'lodash';
 import { HexColors } from '@coldpbc/themes';
 import { ColdWordmark, SurveySectionsProgress } from '@coldpbc/components';
+import { withErrorBoundary } from 'react-error-boundary';
+import { ErrorFallback } from '../../application';
 
 export interface SurveyLeftNavProps {
   surveyData: SurveyPayloadType;
@@ -11,7 +13,7 @@ export interface SurveyLeftNavProps {
   submitted: boolean;
 }
 
-export const SurveyLeftNav = (props: SurveyLeftNavProps) => {
+const _SurveyLeftNav = (props: SurveyLeftNavProps) => {
   const { surveyData, activeKey, submitted } = props;
   const { definition: surveyFormData } = surveyData;
   return (
@@ -43,3 +45,10 @@ export const SurveyLeftNav = (props: SurveyLeftNavProps) => {
     </div>
   );
 };
+
+export const SurveyLeftNav = withErrorBoundary(_SurveyLeftNav, {
+  FallbackComponent: ErrorFallback,
+  onError: (error, info) => {
+    console.error('Error occurred in SurveyLeftNav: ', error);
+  },
+});

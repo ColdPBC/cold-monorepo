@@ -5,8 +5,7 @@ import {
   useNavigate,
   useSearchParams,
 } from 'react-router-dom';
-import { GetTokenSilentlyOptions, useAuth0, User } from '@auth0/auth0-react';
-import { SignupPage, Spinner, Survey } from '@coldpbc/components';
+import { ErrorFallback, SignupPage, Spinner } from '@coldpbc/components';
 import { GlobalSizes } from '@coldpbc/enums';
 import ColdContext from '../../../context/coldContext';
 import { useLDClient } from 'launchdarkly-react-client-sdk';
@@ -16,8 +15,9 @@ import { get, has, isEmpty, isUndefined } from 'lodash';
 import { PolicySignedDataType } from '@coldpbc/interfaces';
 import { useAuth0Wrapper } from '@coldpbc/hooks';
 import { SurveyPayloadType } from '@coldpbc/interfaces';
+import { withErrorBoundary } from 'react-error-boundary';
 
-export const ProtectedRoute = () => {
+const _ProtectedRoute = () => {
   const {
     user,
     error,
@@ -163,3 +163,10 @@ export const ProtectedRoute = () => {
     );
   }
 };
+
+export const ProtectedRoute = withErrorBoundary(_ProtectedRoute, {
+  FallbackComponent: ErrorFallback,
+  onError: (error, info) => {
+    console.error('Error occurred in ProtectedRoute: ', error);
+  },
+});

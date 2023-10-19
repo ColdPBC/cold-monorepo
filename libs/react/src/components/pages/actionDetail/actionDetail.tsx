@@ -7,7 +7,6 @@ import { ArrowRightIcon, ChevronDownIcon } from '@heroicons/react/20/solid';
 import { CompletedBanner } from './completedBanner';
 import { Avatar, BaseButton } from '../../atoms';
 import { ButtonTypes, GlobalSizes } from '@coldpbc/enums';
-import { CheckIcon } from '@heroicons/react/20/solid';
 import { Datepicker } from 'flowbite-react';
 import { Dropdown } from 'flowbite-react';
 import { flowbiteThemeOverride } from '@coldpbc/themes';
@@ -15,12 +14,14 @@ import { DateTime } from 'luxon';
 import { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { ActionDetailProgress } from '../../organisms';
+import { withErrorBoundary } from 'react-error-boundary';
+import { ErrorFallback } from '../../application';
 
 interface Props {
   id: string;
 }
 
-export const ActionDetail = ({ id }: Props) => {
+const _ActionDetail = ({ id }: Props) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { user } = useAuth0();
   const [show, setShow] = useState(true);
@@ -260,3 +261,10 @@ export const ActionDetail = ({ id }: Props) => {
     </Takeover>
   );
 };
+
+export const ActionDetail = withErrorBoundary(_ActionDetail, {
+  FallbackComponent: ErrorFallback,
+  onError: (error, info) => {
+    console.error('Error occurred in ActionDetail: ', error);
+  },
+});

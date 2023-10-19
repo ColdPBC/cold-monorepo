@@ -8,6 +8,8 @@ import { TableActions } from './actions/tableActions';
 import { axiosFetcher } from '../../../fetchers/axiosFetcher';
 import { darkTableTheme } from '../../../themes/flowbiteThemeOverride';
 import { cloneDeep } from 'lodash';
+import { withErrorBoundary } from 'react-error-boundary';
+import { ErrorFallback } from '../../application/errors/errorFallback';
 
 export interface DatagridProps {
   definitionURL: string;
@@ -15,7 +17,7 @@ export interface DatagridProps {
   fetcher?: (...args: any[]) => Promise<any>;
 }
 
-export const Datagrid = (props: DatagridProps) => {
+const _Datagrid = (props: DatagridProps) => {
   const items = props.items;
   const definitionURL = props.definitionURL || '/components/datagrid';
   const {
@@ -123,3 +125,10 @@ export const Datagrid = (props: DatagridProps) => {
     return <></>;
   }
 };
+
+export const Datagrid = withErrorBoundary(_Datagrid, {
+  FallbackComponent: ErrorFallback,
+  onError: (error, info) => {
+    console.error('Error occurred in Datagrid: ', error);
+  },
+});
