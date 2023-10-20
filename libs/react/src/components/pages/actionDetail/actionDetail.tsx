@@ -126,27 +126,25 @@ const _ActionDetail = ({ id }: Props) => {
           <Card title="About this action" glow className="gap-0">
             <div className="flex h-full">
               <div>
-                <h4 className="font-bold text-sm leading-normal mt-4 mb-2">
+                <div className="font-bold text-body leading-normal mt-4 mb-2">
                   Objective
-                </h4>
-                <p className="m-0 font-medium text-sm leading-normal mb-4">
+                </div>
+                <div className="m-0 text-body leading-normal mb-4">
                   {data?.action.overview}
-                </p>
-                <p className="m-0 font-medium text-sm leading-normal">
+                </div>
+                <div className="m-0 text-body leading-normal">
                   {data?.action.objective_description}
-                </p>
-                <h4 className="font-bold text-sm leading-normal mt-4 mb-2">
-                  How we're going to do it
-                </h4>
-                <ol className="list-decimal list-outside pl-6">
-                  {data?.action.steps.map((step) => (
-                    <li>
-                      <p className="m-0 font-medium text-sm leading-normal">
-                        {step.overview}
-                      </p>
-                    </li>
-                  ))}
-                </ol>
+                </div>
+                {data?.action.process_description && (
+                  <>
+                    <div className="font-bold text-body leading-normal mt-4 mb-2">
+                      How we're going to do it
+                    </div>
+                    <p className={'pl-6 text-body whitespace-pre-wrap'}>
+                      {data.action.process_description}
+                    </p>
+                  </>
+                )}
                 {data?.action.areas_of_impact && (
                   <div className="flex items-center mt-10 text-xs font-medium leading-none">
                     <span className="">Areas of impact:</span>
