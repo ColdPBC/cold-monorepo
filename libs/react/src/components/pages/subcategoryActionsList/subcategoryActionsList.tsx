@@ -77,11 +77,13 @@ const _SubcategoryActionsList = () => {
   return (
     <AppContent title={subcategoryName}>
       <CenterColumnContent>
-        <Card glow>
-          <div className={'text-body text-tc-primary'}>
-            {subcategoryData?.subcategory_description}
-          </div>
-        </Card>
+        {subcategoryData?.subcategory_description && (
+          <Card glow>
+            <div className={'text-body text-tc-primary'}>
+              {subcategoryData?.subcategory_description}
+            </div>
+          </Card>
+        )}
         {actions
           ?.filter((actionPayload) => actionPayload.action.subcategory === name)
           .map((actionPayload) => {
