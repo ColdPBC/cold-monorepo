@@ -60,7 +60,7 @@ export const StepDetail = ({ step, handleStepUpdate }: StepDetailProps) => {
                   setComplete={(complete) => {
                     handleCheckBoxClick({
                       ...step,
-                      complete: complete || null,
+                      complete: complete,
                     });
                   }}
                 />

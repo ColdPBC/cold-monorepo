@@ -7,7 +7,7 @@ import { Step } from '@coldpbc/interfaces';
 
 export type StepDetailsCheckboxProps = {
   complete: Step['complete'];
-  setComplete: (complete: string | undefined) => void;
+  setComplete: (complete: Step['complete']) => void;
 };
 
 export const StepDetailsCheckbox = ({
@@ -36,7 +36,7 @@ export const StepDetailsCheckbox = ({
 
   const onCheckboxClick = (event: MouseEvent<HTMLElement>) => {
     if (complete) {
-      setComplete(undefined);
+      setComplete(null);
       setCheckboxClicked(true);
     } else {
       setComplete(new Date().toISOString());
