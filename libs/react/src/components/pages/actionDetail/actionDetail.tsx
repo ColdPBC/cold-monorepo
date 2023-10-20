@@ -53,10 +53,15 @@ const _ActionDetail = ({ id }: Props) => {
       JSON.stringify(newAction),
     ]);
 
-    await mutate({
-      ...data,
-      ...newAction,
-    });
+    await mutate(
+      {
+        ...data,
+        ...newAction,
+      },
+      {
+        revalidate: false,
+      },
+    );
 
     await globalMutate([
       `/organizations/${user?.coldclimate_claims.org_id}/actions`,
