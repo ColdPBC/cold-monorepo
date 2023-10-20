@@ -1,3 +1,12 @@
+# [1.50.0](https://github.com/ColdPBC/ui/compare/v1.49.0...v1.50.0) (2023-10-19)
+
+
+### Features
+
+* add form section component to error boundary handling ([f2150fd](https://github.com/ColdPBC/ui/commit/f2150fd8803193119869d92ee57fb71af1feb7d2))
+* Create error boundary ([4cf6aec](https://github.com/ColdPBC/ui/commit/4cf6aec5691a9f29c7003f9f804cb84da1dddbd1))
+* Render fallback to avoid dependency when initially rendering ([3903dc1](https://github.com/ColdPBC/ui/commit/3903dc17698cfc89527a775df21ff69ef79bd782))
+
 # [1.49.0](https://github.com/ColdPBC/ui/compare/v1.48.0...v1.49.0) (2023-10-19)
 
 
