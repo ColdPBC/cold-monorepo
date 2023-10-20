@@ -140,7 +140,7 @@ const _ActionDetail = ({ id }: Props) => {
                     <div className="font-bold text-body leading-normal mt-4 mb-2">
                       How we're going to do it
                     </div>
-                    <p className={'pl-6 text-body whitespace-pre-wrap'}>
+                    <p className={'pl-1 text-body whitespace-pre-wrap'}>
                       {data.action.process_description}
                     </p>
                   </>
