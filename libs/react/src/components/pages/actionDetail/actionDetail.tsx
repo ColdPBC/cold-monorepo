@@ -11,7 +11,7 @@ import { Datepicker } from 'flowbite-react';
 import { Dropdown } from 'flowbite-react';
 import { flowbiteThemeOverride } from '@coldpbc/themes';
 import { DateTime } from 'luxon';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { ActionDetailProgress } from '../../organisms';
 import { withErrorBoundary } from 'react-error-boundary';
@@ -82,6 +82,17 @@ const _ActionDetail = ({ id }: Props) => {
       },
     });
   };
+
+  useEffect(() => {
+    const reloadActions = async () => {
+      await mutate();
+      await globalMutate([
+        `/organizations/${user?.coldclimate_claims.org_id}/actions`,
+        'GET',
+      ]);
+    };
+    reloadActions();
+  }, [searchParams]);
 
   if (error) {
     return null;
