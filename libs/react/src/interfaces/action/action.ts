@@ -21,7 +21,7 @@ export type Step = {
   assignee?: Assignee;
   overview: string;
   description: string;
-  complete?: string;
+  complete: string | null;
 };
 
 export type Assignee = {

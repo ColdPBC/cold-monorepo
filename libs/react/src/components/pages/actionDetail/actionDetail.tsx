@@ -1,17 +1,17 @@
 import { Card, Takeover, UserSelectDropdown } from '../../molecules';
-import useSWR, { useSWRConfig } from 'swr';
+import useSWR, { mutate as globalMutate } from 'swr';
 import { useAuth0, User } from '@auth0/auth0-react';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { ActionPayload, Assignee } from '@coldpbc/interfaces';
 import { ArrowRightIcon, ChevronDownIcon } from '@heroicons/react/20/solid';
 import { CompletedBanner } from './completedBanner';
-import { Avatar, BaseButton } from '../../atoms';
+import { Avatar, BaseButton, Spinner } from '../../atoms';
 import { ButtonTypes, GlobalSizes } from '@coldpbc/enums';
 import { Datepicker } from 'flowbite-react';
 import { Dropdown } from 'flowbite-react';
 import { flowbiteThemeOverride } from '@coldpbc/themes';
 import { DateTime } from 'luxon';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { ActionDetailProgress } from '../../organisms';
 import { withErrorBoundary } from 'react-error-boundary';
@@ -33,6 +33,8 @@ const _ActionDetail = ({ id }: Props) => {
 
   const isActionComplete = data?.action.steps.every((step) => step.complete);
 
+  const selectedAssignee = data?.action.assignee;
+
   const handleUpdateAction = async (
     updatedAction: Partial<ActionPayload['action']>,
   ) => {
@@ -51,13 +53,15 @@ const _ActionDetail = ({ id }: Props) => {
       JSON.stringify(newAction),
     ]);
 
-    await mutate(
-      {
-        ...data,
-        ...newAction,
-      },
-      { revalidate: false },
-    );
+    await mutate({
+      ...data,
+      ...newAction,
+    });
+
+    await globalMutate([
+      `/organizations/${user?.coldclimate_claims.org_id}/actions`,
+      'GET',
+    ]);
   };
 
   const handleClose = () => {
@@ -79,9 +83,7 @@ const _ActionDetail = ({ id }: Props) => {
     });
   };
 
-  const selectedAssignee = data?.action.assignee;
-
-  if (error && !isLoading) {
+  if (error) {
     return null;
   }
 
@@ -92,7 +94,7 @@ const _ActionDetail = ({ id }: Props) => {
       isLoading={isLoading}
       header={{
         title: {
-          text: 'Renewable Energy Procurement',
+          text: data?.action.title || '',
         },
         dismiss: {
           dismissible: true,

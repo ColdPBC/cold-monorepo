@@ -7,8 +7,25 @@ import {
 } from '../../organisms';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application';
+import { useEffect } from 'react';
+import { mutate } from 'swr';
+import { useSearchParams } from 'react-router-dom';
+import { useAuth0 } from '@auth0/auth0-react';
 
 const _ActionsOverview = () => {
+  // const [searchParams, setSearchParams] = useSearchParams();
+  // const { user } = useAuth0();
+  //
+  // useEffect(() => {
+  //   const reloadActions = async () => {
+  //     await mutate([
+  //       `/organizations/${user?.coldclimate_claims.org_id}/actions`,
+  //       'GET',
+  //     ]);
+  //   };
+  //   reloadActions();
+  // }, [searchParams]);
+
   return (
     <AppContent title="Actions Overview">
       <CenterColumnContent>

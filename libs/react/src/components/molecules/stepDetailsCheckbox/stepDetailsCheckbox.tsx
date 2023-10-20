@@ -3,9 +3,10 @@ import { IconNames } from '@coldpbc/enums';
 import { StepDetailsEmptyCheckBox } from './stepDetailsEmptyCheckBox';
 import { StepDetailsAnimatedCheckbox } from './stepDetailsAnimatedCheckbox';
 import { MouseEvent, useState } from 'react';
+import { Step } from '@coldpbc/interfaces';
 
 export type StepDetailsCheckboxProps = {
-  complete: string | undefined;
+  complete: Step['complete'];
   setComplete: (complete: string | undefined) => void;
 };
 

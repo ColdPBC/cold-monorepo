@@ -13,10 +13,7 @@ export type StepDetailProps = {
   handleStepUpdate: (step: Step) => void;
 };
 
-export const StepDetail = ({
-  step,
-  handleStepUpdate,
-}: StepDetailProps) => {
+export const StepDetail = ({ step, handleStepUpdate }: StepDetailProps) => {
   const assigneeSelectorRef = React.useRef<HTMLDivElement>(null);
   const stepDetailsCheckboxRef = React.useRef<HTMLDivElement>(null);
 
@@ -24,7 +21,6 @@ export const StepDetail = ({
     step: Step,
     assignee: Assignee | undefined,
   ) => {
-
     const updatedStep = {
       ...step,
       assignee: assignee,
@@ -64,7 +60,7 @@ export const StepDetail = ({
                   setComplete={(complete) => {
                     handleCheckBoxClick({
                       ...step,
-                      complete: complete,
+                      complete: complete || null,
                     });
                   }}
                 />

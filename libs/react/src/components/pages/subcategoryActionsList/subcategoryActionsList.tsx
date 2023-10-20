@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import {
   AppContent,
   CenterColumnContent,
@@ -6,16 +6,19 @@ import {
   SubcategoryActionDetailsCard,
   SubcategoryFootprintCard,
 } from '@coldpbc/components';
-import useSWR from 'swr';
+import useSWR, { mutate } from 'swr';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { Card, SubcategoryJourneyPreview } from '../../molecules';
 import { useAuth0, User } from '@auth0/auth0-react';
 import { ActionPayload } from '@coldpbc/interfaces';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application/errors/errorFallback';
+import { useEffect } from 'react';
 
 const _SubcategoryActionsList = () => {
   const { user } = useAuth0();
+
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const { name } = useParams();
 
@@ -25,12 +28,24 @@ const _SubcategoryActionsList = () => {
     data: actions,
     error: actionsError,
     isLoading: actionsIsLoading,
+    mutate,
   } = useSWR<ActionPayload[], any, any>(
     user?.coldclimate_claims.org_id
       ? [`/organizations/${user.coldclimate_claims.org_id}/actions`, 'GET']
       : null,
     axiosFetcher,
   );
+
+  actions?.sort((a, b) => {
+    return a.id.localeCompare(b.id);
+  });
+
+  useEffect(() => {
+    const reloadActions = async () => {
+      await mutate();
+    };
+    reloadActions();
+  }, [searchParams]);
 
   if (!name) return null;
 
