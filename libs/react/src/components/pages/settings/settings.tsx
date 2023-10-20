@@ -96,7 +96,7 @@ const _Settings = (props: { user?: any }) => {
             ]}
           >
             {hasPendingInvitations && (
-              <div className="absolute top-[1.1rem] right-40">
+              <div className="absolute top-[18px] right-40">
                 <Dropdown
                   inline={true}
                   label={
