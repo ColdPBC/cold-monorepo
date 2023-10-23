@@ -1,17 +1,17 @@
 import { Card, Takeover, UserSelectDropdown } from '../../molecules';
-import useSWR, { useSWRConfig } from 'swr';
+import useSWR, { mutate as globalMutate } from 'swr';
 import { useAuth0, User } from '@auth0/auth0-react';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { ActionPayload, Assignee } from '@coldpbc/interfaces';
 import { ArrowRightIcon, ChevronDownIcon } from '@heroicons/react/20/solid';
 import { CompletedBanner } from './completedBanner';
-import { Avatar, BaseButton } from '../../atoms';
+import { Avatar, BaseButton, Spinner } from '../../atoms';
 import { ButtonTypes, GlobalSizes } from '@coldpbc/enums';
 import { Datepicker } from 'flowbite-react';
 import { Dropdown } from 'flowbite-react';
 import { flowbiteThemeOverride } from '@coldpbc/themes';
 import { DateTime } from 'luxon';
-import { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { ActionDetailProgress } from '../../organisms';
 import { withErrorBoundary } from 'react-error-boundary';
@@ -32,6 +32,8 @@ const _ActionDetail = ({ id }: Props) => {
   );
 
   const isActionComplete = data?.action.steps.every((step) => step.complete);
+
+  const selectedAssignee = data?.action.assignee;
 
   const handleUpdateAction = async (
     updatedAction: Partial<ActionPayload['action']>,
@@ -56,8 +58,15 @@ const _ActionDetail = ({ id }: Props) => {
         ...data,
         ...newAction,
       },
-      { revalidate: false },
+      {
+        revalidate: false,
+      },
     );
+
+    await globalMutate([
+      `/organizations/${user?.coldclimate_claims.org_id}/actions`,
+      'GET',
+    ]);
   };
 
   const handleClose = () => {
@@ -79,9 +88,18 @@ const _ActionDetail = ({ id }: Props) => {
     });
   };
 
-  const selectedAssignee = data?.action.assignee;
+  useEffect(() => {
+    const reloadActions = async () => {
+      await mutate();
+      await globalMutate([
+        `/organizations/${user?.coldclimate_claims.org_id}/actions`,
+        'GET',
+      ]);
+    };
+    reloadActions();
+  }, [searchParams]);
 
-  if (error && !isLoading) {
+  if (error) {
     return null;
   }
 
@@ -92,7 +110,7 @@ const _ActionDetail = ({ id }: Props) => {
       isLoading={isLoading}
       header={{
         title: {
-          text: 'Renewable Energy Procurement',
+          text: data?.action.title || '',
         },
         dismiss: {
           dismissible: true,
@@ -108,27 +126,25 @@ const _ActionDetail = ({ id }: Props) => {
           <Card title="About this action" glow className="gap-0">
             <div className="flex h-full">
               <div>
-                <h4 className="font-bold text-sm leading-normal mt-4 mb-2">
+                <div className="font-bold text-body leading-normal mt-4 mb-2">
                   Objective
-                </h4>
-                <p className="m-0 font-medium text-sm leading-normal mb-4">
+                </div>
+                <div className="m-0 text-body leading-normal mb-4">
                   {data?.action.overview}
-                </p>
-                <p className="m-0 font-medium text-sm leading-normal">
+                </div>
+                <div className="m-0 text-body leading-normal">
                   {data?.action.objective_description}
-                </p>
-                <h4 className="font-bold text-sm leading-normal mt-4 mb-2">
-                  How we're going to do it
-                </h4>
-                <ol className="list-decimal list-outside pl-6">
-                  {data?.action.steps.map((step) => (
-                    <li>
-                      <p className="m-0 font-medium text-sm leading-normal">
-                        {step.overview}
-                      </p>
-                    </li>
-                  ))}
-                </ol>
+                </div>
+                {data?.action.process_description && (
+                  <>
+                    <div className="font-bold text-body leading-normal mt-4 mb-2">
+                      How we're going to do it
+                    </div>
+                    <p className={'pl-1 text-body whitespace-pre-wrap'}>
+                      {data.action.process_description}
+                    </p>
+                  </>
+                )}
                 {data?.action.areas_of_impact && (
                   <div className="flex items-center mt-10 text-xs font-medium leading-none">
                     <span className="">Areas of impact:</span>

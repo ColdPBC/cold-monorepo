@@ -8,9 +8,9 @@ export const Interceptor = () => {
 
   return (
     <div>
-      {surveyName && <Survey surveyName={surveyName} />}
-      {actionId && <ActionDetail id={actionId} />}
       <Outlet />
+      {actionId && <ActionDetail id={actionId} />}
+      {surveyName && <Survey surveyName={surveyName} />}
     </div>
   );
 };
