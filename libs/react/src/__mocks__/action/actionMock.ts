@@ -9,6 +9,8 @@ export const getActionMock = (): ActionPayload => {
       overview:
         "Reduce your company's reliance on fossil fuels by purchasing renewable electricity for your facility.",
       objective_description: `Purchasing RECs is the next best way to decarbonize your electricity footprint if you can’t develop renewable energy resources on-site. RECs - Renewable Energy Certificates - give your organization the right to claim the environmental benefits of renewable energy generated and delivered to the grid. Though they do not not physically alter the actual electricity powering your facilities, RECs can help to drive future market demand for renewables development in your grid region while also directly decreasing your carbon footprint. Not all RECs provide the same environmental benefit, however. Cold makes sure our RECs provide the maximum benefit possible in your electricity market.`,
+      process_description:
+        '1. Determine how much electricity you use in each facility\n2. Cold evaluates your renewable electricity purchasing options for each facility\n3. Select the best available option for renewable electricity and purchase',
       image_url:
         'https://images.unsplash.com/photo-1610891015188-5369212db097?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
       subcategory: 'facilities',
