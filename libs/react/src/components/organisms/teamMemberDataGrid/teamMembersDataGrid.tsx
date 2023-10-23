@@ -212,10 +212,16 @@ export const _TeamMembersDataGrid = ({
     );
   }
 
+  const transformedData = getTransformedData(data?.members ?? []);
+
+  if (selectedMemberStatusType === 'Invitations' && transformedData.length === 0) {
+    return (<div className='flex items-center justify-center p-4 pb-8 w-full'>No outstanding invitations</div>);
+  }
+
   if (data && dataGridUser) {
     return (
       <Datagrid
-        items={getTransformedData(data?.members ?? [])}
+        items={transformedData}
         definitionURL={'/components/team_member_table'}
       />
     );
