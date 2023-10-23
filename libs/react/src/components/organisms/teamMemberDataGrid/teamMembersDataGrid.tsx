@@ -52,10 +52,9 @@ export const _TeamMembersDataGrid = ({
         {
           name: 'resend invite',
           label: 'Resend Invite',
-          url: '/organizations/invitation',
+          url: `/organizations/${data.org_id}/invitation`,
           method: 'PATCH',
           data: {
-            org_id: data.org_id,
             user_email: user.email,
             inviter_name: dataGridUser?.name,
             roleId: ['company:admin'],
@@ -69,10 +68,9 @@ export const _TeamMembersDataGrid = ({
         {
           name: 'cancel invite',
           label: 'Cancel Invite',
-          url: '/organizations/invitation',
+          url: `/organizations/${data.org_id}/invitation`,
           method: 'DELETE',
           data: {
-            org_id: data.org_id,
             user_email: user.email,
           },
           type: 'button',

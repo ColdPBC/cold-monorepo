@@ -128,7 +128,7 @@ export const handlers = [
     },
   ),
 
-  rest.delete(getApiUrl('/organizations/invitation'), async (req, res, ctx) => {
+  rest.delete(getApiUrl('/organizations/:orgId/invitation'), async (req, res, ctx) => {
     let data: {
       org_id: string;
       user_email: string;
@@ -143,7 +143,7 @@ export const handlers = [
     return res(ctx.json({}));
   }),
 
-  rest.post(getApiUrl('/organizations/invitation'), async (req, res, ctx) => {
+  rest.post(getApiUrl('/organizations/:orgId/invitation'), async (req, res, ctx) => {
     const data = req.body as {
       org_id: string;
       user_email: string;
@@ -164,7 +164,7 @@ export const handlers = [
     }
   }),
 
-  rest.patch(getApiUrl('/organizations/invitation'), async (req, res, ctx) => {
+  rest.patch(getApiUrl('/organizations/:orgId/invitation'), async (req, res, ctx) => {
     const data = req.body as {
       org_id: string;
       user_email: string;
