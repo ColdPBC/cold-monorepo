@@ -35,10 +35,12 @@ export const getActionMock = (): ActionPayload => {
         {
           overview: "Sign up for your utility's renewable energy program",
           description: 'Test Step 3',
+          complete: null,
         },
         {
           overview: 'Test Step 4',
           description: 'Test Step 4',
+          complete: null,
         },
       ],
       areas_of_impact: ['Test Area 1', 'Test Area 2'],
@@ -106,7 +108,7 @@ export const getActionsMock = (): ActionPayload[] => {
           {
             overview: "Sign up for your utility's renewable energy program",
             description: 'Test Step 3',
-            complete: '',
+            complete: null,
           },
         ],
         areas_of_impact: ['Electricity'],
@@ -141,12 +143,12 @@ export const getActionsMock = (): ActionPayload[] => {
           {
             overview: "Sign up for your utility's renewable energy program",
             description: 'Test Step 1',
-            complete: '',
+            complete: null,
           },
           {
             overview: 'Test Step 2',
             description: 'Test Step 2',
-            complete: '',
+            complete: null,
           },
           {
             overview: 'Step 3 overview',
@@ -215,7 +217,7 @@ export const getActionsMock = (): ActionPayload[] => {
           {
             overview: "Sign up for your utility's renewable energy program",
             description: 'Test Step 1',
-            complete: '',
+            complete: null,
           },
           {
             overview: 'Test Step 2',
