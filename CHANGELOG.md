@@ -1,3 +1,17 @@
+## [1.50.1](https://github.com/ColdPBC/ui/compare/v1.50.0...v1.50.1) (2023-10-23)
+
+
+### Bug Fixes
+
+* Invite member button on settings page does not send invitation t… ([#114](https://github.com/ColdPBC/ui/issues/114)) ([96392fe](https://github.com/ColdPBC/ui/commit/96392fe526c5c0bf3a7499bdfc9042a3ebb65c95))
+* Invite member button on settings page does not send invitation to new user ([82e24bd](https://github.com/ColdPBC/ui/commit/82e24bd95f84b65c148f10fad772321797f92d07))
+
+
+### Reverts
+
+* Revert "Auxiliary commit to revert individual files from 5ab276832fd7b6299dd8fa043118927ffa5a4588" ([44e440f](https://github.com/ColdPBC/ui/commit/44e440f9ca913941d2feda9ab28e3151b26c71fd))
+* Revert "Auxiliary commit to revert individual files from 1156ece27c8484c892aaf9cef8b8429b128ee31a" ([7c0fffd](https://github.com/ColdPBC/ui/commit/7c0fffd1e82a9e509687be852f380b4c8a077027))
+
 # [1.50.0](https://github.com/ColdPBC/ui/compare/v1.49.0...v1.50.0) (2023-10-19)
 
 
