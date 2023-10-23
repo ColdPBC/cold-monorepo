@@ -207,12 +207,12 @@ export const getActionHandler = {
                   given_name: members[0].given_name,
                   picture: members[0].picture,
                 },
-                complete: undefined,
+                complete: null,
               };
             } else {
               return {
                 ...step,
-                complete: undefined,
+                complete: null,
               };
             }
           }),
