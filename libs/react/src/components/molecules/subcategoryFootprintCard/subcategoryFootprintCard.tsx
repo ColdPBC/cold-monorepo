@@ -15,6 +15,7 @@ import {
 } from '@coldpbc/themes';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application/errors/errorFallback';
+import { useOrgSWR } from '../../../hooks/useOrgSWR';
 
 interface Props {
   variant?: EmissionsDonutChartVariants;
@@ -43,7 +44,7 @@ const _SubcategoryFootprintCard = ({
     SubCategoryTotal[]
   >([]);
 
-  const { data, error, isLoading } = useSWR<any>(
+  const { data, error, isLoading } = useOrgSWR<any>(
     ['/categories/company_decarbonization', 'GET'],
     axiosFetcher,
   );

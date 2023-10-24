@@ -14,12 +14,13 @@ import { DismissableInfoCard } from '../../molecules/dismissableInfoCard';
 import { EmissionsDonutChartVariants } from '../../atoms/emissionsDonutChart/emissionsDonutChart';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application/errors/errorFallback';
+import { useOrgSWR } from '../../../hooks/useOrgSWR';
 
 const PERIOD = 2022;
 
 function _Footprint() {
   // Get footprint data from SWR
-  const { data, error, isLoading } = useSWR<any>(
+  const { data, error, isLoading } = useOrgSWR<any>(
     ['/categories/company_decarbonization', 'GET'],
     axiosFetcher,
   );
@@ -34,8 +35,6 @@ function _Footprint() {
           activity.footprint?.[PERIOD].value !== null,
       ),
     );
-
-  console.log({ isEmptyFootprintData, data });
 
   const auth0 = useAuth0();
   if (auth0.isLoading) {

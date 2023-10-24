@@ -6,6 +6,7 @@ import { axiosFetcher } from '@coldpbc/fetchers';
 import useSWR from 'swr';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application/errors/errorFallback';
+import { useOrgSWR } from '../../../hooks/useOrgSWR';
 
 export interface SubcategoryActionsOverviewCardProps {
   subcategory_key: string;
@@ -16,14 +17,12 @@ const _SubcategoryActionsOverviewCard = ({
   subcategory_key,
   category_key,
 }: SubcategoryActionsOverviewCardProps) => {
-  const { user } = useAuth0();
-
-  const { data } = useSWR<ActionPayload[], any, any>(
-    [`/organizations/${user?.coldclimate_claims.org_id}/actions`, 'GET'],
+  const { data } = useOrgSWR<ActionPayload[], any>(
+    [`/actions`, 'GET'],
     axiosFetcher,
   );
 
-  const { data: categoryData } = useSWR<any>(
+  const { data: categoryData } = useOrgSWR<any>(
     ['/categories', 'GET'],
     axiosFetcher,
   );

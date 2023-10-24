@@ -11,6 +11,7 @@ import { SurveyPayloadType } from '@coldpbc/interfaces';
 import { EmissionsDonutChartVariants } from '../../atoms/emissionsDonutChart/emissionsDonutChart';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application/errors/errorFallback';
+import { useOrgSWR } from '../../../hooks/useOrgSWR';
 
 export interface FootprintOverviewCardProps {
   headerless?: boolean;
@@ -25,12 +26,12 @@ function _FootprintOverviewCard(
   const navigate = useNavigate();
 
   // Get footprint data from SWR
-  const { data, isLoading } = useSWR<any>(
+  const { data, isLoading } = useOrgSWR<any>(
     ['/categories/company_decarbonization', 'GET'],
     axiosFetcher,
   );
 
-  const surveyResponse = useSWR<SurveyPayloadType, any, any>(
+  const surveyResponse = useOrgSWR<SurveyPayloadType>(
     [`/surveys/footprint_overview`, 'GET'],
     axiosFetcher,
   );

@@ -16,6 +16,7 @@ import { useSearchParams } from 'react-router-dom';
 import { ActionDetailProgress } from '../../organisms';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application';
+import { useFetchOrg, useOrgSWR } from '@coldpbc/hooks';
 
 interface Props {
   id: string;
@@ -23,11 +24,11 @@ interface Props {
 
 const _ActionDetail = ({ id }: Props) => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const { user } = useAuth0();
+  const { getApiUrl } = useFetchOrg();
   const [show, setShow] = useState(true);
 
-  const { data, error, isLoading, mutate } = useSWR<ActionPayload, any, any>(
-    [`/organizations/${user?.coldclimate_claims.org_id}/actions/${id}`, 'GET'],
+  const { data, error, isLoading, mutate } = useOrgSWR<ActionPayload, any>(
+    [`/actions/${id}`, 'GET'],
     axiosFetcher,
   );
 
@@ -48,7 +49,7 @@ const _ActionDetail = ({ id }: Props) => {
     };
 
     await axiosFetcher([
-      `/organizations/${user?.coldclimate_claims.org_id}/actions/${data.id}`,
+      getApiUrl(`/actions/${data.id}`),
       'PATCH',
       JSON.stringify(newAction),
     ]);
@@ -63,10 +64,7 @@ const _ActionDetail = ({ id }: Props) => {
       },
     );
 
-    await globalMutate([
-      `/organizations/${user?.coldclimate_claims.org_id}/actions`,
-      'GET',
-    ]);
+    await globalMutate([getApiUrl(`/actions`), 'GET']);
   };
 
   const handleClose = () => {
@@ -91,10 +89,7 @@ const _ActionDetail = ({ id }: Props) => {
   useEffect(() => {
     const reloadActions = async () => {
       await mutate();
-      await globalMutate([
-        `/organizations/${user?.coldclimate_claims.org_id}/actions`,
-        'GET',
-      ]);
+      await globalMutate([getApiUrl(`/actions`), 'GET']);
     };
     reloadActions();
   }, [searchParams]);
@@ -249,7 +244,6 @@ const _ActionDetail = ({ id }: Props) => {
                   theme={flowbiteThemeOverride.datepicker}
                   showClearButton={false}
                   onSelectedDateChanged={(date) => {
-                    console.log({ onInput: date.toISOString() });
                     handleUpdateAction({
                       due_date: date.toISOString(),
                     });

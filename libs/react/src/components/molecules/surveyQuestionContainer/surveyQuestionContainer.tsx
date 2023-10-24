@@ -6,13 +6,14 @@ import {
   SurveyPayloadType,
   SurveySectionType,
 } from '@coldpbc/interfaces';
-import { BaseButton } from '../../atoms';
+import { BaseButton, Spinner } from '../../atoms';
 import { ButtonTypes, GlobalSizes } from '@coldpbc/enums';
 import { CSSTransition, SwitchTransition } from 'react-transition-group';
 import { getSectionIndex, isKeyValueFollowUp } from '@coldpbc/lib';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application';
+import { useFetchOrg } from '../../../hooks/useFetchOrg';
 
 export interface SurveyQuestionContainerProps {
   activeKey: SurveyActiveKeyType;
@@ -29,6 +30,7 @@ const _SurveyQuestionContainer = ({
   surveyData,
   setSurveyData,
 }: SurveyQuestionContainerProps) => {
+  const { getApiUrl, isLoading, error } = useFetchOrg();
   const nextQuestionTransitionClassNames = {
     enter: 'transform translate-y-full',
     enterDone: 'transition ease-out duration-200 transform translate-y-0',
@@ -470,7 +472,7 @@ const _SurveyQuestionContainer = ({
 
   const putSurveyData = (survey: SurveyPayloadType) => {
     axiosFetcher([
-      `/surveys/${name}`,
+      getApiUrl(`/surveys/${name}`),
       'PUT',
       JSON.stringify({
         definition: survey.definition,
@@ -508,6 +510,19 @@ const _SurveyQuestionContainer = ({
   useEffect(() => {
     getActiveQuestion();
   }, [activeKey, surveyData]);
+
+  if (isLoading) {
+    return (
+      <div>
+        <Spinner />
+      </div>
+    );
+  }
+
+  if (error) {
+    console.error(error);
+    return <div></div>;
+  }
 
   if (activeQuestion !== undefined) {
     return (

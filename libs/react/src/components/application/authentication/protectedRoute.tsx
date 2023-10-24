@@ -13,7 +13,7 @@ import useSWR from 'swr';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { get, has, isEmpty, isUndefined } from 'lodash';
 import { PolicySignedDataType } from '@coldpbc/interfaces';
-import { useAuth0Wrapper } from '@coldpbc/hooks';
+import { useAuth0Wrapper, useOrgSWR } from '@coldpbc/hooks';
 import { SurveyPayloadType } from '@coldpbc/interfaces';
 import { withErrorBoundary } from 'react-error-boundary';
 
@@ -59,7 +59,7 @@ const _ProtectedRoute = () => {
     // if (isUndefined(user?.coldclimate_claims.org_id)) return true;
   };
 
-  const initialSurveySWR = useSWR<SurveyPayloadType, any, any>(
+  const initialSurveySWR = useOrgSWR<SurveyPayloadType, any>(
     user && isAuthenticated ? [`/surveys/journey_overview`, 'GET'] : null,
     axiosFetcher,
   );
