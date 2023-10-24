@@ -8,7 +8,7 @@ import { twMerge } from 'tailwind-merge';
 import { Avatar } from '../../atoms';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application/errors/errorFallback';
-import { useFetchOrg, useOrgSWR } from '@coldpbc/hooks';
+import { useAuth0Wrapper, useOrgSWR } from '@coldpbc/hooks';
 
 interface Props extends Omit<DropdownProps, 'onSelect' | 'label'> {
   onSelect: (user: User) => void;

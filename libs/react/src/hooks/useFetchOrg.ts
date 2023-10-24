@@ -4,6 +4,7 @@ export const useFetchOrg = () => {
   // todo here to add code to fetch orgId during impersonation
   let orgId: string | undefined = undefined;
   const auth0 = useAuth0();
+
   if (auth0.user) {
     orgId = auth0.user?.coldclimate_claims.org_id;
   }

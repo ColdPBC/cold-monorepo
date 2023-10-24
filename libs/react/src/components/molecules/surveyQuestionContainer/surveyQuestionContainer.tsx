@@ -13,7 +13,7 @@ import { getSectionIndex, isKeyValueFollowUp } from '@coldpbc/lib';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application';
-import { useFetchOrg } from '../../../hooks/useFetchOrg';
+import { useAuth0Wrapper } from '@coldpbc/hooks';
 
 export interface SurveyQuestionContainerProps {
   activeKey: SurveyActiveKeyType;
@@ -30,7 +30,7 @@ const _SurveyQuestionContainer = ({
   surveyData,
   setSurveyData,
 }: SurveyQuestionContainerProps) => {
-  const { getApiUrl, isLoading, error } = useFetchOrg();
+  const { getApiUrl, isLoading, error } = useAuth0Wrapper();
   const nextQuestionTransitionClassNames = {
     enter: 'transform translate-y-full',
     enterDone: 'transition ease-out duration-200 transform translate-y-0',

@@ -16,7 +16,7 @@ import { useSearchParams } from 'react-router-dom';
 import { ActionDetailProgress } from '../../organisms';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application';
-import { useFetchOrg, useOrgSWR } from '@coldpbc/hooks';
+import { useAuth0Wrapper, useOrgSWR } from '@coldpbc/hooks';
 
 interface Props {
   id: string;
@@ -24,7 +24,7 @@ interface Props {
 
 const _ActionDetail = ({ id }: Props) => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const { getApiUrl } = useFetchOrg();
+  const { getApiUrl } = useAuth0Wrapper();
   const [show, setShow] = useState(true);
 
   const { data, error, isLoading, mutate } = useOrgSWR<ActionPayload, any>(

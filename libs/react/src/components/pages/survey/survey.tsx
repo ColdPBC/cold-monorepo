@@ -9,14 +9,14 @@ import { useSearchParams } from 'react-router-dom';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application/errors/errorFallback';
 import { useOrgSWR } from '../../../hooks/useOrgSWR';
-import { useFetchOrg } from '../../../hooks/useFetchOrg';
+import { useAuth0Wrapper } from '@coldpbc/hooks';
 
 export interface SurveyProps {
   surveyName: string;
 }
 
 const _Survey = (props: SurveyProps) => {
-  const { getApiUrl } = useFetchOrg();
+  const { getApiUrl } = useAuth0Wrapper();
   const { surveyName } = props;
   const [activeKey, setActiveKey] = React.useState<SurveyActiveKeyType>({
     value: '',

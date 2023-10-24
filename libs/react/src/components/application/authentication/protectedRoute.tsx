@@ -25,6 +25,7 @@ const _ProtectedRoute = () => {
     isAuthenticated,
     isLoading,
     getAccessTokenSilently,
+    orgId,
   } = useAuth0Wrapper();
   const { auth0Options } = useContext(ColdContext);
 
@@ -87,10 +88,10 @@ const _ProtectedRoute = () => {
       try {
         if (!isLoading) {
           if (isAuthenticated) {
-            if (ldClient && user?.coldclimate_claims.org_id) {
+            if (ldClient && orgId) {
               await ldClient.identify({
                 kind: 'organization',
-                key: user.coldclimate_claims.org_id,
+                key: orgId,
               });
             }
           } else {
@@ -119,7 +120,14 @@ const _ProtectedRoute = () => {
     };
 
     getUserMetadata();
-  }, [getAccessTokenSilently, user, isAuthenticated, isLoading, appState]);
+  }, [
+    getAccessTokenSilently,
+    user,
+    isAuthenticated,
+    isLoading,
+    appState,
+    orgId,
+  ]);
 
   useEffect(() => {
     if (initialSurveySWR.data?.definition && !needsSignup()) {

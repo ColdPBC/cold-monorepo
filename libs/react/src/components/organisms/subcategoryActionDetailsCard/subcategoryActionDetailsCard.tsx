@@ -11,7 +11,7 @@ import { axiosFetcher } from '@coldpbc/fetchers';
 import { mutate } from 'swr';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application';
-import { useFetchOrg } from '@coldpbc/hooks';
+import { useAuth0Wrapper } from '@coldpbc/hooks';
 
 export type SubcategoryActionDetailsCardProps = {
   actionPayload: ActionPayload;
@@ -24,7 +24,7 @@ const _SubcategoryActionDetailsCard = ({
     return action.dependent_surveys.every((survey) => survey.submitted);
   };
 
-  const { user, getApiUrl } = useFetchOrg();
+  const { user, getApiUrl } = useAuth0Wrapper();
 
   const updateActionData = async (action: ActionPayload) => {
     await patchAction(action);
