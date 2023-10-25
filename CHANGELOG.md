@@ -1,3 +1,22 @@
+# [1.51.0](https://github.com/ColdPBC/ui/compare/v1.50.1...v1.51.0) (2023-10-23)
+
+
+### Bug Fixes
+
+* Handle action type change to fix build ([fdeb6b9](https://github.com/ColdPBC/ui/commit/fdeb6b99bc84b7dbe0f0bc4db6ddc1c9f9a21205))
+
+
+### Features
+
+* added back revalidate false on mutate action ([e18ada5](https://github.com/ColdPBC/ui/commit/e18ada5cbacaa84197e5c6e784168016893c13ce))
+* Better handle action related items SWR cache update ([8ff1cbf](https://github.com/ColdPBC/ui/commit/8ff1cbff78136c1a1bd8bb05fa6783c0a4b611db))
+* do not show category description if it does not exist ([a231dcb](https://github.com/ColdPBC/ui/commit/a231dcbd347f6236d60450166bcf86c20fb9704c))
+* reload actions when the search params are updated ([3e9d009](https://github.com/ColdPBC/ui/commit/3e9d0097368177bd1215af1091c7abce28fbce19))
+* update checkbox return type ([2d05e15](https://github.com/ColdPBC/ui/commit/2d05e152c0c48daad906f2771a4fc80be887eecd))
+* Update mock to dynamic date and not static ([50173eb](https://github.com/ColdPBC/ui/commit/50173ebb6ba5cc8d78552fffd84f81e38c461755))
+* update process description padding ([fbfee15](https://github.com/ColdPBC/ui/commit/fbfee15f23eeb5a270b02546b95c3a9fc75db3ca))
+* updated action detail objective and process description styling ([5906e24](https://github.com/ColdPBC/ui/commit/5906e24dea796b9a963d709c6efdd50b91e11b88))
+
 ## [1.50.1](https://github.com/ColdPBC/ui/compare/v1.50.0...v1.50.1) (2023-10-23)
 
 
