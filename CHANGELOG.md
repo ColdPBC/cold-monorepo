@@ -1,3 +1,10 @@
+## [1.51.1](https://github.com/ColdPBC/ui/compare/v1.51.0...v1.51.1) (2023-10-25)
+
+
+### Bug Fixes
+
+* Update image handling to fit cover container ([95ba7c8](https://github.com/ColdPBC/ui/commit/95ba7c8a340b3427908e39adb9b29468355fe9fc))
+
 # [1.51.0](https://github.com/ColdPBC/ui/compare/v1.50.1...v1.51.0) (2023-10-23)
 
 
