@@ -12,7 +12,7 @@ import { Organization } from 'auth0';
 import ColdContext from '../../../context/coldContext';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application/errors/errorFallback';
-import { useAuth0Wrapper } from '@coldpbc/hooks';
+import { useAuth0Wrapper, useOrgSWR } from '@coldpbc/hooks';
 
 export interface SignupPageProps {
   userData: User;
@@ -20,11 +20,8 @@ export interface SignupPageProps {
 }
 
 const _SignupPage = ({ userData, signedPolicyData }: SignupPageProps) => {
-  const { orgId } = useAuth0Wrapper();
-  const navigate = useNavigate();
-
-  const organizationSWR = useSWR<Organization, any, any>(
-    orgId ? [`/organizations/${orgId}`, 'GET'] : null,
+  const organizationSWR = useOrgSWR<Organization, any>(
+    [``, 'GET'],
     axiosFetcher,
   );
 
