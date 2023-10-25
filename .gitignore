@@ -45,3 +45,4 @@ yalc.*
 /libs/react/src/**/**/index.ts
 /.yarn/cache/**/*
 /.yarn/install-state.gz
+index.ts
