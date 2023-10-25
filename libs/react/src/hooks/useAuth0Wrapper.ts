@@ -26,7 +26,7 @@ export const useAuth0Wrapper = () => {
     orgId = auth0Context.user?.coldclimate_claims.org_id;
   }
 
-  const getApiUrl = (url: string) => {
+  const getOrgSpecificUrl = (url: string) => {
     return '/organizations/' + orgId + url;
   };
 
@@ -34,7 +34,7 @@ export const useAuth0Wrapper = () => {
     ...auth0Context,
     isLoading: auth0Context.isLoading || userData.isLoading,
     error: auth0Context.error || userData.error,
-    getApiUrl,
+    getOrgSpecificUrl,
     orgId,
   };
 };

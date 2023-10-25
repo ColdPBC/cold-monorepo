@@ -24,7 +24,7 @@ const _SubcategoryActionDetailsCard = ({
     return action.dependent_surveys.every((survey) => survey.submitted);
   };
 
-  const { user, getApiUrl } = useAuth0Wrapper();
+  const { user, getOrgSpecificUrl } = useAuth0Wrapper();
 
   const updateActionData = async (action: ActionPayload) => {
     await patchAction(action);
@@ -32,13 +32,13 @@ const _SubcategoryActionDetailsCard = ({
 
   const patchAction = async (action: ActionPayload) => {
     await axiosFetcher([
-      getApiUrl(`/actions/${action.id}`),
+      getOrgSpecificUrl(`/actions/${action.id}`),
       'PATCH',
       JSON.stringify({
         action: action.action,
       }),
     ]);
-    await mutate([getApiUrl(`/actions`), 'GET']);
+    await mutate([getOrgSpecificUrl(`/actions`), 'GET']);
   };
 
   return (

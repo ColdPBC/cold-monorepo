@@ -20,7 +20,7 @@ export interface TeamMembersDataGridProps {
 export const _TeamMembersDataGrid = ({
   selectedMemberStatusType,
 }: TeamMembersDataGridProps) => {
-  const { user: dataGridUser, getApiUrl } = useAuth0Wrapper();
+  const { user: dataGridUser, getOrgSpecificUrl } = useAuth0Wrapper();
 
   const {
     data,
@@ -58,7 +58,7 @@ export const _TeamMembersDataGrid = ({
         {
           name: 'cancel invite',
           label: 'Cancel Invite',
-          url: getApiUrl(`/invitation`),
+          url: getOrgSpecificUrl(`/invitation`),
           method: 'DELETE',
           data: {
             user_email: user.email,
@@ -94,7 +94,7 @@ export const _TeamMembersDataGrid = ({
               variant: ButtonTypes.secondary,
             },
           },
-          url: getApiUrl(`/member`),
+          url: getOrgSpecificUrl(`/member`),
           method: 'DELETE',
           data,
           type: 'modal',
@@ -127,7 +127,7 @@ export const _TeamMembersDataGrid = ({
             },
           },
           urls: user.identities.map((identity: string) => {
-            return getApiUrl(`/members/${identity}/role/company:owner`);
+            return getOrgSpecificUrl(`/members/${identity}/role/company:owner`);
           }),
           method: 'POST',
           type: 'modal',

@@ -16,7 +16,7 @@ export interface SurveyProps {
 }
 
 const _Survey = (props: SurveyProps) => {
-  const { getApiUrl } = useAuth0Wrapper();
+  const { getOrgSpecificUrl } = useAuth0Wrapper();
   const { surveyName } = props;
   const [activeKey, setActiveKey] = React.useState<SurveyActiveKeyType>({
     value: '',
@@ -159,7 +159,7 @@ const _Survey = (props: SurveyProps) => {
       searchParams.delete('surveyName');
       setSearchParams(searchParams);
     }
-    await mutate([getApiUrl(`/surveys/${surveyName}`), 'GET'], {
+    await mutate([getOrgSpecificUrl(`/surveys/${surveyName}`), 'GET'], {
       ...surveyData,
     });
     setShow(false);

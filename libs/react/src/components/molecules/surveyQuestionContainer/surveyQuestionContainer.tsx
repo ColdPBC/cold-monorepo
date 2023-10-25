@@ -30,7 +30,7 @@ const _SurveyQuestionContainer = ({
   surveyData,
   setSurveyData,
 }: SurveyQuestionContainerProps) => {
-  const { getApiUrl, isLoading, error } = useAuth0Wrapper();
+  const { getOrgSpecificUrl, isLoading, error } = useAuth0Wrapper();
   const nextQuestionTransitionClassNames = {
     enter: 'transform translate-y-full',
     enterDone: 'transition ease-out duration-200 transform translate-y-0',
@@ -472,7 +472,7 @@ const _SurveyQuestionContainer = ({
 
   const putSurveyData = (survey: SurveyPayloadType) => {
     axiosFetcher([
-      getApiUrl(`/surveys/${name}`),
+      getOrgSpecificUrl(`/surveys/${name}`),
       'PUT',
       JSON.stringify({
         definition: survey.definition,

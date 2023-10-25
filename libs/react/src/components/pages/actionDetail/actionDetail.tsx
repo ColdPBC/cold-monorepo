@@ -24,7 +24,7 @@ interface Props {
 
 const _ActionDetail = ({ id }: Props) => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const { getApiUrl } = useAuth0Wrapper();
+  const { getOrgSpecificUrl } = useAuth0Wrapper();
   const [show, setShow] = useState(true);
 
   const { data, error, isLoading, mutate } = useOrgSWR<ActionPayload, any>(
@@ -49,7 +49,7 @@ const _ActionDetail = ({ id }: Props) => {
     };
 
     await axiosFetcher([
-      getApiUrl(`/actions/${data.id}`),
+      getOrgSpecificUrl(`/actions/${data.id}`),
       'PATCH',
       JSON.stringify(newAction),
     ]);
@@ -64,7 +64,7 @@ const _ActionDetail = ({ id }: Props) => {
       },
     );
 
-    await globalMutate([getApiUrl(`/actions`), 'GET']);
+    await globalMutate([getOrgSpecificUrl(`/actions`), 'GET']);
   };
 
   const handleClose = () => {
@@ -89,7 +89,7 @@ const _ActionDetail = ({ id }: Props) => {
   useEffect(() => {
     const reloadActions = async () => {
       await mutate();
-      await globalMutate([getApiUrl(`/actions`), 'GET']);
+      await globalMutate([getOrgSpecificUrl(`/actions`), 'GET']);
     };
     reloadActions();
   }, [searchParams]);
