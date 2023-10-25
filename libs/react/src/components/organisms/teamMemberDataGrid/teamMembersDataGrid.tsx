@@ -11,7 +11,7 @@ import { ButtonTypes } from '@coldpbc/enums';
 import { MemberStatusType } from '../../pages';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application/errors/errorFallback';
-import { useAuth0Wrapper } from '@coldpbc/hooks';
+import { useAuth0Wrapper, useOrgSWR } from '@coldpbc/hooks';
 
 export interface TeamMembersDataGridProps {
   selectedMemberStatusType: MemberStatusType;
@@ -26,7 +26,7 @@ export const _TeamMembersDataGrid = ({
     data,
     error,
     isLoading,
-  }: { data: any; error: any; isLoading: boolean } = useSWR(
+  }: { data: any; error: any; isLoading: boolean } = useOrgSWR(
     ['/members', 'GET'],
     axiosFetcher,
     {
