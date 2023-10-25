@@ -1,13 +1,10 @@
 import { useAuth0, User } from '@auth0/auth0-react';
-import useSWR from 'swr';
 import { axiosFetcher } from '@coldpbc/fetchers';
+import useSWR from 'swr';
 
 export const useAuth0Wrapper = () => {
-  // wrap auth0 hook here
-  // fetch the latest user data from the /users endpoint
-  // update the user data in the context
-  // return the user data
   const auth0Context = useAuth0();
+  let orgId: string | undefined = undefined;
 
   const userData = useSWR<User, any, any>(
     auth0Context.user && auth0Context.isAuthenticated
@@ -25,9 +22,19 @@ export const useAuth0Wrapper = () => {
     }
   }
 
+  if (auth0Context.user) {
+    orgId = auth0Context.user?.coldclimate_claims.org_id;
+  }
+
+  const getOrgSpecificUrl = (url: string) => {
+    return '/organizations/' + orgId + url;
+  };
+
   return {
     ...auth0Context,
     isLoading: auth0Context.isLoading || userData.isLoading,
     error: auth0Context.error || userData.error,
+    getOrgSpecificUrl,
+    orgId,
   };
 };

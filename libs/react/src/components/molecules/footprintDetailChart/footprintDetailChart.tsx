@@ -17,6 +17,7 @@ import { useActiveSegment } from '../../../hooks/useActiveSegment';
 import { darkTableTheme } from '@coldpbc/themes';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application/errors/errorFallback';
+import { useOrgSWR } from '../../../hooks/useOrgSWR';
 
 interface LegendRow {
   value: number;
@@ -62,7 +63,7 @@ function _FootprintDetailChart({
   const [totalFootprint, setTotalFootprint] = useState(0);
 
   // Get footprint data from SWR
-  const { data, error, isLoading } = useSWR<any>(
+  const { data, error, isLoading } = useOrgSWR<any>(
     ['/categories/company_decarbonization', 'GET'],
     axiosFetcher,
   );

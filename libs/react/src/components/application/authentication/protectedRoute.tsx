@@ -13,7 +13,7 @@ import useSWR from 'swr';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { get, has, isEmpty, isUndefined } from 'lodash';
 import { PolicySignedDataType } from '@coldpbc/interfaces';
-import { useAuth0Wrapper } from '@coldpbc/hooks';
+import { useAuth0Wrapper, useOrgSWR } from '@coldpbc/hooks';
 import { SurveyPayloadType } from '@coldpbc/interfaces';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorPage } from '../errors/errorPage';
@@ -26,6 +26,7 @@ const _ProtectedRoute = () => {
     isAuthenticated,
     isLoading,
     getAccessTokenSilently,
+    orgId,
   } = useAuth0Wrapper();
   const { auth0Options } = useContext(ColdContext);
 
@@ -60,7 +61,7 @@ const _ProtectedRoute = () => {
     // if (isUndefined(user?.coldclimate_claims.org_id)) return true;
   };
 
-  const initialSurveySWR = useSWR<SurveyPayloadType, any, any>(
+  const initialSurveySWR = useOrgSWR<SurveyPayloadType, any>(
     user && isAuthenticated ? [`/surveys/journey_overview`, 'GET'] : null,
     axiosFetcher,
   );
@@ -89,10 +90,10 @@ const _ProtectedRoute = () => {
         if (!isLoading) {
           if (!error) {
             if (isAuthenticated) {
-              if (ldClient && user?.coldclimate_claims.org_id) {
+              if (ldClient && orgId) {
                 await ldClient.identify({
                   kind: 'organization',
-                  key: user.coldclimate_claims.org_id,
+                  key: orgId,
                 });
               }
             } else {
@@ -126,6 +127,7 @@ const _ProtectedRoute = () => {
     isAuthenticated,
     isLoading,
     appState,
+    orgId,
     error,
   ]);
 
