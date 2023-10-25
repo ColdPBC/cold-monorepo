@@ -1,6 +1,6 @@
 import { useAuth0, User } from '@auth0/auth0-react';
-import useSWR from 'swr';
 import { axiosFetcher } from '@coldpbc/fetchers';
+import useSWR from 'swr';
 
 export const useAuth0Wrapper = () => {
   const auth0Context = useAuth0();
