@@ -16,6 +16,7 @@ import { PolicySignedDataType } from '@coldpbc/interfaces';
 import { useAuth0Wrapper } from '@coldpbc/hooks';
 import { SurveyPayloadType } from '@coldpbc/interfaces';
 import { withErrorBoundary } from 'react-error-boundary';
+import { ErrorPage } from '../errors/errorPage';
 
 const _ProtectedRoute = () => {
   const {
@@ -86,15 +87,15 @@ const _ProtectedRoute = () => {
     const getUserMetadata = async () => {
       try {
         if (!isLoading) {
-          if (isAuthenticated) {
-            if (ldClient && user?.coldclimate_claims.org_id) {
-              await ldClient.identify({
-                kind: 'organization',
-                key: user.coldclimate_claims.org_id,
-              });
-            }
-          } else {
-            if (!isAuthenticated) {
+          if (!error) {
+            if (isAuthenticated) {
+              if (ldClient && user?.coldclimate_claims.org_id) {
+                await ldClient.identify({
+                  kind: 'organization',
+                  key: user.coldclimate_claims.org_id,
+                });
+              }
+            } else {
               await loginWithRedirect({
                 appState: appState,
                 authorizationParams: {
@@ -119,7 +120,14 @@ const _ProtectedRoute = () => {
     };
 
     getUserMetadata();
-  }, [getAccessTokenSilently, user, isAuthenticated, isLoading, appState]);
+  }, [
+    getAccessTokenSilently,
+    user,
+    isAuthenticated,
+    isLoading,
+    appState,
+    error,
+  ]);
 
   useEffect(() => {
     if (initialSurveySWR.data?.definition && !needsSignup()) {
@@ -144,7 +152,7 @@ const _ProtectedRoute = () => {
   if (error || initialSurveySWR.error || signedPolicySWR.error) {
     const errorObj = error || initialSurveySWR.error || signedPolicySWR.error;
     console.error(errorObj);
-    return <div></div>;
+    return <ErrorPage />;
   }
 
   if (isAuthenticated && user) {
