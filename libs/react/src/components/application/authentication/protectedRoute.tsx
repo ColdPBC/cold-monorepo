@@ -90,7 +90,7 @@ const _ProtectedRoute = () => {
         if (!isLoading) {
           if (!error) {
             if (isAuthenticated) {
-              if (ldClient && user?.coldclimate_claims.org_id) {
+              if (ldClient && orgId) {
                 await ldClient.identify({
                   kind: 'organization',
                   key: orgId,
