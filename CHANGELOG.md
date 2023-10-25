@@ -1,3 +1,11 @@
+## [1.51.2](https://github.com/ColdPBC/ui/compare/v1.51.1...v1.51.2) (2023-10-25)
+
+
+### Bug Fixes
+
+* Handle auth0 error with error page ([ee475f1](https://github.com/ColdPBC/ui/commit/ee475f1b3d1c8d2ab41383a2d97d7679511ec3f2))
+* Set new mock data to last month to avoid switching from 4 and 5 weeks ([172991c](https://github.com/ColdPBC/ui/commit/172991c792581d102292d02bbe8569c1fb4c7cf9))
+
 ## [1.51.1](https://github.com/ColdPBC/ui/compare/v1.51.0...v1.51.1) (2023-10-25)
 
 
