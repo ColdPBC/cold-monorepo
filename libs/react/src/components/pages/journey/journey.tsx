@@ -12,11 +12,12 @@ import { JourneyDetailView } from '../../molecules/journeyDetailView';
 import { TemperatureCheckCard } from '../../molecules/temperatureCheckCard';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application/errors/errorFallback';
+import { useOrgSWR } from '@coldpbc/hooks';
 
 const PERIOD = 2022;
 
 function _Journey() {
-  const { data, error, isLoading } = useSWR<any>(
+  const { data, error, isLoading } = useOrgSWR<any>(
     ['/categories/', 'GET'],
     axiosFetcher,
   );

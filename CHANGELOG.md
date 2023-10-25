@@ -1,3 +1,22 @@
+# [1.52.0](https://github.com/ColdPBC/ui/compare/v1.51.2...v1.52.0) (2023-10-25)
+
+
+### Bug Fixes
+
+* remove callback ([05b2d57](https://github.com/ColdPBC/ui/commit/05b2d57d563a79737cf190dc2ae52ceebc09306d))
+
+
+### Features
+
+* add useorgswr to team member table ([3d76f46](https://github.com/ColdPBC/ui/commit/3d76f46c38dd2ed607ec1ed8ba106e701ca42ce0))
+* changed getAPIUrl to getOrgSpecificUrl ([9ce527c](https://github.com/ColdPBC/ui/commit/9ce527cf11fc376e5276954fa1d8c69e638b6aaa))
+* created use swr and auth0 wrapper ([39ba2af](https://github.com/ColdPBC/ui/commit/39ba2aff6c8a134f771d4822bcb1ba4916b338cc))
+* remove coldclimate org id references ([520c791](https://github.com/ColdPBC/ui/commit/520c7911287a67dc5af19c3a11182980b6dac9db))
+* remove index ts from prebuild ([8c691d7](https://github.com/ColdPBC/ui/commit/8c691d77264c1dfa274f3ed87bff968d9605d370))
+* remove old code from bad merge ([a717140](https://github.com/ColdPBC/ui/commit/a71714037492c0c25c4fef773b5af2975bbd25d7))
+* remove usefetchorg no longer used ([54c11d6](https://github.com/ColdPBC/ui/commit/54c11d61c75184898a0b03b1f1db4c845f3983f2))
+* Useorgswr instead of swr when fetching organization data ([49a0438](https://github.com/ColdPBC/ui/commit/49a0438995b3291c86d7f5fece30167d337404ba))
+
 ## [1.51.2](https://github.com/ColdPBC/ui/compare/v1.51.1...v1.51.2) (2023-10-25)
 
 

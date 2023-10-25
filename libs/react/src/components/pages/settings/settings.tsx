@@ -18,11 +18,12 @@ import { flowbiteThemeOverride } from '@coldpbc/themes';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application/errors/errorFallback';
+import { useAuth0Wrapper, useOrgSWR } from '@coldpbc/hooks';
 
 export type MemberStatusType = 'Members' | 'Invitations';
 
 const _Settings = (props: { user?: any }) => {
-  const auth0 = useAuth0();
+  const auth0 = useAuth0Wrapper();
   const ldFlags = useFlags();
 
   const [showModal, setShowModal] = useState(false);
@@ -30,27 +31,12 @@ const _Settings = (props: { user?: any }) => {
     useState<MemberStatusType>('Members');
 
   const organization = useSWR(
-    ['/organizations/' + auth0.user?.coldclimate_claims.org_id, 'GET'],
+    ['/organizations/' + auth0.orgId, 'GET'],
     axiosFetcher,
   );
 
-  const { data: Organization } = organization;
-
-  const { user: dataGridUser } = useAuth0();
-
-  const getOrgURL = () => {
-    if (dataGridUser?.coldclimate_claims.org_id) {
-      return [
-        '/organizations/' + dataGridUser.coldclimate_claims.org_id + '/members',
-        'GET',
-      ];
-    } else {
-      return null;
-    }
-  };
-
   const { data: memberData }: { data: any; error: any; isLoading: boolean } =
-    useSWR(getOrgURL(), axiosFetcher, {
+    useOrgSWR(['/members', 'GET'], axiosFetcher, {
       revalidateOnFocus: false,
     });
 

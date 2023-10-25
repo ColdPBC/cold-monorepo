@@ -11,6 +11,7 @@ import { ButtonTypes } from '@coldpbc/enums';
 import { MemberStatusType } from '../../pages';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application/errors/errorFallback';
+import { useAuth0Wrapper, useOrgSWR } from '@coldpbc/hooks';
 
 export interface TeamMembersDataGridProps {
   selectedMemberStatusType: MemberStatusType;
@@ -19,25 +20,14 @@ export interface TeamMembersDataGridProps {
 export const _TeamMembersDataGrid = ({
   selectedMemberStatusType,
 }: TeamMembersDataGridProps) => {
-  const { user: dataGridUser } = useAuth0();
-
-  const getOrgURL = () => {
-    if (dataGridUser?.coldclimate_claims.org_id) {
-      return [
-        '/organizations/' + dataGridUser.coldclimate_claims.org_id + '/members',
-        'GET',
-      ];
-    } else {
-      return null;
-    }
-  };
+  const { user: dataGridUser, getOrgSpecificUrl } = useAuth0Wrapper();
 
   const {
     data,
     error,
     isLoading,
-  }: { data: any; error: any; isLoading: boolean } = useSWR(
-    getOrgURL(),
+  }: { data: any; error: any; isLoading: boolean } = useOrgSWR(
+    ['/members', 'GET'],
     axiosFetcher,
     {
       revalidateOnFocus: false,
@@ -68,7 +58,7 @@ export const _TeamMembersDataGrid = ({
         {
           name: 'cancel invite',
           label: 'Cancel Invite',
-          url: `/organizations/${data.org_id}/invitation`,
+          url: getOrgSpecificUrl(`/invitation`),
           method: 'DELETE',
           data: {
             user_email: user.email,
@@ -104,7 +94,7 @@ export const _TeamMembersDataGrid = ({
               variant: ButtonTypes.secondary,
             },
           },
-          url: `/organizations/${data.org_id}/member`,
+          url: getOrgSpecificUrl(`/member`),
           method: 'DELETE',
           data,
           type: 'modal',
@@ -137,7 +127,7 @@ export const _TeamMembersDataGrid = ({
             },
           },
           urls: user.identities.map((identity: string) => {
-            return `/organizations/${data?.org_id}/members/${identity}/role/company:owner`;
+            return getOrgSpecificUrl(`/members/${identity}/role/company:owner`);
           }),
           method: 'POST',
           type: 'modal',
