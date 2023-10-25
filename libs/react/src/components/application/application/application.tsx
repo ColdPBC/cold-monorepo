@@ -1,6 +1,6 @@
-import { ColdRoutes } from '../routes/routes';
+import { ColdRoutes } from '../routes';
 import { matchRoutes, useLocation } from 'react-router-dom';
-import { GuidanceButton } from '../../molecules/guidanceButton/guidanceButton';
+import { GuidanceButton } from '../../molecules';
 
 export const Application = () => {
   const location = useLocation();
