@@ -102,10 +102,11 @@ export const ActionItem = ({
   };
 
   const getImageClass = () => {
+    const className = 'rounded-lg w-[64px] bg-cover bg-center bg-no-repeat';
     if (variant === ActionItemVariants.SubcategoryActionDetailsCard) {
-      return 'rounded-lg w-[64px] min-h-[153px]';
+      return className + ' min-h-[153px]';
     } else {
-      return 'rounded-lg w-[64px]';
+      return className;
     }
   };
 
@@ -140,7 +141,7 @@ export const ActionItem = ({
       <div
         className={getImageClass()}
         style={{
-          background: `url(${action.image_url})`,
+          backgroundImage: `url(${action.image_url})`,
         }}
       ></div>
       <div className={getContentClass()}>
