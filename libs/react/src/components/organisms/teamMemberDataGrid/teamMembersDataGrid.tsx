@@ -7,11 +7,11 @@ import { orderBy } from 'lodash';
 import { Avatar } from '../../atoms/avatar/avatar';
 import { axiosFetcher } from '../../../fetchers/axiosFetcher';
 import { useAuth0 } from '@auth0/auth0-react';
-import { ButtonTypes } from '@coldpbc/enums';
+import { ButtonTypes, ErrorType } from '@coldpbc/enums';
 import { MemberStatusType } from '../../pages';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application/errors/errorFallback';
-import { useAuth0Wrapper, useOrgSWR } from '@coldpbc/hooks';
+import { useAuth0Wrapper, useColdContext, useOrgSWR } from '@coldpbc/hooks';
 
 export interface TeamMembersDataGridProps {
   selectedMemberStatusType: MemberStatusType;
@@ -33,7 +33,7 @@ export const _TeamMembersDataGrid = ({
       revalidateOnFocus: false,
     },
   );
-
+  const { logError } = useColdContext();
   const getActions = (user: any) => {
     // TODO: remove empty array after actions are refactored for new data structure
     return [];
@@ -191,7 +191,8 @@ export const _TeamMembersDataGrid = ({
   };
 
   if (error) {
-    return <div>Failed to load</div>;
+    if (error) logError(error, ErrorType.SWRError);
+    return null;
   }
 
   if (isLoading) {
@@ -204,8 +205,15 @@ export const _TeamMembersDataGrid = ({
 
   const transformedData = getTransformedData(data?.members ?? []);
 
-  if (selectedMemberStatusType === 'Invitations' && transformedData.length === 0) {
-    return (<div className='flex items-center justify-center p-4 pb-8 w-full'>No outstanding invitations</div>);
+  if (
+    selectedMemberStatusType === 'Invitations' &&
+    transformedData.length === 0
+  ) {
+    return (
+      <div className="flex items-center justify-center p-4 pb-8 w-full">
+        No outstanding invitations
+      </div>
+    );
   }
 
   if (data && dataGridUser) {

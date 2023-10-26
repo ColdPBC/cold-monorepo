@@ -1,12 +1,13 @@
 import { ActionPayload } from '@coldpbc/interfaces';
 import { ActionItem, Card } from '@coldpbc/components';
-import { ActionItemVariants } from '@coldpbc/enums';
+import { ActionItemVariants, ErrorType } from '@coldpbc/enums';
 import { useAuth0 } from '@auth0/auth0-react';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import useSWR from 'swr';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application/errors/errorFallback';
 import { useOrgSWR } from '../../../hooks/useOrgSWR';
+import { useColdContext } from '@coldpbc/hooks';
 
 export interface SubcategoryActionsOverviewCardProps {
   subcategory_key: string;
@@ -17,12 +18,12 @@ const _SubcategoryActionsOverviewCard = ({
   subcategory_key,
   category_key,
 }: SubcategoryActionsOverviewCardProps) => {
-  const { data } = useOrgSWR<ActionPayload[], any>(
+  const { data, error } = useOrgSWR<ActionPayload[], any>(
     [`/actions`, 'GET'],
     axiosFetcher,
   );
 
-  const { data: categoryData } = useOrgSWR<any>(
+  const { data: categoryData, error: categoryError } = useOrgSWR<any>(
     ['/categories', 'GET'],
     axiosFetcher,
   );
@@ -36,6 +37,14 @@ const _SubcategoryActionsOverviewCard = ({
     data?.filter(
       (actionPayload) => actionPayload.action.subcategory === subcategory_key,
     ) ?? [];
+
+  const { logError } = useColdContext();
+
+  if (error || categoryError) {
+    if (error) logError(error, ErrorType.SWRError);
+    if (categoryError) logError(categoryError, ErrorType.SWRError);
+    return null;
+  }
 
   if (!actions.length) {
     return null;
