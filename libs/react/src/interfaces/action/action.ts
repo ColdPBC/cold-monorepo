@@ -5,7 +5,7 @@ export type Action = {
   process_description?: string;
   image_url: string;
   subcategory: string;
-  assignee?: Assignee;
+  assignee: Assignee | null;
   ready_to_execute: boolean;
   due_date?: string;
   steps: Step[];
@@ -18,13 +18,14 @@ export type Action = {
 };
 
 export type Step = {
-  assignee?: Assignee;
+  assignee: Assignee | null;
   overview: string;
   description: string;
   complete: string | null;
 };
 
 export type Assignee = {
+  email?: string;
   name?: string;
   given_name?: string;
   family_name?: string;

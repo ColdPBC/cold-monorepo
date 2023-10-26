@@ -28,6 +28,14 @@ const _UserSelectDropdown = ({ onSelect, className, ...rest }: Props) => {
     },
   );
 
+  const getUserName = (user: User) => {
+    if (user.given_name && user.family_name) {
+      return `${user.given_name} ${user.family_name}`;
+    } else {
+      return user.name;
+    }
+  };
+
   return (
     <Dropdown
       inline={true}
@@ -50,7 +58,7 @@ const _UserSelectDropdown = ({ onSelect, className, ...rest }: Props) => {
                 <Avatar size={GlobalSizes.xSmall} user={member} />
               </span>
               <span className="text-white font-bold text-sm leading-normal">
-                {member.name}
+                {getUserName(member)}
               </span>
             </Dropdown.Item>
             <div className="bg-bgc-accent h-[1px] w-full" />

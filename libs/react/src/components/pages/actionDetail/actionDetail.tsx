@@ -86,6 +86,14 @@ const _ActionDetail = ({ id }: Props) => {
     });
   };
 
+  const getUserName = (user: User) => {
+    if (user.given_name && user.family_name) {
+      return `${user.given_name} ${user.family_name}`;
+    } else {
+      return user.name;
+    }
+  };
+
   useEffect(() => {
     const reloadActions = async () => {
       await mutate();
@@ -196,7 +204,7 @@ const _ActionDetail = ({ id }: Props) => {
                                 />
                               </span>
                               <span className="text-white font-bold text-sm leading-normal">
-                                {selectedAssignee.name}
+                                {getUserName(selectedAssignee)}
                               </span>
                             </div>
                           ) : (

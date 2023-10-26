@@ -16,19 +16,20 @@ type Story = StoryObj<typeof meta>;
 export const WithAssignee: Story = {
   args: {
     assignee: {
+      email: 'john.doe@coldclimate.com',
       name: 'John Doe',
       picture: 'https://picsum.photos/200',
       given_name: 'John',
       family_name: 'Doe',
     },
     // eslint-disable-next-line @typescript-eslint/no-empty-function
-    handleAssigneeSelection: (assignee: Assignee | undefined) => {},
+    handleAssigneeSelection: (assignee: Assignee | null) => {},
   },
 };
 
 export const WithoutUser: Story = {
   args: {
     // eslint-disable-next-line @typescript-eslint/no-empty-function
-    handleAssigneeSelection: (assignee: Assignee | undefined) => {},
+    handleAssigneeSelection: (assignee: Assignee | null) => {},
   },
 };
