@@ -182,7 +182,7 @@ const _SideBar = (): JSX.Element => {
 };
 
 export const SideBar = withErrorBoundary(_SideBar, {
-  FallbackComponent: (props) => <ErrorFallback />,
+  FallbackComponent: (props) => <ErrorFallback {...props} />,
   onError: (error, info) => {
     console.error('Error occurred in SideBar: ', error);
   },

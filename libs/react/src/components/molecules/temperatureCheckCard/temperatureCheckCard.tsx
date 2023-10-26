@@ -10,6 +10,8 @@ import { ColdFootprintIconTwo } from '../../atoms/icons/coldFootprintIconTwo';
 import { ColdActionsCompletedIcon } from '../../atoms/icons/coldActionsCompletedIcon';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application/errors/errorFallback';
+import { useContext } from 'react';
+import ColdContext from '../../../context/coldContext';
 
 // TODO: set default period in constants somewhere and replace all hard-coded values
 const PERIOD = 2022;
@@ -135,7 +137,7 @@ const _TemperatureCheckCard = ({ stats, cardTitle, cornerGlow }: Props) => {
 };
 
 export const TemperatureCheckCard = withErrorBoundary(_TemperatureCheckCard, {
-  FallbackComponent: (props) => <ErrorFallback />,
+  FallbackComponent: (props) => <ErrorFallback {...props} />,
   onError: (error, info) => {
     console.error('Error occurred in TemperatureCheckCard: ', error);
   },

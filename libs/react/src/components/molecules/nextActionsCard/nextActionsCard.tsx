@@ -61,7 +61,7 @@ const _NextActionsCard = () => {
 };
 
 export const NextActionsCard = withErrorBoundary(_NextActionsCard, {
-  FallbackComponent: (props) => <ErrorFallback />,
+  FallbackComponent: (props) => <ErrorFallback {...props} />,
   onError: (error, info) => {
     console.error('Error occurred in NextActionsCard: ', error);
   },

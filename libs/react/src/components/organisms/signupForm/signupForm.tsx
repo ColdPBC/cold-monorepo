@@ -211,7 +211,7 @@ const _SignupForm = ({
 };
 
 export const SignupForm = withErrorBoundary(_SignupForm, {
-  FallbackComponent: (props) => <ErrorFallback />,
+  FallbackComponent: (props) => <ErrorFallback {...props} />,
   onError: (error, info) => {
     console.error('Error occurred in SignupForm: ', error);
   },

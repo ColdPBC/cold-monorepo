@@ -148,7 +148,7 @@ const Component = (props: InviteMemberFormProps) => {
 };
 
 export const InviteMemberForm = withErrorBoundary(Component, {
-  FallbackComponent: (props) => <ErrorFallback />,
+  FallbackComponent: (props) => <ErrorFallback {...props} />,
   onError: (error, info) => {
     console.error('Error occurred in InviteMemberForm: ', error);
   },

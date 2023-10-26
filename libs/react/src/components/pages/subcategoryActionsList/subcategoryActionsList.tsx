@@ -114,7 +114,7 @@ const _SubcategoryActionsList = () => {
 export const SubcategoryActionsList = withErrorBoundary(
   _SubcategoryActionsList,
   {
-    FallbackComponent: (props) => <ErrorFallback />,
+    FallbackComponent: (props) => <ErrorFallback {...props} />,
     onError: (error, info) => {
       console.error('Error occurred in SubcategoryActionsList: ', error);
     },

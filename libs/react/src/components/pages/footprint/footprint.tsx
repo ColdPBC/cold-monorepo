@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { CenterColumnContent } from '../../organisms/centerColumnContent/centerColumnContent';
 import { RightColumnContent } from '../../organisms/rightColumnContent/rightColumnContent';
 import { useAuth0 } from '@auth0/auth0-react';
@@ -100,7 +100,7 @@ function _Footprint() {
 }
 
 export const Footprint = withErrorBoundary(_Footprint, {
-  FallbackComponent: (props) => <ErrorFallback />,
+  FallbackComponent: (props) => <ErrorFallback {...props} />,
   onError: (error, info) => {
     console.error('Error occurred in Footprint: ', error);
   },

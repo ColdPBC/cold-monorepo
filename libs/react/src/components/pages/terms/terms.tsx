@@ -23,7 +23,6 @@ function _Terms(props: PropsWithChildren<TermsProps>) {
       </div>
     );
   } else if (error) {
-    error.log(error);
     return <div></div>;
   }
 
@@ -37,7 +36,7 @@ function _Terms(props: PropsWithChildren<TermsProps>) {
 }
 
 export const Terms = withErrorBoundary(_Terms, {
-  FallbackComponent: (props) => <ErrorFallback />,
+  FallbackComponent: (props) => <ErrorFallback {...props} />,
   onError: (error, info) => {
     console.error('Error occurred in Terms: ', error);
   },

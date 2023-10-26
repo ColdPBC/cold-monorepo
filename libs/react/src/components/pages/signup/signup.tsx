@@ -105,7 +105,7 @@ const _SignupPage = ({ userData, signedPolicyData }: SignupPageProps) => {
 };
 
 export const SignupPage = withErrorBoundary(_SignupPage, {
-  FallbackComponent: (props) => <ErrorFallback />,
+  FallbackComponent: (props) => <ErrorFallback {...props} />,
   onError: (error, info) => {
     console.error('Error occurred in SignupPage: ', error);
   },

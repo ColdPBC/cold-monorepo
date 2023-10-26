@@ -162,7 +162,7 @@ const _SubcategoryFootprintCard = ({
 export const SubcategoryFootprintCard = withErrorBoundary(
   _SubcategoryFootprintCard,
   {
-    FallbackComponent: (props) => <ErrorFallback />,
+    FallbackComponent: (props) => <ErrorFallback {...props} />,
     onError: (error, info) => {
       console.error('Error occurred in SubcategoryFootprintCard: ', error);
     },

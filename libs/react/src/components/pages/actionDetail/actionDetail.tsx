@@ -25,7 +25,6 @@ const _ActionDetail = ({ id }: Props) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { user } = useAuth0();
   const [show, setShow] = useState(true);
-
   const { data, error, isLoading, mutate } = useSWR<ActionPayload, any, any>(
     [`/organizations/${user?.coldclimate_claims.org_id}/actions/${id}`, 'GET'],
     axiosFetcher,
@@ -280,7 +279,7 @@ const _ActionDetail = ({ id }: Props) => {
 };
 
 export const ActionDetail = withErrorBoundary(_ActionDetail, {
-  FallbackComponent: (props) => <ErrorFallback />,
+  FallbackComponent: (props) => <ErrorFallback {...props} />,
   onError: (error, info) => {
     console.error('Error occurred in ActionDetail: ', error);
   },

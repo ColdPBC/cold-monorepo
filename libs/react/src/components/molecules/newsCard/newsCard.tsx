@@ -13,7 +13,6 @@ const _NewsCard = () => {
       (newsItem: any) => newsItem.title && newsItem.image_url && newsItem.url,
     )
     .slice(0, 3);
-
   const isEmpty = filteredNewsItems?.length === 0;
 
   if (isEmpty || isLoading) {
@@ -30,7 +29,7 @@ const _NewsCard = () => {
 };
 
 export const NewsCard = withErrorBoundary(_NewsCard, {
-  FallbackComponent: (props) => <ErrorFallback />,
+  FallbackComponent: (props) => <ErrorFallback {...props} />,
   onError: (error, info) => {
     console.error('Error occurred in NewsCard: ', error);
   },

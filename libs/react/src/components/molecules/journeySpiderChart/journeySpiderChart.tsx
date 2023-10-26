@@ -163,7 +163,7 @@ function _JourneySpiderChart({ setIsEmptyData }: Props) {
 }
 
 export const JourneySpiderChart = withErrorBoundary(_JourneySpiderChart, {
-  FallbackComponent: (props) => <ErrorFallback />,
+  FallbackComponent: (props) => <ErrorFallback {...props} />,
   onError: (error, info) => {
     console.error('Error occurred in JourneySpiderChart: ', error);
   },

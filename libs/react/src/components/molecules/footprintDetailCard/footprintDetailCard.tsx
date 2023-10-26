@@ -64,7 +64,7 @@ function _FootprintDetailCard(
 }
 
 export const FootprintDetailCard = withErrorBoundary(_FootprintDetailCard, {
-  FallbackComponent: (props) => <ErrorFallback />,
+  FallbackComponent: (props) => <ErrorFallback {...props} />,
   onError: (error, info) => {
     console.error('Error occurred in FootprintDetailCard: ', error);
   },

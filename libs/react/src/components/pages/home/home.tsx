@@ -57,7 +57,7 @@ function _Home() {
 }
 
 export const Home = withErrorBoundary(_Home, {
-  FallbackComponent: (props) => <ErrorFallback />,
+  FallbackComponent: (props) => <ErrorFallback {...props} />,
   onError: (error, info) => {
     console.error('Error occurred in Home: ', error);
   },

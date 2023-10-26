@@ -107,7 +107,7 @@ const _JourneyDetailView = () => {
 };
 
 export const JourneyDetailView = withErrorBoundary(_JourneyDetailView, {
-  FallbackComponent: (props) => <ErrorFallback />,
+  FallbackComponent: (props) => <ErrorFallback {...props} />,
   onError: (error, info) => {
     console.error('Error occurred in JourneyDetailView: ', error);
   },

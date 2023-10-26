@@ -252,7 +252,7 @@ function _FootprintDetailChart({
 }
 
 export const FootprintDetailChart = withErrorBoundary(_FootprintDetailChart, {
-  FallbackComponent: (props) => <ErrorFallback />,
+  FallbackComponent: (props) => <ErrorFallback {...props} />,
   onError: (error, info) => {
     console.error('Error occurred in FootprintDetailChart: ', error);
   },
