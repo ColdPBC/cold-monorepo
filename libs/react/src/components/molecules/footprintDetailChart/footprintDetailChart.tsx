@@ -19,6 +19,8 @@ import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application/errors/errorFallback';
 import { useOrgSWR } from '../../../hooks/useOrgSWR';
 import { map } from 'lodash';
+import { ErrorType } from '@coldpbc/enums';
+import { useColdContext } from '@coldpbc/hooks';
 
 interface LegendRow {
   value: number;
@@ -68,6 +70,12 @@ function _FootprintDetailChart({
     ['/categories/company_decarbonization', 'GET'],
     axiosFetcher,
   );
+  const { logError } = useColdContext();
+
+  if (error) {
+    logError(error, ErrorType.SWRError);
+    return null;
+  }
 
   const isEmpty =
     !isLoading &&

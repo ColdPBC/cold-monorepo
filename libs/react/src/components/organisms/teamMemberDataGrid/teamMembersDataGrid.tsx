@@ -191,7 +191,7 @@ export const _TeamMembersDataGrid = ({
   };
 
   if (error) {
-    if (error) logError(error, ErrorType.SWRError);
+    logError(error, ErrorType.SWRError);
     return null;
   }
 

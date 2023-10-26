@@ -1,5 +1,5 @@
 import { useAuth0, User } from '@auth0/auth0-react';
-import { GlobalSizes } from '@coldpbc/enums';
+import { ErrorType, GlobalSizes } from '@coldpbc/enums';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { flowbiteThemeOverride } from '@coldpbc/themes';
 import { Dropdown, DropdownProps } from 'flowbite-react';
@@ -8,7 +8,7 @@ import { twMerge } from 'tailwind-merge';
 import { Avatar } from '../../atoms';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application/errors/errorFallback';
-import { useAuth0Wrapper, useOrgSWR } from '@coldpbc/hooks';
+import { useAuth0Wrapper, useColdContext, useOrgSWR } from '@coldpbc/hooks';
 
 interface Props extends Omit<DropdownProps, 'onSelect' | 'label'> {
   onSelect: (user: User) => void;
@@ -27,6 +27,12 @@ const _UserSelectDropdown = ({ onSelect, className, ...rest }: Props) => {
       revalidateOnFocus: false,
     },
   );
+  const { logError } = useColdContext();
+
+  if (error) {
+    logError(error, ErrorType.SWRError);
+    return null;
+  }
 
   return (
     <Dropdown

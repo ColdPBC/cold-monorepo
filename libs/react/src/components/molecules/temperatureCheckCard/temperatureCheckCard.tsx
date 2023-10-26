@@ -11,6 +11,8 @@ import { ColdActionsCompletedIcon } from '../../atoms/icons/coldActionsCompleted
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application/errors/errorFallback';
 import { useOrgSWR } from '../../../hooks/useOrgSWR';
+import { useColdContext } from '@coldpbc/hooks';
+import { ErrorType } from '@coldpbc/enums';
 
 // TODO: set default period in constants somewhere and replace all hard-coded values
 const PERIOD = 2022;
@@ -28,16 +30,27 @@ interface Props {
 }
 
 const _TemperatureCheckCard = ({ stats, cardTitle, cornerGlow }: Props) => {
-  const { data, isLoading: isCategoryDataLoading } = useOrgSWR<any>(
-    ['/categories', 'GET'],
+  const {
+    data,
+    isLoading: isCategoryDataLoading,
+    error: categoryDataError,
+  } = useOrgSWR<any>(['/categories', 'GET'], axiosFetcher);
+
+  const {
+    data: footprintData,
+    isLoading: isFootprintDataLoading,
+    error: footprintDataError,
+  } = useOrgSWR<any>(
+    ['/categories/company_decarbonization', 'GET'],
     axiosFetcher,
   );
+  const { logError } = useColdContext();
 
-  const { data: footprintData, isLoading: isFootprintDataLoading } =
-    useOrgSWR<any>(
-      ['/categories/company_decarbonization', 'GET'],
-      axiosFetcher,
-    );
+  if (categoryDataError || footprintDataError) {
+    if (categoryDataError) logError(categoryDataError, ErrorType.SWRError);
+    if (footprintDataError) logError(footprintDataError, ErrorType.SWRError);
+    return null;
+  }
 
   if (isCategoryDataLoading || isFootprintDataLoading) {
     return null;

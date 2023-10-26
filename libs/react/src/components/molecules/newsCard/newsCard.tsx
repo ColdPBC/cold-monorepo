@@ -4,9 +4,20 @@ import useSWR from 'swr';
 import { NewsItem } from '../newsItem';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application/errors/errorFallback';
+import { useColdContext } from '@coldpbc/hooks';
+import { ErrorType } from '@coldpbc/enums';
 
 const _NewsCard = () => {
-  const { data, isLoading } = useSWR<any>(['/news', 'GET'], axiosFetcher);
+  const { data, isLoading, error } = useSWR<any>(
+    ['/news', 'GET'],
+    axiosFetcher,
+  );
+  const { logError } = useColdContext();
+
+  if (error) {
+    logError(error, ErrorType.SWRError);
+    return null;
+  }
 
   const filteredNewsItems = data
     ?.filter(
