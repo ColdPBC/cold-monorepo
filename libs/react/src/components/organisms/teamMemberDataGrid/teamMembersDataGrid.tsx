@@ -1,17 +1,20 @@
 import { Datagrid } from '../../molecules/dataGrid/datagrid';
-import useSWR from 'swr';
 import { GlobalSizes } from '../../../enums/sizes';
 import { Spinner } from '../../atoms/spinner/spinner';
 import { ColorNames } from '../../../enums/colors';
 import { orderBy } from 'lodash';
 import { Avatar } from '../../atoms/avatar/avatar';
 import { axiosFetcher } from '../../../fetchers/axiosFetcher';
-import { useAuth0 } from '@auth0/auth0-react';
+import { User } from '@auth0/auth0-react';
 import { ButtonTypes } from '@coldpbc/enums';
 import { MemberStatusType } from '../../pages';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application/errors/errorFallback';
-import { useAuth0Wrapper, useOrgSWR } from '@coldpbc/hooks';
+import { TableActionType } from '@coldpbc/interfaces';
+import { useEffect, useMemo } from 'react';
+import { useAuth0Wrapper } from '@coldpbc/hooks';
+import { useOrgSWR } from '../../../hooks';
+import { getOrganizationMembersMock } from '@coldpbc/mocks';
 
 export interface TeamMembersDataGridProps {
   selectedMemberStatusType: MemberStatusType;
@@ -26,6 +29,7 @@ export const _TeamMembersDataGrid = ({
     data,
     error,
     isLoading,
+    mutate,
   }: { data: any; error: any; isLoading: boolean } = useOrgSWR(
     ['/members', 'GET'],
     axiosFetcher,
@@ -34,40 +38,47 @@ export const _TeamMembersDataGrid = ({
     },
   );
 
-  const getActions = (user: any) => {
-    // TODO: remove empty array after actions are refactored for new data structure
-    return [];
+  const getActions = (user: User): TableActionType[] => {
     if (user.invitee) {
       return [
         {
           name: 'resend invite',
           label: 'Resend Invite',
-          url: `/organizations/${data.org_id}/invitation`,
-          method: 'PATCH',
-          data: {
-            user_email: user.email,
-            inviter_name: dataGridUser?.name,
-            roleId: ['company:admin'],
-          },
           type: 'button',
           toastMessage: {
             success: 'Invite resent',
             fail: 'Invite resend failed',
           },
+          apiRequests: [
+            {
+              url: `/organizations/${dataGridUser?.coldclimate_claims.org_id}/invitations/${user.id}`,
+              method: 'DELETE',
+            },
+            {
+              url: `/organizations/${dataGridUser?.coldclimate_claims.org_id}/invitation`,
+              method: 'POST',
+              data: {
+                user_email: user.email,
+                inviter_name: dataGridUser?.name,
+                roleId: ['company:admin'],
+              },
+            }
+          ]
         },
         {
           name: 'cancel invite',
           label: 'Cancel Invite',
-          url: getOrgSpecificUrl(`/invitation`),
-          method: 'DELETE',
-          data: {
-            user_email: user.email,
-          },
           type: 'button',
           toastMessage: {
             success: 'Invite cancelled',
             fail: 'Invite cancellation failed',
           },
+          apiRequests: [
+            {
+              url: getOrgSpecificUrl(`/invitations/${user.id}`),
+              method: 'DELETE',
+            },
+          ]
         },
       ];
     } else if (user.role === 'company:owner') {
@@ -94,14 +105,20 @@ export const _TeamMembersDataGrid = ({
               variant: ButtonTypes.secondary,
             },
           },
-          url: getOrgSpecificUrl(`/member`),
-          method: 'DELETE',
-          data,
           type: 'modal',
           toastMessage: {
             success: 'Member deleted',
             fail: 'Member deletion failed',
           },
+          apiRequests: [
+            {
+              url: getOrgSpecificUrl(`/members`),
+              method: 'DELETE',
+              data: {
+                members: [user.user_id]
+              },
+            }
+          ]
         },
         {
           label: 'Transfer Ownership',
@@ -126,15 +143,21 @@ export const _TeamMembersDataGrid = ({
               variant: ButtonTypes.secondary,
             },
           },
-          urls: user.identities.map((identity: string) => {
-            return getOrgSpecificUrl(`/members/${identity}/role/company:owner`);
-          }),
-          method: 'POST',
           type: 'modal',
           toastMessage: {
             success: 'Owner changed',
             fail: 'Owner change failed',
           },
+          apiRequests: [
+            {
+              url: getOrgSpecificUrl(`/roles/company:admin/members/${dataGridUser?.user_id}`),
+              method: 'PUT'
+            },
+            {
+              url: getOrgSpecificUrl(`/roles/company:owner/members/${user.user_id}`),
+              method: 'PUT'
+            }
+          ]
         },
       ];
     } else {
@@ -156,8 +179,8 @@ export const _TeamMembersDataGrid = ({
     }
   };
 
-  const getTransformedData = (data: any[]) => {
-    return orderBy(data, ['email'], ['asc'])
+  const transformedData = useMemo(() => {
+    return orderBy(data?.members, ['email'], ['asc'])
       .filter(
         (user) =>
           (user.invitee && selectedMemberStatusType === 'Invitations') ||
@@ -187,8 +210,8 @@ export const _TeamMembersDataGrid = ({
           ),
           actions: getActions(user),
         };
-      });
-  };
+    });
+  }, [data, dataGridUser, selectedMemberStatusType]);
 
   if (error) {
     return <div>Failed to load</div>;

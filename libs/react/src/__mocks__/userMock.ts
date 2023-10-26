@@ -1,6 +1,7 @@
 import { User } from '@auth0/auth0-react';
 
 export const auth0UserMock: User = {
+  user_id: "google-oauth2|112288932075209720794",
   name: 'Qaalib Farah',
   given_name: 'Qaalib',
   family_name: 'Farah',
