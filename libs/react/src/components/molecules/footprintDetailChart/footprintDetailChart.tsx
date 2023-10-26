@@ -18,6 +18,7 @@ import { darkTableTheme } from '@coldpbc/themes';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application/errors/errorFallback';
 import { useOrgSWR } from '../../../hooks/useOrgSWR';
+import { map } from 'lodash';
 
 interface LegendRow {
   value: number;
@@ -85,8 +86,7 @@ function _FootprintDetailChart({
     if (setIsEmpty) setIsEmpty(isEmpty);
     if (isEmpty) return;
 
-    const newLabels: string[] = [];
-    const newData: number[] = [];
+    const newData: { name: string; footprint: number }[] = [];
     let newTotalFootprint = 0;
     const newLegendRows: LegendRow[] = [];
 
@@ -98,8 +98,10 @@ function _FootprintDetailChart({
         const activityFootprint = activity.footprint?.[period]?.value ?? 0;
 
         if (activityFootprint > 0) {
-          newLabels.push(activity.activity_name);
-          newData.push(activityFootprint);
+          newData.push({
+            name: activity.activity_name,
+            footprint: activityFootprint,
+          });
           newTotalFootprint += activityFootprint;
         }
       },
@@ -107,13 +109,13 @@ function _FootprintDetailChart({
 
     // Populate legend rows
     newData
-      .sort((a, b) => b - a)
+      .sort((a, b) => b.footprint - a.footprint)
       .forEach((nD, i) => {
         newLegendRows.push({
-          value: nD,
+          value: nD.footprint,
           color: colors[i],
-          name: newLabels[i],
-          percent: Math.round((nD / newTotalFootprint) * 100),
+          name: nD.name,
+          percent: Math.round((nD.footprint / newTotalFootprint) * 100),
         });
       });
 
@@ -122,14 +124,14 @@ function _FootprintDetailChart({
     const newChartData: ChartData<'pie'> = {
       datasets: [
         {
-          data: newData,
+          data: map(newData, 'footprint'),
           backgroundColor: backgroundColors,
           borderColor: backgroundColors,
           borderWidth: 1,
           hoverBackgroundColor: backgroundColors,
         },
       ],
-      labels: newLabels,
+      labels: map(newData, 'name'),
     };
 
     const chart = chartRef.current;
