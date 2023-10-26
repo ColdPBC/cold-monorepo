@@ -13,6 +13,23 @@ const clientId = import.meta.env.VITE_AUTH0_CLIENT_ID;
 const audience = import.meta.env.VITE_COLD_API_AUDIENCE;
 const launchDarklyClientSideId = import.meta.env.VITE_LD_CLIENT_SIDE_ID;
 const urlParams = new URLSearchParams(document.location.search);
+datadogRum.init({
+  clientToken: 'pub92f690b0e4706ca7b9d2e7d7481f383e',
+  applicationId: '8d5928f4-f01f-4f10-8ac5-979d8989c8f3',
+  site: 'us5.datadoghq.com',
+  service: 'ui',
+  env: import.meta.env.VITE_DD_ENV,
+  allowedTracingUrls: [(url) => url.startsWith('<https://api.coldclimate>')],
+  version: import.meta.env.VITE_DD_VERSION,
+  sessionSampleRate: 100,
+  premiumSampleRate: 100,
+  defaultPrivacyLevel: 'mask-user-input',
+  trackResources: true,
+  trackLongTasks: true,
+  trackUserInteractions: true,
+});
+datadogRum.startSessionReplayRecording();
+
 root.render(
   <StrictMode>
     <ColdContextProvider
@@ -28,23 +45,6 @@ root.render(
         },
       }}
       launchDarklyClientSideId={launchDarklyClientSideId}
-      ddRumClientConfig={{
-        clientToken: 'pub92f690b0e4706ca7b9d2e7d7481f383e',
-        applicationId: '8d5928f4-f01f-4f10-8ac5-979d8989c8f3',
-        site: 'us5.datadoghq.com',
-        service: 'ui',
-        env: import.meta.env.VITE_DD_ENV,
-        allowedTracingUrls: [
-          (url) => url.startsWith('<https://api.coldclimate>'),
-        ],
-        version: '%VITE_DD_VERSION%',
-        sessionSampleRate: 100,
-        premiumSampleRate: 100,
-        defaultPrivacyLevel: 'mask-user-input',
-        trackResources: true,
-        trackLongTasks: true,
-        trackUserInteractions: true,
-      }}
     >
       <Home />
     </ColdContextProvider>

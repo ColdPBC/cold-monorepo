@@ -15,15 +15,23 @@ import { EmissionsDonutChartVariants } from '../../atoms/emissionsDonutChart/emi
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application/errors/errorFallback';
 import { useOrgSWR } from '../../../hooks/useOrgSWR';
+import { ErrorType } from '@coldpbc/enums';
+import { useColdContext } from '@coldpbc/hooks';
 
 const PERIOD = 2022;
 
 function _Footprint() {
+  const { logError } = useColdContext();
   // Get footprint data from SWR
   const { data, error, isLoading } = useOrgSWR<any>(
     ['/categories/company_decarbonization', 'GET'],
     axiosFetcher,
   );
+
+  if (error) {
+    logError(error, ErrorType.SWRError);
+    return null;
+  }
 
   const isEmptyFootprintData =
     !isLoading &&

@@ -1,14 +1,13 @@
 import { Card, Takeover, UserSelectDropdown } from '../../molecules';
-import useSWR, { mutate as globalMutate } from 'swr';
-import { useAuth0, User } from '@auth0/auth0-react';
+import { mutate as globalMutate } from 'swr';
+import { User } from '@auth0/auth0-react';
 import { axiosFetcher } from '@coldpbc/fetchers';
-import { ActionPayload, Assignee } from '@coldpbc/interfaces';
+import { ActionPayload } from '@coldpbc/interfaces';
 import { ArrowRightIcon, ChevronDownIcon } from '@heroicons/react/20/solid';
 import { CompletedBanner } from './completedBanner';
-import { Avatar, BaseButton, Spinner } from '../../atoms';
-import { ButtonTypes, GlobalSizes } from '@coldpbc/enums';
-import { Datepicker } from 'flowbite-react';
-import { Dropdown } from 'flowbite-react';
+import { Avatar, BaseButton } from '../../atoms';
+import { ButtonTypes, ErrorType, GlobalSizes } from '@coldpbc/enums';
+import { Datepicker, Dropdown } from 'flowbite-react';
 import { flowbiteThemeOverride } from '@coldpbc/themes';
 import { DateTime } from 'luxon';
 import React, { useEffect, useState } from 'react';
@@ -16,13 +15,14 @@ import { useSearchParams } from 'react-router-dom';
 import { ActionDetailProgress } from '../../organisms';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application';
-import { useAuth0Wrapper, useOrgSWR } from '@coldpbc/hooks';
+import { useAuth0Wrapper, useColdContext, useOrgSWR } from '@coldpbc/hooks';
 
 interface Props {
   id: string;
 }
 
 const _ActionDetail = ({ id }: Props) => {
+  const { logError } = useColdContext();
   const [searchParams, setSearchParams] = useSearchParams();
   const { getOrgSpecificUrl } = useAuth0Wrapper();
   const [show, setShow] = useState(true);
@@ -95,6 +95,7 @@ const _ActionDetail = ({ id }: Props) => {
   }, [searchParams]);
 
   if (error) {
+    logError(error, ErrorType.SWRError);
     return null;
   }
 

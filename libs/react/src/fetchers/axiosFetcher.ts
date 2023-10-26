@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { set } from 'lodash';
 import { resolveAPIUrl } from './helper';
 import cookies from 'js-cookie';
@@ -38,10 +38,17 @@ export const axiosFetcher = (params: Array<string>) => {
 
     return axios(params[0], config)
       .then((res) => {
+        // if (
+        //   params[0] ===
+        //   '/organizations/org_g2zzR5rwTKVAIwCn/categories/company_decarbonization'
+        // ) {
+        //   // throw a 404 axios error
+        //   throw new AxiosError('Request failed with status code 404', '404');
+        // }
         return res.data;
       })
       .catch((err) => {
-        return err;
+        throw err;
       });
   } catch (e) {
     console.error(e);

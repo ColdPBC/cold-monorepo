@@ -4,12 +4,12 @@ import { Spinner, SurveyLeftNav, SurveyRightNav, Takeover } from '../../index';
 import { cloneDeep, find, first, isEmpty } from 'lodash';
 import useSWR, { mutate } from 'swr';
 import { axiosFetcher } from '@coldpbc/fetchers';
-import { GlobalSizes } from '@coldpbc/enums';
+import { ErrorType, GlobalSizes } from '@coldpbc/enums';
 import { useSearchParams } from 'react-router-dom';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application/errors/errorFallback';
 import { useOrgSWR } from '../../../hooks/useOrgSWR';
-import { useAuth0Wrapper } from '@coldpbc/hooks';
+import { useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
 
 export interface SurveyProps {
   surveyName: string;
@@ -31,6 +31,7 @@ const _Survey = (props: SurveyProps) => {
   );
   const [searchParams, setSearchParams] = useSearchParams();
   const [submitted, setSubmitted] = React.useState<boolean>(false);
+  const { logError } = useColdContext();
 
   const submitSurvey = () => {
     setSubmitted(true);
@@ -219,7 +220,10 @@ const _Survey = (props: SurveyProps) => {
     }
   }, [data]);
 
-  if (error) return <div>failed to load</div>;
+  if (error) {
+    logError(error, ErrorType.SWRError);
+    return <div></div>;
+  }
 
   if (isLoading) {
     return (
