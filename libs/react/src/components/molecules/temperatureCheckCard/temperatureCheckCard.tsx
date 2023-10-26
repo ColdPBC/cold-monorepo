@@ -10,8 +10,7 @@ import { ColdFootprintIconTwo } from '../../atoms/icons/coldFootprintIconTwo';
 import { ColdActionsCompletedIcon } from '../../atoms/icons/coldActionsCompletedIcon';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application/errors/errorFallback';
-import { useContext } from 'react';
-import ColdContext from '../../../context/coldContext';
+import { useOrgSWR } from '../../../hooks/useOrgSWR';
 
 // TODO: set default period in constants somewhere and replace all hard-coded values
 const PERIOD = 2022;
@@ -29,13 +28,16 @@ interface Props {
 }
 
 const _TemperatureCheckCard = ({ stats, cardTitle, cornerGlow }: Props) => {
-  const { data, isLoading: isCategoryDataLoading } = useSWR<any>(
+  const { data, isLoading: isCategoryDataLoading } = useOrgSWR<any>(
     ['/categories', 'GET'],
     axiosFetcher,
   );
 
   const { data: footprintData, isLoading: isFootprintDataLoading } =
-    useSWR<any>(['/categories/company_decarbonization', 'GET'], axiosFetcher);
+    useOrgSWR<any>(
+      ['/categories/company_decarbonization', 'GET'],
+      axiosFetcher,
+    );
 
   if (isCategoryDataLoading || isFootprintDataLoading) {
     return null;

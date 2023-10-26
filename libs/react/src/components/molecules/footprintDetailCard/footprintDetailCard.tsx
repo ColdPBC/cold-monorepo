@@ -7,6 +7,7 @@ import useSWR from 'swr';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application';
+import { useOrgSWR } from '../../../hooks/useOrgSWR';
 
 export interface FootprintDetailCardProps {
   colors: string[];
@@ -23,7 +24,7 @@ function _FootprintDetailCard(
   const [isEmpty, setIsEmpty] = useState(false);
 
   // Get footprint data from SWR
-  const { data } = useSWR<any>(
+  const { data } = useOrgSWR<any>(
     ['/categories/company_decarbonization', 'GET'],
     axiosFetcher,
   );

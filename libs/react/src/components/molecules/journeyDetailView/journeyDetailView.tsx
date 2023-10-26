@@ -4,9 +4,10 @@ import { JourneySpiderChart } from '../journeySpiderChart';
 import { SubcategoryJourneyPreview } from '../subcategoryJourneyPreview';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application/errors/errorFallback';
+import { useOrgSWR } from '../../../hooks/useOrgSWR';
 
 const _JourneyDetailView = () => {
-  const { data } = useSWR<any>(['/categories', 'GET'], axiosFetcher);
+  const { data } = useOrgSWR<any>(['/categories', 'GET'], axiosFetcher);
 
   const showCompanySection =
     data?.definition?.categories['company_decarbonization']?.subcategories[

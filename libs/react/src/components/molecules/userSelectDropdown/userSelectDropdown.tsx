@@ -8,6 +8,7 @@ import { twMerge } from 'tailwind-merge';
 import { Avatar } from '../../atoms';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application/errors/errorFallback';
+import { useAuth0Wrapper, useOrgSWR } from '@coldpbc/hooks';
 
 interface Props extends Omit<DropdownProps, 'onSelect' | 'label'> {
   onSelect: (user: User) => void;
@@ -15,25 +16,12 @@ interface Props extends Omit<DropdownProps, 'onSelect' | 'label'> {
 }
 
 const _UserSelectDropdown = ({ onSelect, className, ...rest }: Props) => {
-  const { user: dataGridUser } = useAuth0();
-
-  const getMembersURL = () => {
-    if (dataGridUser?.coldclimate_claims.org_id) {
-      return [
-        '/organizations/' + dataGridUser.coldclimate_claims.org_id + '/members',
-        'GET',
-      ];
-    } else {
-      return null;
-    }
-  };
-
   const {
     data,
     error,
     isLoading,
-  }: { data: any; error: any; isLoading: boolean } = useSWR(
-    getMembersURL(),
+  }: { data: any; error: any; isLoading: boolean } = useOrgSWR(
+    ['/members', 'GET'],
     axiosFetcher,
     {
       revalidateOnFocus: false,

@@ -11,6 +11,7 @@ import {
 } from '../../atoms/emissionsDonutChart/emissionsDonutChart';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application/errors/errorFallback';
+import { useOrgSWR } from '../../../hooks/useOrgSWR';
 
 const MAX_CATEGORIES = 4;
 
@@ -35,7 +36,7 @@ function _FootprintOverviewChart(
   const { variant = EmissionsDonutChartVariants.horizontal, period } = props;
 
   // Get footprint data from SWR
-  const { data, isLoading } = useSWR<any>(
+  const { data, isLoading } = useOrgSWR<any>(
     ['/categories/company_decarbonization', 'GET'],
     axiosFetcher,
   );

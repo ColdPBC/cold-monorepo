@@ -18,11 +18,12 @@ import { flowbiteThemeOverride } from '@coldpbc/themes';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application/errors/errorFallback';
+import { useAuth0Wrapper, useOrgSWR } from '@coldpbc/hooks';
 
 export type MemberStatusType = 'Members' | 'Invitations';
 
 const _Settings = (props: { user?: any }) => {
-  const auth0 = useAuth0();
+  const auth0 = useAuth0Wrapper();
   const ldFlags = useFlags();
 
   const [showModal, setShowModal] = useState(false);
@@ -30,40 +31,16 @@ const _Settings = (props: { user?: any }) => {
     useState<MemberStatusType>('Members');
 
   const organization = useSWR(
-    ['/organizations/' + auth0.user?.coldclimate_claims.org_id, 'GET'],
+    ['/organizations/' + auth0.orgId, 'GET'],
     axiosFetcher,
   );
 
-  const { data: Organization } = organization;
-
-  const { user: dataGridUser } = useAuth0();
-
-  const getOrgURL = () => {
-    if (dataGridUser?.coldclimate_claims.org_id) {
-      return [
-        '/organizations/' + dataGridUser.coldclimate_claims.org_id + '/members',
-        'GET',
-      ];
-    } else {
-      return null;
-    }
-  };
-
   const { data: memberData }: { data: any; error: any; isLoading: boolean } =
-    useSWR(getOrgURL(), axiosFetcher, {
+    useOrgSWR(['/members', 'GET'], axiosFetcher, {
       revalidateOnFocus: false,
     });
 
   const organizationData = organization.data as Organization;
-  const hasPendingInvitations = memberData?.members?.some(
-    (user: any) => user.invitee,
-  );
-
-  useEffect(() => {
-    if (!hasPendingInvitations) {
-      setSelectedMemberStatusType('Members');
-    }
-  }, [hasPendingInvitations]);
 
   if (auth0.isLoading && organization.isLoading) {
     return (
@@ -95,50 +72,48 @@ const _Settings = (props: { user?: any }) => {
               },
             ]}
           >
-            {hasPendingInvitations && (
-              <div className="absolute top-[18px] right-40">
-                <Dropdown
-                  inline={true}
-                  label={
-                    <BaseButton
-                      variant={ButtonTypes.secondary}
-                      onClick={() => {}}
-                    >
-                      <span className="flex items-center">
-                        {selectedMemberStatusType}{' '}
-                        <ChevronDownIcon className="w-[18px] ml-2" />
-                      </span>
-                    </BaseButton>
-                  }
-                  arrowIcon={false}
-                  theme={flowbiteThemeOverride.dropdown}
+            <div className="absolute top-[18px] right-40">
+              <Dropdown
+                inline={true}
+                label={
+                  <BaseButton
+                    variant={ButtonTypes.secondary}
+                    onClick={() => {}}
+                  >
+                    <span className="flex items-center">
+                      {selectedMemberStatusType}{' '}
+                      <ChevronDownIcon className="w-[18px] ml-2" />
+                    </span>
+                  </BaseButton>
+                }
+                arrowIcon={false}
+                theme={flowbiteThemeOverride.dropdown}
+              >
+                <Dropdown.Item
+                  onClick={() => setSelectedMemberStatusType('Members')}
+                  theme={flowbiteThemeOverride.dropdown.floating.item}
                 >
-                  <Dropdown.Item
-                    onClick={() => setSelectedMemberStatusType('Members')}
-                    theme={flowbiteThemeOverride.dropdown.floating.item}
-                  >
-                    <span className="w-[130px] flex justify-between">
-                      Members{' '}
-                      {selectedMemberStatusType === 'Members' && (
-                        <CheckIcon className="w-[14px]" />
-                      )}
-                    </span>
-                  </Dropdown.Item>
-                  <div className="bg-bgc-accent h-[1px] w-full" />
-                  <Dropdown.Item
-                    onClick={() => setSelectedMemberStatusType('Invitations')}
-                    theme={flowbiteThemeOverride.dropdown.floating.item}
-                  >
-                    <span className="w-[130px] flex justify-between">
-                      Invitations{' '}
-                      {selectedMemberStatusType === 'Invitations' && (
-                        <CheckIcon className="w-[14px]" />
-                      )}
-                    </span>
-                  </Dropdown.Item>
-                </Dropdown>
-              </div>
-            )}
+                  <span className="w-[130px] flex justify-between">
+                    Members{' '}
+                    {selectedMemberStatusType === 'Members' && (
+                      <CheckIcon className="w-[14px]" />
+                    )}
+                  </span>
+                </Dropdown.Item>
+                <div className="bg-bgc-accent h-[1px] w-full" />
+                <Dropdown.Item
+                  onClick={() => setSelectedMemberStatusType('Invitations')}
+                  theme={flowbiteThemeOverride.dropdown.floating.item}
+                >
+                  <span className="w-[130px] flex justify-between">
+                    Invitations{' '}
+                    {selectedMemberStatusType === 'Invitations' && (
+                      <CheckIcon className="w-[14px]" />
+                    )}
+                  </span>
+                </Dropdown.Item>
+              </Dropdown>
+            </div>
             <TeamMembersDataGrid
               selectedMemberStatusType={selectedMemberStatusType}
             />

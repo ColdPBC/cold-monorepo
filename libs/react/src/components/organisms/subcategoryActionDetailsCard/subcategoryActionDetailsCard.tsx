@@ -7,11 +7,11 @@ import {
   Spinner,
 } from '@coldpbc/components';
 import { ActionDetailCardVariants, ActionItemVariants } from '@coldpbc/enums';
-import { useAuth0, User } from '@auth0/auth0-react';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { mutate } from 'swr';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application';
+import { useAuth0Wrapper } from '@coldpbc/hooks';
 
 export type SubcategoryActionDetailsCardProps = {
   actionPayload: ActionPayload;
@@ -24,7 +24,7 @@ const _SubcategoryActionDetailsCard = ({
     return action.dependent_surveys.every((survey) => survey.submitted);
   };
 
-  const { user } = useAuth0();
+  const { user, getOrgSpecificUrl } = useAuth0Wrapper();
 
   const updateActionData = async (action: ActionPayload) => {
     await patchAction(action);
@@ -32,16 +32,13 @@ const _SubcategoryActionDetailsCard = ({
 
   const patchAction = async (action: ActionPayload) => {
     await axiosFetcher([
-      `/organizations/${user?.coldclimate_claims.org_id}/actions/${action.id}`,
+      getOrgSpecificUrl(`/actions/${action.id}`),
       'PATCH',
       JSON.stringify({
         action: action.action,
       }),
     ]);
-    await mutate([
-      `/organizations/${user?.coldclimate_claims.org_id}/actions`,
-      'GET',
-    ]);
+    await mutate([getOrgSpecificUrl(`/actions`), 'GET']);
   };
 
   return (

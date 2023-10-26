@@ -16,10 +16,9 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { ActionPayload } from '@coldpbc/interfaces';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application/errors/errorFallback';
+import { useOrgSWR } from '@coldpbc/hooks';
 
 const _SideBar = (): JSX.Element => {
-  const { user } = useAuth0();
-
   const {
     data,
     error,
@@ -32,10 +31,8 @@ const _SideBar = (): JSX.Element => {
   const ldFlags = useFlags();
 
   // Fetch actions if actions feature flag is present
-  const { data: actionsData } = useSWR<ActionPayload[], any, any>(
-    ldFlags.showActions261
-      ? [`/organizations/${user?.coldclimate_claims.org_id}/actions`, 'GET']
-      : null,
+  const { data: actionsData } = useOrgSWR<ActionPayload[], any>(
+    ldFlags.showActions261 ? [`/actions`, 'GET'] : null,
     axiosFetcher,
   );
 

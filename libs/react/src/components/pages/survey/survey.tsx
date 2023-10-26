@@ -8,12 +8,15 @@ import { GlobalSizes } from '@coldpbc/enums';
 import { useSearchParams } from 'react-router-dom';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application/errors/errorFallback';
+import { useOrgSWR } from '../../../hooks/useOrgSWR';
+import { useAuth0Wrapper } from '@coldpbc/hooks';
 
 export interface SurveyProps {
   surveyName: string;
 }
 
 const _Survey = (props: SurveyProps) => {
+  const { getOrgSpecificUrl } = useAuth0Wrapper();
   const { surveyName } = props;
   const [activeKey, setActiveKey] = React.useState<SurveyActiveKeyType>({
     value: '',
@@ -22,8 +25,7 @@ const _Survey = (props: SurveyProps) => {
   });
   const [show, setShow] = React.useState<boolean>(true);
   const [surveyData, setSurveyData] = React.useState<SurveyPayloadType>();
-  const [headerShown, setHeaderShown] = React.useState<boolean>();
-  const { data, error, isLoading } = useSWR<SurveyPayloadType, any, any>(
+  const { data, error, isLoading } = useOrgSWR<SurveyPayloadType, any>(
     [`/surveys/${surveyName}`, 'GET'],
     axiosFetcher,
   );
@@ -157,7 +159,7 @@ const _Survey = (props: SurveyProps) => {
       searchParams.delete('surveyName');
       setSearchParams(searchParams);
     }
-    await mutate([`/surveys/${surveyName}`, 'GET'], {
+    await mutate([getOrgSpecificUrl(`/surveys/${surveyName}`), 'GET'], {
       ...surveyData,
     });
     setShow(false);

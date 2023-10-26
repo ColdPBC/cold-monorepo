@@ -9,14 +9,15 @@ import { Card } from '../card';
 import { DateTime } from 'luxon';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application';
+import { useOrgSWR } from '@coldpbc/hooks';
 
 const _NextActionsCard = () => {
   const navigate = useNavigate();
 
   const { user } = useAuth0();
 
-  const { data } = useSWR<ActionPayload[], any, any>(
-    [`/organizations/${user?.coldclimate_claims.org_id}/actions`, 'GET'],
+  const { data } = useOrgSWR<ActionPayload[], any>(
+    [`/actions`, 'GET'],
     axiosFetcher,
   );
 

@@ -21,6 +21,7 @@ import { createGradient, pickGradientValue } from './helpers';
 import { EmptyChart } from './emptyChart';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application/errors/errorFallback';
+import { useOrgSWR } from '../../../hooks/useOrgSWR';
 
 ChartJS.register(
   RadarController,
@@ -42,8 +43,8 @@ function _JourneySpiderChart({ setIsEmptyData }: Props) {
   const [chartData, setChartData] = useState<ChartData>(defaultChartData);
 
   // Fetch chart data
-  const { data, error, isLoading } = useSWR<any>(
-    ['/categories/', 'GET'],
+  const { data, error, isLoading } = useOrgSWR<any>(
+    ['/categories', 'GET'],
     axiosFetcher,
   );
 
