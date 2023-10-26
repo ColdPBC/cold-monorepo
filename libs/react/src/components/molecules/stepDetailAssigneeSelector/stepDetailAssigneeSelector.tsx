@@ -45,7 +45,7 @@ export const StepDetailAssigneeSelector = ({
   } else {
     return (
       <UserSelectDropdown
-        className="w-auto"
+        className="w-[240px]"
         onSelect={(assignee: User) => {
           handleAssigneeSelection({
             email: assignee.email,
