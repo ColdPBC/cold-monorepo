@@ -21,6 +21,7 @@ import { useColdContext } from '@coldpbc/hooks';
 const PERIOD = 2022;
 
 function _Footprint() {
+  const auth0 = useAuth0();
   const { logError } = useColdContext();
   // Get footprint data from SWR
   const { data, error, isLoading } = useOrgSWR<any>(
@@ -44,13 +45,17 @@ function _Footprint() {
       ),
     );
 
-  const auth0 = useAuth0();
   if (auth0.isLoading) {
     return (
       <div>
         <Spinner />
       </div>
     );
+  }
+
+  if (auth0.error) {
+    logError(auth0.error, ErrorType.Auth0Error);
+    return null;
   }
 
   if (auth0.user) {

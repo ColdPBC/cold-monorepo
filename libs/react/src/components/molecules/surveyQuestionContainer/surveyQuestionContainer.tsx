@@ -30,7 +30,7 @@ const _SurveyQuestionContainer = ({
   surveyData,
   setSurveyData,
 }: SurveyQuestionContainerProps) => {
-  const { getOrgSpecificUrl, isLoading, error } = useAuth0Wrapper();
+  const { getOrgSpecificUrl } = useAuth0Wrapper();
   const nextQuestionTransitionClassNames = {
     enter: 'transform translate-y-full',
     enterDone: 'transition ease-out duration-200 transform translate-y-0',
@@ -510,19 +510,6 @@ const _SurveyQuestionContainer = ({
   useEffect(() => {
     getActiveQuestion();
   }, [activeKey, surveyData]);
-
-  if (isLoading) {
-    return (
-      <div>
-        <Spinner />
-      </div>
-    );
-  }
-
-  if (error) {
-    console.error(error);
-    return <div></div>;
-  }
 
   if (activeQuestion !== undefined) {
     return (

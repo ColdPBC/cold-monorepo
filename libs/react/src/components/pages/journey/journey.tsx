@@ -31,17 +31,18 @@ function _Journey() {
 
   const auth0 = useAuth0();
 
-  if (error) {
-    logError(error, ErrorType.SWRError);
-    return null;
-  }
-
   if (auth0.isLoading) {
     return (
       <div>
         <Spinner />
       </div>
     );
+  }
+
+  if (error || auth0.error) {
+    if (error) logError(error, ErrorType.SWRError);
+    if (auth0.error) logError(auth0.error, ErrorType.Auth0Error);
+    return null;
   }
 
   if (auth0.user) {
