@@ -106,7 +106,7 @@ export const ActionItem = ({
     if (variant === ActionItemVariants.SubcategoryActionDetailsCard) {
       return className + ' min-h-[153px]';
     } else {
-      return className;
+      return className + ' min-h-[126px]';
     }
   };
 

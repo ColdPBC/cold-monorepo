@@ -4,9 +4,7 @@ import {
   SubcategoryActionsOverviewCard,
   SubcategoryActionsOverviewCardProps,
 } from './subcategoryActionsOverviewCard';
-import {
-  StoryMockProvider,
-} from '@coldpbc/mocks';
+import { getActionHandler, StoryMockProvider } from '@coldpbc/mocks';
 
 const meta = {
   title: 'Organisms/SubcategoryActionsOverviewCard',
@@ -27,7 +25,7 @@ type Story = StoryObj<typeof meta>;
 const SubcategoryActionsOverviewCardTemplate = (
   args: SubcategoryActionsOverviewCardProps,
 ) => (
-  <StoryMockProvider handlers={[]}>
+  <StoryMockProvider handlers={getActionHandler.subcategoryActionsOverviewCard}>
     <SubcategoryActionsOverviewCard {...args} />
   </StoryMockProvider>
 );
@@ -36,6 +34,6 @@ export const Default: Story = {
   render: SubcategoryActionsOverviewCardTemplate,
   args: {
     subcategory_key: 'facilities',
-    category_key: 'company_decarbonization'
+    category_key: 'company_decarbonization',
   },
 };

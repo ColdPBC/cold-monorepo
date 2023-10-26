@@ -51,6 +51,12 @@ const _SubcategoryActionsOverviewCard = ({
               <ActionItem
                 actionPayload={action}
                 variant={ActionItemVariants.wide}
+                showProgress={
+                  action.action.ready_to_execute &&
+                  action.action.dependent_surveys.every(
+                    (survey) => survey.submitted,
+                  )
+                }
               />
             </div>
           );
