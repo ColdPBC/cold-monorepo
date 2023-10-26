@@ -5,7 +5,7 @@ export const CompletedBanner = () => {
       <div className="z-20">
         <div className="font-bold text-xl leading-normal mb-2">Keep it up!</div>
         <div className="font-medium leading-normal text-sm">
-          You've done everything you can here for now..
+          You've done everything you can here for now.
         </div>
       </div>
       <svg
