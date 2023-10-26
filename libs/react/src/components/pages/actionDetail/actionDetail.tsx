@@ -32,6 +32,11 @@ const _ActionDetail = ({ id }: Props) => {
     axiosFetcher,
   );
 
+  const { data: categoriesData } = useOrgSWR<any>(
+    ['/categories', 'GET'],
+    axiosFetcher,
+  );
+
   const isActionComplete = data?.action.steps.every((step) => step.complete);
 
   const selectedAssignee = data?.action.assignee;
@@ -94,6 +99,33 @@ const _ActionDetail = ({ id }: Props) => {
     reloadActions();
   }, [searchParams]);
 
+  // Find the label for an area of impact in the category data
+  const getAreaOfImpactLabel = (area: string) => {
+    // default to showing key if activity not found
+    let label = area;
+
+    Object.keys(categoriesData?.definition.categories ?? {})
+      .forEach(categoryKey => {
+        const category = categoriesData.definition.categories[categoryKey];
+
+        Object.keys(category.subcategories).forEach(subcategoryKey => {
+          const subcategory = category.subcategories[subcategoryKey];
+
+          Object.keys(subcategory.activities).forEach((activityKey) => {
+            if (activityKey === area) {
+              label = subcategory.activities[activityKey].activity_name
+            }
+          })
+        })
+      })
+
+    return (
+      <div className="ml-2 rounded-2xl bg-primary-300 py-2 px-4">
+        {label}
+      </div>
+    )
+  }
+
   if (error) {
     return null;
   }
@@ -143,11 +175,7 @@ const _ActionDetail = ({ id }: Props) => {
                 {data?.action.areas_of_impact && (
                   <div className="flex items-center mt-10 text-xs font-medium leading-none">
                     <span className="">Areas of impact:</span>
-                    {data?.action.areas_of_impact.map((area) => (
-                      <div className="ml-2 rounded-2xl bg-primary-300 py-2 px-4">
-                        {area}
-                      </div>
-                    ))}
+                    {data?.action.areas_of_impact.map((area) => getAreaOfImpactLabel(area))}
                   </div>
                 )}
               </div>
