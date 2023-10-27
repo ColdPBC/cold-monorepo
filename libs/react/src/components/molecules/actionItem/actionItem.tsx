@@ -4,6 +4,7 @@ import { ButtonTypes, IconNames } from '@coldpbc/enums';
 import { useNavigate } from 'react-router-dom';
 import { ActionItemVariants } from '@coldpbc/enums';
 import { motion } from 'framer-motion';
+import { twMerge } from 'tailwind-merge';
 
 export interface ActionItemProps {
   actionPayload: ActionPayload;
@@ -29,7 +30,7 @@ export const ActionItem = ({
       return (
         <BaseButton
           className={'bg-transparent w-6 h-6 p-0'}
-          onClick={onCTAClick}
+          onClick={() => {}}
         >
           <ColdIcon name={IconNames.ColdRightArrowIcon} />
         </BaseButton>
@@ -38,7 +39,7 @@ export const ActionItem = ({
       return (
         <BaseButton
           className={'bg-transparent'}
-          onClick={onCTAClick}
+          onClick={() => {}}
           variant={ButtonTypes.hyperlink}
         >
           <span className={'text-tc-primary text-button'}>View All Steps</span>
@@ -137,7 +138,7 @@ export const ActionItem = ({
   };
 
   return (
-    <div className={getActionItemClass()}>
+    <div className={twMerge(getActionItemClass(), 'cursor-pointer')} onClick={onCTAClick}>
       <div
         className={getImageClass()}
         style={{

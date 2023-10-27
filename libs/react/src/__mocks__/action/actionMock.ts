@@ -48,7 +48,7 @@ export const getActionMock = (): ActionPayload => {
           complete: null,
         },
       ],
-      areas_of_impact: ['Test Area 1', 'Test Area 2'],
+      areas_of_impact: ['workplace', 'air_travel'],
       dependent_surveys: [
         {
           name: 'test_survey_1',
@@ -169,7 +169,7 @@ export const getActionsMock = (): ActionPayload[] => {
             complete: '2022-09-27 18:00:00.000',
           },
         ],
-        areas_of_impact: ['Test Area 1', 'Test Area 2'],
+        areas_of_impact: ['workplace', 'air_travel'],
         dependent_surveys: [
           {
             name: 'test_survey',
@@ -207,7 +207,7 @@ export const getActionsMock = (): ActionPayload[] => {
             complete: '2022-09-27 18:00:00.000',
           },
         ],
-        areas_of_impact: ['Test Area 1', 'Test Area 2'],
+        areas_of_impact: ['workplace', 'air_travel'],
         dependent_surveys: [
           {
             name: 'test_survey',
@@ -244,7 +244,7 @@ export const getActionsMock = (): ActionPayload[] => {
             complete: '2022-09-27 18:00:00.000',
           },
         ],
-        areas_of_impact: ['Test Area 1', 'Test Area 2'],
+        areas_of_impact: ['workplace', 'air_travel'],
         dependent_surveys: [
           {
             name: 'test_survey',
@@ -275,7 +275,7 @@ export const getActionsMock = (): ActionPayload[] => {
             assignee: null,
           },
         ],
-        areas_of_impact: ['Test Area 1', 'Test Area 2'],
+        areas_of_impact: ['workplace', 'air_travel'],
         dependent_surveys: [
           {
             name: 'test_survey',
