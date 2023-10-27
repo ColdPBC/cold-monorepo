@@ -104,7 +104,7 @@ export const ActionItem = ({
   const getImageClass = () => {
     const className = 'rounded-lg w-[64px] bg-cover bg-center bg-no-repeat';
     if (variant === ActionItemVariants.SubcategoryActionDetailsCard) {
-      return className;
+      return className + ' min-h-[153px]';
     } else {
       return className;
     }
