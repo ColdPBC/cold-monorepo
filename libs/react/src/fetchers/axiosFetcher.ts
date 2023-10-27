@@ -38,17 +38,10 @@ export const axiosFetcher = (params: Array<string>) => {
 
     return axios(params[0], config)
       .then((res) => {
-        // if (
-        //   params[0] ===
-        //   '/organizations/org_g2zzR5rwTKVAIwCn/categories/company_decarbonization'
-        // ) {
-        //   // throw a 404 axios error
-        //   throw new AxiosError('Request failed with status code 404', '404');
-        // }
         return res.data;
       })
       .catch((err) => {
-        throw err;
+        return err;
       });
   } catch (e) {
     console.error(e);
