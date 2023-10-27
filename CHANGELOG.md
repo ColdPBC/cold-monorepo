@@ -1,3 +1,13 @@
+# [1.55.0](https://github.com/ColdPBC/ui/compare/v1.54.0...v1.55.0) (2023-10-27)
+
+
+### Features
+
+* created util to get username ([17925a8](https://github.com/ColdPBC/ui/commit/17925a842ec8f7f9e2d65b9369e041766dfa1d63))
+* Update step detail dropdown to specific width ([17b1a94](https://github.com/ColdPBC/ui/commit/17b1a9469691901067f40894f178908eefc64ddd))
+* Update steward to use first and last name. Use name if these dont exist ([c3229af](https://github.com/ColdPBC/ui/commit/c3229af88381033746b7c29ff78b90b1fba6fea6))
+* Updated getusername to formatusername ([f6f4067](https://github.com/ColdPBC/ui/commit/f6f406748b8d961fdd96ff9a816e41fba8f2eb3c))
+
 # [1.54.0](https://github.com/ColdPBC/ui/compare/v1.53.0...v1.54.0) (2023-10-27)
 
 
