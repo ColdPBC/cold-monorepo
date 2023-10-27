@@ -1,3 +1,16 @@
+# [1.54.0](https://github.com/ColdPBC/ui/compare/v1.53.0...v1.54.0) (2023-10-27)
+
+
+### Bug Fixes
+
+* remove extra period ([3f00bf5](https://github.com/ColdPBC/ui/commit/3f00bf597911a17a5ac5a182e4a2b61aac53dce3))
+* update to svg attributes to fix console errors ([126f549](https://github.com/ColdPBC/ui/commit/126f549d2929624a612dc80eda698d20651824d5))
+
+
+### Features
+
+* Updated completed banner text ([8943d8f](https://github.com/ColdPBC/ui/commit/8943d8fc1a1cfa02ad384ec55122e078019d5455))
+
 # [1.53.0](https://github.com/ColdPBC/ui/compare/v1.52.1...v1.53.0) (2023-10-27)
 
 
