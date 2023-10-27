@@ -18,7 +18,7 @@ export const StepDetails = ({
     steps = steps.slice(0, 2);
   }
   const handleStepUpdate = (newStep: Step) => {
-    const index = steps.findIndex((s) => s.overview === newStep.overview);
+    const index = steps.findIndex((s) => s.description === newStep.description);
     const updatedSteps = [...steps];
     updatedSteps[index] = newStep;
 
@@ -41,7 +41,7 @@ export const StepDetails = ({
           <StepDetail
             step={step}
             handleStepUpdate={handleStepUpdate}
-            key={`step_detail_${index}_${snakeCase(step.overview)}`}
+            key={`step_detail_${index}_${snakeCase(step.description)}`}
           />
         );
       })}
