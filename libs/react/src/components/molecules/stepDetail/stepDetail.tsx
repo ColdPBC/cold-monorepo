@@ -17,10 +17,7 @@ export const StepDetail = ({ step, handleStepUpdate }: StepDetailProps) => {
   const assigneeSelectorRef = React.useRef<HTMLDivElement>(null);
   const stepDetailsCheckboxRef = React.useRef<HTMLDivElement>(null);
 
-  const handleAssigneeSelection = (
-    step: Step,
-    assignee: Assignee | undefined,
-  ) => {
+  const handleAssigneeSelection = (step: Step, assignee: Assignee | null) => {
     const updatedStep = {
       ...step,
       assignee: assignee,

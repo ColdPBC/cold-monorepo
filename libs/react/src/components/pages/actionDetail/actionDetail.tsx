@@ -17,6 +17,7 @@ import { ActionDetailProgress } from '../../organisms';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application';
 import { useAuth0Wrapper, useOrgSWR } from '@coldpbc/hooks';
+import { getFormattedUserName } from '@coldpbc/lib';
 
 interface Props {
   id: string;
@@ -225,7 +226,7 @@ const _ActionDetail = ({ id }: Props) => {
                                 />
                               </span>
                               <span className="text-white font-bold text-sm leading-normal">
-                                {selectedAssignee.name}
+                                {getFormattedUserName(selectedAssignee)}
                               </span>
                             </div>
                           ) : (
