@@ -8,7 +8,7 @@ import { Avatar } from '../../atoms';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application/errors/errorFallback';
 import { useOrgSWR } from '@coldpbc/hooks';
-import { getUserName } from '@coldpbc/lib';
+import { getFormattedUserName } from '@coldpbc/lib';
 
 interface Props extends Omit<DropdownProps, 'onSelect' | 'label'> {
   onSelect: (user: User) => void;
@@ -50,7 +50,7 @@ const _UserSelectDropdown = ({ onSelect, className, ...rest }: Props) => {
                 <Avatar size={GlobalSizes.xSmall} user={member} />
               </span>
               <span className="text-white font-bold text-sm leading-normal">
-                {getUserName(member)}
+                {getFormattedUserName(member)}
               </span>
             </Dropdown.Item>
             <div className="bg-bgc-accent h-[1px] w-full" />

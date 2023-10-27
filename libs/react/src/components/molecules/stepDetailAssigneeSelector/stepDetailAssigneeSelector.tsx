@@ -5,7 +5,7 @@ import { GlobalSizes, IconNames } from '@coldpbc/enums';
 import { ColdPlusIcon } from '@coldpbc/components';
 import { UserSelectDropdown } from '../userSelectDropdown';
 import { useAuth0, User } from '@auth0/auth0-react';
-import { getUserName } from '@coldpbc/lib';
+import { getFormattedUserName } from '@coldpbc/lib';
 
 export interface StepDetailAssigneeSelectorProps {
   assignee: Assignee | null;
@@ -28,7 +28,7 @@ export const StepDetailAssigneeSelector = ({
       >
         <Avatar size={GlobalSizes.xSmall} user={assignee} />
         <div className={'text-eyebrow flex items-center justify-center'}>
-          {getUserName(assignee)}
+          {getFormattedUserName(assignee)}
         </div>
         <div className={'flex items-center justify-center w-[24px] h-[24px]'}>
           <ColdIcon name={IconNames.CloseModalIcon} />
