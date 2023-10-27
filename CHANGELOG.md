@@ -1,3 +1,14 @@
+# [1.57.0](https://github.com/ColdPBC/ui/compare/v1.56.0...v1.57.0) (2023-10-27)
+
+
+### Features
+
+* add SWR error to pages components ([3a70bca](https://github.com/ColdPBC/ui/commit/3a70bcab56fc73e71b096116f21520964d602629))
+* add swrerror logging to molecules ([2d35a77](https://github.com/ColdPBC/ui/commit/2d35a770128013529266b82ca91e0d3d8636365e))
+* added more components with auth0error logging ([ca6f19c](https://github.com/ColdPBC/ui/commit/ca6f19c01c1c038d39a602e408368ef364bae128))
+* Added swr error to organism component ([6d35ff8](https://github.com/ColdPBC/ui/commit/6d35ff8b93670667562b0b243b8a38496ba7cc15))
+* setup data dog rum logging functionality ([7bb4c01](https://github.com/ColdPBC/ui/commit/7bb4c0144af39df16273a3c5871557b256da00a1))
+
 # [1.56.0](https://github.com/ColdPBC/ui/compare/v1.55.0...v1.56.0) (2023-10-27)
 
 
