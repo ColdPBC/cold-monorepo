@@ -55,6 +55,12 @@ const _NextActionsCard = () => {
           <ActionItem
             actionPayload={action}
             variant={ActionItemVariants.narrow}
+            showProgress={
+              action.action.ready_to_execute &&
+              action.action.dependent_surveys.every(
+                (survey) => survey.submitted,
+              )
+            }
           />
         ))}
     </Card>
