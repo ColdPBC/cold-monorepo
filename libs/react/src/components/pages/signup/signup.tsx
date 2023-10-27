@@ -47,11 +47,11 @@ const _SignupPage = ({ userData, signedPolicyData }: SignupPageProps) => {
 
   if (tos && privacy && signedPolicyData) {
     return (
-      <div className={'flex h-full w-full'}>
+      <div className={'flex h-screen inset-0 w-full overflow-hidden'}>
         <div className={'pl-[40px] pb-[40px] pt-[40px] pr-[24px]'}>
           <div
             className={
-              'items-center w-[668px] h-[963px] justify-center flex rounded-2xl'
+              'items-center w-[668px] h-full justify-center flex rounded-2xl'
             }
             style={{
               background: `url('https://cold-public-assets.s3.us-east-2.amazonaws.com/splash_images/signup_image.jpeg'), lightgray 50% / cover no-repeat`,
@@ -70,28 +70,22 @@ const _SignupPage = ({ userData, signedPolicyData }: SignupPageProps) => {
             </div>
           </div>
         </div>
-        <div
-          className={
-            'h-[1040px] flex items-center justify-center w-[708px] p-[64px]'
-          }
-        >
-          <div className={'w-[540px]'}>
-            <SignupForm
-              userData={userData}
-              companyData={organizationData}
-              tosSigned={signedPolicyData.some(
-                (policy) =>
-                  policy.name === 'tos' && !isEmpty(policy.policy_data),
-              )}
-              privacySigned={signedPolicyData.some(
-                (policy) =>
-                  policy.name === 'privacy' && !isEmpty(policy.policy_data),
-              )}
-              tosData={tos}
-              privacyData={privacy}
-              onSubmit={onSubmit}
-            />
-          </div>
+        <div className={'w-full h-full flex items-center justify-center flex-1 p-[64px] overflow-y-scroll'}>
+          <SignupForm
+            userData={userData}
+            companyData={organizationData}
+            tosSigned={signedPolicyData.some(
+              (policy) =>
+                policy.name === 'tos' && !isEmpty(policy.policy_data),
+            )}
+            privacySigned={signedPolicyData.some(
+              (policy) =>
+                policy.name === 'privacy' && !isEmpty(policy.policy_data),
+            )}
+            tosData={tos}
+            privacyData={privacy}
+            onSubmit={onSubmit}
+          />
         </div>
       </div>
     );
