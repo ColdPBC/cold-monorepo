@@ -146,9 +146,10 @@ const _ActionDetail = ({ id }: Props) => {
         },
       }}
       className={'z-10'}
+      fullScreenWidth={false}
     >
       <div className="flex gap-6 my-6">
-        <div className="grid gap-6 w-[899px] flex flex-col">
+        <div className="grid gap-6 flex-1 flex flex-col">
           {isActionComplete && <CompletedBanner />}
           <Card title="About this action" glow className="gap-0">
             <div className="flex h-full">
