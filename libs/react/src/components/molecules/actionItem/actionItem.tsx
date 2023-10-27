@@ -102,8 +102,7 @@ export const ActionItem = ({
   };
 
   const getImageClass = () => {
-    const className =
-      'rounded-lg w-[64px] h-full bg-cover bg-center bg-no-repeat';
+    const className = 'rounded-lg w-[64px] bg-cover bg-center bg-no-repeat';
     if (variant === ActionItemVariants.SubcategoryActionDetailsCard) {
       return className;
     } else {

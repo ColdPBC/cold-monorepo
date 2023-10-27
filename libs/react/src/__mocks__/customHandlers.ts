@@ -256,4 +256,17 @@ export const getActionHandler = {
       return res(ctx.json(actions));
     }),
   ],
+  actionsOverview: [
+    rest.get('*/organizations/*/actions', (req, res, ctx) => {
+      const actions = getActionsMock().map((actionPayload, index) => {
+        // set all the surveys to submitted and ready to execute to true
+        actionPayload.action.dependent_surveys.forEach((survey) => {
+          survey.submitted = true;
+        });
+        actionPayload.action.ready_to_execute = true;
+        return actionPayload;
+      });
+      return res(ctx.json(actions));
+    }),
+  ],
 };
