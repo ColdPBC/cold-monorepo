@@ -1,4 +1,4 @@
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
 import { set } from 'lodash';
 import { resolveAPIUrl } from './helper';
 import cookies from 'js-cookie';
