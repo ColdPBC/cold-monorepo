@@ -19,8 +19,8 @@ export const getActionMock = (): ActionPayload => {
       assignee: null,
       steps: [
         {
-          overview: 'Tell us how you pay your utility bills',
-          description:
+          description: 'Tell us how you pay your utility bills',
+          overview:
             "How you pay for electricity impacts your organization's opportunities to purchase different types of RECs. If your electric usage is incorporated in your lease, for instance, you may not be able to determine your annual energy use. Select from the following options: \n" +
             'You directly pay your utility bills; \n' +
             'You pay your utility bills indirectly via your landlord;\n' +
@@ -30,21 +30,21 @@ export const getActionMock = (): ActionPayload => {
         },
         {
           assignee: null,
+          description: 'Test Step 2',
           overview:
             "Determine your facility's annual electricity consumption in kWh and send to Cold",
-          description: 'Test Step 2',
           complete: '2022-09-27 18:00:00.000',
         },
         {
           assignee: null,
-          overview: "Sign up for your utility's renewable energy program",
           description: 'Test Step 3',
+          overview: "Sign up for your utility's renewable energy program",
           complete: null,
         },
         {
           assignee: null,
-          overview: 'Test Step 4',
           description: 'Test Step 4',
+          overview: 'Test Step 4',
           complete: null,
         },
       ],
