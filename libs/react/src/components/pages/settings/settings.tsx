@@ -10,7 +10,7 @@ import { Organization } from 'auth0';
 import { MainContent } from '../../organisms/mainContent';
 import { UserSettings } from '../../molecules/userSettings';
 import { Card } from '../../molecules';
-import { ButtonTypes } from '@coldpbc/enums';
+import { ButtonTypes, ErrorType } from '@coldpbc/enums';
 import { Dropdown } from 'flowbite-react';
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import { CheckIcon } from '@heroicons/react/20/solid';
@@ -18,14 +18,14 @@ import { flowbiteThemeOverride } from '@coldpbc/themes';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application/errors/errorFallback';
-import { useAuth0Wrapper, useOrgSWR } from '@coldpbc/hooks';
+import { useAuth0Wrapper, useColdContext, useOrgSWR } from '@coldpbc/hooks';
 
 export type MemberStatusType = 'Members' | 'Invitations';
 
 const _Settings = (props: { user?: any }) => {
   const auth0 = useAuth0Wrapper();
   const ldFlags = useFlags();
-
+  const { logError } = useColdContext();
   const [showModal, setShowModal] = useState(false);
   const [selectedMemberStatusType, setSelectedMemberStatusType] =
     useState<MemberStatusType>('Members');
@@ -34,11 +34,6 @@ const _Settings = (props: { user?: any }) => {
     ['/organizations/' + auth0.orgId, 'GET'],
     axiosFetcher,
   );
-
-  const { data: memberData }: { data: any; error: any; isLoading: boolean } =
-    useOrgSWR(['/members', 'GET'], axiosFetcher, {
-      revalidateOnFocus: false,
-    });
 
   const organizationData = organization.data as Organization;
 
@@ -50,7 +45,13 @@ const _Settings = (props: { user?: any }) => {
     );
   }
 
-  if (auth0.error && organization.error) {
+  if (auth0.error || organization.error) {
+    if (auth0.error) {
+      logError(auth0.error, ErrorType.Auth0Error);
+    }
+    if (organization.error) {
+      logError(organization.error, ErrorType.SWRError);
+    }
     return <div></div>;
   }
 
@@ -135,7 +136,7 @@ const _Settings = (props: { user?: any }) => {
 };
 
 export const Settings = withErrorBoundary(_Settings, {
-  FallbackComponent: (props) => <ErrorFallback />,
+  FallbackComponent: (props) => <ErrorFallback {...props} />,
   onError: (error, info) => {
     console.error('Error occurred in Settings: ', error);
   },

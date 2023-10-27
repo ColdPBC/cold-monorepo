@@ -9,9 +9,10 @@ import capitalize from 'lodash/capitalize';
 import includes from 'lodash/includes';
 import { Role } from 'auth0';
 import { isArray } from 'lodash';
-import { ButtonTypes } from '@coldpbc/enums';
+import { ButtonTypes, ErrorType } from '@coldpbc/enums';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../../application/errors/errorFallback';
+import { useColdContext } from '@coldpbc/hooks';
 
 export interface InviteMemberFormProps {
   inviteMembers: (email: string, roleId: string) => void;
@@ -35,6 +36,8 @@ const Component = (props: InviteMemberFormProps) => {
       revalidateOnFocus: false,
     },
   );
+
+  const { logError } = useColdContext();
 
   const handleChange = (name: string, value: any) => {
     setMemberForm({ ...memberForm, [name]: value });
@@ -65,6 +68,11 @@ const Component = (props: InviteMemberFormProps) => {
     if (match) return;
     return role;
   };
+
+  if (error) {
+    logError(error, ErrorType.SWRError);
+    return null;
+  }
 
   if (isLoading) {
     return (
@@ -148,7 +156,7 @@ const Component = (props: InviteMemberFormProps) => {
 };
 
 export const InviteMemberForm = withErrorBoundary(Component, {
-  FallbackComponent: (props) => <ErrorFallback />,
+  FallbackComponent: (props) => <ErrorFallback {...props} />,
   onError: (error, info) => {
     console.error('Error occurred in InviteMemberForm: ', error);
   },

@@ -48,6 +48,7 @@ export const Default: Story = {
                 },
               } as Auth0ProviderOptions,
               launchDarklyClientSideId: '',
+              logError: () => {},
             }}
           >
             <Application />

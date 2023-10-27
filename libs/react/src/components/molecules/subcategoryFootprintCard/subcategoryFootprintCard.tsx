@@ -16,6 +16,8 @@ import {
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application/errors/errorFallback';
 import { useOrgSWR } from '../../../hooks/useOrgSWR';
+import { ErrorType } from '@coldpbc/enums';
+import { useColdContext } from '@coldpbc/hooks';
 
 interface Props {
   variant?: EmissionsDonutChartVariants;
@@ -48,10 +50,16 @@ const _SubcategoryFootprintCard = ({
     ['/categories/company_decarbonization', 'GET'],
     axiosFetcher,
   );
+  const { logError } = useColdContext();
 
   const colors = getSchemeForColor(
     HexColors[footprintSubcategoryColors[subcategory_key]],
   );
+
+  if (error) {
+    logError(error, ErrorType.SWRError);
+    return null;
+  }
 
   const subcategoryData = data?.subcategories?.[subcategory_key];
 
@@ -163,7 +171,7 @@ const _SubcategoryFootprintCard = ({
 export const SubcategoryFootprintCard = withErrorBoundary(
   _SubcategoryFootprintCard,
   {
-    FallbackComponent: (props) => <ErrorFallback />,
+    FallbackComponent: (props) => <ErrorFallback {...props} />,
     onError: (error, info) => {
       console.error('Error occurred in SubcategoryFootprintCard: ', error);
     },

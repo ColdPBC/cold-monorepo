@@ -5,9 +5,17 @@ import { SubcategoryJourneyPreview } from '../subcategoryJourneyPreview';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application/errors/errorFallback';
 import { useOrgSWR } from '../../../hooks/useOrgSWR';
+import { useColdContext } from '@coldpbc/hooks';
+import { ErrorType } from '@coldpbc/enums';
 
 const _JourneyDetailView = () => {
-  const { data } = useOrgSWR<any>(['/categories', 'GET'], axiosFetcher);
+  const { data, error } = useOrgSWR<any>(['/categories', 'GET'], axiosFetcher);
+  const { logError } = useColdContext();
+
+  if (error) {
+    logError(error, ErrorType.SWRError);
+    return null;
+  }
 
   const showCompanySection =
     data?.definition?.categories['company_decarbonization']?.subcategories[
@@ -108,7 +116,7 @@ const _JourneyDetailView = () => {
 };
 
 export const JourneyDetailView = withErrorBoundary(_JourneyDetailView, {
-  FallbackComponent: (props) => <ErrorFallback />,
+  FallbackComponent: (props) => <ErrorFallback {...props} />,
   onError: (error, info) => {
     console.error('Error occurred in JourneyDetailView: ', error);
   },

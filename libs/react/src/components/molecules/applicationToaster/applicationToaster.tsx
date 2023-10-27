@@ -3,12 +3,15 @@ import useSWR, { mutate } from 'swr';
 import { Toaster } from '../../atoms';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application';
+import { useColdContext } from '@coldpbc/hooks';
+import { ErrorType } from '@coldpbc/enums';
 
 const _ApplicationToaster = () => {
   const { data, error, isLoading } = useSWR('messages', {
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
   });
+  const { logError } = useColdContext();
 
   useEffect(() => {
     if (data) {
@@ -27,7 +30,8 @@ const _ApplicationToaster = () => {
   }, [data]);
 
   if (error) {
-    return <></>;
+    logError(error, ErrorType.SWRError);
+    return null;
   }
 
   if (isLoading) {
@@ -42,7 +46,7 @@ const _ApplicationToaster = () => {
 };
 
 export const ApplicationToaster = withErrorBoundary(_ApplicationToaster, {
-  FallbackComponent: (props) => <ErrorFallback />,
+  FallbackComponent: (props) => <ErrorFallback {...props} />,
   onError: (error, info) => {
     console.error('Error occurred in ApplicationToaster: ', error);
   },

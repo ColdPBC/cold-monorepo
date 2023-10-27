@@ -10,6 +10,8 @@ import { darkTableTheme } from '../../../themes/flowbiteThemeOverride';
 import { cloneDeep } from 'lodash';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application/errors/errorFallback';
+import { useColdContext } from '@coldpbc/hooks';
+import { ErrorType } from '@coldpbc/enums';
 
 export interface DatagridProps {
   definitionURL: string;
@@ -28,7 +30,7 @@ const _Datagrid = (props: DatagridProps) => {
     [`${definitionURL}`, 'GET'],
     axiosFetcher,
   );
-
+  const { logError } = useColdContext();
   const getTableRowCellItem = (key: string, item: any) => {
     if (key === 'actions') {
       return <TableActions actions={item} />;
@@ -60,7 +62,8 @@ const _Datagrid = (props: DatagridProps) => {
   };
 
   if (error) {
-    return <div>Failed to load</div>;
+    logError(error, ErrorType.SWRError);
+    return null;
   }
 
   if (isLoading) {
@@ -127,7 +130,7 @@ const _Datagrid = (props: DatagridProps) => {
 };
 
 export const Datagrid = withErrorBoundary(_Datagrid, {
-  FallbackComponent: (props) => <ErrorFallback />,
+  FallbackComponent: (props) => <ErrorFallback {...props} />,
   onError: (error, info) => {
     console.error('Error occurred in Datagrid: ', error);
   },
