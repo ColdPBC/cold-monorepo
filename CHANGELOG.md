@@ -1,3 +1,10 @@
+# [1.53.0](https://github.com/ColdPBC/ui/compare/v1.52.1...v1.53.0) (2023-10-27)
+
+
+### Features
+
+* Switch overview and step description in step detail ([d310c5a](https://github.com/ColdPBC/ui/commit/d310c5ad7cb338241a0eac1e42d1648d53026175))
+
 ## [1.52.1](https://github.com/ColdPBC/ui/compare/v1.52.0...v1.52.1) (2023-10-26)
 
 
