@@ -1,14 +1,14 @@
-import { useAuth0, User } from '@auth0/auth0-react';
+import { User } from '@auth0/auth0-react';
 import { ErrorType, GlobalSizes } from '@coldpbc/enums';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { flowbiteThemeOverride } from '@coldpbc/themes';
 import { Dropdown, DropdownProps } from 'flowbite-react';
-import useSWR from 'swr';
 import { twMerge } from 'tailwind-merge';
 import { Avatar } from '../../atoms';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application/errors/errorFallback';
-import { useAuth0Wrapper, useColdContext, useOrgSWR } from '@coldpbc/hooks';
+import { useColdContext, useOrgSWR } from '@coldpbc/hooks';
+import { getFormattedUserName } from '@coldpbc/lib';
 
 interface Props extends Omit<DropdownProps, 'onSelect' | 'label'> {
   onSelect: (user: User) => void;
@@ -56,7 +56,7 @@ const _UserSelectDropdown = ({ onSelect, className, ...rest }: Props) => {
                 <Avatar size={GlobalSizes.xSmall} user={member} />
               </span>
               <span className="text-white font-bold text-sm leading-normal">
-                {member.name}
+                {getFormattedUserName(member)}
               </span>
             </Dropdown.Item>
             <div className="bg-bgc-accent h-[1px] w-full" />
