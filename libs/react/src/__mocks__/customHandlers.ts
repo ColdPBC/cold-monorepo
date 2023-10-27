@@ -198,6 +198,7 @@ export const getActionHandler = {
         action: {
           ...getActionAllStepsComplete().action,
           assignee: {
+            email: members[0].email,
             name: members[0].name,
             family_name: members[0].family_name,
             given_name: members[0].given_name,
@@ -208,6 +209,7 @@ export const getActionHandler = {
               return {
                 ...step,
                 assignee: {
+                  email: members[0].email,
                   name: members[0].name,
                   family_name: members[0].family_name,
                   given_name: members[0].given_name,
