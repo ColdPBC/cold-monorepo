@@ -65,9 +65,9 @@ export const ActionItem = ({
       progressPercent = 0;
     }
     return (
-      <div className={'w-full p-[2px] bg-bgc-accent rounded-lg'}>
+      <div className={'w-full h-[4px] bg-bgc-accent rounded-lg'}>
         <motion.div
-          className={'h-[4px] bg-primary rounded-lg'}
+          className={'h-full bg-primary rounded-lg'}
           initial={{ width: 0 }}
           animate={{ width: `${progressPercent * 100}%` }}
         />
@@ -106,7 +106,7 @@ export const ActionItem = ({
     if (variant === ActionItemVariants.SubcategoryActionDetailsCard) {
       return className + ' min-h-[153px]';
     } else {
-      return className + ' min-h-[126px]';
+      return className + ' min-h-[122px]';
     }
   };
 
