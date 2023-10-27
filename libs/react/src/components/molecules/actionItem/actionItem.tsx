@@ -77,7 +77,7 @@ export const ActionItem = ({
 
   const getProgressPart = () => {
     if (showProgress === false) {
-      return <div></div>;
+      return <div className={'h-[24px] w-full'}></div>;
     } else {
       return (
         <div className={'space-y-2'}>
@@ -102,11 +102,12 @@ export const ActionItem = ({
   };
 
   const getImageClass = () => {
-    const className = 'rounded-lg w-[64px] bg-cover bg-center bg-no-repeat';
+    const className =
+      'rounded-lg w-[64px] h-full bg-cover bg-center bg-no-repeat';
     if (variant === ActionItemVariants.SubcategoryActionDetailsCard) {
-      return className + ' min-h-[153px]';
+      return className;
     } else {
-      return className + ' min-h-[122px]';
+      return className;
     }
   };
 
