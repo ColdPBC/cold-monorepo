@@ -17,7 +17,7 @@ import {
   getFootprintDataMockTwoSubCats,
   getFootprintEmptyDataMock,
 } from './categoriesMock';
-import { getMembersOnlyOneMember } from './membersMock';
+import { getMembersNoInvitations } from './membersMock';
 import {
   getNewsAllMissingProperties,
   getNewsDefault,
@@ -91,8 +91,8 @@ export const getCategoriesHandler = {
 };
 
 export const getMembersHandler = {
-  onlyOneMember: rest.get('*/organizations/*/members', (req, res, ctx) => {
-    return res(ctx.json(getMembersOnlyOneMember()));
+  noInvitations: rest.get('*/organizations/*/members', (req, res, ctx) => {
+    return res(ctx.json(getMembersNoInvitations()));
   }),
 };
 

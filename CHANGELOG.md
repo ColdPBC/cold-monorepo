@@ -1,3 +1,11 @@
+## [1.52.1](https://github.com/ColdPBC/ui/compare/v1.52.0...v1.52.1) (2023-10-26)
+
+
+### Bug Fixes
+
+* Team member table doesn't have Members / Invites dropdown ([99f7708](https://github.com/ColdPBC/ui/commit/99f7708a485c3e4811f3401f71822a04da11eaa6))
+* Team member table doesn't have Members / Invites dropdown ([#120](https://github.com/ColdPBC/ui/issues/120)) ([e4992c3](https://github.com/ColdPBC/ui/commit/e4992c3d5dbb13e5100cbdfd4e0d607da610e8b7))
+
 # [1.52.0](https://github.com/ColdPBC/ui/compare/v1.51.2...v1.52.0) (2023-10-25)
 
 
