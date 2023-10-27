@@ -78,7 +78,7 @@ export const ActionItem = ({
 
   const getProgressPart = () => {
     if (showProgress === false) {
-      return <div></div>;
+      return <div className={'h-[24px] w-full'}></div>;
     } else {
       return (
         <div className={'space-y-2'}>
