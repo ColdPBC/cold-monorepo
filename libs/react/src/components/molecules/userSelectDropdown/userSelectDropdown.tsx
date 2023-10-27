@@ -9,6 +9,7 @@ import { Avatar } from '../../atoms';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application/errors/errorFallback';
 import { useAuth0Wrapper, useOrgSWR } from '@coldpbc/hooks';
+import { getUserName } from '@coldpbc/lib';
 
 interface Props extends Omit<DropdownProps, 'onSelect' | 'label'> {
   onSelect: (user: User) => void;
@@ -27,14 +28,6 @@ const _UserSelectDropdown = ({ onSelect, className, ...rest }: Props) => {
       revalidateOnFocus: false,
     },
   );
-
-  const getUserName = (user: User) => {
-    if (user.given_name && user.family_name) {
-      return `${user.given_name} ${user.family_name}`;
-    } else {
-      return user.name;
-    }
-  };
 
   return (
     <Dropdown

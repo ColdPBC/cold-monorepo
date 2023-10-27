@@ -17,6 +17,7 @@ import { ActionDetailProgress } from '../../organisms';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application';
 import { useAuth0Wrapper, useOrgSWR } from '@coldpbc/hooks';
+import { getUserName } from '@coldpbc/lib';
 
 interface Props {
   id: string;
@@ -84,14 +85,6 @@ const _ActionDetail = ({ id }: Props) => {
         picture: assignee.picture,
       },
     });
-  };
-
-  const getUserName = (user: User) => {
-    if (user.given_name && user.family_name) {
-      return `${user.given_name} ${user.family_name}`;
-    } else {
-      return user.name;
-    }
   };
 
   useEffect(() => {

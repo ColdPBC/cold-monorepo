@@ -5,19 +5,12 @@ import { GlobalSizes, IconNames } from '@coldpbc/enums';
 import { ColdPlusIcon } from '@coldpbc/components';
 import { UserSelectDropdown } from '../userSelectDropdown';
 import { useAuth0, User } from '@auth0/auth0-react';
+import { getUserName } from '@coldpbc/lib';
 
 export interface StepDetailAssigneeSelectorProps {
   assignee: Assignee | null;
   handleAssigneeSelection: (assignee: Assignee | null) => void;
 }
-
-const getUserName = (user: User) => {
-  if (user.given_name && user.family_name) {
-    return `${user.given_name} ${user.family_name}`;
-  } else {
-    return user.name;
-  }
-};
 
 export const StepDetailAssigneeSelector = ({
   assignee,
