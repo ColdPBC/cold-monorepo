@@ -9,6 +9,7 @@ import {
 } from '@coldpbc/enums';
 import { HexColors } from '@coldpbc/themes';
 import { twMerge } from 'tailwind-merge';
+import clsx from 'clsx';
 
 export interface TakeoverProps {
   show: boolean;
@@ -25,10 +26,11 @@ export interface TakeoverProps {
   };
   isLoading?: boolean;
   className?: string;
+  fullScreenWidth?: boolean;
 }
 
 export const Takeover = (props: PropsWithChildren<TakeoverProps>) => {
-  const { children, show, setShow, header, isLoading, className } = props;
+  const { children, show, setShow, header, isLoading, className, fullScreenWidth = true } = props;
 
   const getHeaderComponent = () => {
     if (header && !isLoading) {
@@ -81,19 +83,28 @@ export const Takeover = (props: PropsWithChildren<TakeoverProps>) => {
     return (
       <div
         className={twMerge(
-          'fixed inset-0 h-screen w-screen bg-bgc-main px-[40px] pt-[40px] z-10 flex flex-col overflow-scroll',
+          'fixed h-screen w-screen bg-bgc-main z-10 inset-0',
           className,
         )}
       >
-        {getHeaderComponent()}
-        <div className="flex-1 flex flex-col">
-          {isLoading ? (
-            <div className="h-full w-full flex items-center justify-center">
-              <Spinner size={GlobalSizes.xLarge} />
-            </div>
-          ) : (
-            children
+        <div
+          className={clsx(
+            'flex flex-col overflow-y-scroll h-full px-[40px] pt-[40px]',
+            {
+              'max-w-[1440px] m-auto': !fullScreenWidth
+            }
           )}
+        >
+          {getHeaderComponent()}
+          <div className="flex-1 flex flex-col">
+            {isLoading ? (
+              <div className="h-full w-full flex items-center justify-center">
+                <Spinner size={GlobalSizes.xLarge} />
+              </div>
+            ) : (
+              children
+            )}
+          </div>
         </div>
       </div>
     );
