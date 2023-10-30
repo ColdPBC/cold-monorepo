@@ -27,15 +27,6 @@ const _TeamMemberSettings = (props: any) => {
 
   const organization = useOrgSWR(['', 'GET'], axiosFetcher);
 
-  const { data: Organization } = organization;
-
-  const { user: dataGridUser } = useAuth0();
-
-  const { data: memberData }: { data: any; error: any; isLoading: boolean } =
-    useOrgSWR(['/members', 'GET'], axiosFetcher, {
-      revalidateOnFocus: false,
-    });
-
   const organizationData = organization.data as Organization;
 
   if (auth0.isLoading && organization.isLoading) {
