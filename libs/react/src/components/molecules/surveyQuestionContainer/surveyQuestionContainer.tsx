@@ -6,13 +6,14 @@ import {
   SurveyPayloadType,
   SurveySectionType,
 } from '@coldpbc/interfaces';
-import { BaseButton } from '../../atoms';
+import { BaseButton, Spinner } from '../../atoms';
 import { ButtonTypes, GlobalSizes } from '@coldpbc/enums';
 import { CSSTransition, SwitchTransition } from 'react-transition-group';
 import { getSectionIndex, isKeyValueFollowUp } from '@coldpbc/lib';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application';
+import { useAuth0Wrapper } from '@coldpbc/hooks';
 
 export interface SurveyQuestionContainerProps {
   activeKey: SurveyActiveKeyType;
@@ -29,6 +30,7 @@ const _SurveyQuestionContainer = ({
   surveyData,
   setSurveyData,
 }: SurveyQuestionContainerProps) => {
+  const { getOrgSpecificUrl } = useAuth0Wrapper();
   const nextQuestionTransitionClassNames = {
     enter: 'transform translate-y-full',
     enterDone: 'transition ease-out duration-200 transform translate-y-0',
@@ -470,7 +472,7 @@ const _SurveyQuestionContainer = ({
 
   const putSurveyData = (survey: SurveyPayloadType) => {
     axiosFetcher([
-      `/surveys/${name}`,
+      getOrgSpecificUrl(`/surveys/${name}`),
       'PUT',
       JSON.stringify({
         definition: survey.definition,
@@ -549,7 +551,7 @@ const _SurveyQuestionContainer = ({
 export const SurveyQuestionContainer = withErrorBoundary(
   _SurveyQuestionContainer,
   {
-    FallbackComponent: (props) => <ErrorFallback />,
+    FallbackComponent: (props) => <ErrorFallback {...props} />,
     onError: (error, info) => {
       console.error('Error occurred in SurveyQuestionContainer: ', error);
     },

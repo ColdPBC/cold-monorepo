@@ -7,6 +7,9 @@ import { useFlags } from 'launchdarkly-react-client-sdk';
 import { twMerge } from 'tailwind-merge';
 import { Card } from '../card';
 import { motion } from 'framer-motion';
+import { useOrgSWR } from '../../../hooks/useOrgSWR';
+import { useColdContext } from '@coldpbc/hooks';
+import { ErrorType } from '@coldpbc/enums';
 
 const scoreQuadrants = [
   {
@@ -46,10 +49,17 @@ export const SubcategoryJourneyPreview = ({
   cardTitle,
   to,
   containerClassName,
-  glow
+  glow,
 }: Props) => {
   const ldFlags = useFlags();
-  const { data } = useSWR<any>(['/categories', 'GET'], axiosFetcher);
+  const { data, error } = useOrgSWR<any>(['/categories', 'GET'], axiosFetcher);
+
+  const { logError } = useColdContext();
+
+  if (error) {
+    logError(error, ErrorType.SWRError);
+    return null;
+  }
 
   const subcategoryData =
     data?.definition?.categories[category_key]?.subcategories[subcategory_key];
@@ -71,8 +81,9 @@ export const SubcategoryJourneyPreview = ({
 
   return (
     <Card
-      className={twMerge("gap-0 p-4 border-bgc-accent border rounded-lg w-[310px] text-white bg-bgc-elevated",
-        containerClassName
+      className={twMerge(
+        'gap-0 p-4 border-bgc-accent border rounded-lg w-[310px] text-white bg-bgc-elevated',
+        containerClassName,
       )}
       glow={!!glow}
     >
@@ -102,13 +113,13 @@ export const SubcategoryJourneyPreview = ({
             },
           )}
           initial={{
-            width: 0
+            width: 0,
           }}
           animate={{
-            width: `calc(${subcategoryData.journey_score}% - 4px)`
+            width: `calc(${subcategoryData.journey_score}% - 4px)`,
           }}
           transition={{
-            duration: .5
+            duration: 0.5,
           }}
         />
         <div className="bg-gray-30 flex-1 rounded-l-lg mr-0.5" />
@@ -127,7 +138,7 @@ export const SubcategoryJourneyPreview = ({
               : 100}
           </div>
         </div>
-        {curScoreQuadrantIndex < 3 &&
+        {curScoreQuadrantIndex < 3 && (
           <>
             <ArrowRightIcon className="mx-2 w-[24px] text-bgc-accent" />
             <div className="rounded-lg flex py-1.5 px-2 bg-bgc-accent">
@@ -136,7 +147,7 @@ export const SubcategoryJourneyPreview = ({
                 : 'Trailblazer'}
             </div>
           </>
-        }
+        )}
       </div>
     </Card>
   );

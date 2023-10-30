@@ -1,37 +1,46 @@
 import { Card, Takeover, UserSelectDropdown } from '../../molecules';
-import useSWR, { useSWRConfig } from 'swr';
-import { useAuth0, User } from '@auth0/auth0-react';
+import { mutate as globalMutate } from 'swr';
+import { User } from '@auth0/auth0-react';
 import { axiosFetcher } from '@coldpbc/fetchers';
-import { ActionPayload, Assignee } from '@coldpbc/interfaces';
+import { ActionPayload } from '@coldpbc/interfaces';
 import { ArrowRightIcon, ChevronDownIcon } from '@heroicons/react/20/solid';
 import { CompletedBanner } from './completedBanner';
 import { Avatar, BaseButton } from '../../atoms';
-import { ButtonTypes, GlobalSizes } from '@coldpbc/enums';
-import { Datepicker } from 'flowbite-react';
-import { Dropdown } from 'flowbite-react';
+import { ButtonTypes, ErrorType, GlobalSizes } from '@coldpbc/enums';
+import { Datepicker, Dropdown } from 'flowbite-react';
 import { flowbiteThemeOverride } from '@coldpbc/themes';
 import { DateTime } from 'luxon';
-import { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { ActionDetailProgress } from '../../organisms';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application';
+import { useAuth0Wrapper, useColdContext, useOrgSWR } from '@coldpbc/hooks';
+import { getFormattedUserName } from '@coldpbc/lib';
 
 interface Props {
   id: string;
 }
 
 const _ActionDetail = ({ id }: Props) => {
+  const { logError } = useColdContext();
   const [searchParams, setSearchParams] = useSearchParams();
-  const { user } = useAuth0();
+  const { getOrgSpecificUrl } = useAuth0Wrapper();
   const [show, setShow] = useState(true);
 
-  const { data, error, isLoading, mutate } = useSWR<ActionPayload, any, any>(
-    [`/organizations/${user?.coldclimate_claims.org_id}/actions/${id}`, 'GET'],
+  const { data, error, isLoading, mutate } = useOrgSWR<ActionPayload, any>(
+    [`/actions/${id}`, 'GET'],
+    axiosFetcher,
+  );
+
+  const { data: categoriesData } = useOrgSWR<any>(
+    ['/categories', 'GET'],
     axiosFetcher,
   );
 
   const isActionComplete = data?.action.steps.every((step) => step.complete);
+
+  const selectedAssignee = data?.action.assignee;
 
   const handleUpdateAction = async (
     updatedAction: Partial<ActionPayload['action']>,
@@ -46,7 +55,7 @@ const _ActionDetail = ({ id }: Props) => {
     };
 
     await axiosFetcher([
-      `/organizations/${user?.coldclimate_claims.org_id}/actions/${data.id}`,
+      getOrgSpecificUrl(`/actions/${data.id}`),
       'PATCH',
       JSON.stringify(newAction),
     ]);
@@ -56,8 +65,12 @@ const _ActionDetail = ({ id }: Props) => {
         ...data,
         ...newAction,
       },
-      { revalidate: false },
+      {
+        revalidate: false,
+      },
     );
+
+    await globalMutate([getOrgSpecificUrl(`/actions`), 'GET']);
   };
 
   const handleClose = () => {
@@ -79,9 +92,43 @@ const _ActionDetail = ({ id }: Props) => {
     });
   };
 
-  const selectedAssignee = data?.action.assignee;
+  useEffect(() => {
+    const reloadActions = async () => {
+      await mutate();
+      await globalMutate([getOrgSpecificUrl(`/actions`), 'GET']);
+    };
+    reloadActions();
+  }, [searchParams]);
 
-  if (error && !isLoading) {
+  // Find the label for an area of impact in the category data
+  const getAreaOfImpactLabel = (area: string) => {
+    // default to showing key if activity not found
+    let label = area;
+
+    Object.keys(categoriesData?.definition.categories ?? {})
+      .forEach(categoryKey => {
+        const category = categoriesData.definition.categories[categoryKey];
+
+        Object.keys(category.subcategories).forEach(subcategoryKey => {
+          const subcategory = category.subcategories[subcategoryKey];
+
+          Object.keys(subcategory.activities).forEach((activityKey) => {
+            if (activityKey === area) {
+              label = subcategory.activities[activityKey].activity_name
+            }
+          })
+        })
+      })
+
+    return (
+      <div className="ml-2 rounded-2xl bg-primary-300 py-2 px-4">
+        {label}
+      </div>
+    )
+  }
+
+  if (error) {
+    logError(error, ErrorType.SWRError);
     return null;
   }
 
@@ -92,7 +139,7 @@ const _ActionDetail = ({ id }: Props) => {
       isLoading={isLoading}
       header={{
         title: {
-          text: 'Renewable Energy Procurement',
+          text: data?.action.title || '',
         },
         dismiss: {
           dismissible: true,
@@ -101,42 +148,37 @@ const _ActionDetail = ({ id }: Props) => {
         },
       }}
       className={'z-10'}
+      fullScreenWidth={false}
     >
       <div className="flex gap-6 my-6">
-        <div className="grid gap-6 w-[899px] flex flex-col">
+        <div className="grid gap-6 flex-1 flex flex-col">
           {isActionComplete && <CompletedBanner />}
           <Card title="About this action" glow className="gap-0">
             <div className="flex h-full">
               <div>
-                <h4 className="font-bold text-sm leading-normal mt-4 mb-2">
+                <div className="font-bold text-body leading-normal mt-4 mb-2">
                   Objective
-                </h4>
-                <p className="m-0 font-medium text-sm leading-normal mb-4">
+                </div>
+                <div className="m-0 text-body leading-normal mb-4">
                   {data?.action.overview}
-                </p>
-                <p className="m-0 font-medium text-sm leading-normal">
+                </div>
+                <div className="m-0 text-body leading-normal">
                   {data?.action.objective_description}
-                </p>
-                <h4 className="font-bold text-sm leading-normal mt-4 mb-2">
-                  How we're going to do it
-                </h4>
-                <ol className="list-decimal list-outside pl-6">
-                  {data?.action.steps.map((step) => (
-                    <li>
-                      <p className="m-0 font-medium text-sm leading-normal">
-                        {step.overview}
-                      </p>
-                    </li>
-                  ))}
-                </ol>
+                </div>
+                {data?.action.process_description && (
+                  <>
+                    <div className="font-bold text-body leading-normal mt-4 mb-2">
+                      How we're going to do it
+                    </div>
+                    <p className={'pl-1 text-body whitespace-pre-wrap'}>
+                      {data.action.process_description}
+                    </p>
+                  </>
+                )}
                 {data?.action.areas_of_impact && (
                   <div className="flex items-center mt-10 text-xs font-medium leading-none">
                     <span className="">Areas of impact:</span>
-                    {data?.action.areas_of_impact.map((area) => (
-                      <div className="ml-2 rounded-2xl bg-primary-300 py-2 px-4">
-                        {area}
-                      </div>
-                    ))}
+                    {data?.action.areas_of_impact.map((area) => getAreaOfImpactLabel(area))}
                   </div>
                 )}
               </div>
@@ -185,7 +227,7 @@ const _ActionDetail = ({ id }: Props) => {
                                 />
                               </span>
                               <span className="text-white font-bold text-sm leading-normal">
-                                {selectedAssignee.name}
+                                {getFormattedUserName(selectedAssignee)}
                               </span>
                             </div>
                           ) : (
@@ -233,7 +275,6 @@ const _ActionDetail = ({ id }: Props) => {
                   theme={flowbiteThemeOverride.datepicker}
                   showClearButton={false}
                   onSelectedDateChanged={(date) => {
-                    console.log({ onInput: date.toISOString() });
                     handleUpdateAction({
                       due_date: date.toISOString(),
                     });
@@ -264,7 +305,7 @@ const _ActionDetail = ({ id }: Props) => {
 };
 
 export const ActionDetail = withErrorBoundary(_ActionDetail, {
-  FallbackComponent: (props) => <ErrorFallback />,
+  FallbackComponent: (props) => <ErrorFallback {...props} />,
   onError: (error, info) => {
     console.error('Error occurred in ActionDetail: ', error);
   },

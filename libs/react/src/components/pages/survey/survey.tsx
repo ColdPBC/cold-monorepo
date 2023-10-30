@@ -4,16 +4,19 @@ import { Spinner, SurveyLeftNav, SurveyRightNav, Takeover } from '../../index';
 import { cloneDeep, find, first, isEmpty } from 'lodash';
 import useSWR, { mutate } from 'swr';
 import { axiosFetcher } from '@coldpbc/fetchers';
-import { GlobalSizes } from '@coldpbc/enums';
+import { ErrorType, GlobalSizes } from '@coldpbc/enums';
 import { useSearchParams } from 'react-router-dom';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application/errors/errorFallback';
+import { useOrgSWR } from '../../../hooks/useOrgSWR';
+import { useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
 
 export interface SurveyProps {
   surveyName: string;
 }
 
 const _Survey = (props: SurveyProps) => {
+  const { getOrgSpecificUrl } = useAuth0Wrapper();
   const { surveyName } = props;
   const [activeKey, setActiveKey] = React.useState<SurveyActiveKeyType>({
     value: '',
@@ -22,13 +25,13 @@ const _Survey = (props: SurveyProps) => {
   });
   const [show, setShow] = React.useState<boolean>(true);
   const [surveyData, setSurveyData] = React.useState<SurveyPayloadType>();
-  const [headerShown, setHeaderShown] = React.useState<boolean>();
-  const { data, error, isLoading } = useSWR<SurveyPayloadType, any, any>(
+  const { data, error, isLoading } = useOrgSWR<SurveyPayloadType, any>(
     [`/surveys/${surveyName}`, 'GET'],
     axiosFetcher,
   );
   const [searchParams, setSearchParams] = useSearchParams();
   const [submitted, setSubmitted] = React.useState<boolean>(false);
+  const { logError } = useColdContext();
 
   const submitSurvey = () => {
     setSubmitted(true);
@@ -157,7 +160,7 @@ const _Survey = (props: SurveyProps) => {
       searchParams.delete('surveyName');
       setSearchParams(searchParams);
     }
-    await mutate([`/surveys/${surveyName}`, 'GET'], {
+    await mutate([getOrgSpecificUrl(`/surveys/${surveyName}`), 'GET'], {
       ...surveyData,
     });
     setShow(false);
@@ -217,7 +220,10 @@ const _Survey = (props: SurveyProps) => {
     }
   }, [data]);
 
-  if (error) return <div>failed to load</div>;
+  if (error) {
+    logError(error, ErrorType.SWRError);
+    return <div></div>;
+  }
 
   if (isLoading) {
     return (
@@ -273,7 +279,7 @@ const _Survey = (props: SurveyProps) => {
 };
 
 export const Survey = withErrorBoundary(_Survey, {
-  FallbackComponent: (props) => <ErrorFallback />,
+  FallbackComponent: (props) => <ErrorFallback {...props} />,
   onError: (error, info) => {
     console.error('Error occurred in Survey: ', error);
   },

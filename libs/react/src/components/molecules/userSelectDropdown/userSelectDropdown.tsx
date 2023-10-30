@@ -1,13 +1,14 @@
-import { useAuth0, User } from '@auth0/auth0-react';
-import { GlobalSizes } from '@coldpbc/enums';
+import { User } from '@auth0/auth0-react';
+import { ErrorType, GlobalSizes } from '@coldpbc/enums';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { flowbiteThemeOverride } from '@coldpbc/themes';
 import { Dropdown, DropdownProps } from 'flowbite-react';
-import useSWR from 'swr';
 import { twMerge } from 'tailwind-merge';
 import { Avatar } from '../../atoms';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application/errors/errorFallback';
+import { useColdContext, useOrgSWR } from '@coldpbc/hooks';
+import { getFormattedUserName } from '@coldpbc/lib';
 
 interface Props extends Omit<DropdownProps, 'onSelect' | 'label'> {
   onSelect: (user: User) => void;
@@ -15,30 +16,23 @@ interface Props extends Omit<DropdownProps, 'onSelect' | 'label'> {
 }
 
 const _UserSelectDropdown = ({ onSelect, className, ...rest }: Props) => {
-  const { user: dataGridUser } = useAuth0();
-
-  const getMembersURL = () => {
-    if (dataGridUser?.coldclimate_claims.org_id) {
-      return [
-        '/organizations/' + dataGridUser.coldclimate_claims.org_id + '/members',
-        'GET',
-      ];
-    } else {
-      return null;
-    }
-  };
-
   const {
     data,
     error,
     isLoading,
-  }: { data: any; error: any; isLoading: boolean } = useSWR(
-    getMembersURL(),
+  }: { data: any; error: any; isLoading: boolean } = useOrgSWR(
+    ['/members', 'GET'],
     axiosFetcher,
     {
       revalidateOnFocus: false,
     },
   );
+  const { logError } = useColdContext();
+
+  if (error) {
+    logError(error, ErrorType.SWRError);
+    return null;
+  }
 
   return (
     <Dropdown
@@ -62,7 +56,7 @@ const _UserSelectDropdown = ({ onSelect, className, ...rest }: Props) => {
                 <Avatar size={GlobalSizes.xSmall} user={member} />
               </span>
               <span className="text-white font-bold text-sm leading-normal">
-                {member.name}
+                {getFormattedUserName(member)}
               </span>
             </Dropdown.Item>
             <div className="bg-bgc-accent h-[1px] w-full" />
@@ -73,7 +67,7 @@ const _UserSelectDropdown = ({ onSelect, className, ...rest }: Props) => {
 };
 
 export const UserSelectDropdown = withErrorBoundary(_UserSelectDropdown, {
-  FallbackComponent: (props) => <ErrorFallback />,
+  FallbackComponent: (props) => <ErrorFallback {...props} />,
   onError: (error, info) => {
     console.error('Error occurred in UserSelectDropdown: ', error);
   },

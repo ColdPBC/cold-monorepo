@@ -7,10 +7,11 @@ import { orderBy } from 'lodash';
 import { Avatar } from '../../atoms/avatar/avatar';
 import { axiosFetcher } from '../../../fetchers/axiosFetcher';
 import { useAuth0 } from '@auth0/auth0-react';
-import { ButtonTypes } from '@coldpbc/enums';
+import { ButtonTypes, ErrorType } from '@coldpbc/enums';
 import { MemberStatusType } from '../../pages';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application/errors/errorFallback';
+import { useAuth0Wrapper, useColdContext, useOrgSWR } from '@coldpbc/hooks';
 
 export interface TeamMembersDataGridProps {
   selectedMemberStatusType: MemberStatusType;
@@ -19,31 +20,20 @@ export interface TeamMembersDataGridProps {
 export const _TeamMembersDataGrid = ({
   selectedMemberStatusType,
 }: TeamMembersDataGridProps) => {
-  const { user: dataGridUser } = useAuth0();
-
-  const getOrgURL = () => {
-    if (dataGridUser?.coldclimate_claims.org_id) {
-      return [
-        '/organizations/' + dataGridUser.coldclimate_claims.org_id + '/members',
-        'GET',
-      ];
-    } else {
-      return null;
-    }
-  };
+  const { user: dataGridUser, getOrgSpecificUrl } = useAuth0Wrapper();
 
   const {
     data,
     error,
     isLoading,
-  }: { data: any; error: any; isLoading: boolean } = useSWR(
-    getOrgURL(),
+  }: { data: any; error: any; isLoading: boolean } = useOrgSWR(
+    ['/members', 'GET'],
     axiosFetcher,
     {
       revalidateOnFocus: false,
     },
   );
-
+  const { logError } = useColdContext();
   const getActions = (user: any) => {
     // TODO: remove empty array after actions are refactored for new data structure
     return [];
@@ -52,10 +42,9 @@ export const _TeamMembersDataGrid = ({
         {
           name: 'resend invite',
           label: 'Resend Invite',
-          url: '/organizations/invitation',
+          url: `/organizations/${data.org_id}/invitation`,
           method: 'PATCH',
           data: {
-            org_id: data.org_id,
             user_email: user.email,
             inviter_name: dataGridUser?.name,
             roleId: ['company:admin'],
@@ -69,10 +58,9 @@ export const _TeamMembersDataGrid = ({
         {
           name: 'cancel invite',
           label: 'Cancel Invite',
-          url: '/organizations/invitation',
+          url: getOrgSpecificUrl(`/invitation`),
           method: 'DELETE',
           data: {
-            org_id: data.org_id,
             user_email: user.email,
           },
           type: 'button',
@@ -106,7 +94,7 @@ export const _TeamMembersDataGrid = ({
               variant: ButtonTypes.secondary,
             },
           },
-          url: `/organizations/${data.org_id}/member`,
+          url: getOrgSpecificUrl(`/member`),
           method: 'DELETE',
           data,
           type: 'modal',
@@ -139,7 +127,7 @@ export const _TeamMembersDataGrid = ({
             },
           },
           urls: user.identities.map((identity: string) => {
-            return `/organizations/${data?.org_id}/members/${identity}/role/company:owner`;
+            return getOrgSpecificUrl(`/members/${identity}/role/company:owner`);
           }),
           method: 'POST',
           type: 'modal',
@@ -203,7 +191,8 @@ export const _TeamMembersDataGrid = ({
   };
 
   if (error) {
-    return <div>Failed to load</div>;
+    logError(error, ErrorType.SWRError);
+    return null;
   }
 
   if (isLoading) {
@@ -214,10 +203,23 @@ export const _TeamMembersDataGrid = ({
     );
   }
 
+  const transformedData = getTransformedData(data?.members ?? []);
+
+  if (
+    selectedMemberStatusType === 'Invitations' &&
+    transformedData.length === 0
+  ) {
+    return (
+      <div className="flex items-center justify-center p-4 pb-8 w-full">
+        No outstanding invitations
+      </div>
+    );
+  }
+
   if (data && dataGridUser) {
     return (
       <Datagrid
-        items={getTransformedData(data?.members ?? [])}
+        items={transformedData}
         definitionURL={'/components/team_member_table'}
       />
     );
@@ -227,7 +229,7 @@ export const _TeamMembersDataGrid = ({
 };
 
 export const TeamMembersDataGrid = withErrorBoundary(_TeamMembersDataGrid, {
-  FallbackComponent: (props) => <ErrorFallback />,
+  FallbackComponent: (props) => <ErrorFallback {...props} />,
   onError: (error, info) => {
     console.error('Error occurred in TeamMembersDataGrid: ', error);
   },

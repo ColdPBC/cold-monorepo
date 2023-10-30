@@ -1,5 +1,5 @@
 import { useAuth0 } from '@auth0/auth0-react';
-import { ActionItemVariants } from '@coldpbc/enums';
+import { ActionItemVariants, ErrorType } from '@coldpbc/enums';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { ActionPayload } from '@coldpbc/interfaces';
 import { useNavigate } from 'react-router-dom';
@@ -9,16 +9,24 @@ import { Card } from '../card';
 import { DateTime } from 'luxon';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application';
+import { useColdContext, useOrgSWR } from '@coldpbc/hooks';
 
 const _NextActionsCard = () => {
   const navigate = useNavigate();
 
   const { user } = useAuth0();
 
-  const { data } = useSWR<ActionPayload[], any, any>(
-    [`/organizations/${user?.coldclimate_claims.org_id}/actions`, 'GET'],
+  const { data, error } = useOrgSWR<ActionPayload[], any>(
+    [`/actions`, 'GET'],
     axiosFetcher,
   );
+
+  const { logError } = useColdContext();
+
+  if (error) {
+    logError(error, ErrorType.SWRError);
+    return null;
+  }
 
   return (
     <Card
@@ -54,6 +62,12 @@ const _NextActionsCard = () => {
           <ActionItem
             actionPayload={action}
             variant={ActionItemVariants.narrow}
+            showProgress={
+              action.action.ready_to_execute &&
+              action.action.dependent_surveys.every(
+                (survey) => survey.submitted,
+              )
+            }
           />
         ))}
     </Card>
@@ -61,7 +75,7 @@ const _NextActionsCard = () => {
 };
 
 export const NextActionsCard = withErrorBoundary(_NextActionsCard, {
-  FallbackComponent: (props) => <ErrorFallback />,
+  FallbackComponent: (props) => <ErrorFallback {...props} />,
   onError: (error, info) => {
     console.error('Error occurred in NextActionsCard: ', error);
   },

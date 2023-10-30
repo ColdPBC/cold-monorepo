@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" version="1.1"
      viewBox="0 0 48 48">
   <title>illustration/colors</title>
-  <g id="illustration/colors" fill="none" fill-rule="evenodd" stroke="none" strokeWidth="1">
+  <g id="illustration/colors" fill="none" fillRule="evenodd" stroke="none" strokeWidth="1">
     <circle id="Oval" cx="23.763" cy="16.192" r="13.271" fill="#FC521F" opacity=".6"/>
     <circle id="Oval-Copy" cx="15.468" cy="32.308" r="13.271" fill="#66BF3C" opacity=".6"/>
     <path id="Combined-Shape" fill="#FF5F95"

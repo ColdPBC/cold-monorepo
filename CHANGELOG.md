@@ -1,3 +1,131 @@
+# [1.57.0](https://github.com/ColdPBC/ui/compare/v1.56.0...v1.57.0) (2023-10-27)
+
+
+### Features
+
+* add SWR error to pages components ([3a70bca](https://github.com/ColdPBC/ui/commit/3a70bcab56fc73e71b096116f21520964d602629))
+* add swrerror logging to molecules ([2d35a77](https://github.com/ColdPBC/ui/commit/2d35a770128013529266b82ca91e0d3d8636365e))
+* added more components with auth0error logging ([ca6f19c](https://github.com/ColdPBC/ui/commit/ca6f19c01c1c038d39a602e408368ef364bae128))
+* Added swr error to organism component ([6d35ff8](https://github.com/ColdPBC/ui/commit/6d35ff8b93670667562b0b243b8a38496ba7cc15))
+* setup data dog rum logging functionality ([7bb4c01](https://github.com/ColdPBC/ui/commit/7bb4c0144af39df16273a3c5871557b256da00a1))
+
+# [1.56.0](https://github.com/ColdPBC/ui/compare/v1.55.0...v1.56.0) (2023-10-27)
+
+
+### Features
+
+* reduce action item image height ([c670e33](https://github.com/ColdPBC/ui/commit/c670e334f8f9de82c20f0855add999954fc8e854))
+* remove image height restriction and updated actions overview mock ([8823414](https://github.com/ColdPBC/ui/commit/882341467a50324f9ea23f220e02bbc50d9ddee9))
+* remove progress bar if the action is not ready to execute and all the surveys are not completed ([656adc4](https://github.com/ColdPBC/ui/commit/656adc41cacae2d57998e7b5dc2d0e95d6ef9888))
+* update style of action item progress par ([f863d8c](https://github.com/ColdPBC/ui/commit/f863d8c8a29b1c8a23a9c1392d5a05e3a43f91da))
+* Updates to action mock and minimum image height ([d711060](https://github.com/ColdPBC/ui/commit/d711060f64dd5a62d7c3dcbb197833bc901c4015))
+* use fixed height div to fill in for missing progress bar ([d9b8053](https://github.com/ColdPBC/ui/commit/d9b80530757560b105bf62edf8a79c17bce3420f))
+
+# [1.55.0](https://github.com/ColdPBC/ui/compare/v1.54.0...v1.55.0) (2023-10-27)
+
+
+### Features
+
+* created util to get username ([17925a8](https://github.com/ColdPBC/ui/commit/17925a842ec8f7f9e2d65b9369e041766dfa1d63))
+* Update step detail dropdown to specific width ([17b1a94](https://github.com/ColdPBC/ui/commit/17b1a9469691901067f40894f178908eefc64ddd))
+* Update steward to use first and last name. Use name if these dont exist ([c3229af](https://github.com/ColdPBC/ui/commit/c3229af88381033746b7c29ff78b90b1fba6fea6))
+* Updated getusername to formatusername ([f6f4067](https://github.com/ColdPBC/ui/commit/f6f406748b8d961fdd96ff9a816e41fba8f2eb3c))
+
+# [1.54.0](https://github.com/ColdPBC/ui/compare/v1.53.0...v1.54.0) (2023-10-27)
+
+
+### Bug Fixes
+
+* remove extra period ([3f00bf5](https://github.com/ColdPBC/ui/commit/3f00bf597911a17a5ac5a182e4a2b61aac53dce3))
+* update to svg attributes to fix console errors ([126f549](https://github.com/ColdPBC/ui/commit/126f549d2929624a612dc80eda698d20651824d5))
+
+
+### Features
+
+* Updated completed banner text ([8943d8f](https://github.com/ColdPBC/ui/commit/8943d8fc1a1cfa02ad384ec55122e078019d5455))
+
+# [1.53.0](https://github.com/ColdPBC/ui/compare/v1.52.1...v1.53.0) (2023-10-27)
+
+
+### Features
+
+* Switch overview and step description in step detail ([d310c5a](https://github.com/ColdPBC/ui/commit/d310c5ad7cb338241a0eac1e42d1648d53026175))
+
+## [1.52.1](https://github.com/ColdPBC/ui/compare/v1.52.0...v1.52.1) (2023-10-26)
+
+
+### Bug Fixes
+
+* Team member table doesn't have Members / Invites dropdown ([99f7708](https://github.com/ColdPBC/ui/commit/99f7708a485c3e4811f3401f71822a04da11eaa6))
+* Team member table doesn't have Members / Invites dropdown ([#120](https://github.com/ColdPBC/ui/issues/120)) ([e4992c3](https://github.com/ColdPBC/ui/commit/e4992c3d5dbb13e5100cbdfd4e0d607da610e8b7))
+
+# [1.52.0](https://github.com/ColdPBC/ui/compare/v1.51.2...v1.52.0) (2023-10-25)
+
+
+### Bug Fixes
+
+* remove callback ([05b2d57](https://github.com/ColdPBC/ui/commit/05b2d57d563a79737cf190dc2ae52ceebc09306d))
+
+
+### Features
+
+* add useorgswr to team member table ([3d76f46](https://github.com/ColdPBC/ui/commit/3d76f46c38dd2ed607ec1ed8ba106e701ca42ce0))
+* changed getAPIUrl to getOrgSpecificUrl ([9ce527c](https://github.com/ColdPBC/ui/commit/9ce527cf11fc376e5276954fa1d8c69e638b6aaa))
+* created use swr and auth0 wrapper ([39ba2af](https://github.com/ColdPBC/ui/commit/39ba2aff6c8a134f771d4822bcb1ba4916b338cc))
+* remove coldclimate org id references ([520c791](https://github.com/ColdPBC/ui/commit/520c7911287a67dc5af19c3a11182980b6dac9db))
+* remove index ts from prebuild ([8c691d7](https://github.com/ColdPBC/ui/commit/8c691d77264c1dfa274f3ed87bff968d9605d370))
+* remove old code from bad merge ([a717140](https://github.com/ColdPBC/ui/commit/a71714037492c0c25c4fef773b5af2975bbd25d7))
+* remove usefetchorg no longer used ([54c11d6](https://github.com/ColdPBC/ui/commit/54c11d61c75184898a0b03b1f1db4c845f3983f2))
+* Useorgswr instead of swr when fetching organization data ([49a0438](https://github.com/ColdPBC/ui/commit/49a0438995b3291c86d7f5fece30167d337404ba))
+
+## [1.51.2](https://github.com/ColdPBC/ui/compare/v1.51.1...v1.51.2) (2023-10-25)
+
+
+### Bug Fixes
+
+* Handle auth0 error with error page ([ee475f1](https://github.com/ColdPBC/ui/commit/ee475f1b3d1c8d2ab41383a2d97d7679511ec3f2))
+* Set new mock data to last month to avoid switching from 4 and 5 weeks ([172991c](https://github.com/ColdPBC/ui/commit/172991c792581d102292d02bbe8569c1fb4c7cf9))
+
+## [1.51.1](https://github.com/ColdPBC/ui/compare/v1.51.0...v1.51.1) (2023-10-25)
+
+
+### Bug Fixes
+
+* Update image handling to fit cover container ([95ba7c8](https://github.com/ColdPBC/ui/commit/95ba7c8a340b3427908e39adb9b29468355fe9fc))
+
+# [1.51.0](https://github.com/ColdPBC/ui/compare/v1.50.1...v1.51.0) (2023-10-23)
+
+
+### Bug Fixes
+
+* Handle action type change to fix build ([fdeb6b9](https://github.com/ColdPBC/ui/commit/fdeb6b99bc84b7dbe0f0bc4db6ddc1c9f9a21205))
+
+
+### Features
+
+* added back revalidate false on mutate action ([e18ada5](https://github.com/ColdPBC/ui/commit/e18ada5cbacaa84197e5c6e784168016893c13ce))
+* Better handle action related items SWR cache update ([8ff1cbf](https://github.com/ColdPBC/ui/commit/8ff1cbff78136c1a1bd8bb05fa6783c0a4b611db))
+* do not show category description if it does not exist ([a231dcb](https://github.com/ColdPBC/ui/commit/a231dcbd347f6236d60450166bcf86c20fb9704c))
+* reload actions when the search params are updated ([3e9d009](https://github.com/ColdPBC/ui/commit/3e9d0097368177bd1215af1091c7abce28fbce19))
+* update checkbox return type ([2d05e15](https://github.com/ColdPBC/ui/commit/2d05e152c0c48daad906f2771a4fc80be887eecd))
+* Update mock to dynamic date and not static ([50173eb](https://github.com/ColdPBC/ui/commit/50173ebb6ba5cc8d78552fffd84f81e38c461755))
+* update process description padding ([fbfee15](https://github.com/ColdPBC/ui/commit/fbfee15f23eeb5a270b02546b95c3a9fc75db3ca))
+* updated action detail objective and process description styling ([5906e24](https://github.com/ColdPBC/ui/commit/5906e24dea796b9a963d709c6efdd50b91e11b88))
+
+## [1.50.1](https://github.com/ColdPBC/ui/compare/v1.50.0...v1.50.1) (2023-10-23)
+
+
+### Bug Fixes
+
+* Invite member button on settings page does not send invitation t… ([#114](https://github.com/ColdPBC/ui/issues/114)) ([96392fe](https://github.com/ColdPBC/ui/commit/96392fe526c5c0bf3a7499bdfc9042a3ebb65c95))
+* Invite member button on settings page does not send invitation to new user ([82e24bd](https://github.com/ColdPBC/ui/commit/82e24bd95f84b65c148f10fad772321797f92d07))
+
+
+### Reverts
+
+* Revert "Auxiliary commit to revert individual files from 5ab276832fd7b6299dd8fa043118927ffa5a4588" ([44e440f](https://github.com/ColdPBC/ui/commit/44e440f9ca913941d2feda9ab28e3151b26c71fd))
+* Revert "Auxiliary commit to revert individual files from 1156ece27c8484c892aaf9cef8b8429b128ee31a" ([7c0fffd](https://github.com/ColdPBC/ui/commit/7c0fffd1e82a9e509687be852f380b4c8a077027))
+
 # [1.50.0](https://github.com/ColdPBC/ui/compare/v1.49.0...v1.50.0) (2023-10-19)
 
 

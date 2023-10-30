@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import {
   AppContent,
   CenterColumnContent,
@@ -6,31 +6,46 @@ import {
   SubcategoryActionDetailsCard,
   SubcategoryFootprintCard,
 } from '@coldpbc/components';
-import useSWR from 'swr';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { Card, SubcategoryJourneyPreview } from '../../molecules';
-import { useAuth0, User } from '@auth0/auth0-react';
 import { ActionPayload } from '@coldpbc/interfaces';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application/errors/errorFallback';
+import { useEffect } from 'react';
+import { useOrgSWR } from '../../../hooks/useOrgSWR';
+import { useColdContext } from '@coldpbc/hooks';
+import { ErrorType } from '@coldpbc/enums';
 
 const _SubcategoryActionsList = () => {
-  const { user } = useAuth0();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const { logError } = useColdContext();
 
   const { name } = useParams();
 
-  const { data } = useSWR<any>(['/categories', 'GET'], axiosFetcher);
+  const { data } = useOrgSWR<any>(['/categories', 'GET'], axiosFetcher);
 
   const {
     data: actions,
     error: actionsError,
     isLoading: actionsIsLoading,
-  } = useSWR<ActionPayload[], any, any>(
-    user?.coldclimate_claims.org_id
-      ? [`/organizations/${user.coldclimate_claims.org_id}/actions`, 'GET']
-      : null,
-    axiosFetcher,
-  );
+    mutate,
+  } = useOrgSWR<ActionPayload[], any>([`/actions`, 'GET'], axiosFetcher);
+
+  actions?.sort((a, b) => {
+    return a.id.localeCompare(b.id);
+  });
+
+  useEffect(() => {
+    const reloadActions = async () => {
+      await mutate();
+    };
+    reloadActions();
+  }, [searchParams]);
+
+  if (actionsError) {
+    logError(actionsError, ErrorType.SWRError);
+    return <div></div>;
+  }
 
   if (!name) return null;
 
@@ -55,18 +70,20 @@ const _SubcategoryActionsList = () => {
   }
 
   if (actionsError) {
-    console.log(actionsError);
+    console.error(actionsError);
     return <div></div>;
   }
 
   return (
     <AppContent title={subcategoryName}>
       <CenterColumnContent>
-        <Card glow>
-          <div className={'text-body text-tc-primary'}>
-            {subcategoryData?.subcategory_description}
-          </div>
-        </Card>
+        {subcategoryData?.subcategory_description && (
+          <Card glow>
+            <div className={'text-body text-tc-primary'}>
+              {subcategoryData?.subcategory_description}
+            </div>
+          </Card>
+        )}
         {actions
           ?.filter((actionPayload) => actionPayload.action.subcategory === name)
           .map((actionPayload) => {
@@ -97,7 +114,7 @@ const _SubcategoryActionsList = () => {
 export const SubcategoryActionsList = withErrorBoundary(
   _SubcategoryActionsList,
   {
-    FallbackComponent: (props) => <ErrorFallback />,
+    FallbackComponent: (props) => <ErrorFallback {...props} />,
     onError: (error, info) => {
       console.error('Error occurred in SubcategoryActionsList: ', error);
     },

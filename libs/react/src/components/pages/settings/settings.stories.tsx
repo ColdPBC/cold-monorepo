@@ -37,3 +37,28 @@ export const Default: Story = {
     },
   },
 };
+
+export const NoInvitations: Story = {
+  render: (args) => {
+    return (
+      <StoryMockProvider handlers={[getMembersHandler.noInvitations]}>
+        <Settings {...args} />
+      </StoryMockProvider>
+    );
+  },
+  args: {
+    user: {
+      coldclimate_claims: {
+        org_id: 'org_123',
+      },
+      name: 'John Doe',
+    },
+  },
+  parameters: {
+    launchdarkly: {
+      flags: {
+        showTeamMemberTable: true,
+      },
+    },
+  },
+};

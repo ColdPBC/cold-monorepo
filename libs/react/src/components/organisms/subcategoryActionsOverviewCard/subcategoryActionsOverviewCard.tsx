@@ -1,11 +1,13 @@
 import { ActionPayload } from '@coldpbc/interfaces';
 import { ActionItem, Card } from '@coldpbc/components';
-import { ActionItemVariants } from '@coldpbc/enums';
+import { ActionItemVariants, ErrorType } from '@coldpbc/enums';
 import { useAuth0 } from '@auth0/auth0-react';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import useSWR from 'swr';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application/errors/errorFallback';
+import { useOrgSWR } from '../../../hooks/useOrgSWR';
+import { useColdContext } from '@coldpbc/hooks';
 
 export interface SubcategoryActionsOverviewCardProps {
   subcategory_key: string;
@@ -16,14 +18,12 @@ const _SubcategoryActionsOverviewCard = ({
   subcategory_key,
   category_key,
 }: SubcategoryActionsOverviewCardProps) => {
-  const { user } = useAuth0();
-
-  const { data } = useSWR<ActionPayload[], any, any>(
-    [`/organizations/${user?.coldclimate_claims.org_id}/actions`, 'GET'],
+  const { data, error } = useOrgSWR<ActionPayload[], any>(
+    [`/actions`, 'GET'],
     axiosFetcher,
   );
 
-  const { data: categoryData } = useSWR<any>(
+  const { data: categoryData, error: categoryError } = useOrgSWR<any>(
     ['/categories', 'GET'],
     axiosFetcher,
   );
@@ -37,6 +37,14 @@ const _SubcategoryActionsOverviewCard = ({
     data?.filter(
       (actionPayload) => actionPayload.action.subcategory === subcategory_key,
     ) ?? [];
+
+  const { logError } = useColdContext();
+
+  if (error || categoryError) {
+    if (error) logError(error, ErrorType.SWRError);
+    if (categoryError) logError(categoryError, ErrorType.SWRError);
+    return null;
+  }
 
   if (!actions.length) {
     return null;
@@ -52,6 +60,12 @@ const _SubcategoryActionsOverviewCard = ({
               <ActionItem
                 actionPayload={action}
                 variant={ActionItemVariants.wide}
+                showProgress={
+                  action.action.ready_to_execute &&
+                  action.action.dependent_surveys.every(
+                    (survey) => survey.submitted,
+                  )
+                }
               />
             </div>
           );
@@ -64,7 +78,7 @@ const _SubcategoryActionsOverviewCard = ({
 export const SubcategoryActionsOverviewCard = withErrorBoundary(
   _SubcategoryActionsOverviewCard,
   {
-    FallbackComponent: (props) => <ErrorFallback />,
+    FallbackComponent: (props) => <ErrorFallback {...props} />,
     onError: (error, info) => {
       console.error(
         'Error occurred in SubcategoryActionsOverviewCard: ',

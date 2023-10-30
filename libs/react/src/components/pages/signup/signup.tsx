@@ -5,13 +5,14 @@ import { axiosFetcher } from '@coldpbc/fetchers';
 import useSWR, { mutate } from 'swr';
 import { PolicySignedDataType, PolicyType } from '@coldpbc/interfaces';
 import { HexColors } from '@coldpbc/themes';
-import { ColdLogoNames, GlobalSizes } from '@coldpbc/enums';
+import { ColdLogoNames, ErrorType, GlobalSizes } from '@coldpbc/enums';
 import { useNavigate } from 'react-router-dom';
 import { isEmpty } from 'lodash';
 import { Organization } from 'auth0';
 import ColdContext from '../../../context/coldContext';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application/errors/errorFallback';
+import { useAuth0Wrapper, useColdContext, useOrgSWR } from '@coldpbc/hooks';
 
 export interface SignupPageProps {
   userData: User;
@@ -19,13 +20,9 @@ export interface SignupPageProps {
 }
 
 const _SignupPage = ({ userData, signedPolicyData }: SignupPageProps) => {
-  const { user } = useAuth0();
-  const navigate = useNavigate();
-
-  const organizationSWR = useSWR<Organization, any, any>(
-    user?.coldclimate_claims.org_id
-      ? [`/organizations/${user.coldclimate_claims.org_id}`, 'GET']
-      : null,
+  const { logError } = useColdContext();
+  const organizationSWR = useOrgSWR<Organization, any>(
+    [``, 'GET'],
     axiosFetcher,
   );
 
@@ -33,7 +30,7 @@ const _SignupPage = ({ userData, signedPolicyData }: SignupPageProps) => {
   const onSubmit = async () => {};
 
   if (organizationSWR.error) {
-    console.error(organizationSWR.error);
+    logError(organizationSWR.error, ErrorType.SWRError);
     return <div></div>;
   }
 
@@ -105,7 +102,7 @@ const _SignupPage = ({ userData, signedPolicyData }: SignupPageProps) => {
 };
 
 export const SignupPage = withErrorBoundary(_SignupPage, {
-  FallbackComponent: (props) => <ErrorFallback />,
+  FallbackComponent: (props) => <ErrorFallback {...props} />,
   onError: (error, info) => {
     console.error('Error occurred in SignupPage: ', error);
   },

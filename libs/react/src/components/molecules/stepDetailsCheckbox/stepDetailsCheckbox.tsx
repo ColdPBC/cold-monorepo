@@ -3,10 +3,11 @@ import { IconNames } from '@coldpbc/enums';
 import { StepDetailsEmptyCheckBox } from './stepDetailsEmptyCheckBox';
 import { StepDetailsAnimatedCheckbox } from './stepDetailsAnimatedCheckbox';
 import { MouseEvent, useState } from 'react';
+import { Step } from '@coldpbc/interfaces';
 
 export type StepDetailsCheckboxProps = {
-  complete: string | undefined;
-  setComplete: (complete: string | undefined) => void;
+  complete: Step['complete'];
+  setComplete: (complete: Step['complete']) => void;
 };
 
 export const StepDetailsCheckbox = ({
@@ -35,7 +36,7 @@ export const StepDetailsCheckbox = ({
 
   const onCheckboxClick = (event: MouseEvent<HTMLElement>) => {
     if (complete) {
-      setComplete(undefined);
+      setComplete(null);
       setCheckboxClicked(true);
     } else {
       setComplete(new Date().toISOString());

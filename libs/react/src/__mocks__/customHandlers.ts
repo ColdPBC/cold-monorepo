@@ -17,7 +17,7 @@ import {
   getFootprintDataMockTwoSubCats,
   getFootprintEmptyDataMock,
 } from './categoriesMock';
-import { getMembersOnlyOneMember } from './membersMock';
+import { getMembersNoInvitations } from './membersMock';
 import {
   getNewsAllMissingProperties,
   getNewsDefault,
@@ -28,44 +28,50 @@ import { SubcategoryActionDetailsCard } from '@coldpbc/components';
 import { getOrganizationMembersMock } from './datagridMock';
 
 export const getFootprintHandler = {
-  default: rest.get('*/categories/company_decarbonization', (req, res, ctx) => {
-    return res(ctx.json(getFootprintDataMock()));
-  }),
+  default: rest.get(
+    '*/organizations/:orgId/categories/company_decarbonization',
+    (req, res, ctx) => {
+      return res(ctx.json(getFootprintDataMock()));
+    },
+  ),
   handle404: rest.get(
-    '*/categories/company_decarbonization',
+    '*/organizations/:orgId/categories/company_decarbonization',
     (req, res, ctx) => {
       return res(ctx.status(404));
     },
   ),
-  empty: rest.get('*/categories/company_decarbonization', (req, res, ctx) => {
-    return res(ctx.json(getFootprintEmptyDataMock()));
-  }),
+  empty: rest.get(
+    '*/organizations/:orgId/categories/company_decarbonization',
+    (req, res, ctx) => {
+      return res(ctx.json(getFootprintEmptyDataMock()));
+    },
+  ),
   getFootprintDataFacilitiesAllFootprintsNull: rest.get(
-    '*/categories/company_decarbonization',
+    '*/organizations/:orgId/categories/company_decarbonization',
     (req, res, ctx) => {
       return res(ctx.json(getFootprintDataFacilitiesAllFootprintsNull()));
     },
   ),
   fiveSubCats: rest.get(
-    '*/categories/company_decarbonization',
+    '*/organizations/:orgId/categories/company_decarbonization',
     (req, res, ctx) => {
       return res(ctx.json(getFootprintDataMockFiveSubCats()));
     },
   ),
   twoSubCats: rest.get(
-    '*/categories/company_decarbonization',
+    '*/organizations/:orgId/categories/company_decarbonization',
     (req, res, ctx) => {
       return res(ctx.json(getFootprintDataMockTwoSubCats()));
     },
   ),
   threeSubCats: rest.get(
-    '*/categories/company_decarbonization',
+    '*/organizations/:orgId/categories/company_decarbonization',
     (req, res, ctx) => {
       return res(ctx.json(getFootprintDataMockThreeSubCats()));
     },
   ),
   allNullFootprintValues: rest.get(
-    '*/categories/company_decarbonization',
+    '*/organizations/:orgId/categories/company_decarbonization',
     (req, res, ctx) => {
       return res(ctx.json(getFootprintAllNullFootprintValues()));
     },
@@ -73,20 +79,20 @@ export const getFootprintHandler = {
 };
 
 export const getCategoriesHandler = {
-  default: rest.get('*/categories', (req, res, ctx) => {
+  default: rest.get('*/organizations/:orgId/categories', (req, res, ctx) => {
     return res(ctx.json(getCategoriesDataMock()));
   }),
-  handle404: rest.get('*/categories', (req, res, ctx) => {
+  handle404: rest.get('*/organizations/:orgId/categories', (req, res, ctx) => {
     return res(ctx.status(404));
   }),
-  empty: rest.get('*/categories', (req, res, ctx) => {
+  empty: rest.get('*/organizations/:orgId/categories', (req, res, ctx) => {
     return res(ctx.json(getCategoriesEmptyDataMock()));
   }),
 };
 
 export const getMembersHandler = {
-  onlyOneMember: rest.get('*/organizations/*/members', (req, res, ctx) => {
-    return res(ctx.json(getMembersOnlyOneMember()));
+  noInvitations: rest.get('*/organizations/*/members', (req, res, ctx) => {
+    return res(ctx.json(getMembersNoInvitations()));
   }),
 };
 
@@ -192,6 +198,7 @@ export const getActionHandler = {
         action: {
           ...getActionAllStepsComplete().action,
           assignee: {
+            email: members[0].email,
             name: members[0].name,
             family_name: members[0].family_name,
             given_name: members[0].given_name,
@@ -202,17 +209,18 @@ export const getActionHandler = {
               return {
                 ...step,
                 assignee: {
+                  email: members[0].email,
                   name: members[0].name,
                   family_name: members[0].family_name,
                   given_name: members[0].given_name,
                   picture: members[0].picture,
                 },
-                complete: undefined,
+                complete: null,
               };
             } else {
               return {
                 ...step,
-                complete: undefined,
+                complete: null,
               };
             }
           }),
@@ -220,4 +228,45 @@ export const getActionHandler = {
       } as ActionPayload),
     );
   }),
+  subcategoryActionsOverviewCard: [
+    rest.get('*/organizations/*/actions', (req, res, ctx) => {
+      // return actions with some of them having the ready_to_execute and all survey submitted
+      const facilitiesActions = getActionsMock().filter(
+        (action) => action.action.subcategory === 'facilities',
+      );
+      facilitiesActions[0].action.dependent_surveys.forEach((survey, index) => {
+        survey.submitted = true;
+      });
+      facilitiesActions[1].action.dependent_surveys.forEach((survey) => {
+        survey.submitted = true;
+      });
+      facilitiesActions[0].action.ready_to_execute = true;
+      facilitiesActions[1].action.ready_to_execute = false;
+      const actions = getActionsMock().map((actionPayload, index) => {
+        if (actionPayload.action.subcategory === 'facilities') {
+          if (facilitiesActions[0].id === actionPayload.id) {
+            return facilitiesActions[0];
+          } else {
+            return facilitiesActions[1];
+          }
+        } else {
+          return actionPayload;
+        }
+      });
+      return res(ctx.json(actions));
+    }),
+  ],
+  actionsOverview: [
+    rest.get('*/organizations/*/actions', (req, res, ctx) => {
+      const actions = getActionsMock().map((actionPayload, index) => {
+        // set all the surveys to submitted and ready to execute to true
+        actionPayload.action.dependent_surveys.forEach((survey) => {
+          survey.submitted = true;
+        });
+        actionPayload.action.ready_to_execute = true;
+        return actionPayload;
+      });
+      return res(ctx.json(actions));
+    }),
+  ],
 };

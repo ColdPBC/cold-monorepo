@@ -13,18 +13,11 @@ export type StepDetailProps = {
   handleStepUpdate: (step: Step) => void;
 };
 
-export const StepDetail = ({
-  step,
-  handleStepUpdate,
-}: StepDetailProps) => {
+export const StepDetail = ({ step, handleStepUpdate }: StepDetailProps) => {
   const assigneeSelectorRef = React.useRef<HTMLDivElement>(null);
   const stepDetailsCheckboxRef = React.useRef<HTMLDivElement>(null);
 
-  const handleAssigneeSelection = (
-    step: Step,
-    assignee: Assignee | undefined,
-  ) => {
-
+  const handleAssigneeSelection = (step: Step, assignee: Assignee | null) => {
     const updatedStep = {
       ...step,
       assignee: assignee,
@@ -70,7 +63,7 @@ export const StepDetail = ({
                 />
               </div>
               <div className={'text-body text-left font-bold'}>
-                {step.overview}
+                {step.description}
               </div>
             </div>
             <div
@@ -102,7 +95,7 @@ export const StepDetail = ({
             </div>
           </Disclosure.Button>
           <Disclosure.Panel as="dd" className="px-[16px] pb-[16px]">
-            <p className="text-caption">{step.description}</p>
+            <p className="text-caption">{step.overview}</p>
           </Disclosure.Panel>
         </div>
       )}

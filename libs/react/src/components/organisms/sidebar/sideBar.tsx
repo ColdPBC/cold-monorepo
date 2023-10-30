@@ -16,10 +16,10 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { ActionPayload } from '@coldpbc/interfaces';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application/errors/errorFallback';
+import { useColdContext, useOrgSWR } from '@coldpbc/hooks';
+import { ErrorType } from '@coldpbc/enums';
 
 const _SideBar = (): JSX.Element => {
-  const { user } = useAuth0();
-
   const {
     data,
     error,
@@ -32,12 +32,10 @@ const _SideBar = (): JSX.Element => {
   const ldFlags = useFlags();
 
   // Fetch actions if actions feature flag is present
-  const { data: actionsData } = useSWR<ActionPayload[], any, any>(
-    ldFlags.showActions261
-      ? [`/organizations/${user?.coldclimate_claims.org_id}/actions`, 'GET']
-      : null,
-    axiosFetcher,
-  );
+  const { data: actionsData, error: actionsError } = useOrgSWR<
+    ActionPayload[],
+    any
+  >(ldFlags.showActions261 ? [`/actions`, 'GET'] : null, axiosFetcher);
 
   const filterSidebar = (item: NavbarItem) => {
     if (item.key === 'actions_key') {
@@ -51,7 +49,7 @@ const _SideBar = (): JSX.Element => {
 
   const location = useLocation();
   const [activeChild, setActiveChild] = useState('');
-
+  const { logError } = useColdContext();
   useEffect(() => {
     if (data) {
       data.definition.items.forEach((item: NavbarItem) => {
@@ -79,7 +77,10 @@ const _SideBar = (): JSX.Element => {
       </div>
     );
 
-  if (error) console.error(error);
+  if (error || actionsError) {
+    if (error) logError(error, ErrorType.SWRError);
+    if (actionsError) logError(actionsError, ErrorType.SWRError);
+  }
 
   // filter top-level nav items
   let filteredSidebarItems = data.definition.items.filter(filterSidebar) ?? [];
@@ -182,7 +183,7 @@ const _SideBar = (): JSX.Element => {
 };
 
 export const SideBar = withErrorBoundary(_SideBar, {
-  FallbackComponent: (props) => <ErrorFallback />,
+  FallbackComponent: (props) => <ErrorFallback {...props} />,
   onError: (error, info) => {
     console.error('Error occurred in SideBar: ', error);
   },

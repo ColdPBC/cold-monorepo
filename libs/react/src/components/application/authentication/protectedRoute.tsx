@@ -6,16 +6,17 @@ import {
   useSearchParams,
 } from 'react-router-dom';
 import { ErrorFallback, SignupPage, Spinner } from '@coldpbc/components';
-import { GlobalSizes } from '@coldpbc/enums';
+import { ErrorType, GlobalSizes } from '@coldpbc/enums';
 import ColdContext from '../../../context/coldContext';
 import { useLDClient } from 'launchdarkly-react-client-sdk';
 import useSWR from 'swr';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { get, has, isEmpty, isUndefined } from 'lodash';
 import { PolicySignedDataType } from '@coldpbc/interfaces';
-import { useAuth0Wrapper } from '@coldpbc/hooks';
+import { useAuth0Wrapper, useColdContext, useOrgSWR } from '@coldpbc/hooks';
 import { SurveyPayloadType } from '@coldpbc/interfaces';
 import { withErrorBoundary } from 'react-error-boundary';
+import { ErrorPage } from '../errors/errorPage';
 
 const _ProtectedRoute = () => {
   const {
@@ -25,8 +26,11 @@ const _ProtectedRoute = () => {
     isAuthenticated,
     isLoading,
     getAccessTokenSilently,
+    orgId,
   } = useAuth0Wrapper();
   const { auth0Options } = useContext(ColdContext);
+
+  const { logError } = useColdContext();
 
   const ldClient = useLDClient();
 
@@ -59,7 +63,7 @@ const _ProtectedRoute = () => {
     // if (isUndefined(user?.coldclimate_claims.org_id)) return true;
   };
 
-  const initialSurveySWR = useSWR<SurveyPayloadType, any, any>(
+  const initialSurveySWR = useOrgSWR<SurveyPayloadType, any>(
     user && isAuthenticated ? [`/surveys/journey_overview`, 'GET'] : null,
     axiosFetcher,
   );
@@ -86,15 +90,15 @@ const _ProtectedRoute = () => {
     const getUserMetadata = async () => {
       try {
         if (!isLoading) {
-          if (isAuthenticated) {
-            if (ldClient && user?.coldclimate_claims.org_id) {
-              await ldClient.identify({
-                kind: 'organization',
-                key: user.coldclimate_claims.org_id,
-              });
-            }
-          } else {
-            if (!isAuthenticated) {
+          if (!error) {
+            if (isAuthenticated) {
+              if (ldClient && orgId) {
+                await ldClient.identify({
+                  kind: 'organization',
+                  key: orgId,
+                });
+              }
+            } else {
               await loginWithRedirect({
                 appState: appState,
                 authorizationParams: {
@@ -108,18 +112,28 @@ const _ProtectedRoute = () => {
       } catch (e) {
         if (has(e, 'error')) {
           if (get(e, 'error') === 'login_required') {
+            logError(e, ErrorType.Auth0Error);
             await loginWithRedirect();
           }
           if (get(e, 'error') === 'consent_required') {
+            logError(e, ErrorType.Auth0Error);
             await loginWithRedirect();
           }
         }
-        console.error(e);
+        logError(e, ErrorType.Auth0Error);
       }
     };
 
     getUserMetadata();
-  }, [getAccessTokenSilently, user, isAuthenticated, isLoading, appState]);
+  }, [
+    getAccessTokenSilently,
+    user,
+    isAuthenticated,
+    isLoading,
+    appState,
+    orgId,
+    error,
+  ]);
 
   useEffect(() => {
     if (initialSurveySWR.data?.definition && !needsSignup()) {
@@ -142,9 +156,16 @@ const _ProtectedRoute = () => {
   }
 
   if (error || initialSurveySWR.error || signedPolicySWR.error) {
-    const errorObj = error || initialSurveySWR.error || signedPolicySWR.error;
-    console.error(errorObj);
-    return <div></div>;
+    if (error) {
+      logError(error, ErrorType.Auth0Error);
+    }
+    if (initialSurveySWR.error) {
+      logError(initialSurveySWR.error, ErrorType.SWRError);
+    }
+    if (signedPolicySWR.error) {
+      logError(signedPolicySWR.error, ErrorType.SWRError);
+    }
+    return <ErrorPage />;
   }
 
   if (isAuthenticated && user) {
@@ -165,7 +186,7 @@ const _ProtectedRoute = () => {
 };
 
 export const ProtectedRoute = withErrorBoundary(_ProtectedRoute, {
-  FallbackComponent: (props) => <ErrorFallback />,
+  FallbackComponent: (props) => <ErrorFallback {...props} />,
   onError: (error, info) => {
     console.error('Error occurred in ProtectedRoute: ', error);
   },

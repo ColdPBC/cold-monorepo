@@ -21,6 +21,9 @@ import { createGradient, pickGradientValue } from './helpers';
 import { EmptyChart } from './emptyChart';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application/errors/errorFallback';
+import { useOrgSWR } from '../../../hooks/useOrgSWR';
+import { useColdContext } from '@coldpbc/hooks';
+import { ErrorType } from '@coldpbc/enums';
 
 ChartJS.register(
   RadarController,
@@ -42,10 +45,16 @@ function _JourneySpiderChart({ setIsEmptyData }: Props) {
   const [chartData, setChartData] = useState<ChartData>(defaultChartData);
 
   // Fetch chart data
-  const { data, error, isLoading } = useSWR<any>(
-    ['/categories/', 'GET'],
+  const { data, error, isLoading } = useOrgSWR<any>(
+    ['/categories', 'GET'],
     axiosFetcher,
   );
+  const { logError } = useColdContext();
+
+  if (error) {
+    logError(error, ErrorType.SWRError);
+    return null;
+  }
 
   // Update chart data on receiving new data
   const isEmpty =
@@ -163,7 +172,7 @@ function _JourneySpiderChart({ setIsEmptyData }: Props) {
 }
 
 export const JourneySpiderChart = withErrorBoundary(_JourneySpiderChart, {
-  FallbackComponent: (props) => <ErrorFallback />,
+  FallbackComponent: (props) => <ErrorFallback {...props} />,
   onError: (error, info) => {
     console.error('Error occurred in JourneySpiderChart: ', error);
   },

@@ -23,7 +23,7 @@ const _ActionDetailProgress = ({
 };
 
 export const ActionDetailProgress = withErrorBoundary(_ActionDetailProgress, {
-  FallbackComponent: (props) => <ErrorFallback />,
+  FallbackComponent: (props) => <ErrorFallback {...props} />,
   onError: (error, info) => {
     console.error('Error occurred in ActionDetailProgress: ', error);
   },

@@ -11,6 +11,7 @@ import { BaseButton } from '../../atoms';
 import { ToastMessage } from '@coldpbc/interfaces';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application/errors/errorFallback';
+import { useOrgSWR } from '@coldpbc/hooks';
 
 export interface InvitationModalProps {
   shown: boolean;
@@ -25,8 +26,8 @@ const _InvitationModal = (props: InvitationModalProps) => {
   const [isSuccess, setIsSuccess] = useState(false);
   const [email, setEmail] = useState('');
 
-  const { mutate: sendInvitation } = useSWR<any>(
-    ['/organizations/invitation', 'POST'],
+  const { mutate: sendInvitation } = useOrgSWR<any>(
+    [`/invitation`, 'POST'],
     axiosFetcher,
   );
 
@@ -35,7 +36,6 @@ const _InvitationModal = (props: InvitationModalProps) => {
       const response: any = await sendInvitation(
         JSON.stringify({
           user_email: email,
-          org_id: user.coldclimate_claims.org_id,
           inviter_name: user.name,
           roleId: roleId,
         }),
@@ -98,7 +98,7 @@ const _InvitationModal = (props: InvitationModalProps) => {
 };
 
 export const InvitationModal = withErrorBoundary(_InvitationModal, {
-  FallbackComponent: (props) => <ErrorFallback />,
+  FallbackComponent: (props) => <ErrorFallback {...props} />,
   onError: (error, info) => {
     console.error('Error occurred in InvitationModal: ', error);
   },

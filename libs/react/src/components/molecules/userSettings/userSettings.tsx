@@ -220,7 +220,7 @@ const _UserSettings = () => {
 };
 
 export const UserSettings = withErrorBoundary(_UserSettings, {
-  FallbackComponent: (props) => <ErrorFallback />,
+  FallbackComponent: (props) => <ErrorFallback {...props} />,
   onError: (error, info) => {
     console.error('Error occurred in UserSettings: ', error);
   },

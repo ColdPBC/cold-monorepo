@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { CenterColumnContent } from '../../organisms/centerColumnContent/centerColumnContent';
 import { RightColumnContent } from '../../organisms/rightColumnContent/rightColumnContent';
 import { useAuth0 } from '@auth0/auth0-react';
@@ -14,15 +14,25 @@ import { DismissableInfoCard } from '../../molecules/dismissableInfoCard';
 import { EmissionsDonutChartVariants } from '../../atoms/emissionsDonutChart/emissionsDonutChart';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application/errors/errorFallback';
+import { useOrgSWR } from '../../../hooks/useOrgSWR';
+import { ErrorType } from '@coldpbc/enums';
+import { useColdContext } from '@coldpbc/hooks';
 
 const PERIOD = 2022;
 
 function _Footprint() {
+  const auth0 = useAuth0();
+  const { logError } = useColdContext();
   // Get footprint data from SWR
-  const { data, error, isLoading } = useSWR<any>(
+  const { data, error, isLoading } = useOrgSWR<any>(
     ['/categories/company_decarbonization', 'GET'],
     axiosFetcher,
   );
+
+  if (error) {
+    logError(error, ErrorType.SWRError);
+    return null;
+  }
 
   const isEmptyFootprintData =
     !isLoading &&
@@ -35,15 +45,17 @@ function _Footprint() {
       ),
     );
 
-  console.log({ isEmptyFootprintData, data });
-
-  const auth0 = useAuth0();
   if (auth0.isLoading) {
     return (
       <div>
         <Spinner />
       </div>
     );
+  }
+
+  if (auth0.error) {
+    logError(auth0.error, ErrorType.Auth0Error);
+    return null;
   }
 
   if (auth0.user) {
@@ -100,7 +112,7 @@ function _Footprint() {
 }
 
 export const Footprint = withErrorBoundary(_Footprint, {
-  FallbackComponent: (props) => <ErrorFallback />,
+  FallbackComponent: (props) => <ErrorFallback {...props} />,
   onError: (error, info) => {
     console.error('Error occurred in Footprint: ', error);
   },
