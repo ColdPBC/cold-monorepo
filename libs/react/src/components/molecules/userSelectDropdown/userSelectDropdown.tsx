@@ -41,7 +41,7 @@ const _UserSelectDropdown = ({ onSelect, className, ...rest }: Props) => {
       theme={flowbiteThemeOverride.dropdown}
       label={rest.label ?? ''}
       className={twMerge(
-        'h-fit max-h-[225px] overflow-auto w-[93%]',
+        'h-fit max-h-[225px] overflow-y-auto w-[93%]',
         className,
       )}
       {...rest}
