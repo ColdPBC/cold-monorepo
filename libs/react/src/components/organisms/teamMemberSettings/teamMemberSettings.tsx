@@ -29,7 +29,7 @@ const _TeamMemberSettings = (props: any) => {
 
   const organizationData = organization.data as Organization;
 
-  if (auth0.isLoading && organization.isLoading) {
+  if (auth0.isLoading || organization.isLoading) {
     return (
       <div>
         <Spinner />
