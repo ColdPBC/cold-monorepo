@@ -6,12 +6,11 @@ import { ColorNames } from '../../../enums/colors';
 import { orderBy } from 'lodash';
 import { Avatar } from '../../atoms/avatar/avatar';
 import { axiosFetcher } from '../../../fetchers/axiosFetcher';
-import { useAuth0 } from '@auth0/auth0-react';
 import { ButtonTypes, ErrorType } from '@coldpbc/enums';
-import { MemberStatusType } from '../../pages';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application/errors/errorFallback';
 import { useAuth0Wrapper, useColdContext, useOrgSWR } from '@coldpbc/hooks';
+import { MemberStatusType } from '@coldpbc/interfaces';
 
 export interface TeamMembersDataGridProps {
   selectedMemberStatusType: MemberStatusType;
