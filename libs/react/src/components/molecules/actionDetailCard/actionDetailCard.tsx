@@ -272,7 +272,7 @@ const _ActionDetailCard = ({
   const getActionIsReadyToExecute = (action: Action) => {
     if (variant === ActionDetailCardVariants.ActionDetailProgress) {
       return (
-        <Card glow className={'text-tc-primary'}>
+        <Card glow className={'text-tc-primary overflow-visible'}>
           <div className={'text-h4 text-left w-full'}>Steps</div>
           <div className={'w-full'}>{getProgress()}</div>
           <div>
