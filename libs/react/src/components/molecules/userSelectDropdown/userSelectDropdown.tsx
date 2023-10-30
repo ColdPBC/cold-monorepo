@@ -4,9 +4,8 @@ import { axiosFetcher } from '@coldpbc/fetchers';
 import { flowbiteThemeOverride } from '@coldpbc/themes';
 import { Dropdown, DropdownProps } from 'flowbite-react';
 import { twMerge } from 'tailwind-merge';
-import { Avatar } from '../../atoms';
 import { withErrorBoundary } from 'react-error-boundary';
-import { ErrorFallback } from '../../application/errors/errorFallback';
+import { ErrorFallback, Avatar } from '@coldpbc/components';
 import { useColdContext, useOrgSWR } from '@coldpbc/hooks';
 import { getFormattedUserName } from '@coldpbc/lib';
 
