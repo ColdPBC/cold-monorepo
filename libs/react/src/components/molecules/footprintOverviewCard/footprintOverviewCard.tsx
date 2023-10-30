@@ -12,6 +12,8 @@ import { EmissionsDonutChartVariants } from '../../atoms/emissionsDonutChart/emi
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application/errors/errorFallback';
 import { useOrgSWR } from '../../../hooks/useOrgSWR';
+import { useColdContext } from '@coldpbc/hooks';
+import { ErrorType } from '@coldpbc/enums';
 
 export interface FootprintOverviewCardProps {
   headerless?: boolean;
@@ -26,7 +28,7 @@ function _FootprintOverviewCard(
   const navigate = useNavigate();
 
   // Get footprint data from SWR
-  const { data, isLoading } = useOrgSWR<any>(
+  const { data, isLoading, error } = useOrgSWR<any>(
     ['/categories/company_decarbonization', 'GET'],
     axiosFetcher,
   );
@@ -35,6 +37,15 @@ function _FootprintOverviewCard(
     [`/surveys/footprint_overview`, 'GET'],
     axiosFetcher,
   );
+
+  const { logError } = useColdContext();
+
+  if (surveyResponse.error || error) {
+    if (surveyResponse.error)
+      logError(surveyResponse.error, ErrorType.SWRError);
+    if (error) logError(error, ErrorType.SWRError);
+    return null;
+  }
 
   // TODO: find out if we can include this property in the SWR response, in a transform or something
   // To do this, wrap all useSWR in custom wrappers like, useGetFootprint()
@@ -105,7 +116,7 @@ function _FootprintOverviewCard(
 }
 
 export const FootprintOverviewCard = withErrorBoundary(_FootprintOverviewCard, {
-  FallbackComponent: (props) => <ErrorFallback />,
+  FallbackComponent: (props) => <ErrorFallback {...props} />,
   onError: (error, info) => {
     console.error('Error occurred in FootprintOverviewCard: ', error);
   },

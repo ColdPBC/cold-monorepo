@@ -5,6 +5,8 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { User } from '@auth0/auth0-spa-js/src/global';
 import flowbiteThemeOverride from '../../../themes/flowbiteThemeOverride';
 import clsx from 'clsx';
+import { ErrorType } from '@coldpbc/enums';
+import { useColdContext } from '@coldpbc/hooks';
 
 export type AvatarProps = {
   size?:
@@ -22,9 +24,13 @@ export function Avatar(props: AvatarProps) {
   const size = props.size || GlobalSizes.medium;
 
   const { isLoading, error, user } = useAuth0();
+  const { logError } = useColdContext();
 
   if (!props.user && isLoading) return <Spinner size={size} />;
-  if (error) return <div>failed to load</div>;
+  if (error) {
+    logError(error, ErrorType.Auth0Error);
+    return null;
+  }
   if (user || props.user) {
     const avatarUser: User = props.user ? props.user : (user as User);
 

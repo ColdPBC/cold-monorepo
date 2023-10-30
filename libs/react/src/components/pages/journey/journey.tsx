@@ -12,11 +12,13 @@ import { JourneyDetailView } from '../../molecules/journeyDetailView';
 import { TemperatureCheckCard } from '../../molecules/temperatureCheckCard';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application/errors/errorFallback';
-import { useOrgSWR } from '@coldpbc/hooks';
+import { useColdContext, useOrgSWR } from '@coldpbc/hooks';
+import { ErrorType } from '@coldpbc/enums';
 
 const PERIOD = 2022;
 
 function _Journey() {
+  const { logError } = useColdContext();
   const { data, error, isLoading } = useOrgSWR<any>(
     ['/categories/', 'GET'],
     axiosFetcher,
@@ -28,12 +30,19 @@ function _Journey() {
     data?.response?.status === 404;
 
   const auth0 = useAuth0();
+
   if (auth0.isLoading) {
     return (
       <div>
         <Spinner />
       </div>
     );
+  }
+
+  if (error || auth0.error) {
+    if (error) logError(error, ErrorType.SWRError);
+    if (auth0.error) logError(auth0.error, ErrorType.Auth0Error);
+    return null;
   }
 
   if (auth0.user) {
@@ -69,7 +78,7 @@ function _Journey() {
 }
 
 export const Journey = withErrorBoundary(_Journey, {
-  FallbackComponent: (props) => <ErrorFallback />,
+  FallbackComponent: (props) => <ErrorFallback {...props} />,
   onError: (error, info) => {
     console.error('Error occurred in Journey: ', error);
   },

@@ -200,7 +200,7 @@ const _SurveyInput = (props: SurveyInputProps) => {
 };
 
 export const SurveyInput = withErrorBoundary(_SurveyInput, {
-  FallbackComponent: (props) => <ErrorFallback />,
+  FallbackComponent: (props) => <ErrorFallback {...props} />,
   onError: (error, info) => {
     console.error('Error occurred in SurveyInput: ', error);
   },

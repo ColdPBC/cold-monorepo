@@ -13,9 +13,12 @@ import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application/errors/errorFallback';
 import { useEffect } from 'react';
 import { useOrgSWR } from '../../../hooks/useOrgSWR';
+import { useColdContext } from '@coldpbc/hooks';
+import { ErrorType } from '@coldpbc/enums';
 
 const _SubcategoryActionsList = () => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const { logError } = useColdContext();
 
   const { name } = useParams();
 
@@ -38,6 +41,11 @@ const _SubcategoryActionsList = () => {
     };
     reloadActions();
   }, [searchParams]);
+
+  if (actionsError) {
+    logError(actionsError, ErrorType.SWRError);
+    return <div></div>;
+  }
 
   if (!name) return null;
 
@@ -106,7 +114,7 @@ const _SubcategoryActionsList = () => {
 export const SubcategoryActionsList = withErrorBoundary(
   _SubcategoryActionsList,
   {
-    FallbackComponent: (props) => <ErrorFallback />,
+    FallbackComponent: (props) => <ErrorFallback {...props} />,
     onError: (error, info) => {
       console.error('Error occurred in SubcategoryActionsList: ', error);
     },

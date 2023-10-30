@@ -1,14 +1,13 @@
 import { Card, Takeover, UserSelectDropdown } from '../../molecules';
-import useSWR, { mutate as globalMutate } from 'swr';
-import { useAuth0, User } from '@auth0/auth0-react';
+import { mutate as globalMutate } from 'swr';
+import { User } from '@auth0/auth0-react';
 import { axiosFetcher } from '@coldpbc/fetchers';
-import { ActionPayload, Assignee } from '@coldpbc/interfaces';
+import { ActionPayload } from '@coldpbc/interfaces';
 import { ArrowRightIcon, ChevronDownIcon } from '@heroicons/react/20/solid';
 import { CompletedBanner } from './completedBanner';
-import { Avatar, BaseButton, Spinner } from '../../atoms';
-import { ButtonTypes, GlobalSizes } from '@coldpbc/enums';
-import { Datepicker } from 'flowbite-react';
-import { Dropdown } from 'flowbite-react';
+import { Avatar, BaseButton } from '../../atoms';
+import { ButtonTypes, ErrorType, GlobalSizes } from '@coldpbc/enums';
+import { Datepicker, Dropdown } from 'flowbite-react';
 import { flowbiteThemeOverride } from '@coldpbc/themes';
 import { DateTime } from 'luxon';
 import React, { useEffect, useState } from 'react';
@@ -16,7 +15,7 @@ import { useSearchParams } from 'react-router-dom';
 import { ActionDetailProgress } from '../../organisms';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application';
-import { useAuth0Wrapper, useOrgSWR } from '@coldpbc/hooks';
+import { useAuth0Wrapper, useColdContext, useOrgSWR } from '@coldpbc/hooks';
 import { getFormattedUserName } from '@coldpbc/lib';
 
 interface Props {
@@ -24,12 +23,18 @@ interface Props {
 }
 
 const _ActionDetail = ({ id }: Props) => {
+  const { logError } = useColdContext();
   const [searchParams, setSearchParams] = useSearchParams();
   const { getOrgSpecificUrl } = useAuth0Wrapper();
   const [show, setShow] = useState(true);
 
   const { data, error, isLoading, mutate } = useOrgSWR<ActionPayload, any>(
     [`/actions/${id}`, 'GET'],
+    axiosFetcher,
+  );
+
+  const { data: categoriesData } = useOrgSWR<any>(
+    ['/categories', 'GET'],
     axiosFetcher,
   );
 
@@ -95,7 +100,35 @@ const _ActionDetail = ({ id }: Props) => {
     reloadActions();
   }, [searchParams]);
 
+  // Find the label for an area of impact in the category data
+  const getAreaOfImpactLabel = (area: string) => {
+    // default to showing key if activity not found
+    let label = area;
+
+    Object.keys(categoriesData?.definition.categories ?? {})
+      .forEach(categoryKey => {
+        const category = categoriesData.definition.categories[categoryKey];
+
+        Object.keys(category.subcategories).forEach(subcategoryKey => {
+          const subcategory = category.subcategories[subcategoryKey];
+
+          Object.keys(subcategory.activities).forEach((activityKey) => {
+            if (activityKey === area) {
+              label = subcategory.activities[activityKey].activity_name
+            }
+          })
+        })
+      })
+
+    return (
+      <div className="ml-2 rounded-2xl bg-primary-300 py-2 px-4">
+        {label}
+      </div>
+    )
+  }
+
   if (error) {
+    logError(error, ErrorType.SWRError);
     return null;
   }
 
@@ -115,9 +148,10 @@ const _ActionDetail = ({ id }: Props) => {
         },
       }}
       className={'z-10'}
+      fullScreenWidth={false}
     >
       <div className="flex gap-6 my-6">
-        <div className="grid gap-6 w-[899px] flex flex-col">
+        <div className="grid gap-6 flex-1 flex flex-col">
           {isActionComplete && <CompletedBanner />}
           <Card title="About this action" glow className="gap-0">
             <div className="flex h-full">
@@ -144,11 +178,7 @@ const _ActionDetail = ({ id }: Props) => {
                 {data?.action.areas_of_impact && (
                   <div className="flex items-center mt-10 text-xs font-medium leading-none">
                     <span className="">Areas of impact:</span>
-                    {data?.action.areas_of_impact.map((area) => (
-                      <div className="ml-2 rounded-2xl bg-primary-300 py-2 px-4">
-                        {area}
-                      </div>
-                    ))}
+                    {data?.action.areas_of_impact.map((area) => getAreaOfImpactLabel(area))}
                   </div>
                 )}
               </div>
@@ -275,7 +305,7 @@ const _ActionDetail = ({ id }: Props) => {
 };
 
 export const ActionDetail = withErrorBoundary(_ActionDetail, {
-  FallbackComponent: (props) => <ErrorFallback />,
+  FallbackComponent: (props) => <ErrorFallback {...props} />,
   onError: (error, info) => {
     console.error('Error occurred in ActionDetail: ', error);
   },

@@ -317,7 +317,7 @@ const _ActionDetailCard = ({
 };
 
 export const ActionDetailCard = withErrorBoundary(_ActionDetailCard, {
-  FallbackComponent: (props) => <ErrorFallback />,
+  FallbackComponent: (props) => <ErrorFallback {...props} />,
   onError: (error, info) => {
     console.error('Error occurred in ActionDetailCard: ', error);
   },

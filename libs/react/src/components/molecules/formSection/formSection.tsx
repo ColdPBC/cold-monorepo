@@ -98,7 +98,7 @@ function _FormSection(props: ISectionProps) {
 }
 
 export const FormSection = withErrorBoundary(_FormSection, {
-  FallbackComponent: (props) => <ErrorFallback />,
+  FallbackComponent: (props) => <ErrorFallback {...props} />,
   onError: (error, info) => {
     console.error('Error occurred in FormSection: ', error);
   },

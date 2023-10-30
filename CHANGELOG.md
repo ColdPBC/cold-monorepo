@@ -1,3 +1,26 @@
+# [1.57.0](https://github.com/ColdPBC/ui/compare/v1.56.0...v1.57.0) (2023-10-27)
+
+
+### Features
+
+* add SWR error to pages components ([3a70bca](https://github.com/ColdPBC/ui/commit/3a70bcab56fc73e71b096116f21520964d602629))
+* add swrerror logging to molecules ([2d35a77](https://github.com/ColdPBC/ui/commit/2d35a770128013529266b82ca91e0d3d8636365e))
+* added more components with auth0error logging ([ca6f19c](https://github.com/ColdPBC/ui/commit/ca6f19c01c1c038d39a602e408368ef364bae128))
+* Added swr error to organism component ([6d35ff8](https://github.com/ColdPBC/ui/commit/6d35ff8b93670667562b0b243b8a38496ba7cc15))
+* setup data dog rum logging functionality ([7bb4c01](https://github.com/ColdPBC/ui/commit/7bb4c0144af39df16273a3c5871557b256da00a1))
+
+# [1.56.0](https://github.com/ColdPBC/ui/compare/v1.55.0...v1.56.0) (2023-10-27)
+
+
+### Features
+
+* reduce action item image height ([c670e33](https://github.com/ColdPBC/ui/commit/c670e334f8f9de82c20f0855add999954fc8e854))
+* remove image height restriction and updated actions overview mock ([8823414](https://github.com/ColdPBC/ui/commit/882341467a50324f9ea23f220e02bbc50d9ddee9))
+* remove progress bar if the action is not ready to execute and all the surveys are not completed ([656adc4](https://github.com/ColdPBC/ui/commit/656adc41cacae2d57998e7b5dc2d0e95d6ef9888))
+* update style of action item progress par ([f863d8c](https://github.com/ColdPBC/ui/commit/f863d8c8a29b1c8a23a9c1392d5a05e3a43f91da))
+* Updates to action mock and minimum image height ([d711060](https://github.com/ColdPBC/ui/commit/d711060f64dd5a62d7c3dcbb197833bc901c4015))
+* use fixed height div to fill in for missing progress bar ([d9b8053](https://github.com/ColdPBC/ui/commit/d9b80530757560b105bf62edf8a79c17bce3420f))
+
 # [1.55.0](https://github.com/ColdPBC/ui/compare/v1.54.0...v1.55.0) (2023-10-27)
 
 

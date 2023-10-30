@@ -48,7 +48,7 @@ export const getActionMock = (): ActionPayload => {
           complete: null,
         },
       ],
-      areas_of_impact: ['Test Area 1', 'Test Area 2'],
+      areas_of_impact: ['workplace', 'air_travel'],
       dependent_surveys: [
         {
           name: 'test_survey_1',
@@ -96,7 +96,7 @@ export const getActionsMock = (): ActionPayload[] => {
         image_url:
           'https://images.unsplash.com/photo-1610891015188-5369212db097?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
         subcategory: 'facilities',
-        ready_to_execute: false,
+        ready_to_execute: true,
         due_date: '2024-04-11T21:19:38.441Z',
         assignee: null,
         steps: [
@@ -125,12 +125,12 @@ export const getActionsMock = (): ActionPayload[] => {
           {
             name: 'footprint_survey',
             title: 'Footprint Survey',
-            submitted: false,
+            submitted: true,
           },
           {
             name: 'energy_survey',
             title: 'Energy Survey',
-            submitted: false,
+            submitted: true,
           },
         ],
       },
@@ -146,7 +146,7 @@ export const getActionsMock = (): ActionPayload[] => {
         image_url:
           'https://images.unsplash.com/photo-1610891015188-5369212db097?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
         subcategory: 'facilities',
-        ready_to_execute: false,
+        ready_to_execute: true,
         due_date: '2024-02-11T22:19:38.441Z',
         assignee: null,
         steps: [
@@ -169,12 +169,12 @@ export const getActionsMock = (): ActionPayload[] => {
             complete: '2022-09-27 18:00:00.000',
           },
         ],
-        areas_of_impact: ['Test Area 1', 'Test Area 2'],
+        areas_of_impact: ['workplace', 'air_travel'],
         dependent_surveys: [
           {
             name: 'test_survey',
             title: 'Test Survey 1',
-            submitted: false,
+            submitted: true,
           },
         ],
       },
@@ -190,7 +190,7 @@ export const getActionsMock = (): ActionPayload[] => {
         image_url:
           'https://images.unsplash.com/photo-1610891015188-5369212db097?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
         subcategory: 'employee_footprint',
-        ready_to_execute: false,
+        ready_to_execute: true,
         due_date: '2024-04-11T21:19:38.441Z',
         assignee: null,
         steps: [
@@ -207,12 +207,12 @@ export const getActionsMock = (): ActionPayload[] => {
             complete: '2022-09-27 18:00:00.000',
           },
         ],
-        areas_of_impact: ['Test Area 1', 'Test Area 2'],
+        areas_of_impact: ['workplace', 'air_travel'],
         dependent_surveys: [
           {
             name: 'test_survey',
             title: 'Test Survey 1',
-            submitted: false,
+            submitted: true,
           },
         ],
       },
@@ -228,7 +228,7 @@ export const getActionsMock = (): ActionPayload[] => {
         image_url:
           'https://images.unsplash.com/photo-1610891015188-5369212db097?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
         subcategory: 'employee_footprint',
-        ready_to_execute: false,
+        ready_to_execute: true,
         due_date: '2024-04-11T21:19:38.441Z',
         steps: [
           {
@@ -244,12 +244,12 @@ export const getActionsMock = (): ActionPayload[] => {
             complete: '2022-09-27 18:00:00.000',
           },
         ],
-        areas_of_impact: ['Test Area 1', 'Test Area 2'],
+        areas_of_impact: ['workplace', 'air_travel'],
         dependent_surveys: [
           {
             name: 'test_survey',
             title: 'Test Survey 1',
-            submitted: false,
+            submitted: true,
           },
         ],
       },
@@ -264,7 +264,7 @@ export const getActionsMock = (): ActionPayload[] => {
         image_url:
           'https://images.unsplash.com/photo-1610891015188-5369212db097?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
         subcategory: 'travel',
-        ready_to_execute: false,
+        ready_to_execute: true,
         due_date: '2024-12-10T20:25:22.648Z',
         assignee: null,
         steps: [
@@ -275,12 +275,12 @@ export const getActionsMock = (): ActionPayload[] => {
             assignee: null,
           },
         ],
-        areas_of_impact: ['Test Area 1', 'Test Area 2'],
+        areas_of_impact: ['workplace', 'air_travel'],
         dependent_surveys: [
           {
             name: 'test_survey',
             title: 'Test Survey 1',
-            submitted: false,
+            submitted: true,
           },
         ],
       },
