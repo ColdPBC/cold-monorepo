@@ -16,34 +16,39 @@ export const getActionMock = (): ActionPayload => {
       subcategory: 'facilities',
       ready_to_execute: false,
       due_date: '2023-12-10T20:25:22.648Z',
+      assignee: null,
       steps: [
         {
-          overview: 'Tell us how you pay your utility bills',
-          description:
+          description: 'Tell us how you pay your utility bills',
+          overview:
             "How you pay for electricity impacts your organization's opportunities to purchase different types of RECs. If your electric usage is incorporated in your lease, for instance, you may not be able to determine your annual energy use. Select from the following options: \n" +
             'You directly pay your utility bills; \n' +
             'You pay your utility bills indirectly via your landlord;\n' +
             'You do not pay for utilities because the cost is incorporated into your rent.',
           complete: '2022-09-27 18:00:00.000',
+          assignee: null,
         },
         {
+          assignee: null,
+          description: 'Test Step 2',
           overview:
             "Determine your facility's annual electricity consumption in kWh and send to Cold",
-          description: 'Test Step 2',
           complete: '2022-09-27 18:00:00.000',
         },
         {
-          overview: "Sign up for your utility's renewable energy program",
+          assignee: null,
           description: 'Test Step 3',
+          overview: "Sign up for your utility's renewable energy program",
           complete: null,
         },
         {
-          overview: 'Test Step 4',
+          assignee: null,
           description: 'Test Step 4',
+          overview: 'Test Step 4',
           complete: null,
         },
       ],
-      areas_of_impact: ['Test Area 1', 'Test Area 2'],
+      areas_of_impact: ['workplace', 'air_travel'],
       dependent_surveys: [
         {
           name: 'test_survey_1',
@@ -91,21 +96,25 @@ export const getActionsMock = (): ActionPayload[] => {
         image_url:
           'https://images.unsplash.com/photo-1610891015188-5369212db097?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
         subcategory: 'facilities',
-        ready_to_execute: false,
+        ready_to_execute: true,
         due_date: '2024-04-11T21:19:38.441Z',
+        assignee: null,
         steps: [
           {
+            assignee: null,
             overview: 'Tell us how you pay your utility bills',
             description: 'Test Step 1',
             complete: '2022-09-27 18:00:00.000',
           },
           {
+            assignee: null,
             overview:
               "Determine your facility's annual electricity consumption in kWh and send to Cold",
             description: 'Test Step 2',
             complete: '2022-09-27 18:00:00.000',
           },
           {
+            assignee: null,
             overview: "Sign up for your utility's renewable energy program",
             description: 'Test Step 3',
             complete: null,
@@ -116,12 +125,12 @@ export const getActionsMock = (): ActionPayload[] => {
           {
             name: 'footprint_survey',
             title: 'Footprint Survey',
-            submitted: false,
+            submitted: true,
           },
           {
             name: 'energy_survey',
             title: 'Energy Survey',
-            submitted: false,
+            submitted: true,
           },
         ],
       },
@@ -137,31 +146,35 @@ export const getActionsMock = (): ActionPayload[] => {
         image_url:
           'https://images.unsplash.com/photo-1610891015188-5369212db097?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
         subcategory: 'facilities',
-        ready_to_execute: false,
+        ready_to_execute: true,
         due_date: '2024-02-11T22:19:38.441Z',
+        assignee: null,
         steps: [
           {
+            assignee: null,
             overview: "Sign up for your utility's renewable energy program",
             description: 'Test Step 1',
             complete: null,
           },
           {
+            assignee: null,
             overview: 'Test Step 2',
             description: 'Test Step 2',
             complete: null,
           },
           {
+            assignee: null,
             overview: 'Step 3 overview',
             description: 'Test Step 3',
             complete: '2022-09-27 18:00:00.000',
           },
         ],
-        areas_of_impact: ['Test Area 1', 'Test Area 2'],
+        areas_of_impact: ['workplace', 'air_travel'],
         dependent_surveys: [
           {
             name: 'test_survey',
             title: 'Test Survey 1',
-            submitted: false,
+            submitted: true,
           },
         ],
       },
@@ -177,26 +190,29 @@ export const getActionsMock = (): ActionPayload[] => {
         image_url:
           'https://images.unsplash.com/photo-1610891015188-5369212db097?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
         subcategory: 'employee_footprint',
-        ready_to_execute: false,
+        ready_to_execute: true,
         due_date: '2024-04-11T21:19:38.441Z',
+        assignee: null,
         steps: [
           {
+            assignee: null,
             overview: "Sign up for your utility's renewable energy program",
             description: 'Test Step 1',
             complete: '2022-09-27 18:00:00.000',
           },
           {
+            assignee: null,
             overview: 'Test Step 2',
             description: 'Test Step 2',
             complete: '2022-09-27 18:00:00.000',
           },
         ],
-        areas_of_impact: ['Test Area 1', 'Test Area 2'],
+        areas_of_impact: ['workplace', 'air_travel'],
         dependent_surveys: [
           {
             name: 'test_survey',
             title: 'Test Survey 1',
-            submitted: false,
+            submitted: true,
           },
         ],
       },
@@ -207,30 +223,33 @@ export const getActionsMock = (): ActionPayload[] => {
       action: {
         title: 'Personal Finance',
         overview: 'Test Overview',
+        assignee: null,
         objective_description: 'Test Objective Description',
         image_url:
           'https://images.unsplash.com/photo-1610891015188-5369212db097?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
         subcategory: 'employee_footprint',
-        ready_to_execute: false,
+        ready_to_execute: true,
         due_date: '2024-04-11T21:19:38.441Z',
         steps: [
           {
+            assignee: null,
             overview: "Sign up for your utility's renewable energy program",
             description: 'Test Step 1',
             complete: null,
           },
           {
+            assignee: null,
             overview: 'Test Step 2',
             description: 'Test Step 2',
             complete: '2022-09-27 18:00:00.000',
           },
         ],
-        areas_of_impact: ['Test Area 1', 'Test Area 2'],
+        areas_of_impact: ['workplace', 'air_travel'],
         dependent_surveys: [
           {
             name: 'test_survey',
             title: 'Test Survey 1',
-            submitted: false,
+            submitted: true,
           },
         ],
       },
@@ -245,21 +264,23 @@ export const getActionsMock = (): ActionPayload[] => {
         image_url:
           'https://images.unsplash.com/photo-1610891015188-5369212db097?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
         subcategory: 'travel',
-        ready_to_execute: false,
+        ready_to_execute: true,
         due_date: '2024-12-10T20:25:22.648Z',
+        assignee: null,
         steps: [
           {
             overview: "Sign up for your utility's renewable energy program",
             description: 'Test Step 1',
             complete: '2022-09-27 18:00:00.000',
+            assignee: null,
           },
         ],
-        areas_of_impact: ['Test Area 1', 'Test Area 2'],
+        areas_of_impact: ['workplace', 'air_travel'],
         dependent_surveys: [
           {
             name: 'test_survey',
             title: 'Test Survey 1',
-            submitted: false,
+            submitted: true,
           },
         ],
       },

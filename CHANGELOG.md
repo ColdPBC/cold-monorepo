@@ -1,3 +1,56 @@
+# [1.57.0](https://github.com/ColdPBC/ui/compare/v1.56.0...v1.57.0) (2023-10-27)
+
+
+### Features
+
+* add SWR error to pages components ([3a70bca](https://github.com/ColdPBC/ui/commit/3a70bcab56fc73e71b096116f21520964d602629))
+* add swrerror logging to molecules ([2d35a77](https://github.com/ColdPBC/ui/commit/2d35a770128013529266b82ca91e0d3d8636365e))
+* added more components with auth0error logging ([ca6f19c](https://github.com/ColdPBC/ui/commit/ca6f19c01c1c038d39a602e408368ef364bae128))
+* Added swr error to organism component ([6d35ff8](https://github.com/ColdPBC/ui/commit/6d35ff8b93670667562b0b243b8a38496ba7cc15))
+* setup data dog rum logging functionality ([7bb4c01](https://github.com/ColdPBC/ui/commit/7bb4c0144af39df16273a3c5871557b256da00a1))
+
+# [1.56.0](https://github.com/ColdPBC/ui/compare/v1.55.0...v1.56.0) (2023-10-27)
+
+
+### Features
+
+* reduce action item image height ([c670e33](https://github.com/ColdPBC/ui/commit/c670e334f8f9de82c20f0855add999954fc8e854))
+* remove image height restriction and updated actions overview mock ([8823414](https://github.com/ColdPBC/ui/commit/882341467a50324f9ea23f220e02bbc50d9ddee9))
+* remove progress bar if the action is not ready to execute and all the surveys are not completed ([656adc4](https://github.com/ColdPBC/ui/commit/656adc41cacae2d57998e7b5dc2d0e95d6ef9888))
+* update style of action item progress par ([f863d8c](https://github.com/ColdPBC/ui/commit/f863d8c8a29b1c8a23a9c1392d5a05e3a43f91da))
+* Updates to action mock and minimum image height ([d711060](https://github.com/ColdPBC/ui/commit/d711060f64dd5a62d7c3dcbb197833bc901c4015))
+* use fixed height div to fill in for missing progress bar ([d9b8053](https://github.com/ColdPBC/ui/commit/d9b80530757560b105bf62edf8a79c17bce3420f))
+
+# [1.55.0](https://github.com/ColdPBC/ui/compare/v1.54.0...v1.55.0) (2023-10-27)
+
+
+### Features
+
+* created util to get username ([17925a8](https://github.com/ColdPBC/ui/commit/17925a842ec8f7f9e2d65b9369e041766dfa1d63))
+* Update step detail dropdown to specific width ([17b1a94](https://github.com/ColdPBC/ui/commit/17b1a9469691901067f40894f178908eefc64ddd))
+* Update steward to use first and last name. Use name if these dont exist ([c3229af](https://github.com/ColdPBC/ui/commit/c3229af88381033746b7c29ff78b90b1fba6fea6))
+* Updated getusername to formatusername ([f6f4067](https://github.com/ColdPBC/ui/commit/f6f406748b8d961fdd96ff9a816e41fba8f2eb3c))
+
+# [1.54.0](https://github.com/ColdPBC/ui/compare/v1.53.0...v1.54.0) (2023-10-27)
+
+
+### Bug Fixes
+
+* remove extra period ([3f00bf5](https://github.com/ColdPBC/ui/commit/3f00bf597911a17a5ac5a182e4a2b61aac53dce3))
+* update to svg attributes to fix console errors ([126f549](https://github.com/ColdPBC/ui/commit/126f549d2929624a612dc80eda698d20651824d5))
+
+
+### Features
+
+* Updated completed banner text ([8943d8f](https://github.com/ColdPBC/ui/commit/8943d8fc1a1cfa02ad384ec55122e078019d5455))
+
+# [1.53.0](https://github.com/ColdPBC/ui/compare/v1.52.1...v1.53.0) (2023-10-27)
+
+
+### Features
+
+* Switch overview and step description in step detail ([d310c5a](https://github.com/ColdPBC/ui/commit/d310c5ad7cb338241a0eac1e42d1648d53026175))
+
 ## [1.52.1](https://github.com/ColdPBC/ui/compare/v1.52.0...v1.52.1) (2023-10-26)
 
 

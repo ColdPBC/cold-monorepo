@@ -5,10 +5,11 @@ import { GlobalSizes, IconNames } from '@coldpbc/enums';
 import { ColdPlusIcon } from '@coldpbc/components';
 import { UserSelectDropdown } from '../userSelectDropdown';
 import { useAuth0, User } from '@auth0/auth0-react';
+import { getFormattedUserName } from '@coldpbc/lib';
 
 export interface StepDetailAssigneeSelectorProps {
-  assignee?: Assignee;
-  handleAssigneeSelection: (assignee: Assignee | undefined) => void;
+  assignee: Assignee | null;
+  handleAssigneeSelection: (assignee: Assignee | null) => void;
 }
 
 export const StepDetailAssigneeSelector = ({
@@ -22,20 +23,12 @@ export const StepDetailAssigneeSelector = ({
           'min-h-[40px] flex w-fit text-tc-primary rounded-lg border-[1px] border-bgc-accent p-[8px] space-x-[8px] cursor-pointer'
         }
         onClick={() => {
-          handleAssigneeSelection(undefined);
+          handleAssigneeSelection(null);
         }}
       >
-        <Avatar
-          size={GlobalSizes.xSmall}
-          user={{
-            name: assignee.name,
-            picture: assignee.picture,
-            given_name: assignee.given_name,
-            family_name: assignee.family_name,
-          }}
-        />
+        <Avatar size={GlobalSizes.xSmall} user={assignee} />
         <div className={'text-eyebrow flex items-center justify-center'}>
-          {assignee.name}
+          {getFormattedUserName(assignee)}
         </div>
         <div className={'flex items-center justify-center w-[24px] h-[24px]'}>
           <ColdIcon name={IconNames.CloseModalIcon} />
@@ -45,9 +38,10 @@ export const StepDetailAssigneeSelector = ({
   } else {
     return (
       <UserSelectDropdown
-        className="w-auto"
+        className="w-[240px]"
         onSelect={(assignee: User) => {
           handleAssigneeSelection({
+            email: assignee.email,
             family_name: assignee.family_name,
             given_name: assignee.given_name,
             name: assignee.name,

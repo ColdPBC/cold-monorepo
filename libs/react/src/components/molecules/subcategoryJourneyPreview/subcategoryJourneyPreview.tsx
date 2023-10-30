@@ -8,6 +8,8 @@ import { twMerge } from 'tailwind-merge';
 import { Card } from '../card';
 import { motion } from 'framer-motion';
 import { useOrgSWR } from '../../../hooks/useOrgSWR';
+import { useColdContext } from '@coldpbc/hooks';
+import { ErrorType } from '@coldpbc/enums';
 
 const scoreQuadrants = [
   {
@@ -50,7 +52,14 @@ export const SubcategoryJourneyPreview = ({
   glow,
 }: Props) => {
   const ldFlags = useFlags();
-  const { data } = useOrgSWR<any>(['/categories', 'GET'], axiosFetcher);
+  const { data, error } = useOrgSWR<any>(['/categories', 'GET'], axiosFetcher);
+
+  const { logError } = useColdContext();
+
+  if (error) {
+    logError(error, ErrorType.SWRError);
+    return null;
+  }
 
   const subcategoryData =
     data?.definition?.categories[category_key]?.subcategories[subcategory_key];

@@ -5,6 +5,8 @@ import { Spinner } from '../../atoms';
 import ReactMarkdown from 'react-markdown';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application/errors/errorFallback';
+import { ErrorType } from '@coldpbc/enums';
+import { useColdContext } from '@coldpbc/hooks';
 
 export interface TermsProps {
   type: string;
@@ -15,6 +17,7 @@ function _Terms(props: PropsWithChildren<TermsProps>) {
     ['/policy-content/' + props.type + '/content', 'GET'],
     axiosFetcher,
   );
+  const { logError } = useColdContext();
 
   if (isLoading) {
     return (
@@ -22,8 +25,10 @@ function _Terms(props: PropsWithChildren<TermsProps>) {
         <Spinner />
       </div>
     );
-  } else if (error) {
-    error.log(error);
+  }
+
+  if (error) {
+    logError(error, ErrorType.SWRError);
     return <div></div>;
   }
 
@@ -37,7 +42,7 @@ function _Terms(props: PropsWithChildren<TermsProps>) {
 }
 
 export const Terms = withErrorBoundary(_Terms, {
-  FallbackComponent: (props) => <ErrorFallback />,
+  FallbackComponent: (props) => <ErrorFallback {...props} />,
   onError: (error, info) => {
     console.error('Error occurred in Terms: ', error);
   },

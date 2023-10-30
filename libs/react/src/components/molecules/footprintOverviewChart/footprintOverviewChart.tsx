@@ -12,6 +12,8 @@ import {
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application/errors/errorFallback';
 import { useOrgSWR } from '../../../hooks/useOrgSWR';
+import { useColdContext } from '@coldpbc/hooks';
+import { ErrorType } from '@coldpbc/enums';
 
 const MAX_CATEGORIES = 4;
 
@@ -36,10 +38,17 @@ function _FootprintOverviewChart(
   const { variant = EmissionsDonutChartVariants.horizontal, period } = props;
 
   // Get footprint data from SWR
-  const { data, isLoading } = useOrgSWR<any>(
+  const { data, isLoading, error } = useOrgSWR<any>(
     ['/categories/company_decarbonization', 'GET'],
     axiosFetcher,
   );
+
+  const { logError } = useColdContext();
+
+  if (error) {
+    logError(error, ErrorType.SWRError);
+    return null;
+  }
 
   if (!data) return null;
 
@@ -148,7 +157,7 @@ function _FootprintOverviewChart(
 export const FootprintOverviewChart = withErrorBoundary(
   _FootprintOverviewChart,
   {
-    FallbackComponent: (props) => <ErrorFallback />,
+    FallbackComponent: (props) => <ErrorFallback {...props} />,
     onError: (error, info) => {
       console.error('Error occurred in FootprintOverviewChart: ', error);
     },
