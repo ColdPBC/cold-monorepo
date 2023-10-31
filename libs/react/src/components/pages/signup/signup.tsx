@@ -1,18 +1,15 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { ColdLogos, SignupForm, Spinner } from '@coldpbc/components';
-import { useAuth0, User } from '@auth0/auth0-react';
+import { User } from '@auth0/auth0-react';
 import { axiosFetcher } from '@coldpbc/fetchers';
-import useSWR, { mutate } from 'swr';
-import { PolicySignedDataType, PolicyType } from '@coldpbc/interfaces';
+import { PolicySignedDataType } from '@coldpbc/interfaces';
 import { HexColors } from '@coldpbc/themes';
 import { ColdLogoNames, ErrorType, GlobalSizes } from '@coldpbc/enums';
-import { useNavigate } from 'react-router-dom';
 import { isEmpty } from 'lodash';
 import { Organization } from 'auth0';
-import ColdContext from '../../../context/coldContext';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application/errors/errorFallback';
-import { useAuth0Wrapper, useColdContext, useOrgSWR } from '@coldpbc/hooks';
+import { useColdContext, useOrgSWR } from '@coldpbc/hooks';
 
 export interface SignupPageProps {
   userData: User;
@@ -48,45 +45,55 @@ const _SignupPage = ({ userData, signedPolicyData }: SignupPageProps) => {
 
   if (tos && privacy && signedPolicyData) {
     return (
-      <div className={'flex h-screen inset-0 w-full overflow-hidden'}>
-        <div className={'pl-[40px] pb-[40px] pt-[40px] pr-[24px]'}>
-          <div
-            className={
-              'items-center w-[668px] h-full justify-center flex rounded-2xl'
-            }
-            style={{
-              background: `url('https://cold-public-assets.s3.us-east-2.amazonaws.com/splash_images/signup_image.jpeg'), lightgray 50% / cover no-repeat`,
-            }}
-          >
-            <div className={'space-y-6 w-[438px]'}>
-              <ColdLogos
-                name={ColdLogoNames.ColdWordmark}
-                color={HexColors.tc.primary}
-                width={153}
-                height={48}
-              />
-              <div className={'text-tc-primary text-h1'}>
-                Start Your Journey to Absolute Zero™
+      <div
+        className={
+          'fixed inset-0 flex flex-col h-screen w-screen overflow-y-auto'
+        }
+      >
+        <div className={'flex flex-1 max-h-[1040px]'}>
+          <div className={'pl-[40px] pr-[24px] pb-[40px] pt-[40px]'}>
+            <div
+              className={
+                'max-h-[963px] w-[668px] flex h-full items-center justify-center rounded-2xl'
+              }
+              style={{
+                background: `url('https://cold-public-assets.s3.us-east-2.amazonaws.com/splash_images/signup_image.jpeg'), lightgray 50% / cover no-repeat`,
+              }}
+            >
+              <div className={'space-y-6 w-[438px]'}>
+                <ColdLogos
+                  name={ColdLogoNames.ColdWordmark}
+                  color={HexColors.tc.primary}
+                  width={153}
+                  height={48}
+                />
+                <div className={'text-tc-primary text-h1'}>
+                  Start Your Journey to Absolute Zero™
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div className={'w-full h-full flex items-center justify-center flex-1 p-[64px] overflow-y-scroll'}>
-          <SignupForm
-            userData={userData}
-            companyData={organizationData}
-            tosSigned={signedPolicyData.some(
-              (policy) =>
-                policy.name === 'tos' && !isEmpty(policy.policy_data),
-            )}
-            privacySigned={signedPolicyData.some(
-              (policy) =>
-                policy.name === 'privacy' && !isEmpty(policy.policy_data),
-            )}
-            tosData={tos}
-            privacyData={privacy}
-            onSubmit={onSubmit}
-          />
+          <div
+            className={
+              'w-full h-full flex items-center justify-center p-[64px]'
+            }
+          >
+            <SignupForm
+              userData={userData}
+              companyData={organizationData}
+              tosSigned={signedPolicyData.some(
+                (policy) =>
+                  policy.name === 'tos' && !isEmpty(policy.policy_data),
+              )}
+              privacySigned={signedPolicyData.some(
+                (policy) =>
+                  policy.name === 'privacy' && !isEmpty(policy.policy_data),
+              )}
+              tosData={tos}
+              privacyData={privacy}
+              onSubmit={onSubmit}
+            />
+          </div>
         </div>
       </div>
     );
