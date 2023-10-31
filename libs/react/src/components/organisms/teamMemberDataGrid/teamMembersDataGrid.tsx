@@ -6,7 +6,6 @@ import { ColorNames } from '../../../enums/colors';
 import { orderBy } from 'lodash';
 import { Avatar } from '../../atoms/avatar/avatar';
 import { axiosFetcher } from '../../../fetchers/axiosFetcher';
-import { useAuth0 } from '@auth0/auth0-react';
 import { ButtonTypes, ErrorType } from '@coldpbc/enums';
 import { MemberStatusType } from '../../pages';
 import { withErrorBoundary } from 'react-error-boundary';
