@@ -4,9 +4,8 @@ import { axiosFetcher } from '@coldpbc/fetchers';
 import { flowbiteThemeOverride } from '@coldpbc/themes';
 import { Dropdown, DropdownProps } from 'flowbite-react';
 import { twMerge } from 'tailwind-merge';
-import { Avatar } from '../../atoms';
 import { withErrorBoundary } from 'react-error-boundary';
-import { ErrorFallback } from '../../application/errors/errorFallback';
+import { ErrorFallback, Avatar } from '@coldpbc/components';
 import { useColdContext, useOrgSWR } from '@coldpbc/hooks';
 import { getFormattedUserName } from '@coldpbc/lib';
 
@@ -40,7 +39,10 @@ const _UserSelectDropdown = ({ onSelect, className, ...rest }: Props) => {
       arrowIcon={false}
       theme={flowbiteThemeOverride.dropdown}
       label={rest.label ?? ''}
-      className={twMerge('h-[225px] overflow-y-scroll w-[93%]', className)}
+      className={twMerge(
+        'h-fit max-h-[225px] overflow-y-auto w-[93%]',
+        className,
+      )}
       {...rest}
     >
       {data?.members
