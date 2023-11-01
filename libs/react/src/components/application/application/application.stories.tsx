@@ -99,8 +99,8 @@ export const NeedsSignup: Story = {
       user: {
         ...auth0UserMock,
         coldclimate_claims: '',
-        family_name: 'null',
-        given_name: 'null',
+        family_name: null,
+        given_name: null,
       },
     },
   },
