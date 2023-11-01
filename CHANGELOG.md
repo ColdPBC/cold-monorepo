@@ -1,3 +1,29 @@
+# [1.60.0](https://github.com/ColdPBC/ui/compare/v1.59.0...v1.60.0) (2023-11-01)
+
+
+### Bug Fixes
+
+* fix build issues ([fc1081b](https://github.com/ColdPBC/ui/commit/fc1081b223699adffa75d848f7962912478340b2))
+
+
+### Features
+
+* check if auth0 or organization data is loading ([e37f9aa](https://github.com/ColdPBC/ui/commit/e37f9aadc78f14440a066f38bf518b30bc286fa5))
+* moved table to teammembersettings component ([ae6775b](https://github.com/ColdPBC/ui/commit/ae6775b028f39d6340e1291467dd5f06ff936679))
+* refactor team member table to own component ([3826928](https://github.com/ColdPBC/ui/commit/3826928f2afb301097c8e93878797a5fb179b81c))
+
+# [1.59.0](https://github.com/ColdPBC/ui/compare/v1.58.0...v1.59.0) (2023-11-01)
+
+
+### Bug Fixes
+
+* Make signup page responsive ([f9bc168](https://github.com/ColdPBC/ui/commit/f9bc1683368ff414e55b9ec7238fc278ca2cd88f))
+
+
+### Features
+
+* allow flex col to allow stretching. Set max height to avoid image repeating ([a2f0cd4](https://github.com/ColdPBC/ui/commit/a2f0cd40356cdfb26d25875212ce71ed59a59353))
+
 # [1.58.0](https://github.com/ColdPBC/ui/compare/v1.57.0...v1.58.0) (2023-10-31)
 
 
