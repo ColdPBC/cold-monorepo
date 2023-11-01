@@ -1,3 +1,15 @@
+# [1.59.0](https://github.com/ColdPBC/ui/compare/v1.58.0...v1.59.0) (2023-11-01)
+
+
+### Bug Fixes
+
+* Make signup page responsive ([f9bc168](https://github.com/ColdPBC/ui/commit/f9bc1683368ff414e55b9ec7238fc278ca2cd88f))
+
+
+### Features
+
+* allow flex col to allow stretching. Set max height to avoid image repeating ([a2f0cd4](https://github.com/ColdPBC/ui/commit/a2f0cd40356cdfb26d25875212ce71ed59a59353))
+
 # [1.58.0](https://github.com/ColdPBC/ui/compare/v1.57.0...v1.58.0) (2023-10-31)
 
 
