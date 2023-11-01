@@ -43,13 +43,13 @@ export const handlers = [
   }),
 
   // Mock data for journey modules
-  rest.get(getApiUrl('/categories'), (req, res, ctx) => {
+  rest.get(getApiUrl('/organizations/:orgId/categories'), (req, res, ctx) => {
     return res(ctx.json({ ...getCategoriesDataMock() }));
   }),
 
   // Mock data for footprint modules
   rest.get(
-    getApiUrl('/categories/company_decarbonization'),
+    getApiUrl('/organizations/:orgId/categories/company_decarbonization'),
     (req, res, ctx) => {
       return res(ctx.json({ ...getFootprintDataMock() }));
     },
@@ -176,17 +176,23 @@ export const handlers = [
     return res(ctx.json(getRoles()));
   }),
 
-  rest.get(getApiUrl('/surveys/:name'), (req, res, ctx) => {
-    const { name } = req.params;
+  rest.get(
+    getApiUrl('/organizations/:orgId/surveys/:name'),
+    (req, res, ctx) => {
+      const { name } = req.params;
 
-    return res(ctx.json(getSurveyFormDataByName(name as string)));
-  }),
+      return res(ctx.json(getSurveyFormDataByName(name as string)));
+    },
+  ),
 
-  rest.put(getApiUrl('/surveys/:name'), async (req, res, ctx) => {
-    const { data } = await req.json();
+  rest.put(
+    getApiUrl('/organizations/:orgId/surveys/:name'),
+    async (req, res, ctx) => {
+      const { data } = await req.json();
 
-    return res(ctx.json({}));
-  }),
+      return res(ctx.json({}));
+    },
+  ),
 
   rest.patch(getApiUrl(`/members/:emailOrId`), (req, res, ctx) => {
     return res(ctx.json({}));
