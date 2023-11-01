@@ -7,10 +7,10 @@ import { orderBy } from 'lodash';
 import { Avatar } from '../../atoms/avatar/avatar';
 import { axiosFetcher } from '../../../fetchers/axiosFetcher';
 import { ButtonTypes, ErrorType } from '@coldpbc/enums';
-import { MemberStatusType } from '../../pages';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application/errors/errorFallback';
 import { useAuth0Wrapper, useColdContext, useOrgSWR } from '@coldpbc/hooks';
+import { MemberStatusType } from '@coldpbc/interfaces';
 
 export interface TeamMembersDataGridProps {
   selectedMemberStatusType: MemberStatusType;
