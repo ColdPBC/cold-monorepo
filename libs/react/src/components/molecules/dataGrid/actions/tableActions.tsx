@@ -7,6 +7,7 @@ import { flowbiteThemeOverride } from '@coldpbc/themes';
 import { Modal } from '../../modal';
 import { useAddToastMessage, useExecuteAction } from '@coldpbc/hooks';
 import { ToastMessage } from '@coldpbc/interfaces';
+import { RoleModal } from './roleModal';
 
 export interface TableActionsProps {
   actions: TableActionType[];
@@ -17,29 +18,122 @@ export interface TableActionsProps {
 export const TableActions = (props: TableActionsProps) => {
   const { actions } = props;
   const [shown, setShown] = useState(false);
-  const [actionModal, setActionModal] = useState<any | null>(null);
+  const [actionModal, setActionModal] = useState<TableActionType | null>(null);
   const { addToastMessage } = useAddToastMessage();
   const { executeAction } = useExecuteAction();
+  const { modalProps } = actionModal || {};
 
-  const onActionModalConfirm = () => {
-    // todo: fix this type issue
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    executeAction(actionModal)
-      .then(() => {
-        addToastMessage({
-          message: actionModal.toastMessage.success,
-          type: ToastMessage.SUCCESS,
+  const onActionModalConfirm = async () => {
+    if (actionModal) {
+      addLoadingToButton(true);
+      executeAction(actionModal)
+        .then(() => {
+          addToastMessage({
+            message: actionModal.toastMessage.success,
+            type: ToastMessage.SUCCESS,
+          });
+          addLoadingToButton(false);
+          setActionModal(null);
+        })
+        .catch(() => {
+          addToastMessage({
+            message: actionModal.toastMessage.fail,
+            type: ToastMessage.FAILURE,
+          });
+          addLoadingToButton(false);
+          setActionModal(null);
         });
-        setActionModal(null);
-      })
-      .catch(() => {
-        addToastMessage({
-          message: actionModal.toastMessage.fail,
-          type: ToastMessage.FAILURE,
-        });
-        setActionModal(null);
+    }
+  };
+
+  const addLoadingToButton = (loading: boolean) => {
+    if (modalProps && actionModal) {
+      setActionModal({
+        ...actionModal,
+        modalProps: {
+          ...modalProps,
+          footer: {
+            ...modalProps?.footer,
+            resolveButton: {
+              ...modalProps?.footer?.resolveButton,
+              loading: loading,
+            },
+          },
+        },
       });
+    }
+  };
+
+  const getActionModal = () => {
+    if (actionModal?.name === 'update role') {
+      if (modalProps) {
+        return (
+          <RoleModal
+            show={true}
+            setShowModal={() => setActionModal(null)}
+            action={{
+              ...actionModal,
+              modalProps: {
+                ...modalProps,
+                footer: {
+                  rejectButton: {
+                    ...modalProps?.footer?.rejectButton,
+                    onClick: () => {
+                      if (modalProps?.footer?.rejectButton?.onClick) {
+                        modalProps?.footer?.rejectButton?.onClick();
+                      }
+                      setActionModal(null);
+                    },
+                  },
+                  resolveButton: {
+                    ...modalProps?.footer?.resolveButton,
+                    onClick: () => {
+                      if (modalProps?.footer?.resolveButton?.onClick) {
+                        modalProps?.footer?.resolveButton?.onClick();
+                      }
+                      onActionModalConfirm();
+                    },
+                  },
+                },
+              },
+            }}
+          />
+        );
+      } else {
+        return null;
+      }
+    } else {
+      return (
+        <Modal
+          show={actionModal !== null}
+          setShowModal={() => setActionModal(null)}
+          header={{
+            title: modalProps?.header.title || '',
+          }}
+          body={<div className="text-sm font-medium">{modalProps?.body}</div>}
+          footer={{
+            rejectButton: {
+              ...modalProps?.footer?.rejectButton,
+              onClick: () => {
+                if (modalProps?.footer?.rejectButton?.onClick) {
+                  modalProps?.footer?.rejectButton?.onClick();
+                }
+                setActionModal(null);
+              },
+            },
+            resolveButton: {
+              ...modalProps?.footer?.resolveButton,
+              onClick: () => {
+                if (modalProps?.footer?.resolveButton?.onClick) {
+                  modalProps?.footer?.resolveButton?.onClick();
+                }
+                onActionModalConfirm();
+              },
+            },
+          }}
+        />
+      );
+    }
   };
 
   if (!actions.length) return null;
@@ -79,28 +173,7 @@ export const TableActions = (props: TableActionsProps) => {
           );
         })}
       </Dropdown>
-      <Modal
-        show={actionModal !== null}
-        setShowModal={() => setActionModal(null)}
-        header={{
-          title: actionModal?.title,
-        }}
-        body={<div className="text-sm font-medium">{actionModal?.body}</div>}
-        footer={{
-          rejectButton: {
-            ...actionModal?.footer?.rejectButton,
-            onClick: () => {
-              setActionModal(null);
-            },
-          },
-          resolveButton: {
-            ...actionModal?.footer?.resolveButton,
-            onClick: () => {
-              onActionModalConfirm();
-            },
-          },
-        }}
-      />
+      {getActionModal()}
     </>
   );
 };

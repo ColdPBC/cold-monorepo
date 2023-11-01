@@ -107,7 +107,7 @@ const Component = (props: InviteMemberFormProps) => {
               input_label="Email Address"
             />
           </div>
-          <div className="w-40 ml-4 mb-2">
+          <div className="w-40 ml-4">
             <Input
               input_props={{
                 name: 'role',

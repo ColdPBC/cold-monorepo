@@ -1,4 +1,7 @@
-import { ButtonTypes } from "../enums/buttons";
+import { ButtonTypes } from '../enums/buttons';
+import { KeyedMutator } from 'swr';
+import { IModalProps } from '@coldpbc/components';
+import { IButtonProps } from './buttons';
 
 export interface TableActionType {
   name: string;
@@ -7,24 +10,20 @@ export interface TableActionType {
   toastMessage: TableActionToastMessageType;
 
   // for modal
-  title?: string;
-  body?: JSX.Element;
-  footer?: {
-    resolveButton: {
-        variant?: ButtonTypes;
-        label: string;
-    };
-    rejectButton: {
-        label: string;
-        variant?: ButtonTypes;
-    };
-}
+  modalProps?: {
+    header: IModalProps['header'];
+    body: IModalProps['body'];
+    footer: IModalProps['footer'];
+  };
 
   apiRequests: {
     url: string;
     method: string;
     data?: object;
   }[];
+
+  mutate: KeyedMutator<any>;
+  actionObject: any;
 }
 
 export interface TableActionToastMessageType {
