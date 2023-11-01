@@ -1,3 +1,11 @@
+# [1.58.0](https://github.com/ColdPBC/ui/compare/v1.57.0...v1.58.0) (2023-10-31)
+
+
+### Features
+
+* add max height and set overflow to auto to only show scrollbar if the list exceeds the height ([62c4350](https://github.com/ColdPBC/ui/commit/62c43505d30f7b26739ce83595518268ff9d4e42))
+* add overflow and remove overflow ([89e5748](https://github.com/ColdPBC/ui/commit/89e5748ac02cba4fc45fa00ff110bd4252c76b2c))
+
 # [1.57.0](https://github.com/ColdPBC/ui/compare/v1.56.0...v1.57.0) (2023-10-27)
 
 
