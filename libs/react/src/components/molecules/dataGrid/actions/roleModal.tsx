@@ -3,13 +3,14 @@ import { IModalProps, Input, Modal, Spinner } from '@coldpbc/components';
 import { Role } from 'auth0';
 import capitalize from 'lodash/capitalize';
 import { ColorNames, ErrorType, GlobalSizes, InputTypes } from '@coldpbc/enums';
-import { TableActionType } from '@coldpbc/interfaces';
+import { InputOption, TableActionType } from '@coldpbc/interfaces';
 import useSWR from 'swr';
 import { axiosFetcher } from '@coldpbc/fetchers';
-import { useColdContext } from '@coldpbc/hooks';
+import { useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
 import includes from 'lodash/includes';
 import { isEqual } from 'lodash';
 import { getFormattedUserName } from '@coldpbc/lib';
+import { UserRole } from '../../../../interfaces/user';
 
 export type RoleModalProps = {
   show: boolean;
@@ -25,12 +26,13 @@ export type RoleModalProps = {
 
 export const RoleModal = (props: RoleModalProps) => {
   const { logError } = useColdContext();
-  const [role, setRole] = useState<string | undefined>();
+  const [selectedRole, setSelectedRole] = useState<any>(undefined);
+  const auth0 = useAuth0Wrapper();
   const { modalProps, actionObject } = props.action;
 
   const { data, isLoading, error } = useSWR(['/roles', 'GET'], axiosFetcher);
 
-  const filterRoles = (role: any) => {
+  const filterRoles = (role: UserRole) => {
     const filteredRoles = ['cold:', 'default:'];
 
     let match = false;
@@ -44,23 +46,40 @@ export const RoleModal = (props: RoleModalProps) => {
       match = isEqual(role.name, actionObject.role);
     });
 
+    if (
+      auth0.user?.coldclimate_claims.roles[0] === 'company:admin' &&
+      role.name === 'company:owner'
+    ) {
+      if (match) return;
+      match = true;
+    }
+
     if (match) return;
     return role;
   };
 
   useEffect(() => {
     if (data) {
-      const filteredRoles = (data as Role[]).filter(filterRoles);
-      setRole(filteredRoles[0].name);
+      const filteredRoles = (data as UserRole[]).filter(filterRoles);
+      setSelectedRole({
+        id: 0,
+        value: filteredRoles[0].name,
+        name: capitalize(filteredRoles[0].name?.replace('company:', '')),
+      });
     }
   }, [data]);
 
-  if (error) {
-    logError(error, ErrorType.SWRError);
+  if (error || auth0.error) {
+    if (error) {
+      logError(error, ErrorType.SWRError);
+    }
+    if (auth0.error) {
+      logError(auth0.error, ErrorType.Auth0Error);
+    }
     return null;
   }
 
-  if (isLoading) {
+  if (isLoading || auth0.isLoading) {
     return (
       <div className="w-full h-full grid content-center">
         <Spinner size={GlobalSizes.medium} color={ColorNames.primary} />
@@ -68,8 +87,7 @@ export const RoleModal = (props: RoleModalProps) => {
     );
   }
 
-  if (data) {
-    const filteredRoles = (data as Role[]).filter(filterRoles);
+  if (data && selectedRole) {
     return (
       <Modal
         show={props.show}
@@ -87,16 +105,19 @@ export const RoleModal = (props: RoleModalProps) => {
               <Input
                 input_props={{
                   name: 'role',
-                  value: role || filteredRoles[0].name,
-                  onValueChange: (value) => {
-                    setRole(value);
+                  value: selectedRole,
+                  onValueChange: (value: InputOption) => {
+                    setSelectedRole(value);
                   },
-                  options: filteredRoles.map((role: Role, index) => {
-                    return {
-                      id: index,
-                      name: capitalize(role.name?.replace('company:', '')),
-                    };
-                  }),
+                  options: (data as UserRole[])
+                    .filter(filterRoles)
+                    .map((role: UserRole, index) => {
+                      return {
+                        id: index,
+                        value: role.name,
+                        name: capitalize(role.name?.replace('company:', '')),
+                      };
+                    }),
                 }}
                 idx={1}
                 type={InputTypes.Select}
@@ -113,7 +134,7 @@ export const RoleModal = (props: RoleModalProps) => {
               props.action.apiRequests[0].url =
                 props.action.apiRequests[0].url.replace(
                   ':roleName',
-                  role || '',
+                  selectedRole.value,
                 );
               if (modalProps?.footer?.resolveButton?.onClick) {
                 modalProps?.footer?.resolveButton?.onClick();

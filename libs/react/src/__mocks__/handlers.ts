@@ -17,6 +17,7 @@ import { getPoliciesSignedMock, getPolicyMockByName } from './policyMock';
 import { auth0UserMock } from './userMock';
 import { getNewsDefault } from './newsMock';
 import { getActionMock, getActionsMock } from './action';
+import { v4 as uuidv4 } from 'uuid';
 
 // Even if this uses vite as a bundler, it still uses the NODE_ENV variable
 export const getApiUrl = (path: string) => {
@@ -141,7 +142,7 @@ export const handlers = [
         const { user_email, inviter_name, roleId } = data;
         return res(
           ctx.json({
-            id: 'uinv_ZcGKwTk15bjKevI0',
+            id: uuidv4(),
             client_id: 'i8rCPXsLq9b2YKOOWUTfvgUj0iYD7dE3',
             inviter: {
               name: inviter_name,

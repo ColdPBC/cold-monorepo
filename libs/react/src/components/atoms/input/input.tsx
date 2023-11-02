@@ -115,9 +115,10 @@ export const Input = (props: IInputProps) => {
     return (
       <Select
         {...input_props}
+        value={input_props.value.name}
         label={input_label}
         onChange={(value) => {
-          input_props.onValueChange(value.name);
+          input_props.onValueChange(value);
         }}
       />
     );

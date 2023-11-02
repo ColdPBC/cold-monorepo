@@ -12,6 +12,7 @@ import { ErrorFallback } from '../../application/errors/errorFallback';
 import { MemberStatusType, TableActionType } from '@coldpbc/interfaces';
 import { useEffect, useMemo } from 'react';
 import { useAuth0Wrapper, useColdContext, useOrgSWR } from '@coldpbc/hooks';
+import { cache } from 'swr/_internal';
 
 export interface TeamMembersDataGridProps {
   selectedMemberStatusType: MemberStatusType;
@@ -21,7 +22,7 @@ export const _TeamMembersDataGrid = ({
   selectedMemberStatusType,
 }: TeamMembersDataGridProps) => {
   const { logError } = useColdContext();
-  const { user: dataGridUser, getOrgSpecificUrl } = useAuth0Wrapper();
+  const auth0 = useAuth0Wrapper();
 
   const { data, error, isLoading, mutate } = useOrgSWR(
     ['/members', 'GET'],
@@ -30,6 +31,13 @@ export const _TeamMembersDataGrid = ({
       revalidateOnFocus: false,
     },
   );
+
+  const filterActions = (action: TableActionType) => {
+    if (auth0.user?.coldclimate_claims.roles[0] === 'company:member') {
+      return false;
+    }
+    return true;
+  };
 
   const getActions = (user: User): TableActionType[] => {
     let actions: TableActionType[] = [];
@@ -45,15 +53,15 @@ export const _TeamMembersDataGrid = ({
           },
           apiRequests: [
             {
-              url: `/organizations/${dataGridUser?.coldclimate_claims.org_id}/invitations/${user.id}`,
+              url: `/organizations/${auth0.user?.coldclimate_claims.org_id}/invitations/${user.id}`,
               method: 'DELETE',
             },
             {
-              url: `/organizations/${dataGridUser?.coldclimate_claims.org_id}/invitation`,
+              url: `/organizations/${auth0.user?.coldclimate_claims.org_id}/invitation`,
               method: 'POST',
               data: {
                 user_email: user.email,
-                inviter_name: dataGridUser?.name,
+                inviter_name: auth0.user?.name,
                 roleId: ['company:admin'],
               },
             },
@@ -71,7 +79,7 @@ export const _TeamMembersDataGrid = ({
           },
           apiRequests: [
             {
-              url: getOrgSpecificUrl(`/invitations/${user.id}`),
+              url: auth0.getOrgSpecificUrl(`/invitations/${user.id}`),
               method: 'DELETE',
             },
           ],
@@ -113,7 +121,7 @@ export const _TeamMembersDataGrid = ({
           },
           apiRequests: [
             {
-              url: getOrgSpecificUrl(`/members`),
+              url: auth0.getOrgSpecificUrl(`/members`),
               method: 'DELETE',
               data: {
                 members: [user.user_id],
@@ -148,7 +156,7 @@ export const _TeamMembersDataGrid = ({
           },
           apiRequests: [
             {
-              url: getOrgSpecificUrl(
+              url: auth0.getOrgSpecificUrl(
                 `/roles/:roleName/members/${user.user_id}`,
               ),
               method: 'PUT',
@@ -192,7 +200,7 @@ export const _TeamMembersDataGrid = ({
           },
           apiRequests: [
             {
-              url: getOrgSpecificUrl(`/members`),
+              url: auth0.getOrgSpecificUrl(`/members`),
               method: 'DELETE',
               data: {
                 members: [user.user_id],
@@ -227,7 +235,7 @@ export const _TeamMembersDataGrid = ({
           },
           apiRequests: [
             {
-              url: getOrgSpecificUrl(
+              url: auth0.getOrgSpecificUrl(
                 `/roles/:roleName/members/${user.user_id}`,
               ),
               method: 'PUT',
@@ -284,17 +292,22 @@ export const _TeamMembersDataGrid = ({
               {getRole(user)}
             </span>
           ),
-          actions: getActions(user),
+          actions: getActions(user).filter(filterActions),
         };
       });
-  }, [data, dataGridUser, selectedMemberStatusType]);
+  }, [data, auth0, selectedMemberStatusType]);
 
-  if (error) {
-    logError(error, ErrorType.SWRError);
+  if (error || auth0.error) {
+    if (error) {
+      logError(error, ErrorType.SWRError);
+    }
+    if (auth0.error) {
+      logError(auth0.error, ErrorType.Auth0Error);
+    }
     return null;
   }
 
-  if (isLoading) {
+  if (isLoading || auth0.isLoading) {
     return (
       <div className="w-full h-full grid content-center">
         <Spinner size={GlobalSizes.medium} color={ColorNames.primary} />
@@ -313,7 +326,7 @@ export const _TeamMembersDataGrid = ({
     );
   }
 
-  if (data && dataGridUser) {
+  if (data && auth0.user) {
     return (
       <Datagrid
         items={transformedData}

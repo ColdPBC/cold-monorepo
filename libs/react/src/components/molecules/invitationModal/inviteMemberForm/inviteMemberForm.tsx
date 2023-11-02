@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BaseButton } from '../../../atoms/button/button';
 import { InputTypes } from '../../../../enums/inputs';
 import { Input } from '../../../atoms/input/input';
@@ -13,6 +13,8 @@ import { ButtonTypes, ErrorType } from '@coldpbc/enums';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../../application/errors/errorFallback';
 import { useColdContext } from '@coldpbc/hooks';
+import { InputOption } from '@coldpbc/interfaces';
+import { UserRole } from '../../../../interfaces/user';
 
 export interface InviteMemberFormProps {
   inviteMembers: (email: string, roleId: string) => void;
@@ -23,7 +25,7 @@ const Component = (props: InviteMemberFormProps) => {
   const { inviteMembers } = props;
   const [memberForm, setMemberForm] = useState<any>({
     email: '',
-    role: '',
+    role: undefined,
   });
   const {
     data,
@@ -44,7 +46,7 @@ const Component = (props: InviteMemberFormProps) => {
   };
 
   const handleSubmit = () => {
-    inviteMembers(memberForm.email, memberForm.role);
+    inviteMembers(memberForm.email, memberForm.role.value);
   };
 
   const isEmailValid = () => {
@@ -56,7 +58,7 @@ const Component = (props: InviteMemberFormProps) => {
   };
 
   // Filter out special case roles
-  const filterRoles = (role: any) => {
+  const filterRoles = (role: UserRole) => {
     const filteredRoles = ['company:owner', 'cold:', 'default:'];
 
     let match = false;
@@ -68,6 +70,20 @@ const Component = (props: InviteMemberFormProps) => {
     if (match) return;
     return role;
   };
+
+  useEffect(() => {
+    if (data) {
+      const filtered = data.filter(filterRoles);
+      setMemberForm({
+        ...memberForm,
+        role: {
+          id: 0,
+          value: filtered[0].name,
+          name: capitalize(filtered[0].name?.replace('company:', '')),
+        },
+      });
+    }
+  }, [data]);
 
   if (error) {
     logError(error, ErrorType.SWRError);
@@ -82,7 +98,7 @@ const Component = (props: InviteMemberFormProps) => {
     );
   }
 
-  if (isArray(data)) {
+  if (isArray(data) && memberForm.role) {
     return (
       <>
         <div className="flex items-end">
@@ -112,14 +128,15 @@ const Component = (props: InviteMemberFormProps) => {
               input_props={{
                 name: 'role',
                 value: memberForm.role,
-                onValueChange: (value) => {
+                onValueChange: (value: InputOption) => {
                   handleChange('role', value);
                 },
-                options: (data as Role[])
+                options: (data as UserRole[])
                   .filter(filterRoles)
-                  .map((role: Role, index) => {
+                  .map((role: UserRole, index) => {
                     return {
                       id: index,
+                      value: role.name,
                       name: capitalize(role.name?.replace('company:', '')),
                     };
                   }),

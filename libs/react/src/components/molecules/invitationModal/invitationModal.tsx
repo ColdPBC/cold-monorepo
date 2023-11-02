@@ -1,45 +1,45 @@
-import { User } from '@auth0/auth0-spa-js/src/global';
 import { axiosFetcher } from '../../../fetchers/axiosFetcher';
 import { Modal } from '../modal/modal';
 import { useAddToastMessage } from '../../../hooks/useToastMessage';
 import { InviteMemberForm } from './inviteMemberForm/inviteMemberForm';
 import { isAxiosError } from 'axios';
-import useSWR from 'swr';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { CheckIcon } from '@heroicons/react/20/solid';
-import { BaseButton } from '../../atoms';
+import { BaseButton, Spinner } from '../../atoms';
 import { ToastMessage } from '@coldpbc/interfaces';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application/errors/errorFallback';
-import { useOrgSWR } from '@coldpbc/hooks';
+import { useAuth0Wrapper, useColdContext, useOrgSWR } from '@coldpbc/hooks';
+import { ErrorType } from '@coldpbc/enums';
+import { useSWRConfig } from 'swr';
+import { cloneDeep } from 'lodash';
 
 export interface InvitationModalProps {
   shown: boolean;
   setShown: (shown: boolean) => void;
   companyName: string;
-  user: User;
 }
 
 const _InvitationModal = (props: InvitationModalProps) => {
-  const { shown, setShown, user } = props;
+  const { shown, setShown } = props;
+  const { logError } = useColdContext();
   const { addToastMessage } = useAddToastMessage();
+  const { cache, mutate } = useSWRConfig();
+  const auth0 = useAuth0Wrapper();
   const [isSuccess, setIsSuccess] = useState(false);
   const [email, setEmail] = useState('');
 
-  const { mutate: sendInvitation } = useOrgSWR<any>(
-    [`/invitation`, 'POST'],
-    axiosFetcher,
-  );
-
   const inviteMembers = async (email: string, roleId: string) => {
     try {
-      const response: any = await sendInvitation(
+      const response: any = await axiosFetcher([
+        auth0.getOrgSpecificUrl(`/invitation`),
+        'POST',
         JSON.stringify({
           user_email: email,
-          inviter_name: user.name,
-          roleId: roleId,
+          inviter_name: auth0.user?.name,
+          roleId: [roleId],
         }),
-      );
+      ]);
 
       // check if the response array contains any AxiosError objects
       // reject the promise if there are any errors
@@ -49,6 +49,21 @@ const _InvitationModal = (props: InvitationModalProps) => {
       }
       setIsSuccess(true);
       setEmail(email);
+      const key = auth0.getOrgSpecificUrl('/members');
+      console.log(cache);
+      await mutate(
+        [key, 'GET'],
+        (data: any) => {
+          data.members.push(response);
+          return {
+            ...data,
+            members: cloneDeep(data.members),
+          };
+        },
+        {
+          revalidate: false,
+        },
+      );
     } catch (error) {
       addToastMessage({
         message: 'Invitation failed',
@@ -84,6 +99,19 @@ const _InvitationModal = (props: InvitationModalProps) => {
       />
     );
   };
+
+  if (auth0.isLoading) {
+    return (
+      <div>
+        <Spinner />
+      </div>
+    );
+  }
+
+  if (auth0.error) {
+    logError(auth0.error, ErrorType.Auth0Error);
+    return <div></div>;
+  }
 
   return (
     <Modal

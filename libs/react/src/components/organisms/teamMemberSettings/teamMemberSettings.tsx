@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { withErrorBoundary } from 'react-error-boundary';
-import { useAuth0 } from '@auth0/auth0-react';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import {
   BaseButton,
@@ -15,11 +14,10 @@ import { Dropdown } from 'flowbite-react';
 import { CheckIcon, ChevronDownIcon } from '@heroicons/react/20/solid';
 import { flowbiteThemeOverride } from '@coldpbc/themes';
 import { Organization } from 'auth0';
-import { useAuth0Wrapper, useColdContext, useOrgSWR } from '@coldpbc/hooks';
+import { useColdContext, useOrgSWR } from '@coldpbc/hooks';
 import { MemberStatusType } from '@coldpbc/interfaces';
 
 const _TeamMemberSettings = (props: any) => {
-  const auth0 = useAuth0Wrapper();
   const { logError } = useColdContext();
   const [showModal, setShowModal] = useState(false);
   const [selectedMemberStatusType, setSelectedMemberStatusType] =
@@ -29,7 +27,7 @@ const _TeamMemberSettings = (props: any) => {
 
   const organizationData = organization.data as Organization;
 
-  if (auth0.isLoading || organization.isLoading) {
+  if (organization.isLoading) {
     return (
       <div>
         <Spinner />
@@ -37,17 +35,12 @@ const _TeamMemberSettings = (props: any) => {
     );
   }
 
-  if (auth0.error || organization.error) {
-    if (auth0.error) {
-      logError(auth0.error, ErrorType.Auth0Error);
-    }
-    if (organization.error) {
-      logError(organization.error, ErrorType.SWRError);
-    }
+  if (organization.error) {
+    logError(organization.error, ErrorType.SWRError);
     return <div></div>;
   }
 
-  if (auth0.user && organization.data) {
+  if (organization.data) {
     return (
       <>
         <Card
@@ -111,7 +104,6 @@ const _TeamMemberSettings = (props: any) => {
             setShown={setShowModal}
             shown={showModal}
             companyName={organizationData.name}
-            user={auth0.user}
           />
         )}
       </>

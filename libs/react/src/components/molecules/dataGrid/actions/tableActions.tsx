@@ -154,13 +154,12 @@ export const TableActions = (props: TableActionsProps) => {
       >
         {actions.map((action, index, array) => {
           return (
-            <>
+            <div key={`${index}`}>
               <Dropdown.Item
                 theme={flowbiteThemeOverride.dropdown.floating.item}
                 className="p-0 w-full"
               >
                 <TableAction
-                  key={`${index}`}
                   action={action}
                   setActionsShown={setShown}
                   openActionModal={setActionModal}
@@ -169,7 +168,7 @@ export const TableActions = (props: TableActionsProps) => {
               {index + 1 < actions.length && (
                 <div className="bg-bgc-accent h-[1px] w-full" />
               )}
-            </>
+            </div>
           );
         })}
       </Dropdown>
