@@ -22,15 +22,4 @@ export const Default: Story = {
       </StoryMockProvider>
     );
   },
-  parameters: {
-    auth0AddOn: {
-      user: {
-        ...auth0UserMock,
-        coldclimate_claims: {
-          ...auth0UserMock.coldclimate_claims,
-          roles: ['company:admin'],
-        },
-      },
-    },
-  },
 };

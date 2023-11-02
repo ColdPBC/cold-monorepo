@@ -13,6 +13,7 @@ import { useAuth0Wrapper, useColdContext, useOrgSWR } from '@coldpbc/hooks';
 import { ErrorType } from '@coldpbc/enums';
 import { useSWRConfig } from 'swr';
 import { cloneDeep } from 'lodash';
+import { getFormattedUserName } from '@coldpbc/lib';
 
 export interface InvitationModalProps {
   shown: boolean;
@@ -36,7 +37,7 @@ const _InvitationModal = (props: InvitationModalProps) => {
         'POST',
         JSON.stringify({
           user_email: email,
-          inviter_name: auth0.user?.name,
+          inviter_name: getFormattedUserName(auth0.user),
           roleId: [roleId],
         }),
       ]);

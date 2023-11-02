@@ -13,6 +13,7 @@ import { MemberStatusType, TableActionType } from '@coldpbc/interfaces';
 import { useEffect, useMemo } from 'react';
 import { useAuth0Wrapper, useColdContext, useOrgSWR } from '@coldpbc/hooks';
 import { cache } from 'swr/_internal';
+import { getFormattedUserName } from '@coldpbc/lib';
 
 export interface TeamMembersDataGridProps {
   selectedMemberStatusType: MemberStatusType;
@@ -27,9 +28,6 @@ export const _TeamMembersDataGrid = ({
   const { data, error, isLoading, mutate } = useOrgSWR(
     ['/members', 'GET'],
     axiosFetcher,
-    {
-      revalidateOnFocus: false,
-    },
   );
 
   const filterActions = (action: TableActionType) => {
@@ -61,7 +59,7 @@ export const _TeamMembersDataGrid = ({
               method: 'POST',
               data: {
                 user_email: user.email,
-                inviter_name: auth0.user?.name,
+                inviter_name: getFormattedUserName(auth0.user),
                 roleId: ['company:admin'],
               },
             },

@@ -44,7 +44,7 @@ export const Select = (props: SelectProps) => {
               {label}
             </Listbox.Label>
           )}
-          <Listbox.Button className="relative w-full cursor-pointer bg-transparent text-tc-primary text-left text-body p-4 border-[1px] border-bgc-accent rounded-lg focus:outline-none focus:border-[1.5px] focus:border-primary">
+          <Listbox.Button className="relative w-full cursor-pointer bg-transparent text-tc-primary text-left text-body p-4 border-[1px] border-bgc-accent rounded-lg">
             <span className="block truncate">
               {findOption(value, options).name}
             </span>
