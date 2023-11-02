@@ -21,6 +21,8 @@ import { useOrgSWR } from '../../../hooks/useOrgSWR';
 import { map } from 'lodash';
 import { ErrorType } from '@coldpbc/enums';
 import { useColdContext } from '@coldpbc/hooks';
+import { NumericFormat } from 'react-number-format';
+import { formatTonnes } from '../../../lib/footprintUtils';
 
 interface LegendRow {
   value: number;
@@ -252,7 +254,7 @@ function _FootprintDetailChart({
                 {row.percent}%
               </Table.Cell>
               <Table.Cell theme={darkTableTheme.table?.body?.cell}>
-                {row.value}
+                {formatTonnes(row.value)}
               </Table.Cell>
             </Table.Row>
           ))}
