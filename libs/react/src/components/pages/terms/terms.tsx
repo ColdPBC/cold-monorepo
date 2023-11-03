@@ -14,7 +14,7 @@ export interface TermsProps {
 
 function _Terms(props: PropsWithChildren<TermsProps>) {
   const { data, error, isLoading } = useSWR<any>(
-    ['/policy-content/' + props.type + '/content', 'GET'],
+    ['/policies/' + props.type + '/content', 'GET'],
     axiosFetcher,
   );
   const { logError } = useColdContext();
