@@ -17,6 +17,7 @@ import { useAuth0Wrapper, useColdContext, useOrgSWR } from '@coldpbc/hooks';
 import { SurveyPayloadType } from '@coldpbc/interfaces';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorPage } from '../errors/errorPage';
+import { datadogRum } from '@datadog/browser-rum';
 
 const _ProtectedRoute = () => {
   const {
@@ -98,6 +99,7 @@ const _ProtectedRoute = () => {
                   key: orgId,
                 });
               }
+              datadogRum.setUser(user?.coldclimate_claims);
             } else {
               await loginWithRedirect({
                 appState: appState,
