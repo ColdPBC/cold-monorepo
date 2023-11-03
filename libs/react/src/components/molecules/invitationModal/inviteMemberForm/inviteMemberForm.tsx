@@ -3,7 +3,7 @@ import { BaseButton } from '../../../atoms/button/button';
 import { InputTypes } from '../../../../enums/inputs';
 import { Input } from '../../../atoms/input/input';
 import useSWR from 'swr';
-import { axiosFetcher } from '../../../../fetchers/axiosFetcher';
+import { axiosFetcher } from '@coldpbc/fetchers';
 import { Spinner } from '../../../atoms/spinner/spinner';
 import capitalize from 'lodash/capitalize';
 import includes from 'lodash/includes';
