@@ -1,3 +1,13 @@
+# [1.61.0](https://github.com/ColdPBC/ui/compare/v1.60.0...v1.61.0) (2023-11-02)
+
+
+### Features
+
+* add 2nd decimal number if needed ([6597f1b](https://github.com/ColdPBC/ui/commit/6597f1b99d9508b25efa956e687a8f9e82e44cc0))
+* format tonnes to have thousand comma ([2260929](https://github.com/ColdPBC/ui/commit/22609293513b1295b5f0dbc308fd7e5f0568f1b6))
+* one decimal point ([cde84f7](https://github.com/ColdPBC/ui/commit/cde84f79d8f7f82168d3f0344082c54fe439a221))
+* remove trailing zeroes ([87ba77e](https://github.com/ColdPBC/ui/commit/87ba77ec43c48102f51e5ab3c774338d8594abf0))
+
 # [1.60.0](https://github.com/ColdPBC/ui/compare/v1.59.0...v1.60.0) (2023-11-01)
 
 
