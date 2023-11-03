@@ -99,10 +99,7 @@ const _ProtectedRoute = () => {
                   key: orgId,
                 });
               }
-              datadogRum.setUser({
-                ...user,
-                orgId: orgId,
-              });
+              datadogRum.setUser(user?.coldclimate_claims);
             } else {
               await loginWithRedirect({
                 appState: appState,
