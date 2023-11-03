@@ -1,3 +1,11 @@
+# [1.64.0](https://github.com/ColdPBC/ui/compare/v1.63.0...v1.64.0) (2023-11-03)
+
+
+### Features
+
+* add user to dd rum to help track users running into errors ([b161fdc](https://github.com/ColdPBC/ui/commit/b161fdc68e4b456dfd3354054e11f158bf129384))
+* use cold climate claims object for logging ([d09aaa0](https://github.com/ColdPBC/ui/commit/d09aaa0ff9da6a9174229dc081e29b02519f2d63))
+
 # [1.63.0](https://github.com/ColdPBC/ui/compare/v1.62.0...v1.63.0) (2023-11-03)
 
 
