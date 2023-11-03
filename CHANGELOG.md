@@ -1,3 +1,10 @@
+# [1.63.0](https://github.com/ColdPBC/ui/compare/v1.62.0...v1.63.0) (2023-11-03)
+
+
+### Features
+
+* update policy content endpoint ([64c9a1f](https://github.com/ColdPBC/ui/commit/64c9a1ff3059e02539f6332c1e5807927432e8da))
+
 # [1.62.0](https://github.com/ColdPBC/ui/compare/v1.61.0...v1.62.0) (2023-11-03)
 
 
