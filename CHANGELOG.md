@@ -1,3 +1,14 @@
+# [1.62.0](https://github.com/ColdPBC/ui/compare/v1.61.0...v1.62.0) (2023-11-03)
+
+
+### Features
+
+* add team member actions ([bc15a6c](https://github.com/ColdPBC/ui/commit/bc15a6c3855f0c5a3c46832d337c909f743716f5))
+* Add team member actions back to table for each row ([211abff](https://github.com/ColdPBC/ui/commit/211abff98c044b6a8ffaee859cc252c08ffe2997))
+* Added error message for expired invitation link ([efb96a1](https://github.com/ColdPBC/ui/commit/efb96a175e0c7d072dd448a4efeacb19ce5d95de))
+* allow roles to be filtered based on role ([5e84596](https://github.com/ColdPBC/ui/commit/5e84596a370ca60534895af772e11a5ce85f7a2c))
+* revert handler changes ([fe00f56](https://github.com/ColdPBC/ui/commit/fe00f56c476785bc290d8bc1652eca1d700b17f0))
+
 # [1.61.0](https://github.com/ColdPBC/ui/compare/v1.60.0...v1.61.0) (2023-11-02)
 
 
