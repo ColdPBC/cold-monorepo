@@ -7,14 +7,12 @@ import { axiosFetcher } from '../../../../fetchers/axiosFetcher';
 import { Spinner } from '../../../atoms/spinner/spinner';
 import capitalize from 'lodash/capitalize';
 import includes from 'lodash/includes';
-import { Role } from 'auth0';
 import { isArray } from 'lodash';
 import { ButtonTypes, ErrorType } from '@coldpbc/enums';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../../application/errors/errorFallback';
 import { useColdContext } from '@coldpbc/hooks';
-import { InputOption } from '@coldpbc/interfaces';
-import { UserRole } from '../../../../interfaces/user';
+import { InputOption, UserRole } from '@coldpbc/interfaces';
 
 export interface InviteMemberFormProps {
   inviteMembers: (email: string, roleId: string) => void;

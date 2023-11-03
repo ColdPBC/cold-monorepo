@@ -33,24 +33,7 @@ export function useExecuteAction() {
         );
         break;
       case 'resend invite':
-        await action.mutate(
-          (data: any) => {
-            data.members = data.members.filter(
-              (member: User) => member.id !== action.actionObject.id,
-            );
-            const newInvitation = responses.find(
-              (response: any) => !isEmpty(response),
-            );
-            data.members.push(newInvitation);
-            return {
-              ...data,
-              members: cloneDeep(data.members),
-            };
-          },
-          {
-            revalidate: false,
-          },
-        );
+        await action.mutate();
         break;
       case 'remove user':
         await action.mutate(

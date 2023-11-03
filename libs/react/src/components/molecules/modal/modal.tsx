@@ -6,7 +6,6 @@ import { flowbiteThemeOverride } from '@coldpbc/themes';
 import { Card } from '../card';
 import { XMarkIcon } from '@heroicons/react/20/solid';
 import clsx from 'clsx';
-import ReactMarkdown from 'react-markdown';
 
 export interface ModalHeader {
   title: string;

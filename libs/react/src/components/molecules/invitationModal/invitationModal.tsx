@@ -25,7 +25,7 @@ const _InvitationModal = (props: InvitationModalProps) => {
   const { shown, setShown } = props;
   const { logError } = useColdContext();
   const { addToastMessage } = useAddToastMessage();
-  const { cache, mutate } = useSWRConfig();
+  const { mutate } = useSWRConfig();
   const auth0 = useAuth0Wrapper();
   const [isSuccess, setIsSuccess] = useState(false);
   const [email, setEmail] = useState('');
@@ -50,21 +50,7 @@ const _InvitationModal = (props: InvitationModalProps) => {
       }
       setIsSuccess(true);
       setEmail(email);
-      const key = auth0.getOrgSpecificUrl('/members');
-      console.log(cache);
-      await mutate(
-        [key, 'GET'],
-        (data: any) => {
-          data.members.push(response);
-          return {
-            ...data,
-            members: cloneDeep(data.members),
-          };
-        },
-        {
-          revalidate: false,
-        },
-      );
+      await mutate([auth0.getOrgSpecificUrl('/members'), 'GET']);
     } catch (error) {
       addToastMessage({
         message: 'Invitation failed',

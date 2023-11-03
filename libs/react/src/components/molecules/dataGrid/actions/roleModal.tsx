@@ -1,16 +1,14 @@
 import { useEffect, useState } from 'react';
 import { IModalProps, Input, Modal, Spinner } from '@coldpbc/components';
-import { Role } from 'auth0';
 import capitalize from 'lodash/capitalize';
 import { ColorNames, ErrorType, GlobalSizes, InputTypes } from '@coldpbc/enums';
-import { InputOption, TableActionType } from '@coldpbc/interfaces';
+import { InputOption, TableActionType, UserRole } from '@coldpbc/interfaces';
 import useSWR from 'swr';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
 import includes from 'lodash/includes';
 import { isEqual } from 'lodash';
 import { getFormattedUserName } from '@coldpbc/lib';
-import { UserRole } from '../../../../interfaces/user';
 
 export type RoleModalProps = {
   show: boolean;

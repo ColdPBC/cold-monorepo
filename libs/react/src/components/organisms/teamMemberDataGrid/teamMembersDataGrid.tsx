@@ -10,9 +10,8 @@ import { ButtonTypes, ErrorType, InputTypes } from '@coldpbc/enums';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application/errors/errorFallback';
 import { MemberStatusType, TableActionType } from '@coldpbc/interfaces';
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import { useAuth0Wrapper, useColdContext, useOrgSWR } from '@coldpbc/hooks';
-import { cache } from 'swr/_internal';
 import { getFormattedUserName } from '@coldpbc/lib';
 
 export interface TeamMembersDataGridProps {
@@ -293,7 +292,7 @@ export const _TeamMembersDataGrid = ({
           actions: getActions(user).filter(filterActions),
         };
       });
-  }, [data, auth0, selectedMemberStatusType]);
+  }, [data, selectedMemberStatusType]);
 
   if (error || auth0.error) {
     if (error) {
