@@ -156,8 +156,13 @@ const _ProtectedRoute = () => {
   }
 
   if (error || initialSurveySWR.error || signedPolicySWR.error) {
+    let errorMessage;
     if (error) {
       logError(error, ErrorType.Auth0Error);
+      if (error.message === 'invitation not found or already used') {
+        errorMessage =
+          'This link is no longer valid. Please request a new invitation from one of your administrators.';
+      }
     }
     if (initialSurveySWR.error) {
       logError(initialSurveySWR.error, ErrorType.SWRError);
@@ -165,7 +170,8 @@ const _ProtectedRoute = () => {
     if (signedPolicySWR.error) {
       logError(signedPolicySWR.error, ErrorType.SWRError);
     }
-    return <ErrorPage />;
+
+    return <ErrorPage error={errorMessage} />;
   }
 
   if (isAuthenticated && user) {
