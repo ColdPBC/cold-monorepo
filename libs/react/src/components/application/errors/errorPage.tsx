@@ -1,6 +1,10 @@
 import React from 'react';
 
-export const ErrorPage = () => {
+export type ErrorPageProps = {
+  error?: string;
+};
+
+export const ErrorPage = ({ error }: ErrorPageProps) => {
   return (
     <div
       className={
@@ -8,8 +12,17 @@ export const ErrorPage = () => {
       }
     >
       <div className={'text-tc-primary text-h2 w-1/2'}>
-        An error occurred accessing your account. Please contact us at{' '}
-        <a href="mailto: support@coldclimate.com">support@coldclimate.com</a>.
+        {error ? (
+          error
+        ) : (
+          <>
+            An error occurred accessing your account. Please contact us at{' '}
+            <a href="mailto: support@coldclimate.com">
+              support@coldclimate.com
+            </a>
+            .
+          </>
+        )}
       </div>
     </div>
   );
