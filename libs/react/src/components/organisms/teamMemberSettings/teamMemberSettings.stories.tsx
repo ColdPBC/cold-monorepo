@@ -2,7 +2,7 @@ import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { SWRConfig } from 'swr';
 import { TeamMemberSettings } from '@coldpbc/components';
-import { StoryMockProvider } from '@coldpbc/mocks';
+import { auth0UserMock, StoryMockProvider } from '@coldpbc/mocks';
 
 const meta: Meta<typeof TeamMemberSettings> = {
   title: 'Organisms/TeamMemberSettings',
