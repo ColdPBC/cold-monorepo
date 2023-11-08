@@ -119,18 +119,24 @@ module.exports = {
         },
         sm: {
           css: {
-            color: themeColors().tc.primary,
             p: {
               fontSize: fontSizes().caption[0],
               lineHeight: fontSizes().caption[1].lineHeight,
               fontWeight: fontSizes().caption[1].fontWeight,
-              color: themeColors().tc.primary,
             },
             li: {
               fontSize: fontSizes().caption[0],
               lineHeight: fontSizes().caption[1].lineHeight,
               fontWeight: fontSizes().caption[1].fontWeight,
-              color: themeColors().tc.primary,
+            },
+            strong: {
+              fontSize: fontSizes().caption[0],
+              lineHeight: fontSizes().caption[1].lineHeight,
+            },
+            a: {
+              fontSize: fontSizes().caption[0],
+              lineHeight: fontSizes().caption[1].lineHeight,
+              fontWeight: fontSizes().caption[1].fontWeight,
             },
           },
         },
