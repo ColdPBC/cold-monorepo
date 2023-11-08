@@ -69,10 +69,12 @@ export const Select: Story = {
       {
         id: 1,
         name: 'Minnesota',
+        value: 'Minnesota',
       },
       {
         id: 2,
         name: 'Wisconsin',
+        value: 'Wisconsin',
       },
     ],
   },
