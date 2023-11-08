@@ -250,6 +250,6 @@ export const Small: Story = {
       '\n1.   You directly pay your utility bills;' +
       '\n2.   You pay your utility bills indirectly via your landlord;' +
       '\n3.   You do not pay for utilities because the cost is incorporated into your rent.',
-    className: 'prose',
+    className: 'prose-sm',
   },
 };
