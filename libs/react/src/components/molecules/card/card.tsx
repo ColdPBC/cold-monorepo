@@ -8,9 +8,10 @@ export interface CardProps {
   glow?: boolean;
   title?: string;
   ctas?: Array<{
-    text: string;
-    action: () => void;
+    text?: string;
+    action?: () => void;
     variant?: ButtonTypes;
+    child?: React.ReactNode;
   }>;
   className?: string;
 }
@@ -37,22 +38,25 @@ export function Card(props: PropsWithChildren<CardProps>) {
             // show title if we have one
             props.title && <div className="text-h4 flex-1">{props.title}</div>
           }
-          {
-            // show CTAs if we have at least one
-            props.ctas?.map((cta) => {
-              return (
-                cta.text &&
-                cta.action !== undefined && (
-                  <BaseButton
-                    key={'button_' + snakeCase(cta.text)}
-                    label={cta.text}
-                    onClick={cta.action}
-                    variant={cta.variant || ButtonTypes.secondary}
-                  />
-                )
-              );
-            })
-          }
+          <div className={'flex space-x-4'}>
+            {props.ctas?.map((cta) => {
+              if (cta.child) {
+                return cta.child;
+              } else {
+                return (
+                  cta.text &&
+                  cta.action !== undefined && (
+                    <BaseButton
+                      key={'button_' + snakeCase(cta.text)}
+                      label={cta.text}
+                      onClick={cta.action}
+                      variant={cta.variant || ButtonTypes.secondary}
+                    />
+                  )
+                );
+              }
+            })}
+          </div>
         </div>
       )}
       {props.children}
