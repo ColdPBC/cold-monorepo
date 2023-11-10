@@ -12779,7 +12779,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:^1.0.0, axios@npm:^1.4.0":
+"axios@npm:^1.0.0":
   version: 1.5.0
   resolution: "axios@npm:1.5.0"
   dependencies:
@@ -12787,6 +12787,17 @@ __metadata:
     form-data: ^4.0.0
     proxy-from-env: ^1.1.0
   checksum: e7405a5dbbea97760d0e6cd58fecba311b0401ddb4a8efbc4108f5537da9b3f278bde566deb777935a960beec4fa18e7b8353881f2f465e4f2c0e949fead35be
+  languageName: node
+  linkType: hard
+
+"axios@npm:^1.6.0":
+  version: 1.6.1
+  resolution: "axios@npm:1.6.1"
+  dependencies:
+    follow-redirects: ^1.15.0
+    form-data: ^4.0.0
+    proxy-from-env: ^1.1.0
+  checksum: 573f03f59b7487d54551b16f5e155d1d130ad4864ed32d1da93d522b78a57123b34e3bde37f822a65ee297e79f1db840f9ad6514addff50d3cbf5caeed39e8dc
   languageName: node
   linkType: hard
 
@@ -14522,7 +14533,7 @@ __metadata:
     "@zerollup/ts-transform-paths": ^1.0.0
     auto-changelog: ^2.4.0
     autoprefixer: ^10.4.14
-    axios: ^1.4.0
+    axios: ^1.6.0
     babel-loader: ^9.1.2
     babel-plugin-named-exports-order: ^0.0.2
     barrelsby: ^2.0.1
