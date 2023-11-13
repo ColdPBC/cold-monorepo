@@ -107,7 +107,7 @@ export const NeedsToCompleteInitialSurvey: Story = {
 export const ColdAdmin: Story = {
   render: () => {
     return (
-      <StoryMockProvider handlers={getSurveyHandler.initialIncomplete}>
+      <StoryMockProvider>
         <Application />
       </StoryMockProvider>
     );
