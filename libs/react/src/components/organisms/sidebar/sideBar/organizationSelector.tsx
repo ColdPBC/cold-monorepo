@@ -35,7 +35,6 @@ const _OrganizationSelector = () => {
   };
 
   useEffect(() => {
-    // add unselected org to the top of the list if it's not there
     if (data && !find(data, (org) => org.name === unselectedOrg.name)) {
       data.unshift(unselectedOrg);
     }
@@ -49,8 +48,6 @@ const _OrganizationSelector = () => {
     logError(error, ErrorType.SWRError);
     return null;
   }
-
-  console.log('data', data);
 
   return (
     <div className={'w-full p-4'}>
