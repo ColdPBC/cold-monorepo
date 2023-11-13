@@ -1,3 +1,12 @@
+# [1.65.0](https://github.com/ColdPBC/ui/compare/v1.64.0...v1.65.0) (2023-11-13)
+
+
+### Features
+
+* Created markdown component ([90cf17c](https://github.com/ColdPBC/ui/commit/90cf17c0c7fcd3b958a31135b296283739905219))
+* remove unneeded color specification on prose sm custom styling ([77869e6](https://github.com/ColdPBC/ui/commit/77869e6a4f0c67462ea3c097d888013c1b9f9b70))
+* update small story ([d5d981a](https://github.com/ColdPBC/ui/commit/d5d981ad4c2ec565b808913d603a16af1197e7f3))
+
 # [1.64.0](https://github.com/ColdPBC/ui/compare/v1.63.0...v1.64.0) (2023-11-03)
 
 
