@@ -29,32 +29,9 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   render: () => {
     return (
-      <SWRConfig
-        value={{
-          provider: (cache) => {
-            cache.delete('messages');
-            return cache;
-          },
-        }}
-      >
-        <BrowserRouter>
-          <ColdContext.Provider
-            value={{
-              auth0Options: {
-                domain: '',
-                clientId: '',
-                authorizationParams: {
-                  audience: '',
-                },
-              } as Auth0ProviderOptions,
-              launchDarklyClientSideId: '',
-              logError: () => {},
-            }}
-          >
-            <Application />
-          </ColdContext.Provider>
-        </BrowserRouter>
-      </SWRConfig>
+      <StoryMockProvider>
+        <Application />
+      </StoryMockProvider>
     );
   },
 };
@@ -62,9 +39,9 @@ export const Default: Story = {
 export const Loading: Story = {
   render: () => {
     return (
-      <BrowserRouter>
+      <StoryMockProvider>
         <Application />
-      </BrowserRouter>
+      </StoryMockProvider>
     );
   },
   parameters: {

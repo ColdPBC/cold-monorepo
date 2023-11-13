@@ -3,6 +3,7 @@ import { SideBar } from './sideBar';
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { BrowserRouter } from 'react-router-dom';
+import { StoryMockProvider } from '@coldpbc/mocks';
 
 const meta = {
   title: 'Organisms/Sidebar',
@@ -17,19 +18,28 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   render: (args) => {
     return (
-      <BrowserRouter>
+      <StoryMockProvider>
         <SideBar />
-      </BrowserRouter>
+      </StoryMockProvider>
     );
+  },
+  parameters: {
+    auth0AddOn: {
+      user: {
+        coldclimate_claims: {
+          roles: ['cold:admin'],
+        },
+      },
+    },
   },
 };
 
 export const NoActions: Story = {
   render: (args) => {
     return (
-      <BrowserRouter>
+      <StoryMockProvider>
         <SideBar />
-      </BrowserRouter>
+      </StoryMockProvider>
     );
   },
   parameters: {

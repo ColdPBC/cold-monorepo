@@ -17,6 +17,9 @@ export const ColdContextProvider = (
   props: PropsWithChildren<ColdContextProviderProps>,
 ) => {
   const { auth0Options, launchDarklyClientSideId, children } = props;
+  const [impersonatingOrg, setImpersonatingOrg] = React.useState<
+    any | undefined
+  >(undefined);
 
   const logError = (error: any, type: ErrorType) => {
     error.name = type;
@@ -30,6 +33,8 @@ export const ColdContextProvider = (
           auth0Options: auth0Options,
           launchDarklyClientSideId: launchDarklyClientSideId,
           logError: logError,
+          impersonatingOrg: impersonatingOrg,
+          setImpersonatingOrg: setImpersonatingOrg,
         }}
       >
         <ColdAuthProvider>
