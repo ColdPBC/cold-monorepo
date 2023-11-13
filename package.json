@@ -48,6 +48,7 @@
     "lodash": "^4.17.21",
     "lottie-react": "^2.4.0",
     "luxon": "^3.4.3",
+    "markdown-to-jsx": "^7.3.2",
     "msw": "latest",
     "numeral": "^2.0.6",
     "nx": "^16.8.0",

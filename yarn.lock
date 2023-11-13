@@ -14552,6 +14552,7 @@ __metadata:
     lodash: ^4.17.21
     lottie-react: ^2.4.0
     luxon: ^3.4.3
+    markdown-to-jsx: ^7.3.2
     msw: latest
     node-browserify: ^1.0.0
     numeral: ^2.0.6
@@ -24447,7 +24448,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"markdown-to-jsx@npm:^7.1.8":
+"markdown-to-jsx@npm:^7.1.8, markdown-to-jsx@npm:^7.3.2":
   version: 7.3.2
   resolution: "markdown-to-jsx@npm:7.3.2"
   peerDependencies:
