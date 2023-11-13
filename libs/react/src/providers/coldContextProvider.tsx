@@ -17,13 +17,32 @@ export const ColdContextProvider = (
   props: PropsWithChildren<ColdContextProviderProps>,
 ) => {
   const { auth0Options, launchDarklyClientSideId, children } = props;
+
+  const getImpersonatingOrg = () => {
+    const impersonatingOrg = sessionStorage.getItem('impersonatingOrg');
+    if (impersonatingOrg) {
+      return JSON.parse(impersonatingOrg);
+    } else {
+      return undefined;
+    }
+  };
+
   const [impersonatingOrg, setImpersonatingOrg] = React.useState<
     any | undefined
-  >(undefined);
+  >(getImpersonatingOrg());
 
   const logError = (error: any, type: ErrorType) => {
     error.name = type;
     datadogRum.addError(error);
+  };
+
+  const setSelectedOrg = (org: any) => {
+    setImpersonatingOrg(org);
+    if (org) {
+      sessionStorage.setItem('impersonatingOrg', JSON.stringify(org));
+    } else {
+      sessionStorage.removeItem('impersonatingOrg');
+    }
   };
 
   return (
@@ -34,7 +53,7 @@ export const ColdContextProvider = (
           launchDarklyClientSideId: launchDarklyClientSideId,
           logError: logError,
           impersonatingOrg: impersonatingOrg,
-          setImpersonatingOrg: setImpersonatingOrg,
+          setImpersonatingOrg: setSelectedOrg,
         }}
       >
         <ColdAuthProvider>

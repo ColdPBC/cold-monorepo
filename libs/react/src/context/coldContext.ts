@@ -7,7 +7,7 @@ export type ColdContextType = {
   launchDarklyClientSideId: string;
   logError: (error: any, type: ErrorType) => void;
   impersonatingOrg: any | undefined;
-  setImpersonatingOrg: (orgId: any | undefined) => void;
+  setImpersonatingOrg: (org: any | undefined) => void;
 };
 
 const ColdContext = createContext({

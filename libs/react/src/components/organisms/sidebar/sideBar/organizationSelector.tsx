@@ -17,13 +17,12 @@ const _OrganizationSelector = () => {
     axiosFetcher,
   );
   const { logError, setImpersonatingOrg, impersonatingOrg } = useColdContext();
-  const initialValue = impersonatingOrg
-    ? impersonatingOrg
-    : {
-        id: '0',
-        name: 'unselected',
-        display_name: 'Select Org',
-      };
+  const unselectedOrg = {
+    id: '0',
+    name: 'unselected',
+    display_name: 'Select Org',
+  };
+  const initialValue = impersonatingOrg ? impersonatingOrg : unselectedOrg;
   const [selectedOrg, setSelectedOrg] = useState<any>(initialValue);
 
   const onOrgSelect = (org: any) => {
@@ -36,8 +35,9 @@ const _OrganizationSelector = () => {
   };
 
   useEffect(() => {
-    if (data && !find(data, (org) => org.name === initialValue.name)) {
-      data.unshift(initialValue);
+    // add unselected org to the top of the list if it's not there
+    if (data && !find(data, (org) => org.name === unselectedOrg.name)) {
+      data.unshift(unselectedOrg);
     }
   }, [data]);
 

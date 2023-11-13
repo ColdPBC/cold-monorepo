@@ -103,3 +103,22 @@ export const NeedsToCompleteInitialSurvey: Story = {
   },
   parameters: {},
 };
+
+export const ColdAdmin: Story = {
+  render: () => {
+    return (
+      <StoryMockProvider handlers={getSurveyHandler.initialIncomplete}>
+        <Application />
+      </StoryMockProvider>
+    );
+  },
+  parameters: {
+    auth0AddOn: {
+      user: {
+        coldclimate_claims: {
+          roles: ['cold:admin'],
+        },
+      },
+    },
+  },
+};
