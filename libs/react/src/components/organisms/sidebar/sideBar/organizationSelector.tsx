@@ -56,7 +56,7 @@ const _OrganizationSelector = () => {
         label={
           <span
             className={
-              'w-full p-4 text-tc-primary text-start flex items-center border border-bgc-accent rounded-lg'
+              'w-full p-4 text-tc-primary text-start text-xs flex items-center border border-bgc-accent rounded-lg'
             }
           >
             {selectedOrg.display_name}{' '}
@@ -65,7 +65,7 @@ const _OrganizationSelector = () => {
         }
         arrowIcon={false}
         theme={flowbiteThemeOverride.dropdown}
-        className={'h-fit max-h-[200px] overflow-y-auto'}
+        className={'w-[175px] h-fit max-h-[200px] overflow-y-auto'}
       >
         {data.map((org: any) => (
           <Dropdown.Item
@@ -74,7 +74,7 @@ const _OrganizationSelector = () => {
               onOrgSelect(org);
             }}
             theme={flowbiteThemeOverride.dropdown.floating.item}
-            className={'text-start'}
+            className={'text-start text-xs'}
           >
             {org.display_name}
           </Dropdown.Item>
