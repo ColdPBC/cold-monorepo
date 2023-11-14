@@ -65,7 +65,7 @@ export function Avatar(props: AvatarProps) {
           d="M14 26C14 22.25 16.25 20 20 20C23.7499 20 26 22.25 26 26"
           stroke="white"
           strokeWidth="1.5"
-          stroke-linecap="round"
+          strokeLinecap="round"
         />
         <circle cx="20" cy="14" r="3" fill="white" />
       </svg>

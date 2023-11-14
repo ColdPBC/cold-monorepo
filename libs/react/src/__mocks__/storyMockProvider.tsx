@@ -5,6 +5,7 @@ import { DefaultBodyType, MockedRequest, RestHandler } from 'msw';
 import { SWRConfig } from 'swr';
 import { MemoryRouter, MemoryRouterProps } from 'react-router-dom';
 import { Auth0ProviderOptions } from '@auth0/auth0-react';
+import { ErrorType } from '@coldpbc/enums';
 
 export const StoryMockProvider = (
   props: PropsWithChildren<{
@@ -34,7 +35,7 @@ export const StoryMockProvider = (
       },
     } as Auth0ProviderOptions,
     launchDarklyClientSideId: '',
-    logError: () => {},
+    logError: (error: any, type: ErrorType, context?: object) => {},
     impersonatingOrg: impersonatingOrg,
     setImpersonatingOrg: setImpersonatingOrg,
   };

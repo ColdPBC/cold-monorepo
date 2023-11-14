@@ -32,8 +32,9 @@ const setAxiosResponseInterceptor = (coldContext: any) => {
       return response;
     },
     (error) => {
-      console.error(error);
-      // logError(error, ErrorType.AxiosError);
+      logError(error, ErrorType.AxiosError, {
+        ...error,
+      });
       return Promise.reject(error);
     },
   );
