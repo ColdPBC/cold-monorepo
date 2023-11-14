@@ -2,6 +2,8 @@ import { GetTokenSilentlyOptions, useAuth0 } from '@auth0/auth0-react';
 import React, { useEffect } from 'react';
 import axios from 'axios';
 import { resolveAPIUrl } from '@coldpbc/fetchers';
+import { ErrorType } from '@coldpbc/enums';
+import { useColdContext } from '@coldpbc/hooks';
 
 const setAxiosTokenInterceptor = async (
   getAccessTokenSilently: (
@@ -23,19 +25,35 @@ const setAxiosTokenInterceptor = async (
   });
 };
 
+const setAxiosResponseInterceptor = (coldContext: any) => {
+  const { logError } = coldContext;
+  axios.interceptors.response.use(
+    (response) => {
+      return response;
+    },
+    (error) => {
+      console.error(error);
+      // logError(error, ErrorType.AxiosError);
+      return Promise.reject(error);
+    },
+  );
+};
+
 type AxiosInterceptorProviderProps = { children: React.ReactNode };
 
 export const ColdAxiosInterceptorProvider = ({
   children,
 }: AxiosInterceptorProviderProps) => {
   const { getAccessTokenSilently } = useAuth0();
-
+  const context = useColdContext();
   useEffect(() => {
     const getAccessToken = async () => {
       await setAxiosTokenInterceptor(getAccessTokenSilently);
     };
     getAccessToken();
   }, [getAccessTokenSilently]);
+
+  setAxiosResponseInterceptor(context);
 
   return <>{children}</>;
 };
