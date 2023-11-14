@@ -1,7 +1,7 @@
 {
   "name": "cold-monorepo-nx",
   "packageManager": "yarn@3.6.3",
-  "version": "1.66.0",
+  "version": "1.67.0",
   "license": "MIT",
   "scripts": {
     "prebuild": "npx barrelsby -D -d ./libs/react/src -l all -e stories.tsx -e react-app-env -e test.tsx -e private.tsx",
