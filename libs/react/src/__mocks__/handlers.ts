@@ -12,7 +12,7 @@ import {
 import { getSurveyFormDataByName } from './surveyDataMock';
 import { getRoles } from './roleMock';
 import { resolveAPIUrl } from '@coldpbc/fetchers';
-import { getOrganizationMock } from './organizationMock';
+import { getOrganizationMock, getOrganizationsMock } from './organizationMock';
 import { getPoliciesSignedMock, getPolicyMockByName } from './policyMock';
 import { auth0UserMock } from './userMock';
 import { getNewsDefault } from './newsMock';
@@ -88,6 +88,10 @@ export const handlers = [
   rest.get(getApiUrl('/organizations/:orgId'), (req, res, ctx) => {
     const { orgId } = req.params;
     return res(ctx.json({ ...getOrganizationMock() }));
+  }),
+
+  rest.get(getApiUrl('/organizations'), (req, res, ctx) => {
+    return res(ctx.json(getOrganizationsMock()));
   }),
 
   rest.get(getApiUrl('/organizations/:orgId/members'), (req, res, ctx) => {

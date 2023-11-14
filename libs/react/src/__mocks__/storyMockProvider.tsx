@@ -1,15 +1,22 @@
-import { PropsWithChildren, useEffect } from 'react';
+import React, { PropsWithChildren, useEffect } from 'react';
+import ColdContext, { ColdContextType } from '../context/coldContext';
 import { worker } from './browser';
 import { DefaultBodyType, MockedRequest, RestHandler } from 'msw';
 import { SWRConfig } from 'swr';
 import { MemoryRouter, MemoryRouterProps } from 'react-router-dom';
+import { Auth0ProviderOptions } from '@auth0/auth0-react';
 
 export const StoryMockProvider = (
   props: PropsWithChildren<{
     handlers?: RestHandler<MockedRequest<DefaultBodyType>>[];
     memoryRouterProps?: MemoryRouterProps;
+    coldContext?: ColdContextType;
   }>,
 ) => {
+  const [impersonatingOrg, setImpersonatingOrg] = React.useState<
+    string | undefined
+  >(undefined);
+
   useEffect(() => {
     worker && worker.use(...(props.handlers ?? []));
     return () => {
@@ -18,12 +25,28 @@ export const StoryMockProvider = (
     };
   });
 
+  const coldContextValue = props.coldContext ?? {
+    auth0Options: {
+      domain: '',
+      clientId: '',
+      authorizationParams: {
+        audience: '',
+      },
+    } as Auth0ProviderOptions,
+    launchDarklyClientSideId: '',
+    logError: () => {},
+    impersonatingOrg: impersonatingOrg,
+    setImpersonatingOrg: setImpersonatingOrg,
+  };
+
   return (
     // so swr doesn't cache between stories
-    <SWRConfig value={{ provider: () => new Map() }}>
-      <MemoryRouter {...props.memoryRouterProps}>
-        {props.children}
-      </MemoryRouter>
-    </SWRConfig>
+    <ColdContext.Provider value={coldContextValue}>
+      <SWRConfig value={{ provider: () => new Map() }}>
+        <MemoryRouter {...props.memoryRouterProps}>
+          {props.children}
+        </MemoryRouter>
+      </SWRConfig>
+    </ColdContext.Provider>
   );
 };
