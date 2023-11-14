@@ -1,3 +1,17 @@
+# [1.67.0](https://github.com/ColdPBC/ui/compare/v1.66.0...v1.67.0) (2023-11-14)
+
+
+### Bug Fixes
+
+* remove surveys incomplete from mocks for cold admin story ([84b1f62](https://github.com/ColdPBC/ui/commit/84b1f62b3562b3700016ce79bf85483003231422))
+
+
+### Features
+
+* add cookie to session storage ([8a134e1](https://github.com/ColdPBC/ui/commit/8a134e1502fc30008ae745745e104880d0bb6cae))
+* create organization selector on sidebar for cold admins ([97e29b4](https://github.com/ColdPBC/ui/commit/97e29b40d9b105ee700e8e78cad010c8f2018a9c))
+* reduce font size and dropdown width ([e58f72d](https://github.com/ColdPBC/ui/commit/e58f72d6e10a29f62a51b2e4eda0c302668cf295))
+
 # [1.66.0](https://github.com/ColdPBC/ui/compare/v1.65.0...v1.66.0) (2023-11-14)
 
 
