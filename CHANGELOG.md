@@ -1,3 +1,10 @@
+# [1.66.0](https://github.com/ColdPBC/ui/compare/v1.65.0...v1.66.0) (2023-11-14)
+
+
+### Features
+
+* Remove invite member when user is company:member ([e3f3708](https://github.com/ColdPBC/ui/commit/e3f370878e7550fda6dc44355d77fef2c8ce68d7))
+
 # [1.65.0](https://github.com/ColdPBC/ui/compare/v1.64.0...v1.65.0) (2023-11-13)
 
 
