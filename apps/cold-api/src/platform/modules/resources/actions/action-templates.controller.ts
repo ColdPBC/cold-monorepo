@@ -1,0 +1,191 @@
+import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Patch, Post, Query, Req, UseFilters, UseGuards, UsePipes } from '@nestjs/common';
+import { ApiBody, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Span } from 'nestjs-ddtrace';
+import { createZodDto, ZodSerializerDto } from 'nestjs-zod';
+//import { z } from 'zod';
+import { Roles } from '../../../authorization/decorators/roles.decorator';
+import { JwtAuthGuard } from '../../../authorization/guards/jwtAuth.guard';
+import { RolesGuard } from '../../../authorization/guards/roles.guard';
+import { HttpExceptionFilter } from '../../../filters/http-exception.filter';
+import { ResourceValidationPipe } from '../../../pipes/resource.pipe';
+import { AuthenticatedUser } from '../../../primitives/interfaces/user.interface';
+import { BaseWorker } from '../../../worker/worker.class';
+import { CreateActionTemplateItemSchema, ZodCreateActionTemplate } from '../../zod/custom';
+import { action_templatesSchema } from '../../zod/generated';
+import { coldAdminOnly } from '../_global/global.params';
+import { ActionTemplatesService } from './action-templates.service';
+import { actionTemplatePatchExample, actionTemplatePostExample, testActionTemplateIdExample } from './examples/action-template.examples';
+
+class ActionTemplateDto extends createZodDto(action_templatesSchema) {}
+//class ActionTemplatesDto extends createZodDto(z.array(action_templatesSchema)) {}
+
+@Controller('action-templates')
+@Span()
+@ApiTags('Action Templates')
+@UseGuards(JwtAuthGuard, RolesGuard)
+@UseFilters(new HttpExceptionFilter(ActionTemplatesController.name))
+export class ActionTemplatesController extends BaseWorker {
+  constructor(private readonly actions: ActionTemplatesService) {
+    super(ActionTemplatesController.name);
+  }
+
+  /**
+   * This action returns all action templates
+   * @param {{body: any, headers: any, query: any, user: AuthenticatedUser}} req
+   * @param {boolean} bpc
+   * @returns {Promise<any>}
+   */
+  @ApiOperation({
+    summary: 'Get Action Templates',
+    operationId: 'GetActionTemplates',
+  })
+  @Get()
+  @Roles(...coldAdminOnly)
+  public getActionTemplates(
+    @Req()
+    req: {
+      body: any;
+      headers: any;
+      query: any;
+      user: AuthenticatedUser;
+    },
+    @Query('bpc') bpc?: boolean,
+  ): Promise<any> {
+    return this.actions.getActionTemplates(req.user, bpc);
+  }
+
+  /**
+   * This action returns an action template by ID
+   * @param {string} id
+   * @param {{body: any, headers: any, query: any, user: AuthenticatedUser}} req
+   * @param {boolean} bpc
+   * @returns {Promise<any>}
+   */
+  @ApiOperation({
+    summary: 'Get Action Template by ID',
+    operationId: 'GetActionTemplateById',
+  })
+  @Get(`:id`)
+  @Roles(...coldAdminOnly)
+  @ApiParam({
+    name: 'id',
+    required: true,
+    type: String,
+    example: testActionTemplateIdExample,
+  })
+  @ZodSerializerDto(action_templatesSchema)
+  public getActionTemplate(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Req()
+    req: {
+      body: any;
+      headers: any;
+      query: any;
+      user: AuthenticatedUser;
+    },
+    @Query('bpc') bpc?: boolean,
+  ) {
+    return this.actions.getActionTemplate(req.user, id, bpc);
+  }
+
+  /**
+   * This action creates an action template
+   * @param {{body: ActionDefinitionsCreate, headers: any, query: any, user: AuthenticatedUser}} req
+   * @param body
+   * @returns {Promise<Prisma.Prisma__action_definitionsClient<GetResult<Prisma.$action_definitionsPayload<DefaultArgs>, {data: any}, "create">, never, DefaultArgs>>}
+   */
+  @ApiOperation({
+    summary: 'Create Action Template',
+    operationId: 'CreateActionTemplate',
+  })
+  @Post()
+  @Roles(...coldAdminOnly)
+  @UsePipes(new ResourceValidationPipe(CreateActionTemplateItemSchema))
+  @ApiBody({
+    schema: {
+      example: actionTemplatePostExample,
+    },
+  })
+  //@ZodSerializerDto(ActionTemplateDto)
+  //@UsePipes(new ResourceValidationPipe()) /**
+  public createActionTemplate(
+    @Body(new ResourceValidationPipe(CreateActionTemplateItemSchema, 'POST')) body: ZodCreateActionTemplate,
+    @Req()
+    req: {
+      headers: any;
+      query: any;
+      user: AuthenticatedUser;
+    },
+  ) {
+    return this.actions.createActionTemplate(req.user, body);
+  }
+
+  /**
+   * This action updates an action template
+   * @param {string} id
+   * @param body
+   * @param {{body: ActionDefinitionsCreate, headers: any, query: any, user: AuthenticatedUser}} req
+   * @param {boolean} bpc
+   * @returns {Promise<Prisma.Prisma__action_definitionsClient<GetResult<Prisma.$action_definitionsPayload<DefaultArgs>, {data: any, where: {id: string}}, "update">, never, DefaultArgs>>}
+   */
+  @ApiOperation({
+    summary: 'Update Action Template',
+    operationId: 'UpdateActionTemplate',
+  })
+  @Patch(`:id`)
+  @Roles(...coldAdminOnly)
+  @ZodSerializerDto(ActionTemplateDto)
+  @ApiParam({
+    name: 'id',
+    required: true,
+    type: String,
+    example: testActionTemplateIdExample,
+  })
+  @ApiBody({
+    schema: {
+      example: actionTemplatePatchExample,
+    },
+  })
+  public updateActionTemplate(
+    @Param('id') id: string,
+    @Body(new ResourceValidationPipe(CreateActionTemplateItemSchema, 'PATCH')) body: ZodCreateActionTemplate,
+    @Req()
+    req: { headers: any; query: any; user: AuthenticatedUser },
+  ) {
+    return this.actions.updateActionTemplate(req.user, id, body);
+  }
+
+  /**
+   * This action deletes an action template
+   * @param {string} id
+   * @param {{body: any, headers: any, query: any, user: AuthenticatedUser}} req
+   * @returns {Promise<Prisma.Prisma__action_definitionsClient<GetResult<Prisma.$action_definitionsPayload<DefaultArgs>, {where: {id: string}}, "delete">, never, DefaultArgs>>}
+   */
+  @ApiOperation({
+    summary: 'Delete Action Template',
+    operationId: 'DeleteActionTemplate',
+  })
+  @Delete(`:id`)
+  @Roles(...coldAdminOnly)
+  @ApiParam({
+    name: 'id',
+    required: true,
+    type: String,
+    example: testActionTemplateIdExample,
+  })
+  @ApiResponse({
+    status: 204,
+  })
+  public deleteActionTemplate(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Req()
+    req: {
+      body: any;
+      headers: any;
+      query: any;
+      user: AuthenticatedUser;
+    },
+  ) {
+    return this.actions.deleteActionTemplate(req.user, id);
+  }
+}

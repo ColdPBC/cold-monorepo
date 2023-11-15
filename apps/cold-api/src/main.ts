@@ -1,22 +1,34 @@
-/**
- * This is not a production server yet!
- * This is only a minimal backend to get started.
- */
-
-import { Logger } from '@nestjs/common';
+import './tracer';
 import { NestFactory } from '@nestjs/core';
+import * as dotenv from 'dotenv';
+import { WinstonModule } from 'nest-winston';
+import { createLogger } from 'winston';
+import { AppModule } from './platform/modules/app.module';
+import { DocsModule } from './platform/modules/docs/docs.module';
+import winstonConfig from './platform/worker/winston.config';
+import { patchNestjsSwagger } from '@abitia/zod-dto';
 
-import { AppModule } from './app/app.module';
+dotenv.config();
 
-async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-  const globalPrefix = 'api';
-  app.setGlobalPrefix(globalPrefix);
-  const port = process.env.PORT || 3000;
-  await app.listen(port);
-  Logger.log(
-    `🚀 Application is running on: http://localhost:${port}/${globalPrefix}`,
-  );
+async function bootstrap(instance) {
+  const app = await NestFactory.create(AppModule, {
+    logger: WinstonModule.createLogger({
+      instance,
+    }),
+  });
+
+  //app.useGlobalPipes(new ResourceValidationPipe());
+  app.enableCors();
+
+  DocsModule.register(app);
+  patchNestjsSwagger();
+
+  await app.listen(process.env.PORT || 7001, '0.0.0.0');
 }
 
-bootstrap();
+async function init() {
+  const instance = createLogger(winstonConfig('main'));
+  await bootstrap(instance);
+}
+
+init();
