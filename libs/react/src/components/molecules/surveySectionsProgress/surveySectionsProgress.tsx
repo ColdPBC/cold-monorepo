@@ -114,9 +114,6 @@ const _SurveySectionsProgress = ({
     <div
       className={'w-[668px] h-full rounded-2xl relative overflow-hidden'}
       ref={containerRef}
-      style={{
-        maxHeight: 'calc(100vh - 122px)', // full-height minus other els
-      }}
     >
       <div
         className={
