@@ -31,9 +31,9 @@ export const ColdContextProvider = (
     any | undefined
   >(getImpersonatingOrg());
 
-  const logError = (error: any, type: ErrorType) => {
+  const logError = (error: any, type: ErrorType, context?: object) => {
     error.name = type;
-    datadogRum.addError(error);
+    datadogRum.addError(error, context);
   };
 
   const setSelectedOrg = (org: any) => {

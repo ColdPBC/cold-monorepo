@@ -14,7 +14,7 @@ export const ColdChevronUpIcon = (props: IconProps) => {
         d="M9 6L5 2L1 6"
         stroke="white"
         strokeWidth="1.5"
-        stroke-linecap="round"
+        strokeLinecap="round"
       />
     </svg>
   );
