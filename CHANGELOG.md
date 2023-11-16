@@ -1,3 +1,11 @@
+# [1.68.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.67.0...v1.68.0) (2023-11-16)
+
+
+### Features
+
+* add response interceptor for axios to log error in datadogrum ([7c55229](https://github.com/ColdPBC/cold-monorepo/commit/7c55229585c1d5be9589ce99ce37dd4adb51277a))
+* added context object to add error to have more info when investigating ([4d924a8](https://github.com/ColdPBC/cold-monorepo/commit/4d924a8da9a6580e581001425df389ef091bc86c))
+
 # [1.67.0](https://github.com/ColdPBC/ui/compare/v1.66.0...v1.67.0) (2023-11-14)
 
 
