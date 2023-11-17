@@ -30,7 +30,9 @@ process.env.DD_VERSION = process.env.npm_package_version;
       isGlobal: true,
     }),
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'public'),
+      serveStaticOptions: {
+        index: false,
+      },
     }),
     CacheModule.registerAsync({
       imports: [ConfigModule],
