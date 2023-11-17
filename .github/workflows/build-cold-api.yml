@@ -4,14 +4,15 @@ on:
   push:
     branches:
       - main
+      - 'cold-**'
+      - 'COLD-**'
+      - 'Cold-**'
   pull_request:
     branches:
       - main
       - 'cold-**'
       - 'COLD-**'
       - 'Cold-**'
-permissions:
-  contents: read # for checkout
 env:
   GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
   GH_TOKEN: ${{ secrets.GH_TOKEN }}
@@ -52,7 +53,7 @@ jobs:
         run: yarn
       #Database Migrations
       - name: Generate Prisma Client
-        run: yarn global add zod-prisma zod-prisma-types @vegardit/prisma-generator-nestjs-dto prisma ts-node && prisma generate && yarn lint
+        run: yarn add global zod-prisma zod-prisma-types @vegardit/prisma-generator-nestjs-dto prisma ts-node && prisma generate && yarn lint
       - name: Migrate Staging DB
         env:
           BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
