@@ -1,4 +1,4 @@
-import * as stringify from 'json-stringify-safe';
+import { stringify } from 'safe-stable-stringify';
 import { find, remove } from 'lodash';
 import { Global } from '@nestjs/common';
 
@@ -144,7 +144,10 @@ export class RedactorService {
   redact(obj: any): any {
     let redactMe: any;
     try {
-      redactMe = JSON.parse(stringify(obj));
+      if (!obj) obj = {};
+      const str = stringify(obj);
+      if (str === '{}') obj = JSON.parse(str);
+      redactMe = obj;
     } catch (err) {
       // failed to parse object so just return what was passed in
       return obj;
@@ -169,7 +172,7 @@ export class RedactorService {
       }
 
       if (Array.isArray(redactMe[p])) {
-        redactMe[p].forEach((value, index) => {
+        redactMe[p].forEach((value: any, index: number) => {
           if (this.isObject(value)) {
             redactMe[p][index] = this.redact(value);
           }
