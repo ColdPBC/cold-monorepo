@@ -1,11 +1,7 @@
 import { Body, Controller, Get, Param, Patch, Post, Query, Req, UseFilters, UseGuards } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { Span } from 'nestjs-ddtrace';
-import { JwtAuthGuard } from '../../../authorization/guards/jwtAuth.guard';
-import { RolesGuard } from '../../../authorization/guards/roles.guard';
-import { HttpExceptionFilter } from '../../../filters/http-exception.filter';
-import { Role, AuthenticatedUser, BaseWorker, CreateActionTemplatesDto, actions } from 'nest';
-import { Roles } from '../../../../../../../libs/nest/src/lib/decorators/roles.decorator';
+import { JwtAuthGuard, RolesGuard, HttpExceptionFilter, Roles, Role, AuthenticatedUser, BaseWorker, CreateActionTemplatesDto, actions } from 'nest';
 import { allRoles } from '../_global/global.params';
 import { ActionsService } from './actions.service';
 

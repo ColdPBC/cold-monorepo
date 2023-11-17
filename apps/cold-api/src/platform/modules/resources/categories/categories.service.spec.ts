@@ -1,7 +1,6 @@
 import { JwtService } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
-import { JwtStrategy } from '../../../authorization/jwt.strategy';
-import { ColdCacheModule, CacheService, PrismaModule, PrismaService } from 'nest';
+import { ColdCacheModule, CacheService, PrismaModule, PrismaService, JwtStrategy } from 'nest';
 import { CategoriesController } from './categories.controller';
 import { CategoriesService } from './categories.service';
 import { CategoryValidationModule } from './validation/category-validation.module';

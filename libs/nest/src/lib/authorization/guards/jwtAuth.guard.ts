@@ -8,14 +8,16 @@ import { set } from 'lodash';
 @Injectable()
 @Span()
 export class JwtAuthGuard extends AuthGuard('jwt') {
-  constructor(private tracer: TraceService, private logger: WorkerLogger, private reflector: Reflector, private moduleRef: ModuleRef) {
+  logger: WorkerLogger;
+  constructor(private tracer: TraceService, private reflector: Reflector, private moduleRef: ModuleRef) {
     super({
       passReqToCallback: true,
     });
 
-    this.logger = new WorkerLogger('JwtAuthGuard', { service: process.env.NODE_PKG_NAME, version: process.env.NODE_PKG_VERSION });
+    this.logger = new WorkerLogger('JwtAuthGuard', { service: process.env['NODE_PKG_NAME'], version: process.env['NODE_PKG_VERSION'] });
   }
-  canActivate(context: ExecutionContext) {
+
+  override canActivate(context: ExecutionContext) {
     const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [context.getHandler(), context.getClass()]);
     if (isPublic) {
       return true;
@@ -23,7 +25,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     return super.canActivate(context);
   }
 
-  handleRequest(info, user, err) {
+  override handleRequest(info: any, user: any, err: any) {
     // You can throw an exception based on either "info" or "err" arguments
     if (err || !user.iss) {
       this.tracer.getTracer().appsec.trackCustomEvent('Login Failed', { error: err, user: user, info: info });
@@ -32,7 +34,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
 
     const claims = user?.coldclimate_claims;
 
-    claims?.roles?.map(role => {
+    claims?.roles?.map((role: string) => {
       set(user, 'isAdmin', role.includes('admin'));
       set(user, 'isOwner', role.includes('owner'));
       set(user, 'isColdAdmin', role.includes('cold:admin'));
@@ -47,7 +49,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
       };
 
       this.tracer.getTracer().appsec.trackCustomEvent('Login Completed', { ...dd_user, info: info });
-      this.tracer.getTracer().dogstatsd.increment('cold.api.login', 1, { ...dd_user, environment: process.env.NODE_ENV || 'development', status: 'completed' });
+      this.tracer.getTracer().dogstatsd.increment('cold.api.login', 1, { ...dd_user, environment: process.env['NODE_ENV'] || 'development', status: 'completed' });
       this.tracer.getTracer().setUser(dd_user);
       this.tracer.getTracer().appsec.setUser(dd_user);
     }

@@ -4,7 +4,9 @@ import { filter, first } from 'lodash';
 import { Span } from 'nestjs-ddtrace';
 import { Observable } from 'rxjs';
 import { Reflector } from '@nestjs/core';
-import { AuthenticatedUser, BaseWorker, CacheService } from 'nest';
+import { BaseWorker } from '../../worker';
+import { CacheService } from '../../cache';
+import { AuthenticatedUser } from '../../primitives';
 
 @Injectable()
 @Span()
@@ -113,7 +115,7 @@ export class RolesGuard extends BaseWorker implements CanActivate {
     return this.resolveRequest(request, user, roles);
   }
 
-  handleRequest(info, user, err) {
+  handleRequest(info: any, user: any, err: any) {
     // You can throw an exception based on either "info" or "err" arguments
     if (err || !user) {
       throw err || new UnauthorizedException();

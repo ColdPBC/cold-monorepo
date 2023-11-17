@@ -5,7 +5,7 @@ import { ColdCacheModule } from '../../../../../../../../libs/nest/src/lib/cache
 import { CacheService } from '../../../../../../../../libs/nest/src/lib/cache/cache.service';
 import { MemberController } from './member.controller';
 import { MemberService } from './member.service';
-import { AuthorizationModule } from '../../../../authorization/authorization.module';
+import { AuthorizationModule } from '../../../../../../../../libs/nest/src/lib/authorization/authorization.module';
 
 @Module({
   imports: [AuthorizationModule, HttpModule, ColdCacheModule],

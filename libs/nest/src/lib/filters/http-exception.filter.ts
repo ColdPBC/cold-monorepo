@@ -2,7 +2,8 @@ import { ArgumentsHost, Catch, ExceptionFilter, HttpException } from '@nestjs/co
 import { Request, Response } from 'express';
 import { Span, TraceService } from 'nestjs-ddtrace';
 import * as process from 'process';
-import { BaseWorker } from 'nest';
+import { get } from 'lodash';
+import { BaseWorker } from '../worker';
 import safeStringify from 'fast-safe-stringify';
 
 @Span()
@@ -16,14 +17,15 @@ export class HttpExceptionFilter extends BaseWorker implements ExceptionFilter {
     const request = ctx.getRequest<Request>();
     const status = exception.getStatus();
 
-    this.traceService.getTracer().appsec.setUser({ ...request['user']?.coldclimate_claims });
+    const user: { coldclimate_claims: any } = get(request, 'user', { coldclimate_claims: {} });
+    this.traceService.getTracer().appsec.setUser({ ...user.coldclimate_claims });
 
     if (status >= 400 && status < 500) {
       if (status !== 404) {
         this.logger.error(JSON.parse(safeStringify(exception)), {
           error: exception,
           stack: exception.stack,
-          user: request['user'],
+          user: user,
           url: request.url,
           method: request.method,
           body: request.body,
@@ -36,7 +38,7 @@ export class HttpExceptionFilter extends BaseWorker implements ExceptionFilter {
     }
     if (status < 300) {
       this.logger.info(exception.message, {
-        user: request['user'],
+        user: user,
         url: request.url,
         method: request.method,
         body: request.body,
@@ -51,10 +53,10 @@ export class HttpExceptionFilter extends BaseWorker implements ExceptionFilter {
       message: exception.message.replace(/\n/g, ''),
       statusCode: status,
       error: exception.name,
-      version: process.env.npm_package_version,
+      version: process.env['npm_package_version'],
       timestamp: new Date().toISOString(),
       path: request.url,
-      meta: { user: request['user']?.coldclimate_claims },
+      meta: { user: user?.coldclimate_claims },
     });
   }
 }

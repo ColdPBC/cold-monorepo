@@ -2,12 +2,11 @@ import { Global, Module } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './jwt.strategy';
 import { JwtService } from '@nestjs/jwt';
-import { RolesGuard } from './guards/roles.guard';
+import { RolesGuard, JwtAuthGuard, PermissionsGuard } from './guards';
 import { HttpModule } from '@nestjs/axios';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { JwtAuthGuard } from './guards/jwtAuth.guard';
-import { PermissionsGuard } from './guards/permissions.guard';
-import { WorkerLogger, CacheService, ColdCacheModule } from 'nest';
+import { CacheService, ColdCacheModule } from '../cache';
+import { WorkerLogger } from '../worker';
 
 @Global()
 @Module({

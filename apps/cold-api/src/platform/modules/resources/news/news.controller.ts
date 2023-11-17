@@ -1,14 +1,8 @@
 import { Body, Controller, Delete, Get, Param, ParseBoolPipe, Post, Query, Req, UseFilters, UseGuards } from '@nestjs/common';
 import { ApiBody, ApiOAuth2, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Span } from 'nestjs-ddtrace';
-import { HttpExceptionFilter } from '../../../filters/http-exception.filter';
 import { ResourceValidationPipe } from '../../../pipes/resource.pipe';
-
-import { AuthenticatedUser, BaseWorker } from 'nest';
-import { Roles } from '../../../../../../../libs/nest/src/lib/decorators/roles.decorator';
-import { JwtAuthGuard } from '../../../authorization/guards/jwtAuth.guard';
-import { RolesGuard } from '../../../authorization/guards/roles.guard';
-import NewsSchema from '../../../../../../../libs/nest/src/zod/generated/modelSchema/newsSchema';
+import { AuthenticatedUser, BaseWorker, HttpExceptionFilter, Roles, JwtAuthGuard, RolesGuard, newsSchema } from 'nest';
 import { bpcDecoratorOptions, coldAdminOnly, skipDecoratorOptions, takeDecoratorOptions } from '../_global/global.params';
 import { CreateArticleDto } from './dto/news-article.dto';
 import { postNewsExample } from './examples/news.examples';
@@ -67,7 +61,7 @@ export class NewsController extends BaseWorker {
     },
   })
   create(
-    @Body(new ResourceValidationPipe(NewsSchema, 'POST')) body: CreateArticleDto,
+    @Body(new ResourceValidationPipe(newsSchema, 'POST')) body: CreateArticleDto,
     @Req()
     req: {
       body: any;

@@ -2,13 +2,8 @@ import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post, Req, UseFi
 import { ApiBody, ApiOAuth2, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Span } from 'nestjs-ddtrace';
 import { component_definition_types } from 'prisma/prisma-client';
-import { HttpExceptionFilter } from '../../../filters/http-exception.filter';
 import { ResourceValidationPipe } from '../../../pipes/resource.pipe';
-import { AuthenticatedUser, BaseWorker } from 'nest';
-import { Roles } from '../../../../../../../libs/nest/src/lib/decorators/roles.decorator';
-import { JwtAuthGuard } from '../../../authorization/guards/jwtAuth.guard';
-import { RolesGuard } from '../../../authorization/guards/roles.guard';
-import Component_definitionsSchema from '../../../../../../../libs/nest/src/zod/generated/modelSchema/component_definitionsSchema';
+import { HttpExceptionFilter, component_definitionsSchema, AuthenticatedUser, BaseWorker, Roles, JwtAuthGuard, RolesGuard } from 'nest';
 import { allRoles, bpcDecoratorOptions, coldAdminOnly } from '../_global/global.params';
 import { ComponentDefinitionsService } from './component-definitions.service';
 import { ComponentDefinitionDto } from './dto/component-definition-dto';
@@ -46,7 +41,7 @@ export class ComponentDefinitionsController extends BaseWorker {
       query: any;
       user: AuthenticatedUser;
     },
-    @Body(new ResourceValidationPipe(Component_definitionsSchema, 'POST')) createComponentDefinitionDto: ComponentDefinitionDto,
+    @Body(new ResourceValidationPipe(component_definitionsSchema, 'POST')) createComponentDefinitionDto: ComponentDefinitionDto,
   ) {
     return this.componentDefinitions.create(createComponentDefinitionDto, req.user);
   }
@@ -130,7 +125,7 @@ export class ComponentDefinitionsController extends BaseWorker {
   })
   update(
     @Param('name') name: string,
-    @Body(new ResourceValidationPipe(Component_definitionsSchema, 'PATCH')) updateComponentDefinitionDto: any,
+    @Body(new ResourceValidationPipe(component_definitionsSchema, 'PATCH')) updateComponentDefinitionDto: any,
     @Req()
     req: {
       headers: any;

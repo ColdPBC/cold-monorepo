@@ -5,7 +5,7 @@ import { ColdCacheModule } from '../../../../../../../../libs/nest/src/lib/cache
 import { Auth0UtilityService } from '../auth0.utility.service';
 import { MemberController } from './member.controller';
 import { CacheService } from '../../../../../../../../libs/nest/src/lib/cache/cache.service';
-import { AuthorizationModule } from '../../../../authorization/authorization.module';
+import { AuthorizationModule } from '../../../../../../../../libs/nest/src/lib/authorization/authorization.module';
 
 describe('Auth0UserService', () => {
   let service: MemberService;
