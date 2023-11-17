@@ -46,3 +46,6 @@ yalc.*
 /.yarn/cache/**/*
 /.yarn/install-state.gz
 index.ts
+/.nx/
+/migrations.json
+**/*.d.ts
