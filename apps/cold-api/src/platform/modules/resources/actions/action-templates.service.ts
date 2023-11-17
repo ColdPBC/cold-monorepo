@@ -2,7 +2,8 @@ import { HttpException, Injectable, NotFoundException, UnauthorizedException, Un
 import { Span } from 'nestjs-ddtrace';
 import { merge } from 'lodash';
 import { v4 } from 'uuid';
-import { BaseWorker, AuthenticatedUser, CacheService, ActionTemplatesEntity, PrismaService, ZodCreateActionTemplate, action_templates, action_templatesSchema } from 'nest';
+import { BaseWorker, AuthenticatedUser, CacheService, ActionTemplatesEntity, PrismaService } from 'nest';
+import { ZodCreateActionTemplate, action_templates, action_templatesSchema } from 'validation';
 
 @Span()
 @Injectable()

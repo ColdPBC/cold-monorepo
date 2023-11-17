@@ -6,7 +6,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { join } from 'path';
 
 @Module({})
-export class DocsModule {
+export class OpenapiModule {
   static register(app: INestApplication) {
     const customOptions = new DocumentBuilder()
       .setTitle('V1 REST API')
@@ -35,7 +35,7 @@ export class DocsModule {
     patchNestjsSwagger();
 
     return {
-      module: DocsModule,
+      module: OpenapiModule,
       imports: [
         SwaggerModule.setup('/v1', app, document, {
           customfavIcon: join(__dirname, '../../../..', 'public/favicon.ico'), //adding our favicon to swagger

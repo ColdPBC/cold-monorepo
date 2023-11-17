@@ -2,19 +2,9 @@ import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Patch, Post, Query
 import { ApiBody, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Span } from 'nestjs-ddtrace';
 import { createZodDto, ZodSerializerDto } from 'nestjs-zod';
-//import { z } from 'zod';
 import { ResourceValidationPipe } from '../../../pipes/resource.pipe';
-import {
-  Roles,
-  JwtAuthGuard,
-  RolesGuard,
-  HttpExceptionFilter,
-  AuthenticatedUser,
-  BaseWorker,
-  CreateActionTemplateItemSchema,
-  ZodCreateActionTemplate,
-  action_templatesSchema,
-} from 'nest';
+import { Roles, JwtAuthGuard, RolesGuard, HttpExceptionFilter, AuthenticatedUser, BaseWorker } from 'nest';
+import { CreateActionTemplateItemSchema, ZodCreateActionTemplate, action_templatesSchema } from 'validation';
 import { coldAdminOnly } from '../_global/global.params';
 import { ActionTemplatesService } from './action-templates.service';
 import { actionTemplatePatchExample, actionTemplatePostExample, testActionTemplateIdExample } from './examples/action-template.examples';

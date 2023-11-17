@@ -1,7 +1,8 @@
 import { Body, Controller, Get, Param, Patch, Post, Query, Req, UseFilters, UseGuards } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { Span } from 'nestjs-ddtrace';
-import { JwtAuthGuard, RolesGuard, HttpExceptionFilter, Roles, Role, AuthenticatedUser, BaseWorker, CreateActionTemplatesDto, actions } from 'nest';
+import { actions } from 'validation';
+import { JwtAuthGuard, RolesGuard, HttpExceptionFilter, Roles, Role, AuthenticatedUser, BaseWorker, CreateActionTemplatesDto } from 'nest';
 import { allRoles } from '../_global/global.params';
 import { ActionsService } from './actions.service';
 

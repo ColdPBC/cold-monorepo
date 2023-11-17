@@ -1,16 +1,10 @@
 import { Controller, Get, Param, Patch, Post, Query, Req, UseFilters, UseGuards } from '@nestjs/common';
 import { ApiOAuth2, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Span } from 'nestjs-ddtrace';
-import { Roles } from '../../../../../../../../libs/nest/src/lib/decorators/roles.decorator';
-import { HttpExceptionFilter } from '../../../../../../../../libs/nest/src/lib/filters/http-exception.filter';
-import { AuthenticatedUser } from '../../../../../../../../libs/nest/src/lib/primitives/interfaces/user.interface';
-import { BaseWorker } from '../../../../../../../../libs/nest/src/lib/worker/worker.class';
-import { JwtAuthGuard } from '../../../../../../../../libs/nest/src/lib/authorization/guards/jwtAuth.guard';
-import { PermissionsGuard } from '../../../../../../../../libs/nest/src/lib/authorization/guards/permissions.guard';
-import { RolesGuard } from '../../../../../../../../libs/nest/src/lib/authorization/guards/roles.guard';
-import { JwtStrategy } from '../../../../../../../../libs/nest/src/lib/authorization/jwt.strategy';
 import { coldAdminOnly } from '../../_global/global.params';
 import { MemberService } from './member.service';
+
+import { Roles, JwtStrategy, RolesGuard, PermissionsGuard, JwtAuthGuard, BaseWorker, HttpExceptionFilter, AuthenticatedUser } from 'nest';
 
 @Span()
 @UseGuards(JwtAuthGuard, RolesGuard, PermissionsGuard)

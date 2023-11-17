@@ -5,7 +5,8 @@ import { diff } from 'deep-object-diff';
 import { find, merge, omit, map } from 'lodash';
 import { Span, TraceService } from 'nestjs-ddtrace';
 import { v4 } from 'uuid';
-import { CacheService, DarklyService, PrismaService, BaseWorker, AuthenticatedUser, UpdateSurveyDefinitionsDto, SurveyDefinitionsEntity, ZodSurveyResponseDto } from 'nest';
+import { ZodSurveyResponseDto } from 'validation';
+import { CacheService, DarklyService, PrismaService, BaseWorker, AuthenticatedUser, UpdateSurveyDefinitionsDto, SurveyDefinitionsEntity } from 'nest';
 
 @Span()
 @Injectable()

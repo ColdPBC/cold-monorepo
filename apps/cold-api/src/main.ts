@@ -4,7 +4,7 @@ import * as dotenv from 'dotenv';
 import { WinstonModule } from 'nest-winston';
 import { createLogger } from 'winston';
 import { AppModule } from './platform/modules/app.module';
-import { DocsModule } from './platform/modules/docs/docs.module';
+import { OpenapiModule } from './platform/modules/swagger/openapi.module';
 import winstonConfig from '../../../libs/nest/src/lib/worker/winston.config';
 import { patchNestjsSwagger } from '@abitia/zod-dto';
 
@@ -20,7 +20,7 @@ async function bootstrap(instance) {
   //app.useGlobalPipes(new ResourceValidationPipe());
   app.enableCors();
 
-  DocsModule.register(app);
+  OpenapiModule.register(app);
   patchNestjsSwagger();
 
   await app.listen(process.env.PORT || 7001, '0.0.0.0');

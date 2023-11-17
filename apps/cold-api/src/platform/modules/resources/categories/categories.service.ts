@@ -1,8 +1,9 @@
 import { BadRequestException, ConflictException, Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
 import { detailedDiff, diff } from 'deep-object-diff';
 import { isEmpty, isUUID } from 'class-validator';
-import { Span, TraceService } from 'nestjs-ddtrace';
-import { ObjectUtils, AuthenticatedUser, BaseWorker, CacheService, DarklyService, PrismaService, ZodCategoryResponseDto, category_definitions, Tags } from 'nest';
+import { Span } from 'nestjs-ddtrace';
+import { ObjectUtils, AuthenticatedUser, BaseWorker, CacheService, DarklyService, PrismaService, Tags } from 'nest';
+import { ZodCategoryResponseDto, category_definitions } from 'validation';
 import { v4 } from 'uuid';
 import { get, merge, omit, find } from 'lodash';
 import { CategoryDefinitionValidator } from './validation/category-definition.validator';
@@ -18,7 +19,6 @@ export class CategoriesService extends BaseWorker {
 
   constructor(
     readonly darkly: DarklyService,
-    private readonly tracer: TraceService,
     private prisma: PrismaService,
     private readonly cache: CacheService,
     private readonly categoryDefinitionValidator: CategoryDefinitionValidator,

@@ -10,14 +10,15 @@ import { SurveysModule } from './resources/surveys/surveys.module';
 import { Auth0Module } from './resources/auth0/auth0.module';
 import { NestModule } from 'nest';
 
-process.env.DD_VERSION = process.env.npm_package_version;
 @Module({
   imports: [
     NestModule,
     ServeStaticModule.forRoot({
       serveStaticOptions: {
         index: false,
+        fallthrough: true,
       },
+      serveRoot: '../../../public',
     }),
     Auth0Module,
     ComponentDefinitionsModule,

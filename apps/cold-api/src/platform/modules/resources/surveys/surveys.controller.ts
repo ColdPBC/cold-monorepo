@@ -4,19 +4,8 @@ import { survey_types } from '@prisma/client';
 import { Span } from 'nestjs-ddtrace';
 import { filter } from 'lodash';
 import { ResourceValidationPipe } from '../../../pipes/resource.pipe';
-import {
-  JwtAuthGuard,
-  RolesGuard,
-  Roles,
-  HttpExceptionFilter,
-  SurveyResponseSchema,
-  ZodCategoryResponseDto,
-  Role,
-  BaseWorker,
-  AuthenticatedUser,
-  UpdateSurveyDefinitionsDto,
-  survey_definitions,
-} from 'nest';
+import { JwtAuthGuard, RolesGuard, Roles, HttpExceptionFilter, Role, BaseWorker, AuthenticatedUser, UpdateSurveyDefinitionsDto } from 'nest';
+import { survey_definitions, SurveyResponseSchema, ZodCategoryResponseDto } from 'validation';
 import { allRoles, bpcDecoratorOptions, coldAdminOnly, impersonateOrgDecoratorOptions, orgIdDecoratorOptions } from '../_global/global.params';
 import { SurveysService } from './surveys.service';
 import { UpdateSurveyDefinitionDto } from './dto/update-survey-definition.dto';
