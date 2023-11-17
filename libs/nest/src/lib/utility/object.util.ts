@@ -1,6 +1,6 @@
 import { Global } from '@nestjs/common';
 import { unset, mapKeys } from 'lodash';
-import { BaseWorker } from 'nest';
+import { BaseWorker } from '../worker';
 
 @Global()
 export class ObjectUtils extends BaseWorker {
@@ -13,7 +13,7 @@ export class ObjectUtils extends BaseWorker {
    * @param roots keeps previous parent properties as they will be added as a prefix for each prop
    * @param {string} sep delimiter
    */
-  flatten(obj, roots: any = [], sep = '.') {
+  flatten(obj: any, roots: any = [], sep: string = '.'): any {
     return (
       Object
         // find props of given object
@@ -40,7 +40,7 @@ export class ObjectUtils extends BaseWorker {
    * @param val keys that have a value matching this will be removed from the object
    * @returns {any}
    */
-  deleteKeys(source, val) {
+  deleteKeys(source: any, val: any): any {
     const flat = this.flatten(source);
     mapKeys(flat, function (value, key) {
       if (value === val) {

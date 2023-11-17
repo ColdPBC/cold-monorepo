@@ -9,16 +9,12 @@ import { DatadogTraceModule } from 'nestjs-ddtrace';
 import { HotShotsModule } from 'nestjs-hot-shots';
 import { redisStore } from 'cache-manager-redis-yet';
 
-import { PrismaModule } from './prisma/prisma.module';
-import { PrismaService } from './prisma/prisma.service';
-import { RedactorModule } from './redactor';
+import { PrismaModule, PrismaService } from './prisma';
 import { HealthController, HealthModule, HealthService } from './health';
 import { DarklyModule, DarklyService } from './darkly';
 import { ColdCacheModule } from './cache';
-import { AuthorizationModule } from './authorization/authorization.module';
-import { InterceptorModule } from './interceptors/interceptor.module';
-import { JwtStrategy } from './authorization/jwt.strategy';
-import { JwtAuthGuard } from './authorization/guards/jwtAuth.guard';
+import { JwtStrategy, JwtAuthGuard, AuthorizationModule } from './authorization';
+import { InterceptorModule } from './interceptors';
 
 @Module({
   imports: [

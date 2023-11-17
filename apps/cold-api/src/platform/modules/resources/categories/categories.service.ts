@@ -1,9 +1,8 @@
 import { BadRequestException, ConflictException, Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
-import { ObjectUtils } from '../../../utilities/object.util';
 import { detailedDiff, diff } from 'deep-object-diff';
 import { isEmpty, isUUID } from 'class-validator';
 import { Span, TraceService } from 'nestjs-ddtrace';
-import { AuthenticatedUser, BaseWorker, CacheService, DarklyService, PrismaService, ZodCategoryResponseDto, category_definitions, Tags } from 'nest';
+import { ObjectUtils, AuthenticatedUser, BaseWorker, CacheService, DarklyService, PrismaService, ZodCategoryResponseDto, category_definitions, Tags } from 'nest';
 import { v4 } from 'uuid';
 import { get, merge, omit, find } from 'lodash';
 import { CategoryDefinitionValidator } from './validation/category-definition.validator';
