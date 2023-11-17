@@ -1,6 +1,6 @@
 import { Global } from '@nestjs/common';
 import { unset, mapKeys } from 'lodash';
-import { BaseWorker } from '../worker/worker.class';
+import { BaseWorker } from 'nest';
 
 @Global()
 export class ObjectUtils extends BaseWorker {

@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ScheduleModule } from '@nestjs/schedule';
-import { ColdCacheModule } from '../cache/cache.module';
-import { PrismaModule } from '../vendor/prisma/prisma.module';
+import { PrismaModule, ColdCacheModule } from 'nest';
 import { TestOrgCleanup } from './testOrgCleanup.cron';
 
 @Module({

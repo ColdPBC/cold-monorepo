@@ -1,8 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
-import { CacheService } from '../../cache/cache.service';
-import { BaseWorker } from '../../../worker/worker.class';
+import { CacheService, BaseWorker } from 'nest';
 
 export interface Auth0APIOptions {
   baseURL: string;

@@ -4,12 +4,8 @@ import { Span } from 'nestjs-ddtrace';
 import { JwtAuthGuard } from '../../../authorization/guards/jwtAuth.guard';
 import { RolesGuard } from '../../../authorization/guards/roles.guard';
 import { HttpExceptionFilter } from '../../../filters/http-exception.filter';
-import { Role } from '../../../primitives/enums/roles.enum';
-import { AuthenticatedUser } from '../../../primitives/interfaces/user.interface';
-import { BaseWorker } from '../../../worker/worker.class';
-import { Roles } from '../../../authorization/decorators/roles.decorator';
-import { CreateActionTemplatesDto } from '../../dto/action-templates/dto';
-import { actions } from '../../zod/generated';
+import { Role, AuthenticatedUser, BaseWorker, CreateActionTemplatesDto, actions } from 'nest';
+import { Roles } from '../../../../../../../libs/nest/src/lib/decorators/roles.decorator';
 import { allRoles } from '../_global/global.params';
 import { ActionsService } from './actions.service';
 

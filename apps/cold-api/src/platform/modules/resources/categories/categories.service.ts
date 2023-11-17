@@ -3,17 +3,10 @@ import { ObjectUtils } from '../../../utilities/object.util';
 import { detailedDiff, diff } from 'deep-object-diff';
 import { isEmpty, isUUID } from 'class-validator';
 import { Span, TraceService } from 'nestjs-ddtrace';
-import { AuthenticatedUser } from '../../../primitives/interfaces/user.interface';
-import { BaseWorker } from '../../../worker/worker.class';
-import { CacheService } from '../../cache/cache.service';
-import { DarklyService } from '../../vendor/darkly/darkly.service';
-import { PrismaService } from '../../vendor/prisma/prisma.service';
+import { AuthenticatedUser, BaseWorker, CacheService, DarklyService, PrismaService, ZodCategoryResponseDto, category_definitions, Tags } from 'nest';
 import { v4 } from 'uuid';
 import { get, merge, omit, find } from 'lodash';
-import { ZodCategoryResponseDto } from '../../zod/custom';
-import { category_definitions } from '../../zod/generated';
 import { CategoryDefinitionValidator } from './validation/category-definition.validator';
-import { Tags } from '../../../primitives/interfaces/datadog';
 
 /**
  * @description This service is responsible for managing category definitions

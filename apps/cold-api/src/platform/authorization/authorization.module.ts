@@ -7,9 +7,7 @@ import { HttpModule } from '@nestjs/axios';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtAuthGuard } from './guards/jwtAuth.guard';
 import { PermissionsGuard } from './guards/permissions.guard';
-import { WorkerLogger } from '../worker/worker.log.service';
-import { CacheService } from '../modules/cache/cache.service';
-import { ColdCacheModule } from '../modules/cache/cache.module';
+import { WorkerLogger, CacheService, ColdCacheModule } from 'nest';
 
 @Global()
 @Module({

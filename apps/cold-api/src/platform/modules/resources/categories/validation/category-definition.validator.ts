@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { BaseWorker } from '../../../../worker/worker.class';
+import { BaseWorker } from 'nest';
 import { ActivitiesValidator } from './activities.validator';
 import { ActivityValidator } from './activity.validator';
 import { CategoriesValidator } from './categories.validator';

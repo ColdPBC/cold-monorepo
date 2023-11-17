@@ -3,7 +3,7 @@ import { ApiOAuth2, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { Span } from 'nestjs-ddtrace';
 import { JwtAuthGuard } from '../../../../authorization/guards/jwtAuth.guard';
 import { RolesGuard } from '../../../../authorization/guards/roles.guard';
-import { BaseWorker } from '../../../../worker/worker.class';
+import { BaseWorker } from 'nest';
 import { ownerRoleNameExample } from './examples/role.examples';
 import { RoleService } from './role.service';
 import { HttpExceptionFilter } from '../../../../filters/http-exception.filter';

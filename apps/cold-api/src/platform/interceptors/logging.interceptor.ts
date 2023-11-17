@@ -3,7 +3,7 @@ import { Span, TraceService } from 'nestjs-ddtrace';
 import { Observable } from 'rxjs';
 import { merge } from 'lodash';
 import { tap } from 'rxjs/operators';
-import { WorkerLogger } from '../worker/worker.log.service';
+import { WorkerLogger } from 'nest';
 import { Request } from 'express';
 
 @Span()

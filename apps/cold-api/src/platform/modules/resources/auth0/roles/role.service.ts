@@ -2,8 +2,7 @@ import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { Span } from 'nestjs-ddtrace';
 import { Auth0APIOptions, Auth0UtilityService } from '../auth0.utility.service';
-import { BaseWorker } from '../../../../worker/worker.class';
-import { CacheService } from '../../../cache/cache.service';
+import { BaseWorker, CacheService } from 'nest';
 import { filter, first } from 'lodash';
 
 @Span()

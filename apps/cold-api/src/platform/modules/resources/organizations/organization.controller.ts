@@ -1,9 +1,8 @@
 import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post, Put, Query, Req, Res, UseFilters, UseGuards } from '@nestjs/common';
 import { Span } from 'nestjs-ddtrace';
-import { Roles } from '../../../authorization/decorators/roles.decorator';
+import { Roles } from '../../../../../../../libs/nest/src/lib/decorators/roles.decorator';
 import { Response } from 'express';
 import { ResourceValidationPipe } from '../../../pipes/resource.pipe';
-import OrganizationsSchema from '../../zod/generated/modelSchema/organizationsSchema';
 import {
   allRoles,
   bpcDecoratorOptions,
@@ -19,10 +18,9 @@ import { OrganizationService } from './organization.service';
 import { ApiBody, ApiOAuth2, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../../../authorization/guards/jwtAuth.guard';
 import { RolesGuard } from '../../../authorization/guards/roles.guard';
-import { BaseWorker } from '../../../worker/worker.class';
+import { BaseWorker, AuthenticatedUser, organizationsSchema } from 'nest';
 import { HttpExceptionFilter } from '../../../filters/http-exception.filter';
 import { CreateOrganizationDto } from './dto/organization.dto';
-import { AuthenticatedUser } from '../../../primitives/interfaces/user.interface';
 
 @Span()
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -59,7 +57,7 @@ export class OrganizationController extends BaseWorker {
   @HttpCode(201)
   async createOrganization(
     @Query() query,
-    @Body(new ResourceValidationPipe(OrganizationsSchema.partial(), 'POST')) createOrganizationDTO: CreateOrganizationDto,
+    @Body(new ResourceValidationPipe(organizationsSchema.partial(), 'POST')) createOrganizationDTO: CreateOrganizationDto,
     @Req()
     req: {
       body: any;

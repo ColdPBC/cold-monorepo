@@ -2,9 +2,8 @@ import { Body, Controller, Get, HttpCode, Param, Put, Query, Req, UseFilters } f
 import { ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Span } from 'nestjs-ddtrace';
 import { HttpExceptionFilter } from '../../../filters/http-exception.filter';
-import { AuthenticatedUser } from '../../../primitives/interfaces/user.interface';
-import { BaseWorker } from '../../../worker/worker.class';
-import { Roles } from '../../../authorization/decorators/roles.decorator';
+import { AuthenticatedUser, BaseWorker } from 'nest';
+import { Roles } from '../../../../../../../libs/nest/src/lib/decorators/roles.decorator';
 import { allRoles, bpcDecoratorOptions, coldAdminOnly, orgIdDecoratorOptions } from '../_global/global.params';
 import { CategoriesService } from './categories.service';
 

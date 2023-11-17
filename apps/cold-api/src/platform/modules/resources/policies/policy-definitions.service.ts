@@ -1,8 +1,6 @@
 import { ConflictException, Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
-import { AuthenticatedUser } from '../../../primitives/interfaces/user.interface';
-import { BaseWorker } from '../../../worker/worker.class';
-import { CacheService } from '../../cache/cache.service';
-import { PrismaService } from '../../vendor/prisma/prisma.service';
+import { BaseWorker, AuthenticatedUser, PrismaService, CacheService } from 'nest';
+
 import { CreatePolicyDataDto } from './dto/create-policy-data.dto';
 import { CreatePolicyDefinition } from './dto/create-policy-definition.dto';
 import { PolicyDefinitionDto } from './dto/policy-definition.dto';

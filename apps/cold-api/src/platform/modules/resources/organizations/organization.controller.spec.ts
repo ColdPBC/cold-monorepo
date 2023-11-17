@@ -4,10 +4,9 @@ import { MemberService } from '../auth0/members/member.service';
 import { OrganizationController } from './organization.controller';
 import { OrganizationService } from './organization.service';
 import { HttpModule } from '@nestjs/axios';
-import { ColdCacheModule } from '../../cache/cache.module';
+import { ColdCacheModule, CacheService } from 'nest';
 import { RoleModule } from '../auth0/roles/role.module';
 import { Auth0UtilityService } from '../auth0/auth0.utility.service';
-import { CacheService } from '../../cache/cache.service';
 import { RoleService } from '../auth0/roles/role.service';
 
 describe('Auth0Controller', () => {

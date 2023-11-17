@@ -2,9 +2,8 @@ import { ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/com
 import { AuthGuard } from '@nestjs/passport';
 import { ModuleRef, Reflector } from '@nestjs/core';
 import { Span, TraceService } from 'nestjs-ddtrace';
-import { IS_PUBLIC_KEY } from '../decorators/public_route.decorator';
+import { IS_PUBLIC_KEY, WorkerLogger } from 'nest';
 import { set } from 'lodash';
-import { WorkerLogger } from '../../worker/worker.log.service';
 
 @Injectable()
 @Span()

@@ -1,7 +1,7 @@
 import Tracer from 'dd-trace';
 import { Request } from 'express';
 import { get } from 'lodash';
-import { BaseWorker } from './platform/worker/worker.class';
+import { BaseWorker } from 'nest';
 
 const details = JSON.parse(BaseWorker.getJSON('package.json'));
 
@@ -13,6 +13,10 @@ const tracer = Tracer.init({
   hostname: '127.0.0.1',
   profiling: true,
   runtimeMetrics: true,
+  tags: {
+    environment: `${process.env.NODE_ENV}`,
+    host: `${details.host_name}`,
+  },
   dogstatsd: {
     hostname: '127.0.0.1',
     port: 8125,

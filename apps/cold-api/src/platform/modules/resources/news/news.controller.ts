@@ -3,12 +3,12 @@ import { ApiBody, ApiOAuth2, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@
 import { Span } from 'nestjs-ddtrace';
 import { HttpExceptionFilter } from '../../../filters/http-exception.filter';
 import { ResourceValidationPipe } from '../../../pipes/resource.pipe';
-import { AuthenticatedUser } from '../../../primitives/interfaces/user.interface';
-import { BaseWorker } from '../../../worker/worker.class';
-import { Roles } from '../../../authorization/decorators/roles.decorator';
+
+import { AuthenticatedUser, BaseWorker } from 'nest';
+import { Roles } from '../../../../../../../libs/nest/src/lib/decorators/roles.decorator';
 import { JwtAuthGuard } from '../../../authorization/guards/jwtAuth.guard';
 import { RolesGuard } from '../../../authorization/guards/roles.guard';
-import NewsSchema from '../../zod/generated/modelSchema/newsSchema';
+import NewsSchema from '../../../../../../../libs/nest/src/zod/generated/modelSchema/newsSchema';
 import { bpcDecoratorOptions, coldAdminOnly, skipDecoratorOptions, takeDecoratorOptions } from '../_global/global.params';
 import { CreateArticleDto } from './dto/news-article.dto';
 import { postNewsExample } from './examples/news.examples';

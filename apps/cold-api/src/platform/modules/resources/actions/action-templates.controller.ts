@@ -3,15 +3,12 @@ import { ApiBody, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/s
 import { Span } from 'nestjs-ddtrace';
 import { createZodDto, ZodSerializerDto } from 'nestjs-zod';
 //import { z } from 'zod';
-import { Roles } from '../../../authorization/decorators/roles.decorator';
+import { Roles } from '../../../../../../../libs/nest/src/lib/decorators/roles.decorator';
 import { JwtAuthGuard } from '../../../authorization/guards/jwtAuth.guard';
 import { RolesGuard } from '../../../authorization/guards/roles.guard';
 import { HttpExceptionFilter } from '../../../filters/http-exception.filter';
 import { ResourceValidationPipe } from '../../../pipes/resource.pipe';
-import { AuthenticatedUser } from '../../../primitives/interfaces/user.interface';
-import { BaseWorker } from '../../../worker/worker.class';
-import { CreateActionTemplateItemSchema, ZodCreateActionTemplate } from '../../zod/custom';
-import { action_templatesSchema } from '../../zod/generated';
+import { AuthenticatedUser, BaseWorker, CreateActionTemplateItemSchema, ZodCreateActionTemplate, action_templatesSchema } from 'nest';
 import { coldAdminOnly } from '../_global/global.params';
 import { ActionTemplatesService } from './action-templates.service';
 import { actionTemplatePatchExample, actionTemplatePostExample, testActionTemplateIdExample } from './examples/action-template.examples';

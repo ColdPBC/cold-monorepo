@@ -1,10 +1,9 @@
 import { Controller, Get, Param, ParseIntPipe, Post, Req, UseFilters, UseGuards } from '@nestjs/common';
 import { ApiOAuth2, ApiParam, ApiTags } from '@nestjs/swagger';
 import { HttpExceptionFilter } from '../../../filters/http-exception.filter';
-import { AuthenticatedUser } from '../../../primitives/interfaces/user.interface';
-import { BaseWorker } from '../../../worker/worker.class';
-import { Public } from '../../../authorization/decorators/public_route.decorator';
-import { Roles } from '../../../authorization/decorators/roles.decorator';
+import { AuthenticatedUser, BaseWorker } from 'nest';
+import { Public } from '../../../../../../../libs/nest/src/lib/decorators/public_route.decorator';
+import { Roles } from '../../../../../../../libs/nest/src/lib/decorators/roles.decorator';
 import { JwtAuthGuard } from '../../../authorization/guards/jwtAuth.guard';
 import { RolesGuard } from '../../../authorization/guards/roles.guard';
 import { coldAdminOnly } from '../_global/global.params';

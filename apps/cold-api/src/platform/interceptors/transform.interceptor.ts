@@ -1,6 +1,6 @@
 import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from '@nestjs/common';
 import { Observable } from 'rxjs';
-import { WorkerLogger } from '../worker/worker.log.service';
+import { WorkerLogger } from 'nest';
 
 export interface Response<T> {
   data: T;

@@ -4,9 +4,7 @@ import { filter, first } from 'lodash';
 import { Span } from 'nestjs-ddtrace';
 import { Observable } from 'rxjs';
 import { Reflector } from '@nestjs/core';
-import { AuthenticatedUser } from '../../primitives/interfaces/user.interface';
-import { BaseWorker } from '../../worker/worker.class';
-import { CacheService } from '../../modules/cache/cache.service';
+import { AuthenticatedUser, BaseWorker, CacheService } from 'nest';
 
 @Injectable()
 @Span()

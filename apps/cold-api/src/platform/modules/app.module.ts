@@ -13,9 +13,7 @@ import { join } from 'path';
 import { AuthorizationModule } from '../authorization/authorization.module';
 import { JwtAuthGuard } from '../authorization/guards/jwtAuth.guard';
 import { JwtStrategy } from '../authorization/jwt.strategy';
-import { HealthController } from './health/health.controller';
-import { HealthModule } from './health/health.module';
-import { HealthService } from './health/health.service';
+import { HealthController, HealthModule, HealthService, DarklyModule, DarklyService, PrismaModule } from 'nest';
 import { ActionsModule } from './resources/actions/actions.module';
 import { CategoriesModule } from './resources/categories/categories.module';
 import { ComponentDefinitionsModule } from './resources/component-definitions/component-definitions.module';
@@ -24,9 +22,6 @@ import { PolicyDefinitionsModule } from './resources/policies/policy-definitions
 import { SurveysModule } from './resources/surveys/surveys.module';
 import { InterceptorModule } from '../interceptors/interceptor.module';
 import { Auth0Module } from './resources/auth0/auth0.module';
-import { DarklyModule } from './vendor/darkly/darkly.module';
-import { DarklyService } from './vendor/darkly/darkly.service';
-import { PrismaModule } from './vendor/prisma/prisma.module';
 
 process.env.DD_VERSION = process.env.npm_package_version;
 @Module({

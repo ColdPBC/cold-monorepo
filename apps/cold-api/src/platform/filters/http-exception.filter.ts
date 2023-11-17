@@ -2,7 +2,7 @@ import { ArgumentsHost, Catch, ExceptionFilter, HttpException } from '@nestjs/co
 import { Request, Response } from 'express';
 import { Span, TraceService } from 'nestjs-ddtrace';
 import * as process from 'process';
-import { BaseWorker } from '../worker/worker.class';
+import { BaseWorker } from 'nest';
 import safeStringify from 'fast-safe-stringify';
 
 @Span()

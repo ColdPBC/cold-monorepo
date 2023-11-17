@@ -1,10 +1,10 @@
 import { Controller, Get, Param, Patch, Post, Query, Req, UseFilters, UseGuards } from '@nestjs/common';
 import { ApiOAuth2, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Span } from 'nestjs-ddtrace';
-import { Roles } from '../../../../authorization/decorators/roles.decorator';
+import { Roles } from '../../../../../../../../libs/nest/src/lib/decorators/roles.decorator';
 import { HttpExceptionFilter } from '../../../../filters/http-exception.filter';
-import { AuthenticatedUser } from '../../../../primitives/interfaces/user.interface';
-import { BaseWorker } from '../../../../worker/worker.class';
+import { AuthenticatedUser } from '../../../../../../../../libs/nest/src/lib/primitives/interfaces/user.interface';
+import { BaseWorker } from '../../../../../../../../libs/nest/src/lib/worker/worker.class';
 import { JwtAuthGuard } from '../../../../authorization/guards/jwtAuth.guard';
 import { PermissionsGuard } from '../../../../authorization/guards/permissions.guard';
 import { RolesGuard } from '../../../../authorization/guards/roles.guard';

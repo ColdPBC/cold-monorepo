@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { Auth0UtilityService } from '../auth0.utility.service';
 import { HttpModule } from '@nestjs/axios';
-import { ColdCacheModule } from '../../../cache/cache.module';
-import { CacheService } from '../../../cache/cache.service';
+import { ColdCacheModule } from '../../../../../../../../libs/nest/src/lib/cache/cache.module';
+import { CacheService } from '../../../../../../../../libs/nest/src/lib/cache/cache.service';
 import { MemberController } from './member.controller';
 import { MemberService } from './member.service';
 import { AuthorizationModule } from '../../../../authorization/authorization.module';

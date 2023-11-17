@@ -1,10 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { MemberService } from './member.service';
 import { HttpModule } from '@nestjs/axios';
-import { ColdCacheModule } from '../../../cache/cache.module';
+import { ColdCacheModule } from '../../../../../../../../libs/nest/src/lib/cache/cache.module';
 import { Auth0UtilityService } from '../auth0.utility.service';
 import { MemberController } from './member.controller';
-import { CacheService } from '../../../cache/cache.service';
+import { CacheService } from '../../../../../../../../libs/nest/src/lib/cache/cache.service';
 import { AuthorizationModule } from '../../../../authorization/authorization.module';
 
 describe('Auth0UserService', () => {

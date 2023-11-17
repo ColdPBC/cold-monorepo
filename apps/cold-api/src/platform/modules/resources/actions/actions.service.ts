@@ -2,12 +2,7 @@ import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/co
 import { Span } from 'nestjs-ddtrace';
 import { v4 } from 'uuid';
 import { merge } from 'lodash';
-import { AuthenticatedUser } from '../../../primitives/interfaces/user.interface';
-import { BaseWorker } from '../../../worker/worker.class';
-import { CacheService } from '../../cache/cache.service';
-import { CreateActionTemplatesDto } from '../../dto/action-templates/dto';
-import { UpdateActionsDto } from '../../dto/actions/dto';
-import { PrismaService } from '../../vendor/prisma/prisma.service';
+import { AuthenticatedUser, BaseWorker, CacheService, CreateActionTemplatesDto, UpdateActionsDto, PrismaService } from 'nest';
 import { SurveysService } from '../surveys/surveys.service';
 
 @Span()

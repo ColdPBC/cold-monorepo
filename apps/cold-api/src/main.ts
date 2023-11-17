@@ -5,7 +5,7 @@ import { WinstonModule } from 'nest-winston';
 import { createLogger } from 'winston';
 import { AppModule } from './platform/modules/app.module';
 import { DocsModule } from './platform/modules/docs/docs.module';
-import winstonConfig from './platform/worker/winston.config';
+import winstonConfig from '../../../libs/nest/src/lib/worker/winston.config';
 import { patchNestjsSwagger } from '@abitia/zod-dto';
 
 dotenv.config();

@@ -2,11 +2,7 @@ import { BadRequestException, ConflictException, Injectable, NotFoundException, 
 import { filter, set } from 'lodash';
 import { Span } from 'nestjs-ddtrace';
 import { component_definition_types } from 'prisma/prisma-client';
-import { AuthenticatedUser } from '../../../primitives/interfaces/user.interface';
-import { BaseWorker } from '../../../worker/worker.class';
-import { CacheService } from '../../cache/cache.service';
-import { DarklyService } from '../../vendor/darkly/darkly.service';
-import { PrismaService } from '../../vendor/prisma/prisma.service';
+import { AuthenticatedUser, CacheService, BaseWorker, PrismaService, DarklyService } from 'nest';
 import { filterItemsByRole } from './component-definitions.utils';
 
 @Span()

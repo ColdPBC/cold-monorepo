@@ -1,5 +1,5 @@
 import { number } from 'zod';
-import { Role } from '../../../primitives/enums/roles.enum';
+import { Role } from 'nest';
 import { testOrgIdExample } from './global.examples';
 
 export const allRoles = [Role.ColdAdmin, Role.CompanyOwner, Role.CompanyAdmin, Role.CompanyMember];
