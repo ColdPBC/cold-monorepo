@@ -10,7 +10,7 @@ datasource db {
 
 generator zod {
   provider                         = "zod-prisma-types"
-  output                           = "../src/zod/generated" // default is ./generated/custom
+  output                           = "../../validation/src/generated" // default is ./generated/custom
   useMultipleFiles                 = true // default is false
   writeBarrelFiles                 = true // default is true
   createInputTypes                 = false // default is true

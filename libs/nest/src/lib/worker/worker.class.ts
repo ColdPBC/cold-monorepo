@@ -6,10 +6,10 @@ import * as path from 'path';
 import { get, merge } from 'lodash';
 import { cpus, freemem, hostname, loadavg, NetworkInterfaceInfo, platform, totalmem, uptime } from 'os';
 import * as process from 'process';
-import { IWorkerDetails } from '../primitives/interfaces/worker.interface';
-import { RedactorService } from '../redactor/redactor.service';
+import { IWorkerDetails, Tags } from '../primitives';
+import { RedactorService } from '../redactor';
 import { WorkerLogger } from './worker.log.service';
-import { Tags } from '../primitives/interfaces/datadog';
+import { TraceService } from 'nestjs-ddtrace';
 
 @Injectable()
 @Global()
@@ -22,9 +22,11 @@ export class BaseWorker extends RedactorService {
     host: '127.0.0.1',
     port: 8125,
   });
+  tracer: TraceService;
 
   constructor(className: string) {
     super();
+    this.tracer = new TraceService();
     this.logger = new WorkerLogger(className);
     const pkg = JSON.parse(BaseWorker.getJSON('package.json'));
     if (pkg) {
@@ -70,7 +72,7 @@ export class BaseWorker extends RedactorService {
 
   public setTags(tags: Tags) {
     this.tags = merge(this.tags, tags);
-    this.logger.tags = this.tags;
+    this.logger.setTags(this.tags);
   }
 
   /***

@@ -17,7 +17,7 @@ export class MockAuthGuard extends AuthGuard('jwt') {
     });
   }
 
-  canActivate(context: ExecutionContext) {
+  override canActivate(context: ExecutionContext) {
     const req = context.switchToHttp().getRequest();
 
     req.user = {
@@ -27,7 +27,7 @@ export class MockAuthGuard extends AuthGuard('jwt') {
     return true;
   }
 
-  handleRequest(err, user) {
+  override handleRequest(err: any, user: any) {
     // You can throw an exception based on either "info" or "err" arguments
     if (err || !user.id) {
       throw err || new UnauthorizedException();
@@ -45,7 +45,7 @@ export class MockAuthGuard extends AuthGuard('jwt') {
       tracer.appsec.setUser(dd_user);
     }
 
-    claims?.roles?.map(role => {
+    claims?.roles?.map((role: any) => {
       set(user, 'isAdmin', role.includes('admin'));
       set(user, 'isOwner', role.includes('owner'));
       set(user, 'isColdAdmin', role.includes('cold:admin'));

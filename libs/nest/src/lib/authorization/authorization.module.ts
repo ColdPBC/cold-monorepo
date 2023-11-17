@@ -2,7 +2,7 @@ import { Global, Module } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './jwt.strategy';
 import { JwtService } from '@nestjs/jwt';
-import { RolesGuard, JwtAuthGuard, PermissionsGuard } from './guards';
+import { RolesGuard, JwtAuthGuard, PermissionsGuard } from '../guards';
 import { HttpModule } from '@nestjs/axios';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { CacheService, ColdCacheModule } from '../cache';

@@ -1,7 +1,7 @@
 import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from '@nestjs/common';
 import { Span, TraceService } from 'nestjs-ddtrace';
 import { Observable } from 'rxjs';
-import { merge } from 'lodash';
+import { merge, get } from 'lodash';
 import { tap } from 'rxjs/operators';
 import { WorkerLogger } from 'nest';
 import { Request } from 'express';
@@ -19,14 +19,14 @@ export class LoggingInterceptor implements NestInterceptor {
 
     return next.handle().pipe(
       tap(() => {
-        const user = context['args']['0'].user;
+        const user: any = get(request, 'user', { sub: '', coldclimate_claims: {} });
         this.logger.tags = merge(this.logger.tags, {
           user: user?.coldclimate_claims,
           query: request.query,
           body: request.body,
           params: request.params,
           url: request.url,
-          version: process.env.DD_VERSION,
+          version: process.env['DD_VERSION'],
           method: request.method,
         });
 
@@ -37,7 +37,7 @@ export class LoggingInterceptor implements NestInterceptor {
           roles: user?.coldclimate_claims?.roles,
         };
 
-        if (request.query?.impersonateOrg) {
+        if (request.query['impersonateOrg']) {
           if (!user.isColdAdmin) {
             this.tracer.getTracer().appsec.trackCustomEvent('Attempted Impersonation', {
               ...dd_user,
@@ -54,11 +54,11 @@ export class LoggingInterceptor implements NestInterceptor {
         this.tracer.getTracer().appsec.setUser(dd_user);
         this.tracer.getTracer().setUser(dd_user);
 
-        this.logger.info(`${context['args']['0'].method} ${context['args']['0'].url}`, {
+        this.logger.info(`${request.method} ${request.url}`, {
           query: request.query,
           user: dd_user,
-          version: process.env.DD_VERSION,
-          body: context['args']['0'].body,
+          version: process.env['DD_VERSION'],
+          body: request.body,
           duration: `${Date.now() - now}ms`,
         });
       }),

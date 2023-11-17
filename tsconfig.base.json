@@ -14,7 +14,6 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@coldpbc/nest": ["./libs/nest/src/index.ts"],
       "@coldpbc/animations": ["./libs/react/src/animations/index.ts"],
       "@coldpbc/assets": ["./libs/react/src/assets/index.ts"],
       "@coldpbc/components": ["./libs/react/src/components/index.ts"],
@@ -25,12 +24,14 @@
       "@coldpbc/interfaces": ["./libs/react/src/interfaces/index.ts"],
       "@coldpbc/lib": ["./libs/react/src/lib/index.ts"],
       "@coldpbc/mocks": ["./libs/react/src/__mocks__/index.ts"],
+      "@coldpbc/nest": ["./libs/nest/src/index.ts"],
       "@coldpbc/providers": ["./libs/react/src/providers/index.ts"],
       "@coldpbc/routes": ["./libs/react/src/routes/index.ts"],
       "@coldpbc/styles": ["./libs/react/src/styles/index.ts"],
       "@coldpbc/themes": ["./libs/react/src/themes/index.ts"],
       "nest": ["libs/nest/src/index.ts"],
-      "prisma": ["libs/prisma/src/index.ts"]
+      "prisma": ["libs/prisma/src/index.ts"],
+      "validation": ["libs/validation/src/index.ts"],
     }
   },
   "files": ["./node_modules/@nx/react/typings/cssmodule.d.ts", "./node_modules/@nx/react/typings/image.d.ts"],

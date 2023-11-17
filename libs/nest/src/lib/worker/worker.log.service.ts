@@ -3,11 +3,14 @@ import { AxiosError } from 'axios';
 import safeStringify from 'fast-safe-stringify';
 import winstonConfig from './winston.config';
 import winston, { createLogger } from 'winston';
-import { RedactorService } from '../redactor/redactor.service';
+import { RedactorService } from '../redactor';
+import { BaseWorker } from './worker.class';
+import { Tags } from '../primitives';
+import { merge } from 'lodash';
 
 /// test
 export class WorkerLogger implements LoggerService {
-  tags: any = { version: process.env['npm_package_version'], service: process.env['npm_package_name'] };
+  tags: Tags;
   redactor: RedactorService;
   logger: winston.Logger;
   context: string;
@@ -23,8 +26,14 @@ export class WorkerLogger implements LoggerService {
       meta,
     });
 
+    const pkg = JSON.parse(BaseWorker.getJSON('package.json'));
+    this.tags = { version: process.env['npm_package_version'] || pkg.version, service: process.env['npm_package_name'] || pkg.name };
     //Logger.overrideLogger(this.logger);
     this.redactor = new RedactorService();
+  }
+
+  public setTags(tags: Tags) {
+    this.tags = merge(this.tags, tags);
   }
 
   setRedactor(scrubber: RedactorService): WorkerLogger {

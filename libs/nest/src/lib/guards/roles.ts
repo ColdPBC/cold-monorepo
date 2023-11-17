@@ -1,12 +1,13 @@
-import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
+import { CanActivate, ExecutionContext, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { tracer } from 'dd-trace';
 import { filter, first } from 'lodash';
 import { Span } from 'nestjs-ddtrace';
 import { Observable } from 'rxjs';
 import { Reflector } from '@nestjs/core';
-import { BaseWorker } from '../../worker';
-import { CacheService } from '../../cache';
-import { AuthenticatedUser } from '../../primitives';
+import { BaseWorker } from '../worker';
+import { CacheService } from '../cache';
+import { AuthenticatedUser } from '../primitives';
+import { organizations } from 'validation';
 
 @Injectable()
 @Span()
@@ -17,7 +18,7 @@ export class RolesGuard extends BaseWorker implements CanActivate {
 
   async resolveRequest(request: any, user: AuthenticatedUser, roles: Array<string>) {
     let isValid = false;
-    let orgId = null;
+    let orgId = '';
 
     const dd_user = {
       id: user?.sub,
@@ -25,6 +26,17 @@ export class RolesGuard extends BaseWorker implements CanActivate {
       org_id: user?.coldclimate_claims?.org_id,
     };
 
+    tracer.setUser(dd_user);
+
+    this.tracer.getActiveSpan()?.addTags({
+      action: 'resolveRequest',
+      user: user.coldclimate_claims,
+      required_roles: roles,
+      url: request.url,
+      method: request.method,
+      query: request.query,
+      params: request.params,
+    });
     // Check if organization is being requested by name
     if (
       (request?.params?.nameOrId || request?.params?.orgId) &&
@@ -32,14 +44,15 @@ export class RolesGuard extends BaseWorker implements CanActivate {
     ) {
       if (request?.params?.nameOrId) {
         // since org was requested by name get all orgs from cache and filter by name
-        const orgs: any = await this.cache.get('organizations');
+        const orgs = (await this.cache.get('organizations')) as organizations[];
         const org = first(
           filter(orgs, {
             name: request?.params?.nameOrId ? request?.params?.nameOrId : request?.params?.orgId,
           }),
         );
 
-        orgId = org?.id; //set org id to the ID of the org that matched by name
+        orgId = org ? org?.id : '';
+        if (!orgId) throw new NotFoundException(`Unable to find cached org by name ${request?.params?.nameOrId | request?.params?.orgId}`); //set org id to the ID of the org that matched by name
       }
 
       //Check for impersonation flag
@@ -52,15 +65,10 @@ export class RolesGuard extends BaseWorker implements CanActivate {
         orgId = request?.params?.orgId;
       }
 
-      if (user.coldclimate_claims.org_id !== orgId && !user.isColdAdmin) {
-        this.logger.error(`User: ${user?.coldclimate_claims?.email} attempted to impersonate a user in another org: ${orgId}`, {
-          user,
-          roles,
-          params: request.params,
-        });
-        if (user && user?.coldclimate_claims) {
-          tracer.appsec.trackCustomEvent('impersonation-attempt', dd_user);
-        }
+      if (orgId && orgId.startsWith('org_') && user.coldclimate_claims.org_id !== orgId && !user.isColdAdmin) {
+        this.logger.error(`User: ${user?.coldclimate_claims?.email} attempted to impersonate a user in another org: ${orgId}`);
+        tracer.appsec.trackCustomEvent('invalid-impersonation-attempt', dd_user);
+
         throw new UnauthorizedException(`User: ${user?.coldclimate_claims?.email} attempted to impersonate a user in another org: ${orgId}`);
       }
 
@@ -68,11 +76,7 @@ export class RolesGuard extends BaseWorker implements CanActivate {
         isValid = user?.coldclimate_claims?.roles?.includes('cold:admin');
         // Log if user is impersonating an admin
         if (isValid) {
-          this.logger.warn(`User: ${user?.coldclimate_claims?.email} is impersonating user for org: ${orgId}`, {
-            user,
-            roles,
-            params: request.params,
-          });
+          this.logger.warn(`User: ${user?.coldclimate_claims?.email} is impersonating user for org: ${orgId}`);
           return isValid;
         }
       }
@@ -88,10 +92,7 @@ export class RolesGuard extends BaseWorker implements CanActivate {
     }
 
     if (!isValid) {
-      this.logger.error(`No matching roles found`, {
-        required: roles,
-        configured: user?.coldclimate_claims?.roles,
-      });
+      this.logger.error(`No matching roles found`);
 
       tracer.appsec.trackCustomEvent('missing-role', dd_user);
 
@@ -103,32 +104,36 @@ export class RolesGuard extends BaseWorker implements CanActivate {
 
   canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
     const roles = this.reflector.get<string[]>('roles', context.getHandler());
+    const request = context.switchToHttp().getRequest();
+    const user = request.user;
+
+    this.tracer.getTracer().appsec.setUser({
+      id: user?.sub,
+      email: user?.coldclimate_claims?.email,
+      org_id: user?.coldclimate_claims?.org_id,
+    });
+
+    this.tracer.getTracer().setUser({
+      id: user?.sub,
+      email: user?.coldclimate_claims?.email,
+      org_id: user?.coldclimate_claims?.org_id,
+    });
+
+    this.setTags({
+      action: 'resolveRequest',
+      user: user.coldclimate_claims,
+      required_roles: roles,
+      url: request.url,
+      method: request.method,
+      query: request.query,
+      params: request.params,
+    });
 
     if (!roles) {
       // this.logger.log(`no roles required for this route`);
       return true;
     }
 
-    const request = context.switchToHttp().getRequest();
-    const user = request.user;
-
     return this.resolveRequest(request, user, roles);
-  }
-
-  handleRequest(info: any, user: any, err: any) {
-    // You can throw an exception based on either "info" or "err" arguments
-    if (err || !user) {
-      throw err || new UnauthorizedException();
-    }
-
-    const dd_user = {
-      id: user?.sub,
-      email: user?.coldclimate_claims?.email,
-      org_id: user?.coldclimate_claims?.org_id,
-    };
-
-    tracer.appsec.setUser(dd_user);
-
-    return user;
   }
 }

@@ -1,7 +1,7 @@
 import { createZodDto } from '@anatine/zod-nestjs';
 import { extendApi } from '@anatine/zod-openapi';
 import * as z from 'zod';
-import { SubCategoriesSchema } from './sub-categories.schema';
+import { SubCategoriesSchema } from './subCategoriesSchema';
 
 export const CategorySchema = extendApi(
   z.object({

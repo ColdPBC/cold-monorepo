@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
-import { BaseWorker, PrismaService, CacheService } from 'nest';
+import { BaseWorker } from '../worker';
+import { CacheService } from '../cache';
+import { PrismaService } from '../prisma';
 
 @Injectable()
 export class TestOrgCleanup extends BaseWorker {

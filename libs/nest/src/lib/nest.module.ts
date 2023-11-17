@@ -13,7 +13,8 @@ import { PrismaModule, PrismaService } from './prisma';
 import { HealthController, HealthModule, HealthService } from './health';
 import { DarklyModule, DarklyService } from './darkly';
 import { ColdCacheModule } from './cache';
-import { JwtStrategy, JwtAuthGuard, AuthorizationModule } from './authorization';
+import { JwtStrategy, AuthorizationModule } from './authorization';
+import { JwtAuthGuard } from './guards';
 import { InterceptorModule } from './interceptors';
 
 @Module({

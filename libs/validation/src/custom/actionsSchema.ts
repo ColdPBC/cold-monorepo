@@ -1,6 +1,6 @@
 import { createZodDto } from '@anatine/zod-nestjs';
 import { z } from 'zod';
-import { ActionTemplateSchema } from './action_templates.schema';
+import { ActionTemplateSchema } from './actionTemplatesSchema';
 
 export const CreateActionItemSchema = z.object({
   id: z.string().uuid().optional(),

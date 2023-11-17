@@ -1,7 +1,7 @@
 import { createZodDto } from '@abitia/zod-dto';
 import { extendApi } from '@anatine/zod-openapi';
 import * as z from 'zod';
-import { ActivitySchema } from './activities.schema';
+import { ActivitySchema } from './activitiesSchema';
 
 export const SubCategorySchema = extendApi(
   z.object({
@@ -12,7 +12,7 @@ export const SubCategorySchema = extendApi(
   }),
 );
 
-export const SubCategoriesSchema = SubCategorySchema;
+export const SubCategoriesSchema = z.array(SubCategorySchema);
 
 export type ZodSubCategory = z.infer<typeof SubCategorySchema>;
 export type ZodSubCategories = z.infer<typeof SubCategoriesSchema>;

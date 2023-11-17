@@ -1,7 +1,7 @@
 import { createZodDto } from '@anatine/zod-nestjs';
 import { extendApi } from '@anatine/zod-openapi';
 import * as z from 'zod';
-import { FootprintSchema } from './footprint.schema';
+import { FootprintSchema } from './footprintSchema';
 
 export const ActivitySchema = extendApi(
   z.object({
