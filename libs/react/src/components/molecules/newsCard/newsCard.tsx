@@ -8,10 +8,7 @@ import { useColdContext } from '@coldpbc/hooks';
 import { ErrorType } from '@coldpbc/enums';
 
 const _NewsCard = () => {
-  const { data, isLoading, error } = useSWR<any>(
-    ['/news', 'GET'],
-    axiosFetcher,
-  );
+  const { data, isLoading, error } = useSWR<any, any, any>(['/news', 'GET'], axiosFetcher);
   const { logError } = useColdContext();
 
   if (error) {
@@ -19,11 +16,7 @@ const _NewsCard = () => {
     return null;
   }
 
-  const filteredNewsItems = data
-    ?.filter(
-      (newsItem: any) => newsItem.title && newsItem.image_url && newsItem.url,
-    )
-    .slice(0, 3);
+  const filteredNewsItems = data?.filter((newsItem: any) => newsItem.title && newsItem.image_url && newsItem.url).slice(0, 3);
   const isEmpty = filteredNewsItems?.length === 0;
 
   if (isEmpty || isLoading) {
@@ -40,7 +33,7 @@ const _NewsCard = () => {
 };
 
 export const NewsCard = withErrorBoundary(_NewsCard, {
-  FallbackComponent: (props) => <ErrorFallback {...props} />,
+  FallbackComponent: props => <ErrorFallback {...props} />,
   onError: (error, info) => {
     console.error('Error occurred in NewsCard: ', error);
   },
