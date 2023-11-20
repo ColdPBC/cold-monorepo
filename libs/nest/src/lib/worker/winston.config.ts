@@ -8,7 +8,7 @@ const winstonConfig = (context: string) => {
     transports: [
       new winston.transports.Console({
         format:
-          process.env.NODE_ENV === 'development'
+          process.env['NODE_ENV'] === 'development'
             ? winston.format.combine(winston.format.combine(winston.format.timestamp(), nestWinstonModuleUtilities.format.nestLike()))
             : winston.format.combine(winston.format.timestamp(), winston.format.json(), winston.format.align()),
       }),

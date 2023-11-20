@@ -392,12 +392,8 @@
           "type": "fargate",
           "memory": 2,
           "basePath": ".",
-          "buildType": "fromRepository",
-          "containerImage": {
-            "registryId": "cold-ecr-fc-r123elz",
-            "repository": "api-docker-images"
-          },
-          "domain": "api.coldclimate.online",
+          "buildType": "docker",
+          "domain": "api.coldclimate.wtf",
           "watchPaths": [
             "apps/cold-api/src/**",
             "apps/cold-api/prisma/**",
@@ -407,7 +403,7 @@
           ],
           "sidecars": [
             {
-              "name": "cold-datadog-fc-production",
+              "name": "cold-datadog-fc-staging",
               "image": "datadog/agent",
               "cpuAllotment": 0.5,
               "memoryAllotment": 0.25,
@@ -415,7 +411,7 @@
               "logging": true,
               "ports": [8125, 5001, 5000],
               "envVariables": {
-                "DD_ENV": "production",
+                "DD_ENV": "staging",
                 "DD_AGENT_MAJOR_VERSION": "7",
                 "DD_LOG_LEVEL": "ERROR",
                 "DD_API_KEY": {

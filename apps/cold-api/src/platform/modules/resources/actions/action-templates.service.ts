@@ -184,7 +184,7 @@ export class ActionTemplatesService extends BaseWorker {
       // re-cache all actions
       await this.getActionTemplates(user, true);
 
-      throw new HttpException(`Action ${id} deleted`, 204);
+      return `Action ${id} deleted`;
     } catch (e) {
       this.logger.error(e, { ...e });
       if (e.status == 204) {

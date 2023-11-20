@@ -14,8 +14,8 @@ dotenv.config();
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   logger: WorkerLogger;
-
-  constructor(private readonly tracer: TraceService, private readonly jwtService: JwtService, private readonly config: ConfigService) {
+  private tracer: TraceService = new TraceService();
+  constructor(private readonly jwtService: JwtService, private readonly config: ConfigService) {
     super({
       secretOrKeyProvider: passportJwtSecret({
         cache: true,
@@ -24,8 +24,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         jwksUri: `https://${config.get('AUTH0_DOMAIN')}/.well-known/jwks.json`,
       }),
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken() || ExtractJwt.fromUrlQueryParameter('access_token'),
-      audience: process.env.AUTH0_AUDIENCE,
-      issuer: `https://${process.env.AUTH0_DOMAIN}/`,
+      audience: process.env['AUTH0_AUDIENCE'],
+      issuer: `https://${process.env['AUTH0_DOMAIN']}/`,
       algorithms: ['RS256'],
     });
 
@@ -33,7 +33,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: any): Promise<unknown> {
-    if (!payload.aud.includes(process.env.AUTH0_AUDIENCE)) {
+    if (!payload.aud.includes(process.env['AUTH0_AUDIENCE'])) {
       return new UnauthorizedException('Invalid audience', payload);
     }
 
@@ -42,7 +42,10 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   decode(header: Headers): unknown {
-    const token = header['authorization'].replace('Bearer ', '');
+    const token = header.get('Authorization')?.replace('Bearer ', '');
+    if (!token) {
+      throw new UnauthorizedException('Invalid token');
+    }
     const decoded = this.jwtService.decode(token);
 
     if (decoded != null) {

@@ -11,7 +11,6 @@ import { actionTemplatePatchExample, actionTemplatePostExample, testActionTempla
 
 class ActionTemplateDto extends createZodDto(action_templatesSchema) {}
 //class ActionTemplatesDto extends createZodDto(z.array(action_templatesSchema)) {}
-
 @Controller('action-templates')
 @Span()
 @ApiTags('Action Templates')
@@ -157,6 +156,11 @@ export class ActionTemplatesController extends BaseWorker {
   @ApiOperation({
     summary: 'Delete Action Template',
     operationId: 'DeleteActionTemplate',
+    responses: {
+      204: {
+        description: 'Action Template Deleted',
+      },
+    },
   })
   @Delete(`:id`)
   @Roles(...coldAdminOnly)

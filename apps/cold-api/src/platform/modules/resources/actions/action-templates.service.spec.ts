@@ -1,29 +1,81 @@
 import { JwtService } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
-import { JwtStrategy } from '../../../../../../../libs/nest/src/lib/authorization/jwt.strategy';
-import { ColdCacheModule, CacheService, PrismaModule, PrismaService } from 'nest';
-import { CategoryValidationModule } from '../categories/validation/category-validation.module';
-import { SurveysModule } from '../surveys/surveys.module';
+import { CacheService, PrismaService } from 'nest';
+import { authenticatedUserExample } from '../_global/global.examples';
+import { actionTemplatePostExample, actionTemplatePatchExample } from './examples/action-template.examples';
+
 import { SurveysService } from '../surveys/surveys.service';
-import { ActionTemplatesController } from './action-templates.controller';
+import { v4 } from 'uuid';
 import { ActionTemplatesService } from './action-templates.service';
-import { ActionsController } from './actions.controller';
 import { ActionsService } from './actions.service';
+import { mockDeep } from 'jest-mock-extended';
 
 describe('ActionsService', () => {
   let service: ActionTemplatesService;
+  let actionTemplatesService: ActionTemplatesService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [PrismaModule, ColdCacheModule, CategoryValidationModule, SurveysModule],
-      controllers: [ActionTemplatesController, ActionsController],
-      providers: [ActionTemplatesService, ActionsService, JwtService, SurveysService, JwtStrategy, PrismaService, CacheService],
-    }).compile();
+      controllers: [],
+      providers: [ActionTemplatesService, PrismaService, ActionsService, JwtService, SurveysService, CacheService],
+    })
+      .overrideProvider(PrismaService)
+      .useValue({
+        action_templates: {
+          findMany: () => {
+            return [actionTemplatePostExample];
+          },
+          findUnique: () => {
+            return actionTemplatePostExample;
+          },
+          create: () => {
+            return actionTemplatePostExample;
+          },
+          update: () => {
+            return actionTemplatePatchExample;
+          },
+          delete: () => {
+            return null;
+          },
+        },
+      })
+      .overrideProvider(CacheService)
+      .useValue(mockDeep<CacheService>())
+      .overrideProvider(JwtService)
+      .useValue(mockDeep<JwtService>())
+      .overrideProvider(ActionsService)
+      .useValue(mockDeep<ActionsService>())
+      .overrideProvider(SurveysService)
+      .useValue(mockDeep<SurveysService>())
+      .compile();
+
+    actionTemplatesService = module.get(ActionTemplatesService);
 
     service = module.get<ActionTemplatesService>(ActionTemplatesService);
   });
 
   it('should be defined', () => {
     expect(service).toBeDefined();
+  });
+
+  it('created action matches template', async () => {
+    const response = await actionTemplatesService.createActionTemplate(authenticatedUserExample, actionTemplatePostExample);
+    expect(response).toMatchObject(actionTemplatePostExample);
+  });
+
+  it('get action matches template', async () => {
+    const response = await actionTemplatesService.getActionTemplates(authenticatedUserExample);
+    expect(response).toMatchObject([actionTemplatePostExample]);
+  });
+
+  it('update action matches template', async () => {
+    const response = await actionTemplatesService.updateActionTemplate(authenticatedUserExample, v4(), actionTemplatePatchExample);
+    expect(response).toMatchObject(actionTemplatePatchExample);
+  });
+
+  it('delete action returns correct id', async () => {
+    const id = v4();
+    const response = await actionTemplatesService.deleteActionTemplate(authenticatedUserExample, id);
+    expect(response).toEqual(`Action ${id} deleted`);
   });
 });

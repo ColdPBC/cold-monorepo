@@ -4,8 +4,8 @@ import { ConfigService, ConfigModule } from '@nestjs/config';
 import { redisStore } from 'cache-manager-redis-yet';
 
 import { CacheService } from './cache.service';
-import { DarklyModule } from '../darkly/darkly.module';
-import { DarklyService } from '../darkly/darkly.service';
+import { DarklyModule } from '../darkly';
+import { DarklyService } from '../darkly';
 
 @Module({
   imports: [
