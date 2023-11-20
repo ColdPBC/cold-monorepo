@@ -89,7 +89,7 @@
     "@nx/storybook": "16.1.4",
     "@nx/vite": "^16.7.4",
     "@nx/web": "^16.3.2",
-    "@nx/workspace": "16.1.4",
+    "@nx/workspace": "17.1.2",
     "@react-buddy/ide-toolbox": "^2.3.1",
     "@rollup/plugin-alias": "^5.0.0",
     "@rollup/plugin-babel": "^6.0.3",
