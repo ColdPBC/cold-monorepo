@@ -32,9 +32,18 @@ const setAxiosResponseInterceptor = (coldContext: any) => {
       return response;
     },
     (error) => {
-      logError(error, ErrorType.AxiosError, {
-        ...error,
-      });
+      // filter out 404 errors when fetching data from /categories
+      if (
+        !(
+          error.response &&
+          error.response.status === 404 &&
+          error.config.url?.includes('/categories')
+        )
+      ) {
+        logError(error, ErrorType.AxiosError, {
+          ...error,
+        });
+      }
       return Promise.reject(error);
     },
   );
