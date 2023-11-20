@@ -17,7 +17,7 @@ export class HttpExceptionFilter extends BaseWorker implements ExceptionFilter {
     const request = ctx.getRequest<Request>();
     const status = exception.getStatus();
 
-    const user: { coldclimate_claims: any } = get(request, 'user', { coldclimate_claims: {} });
+    const user: { coldclimate_claims?: any } = get(request, 'user', { coldclimate_claims: {} });
     this.traceService.getTracer().appsec.setUser({ ...user.coldclimate_claims });
 
     if (status >= 400 && status < 500) {
