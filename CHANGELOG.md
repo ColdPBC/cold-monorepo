@@ -1,3 +1,10 @@
+# [1.70.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.69.0...v1.70.0) (2023-11-22)
+
+
+### Features
+
+* filter out /categories errors when they are are a 404 ([c9a16a8](https://github.com/ColdPBC/cold-monorepo/commit/c9a16a82e0d6f45ca0448c33e03e1894282f6e0b))
+
 # [1.69.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.68.0...v1.69.0) (2023-11-22)
 
 
