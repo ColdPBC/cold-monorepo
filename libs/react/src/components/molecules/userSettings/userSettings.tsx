@@ -160,7 +160,7 @@ const _UserSettings = () => {
                 d="M42 78C42 66.75 48.75 60 59.9999 60C71.2498 60 78 66.75 78 78"
                 stroke="white"
                 strokeWidth="4.5"
-                stroke-linecap="round"
+                strokeLinecap="round"
               />
               <circle cx="60" cy="42" r="9" fill="white" />
             </svg>

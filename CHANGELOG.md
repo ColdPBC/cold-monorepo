@@ -1,3 +1,31 @@
+# [1.70.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.69.0...v1.70.0) (2023-11-22)
+
+
+### Features
+
+* filter out /categories errors when they are are a 404 ([c9a16a8](https://github.com/ColdPBC/cold-monorepo/commit/c9a16a82e0d6f45ca0448c33e03e1894282f6e0b))
+
+# [1.69.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.68.0...v1.69.0) (2023-11-22)
+
+
+### Bug Fixes
+
+* revert max height styling for sections progress ([7ea6614](https://github.com/ColdPBC/cold-monorepo/commit/7ea66141ccbd76ff8df1164a064c812de881814c))
+
+
+### Features
+
+* added max height restriction and correct background image styling ([843bc08](https://github.com/ColdPBC/cold-monorepo/commit/843bc080440a2a047bf3cc3ef69983a7b333a8d9))
+* set max height to 100px or viewport - 122px ([09dcdf6](https://github.com/ColdPBC/cold-monorepo/commit/09dcdf6c8a7de344bfc125b087817f79a3741593))
+
+# [1.68.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.67.0...v1.68.0) (2023-11-16)
+
+
+### Features
+
+* add response interceptor for axios to log error in datadogrum ([7c55229](https://github.com/ColdPBC/cold-monorepo/commit/7c55229585c1d5be9589ce99ce37dd4adb51277a))
+* added context object to add error to have more info when investigating ([4d924a8](https://github.com/ColdPBC/cold-monorepo/commit/4d924a8da9a6580e581001425df389ef091bc86c))
+
 # [1.67.0](https://github.com/ColdPBC/ui/compare/v1.66.0...v1.67.0) (2023-11-14)
 
 
