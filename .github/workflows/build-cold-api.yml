@@ -82,6 +82,7 @@ jobs:
           PR_NUMBER: ${{ github.event.number }}
         if: startsWith(env.BRANCH_NAME,'main')
         run: |
+          cd libs/nest /
           prisma generate  /
           prisma migrate deploy --preview-feature /
       - name: Seed Production DB
