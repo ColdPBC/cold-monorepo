@@ -60,7 +60,7 @@ jobs:
           DATABASE_URL: ${{ secrets.STAGING_DATABASE_URL }}
         if: startsWith(env.BRANCH_NAME,'cold') || startsWith(env.BRANCH_NAME,'Cold') || startsWith(env.BRANCH_NAME,'COLD')
         run: |
-          prisma generate  /
+          prisma generate --schema=libs/nest/prisma/schema.prisma /
           prisma migrate deploy --preview-feature /
       - name: Seed Staging DB
         env:
