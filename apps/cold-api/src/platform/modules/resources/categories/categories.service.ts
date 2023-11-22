@@ -3,10 +3,9 @@ import { detailedDiff, diff } from 'deep-object-diff';
 import { isEmpty, isUUID } from 'class-validator';
 import { Span } from 'nestjs-ddtrace';
 import { ObjectUtils, AuthenticatedUser, BaseWorker, CacheService, DarklyService, PrismaService, Tags } from 'nest';
-import { ZodCategoryResponseDto, category_definitions } from 'validation';
+import { category_definitions, category_definitionsCustomValidators, ZodCategoryDefinitionItemDto, ZodCreateCategoryDefinitionItemDto } from 'validation';
 import { v4 } from 'uuid';
 import { get, merge, omit, find } from 'lodash';
-import { CategoryDefinitionValidator } from './validation/category-definition.validator';
 
 /**
  * @description This service is responsible for managing category definitions
@@ -17,17 +16,15 @@ export class CategoriesService extends BaseWorker {
   test_orgs: Array<{ id: string; name: string; display_name: string }>;
   objectUtils = new ObjectUtils();
 
-  constructor(
-    readonly darkly: DarklyService,
-    private prisma: PrismaService,
-    private readonly cache: CacheService,
-    private readonly categoryDefinitionValidator: CategoryDefinitionValidator,
-  ) {
+  constructor(readonly darkly: DarklyService, private prisma: PrismaService, private readonly cache: CacheService) {
     super('CategoriesService');
 
-    this.darkly.getJSONFlag('org-whitelist').then(response => {
-      this.test_orgs = response;
-    });
+    this.init();
+  }
+
+  async init() {
+    await this.prisma.$connect();
+    this.test_orgs = await this.darkly.getJSONFlag('org-whitelist');
   }
 
   /**
@@ -74,7 +71,7 @@ export class CategoriesService extends BaseWorker {
    * @param {string} orgId
    * @returns {Promise<CategoryDefinitionDto>}
    */
-  async findFull(user: AuthenticatedUser, bypassCache?: boolean, orgId?: string): Promise<category_definitions> {
+  async findFull(user: AuthenticatedUser, bypassCache?: boolean, orgId?: string): Promise<ZodCategoryDefinitionItemDto> {
     const categoryCacheKey = this.getCategoryCacheKey(user, orgId);
 
     // Return cached
@@ -122,7 +119,7 @@ export class CategoriesService extends BaseWorker {
    * @param bypassCache
    * @param orgId
    */
-  async findByName(user: AuthenticatedUser, bypassCache?: boolean, orgId?: string, name?: string): Promise<category_definitions | undefined> {
+  async findByName(user: AuthenticatedUser, bypassCache?: boolean, orgId?: string, name?: string): Promise<ZodCategoryDefinitionItemDto | undefined> {
     if (isEmpty(name) || name == ':name') {
       throw new BadRequestException(`Name is required!`);
     }
@@ -130,7 +127,7 @@ export class CategoriesService extends BaseWorker {
     const categoryCacheKey = this.getCategoryCacheKey(user, orgId, name);
 
     if (!bypassCache) {
-      const cached = (await this.cache.get(categoryCacheKey)) as category_definitions;
+      const cached = (await this.cache.get(categoryCacheKey)) as ZodCategoryDefinitionItemDto;
 
       if (cached) {
         return cached;
@@ -156,7 +153,7 @@ export class CategoriesService extends BaseWorker {
    * @param user
    * @param impersonateOrg
    */
-  async submitResults(submission: any, user: AuthenticatedUser, impersonateOrg?: string): Promise<category_definitions> {
+  async submitResults(submission: any, user: AuthenticatedUser, impersonateOrg?: string): Promise<ZodCategoryDefinitionItemDto> {
     let org = (await this.cache.get(`organizations:${user.isColdAdmin && impersonateOrg ? impersonateOrg : user.coldclimate_claims.org_id}`)) as any;
     if (!org) {
       org = await this.prisma.organizations.findUnique({
@@ -268,10 +265,10 @@ export class CategoriesService extends BaseWorker {
    * @param user
    * @param createCategoryDefinitionDto
    */
-  async create(user: AuthenticatedUser, createCategoryDefinitionDto: ZodCategoryResponseDto): Promise<ZodCategoryResponseDto> {
+  async create(user: AuthenticatedUser, createCategoryDefinitionDto: any): Promise<category_definitionsCustomValidators> {
     const org = (await this.cache.get(`organizations:${user.coldclimate_claims.org_id}`)) as any;
     const tags: Tags = {
-      name: createCategoryDefinitionDto?.name,
+      name: createCategoryDefinitionDto.name,
       organization: omit(org, ['branding', 'phone', 'street_address', 'created_at', 'updated_at']),
       user: user.coldclimate_claims,
       ...this.tags,
@@ -296,9 +293,9 @@ export class CategoriesService extends BaseWorker {
         throw new BadRequestException(`A category definition with the name ${createCategoryDefinitionDto.name} already exists`);
       }
 
-      const definition: any = await this.prisma.category_definitions.create({
+      const definition = (await this.prisma.category_definitions.create({
         data: createCategoryDefinitionDto,
-      });
+      })) as category_definitionsCustomValidators;
 
       if (definition) {
         tags.id = definition.id;
@@ -341,7 +338,7 @@ export class CategoriesService extends BaseWorker {
    * @param updateSurveyDefinitionDto
    * @param user
    */
-  async update(id: string, updateSurveyDefinitionDto: any, user: AuthenticatedUser): Promise<category_definitions> {
+  async update(id: string, updateSurveyDefinitionDto: any, user: AuthenticatedUser): Promise<ZodCategoryDefinitionItemDto> {
     const org = (await this.cache.get(`organizations:${user.coldclimate_claims.org_id}`)) as any;
     const tags: Tags = {
       organization: omit(org, ['branding', 'phone', 'street_address', 'created_at', 'updated_at']),

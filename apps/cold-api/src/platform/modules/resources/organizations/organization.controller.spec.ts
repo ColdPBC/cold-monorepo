@@ -4,26 +4,115 @@ import { MemberService } from '../auth0/members/member.service';
 import { OrganizationController } from './organization.controller';
 import { OrganizationService } from './organization.service';
 import { HttpModule } from '@nestjs/axios';
-import { ColdCacheModule, CacheService } from 'nest';
+import { ColdCacheModule, CacheService, JwtStrategy, PrismaService, DarklyService } from 'nest';
 import { RoleModule } from '../auth0/roles/role.module';
 import { Auth0UtilityService } from '../auth0/auth0.utility.service';
 import { RoleService } from '../auth0/roles/role.service';
+import { JwtService } from '@nestjs/jwt';
+import { mockDeep } from 'jest-mock-extended';
+import { authenticatedUserExample, fullReqExample } from '../_global/global.examples';
+import { CreateOrganizationDto } from './dto/organization.dto';
+import { undefined } from 'zod';
 
-describe('Auth0Controller', () => {
+describe('Organization Controller', () => {
   let controller: OrganizationController;
-
+  let service: OrganizationService;
+  const mock: CreateOrganizationDto = {
+    branding: {},
+    city: 'undefined',
+    created_at: new Date(),
+    display_name: '',
+    email: 'undefined',
+    name: '',
+    phone: 'undefined',
+    state: 'undefined',
+    street_address: 'undefined',
+    updated_at: new Date(),
+    zip: 'undefined',
+  };
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [HttpModule, ColdCacheModule, RoleModule, MemberModule],
       controllers: [OrganizationController],
       providers: [OrganizationService, Auth0UtilityService, CacheService, RoleService, MemberService],
       exports: [OrganizationService, Auth0UtilityService],
-    }).compile();
+    })
+      .overrideProvider(OrganizationService)
+      .useValue(mockDeep<OrganizationService>())
+      .overrideProvider(Auth0UtilityService)
+      .useValue(mockDeep<Auth0UtilityService>())
+      .overrideProvider(RoleService)
+      .useValue(mockDeep<RoleService>())
+      .overrideProvider(MemberService)
+      .useValue(mockDeep<MemberService>())
+      .overrideProvider(JwtService)
+      .useValue(mockDeep<JwtService>())
+      .overrideProvider(JwtStrategy)
+      .useValue(mockDeep<JwtStrategy>())
+      .overrideProvider(PrismaService)
+      .useValue(mockDeep<PrismaService>())
+      .overrideProvider(CacheService)
+      .useValue(mockDeep<CacheService>())
+      .overrideProvider(DarklyService)
+      .useValue({
+        getJSONFlag: jest.fn().mockReturnValue(true),
+      })
+      .compile();
 
     controller = module.get<OrganizationController>(OrganizationController);
+    service = module.get<OrganizationService>(OrganizationService);
   });
 
   it('should be defined', () => {
     expect(controller).toBeDefined();
+  });
+
+  it('AddUserToOrganization called', async () => {
+    await controller.addMemberToOrganizationAndRole('123', 'role', 'userid', fullReqExample);
+    expect(service.addUserToOrganization).toHaveBeenCalled();
+  });
+
+  it('CreateOrganization called', async () => {
+    await controller.createOrganization('123', mock, fullReqExample);
+    expect(service.createColdOrg).toHaveBeenCalled();
+  });
+
+  it('GetOrganizations called', async () => {
+    await controller.getOrganizations(true, { name: 'name', id: null });
+    expect(service.getOrganizations).toHaveBeenCalled();
+  });
+
+  it('GetOrganization called', async () => {
+    await controller.getOrganization('123', fullReqExample);
+    expect(service.getOrganization).toHaveBeenCalled();
+  });
+
+  it('GetOrgUsersRoles called', async () => {
+    await controller.getOrgUsersRoles(fullReqExample, '123', 'userId');
+    expect(service.getOrgUserRoles).toHaveBeenCalled();
+  });
+
+  it('UpdateOrgUserRoles called', async () => {
+    await controller.updateOrgUserRoles(fullReqExample, '123', 'role', 'userid');
+    expect(service.updateOrgUserRoles).toHaveBeenCalled();
+  });
+
+  it('InviteUser called', async () => {
+    await controller.inviteUser(fullReqExample, { user_email: 'user', inviter_name: 'inviter', roleId: 'rol_1234' }, 'orgId');
+    expect(service.inviteUser).toHaveBeenCalled();
+  });
+
+  it('DeleteInvitation called', async () => {
+    await controller.removeInvitation('orgId', 'invId', fullReqExample);
+    expect(service.deleteInvitation).toHaveBeenCalled();
+  });
+
+  it('RemoveUserFromOrganization called', async () => {
+    await controller.removeMembers('orgId', { members: ['memberid'] }, fullReqExample);
+    expect(service.removeUserFromOrganization).toHaveBeenCalled();
+  });
+
+  it('DeleteInvitation called', async () => {
+    await controller.removeOrg('orgId', fullReqExample);
+    expect(service.deleteOrganization).toHaveBeenCalled();
   });
 });

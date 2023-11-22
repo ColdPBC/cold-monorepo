@@ -20,4 +20,9 @@ export const authenticatedUserExample = {
   isColdAdmin: true,
   isMember: false,
 };
+
+export const fullReqExample = { headers: {}, body: {}, query: {}, user: authenticatedUserExample };
+export const noBodyReqExample = { headers: {}, query: {}, user: authenticatedUserExample };
+export const noBodyOrQueryReqExample = { headers: {}, user: authenticatedUserExample };
+export const noHeadersOrQueryOrBodyReqExample = { user: authenticatedUserExample };
 export const testOrgNameExample = 'Test Organization';

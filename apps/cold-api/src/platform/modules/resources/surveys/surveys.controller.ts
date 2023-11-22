@@ -75,28 +75,9 @@ export class SurveysController extends BaseWorker {
     @Query('impersonateOrg') orgId?: string,
     @Query('bpc') bpc?: boolean,
   ) {
-    if (!name && !type) {
-      // return new HttpException('Must provide either name or type query parameters', 400);
-    }
-    const response = await this.surveyService.findAll(req.user, bpc, orgId);
+    const response = await this.surveyService.findAll(req.user, { name: name, type: type }, bpc, orgId);
 
-    const filtered = filter(response, survey => {
-      if (name && type) {
-        return survey.name === name && survey.type === type;
-      } else if (name) {
-        return survey.name === name;
-      } else if (type) {
-        return survey.type === type;
-      } else {
-        return true;
-      }
-    });
-
-    if (filtered.length === 0) {
-      throw new HttpException(`No surveys found with supplied filter`, 404);
-    }
-
-    return filtered;
+    return response;
 
     //return this.surveyService.findAll(req.user, bpc, orgId);
   }
@@ -141,25 +122,9 @@ export class SurveysController extends BaseWorker {
     if (!name && !type) {
       // return new HttpException('Must provide either name or type query parameters', 400);
     }
-    const response = await this.surveyService.findAll(req.user, bpc, orgId);
+    const response = await this.surveyService.findAll(req.user, { name, type }, bpc, orgId);
 
-    const filtered = filter(response, survey => {
-      if (name && type) {
-        return survey.name === name && survey.type === type;
-      } else if (name) {
-        return survey.name === name;
-      } else if (type) {
-        return survey.type === type;
-      } else {
-        return true;
-      }
-    });
-
-    if (filtered.length === 0) {
-      throw new HttpException(`No surveys found with supplied filter`, 404);
-    }
-
-    return filtered;
+    return response;
 
     //return this.surveyService.findAll(req.user, bpc, orgId);
   }
@@ -228,9 +193,7 @@ export class SurveysController extends BaseWorker {
     @Query('bpc') bpc?: boolean,
   ) {
     const response = await this.surveyService.findOne(name, req.user, bpc, orgId);
-    if (type && response.type !== type) {
-      throw new HttpException(`No Surveys found named ${name} with the type of ${type}`, 404);
-    }
+
     return response;
   }
 

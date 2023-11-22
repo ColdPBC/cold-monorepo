@@ -13,7 +13,6 @@ export const newsSchema = z.object({
   title: z.string(),
   url: z.string().url(),
   image_url: z.string().url(),
-  publish: z.boolean(),
   published_at: z.coerce.date(),
   source_name: z.string(),
   /**
@@ -26,6 +25,7 @@ export const newsSchema = z.object({
    * @DtoReadOnly
    */
   updated_at: z.date().optional(),
+  publish: z.boolean(),
 })
 
 export type news = z.infer<typeof newsSchema>

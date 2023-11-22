@@ -5,7 +5,6 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { passportJwtSecret } from 'jwks-rsa';
 import * as dotenv from 'dotenv';
 import { JwtService } from '@nestjs/jwt';
-import { ConfigService } from '@nestjs/config';
 import { WorkerLogger } from 'nest';
 
 dotenv.config();
@@ -15,13 +14,13 @@ dotenv.config();
 export class JwtStrategy extends PassportStrategy(Strategy) {
   logger: WorkerLogger;
   private tracer: TraceService = new TraceService();
-  constructor(private readonly jwtService: JwtService, private readonly config: ConfigService) {
+  constructor(private readonly jwtService: JwtService) {
     super({
       secretOrKeyProvider: passportJwtSecret({
         cache: true,
         rateLimit: true,
         jwksRequestsPerMinute: 5,
-        jwksUri: `https://${config.get('AUTH0_DOMAIN')}/.well-known/jwks.json`,
+        jwksUri: `https://${process.env['AUTH0_DOMAIN']}/.well-known/jwks.json`,
       }),
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken() || ExtractJwt.fromUrlQueryParameter('access_token'),
       audience: process.env['AUTH0_AUDIENCE'],

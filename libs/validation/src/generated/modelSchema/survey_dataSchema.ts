@@ -12,7 +12,6 @@ import { SurveyDefinitionSchema } from '../../custom'
  */
 export const survey_dataSchema = z.object({
   id: z.string().uuid(),
-  survey_definition_id: z.string().uuid(),
   organization_id: z.string().uuid(),
   data: SurveyDefinitionSchema.optional(),
   /**
@@ -25,6 +24,7 @@ export const survey_dataSchema = z.object({
    * @DtoReadOnly
    */
   updated_at: z.date().optional(),
+  survey_definition_id: z.string().uuid(),
 })
 
 export type survey_data = z.infer<typeof survey_dataSchema>

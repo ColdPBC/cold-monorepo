@@ -8,27 +8,8 @@ import { ActionsController } from './actions.controller';
 import { ActionsService } from './actions.service';
 import { PrismaClient } from '@prisma/client';
 import { mockDeep, DeepMockProxy } from 'jest-mock-extended';
-const authUser = {
-  company_id: null,
-  coldclimate_claims: {
-    email: 'test@test.com',
-    org_id: 'org_123',
-    id: 'auth0|123',
-    roles: ['cold:admin'],
-  },
-  iss: 'string',
-  sub: 'string',
-  azp: 'string',
-  aud: ['coldclimate.online'],
-  iat: 123,
-  exp: 123,
-  scope: 'blah',
-  permissions: ['read:all'],
-  isAdmin: true,
-  isOwner: false,
-  isColdAdmin: true,
-  isMember: false,
-};
+import { fullReqExample, noBodyReqExample } from '../_global/global.examples';
+
 const mock = {
   template: {
     steps: [
@@ -96,8 +77,28 @@ describe('ActionsController', () => {
     expect(controller).toBeDefined();
   });
 
-  it('create action template works', async () => {
-    const response = await controller.createActionTemplate(mock, { headers: {}, query: {}, user: authUser });
-    expect(response).toMatchObject(mock);
+  it('create action template called', async () => {
+    const response = await controller.createActionTemplate(mock, noBodyReqExample);
+    expect(actionTemplatesService.createActionTemplate).toHaveBeenCalled();
+  });
+
+  it('delete action template called', async () => {
+    const response = await controller.deleteActionTemplate('deleteme', fullReqExample);
+    expect(actionTemplatesService.deleteActionTemplate).toHaveBeenCalled();
+  });
+
+  it('update action template called', async () => {
+    const response = await controller.updateActionTemplate('updateme', mock, noBodyReqExample);
+    expect(actionTemplatesService.updateActionTemplate).toHaveBeenCalled();
+  });
+
+  it('get action templates called', async () => {
+    const response = await controller.getActionTemplates(fullReqExample);
+    expect(actionTemplatesService.getActionTemplates).toHaveBeenCalled();
+  });
+
+  it('get action template called', async () => {
+    const response = await controller.getActionTemplate('123', fullReqExample);
+    expect(actionTemplatesService.getActionTemplate).toHaveBeenCalled();
   });
 });

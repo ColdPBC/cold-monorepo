@@ -1,8 +1,8 @@
-import { BadRequestException, Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
+import { BadRequestException, HttpException, Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
 import { organizations, survey_types } from '@prisma/client';
 import { isUUID } from 'class-validator';
 import { diff } from 'deep-object-diff';
-import { find, merge, omit, map } from 'lodash';
+import { find, merge, omit, map, filter } from 'lodash';
 import { Span, TraceService } from 'nestjs-ddtrace';
 import { v4 } from 'uuid';
 import { ZodSurveyResponseDto } from 'validation';
@@ -13,12 +13,14 @@ import { CacheService, DarklyService, PrismaService, BaseWorker, AuthenticatedUs
 export class SurveysService extends BaseWorker {
   exclude_orgs: Array<{ id: string; name: string; display_name: string }>;
 
-  constructor(readonly darkly: DarklyService, readonly tracer: TraceService, private prisma: PrismaService, private readonly cache: CacheService) {
+  constructor(readonly darkly: DarklyService, private prisma: PrismaService, private readonly cache: CacheService) {
     super('SurveysService');
 
-    this.darkly.getJSONFlag('org-whitelist').then(response => {
-      this.exclude_orgs = response;
-    });
+    this.init();
+  }
+
+  async init() {
+    this.exclude_orgs = await this.darkly.getJSONFlag('org-whitelist');
   }
 
   /***
@@ -116,11 +118,13 @@ export class SurveysService extends BaseWorker {
   /***
    * This action returns all survey definitions
    * @param user
+   * @param surveyFilter
    * @param bpc
    * @param impersonateOrg
    */
-  async findAll(user: AuthenticatedUser, bpc?: boolean, impersonateOrg?: string): Promise<ZodSurveyResponseDto[]> {
+  async findAll(user: AuthenticatedUser, surveyFilter?: { name: string; type: string }, bpc?: boolean, impersonateOrg?: string): Promise<ZodSurveyResponseDto[]> {
     this.setTags({ user: user.coldclimate_claims, bpc, impersonateOrg });
+    let surveys = [] as ZodSurveyResponseDto[];
 
     if (impersonateOrg && user.isColdAdmin) {
       const surveyData = await this.prisma.survey_data.findMany({
@@ -129,7 +133,6 @@ export class SurveysService extends BaseWorker {
         },
       });
 
-      const surveys = [] as ZodSurveyResponseDto[];
       for (const item of surveyData) {
         const def = await this.findOne(item.survey_definition_id, user, bpc, impersonateOrg);
         if (def) {
@@ -138,11 +141,28 @@ export class SurveysService extends BaseWorker {
       }
 
       this.logger.info(`found ${surveys.length} surveys for org: ${impersonateOrg}`, { surveys: map(surveys, 'id') });
-      return surveys;
+    } else {
+      const surveys = (await this.prisma.survey_definitions.findMany()) as ZodSurveyResponseDto[];
+      this.logger.info(`found ${surveys.length} surveys`);
     }
 
-    const surveys = (await this.prisma.survey_definitions.findMany()) as ZodSurveyResponseDto[];
-    this.logger.info(`found ${surveys.length} surveys`);
+    if (surveyFilter) {
+      surveys = filter(surveys, survey => {
+        if (surveyFilter.name && surveyFilter.type) {
+          return survey.name === surveyFilter.name && survey.type === surveyFilter.type;
+        } else if (surveyFilter.name) {
+          return survey.name === surveyFilter.name;
+        } else if (surveyFilter.type) {
+          return survey.type === surveyFilter.type;
+        } else {
+          return true;
+        }
+      });
+
+      if (surveys.length === 0) {
+        throw new HttpException(`No surveys found with supplied filter`, 404);
+      }
+    }
 
     return surveys;
   }

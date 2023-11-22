@@ -1,0 +1,881 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`API Tests Authenticated Tests Action Templates GET /action-templates 1`] = `
+[
+  {
+    "created_at": "2023-11-22T04:46:55.193Z",
+    "id": "9c106bb5-c580-4d1b-aa57-4fb2f575afcf",
+    "template": {
+      "areas_of_impact": [
+        "Electricity",
+      ],
+      "dependent_surveys": [
+        {
+          "name": "test_survey",
+        },
+      ],
+      "due_date": "2023-10-05T19:15:14.550Z",
+      "image_url": "https://images.unsplash.com/photo-1610891015188-5369212db097?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+      "objective_description": "Test Objective Description",
+      "overview": "Reduce your company's reliance on fossil fuels by purchasing renewable electricity for your facility.",
+      "process_description": "this is our process_description",
+      "ready_to_execute": false,
+      "steps": [
+        {
+          "complete": false,
+          "description": "Test Step 3",
+          "overview": "Sign up for your utility's renewable energy program",
+        },
+      ],
+      "subcategory": "facilities",
+      "title": "Test Action Template",
+    },
+    "updated_at": "2023-11-22T04:46:55.193Z",
+  },
+]
+`;
+
+exports[`API Tests Authenticated Tests Action Templates GET /action-templates/:id 1`] = `
+{
+  "created_at": "2023-11-22T04:46:55.193Z",
+  "id": "9c106bb5-c580-4d1b-aa57-4fb2f575afcf",
+  "template": {
+    "areas_of_impact": [
+      "Electricity",
+    ],
+    "dependent_surveys": [
+      {
+        "name": "test_survey",
+      },
+    ],
+    "due_date": "2023-10-05T19:15:14.550Z",
+    "image_url": "https://images.unsplash.com/photo-1610891015188-5369212db097?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+    "objective_description": "Test Objective Description",
+    "overview": "Reduce your company's reliance on fossil fuels by purchasing renewable electricity for your facility.",
+    "process_description": "this is our process_description",
+    "ready_to_execute": false,
+    "steps": [
+      {
+        "complete": false,
+        "description": "Test Step 3",
+        "overview": "Sign up for your utility's renewable energy program",
+      },
+    ],
+    "subcategory": "facilities",
+    "title": "Test Action Template",
+  },
+  "updated_at": "2023-11-22T04:46:55.193Z",
+}
+`;
+
+exports[`API Tests Authenticated Tests Action Templates POST /action-templates 1`] = `
+{
+  "created_at": "2023-11-22T04:46:55.193Z",
+  "id": "9c106bb5-c580-4d1b-aa57-4fb2f575afcf",
+  "template": {
+    "areas_of_impact": [
+      "Electricity",
+    ],
+    "dependent_surveys": [
+      {
+        "name": "test_survey",
+      },
+    ],
+    "due_date": "2023-10-05T19:15:14.550Z",
+    "image_url": "https://images.unsplash.com/photo-1610891015188-5369212db097?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+    "objective_description": "Test Objective Description",
+    "overview": "Reduce your company's reliance on fossil fuels by purchasing renewable electricity for your facility.",
+    "process_description": "this is our process_description",
+    "ready_to_execute": false,
+    "steps": [
+      {
+        "complete": false,
+        "description": "Test Step 3",
+        "overview": "Sign up for your utility's renewable energy program",
+      },
+    ],
+    "subcategory": "facilities",
+    "title": "Test Action Template",
+  },
+  "updated_at": "2023-11-22T04:46:55.193Z",
+}
+`;
+
+exports[`API Tests Authenticated Tests Categories GET /categories 1`] = `
+{
+  "created_at": "2023-11-22T03:11:40.014Z",
+  "definition": {
+    "categories": {
+      "climate_leadership": {
+        "category_name": "Climate Leadership",
+        "idx": 2,
+        "subcategories": {
+          "community_impact": {
+            "activities": {
+              "collective_action_and_advocacy": {
+                "activity_description": "Non-financial contribution of time or influence to a group or cause that the company believes in",
+                "activity_name": "Collective Action And Advocacy",
+              },
+              "philanthropy": {
+                "activity_description": "Financial contribution to mission-aligned group or cause",
+                "activity_name": "Philanthropy",
+              },
+            },
+            "idx": 1,
+            "journey_score": null,
+            "subcategory_name": "Community Impact",
+          },
+          "internal_alignment": {
+            "activities": {
+              "additional_environmental_issues": {
+                "activity_description": "Actions & goals on water, biodiversity, etc.",
+                "activity_name": "Additional Environmental Issues",
+              },
+              "client_work": {
+                "activity_description": "Introducing environmentally friendly choices into work products for clients",
+                "activity_name": "Client Work",
+              },
+              "finance": {
+                "activity_description": "Climate friendly financial stewardship (banking and investments) and decision making",
+                "activity_name": "Finance",
+              },
+              "hr": {
+                "activity_description": "Drive impact and improve employee retention through strategic environmental personnel management",
+                "activity_name": "HR",
+              },
+              "long-term_planning": {
+                "activity_description": "Ensure long-term impact through strategic business planning and executive-level governance",
+                "activity_name": "Long Term Planning",
+              },
+              "purchasing": {
+                "activity_description": "Ensure environmental impact is prioritized through supplier choice & product selection",
+                "activity_name": "Purchasing",
+              },
+              "transparency": {
+                "activity_description": "Disclosure of environmental performance & stewardship",
+                "activity_name": "Transparency",
+              },
+            },
+            "idx": 0,
+            "journey_score": null,
+            "subcategory_name": "Internal Alignment",
+          },
+        },
+      },
+      "company_decarbonization": {
+        "category_name": "Company Decarbonization",
+        "idx": 0,
+        "subcategories": {
+          "facilities": {
+            "activities": {
+              "electricity_leased": {
+                "activity_description": "Electricity consumption at all company leased facilities",
+                "activity_name": "Electricity at Leased",
+              },
+              "electricity_owned": {
+                "activity_description": "Electricity consumption at all company owned facilities",
+                "activity_name": "Electricity at Owned",
+              },
+              "fuel_leased": {
+                "activity_description": "Natural Gas, Propane, and Diesel consumption at all company leased facilities",
+                "activity_name": "Fuel at Leased",
+              },
+              "fuel_owned": {
+                "activity_description": "Natural Gas, Propane, and Diesel consumption at all company owned facilities",
+                "activity_name": "Fuel at Owned",
+              },
+            },
+            "idx": 0,
+            "journey_score": null,
+            "subcategory_name": "Facilities",
+          },
+          "operations": {
+            "activities": {
+              "business_equipment": {
+                "activity_description": "Printers, sinks & toilets, computers, printers, other electronic appliances",
+                "activity_name": "Business Equipment",
+              },
+              "business_supplies": {
+                "activity_description": "Consumables and single-use items: Inks, papers, napkins & towels, etc.",
+                "activity_name": "Business Supplies",
+              },
+              "cloud_computing": {
+                "activity_description": "Server & SaaS usage. ",
+                "activity_name": "Cloud Computing",
+              },
+              "furniture": {
+                "activity_description": "Furniture for offices, company-owned or leased residences, and other worksites",
+                "activity_name": "Furniture",
+              },
+              "machinery_electricity": {
+                "activity_description": "Electricity for forklifts, excavators, cranes, other heavy machinery",
+                "activity_name": "Machinery Electricity",
+              },
+              "machinery_fuel": {
+                "activity_description": "Fuel for forklifts, excavators, cranes, other heavy machinery",
+                "activity_name": "Machinery Fuel",
+              },
+              "professional_services": {
+                "activity_description": "Creative, marketing and communications, consultants, legal, etc.",
+                "activity_name": "Professional Services",
+              },
+            },
+            "idx": 2,
+            "journey_score": null,
+            "subcategory_name": "Operations",
+          },
+          "product": {
+            "activities": {
+              "downstream_shipping_and_freight": {
+                "activity_description": "Movement of finished product to distributors, retailers, and customers by land, sea, or air",
+                "activity_name": "Downstream Shipping & Freight",
+              },
+              "engineering_and_innovation": {
+                "activity_description": "Design new products and services for environmental impact",
+                "activity_name": "Engineering & Innovation",
+              },
+              "manufacturing_energy": {
+                "activity_description": "Process energy (electric + heat) used for making products",
+                "activity_name": "Manufacturing Energy",
+              },
+              "manufacturing_waste": {
+                "activity_description": "Reduce production-related materials waste",
+                "activity_name": "Manufacturing Waste",
+              },
+              "materials": {
+                "activity_description": "Purchased raw materials and manufactured inputs",
+                "activity_name": "Materials",
+              },
+              "packaging_disposal": {
+                "activity_description": "Consumer disposal of packaging (recycling, composting, trash, etc.)",
+                "activity_name": "Packaging Disposal",
+              },
+              "packaging_materials": {
+                "activity_description": "What raw materials + manufactured products are purchased for packaging",
+                "activity_name": "Packaging Materials",
+              },
+              "product_use": {
+                "activity_description": "Optimize product use impact through customer education and behavior change",
+                "activity_name": "Product Use",
+              },
+              "upstream_shipping_and_freight": {
+                "activity_description": "Movement of materials and manufactured inputs to manufacturing facilities (includes import freight by land, air, or sea)",
+                "activity_name": "Upstream Shipping & Freight",
+              },
+            },
+            "idx": 3,
+            "journey_score": null,
+            "subcategory_name": "Product",
+          },
+          "travel": {
+            "activities": {
+              "air_travel": {
+                "activity_description": "Business-related air travel, domestic and international",
+                "activity_name": "Air Travel",
+              },
+              "commuting": {
+                "activity_description": "Employee transportation to/from worksite (ICE, EV, bus, train, scooter, bike, walking, etc.)",
+                "activity_name": "Commuting",
+              },
+              "other_travel": {
+                "activity_description": "Rail, boat, taxi, and car service travel, hotel and boarding costs, food and expenses, etc.",
+                "activity_name": "Other Travel",
+              },
+              "vehicle_electricity": {
+                "activity_description": "Electricity for Sales, Executive, Delivery, and Operational Fleet Vehicles either owned or leased",
+                "activity_name": "Vehicle Electricity",
+              },
+              "vehicle_fuel": {
+                "activity_description": "Fuel for Sales, Executive, Delivery, and Operational Fleet Vehicles either owned or leased",
+                "activity_name": "Vehicle Fuel",
+              },
+            },
+            "idx": 1,
+            "journey_score": null,
+            "subcategory_name": "Travel",
+          },
+        },
+        "weighted_journey_score": null,
+      },
+      "employee_engagement": {
+        "category_name": "Employee Engagement",
+        "idx": 1,
+        "subcategories": {
+          "employee_activation": {
+            "activities": {
+              "community": {
+                "activity_description": "Activate employees for community environmental impact through relevant workshops & education opportunities on material, local issues",
+                "activity_name": "Community",
+              },
+              "workplace": {
+                "activity_description": "Enable employees to become climate and environmental leaders in the office/workplace through education and other opportunities",
+                "activity_name": "Workplace",
+              },
+            },
+            "idx": 1,
+            "journey_score": null,
+            "subcategory_name": "Employee Activation",
+          },
+          "employee_footprint": {
+            "activities": {
+              "home": {
+                "activity_description": "Empower employees to reduce their carbon footprint at home, through energy efficiency, renewable energy, and other reduction opportunities",
+                "activity_name": "Home",
+              },
+              "personal_finance": {
+                "activity_description": "Steward financial resources to maximize climate impact (401k, investing opportunities, debit/credit cards, etc.)",
+                "activity_name": "Personal Finance",
+              },
+              "transport_and_travel": {
+                "activity_description": "Reduce transport and travel-related emissions through public transportation, EVs, personal mobility devices, behavior change, and education",
+                "activity_name": "Transport & Travel",
+              },
+            },
+            "idx": 0,
+            "journey_score": null,
+            "subcategory_name": "Employee Footprint",
+          },
+        },
+      },
+    },
+    "cold_score": null,
+  },
+  "description": "2023 Taxonomy",
+  "id": "968224b8-1754-499a-ad5d-199c3009c8f0",
+  "name": "taxonomy",
+  "updated_at": "2023-11-22T03:11:40.016Z",
+}
+`;
+
+exports[`API Tests Authenticated Tests Components GET /components/:name 1`] = `
+{
+  "created_at": "2023-11-22T00:43:55.888Z",
+  "definition": {
+    "items": [
+      {
+        "icon": {
+          "name": "ColdHomeIcon",
+        },
+        "key": "home_key",
+        "label": "Home",
+        "route": "/home",
+      },
+      {
+        "icon": {
+          "name": "ColdFootprintIcon",
+        },
+        "key": "footprint_key",
+        "label": "Footprint",
+        "route": "/footprint",
+      },
+      {
+        "icon": {
+          "name": "ColdJourneyIcon",
+        },
+        "key": "journey_key",
+        "label": "Journey",
+        "route": "/journey",
+      },
+      {
+        "icon": {
+          "name": "ColdActionsIcon",
+        },
+        "items": [
+          {
+            "key": "overview_actions_key",
+            "label": "Overview",
+            "route": "/actions",
+          },
+          {
+            "key": "facilities_actions_key",
+            "label": "Facilities",
+            "route": "/actions/facilities",
+          },
+          {
+            "key": "travel_actions_key",
+            "label": "Travel",
+            "route": "/actions/travel",
+          },
+          {
+            "key": "operations_actions_key",
+            "label": "Operations",
+            "route": "/actions/operations",
+          },
+          {
+            "key": "product_actions_key",
+            "label": "Product",
+            "route": "/actions/product",
+          },
+          {
+            "key": "employee_footprint_actions_key",
+            "label": "Employee Footprint",
+            "route": "/actions/employee_footprint",
+          },
+          {
+            "key": "employee_activation_actions_key",
+            "label": "Employee Activation",
+            "route": "/actions/employee_activation",
+          },
+          {
+            "key": "internal_alignment_actions_key",
+            "label": "Internal Alignment",
+            "route": "/actions/internal_alignment",
+          },
+          {
+            "key": "community_impact_actions_key",
+            "label": "Community Impact",
+            "route": "/actions/community_impact",
+          },
+        ],
+        "key": "actions_key",
+        "label": "Actions",
+      },
+      {
+        "icon": {
+          "name": "ColdSettingsIcon",
+        },
+        "key": "settings_key",
+        "label": "Settings",
+        "placement": "bottom",
+        "roles": [
+          "cold:admin",
+          "company:admin",
+          "company:owner",
+        ],
+        "route": "/settings",
+      },
+    ],
+  },
+  "description": "Provides links in the application sidebar",
+  "id": "0c6bcbe3-304c-43ba-a4ad-3de801325937",
+  "name": "sidebar_navigation",
+  "type": "NAVIGATION_SIDE",
+  "updated_at": "2023-11-22T00:43:55.889Z",
+}
+`;
+
+exports[`API Tests Authenticated Tests Components GET /components/darkly/testOrgs 1`] = `
+[
+  {
+    "display_name": "Cold Climate Staging",
+    "id": "org_g2zzR5rwTKVAIwCn",
+    "name": "cold-climate-staging",
+  },
+  {
+    "display_name": "Demo Agency Company",
+    "id": "org_d1JYoP7ni6KReG8h",
+    "name": "demo-agency-company",
+  },
+  {
+    "display_name": "Demo Product Company",
+    "id": "org_xcjopMttRXzEqjHf",
+    "name": "demo-product-company",
+  },
+  {
+    "display_name": "Demo Surveys",
+    "id": "org_BLyGg9Ra7m0Um1S2",
+    "name": "demo-surveys",
+  },
+  {
+    "display_name": "TEST Dan's Sep 29 Prod Test Co",
+    "id": "org_VtZXHcUyEiw63UFC",
+    "name": "test-dans-sep-29-prod-test-co",
+  },
+  {
+    "display_name": "TEST Stuart's Burger Barn",
+    "id": "org_G7KQZ1UYIgnXlvmy",
+    "name": "test-stuarts-burger-barn",
+  },
+  {
+    "display_name": "Cold Test No Survey",
+    "id": "org_YSkCa3rmbPBDjzMi",
+    "name": "cold-test-no-survey",
+  },
+  {
+    "display_name": "Cold Test Survey",
+    "id": "org_cyesmumMtdW1FoKf",
+    "name": "cold-test-survey",
+  },
+  {
+    "display_name": "Cold Test Survey Data",
+    "id": "org_IGKPBR2MGQelLcgH",
+    "name": "cold-test-survey-data",
+  },
+  {
+    "display_name": "Cold Test Survey Data Actions",
+    "id": "org_2gRyrn8y2vtJozdb",
+    "name": "cold-test-survey-data-actions",
+  },
+]
+`;
+
+exports[`API Tests Authenticated Tests Components GET /components/types/:type 1`] = `
+[
+  {
+    "created_at": "2023-11-22T00:42:19.506Z",
+    "definition": {
+      "items": [
+        {
+          "cellStyle": "py-2 px-4 h-16",
+          "field": "image",
+          "headerStyle": "py-4",
+          "headerTitle": "Profile Image",
+          "hideTitle": "true",
+          "size": "w-8",
+        },
+        {
+          "cellStyle": "h-16",
+          "field": "name",
+          "headerStyle": "py-4",
+          "headerTitle": "NAME",
+        },
+        {
+          "cellStyle": "h-16",
+          "field": "role",
+          "headerStyle": "py-4",
+          "headerTitle": "ROLE",
+        },
+        {
+          "cellStyle": "h-16",
+          "field": "status",
+          "headerStyle": "py-4",
+          "headerTitle": "STATUS",
+        },
+        {
+          "cellStyle": "justify-end grid content-center h-16",
+          "field": "actions",
+          "headerStyle": "py-4",
+          "headerTitle": "Table Actions",
+          "hideTitle": "true",
+          "size": "w-8",
+        },
+      ],
+    },
+    "description": "Provides a table for managing team members",
+    "id": "fefb4284-f244-45c3-9029-0956a288427a",
+    "name": "team_member_table",
+    "type": "DATAGRID",
+    "updated_at": "2023-11-22T00:42:19.508Z",
+  },
+]
+`;
+
+exports[`API Tests Authenticated Tests Components PATCH /components 1`] = `
+{
+  "created_at": "2023-11-22T04:46:55.233Z",
+  "definition": {
+    "test": "test component json",
+  },
+  "description": "updated: incididunt dolore culpa do proident",
+  "id": "9795e04e-e48f-4ade-8776-2e8a352855af",
+  "name": "test_component",
+  "type": "TEST",
+  "updated_at": "2023-11-22T04:46:55.255Z",
+}
+`;
+
+exports[`API Tests Authenticated Tests Components POST /components 1`] = `
+{
+  "created_at": "2023-11-22T04:46:55.233Z",
+  "definition": {
+    "test": "test component json",
+  },
+  "description": "incididunt dolore culpa do proident",
+  "id": "9795e04e-e48f-4ade-8776-2e8a352855af",
+  "name": "test_component",
+  "type": "TEST",
+  "updated_at": "2023-11-22T04:46:55.234Z",
+}
+`;
+
+exports[`API Tests Authenticated Tests Members GET /members/:email?bpc=true 1`] = `
+{
+  "created_at": "2023-11-22T04:46:55.842Z",
+  "email": "beth63@example.com",
+  "email_verified": false,
+  "family_name": "O'Keefe",
+  "given_name": "Beth",
+  "identities": [
+    {
+      "connection": "cold-db",
+      "isSocial": false,
+      "provider": "auth0",
+      "user_id": "655d87bf022a9fc3be9d4d1f",
+    },
+  ],
+  "name": "Beth O'Keefe",
+  "nickname": "beth63",
+  "picture": "https://s3.amazonaws.com/uifaces/faces/twitter/shvelo96/128.jpg",
+  "updated_at": "2023-11-22T04:46:56.293Z",
+  "user_id": "auth0|655d87bf022a9fc3be9d4d1f",
+}
+`;
+
+exports[`API Tests Authenticated Tests Members PATCH /members/:email 1`] = `
+{
+  "created_at": "2023-11-22T04:46:55.842Z",
+  "email": "beth63@example.com",
+  "email_verified": false,
+  "family_name": "O'Keefe",
+  "given_name": "Beth",
+  "identities": [
+    {
+      "connection": "cold-db",
+      "isSocial": false,
+      "provider": "auth0",
+      "user_id": "655d87bf022a9fc3be9d4d1f",
+    },
+  ],
+  "name": "Beth O'Keefe",
+  "nickname": "beth63",
+  "picture": "https://s3.amazonaws.com/uifaces/faces/twitter/shvelo96/128.jpg",
+  "updated_at": "2023-11-22T04:46:56.293Z",
+  "user_id": "auth0|655d87bf022a9fc3be9d4d1f",
+}
+`;
+
+exports[`API Tests Authenticated Tests Members POST /members 1`] = `
+{
+  "created_at": "2023-11-22T04:46:55.842Z",
+  "email": "beth63@example.com",
+  "email_verified": false,
+  "identities": [
+    {
+      "connection": "cold-db",
+      "isSocial": false,
+      "provider": "auth0",
+      "user_id": "655d87bf022a9fc3be9d4d1f",
+    },
+  ],
+  "name": "beth63@example.com",
+  "nickname": "beth63",
+  "picture": "https://s.gravatar.com/avatar/65afbcdbd0896c40a03ae67c718516d0?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fbe.png",
+  "updated_at": "2023-11-22T04:46:55.842Z",
+  "user_id": "auth0|655d87bf022a9fc3be9d4d1f",
+}
+`;
+
+exports[`API Tests Authenticated Tests News GET /news?take=3&skip=0&bpc=true&publish=false 1`] = `
+[
+  {
+    "created_at": "2023-11-22T04:45:57.807Z",
+    "id": "50276584-5fc8-4a0b-8837-15be84c1969c",
+    "image_url": "http://placeimg.com/640/480",
+    "publish": true,
+    "published_at": "1945-07-18T05:51:15.352Z",
+    "source_name": "New York Times",
+    "title": "dolore consectetur ea",
+    "updated_at": "2023-11-22T04:45:57.808Z",
+    "url": "http://cassandre.net",
+  },
+  {
+    "created_at": "2023-11-22T03:11:40.078Z",
+    "id": "8f21e06b-d628-4854-acd3-cf89c1456f93",
+    "image_url": "https://www.reuters.com/resizer/19ZnOlXJL0lqbq588RsYF5Z-cAM=/1200x628/smart/filters:quality(80)/cloudfront-us-east-2.images.arcpublishing.com/reuters/6ELBCZRUIRK7FNNQCF66P47QIA.jpg",
+    "publish": true,
+    "published_at": "2023-09-01T09:00:08.000Z",
+    "source_name": "Reuters",
+    "title": "Carbon credit market confidence ebbs as big names retreat",
+    "updated_at": "2023-11-22T03:11:40.079Z",
+    "url": "https://www.reuters.com/sustainability/carbon-credit-market-confidence-ebbs-big-names-retreat-2023-09-01/",
+  },
+  {
+    "created_at": "2023-11-22T03:11:40.078Z",
+    "id": "4105fa89-9517-4624-93c7-16468510185a",
+    "image_url": "https://static01.nyt.com/images/2023/07/21/science/21CLI-VEGAN/21CLI-VEGAN-facebookJumbo.jpg",
+    "publish": true,
+    "published_at": "2023-07-21T09:00:08.000Z",
+    "source_name": "New York Times",
+    "title": "Save the Planet, Put Down that Hamburger",
+    "updated_at": "2023-11-22T03:11:40.079Z",
+    "url": "https://www.nytimes.com/2023/07/21/climate/diet-vegan-meat-emissions.html",
+  },
+]
+`;
+
+exports[`API Tests Authenticated Tests News POST /news (not published) 1`] = `
+{
+  "created_at": "2023-11-22T04:46:55.133Z",
+  "id": "1220ba40-8414-41f6-bfd7-5e3e084cc2a0",
+  "image_url": "http://placeimg.com/640/480",
+  "publish": false,
+  "published_at": "1945-07-18T05:51:15.352Z",
+  "source_name": "New York Times",
+  "title": "dolore consectetur ea",
+  "updated_at": "2023-11-22T04:46:55.134Z",
+  "url": "http://cassandre.net",
+}
+`;
+
+exports[`API Tests Authenticated Tests News POST /news 1`] = `
+{
+  "created_at": "2023-11-22T04:46:55.172Z",
+  "id": "62ed883b-3d90-4ab9-8673-d3d692fe55dd",
+  "image_url": "http://placeimg.com/640/480",
+  "publish": true,
+  "published_at": "1945-07-18T05:51:15.352Z",
+  "source_name": "New York Times",
+  "title": "dolore consectetur ea",
+  "updated_at": "2023-11-22T04:46:55.173Z",
+  "url": "http://cassandre.net",
+}
+`;
+
+exports[`API Tests Authenticated Tests Organizations POST /organizations 1`] = `
+{
+  "created_at": "2023-11-22T04:46:56.877Z",
+  "display_name": "Buckridge Inc.",
+  "enabled_connections": [
+    {
+      "assign_membership_on_login": false,
+      "connection_id": "con_8YpNVN06YkEU8J8Y",
+    },
+    {
+      "assign_membership_on_login": false,
+      "connection_id": "con_HdpDqrAihfZnRBSy",
+    },
+  ],
+  "id": "org_R4XqShDJF4sLTFxy",
+  "name": "buckridge-inc",
+}
+`;
+
+exports[`API Tests Authenticated Tests Organizations PUT /organizations/:orgID/roles/:role/members/:userId 1`] = `
+{
+  "branding": {},
+  "city": {},
+  "created_at": "2023-11-22T04:46:56.877Z",
+  "display_name": "Buckridge Inc.",
+  "email": {},
+  "enabled_connections": [
+    {
+      "assign_membership_on_login": false,
+      "connection_id": "con_8YpNVN06YkEU8J8Y",
+    },
+    {
+      "assign_membership_on_login": false,
+      "connection_id": "con_HdpDqrAihfZnRBSy",
+    },
+  ],
+  "id": "org_R4XqShDJF4sLTFxy",
+  "isTest": false,
+  "members": [
+    {
+      "created_at": "2023-11-22T04:46:55.842Z",
+      "email": "beth63@example.com",
+      "email_verified": false,
+      "family_name": "O'Keefe",
+      "given_name": "Beth",
+      "identities": [
+        {
+          "connection": "cold-db",
+          "isSocial": false,
+          "provider": "auth0",
+          "user_id": "655d87bf022a9fc3be9d4d1f",
+        },
+      ],
+      "image": "https://s3.amazonaws.com/uifaces/faces/twitter/shvelo96/128.jpg",
+      "name": "Beth O'Keefe",
+      "nickname": "beth63",
+      "picture": "https://s3.amazonaws.com/uifaces/faces/twitter/shvelo96/128.jpg",
+      "roles": [],
+      "updated_at": "2023-11-22T04:46:56.293Z",
+      "user_id": "auth0|655d87bf022a9fc3be9d4d1f",
+    },
+  ],
+  "name": "buckridge-inc",
+  "phone": {},
+  "state": {},
+  "street_address": {},
+  "updated_at": "2023-11-22T04:46:56.878Z",
+  "zip": {},
+}
+`;
+
+exports[`API Tests Unauthenticated Tests GET /health should return health 1`] = `"ok"`;
+
+exports[`API Tests Unauthenticated Tests GET /v1 should return docs 1`] = `
+"
+<!-- HTML for static distribution bundle build -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Cold Climate Platform API</title>
+  <link rel="stylesheet" type="text/css" href="./v1/swagger-ui.css" >
+  <link rel='icon' href='/Users/troy/WebstormProjects/public/favicon.ico' />
+  <style>
+    html
+    {
+      box-sizing: border-box;
+      overflow: -moz-scrollbars-vertical;
+      overflow-y: scroll;
+    }
+    *,
+    *:before,
+    *:after
+    {
+      box-sizing: inherit;
+    }
+
+    body {
+      margin:0;
+      background: #fafafa;
+    }
+  </style>
+</head>
+
+<body>
+
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="position:absolute;width:0;height:0">
+  <defs>
+    <symbol viewBox="0 0 20 20" id="unlocked">
+      <path d="M15.8 8H14V5.6C14 2.703 12.665 1 10 1 7.334 1 6 2.703 6 5.6V6h2v-.801C8 3.754 8.797 3 10 3c1.203 0 2 .754 2 2.199V8H4c-.553 0-1 .646-1 1.199V17c0 .549.428 1.139.951 1.307l1.197.387C5.672 18.861 6.55 19 7.1 19h5.8c.549 0 1.428-.139 1.951-.307l1.196-.387c.524-.167.953-.757.953-1.306V9.199C17 8.646 16.352 8 15.8 8z"></path>
+    </symbol>
+
+    <symbol viewBox="0 0 20 20" id="locked">
+      <path d="M15.8 8H14V5.6C14 2.703 12.665 1 10 1 7.334 1 6 2.703 6 5.6V8H4c-.553 0-1 .646-1 1.199V17c0 .549.428 1.139.951 1.307l1.197.387C5.672 18.861 6.55 19 7.1 19h5.8c.549 0 1.428-.139 1.951-.307l1.196-.387c.524-.167.953-.757.953-1.306V9.199C17 8.646 16.352 8 15.8 8zM12 8H8V5.199C8 3.754 8.797 3 10 3c1.203 0 2 .754 2 2.199V8z"/>
+    </symbol>
+
+    <symbol viewBox="0 0 20 20" id="close">
+      <path d="M14.348 14.849c-.469.469-1.229.469-1.697 0L10 11.819l-2.651 3.029c-.469.469-1.229.469-1.697 0-.469-.469-.469-1.229 0-1.697l2.758-3.15-2.759-3.152c-.469-.469-.469-1.228 0-1.697.469-.469 1.228-.469 1.697 0L10 8.183l2.651-3.031c.469-.469 1.228-.469 1.697 0 .469.469.469 1.229 0 1.697l-2.758 3.152 2.758 3.15c.469.469.469 1.229 0 1.698z"/>
+    </symbol>
+
+    <symbol viewBox="0 0 20 20" id="large-arrow">
+      <path d="M13.25 10L6.109 2.58c-.268-.27-.268-.707 0-.979.268-.27.701-.27.969 0l7.83 7.908c.268.271.268.709 0 .979l-7.83 7.908c-.268.271-.701.27-.969 0-.268-.269-.268-.707 0-.979L13.25 10z"/>
+    </symbol>
+
+    <symbol viewBox="0 0 20 20" id="large-arrow-down">
+      <path d="M17.418 6.109c.272-.268.709-.268.979 0s.271.701 0 .969l-7.908 7.83c-.27.268-.707.268-.979 0l-7.908-7.83c-.27-.268-.27-.701 0-.969.271-.268.709-.268.979 0L10 13.25l7.418-7.141z"/>
+    </symbol>
+
+
+    <symbol viewBox="0 0 24 24" id="jump-to">
+      <path d="M19 7v4H5.83l3.58-3.59L8 6l-6 6 6 6 1.41-1.41L5.83 13H21V7z"/>
+    </symbol>
+
+    <symbol viewBox="0 0 24 24" id="expand">
+      <path d="M10 18h4v-2h-4v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z"/>
+    </symbol>
+
+  </defs>
+</svg>
+
+<div id="swagger-ui"></div>
+
+<script src="./v1/swagger-ui-bundle.js"> </script>
+<script src="./v1/swagger-ui-standalone-preset.js"> </script>
+<script src="./v1/swagger-ui-init.js"> </script>
+
+
+
+<style>
+  .topbar-wrapper img {content:url('https://cold-public-assets.s3.us-east-2.amazonaws.com/cold-climate-logo/white/Asset+4Logotype_Preferred.svg'); width:200px; height:auto;}
+      .swagger-ui .opblock.opblock-get { border-color: #2892D7 } .swagger-ui .opblock.opblock-get .opblock-summary-method { background: #2892D7 } .swagger-ui .swagger-container { background-color: #0A1C2B; } .swagger-ui .btn.authorize { color: #2892D7; border-color: #2892D7; } .swagger-ui .btn.authorize svg { fill: #2892D7; }
+  .swagger-ui .topbar .download-url-wrapper { display: none }
+</style>
+</body>
+
+</html>
+"
+`;

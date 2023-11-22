@@ -316,7 +316,6 @@ export class OrganizationController extends BaseWorker {
   @Roles(...coldAndCompanyAdmins)
   @HttpCode(204)
   async removeMembers(
-    @Res() res: Response,
     @Param('orgId') orgId: string,
     @Body() body: { members: string[] },
     @Req()
@@ -348,7 +347,6 @@ export class OrganizationController extends BaseWorker {
   @Roles(...coldAdminOnly)
   @HttpCode(204)
   async removeOrg(
-    @Res() res: Response,
     @Param('orgId') orgId: string,
     @Req()
     req: {

@@ -19,7 +19,6 @@ export class OrganizationService extends BaseWorker {
   test_orgs: Array<{ id: string; name: string; display_name: string }>;
 
   constructor(
-    readonly tracer: TraceService,
     readonly cache: CacheService,
     readonly utilService: Auth0UtilityService,
     readonly roleService: RoleService,
@@ -30,9 +29,11 @@ export class OrganizationService extends BaseWorker {
     this.httpService = new HttpService();
     this.prisma = new PrismaService();
 
-    this.darkly.getJSONFlag('org-whitelist').then(response => {
-      this.test_orgs = response;
-    });
+    this.init();
+  }
+
+  async init() {
+    this.test_orgs = await this.darkly.getJSONFlag('org-whitelist');
   }
 
   /***
@@ -222,7 +223,7 @@ export class OrganizationService extends BaseWorker {
       } else {
         const filter = nameOrId.startsWith('org_') ? { id: nameOrId } : { name: nameOrId };
 
-        const org = (await this.prisma.organizations.findUnique({
+        let org = (await this.prisma.organizations.findUnique({
           where: filter,
         })) as unknown as Auth0Organization;
 
@@ -233,14 +234,28 @@ export class OrganizationService extends BaseWorker {
             throw new UnauthorizedException('You are not permitted to perform actions on this organization');
           }
         } else {
-          throw new NotFoundException(`Organization ${nameOrId} not found`);
+          // if org not found in db, get from auth0
+
+          this.options = await this.utilService.init();
+
+          const response = await this.httpService.axiosRef.get(`/organizations/${nameOrId.startsWith('org_') ? nameOrId : '/name/' + nameOrId}`, this.options);
+
+          if (!response.data) {
+            throw new NotFoundException(`No Organizations found`);
+          }
+
+          org = response.data;
         }
 
         return org;
       }
     } catch (e) {
       this.logger.error(e, { nameOrId, user, bypassCache });
-      throw e;
+      if (e.response.status === 404) {
+        throw new NotFoundException(`Organization ${nameOrId} not found`);
+      } else {
+        throw new HttpException(e.message, e.status);
+      }
     }
   }
 
@@ -542,84 +557,104 @@ export class OrganizationService extends BaseWorker {
    */
   async deleteOrganization(orgId: string, user: AuthenticatedUser) {
     // get org by id or name
-    const org = (await this.getOrganization(orgId, user, false)) as Auth0Organization;
-
-    this.tags = merge(this.tags, {
-      organization: omit(org, ['branding', 'phone', 'street_address', 'created_at', 'updated_at']),
-      user: user.coldclimate_claims,
-      status: 'started',
-    });
-
-    if (!orgId?.includes('org_')) {
-      throw new UnprocessableEntityException(`${orgId} is not a valid organization id`);
-    }
-
-    // don't del cold-climate
-    if (org?.name?.includes('cold-climate')) {
-      throw new HttpException('cannot delete cold-climate org', 422);
-    }
-
-    // if org not found in db and the function was called with an org name throw error
-    if (!orgId.includes('org_') && !org?.id) {
-      // org not found in db
-
-      throw new HttpException(
-        `Unable to find org name: ${orgId} in the database.  To insure this gets deleted from auth0, you must call this route again with the org id instead of name`,
-        404,
-      );
-    }
-
-    // Use id returned from db if orgId is not an id
-    if (!orgId.includes('org_')) {
-      orgId = org.id;
-    }
-
-    // delete org from auth0
+    let org;
     try {
-      this.options = await this.utilService.init();
-      await this.httpService.axiosRef.delete(`/organizations/${orgId}`, this.options);
+      try {
+        org = (await this.getOrganization(orgId, user, false)) as Auth0Organization;
+      } catch (e) {
+        if (e.status !== 404) {
+          throw e;
+        }
+      }
 
-      this.logger.info(`organization ${orgId} deleted from auth0`, { ...this.tags });
-    } catch (e) {
-      set(this.tags, 'status', 'failed');
-
-      this.metrics.event(
-        `Delete organization failed`,
-        `${user.coldclimate_claims.email}'s request to delete organization for ${org.display_name} failed`,
-        {
-          alert_type: 'error',
-          date_happened: new Date(),
-          priority: 'normal',
-        },
-        this.tags,
-      );
-
-      this.metrics.increment('cold.api.organizations.delete', this.tags);
-
-      this.logger.error(e, { ...e, ...this.tags });
-      throw new UnprocessableEntityException(e.message, e);
-    }
-
-    // delete org from db
-    if (org) {
-      await this.prisma.organizations.delete({
-        where: {
-          id: orgId,
-        },
+      this.tags = merge(this.tags, {
+        organization: omit(org, ['branding', 'phone', 'street_address', 'created_at', 'updated_at']),
+        user: user.coldclimate_claims,
+        status: 'started',
       });
 
-      this.logger.info(`organization ${orgId} deleted from db`, this.tags);
+      if (!orgId?.includes('org_')) {
+        throw new UnprocessableEntityException(`${orgId} is not a valid organization id`);
+      }
+
+      // don't del cold-climate
+      if (org?.name?.includes('cold-climate')) {
+        throw new HttpException('cannot delete cold-climate org', 422);
+      }
+
+      // if org not found in db and the function was called with an org name throw error
+      if (!orgId.includes('org_') && !org?.id) {
+        // org not found in db
+
+        throw new HttpException(
+          `Unable to find org name: ${orgId} in the database.  To insure this gets deleted from auth0, you must call this route again with the org id instead of name`,
+          404,
+        );
+      }
+
+      // Use id returned from db if orgId is not an id
+      if (!orgId.includes('org_')) {
+        orgId = org.id;
+      }
+
+      // delete org from auth0
+      try {
+        this.options = await this.utilService.init();
+        await this.httpService.axiosRef.delete(`/organizations/${orgId}`, this.options);
+
+        this.logger.info(`organization ${orgId} deleted from auth0`);
+      } catch (e) {
+        if (e.response.status !== 404) {
+          set(this.tags, 'status', 'failed');
+
+          this.metrics.event(
+            `Delete organization failed`,
+            `${user.coldclimate_claims.email}'s request to delete organization for ${org.display_name} failed`,
+            {
+              alert_type: 'error',
+              date_happened: new Date(),
+              priority: 'normal',
+            },
+            this.tags,
+          );
+
+          this.metrics.increment('cold.api.organizations.delete');
+
+          this.logger.error(e, { ...e.response?.data });
+          throw new UnprocessableEntityException(e.message, e.response?.data);
+        } else {
+          throw new NotFoundException(`Organization ${orgId} not found`);
+        }
+      }
+
+      // delete org from db
+      if (org) {
+        try {
+          await this.prisma.organizations.delete({
+            where: {
+              id: orgId,
+            },
+          });
+
+          this.logger.info(`organization ${orgId} deleted from db`);
+        } catch (e) {
+          if (!e.message.includes('Record to delete does not exist')) {
+            this.logger.error(e.message, { ...e.response?.data });
+          }
+          this.logger.info(`organization ${orgId} not found in db`);
+        }
+      }
+
+      await this.cache.delete(`organizations:${orgId}:members`);
+      await this.cache.delete(`organizations:${orgId}:invitations`);
+    } catch (e) {
+      this.logger.error(e.message, { ...e.response?.data });
     }
-
-    await this.cache.delete(`organizations:${orgId}:members`);
-    await this.cache.delete(`organizations:${orgId}:invitations`);
-
     await this.getOrganizations(true);
 
     set(this.tags, 'status', 'completed');
 
     this.metrics.increment('cold.api.organizations.delete', this.tags);
-
     throw new HttpException(`Organization ${orgId} deleted`, 204);
   }
 
@@ -662,9 +697,9 @@ export class OrganizationService extends BaseWorker {
           },
           this.tags,
         );
-        this.logger.error(e.response?.data?.message, { data: e.response?.data, ...this.tags });
+        this.logger.error(e.response?.data?.message, { data: e.response?.data });
       } else {
-        this.logger.error(e.message, { ...e, ...this.tags });
+        this.logger.error(e.message, { ...e });
         this.metrics.event(
           'Attempt to remove user failed',
           `Organization (${user.coldclimate_claims.org_id}) member (${user.coldclimate_claims.email}) attempted to remove the following invitation to ${orgId}: ${invId}.  The request failed with the following meesage: ${e.message}`,

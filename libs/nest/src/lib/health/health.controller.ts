@@ -1,8 +1,7 @@
-import { Controller, Get, Req, Res } from '@nestjs/common';
+import { Controller, Get, Req } from '@nestjs/common';
 import { Public } from '../decorators';
 import { BaseWorker } from '../worker';
 import { HealthService } from './health.service';
-import { Request, Response } from 'express';
 
 @Controller()
 export class HealthController extends BaseWorker {
@@ -16,11 +15,14 @@ export class HealthController extends BaseWorker {
    */
   @Get('health')
   @Public()
-  public health(
+  public async health(
     @Req()
-    req: Request,
-    @Res() res: Response,
+    req: {
+      body: any;
+      headers: any;
+      query: any;
+    },
   ) {
-    return this.service.health(req, res);
+    return this.service.health(req);
   }
 }

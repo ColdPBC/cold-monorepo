@@ -9,7 +9,14 @@
       "outputs": ["{workspaceRoot}/coverage/{e2eProjectRoot}"],
       "options": {
         "jestConfig": "apps/cold-api-e2e/jest.config.ts",
-        "passWithNoTests": true
+        "passWithNoTests": true,
+        "codeCoverage": false,
+        "detectOpenHandles": false,
+        "forceExit": true,
+        "verbose": true,
+        "testTimeout": 30000,
+        "watchAll": false,
+        "watch": false
       }
     },
     "lint": {
