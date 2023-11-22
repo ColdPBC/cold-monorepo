@@ -3,8 +3,8 @@
 exports[`API Tests Authenticated Tests Action Templates GET /action-templates 1`] = `
 [
   {
-    "created_at": "2023-11-22T04:46:55.193Z",
-    "id": "9c106bb5-c580-4d1b-aa57-4fb2f575afcf",
+    "created_at": "2023-11-22T05:35:22.943Z",
+    "id": "2da8fd64-07a7-426d-9f02-0f2200c8740b",
     "template": {
       "areas_of_impact": [
         "Electricity",
@@ -30,15 +30,75 @@ exports[`API Tests Authenticated Tests Action Templates GET /action-templates 1`
       "subcategory": "facilities",
       "title": "Test Action Template",
     },
-    "updated_at": "2023-11-22T04:46:55.193Z",
+    "updated_at": "2023-11-22T05:35:22.943Z",
+  },
+  {
+    "created_at": "2023-11-22T05:37:04.973Z",
+    "id": "f5afc2fa-e8cc-47cd-8727-ce94ec6adadf",
+    "template": {
+      "areas_of_impact": [
+        "Electricity",
+      ],
+      "dependent_surveys": [
+        {
+          "name": "test_survey",
+        },
+      ],
+      "due_date": "2023-10-05T19:15:14.550Z",
+      "image_url": "https://images.unsplash.com/photo-1610891015188-5369212db097?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+      "objective_description": "Test Objective Description",
+      "overview": "Reduce your company's reliance on fossil fuels by purchasing renewable electricity for your facility.",
+      "process_description": "this is our process_description",
+      "ready_to_execute": false,
+      "steps": [
+        {
+          "complete": false,
+          "description": "Test Step 3",
+          "overview": "Sign up for your utility's renewable energy program",
+        },
+      ],
+      "subcategory": "facilities",
+      "title": "Test Action Template",
+    },
+    "updated_at": "2023-11-22T05:37:04.973Z",
+  },
+  {
+    "created_at": "2023-11-22T06:29:56.787Z",
+    "id": "d472a5d2-6bf4-4706-8670-33b7c23a852a",
+    "template": {
+      "areas_of_impact": [
+        "Electricity",
+      ],
+      "dependent_surveys": [
+        {
+          "name": "test_survey",
+        },
+      ],
+      "due_date": "2023-10-05T19:15:14.550Z",
+      "image_url": "https://images.unsplash.com/photo-1610891015188-5369212db097?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+      "objective_description": "Test Objective Description",
+      "overview": "Reduce your company's reliance on fossil fuels by purchasing renewable electricity for your facility.",
+      "process_description": "this is our process_description",
+      "ready_to_execute": false,
+      "steps": [
+        {
+          "complete": false,
+          "description": "Test Step 3",
+          "overview": "Sign up for your utility's renewable energy program",
+        },
+      ],
+      "subcategory": "facilities",
+      "title": "Test Action Template",
+    },
+    "updated_at": "2023-11-22T06:29:56.787Z",
   },
 ]
 `;
 
 exports[`API Tests Authenticated Tests Action Templates GET /action-templates/:id 1`] = `
 {
-  "created_at": "2023-11-22T04:46:55.193Z",
-  "id": "9c106bb5-c580-4d1b-aa57-4fb2f575afcf",
+  "created_at": "2023-11-22T06:29:56.787Z",
+  "id": "d472a5d2-6bf4-4706-8670-33b7c23a852a",
   "template": {
     "areas_of_impact": [
       "Electricity",
@@ -64,14 +124,14 @@ exports[`API Tests Authenticated Tests Action Templates GET /action-templates/:i
     "subcategory": "facilities",
     "title": "Test Action Template",
   },
-  "updated_at": "2023-11-22T04:46:55.193Z",
+  "updated_at": "2023-11-22T06:29:56.787Z",
 }
 `;
 
 exports[`API Tests Authenticated Tests Action Templates POST /action-templates 1`] = `
 {
-  "created_at": "2023-11-22T04:46:55.193Z",
-  "id": "9c106bb5-c580-4d1b-aa57-4fb2f575afcf",
+  "created_at": "2023-11-22T06:29:56.787Z",
+  "id": "d472a5d2-6bf4-4706-8670-33b7c23a852a",
   "template": {
     "areas_of_impact": [
       "Electricity",
@@ -97,7 +157,7 @@ exports[`API Tests Authenticated Tests Action Templates POST /action-templates 1
     "subcategory": "facilities",
     "title": "Test Action Template",
   },
-  "updated_at": "2023-11-22T04:46:55.193Z",
+  "updated_at": "2023-11-22T06:29:56.787Z",
 }
 `;
 
@@ -562,110 +622,121 @@ exports[`API Tests Authenticated Tests Components GET /components/types/:type 1`
 
 exports[`API Tests Authenticated Tests Components PATCH /components 1`] = `
 {
-  "created_at": "2023-11-22T04:46:55.233Z",
+  "created_at": "2023-11-22T06:29:56.827Z",
   "definition": {
     "test": "test component json",
   },
   "description": "updated: incididunt dolore culpa do proident",
-  "id": "9795e04e-e48f-4ade-8776-2e8a352855af",
+  "id": "2f06588d-41c8-40a3-9968-54c588a49cec",
   "name": "test_component",
   "type": "TEST",
-  "updated_at": "2023-11-22T04:46:55.255Z",
+  "updated_at": "2023-11-22T06:29:56.850Z",
 }
 `;
 
 exports[`API Tests Authenticated Tests Components POST /components 1`] = `
 {
-  "created_at": "2023-11-22T04:46:55.233Z",
+  "created_at": "2023-11-22T06:29:56.827Z",
   "definition": {
     "test": "test component json",
   },
   "description": "incididunt dolore culpa do proident",
-  "id": "9795e04e-e48f-4ade-8776-2e8a352855af",
+  "id": "2f06588d-41c8-40a3-9968-54c588a49cec",
   "name": "test_component",
   "type": "TEST",
-  "updated_at": "2023-11-22T04:46:55.234Z",
+  "updated_at": "2023-11-22T06:29:56.828Z",
 }
 `;
 
 exports[`API Tests Authenticated Tests Members GET /members/:email?bpc=true 1`] = `
 {
-  "created_at": "2023-11-22T04:46:55.842Z",
-  "email": "beth63@example.com",
+  "created_at": "2023-11-22T06:29:57.671Z",
+  "email": "emma.kertzmann@example.com",
   "email_verified": false,
-  "family_name": "O'Keefe",
-  "given_name": "Beth",
+  "family_name": "Kertzmann",
+  "given_name": "Emma",
   "identities": [
     {
       "connection": "cold-db",
       "isSocial": false,
       "provider": "auth0",
-      "user_id": "655d87bf022a9fc3be9d4d1f",
+      "user_id": "655d9fe517b4bdb5010f2c01",
     },
   ],
-  "name": "Beth O'Keefe",
-  "nickname": "beth63",
-  "picture": "https://s3.amazonaws.com/uifaces/faces/twitter/shvelo96/128.jpg",
-  "updated_at": "2023-11-22T04:46:56.293Z",
-  "user_id": "auth0|655d87bf022a9fc3be9d4d1f",
+  "name": "Emma Kertzmann",
+  "nickname": "emma.kertzmann",
+  "picture": "https://s3.amazonaws.com/uifaces/faces/twitter/igorgarybaldi/128.jpg",
+  "updated_at": "2023-11-22T06:29:58.112Z",
+  "user_id": "auth0|655d9fe517b4bdb5010f2c01",
 }
 `;
 
 exports[`API Tests Authenticated Tests Members PATCH /members/:email 1`] = `
 {
-  "created_at": "2023-11-22T04:46:55.842Z",
-  "email": "beth63@example.com",
+  "created_at": "2023-11-22T06:29:57.671Z",
+  "email": "emma.kertzmann@example.com",
   "email_verified": false,
-  "family_name": "O'Keefe",
-  "given_name": "Beth",
+  "family_name": "Kertzmann",
+  "given_name": "Emma",
   "identities": [
     {
       "connection": "cold-db",
       "isSocial": false,
       "provider": "auth0",
-      "user_id": "655d87bf022a9fc3be9d4d1f",
+      "user_id": "655d9fe517b4bdb5010f2c01",
     },
   ],
-  "name": "Beth O'Keefe",
-  "nickname": "beth63",
-  "picture": "https://s3.amazonaws.com/uifaces/faces/twitter/shvelo96/128.jpg",
-  "updated_at": "2023-11-22T04:46:56.293Z",
-  "user_id": "auth0|655d87bf022a9fc3be9d4d1f",
+  "name": "Emma Kertzmann",
+  "nickname": "emma.kertzmann",
+  "picture": "https://s3.amazonaws.com/uifaces/faces/twitter/igorgarybaldi/128.jpg",
+  "updated_at": "2023-11-22T06:29:58.112Z",
+  "user_id": "auth0|655d9fe517b4bdb5010f2c01",
 }
 `;
 
 exports[`API Tests Authenticated Tests Members POST /members 1`] = `
 {
-  "created_at": "2023-11-22T04:46:55.842Z",
-  "email": "beth63@example.com",
+  "created_at": "2023-11-22T06:29:57.671Z",
+  "email": "emma.kertzmann@example.com",
   "email_verified": false,
   "identities": [
     {
       "connection": "cold-db",
       "isSocial": false,
       "provider": "auth0",
-      "user_id": "655d87bf022a9fc3be9d4d1f",
+      "user_id": "655d9fe517b4bdb5010f2c01",
     },
   ],
-  "name": "beth63@example.com",
-  "nickname": "beth63",
-  "picture": "https://s.gravatar.com/avatar/65afbcdbd0896c40a03ae67c718516d0?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fbe.png",
-  "updated_at": "2023-11-22T04:46:55.842Z",
-  "user_id": "auth0|655d87bf022a9fc3be9d4d1f",
+  "name": "emma.kertzmann@example.com",
+  "nickname": "emma.kertzmann",
+  "picture": "https://s.gravatar.com/avatar/4966205658feb916cbf6008caf50d556?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fem.png",
+  "updated_at": "2023-11-22T06:29:57.671Z",
+  "user_id": "auth0|655d9fe517b4bdb5010f2c01",
 }
 `;
 
 exports[`API Tests Authenticated Tests News GET /news?take=3&skip=0&bpc=true&publish=false 1`] = `
 [
   {
-    "created_at": "2023-11-22T04:45:57.807Z",
-    "id": "50276584-5fc8-4a0b-8837-15be84c1969c",
+    "created_at": "2023-11-22T05:37:04.954Z",
+    "id": "efe70dcb-86e8-402b-b803-80559f0752b2",
     "image_url": "http://placeimg.com/640/480",
     "publish": true,
     "published_at": "1945-07-18T05:51:15.352Z",
     "source_name": "New York Times",
     "title": "dolore consectetur ea",
-    "updated_at": "2023-11-22T04:45:57.808Z",
+    "updated_at": "2023-11-22T05:37:04.955Z",
+    "url": "http://cassandre.net",
+  },
+  {
+    "created_at": "2023-11-22T05:35:22.922Z",
+    "id": "6d831241-b61c-4317-ade3-fb65caa627e3",
+    "image_url": "http://placeimg.com/640/480",
+    "publish": true,
+    "published_at": "1945-07-18T05:51:15.352Z",
+    "source_name": "New York Times",
+    "title": "dolore consectetur ea",
+    "updated_at": "2023-11-22T05:35:22.923Z",
     "url": "http://cassandre.net",
   },
   {
@@ -679,52 +750,44 @@ exports[`API Tests Authenticated Tests News GET /news?take=3&skip=0&bpc=true&pub
     "updated_at": "2023-11-22T03:11:40.079Z",
     "url": "https://www.reuters.com/sustainability/carbon-credit-market-confidence-ebbs-big-names-retreat-2023-09-01/",
   },
-  {
-    "created_at": "2023-11-22T03:11:40.078Z",
-    "id": "4105fa89-9517-4624-93c7-16468510185a",
-    "image_url": "https://static01.nyt.com/images/2023/07/21/science/21CLI-VEGAN/21CLI-VEGAN-facebookJumbo.jpg",
-    "publish": true,
-    "published_at": "2023-07-21T09:00:08.000Z",
-    "source_name": "New York Times",
-    "title": "Save the Planet, Put Down that Hamburger",
-    "updated_at": "2023-11-22T03:11:40.079Z",
-    "url": "https://www.nytimes.com/2023/07/21/climate/diet-vegan-meat-emissions.html",
-  },
 ]
 `;
 
 exports[`API Tests Authenticated Tests News POST /news (not published) 1`] = `
 {
-  "created_at": "2023-11-22T04:46:55.133Z",
-  "id": "1220ba40-8414-41f6-bfd7-5e3e084cc2a0",
+  "created_at": "2023-11-22T06:29:56.740Z",
+  "id": "b535e86c-4c42-4f81-bda5-1db4fdc43c71",
   "image_url": "http://placeimg.com/640/480",
   "publish": false,
   "published_at": "1945-07-18T05:51:15.352Z",
   "source_name": "New York Times",
   "title": "dolore consectetur ea",
-  "updated_at": "2023-11-22T04:46:55.134Z",
+  "updated_at": "2023-11-22T06:29:56.741Z",
   "url": "http://cassandre.net",
 }
 `;
 
 exports[`API Tests Authenticated Tests News POST /news 1`] = `
 {
-  "created_at": "2023-11-22T04:46:55.172Z",
-  "id": "62ed883b-3d90-4ab9-8673-d3d692fe55dd",
+  "created_at": "2023-11-22T06:29:56.766Z",
+  "id": "b8086800-40c0-4a0b-ad3d-6399cbd0612f",
   "image_url": "http://placeimg.com/640/480",
   "publish": true,
   "published_at": "1945-07-18T05:51:15.352Z",
   "source_name": "New York Times",
   "title": "dolore consectetur ea",
-  "updated_at": "2023-11-22T04:46:55.173Z",
+  "updated_at": "2023-11-22T06:29:56.767Z",
   "url": "http://cassandre.net",
 }
 `;
 
-exports[`API Tests Authenticated Tests Organizations POST /organizations 1`] = `
+exports[`API Tests Authenticated Tests Organizations GET /organizations/:orgId 1`] = `
 {
-  "created_at": "2023-11-22T04:46:56.877Z",
-  "display_name": "Buckridge Inc.",
+  "branding": null,
+  "city": null,
+  "created_at": "2023-11-22T06:29:58.773Z",
+  "display_name": "Hermann, Stark and Walter Corp.",
+  "email": null,
   "enabled_connections": [
     {
       "assign_membership_on_login": false,
@@ -735,17 +798,23 @@ exports[`API Tests Authenticated Tests Organizations POST /organizations 1`] = `
       "connection_id": "con_HdpDqrAihfZnRBSy",
     },
   ],
-  "id": "org_R4XqShDJF4sLTFxy",
-  "name": "buckridge-inc",
+  "id": "org_y9L4Z5qX9VQ07mpb",
+  "isTest": false,
+  "name": "hermann-stark-and-walter-corp",
+  "phone": null,
+  "state": null,
+  "street_address": null,
+  "updated_at": "2023-11-22T06:29:58.775Z",
+  "zip": null,
 }
 `;
 
-exports[`API Tests Authenticated Tests Organizations PUT /organizations/:orgID/roles/:role/members/:userId 1`] = `
+exports[`API Tests Authenticated Tests Organizations GET /organizations/:orgId/members 1`] = `
 {
   "branding": {},
   "city": {},
-  "created_at": "2023-11-22T04:46:56.877Z",
-  "display_name": "Buckridge Inc.",
+  "created_at": "2023-11-22T06:29:58.773Z",
+  "display_name": "Hermann, Stark and Walter Corp.",
   "email": {},
   "enabled_connections": [
     {
@@ -757,37 +826,110 @@ exports[`API Tests Authenticated Tests Organizations PUT /organizations/:orgID/r
       "connection_id": "con_HdpDqrAihfZnRBSy",
     },
   ],
-  "id": "org_R4XqShDJF4sLTFxy",
+  "id": "org_y9L4Z5qX9VQ07mpb",
   "isTest": false,
   "members": [
     {
-      "created_at": "2023-11-22T04:46:55.842Z",
-      "email": "beth63@example.com",
+      "created_at": "2023-11-22T06:29:57.671Z",
+      "email": "emma.kertzmann@example.com",
       "email_verified": false,
-      "family_name": "O'Keefe",
-      "given_name": "Beth",
+      "family_name": "Kertzmann",
+      "given_name": "Emma",
       "identities": [
         {
           "connection": "cold-db",
           "isSocial": false,
           "provider": "auth0",
-          "user_id": "655d87bf022a9fc3be9d4d1f",
+          "user_id": "655d9fe517b4bdb5010f2c01",
         },
       ],
-      "image": "https://s3.amazonaws.com/uifaces/faces/twitter/shvelo96/128.jpg",
-      "name": "Beth O'Keefe",
-      "nickname": "beth63",
-      "picture": "https://s3.amazonaws.com/uifaces/faces/twitter/shvelo96/128.jpg",
+      "image": "https://s3.amazonaws.com/uifaces/faces/twitter/igorgarybaldi/128.jpg",
+      "name": "Emma Kertzmann",
+      "nickname": "emma.kertzmann",
+      "picture": "https://s3.amazonaws.com/uifaces/faces/twitter/igorgarybaldi/128.jpg",
       "roles": [],
-      "updated_at": "2023-11-22T04:46:56.293Z",
-      "user_id": "auth0|655d87bf022a9fc3be9d4d1f",
+      "updated_at": "2023-11-22T06:29:58.112Z",
+      "user_id": "auth0|655d9fe517b4bdb5010f2c01",
     },
   ],
-  "name": "buckridge-inc",
+  "name": "hermann-stark-and-walter-corp",
   "phone": {},
   "state": {},
   "street_address": {},
-  "updated_at": "2023-11-22T04:46:56.878Z",
+  "updated_at": "2023-11-22T06:29:58.775Z",
+  "zip": {},
+}
+`;
+
+exports[`API Tests Authenticated Tests Organizations GET /organizations/:orgid/members/:userId/roles 1`] = `[]`;
+
+exports[`API Tests Authenticated Tests Organizations POST /organizations 1`] = `
+{
+  "created_at": "2023-11-22T06:29:58.773Z",
+  "display_name": "Hermann, Stark and Walter Corp.",
+  "enabled_connections": [
+    {
+      "assign_membership_on_login": false,
+      "connection_id": "con_8YpNVN06YkEU8J8Y",
+    },
+    {
+      "assign_membership_on_login": false,
+      "connection_id": "con_HdpDqrAihfZnRBSy",
+    },
+  ],
+  "id": "org_y9L4Z5qX9VQ07mpb",
+  "name": "hermann-stark-and-walter-corp",
+}
+`;
+
+exports[`API Tests Authenticated Tests Organizations PUT /organizations/:orgID/roles/:role/members/:userId 1`] = `
+{
+  "branding": {},
+  "city": {},
+  "created_at": "2023-11-22T06:29:58.773Z",
+  "display_name": "Hermann, Stark and Walter Corp.",
+  "email": {},
+  "enabled_connections": [
+    {
+      "assign_membership_on_login": false,
+      "connection_id": "con_8YpNVN06YkEU8J8Y",
+    },
+    {
+      "assign_membership_on_login": false,
+      "connection_id": "con_HdpDqrAihfZnRBSy",
+    },
+  ],
+  "id": "org_y9L4Z5qX9VQ07mpb",
+  "isTest": false,
+  "members": [
+    {
+      "created_at": "2023-11-22T06:29:57.671Z",
+      "email": "emma.kertzmann@example.com",
+      "email_verified": false,
+      "family_name": "Kertzmann",
+      "given_name": "Emma",
+      "identities": [
+        {
+          "connection": "cold-db",
+          "isSocial": false,
+          "provider": "auth0",
+          "user_id": "655d9fe517b4bdb5010f2c01",
+        },
+      ],
+      "image": "https://s3.amazonaws.com/uifaces/faces/twitter/igorgarybaldi/128.jpg",
+      "name": "Emma Kertzmann",
+      "nickname": "emma.kertzmann",
+      "picture": "https://s3.amazonaws.com/uifaces/faces/twitter/igorgarybaldi/128.jpg",
+      "roles": [],
+      "updated_at": "2023-11-22T06:29:58.112Z",
+      "user_id": "auth0|655d9fe517b4bdb5010f2c01",
+    },
+  ],
+  "name": "hermann-stark-and-walter-corp",
+  "phone": {},
+  "state": {},
+  "street_address": {},
+  "updated_at": "2023-11-22T06:29:58.775Z",
   "zip": {},
 }
 `;

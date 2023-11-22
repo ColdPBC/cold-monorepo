@@ -30,6 +30,7 @@ describe('API Tests', () => {
     owner.password = `ABC123-${fakeUser.password}`;
     owner.email = fakeUser.email.replace('hotmail.com', 'example.com').replace('yahoo.com', 'example.com').replace('gmail.com', 'example.com');
     let org: organizations;
+    let invitation: any;
 
     describe('News', () => {
       it('POST /news (not published)', async () => {
@@ -267,6 +268,7 @@ describe('API Tests', () => {
           throw error;
         }
       });
+
       it('PUT /organizations/:orgID/roles/:role/members/:userId', async () => {
         try {
           const res = await axios.put(`/organizations/${org.id}/roles/company:owner/members/${owner['user_id']}`);
@@ -276,6 +278,68 @@ describe('API Tests', () => {
           org = res.data;
 
           expect(res.status).toBe(201);
+          expect(res.data).toMatchSnapshot();
+        } catch (error) {
+          console.log(error.message, error.response.data);
+          throw error;
+        }
+      });
+
+      it('POST /organizations/:orgID/invitation?suppressEmail=true', async () => {
+        try {
+          const res = await axios.post(`/organizations/${org.id}/invitations?suppressEmail=true`, {
+            user_email: `test_company_admin@coldclimate.com`,
+            inviter_name: `${owner.firstName} ${owner.lastName}`,
+            roleId: 'company:admin',
+          });
+
+          console.log(`/organizations/${org.id}/invitations?suppressEmail=true`, res.data);
+
+          invitation = res.data;
+
+          expect(res.status).toBe(201);
+          expect(res.data).toMatchSnapshot();
+        } catch (error) {
+          console.log(error.message, error.response.data);
+          throw error;
+        }
+      });
+
+      it('GET /organizations/:orgId/members', async () => {
+        try {
+          const res = await axios.get(`/organizations/${org.id}/members`);
+
+          console.log(`/organizations/${org.id}/members`, res.data);
+
+          expect(res.status).toBe(200);
+          expect(res.data).toMatchSnapshot();
+        } catch (error) {
+          console.log(error.message, error.response.data);
+          throw error;
+        }
+      });
+
+      it('GET /organizations/:orgId', async () => {
+        try {
+          const res = await axios.get(`/organizations/${org.id}`);
+
+          console.log(`/organizations/${org.id}`, res.data);
+
+          expect(res.status).toBe(200);
+          expect(res.data).toMatchSnapshot();
+        } catch (error) {
+          console.log(error.message, error.response.data);
+          throw error;
+        }
+      });
+
+      it(`GET /organizations/:orgid/members/:userId/roles`, async () => {
+        try {
+          const res = await axios.get(`/organizations/${org.id}/members/${owner['user_id']}/roles`);
+
+          console.log(`/organizations/${org.id}/members/${owner['user_id']}/roles`, res.data);
+
+          expect(res.status).toBe(200);
           expect(res.data).toMatchSnapshot();
         } catch (error) {
           console.log(error.message, error.response.data);

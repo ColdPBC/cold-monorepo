@@ -238,7 +238,7 @@ export class OrganizationService extends BaseWorker {
 
           this.options = await this.utilService.init();
 
-          const response = await this.httpService.axiosRef.get(`/organizations/${nameOrId.startsWith('org_') ? nameOrId : '/name/' + nameOrId}`, this.options);
+          const response = await this.httpService.axiosRef.get(`/organizations/${nameOrId.startsWith('org_') ? nameOrId : 'name/' + nameOrId}`, this.options);
 
           if (!response.data) {
             throw new NotFoundException(`No Organizations found`);
