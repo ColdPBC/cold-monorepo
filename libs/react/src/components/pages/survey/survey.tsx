@@ -253,7 +253,12 @@ const _Survey = (props: SurveyProps) => {
         }}
         className={'z-20'}
       >
-        <div className={'flex flex-1'}>
+        <div
+          className={'flex flex-1'}
+          style={{
+            maxHeight: 'min(1000px, calc(100vh - 100px))',
+          }}
+        >
           <SurveyLeftNav
             surveyData={surveyData}
             activeKey={activeKey}
