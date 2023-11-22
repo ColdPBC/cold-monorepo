@@ -50,10 +50,7 @@ jobs:
         run: yarn
       #Database Migrations
       - name: Generate Prisma Client
-        run: |
-          npm install -g zod-prisma zod-prisma-types @vegardit/prisma-generator-nestjs-dto prisma ts-node /
-          prisma generate /
-          yarn lint libs/nest/src --fix /
+        run: yarn add -D zod-prisma zod-prisma-types @vegardit/prisma-generator-nestjs-dto ts-node && yarn dlx prisma generate
       - name: unit tests
         run: yarn test
       - name: Migrate Staging DB
