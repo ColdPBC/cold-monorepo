@@ -27,6 +27,10 @@
     "chromatic": "npx chromatic --project-token=chpt_8c97d5f04267902 --exit-once-uploaded --onlyChanged --exit-zero-on-changes"
   },
   "prisma": {
+    "generate": {
+      "schema": "libs/nest/prisma/schema.prisma"
+    },
+    "schema": "libs/nest/prisma/schema.prisma",
     "seed": "ts-node libs/nest/prisma/seeds/main.ts"
   },
   "private": true,

@@ -50,7 +50,11 @@ jobs:
         run: yarn
       #Database Migrations
       - name: Generate Prisma Client
-        run: npm install -g zod-prisma zod-prisma-types @vegardit/prisma-generator-nestjs-dto prisma ts-node && prisma generate && yarn lint
+        run: |
+          npm install -g nx zod-prisma zod-prisma-types @vegardit/prisma-generator-nestjs-dto prisma ts-node && prisma generate && yarn lint /
+          npx nx run nest:prisma-generate /
+      - name: unit tests
+        run: yarn test
       - name: Migrate Staging DB
         env:
           BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
@@ -60,7 +64,7 @@ jobs:
           DATABASE_URL: ${{ secrets.STAGING_DATABASE_URL }}
         if: startsWith(env.BRANCH_NAME,'cold') || startsWith(env.BRANCH_NAME,'Cold') || startsWith(env.BRANCH_NAME,'COLD')
         run: |
-          prisma generate --schema=libs/nest/prisma/schema.prisma /
+          npx nx run nest:prisma-generate /
           prisma migrate deploy --preview-feature /
       - name: Seed Staging DB
         env:
@@ -82,7 +86,7 @@ jobs:
           PR_NUMBER: ${{ github.event.number }}
         if: startsWith(env.BRANCH_NAME,'main')
         run: |
-          cd libs/nest /
+          nx run nest:prisma-generate  /
           prisma generate  /
           prisma migrate deploy --preview-feature /
       - name: Seed Production DB
