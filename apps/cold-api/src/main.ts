@@ -6,7 +6,7 @@ import { createLogger } from 'winston';
 import { AppModule } from './platform/modules/app.module';
 import { OpenapiModule } from './platform/modules/swagger/openapi.module';
 import winstonConfig from '../../../libs/nest/src/lib/worker/winston.config';
-import { patchNestjsSwagger } from '@abitia/zod-dto';
+import { patchNestjsSwagger } from '@anatine/zod-nestjs';
 
 dotenv.config();
 

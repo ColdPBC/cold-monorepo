@@ -1,0 +1,553 @@
+{
+  "$schema": "https://app.flightcontrol.dev/schema.json",
+  "environments": [
+    {
+      "id": "cold-production",
+      "name": "production",
+      "region": "us-east-1",
+      "source": {
+        "pr": false,
+        "branch": "main",
+        "trigger": "push"
+      },
+      "services": [
+        {
+          "id": "cold-ui-production",
+          "name": "cold-ui",
+          "type": "static",
+          "singlePageApp": true,
+          "basePath": "./apps/cold-ui",
+          "buildCommand": "yarn prebuild && npx nx build cold-ui:build:production",
+          "outputDirectory": "dist/apps/cold-ui",
+          "watchPaths": [
+            "apps/cold-ui/**",
+            "package.json"
+          ],
+          "envVariables": {
+            "VITE_API_BASE_URL": "https://api.coldclimate.com",
+            "VITE_APP_VERSION": "1.0.0",
+            "VITE_AUTH0_CLIENT_ID": "CxonhKwqNec6L8uTKynydwo11s4VdrmU",
+            "VITE_AUTH0_DOMAIN": "cold-climate-production.us.auth0.com",
+            "VITE_AUTH0_ISSUER_BASE_URL": "https://cold-climate-production.us.auth0.com",
+            "VITE_COLD_API_AUDIENCE": "https://api.coldclimate.com/",
+            "VITE_COLD_ORG_ID": "org_TDK6TBFHzLonU2tz",
+            "VITE_DARKLY_CLIENT_ID": "644fe7fe13a8fb12f3ca0c1a",
+            "VITE_DD_AGENT_MAJOR_VERSION": "7",
+            "VITE_DD_API_KEY": "2149b12f01003a49ad9560dc945b1446",
+            "VITE_DD_APM_ENABLED": "true",
+            "VITE_DD_APPSEC_ENABLED": "true",
+            "VITE_DD_DYNO_HOST": "true",
+            "VITE_NODE_ENV": "production",
+            "VITE_DD_ENV": "production",
+            "VITE_DD_IAST_ENABLED": "true",
+            "VITE_DD_LOG_LEVEL": "ERROR",
+            "VITE_DD_LOGS_INJECTION": "true",
+            "VITE_DD_PROFILING_ENABLED": "true",
+            "VITE_DD_REMOTE_CONFIGURATION_ENABLED": "true",
+            "VITE_DD_RUM_APPLICATION_ID": "8d5928f4-f01f-4f10-8ac5-979d8989c8f3",
+            "VITE_DD_RUM_CLIENT_TOKEN": "pub92f690b0e4706ca7b9d2e7d7481f383e",
+            "VITE_DD_SITE": "us5.datadoghq.com",
+            "VITE_DD_VERSION": "1.70.0",
+            "VITE_LD_CLIENT_SIDE_ID": "644fe7fe13a8fb12f3ca0c1a"
+          }
+        },
+        {
+          "id": "cold-api-production",
+          "name": "cold-api-nest",
+          "cpu": 1,
+          "port": 7001,
+          "type": "fargate",
+          "memory": 2,
+          "basePath": ".",
+          "buildType": "fromRepository",
+          "containerImage": {
+            "registryId": "cold-ecr-fc-r123elz",
+            "repository": "api-docker-images",
+            "tag": "main"
+          },
+          "domain": "api.coldclimate.com",
+          "watchPaths": [
+            "apps/cold-api/src/**",
+            "apps/cold-api/prisma/**",
+            "package.json"
+          ],
+          "maxInstances": 4,
+          "minInstances": 2,
+          "healthCheckPath": "/health",
+          "containerInsights": false,
+          "enableCloudfrontSwr": true,
+          "versionHistoryCount": 10,
+          "dockerLabels": {
+            "com.datadoghq.ad.instances": "[{\"host\": \"%%host%%\", \"port\": 7001}]",
+            "com.datadoghq.ad.check_names": "[\"cold-api-nest\"]",
+            "com.datadoghq.ad.init_configs": "[{}]"
+          },
+          "autoscaling": {
+            "cpuThreshold": 70,
+            "memoryThreshold": 70,
+            "cooldownTimerSecs": 300,
+            "requestsPerTarget": 500
+          },
+          "experimental": {
+            "healthCheckTimeout": 15,
+            "healthCheckInterval": 35
+          },
+          "envVariables": {
+            "DD_API_KEY": {
+              "fromParameterStore": "fc.cold-api-fc.env.cold-production.8pr1zak.DD_API_KEY"
+            },
+            "NODE_ENV": "production",
+            "DD_ENV": "production",
+            "REDISCLOUD_URL": {
+              "fromService": {
+                "id": "cold-cache-fc-production",
+                "value": "connectionString"
+              }
+            },
+            "DATABASE_URL": {
+              "fromService": {
+                "id": "cold-rds-fc-production",
+                "value": "dbConnectionString"
+              }
+            },
+            "ENABLE_HEALTH_LOGS": false
+          },
+          "sidecars": [
+            {
+              "name": "cold-datadog-fc-production",
+              "image": "datadog/agent",
+              "cpuAllotment": 0.5,
+              "memoryAllotment": 0.25,
+              "enableNetworking": true,
+              "logging": true,
+              "ports": [8125, 5001, 5000],
+              "envVariables": {
+                "DD_ENV": "production",
+                "NODE_ENV": "production",
+                "DD_AGENT_MAJOR_VERSION": "7",
+                "DD_LOG_LEVEL": "ERROR",
+                "DD_API_KEY": {
+                  "fromParameterStore": "fc.cold-api-fc.env.cold-production.8pr1zak.DD_API_KEY"
+                },
+                "DD_POSTGRES_URL_VAR": "DATABASE_URL",
+                "DD_REDIS_URL_VAR": "REDISCLOUD_URL",
+                "DD_SERVICE": "cold-api-fc",
+                "DD_SITE": "us5.datadoghq.com",
+                "DD_APM_ENABLED": true,
+                "DD_APPSEC_AUTOMATED_USER_EVENTS_TRACKING": true,
+                "DD_APPSEC_ENABLED": true,
+                "DD_DOGSTATSD_NON_LOCAL_TRAFFIC": true,
+                "DD_DYNO_HOST": true,
+                "DD_ENABLE_DBM": true,
+                "DD_LOGS_INJECTION": true,
+                "DD_IAST_ENABLED": true,
+                "DD_PROCESS_AGENT": true,
+                "DD_PROFILING_ENABLED": true,
+                "DD_REMOTE_CONFIGURATION_ENABLED": true
+              }
+            }
+          ]
+        },
+        {
+          "id": "cold-rds-production",
+          "name": "rds-production",
+          "type": "rds",
+          "engine": "postgres",
+          "engineVersion": "15",
+          "instanceSize": "db.t4g.large",
+          "storage": 200,
+          "maxStorage": 400,
+          "private": false,
+          "deletionProtection": true,
+          "applyChangesImmediately": true,
+          "autoUpgradeMinorVersions": true,
+          "connectionStringEnvVarName": "DATABASE_URL"
+        },
+        {
+          "id": "cold-cache-fc-production",
+          "name": "cold-cache-fc-production",
+          "port": 6379,
+          "type": "elasticache",
+          "engine": "redis",
+          "clusterMode": false,
+          "instanceSize": "cache.t3.micro",
+          "engineVersion": "7.0",
+          "encryptionAtRest": true,
+          "numberOfReplicas": 1,
+          "applyChangesImmediately": true,
+          "autoMinorVersionUpgrade": true,
+          "connectionStringEnvVarName": "REDISCLOUD_URL"
+        }
+      ]
+    },
+    {
+      "id": "cold-staging",
+      "name": "staging",
+      "region": "us-east-1",
+      "source": {
+        "pr": false,
+        "branch": "staging"
+      },
+      "services": [
+        {
+          "id": "cold-ui-staging",
+          "name": "cold-ui",
+          "type": "static",
+          "singlePageApp": true,
+          "basePath": "./apps/cold-ui",
+          "buildCommand": "yarn prebuild && npx nx build cold-ui:build:production",
+          "outputDirectory": "dist/apps/cold-ui",
+          "watchPaths": [
+            "apps/cold-ui/**",
+            "package.json"
+          ],
+          "envVariables": {
+            "VITE_API_BASE_URL": "https://api.coldclimate.online",
+            "VITE_APP_VERSION": "1.0.0",
+            "VITE_AUTH0_ISSUER_BASE_URL": "https://cold-climate-staging.us.auth0.com",
+            "VITE_AUTH0_BASE_URL": "https://app.coldclimate.online",
+            "VITE_AUTH0_CLIENT_ID": "i8rCPXsLq9b2YKOOWUTfvgUj0iYD7dE3",
+            "VITE_AUTH0_DOMAIN": "cold-climate-staging.us.auth0.com",
+            "VITE_COLD_API_AUDIENCE": "https://api.coldclimate.online/",
+            "VITE_COLD_ORG_ID": "org_g2zzR5rwTKVAIwCn",
+            "VITE_DARKLY_CLIENT_ID": "644fe7fe13a8fb12f3ca0c19",
+            "VITE_DD_AGENT_MAJOR_VERSION": "7",
+            "VITE_DD_API_KEY": "2149b12f01003a49ad9560dc945b1446",
+            "VITE_DD_APM_ENABLED": "true",
+            "VITE_DD_APPLICATION_ID": "8d5928f4-f01f-4f10-8ac5-979d8989c8f3",
+            "VITE_DD_APPSEC_ENABLED": "true",
+            "VITE_DD_CLIENT_TOKEN": "pub92f690b0e4706ca7b9d2e7d7481f383e",
+            "VITE_DD_DYNO_HOST": "true",
+            "VITE_DD_ENV": "staging",
+            "VITE_DD_IAST_ENABLED": "true",
+            "VITE_DD_LOG_LEVEL": "ERROR",
+            "VITE_DD_LOGS_INJECTION": "true",
+            "VITE_DD_PROFILING_ENABLED": "true",
+            "VITE_DD_REMOTE_CONFIGURATION_ENABLED": "true",
+            "VITE_DD_RUM_APPLICATION_ID": "8d5928f4-f01f-4f10-8ac5-979d8989c8f3",
+            "VITE_DD_RUM_CLIENT_TOKEN": "pub92f690b0e4706ca7b9d2e7d7481f383e",
+            "VITE_DD_SERVICE": "ui",
+            "VITE_DD_SITE": "us5.datadoghq.com",
+            "VITE_LD_CLIENT_SIDE_ID": "644fe7fe13a8fb12f3ca0c19"
+          }
+        },
+        {
+          "id": "cold-api-fc-staging",
+          "cpu": 1,
+          "name": "cold-api-fc",
+          "port": 7001,
+          "type": "fargate",
+          "memory": 2,
+          "basePath": ".",
+          "buildType": "fromRepository",
+          "containerImage": {
+            "registryId": "cold-ecr-fc-r123elz",
+            "repository": "api-docker-images",
+            "tag": "staging"
+          },
+          "domain": "api.coldclimate.online",
+          "watchPaths": [
+            "apps/cold-api/src/**",
+            "apps/cold-api/prisma/**",
+            "apps/cold-api/test/**",
+            "Dockerfile"
+          ],
+          "autoscaling": {
+            "cpuThreshold": 70,
+            "memoryThreshold": 70,
+            "cooldownTimerSecs": 300,
+            "requestsPerTarget": 500
+          },
+          "maxInstances": 2,
+          "minInstances": 1,
+          "healthCheckPath": "/health",
+          "containerInsights": true,
+          "enableCloudfrontSwr": false,
+          "versionHistoryCount": 10,
+          "experimental": {
+            "healthCheckTimeout": 15,
+            "healthCheckInterval": 35
+          },
+          "dockerLabels": {
+            "com.datadoghq.ad.instances": "[{\"host\": \"%%host%%\", \"port\": 7001}]",
+            "com.datadoghq.ad.check_names": "[\"cold-api-nest\"]",
+            "com.datadoghq.ad.init_configs": "[{}]"
+          },
+          "envVariables": {
+            "DD_API_KEY": {
+              "fromParameterStore": "fc.cold-api-fc.env.cold-production.8pr1zak.DD_API_KEY"
+            },
+            "DATABASE_URL": {
+              "fromService": {
+                "id": "cold-rds-fc-staging",
+                "value": "dbConnectionString"
+              }
+            },
+            "REDISCLOUD_URL": {
+              "fromService": {
+                "id": "cold-cache-fc-staging",
+                "value": "connectionString"
+              }
+            }
+          },
+          "sidecars": [
+            {
+              "name": "cold-datadog-fc-staging",
+              "image": "datadog/agent",
+              "cpuAllotment": 0.5,
+              "memoryAllotment": 0.25,
+              "enableNetworking": true,
+              "logging": true,
+              "ports": [8125, 5001, 5000],
+              "envVariables": {
+                "DD_ENV": "staging",
+                "NODE_ENV": "staging",
+                "DD_AGENT_MAJOR_VERSION": "7",
+                "DD_LOG_LEVEL": "ERROR",
+                "DD_API_KEY": {
+                  "fromParameterStore": "fc.cold-api-fc.env.cold-production.8pr1zak.DD_API_KEY"
+                },
+                "DD_POSTGRES_URL_VAR": "DATABASE_URL",
+                "DD_REDIS_URL_VAR": "REDISCLOUD_URL",
+                "DD_SERVICE": "cold-api-fc",
+                "DD_SITE": "us5.datadoghq.com",
+                "DD_APM_ENABLED": true,
+                "DD_APPSEC_AUTOMATED_USER_EVENTS_TRACKING": true,
+                "DD_APPSEC_ENABLED": true,
+                "DD_DOGSTATSD_NON_LOCAL_TRAFFIC": true,
+                "DD_DYNO_HOST": true,
+                "DD_ENABLE_DBM": true,
+                "DD_LOGS_INJECTION": true,
+                "DD_IAST_ENABLED": true,
+                "DD_PROCESS_AGENT": true,
+                "DD_PROFILING_ENABLED": true,
+                "DD_REMOTE_CONFIGURATION_ENABLED": true
+              }
+            }
+          ]
+        },
+        {
+          "id": "cold-rds-fc-staging",
+          "name": "cold-rds-fc-staging",
+          "type": "rds",
+          "engine": "postgres",
+          "engineVersion": "15",
+          "instanceSize": "db.t4g.small",
+          "storage": 20,
+          "maxStorage": 200,
+          "private": false,
+          "deletionProtection": false,
+          "applyChangesImmediately": true,
+          "autoUpgradeMinorVersions": true,
+          "connectionStringEnvVarName": "DATABASE_URL"
+        },
+        {
+          "id": "cold-cache-fc-staging",
+          "name": "cold-cache-fc-staging",
+          "port": 6379,
+          "type": "elasticache",
+          "engine": "redis",
+          "clusterMode": false,
+          "instanceSize": "cache.t3.micro",
+          "engineVersion": "7.0",
+          "encryptionAtRest": true,
+          "numberOfReplicas": 1,
+          "applyChangesImmediately": true,
+          "autoMinorVersionUpgrade": true,
+          "connectionStringEnvVarName": "REDISCLOUD_URL"
+        }
+      ]
+    },
+    {
+      "id": "cold-preview",
+      "name": "preview",
+      "region": "us-east-1",
+      "source": {
+        "pr": true,
+        "filter": {
+          "toBranches": ["main"]
+        }
+      },
+      "services": [
+        {
+          "id": "cold-ui-test",
+          "name": "cold-ui",
+          "type": "static",
+          "singlePageApp": true,
+          "basePath": "./apps/cold-ui",
+          "buildCommand": "yarn prebuild && npx nx build cold-ui:build:development",
+          "outputDirectory": "dist/apps/cold-ui",
+          "watchPaths": [
+            "apps/cold-ui/**",
+            "package.json"
+          ],
+          "envVariables": {
+            "VITE_API_BASE_URL": "https://api.coldclimate.online",
+            "VITE_APP_VERSION": "1.0.0",
+            "VITE_AUTH0_ISSUER_BASE_URL": "https://cold-climate-staging.us.auth0.com",
+            "VITE_AUTH0_BASE_URL": "https://app.coldclimate.online",
+            "VITE_AUTH0_CLIENT_ID": "i8rCPXsLq9b2YKOOWUTfvgUj0iYD7dE3",
+            "VITE_AUTH0_DOMAIN": "cold-climate-staging.us.auth0.com",
+            "VITE_COLD_API_AUDIENCE": "https://api.coldclimate.online/",
+            "VITE_COLD_ORG_ID": "org_g2zzR5rwTKVAIwCn",
+            "VITE_DARKLY_CLIENT_ID": "644fe7fe13a8fb12f3ca0c19",
+            "VITE_DD_AGENT_MAJOR_VERSION": "7",
+            "VITE_DD_API_KEY": "2149b12f01003a49ad9560dc945b1446",
+            "VITE_DD_APM_ENABLED": "true",
+            "VITE_DD_APPLICATION_ID": "8d5928f4-f01f-4f10-8ac5-979d8989c8f3",
+            "VITE_DD_APPSEC_ENABLED": "true",
+            "VITE_DD_CLIENT_TOKEN": "pub92f690b0e4706ca7b9d2e7d7481f383e",
+            "VITE_DD_DYNO_HOST": "true",
+            "VITE_DD_ENV": "test",
+            "VITE_NODE_ENV": "test",
+            "VITE_DD_IAST_ENABLED": "true",
+            "VITE_DD_LOG_LEVEL": "ERROR",
+            "VITE_DD_LOGS_INJECTION": "true",
+            "VITE_DD_PROFILING_ENABLED": "true",
+            "VITE_DD_REMOTE_CONFIGURATION_ENABLED": "true",
+            "VITE_DD_RUM_APPLICATION_ID": "8d5928f4-f01f-4f10-8ac5-979d8989c8f3",
+            "VITE_DD_RUM_CLIENT_TOKEN": "pub92f690b0e4706ca7b9d2e7d7481f383e",
+            "VITE_DD_SERVICE": "ui",
+            "VITE_DD_SITE": "us5.datadoghq.com",
+            "VITE_LD_CLIENT_SIDE_ID": "644fe7fe13a8fb12f3ca0c19"
+          }
+        },
+        {
+          "id": "cold-api-preview",
+          "name": "cold-api-nest",
+          "cpu": 1,
+          "port": 7001,
+          "type": "fargate",
+          "memory": 2,
+          "basePath": ".",
+          "buildType": "docker",
+          "domain": "api.coldclimate.wtf",
+          "maxInstances": 2,
+          "minInstances": 1,
+          "healthCheckPath": "/health",
+          "containerInsights": true,
+          "enableCloudfrontSwr": false,
+          "versionHistoryCount": 10,
+          "experimental": {
+            "healthCheckTimeout": 15,
+            "healthCheckInterval": 35
+          },
+          "watchPaths": [
+            "apps/cold-api/src/**",
+            "apps/cold-api/prisma/**",
+            "apps/cold-api/test/**",
+            "api.flightcontrol.json",
+            "Dockerfile"
+          ],
+          "autoscaling": {
+            "cpuThreshold": 70,
+            "memoryThreshold": 70,
+            "cooldownTimerSecs": 300,
+            "requestsPerTarget": 500
+          },
+          "dockerLabels": {
+            "com.datadoghq.ad.instances": "[{\"host\": \"%%host%%\", \"port\": 7001}]",
+            "com.datadoghq.ad.check_names": "[\"cold-api-nest\"]",
+            "com.datadoghq.ad.init_configs": "[{}]"
+          },
+          "envVariables": {
+            "DATABASE_URL": {
+              "fromService": {
+                "id": "cold-rds-fc-staging",
+                "value": "dbConnectionString"
+              }
+            },
+            "REDISCLOUD_URL": {
+              "fromService": {
+                "id": "cold-cache-fc-staging",
+                "value": "connectionString"
+              }
+            },
+            "DD_API_KEY": {
+              "fromParameterStore": "fc.cold-api-fc.env.cold-production.8pr1zak.DD_API_KEY"
+            },
+            "NODE_ENV": "test",
+            "DD_ENV": "test"
+          },
+          "sidecars": [
+            {
+              "name": "cold-datadog-preview",
+              "image": "datadog/agent",
+              "cpuAllotment": 0.5,
+              "memoryAllotment": 0.25,
+              "enableNetworking": true,
+              "logging": true,
+              "ports": [8125, 5001, 5000],
+              "envVariables": {
+                "DD_ENV": "test",
+                "NODE_ENV": "test",
+                "DD_AGENT_MAJOR_VERSION": "7",
+                "DD_LOG_LEVEL": "ERROR",
+                "DD_API_KEY": {
+                  "fromParameterStore": "fc.cold-api-fc.env.cold-production.8pr1zak.DD_API_KEY"
+                },
+                "DD_POSTGRES_URL_VAR": "DATABASE_URL",
+                "DD_REDIS_URL_VAR": "REDISCLOUD_URL",
+                "DD_SERVICE": "cold-api-fc",
+                "DD_SITE": "us5.datadoghq.com",
+                "DD_APM_ENABLED": true,
+                "DD_APPSEC_AUTOMATED_USER_EVENTS_TRACKING": true,
+                "DD_APPSEC_ENABLED": true,
+                "DD_DOGSTATSD_NON_LOCAL_TRAFFIC": true,
+                "DD_DYNO_HOST": true,
+                "DD_ENABLE_DBM": true,
+                "DD_LOGS_INJECTION": true,
+                "DD_IAST_ENABLED": true,
+                "DD_PROCESS_AGENT": true,
+                "DD_PROFILING_ENABLED": true,
+                "DD_REMOTE_CONFIGURATION_ENABLED": true
+              }
+            }
+          ]
+        },
+        {
+          "id": "cold-rds-preview",
+          "name": "cold-rds-preview",
+          "type": "rds",
+          "engine": "postgres",
+          "engineVersion": "15",
+          "instanceSize": "db.t4g.small",
+          "storage": 20,
+          "maxStorage": 200,
+          "private": false,
+          "deletionProtection": false,
+          "applyChangesImmediately": true,
+          "autoUpgradeMinorVersions": true,
+          "connectionStringEnvVarName": "DATABASE_URL"
+        },
+        {
+          "id": "cold-cache-preview",
+          "name": "cold-cache-preview",
+          "port": 6379,
+          "type": "elasticache",
+          "engine": "redis",
+          "clusterMode": false,
+          "instanceSize": "cache.t3.micro",
+          "engineVersion": "7.0",
+          "encryptionAtRest": true,
+          "numberOfReplicas": 1,
+          "applyChangesImmediately": false,
+          "autoMinorVersionUpgrade": true,
+          "connectionStringEnvVarName": "REDISCLOUD_URL"
+        }
+      ],
+      "envVariables": {
+        "API_SERVER_DESCRIPTION": "Preview Server",
+        "API_SERVER_URL": "https://api.coldclimate.online",
+        "AUTH0_AUDIENCE": "https://api.coldclimate.online/",
+        "AUTH0_DOMAIN": "cold-climate-staging.us.auth0.com",
+        "CACHE_TTL": "604800000",
+        "NODE_ENV": "test",
+        "DD_ENV": "test",
+        "DD_API_KEY": {
+          "fromParameterStore": "fc.cold-api-fc.env.cold-production.8pr1zak.DD_API_KEY"
+        }
+      }
+    }
+  ]
+}

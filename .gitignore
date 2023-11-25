@@ -49,3 +49,4 @@ index.ts
 /.nx/
 /migrations.json
 **/*.d.ts
+/libs/validation/src/generated/

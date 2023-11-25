@@ -1,6 +1,6 @@
-import { createZodDto } from '@abitia/zod-dto';
 import * as z from 'zod';
 import { ActivitySchema } from './activities.schema';
+import { createZodDto } from '@anatine/zod-nestjs';
 
 export const SubCategorySchema = z.object({
   idx: z.number(),

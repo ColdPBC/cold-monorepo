@@ -177,15 +177,15 @@ jobs:
           --header 'Content-Type: application/json' \
           --header 'Authorization: Bearer ${{secrets.HEROKU_API_KEY}}' \
           --data "{\"DD_VERSION\":$(npm pkg get version)}"
-      - name: Update Image Tag in api.flightcontrol.json
+      - name: Update Image Tag in flightcontrol.json
         uses: restackio/update-json-file-action@v2.0
         with:
-            file: api.flightcontrol.json
+            file: flightcontrol.json
             fields: "{\"environments.services[1].containerImage.tag\":\"${{ github.head_ref || github.ref_name }}\"}"
-      - name: Update Version Variable in api.flightcontrol.json
+      - name: Update Version Variable in flightcontrol.json
         uses: restackio/update-json-file-action@v2.0
         with:
-          file: api.flightcontrol.json
+          file: flightcontrol.json
           fields: "{\"environments.services[1].envVariables.DD_VERSION\":$(npm pkg get version)}"
 
       - name: test

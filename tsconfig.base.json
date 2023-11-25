@@ -30,7 +30,6 @@
       "@coldpbc/styles": ["./libs/react/src/styles/index.ts"],
       "@coldpbc/themes": ["./libs/react/src/themes/index.ts"],
       "nest": ["libs/nest/src/index.ts"],
-      "prisma": ["libs/prisma/src/index.ts"],
       "validation": ["libs/validation/src/index.ts"],
     }
   },

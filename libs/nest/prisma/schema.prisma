@@ -6,17 +6,17 @@ generator client {
 generator zod {
   provider                         = "zod-prisma-types"
   output                           = "../../validation/src/generated"
-  addInputTypeValidation           = "false"
+  addInputTypeValidation           = false
   addSelectType                    = "false"
   validateWhereUniqueInput         = "false"
   addIncludeType                   = "false"
   writeNullishInModelTypes         = "false"
-  createInputTypes                 = "false"
+  createInputTypes                 = false
   useDefaultValidators             = "false"
   createRelationValuesTypes        = "false"
-  createPartialTypes               = "false"
+  createPartialTypes               = false
   createOptionalDefaultValuesTypes = "false"
-  writeBarrelFiles                 = "true"
+  writeBarrelFiles                 = false
   useMultipleFiles                 = "true"
   coerceDate                       = "true"
   createModelTypes                 = "true"

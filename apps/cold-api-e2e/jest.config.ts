@@ -1,7 +1,7 @@
 /* eslint-disable */
 export default {
   displayName: 'cold-api-e2e',
-  preset: '../../jest.preset.js',
+  preset: '../../jest.preset.cjs',
   globalSetup: '<rootDir>/src/support/global-setup.ts',
   globalTeardown: '<rootDir>/src/support/global-teardown.ts',
   setupFiles: ['dotenv/config', '<rootDir>/src/support/test-setup.ts'],

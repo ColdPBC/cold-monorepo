@@ -1,8 +1,8 @@
 {
   "delete": true,
   "location": "all",
-  "header": false,
   "singleQuote": true,
-  "directory": ["./libs/react/src", "./libs/nest", "./libs/validation"],
-  "exclude": ["stories.tsx", "react-app-env", "test.ts[x]*", "private.tsx", "spec.ts[x]*", "jest.config.ts"]
+  "verbose": true,
+  "directory": ["./libs/react/src/", "./libs/nest", "./libs/validation"],
+  "exclude": ["stories.tsx", "react-app-env", "private.tsx", "index.ts", "jest.config.ts"]
 }

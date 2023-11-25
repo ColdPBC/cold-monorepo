@@ -1,9 +1,9 @@
 // noinspection JSVoidFunctionReturnValueUsed
 
-import { patchNestjsSwagger } from '@abitia/zod-dto';
 import { INestApplication, Module } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { join } from 'path';
+import { patchNestjsSwagger } from '@anatine/zod-nestjs';
 
 @Module({})
 export class OpenapiModule {

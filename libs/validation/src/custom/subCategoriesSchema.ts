@@ -1,7 +1,7 @@
-import { createZodDto } from '@abitia/zod-dto';
 import { extendApi } from '@anatine/zod-openapi';
 import * as z from 'zod';
 import { ActivitySchema } from './activitiesSchema';
+import { createZodDto } from '@anatine/zod-nestjs';
 
 export const SubCategorySchema = extendApi(
   z.object({

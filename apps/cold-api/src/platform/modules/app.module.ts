@@ -8,7 +8,7 @@ import { NewsModule } from './resources/news/news.module';
 import { PolicyDefinitionsModule } from './resources/policies/policy-definitions.module';
 import { SurveysModule } from './resources/surveys/surveys.module';
 import { Auth0Module } from './resources/auth0/auth0.module';
-import { NestModule } from 'nest';
+import { NestModule, PrismaModule } from 'nest';
 
 @Module({
   imports: [
@@ -20,6 +20,7 @@ import { NestModule } from 'nest';
       },
       serveRoot: '../../../public',
     }),
+    PrismaModule,
     Auth0Module,
     ComponentDefinitionsModule,
     PolicyDefinitionsModule,
