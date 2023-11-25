@@ -195,6 +195,9 @@ jobs:
 
   deploy:
     name: Build Docker Image
+    needs:
+      - build
+      - dependencies
     env:
       BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
     runs-on: ubuntu-latest
