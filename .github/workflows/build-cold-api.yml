@@ -51,7 +51,7 @@ jobs:
         run: yarn
       #Database Migrations
       - name: Generate Prisma Client
-        run: yarn dlx prisma generate
+        run: prisma generate
       - name: Unit Tests
         run: yarn test
       - name: Migrate Staging DB
