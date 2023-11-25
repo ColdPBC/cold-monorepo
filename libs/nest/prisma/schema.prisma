@@ -16,7 +16,7 @@ generator zod {
   createRelationValuesTypes        = "false"
   createPartialTypes               = false
   createOptionalDefaultValuesTypes = "false"
-  writeBarrelFiles                 = false
+  writeBarrelFiles                 = true
   useMultipleFiles                 = "true"
   coerceDate                       = "true"
   createModelTypes                 = "true"

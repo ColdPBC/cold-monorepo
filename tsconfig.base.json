@@ -29,8 +29,8 @@
       "@coldpbc/routes": ["./libs/react/src/routes/index.ts"],
       "@coldpbc/styles": ["./libs/react/src/styles/index.ts"],
       "@coldpbc/themes": ["./libs/react/src/themes/index.ts"],
-      "nest": ["libs/nest/src/index.ts"],
-      "validation": ["libs/validation/src/index.ts"],
+      "nest": ["./libs/nest/src/index.ts"],
+      "validation": ["./libs/validation/src/index.ts"],
     }
   },
   "files": ["./node_modules/@nx/react/typings/cssmodule.d.ts", "./node_modules/@nx/react/typings/image.d.ts"],
