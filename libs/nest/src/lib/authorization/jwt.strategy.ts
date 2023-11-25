@@ -5,7 +5,7 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { passportJwtSecret } from 'jwks-rsa';
 import * as dotenv from 'dotenv';
 import { JwtService } from '@nestjs/jwt';
-import { WorkerLogger } from 'nest';
+import { WorkerLogger } from '../worker';
 
 dotenv.config();
 

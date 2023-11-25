@@ -51,9 +51,9 @@ jobs:
       - name: Install dependencies
         run: yarn global add nx zod-prisma zod-prisma-types @vegardit/prisma-generator-nestjs-dto prisma ts-node && yarn
       - name: Generate Prisma Client
-        run: nx run nest:prisma-generate && yarn prebuild
+        run: nx run nest:prisma-generate
       - name: build
-        run: nx run cold-api:build:development
+        run:  yarn prebuild && nx run cold-api:build:development
       - name: Unit Tests
         run: yarn test
       - name: Migrate Staging DB
