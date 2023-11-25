@@ -50,8 +50,9 @@ jobs:
       #Database Migrations
       - name: Install dependencies
         run: |
-          yarn global add nx zod-prisma zod-prisma-types @vegardit/prisma-generator-nestjs-dto prisma ts-node /
           yarn /
+          yarn global add nx zod-prisma zod-prisma-types @vegardit/prisma-generator-nestjs-dto prisma ts-node /
+
       - name: Generate Prisma Client
         run: nx run nest:prisma-generate
       - name: Unit Tests
