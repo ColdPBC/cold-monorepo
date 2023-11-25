@@ -47,11 +47,13 @@ jobs:
             ${{ runner.os }}-build-${{ env.CACHE_NAME }}-
             ${{ runner.os }}-build-
             ${{ runner.os }}-
-      - name: Install dependencies
-        run: yarn
       #Database Migrations
+      - name: Install dependencies
+        run: |
+          yarn global add nx zod-prisma zod-prisma-types @vegardit/prisma-generator-nestjs-dto prisma ts-node /
+          yarn /
       - name: Generate Prisma Client
-        run: npx nx run prisma generate
+        run: nx run nest:prisma-generate
       - name: Unit Tests
         run: yarn test
       - name: Migrate Staging DB
@@ -63,7 +65,7 @@ jobs:
           DATABASE_URL: ${{ secrets.STAGING_DATABASE_URL }}
         if: startsWith(env.BRANCH_NAME,'cold') || startsWith(env.BRANCH_NAME,'Cold') || startsWith(env.BRANCH_NAME,'COLD')
         run: |
-          npx nx run nest:prisma-generate /
+          nx run nest:prisma-generate /
           prisma migrate deploy --preview-feature /
       - name: Seed Staging DB
         env:
