@@ -3,8 +3,7 @@ import { ApiBody, ApiOAuth2, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@
 import { Span } from 'nestjs-ddtrace';
 import { component_definition_types } from 'prisma/prisma-client';
 import { ResourceValidationPipe } from '../../../pipes/resource.pipe';
-import { HttpExceptionFilter, AuthenticatedUser, BaseWorker, Roles, JwtAuthGuard, RolesGuard } from '@coldpbc/nest';
-import { component_definitionsSchema } from '@coldpbc/validation';
+import { component_definitionsSchema, HttpExceptionFilter, AuthenticatedUser, BaseWorker, Roles, JwtAuthGuard, RolesGuard } from '@coldpbc/nest';
 import { allRoles, bpcDecoratorOptions, coldAdminOnly } from '../_global/global.params';
 import { ComponentDefinitionsService } from './component-definitions.service';
 import { ComponentDefinitionDto } from './dto/component-definition-dto';

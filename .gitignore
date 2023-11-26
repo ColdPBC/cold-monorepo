@@ -50,3 +50,5 @@ index.ts
 /migrations.json
 **/*.d.ts
 /libs/validation/src/generated/
+/libs/nest/src/validation/generated/inputTypeSchemas/
+/libs/nest/src/validation/generated/modelSchema/

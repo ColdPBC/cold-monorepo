@@ -1,11 +1,9 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpException, Param, Patch, Post, Put, Query, Req, UseFilters, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post, Put, Query, Req, UseFilters, UseGuards } from '@nestjs/common';
 import { ApiOAuth2, ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { survey_types } from '@prisma/client';
 import { Span } from 'nestjs-ddtrace';
-import { filter } from 'lodash';
 import { ResourceValidationPipe } from '../../../pipes/resource.pipe';
-import { JwtAuthGuard, RolesGuard, Roles, HttpExceptionFilter, Role, BaseWorker, AuthenticatedUser, UpdateSurveyDefinitionsDto } from '@coldpbc/nest';
-import { survey_definitions, SurveyResponseSchema, ZodCategoryResponseDto } from '@coldpbc/validation';
+import { survey_definitions, SurveyResponseSchema, ZodCategoryResponseDto, JwtAuthGuard, RolesGuard, Roles, HttpExceptionFilter, Role, BaseWorker, AuthenticatedUser, UpdateSurveyDefinitionsDto } from '@coldpbc/nest';
 import { allRoles, bpcDecoratorOptions, coldAdminOnly, impersonateOrgDecoratorOptions, orgIdDecoratorOptions } from '../_global/global.params';
 import { SurveysService } from './surveys.service';
 import { UpdateSurveyDefinitionDto } from './dto/update-survey-definition.dto';

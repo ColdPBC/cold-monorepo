@@ -5,7 +5,7 @@ generator client {
 
 generator zod {
   provider                         = "zod-prisma-types"
-  output                           = "../../validation/src/generated"
+  output                           = "../src/validation/generated"
   addInputTypeValidation           = false
   addSelectType                    = "false"
   validateWhereUniqueInput         = "false"

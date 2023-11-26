@@ -2,8 +2,7 @@ import { Body, Controller, Delete, Get, Param, ParseBoolPipe, Post, Query, Req, 
 import { ApiBody, ApiOAuth2, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Span } from 'nestjs-ddtrace';
 import { ResourceValidationPipe } from '../../../pipes/resource.pipe';
-import { AuthenticatedUser, BaseWorker, HttpExceptionFilter, Roles, JwtAuthGuard, RolesGuard } from '@coldpbc/nest';
-import { newsSchema } from '@coldpbc/validation';
+import { newsSchema, AuthenticatedUser, BaseWorker, HttpExceptionFilter, Roles, JwtAuthGuard, RolesGuard } from '@coldpbc/nest';
 import { bpcDecoratorOptions, coldAdminOnly, skipDecoratorOptions, takeDecoratorOptions } from '../_global/global.params';
 import { CreateArticleDto } from './dto/news-article.dto';
 import { postNewsExample } from './examples/news.examples';

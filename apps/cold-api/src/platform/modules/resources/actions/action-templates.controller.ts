@@ -3,8 +3,7 @@ import { ApiBody, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/s
 import { Span } from 'nestjs-ddtrace';
 import { createZodDto, ZodSerializerDto } from 'nestjs-zod';
 import { ResourceValidationPipe } from '../../../pipes/resource.pipe';
-import { Roles, JwtAuthGuard, RolesGuard, HttpExceptionFilter, AuthenticatedUser, BaseWorker } from '@coldpbc/nest';
-import { CreateActionTemplateItemSchema, ZodCreateActionTemplate, action_templatesSchema } from '@coldpbc/validation';
+import { CreateActionTemplateItemSchema, ZodCreateActionTemplate, action_templatesSchema, Roles, JwtAuthGuard, RolesGuard, HttpExceptionFilter, AuthenticatedUser, BaseWorker } from '@coldpbc/nest';
 import { coldAdminOnly } from '../_global/global.params';
 import { ActionTemplatesService } from './action-templates.service';
 import { actionTemplatePatchExample, actionTemplatePostExample, testActionTemplateIdExample } from './examples/action-template.examples';
