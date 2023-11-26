@@ -52,11 +52,7 @@ jobs:
         run: yarn add global nx zod-prisma zod-prisma-types @vegardit/prisma-generator-nestjs-dto prisma ts-node && yarn
       - name: Generate Prisma Client
         run: yarn dlx nx run coldpbc/nest:prisma-generate
-      - name: build production
-        if: startsWith(env.BRANCH_NAME,'main') || startsWith(env.BRANCH_NAME,'staging')
-        run:  yarn prebuild && yarn dlx nx reset && yarn dlx nx run cold-api:build:production
       - name: build development
-        if: startsWith(env.BRANCH_NAME,'cold') || startsWith(env.BRANCH_NAME,'Cold') || startsWith(env.BRANCH_NAME,'COLD')
         run:  yarn prebuild && yarn dlx nx reset && yarn dlx nx run cold-api:build:development
       - name: Unit Tests
         run: yarn test
@@ -180,20 +176,6 @@ jobs:
           --header 'Content-Type: application/json' \
           --header 'Authorization: Bearer ${{secrets.HEROKU_API_KEY}}' \
           --data "{\"DD_VERSION\":$(npm pkg get version)}"
-      - name: Update Image Tag in flightcontrol.json
-        uses: restackio/update-json-file-action@v2.0
-        with:
-            file: flightcontrol.json
-            fields: "{\"environments.services[1].containerImage.tag\":\"${{ github.head_ref || github.ref_name }}\"}"
-      - name: Update Version Variable in flightcontrol.json
-        uses: restackio/update-json-file-action@v2.0
-        with:
-          file: flightcontrol.json
-          fields: "{\"environments.services[1].envVariables.DD_VERSION\":$(npm pkg get version)}"
-
-      - name: test
-        run: echo $(cat api.filghtcontrol.json)
-
   deploy:
     name: Build Docker Image
     needs:
