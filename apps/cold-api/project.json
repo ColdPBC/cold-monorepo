@@ -1,6 +1,6 @@
 {
   "name": "cold-api",
-  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "$schema": "/node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/cold-api/src",
   "projectType": "application",
   "targets": {

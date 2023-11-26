@@ -1,6 +1,6 @@
 {
   "name": "cold-openai",
-  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "$schema": "/node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/cold-openai/src",
   "projectType": "application",
   "targets": {

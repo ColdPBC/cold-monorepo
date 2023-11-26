@@ -53,7 +53,7 @@ jobs:
       - name: Generate Prisma Client
         run: nx run nest:prisma-generate
       - name: build
-        run:  yarn prebuild && nx run cold-api:build:development
+        run:  yarn prebuild && nx reset && nx run cold-api:build:development
       - name: Unit Tests
         run: yarn test
       - name: Migrate Staging DB
