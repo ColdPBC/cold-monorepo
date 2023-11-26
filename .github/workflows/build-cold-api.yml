@@ -51,8 +51,12 @@ jobs:
       - name: Install dependencies
         run: yarn add global nx zod-prisma zod-prisma-types @vegardit/prisma-generator-nestjs-dto prisma ts-node && yarn
       - name: Generate Prisma Client
-        run: nx run nest:prisma-generate
-      - name: build
+        run: yarn dlx nx run coldpbc/nest:prisma-generate
+      - name: build production
+        if: startsWith(env.BRANCH_NAME,'main')
+        run:  yarn prebuild && nx reset && nx run cold-api:build:production
+      - name: build development
+        if: startsWith(env.BRANCH_NAME,'cold') || startsWith(env.BRANCH_NAME,'Cold') || startsWith(env.BRANCH_NAME,'COLD')
         run:  yarn prebuild && nx reset && nx run cold-api:build:development
       - name: Unit Tests
         run: yarn test
@@ -65,7 +69,6 @@ jobs:
           DATABASE_URL: ${{ secrets.STAGING_DATABASE_URL }}
         if: startsWith(env.BRANCH_NAME,'cold') || startsWith(env.BRANCH_NAME,'Cold') || startsWith(env.BRANCH_NAME,'COLD')
         run: |
-          yarn dlx nx run coldpbc/nest:prisma-generate /
           prisma migrate deploy --preview-feature /
       - name: Seed Staging DB
         env:
@@ -87,7 +90,6 @@ jobs:
           PR_NUMBER: ${{ github.event.number }}
         if: startsWith(env.BRANCH_NAME,'main')
         run: |
-          yarn dlx nx run coldpbc/nest:prisma-generate  /
           prisma migrate deploy --preview-feature /
       - name: Seed Production DB
         env:
