@@ -1,6 +1,6 @@
 import { JwtService } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
-import { ColdCacheModule, CacheService, PrismaModule, PrismaService, JwtStrategy, DarklyService } from 'nest';
+import { ColdCacheModule, CacheService, PrismaModule, PrismaService, JwtStrategy, DarklyService } from '@coldpbc/nest';
 import { CategoriesController } from './categories.controller';
 import { CategoriesService } from './categories.service';
 import { mockDeep } from 'jest-mock-extended';

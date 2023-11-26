@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { BaseWorker } from 'nest';
+import { BaseWorker } from '@coldpbc/nest';
 import { Category, CategorySchema } from './schemas/category.schema';
 
 @Injectable()

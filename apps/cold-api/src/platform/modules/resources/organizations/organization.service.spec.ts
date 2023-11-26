@@ -3,7 +3,7 @@ import { MemberModule } from '../auth0/members/member.module';
 import { MemberService } from '../auth0/members/member.service';
 import { OrganizationService } from './organization.service';
 import { HttpModule } from '@nestjs/axios';
-import { ColdCacheModule, CacheService, JwtStrategy, PrismaService, DarklyService } from 'nest';
+import { ColdCacheModule, CacheService, JwtStrategy, PrismaService, DarklyService } from '@coldpbc/nest';
 import { RoleModule } from '../auth0/roles/role.module';
 import { OrganizationController } from './organization.controller';
 import { Auth0UtilityService } from '../auth0/auth0.utility.service';

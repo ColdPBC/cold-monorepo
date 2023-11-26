@@ -2,7 +2,7 @@ import { CacheModule } from '@nestjs/cache-manager';
 import { ConfigModule } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
-import { JwtStrategy, ColdCacheModule, CacheService, PrismaModule, PrismaService, DarklyService } from 'nest';
+import { JwtStrategy, ColdCacheModule, CacheService, PrismaModule, PrismaService, DarklyService } from '@coldpbc/nest';
 import { ComponentDefinitionsService } from '../component-definitions/component-definitions.service';
 import { SurveysController } from './surveys.controller';
 import { SurveysService } from './surveys.service';

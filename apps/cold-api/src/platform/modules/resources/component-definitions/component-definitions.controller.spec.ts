@@ -1,6 +1,6 @@
 import { JwtService } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
-import { JwtStrategy, ColdCacheModule, CacheService, PrismaModule, PrismaService, DarklyService } from 'nest';
+import { JwtStrategy, ColdCacheModule, CacheService, PrismaModule, PrismaService, DarklyService } from '@coldpbc/nest';
 import { PolicyDefinitionsModule } from '../policies/policy-definitions.module';
 import { ComponentDefinitionsController } from './component-definitions.controller';
 import { ComponentDefinitionsService } from './component-definitions.service';

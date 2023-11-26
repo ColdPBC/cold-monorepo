@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { CacheService, ColdCacheModule, DarklyService, JwtStrategy, PrismaModule, PrismaService } from 'nest';
+import { CacheService, ColdCacheModule, DarklyService, JwtStrategy, PrismaModule, PrismaService } from '@coldpbc/nest';
 import { PolicyDefinitionsController } from './policy-definitions.controller';
 import { PolicyDefinitionsService } from './policy-definitions.service';
 import { OrganizationService } from '../organizations/organization.service';

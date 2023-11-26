@@ -1,6 +1,6 @@
 import { PipeTransform, BadRequestException } from '@nestjs/common';
 import { ZodObject } from 'zod';
-import { BaseWorker } from 'nest';
+import { BaseWorker } from '@coldpbc/nest';
 
 export class ResourceValidationPipe extends BaseWorker implements PipeTransform {
   constructor(private schema: ZodObject<any>, private method?: 'POST' | 'PATCH' | 'PUT') {

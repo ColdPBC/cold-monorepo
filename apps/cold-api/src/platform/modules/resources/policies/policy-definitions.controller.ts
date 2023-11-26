@@ -1,6 +1,6 @@
 import { Controller, Get, Param, ParseIntPipe, Post, Req, UseFilters, UseGuards } from '@nestjs/common';
 import { ApiOAuth2, ApiParam, ApiTags } from '@nestjs/swagger';
-import { RolesGuard, JwtAuthGuard, Roles, AuthenticatedUser, BaseWorker, HttpExceptionFilter, Public } from 'nest';
+import { RolesGuard, JwtAuthGuard, Roles, AuthenticatedUser, BaseWorker, HttpExceptionFilter, Public } from '@coldpbc/nest';
 import { coldAdminOnly } from '../_global/global.params';
 import { PolicyDefinitionsService } from './policy-definitions.service';
 

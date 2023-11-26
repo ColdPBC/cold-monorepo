@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { CacheService, DarklyService, JwtStrategy, PrismaModule, PrismaService } from 'nest';
+import { CacheService, DarklyService, JwtStrategy, PrismaModule, PrismaService } from '@coldpbc/nest';
 import { PolicyDefinitionsController } from './policy-definitions.controller';
 import { PolicyDefinitionsService } from './policy-definitions.service';
 import { mockDeep } from 'jest-mock-extended';

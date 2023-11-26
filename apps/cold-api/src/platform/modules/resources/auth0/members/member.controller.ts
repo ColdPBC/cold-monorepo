@@ -4,7 +4,7 @@ import { Span } from 'nestjs-ddtrace';
 import { coldAdminOnly } from '../../_global/global.params';
 import { MemberService } from './member.service';
 
-import { Roles, JwtStrategy, RolesGuard, PermissionsGuard, JwtAuthGuard, BaseWorker, HttpExceptionFilter, AuthenticatedUser } from 'nest';
+import { Roles, JwtStrategy, RolesGuard, PermissionsGuard, JwtAuthGuard, BaseWorker, HttpExceptionFilter, AuthenticatedUser } from '@coldpbc/nest';
 
 @Span()
 @UseGuards(JwtAuthGuard, RolesGuard, PermissionsGuard)

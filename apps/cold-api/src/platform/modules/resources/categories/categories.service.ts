@@ -2,8 +2,8 @@ import { BadRequestException, ConflictException, Injectable, NotFoundException, 
 import { detailedDiff, diff } from 'deep-object-diff';
 import { isEmpty, isUUID } from 'class-validator';
 import { Span } from 'nestjs-ddtrace';
-import { ObjectUtils, AuthenticatedUser, BaseWorker, CacheService, DarklyService, PrismaService, Tags } from 'nest';
-import { category_definitions, category_definitionsCustomValidators, ZodCategoryDefinitionItemDto, ZodCreateCategoryDefinitionItemDto } from 'validation';
+import { ObjectUtils, AuthenticatedUser, BaseWorker, CacheService, DarklyService, PrismaService, Tags } from '@coldpbc/nest';
+import { category_definitions, category_definitionsCustomValidators, ZodCategoryDefinitionItemDto, ZodCreateCategoryDefinitionItemDto } from '@coldpbc/validation';
 import { v4 } from 'uuid';
 import { get, merge, omit, find } from 'lodash';
 

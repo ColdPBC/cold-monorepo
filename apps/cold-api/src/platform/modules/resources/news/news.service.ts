@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { news } from '@prisma/client';
 import { Span } from 'nestjs-ddtrace';
-import { AuthenticatedUser, BaseWorker, CacheService, PrismaService } from 'nest';
+import { AuthenticatedUser, BaseWorker, CacheService, PrismaService } from '@coldpbc/nest';
 import { CreateArticleDto } from './dto/news-article.dto';
 
 @Span()

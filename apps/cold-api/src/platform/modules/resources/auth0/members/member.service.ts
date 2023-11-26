@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException, UnauthorizedException, UnprocessableEntityException } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { Span } from 'nestjs-ddtrace';
-import { AuthenticatedUser, CacheService, BaseWorker } from 'nest';
+import { AuthenticatedUser, CacheService, BaseWorker } from '@coldpbc/nest';
 import { Auth0APIOptions, Auth0UtilityService } from '../auth0.utility.service';
 import { filter } from 'lodash';
 

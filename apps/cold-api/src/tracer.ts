@@ -1,7 +1,7 @@
 import Tracer from 'dd-trace';
 import { Request } from 'express';
 import { get } from 'lodash';
-import { BaseWorker } from 'nest';
+import { BaseWorker } from '@coldpbc/nest';
 
 const details = JSON.parse(BaseWorker.getJSON('package.json'));
 

@@ -1,5 +1,5 @@
 import { ConflictException, Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
-import { BaseWorker, AuthenticatedUser, PrismaService, CacheService } from 'nest';
+import { BaseWorker, AuthenticatedUser, PrismaService, CacheService } from '@coldpbc/nest';
 
 import { CreatePolicyDataDto } from './dto/create-policy-data.dto';
 import { CreatePolicyDefinition } from './dto/create-policy-definition.dto';

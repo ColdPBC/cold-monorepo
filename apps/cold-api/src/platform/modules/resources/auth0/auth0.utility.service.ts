@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
-import { CacheService, BaseWorker } from 'nest';
+import { CacheService, BaseWorker } from '@coldpbc/nest';
 
 export interface Auth0APIOptions {
   baseURL: string;

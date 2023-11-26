@@ -1,6 +1,6 @@
 import { JwtService } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
-import { CacheService, PrismaService } from 'nest';
+import { CacheService, PrismaService } from '@coldpbc/nest';
 import { SurveysService } from '../surveys/surveys.service';
 import { ActionTemplatesController } from './action-templates.controller';
 import { ActionTemplatesService } from './action-templates.service';

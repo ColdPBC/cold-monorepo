@@ -1,7 +1,7 @@
 import { Controller, Get, Param, UseFilters, UseGuards } from '@nestjs/common';
 import { ApiOAuth2, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { Span } from 'nestjs-ddtrace';
-import { JwtAuthGuard, HttpExceptionFilter, RolesGuard, BaseWorker } from 'nest';
+import { JwtAuthGuard, HttpExceptionFilter, RolesGuard, BaseWorker } from '@coldpbc/nest';
 import { ownerRoleNameExample } from './examples/role.examples';
 import { RoleService } from './role.service';
 

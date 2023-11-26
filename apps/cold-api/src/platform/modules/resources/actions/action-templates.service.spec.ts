@@ -1,6 +1,6 @@
 import { JwtService } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
-import { CacheService, PrismaService } from 'nest';
+import { CacheService, PrismaService } from '@coldpbc/nest';
 import { authenticatedUserExample } from '../_global/global.examples';
 import { actionTemplatePostExample, actionTemplatePatchExample } from './examples/action-template.examples';
 

@@ -1,7 +1,7 @@
 import { Body, Controller, Get, HttpCode, Param, Put, Query, Req, UseFilters } from '@nestjs/common';
 import { ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Span } from 'nestjs-ddtrace';
-import { Roles, HttpExceptionFilter, AuthenticatedUser, BaseWorker } from 'nest';
+import { Roles, HttpExceptionFilter, AuthenticatedUser, BaseWorker } from '@coldpbc/nest';
 import { allRoles, bpcDecoratorOptions, coldAdminOnly, orgIdDecoratorOptions } from '../_global/global.params';
 import { CategoriesService } from './categories.service';
 

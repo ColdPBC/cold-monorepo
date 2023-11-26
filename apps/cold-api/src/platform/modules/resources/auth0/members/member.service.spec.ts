@@ -2,7 +2,7 @@ import { Test } from '@nestjs/testing';
 import { MemberService } from './member.service';
 import { HttpService } from '@nestjs/axios';
 import { Auth0UtilityService } from '../auth0.utility.service';
-import { CacheService, AuthorizationModule, DarklyService } from 'nest';
+import { CacheService, AuthorizationModule, DarklyService } from '@coldpbc/nest';
 import { mockDeep } from 'jest-mock-extended';
 import { JwtService } from '@nestjs/jwt';
 import { createMock, DeepMocked, PartialFuncReturn } from '@golevelup/ts-jest';

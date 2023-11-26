@@ -2,7 +2,7 @@ import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/co
 import { Span } from 'nestjs-ddtrace';
 import { v4 } from 'uuid';
 import { merge } from 'lodash';
-import { AuthenticatedUser, BaseWorker, CacheService, CreateActionTemplatesDto, UpdateActionsDto, PrismaService } from 'nest';
+import { AuthenticatedUser, BaseWorker, CacheService, CreateActionTemplatesDto, UpdateActionsDto, PrismaService } from '@coldpbc/nest';
 import { SurveysService } from '../surveys/surveys.service';
 
 @Span()

@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { HttpModule } from '@nestjs/axios';
-import { ColdCacheModule } from 'nest';
+import { ColdCacheModule } from '@coldpbc/nest';
 import { MemberModule } from './members/member.module';
 import { RoleModule } from './roles/role.module';
 import { OrganizationModule } from '../organizations/organization.module';

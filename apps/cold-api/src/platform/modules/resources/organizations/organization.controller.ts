@@ -15,8 +15,8 @@ import {
 import { postInviteOwnerExample, postOrganizationExample } from './examples/organization.examples';
 import { OrganizationService } from './organization.service';
 import { ApiBody, ApiOAuth2, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { Roles, JwtAuthGuard, RolesGuard, HttpExceptionFilter, BaseWorker, AuthenticatedUser } from 'nest';
-import { organizationsSchema } from 'validation';
+import { Roles, JwtAuthGuard, RolesGuard, HttpExceptionFilter, BaseWorker, AuthenticatedUser } from '@coldpbc/nest';
+import { organizationsSchema } from '@coldpbc/validation';
 import { CreateOrganizationDto } from './dto/organization.dto';
 
 @Span()

@@ -5,7 +5,7 @@ import { OrganizationController } from './organization.controller';
 import { OrganizationService } from './organization.service';
 import { Auth0UtilityService } from '../auth0/auth0.utility.service';
 import { HttpModule } from '@nestjs/axios';
-import { ColdCacheModule, CacheService } from 'nest';
+import { ColdCacheModule, CacheService } from '@coldpbc/nest';
 import { RoleModule } from '../auth0/roles/role.module';
 import { RoleService } from '../auth0/roles/role.service';
 

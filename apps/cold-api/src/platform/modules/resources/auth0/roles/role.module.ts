@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { Auth0UtilityService } from '../auth0.utility.service';
 import { HttpModule } from '@nestjs/axios';
-import { ColdCacheModule } from 'nest';
-import { CacheService } from 'nest';
+import { ColdCacheModule } from '@coldpbc/nest';
+import { CacheService } from '@coldpbc/nest';
 import { RoleController } from './role.controller';
 import { RoleService } from './role.service';
 
