@@ -54,8 +54,10 @@ jobs:
         run: yarn dlx nx run coldpbc/nest:prisma-generate
       - name: build development
         run:  yarn prebuild && yarn dlx nx reset && yarn dlx nx run cold-api:build:development
-      - name: Unit Tests
-        run: yarn test
+      - name: 'Unit Test: Nest'
+        run: nx run coldpbc/nest:test:ci
+      - name: 'Unit Test: Cold-API'
+        run: nx run cold-api:test:ci
       - name: Migrate Staging DB
         env:
           BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
