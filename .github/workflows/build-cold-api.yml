@@ -65,7 +65,7 @@ jobs:
           DATABASE_URL: ${{ secrets.STAGING_DATABASE_URL }}
         if: startsWith(env.BRANCH_NAME,'cold') || startsWith(env.BRANCH_NAME,'Cold') || startsWith(env.BRANCH_NAME,'COLD')
         run: |
-          nx run nest:prisma-generate /
+          yarn dlx nx run coldpbc/nest:prisma-generate /
           prisma migrate deploy --preview-feature /
       - name: Seed Staging DB
         env:
@@ -87,8 +87,7 @@ jobs:
           PR_NUMBER: ${{ github.event.number }}
         if: startsWith(env.BRANCH_NAME,'main')
         run: |
-          nx run nest:prisma-generate  /
-          prisma generate  /
+          yarn dlx nx run coldpbc/nest:prisma-generate  /
           prisma migrate deploy --preview-feature /
       - name: Seed Production DB
         env:
