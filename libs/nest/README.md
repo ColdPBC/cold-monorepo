@@ -16,7 +16,7 @@ To make sure you have all modules available in your Nest.js microservice, simply
 
 ```typescript
 import { Module } from '@nestjs/common';
-import { NestModule } from 'nest';
+import { NestModule } from '@coldpbc/nest';
 
 @Module({
   imports: [

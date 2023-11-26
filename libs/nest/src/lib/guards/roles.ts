@@ -7,7 +7,7 @@ import { Reflector } from '@nestjs/core';
 import { BaseWorker } from '../worker';
 import { CacheService } from '../cache';
 import { AuthenticatedUser } from '../primitives';
-import { organizations } from 'validation';
+import { organizations } from '@coldpbc/validation';
 
 @Injectable()
 @Span()

@@ -3,7 +3,7 @@ import { Span, TraceService } from 'nestjs-ddtrace';
 import { Observable } from 'rxjs';
 import { merge, get } from 'lodash';
 import { tap } from 'rxjs/operators';
-import { WorkerLogger } from 'nest';
+import { WorkerLogger } from '@coldpbc/nest';
 import { Request } from 'express';
 
 @Span()
