@@ -7,19 +7,19 @@ generator zod {
   provider                         = "zod-prisma-types"
   output                           = "../src/validation/generated"
   addInputTypeValidation           = false
-  addSelectType                    = "false"
-  validateWhereUniqueInput         = "false"
-  addIncludeType                   = "false"
-  writeNullishInModelTypes         = "false"
+  addSelectType                    = false
+  validateWhereUniqueInput         = false
+  addIncludeType                   = false
+  writeNullishInModelTypes         = false
   createInputTypes                 = false
-  useDefaultValidators             = "false"
-  createRelationValuesTypes        = "false"
+  useDefaultValidators             = false
+  createRelationValuesTypes        = false
   createPartialTypes               = false
-  createOptionalDefaultValuesTypes = "false"
-  writeBarrelFiles                 = true
-  useMultipleFiles                 = "true"
-  coerceDate                       = "true"
-  createModelTypes                 = "true"
+  createOptionalDefaultValuesTypes = false
+  writeBarrelFiles                 = false
+  useMultipleFiles                 = true
+  coerceDate                       = false
+  createModelTypes                 = true
 }
 
 datasource db {

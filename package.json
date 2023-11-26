@@ -15,7 +15,7 @@
     "generate": "npx prisma generate --schema libs/nest/prisma/schema.prisma && yarn prebuild && yarn lint",
     "format": "prettier --write \"apps/cold-api/src/**/*.ts\" \"apps/cold-api/test/**/*.ts\"",
     "lint": "eslint apps/**/*.ts --fix",
-    "prebuild": "yarn dlx barrelsby -D -l all --directory ./libs/react/src -d ./libs/nest/src -e ./libs/nest/src/generated -e stories.tsx -e react-app-env -e private.tsx -e spec.ts -e jest.config.ts -S -H",
+    "prebuild": "yarn dlx barrelsby -D -l all --directory ./libs/react/src -d ./libs/nest/src -e ./libs/nest/src/validation/generated -e stories.tsx -e react-app-env -e private.tsx -e spec.ts -e jest.config.ts -S -H",
     "start": "nx serve",
     "start:prod": "nx serve-static",
     "storybook": "pnpm run build-storybook && npx nx storybook cold-ui",

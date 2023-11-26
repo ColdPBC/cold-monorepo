@@ -49,7 +49,7 @@ jobs:
             ${{ runner.os }}-
       #Database Migrations
       - name: Install dependencies
-        run: yarn add global nx zod-prisma zod-prisma-types @vegardit/prisma-generator-nestjs-dto prisma ts-node && yarn
+        run: yarn && yarn postinstall
       - name: Generate Prisma Client
         run: yarn dlx nx run coldpbc/nest:prisma-generate
       - name: build development
