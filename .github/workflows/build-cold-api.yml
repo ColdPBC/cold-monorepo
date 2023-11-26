@@ -53,7 +53,7 @@ jobs:
       - name: Generate Prisma Client
         run: yarn dlx nx run coldpbc/nest:prisma-generate
       - name: build production
-        if: startsWith(env.BRANCH_NAME,'main')
+        if: startsWith(env.BRANCH_NAME,'main') || startsWith(env.BRANCH_NAME,'staging')
         run:  yarn prebuild && nx reset && nx run cold-api:build:production
       - name: build development
         if: startsWith(env.BRANCH_NAME,'cold') || startsWith(env.BRANCH_NAME,'Cold') || startsWith(env.BRANCH_NAME,'COLD')
