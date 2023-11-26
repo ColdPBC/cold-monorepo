@@ -55,9 +55,9 @@ jobs:
       - name: build development
         run:  yarn prebuild && yarn dlx nx reset && yarn dlx nx run cold-api:build:development
       - name: 'Unit Test: Nest'
-        run: nx run coldpbc/nest:test:ci
+        run: yarn dlx nx run coldpbc/nest:test:ci
       - name: 'Unit Test: Cold-API'
-        run: nx run cold-api:test:ci
+        run: yarn dlx nx run cold-api:test:ci
       - name: Migrate Staging DB
         env:
           BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
@@ -154,6 +154,11 @@ jobs:
         run: npx semantic-release
       - name: get new app version
         run: echo "DD_VERSION=$(npm pkg get version)" >> $GITHUB_ENV
+      - name: Update Version Variable in flightcontrol.json
+        uses: restackio/update-json-file-action@v2.0
+        with:
+          file: flightcontrol.json
+          fields: "{\"environments.services[1].envVariables.DD_VERSION\":$(npm pkg get version)}"
       - name: set version in heroku staging
         env:
           BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
