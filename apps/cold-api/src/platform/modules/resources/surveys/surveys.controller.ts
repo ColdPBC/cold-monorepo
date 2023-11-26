@@ -3,7 +3,20 @@ import { ApiOAuth2, ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } fro
 import { survey_types } from '@prisma/client';
 import { Span } from 'nestjs-ddtrace';
 import { ResourceValidationPipe } from '../../../pipes/resource.pipe';
-import { survey_definitions, SurveyResponseSchema, ZodCategoryResponseDto, JwtAuthGuard, RolesGuard, Roles, HttpExceptionFilter, Role, BaseWorker, AuthenticatedUser, UpdateSurveyDefinitionsDto } from '@coldpbc/nest';
+import {
+  ZodSurveyDefinition,
+  SurveyResponseSchema,
+  ZodCategoryResponseDto,
+  JwtAuthGuard,
+  RolesGuard,
+  Roles,
+  HttpExceptionFilter,
+  Role,
+  BaseWorker,
+  AuthenticatedUser,
+  UpdateSurveyDefinitionsDto,
+  SurveyDefinitionsEntity
+} from '@coldpbc/nest';
 import { allRoles, bpcDecoratorOptions, coldAdminOnly, impersonateOrgDecoratorOptions, orgIdDecoratorOptions } from '../_global/global.params';
 import { SurveysService } from './surveys.service';
 import { UpdateSurveyDefinitionDto } from './dto/update-survey-definition.dto';
@@ -29,12 +42,12 @@ export class SurveysController extends BaseWorker {
   create(
     @Req()
     req: {
-      body: survey_definitions;
+      body: any;
       headers: any;
       query: any;
       user: AuthenticatedUser;
     },
-    @Body(new ResourceValidationPipe(SurveyResponseSchema, 'POST')) createSurvey: survey_definitions,
+    @Body(new ResourceValidationPipe(SurveyResponseSchema, 'POST')) createSurvey: SurveyDefinitionsEntity,
   ) {
     return this.surveyService.create(createSurvey, req.user);
   }

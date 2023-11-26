@@ -1,15 +1,14 @@
 import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Patch, Post, Query, Req, UseFilters, UseGuards, UsePipes } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Span } from 'nestjs-ddtrace';
-import { createZodDto, ZodSerializerDto } from 'nestjs-zod';
+import { ZodSerializerDto } from 'nestjs-zod';
 import { ResourceValidationPipe } from '../../../pipes/resource.pipe';
-import { CreateActionTemplateItemSchema, ZodCreateActionTemplate, action_templatesSchema, Roles, JwtAuthGuard, RolesGuard, HttpExceptionFilter, AuthenticatedUser, BaseWorker } from '@coldpbc/nest';
+import { CreateActionTemplateItemSchema, ActionTemplateSchema, ZodCreateActionTemplate, Roles, JwtAuthGuard, RolesGuard, HttpExceptionFilter, AuthenticatedUser, BaseWorker } from '@coldpbc/nest';
 import { coldAdminOnly } from '../_global/global.params';
 import { ActionTemplatesService } from './action-templates.service';
 import { actionTemplatePatchExample, actionTemplatePostExample, testActionTemplateIdExample } from './examples/action-template.examples';
+import {ActionTemplate} from "./validation/schemas/actions.schema";
 
-class ActionTemplateDto extends createZodDto(action_templatesSchema) {}
-//class ActionTemplatesDto extends createZodDto(z.array(action_templatesSchema)) {}
 @Controller('action-templates')
 @Span()
 @ApiTags('Action Templates')
@@ -64,7 +63,7 @@ export class ActionTemplatesController extends BaseWorker {
     type: String,
     example: testActionTemplateIdExample,
   })
-  @ZodSerializerDto(action_templatesSchema)
+  @ZodSerializerDto(ActionTemplateSchema)
   public getActionTemplate(
     @Param('id', ParseUUIDPipe) id: string,
     @Req()
@@ -125,7 +124,7 @@ export class ActionTemplatesController extends BaseWorker {
   })
   @Patch(`:id`)
   @Roles(...coldAdminOnly)
-  @ZodSerializerDto(ActionTemplateDto)
+  @ZodSerializerDto(ActionTemplateSchema)
   @ApiParam({
     name: 'id',
     required: true,

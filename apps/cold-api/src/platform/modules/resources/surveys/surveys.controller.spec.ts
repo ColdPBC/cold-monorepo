@@ -1,6 +1,6 @@
 import { JwtService } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
-import { JwtStrategy, ColdCacheModule, CacheService, PrismaModule, PrismaService, DarklyService } from '@coldpbc/nest';
+import { JwtStrategy, SurveyDefinitionsEntity, CacheService, PrismaModule, PrismaService, DarklyService } from '@coldpbc/nest';
 import { ComponentDefinitionsController } from '../component-definitions/component-definitions.controller';
 import { SurveysController } from './surveys.controller';
 import { SurveysService } from './surveys.service';
@@ -11,6 +11,7 @@ import { RoleService } from '../auth0/roles/role.service';
 import { MemberService } from '../auth0/members/member.service';
 import { fullReqExample } from '../_global/global.examples';
 import Survey_typesSchema from '../../../../../../../libs/validation/src/generated/inputTypeSchemas/survey_typesSchema';
+import {undefined} from "zod";
 
 describe('Surveys Controller', () => {
   let controller: SurveysController;
@@ -74,7 +75,15 @@ describe('Surveys Controller', () => {
   });
 
   it('Create called', async () => {
-    await controller.create(fullReqExample, {});
+    await controller.create(fullReqExample, {
+      updated_at: new Date(),
+      created_at: new Date(),
+      definition: {},
+      description: "",
+      id: "",
+      name: "",
+      type: "TEST"
+    });
     expect(service.create).toHaveBeenCalled();
   });
 

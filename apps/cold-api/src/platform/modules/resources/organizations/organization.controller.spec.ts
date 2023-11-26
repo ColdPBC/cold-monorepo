@@ -1,18 +1,14 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { MemberModule } from '../auth0/members/member.module';
 import { MemberService } from '../auth0/members/member.service';
 import { OrganizationController } from './organization.controller';
 import { OrganizationService } from './organization.service';
-import { HttpModule } from '@nestjs/axios';
-import { ColdCacheModule, CacheService, JwtStrategy, PrismaService, DarklyService } from '@coldpbc/nest';
-import { RoleModule } from '../auth0/roles/role.module';
+import { CacheService, JwtStrategy, PrismaService, DarklyService } from '@coldpbc/nest';
 import { Auth0UtilityService } from '../auth0/auth0.utility.service';
 import { RoleService } from '../auth0/roles/role.service';
 import { JwtService } from '@nestjs/jwt';
 import { mockDeep } from 'jest-mock-extended';
-import { authenticatedUserExample, fullReqExample } from '../_global/global.examples';
+import { fullReqExample } from '../_global/global.examples';
 import { CreateOrganizationDto } from './dto/organization.dto';
-import { undefined } from 'zod';
 
 describe('Organization Controller', () => {
   let controller: OrganizationController;

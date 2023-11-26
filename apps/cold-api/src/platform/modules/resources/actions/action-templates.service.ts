@@ -2,7 +2,17 @@ import { HttpException, Injectable, NotFoundException, UnauthorizedException, Un
 import { Span } from 'nestjs-ddtrace';
 import { merge } from 'lodash';
 import { v4 } from 'uuid';
-import {  ZodCreateActionTemplate, action_templates, action_templatesSchema, BaseWorker, AuthenticatedUser, CacheService, ActionTemplatesEntity, PrismaService } from '@coldpbc/nest';
+import {
+  ZodCreateActionTemplate,
+  ZodCreateActionTemplateDto,
+  ActionTemplateSchema,
+  BaseWorker,
+  AuthenticatedUser,
+  CacheService,
+  ActionTemplatesEntity,
+  PrismaService,
+  ZodActionTemplate
+} from '@coldpbc/nest';
 
 @Span()
 @Injectable()
@@ -17,7 +27,7 @@ export class ActionTemplatesService extends BaseWorker {
    * @param {boolean} bpc
    * @returns {Promise<any>}
    */
-  async getActionTemplates(user: AuthenticatedUser, bpc?: boolean): Promise<action_templates[]> {
+  async getActionTemplates(user: AuthenticatedUser, bpc?: boolean): Promise<ActionTemplatesEntity[]> {
     this.setTags({ user: user.coldclimate_claims, bpc });
 
     try {
@@ -27,13 +37,13 @@ export class ActionTemplatesService extends BaseWorker {
       }
 
       if (!bpc) {
-        const cached = (await this.cacheService.get(`action-templates`)) as action_templates[];
+        const cached = (await this.cacheService.get(`action-templates`)) as ActionTemplatesEntity[];
         if (cached) {
           return cached;
         }
       }
 
-      const actions = (await this.prisma.action_templates.findMany()) as unknown as action_templates[];
+      const actions = (await this.prisma.action_templates.findMany()) as unknown as ActionTemplatesEntity[];
 
       this.cacheService.set(`action-templates`, actions, { ttl: 60 * 60 * 24 * 7, update: true });
 
@@ -56,7 +66,7 @@ export class ActionTemplatesService extends BaseWorker {
    * @param {boolean} bpc
    * @returns {Promise<any>}
    */
-  async getActionTemplate(user: AuthenticatedUser, id: string, bpc?: boolean): Promise<action_templates> {
+  async getActionTemplate(user: AuthenticatedUser, id: string, bpc?: boolean): Promise<ZodCreateActionTemplateDto> {
     this.setTags({ user: user.coldclimate_claims, action_template_id: id, bpc });
 
     try {
@@ -66,7 +76,7 @@ export class ActionTemplatesService extends BaseWorker {
       }
 
       if (!bpc) {
-        const cached = (await this.cacheService.get(`action-templates:${id}`)) as action_templates;
+        const cached = (await this.cacheService.get(`action-templates:${id}`)) as ZodCreateActionTemplateDto;
         if (cached) {
           return cached;
         }
@@ -76,7 +86,7 @@ export class ActionTemplatesService extends BaseWorker {
         where: {
           id: id,
         },
-      })) as unknown as action_templates;
+      })) as unknown as ZodCreateActionTemplateDto;
 
       if (!action) {
         throw new NotFoundException(`Action ${id} not found`);
@@ -102,7 +112,7 @@ export class ActionTemplatesService extends BaseWorker {
 
     try {
       data.id = v4();
-      action_templatesSchema.parse(data);
+      ActionTemplateSchema.parse(data.template);
 
       this.setTags({ action_template_id: data.id });
 

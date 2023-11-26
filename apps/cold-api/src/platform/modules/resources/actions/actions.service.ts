@@ -2,7 +2,15 @@ import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/co
 import { Span } from 'nestjs-ddtrace';
 import { v4 } from 'uuid';
 import { merge } from 'lodash';
-import { AuthenticatedUser, BaseWorker, CacheService, CreateActionTemplatesDto, UpdateActionsDto, PrismaService } from '@coldpbc/nest';
+import {
+  AuthenticatedUser,
+  BaseWorker,
+  CacheService,
+  CreateActionTemplatesDto,
+  UpdateActionsDto,
+  PrismaService,
+  ZodCreateActionDto
+} from '@coldpbc/nest';
 import { SurveysService } from '../surveys/surveys.service';
 
 @Span()
@@ -170,7 +178,7 @@ export class ActionsService extends BaseWorker {
     }
   }
 
-  async updateAction(user: AuthenticatedUser, orgId: string, id: string, data: UpdateActionsDto, bpc?: boolean) {
+  async updateAction(user: AuthenticatedUser, orgId: string, id: string, data: {action: ZodCreateActionDto}, bpc?: boolean) {
     try {
       if (!user.isColdAdmin && user.coldclimate_claims.org_id !== orgId) {
         this.logger.error(`User ${user.coldclimate_claims.email} attempted to create action for org ${orgId}`);
@@ -188,7 +196,7 @@ export class ActionsService extends BaseWorker {
         throw new NotFoundException(`Action ${id} not found`);
       }
 
-      const mergedData = merge(item.action, data.action);
+      const mergedData = merge(item.action, data);
 
       const updated = await this.prisma.actions.update({
         where: {

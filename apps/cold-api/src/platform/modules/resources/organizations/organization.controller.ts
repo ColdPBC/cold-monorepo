@@ -15,7 +15,15 @@ import {
 import { postInviteOwnerExample, postOrganizationExample } from './examples/organization.examples';
 import { OrganizationService } from './organization.service';
 import { ApiBody, ApiOAuth2, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { organizationsSchema, Roles, JwtAuthGuard, RolesGuard, HttpExceptionFilter, BaseWorker, AuthenticatedUser } from '@coldpbc/nest';
+import {
+  Roles,
+  JwtAuthGuard,
+  RolesGuard,
+  HttpExceptionFilter,
+  BaseWorker,
+  AuthenticatedUser,
+  OrganizationsSchema
+} from '@coldpbc/nest';
 import { CreateOrganizationDto } from './dto/organization.dto';
 
 @Span()
@@ -53,7 +61,7 @@ export class OrganizationController extends BaseWorker {
   @HttpCode(201)
   async createOrganization(
     @Query() query,
-    @Body(new ResourceValidationPipe(organizationsSchema.partial(), 'POST')) createOrganizationDTO: CreateOrganizationDto,
+    @Body(new ResourceValidationPipe(OrganizationsSchema.partial(), 'POST')) createOrganizationDTO: CreateOrganizationDto,
     @Req()
     req: {
       body: any;

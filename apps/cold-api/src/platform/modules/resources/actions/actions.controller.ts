@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Param, Patch, Post, Query, Req, UseFilters, UseGuards } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { Span } from 'nestjs-ddtrace';
-import { actions, JwtAuthGuard, RolesGuard, HttpExceptionFilter, Roles, Role, AuthenticatedUser, BaseWorker, CreateActionTemplatesDto } from '@coldpbc/nest';
+import { ZodCreateActionDto, JwtAuthGuard, RolesGuard, HttpExceptionFilter, Roles, Role, AuthenticatedUser, BaseWorker, CreateActionTemplatesDto } from '@coldpbc/nest';
 import { allRoles } from '../_global/global.params';
 import { ActionsService } from './actions.service';
 
@@ -119,7 +119,7 @@ export class ActionsController extends BaseWorker {
       query: any;
       user: AuthenticatedUser;
     },
-    @Body() dto: actions,
+    @Body() dto: {action: ZodCreateActionDto},
   ) {
     return this.assignments.updateAction(req.user, orgId, id, dto);
   }

@@ -7,7 +7,7 @@ import { Reflector } from '@nestjs/core';
 import { BaseWorker } from '../worker';
 import { CacheService } from '../cache';
 import { AuthenticatedUser } from '../primitives';
-import { organizations } from '@coldpbc/nest';
+import { Organizations } from '@coldpbc/nest';
 
 @Injectable()
 @Span()
@@ -44,7 +44,7 @@ export class RolesGuard extends BaseWorker implements CanActivate {
     ) {
       if (request?.params?.nameOrId) {
         // since org was requested by name get all orgs from cache and filter by name
-        const orgs = (await this.cache.get('organizations')) as organizations[];
+        const orgs = (await this.cache.get('organizations')) as Organizations[];
         const org = first(
           filter(orgs, {
             name: request?.params?.nameOrId ? request?.params?.nameOrId : request?.params?.orgId,

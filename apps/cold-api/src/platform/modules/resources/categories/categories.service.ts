@@ -2,7 +2,7 @@ import { BadRequestException, ConflictException, Injectable, NotFoundException, 
 import { detailedDiff, diff } from 'deep-object-diff';
 import { isEmpty, isUUID } from 'class-validator';
 import { Span } from 'nestjs-ddtrace';
-import { category_definitions, category_definitionsCustomValidators, ZodCategoryDefinitionItemDto, ZodCreateCategoryDefinitionItemDto, ObjectUtils, AuthenticatedUser, BaseWorker, CacheService, DarklyService, PrismaService, Tags } from '@coldpbc/nest';
+import { CategoryDefinitionItemSchema, ZodCategoryDefinitionItemDto, ZodCreateCategoryDefinitionItemDto, ObjectUtils, AuthenticatedUser, BaseWorker, CacheService, DarklyService, PrismaService, Tags } from '@coldpbc/nest';
 import { v4 } from 'uuid';
 import { get, merge, omit, find } from 'lodash';
 
@@ -179,7 +179,7 @@ export class CategoriesService extends BaseWorker {
         orderBy: {
           updated_at: 'desc',
         },
-      })) as category_definitions;
+      })) as ZodCategoryDefinitionItemDto;
 
       if (!def) {
         throw new NotFoundException(`Unable to find any category definition`);
@@ -264,7 +264,7 @@ export class CategoriesService extends BaseWorker {
    * @param user
    * @param createCategoryDefinitionDto
    */
-  async create(user: AuthenticatedUser, createCategoryDefinitionDto: any): Promise<category_definitionsCustomValidators> {
+  async create(user: AuthenticatedUser, createCategoryDefinitionDto: any): Promise<ZodCategoryDefinitionItemDto> {
     const org = (await this.cache.get(`organizations:${user.coldclimate_claims.org_id}`)) as any;
     const tags: Tags = {
       name: createCategoryDefinitionDto.name,
@@ -294,7 +294,7 @@ export class CategoriesService extends BaseWorker {
 
       const definition = (await this.prisma.category_definitions.create({
         data: createCategoryDefinitionDto,
-      })) as category_definitionsCustomValidators;
+      })) as ZodCategoryDefinitionItemDto;
 
       if (definition) {
         tags.id = definition.id;
