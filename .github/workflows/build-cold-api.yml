@@ -54,10 +54,10 @@ jobs:
         run: yarn dlx nx run coldpbc/nest:prisma-generate
       - name: build production
         if: startsWith(env.BRANCH_NAME,'main') || startsWith(env.BRANCH_NAME,'staging')
-        run:  yarn prebuild && nx reset && nx run cold-api:build:production
+        run:  yarn prebuild && yarn dlx nx reset && yarn dlx nx run cold-api:build:production
       - name: build development
         if: startsWith(env.BRANCH_NAME,'cold') || startsWith(env.BRANCH_NAME,'Cold') || startsWith(env.BRANCH_NAME,'COLD')
-        run:  yarn prebuild && nx reset && nx run cold-api:build:development
+        run:  yarn prebuild && yarn dlx nx reset && yarn dlx nx run cold-api:build:development
       - name: Unit Tests
         run: yarn test
       - name: Migrate Staging DB
