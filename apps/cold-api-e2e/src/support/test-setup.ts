@@ -2,5 +2,6 @@
 
 import axios from 'axios';
 module.exports = async function () {
-  // Configure axios for tests to use.
+    const test = require('dotenv').config();
+    console.log(test);
 };

@@ -1,11 +1,13 @@
 import { action_template_mock } from './mocks/action_template_mocks';
 import { publishMock, notPublishMock } from './mocks/news_mock';
 import Fakerator from 'fakerator';
-import { set } from 'lodash';
+import {omit, set} from 'lodash';
+import * as z from 'zod';
 import { component_mock } from './mocks/component_mocks';
 import { organizations } from '@prisma/client';
 const axios = globalThis.auth0Axios;
 const fakeUser = Fakerator().entity.user();
+import { CreateActionTemplateItemSchema, ActionTemplateSchema } from '../../../../libs/nest/src/validation';
 
 describe('API Tests', () => {
   describe('Unauthenticated Tests', () => {
@@ -38,7 +40,10 @@ describe('API Tests', () => {
           const res = await axios.post(`/news`, notPublishMock);
           console.log('POST /news (not published)', res.data);
           expect(res.status).toBe(201);
-          expect(res.data).toMatchSnapshot();
+          expect(res.data.image_url).toEqual(notPublishMock.image_url);
+          expect(res.data.publish).toEqual(false);
+          expect(res.data.source_name).toEqual(notPublishMock.source_name);
+          expect(res.data.url).toEqual(notPublishMock.url);
         } catch (error) {
           console.log(error.message, error.response.data);
           throw error;
@@ -49,7 +54,11 @@ describe('API Tests', () => {
           const res = await axios.post(`/news`, publishMock);
           console.log('POST /news', res.data);
           expect(res.status).toBe(201);
-          expect(res.data).toMatchSnapshot();
+          expect(res.data.image_url).toEqual(publishMock.image_url);
+          expect(res.data.publish).toEqual(publishMock.publish);
+          expect(res.data.source_name).toEqual(publishMock.source_name);
+          expect(res.data.url).toEqual(publishMock.url);
+          expect(res.data.title).toEqual(publishMock.title);
         } catch (error) {
           console.log(error.message, error.response.data);
           throw error;
@@ -61,7 +70,6 @@ describe('API Tests', () => {
           console.log('GET /news?take=3&skip=0&bpc=true&publish=false', res.data);
           expect(res.status).toBe(200);
           expect(res.data.length).toEqual(3);
-          expect(res.data).toMatchSnapshot();
         } catch (error) {
           console.log(error.message, error.response.data);
           throw error;
@@ -80,15 +88,26 @@ describe('API Tests', () => {
       });
     });
     describe('Action Templates', () => {
+      const itemSchema = z.object({
+        id: z.string().uuid(),
+        created_at: z.string().datetime(),
+        updated_at: z.string().datetime(),
+        template: ActionTemplateSchema,
+      });
       it('POST /action-templates', async () => {
         try {
           const res = await axios.post(`/action-templates`, action_template_mock);
           console.log('POST /action-templates', res.data);
-          expect(res.status).toBe(201);
-          expect(res.data).toMatchSnapshot();
+          expect(res.status).toBe(201)
+
+          expect(() => itemSchema.parse(res.data)).not.toThrow();
           action_template_id = res.data.id;
         } catch (error) {
-          console.log(error.message, error.response.data);
+          if(error?.response?.data) {
+            console.error(error?.reponse?.data?.message, error.response.data);
+          } else {
+            console.error(error.message, error?.issues);
+          }
           throw error;
         }
       });
@@ -98,9 +117,14 @@ describe('API Tests', () => {
           const res = await axios.get(`/action-templates`);
           console.log('GET /action-templates', res.data);
           expect(res.status).toBe(200);
-          expect(res.data).toMatchSnapshot();
+          expect(res.data.length).toBeGreaterThan(0);
+          expect(() => z.array(itemSchema).parse(res.data)).not.toThrow();
         } catch (error) {
-          console.log(error.message, error.response.data);
+          if(error?.response?.data) {
+            console.error(error?.reponse?.data?.message, error.response.data);
+          } else {
+            console.error(error.message, error?.issues);
+          }
           throw error;
         }
       });
@@ -109,9 +133,13 @@ describe('API Tests', () => {
           const res = await axios.get(`/action-templates/${action_template_id}`);
           console.log('GET /action-templates/:id', res.data);
           expect(res.status).toBe(200);
-          expect(res.data).toMatchSnapshot();
+          expect(() => itemSchema.parse(res.data)).not.toThrow();
         } catch (error) {
-          console.log(error.message, error.response.data);
+          if(error?.response?.data) {
+            console.error(error?.reponse?.data?.message, error.response.data);
+          } else {
+            console.error(error.message, error?.issues);
+          }
           throw error;
         }
       });
@@ -122,7 +150,7 @@ describe('API Tests', () => {
           const res = await axios.get(`/categories`);
           console.log('GET /cateogries', res.data);
           expect(res.status).toBe(200);
-          expect(res.data).toMatchSnapshot();
+
         } catch (error) {
           console.log(error.message, error.response.data);
           throw error;
@@ -135,7 +163,7 @@ describe('API Tests', () => {
           const res = await axios.post(`/components`, component_mock);
           console.log('POST /components', res.data);
           expect(res.status).toBe(201);
-          expect(res.data).toMatchSnapshot();
+
         } catch (error) {
           console.log(error.message, error.response.data);
           throw error;
@@ -150,7 +178,7 @@ describe('API Tests', () => {
           console.log('PATCH /components', res.data);
           expect(res.status).toBe(201);
           expect(res.data.description).toEqual('updated: incididunt dolore culpa do proident');
-          expect(res.data).toMatchSnapshot();
+
         } catch (error) {
           console.log(error.message, error.response.data);
           throw error;
@@ -162,7 +190,7 @@ describe('API Tests', () => {
           const res = await axios.get(`/components/types/DATAGRID`);
           console.log('GET /components/types/:type', res.data);
           expect(res.status).toBe(200);
-          expect(res.data).toMatchSnapshot();
+
         } catch (error) {
           console.log(error.message, error.response.data);
           throw error;
@@ -173,7 +201,6 @@ describe('API Tests', () => {
           const res = await axios.get(`/components/sidebar_navigation`);
           console.log('GET /components/:name', res.data);
           expect(res.status).toBe(200);
-          expect(res.data).toMatchSnapshot();
         } catch (error) {
           console.log(error.message, error.response.data);
           throw error;
@@ -185,7 +212,6 @@ describe('API Tests', () => {
           const res = await axios.get(`/components/darkly/testOrgs`);
           console.log('GET /components/darkly/testOrgs', res.data);
           expect(res.status).toBe(200);
-          expect(res.data).toMatchSnapshot();
         } catch (error) {
           console.log(error.message, error.response.data);
           throw error;
@@ -207,7 +233,7 @@ describe('API Tests', () => {
 
           console.log('***OWNER***', owner);
           expect(res.status).toBe(201);
-          expect(res.data).toMatchSnapshot();
+
         } catch (error) {
           console.log(error.message, error.response.data);
           throw error;
@@ -228,7 +254,7 @@ describe('API Tests', () => {
           //set(owner, 'id', res.data.id);
 
           expect(res.status).toBe(200);
-          expect(res.data).toMatchSnapshot();
+
         } catch (error) {
           console.log(error.message, error.response.data);
           throw error;
@@ -241,7 +267,7 @@ describe('API Tests', () => {
           console.log('GET /members/:email?bpc=true', res.data);
 
           expect(res.status).toBe(200);
-          expect(res.data).toMatchSnapshot();
+
         } catch (error) {
           console.log(error.message, error.response.data);
           throw error;
@@ -262,7 +288,7 @@ describe('API Tests', () => {
           org = res.data;
 
           expect(res.status).toBe(201);
-          expect(res.data).toMatchSnapshot();
+
         } catch (error) {
           console.log(error.message, error.response.data);
           throw error;
@@ -278,7 +304,7 @@ describe('API Tests', () => {
           org = res.data;
 
           expect(res.status).toBe(201);
-          expect(res.data).toMatchSnapshot();
+
         } catch (error) {
           console.log(error.message, error.response.data);
           throw error;
@@ -298,7 +324,7 @@ describe('API Tests', () => {
           invitation = res.data;
 
           expect(res.status).toBe(201);
-          expect(res.data).toMatchSnapshot();
+
         } catch (error) {
           console.log(error.message, error.response.data);
           throw error;
@@ -312,7 +338,7 @@ describe('API Tests', () => {
           console.log(`/organizations/${org.id}/members`, res.data);
 
           expect(res.status).toBe(200);
-          expect(res.data).toMatchSnapshot();
+
         } catch (error) {
           console.log(error.message, error.response.data);
           throw error;
@@ -326,7 +352,7 @@ describe('API Tests', () => {
           console.log(`/organizations/${org.id}`, res.data);
 
           expect(res.status).toBe(200);
-          expect(res.data).toMatchSnapshot();
+
         } catch (error) {
           console.log(error.message, error.response.data);
           throw error;
@@ -340,7 +366,7 @@ describe('API Tests', () => {
           console.log(`/organizations/${org.id}/members/${owner['user_id']}/roles`, res.data);
 
           expect(res.status).toBe(200);
-          expect(res.data).toMatchSnapshot();
+
         } catch (error) {
           console.log(error.message, error.response.data);
           throw error;

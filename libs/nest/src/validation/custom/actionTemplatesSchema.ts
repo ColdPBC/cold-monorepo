@@ -115,8 +115,7 @@ export const CreateActionTemplateItemSchema = z.object({
     })
     .uuid()
     .optional(),
-  created_at: z
-    .date({
+  created_at: z.date({
       required_error: 'created_at is required',
       invalid_type_error: 'created_at must be a valid date string',
     })

@@ -716,8 +716,8 @@ exports[`API Tests Authenticated Tests Members POST /members 1`] = `
 `;
 
 exports[`API Tests Authenticated Tests News GET /news?take=3&skip=0&bpc=true&publish=false 1`] = `
-[
-  {
+{
+  "0": {
     "created_at": "2023-11-22T05:37:04.954Z",
     "id": "efe70dcb-86e8-402b-b803-80559f0752b2",
     "image_url": "http://placeimg.com/640/480",
@@ -728,7 +728,7 @@ exports[`API Tests Authenticated Tests News GET /news?take=3&skip=0&bpc=true&pub
     "updated_at": "2023-11-22T05:37:04.955Z",
     "url": "http://cassandre.net",
   },
-  {
+  "1": {
     "created_at": "2023-11-22T05:35:22.922Z",
     "id": "6d831241-b61c-4317-ade3-fb65caa627e3",
     "image_url": "http://placeimg.com/640/480",
@@ -739,7 +739,7 @@ exports[`API Tests Authenticated Tests News GET /news?take=3&skip=0&bpc=true&pub
     "updated_at": "2023-11-22T05:35:22.923Z",
     "url": "http://cassandre.net",
   },
-  {
+  "2": {
     "created_at": "2023-11-22T03:11:40.078Z",
     "id": "8f21e06b-d628-4854-acd3-cf89c1456f93",
     "image_url": "https://www.reuters.com/resizer/19ZnOlXJL0lqbq588RsYF5Z-cAM=/1200x628/smart/filters:quality(80)/cloudfront-us-east-2.images.arcpublishing.com/reuters/6ELBCZRUIRK7FNNQCF66P47QIA.jpg",
@@ -747,10 +747,10 @@ exports[`API Tests Authenticated Tests News GET /news?take=3&skip=0&bpc=true&pub
     "published_at": "2023-09-01T09:00:08.000Z",
     "source_name": "Reuters",
     "title": "Carbon credit market confidence ebbs as big names retreat",
-    "updated_at": "2023-11-22T03:11:40.079Z",
+    "updated_at": "2023-11-25T18:41:26.056Z",
     "url": "https://www.reuters.com/sustainability/carbon-credit-market-confidence-ebbs-big-names-retreat-2023-09-01/",
   },
-]
+}
 `;
 
 exports[`API Tests Authenticated Tests News POST /news (not published) 1`] = `
@@ -945,7 +945,7 @@ exports[`API Tests Unauthenticated Tests GET /v1 should return docs 1`] = `
   <meta charset="UTF-8">
   <title>Cold Climate Platform API</title>
   <link rel="stylesheet" type="text/css" href="./v1/swagger-ui.css" >
-  <link rel='icon' href='/Users/troy/WebstormProjects/public/favicon.ico' />
+  <link rel='icon' href='/public/favicon.ico' />
   <style>
     html
     {

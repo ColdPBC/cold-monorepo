@@ -7,6 +7,7 @@ var __TEARDOWN_MESSAGE__: string;
 const EnhancedPrisma = enhancePrisma(PrismaClient);
 export * from '@prisma/client';
 module.exports = async function () {
+  const test = require('dotenv').config();
   // Start services that that the app needs to run (e.g. database, docker-compose, etc.).
   console.log('\nSetting up...\n');
   globalThis.started_utc_on = new Date().toISOString();

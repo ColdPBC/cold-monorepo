@@ -3,7 +3,7 @@ export default {
   displayName: 'cold-api-e2e',
   globalSetup: '<rootDir>/src/support/global-setup.ts',
   globalTeardown: '<rootDir>/src/support/global-teardown.ts',
-  setupFiles: ['dotenv/config', '<rootDir>/src/support/test-setup.ts'],
+  setupFiles: ['<rootDir>/src/support/test-setup.ts'],
   testEnvironment: 'node',
   transform: {
     '^.+\\.[tj]s$': [
