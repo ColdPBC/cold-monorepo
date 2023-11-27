@@ -30,7 +30,7 @@ export const SideBarCollapse = (props: SideBarCollapseProps) => {
       }
       label={item.label}
       open={collapseIsOpen}
-      active={ifSubItemIsActive()}
+      active={ifSubItemIsActive() ? true : undefined}
       onClick={() => {
         setCollapseIsOpen(!collapseIsOpen);
       }}

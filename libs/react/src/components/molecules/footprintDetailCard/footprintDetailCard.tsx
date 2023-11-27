@@ -1,48 +1,80 @@
-import {PropsWithChildren} from 'react';
-import {Card} from '../card/card';
-import {useNavigate} from 'react-router-dom';
+import { PropsWithChildren, useState } from 'react';
+import { Card } from '../card/card';
+import { useNavigate } from 'react-router-dom';
 import { FootprintDetailChart } from '../footprintDetailChart';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import useSWR from 'swr';
+import { useFlags } from 'launchdarkly-react-client-sdk';
+import { withErrorBoundary } from 'react-error-boundary';
+import { ErrorFallback } from '../../application';
+import { useOrgSWR } from '../../../hooks/useOrgSWR';
+import { useColdContext } from '@coldpbc/hooks';
+import { ErrorType } from '@coldpbc/enums';
 
 export interface FootprintDetailCardProps {
   colors: string[];
   subcategory_key: string;
   period: number;
+  className?: string;
 }
 
-export function FootprintDetailCard(
+function _FootprintDetailCard(
   props: PropsWithChildren<FootprintDetailCardProps>,
 ) {
+  const ldFlags = useFlags();
   const navigate = useNavigate();
+  const [isEmpty, setIsEmpty] = useState(false);
 
   // Get footprint data from SWR
-  const { data } = useSWR<any>(
+  const { data, error } = useOrgSWR<any>(
     ['/categories/company_decarbonization', 'GET'],
     axiosFetcher,
   );
+  const { logError } = useColdContext();
 
-    if (!data?.subcategories[props.subcategory_key]) {
-      return null;
+  if (isEmpty) {
+    return null;
+  }
+
+  if (error) {
+    logError(error, ErrorType.SWRError);
+    return null;
+  }
+
+  const subcategoryName =
+    data?.subcategories[props.subcategory_key]?.subcategory_name;
+
+  const { className, ...rest } = props;
+
+  const getCtas = (subcategoryName: string) => {
+    const ctas = [];
+    if (ldFlags.showActions261) {
+      ctas.push({
+        text: `View ${subcategoryName} Actions`,
+        action: () => {
+          navigate(`/actions/${props.subcategory_key}`);
+        },
+      });
     }
-
-  const subcategoryName = data?.subcategories[props.subcategory_key].subcategory_name;
+    return ctas;
+  };
 
   return (
     <Card
       title={subcategoryName}
-      ctas={[
-        {
-          text: `View ${subcategoryName} Actions`,
-          action: () => {
-            navigate(`/actions/${props.subcategory_key}`);
-          },
-        },
-      ]}
+      ctas={getCtas(subcategoryName)}
+      className={className}
     >
       <div className="flex items-center justify-center self-stretch flex-col">
-        <FootprintDetailChart {...props} />
+        <FootprintDetailChart {...rest} setIsEmpty={setIsEmpty} />
       </div>
     </Card>
   );
 }
+
+export const FootprintDetailCard = withErrorBoundary(_FootprintDetailCard, {
+  FallbackComponent: (props) => <ErrorFallback {...props} />,
+  onError: (error, info) => {
+    console.error('Error occurred in FootprintDetailCard: ', error);
+  },
+});

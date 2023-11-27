@@ -2,7 +2,7 @@ import React from 'react';
 import { withKnobs } from '@storybook/addon-knobs';
 import { StoryObj } from '@storybook/react';
 import { Toaster } from './toaster';
-import { ToastMessageTypes } from '../../../interfaces/toastMessage';
+import { ToastMessage } from '../../../interfaces/toastMessage';
 
 const meta = {
   title: 'Atoms/Toaster',
@@ -12,7 +12,7 @@ const meta = {
   argTypes: {
     type: {
       control: 'select',
-      options: ToastMessageTypes,
+      options: ToastMessage,
     },
   },
 };
@@ -29,6 +29,8 @@ export const Default: Story = {
     );
   },
   args: {
-    message: 'New toaster message',
+    toastMessage: {
+      message: 'This is a toast message',
+    },
   },
 };

@@ -1,9 +1,9 @@
 import { DefaultHexColors } from '../../enums/colors';
 import { IconNames } from '../../enums/iconNames';
+import React from 'react';
 
-export interface IconProps {
+export interface IconProps extends React.SVGProps<SVGSVGElement> {
   name?: IconNames;
-  color?: DefaultHexColors;
   strokeWidth?: number;
   className?: string;
 }

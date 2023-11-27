@@ -4,6 +4,9 @@ import { GlobalSizes } from '../../../enums/sizes';
 import { ButtonTypes } from '../../../enums/buttons';
 import { IconNames } from '../../../enums/iconNames';
 import { ColdIcon } from '../../atoms/icons/coldIcon';
+import { Link } from 'react-router-dom';
+import { twMerge } from 'tailwind-merge';
+import { Spinner } from '../spinner';
 
 export function BaseButton(props: IButtonProps): JSX.Element {
   const {
@@ -18,21 +21,43 @@ export function BaseButton(props: IButtonProps): JSX.Element {
     bold = true,
     upperCase,
     className,
+    href,
+    target,
+    loading = false,
+    children,
   } = props;
 
-  return (
-    <button
-      onClick={onClick}
-      className={className ? className : `${getClassName(props)}`}
-      disabled={!!props.disabled}
-    >
-      <>
-        {iconLeft && getIconComponent(iconLeft, props)}
-        {label && <span>{label}</span>}
-        {iconRight && getIconComponent(iconRight, props)}
-      </>
-    </button>
+  const content = (
+    <>
+      {iconLeft && getIconComponent(iconLeft, props)}
+      {label && <span>{label}</span>}
+      {children && <span className="w-full">{children}</span>}
+      {iconRight && getIconComponent(iconRight, props)}
+      {loading && <Spinner size={GlobalSizes.small} />}
+    </>
   );
+
+  if (!href) {
+    return (
+      <button
+        onClick={onClick}
+        className={twMerge(getClassName(props), className)}
+        disabled={!!props.disabled || loading}
+      >
+        {content}
+      </button>
+    );
+  } else {
+    return (
+      <Link
+        to={href}
+        className={twMerge(getClassName(props), className)}
+        target={target}
+      >
+        {content}
+      </Link>
+    );
+  }
 }
 
 /*
@@ -95,7 +120,7 @@ export function getBoldStyle(props: IButtonProps) {
 }
 
 export function getClassName(props: IButtonProps) {
-  return `flex items-center gap-2 transition-colors ease-in-out ${getUpperStyle(
+  return `flex items-center justify-center gap-2 transition-colors ease-in-out ${getUpperStyle(
     props,
   )} ${getBoldStyle(props)} ${getVariantStyle(props)} ${getTextSizeStyle(
     props,

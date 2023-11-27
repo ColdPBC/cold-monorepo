@@ -3,9 +3,10 @@ import { GlobalSizes } from '../../../enums/sizes';
 import { Avatar as FlowBiteAvatar, Spinner } from 'flowbite-react';
 import { useAuth0 } from '@auth0/auth0-react';
 import { User } from '@auth0/auth0-spa-js/src/global';
-import { toUpper } from 'lodash';
-import * as z from 'zod';
 import flowbiteThemeOverride from '../../../themes/flowbiteThemeOverride';
+import clsx from 'clsx';
+import { ErrorType } from '@coldpbc/enums';
+import { useColdContext } from '@coldpbc/hooks';
 
 export type AvatarProps = {
   size?:
@@ -19,94 +20,55 @@ export type AvatarProps = {
   children?: React.ReactNode;
 };
 
-const UserSchema = z.object({
-  email: z.string().email().optional(),
-  family_name: z.string().optional(),
-  given_name: z.string().optional(),
-  picture: z.string().url().optional(),
-});
-
-const AvatarPropsSchema: z.ZodSchema<AvatarProps> = z
-  .object({
-    size: z
-      .enum([
-        GlobalSizes.xSmall,
-        GlobalSizes.small,
-        GlobalSizes.medium,
-        GlobalSizes.large,
-        GlobalSizes.xLarge,
-      ])
-      .optional(),
-    children: z.any().optional(),
-    rounded: z.boolean().optional(),
-    user: UserSchema.optional(),
-  })
-  .superRefine((data, ctx) => {
-    if (
-      (data.user?.email && data.user?.picture) ||
-      (data.user?.family_name && data.user?.given_name)
-    )
-      return true;
-
-    if (!data.user?.picture) {
-      if (
-        !data.user?.email &&
-        (!data.user?.family_name || !data.user?.given_name)
-      ) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message:
-            'If user.picture is null then it must a family_name and given_name or a email',
-          path: ['user'],
-        });
-      }
-    }
-  });
-
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-export function Avatar(props: AvatarProps): React.JSX.Element {
+export function Avatar(props: AvatarProps) {
   const size = props.size || GlobalSizes.medium;
 
   const { isLoading, error, user } = useAuth0();
+  const { logError } = useColdContext();
 
   if (!props.user && isLoading) return <Spinner size={size} />;
-  if (error) return <div>failed to load</div>;
+  if (error) {
+    logError(error, ErrorType.Auth0Error);
+    return null;
+  }
   if (user || props.user) {
     const avatarUser: User = props.user ? props.user : (user as User);
 
     if (avatarUser.picture && avatarUser.picture !== 'null')
       return (
-        <FlowBiteAvatar
-          size={size}
-          img={avatarUser.picture}
-          rounded={props.circle}
-          theme={flowbiteThemeOverride.avatar}
-        >
-          {props.children}
-        </FlowBiteAvatar>
+        <span data-chromatic="ignore">
+          <FlowBiteAvatar
+            size={size}
+            img={avatarUser.picture}
+            rounded={props.circle}
+            theme={flowbiteThemeOverride.avatar}
+          >
+            {props.children}
+          </FlowBiteAvatar>
+        </span>
       );
 
-    const initials =
-      avatarUser.given_name && avatarUser.family_name
-        ? toUpper(
-            `${avatarUser.given_name.slice(0, 1)}${avatarUser.family_name.slice(
-              0,
-              1,
-            )}`,
-          )
-        : toUpper(avatarUser.email?.slice(0, 2));
-
     return (
-      <FlowBiteAvatar
-        color={'midnightBlue'}
-        placeholderInitials={initials}
-        size={size}
-        rounded={props.circle}
-        theme={flowbiteThemeOverride.avatar}
+      <svg
+        className={clsx({ 'rounded-full': props.circle })}
+        width="40"
+        height="40"
+        viewBox="0 0 40 40"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
       >
-        {props.children}
-      </FlowBiteAvatar>
+        <path
+          d="M0 8C0 3.58172 3.58172 0 8 0H32C36.4183 0 40 3.58172 40 8V32C40 36.4183 36.4183 40 32 40H8C3.58172 40 0 36.4183 0 32V8Z"
+          fill="#282C3E"
+        />
+        <path
+          d="M14 26C14 22.25 16.25 20 20 20C23.7499 20 26 22.25 26 26"
+          stroke="white"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+        />
+        <circle cx="20" cy="14" r="3" fill="white" />
+      </svg>
     );
   }
 

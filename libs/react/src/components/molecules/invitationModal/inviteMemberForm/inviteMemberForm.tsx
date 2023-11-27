@@ -1,26 +1,29 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BaseButton } from '../../../atoms/button/button';
-import { ColorNames } from '../../../../enums/colors';
 import { InputTypes } from '../../../../enums/inputs';
-import { GlobalSizes } from '../../../../enums/sizes';
 import { Input } from '../../../atoms/input/input';
 import useSWR from 'swr';
-import { axiosFetcher } from '../../../../fetchers/axiosFetcher';
+import { axiosFetcher } from '@coldpbc/fetchers';
 import { Spinner } from '../../../atoms/spinner/spinner';
 import capitalize from 'lodash/capitalize';
 import includes from 'lodash/includes';
-import { Role } from 'auth0';
 import { isArray } from 'lodash';
+import { ButtonTypes, ErrorType } from '@coldpbc/enums';
+import { withErrorBoundary } from 'react-error-boundary';
+import { ErrorFallback } from '../../../application/errors/errorFallback';
+import { useColdContext } from '@coldpbc/hooks';
+import { InputOption, UserRole } from '@coldpbc/interfaces';
 
 export interface InviteMemberFormProps {
-  inviteMembers: (emails: string, roleId: string) => void;
+  inviteMembers: (email: string, roleId: string) => void;
+  onCancel: () => void;
 }
 
-export const InviteMemberForm = (props: InviteMemberFormProps) => {
+const Component = (props: InviteMemberFormProps) => {
   const { inviteMembers } = props;
   const [memberForm, setMemberForm] = useState<any>({
-    emails: '',
-    role: '',
+    email: '',
+    role: undefined,
   });
   const {
     data,
@@ -34,16 +37,26 @@ export const InviteMemberForm = (props: InviteMemberFormProps) => {
     },
   );
 
+  const { logError } = useColdContext();
+
   const handleChange = (name: string, value: any) => {
     setMemberForm({ ...memberForm, [name]: value });
   };
 
   const handleSubmit = () => {
-    inviteMembers(memberForm.emails, memberForm.role);
+    inviteMembers(memberForm.email, memberForm.role.value);
+  };
+
+  const isEmailValid = () => {
+    return String(memberForm.email)
+      .toLowerCase()
+      .match(
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+      );
   };
 
   // Filter out special case roles
-  const filterRoles = (role: any) => {
+  const filterRoles = (role: UserRole) => {
     const filteredRoles = ['company:owner', 'cold:', 'default:'];
 
     let match = false;
@@ -56,6 +69,25 @@ export const InviteMemberForm = (props: InviteMemberFormProps) => {
     return role;
   };
 
+  useEffect(() => {
+    if (data) {
+      const filtered = data.filter(filterRoles);
+      setMemberForm({
+        ...memberForm,
+        role: {
+          id: 0,
+          value: filtered[0].name,
+          name: capitalize(filtered[0].name?.replace('company:', '')),
+        },
+      });
+    }
+  }, [data]);
+
+  if (error) {
+    logError(error, ErrorType.SWRError);
+    return null;
+  }
+
   if (isLoading) {
     return (
       <div>
@@ -64,55 +96,71 @@ export const InviteMemberForm = (props: InviteMemberFormProps) => {
     );
   }
 
-  if (isArray(data)) {
+  if (isArray(data) && memberForm.role) {
     return (
       <>
-        <div className="w-64">
-          <Input
-            input_props={{
-              placeholder: 'Emails, comma separated',
-              name: 'emails',
-              value: memberForm.emails,
-              onChange: (e) => handleChange('emails', e.target.value),
-              onValueChange: (value) => {
-                handleChange('emails', value);
-              },
-              required: true,
-            }}
-            idx={0}
-            type={InputTypes.Text}
-          />
+        <div className="flex items-end">
+          <div className="flex-1">
+            <Input
+              input_props={{
+                name: 'email',
+                value: memberForm.email,
+                onChange: (e) => handleChange('email', e.target.value),
+                onValueChange: (value) => {
+                  handleChange('email', value);
+                },
+                required: true,
+                className:
+                  'text-sm not-italic text-tc-primary font-medium bg-transparent w-full rounded-lg p-[16px] border border-bgc-accent focus:border focus:border-bgc-accent focus:ring-0 w-full',
+              }}
+              input_label_props={{
+                className: 'text-sm not-italic text-tc-primary font-medium',
+              }}
+              idx={0}
+              type={InputTypes.Text}
+              input_label="Email Address"
+            />
+          </div>
+          <div className="w-40 ml-4">
+            <Input
+              input_props={{
+                name: 'role',
+                value: memberForm.role,
+                onValueChange: (value: InputOption) => {
+                  handleChange('role', value);
+                },
+                options: (data as UserRole[])
+                  .filter(filterRoles)
+                  .map((role: UserRole, index) => {
+                    return {
+                      id: index,
+                      value: role.name,
+                      name: capitalize(role.name?.replace('company:', '')),
+                    };
+                  }),
+              }}
+              idx={1}
+              type={InputTypes.Select}
+            />
+          </div>
         </div>
-        <div className="w-40">
-          <Input
-            input_props={{
-              name: 'role',
-              value: memberForm.role,
-              onValueChange: (value) => {
-                handleChange('role', value);
-              },
-              options: (data as Role[])
-                .filter(filterRoles)
-                .map((role: Role, index) => {
-                  return {
-                    id: index,
-                    name: capitalize(role.name?.replace('company:', '')),
-                  };
-                }),
-            }}
-            idx={1}
-            type={InputTypes.Select}
-          />
-        </div>
-        <div className="pl-6 mt-2">
+        <div className="mt-11 flex justify-end">
+          <span className="mr-4">
+            <BaseButton
+              variant={ButtonTypes.secondary}
+              label={'Cancel'}
+              onClick={() => {
+                props.onCancel();
+              }}
+            />
+          </span>
           <BaseButton
             type={'submit'}
-            textSize={GlobalSizes.xSmall}
-            color={ColorNames.primary}
-            label={'Send Invite'}
+            label={'Invite'}
             onClick={() => {
               handleSubmit();
             }}
+            disabled={!isEmailValid()}
           />
         </div>
       </>
@@ -121,3 +169,10 @@ export const InviteMemberForm = (props: InviteMemberFormProps) => {
     return <></>;
   }
 };
+
+export const InviteMemberForm = withErrorBoundary(Component, {
+  FallbackComponent: (props) => <ErrorFallback {...props} />,
+  onError: (error, info) => {
+    console.error('Error occurred in InviteMemberForm: ', error);
+  },
+});

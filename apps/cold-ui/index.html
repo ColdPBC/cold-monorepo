@@ -9,33 +9,6 @@
   <link href="/favicon.ico" rel="icon" type="image/x-icon"/>
   <link href="/apple-touch-icon.png" rel="apple-touch-icon"/>
   <link href="./src/styles.css" rel="stylesheet"/>
-  <script>
-    (function(h,o,u,n,d) {
-      h=h[d]=h[d]||{q:[],onReady:function(c){h.q.push(c)}}
-      d=o.createElement(u);d.async=1;d.src=n
-      n=o.getElementsByTagName(u)[0];n.parentNode.insertBefore(d,n)
-    })(window,document,'script','https://www.datadoghq-browser-agent.com/us5/v4/datadog-rum.js','DD_RUM')
-    window.DD_RUM.onReady(function() {
-      window.DD_RUM.init({
-        clientToken: 'pub92f690b0e4706ca7b9d2e7d7481f383e',
-        applicationId: '8d5928f4-f01f-4f10-8ac5-979d8989c8f3',
-        site: 'us5.datadoghq.com',
-        service: 'ui',
-        env: '%VITE_NODE_ENV%',
-        allowedTracingUrls: [(url) => url.startsWith("<https://api.coldclimate>")],
-        // Specify a version number to identify the deployed version of your application in Datadog
-        version: '%VITE_APP_VERSION%',
-        sessionSampleRate: 100,
-        premiumSampleRate: 100,
-        defaultPrivacyLevel: 'mask-user-input',
-        trackResources: true,
-        trackLongTasks: true,
-        trackUserInteractions: true,
-      });
-
-      window.DD_RUM.startSessionReplayRecording();
-    })
-  </script>
   <script src="./src/main.tsx" type="module"></script>
 </head>
 <body>

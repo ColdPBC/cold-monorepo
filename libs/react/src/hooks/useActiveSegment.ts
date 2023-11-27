@@ -11,7 +11,11 @@ export interface ActiveSegment {
     medium?: ActiveSegmentMedium; // method by which this segment was activated
 }
 
-export const useActiveSegment = () => {
+export const useActiveSegment = ({
+  chartHasSpacers
+}: {
+  chartHasSpacers: boolean;
+}) => {
     const [activeSegment, setActiveSegment] = useState<null | ActiveSegment>(
         null,
     );
@@ -33,7 +37,8 @@ export const useActiveSegment = () => {
 
         if (
           currentHoveredElement &&
-          currentHoveredElement.index !== activeSegment?.index
+          currentHoveredElement.index !== activeSegment?.index &&
+          (currentHoveredElement.index % 2 === 0 || !chartHasSpacers) // spacer will be odd number
         ) {
           animateSegmentThickness(currentHoveredElement.index, 'segment');
         }

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { set } from 'lodash';
-import { useCookies } from '@coldpbc/hooks';
 import { resolveAPIUrl } from './helper';
+import cookies from 'js-cookie';
 
 const baseURL = resolveAPIUrl();
 
@@ -11,23 +11,10 @@ const baseURL = resolveAPIUrl();
  */
 export const axiosFetcher = (params: Array<string>) => {
   try {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const { getCookieData } = useCookies();
-    const cookie = getCookieData();
-
-    const token = cookie ? cookie.accessToken : null;
-    const user = cookie ? cookie.user : null;
-
-    if (!token)
-      throw new Error(
-        `${user?.email} attempted to request data from ${params[0]} however a token was not found in the cookie.`,
-      );
-
     const config = {
       baseURL: baseURL,
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
       },
       method: 'GET',
     };

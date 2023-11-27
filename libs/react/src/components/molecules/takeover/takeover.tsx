@@ -1,35 +1,114 @@
 import React, { PropsWithChildren } from 'react';
-import { BaseButton } from '../../atoms/button/button';
-import { CloseModalIcon } from '../../atoms/icons/closeModalIcon';
-import { ColorNames } from '../../../enums/colors';
+import { BaseButton, Spinner } from '../../atoms';
+import { ColdLogos } from '../../atoms';
+import {
+  ButtonTypes,
+  ColdLogoNames,
+  GlobalSizes,
+  IconNames,
+} from '@coldpbc/enums';
+import { HexColors } from '@coldpbc/themes';
+import { twMerge } from 'tailwind-merge';
+import clsx from 'clsx';
 
 export interface TakeoverProps {
   show: boolean;
   setShow: (show: boolean) => void;
+  header?: {
+    title?: {
+      text?: string;
+    };
+    dismiss: {
+      label?: string;
+      dismissible: boolean;
+      onClick?: () => void;
+    };
+  };
+  isLoading?: boolean;
+  className?: string;
+  fullScreenWidth?: boolean;
 }
 
 export const Takeover = (props: PropsWithChildren<TakeoverProps>) => {
-  const { children, show, setShow } = props;
-  return (
-    <>
-      {show && (
+  const { children, show, setShow, header, isLoading, className, fullScreenWidth = true } = props;
+
+  const getHeaderComponent = () => {
+    if (header && !isLoading) {
+      return (
         <div
           className={
-            'fixed inset-0 h-screen w-screen rounded bg-cold-fadeAwayGray'
+            'w-full flex h-[40px]' +
+            (header.title ? ' justify-between' : ' justify-end')
           }
         >
-          <div className="w-full flex justify-end">
+          {header.title ? (
+            header.title.text ? (
+              <div className={'text-h3 text-tc-primary'}>
+                {header.title.text}
+              </div>
+            ) : (
+              <div className={'flex items-center'}>
+                <ColdLogos
+                  name={ColdLogoNames.ColdWordmark}
+                  color={HexColors.white}
+                  className={'w-[76px] h-[24px]'}
+                />
+              </div>
+            )
+          ) : (
+            ''
+          )}
+          {header.dismiss.dismissible && (
             <BaseButton
               onClick={() => {
-                setShow(false);
+                if (header.dismiss.onClick) {
+                  header.dismiss.onClick();
+                } else {
+                  setShow(false);
+                }
               }}
-              icon={<CloseModalIcon />}
-              color={ColorNames.starkWhite}
+              label={header.dismiss.label}
+              iconRight={IconNames.CloseModalIcon}
+              variant={ButtonTypes.secondary}
             />
-          </div>
-          <div>{children}</div>
+          )}
         </div>
-      )}
-    </>
-  );
+      );
+    } else {
+      return null;
+    }
+  };
+
+  if (show) {
+    return (
+      <div
+        className={twMerge(
+          'fixed h-screen w-screen bg-bgc-main z-10 inset-0',
+          className,
+        )}
+      >
+        <div
+          className={clsx(
+            'flex flex-col overflow-y-scroll h-full px-[40px] pt-[40px]',
+            {
+              'max-w-[1440px] m-auto': !fullScreenWidth
+            }
+          )}
+        >
+          {getHeaderComponent()}
+          <div className="flex-1 flex flex-col">
+            {isLoading ? (
+              <div className="h-full w-full flex items-center justify-center">
+                <Spinner size={GlobalSizes.xLarge} />
+              </div>
+            ) : (
+              children
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  } else {
+    return null;
+  }
 };

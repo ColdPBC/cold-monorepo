@@ -1,9 +1,10 @@
-export type ToastMessageProps = {
+export interface ToastMessageType {
   message: string;
-  type?: ToastMessageTypes;
-};
+  type?: ToastMessage;
+  timeout?: number;
+}
 
-export enum ToastMessageTypes {
+export enum ToastMessage {
   SUCCESS = 'success',
   FAILURE = 'failure',
   INFO = 'info',

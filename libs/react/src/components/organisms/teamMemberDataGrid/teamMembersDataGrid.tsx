@@ -1,190 +1,310 @@
-import React from 'react';
-import {Datagrid} from '../../molecules/dataGrid/datagrid';
-import useSWR from 'swr';
-import {TeamMemberName} from '../../molecules/teamMemberName/teamMemberName';
-import {GlobalSizes} from '../../../enums/sizes';
-import {Spinner} from '../../atoms/spinner/spinner';
-import {ColorNames} from '../../../enums/colors';
-import {orderBy, startCase} from 'lodash';
-import {Avatar} from '../../atoms/avatar/avatar';
-import {axiosFetcher} from '../../../fetchers/axiosFetcher';
-import {useAuth0} from '@auth0/auth0-react';
-import {format} from 'date-fns';
+import { Datagrid } from '../../molecules/dataGrid/datagrid';
+import { GlobalSizes } from '../../../enums/sizes';
+import { Spinner } from '../../atoms/spinner/spinner';
+import { ColorNames } from '../../../enums/colors';
+import { orderBy } from 'lodash';
+import { Avatar } from '../../atoms/avatar/avatar';
+import { axiosFetcher } from '../../../fetchers/axiosFetcher';
+import { User } from '@auth0/auth0-react';
+import { ButtonTypes, ErrorType, InputTypes } from '@coldpbc/enums';
+import { withErrorBoundary } from 'react-error-boundary';
+import { ErrorFallback } from '../../application/errors/errorFallback';
+import { MemberStatusType, TableActionType } from '@coldpbc/interfaces';
+import { useMemo } from 'react';
+import { useAuth0Wrapper, useColdContext, useOrgSWR } from '@coldpbc/hooks';
+import { getFormattedUserName } from '@coldpbc/lib';
 
-//TODO:Why the empty interface?
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface TeamMembersDataGridProps {}
+export interface TeamMembersDataGridProps {
+  selectedMemberStatusType: MemberStatusType;
+}
 
-export const TeamMembersDataGrid = (props: TeamMembersDataGridProps) => {
-  const { user: dataGridUser } = useAuth0();
+export const _TeamMembersDataGrid = ({
+  selectedMemberStatusType,
+}: TeamMembersDataGridProps) => {
+  const { logError } = useColdContext();
+  const auth0 = useAuth0Wrapper();
 
-  const getOrgURL = () => {
-    if (dataGridUser?.coldclimate_claims.org_id) {
-      return [
-        '/organizations/' + dataGridUser.coldclimate_claims.org_id + '/members',
-        'GET',
-      ];
-    } else {
-      return null;
-    }
-  };
-
-  const {
-    data,
-    error,
-    isLoading,
-  }: { data: any; error: any; isLoading: boolean } = useSWR(
-    getOrgURL(),
+  const { data, error, isLoading, mutate } = useOrgSWR(
+    ['/members', 'GET'],
     axiosFetcher,
-    {
-      revalidateOnFocus: false,
-    },
   );
 
-  const getActions = (user: any) => {
-    if (user.status === 'invited') {
-      return [
+  const filterActions = (action: TableActionType) => {
+    if (auth0.user?.coldclimate_claims.roles[0] === 'company:member') {
+      return false;
+    }
+    return true;
+  };
+
+  const getActions = (user: User): TableActionType[] => {
+    let actions: TableActionType[] = [];
+    if (user.invitee) {
+      actions = [
         {
           name: 'resend invite',
           label: 'Resend Invite',
-          url: '/organizations/invitation',
-          method: 'PATCH',
-          data: {
-            org_id: data.org_id,
-            user_email: user.email,
-            inviter_name: dataGridUser?.name,
-            roleId: ['company:admin'],
-          },
           type: 'button',
           toastMessage: {
-            success: 'Invite resent',
-            fail: 'Invite resend failed',
+            success: 'Invite resending successfully',
+            fail: 'Invite resending failed',
           },
+          apiRequests: [
+            {
+              url: `/organizations/${auth0.user?.coldclimate_claims.org_id}/invitations/${user.id}`,
+              method: 'DELETE',
+            },
+            {
+              url: `/organizations/${auth0.user?.coldclimate_claims.org_id}/invitation`,
+              method: 'POST',
+              data: {
+                user_email: user.email,
+                inviter_name: getFormattedUserName(auth0.user),
+                roleId: ['company:admin'],
+              },
+            },
+          ],
+          mutate,
+          actionObject: user,
         },
         {
           name: 'cancel invite',
           label: 'Cancel Invite',
-          url: '/organizations/invitation',
-          method: 'DELETE',
-          data: {
-            org_id: data.org_id,
-            user_email: user.email,
-          },
           type: 'button',
           toastMessage: {
-            success: 'Invite cancelled',
+            success: 'Invite cancelled successfully',
             fail: 'Invite cancellation failed',
           },
+          apiRequests: [
+            {
+              url: auth0.getOrgSpecificUrl(`/invitations/${user.id}`),
+              method: 'DELETE',
+            },
+          ],
+          mutate,
+          actionObject: user,
         },
       ];
-    } else if (user.roles === 'company:owner') {
-      return [];
-    } else if (user.roles === 'company:admin') {
-      return [
+    } else if (user.role === 'company:admin') {
+      actions = [
         {
-          label: 'Delete Member',
-          name: 'delete member',
-          title: 'Delete Member',
-          body: `Are you sure you want to delete ${user.name}?\n\nOnce confirmed, this action cannot be undone.`,
-          footer: {
-            resolveButton: {
-              label: 'Delete',
-              color: ColorNames.red,
-              size: GlobalSizes.small,
-              rounded: true,
+          label: 'Remove User',
+          name: 'remove user',
+          modalProps: {
+            header: {
+              title: 'Remove User',
             },
-            rejectButton: {
-              label: 'Cancel',
-              color: ColorNames.jetBlack,
-              size: GlobalSizes.small,
-              rounded: true,
+            body: (
+              <span>
+                Are you sure you want to remove{' '}
+                <span className="font-bold">{user.name}</span> from your
+                company?
+              </span>
+            ),
+            footer: {
+              resolveButton: {
+                label: 'Remove User',
+                variant: ButtonTypes.warning,
+              },
+              rejectButton: {
+                label: 'Cancel',
+                variant: ButtonTypes.secondary,
+              },
             },
-          },
-          url: `/organizations/${data.org_id}/member`,
-          method: 'DELETE',
-          data: {
-            members: user.identities,
           },
           type: 'modal',
           toastMessage: {
             success: 'Member deleted',
             fail: 'Member deletion failed',
           },
+          apiRequests: [
+            {
+              url: auth0.getOrgSpecificUrl(`/members`),
+              method: 'DELETE',
+              data: {
+                members: [user.user_id],
+              },
+            },
+          ],
+          mutate,
+          actionObject: user,
         },
         {
-          label: 'Make Owner',
-          name: 'make owner',
-          title: `Change Owner of ${data.name}`,
-          body: `There can only be one owner for ${data.name}.\n\nBy making this member the owner you will give up your permission as owner. Are you sure you want to make ${user.name} the owner?`,
-          footer: {
-            resolveButton: {
-              label: 'Confirm',
-              color: ColorNames.primary,
-              size: GlobalSizes.small,
-              rounded: true,
+          label: 'Update Role',
+          name: 'update role',
+          modalProps: {
+            header: {
+              title: 'Update Role',
             },
-            rejectButton: {
-              label: 'Cancel',
-              color: ColorNames.jetBlack,
-              size: GlobalSizes.small,
-              rounded: true,
+            body: <></>,
+            footer: {
+              resolveButton: {
+                label: 'Update Role',
+              },
+              rejectButton: {
+                label: 'Cancel',
+                variant: ButtonTypes.secondary,
+              },
             },
           },
-          urls: user.identities.map((identity: string) => {
-            return `/organizations/${data?.org_id}/members/${identity}/role/company:owner`;
-          }),
-          method: 'POST',
           type: 'modal',
           toastMessage: {
-            success: 'Owner changed',
-            fail: 'Owner change failed',
+            success: 'Role updated successfully',
+            fail: 'Role update failed',
           },
+          apiRequests: [
+            {
+              url: auth0.getOrgSpecificUrl(
+                `/roles/:roleName/members/${user.user_id}`,
+              ),
+              method: 'PUT',
+            },
+          ],
+          mutate,
+          actionObject: user,
         },
       ];
-    } else {
-      return [];
+    } else if (user.role === 'company:member') {
+      actions = [
+        {
+          label: 'Remove User',
+          name: 'remove user',
+          modalProps: {
+            header: {
+              title: 'Remove User',
+            },
+            body: (
+              <span>
+                Are you sure you want to remove{' '}
+                <span className="font-bold">{user.name}</span> from your
+                company?
+              </span>
+            ),
+            footer: {
+              resolveButton: {
+                label: 'Remove User',
+                variant: ButtonTypes.warning,
+              },
+              rejectButton: {
+                label: 'Cancel',
+                variant: ButtonTypes.secondary,
+              },
+            },
+          },
+          type: 'modal',
+          toastMessage: {
+            success: 'User removed successfully',
+            fail: 'User removing failed',
+          },
+          apiRequests: [
+            {
+              url: auth0.getOrgSpecificUrl(`/members`),
+              method: 'DELETE',
+              data: {
+                members: [user.user_id],
+              },
+            },
+          ],
+          mutate,
+          actionObject: user,
+        },
+        {
+          label: 'Update Role',
+          name: 'update role',
+          modalProps: {
+            header: {
+              title: 'Update Role',
+            },
+            body: <></>,
+            footer: {
+              resolveButton: {
+                label: 'Update Role',
+              },
+              rejectButton: {
+                label: 'Cancel',
+                variant: ButtonTypes.secondary,
+              },
+            },
+          },
+          type: 'modal',
+          toastMessage: {
+            success: 'Role updated successfully',
+            fail: 'Role update failed',
+          },
+          apiRequests: [
+            {
+              url: auth0.getOrgSpecificUrl(
+                `/roles/:roleName/members/${user.user_id}`,
+              ),
+              method: 'PUT',
+            },
+          ],
+          mutate,
+          actionObject: user,
+        },
+      ];
     }
+    return actions;
   };
 
   const getRole = (user: any) => {
-    if (user.roles === 'company:owner') {
+    if (user.role === 'company:owner') {
       return 'Owner';
-    } else if (user.roles === 'company:admin') {
+    } else if (user.role === 'company:admin') {
       return 'Admin';
-    } else if (user.roles === 'company:member') {
+    } else if (user.role === 'company:member') {
       return 'Member';
-    } else if (user.roles === 'cold:admin') {
+    } else if (user.role === 'cold:admin') {
       return 'Cold Admin';
     } else {
       return '';
     }
   };
 
-  const getUserStatus = (user: any) => {
-    if (user.status === 'invited') {
-      return 'Invited: ' + format(new Date(user.invited_at), 'MMM. dd');
-    } else {
-      return startCase(user.status);
+  const transformedData = useMemo(() => {
+    return orderBy(data?.members, ['email'], ['asc'])
+      .filter(
+        (user) =>
+          (user.invitee && selectedMemberStatusType === 'Invitations') ||
+          (selectedMemberStatusType === 'Members' && !user.invitee),
+      )
+      .map((user) => {
+        return {
+          name: (
+            <div className="flex items-center">
+              <span className="mr-4">
+                <Avatar size={GlobalSizes.medium} user={user} />
+              </span>
+              <span className="text-white font-bold text-sm leading-normal">
+                {user.name}
+              </span>
+            </div>
+          ),
+          email: (
+            <span className="text-white font-medium text-sm leading-normal">
+              {user.email}
+            </span>
+          ),
+          role: (
+            <span className="text-white font-medium text-sm leading-normal">
+              {getRole(user)}
+            </span>
+          ),
+          actions: getActions(user).filter(filterActions),
+        };
+      });
+  }, [data, selectedMemberStatusType]);
+
+  if (error || auth0.error) {
+    if (error) {
+      logError(error, ErrorType.SWRError);
     }
-  };
-
-  const getTransformedData = (data: any[]) => {
-    return orderBy(data, ['email'], ['asc']).map((user) => {
-      return {
-        picture: <Avatar size={GlobalSizes.medium} user={user} circle={true} />,
-        name: <TeamMemberName user={user} />,
-        role: getRole(user),
-        status: getUserStatus(user),
-        actions: getActions(user),
-      };
-    });
-  };
-
-  if (error) {
-    return <div>Failed to load</div>;
+    if (auth0.error) {
+      logError(auth0.error, ErrorType.Auth0Error);
+    }
+    return null;
   }
 
-  if (isLoading) {
+  if (isLoading || auth0.isLoading) {
     return (
       <div className="w-full h-full grid content-center">
         <Spinner size={GlobalSizes.medium} color={ColorNames.primary} />
@@ -192,14 +312,32 @@ export const TeamMembersDataGrid = (props: TeamMembersDataGridProps) => {
     );
   }
 
-  if (data && data.members && dataGridUser) {
+  if (
+    selectedMemberStatusType === 'Invitations' &&
+    transformedData.length === 0
+  ) {
+    return (
+      <div className="flex items-center justify-center p-4 pb-8 w-full">
+        No outstanding invitations
+      </div>
+    );
+  }
+
+  if (data && auth0.user) {
     return (
       <Datagrid
-        items={getTransformedData(data.members)}
-        definitionURL={'/form-definitions/team_member_table'}
+        items={transformedData}
+        definitionURL={'/components/team_member_table'}
       />
     );
   } else {
     return <></>;
   }
 };
+
+export const TeamMembersDataGrid = withErrorBoundary(_TeamMembersDataGrid, {
+  FallbackComponent: (props) => <ErrorFallback {...props} />,
+  onError: (error, info) => {
+    console.error('Error occurred in TeamMembersDataGrid: ', error);
+  },
+});

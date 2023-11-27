@@ -1,0 +1,30 @@
+{
+  "name": "cold-api-e2e",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "implicitDependencies": ["cold-api"],
+  "projectType": "application",
+  "targets": {
+    "e2e": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{e2eProjectRoot}"],
+      "options": {
+        "jestConfig": "apps/cold-api-e2e/jest.config.ts",
+        "passWithNoTests": true,
+        "codeCoverage": false,
+        "detectOpenHandles": false,
+        "forceExit": true,
+        "verbose": true,
+        "testTimeout": 30000,
+        "watchAll": false,
+        "watch": false
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/cold-api-e2e/**/*.{js,ts}"]
+      }
+    }
+  }
+}
