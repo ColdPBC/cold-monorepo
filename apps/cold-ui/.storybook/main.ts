@@ -9,6 +9,7 @@ const config: StorybookConfig = {
     '../../../libs/react/src/**/*.stories.@(js|jsx|ts|tsx|mdx)',
   ],
   addons: [
+    '@storybook/addon-knobs',
     '@storybook/addon-essentials',
     'storybook-addon-auth0-react',
     'storybook-addon-cookie',

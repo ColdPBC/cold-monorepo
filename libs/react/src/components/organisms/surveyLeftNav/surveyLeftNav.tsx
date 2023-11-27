@@ -23,7 +23,10 @@ const _SurveyLeftNav = (props: SurveyLeftNavProps) => {
           <div
             className={'w-[668px] h-full rounded-2xl'}
             style={{
-              background: `url('${surveyFormData.image_url}'), lightgray 50% / cover no-repeat`,
+              backgroundImage: `url('${surveyFormData.image_url}')`,
+              backgroundSize: 'cover',
+              backgroundColor: 'lightGray',
+              backgroundRepeat: 'no-repeat',
             }}
           ></div>
         </div>

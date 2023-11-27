@@ -1,16 +1,20 @@
 import { useAuth0 } from '@auth0/auth0-react';
-import useSWR, { Fetcher, Key, SWRConfiguration, SWRResponse } from 'swr';
-import { FullConfiguration } from 'swr/_internal';
+import useSWR, { SWRConfiguration, SWRResponse } from 'swr';
+import { useColdContext } from './useColdContext';
 
 export const useOrgSWR = <Data = any, Error = any>(
   key: string[] | null,
   fetcher: ((arg: string[]) => unknown) | null,
   config?: SWRConfiguration,
 ) => {
+  const { impersonatingOrg } = useColdContext();
+
   const getKey = () => {
     if (authUser && key != null) {
-      const orgKey =
-        '/organizations/' + authUser.coldclimate_claims.org_id + key[0];
+      const orgId = impersonatingOrg
+        ? impersonatingOrg.id
+        : authUser.coldclimate_claims.org_id;
+      const orgKey = '/organizations/' + orgId + key[0];
       return [orgKey, ...key.slice(1)];
     } else {
       return null;

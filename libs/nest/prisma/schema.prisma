@@ -1,0 +1,315 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["linux-arm64-openssl-1.1.x", "native"]
+}
+
+generator zod {
+  provider                         = "zod-prisma-types"
+  output                           = "../src/validation/generated"
+  addInputTypeValidation           = false
+  addSelectType                    = false
+  validateWhereUniqueInput         = false
+  addIncludeType                   = false
+  writeNullishInModelTypes         = false
+  createInputTypes                 = false
+  useDefaultValidators             = false
+  createRelationValuesTypes        = false
+  createPartialTypes               = false
+  createOptionalDefaultValuesTypes = false
+  writeBarrelFiles                 = false
+  useMultipleFiles                 = true
+  coerceDate                       = false
+  createModelTypes                 = true
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/// @namespace Actions
+/// @erd action_templates
+/// @erd actions
+/// @describe Action Templates are a way to define a set of actions that can be taken by a user in the app.  Action Templates are then used to create Actions that are specific to an organization.
+/// @zod.import(["import { ActionTemplateSchema } from '../../custom'"])
+model action_templates {
+  /// @zod.custom.use(z.string().uuid())
+  id         String    @id @default(uuid())
+  /// @zod.custom.use(ActionTemplateSchema)
+  template   Json
+  /// @DtoUpdateHidden
+  /// @zod.custom.use(z.date().optional())
+  created_at DateTime  @default(now())
+  /// @DtoUpdateHidden
+  /// @DtoCreateHidden
+  /// @DtoReadOnly
+  /// @zod.custom.use(z.date().optional())
+  updated_at DateTime  @default(now()) @updatedAt
+  actions    actions[]
+}
+
+/// @namespace Actions
+/// @erd organizations
+/// @erd action_templates
+/// @erd actions
+/// @describe *Actions* are defined by an *Action Template* and are specific to an organization.
+/// @zod.import(["import { ActionTemplateSchema } from '../../custom'"])
+model actions {
+  /// @zod.custom.use(z.string().uuid())
+  id                 String           @id @default(uuid())
+  /// @zod.custom.use(ActionTemplateSchema)
+  action             Json
+  /// @zod.custom.use(z.string().uuid())
+  action_template_id String
+  /// @zod.custom.use(z.string().uuid())
+  organization_id    String
+  /// @DtoUpdateHidden
+  /// @zod.custom.use(z.date().optional())
+  created_at         DateTime         @default(now())
+  /// @DtoUpdateHidden
+  /// @DtoCreateHidden
+  /// @DtoReadOnly
+  /// @zod.custom.use(z.date().optional())
+  updated_at         DateTime         @updatedAt
+  action_template    action_templates @relation(fields: [action_template_id], references: [id], onDelete: Cascade)
+  organization       organizations    @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+}
+
+/// @namespace News
+/// @describe News is a way to share climate information with users of the app.
+model news {
+  /// @zod.custom.use(z.string().uuid())
+  id           String   @id @default(uuid())
+  title        String
+  /// @zod.custom.use(z.string().url())
+  url          String
+  /// @zod.custom.use(z.string().url())
+  image_url    String
+  published_at DateTime
+  source_name  String
+  /// @DtoUpdateHidden
+  /// @zod.custom.use(z.date().optional())
+  created_at   DateTime @default(now())
+  /// @DtoUpdateHidden
+  /// @DtoCreateHidden
+  /// @DtoReadOnly
+  /// @zod.custom.use(z.date().optional())
+  updated_at   DateTime @updatedAt
+  publish      Boolean  @default(false)
+}
+
+/// @namespace Component Definitions
+/// @describe Component definitions describe how a component should be rendered in the UI
+model component_definitions {
+  /// @DtoReadOnly
+  /// #DtoHide
+  /// @zod.custom.use(z.string().uuid())
+  id          String                     @id @default(uuid())
+  name        String                     @unique
+  type        component_definition_types
+  /// @zod.custom.use(z.string())
+  description String
+  definition  Json
+  /// @DtoUpdateHidden
+  /// @zod.custom.use(z.date().optional())
+  created_at  DateTime                   @default(now())
+  /// @DtoUpdateHidden
+  /// @DtoCreateHidden
+  /// @DtoReadOnly
+  /// @zod.custom.use(z.date().optional())
+  updated_at  DateTime                   @updatedAt
+}
+
+/// @namespace Policies
+/// @describe Policy Definitions are a set of content policies (ie: Privacy & ToS)
+/// @erd policy_data
+model policy_definitions {
+  /// @zod.custom.use(z.number().int().positive())
+  id          Int           @id @default(autoincrement())
+  name        String
+  definition  String
+  /// @DtoUpdateHidden
+  /// @zod.custom.use(z.date().optional())
+  created_at  DateTime      @default(now())
+  /// @DtoUpdateHidden
+  /// @DtoCreateHidden
+  /// @DtoReadOnly
+  /// @zod.custom.use(z.date().optional())
+  updated_at  DateTime      @updatedAt
+  policy_data policy_data[]
+}
+
+/// @namespace Policies
+/// @describe Policy Definitions are a set of content policies (ie: Privacy & ToS)
+/// @erd policy_definitions
+model policy_data {
+  /// @zod.custom.use(z.string().email())
+  email             String
+  /// @zod.custom.use(z.number().int().positive())
+  id                Int
+  /// @DtoUpdateHidden
+  /// @zod.custom.use(z.date().optional())
+  created_at        DateTime           @default(now())
+  /// @DtoUpdateHidden
+  /// @DtoCreateHidden
+  /// @DtoReadOnly
+  /// @zod.custom.use(z.date().optional())
+  updated_at        DateTime           @updatedAt
+  policy_definition policy_definitions @relation(fields: [id], references: [id], onDelete: Cascade)
+
+  @@unique([email, id])
+}
+
+/// @namespace Surveys
+/// @erd survey_data
+/// @erd organizations
+/// @zod.import(["import { SurveyDefinitionSchema } from '../../custom'"])
+model survey_definitions {
+  /// @zod.custom.use(z.string().uuid())
+  id          String        @id @default(uuid())
+  name        String        @unique
+  /// @z.enum()
+  type        survey_types
+  description String
+  /// @DtoUpdateHidden
+  /// @zod.custom.use(z.date().optional())
+  created_at  DateTime      @default(now())
+  /// @DtoUpdateHidden
+  /// @DtoCreateHidden
+  /// @DtoReadOnly
+  /// @zod.custom.use(z.date().optional())
+  updated_at  DateTime      @updatedAt
+  /// @zod.custom.use(SurveyDefinitionSchema)
+  definition  Json
+  survey_data survey_data[]
+}
+
+/// @namespace Surveys
+/// @erd organizations
+/// @zod.import(["import { SurveyDefinitionSchema } from '../../custom'"])
+model survey_data {
+  /// @zod.custom.use(z.string().uuid())
+  id                   String             @id @unique @default(uuid())
+  /// @zod.custom.use(z.string().uuid())
+  organization_id      String
+  /// @zod.custom.use(SurveyDefinitionSchema.optional())
+  data                 Json
+  /// @DtoUpdateHidden
+  /// @zod.custom.use(z.date().optional())
+  created_at           DateTime           @default(now())
+  /// @DtoUpdateHidden
+  /// @DtoCreateHidden
+  /// @DtoReadOnly
+  /// @zod.custom.use(z.date().optional())
+  updated_at           DateTime           @updatedAt
+  /// @zod.custom.use(z.string().uuid())
+  survey_definition_id String
+  organizations        organizations      @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+  survey_definition    survey_definitions @relation(fields: [survey_definition_id], references: [id], onDelete: Cascade)
+}
+
+/// @namespace Categories
+/// @erd category_data
+/// @erd organizations
+/// @zod.import(["import { CategoryDefinitionSchema } from '../../custom'"])
+model category_definitions {
+  /// @zod.custom.use(z.string().uuid())
+  id            String          @id @default(uuid())
+  name          String          @unique
+  description   String
+  /// @DtoUpdateHidden
+  /// @zod.custom.use(z.date().optional())
+  created_at    DateTime        @default(now())
+  /// @DtoUpdateHidden
+  /// @DtoCreateHidden
+  /// @DtoReadOnly
+  /// @zod.custom.use(z.date().optional())
+  updated_at    DateTime        @updatedAt
+  /// @zod.custom.use(CategoryDefinitionSchema)
+  definition    Json
+  category_data category_data[]
+}
+
+/// @namespace Categories
+/// @erd category_definitions
+/// @erd organizations
+/// @zod.import(["import { CategoryDefinitionSchema } from '../../custom'"])
+model category_data {
+  id                     String               @id @unique @default(uuid())
+  /// @zod.custom.use(z.string().uuid())
+  category_definition_id String
+  /// @zod.custom.use(z.string().uuid())
+  organization_id        String
+  /// @zod.custom.use(CategoryDefinitionSchema.optional())
+  data                   Json
+  /// @DtoUpdateHidden
+  /// @zod.custom.use(z.date().optional())
+  created_at             DateTime             @default(now())
+  /// @DtoUpdateHidden
+  /// @DtoCreateHidden
+  /// @DtoReadOnly
+  /// @zod.custom.use(z.date().optional())
+  updated_at             DateTime             @updatedAt
+  category_definition    category_definitions @relation(fields: [category_definition_id], references: [id], onDelete: Cascade)
+  organizations          organizations        @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+}
+
+/// @namespace Categories
+/// @erd category_data
+/// @erd survey_data
+/// @actions
+model organizations {
+  /// @zod.custom.use(z.string().uuid())
+  id                  String          @id @default(uuid())
+  name                String          @unique
+  enabled_connections Json
+  display_name        String
+  branding            Json?
+  phone               String?
+  /// @zod.custom.use(z.string().email())
+  email               String?
+  street_address      String?
+  city                String?
+  state               String?
+  zip                 String?
+  /// @DtoUpdateHidden
+  /// @zod.custom.use(z.date().optional())
+  created_at          DateTime        @default(now())
+  /// @DtoUpdateHidden
+  /// @DtoCreateHidden
+  /// @DtoReadOnly
+  /// @zod.custom.use(z.date().optional())
+  updated_at          DateTime        @updatedAt
+  isTest              Boolean         @default(false)
+  actions             actions[]
+  category_data       category_data[]
+  survey_data         survey_data[]
+}
+
+enum survey_types {
+  JOURNEY
+  FOOTPRINT
+  ENRICHMENT
+  SOLUTION
+  TEST
+}
+
+enum component_definition_types {
+  UNKNOWN
+  FORM
+  NAVIGATION_SIDE
+  NAVIGATION_HEADER
+  NAVIGATION_FOOTER
+  DATAGRID
+  TEST
+}
+
+enum emissions_categories {
+  ELECTRICITY
+  FUEL
+  WASTE
+  WATER
+  TRANSPORTATION
+  OTHER
+  TEST
+}

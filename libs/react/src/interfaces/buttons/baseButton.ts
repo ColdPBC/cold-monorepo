@@ -65,5 +65,7 @@ export interface IButtonProps
   /**
    * Used to control behaviour of links, if href is passed
    */
-  target?: React.HTMLAttributeAnchorTarget
+  target?: React.HTMLAttributeAnchorTarget;
+
+  loading?: boolean;
 }
