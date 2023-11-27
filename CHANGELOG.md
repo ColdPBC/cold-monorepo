@@ -1,3 +1,143 @@
+# [1.71.0-staging.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.70.0...v1.71.0-staging.1) (2023-11-27)
+
+
+### Bug Fixes
+
+* add tests ([4bd8c64](https://github.com/ColdPBC/cold-monorepo/commit/4bd8c64bc4d4656655e5bb2a5aaa3698b33b908f))
+* add tests ([3f7ad98](https://github.com/ColdPBC/cold-monorepo/commit/3f7ad989cfad3e7452913f950a89ddc9724fea3d))
+* issue causing 404 when accessing apiDocs or health endpoint ([6de58db](https://github.com/ColdPBC/cold-monorepo/commit/6de58db489c6305bf46ecb0b797b10ad9abf4e7b))
+* move authorization/guards/filters to lib ([93b7457](https://github.com/ColdPBC/cold-monorepo/commit/93b7457948b19afa5a8d22bfc7bd48984c1fdedd))
+* move cron module and objectUtils to lib ([c8ca863](https://github.com/ColdPBC/cold-monorepo/commit/c8ca863524bff15f12d7ad829c4e0e34f345a2b3))
+* move schemas to validation library ([8fe55c4](https://github.com/ColdPBC/cold-monorepo/commit/8fe55c4b188c214bb68bcd6839dbab9afc6917a9))
+* move schemas to validation library ([fdd0422](https://github.com/ColdPBC/cold-monorepo/commit/fdd04228b3dd0f9927382305a73f7709e8ef920b))
+* rename path alias ([f43bedf](https://github.com/ColdPBC/cold-monorepo/commit/f43bedfd3980bcf1bb66ea054559ec89153efb9a))
+* rename path alias ([361ac7b](https://github.com/ColdPBC/cold-monorepo/commit/361ac7befe0c43372856b4f1da4621daba94d474))
+* rename path alias ([c2ee1c4](https://github.com/ColdPBC/cold-monorepo/commit/c2ee1c42ebf3d41cae6676be14e413876beeaaa4))
+* rename path alias ([4ee0ee5](https://github.com/ColdPBC/cold-monorepo/commit/4ee0ee5c43d48d58d93648bdc434eb7854587888))
+* resolve react types mismatch ([08c77dc](https://github.com/ColdPBC/cold-monorepo/commit/08c77dcfe23811d7000da95c45a7fdac9ae6ed23))
+* unhandled error case ([b73b06d](https://github.com/ColdPBC/cold-monorepo/commit/b73b06d9cdb0719d982491fec6525cc62f7273f3))
+* unhandled error case ([39398f0](https://github.com/ColdPBC/cold-monorepo/commit/39398f0231c52372a8f472a2fedc714a00903326))
+* use faster stringify ([64e51c3](https://github.com/ColdPBC/cold-monorepo/commit/64e51c37e8d1e8ec5f5b74f3b87510765fd82f35))
+
+
+### Features
+
+* add api codebase to monorepo ([b4923d6](https://github.com/ColdPBC/cold-monorepo/commit/b4923d662e1753df8ebf781e141a067fa1d5740f))
+* add dockerfiles ([3d26a88](https://github.com/ColdPBC/cold-monorepo/commit/3d26a88dd28a8cbc411d12c319ca84d369d9580f))
+* add functioning api to monorepo ([1f45cc9](https://github.com/ColdPBC/cold-monorepo/commit/1f45cc9faf38dc8e97336b98ad87611537bd1385))
+* add openai service ([7457661](https://github.com/ColdPBC/cold-monorepo/commit/745766127e56fa6e991c3f4774b444b1c3ad0979))
+* add shared nest lib to monorepo ([941b3a5](https://github.com/ColdPBC/cold-monorepo/commit/941b3a53d3584c5af5717ef1b640755360efcb6c))
+* resolve typing issue ([064234e](https://github.com/ColdPBC/cold-monorepo/commit/064234ee7bf46e99d9aa771f49858260465ff813))
+* resolve ui build errors ([0d266d2](https://github.com/ColdPBC/cold-monorepo/commit/0d266d2f056c67bee295582accd75b24edad9817))
+
+# [1.70.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.69.0...v1.70.0) (2023-11-22)
+
+
+### Features
+
+* filter out /categories errors when they are are a 404 ([c9a16a8](https://github.com/ColdPBC/cold-monorepo/commit/c9a16a82e0d6f45ca0448c33e03e1894282f6e0b))
+
+# [1.69.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.68.0...v1.69.0) (2023-11-22)
+
+
+### Bug Fixes
+
+* revert max height styling for sections progress ([7ea6614](https://github.com/ColdPBC/cold-monorepo/commit/7ea66141ccbd76ff8df1164a064c812de881814c))
+
+
+### Features
+
+* added max height restriction and correct background image styling ([843bc08](https://github.com/ColdPBC/cold-monorepo/commit/843bc080440a2a047bf3cc3ef69983a7b333a8d9))
+* set max height to 100px or viewport - 122px ([09dcdf6](https://github.com/ColdPBC/cold-monorepo/commit/09dcdf6c8a7de344bfc125b087817f79a3741593))
+
+# [1.68.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.67.0...v1.68.0) (2023-11-16)
+
+
+### Features
+
+* add response interceptor for axios to log error in datadogrum ([7c55229](https://github.com/ColdPBC/cold-monorepo/commit/7c55229585c1d5be9589ce99ce37dd4adb51277a))
+* added context object to add error to have more info when investigating ([4d924a8](https://github.com/ColdPBC/cold-monorepo/commit/4d924a8da9a6580e581001425df389ef091bc86c))
+
+# [1.67.0](https://github.com/ColdPBC/ui/compare/v1.66.0...v1.67.0) (2023-11-14)
+
+
+### Bug Fixes
+
+* remove surveys incomplete from mocks for cold admin story ([84b1f62](https://github.com/ColdPBC/ui/commit/84b1f62b3562b3700016ce79bf85483003231422))
+
+
+### Features
+
+* add cookie to session storage ([8a134e1](https://github.com/ColdPBC/ui/commit/8a134e1502fc30008ae745745e104880d0bb6cae))
+* create organization selector on sidebar for cold admins ([97e29b4](https://github.com/ColdPBC/ui/commit/97e29b40d9b105ee700e8e78cad010c8f2018a9c))
+* reduce font size and dropdown width ([e58f72d](https://github.com/ColdPBC/ui/commit/e58f72d6e10a29f62a51b2e4eda0c302668cf295))
+
+# [1.66.0](https://github.com/ColdPBC/ui/compare/v1.65.0...v1.66.0) (2023-11-14)
+
+
+### Features
+
+* Remove invite member when user is company:member ([e3f3708](https://github.com/ColdPBC/ui/commit/e3f370878e7550fda6dc44355d77fef2c8ce68d7))
+
+# [1.65.0](https://github.com/ColdPBC/ui/compare/v1.64.0...v1.65.0) (2023-11-13)
+
+
+### Features
+
+* Created markdown component ([90cf17c](https://github.com/ColdPBC/ui/commit/90cf17c0c7fcd3b958a31135b296283739905219))
+* remove unneeded color specification on prose sm custom styling ([77869e6](https://github.com/ColdPBC/ui/commit/77869e6a4f0c67462ea3c097d888013c1b9f9b70))
+* update small story ([d5d981a](https://github.com/ColdPBC/ui/commit/d5d981ad4c2ec565b808913d603a16af1197e7f3))
+
+# [1.64.0](https://github.com/ColdPBC/ui/compare/v1.63.0...v1.64.0) (2023-11-03)
+
+
+### Features
+
+* add user to dd rum to help track users running into errors ([b161fdc](https://github.com/ColdPBC/ui/commit/b161fdc68e4b456dfd3354054e11f158bf129384))
+* use cold climate claims object for logging ([d09aaa0](https://github.com/ColdPBC/ui/commit/d09aaa0ff9da6a9174229dc081e29b02519f2d63))
+
+# [1.63.0](https://github.com/ColdPBC/ui/compare/v1.62.0...v1.63.0) (2023-11-03)
+
+
+### Features
+
+* update policy content endpoint ([64c9a1f](https://github.com/ColdPBC/ui/commit/64c9a1ff3059e02539f6332c1e5807927432e8da))
+
+# [1.62.0](https://github.com/ColdPBC/ui/compare/v1.61.0...v1.62.0) (2023-11-03)
+
+
+### Features
+
+* add team member actions ([bc15a6c](https://github.com/ColdPBC/ui/commit/bc15a6c3855f0c5a3c46832d337c909f743716f5))
+* Add team member actions back to table for each row ([211abff](https://github.com/ColdPBC/ui/commit/211abff98c044b6a8ffaee859cc252c08ffe2997))
+* Added error message for expired invitation link ([efb96a1](https://github.com/ColdPBC/ui/commit/efb96a175e0c7d072dd448a4efeacb19ce5d95de))
+* allow roles to be filtered based on role ([5e84596](https://github.com/ColdPBC/ui/commit/5e84596a370ca60534895af772e11a5ce85f7a2c))
+* revert handler changes ([fe00f56](https://github.com/ColdPBC/ui/commit/fe00f56c476785bc290d8bc1652eca1d700b17f0))
+
+# [1.61.0](https://github.com/ColdPBC/ui/compare/v1.60.0...v1.61.0) (2023-11-02)
+
+
+### Features
+
+* add 2nd decimal number if needed ([6597f1b](https://github.com/ColdPBC/ui/commit/6597f1b99d9508b25efa956e687a8f9e82e44cc0))
+* format tonnes to have thousand comma ([2260929](https://github.com/ColdPBC/ui/commit/22609293513b1295b5f0dbc308fd7e5f0568f1b6))
+* one decimal point ([cde84f7](https://github.com/ColdPBC/ui/commit/cde84f79d8f7f82168d3f0344082c54fe439a221))
+* remove trailing zeroes ([87ba77e](https://github.com/ColdPBC/ui/commit/87ba77ec43c48102f51e5ab3c774338d8594abf0))
+
+# [1.60.0](https://github.com/ColdPBC/ui/compare/v1.59.0...v1.60.0) (2023-11-01)
+
+
+### Bug Fixes
+
+* fix build issues ([fc1081b](https://github.com/ColdPBC/ui/commit/fc1081b223699adffa75d848f7962912478340b2))
+
+
+### Features
+
+* check if auth0 or organization data is loading ([e37f9aa](https://github.com/ColdPBC/ui/commit/e37f9aadc78f14440a066f38bf518b30bc286fa5))
+* moved table to teammembersettings component ([ae6775b](https://github.com/ColdPBC/ui/commit/ae6775b028f39d6340e1291467dd5f06ff936679))
+* refactor team member table to own component ([3826928](https://github.com/ColdPBC/ui/commit/3826928f2afb301097c8e93878797a5fb179b81c))
+
 # [1.59.0](https://github.com/ColdPBC/ui/compare/v1.58.0...v1.59.0) (2023-11-01)
 
 
