@@ -1,21 +1,15 @@
 import { useAuth0, User } from '@auth0/auth0-react';
-import { useCookies } from 'react-cookie';
-import useSWR from 'swr';
 import { axiosFetcher } from '@coldpbc/fetchers';
+import useSWR from 'swr';
+import { useColdContext } from './useColdContext';
 
 export const useAuth0Wrapper = () => {
-  // wrap auth0 hook here
-  // fetch the latest user data from the /users endpoint
-  // update the user data in the context
-  // return the user data
+  const { impersonatingOrg } = useColdContext();
   const auth0Context = useAuth0();
-
-  const [cookies] = useCookies(['coldpbc']);
-
-  const { coldpbc } = cookies;
+  let orgId: string | undefined = undefined;
 
   const userData = useSWR<User, any, any>(
-    auth0Context.user && coldpbc
+    auth0Context.user && auth0Context.isAuthenticated
       ? [`/members/${auth0Context.user.email}`, 'GET']
       : null,
     axiosFetcher,
@@ -30,9 +24,21 @@ export const useAuth0Wrapper = () => {
     }
   }
 
+  if (auth0Context.user) {
+    orgId = impersonatingOrg
+      ? impersonatingOrg.id
+      : auth0Context.user.coldclimate_claims.org_id;
+  }
+
+  const getOrgSpecificUrl = (url: string) => {
+    return '/organizations/' + orgId + url;
+  };
+
   return {
     ...auth0Context,
     isLoading: auth0Context.isLoading || userData.isLoading,
     error: auth0Context.error || userData.error,
+    getOrgSpecificUrl,
+    orgId,
   };
 };

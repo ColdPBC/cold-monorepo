@@ -1,33 +1,39 @@
 import type { CustomFlowbiteTheme, FlowbiteTheme } from 'flowbite-react';
+import { theme } from 'flowbite-react';
 
 export const darkTableTheme: CustomFlowbiteTheme = {
+  ...theme,
   table: {
-    "root": {
-      "base": "w-full text-left text-sm text-gray-500 dark:text-gray-400",
-      "shadow": "absolute dark:bg-black w-full h-full top-0 left-0 rounded-lg drop-shadow-md -z-10",
-      "wrapper": "relative border-gray-50 border border-solid rounded-lg bg-gray-50 flex-1 w-full"
+    root: {
+      base: 'w-full text-left text-sm text-gray-500 dark:text-gray-400',
+      shadow:
+        'absolute dark:bg-black w-full h-full top-0 left-0 rounded-lg drop-shadow-md -z-10',
+      wrapper:
+        'relative border-gray-50 border border-solid rounded-lg bg-gray-50 flex-1 w-full',
     },
-    "body": {
-      "base": "group/body",
-      "cell": {
-        "base": "group-first/body:group-first/row:first:rounded-tl-lg group-first/body:group-first/row:last:rounded-tr-lg group-last/body:group-last/row:first:rounded-bl-lg group-last/body:group-last/row:last:rounded-br-lg px-4 py-4 bg-bgc-elevated whitespace-pre"
-      }
+    body: {
+      base: 'group/body',
+      cell: {
+        base: 'group-first/body:group-first/row:first:rounded-tl-lg group-first/body:group-first/row:last:rounded-tr-lg group-last/body:group-last/row:first:rounded-bl-lg group-last/body:group-last/row:last:rounded-br-lg px-4 py-4 bg-bgc-elevated whitespace-pre',
+      },
     },
-    "head": {
-      "base": "group/head text-xs uppercase text-gray-700 dark:text-gray-400",
-      "cell": {
-        "base": "group-first/head:first:rounded-tl-lg group-first/head:last:rounded-tr-lg bg-none dark:bg-gray-700 px-4 py-3 font-normal"
-      }
+    head: {
+      base: 'group/head text-xs uppercase text-gray-700 dark:text-gray-400',
+      cell: {
+        base: 'group-first/head:first:rounded-tl-lg group-first/head:last:rounded-tr-lg bg-none dark:bg-gray-700 px-4 py-3 font-normal',
+      },
     },
-    "row": {
-      "base": "group/row border-t border-gray-50",
-      "hovered": "hover:bg-gray-50 dark:hover:bg-gray-600",
-      "striped": "odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700"
-    }
-  }
-}
+    row: {
+      base: 'group/row border-t border-gray-50',
+      hovered: 'hover:bg-gray-50 dark:hover:bg-gray-600',
+      striped:
+        'odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700',
+    },
+  },
+};
 
 export const flowbiteThemeOverride: FlowbiteTheme = {
+  ...theme,
   accordion: {
     root: {
       base: 'divide-y divide-gray-200 border-gray-200 dark:divide-gray-700 dark:border-gray-700',
@@ -416,6 +422,7 @@ export const flowbiteThemeOverride: FlowbiteTheme = {
   },
   checkbox: {
     root: {
+      ...theme.checkbox.root,
       base: 'h-4 w-4 rounded border border-gray-300 bg-gray-100 focus:ring-2 focus:ring-cold-skyBlue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-cold-skyBlue-600',
     },
   },
@@ -439,13 +446,13 @@ export const flowbiteThemeOverride: FlowbiteTheme = {
         },
         placement: '-4px',
       },
-      base: 'z-10 w-fit rounded divide-y divide-gray-100 shadow',
+      base: 'z-10 w-fit rounded-lg divide-y divide-gray-100 shadow !min-w-0',
       content: 'py-1 text-sm text-gray-700 dark:text-gray-200',
-      divider: 'my-1 h-px bg-bgc-accent',
+      divider: 'h-[1.5px] bg-bgc-accent',
       header: 'block py-2 px-4 text-sm text-gray-700 dark:text-gray-200',
       hidden: 'invisible opacity-0',
       item: {
-        base: 'flex items-center justify-start py-4 px-4 text-white font-medium text-sm cursor-pointer',
+        base: 'flex items-center justify-start py-4 px-4 text-white font-medium text-sm cursor-pointer w-full hover:bg-bgc-accent',
         icon: 'mr-2 h-4 w-4',
         container: '',
       },
@@ -875,6 +882,7 @@ export const flowbiteThemeOverride: FlowbiteTheme = {
       label: 'ml-3 text-sm font-medium text-gray-900 dark:text-gray-300',
     },
     toggle: {
+      ...theme.toggleSwitch.toggle,
       base: 'toggle-bg h-6 w-11 rounded-full border group-focus:ring-4 group-focus:ring-cold-skyBlue-500/25',
       checked: {
         on: 'after:translate-x-full after:border-white',
@@ -924,7 +932,13 @@ export const flowbiteThemeOverride: FlowbiteTheme = {
       },
       label: {
         base: 'flex-1 whitespace-nowrap text-left',
-        icon: 'h-6 w-6',
+        icon: {
+          base: 'h-6 w-6',
+          open: {
+            on: '',
+            off: '',
+          },
+        },
       },
       list: 'py-2',
     },
@@ -1020,6 +1034,7 @@ export const flowbiteThemeOverride: FlowbiteTheme = {
     },
   },
   tab: {
+    ...theme.tab,
     base: 'flex flex-col gap-2',
     tablist: {
       base: 'flex text-center',
@@ -1164,6 +1179,93 @@ export const flowbiteThemeOverride: FlowbiteTheme = {
       auto: 'border border-gray-200 bg-white text-gray-900 dark:border-none dark:bg-gray-700 dark:text-white',
     },
     content: 'relative z-20',
+  },
+  datepicker: {
+    root: {
+      base: 'relative',
+    },
+    popup: {
+      root: {
+        base: 'absolute top-10 z-50 block',
+        inline: 'relative top-0 z-auto',
+        inner:
+          'inline-block rounded-lg bg-white p-4 shadow-lg dark:bg-gray-700',
+      },
+      header: {
+        base: '',
+        title:
+          'px-2 py-3 text-center font-semibold text-gray-900 dark:text-white',
+        selectors: {
+          base: 'flex justify-between mb-2',
+          button: {
+            base: 'text-sm rounded-lg text-bgc-accent dark:text-white bg-white dark:bg-gray-700 font-semibold py-2.5 px-5 hover:bg-bgc-accent hover:text-white dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-200 view-switch',
+            prev: '',
+            next: '',
+            view: '',
+          },
+        },
+      },
+      view: {
+        base: 'p-1',
+      },
+      footer: {
+        base: 'flex mt-2 space-x-2',
+        button: {
+          base: 'w-full rounded-lg px-5 py-2 text-center text-sm font-medium',
+          today:
+            'bg-primary text-white hover:bg-primary-200 dark:bg-cyan-600 dark:hover:bg-cyan-700',
+          clear:
+            'border border-gray-300 bg-white text-gray-900 hover:bg-bgc-accent hover:text-white dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600',
+        },
+      },
+    },
+    views: {
+      days: {
+        header: {
+          base: 'grid grid-cols-7 mb-1',
+          title:
+            'dow h-6 text-center text-sm font-medium leading-6 text-gray-500 dark:text-gray-400',
+        },
+        items: {
+          base: 'grid w-64 grid-cols-7',
+          item: {
+            base: 'block flex-1 cursor-pointer rounded-lg border-0 text-center text-sm font-semibold leading-9 text-gray-900 hover:bg-primary-100 dark:text-white dark:hover:bg-gray-600 ',
+            selected: 'bg-primary text-white hover:bg-primary-200',
+            disabled: 'text-gray-500',
+          },
+        },
+      },
+      months: {
+        items: {
+          base: 'grid w-64 grid-cols-4',
+          item: {
+            base: 'block flex-1 cursor-pointer rounded-lg border-0 text-center text-sm font-semibold leading-9 text-gray-900 hover:bg-bgc-accent hover:text-white dark:text-white dark:hover:bg-gray-600',
+            selected: 'bg-primary text-white hover:bg-primary-200',
+            disabled: 'text-gray-500',
+          },
+        },
+      },
+      years: {
+        items: {
+          base: 'grid w-64 grid-cols-4',
+          item: {
+            base: 'block flex-1 cursor-pointer rounded-lg border-0 text-center text-sm font-semibold leading-9 hover:bg-bgc-accent hover:text-white dark:text-white dark:hover:bg-gray-600 text-gray-900',
+            selected: 'bg-primary text-white hover:primary-200',
+            disabled: 'text-gray-500',
+          },
+        },
+      },
+      decades: {
+        items: {
+          base: 'grid w-64 grid-cols-4',
+          item: {
+            base: 'block flex-1 cursor-pointer rounded-lg border-0 text-center text-sm font-semibold leading-9  hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600 text-gray-900',
+            selected: 'bg-primary text-white hover:bg-primary-200',
+            disabled: 'text-gray-500',
+          },
+        },
+      },
+    },
   },
 };
 

@@ -10,18 +10,27 @@ import { AppContent } from '../../organisms/appContent/appContent';
 import { DismissableInfoCard } from '../../molecules/dismissableInfoCard';
 import { JourneyDetailView } from '../../molecules/journeyDetailView';
 import { TemperatureCheckCard } from '../../molecules/temperatureCheckCard';
+import { withErrorBoundary } from 'react-error-boundary';
+import { ErrorFallback } from '../../application/errors/errorFallback';
+import { useColdContext, useOrgSWR } from '@coldpbc/hooks';
+import { ErrorType } from '@coldpbc/enums';
 
 const PERIOD = 2022;
 
-export function Journey() {
-  const { data, error, isLoading } = useSWR<any>(
+function _Journey() {
+  const { logError } = useColdContext();
+  const { data, error, isLoading } = useOrgSWR<any>(
     ['/categories/', 'GET'],
     axiosFetcher,
   );
 
-  const isEmptyData = (data?.definition && Object.keys(data.definition.categories).length === 0) || data?.response?.status === 404;
+  const isEmptyData =
+    (data?.definition &&
+      Object.keys(data.definition.categories).length === 0) ||
+    data?.response?.status === 404;
 
   const auth0 = useAuth0();
+
   if (auth0.isLoading) {
     return (
       <div>
@@ -30,31 +39,35 @@ export function Journey() {
     );
   }
 
+  if (error || auth0.error) {
+    if (error) logError(error, ErrorType.SWRError);
+    if (auth0.error) logError(auth0.error, ErrorType.Auth0Error);
+    return null;
+  }
+
   if (auth0.user) {
     return (
-      <AppContent title='Climate Journey'>
+      <AppContent title="Climate Journey">
         <CenterColumnContent>
-          {!isEmptyData ?
+          {!isEmptyData ? (
+            <Card>
+              <JourneyDetailView />
+            </Card>
+          ) : (
             <>
-              <Card>
-                <JourneyDetailView />
-              </Card>
-            </>
-            :
-            <>
-              <DismissableInfoCard 
+              <DismissableInfoCard
                 text="Your Cold Score is a measure of your company's progress towards climate leadership. The higher your score, the more progress you've made!"
                 onDismiss={() => {}}
-                dismissKey='journey-page'
+                dismissKey="journey-page"
               />
-              <JourneyOverviewCard />
+              <JourneyOverviewCard omitCta={true} />
             </>
-          } 
+          )}
         </CenterColumnContent>
         <RightColumnContent>
           <TemperatureCheckCard
-              cardTitle="Temperature Check"
-              stats={['cold_score','footprint']}
+            cardTitle="Temperature Check"
+            stats={['cold_score', 'footprint']}
           />
         </RightColumnContent>
       </AppContent>
@@ -63,3 +76,10 @@ export function Journey() {
 
   return null;
 }
+
+export const Journey = withErrorBoundary(_Journey, {
+  FallbackComponent: (props) => <ErrorFallback {...props} />,
+  onError: (error, info) => {
+    console.error('Error occurred in Journey: ', error);
+  },
+});

@@ -1,14 +1,6 @@
-import { useContext, useEffect, useState } from 'react';
-import cookies from 'js-cookie';
-import { useAuth0 } from '@auth0/auth0-react';
-import { ColdRoutes } from '../routes/routes';
-import { useCookies } from '@coldpbc/hooks';
-import { Spinner } from '../../atoms';
-import { GlobalSizes } from '@coldpbc/enums';
-import ColdContext from '../../../context/coldContext';
-import { useLDClient } from 'launchdarkly-react-client-sdk';
+import { ColdRoutes } from '../routes';
 import { matchRoutes, useLocation } from 'react-router-dom';
-import { GuidanceButton } from '../../molecules/guidanceButton/guidanceButton';
+import { GuidanceButton } from '../../molecules';
 
 export const Application = () => {
   const location = useLocation();
@@ -17,7 +9,7 @@ export const Application = () => {
       { path: '/home' },
       { path: '/footprint' },
       { path: '/journey' },
-      { path: '/actions' },
+      { path: '/actions/*' },
     ],
     location,
   );

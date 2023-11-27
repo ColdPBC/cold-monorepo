@@ -114,12 +114,11 @@ export const Input = (props: IInputProps) => {
   function renderSelect(): JSX.Element {
     return (
       <Select
-        options={input_props.options}
-        name={input_props.name}
+        {...input_props}
+        value={input_props.value.name}
         label={input_label}
-        value={input_props.value}
         onChange={(value) => {
-          input_props.onValueChange(value.name);
+          input_props.onValueChange(value);
         }}
       />
     );

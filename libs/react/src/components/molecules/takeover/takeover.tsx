@@ -1,5 +1,5 @@
 import React, { PropsWithChildren } from 'react';
-import { BaseButton } from '../../atoms';
+import { BaseButton, Spinner } from '../../atoms';
 import { ColdLogos } from '../../atoms';
 import {
   ButtonTypes,
@@ -8,6 +8,8 @@ import {
   IconNames,
 } from '@coldpbc/enums';
 import { HexColors } from '@coldpbc/themes';
+import { twMerge } from 'tailwind-merge';
+import clsx from 'clsx';
 
 export interface TakeoverProps {
   show: boolean;
@@ -22,13 +24,16 @@ export interface TakeoverProps {
       onClick?: () => void;
     };
   };
+  isLoading?: boolean;
+  className?: string;
+  fullScreenWidth?: boolean;
 }
 
 export const Takeover = (props: PropsWithChildren<TakeoverProps>) => {
-  const { children, show, setShow, header } = props;
+  const { children, show, setShow, header, isLoading, className, fullScreenWidth = true } = props;
 
   const getHeaderComponent = () => {
-    if (header) {
+    if (header && !isLoading) {
       return (
         <div
           className={
@@ -70,22 +75,40 @@ export const Takeover = (props: PropsWithChildren<TakeoverProps>) => {
         </div>
       );
     } else {
-      return '';
+      return null;
     }
   };
 
   if (show) {
     return (
       <div
-        className={
-          'fixed inset-0 h-screen w-screen rounded-2xl bg-bgc-main p-[40px] z-10'
-        }
+        className={twMerge(
+          'fixed h-screen w-screen bg-bgc-main z-10 inset-0',
+          className,
+        )}
       >
-        {getHeaderComponent()}
-        <div>{children}</div>
+        <div
+          className={clsx(
+            'flex flex-col overflow-y-scroll h-full px-[40px] pt-[40px]',
+            {
+              'max-w-[1440px] m-auto': !fullScreenWidth
+            }
+          )}
+        >
+          {getHeaderComponent()}
+          <div className="flex-1 flex flex-col">
+            {isLoading ? (
+              <div className="h-full w-full flex items-center justify-center">
+                <Spinner size={GlobalSizes.xLarge} />
+              </div>
+            ) : (
+              children
+            )}
+          </div>
+        </div>
       </div>
     );
   } else {
-    return '';
+    return null;
   }
 };

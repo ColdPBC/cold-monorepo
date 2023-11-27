@@ -1,28 +1,53 @@
-import { PropsWithChildren, useEffect } from 'react';
+import React, { PropsWithChildren, useEffect } from 'react';
+import ColdContext, { ColdContextType } from '../context/coldContext';
 import { worker } from './browser';
 import { DefaultBodyType, MockedRequest, RestHandler } from 'msw';
 import { SWRConfig } from 'swr';
-import {BrowserRouter} from 'react-router-dom';
+import { MemoryRouter, MemoryRouterProps } from 'react-router-dom';
+import { Auth0ProviderOptions } from '@auth0/auth0-react';
+import { ErrorType } from '@coldpbc/enums';
 
 export const StoryMockProvider = (
   props: PropsWithChildren<{
-    handlers: RestHandler<MockedRequest<DefaultBodyType>>[];
+    handlers?: RestHandler<MockedRequest<DefaultBodyType>>[];
+    memoryRouterProps?: MemoryRouterProps;
+    coldContext?: ColdContextType;
   }>,
 ) => {
+  const [impersonatingOrg, setImpersonatingOrg] = React.useState<
+    string | undefined
+  >(undefined);
+
   useEffect(() => {
-    worker && worker.use(...props.handlers);
+    worker && worker.use(...(props.handlers ?? []));
     return () => {
       // clear added handler on dismount, so stories that don't have custom handlers don't get this data
       worker && worker.resetHandlers();
     };
   });
 
+  const coldContextValue = props.coldContext ?? {
+    auth0Options: {
+      domain: '',
+      clientId: '',
+      authorizationParams: {
+        audience: '',
+      },
+    } as Auth0ProviderOptions,
+    launchDarklyClientSideId: '',
+    logError: (error: any, type: ErrorType, context?: object) => {},
+    impersonatingOrg: impersonatingOrg,
+    setImpersonatingOrg: setImpersonatingOrg,
+  };
+
   return (
     // so swr doesn't cache between stories
-    <SWRConfig value={{ provider: () => new Map() }}>
-      <BrowserRouter>
-        {props.children}
-      </BrowserRouter>
-    </SWRConfig>
+    <ColdContext.Provider value={coldContextValue}>
+      <SWRConfig value={{ provider: () => new Map() }}>
+        <MemoryRouter {...props.memoryRouterProps}>
+          {props.children}
+        </MemoryRouter>
+      </SWRConfig>
+    </ColdContext.Provider>
   );
 };

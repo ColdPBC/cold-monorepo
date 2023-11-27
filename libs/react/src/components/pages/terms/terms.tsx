@@ -3,16 +3,18 @@ import { axiosFetcher } from '../../../fetchers';
 import useSWR from 'swr';
 import { Spinner } from '../../atoms';
 import ReactMarkdown from 'react-markdown';
+import { withErrorBoundary } from 'react-error-boundary';
+import { ErrorFallback } from '../../application/errors/errorFallback';
+import { ErrorType } from '@coldpbc/enums';
+import { useColdContext } from '@coldpbc/hooks';
 
 export interface TermsProps {
   type: string;
 }
 
-export function Terms(props: PropsWithChildren<TermsProps>) {
-  const { data, error, isLoading } = useSWR<any>(
-    ['/policy-content/' + props.type + '/content', 'GET'],
-    axiosFetcher,
-  );
+function _Terms(props: PropsWithChildren<TermsProps>) {
+  const { data, error, isLoading } = useSWR<any, any, any>(['/policies/' + props.type + '/content', 'GET'], axiosFetcher);
+  const { logError } = useColdContext();
 
   if (isLoading) {
     return (
@@ -20,8 +22,10 @@ export function Terms(props: PropsWithChildren<TermsProps>) {
         <Spinner />
       </div>
     );
-  } else if (error) {
-    error.log(error);
+  }
+
+  if (error) {
+    logError(error, ErrorType.SWRError);
     return <div></div>;
   }
 
@@ -33,3 +37,10 @@ export function Terms(props: PropsWithChildren<TermsProps>) {
     </div>
   );
 }
+
+export const Terms = withErrorBoundary(_Terms, {
+  FallbackComponent: props => <ErrorFallback {...props} />,
+  onError: (error, info) => {
+    console.error('Error occurred in Terms: ', error);
+  },
+});

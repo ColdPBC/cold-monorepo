@@ -33,8 +33,12 @@ export const Modal = (props: IModalProps) => {
 
   const getModalFooter = () => {
     return (
-      <div className='flex justify-end mt-11'>
-        {footer?.rejectButton && <span className={clsx({'mr-6': footer?.resolveButton})}><BaseButton {...footer.rejectButton} /></span>}
+      <div className="flex justify-end mt-11">
+        {footer?.rejectButton && (
+          <span className={clsx({ 'mr-6': footer?.resolveButton })}>
+            <BaseButton {...footer.rejectButton} />
+          </span>
+        )}
         {footer?.resolveButton && <BaseButton {...footer.resolveButton} />}
       </div>
     );
@@ -47,21 +51,21 @@ export const Modal = (props: IModalProps) => {
       onClose={() => props.setShowModal(false)}
       theme={flowbiteThemeOverride.modal}
       style={{
-        boxShadow: '0px 8px 32px 8px rgba(0, 0, 0, 0.70)'
+        boxShadow: '0px 8px 32px 8px rgba(0, 0, 0, 0.70)',
       }}
     >
-      <Card title={header.title} className='relative p-6'>
-        <div className='flex flex-col w-full'>
+      <Card title={header.title} className="relative p-6 overflow-visible">
+        <div className="flex flex-col w-full">
           <div className="">{getModelBody()}</div>
           {footer && getModalFooter()}
         </div>
         <button
-            className='w-[20px] h-[20px] absolute right-[24px] top-[24px]'
-            onClick={(e) => {
-                props.setShowModal(false)
-            }}
+          className="w-[20px] h-[20px] absolute right-[24px] top-[24px]"
+          onClick={(e) => {
+            props.setShowModal(false);
+          }}
         >
-            <XMarkIcon />
+          <XMarkIcon />
         </button>
       </Card>
     </FBModal>

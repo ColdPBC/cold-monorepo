@@ -18,9 +18,11 @@ type Story = StoryObj<typeof meta>;
 const SurveyRightNavStory = (args: SurveyRightNavProps) => {
   const [activeKey, setActiveKey] = React.useState(args.activeKey);
   const [surveyData, setSurveyData] = React.useState(args.surveyData);
-
+  const [submitted, setSubmitted] = React.useState(args.submitted);
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  const submitSurvey = () => {};
+  const submitSurvey = () => {
+    setSubmitted(true);
+  };
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   const startSurvey = () => {
     setActiveKey({
@@ -39,6 +41,7 @@ const SurveyRightNavStory = (args: SurveyRightNavProps) => {
       setSurveyData={setSurveyData}
       submitSurvey={submitSurvey}
       startSurvey={startSurvey}
+      submitted={submitted}
     />
   );
 };
@@ -52,5 +55,8 @@ export const Default: Story = {
       isFollowUp: false,
     },
     surveyData: getSurveyFormDataPayload(),
+    submitted: false,
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    closeSurvey: () => {},
   },
 };

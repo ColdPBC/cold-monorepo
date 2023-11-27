@@ -6,11 +6,14 @@ import {
   SurveyPayloadType,
   SurveySectionType,
 } from '@coldpbc/interfaces';
-import { BaseButton } from '../../atoms';
+import { BaseButton, Spinner } from '../../atoms';
 import { ButtonTypes, GlobalSizes } from '@coldpbc/enums';
 import { CSSTransition, SwitchTransition } from 'react-transition-group';
 import { getSectionIndex, isKeyValueFollowUp } from '@coldpbc/lib';
 import { axiosFetcher } from '@coldpbc/fetchers';
+import { withErrorBoundary } from 'react-error-boundary';
+import { ErrorFallback } from '../../application';
+import { useAuth0Wrapper } from '@coldpbc/hooks';
 
 export interface SurveyQuestionContainerProps {
   activeKey: SurveyActiveKeyType;
@@ -20,13 +23,14 @@ export interface SurveyQuestionContainerProps {
   setSurveyData: (surveyData: SurveyPayloadType) => void;
 }
 
-export const SurveyQuestionContainer = ({
+const _SurveyQuestionContainer = ({
   activeKey,
   setActiveKey,
   submitSurvey,
   surveyData,
   setSurveyData,
 }: SurveyQuestionContainerProps) => {
+  const { getOrgSpecificUrl } = useAuth0Wrapper();
   const nextQuestionTransitionClassNames = {
     enter: 'transform translate-y-full',
     enterDone: 'transition ease-out duration-200 transform translate-y-0',
@@ -67,6 +71,13 @@ export const SurveyQuestionContainer = ({
     const activeSectionKey = Object.keys(sections)[activeSectionIndex];
     if (isKeyValueFollowUp(key, sections)) {
       const section = sections[activeSectionKey];
+      if (submit) {
+        // check if the current follow up is answered. If not, set it update.skipped to true
+        // if it is answered, set update.skipped to false
+        const followUp = section.follow_up[key];
+        update.skipped =
+          followUp.value === null || followUp.value === undefined;
+      }
       newSection = {
         ...section,
         follow_up: {
@@ -79,6 +90,11 @@ export const SurveyQuestionContainer = ({
       };
     } else {
       const section = sections[key];
+      if (submit) {
+        // check if the current section is answered. If not, set it update.skipped to true
+        // if it is answered, set update.skipped to false
+        update.skipped = section.value === null || section.value === undefined;
+      }
       newSection = {
         ...section,
         ...update,
@@ -93,16 +109,17 @@ export const SurveyQuestionContainer = ({
     const newSurvey: SurveyPayloadType = cloneDeep(surveyData);
     newSurvey.definition.sections[activeSectionKey] = newSection;
     newSurvey.definition.submitted = submit;
-    setSurveyData(newSurvey);
+    return newSurvey;
+  };
+
+  const onFieldUpdated = (key: string, value: any) => {
     setActiveKey({
       value: activeKey.value,
       previousValue: activeKey.value,
       isFollowUp: activeKey.isFollowUp,
     });
-  };
-
-  const onFieldUpdated = (key: string, value: any) => {
-    updateSurveyQuestion(key, { value });
+    const survey = updateSurveyQuestion(key, { value });
+    setSurveyData(survey);
   };
 
   const getQuestionForKey = (key: SurveyActiveKeyType) => {
@@ -342,23 +359,34 @@ export const SurveyQuestionContainer = ({
   };
 
   const onNextButtonClicked = () => {
-    updateSurveyQuestion(activeKey.value, { skipped: false });
+    const newSurvey = updateSurveyQuestion(activeKey.value, { skipped: false });
+    setSurveyData(newSurvey);
     goToNextQuestion();
     updateTransitionClassNames(true);
-    putSurveyData();
+    putSurveyData(newSurvey);
   };
 
   const onSkipButtonClicked = () => {
-    updateSurveyQuestion(activeKey.value, { skipped: true, value: null });
+    const newSurvey = updateSurveyQuestion(activeKey.value, {
+      skipped: true,
+      value: null,
+    });
+    setSurveyData(newSurvey);
     goToNextQuestion();
     updateTransitionClassNames(true);
-    putSurveyData();
+    putSurveyData(newSurvey);
   };
 
-  const onSubmitButtonClicked = () => {
-    updateSurveyQuestion(activeKey.value, { skipped: true }, true);
+  const onSubmitButtonClicked = async () => {
+    // tell the difference between a skipped question and a question that was answered
+    const newSurvey = updateSurveyQuestion(
+      activeKey.value,
+      { skipped: false },
+      true,
+    );
+    setSurveyData(newSurvey);
     updateTransitionClassNames(true);
-    putSurveyData();
+    await putSurveyData(newSurvey);
     submitSurvey();
   };
 
@@ -442,12 +470,12 @@ export const SurveyQuestionContainer = ({
     updateTransitionClassNames(false);
   };
 
-  const putSurveyData = () => {
+  const putSurveyData = (survey: SurveyPayloadType) => {
     axiosFetcher([
-      `/surveys/${name}`,
+      getOrgSpecificUrl(`/surveys/${name}`),
       'PUT',
       JSON.stringify({
-        definition: surveyData.definition,
+        definition: survey.definition,
       }),
     ]);
   };
@@ -487,7 +515,7 @@ export const SurveyQuestionContainer = ({
     return (
       <div
         className={
-          'w-[668px] h-[923px] relative flex items-center justify-center overflow-hidden'
+          'w-full h-full relative flex items-center justify-center overflow-hidden pb-[93px]'
         }
       >
         <SwitchTransition>
@@ -497,7 +525,9 @@ export const SurveyQuestionContainer = ({
             classNames={transitionClassNames}
           >
             <div
-              className={'h-full w-[438px] flex items-center justify-center'}
+              className={
+                'h-full w-full flex items-center justify-center px-[139px] shortScreen:px-[32px] shortWideScreen:px-[139px]'
+              }
             >
               {activeQuestion}
             </div>
@@ -505,7 +535,7 @@ export const SurveyQuestionContainer = ({
         </SwitchTransition>
         <div
           className={
-            'absolute w-[540px] space-x-[15px] h-[40px] flex justify-end right-0 bottom-0'
+            'absolute w-[540px] space-x-[15px] h-[40px] flex justify-end right-0 bottom-0 mb-[37px]'
           }
         >
           {getPreviousButton()}
@@ -517,3 +547,13 @@ export const SurveyQuestionContainer = ({
     return <></>;
   }
 };
+
+export const SurveyQuestionContainer = withErrorBoundary(
+  _SurveyQuestionContainer,
+  {
+    FallbackComponent: (props) => <ErrorFallback {...props} />,
+    onError: (error, info) => {
+      console.error('Error occurred in SurveyQuestionContainer: ', error);
+    },
+  },
+);

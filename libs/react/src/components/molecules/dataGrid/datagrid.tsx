@@ -8,6 +8,10 @@ import { TableActions } from './actions/tableActions';
 import { axiosFetcher } from '../../../fetchers/axiosFetcher';
 import { darkTableTheme } from '../../../themes/flowbiteThemeOverride';
 import { cloneDeep } from 'lodash';
+import { withErrorBoundary } from 'react-error-boundary';
+import { ErrorFallback } from '../../application/errors/errorFallback';
+import { useColdContext } from '@coldpbc/hooks';
+import { ErrorType } from '@coldpbc/enums';
 
 export interface DatagridProps {
   definitionURL: string;
@@ -15,9 +19,9 @@ export interface DatagridProps {
   fetcher?: (...args: any[]) => Promise<any>;
 }
 
-export const Datagrid = (props: DatagridProps) => {
+const _Datagrid = (props: DatagridProps) => {
   const items = props.items;
-  const definitionURL = props.definitionURL || '/form-definitions/datagrid';
+  const definitionURL = props.definitionURL || '/components/datagrid';
   const {
     data,
     error,
@@ -26,7 +30,7 @@ export const Datagrid = (props: DatagridProps) => {
     [`${definitionURL}`, 'GET'],
     axiosFetcher,
   );
-
+  const { logError } = useColdContext();
   const getTableRowCellItem = (key: string, item: any) => {
     if (key === 'actions') {
       return <TableActions actions={item} />;
@@ -58,7 +62,8 @@ export const Datagrid = (props: DatagridProps) => {
   };
 
   if (error) {
-    return <div>Failed to load</div>;
+    logError(error, ErrorType.SWRError);
+    return null;
   }
 
   if (isLoading) {
@@ -76,7 +81,7 @@ export const Datagrid = (props: DatagridProps) => {
   if (data && data.definition?.items) {
     return (
       <Table theme={darkTableTheme.table}>
-        <Table.Head className='text-white normal-case'>
+        <Table.Head className="text-white normal-case">
           {data?.definition?.items?.map((column: any, index: number) => {
             return (
               <Table.HeadCell
@@ -93,14 +98,14 @@ export const Datagrid = (props: DatagridProps) => {
             );
           })}
         </Table.Head>
-        <Table.Body
-          className="divide-y"
-          theme={darkTableTheme.table?.body}
-        >
+        <Table.Body className="divide-y" theme={darkTableTheme.table?.body}>
           {items.map((row: any, rowIndex: number) => {
             {
               return (
-                <Table.Row key={`${row + ' ' + rowIndex}`} theme={darkTableTheme.table?.row}>
+                <Table.Row
+                  key={`${row + ' ' + rowIndex}`}
+                  theme={darkTableTheme.table?.row}
+                >
                   {Object.keys(row).map((key, index) => {
                     return (
                       <Table.Cell
@@ -123,3 +128,10 @@ export const Datagrid = (props: DatagridProps) => {
     return <></>;
   }
 };
+
+export const Datagrid = withErrorBoundary(_Datagrid, {
+  FallbackComponent: (props) => <ErrorFallback {...props} />,
+  onError: (error, info) => {
+    console.error('Error occurred in Datagrid: ', error);
+  },
+});

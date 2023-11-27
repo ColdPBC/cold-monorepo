@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { CenterColumnContent } from '../../organisms/centerColumnContent/centerColumnContent';
 import { RightColumnContent } from '../../organisms/rightColumnContent/rightColumnContent';
 import { useAuth0 } from '@auth0/auth0-react';
@@ -6,29 +6,45 @@ import { Spinner } from '../../atoms/spinner/spinner';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import useSWR from 'swr';
 import { some } from 'lodash';
-import { Card, FootprintOverviewCard, FootprintOverviewChart, FootprintOverviewVariants } from '../../molecules';
+import { FootprintOverviewCard } from '../../molecules';
 import { FootprintDetailCard } from '../../molecules/footprintDetailCard';
 import { getSchemeForColor, HexColors } from '@coldpbc/themes';
-import { Link } from 'react-router-dom';
 import { AppContent } from '../../organisms/appContent';
 import { DismissableInfoCard } from '../../molecules/dismissableInfoCard';
+import { EmissionsDonutChartVariants } from '../../atoms/emissionsDonutChart/emissionsDonutChart';
+import { withErrorBoundary } from 'react-error-boundary';
+import { ErrorFallback } from '../../application/errors/errorFallback';
+import { useOrgSWR } from '../../../hooks/useOrgSWR';
+import { ErrorType } from '@coldpbc/enums';
+import { useColdContext } from '@coldpbc/hooks';
 
 const PERIOD = 2022;
 
-export function Footprint() {
+function _Footprint() {
+  const auth0 = useAuth0();
+  const { logError } = useColdContext();
   // Get footprint data from SWR
-  const { data, error, isLoading } = useSWR<any>(
+  const { data, error, isLoading } = useOrgSWR<any>(
     ['/categories/company_decarbonization', 'GET'],
     axiosFetcher,
   );
 
-  const isEmptyFootprintData = !isLoading && !some(data.subcategories, (
-    (subcategory: any) => some(subcategory.activities, (
-        (activity: any) => activity.footprint?.[PERIOD] && activity.footprint?.[PERIOD].value !== null))));
+  if (error) {
+    logError(error, ErrorType.SWRError);
+    return null;
+  }
 
-  console.log({isEmptyFootprintData, data})
+  const isEmptyFootprintData =
+    !isLoading &&
+    !some(data.subcategories, (subcategory: any) =>
+      some(
+        subcategory.activities,
+        (activity: any) =>
+          activity.footprint?.[PERIOD] &&
+          activity.footprint?.[PERIOD].value !== null,
+      ),
+    );
 
-  const auth0 = useAuth0();
   if (auth0.isLoading) {
     return (
       <div>
@@ -37,46 +53,56 @@ export function Footprint() {
     );
   }
 
+  if (auth0.error) {
+    logError(auth0.error, ErrorType.Auth0Error);
+    return null;
+  }
+
   if (auth0.user) {
     return (
-      <AppContent title='Footprint'>
+      <AppContent title="Footprint">
         <CenterColumnContent>
-          {!isEmptyFootprintData ?
+          {!isEmptyFootprintData ? (
             <>
               <FootprintDetailCard
                 colors={getSchemeForColor(HexColors.lightblue)}
                 period={PERIOD}
-                subcategory_key='facilities'
+                subcategory_key="facilities"
               />
               <FootprintDetailCard
                 colors={getSchemeForColor(HexColors.teal)}
                 period={PERIOD}
-                subcategory_key='product'
+                subcategory_key="product"
               />
               <FootprintDetailCard
                 colors={getSchemeForColor(HexColors.green)}
                 period={PERIOD}
-                subcategory_key='operations'
+                subcategory_key="operations"
               />
               <FootprintDetailCard
                 colors={getSchemeForColor(HexColors.purple)}
                 period={PERIOD}
-                subcategory_key='travel'
+                subcategory_key="travel"
               />
             </>
-            :
+          ) : (
             <>
-              <DismissableInfoCard 
-                text='Your footprint is a snapshot of the greenhouse gases your company emitted over a specific timeframe. It is measured in tons of carbon dioxide equivalent, expressed as tCO2e.'
+              <DismissableInfoCard
+                text="Your footprint is a snapshot of the greenhouse gases your company emitted over a specific timeframe. It is measured in tons of carbon dioxide equivalent, expressed as tCO2e."
                 onDismiss={() => {}}
-                dismissKey='footprint-page'
+                dismissKey="footprint-page"
               />
-              <FootprintOverviewCard chartVariant={FootprintOverviewVariants.horizontal} headerless />
+              <FootprintOverviewCard
+                chartVariant={EmissionsDonutChartVariants.horizontal}
+                headerless
+              />
             </>
-          } 
+          )}
         </CenterColumnContent>
         <RightColumnContent>
-          <FootprintOverviewCard chartVariant={FootprintOverviewVariants.vertical} />
+          <FootprintOverviewCard
+            chartVariant={EmissionsDonutChartVariants.vertical}
+          />
         </RightColumnContent>
       </AppContent>
     );
@@ -84,3 +110,10 @@ export function Footprint() {
 
   return null;
 }
+
+export const Footprint = withErrorBoundary(_Footprint, {
+  FallbackComponent: (props) => <ErrorFallback {...props} />,
+  onError: (error, info) => {
+    console.error('Error occurred in Footprint: ', error);
+  },
+});

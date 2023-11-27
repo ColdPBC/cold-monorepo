@@ -5,6 +5,11 @@ import { FootprintDetailChart } from '../footprintDetailChart';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import useSWR from 'swr';
 import { useFlags } from 'launchdarkly-react-client-sdk';
+import { withErrorBoundary } from 'react-error-boundary';
+import { ErrorFallback } from '../../application';
+import { useOrgSWR } from '../../../hooks/useOrgSWR';
+import { useColdContext } from '@coldpbc/hooks';
+import { ErrorType } from '@coldpbc/enums';
 
 export interface FootprintDetailCardProps {
   colors: string[];
@@ -13,7 +18,7 @@ export interface FootprintDetailCardProps {
   className?: string;
 }
 
-export function FootprintDetailCard(
+function _FootprintDetailCard(
   props: PropsWithChildren<FootprintDetailCardProps>,
 ) {
   const ldFlags = useFlags();
@@ -21,12 +26,18 @@ export function FootprintDetailCard(
   const [isEmpty, setIsEmpty] = useState(false);
 
   // Get footprint data from SWR
-  const { data } = useSWR<any>(
+  const { data, error } = useOrgSWR<any>(
     ['/categories/company_decarbonization', 'GET'],
     axiosFetcher,
   );
+  const { logError } = useColdContext();
 
   if (isEmpty) {
+    return null;
+  }
+
+  if (error) {
+    logError(error, ErrorType.SWRError);
     return null;
   }
 
@@ -60,3 +71,10 @@ export function FootprintDetailCard(
     </Card>
   );
 }
+
+export const FootprintDetailCard = withErrorBoundary(_FootprintDetailCard, {
+  FallbackComponent: (props) => <ErrorFallback {...props} />,
+  onError: (error, info) => {
+    console.error('Error occurred in FootprintDetailCard: ', error);
+  },
+});

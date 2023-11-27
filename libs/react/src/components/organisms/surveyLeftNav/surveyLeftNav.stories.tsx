@@ -39,6 +39,7 @@ export const Intro: Story = {
       isFollowUp: false,
     },
     surveyData: getSurveyFormDataPayload(),
+    submitted: false,
   },
 };
 
@@ -51,5 +52,19 @@ export const InSurvey: Story = {
       isFollowUp: false,
     },
     surveyData: getSurveyFormDataPayload(),
+    submitted: false,
+  },
+};
+
+export const LastPage: Story = {
+  render: (args) => <SurveyLeftNavStory {...args} />,
+  args: {
+    activeKey: {
+      value: '',
+      previousValue: '',
+      isFollowUp: false,
+    },
+    surveyData: getSurveyFormDataPayload(),
+    submitted: true,
   },
 };

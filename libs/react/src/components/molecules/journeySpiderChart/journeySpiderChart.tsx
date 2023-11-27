@@ -12,13 +12,18 @@ import {
   Title,
 } from 'chart.js';
 import { HexColors } from '../../../themes/cold_theme';
-import {forEach, isNumber, isString, some} from 'lodash';
+import { forEach, isNumber, isString, some } from 'lodash';
 import useSWR from 'swr';
 import { axiosFetcher } from '../../../fetchers/axiosFetcher';
 import { Spinner } from '../../atoms/spinner/spinner';
 import { defaultChartData, options } from './constants';
 import { createGradient, pickGradientValue } from './helpers';
 import { EmptyChart } from './emptyChart';
+import { withErrorBoundary } from 'react-error-boundary';
+import { ErrorFallback } from '../../application/errors/errorFallback';
+import { useOrgSWR } from '../../../hooks/useOrgSWR';
+import { useColdContext } from '@coldpbc/hooks';
+import { ErrorType } from '@coldpbc/enums';
 
 ChartJS.register(
   RadarController,
@@ -33,21 +38,36 @@ interface Props {
   setIsEmptyData?: (isEmpty: boolean) => void;
 }
 
-export function JourneySpiderChart({ setIsEmptyData }: Props) {
+function _JourneySpiderChart({ setIsEmptyData }: Props) {
   const chartRef = useRef<ChartJS>(null);
 
   const [chartOptions, setChartOptions] = useState<ChartOptions>(options);
   const [chartData, setChartData] = useState<ChartData>(defaultChartData);
 
   // Fetch chart data
-  const { data, error, isLoading } = useSWR<any>(
-    ['/categories/', 'GET'],
+  const { data, error, isLoading } = useOrgSWR<any>(
+    ['/categories', 'GET'],
     axiosFetcher,
   );
+  const { logError } = useColdContext();
+
+  if (error) {
+    logError(error, ErrorType.SWRError);
+    return null;
+  }
 
   // Update chart data on receiving new data
-  const isEmpty = !(data?.definition && Object.keys(data.definition.categories).length !== 0 && some(data.definition.categories, (category: any) => some(category.subcategories, (
-    (subcategory: any) => subcategory.journey_score !== null)))) || data?.response?.status === 404;
+  const isEmpty =
+    !(
+      data?.definition &&
+      Object.keys(data.definition.categories).length !== 0 &&
+      some(data.definition.categories, (category: any) =>
+        some(
+          category.subcategories,
+          (subcategory: any) => subcategory.journey_score !== null,
+        ),
+      )
+    ) || data?.response?.status === 404;
   useEffect(() => {
     if (!isEmpty) {
       const newLabels: string[] = [],
@@ -108,11 +128,21 @@ export function JourneySpiderChart({ setIsEmptyData }: Props) {
     setTimeout(() => {
       setChartOptions({
         ...chartOptions,
-        backgroundColor: createGradient( chart.ctx, chart.chartArea, HexColors.white+"00", HexColors.primary.DEFAULT+"40"), // 25% transparency
-        borderColor: createGradient( chart.ctx, chart.chartArea, HexColors.gray['130'], HexColors.primary.DEFAULT),
+        backgroundColor: createGradient(
+          chart.ctx,
+          chart.chartArea,
+          HexColors.white + '00',
+          HexColors.primary.DEFAULT + '40',
+        ), // 25% transparency
+        borderColor: createGradient(
+          chart.ctx,
+          chart.chartArea,
+          HexColors.gray['130'],
+          HexColors.primary.DEFAULT,
+        ),
       });
-    }, 100)
-  }
+    }, 100);
+  };
 
   if (isLoading) {
     return (
@@ -120,11 +150,9 @@ export function JourneySpiderChart({ setIsEmptyData }: Props) {
         <Spinner />
       </div>
     );
-  }
-  else if (isEmpty) {
-    return <EmptyChart />
-  }
-  else if (error) {
+  } else if (isEmpty) {
+    return <EmptyChart />;
+  } else if (error) {
     return <div></div>;
   }
 
@@ -142,3 +170,10 @@ export function JourneySpiderChart({ setIsEmptyData }: Props) {
     </div>
   );
 }
+
+export const JourneySpiderChart = withErrorBoundary(_JourneySpiderChart, {
+  FallbackComponent: (props) => <ErrorFallback {...props} />,
+  onError: (error, info) => {
+    console.error('Error occurred in JourneySpiderChart: ', error);
+  },
+});

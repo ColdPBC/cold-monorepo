@@ -11,6 +11,7 @@ import {
   auth0UserMock,
   getSignUpHandler,
   getSignupHandlersForApplicationSignup,
+  getSurveyHandler,
 } from '@coldpbc/mocks';
 import ColdContext from '../../../context/coldContext';
 import { Auth0ProviderOptions } from '@auth0/auth0-react';
@@ -28,49 +29,19 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   render: () => {
     return (
-      <SWRConfig
-        value={{
-          provider: (cache) => {
-            cache.delete('messages');
-            return cache;
-          },
-        }}
-      >
-        <BrowserRouter>
-          <ColdContext.Provider
-            value={{
-              auth0Options: {
-                domain: '',
-                clientId: '',
-                authorizationParams: {
-                  audience: '',
-                },
-              } as Auth0ProviderOptions,
-              launchDarklyClientSideId: '',
-            }}
-          >
-            <Application />
-          </ColdContext.Provider>
-        </BrowserRouter>
-      </SWRConfig>
+      <StoryMockProvider>
+        <Application />
+      </StoryMockProvider>
     );
-  },
-  parameters: {
-    launchdarkly: {
-      flags: {
-        showTeamMemberTable: true,
-        showActions261: true,
-      },
-    },
   },
 };
 
 export const Loading: Story = {
   render: () => {
     return (
-      <BrowserRouter>
+      <StoryMockProvider>
         <Application />
-      </BrowserRouter>
+      </StoryMockProvider>
     );
   },
   parameters: {
@@ -105,8 +76,8 @@ export const NeedsSignup: Story = {
       user: {
         ...auth0UserMock,
         coldclimate_claims: '',
-        family_name: 'null',
-        given_name: 'null',
+        family_name: null,
+        given_name: null,
       },
     },
   },
@@ -120,4 +91,34 @@ export const Handle404 = () => {
       <Application />
     </StoryMockProvider>
   );
+};
+
+export const NeedsToCompleteInitialSurvey: Story = {
+  render: () => {
+    return (
+      <StoryMockProvider handlers={getSurveyHandler.initialIncomplete}>
+        <Application />
+      </StoryMockProvider>
+    );
+  },
+  parameters: {},
+};
+
+export const ColdAdmin: Story = {
+  render: () => {
+    return (
+      <StoryMockProvider>
+        <Application />
+      </StoryMockProvider>
+    );
+  },
+  parameters: {
+    auth0AddOn: {
+      user: {
+        coldclimate_claims: {
+          roles: ['cold:admin'],
+        },
+      },
+    },
+  },
 };

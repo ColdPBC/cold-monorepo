@@ -1,38 +1,33 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { ColdLogos, SignupForm, Spinner } from '@coldpbc/components';
-import { useAuth0, User } from '@auth0/auth0-react';
+import { User } from '@auth0/auth0-react';
 import { axiosFetcher } from '@coldpbc/fetchers';
-import useSWR, { mutate } from 'swr';
-import { PolicySignedDataType, PolicyType } from '@coldpbc/interfaces';
+import { PolicySignedDataType } from '@coldpbc/interfaces';
 import { HexColors } from '@coldpbc/themes';
-import { ColdLogoNames, GlobalSizes } from '@coldpbc/enums';
-import { useNavigate } from 'react-router-dom';
+import { ColdLogoNames, ErrorType, GlobalSizes } from '@coldpbc/enums';
 import { isEmpty } from 'lodash';
 import { Organization } from 'auth0';
-import ColdContext from '../../../context/coldContext';
+import { withErrorBoundary } from 'react-error-boundary';
+import { ErrorFallback } from '../../application/errors/errorFallback';
+import { useColdContext, useOrgSWR } from '@coldpbc/hooks';
 
 export interface SignupPageProps {
   userData: User;
   signedPolicyData?: PolicySignedDataType[];
 }
 
-export const SignupPage = ({ userData, signedPolicyData }: SignupPageProps) => {
-  const { user } = useAuth0();
-  const navigate = useNavigate();
-
-  const organizationSWR = useSWR<Organization, any, any>(
-    user?.coldclimate_claims.org_id
-      ? [`/organizations/${user.coldclimate_claims.org_id}`, 'GET']
-      : null,
+const _SignupPage = ({ userData, signedPolicyData }: SignupPageProps) => {
+  const { logError } = useColdContext();
+  const organizationSWR = useOrgSWR<Organization, any>(
+    [``, 'GET'],
     axiosFetcher,
   );
 
-  const onSubmit = async () => {
-    navigate('/home?surveyName=journey_overview');
-  };
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  const onSubmit = async () => {};
 
   if (organizationSWR.error) {
-    console.error(organizationSWR.error);
+    logError(organizationSWR.error, ErrorType.SWRError);
     return <div></div>;
   }
 
@@ -50,35 +45,39 @@ export const SignupPage = ({ userData, signedPolicyData }: SignupPageProps) => {
 
   if (tos && privacy && signedPolicyData) {
     return (
-      <div className={'flex h-full w-full'}>
-        <div className={'pl-[40px] pb-[40px] pt-[40px] pr-[24px]'}>
-          <div
-            className={
-              'items-center w-[668px] h-[963px] justify-center flex rounded-2xl'
-            }
-            style={{
-              background: `url('https://cold-public-assets.s3.us-east-2.amazonaws.com/splash_images/signup_image.jpeg'), lightgray 50% / cover no-repeat`,
-            }}
-          >
-            <div className={'space-y-6 w-[438px]'}>
-              <ColdLogos
-                name={ColdLogoNames.ColdWordmark}
-                color={HexColors.tc.primary}
-                width={153}
-                height={48}
-              />
-              <div className={'text-tc-primary text-h1'}>
-                Start Your Journey to Absolute Zero™
+      <div
+        className={
+          'fixed inset-0 flex flex-col h-screen w-screen overflow-y-auto'
+        }
+      >
+        <div className={'flex flex-1 max-h-[1040px]'}>
+          <div className={'pl-[40px] pr-[24px] pb-[40px] pt-[40px]'}>
+            <div
+              className={
+                'max-h-[963px] w-[668px] flex h-full items-center justify-center rounded-2xl'
+              }
+              style={{
+                background: `url('https://cold-public-assets.s3.us-east-2.amazonaws.com/splash_images/signup_image.jpeg'), lightgray 50% / cover no-repeat`,
+              }}
+            >
+              <div className={'space-y-6 w-[438px]'}>
+                <ColdLogos
+                  name={ColdLogoNames.ColdWordmark}
+                  color={HexColors.tc.primary}
+                  width={153}
+                  height={48}
+                />
+                <div className={'text-tc-primary text-h1'}>
+                  Start Your Journey to Absolute Zero™
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div
-          className={
-            'h-[1040px] flex items-center justify-center w-[708px] p-[64px]'
-          }
-        >
-          <div className={'w-[540px]'}>
+          <div
+            className={
+              'w-full h-full flex items-center justify-center p-[64px]'
+            }
+          >
             <SignupForm
               userData={userData}
               companyData={organizationData}
@@ -102,3 +101,10 @@ export const SignupPage = ({ userData, signedPolicyData }: SignupPageProps) => {
     return <div></div>;
   }
 };
+
+export const SignupPage = withErrorBoundary(_SignupPage, {
+  FallbackComponent: (props) => <ErrorFallback {...props} />,
+  onError: (error, info) => {
+    console.error('Error occurred in SignupPage: ', error);
+  },
+});

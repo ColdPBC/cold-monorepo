@@ -2,6 +2,8 @@ import React from 'react';
 import { SurveyActiveKeyType, SurveyPayloadType } from '@coldpbc/interfaces';
 import { isEmpty } from 'lodash';
 import { SurveyIntro, SurveyQuestionContainer } from '../../molecules';
+import { withErrorBoundary } from 'react-error-boundary';
+import { ErrorFallback } from '../../application/errors/errorFallback';
 
 export interface SurveyRightNavProps {
   activeKey: SurveyActiveKeyType;
@@ -10,27 +12,33 @@ export interface SurveyRightNavProps {
   setSurveyData: (data: SurveyPayloadType) => void;
   submitSurvey: () => void;
   startSurvey: () => void;
+  submitted: boolean;
+  closeSurvey: () => void;
 }
 
-export const SurveyRightNav = ({
+const _SurveyRightNav = ({
   activeKey,
   setActiveKey,
   surveyData,
   setSurveyData,
   submitSurvey,
   startSurvey,
+  submitted,
+  closeSurvey,
 }: SurveyRightNavProps) => {
   return (
     <>
-      {isEmpty(activeKey.value) ? (
+      {isEmpty(activeKey.value) || submitted ? (
         <div
           className={
-            'w-[708px] h-[1040px] flex items-center justify-center px-[64px]'
+            'w-[708px] h-full flex flex-1 items-center justify-center px-[64px]'
           }
         >
           <SurveyIntro
             surveyFormData={surveyData.definition}
-            onSurveyStart={startSurvey}
+            startSurvey={startSurvey}
+            submitted={submitted}
+            closeSurvey={closeSurvey}
           />
         </div>
       ) : (
@@ -45,3 +53,10 @@ export const SurveyRightNav = ({
     </>
   );
 };
+
+export const SurveyRightNav = withErrorBoundary(_SurveyRightNav, {
+  FallbackComponent: (props) => <ErrorFallback {...props} />,
+  onError: (error, info) => {
+    console.error('Error occurred in SurveyRightNav: ', error);
+  },
+});
