@@ -24,7 +24,7 @@ export const ColdFootprintIconTwo = (props: IconProps) => {
         d="M14.8376 20.7507L13.2539 13.7788C13.1503 13.3236 12.7454 13.0005 12.2785 13.0005H7.89769C7.41932 13.0001 7.00761 13.3385 6.91528 13.8079L6.08594 18.0406"
         stroke="white"
         strokeWidth="1.5"
-        stroke-linecap="round"
+        strokeLinecap="round"
         strokeLinejoin="round"
       />
       <path
