@@ -6457,6 +6457,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@nrwl/devkit@npm:17.1.3":
+  version: 17.1.3
+  resolution: "@nrwl/devkit@npm:17.1.3"
+  dependencies:
+    "@nx/devkit": 17.1.3
+  checksum: 76a80de1c5e91751290521855e41d8a674d4c59903eebea4f63348481c785ce60cfc52dab66e6eb91a94bdbd2669fd484086f6c081da06d2080adc89cc069d45
+  languageName: node
+  linkType: hard
+
 "@nrwl/eslint-plugin-nx@npm:17.1.2":
   version: 17.1.2
   resolution: "@nrwl/eslint-plugin-nx@npm:17.1.2"
@@ -6481,6 +6490,15 @@ __metadata:
   dependencies:
     "@nx/js": 17.1.2
   checksum: 9001f526b96893238d0f0b2296c8eb79b298163743efbce57713c4fa6f291d31b6ec819dd6a9bd5bb38c29ba4d8e445ba20053af4ecf095db40cf263587da6e3
+  languageName: node
+  linkType: hard
+
+"@nrwl/js@npm:17.1.3":
+  version: 17.1.3
+  resolution: "@nrwl/js@npm:17.1.3"
+  dependencies:
+    "@nx/js": 17.1.3
+  checksum: 96e3384e632ef392284de66abbca430f30d173d00535978a5781ac3c6fb9d2f60e843f94314896eb1013eee01cb345994ef394b012b3540de5b92c2eb95dc88b
   languageName: node
   linkType: hard
 
@@ -6589,6 +6607,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@nrwl/workspace@npm:17.1.3":
+  version: 17.1.3
+  resolution: "@nrwl/workspace@npm:17.1.3"
+  dependencies:
+    "@nx/workspace": 17.1.3
+  checksum: b07e1f25f78bd975928184424761002688b0f55e280e5253e9daa60728ffded7d0370626256dd2ac1bd887836dab9a7473173adfb27943a4511e46490888fc2b
+  languageName: node
+  linkType: hard
+
 "@nuxtjs/opencollective@npm:0.3.2":
   version: 0.3.2
   resolution: "@nuxtjs/opencollective@npm:0.3.2"
@@ -6666,6 +6693,23 @@ __metadata:
   peerDependencies:
     nx: ">= 16 <= 18"
   checksum: 6cd436aca770061bcbaf963100d99a7acee5bfeccfafcdeb9670e6c467450b6715f2feec57130ca13853ca3b2eb0e53ec94374fcd6976ba14111c1e9aede937f
+  languageName: node
+  linkType: hard
+
+"@nx/devkit@npm:17.1.3":
+  version: 17.1.3
+  resolution: "@nx/devkit@npm:17.1.3"
+  dependencies:
+    "@nrwl/devkit": 17.1.3
+    ejs: ^3.1.7
+    enquirer: ~2.3.6
+    ignore: ^5.0.4
+    semver: 7.5.3
+    tmp: ~0.2.1
+    tslib: ^2.3.0
+  peerDependencies:
+    nx: ">= 16 <= 18"
+  checksum: 02bf4b7c0c11e862e005e0194303036802766dfcafe111498feaa7f6c7f1a6c1999e59342371a8d2eb3fbe495d723895961c9ba0a5ed2bc1dd693778b54f88ba
   languageName: node
   linkType: hard
 
@@ -6772,6 +6816,49 @@ __metadata:
     verdaccio:
       optional: true
   checksum: cd411ffd5cef192415073737fb14b96b90fb0f22fd05146be17ff08d802122c4ce884ede10d91e07a0b73fab2a4a4af732f7d5251a00390aebd018459b44dae0
+  languageName: node
+  linkType: hard
+
+"@nx/js@npm:17.1.3":
+  version: 17.1.3
+  resolution: "@nx/js@npm:17.1.3"
+  dependencies:
+    "@babel/core": ^7.22.9
+    "@babel/plugin-proposal-decorators": ^7.22.7
+    "@babel/plugin-transform-class-properties": ^7.22.5
+    "@babel/plugin-transform-runtime": ^7.22.9
+    "@babel/preset-env": ^7.22.9
+    "@babel/preset-typescript": ^7.22.5
+    "@babel/runtime": ^7.22.6
+    "@nrwl/js": 17.1.3
+    "@nx/devkit": 17.1.3
+    "@nx/workspace": 17.1.3
+    "@phenomnomnominal/tsquery": ~5.0.1
+    babel-plugin-const-enum: ^1.0.1
+    babel-plugin-macros: ^2.8.0
+    babel-plugin-transform-typescript-metadata: ^0.3.1
+    chalk: ^4.1.0
+    columnify: ^1.6.0
+    detect-port: ^1.5.1
+    fast-glob: 3.2.7
+    fs-extra: ^11.1.0
+    ignore: ^5.0.4
+    js-tokens: ^4.0.0
+    minimatch: 3.0.5
+    npm-package-arg: 11.0.1
+    npm-run-path: ^4.0.1
+    ora: 5.3.0
+    semver: 7.5.3
+    source-map-support: 0.5.19
+    ts-node: 10.9.1
+    tsconfig-paths: ^4.1.2
+    tslib: ^2.3.0
+  peerDependencies:
+    verdaccio: ^5.0.4
+  peerDependenciesMeta:
+    verdaccio:
+      optional: true
+  checksum: 0d53dff180ac2dce5608e2f225b4b9e4ddd92bf6444ad66df993717c46c1eb31c9f723cc1fd2c3e20b5e9ce68d33c7cb36b516c4a52617ad0311457b70bea78b
   languageName: node
   linkType: hard
 
@@ -7078,6 +7165,21 @@ __metadata:
     tslib: ^2.3.0
     yargs-parser: 21.1.1
   checksum: 32129c94135cac223b558cb6b678a5817684c7ab46510c1404a58d3cef6ffc4f3bb85b8554c9186e2e8def7c2ad5a8a54faba66d92fd6dea117ac8e1bec4d7ec
+  languageName: node
+  linkType: hard
+
+"@nx/workspace@npm:17.1.3":
+  version: 17.1.3
+  resolution: "@nx/workspace@npm:17.1.3"
+  dependencies:
+    "@nrwl/workspace": 17.1.3
+    "@nx/devkit": 17.1.3
+    chalk: ^4.1.0
+    enquirer: ~2.3.6
+    nx: 17.1.3
+    tslib: ^2.3.0
+    yargs-parser: 21.1.1
+  checksum: c29d18a38497cddcabc484ab054f7aba3d51de93b329bac792c8fac7f3fb94d1418c916351788dbf509fbc3fbea9ea73fbdc6b7daac428fae257ff321b70f700
   languageName: node
   linkType: hard
 
@@ -18019,7 +18121,7 @@ __metadata:
     "@nx/cypress": 17.1.2
     "@nx/eslint-plugin": 17.1.2
     "@nx/jest": 17.1.2
-    "@nx/js": 17.1.2
+    "@nx/js": 17.1.3
     "@nx/linter": 17.1.2
     "@nx/nest": 17.1.2
     "@nx/node": 17.1.2
