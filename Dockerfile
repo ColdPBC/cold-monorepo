@@ -43,7 +43,6 @@ WORKDIR /home/node/app
 
 ADD --chown=node:node ./apps/cold-api/src/public /home/node/app/
 ADD --chown=node:node ./apps/cold-api/src/assets /home/node/app/
-ADD --chown=node:node ./coverage /home/node/app/
 ADD --chown=node:node ./package.json /home/node/app/
 ADD --chown=node:node ./yarn.lock /home/node/app/
 
