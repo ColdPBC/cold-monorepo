@@ -29,7 +29,7 @@ export interface IButtonProps
   /**
    * Button click action
    */
-  onClick: (event?: any) => void;
+  onClick?: (event?: any) => void;
 
   /**
    * Tailwinds css styles
@@ -56,4 +56,16 @@ export interface IButtonProps
    * Boolean value to round the button's corners
    */
   rounded?: boolean;
+
+  /**
+   * If present, the element rendered is an anchor/Link
+   */
+  href?: string;
+
+  /**
+   * Used to control behaviour of links, if href is passed
+   */
+  target?: React.HTMLAttributeAnchorTarget;
+
+  loading?: boolean;
 }

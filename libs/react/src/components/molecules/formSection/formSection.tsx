@@ -4,8 +4,10 @@ import { BaseButton } from '../../atoms/button/button';
 import { ColorNames } from '../../../enums/colors';
 import { axiosFetcher } from '../../../fetchers/axiosFetcher';
 import { FormInput } from '../formInput/formInput';
+import { withErrorBoundary } from 'react-error-boundary';
+import { ErrorFallback } from '../../application';
 
-export function FormSection(props: ISectionProps) {
+function _FormSection(props: ISectionProps) {
   const [sectionData, setSectionData] = useState<Record<string, any>>(
     props.fields.reduce(
       (obj, item) =>
@@ -95,4 +97,9 @@ export function FormSection(props: ISectionProps) {
   );
 }
 
-export default FormSection;
+export const FormSection = withErrorBoundary(_FormSection, {
+  FallbackComponent: (props) => <ErrorFallback {...props} />,
+  onError: (error, info) => {
+    console.error('Error occurred in FormSection: ', error);
+  },
+});

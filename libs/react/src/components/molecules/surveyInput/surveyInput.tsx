@@ -4,6 +4,8 @@ import { Input } from '../../atoms/input/input';
 import { PercentSlider } from '../percentSlider/percentSlider';
 import { SelectOption } from '../selectOption/selectOption';
 import { InputTypes } from '../../../enums/inputs';
+import { withErrorBoundary } from 'react-error-boundary';
+import { ErrorFallback } from '../../application';
 
 export interface SurveyInputProps {
   input_key: string;
@@ -16,7 +18,7 @@ export interface SurveyInputProps {
   onFieldUpdated: (name: string, value: any) => void;
 }
 
-export const SurveyInput = (props: SurveyInputProps) => {
+const _SurveyInput = (props: SurveyInputProps) => {
   const {
     input_key,
     prompt,
@@ -191,7 +193,15 @@ export const SurveyInput = (props: SurveyInputProps) => {
           {tooltip}
         </div>
       )}
+
       <div className="w-full justify-center">{inputComponent()}</div>
     </div>
   );
 };
+
+export const SurveyInput = withErrorBoundary(_SurveyInput, {
+  FallbackComponent: (props) => <ErrorFallback {...props} />,
+  onError: (error, info) => {
+    console.error('Error occurred in SurveyInput: ', error);
+  },
+});

@@ -3,4 +3,5 @@ export enum InputTypes {
   Currency = 'currency',
   Number = 'number',
   Select = 'select',
+  Checkbox = 'checkbox',
 }

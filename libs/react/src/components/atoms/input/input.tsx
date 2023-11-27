@@ -100,7 +100,7 @@ export const Input = (props: IInputProps) => {
         <input
           {...input_props}
           type={type || 'text'}
-          key={`input_txt_${key}`}
+          key={`input_${key}`}
           autoComplete={input_props.autoComplete || input_props.name}
           className={
             input_props?.className ||
@@ -114,12 +114,11 @@ export const Input = (props: IInputProps) => {
   function renderSelect(): JSX.Element {
     return (
       <Select
-        options={input_props.options}
-        name={input_props.name}
+        {...input_props}
+        value={input_props.value.name}
         label={input_label}
-        value={input_props.value}
         onChange={(value) => {
-          input_props.onValueChange(value.name);
+          input_props.onValueChange(value);
         }}
       />
     );

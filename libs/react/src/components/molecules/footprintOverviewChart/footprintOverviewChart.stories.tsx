@@ -2,9 +2,9 @@ import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import {
   FootprintOverviewChart,
-  FootprintOverviewVariants,
 } from './footprintOverviewChart';
 import { getFootprintHandler, StoryMockProvider } from '../../../';
+import { EmissionsDonutChartVariants } from "../../atoms/emissionsDonutChart/emissionsDonutChart";
 
 const meta = {
   title: 'Molecules/FootprintOverviewChart',
@@ -25,7 +25,7 @@ export const Default: Story = {
 export const Vertical: Story = {
   args: {
     period: 2022,
-    variant: FootprintOverviewVariants.vertical,
+    variant: EmissionsDonutChartVariants.vertical,
   },
 };
 
@@ -56,6 +56,14 @@ export const FiveSubCats = () => {
 export const EmptyData = () => {
   return (
     <StoryMockProvider handlers={[getFootprintHandler.empty]}>
+      <FootprintOverviewChart period={2022} />
+    </StoryMockProvider>
+  );
+};
+
+export const Handle404 = () => {
+  return (
+    <StoryMockProvider handlers={[getFootprintHandler.handle404]}>
       <FootprintOverviewChart period={2022} />
     </StoryMockProvider>
   );

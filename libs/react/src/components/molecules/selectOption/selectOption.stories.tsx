@@ -34,7 +34,7 @@ export const Default: Story = {
     options: [
       'Limited (0-5% Year-over-Year)',
       'Moderated (5-15% Year-over-Year)',
-      'Aggressive (>15% Year-over-Year)',
+      'Smile spoke total few great had never their too. Amongst moments do in arrived at my replied.',
     ],
   },
 };
@@ -53,7 +53,7 @@ export const HorizontalLayout: Story = {
       'Asia',
       'Africa',
       'Australia',
-      'No Applicable',
+      'Smile spoke total few great had never their too. Amongst moments do in arrived at my replied.',
     ],
   },
 };

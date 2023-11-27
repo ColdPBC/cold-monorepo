@@ -4,6 +4,7 @@ import { BaseButton } from '../../atoms/button/button';
 import { ColorNames } from '../../../enums/colors';
 import { GlobalSizes } from '../../../enums/sizes';
 import { Modal } from '../modal/modal';
+import { ButtonTypes } from '@coldpbc/enums';
 
 const meta: Meta<typeof Modal> = {
   /* 👇 The title prop is optional.
@@ -82,6 +83,7 @@ const ModalWithContentComponent = () => {
             label: 'Cancel',
             color: ColorNames.alert,
             textSize: GlobalSizes.medium,
+            variant: ButtonTypes.secondary,
             onClick: () => {
               setIsShow(false);
             },

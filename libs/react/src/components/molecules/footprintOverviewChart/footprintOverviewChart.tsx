@@ -1,23 +1,21 @@
-import { PropsWithChildren, useEffect } from 'react';
-import {
-  ArcElement,
-  Chart as ChartJS,
-  ChartData,
-  ChartOptions,
-  DoughnutController,
-  Plugin as PluginType,
-} from 'chart.js';
-import { Chart } from 'react-chartjs-2';
+import { PropsWithChildren } from 'react';
+import { ChartData } from 'chart.js';
 import useSWR from 'swr';
 import { axiosFetcher } from '@coldpbc/fetchers';
-import { Spinner } from '../../atoms';
-import { HexColors } from '@coldpbc/themes';
-import { find, forEach, isArray, some } from 'lodash';
-import { FootprintOverviewHorizontalDetail } from './footprintOverviewHorizontalDetail';
-import clsx from 'clsx';
-import { FootprintOverviewVerticalDetail } from './footprintOverviewVerticalDetail';
-import { FootprintDetailChip } from '../../atoms/footprintDetailChip/footprintDetailChip';
-import { useActiveSegment } from '../../../hooks/useActiveSegment';
+import { footprintSubcategoryColors, HexColors } from '@coldpbc/themes';
+import { forEach, isArray, some } from 'lodash';
+import {
+  EmissionsDonutChart,
+  EmissionsDonutChartVariants,
+  SubCategoryTotal,
+} from '../../atoms/emissionsDonutChart/emissionsDonutChart';
+import { withErrorBoundary } from 'react-error-boundary';
+import { ErrorFallback } from '../../application/errors/errorFallback';
+import { useOrgSWR } from '../../../hooks/useOrgSWR';
+import { useColdContext } from '@coldpbc/hooks';
+import { ErrorType } from '@coldpbc/enums';
+
+const MAX_CATEGORIES = 4;
 
 export interface FootprintOverviewDetail {
   color: string;
@@ -26,163 +24,77 @@ export interface FootprintOverviewDetail {
   emissions: number;
 }
 
-const NO_DATA_CHART_DATA = [
-  {
-    data: [
-      30, 1.9423000000000001, 26, 1.9423000000000001, 60, 1.9423000000000001,
-      80, 1.9423000000000001,
-    ],
-    borderRadius: 2,
-    borderWidth: 0,
-    backgroundColor: [
-      HexColors.teal.DEFAULT,
-      '#FFFFFF00',
-      HexColors.green.DEFAULT,
-      '#FFFFFF00',
-      HexColors.purple.DEFAULT,
-      '#FFFFFF00',
-      HexColors.lightblue.DEFAULT,
-      '#FFFFFF00',
-    ],
-  },
-];
-
-const MAX_CATEGORIES = 4;
-
-ChartJS.register(ArcElement, DoughnutController);
-
-export enum FootprintOverviewVariants {
-  horizontal = 'horizontal', // horizontal is the default
-  vertical = 'vertical',
-}
-
 export interface FootprintOverviewChartProps {
-  variant?: FootprintOverviewVariants;
+  variant?: EmissionsDonutChartVariants;
   period: number | string;
   periodType?: string; // year should be the default
-  setIsEmptyData?: (isEmpty: boolean) => void;
 }
 
 const gapStylingConstant = 100;
 
-export function FootprintOverviewChart(
+function _FootprintOverviewChart(
   props: PropsWithChildren<FootprintOverviewChartProps>,
 ) {
-
-  const {
-    activeSegment,
-    setActiveSegment,
-    animateSegmentThickness,
-    segmentOnHover,
-    chartBeforeDraw
-  } = useActiveSegment(); 
-
-  const {
-    variant = FootprintOverviewVariants.horizontal,
-    period,
-    periodType = 'year',
-  } = props;
+  const { variant = EmissionsDonutChartVariants.horizontal, period } = props;
 
   // Get footprint data from SWR
-  const { data, error, isLoading } = useSWR<any>(
+  const { data, isLoading, error } = useOrgSWR<any>(
     ['/categories/company_decarbonization', 'GET'],
     axiosFetcher,
   );
 
-  // account for spacer elements, need to offset index
-  const getIndexOffsetForSegment = (index: number) => {
-    return index === 0 ? 0 : index + index;
-  };
+  const { logError } = useColdContext();
 
-  const chartOptions: ChartOptions<'doughnut'> = {
-    responsive: true,
-    maintainAspectRatio: false,
-    radius: 80,
-    cutout: 90, // Arc should be 30px wide
-    rotation: 20,
-    onHover: segmentOnHover,
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore - inject this into the chart options
-    activeSegment,
-  };
-
-  const isEmptyFootprintData = !isLoading && !some(data.subcategories, (
-    (subcategory: any) => some(subcategory.activities, (
-        (activity: any) => activity.footprint[props.period]))));
-
-  useEffect(() => {
-    if (props.setIsEmptyData) {
-      props.setIsEmptyData(isEmptyFootprintData);
-    }
-  }, [isEmptyFootprintData]);
-
-  if (isLoading) {
-    return (
-      <div className="h-[284px] flex items-center">
-        <Spinner />
-      </div>
-    );
-  } else if (isEmptyFootprintData) {
-    return (
-      <div className="relative h-[255px] w-full">
-        <svg
-          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
-          xmlns="http://www.w3.org/2000/svg"
-          width="81"
-          height="80"
-          viewBox="0 0 81 80"
-          fill="none"
-        >
-          <rect x="37.5" y="21.5" width="6" height="22.5" rx="2" fill="white" />
-          <rect x="37.5" y="48.5" width="6" height="6" rx="2" fill="white" />
-        </svg>
-        <Chart
-          options={chartOptions}
-          type="doughnut"
-          data={{ datasets: NO_DATA_CHART_DATA }}
-        />
-      </div>
-    );
-  } else if (error) {
-    error.log(error);
-    return <div></div>;
+  if (error) {
+    logError(error, ErrorType.SWRError);
+    return null;
   }
 
-  // Add up all the information from the footprint
-  const subcategoryTotals: {
-    value: number;
-    color: string;
-    name: string;
-    percent?: number;
-  }[] = [];
-  const colorArray: string[] = [
-    HexColors.purple.DEFAULT,
-    HexColors.teal.DEFAULT,
-    HexColors.green.DEFAULT,
-    HexColors.lightblue.DEFAULT,
-  ];
-  const hoverColorArray: string[] = [
-    HexColors.purple.DEFAULT_BRIGHTEN,
-    HexColors.lightblue.DEFAULT_BRIGHTEN,
-    HexColors.teal.DEFAULT_BRIGHTEN,
-    HexColors.green.DEFAULT_BRIGHTEN,
-  ];
-  let totalFootprint = 0;
-  forEach(data.subcategories, (subcategory) => {
-    let value = 0;
-    const color = colorArray.reverse().pop() || HexColors.primary.DEFAULT;
+  if (!data) return null;
 
-    forEach(subcategory.activities, (activity) => {
-      if (activity.footprint && period in activity.footprint) {
-        const footprint = activity.footprint[period];
-        if (footprint) {
-          value += footprint.value;
-          totalFootprint += footprint.value;
+  const isEmptyFootprintData =
+    !isLoading &&
+    !some(data?.subcategories, (subcategory: any) =>
+      some(
+        subcategory.activities,
+        (activity: any) =>
+          activity.footprint &&
+          activity.footprint?.[props.period]?.value !== null,
+      ),
+    );
+
+  // Add up all the information from the footprint
+  const subcategoryTotals: SubCategoryTotal[] = [];
+  let totalFootprint = 0;
+  Object.keys(data?.subcategories ?? {}).forEach((subcategoryKey) => {
+    const subcategory = data.subcategories[subcategoryKey];
+    let value = 0;
+    const color =
+      HexColors[footprintSubcategoryColors[subcategoryKey]]?.DEFAULT ||
+      HexColors.primary.DEFAULT;
+
+    let nullFootprint = true;
+
+    if (subcategory?.activities) {
+      forEach(subcategory.activities, (activity) => {
+        if (activity?.footprint && period in activity.footprint) {
+          const footprint = activity.footprint[period];
+          if (footprint && footprint.value !== null) {
+            value += footprint.value;
+            totalFootprint += footprint.value;
+            nullFootprint = false;
+          }
         }
-      }
-    })
+      });
+    }
     if (subcategoryTotals.length >= MAX_CATEGORIES) return;
-    subcategoryTotals.push({value: value, color: color, name:subcategory.subcategory_name});
+    if (!nullFootprint)
+      subcategoryTotals.push({
+        value: value,
+        color,
+        name: subcategory.subcategory_name,
+        subcategoryKey,
+      });
   });
 
   // Set spacer width
@@ -201,91 +113,53 @@ export function FootprintOverviewChart(
     labels: [],
   };
 
-  // Add data to the chart, determine total percentages, and build detail views
-  const detailViews: JSX.Element[] = [];
-  forEach(subcategoryTotals, (info, index) => {
-    info.percent = (info.value / totalFootprint) * 100;
+  // Add data to the chart, determine total percentages
+  forEach(
+    subcategoryTotals.sort((a, b) => b.value - a.value),
+    (info, index) => {
+      info.percent = (info.value / totalFootprint) * 100;
 
-    chartData.labels?.push(info.name);
-    chartData.datasets[0].data.push(info.value);
+      chartData.labels?.push(info.name);
+      chartData.datasets[0].data.push(info.value);
 
-    if (isArray(chartData.datasets[0].backgroundColor)) {
-      chartData.datasets[0].backgroundColor?.push(info.color);
-    }
+      if (isArray(chartData.datasets[0].backgroundColor)) {
+        chartData.datasets[0].backgroundColor?.push(info.color);
+      }
 
-    // Add a spacer
-    chartData.labels?.push(null);
-    chartData.datasets[0].data.push(spacerValue);
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    chartData.datasets[0].backgroundColor?.push('#FFFFFF00'); // make spacer transparent
-
-    const leftAlign = detailViews.length < 2;
-    const bottomAlign = detailViews.length === 1 || detailViews.length === 2;
-    detailViews.push(
-      <div
-        key={info.name}
-        className={clsx({
-          'absolute w-[210px] inline-flex gap-2 items-start':
-            variant === FootprintOverviewVariants.horizontal,
-          'left-1/2 translate-x-[104px] justify-start':
-            variant === FootprintOverviewVariants.horizontal && leftAlign,
-          'right-1/2 translate-x-[-104px] justify-end':
-            variant === FootprintOverviewVariants.horizontal && !leftAlign,
-          'bottom-0': bottomAlign,
-        })}
-        onMouseEnter={() => {
-          animateSegmentThickness(getIndexOffsetForSegment(index), 'legend');
-        }}
-        onMouseLeave={() => {
-          setActiveSegment(null);
-        }}
-      >
-        {variant === FootprintOverviewVariants.horizontal ? (
-          <FootprintOverviewHorizontalDetail
-            color={info.color}
-            title={info.name}
-            percent={info.percent}
-            emissions={info.value}
-            leftAlign={leftAlign}
-          />
-        ) : (
-          <FootprintOverviewVerticalDetail
-            color={info.color}
-            title={info.name}
-            percent={info.percent}
-            emissions={info.value}
-          />
-        )}
-      </div>,
-    );
-  });
-
-  // Create plugins for chart
-  const chartPlugins: PluginType<'doughnut'>[] = [
-    {
-      id: 'sliceThickness',
-      beforeDraw: (chart: ChartJS) => chartBeforeDraw(chart, hoverColorArray),
+      // Add a spacer
+      chartData.labels?.push(null);
+      chartData.datasets[0].data.push(spacerValue);
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      chartData.datasets[0].backgroundColor?.push('#FFFFFF00'); // make spacer transparent
     },
-  ];
+  );
 
   return (
-    <div className="w-full">
-      <div className="h-[255px] w-full relative">
-        {variant === FootprintOverviewVariants.horizontal && detailViews}
-        {variant === FootprintOverviewVariants.vertical && (
-          <FootprintDetailChip emissions={totalFootprint} large center />
-        )}
-        <Chart
-          options={chartOptions}
-          type="doughnut"
-          data={chartData}
-          plugins={chartPlugins}
-        />
-      </div>
-      {variant === FootprintOverviewVariants.vertical && (
-        <div className="max-w-md m-auto -mt-6 -mb-3">{detailViews}</div>
-      )}
-    </div>
+    <EmissionsDonutChart
+      variant={variant}
+      isEmptyData={isEmptyFootprintData}
+      totalEmissions={totalFootprint}
+      chartData={chartData}
+      subcategoryTotals={subcategoryTotals}
+      hoverColorArray={subcategoryTotals
+        .sort((a, b) => b.value - a.value)
+        .map((subcategory) => {
+          return (
+            HexColors[footprintSubcategoryColors[subcategory.subcategoryKey]]
+              ?.DEFAULT_BRIGHTEN || HexColors.primary.DEFAULT
+          );
+        })}
+    />
   );
 }
+
+export const FootprintOverviewChart = withErrorBoundary(
+  _FootprintOverviewChart,
+  {
+    FallbackComponent: (props) => <ErrorFallback {...props} />,
+    onError: (error, info) => {
+      console.error('Error occurred in FootprintOverviewChart: ', error);
+    },
+  },
+);

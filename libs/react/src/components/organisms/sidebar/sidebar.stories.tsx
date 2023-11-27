@@ -3,6 +3,7 @@ import { SideBar } from './sideBar';
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { BrowserRouter } from 'react-router-dom';
+import { StoryMockProvider } from '@coldpbc/mocks';
 
 const meta = {
   title: 'Organisms/Sidebar',
@@ -17,9 +18,26 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   render: (args) => {
     return (
-      <BrowserRouter>
+      <StoryMockProvider>
         <SideBar />
-      </BrowserRouter>
+      </StoryMockProvider>
     );
+  },
+};
+
+export const NoActions: Story = {
+  render: (args) => {
+    return (
+      <StoryMockProvider>
+        <SideBar />
+      </StoryMockProvider>
+    );
+  },
+  parameters: {
+    launchdarkly: {
+      flags: {
+        showActions261: false,
+      },
+    },
   },
 };

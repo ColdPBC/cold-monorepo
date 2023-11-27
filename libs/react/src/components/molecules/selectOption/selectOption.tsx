@@ -47,14 +47,13 @@ export const SelectOption = ({
   };
 
   const getClassName = (index: number) => {
-    let className = vertical ? 'whitespace-pre' : '';
-    className +=
-      ' text-sm not-italic font-semibold text-center text-tc-primary cursor-pointer';
+    let className =
+      'whitespace-normal text-sm not-italic font-semibold text-center text-tc-primary cursor-pointer';
 
     if (vertical) {
       className += ' p-2';
     } else {
-      className += ' h-[104px] py-16 px-8';
+      className += ' min-h-[104px] shortScreen:min-h-0 py-16 px-8 shortScreen:p-4 shortWideScreen:py-16 shortWideScreen:px-8';
     }
 
     if (isMultiSelect) {
@@ -79,36 +78,58 @@ export const SelectOption = ({
 
   if (vertical) {
     return (
-      <div className={'w-full space-y-4'}>
-        {options.map((option, index) => {
-          return (
-            <div
-              key={`select_option_${index}`}
-              className={getClassName(index)}
-              id={index.toString()}
-              onClick={() => onOptionClick(index)}
-            >
-              {option}
-            </div>
-          );
-        })}
+      <div className={'w-full'}>
+        {isMultiSelect && (
+          <div
+            className={
+              'text-left text-xs not-italic font-normal text-tc-primary mb-2'
+            }
+          >
+            Select all that apply
+          </div>
+        )}
+        <div className={'w-full space-y-4'}>
+          {options.map((option, index) => {
+            return (
+              <div
+                key={`select_option_${index}`}
+                className={getClassName(index)}
+                id={index.toString()}
+                onClick={() => onOptionClick(index)}
+              >
+                {option}
+              </div>
+            );
+          })}
+        </div>
       </div>
     );
   } else {
     return (
-      <div className={'w-full grid grid-cols-2 gap-4'}>
-        {options.map((option, index) => {
-          return (
-            <div
-              key={`select_option_${index}`}
-              className={getClassName(index)}
-              id={index.toString()}
-              onClick={() => onOptionClick(index)}
-            >
-              {option}
-            </div>
-          );
-        })}
+      <div className={'w-full'}>
+        {isMultiSelect && (
+          <div
+            className={
+              'text-left text-xs not-italic font-normal text-tc-primary mb-2'
+            }
+          >
+            Select all that apply
+          </div>
+        )}
+        <div className={'w-full grid grid-cols-2 gap-4'}>
+          {options.map((option, index) => {
+            return (
+              <div
+                key={`select_option_${index}`}
+                className={getClassName(index)}
+                id={index.toString()}
+                onClick={() => onOptionClick(index)}
+              >
+                {option}
+              </div>
+            );
+          })}
+        </div>
       </div>
     );
   }

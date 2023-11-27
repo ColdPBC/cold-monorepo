@@ -6,59 +6,46 @@ import {
   ChartOptions,
   PieController,
   Plugin as PluginType,
-  ArcElement
+  ArcElement,
 } from 'chart.js';
 import useSWR from 'swr';
 import { axiosFetcher } from '../../../fetchers/axiosFetcher';
 import { Spinner } from '../../atoms/spinner/spinner';
-import { CustomFlowbiteTheme, Table } from 'flowbite-react';
+import { Table } from 'flowbite-react';
 import { FootprintDetailChip } from '../../atoms/footprintDetailChip/footprintDetailChip';
 import { useActiveSegment } from '../../../hooks/useActiveSegment';
-
-export const tableTheme: CustomFlowbiteTheme = {
-  table: {
-    "root": {
-      "base": "w-full text-left text-sm text-gray-500 dark:text-gray-400",
-      "shadow": "absolute dark:bg-black w-full h-full top-0 left-0 rounded-lg drop-shadow-md -z-10",
-      "wrapper": "relative border-gray-50 border border-solid rounded-lg bg-gray-50"
-    },
-    "body": {
-      "base": "group/body",
-      "cell": {
-        "base": "group-first/body:group-first/row:first:rounded-tl-lg group-first/body:group-first/row:last:rounded-tr-lg group-last/body:group-last/row:first:rounded-bl-lg group-last/body:group-last/row:last:rounded-br-lg px-6 py-4 bg-bgc-elevated"
-      }
-    },
-    "head": {
-      "base": "group/head text-xs uppercase text-gray-700 dark:text-gray-400",
-      "cell": {
-        "base": "group-first/head:first:rounded-tl-lg group-first/head:last:rounded-tr-lg bg-none dark:bg-gray-700 px-6 py-3 font-normal"
-      }
-    },
-    "row": {
-      "base": "group/row border-t border-gray-50",
-      "hovered": "hover:bg-gray-50 dark:hover:bg-gray-600",
-      "striped": "odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700"
-    }
-  }
-}
+import { darkTableTheme } from '@coldpbc/themes';
+import { withErrorBoundary } from 'react-error-boundary';
+import { ErrorFallback } from '../../application/errors/errorFallback';
+import { useOrgSWR } from '../../../hooks/useOrgSWR';
+import { map } from 'lodash';
+import { ErrorType } from '@coldpbc/enums';
+import { useColdContext } from '@coldpbc/hooks';
+import { NumericFormat } from 'react-number-format';
+import { formatTonnes } from '../../../lib/footprintUtils';
 
 interface LegendRow {
   value: number;
   color: string;
   name: string;
   percent?: number;
-};
+}
 
 interface Props {
-  setIsEmptyData?: (isEmpty: boolean) => void;
   colors: string[];
   subcategory_key: string;
   period: number;
+  setIsEmpty?: (isEmpty: boolean) => void;
 }
 
 ChartJS.register(ArcElement, PieController);
 
-export function FootprintDetailChart({ setIsEmptyData, colors, subcategory_key, period }: Props) {
+function _FootprintDetailChart({
+  colors,
+  subcategory_key,
+  period,
+  setIsEmpty,
+}: Props) {
   const chartRef = useRef<ChartJS<'pie'>>(null);
 
   const {
@@ -66,8 +53,8 @@ export function FootprintDetailChart({ setIsEmptyData, colors, subcategory_key, 
     setActiveSegment,
     animateSegmentThickness,
     segmentOnHover,
-    chartBeforeDraw
-  } = useActiveSegment(); 
+    chartBeforeDraw,
+  } = useActiveSegment({ chartHasSpacers: false });
 
   const [chartData, setChartData] = useState<ChartData<'pie'>>({
     datasets: [
@@ -76,72 +63,97 @@ export function FootprintDetailChart({ setIsEmptyData, colors, subcategory_key, 
       },
     ],
   });
-  
+
   const [legendRows, setLegendRows] = useState<LegendRow[]>([]);
   const [totalFootprint, setTotalFootprint] = useState(0);
 
   // Get footprint data from SWR
-  const { data, error, isLoading } = useSWR<any>(
+  const { data, error, isLoading } = useOrgSWR<any>(
     ['/categories/company_decarbonization', 'GET'],
     axiosFetcher,
   );
+  const { logError } = useColdContext();
+
+  if (error) {
+    logError(error, ErrorType.SWRError);
+    return null;
+  }
+
+  const isEmpty =
+    !isLoading &&
+    (!data?.subcategories?.[subcategory_key] ||
+      !Object.keys(data?.subcategories?.[subcategory_key].activities).some(
+        (activityKey) => {
+          const activity =
+            data?.subcategories?.[subcategory_key].activities[activityKey];
+
+          return activity.footprint && activity.footprint.value !== null;
+        },
+      ));
 
   // Update chart data on receiving new data
   useEffect(() => {
+    if (setIsEmpty) setIsEmpty(isEmpty);
+    if (isEmpty) return;
 
-      if (!data?.subcategories?.[subcategory_key]) return;
+    const newData: { name: string; footprint: number }[] = [];
+    let newTotalFootprint = 0;
+    const newLegendRows: LegendRow[] = [];
 
-      const newLabels: string[] = [];
-      const newData: number[] = [];
-      let newTotalFootprint = 0;
-      const newLegendRows: LegendRow[] = [];
+    // Transform chart data
+    Object.keys(data?.subcategories[subcategory_key].activities ?? {}).forEach(
+      (activityKey: any) => {
+        const activity =
+          data?.subcategories[subcategory_key].activities[activityKey];
+        const activityFootprint = activity.footprint?.[period]?.value ?? 0;
 
-      // Transform chart data
-      Object.keys(data?.subcategories[subcategory_key].activities ?? {}).forEach(
-        (activityKey: any) => {
-          const activity = data?.subcategories[subcategory_key].activities[activityKey];
-          const activityFootprint = activity.footprint?.[period]?.value ?? 0;
-          
-          if (activityFootprint > 0) {
-            newLabels.push(activity.activity_name);
-            newData.push(activityFootprint);
-            newTotalFootprint += activityFootprint;
-          }
-      })
+        if (activityFootprint > 0) {
+          newData.push({
+            name: activity.activity_name,
+            footprint: activityFootprint,
+          });
+          newTotalFootprint += activityFootprint;
+        }
+      },
+    );
 
-      // Populate legend rows
-      newData.sort((a, b) => b - a).forEach((nD, i) => {
+    // Populate legend rows
+    newData
+      .sort((a, b) => b.footprint - a.footprint)
+      .forEach((nD, i) => {
         newLegendRows.push({
-          value: nD,
+          value: nD.footprint,
           color: colors[i],
-          name: newLabels[i],
-          percent: Math.round((nD / newTotalFootprint) * 100)
-        })
-      })
+          name: nD.name,
+          percent: Math.round((nD.footprint / newTotalFootprint) * 100),
+        });
+      });
 
-      const backgroundColors = newData.map((_, i) => colors[i]);
+    const backgroundColors = newData.map((_, i) => colors[i]);
 
-      const newChartData: ChartData<'pie'> = {
-        datasets: [{
-          data: newData,
+    const newChartData: ChartData<'pie'> = {
+      datasets: [
+        {
+          data: map(newData, 'footprint'),
           backgroundColor: backgroundColors,
           borderColor: backgroundColors,
           borderWidth: 1,
-        }],
-        labels: newLabels,
-      };
+          hoverBackgroundColor: backgroundColors,
+        },
+      ],
+      labels: map(newData, 'name'),
+    };
 
-      const chart = chartRef.current;
+    const chart = chartRef.current;
 
-      if (!chart) {
-        return;
-      }
+    if (!chart) {
+      return;
+    }
 
-      setChartData(newChartData);
-      setTotalFootprint(newTotalFootprint);
-      setLegendRows(newLegendRows);
+    setChartData(newChartData);
+    setTotalFootprint(newTotalFootprint);
+    setLegendRows(newLegendRows);
   }, [data, chartRef.current]);
-
 
   // Create plugins for chart
   const chartPlugins: PluginType<'pie'>[] = [
@@ -159,6 +171,11 @@ export function FootprintDetailChart({ setIsEmptyData, colors, subcategory_key, 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore - inject this into the chart options
     activeSegment,
+    elements: {
+      arc: {
+        borderWidth: 0,
+      },
+    },
   };
 
   if (isLoading) {
@@ -167,7 +184,7 @@ export function FootprintDetailChart({ setIsEmptyData, colors, subcategory_key, 
         <Spinner />
       </div>
     );
-  } else if (!data?.subcategories?.[subcategory_key]) {
+  } else if (isEmpty) {
     return null;
   } else if (error) {
     return null;
@@ -176,7 +193,7 @@ export function FootprintDetailChart({ setIsEmptyData, colors, subcategory_key, 
   return (
     <div className="relative w-full flex items-center">
       <div
-        className="h-[200px] w-[225px] relative"
+        className="h-[182px] w-[182px] relative ml-2 mr-6"
         onMouseLeave={() => {
           setActiveSegment(null);
         }}
@@ -191,55 +208,65 @@ export function FootprintDetailChart({ setIsEmptyData, colors, subcategory_key, 
         <FootprintDetailChip emissions={totalFootprint} large center />
       </div>
       <Table
-        className='text-white'
-        theme={tableTheme.table}
+        className="text-white"
+        theme={darkTableTheme.table}
         onMouseLeave={() => {
           setActiveSegment(null);
         }}
       >
-        <Table.Head className='text-white normal-case'>
-          <Table.HeadCell className='w-[225px]' theme={tableTheme.table?.head?.cell}>
+        <Table.Head className="text-white normal-case">
+          <Table.HeadCell theme={darkTableTheme.table?.head?.cell}>
             Category
           </Table.HeadCell>
-          <Table.HeadCell theme={tableTheme.table?.head?.cell}>
+          <Table.HeadCell theme={darkTableTheme.table?.head?.cell}>
             Breakdown
           </Table.HeadCell>
-          <Table.HeadCell theme={tableTheme.table?.head?.cell}>
+          <Table.HeadCell theme={darkTableTheme.table?.head?.cell}>
             tCO2e
           </Table.HeadCell>
         </Table.Head>
-          <Table.Body className="divide-y">
-            {legendRows.map((row, i) => (
-              <Table.Row
-                key={`${row.name}-${i}`}
-                onMouseEnter={() => {
-                  animateSegmentThickness(i, 'legend');
-                }}
-                onMouseLeave={() => {
-                  setActiveSegment(null);
-                }}
-                theme={tableTheme.table?.row}
+        <Table.Body className="divide-y">
+          {legendRows.map((row, i) => (
+            <Table.Row
+              key={`${row.name}-${i}`}
+              onMouseEnter={() => {
+                animateSegmentThickness(i, 'legend');
+              }}
+              onMouseLeave={() => {
+                setActiveSegment(null);
+              }}
+              theme={darkTableTheme.table?.row}
+            >
+              <Table.Cell
+                className="flex items-center font-bold"
+                theme={darkTableTheme.table?.body?.cell}
               >
-                <Table.Cell className='flex items-center font-bold' theme={tableTheme.table?.body?.cell}>
-                  <div 
-                    style={{
-                      background: row.color,
-                      border: '2px solid rgba(0, 0, 0, 0.2)'
-                    }}
-                    className='mr-2 h-[10px] w-[10px] min-w-[10px] rounded-xl'
-                  />
-                  {row.name}
-                </Table.Cell>
-                <Table.Cell theme={tableTheme.table?.body?.cell}>
-                  {row.percent}%
-                </Table.Cell>
-                <Table.Cell theme={tableTheme.table?.body?.cell}>
-                  {row.value}
-                </Table.Cell>
-              </Table.Row>
-            ))}
-          </Table.Body>
-        </Table>
+                <div
+                  style={{
+                    background: row.color,
+                    border: '2px solid rgba(0, 0, 0, 0.2)',
+                  }}
+                  className="mr-2 h-[10px] w-[10px] min-w-[10px] rounded-xl"
+                />
+                {row.name}
+              </Table.Cell>
+              <Table.Cell theme={darkTableTheme.table?.body?.cell}>
+                {row.percent}%
+              </Table.Cell>
+              <Table.Cell theme={darkTableTheme.table?.body?.cell}>
+                {formatTonnes(row.value)}
+              </Table.Cell>
+            </Table.Row>
+          ))}
+        </Table.Body>
+      </Table>
     </div>
   );
 }
+
+export const FootprintDetailChart = withErrorBoundary(_FootprintDetailChart, {
+  FallbackComponent: (props) => <ErrorFallback {...props} />,
+  onError: (error, info) => {
+    console.error('Error occurred in FootprintDetailChart: ', error);
+  },
+});

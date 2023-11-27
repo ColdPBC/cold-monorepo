@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { withKnobs } from '@storybook/addon-knobs';
 import { StoryObj } from '@storybook/react';
 import { SurveyIntro } from './surveyIntro';
-import { getTestingSurveyData } from '../../../__mocks__/surveyDataMock';
+import { getSurveyFormDataPayload } from '@coldpbc/mocks';
+import { SurveyDefinitionType } from '@coldpbc/interfaces';
 
 const meta = {
   title: 'Molecules/SurveyIntro',
@@ -19,8 +20,25 @@ export const Default: Story = {
     return <SurveyIntro {...args} />;
   },
   args: {
-    surveyFormDefinition: getTestingSurveyData().definition,
+    surveyFormData: getSurveyFormDataPayload().definition,
     // eslint-disable-next-line @typescript-eslint/no-empty-function
-    onSurveyStart: () => {},
+    startSurvey: () => {},
+    submitted: false,
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    closeSurvey: () => {},
+  },
+};
+
+export const LastPage: Story = {
+  render: (args) => {
+    return <SurveyIntro {...args} />;
+  },
+  args: {
+    surveyFormData: getSurveyFormDataPayload().definition,
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    startSurvey: () => {},
+    submitted: true,
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    closeSurvey: () => {},
   },
 };

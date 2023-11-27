@@ -1,37 +1,44 @@
 import React from 'react';
-import { SurveyActiveKeyType, SurveyDataType } from '@coldpbc/interfaces';
+import { SurveyActiveKeyType, SurveyPayloadType } from '@coldpbc/interfaces';
 import { isEmpty } from 'lodash';
-import { SurveyQuestionContainer } from '../surveyQuestionContainer';
-import { SurveyIntro } from '../../molecules';
+import { SurveyIntro, SurveyQuestionContainer } from '../../molecules';
+import { withErrorBoundary } from 'react-error-boundary';
+import { ErrorFallback } from '../../application/errors/errorFallback';
 
 export interface SurveyRightNavProps {
   activeKey: SurveyActiveKeyType;
   setActiveKey: (key: SurveyActiveKeyType) => void;
-  surveyData: SurveyDataType;
-  setSurveyData: (data: SurveyDataType) => void;
+  surveyData: SurveyPayloadType;
+  setSurveyData: (data: SurveyPayloadType) => void;
   submitSurvey: () => void;
   startSurvey: () => void;
+  submitted: boolean;
+  closeSurvey: () => void;
 }
 
-export const SurveyRightNav = ({
+const _SurveyRightNav = ({
   activeKey,
   setActiveKey,
   surveyData,
   setSurveyData,
   submitSurvey,
   startSurvey,
+  submitted,
+  closeSurvey,
 }: SurveyRightNavProps) => {
   return (
     <>
-      {isEmpty(activeKey.value) ? (
+      {isEmpty(activeKey.value) || submitted ? (
         <div
           className={
-            'w-[708px] h-[1040px] flex items-center justify-center px-[64px]'
+            'w-[708px] h-full flex flex-1 items-center justify-center px-[64px]'
           }
         >
           <SurveyIntro
-            surveyFormDefinition={surveyData.definition}
-            onSurveyStart={startSurvey}
+            surveyFormData={surveyData.definition}
+            startSurvey={startSurvey}
+            submitted={submitted}
+            closeSurvey={closeSurvey}
           />
         </div>
       ) : (
@@ -46,3 +53,10 @@ export const SurveyRightNav = ({
     </>
   );
 };
+
+export const SurveyRightNav = withErrorBoundary(_SurveyRightNav, {
+  FallbackComponent: (props) => <ErrorFallback {...props} />,
+  onError: (error, info) => {
+    console.error('Error occurred in SurveyRightNav: ', error);
+  },
+});

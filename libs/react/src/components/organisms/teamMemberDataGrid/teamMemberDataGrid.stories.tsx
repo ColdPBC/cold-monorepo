@@ -1,15 +1,14 @@
-import React from 'react';
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { TeamMembersDataGrid } from './teamMembersDataGrid';
 import { SWRConfig } from 'swr';
 
-const meta = {
+const meta: Meta<typeof TeamMembersDataGrid> = {
   title: 'Organisms/TeamMemberDatagrid',
   component: TeamMembersDataGrid,
   tags: ['autodocs'],
   decorators: [withKnobs],
-} satisfies Meta<typeof TeamMembersDataGrid>;
+};
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -29,10 +28,25 @@ export const Default: Story = {
     );
   },
   args: {
-    dataGridUser: {
-      coldclimate_claims: {
-        org_id: 'org_123',
-      },
-    },
+    selectedMemberStatusType: 'Members'
+  },
+};
+
+export const Invitations: Story = {
+  render: (args) => {
+    return (
+      <SWRConfig
+        value={{
+          provider: (cache) => {
+            return cache;
+          },
+        }}
+      >
+        <TeamMembersDataGrid {...args} />
+      </SWRConfig>
+    );
+  },
+  args: {
+    selectedMemberStatusType: 'Invitations'
   },
 };
