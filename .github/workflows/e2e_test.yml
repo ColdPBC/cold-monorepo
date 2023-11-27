@@ -34,7 +34,7 @@ jobs:
       id-token: write # to enable use of OIDC for npm provenance
     steps:
       - name: Deployment
-        run: echo ${{ github.event.deployment }}
+        run: echo ${{ toJson(github.event.deployment) }}
       - name: Checkout
         uses: actions/checkout@v3
         with:
