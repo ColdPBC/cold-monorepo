@@ -1,0 +1,67 @@
+name: 'API: E2E Test'
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to run tests against'
+        type: environment
+        required: false
+  deployment_status:
+env:
+  GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+  GH_TOKEN: ${{ secrets.GH_TOKEN }}
+  NPM_TOKEN: ${{ secrets.GH_TOKEN }}
+  CACHE_NAME: cache-node-modules
+  PR_NUMBER: ${{ github.event.number }}
+  API_ADMIN_EMAIL: ${{ secrets.API_ADMIN_EMAIL }}
+  API_ADMIN_PASSWORD: ${{ secrets.TEST_API_ADMIN_PASSWORD }}
+  AUTH0_AUDIENCE: ${{ secrets.TEST_AUTH0_AUDIENCE }}
+  AUTH0_CLIENT_ID: ${{ secrets.TEST_AUTH0_CLIENT_ID }}
+  AUTH0_CLIENT_SECRET: ${{ secrets.TEST_AUTH0_CLIENT_SECRET }}
+  AUTH0_ORG_ID: ${{ secrets.TEST_AUTH0_ORG_ID }}
+  AUTH0_TOKEN_URL: ${{ secrets.TEST_AUTH0_TOKEN_URL }}
+  API_SERVER_URL: ${{ github.event.deployment_status.target_url }}
+
+jobs:
+  e2e:
+    name: Run E2E Tests
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write # to be able to publish a GitHub release
+      issues: write # to be able to comment on released issues
+      pull-requests: write # to be able to comment on released pull requests
+      id-token: write # to enable use of OIDC for npm provenance
+    if: github.event.deployment_status.state == 'success'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "20.9.0"
+      - name: Cache node modules
+        uses: actions/cache@v3
+        with:
+          path: ./node_modules
+          key: ${{ runner.os }}-build-${{ env.CACHE_NAME }}-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.CACHE_NAME }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+
+      - name: Install dependencies
+        run: yarn && yarn postinstall
+
+      - name: Generate Prisma Client
+        run: yarn dlx nx run coldpbc/nest:prisma-generate
+
+      - name: build development
+        run: yarn prebuild && yarn dlx nx reset && yarn dlx nx run cold-api:build:development
+
+      - name: 'Run Tests'
+        run: yarn dlx nx run cold-api-e2e:e2e:ci
