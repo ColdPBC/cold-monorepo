@@ -155,6 +155,16 @@ jobs:
     needs:
       - build
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "20.9.0"
+
       - name: Setup AWS ECR Details
         uses: aws-actions/configure-aws-credentials@v4
         with:
