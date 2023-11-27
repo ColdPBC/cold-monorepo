@@ -203,7 +203,7 @@
           "singlePageApp": true,
           "buildType": "nixpacks",
           "basePath": ".",
-          "buildCommand": "yarn prebuild && yarn dlx run nx build cold-ui:build:production",
+          "buildCommand": "yarn prebuild && yarn dlx nx build cold-ui:build:production",
           "outputDirectory": "dist/apps/cold-ui",
           "watchPaths": [
             "apps/cold-ui/**",
