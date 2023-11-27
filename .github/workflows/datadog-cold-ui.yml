@@ -1,0 +1,93 @@
+name: 'UI: Service Catalog'
+on:
+  push:
+    paths: [ ".github/workflows/datadog-cold-ui.yml"] # Trigger the action only when files change in the folders defined here
+  workflow_dispatch:
+permissions:
+  contents: read # for checkout
+env:
+  GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+  GH_TOKEN: ${{ secrets.GH_TOKEN }}
+  NPM_TOKEN: ${{ secrets.GH_TOKEN }}
+  CACHE_NAME: cache-node-modules
+  PR_NUMBER: ${{ github.event.number }}
+
+jobs:
+  datadog:
+    runs-on: ubuntu-latest
+    steps:
+      # This uses the custom action to push the service definition to Datadog.
+      - uses: arcxp/datadog-service-catalog-metadata-provider@v2
+        with:
+          # service-version: v2
+          # You should use GitHub's encrypted secrets feature to manage secrets for Datadog.
+          # Don't store your secrets in your workflow files, and don't do anything fancy to get them.
+          # GitHub already gave us a great tool for managing secrets, and it's super easy to use.
+          datadog-hostname: api.us5.datadoghq.com
+          datadog-key: ${{ secrets.DATADOG_API }}
+          datadog-app-key: ${{ secrets.DD_APP_KEY }}
+          github-token: ${{ secrets.GH_TOKEN }}
+
+          # This maps to the `dd-service` field in Datadog, it's just the name of your service.
+          service-name: cold-monorepo-ui
+
+          # The name of the team which owns and/or supports the service.
+          team: Engineering
+
+          # The email address of the team which owns and/or supports the service.
+          # email: global.greetings@fake-email-host.com
+
+          # The URL of the Slack channel where support for the service is handled.
+          # Keep in mind, this _must_ be a URL. To get the URL, right-click on the channel
+          # in the Slack app, and select "Copy link" in the "Copy" submenu.
+          slack-support-channel: 'https://cold-climate.slack.com/archives/C04RWC4MXN2'
+
+          tags: |
+            - lang:typescript
+            - framework:nestjs
+
+          # For repos, you'll obviously want to have the repository for your service. If your service
+          # is made up of multiple repositories, you can add them here as well. Note that we're using a multi-line string here. That multi-line string will be parsed as YAML, I didn't typo.
+          repos: |
+            - name: cold-monorepo-ui
+              url: https://github.com/ColdPBC/cold-monorepo
+              provider: github
+
+          # Docs contain anything that you might need when supporting the service.
+          docs: |
+            - name: API Docs
+              url: https://api.coldclimate.com/v1
+              provider: swagger
+            - name: Readme
+              url: https://github.com/ColdPBC/cold-monorepo/blob/main/README.md
+              provider: github
+
+            # Links are great for runbooks, other documentation, other services which
+            # could be helpful, as well as dashboards.
+            # links: |
+            #- name: outage-runbook
+            #  url: https://fake-org.github.io/hello-world-outage-runbook
+            #  type: runbook
+            #- name: hello-world dashboard
+            #  url: https://app.datadoghq.com/dashboard/1234567890
+            #  type: dashboard
+
+            # These integrations allow folks to be able to see who's on-call for the
+            # service right from the Datadog Service Catalog.
+            #integrations: |
+            #opsgenie:
+            #service_url: https://fake-org.hello-world.opsgenie.com
+            #region: US
+          #pagerduty: https://fake-org.hello-world.pagerduty.com
+
+          # This is the Product Owner, you should contact them if you have suggestions.
+          contacts: |
+            - name: Dan Lindquist (Product Owner)
+              contact: @U04QVH8TR1N
+              type: slack
+            - name: Troy Morvant (Staff Engineer)
+              contact:  @U04TLTX9XPF
+              type: slack
+            - name: Qaalib Farah (FE Engineer)
+              contact: @U055L8KNKS9
+              type: slack

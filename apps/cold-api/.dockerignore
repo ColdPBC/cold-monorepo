@@ -1,0 +1,16 @@
+**/node_modules
+**/dist
+.github
+.git
+npm-debug.log
+.coverage
+.coverage.*
+.env*
+.aws
+Dockerfile
+docker-compose.yml
+**/herokuRelease.sh
+**/.env?
+**/.npmrc
+**/.releaserc
+**/app.json

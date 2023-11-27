@@ -16,6 +16,7 @@ export interface BaseInputProps extends InputHTMLAttributes<HTMLInputElement> {
   name: string;
   options?: Array<InputOption>;
   onValueChange: (value: any) => void;
+  value?: any;
 }
 
 export type NumericInputProps = NumericFormatProps;
@@ -26,5 +27,6 @@ export interface LabelProps extends LabelHTMLAttributes<HTMLLabelElement> {
 
 export interface InputOption {
   id: number;
+  value: string;
   name: string;
 }

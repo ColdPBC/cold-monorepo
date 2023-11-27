@@ -6,6 +6,7 @@ import { IconNames } from '../../../enums/iconNames';
 import { ColdIcon } from '../../atoms/icons/coldIcon';
 import { Link } from 'react-router-dom';
 import { twMerge } from 'tailwind-merge';
+import { Spinner } from '../spinner';
 
 export function BaseButton(props: IButtonProps): JSX.Element {
   const {
@@ -22,6 +23,7 @@ export function BaseButton(props: IButtonProps): JSX.Element {
     className,
     href,
     target,
+    loading = false,
     children,
   } = props;
 
@@ -29,8 +31,9 @@ export function BaseButton(props: IButtonProps): JSX.Element {
     <>
       {iconLeft && getIconComponent(iconLeft, props)}
       {label && <span>{label}</span>}
-      {children && <span className='w-full'>{children}</span>}
+      {children && <span className="w-full">{children}</span>}
       {iconRight && getIconComponent(iconRight, props)}
+      {loading && <Spinner size={GlobalSizes.small} />}
     </>
   );
 
@@ -39,7 +42,7 @@ export function BaseButton(props: IButtonProps): JSX.Element {
       <button
         onClick={onClick}
         className={twMerge(getClassName(props), className)}
-        disabled={!!props.disabled}
+        disabled={!!props.disabled || loading}
       >
         {content}
       </button>

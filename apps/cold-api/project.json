@@ -1,0 +1,67 @@
+{
+  "name": "cold-api",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/cold-api/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "defaultConfiguration": "production",
+      "options": {
+        "target": "node",
+        "compiler": "tsc",
+        "outputPath": "dist/apps/cold-api",
+        "main": "apps/cold-api/src/main.ts",
+        "tsConfig": "apps/cold-api/tsconfig.app.json",
+        "assets": [
+          "apps/cold-api/src/assets"
+        ],
+        "isolatedConfig": true,
+        "webpackConfig": "apps/cold-api/webpack.config.js"
+      },
+      "configurations": {
+        "development": {},
+        "production": {}
+      }
+    },
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "cold-api:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "cold-api:build:development"
+        },
+        "production": {
+          "buildTarget": "cold-api:build:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": [
+        "{options.outputFile}"
+      ],
+      "options": {
+        "lintFilePatterns": [
+          "apps/cold-api/**/*.ts"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": [
+        "{workspaceRoot}/coverage/{projectRoot}"
+      ],
+      "options": {
+        "jestConfig": "apps/cold-api/jest.config.ts"
+      }
+    }
+  },
+  "tags": []
+}
