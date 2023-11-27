@@ -504,9 +504,9 @@
       ],
       "envVariables": {
         "API_SERVER_DESCRIPTION": "Preview Server",
-        "API_SERVER_URL": "https://api.coldclimate.online",
-        "AUTH0_AUDIENCE": "https://api.coldclimate.online/",
-        "AUTH0_DOMAIN": "cold-climate-staging.us.auth0.com",
+        "API_SERVER_URL": "https://api.coldclimate.wtf",
+        "AUTH0_AUDIENCE": "https://api.coldclimate.wtf/",
+        "AUTH0_DOMAIN": "dev-6qt527e13qyo4ls6.us.auth0.com",
         "CACHE_TTL": "604800000",
         "NODE_ENV": "test",
         "DD_ENV": "test",
