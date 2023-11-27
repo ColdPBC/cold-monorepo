@@ -33,8 +33,9 @@ jobs:
       issues: write # to be able to comment on released issues
       pull-requests: write # to be able to comment on released pull requests
       id-token: write # to enable use of OIDC for npm provenance
-    if: github.event.deployment_status.state == 'success'
     steps:
+      - name: ECHO
+        run: echo ${{ github.event.deployment_status }}
       - name: Checkout
         uses: actions/checkout@v3
         with:
