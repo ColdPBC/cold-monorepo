@@ -147,8 +147,8 @@ jobs:
           --header 'Authorization: Bearer ${{secrets.HEROKU_API_KEY}}' \
           --data "{\"DD_VERSION\":$(npm pkg get version)}"
 
-  docker:
-    name: Build Docker Image and Push to ECR
+  deploy-prod:
+    name: Trigger Deploy
     env:
       BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
     runs-on: ubuntu-latest
@@ -157,5 +157,35 @@ jobs:
     steps:
       - name: Deploy to production
         if: startsWith(env.BRANCH_NAME,'main')
+        run: |
+          curl -n -X POST https://app.flightcontrol.dev/api/deploy-hook/cold-staging/58vWGjvmj9PWGxzImyRkVCTujxuJT-Q8piPwciMogtAy4-ci?force=false \
+      - name: Deploy to staging
+        if: startsWith(env.BRANCH_NAME,'staging')
+        run: |
+          curl -n -X POST https://app.flightcontrol.dev/api/deploy-hook/cold-staging/58vWGjvmj9PWGxzImyRkVCTujxuJT-Q8piPwciMogtAy4-ci?force=false \
+      - name: Deploy to preview
+        if: startsWith(env.BRANCH_NAME,'cold') || startsWith(env.BRANCH_NAME,'Cold') || startsWith(env.BRANCH_NAME,'COLD')
+        run: |
+          curl -n -X POST https://app.flightcontrol.dev/api/deploy-hook/cold-staging/58vWGjvmj9PWGxzImyRkVCTujxuJT-Q8piPwciMogtAy4-ci?force=false \
+
+  deploy-dev:
+    name: Trigger Dev Deploy
+    env:
+      BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+    runs-on: ubuntu-latest
+    if: startsWith(env.BRANCH_NAME,'main')
+    needs:
+      - build
+    steps:
+      - name: Deploy to production
+        if: startsWith(env.BRANCH_NAME,'main')
+        run: |
+          curl -n -X POST https://app.flightcontrol.dev/api/deploy-hook/cold-staging/58vWGjvmj9PWGxzImyRkVCTujxuJT-Q8piPwciMogtAy4-ci?force=false \
+      - name: Deploy to staging
+        if: startsWith(env.BRANCH_NAME,'staging')
+        run: |
+          curl -n -X POST https://app.flightcontrol.dev/api/deploy-hook/cold-staging/58vWGjvmj9PWGxzImyRkVCTujxuJT-Q8piPwciMogtAy4-ci?force=false \
+      - name: Deploy to preview
+        if: startsWith(env.BRANCH_NAME,'cold') || startsWith(env.BRANCH_NAME,'Cold') || startsWith(env.BRANCH_NAME,'COLD')
         run: |
           curl -n -X POST https://app.flightcontrol.dev/api/deploy-hook/cold-staging/58vWGjvmj9PWGxzImyRkVCTujxuJT-Q8piPwciMogtAy4-ci?force=false \

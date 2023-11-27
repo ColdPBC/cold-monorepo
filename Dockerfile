@@ -45,7 +45,7 @@ ADD --chown=node:node ./apps/cold-api/src/assets /home/node/app/
 ADD --chown=node:node ./package.json /home/node/app/
 ADD --chown=node:node ./yarn.lock /home/node/app/
 
-COPY --from=build --chown=node:node /app/dist/apps/cold-api/*.* /home/node/app/cold-api
+COPY --from=build --chown=node:node /app/dist/apps/cold-api /home/node/app/cold-api
 COPY --from=build --chown=node:node /app/node_modules /home/node/app/node_modules
 
 # Expose the port that the application listens on.
