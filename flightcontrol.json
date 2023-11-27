@@ -186,7 +186,8 @@
       "region": "us-east-1",
       "source": {
         "pr": false,
-        "branch": "staging"
+        "branch": "staging",
+        "trigger": "manual"
       },
       "services": [
         {

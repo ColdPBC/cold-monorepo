@@ -56,11 +56,6 @@ jobs:
         run: npx semantic-release
       - name: get new app version
         run: echo "DD_VERSION=$(npm pkg get version)" >> $GITHUB_ENV
-      - name: Update UI Version in flightcontrol.json
-        uses: restackio/update-json-file-action@v2.0
-        with:
-          file: flightcontrol.json
-          fields: "{\"environments.services[0].envVariables.VITE_DD_VERSION\":$(npm pkg get version)}"
       - name: set version in heroku
         run: |
           echo $DD_VERSION + $BRANCH_NAME + $HEROKU_API_KEY
