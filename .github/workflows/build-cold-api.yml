@@ -173,14 +173,7 @@ jobs:
     env:
       BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
     runs-on: ubuntu-latest
-    if: startsWith(env.BRANCH_NAME,'main')
-    needs:
-      - build
     steps:
-      - name: Deploy to production
-        if: startsWith(env.BRANCH_NAME,'main')
-        run: |
-          curl -n -X POST https://app.flightcontrol.dev/api/deploy-hook/cold-staging/58vWGjvmj9PWGxzImyRkVCTujxuJT-Q8piPwciMogtAy4-ci?force=false \
       - name: Deploy to staging
         if: startsWith(env.BRANCH_NAME,'staging')
         run: |
