@@ -155,45 +155,6 @@ jobs:
     needs:
       - build
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          persist-credentials: false
-          fetch-depth: 0
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: "20.9.0"
-
-      - name: Setup AWS ECR Details
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{secrets.AWS_REGION_NAME}}
-
-      - name: Login to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v2
-
-      - name: Build and push the latest docker image to Amazon ECR
-        env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: ${{secrets.AWS_ECR_REPO}}
-        run: |
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:${{ github.head_ref || github.ref_name }} .
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:${{ github.head_ref || github.ref_name }}
-
-      - name: Deploy to staging
-        if: startsWith(env.BRANCH_NAME,'staging')
-        run: |
-          curl -n -X POST https://app.flightcontrol.dev/api/deploy-hook/cold-staging/58vWGjvmj9PWGxzImyRkVCTujxuJT-Q8piPwciMogtAy4-ci?force=false \
-
-      - name: Deploy to preview
-        if: startsWith(env.BRANCH_NAME,'cold') || startsWith(env.BRANCH_NAME,'Cold') || startsWith(env.BRANCH_NAME,'COLD')
-        run: |
-          curl -n -X POST https://app.flightcontrol.dev/api/deploy-hook/cold-staging/58vWGjvmj9PWGxzImyRkVCTujxuJT-Q8piPwciMogtAy4-ci?force=false \
-
       - name: Deploy to production
         if: startsWith(env.BRANCH_NAME,'main')
         run: |
