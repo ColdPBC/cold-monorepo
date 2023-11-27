@@ -16,6 +16,7 @@
           "name": "cold-ui",
           "type": "static",
           "singlePageApp": true,
+          "domain": "app.coldclimate.com",
           "basePath": "./apps/cold-ui",
           "buildCommand": "yarn && yarn postinstall && yarn prebuild && npx nx build cold-ui:build:production",
           "outputDirectory": "dist/apps/cold-ui",
@@ -418,13 +419,13 @@
           "envVariables": {
             "DATABASE_URL": {
               "fromService": {
-                "id": "cold-rds-fc-staging",
+                "id": "cold-rds-preview",
                 "value": "dbConnectionString"
               }
             },
             "REDISCLOUD_URL": {
               "fromService": {
-                "id": "cold-cache-fc-staging",
+                "id": "cold-cache-preview",
                 "value": "connectionString"
               }
             },
