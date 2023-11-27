@@ -202,7 +202,7 @@
           "domain": "app.coldclimate.online",
           "singlePageApp": true,
           "buildType": "nixpacks",
-          "basePath": "./apps/cold-ui",
+          "basePath": ".",
           "buildCommand": "yarn prebuild && yarn dlx run nx build cold-ui:build:production",
           "outputDirectory": "dist/apps/cold-ui",
           "watchPaths": [
