@@ -1,3 +1,10 @@
+# [1.68.0-staging.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.68.0-staging.1...v1.68.0-staging.2) (2023-11-27)
+
+
+### Bug Fixes
+
+* unhandled error case ([39398f0](https://github.com/ColdPBC/cold-monorepo/commit/39398f0231c52372a8f472a2fedc714a00903326))
+
 # [1.68.0-staging.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.67.0...v1.68.0-staging.1) (2023-11-27)
 
 
