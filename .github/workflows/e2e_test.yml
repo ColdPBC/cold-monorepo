@@ -27,7 +27,6 @@ jobs:
     name: Run E2E Tests
     timeout-minutes: 10
     runs-on: ubuntu-latest
-
     permissions:
       contents: write # to be able to publish a GitHub release
       issues: write # to be able to comment on released issues
@@ -35,7 +34,7 @@ jobs:
       id-token: write # to enable use of OIDC for npm provenance
     steps:
       - name: ECHO
-        run: echo ${{ github.event.deployment_status }}
+        run: echo ${{ toJson(github.event.deployment_status) }}
       - name: Checkout
         uses: actions/checkout@v3
         with:
