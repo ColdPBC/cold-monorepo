@@ -21,7 +21,7 @@
           "outputDirectory": "dist/apps/cold-ui",
           "watchPaths": [
             "apps/cold-ui/**",
-            "package.json"
+            "libs/react/src/**"
           ],
           "envVariables": {
             "VITE_API_BASE_URL": "https://api.coldclimate.com",
@@ -68,8 +68,11 @@
           "domain": "api.coldclimate.com",
           "watchPaths": [
             "apps/cold-api/src/**",
-            "apps/cold-api/prisma/**",
-            "package.json"
+            "apps/cold-api/test/**",
+            "libs/nest/prisma/**",
+            "libs/nest/src/**",
+            "api.flightcontrol.json",
+            "Dockerfile"
           ],
           "maxInstances": 4,
           "minInstances": 2,
@@ -194,13 +197,14 @@
           "id": "cold-ui-staging",
           "name": "cold-ui",
           "type": "static",
+          "domain": "app.coldclimate.online",
           "singlePageApp": true,
           "basePath": "./apps/cold-ui",
           "buildCommand": "yarn prebuild && npx nx build cold-ui:build:production",
           "outputDirectory": "dist/apps/cold-ui",
           "watchPaths": [
             "apps/cold-ui/**",
-            "package.json"
+            "libs/react/src/**"
           ],
           "envVariables": {
             "VITE_API_BASE_URL": "https://api.coldclimate.online",
@@ -249,8 +253,10 @@
           "domain": "api.coldclimate.online",
           "watchPaths": [
             "apps/cold-api/src/**",
-            "apps/cold-api/prisma/**",
             "apps/cold-api/test/**",
+            "libs/nest/prisma/**",
+            "libs/nest/src/**",
+            "api.flightcontrol.json",
             "Dockerfile"
           ],
           "autoscaling": {
@@ -392,8 +398,9 @@
           },
           "watchPaths": [
             "apps/cold-api/src/**",
-            "apps/cold-api/prisma/**",
             "apps/cold-api/test/**",
+            "libs/nest/prisma/**",
+            "libs/nest/src/**",
             "api.flightcontrol.json",
             "Dockerfile"
           ],
