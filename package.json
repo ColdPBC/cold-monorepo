@@ -1,6 +1,6 @@
 {
   "name": "cold-monorepo-nx",
-  "version": "1.67.0",
+  "version": "1.68.0-staging.1",
   "license": "MIT",
   "engines": {
     "node": ">=20.9.0",
