@@ -41,6 +41,5 @@ export const Default: Story = {
   render: (args) => <DefaultComponent {...args} />,
   args: {
     companyName: 'Cold Climate',
-    user: auth0UserMock,
   },
 };

@@ -1,8 +1,10 @@
 import { useAuth0, User } from '@auth0/auth0-react';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import useSWR from 'swr';
+import { useColdContext } from './useColdContext';
 
 export const useAuth0Wrapper = () => {
+  const { impersonatingOrg } = useColdContext();
   const auth0Context = useAuth0();
   let orgId: string | undefined = undefined;
 
@@ -23,7 +25,9 @@ export const useAuth0Wrapper = () => {
   }
 
   if (auth0Context.user) {
-    orgId = auth0Context.user?.coldclimate_claims.org_id;
+    orgId = impersonatingOrg
+      ? impersonatingOrg.id
+      : auth0Context.user.coldclimate_claims.org_id;
   }
 
   const getOrgSpecificUrl = (url: string) => {

@@ -12,12 +12,12 @@ import { HexColors } from '../../../themes/cold_theme';
 import { clone, remove } from 'lodash';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import { useLocation } from 'react-router-dom';
-import { useAuth0 } from '@auth0/auth0-react';
 import { ActionPayload } from '@coldpbc/interfaces';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application/errors/errorFallback';
-import { useColdContext, useOrgSWR } from '@coldpbc/hooks';
+import { useAuth0Wrapper, useColdContext, useOrgSWR } from '@coldpbc/hooks';
 import { ErrorType } from '@coldpbc/enums';
+import { OrganizationSelector } from './sideBar/organizationSelector';
 
 const _SideBar = (): JSX.Element => {
   const {
@@ -37,6 +37,8 @@ const _SideBar = (): JSX.Element => {
     any
   >(ldFlags.showActions261 ? [`/actions`, 'GET'] : null, axiosFetcher);
 
+  const auth0 = useAuth0Wrapper();
+
   const filterSidebar = (item: NavbarItem) => {
     if (item.key === 'actions_key') {
       const hasActions = actionsData && actionsData?.length > 0;
@@ -50,6 +52,15 @@ const _SideBar = (): JSX.Element => {
   const location = useLocation();
   const [activeChild, setActiveChild] = useState('');
   const { logError } = useColdContext();
+
+  const getOrgSelector = () => {
+    if (auth0.user && auth0.user.coldclimate_claims.roles[0] === 'cold:admin') {
+      return <OrganizationSelector />;
+    } else {
+      return null;
+    }
+  };
+
   useEffect(() => {
     if (data) {
       data.definition.items.forEach((item: NavbarItem) => {
@@ -70,16 +81,18 @@ const _SideBar = (): JSX.Element => {
     }
   }, [location.pathname, data]);
 
-  if (isLoading)
+  if (isLoading || auth0.isLoading)
     return (
       <div>
         <Spinner />
       </div>
     );
 
-  if (error || actionsError) {
+  if (error || actionsError || auth0.error) {
     if (error) logError(error, ErrorType.SWRError);
     if (actionsError) logError(actionsError, ErrorType.SWRError);
+    if (auth0.error) logError(auth0.error, ErrorType.Auth0Error);
+    return <></>;
   }
 
   // filter top-level nav items
@@ -152,6 +165,7 @@ const _SideBar = (): JSX.Element => {
         </FBSidebar.Items>
         <FBSidebar.Items className="gap-2">
           <FBSidebar.ItemGroup className="mt-0 border-t-0 overflow-visible">
+            <div id={'orgSelector'}>{getOrgSelector()}</div>
             {bottomItems.map((item: NavbarItem, index: number) => {
               if (item.items) {
                 return (

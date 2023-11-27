@@ -9,21 +9,15 @@ import {
   getOrganizationMembersMock,
   getTeamMemberDataGridMock,
 } from './datagridMock';
-import {
-  changeUserRoles,
-  deleteUserInvitation,
-  removeUserFromOrganization,
-  resendInvitation,
-  sendInvitation,
-} from './helper';
 import { getSurveyFormDataByName } from './surveyDataMock';
 import { getRoles } from './roleMock';
 import { resolveAPIUrl } from '@coldpbc/fetchers';
-import { getOrganizationMock } from './organizationMock';
+import { getOrganizationMock, getOrganizationsMock } from './organizationMock';
 import { getPoliciesSignedMock, getPolicyMockByName } from './policyMock';
 import { auth0UserMock } from './userMock';
 import { getNewsDefault } from './newsMock';
 import { getActionMock, getActionsMock } from './action';
+import { v4 as uuidv4 } from 'uuid';
 
 // Even if this uses vite as a bundler, it still uses the NODE_ENV variable
 export const getApiUrl = (path: string) => {
@@ -96,52 +90,44 @@ export const handlers = [
     return res(ctx.json({ ...getOrganizationMock() }));
   }),
 
+  rest.get(getApiUrl('/organizations'), (req, res, ctx) => {
+    return res(ctx.json(getOrganizationsMock()));
+  }),
+
   rest.get(getApiUrl('/organizations/:orgId/members'), (req, res, ctx) => {
     const { orgId } = req.params;
     const mock = getOrganizationMembersMock();
     return res(ctx.json({ ...getOrganizationMembersMock() }));
   }),
 
-  rest.post(
-    getApiUrl('/organizations/:orgId/members/:userId/role/:roleName'),
+  rest.put(
+    getApiUrl('/organizations/:orgId/roles/:roleName/members/:userId'),
     async (req, res, ctx) => {
-      const { orgId, userId, roleName } = req.params;
-      await changeUserRoles(
-        orgId as string,
-        userId as string,
-        roleName as string,
+      const { orgId, roleName, userId } = req.params;
+      return res(
+        ctx.json({
+          ...getOrganizationMembersMock(),
+          members: getOrganizationMembersMock().members.map((member) => {
+            if (member.user_id === userId) {
+              member.role = roleName as string;
+            }
+            return member;
+          }),
+        }),
       );
+    },
+  ),
+
+  rest.delete(
+    getApiUrl('/organizations/:orgId/members'),
+    async (req, res, ctx) => {
       return res(ctx.json({}));
     },
   ),
 
   rest.delete(
-    getApiUrl('/organizations/:orgId/member'),
+    getApiUrl('/organizations/:orgId/invitations/:userId'),
     async (req, res, ctx) => {
-      const { orgId } = req.params;
-      let data: { members: string[] };
-      if (req.body) {
-        data = req.body as { members: string[] };
-        await removeUserFromOrganization(data.members, orgId as string);
-      }
-      return res(ctx.json({}));
-    },
-  ),
-
-  rest.delete(
-    getApiUrl('/organizations/:orgId/invitation'),
-    async (req, res, ctx) => {
-      let data: {
-        org_id: string;
-        user_email: string;
-      };
-      if (req.body) {
-        data = req.body as {
-          org_id: string;
-          user_email: string;
-        };
-        await deleteUserInvitation(data.org_id, data.user_email);
-      }
       return res(ctx.json({}));
     },
   ),
@@ -150,40 +136,40 @@ export const handlers = [
     getApiUrl('/organizations/:orgId/invitation'),
     async (req, res, ctx) => {
       const data = req.body as {
-        org_id: string;
         user_email: string;
         inviter_name: string;
         roleId: string;
       };
+      const { orgId } = req.params;
+
       try {
-        if (data) {
-          const { org_id, user_email, inviter_name, roleId } = data;
-          await sendInvitation(org_id, user_email, inviter_name, roleId);
-        }
-        return res(ctx.json({}));
+        const { user_email, inviter_name, roleId } = data;
+        return res(
+          ctx.json({
+            id: uuidv4(),
+            client_id: 'i8rCPXsLq9b2YKOOWUTfvgUj0iYD7dE3',
+            inviter: {
+              name: inviter_name,
+            },
+            invitee: {
+              email: user_email,
+            },
+            invitation_url: '',
+            ticket_id: 'KpfUpW3PE6GwqgNsLUlLfwdkZS4373XO',
+            created_at: new Date().toISOString(),
+            expires_at: new Date(
+              new Date().getTime() + 7 * 24 * 60 * 60 * 1000,
+            ).toISOString(),
+            organization_id: orgId,
+            roles: [roleId],
+          }),
+        );
       } catch (error) {
         let message;
         if (error instanceof Error) message = error.message;
         else message = String(error);
         return res(ctx.status(500), ctx.json({ message: message }));
       }
-    },
-  ),
-
-  rest.patch(
-    getApiUrl('/organizations/:orgId/invitation'),
-    async (req, res, ctx) => {
-      const data = req.body as {
-        org_id: string;
-        user_email: string;
-        inviter_name: string;
-        roleId: string;
-      };
-      if (data) {
-        const { org_id, user_email, inviter_name, roleId } = data;
-        await resendInvitation(org_id, user_email);
-      }
-      return res(ctx.json({}));
     },
   ),
 
