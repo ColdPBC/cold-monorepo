@@ -248,18 +248,12 @@
           "memory": 2,
           "dockerfilePath": "Dockerfile",
           "dockerContext": ".",
-          "containerImage": {
-            "registryId": "cold-ecr-fc-r123elz",
-            "repository": "api-docker-images",
-            "tag": "staging"
-          },
           "domain": "api.coldclimate.online",
           "watchPaths": [
             "apps/cold-api/src/**",
             "apps/cold-api/test/**",
             "libs/nest/prisma/**",
             "libs/nest/src/**",
-            "api.flightcontrol.json",
             "Dockerfile"
           ],
           "autoscaling": {
@@ -279,9 +273,9 @@
             "healthCheckInterval": 35
           },
           "dockerLabels": {
-            "com.datadoghq.ad.instances": "[{\"host\": \"%%host%%\", \"port\": 7001}]",
-            "com.datadoghq.ad.check_names": "[\"cold-api-nest\"]",
-            "com.datadoghq.ad.init_configs": "[{}]"
+            "com.datadoghq.tags.env": "staging",
+            "com.datadoghq.tags.service": "cold-api-nest",
+            "com.datadoghq.tags.version": ""
           },
           "envVariables": {
             "DD_API_KEY": {
@@ -319,7 +313,7 @@
                 },
                 "DD_POSTGRES_URL_VAR": "DATABASE_URL",
                 "DD_REDIS_URL_VAR": "REDISCLOUD_URL",
-                "DD_SERVICE": "cold-api-fc",
+                "DD_SERVICE": "cold-api-nest",
                 "DD_SITE": "us5.datadoghq.com",
                 "DD_APM_ENABLED": true,
                 "DD_APPSEC_AUTOMATED_USER_EVENTS_TRACKING": true,
@@ -458,9 +452,9 @@
             "requestsPerTarget": 500
           },
           "dockerLabels": {
-            "com.datadoghq.ad.instances": "[{\"host\": \"%%host%%\", \"port\": 7001}]",
-            "com.datadoghq.ad.check_names": "[\"cold-api-nest\"]",
-            "com.datadoghq.ad.init_configs": "[{}]"
+            "com.datadoghq.tags.env": "test",
+            "com.datadoghq.tags.service": "cold-api-nest",
+            "com.datadoghq.tags.version": ""
           },
           "envVariables": {
             "DATABASE_URL": {
