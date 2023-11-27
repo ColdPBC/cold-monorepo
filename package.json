@@ -116,6 +116,7 @@
     "nestjs-ddtrace": "^4.0.0",
     "nestjs-hot-shots": "^2.0.18",
     "nestjs-zod": "^3.0.0",
+    "node-gyp": "^10.0.1",
     "numeral": "^2.0.6",
     "nx": "^17.1.2",
     "nx-cloud": "16.5.2",
