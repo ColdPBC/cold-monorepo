@@ -1,3 +1,35 @@
+# [1.71.0-staging.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.70.0...v1.71.0-staging.1) (2023-11-27)
+
+
+### Bug Fixes
+
+* add tests ([4bd8c64](https://github.com/ColdPBC/cold-monorepo/commit/4bd8c64bc4d4656655e5bb2a5aaa3698b33b908f))
+* add tests ([3f7ad98](https://github.com/ColdPBC/cold-monorepo/commit/3f7ad989cfad3e7452913f950a89ddc9724fea3d))
+* issue causing 404 when accessing apiDocs or health endpoint ([6de58db](https://github.com/ColdPBC/cold-monorepo/commit/6de58db489c6305bf46ecb0b797b10ad9abf4e7b))
+* move authorization/guards/filters to lib ([93b7457](https://github.com/ColdPBC/cold-monorepo/commit/93b7457948b19afa5a8d22bfc7bd48984c1fdedd))
+* move cron module and objectUtils to lib ([c8ca863](https://github.com/ColdPBC/cold-monorepo/commit/c8ca863524bff15f12d7ad829c4e0e34f345a2b3))
+* move schemas to validation library ([8fe55c4](https://github.com/ColdPBC/cold-monorepo/commit/8fe55c4b188c214bb68bcd6839dbab9afc6917a9))
+* move schemas to validation library ([fdd0422](https://github.com/ColdPBC/cold-monorepo/commit/fdd04228b3dd0f9927382305a73f7709e8ef920b))
+* rename path alias ([f43bedf](https://github.com/ColdPBC/cold-monorepo/commit/f43bedfd3980bcf1bb66ea054559ec89153efb9a))
+* rename path alias ([361ac7b](https://github.com/ColdPBC/cold-monorepo/commit/361ac7befe0c43372856b4f1da4621daba94d474))
+* rename path alias ([c2ee1c4](https://github.com/ColdPBC/cold-monorepo/commit/c2ee1c42ebf3d41cae6676be14e413876beeaaa4))
+* rename path alias ([4ee0ee5](https://github.com/ColdPBC/cold-monorepo/commit/4ee0ee5c43d48d58d93648bdc434eb7854587888))
+* resolve react types mismatch ([08c77dc](https://github.com/ColdPBC/cold-monorepo/commit/08c77dcfe23811d7000da95c45a7fdac9ae6ed23))
+* unhandled error case ([b73b06d](https://github.com/ColdPBC/cold-monorepo/commit/b73b06d9cdb0719d982491fec6525cc62f7273f3))
+* unhandled error case ([39398f0](https://github.com/ColdPBC/cold-monorepo/commit/39398f0231c52372a8f472a2fedc714a00903326))
+* use faster stringify ([64e51c3](https://github.com/ColdPBC/cold-monorepo/commit/64e51c37e8d1e8ec5f5b74f3b87510765fd82f35))
+
+
+### Features
+
+* add api codebase to monorepo ([b4923d6](https://github.com/ColdPBC/cold-monorepo/commit/b4923d662e1753df8ebf781e141a067fa1d5740f))
+* add dockerfiles ([3d26a88](https://github.com/ColdPBC/cold-monorepo/commit/3d26a88dd28a8cbc411d12c319ca84d369d9580f))
+* add functioning api to monorepo ([1f45cc9](https://github.com/ColdPBC/cold-monorepo/commit/1f45cc9faf38dc8e97336b98ad87611537bd1385))
+* add openai service ([7457661](https://github.com/ColdPBC/cold-monorepo/commit/745766127e56fa6e991c3f4774b444b1c3ad0979))
+* add shared nest lib to monorepo ([941b3a5](https://github.com/ColdPBC/cold-monorepo/commit/941b3a53d3584c5af5717ef1b640755360efcb6c))
+* resolve typing issue ([064234e](https://github.com/ColdPBC/cold-monorepo/commit/064234ee7bf46e99d9aa771f49858260465ff813))
+* resolve ui build errors ([0d266d2](https://github.com/ColdPBC/cold-monorepo/commit/0d266d2f056c67bee295582accd75b24edad9817))
+
 # [1.70.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.69.0...v1.70.0) (2023-11-22)
 
 

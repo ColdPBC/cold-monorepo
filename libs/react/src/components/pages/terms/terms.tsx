@@ -13,10 +13,7 @@ export interface TermsProps {
 }
 
 function _Terms(props: PropsWithChildren<TermsProps>) {
-  const { data, error, isLoading } = useSWR<any>(
-    ['/policies/' + props.type + '/content', 'GET'],
-    axiosFetcher,
-  );
+  const { data, error, isLoading } = useSWR<any, any, any>(['/policies/' + props.type + '/content', 'GET'], axiosFetcher);
   const { logError } = useColdContext();
 
   if (isLoading) {
@@ -42,7 +39,7 @@ function _Terms(props: PropsWithChildren<TermsProps>) {
 }
 
 export const Terms = withErrorBoundary(_Terms, {
-  FallbackComponent: (props) => <ErrorFallback {...props} />,
+  FallbackComponent: props => <ErrorFallback {...props} />,
   onError: (error, info) => {
     console.error('Error occurred in Terms: ', error);
   },

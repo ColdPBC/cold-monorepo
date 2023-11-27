@@ -12,10 +12,7 @@ import { Dropdown } from 'flowbite-react';
 import { find } from 'lodash';
 
 const _OrganizationSelector = () => {
-  const { data, error, isLoading } = useSWR<any, any>(
-    ['/organizations', 'GET'],
-    axiosFetcher,
-  );
+  const { data, error, isLoading } = useSWR<any, any, any>(['/organizations', 'GET'], axiosFetcher);
   const { logError, setImpersonatingOrg, impersonatingOrg } = useColdContext();
   const unselectedOrg = {
     id: '0',
@@ -35,7 +32,7 @@ const _OrganizationSelector = () => {
   };
 
   useEffect(() => {
-    if (data && !find(data, (org) => org.name === unselectedOrg.name)) {
+    if (data && !find(data, org => org.name === unselectedOrg.name)) {
       data.unshift(unselectedOrg);
     }
   }, [data]);
@@ -54,19 +51,13 @@ const _OrganizationSelector = () => {
       <Dropdown
         inline={true}
         label={
-          <span
-            className={
-              'w-full p-4 text-tc-primary text-start text-xs flex items-center border border-bgc-accent rounded-lg'
-            }
-          >
-            {selectedOrg.display_name}{' '}
-            <ChevronDownIcon className="w-[18px] ml-2" />
+          <span className={'w-full p-4 text-tc-primary text-start text-xs flex items-center border border-bgc-accent rounded-lg'}>
+            {selectedOrg.display_name} <ChevronDownIcon className="w-[18px] ml-2" />
           </span>
         }
         arrowIcon={false}
         theme={flowbiteThemeOverride.dropdown}
-        className={'w-[175px] h-fit max-h-[200px] overflow-y-auto'}
-      >
+        className={'w-[175px] h-fit max-h-[200px] overflow-y-auto'}>
         {data.map((org: any) => (
           <Dropdown.Item
             key={org.id}
@@ -74,8 +65,7 @@ const _OrganizationSelector = () => {
               onOrgSelect(org);
             }}
             theme={flowbiteThemeOverride.dropdown.floating.item}
-            className={'text-start text-xs'}
-          >
+            className={'text-start text-xs'}>
             {org.display_name}
           </Dropdown.Item>
         ))}
@@ -85,5 +75,5 @@ const _OrganizationSelector = () => {
 };
 
 export const OrganizationSelector = withErrorBoundary(_OrganizationSelector, {
-  FallbackComponent: (props) => <ErrorFallback {...props} />,
+  FallbackComponent: props => <ErrorFallback {...props} />,
 });
