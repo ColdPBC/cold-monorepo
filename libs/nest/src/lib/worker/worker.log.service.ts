@@ -47,7 +47,11 @@ export class WorkerLogger implements LoggerService {
     } else if (typeof error === typeof AxiosError) {
       this.logger.error(error.response?.data?.message, safeStringify({ error, meta: optionalParams, ...this.tags }));
     } else {
-      this.logger.error(error.message, this.redactor.redact(JSON.parse(safeStringify({ error, meta: optionalParams, ...this.tags }))));
+      if(error?.message) {
+          this.logger.error(error?.message, this.redactor.redact(JSON.parse(safeStringify({error, meta: optionalParams, ...this.tags}))));
+      } else {
+          this.logger.error(error, this.redactor.redact(JSON.parse(safeStringify({error, meta: optionalParams, ...this.tags}))));
+      }
     }
   }
 
