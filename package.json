@@ -19,13 +19,13 @@
     "prebuild": "yarn dlx barrelsby -D -l all --directory ./libs/react/src -d ./libs/nest/src -e ./libs/nest/src/validation/generated -e stories.tsx -e react-app-env -e private.tsx -e spec.ts -e jest.config.ts -S -H",
     "start": "nx serve",
     "start:prod": "nx serve-static",
-    "storybook": "pnpm run build-storybook && npx nx storybook cold-ui",
-    "build-storybook": "pnpm run prebuild && npx nx build-storybook cold-ui",
-    "build": "nx run cold-api:build:development",
-    "build:dev": "npx nx run cold-ui:build:development --resolveJsonModule",
-    "build:prod": "npx nx run cold-ui:build:production --resolveJsonModule",
-    "test": "nx run cold-api:test:ci",
-    "chromatic": "npx chromatic --project-token=chpt_8c97d5f04267902 --exit-once-uploaded --onlyChanged --exit-zero-on-changes"
+    "storybook": "pnpm run build-storybook && yarn dlx nx storybook cold-ui",
+    "build-storybook": "yarn prebuild && yarn dlx nx build-storybook cold-ui",
+    "build": "yarn dlx nx run cold-api:build:development",
+    "build:dev": "yarn dlx nx run cold-ui:build:development --resolveJsonModule",
+    "build:prod": "yarn dlx nx run cold-ui:build:production --resolveJsonModule",
+    "test": "yarn dlx nx run cold-api:test:ci",
+    "chromatic": "yarn dlx chromatic --project-token=chpt_8c97d5f04267902 --exit-once-uploaded --onlyChanged --exit-zero-on-changes"
   },
   "prisma": {
     "generate": {
