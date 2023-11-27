@@ -32,10 +32,10 @@ RUN yarn add -D @typescript-eslint/eslint-plugin
 FROM dependencies as build
 WORKDIR /app
 RUN yarn prebuild
-RUN npx nx run nest:prisma-generate
+RUN npx nx run coldpbc/nest:prisma-generate
 RUN if [ "${NODE_ENV}" = "production" ] ; then echo "building for production..." && npx nx run cold-api:build:production ; else echo "building development..." && npx nx run cold-api:build:development ; fi
 RUN npx nx reset
-RUN if [ "${NODE_ENV}" = "production" ] ; then npx nx run nest:test ; else npx nx run nest:test --coverage ; fi
+RUN if [ "${NODE_ENV}" = "production" ] ; then npx nx run coldpbc/nest:test:ci ; else npx nx run nest:test:ci --coverage ; fi
 
 FROM base as final
 USER node

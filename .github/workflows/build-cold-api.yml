@@ -19,7 +19,7 @@ env:
   PR_NUMBER: ${{ github.event.number }}
 
 jobs:
-  dependencies:
+  build:
     name: Build Dependencies and Migrate DB
     runs-on: ubuntu-latest
 
@@ -52,12 +52,16 @@ jobs:
         run: yarn && yarn postinstall
       - name: Generate Prisma Client
         run: yarn dlx nx run coldpbc/nest:prisma-generate
+
       - name: build development
         run:  yarn prebuild && yarn dlx nx reset && yarn dlx nx run cold-api:build:development
+
       - name: 'Unit Test: Nest'
         run: yarn dlx nx run coldpbc/nest:test:ci
+
       - name: 'Unit Test: Cold-API'
         run: yarn dlx nx run cold-api:test:ci
+
       - name: Migrate Staging DB
         env:
           BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
@@ -99,61 +103,24 @@ jobs:
           PR_NUMBER: ${{ github.event.number }}
         if: startsWith(env.BRANCH_NAME,'main')
         run: prisma db seed
-      - name: Compile Typescript
-        run: yarn build
+
       - name: Install Postman CLI
         run: |
           curl -o- "https://dl-cli.pstmn.io/install/linux64.sh" | sh
+
       - name: Login to Postman CLI
         run: postman login --with-api-key ${{ secrets.POSTMAN_API_KEY }}
-  #    - name: Run API tests
-  #     run: |
-  #        postman collection run "26744970-e48d50a1-8c4b-40ba-8b74-6aec4144adc4" -e "26744970-19278787-72dd-42c7-b9a8-6ac826617c4d" --delay-request 500 --env-var baseUrl=cold-api-pr-${PR_NUMBER}.herokuapp.com"
 
-  build:
-    name: Deploy and Version
-    needs: dependencies
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write # to be able to publish a GitHub release
-      issues: write # to be able to comment on released issues
-      pull-requests: write # to be able to comment on released pull requests
-      id-token: write # to enable use of OIDC for npm provenance
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          persist-credentials: false
-          fetch-depth: 0
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: "lts/*"
-      - name: Cache node modules
-        uses: actions/cache@v3
-        with:
-          path: ./node_modules
-          key: ${{ runner.os }}-build-${{ env.CACHE_NAME }}-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.CACHE_NAME }}-
-            ${{ runner.os }}-build-
-            ${{ runner.os }}-
-      - name: Install Corepack
-        run: |
-          npm -g install corepack \
-          corepack enable \
-      - name: Install dependencies
-        run: yarn
-      - name: Compile Typescript
-        run: yarn build
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           NPM_TOKEN: ${{ secrets.GH_TOKEN }}
         run: npx semantic-release
+
       - name: get new app version
         run: echo "DD_VERSION=$(npm pkg get version)" >> $GITHUB_ENV
+
       - name: set version in heroku staging
         env:
           BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
@@ -166,6 +133,7 @@ jobs:
           --header 'Content-Type: application/json' \
           --header 'Authorization: Bearer ${{secrets.HEROKU_API_KEY}}' \
           --data "{\"DD_VERSION\":$(npm pkg get version)}"
+
       - name: set version in heroku production
         env:
           BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
@@ -178,23 +146,15 @@ jobs:
           --header 'Content-Type: application/json' \
           --header 'Authorization: Bearer ${{secrets.HEROKU_API_KEY}}' \
           --data "{\"DD_VERSION\":$(npm pkg get version)}"
+
   docker:
-    name: Build Docker Image
-    needs:
-      - build
-      - dependencies
+    name: Build Docker Image and Push to ECR
     env:
       BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
     runs-on: ubuntu-latest
-    permissions:
-      contents: write # to be able to publish a GitHub release
-      issues: write # to be able to comment on released issues
-      pull-requests: write # to be able to comment on released pull requests
-      id-token: write # to enable use of OIDC for npm provenance
+    needs:
+      - build
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
       - name: Setup AWS ECR Details
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -211,18 +171,20 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: ${{secrets.AWS_ECR_REPO}}
         run: |
-            docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:${{ github.head_ref || github.ref_name }} .
-            docker push $ECR_REGISTRY/$ECR_REPOSITORY:${{ github.head_ref || github.ref_name }}
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:${{ github.head_ref || github.ref_name }} .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:${{ github.head_ref || github.ref_name }}
 
-  deploy:
-    name: Trigger Flightcontrol Deploy
-    env:
-      BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
-    runs-on: ubuntu-latest
-    needs:
-      - docker
-    steps:
-      - name: trigger deploy to staging
+      - name: Deploy to staging
         if: startsWith(env.BRANCH_NAME,'staging')
+        run: |
+          curl -n -X POST https://app.flightcontrol.dev/api/deploy-hook/cold-staging/58vWGjvmj9PWGxzImyRkVCTujxuJT-Q8piPwciMogtAy4-ci?force=false \
+
+      - name: Deploy to preview
+        if: startsWith(env.BRANCH_NAME,'cold') || startsWith(env.BRANCH_NAME,'Cold') || startsWith(env.BRANCH_NAME,'COLD')
+        run: |
+          curl -n -X POST https://app.flightcontrol.dev/api/deploy-hook/cold-staging/58vWGjvmj9PWGxzImyRkVCTujxuJT-Q8piPwciMogtAy4-ci?force=false \
+
+      - name: Deploy to production
+        if: startsWith(env.BRANCH_NAME,'main')
         run: |
           curl -n -X POST https://app.flightcontrol.dev/api/deploy-hook/cold-staging/58vWGjvmj9PWGxzImyRkVCTujxuJT-Q8piPwciMogtAy4-ci?force=false \
