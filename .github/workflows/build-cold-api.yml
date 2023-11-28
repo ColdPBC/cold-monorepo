@@ -64,11 +64,7 @@ jobs:
         env:
           BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
           GIT_TERMINAL_PROMPT: 0
-        run: |
-          yarn setVersion
-          git config --local user.name github-actions
-          git config --local user.email <>
-          git add .
+        run: yarn setVersion && git config --local user.name github-actions && git config --local user.email <> && git add .
       - name: 🏷️ Commit
         run: |
           git commit -m "ci: update flightcontrol.json [skip actions] [skip ci]"
