@@ -68,7 +68,9 @@ jobs:
           yarn setVersion
           git config --local user.name github-actions
           git config --local user.email <>
-          git add flightcontrol.json
+          git add .
+      - name: Commit
+        run: |
           git commit -m "ci: update flightcontrol.json [skip actions] [skip ci]"
 
       - name: 🚚 Push Changes To GitHub
