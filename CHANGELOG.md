@@ -1,3 +1,16 @@
+# [1.71.0-staging.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.71.0-staging.1...v1.71.0-staging.2) (2023-11-28)
+
+
+### Bug Fixes
+
+* correct sidebar styling after flowbite react update ([326a25c](https://github.com/ColdPBC/cold-monorepo/commit/326a25c4f02fdd5554d72c85d57cc67fb012d9eb))
+* update yarn lock and react types ([fc66157](https://github.com/ColdPBC/cold-monorepo/commit/fc6615768189388492d66bae9fa0d471e77a7501))
+
+
+### Features
+
+* fix ui build issues ([affe153](https://github.com/ColdPBC/cold-monorepo/commit/affe1534b23516833d0b1d97a59bea5485263bfb))
+
 # [1.71.0-staging.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.70.0...v1.71.0-staging.1) (2023-11-27)
 
 

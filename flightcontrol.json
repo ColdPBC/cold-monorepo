@@ -279,7 +279,7 @@
           "dockerLabels": {
             "com.datadoghq.tags.env": "staging",
             "com.datadoghq.tags.service": "cold-api-nest",
-            "com.datadoghq.tags.version": ""
+            "com.datadoghq.tags.version": "1.71.0-staging.1"
           },
           "envVariables": {
             "DD_API_KEY": {
@@ -464,7 +464,7 @@
           "dockerLabels": {
             "com.datadoghq.tags.env": "test",
             "com.datadoghq.tags.service": "cold-api-nest",
-            "com.datadoghq.tags.version": ""
+            "com.datadoghq.tags.version": "1.71.0-staging.1"
           },
           "envVariables": {
             "DATABASE_URL": {
