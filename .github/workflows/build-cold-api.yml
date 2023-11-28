@@ -83,6 +83,8 @@ jobs:
            branch: ${{ env.BRANCH_NAME }}
            unprotect_reviews: true
            force: true
+           timeout: 3
+           acceptable_conclusions: success, failure, neutral, cancelled, skipped, timed_out, action_required
 
       - name: 🏁 Done!
         run: |
