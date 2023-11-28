@@ -117,10 +117,6 @@ jobs:
         with:
           persist-credentials: false
           fetch-depth: 0
-      - name: Deploy to production
-        if: startsWith(env.BRANCH_NAME,'main')
-        run: |
-          curl -n -X POST https://app.flightcontrol.dev/api/deploy-hook/cold-production/wKyB691SxArA4LuDb3FDaptLaexm8Vtv2DAc_2w6gw-_WOYH?force=false \
   deploy-dev:
     name: Trigger Dev Deploy
     env:
@@ -129,11 +125,15 @@ jobs:
     needs:
       - build
     steps:
+      - name: Deploy to production
+        if: startsWith(env.BRANCH_NAME,'main')
+        run: |
+          curl -n -X POST https://app.flightcontrol.dev/api/deploy-hook/cold-production/wKyB691SxArA4LuDb3FDaptLaexm8Vtv2DAc_2w6gw-_WOYH?force=false \
       - name: Deploy to staging
         if: startsWith(env.BRANCH_NAME,'staging')
         run: |
           curl -n -X POST https://app.flightcontrol.dev/api/deploy-hook/cold-staging/58vWGjvmj9PWGxzImyRkVCTujxuJT-Q8piPwciMogtAy4-ci?force=false \
       - name: Deploy to preview
-        if: ${{ github.event.number }} && startsWith(env.BRANCH_NAME,'cold') || startsWith(env.BRANCH_NAME,'Cold') || startsWith(env.BRANCH_NAME,'COLD')
+        if: ${{ github.event.number }} && (startsWith(env.BRANCH_NAME,'cold') || startsWith(env.BRANCH_NAME,'Cold') || startsWith(env.BRANCH_NAME,'COLD'))
         run: |
           curl -n -X POST https://app.flightcontrol.dev/api/deploy-hook/cold-preview/xaQAJM9Iw4G6UWmYTX0RLYdU1krFiPnKNV-lzQeTc6crqjgc/${{ github.event.number }}/$(git rev-parse --short "$GITHUB_SHA")?force=false \
