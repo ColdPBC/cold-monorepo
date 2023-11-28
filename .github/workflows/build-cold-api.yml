@@ -17,10 +17,10 @@ env:
   NPM_TOKEN: ${{ secrets.GH_TOKEN }}
   CACHE_NAME: cache-node-modules
   PR_NUMBER: ${{ github.event.number }}
-
+  BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
 jobs:
   build:
-    name: Build Dependencies & Version
+    name: Dependencies & Version
     runs-on: ubuntu-latest
 
     permissions:
@@ -29,16 +29,18 @@ jobs:
       pull-requests: write # to be able to comment on released pull requests
       id-token: write # to enable use of OIDC for npm provenance
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - name: ⚙ Checkout
+        uses: actions/checkout@v3
         with:
-          persist-credentials: false
+          ref: ${{ github.head_ref }}
           fetch-depth: 0
-      - name: Setup Node.js
+          token: ${{ secrets.GH_TOKEN }}
+
+      - name: ⚙ Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "20.9.0"
-      - name: Cache node modules
+      - name: ⚙ Cache node modules
         uses: actions/cache@v3
         with:
           path: ./node_modules
@@ -48,61 +50,37 @@ jobs:
             ${{ runner.os }}-build-
             ${{ runner.os }}-
       #Database Migrations
-      - name: enable corepack
+      - name: ⚙ Enable corepack
         run: corepack enable
-      - name: install yarn
+      - name: ⚙ Install yarn
         run: yarn set version stable
-      - name: Install dependencies
+      - name: ⚙ Install dependencies
         continue-on-error: true
         run: yarn install && yarn postinstall
-      - name: Generate Prisma Client
+      - name: ⚙ Generate Prisma Client
         run: yarn dlx nx run coldpbc/nest:prisma-generate
 
-      - name: Version
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
-          NPM_TOKEN: ${{ secrets.GH_TOKEN }}
-        run: npx semantic-release
+      - name: 🌱 Semantic Release
+        run: npx -p semantic-release -p @semantic-release/changelog -p @semantic-release/commit-analyzer -p @semantic-release/git -p @semantic-release/npm -p @semantic-release/release-notes-generator semantic-release
 
-      - name: setup git config
-        run: |
-          # setup the username and email
-          git config user.name "FlightControl Update Bot"
-          git config user.email "<>"
-
-      - name: commit
+      - name: ⚙ Update FlightControl
         env:
           BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+          VERSION: $(npm pkg get version)
+          GIT_TERMINAL_PROMPT: 0
         run: |
-          # Stage the file, commit and push
+          node updateVersion.mjs ${{ env.VERSION }}
+          git config --local user.name github-actions
+          git config --local user.email <>
           git add flightcontrol.json
-          git commit -m "chore: update version [skip ci]"
-          git push origin ${BRANCH_NAME}
-      - name: set version in heroku staging
-        env:
-          BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
-        if: startsWith(env.BRANCH_NAME,'staging') || startsWith(env.BRANCH_NAME,'cold') || startsWith(env.BRANCH_NAME,'Cold') || startsWith(env.BRANCH_NAME,'COLD')
-        run: |
-          echo "{\"DD_VERSION\":$(npm pkg get version)}"
-          curl --request PATCH \
-          --url 'https://api.heroku.com/apps/api-cold-climate/config-vars' \
-          --header 'Accept: application/vnd.heroku+json; version=3`.\n' \
-          --header 'Content-Type: application/json' \
-          --header 'Authorization: Bearer ${{secrets.HEROKU_API_KEY}}' \
-          --data "{\"DD_VERSION\":$(npm pkg get version)}"
+          git commit -m "ci: update flightcontrol.json [skip actions] [skip ci]"
+          git push origin/${{env.BRANCH_NAME}}
 
-      - name: set version in heroku
+      - name: 🏁 Done!
         run: |
-          echo $DD_VERSION + $BRANCH_NAME + $HEROKU_API_KEY
-          curl --request PATCH \
-          --url 'https://api.heroku.com/apps/api-cold-climate-${environment}/config-vars' \
-          --header 'Accept: application/vnd.heroku+json; version=3`.\n' \
-          --header 'Content-Type: application/json' \
-          --header 'Authorization: Bearer ${{secrets.HEROKU_API_KEY}}' \
-          --data "{\"DD_VERSION\":$(npm pkg get version)}"
+          echo "✅ Dependencies & Version Complete: 🌱 $(npm pkg get version) 🌱"
 
-  deploy-prod:
+  deploy:
     name: Trigger Deploy
     env:
       BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
@@ -110,28 +88,36 @@ jobs:
     needs:
       - build
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          persist-credentials: false
-          fetch-depth: 0
-  deploy-dev:
-    name: Trigger Dev Deploy
-    env:
-      BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
-    runs-on: ubuntu-latest
-    needs:
-      - build
-    steps:
-      - name: Deploy to production
+      - name: 🚀 Trigger Production Deploy
         if: startsWith(env.BRANCH_NAME,'main')
         run: |
           curl -n -X POST https://app.flightcontrol.dev/api/deploy-hook/cold-production/wKyB691SxArA4LuDb3FDaptLaexm8Vtv2DAc_2w6gw-_WOYH?force=false \
-      - name: Deploy to staging
+      - name: 🚀 Set prod version in heroku
+        run: |
+          curl --request PATCH \
+          --url 'https://api.heroku.com/apps/api-cold-climate-production/config-vars' \
+          --header 'Accept: application/vnd.heroku+json; version=3`.\n' \
+          --header 'Content-Type: application/json' \
+          --header 'Authorization: Bearer ${{secrets.HEROKU_API_KEY}}' \
+          --data "{\"DD_VERSION\":$(npm pkg get version)}"
+
+      - name: 🚀 Set Staging Version in Heroku
+        if: startsWith(env.BRANCH_NAME,'staging') || startsWith(env.BRANCH_NAME,'cold') || startsWith(env.BRANCH_NAME,'Cold') || startsWith(env.BRANCH_NAME,'COLD')
+        run: |
+          curl --request PATCH \
+          --url 'https://api.heroku.com/apps/api-cold-climate-staging/config-vars' \
+          --header 'Accept: application/vnd.heroku+json; version=3`.\n' \
+          --header 'Content-Type: application/json' \
+          --header 'Authorization: Bearer ${{secrets.HEROKU_API_KEY}}' \
+          --data "{\"DD_VERSION\":$(npm pkg get version)}"
+      - name: 🚀 Trigger Staging Deploy
         if: startsWith(env.BRANCH_NAME,'staging')
         run: |
           curl -n -X POST https://app.flightcontrol.dev/api/deploy-hook/cold-staging/58vWGjvmj9PWGxzImyRkVCTujxuJT-Q8piPwciMogtAy4-ci?force=false \
-      - name: Deploy to preview
+
+      - name: 🚀 Trigger Preview Deploy
         if: ${{ github.event.number }} && (startsWith(env.BRANCH_NAME,'cold') || startsWith(env.BRANCH_NAME,'Cold') || startsWith(env.BRANCH_NAME,'COLD'))
         run: |
           curl -n -X POST https://app.flightcontrol.dev/api/deploy-hook/cold-preview/xaQAJM9Iw4G6UWmYTX0RLYdU1krFiPnKNV-lzQeTc6crqjgc/${{ github.event.number }}/$(git rev-parse --short "$GITHUB_SHA")?force=false \
+      - name: 🏁 Done!
+        run: echo "🚀 Instructed FlightControl to deploy 🌱$(npm pkg get version)🌱"
