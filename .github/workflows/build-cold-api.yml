@@ -78,7 +78,13 @@ jobs:
           git config --local user.email <>
           git add flightcontrol.json
           git commit -m "ci: update flightcontrol.json [skip actions] [skip ci]"
-          git push origin/${{env.BRANCH_NAME}}
+      - name: push to git
+        uses: CasperWA/push-protected@v2
+        with:
+           token: ${{ secrets.GH_TOKEN }}
+           branch: ${{ env.BRANCH_NAME }}
+           unprotect_reviews: true
+           force: true
 
       - name: 🏁 Done!
         run: |
