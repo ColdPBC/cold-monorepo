@@ -1,3 +1,10 @@
+# [1.71.0-staging.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.71.0-staging.2...v1.71.0-staging.3) (2023-11-28)
+
+
+### Bug Fixes
+
+* consolidate deploy steps ([4ece12c](https://github.com/ColdPBC/cold-monorepo/commit/4ece12c472992b8eeb5749b05ac42120de19325a))
+
 # [1.71.0-staging.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.71.0-staging.1...v1.71.0-staging.2) (2023-11-28)
 
 
