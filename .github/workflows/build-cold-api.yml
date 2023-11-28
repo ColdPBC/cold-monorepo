@@ -48,8 +48,6 @@ jobs:
             ${{ runner.os }}-build-
             ${{ runner.os }}-
       #Database Migrations
-      - name: Update package.json version
-        run: node updateVersion.mjs
       - name: enable corepack
         run: corepack enable
       - name: install yarn
@@ -68,9 +66,21 @@ jobs:
 
         continue-on-error: true
         run: npx semantic-release
-      - name: get new app version
-        run: echo "DD_VERSION=$(npm pkg get version)" >> $GITHUB_ENV
 
+      - name: setup git config
+        run: |
+          # setup the username and email
+          git config user.name "FlightControl Update Bot"
+          git config user.email "<>"
+
+      - name: commit
+        env:
+          BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+        run: |
+          # Stage the file, commit and push
+          git add flightcontrol.json
+          git commit -m "chore: update version [skip ci]"
+          git push origin ${BRANCH_NAME}
       - name: set version in heroku staging
         env:
           BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
