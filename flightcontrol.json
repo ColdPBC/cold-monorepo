@@ -8,7 +8,7 @@
       "source": {
         "pr": false,
         "branch": "main",
-        "trigger": "push"
+        "trigger": "manual"
       },
       "services": [
         {
@@ -73,7 +73,6 @@
             "apps/cold-api/test/**",
             "libs/nest/prisma/**",
             "libs/nest/src/**",
-            "api.flightcontrol.json",
             "Dockerfile"
           ],
           "maxInstances": 4,
@@ -115,7 +114,7 @@
                 "value": "dbConnectionString"
               }
             },
-            "ENABLE_HEALTH_LOGS": false
+            "ENABLE_HEALTH_LOGS": true
           },
           "sidecars": [
             {
@@ -380,7 +379,8 @@
           "toBranches": [
             "main"
           ]
-        }
+        },
+        "trigger": "manual"
       },
       "services": [
         {
@@ -452,7 +452,6 @@
             "apps/cold-api/test/**",
             "libs/nest/prisma/**",
             "libs/nest/src/**",
-            "api.flightcontrol.json",
             "Dockerfile"
           ],
           "autoscaling": {

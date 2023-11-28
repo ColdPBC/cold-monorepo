@@ -9,10 +9,6 @@
         "npmPublish": false
       }
     ],
-    ["@semantic-release/git", {
-      "assets": ["flightcontrol.json", "CHANGELOG.md"],
-      "message": "Release <%= nextRelease.version %> \n [skip ci]"
-    }],
     "@semantic-release/github"
     ]
 }

@@ -21,9 +21,12 @@ const updateVersion = () => {
             const pkg = JSON.parse(raw);
             const version = get(pkg, 'version', '0.0.0');
             if(process.env.NODE_ENV === 'production'){
+                set(fcData, 'environments[0].services[0].envVariables.VITE_APP_VERSION', version);
                 set(fcData, 'environments[0].services[1].dockerLabels["com.datadoghq.tags.version"]', version);
             } else {
+                set(fcData, 'environments[1].services[0].envVariables.VITE_APP_VERSION"]', version);
                 set(fcData, 'environments[1].services[1].dockerLabels["com.datadoghq.tags.version"]', version);
+                set(fcData, 'environments[2].services[0].envVariables.VITE_APP_VERSION"]', version);
                 set(fcData, 'environments[2].services[1].dockerLabels["com.datadoghq.tags.version"]', version);
             }
             fs.writeFile('flightcontrol.json', JSON.stringify(fcData, null, 2), 'utf8', (err) => {
