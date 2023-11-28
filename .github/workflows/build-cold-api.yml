@@ -39,7 +39,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20.9.0"
-      - name: ⚙ Cache node modules
+      - name: 💼 Cache node modules
         uses: actions/cache@v3
         with:
           path: ./node_modules
@@ -49,20 +49,18 @@ jobs:
             ${{ runner.os }}-build-
             ${{ runner.os }}-
       #Database Migrations
-      - name: ⚙ Enable corepack
-        run: corepack enable
-      - name: ⚙ Install yarn
-        run: yarn set version stable
-      - name: ⚙ Install dependencies
+      - name: 🧶 Install yarn
+        run: corepack enable && yarn set version stable
+      - name: 🧩 Install dependencies
         continue-on-error: true
         run: yarn install && yarn postinstall
-      - name: ⚙ Generate Prisma Client
+      - name: 🍭 Generate Prisma Client
         run: yarn dlx nx run coldpbc/nest:prisma-generate
 
-      - name: 🌱 Semantic Release
+      - name: 🌱 Get Next Version
         run: npx -p semantic-release -p @semantic-release/changelog -p @semantic-release/commit-analyzer -p @semantic-release/git -p @semantic-release/npm -p @semantic-release/release-notes-generator semantic-release
 
-      - name: ⚙ Update FlightControl
+      - name: 📂 Update FlightControl
         env:
           BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
           VERSION: $(npm pkg get version)
@@ -78,7 +76,7 @@ jobs:
           git config --local user.email <>
           git add flightcontrol.json
           git commit -m "ci: update flightcontrol.json [skip actions] [skip ci]"
-      - name: push to git
+      - name: 🚚 Push Changes To GitHub
         uses: CasperWA/push-protected@v2
         with:
            token: ${{ secrets.GH_TOKEN }}
@@ -98,10 +96,6 @@ jobs:
     needs:
       - build
     steps:
-      - name: 🚀 Trigger Production Deploy
-        if: startsWith(env.BRANCH_NAME,'main')
-        run: |
-          curl -n -X POST https://app.flightcontrol.dev/api/deploy-hook/cold-production/wKyB691SxArA4LuDb3FDaptLaexm8Vtv2DAc_2w6gw-_WOYH?force=false \
       - name: 🚀 Set prod version in heroku
         run: |
           curl --request PATCH \
@@ -120,14 +114,24 @@ jobs:
           --header 'Content-Type: application/json' \
           --header 'Authorization: Bearer ${{secrets.HEROKU_API_KEY}}' \
           --data "{\"DD_VERSION\":$(npm pkg get version)}"
-      - name: 🚀 Trigger Staging Deploy
+
+      - name: 🛩️ Trigger Production Deploy
+        if: startsWith(env.BRANCH_NAME,'main')
+        run: |
+          curl -n -X POST https://app.flightcontrol.dev/api/deploy-hook/cold-production/wKyB691SxArA4LuDb3FDaptLaexm8Vtv2DAc_2w6gw-_WOYH?force=false
+          echo "🛩 Flightcontrol Deploying ( https://app.flightcontrol.dev/org/cloejv4kz05s0ps21f3q2qjxe/environments/clpgmjfpl049fr90yqwdsuqd8 )"
+
+      - name: 🛩️ Trigger Staging Deploy
         if: startsWith(env.BRANCH_NAME,'staging')
         run: |
-          curl -n -X POST https://app.flightcontrol.dev/api/deploy-hook/cold-staging/58vWGjvmj9PWGxzImyRkVCTujxuJT-Q8piPwciMogtAy4-ci?force=false \
+          curl -n -X POST https://app.flightcontrol.dev/api/deploy-hook/cold-staging/58vWGjvmj9PWGxzImyRkVCTujxuJT-Q8piPwciMogtAy4-ci?force=false
+          echo "🛩 Flightcontrol Deploying ( https://app.flightcontrol.dev/org/cloejv4kz05s0ps21f3q2qjxe/environments/clpeertbx01sgpx0yy5cu4imq )"
 
-      - name: 🚀 Trigger Preview Deploy
+      - name: 🛩️ Trigger Preview Deploy
         if: ${{ github.event.number }} && (startsWith(env.BRANCH_NAME,'cold') || startsWith(env.BRANCH_NAME,'Cold') || startsWith(env.BRANCH_NAME,'COLD'))
         run: |
-          curl -n -X POST https://app.flightcontrol.dev/api/deploy-hook/cold-preview/xaQAJM9Iw4G6UWmYTX0RLYdU1krFiPnKNV-lzQeTc6crqjgc/${{ github.event.number }}/$(git rev-parse --short "$GITHUB_SHA")?force=false \
+          curl -n -X POST https://app.flightcontrol.dev/api/deploy-hook/cold-preview/xaQAJM9Iw4G6UWmYTX0RLYdU1krFiPnKNV-lzQeTc6crqjgc/${{ github.event.number }}/$(git rev-parse --short "$GITHUB_SHA")?force=false
+          echo "🛩 Flightcontrol Deploying ( https://app.flightcontrol.dev/org/cloejv4kz05s0ps21f3q2qjxe/projects/clpeerpk90034r71b0tiky5vd/preview-environments )"
+
       - name: 🏁 Done!
-        run: echo "🚀 Instructed FlightControl to deploy 🌱$(npm pkg get version)🌱"
+        run: echo "🛩 Flightcontrol Deploying 🛩"
