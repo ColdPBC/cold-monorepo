@@ -83,9 +83,9 @@
           "enableCloudfrontSwr": true,
           "versionHistoryCount": 10,
           "dockerLabels": {
-            "com.datadoghq.ad.instances": "[{\"host\": \"%%host%%\", \"port\": 7001}]",
-            "com.datadoghq.ad.check_names": "[\"cold-api-nest\"]",
-            "com.datadoghq.ad.init_configs": "[{}]"
+            "com.datadoghq.tags.env": "production",
+            "com.datadoghq.tags.service": "cold-api-nest",
+            "com.datadoghq.tags.version": ""
           },
           "autoscaling": {
             "cpuThreshold": 70,
@@ -125,7 +125,11 @@
               "memoryAllotment": 0.25,
               "enableNetworking": true,
               "logging": true,
-              "ports": [8125, 5001, 5000],
+              "ports": [
+                8125,
+                5001,
+                5000
+              ],
               "envVariables": {
                 "DD_ENV": "production",
                 "NODE_ENV": "production",
@@ -302,7 +306,11 @@
               "memoryAllotment": 0.25,
               "enableNetworking": true,
               "logging": true,
-              "ports": [8125, 5001, 5000],
+              "ports": [
+                8125,
+                5001,
+                5000
+              ],
               "envVariables": {
                 "DD_ENV": "staging",
                 "NODE_ENV": "staging",
@@ -369,7 +377,9 @@
       "source": {
         "pr": true,
         "filter": {
-          "toBranches": ["main"]
+          "toBranches": [
+            "main"
+          ]
         }
       },
       "services": [
@@ -483,7 +493,11 @@
               "memoryAllotment": 0.25,
               "enableNetworking": true,
               "logging": true,
-              "ports": [8125, 5001, 5000],
+              "ports": [
+                8125,
+                5001,
+                5000
+              ],
               "envVariables": {
                 "DD_ENV": "test",
                 "NODE_ENV": "test",

@@ -48,6 +48,8 @@ jobs:
             ${{ runner.os }}-build-
             ${{ runner.os }}-
       #Database Migrations
+      - name: Update package.json version
+        run: node updateVersion.mjs
       - name: enable corepack
         run: corepack enable
       - name: install yarn
@@ -63,12 +65,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           NPM_TOKEN: ${{ secrets.GH_TOKEN }}
+
+        continue-on-error: true
         run: npx semantic-release
-      - name: Update package.json version
-        uses: restackio/update-json-file-action@v2.0
-        with:
-          file: flightcontrol.json
-          fields: "{\"environments[1].services[1].dockerLabels.\"com.datadoghq.tags.version\"\": 'value_here', 'a.b.d[0]': 'value_here'}"
       - name: get new app version
         run: echo "DD_VERSION=$(npm pkg get version)" >> $GITHUB_ENV
 
