@@ -65,17 +65,13 @@ jobs:
           BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
           VERSION: $(npm pkg get version)
           GIT_TERMINAL_PROMPT: 0
-        with:
-          ref: ${{ github.head_ref }}
-          fetch-depth: 0
-          token: ${{ secrets.GH_TOKEN }}
-          github_token: ${{ secrets.GH_TOKEN }}
         run: |
           node updateVersion.mjs ${{ env.VERSION }}
           git config --local user.name github-actions
           git config --local user.email <>
           git add flightcontrol.json
           git commit -m "ci: update flightcontrol.json [skip actions] [skip ci]"
+
       - name: 🚚 Push Changes To GitHub
         uses: CasperWA/push-protected@v2
         with:
