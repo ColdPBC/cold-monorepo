@@ -19,7 +19,9 @@
     "prebuild": "yarn dlx barrelsby -D -l all --directory ./libs/react/src -d ./libs/nest/src -e ./libs/nest/src/validation/generated -e stories.tsx -e react-app-env -e private.tsx -e spec.ts -e jest.config.ts -S -H",
     "start": "yarn dlx nx serve",
     "start:prod": "yarn dlx nx serve-static",
-    "setVersion": "node updateVersion.mjs $(git tag --sort=committerdate | tail -1)",
+    "setVersion": "node updateVersion.mjs $(git tag --sort=committerdate | tail -1 | cut -b 2-100) $(git branch --show)",
+    "clearVersion": "node updateVersion.mjs '' $(git branch --show)",
+
     "storybook": "yarn run build-storybook && yarn dlx nx storybook cold-ui",
     "build-storybook": "yarn run prebuild && yarn dlx nx build-storybook cold-ui",
     "build": "yarn dlx nx run cold-api:build:development",

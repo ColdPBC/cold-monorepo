@@ -63,10 +63,9 @@ jobs:
       - name: 📂 Update FlightControl
         env:
           BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
-          VERSION: $(npm pkg get version)
           GIT_TERMINAL_PROMPT: 0
         run: |
-          node updateVersion.mjs ${{ env.VERSION }}
+          yarn setVersion
           git config --local user.name github-actions
           git config --local user.email <>
           git add flightcontrol.json
