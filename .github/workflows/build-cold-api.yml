@@ -67,6 +67,11 @@ jobs:
           BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
           VERSION: $(npm pkg get version)
           GIT_TERMINAL_PROMPT: 0
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+          token: ${{ secrets.GH_TOKEN }}
+          github_token: ${{ secrets.GH_TOKEN }}
         run: |
           node updateVersion.mjs ${{ env.VERSION }}
           git config --local user.name github-actions
