@@ -37,9 +37,8 @@ export class BaseWorker extends RedactorService {
         this.logger.warn('Package version not defined in package.json.  This can be ignored for now.', pkg);
       }
 
-      process.env['DD_SERVICE'];
       process.env['npm_package_name'] || pkg.name;
-      process.env['DD_VERSION'] = process.env['npm_package_version'] || get(pkg, 'version');
+      //process.env['DD_VERSION'] = process.env['npm_package_version'] || get(pkg, 'version');
     } else {
       this.logger.warn('Package.json not found.  This can be ignored for now.', null);
     }
@@ -64,7 +63,7 @@ export class BaseWorker extends RedactorService {
     this.tags = {
       env: process.env['NODE_ENV'] || 'development',
       app: process.env['npm_package_name'] || this.details.pkg_name,
-      version: process.env['npm_package_version'],
+      version: process.env["DD_VERSION"] || process.env['npm_package_version'],
       service: process.env['npm_package_name'] || this.details.pkg_name,
       host: this.details.host_name,
     };

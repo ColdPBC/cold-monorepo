@@ -27,7 +27,7 @@ export class WorkerLogger implements LoggerService {
     });
 
     const pkg = JSON.parse(BaseWorker.getJSON('package.json'));
-    this.tags = { version: process.env['npm_package_version'] || pkg.version, service: process.env['npm_package_name'] || pkg.name };
+    this.tags = { version: process.env["DD_VERSION"] || process.env['npm_package_version'] || pkg.version, service: process.env['npm_package_name'] || pkg.name };
     //Logger.overrideLogger(this.logger);
     this.redactor = new RedactorService();
   }

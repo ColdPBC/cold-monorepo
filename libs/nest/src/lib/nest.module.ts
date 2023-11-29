@@ -45,7 +45,7 @@ import { InterceptorModule } from './interceptors';
       port: 8125,
       host: '127.0.0.1',
       globalTags: {
-        version: process.env['npm_package_version'] || '0.0.0',
+        version: process.env["DD_VERSION"] || process.env['npm_package_version'] || '0.0.0',
         service: process.env['npm_package_name'] || 'cold-api-nest',
         env: process.env['NODE_ENV'] || 'development',
       },

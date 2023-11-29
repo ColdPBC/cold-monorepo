@@ -7,8 +7,7 @@ export const SideBarTheme: FlowbiteSidebarTheme = {
       on: 'w-16',
       off: 'w-72',
     },
-    inner:
-      'h-full w-full overflow-y-auto overflow-x-hidden rounded bg-cold-midnightBlue py-4 px-3',
+    inner: 'h-full w-full overflow-y-auto overflow-x-hidden rounded bg-cold-midnightBlue py-4 px-3',
   },
   collapse: {
     button:
@@ -26,8 +25,8 @@ export const SideBarTheme: FlowbiteSidebarTheme = {
         base: 'h-6 w-6',
         open: {
           on: '',
-          off: ''
-        }
+          off: '',
+        },
       },
     },
     list: 'space-y-2 py-2',
@@ -65,9 +64,12 @@ export const SideBarTheme: FlowbiteSidebarTheme = {
     label: '',
     listItem: '',
   },
-  items: '',
-  itemGroup:
-    'mt-4 space-y-2 border-t pt-8 first:mt-0 first:border-t-0 first:pt-0',
+  items: {
+    base: '',
+  },
+  itemGroup: {
+    base: 'mt-4 space-y-2 border-t pt-8 first:mt-0 first:border-t-0 first:pt-0',
+  },
   logo: {
     base: 'mb-5 flex items-center pl-2.5',
     collapsed: {

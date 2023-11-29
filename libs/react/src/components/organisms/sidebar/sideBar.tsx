@@ -32,10 +32,7 @@ const _SideBar = (): JSX.Element => {
   const ldFlags = useFlags();
 
   // Fetch actions if actions feature flag is present
-  const { data: actionsData, error: actionsError } = useOrgSWR<
-    ActionPayload[],
-    any
-  >(ldFlags.showActions261 ? [`/actions`, 'GET'] : null, axiosFetcher);
+  const { data: actionsData, error: actionsError } = useOrgSWR<ActionPayload[], any>(ldFlags.showActions261 ? [`/actions`, 'GET'] : null, axiosFetcher);
 
   const auth0 = useAuth0Wrapper();
 
@@ -69,10 +66,7 @@ const _SideBar = (): JSX.Element => {
         }
         if (item.items) {
           item.items.forEach((subItem: NavbarItem) => {
-            if (
-              location.pathname === subItem.route &&
-              activeChild !== subItem.key
-            ) {
+            if (location.pathname === subItem.route && activeChild !== subItem.key) {
               setActiveChild(subItem.key);
             }
           });
@@ -99,22 +93,13 @@ const _SideBar = (): JSX.Element => {
   let filteredSidebarItems = data.definition.items.filter(filterSidebar) ?? [];
 
   // filter nested action items
-  if (
-    ldFlags.showActions261 &&
-    filteredSidebarItems.some((item: any) => item.key === 'actions_key')
-  ) {
+  if (ldFlags.showActions261 && filteredSidebarItems.some((item: any) => item.key === 'actions_key')) {
     filteredSidebarItems = filteredSidebarItems.map((item: any) => {
       if (item.key === 'actions_key') {
         return {
           ...item,
           items: item.items.filter((actionItem: any) => {
-            return (
-              actionItem.key === 'overview_actions_key' ||
-              actionsData?.some(
-                (action) =>
-                  actionItem.key === `${action.action.subcategory}_actions_key`,
-              )
-            );
+            return actionItem.key === 'overview_actions_key' || actionsData?.some(action => actionItem.key === `${action.action.subcategory}_actions_key`);
           }),
         };
       } else {
@@ -139,26 +124,12 @@ const _SideBar = (): JSX.Element => {
           </div>
         </div>
         <FBSidebar.Items className="gap-2 mb-auto">
-          <FBSidebar.ItemGroup className="mt-0 overflow-visible flex-grow">
+          <FBSidebar.ItemGroup className="space-y-2 border-t pt-8 first:mt-0 first:border-t-0 first:pt-0 mt-0 overflow-visible flex-grow">
             {topItems.map((item: NavbarItem, index: number) => {
               if (item.items) {
-                return (
-                  <SideBarCollapse
-                    setActiveChild={setActiveChild}
-                    activeChild={activeChild}
-                    item={item}
-                    key={item.key}
-                  />
-                );
+                return <SideBarCollapse setActiveChild={setActiveChild} activeChild={activeChild} item={item} key={item.key} />;
               } else {
-                return (
-                  <SideBarItem
-                    setActiveChild={setActiveChild}
-                    activeChild={activeChild}
-                    item={item}
-                    key={item.key}
-                  />
-                );
+                return <SideBarItem setActiveChild={setActiveChild} activeChild={activeChild} item={item} key={item.key} />;
               }
             })}
           </FBSidebar.ItemGroup>
@@ -168,23 +139,9 @@ const _SideBar = (): JSX.Element => {
             <div id={'orgSelector'}>{getOrgSelector()}</div>
             {bottomItems.map((item: NavbarItem, index: number) => {
               if (item.items) {
-                return (
-                  <SideBarCollapse
-                    setActiveChild={setActiveChild}
-                    activeChild={activeChild}
-                    item={item}
-                    key={item.key}
-                  />
-                );
+                return <SideBarCollapse setActiveChild={setActiveChild} activeChild={activeChild} item={item} key={item.key} />;
               } else {
-                return (
-                  <SideBarItem
-                    setActiveChild={setActiveChild}
-                    activeChild={activeChild}
-                    item={item}
-                    key={item.key}
-                  />
-                );
+                return <SideBarItem setActiveChild={setActiveChild} activeChild={activeChild} item={item} key={item.key} />;
               }
             })}
           </FBSidebar.ItemGroup>
@@ -197,7 +154,7 @@ const _SideBar = (): JSX.Element => {
 };
 
 export const SideBar = withErrorBoundary(_SideBar, {
-  FallbackComponent: (props) => <ErrorFallback {...props} />,
+  FallbackComponent: props => <ErrorFallback {...props} />,
   onError: (error, info) => {
     console.error('Error occurred in SideBar: ', error);
   },

@@ -172,6 +172,18 @@ Have a look at the [Nx Console extensions](https://nx.dev/nx-console). It provid
 
 Just run `nx build` to build the application. The build artifacts will be stored in the `dist/` directory, ready to be deployed.
 
+# Troubleshooting
+
+## UI: Build
+- `yarn: command not found`
+    - flightcontrol.dev UI build fails with an error: 
+    ```
+       6:43:21 PM #11 [ 7/10] RUN  yarn prebuild && yarn dlx nx build cold-ui:build:development
+       6:43:21 PM #11 sha256:de51b5d92e3e08950b5d940e9e15dc33ebe9b860d501bec10328dcc547964456
+       6:43:21 PM #11 0.266 /bin/bash: line 1: yarn: command not found
+    ```
+  This is due to flight control not being able to locate the yarn.lock file.  This is typically caused by an incorrect value for `basePath`.  Make sure you have the path to the yarn.lock file relative to where the `flightcontrol.json` file. For example, if both file reside in the project root, then the basePath should be: `.`'
+
 ## Set up CI!
 
 Nx comes with local caching already built-in (check your `nx.json`). On CI you might want to go a step further.

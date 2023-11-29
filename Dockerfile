@@ -2,8 +2,19 @@ ARG NODE_VERSION=20.9
 FROM node:${NODE_VERSION}-bullseye-slim as base
 ARG NODE_ENV
 ARG DATABASE_URL
+ARG DD_SERVICE
+ARG DD_VERSION
+
 ENV NODE_ENV=${NODE_ENV}
+ENV DD_ENV=${NODE_ENV}
 ENV DATABASE_URL=${DATABASE_URL}
+ENV DD_SERVICE=${DD_SERVICE}
+ENV DD_VERSION=${DD_VERSION}
+
+LABEL com.datadoghq.tags.service=${DD_SERVICE}
+LABEL com.datadoghq.tags.version=${DD_VERSION}
+LABEL com.datadoghq.tags.env=${NODE_ENV}
+
 WORKDIR /app
 # uninstall old yarn or pnpm
 #RUN npm uninstall -g yarn pnpm
@@ -32,7 +43,7 @@ RUN yarn add -D @typescript-eslint/eslint-plugin
 FROM dependencies as build
 WORKDIR /app
 RUN yarn prebuild
-RUN npx nx run coldpbc/nest:prisma-generate
+RUN yarn dlx nx run coldpbc/nest:prisma-generate
 RUN if [ "${NODE_ENV}" = "production" ] ; then echo "building for production..." && npx nx run cold-api:build:production ; else echo "building development..." && npx nx run cold-api:build:development ; fi
 RUN npx nx reset
 
