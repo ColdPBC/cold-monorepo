@@ -8,7 +8,7 @@
     "yarn": ">=1.22.10"
   },
   "scripts": {
-    "seed": "yarn dlx nx run nest:prisma-seed --script libs/nest/prisma/seeds/main.ts",
+    "seed": "yarn dlx nx run coldpbc/nest:prisma-seed --script libs/nest/prisma/seeds/main.ts",
     "docker": "docker compose build",
     "postinstall": "prisma generate --schema libs/nest/prisma/schema.prisma && yarn prebuild",
     "migrate": "prisma migrate deploy",
