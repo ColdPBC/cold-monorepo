@@ -1,4 +1,4 @@
-name: 'API: Service Catalog'
+name: 📒 API Service Catalog
 on:
   workflow_dispatch:
   push:
@@ -15,6 +15,7 @@ env:
 jobs:
   datadog:
     runs-on: ubuntu-latest
+    name: 🐕‍🦺 API Service Catalog
     steps:
       # This uses the custom action to push the service definition to Datadog.
       - uses: arcxp/datadog-service-catalog-metadata-provider@v2

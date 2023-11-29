@@ -110,7 +110,7 @@
             },
             "DATABASE_URL": {
               "fromService": {
-                "id": "cold-rds-fc-production",
+                "id": "cold-rds-production",
                 "value": "dbConnectionString"
               }
             },
@@ -379,8 +379,7 @@
           "toBranches": [
             "main"
           ]
-        },
-        "trigger": "manual"
+        }
       },
       "services": [
         {

@@ -1,4 +1,4 @@
-name: 'UI: Service Catalog'
+name: 📒 UI Service Catalog
 on:
   push:
     paths: [ ".github/workflows/datadog-cold-ui.yml"] # Trigger the action only when files change in the folders defined here
@@ -15,6 +15,7 @@ env:
 jobs:
   datadog:
     runs-on: ubuntu-latest
+    name: 🐩 UI Service Catalog
     steps:
       # This uses the custom action to push the service definition to Datadog.
       - uses: arcxp/datadog-service-catalog-metadata-provider@v2

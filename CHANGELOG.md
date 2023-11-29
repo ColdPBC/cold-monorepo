@@ -1,3 +1,77 @@
+# [1.72.0-cold-0002.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.72.0-cold-0002.1...v1.72.0-cold-0002.2) (2023-11-29)
+
+
+### Bug Fixes
+
+* update cancel action version ([ab7eccd](https://github.com/ColdPBC/cold-monorepo/commit/ab7eccd5e29f520378ecd5c14acbeb77173e8d59))
+
+# [1.72.0-cold-0002.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.71.0...v1.72.0-cold-0002.1) (2023-11-29)
+
+
+### Bug Fixes
+
+* broken version ([d2aee9f](https://github.com/ColdPBC/cold-monorepo/commit/d2aee9f88c9a1d99aef2e6297350cde9f196c6aa))
+* broken version ([98be095](https://github.com/ColdPBC/cold-monorepo/commit/98be0951d11c122baf2f01b98fd2d544ee3c0764))
+* broken version ([5b05bb9](https://github.com/ColdPBC/cold-monorepo/commit/5b05bb9099db72ed33d5110f74715df4499e32c9))
+* build ([0bb1e0a](https://github.com/ColdPBC/cold-monorepo/commit/0bb1e0a168d2b7fad39c5b35898ac1c73ec58752))
+* build ([a872027](https://github.com/ColdPBC/cold-monorepo/commit/a87202746e71b939409c435b07392beaa1802fb6))
+* cancel dupe actions ([9b90935](https://github.com/ColdPBC/cold-monorepo/commit/9b909351883f798f3743e332d86a6fc2d3d6007f))
+* dont version on PR ([6486568](https://github.com/ColdPBC/cold-monorepo/commit/648656843902f07937a8f0f991a23d40c625340a))
+
+
+### Features
+
+* cancel outdated actions ([76b9d59](https://github.com/ColdPBC/cold-monorepo/commit/76b9d59eb1ad85a86f104a61e4818052280982a0))
+
+## [1.71.1-cold-0001.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.71.1-cold-0001.2...v1.71.1-cold-0001.3) (2023-11-29)
+
+
+### Bug Fixes
+
+* broken version ([d2aee9f](https://github.com/ColdPBC/cold-monorepo/commit/d2aee9f88c9a1d99aef2e6297350cde9f196c6aa))
+* broken version ([98be095](https://github.com/ColdPBC/cold-monorepo/commit/98be0951d11c122baf2f01b98fd2d544ee3c0764))
+* broken version ([5b05bb9](https://github.com/ColdPBC/cold-monorepo/commit/5b05bb9099db72ed33d5110f74715df4499e32c9))
+* build ([0bb1e0a](https://github.com/ColdPBC/cold-monorepo/commit/0bb1e0a168d2b7fad39c5b35898ac1c73ec58752))
+* cancel dupe actions ([9b90935](https://github.com/ColdPBC/cold-monorepo/commit/9b909351883f798f3743e332d86a6fc2d3d6007f))
+
+## [1.71.1-cold-0001.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.71.1-cold-0001.2...v1.71.1-cold-0001.3) (2023-11-29)
+
+
+### Bug Fixes
+
+* broken version ([5b05bb9](https://github.com/ColdPBC/cold-monorepo/commit/5b05bb9099db72ed33d5110f74715df4499e32c9))
+* build ([0bb1e0a](https://github.com/ColdPBC/cold-monorepo/commit/0bb1e0a168d2b7fad39c5b35898ac1c73ec58752))
+* cancel dupe actions ([9b90935](https://github.com/ColdPBC/cold-monorepo/commit/9b909351883f798f3743e332d86a6fc2d3d6007f))
+
+## [1.71.1-cold-0001.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.71.1-cold-0001.2...v1.71.1-cold-0001.3) (2023-11-29)
+
+
+### Bug Fixes
+
+* build ([0bb1e0a](https://github.com/ColdPBC/cold-monorepo/commit/0bb1e0a168d2b7fad39c5b35898ac1c73ec58752))
+* cancel dupe actions ([9b90935](https://github.com/ColdPBC/cold-monorepo/commit/9b909351883f798f3743e332d86a6fc2d3d6007f))
+
+## [1.71.1-cold-0001.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.71.1-cold-0001.2...v1.71.1-cold-0001.3) (2023-11-29)
+
+
+### Bug Fixes
+
+* build ([0bb1e0a](https://github.com/ColdPBC/cold-monorepo/commit/0bb1e0a168d2b7fad39c5b35898ac1c73ec58752))
+
+## [1.71.1-cold-0001.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.71.1-cold-0001.1...v1.71.1-cold-0001.2) (2023-11-29)
+
+
+### Bug Fixes
+
+* build ([a872027](https://github.com/ColdPBC/cold-monorepo/commit/a87202746e71b939409c435b07392beaa1802fb6))
+
+## [1.71.1-cold-0001.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.71.0...v1.71.1-cold-0001.1) (2023-11-29)
+
+
+### Bug Fixes
+
+* dont version on PR ([6486568](https://github.com/ColdPBC/cold-monorepo/commit/648656843902f07937a8f0f991a23d40c625340a))
+
 # [1.71.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.70.0...v1.71.0) (2023-11-29)
 
 
