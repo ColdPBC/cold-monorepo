@@ -39,54 +39,12 @@ jobs:
           cancel_others: 'true'
           # All of these options are optional, so you can remove them if you are happy with the defaults
           concurrent_skipping: 'outdated_runs'
-  build:
-    needs: pre_build
-    name: 🧩 Dependencies
-    runs-on: ubuntu-latest
-
-    permissions:
-      contents: write # to be able to publish a GitHub release
-      issues: write # to be able to comment on released issues
-      pull-requests: write # to be able to comment on released pull requests
-      id-token: write # to enable use of OIDC for npm provenance
-    steps:
-      - name: ⚙ Checkout
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.head_ref }}
-          fetch-depth: 0
-          token: ${{ secrets.GH_TOKEN }}
-
-      - name: ⚙ Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20.9.0"
-      - name: 💼 Cache node modules
-        uses: actions/cache@v3
-        with:
-          path: ./node_modules
-          key: ${{ runner.os }}-build-${{ env.CACHE_NAME }}-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.CACHE_NAME }}-
-            ${{ runner.os }}-build-
-            ${{ runner.os }}-
-      #Database Migrations
-      - name: 🪢 Install yarn
-        run: corepack enable && yarn set version stable
-      - name: 💼 Package dependencies
-        continue-on-error: true
-        run: yarn install && yarn postinstall
-      - name: 🌈 Generate Prisma Client
-        run: yarn dlx nx run coldpbc/nest:prisma-generate
-      - name: 🏁 Done!
-        run: |
-          echo "✅ Dependencies Complete!"
 
   version:
     name: 🏷️ Versioning
     runs-on: ubuntu-latest
     needs:
-      - build
+      - pre_build
     permissions:
       contents: write # to be able to publish a GitHub release
       issues: write # to be able to comment on released issues
@@ -114,15 +72,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20.9.0"
-      - name: 💼 Cache node modules
-        uses: actions/cache@v3
-        with:
-          path: ./node_modules
-          key: ${{ runner.os }}-build-${{ env.CACHE_NAME }}-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.CACHE_NAME }}-
-            ${{ runner.os }}-build-
-            ${{ runner.os }}-
       - name: 🌱 Get Next Version
         if: steps.PR.outputs.pr_found != 'true'
         run: npx -p semantic-release -p @semantic-release/changelog -p @semantic-release/commit-analyzer -p @semantic-release/git -p @semantic-release/npm -p @semantic-release/release-notes-generator semantic-release
@@ -132,7 +81,7 @@ jobs:
           BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
           GIT_TERMINAL_PROMPT: 0
         run: |
-          yarn setVersion \
+          node updateVersion.mjs $(git tag --sort=committerdate | tail -1 | cut -b 2-100) $(git branch --show) \
           git config --local user.name "github-actions" \
           git config --local user.email "<>" \
           git add . \
@@ -154,7 +103,6 @@ jobs:
       BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
     runs-on: ubuntu-latest
     needs:
-      - build
       - version
     steps:
       - name: 🛫 Trigger Production Deploy
