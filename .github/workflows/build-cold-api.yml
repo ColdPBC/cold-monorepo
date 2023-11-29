@@ -56,7 +56,41 @@ jobs:
         run: yarn install && yarn postinstall
       - name: 🍭 Generate Prisma Client
         run: yarn dlx nx run coldpbc/nest:prisma-generate
+      - name: 🏁 Done!
+        run: |
+          echo "✅ Dependencies Complete!"
 
+  version:
+    name: 🏷️ Versioning
+    runs-on: ubuntu-latest
+    needs:
+      - build
+    permissions:
+      contents: write # to be able to publish a GitHub release
+      issues: write # to be able to comment on released issues
+      pull-requests: write # to be able to comment on released pull requests
+      id-token: write # to enable use of OIDC for npm provenance
+    steps:
+      - name: ⚙ Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+          token: ${{ secrets.GH_TOKEN }}
+
+      - name: ⚙ Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.9.0"
+      - name: 💼 Cache node modules
+        uses: actions/cache@v3
+        with:
+          path: ./node_modules
+          key: ${{ runner.os }}-build-${{ env.CACHE_NAME }}-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.CACHE_NAME }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
       - name: 🌱 Get Next Version
         run: npx -p semantic-release -p @semantic-release/changelog -p @semantic-release/commit-analyzer -p @semantic-release/git -p @semantic-release/npm -p @semantic-release/release-notes-generator semantic-release
 
@@ -65,26 +99,24 @@ jobs:
           BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
           GIT_TERMINAL_PROMPT: 0
         run: |
-         yarn setVersion /
-         git config --local user.name github-actions /
-         git config --local user.email <> /
-         git add . /
+          yarn setVersion ;
+          git config --local user.name github-actions ;
+          git config --local user.email <> ;
+          git add . ;
       - name: 🏷️ Commit
         run: |
-         git commit -m "ci: update flightcontrol.json [skip actions] [skip ci]"
+          git commit -m "ci: update flightcontrol.json [skip actions] [skip ci]"
       - name: 🚚 Push Changes To GitHub
         uses: CasperWA/push-protected@v2
         with:
-           token: ${{ secrets.GH_TOKEN }}
-           branch: ${{ env.BRANCH_NAME }}
-           unprotect_reviews: true
-           force: true
-           timeout: 3
-           acceptable_conclusions: success, failure, neutral, cancelled, skipped, timed_out, action_required
+          token: ${{ secrets.GH_TOKEN }}
+          branch: ${{ env.BRANCH_NAME }}
+          unprotect_reviews: true
+          force: true
+          timeout: 3
+          acceptable_conclusions: success, failure, neutral, cancelled, skipped, timed_out, action_required
 
-      - name: 🏁 Done!
-        run: |
-          echo "✅ Dependencies & Version Complete: 🌱 $(npm pkg get version) 🌱"
+
 
   deploy:
     name: 🛩️ Trigger Deploy
@@ -93,6 +125,7 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - build
+      - version
     steps:
       - name: 🚀 Set prod version in heroku
         run: |
