@@ -1,3 +1,10 @@
+## [1.71.1-cold-0001.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.71.0...v1.71.1-cold-0001.1) (2023-11-29)
+
+
+### Bug Fixes
+
+* dont version on PR ([6486568](https://github.com/ColdPBC/cold-monorepo/commit/648656843902f07937a8f0f991a23d40c625340a))
+
 # [1.71.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.70.0...v1.71.0) (2023-11-29)
 
 
