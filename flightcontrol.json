@@ -54,8 +54,8 @@
           }
         },
         {
-          "id": "cold-api-production",
-          "name": "cold-api-nest",
+          "id": "cold-api-fc-production",
+          "name": "cold-api-fc",
           "cpu": 1,
           "port": 7001,
           "type": "fargate",
@@ -110,7 +110,7 @@
             },
             "DATABASE_URL": {
               "fromService": {
-                "id": "cold-rds-production",
+                "id": "cold-rds-fc-production",
                 "value": "dbConnectionString"
               }
             },
@@ -157,8 +157,8 @@
           ]
         },
         {
-          "id": "cold-rds-production",
-          "name": "rds-production",
+          "id": "cold-rds-fc-production",
+          "name": "cold-rds-fc-production",
           "type": "rds",
           "engine": "postgres",
           "engineVersion": "15",
