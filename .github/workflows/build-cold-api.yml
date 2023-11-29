@@ -169,12 +169,6 @@ jobs:
           curl -n -X POST https://app.flightcontrol.dev/api/deploy-hook/cold-staging/58vWGjvmj9PWGxzImyRkVCTujxuJT-Q8piPwciMogtAy4-ci?force=false
           echo "🛩 Flightcontrol Deploying ( https://app.flightcontrol.dev/org/cloejv4kz05s0ps21f3q2qjxe/environments/clpeertbx01sgpx0yy5cu4imq )"
 
-      - name: 🛫 Trigger Preview Deploy
-        if: ${{ github.event.number }} && (startsWith(env.BRANCH_NAME,'cold') || startsWith(env.BRANCH_NAME,'Cold') || startsWith(env.BRANCH_NAME,'COLD'))
-        run: |
-          curl -n -X POST https://app.flightcontrol.dev/api/deploy-hook/cold-preview/xaQAJM9Iw4G6UWmYTX0RLYdU1krFiPnKNV-lzQeTc6crqjgc/${{ github.event.number }}/$(git rev-parse --short "$GITHUB_SHA")?force=false
-          echo "🛩 Flightcontrol Deploying ( https://app.flightcontrol.dev/org/cloejv4kz05s0ps21f3q2qjxe/projects/clpeerpk90034r71b0tiky5vd/preview-environments )"
-
       - name: 🛩 Set prod version in heroku
         run: |
           curl --request PATCH \
@@ -193,7 +187,6 @@ jobs:
           --header 'Content-Type: application/json' \
           --header 'Authorization: Bearer ${{secrets.HEROKU_API_KEY}}' \
           --data "{\"DD_VERSION\":$(npm pkg get version)}"
-
 
       - name: 🛬 Done!
         run: echo "🛩 Flightcontrol Deploying 🛩"
