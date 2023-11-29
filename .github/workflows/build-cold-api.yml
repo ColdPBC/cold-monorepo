@@ -3,13 +3,13 @@ on:
   workflow_dispatch:
   push:
     branches:
+      - main
       - 'cold-**'
       - 'COLD-**'
       - 'Cold-**'
   pull_request:
     branches:
       - staging
-      - main
 env:
   GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
   GH_TOKEN: ${{ secrets.GH_TOKEN }}
