@@ -84,19 +84,16 @@ jobs:
           # Only return if PR is not in draft state. (By default it returns PRs in any state.)
           filterOutDraft: true
       - name: 🛒 Checkout
-        if: steps.PR.outputs.pr_found != 'true'
         uses: actions/checkout@v4
         with:
           ref: ${{ github.head_ref }}
           fetch-depth: 0
           token: ${{ secrets.GH_TOKEN }}
       - name: 🧑‍💻 Setup Node.js
-        if: steps.PR.outputs.pr_found != 'true'
         uses: actions/setup-node@v4
         with:
           node-version: "20.9.0"
       - name: 💼 Cache node modules
-        if: steps.PR.outputs.pr_found != 'true'
         uses: actions/cache@v3
         with:
           path: ./node_modules
