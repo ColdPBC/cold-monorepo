@@ -1,3 +1,10 @@
+## [1.72.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.72.0...v1.72.1) (2023-11-29)
+
+
+### Bug Fixes
+
+* error in logger ([80db42c](https://github.com/ColdPBC/cold-monorepo/commit/80db42cb4d3323abaf9f7b6e7e0ff81625d6bca7))
+
 # [1.72.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.71.0...v1.72.0) (2023-11-29)
 
 
