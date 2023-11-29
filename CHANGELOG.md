@@ -1,3 +1,10 @@
+## [1.72.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.72.2...v1.72.3) (2023-11-29)
+
+
+### Bug Fixes
+
+* update deploy hook ([2c43937](https://github.com/ColdPBC/cold-monorepo/commit/2c43937b5d428155063e65feb99404fa46d67960))
+
 ## [1.72.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.72.1...v1.72.2) (2023-11-29)
 
 
