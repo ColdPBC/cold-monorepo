@@ -29,7 +29,7 @@ jobs:
       id-token: write # to enable use of OIDC for npm provenance
     steps:
       - name: ⚙ Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: ${{ github.head_ref }}
           fetch-depth: 0
@@ -69,11 +69,9 @@ jobs:
          git config --local user.name github-actions /
          git config --local user.email <> /
          git add . /
-
       - name: 🏷️ Commit
         run: |
-          git commit -m "ci: update flightcontrol.json [skip actions] [skip ci]"
-
+         git commit -m "ci: update flightcontrol.json [skip actions] [skip ci]"
       - name: 🚚 Push Changes To GitHub
         uses: CasperWA/push-protected@v2
         with:
