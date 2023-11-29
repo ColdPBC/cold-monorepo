@@ -108,7 +108,7 @@ jobs:
       - name: 🛫 Trigger Production Deploy
         if: startsWith(env.BRANCH_NAME,'main')
         run: |
-          curl -n -X POST https://app.flightcontrol.dev/api/deploy-hook/cold-production/wKyB691SxArA4LuDb3FDaptLaexm8Vtv2DAc_2w6gw-_WOYH?force=false
+          curl -n -X POST https://app.flightcontrol.dev/api/deploy-hook/cold-production/gAEvhWNzcPCY69Z35mGvqXY0S9_vnQ0eqJrtCpIr8aUI9sW-?force=false
           echo "🛩 Flightcontrol Deploying ( https://app.flightcontrol.dev/org/cloejv4kz05s0ps21f3q2qjxe/environments/clpgmjfpl049fr90yqwdsuqd8 )"
 
       - name: 🛫 Trigger Staging Deploy
