@@ -1,7 +1,7 @@
 {
   "name": "cold-monorepo-nx",
   "packageManager": "yarn@4.0.2",
-  "version": "1.71.0-staging.1",
+  "version": "1.71.0",
   "license": "MIT",
   "engines": {
     "node": ">=20.9.0",
@@ -21,7 +21,6 @@
     "start:prod": "yarn dlx nx serve-static",
     "setVersion": "node updateVersion.mjs $(git tag --sort=committerdate | tail -1 | cut -b 2-100) $(git branch --show)",
     "clearVersion": "node updateVersion.mjs '' $(git branch --show)",
-
     "storybook": "yarn run build-storybook && yarn dlx nx storybook cold-ui",
     "build-storybook": "yarn run prebuild && yarn dlx nx build-storybook cold-ui",
     "build": "yarn dlx nx run cold-api:build:development",
