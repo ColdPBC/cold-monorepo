@@ -1,3 +1,10 @@
+## [1.71.1-cold-0001.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.71.1-cold-0001.1...v1.71.1-cold-0001.2) (2023-11-29)
+
+
+### Bug Fixes
+
+* build ([a872027](https://github.com/ColdPBC/cold-monorepo/commit/a87202746e71b939409c435b07392beaa1802fb6))
+
 ## [1.71.1-cold-0001.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.71.0...v1.71.1-cold-0001.1) (2023-11-29)
 
 
