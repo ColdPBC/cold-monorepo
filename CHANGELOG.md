@@ -1,3 +1,10 @@
+## [1.72.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.72.3...v1.72.4) (2023-11-29)
+
+
+### Bug Fixes
+
+* only run on pr ([3f84d91](https://github.com/ColdPBC/cold-monorepo/commit/3f84d913a001db491b32f915023e18299ff65925))
+
 ## [1.72.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.72.2...v1.72.3) (2023-11-29)
 
 
