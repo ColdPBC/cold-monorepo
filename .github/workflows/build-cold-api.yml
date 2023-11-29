@@ -11,6 +11,12 @@ on:
     branches:
       - staging
       - main
+permissions:
+  contents: write # to be able to publish a GitHub release
+  issues: write # to be able to comment on released issues
+  pull-requests: write # to be able to comment on released pull requests
+  id-token: write # to enable use of OIDC for npm provenance
+  actions: write
 env:
   GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
   GH_TOKEN: ${{ secrets.GH_TOKEN }}
@@ -28,13 +34,11 @@ jobs:
       should_skip: ${{ steps.skip_check.outputs.should_skip }}
     steps:
       - id: skip_check
-        uses: fkirc/skip-duplicate-actions@master
+        uses: fkirc/skip-duplicate-actions@v5
         with:
           cancel_others: 'true'
           # All of these options are optional, so you can remove them if you are happy with the defaults
           concurrent_skipping: 'outdated_runs'
-          paths_ignore: '["**/README.md", "**/docs/**"]'
-          do_not_skip: '["pull_request", "workflow_dispatch"]'
   build:
     needs: pre_build
     name: 🧩 Dependencies
