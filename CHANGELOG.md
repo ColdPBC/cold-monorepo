@@ -1,3 +1,10 @@
+## [1.72.5](https://github.com/ColdPBC/cold-monorepo/compare/v1.72.4...v1.72.5) (2023-11-29)
+
+
+### Bug Fixes
+
+* debug log error ([69a7585](https://github.com/ColdPBC/cold-monorepo/commit/69a75857281d1b51729d9a4ee633d74f8e9b7f8f))
+
 ## [1.72.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.72.3...v1.72.4) (2023-11-29)
 
 
