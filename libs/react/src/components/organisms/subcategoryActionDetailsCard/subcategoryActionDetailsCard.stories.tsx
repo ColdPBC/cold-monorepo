@@ -1,6 +1,6 @@
 import React from 'react';
 import { withKnobs } from '@storybook/addon-knobs';
-import { StoryObj } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 import {
   getActionHandler,
   getActionMock,
@@ -12,19 +12,12 @@ import {
   SubcategoryActionDetailsCard,
   SubcategoryActionDetailsCardProps,
 } from './subcategoryActionDetailsCard';
-import { getCustomHasher } from 'nx/src/tasks-runner/utils';
 
-const meta = {
+const meta: Meta<typeof SubcategoryActionDetailsCard> = {
   title: 'Organisms/SubcategoryActionDetailsCard',
   component: SubcategoryActionDetailsCard,
   tags: ['autodocs'],
   decorators: [withKnobs],
-  argTypes: {
-    variant: {
-      control: 'select',
-      options: SubcategoryActionDetailsCard,
-    },
-  },
 };
 
 export default meta;

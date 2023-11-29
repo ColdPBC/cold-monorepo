@@ -3,13 +3,14 @@ import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { DashboardLayout } from '../dashboardLayout/dashboardLayout';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { SurveyRightNav } from '@coldpbc/components';
 
-const meta = {
+const meta: Meta<typeof DashboardLayout> = {
   title: 'Pages/Layout',
   component: DashboardLayout,
   tags: ['autodocs'],
   decorators: [withKnobs],
-} satisfies Meta<typeof DashboardLayout>;
+};
 
 export default meta;
 type Story = StoryObj<typeof meta>;

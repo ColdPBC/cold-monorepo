@@ -2,6 +2,7 @@ import React from 'react';
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import {
+  SurveyQuestionContainer,
   SurveySectionsProgress,
   SurveySectionsProgressProps,
 } from '@coldpbc/components';
@@ -11,13 +12,13 @@ import {
 } from '@coldpbc/mocks';
 import { SurveySectionType } from '@coldpbc/interfaces';
 
-const meta = {
+const meta: Meta<typeof SurveySectionsProgress> = {
   title: 'Molecules/SurveySectionsProgress',
   component: SurveySectionsProgress,
   tags: ['autodocs'],
   decorators: [withKnobs],
   argTypes: {},
-} satisfies Meta<typeof SurveySectionsProgress>;
+};
 
 export default meta;
 type Story = StoryObj<typeof meta>;

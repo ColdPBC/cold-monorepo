@@ -1,20 +1,14 @@
 import React from 'react';
 import { withKnobs } from '@storybook/addon-knobs';
-import { StoryObj } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 import { Toaster } from './toaster';
 import { ToastMessage } from '../../../interfaces/toastMessage';
 
-const meta = {
+const meta: Meta<typeof Toaster> = {
   title: 'Atoms/Toaster',
   component: Toaster,
   tags: ['autodocs'],
   decorators: [withKnobs],
-  argTypes: {
-    type: {
-      control: 'select',
-      options: ToastMessage,
-    },
-  },
 };
 
 export default meta;

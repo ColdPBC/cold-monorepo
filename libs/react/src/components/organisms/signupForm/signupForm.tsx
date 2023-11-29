@@ -118,6 +118,7 @@ const _SignupForm = ({
               className:
                 'text-sm not-italic text-tc-primary font-medium bg-transparent w-full rounded-lg p-[16px] border border-bgc-accent focus:border focus:border-bgc-accent focus:ring-0',
               disabled: !!userData?.given_name,
+              'aria-label': 'firstName',
             }}
             input_label_props={{
               className: 'text-sm not-italic text-tc-primary font-medium',
@@ -133,6 +134,7 @@ const _SignupForm = ({
               className:
                 'text-sm not-italic text-tc-primary font-medium bg-transparent w-full rounded-lg p-[16px] border border-bgc-accent focus:border focus:border-bgc-accent focus:ring-0',
               disabled: !!userData?.family_name,
+              'aria-label': 'lastName',
             }}
             input_label_props={{
               className: 'text-sm not-italic text-tc-primary font-medium',
@@ -150,6 +152,7 @@ const _SignupForm = ({
                 ' focus:border focus:border-bgc-accent focus:ring-0 ' +
                 (companyData ? 'text-tc-disabled' : 'text-tc-primary'),
               disabled: !!companyData,
+              'aria-label': 'companyName',
             }}
             input_label_props={{
               className: 'text-sm not-italic text-tc-primary font-medium',
@@ -169,6 +172,7 @@ const _SignupForm = ({
                 className:
                   'w-6 h-6 rounded border border-bgc-accent bg-transparent focus:ring-0 focus:ring-offset-0',
                 disabled: tosSigned && privacySigned,
+                'aria-label': 'isAgreedToPrivacyAndTOS',
               }}
             />
             <div>

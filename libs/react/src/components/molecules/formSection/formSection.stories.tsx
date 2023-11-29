@@ -1,8 +1,8 @@
 import { withKnobs } from '@storybook/addon-knobs';
-import { StoryObj } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 import { FormSection } from './formSection';
 
-const meta = {
+const meta: Meta<typeof FormSection> = {
   title: 'Molecules/FormSection',
   component: FormSection,
   tags: ['autodocs'],

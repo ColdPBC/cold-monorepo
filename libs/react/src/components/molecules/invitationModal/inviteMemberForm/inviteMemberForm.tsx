@@ -40,6 +40,7 @@ const Component = (props: InviteMemberFormProps) => {
   const { logError } = useColdContext();
 
   const handleChange = (name: string, value: any) => {
+    console.log(name, value);
     setMemberForm({ ...memberForm, [name]: value });
   };
 
@@ -58,13 +59,11 @@ const Component = (props: InviteMemberFormProps) => {
   // Filter out special case roles
   const filterRoles = (role: UserRole) => {
     const filteredRoles = ['company:owner', 'cold:', 'default:'];
-
     let match = false;
     filteredRoles.map((roleFilter) => {
       if (match) return;
       match = includes(role.name, roleFilter);
     });
-
     if (match) return;
     return role;
   };
@@ -105,7 +104,9 @@ const Component = (props: InviteMemberFormProps) => {
               input_props={{
                 name: 'email',
                 value: memberForm.email,
-                onChange: (e) => handleChange('email', e.target.value),
+                onChange: (e) => {
+                  handleChange('email', e.target.value);
+                },
                 onValueChange: (value) => {
                   handleChange('email', value);
                 },

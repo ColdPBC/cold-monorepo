@@ -1,23 +1,17 @@
 import React from 'react';
 import { BaseButton } from '../../atoms/button/button';
 import { withKnobs } from '@storybook/addon-knobs';
-import { StoryObj } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 import { ToastMessage } from '../../../interfaces/toastMessage';
 import { ApplicationToaster } from './applicationToaster';
 import { useAddToastMessage } from '../../../hooks/useToastMessage';
 import { SWRConfig } from 'swr';
 
-const meta = {
+const meta: Meta<typeof ApplicationToaster> = {
   title: 'Molecules/Application Toaster',
   component: ApplicationToaster,
   tags: ['autodocs'],
   decorators: [withKnobs],
-  argTypes: {
-    type: {
-      control: 'select',
-      options: ToastMessage,
-    },
-  },
 };
 
 export default meta;

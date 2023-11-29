@@ -13,8 +13,6 @@ import {
   getSignupHandlersForApplicationSignup,
   getSurveyHandler,
 } from '@coldpbc/mocks';
-import ColdContext from '../../../context/coldContext';
-import { Auth0ProviderOptions } from '@auth0/auth0-react';
 
 const meta: Meta<typeof Application> = {
   title: 'Application/Application',

@@ -54,6 +54,8 @@ const _ActionDetail = ({ id }: Props) => {
       },
     };
 
+    console.log('newAction', newAction);
+
     await axiosFetcher([
       getOrgSpecificUrl(`/actions/${data.id}`),
       'PATCH',
@@ -105,27 +107,26 @@ const _ActionDetail = ({ id }: Props) => {
     // default to showing key if activity not found
     let label = area;
 
-    Object.keys(categoriesData?.definition.categories ?? {})
-      .forEach(categoryKey => {
+    Object.keys(categoriesData?.definition.categories ?? {}).forEach(
+      (categoryKey) => {
         const category = categoriesData.definition.categories[categoryKey];
 
-        Object.keys(category.subcategories).forEach(subcategoryKey => {
+        Object.keys(category.subcategories).forEach((subcategoryKey) => {
           const subcategory = category.subcategories[subcategoryKey];
 
           Object.keys(subcategory.activities).forEach((activityKey) => {
             if (activityKey === area) {
-              label = subcategory.activities[activityKey].activity_name
+              label = subcategory.activities[activityKey].activity_name;
             }
-          })
-        })
-      })
+          });
+        });
+      },
+    );
 
     return (
-      <div className="ml-2 rounded-2xl bg-primary-300 py-2 px-4">
-        {label}
-      </div>
-    )
-  }
+      <div className="ml-2 rounded-2xl bg-primary-300 py-2 px-4">{label}</div>
+    );
+  };
 
   if (error) {
     logError(error, ErrorType.SWRError);
@@ -178,7 +179,9 @@ const _ActionDetail = ({ id }: Props) => {
                 {data?.action.areas_of_impact && (
                   <div className="flex items-center mt-10 text-xs font-medium leading-none">
                     <span className="">Areas of impact:</span>
-                    {data?.action.areas_of_impact.map((area) => getAreaOfImpactLabel(area))}
+                    {data?.action.areas_of_impact.map((area) =>
+                      getAreaOfImpactLabel(area),
+                    )}
                   </div>
                 )}
               </div>

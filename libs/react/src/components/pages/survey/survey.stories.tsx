@@ -4,12 +4,12 @@ import { StoryMockProvider } from '@coldpbc/mocks';
 import { getSurveyHandler } from '@coldpbc/mocks';
 import { Survey } from '@coldpbc/components';
 
-const meta = {
+const meta: Meta<typeof Survey> = {
   title: 'Pages/Survey',
   component: Survey,
   tags: ['autodocs'],
   decorators: [withKnobs],
-} satisfies Meta<typeof Survey>;
+};
 
 export default meta;
 type Story = StoryObj<typeof meta>;

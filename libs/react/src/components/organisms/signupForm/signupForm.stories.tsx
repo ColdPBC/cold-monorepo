@@ -9,16 +9,17 @@ import {
 } from '@coldpbc/mocks';
 import { getOrganizationMock } from '../../../__mocks__/organizationMock';
 import { getPrivacyMock, getTosMock } from '../../../__mocks__/policyMock';
-import { FootprintOverviewChart } from '@coldpbc/components';
 import { getSignUpHandler } from '../../../__mocks__/signupHandlers';
+import { userEvent, within } from '@storybook/testing-library';
+import { expect } from '@storybook/jest';
 
-const meta = {
+const meta: Meta<typeof SignupForm> = {
   title: 'Organisms/SignupForm',
   component: SignupForm,
   tags: ['autodocs'],
   decorators: [withKnobs],
   argTypes: {},
-} satisfies Meta<typeof SignupForm>;
+};
 
 export default meta;
 type Story = StoryObj<typeof meta>;

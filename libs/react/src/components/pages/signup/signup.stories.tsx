@@ -1,13 +1,9 @@
-import {
-  auth0UserMock,
-  getEmptyPoliciesSignedMock,
-  getPoliciesSignedMock,
-  getSignUpHandler,
-  StoryMockProvider,
-} from '@coldpbc/mocks';
+import { auth0UserMock, getEmptyPoliciesSignedMock, getPoliciesSignedMock, getSignUpHandler, StoryMockProvider } from '@coldpbc/mocks';
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { ApplicationToaster, SignupPage } from '@coldpbc/components';
+import { fireEvent, userEvent, waitFor, waitForElementToBeRemoved, within } from '@storybook/testing-library';
+import { expect } from '@storybook/jest';
 
 const meta: Meta<typeof SignupPage> = {
   title: 'Pages/SignupPage',
@@ -20,7 +16,7 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const NewUserExistingCompany: Story = {
-  render: (args) => (
+  render: args => (
     <StoryMockProvider handlers={getSignUpHandler.DEFAULT}>
       <SignupPage
         userData={{
@@ -32,10 +28,51 @@ export const NewUserExistingCompany: Story = {
       />
     </StoryMockProvider>
   ),
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+
+    const spinner = canvas.queryByRole('status');
+
+    await waitForElementToBeRemoved(() => canvas.queryByRole('status'));
+
+    let continueButton = await canvas.findByRole('button', { name: 'Continue' });
+
+    const firstNameInput = canvas.getByRole('textbox', {
+      name: 'firstName',
+    });
+    const lastNameInput = canvas.getByRole('textbox', {
+      name: 'lastName',
+    });
+    const companyNameInput = canvas.getByRole('textbox', {
+      name: 'companyName',
+    });
+    const isAgreedToPrivacyAndTOSInput = canvas.getByRole('checkbox', {
+      name: 'isAgreedToPrivacyAndTOS',
+    });
+    await step('Validate the form', async () => {
+      await waitFor(async () => {
+        fireEvent.change(firstNameInput, { target: { value: 'John' } });
+        fireEvent.change(lastNameInput, { target: { value: 'Doe' } });
+        await expect(companyNameInput).toBeDisabled();
+        fireEvent.click(isAgreedToPrivacyAndTOSInput);
+      });
+      await expect(continueButton).not.toBeDisabled();
+    });
+
+    await step('Invalidate the form', async () => {
+      await waitFor(async () => {
+        fireEvent.change(firstNameInput, { target: { value: '' } });
+        fireEvent.change(lastNameInput, { target: { value: '' } });
+        fireEvent.click(isAgreedToPrivacyAndTOSInput);
+        continueButton = await canvas.findByRole('button', { name: 'Continue' });
+        await expect(continueButton).toBeDisabled();
+      });
+    });
+  },
 };
 
 export const OnSignupError: Story = {
-  render: (args) => (
+  render: args => (
     <StoryMockProvider handlers={getSignUpHandler.server500Error}>
       <SignupPage
         userData={{

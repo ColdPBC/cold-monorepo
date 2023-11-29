@@ -20,7 +20,11 @@ export const StepDetailsCheckbox = ({
     if (complete) {
       if (!checkboxClicked) {
         return (
-          <div className={'w-[32px] h-[32px]'} onClick={onCheckboxClick}>
+          <div
+            className={'w-[32px] h-[32px]'}
+            onClick={onCheckboxClick}
+            data-testid={'step-detail-checkbox'}
+          >
             <ColdIcon name={IconNames.ColdSmallCheckBoxIcon} className={' '} />
           </div>
         );
