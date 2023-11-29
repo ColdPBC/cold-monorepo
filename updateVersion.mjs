@@ -1,4 +1,4 @@
-import lodash from 'lodash';
+import lodash from 'lodash.set';
 const {set} = lodash;
 import * as fs from 'fs';
 
