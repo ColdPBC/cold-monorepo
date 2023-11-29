@@ -1,4 +1,4 @@
-name: 📒 Service Catalog
+name: 📒 UI Service Catalog
 on:
   push:
     paths: [ ".github/workflows/datadog-cold-ui.yml"] # Trigger the action only when files change in the folders defined here

@@ -1,4 +1,4 @@
-name: 📒 Service Catalog
+name: 📒 API Service Catalog
 on:
   workflow_dispatch:
   push:
