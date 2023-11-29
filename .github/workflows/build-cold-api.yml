@@ -81,10 +81,10 @@ jobs:
           BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
           GIT_TERMINAL_PROMPT: 0
         run: |
-          node updateVersion.mjs $(git tag --sort=committerdate | tail -1 | cut -b 2-100) $(git branch --show) \
+          npx -p lodash.set node updateVersion.mjs $(git tag --sort=committerdate | tail -1 | cut -b 2-100) $(git branch --show) \
           git config --local user.name "github-actions" \
           git config --local user.email "<>" \
-          git add . \
+          git add flightcontrol.json \
           git commit -m "ci: update flightcontrol.json [skip actions] [skip ci]" \
 
       - name: 🫸 Push Changes To GitHub
