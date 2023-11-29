@@ -93,18 +93,17 @@ jobs:
       - name: 🌱 Get Next Version
         run: npx -p semantic-release -p @semantic-release/changelog -p @semantic-release/commit-analyzer -p @semantic-release/git -p @semantic-release/npm -p @semantic-release/release-notes-generator semantic-release
 
-      - name: 📂 Update FlightControl
+      - name: 🏷️ Tag Version In FlightControl
         env:
           BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
           GIT_TERMINAL_PROMPT: 0
         run: |
           yarn setVersion \
-          git config --local user.name github-actions \
-          git config --local user.email <> \
+          git config --local user.name "github-actions" \
+          git config --local user.email "<>" \
           git add . \
-      - name: 🏷️ Commit
-        run: |
           git commit -m "ci: update flightcontrol.json [skip actions] [skip ci]" \
+
       - name: 🚚 Push Changes To GitHub
         uses: CasperWA/push-protected@v2
         with:
@@ -114,9 +113,6 @@ jobs:
           force: true
           timeout: 3
           acceptable_conclusions: success, failure, neutral, cancelled, skipped, timed_out, action_required
-
-
-
   deploy:
     name: 🛩️ Trigger Deploy
     env:
