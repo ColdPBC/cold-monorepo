@@ -36,7 +36,7 @@ export class RedactorService {
   ];
   left = 0;
   right = 0;
-
+  depth = 0;
   constructor(propList?: Array<{ prop: string; rightPad: number; leftPad: number }>) {
     if (propList) {
       this.addProperties(propList);
@@ -128,6 +128,7 @@ export class RedactorService {
     const start = Math.floor(left && left > -1 ? left : this.left);
     const end = Math.floor(text.length - (start + (right && right > -1 ? right : this.right)));
     const pattern = new RegExp(`(.{${start}}).{${end}}`, 'ism');
+    this.depth = 0;
     return text.replace(pattern, '$1####');
   }
 
@@ -143,6 +144,14 @@ export class RedactorService {
   // Recursively search through objects and arrays for properties and redacts their value
   redact(obj: any): any {
     let redactMe: any;
+    this.depth = this.depth + 1;
+    const maxDepth = 10;
+    if (this.depth >= maxDepth) {
+      console.warn('Max depth reached!', obj);
+      this.depth = 0;
+      return stringify(obj);
+    }
+
     try {
       if (!obj) obj = {};
       const str = stringify(obj);

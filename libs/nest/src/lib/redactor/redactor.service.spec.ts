@@ -374,6 +374,7 @@ describe('When calling RedactorService', () => {
         default_org: v4(),
         org_id: v4(),
         deep: { nested: { id: v4() } },
+        veryDeep: { one: { two: { three: { four: { five: { six: { seven: { eight: { nine: { ten: { eleven: { password: "alsdkfjasldfk"} } } } } } } } } } } },
       };
 
       describe('using default properties', () => {
@@ -391,6 +392,11 @@ describe('When calling RedactorService', () => {
         it('deeply nested property is scrubbed', () => {
           const val = get(defaultScrubbed, 'deep.nested.id');
           expect(val).toMatch(/.{2}#{4}[aA-zZ0-9]{2}/);
+        });
+
+        it('very deeply nested property is scrubbed', () => {
+          const val = get(defaultScrubbed,  `veryDeep.one.two.three.four.five.six.seven`);
+          expect(val).toMatch(JSON.stringify({"eight":{"nine":{"ten":{"eleven":{"password":"alsdkfjasldfk"}}}}}));
         });
       });
 
