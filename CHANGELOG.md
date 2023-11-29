@@ -1,3 +1,10 @@
+## [1.72.2-cold-0004.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.72.2-cold-0004.2...v1.72.2-cold-0004.3) (2023-11-29)
+
+
+### Bug Fixes
+
+* remove lodash dep ([ac66049](https://github.com/ColdPBC/cold-monorepo/commit/ac66049d9b44161ac2f35f50d243254588d043bd))
+
 ## [1.72.2-cold-0004.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.72.2-cold-0004.1...v1.72.2-cold-0004.2) (2023-11-29)
 
 
