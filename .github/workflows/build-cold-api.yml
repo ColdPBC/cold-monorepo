@@ -22,6 +22,7 @@ jobs:
   pre_build:
     # continue-on-error: true # Uncomment once integration is finished
     runs-on: ubuntu-latest
+    name: 🤐 Cancel Duplicate Actionss
     # Map a step output to a job output
     outputs:
       should_skip: ${{ steps.skip_check.outputs.should_skip }}
@@ -29,9 +30,9 @@ jobs:
       - id: skip_check
         uses: fkirc/skip-duplicate-actions@master
         with:
+          cancel_others: 'true'
           # All of these options are optional, so you can remove them if you are happy with the defaults
-          concurrent_skipping: 'never'
-          skip-duplicate-actions: 'true'
+          concurrent_skipping: 'outdated_runs'
           paths_ignore: '["**/README.md", "**/docs/**"]'
           do_not_skip: '["pull_request", "workflow_dispatch"]'
   build:
