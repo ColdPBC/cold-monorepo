@@ -1,3 +1,12 @@
+## [1.72.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.72.1...v1.72.2) (2023-11-29)
+
+
+### Bug Fixes
+
+* add lodash.set ([d1f4a5e](https://github.com/ColdPBC/cold-monorepo/commit/d1f4a5e83e099feac0d9fe4f40209ccfa4425e9f))
+* add lodash.set ([4743986](https://github.com/ColdPBC/cold-monorepo/commit/47439868b3f267bb59803075c5be69c24a60bc80))
+* remove lodash dep ([ac66049](https://github.com/ColdPBC/cold-monorepo/commit/ac66049d9b44161ac2f35f50d243254588d043bd))
+
 ## [1.72.2-cold-0004.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.72.2-cold-0004.2...v1.72.2-cold-0004.3) (2023-11-29)
 
 
