@@ -33,8 +33,7 @@ jobs:
         uses: fkirc/skip-duplicate-actions@master
         with:
           # All of these options are optional, so you can remove them if you are happy with the defaults
-          concurrent_skipping: 'never'
-          skip-duplicate-actions: 'true'
+          concurrent_skipping: 'outdated_runs'
           paths_ignore: '["**/README.md", "**/docs/**"]'
           do_not_skip: '["pull_request", "workflow_dispatch"]'
   chromatic-deployment:
