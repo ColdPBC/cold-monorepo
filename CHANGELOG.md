@@ -1,3 +1,10 @@
+## [1.72.6](https://github.com/ColdPBC/cold-monorepo/compare/v1.72.5...v1.72.6) (2023-11-29)
+
+
+### Bug Fixes
+
+* add circuit breaker to redactor ([e33d242](https://github.com/ColdPBC/cold-monorepo/commit/e33d242e89ecff1ac7ad57ab04ef95fe6acbe435))
+
 ## [1.72.5](https://github.com/ColdPBC/cold-monorepo/compare/v1.72.4...v1.72.5) (2023-11-29)
 
 
