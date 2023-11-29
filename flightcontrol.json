@@ -379,8 +379,7 @@
           "toBranches": [
             "main"
           ]
-        },
-        "trigger": "manual"
+        }
       },
       "services": [
         {
