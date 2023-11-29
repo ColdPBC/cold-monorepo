@@ -7,9 +7,9 @@ on:
       - 'cold-**'
       - 'COLD-**'
       - 'Cold-**'
-      - staging
   pull_request:
     branches:
+      - staging
       - main
 env:
   GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
@@ -72,17 +72,31 @@ jobs:
       pull-requests: write # to be able to comment on released pull requests
       id-token: write # to enable use of OIDC for npm provenance
     steps:
+      - uses: 8BitJonny/gh-get-current-pr@2.2.0
+        id: PR
+        with:
+          # Authetication token to access GitHub APIs. (Can be omitted by default.)
+          github-token: ${{ github.token }}
+          # Verbose setting SHA when using Pull_Request event trigger to fix #16. (For push even trigger this is not necessary.)
+          sha: ${{ github.event.pull_request.head.sha }}
+          # Only return if PR is still open. (By default it returns PRs in any state.)
+          filterOutClosed: true
+          # Only return if PR is not in draft state. (By default it returns PRs in any state.)
+          filterOutDraft: true
       - name: ⚙ Checkout
+        if: steps.PR.outputs.pr_found != 'true'
         uses: actions/checkout@v4
         with:
           ref: ${{ github.head_ref }}
           fetch-depth: 0
           token: ${{ secrets.GH_TOKEN }}
       - name: ⚙ Setup Node.js
+        if: steps.PR.outputs.pr_found != 'true'
         uses: actions/setup-node@v4
         with:
           node-version: "20.9.0"
       - name: 💼 Cache node modules
+        if: steps.PR.outputs.pr_found != 'true'
         uses: actions/cache@v3
         with:
           path: ./node_modules
@@ -92,9 +106,10 @@ jobs:
             ${{ runner.os }}-build-
             ${{ runner.os }}-
       - name: 🌱 Get Next Version
+        if: steps.PR.outputs.pr_found != 'true'
         run: npx -p semantic-release -p @semantic-release/changelog -p @semantic-release/commit-analyzer -p @semantic-release/git -p @semantic-release/npm -p @semantic-release/release-notes-generator semantic-release
-
       - name: 🏷️ Tag Version In FlightControl
+        if: steps.PR.outputs.pr_found != 'true'
         env:
           BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
           GIT_TERMINAL_PROMPT: 0
@@ -106,6 +121,7 @@ jobs:
           git commit -m "ci: update flightcontrol.json [skip actions] [skip ci]" \
 
       - name: 🚚 Push Changes To GitHub
+        if: steps.PR.outputs.pr_found != 'true'
         uses: CasperWA/push-protected@v2
         with:
           token: ${{ secrets.GH_TOKEN }}
