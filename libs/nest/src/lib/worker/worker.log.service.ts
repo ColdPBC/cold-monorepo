@@ -48,9 +48,9 @@ export class WorkerLogger implements LoggerService {
       this.logger.error(error.response?.data?.message, safeStringify({error: error?.response?.data, meta: optionalParams, ...this.tags}));
     } else {
       if(error?.message) {
-          this.logger.error(error?.message, {error, ...this.redactor.redact(JSON.parse(safeStringify({meta: optionalParams, ...this.tags})))});
+          this.logger.error(error?.message, {error, meta: optionalParams, ...this.tags});
       } else {
-          this.logger.error(error, {error, ...this.redactor.redact(JSON.parse(safeStringify({meta: optionalParams, ...this.tags})))});
+          this.logger.error(error, {error, meta: optionalParams, ...this.tags});
       }
     }
   }
