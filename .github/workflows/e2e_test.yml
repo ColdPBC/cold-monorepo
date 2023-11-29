@@ -1,4 +1,4 @@
-name: 'Testing'
+name: ⏮ E2E Tests ⏭
 on:
   workflow_dispatch:
     inputs:
@@ -26,7 +26,7 @@ env:
 
 jobs:
   api-e2e:
-    name: 🔬 E2E Tests
+    name: 🔬 API Tests
     timeout-minutes: 10
     runs-on: ubuntu-latest
     permissions:
@@ -40,11 +40,11 @@ jobs:
         with:
           persist-credentials: false
           fetch-depth: 0
-      - name: Setup Node.js
+      - name: 👨‍💻Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "20.9.0"
-      - name: Cache node modules
+      - name: 📦 Cache node modules
         uses: actions/cache@v3
         with:
           path: ./node_modules
@@ -54,15 +54,15 @@ jobs:
             ${{ runner.os }}-build-
             ${{ runner.os }}-
 
-      - name: Install dependencies
+      - name: 🧩 Install dependencies
         run: yarn && yarn postinstall
 
-      - name: Generate Prisma Client
+      - name: 🌈 Generate Prisma Client
         run: yarn dlx nx run coldpbc/nest:prisma-generate
 
-      - name: build development
+      - name: 🏗 build development
         run: yarn prebuild && yarn dlx nx reset && yarn dlx nx run cold-api:build:development
 
-      - name: 'Run Tests'
+      - name: 🩻 Run Tests
         run: yarn dlx nx run cold-api-e2e:e2e:ci
 
