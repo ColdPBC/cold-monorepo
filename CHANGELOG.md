@@ -1,3 +1,10 @@
+## [1.72.7-cold-000005.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.72.7-cold-000005.1...v1.72.7-cold-000005.2) (2023-11-30)
+
+
+### Bug Fixes
+
+* redactor issue ([34e89c5](https://github.com/ColdPBC/cold-monorepo/commit/34e89c57208bf1aec3922bd1f992c8cf07ffbaa8))
+
 ## [1.72.7-cold-000005.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.72.6...v1.72.7-cold-000005.1) (2023-11-30)
 
 
