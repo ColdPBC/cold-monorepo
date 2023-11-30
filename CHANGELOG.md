@@ -1,3 +1,10 @@
+## [1.72.7](https://github.com/ColdPBC/cold-monorepo/compare/v1.72.6...v1.72.7) (2023-11-30)
+
+
+### Bug Fixes
+
+* health check logs ([fc6299d](https://github.com/ColdPBC/cold-monorepo/commit/fc6299d9e07e099997cf0fbdfc3a2c92407ae22b))
+
 ## [1.72.6](https://github.com/ColdPBC/cold-monorepo/compare/v1.72.5...v1.72.6) (2023-11-29)
 
 
