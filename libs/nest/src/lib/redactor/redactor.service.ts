@@ -147,7 +147,7 @@ export class RedactorService {
     this.depth = this.depth + 1;
     const maxDepth = 10;
     if (this.depth >= maxDepth) {
-      console.warn('Max depth reached!', obj);
+      console.warn('Max depth reached!', stringify(obj));
       this.depth = 0;
       return stringify(obj);
     }
@@ -191,6 +191,7 @@ export class RedactorService {
       }
     }
 
+    this.depth = 0;
     return redactMe;
   }
 }
