@@ -164,6 +164,35 @@ nx run-many -t <target1> <target2> -p <proj1> <proj2>
 
 Targets can be defined in the `package.json` or `projects.json`. Learn more [in the docs](https://nx.dev/core-features/run-tasks).
 
+## Troubleshooting
+
+### Errors During FlightControl/ AWS Code Build
+
+### ENOMEM error when running `nx build cold-api`
+When building the apps in FlightControl or CodeBuild, you may receive an ENOMEM error like in the log below:
+
+```log
+.4 ➤ YN0000: │ contentlayer@npm:0.3.4 STDERR Error: spawn ENOMEM
+5:56:12 PM #12 296.4 ➤ YN0000: │ contentlayer@npm:0.3.4 STDERR     at ChildProcess.spawn (node:internal/child_process:421:11)
+5:56:12 PM #12 296.4 ➤ YN0000: │ contentlayer@npm:0.3.4 STDERR     at Object.spawn (node:child_process:761:9)
+5:56:12 PM #12 296.4 ➤ YN0000: │ contentlayer@npm:0.3.4 STDERR     at ZY (/app/.yarn/releases/yarn-4.0.2.cjs:9:51927)
+5:56:12 PM #12 296.4 ➤ YN0000: │ contentlayer@npm:0.3.4 STDERR     at RE.implementation (/app/.yarn/releases/yarn-4.0.2.cjs:159:1348)
+5:56:12 PM #12 296.4 ➤ YN0000: │ contentlayer@npm:0.3.4 STDERR     at RE.exec (/app/.yarn/releases/yarn-4.0.2.cjs:165:1414)
+5:56:12 PM #12 296.4 ➤ YN0000: │ contentlayer@npm:0.3.4 STDERR     at RE.run (/app/.yarn/releases/yarn-4.0.2.cjs:165:1585)
+5:56:12 PM #12 296.4 ➤ YN0000: │ contentlayer@npm:0.3.4 STDERR     at ace (/app/.yarn/releases/yarn-4.0.2.cjs:165:7428)
+5:56:12 PM #12 296.4 ➤ YN0000: │ contentlayer@npm:0.3.4 STDERR     at async Bot (/app/.yarn/releases/yarn-4.0.2.cjs:167:16)
+5:56:12 PM #12 296.4 ➤ YN0000: │ contentlayer@npm:0.3.4 STDERR     at async u (/app/.yarn/releases/yarn-4.0.2.cjs:167:147)
+5:56:12 PM #12 296.4 ➤ YN0009: │ contentlayer@npm:0.3.4 couldn't be built successfully (exit code 1, logs can be found here: /tmp/xfs-7e7d84e7/build.log)
+```
+In order to prevent this from happening, you need to increase the memory available to AWS CodeBuild.  To do this, 
+- log into the AWS Console and navigate to CodeBuild.  
+- Click on whichever project failed (ie: `cold-api-fc-vvac0727`) 
+- Click on the `Edit` button.  
+- Scroll down to the `Environment` section
+- Click on the `Additional configuration` button.  
+- In the `Additional configuration` section, increase the `Memory` to the next higher level.  
+- Click on the `Update Project` button to save your changes.  
+
 ## Want better Editor Integration?
 
 Have a look at the [Nx Console extensions](https://nx.dev/nx-console). It provides autocomplete support, a UI for exploring and running tasks & generators, and more! Available for VSCode, IntelliJ and comes with a LSP for Vim users.
