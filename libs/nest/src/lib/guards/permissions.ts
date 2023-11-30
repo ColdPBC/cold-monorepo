@@ -42,12 +42,13 @@ export class PermissionsGuard extends BaseWorker implements CanActivate {
 
     const hasPermission = () => routePermissions.every(routePermission => userPermissions.includes(routePermission));
 
+    const status = hasPermission();
     this.logger.info(`user has permission`, {
       routePermissions,
       userPermissions,
-      hasPermission: hasPermission(),
+      hasPermission: status
     });
 
-    return hasPermission();
+    return status;
   }
 }
