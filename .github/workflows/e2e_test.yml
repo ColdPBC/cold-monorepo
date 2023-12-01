@@ -11,6 +11,11 @@ on:
     types: [completed, success]
 env:
   GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+  NODE_ENV: ci
+  NODE_OPTIONS: "-r dd-trace/ci/init"
+  DD_SITE: us5.datadoghq.com
+  DD_CIVISIBILITY_AGENTLESS_ENABLED: true
+  DD_API_KEY: ${{ secrets.DD_APP_KEY }}
   GH_TOKEN: ${{ secrets.GH_TOKEN }}
   NPM_TOKEN: ${{ secrets.GH_TOKEN }}
   CACHE_NAME: cache-node-modules
@@ -57,6 +62,8 @@ jobs:
       - name: 🧩 Install dependencies
         run: yarn && yarn postinstall
 
+      - name: Install Tracer
+        run: npm install --save-dev dd-trace --env ci
       - name: 🌈 Generate Prisma Client
         run: yarn dlx nx run coldpbc/nest:prisma-generate
 
@@ -64,5 +71,5 @@ jobs:
         run: yarn prebuild && yarn dlx nx reset && yarn dlx nx run cold-api:build:development
 
       - name: 🩻 Run Tests
-        run: yarn dlx nx run cold-api-e2e:e2e:ci
+        run: NODE_OPTIONS="-r dd-trace/ci/init" DD_ENV=ci DD_SERVICE=cold-api-nest yarn dlx nx run cold-api-e2e:e2e:ci
 

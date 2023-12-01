@@ -5,6 +5,7 @@ ARG DATABASE_URL
 ARG DD_SERVICE
 ARG DD_VERSION
 ARG DD_API_KEY
+ARG DD_POSTGRES_PASSWORD
 
 ARG DD_GIT_COMMIT_SHA
 ENV DD_GIT_REPOSITORY_URL=https://github.com/ColdPBC/cold-monorepo
@@ -25,8 +26,6 @@ LABEL com.datadoghq.ad.instances='[{"database_autodiscovery":{"enabled":true},"c
 LABEL com.datadoghq.tags.service=${DD_SERVICE}
 LABEL com.datadoghq.tags.version=${DD_VERSION}
 LABEL com.datadoghq.tags.env=${NODE_ENV}
-
-VOLUME /var/run/docker.sock:/var/run/docker.sock:ro
 
 WORKDIR /app
 # uninstall old yarn or pnpm
