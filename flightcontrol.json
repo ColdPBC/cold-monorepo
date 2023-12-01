@@ -78,10 +78,11 @@
           "maxInstances": 4,
           "minInstances": 2,
           "healthCheckPath": "/health",
-          "containerInsights": false,
+          "containerInsights": true,
           "enableCloudfrontSwr": true,
           "versionHistoryCount": 10,
           "dockerLabels": {
+            "com.datadoghq.tags.environment": "production",
             "com.datadoghq.tags.env": "production",
             "com.datadoghq.tags.service": "cold-api-nest",
             "com.datadoghq.tags.version": ""
@@ -442,7 +443,7 @@
           "maxInstances": 2,
           "minInstances": 1,
           "healthCheckPath": "/health",
-          "containerInsights": true,
+          "containerInsights": false,
           "enableCloudfrontSwr": false,
           "versionHistoryCount": 10,
           "experimental": {
