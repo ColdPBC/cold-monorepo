@@ -77,10 +77,11 @@
           "maxInstances": 4,
           "minInstances": 2,
           "healthCheckPath": "/health",
-          "containerInsights": false,
+          "containerInsights": true,
           "enableCloudfrontSwr": true,
           "versionHistoryCount": 10,
           "dockerLabels": {
+            "com.datadoghq.tags.environment": "production",
             "com.datadoghq.tags.env": "production",
             "com.datadoghq.tags.service": "cold-api-nest",
             "com.datadoghq.tags.version": ""
@@ -274,11 +275,14 @@
             "healthCheckInterval": 35
           },
           "dockerLabels": {
+            "com.datadoghq.tags.environment": "staging",
             "com.datadoghq.tags.env": "staging",
             "com.datadoghq.tags.service": "cold-api-nest",
             "com.datadoghq.tags.version": ""
           },
           "envVariables": {
+            "NODE_ENV": "staging",
+            "DD_ENV": "staging",
             "DD_API_KEY": {
               "fromParameterStore": "fc.cold-api-fc.env.cold-production.8pr1zak.DD_API_KEY"
             },
@@ -436,7 +440,7 @@
           "maxInstances": 2,
           "minInstances": 1,
           "healthCheckPath": "/health",
-          "containerInsights": true,
+          "containerInsights": false,
           "enableCloudfrontSwr": false,
           "versionHistoryCount": 10,
           "experimental": {
@@ -457,6 +461,7 @@
             "requestsPerTarget": 500
           },
           "dockerLabels": {
+            "com.datadoghq.tags.environment": "test",
             "com.datadoghq.tags.env": "test",
             "com.datadoghq.tags.service": "cold-api-nest",
             "com.datadoghq.tags.version": ""
