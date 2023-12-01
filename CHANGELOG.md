@@ -1,4 +1,20 @@
 
+## [1.72.9](https://github.com/ColdPBC/cold-monorepo/compare/v1.72.8...v1.72.9) (2023-12-01)
+
+
+### Bug Fixes
+
+* add additional telemetry ([a527748](https://github.com/ColdPBC/cold-monorepo/commit/a5277482c99ce29c43e9b427b3a6bd5494f188c5))
+
+## [1.72.8](https://github.com/ColdPBC/cold-monorepo/compare/v1.72.7...v1.72.8) (2023-12-01)
+
+
+### Bug Fixes
+
+* remove max depth ([8dd8939](https://github.com/ColdPBC/cold-monorepo/commit/8dd893916c1407b5f6cfabb804b3b4693edfd2b7))
+
+## [1.72.7](https://github.com/ColdPBC/cold-monorepo/compare/v1.72.6...v1.72.7) (2023-11-30)
+
 ## [1.72.7-cold-000005.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.72.7-cold-000005.1...v1.72.7-cold-000005.2) (2023-11-30)
 
 

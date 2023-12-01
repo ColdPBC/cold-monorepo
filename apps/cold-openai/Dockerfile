@@ -5,11 +5,7 @@ ARG DATABASE_URL
 ARG DD_SERVICE
 ARG DD_VERSION
 ARG DD_API_KEY
-
-ARG DD_GIT_COMMIT_SHA
-ENV DD_GIT_REPOSITORY_URL=https://github.com/ColdPBC/cold-monorepo
-ENV DD_GIT_COMMIT_SHA=${DD_GIT_COMMIT_SHA}
-
+ARG DD_POSTGRES_PASSWORD
 
 ENV NODE_ENV=${NODE_ENV}
 ENV DD_ENV=${NODE_ENV}
@@ -49,7 +45,7 @@ RUN --mount=type=bind,source=package.json,target=package.json \
     --mount=type=bind,source=yarn.lock,target=yarn.lock,readwrite \
     --mount=type=cache,target=/root/.yarn \
     if [ "${NODE_ENV}" = "production" ] ; then echo "installing production dependencies..." && yarn workspaces focus --all --production ; else echo "installing dev dependencies..." && yarn ; fi
-#RUN chown -R node:node /home/node/build
+
 RUN echo  "****NODE ENV**** ${NODE_ENV}"
 RUN yarn add -D @typescript-eslint/eslint-plugin
 
