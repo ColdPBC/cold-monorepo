@@ -395,8 +395,8 @@ describe('When calling RedactorService', () => {
         });
 
         it('very deeply nested property is scrubbed', () => {
-          const val = get(defaultScrubbed,  `veryDeep.one.two.three.four.five.six.seven`);
-          expect(val).toMatch(JSON.stringify({"eight":{"nine":{"ten":{"eleven":{"password":"alsdkfjasldfk"}}}}}));
+          const val = get(defaultScrubbed,  `veryDeep.one.two.three.four.five.six.seven.eight.nine`);
+          expect(val).toMatchSnapshot();
         });
       });
 

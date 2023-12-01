@@ -1,14 +1,15 @@
-import { Injectable } from '@nestjs/common';
+import {Global, Injectable} from '@nestjs/common';
 import { BaseWorker } from '../worker';
 import * as sdk from '@launchdarkly/node-server-sdk';
 
-interface DarklyContext {
+export interface DarklyContext {
   kind: string;
   name: string;
   key: string;
 }
 
 @Injectable()
+@Global()
 export class DarklyService extends BaseWorker {
   darkly: sdk.LDClient = {} as sdk.LDClient;
   context: DarklyContext = {

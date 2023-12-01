@@ -28,7 +28,6 @@
           "envVariables": {
             "VITE_API_BASE_URL": "https://api.coldclimate.com",
             "VITE_APP_VERSION": "1.0.0",
-            "VITE_AUTH0_CLIENT_ID": "CxonhKwqNec6L8uTKynydwo11s4VdrmU",
             "VITE_AUTH0_DOMAIN": "cold-climate-production.us.auth0.com",
             "VITE_AUTH0_ISSUER_BASE_URL": "https://cold-climate-production.us.auth0.com",
             "VITE_COLD_API_AUDIENCE": "https://api.coldclimate.com/",
@@ -218,7 +217,6 @@
             "VITE_APP_VERSION": "",
             "VITE_AUTH0_ISSUER_BASE_URL": "https://cold-climate-staging.us.auth0.com",
             "VITE_AUTH0_BASE_URL": "https://app.coldclimate.online",
-            "VITE_AUTH0_CLIENT_ID": "i8rCPXsLq9b2YKOOWUTfvgUj0iYD7dE3",
             "VITE_AUTH0_DOMAIN": "cold-climate-staging.us.auth0.com",
             "VITE_COLD_API_AUDIENCE": "https://api.coldclimate.online/",
             "VITE_COLD_ORG_ID": "org_g2zzR5rwTKVAIwCn",
@@ -404,7 +402,6 @@
             "VITE_API_BASE_URL": "https://api.coldclimate.wtf",
             "VITE_AUTH0_ISSUER_BASE_URL": "https://dev-6qt527e13qyo4ls6.us.auth0.com",
             "VITE_AUTH0_BASE_URL": "https://dev-6qt527e13qyo4ls6.us.auth0.com",
-            "VITE_AUTH0_CLIENT_ID": "AocyNEqBocKfmU9AHUs0koGeZ73lbrkF",
             "VITE_AUTH0_DOMAIN": "dev-6qt527e13qyo4ls6.us.auth0.com",
             "VITE_COLD_API_AUDIENCE": "https://api.coldclimate.wtf/",
             "VITE_COLD_ORG_ID": "org_VWv3Al9pLEI4CaOH",

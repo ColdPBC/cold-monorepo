@@ -1,3 +1,4 @@
+
 ## [1.72.9](https://github.com/ColdPBC/cold-monorepo/compare/v1.72.8...v1.72.9) (2023-12-01)
 
 
@@ -14,10 +15,19 @@
 
 ## [1.72.7](https://github.com/ColdPBC/cold-monorepo/compare/v1.72.6...v1.72.7) (2023-11-30)
 
+## [1.72.7-cold-000005.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.72.7-cold-000005.1...v1.72.7-cold-000005.2) (2023-11-30)
+
+
+### Bug Fixes
+
+* redactor issue ([34e89c5](https://github.com/ColdPBC/cold-monorepo/commit/34e89c57208bf1aec3922bd1f992c8cf07ffbaa8))
+
+## [1.72.7-cold-000005.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.72.6...v1.72.7-cold-000005.1) (2023-11-30)
 
 ### Bug Fixes
 
 * health check logs ([fc6299d](https://github.com/ColdPBC/cold-monorepo/commit/fc6299d9e07e099997cf0fbdfc3a2c92407ae22b))
+* minor issues ([982f657](https://github.com/ColdPBC/cold-monorepo/commit/982f657ba786845d8fd573bec3a7d1cc9bc676f3))
 
 ## [1.72.6](https://github.com/ColdPBC/cold-monorepo/compare/v1.72.5...v1.72.6) (2023-11-29)
 
