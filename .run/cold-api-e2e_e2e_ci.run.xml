@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="cold-api-e2e:e2e:ci" type="NxRunConfigurationType">
+    <option name="nx-projects" value="cold-api-e2e" />
+    <option name="nx-targets" value="e2e" />
+    <option name="nx-target-configuration" value="ci" />
+    <envs />
+    <option name="arguments" value="" />
+    <method v="2" />
+  </configuration>
+</component>

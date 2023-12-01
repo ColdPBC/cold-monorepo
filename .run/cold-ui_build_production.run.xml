@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="cold-ui:build:production" type="NxRunConfigurationType">
+    <option name="nx-projects" value="cold-ui" />
+    <option name="nx-targets" value="build" />
+    <option name="nx-target-configuration" value="production" />
+    <envs />
+    <option name="arguments" value="" />
+    <method v="2" />
+  </configuration>
+</component>
