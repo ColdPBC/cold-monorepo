@@ -2,7 +2,6 @@
 /apps/cold-api
 /apps/cold-api-e2e
 /libs/nest
-/.nx
 /.yarn/cache
 /.yarn/install-state.gz
 .git
