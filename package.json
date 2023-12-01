@@ -23,7 +23,7 @@
     "clearVersion": "node updateVersion.mjs '' $(git branch --show)",
     "storybook": "yarn run build-storybook && yarn dlx nx storybook cold-ui",
     "build-storybook": "yarn run prebuild && yarn dlx nx build-storybook cold-ui",
-    "build": "yarn dlx nx run cold-api:build:development",
+    "build": "yarn dlx nx dep-graph --file dep-graph.json && yarn dlx nx run cold-ui:build",
     "build:dev": "yarn dlx nx run cold-ui:build:development --resolveJsonModule",
     "build:prod": "yarn dlx nx run cold-ui:build:production --resolveJsonModule",
     "test": "nx run cold-api:test:ci",
@@ -162,7 +162,6 @@
     "@golevelup/ts-jest": "^0.4.0",
     "@nestjs/schematics": "^10.0.1",
     "@nestjs/testing": "^10.0.2",
-    "@nrwl/nx-cloud": "16.5.2",
     "@nx-tools/nx-prisma": "^5.1.0",
     "@nx/eslint-plugin": "17.1.2",
     "@nx/jest": "17.1.2",
@@ -313,6 +312,7 @@
     "vite-plugin-turbosnap": "^1.0.3",
     "vite-tsconfig-paths": "^4.0.2",
     "vitest": "~0.32.0",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "nx-cloud": "16.5.2"
   }
 }
