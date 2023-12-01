@@ -274,6 +274,7 @@
     "jest-mock-extended": "^3.0.5",
     "jsdom": "~22.1.0",
     "npm-which": "^3.0.1",
+    "nx-cloud": "16.5.2",
     "postcss-cli": "^10.1.0",
     "prettier": "^2.8.8",
     "prisma": "^5.6.0",
@@ -312,7 +313,6 @@
     "vite-plugin-turbosnap": "^1.0.3",
     "vite-tsconfig-paths": "^4.0.2",
     "vitest": "~0.32.0",
-    "web-vitals": "^2.1.4",
-    "nx-cloud": "16.5.2"
+    "web-vitals": "^2.1.4"
   }
 }

@@ -17277,7 +17277,6 @@ __metadata:
     "@nivo/line": "npm:^0.80.0"
     "@nivo/parallel-coordinates": "npm:^0.80.0"
     "@nivo/pie": "npm:^0.80.0"
-    "@nrwl/nx-cloud": "npm:16.5.2"
     "@nx-tools/nx-prisma": "npm:^5.1.0"
     "@nx/eslint-plugin": "npm:17.1.2"
     "@nx/jest": "npm:17.1.2"

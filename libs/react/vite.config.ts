@@ -11,8 +11,6 @@ export default defineConfig({
   plugins: [
     dts({
       entryRoot: 'src',
-      tsConfigFilePath: path.join(__dirname, 'tsconfig.lib.json'),
-      skipDiagnostics: true,
     }),
     react(),
     nxViteTsPaths(),
@@ -40,10 +38,7 @@ export default defineConfig({
       plugins: [
         alias({
           entries: {
-            '@coldpbc/animations': path.resolve(
-              __dirname,
-              './src/animations/index.ts',
-            ),
+            '@coldpbc/animations': path.resolve(__dirname, './src/animations/index.ts'),
             '@coldpbc/assets': path.resolve(__dirname, './src/assets/index.ts'),
             '@coldpbc/components': path.resolve(__dirname, './src/components'),
             '@coldpbc/context': path.resolve(__dirname, './src/context'),
@@ -63,11 +58,7 @@ export default defineConfig({
       output: {
         manualChunks(id) {
           if (id.includes('node_modules')) {
-            return id
-              .toString()
-              .split('node_modules/')[1]
-              .split('/')[0]
-              .toString();
+            return id.toString().split('node_modules/')[1].split('/')[0].toString();
           }
         },
       },
