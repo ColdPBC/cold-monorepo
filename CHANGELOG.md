@@ -1,3 +1,10 @@
+## [1.72.8](https://github.com/ColdPBC/cold-monorepo/compare/v1.72.7...v1.72.8) (2023-12-01)
+
+
+### Bug Fixes
+
+* remove max depth ([8dd8939](https://github.com/ColdPBC/cold-monorepo/commit/8dd893916c1407b5f6cfabb804b3b4693edfd2b7))
+
 ## [1.72.7](https://github.com/ColdPBC/cold-monorepo/compare/v1.72.6...v1.72.7) (2023-11-30)
 
 
