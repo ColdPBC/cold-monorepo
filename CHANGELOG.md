@@ -1,3 +1,12 @@
+## [1.72.10](https://github.com/ColdPBC/cold-monorepo/compare/v1.72.9...v1.72.10) (2023-12-01)
+
+
+### Bug Fixes
+
+* don't tear down db unless in CI ([70914de](https://github.com/ColdPBC/cold-monorepo/commit/70914de942e527fe1d3a6b8c1b1b2da5c893470f))
+* minor issues ([982f657](https://github.com/ColdPBC/cold-monorepo/commit/982f657ba786845d8fd573bec3a7d1cc9bc676f3))
+* redactor issue ([34e89c5](https://github.com/ColdPBC/cold-monorepo/commit/34e89c57208bf1aec3922bd1f992c8cf07ffbaa8))
+* remove vite_auth0_client_id ([4ef5b5d](https://github.com/ColdPBC/cold-monorepo/commit/4ef5b5dff33c7eb5f2cbdd76488bef1d735c104a))
 
 ## [1.72.9](https://github.com/ColdPBC/cold-monorepo/compare/v1.72.8...v1.72.9) (2023-12-01)
 
