@@ -1,7 +1,1 @@
-/coverage
-/apps/cold-api
-/apps/cold-api-e2e
-/libs/nest
-/.yarn/cache
-/.yarn/install-state.gz
-.git
+
