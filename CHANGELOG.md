@@ -1,3 +1,10 @@
+## [1.72.9](https://github.com/ColdPBC/cold-monorepo/compare/v1.72.8...v1.72.9) (2023-12-01)
+
+
+### Bug Fixes
+
+* add additional telemetry ([a527748](https://github.com/ColdPBC/cold-monorepo/commit/a5277482c99ce29c43e9b427b3a6bd5494f188c5))
+
 ## [1.72.8](https://github.com/ColdPBC/cold-monorepo/compare/v1.72.7...v1.72.8) (2023-12-01)
 
 
