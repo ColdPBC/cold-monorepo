@@ -1,7 +1,7 @@
 {
   "name": "cold-monorepo-nx",
   "packageManager": "yarn@4.0.2",
-  "version": "1.72.10",
+  "version": "1.72.11",
   "license": "MIT",
   "engines": {
     "node": ">=20.9.0",
@@ -23,7 +23,7 @@
     "clearVersion": "node updateVersion.mjs '' $(git branch --show)",
     "storybook": "yarn run build-storybook && yarn dlx nx storybook cold-ui",
     "build-storybook": "yarn run prebuild && yarn dlx nx build-storybook cold-ui",
-    "build": "yarn dlx nx dep-graph --file dep-graph.json && yarn dlx nx run cold-ui:build",
+    "build": "yarn dlx nx run cold-ui:build",
     "build:dev": "yarn dlx nx run cold-ui:build:development --resolveJsonModule",
     "build:prod": "yarn dlx nx run cold-ui:build:production --resolveJsonModule",
     "test": "nx run cold-api:test:ci",

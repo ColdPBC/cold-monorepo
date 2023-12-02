@@ -1,6 +1,6 @@
 import { HttpService } from '@nestjs/axios';
 import { ConflictException, HttpException, Injectable, NotFoundException, UnauthorizedException, UnprocessableEntityException } from '@nestjs/common';
-import { Span, TraceService } from 'nestjs-ddtrace';
+import { Span } from 'nestjs-ddtrace';
 import { BaseWorker, Auth0Organization, AuthenticatedUser, DarklyService, PrismaService, CacheService, Tags } from '@coldpbc/nest';
 import { Auth0APIOptions, Auth0UtilityService } from '../auth0/auth0.utility.service';
 import { find, filter, first, kebabCase, pick, set, merge, omit, map } from 'lodash';
@@ -713,7 +713,8 @@ export class OrganizationService extends BaseWorker {
         throw new UnprocessableEntityException(e.message, e);
       }
     }
-    throw new HttpException(`Invitation ${invId} deleted`, 204);
+
+    return `Invitation ${invId} deleted`;
   }
 
   /***

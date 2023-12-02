@@ -17,7 +17,6 @@
           "type": "static",
           "singlePageApp": true,
           "buildType": "nixpacks",
-          "domain": "app.coldclimate.com",
           "basePath": ".",
           "buildCommand": "yarn && yarn postinstall && yarn prebuild && yarn dlx nx build cold-ui:build:production",
           "outputDirectory": "dist/apps/cold-ui",
@@ -26,7 +25,12 @@
             "libs/react/src/**"
           ],
           "envVariables": {
-            "VITE_API_BASE_URL": "https://api.coldclimate.com",
+            "VITE_API_BASE_URL": {
+              "fromService": {
+                "id": "cold-api-fc-production",
+                "value": "origin"
+              }
+            },
             "VITE_APP_VERSION": "1.0.0",
             "VITE_AUTH0_DOMAIN": "cold-climate-production.us.auth0.com",
             "VITE_AUTH0_ISSUER_BASE_URL": "https://cold-climate-production.us.auth0.com",
@@ -66,7 +70,6 @@
             "repository": "api-docker-images",
             "tag": "main"
           },
-          "domain": "api.coldclimate.com",
           "watchPaths": [
             "apps/cold-api/src/**",
             "apps/cold-api/test/**",
@@ -84,6 +87,9 @@
             "com.datadoghq.tags.environment": "production",
             "com.datadoghq.tags.env": "production",
             "com.datadoghq.tags.service": "cold-api-nest",
+            "com.datadoghq.ad.check_names": "[\"postgres\"]",
+            "com.datadoghq.ad.init_configs": "[{}]",
+            "com.datadoghq.ad.instances":"[{\"database_autodiscovery\":{\"enabled\":true},\"collect_schemas\":{\"enabled\":true},\"dbm\":true,\"host\":\"${DATABASE_URL}\",\"port\": 5432,\"username\":\"datadog\",\"password\":\"${DD_POSTGRES_PASSWORD}\", \"tags\":[\"service:cold-rds-fc-${NODE_ENV}\",\"env:${NODE_ENV}\"]",
             "com.datadoghq.tags.version": ""
           },
           "autoscaling": {
@@ -202,7 +208,6 @@
           "id": "cold-ui-staging",
           "name": "cold-ui",
           "type": "static",
-          "domain": "app.coldclimate.online",
           "singlePageApp": true,
           "buildType": "nixpacks",
           "basePath": ".",
@@ -213,7 +218,12 @@
             "libs/react/src/**"
           ],
           "envVariables": {
-            "VITE_API_BASE_URL": "https://api.coldclimate.online",
+            "VITE_API_BASE_URL": {
+              "fromService": {
+                "id": "cold-api-fc-staging",
+                "value": "origin"
+              }
+            },
             "VITE_APP_VERSION": "",
             "VITE_AUTH0_ISSUER_BASE_URL": "https://cold-climate-staging.us.auth0.com",
             "VITE_AUTH0_BASE_URL": "https://app.coldclimate.online",
@@ -250,7 +260,6 @@
           "memory": 2,
           "dockerfilePath": "Dockerfile",
           "dockerContext": ".",
-          "domain": "api.coldclimate.online",
           "watchPaths": [
             "apps/cold-api/src/**",
             "apps/cold-api/test/**",
@@ -278,7 +287,10 @@
             "com.datadoghq.tags.environment": "staging",
             "com.datadoghq.tags.env": "staging",
             "com.datadoghq.tags.service": "cold-api-nest",
-            "com.datadoghq.tags.version": ""
+            "com.datadoghq.tags.version": "",
+            "com.datadoghq.ad.check_names": "[\"postgres\"]",
+            "com.datadoghq.ad.init_configs": "[{}]",
+            "com.datadoghq.ad.instances":"[{\"database_autodiscovery\":{\"enabled\":true},\"collect_schemas\":{\"enabled\":true},\"dbm\":true,\"host\":\"${DATABASE_URL}\",\"port\": 5432,\"username\":\"datadog\",\"password\":\"${DD_POSTGRES_PASSWORD}\", \"tags\":[\"service:cold-rds-fc-${NODE_ENV}\",\"env:${NODE_ENV}\"]"
           },
           "envVariables": {
             "NODE_ENV": "staging",
@@ -322,7 +334,7 @@
                 },
                 "DD_POSTGRES_URL_VAR": "DATABASE_URL",
                 "DD_REDIS_URL_VAR": "REDISCLOUD_URL",
-                "DD_SERVICE": "cold-api-nest",
+                "DD_SERVICE": "cold-api-nest-datadog",
                 "DD_SITE": "us5.datadoghq.com",
                 "DD_APM_ENABLED": true,
                 "DD_APPSEC_AUTOMATED_USER_EVENTS_TRACKING": true,
@@ -388,7 +400,6 @@
           "id": "cold-ui-preview",
           "name": "cold-ui",
           "type": "static",
-          "domain": "app.coldclimate.wtf",
           "singlePageApp": true,
           "buildType": "nixpacks",
           "basePath": ".",
@@ -399,7 +410,12 @@
             "libs/react/src/**"
           ],
           "envVariables": {
-            "VITE_API_BASE_URL": "https://api.coldclimate.wtf",
+            "VITE_API_BASE_URL": {
+              "fromService": {
+                "id": "cold-api-fc-staging",
+                "value": "origin"
+              }
+            },
             "VITE_AUTH0_ISSUER_BASE_URL": "https://dev-6qt527e13qyo4ls6.us.auth0.com",
             "VITE_AUTH0_BASE_URL": "https://dev-6qt527e13qyo4ls6.us.auth0.com",
             "VITE_AUTH0_DOMAIN": "dev-6qt527e13qyo4ls6.us.auth0.com",
@@ -434,9 +450,8 @@
           "port": 7001,
           "type": "fargate",
           "memory": 2,
-          "dockerfilePath": "Dockerfile",
+          "dockerfilePath": "api.dockerfile",
           "dockerContext": ".",
-          "domain": "api.coldclimate.wtf",
           "maxInstances": 2,
           "minInstances": 1,
           "healthCheckPath": "/health",
@@ -464,7 +479,10 @@
             "com.datadoghq.tags.environment": "test",
             "com.datadoghq.tags.env": "test",
             "com.datadoghq.tags.service": "cold-api-nest",
-            "com.datadoghq.tags.version": ""
+            "com.datadoghq.tags.version": "",
+            "com.datadoghq.ad.check_names": "[\"postgres\"]",
+            "com.datadoghq.ad.init_configs": "[{}]",
+            "com.datadoghq.ad.instances":"[{\"database_autodiscovery\":{\"enabled\":true},\"collect_schemas\":{\"enabled\":true},\"dbm\":true,\"host\":\"${DATABASE_URL}\",\"port\": 5432,\"username\":\"datadog\",\"password\":\"${DD_POSTGRES_PASSWORD}\", \"tags\":[\"service:cold-rds-fc-${NODE_ENV}\",\"env:${NODE_ENV}\"]"
           },
           "envVariables": {
             "DATABASE_URL": {

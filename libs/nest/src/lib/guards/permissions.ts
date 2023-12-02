@@ -35,18 +35,19 @@ export class PermissionsGuard extends BaseWorker implements CanActivate {
       params: request.params,
     });
 
+    // no permissions required for this route
     if (!routePermissions) {
-      this.logger.log(`no permissions required for this route`);
       return true;
     }
 
     const hasPermission = () => routePermissions.every(routePermission => userPermissions.includes(routePermission));
 
     const status = hasPermission();
-    this.logger.info(`user has permission`, {
+    this.logger.info(status ? `user has permission` : 'user does not have required permissions', {
+      ...this.tags,
       routePermissions,
       userPermissions,
-      hasPermission: status
+      hasPermission: status,
     });
 
     return status;

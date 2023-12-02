@@ -1,0 +1,834 @@
+{
+  "graph": {
+    "nodes": {
+      "cold-openai-e2e": {
+        "name": "cold-openai-e2e",
+        "type": "e2e",
+        "data": {
+          "root": "apps/cold-openai-e2e",
+          "name": "cold-openai-e2e",
+          "$schema": "../../node_modules/nx/schemas/project-schema.json",
+          "implicitDependencies": [
+            "cold-openai"
+          ],
+          "projectType": "application",
+          "targets": {
+            "e2e": {
+              "cache": true,
+              "inputs": [
+                "default",
+                "^production",
+                "{workspaceRoot}/jest.preset.js"
+              ],
+              "executor": "@nx/jest:jest",
+              "outputs": [
+                "{workspaceRoot}/coverage/{e2eProjectRoot}"
+              ],
+              "options": {
+                "passWithNoTests": true,
+                "jestConfig": "apps/cold-openai-e2e/jest.config.ts"
+              },
+              "configurations": {
+                "ci": {
+                  "ci": true,
+                  "codeCoverage": true
+                }
+              }
+            },
+            "lint": {
+              "inputs": [
+                "default",
+                "{workspaceRoot}/.eslintrc.json",
+                "{workspaceRoot}/.eslintignore"
+              ],
+              "executor": "@nx/eslint:lint",
+              "outputs": [
+                "{options.outputFile}"
+              ],
+              "options": {
+                "lintFilePatterns": [
+                  "apps/cold-openai-e2e/**/*.{js,ts}"
+                ]
+              },
+              "configurations": {}
+            }
+          },
+          "tags": []
+        }
+      },
+      "cold-api-e2e": {
+        "name": "cold-api-e2e",
+        "type": "e2e",
+        "data": {
+          "root": "apps/cold-api-e2e",
+          "name": "cold-api-e2e",
+          "$schema": "../../node_modules/nx/schemas/project-schema.json",
+          "implicitDependencies": [
+            "cold-api"
+          ],
+          "projectType": "application",
+          "targets": {
+            "e2e": {
+              "cache": true,
+              "inputs": [
+                "default",
+                "^production",
+                "{workspaceRoot}/jest.preset.js"
+              ],
+              "executor": "@nx/jest:jest",
+              "outputs": [
+                "{workspaceRoot}/coverage/{e2eProjectRoot}"
+              ],
+              "options": {
+                "passWithNoTests": true,
+                "jestConfig": "apps/cold-api-e2e/jest.config.ts",
+                "codeCoverage": false,
+                "detectOpenHandles": false,
+                "forceExit": true,
+                "verbose": true,
+                "testTimeout": 30000,
+                "watchAll": false,
+                "watch": false
+              },
+              "configurations": {
+                "ci": {
+                  "ci": true,
+                  "codeCoverage": true
+                }
+              }
+            },
+            "lint": {
+              "inputs": [
+                "default",
+                "{workspaceRoot}/.eslintrc.json",
+                "{workspaceRoot}/.eslintignore"
+              ],
+              "executor": "@nx/eslint:lint",
+              "outputs": [
+                "{options.outputFile}"
+              ],
+              "options": {
+                "lintFilePatterns": [
+                  "apps/cold-api-e2e/**/*.{js,ts}"
+                ]
+              },
+              "configurations": {}
+            }
+          },
+          "tags": []
+        }
+      },
+      "cold-openai": {
+        "name": "cold-openai",
+        "type": "app",
+        "data": {
+          "root": "apps/cold-openai",
+          "name": "cold-openai",
+          "$schema": "/node_modules/nx/schemas/project-schema.json",
+          "sourceRoot": "apps/cold-openai/src",
+          "projectType": "application",
+          "targets": {
+            "build": {
+              "dependsOn": [
+                "^build"
+              ],
+              "inputs": [
+                "production",
+                "^production"
+              ],
+              "executor": "@nx/webpack:webpack",
+              "outputs": [
+                "{options.outputPath}"
+              ],
+              "defaultConfiguration": "production",
+              "options": {
+                "target": "node",
+                "compiler": "tsc",
+                "outputPath": "dist/apps/cold-openai",
+                "main": "apps/cold-openai/src/main.ts",
+                "tsConfig": "apps/cold-openai/tsconfig.app.json",
+                "assets": [
+                  "apps/cold-openai/src/assets"
+                ],
+                "isolatedConfig": true,
+                "webpackConfig": "apps/cold-openai/webpack.config.js"
+              },
+              "configurations": {
+                "development": {},
+                "production": {}
+              }
+            },
+            "serve": {
+              "executor": "@nx/js:node",
+              "defaultConfiguration": "development",
+              "options": {
+                "buildTarget": "cold-openai:build"
+              },
+              "configurations": {
+                "development": {
+                  "buildTarget": "cold-openai:build:development"
+                },
+                "production": {
+                  "buildTarget": "cold-openai:build:production"
+                }
+              }
+            },
+            "lint": {
+              "inputs": [
+                "default",
+                "{workspaceRoot}/.eslintrc.json",
+                "{workspaceRoot}/.eslintignore"
+              ],
+              "executor": "@nx/eslint:lint",
+              "outputs": [
+                "{options.outputFile}"
+              ],
+              "options": {
+                "lintFilePatterns": [
+                  "apps/cold-openai/**/*.ts"
+                ]
+              },
+              "configurations": {}
+            },
+            "test": {
+              "cache": true,
+              "inputs": [
+                "default",
+                "^production",
+                "{workspaceRoot}/jest.preset.js"
+              ],
+              "executor": "@nx/jest:jest",
+              "outputs": [
+                "{workspaceRoot}/coverage/{projectRoot}"
+              ],
+              "options": {
+                "passWithNoTests": true,
+                "jestConfig": "apps/cold-openai/jest.config.ts"
+              },
+              "configurations": {
+                "ci": {
+                  "ci": true,
+                  "codeCoverage": true
+                }
+              }
+            }
+          },
+          "tags": [],
+          "implicitDependencies": []
+        }
+      },
+      "cold-ui-e2e": {
+        "name": "cold-ui-e2e",
+        "type": "e2e",
+        "data": {
+          "root": "apps/cold-ui-e2e",
+          "name": "cold-ui-e2e",
+          "$schema": "../../node_modules/nx/schemas/project-schema.json",
+          "sourceRoot": "apps/cold-ui-e2e/src",
+          "projectType": "application",
+          "targets": {
+            "e2e": {
+              "inputs": [
+                "default",
+                "^production"
+              ],
+              "executor": "@nx/cypress:cypress",
+              "options": {
+                "cypressConfig": "apps/cold-ui-e2e/cypress.config.ts",
+                "devServerTarget": "cold-ui:serve:development",
+                "testingType": "e2e"
+              },
+              "configurations": {
+                "production": {
+                  "devServerTarget": "cold-ui:serve:production"
+                },
+                "ci": {
+                  "devServerTarget": "cold-ui:serve-static"
+                }
+              }
+            },
+            "lint": {
+              "inputs": [
+                "default",
+                "{workspaceRoot}/.eslintrc.json",
+                "{workspaceRoot}/.eslintignore"
+              ],
+              "executor": "@nx/linter:eslint",
+              "outputs": [
+                "{options.outputFile}"
+              ],
+              "options": {
+                "lintFilePatterns": [
+                  "apps/cold-ui-e2e/**/*.{js,ts}"
+                ]
+              },
+              "configurations": {}
+            }
+          },
+          "tags": [],
+          "implicitDependencies": [
+            "cold-ui"
+          ]
+        }
+      },
+      "cold-api": {
+        "name": "cold-api",
+        "type": "app",
+        "data": {
+          "root": "apps/cold-api",
+          "name": "cold-api",
+          "$schema": "../../node_modules/nx/schemas/project-schema.json",
+          "sourceRoot": "apps/cold-api/src",
+          "projectType": "application",
+          "targets": {
+            "build": {
+              "dependsOn": [
+                "^build"
+              ],
+              "inputs": [
+                "production",
+                "^production"
+              ],
+              "executor": "@nx/webpack:webpack",
+              "outputs": [
+                "{options.outputPath}"
+              ],
+              "defaultConfiguration": "production",
+              "options": {
+                "target": "node",
+                "compiler": "tsc",
+                "outputPath": "dist/apps/cold-api",
+                "main": "apps/cold-api/src/main.ts",
+                "tsConfig": "apps/cold-api/tsconfig.app.json",
+                "assets": [
+                  "apps/cold-api/src/assets"
+                ],
+                "isolatedConfig": true,
+                "webpackConfig": "apps/cold-api/webpack.config.js"
+              },
+              "configurations": {
+                "development": {},
+                "production": {}
+              }
+            },
+            "serve": {
+              "executor": "@nx/js:node",
+              "defaultConfiguration": "development",
+              "options": {
+                "buildTarget": "cold-api:build"
+              },
+              "configurations": {
+                "development": {
+                  "buildTarget": "cold-api:build:development"
+                },
+                "production": {
+                  "buildTarget": "cold-api:build:production"
+                }
+              }
+            },
+            "lint": {
+              "inputs": [
+                "default",
+                "{workspaceRoot}/.eslintrc.json",
+                "{workspaceRoot}/.eslintignore"
+              ],
+              "executor": "@nx/eslint:lint",
+              "outputs": [
+                "{options.outputFile}"
+              ],
+              "options": {
+                "lintFilePatterns": [
+                  "apps/cold-api/**/*.ts"
+                ]
+              },
+              "configurations": {}
+            },
+            "test": {
+              "cache": true,
+              "inputs": [
+                "default",
+                "^production",
+                "{workspaceRoot}/jest.preset.js"
+              ],
+              "executor": "@nx/jest:jest",
+              "outputs": [
+                "{workspaceRoot}/coverage/{projectRoot}"
+              ],
+              "options": {
+                "passWithNoTests": true,
+                "jestConfig": "apps/cold-api/jest.config.ts"
+              },
+              "configurations": {
+                "ci": {
+                  "ci": true,
+                  "codeCoverage": true
+                }
+              }
+            }
+          },
+          "tags": [],
+          "implicitDependencies": []
+        }
+      },
+      "cold-ui": {
+        "name": "cold-ui",
+        "type": "app",
+        "data": {
+          "root": "apps/cold-ui",
+          "name": "cold-ui",
+          "$schema": "/node_modules/nx/schemas/project-schema.json",
+          "sourceRoot": "apps/cold-ui/src",
+          "projectType": "application",
+          "targets": {
+            "build": {
+              "dependsOn": [
+                "^build"
+              ],
+              "inputs": [
+                "production",
+                "^production"
+              ],
+              "executor": "@nx/vite:build",
+              "outputs": [
+                "{options.outputPath}"
+              ],
+              "defaultConfiguration": "production",
+              "options": {
+                "postcssConfig": "apps/cold-ui/postcss.config.js",
+                "outputPath": "dist/apps/cold-ui"
+              },
+              "configurations": {
+                "development": {
+                  "mode": "development"
+                },
+                "production": {
+                  "mode": "production"
+                }
+              }
+            },
+            "serve": {
+              "executor": "@nx/vite:dev-server",
+              "defaultConfiguration": "development",
+              "options": {
+                "buildTarget": "cold-ui:build"
+              },
+              "configurations": {
+                "development": {
+                  "buildTarget": "cold-ui:build:development",
+                  "hmr": true
+                },
+                "production": {
+                  "buildTarget": "cold-ui:build:production",
+                  "hmr": false
+                }
+              }
+            },
+            "preview": {
+              "executor": "@nx/vite:preview-server",
+              "defaultConfiguration": "development",
+              "options": {
+                "buildTarget": "cold-ui:build"
+              },
+              "configurations": {
+                "development": {
+                  "buildTarget": "cold-ui:build:development"
+                },
+                "production": {
+                  "buildTarget": "cold-ui:build:production"
+                }
+              }
+            },
+            "test": {
+              "inputs": [
+                "default",
+                "^production"
+              ],
+              "executor": "@nx/vite:test",
+              "outputs": [
+                "{options.reportsDirectory}"
+              ],
+              "options": {
+                "passWithNoTests": true,
+                "reportsDirectory": "../../coverage/apps/cold-ui"
+              },
+              "configurations": {}
+            },
+            "typecheck": {
+              "executor": "nx:run-commands",
+              "options": {
+                "commands": [
+                  "tsc -p tsconfig.app.json --noEmit"
+                ],
+                "cwd": "apps/cold-ui",
+                "forwardAllArgs": false
+              },
+              "configurations": {}
+            },
+            "lint": {
+              "inputs": [
+                "default",
+                "{workspaceRoot}/.eslintrc.json",
+                "{workspaceRoot}/.eslintignore"
+              ],
+              "executor": "@nx/linter:eslint",
+              "outputs": [
+                "{options.outputFile}"
+              ],
+              "options": {
+                "lintFilePatterns": [
+                  "apps/cold-ui/**/*.{ts,tsx,js,jsx}"
+                ]
+              },
+              "configurations": {}
+            },
+            "serve-static": {
+              "executor": "@nx/web:file-server",
+              "options": {
+                "buildTarget": "cold-ui:build"
+              },
+              "configurations": {}
+            },
+            "storybook": {
+              "executor": "@nx/storybook:storybook",
+              "options": {
+                "port": 4400,
+                "configDir": "apps/cold-ui/.storybook"
+              },
+              "configurations": {
+                "ci": {
+                  "quiet": true
+                }
+              }
+            },
+            "build-storybook": {
+              "inputs": [
+                "default",
+                "^production",
+                "!{projectRoot}/.storybook/**/*"
+              ],
+              "executor": "@nx/storybook:build",
+              "outputs": [
+                "{options.outputDir}"
+              ],
+              "options": {
+                "outputDir": "dist/storybook/cold-ui",
+                "configDir": "apps/cold-ui/.storybook"
+              },
+              "configurations": {
+                "ci": {
+                  "quiet": true
+                }
+              }
+            },
+            "test-storybook": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "test-storybook -c apps/cold-ui/.storybook --url=http://localhost:4400"
+              },
+              "configurations": {}
+            },
+            "static-storybook": {
+              "executor": "@nx/web:file-server",
+              "options": {
+                "buildTarget": "cold-ui:build-storybook",
+                "staticFilePath": "dist/storybook/cold-ui"
+              },
+              "configurations": {
+                "ci": {
+                  "buildTarget": "cold-ui:build-storybook:ci"
+                }
+              }
+            },
+            "e2e": {
+              "inputs": [
+                "default",
+                "^production"
+              ],
+              "executor": "@nx/cypress:cypress",
+              "options": {
+                "cypressConfig": "apps/cold-ui/cypress.config.ts",
+                "testingType": "e2e",
+                "devServerTarget": "cold-ui:serve",
+                "port": 6006
+              },
+              "configurations": {
+                "production": {
+                  "devServerTarget": "cold-ui:serve:production"
+                },
+                "ci": {
+                  "devServerTarget": "cold-ui:serve-static"
+                }
+              }
+            },
+            "component-test": {
+              "inputs": [
+                "default",
+                "^production"
+              ],
+              "executor": "@nx/cypress:cypress",
+              "options": {
+                "cypressConfig": "apps/cold-ui/cypress.config.ts",
+                "testingType": "component"
+              },
+              "configurations": {}
+            }
+          },
+          "tags": [],
+          "implicitDependencies": []
+        }
+      },
+      "react": {
+        "name": "react",
+        "type": "lib",
+        "data": {
+          "root": "libs/react",
+          "name": "react",
+          "$schema": "../../node_modules/nx/schemas/project-schema.json",
+          "sourceRoot": "libs/react/src",
+          "projectType": "library",
+          "tags": [],
+          "targets": {
+            "typecheck": {
+              "executor": "nx:run-commands",
+              "options": {
+                "commands": [
+                  "tsc -p tsconfig.lib.json --noEmit"
+                ],
+                "cwd": "libs/react",
+                "forwardAllArgs": false
+              },
+              "configurations": {}
+            },
+            "lint": {
+              "inputs": [
+                "default",
+                "{workspaceRoot}/.eslintrc.json",
+                "{workspaceRoot}/.eslintignore"
+              ],
+              "executor": "@nx/linter:eslint",
+              "outputs": [
+                "{options.outputFile}"
+              ],
+              "options": {
+                "lintFilePatterns": [
+                  "libs/react/**/*.{ts,tsx,js,jsx}"
+                ]
+              },
+              "configurations": {}
+            },
+            "build": {
+              "dependsOn": [
+                "^build"
+              ],
+              "inputs": [
+                "production",
+                "^production"
+              ],
+              "executor": "@nx/vite:build",
+              "outputs": [
+                "{options.outputPath}"
+              ],
+              "defaultConfiguration": "production",
+              "options": {
+                "outputPath": "dist/libs/react"
+              },
+              "configurations": {
+                "development": {
+                  "mode": "development"
+                },
+                "production": {
+                  "mode": "production"
+                }
+              }
+            },
+            "test": {
+              "inputs": [
+                "default",
+                "^production"
+              ],
+              "executor": "@nx/vite:test",
+              "outputs": [
+                "{options.reportsDirectory}"
+              ],
+              "options": {
+                "passWithNoTests": true,
+                "reportsDirectory": "../../coverage/libs/react"
+              },
+              "configurations": {}
+            }
+          },
+          "implicitDependencies": []
+        }
+      },
+      "coldpbc/nest": {
+        "name": "coldpbc/nest",
+        "type": "lib",
+        "data": {
+          "root": "libs/nest",
+          "name": "coldpbc/nest",
+          "targets": {
+            "nx-release-publish": {
+              "dependsOn": [
+                "^nx-release-publish"
+              ],
+              "executor": "@nx/js:release-publish",
+              "options": {},
+              "configurations": {}
+            },
+            "lint": {
+              "inputs": [
+                "default",
+                "{workspaceRoot}/.eslintrc.json",
+                "{workspaceRoot}/.eslintignore"
+              ],
+              "executor": "@nx/eslint:lint",
+              "outputs": [
+                "{options.outputFile}"
+              ],
+              "options": {
+                "lintFilePatterns": [
+                  "libs/nest/**/*.ts"
+                ]
+              },
+              "configurations": {}
+            },
+            "test": {
+              "cache": true,
+              "inputs": [
+                "default",
+                "^production",
+                "{workspaceRoot}/jest.preset.js"
+              ],
+              "executor": "@nx/jest:jest",
+              "outputs": [
+                "{workspaceRoot}/coverage/{projectRoot}"
+              ],
+              "options": {
+                "passWithNoTests": true,
+                "jestConfig": "libs/nest/jest.config.ts"
+              },
+              "configurations": {
+                "ci": {
+                  "ci": true,
+                  "codeCoverage": true
+                }
+              }
+            },
+            "prisma-generate": {
+              "executor": "@nx-tools/nx-prisma:generate",
+              "options": {
+                "schema": "libs/nest/prisma/schema.prisma"
+              },
+              "configurations": {}
+            },
+            "prisma-migrate": {
+              "executor": "@nx-tools/nx-prisma:migrate dev",
+              "options": {
+                "schema": "libs/nest/prisma/schema.prisma"
+              },
+              "configurations": {}
+            },
+            "prisma-pull": {
+              "executor": "@nx-tools/nx-prisma:pull",
+              "options": {
+                "schema": "libs/nest/prisma/schema.prisma"
+              },
+              "configurations": {}
+            },
+            "prisma-push": {
+              "executor": "@nx-tools/nx-prisma:push",
+              "options": {
+                "schema": "libs/nest/prisma/schema.prisma"
+              },
+              "configurations": {}
+            },
+            "prisma-deploy": {
+              "executor": "@nx-tools/nx-prisma:deploy",
+              "options": {
+                "schema": "libs/nest/prisma/schema.prisma"
+              },
+              "configurations": {}
+            },
+            "prisma-status": {
+              "executor": "@nx-tools/nx-prisma:status",
+              "options": {
+                "schema": "libs/nest/prisma/schema.prisma"
+              },
+              "configurations": {}
+            },
+            "prisma-studio": {
+              "executor": "@nx-tools/nx-prisma:studio",
+              "options": {
+                "schema": "libs/nest/prisma/schema.prisma"
+              },
+              "configurations": {}
+            },
+            "prisma-reset": {
+              "executor": "@nx-tools/nx-prisma:reset",
+              "options": {
+                "schema": "libs/nest/prisma/schema.prisma"
+              },
+              "configurations": {}
+            },
+            "prisma-resolve": {
+              "executor": "@nx-tools/nx-prisma:resolve",
+              "options": {
+                "schema": "libs/nest/prisma/schema.prisma"
+              },
+              "configurations": {}
+            },
+            "prisma-seed": {
+              "executor": "@nx-tools/nx-prisma:seed",
+              "options": {
+                "schema": "libs/nest/prisma/schema.prisma"
+              },
+              "configurations": {}
+            },
+            "prisma-validate": {
+              "executor": "@nx-tools/nx-prisma:validate",
+              "options": {
+                "schema": "libs/nest/prisma/schema.prisma"
+              },
+              "configurations": {}
+            }
+          },
+          "$schema": "../../node_modules/nx/schemas/project-schema.json",
+          "sourceRoot": "/libs/nest/src",
+          "projectType": "library",
+          "tags": [],
+          "implicitDependencies": []
+        }
+      }
+    },
+    "dependencies": {
+      "cold-openai-e2e": [
+        {
+          "source": "cold-openai-e2e",
+          "target": "cold-openai",
+          "type": "implicit"
+        }
+      ],
+      "cold-api-e2e": [
+        {
+          "source": "cold-api-e2e",
+          "target": "cold-api",
+          "type": "implicit"
+        }
+      ],
+      "cold-openai": [],
+      "cold-ui-e2e": [
+        {
+          "source": "cold-ui-e2e",
+          "target": "cold-ui",
+          "type": "implicit"
+        }
+      ],
+      "cold-api": [],
+      "cold-ui": [],
+      "react": [],
+      "coldpbc/nest": []
+    }
+  },
+  "affectedProjects": [],
+  "criticalPath": []
+}
