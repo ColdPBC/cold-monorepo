@@ -13,6 +13,7 @@
       "services": [
         {
           "id": "cold-ui-production",
+          "domain": "app.coldclimate.com",
           "name": "cold-ui",
           "type": "static",
           "singlePageApp": true,
@@ -59,6 +60,7 @@
         {
           "id": "cold-api-fc-production",
           "name": "cold-api-fc",
+          "domain": "api.coldclimate.com",
           "cpu": 1,
           "port": 7001,
           "type": "fargate",
@@ -207,6 +209,7 @@
         {
           "id": "cold-ui-staging",
           "name": "cold-ui",
+          "domain": "app.coldclimate.online",
           "type": "static",
           "singlePageApp": true,
           "buildType": "nixpacks",
@@ -255,6 +258,7 @@
           "id": "cold-api-fc-staging",
           "cpu": 1,
           "name": "cold-api-fc",
+          "domain": "api.coldclimate.online",
           "port": 7001,
           "type": "fargate",
           "memory": 2,
