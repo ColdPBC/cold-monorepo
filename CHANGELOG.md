@@ -1,3 +1,11 @@
+## [1.72.11](https://github.com/ColdPBC/cold-monorepo/compare/v1.72.10...v1.72.11) (2023-12-02)
+
+
+### Bug Fixes
+
+* return object instead of throwing ([731dd10](https://github.com/ColdPBC/cold-monorepo/commit/731dd1006e23fcf42d3581b2301b067dd90a5ff4))
+* typo in log message ([3d945c1](https://github.com/ColdPBC/cold-monorepo/commit/3d945c141d3b936089e8f27899632b1d896918ce))
+
 ## [1.72.10](https://github.com/ColdPBC/cold-monorepo/compare/v1.72.9...v1.72.10) (2023-12-01)
 
 
