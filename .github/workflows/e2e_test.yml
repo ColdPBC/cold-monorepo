@@ -63,7 +63,7 @@ jobs:
         run: yarn && yarn postinstall
 
       - name: Install Tracer
-        run: npm install --save-dev dd-trace --env ci
+        run: yarn add -D dd-trace
       - name: 🌈 Generate Prisma Client
         run: yarn dlx nx run coldpbc/nest:prisma-generate
 
@@ -71,5 +71,5 @@ jobs:
         run: yarn prebuild && yarn dlx nx reset && yarn dlx nx run cold-api:build:development
 
       - name: 🩻 Run Tests
-        run: NODE_OPTIONS="-r dd-trace/ci/init" DD_ENV=ci DD_SERVICE=cold-api-nest yarn dlx nx run cold-api-e2e:e2e:ci
+        run: DD_SITE=us5.datadoghq.com DD_API_KEY=${{secrets.DD_API_KEY}} DD_CIVISIBILITY_AGENTLESS_ENABLED=true NODE_OPTIONS="-r dd-trace/ci/init" DD_ENV=test DD_SERVICE=cold-api-nest-e2e nx run cold-api-e2e:e2e:ci
 
