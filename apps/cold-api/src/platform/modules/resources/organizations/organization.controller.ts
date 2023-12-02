@@ -378,7 +378,7 @@ export class OrganizationController extends BaseWorker {
       user: AuthenticatedUser;
     },
   ) {
-    this.logger.log(`Removing organization ${orgId} in Auth0`);
+    this.logger.log(`Removing organization (${orgId}) invite in Auth0`, { orgId, invId, ...req.user });
 
     return this.orgService.deleteInvitation(orgId, invId, req.user);
   }
