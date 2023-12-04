@@ -50,7 +50,7 @@
     "@heroicons/react": "^2.0.16",
     "@launchdarkly/node-server-sdk": "^8.1.0",
     "@mdx-js/rollup": "^2.3.0",
-    "@mui/icons-material": "^5.11.11",
+    "@mui/icons-material": "^5.14.19",
     "@nestjs/axios": "^3.0.0",
     "@nestjs/cache-manager": "^2.1.0",
     "@nestjs/cli": "^10.2.1",
