@@ -1,14 +1,15 @@
-name: ⏮ E2E Tests ⏭
+name: ⏮ Production E2E Tests ⏭
 on:
   workflow_dispatch:
     inputs:
       api_url:
-        description: 'API Server URL to run tests against'
+        description: 'Production API Server URL'
         type: string
-        default: 'https://api.coldclimate.online'
+        default: 'https://api.coldclimate.com'
         required: true
-  deployment_status:
-    types: [completed, success]
+  push:
+    branches:
+      - main
 env:
   GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
   NODE_ENV: ci
@@ -21,13 +22,13 @@ env:
   CACHE_NAME: cache-node-modules
   PR_NUMBER: ${{ github.event.number }}
   API_ADMIN_EMAIL: ${{ secrets.API_ADMIN_EMAIL }}
-  API_ADMIN_PASSWORD: ${{ secrets.TEST_API_ADMIN_PASSWORD }}
-  AUTH0_AUDIENCE: ${{ secrets.TEST_AUTH0_AUDIENCE }}
-  AUTH0_CLIENT_ID: ${{ secrets.TEST_AUTH0_CLIENT_ID }}
-  AUTH0_CLIENT_SECRET: ${{ secrets.TEST_AUTH0_CLIENT_SECRET }}
-  AUTH0_ORG_ID: ${{ secrets.TEST_AUTH0_ORG_ID }}
-  AUTH0_TOKEN_URL: ${{ secrets.TEST_AUTH0_TOKEN_URL }}
-  API_SERVER_URL: ${{ github.event.inputs.api_url || github.event.deployment_status.target_url }}
+  API_ADMIN_PASSWORD: ${{ secrets.PRODUCTION_API_ADMIN_PASSWORD }}
+  AUTH0_AUDIENCE: ${{ secrets.PRODUCTION_AUTH0_AUDIENCE }}
+  AUTH0_CLIENT_ID: ${{ secrets.PRODUCTION_AUTH0_CLIENT_ID }}
+  AUTH0_CLIENT_SECRET: ${{ secrets.PRODUCTION_AUTH0_CLIENT_SECRET }}
+  AUTH0_ORG_ID: ${{ secrets.PRODUCTION_AUTH0_ORG_ID }}
+  AUTH0_TOKEN_URL: ${{ secrets.PRODUCTION_AUTH0_TOKEN_URL }}
+  API_SERVER_URL: "https://api.coldclimate.com"
 
 jobs:
   api-e2e:
