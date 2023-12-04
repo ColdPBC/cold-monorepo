@@ -63,12 +63,14 @@ jobs:
           # Only return if PR is not in draft state. (By default it returns PRs in any state.)
           filterOutDraft: true
       - name: 🛒 Checkout
+        if: steps.PR.outputs.pr_found != 'true'
         uses: actions/checkout@v4
         with:
           ref: ${{ github.head_ref }}
           fetch-depth: 0
           token: ${{ secrets.GH_TOKEN }}
       - name: 🧑‍💻 Setup Node.js
+        if: steps.PR.outputs.pr_found != 'true'
         uses: actions/setup-node@v4
         with:
           node-version: "20.9.0"
@@ -116,25 +118,6 @@ jobs:
         run: |
           curl -n -X POST https://app.flightcontrol.dev/api/deploy-hook/cold-staging/58vWGjvmj9PWGxzImyRkVCTujxuJT-Q8piPwciMogtAy4-ci?force=false
           echo "🛩 Flightcontrol Deploying ( https://app.flightcontrol.dev/org/cloejv4kz05s0ps21f3q2qjxe/environments/clpeertbx01sgpx0yy5cu4imq )"
-
-      - name: 🛩 Set prod version in heroku
-        run: |
-          curl --request PATCH \
-          --url 'https://api.heroku.com/apps/api-cold-climate-production/config-vars' \
-          --header 'Accept: application/vnd.heroku+json; version=3`.\n' \
-          --header 'Content-Type: application/json' \
-          --header 'Authorization: Bearer ${{secrets.HEROKU_API_KEY}}' \
-          --data "{\"DD_VERSION\":$(npm pkg get version)}"
-
-      - name: 🛩 Set Staging Version in Heroku
-        if: startsWith(env.BRANCH_NAME,'staging') || startsWith(env.BRANCH_NAME,'cold') || startsWith(env.BRANCH_NAME,'Cold') || startsWith(env.BRANCH_NAME,'COLD')
-        run: |
-          curl --request PATCH \
-          --url 'https://api.heroku.com/apps/api-cold-climate-staging/config-vars' \
-          --header 'Accept: application/vnd.heroku+json; version=3`.\n' \
-          --header 'Content-Type: application/json' \
-          --header 'Authorization: Bearer ${{secrets.HEROKU_API_KEY}}' \
-          --data "{\"DD_VERSION\":$(npm pkg get version)}"
 
       - name: 🛬 Done!
         run: echo "🛩 Flightcontrol Deploying 🛩"
