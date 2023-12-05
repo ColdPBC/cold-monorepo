@@ -65,7 +65,7 @@
           "port": 7001,
           "type": "fargate",
           "memory": 2,
-          "dockerfilePath": "Dockerfile",
+          "dockerfilePath": "api.dockerfile",
           "dockerContext": ".",
           "containerImage": {
             "registryId": "cold-ecr-fc-r123elz",
@@ -77,7 +77,7 @@
             "apps/cold-api/test/**",
             "libs/nest/prisma/**",
             "libs/nest/src/**",
-            "Dockerfile"
+            "api.dockerfile"
           ],
           "maxInstances": 4,
           "minInstances": 2,
@@ -262,14 +262,14 @@
           "port": 7001,
           "type": "fargate",
           "memory": 2,
-          "dockerfilePath": "Dockerfile",
+          "dockerfilePath": "api.dockerfile",
           "dockerContext": ".",
           "watchPaths": [
             "apps/cold-api/src/**",
             "apps/cold-api/test/**",
             "libs/nest/prisma/**",
             "libs/nest/src/**",
-            "Dockerfile"
+            "api.dockerfile"
           ],
           "autoscaling": {
             "cpuThreshold": 70,
@@ -471,7 +471,7 @@
             "apps/cold-api/test/**",
             "libs/nest/prisma/**",
             "libs/nest/src/**",
-            "Dockerfile"
+            "api.dockerfile"
           ],
           "autoscaling": {
             "cpuThreshold": 70,
