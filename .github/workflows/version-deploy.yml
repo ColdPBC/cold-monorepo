@@ -108,16 +108,22 @@ jobs:
       - version
     steps:
       - name: 🛫 Trigger Production Deploy
-        if: startsWith(env.BRANCH_NAME,'main') && ${{ github.actor != 'dependabot[bot]' }}
+        if: steps.PR.outputs.pr_found != 'true' && (startsWith(env.BRANCH_NAME,'main') && ${{ github.actor != 'dependabot[bot]' }})
         run: |
           curl -n -X POST https://app.flightcontrol.dev/api/deploy-hook/cold-production/gAEvhWNzcPCY69Z35mGvqXY0S9_vnQ0eqJrtCpIr8aUI9sW-?force=false
           echo "🛩 Flightcontrol Deploying ( https://app.flightcontrol.dev/org/cloejv4kz05s0ps21f3q2qjxe/environments/clpgmjfpl049fr90yqwdsuqd8 )"
 
       - name: 🛫 Trigger Staging Deploy
-        if: startsWith(env.BRANCH_NAME,'staging') && ${{ github.actor != 'dependabot[bot]' }}
+        if: steps.PR.outputs.pr_found != 'true' && startsWith(env.BRANCH_NAME,'staging') && ${{ github.actor != 'dependabot[bot]' }}
         run: |
           curl -n -X POST https://app.flightcontrol.dev/api/deploy-hook/cold-staging/58vWGjvmj9PWGxzImyRkVCTujxuJT-Q8piPwciMogtAy4-ci?force=false
           echo "🛩 Flightcontrol Deploying ( https://app.flightcontrol.dev/org/cloejv4kz05s0ps21f3q2qjxe/environments/clpeertbx01sgpx0yy5cu4imq )"
+
+      - name: 🛫 Trigger Test Deploy
+        if: steps.PR.outputs.pr_found === 'true' && startsWith(env.BRANCH_NAME,'cold') && ${{ github.actor != 'dependabot[bot]' }}
+        run: |
+          curl -n -X POST https://app.flightcontrol.dev/api/deploy-hook/cold-preview/xaQAJM9Iw4G6UWmYTX0RLYdU1krFiPnKNV-lzQeTc6crqjgc/{prNumber}/{commitSha}?force=false
+          echo "🛩 Flightcontrol Deploying ( https://app.flightcontrol.dev/org/cloejv4kz05s0ps21f3q2qjxe/preview-environments )"
 
       - name: 🛬 Done!
         run: echo "🛩 Flightcontrol Deploying 🛩"
