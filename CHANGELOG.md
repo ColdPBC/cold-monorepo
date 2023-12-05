@@ -1,3 +1,10 @@
+## [1.72.12-cold-000007-test-issue.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.72.11...v1.72.12-cold-000007-test-issue.1) (2023-12-05)
+
+
+### Bug Fixes
+
+* migrate to config service ([2d359d3](https://github.com/ColdPBC/cold-monorepo/commit/2d359d358ba8fbb662b46941b939d6e3f00466db))
+
 ## [1.72.11](https://github.com/ColdPBC/cold-monorepo/compare/v1.72.10...v1.72.11) (2023-12-02)
 
 
