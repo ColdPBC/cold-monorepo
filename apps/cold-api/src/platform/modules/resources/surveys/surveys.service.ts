@@ -3,7 +3,7 @@ import { organizations, survey_types } from '@prisma/client';
 import { isUUID } from 'class-validator';
 import { diff } from 'deep-object-diff';
 import { find, merge, omit, map, filter } from 'lodash';
-import { Span, TraceService } from 'nestjs-ddtrace';
+import { Span } from 'nestjs-ddtrace';
 import { v4 } from 'uuid';
 import { ZodSurveyResponseDto } from '@coldpbc/nest';
 import { CacheService, DarklyService, PrismaService, BaseWorker, AuthenticatedUser, UpdateSurveyDefinitionsDto, SurveyDefinitionsEntity } from '@coldpbc/nest';
@@ -61,7 +61,10 @@ export class SurveysService extends BaseWorker {
   async create(createSurveyDefinitionDto: Partial<SurveyDefinitionsEntity>, user: AuthenticatedUser): Promise<ZodSurveyResponseDto> {
     const org = (await this.cache.get(`organizations:${user.coldclimate_claims.org_id}`)) as organizations;
 
-    this.setTags({ organization: omit(org, ['branding', 'phone', 'street_address', 'created_at', 'updated_at']), user: user.coldclimate_claims });
+    this.setTags({
+      organization: omit(org, ['branding', 'phone', 'street_address', 'created_at', 'updated_at']),
+      user: user.coldclimate_claims,
+    });
 
     try {
       const existing = (await this.prisma.survey_definitions.findFirst({
@@ -122,7 +125,15 @@ export class SurveysService extends BaseWorker {
    * @param bpc
    * @param impersonateOrg
    */
-  async findAll(user: AuthenticatedUser, surveyFilter?: { name: string; type: string }, bpc?: boolean, impersonateOrg?: string): Promise<ZodSurveyResponseDto[]> {
+  async findAll(
+    user: AuthenticatedUser,
+    surveyFilter?: {
+      name: string;
+      type: string;
+    },
+    bpc?: boolean,
+    impersonateOrg?: string,
+  ): Promise<ZodSurveyResponseDto[]> {
     this.setTags({ user: user.coldclimate_claims, bpc, impersonateOrg });
     let surveys = [] as ZodSurveyResponseDto[];
 
@@ -278,7 +289,10 @@ export class SurveysService extends BaseWorker {
   async submitResults(name: string, submission: any, user: AuthenticatedUser, impersonateOrg?: string): Promise<ZodSurveyResponseDto> {
     const org = (await this.cache.get(`organizations:${impersonateOrg && user.isColdAdmin ? impersonateOrg : user.coldclimate_claims.org_id}`)) as organizations;
 
-    this.setTags({ organization: omit(org, ['branding', 'phone', 'street_address', 'created_at', 'updated_at']), user: user.coldclimate_claims });
+    this.setTags({
+      organization: omit(org, ['branding', 'phone', 'street_address', 'created_at', 'updated_at']),
+      user: user.coldclimate_claims,
+    });
 
     try {
       const surveyCacheKey = () => {

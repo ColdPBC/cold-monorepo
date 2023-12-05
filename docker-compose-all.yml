@@ -4,6 +4,13 @@ services:
     build:
       context: .
       dockerfile: api.dockerfile
+      args:
+        NODE_ENV: development
+        DD_SERVICE: nest-api
+        DD_VERSION: 99.99.99
+        DD_POSTGRES_PASSWORD: emanate-rail-pliable-brindled-plea-PADDOCK
+        DD_API_KEY: ${DD_API_KEY}
+        FC_GIT_COMMIT_SHA: cdc3b19
     container_name: nest-api
     restart: always
     ports:

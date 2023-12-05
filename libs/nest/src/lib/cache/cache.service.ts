@@ -1,7 +1,7 @@
 // cache.service.ts
 import { Global, Inject, Injectable } from '@nestjs/common';
 import { RedisCache } from 'cache-manager-redis-yet';
-import { Span, TraceService } from 'nestjs-ddtrace';
+import { Span } from 'nestjs-ddtrace';
 import { filter } from 'lodash';
 import { BaseWorker } from '../worker';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';

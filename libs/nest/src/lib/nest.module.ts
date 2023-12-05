@@ -16,57 +16,76 @@ import { ColdCacheModule } from './cache';
 import { JwtStrategy, AuthorizationModule } from './authorization';
 import { JwtAuthGuard } from './guards';
 import { InterceptorModule } from './interceptors';
+import { BaseWorker, WorkerLogger } from './worker';
 
-@Module({
-  imports: [
-    ConfigModule.forRoot({
-      isGlobal: true,
-    }),
-    CacheModule.registerAsync({
-      imports: [ConfigModule],
-      useFactory: async (cfg: ConfigService) => ({
-        store: await redisStore({
-          url: cfg.get<string>('REDISCLOUD_URL'),
-          ttl: 1000 * 60 * 60,
+@Module({})
+export class NestModule {
+  static async forRootAsync() {
+    const logger = new WorkerLogger('NestModule');
+    const config = new ConfigService();
+    return {
+      module: NestModule,
+      imports: [
+        ConfigModule.forRoot({
+          isGlobal: true,
         }),
-      }),
-      inject: [ConfigService],
-      isGlobal: true,
-    }),
-    HealthModule,
-    DarklyModule,
-    PrismaModule,
-    PassportModule,
-    AuthorizationModule,
-    HttpModule,
-    InterceptorModule,
-    DatadogTraceModule.forRoot(),
-    HotShotsModule.forRoot({
-      port: 8125,
-      host: '127.0.0.1',
-      globalTags: {
-        version: process.env["DD_VERSION"] || process.env['npm_package_version'] || '0.0.0',
-        service: process.env['npm_package_name'] || 'cold-api-nest',
-        env: process.env['NODE_ENV'] || 'development',
-      },
-    }),
-    HealthModule,
-    DarklyModule,
-    ColdCacheModule,
-  ],
-  controllers: [HealthController],
-  providers: [
-    PrismaService,
-    ConfigService,
-    DarklyService,
-    JwtStrategy,
-    JwtService,
-    HealthService,
-    {
-      provide: APP_GUARD,
-      useClass: JwtAuthGuard,
-    },
-  ],
-  exports: [PrismaService, JwtStrategy, JwtService, HttpModule, ConfigService, DarklyService, HealthService, ColdCacheModule],
-})
-export class NestModule {}
+        CacheModule.registerAsync({
+          imports: [ConfigModule],
+          useFactory: async (cfg: ConfigService) => ({
+            store: await redisStore({
+              url: cfg.get<string>('REDISCLOUD_URL'),
+              ttl: 1000 * 60 * 60,
+            }),
+          }),
+          inject: [ConfigService],
+          isGlobal: true,
+        }),
+        HealthModule,
+        DarklyModule,
+        PrismaModule,
+        PassportModule,
+        AuthorizationModule,
+        HttpModule,
+        InterceptorModule,
+        DatadogTraceModule.forRoot({ controllers: true, providers: true }),
+        HotShotsModule.forRoot({
+          port: 8125,
+          host: '127.0.0.1',
+          globalize: true,
+          errorHandler: err => {
+            logger.error(err.message, {
+              stack: err.stack,
+              name: err.name,
+              env: config.get('DD_ENV') || config.getOrThrow('NX_TASK_TARGET_PROJECT'),
+              version: config.get('DD_VERSION') || BaseWorker.getPkgVersion(),
+              service: config.get('DD_SERVICE') || config.getOrThrow('NX_TASK_TARGET_PROJECT'),
+            });
+          },
+          prefix: 'cold_',
+          globalTags: {
+            env: config.get('DD_ENV') || config.getOrThrow('NX_TASK_TARGET_ENVIRONMENT'),
+            version: config.get('DD_VERSION') || BaseWorker.getPkgVersion(),
+            service: config.get('DD_SERVICE') || config.getOrThrow('NX_TASK_TARGET_PROJECT'),
+          },
+        }),
+        HealthModule,
+        DarklyModule,
+        ColdCacheModule,
+      ],
+      controllers: [HealthController],
+      providers: [
+        PrismaService,
+        ConfigService,
+        DarklyService,
+        JwtStrategy,
+        JwtService,
+        HealthService,
+        {
+          provide: APP_GUARD,
+          useClass: JwtAuthGuard,
+        },
+      ],
+      exports: [PrismaService, JwtStrategy, JwtService, HttpModule, ConfigService, DarklyService, HealthService, ColdCacheModule],
+    };
+  }
+}

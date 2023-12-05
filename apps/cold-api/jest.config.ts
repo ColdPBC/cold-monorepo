@@ -1,6 +1,6 @@
 /* eslint-disable */
 export default {
-  displayName: 'cold-api',
+  displayName: 'cold-api-test',
   preset: '../../jest.preset.js',
   testEnvironment: 'node',
   transform: {

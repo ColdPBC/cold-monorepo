@@ -5,8 +5,8 @@ ARG DATABASE_URL
 ARG DD_SERVICE
 ARG DD_VERSION
 ARG DD_API_KEY
-
 ARG FC_GIT_COMMIT_SHA
+
 ENV DD_GIT_REPOSITORY_URL=https://github.com/ColdPBC/cold-monorepo
 ENV DD_GIT_COMMIT_SHA=${FC_GIT_COMMIT_SHA}
 
@@ -56,8 +56,8 @@ FROM dependencies as build
 WORKDIR /app
 RUN yarn prebuild
 RUN yarn dlx nx run coldpbc/nest:prisma-generate
-RUN prisma migrate deploy
-RUN prisma db seed
+RUN if [ "${DATABASE_URL}" = "" ] ; then echo "DATABASE_URL is empty; skipping migration" ; else prisma migrate deploy ; fi
+RUN if [ "${DATABASE_URL}" = "" ] ; then echo "DATABASE_URL is empty; skipping seed" ; else prisma db seed ; fi
 RUN if [ "${NODE_ENV}" = "production" ] ; then echo "building for production..." && npx nx run cold-api:build:production ; else echo "building development..." && npx nx run cold-api:build:development ; fi
 RUN npx nx reset
 

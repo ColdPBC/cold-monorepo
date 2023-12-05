@@ -1,15 +1,16 @@
 import { ArgumentsHost, Catch, ExceptionFilter, HttpException } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { Span, TraceService } from 'nestjs-ddtrace';
-import * as process from 'process';
 import { get } from 'lodash';
 import { BaseWorker } from '../worker';
 import safeStringify from 'fast-safe-stringify';
+import { ConfigService } from '@nestjs/config';
 
 @Span()
 @Catch(HttpException)
 export class HttpExceptionFilter extends BaseWorker implements ExceptionFilter {
   private readonly traceService: TraceService = new TraceService();
+  private readonly config: ConfigService = new ConfigService();
 
   catch(exception: HttpException, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
@@ -53,7 +54,8 @@ export class HttpExceptionFilter extends BaseWorker implements ExceptionFilter {
       message: exception.message.replace(/\n/g, ''),
       statusCode: status,
       error: exception.name,
-      version: process.env['npm_package_version'],
+      service: this.config.get('DD_SERVICE') || this.config.getOrThrow('NX_TASK_TARGET_PROJECT'),
+      version: this.config.get('DD_VERSION') || BaseWorker.getPkgVersion(),
       timestamp: new Date().toISOString(),
       path: request.url,
       meta: { user: user?.coldclimate_claims },
