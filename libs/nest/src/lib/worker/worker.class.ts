@@ -32,7 +32,7 @@ export class BaseWorker extends RedactorService {
       service: config.get('DD_SERVICE') || config.getOrThrow('NX_TASK_TARGET_PROJECT'),
       version: config.get('DD_VERSION') || BaseWorker.getPkgVersion(),
       home_dir: appRoot.toString(),
-      env: config.get('DD_ENV') || config.getOrThrow('NX_TASK_TARGET_ENVIRONMENT'),
+      env: config.get('NODE_ENV') || config.getOrThrow('DD_ENVIRONMENT'),
       host_name: hostname(),
       system_details: {
         load_avg: loadavg(),

@@ -13,7 +13,7 @@ import { PrismaModule, PrismaService } from './prisma';
 import { HealthController, HealthModule, HealthService } from './health';
 import { DarklyModule, DarklyService } from './darkly';
 import { ColdCacheModule } from './cache';
-import { JwtStrategy, AuthorizationModule } from './authorization';
+import { AuthorizationModule, JwtStrategy } from './authorization';
 import { JwtAuthGuard } from './guards';
 import { InterceptorModule } from './interceptors';
 import { BaseWorker, WorkerLogger } from './worker';
@@ -56,14 +56,14 @@ export class NestModule {
             logger.error(err.message, {
               stack: err.stack,
               name: err.name,
-              env: config.get('DD_ENV') || config.getOrThrow('NX_TASK_TARGET_PROJECT'),
+              env: config.get('NODE_ENV') || config.getOrThrow('NX_TASK_TARGET_PROJECT'),
               version: config.get('DD_VERSION') || BaseWorker.getPkgVersion(),
               service: config.get('DD_SERVICE') || config.getOrThrow('NX_TASK_TARGET_PROJECT'),
             });
           },
           prefix: 'cold_',
           globalTags: {
-            env: config.get('DD_ENV') || config.getOrThrow('NX_TASK_TARGET_ENVIRONMENT'),
+            env: config.get('NODE_ENV') || config.getOrThrow('DD_ENVIRONMENT'),
             version: config.get('DD_VERSION') || BaseWorker.getPkgVersion(),
             service: config.get('DD_SERVICE') || config.getOrThrow('NX_TASK_TARGET_PROJECT'),
           },

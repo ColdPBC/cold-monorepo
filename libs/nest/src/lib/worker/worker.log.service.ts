@@ -1,12 +1,12 @@
-import { LoggerService } from '@nestjs/common';
+import {LoggerService} from '@nestjs/common';
 import safeStringify from 'fast-safe-stringify';
 import winstonConfig from './winston.config';
-import winston, { createLogger } from 'winston';
-import { RedactorService } from '../redactor';
-import { BaseWorker } from './worker.class';
-import { Tags } from '../primitives';
-import { merge } from 'lodash';
-import { ConfigService } from '@nestjs/config';
+import winston, {createLogger} from 'winston';
+import {RedactorService} from '../redactor';
+import {BaseWorker} from './worker.class';
+import {Tags} from '../primitives';
+import {merge} from 'lodash';
+import {ConfigService} from '@nestjs/config';
 
 /// test
 export class WorkerLogger implements LoggerService {
@@ -34,7 +34,7 @@ export class WorkerLogger implements LoggerService {
     this.tags = {
       version: this.config.get('DD_VERSION') || BaseWorker.getPkgVersion(),
       service: this.config.get('DD_SERVICE') || this.config.getOrThrow('NX_TASK_TARGET_PROJECT'),
-      env: this.config.get('DD_ENV') || this.config.getOrThrow('NX_TASK_TARGET_ENVIRONMENT'),
+      env: this.config.get('NODE_ENV') || this.config.getOrThrow('DD_ENVIRONMENT'),
       app: pkg.name,
     };
     //Logger.overrideLogger(this.logger);
