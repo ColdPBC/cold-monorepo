@@ -39,7 +39,8 @@
             "com.datadoghq.tags.service": "cold-openai",
             "com.datadoghq.ad.check_names": "[\"postgres\"]",
             "com.datadoghq.ad.init_configs": "[{}]",
-            "com.datadoghq.ad.instances":"[{\"database_autodiscovery\":{\"enabled\":true},\"collect_schemas\":{\"enabled\":true},\"dbm\":true,\"host\":\"${DATABASE_URL}\",\"port\": 5432,\"username\":\"datadog\",\"password\":\"${DD_POSTGRES_PASSWORD}\", \"tags\":[\"service:cold-rds-fc-${NODE_ENV}\",\"env:${NODE_ENV}\"]"
+            "com.datadoghq.ad.instances": "[{\"database_autodiscovery\":{\"enabled\":true},\"collect_schemas\":{\"enabled\":true},\"dbm\":true,\"host\":\"${DATABASE_URL}\",\"port\": 5432,\"username\":\"datadog\",\"password\":\"${DD_POSTGRES_PASSWORD}\", \"tags\":[\"service:cold-rds-fc-${NODE_ENV}\",\"env:${NODE_ENV}\"]",
+            "com.datadoghq.tags.version": "1.0.0"
           },
           "autoscaling": {
             "cpuThreshold": 90,
@@ -151,7 +152,7 @@
             "com.datadoghq.tags.service": "cold-openai",
             "com.datadoghq.ad.check_names": "[\"postgres\"]",
             "com.datadoghq.ad.init_configs": "[{}]",
-            "com.datadoghq.ad.instances":"[{\"database_autodiscovery\":{\"enabled\":true},\"collect_schemas\":{\"enabled\":true},\"dbm\":true,\"host\":\"${DATABASE_URL}\",\"port\": 5432,\"username\":\"datadog\",\"password\":\"${DD_POSTGRES_PASSWORD}\", \"tags\":[\"service:cold-rds-fc-${NODE_ENV}\",\"env:${NODE_ENV}\"]"
+            "com.datadoghq.ad.instances": "[{\"database_autodiscovery\":{\"enabled\":true},\"collect_schemas\":{\"enabled\":true},\"dbm\":true,\"host\":\"${DATABASE_URL}\",\"port\": 5432,\"username\":\"datadog\",\"password\":\"${DD_POSTGRES_PASSWORD}\", \"tags\":[\"service:cold-rds-fc-${NODE_ENV}\",\"env:${NODE_ENV}\"]"
           },
           "autoscaling": {
             "cpuThreshold": 90,
@@ -266,7 +267,7 @@
             "com.datadoghq.tags.service": "cold-openai",
             "com.datadoghq.ad.check_names": "[\"postgres\"]",
             "com.datadoghq.ad.init_configs": "[{}]",
-            "com.datadoghq.ad.instances":"[{\"database_autodiscovery\":{\"enabled\":true},\"collect_schemas\":{\"enabled\":true},\"dbm\":true,\"host\":\"${DATABASE_URL}\",\"port\": 5432,\"username\":\"datadog\",\"password\":\"${DD_POSTGRES_PASSWORD}\", \"tags\":[\"service:cold-rds-fc-${NODE_ENV}\",\"env:${NODE_ENV}\"]"
+            "com.datadoghq.ad.instances": "[{\"database_autodiscovery\":{\"enabled\":true},\"collect_schemas\":{\"enabled\":true},\"dbm\":true,\"host\":\"${DATABASE_URL}\",\"port\": 5432,\"username\":\"datadog\",\"password\":\"${DD_POSTGRES_PASSWORD}\", \"tags\":[\"service:cold-rds-fc-${NODE_ENV}\",\"env:${NODE_ENV}\"]"
           },
           "autoscaling": {
             "cpuThreshold": 90,

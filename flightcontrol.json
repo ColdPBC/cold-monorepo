@@ -91,8 +91,8 @@
             "com.datadoghq.tags.service": "cold-api-nest",
             "com.datadoghq.ad.check_names": "[\"postgres\"]",
             "com.datadoghq.ad.init_configs": "[{}]",
-            "com.datadoghq.ad.instances":"[{\"database_autodiscovery\":{\"enabled\":true},\"collect_schemas\":{\"enabled\":true},\"dbm\":true,\"host\":\"${DATABASE_URL}\",\"port\": 5432,\"username\":\"datadog\",\"password\":\"${DD_POSTGRES_PASSWORD}\", \"tags\":[\"service:cold-rds-fc-${NODE_ENV}\",\"env:${NODE_ENV}\"]",
-            "com.datadoghq.tags.version": ""
+            "com.datadoghq.ad.instances": "[{\"database_autodiscovery\":{\"enabled\":true},\"collect_schemas\":{\"enabled\":true},\"dbm\":true,\"host\":\"${DATABASE_URL}\",\"port\": 5432,\"username\":\"datadog\",\"password\":\"${DD_POSTGRES_PASSWORD}\", \"tags\":[\"service:cold-rds-fc-${NODE_ENV}\",\"env:${NODE_ENV}\"]",
+            "com.datadoghq.tags.version": "1.0.0"
           },
           "autoscaling": {
             "cpuThreshold": 90,
@@ -291,10 +291,10 @@
             "com.datadoghq.tags.environment": "staging",
             "com.datadoghq.tags.env": "staging",
             "com.datadoghq.tags.service": "cold-api-nest",
-            "com.datadoghq.tags.version": "",
+            "com.datadoghq.tags.version": "1.0.0",
             "com.datadoghq.ad.check_names": "[\"postgres\"]",
             "com.datadoghq.ad.init_configs": "[{}]",
-            "com.datadoghq.ad.instances":"[{\"database_autodiscovery\":{\"enabled\":true},\"collect_schemas\":{\"enabled\":true},\"dbm\":true,\"host\":\"${DATABASE_URL}\",\"port\": 5432,\"username\":\"datadog\",\"password\":\"${DD_POSTGRES_PASSWORD}\", \"tags\":[\"service:cold-rds-fc-${NODE_ENV}\",\"env:${NODE_ENV}\"]"
+            "com.datadoghq.ad.instances": "[{\"database_autodiscovery\":{\"enabled\":true},\"collect_schemas\":{\"enabled\":true},\"dbm\":true,\"host\":\"${DATABASE_URL}\",\"port\": 5432,\"username\":\"datadog\",\"password\":\"${DD_POSTGRES_PASSWORD}\", \"tags\":[\"service:cold-rds-fc-${NODE_ENV}\",\"env:${NODE_ENV}\"]"
           },
           "envVariables": {
             "NODE_ENV": "staging",
@@ -483,10 +483,10 @@
             "com.datadoghq.tags.environment": "test",
             "com.datadoghq.tags.env": "test",
             "com.datadoghq.tags.service": "cold-api-nest",
-            "com.datadoghq.tags.version": "",
+            "com.datadoghq.tags.version": "1.0.0",
             "com.datadoghq.ad.check_names": "[\"postgres\"]",
             "com.datadoghq.ad.init_configs": "[{}]",
-            "com.datadoghq.ad.instances":"[{\"database_autodiscovery\":{\"enabled\":true},\"collect_schemas\":{\"enabled\":true},\"dbm\":true,\"host\":\"${DATABASE_URL}\",\"port\": 5432,\"username\":\"datadog\",\"password\":\"${DD_POSTGRES_PASSWORD}\", \"tags\":[\"service:cold-rds-fc-${NODE_ENV}\",\"env:${NODE_ENV}\"]"
+            "com.datadoghq.ad.instances": "[{\"database_autodiscovery\":{\"enabled\":true},\"collect_schemas\":{\"enabled\":true},\"dbm\":true,\"host\":\"${DATABASE_URL}\",\"port\": 5432,\"username\":\"datadog\",\"password\":\"${DD_POSTGRES_PASSWORD}\", \"tags\":[\"service:cold-rds-fc-${NODE_ENV}\",\"env:${NODE_ENV}\"]"
           },
           "envVariables": {
             "DATABASE_URL": {
