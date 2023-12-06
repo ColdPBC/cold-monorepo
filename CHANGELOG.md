@@ -1,3 +1,10 @@
+## [1.73.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.73.0...v1.73.1) (2023-12-06)
+
+
+### Bug Fixes
+
+* versioning ([35cd479](https://github.com/ColdPBC/cold-monorepo/commit/35cd4799d24b0b9b884689ed68d2e0144fe07298))
+
 # [1.73.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.72.11...v1.73.0) (2023-12-06)
 
 
