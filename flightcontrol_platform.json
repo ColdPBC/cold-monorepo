@@ -15,7 +15,7 @@
           "id": "cold-openai-production",
           "name": "cold-openai",
           "cpu": 1,
-          "port": 7001,
+          "port": 7002,
           "type": "fargate",
           "memory": 2,
           "dockerfilePath": "_openai.dockerfile",
@@ -42,8 +42,8 @@
             "com.datadoghq.ad.instances":"[{\"database_autodiscovery\":{\"enabled\":true},\"collect_schemas\":{\"enabled\":true},\"dbm\":true,\"host\":\"${DATABASE_URL}\",\"port\": 5432,\"username\":\"datadog\",\"password\":\"${DD_POSTGRES_PASSWORD}\", \"tags\":[\"service:cold-rds-fc-${NODE_ENV}\",\"env:${NODE_ENV}\"]"
           },
           "autoscaling": {
-            "cpuThreshold": 70,
-            "memoryThreshold": 70,
+            "cpuThreshold": 90,
+            "memoryThreshold": 90,
             "cooldownTimerSecs": 300,
             "requestsPerTarget": 500
           },
@@ -139,8 +139,8 @@
             "libs/nest/src/**",
             "_openai.dockerfile"
           ],
-          "maxInstances": 4,
-          "minInstances": 2,
+          "maxInstances": 1,
+          "minInstances": 1,
           "healthCheckPath": "/health",
           "containerInsights": true,
           "enableCloudfrontSwr": true,
@@ -154,8 +154,8 @@
             "com.datadoghq.ad.instances":"[{\"database_autodiscovery\":{\"enabled\":true},\"collect_schemas\":{\"enabled\":true},\"dbm\":true,\"host\":\"${DATABASE_URL}\",\"port\": 5432,\"username\":\"datadog\",\"password\":\"${DD_POSTGRES_PASSWORD}\", \"tags\":[\"service:cold-rds-fc-${NODE_ENV}\",\"env:${NODE_ENV}\"]"
           },
           "autoscaling": {
-            "cpuThreshold": 70,
-            "memoryThreshold": 70,
+            "cpuThreshold": 90,
+            "memoryThreshold": 90,
             "cooldownTimerSecs": 300,
             "requestsPerTarget": 500
           },
@@ -254,8 +254,8 @@
             "libs/nest/src/**",
             "_openai.dockerfile"
           ],
-          "maxInstances": 4,
-          "minInstances": 2,
+          "maxInstances": 1,
+          "minInstances": 1,
           "healthCheckPath": "/health",
           "containerInsights": true,
           "enableCloudfrontSwr": true,
@@ -269,8 +269,8 @@
             "com.datadoghq.ad.instances":"[{\"database_autodiscovery\":{\"enabled\":true},\"collect_schemas\":{\"enabled\":true},\"dbm\":true,\"host\":\"${DATABASE_URL}\",\"port\": 5432,\"username\":\"datadog\",\"password\":\"${DD_POSTGRES_PASSWORD}\", \"tags\":[\"service:cold-rds-fc-${NODE_ENV}\",\"env:${NODE_ENV}\"]"
           },
           "autoscaling": {
-            "cpuThreshold": 70,
-            "memoryThreshold": 70,
+            "cpuThreshold": 90,
+            "memoryThreshold": 90,
             "cooldownTimerSecs": 300,
             "requestsPerTarget": 500
           },
