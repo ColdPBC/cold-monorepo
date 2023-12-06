@@ -21,7 +21,7 @@ export class AppModule {
             index: false,
             fallthrough: true,
           },
-          serveRoot: '../../../public',
+          serveRoot: '../../../assets',
         }),
         PrismaModule,
         Auth0Module,

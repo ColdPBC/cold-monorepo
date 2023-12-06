@@ -1,11 +1,26 @@
 import { Module } from '@nestjs/common';
+import { NestModule, PrismaModule } from '@coldpbc/nest';
+import { ServeStaticModule } from '@nestjs/serve-static';
 
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-
-@Module({
-  imports: [],
-  controllers: [AppController],
-  providers: [AppService],
-})
-export class AppModule {}
+@Module({})
+export class AppModule {
+  static async forRootAsync() {
+    return {
+      module: AppModule,
+      imports: [
+        await NestModule.forRootAsync(),
+        ServeStaticModule.forRoot({
+          serveStaticOptions: {
+            index: false,
+            fallthrough: true,
+          },
+          serveRoot: '../../../assets',
+        }),
+        PrismaModule,
+      ],
+      controllers: [],
+      providers: [],
+      exports: [],
+    };
+  }
+}

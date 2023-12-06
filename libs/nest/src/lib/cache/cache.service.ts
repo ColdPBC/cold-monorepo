@@ -29,7 +29,7 @@ export class CacheService extends BaseWorker {
       return true;
     }
 
-    if (!(await this.darkly.getFlag('api-cache-service'))) {
+    if (!(await this.darkly?.getFlag('api-cache-service'))) {
       this.logger.warn('api-cache-service flag is disabled, enable this flag to remove this warning');
       return false;
     }

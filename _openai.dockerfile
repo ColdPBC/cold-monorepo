@@ -5,7 +5,10 @@ ARG DATABASE_URL
 ARG DD_SERVICE
 ARG DD_VERSION
 ARG DD_API_KEY
-ARG DD_POSTGRES_PASSWORD
+ARG FC_GIT_COMMIT_SHA
+
+ENV DD_GIT_REPOSITORY_URL=https://github.com/ColdPBC/cold-monorepo
+ENV DD_GIT_COMMIT_SHA=${FC_GIT_COMMIT_SHA}
 
 ENV NODE_ENV=${NODE_ENV}
 ENV DD_ENV=${NODE_ENV}
@@ -18,7 +21,7 @@ LABEL com.datadoghq.ad.check_names='["postgres"]'
 LABEL com.datadoghq.ad.init_configs='[{}]'
 LABEL com.datadoghq.ad.instances='[{"database_autodiscovery":{"enabled":true},"collect_schemas":{"enabled":true},"dbm":true,"host":"${DATABASE_URL}","port": 5432,"username":"datadog","password":"${DD_POSTGRES_PASSWORD}", "tags":["service:cold-rds-fc-${NODE_ENV}","env:${NODE_ENV}"]'
 
-LABEL com.datadoghq.tags.service=${DD_SERVICE}
+LABEL com.datadoghq.tags.service="cold-openai"
 LABEL com.datadoghq.tags.version=${DD_VERSION}
 LABEL com.datadoghq.tags.env=${NODE_ENV}
 
@@ -29,7 +32,7 @@ WORKDIR /app
 #RUN npm uninstall -g yarn pnpm
 
 # install global dependencies
-RUN yarn global add nx nx-cloud prisma zod-prisma zod-prisma-types @vegardit/prisma-generator-nestjs-dto ts-node eslint
+RUN yarn global add nx nx-cloud ts-node eslint
 
 ADD . /app/
 
@@ -45,33 +48,29 @@ RUN --mount=type=bind,source=package.json,target=package.json \
     --mount=type=bind,source=yarn.lock,target=yarn.lock,readwrite \
     --mount=type=cache,target=/root/.yarn \
     if [ "${NODE_ENV}" = "production" ] ; then echo "installing production dependencies..." && yarn workspaces focus --all --production ; else echo "installing dev dependencies..." && yarn ; fi
-
+#RUN chown -R node:node /home/node/build
 RUN echo  "****NODE ENV**** ${NODE_ENV}"
 RUN yarn add -D @typescript-eslint/eslint-plugin
 
 FROM dependencies as build
 WORKDIR /app
-RUN yarn prebuild
-RUN yarn dlx nx run coldpbc/nest:prisma-generate
-RUN prisma migrate deploy
-RUN prisma db seed
-RUN if [ "${NODE_ENV}" = "production" ] ; then echo "building for production..." && npx nx run cold-api:build:production ; else echo "building development..." && npx nx run cold-api:build:development ; fi
+RUN if [ "${NODE_ENV}" = "production" ] ; then echo "building for production..." && npx nx run cold-openai:build:production ; else echo "building development..." && npx nx run cold-openai:build:development ; fi
 RUN npx nx reset
 
 FROM base as final
 USER node
 WORKDIR /home/node/app
 
-ADD --chown=node:node ./apps/cold-api/src/public /home/node/app/
-ADD --chown=node:node ./apps/cold-api/src/assets /home/node/app/
+ADD --chown=node:node ./apps/cold-openai/src/assets /home/node/app/
+ADD --chown=node:node ./apps/cold-openai/project.json /home/node/app/
 ADD --chown=node:node ./package.json /home/node/app/
 ADD --chown=node:node ./yarn.lock /home/node/app/
 
-COPY --from=build --chown=node:node /app/dist/apps/cold-api /home/node/app/cold-api
+COPY --from=build --chown=node:node /app/dist/apps/cold-openai /home/node/app/cold-openai
 COPY --from=build --chown=node:node /app/node_modules /home/node/app/node_modules
 
 # Expose the port that the application listens on.
-EXPOSE 7001
+EXPOSE 7002
 
-CMD ["node", "/home/node/app/cold-api/main.js"]
+CMD ["node", "/home/node/app/cold-openai/main.js"]
 # Run the application.
