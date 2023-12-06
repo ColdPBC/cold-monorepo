@@ -63,7 +63,7 @@ jobs:
         run: yarn && yarn postinstall && yarn add dd-trace
 
       - name: 🌈 Generate Prisma Client
-        run: yarn dlx nx run coldpbc/nest:prisma-generate
+        run: yarn dlx nx run cold-nest-library:prisma-generate
 
       - name: 🏗 build development
         run: yarn prebuild && yarn dlx nx reset && yarn dlx nx run cold-api:build:development
