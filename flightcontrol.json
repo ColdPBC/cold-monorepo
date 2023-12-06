@@ -223,7 +223,7 @@
           "envVariables": {
             "VITE_API_BASE_URL": {
               "fromService": {
-                "id": "cold-api-preview",
+                "id": "cold-api-fc-staging",
                 "value": "origin"
               }
             },
@@ -416,7 +416,7 @@
           "envVariables": {
             "VITE_API_BASE_URL": {
               "fromService": {
-                "id": "cold-api-fc-staging",
+                "id": "cold-api-preview",
                 "value": "origin"
               }
             },
