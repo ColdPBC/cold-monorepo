@@ -117,7 +117,7 @@ const _SideBar = (): JSX.Element => {
     });
 
     return (
-      <FBSidebar theme={flowbiteThemeOverride.sidebar}>
+      <FBSidebar theme={flowbiteThemeOverride.sidebar} data-testid={'sidebar'}>
         <div className="flex px-4 self-stretch items-center">
           <div className="h-6 w-[76px]">
             <ColdWordmark color={HexColors.white} />

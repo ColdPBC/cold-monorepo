@@ -8,11 +8,7 @@ export interface PercentSliderProps {
   onChange: (value: number | null) => void;
 }
 
-export const PercentSlider = ({
-  tooltip,
-  value,
-  onChange,
-}: PercentSliderProps) => {
+export const PercentSlider = ({ tooltip, value, onChange }: PercentSliderProps) => {
   const onRangeChange = (values: number[]) => {
     onChange(values[0]);
   };
@@ -50,15 +46,10 @@ export const PercentSlider = ({
             'w-[56px] h-[56px]  rounded-lg py-4 text-sm text-center font-bold not-italic bg-transparent border border-bgc-accent focus:border focus:border-bgc-accent focus:ring-0'
           }
           allowNegative={false}
+          data-testid={'percent-slider-input'}
         />
         <div className={'grid content-center w-full'}>
-          <RangeSlider
-            min={0}
-            max={100}
-            onChange={onRangeChange}
-            defaultValue={getRangeValue()}
-            title={tooltip}
-          />
+          <RangeSlider min={0} max={100} onChange={onRangeChange} defaultValue={getRangeValue()} title={tooltip} />
         </div>
       </div>
     </div>

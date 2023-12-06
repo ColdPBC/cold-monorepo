@@ -18,18 +18,13 @@ export interface FootprintDetailCardProps {
   className?: string;
 }
 
-function _FootprintDetailCard(
-  props: PropsWithChildren<FootprintDetailCardProps>,
-) {
+function _FootprintDetailCard(props: PropsWithChildren<FootprintDetailCardProps>) {
   const ldFlags = useFlags();
   const navigate = useNavigate();
   const [isEmpty, setIsEmpty] = useState(false);
 
   // Get footprint data from SWR
-  const { data, error } = useOrgSWR<any>(
-    ['/categories/company_decarbonization', 'GET'],
-    axiosFetcher,
-  );
+  const { data, error } = useOrgSWR<any>(['/categories/company_decarbonization', 'GET'], axiosFetcher);
   const { logError } = useColdContext();
 
   if (isEmpty) {
@@ -41,8 +36,7 @@ function _FootprintDetailCard(
     return null;
   }
 
-  const subcategoryName =
-    data?.subcategories[props.subcategory_key]?.subcategory_name;
+  const subcategoryName = data?.subcategories[props.subcategory_key]?.subcategory_name;
 
   const { className, ...rest } = props;
 
@@ -60,12 +54,8 @@ function _FootprintDetailCard(
   };
 
   return (
-    <Card
-      title={subcategoryName}
-      ctas={getCtas(subcategoryName)}
-      className={className}
-    >
-      <div className="flex items-center justify-center self-stretch flex-col">
+    <Card title={subcategoryName} ctas={getCtas(subcategoryName)} className={className}>
+      <div className="flex items-center justify-center self-stretch flex-col" data-testid={`footprint-detail-card-${props.subcategory_key}`}>
         <FootprintDetailChart {...rest} setIsEmpty={setIsEmpty} />
       </div>
     </Card>
@@ -73,7 +63,7 @@ function _FootprintDetailCard(
 }
 
 export const FootprintDetailCard = withErrorBoundary(_FootprintDetailCard, {
-  FallbackComponent: (props) => <ErrorFallback {...props} />,
+  FallbackComponent: props => <ErrorFallback {...props} />,
   onError: (error, info) => {
     console.error('Error occurred in FootprintDetailCard: ', error);
   },

@@ -25,22 +25,13 @@ const Component = (props: InviteMemberFormProps) => {
     email: '',
     role: undefined,
   });
-  const {
-    data,
-    error,
-    isLoading,
-  }: { data: any; error: any; isLoading: boolean } = useSWR(
-    ['/roles', 'GET'],
-    axiosFetcher,
-    {
-      revalidateOnFocus: false,
-    },
-  );
+  const { data, error, isLoading }: { data: any; error: any; isLoading: boolean } = useSWR(['/roles', 'GET'], axiosFetcher, {
+    revalidateOnFocus: false,
+  });
 
   const { logError } = useColdContext();
 
   const handleChange = (name: string, value: any) => {
-    console.log(name, value);
     setMemberForm({ ...memberForm, [name]: value });
   };
 
@@ -51,16 +42,14 @@ const Component = (props: InviteMemberFormProps) => {
   const isEmailValid = () => {
     return String(memberForm.email)
       .toLowerCase()
-      .match(
-        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-      );
+      .match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
   };
 
   // Filter out special case roles
   const filterRoles = (role: UserRole) => {
     const filteredRoles = ['company:owner', 'cold:', 'default:'];
     let match = false;
-    filteredRoles.map((roleFilter) => {
+    filteredRoles.map(roleFilter => {
       if (match) return;
       match = includes(role.name, roleFilter);
     });
@@ -104,10 +93,10 @@ const Component = (props: InviteMemberFormProps) => {
               input_props={{
                 name: 'email',
                 value: memberForm.email,
-                onChange: (e) => {
+                onChange: e => {
                   handleChange('email', e.target.value);
                 },
-                onValueChange: (value) => {
+                onValueChange: value => {
                   handleChange('email', value);
                 },
                 required: true,
@@ -130,15 +119,13 @@ const Component = (props: InviteMemberFormProps) => {
                 onValueChange: (value: InputOption) => {
                   handleChange('role', value);
                 },
-                options: (data as UserRole[])
-                  .filter(filterRoles)
-                  .map((role: UserRole, index) => {
-                    return {
-                      id: index,
-                      value: role.name,
-                      name: capitalize(role.name?.replace('company:', '')),
-                    };
-                  }),
+                options: (data as UserRole[]).filter(filterRoles).map((role: UserRole, index) => {
+                  return {
+                    id: index,
+                    value: role.name,
+                    name: capitalize(role.name?.replace('company:', '')),
+                  };
+                }),
               }}
               idx={1}
               type={InputTypes.Select}
@@ -172,7 +159,7 @@ const Component = (props: InviteMemberFormProps) => {
 };
 
 export const InviteMemberForm = withErrorBoundary(Component, {
-  FallbackComponent: (props) => <ErrorFallback {...props} />,
+  FallbackComponent: props => <ErrorFallback {...props} />,
   onError: (error, info) => {
     console.error('Error occurred in InviteMemberForm: ', error);
   },

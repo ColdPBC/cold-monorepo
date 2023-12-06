@@ -171,7 +171,9 @@ const _ActionDetailCard = ({ actionPayload, setActionPayLoad, variant }: ActionD
       return (
         <Card glow className={'text-tc-primary'}>
           <div className={'text-h4 text-left w-full'}>Steps</div>
-          <div className={'w-full'}>{getProgress()}</div>
+          <div className={'w-full'} data-testid={'action-detail-progress-progress-bar'}>
+            {getProgress()}
+          </div>
           <div>
             <StepDetails steps={action.steps} handleStepsUpdate={handleStepsUpdate} />
           </div>

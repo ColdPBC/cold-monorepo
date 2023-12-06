@@ -3,7 +3,8 @@ import { Meta, StoryObj } from '@storybook/react';
 import { SubcategoryActionsList } from './subcategoryActionsList';
 import { getActionHandler, StoryMockProvider } from '@coldpbc/mocks';
 import { Route, Routes } from 'react-router-dom';
-import { fireEvent, waitFor } from '@storybook/testing-library';
+import { fireEvent, waitFor, within } from '@storybook/testing-library';
+import { expect } from '@storybook/jest';
 
 const meta: Meta<typeof SubcategoryActionsList> = {
   title: 'Pages/SubcategoryActionsList',
@@ -33,12 +34,56 @@ export const Default: Story = {
       const getStartedButton = await canvas.findByRole('button', {
         name: 'Get Started with this action',
       });
-      await waitFor(() => {
+      await waitFor(async () => {
         fireEvent.click(getStartedButton);
       });
-      const text = await canvas.findByText(
+      const text = canvas.getByText(
         'Take a few moments to provide the data necessary for this action. After the surveys are complete, CØLD will step away to evaluate your data and build the optimal solution for your company.',
       );
+      await expect(text).toBeInTheDocument();
+      // look for footprint survey and Energy survey buttons
+      const footprintSurveyButton = await canvas.findByRole('button', {
+        name: 'Footprint Survey',
+      });
+      const energySurveyButton = await canvas.findByRole('button', {
+        name: 'Energy Survey',
+      });
+      // check if footprint survey button is disabled
+      await expect(footprintSurveyButton).toBeDisabled();
+      // check if energy survey button is enabled
+      await expect(energySurveyButton).toBeEnabled();
+      await waitFor(async () => {
+        fireEvent.click(getStartedButton);
+      });
+    });
+
+    await step('Not Ready to Execute', async () => {
+      // find Hold tight while we build out your plan text
+      const text = canvas.getByText('Hold tight while we build out your plan');
+      await expect(text).toBeInTheDocument();
+      // find We’re working on building the optimal solution for your company text
+      const text2 = canvas.getByText('We’re working on building the optimal solution for your company');
+      await expect(text2).toBeInTheDocument();
+    });
+
+    await step('Category Score', async () => {
+      // find Category Score text
+      const text = canvas.getByText('Facilities Score');
+      await expect(text).toBeInTheDocument();
+      // find Category Score number
+      const text2 = canvas.getByText('25/50');
+      await expect(text2).toBeInTheDocument();
+    });
+
+    await step('Footprint Chart', async () => {
+      // find Action Score text
+      const tCO2eScores = await canvas.findAllByText('tCO2e');
+      // check if the tc02e scores array are not empty
+      await expect(tCO2eScores).not.toHaveLength(0);
+    });
+
+    await step('Check Subcategory Description', async () => {
+      const text = canvas.getByTestId('subcategory-description');
       await expect(text).toBeInTheDocument();
     });
   },

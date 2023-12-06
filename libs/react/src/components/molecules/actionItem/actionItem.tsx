@@ -11,11 +11,7 @@ export interface ActionItemProps {
   variant: ActionItemVariants;
   showProgress?: boolean;
 }
-export const ActionItem = ({
-  actionPayload,
-  variant,
-  showProgress = true,
-}: ActionItemProps) => {
+export const ActionItem = ({ actionPayload, variant, showProgress = true }: ActionItemProps) => {
   const navigate = useNavigate();
   const { action } = actionPayload;
 
@@ -28,20 +24,13 @@ export const ActionItem = ({
       return <div></div>;
     } else if (variant === ActionItemVariants.narrow) {
       return (
-        <BaseButton
-          className={'bg-transparent w-6 h-6 p-0'}
-          onClick={() => {}}
-        >
+        <BaseButton className={'bg-transparent w-6 h-6 p-0'} onClick={() => {}}>
           <ColdIcon name={IconNames.ColdRightArrowIcon} />
         </BaseButton>
       );
     } else {
       return (
-        <BaseButton
-          className={'bg-transparent'}
-          onClick={() => {}}
-          variant={ButtonTypes.hyperlink}
-        >
+        <BaseButton className={'bg-transparent'} onClick={() => {}} variant={ButtonTypes.hyperlink}>
           <span className={'text-tc-primary text-button'}>View All Steps</span>
         </BaseButton>
       );
@@ -50,7 +39,7 @@ export const ActionItem = ({
 
   const getProgressText = () => {
     const steps = action.steps;
-    const completedSteps = steps.filter((step) => step.complete);
+    const completedSteps = steps.filter(step => step.complete);
     const totalSteps = steps.length;
     return `${completedSteps.length}/${totalSteps}`;
   };
@@ -58,7 +47,7 @@ export const ActionItem = ({
   const getProgressBar = () => {
     let progressPercent = 0;
     const steps = action.steps;
-    const completedSteps = steps.filter((step) => step.complete);
+    const completedSteps = steps.filter(step => step.complete);
     const totalSteps = steps.length;
     if (completedSteps.length > 0) {
       progressPercent = completedSteps.length / totalSteps;
@@ -67,11 +56,7 @@ export const ActionItem = ({
     }
     return (
       <div className={'w-full h-[4px] bg-bgc-accent rounded-lg'}>
-        <motion.div
-          className={'h-full bg-primary rounded-lg'}
-          initial={{ width: 0 }}
-          animate={{ width: `${progressPercent * 100}%` }}
-        />
+        <motion.div className={'h-full bg-primary rounded-lg'} initial={{ width: 0 }} animate={{ width: `${progressPercent * 100}%` }} />
       </div>
     );
   };
@@ -86,7 +71,7 @@ export const ActionItem = ({
             <div>Action Progress</div>
             <div>{getProgressText()}</div>
           </div>
-          <div>{getProgressBar()}</div>
+          <div data-testid={'action-item-progress-bar'}>{getProgressBar()}</div>
         </div>
       );
     }
@@ -143,8 +128,7 @@ export const ActionItem = ({
         className={getImageClass()}
         style={{
           backgroundImage: `url(${action.image_url})`,
-        }}
-      ></div>
+        }}></div>
       <div className={getContentClass()}>
         <div className={'flex justify-between items-center'}>
           <div className={getTitleClass()}>{action.title}</div>

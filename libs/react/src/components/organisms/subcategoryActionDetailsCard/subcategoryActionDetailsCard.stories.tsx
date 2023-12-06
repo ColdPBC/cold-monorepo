@@ -1,17 +1,10 @@
 import React from 'react';
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
-import {
-  getActionHandler,
-  getActionMock,
-  getActionsMockBySubCategoryName,
-  getOrganizationMembersMock,
-  StoryMockProvider,
-} from '@coldpbc/mocks';
-import {
-  SubcategoryActionDetailsCard,
-  SubcategoryActionDetailsCardProps,
-} from './subcategoryActionDetailsCard';
+import { getActionHandler, getActionMock, getActionsMockBySubCategoryName, getOrganizationMembersMock, StoryMockProvider } from '@coldpbc/mocks';
+import { SubcategoryActionDetailsCard, SubcategoryActionDetailsCardProps } from './subcategoryActionDetailsCard';
+import { fireEvent, userEvent, waitFor, within } from '@storybook/testing-library';
+import { expect } from '@storybook/jest';
 
 const meta: Meta<typeof SubcategoryActionDetailsCard> = {
   title: 'Organisms/SubcategoryActionDetailsCard',
@@ -24,11 +17,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const SurveysNotComplete: Story = {
-  render: (args) => {
+  render: args => {
     return (
-      <StoryMockProvider
-        handlers={getActionHandler.subcategoryActionDetailsCard}
-      >
+      <StoryMockProvider handlers={getActionHandler.subcategoryActionDetailsCard}>
         <SubcategoryActionDetailsCard {...args} />
       </StoryMockProvider>
     );
@@ -54,11 +45,9 @@ export const SurveysNotComplete: Story = {
 };
 
 export const NotReadyToExecute: Story = {
-  render: (args) => {
+  render: args => {
     return (
-      <StoryMockProvider
-        handlers={getActionHandler.subcategoryActionDetailsCard}
-      >
+      <StoryMockProvider handlers={getActionHandler.subcategoryActionDetailsCard}>
         <SubcategoryActionDetailsCard {...args} />
       </StoryMockProvider>
     );
@@ -85,11 +74,9 @@ export const NotReadyToExecute: Story = {
 };
 
 export const ReadyToExecute: Story = {
-  render: (args) => {
+  render: args => {
     return (
-      <StoryMockProvider
-        handlers={getActionHandler.subcategoryActionDetailsCard}
-      >
+      <StoryMockProvider handlers={getActionHandler.subcategoryActionDetailsCard}>
         <SubcategoryActionDetailsCard {...args} />
       </StoryMockProvider>
     );
