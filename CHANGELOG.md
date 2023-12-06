@@ -1,3 +1,17 @@
+# [1.73.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.72.11...v1.73.0) (2023-12-06)
+
+
+### Bug Fixes
+
+* migrate to config service ([2d359d3](https://github.com/ColdPBC/cold-monorepo/commit/2d359d358ba8fbb662b46941b939d6e3f00466db))
+* missing env vars ([0b8abb9](https://github.com/ColdPBC/cold-monorepo/commit/0b8abb9f10ffdd6c75a01a72f9914e5c9c8dc996))
+
+
+### Features
+
+* add openai service scaffolding ([7146d07](https://github.com/ColdPBC/cold-monorepo/commit/7146d0772061ac0a07bb6f2489c9a80410b03390))
+* reduce instance counts ([c718c1c](https://github.com/ColdPBC/cold-monorepo/commit/c718c1c8ae72af419444c10fae38fbf017fcb59f))
+
 ## [1.72.12-cold-000007-test-issue.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.72.11...v1.72.12-cold-000007-test-issue.1) (2023-12-05)
 
 
