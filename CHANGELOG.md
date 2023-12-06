@@ -1,3 +1,10 @@
+# [1.74.0-staging.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.73.1...v1.74.0-staging.1) (2023-12-06)
+
+
+### Features
+
+* add openai scaffolding to staging ([71a9c2a](https://github.com/ColdPBC/cold-monorepo/commit/71a9c2aed3f0bfc7f9b8632e1d49a23d7595bd36))
+
 ## [1.73.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.73.0...v1.73.1) (2023-12-06)
 
 
