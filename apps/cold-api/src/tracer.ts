@@ -6,7 +6,7 @@ import { BaseWorker } from '@coldpbc/nest';
 
 const config = new ConfigService();
 const tracer = Tracer.init({
-  service: config.get('DD_SERVICE') || config.getOrThrow('NX_TASK_TARGET_PROJECT'),
+  service: config.get('DD_SERVICE') || BaseWorker.getProjectName(),
   env: config.get('NODE_ENV') || config.getOrThrow('DD_ENV'),
   version: config.get('VERSION', BaseWorker.getPkgVersion()),
   logInjection: true,
@@ -14,7 +14,7 @@ const tracer = Tracer.init({
   profiling: true,
   runtimeMetrics: true,
   tags: {
-    service: config.get('DD_SERVICE') || config.getOrThrow('NX_TASK_TARGET_PROJECT'),
+    service: config.get('DD_SERVICE') || BaseWorker.getProjectName(),
     env: config.get('NODE_ENV') || config.getOrThrow('DD_ENV'),
     version: config.get('version', BaseWorker.getPkgVersion()),
     environment: config.get('NODE_ENV') || config.getOrThrow('DD_ENV'),

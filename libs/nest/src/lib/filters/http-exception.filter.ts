@@ -54,7 +54,7 @@ export class HttpExceptionFilter extends BaseWorker implements ExceptionFilter {
       message: exception.message.replace(/\n/g, ''),
       statusCode: status,
       error: exception.name,
-      service: this.config.get('DD_SERVICE') || this.config.getOrThrow('NX_TASK_TARGET_PROJECT'),
+      service: this.config.get('DD_SERVICE') || BaseWorker.getProjectName(),
       version: this.config.get('DD_VERSION') || BaseWorker.getPkgVersion(),
       timestamp: new Date().toISOString(),
       path: request.url,

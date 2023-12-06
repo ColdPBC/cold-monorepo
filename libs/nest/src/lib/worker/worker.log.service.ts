@@ -33,8 +33,8 @@ export class WorkerLogger implements LoggerService {
 
     this.tags = {
       version: this.config.get('DD_VERSION') || BaseWorker.getPkgVersion(),
-      service: this.config.get('DD_SERVICE') || this.config.getOrThrow('NX_TASK_TARGET_PROJECT'),
-      env: this.config.get('NODE_ENV') || this.config.getOrThrow('DD_ENVIRONMENT'),
+      service: this.config.get('DD_SERVICE') || BaseWorker.getProjectName(),
+      env: this.config.get('NODE_ENV') || this.config.getOrThrow('DD_ENV') || 'unknown',
       app: pkg.name,
     };
     //Logger.overrideLogger(this.logger);

@@ -56,16 +56,16 @@ export class NestModule {
             logger.error(err.message, {
               stack: err.stack,
               name: err.name,
-              env: config.get('NODE_ENV') || config.getOrThrow('NX_TASK_TARGET_PROJECT'),
+              env: config.get('NODE_ENV') || config.get('DD_ENV') || 'unknown',
               version: config.get('DD_VERSION') || BaseWorker.getPkgVersion(),
-              service: config.get('DD_SERVICE') || config.getOrThrow('NX_TASK_TARGET_PROJECT'),
+              service: config.get('DD_SERVICE') || BaseWorker.getProjectName(),
             });
           },
           prefix: 'cold_',
           globalTags: {
-            env: config.get('NODE_ENV') || config.getOrThrow('DD_ENVIRONMENT'),
+            env: config.get('NODE_ENV') || config.getOrThrow('DD_ENV') || 'unknown',
             version: config.get('DD_VERSION') || BaseWorker.getPkgVersion(),
-            service: config.get('DD_SERVICE') || config.getOrThrow('NX_TASK_TARGET_PROJECT'),
+            service: config.get('DD_SERVICE') || BaseWorker.getProjectName(),
           },
         }),
         HealthModule,

@@ -29,7 +29,7 @@ export class BaseWorker extends RedactorService {
     const config = new ConfigService();
 
     this.details = {
-      service: config.get('DD_SERVICE') || config.getOrThrow('NX_TASK_TARGET_PROJECT'),
+      service: config.get('DD_SERVICE') || BaseWorker.getProjectName(),
       version: config.get('DD_VERSION') || BaseWorker.getPkgVersion(),
       home_dir: appRoot.toString(),
       env: config.get('NODE_ENV') || config.getOrThrow('DD_ENVIRONMENT'),
@@ -121,6 +121,11 @@ export class BaseWorker extends RedactorService {
     }
 
     return get(parsed, 'workerOptions.definition.name');
+  }
+
+  public static getProjectName() {
+    const proj = BaseWorker.getParsedJSON('project.json');
+    return proj.name;
   }
 
   public static getPkgVersion() {
