@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { get } from 'lodash';
-import { Response } from 'express';
 import { BaseWorker } from '../worker';
 
 @Injectable()

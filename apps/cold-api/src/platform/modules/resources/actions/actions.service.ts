@@ -2,15 +2,7 @@ import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/co
 import { Span } from 'nestjs-ddtrace';
 import { v4 } from 'uuid';
 import { merge } from 'lodash';
-import {
-  AuthenticatedUser,
-  BaseWorker,
-  CacheService,
-  CreateActionTemplatesDto,
-  UpdateActionsDto,
-  PrismaService,
-  ZodCreateActionDto
-} from '@coldpbc/nest';
+import { AuthenticatedUser, BaseWorker, CacheService, CreateActionTemplatesDto, PrismaService, ZodCreateActionDto } from '@coldpbc/nest';
 import { SurveysService } from '../surveys/surveys.service';
 
 @Span()
@@ -48,7 +40,10 @@ export class ActionsService extends BaseWorker {
 
         actionItem.action = await this.filterDependentSurveys(actionItem.action as any, user, orgId);
 
-        this.cacheService.set(`organizations:${orgId}:actions:${actionItem.id}`, actionItem, { ttl: 60 * 60 * 24, update: true });
+        this.cacheService.set(`organizations:${orgId}:actions:${actionItem.id}`, actionItem, {
+          ttl: 60 * 60 * 24,
+          update: true,
+        });
       }
 
       return actions;
@@ -178,7 +173,15 @@ export class ActionsService extends BaseWorker {
     }
   }
 
-  async updateAction(user: AuthenticatedUser, orgId: string, id: string, data: {action: ZodCreateActionDto}, bpc?: boolean) {
+  async updateAction(
+    user: AuthenticatedUser,
+    orgId: string,
+    id: string,
+    data: {
+      action: ZodCreateActionDto;
+    },
+    bpc?: boolean,
+  ) {
     try {
       if (!user.isColdAdmin && user.coldclimate_claims.org_id !== orgId) {
         this.logger.error(`User ${user.coldclimate_claims.email} attempted to create action for org ${orgId}`);

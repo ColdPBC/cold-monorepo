@@ -13,6 +13,9 @@
 
 - [/apps/cold-api](https://github.com/ColdPBC/cold-monorepo/tree/main/apps/cold-api/README.md) - The Cold Climate REST API
 
+## Deployment Lifecycle
+   coming soon
+
 ## Getting Started
 - Make sure you've followed the instructions to set up your dev machine on [the Dev Setup Notion page](https://www.notion.so/coldclimate/Setting-Up-Your-Local-Environment-95c1f5398890412ab446d7ff94bcec7a?pvs=4), including Homebrew and Docker install
 - install node 20.9.0:

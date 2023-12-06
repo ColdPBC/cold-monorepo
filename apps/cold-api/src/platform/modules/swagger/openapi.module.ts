@@ -17,7 +17,7 @@ export class OpenapiModule {
         type: 'oauth2',
         flows: {
           implicit: {
-            authorizationUrl: `https://${process.env.AUTH0_DOMAIN}/authorize?audience=${process.env.AUTH0_AUDIENCE}`,
+            authorizationUrl: `https://${process.env['AUTH0_DOMAIN']}/authorize?audience=${process.env['AUTH0_AUDIENCE']}`,
             scopes: {
               all: 'openid profile email',
             },
@@ -43,9 +43,9 @@ export class OpenapiModule {
           customCss: `.topbar-wrapper img {content:url('https://cold-public-assets.s3.us-east-2.amazonaws.com/cold-climate-logo/white/Asset+4Logotype_Preferred.svg'); width:200px; height:auto;}
       .swagger-ui .opblock.opblock-get { border-color: #2892D7 } .swagger-ui .opblock.opblock-get .opblock-summary-method { background: #2892D7 } .swagger-ui .swagger-container { background-color: #0A1C2B; } .swagger-ui .btn.authorize { color: #2892D7; border-color: #2892D7; } .swagger-ui .btn.authorize svg { fill: #2892D7; }`,
           swaggerOptions: {
-            oauth2RedirectUrl: `${process.env.API_SERVER_URL}/oauth2-redirect.html`,
+            oauth2RedirectUrl: `${process.env['API_SERVER_URL']}/oauth2-redirect.html`,
             oauth: {
-              clientId: process.env.AUTH0_CLIENT_ID || '',
+              clientId: process.env['AUTH0_CLIENT_ID'] || '',
             },
           },
         }),

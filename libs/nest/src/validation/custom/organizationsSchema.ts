@@ -1,6 +1,4 @@
 import * as z from 'zod';
-import { createZodDto } from '@anatine/zod-nestjs';
-import {CategorySchema} from "@coldpbc/nest";
 
 /**
  * @namespace Organizations
@@ -13,14 +11,19 @@ export const OrganizationsSchema = z.object({
   name: z.string(),
   enabled_connections: z.record(z.string(), z.boolean()),
   display_name: z.string(),
-  branding: z.object({
-    logo: z.string().url().optional(),
-    colors: z.object({
-      primary: z.string().optional(),
-      secondary: z.string().optional(),
-      tertiary: z.string().optional(),
-    }).optional().nullable(),
-  }).optional(),
+  branding: z
+    .object({
+      logo: z.string().url().optional(),
+      colors: z
+        .object({
+          primary: z.string().optional(),
+          secondary: z.string().optional(),
+          tertiary: z.string().optional(),
+        })
+        .optional()
+        .nullable(),
+    })
+    .optional(),
   phone: z.string().nullable(),
   email: z.string().email().nullable(),
   street_address: z.string().nullable(),
@@ -38,7 +41,7 @@ export const OrganizationsSchema = z.object({
    */
   updated_at: z.date().optional(),
   isTest: z.boolean(),
-})
+});
 
-export type Organizations = z.infer<typeof OrganizationsSchema>
+export type Organizations = z.infer<typeof OrganizationsSchema>;
 export default OrganizationsSchema;

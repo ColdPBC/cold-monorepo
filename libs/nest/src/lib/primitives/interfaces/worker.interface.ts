@@ -10,9 +10,10 @@ export interface ISystemDetails {
 }
 
 export interface IWorkerDetails {
-  lib_version: string;
-  pkg_version: string;
-  pkg_name: string;
+  version: string;
+  service: string;
+  env: string;
+  app?: string;
   host_name: string;
   home_dir: string;
   system_details: ISystemDetails;

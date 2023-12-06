@@ -5,12 +5,10 @@ ARG DATABASE_URL
 ARG DD_SERVICE
 ARG DD_VERSION
 ARG DD_API_KEY
-ARG DD_POSTGRES_PASSWORD
-
 ARG FC_GIT_COMMIT_SHA
-ENV DD_GIT_REPOSITORY_URL="https://github.com/ColdPBC/cold-monorepo"
-ENV DD_GIT_COMMIT_SHA=${FC_GIT_COMMIT_SHA}
 
+ENV DD_GIT_REPOSITORY_URL=https://github.com/ColdPBC/cold-monorepo
+ENV DD_GIT_COMMIT_SHA=${FC_GIT_COMMIT_SHA}
 
 ENV NODE_ENV=${NODE_ENV}
 ENV DD_ENV=${NODE_ENV}
@@ -23,9 +21,11 @@ LABEL com.datadoghq.ad.check_names='["postgres"]'
 LABEL com.datadoghq.ad.init_configs='[{}]'
 LABEL com.datadoghq.ad.instances='[{"database_autodiscovery":{"enabled":true},"collect_schemas":{"enabled":true},"dbm":true,"host":"${DATABASE_URL}","port": 5432,"username":"datadog","password":"${DD_POSTGRES_PASSWORD}", "tags":["service:cold-rds-fc-${NODE_ENV}","env:${NODE_ENV}"]'
 
-LABEL com.datadoghq.tags.service="cold-api-nest"
+LABEL com.datadoghq.tags.service="cold-api"
 LABEL com.datadoghq.tags.version=${DD_VERSION}
 LABEL com.datadoghq.tags.env=${NODE_ENV}
+
+VOLUME /var/run/docker.sock:/var/run/docker.sock:ro
 
 WORKDIR /app
 # uninstall old yarn or pnpm
@@ -55,9 +55,9 @@ RUN yarn add -D @typescript-eslint/eslint-plugin
 FROM dependencies as build
 WORKDIR /app
 RUN yarn prebuild
-RUN yarn dlx nx run coldpbc/nest:prisma-generate
-RUN prisma migrate deploy
-RUN prisma db seed
+RUN yarn dlx nx run cold-nest-library:prisma-generate
+RUN if [ "${DATABASE_URL}" = "" ] ; then echo "DATABASE_URL is empty; skipping migration" ; else prisma migrate deploy ; fi
+RUN if [ "${DATABASE_URL}" = "" ] ; then echo "DATABASE_URL is empty; skipping seed" ; else prisma db seed ; fi
 RUN if [ "${NODE_ENV}" = "production" ] ; then echo "building for production..." && npx nx run cold-api:build:production ; else echo "building development..." && npx nx run cold-api:build:development ; fi
 RUN npx nx reset
 
@@ -65,7 +65,7 @@ FROM base as final
 USER node
 WORKDIR /home/node/app
 
-ADD --chown=node:node ./apps/cold-api/src/public /home/node/app/
+ADD --chown=node:node ./apps/cold-api/project.json /home/node/app/
 ADD --chown=node:node ./apps/cold-api/src/assets /home/node/app/
 ADD --chown=node:node ./package.json /home/node/app/
 ADD --chown=node:node ./yarn.lock /home/node/app/

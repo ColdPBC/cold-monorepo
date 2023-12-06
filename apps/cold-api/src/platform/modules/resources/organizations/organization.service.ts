@@ -77,7 +77,7 @@ export class OrganizationService extends BaseWorker {
         inviter: {
           name: inviter_name,
         },
-        client_id: process.env.AUTH0_UI_CLIENT_ID,
+        client_id: process.env['AUTH0_UI_CLIENT_ID'],
         invitee: {
           email: user_email,
         },
@@ -331,7 +331,10 @@ export class OrganizationService extends BaseWorker {
             if (roles.length > 0) {
               fullMember.role = roles[0].name;
             }
-            await this.cache.set(`organizations:${orgId}:members:${member.user_id}`, fullMember, { ttl: 1000 * 60 * 60 * 24 * 7, update: true });
+            await this.cache.set(`organizations:${orgId}:members:${member.user_id}`, fullMember, {
+              ttl: 1000 * 60 * 60 * 24 * 7,
+              update: true,
+            });
             merge(member, fullMember);
           }
         }

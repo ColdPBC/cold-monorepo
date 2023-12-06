@@ -3,7 +3,7 @@ import { Public } from '../decorators';
 import { BaseWorker } from '../worker';
 import { HealthService } from './health.service';
 
-@Controller()
+@Controller('health')
 export class HealthController extends BaseWorker {
   constructor(private readonly service: HealthService) {
     super(HealthController.name);
@@ -13,7 +13,7 @@ export class HealthController extends BaseWorker {
    * Used for health checks
    * @returns {Promise<any>}
    */
-  @Get('health')
+  @Get()
   @Public()
   public async health(
     @Req()
