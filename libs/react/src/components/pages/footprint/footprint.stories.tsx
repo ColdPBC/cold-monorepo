@@ -2,9 +2,8 @@ import { StoryMockProvider, getFootprintHandler, getFootprintDataMock } from '@c
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { Footprint } from './footprint';
-import { userEvent, within } from '@storybook/testing-library';
+import { within } from '@storybook/testing-library';
 import { expect } from '@storybook/jest';
-import { sortBy } from 'lodash';
 
 const meta: Meta<typeof Footprint> = {
   title: 'Pages/Footprint',
