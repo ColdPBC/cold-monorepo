@@ -29,11 +29,6 @@ export class DarklyService extends BaseWorker {
   }
 
   async init(): Promise<void | boolean> {
-    if (!this.config.get('LD_SDK_KEY')) {
-      this.logger.warn('LD_SDK_KEY not set');
-      return false;
-    }
-
     this.sdkKey = this.config.getOrThrow('LD_SDK_KEY');
 
     this.darkly = sdk.init(this.sdkKey, {
@@ -70,6 +65,8 @@ export class DarklyService extends BaseWorker {
 
     const response = await this.darkly.variation(flag, context || this.context, null);
     this.darkly.track(`${flag} called`, this.context);
+    this.logger.log(`flag: ${flag} called with response: ${response}`, context || this.context);
+
     await this.darkly.flush();
 
     return response;
@@ -78,11 +75,14 @@ export class DarklyService extends BaseWorker {
   async getFlag(flag: string, context?: DarklyContext): Promise<boolean> {
     if (!this.initialized) {
       if (!(await this.init())) {
+        this.logger.warn('DarklyService not initialized');
         return false;
       }
     }
 
     const response = await this.darkly.variation(flag, context || this.context, true);
+    this.logger.log(`flag: ${flag} called with response: ${response}`, context || this.context);
+
     this.darkly.track(`${flag} called`, this.context);
     await this.darkly.flush();
 
