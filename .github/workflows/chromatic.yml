@@ -1,28 +1,56 @@
-# .github/workflows/chromatic.yml
-
-# Workflow name
-name: 'UI: Chromatic'
-# Event for the workflow
+name: 📸 Chromatic
 on:
-  push:
-    paths: [ "libs/react/src/**", "apps/cold-ui/.storybook/**", "apps/cold-ui/src/**", "apps/cold-ui/public/**" ] # Trigger the action only when files change in the folders defined here
-  workflow_dispatch:
+  pull_request:
+    branches:
+      - staging
+      - main
 env:
   GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
   GH_TOKEN: ${{ secrets.GH_TOKEN }}
-# List of jobs
+  NPM_TOKEN: ${{ secrets.GH_TOKEN }}
+  CACHE_NAME: cache-node-modules
+  PR_NUMBER: ${{ github.event.number }}
+  API_ADMIN_EMAIL: ${{ secrets.API_ADMIN_EMAIL }}
+  API_ADMIN_PASSWORD: ${{ secrets.TEST_API_ADMIN_PASSWORD }}
+  AUTH0_AUDIENCE: ${{ secrets.TEST_AUTH0_AUDIENCE }}
+  AUTH0_CLIENT_ID: ${{ secrets.TEST_AUTH0_CLIENT_ID }}
+  AUTH0_CLIENT_SECRET: ${{ secrets.TEST_AUTH0_CLIENT_SECRET }}
+  AUTH0_ORG_ID: ${{ secrets.TEST_AUTH0_ORG_ID }}
+  AUTH0_TOKEN_URL: ${{ secrets.TEST_AUTH0_TOKEN_URL }}
+  API_SERVER_URL: ${{ github.event.deployment_status.target_url }}
+
 jobs:
+  pre_build:
+    name: 🤔Cancel Duplicate Actions
+    continue-on-error: true # Uncomment once integration is finished
+    runs-on: ubuntu-latest
+    # Map a step output to a job output
+    outputs:
+      should_skip: ${{ steps.skip_check.outputs.should_skip }}
+    steps:
+      - id: skip_check
+        uses: fkirc/skip-duplicate-actions@master
+        with:
+          # All of these options are optional, so you can remove them if you are happy with the defaults
+          concurrent_skipping: 'outdated_runs'
+          paths_ignore: '["**/README.md", "**/docs/**"]'
+          do_not_skip: '["pull_request", "workflow_dispatch"]'
   chromatic-deployment:
+    needs: pre_build
     # Operating System
     runs-on: ubuntu-latest
     # Job steps
     steps:
-      - name: Checkout
+      - name: 🛒 Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
           persist-credentials: false
-      - name: Cache node modules
+      - name: 🧑‍💻 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.9.0"
+      - name: 💼 Cache Node Modules
         uses: actions/cache@v3
         with:
           path: ./node_modules
@@ -31,11 +59,14 @@ jobs:
             ${{ runner.os }}-${{ env.CACHE_NAME }}-${{ hashFiles('**/yarn.lock') }}
             ${{ runner.os }}-${{ env.CACHE_NAME }}
             ${{ runner.os }}
-      - name: Install dependencies
+      - name: 🪢 Install Yarn
+        run: corepack enable && yarn set version stable
+
+      - name: 🧩 Install Dependencies
         # 👇 Install dependencies with the same package manager used in the project (replace it as needed), e.g. yarn, npm, pnpm
         run: yarn
         # 👇 Adds Chromatic as a step in the workflow
-      - name: Publish to Chromatic
+      - name: 🎑 Publish to Chromatic
         uses: chromaui/action@v1
         # Chromatic GitHub Action options
         with:
@@ -47,3 +78,5 @@ jobs:
           externals: /(public|.storybook|tailwind.config.js)/**
         env:
           STORYBOOK_API_URL: ${{ secrets.STORYBOOK_API_URL }}
+      - name: 🏁 Done!
+        run: echo "🎑 Published Build To Chromatic"

@@ -1,14 +1,21 @@
-name: 'API: E2E Test'
+name: ⏮ E2E Tests ⏭
 on:
   workflow_dispatch:
     inputs:
-      environment:
-        description: 'Environment to run tests against'
-        type: environment
-        required: false
+      api_url:
+        description: 'API Server URL to run tests against'
+        type: string
+        default: 'https://api.coldclimate.online'
+        required: true
   deployment_status:
+    types: [completed, success]
 env:
   GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+  NODE_ENV: ci
+  NODE_OPTIONS: "-r dd-trace/ci/init"
+  DD_SITE: us5.datadoghq.com
+  DD_CIVISIBILITY_AGENTLESS_ENABLED: true
+  DD_API_KEY: ${{ secrets.DD_APP_KEY }}
   GH_TOKEN: ${{ secrets.GH_TOKEN }}
   NPM_TOKEN: ${{ secrets.GH_TOKEN }}
   CACHE_NAME: cache-node-modules
@@ -20,11 +27,11 @@ env:
   AUTH0_CLIENT_SECRET: ${{ secrets.TEST_AUTH0_CLIENT_SECRET }}
   AUTH0_ORG_ID: ${{ secrets.TEST_AUTH0_ORG_ID }}
   AUTH0_TOKEN_URL: ${{ secrets.TEST_AUTH0_TOKEN_URL }}
-  API_SERVER_URL: ${{ github.event.deployment_status.target_url }}
+  API_SERVER_URL: ${{ github.event.inputs.api_url || github.event.deployment_status.target_url }}
 
 jobs:
-  e2e:
-    name: Run E2E Tests
+  api-e2e:
+    name: 🔬 API Tests
     timeout-minutes: 10
     runs-on: ubuntu-latest
     permissions:
@@ -38,11 +45,11 @@ jobs:
         with:
           persist-credentials: false
           fetch-depth: 0
-      - name: Setup Node.js
+      - name: 👨‍💻Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "20.9.0"
-      - name: Cache node modules
+      - name: 📦 Cache node modules
         uses: actions/cache@v3
         with:
           path: ./node_modules
@@ -52,14 +59,15 @@ jobs:
             ${{ runner.os }}-build-
             ${{ runner.os }}-
 
-      - name: Install dependencies
-        run: yarn && yarn postinstall
+      - name: 🧩 Install dependencies
+        run: yarn && yarn postinstall && yarn add -D dd-trace
 
-      - name: Generate Prisma Client
-        run: yarn dlx nx run coldpbc/nest:prisma-generate
+      - name: 🌈 Generate Prisma Client
+        run: yarn dlx nx run cold-nest-library:prisma-generate
 
-      - name: build development
+      - name: 🏗 build development
         run: yarn prebuild && yarn dlx nx reset && yarn dlx nx run cold-api:build:development
 
-      - name: 'Run Tests'
-        run: yarn dlx nx run cold-api-e2e:e2e:ci
+      - name: 🩻 Run Tests
+        run: DD_SITE=us5.datadoghq.com DD_API_KEY=${{secrets.DD_API_KEY}} DD_CIVISIBILITY_AGENTLESS_ENABLED=true NODE_OPTIONS="-r dd-trace/ci/init" DD_ENV=test DD_SERVICE=cold-api-nest-e2e nx run cold-api-e2e:e2e:ci
+

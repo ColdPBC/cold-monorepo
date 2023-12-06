@@ -3,12 +3,13 @@ import { ApiBody, ApiOAuth2, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@
 import { Span } from 'nestjs-ddtrace';
 import { component_definition_types } from 'prisma/prisma-client';
 import { ResourceValidationPipe } from '../../../pipes/resource.pipe';
-import { component_definitions, HttpExceptionFilter, AuthenticatedUser, BaseWorker, Roles, JwtAuthGuard, RolesGuard } from '@coldpbc/nest';
+import { HttpExceptionFilter, AuthenticatedUser, BaseWorker, Roles, JwtAuthGuard, RolesGuard } from '@coldpbc/nest';
 import { allRoles, bpcDecoratorOptions, coldAdminOnly } from '../_global/global.params';
 import { ComponentDefinitionsService } from './component-definitions.service';
 import { ComponentDefinitionDto } from './dto/component-definition-dto';
 import { postComponentExample } from './examples/component.examples';
-import ComponentDefinitionSchema from "../../../../../../../libs/nest/src/validation/custom/componentDefinitionSchema";
+// eslint-disable-next-line @nx/enforce-module-boundaries
+import ComponentDefinitionSchema from '../../../../../../../libs/nest/src/validation/custom/componentDefinitionSchema';
 
 @Span()
 @UseGuards(JwtAuthGuard, RolesGuard)

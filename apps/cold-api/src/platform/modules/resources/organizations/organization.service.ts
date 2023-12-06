@@ -1,6 +1,6 @@
 import { HttpService } from '@nestjs/axios';
 import { ConflictException, HttpException, Injectable, NotFoundException, UnauthorizedException, UnprocessableEntityException } from '@nestjs/common';
-import { Span, TraceService } from 'nestjs-ddtrace';
+import { Span } from 'nestjs-ddtrace';
 import { BaseWorker, Auth0Organization, AuthenticatedUser, DarklyService, PrismaService, CacheService, Tags } from '@coldpbc/nest';
 import { Auth0APIOptions, Auth0UtilityService } from '../auth0/auth0.utility.service';
 import { find, filter, first, kebabCase, pick, set, merge, omit, map } from 'lodash';
@@ -77,7 +77,7 @@ export class OrganizationService extends BaseWorker {
         inviter: {
           name: inviter_name,
         },
-        client_id: process.env.AUTH0_UI_CLIENT_ID,
+        client_id: process.env['AUTH0_UI_CLIENT_ID'],
         invitee: {
           email: user_email,
         },
@@ -331,7 +331,10 @@ export class OrganizationService extends BaseWorker {
             if (roles.length > 0) {
               fullMember.role = roles[0].name;
             }
-            await this.cache.set(`organizations:${orgId}:members:${member.user_id}`, fullMember, { ttl: 1000 * 60 * 60 * 24 * 7, update: true });
+            await this.cache.set(`organizations:${orgId}:members:${member.user_id}`, fullMember, {
+              ttl: 1000 * 60 * 60 * 24 * 7,
+              update: true,
+            });
             merge(member, fullMember);
           }
         }
@@ -713,7 +716,8 @@ export class OrganizationService extends BaseWorker {
         throw new UnprocessableEntityException(e.message, e);
       }
     }
-    throw new HttpException(`Invitation ${invId} deleted`, 204);
+
+    return `Invitation ${invId} deleted`;
   }
 
   /***

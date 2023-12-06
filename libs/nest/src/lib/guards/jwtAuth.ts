@@ -3,19 +3,25 @@ import { AuthGuard } from '@nestjs/passport';
 import { ModuleRef, Reflector } from '@nestjs/core';
 import { Span, TraceService } from 'nestjs-ddtrace';
 import { IS_PUBLIC_KEY } from '../decorators';
-import { WorkerLogger } from '../worker';
+import { BaseWorker, WorkerLogger } from '../worker';
 import { set } from 'lodash';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 @Span()
 export class JwtAuthGuard extends AuthGuard('jwt') {
   logger: WorkerLogger;
-  constructor(private tracer: TraceService, private reflector: Reflector, private moduleRef: ModuleRef) {
+
+  constructor(private tracer: TraceService, private reflector: Reflector, private moduleRef: ModuleRef, private config: ConfigService) {
     super({
       passReqToCallback: true,
     });
 
-    this.logger = new WorkerLogger('JwtAuthGuard', { service: process.env['NODE_PKG_NAME'], version: process.env['NODE_PKG_VERSION'] });
+    this.logger = new WorkerLogger('JwtAuthGuard', {
+      service: this.config.get('DD_SERVICE') || BaseWorker.getProjectName(),
+      env: this.config.get('NODE_ENV') || this.config.getOrThrow('DD_ENV'),
+      version: this.config.get('DD_VERSION') || BaseWorker.getPkgVersion(),
+    });
   }
 
   override canActivate(context: ExecutionContext) {
@@ -53,8 +59,6 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
       email: user?.coldclimate_claims?.email,
       org_id: user?.coldclimate_claims?.org_id,
     };
-
-    const span = this.tracer.getActiveSpan();
 
     this.tracer.getTracer().appsec.setUser(dd_user);
 

@@ -9,10 +9,10 @@ describe('DarklyService', () => {
         {
           provide: DarklyService,
           useValue: {
-            getJSONFlag: (flag: string, context?: any) => {
+            getJSONFlag: () => {
               return true;
             },
-            getFlag: (flag: string, context?: any) => {
+            getFlag: () => {
               return true;
             },
           },

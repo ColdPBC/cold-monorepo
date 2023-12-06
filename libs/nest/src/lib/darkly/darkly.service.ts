@@ -1,14 +1,16 @@
-import { Injectable } from '@nestjs/common';
+import { Global, Injectable } from '@nestjs/common';
 import { BaseWorker } from '../worker';
 import * as sdk from '@launchdarkly/node-server-sdk';
+import { ConfigService } from '@nestjs/config';
 
-interface DarklyContext {
+export interface DarklyContext {
   kind: string;
   name: string;
   key: string;
 }
 
 @Injectable()
+@Global()
 export class DarklyService extends BaseWorker {
   darkly: sdk.LDClient = {} as sdk.LDClient;
   context: DarklyContext = {
@@ -19,31 +21,33 @@ export class DarklyService extends BaseWorker {
   initialized: boolean = false;
   sdkKey: string = '';
 
-  constructor() {
+  constructor(private config: ConfigService) {
     super('DarklyService');
     if (this.darkly && this.context && this.initialized && this.sdkKey) return this;
-
-    if (!process.env['LD_SDK_KEY']) {
-      this.logger.warn('LaunchDarkly SDK Key not found');
-    } else {
-      this.sdkKey = process.env['LD_SDK_KEY'];
-    }
 
     this.init();
   }
 
-  async init(): Promise<void> {
-    this.darkly = sdk.init(process.env['LD_SDK_KEY'] || '', {
+  async init(): Promise<void | boolean> {
+    if (!this.config.get('LD_SDK_KEY')) {
+      this.logger.warn('LD_SDK_KEY not set');
+      return false;
+    }
+
+    this.sdkKey = this.config.getOrThrow('LD_SDK_KEY');
+
+    this.darkly = sdk.init(this.sdkKey, {
       logger: this.logger,
       sendEvents: true,
       stream: true,
       application: {
-        id: this.details.pkg_name,
-        version: this.details.pkg_version,
+        id: this.details.service,
+        version: this.details.version,
       },
     });
 
-    this.darkly.waitForInitialization();
+    await this.darkly.waitForInitialization();
+
     if (this.darkly) {
       this.initialized = this.darkly.initialized();
       this.darkly.track(`client called`, this.context);
@@ -59,8 +63,11 @@ export class DarklyService extends BaseWorker {
    */
   async getJSONFlag(flag: string, context?: DarklyContext): Promise<any> {
     if (!this.initialized) {
-      await this.darkly.waitForInitialization();
+      if (!(await this.init())) {
+        return false;
+      }
     }
+
     const response = await this.darkly.variation(flag, context || this.context, null);
     this.darkly.track(`${flag} called`, this.context);
     await this.darkly.flush();
@@ -70,8 +77,11 @@ export class DarklyService extends BaseWorker {
 
   async getFlag(flag: string, context?: DarklyContext): Promise<boolean> {
     if (!this.initialized) {
-      await this.darkly.waitForInitialization();
+      if (!(await this.init())) {
+        return false;
+      }
     }
+
     const response = await this.darkly.variation(flag, context || this.context, true);
     this.darkly.track(`${flag} called`, this.context);
     await this.darkly.flush();

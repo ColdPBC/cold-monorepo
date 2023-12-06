@@ -50,7 +50,15 @@ export class RedactorService {
     return this;
   }
 
-  addProperties(properties: Array<string> | Array<{ prop: string; leftPad: number; rightPad: number }>): RedactorService {
+  addProperties(
+    properties:
+      | Array<string>
+      | Array<{
+          prop: string;
+          leftPad: number;
+          rightPad: number;
+        }>,
+  ): RedactorService {
     if (!properties || !Array.isArray(properties)) {
       const error = new Error('Properties must be an array of strings or properties: {prop: string, leftPad: number, rightPad: number}');
       throw error;
@@ -143,6 +151,7 @@ export class RedactorService {
   // Recursively search through objects and arrays for properties and redacts their value
   redact(obj: any): any {
     let redactMe: any;
+
     try {
       if (!obj) obj = {};
       const str = stringify(obj);

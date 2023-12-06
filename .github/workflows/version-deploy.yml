@@ -1,0 +1,120 @@
+name: 🏗 Build
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - 'cold-**'
+      - 'COLD-**'
+      - 'Cold-**'
+  pull_request:
+    branches:
+      - staging
+      - main
+permissions:
+  contents: write # to be able to publish a GitHub release
+  issues: write # to be able to comment on released issues
+  pull-requests: write # to be able to comment on released pull requests
+  id-token: write # to enable use of OIDC for npm provenance
+  actions: write
+env:
+  GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+  GH_TOKEN: ${{ secrets.GH_TOKEN }}
+  NPM_TOKEN: ${{ secrets.GH_TOKEN }}
+  CACHE_NAME: cache-node-modules
+  PR_NUMBER: ${{ github.event.number }}
+  BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+jobs:
+  pre_build:
+    # continue-on-error: true # Uncomment once integration is finished
+    runs-on: ubuntu-latest
+    name: 🤐 Cancel Duplicate Actions
+    # Map a step output to a job output
+    outputs:
+      should_skip: ${{ steps.skip_check.outputs.should_skip }}
+    steps:
+      - id: skip_check
+        uses: fkirc/skip-duplicate-actions@v5
+        with:
+          cancel_others: 'true'
+          # All of these options are optional, so you can remove them if you are happy with the defaults
+          concurrent_skipping: 'outdated_runs'
+
+  version:
+    name: 🏷️ Versioning
+    runs-on: ubuntu-latest
+    needs:
+      - pre_build
+    permissions:
+      contents: write # to be able to publish a GitHub release
+      issues: write # to be able to comment on released issues
+      pull-requests: write # to be able to comment on released pull requests
+      id-token: write # to enable use of OIDC for npm provenance
+    steps:
+      - uses: 8BitJonny/gh-get-current-pr@2.2.0
+        id: PR
+        with:
+          # Authetication token to access GitHub APIs. (Can be omitted by default.)
+          github-token: ${{ github.token }}
+          # Verbose setting SHA when using Pull_Request event trigger to fix #16. (For push even trigger this is not necessary.)
+          sha: ${{ github.event.pull_request.head.sha }}
+          # Only return if PR is still open. (By default it returns PRs in any state.)
+          filterOutClosed: true
+          # Only return if PR is not in draft state. (By default it returns PRs in any state.)
+          filterOutDraft: true
+      - name: 🛒 Checkout
+        if: steps.PR.outputs.pr_found != 'true'
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+          token: ${{ secrets.GH_TOKEN }}
+      - name: 🧑‍💻 Setup Node.js
+        if: steps.PR.outputs.pr_found != 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.9.0"
+      - name: 🌱 Get Next Version
+        if: steps.PR.outputs.pr_found != 'true'
+        run: npx -p semantic-release -p @semantic-release/changelog -p @semantic-release/commit-analyzer -p @semantic-release/git -p @semantic-release/npm -p @semantic-release/release-notes-generator semantic-release
+      - name: 🏷️ Tag Version In FlightControl
+        if: steps.PR.outputs.pr_found != 'true'
+        env:
+          BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+          GIT_TERMINAL_PROMPT: 0
+        run: |
+          npx -p lodash.set node updateVersion.mjs $(git tag --sort=committerdate | tail -1 | cut -b 2-100) \
+          git config --local user.name "github-actions" \
+          git config --local user.email "<>" \
+          git add flightcontrol.json \
+          git commit -m "ci: update flightcontrol.json [skip actions] [skip ci]" \
+
+      - name: 🫸 Push Changes To GitHub
+        if: steps.PR.outputs.pr_found != 'true'
+        uses: CasperWA/push-protected@v2
+        with:
+          token: ${{ secrets.GH_TOKEN }}
+          branch: ${{ env.BRANCH_NAME }}
+          unprotect_reviews: true
+          force: true
+          timeout: 3
+          acceptable_conclusions: success, failure, neutral, cancelled, skipped, timed_out, action_required
+  deploy:
+    name: 🛫 Deploy
+    env:
+      BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+    runs-on: ubuntu-latest
+    needs:
+      - version
+    steps:
+      - name: 🛫 Trigger Production Deploy
+        if: startsWith(env.BRANCH_NAME,'main')
+        run: |
+          curl -n -X POST https://app.flightcontrol.dev/api/deploy-hook/cold-production/gAEvhWNzcPCY69Z35mGvqXY0S9_vnQ0eqJrtCpIr8aUI9sW-?force=false
+          echo "🛩 Flightcontrol Deploying ( https://app.flightcontrol.dev/org/cloejv4kz05s0ps21f3q2qjxe/environments/clpgmjfpl049fr90yqwdsuqd8 )"
+
+      - name: 🛫 Trigger Staging Deploy
+        if: steps.PR.outputs.pr_found != 'true' && startsWith(env.BRANCH_NAME,'staging')
+        run: |
+          curl -n -X POST https://app.flightcontrol.dev/api/deploy-hook/cold-staging/58vWGjvmj9PWGxzImyRkVCTujxuJT-Q8piPwciMogtAy4-ci?force=false
+          echo "🛩 Flightcontrol Deploying ( https://app.flightcontrol.dev/org/cloejv4kz05s0ps21f3q2qjxe/environments/clpeertbx01sgpx0yy5cu4imq )"

@@ -11,7 +11,6 @@ import {
   CacheService,
   ActionTemplatesEntity,
   PrismaService,
-  ZodActionTemplate
 } from '@coldpbc/nest';
 
 @Span()
@@ -32,7 +31,10 @@ export class ActionTemplatesService extends BaseWorker {
 
     try {
       if (!user.isColdAdmin) {
-        this.logger.error(`${user.coldclimate_claims.email} attempted to get all actions`, { user: user.coldclimate_claims, bpc });
+        this.logger.error(`${user.coldclimate_claims.email} attempted to get all actions`, {
+          user: user.coldclimate_claims,
+          bpc,
+        });
         throw new UnauthorizedException(`You are not authorized to get actions`);
       }
 
@@ -71,7 +73,10 @@ export class ActionTemplatesService extends BaseWorker {
 
     try {
       if (!user.isColdAdmin) {
-        this.logger.error(`${user.coldclimate_claims.email} attempted to get action: ${id}`, { user: user.coldclimate_claims, bpc });
+        this.logger.error(`${user.coldclimate_claims.email} attempted to get action: ${id}`, {
+          user: user.coldclimate_claims,
+          bpc,
+        });
         throw new UnauthorizedException(`You are not authorized to get actions`);
       }
 

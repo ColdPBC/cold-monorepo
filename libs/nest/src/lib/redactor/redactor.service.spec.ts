@@ -225,21 +225,21 @@ describe('When calling RedactorService', () => {
     describe('with strings', () => {
       it('it throws', () => {
         const data = { key: 'this is a test' };
-        // @ts-ignore
+        // @ts-expect-error - testing invalid data
         expect(() => scrubber.addProperties(get(data, 'key'))).toThrow();
       });
     });
     describe('with objects', () => {
       it('it throws', () => {
         const data = { key: { value: 'this is a test' } };
-        // @ts-ignore
+        // @ts-expect-error - testing invalid data
         expect(() => scrubber.addProperties(get(data, 'key'))).toThrow();
       });
     });
     describe('with numbers', () => {
       it('it throws', () => {
         const data = { key: 9 };
-        // @ts-ignore
+        // @ts-expect-error - testing invalid data
         expect(() => scrubber.addProperties(get(data, 'key'))).toThrow();
       });
     });
@@ -266,7 +266,6 @@ describe('When calling RedactorService', () => {
     describe('with an existing object', () => {
       it('is ignored', () => {
         const initial = scrubber.defaultPropList.length;
-        const data = { key: { value: 'another_test_key' } };
         expect(scrubber.defaultPropList).toHaveLength(initial);
       });
     });
@@ -274,7 +273,7 @@ describe('When calling RedactorService', () => {
       it('throws exception', () => {
         const data = { key: { value: 'this is a test' } };
         expect(() => {
-          // @ts-ignore
+          // @ts-expect-error - testing invalid data
           scrubber.addProperty(get(data, 'key'));
         }).toThrow();
       });
@@ -283,7 +282,7 @@ describe('When calling RedactorService', () => {
       it('throws exception', () => {
         const data = { key: ['another_test_key'] };
         expect(() => {
-          // @ts-ignore
+          // @ts-expect-error - testing invalid data
           scrubber.addProperty(get(data, 'key'));
         }).toThrow();
       });
@@ -292,7 +291,7 @@ describe('When calling RedactorService', () => {
       it('it adds the property', () => {
         const initial = scrubber.defaultPropList.length;
         const data = { key: 9 };
-        // @ts-ignore
+        // @ts-expect-error - testing invalid data
         scrubber.addProperty(get(data, 'key'));
         expect(scrubber.defaultPropList).toHaveLength(initial + 1);
       });
@@ -316,7 +315,7 @@ describe('When calling RedactorService', () => {
     describe('with an object', () => {
       it('it is ignored', () => {
         const data = { key: { value: 'this is a test' } };
-        // @ts-ignore
+        // @ts-expect-error - testing invalid data
         const scrubbed = scrubber.redactProp(get(data, 'key'));
         expect(scrubbed).toEqual(get(data, 'key'));
       });
@@ -324,7 +323,7 @@ describe('When calling RedactorService', () => {
     describe('with an array', () => {
       it('it is ignored', () => {
         const data = { key: ['this is a test'] };
-        // @ts-ignore
+        // @ts-expect-error - testing invalid data
         const scrubbed = scrubber.redactProp(get(data, 'key'));
         expect(scrubbed).toEqual(get(data, 'key'));
       });
@@ -332,7 +331,7 @@ describe('When calling RedactorService', () => {
     describe('with a number', () => {
       it('it is ignored', () => {
         const data = { key: 9 };
-        // @ts-ignore
+        // @ts-expect-error - testing invalid data
         const scrubbed = scrubber.redactProp(get(data, 'key'));
         expect(scrubbed).toEqual(get(data, 'key'));
       });
@@ -374,6 +373,7 @@ describe('When calling RedactorService', () => {
         default_org: v4(),
         org_id: v4(),
         deep: { nested: { id: v4() } },
+        veryDeep: { one: { two: { three: { four: { five: { six: { seven: { eight: { nine: { ten: { eleven: { password: 'alsdkfjasldfk' } } } } } } } } } } } },
       };
 
       describe('using default properties', () => {
@@ -391,6 +391,11 @@ describe('When calling RedactorService', () => {
         it('deeply nested property is scrubbed', () => {
           const val = get(defaultScrubbed, 'deep.nested.id');
           expect(val).toMatch(/.{2}#{4}[aA-zZ0-9]{2}/);
+        });
+
+        it('very deeply nested property is scrubbed', () => {
+          const val = get(defaultScrubbed, `veryDeep.one.two.three.four.five.six.seven.eight.nine`);
+          expect(val).toMatchSnapshot();
         });
       });
 

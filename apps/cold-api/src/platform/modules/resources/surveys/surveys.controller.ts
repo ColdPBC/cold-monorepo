@@ -4,7 +4,6 @@ import { survey_types } from '@prisma/client';
 import { Span } from 'nestjs-ddtrace';
 import { ResourceValidationPipe } from '../../../pipes/resource.pipe';
 import {
-  ZodSurveyDefinition,
   SurveyResponseSchema,
   ZodCategoryResponseDto,
   JwtAuthGuard,
@@ -15,7 +14,7 @@ import {
   BaseWorker,
   AuthenticatedUser,
   UpdateSurveyDefinitionsDto,
-  SurveyDefinitionsEntity
+  SurveyDefinitionsEntity,
 } from '@coldpbc/nest';
 import { allRoles, bpcDecoratorOptions, coldAdminOnly, impersonateOrgDecoratorOptions, orgIdDecoratorOptions } from '../_global/global.params';
 import { SurveysService } from './surveys.service';

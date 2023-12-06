@@ -1,3 +1,294 @@
+## [1.73.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.73.0...v1.73.1) (2023-12-06)
+
+
+### Bug Fixes
+
+* versioning ([35cd479](https://github.com/ColdPBC/cold-monorepo/commit/35cd4799d24b0b9b884689ed68d2e0144fe07298))
+
+# [1.73.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.72.11...v1.73.0) (2023-12-06)
+
+
+### Bug Fixes
+
+* migrate to config service ([2d359d3](https://github.com/ColdPBC/cold-monorepo/commit/2d359d358ba8fbb662b46941b939d6e3f00466db))
+* missing env vars ([0b8abb9](https://github.com/ColdPBC/cold-monorepo/commit/0b8abb9f10ffdd6c75a01a72f9914e5c9c8dc996))
+
+
+### Features
+
+* add openai service scaffolding ([7146d07](https://github.com/ColdPBC/cold-monorepo/commit/7146d0772061ac0a07bb6f2489c9a80410b03390))
+* reduce instance counts ([c718c1c](https://github.com/ColdPBC/cold-monorepo/commit/c718c1c8ae72af419444c10fae38fbf017fcb59f))
+
+## [1.72.12-cold-000007-test-issue.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.72.11...v1.72.12-cold-000007-test-issue.1) (2023-12-05)
+
+
+### Bug Fixes
+
+* migrate to config service ([2d359d3](https://github.com/ColdPBC/cold-monorepo/commit/2d359d358ba8fbb662b46941b939d6e3f00466db))
+
+## [1.72.11](https://github.com/ColdPBC/cold-monorepo/compare/v1.72.10...v1.72.11) (2023-12-02)
+
+
+### Bug Fixes
+
+* return object instead of throwing ([731dd10](https://github.com/ColdPBC/cold-monorepo/commit/731dd1006e23fcf42d3581b2301b067dd90a5ff4))
+* typo in log message ([3d945c1](https://github.com/ColdPBC/cold-monorepo/commit/3d945c141d3b936089e8f27899632b1d896918ce))
+
+## [1.72.10](https://github.com/ColdPBC/cold-monorepo/compare/v1.72.9...v1.72.10) (2023-12-01)
+
+
+### Bug Fixes
+
+* don't tear down db unless in CI ([70914de](https://github.com/ColdPBC/cold-monorepo/commit/70914de942e527fe1d3a6b8c1b1b2da5c893470f))
+* minor issues ([982f657](https://github.com/ColdPBC/cold-monorepo/commit/982f657ba786845d8fd573bec3a7d1cc9bc676f3))
+* redactor issue ([34e89c5](https://github.com/ColdPBC/cold-monorepo/commit/34e89c57208bf1aec3922bd1f992c8cf07ffbaa8))
+* remove vite_auth0_client_id ([4ef5b5d](https://github.com/ColdPBC/cold-monorepo/commit/4ef5b5dff33c7eb5f2cbdd76488bef1d735c104a))
+
+## [1.72.9](https://github.com/ColdPBC/cold-monorepo/compare/v1.72.8...v1.72.9) (2023-12-01)
+
+
+### Bug Fixes
+
+* add additional telemetry ([a527748](https://github.com/ColdPBC/cold-monorepo/commit/a5277482c99ce29c43e9b427b3a6bd5494f188c5))
+
+## [1.72.8](https://github.com/ColdPBC/cold-monorepo/compare/v1.72.7...v1.72.8) (2023-12-01)
+
+
+### Bug Fixes
+
+* remove max depth ([8dd8939](https://github.com/ColdPBC/cold-monorepo/commit/8dd893916c1407b5f6cfabb804b3b4693edfd2b7))
+
+## [1.72.7](https://github.com/ColdPBC/cold-monorepo/compare/v1.72.6...v1.72.7) (2023-11-30)
+
+## [1.72.7-cold-000005.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.72.7-cold-000005.1...v1.72.7-cold-000005.2) (2023-11-30)
+
+
+### Bug Fixes
+
+* redactor issue ([34e89c5](https://github.com/ColdPBC/cold-monorepo/commit/34e89c57208bf1aec3922bd1f992c8cf07ffbaa8))
+
+## [1.72.7-cold-000005.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.72.6...v1.72.7-cold-000005.1) (2023-11-30)
+
+### Bug Fixes
+
+* health check logs ([fc6299d](https://github.com/ColdPBC/cold-monorepo/commit/fc6299d9e07e099997cf0fbdfc3a2c92407ae22b))
+* minor issues ([982f657](https://github.com/ColdPBC/cold-monorepo/commit/982f657ba786845d8fd573bec3a7d1cc9bc676f3))
+
+## [1.72.6](https://github.com/ColdPBC/cold-monorepo/compare/v1.72.5...v1.72.6) (2023-11-29)
+
+
+### Bug Fixes
+
+* add circuit breaker to redactor ([e33d242](https://github.com/ColdPBC/cold-monorepo/commit/e33d242e89ecff1ac7ad57ab04ef95fe6acbe435))
+
+## [1.72.5](https://github.com/ColdPBC/cold-monorepo/compare/v1.72.4...v1.72.5) (2023-11-29)
+
+
+### Bug Fixes
+
+* debug log error ([69a7585](https://github.com/ColdPBC/cold-monorepo/commit/69a75857281d1b51729d9a4ee633d74f8e9b7f8f))
+
+## [1.72.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.72.3...v1.72.4) (2023-11-29)
+
+
+### Bug Fixes
+
+* only run on pr ([3f84d91](https://github.com/ColdPBC/cold-monorepo/commit/3f84d913a001db491b32f915023e18299ff65925))
+
+## [1.72.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.72.2...v1.72.3) (2023-11-29)
+
+
+### Bug Fixes
+
+* update deploy hook ([2c43937](https://github.com/ColdPBC/cold-monorepo/commit/2c43937b5d428155063e65feb99404fa46d67960))
+
+## [1.72.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.72.1...v1.72.2) (2023-11-29)
+
+
+### Bug Fixes
+
+* add lodash.set ([d1f4a5e](https://github.com/ColdPBC/cold-monorepo/commit/d1f4a5e83e099feac0d9fe4f40209ccfa4425e9f))
+* add lodash.set ([4743986](https://github.com/ColdPBC/cold-monorepo/commit/47439868b3f267bb59803075c5be69c24a60bc80))
+* remove lodash dep ([ac66049](https://github.com/ColdPBC/cold-monorepo/commit/ac66049d9b44161ac2f35f50d243254588d043bd))
+
+## [1.72.2-cold-0004.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.72.2-cold-0004.2...v1.72.2-cold-0004.3) (2023-11-29)
+
+
+### Bug Fixes
+
+* remove lodash dep ([ac66049](https://github.com/ColdPBC/cold-monorepo/commit/ac66049d9b44161ac2f35f50d243254588d043bd))
+
+## [1.72.2-cold-0004.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.72.2-cold-0004.1...v1.72.2-cold-0004.2) (2023-11-29)
+
+
+### Bug Fixes
+
+* add lodash.set ([d1f4a5e](https://github.com/ColdPBC/cold-monorepo/commit/d1f4a5e83e099feac0d9fe4f40209ccfa4425e9f))
+
+## [1.72.2-cold-0004.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.72.1...v1.72.2-cold-0004.1) (2023-11-29)
+
+
+### Bug Fixes
+
+* add lodash.set ([4743986](https://github.com/ColdPBC/cold-monorepo/commit/47439868b3f267bb59803075c5be69c24a60bc80))
+
+## [1.72.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.72.0...v1.72.1) (2023-11-29)
+
+
+### Bug Fixes
+
+* error in logger ([80db42c](https://github.com/ColdPBC/cold-monorepo/commit/80db42cb4d3323abaf9f7b6e7e0ff81625d6bca7))
+
+# [1.72.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.71.0...v1.72.0) (2023-11-29)
+
+
+### Bug Fixes
+
+* broken version ([d2aee9f](https://github.com/ColdPBC/cold-monorepo/commit/d2aee9f88c9a1d99aef2e6297350cde9f196c6aa))
+* broken version ([98be095](https://github.com/ColdPBC/cold-monorepo/commit/98be0951d11c122baf2f01b98fd2d544ee3c0764))
+* broken version ([5b05bb9](https://github.com/ColdPBC/cold-monorepo/commit/5b05bb9099db72ed33d5110f74715df4499e32c9))
+* build ([0bb1e0a](https://github.com/ColdPBC/cold-monorepo/commit/0bb1e0a168d2b7fad39c5b35898ac1c73ec58752))
+* build ([a872027](https://github.com/ColdPBC/cold-monorepo/commit/a87202746e71b939409c435b07392beaa1802fb6))
+* cancel dupe actions ([9b90935](https://github.com/ColdPBC/cold-monorepo/commit/9b909351883f798f3743e332d86a6fc2d3d6007f))
+* dont version on PR ([6486568](https://github.com/ColdPBC/cold-monorepo/commit/648656843902f07937a8f0f991a23d40c625340a))
+* update cancel action version ([ab7eccd](https://github.com/ColdPBC/cold-monorepo/commit/ab7eccd5e29f520378ecd5c14acbeb77173e8d59))
+
+
+### Features
+
+* cancel outdated actions ([76b9d59](https://github.com/ColdPBC/cold-monorepo/commit/76b9d59eb1ad85a86f104a61e4818052280982a0))
+
+# [1.72.0-cold-0002.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.72.0-cold-0002.1...v1.72.0-cold-0002.2) (2023-11-29)
+
+
+### Bug Fixes
+
+* update cancel action version ([ab7eccd](https://github.com/ColdPBC/cold-monorepo/commit/ab7eccd5e29f520378ecd5c14acbeb77173e8d59))
+
+# [1.72.0-cold-0002.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.71.0...v1.72.0-cold-0002.1) (2023-11-29)
+
+
+### Bug Fixes
+
+* broken version ([d2aee9f](https://github.com/ColdPBC/cold-monorepo/commit/d2aee9f88c9a1d99aef2e6297350cde9f196c6aa))
+* broken version ([98be095](https://github.com/ColdPBC/cold-monorepo/commit/98be0951d11c122baf2f01b98fd2d544ee3c0764))
+* broken version ([5b05bb9](https://github.com/ColdPBC/cold-monorepo/commit/5b05bb9099db72ed33d5110f74715df4499e32c9))
+* build ([0bb1e0a](https://github.com/ColdPBC/cold-monorepo/commit/0bb1e0a168d2b7fad39c5b35898ac1c73ec58752))
+* build ([a872027](https://github.com/ColdPBC/cold-monorepo/commit/a87202746e71b939409c435b07392beaa1802fb6))
+* cancel dupe actions ([9b90935](https://github.com/ColdPBC/cold-monorepo/commit/9b909351883f798f3743e332d86a6fc2d3d6007f))
+* dont version on PR ([6486568](https://github.com/ColdPBC/cold-monorepo/commit/648656843902f07937a8f0f991a23d40c625340a))
+
+
+### Features
+
+* cancel outdated actions ([76b9d59](https://github.com/ColdPBC/cold-monorepo/commit/76b9d59eb1ad85a86f104a61e4818052280982a0))
+
+## [1.71.1-cold-0001.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.71.1-cold-0001.2...v1.71.1-cold-0001.3) (2023-11-29)
+
+
+### Bug Fixes
+
+* broken version ([d2aee9f](https://github.com/ColdPBC/cold-monorepo/commit/d2aee9f88c9a1d99aef2e6297350cde9f196c6aa))
+* broken version ([98be095](https://github.com/ColdPBC/cold-monorepo/commit/98be0951d11c122baf2f01b98fd2d544ee3c0764))
+* broken version ([5b05bb9](https://github.com/ColdPBC/cold-monorepo/commit/5b05bb9099db72ed33d5110f74715df4499e32c9))
+* build ([0bb1e0a](https://github.com/ColdPBC/cold-monorepo/commit/0bb1e0a168d2b7fad39c5b35898ac1c73ec58752))
+* cancel dupe actions ([9b90935](https://github.com/ColdPBC/cold-monorepo/commit/9b909351883f798f3743e332d86a6fc2d3d6007f))
+
+## [1.71.1-cold-0001.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.71.1-cold-0001.2...v1.71.1-cold-0001.3) (2023-11-29)
+
+
+### Bug Fixes
+
+* broken version ([5b05bb9](https://github.com/ColdPBC/cold-monorepo/commit/5b05bb9099db72ed33d5110f74715df4499e32c9))
+* build ([0bb1e0a](https://github.com/ColdPBC/cold-monorepo/commit/0bb1e0a168d2b7fad39c5b35898ac1c73ec58752))
+* cancel dupe actions ([9b90935](https://github.com/ColdPBC/cold-monorepo/commit/9b909351883f798f3743e332d86a6fc2d3d6007f))
+
+## [1.71.1-cold-0001.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.71.1-cold-0001.2...v1.71.1-cold-0001.3) (2023-11-29)
+
+
+### Bug Fixes
+
+* build ([0bb1e0a](https://github.com/ColdPBC/cold-monorepo/commit/0bb1e0a168d2b7fad39c5b35898ac1c73ec58752))
+* cancel dupe actions ([9b90935](https://github.com/ColdPBC/cold-monorepo/commit/9b909351883f798f3743e332d86a6fc2d3d6007f))
+
+## [1.71.1-cold-0001.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.71.1-cold-0001.2...v1.71.1-cold-0001.3) (2023-11-29)
+
+
+### Bug Fixes
+
+* build ([0bb1e0a](https://github.com/ColdPBC/cold-monorepo/commit/0bb1e0a168d2b7fad39c5b35898ac1c73ec58752))
+
+## [1.71.1-cold-0001.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.71.1-cold-0001.1...v1.71.1-cold-0001.2) (2023-11-29)
+
+
+### Bug Fixes
+
+* build ([a872027](https://github.com/ColdPBC/cold-monorepo/commit/a87202746e71b939409c435b07392beaa1802fb6))
+
+## [1.71.1-cold-0001.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.71.0...v1.71.1-cold-0001.1) (2023-11-29)
+
+
+### Bug Fixes
+
+* dont version on PR ([6486568](https://github.com/ColdPBC/cold-monorepo/commit/648656843902f07937a8f0f991a23d40c625340a))
+
+# [1.71.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.70.0...v1.71.0) (2023-11-29)
+
+
+### Bug Fixes
+
+* add tests ([4bd8c64](https://github.com/ColdPBC/cold-monorepo/commit/4bd8c64bc4d4656655e5bb2a5aaa3698b33b908f))
+* add tests ([3f7ad98](https://github.com/ColdPBC/cold-monorepo/commit/3f7ad989cfad3e7452913f950a89ddc9724fea3d))
+* consolidate deploy steps ([4ece12c](https://github.com/ColdPBC/cold-monorepo/commit/4ece12c472992b8eeb5749b05ac42120de19325a))
+* correct sidebar styling after flowbite react update ([326a25c](https://github.com/ColdPBC/cold-monorepo/commit/326a25c4f02fdd5554d72c85d57cc67fb012d9eb))
+* improve build ([ec25746](https://github.com/ColdPBC/cold-monorepo/commit/ec25746f04b7d4e6de8b6af3139999e35571058f))
+* issue causing 404 when accessing apiDocs or health endpoint ([6de58db](https://github.com/ColdPBC/cold-monorepo/commit/6de58db489c6305bf46ecb0b797b10ad9abf4e7b))
+* move authorization/guards/filters to lib ([93b7457](https://github.com/ColdPBC/cold-monorepo/commit/93b7457948b19afa5a8d22bfc7bd48984c1fdedd))
+* move cron module and objectUtils to lib ([c8ca863](https://github.com/ColdPBC/cold-monorepo/commit/c8ca863524bff15f12d7ad829c4e0e34f345a2b3))
+* move schemas to validation library ([8fe55c4](https://github.com/ColdPBC/cold-monorepo/commit/8fe55c4b188c214bb68bcd6839dbab9afc6917a9))
+* move schemas to validation library ([fdd0422](https://github.com/ColdPBC/cold-monorepo/commit/fdd04228b3dd0f9927382305a73f7709e8ef920b))
+* rename path alias ([f43bedf](https://github.com/ColdPBC/cold-monorepo/commit/f43bedfd3980bcf1bb66ea054559ec89153efb9a))
+* rename path alias ([361ac7b](https://github.com/ColdPBC/cold-monorepo/commit/361ac7befe0c43372856b4f1da4621daba94d474))
+* rename path alias ([c2ee1c4](https://github.com/ColdPBC/cold-monorepo/commit/c2ee1c42ebf3d41cae6676be14e413876beeaaa4))
+* rename path alias ([4ee0ee5](https://github.com/ColdPBC/cold-monorepo/commit/4ee0ee5c43d48d58d93648bdc434eb7854587888))
+* resolve react types mismatch ([08c77dc](https://github.com/ColdPBC/cold-monorepo/commit/08c77dcfe23811d7000da95c45a7fdac9ae6ed23))
+* unhandled error case ([b73b06d](https://github.com/ColdPBC/cold-monorepo/commit/b73b06d9cdb0719d982491fec6525cc62f7273f3))
+* unhandled error case ([39398f0](https://github.com/ColdPBC/cold-monorepo/commit/39398f0231c52372a8f472a2fedc714a00903326))
+* update yarn lock and react types ([fc66157](https://github.com/ColdPBC/cold-monorepo/commit/fc6615768189388492d66bae9fa0d471e77a7501))
+* use faster stringify ([64e51c3](https://github.com/ColdPBC/cold-monorepo/commit/64e51c37e8d1e8ec5f5b74f3b87510765fd82f35))
+
+
+### Features
+
+* add api codebase to monorepo ([b4923d6](https://github.com/ColdPBC/cold-monorepo/commit/b4923d662e1753df8ebf781e141a067fa1d5740f))
+* add dockerfiles ([3d26a88](https://github.com/ColdPBC/cold-monorepo/commit/3d26a88dd28a8cbc411d12c319ca84d369d9580f))
+* add functioning api to monorepo ([1f45cc9](https://github.com/ColdPBC/cold-monorepo/commit/1f45cc9faf38dc8e97336b98ad87611537bd1385))
+* add openai service ([7457661](https://github.com/ColdPBC/cold-monorepo/commit/745766127e56fa6e991c3f4774b444b1c3ad0979))
+* add shared nest lib to monorepo ([941b3a5](https://github.com/ColdPBC/cold-monorepo/commit/941b3a53d3584c5af5717ef1b640755360efcb6c))
+* fix ui build issues ([affe153](https://github.com/ColdPBC/cold-monorepo/commit/affe1534b23516833d0b1d97a59bea5485263bfb))
+* resolve typing issue ([064234e](https://github.com/ColdPBC/cold-monorepo/commit/064234ee7bf46e99d9aa771f49858260465ff813))
+* resolve ui build errors ([0d266d2](https://github.com/ColdPBC/cold-monorepo/commit/0d266d2f056c67bee295582accd75b24edad9817))
+
+# [1.71.0-staging.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.71.0-staging.2...v1.71.0-staging.3) (2023-11-28)
+
+
+### Bug Fixes
+
+* consolidate deploy steps ([4ece12c](https://github.com/ColdPBC/cold-monorepo/commit/4ece12c472992b8eeb5749b05ac42120de19325a))
+
+# [1.71.0-staging.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.71.0-staging.1...v1.71.0-staging.2) (2023-11-28)
+
+
+### Bug Fixes
+
+* correct sidebar styling after flowbite react update ([326a25c](https://github.com/ColdPBC/cold-monorepo/commit/326a25c4f02fdd5554d72c85d57cc67fb012d9eb))
+* update yarn lock and react types ([fc66157](https://github.com/ColdPBC/cold-monorepo/commit/fc6615768189388492d66bae9fa0d471e77a7501))
+
+
+### Features
+
+* fix ui build issues ([affe153](https://github.com/ColdPBC/cold-monorepo/commit/affe1534b23516833d0b1d97a59bea5485263bfb))
+
 # [1.71.0-staging.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.70.0...v1.71.0-staging.1) (2023-11-27)
 
 

@@ -1,21 +1,23 @@
 import Tracer from 'dd-trace';
 import { Request } from 'express';
 import { get } from 'lodash';
+import { ConfigService } from '@nestjs/config';
 import { BaseWorker } from '@coldpbc/nest';
 
-const details = JSON.parse(BaseWorker.getJSON('package.json'));
-
+const config = new ConfigService();
 const tracer = Tracer.init({
-  service: `cold-api-nest`,
-  version: `${process.env.npm_package_version || details.version}`,
-  env: `${process.env.NODE_ENV}`,
+  service: config.get('DD_SERVICE') || BaseWorker.getProjectName(),
+  env: config.get('NODE_ENV') || config.getOrThrow('DD_ENV'),
+  version: config.get('VERSION', BaseWorker.getPkgVersion()),
   logInjection: true,
   hostname: '127.0.0.1',
   profiling: true,
   runtimeMetrics: true,
   tags: {
-    environment: `${process.env.NODE_ENV}`,
-    host: `${details.host_name}`,
+    service: config.get('DD_SERVICE') || BaseWorker.getProjectName(),
+    env: config.get('NODE_ENV') || config.getOrThrow('DD_ENV'),
+    version: config.get('version', BaseWorker.getPkgVersion()),
+    environment: config.get('NODE_ENV') || config.getOrThrow('DD_ENV'),
   },
   dogstatsd: {
     hostname: '127.0.0.1',
