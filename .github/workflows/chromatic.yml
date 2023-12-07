@@ -35,8 +35,41 @@ jobs:
           concurrent_skipping: 'outdated_runs'
           paths_ignore: '["**/README.md", "**/docs/**"]'
           do_not_skip: '["pull_request", "workflow_dispatch"]'
+  storybook_tests:
+    - needs: pre_build
+    - name: 🛒 Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        persist-credentials: false
+    - name: 🧑‍💻 Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: "20.9.0"
+    - name: 💼 Cache Node Modules
+      uses: actions/cache@v3
+      with:
+        path: ./node_modules
+        key: ${{ runner.os }}-${{ env.CACHE_NAME }}-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-${{ env.CACHE_NAME }}-${{ hashFiles('**/yarn.lock') }}
+          ${{ runner.os }}-${{ env.CACHE_NAME }}
+          ${{ runner.os }}
+    - name: 🪢 Install Yarn
+      run: corepack enable && yarn set version stable
+    - name: 🧩 Install Dependencies
+      run: yarn
+    - name: Install Playwright
+      run: npx playwright install --with-deps
+    - name: Build Storybook
+      run: yarn build-storybook --quiet
+    - name: Serve Storybook and run tests
+      run: |
+        npx concurrently -k -s first -n "SB,TEST" -c "magenta,blue" \
+          "npx http-server storybook-static --port 6006 --silent" \
+          "npx wait-on tcp:6006 && yarn test-storybook"
   chromatic-deployment:
-    needs: pre_build
+    needs: [pre_build, storybook_tests]
     # Operating System
     runs-on: ubuntu-latest
     # Job steps
