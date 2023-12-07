@@ -1,24 +1,19 @@
 import React, { createContext } from 'react';
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
-import { SWRConfig } from 'swr';
 import { Application } from './application';
-import { BrowserRouter } from 'react-router-dom';
 import {
   StoryMockProvider,
   getFootprintHandler,
   getCategoriesHandler,
   auth0UserMock,
-  getSignUpHandler,
   getSignupHandlersForApplicationSignup,
   getSurveyHandler,
   getActionsMock,
   getCategoriesDataMock,
 } from '@coldpbc/mocks';
 import { userEvent, waitFor, within } from '@storybook/testing-library';
-import { expect } from '@storybook/jest';
 import { find, findKey, forEach, uniq, uniqBy } from 'lodash';
-import { uninstall } from 'husky';
 
 const meta: Meta<typeof Application> = {
   title: 'Application/Application',
