@@ -7,13 +7,12 @@ on:
         type: string
         default: 'https://api.coldclimate.com'
         required: true
-  push:
-    branches:
-      - main
+  deployment_status:
+        branches: [ main ]
+        types: [ completed, success ]
 env:
   GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
   NODE_ENV: ci
-  NODE_OPTIONS: "-r dd-trace/ci/init"
   DD_SITE: us5.datadoghq.com
   DD_CIVISIBILITY_AGENTLESS_ENABLED: true
   DD_API_KEY: ${{ secrets.DD_APP_KEY }}
@@ -61,14 +60,14 @@ jobs:
             ${{ runner.os }}-
 
       - name: 🧩 Install dependencies
-        run: yarn && yarn postinstall && yarn add -D dd-trace
+        run: yarn && yarn postinstall && yarn add dd-trace
 
       - name: 🌈 Generate Prisma Client
-        run: yarn dlx nx run coldpbc/nest:prisma-generate
+        run: yarn dlx nx run cold-nest-library:prisma-generate
 
       - name: 🏗 build development
         run: yarn prebuild && yarn dlx nx reset && yarn dlx nx run cold-api:build:development
 
       - name: 🩻 Run Tests
-        run: DD_SITE=us5.datadoghq.com DD_API_KEY=${{secrets.DD_API_KEY}} DD_CIVISIBILITY_AGENTLESS_ENABLED=true NODE_OPTIONS="-r dd-trace/ci/init" DD_ENV=test DD_SERVICE=cold-api-nest-e2e nx run cold-api-e2e:e2e:ci
+        run: DD_SITE=us5.datadoghq.com DD_API_KEY=${{secrets.DD_API_KEY}} DD_CIVISIBILITY_AGENTLESS_ENABLED=true NODE_OPTIONS="-r $(pwd)/.pnp.cjs -r dd-trace/ci/init" DD_ENV=test DD_SERVICE=cold-api-e2e yarn dlx nx run cold-api-e2e:e2e:ci
 
