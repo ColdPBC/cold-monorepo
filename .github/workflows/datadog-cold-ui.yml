@@ -18,7 +18,7 @@ jobs:
     name: 🐩 UI Service Catalog
     steps:
       # This uses the custom action to push the service definition to Datadog.
-      - uses: arcxp/datadog-service-catalog-metadata-provider@v2
+      - uses: arcxp/datadog-service-catalog-metadata-provider@v2.2
         with:
           # service-version: v2
           # You should use GitHub's encrypted secrets feature to manage secrets for Datadog.
@@ -30,10 +30,11 @@ jobs:
           github-token: ${{ secrets.GH_TOKEN }}
 
           # This maps to the `dd-service` field in Datadog, it's just the name of your service.
-          service-name: cold-monorepo-ui
+          service-name: cold-ui
 
           # The name of the team which owns and/or supports the service.
           team: Engineering
+          application: core
 
           # The email address of the team which owns and/or supports the service.
           # email: global.greetings@fake-email-host.com
@@ -53,7 +54,6 @@ jobs:
             - name: cold-monorepo-ui
               url: https://github.com/ColdPBC/cold-monorepo
               provider: github
-
           # Docs contain anything that you might need when supporting the service.
           docs: |
             - name: API Docs

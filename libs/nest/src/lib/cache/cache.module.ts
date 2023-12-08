@@ -1,11 +1,10 @@
 import { Module } from '@nestjs/common';
 import { CacheModule } from '@nestjs/cache-manager';
-import { ConfigService, ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { redisStore } from 'cache-manager-redis-yet';
 
 import { CacheService } from './cache.service';
-import { DarklyModule } from '../darkly';
-import { DarklyService } from '../darkly';
+import { DarklyModule, DarklyService } from '../darkly';
 
 @Module({
   imports: [

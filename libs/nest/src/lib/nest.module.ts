@@ -11,10 +11,9 @@ import { redisStore } from 'cache-manager-redis-yet';
 
 import { PrismaModule, PrismaService } from './prisma';
 import { HealthController, HealthModule, HealthService } from './health';
-import { DarklyModule, DarklyService } from './darkly';
+import { DarklyModule } from './darkly';
 import { ColdCacheModule } from './cache';
-import { AuthorizationModule, JwtStrategy } from './authorization';
-import { JwtAuthGuard } from './guards';
+import { AuthorizationModule, JwtAuthGuard, JwtStrategy } from './authorization';
 import { InterceptorModule } from './interceptors';
 import { BaseWorker, WorkerLogger } from './worker';
 
@@ -68,15 +67,12 @@ export class NestModule {
             service: config.get('DD_SERVICE') || BaseWorker.getProjectName(),
           },
         }),
-        HealthModule,
-        DarklyModule,
         ColdCacheModule,
       ],
       controllers: [HealthController],
       providers: [
         PrismaService,
         ConfigService,
-        DarklyService,
         JwtStrategy,
         JwtService,
         HealthService,
@@ -85,7 +81,7 @@ export class NestModule {
           useClass: JwtAuthGuard,
         },
       ],
-      exports: [PrismaService, JwtStrategy, JwtService, HttpModule, ConfigService, DarklyService, HealthService, ColdCacheModule],
+      exports: [PrismaService, JwtStrategy, JwtService, HttpModule, ConfigService, HealthService],
     };
   }
 }

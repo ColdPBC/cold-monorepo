@@ -1,3 +1,17 @@
+## [1.73.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.73.2...v1.73.3) (2023-12-08)
+
+
+### Bug Fixes
+
+* update VITE_DD_SERVICE ([69a5197](https://github.com/ColdPBC/cold-monorepo/commit/69a5197602ed5ccbe175a353b28764046f2bd00f))
+
+## [1.73.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.73.1...v1.73.2) (2023-12-08)
+
+
+### Bug Fixes
+
+* refactor authentication / caching ([52a5129](https://github.com/ColdPBC/cold-monorepo/commit/52a51291c89f58dd7cefbcbaf5f06252f5ec4d4d))
+
 ## [1.73.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.73.0...v1.73.1) (2023-12-06)
 
 
