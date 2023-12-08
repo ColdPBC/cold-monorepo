@@ -18,7 +18,7 @@ jobs:
     name: 🐕‍🦺 API Service Catalog
     steps:
       # This uses the custom action to push the service definition to Datadog.
-      - uses: arcxp/datadog-service-catalog-metadata-provider@v2
+      - uses: arcxp/datadog-service-catalog-metadata-provider@v2.2
         with:
           # service-version: v2
           # You should use GitHub's encrypted secrets feature to manage secrets for Datadog.
@@ -84,11 +84,11 @@ jobs:
           # This is the Product Owner, you should contact them if you have suggestions.
           contacts: |
             - name: Dan Lindquist (Product Owner)
-              contact: @U04QVH8TR1N
+              contact: https://app.slack.com/client/T03GR5AMT6Y/D04UDGVKLD6
               type: slack
             - name: Troy Morvant (Staff Engineer)
-              contact:  @U04TLTX9XPF
+              contact: https://app.slack.com/client/T03GR5AMT6Y/D04UDGVKLD6
               type: slack
             - name: Qaalib Farah (FE Engineer)
-              contact: @U055L8KNKS9
+              contact: https://app.slack.com/client/T03GR5AMT6Y/D055RM5FRV2
               type: slack
