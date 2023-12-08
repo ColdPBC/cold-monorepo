@@ -1,3 +1,11 @@
+## [1.73.10](https://github.com/ColdPBC/cold-monorepo/compare/v1.73.9...v1.73.10) (2023-12-08)
+
+
+### Bug Fixes
+
+* surveys issue ([9047c57](https://github.com/ColdPBC/cold-monorepo/commit/9047c57fdf7a6084064495a819a949c6f1cd2d76))
+* surveys issue ([3c5701b](https://github.com/ColdPBC/cold-monorepo/commit/3c5701b4359e7852c17b40095be81e0ebe20173c))
+
 ## [1.73.9](https://github.com/ColdPBC/cold-monorepo/compare/v1.73.8...v1.73.9) (2023-12-08)
 
 
