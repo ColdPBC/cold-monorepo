@@ -1,3 +1,10 @@
+## [1.73.5](https://github.com/ColdPBC/cold-monorepo/compare/v1.73.4...v1.73.5) (2023-12-08)
+
+
+### Bug Fixes
+
+* barrel file issue ([4f46731](https://github.com/ColdPBC/cold-monorepo/commit/4f467319040373ea9edf88d89c5909b0f705e462))
+
 ## [1.73.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.73.3...v1.73.4) (2023-12-08)
 
 
