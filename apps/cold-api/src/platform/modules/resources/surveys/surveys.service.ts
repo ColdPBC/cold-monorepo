@@ -1,8 +1,8 @@
-import { BadRequestException, Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
+import { BadRequestException, HttpException, Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
 import { organizations, survey_types } from '@prisma/client';
 import { isUUID } from 'class-validator';
 import { diff } from 'deep-object-diff';
-import { find, map, merge, omit } from 'lodash';
+import { filter, find, map, merge, omit } from 'lodash';
 import { Span } from 'nestjs-ddtrace';
 import { v4 } from 'uuid';
 import {
@@ -163,6 +163,24 @@ export class SurveysService extends BaseWorker {
     } else {
       surveys = (await this.prisma.survey_definitions.findMany()) as ZodSurveyResponseDto[];
       this.logger.info(`found ${surveys.length} surveys`);
+    }
+
+    if (surveyFilter?.name || surveyFilter?.type) {
+      surveys = filter(surveys, survey => {
+        if (surveyFilter.name && surveyFilter.type) {
+          return survey.name === surveyFilter.name && survey.type === surveyFilter.type;
+        } else if (surveyFilter.name) {
+          return survey.name === surveyFilter.name;
+        } else if (surveyFilter.type) {
+          return survey.type === surveyFilter.type;
+        } else {
+          return true;
+        }
+      });
+
+      if (surveys.length === 0) {
+        throw new HttpException(`No surveys found with supplied filter`, 404);
+      }
     }
 
     return surveys;
