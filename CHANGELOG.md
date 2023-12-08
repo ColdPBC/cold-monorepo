@@ -1,3 +1,10 @@
+# [1.74.0-COLD-401.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.73.1...v1.74.0-COLD-401.1) (2023-12-08)
+
+
+### Features
+
+* Added addtional context to surveys ([5dc9b56](https://github.com/ColdPBC/cold-monorepo/commit/5dc9b56b68395381028cf43d90d69fa746220dc7))
+
 ## [1.73.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.73.0...v1.73.1) (2023-12-06)
 
 
