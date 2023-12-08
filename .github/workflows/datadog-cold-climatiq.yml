@@ -1,8 +1,8 @@
-name: 📒 API Service Catalog
+name: 📒 Climatiq Service Catalog
 on:
   workflow_dispatch:
   push:
-    paths: [ ".github/workflows/datadog-cold-api.yml"] # Trigger the action only when files change in the folders defined here
+    paths: [ ".github/workflows/datadog-cold-climatiq.yml"] # Trigger the action only when files change in the folders defined here
 permissions:
   contents: read # for checkout
 env:
