@@ -105,47 +105,7 @@
             "healthCheckTimeout": 15,
             "healthCheckInterval": 35
           },
-          "envVariables": {
-            "DD_API_KEY": {
-              "fromParameterStore": "fc.cold-api-fc.env.cold-production.8pr1zak.DD_API_KEY"
-            },
-            "REDISCLOUD_URL": {
-              "fromService": {
-                "id": "cold-cache-fc-production",
-                "value": "connectionString"
-              }
-            },
-            "DATABASE_URL": {
-              "fromService": {
-                "id": "cold-rds-fc-production",
-                "value": "dbConnectionString"
-              }
-            },
-            "ENABLE_HEALTH_LOGS": true,
-            "DD_ENV": "production",
-            "NODE_ENV": "production",
-            "DD_AGENT_MAJOR_VERSION": "7",
-            "DD_LOG_LEVEL": "ERROR",
-            "DD_POSTGRES_URL_VAR": "DATABASE_URL",
-            "DD_REDIS_URL_VAR": "REDISCLOUD_URL",
-            "DD_SITE": "us5.datadoghq.com",
-            "DD_APM_ENABLED": true,
-            "DD_APPSEC_AUTOMATED_USER_EVENTS_TRACKING": true,
-            "DD_APPSEC_ENABLED": true,
-            "DD_DOGSTATSD_NON_LOCAL_TRAFFIC": true,
-            "DD_DYNO_HOST": true,
-            "DD_ENABLE_DBM": true,
-            "DD_IAST_ENABLED": true,
-            "DD_LISTENERS": 2,
-            "DD_LOGS_ENABLED": true,
-            "DD_LOGS_INJECTION": true,
-            "DD_METRICS_ENABLED": true,
-            "DD_PROCESS_AGENT": true,
-            "DD_PROCESS_AGENT_ENABLED": true,
-            "DD_PROFILING_ENABLED": true,
-            "DD_REMOTE_CONFIGURATION_ENABLED": true,
-            "DD_USE_DOGSTATSD": true
-          },
+          "envVariables": {},
           "sidecars": [
             {
               "name": "sidecar-dd-api-prod",
@@ -160,7 +120,32 @@
                 5000
               ],
               "envVariables": {
-                "DD_SERVICE": "cold-api"
+                "DD_SERVICE": "cold-api",
+                "DD_API_KEY": {
+                  "fromParameterStore": "fc.cold-api-fc.env.cold-production.8pr1zak.DD_API_KEY"
+                },
+                "DD_AGENT_MAJOR_VERSION": "7",
+                "DD_LOG_LEVEL": "ERROR",
+                "DD_POSTGRES_URL_VAR": "DATABASE_URL",
+                "DD_REDIS_URL_VAR": "REDISCLOUD_URL",
+                "DD_SITE": "us5.datadoghq.com",
+                "DD_APM_ENABLED": true,
+                "DD_APPSEC_AUTOMATED_USER_EVENTS_TRACKING": true,
+                "DD_APPSEC_ENABLED": true,
+                "DD_DOGSTATSD_NON_LOCAL_TRAFFIC": true,
+                "DD_DYNO_HOST": true,
+                "DD_ENABLE_DBM": true,
+                "DD_IAST_ENABLED": true,
+                "DD_LISTENERS": 2,
+                "DD_LOGS_ENABLED": true,
+                "DD_LOGS_INJECTION": true,
+                "DD_METRICS_ENABLED": true,
+                "DD_PROCESS_AGENT": true,
+                "DD_PROCESS_AGENT_ENABLED": true,
+                "DD_PROFILING_ENABLED": true,
+                "DD_REMOTE_CONFIGURATION_ENABLED": true,
+                "DD_USE_DOGSTATSD": true,
+
               }
             }
           ]
