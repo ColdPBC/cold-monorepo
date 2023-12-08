@@ -144,7 +144,7 @@
                 "DD_PROCESS_AGENT_ENABLED": true,
                 "DD_PROFILING_ENABLED": true,
                 "DD_REMOTE_CONFIGURATION_ENABLED": true,
-                "DD_USE_DOGSTATSD": true,
+                "DD_USE_DOGSTATSD": true
 
               }
             }
