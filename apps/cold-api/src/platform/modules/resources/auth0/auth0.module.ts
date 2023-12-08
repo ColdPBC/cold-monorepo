@@ -7,11 +7,10 @@ import { OrganizationModule } from '../organizations/organization.module';
 import { RoleService } from './roles/role.service';
 import { OrganizationService } from '../organizations/organization.service';
 import { MemberService } from './members/member.service';
-import { Auth0UtilityService } from './auth0.utility.service';
 
 @Module({
   imports: [HttpModule, ColdCacheModule, MemberModule, RoleModule, OrganizationModule],
-  providers: [RoleService, OrganizationService, MemberService, Auth0UtilityService],
-  exports: [RoleService, OrganizationService, MemberService, Auth0UtilityService],
+  providers: [RoleService, OrganizationService, MemberService],
+  exports: [RoleService, OrganizationService, MemberService],
 })
 export class Auth0Module {}
