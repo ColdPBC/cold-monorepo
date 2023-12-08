@@ -15,8 +15,7 @@ export const getTestingSurveyFormDefinitionData = (): SurveyPayloadType => {
     id: '622fe082-a490-49a3-97f1-9cb511b53581',
     name: 'qaalib_test',
     type: 'survey',
-    description:
-      'A survey that exercises lots of sections and components for Qaalib to test everything with the survey',
+    description: 'A survey that exercises lots of sections and components for Qaalib to test everything with the survey',
     created_at: '2023-08-14T16:14:14.128Z',
     updated_at: '2023-08-14T16:14:14.128Z',
     definition: {
@@ -67,21 +66,18 @@ export const getTestingSurveyFormDefinitionData = (): SurveyPayloadType => {
           image_url:
             'https://images.unsplash.com/photo-1610891015188-5369212db097?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
           category_idx: 1,
-          category_description:
-            'Questions about how your products are produced',
+          category_description: 'Questions about how your products are produced',
         },
         facilities: {
           title: 'Facilities',
-          prompt:
-            'Do you own or lease any facilities like offices or warehouses?',
+          prompt: 'Do you own or lease any facilities like offices or warehouses?',
           component: 'yes_no',
           follow_up: {
             'facilities:0': {
               idx: 0,
               prompt: 'What colors are your office carpets?',
               options: ['Gray', 'Black', 'Orange', 'Blue', 'Purple'],
-              tooltip:
-                'If carpets are multiple colors choose all colors that apply',
+              tooltip: 'If carpets are multiple colors choose all colors that apply',
               component: 'multi_select',
               placeholder: '',
             },
@@ -89,8 +85,7 @@ export const getTestingSurveyFormDefinitionData = (): SurveyPayloadType => {
           image_url:
             'https://images.unsplash.com/photo-1524758631624-e2822e304c36?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
           category_idx: 2,
-          category_description:
-            'Questions about your the facilities you own or lease',
+          category_description: 'Questions about your the facilities you own or lease',
         },
         general: {
           title: 'General',
@@ -100,14 +95,7 @@ export const getTestingSurveyFormDefinitionData = (): SurveyPayloadType => {
             'general:0': {
               idx: 0,
               prompt: 'Which regions do you sell your product into?',
-              options: [
-                'North America',
-                'South America',
-                'Europe',
-                'Asia',
-                'Australia',
-                'Africa',
-              ],
+              options: ['North America', 'South America', 'Europe', 'Asia', 'Australia', 'Africa'],
               tooltip: '',
               component: 'multi_select',
               placeholder: '',
@@ -128,6 +116,21 @@ export const getTestingSurveyFormDefinitionData = (): SurveyPayloadType => {
               component: 'select',
               placeholder: '',
             },
+            'general:3': {
+              idx: 3,
+              prompt: 'How many employees did your company have as of the end of last calendar year?',
+              options: [],
+              tooltip: '',
+              component: 'number',
+              placeholder: 'Enter number of employees',
+              additional_context: {
+                prompt: 'Please explain your answer',
+                component: 'textarea',
+                placeholder: 'Write in here',
+                operator: '<', // could be ==, >, <, <=, >=
+                comparison: 10,
+              },
+            },
           },
           image_url:
             'https://images.unsplash.com/photo-1533038590840-1cde6e668a91?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1587&q=80',
@@ -145,8 +148,7 @@ export const getJourneyOverviewMock = (): SurveyPayloadType => {
     id: 'ca3ad2ed-619b-4ee0-834e-2e56c336dba8',
     name: 'journey_overview',
     type: 'JOURNEY',
-    description:
-      'Introductory survey to understand where an organization currently stands with climate',
+    description: 'Introductory survey to understand where an organization currently stands with climate',
     created_at: '2023-09-18T23:37:55.849Z',
     updated_at: '2023-09-18T23:37:55.959Z',
     definition: {
@@ -159,8 +161,7 @@ export const getJourneyOverviewMock = (): SurveyPayloadType => {
           follow_up: {
             employee_count: {
               idx: 0,
-              prompt:
-                'How many employees did your company have as of the end of last calendar year?',
+              prompt: 'How many employees did your company have as of the end of last calendar year?',
               options: [],
               tooltip: '',
               component: 'number',
@@ -193,20 +194,14 @@ export const getJourneyOverviewMock = (): SurveyPayloadType => {
             },
             growth_expectations: {
               idx: 3,
-              prompt:
-                'How quickly do you expect your company to grow over the next five years?',
-              options: [
-                'Light (e.g. < 5% Year-over-Year)',
-                'Moderate (e.g. 5-15% Year-over-year)',
-                'Aggressive (e.g. > 15% Year-over-Year)',
-              ],
+              prompt: 'How quickly do you expect your company to grow over the next five years?',
+              options: ['Light (e.g. < 5% Year-over-Year)', 'Moderate (e.g. 5-15% Year-over-year)', 'Aggressive (e.g. > 15% Year-over-Year)'],
               tooltip: '',
               component: 'select',
               placeholder: '',
             },
           },
-          image_url:
-            'https://cold-public-assets.s3.us-east-2.amazonaws.com/splash_images/General.png',
+          image_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/splash_images/General.png',
           category_idx: 0,
           category_description: 'Basic information about your company',
         },
@@ -217,13 +212,8 @@ export const getJourneyOverviewMock = (): SurveyPayloadType => {
           follow_up: {
             lca_use: {
               idx: 0,
-              prompt:
-                'Have you conducted LCAs (life-cycle analyses) to determine the environmental impact of your products?',
-              options: [
-                'Yes, for all products',
-                'Yes, for some products',
-                'No',
-              ],
+              prompt: 'Have you conducted LCAs (life-cycle analyses) to determine the environmental impact of your products?',
+              options: ['Yes, for all products', 'Yes, for some products', 'No'],
               tooltip: '',
               component: 'select',
               placeholder: '',
@@ -246,11 +236,9 @@ export const getJourneyOverviewMock = (): SurveyPayloadType => {
             },
             freight_import: {
               idx: 3,
-              prompt:
-                'Do you import any freight into countries where you manufacture or sell your product(s)?',
+              prompt: 'Do you import any freight into countries where you manufacture or sell your product(s)?',
               options: [],
-              tooltip:
-                'Freight includes all raw materials, secondary goods, or final products you import into a country where you manufacture and/or sell your product',
+              tooltip: 'Freight includes all raw materials, secondary goods, or final products you import into a country where you manufacture and/or sell your product',
               component: 'yes_no',
               placeholder: '',
             },
@@ -266,38 +254,23 @@ export const getJourneyOverviewMock = (): SurveyPayloadType => {
               idx: 1,
               prompt:
                 'Do you monitor and report usage for the following in your manufacturing facilities, or do you ask manufacturing partners to monitor and report on the following?',
-              options: [
-                'Water',
-                'Electricity',
-                'Gas',
-                'Waste',
-                'None of these',
-              ],
+              options: ['Water', 'Electricity', 'Gas', 'Waste', 'None of these'],
               tooltip: '',
               component: 'multi_select',
               placeholder: '',
             },
             maufacturing_utility_reduction: {
               idx: 2,
-              prompt:
-                'Do you have reduction targets per unit of output in place for any of the following?',
-              options: [
-                'Water',
-                'Electricity',
-                'Gas',
-                'Waste',
-                'None of these',
-              ],
+              prompt: 'Do you have reduction targets per unit of output in place for any of the following?',
+              options: ['Water', 'Electricity', 'Gas', 'Waste', 'None of these'],
               tooltip: '',
               component: 'multi_select',
               placeholder: '',
             },
           },
-          image_url:
-            'https://cold-public-assets.s3.us-east-2.amazonaws.com/splash_images/Product.png',
+          image_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/splash_images/Product.png',
           category_idx: 4,
-          category_description:
-            'Information about products your company makes or distributes',
+          category_description: 'Information about products your company makes or distributes',
         },
         vehicles: {
           title: 'Vehicles',
@@ -313,11 +286,9 @@ export const getJourneyOverviewMock = (): SurveyPayloadType => {
               placeholder: '',
             },
           },
-          image_url:
-            'https://cold-public-assets.s3.us-east-2.amazonaws.com/splash_images/Vehicles.png',
+          image_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/splash_images/Vehicles.png',
           category_idx: 3,
-          category_description:
-            'Information about vehicles your company owns or leases',
+          category_description: 'Information about vehicles your company owns or leases',
         },
         employees: {
           title: 'Employees',
@@ -326,8 +297,7 @@ export const getJourneyOverviewMock = (): SurveyPayloadType => {
           follow_up: {
             food_education: {
               idx: 1,
-              prompt:
-                'Do you educate employees on the environmental impact of foods consumed at company facilities and at home?',
+              prompt: 'Do you educate employees on the environmental impact of foods consumed at company facilities and at home?',
               options: [],
               tooltip: '',
               component: 'yes_no',
@@ -335,8 +305,7 @@ export const getJourneyOverviewMock = (): SurveyPayloadType => {
             },
             climate_benefits: {
               idx: 0,
-              prompt:
-                'What climate-friendly benefits do you offer to your employees?',
+              prompt: 'What climate-friendly benefits do you offer to your employees?',
               options: [
                 'ESG-focused 401k options',
                 'Climate-friendly commuter benefits',
@@ -352,21 +321,15 @@ export const getJourneyOverviewMock = (): SurveyPayloadType => {
             employee_opportunities: {
               idx: 2,
               prompt: 'Do you offer any of the following to your employees?',
-              options: [
-                'Climate education',
-                'Local environmental leadership experiences',
-                'Paid volunteering opportunities with mission-aligned NGOs or community organizations',
-              ],
+              options: ['Climate education', 'Local environmental leadership experiences', 'Paid volunteering opportunities with mission-aligned NGOs or community organizations'],
               tooltip: '',
               component: 'multi_select',
               placeholder: '',
             },
           },
-          image_url:
-            'https://cold-public-assets.s3.us-east-2.amazonaws.com/splash_images/Employees.png',
+          image_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/splash_images/Employees.png',
           category_idx: 7,
-          category_description:
-            'Information about benefits you provide to your employees and how you engage them on climate',
+          category_description: 'Information about benefits you provide to your employees and how you engage them on climate',
         },
         machinery: {
           title: 'Machinery',
@@ -375,19 +338,16 @@ export const getJourneyOverviewMock = (): SurveyPayloadType => {
           follow_up: {
             machine_energy: {
               idx: 0,
-              prompt:
-                'Do you monitor and record industrial machinery energy use in order to optimize energy performance and conservation?',
+              prompt: 'Do you monitor and record industrial machinery energy use in order to optimize energy performance and conservation?',
               options: [],
               tooltip: '',
               component: 'yes_no',
               placeholder: '',
             },
           },
-          image_url:
-            'https://cold-public-assets.s3.us-east-2.amazonaws.com/splash_images/Machinery.png',
+          image_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/splash_images/Machinery.png',
           category_idx: 5,
-          category_description:
-            'Information about industrial machinery used in your operations',
+          category_description: 'Information about industrial machinery used in your operations',
         },
         facilities: {
           title: 'Facilities',
@@ -396,8 +356,7 @@ export const getJourneyOverviewMock = (): SurveyPayloadType => {
           follow_up: {
             gas_monitoring: {
               idx: 4,
-              prompt:
-                'At which of your facilities do you monitor and record gas use? ',
+              prompt: 'At which of your facilities do you monitor and record gas use? ',
               options: ['All', 'Some', 'None'],
               tooltip: '',
               component: 'select',
@@ -405,8 +364,7 @@ export const getJourneyOverviewMock = (): SurveyPayloadType => {
             },
             waste_education: {
               idx: 7,
-              prompt:
-                'Do you educate employees to properly dispose of waste at all offices and facilities?',
+              prompt: 'Do you educate employees to properly dispose of waste at all offices and facilities?',
               options: [],
               tooltip: '',
               component: 'yes_no',
@@ -422,32 +380,23 @@ export const getJourneyOverviewMock = (): SurveyPayloadType => {
             },
             waste_receptacles: {
               idx: 6,
-              prompt:
-                'Do you offer the following waste diversion receptacles at some or all of your facilities?',
-              options: [
-                'Electronic waste',
-                'Compost / organics',
-                'Paper and cardboard recycling',
-                'Glass, aluminum, and plastics recycling',
-              ],
+              prompt: 'Do you offer the following waste diversion receptacles at some or all of your facilities?',
+              options: ['Electronic waste', 'Compost / organics', 'Paper and cardboard recycling', 'Glass, aluminum, and plastics recycling'],
               tooltip: '',
               component: 'multi_select',
               placeholder: '',
             },
             renewable_estimate: {
               idx: 1,
-              prompt:
-                'How much of your electricity came from renewable electricity generated on-site at your facilities? ',
+              prompt: 'How much of your electricity came from renewable electricity generated on-site at your facilities? ',
               options: ['All', 'Some', 'None'],
-              tooltip:
-                '(i.e. if you own, you installed your own solar panels; if you lease, your landlord has installed solar panels)',
+              tooltip: '(i.e. if you own, you installed your own solar panels; if you lease, your landlord has installed solar panels)',
               component: 'select',
               placeholder: '',
             },
             renewable_purchased: {
               idx: 2,
-              prompt:
-                'How much of your electricity was renewable electricity you purchased from your utility provider?',
+              prompt: 'How much of your electricity was renewable electricity you purchased from your utility provider?',
               options: ['All', 'Some', 'None'],
               tooltip: '',
               component: 'select',
@@ -455,8 +404,7 @@ export const getJourneyOverviewMock = (): SurveyPayloadType => {
             },
             electricity_monitoring: {
               idx: 3,
-              prompt:
-                'At which of your facilities do you monitor and record electricity use? ',
+              prompt: 'At which of your facilities do you monitor and record electricity use? ',
               options: ['All', 'Some', 'None'],
               tooltip: '',
               component: 'select',
@@ -464,8 +412,7 @@ export const getJourneyOverviewMock = (): SurveyPayloadType => {
             },
             facilities_actions_taken: {
               idx: 5,
-              prompt:
-                "Which of the following actions have you taken to improve your climate impact at any of your organization's facilities?",
+              prompt: "Which of the following actions have you taken to improve your climate impact at any of your organization's facilities?",
               options: [
                 'Optimized building management systems for energy usage (i.e. set points, lighting timers, etc.)',
                 'Installed LED bulbs, programmable thermostats, occupancy sensors, or other equipment to support energy efficiency and conservation',
@@ -478,11 +425,9 @@ export const getJourneyOverviewMock = (): SurveyPayloadType => {
               placeholder: '',
             },
           },
-          image_url:
-            'https://cold-public-assets.s3.us-east-2.amazonaws.com/splash_images/Facilities.png',
+          image_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/splash_images/Facilities.png',
           category_idx: 1,
-          category_description:
-            'Information about any facilities your company manages',
+          category_description: 'Information about any facilities your company manages',
         },
         purchasing: {
           title: 'Office Purchasing',
@@ -491,8 +436,7 @@ export const getJourneyOverviewMock = (): SurveyPayloadType => {
           follow_up: {
             reusable_water: {
               idx: 3,
-              prompt:
-                'Have you eliminated bottled water in office and do you provide filtered water stations and reusable glasses?',
+              prompt: 'Have you eliminated bottled water in office and do you provide filtered water stations and reusable glasses?',
               options: [],
               tooltip: '',
               component: 'yes_no',
@@ -500,8 +444,7 @@ export const getJourneyOverviewMock = (): SurveyPayloadType => {
             },
             used_donations: {
               idx: 6,
-              prompt:
-                'Do you donate any unused office supplies, equipment, or furniture to local organizations?',
+              prompt: 'Do you donate any unused office supplies, equipment, or furniture to local organizations?',
               options: [],
               tooltip: '',
               component: 'yes_no',
@@ -509,8 +452,7 @@ export const getJourneyOverviewMock = (): SurveyPayloadType => {
             },
             paper_purchasing: {
               idx: 1,
-              prompt:
-                'Do you purchase only certified deforestation-free or 100% post-consumer recycled paper & paper products (towels & napkins, etc.)?',
+              prompt: 'Do you purchase only certified deforestation-free or 100% post-consumer recycled paper & paper products (towels & napkins, etc.)?',
               options: [],
               tooltip: '',
               component: 'yes_no',
@@ -518,8 +460,7 @@ export const getJourneyOverviewMock = (): SurveyPayloadType => {
             },
             energystar_equipment: {
               idx: 5,
-              prompt:
-                'Do you purchase EnergyStar top performing for all digital equipment?',
+              prompt: 'Do you purchase EnergyStar top performing for all digital equipment?',
               options: [],
               tooltip: '',
               component: 'yes_no',
@@ -527,8 +468,7 @@ export const getJourneyOverviewMock = (): SurveyPayloadType => {
             },
             double_sided_printing: {
               idx: 2,
-              prompt:
-                'Have you implemented a policy to minimize printing and require double-sided printing?',
+              prompt: 'Have you implemented a policy to minimize printing and require double-sided printing?',
               options: [],
               tooltip: '',
               component: 'yes_no',
@@ -536,8 +476,7 @@ export const getJourneyOverviewMock = (): SurveyPayloadType => {
             },
             eco_friendly_cleaning: {
               idx: 4,
-              prompt:
-                'Do you require custodial staff to use only non-toxic and environmentally-friendly cleaning supplies?',
+              prompt: 'Do you require custodial staff to use only non-toxic and environmentally-friendly cleaning supplies?',
               options: [],
               tooltip: '',
               component: 'yes_no',
@@ -545,19 +484,16 @@ export const getJourneyOverviewMock = (): SurveyPayloadType => {
             },
             environmental_purchasing: {
               idx: 0,
-              prompt:
-                'Have you written and implemented an environmentally preferred purchasing policy?',
+              prompt: 'Have you written and implemented an environmentally preferred purchasing policy?',
               options: [],
               tooltip: '',
               component: 'yes_no',
               placeholder: '',
             },
           },
-          image_url:
-            'https://cold-public-assets.s3.us-east-2.amazonaws.com/splash_images/Purchasing.png',
+          image_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/splash_images/Purchasing.png',
           category_idx: 6,
-          category_description:
-            "Information about your company's purchasing decisions and policies",
+          category_description: "Information about your company's purchasing decisions and policies",
         },
         commuting_travel: {
           title: 'Commuting & Travel',
@@ -566,8 +502,7 @@ export const getJourneyOverviewMock = (): SurveyPayloadType => {
           follow_up: {
             commute_drive: {
               idx: 2,
-              prompt:
-                'Approximately how many employees drive to work when commuting?',
+              prompt: 'Approximately how many employees drive to work when commuting?',
               options: ['All', 'Most', 'Some', 'None'],
               tooltip: '',
               component: 'select',
@@ -575,8 +510,7 @@ export const getJourneyOverviewMock = (): SurveyPayloadType => {
             },
             workforce_wfh: {
               idx: 1,
-              prompt:
-                'Approximately how many days per week are work-from-home days across all employees, on average?',
+              prompt: 'Approximately how many days per week are work-from-home days across all employees, on average?',
               options: ['One', 'Two', 'Three', 'Four'],
               tooltip: '',
               component: 'select',
@@ -584,8 +518,7 @@ export const getJourneyOverviewMock = (): SurveyPayloadType => {
             },
             business_travel: {
               idx: 3,
-              prompt:
-                'Roughly how many employees regularly travel for business?',
+              prompt: 'Roughly how many employees regularly travel for business?',
               options: ['All', 'Most', 'Some', 'None'],
               tooltip: '',
               component: 'select',
@@ -605,11 +538,9 @@ export const getJourneyOverviewMock = (): SurveyPayloadType => {
               placeholder: '',
             },
           },
-          image_url:
-            'https://cold-public-assets.s3.us-east-2.amazonaws.com/splash_images/CommutingTravel.png',
+          image_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/splash_images/CommutingTravel.png',
           category_idx: 2,
-          category_description:
-            "Information about your employee's commuting and business travel habits",
+          category_description: "Information about your employee's commuting and business travel habits",
         },
         climate_leadership: {
           title: 'Climate Leadership',
@@ -618,8 +549,7 @@ export const getJourneyOverviewMock = (): SurveyPayloadType => {
           follow_up: {
             ghg_target: {
               idx: 2,
-              prompt:
-                'Has your organization set a company-wide GHG emissions reduction target?',
+              prompt: 'Has your organization set a company-wide GHG emissions reduction target?',
               options: [],
               tooltip: '',
               component: 'yes_no',
@@ -627,13 +557,8 @@ export const getJourneyOverviewMock = (): SurveyPayloadType => {
             },
             cost_of_carbon: {
               idx: 1,
-              prompt:
-                'Do you incorporate the cost of carbon into financial accounting and decision making?',
-              options: [
-                'No',
-                'We implement a shadow or proxy price on carbon',
-                'We implement an internal price on carbon aligned with or higher than the social cost of carbon',
-              ],
+              prompt: 'Do you incorporate the cost of carbon into financial accounting and decision making?',
+              options: ['No', 'We implement a shadow or proxy price on carbon', 'We implement an internal price on carbon aligned with or higher than the social cost of carbon'],
               tooltip:
                 'Carbon prices help businesses to assess the climate-related externalities of doing business. Externalities, in this case, refer to the social and environmental cost of greenhouse gas emissions associated with key business activities that are otherwise not included or reflected in company balance sheets or transaction analyses. Companies implement a "shadow or proxy price on carbon" to help them better understand their company\'s social and environmental impact or to project potential impacts to the bottom-line under scenarios where regulators adopt or strengthen carbon tax policies. Implementing an "internal price on carbon" typically involves incorporating the cost of climate-related externalities into departmental balance sheets or cost-benefit analyses, which directly affects bottom-line decision making.',
               component: 'select',
@@ -641,8 +566,7 @@ export const getJourneyOverviewMock = (): SurveyPayloadType => {
             },
             vendor_screening: {
               idx: 6,
-              prompt:
-                'Do you have a screening policy to evaluate and support supplier/vendor climate impact?',
+              prompt: 'Do you have a screening policy to evaluate and support supplier/vendor climate impact?',
               options: [],
               tooltip: '',
               component: 'yes_no',
@@ -650,8 +574,7 @@ export const getJourneyOverviewMock = (): SurveyPayloadType => {
             },
             climate_disclosure: {
               idx: 5,
-              prompt:
-                'Do you publicly disclose any of your environmental performance or impact?',
+              prompt: 'Do you publicly disclose any of your environmental performance or impact?',
               options: [],
               tooltip: '',
               component: 'yes_no',
@@ -676,8 +599,7 @@ export const getJourneyOverviewMock = (): SurveyPayloadType => {
             },
             financial_screening: {
               idx: 0,
-              prompt:
-                'Do you screen potential banking & financial partners for climate impact?',
+              prompt: 'Do you screen potential banking & financial partners for climate impact?',
               options: [],
               tooltip: '',
               component: 'yes_no',
@@ -685,8 +607,7 @@ export const getJourneyOverviewMock = (): SurveyPayloadType => {
             },
             climate_hr_decisions: {
               idx: 3,
-              prompt:
-                'Do you consider environmental issues in HR-related matters such as recruitment or compensation?',
+              prompt: 'Do you consider environmental issues in HR-related matters such as recruitment or compensation?',
               options: [],
               tooltip: '',
               component: 'yes_no',
@@ -694,23 +615,19 @@ export const getJourneyOverviewMock = (): SurveyPayloadType => {
             },
             climate_company_decisions: {
               idx: 4,
-              prompt:
-                'Does your board consider environmental impact as a part of company decision making?',
+              prompt: 'Does your board consider environmental impact as a part of company decision making?',
               options: [],
               tooltip: '',
               component: 'yes_no',
               placeholder: '',
             },
           },
-          image_url:
-            'https://cold-public-assets.s3.us-east-2.amazonaws.com/splash_images/ClimateLeadership.png',
+          image_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/splash_images/ClimateLeadership.png',
           category_idx: 8,
-          category_description:
-            'Efforts your company makes to bring climate to the forefront of decision making',
+          category_description: 'Efforts your company makes to bring climate to the forefront of decision making',
         },
       },
-      image_url:
-        'https://cold-public-assets.s3.us-east-2.amazonaws.com/splash_images/General.png',
+      image_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/splash_images/General.png',
       intro_markdown:
         "Thanks for joining Cold. We'll start with our initial overview questionnaire.\n\nThis is a short set of questions to help us understand where you are on your climate journey and where you might be able to go next.",
       submitted: true,
@@ -723,8 +640,7 @@ export const getSurveyMockSomeCompleted = (): SurveyPayloadType => {
     id: 'ca3ad2ed-619b-4ee0-834e-2e56c336dba8',
     name: 'journey_overview',
     type: 'JOURNEY',
-    description:
-      'Introductory survey to understand where an organization currently stands with climate',
+    description: 'Introductory survey to understand where an organization currently stands with climate',
     created_at: '2023-09-18T23:37:55.849Z',
     updated_at: '2023-09-18T23:37:55.959Z',
     definition: {
@@ -737,8 +653,7 @@ export const getSurveyMockSomeCompleted = (): SurveyPayloadType => {
           follow_up: {
             employee_count: {
               idx: 0,
-              prompt:
-                'How many employees did your company have as of the end of last calendar year?',
+              prompt: 'How many employees did your company have as of the end of last calendar year?',
               options: [],
               tooltip: '',
               component: 'number',
@@ -777,13 +692,8 @@ export const getSurveyMockSomeCompleted = (): SurveyPayloadType => {
             },
             growth_expectations: {
               idx: 3,
-              prompt:
-                'How quickly do you expect your company to grow over the next five years?',
-              options: [
-                'Light (e.g. < 5% Year-over-Year)',
-                'Moderate (e.g. 5-15% Year-over-year)',
-                'Aggressive (e.g. > 15% Year-over-Year)',
-              ],
+              prompt: 'How quickly do you expect your company to grow over the next five years?',
+              options: ['Light (e.g. < 5% Year-over-Year)', 'Moderate (e.g. 5-15% Year-over-year)', 'Aggressive (e.g. > 15% Year-over-Year)'],
               tooltip: '',
               component: 'select',
               placeholder: '',
@@ -791,8 +701,7 @@ export const getSurveyMockSomeCompleted = (): SurveyPayloadType => {
               skipped: true,
             },
           },
-          image_url:
-            'https://cold-public-assets.s3.us-east-2.amazonaws.com/splash_images/General.png',
+          image_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/splash_images/General.png',
           category_idx: 0,
           category_description: 'Basic information about your company',
         },
@@ -803,13 +712,8 @@ export const getSurveyMockSomeCompleted = (): SurveyPayloadType => {
           follow_up: {
             lca_use: {
               idx: 0,
-              prompt:
-                'Have you conducted LCAs (life-cycle analyses) to determine the environmental impact of your products?',
-              options: [
-                'Yes, for all products',
-                'Yes, for some products',
-                'No',
-              ],
+              prompt: 'Have you conducted LCAs (life-cycle analyses) to determine the environmental impact of your products?',
+              options: ['Yes, for all products', 'Yes, for some products', 'No'],
               tooltip: '',
               component: 'select',
               placeholder: '',
@@ -832,11 +736,9 @@ export const getSurveyMockSomeCompleted = (): SurveyPayloadType => {
             },
             freight_import: {
               idx: 3,
-              prompt:
-                'Do you import any freight into countries where you manufacture or sell your product(s)?',
+              prompt: 'Do you import any freight into countries where you manufacture or sell your product(s)?',
               options: [],
-              tooltip:
-                'Freight includes all raw materials, secondary goods, or final products you import into a country where you manufacture and/or sell your product',
+              tooltip: 'Freight includes all raw materials, secondary goods, or final products you import into a country where you manufacture and/or sell your product',
               component: 'yes_no',
               placeholder: '',
             },
@@ -852,38 +754,23 @@ export const getSurveyMockSomeCompleted = (): SurveyPayloadType => {
               idx: 1,
               prompt:
                 'Do you monitor and report usage for the following in your manufacturing facilities, or do you ask manufacturing partners to monitor and report on the following?',
-              options: [
-                'Water',
-                'Electricity',
-                'Gas',
-                'Waste',
-                'None of these',
-              ],
+              options: ['Water', 'Electricity', 'Gas', 'Waste', 'None of these'],
               tooltip: '',
               component: 'multi_select',
               placeholder: '',
             },
             maufacturing_utility_reduction: {
               idx: 2,
-              prompt:
-                'Do you have reduction targets per unit of output in place for any of the following?',
-              options: [
-                'Water',
-                'Electricity',
-                'Gas',
-                'Waste',
-                'None of these',
-              ],
+              prompt: 'Do you have reduction targets per unit of output in place for any of the following?',
+              options: ['Water', 'Electricity', 'Gas', 'Waste', 'None of these'],
               tooltip: '',
               component: 'multi_select',
               placeholder: '',
             },
           },
-          image_url:
-            'https://cold-public-assets.s3.us-east-2.amazonaws.com/splash_images/Product.png',
+          image_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/splash_images/Product.png',
           category_idx: 4,
-          category_description:
-            'Information about products your company makes or distributes',
+          category_description: 'Information about products your company makes or distributes',
         },
         vehicles: {
           title: 'Vehicles',
@@ -899,11 +786,9 @@ export const getSurveyMockSomeCompleted = (): SurveyPayloadType => {
               placeholder: '',
             },
           },
-          image_url:
-            'https://cold-public-assets.s3.us-east-2.amazonaws.com/splash_images/Vehicles.png',
+          image_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/splash_images/Vehicles.png',
           category_idx: 3,
-          category_description:
-            'Information about vehicles your company owns or leases',
+          category_description: 'Information about vehicles your company owns or leases',
         },
         employees: {
           title: 'Employees',
@@ -912,8 +797,7 @@ export const getSurveyMockSomeCompleted = (): SurveyPayloadType => {
           follow_up: {
             food_education: {
               idx: 1,
-              prompt:
-                'Do you educate employees on the environmental impact of foods consumed at company facilities and at home?',
+              prompt: 'Do you educate employees on the environmental impact of foods consumed at company facilities and at home?',
               options: [],
               tooltip: '',
               component: 'yes_no',
@@ -921,8 +805,7 @@ export const getSurveyMockSomeCompleted = (): SurveyPayloadType => {
             },
             climate_benefits: {
               idx: 0,
-              prompt:
-                'What climate-friendly benefits do you offer to your employees?',
+              prompt: 'What climate-friendly benefits do you offer to your employees?',
               options: [
                 'ESG-focused 401k options',
                 'Climate-friendly commuter benefits',
@@ -938,21 +821,15 @@ export const getSurveyMockSomeCompleted = (): SurveyPayloadType => {
             employee_opportunities: {
               idx: 2,
               prompt: 'Do you offer any of the following to your employees?',
-              options: [
-                'Climate education',
-                'Local environmental leadership experiences',
-                'Paid volunteering opportunities with mission-aligned NGOs or community organizations',
-              ],
+              options: ['Climate education', 'Local environmental leadership experiences', 'Paid volunteering opportunities with mission-aligned NGOs or community organizations'],
               tooltip: '',
               component: 'multi_select',
               placeholder: '',
             },
           },
-          image_url:
-            'https://cold-public-assets.s3.us-east-2.amazonaws.com/splash_images/Employees.png',
+          image_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/splash_images/Employees.png',
           category_idx: 7,
-          category_description:
-            'Information about benefits you provide to your employees and how you engage them on climate',
+          category_description: 'Information about benefits you provide to your employees and how you engage them on climate',
         },
         machinery: {
           title: 'Machinery',
@@ -961,19 +838,16 @@ export const getSurveyMockSomeCompleted = (): SurveyPayloadType => {
           follow_up: {
             machine_energy: {
               idx: 0,
-              prompt:
-                'Do you monitor and record industrial machinery energy use in order to optimize energy performance and conservation?',
+              prompt: 'Do you monitor and record industrial machinery energy use in order to optimize energy performance and conservation?',
               options: [],
               tooltip: '',
               component: 'yes_no',
               placeholder: '',
             },
           },
-          image_url:
-            'https://cold-public-assets.s3.us-east-2.amazonaws.com/splash_images/Machinery.png',
+          image_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/splash_images/Machinery.png',
           category_idx: 5,
-          category_description:
-            'Information about industrial machinery used in your operations',
+          category_description: 'Information about industrial machinery used in your operations',
         },
         facilities: {
           title: 'Facilities',
@@ -982,8 +856,7 @@ export const getSurveyMockSomeCompleted = (): SurveyPayloadType => {
           follow_up: {
             gas_monitoring: {
               idx: 4,
-              prompt:
-                'At which of your facilities do you monitor and record gas use? ',
+              prompt: 'At which of your facilities do you monitor and record gas use? ',
               options: ['All', 'Some', 'None'],
               tooltip: '',
               component: 'select',
@@ -991,8 +864,7 @@ export const getSurveyMockSomeCompleted = (): SurveyPayloadType => {
             },
             waste_education: {
               idx: 7,
-              prompt:
-                'Do you educate employees to properly dispose of waste at all offices and facilities?',
+              prompt: 'Do you educate employees to properly dispose of waste at all offices and facilities?',
               options: [],
               tooltip: '',
               component: 'yes_no',
@@ -1008,32 +880,23 @@ export const getSurveyMockSomeCompleted = (): SurveyPayloadType => {
             },
             waste_receptacles: {
               idx: 6,
-              prompt:
-                'Do you offer the following waste diversion receptacles at some or all of your facilities?',
-              options: [
-                'Electronic waste',
-                'Compost / organics',
-                'Paper and cardboard recycling',
-                'Glass, aluminum, and plastics recycling',
-              ],
+              prompt: 'Do you offer the following waste diversion receptacles at some or all of your facilities?',
+              options: ['Electronic waste', 'Compost / organics', 'Paper and cardboard recycling', 'Glass, aluminum, and plastics recycling'],
               tooltip: '',
               component: 'multi_select',
               placeholder: '',
             },
             renewable_estimate: {
               idx: 1,
-              prompt:
-                'How much of your electricity came from renewable electricity generated on-site at your facilities? ',
+              prompt: 'How much of your electricity came from renewable electricity generated on-site at your facilities? ',
               options: ['All', 'Some', 'None'],
-              tooltip:
-                '(i.e. if you own, you installed your own solar panels; if you lease, your landlord has installed solar panels)',
+              tooltip: '(i.e. if you own, you installed your own solar panels; if you lease, your landlord has installed solar panels)',
               component: 'select',
               placeholder: '',
             },
             renewable_purchased: {
               idx: 2,
-              prompt:
-                'How much of your electricity was renewable electricity you purchased from your utility provider?',
+              prompt: 'How much of your electricity was renewable electricity you purchased from your utility provider?',
               options: ['All', 'Some', 'None'],
               tooltip: '',
               component: 'select',
@@ -1041,8 +904,7 @@ export const getSurveyMockSomeCompleted = (): SurveyPayloadType => {
             },
             electricity_monitoring: {
               idx: 3,
-              prompt:
-                'At which of your facilities do you monitor and record electricity use? ',
+              prompt: 'At which of your facilities do you monitor and record electricity use? ',
               options: ['All', 'Some', 'None'],
               tooltip: '',
               component: 'select',
@@ -1050,8 +912,7 @@ export const getSurveyMockSomeCompleted = (): SurveyPayloadType => {
             },
             facilities_actions_taken: {
               idx: 5,
-              prompt:
-                "Which of the following actions have you taken to improve your climate impact at any of your organization's facilities?",
+              prompt: "Which of the following actions have you taken to improve your climate impact at any of your organization's facilities?",
               options: [
                 'Optimized building management systems for energy usage (i.e. set points, lighting timers, etc.)',
                 'Installed LED bulbs, programmable thermostats, occupancy sensors, or other equipment to support energy efficiency and conservation',
@@ -1064,11 +925,9 @@ export const getSurveyMockSomeCompleted = (): SurveyPayloadType => {
               placeholder: '',
             },
           },
-          image_url:
-            'https://cold-public-assets.s3.us-east-2.amazonaws.com/splash_images/Facilities.png',
+          image_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/splash_images/Facilities.png',
           category_idx: 1,
-          category_description:
-            'Information about any facilities your company manages',
+          category_description: 'Information about any facilities your company manages',
         },
         purchasing: {
           title: 'Office Purchasing',
@@ -1077,8 +936,7 @@ export const getSurveyMockSomeCompleted = (): SurveyPayloadType => {
           follow_up: {
             reusable_water: {
               idx: 3,
-              prompt:
-                'Have you eliminated bottled water in office and do you provide filtered water stations and reusable glasses?',
+              prompt: 'Have you eliminated bottled water in office and do you provide filtered water stations and reusable glasses?',
               options: [],
               tooltip: '',
               component: 'yes_no',
@@ -1086,8 +944,7 @@ export const getSurveyMockSomeCompleted = (): SurveyPayloadType => {
             },
             used_donations: {
               idx: 6,
-              prompt:
-                'Do you donate any unused office supplies, equipment, or furniture to local organizations?',
+              prompt: 'Do you donate any unused office supplies, equipment, or furniture to local organizations?',
               options: [],
               tooltip: '',
               component: 'yes_no',
@@ -1095,8 +952,7 @@ export const getSurveyMockSomeCompleted = (): SurveyPayloadType => {
             },
             paper_purchasing: {
               idx: 1,
-              prompt:
-                'Do you purchase only certified deforestation-free or 100% post-consumer recycled paper & paper products (towels & napkins, etc.)?',
+              prompt: 'Do you purchase only certified deforestation-free or 100% post-consumer recycled paper & paper products (towels & napkins, etc.)?',
               options: [],
               tooltip: '',
               component: 'yes_no',
@@ -1104,8 +960,7 @@ export const getSurveyMockSomeCompleted = (): SurveyPayloadType => {
             },
             energystar_equipment: {
               idx: 5,
-              prompt:
-                'Do you purchase EnergyStar top performing for all digital equipment?',
+              prompt: 'Do you purchase EnergyStar top performing for all digital equipment?',
               options: [],
               tooltip: '',
               component: 'yes_no',
@@ -1113,8 +968,7 @@ export const getSurveyMockSomeCompleted = (): SurveyPayloadType => {
             },
             double_sided_printing: {
               idx: 2,
-              prompt:
-                'Have you implemented a policy to minimize printing and require double-sided printing?',
+              prompt: 'Have you implemented a policy to minimize printing and require double-sided printing?',
               options: [],
               tooltip: '',
               component: 'yes_no',
@@ -1122,8 +976,7 @@ export const getSurveyMockSomeCompleted = (): SurveyPayloadType => {
             },
             eco_friendly_cleaning: {
               idx: 4,
-              prompt:
-                'Do you require custodial staff to use only non-toxic and environmentally-friendly cleaning supplies?',
+              prompt: 'Do you require custodial staff to use only non-toxic and environmentally-friendly cleaning supplies?',
               options: [],
               tooltip: '',
               component: 'yes_no',
@@ -1131,19 +984,16 @@ export const getSurveyMockSomeCompleted = (): SurveyPayloadType => {
             },
             environmental_purchasing: {
               idx: 0,
-              prompt:
-                'Have you written and implemented an environmentally preferred purchasing policy?',
+              prompt: 'Have you written and implemented an environmentally preferred purchasing policy?',
               options: [],
               tooltip: '',
               component: 'yes_no',
               placeholder: '',
             },
           },
-          image_url:
-            'https://cold-public-assets.s3.us-east-2.amazonaws.com/splash_images/Purchasing.png',
+          image_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/splash_images/Purchasing.png',
           category_idx: 6,
-          category_description:
-            "Information about your company's purchasing decisions and policies",
+          category_description: "Information about your company's purchasing decisions and policies",
         },
         commuting_travel: {
           title: 'Commuting & Travel',
@@ -1152,8 +1002,7 @@ export const getSurveyMockSomeCompleted = (): SurveyPayloadType => {
           follow_up: {
             commute_drive: {
               idx: 2,
-              prompt:
-                'Approximately how many employees drive to work when commuting?',
+              prompt: 'Approximately how many employees drive to work when commuting?',
               options: ['All', 'Most', 'Some', 'None'],
               tooltip: '',
               component: 'select',
@@ -1161,8 +1010,7 @@ export const getSurveyMockSomeCompleted = (): SurveyPayloadType => {
             },
             workforce_wfh: {
               idx: 1,
-              prompt:
-                'Approximately how many days per week are work-from-home days across all employees, on average?',
+              prompt: 'Approximately how many days per week are work-from-home days across all employees, on average?',
               options: ['One', 'Two', 'Three', 'Four'],
               tooltip: '',
               component: 'select',
@@ -1170,8 +1018,7 @@ export const getSurveyMockSomeCompleted = (): SurveyPayloadType => {
             },
             business_travel: {
               idx: 3,
-              prompt:
-                'Roughly how many employees regularly travel for business?',
+              prompt: 'Roughly how many employees regularly travel for business?',
               options: ['All', 'Most', 'Some', 'None'],
               tooltip: '',
               component: 'select',
@@ -1191,11 +1038,9 @@ export const getSurveyMockSomeCompleted = (): SurveyPayloadType => {
               placeholder: '',
             },
           },
-          image_url:
-            'https://cold-public-assets.s3.us-east-2.amazonaws.com/splash_images/CommutingTravel.png',
+          image_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/splash_images/CommutingTravel.png',
           category_idx: 2,
-          category_description:
-            "Information about your employee's commuting and business travel habits",
+          category_description: "Information about your employee's commuting and business travel habits",
         },
         climate_leadership: {
           title: 'Climate Leadership',
@@ -1204,8 +1049,7 @@ export const getSurveyMockSomeCompleted = (): SurveyPayloadType => {
           follow_up: {
             ghg_target: {
               idx: 2,
-              prompt:
-                'Has your organization set a company-wide GHG emissions reduction target?',
+              prompt: 'Has your organization set a company-wide GHG emissions reduction target?',
               options: [],
               tooltip: '',
               component: 'yes_no',
@@ -1213,13 +1057,8 @@ export const getSurveyMockSomeCompleted = (): SurveyPayloadType => {
             },
             cost_of_carbon: {
               idx: 1,
-              prompt:
-                'Do you incorporate the cost of carbon into financial accounting and decision making?',
-              options: [
-                'No',
-                'We implement a shadow or proxy price on carbon',
-                'We implement an internal price on carbon aligned with or higher than the social cost of carbon',
-              ],
+              prompt: 'Do you incorporate the cost of carbon into financial accounting and decision making?',
+              options: ['No', 'We implement a shadow or proxy price on carbon', 'We implement an internal price on carbon aligned with or higher than the social cost of carbon'],
               tooltip:
                 'Carbon prices help businesses to assess the climate-related externalities of doing business. Externalities, in this case, refer to the social and environmental cost of greenhouse gas emissions associated with key business activities that are otherwise not included or reflected in company balance sheets or transaction analyses. Companies implement a "shadow or proxy price on carbon" to help them better understand their company\'s social and environmental impact or to project potential impacts to the bottom-line under scenarios where regulators adopt or strengthen carbon tax policies. Implementing an "internal price on carbon" typically involves incorporating the cost of climate-related externalities into departmental balance sheets or cost-benefit analyses, which directly affects bottom-line decision making.',
               component: 'select',
@@ -1227,8 +1066,7 @@ export const getSurveyMockSomeCompleted = (): SurveyPayloadType => {
             },
             vendor_screening: {
               idx: 6,
-              prompt:
-                'Do you have a screening policy to evaluate and support supplier/vendor climate impact?',
+              prompt: 'Do you have a screening policy to evaluate and support supplier/vendor climate impact?',
               options: [],
               tooltip: '',
               component: 'yes_no',
@@ -1236,8 +1074,7 @@ export const getSurveyMockSomeCompleted = (): SurveyPayloadType => {
             },
             climate_disclosure: {
               idx: 5,
-              prompt:
-                'Do you publicly disclose any of your environmental performance or impact?',
+              prompt: 'Do you publicly disclose any of your environmental performance or impact?',
               options: [],
               tooltip: '',
               component: 'yes_no',
@@ -1262,8 +1099,7 @@ export const getSurveyMockSomeCompleted = (): SurveyPayloadType => {
             },
             financial_screening: {
               idx: 0,
-              prompt:
-                'Do you screen potential banking & financial partners for climate impact?',
+              prompt: 'Do you screen potential banking & financial partners for climate impact?',
               options: [],
               tooltip: '',
               component: 'yes_no',
@@ -1271,8 +1107,7 @@ export const getSurveyMockSomeCompleted = (): SurveyPayloadType => {
             },
             climate_hr_decisions: {
               idx: 3,
-              prompt:
-                'Do you consider environmental issues in HR-related matters such as recruitment or compensation?',
+              prompt: 'Do you consider environmental issues in HR-related matters such as recruitment or compensation?',
               options: [],
               tooltip: '',
               component: 'yes_no',
@@ -1280,23 +1115,19 @@ export const getSurveyMockSomeCompleted = (): SurveyPayloadType => {
             },
             climate_company_decisions: {
               idx: 4,
-              prompt:
-                'Does your board consider environmental impact as a part of company decision making?',
+              prompt: 'Does your board consider environmental impact as a part of company decision making?',
               options: [],
               tooltip: '',
               component: 'yes_no',
               placeholder: '',
             },
           },
-          image_url:
-            'https://cold-public-assets.s3.us-east-2.amazonaws.com/splash_images/ClimateLeadership.png',
+          image_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/splash_images/ClimateLeadership.png',
           category_idx: 8,
-          category_description:
-            'Efforts your company makes to bring climate to the forefront of decision making',
+          category_description: 'Efforts your company makes to bring climate to the forefront of decision making',
         },
       },
-      image_url:
-        'https://cold-public-assets.s3.us-east-2.amazonaws.com/splash_images/General.png',
+      image_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/splash_images/General.png',
       intro_markdown:
         "Thanks for joining Cold. We'll start with our initial overview questionnaire.\n\nThis is a short set of questions to help us understand where you are on your climate journey and where you might be able to go next.",
     },
