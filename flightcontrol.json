@@ -106,7 +106,19 @@
             "healthCheckInterval": 35
           },
           "envVariables": {
-            "DD_SERVICE": "cold-api"
+            "DD_SERVICE": "cold-api",
+            "REDISCLOUD_URL": {
+              "fromService": {
+                "id": "cold-cache-fc-production",
+                "value": "connectionString"
+              }
+            },
+            "DATABASE_URL": {
+              "fromService": {
+                "id": "cold-rds-fc-production",
+                "value": "dbConnectionString"
+              }
+            }
           },
           "sidecars": [
             {
