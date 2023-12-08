@@ -57,6 +57,7 @@ export interface SurveySectionType {
   category_description: string;
   value?: any | null;
   skipped?: boolean;
+  additional_context?: SurveyAdditionalContext;
 }
 
 export interface SurveySectionFollowUpsType {
@@ -72,6 +73,7 @@ export interface SurveySectionFollowUpType {
   placeholder: string;
   value?: any | null;
   skipped?: boolean;
+  additional_context?: SurveyAdditionalContext;
 }
 
 export interface SurveyPayloadType {
@@ -90,4 +92,13 @@ export interface SurveyDefinitionType {
   intro_markdown: string;
   sections: SurveySectionsType;
   submitted?: boolean;
+}
+
+export interface SurveyAdditionalContext {
+  prompt: string;
+  component: string;
+  placeholder: string;
+  operator: string;
+  comparison: any;
+  value?: any | null;
 }
