@@ -18,7 +18,7 @@ jobs:
     name: 🐕‍🦺 API Service Catalog
     steps:
       # This uses the custom action to push the service definition to Datadog.
-      - uses: arcxp/datadog-service-catalog-metadata-provider@v2.2
+      - uses: arcxp/datadog-service-catalog-metadata-provider@v2
         with:
           # service-version: v2
           # You should use GitHub's encrypted secrets feature to manage secrets for Datadog.
@@ -28,9 +28,11 @@ jobs:
           datadog-key: ${{ secrets.DATADOG_API }}
           datadog-app-key: ${{ secrets.DD_APP_KEY }}
           github-token: ${{ secrets.GH_TOKEN }}
-
+          schema-version: 2.1
           # This maps to the `dd-service` field in Datadog, it's just the name of your service.
           service-name: cold-api
+          application: backend
+          division: core
 
           # The name of the team which owns and/or supports the service.
           team: Engineering
@@ -80,7 +82,6 @@ jobs:
             #service_url: https://fake-org.hello-world.opsgenie.com
             #region: US
           #pagerduty: https://fake-org.hello-world.pagerduty.com
-          application: core
           # This is the Product Owner, you should contact them if you have suggestions.
           contacts: |
             - name: Dan Lindquist (Product Owner)

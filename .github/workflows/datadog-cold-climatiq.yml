@@ -1,8 +1,8 @@
-name: 📒 UI Service Catalog
+name: 📒 API Service Catalog
 on:
-  push:
-    paths: [ ".github/workflows/datadog-cold-ui.yml"] # Trigger the action only when files change in the folders defined here
   workflow_dispatch:
+  push:
+    paths: [ ".github/workflows/datadog-cold-api.yml"] # Trigger the action only when files change in the folders defined here
 permissions:
   contents: read # for checkout
 env:
@@ -15,7 +15,7 @@ env:
 jobs:
   datadog:
     runs-on: ubuntu-latest
-    name: 🐩 UI Service Catalog
+    name: 🐕‍🦺 API Service Catalog
     steps:
       # This uses the custom action to push the service definition to Datadog.
       - uses: arcxp/datadog-service-catalog-metadata-provider@v2
@@ -28,15 +28,15 @@ jobs:
           datadog-key: ${{ secrets.DATADOG_API }}
           datadog-app-key: ${{ secrets.DD_APP_KEY }}
           github-token: ${{ secrets.GH_TOKEN }}
-          chema-version: 2.1
+          schema-version: 2.1
+
           # This maps to the `dd-service` field in Datadog, it's just the name of your service.
+          service-name: cold-climatiq
+          application: backend
+          division: provider
 
           # The name of the team which owns and/or supports the service.
           team: Engineering
-
-          service-name: cold-ui
-          application: frontend
-          division: core
 
           # The email address of the team which owns and/or supports the service.
           # email: global.greetings@fake-email-host.com
@@ -53,16 +53,17 @@ jobs:
           # For repos, you'll obviously want to have the repository for your service. If your service
           # is made up of multiple repositories, you can add them here as well. Note that we're using a multi-line string here. That multi-line string will be parsed as YAML, I didn't typo.
           repos: |
-            - name: cold-monorepo-ui
+            - name: cold-monorepo-api
               url: https://github.com/ColdPBC/cold-monorepo
               provider: github
+
           # Docs contain anything that you might need when supporting the service.
           docs: |
             - name: API Docs
               url: https://api.coldclimate.com/v1
               provider: swagger
             - name: Readme
-              url: https://github.com/ColdPBC/cold-monorepo/blob/main/README.md
+              url: https://github.com/ColdPBC/cold-monorepo/tree/main/apps/cold-api
               provider: github
 
             # Links are great for runbooks, other documentation, other services which
@@ -82,15 +83,14 @@ jobs:
             #service_url: https://fake-org.hello-world.opsgenie.com
             #region: US
           #pagerduty: https://fake-org.hello-world.pagerduty.com
-
           # This is the Product Owner, you should contact them if you have suggestions.
           contacts: |
             - name: Dan Lindquist (Product Owner)
-              contact: @U04QVH8TR1N
+              contact: https://app.slack.com/client/T03GR5AMT6Y/D04UDGVKLD6
               type: slack
             - name: Troy Morvant (Staff Engineer)
-              contact:  @U04TLTX9XPF
+              contact: https://app.slack.com/client/T03GR5AMT6Y/D04UDGVKLD6
               type: slack
             - name: Qaalib Farah (FE Engineer)
-              contact: @U055L8KNKS9
+              contact: https://app.slack.com/client/T03GR5AMT6Y/D055RM5FRV2
               type: slack
