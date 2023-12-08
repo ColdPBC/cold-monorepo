@@ -54,7 +54,7 @@ RUN yarn add -D @typescript-eslint/eslint-plugin
 
 FROM dependencies as build
 WORKDIR /app
-RUN if [ "${NODE_ENV}" = "production" ] ; then echo "building for production..." && npx nx run cold-openai:build:production ; else echo "building development..." && npx nx run cold-openai:build:development ; fi
+RUN if [ "${NODE_ENV}" = "production" ] ; then echo "building for production..." && npx nx run --skip-nx-cache cold-openai:build:production ; else echo "building development..." && npx nx run --skip-nx-cache cold-openai:build:development ; fi
 RUN npx nx reset
 
 FROM base as final
