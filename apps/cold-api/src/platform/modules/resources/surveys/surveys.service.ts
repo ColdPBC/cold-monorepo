@@ -1,12 +1,20 @@
-import { BadRequestException, HttpException, Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
 import { organizations, survey_types } from '@prisma/client';
 import { isUUID } from 'class-validator';
 import { diff } from 'deep-object-diff';
-import { find, merge, omit, map, filter } from 'lodash';
+import { find, map, merge, omit } from 'lodash';
 import { Span } from 'nestjs-ddtrace';
 import { v4 } from 'uuid';
-import { ZodSurveyResponseDto } from '@coldpbc/nest';
-import { CacheService, DarklyService, PrismaService, BaseWorker, AuthenticatedUser, UpdateSurveyDefinitionsDto, SurveyDefinitionsEntity } from '@coldpbc/nest';
+import {
+  AuthenticatedUser,
+  BaseWorker,
+  CacheService,
+  DarklyService,
+  PrismaService,
+  SurveyDefinitionsEntity,
+  UpdateSurveyDefinitionsDto,
+  ZodSurveyResponseDto,
+} from '@coldpbc/nest';
 
 @Span()
 @Injectable()
@@ -153,26 +161,8 @@ export class SurveysService extends BaseWorker {
 
       this.logger.info(`found ${surveys.length} surveys for org: ${impersonateOrg}`, { surveys: map(surveys, 'id') });
     } else {
-      const surveys = (await this.prisma.survey_definitions.findMany()) as ZodSurveyResponseDto[];
+      surveys = (await this.prisma.survey_definitions.findMany()) as ZodSurveyResponseDto[];
       this.logger.info(`found ${surveys.length} surveys`);
-    }
-
-    if (surveyFilter) {
-      surveys = filter(surveys, survey => {
-        if (surveyFilter.name && surveyFilter.type) {
-          return survey.name === surveyFilter.name && survey.type === surveyFilter.type;
-        } else if (surveyFilter.name) {
-          return survey.name === surveyFilter.name;
-        } else if (surveyFilter.type) {
-          return survey.type === surveyFilter.type;
-        } else {
-          return true;
-        }
-      });
-
-      if (surveys.length === 0) {
-        throw new HttpException(`No surveys found with supplied filter`, 404);
-      }
     }
 
     return surveys;
