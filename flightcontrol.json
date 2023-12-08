@@ -120,7 +120,7 @@
                 5000
               ],
               "envVariables": {
-                "DD_SERVICE": "cold-api",
+                "DD_SERVICE": "cold-datadog-production",
                 "DD_API_KEY": {
                   "fromParameterStore": "fc.cold-api-fc.env.cold-production.8pr1zak.DD_API_KEY"
                 },
@@ -145,7 +145,6 @@
                 "DD_PROFILING_ENABLED": true,
                 "DD_REMOTE_CONFIGURATION_ENABLED": true,
                 "DD_USE_DOGSTATSD": true
-
               }
             }
           ]
@@ -182,6 +181,7 @@
         }
       ],
       "envVariables": {
+        "DD_SERVICE": "cold-api",
         "DD_API_KEY": {
           "fromParameterStore": "fc.cold-api-fc.env.cold-production.8pr1zak.DD_API_KEY"
         },
@@ -199,28 +199,7 @@
         },
         "ENABLE_HEALTH_LOGS": true,
         "DD_ENV": "production",
-        "NODE_ENV": "production",
-        "DD_AGENT_MAJOR_VERSION": "7",
-        "DD_LOG_LEVEL": "ERROR",
-        "DD_POSTGRES_URL_VAR": "DATABASE_URL",
-        "DD_REDIS_URL_VAR": "REDISCLOUD_URL",
-        "DD_SITE": "us5.datadoghq.com",
-        "DD_APM_ENABLED": true,
-        "DD_APPSEC_AUTOMATED_USER_EVENTS_TRACKING": true,
-        "DD_APPSEC_ENABLED": true,
-        "DD_DOGSTATSD_NON_LOCAL_TRAFFIC": true,
-        "DD_DYNO_HOST": true,
-        "DD_ENABLE_DBM": true,
-        "DD_IAST_ENABLED": true,
-        "DD_LISTENERS": 2,
-        "DD_LOGS_ENABLED": true,
-        "DD_LOGS_INJECTION": true,
-        "DD_METRICS_ENABLED": true,
-        "DD_PROCESS_AGENT": true,
-        "DD_PROCESS_AGENT_ENABLED": true,
-        "DD_PROFILING_ENABLED": true,
-        "DD_REMOTE_CONFIGURATION_ENABLED": true,
-        "DD_USE_DOGSTATSD": true
+        "NODE_ENV": "production"
       }
     },
     {
@@ -337,7 +316,7 @@
                 5000
               ],
               "envVariables": {
-                "DD_SERVICE": "cold-api",
+                "DD_SERVICE": "cold-datadog-staging",
                 "DD_ENV": "staging",
                 "DD_AGENT_MAJOR_VERSION": "7",
                 "DD_LOG_LEVEL": "ERROR",
@@ -537,7 +516,31 @@
                 5000
               ],
               "envVariables": {
-                "DD_SERVICE": "cold-datadog-sidecar-test"
+                "DD_SERVICE": "cold-datadog-test",
+                "DD_API_KEY": {
+                  "fromParameterStore": "fc.cold-api-fc.env.cold-production.8pr1zak.DD_API_KEY"
+                },
+                "DD_AGENT_MAJOR_VERSION": "7",
+                "DD_LOG_LEVEL": "ERROR",
+                "DD_POSTGRES_URL_VAR": "DATABASE_URL",
+                "DD_REDIS_URL_VAR": "REDISCLOUD_URL",
+                "DD_SITE": "us5.datadoghq.com",
+                "DD_APM_ENABLED": true,
+                "DD_APPSEC_AUTOMATED_USER_EVENTS_TRACKING": true,
+                "DD_APPSEC_ENABLED": true,
+                "DD_DOGSTATSD_NON_LOCAL_TRAFFIC": true,
+                "DD_DYNO_HOST": true,
+                "DD_ENABLE_DBM": true,
+                "DD_IAST_ENABLED": true,
+                "DD_LISTENERS": 2,
+                "DD_LOGS_ENABLED": true,
+                "DD_LOGS_INJECTION": true,
+                "DD_METRICS_ENABLED": true,
+                "DD_PROCESS_AGENT": true,
+                "DD_PROCESS_AGENT_ENABLED": true,
+                "DD_PROFILING_ENABLED": true,
+                "DD_REMOTE_CONFIGURATION_ENABLED": true,
+                "DD_USE_DOGSTATSD": true
               }
             }
           ]
