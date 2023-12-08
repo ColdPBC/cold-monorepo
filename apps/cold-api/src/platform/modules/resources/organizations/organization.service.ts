@@ -1,26 +1,27 @@
 import { HttpService } from '@nestjs/axios';
 import { ConflictException, HttpException, Injectable, NotFoundException, UnauthorizedException, UnprocessableEntityException } from '@nestjs/common';
 import { Span } from 'nestjs-ddtrace';
-import { BaseWorker, Auth0Organization, AuthenticatedUser, DarklyService, PrismaService, CacheService, Tags } from '@coldpbc/nest';
-import { Auth0APIOptions, Auth0UtilityService } from '../auth0/auth0.utility.service';
-import { find, filter, first, kebabCase, pick, set, merge, omit, map } from 'lodash';
-import axios, { AxiosResponse } from 'axios';
+import { Auth0Organization, AuthenticatedUser, BaseWorker, CacheService, DarklyService, PrismaService, Tags } from '@coldpbc/nest';
+import { filter, find, first, kebabCase, map, merge, omit, pick, set } from 'lodash';
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { MemberService } from '../auth0/members/member.service';
 import { RoleService } from '../auth0/roles/role.service';
 import { CreateOrganizationDto } from './dto/organization.dto';
 import { organizations } from '@prisma/client';
+// eslint-disable-next-line @nx/enforce-module-boundaries
+import { Auth0TokenService } from '../../../../../../../libs/nest/src/lib/authorization/auth0-token.service';
 
 @Span()
 @Injectable()
 export class OrganizationService extends BaseWorker {
-  options: Auth0APIOptions;
+  options: AxiosRequestConfig<any>;
   httpService: HttpService;
   prisma: PrismaService;
   test_orgs: Array<{ id: string; name: string; display_name: string }>;
 
   constructor(
     readonly cache: CacheService,
-    readonly utilService: Auth0UtilityService,
+    readonly utilService: Auth0TokenService,
     readonly roleService: RoleService,
     readonly memberService: MemberService,
     readonly darkly: DarklyService,
