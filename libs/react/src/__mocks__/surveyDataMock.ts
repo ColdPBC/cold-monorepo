@@ -67,6 +67,13 @@ export const getTestingSurveyFormDefinitionData = (): SurveyPayloadType => {
             'https://images.unsplash.com/photo-1610891015188-5369212db097?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
           category_idx: 1,
           category_description: 'Questions about how your products are produced',
+          additional_context: {
+            prompt: 'Please explain your answer',
+            component: 'textarea',
+            placeholder: 'Write in here',
+            operator: '==', // could be ==, >, <, <=, >=
+            comparison: true,
+          }
         },
         facilities: {
           title: 'Facilities',

@@ -16,10 +16,11 @@ export interface SurveyInputProps {
   placeholder: string;
   value: any | null;
   onFieldUpdated: (name: string, value: any) => void;
+  isAdditional?: boolean;
 }
 
 const _SurveyInput = (props: SurveyInputProps) => {
-  const { input_key, prompt, options, tooltip, component, placeholder, onFieldUpdated, value } = props;
+  const { input_key, prompt, options, tooltip, component, placeholder, onFieldUpdated, value, isAdditional} = props;
 
   const inputComponent = () => {
     switch (component) {
@@ -170,7 +171,6 @@ const _SurveyInput = (props: SurveyInputProps) => {
               },
               placeholder: placeholder,
               title: tooltip,
-              type: 'textarea',
             }}
             textarea_props={{
               draggable: false,
@@ -185,7 +185,7 @@ const _SurveyInput = (props: SurveyInputProps) => {
               name: input_key,
               value: value === null ? undefined : value,
               className:
-                'text-sm not-italic text-tc-primary font-medium bg-transparent w-full rounded-lg py-6 px-4 border border-bgc-accent focus:border focus:border-bgc-accent focus:ring-0',
+                'text-sm not-italic text-tc-primary font-medium bg-transparent w-full rounded-lg py-6 px-4 border border-bgc-accent focus:border focus:border-bgc-accent focus:ring-0 resize-none',
               placeholder: placeholder,
               title: tooltip,
             }}
@@ -197,11 +197,20 @@ const _SurveyInput = (props: SurveyInputProps) => {
     }
   };
 
+  const getPrompt = () => {
+    let className = "text-left text-tc-primary";
+    if(isAdditional){
+      className += " text-h4";
+    } else {
+      className += " text-h3";
+    }
+    return <div className={className}>{prompt}</div>;
+  }
+
   return (
     <div className="w-full space-y-6">
-      <div className="text-left text-2xl not-italic font-bold text-tc-primary">{prompt}</div>
+      {getPrompt()}
       {tooltip && <div className="text-left text-sm not-italic font-medium text-tc-primary">{tooltip}</div>}
-
       <div className="w-full justify-center">{inputComponent()}</div>
     </div>
   );
