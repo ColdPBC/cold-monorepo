@@ -8,6 +8,7 @@ import { SurveysModule } from './resources/surveys/surveys.module';
 import { CategoriesModule } from './resources/categories/categories.module';
 import { NewsModule } from './resources/news/news.module';
 import { ActionsModule } from './resources/actions/actions.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({})
 export class AppModule {
@@ -15,6 +16,9 @@ export class AppModule {
     return {
       module: AppModule,
       imports: [
+        ConfigModule.forRoot({
+          isGlobal: true,
+        }),
         await NestModule.forRootAsync(),
         ServeStaticModule.forRoot({
           serveStaticOptions: {

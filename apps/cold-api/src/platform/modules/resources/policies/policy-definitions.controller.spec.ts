@@ -1,25 +1,26 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { CacheService, DarklyService, JwtStrategy, PrismaModule, PrismaService } from '@coldpbc/nest';
+import { Auth0TokenService, CacheService, DarklyService, JwtStrategy, PrismaService } from '@coldpbc/nest';
 import { PolicyDefinitionsController } from './policy-definitions.controller';
 import { PolicyDefinitionsService } from './policy-definitions.service';
 import { mockDeep } from 'jest-mock-extended';
-import { Auth0UtilityService } from '../auth0/auth0.utility.service';
 import { JwtService } from '@nestjs/jwt';
 import { fullReqExample } from '../_global/global.examples';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
-describe('PolicyContentController', () => {
+describe('PolicyDefinitionsController', () => {
   let controller: PolicyDefinitionsController;
   let service: PolicyDefinitionsService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
+      imports: [ConfigModule],
       controllers: [PolicyDefinitionsController],
-      providers: [PolicyDefinitionsService, PrismaService, CacheService, DarklyService],
+      providers: [ConfigService, PolicyDefinitionsService, PrismaService, CacheService, DarklyService],
     })
       .overrideProvider(PolicyDefinitionsService)
       .useValue(mockDeep<PolicyDefinitionsService>())
-      .overrideProvider(Auth0UtilityService)
-      .useValue(mockDeep<Auth0UtilityService>())
+      .overrideProvider(Auth0TokenService)
+      .useValue(mockDeep<Auth0TokenService>())
       .overrideProvider(JwtService)
       .useValue(mockDeep<JwtService>())
       .overrideProvider(JwtStrategy)

@@ -470,7 +470,11 @@ export class SurveysService extends BaseWorker {
 
       this.metrics.increment('cold.api.surveys.update', 1, this.tags);
 
-      throw new UnprocessableEntityException(e);
+      if (e.message.includes('Unable to find survey definition')) {
+        throw new NotFoundException(e);
+      } else {
+        throw new UnprocessableEntityException(e);
+      }
     }
   }
 

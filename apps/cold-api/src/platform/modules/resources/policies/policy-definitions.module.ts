@@ -3,10 +3,11 @@ import { Module } from '@nestjs/common';
 import { ColdCacheModule, PrismaModule } from '@coldpbc/nest';
 import { PolicyDefinitionsController } from './policy-definitions.controller';
 import { PolicyDefinitionsService } from './policy-definitions.service';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
-  imports: [PrismaModule, ColdCacheModule],
+  imports: [ConfigModule, PrismaModule, ColdCacheModule],
   controllers: [PolicyDefinitionsController],
-  providers: [PolicyDefinitionsService],
+  providers: [ConfigService, PolicyDefinitionsService],
 })
 export class PolicyDefinitionsModule {}

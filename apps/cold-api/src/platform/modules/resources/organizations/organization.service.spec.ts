@@ -1,12 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { MemberModule } from '../auth0/members/member.module';
 import { MemberService } from '../auth0/members/member.service';
 import { OrganizationService } from './organization.service';
-import { HttpModule } from '@nestjs/axios';
-import { ColdCacheModule, CacheService, JwtStrategy, PrismaService, DarklyService } from '@coldpbc/nest';
-import { RoleModule } from '../auth0/roles/role.module';
-import { OrganizationController } from './organization.controller';
-import { Auth0UtilityService } from '../auth0/auth0.utility.service';
+import { Auth0TokenService, CacheService, DarklyService, JwtStrategy, PrismaService } from '@coldpbc/nest';
 import { RoleService } from '../auth0/roles/role.service';
 import { mockDeep } from 'jest-mock-extended';
 import { JwtService } from '@nestjs/jwt';
@@ -16,11 +11,11 @@ describe('Organization Service', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [OrganizationService, Auth0UtilityService, CacheService, RoleService, MemberService, DarklyService],
-      exports: [OrganizationService, Auth0UtilityService],
+      providers: [OrganizationService, Auth0TokenService, CacheService, RoleService, MemberService, DarklyService],
+      exports: [OrganizationService, Auth0TokenService],
     })
-      .overrideProvider(Auth0UtilityService)
-      .useValue(mockDeep<Auth0UtilityService>())
+      .overrideProvider(Auth0TokenService)
+      .useValue(mockDeep<Auth0TokenService>())
       .overrideProvider(RoleService)
       .useValue(mockDeep<RoleService>())
       .overrideProvider(MemberService)

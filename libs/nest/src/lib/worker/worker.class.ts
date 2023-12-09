@@ -29,7 +29,7 @@ export class BaseWorker extends RedactorService {
     const config = new ConfigService();
 
     this.details = {
-      service: config.get('DD_SERVICE') || BaseWorker.getProjectName(),
+      service: config.get('DD_SERVICE') || 'UNKNOWN',
       version: config.get('DD_VERSION') || BaseWorker.getPkgVersion(),
       home_dir: appRoot.toString(),
       env: config.get('NODE_ENV') || config.getOrThrow('DD_ENVIRONMENT'),
