@@ -1,3 +1,10 @@
+# [1.74.0-COLD-401.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.74.0-COLD-401.1...v1.74.0-COLD-401.2) (2023-12-09)
+
+
+### Features
+
+* update to survey input styling and improved logic ([20fa43f](https://github.com/ColdPBC/cold-monorepo/commit/20fa43ffb6e9a8fb7721bd1c5cbc4e13008c5277))
+
 # [1.74.0-COLD-401.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.73.1...v1.74.0-COLD-401.1) (2023-12-08)
 
 
