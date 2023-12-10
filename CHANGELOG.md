@@ -1,3 +1,10 @@
+# [1.74.0-cold-000-climatiq.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.74.0-cold-000-climatiq.1...v1.74.0-cold-000-climatiq.2) (2023-12-10)
+
+
+### Bug Fixes
+
+* Update main.ts to modify AppModule import path ([a374888](https://github.com/ColdPBC/cold-monorepo/commit/a374888db28de5ef77da2a181e8571ed80e032ba))
+
 # [1.74.0-cold-000-climatiq.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.73.10...v1.74.0-cold-000-climatiq.1) (2023-12-10)
 
 
