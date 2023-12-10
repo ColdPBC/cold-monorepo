@@ -17800,7 +17800,6 @@ __metadata:
     "@datadog/datadog-ci": "npm:^2.19.1"
     "@emotion/react": "npm:11.11.1"
     "@fastify/static": "npm:^6.10.2"
-    "@golevelup/nestjs-modules": "npm:^0.7.0"
     "@golevelup/nestjs-rabbitmq": "npm:^4.1.0"
     "@golevelup/ts-jest": "npm:^0.4.0"
     "@headlessui/react": "npm:^1.7.15"
