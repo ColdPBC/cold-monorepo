@@ -4,10 +4,10 @@ import { filter, first } from 'lodash';
 import { Span } from 'nestjs-ddtrace';
 import { Observable } from 'rxjs';
 import { Reflector } from '@nestjs/core';
-import { BaseWorker } from '../worker';
-import { CacheService } from '../cache';
-import { AuthenticatedUser } from '../primitives';
-import { Organizations } from '@coldpbc/nest';
+import { BaseWorker } from '../../worker';
+import { CacheService } from '../../cache';
+import { AuthenticatedUser } from '../../primitives';
+import { Organizations } from '../../../validation';
 
 @Injectable()
 @Span()

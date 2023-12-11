@@ -4,7 +4,7 @@ import { ModuleRef, Reflector } from '@nestjs/core';
 import { tracer } from 'dd-trace';
 import { set } from 'lodash';
 import { Span } from 'nestjs-ddtrace';
-import { WorkerLogger } from '../worker';
+import { WorkerLogger } from '../../worker';
 
 @Injectable()
 @Span()

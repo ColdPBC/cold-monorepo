@@ -4,7 +4,7 @@ import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Span } from 'nestjs-ddtrace';
 import { Observable } from 'rxjs';
 import { Reflector } from '@nestjs/core';
-import { BaseWorker, WorkerLogger } from '../worker';
+import { BaseWorker, WorkerLogger } from '../../worker';
 
 @Injectable()
 @Span()

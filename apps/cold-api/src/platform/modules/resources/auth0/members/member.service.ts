@@ -1,17 +1,18 @@
 import { Injectable, NotFoundException, UnauthorizedException, UnprocessableEntityException } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { Span } from 'nestjs-ddtrace';
-import { AuthenticatedUser, CacheService, BaseWorker } from '@coldpbc/nest';
-import { Auth0APIOptions, Auth0UtilityService } from '../auth0.utility.service';
+import { Auth0TokenService, AuthenticatedUser, BaseWorker, CacheService } from '@coldpbc/nest';
 import { filter } from 'lodash';
+import { AxiosRequestConfig } from 'axios';
 
 @Span()
 @Injectable()
 export class MemberService extends BaseWorker {
-  options: Auth0APIOptions;
+  options: AxiosRequestConfig<any>;
+
   private httpService: HttpService;
 
-  constructor(private readonly utilService: Auth0UtilityService, readonly cacheService: CacheService) {
+  constructor(private readonly utilService: Auth0TokenService, readonly cacheService: CacheService) {
     super('MemberService');
     this.httpService = new HttpService();
   }
@@ -47,7 +48,10 @@ export class MemberService extends BaseWorker {
       await this.cacheService.delete(`auth0:organizations:${user.coldclimate_claims.org_id}:members:${email}`);
       await this.cacheService.delete(`auth0:organizations:${user.coldclimate_claims.org_id}:members`);
 
-      await this.cacheService.set(`auth0:organizations:${user.coldclimate_claims.org_id}:members:${email}`, results.data[0], { ttl: 1000 * 60 * 60 * 24 * 7, update: true });
+      await this.cacheService.set(`auth0:organizations:${user.coldclimate_claims.org_id}:members:${email}`, results.data[0], {
+        ttl: 1000 * 60 * 60 * 24 * 7,
+        update: true,
+      });
 
       return results.data[0];
     } catch (e) {

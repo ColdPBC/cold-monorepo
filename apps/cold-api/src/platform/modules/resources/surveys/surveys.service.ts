@@ -2,11 +2,19 @@ import { BadRequestException, HttpException, Injectable, NotFoundException, Unpr
 import { organizations, survey_types } from '@prisma/client';
 import { isUUID } from 'class-validator';
 import { diff } from 'deep-object-diff';
-import { find, merge, omit, map, filter } from 'lodash';
+import { filter, find, map, merge, omit } from 'lodash';
 import { Span } from 'nestjs-ddtrace';
 import { v4 } from 'uuid';
-import { ZodSurveyResponseDto } from '@coldpbc/nest';
-import { CacheService, DarklyService, PrismaService, BaseWorker, AuthenticatedUser, UpdateSurveyDefinitionsDto, SurveyDefinitionsEntity } from '@coldpbc/nest';
+import {
+  AuthenticatedUser,
+  BaseWorker,
+  CacheService,
+  DarklyService,
+  PrismaService,
+  SurveyDefinitionsEntity,
+  UpdateSurveyDefinitionsDto,
+  ZodSurveyResponseDto,
+} from '@coldpbc/nest';
 
 @Span()
 @Injectable()
@@ -153,11 +161,11 @@ export class SurveysService extends BaseWorker {
 
       this.logger.info(`found ${surveys.length} surveys for org: ${impersonateOrg}`, { surveys: map(surveys, 'id') });
     } else {
-      const surveys = (await this.prisma.survey_definitions.findMany()) as ZodSurveyResponseDto[];
+      surveys = (await this.prisma.survey_definitions.findMany()) as ZodSurveyResponseDto[];
       this.logger.info(`found ${surveys.length} surveys`);
     }
 
-    if (surveyFilter) {
+    if (surveyFilter?.name || surveyFilter?.type) {
       surveys = filter(surveys, survey => {
         if (surveyFilter.name && surveyFilter.type) {
           return survey.name === surveyFilter.name && survey.type === surveyFilter.type;
