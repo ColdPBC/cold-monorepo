@@ -59,7 +59,7 @@ Use this file to start the Redis server, Postgres database, and the API server; 
   
 Execute the following command:
   ```bash
-  $   docker compose -f docker-compose-all.yml up
+  $   docker compose -f docker-compose.yml up
   ```
 
 ## UI Server
