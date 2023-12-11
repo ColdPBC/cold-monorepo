@@ -12,7 +12,7 @@ export class ColdRabbitModule {
     const module: DynamicModule = {
       module: ColdRabbitModule,
       imports: [RabbitMQModule.forRoot(RabbitMQModule, ColdRabbitService.getRabbitConfig(type)), ColdRabbitModule],
-      providers: [ColdRabbitService],
+      providers: [ColdRabbitService, AmqpConnection],
       exports: [ColdRabbitService, AmqpConnection],
     };
 

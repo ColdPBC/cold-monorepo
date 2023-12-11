@@ -16,6 +16,7 @@ import { ColdCacheModule } from './cache';
 import { AuthorizationModule, JwtAuthGuard, JwtStrategy } from './authorization';
 import { InterceptorModule } from './interceptors';
 import { BaseWorker, WorkerLogger } from './worker';
+import { ColdRabbitModule, ColdRabbitService } from './rabbit';
 
 @Module({})
 export class NestModule {
@@ -39,6 +40,7 @@ export class NestModule {
           inject: [ConfigService],
           isGlobal: true,
         }),
+        ColdRabbitModule,
         HealthModule,
         DarklyModule,
         PrismaModule,
@@ -75,13 +77,14 @@ export class NestModule {
         ConfigService,
         JwtStrategy,
         JwtService,
+        ColdRabbitService,
         HealthService,
         {
           provide: APP_GUARD,
           useClass: JwtAuthGuard,
         },
       ],
-      exports: [PrismaService, JwtStrategy, JwtService, HttpModule, ConfigService, HealthService],
+      exports: [ColdRabbitService, PrismaService, JwtStrategy, JwtService, HttpModule, ConfigService, HealthService],
     };
   }
 }
