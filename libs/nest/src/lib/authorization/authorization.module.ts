@@ -10,9 +10,14 @@ import { WorkerLogger } from '../worker';
 import { Auth0TokenService } from './auth0-token.service';
 
 @Global()
-@Module({
-  imports: [ConfigModule, ColdCacheModule, HttpModule, PassportModule.register({ defaultStrategy: 'jwt' })],
-  providers: [CacheService, WorkerLogger, JwtStrategy, JwtService, ConfigService, JwtAuthGuard, RolesGuard, PermissionsGuard, Auth0TokenService],
-  exports: [PassportModule, JwtStrategy, JwtService, JwtAuthGuard, WorkerLogger, CacheService, Auth0TokenService],
-})
-export class AuthorizationModule {}
+@Module({})
+export class AuthorizationModule {
+  static async forFeatureAsync() {
+    return {
+      module: AuthorizationModule,
+      imports: [ConfigModule, ColdCacheModule, HttpModule, PassportModule.register({ defaultStrategy: 'jwt' })],
+      providers: [CacheService, WorkerLogger, JwtStrategy, JwtService, ConfigService, JwtAuthGuard, RolesGuard, PermissionsGuard, Auth0TokenService],
+      exports: [PassportModule, JwtStrategy, JwtService, JwtAuthGuard, WorkerLogger, CacheService, Auth0TokenService],
+    };
+  }
+}
