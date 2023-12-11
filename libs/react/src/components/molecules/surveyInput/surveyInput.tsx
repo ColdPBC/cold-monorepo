@@ -3,7 +3,7 @@ import { YesNo } from '../yesNo/yesNo';
 import { Input } from '../../atoms/input/input';
 import { PercentSlider } from '../percentSlider/percentSlider';
 import { SelectOption } from '../selectOption/selectOption';
-import { InputTypes } from '../../../enums/inputs';
+import { InputTypes } from "@coldpbc/enums";
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application';
 
