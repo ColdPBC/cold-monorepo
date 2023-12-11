@@ -20,6 +20,7 @@ jobs:
       # This uses the custom action to push the service definition to Datadog.
       - uses: arcxp/datadog-service-catalog-metadata-provider@v2
         with:
+          schema-version: v2.1
           # service-version: v2
           # You should use GitHub's encrypted secrets feature to manage secrets for Datadog.
           # Don't store your secrets in your workflow files, and don't do anything fancy to get them.
