@@ -65,8 +65,6 @@ jobs:
         # 👇 Adds Chromatic as a step in the workflow
       - name: Install Playwright
         run: npx playwright install --with-deps
-      - name: Build Storybook
-        run: yarn build-storybook --quiet
       - name: Serve Storybook and run tests
         run: yarn test-storybook
   chromatic-deployment:
