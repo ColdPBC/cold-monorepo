@@ -1,3 +1,10 @@
+## [1.73.11](https://github.com/ColdPBC/cold-monorepo/compare/v1.73.10...v1.73.11) (2023-12-11)
+
+
+### Bug Fixes
+
+* Update Datadog workflows and add new OpenAI service workflow ([575e950](https://github.com/ColdPBC/cold-monorepo/commit/575e9501dfb3ea678a23b0b4ded91d3e63727a4b))
+
 ## [1.73.10](https://github.com/ColdPBC/cold-monorepo/compare/v1.73.9...v1.73.10) (2023-12-08)
 
 
