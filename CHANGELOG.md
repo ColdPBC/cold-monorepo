@@ -1,3 +1,10 @@
+## [1.73.12](https://github.com/ColdPBC/cold-monorepo/compare/v1.73.11...v1.73.12) (2023-12-11)
+
+
+### Bug Fixes
+
+* Update auth0 module dependencies and initialization ([0b91e9e](https://github.com/ColdPBC/cold-monorepo/commit/0b91e9e398d19ecbe1329a378b48e61eea5e73f6))
+
 ## [1.73.11](https://github.com/ColdPBC/cold-monorepo/compare/v1.73.10...v1.73.11) (2023-12-11)
 
 
