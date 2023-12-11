@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, OnModuleInit } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
 import { BaseWorker } from '../worker';
@@ -13,7 +13,7 @@ export interface Auth0APIOptions {
 }
 
 @Injectable()
-export class Auth0TokenService extends BaseWorker {
+export class Auth0TokenService extends BaseWorker implements OnModuleInit {
   tokenBody: {
     client_id: string;
     client_secret: string;
@@ -51,19 +51,21 @@ export class Auth0TokenService extends BaseWorker {
         return status >= 200 && status < 400;
       },
     };
+  }
 
-    this.init();
+  async onModuleInit() {
+    await this.init();
   }
 
   async init(): Promise<AxiosRequestConfig<any>> {
     try {
       if (this.cache) {
-        const token: any = await this.cache.get('auth0-management-token');
+        let token: any = await this.cache.get('auth0-management-token');
         if (!token) {
-          await this.getManagementToken();
+          token = await this.getManagementToken();
         }
 
-        await this.setOptions(token);
+        await this.setOptions(token as AxiosResponse);
       }
 
       if (!this.options.headers.Authorization || this.expiresAt < new Date().getSeconds()) {
@@ -87,18 +89,30 @@ export class Auth0TokenService extends BaseWorker {
    * Get Management Token from Auth0
    */
   async getManagementToken() {
-    this.logger.info('Requesting Auth0 Management Token');
     const tokenBody = Object.assign({}, this.tokenBody);
     tokenBody.client_id = this.config.get<string>('AUTH0_CLIENT_ID') || '';
 
     const tokenResponse = await this.httpService.axiosRef.post(`https://${this.config.get<string>('AUTH0_DOMAIN')}/oauth/token`, tokenBody, this.options);
 
     if (tokenResponse.data['access_token']) {
+      this.logger.info('Requested Auth0 Management Token');
       await this.setOptions(tokenResponse);
 
       if (this.cache) {
-        await this.cache.set('auth0-management-token', tokenResponse.data, { ttl: 1000 * 60 * 60 * 20, update: true });
+        await this.cache.set(
+          'auth0-management-token',
+          { data: tokenResponse.data },
+          {
+            ttl: 1000 * 60 * 60 * 20,
+            update: true,
+          },
+        );
       }
+
+      return tokenResponse as AxiosResponse;
+    } else {
+      this.logger.error('Unable to get Auth0 Management Token', { error: tokenResponse.data });
+      throw new Error('Unable to get Auth0 Management Token');
     }
   }
 
