@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { SurveyInput } from '../index';
 import { cloneDeep, findIndex, forEach } from 'lodash';
 import { IButtonProps, SurveyActiveKeyType, SurveyAdditionalContext, SurveyPayloadType, SurveySectionType } from '@coldpbc/interfaces';
-import { BaseButton, Spinner } from '../../atoms';
+import { BaseButton } from '../../atoms';
 import { ButtonTypes, GlobalSizes } from '@coldpbc/enums';
 import { CSSTransition, SwitchTransition } from 'react-transition-group';
 import { getSectionIndex, isKeyValueFollowUp } from '@coldpbc/lib';
