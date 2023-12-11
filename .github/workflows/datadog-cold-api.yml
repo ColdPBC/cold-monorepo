@@ -49,10 +49,10 @@ jobs:
 
           # For repos, you'll obviously want to have the repository for your service. If your service
           # is made up of multiple repositories, you can add them here as well. Note that we're using a multi-line string here. That multi-line string will be parsed as YAML, I didn't typo.
-          repos: |
+          links: |
             - name: cold-monorepo-api
               url: https://github.com/ColdPBC/cold-monorepo
-              provider: github
+              type: repo
 
           # Docs contain anything that you might need when supporting the service.
           docs: |
