@@ -18,7 +18,7 @@ jobs:
     name: 🐩 UI Service Catalog
     steps:
       # This uses the custom action to push the service definition to Datadog.
-      - uses: arcxp/datadog-service-catalog-metadata-provider@v2
+      - uses: arcxp/datadog-service-catalog-metadata-provider@v2.2
         with:
           # service-version: v2
           # You should use GitHub's encrypted secrets feature to manage secrets for Datadog.
@@ -28,15 +28,13 @@ jobs:
           datadog-key: ${{ secrets.DATADOG_API }}
           datadog-app-key: ${{ secrets.DD_APP_KEY }}
           github-token: ${{ secrets.GH_TOKEN }}
-          chema-version: 2.1
+
           # This maps to the `dd-service` field in Datadog, it's just the name of your service.
+          service-name: cold-ui
 
           # The name of the team which owns and/or supports the service.
           team: Engineering
-
-          service-name: cold-ui
-          application: frontend
-          division: core
+          application: core
 
           # The email address of the team which owns and/or supports the service.
           # email: global.greetings@fake-email-host.com

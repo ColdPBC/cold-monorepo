@@ -1,9 +1,67 @@
-# [1.74.0-staging.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.73.1...v1.74.0-staging.1) (2023-12-06)
+## [1.73.10](https://github.com/ColdPBC/cold-monorepo/compare/v1.73.9...v1.73.10) (2023-12-08)
 
 
-### Features
+### Bug Fixes
 
-* add openai scaffolding to staging ([71a9c2a](https://github.com/ColdPBC/cold-monorepo/commit/71a9c2aed3f0bfc7f9b8632e1d49a23d7595bd36))
+* surveys issue ([9047c57](https://github.com/ColdPBC/cold-monorepo/commit/9047c57fdf7a6084064495a819a949c6f1cd2d76))
+* surveys issue ([3c5701b](https://github.com/ColdPBC/cold-monorepo/commit/3c5701b4359e7852c17b40095be81e0ebe20173c))
+
+## [1.73.9](https://github.com/ColdPBC/cold-monorepo/compare/v1.73.8...v1.73.9) (2023-12-08)
+
+
+### Bug Fixes
+
+* barrel file issue ([d8234d6](https://github.com/ColdPBC/cold-monorepo/commit/d8234d667fee010ee5d677af3f254a76874a99a1))
+
+## [1.73.8](https://github.com/ColdPBC/cold-monorepo/compare/v1.73.7...v1.73.8) (2023-12-08)
+
+
+### Bug Fixes
+
+* barrel file issue ([48c3fc9](https://github.com/ColdPBC/cold-monorepo/commit/48c3fc9f1546aeaf78c055fea1fdd5cd9a3ee65e))
+* barrel file issue ([6ef74f1](https://github.com/ColdPBC/cold-monorepo/commit/6ef74f1bd00d72b2684bd0d95e7ed288d9049fb5))
+
+## [1.73.7](https://github.com/ColdPBC/cold-monorepo/compare/v1.73.6...v1.73.7) (2023-12-08)
+
+
+### Bug Fixes
+
+* barrel file issue ([a793020](https://github.com/ColdPBC/cold-monorepo/commit/a7930200d56d51a62f0fab08a06b6383a78507b9))
+
+## [1.73.6](https://github.com/ColdPBC/cold-monorepo/compare/v1.73.5...v1.73.6) (2023-12-08)
+
+
+### Bug Fixes
+
+* barrel file issue ([16723c4](https://github.com/ColdPBC/cold-monorepo/commit/16723c4512c786ec8a39c1f9b1988346e9aa03d2))
+
+## [1.73.5](https://github.com/ColdPBC/cold-monorepo/compare/v1.73.4...v1.73.5) (2023-12-08)
+
+
+### Bug Fixes
+
+* barrel file issue ([4f46731](https://github.com/ColdPBC/cold-monorepo/commit/4f467319040373ea9edf88d89c5909b0f705e462))
+
+## [1.73.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.73.3...v1.73.4) (2023-12-08)
+
+
+### Bug Fixes
+
+* disable cache ([b4b5daa](https://github.com/ColdPBC/cold-monorepo/commit/b4b5daa911aca86828852a9e34ce5c1fea3b6f41))
+
+## [1.73.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.73.2...v1.73.3) (2023-12-08)
+
+
+### Bug Fixes
+
+* update VITE_DD_SERVICE ([69a5197](https://github.com/ColdPBC/cold-monorepo/commit/69a5197602ed5ccbe175a353b28764046f2bd00f))
+
+## [1.73.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.73.1...v1.73.2) (2023-12-08)
+
+
+### Bug Fixes
+
+* refactor authentication / caching ([52a5129](https://github.com/ColdPBC/cold-monorepo/commit/52a51291c89f58dd7cefbcbaf5f06252f5ec4d4d))
 
 ## [1.73.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.73.0...v1.73.1) (2023-12-06)
 
