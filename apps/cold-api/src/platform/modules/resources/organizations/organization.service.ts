@@ -102,15 +102,20 @@ export class OrganizationService extends BaseWorker {
 
       return invitation.data;
     } catch (e) {
-      if (e.response.status !== 404) {
-        this.logger.error(e.response?.data ? e.response.data : e.response, data);
+      switch (e.response.status) {
+        case 404:
+          this.logger.error(e.response?.data ? e.response.data : e.response, data);
+          throw new NotFoundException(e);
+        case 400:
+          this.logger.error(e.response?.data ? e.response.data : e.response, data);
+          throw new UnprocessableEntityException(e);
+        case 409:
+          this.logger.error(e.response?.data ? e.response.data : e.response, data);
+          throw new ConflictException(e);
+        default:
+          this.logger.error(e.response?.data ? e.response.data : e.response, data);
+          throw new HttpException(e.response?.data ? e.response.data : e.response, e.response.status);
       }
-
-      // increment failed invitation metric
-      tags.status = 'failed';
-      if (!find(this.test_orgs, { id: orgId })) this.metrics.increment('cold.api.invitations.sent', tags);
-
-      return e.response?.data ? e.response.data : e.response;
     }
   }
 
