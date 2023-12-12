@@ -1,3 +1,22 @@
+# [1.74.0-cold-000-climatiq.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.74.0-cold-000-climatiq.2...v1.74.0-cold-000-climatiq.3) (2023-12-12)
+
+
+### Bug Fixes
+
+* custom action in Datadog workflows ([5fcd777](https://github.com/ColdPBC/cold-monorepo/commit/5fcd77798b416cb52b2689785f5cdb21fbd982a1))
+* error handling in organization.service ([dfc4853](https://github.com/ColdPBC/cold-monorepo/commit/dfc4853a2ace3d09eb9a1076ea38f81e3b832cb2))
+* Implement RabbitMQ context check in interceptors and guards ([6e6e58d](https://github.com/ColdPBC/cold-monorepo/commit/6e6e58db89fe041aed277629561e9693884453bf))
+* Integrate AMQP Connection into ColdRabbitService and AppModule ([6c12c2a](https://github.com/ColdPBC/cold-monorepo/commit/6c12c2ac4ed79fb8777abe61fa0b5a42d434b106))
+
+
+### Features
+
+* Add integration service types to "service_definitions" ([291329c](https://github.com/ColdPBC/cold-monorepo/commit/291329cb012e81fadf66555c4bc0a1c6053e77c6))
+* Add service_definitions model to Prisma schema ([745176f](https://github.com/ColdPBC/cold-monorepo/commit/745176f53c07e694cbacf78a4a5708969be9cd1e))
+* Add unique index on `name` in `service_definitions` ([ccd0302](https://github.com/ColdPBC/cold-monorepo/commit/ccd03023b3057132e41047af0d3b216747d650e8))
+* Create "service_definitions" model in database ([ddd6205](https://github.com/ColdPBC/cold-monorepo/commit/ddd620523b04d5f3d99c7ca53406e53bb2f798b6))
+* Update AppModule and add AppService in Climatiq app ([7e3a45b](https://github.com/ColdPBC/cold-monorepo/commit/7e3a45b661623d9afd15b81000ad38bc011e47cd))
+
 # [1.74.0-cold-000-climatiq.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.74.0-cold-000-climatiq.1...v1.74.0-cold-000-climatiq.2) (2023-12-10)
 
 

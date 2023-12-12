@@ -1,7 +1,7 @@
 {
   "name": "cold-monorepo-nx",
   "packageManager": "yarn@4.0.2",
-  "version": "1.74.0-cold-000-climatiq.2",
+  "version": "1.74.0-cold-000-climatiq.3",
   "license": "MIT",
   "engines": {
     "node": ">=20.9.0",
