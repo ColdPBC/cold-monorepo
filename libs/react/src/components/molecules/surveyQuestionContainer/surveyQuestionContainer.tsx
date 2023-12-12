@@ -1,12 +1,8 @@
 import React, { useEffect } from 'react';
 import { SurveyInput } from '../index';
 import { cloneDeep, findIndex, forEach } from 'lodash';
-import {
-  SurveyActiveKeyType,
-  SurveyPayloadType,
-  SurveySectionType,
-} from '@coldpbc/interfaces';
-import { BaseButton, Spinner } from '../../atoms';
+import { IButtonProps, SurveyActiveKeyType, SurveyAdditionalContext, SurveyPayloadType, SurveySectionType } from '@coldpbc/interfaces';
+import { BaseButton } from '../../atoms';
 import { ButtonTypes, GlobalSizes } from '@coldpbc/enums';
 import { CSSTransition, SwitchTransition } from 'react-transition-group';
 import { getSectionIndex, isKeyValueFollowUp } from '@coldpbc/lib';
@@ -23,13 +19,7 @@ export interface SurveyQuestionContainerProps {
   setSurveyData: (surveyData: SurveyPayloadType) => void;
 }
 
-const _SurveyQuestionContainer = ({
-  activeKey,
-  setActiveKey,
-  submitSurvey,
-  surveyData,
-  setSurveyData,
-}: SurveyQuestionContainerProps) => {
+const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surveyData, setSurveyData }: SurveyQuestionContainerProps) => {
   const { getOrgSpecificUrl } = useAuth0Wrapper();
   const nextQuestionTransitionClassNames = {
     enter: 'transform translate-y-full',
@@ -41,12 +31,9 @@ const _SurveyQuestionContainer = ({
     enterDone: 'transition ease-out duration-200 transform translate-y-0',
     exitActive: 'transition ease-in duration-200 transform translate-y-full',
   };
-  const [activeQuestion, setActiveQuestion] = React.useState<
-    JSX.Element | undefined
-  >(undefined);
-  const [transitionClassNames, setTransitionClassNames] = React.useState<any>(
-    nextQuestionTransitionClassNames,
-  );
+  const [activeQuestion, setActiveQuestion] = React.useState<JSX.Element | undefined>(undefined);
+  const [additionalContextQuestion, setAdditionalContextQuestion] = React.useState<JSX.Element | undefined>(undefined);
+  const [transitionClassNames, setTransitionClassNames] = React.useState<any>(nextQuestionTransitionClassNames);
   const { definition, id, name } = surveyData;
   const { sections } = definition;
 
@@ -65,42 +52,116 @@ const _SurveyQuestionContainer = ({
       skipped?: boolean;
     },
     submit?: boolean,
+    additional?: boolean,
   ) => {
     let newSection: SurveySectionType;
     const activeSectionIndex = getSectionIndex(sections, activeKey);
     const activeSectionKey = Object.keys(sections)[activeSectionIndex];
     if (isKeyValueFollowUp(key, sections)) {
       const section = sections[activeSectionKey];
+      const followUp = section.follow_up[key];
       if (submit) {
-        // check if the current follow up is answered. If not, set it update.skipped to true
-        // if it is answered, set update.skipped to false
-        const followUp = section.follow_up[key];
-        update.skipped =
-          followUp.value === null || followUp.value === undefined;
+        update.skipped = followUp.value === null || followUp.value === undefined;
       }
-      newSection = {
-        ...section,
-        follow_up: {
-          ...section.follow_up,
-          [key]: {
-            ...section.follow_up[key],
-            ...update,
+      if(followUp.additional_context) {
+        if(additional) {
+          newSection = {
+            ...section,
+            follow_up: {
+              ...section.follow_up,
+              [key]: {
+                ...section.follow_up[key],
+                additional_context: {
+                  ...section.follow_up[key].additional_context,
+                  ...update,
+                } as SurveyAdditionalContext,
+              },
+            },
+          };
+        } else {
+          const value = update.value;
+          const conditionMet = ifAdditionalContextConditionMet(value, followUp.additional_context);
+          if(!conditionMet) {
+            newSection = {
+              ...section,
+              follow_up: {
+                ...section.follow_up,
+                [key]: {
+                  ...section.follow_up[key],
+                  ...update,
+                  additional_context: {
+                    ...section.follow_up[key].additional_context,
+                    value: null,
+                  } as SurveyAdditionalContext,
+                },
+              },
+            };
+          } else {
+            newSection = {
+              ...section,
+              follow_up: {
+                ...section.follow_up,
+                [key]: {
+                  ...section.follow_up[key],
+                  ...update,
+                },
+              },
+            };
+          }
+        }
+      } else {
+        newSection = {
+          ...section,
+          follow_up: {
+            ...section.follow_up,
+            [key]: {
+              ...section.follow_up[key],
+              ...update,
+            },
           },
-        },
-      };
+        };
+      }
     } else {
       const section = sections[key];
       if (submit) {
-        // check if the current section is answered. If not, set it update.skipped to true
-        // if it is answered, set update.skipped to false
         update.skipped = section.value === null || section.value === undefined;
       }
-      newSection = {
-        ...section,
-        ...update,
-      };
+      if(section.additional_context){
+        if(additional) {
+          newSection = {
+            ...section,
+            additional_context: {
+              ...section.additional_context,
+              ...update,
+            } as SurveyAdditionalContext,
+          };
+        } else {
+          const value = update.value;
+          const conditionMet = ifAdditionalContextConditionMet(value, section.additional_context);
+          if(!conditionMet) {
+            newSection = {
+              ...section,
+              ...update,
+              additional_context: {
+                ...section.additional_context,
+                value: null,
+              } as SurveyAdditionalContext,
+            };
+          } else {
+            newSection = {
+              ...section,
+              ...update,
+            };
+          }
+        }
+      } else {
+        newSection = {
+          ...section,
+          ...update,
+        };
+      }
       if (update.value === false || update.skipped === true) {
-        forEach(Object.keys(section.follow_up), (followUpKey) => {
+        forEach(Object.keys(section.follow_up), followUpKey => {
           newSection.follow_up[followUpKey].value = null;
           newSection.follow_up[followUpKey].skipped = true;
         });
@@ -112,43 +173,59 @@ const _SurveyQuestionContainer = ({
     return newSurvey;
   };
 
-  const onFieldUpdated = (key: string, value: any) => {
+  const onFieldUpdated = (key: string, value: any, additional = false) => {
     setActiveKey({
       value: activeKey.value,
       previousValue: activeKey.value,
       isFollowUp: activeKey.isFollowUp,
     });
-    const survey = updateSurveyQuestion(key, { value });
+    const survey = updateSurveyQuestion(key, { value }, undefined, additional);
     setSurveyData(survey);
   };
 
-  const getQuestionForKey = (key: SurveyActiveKeyType) => {
+  const getQuestionForKey = (key: SurveyActiveKeyType, additional = false) => {
     const activeSectionIndex = getSectionIndex(sections, activeKey);
     const activeSectionKey = Object.keys(sections)[activeSectionIndex];
     if (key.isFollowUp) {
-      const followUpIndex = findIndex(
-        Object.keys(sections[activeSectionKey].follow_up),
-        (followUpKey) => {
-          return followUpKey === key.value;
-        },
-      );
-      const followUpKey = Object.keys(sections[activeSectionKey].follow_up)[
-        followUpIndex
-      ];
+      const followUpIndex = findIndex(Object.keys(sections[activeSectionKey].follow_up), followUpKey => {
+        return followUpKey === key.value;
+      });
+      const followUpKey = Object.keys(sections[activeSectionKey].follow_up)[followUpIndex];
       const followUp = sections[activeSectionKey].follow_up[followUpKey];
-      if (followUp) {
+      if (additional && followUp.additional_context) {
         return (
           <SurveyInput
-            {...followUp}
+            {...followUp.additional_context}
+            options={[]}
             input_key={key.value}
-            onFieldUpdated={onFieldUpdated}
-            value={followUp.value === undefined ? null : followUp.value}
+            onFieldUpdated={(name, value) => {
+              onFieldUpdated(key.value, value, true);
+            }}
+            value={followUp.additional_context.value === undefined ? null : followUp.additional_context.value}
+            isAdditional={true}
           />
         );
+      }
+      if (followUp) {
+        return <SurveyInput {...followUp} input_key={key.value} onFieldUpdated={onFieldUpdated} value={followUp.value === undefined ? null : followUp.value} />;
       }
     } else {
       const section = sections[key.value];
       if (section && section.component !== null) {
+        if (additional && section.additional_context) {
+          return (
+            <SurveyInput
+              {...section.additional_context}
+              options={[]}
+              input_key={key.value}
+              onFieldUpdated={(name, value) => {
+                onFieldUpdated(key.value, value, true);
+              }}
+              value={section.additional_context.value === undefined ? null : section.additional_context.value}
+              isAdditional={true}
+            />
+          );
+        }
         return (
           <SurveyInput
             {...section}
@@ -186,16 +263,10 @@ const _SurveyQuestionContainer = ({
         };
       }
     } else {
-      const activeFollowUpIndex = findIndex(
-        Object.keys(sections[activeSectionKey].follow_up),
-        (followUpKey) => {
-          return followUpKey === activeKey.value;
-        },
-      );
-      if (
-        sections[activeSectionKey].component === null &&
-        sections[activeSectionKey].prompt === ''
-      ) {
+      const activeFollowUpIndex = findIndex(Object.keys(sections[activeSectionKey].follow_up), followUpKey => {
+        return followUpKey === activeKey.value;
+      });
+      if (sections[activeSectionKey].component === null && sections[activeSectionKey].prompt === '') {
         if (activeFollowUpIndex === 0) {
           if (activeSectionIndex !== 0) {
             buttonProps.label = 'Previous';
@@ -224,7 +295,7 @@ const _SurveyQuestionContainer = ({
   };
 
   const getNextButton = () => {
-    const buttonProps = {
+    const buttonProps: IButtonProps = {
       label: 'Continue',
       variant: ButtonTypes.primary,
       onClick: () => {
@@ -235,30 +306,25 @@ const _SurveyQuestionContainer = ({
     const activeSectionIndex = getSectionIndex(sections, activeKey);
     const activeSectionKey = Object.keys(sections)[activeSectionIndex];
     if (activeKey.isFollowUp) {
-      const activeFollowUpIndex = Object.keys(
-        sections[activeSectionKey].follow_up,
-      ).findIndex((followUpKey) => {
+      const activeFollowUpIndex = Object.keys(sections[activeSectionKey].follow_up).findIndex(followUpKey => {
         return followUpKey === activeKey.value;
       });
-      const activeFollowUpKey = Object.keys(
-        sections[activeSectionKey].follow_up,
-      )[activeFollowUpIndex];
+      const activeFollowUpKey = Object.keys(sections[activeSectionKey].follow_up)[activeFollowUpIndex];
       if (
-        activeSectionIndex === Object.keys(sections).length - 1 &&
-        activeFollowUpIndex ===
-          Object.keys(sections[activeSectionKey].follow_up).length - 1
+        additionalContextQuestion &&
+        sections[activeSectionKey].follow_up[activeFollowUpKey].additional_context &&
+        (sections[activeSectionKey].follow_up[activeFollowUpKey].additional_context?.value === undefined
+          || sections[activeSectionKey].follow_up[activeFollowUpKey].additional_context?.value === null)
       ) {
+        buttonProps.disabled = true;
+      }
+      if (activeSectionIndex === Object.keys(sections).length - 1 && activeFollowUpIndex === Object.keys(sections[activeSectionKey].follow_up).length - 1) {
         buttonProps.label = 'Submit';
         buttonProps.onClick = () => {
           onSubmitButtonClicked();
         };
       } else {
-        if (
-          sections[activeSectionKey].follow_up[activeFollowUpKey].value ===
-            null ||
-          sections[activeSectionKey].follow_up[activeFollowUpKey].value ===
-            undefined
-        ) {
+        if (sections[activeSectionKey].follow_up[activeFollowUpKey].value === null || sections[activeSectionKey].follow_up[activeFollowUpKey].value === undefined) {
           buttonProps.label = 'Skip';
           buttonProps.onClick = () => {
             onSkipButtonClicked();
@@ -271,10 +337,10 @@ const _SurveyQuestionContainer = ({
         }
       }
     } else {
-      if (
-        sections[activeSectionKey].value === null ||
-        sections[activeSectionKey].value === undefined
-      ) {
+      if (additionalContextQuestion && sections[activeSectionKey].additional_context && sections[activeSectionKey].additional_context?.value === undefined) {
+        buttonProps.disabled = true;
+      }
+      if (sections[activeSectionKey].value === null || sections[activeSectionKey].value === undefined) {
         buttonProps.label = 'Skip';
         buttonProps.onClick = () => {
           onSkipButtonClicked();
@@ -297,16 +363,10 @@ const _SurveyQuestionContainer = ({
     const nextSection = sections[nextSectionKey];
 
     if (activeKey.isFollowUp) {
-      const activeFollowUpIndex = findIndex(
-        Object.keys(sections[activeSectionKey].follow_up),
-        (followUpKey) => {
-          return followUpKey === activeKey.value;
-        },
-      );
-      if (
-        activeFollowUpIndex ===
-        Object.keys(sections[activeSectionKey].follow_up).length - 1
-      ) {
+      const activeFollowUpIndex = findIndex(Object.keys(sections[activeSectionKey].follow_up), followUpKey => {
+        return followUpKey === activeKey.value;
+      });
+      if (activeFollowUpIndex === Object.keys(sections[activeSectionKey].follow_up).length - 1) {
         if (nextSection.component === null && nextSection.prompt === '') {
           setActiveKey({
             value: Object.keys(nextSection.follow_up)[0],
@@ -321,9 +381,7 @@ const _SurveyQuestionContainer = ({
           });
         }
       } else {
-        const nextFollowUpKey = Object.keys(
-          sections[activeSectionKey].follow_up,
-        )[activeFollowUpIndex + 1];
+        const nextFollowUpKey = Object.keys(sections[activeSectionKey].follow_up)[activeFollowUpIndex + 1];
         setActiveKey({
           value: nextFollowUpKey,
           previousValue: activeKey.value,
@@ -346,9 +404,7 @@ const _SurveyQuestionContainer = ({
           });
         }
       } else {
-        const nextFollowUpKey = Object.keys(
-          sections[activeSectionKey].follow_up,
-        )[0];
+        const nextFollowUpKey = Object.keys(sections[activeSectionKey].follow_up)[0];
         setActiveKey({
           value: nextFollowUpKey,
           previousValue: activeKey.value,
@@ -359,7 +415,7 @@ const _SurveyQuestionContainer = ({
   };
 
   const onNextButtonClicked = () => {
-    const newSurvey = updateSurveyQuestion(activeKey.value, { skipped: false });
+    const newSurvey = updateSurveyQuestion(activeKey.value, { value: getQuestionValue(activeKey), skipped: false });
     setSurveyData(newSurvey);
     goToNextQuestion();
     updateTransitionClassNames(true);
@@ -379,11 +435,7 @@ const _SurveyQuestionContainer = ({
 
   const onSubmitButtonClicked = async () => {
     // tell the difference between a skipped question and a question that was answered
-    const newSurvey = updateSurveyQuestion(
-      activeKey.value,
-      { skipped: false },
-      true,
-    );
+    const newSurvey = updateSurveyQuestion(activeKey.value, { value: getQuestionValue(activeKey), skipped: false }, true);
     setSurveyData(newSurvey);
     updateTransitionClassNames(true);
     await putSurveyData(newSurvey);
@@ -394,23 +446,15 @@ const _SurveyQuestionContainer = ({
     const activeSectionIndex = getSectionIndex(sections, activeKey);
     const activeSectionKey = Object.keys(sections)[activeSectionIndex];
     if (activeKey.isFollowUp) {
-      const activeFollowUpIndex = findIndex(
-        Object.keys(sections[activeSectionKey].follow_up),
-        (followUpKey) => {
-          return followUpKey === activeKey.value;
-        },
-      );
+      const activeFollowUpIndex = findIndex(Object.keys(sections[activeSectionKey].follow_up), followUpKey => {
+        return followUpKey === activeKey.value;
+      });
       if (activeFollowUpIndex === 0) {
         const section = sections[activeSectionKey];
         if (section.component === null && section.prompt === '') {
-          const previousSectionKey =
-            Object.keys(sections)[activeSectionIndex - 1];
+          const previousSectionKey = Object.keys(sections)[activeSectionIndex - 1];
           const previousSection = sections[previousSectionKey];
-          if (
-            previousSection.value !== true &&
-            previousSection.component !== null &&
-            previousSection.prompt !== ''
-          ) {
+          if (previousSection.value !== true && previousSection.component !== null && previousSection.prompt !== '') {
             setActiveKey({
               value: previousSectionKey,
               previousValue: activeKey.value,
@@ -418,9 +462,7 @@ const _SurveyQuestionContainer = ({
             });
           } else {
             setActiveKey({
-              value: Object.keys(previousSection.follow_up)[
-                Object.keys(previousSection.follow_up).length - 1
-              ],
+              value: Object.keys(previousSection.follow_up)[Object.keys(previousSection.follow_up).length - 1],
               previousValue: activeKey.value,
               isFollowUp: true,
             });
@@ -433,9 +475,7 @@ const _SurveyQuestionContainer = ({
           });
         }
       } else {
-        const previousFollowUpKey = Object.keys(
-          sections[activeSectionKey].follow_up,
-        )[activeFollowUpIndex - 1];
+        const previousFollowUpKey = Object.keys(sections[activeSectionKey].follow_up)[activeFollowUpIndex - 1];
         setActiveKey({
           value: previousFollowUpKey,
           previousValue: activeKey.value,
@@ -445,20 +485,14 @@ const _SurveyQuestionContainer = ({
     } else {
       const previousSectionKey = Object.keys(sections)[activeSectionIndex - 1];
       const previousSection = sections[previousSectionKey];
-      if (
-        previousSection.value !== true &&
-        previousSection.component !== null &&
-        previousSection.prompt !== ''
-      ) {
+      if (previousSection.value !== true && previousSection.component !== null && previousSection.prompt !== '') {
         setActiveKey({
           value: previousSectionKey,
           previousValue: activeKey.value,
           isFollowUp: false,
         });
       } else {
-        const previousSectionLastFollowUpKey = Object.keys(
-          previousSection.follow_up,
-        )[Object.keys(previousSection.follow_up).length - 1];
+        const previousSectionLastFollowUpKey = Object.keys(previousSection.follow_up)[Object.keys(previousSection.follow_up).length - 1];
 
         setActiveKey({
           value: previousSectionLastFollowUpKey,
@@ -480,30 +514,105 @@ const _SurveyQuestionContainer = ({
     ]);
   };
 
+  const checkAdditionalContext = (key: SurveyActiveKeyType) => {
+    let condition = false;
+    const activeSectionIndex = getSectionIndex(sections, activeKey);
+    const activeSectionKey = Object.keys(sections)[activeSectionIndex];
+    console.log(key);
+    const section = sections[activeSectionKey];
+    if (key.isFollowUp) {
+      const followUp = section.follow_up[key.value];
+      const value = followUp.value;
+      // if the follow up is unanswered then
+      if (value === null || value === undefined) {
+        condition = false;
+      } else {
+        if (followUp && followUp.additional_context) {
+          condition = ifAdditionalContextConditionMet(value, followUp.additional_context);
+        }
+      }
+    } else {
+      const value = section.value;
+      if (value === null || value === undefined) {
+        condition = false;
+      } else {
+        if (section.additional_context) {
+          condition = ifAdditionalContextConditionMet(value, section.additional_context);
+        }
+      }
+    }
+    if (condition) {
+      console.log('Condition met');
+      setAdditionalContextQuestion(getQuestionForKey(activeKey, true));
+    } else {
+      setAdditionalContextQuestion(undefined);
+      console.log('Condition not met');
+    }
+  };
+
+  const ifAdditionalContextConditionMet = (value: any, additionalContext: SurveyAdditionalContext) => {
+    switch (additionalContext.operator) {
+      case '==':
+        return value === additionalContext.comparison;
+      case '!=':
+        return value !== additionalContext.comparison;
+      case '>':
+        return value > additionalContext.comparison;
+      case '<':
+        return value < additionalContext.comparison;
+      case '>=':
+        return value >= additionalContext.comparison;
+      case '<=':
+        return value <= additionalContext.comparison;
+      default:
+        return false;
+    }
+  }
+
+  const getQuestionValue = (key: SurveyActiveKeyType) => {
+    const activeSectionIndex = getSectionIndex(sections, activeKey);
+    const activeSectionKey = Object.keys(sections)[activeSectionIndex];
+    if (key.isFollowUp) {
+      const followUpIndex = findIndex(Object.keys(sections[activeSectionKey].follow_up), followUpKey => {
+        return followUpKey === key.value;
+      });
+      const followUpKey = Object.keys(sections[activeSectionKey].follow_up)[followUpIndex];
+      const followUp = sections[activeSectionKey].follow_up[followUpKey];
+      if (followUp) {
+        return followUp.value;
+      }
+    } else {
+      const section = sections[key.value];
+      if (section) {
+        return section.value;
+      }
+    }
+  }
+
   const questions = Object.keys(sections)
-    .map((sectionKey) => {
+    .map(sectionKey => {
       const category = getQuestionForKey({
         value: sectionKey,
         previousValue: '',
         isFollowUp: false,
       });
-      const followUps = Object.keys(sections[sectionKey].follow_up).map(
-        (followUpKey) => {
-          return getQuestionForKey({
-            value: followUpKey,
-            previousValue: '',
-            isFollowUp: true,
-          });
-        },
-      );
+      const followUps = Object.keys(sections[sectionKey].follow_up).map(followUpKey => {
+        return getQuestionForKey({
+          value: followUpKey,
+          previousValue: '',
+          isFollowUp: true,
+        });
+      });
       return [category, ...followUps];
     })
     .flat();
 
   const getActiveQuestion = () => {
-    const question = questions.find((question) => {
+    const question = questions.find(question => {
       return question.props.input_key === activeKey.value;
     });
+    // show additional context
+    checkAdditionalContext(activeKey);
     setActiveQuestion(question);
   };
 
@@ -513,31 +622,18 @@ const _SurveyQuestionContainer = ({
 
   if (activeQuestion !== undefined) {
     return (
-      <div
-        className={
-          'w-full h-full relative flex items-center justify-center overflow-hidden pb-[93px]'
-        }
-      >
+      <div className={'w-full h-full relative flex items-center justify-center overflow-hidden pb-[93px]'}>
         <SwitchTransition>
-          <CSSTransition
-            key={activeQuestion.props.input_key}
-            timeout={150}
-            classNames={transitionClassNames}
-          >
-            <div
-              className={
-                'h-full w-full flex items-center justify-center px-[139px] shortScreen:px-[32px] shortWideScreen:px-[139px]'
-              }
-            >
-              {activeQuestion}
+          <CSSTransition key={activeQuestion.props.input_key} timeout={150} classNames={transitionClassNames}>
+            <div className={'h-full w-full flex items-center justify-center px-[139px] shortScreen:px-[32px] shortWideScreen:px-[139px]'}>
+              <div className={'w-full space-y-6'}>
+                {activeQuestion}
+                {additionalContextQuestion}
+              </div>
             </div>
           </CSSTransition>
         </SwitchTransition>
-        <div
-          className={
-            'absolute w-[540px] space-x-[15px] h-[40px] flex justify-end right-0 bottom-0 mb-[37px]'
-          }
-        >
+        <div className={'absolute w-[540px] space-x-[15px] h-[40px] flex justify-end right-0 bottom-0 mb-[37px]'}>
           {getPreviousButton()}
           {getNextButton()}
         </div>
@@ -548,12 +644,9 @@ const _SurveyQuestionContainer = ({
   }
 };
 
-export const SurveyQuestionContainer = withErrorBoundary(
-  _SurveyQuestionContainer,
-  {
-    FallbackComponent: (props) => <ErrorFallback {...props} />,
-    onError: (error, info) => {
-      console.error('Error occurred in SurveyQuestionContainer: ', error);
-    },
+export const SurveyQuestionContainer = withErrorBoundary(_SurveyQuestionContainer, {
+  FallbackComponent: props => <ErrorFallback {...props} />,
+  onError: (error, info) => {
+    console.error('Error occurred in SurveyQuestionContainer: ', error);
   },
-);
+});

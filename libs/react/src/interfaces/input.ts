@@ -1,6 +1,7 @@
 import { InputTypes } from '../enums/inputs';
 import { InputHTMLAttributes, LabelHTMLAttributes } from 'react';
 import { NumericFormatProps } from 'react-number-format';
+import { TextareaProps } from 'flowbite-react';
 
 export interface IInputProps {
   idx?: number;
@@ -10,6 +11,7 @@ export interface IInputProps {
   type?: InputTypes;
   container_classname?: string;
   numeric_input_props?: NumericInputProps;
+  textarea_props?: TextareaProps;
 }
 
 export interface BaseInputProps extends InputHTMLAttributes<HTMLInputElement> {
