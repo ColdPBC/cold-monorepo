@@ -1,3 +1,10 @@
+# [1.75.0-COLD-403.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.74.0...v1.75.0-COLD-403.1) (2023-12-12)
+
+
+### Features
+
+* Create next steps module ([6bd6f8f](https://github.com/ColdPBC/cold-monorepo/commit/6bd6f8fe1e9d06aa6279c53bf923c862b57285c9))
+
 # [1.74.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.73.12...v1.74.0) (2023-12-12)
 
 
