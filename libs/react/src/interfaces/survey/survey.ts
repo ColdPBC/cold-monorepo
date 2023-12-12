@@ -103,6 +103,7 @@ export interface SurveyAdditionalContext {
 }
 
 export interface SurveyNextStep {
+  name: string,
   title: string,
   started: boolean,
   surveyProgress: number
