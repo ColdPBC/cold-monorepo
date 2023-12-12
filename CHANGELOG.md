@@ -1,3 +1,10 @@
+# [1.74.0-cold-000-climatiq.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.74.0-cold-000-climatiq.3...v1.74.0-cold-000-climatiq.4) (2023-12-12)
+
+
+### Bug Fixes
+
+* Refactor RabbitMQ integration in ColdRabbitModule ([44ecc12](https://github.com/ColdPBC/cold-monorepo/commit/44ecc1276c20929e6504cfda2dfaef6bb72e7d71))
+
 # [1.74.0-cold-000-climatiq.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.74.0-cold-000-climatiq.2...v1.74.0-cold-000-climatiq.3) (2023-12-12)
 
 
