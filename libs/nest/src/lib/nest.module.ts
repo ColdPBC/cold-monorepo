@@ -43,7 +43,7 @@ export class NestModule {
         DarklyModule,
         PrismaModule,
         PassportModule,
-        AuthorizationModule,
+        await AuthorizationModule.forFeatureAsync(),
         HttpModule,
         InterceptorModule,
         DatadogTraceModule.forRoot({ controllers: true, providers: true }),
