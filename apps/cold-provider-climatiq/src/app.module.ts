@@ -2,19 +2,26 @@ import { Module } from '@nestjs/common';
 
 import { NestModule } from '@coldpbc/nest';
 import { ClimatiqModule } from './climatiq/climatiq.module';
-import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
+import { ClimatiqService } from './climatiq/climatiq.service';
+import { AppService } from './app.service';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [ClimatiqModule],
-  providers: [],
+  providers: [AppService],
 })
 export class AppModule {
   static async forRootAsync() {
     return {
       module: AppModule,
-      imports: [await NestModule.forRootAsync(), ClimatiqModule],
+      imports: [
+        ConfigModule.forRoot({
+          isGlobal: true,
+        }),
+        await NestModule.forRootAsync(),
+        ClimatiqModule,
+      ],
       controllers: [],
-      providers: [AmqpConnection],
+      providers: [ClimatiqService],
       exports: [],
     };
   }
