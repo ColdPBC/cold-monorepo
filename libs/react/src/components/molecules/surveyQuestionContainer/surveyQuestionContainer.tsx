@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { SurveyInput } from '../index';
 import { cloneDeep, findIndex, forEach } from 'lodash';
-import { SurveyActiveKeyType, SurveyPayloadType, SurveySectionType } from '@coldpbc/interfaces';
+import { IButtonProps, SurveyActiveKeyType, SurveyAdditionalContext, SurveyPayloadType, SurveySectionType } from '@coldpbc/interfaces';
 import { BaseButton, Spinner } from '../../atoms';
 import { ButtonTypes, GlobalSizes } from '@coldpbc/enums';
 import { CSSTransition, SwitchTransition } from 'react-transition-group';
@@ -32,6 +32,7 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
     exitActive: 'transition ease-in duration-200 transform translate-y-full',
   };
   const [activeQuestion, setActiveQuestion] = React.useState<JSX.Element | undefined>(undefined);
+  const [additionalContextQuestion, setAdditionalContextQuestion] = React.useState<JSX.Element | undefined>(undefined);
   const [transitionClassNames, setTransitionClassNames] = React.useState<any>(nextQuestionTransitionClassNames);
   const { definition, id, name } = surveyData;
   const { sections } = definition;
@@ -51,39 +52,114 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
       skipped?: boolean;
     },
     submit?: boolean,
+    additional?: boolean,
   ) => {
     let newSection: SurveySectionType;
     const activeSectionIndex = getSectionIndex(sections, activeKey);
     const activeSectionKey = Object.keys(sections)[activeSectionIndex];
     if (isKeyValueFollowUp(key, sections)) {
       const section = sections[activeSectionKey];
+      const followUp = section.follow_up[key];
       if (submit) {
-        // check if the current follow up is answered. If not, set it update.skipped to true
-        // if it is answered, set update.skipped to false
-        const followUp = section.follow_up[key];
         update.skipped = followUp.value === null || followUp.value === undefined;
       }
-      newSection = {
-        ...section,
-        follow_up: {
-          ...section.follow_up,
-          [key]: {
-            ...section.follow_up[key],
-            ...update,
+      if(followUp.additional_context) {
+        if(additional) {
+          newSection = {
+            ...section,
+            follow_up: {
+              ...section.follow_up,
+              [key]: {
+                ...section.follow_up[key],
+                additional_context: {
+                  ...section.follow_up[key].additional_context,
+                  ...update,
+                } as SurveyAdditionalContext,
+              },
+            },
+          };
+        } else {
+          const value = update.value;
+          const conditionMet = ifAdditionalContextConditionMet(value, followUp.additional_context);
+          if(!conditionMet) {
+            newSection = {
+              ...section,
+              follow_up: {
+                ...section.follow_up,
+                [key]: {
+                  ...section.follow_up[key],
+                  ...update,
+                  additional_context: {
+                    ...section.follow_up[key].additional_context,
+                    value: null,
+                  } as SurveyAdditionalContext,
+                },
+              },
+            };
+          } else {
+            newSection = {
+              ...section,
+              follow_up: {
+                ...section.follow_up,
+                [key]: {
+                  ...section.follow_up[key],
+                  ...update,
+                },
+              },
+            };
+          }
+        }
+      } else {
+        newSection = {
+          ...section,
+          follow_up: {
+            ...section.follow_up,
+            [key]: {
+              ...section.follow_up[key],
+              ...update,
+            },
           },
-        },
-      };
+        };
+      }
     } else {
       const section = sections[key];
       if (submit) {
-        // check if the current section is answered. If not, set it update.skipped to true
-        // if it is answered, set update.skipped to false
         update.skipped = section.value === null || section.value === undefined;
       }
-      newSection = {
-        ...section,
-        ...update,
-      };
+      if(section.additional_context){
+        if(additional) {
+          newSection = {
+            ...section,
+            additional_context: {
+              ...section.additional_context,
+              ...update,
+            } as SurveyAdditionalContext,
+          };
+        } else {
+          const value = update.value;
+          const conditionMet = ifAdditionalContextConditionMet(value, section.additional_context);
+          if(!conditionMet) {
+            newSection = {
+              ...section,
+              ...update,
+              additional_context: {
+                ...section.additional_context,
+                value: null,
+              } as SurveyAdditionalContext,
+            };
+          } else {
+            newSection = {
+              ...section,
+              ...update,
+            };
+          }
+        }
+      } else {
+        newSection = {
+          ...section,
+          ...update,
+        };
+      }
       if (update.value === false || update.skipped === true) {
         forEach(Object.keys(section.follow_up), followUpKey => {
           newSection.follow_up[followUpKey].value = null;
@@ -97,17 +173,17 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
     return newSurvey;
   };
 
-  const onFieldUpdated = (key: string, value: any) => {
+  const onFieldUpdated = (key: string, value: any, additional = false) => {
     setActiveKey({
       value: activeKey.value,
       previousValue: activeKey.value,
       isFollowUp: activeKey.isFollowUp,
     });
-    const survey = updateSurveyQuestion(key, { value });
+    const survey = updateSurveyQuestion(key, { value }, undefined, additional);
     setSurveyData(survey);
   };
 
-  const getQuestionForKey = (key: SurveyActiveKeyType) => {
+  const getQuestionForKey = (key: SurveyActiveKeyType, additional = false) => {
     const activeSectionIndex = getSectionIndex(sections, activeKey);
     const activeSectionKey = Object.keys(sections)[activeSectionIndex];
     if (key.isFollowUp) {
@@ -116,12 +192,40 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
       });
       const followUpKey = Object.keys(sections[activeSectionKey].follow_up)[followUpIndex];
       const followUp = sections[activeSectionKey].follow_up[followUpKey];
+      if (additional && followUp.additional_context) {
+        return (
+          <SurveyInput
+            {...followUp.additional_context}
+            options={[]}
+            input_key={key.value}
+            onFieldUpdated={(name, value) => {
+              onFieldUpdated(key.value, value, true);
+            }}
+            value={followUp.additional_context.value === undefined ? null : followUp.additional_context.value}
+            isAdditional={true}
+          />
+        );
+      }
       if (followUp) {
         return <SurveyInput {...followUp} input_key={key.value} onFieldUpdated={onFieldUpdated} value={followUp.value === undefined ? null : followUp.value} />;
       }
     } else {
       const section = sections[key.value];
       if (section && section.component !== null) {
+        if (additional && section.additional_context) {
+          return (
+            <SurveyInput
+              {...section.additional_context}
+              options={[]}
+              input_key={key.value}
+              onFieldUpdated={(name, value) => {
+                onFieldUpdated(key.value, value, true);
+              }}
+              value={section.additional_context.value === undefined ? null : section.additional_context.value}
+              isAdditional={true}
+            />
+          );
+        }
         return (
           <SurveyInput
             {...section}
@@ -191,7 +295,7 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
   };
 
   const getNextButton = () => {
-    const buttonProps = {
+    const buttonProps: IButtonProps = {
       label: 'Continue',
       variant: ButtonTypes.primary,
       onClick: () => {
@@ -206,6 +310,14 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
         return followUpKey === activeKey.value;
       });
       const activeFollowUpKey = Object.keys(sections[activeSectionKey].follow_up)[activeFollowUpIndex];
+      if (
+        additionalContextQuestion &&
+        sections[activeSectionKey].follow_up[activeFollowUpKey].additional_context &&
+        (sections[activeSectionKey].follow_up[activeFollowUpKey].additional_context?.value === undefined
+          || sections[activeSectionKey].follow_up[activeFollowUpKey].additional_context?.value === null)
+      ) {
+        buttonProps.disabled = true;
+      }
       if (activeSectionIndex === Object.keys(sections).length - 1 && activeFollowUpIndex === Object.keys(sections[activeSectionKey].follow_up).length - 1) {
         buttonProps.label = 'Submit';
         buttonProps.onClick = () => {
@@ -225,6 +337,9 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
         }
       }
     } else {
+      if (additionalContextQuestion && sections[activeSectionKey].additional_context && sections[activeSectionKey].additional_context?.value === undefined) {
+        buttonProps.disabled = true;
+      }
       if (sections[activeSectionKey].value === null || sections[activeSectionKey].value === undefined) {
         buttonProps.label = 'Skip';
         buttonProps.onClick = () => {
@@ -300,7 +415,7 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
   };
 
   const onNextButtonClicked = () => {
-    const newSurvey = updateSurveyQuestion(activeKey.value, { skipped: false });
+    const newSurvey = updateSurveyQuestion(activeKey.value, { value: getQuestionValue(activeKey), skipped: false });
     setSurveyData(newSurvey);
     goToNextQuestion();
     updateTransitionClassNames(true);
@@ -320,7 +435,7 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
 
   const onSubmitButtonClicked = async () => {
     // tell the difference between a skipped question and a question that was answered
-    const newSurvey = updateSurveyQuestion(activeKey.value, { skipped: false }, true);
+    const newSurvey = updateSurveyQuestion(activeKey.value, { value: getQuestionValue(activeKey), skipped: false }, true);
     setSurveyData(newSurvey);
     updateTransitionClassNames(true);
     await putSurveyData(newSurvey);
@@ -399,6 +514,81 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
     ]);
   };
 
+  const checkAdditionalContext = (key: SurveyActiveKeyType) => {
+    let condition = false;
+    const activeSectionIndex = getSectionIndex(sections, activeKey);
+    const activeSectionKey = Object.keys(sections)[activeSectionIndex];
+    console.log(key);
+    const section = sections[activeSectionKey];
+    if (key.isFollowUp) {
+      const followUp = section.follow_up[key.value];
+      const value = followUp.value;
+      // if the follow up is unanswered then
+      if (value === null || value === undefined) {
+        condition = false;
+      } else {
+        if (followUp && followUp.additional_context) {
+          condition = ifAdditionalContextConditionMet(value, followUp.additional_context);
+        }
+      }
+    } else {
+      const value = section.value;
+      if (value === null || value === undefined) {
+        condition = false;
+      } else {
+        if (section.additional_context) {
+          condition = ifAdditionalContextConditionMet(value, section.additional_context);
+        }
+      }
+    }
+    if (condition) {
+      console.log('Condition met');
+      setAdditionalContextQuestion(getQuestionForKey(activeKey, true));
+    } else {
+      setAdditionalContextQuestion(undefined);
+      console.log('Condition not met');
+    }
+  };
+
+  const ifAdditionalContextConditionMet = (value: any, additionalContext: SurveyAdditionalContext) => {
+    switch (additionalContext.operator) {
+      case '==':
+        return value === additionalContext.comparison;
+      case '!=':
+        return value !== additionalContext.comparison;
+      case '>':
+        return value > additionalContext.comparison;
+      case '<':
+        return value < additionalContext.comparison;
+      case '>=':
+        return value >= additionalContext.comparison;
+      case '<=':
+        return value <= additionalContext.comparison;
+      default:
+        return false;
+    }
+  }
+
+  const getQuestionValue = (key: SurveyActiveKeyType) => {
+    const activeSectionIndex = getSectionIndex(sections, activeKey);
+    const activeSectionKey = Object.keys(sections)[activeSectionIndex];
+    if (key.isFollowUp) {
+      const followUpIndex = findIndex(Object.keys(sections[activeSectionKey].follow_up), followUpKey => {
+        return followUpKey === key.value;
+      });
+      const followUpKey = Object.keys(sections[activeSectionKey].follow_up)[followUpIndex];
+      const followUp = sections[activeSectionKey].follow_up[followUpKey];
+      if (followUp) {
+        return followUp.value;
+      }
+    } else {
+      const section = sections[key.value];
+      if (section) {
+        return section.value;
+      }
+    }
+  }
+
   const questions = Object.keys(sections)
     .map(sectionKey => {
       const category = getQuestionForKey({
@@ -421,6 +611,8 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
     const question = questions.find(question => {
       return question.props.input_key === activeKey.value;
     });
+    // show additional context
+    checkAdditionalContext(activeKey);
     setActiveQuestion(question);
   };
 
@@ -433,8 +625,11 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
       <div className={'w-full h-full relative flex items-center justify-center overflow-hidden pb-[93px]'} data-testid={'survey-question-container'}>
         <SwitchTransition>
           <CSSTransition key={activeQuestion.props.input_key} timeout={150} classNames={transitionClassNames}>
-            <div data-testid={'survey-question'} className={'h-full w-full flex items-center justify-center px-[139px] shortScreen:px-[32px] shortWideScreen:px-[139px]'}>
-              {activeQuestion}
+            <div className={'h-full w-full flex items-center justify-center px-[139px] shortScreen:px-[32px] shortWideScreen:px-[139px]'}>
+              <div className={'w-full space-y-6'}>
+                {activeQuestion}
+                {additionalContextQuestion}
+              </div>
             </div>
           </CSSTransition>
         </SwitchTransition>

@@ -1,15 +1,14 @@
 import React, { useEffect } from 'react';
 import { SurveyActiveKeyType, SurveyPayloadType } from '@coldpbc/interfaces';
 import { Spinner, SurveyLeftNav, SurveyRightNav, Takeover } from '../../index';
-import { cloneDeep, find, first, isEmpty } from 'lodash';
-import useSWR, { mutate } from 'swr';
+import { find, isEmpty } from 'lodash';
+import { mutate } from 'swr';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { ErrorType, GlobalSizes } from '@coldpbc/enums';
 import { useSearchParams } from 'react-router-dom';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application/errors/errorFallback';
-import { useOrgSWR } from '../../../hooks/useOrgSWR';
-import { useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
+import { useOrgSWR, useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
 
 export interface SurveyProps {
   surveyName: string;

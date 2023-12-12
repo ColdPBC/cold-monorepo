@@ -14,7 +14,7 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Text: Story = {
-  render: (args) => {
+  render: args => {
     return <SurveyInputStory {...args} />;
   },
   args: {
@@ -29,20 +29,13 @@ export const Text: Story = {
 };
 
 export const MultiSelect: Story = {
-  render: (args) => {
+  render: args => {
     return <SurveyInputStory {...args} />;
   },
   args: {
     input_key: 'general:0',
     prompt: 'Which regions do you sell your product into?',
-    options: [
-      'North America United States',
-      'South America, Central America, Mexico',
-      'Europe',
-      'Asia',
-      'Australia',
-      'Africa',
-    ],
+    options: ['North America United States', 'South America, Central America, Mexico', 'Europe', 'Asia', 'Australia', 'Africa'],
     tooltip: 'Select correct regions',
     component: 'multi_select',
     placeholder: '',
@@ -51,7 +44,7 @@ export const MultiSelect: Story = {
 };
 
 export const Select: Story = {
-  render: (args) => {
+  render: args => {
     return <SurveyInputStory {...args} />;
   },
   args: {
@@ -66,7 +59,7 @@ export const Select: Story = {
 };
 
 export const Currency: Story = {
-  render: (args) => {
+  render: args => {
     return <SurveyInputStory {...args} />;
   },
   args: {
@@ -81,7 +74,7 @@ export const Currency: Story = {
 };
 
 export const PercentSlider: Story = {
-  render: (args) => {
+  render: args => {
     return <SurveyInputStory {...args} />;
   },
   args: {
@@ -96,7 +89,7 @@ export const PercentSlider: Story = {
 };
 
 export const Number: Story = {
-  render: (args) => {
+  render: args => {
     return <SurveyInputStory {...args} />;
   },
   args: {
@@ -111,7 +104,7 @@ export const Number: Story = {
 };
 
 export const YesNo: Story = {
-  render: (args) => {
+  render: args => {
     return <SurveyInputStory {...args} />;
   },
   args: {
@@ -125,9 +118,22 @@ export const YesNo: Story = {
   },
 };
 
+export const TextArea: Story = {
+  render: args => {
+    return <SurveyInputStory {...args} />;
+  },
+  args: {
+    input_key: 'product:0',
+    prompt: 'Tell me about your product',
+    options: [],
+    tooltip: '',
+    component: 'textarea',
+    placeholder: 'Write a few sentences about your product',
+  },
+};
+
 const SurveyInputStory = (props: SurveyInputProps) => {
-  const { input_key, prompt, options, tooltip, component, placeholder, value } =
-    props;
+  const { input_key, prompt, options, tooltip, component, placeholder, value } = props;
   const [stateValue, setStateValue] = useState<any>(value);
   return (
     <SurveyInput

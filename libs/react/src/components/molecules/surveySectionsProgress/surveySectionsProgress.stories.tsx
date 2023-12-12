@@ -68,8 +68,8 @@ export const SurveyComplete: Story = {
   args: {
     ...Default.args,
     activeKey: {
-      value: 'general:2',
-      previousValue: 'general:1',
+      value: 'general:3',
+      previousValue: 'general:2',
       isFollowUp: true,
     },
   },

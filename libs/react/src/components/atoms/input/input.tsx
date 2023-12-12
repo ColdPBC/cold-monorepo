@@ -2,31 +2,18 @@ import React from 'react';
 import { NumericFormat } from 'react-number-format';
 import { Select } from './select/select';
 import { IInputProps } from '../../../interfaces/input';
+import { Textarea } from 'flowbite-react';
+import { twMerge } from 'tailwind-merge';
 
 export const Input = (props: IInputProps) => {
-  const {
-    input_props,
-    input_label,
-    input_label_props,
-    numeric_input_props,
-    container_classname,
-    idx,
-    type,
-  } = props;
+  const { input_props, input_label, input_label_props, numeric_input_props, container_classname, idx, type, textarea_props } = props;
 
   function renderCurrency(): JSX.Element {
     const key = `${numeric_input_props?.name}_${idx}`;
     return (
       <div className={container_classname || 'col-span-full'}>
         {input_label && (
-          <label
-            {...input_label_props}
-            htmlFor={numeric_input_props?.name}
-            className={
-              input_label_props?.className ||
-              'block text-sm font-medium leading-6 text-gray-900'
-            }
-          >
+          <label {...input_label_props} htmlFor={numeric_input_props?.name} className={input_label_props?.className || 'block text-sm font-medium leading-6 text-gray-900'}>
             {input_label}
           </label>
         )}
@@ -52,14 +39,7 @@ export const Input = (props: IInputProps) => {
     return (
       <div className={container_classname || 'col-span-full'}>
         {input_label && (
-          <label
-            {...input_label_props}
-            htmlFor={numeric_input_props?.name}
-            className={
-              input_label_props?.className ||
-              'block text-sm font-medium leading-6 text-gray-900'
-            }
-          >
+          <label {...input_label_props} htmlFor={numeric_input_props?.name} className={input_label_props?.className || 'block text-sm font-medium leading-6 text-gray-900'}>
             {input_label}
           </label>
         )}
@@ -89,11 +69,7 @@ export const Input = (props: IInputProps) => {
             {...input_label_props}
             key={`lbl_${key}`}
             htmlFor={input_props.name}
-            className={
-              input_label_props?.className ||
-              'block text-sm font-medium leading-6 text-gray-900'
-            }
-          >
+            className={input_label_props?.className || 'block text-sm font-medium leading-6 text-gray-900'}>
             {input_label}
           </label>
         )}
@@ -118,10 +94,29 @@ export const Input = (props: IInputProps) => {
         {...input_props}
         value={input_props.value.name}
         label={input_label}
-        onChange={(value) => {
+        onChange={value => {
           input_props.onValueChange(value);
         }}
       />
+    );
+  }
+
+  function renderTextArea(): JSX.Element {
+    // eslint-disable-next-line no-restricted-globals
+    const key = `${name}_${idx}`;
+    return (
+      <div key={key} className={container_classname || 'col-span-full'}>
+        {input_label && (
+          <label
+            {...input_label_props}
+            key={`lbl_${key}`}
+            htmlFor={input_props.name}
+            className={input_label_props?.className || 'block text-sm font-medium leading-6 text-gray-900'}>
+            {input_label}
+          </label>
+        )}
+        <Textarea {...textarea_props} key={`input_${key}`} autoComplete={input_props.autoComplete || input_props.name} className={textarea_props?.className} />
+      </div>
     );
   }
 
@@ -132,6 +127,8 @@ export const Input = (props: IInputProps) => {
       return renderNumber();
     case 'select':
       return renderSelect();
+    case 'textarea':
+      return renderTextArea();
     default:
     case 'text':
       return renderText();

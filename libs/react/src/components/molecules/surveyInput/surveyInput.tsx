@@ -3,7 +3,7 @@ import { YesNo } from '../yesNo/yesNo';
 import { Input } from '../../atoms/input/input';
 import { PercentSlider } from '../percentSlider/percentSlider';
 import { SelectOption } from '../selectOption/selectOption';
-import { InputTypes } from '../../../enums/inputs';
+import { InputTypes } from "@coldpbc/enums";
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application';
 
@@ -11,15 +11,16 @@ export interface SurveyInputProps {
   input_key: string;
   prompt: string;
   options: string[];
-  tooltip: string;
+  tooltip?: string;
   component: string;
   placeholder: string;
   value: any | null;
   onFieldUpdated: (name: string, value: any) => void;
+  isAdditional?: boolean;
 }
 
 const _SurveyInput = (props: SurveyInputProps) => {
-  const { input_key, prompt, options, tooltip, component, placeholder, onFieldUpdated, value } = props;
+  const { input_key, prompt, options, tooltip, component, placeholder, onFieldUpdated, value, isAdditional} = props;
 
   const inputComponent = () => {
     switch (component) {
@@ -161,16 +162,58 @@ const _SurveyInput = (props: SurveyInputProps) => {
             value={value}
           />
         );
+      case 'textarea':
+        return (
+          <Input
+            type={InputTypes.TextArea}
+            input_props={{
+              name: input_key,
+              value: value === null ? undefined : value,
+              onValueChange: value => {
+                onFieldUpdated(input_key, value);
+              },
+              placeholder: placeholder,
+              title: tooltip,
+            }}
+            textarea_props={{
+              draggable: false,
+              rows: 4,
+              onChange: e => {
+                if (e.target.value === '') {
+                  onFieldUpdated(input_key, null);
+                } else {
+                  onFieldUpdated(input_key, e.target.value);
+                }
+              },
+              name: input_key,
+              value: value === null ? undefined : value,
+              className:
+                'text-sm not-italic text-tc-primary font-medium bg-transparent w-full rounded-lg py-6 px-4 border border-bgc-accent focus:border focus:border-bgc-accent focus:ring-0 resize-none',
+              placeholder: placeholder,
+              title: tooltip,
+            }}
+            container_classname={'w-full'}
+          />
+        );
       default:
         return <></>;
     }
   };
 
+  const getPrompt = () => {
+    let className = "text-left text-tc-primary";
+    if(isAdditional){
+      className += " text-h4";
+    } else {
+      className += " text-h3";
+    }
+    return <div className={className}>{prompt}</div>;
+  }
+
   return (
     <div className="w-full space-y-6">
-      <div className="text-left text-2xl not-italic font-bold text-tc-primary">{prompt}</div>
+      {getPrompt()}
       {tooltip && <div className="text-left text-sm not-italic font-medium text-tc-primary">{tooltip}</div>}
-
       <div className="w-full justify-center">{inputComponent()}</div>
     </div>
   );
