@@ -1,21 +1,11 @@
-import { AmqpConnection, RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
-import { DynamicModule, Module } from '@nestjs/common';
+import { RabbitMQConfig } from '@golevelup/nestjs-rabbitmq';
+import { Module } from '@nestjs/common';
 import { ColdRabbitService } from './rabbit.service';
+import { createConfigurableDynamicRootModule } from '@golevelup/nestjs-modules';
+import { COLD_RABBIT_CONFIG } from './constants';
 
 @Module({
-  imports: [RabbitMQModule.forRoot(RabbitMQModule, ColdRabbitService.getRabbitConfig('provider')), ColdRabbitModule],
   providers: [ColdRabbitService],
-  exports: [ColdRabbitService, AmqpConnection],
+  exports: [ColdRabbitService],
 })
-export class ColdRabbitModule {
-  static async forFeature(type: string): Promise<DynamicModule> {
-    const module: DynamicModule = {
-      module: ColdRabbitModule,
-      imports: [RabbitMQModule.forRoot(RabbitMQModule, ColdRabbitService.getRabbitConfig(type)), ColdRabbitModule],
-      providers: [ColdRabbitService, AmqpConnection],
-      exports: [ColdRabbitService, AmqpConnection],
-    };
-
-    return module;
-  }
-}
+export class ColdRabbitModule extends createConfigurableDynamicRootModule<ColdRabbitModule, RabbitMQConfig>(COLD_RABBIT_CONFIG) {}

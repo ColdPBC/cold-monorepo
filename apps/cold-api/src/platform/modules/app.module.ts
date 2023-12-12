@@ -9,6 +9,7 @@ import { CategoriesModule } from './resources/categories/categories.module';
 import { NewsModule } from './resources/news/news.module';
 import { ActionsModule } from './resources/actions/actions.module';
 import { ConfigModule } from '@nestjs/config';
+import { IntegrationsModule } from './resources/integrations/integrations.module';
 
 @Module({})
 export class AppModule {
@@ -35,6 +36,7 @@ export class AppModule {
         CategoriesModule,
         NewsModule,
         ActionsModule,
+        IntegrationsModule,
       ],
       controllers: [],
       providers: [],

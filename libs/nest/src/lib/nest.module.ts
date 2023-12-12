@@ -23,6 +23,7 @@ export class NestModule {
   static async forRootAsync() {
     const logger = new WorkerLogger('NestModule');
     const config = new ConfigService();
+    const rabbitConfig = ColdRabbitService.getRabbitConfig();
     return {
       module: NestModule,
       imports: [
@@ -40,7 +41,6 @@ export class NestModule {
           inject: [ConfigService],
           isGlobal: true,
         }),
-        ColdRabbitModule,
         HealthModule,
         DarklyModule,
         PrismaModule,
@@ -70,6 +70,7 @@ export class NestModule {
           },
         }),
         ColdCacheModule,
+        ColdRabbitModule.forRoot(ColdRabbitModule, rabbitConfig),
       ],
       controllers: [HealthController],
       providers: [
@@ -77,14 +78,14 @@ export class NestModule {
         ConfigService,
         JwtStrategy,
         JwtService,
-        ColdRabbitService,
         HealthService,
+        ColdRabbitService,
         {
           provide: APP_GUARD,
           useClass: JwtAuthGuard,
         },
       ],
-      exports: [ColdRabbitService, PrismaService, JwtStrategy, JwtService, HttpModule, ConfigService, HealthService],
+      exports: [PrismaService, JwtStrategy, JwtService, HttpModule, ConfigService, HealthService, ColdRabbitService],
     };
   }
 }
