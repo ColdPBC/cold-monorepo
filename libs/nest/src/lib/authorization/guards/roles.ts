@@ -8,6 +8,7 @@ import { BaseWorker } from '../../worker';
 import { CacheService } from '../../cache';
 import { AuthenticatedUser } from '../../primitives';
 import { Organizations } from '../../../validation';
+import { isRabbitContext } from '@golevelup/nestjs-rabbitmq';
 
 @Injectable()
 @Span()
@@ -103,6 +104,11 @@ export class RolesGuard extends BaseWorker implements CanActivate {
   }
 
   canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
+    // Do nothing if this is a RabbitMQ event
+    if (isRabbitContext(context)) {
+      return true;
+    }
+
     const roles = this.reflector.get<string[]>('roles', context.getHandler());
     const request = context.switchToHttp().getRequest();
     const user = request.user;
