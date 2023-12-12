@@ -18,7 +18,14 @@ export const Default: Story = {
     <StoryMockProvider handlers={[]}>
       <Home />
     </StoryMockProvider>
-  )
+  ),
+  parameters: {
+    launchdarkly: {
+      flags: {
+        showNextStepsCard: false,
+      }
+    }
+  },
 };
 
 export const EmptyFootprintData: Story = {

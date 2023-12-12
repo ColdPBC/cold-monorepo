@@ -518,7 +518,6 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
     let condition = false;
     const activeSectionIndex = getSectionIndex(sections, activeKey);
     const activeSectionKey = Object.keys(sections)[activeSectionIndex];
-    console.log(key);
     const section = sections[activeSectionKey];
     if (key.isFollowUp) {
       const followUp = section.follow_up[key.value];
@@ -542,11 +541,9 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
       }
     }
     if (condition) {
-      console.log('Condition met');
       setAdditionalContextQuestion(getQuestionForKey(activeKey, true));
     } else {
       setAdditionalContextQuestion(undefined);
-      console.log('Condition not met');
     }
   };
 

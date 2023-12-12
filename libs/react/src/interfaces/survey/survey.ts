@@ -73,7 +73,6 @@ export interface SurveySectionFollowUpType {
   placeholder: string;
   value?: any | null;
   skipped?: boolean;
-  additional_context?: SurveyAdditionalContext;
 }
 
 export interface SurveyPayloadType {
@@ -101,4 +100,10 @@ export interface SurveyAdditionalContext {
   operator: string;
   comparison: any;
   value?: any | null;
+}
+
+export interface SurveyNextStep {
+  title: string,
+  started: boolean,
+  surveyProgress: number
 }
