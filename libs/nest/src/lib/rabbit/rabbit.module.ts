@@ -1,11 +1,17 @@
-import { RabbitMQConfig } from '@golevelup/nestjs-rabbitmq';
-import { Module } from '@nestjs/common';
+import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
+import { DynamicModule, Module } from '@nestjs/common';
 import { ColdRabbitService } from './rabbit.service';
-import { createConfigurableDynamicRootModule } from '@golevelup/nestjs-modules';
-import { COLD_RABBIT_CONFIG } from './constants';
 
-@Module({
-  providers: [ColdRabbitService],
-  exports: [ColdRabbitService],
-})
-export class ColdRabbitModule extends createConfigurableDynamicRootModule<ColdRabbitModule, RabbitMQConfig>(COLD_RABBIT_CONFIG) {}
+@Module({})
+export class ColdRabbitModule {
+  static forFeature(): DynamicModule {
+    const module: DynamicModule = {
+      module: ColdRabbitModule,
+      imports: [RabbitMQModule.forRoot(RabbitMQModule, ColdRabbitService.getRabbitConfig()), ColdRabbitModule],
+      providers: [ColdRabbitService],
+      exports: [ColdRabbitService, RabbitMQModule],
+    };
+
+    return module;
+  }
+}

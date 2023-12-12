@@ -70,7 +70,7 @@ export class NestModule {
           },
         }),
         ColdCacheModule,
-        ColdRabbitModule.forRoot(ColdRabbitModule, rabbitConfig),
+        ColdRabbitModule.forFeature(),
       ],
       controllers: [HealthController],
       providers: [

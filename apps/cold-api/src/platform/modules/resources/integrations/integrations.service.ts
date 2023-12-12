@@ -6,7 +6,7 @@ import { integration_service_type } from '@prisma/client';
 @Span()
 @Injectable()
 export class IntegrationsService extends BaseWorker {
-  constructor(private prisma: PrismaService, private readonly cache: CacheService) {
+  constructor(private prisma: PrismaService, private readonly cache: CacheService, private rabbit: ColdRabbitService) {
     super('PolicyContentService');
   }
 
@@ -87,8 +87,7 @@ export class IntegrationsService extends BaseWorker {
         }
       }
 
-      const rabbit: ColdRabbitService = new ColdRabbitService();
-      const response = await rabbit.request(data.routingKey, data);
+      const response = await this.rabbit.request(data.routingKey, data);
 
       return response;
     } catch (e: any) {

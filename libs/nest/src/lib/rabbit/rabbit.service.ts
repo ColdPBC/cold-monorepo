@@ -1,4 +1,4 @@
-import { AmqpConnection, RabbitMQConfig, RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
+import { AmqpConnection, RabbitMQConfig } from '@golevelup/nestjs-rabbitmq';
 import { Global, Injectable, OnModuleInit } from '@nestjs/common';
 import { BaseWorker } from '../worker';
 
@@ -13,18 +13,14 @@ export enum WorkerTypes {
 @Injectable()
 export class ColdRabbitService extends BaseWorker implements OnModuleInit {
   public registered = false;
-  client: AmqpConnection | null = null;
   definition: any;
 
-  constructor() {
+  constructor(private readonly client: AmqpConnection) {
     super(ColdRabbitService.name);
-    RabbitMQModule.AmqpConnectionFactory(ColdRabbitService.getRabbitConfig()).then(client => {
-      this.client = client;
-    });
   }
 
   async onModuleInit(): Promise<void> {
-    //await this.initializeExitHandlers();
+    await this.initializeExitHandlers();
   }
 
   /**
@@ -37,10 +33,7 @@ export class ColdRabbitService extends BaseWorker implements OnModuleInit {
   public async register_service(pkg: { name: string; label: string; service_type: WorkerTypes; definition: any }): Promise<void> {
     try {
       this.definition = pkg.definition;
-      if (!this.client) {
-        this.logger.error('rabbit client not initialized');
-        return;
-      }
+
       const response = await this.client.request({
         exchange: 'amq.direct',
         routingKey: `cold.integrations.registration`,
@@ -152,8 +145,8 @@ export class ColdRabbitService extends BaseWorker implements OnModuleInit {
     process.on('SIGINT', this.exitHandler.bind(this, { exit: true }));
 
     // catches "kill pid" (for example: nodemon restart)
-    process.on('SIGUSR1', this.exitHandler.bind(this, { cleanup: true, exit: false }));
-    process.on('SIGUSR2', this.exitHandler.bind(this, { cleanup: true, exit: false }));
+    process.on('SIGUSR1', this.exitHandler.bind(this, { exit: true }));
+    process.on('SIGUSR2', this.exitHandler.bind(this, { exit: true }));
     //catches uncaught exceptions
     process.on('uncaughtException', this.exitHandler.bind(this, { cleanup: false, exit: false }));
   }
