@@ -106,7 +106,7 @@ export class Auth0TokenService extends BaseWorker {
     this.options.headers.Authorization = `Bearer ${get(tokenResponse, 'data.access_token', get(tokenResponse, 'access_token'))}`;
     //auth0-management-token
     this.expiresAt = new Date().setSeconds(get(tokenResponse, 'data.expires_in', get(tokenResponse, 'expires_in')));
-    set(tokenResponse.data, 'expiresAt', this.expiresAt);
+    set(tokenResponse, 'data.expiresAt', this.expiresAt);
 
     return this.options;
   }
