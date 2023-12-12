@@ -1,3 +1,17 @@
+# [1.74.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.73.12...v1.74.0) (2023-12-12)
+
+
+### Bug Fixes
+
+* fix datadog service build ([219aac3](https://github.com/ColdPBC/cold-monorepo/commit/219aac31986632eea8853d6235c41cc6320c0cc0))
+* fix github actions workflow ([98dbea5](https://github.com/ColdPBC/cold-monorepo/commit/98dbea5f3c748749f47a83f43b23946ac3ddd074))
+
+
+### Features
+
+* Added addtional context to surveys ([5dc9b56](https://github.com/ColdPBC/cold-monorepo/commit/5dc9b56b68395381028cf43d90d69fa746220dc7))
+* update to survey input styling and improved logic ([20fa43f](https://github.com/ColdPBC/cold-monorepo/commit/20fa43ffb6e9a8fb7721bd1c5cbc4e13008c5277))
+
 ## [1.73.12](https://github.com/ColdPBC/cold-monorepo/compare/v1.73.11...v1.73.12) (2023-12-11)
 
 
