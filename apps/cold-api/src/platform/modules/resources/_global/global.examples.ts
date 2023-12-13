@@ -1,3 +1,9 @@
+import { ZodSurveyTypesSchema } from '@coldpbc/nest';
+import fakerator from 'fakerator';
+import { v4 } from 'uuid';
+
+const fakeDataGenerator = fakerator();
+
 export const testOrgIdExample = '{{test_organization_id}}';
 export const authenticatedUserExample = {
   company_id: null,
@@ -26,3 +32,24 @@ export const noBodyReqExample = { headers: {}, query: {}, user: authenticatedUse
 export const noBodyOrQueryReqExample = { headers: {}, user: authenticatedUserExample };
 export const noHeadersOrQueryOrBodyReqExample = { user: authenticatedUserExample };
 export const testOrgNameExample = 'Test Organization';
+
+export const generateSurveyTypesMock = () => {
+  const survey_types = ZodSurveyTypesSchema._def.values;
+  return survey_types[0];
+};
+export const generateSurveyMock = () => {
+  return {
+    id: v4(),
+    name: fakeDataGenerator.names.name(),
+    type: generateSurveyTypesMock(),
+    definition: {
+      // you may want to replace these with actual data structure
+      key1: fakeDataGenerator.lorem.word(),
+      key2: fakeDataGenerator.random.number(100),
+      key3: fakeDataGenerator.internet.email(),
+    },
+    description: fakeDataGenerator.random.boolean() ? fakeDataGenerator.lorem.paragraph() : null,
+    created_at: fakeDataGenerator.date.recent(50),
+    updated_at: fakeDataGenerator.random.boolean() ? fakeDataGenerator.date.recent(30) : null,
+  };
+};

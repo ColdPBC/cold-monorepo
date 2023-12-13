@@ -1,0 +1,1 @@
+export const COLD_RABBIT_CONFIG = 'COLD_RABBIT_CONFIG';

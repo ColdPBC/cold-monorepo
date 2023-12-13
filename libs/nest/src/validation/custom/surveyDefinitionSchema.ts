@@ -16,6 +16,7 @@ export const FollowUpSchema = extendApi(
 );
 
 export type ZodFollowUp = z.infer<typeof FollowUpSchema>;
+
 export class ZodFollowUpDto extends createZodDto(FollowUpSchema) {}
 
 export const SurveySectionSchema = extendApi(
@@ -29,6 +30,7 @@ export const SurveySectionSchema = extendApi(
 );
 
 export type ZodSurveySection = z.infer<typeof SurveySectionSchema>;
+
 export class ZodSurveySectionDto extends createZodDto(SurveySectionSchema) {}
 
 export const SurveyDefinitionSchema = extendApi(
@@ -43,6 +45,7 @@ export const SurveyDefinitionSchema = extendApi(
 );
 
 export type ZodSurveyDefinition = z.infer<typeof SurveyDefinitionSchema>;
+
 export class ZodSurveyDefinitionDto extends createZodDto(SurveyDefinitionSchema) {}
 
 export const SurveyResponseSchema = extendApi(
@@ -59,5 +62,7 @@ export const SurveyResponseSchema = extendApi(
     .strip(),
 );
 
+export const ZodSurveyTypesSchema = Survey_typesSchema;
 export type ZodSurveyResponse = z.infer<typeof SurveyResponseSchema>;
+
 export class ZodSurveyResponseDto extends createZodDto(SurveyResponseSchema) {}

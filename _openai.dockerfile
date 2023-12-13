@@ -70,7 +70,7 @@ COPY --from=build --chown=node:node /app/dist/apps/cold-openai /home/node/app/co
 COPY --from=build --chown=node:node /app/node_modules /home/node/app/node_modules
 
 # Expose the port that the application listens on.
-EXPOSE 7002
+EXPOSE 7003
 
 CMD ["node", "/home/node/app/cold-openai/main.js"]
 # Run the application.
