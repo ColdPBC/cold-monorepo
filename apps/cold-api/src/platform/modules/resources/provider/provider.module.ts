@@ -4,7 +4,7 @@ import { ProviderController } from './provider.controller';
 import { ProviderService } from './provider.service';
 
 @Module({
-  imports: [PrismaModule, ColdCacheModule, ColdRabbitModule.forFeature('provider')],
+  imports: [PrismaModule, ColdCacheModule, ColdRabbitModule.forFeature()],
   controllers: [ProviderController],
   providers: [ProviderService, ColdRabbitService],
 })

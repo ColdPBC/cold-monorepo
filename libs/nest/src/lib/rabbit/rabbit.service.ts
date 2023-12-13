@@ -28,7 +28,7 @@ export class ColdRabbitService extends BaseWorker implements OnModuleInit {
   }
 
   public async register_service(definition: any): Promise<void> {
-    this.client = await RabbitMQModule.AmqpConnectionFactory(ColdRabbitService.getRabbitConfig('RabbitService'));
+    this.client = await RabbitMQModule.AmqpConnectionFactory(ColdRabbitService.getRabbitConfig());
     let routingKey: string;
 
     switch (definition.type) {
@@ -135,7 +135,7 @@ export class ColdRabbitService extends BaseWorker implements OnModuleInit {
     process.on('uncaughtException', this.exitHandler.bind(this, { cleanup: true, exit: true }));
   }
 
-  static getRabbitConfig(type: string): RabbitMQConfig {
+  static getRabbitConfig(): RabbitMQConfig {
     return {
       uri: process.env['RABBIT_MQ_URL'] || 'amqp://localhost:5672',
       connectionManagerOptions: {
@@ -143,7 +143,7 @@ export class ColdRabbitService extends BaseWorker implements OnModuleInit {
         reconnectTimeInSeconds: 3,
         connectionOptions: {
           clientProperties: {
-            connection_name: `${process.env['DD_SERVICE']}:${type}`,
+            connection_name: `${process.env['DD_SERVICE']}`,
           },
         },
       },
