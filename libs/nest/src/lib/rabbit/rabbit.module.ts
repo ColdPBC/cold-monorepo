@@ -1,19 +1,15 @@
-import { AmqpConnection, RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
+import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import { DynamicModule, Module } from '@nestjs/common';
 import { ColdRabbitService } from './rabbit.service';
 
-@Module({
-  imports: [RabbitMQModule.forRoot(RabbitMQModule, ColdRabbitService.getRabbitConfig()), ColdRabbitModule],
-  providers: [ColdRabbitService],
-  exports: [ColdRabbitService, AmqpConnection],
-})
+@Module({})
 export class ColdRabbitModule {
-  static async forFeature(): Promise<DynamicModule> {
+  static forFeature(): DynamicModule {
     const module: DynamicModule = {
       module: ColdRabbitModule,
       imports: [RabbitMQModule.forRoot(RabbitMQModule, ColdRabbitService.getRabbitConfig()), ColdRabbitModule],
       providers: [ColdRabbitService],
-      exports: [ColdRabbitService, AmqpConnection],
+      exports: [ColdRabbitService, RabbitMQModule],
     };
 
     return module;
