@@ -9,7 +9,6 @@ on:
       - 'Cold-**'
   pull_request:
     branches:
-      - staging
       - main
 permissions:
   contents: write # to be able to publish a GitHub release
@@ -107,14 +106,11 @@ jobs:
     needs:
       - version
     steps:
-      - name: 🛫 Trigger Production Deploy
+      - name: 🛫 Trigger Production & Staging Deploy
         if: startsWith(env.BRANCH_NAME,'main')
         run: |
           curl -n -X POST https://app.flightcontrol.dev/api/deploy-hook/cold-production/gAEvhWNzcPCY69Z35mGvqXY0S9_vnQ0eqJrtCpIr8aUI9sW-?force=false
           echo "🛩 Flightcontrol Deploying ( https://app.flightcontrol.dev/org/cloejv4kz05s0ps21f3q2qjxe/environments/clpgmjfpl049fr90yqwdsuqd8 )"
-
-      - name: 🛫 Trigger Staging Deploy
-        if: steps.PR.outputs.pr_found != 'true' && startsWith(env.BRANCH_NAME,'staging')
-        run: |
           curl -n -X POST https://app.flightcontrol.dev/api/deploy-hook/cold-staging/58vWGjvmj9PWGxzImyRkVCTujxuJT-Q8piPwciMogtAy4-ci?force=false
           echo "🛩 Flightcontrol Deploying ( https://app.flightcontrol.dev/org/cloejv4kz05s0ps21f3q2qjxe/environments/clpeertbx01sgpx0yy5cu4imq )"
+
