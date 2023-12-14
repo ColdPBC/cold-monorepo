@@ -149,8 +149,9 @@ export class RedactorService {
   }
 
   // Recursively search through objects and arrays for properties and redacts their value
-  redact(obj: any): any {
+  redact(data: any): any {
     let redactMe: any;
+    let obj = Object.assign({}, data);
 
     try {
       if (!obj) obj = {};

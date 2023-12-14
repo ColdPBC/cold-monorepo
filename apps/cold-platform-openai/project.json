@@ -1,7 +1,7 @@
 {
-  "name": "cold-openai",
+  "name": "cold-platform-openai",
   "$schema": "/node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/cold-openai/src",
+  "sourceRoot": "apps/cold-platform-openai/src",
   "projectType": "application",
   "targets": {
     "build": {
@@ -11,12 +11,12 @@
       "options": {
         "target": "node",
         "compiler": "tsc",
-        "outputPath": "dist/apps/cold-openai",
-        "main": "apps/cold-openai/src/main.ts",
-        "tsConfig": "apps/cold-openai/tsconfig.app.json",
-        "assets": ["apps/cold-openai/src/assets"],
+        "outputPath": "dist/apps/cold-platform-openai",
+        "main": "apps/cold-platform-openai/src/main.ts",
+        "tsConfig": "apps/cold-platform-openai/tsconfig.app.json",
+        "assets": ["apps/cold-platform-openai/src/assets"],
         "isolatedConfig": true,
-        "webpackConfig": "apps/cold-openai/webpack.config.js"
+        "webpackConfig": "apps/cold-platform-openai/webpack.config.js"
       },
       "configurations": {
         "development": {},
@@ -27,14 +27,14 @@
       "executor": "@nx/js:node",
       "defaultConfiguration": "development",
       "options": {
-        "buildTarget": "cold-openai:build"
+        "buildTarget": "cold-platform-openai:build"
       },
       "configurations": {
         "development": {
-          "buildTarget": "cold-openai:build:development"
+          "buildTarget": "cold-platform-openai:build:development"
         },
         "production": {
-          "buildTarget": "cold-openai:build:production"
+          "buildTarget": "cold-platform-openai:build:production"
         }
       }
     },
@@ -42,14 +42,14 @@
       "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["apps/cold-openai/**/*.ts"]
+        "lintFilePatterns": ["apps/cold-platform-openai/**/*.ts"]
       }
     },
     "test": {
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "apps/cold-openai/jest.config.ts"
+        "jestConfig": "apps/cold-platform-openai/jest.config.ts"
       }
     }
   },

@@ -208,7 +208,7 @@
       "region": "us-east-1",
       "source": {
         "pr": false,
-        "branch": "staging",
+        "branch": "main",
         "trigger": "manual"
       },
       "services": [

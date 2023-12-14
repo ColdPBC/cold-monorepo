@@ -1,11 +1,10 @@
 import { Test } from '@nestjs/testing';
 import { MemberService } from './member.service';
 import { HttpService } from '@nestjs/axios';
-import { Auth0UtilityService } from '../auth0.utility.service';
-import { CacheService, AuthorizationModule, DarklyService } from '@coldpbc/nest';
+import { Auth0TokenService, CacheService, DarklyService } from '@coldpbc/nest';
 import { mockDeep } from 'jest-mock-extended';
 import { JwtService } from '@nestjs/jwt';
-import { createMock, DeepMocked, PartialFuncReturn } from '@golevelup/ts-jest';
+import { createMock, DeepMocked } from '@golevelup/ts-jest';
 
 describe('Auth0MemberService', () => {
   let memberService: MemberService;
@@ -28,7 +27,7 @@ describe('Auth0MemberService', () => {
     const module = await Test.createTestingModule({
       providers: [
         MemberService,
-        Auth0UtilityService,
+        Auth0TokenService,
         CacheService,
         DarklyService,
         {
@@ -37,8 +36,8 @@ describe('Auth0MemberService', () => {
         },
       ],
     })
-      .overrideProvider(Auth0UtilityService)
-      .useValue(mockDeep<Auth0UtilityService>())
+      .overrideProvider(Auth0TokenService)
+      .useValue(mockDeep<Auth0TokenService>())
       .overrideProvider(DarklyService)
       .useValue(mockDeep<DarklyService>())
       .overrideProvider(CacheService)

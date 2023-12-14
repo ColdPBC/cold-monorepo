@@ -2,13 +2,13 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { MemberService } from '../auth0/members/member.service';
 import { OrganizationController } from './organization.controller';
 import { OrganizationService } from './organization.service';
-import { CacheService, JwtStrategy, PrismaService, DarklyService } from '@coldpbc/nest';
-import { Auth0UtilityService } from '../auth0/auth0.utility.service';
+import { Auth0TokenService, CacheService, DarklyService, JwtStrategy, PrismaService } from '@coldpbc/nest';
 import { RoleService } from '../auth0/roles/role.service';
 import { JwtService } from '@nestjs/jwt';
 import { mockDeep } from 'jest-mock-extended';
 import { fullReqExample } from '../_global/global.examples';
 import { CreateOrganizationDto } from './dto/organization.dto';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 describe('Organization Controller', () => {
   let controller: OrganizationController;
@@ -28,14 +28,15 @@ describe('Organization Controller', () => {
   };
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
+      imports: [ConfigModule],
       controllers: [OrganizationController],
-      providers: [OrganizationService, Auth0UtilityService, CacheService, RoleService, MemberService],
-      exports: [OrganizationService, Auth0UtilityService],
+      providers: [ConfigService, OrganizationService, Auth0TokenService, CacheService, RoleService, MemberService],
+      exports: [OrganizationService, Auth0TokenService],
     })
       .overrideProvider(OrganizationService)
       .useValue(mockDeep<OrganizationService>())
-      .overrideProvider(Auth0UtilityService)
-      .useValue(mockDeep<Auth0UtilityService>())
+      .overrideProvider(Auth0TokenService)
+      .useValue(mockDeep<Auth0TokenService>())
       .overrideProvider(RoleService)
       .useValue(mockDeep<RoleService>())
       .overrideProvider(MemberService)
@@ -93,7 +94,15 @@ describe('Organization Controller', () => {
   });
 
   it('InviteUser called', async () => {
-    await controller.inviteUser(fullReqExample, { user_email: 'user', inviter_name: 'inviter', roleId: 'rol_1234' }, 'orgId');
+    await controller.inviteUser(
+      fullReqExample,
+      {
+        user_email: 'user',
+        inviter_name: 'inviter',
+        roleId: 'rol_1234',
+      },
+      'orgId',
+    );
     expect(service.inviteUser).toHaveBeenCalled();
   });
 

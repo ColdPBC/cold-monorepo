@@ -1,0 +1,57 @@
+{
+  "name": "cold-platform-climatiq",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/cold-platform-climatiq/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "target": "node",
+        "compiler": "tsc",
+        "outputPath": "dist/apps/cold-platform-climatiq",
+        "main": "apps/cold-platform-climatiq/src/main.ts",
+        "tsConfig": "apps/cold-platform-climatiq/tsconfig.app.json",
+        "assets": ["apps/cold-platform-climatiq/src/assets"],
+        "isolatedConfig": true,
+        "webpackConfig": "apps/cold-platform-climatiq/webpack.config.js"
+      },
+      "configurations": {
+        "development": {},
+        "production": {}
+      }
+    },
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "cold-platform-climatiq:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "cold-platform-climatiq:build:development"
+        },
+        "production": {
+          "buildTarget": "cold-platform-climatiq:build:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/cold-platform-climatiq/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/cold-platform-climatiq/jest.config.ts"
+      }
+    }
+  },
+  "tags": []
+}

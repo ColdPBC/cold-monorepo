@@ -1,12 +1,13 @@
 import { JwtService } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
-import { JwtStrategy, ColdCacheModule, CacheService, PrismaModule, PrismaService, DarklyService } from '@coldpbc/nest';
+import { CacheService, ColdCacheModule, DarklyService, JwtStrategy, PrismaModule, PrismaService } from '@coldpbc/nest';
 import { PolicyDefinitionsModule } from '../policies/policy-definitions.module';
 import { ComponentDefinitionsController } from './component-definitions.controller';
 import { ComponentDefinitionsService } from './component-definitions.service';
 import { mockDeep } from 'jest-mock-extended';
-import { authenticatedUserExample, fullReqExample, noBodyOrQueryReqExample } from '../_global/global.examples';
+import { fullReqExample, noBodyOrQueryReqExample } from '../_global/global.examples';
 import { CreateComponentDefinitionDto } from './dto/create-component-definition.dto';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 describe('ComponentDefinitionsController', () => {
   let controller: ComponentDefinitionsController;
@@ -22,9 +23,9 @@ describe('ComponentDefinitionsController', () => {
   };
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [PrismaModule, ColdCacheModule, PolicyDefinitionsModule],
+      imports: [ConfigModule, PrismaModule, ColdCacheModule, PolicyDefinitionsModule],
       controllers: [ComponentDefinitionsController],
-      providers: [ComponentDefinitionsService, JwtService, JwtStrategy, PrismaService, CacheService],
+      providers: [ConfigService, ComponentDefinitionsService, JwtService, JwtStrategy, PrismaService, CacheService],
     })
       .overrideProvider(ComponentDefinitionsService)
       .useValue(mockDeep<ComponentDefinitionsService>())

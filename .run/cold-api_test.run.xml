@@ -3,7 +3,9 @@
     <option name="nx-projects" value="cold-api" />
     <option name="nx-targets" value="test" />
     <option name="nx-target-configuration" value="" />
-    <envs />
+    <envs>
+      <env name="DD_SERVICE" value="cold-api" />
+    </envs>
     <option name="arguments" value="" />
     <method v="2" />
   </configuration>
