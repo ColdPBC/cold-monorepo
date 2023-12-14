@@ -353,8 +353,8 @@ export class SurveysService extends BaseWorker {
             this.setTags({ status: 'completed' });
 
             this.metrics.event(
-              `${existing?.name} survey for ${org.display_name} was completed`,
-              `${user.coldclimate_claims.email} completed ${existing?.name} survey for ${org.display_name}`,
+              `${existing?.name} survey for ${org?.display_name} was completed`,
+              `${user.coldclimate_claims.email} completed ${existing?.name} survey for ${org?.display_name}`,
               {
                 alert_type: 'success',
                 date_happened: new Date(),

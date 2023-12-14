@@ -1,15 +1,14 @@
 import { HttpService } from '@nestjs/axios';
 import { ConflictException, HttpException, Injectable, NotFoundException, UnauthorizedException, UnprocessableEntityException } from '@nestjs/common';
 import { Span } from 'nestjs-ddtrace';
-import { Auth0Organization, AuthenticatedUser, BaseWorker, CacheService, DarklyService, PrismaService, Tags } from '@coldpbc/nest';
+// eslint-disable-next-line @nx/enforce-module-boundaries
+import { Auth0Organization, Auth0TokenService, AuthenticatedUser, BaseWorker, CacheService, DarklyService, PrismaService, Tags } from '@coldpbc/nest';
 import { filter, find, first, kebabCase, map, merge, omit, pick, set } from 'lodash';
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { MemberService } from '../auth0/members/member.service';
 import { RoleService } from '../auth0/roles/role.service';
 import { CreateOrganizationDto } from './dto/organization.dto';
 import { organizations } from '@prisma/client';
-// eslint-disable-next-line @nx/enforce-module-boundaries
-import { Auth0TokenService } from '../../../../../../../libs/nest/src/lib/authorization/auth0-token.service';
 
 @Span()
 @Injectable()
