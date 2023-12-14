@@ -6,6 +6,7 @@ import { IS_PUBLIC_KEY } from '../../decorators';
 import { BaseWorker, WorkerLogger } from '../../worker';
 import { set } from 'lodash';
 import { ConfigService } from '@nestjs/config';
+import { isRabbitContext } from '@golevelup/nestjs-rabbitmq';
 
 @Injectable()
 @Span()
@@ -25,6 +26,10 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
   }
 
   override canActivate(context: ExecutionContext) {
+    // Do nothing if this is a RabbitMQ event
+    if (isRabbitContext(context)) {
+      return true;
+    }
     const { user, url, method, query, params } = context.switchToHttp().getRequest();
     const span = this.tracer.getActiveSpan();
 

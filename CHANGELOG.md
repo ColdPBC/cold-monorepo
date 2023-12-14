@@ -1,30 +1,50 @@
-# [1.74.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.73.12...v1.74.0) (2023-12-12)
+## [1.75.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.75.0...v1.75.1) (2023-12-14)
 
 
 ### Bug Fixes
 
-* fix datadog service build ([219aac3](https://github.com/ColdPBC/cold-monorepo/commit/219aac31986632eea8853d6235c41cc6320c0cc0))
-* fix github actions workflow ([98dbea5](https://github.com/ColdPBC/cold-monorepo/commit/98dbea5f3c748749f47a83f43b23946ac3ddd074))
+* prevent redactor from mutating object ([4cbcd8d](https://github.com/ColdPBC/cold-monorepo/commit/4cbcd8d3491ea391d8b722c63529264a61226a72))
+
+# [1.75.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.74.0...v1.75.0) (2023-12-13)
+
+
+### Bug Fixes
+
+* Configure Traefik proxy and extend docker-compose ([80981c7](https://github.com/ColdPBC/cold-monorepo/commit/80981c74a0b490cea0e8189a71796c87d0d5306b))
+* Configure Traefik proxy and extend docker-compose ([24bef3b](https://github.com/ColdPBC/cold-monorepo/commit/24bef3b8ea22f5c0635822f0d5b5eeae42315664))
+* custom action in Datadog workflows ([5fcd777](https://github.com/ColdPBC/cold-monorepo/commit/5fcd77798b416cb52b2689785f5cdb21fbd982a1))
+* error handling in organization.service ([dfc4853](https://github.com/ColdPBC/cold-monorepo/commit/dfc4853a2ace3d09eb9a1076ea38f81e3b832cb2))
+* fix datadog service build ([989dc0e](https://github.com/ColdPBC/cold-monorepo/commit/989dc0e1f4c0ae6cbc760914af1c109c0b0ddb8d))
+* fix github actions workflow ([0d21148](https://github.com/ColdPBC/cold-monorepo/commit/0d211489343c83789fa4d8e417638f77717ec137))
+* Implement RabbitMQ context check in interceptors and guards ([6e6e58d](https://github.com/ColdPBC/cold-monorepo/commit/6e6e58db89fe041aed277629561e9693884453bf))
+* Integrate AMQP Connection into ColdRabbitService and AppModule ([6c12c2a](https://github.com/ColdPBC/cold-monorepo/commit/6c12c2ac4ed79fb8777abe61fa0b5a42d434b106))
+* issue caused by merge conflicts. ([7da35ae](https://github.com/ColdPBC/cold-monorepo/commit/7da35ae32156ad523d237b0a100ac0c44b0bce49))
+* Refactor RabbitMQ integration in ColdRabbitModule ([44ecc12](https://github.com/ColdPBC/cold-monorepo/commit/44ecc1276c20929e6504cfda2dfaef6bb72e7d71))
+* Update auth0 module dependencies and initialization ([f594bee](https://github.com/ColdPBC/cold-monorepo/commit/f594bee51760ff36a9cf8b565a744715083f8afe))
+* Update Datadog workflows and add new OpenAI service workflow ([9640ca6](https://github.com/ColdPBC/cold-monorepo/commit/9640ca65b0a48afc3ee228df33fe056febab9b3b))
+* Update main.ts to modify AppModule import path ([a374888](https://github.com/ColdPBC/cold-monorepo/commit/a374888db28de5ef77da2a181e8571ed80e032ba))
 
 
 ### Features
 
-* Added addtional context to surveys ([5dc9b56](https://github.com/ColdPBC/cold-monorepo/commit/5dc9b56b68395381028cf43d90d69fa746220dc7))
-* update to survey input styling and improved logic ([20fa43f](https://github.com/ColdPBC/cold-monorepo/commit/20fa43ffb6e9a8fb7721bd1c5cbc4e13008c5277))
+* Add integration service types to "service_definitions" ([291329c](https://github.com/ColdPBC/cold-monorepo/commit/291329cb012e81fadf66555c4bc0a1c6053e77c6))
+* Add RabbitMQ module and update AWS SDK dependency versions ([dafcb7b](https://github.com/ColdPBC/cold-monorepo/commit/dafcb7b7ced364c9f7c86daf16df553b83e93b31))
+* Add RabbitMQ module and update AWS SDK dependency versions ([e9f711d](https://github.com/ColdPBC/cold-monorepo/commit/e9f711dbfcd542c4b3fd0e4a01777b8e2cf05c8e))
+* Add service_definitions model to Prisma schema ([745176f](https://github.com/ColdPBC/cold-monorepo/commit/745176f53c07e694cbacf78a4a5708969be9cd1e))
+* Add unique index on `name` in `service_definitions` ([ccd0302](https://github.com/ColdPBC/cold-monorepo/commit/ccd03023b3057132e41047af0d3b216747d650e8))
+* Added addtional context to surveys ([9c2e425](https://github.com/ColdPBC/cold-monorepo/commit/9c2e4252ef8dc74fbc05cfe74e6e78c9d35f03ce))
+* Create "service_definitions" model in database ([ddd6205](https://github.com/ColdPBC/cold-monorepo/commit/ddd620523b04d5f3d99c7ca53406e53bb2f798b6))
+* Initialize Climatiq and RabbitMQ services ([6c90b26](https://github.com/ColdPBC/cold-monorepo/commit/6c90b268afbddab0760a2973b8f3a268569d4162))
+* Update AppModule and add AppService in Climatiq app ([7e3a45b](https://github.com/ColdPBC/cold-monorepo/commit/7e3a45b661623d9afd15b81000ad38bc011e47cd))
+* update to survey input styling and improved logic ([dca46f5](https://github.com/ColdPBC/cold-monorepo/commit/dca46f5294e43b36d88ad510069a7366c2aea9b6))
 
-## [1.73.12](https://github.com/ColdPBC/cold-monorepo/compare/v1.73.11...v1.73.12) (2023-12-11)
+# [1.74.0-cold-000-climatiq.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.73.10...v1.74.0-cold-000-climatiq.1) (2023-12-10)
 
 
-### Bug Fixes
+### Features
 
-* Update auth0 module dependencies and initialization ([0b91e9e](https://github.com/ColdPBC/cold-monorepo/commit/0b91e9e398d19ecbe1329a378b48e61eea5e73f6))
-
-## [1.73.11](https://github.com/ColdPBC/cold-monorepo/compare/v1.73.10...v1.73.11) (2023-12-11)
-
-
-### Bug Fixes
-
-* Update Datadog workflows and add new OpenAI service workflow ([575e950](https://github.com/ColdPBC/cold-monorepo/commit/575e9501dfb3ea678a23b0b4ded91d3e63727a4b))
+* Add RabbitMQ module and update AWS SDK dependency versions ([e9f711d](https://github.com/ColdPBC/cold-monorepo/commit/e9f711dbfcd542c4b3fd0e4a01777b8e2cf05c8e))
+* Initialize Climatiq and RabbitMQ services ([6c90b26](https://github.com/ColdPBC/cold-monorepo/commit/6c90b268afbddab0760a2973b8f3a268569d4162))
 
 ## [1.73.10](https://github.com/ColdPBC/cold-monorepo/compare/v1.73.9...v1.73.10) (2023-12-08)
 

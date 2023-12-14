@@ -286,6 +286,22 @@ model organizations {
   survey_data         survey_data[]
 }
 
+model service_definitions {
+  id         String                   @id @default(uuid())
+  name       String                   @unique
+  label      String
+  type       integration_service_type
+  definition Json
+  created_at DateTime                 @default(now())
+  updated_at DateTime                 @updatedAt
+}
+
+enum integration_service_type {
+  provider
+  platform
+  core
+}
+
 enum survey_types {
   JOURNEY
   FOOTPRINT

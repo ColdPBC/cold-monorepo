@@ -1,18 +1,62 @@
 version: '3.8'
+networks:
+  cold:
+    external: true
 services:
+  proxy:
+    # The official v2 Traefik docker image
+    image: traefik:v2.10
+    networks:
+      - cold
+    # Enables the web UI and tells Traefik to listen to docker
+    command:
+      - "-api.insecure=true"
+      - "--providers.docker=true"
+    labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.proxy.rule=Host(`www.coldclimate.wtf`)"
+        - "traefik.http.routers.proxy.entrypoints=web"
+        - "traefik.entryPoints.web.address=:80"
+        - "traefik.entryPoints.websecure.address=:443"
+        - "traefik.entryPoints.tcp.address=:5432"
+    ports:
+      - "80:80"
+      - "443:443"
+      - "4200:4200"
+      - "4400:4400"
+      - "8080:8080"
+    volumes:
+      # So that Traefik can listen to the Docker events
+      - /var/run/docker.sock:/var/run/docker.sock
   api:
     build:
       context: .
       dockerfile: _api.dockerfile
       args:
         NODE_ENV: development
-        DD_SERVICE: nest-api
+        DD_SERVICE: cold-api
         DD_VERSION: 99.99.99
         DD_POSTGRES_PASSWORD: emanate-rail-pliable-brindled-plea-PADDOCK
         DD_API_KEY: ${DD_API_KEY}
         FC_GIT_COMMIT_SHA: cdc3b19
-    container_name: nest-api
+    container_name: cold-api
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.api.rule=Host(`api.coldclimate.wtf`)"
+      - "traefik.http.routers.api.entrypoints=web"
+      - "traefik.entryPoints.web.address=:80"
     restart: always
+    networks:
+      - cold
+    external_links:
+      - postgres
+      - rabbit
+      - cache
+    depends_on:
+      - proxy
+      - cache
+      - rabbit
+      - postgres
     ports:
       - '7001:7001'
     environment:
@@ -23,6 +67,7 @@ services:
       API_SERVER_URL: http://localhost:7001
       API_ADMIN_PASSWORD: ${API_ADMIN_PASSWORD}
       DD_API_KEY: ${DD_API_KEY}
+      RABBIT_MQ_URL: amqp://guest:guest@rabbit:5672
       AUTH0_CLIENT_SECRET: ${AUTH0_CLIENT_SECRET}
       AUTH0_AUDIENCE: https://api.coldclimate.wtf/
       AUTH0_CLIENT_ID: AocyNEqBocKfmU9AHUs0koGeZ73lbrkF
@@ -36,29 +81,88 @@ services:
     volumes:
       - api:/usr/src/app
       - /usr/src/app/node_modules
+  climatiq:
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.climatiq.rule=Host(`climatiq.coldclimate.wtf`)"
+      - "traefik.http.routers.climatiq.entrypoints=web"
+    build:
+      context: .
+      dockerfile: _climatiq.dockerfile
+      args:
+        NODE_ENV: development
+        DD_SERVICE: cold-platform-climatiq
+        DD_VERSION: 0.0.1
+        DD_API_KEY: ${DD_API_KEY}
+        FC_GIT_COMMIT_SHA: cdc3b19
+    container_name: cold-platform-climatiq
+    restart: always
+    networks:
+      - cold
+    external_links:
+      - api
+      - rabbit
+      - cache
     depends_on:
-      - cache
-      - postgres
-    links:
-      - cache
-      - postgres
+      - api
+    ports:
+      - '7002:7002'
+    environment:
+      PORT: 7002
+      DATABASE_URL: postgres://postgres:postgres@postgres:5432/colddb
+      API_ADMIN_EMAIL: api_admin@coldclimate.com
+      API_ADMIN_PASSWORD: ${API_ADMIN_PASSWORD}
+      DD_API_KEY: ${DD_API_KEY}
+      AUTH0_CLIENT_SECRET: ${AUTH0_CLIENT_SECRET}
+      API_SERVER_DESCRIPTION: The staging server is our development server
+      API_SERVER_URL: http://api.coldclimate.wtf
+      AUTH0_AUDIENCE: https://api.coldclimate.wtf/
+      AUTH0_CLIENT_ID: AocyNEqBocKfmU9AHUs0koGeZ73lbrkF
+      AUTH0_DOMAIN: dev-6qt527e13qyo4ls6.us.auth0.com
+      AUTH0_ORG_ID: org_VWv3Al9pLEI4CaOH
+      AUTH0_TOKEN_URL: https://dev-6qt527e13qyo4ls6.us.auth0.com/oauth/token
+      AUTH0_UI_CLIENT_ID: i8rCPXsLq9b2YKOOWUTfvgUj0iYD7dE3
+      LD_SDK_KEY: sdk-1d8c0508-63b9-4396-aceb-a3cd13ec16b2
+      NODE_ENV: development
+      REDISCLOUD_URL: redis://cache:6379
+      RABBIT_MQ_URL: amqp://guest:guest@rabbit:5672
+    volumes:
+      - api:/usr/src/app
+      - /usr/src/app/node_modules
   openai:
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.api.rule=Host(`openai.coldclimate.wtf`)"
+      - "traefik.http.routers.api.entrypoints=web"
     build:
       context: .
       dockerfile: _openai.dockerfile
       args:
         NODE_ENV: development
-        DD_SERVICE: cold-openai
+        DD_SERVICE: cold-platform-openai
         DD_VERSION: 0.0.1
         DD_API_KEY: ${DD_API_KEY}
         FC_GIT_COMMIT_SHA: cdc3b19
-    container_name: cold-openai
+    container_name: cold-platform-openai
     restart: always
+    networks:
+      - cold
+    external_links:
+      - postgres
+      - rabbit
+      - cache
+
+    depends_on:
+      - proxy
+      - api
+      - cache
+      - rabbit
+      - postgres
     ports:
-      - '7002:7002'
+      - '7003:7003'
     environment:
       DATABASE_URL: postgres://postgres:postgres@postgres:5432/colddb
-      PORT: 7002
+      PORT: 7003
       API_ADMIN_EMAIL: api_admin@coldclimate.com
       API_ADMIN_PASSWORD: ${API_ADMIN_PASSWORD}
       DD_API_KEY: ${DD_API_KEY}
@@ -74,27 +178,36 @@ services:
       LD_SDK_KEY: sdk-1d8c0508-63b9-4396-aceb-a3cd13ec16b2
       NODE_ENV: development
       REDISCLOUD_URL: redis://cache:6379
+      RABBIT_MQ_URL: amqp://guest:guest@rabbit:5672
     volumes:
       - api:/usr/src/app
       - /usr/src/app/node_modules
-    depends_on:
-      - cache
-      - postgres
-    links:
-      - cache
-      - postgres
+
+
   cache:
+    labels:
+      - "traefik.http.routers.cache.rule=Host(`cache.coldclimate.wtf`)"
+      - "traefik.tcp.services.cache.loadbalancer.server.port=6379"
+      - "traefik.udp.services.cache.loadbalancer.server.port=6379"
     image: redis:6.2-alpine
-    container_name: nest-api-cache
+    container_name: cold-cache
     restart: always
+    depends_on:
+      - proxy
+    networks:
+      - cold
     ports:
       - '6379:6379'
     command: redis-server --save 20 1 --loglevel warning
     volumes:
       - cache:/data
   postgres:
-    container_name: nest-api-postgres
+    container_name: cold-postgres
     image: postgres:14-alpine
+    depends_on:
+      - proxy
+    networks:
+      - cold
     ports:
       - '5432:5432'
     volumes:
@@ -103,6 +216,20 @@ services:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_DB=colddb
+  rabbit:
+    labels:
+      - "traefik.http.routers.rabbit.rule=Host(`rabbit.coldclimate.wtf`)"
+      - "traefik.tcp.services.rabbit.loadbalancer.server.port=5672"
+      - "traefik.http.services.rabbit.loadbalancer.server.port=15672"
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - cold
+    depends_on:
+      - proxy
+    image: rabbitmq:3-management-alpine
+    container_name: cold-rabbit
 
 volumes:
   openai:

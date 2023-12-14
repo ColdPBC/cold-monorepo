@@ -1,15 +1,14 @@
 import { HttpService } from '@nestjs/axios';
 import { ConflictException, HttpException, Injectable, NotFoundException, UnauthorizedException, UnprocessableEntityException } from '@nestjs/common';
 import { Span } from 'nestjs-ddtrace';
-import { Auth0Organization, AuthenticatedUser, BaseWorker, CacheService, DarklyService, PrismaService, Tags } from '@coldpbc/nest';
+// eslint-disable-next-line @nx/enforce-module-boundaries
+import { Auth0Organization, Auth0TokenService, AuthenticatedUser, BaseWorker, CacheService, DarklyService, PrismaService, Tags } from '@coldpbc/nest';
 import { filter, find, first, kebabCase, map, merge, omit, pick, set } from 'lodash';
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { MemberService } from '../auth0/members/member.service';
 import { RoleService } from '../auth0/roles/role.service';
 import { CreateOrganizationDto } from './dto/organization.dto';
 import { organizations } from '@prisma/client';
-// eslint-disable-next-line @nx/enforce-module-boundaries
-import { Auth0TokenService } from '../../../../../../../libs/nest/src/lib/authorization/auth0-token.service';
 
 @Span()
 @Injectable()
@@ -102,15 +101,20 @@ export class OrganizationService extends BaseWorker {
 
       return invitation.data;
     } catch (e) {
-      if (e.response.status !== 404) {
-        this.logger.error(e.response?.data ? e.response.data : e.response, data);
+      switch (e.response.status) {
+        case 404:
+          this.logger.error(e.response?.data ? e.response.data : e.response, data);
+          throw new NotFoundException(e);
+        case 400:
+          this.logger.error(e.response?.data ? e.response.data : e.response, data);
+          throw new UnprocessableEntityException(e);
+        case 409:
+          this.logger.error(e.response?.data ? e.response.data : e.response, data);
+          throw new ConflictException(e);
+        default:
+          this.logger.error(e.response?.data ? e.response.data : e.response, data);
+          throw new HttpException(e.response?.data ? e.response.data : e.response, e.response.status);
       }
-
-      // increment failed invitation metric
-      tags.status = 'failed';
-      if (!find(this.test_orgs, { id: orgId })) this.metrics.increment('cold.api.invitations.sent', tags);
-
-      return e.response?.data ? e.response.data : e.response;
     }
   }
 

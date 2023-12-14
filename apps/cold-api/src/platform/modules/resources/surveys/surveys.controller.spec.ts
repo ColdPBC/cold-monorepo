@@ -1,17 +1,13 @@
 import { JwtService } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
-import { JwtStrategy, SurveyDefinitionsEntity, CacheService, PrismaModule, PrismaService, DarklyService } from '@coldpbc/nest';
-import { ComponentDefinitionsController } from '../component-definitions/component-definitions.controller';
+import { Auth0TokenService, CacheService, DarklyService, JwtStrategy, PrismaService, ZodSurveyTypesSchema } from '@coldpbc/nest';
 import { SurveysController } from './surveys.controller';
 import { SurveysService } from './surveys.service';
-import { OrganizationService } from '../organizations/organization.service';
 import { mockDeep } from 'jest-mock-extended';
-import { Auth0UtilityService } from '../auth0/auth0.utility.service';
 import { RoleService } from '../auth0/roles/role.service';
 import { MemberService } from '../auth0/members/member.service';
 import { fullReqExample } from '../_global/global.examples';
-import Survey_typesSchema from '../../../../../../../libs/validation/src/generated/inputTypeSchemas/survey_typesSchema';
-import {undefined} from "zod";
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 describe('Surveys Controller', () => {
   let controller: SurveysController;
@@ -19,13 +15,14 @@ describe('Surveys Controller', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
+      imports: [ConfigModule],
       controllers: [SurveysController],
-      providers: [DarklyService, SurveysService, JwtService, JwtStrategy, PrismaService, CacheService],
+      providers: [ConfigService, DarklyService, SurveysService, JwtService, JwtStrategy, PrismaService, CacheService],
     })
       .overrideProvider(SurveysService)
       .useValue(mockDeep<SurveysService>())
-      .overrideProvider(Auth0UtilityService)
-      .useValue(mockDeep<Auth0UtilityService>())
+      .overrideProvider(Auth0TokenService)
+      .useValue(mockDeep<Auth0TokenService>())
       .overrideProvider(RoleService)
       .useValue(mockDeep<RoleService>())
       .overrideProvider(MemberService)
@@ -55,7 +52,7 @@ describe('Surveys Controller', () => {
   });
 
   it('FindAll called', async () => {
-    await controller.findAll(fullReqExample, Survey_typesSchema.enum.TEST, 'test');
+    await controller.findAll(fullReqExample, ZodSurveyTypesSchema.enum.TEST, 'test');
     expect(service.findAll).toHaveBeenCalled();
   });
 
@@ -79,10 +76,10 @@ describe('Surveys Controller', () => {
       updated_at: new Date(),
       created_at: new Date(),
       definition: {},
-      description: "",
-      id: "",
-      name: "",
-      type: "TEST"
+      description: '',
+      id: '',
+      name: '',
+      type: 'TEST',
     });
     expect(service.create).toHaveBeenCalled();
   });

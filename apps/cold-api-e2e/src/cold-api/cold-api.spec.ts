@@ -1,13 +1,14 @@
 import { action_template_mock } from './mocks/action_template_mocks';
-import { publishMock, notPublishMock } from './mocks/news_mock';
+import { notPublishMock, publishMock } from './mocks/news_mock';
 import Fakerator from 'fakerator';
-import {omit, set} from 'lodash';
+import { set } from 'lodash';
 import * as z from 'zod';
 import { component_mock } from './mocks/component_mocks';
 import { organizations } from '@prisma/client';
+import { ActionTemplateSchema } from '@coldpbc/nest';
+
 const axios = globalThis.auth0Axios;
 const fakeUser = Fakerator().entity.user();
-import { CreateActionTemplateItemSchema, ActionTemplateSchema } from '../../../../libs/nest/src/validation';
 
 describe('API Tests', () => {
   describe('Unauthenticated Tests', () => {
@@ -28,7 +29,7 @@ describe('API Tests', () => {
 
   describe('Authenticated Tests', () => {
     let action_template_id = '';
-    let owner = fakeUser;
+    const owner = fakeUser;
     owner.password = `ABC123-${fakeUser.password}`;
     owner.email = fakeUser.email.replace('hotmail.com', 'example.com').replace('yahoo.com', 'example.com').replace('gmail.com', 'example.com');
     let org: organizations;
@@ -98,12 +99,12 @@ describe('API Tests', () => {
         try {
           const res = await axios.post(`/action-templates`, action_template_mock);
           console.log('POST /action-templates', res.data);
-          expect(res.status).toBe(201)
+          expect(res.status).toBe(201);
 
           expect(() => itemSchema.parse(res.data)).not.toThrow();
           action_template_id = res.data.id;
         } catch (error) {
-          if(error?.response?.data) {
+          if (error?.response?.data) {
             console.error(error?.reponse?.data?.message, error.response.data);
           } else {
             console.error(error.message, error?.issues);
@@ -120,7 +121,7 @@ describe('API Tests', () => {
           expect(res.data.length).toBeGreaterThan(0);
           expect(() => z.array(itemSchema).parse(res.data)).not.toThrow();
         } catch (error) {
-          if(error?.response?.data) {
+          if (error?.response?.data) {
             console.error(error?.reponse?.data?.message, error.response.data);
           } else {
             console.error(error.message, error?.issues);
@@ -135,7 +136,7 @@ describe('API Tests', () => {
           expect(res.status).toBe(200);
           expect(() => itemSchema.parse(res.data)).not.toThrow();
         } catch (error) {
-          if(error?.response?.data) {
+          if (error?.response?.data) {
             console.error(error?.reponse?.data?.message, error.response.data);
           } else {
             console.error(error.message, error?.issues);
@@ -150,7 +151,6 @@ describe('API Tests', () => {
           const res = await axios.get(`/categories`);
           console.log('GET /cateogries', res.data);
           expect(res.status).toBe(200);
-
         } catch (error) {
           console.log(error.message, error.response.data);
           throw error;
@@ -163,7 +163,6 @@ describe('API Tests', () => {
           const res = await axios.post(`/components`, component_mock);
           console.log('POST /components', res.data);
           expect(res.status).toBe(201);
-
         } catch (error) {
           console.log(error.message, error.response.data);
           throw error;
@@ -178,19 +177,17 @@ describe('API Tests', () => {
           console.log('PATCH /components', res.data);
           expect(res.status).toBe(201);
           expect(res.data.description).toEqual('updated: incididunt dolore culpa do proident');
-
         } catch (error) {
           console.log(error.message, error.response.data);
           throw error;
         }
       });
 
-      it('GET /components/types/:type', async () => {
+      it('GET /components/enums/:type', async () => {
         try {
           const res = await axios.get(`/components/types/DATAGRID`);
-          console.log('GET /components/types/:type', res.data);
+          console.log('GET /components/enums/:type', res.data);
           expect(res.status).toBe(200);
-
         } catch (error) {
           console.log(error.message, error.response.data);
           throw error;
@@ -233,7 +230,6 @@ describe('API Tests', () => {
 
           console.log('***OWNER***', owner);
           expect(res.status).toBe(201);
-
         } catch (error) {
           console.log(error.message, error.response.data);
           throw error;
@@ -254,7 +250,6 @@ describe('API Tests', () => {
           //set(owner, 'id', res.data.id);
 
           expect(res.status).toBe(200);
-
         } catch (error) {
           console.log(error.message, error.response.data);
           throw error;
@@ -267,7 +262,6 @@ describe('API Tests', () => {
           console.log('GET /members/:email?bpc=true', res.data);
 
           expect(res.status).toBe(200);
-
         } catch (error) {
           console.log(error.message, error.response.data);
           throw error;
@@ -288,7 +282,6 @@ describe('API Tests', () => {
           org = res.data;
 
           expect(res.status).toBe(201);
-
         } catch (error) {
           console.log(error.message, error.response.data);
           throw error;
@@ -304,7 +297,6 @@ describe('API Tests', () => {
           org = res.data;
 
           expect(res.status).toBe(201);
-
         } catch (error) {
           console.log(error.message, error.response.data);
           throw error;
@@ -324,7 +316,6 @@ describe('API Tests', () => {
           invitation = res.data;
 
           expect(res.status).toBe(201);
-
         } catch (error) {
           console.log(error.message, error.response.data);
           throw error;
@@ -338,7 +329,6 @@ describe('API Tests', () => {
           console.log(`/organizations/${org.id}/members`, res.data);
 
           expect(res.status).toBe(200);
-
         } catch (error) {
           console.log(error.message, error.response.data);
           throw error;
@@ -352,7 +342,6 @@ describe('API Tests', () => {
           console.log(`/organizations/${org.id}`, res.data);
 
           expect(res.status).toBe(200);
-
         } catch (error) {
           console.log(error.message, error.response.data);
           throw error;
@@ -366,7 +355,6 @@ describe('API Tests', () => {
           console.log(`/organizations/${org.id}/members/${owner['user_id']}/roles`, res.data);
 
           expect(res.status).toBe(200);
-
         } catch (error) {
           console.log(error.message, error.response.data);
           throw error;

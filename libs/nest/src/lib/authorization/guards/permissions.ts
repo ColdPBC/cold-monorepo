@@ -5,6 +5,7 @@ import { Span } from 'nestjs-ddtrace';
 import { Observable } from 'rxjs';
 import { Reflector } from '@nestjs/core';
 import { BaseWorker, WorkerLogger } from '../../worker';
+import { isRabbitContext } from '@golevelup/nestjs-rabbitmq';
 
 @Injectable()
 @Span()
@@ -16,6 +17,11 @@ export class PermissionsGuard extends BaseWorker implements CanActivate {
   }
 
   canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
+    // Do nothing if this is a RabbitMQ event
+    if (isRabbitContext(context)) {
+      return true;
+    }
+
     const routePermissions = this.reflector.get<string[]>('permissions', context.getHandler());
 
     const roles = this.reflector.get<string[]>('roles', context.getHandler());

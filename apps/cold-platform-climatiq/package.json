@@ -1,0 +1,32 @@
+{
+  "name": "cold-climatiq",
+  "label": "Climatiq",
+  "service_type": "platform",
+  "definition": {
+    "logo_url": "./assets/climatiq.png",
+    "platform_url": "https://www.climatiq.io",
+    "enabled": true,
+    "rabbitMQ": {
+      "rpcOptions": {
+        "queue": "cold.platform.climatiq",
+        "routing_key": "cold.platform.climatiq.rpc",
+        "exchange": "direct"
+      },
+      "publishOptions": {
+        "queue": "cold.platform.climatiq",
+        "routing_key": "cold.platform.climatiq",
+        "exchange": "direct"
+      }
+    },
+    "options": {
+      "description": "Upgrade your solutions with automated carbon emission calculations. Get access to convenient, up-to-date emission factors. No need to maintain your own datasets.",
+      "helptext": "",
+      "flags": {
+        "show_api_tokens": false,
+        "show_account_id": false
+      },
+      "elements": []
+    },
+    "fields": []
+  }
+}
