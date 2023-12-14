@@ -8,7 +8,7 @@
       "source": {
         "pr": false,
         "branch": "main",
-        "trigger": "manual"
+        "trigger": "push"
       },
       "vpc": {
         "id": "vpc-0adff7558db4535e2",
@@ -211,8 +211,8 @@
       "region": "us-east-1",
       "source": {
         "pr": false,
-        "branch": "staging",
-        "trigger": "manual"
+        "branch": "main",
+        "trigger": "push"
       },
       "vpc": {
         "id": "vpc-060fc621728026ddf",
