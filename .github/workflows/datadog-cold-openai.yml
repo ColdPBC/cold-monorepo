@@ -2,7 +2,7 @@ name: 📒 OpenAI Service Catalog
 on:
   workflow_dispatch:
   push:
-    paths: [ ".github/workflows/datadog-cold-openai.yml"] # Trigger the action only when files change in the folders defined here
+    paths: [ ".github/workflows/datadog-cold-platform-openai.yml"] # Trigger the action only when files change in the folders defined here
 permissions:
   contents: read # for checkout
 env:
@@ -30,7 +30,7 @@ jobs:
           github-token: ${{ secrets.GH_TOKEN }}
           schema-version: 2.1
           # This maps to the `dd-service` field in Datadog, it's just the name of your service.
-          service-name: cold-openai
+          service-name: cold-platform-openai
           application: backend
           division: platform
 
