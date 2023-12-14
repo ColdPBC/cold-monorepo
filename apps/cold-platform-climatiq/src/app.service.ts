@@ -8,7 +8,7 @@ export class AppService extends BaseWorker implements OnModuleInit {
   }
 
   async onModuleInit(): Promise<void> {
-    const pkg = await BaseWorker.getParsedJSON('apps/cold-provider-climatiq/package.json');
+    const pkg = await BaseWorker.getParsedJSON('apps/cold-platform-climatiq/package.json');
 
     await this.rabbit.register_service(pkg);
 

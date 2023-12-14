@@ -1,7 +1,7 @@
 {
-  "name": "cold-provider-climatiq",
+  "name": "cold-platform-climatiq",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/cold-provider-climatiq/src",
+  "sourceRoot": "apps/cold-platform-climatiq/src",
   "projectType": "application",
   "targets": {
     "build": {
@@ -11,12 +11,12 @@
       "options": {
         "target": "node",
         "compiler": "tsc",
-        "outputPath": "dist/apps/cold-provider-climatiq",
-        "main": "apps/cold-provider-climatiq/src/main.ts",
-        "tsConfig": "apps/cold-provider-climatiq/tsconfig.app.json",
-        "assets": ["apps/cold-provider-climatiq/src/assets"],
+        "outputPath": "dist/apps/cold-platform-climatiq",
+        "main": "apps/cold-platform-climatiq/src/main.ts",
+        "tsConfig": "apps/cold-platform-climatiq/tsconfig.app.json",
+        "assets": ["apps/cold-platform-climatiq/src/assets"],
         "isolatedConfig": true,
-        "webpackConfig": "apps/cold-provider-climatiq/webpack.config.js"
+        "webpackConfig": "apps/cold-platform-climatiq/webpack.config.js"
       },
       "configurations": {
         "development": {},
@@ -27,14 +27,14 @@
       "executor": "@nx/js:node",
       "defaultConfiguration": "development",
       "options": {
-        "buildTarget": "cold-provider-climatiq:build"
+        "buildTarget": "cold-platform-climatiq:build"
       },
       "configurations": {
         "development": {
-          "buildTarget": "cold-provider-climatiq:build:development"
+          "buildTarget": "cold-platform-climatiq:build:development"
         },
         "production": {
-          "buildTarget": "cold-provider-climatiq:build:production"
+          "buildTarget": "cold-platform-climatiq:build:production"
         }
       }
     },
@@ -42,14 +42,14 @@
       "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["apps/cold-provider-climatiq/**/*.ts"]
+        "lintFilePatterns": ["apps/cold-platform-climatiq/**/*.ts"]
       }
     },
     "test": {
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "apps/cold-provider-climatiq/jest.config.ts"
+        "jestConfig": "apps/cold-platform-climatiq/jest.config.ts"
       }
     }
   },

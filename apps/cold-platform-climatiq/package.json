@@ -1,20 +1,20 @@
 {
   "name": "cold-climatiq",
   "label": "Climatiq",
-  "service_type": "provider",
+  "service_type": "platform",
   "definition": {
     "logo_url": "./assets/climatiq.png",
     "platform_url": "https://www.climatiq.io",
     "enabled": true,
     "rabbitMQ": {
       "rpcOptions": {
-        "queue": "cold.provider.climatiq",
-        "routing_key": "cold.provider.climatiq.rpc",
+        "queue": "cold.platform.climatiq",
+        "routing_key": "cold.platform.climatiq.rpc",
         "exchange": "direct"
       },
       "publishOptions": {
-        "queue": "cold.provider.climatiq",
-        "routing_key": "cold.provider.climatiq",
+        "queue": "cold.platform.climatiq",
+        "routing_key": "cold.platform.climatiq",
         "exchange": "direct"
       }
     },

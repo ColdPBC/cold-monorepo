@@ -30,7 +30,7 @@ export class ClimatiqService extends BaseWorker {
     };
 
     this.axiosConfig.headers.Authorization = `Bearer ${process.env.CLIMATIQ_API_KEY}`;
-    
+
     this.energyPayload = {
       emission_factor: {
         activity_id: 'electricity-supply_grid-source_residual_mix',

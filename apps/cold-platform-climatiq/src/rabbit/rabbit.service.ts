@@ -27,8 +27,8 @@ export class RabbitService extends BaseWorker {
    */
   @RabbitRPC({
     exchange: 'amq.direct',
-    routingKey: `cold.provider.climatiq.rpc`,
-    queue: `cold.provider.climatiq.rpc`,
+    routingKey: `cold.platform.climatiq.rpc`,
+    queue: `cold.platform.climatiq.rpc`,
     allowNonJsonMessages: false,
   })
   async handleRPCMessages(data: { msg: string }): Promise<unknown> {
@@ -61,8 +61,8 @@ export class RabbitService extends BaseWorker {
    */
   @RabbitSubscribe({
     exchange: 'amq.direct',
-    routingKey: `cold.provider.climatiq`,
-    queue: `cold.provider.climatiq`,
+    routingKey: `cold.platform.climatiq`,
+    queue: `cold.platform.climatiq`,
     allowNonJsonMessages: false,
   })
   async handleAsyncMessages(data: { msg: string }): Promise<unknown> {

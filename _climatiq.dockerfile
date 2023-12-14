@@ -15,7 +15,7 @@ ENV DD_API_KEY=${DD_API_KEY}
 ENV DD_SERVICE=${DD_SERVICE}
 ENV DD_VERSION=${DD_VERSION}
 
-LABEL com.datadoghq.tags.service="cold-climatiq"
+LABEL com.datadoghq.tags.service="cold-platform-climatiq"
 LABEL com.datadoghq.tags.version=${DD_VERSION}
 LABEL com.datadoghq.tags.env=${NODE_ENV}
 
@@ -48,15 +48,15 @@ RUN yarn add -D @typescript-eslint/eslint-plugin
 
 FROM dependencies as build
 WORKDIR /repo
-RUN if [ "${NODE_ENV}" = "production" ] ; then echo "building for production..." && npx nx run --skip-nx-cache cold-provider-climatiq:build:production ; else echo "building development..." && npx nx run --skip-nx-cache cold-provider-climatiq:build:development ; fi
+RUN if [ "${NODE_ENV}" = "production" ] ; then echo "building for production..." && npx nx run --skip-nx-cache cold-platform-climatiq:build:production ; else echo "building development..." && npx nx run --skip-nx-cache cold-platform-climatiq:build:development ; fi
 RUN npx nx reset
 
 FROM base as final
 USER node
 WORKDIR /home/node/repo
 
-ADD --chown=node:node ./apps/cold-provider-climatiq/project.json /home/node/apps/cold-provider-climatiq/project.json
-ADD --chown=node:node ./apps/cold-provider-climatiq/package.json /home/node/apps/cold-provider-climatiq/package.json
+ADD --chown=node:node apps/cold-platform-climatiq/project.json /home/node/apps/cold-provider-climatiq/project.json
+ADD --chown=node:node apps/cold-platform-climatiq/package.json /home/node/apps/cold-provider-climatiq/package.json
 
 ADD --chown=node:node ./package.json /home/node/package.json
 ADD --chown=node:node ./yarn.lock /home/node/yarn.lock
