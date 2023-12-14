@@ -209,7 +209,7 @@
       "source": {
         "pr": false,
         "branch": "main",
-        "trigger": "manual"
+        "trigger": "push"
       },
       "services": [
         {
