@@ -1,3 +1,10 @@
+## [1.75.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.75.0...v1.75.1) (2023-12-14)
+
+
+### Bug Fixes
+
+* prevent redactor from mutating object ([4cbcd8d](https://github.com/ColdPBC/cold-monorepo/commit/4cbcd8d3491ea391d8b722c63529264a61226a72))
+
 # [1.75.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.74.0...v1.75.0) (2023-12-13)
 
 
