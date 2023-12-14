@@ -119,7 +119,6 @@
         {
           "id": "cold-platform-climatiq-production",
           "name": "cold-platform-climatiq",
-          "domain": "api.coldclimate.com",
           "cpu": 1,
           "port": 7001,
           "type": "fargate",
