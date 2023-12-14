@@ -1,15 +1,15 @@
 {
   "graph": {
     "nodes": {
-      "cold-openai-e2e": {
-        "name": "cold-openai-e2e",
+      "cold-platform-openai-e2e": {
+        "name": "cold-platform-openai-e2e",
         "type": "e2e",
         "data": {
-          "root": "apps/cold-openai-e2e",
-          "name": "cold-openai-e2e",
+          "root": "apps/cold-platform-openai-e2e",
+          "name": "cold-platform-openai-e2e",
           "$schema": "../../node_modules/nx/schemas/project-schema.json",
           "implicitDependencies": [
-            "cold-openai"
+            "cold-platform-openai"
           ],
           "projectType": "application",
           "targets": {
@@ -26,7 +26,7 @@
               ],
               "options": {
                 "passWithNoTests": true,
-                "jestConfig": "apps/cold-openai-e2e/jest.config.ts"
+                "jestConfig": "apps/cold-platform-openai-e2e/jest.config.ts"
               },
               "configurations": {
                 "ci": {
@@ -47,7 +47,7 @@
               ],
               "options": {
                 "lintFilePatterns": [
-                  "apps/cold-openai-e2e/**/*.{js,ts}"
+                  "apps/cold-platform-openai-e2e/**/*.{js,ts}"
                 ]
               },
               "configurations": {}
@@ -118,14 +118,14 @@
           "tags": []
         }
       },
-      "cold-openai": {
-        "name": "cold-openai",
+      "cold-platform-openai": {
+        "name": "cold-platform-openai",
         "type": "app",
         "data": {
-          "root": "apps/cold-openai",
-          "name": "cold-openai",
+          "root": "apps/cold-platform-openai",
+          "name": "cold-platform-openai",
           "$schema": "/node_modules/nx/schemas/project-schema.json",
-          "sourceRoot": "apps/cold-openai/src",
+          "sourceRoot": "apps/cold-platform-openai/src",
           "projectType": "application",
           "targets": {
             "build": {
@@ -144,14 +144,14 @@
               "options": {
                 "target": "node",
                 "compiler": "tsc",
-                "outputPath": "dist/apps/cold-openai",
-                "main": "apps/cold-openai/src/main.ts",
-                "tsConfig": "apps/cold-openai/tsconfig.app.json",
+                "outputPath": "dist/apps/cold-platform-openai",
+                "main": "apps/cold-platform-openai/src/main.ts",
+                "tsConfig": "apps/cold-platform-openai/tsconfig.app.json",
                 "assets": [
-                  "apps/cold-openai/src/assets"
+                  "apps/cold-platform-openai/src/assets"
                 ],
                 "isolatedConfig": true,
-                "webpackConfig": "apps/cold-openai/webpack.config.js"
+                "webpackConfig": "apps/cold-platform-openai/webpack.config.js"
               },
               "configurations": {
                 "development": {},
@@ -162,14 +162,14 @@
               "executor": "@nx/js:node",
               "defaultConfiguration": "development",
               "options": {
-                "buildTarget": "cold-openai:build"
+                "buildTarget": "cold-platform-openai:build"
               },
               "configurations": {
                 "development": {
-                  "buildTarget": "cold-openai:build:development"
+                  "buildTarget": "cold-platform-openai:build:development"
                 },
                 "production": {
-                  "buildTarget": "cold-openai:build:production"
+                  "buildTarget": "cold-platform-openai:build:production"
                 }
               }
             },
@@ -185,7 +185,7 @@
               ],
               "options": {
                 "lintFilePatterns": [
-                  "apps/cold-openai/**/*.ts"
+                  "apps/cold-platform-openai/**/*.ts"
                 ]
               },
               "configurations": {}
@@ -203,7 +203,7 @@
               ],
               "options": {
                 "passWithNoTests": true,
-                "jestConfig": "apps/cold-openai/jest.config.ts"
+                "jestConfig": "apps/cold-platform-openai/jest.config.ts"
               },
               "configurations": {
                 "ci": {
@@ -801,10 +801,10 @@
       }
     },
     "dependencies": {
-      "cold-openai-e2e": [
+      "cold-platform-openai-e2e": [
         {
-          "source": "cold-openai-e2e",
-          "target": "cold-openai",
+          "source": "cold-platform-openai-e2e",
+          "target": "cold-platform-openai",
           "type": "implicit"
         }
       ],
@@ -815,7 +815,7 @@
           "type": "implicit"
         }
       ],
-      "cold-openai": [],
+      "cold-platform-openai": [],
       "cold-ui-e2e": [
         {
           "source": "cold-ui-e2e",
