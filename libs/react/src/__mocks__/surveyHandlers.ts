@@ -92,7 +92,7 @@ export const getSurveyHandler = {
           ...surveys[qaalibTestIndex],
           definition: {
             ...surveys[qaalibTestIndex].definition,
-            submitted: undefined,
+            submitted: true,
           }
         };
         const journeyOverviewIndex = findIndex(surveys, { name: 'journey_overview' })
