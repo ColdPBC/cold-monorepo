@@ -48,6 +48,13 @@ export const Default: Story = {
       await within(card).findByText('Learn More');
     });
   },
+  parameters: {
+    launchdarkly: {
+      flags: {
+        showNextStepsCard: false,
+      }
+    }
+  },
 };
 
 export const EmptyFootprintData: Story = {

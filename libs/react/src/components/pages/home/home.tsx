@@ -15,6 +15,7 @@ import { useFlags } from 'launchdarkly-react-client-sdk';
 import { EmissionsDonutChartVariants } from '../../atoms/emissionsDonutChart/emissionsDonutChart';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application/errors/errorFallback';
+import { NextSteps } from "../../organisms";
 
 function _Home() {
   const ldFlags = useFlags();
@@ -32,6 +33,7 @@ function _Home() {
     return (
       <AppContent title={'Welcome, ' + auth0.user?.given_name}>
         <CenterColumnContent>
+          {ldFlags.showNextStepsCard && <NextSteps />}
           <FootprintOverviewCard
             chartVariant={EmissionsDonutChartVariants.horizontal}
           />

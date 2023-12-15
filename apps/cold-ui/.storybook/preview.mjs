@@ -97,6 +97,8 @@ export default {
       flags: {
         showTeamMemberTable: true,
         showActions261: true,
+        showNewsModuleCold310: true,
+        showNextStepsCard: true,
       },
     },
   },

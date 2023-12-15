@@ -102,3 +102,10 @@ export interface SurveyAdditionalContext {
   comparison: any;
   value?: any | null;
 }
+
+export interface SurveyNextStep {
+  name: string,
+  title: string,
+  started: boolean,
+  surveyProgress: number
+}

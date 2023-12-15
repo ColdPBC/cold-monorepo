@@ -9,7 +9,7 @@ import {
   getOrganizationMembersMock,
   getTeamMemberDataGridMock,
 } from './datagridMock';
-import { getSurveyFormDataByName } from './surveyDataMock';
+import { getSurveyFormDataByName, getSurveysMock } from "./surveyDataMock";
 import { getRoles } from './roleMock';
 import { resolveAPIUrl } from '@coldpbc/fetchers';
 import { getOrganizationMock, getOrganizationsMock } from './organizationMock';
@@ -248,4 +248,12 @@ export const handlers = [
       return res(ctx.json({}));
     },
   ),
+
+  rest.get(
+    getApiUrl('/organizations/:orgId/surveys'),
+    (req, res, ctx) => {
+      return res(ctx.json(getSurveysMock()));
+    },
+  ),
+
 ];
