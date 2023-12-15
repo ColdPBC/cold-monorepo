@@ -1,3 +1,12 @@
+# [1.76.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.75.1...v1.76.0) (2023-12-15)
+
+
+### Features
+
+* added sorting and not showing the module if there are no steps ([ec04e13](https://github.com/ColdPBC/cold-monorepo/commit/ec04e1302fc795c3f8dc6760a228adc3058385d1))
+* Create next steps module ([6bd6f8f](https://github.com/ColdPBC/cold-monorepo/commit/6bd6f8fe1e9d06aa6279c53bf923c862b57285c9))
+* Update typing ([71ad0c9](https://github.com/ColdPBC/cold-monorepo/commit/71ad0c9ccc24f7cc8d02d82dec6375c67c614ca8))
+
 ## [1.75.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.75.0...v1.75.1) (2023-12-14)
 
 
