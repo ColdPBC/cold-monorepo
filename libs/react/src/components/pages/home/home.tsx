@@ -28,7 +28,7 @@ function _Home() {
       </div>
     );
   }
-  console.log('ldFlags', ldFlags);
+
   if (auth0.user) {
     return (
       <AppContent title={'Welcome, ' + auth0.user?.given_name}>
