@@ -251,6 +251,7 @@ const _Survey = (props: SurveyProps) => {
           dismiss: dismiss,
         }}
         className={'z-20'}
+        data-testid={'survey-takeover'}
       >
         <div
           className={'flex flex-1'}

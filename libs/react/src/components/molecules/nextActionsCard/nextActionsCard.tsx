@@ -33,6 +33,7 @@ const _NextActionsCard = () => {
       glow
       title="Your Next Actions"
       ctas={[{ text: 'Learn More', action: () => navigate('/actions') }]}
+      data-testid={'next-actions-card'}
     >
       {data
         ?.filter((actionPayload) =>

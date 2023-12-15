@@ -27,10 +27,11 @@ export interface TakeoverProps {
   isLoading?: boolean;
   className?: string;
   fullScreenWidth?: boolean;
+  "data-testid"?: string;
 }
 
 export const Takeover = (props: PropsWithChildren<TakeoverProps>) => {
-  const { children, show, setShow, header, isLoading, className, fullScreenWidth = true } = props;
+  const { children, show, setShow, header, isLoading, className, fullScreenWidth = true, } = props;
 
   const getHeaderComponent = () => {
     if (header && !isLoading) {
@@ -81,20 +82,11 @@ export const Takeover = (props: PropsWithChildren<TakeoverProps>) => {
 
   if (show) {
     return (
-      <div
-        className={twMerge(
-          'fixed h-screen w-screen bg-bgc-main z-10 inset-0',
-          className,
-        )}
-      >
+      <div className={twMerge('fixed h-screen w-screen bg-bgc-main z-10 inset-0', className)} data-testid={props['data-testid']}>
         <div
-          className={clsx(
-            'flex flex-col overflow-y-scroll h-full px-[40px] pt-[40px]',
-            {
-              'max-w-[1440px] m-auto': !fullScreenWidth
-            }
-          )}
-        >
+          className={clsx('flex flex-col overflow-y-scroll h-full px-[40px] pt-[40px]', {
+            'max-w-[1440px] m-auto': !fullScreenWidth,
+          })}>
           {getHeaderComponent()}
           <div className="flex-1 flex flex-col">
             {isLoading ? (

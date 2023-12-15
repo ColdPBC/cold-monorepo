@@ -10,10 +10,11 @@ import {
   getSignupHandlersForApplicationSignup,
   getSurveyHandler,
   getActionsMock,
-  getCategoriesDataMock,
-} from '@coldpbc/mocks';
+  getCategoriesDataMock, getSurveysMock
+} from "@coldpbc/mocks";
 import { userEvent, waitFor, within } from '@storybook/testing-library';
 import { find, findKey, forEach, uniq, uniqBy } from 'lodash';
+import { expect } from '@storybook/jest';
 
 const meta: Meta<typeof Application> = {
   title: 'Application/Application',
@@ -173,6 +174,46 @@ export const Default: Story = {
           await verifyActionsPage(subCategoryName, subCategoryTitle);
         });
       });
+      await waitFor(async () => {
+        const homeSidebarItem = await within(sidebar).findByText('Home');
+        expect(homeSidebarItem).toBeInTheDocument();
+      });
+      const homeSidebarItem = await within(sidebar).findByText('Home');
+      await userEvent.click(homeSidebarItem);
+    });
+
+    await step('Next Steps Card', async () => {
+      // check next steps card. find all the next step cards and click the button in each of them
+      const nextStepsCard = await canvas.findByTestId('next-steps-card');
+      const nextStepCards = await within(nextStepsCard).findAllByTestId('next-step-card');
+      const surveys = getSurveysMock();
+      // get all the surveys that are not submitted and sort by updated_at
+      const incompleteSurveys = surveys.filter(survey => !survey.definition.submitted).sort((a, b) => {
+        const aDate = new Date(a.updated_at);
+        const bDate = new Date(b.updated_at);
+        return bDate.getTime() - aDate.getTime();
+      });
+
+      // find survey name in
+      forEach(incompleteSurveys, async (survey, index) => {
+        const nextStepCard = nextStepCards[index];
+        const button = await within(nextStepCard).findByRole('button');
+        const progressBar = await within(nextStepCard).queryByTestId('next-step-card-progress');
+        if (progressBar) {
+          await within(nextStepCard).findByText('Continue Survey');
+        } else {
+          await within(nextStepCard).findByText('Start Survey');
+        }
+        await button.click();
+        // check that we are on the survey page
+        const surveyTakeover = await canvas.findByTestId('survey-takeover');
+        // find close button and click it
+        const closeButton = await within(surveyTakeover).findByRole('button', {
+          name: 'Close',
+        });
+        await userEvent.click(closeButton);
+      });
+
     });
   },
 };
