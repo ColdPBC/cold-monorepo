@@ -106,7 +106,7 @@ export const Default: Story = {
 
 export const EmptyData: Story = {
   render: args => (
-    <StoryMockProvider {...args} handlers={[getFootprintHandler.empty]}>
+    <StoryMockProvider {...args} handlers={getFootprintHandler.empty}>
       <Footprint />
     </StoryMockProvider>
   ),

@@ -23,9 +23,11 @@ import {
   getNewsDefault,
   getNewsSomeMissingProperties,
 } from './newsMock';
-import { ActionPayload } from '@coldpbc/interfaces';
+import { ActionPayload, SurveyFormDataPayloadType } from "@coldpbc/interfaces";
 import { SubcategoryActionDetailsCard } from '@coldpbc/components';
 import { getOrganizationMembersMock } from './datagridMock';
+import { getSurveyFormDataByName } from "./surveyDataMock";
+import { getApiUrl } from "./handlers";
 
 export const getFootprintHandler = {
   default: rest.get(
@@ -40,12 +42,29 @@ export const getFootprintHandler = {
       return res(ctx.status(404));
     },
   ),
-  empty: rest.get(
-    '*/organizations/:orgId/categories/company_decarbonization',
-    (req, res, ctx) => {
-      return res(ctx.json(getFootprintEmptyDataMock()));
-    },
-  ),
+  empty: [
+    rest.get(
+      '*/organizations/:orgId/categories/company_decarbonization',
+      (req, res, ctx) => {
+        return res(ctx.json(getFootprintEmptyDataMock()));
+      },
+    ),
+    rest.get(
+      getApiUrl('/organizations/:orgId/surveys/:name'),
+      (req, res, ctx) => {
+        const { name } = req.params;
+        const survey = getSurveyFormDataByName('footprint_overview')
+
+        return res(ctx.json({
+          ...survey,
+          definition: {
+            ...survey?.definition,
+            submitted: true,
+          }
+        }));
+      },
+    ),
+  ],
   getFootprintDataFacilitiesAllFootprintsNull: rest.get(
     '*/organizations/:orgId/categories/company_decarbonization',
     (req, res, ctx) => {
