@@ -57,25 +57,7 @@
             "healthCheckInterval": 35
           },
           "envVariables": {
-            "DD_API_KEY": {
-              "fromParameterStore": "fc.cold-api-fc.env.cold-production.8pr1zak.DD_API_KEY"
-            },
-            "NODE_ENV": "production",
-            "DD_ENV": "production",
-            "DD_SERVICE": "cold-platform-openai",
-            "REDISCLOUD_URL": {
-              "fromService": {
-                "id": "cold-cache-fc-production",
-                "value": "connectionString"
-              }
-            },
-            "DATABASE_URL": {
-              "fromService": {
-                "id": "cold-rds-fc-production",
-                "value": "dbConnectionString"
-              }
-            },
-            "ENABLE_HEALTH_LOGS": true
+            "DD_SERVICE": "cold-platform-openai"
           },
           "sidecars": [
             {
@@ -161,25 +143,7 @@
             "healthCheckInterval": 35
           },
           "envVariables": {
-            "DD_SERVICE": "cold-platform-openai",
-            "NODE_ENV": "production",
-            "DD_ENV": "production",
-            "DD_API_KEY": {
-              "fromParameterStore": "fc.cold-api-fc.env.cold-production.8pr1zak.DD_API_KEY"
-            },
-            "REDISCLOUD_URL": {
-              "fromService": {
-                "id": "cold-cache-fc-production",
-                "value": "connectionString"
-              }
-            },
-            "DATABASE_URL": {
-              "fromService": {
-                "id": "cold-rds-fc-production",
-                "value": "dbConnectionString"
-              }
-            },
-            "ENABLE_HEALTH_LOGS": true
+            "DD_SERVICE": "cold-platform-openai"
           },
           "sidecars": [
             {
@@ -223,7 +187,24 @@
             }
           ]
         }
-      ]
+      ],
+      "envVariables": {
+        "DD_API_KEY": {
+          "fromParameterStore": "fc.cold-api-fc.env.cold-production.8pr1zak.DD_API_KEY"
+        },
+        "NODE_ENV": "production",
+        "DD_ENV": "production",
+        "REDISCLOUD_URL": {
+          "fromParameterStore": "fc_coldmonorepo_coldproduction_coldcachefcproduction_wyb007zj_primary_url"
+        },
+        "DATABASE_URL": {
+          "fromService": {
+            "id": "cold-rds-fc-production",
+            "value": "dbConnectionString"
+          }
+        },
+        "ENABLE_HEALTH_LOGS": true
+      }
     },
     {
       "id": "cold-staging",
