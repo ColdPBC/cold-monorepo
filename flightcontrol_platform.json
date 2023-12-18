@@ -62,6 +62,7 @@
             },
             "NODE_ENV": "production",
             "DD_ENV": "production",
+            "DD_SERVICE": "cold-platform-openai",
             "REDISCLOUD_URL": {
               "fromService": {
                 "id": "cold-cache-fc-production",
@@ -159,7 +160,27 @@
             "healthCheckTimeout": 15,
             "healthCheckInterval": 35
           },
-          "envVariables": {},
+          "envVariables": {
+            "DD_SERVICE": "cold-platform-openai",
+            "NODE_ENV": "production",
+            "DD_ENV": "production",
+            "DD_API_KEY": {
+              "fromParameterStore": "fc.cold-api-fc.env.cold-production.8pr1zak.DD_API_KEY"
+            },
+            "REDISCLOUD_URL": {
+              "fromService": {
+                "id": "cold-cache-fc-production",
+                "value": "connectionString"
+              }
+            },
+            "DATABASE_URL": {
+              "fromService": {
+                "id": "cold-rds-fc-production",
+                "value": "dbConnectionString"
+              }
+            },
+            "ENABLE_HEALTH_LOGS": true
+          },
           "sidecars": [
             {
               "name": "sidecar-dd-climatiq-prod",
@@ -361,7 +382,27 @@
             "healthCheckTimeout": 15,
             "healthCheckInterval": 35
           },
-          "envVariables": {},
+          "envVariables": {
+            "DD_SERVICE": "cold-platform-openai",
+            "NODE_ENV": "production",
+            "DD_ENV": "production",
+            "DD_API_KEY": {
+              "fromParameterStore": "fc.cold-api-fc.env.cold-production.8pr1zak.DD_API_KEY"
+            },
+            "REDISCLOUD_URL": {
+              "fromService": {
+                "id": "cold-cache-fc-production",
+                "value": "connectionString"
+              }
+            },
+            "DATABASE_URL": {
+              "fromService": {
+                "id": "cold-rds-fc-production",
+                "value": "dbConnectionString"
+              }
+            },
+            "ENABLE_HEALTH_LOGS": true
+          },
           "sidecars": [
             {
               "name": "sidecar-dd-climatiq-staging",
