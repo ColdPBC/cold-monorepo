@@ -61,7 +61,7 @@ RUN if [ "${DATABASE_URL}" = "" ] ; then echo "DATABASE_URL is empty; skipping s
 RUN if [ "${NODE_ENV}" = "production" ] ; then echo "building for production..." && npx nx run --skip-nx-cache cold-api:build:production ; else echo "building development..." && npx nx run --skip-nx-cache cold-api:build:development ; fi
 RUN npx nx reset
 
-FROM base as final
+FROM node:${NODE_VERSION}-bullseye-slim as final
 USER node
 WORKDIR /home/node/app
 
