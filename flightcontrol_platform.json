@@ -198,10 +198,7 @@
           "fromParameterStore": "fc_coldmonorepo_coldproduction_coldcachefcproduction_wyb007zj_primary_url"
         },
         "DATABASE_URL": {
-          "fromService": {
-            "id": "cold-rds-fc-production",
-            "value": "dbConnectionString"
-          }
+          "fromParameterStore": "fc_coldmonorepo_coldproduction_coldrdsfcproduction_6vas07o1_dbConnectionString"
         },
         "ENABLE_HEALTH_LOGS": true
       }
