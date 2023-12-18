@@ -1,20 +1,41 @@
 version: '3.8'
 services:
   rabbit:
+    labels:
+      - "traefik.http.routers.rabbit.rule=Host(`rabbit.coldclimate.wtf`)"
+      - "traefik.tcp.services.rabbit.loadbalancer.server.port=5672"
+      - "traefik.http.services.rabbit.loadbalancer.server.port=15672"
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - cold
+    depends_on:
+      - proxy
     image: rabbitmq:3-management-alpine
-    container_name: nest-rabbit
+    container_name: cold-rabbit
   cache:
+    labels:
+      - "traefik.http.routers.cache.rule=Host(`cache.coldclimate.wtf`)"
+      - "traefik.tcp.services.cache.loadbalancer.server.port=6379"
+      - "traefik.udp.services.cache.loadbalancer.server.port=6379"
     image: redis:6.2-alpine
-    container_name: nest-redis
+    container_name: cold-cache
     restart: always
+    depends_on:
+      - proxy
+    networks:
+      - cold
     ports:
       - '6379:6379'
     command: redis-server --save 20 1 --loglevel warning
-    volumes:
-      - cache:/data
   postgres:
-    container_name: nest-postgres
+    container_name: cold-postgres
     image: postgres:14-alpine
+    depends_on:
+      - proxy
+    networks:
+      - cold
     ports:
       - '5432:5432'
     volumes:
@@ -24,8 +45,3 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_DB=colddb
 
-volumes:
-  api:
-    driver: local
-  cache:
-    driver: local

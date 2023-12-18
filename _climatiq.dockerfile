@@ -55,17 +55,17 @@ FROM base as final
 USER node
 WORKDIR /home/node/repo
 
-ADD --chown=node:node apps/cold-platform-climatiq/project.json /home/node/apps/cold-provider-climatiq/project.json
-ADD --chown=node:node apps/cold-platform-climatiq/package.json /home/node/apps/cold-provider-climatiq/package.json
+ADD --chown=node:node apps/cold-platform-climatiq/project.json /home/node/apps/cold-platform-climatiq/project.json
+ADD --chown=node:node apps/cold-platform-climatiq/package.json /home/node/apps/cold-platform-climatiq/package.json
 
 ADD --chown=node:node ./package.json /home/node/package.json
 ADD --chown=node:node ./yarn.lock /home/node/yarn.lock
 
-COPY --from=build --chown=node:node /repo/dist/apps/cold-provider-climatiq /home/node/apps/cold-provider-climatiq/
+COPY --from=build --chown=node:node /repo/dist/apps/cold-platform-climatiq /home/node/apps/cold-platform-climatiq/
 COPY --from=build --chown=node:node /repo/node_modules /home/node/node_modules
 
 # Expose the port that the application listens on.
 EXPOSE 7002
 
-CMD ["node", "/home/node/apps/cold-provider-climatiq/main.js"]
+CMD ["node", "/home/node/apps/cold-platform-climatiq/main.js"]
 # Run the application.

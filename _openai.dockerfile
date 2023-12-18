@@ -1,7 +1,6 @@
 ARG NODE_VERSION=20.9
 FROM node:${NODE_VERSION}-bullseye-slim as base
 ARG NODE_ENV
-ARG DATABASE_URL
 ARG DD_SERVICE
 ARG DD_VERSION
 ARG DD_API_KEY
@@ -13,13 +12,8 @@ ENV DD_GIT_COMMIT_SHA=${FC_GIT_COMMIT_SHA}
 ENV NODE_ENV=${NODE_ENV}
 ENV DD_ENV=${NODE_ENV}
 ENV DD_API_KEY=${DD_API_KEY}
-ENV DATABASE_URL=${DATABASE_URL}
 ENV DD_SERVICE=${DD_SERVICE}
 ENV DD_VERSION=${DD_VERSION}
-
-LABEL com.datadoghq.ad.check_names='["postgres"]'
-LABEL com.datadoghq.ad.init_configs='[{}]'
-LABEL com.datadoghq.ad.instances='[{"database_autodiscovery":{"enabled":true},"collect_schemas":{"enabled":true},"dbm":true,"host":"${DATABASE_URL}","port": 5432,"username":"datadog","password":"${DD_POSTGRES_PASSWORD}", "tags":["service:cold-rds-fc-${NODE_ENV}","env:${NODE_ENV}"]'
 
 LABEL com.datadoghq.tags.service="cold-platform-openai"
 LABEL com.datadoghq.tags.version=${DD_VERSION}
