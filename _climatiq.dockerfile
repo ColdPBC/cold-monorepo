@@ -12,6 +12,7 @@ ENV DD_GIT_COMMIT_SHA=${FC_GIT_COMMIT_SHA}
 ENV NODE_ENV=${NODE_ENV}
 ENV DD_ENV=${NODE_ENV}
 ENV DD_API_KEY=${DD_API_KEY}
+ENV DATABASE_URL=${DATABASE_URL}
 ENV DD_SERVICE=${DD_SERVICE}
 ENV DD_VERSION=${DD_VERSION}
 
@@ -26,7 +27,7 @@ WORKDIR /repo
 #RUN npm uninstall -g yarn pnpm
 
 # install global dependencies
-RUN yarn global add nx nx-cloud ts-node eslint
+RUN yarn global add nx nx-cloud prisma zod-prisma zod-prisma-types @vegardit/prisma-generator-nestjs-dto ts-node eslint
 
 ADD . /repo
 
@@ -48,24 +49,26 @@ RUN yarn add -D @typescript-eslint/eslint-plugin
 
 FROM dependencies as build
 WORKDIR /repo
+RUN yarn dlx nx run cold-nest-library:prisma-generate
+RUN yarn prebuild
 RUN if [ "${NODE_ENV}" = "production" ] ; then echo "building for production..." && npx nx run --skip-nx-cache cold-platform-climatiq:build:production ; else echo "building development..." && npx nx run --skip-nx-cache cold-platform-climatiq:build:development ; fi
 RUN npx nx reset
 
-FROM base as final
+FROM node:${NODE_VERSION}-bullseye-slim as final
 USER node
 WORKDIR /home/node/repo
 
-ADD --chown=node:node apps/cold-platform-climatiq/project.json /home/node/apps/cold-provider-climatiq/project.json
-ADD --chown=node:node apps/cold-platform-climatiq/package.json /home/node/apps/cold-provider-climatiq/package.json
+ADD --chown=node:node apps/cold-platform-climatiq/project.json /home/node/apps/cold-platform-climatiq/project.json
+ADD --chown=node:node apps/cold-platform-climatiq/package.json /home/node/apps/cold-platform-climatiq/package.json
 
 ADD --chown=node:node ./package.json /home/node/package.json
 ADD --chown=node:node ./yarn.lock /home/node/yarn.lock
 
-COPY --from=build --chown=node:node /repo/dist/apps/cold-provider-climatiq /home/node/apps/cold-provider-climatiq/
+COPY --from=build --chown=node:node /repo/dist/apps/cold-platform-climatiq /home/node/apps/cold-platform-climatiq/
 COPY --from=build --chown=node:node /repo/node_modules /home/node/node_modules
 
 # Expose the port that the application listens on.
 EXPOSE 7002
 
-CMD ["node", "/home/node/apps/cold-provider-climatiq/main.js"]
+CMD ["node", "/home/node/apps/cold-platform-climatiq/main.js"]
 # Run the application.

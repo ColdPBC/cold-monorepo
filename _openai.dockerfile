@@ -1,7 +1,6 @@
 ARG NODE_VERSION=20.9
 FROM node:${NODE_VERSION}-bullseye-slim as base
 ARG NODE_ENV
-ARG DATABASE_URL
 ARG DD_SERVICE
 ARG DD_VERSION
 ARG DD_API_KEY
@@ -17,10 +16,6 @@ ENV DATABASE_URL=${DATABASE_URL}
 ENV DD_SERVICE=${DD_SERVICE}
 ENV DD_VERSION=${DD_VERSION}
 
-LABEL com.datadoghq.ad.check_names='["postgres"]'
-LABEL com.datadoghq.ad.init_configs='[{}]'
-LABEL com.datadoghq.ad.instances='[{"database_autodiscovery":{"enabled":true},"collect_schemas":{"enabled":true},"dbm":true,"host":"${DATABASE_URL}","port": 5432,"username":"datadog","password":"${DD_POSTGRES_PASSWORD}", "tags":["service:cold-rds-fc-${NODE_ENV}","env:${NODE_ENV}"]'
-
 LABEL com.datadoghq.tags.service="cold-platform-openai"
 LABEL com.datadoghq.tags.version=${DD_VERSION}
 LABEL com.datadoghq.tags.env=${NODE_ENV}
@@ -32,7 +27,7 @@ WORKDIR /app
 #RUN npm uninstall -g yarn pnpm
 
 # install global dependencies
-RUN yarn global add nx nx-cloud ts-node eslint
+RUN yarn global add nx nx-cloud prisma zod-prisma zod-prisma-types @vegardit/prisma-generator-nestjs-dto ts-node eslint
 
 ADD . /app/
 
@@ -54,10 +49,12 @@ RUN yarn add -D @typescript-eslint/eslint-plugin
 
 FROM dependencies as build
 WORKDIR /app
+RUN yarn dlx nx run cold-nest-library:prisma-generate
+RUN yarn prebuild
 RUN if [ "${NODE_ENV}" = "production" ] ; then echo "building for production..." && npx nx run --skip-nx-cache cold-platform-openai:build:production ; else echo "building development..." && npx nx run --skip-nx-cache cold-platform-openai:build:development ; fi
 RUN npx nx reset
 
-FROM base as final
+FROM node:${NODE_VERSION}-bullseye-slim as final
 USER node
 WORKDIR /home/node/app
 
