@@ -7,8 +7,7 @@
       "region": "us-east-1",
       "source": {
         "pr": false,
-        "branch": "main",
-        "trigger": "push"
+        "branch": "main"
       },
       "vpc": {
         "id": "vpc-0adff7558db4535e2",
@@ -26,8 +25,6 @@
           "dockerContext": ".",
           "watchPaths": [
             "apps/cold-platform-openai/src/**",
-            "apps/cold-platform-openai/test/**",
-            "libs/nest/prisma/**",
             "libs/nest/src/**",
             "_openai.dockerfile"
           ],
@@ -77,6 +74,12 @@
                 "NODE_ENV": "production",
                 "DD_AGENT_MAJOR_VERSION": "7",
                 "DD_LOG_LEVEL": "ERROR",
+                "REDISCLOUD_URL": {
+                  "fromParameterStore": "fc_coldmonorepo_coldproduction_coldcachefcproduction_wyb007zj_primary_url"
+                },
+                "DATABASE_URL": {
+                  "fromParameterStore": "fc_coldmonorepo_coldproduction_coldrdsfcproduction_6vas07o1_dbConnectionString"
+                },
                 "DD_API_KEY": {
                   "fromParameterStore": "fc.cold-api-fc.env.cold-production.8pr1zak.DD_API_KEY"
                 },
@@ -115,8 +118,6 @@
           },
           "watchPaths": [
             "apps/cold-platform-climatiq/src/**",
-            "apps/cold-platform-climatiq/test/**",
-            "libs/nest/prisma/**",
             "libs/nest/src/**",
             "_climatiq.dockerfile"
           ],
@@ -143,7 +144,7 @@
             "healthCheckInterval": 35
           },
           "envVariables": {
-            "DD_SERVICE": "cold-platform-openai"
+            "DD_SERVICE": "cold-platform-climatiq"
           },
           "sidecars": [
             {
@@ -162,6 +163,12 @@
                 "DD_SERVICE": "cold-datadog-production",
                 "DD_API_KEY": {
                   "fromParameterStore": "fc.cold-api-fc.env.cold-production.8pr1zak.DD_API_KEY"
+                },
+                "REDISCLOUD_URL": {
+                  "fromParameterStore": "fc_coldmonorepo_coldproduction_coldcachefcproduction_wyb007zj_primary_url"
+                },
+                "DATABASE_URL": {
+                  "fromParameterStore": "fc_coldmonorepo_coldproduction_coldrdsfcproduction_6vas07o1_dbConnectionString"
                 },
                 "DD_AGENT_MAJOR_VERSION": "7",
                 "DD_LOG_LEVEL": "ERROR",
@@ -227,9 +234,7 @@
           "dockerfilePath": "_openai.dockerfile",
           "dockerContext": ".",
           "watchPaths": [
-            "apps/cold-api/src/**",
-            "apps/cold-api/test/**",
-            "libs/nest/prisma/**",
+            "apps/cold-platform-openai/src/**",
             "libs/nest/src/**",
             "_openai.dockerfile"
           ],
@@ -258,23 +263,7 @@
             "healthCheckInterval": 35
           },
           "envVariables": {
-            "DD_API_KEY": {
-              "fromParameterStore": "fc.cold-api-fc.env.cold-production.8pr1zak.DD_API_KEY"
-            },
-            "NODE_ENV": "staging",
-            "DD_ENV": "staging",
-            "REDISCLOUD_URL": {
-              "fromService": {
-                "id": "cold-cache-fc-staging",
-                "value": "connectionString"
-              }
-            },
-            "DATABASE_URL": {
-              "fromService": {
-                "id": "cold-rds-fc-staging",
-                "value": "dbConnectionString"
-              }
-            },
+            "DD_SERVICE": "cold-platform-openai",
             "ENABLE_HEALTH_LOGS": true
           },
           "sidecars": [
@@ -297,6 +286,12 @@
                 "DD_LOG_LEVEL": "ERROR",
                 "DD_API_KEY": {
                   "fromParameterStore": "fc.cold-api-fc.env.cold-production.8pr1zak.DD_API_KEY"
+                },
+                "REDISCLOUD_URL": {
+                  "fromParameterStore": "fc_coldmonorepo_coldstaging_coldcachefcstaging_zc610oe6_primary_url"
+                },
+                "DATABASE_URL": {
+                  "fromParameterStore": "fc_coldmonorepo_coldstaging_coldrdsfcstaging_835r0xe9_dbConnectionString"
                 },
                 "DD_POSTGRES_URL_VAR": "DATABASE_URL",
                 "DD_REDIS_URL_VAR": "REDISCLOUD_URL",
@@ -333,8 +328,6 @@
           },
           "watchPaths": [
             "apps/cold-platform-climatiq/src/**",
-            "apps/cold-platform-climatiq/test/**",
-            "libs/nest/prisma/**",
             "libs/nest/src/**",
             "_climatiq.dockerfile"
           ],
@@ -362,23 +355,6 @@
           },
           "envVariables": {
             "DD_SERVICE": "cold-platform-openai",
-            "NODE_ENV": "production",
-            "DD_ENV": "production",
-            "DD_API_KEY": {
-              "fromParameterStore": "fc.cold-api-fc.env.cold-production.8pr1zak.DD_API_KEY"
-            },
-            "REDISCLOUD_URL": {
-              "fromService": {
-                "id": "cold-cache-fc-production",
-                "value": "connectionString"
-              }
-            },
-            "DATABASE_URL": {
-              "fromService": {
-                "id": "cold-rds-fc-production",
-                "value": "dbConnectionString"
-              }
-            },
             "ENABLE_HEALTH_LOGS": true
           },
           "sidecars": [
@@ -398,6 +374,12 @@
                 "DD_SERVICE": "cold-datadog-staging",
                 "DD_API_KEY": {
                   "fromParameterStore": "fc.cold-api-fc.env.cold-production.8pr1zak.DD_API_KEY"
+                },
+                "REDISCLOUD_URL": {
+                  "fromParameterStore": "fc_coldmonorepo_coldstaging_coldcachefcstaging_zc610oe6_primary_url"
+                },
+                "DATABASE_URL": {
+                  "fromParameterStore": "fc_coldmonorepo_coldstaging_coldrdsfcstaging_835r0xe9_dbConnectionString"
                 },
                 "DD_AGENT_MAJOR_VERSION": "7",
                 "DD_LOG_LEVEL": "ERROR",
@@ -423,7 +405,21 @@
             }
           ]
         }
-      ]
+      ],
+      "envVariables": {
+        "DD_API_KEY": {
+          "fromParameterStore": "fc.cold-api-fc.env.cold-production.8pr1zak.DD_API_KEY"
+        },
+        "NODE_ENV": "production",
+        "DD_ENV": "production",
+        "REDISCLOUD_URL": {
+          "fromParameterStore": "fc_coldmonorepo_coldstaging_coldcachefcstaging_zc610oe6_primary_url"
+        },
+        "DATABASE_URL": {
+          "fromParameterStore": "fc_coldmonorepo_coldstaging_coldrdsfcstaging_835r0xe9_dbConnectionString"
+        },
+        "ENABLE_HEALTH_LOGS": true
+      }
     },
     {
       "id": "cold-preview",
@@ -520,6 +516,12 @@
                 "NODE_ENV": "test",
                 "DD_AGENT_MAJOR_VERSION": "7",
                 "DD_LOG_LEVEL": "ERROR",
+                "REDISCLOUD_URL": {
+                  "fromParameterStore": "fc_coldmonorepo_coldpreview_coldcachepreview_bm8g0o0i_primary_url"
+                },
+                "DATABASE_URL": {
+                  "fromParameterStore": "fc_coldmonorepo_coldpreview_coldrdspreview_3q5601mr_dbConnectionString"
+                },
                 "DD_API_KEY": {
                   "fromParameterStore": "fc.cold-api-fc.env.cold-production.8pr1zak.DD_API_KEY"
                 },
@@ -604,6 +606,12 @@
                 "DD_API_KEY": {
                   "fromParameterStore": "fc.cold-api-fc.env.cold-production.8pr1zak.DD_API_KEY"
                 },
+                "REDISCLOUD_URL": {
+                  "fromParameterStore": "fc_coldmonorepo_coldpreview_coldcachepreview_bm8g0o0i_primary_url"
+                },
+                "DATABASE_URL": {
+                  "fromParameterStore": "fc_coldmonorepo_coldpreview_coldrdspreview_3q5601mr_dbConnectionString"
+                },
                 "DD_AGENT_MAJOR_VERSION": "7",
                 "DD_LOG_LEVEL": "ERROR",
                 "DD_POSTGRES_URL_VAR": "DATABASE_URL",
@@ -630,16 +638,23 @@
         }
       ],
       "envVariables": {
+        "DD_API_KEY": {
+          "fromParameterStore": "fc.cold-api-fc.env.cold-production.8pr1zak.DD_API_KEY"
+        },
+        "REDISCLOUD_URL": {
+          "fromParameterStore": "fc_coldmonorepo_coldpreview_coldcachepreview_bm8g0o0i_primary_url"
+        },
+        "DATABASE_URL": {
+          "fromParameterStore": "fc_coldmonorepo_coldpreview_coldrdspreview_3q5601mr_dbConnectionString"
+        },
+        "ENABLE_HEALTH_LOGS": true,
         "API_SERVER_DESCRIPTION": "Preview Server",
         "API_SERVER_URL": "https://api.coldclimate.wtf",
         "AUTH0_AUDIENCE": "https://api.coldclimate.wtf/",
         "AUTH0_DOMAIN": "dev-6qt527e13qyo4ls6.us.auth0.com",
         "CACHE_TTL": "604800000",
         "NODE_ENV": "test",
-        "DD_ENV": "test",
-        "DD_API_KEY": {
-          "fromParameterStore": "fc.cold-api-fc.env.cold-production.8pr1zak.DD_API_KEY"
-        }
+        "DD_ENV": "test"
       }
     }
   ]
