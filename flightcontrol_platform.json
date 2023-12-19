@@ -123,7 +123,7 @@
           ],
           "maxInstances": 2,
           "minInstances": 2,
-          "healthCheckPath": "/health",
+          "healthCheckPath": "/api/health",
           "containerInsights": true,
           "enableCloudfrontSwr": true,
           "versionHistoryCount": 10,
