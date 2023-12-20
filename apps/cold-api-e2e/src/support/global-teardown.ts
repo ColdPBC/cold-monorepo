@@ -1,13 +1,12 @@
 /* eslint-disable */
-import { enhancePrisma } from './enhancedPrimsa';
-import { PrismaClient } from '@prisma/client';
+import {enhancePrisma} from './enhancedPrimsa';
+import {PrismaClient} from '@prisma/client';
 
 const EnhancedPrisma = enhancePrisma(PrismaClient);
 export * from '@prisma/client';
-import axios from 'axios';
 
 module.exports = async function () {
-  if (process.env['staging'] || process.env['production']) {
+  if (process.env.NODE_ENV == 'staging' || process.env.NODE_ENV == 'production') {
     // Put clean up logic here (e.g. stopping services, docker-compose, etc.).
     // Hint: `globalThis` is shared between setup and teardown.
     console.log('STARTED ON', globalThis.started_utc_on);
