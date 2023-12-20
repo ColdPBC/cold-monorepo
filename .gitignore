@@ -53,3 +53,12 @@ index.ts
 /libs/nest/src/validation/generated/modelSchema/
 /libs/nest/src/validation/generated/
 /.yarn/cache/
+
+
+.yarn/*
+!.yarn/cache
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
