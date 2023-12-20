@@ -123,7 +123,7 @@
           ],
           "maxInstances": 2,
           "minInstances": 2,
-          "healthCheckPath": "/health",
+          "healthCheckPath": "/api/health",
           "containerInsights": true,
           "enableCloudfrontSwr": true,
           "versionHistoryCount": 10,
@@ -228,7 +228,7 @@
           "id": "cold-platform-openai-staging",
           "name": "cold-platform-openai",
           "cpu": 1,
-          "port": 7001,
+          "port": 7003,
           "type": "fargate",
           "memory": 2,
           "dockerfilePath": "_openai.dockerfile",
@@ -263,8 +263,7 @@
             "healthCheckInterval": 35
           },
           "envVariables": {
-            "DD_SERVICE": "cold-platform-openai",
-            "ENABLE_HEALTH_LOGS": true
+            "DD_SERVICE": "cold-platform-openai"
           },
           "sidecars": [
             {
@@ -316,7 +315,7 @@
           "id": "cold-platform-climatiq-staging",
           "name": "cold-platform-climatiq",
           "cpu": 1,
-          "port": 7001,
+          "port": 7002,
           "type": "fargate",
           "memory": 2,
           "dockerfilePath": "_climatiq.dockerfile",
@@ -333,7 +332,7 @@
           ],
           "maxInstances": 2,
           "minInstances": 2,
-          "healthCheckPath": "/health",
+          "healthCheckPath": "/api/health",
           "containerInsights": true,
           "enableCloudfrontSwr": true,
           "versionHistoryCount": 10,
@@ -354,8 +353,7 @@
             "healthCheckInterval": 35
           },
           "envVariables": {
-            "DD_SERVICE": "cold-platform-openai",
-            "ENABLE_HEALTH_LOGS": true
+            "DD_SERVICE": "cold-platform-climatiq"
           },
           "sidecars": [
             {
@@ -448,9 +446,8 @@
           "dockerfilePath": "_openai.dockerfile",
           "dockerContext": ".",
           "watchPaths": [
-            "apps/cold-api/src/**",
-            "apps/cold-api/test/**",
-            "libs/nest/prisma/**",
+            "apps/cold-platform-openai/src/**",
+            "apps/cold-platform-openai/test/**",
             "libs/nest/src/**",
             "_openai.dockerfile"
           ],
@@ -479,24 +476,7 @@
             "healthCheckInterval": 35
           },
           "envVariables": {
-            "DD_API_KEY": {
-              "fromParameterStore": "fc.cold-api-fc.env.cold-production.8pr1zak.DD_API_KEY"
-            },
-            "NODE_ENV": "test",
-            "DD_ENV": "test",
-            "REDISCLOUD_URL": {
-              "fromService": {
-                "id": "cold-cache-fc-preview",
-                "value": "connectionString"
-              }
-            },
-            "DATABASE_URL": {
-              "fromService": {
-                "id": "cold-rds-fc-preview",
-                "value": "dbConnectionString"
-              }
-            },
-            "ENABLE_HEALTH_LOGS": true
+            "DD_SERVICE": "cold-platform-openai"
           },
           "sidecars": [
             {
@@ -561,13 +541,12 @@
           "watchPaths": [
             "apps/cold-platform-climatiq/src/**",
             "apps/cold-platform-climatiq/test/**",
-            "libs/nest/prisma/**",
             "libs/nest/src/**",
             "_climatiq.dockerfile"
           ],
           "maxInstances": 2,
           "minInstances": 2,
-          "healthCheckPath": "/health",
+          "healthCheckPath": "/api/health",
           "containerInsights": true,
           "enableCloudfrontSwr": true,
           "versionHistoryCount": 10,
@@ -587,7 +566,9 @@
             "healthCheckTimeout": 15,
             "healthCheckInterval": 35
           },
-          "envVariables": {},
+          "envVariables": {
+            "DD_SERVICE": "cold-platform-climatiq"
+          },
           "sidecars": [
             {
               "name": "sidecar-dd-climatiq-preview",
@@ -647,7 +628,7 @@
         "DATABASE_URL": {
           "fromParameterStore": "fc_coldmonorepo_coldpreview_coldrdspreview_3q5601mr_dbConnectionString"
         },
-        "ENABLE_HEALTH_LOGS": true,
+        "ENABLE_HEALTH_LOGS": false,
         "API_SERVER_DESCRIPTION": "Preview Server",
         "API_SERVER_URL": "https://api.coldclimate.wtf",
         "AUTH0_AUDIENCE": "https://api.coldclimate.wtf/",
