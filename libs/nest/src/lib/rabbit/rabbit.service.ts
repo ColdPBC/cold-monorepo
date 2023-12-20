@@ -34,16 +34,12 @@ export class ColdRabbitService extends BaseWorker implements OnModuleInit {
     try {
       this.definition = pkg.definition;
 
-      const response = await this.client.request({
-        exchange: 'amq.direct',
-        routingKey: `cold.integrations.registration`,
-        payload: {
-          msg: {
-            name: pkg.name,
-            label: pkg.label,
-            type: pkg.service_type,
-            definition: pkg.definition,
-          },
+      const response = await this.client.publish('amq.direct', `cold.integrations.registration`, {
+        msg: {
+          name: pkg.name,
+          label: pkg.label,
+          type: pkg.service_type,
+          definition: pkg.definition,
         },
       });
 
