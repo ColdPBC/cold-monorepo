@@ -81,7 +81,7 @@
     "@vegardit/prisma-generator-nestjs-dto": "^1.5.1",
     "app-root-path": "^3.1.0",
     "argon2": "^0.30.3",
-    "auth0": "^3.4.0",
+    "auth0": "^4.2.0",
     "autoprefixer": "^10.4.14",
     "axios": "^1.4.0",
     "bcrypt": "^5.1.0",
