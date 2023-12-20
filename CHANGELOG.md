@@ -1,3 +1,10 @@
+## [1.76.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.76.0...v1.76.1) (2023-12-19)
+
+
+### Bug Fixes
+
+* switch service to register via publish rather than RPC ([93ec04d](https://github.com/ColdPBC/cold-monorepo/commit/93ec04dd1847546c03857de6311e911d039b45bb))
+
 # [1.76.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.75.1...v1.76.0) (2023-12-15)
 
 
