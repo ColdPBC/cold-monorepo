@@ -63,7 +63,8 @@ jobs:
         run: corepack enable && yarn set version stable
 
       - name: 🧩 Install Dependencies
-        # 👇 Install dependencies with the same package manager used in the project (replace it as needed), e.g. yarn, npm, pnpm
+        # 👇 If cache not found, install dependencies with the same package manager used in the project (replace it as needed), e.g. yarn, npm, pnpm
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
         run: yarn
         # 👇 Adds Chromatic as a step in the workflow
       - name: 🎑 Publish to Chromatic
