@@ -1,3 +1,10 @@
+## [1.77.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.77.1...v1.77.2) (2023-12-21)
+
+
+### Bug Fixes
+
+* add undefined/null orgId check before checking for cold:Admin ([04b4d05](https://github.com/ColdPBC/cold-monorepo/commit/04b4d05555728ba9e3889dcd165d51d3c6ee1148))
+
 ## [1.77.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.77.0...v1.77.1) (2023-12-21)
 
 
