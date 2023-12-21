@@ -288,7 +288,6 @@
         "REDISCLOUD_URL": {
           "fromParameterStore": "fc_coldmonorepo_coldproduction_coldcachefcproduction_wyb007zj_primary_url"
         },
-        "ENABLE_HEALTH_LOGS": false
       }
     },
     {
@@ -577,7 +576,6 @@
         "REDISCLOUD_URL": {
           "fromParameterStore": "fc_coldmonorepo_coldpreview_coldcachepreview_bm8g0o0i_primary_url"
         },
-        "ENABLE_HEALTH_LOGS": false,
         "API_SERVER_DESCRIPTION": "Preview Server",
         "API_SERVER_URL": "https://api.coldclimate.wtf",
         "AUTH0_AUDIENCE": "https://api.coldclimate.wtf/",

@@ -176,7 +176,6 @@
             "value": "connectionString"
           }
         },
-        "ENABLE_HEALTH_LOGS": true,
         "DD_ENV": "production",
         "NODE_ENV": "production"
       }
@@ -352,8 +351,7 @@
             "value": "connectionString"
           }
         },
-        "NODE_ENV": "staging",
-        "ENABLE_HEALTH_LOGS": true
+        "NODE_ENV": "staging"
       }
     },
     {
