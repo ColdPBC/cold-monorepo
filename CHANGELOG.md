@@ -1,3 +1,10 @@
+## [1.77.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.77.2...v1.77.3) (2023-12-21)
+
+
+### Bug Fixes
+
+* logging interceptor not respecting ENABLE_HEALTH_LOGS flag ([e0a65da](https://github.com/ColdPBC/cold-monorepo/commit/e0a65dac0dc93f3e8c408f24ec6585bc93386ba4))
+
 ## [1.77.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.77.1...v1.77.2) (2023-12-21)
 
 
