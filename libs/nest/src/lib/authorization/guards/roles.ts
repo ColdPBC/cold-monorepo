@@ -20,7 +20,7 @@ export class RolesGuard extends BaseWorker implements CanActivate {
 
   async resolveRequest(request: any, user: AuthenticatedUser, roles: Array<string>) {
     let isValid = false;
-    let orgId = '';
+    let orgId: string | null = null;
     const isColdAdmin = user?.coldclimate_claims?.roles?.includes('cold:admin');
 
     const dd_user = {
@@ -77,13 +77,10 @@ export class RolesGuard extends BaseWorker implements CanActivate {
       if (isColdAdmin) {
         orgId = request?.query?.impersonateOrg;
       }
-    } else {
-      // ignore whatever was passed to impersonate org
-      orgId = request?.params?.orgId;
     }
 
     // check if orgId matches claims
-    if (orgId !== user?.coldclimate_claims?.org_id) {
+    if (orgId && orgId !== user?.coldclimate_claims?.org_id) {
       // if not check if they are cold admin
       if (isColdAdmin) {
         // Log if cold:admin is impersonating an org
