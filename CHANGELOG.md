@@ -1,3 +1,10 @@
+## [1.76.4-cold-447.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.76.4-cold-447.2...v1.76.4-cold-447.3) (2023-12-21)
+
+
+### Bug Fixes
+
+* add bayou service to preview block ([e4b7fb5](https://github.com/ColdPBC/cold-monorepo/commit/e4b7fb5bbb0f33b44ac64e63b13a7d28f3159960))
+
 ## [1.76.4-cold-447.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.76.4-cold-447.1...v1.76.4-cold-447.2) (2023-12-21)
 
 
