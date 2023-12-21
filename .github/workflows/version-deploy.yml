@@ -114,3 +114,9 @@ jobs:
           curl -n -X POST https://app.flightcontrol.dev/api/deploy-hook/cold-staging/58vWGjvmj9PWGxzImyRkVCTujxuJT-Q8piPwciMogtAy4-ci?force=false
           echo "🛩 Flightcontrol Deploying ( https://app.flightcontrol.dev/org/cloejv4kz05s0ps21f3q2qjxe/environments/clpeertbx01sgpx0yy5cu4imq )"
 
+      - name: 🛫 Trigger Preview Deploy
+        if: steps.PR.outputs.pr_found != 'true'
+        run: |
+          curl -n -X POST https://app.flightcontrol.dev/api/deploy-hook/cold-preview/eJuArVaE-2tgOHS846v6Fb8-RbPv1CxKRuXcPvQvaOQnMehX/${{ env.PR_NUMBER }}/${{ github.sha }}?force=false
+          echo "🛩 Flightcontrol Deploying ( https://app.flightcontrol.dev/org/cloejv4kz05s0ps21f3q2qjxe/environments/clp9qj5qj0qj0qj0qj0qj0qj )"
+

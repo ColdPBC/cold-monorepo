@@ -4,17 +4,17 @@ import { survey_types } from '@prisma/client';
 import { Span } from 'nestjs-ddtrace';
 import { ResourceValidationPipe } from '../../../pipes/resource.pipe';
 import {
-  SurveyResponseSchema,
-  ZodCategoryResponseDto,
-  JwtAuthGuard,
-  RolesGuard,
-  Roles,
-  HttpExceptionFilter,
-  Role,
-  BaseWorker,
   AuthenticatedUser,
-  UpdateSurveyDefinitionsDto,
+  BaseWorker,
+  HttpExceptionFilter,
+  JwtAuthGuard,
+  Role,
+  Roles,
+  RolesGuard,
   SurveyDefinitionsEntity,
+  SurveyResponseSchema,
+  UpdateSurveyDefinitionsDto,
+  ZodCategoryResponseDto,
 } from '@coldpbc/nest';
 import { allRoles, bpcDecoratorOptions, coldAdminOnly, impersonateOrgDecoratorOptions, orgIdDecoratorOptions } from '../_global/global.params';
 import { SurveysService } from './surveys.service';
@@ -96,7 +96,7 @@ export class SurveysController extends BaseWorker {
    * Get all surveys for an org
    */
   @Get('organizations/:orgId/surveys')
-  @Roles(...coldAdminOnly)
+  @Roles(...allRoles)
   @ApiTags('Organizations : Surveys')
   @ApiParam(orgIdDecoratorOptions)
   @ApiQuery({
@@ -290,7 +290,7 @@ export class SurveysController extends BaseWorker {
   }
 
   @Put('organizations/:orgId/surveys/:name')
-  @Roles(Role.ColdAdmin, Role.CompanyOwner, Role.CompanyAdmin, Role.CompanyMember)
+  @Roles(...allRoles)
   @ApiTags('Organizations : Surveys')
   @ApiParam({
     name: 'orgId',
