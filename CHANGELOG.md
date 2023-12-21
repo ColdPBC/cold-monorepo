@@ -1,3 +1,10 @@
+## [1.77.5](https://github.com/ColdPBC/cold-monorepo/compare/v1.77.4...v1.77.5) (2023-12-21)
+
+
+### Bug Fixes
+
+* primsa init issue with services that don't rely on the database ([57ea718](https://github.com/ColdPBC/cold-monorepo/commit/57ea718c557071cf43e29aac06f1aa22db864f01))
+
 ## [1.77.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.77.3...v1.77.4) (2023-12-21)
 
 
