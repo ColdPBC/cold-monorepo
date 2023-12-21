@@ -1,3 +1,11 @@
+## [1.77.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.77.0...v1.77.1) (2023-12-21)
+
+
+### Bug Fixes
+
+* remove auth0 types ([ae0e422](https://github.com/ColdPBC/cold-monorepo/commit/ae0e422cf28d1c8eadb9ca5cbf2ca80a2f1dea33))
+* remove auth0 types ([#209](https://github.com/ColdPBC/cold-monorepo/issues/209)) ([657a4d0](https://github.com/ColdPBC/cold-monorepo/commit/657a4d07054a7359f9a6352a18300d36f71fe537))
+
 # [1.77.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.76.5...v1.77.0) (2023-12-21)
 
 
