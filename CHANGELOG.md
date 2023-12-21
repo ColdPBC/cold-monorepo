@@ -1,3 +1,14 @@
+## [1.76.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.76.3...v1.76.4) (2023-12-21)
+
+
+### Bug Fixes
+
+* add bayou service to preview block ([1b0ab6e](https://github.com/ColdPBC/cold-monorepo/commit/1b0ab6e9c49297f7e31e15c72b433bdbd01c69ea))
+* add bayou service to preview block ([e4b7fb5](https://github.com/ColdPBC/cold-monorepo/commit/e4b7fb5bbb0f33b44ac64e63b13a7d28f3159960))
+* add manual deploy for preview ([a35dd2c](https://github.com/ColdPBC/cold-monorepo/commit/a35dd2c865d49741d812add53db79acf447ddc23))
+* allow all roles on org scoped requests ([2f435a8](https://github.com/ColdPBC/cold-monorepo/commit/2f435a8fbedf614c70e3645115b8eb70de1a14c3))
+* remove database_url from platform preview apps ([7d2e709](https://github.com/ColdPBC/cold-monorepo/commit/7d2e709e3e0f5257c9e7d22e9830908bd61ac46b))
+
 ## [1.76.4-cold-447.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.76.4-cold-447.3...v1.76.4-cold-447.4) (2023-12-21)
 
 
