@@ -167,9 +167,6 @@
                 "REDISCLOUD_URL": {
                   "fromParameterStore": "fc_coldmonorepo_coldproduction_coldcachefcproduction_wyb007zj_primary_url"
                 },
-                "DATABASE_URL": {
-                  "fromParameterStore": "fc_coldmonorepo_coldproduction_coldrdsfcproduction_6vas07o1_dbConnectionString"
-                },
                 "DD_AGENT_MAJOR_VERSION": "7",
                 "DD_LOG_LEVEL": "ERROR",
                 "DD_POSTGRES_URL_VAR": "DATABASE_URL",
@@ -590,9 +587,6 @@
                 "REDISCLOUD_URL": {
                   "fromParameterStore": "fc_coldmonorepo_coldpreview_coldcachepreview_bm8g0o0i_primary_url"
                 },
-                "DATABASE_URL": {
-                  "fromParameterStore": "fc_coldmonorepo_coldpreview_coldrdspreview_3q5601mr_dbConnectionString"
-                },
                 "DD_AGENT_MAJOR_VERSION": "7",
                 "DD_LOG_LEVEL": "ERROR",
                 "DD_POSTGRES_URL_VAR": "DATABASE_URL",
@@ -624,9 +618,6 @@
         },
         "REDISCLOUD_URL": {
           "fromParameterStore": "fc_coldmonorepo_coldpreview_coldcachepreview_bm8g0o0i_primary_url"
-        },
-        "DATABASE_URL": {
-          "fromParameterStore": "fc_coldmonorepo_coldpreview_coldrdspreview_3q5601mr_dbConnectionString"
         },
         "ENABLE_HEALTH_LOGS": false,
         "API_SERVER_DESCRIPTION": "Preview Server",
