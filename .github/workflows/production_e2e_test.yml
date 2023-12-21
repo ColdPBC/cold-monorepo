@@ -49,25 +49,33 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20.9.0"
-      - name: 📦 Cache node modules
+
+      - name: 🪢 Install Yarn
+        run: corepack enable && yarn set version stable
+
+      - name: 💼 Cache Node Modules
+        id: cache-node-modules
         uses: actions/cache@v3
         with:
           path: ./node_modules
-          key: ${{ runner.os }}-build-${{ env.CACHE_NAME }}-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.CACHE_NAME }}-
-            ${{ runner.os }}-build-
-            ${{ runner.os }}-
-
-      - name: 🧩 Install dependencies
-        run: yarn && yarn postinstall && yarn add dd-trace
+          key: node-modules-${{ hashFiles('**/yarn.lock') }}
+      - name: 🧩 Install Dependencies
+        # 👇 If cache not found, install dependencies with the same package manager used in the project (replace it as needed), e.g. yarn, npm, pnpm
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
+        run: yarn
 
       - name: 🌈 Generate Prisma Client
         run: yarn dlx nx run cold-nest-library:prisma-generate
 
       - name: 🏗 build development
-        run: yarn prebuild && yarn dlx nx reset && yarn dlx nx run cold-api:build:development
+        run: yarn barrels && yarn dlx nx reset && yarn dlx nx run cold-api:build:development
+
+      - name: Parse Payload
+        if: github.event.deployment_status.state == 'success'
+        id: parse_payload
+        run: echo "::set-output name=service_url::$(node .github/scripts/parse_payload.js "${{ toJson(github.event.deployment.payload) }}" cold-api)"
 
       - name: 🩻 Run Tests
-        run: DD_SITE=us5.datadoghq.com DD_API_KEY=${{secrets.DD_API_KEY}} DD_CIVISIBILITY_AGENTLESS_ENABLED=true NODE_OPTIONS="-r $(pwd)/.pnp.cjs -r dd-trace/ci/init" DD_ENV=test DD_SERVICE=cold-api-e2e yarn dlx nx run cold-api-e2e:e2e:ci
+        if: github.event.deployment_status.state == 'success'
+        run: API_SERVER_URL=${{ steps.parse_payload.outputs.service_url }} DD_SITE=us5.datadoghq.com DD_API_KEY=${{secrets.DD_API_KEY}} DD_CIVISIBILITY_AGENTLESS_ENABLED=true NODE_OPTIONS="-r $(pwd)/.pnp.cjs -r dd-trace/ci/init" DD_ENV=test DD_SERVICE=cold-api-e2e yarn dlx nx run cold-api-e2e:e2e:ci
 

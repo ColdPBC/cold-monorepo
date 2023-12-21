@@ -1,0 +1,57 @@
+{
+  "name": "cold-platform-bayou",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/cold-platform-bayou/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "target": "node",
+        "compiler": "tsc",
+        "outputPath": "dist/apps/cold-platform-bayou",
+        "main": "apps/cold-platform-bayou/src/main.ts",
+        "tsConfig": "apps/cold-platform-bayou/tsconfig.app.json",
+        "assets": ["apps/cold-platform-bayou/src/assets"],
+        "isolatedConfig": true,
+        "webpackConfig": "apps/cold-platform-bayou/webpack.config.js"
+      },
+      "configurations": {
+        "development": {},
+        "production": {}
+      }
+    },
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "cold-platform-bayou:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "cold-platform-bayou:build:development"
+        },
+        "production": {
+          "buildTarget": "cold-platform-bayou:build:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/cold-platform-bayou/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/cold-platform-bayou/jest.config.ts"
+      }
+    }
+  },
+  "tags": []
+}

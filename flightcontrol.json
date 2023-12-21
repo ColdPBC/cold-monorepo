@@ -191,12 +191,6 @@
             "value": "connectionString"
           }
         },
-        "DATABASE_URL": {
-          "fromService": {
-            "id": "cold-rds-fc-production",
-            "value": "dbConnectionString"
-          }
-        },
         "ENABLE_HEALTH_LOGS": true,
         "DD_ENV": "production",
         "NODE_ENV": "production"
@@ -388,12 +382,6 @@
             "value": "connectionString"
           }
         },
-        "DATABASE_URL": {
-          "fromService": {
-            "id": "cold-rds-fc-staging",
-            "value": "dbConnectionString"
-          }
-        },
         "NODE_ENV": "staging",
         "ENABLE_HEALTH_LOGS": true
       }
@@ -577,12 +565,6 @@
         }
       ],
       "envVariables": {
-        "DATABASE_URL": {
-          "fromService": {
-            "id": "cold-rds-preview",
-            "value": "dbConnectionString"
-          }
-        },
         "REDISCLOUD_URL": {
           "fromService": {
             "id": "cold-cache-preview",

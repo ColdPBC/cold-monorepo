@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from 'zod'; /////////////////////////////////////////
 
 /////////////////////////////////////////
 // NEWS SCHEMA
@@ -13,7 +13,7 @@ export const newsSchema = z.object({
   title: z.string(),
   url: z.string().url(),
   image_url: z.string().url(),
-  published_at: z.date(),
+  published_at: z.coerce.date(),
   source_name: z.string(),
   /**
    * @DtoUpdateHidden
@@ -26,8 +26,8 @@ export const newsSchema = z.object({
    */
   updated_at: z.date().optional(),
   publish: z.boolean(),
-})
+});
 
-export type news = z.infer<typeof newsSchema>
+export type news = z.infer<typeof newsSchema>;
 
 export default newsSchema;

@@ -1,3 +1,85 @@
+# [1.77.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.76.5...v1.77.0) (2023-12-21)
+
+
+### Bug Fixes
+
+* implement nest library ([9b1820e](https://github.com/ColdPBC/cold-monorepo/commit/9b1820e6d5c7f2bd6bdcced3aedc1ae95ca4a306))
+* path resolution in test ([a395790](https://github.com/ColdPBC/cold-monorepo/commit/a395790a053e3118a3ae942591752110b8b6ab55))
+* remove database_url from platform preview apps ([0e83756](https://github.com/ColdPBC/cold-monorepo/commit/0e83756509b4119cde14d2849d74c44d0b931d29))
+
+
+### Features
+
+* add bayou microservice ([8d7506b](https://github.com/ColdPBC/cold-monorepo/commit/8d7506b4c86084da9c09c5d0279d6bd41d3b9c9f))
+
+## [1.76.5](https://github.com/ColdPBC/cold-monorepo/compare/v1.76.4...v1.76.5) (2023-12-21)
+
+
+### Bug Fixes
+
+* make prisma module global ([b4df262](https://github.com/ColdPBC/cold-monorepo/commit/b4df26200de4cff77e278dffbd475c39ef9f75ba))
+* make prisma module global ([#208](https://github.com/ColdPBC/cold-monorepo/issues/208)) ([029c40e](https://github.com/ColdPBC/cold-monorepo/commit/029c40e2244f81b40d59df3e1314d50c7bdce7df))
+
+## [1.76.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.76.3...v1.76.4) (2023-12-21)
+
+
+### Bug Fixes
+
+* add bayou service to preview block ([1b0ab6e](https://github.com/ColdPBC/cold-monorepo/commit/1b0ab6e9c49297f7e31e15c72b433bdbd01c69ea))
+* add bayou service to preview block ([e4b7fb5](https://github.com/ColdPBC/cold-monorepo/commit/e4b7fb5bbb0f33b44ac64e63b13a7d28f3159960))
+* add manual deploy for preview ([a35dd2c](https://github.com/ColdPBC/cold-monorepo/commit/a35dd2c865d49741d812add53db79acf447ddc23))
+* allow all roles on org scoped requests ([2f435a8](https://github.com/ColdPBC/cold-monorepo/commit/2f435a8fbedf614c70e3645115b8eb70de1a14c3))
+* remove database_url from platform preview apps ([7d2e709](https://github.com/ColdPBC/cold-monorepo/commit/7d2e709e3e0f5257c9e7d22e9830908bd61ac46b))
+
+## [1.76.4-cold-447.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.76.4-cold-447.3...v1.76.4-cold-447.4) (2023-12-21)
+
+
+### Bug Fixes
+
+* add bayou service to preview block ([1b0ab6e](https://github.com/ColdPBC/cold-monorepo/commit/1b0ab6e9c49297f7e31e15c72b433bdbd01c69ea))
+
+## [1.76.4-cold-447.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.76.4-cold-447.2...v1.76.4-cold-447.3) (2023-12-21)
+
+
+### Bug Fixes
+
+* add bayou service to preview block ([e4b7fb5](https://github.com/ColdPBC/cold-monorepo/commit/e4b7fb5bbb0f33b44ac64e63b13a7d28f3159960))
+
+## [1.76.4-cold-447.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.76.4-cold-447.1...v1.76.4-cold-447.2) (2023-12-21)
+
+
+### Bug Fixes
+
+* remove database_url from platform preview apps ([7d2e709](https://github.com/ColdPBC/cold-monorepo/commit/7d2e709e3e0f5257c9e7d22e9830908bd61ac46b))
+
+## [1.76.4-cold-447.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.76.3...v1.76.4-cold-447.1) (2023-12-21)
+
+
+### Bug Fixes
+
+* allow all roles on org scoped requests ([2f435a8](https://github.com/ColdPBC/cold-monorepo/commit/2f435a8fbedf614c70e3645115b8eb70de1a14c3))
+
+## [1.76.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.76.2...v1.76.3) (2023-12-21)
+
+
+### Bug Fixes
+
+* published_at validation bug ([f8b814f](https://github.com/ColdPBC/cold-monorepo/commit/f8b814f9806fc747fd333ebf9215ec22a21055a9))
+
+## [1.76.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.76.1...v1.76.2) (2023-12-21)
+
+
+### Bug Fixes
+
+* role bug ([baf80ed](https://github.com/ColdPBC/cold-monorepo/commit/baf80edc5bf0310af539ac24ba576220972e8e80))
+
+## [1.76.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.76.0...v1.76.1) (2023-12-19)
+
+
+### Bug Fixes
+
+* switch service to register via publish rather than RPC ([93ec04d](https://github.com/ColdPBC/cold-monorepo/commit/93ec04dd1847546c03857de6311e911d039b45bb))
+
 # [1.76.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.75.1...v1.76.0) (2023-12-15)
 
 

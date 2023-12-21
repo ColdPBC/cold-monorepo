@@ -106,11 +106,27 @@ jobs:
     needs:
       - version
     steps:
-      - name: 🛫 Trigger Production & Staging Deploy
+      - name: 🛫 Trigger Staging Deploy
+        if: steps.PR.outputs.pr_found != 'true'
+        run: |
+          curl -n -X POST https://app.flightcontrol.dev/api/deploy-hook/cold-staging/58vWGjvmj9PWGxzImyRkVCTujxuJT-Q8piPwciMogtAy4-ci?force=false
+          echo "🛩 Core-Staging Deploying ( https://app.flightcontrol.dev/org/cloejv4kz05s0ps21f3q2qjxe/environments/clpeertbx01sgpx0yy5cu4imq )"
+          curl -n -X POST https://app.flightcontrol.dev/api/deploy-hook/cold-staging/qTgxHc33CcF_KjESarfLSAmpY30CE6-DnQHuy24Te_B5lM2L?force=false
+          echo "🛩 Platform-Staging Deploying ( https://app.flightcontrol.dev/org/cloejv4kz05s0ps21f3q2qjxe/environments/clq5n03ri03frr10xeuz85upi )"
+
+      - name: 🛫 Trigger Production Deploy
         if: startsWith(env.BRANCH_NAME,'main')
         run: |
           curl -n -X POST https://app.flightcontrol.dev/api/deploy-hook/cold-production/gAEvhWNzcPCY69Z35mGvqXY0S9_vnQ0eqJrtCpIr8aUI9sW-?force=false
-          echo "🛩 Flightcontrol Deploying ( https://app.flightcontrol.dev/org/cloejv4kz05s0ps21f3q2qjxe/environments/clpgmjfpl049fr90yqwdsuqd8 )"
-          curl -n -X POST https://app.flightcontrol.dev/api/deploy-hook/cold-staging/58vWGjvmj9PWGxzImyRkVCTujxuJT-Q8piPwciMogtAy4-ci?force=false
-          echo "🛩 Flightcontrol Deploying ( https://app.flightcontrol.dev/org/cloejv4kz05s0ps21f3q2qjxe/environments/clpeertbx01sgpx0yy5cu4imq )"
+          echo "🛩 Core-Production Deploying ( https://app.flightcontrol.dev/org/cloejv4kz05s0ps21f3q2qjxe/environments/clpgmjfpl049fr90yqwdsuqd8 )"
+          curl -n -X POST https://app.flightcontrol.dev/api/deploy-hook/cold-production/ldoOYhz-MrVnJCk2uvX3DksItBNCEIShKF2Wvf4RgYEleGdk?force=false
+          echo "🛩 Platform-Production Deploying ( https://app.flightcontrol.dev/org/cloejv4kz05s0ps21f3q2qjxe/environments/clq5mrh6a01sypm0x6k3lbpw7 )"
+
+      - name: 🛫 Trigger Preview Deploy
+        if: steps.PR.outputs.pr_found != 'true'
+        run: |
+          curl -n -X POST https://app.flightcontrol.dev/api/deploy-hook/cold-preview/eJuArVaE-2tgOHS846v6Fb8-RbPv1CxKRuXcPvQvaOQnMehX/${{ env.PR_NUMBER }}/${{ github.sha }}?force=false
+          echo "🛩 Platform-Preview Deploying ( https://app.flightcontrol.dev/org/cloejv4kz05s0ps21f3q2qjxe/environments/clp9qj5qj0qj0qj0qj0qj0qj )"
+          curl -n -X POST https://app.flightcontrol.dev/api/deploy-hook/cold-preview/xaQAJM9Iw4G6UWmYTX0RLYdU1krFiPnKNV-lzQeTc6crqjgc/${{ env.PR_NUMBER }}/${{ github.sha }}?force=false
+          echo "🛩 Core-Preview Deploying ( https://app.flightcontrol.dev/org/cloejv4kz05s0ps21f3q2qjxe/projects/clpeerpk90034r71b0tiky5vd/preview-environments )"
 
