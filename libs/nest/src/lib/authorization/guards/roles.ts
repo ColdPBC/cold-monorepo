@@ -9,17 +9,19 @@ import { CacheService } from '../../cache';
 import { AuthenticatedUser } from '../../primitives';
 import { Organizations } from '../../../validation';
 import { isRabbitContext } from '@golevelup/nestjs-rabbitmq';
+import { PrismaService } from '../../prisma';
 
 @Injectable()
 @Span()
 export class RolesGuard extends BaseWorker implements CanActivate {
-  constructor(private reflector: Reflector, private readonly cache: CacheService) {
+  constructor(private reflector: Reflector, private readonly cache: CacheService, private prisma: PrismaService) {
     super('RolesGuard');
   }
 
   async resolveRequest(request: any, user: AuthenticatedUser, roles: Array<string>) {
     let isValid = false;
     let orgId = '';
+    const isColdAdmin = user?.coldclimate_claims?.roles?.includes('cold:admin');
 
     const dd_user = {
       id: user?.sub,
@@ -28,8 +30,7 @@ export class RolesGuard extends BaseWorker implements CanActivate {
     };
 
     tracer.setUser(dd_user);
-
-    this.tracer.getActiveSpan()?.addTags({
+    const tags = {
       action: 'resolveRequest',
       user: user.coldclimate_claims,
       required_roles: roles,
@@ -37,52 +38,67 @@ export class RolesGuard extends BaseWorker implements CanActivate {
       method: request.method,
       query: request.query,
       params: request.params,
-    });
+    };
+
+    this.logger.setTags(tags);
+
+    this.tracer.getActiveSpan()?.addTags(tags);
+
     // Check if organization is being requested by name
-    if (
-      (request?.params?.nameOrId || request?.params?.orgId) &&
-      (!request?.params?.nameOrId?.includes('org_') || !request?.params?.orgId?.includes('org_')) //neither nameOrId nor orgId parameters contain an so filter by name
-    ) {
-      if (request?.params?.nameOrId) {
-        // since org was requested by name get all orgs from cache and filter by name
-        const orgs = (await this.cache.get('organizations')) as Organizations[];
-        const org = first(
-          filter(orgs, {
+    //neither nameOrId nor orgId parameters contain an Auth0 org ID so find the orgId by name
+    if ((request?.params?.nameOrId || request?.params?.orgId) && (!request?.params?.nameOrId?.includes('org_') || !request?.params?.orgId?.includes('org_'))) {
+      // since org was requested by name get all orgs from cache and filter by name
+      const orgs = (await this.cache.get('organizations')) as Organizations[];
+      let org: any = first(
+        filter(orgs, {
+          name: request?.params?.nameOrId ? request?.params?.nameOrId : request?.params?.orgId,
+        }),
+      );
+
+      if (!org) {
+        this.logger.warn(`Unable to find cached org by name ${request?.params?.nameOrId | request?.params?.orgId}`);
+
+        org = await this.prisma.organizations.findUnique({
+          where: {
             name: request?.params?.nameOrId ? request?.params?.nameOrId : request?.params?.orgId,
-          }),
-        );
+          },
+        });
 
-        orgId = org ? org?.id : '';
-        if (!orgId) throw new NotFoundException(`Unable to find cached org by name ${request?.params?.nameOrId | request?.params?.orgId}`); //set org id to the ID of the org that matched by name
-      }
-
-      //Check for impersonation flag
-      if (request?.query?.impersonateOrg) {
-        if (user?.coldclimate_claims?.roles?.includes('cold:admin')) {
-          orgId = request?.query?.impersonateOrg;
+        if (!org) {
+          throw new NotFoundException(`Unable to locate organization ${request?.params?.nameOrId ? request?.params?.nameOrId : request?.params?.orgId} in cache or db`);
         }
-      } else {
-        // set orgId to match the id of the orgId passed in the request
-        orgId = request?.params?.orgId;
       }
 
-      if (orgId && orgId.startsWith('org_') && user.coldclimate_claims.org_id !== orgId && !user.isColdAdmin) {
+      orgId = org?.id; //set org id to the ID of the org that matched by name
+    }
+
+    //Check for impersonation flag
+    if (request?.query?.impersonateOrg) {
+      if (isColdAdmin) {
+        orgId = request?.query?.impersonateOrg;
+      }
+    } else {
+      // ignore whatever was passed to impersonate org
+      orgId = request?.params?.orgId;
+    }
+
+    // check if orgId matches claims
+    if (orgId !== user?.coldclimate_claims?.org_id) {
+      // if not check if they are cold admin
+      if (isColdAdmin) {
+        // Log if cold:admin is impersonating an org
+        this.logger.warn(`User: ${user?.coldclimate_claims?.email} is impersonating user for org: ${orgId}`);
+        return true;
+      } else {
+        // Non cold:admin attempted to impersonate a different org
         this.logger.error(`User: ${user?.coldclimate_claims?.email} attempted to impersonate a user in another org: ${orgId}`);
         tracer.appsec.trackCustomEvent('invalid-impersonation-attempt', dd_user);
 
         throw new UnauthorizedException(`User: ${user?.coldclimate_claims?.email} attempted to impersonate a user in another org: ${orgId}`);
       }
-
-      if (orgId && orgId !== user?.coldclimate_claims?.org_id) {
-        isValid = user?.coldclimate_claims?.roles?.includes('cold:admin');
-        // Log if user is impersonating an admin
-        if (isValid) {
-          this.logger.warn(`User: ${user?.coldclimate_claims?.email} is impersonating user for org: ${orgId}`);
-          return isValid;
-        }
-      }
     }
 
+    // check if user's role is allowed
     for (const role of roles) {
       if (user?.coldclimate_claims?.roles?.includes(role)) {
         isValid = true;

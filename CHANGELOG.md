@@ -1,23 +1,16 @@
-# [1.77.0-cold-449.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.77.0-cold-449.2...v1.77.0-cold-449.3) (2023-12-21)
+## [1.76.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.76.2...v1.76.3) (2023-12-21)
 
 
 ### Bug Fixes
 
-* path resolution in test ([a395790](https://github.com/ColdPBC/cold-monorepo/commit/a395790a053e3118a3ae942591752110b8b6ab55))
+* published_at validation bug ([f8b814f](https://github.com/ColdPBC/cold-monorepo/commit/f8b814f9806fc747fd333ebf9215ec22a21055a9))
 
-# [1.77.0-cold-449.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.77.0-cold-449.1...v1.77.0-cold-449.2) (2023-12-21)
+## [1.76.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.76.1...v1.76.2) (2023-12-21)
 
 
 ### Bug Fixes
 
-* implement nest library ([9b1820e](https://github.com/ColdPBC/cold-monorepo/commit/9b1820e6d5c7f2bd6bdcced3aedc1ae95ca4a306))
-
-# [1.77.0-cold-449.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.76.1...v1.77.0-cold-449.1) (2023-12-21)
-
-
-### Features
-
-* add bayou microservice ([8d7506b](https://github.com/ColdPBC/cold-monorepo/commit/8d7506b4c86084da9c09c5d0279d6bd41d3b9c9f))
+* role bug ([baf80ed](https://github.com/ColdPBC/cold-monorepo/commit/baf80edc5bf0310af539ac24ba576220972e8e80))
 
 ## [1.76.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.76.0...v1.76.1) (2023-12-19)
 
