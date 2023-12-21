@@ -1,3 +1,10 @@
+## [1.76.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.76.1...v1.76.2) (2023-12-21)
+
+
+### Bug Fixes
+
+* role bug ([baf80ed](https://github.com/ColdPBC/cold-monorepo/commit/baf80edc5bf0310af539ac24ba576220972e8e80))
+
 ## [1.76.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.76.0...v1.76.1) (2023-12-19)
 
 
