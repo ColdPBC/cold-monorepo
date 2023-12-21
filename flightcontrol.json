@@ -150,21 +150,6 @@
           ]
         },
         {
-          "id": "cold-rds-fc-production",
-          "name": "cold-rds-fc-production",
-          "type": "rds",
-          "engine": "postgres",
-          "engineVersion": "15",
-          "instanceSize": "db.t4g.large",
-          "storage": 200,
-          "maxStorage": 400,
-          "private": false,
-          "deletionProtection": true,
-          "applyChangesImmediately": true,
-          "autoUpgradeMinorVersions": true,
-          "connectionStringEnvVarName": "DATABASE_URL"
-        },
-        {
           "id": "cold-cache-fc-production",
           "name": "cold-cache-fc-production",
           "port": 6379,
