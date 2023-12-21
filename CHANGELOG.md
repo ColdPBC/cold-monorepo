@@ -1,3 +1,10 @@
+## [1.76.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.76.2...v1.76.3) (2023-12-21)
+
+
+### Bug Fixes
+
+* published_at validation bug ([f8b814f](https://github.com/ColdPBC/cold-monorepo/commit/f8b814f9806fc747fd333ebf9215ec22a21055a9))
+
 ## [1.76.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.76.1...v1.76.2) (2023-12-21)
 
 
