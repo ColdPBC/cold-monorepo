@@ -7,7 +7,8 @@
       "region": "us-east-1",
       "source": {
         "pr": false,
-        "branch": "main"
+        "branch": "main",
+        "trigger": "manual"
       },
       "vpc": {
         "id": "vpc-0adff7558db4535e2",
@@ -21,12 +22,12 @@
           "port": 7003,
           "type": "fargate",
           "memory": 2,
-          "dockerfilePath": "_openai.dockerfile",
+          "dockerfilePath": "_platform.dockerfile",
           "dockerContext": ".",
           "watchPaths": [
             "apps/cold-platform-openai/src/**",
             "libs/nest/src/**",
-            "_openai.dockerfile"
+            "_platform.dockerfile"
           ],
           "maxInstances": 2,
           "minInstances": 1,
@@ -77,9 +78,6 @@
                 "REDISCLOUD_URL": {
                   "fromParameterStore": "fc_coldmonorepo_coldproduction_coldcachefcproduction_wyb007zj_primary_url"
                 },
-                "DATABASE_URL": {
-                  "fromParameterStore": "fc_coldmonorepo_coldproduction_coldrdsfcproduction_6vas07o1_dbConnectionString"
-                },
                 "DD_API_KEY": {
                   "fromParameterStore": "fc.cold-api-fc.env.cold-production.8pr1zak.DD_API_KEY"
                 },
@@ -109,7 +107,7 @@
           "port": 7002,
           "type": "fargate",
           "memory": 2,
-          "dockerfilePath": "_climatiq.dockerfile",
+          "dockerfilePath": "_platform.dockerfile",
           "dockerContext": ".",
           "containerImage": {
             "registryId": "cold-ecr-fc-r123elz",
@@ -119,7 +117,7 @@
           "watchPaths": [
             "apps/cold-platform-climatiq/src/**",
             "libs/nest/src/**",
-            "_climatiq.dockerfile"
+            "_platform.dockerfile"
           ],
           "maxInstances": 2,
           "minInstances": 2,
@@ -167,8 +165,94 @@
                 "REDISCLOUD_URL": {
                   "fromParameterStore": "fc_coldmonorepo_coldproduction_coldcachefcproduction_wyb007zj_primary_url"
                 },
-                "DATABASE_URL": {
-                  "fromParameterStore": "fc_coldmonorepo_coldproduction_coldrdsfcproduction_6vas07o1_dbConnectionString"
+                "DD_AGENT_MAJOR_VERSION": "7",
+                "DD_LOG_LEVEL": "ERROR",
+                "DD_POSTGRES_URL_VAR": "DATABASE_URL",
+                "DD_REDIS_URL_VAR": "REDISCLOUD_URL",
+                "DD_SITE": "us5.datadoghq.com",
+                "DD_APM_ENABLED": true,
+                "DD_APPSEC_AUTOMATED_USER_EVENTS_TRACKING": true,
+                "DD_APPSEC_ENABLED": true,
+                "DD_DOGSTATSD_NON_LOCAL_TRAFFIC": true,
+                "DD_ENABLE_DBM": true,
+                "DD_IAST_ENABLED": true,
+                "DD_LISTENERS": 2,
+                "DD_LOGS_ENABLED": true,
+                "DD_LOGS_INJECTION": true,
+                "DD_METRICS_ENABLED": true,
+                "DD_PROCESS_AGENT": true,
+                "DD_PROCESS_AGENT_ENABLED": true,
+                "DD_PROFILING_ENABLED": true,
+                "DD_REMOTE_CONFIGURATION_ENABLED": true,
+                "DD_USE_DOGSTATSD": true
+              }
+            }
+          ]
+        },
+        {
+          "id": "cold-platform-bayou-production",
+          "name": "cold-platform-bayou",
+          "cpu": 1,
+          "port": 7004,
+          "type": "fargate",
+          "memory": 2,
+          "dockerfilePath": "_platform.dockerfile",
+          "dockerContext": ".",
+          "containerImage": {
+            "registryId": "cold-ecr-fc-r123elz",
+            "repository": "bayou-docker-images",
+            "tag": "main"
+          },
+          "watchPaths": [
+            "apps/cold-platform-bayou/src/**",
+            "libs/nest/src/**",
+            "_platform.dockerfile"
+          ],
+          "maxInstances": 2,
+          "minInstances": 2,
+          "healthCheckPath": "/health",
+          "containerInsights": true,
+          "enableCloudfrontSwr": true,
+          "versionHistoryCount": 10,
+          "dockerLabels": {
+            "com.datadoghq.tags.environment": "production",
+            "com.datadoghq.tags.env": "production",
+            "com.datadoghq.tags.service": "cold-platform-bayou",
+            "com.datadoghq.tags.version": "1.0.0"
+          },
+          "autoscaling": {
+            "cpuThreshold": 90,
+            "memoryThreshold": 90,
+            "cooldownTimerSecs": 300,
+            "requestsPerTarget": 500
+          },
+          "experimental": {
+            "healthCheckTimeout": 15,
+            "healthCheckInterval": 35
+          },
+          "envVariables": {
+            "DD_SERVICE": "cold-platform-bayou"
+          },
+          "sidecars": [
+            {
+              "name": "sidecar-dd-bayou-prod",
+              "image": "datadog/agent",
+              "cpuAllotment": 0.5,
+              "memoryAllotment": 0.25,
+              "enableNetworking": true,
+              "logging": true,
+              "ports": [
+                8125,
+                5001,
+                5000
+              ],
+              "envVariables": {
+                "DD_SERVICE": "cold-datadog-bayou-production",
+                "DD_API_KEY": {
+                  "fromParameterStore": "fc.cold-api-fc.env.cold-production.8pr1zak.DD_API_KEY"
+                },
+                "REDISCLOUD_URL": {
+                  "fromParameterStore": "fc_coldmonorepo_coldproduction_coldcachefcproduction_wyb007zj_primary_url"
                 },
                 "DD_AGENT_MAJOR_VERSION": "7",
                 "DD_LOG_LEVEL": "ERROR",
@@ -204,10 +288,7 @@
         "REDISCLOUD_URL": {
           "fromParameterStore": "fc_coldmonorepo_coldproduction_coldcachefcproduction_wyb007zj_primary_url"
         },
-        "DATABASE_URL": {
-          "fromParameterStore": "fc_coldmonorepo_coldproduction_coldrdsfcproduction_6vas07o1_dbConnectionString"
-        },
-        "ENABLE_HEALTH_LOGS": true
+        "ENABLE_HEALTH_LOGS": false
       }
     },
     {
@@ -231,12 +312,12 @@
           "port": 7003,
           "type": "fargate",
           "memory": 2,
-          "dockerfilePath": "_openai.dockerfile",
+          "dockerfilePath": "_platform.dockerfile",
           "dockerContext": ".",
           "watchPaths": [
             "apps/cold-platform-openai/src/**",
             "libs/nest/src/**",
-            "_openai.dockerfile"
+            "_platform.dockerfile"
           ],
           "maxInstances": 1,
           "minInstances": 1,
@@ -289,9 +370,6 @@
                 "REDISCLOUD_URL": {
                   "fromParameterStore": "fc_coldmonorepo_coldstaging_coldcachefcstaging_zc610oe6_primary_url"
                 },
-                "DATABASE_URL": {
-                  "fromParameterStore": "fc_coldmonorepo_coldstaging_coldrdsfcstaging_835r0xe9_dbConnectionString"
-                },
                 "DD_POSTGRES_URL_VAR": "DATABASE_URL",
                 "DD_REDIS_URL_VAR": "REDISCLOUD_URL",
                 "DD_SERVICE": "cold-platform-openai",
@@ -318,7 +396,7 @@
           "port": 7002,
           "type": "fargate",
           "memory": 2,
-          "dockerfilePath": "_climatiq.dockerfile",
+          "dockerfilePath": "_platform.dockerfile",
           "dockerContext": ".",
           "containerImage": {
             "registryId": "cold-ecr-fc-r123elz",
@@ -328,7 +406,7 @@
           "watchPaths": [
             "apps/cold-platform-climatiq/src/**",
             "libs/nest/src/**",
-            "_climatiq.dockerfile"
+            "_platform.dockerfile"
           ],
           "maxInstances": 2,
           "minInstances": 2,
@@ -376,8 +454,94 @@
                 "REDISCLOUD_URL": {
                   "fromParameterStore": "fc_coldmonorepo_coldstaging_coldcachefcstaging_zc610oe6_primary_url"
                 },
-                "DATABASE_URL": {
-                  "fromParameterStore": "fc_coldmonorepo_coldstaging_coldrdsfcstaging_835r0xe9_dbConnectionString"
+                "DD_AGENT_MAJOR_VERSION": "7",
+                "DD_LOG_LEVEL": "ERROR",
+                "DD_POSTGRES_URL_VAR": "DATABASE_URL",
+                "DD_REDIS_URL_VAR": "REDISCLOUD_URL",
+                "DD_SITE": "us5.datadoghq.com",
+                "DD_APM_ENABLED": true,
+                "DD_APPSEC_AUTOMATED_USER_EVENTS_TRACKING": true,
+                "DD_APPSEC_ENABLED": true,
+                "DD_DOGSTATSD_NON_LOCAL_TRAFFIC": true,
+                "DD_ENABLE_DBM": true,
+                "DD_IAST_ENABLED": true,
+                "DD_LISTENERS": 2,
+                "DD_LOGS_ENABLED": true,
+                "DD_LOGS_INJECTION": true,
+                "DD_METRICS_ENABLED": true,
+                "DD_PROCESS_AGENT": true,
+                "DD_PROCESS_AGENT_ENABLED": true,
+                "DD_PROFILING_ENABLED": true,
+                "DD_REMOTE_CONFIGURATION_ENABLED": true,
+                "DD_USE_DOGSTATSD": true
+              }
+            }
+          ]
+        },
+        {
+          "id": "cold-platform-bayou-staging",
+          "name": "cold-platform-bayou",
+          "cpu": 1,
+          "port": 7004,
+          "type": "fargate",
+          "memory": 2,
+          "dockerfilePath": "_platform.dockerfile",
+          "dockerContext": ".",
+          "containerImage": {
+            "registryId": "cold-ecr-fc-r123elz",
+            "repository": "bayou-docker-images",
+            "tag": "main"
+          },
+          "watchPaths": [
+            "apps/cold-platform-bayou/src/**",
+            "libs/nest/src/**",
+            "_platform.dockerfile"
+          ],
+          "maxInstances": 2,
+          "minInstances": 2,
+          "healthCheckPath": "/health",
+          "containerInsights": true,
+          "enableCloudfrontSwr": true,
+          "versionHistoryCount": 10,
+          "dockerLabels": {
+            "com.datadoghq.tags.environment": "staging",
+            "com.datadoghq.tags.env": "staging",
+            "com.datadoghq.tags.service": "cold-platform-bayou",
+            "com.datadoghq.tags.version": "1.0.0"
+          },
+          "autoscaling": {
+            "cpuThreshold": 90,
+            "memoryThreshold": 90,
+            "cooldownTimerSecs": 300,
+            "requestsPerTarget": 500
+          },
+          "experimental": {
+            "healthCheckTimeout": 15,
+            "healthCheckInterval": 35
+          },
+          "envVariables": {
+            "DD_SERVICE": "cold-platform-bayou"
+          },
+          "sidecars": [
+            {
+              "name": "sidecar-dd-bayou-staging",
+              "image": "datadog/agent",
+              "cpuAllotment": 0.5,
+              "memoryAllotment": 0.25,
+              "enableNetworking": true,
+              "logging": true,
+              "ports": [
+                8125,
+                5001,
+                5000
+              ],
+              "envVariables": {
+                "DD_SERVICE": "cold-datadog-bayou-staging",
+                "DD_API_KEY": {
+                  "fromParameterStore": "fc.cold-api-fc.env.cold-production.8pr1zak.DD_API_KEY"
+                },
+                "REDISCLOUD_URL": {
+                  "fromParameterStore": "fc_coldmonorepo_coldstaging_coldcachefcstaging_zc610oe6_primary_url"
                 },
                 "DD_AGENT_MAJOR_VERSION": "7",
                 "DD_LOG_LEVEL": "ERROR",
@@ -408,15 +572,13 @@
         "DD_API_KEY": {
           "fromParameterStore": "fc.cold-api-fc.env.cold-production.8pr1zak.DD_API_KEY"
         },
-        "NODE_ENV": "production",
-        "DD_ENV": "production",
+        "NODE_ENV": "staging",
+        "DD_ENV": "staging",
         "REDISCLOUD_URL": {
           "fromParameterStore": "fc_coldmonorepo_coldstaging_coldcachefcstaging_zc610oe6_primary_url"
         },
-        "DATABASE_URL": {
-          "fromParameterStore": "fc_coldmonorepo_coldstaging_coldrdsfcstaging_835r0xe9_dbConnectionString"
-        },
-        "ENABLE_HEALTH_LOGS": true
+
+        "ENABLE_HEALTH_LOGS": false
       }
     },
     {
@@ -429,7 +591,8 @@
           "toBranches": [
             "main"
           ]
-        }
+        },
+        "trigger": "manual"
       },
       "vpc": {
         "id": "vpc-0d5a6014067dda3b2",
@@ -443,13 +606,13 @@
           "port": 7001,
           "type": "fargate",
           "memory": 2,
-          "dockerfilePath": "_openai.dockerfile",
+          "dockerfilePath": "_platform.dockerfile",
           "dockerContext": ".",
           "watchPaths": [
             "apps/cold-platform-openai/src/**",
             "apps/cold-platform-openai/test/**",
             "libs/nest/src/**",
-            "_openai.dockerfile"
+            "_platform.dockerfile"
           ],
           "maxInstances": 1,
           "minInstances": 1,
@@ -499,9 +662,6 @@
                 "REDISCLOUD_URL": {
                   "fromParameterStore": "fc_coldmonorepo_coldpreview_coldcachepreview_bm8g0o0i_primary_url"
                 },
-                "DATABASE_URL": {
-                  "fromParameterStore": "fc_coldmonorepo_coldpreview_coldrdspreview_3q5601mr_dbConnectionString"
-                },
                 "DD_API_KEY": {
                   "fromParameterStore": "fc.cold-api-fc.env.cold-production.8pr1zak.DD_API_KEY"
                 },
@@ -531,7 +691,7 @@
           "port": 7001,
           "type": "fargate",
           "memory": 2,
-          "dockerfilePath": "_climatiq.dockerfile",
+          "dockerfilePath": "_platform.dockerfile",
           "dockerContext": ".",
           "containerImage": {
             "registryId": "cold-ecr-fc-r123elz",
@@ -542,7 +702,7 @@
             "apps/cold-platform-climatiq/src/**",
             "apps/cold-platform-climatiq/test/**",
             "libs/nest/src/**",
-            "_climatiq.dockerfile"
+            "_platform.dockerfile"
           ],
           "maxInstances": 2,
           "minInstances": 2,
@@ -590,9 +750,6 @@
                 "REDISCLOUD_URL": {
                   "fromParameterStore": "fc_coldmonorepo_coldpreview_coldcachepreview_bm8g0o0i_primary_url"
                 },
-                "DATABASE_URL": {
-                  "fromParameterStore": "fc_coldmonorepo_coldpreview_coldrdspreview_3q5601mr_dbConnectionString"
-                },
                 "DD_AGENT_MAJOR_VERSION": "7",
                 "DD_LOG_LEVEL": "ERROR",
                 "DD_POSTGRES_URL_VAR": "DATABASE_URL",
@@ -616,6 +773,91 @@
               }
             }
           ]
+        },
+        {
+          "id": "cold-platform-bayou-preview",
+          "name": "cold-platform-bayou",
+          "cpu": 1,
+          "port": 7004,
+          "type": "fargate",
+          "memory": 2,
+          "dockerfilePath": "_platform.dockerfile",
+          "dockerContext": ".",
+          "watchPaths": [
+            "apps/cold-platform-bayou/src/**",
+            "apps/cold-platform-bayou/test/**",
+            "libs/nest/src/**",
+            "_platform.dockerfile"
+          ],
+          "maxInstances": 1,
+          "minInstances": 1,
+          "healthCheckPath": "/health",
+          "containerInsights": true,
+          "enableCloudfrontSwr": true,
+          "versionHistoryCount": 10,
+          "dockerLabels": {
+            "com.datadoghq.tags.environment": "test",
+            "com.datadoghq.tags.env": "test",
+            "com.datadoghq.tags.service": "cold-platform-bayou",
+            "com.datadoghq.ad.check_names": "[\"postgres\"]",
+            "com.datadoghq.ad.init_configs": "[{}]",
+            "com.datadoghq.ad.instances": "[{\"database_autodiscovery\":{\"enabled\":true},\"collect_schemas\":{\"enabled\":true},\"dbm\":true,\"host\":\"${DATABASE_URL}\",\"port\": 5432,\"username\":\"datadog\",\"password\":\"${DD_POSTGRES_PASSWORD}\", \"tags\":[\"service:cold-rds-fc-${NODE_ENV}\",\"env:${NODE_ENV}\"]"
+          },
+          "autoscaling": {
+            "cpuThreshold": 90,
+            "memoryThreshold": 90,
+            "cooldownTimerSecs": 300,
+            "requestsPerTarget": 500
+          },
+          "experimental": {
+            "healthCheckTimeout": 15,
+            "healthCheckInterval": 35
+          },
+          "envVariables": {
+            "DD_SERVICE": "cold-platform-bayou"
+          },
+          "sidecars": [
+            {
+              "name": "cold-datadog-fc-preview",
+              "image": "datadog/agent",
+              "cpuAllotment": 0.5,
+              "memoryAllotment": 0.25,
+              "enableNetworking": true,
+              "logging": true,
+              "ports": [
+                8125,
+                5001,
+                5000
+              ],
+              "envVariables": {
+                "DD_ENV": "test",
+                "NODE_ENV": "test",
+                "DD_AGENT_MAJOR_VERSION": "7",
+                "DD_LOG_LEVEL": "ERROR",
+                "REDISCLOUD_URL": {
+                  "fromParameterStore": "fc_coldmonorepo_coldpreview_coldcachepreview_bm8g0o0i_primary_url"
+                },
+                "DD_API_KEY": {
+                  "fromParameterStore": "fc.cold-api-fc.env.cold-production.8pr1zak.DD_API_KEY"
+                },
+                "DD_POSTGRES_URL_VAR": "DATABASE_URL",
+                "DD_REDIS_URL_VAR": "REDISCLOUD_URL",
+                "DD_SERVICE": "cold-platform-bayou",
+                "DD_SITE": "us5.datadoghq.com",
+                "DD_APM_ENABLED": true,
+                "DD_APPSEC_AUTOMATED_USER_EVENTS_TRACKING": true,
+                "DD_APPSEC_ENABLED": true,
+                "DD_DOGSTATSD_NON_LOCAL_TRAFFIC": true,
+                "DD_METRICS_ENABLED": true,
+                "DD_ENABLE_DBM": true,
+                "DD_LOGS_INJECTION": true,
+                "DD_IAST_ENABLED": true,
+                "DD_PROCESS_AGENT": true,
+                "DD_PROFILING_ENABLED": true,
+                "DD_REMOTE_CONFIGURATION_ENABLED": true
+              }
+            }
+          ]
         }
       ],
       "envVariables": {
@@ -624,9 +866,6 @@
         },
         "REDISCLOUD_URL": {
           "fromParameterStore": "fc_coldmonorepo_coldpreview_coldcachepreview_bm8g0o0i_primary_url"
-        },
-        "DATABASE_URL": {
-          "fromParameterStore": "fc_coldmonorepo_coldpreview_coldrdspreview_3q5601mr_dbConnectionString"
         },
         "ENABLE_HEALTH_LOGS": false,
         "API_SERVER_DESCRIPTION": "Preview Server",
