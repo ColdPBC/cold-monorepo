@@ -3,7 +3,6 @@ import { User as Auth0User } from '@auth0/auth0-react';
 import { BaseButton, Input, Spinner } from '@coldpbc/components';
 import { ButtonTypes, GlobalSizes, InputTypes } from '@coldpbc/enums';
 import { axiosFetcher } from '@coldpbc/fetchers';
-import { Organization } from 'auth0';
 import { PolicyType, ToastMessage } from '@coldpbc/interfaces';
 import { useAddToastMessage } from '@coldpbc/hooks';
 import { isAxiosError } from 'axios';
@@ -13,7 +12,7 @@ import { ErrorFallback } from '../../application/errors/errorFallback';
 
 export interface SignupFormProps {
   userData?: Auth0User;
-  companyData?: Organization;
+  companyData?: any;
   tosSigned: boolean;
   privacySigned: boolean;
   tosData: PolicyType;

@@ -14,7 +14,6 @@ import { ButtonTypes, ErrorType } from '@coldpbc/enums';
 import { Dropdown } from 'flowbite-react';
 import { CheckIcon, ChevronDownIcon } from '@heroicons/react/20/solid';
 import { flowbiteThemeOverride } from '@coldpbc/themes';
-import { Organization } from 'auth0';
 import { useAuth0Wrapper, useColdContext, useOrgSWR } from '@coldpbc/hooks';
 import { MemberStatusType } from '@coldpbc/interfaces';
 
@@ -27,7 +26,7 @@ const _TeamMemberSettings = (props: any) => {
 
   const organization = useOrgSWR(['', 'GET'], axiosFetcher);
 
-  const organizationData = organization.data as Organization;
+  const organizationData = organization.data;
 
   const getCTAs = () => {
     const ctas: CardProps['ctas'] = [];
