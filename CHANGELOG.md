@@ -1,3 +1,10 @@
+# [1.77.0-cold-449.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.77.0-cold-449.2...v1.77.0-cold-449.3) (2023-12-21)
+
+
+### Bug Fixes
+
+* path resolution in test ([a395790](https://github.com/ColdPBC/cold-monorepo/commit/a395790a053e3118a3ae942591752110b8b6ab55))
+
 # [1.77.0-cold-449.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.77.0-cold-449.1...v1.77.0-cold-449.2) (2023-12-21)
 
 
