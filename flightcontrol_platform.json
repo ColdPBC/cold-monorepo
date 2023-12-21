@@ -298,7 +298,7 @@
       "source": {
         "pr": false,
         "branch": "main",
-        "trigger": "push"
+        "trigger": "manual"
       },
       "vpc": {
         "id": "vpc-060fc621728026ddf",
