@@ -1,3 +1,17 @@
+# [1.77.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.76.5...v1.77.0) (2023-12-21)
+
+
+### Bug Fixes
+
+* implement nest library ([9b1820e](https://github.com/ColdPBC/cold-monorepo/commit/9b1820e6d5c7f2bd6bdcced3aedc1ae95ca4a306))
+* path resolution in test ([a395790](https://github.com/ColdPBC/cold-monorepo/commit/a395790a053e3118a3ae942591752110b8b6ab55))
+* remove database_url from platform preview apps ([0e83756](https://github.com/ColdPBC/cold-monorepo/commit/0e83756509b4119cde14d2849d74c44d0b931d29))
+
+
+### Features
+
+* add bayou microservice ([8d7506b](https://github.com/ColdPBC/cold-monorepo/commit/8d7506b4c86084da9c09c5d0279d6bd41d3b9c9f))
+
 ## [1.76.5](https://github.com/ColdPBC/cold-monorepo/compare/v1.76.4...v1.76.5) (2023-12-21)
 
 
