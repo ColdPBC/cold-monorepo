@@ -1,3 +1,10 @@
+# [1.77.0-cold-449.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.77.0-cold-449.1...v1.77.0-cold-449.2) (2023-12-21)
+
+
+### Bug Fixes
+
+* implement nest library ([9b1820e](https://github.com/ColdPBC/cold-monorepo/commit/9b1820e6d5c7f2bd6bdcced3aedc1ae95ca4a306))
+
 # [1.77.0-cold-449.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.76.1...v1.77.0-cold-449.1) (2023-12-21)
 
 
