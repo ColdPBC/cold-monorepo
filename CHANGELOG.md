@@ -1,3 +1,11 @@
+## [1.76.5](https://github.com/ColdPBC/cold-monorepo/compare/v1.76.4...v1.76.5) (2023-12-21)
+
+
+### Bug Fixes
+
+* make prisma module global ([b4df262](https://github.com/ColdPBC/cold-monorepo/commit/b4df26200de4cff77e278dffbd475c39ef9f75ba))
+* make prisma module global ([#208](https://github.com/ColdPBC/cold-monorepo/issues/208)) ([029c40e](https://github.com/ColdPBC/cold-monorepo/commit/029c40e2244f81b40d59df3e1314d50c7bdce7df))
+
 ## [1.76.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.76.3...v1.76.4) (2023-12-21)
 
 
