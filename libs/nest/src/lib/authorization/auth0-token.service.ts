@@ -53,10 +53,16 @@ export class Auth0TokenService extends BaseWorker implements OnModuleInit {
     };
   }
 
-  async onModuleInit() {
+  override async onModuleInit() {
     await this.init();
   }
 
+  /**
+   * Initialize Auth0 Management API
+   * @returns {Promise<AxiosRequestConfig<any>>}
+   * @constructor
+   * @throws Error
+   */
   async init(): Promise<AxiosRequestConfig<any>> {
     try {
       if (this.cache) {

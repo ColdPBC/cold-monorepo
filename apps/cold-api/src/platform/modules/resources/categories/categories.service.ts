@@ -1,10 +1,25 @@
-import { BadRequestException, ConflictException, Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
-import { detailedDiff, diff } from 'deep-object-diff';
-import { isEmpty, isUUID } from 'class-validator';
-import { Span } from 'nestjs-ddtrace';
-import { ZodCategoryDefinitionItemDto, ObjectUtils, AuthenticatedUser, BaseWorker, CacheService, DarklyService, PrismaService, Tags } from '@coldpbc/nest';
-import { v4 } from 'uuid';
-import { get, merge, omit, find } from 'lodash';
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+  NotFoundException,
+  UnprocessableEntityException
+} from '@nestjs/common';
+import {detailedDiff, diff} from 'deep-object-diff';
+import {isEmpty, isUUID} from 'class-validator';
+import {Span} from 'nestjs-ddtrace';
+import {
+  AuthenticatedUser,
+  BaseWorker,
+  CacheService,
+  DarklyService,
+  ObjectUtils,
+  PrismaService,
+  Tags,
+  ZodCategoryDefinitionItemDto
+} from '@coldpbc/nest';
+import {v4} from 'uuid';
+import {find, get, merge, omit} from 'lodash';
 
 /**
  * @description This service is responsible for managing category definitions
@@ -17,11 +32,9 @@ export class CategoriesService extends BaseWorker {
 
   constructor(readonly darkly: DarklyService, private prisma: PrismaService, private readonly cache: CacheService) {
     super('CategoriesService');
-
-    this.init();
   }
 
-  async init() {
+  override async onModuleInit() {
     await this.prisma.$connect();
     this.test_orgs = await this.darkly.getJSONFlag('org-whitelist');
   }
