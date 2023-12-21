@@ -6,7 +6,6 @@ import { PolicySignedDataType } from '@coldpbc/interfaces';
 import { HexColors } from '@coldpbc/themes';
 import { ColdLogoNames, ErrorType, GlobalSizes } from '@coldpbc/enums';
 import { isEmpty } from 'lodash';
-import { Organization } from 'auth0';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application/errors/errorFallback';
 import { useColdContext, useOrgSWR } from '@coldpbc/hooks';
@@ -18,7 +17,7 @@ export interface SignupPageProps {
 
 const _SignupPage = ({ userData, signedPolicyData }: SignupPageProps) => {
   const { logError } = useColdContext();
-  const organizationSWR = useOrgSWR<Organization, any>(
+  const organizationSWR = useOrgSWR<any, any>(
     [``, 'GET'],
     axiosFetcher,
   );
