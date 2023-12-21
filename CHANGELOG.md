@@ -1,3 +1,10 @@
+## [1.76.4-cold-447.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.76.3...v1.76.4-cold-447.1) (2023-12-21)
+
+
+### Bug Fixes
+
+* allow all roles on org scoped requests ([2f435a8](https://github.com/ColdPBC/cold-monorepo/commit/2f435a8fbedf614c70e3645115b8eb70de1a14c3))
+
 ## [1.76.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.76.2...v1.76.3) (2023-12-21)
 
 
