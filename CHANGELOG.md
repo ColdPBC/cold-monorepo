@@ -1,3 +1,10 @@
+## [1.76.4-cold-447.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.76.4-cold-447.1...v1.76.4-cold-447.2) (2023-12-21)
+
+
+### Bug Fixes
+
+* remove database_url from platform preview apps ([7d2e709](https://github.com/ColdPBC/cold-monorepo/commit/7d2e709e3e0f5257c9e7d22e9830908bd61ac46b))
+
 ## [1.76.4-cold-447.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.76.3...v1.76.4-cold-447.1) (2023-12-21)
 
 
