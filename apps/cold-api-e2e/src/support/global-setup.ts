@@ -1,8 +1,8 @@
 /* eslint-disable */
-import * as global from 'global';
 import axios from 'axios';
-import { enhancePrisma } from './enhancedPrimsa';
-import { PrismaClient } from '@prisma/client';
+import {enhancePrisma} from './enhancedPrimsa';
+import {PrismaClient} from '@prisma/client';
+
 var __TEARDOWN_MESSAGE__: string;
 const EnhancedPrisma = enhancePrisma(PrismaClient);
 export * from '@prisma/client';
@@ -40,7 +40,7 @@ module.exports = async function () {
         username: `${API_ADMIN_EMAIL}`,
         password: `${API_ADMIN_PASSWORD}`,
         audience: `${AUTH0_AUDIENCE}`,
-        scope: 'offline_access',
+        scope: 'offline_access, openid, profile, email',
         client_id: `${AUTH0_CLIENT_ID}`,
         client_secret: `${AUTH0_CLIENT_SECRET}`,
       }),

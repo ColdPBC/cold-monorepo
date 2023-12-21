@@ -3,7 +3,16 @@
     <option name="nx-projects" value="cold-api-e2e" />
     <option name="nx-targets" value="e2e" />
     <option name="nx-target-configuration" value="ci" />
-    <envs />
+    <envs>
+      <env name="API_ADMIN_EMAIL" value="api_admin_test@coldclimate.com" />
+      <env name="API_ADMIN_PASSWORD" value="exorcism-edging-glaucous-HUSKING-shoptalk" />
+      <env name="API_SERVER_URL" value="https://cold-000005.cold-api-nest-xm840962.preflig.ht" />
+      <env name="AUTH0_AUDIENCE" value="https://api.coldclimate.wtf/" />
+      <env name="AUTH0_CLIENT_ID" value="AocyNEqBocKfmU9AHUs0koGeZ73lbrkF" />
+      <env name="AUTH0_CLIENT_SECRET" value="2B-61DfHmIRJNuhhg1CXVuUZg4bYnnDq9JNCLPIfyuz4if8JD4kTPcO1qflquLT4" />
+      <env name="AUTH0_DOMAIN" value="dev-6qt527e13qyo4ls6.us.auth0.com" />
+      <env name="AUTH0_ORG_ID" value="org_VWv3Al9pLEI4CaOH" />
+    </envs>
     <option name="arguments" value="" />
     <method v="2" />
   </configuration>

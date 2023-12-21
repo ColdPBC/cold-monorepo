@@ -1,7 +1,7 @@
 /* eslint-disable */
 export default {
-  preset: 'ts-jest',
-  displayName: 'cold-api-e2e',
+  displayName: 'cold-platform-bayou-e2e',
+  preset: '../../jest.preset.js',
   globalSetup: '<rootDir>/src/support/global-setup.ts',
   globalTeardown: '<rootDir>/src/support/global-teardown.ts',
   setupFiles: ['<rootDir>/src/support/test-setup.ts'],
@@ -14,9 +14,6 @@ export default {
       },
     ],
   },
-  moduleNameMapper: {
-    '@coldpbc/nest': '<rootDir>../../libs/nest/src/index',
-  },
   moduleFileExtensions: ['ts', 'js', 'html'],
-  coverageDirectory: '../../coverage/cold-api-e2e',
+  coverageDirectory: '../../coverage/cold-platform-bayou-e2e',
 };

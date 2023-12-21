@@ -284,16 +284,42 @@ model organizations {
   actions             actions[]
   category_data       category_data[]
   survey_data         survey_data[]
+  integrations        integrations[]
 }
 
 model service_definitions {
-  id         String                   @id @default(uuid())
-  name       String                   @unique
-  label      String
-  type       integration_service_type
-  definition Json
-  created_at DateTime                 @default(now())
-  updated_at DateTime                 @updatedAt
+  id           String                   @id @default(uuid())
+  name         String                   @unique
+  label        String
+  type         integration_service_type
+  definition   Json
+  created_at   DateTime                 @default(now())
+  updated_at   DateTime                 @updatedAt
+  integrations integrations[]
+}
+
+/// @namespace Integrations
+/// @describe Integrations are a way to connect to external services
+/// @erd integrations
+model integrations {
+  /// @zod.custom.use(z.string().uuid())
+  id                    String
+  service_definition_id String
+  /// @zod.custom.use(z.string().uuid())
+  organization_id       String
+  metadata              Json
+  /// @DtoUpdateHidden
+  /// @zod.custom.use(z.date().optional())
+  created_at            DateTime            @default(now())
+  /// @DtoUpdateHidden
+  /// @DtoCreateHidden
+  /// @DtoReadOnly
+  /// @zod.custom.use(z.date().optional())
+  updated_at            DateTime            @updatedAt
+  service_definition    service_definitions @relation(fields: [service_definition_id], references: [id], onDelete: Cascade)
+  organization          organizations       @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+
+  @@unique([id])
 }
 
 enum integration_service_type {
