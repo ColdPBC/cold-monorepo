@@ -1,25 +1,5 @@
 ARG NODE_VERSION=20.9
 FROM node:${NODE_VERSION}-bullseye-slim as base
-ARG NODE_ENV
-ARG DD_SERVICE
-ARG DD_VERSION
-ARG DD_API_KEY
-ARG FC_GIT_COMMIT_SHA
-
-ENV DD_GIT_REPOSITORY_URL=https://github.com/ColdPBC/cold-monorepo
-ENV DD_GIT_COMMIT_SHA=${FC_GIT_COMMIT_SHA}
-
-ENV NODE_ENV=${NODE_ENV}
-ENV DD_ENV=${NODE_ENV}
-ENV DD_API_KEY=${DD_API_KEY}
-ENV DATABASE_URL=${DATABASE_URL}
-ENV DD_SERVICE=${DD_SERVICE}
-ENV DD_VERSION=${DD_VERSION}
-
-LABEL com.datadoghq.tags.service="cold-platform-climatiq"
-LABEL com.datadoghq.tags.version=${DD_VERSION}
-LABEL com.datadoghq.tags.env=${NODE_ENV}
-
 VOLUME /var/run/docker.sock:/var/run/docker.sock:ro
 
 WORKDIR /repo
@@ -35,6 +15,9 @@ ADD . /repo
 
 FROM base as dependencies
 WORKDIR /repo
+ARG NODE_ENV
+
+ENV NODE_ENV=${NODE_ENV}
 # Download dependencies as a separate step to take advantage of Docker's caching.
 # Leverage a cache mount to /root/.yarn to speed up subsequent builds.
 # Leverage a bind mounts to package.json and yarn.lock to avoid having to copy them into
@@ -43,32 +26,58 @@ RUN --mount=type=bind,source=package.json,target=package.json \
     --mount=type=bind,source=yarn.lock,target=yarn.lock,readwrite \
     --mount=type=cache,target=/root/.yarn \
     if [ "${NODE_ENV}" = "production" ] ; then echo "installing production dependencies..." && yarn workspaces focus --all --production ; else echo "installing dev dependencies..." && yarn ; fi
-#RUN chown -R node:node /home/node/build
-RUN echo  "****NODE ENV**** ${NODE_ENV}"
+
 RUN yarn add -D @typescript-eslint/eslint-plugin
 
 FROM dependencies as build
+ARG DD_SERVICE
+ARG NODE_ENV
+
+ENV NODE_ENV=${NODE_ENV}
+ENV DD_SERVICE=${DD_SERVICE}
+
 WORKDIR /repo
 RUN yarn dlx nx run cold-nest-library:prisma-generate
 RUN yarn prebuild
-RUN if [ "${NODE_ENV}" = "production" ] ; then echo "building for production..." && npx nx run --skip-nx-cache cold-platform-climatiq:build:production ; else echo "building development..." && npx nx run --skip-nx-cache cold-platform-climatiq:build:development ; fi
-RUN npx nx reset
+RUN if [ "${NODE_ENV}" = "production" ] ; then echo "building for production..." && npx nx run --skip-nx-cache ${DD_SERVICE}:build:production ; else echo "building development..." && npx nx run --skip-nx-cache ${DD_SERVICE}:build:development ; fi
 
 FROM node:${NODE_VERSION}-bullseye-slim as final
 USER node
-WORKDIR /home/node/repo
 
-ADD --chown=node:node apps/cold-platform-climatiq/project.json /home/node/apps/cold-platform-climatiq/project.json
-ADD --chown=node:node apps/cold-platform-climatiq/package.json /home/node/apps/cold-platform-climatiq/package.json
+ARG DD_SERVICE
+ARG NODE_ENV
+ARG DD_VERSION
+ARG DD_API_KEY
+ARG FC_GIT_COMMIT_SHA
+ARG PORT
+
+ENV DD_GIT_REPOSITORY_URL=https://github.com/ColdPBC/cold-monorepo
+ENV DD_GIT_COMMIT_SHA=${FC_GIT_COMMIT_SHA}
+
+ENV NODE_ENV=${NODE_ENV}
+ENV DD_SERVICE=${DD_SERVICE}
+ENV DD_ENV=${NODE_ENV}
+ENV DD_API_KEY=${DD_API_KEY}
+ENV DATABASE_URL=${DATABASE_URL}
+ENV DD_VERSION=${DD_VERSION}
+
+WORKDIR /home/node/apps/${DD_SERVICE}
+
+LABEL com.datadoghq.tags.service=${DD_SERVICE}
+LABEL com.datadoghq.tags.version=${DD_VERSION}
+LABEL com.datadoghq.tags.env=${NODE_ENV}
+
+ADD --chown=node:node apps/${DD_SERVICE}/project.json /home/node/apps/${DD_SERVICE}/project.json
+ADD --chown=node:node apps/${DD_SERVICE}/package.json /home/node/apps/${DD_SERVICE}/package.json
 
 ADD --chown=node:node ./package.json /home/node/package.json
 ADD --chown=node:node ./yarn.lock /home/node/yarn.lock
 
-COPY --from=build --chown=node:node /repo/dist/apps/cold-platform-climatiq /home/node/apps/cold-platform-climatiq/
+COPY --from=build --chown=node:node /repo/dist/apps/${DD_SERVICE} /home/node/apps/${DD_SERVICE}/
 COPY --from=build --chown=node:node /repo/node_modules /home/node/node_modules
 
 # Expose the port that the application listens on.
-EXPOSE 7002
+EXPOSE ${PORT}
 
-CMD ["node", "/home/node/apps/cold-platform-climatiq/main.js"]
+CMD ["node", "main.js"]
 # Run the application.

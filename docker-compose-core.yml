@@ -1,8 +1,38 @@
 version: '3.8'
+networks:
+  cold:
+    external: true
 services:
+  proxy:
+    # The official v2 Traefik docker image
+    image: traefik:v2.10
+    networks:
+      - cold
+    # Enables the web UI and tells Traefik to listen to docker
+    command:
+      - "-api.insecure=true"
+      - "--providers.docker=true"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.proxy.rule=Host(`www.coldclimate.wtf`)"
+      - "traefik.http.routers.proxy.entrypoints=web"
+      - "traefik.entryPoints.web.address=:80"
+      - "traefik.entryPoints.websecure.address=:443"
+      - "traefik.entryPoints.tcp.address=:5432"
+      - "traefik.entryPoints.tcp.address=:5432"
+    ports:
+      - "80:80"
+      - "443:443"
+      - "4200:4200"
+      - "4400:4400"
+      - "8080:8080"
+    volumes:
+      # So that Traefik can listen to the Docker events
+      - /var/run/docker.sock:/var/run/docker.sock
   rabbit:
     labels:
       - "traefik.http.routers.rabbit.rule=Host(`rabbit.coldclimate.wtf`)"
+      - "traefik.tcp.routers.rabbit.rule=Host(`rabbit.coldclimate.wtf`)"
       - "traefik.tcp.services.rabbit.loadbalancer.server.port=5672"
       - "traefik.http.services.rabbit.loadbalancer.server.port=15672"
     ports:
