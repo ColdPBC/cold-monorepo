@@ -23,7 +23,6 @@ export class NestModule {
   static async forRootAsync() {
     const logger = new WorkerLogger('NestModule');
     const config = new ConfigService();
-    const rabbitConfig = ColdRabbitService.getRabbitConfig();
     return {
       module: NestModule,
       imports: [
@@ -42,7 +41,7 @@ export class NestModule {
           isGlobal: true,
         }),
         HealthModule,
-        DarklyModule,
+        await DarklyModule.forFeatureAsync(),
         PrismaModule,
         PassportModule,
         await AuthorizationModule.forFeatureAsync(),
