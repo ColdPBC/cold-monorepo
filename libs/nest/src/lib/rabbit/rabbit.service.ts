@@ -19,7 +19,7 @@ export class ColdRabbitService extends BaseWorker implements OnModuleInit {
     super(ColdRabbitService.name);
   }
 
-  async onModuleInit(): Promise<void> {
+  override async onModuleInit(): Promise<void> {
     await this.initializeExitHandlers();
   }
 

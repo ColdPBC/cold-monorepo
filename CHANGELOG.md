@@ -1,16 +1,10 @@
-# [1.78.0-COLD-448.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.78.0-COLD-448.1...v1.78.0-COLD-448.2) (2023-12-22)
+## [1.77.8](https://github.com/ColdPBC/cold-monorepo/compare/v1.77.7...v1.77.8) (2023-12-22)
 
 
-### Features
+### Bug Fixes
 
-* set section value to null if the section is skipped on submit ([d83001a](https://github.com/ColdPBC/cold-monorepo/commit/d83001ade37fdda306a881686173a0bf4a9da43f))
+* add override keyword to onModuleInit ([d962a1c](https://github.com/ColdPBC/cold-monorepo/commit/d962a1c3e63a0c364fd17d4b8a404570902c06ae))
 
-# [1.78.0-COLD-448.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.77.7...v1.78.0-COLD-448.1) (2023-12-22)
-
-
-### Features
-
-* submit on last section if it is unanswered or is wanted to be jumped over by answering 'No' ([d3006e0](https://github.com/ColdPBC/cold-monorepo/commit/d3006e06b9e73799a15c7718700b07f2fae6b81b))
 
 ## [1.77.7](https://github.com/ColdPBC/cold-monorepo/compare/v1.77.6...v1.77.7) (2023-12-22)
 
