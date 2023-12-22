@@ -24,11 +24,9 @@ export class DarklyService extends BaseWorker {
   constructor(private config: ConfigService) {
     super('DarklyService');
     if (this.darkly && this.context && this.initialized && this.sdkKey) return this;
-
-    this.init();
   }
 
-  async init(): Promise<void | boolean> {
+  override async onModuleInit() {
     this.sdkKey = this.config.getOrThrow('LD_SDK_KEY');
 
     this.darkly = sdk.init(this.sdkKey, {
@@ -57,15 +55,9 @@ export class DarklyService extends BaseWorker {
    * @returns {Promise<any>}
    */
   async getJSONFlag(flag: string, context?: DarklyContext): Promise<any> {
-    if (!this.initialized) {
-      if (!(await this.init())) {
-        return false;
-      }
-    }
-
     const response = await this.darkly.variation(flag, context || this.context, null);
     this.darkly.track(`${flag} called`, this.context);
-    this.logger.log(`flag: ${flag} called with response: ${response}`, context || this.context);
+    this.logger.log(`flag: ${flag} called with response`, { context: context || this.context, response });
 
     await this.darkly.flush();
 
@@ -73,15 +65,8 @@ export class DarklyService extends BaseWorker {
   }
 
   async getFlag(flag: string, context?: DarklyContext): Promise<boolean> {
-    if (!this.initialized) {
-      if (!(await this.init())) {
-        this.logger.warn('DarklyService not initialized');
-        return false;
-      }
-    }
-
     const response = await this.darkly.variation(flag, context || this.context, true);
-    this.logger.log(`flag: ${flag} called with response: ${response}`, context || this.context);
+    this.logger.log(`flag: ${flag} called with response`, { context: context || this.context, response });
 
     this.darkly.track(`${flag} called`, this.context);
     await this.darkly.flush();

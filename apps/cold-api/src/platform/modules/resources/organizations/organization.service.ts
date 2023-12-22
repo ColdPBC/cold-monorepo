@@ -28,11 +28,10 @@ export class OrganizationService extends BaseWorker {
     super('OrganizationService');
     this.httpService = new HttpService();
     this.prisma = new PrismaService();
-
-    this.init();
   }
 
-  async init() {
+  override async onModuleInit() {
+    await this.getOrganizations(true);
     this.test_orgs = await this.darkly.getJSONFlag('org-whitelist');
   }
 
@@ -178,7 +177,7 @@ export class OrganizationService extends BaseWorker {
 
       orgs = response.data;
 
-      await this.cache.set('organizations', response.data, {
+      this.cache.set('organizations', response.data, {
         update: true,
         wildcard: true,
       });

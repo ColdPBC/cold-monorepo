@@ -23,11 +23,9 @@ export class SurveysService extends BaseWorker {
 
   constructor(readonly darkly: DarklyService, private prisma: PrismaService, private readonly cache: CacheService) {
     super('SurveysService');
-
-    this.init();
   }
 
-  async init() {
+  override async onModuleInit() {
     this.exclude_orgs = await this.darkly.getJSONFlag('org-whitelist');
   }
 

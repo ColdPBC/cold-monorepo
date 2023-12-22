@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { IModalProps, Input, Modal, Spinner } from '@coldpbc/components';
 import capitalize from 'lodash/capitalize';
 import { ColorNames, ErrorType, GlobalSizes, InputTypes } from '@coldpbc/enums';
-import { InputOption, TableActionType, UserRole } from '@coldpbc/interfaces';
+import { InputOption, TableActionType } from '@coldpbc/interfaces';
 import useSWR from 'swr';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
@@ -30,7 +30,7 @@ export const RoleModal = (props: RoleModalProps) => {
 
   const { data, isLoading, error } = useSWR(['/roles', 'GET'], axiosFetcher);
 
-  const filterRoles = (role: UserRole) => {
+  const filterRoles = (role: any) => {
     const filteredRoles = ['cold:', 'default:'];
 
     let match = false;
@@ -58,7 +58,7 @@ export const RoleModal = (props: RoleModalProps) => {
 
   useEffect(() => {
     if (data) {
-      const filteredRoles = (data as UserRole[]).filter(filterRoles);
+      const filteredRoles = (data as any[]).filter(filterRoles);
       setSelectedRole({
         id: 0,
         value: filteredRoles[0].name,
@@ -107,9 +107,9 @@ export const RoleModal = (props: RoleModalProps) => {
                   onValueChange: (value: InputOption) => {
                     setSelectedRole(value);
                   },
-                  options: (data as UserRole[])
+                  options: (data as any[])
                     .filter(filterRoles)
-                    .map((role: UserRole, index) => {
+                    .map((role: any, index) => {
                       return {
                         id: index,
                         value: role.name,

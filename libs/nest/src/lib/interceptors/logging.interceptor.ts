@@ -29,7 +29,17 @@ export class LoggingInterceptor implements NestInterceptor {
       return next.handle().pipe(
         tap(() => {
           const user: any = get(request, 'user', { sub: '', coldclimate_claims: {} });
-          this.logger = new WorkerLogger(LoggingInterceptor.name, {
+
+          this.logger = new WorkerLogger(LoggingInterceptor.name);
+
+          const dd_user = {
+            id: user?.sub,
+            email: user?.coldclimate_claims?.email,
+            org_id: user?.coldclimate_claims?.org_id,
+            roles: user?.coldclimate_claims?.roles,
+          };
+
+          this.logger.setTags({
             user: user?.coldclimate_claims,
             query: request.query,
             body: request.body,
@@ -39,13 +49,6 @@ export class LoggingInterceptor implements NestInterceptor {
             version: this.config.get('DD_VERSION') || BaseWorker.getPkgVersion(),
             method: request.method,
           });
-
-          const dd_user = {
-            id: user?.sub,
-            email: user?.coldclimate_claims?.email,
-            org_id: user?.coldclimate_claims?.org_id,
-            roles: user?.coldclimate_claims?.roles,
-          };
 
           if (request.query['impersonateOrg']) {
             if (!user.isColdAdmin) {
@@ -63,14 +66,9 @@ export class LoggingInterceptor implements NestInterceptor {
 
           this.tracer.getTracer().appsec.setUser(dd_user);
           this.tracer.getTracer().setUser(dd_user);
-
-          this.logger.info(`${request.method} ${request.url}`, {
-            query: request.query,
-            user: dd_user,
-            version: BaseWorker.getPkgVersion(),
-            body: request.body,
-            duration: `${Date.now() - now}ms`,
-          });
+          if (process.env['ENABLE_HEALTH_LOGS']) {
+            this.logger.info(`${request.method} ${request.url}`, { duration: `${Date.now() - now}ms` });
+          }
         }),
       );
     } else {
