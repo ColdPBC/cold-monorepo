@@ -12,7 +12,7 @@ export interface DarklyContext {
 @Injectable()
 @Global()
 export class DarklyService extends BaseWorker {
-  darkly: sdk.LDClient = {} as sdk.LDClient;
+  client: sdk.LDClient = {} as sdk.LDClient;
   context: DarklyContext = {
     kind: 'host',
     name: 'hostname',
@@ -23,13 +23,13 @@ export class DarklyService extends BaseWorker {
 
   constructor(private config: ConfigService) {
     super('DarklyService');
-    if (this.darkly && this.context && this.initialized && this.sdkKey) return this;
+    if (this.client && this.context && this.initialized && this.sdkKey) return this;
   }
 
   override async onModuleInit() {
     this.sdkKey = this.config.getOrThrow('LD_SDK_KEY');
 
-    this.darkly = sdk.init(this.sdkKey, {
+    this.client = sdk.init(this.sdkKey, {
       logger: this.logger,
       sendEvents: true,
       stream: true,
@@ -39,12 +39,12 @@ export class DarklyService extends BaseWorker {
       },
     });
 
-    await this.darkly.waitForInitialization();
+    await this.client.waitForInitialization();
 
-    if (this.darkly) {
-      this.initialized = this.darkly.initialized();
-      this.darkly.track(`client called`, this.context);
-      await this.darkly.flush();
+    if (this.client) {
+      this.initialized = this.client.initialized();
+      this.client.track(`client called`, this.context);
+      await this.client.flush();
     }
   }
 
@@ -55,22 +55,38 @@ export class DarklyService extends BaseWorker {
    * @returns {Promise<any>}
    */
   async getJSONFlag(flag: string, context?: DarklyContext): Promise<any> {
-    const response = await this.darkly.variation(flag, context || this.context, null);
-    this.darkly.track(`${flag} called`, this.context);
+    const response = await this.client.variation(flag, context || this.context, null);
+    this.client.track(`${flag} called`, this.context);
     this.logger.log(`flag: ${flag} called with response`, { context: context || this.context, response });
 
-    await this.darkly.flush();
+    await this.client.flush();
 
     return response;
   }
 
   async getFlag(flag: string, context?: DarklyContext): Promise<boolean> {
-    const response = await this.darkly.variation(flag, context || this.context, true);
+    const response = await this.client.variation(flag, context || this.context, true);
     this.logger.log(`flag: ${flag} called with response`, { context: context || this.context, response });
 
-    this.darkly.track(`${flag} called`, this.context);
-    await this.darkly.flush();
+    this.client.track(`${flag} called`, this.context);
+    await this.client.flush();
 
     return response;
+  }
+
+  // Method to subscribe to feature flag changes
+  subscribeToFlagChanges(key: string, callback: (flagValue: boolean) => void): void {
+    // Register a callback to be invoked when the feature flag changes
+    this.client.on(`update:${key}`, async (flag: any) => {
+      callback(await this.getFlag(flag.key, this.context));
+    });
+  }
+
+  // Method to subscribe to feature flag changes
+  subscribeToAnyChanges(callback: (flagValue: boolean) => void): void {
+    // Register a callback to be invoked when the feature flag changes
+    this.client.on(`update`, async (flag: string) => {
+      callback(await this.getFlag(flag, this.context));
+    });
   }
 }

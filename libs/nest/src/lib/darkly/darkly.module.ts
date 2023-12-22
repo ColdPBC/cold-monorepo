@@ -1,8 +1,14 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { DarklyService } from './darkly.service';
 
-@Module({
-  providers: [DarklyService],
-  exports: [DarklyService],
-})
-export class DarklyModule {}
+@Global()
+@Module({})
+export class DarklyModule {
+  static async forFeatureAsync() {
+    return {
+      module: DarklyModule,
+      providers: [DarklyService],
+      exports: [DarklyService],
+    };
+  }
+}
