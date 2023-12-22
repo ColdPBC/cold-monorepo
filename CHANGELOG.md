@@ -1,3 +1,10 @@
+# [1.78.0-COLD-448.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.78.0-COLD-448.1...v1.78.0-COLD-448.2) (2023-12-22)
+
+
+### Features
+
+* set section value to null if the section is skipped on submit ([d83001a](https://github.com/ColdPBC/cold-monorepo/commit/d83001ade37fdda306a881686173a0bf4a9da43f))
+
 # [1.78.0-COLD-448.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.77.7...v1.78.0-COLD-448.1) (2023-12-22)
 
 
