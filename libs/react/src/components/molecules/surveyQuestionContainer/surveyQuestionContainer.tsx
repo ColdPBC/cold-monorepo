@@ -125,6 +125,7 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
       const section = sections[key];
       if (submit) {
         update.skipped = section.value === null || section.value === undefined;
+        update.value = section.value ? section.value : null;
       }
       if(section.additional_context){
         if(additional) {
