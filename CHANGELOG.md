@@ -1,3 +1,10 @@
+# [1.78.0-COLD-448.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.77.7...v1.78.0-COLD-448.1) (2023-12-22)
+
+
+### Features
+
+* submit on last section if it is unanswered or is wanted to be jumped over by answering 'No' ([d3006e0](https://github.com/ColdPBC/cold-monorepo/commit/d3006e06b9e73799a15c7718700b07f2fae6b81b))
+
 ## [1.77.7](https://github.com/ColdPBC/cold-monorepo/compare/v1.77.6...v1.77.7) (2023-12-22)
 
 
