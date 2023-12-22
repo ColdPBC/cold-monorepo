@@ -6,7 +6,7 @@ import { RedactorService } from '../redactor';
 import { BaseWorker } from './worker.class';
 import { Tags } from '../primitives';
 import { merge } from 'lodash';
-import { ConfigService } from '@nestjs/config';
+import { ConfigService } from '@nestjs/config'; /// test
 
 /// test
 export class WorkerLogger implements LoggerService {
@@ -24,7 +24,7 @@ export class WorkerLogger implements LoggerService {
   constructor(className: string, meta?: any) {
     this.config = new ConfigService();
     this.context = className;
-    this.logger = createLogger(winstonConfig(className)).child({
+    this.logger = createLogger(winstonConfig(className, meta)).child({
       context: className,
       meta,
     });

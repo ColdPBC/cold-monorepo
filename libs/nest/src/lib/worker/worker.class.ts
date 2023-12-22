@@ -127,8 +127,15 @@ export class BaseWorker extends RedactorService implements OnModuleInit {
     return get(parsed, 'workerOptions.definition.name');
   }
 
-  public static getProjectName() {
-    const proj = BaseWorker.getParsedJSON('project.json');
+  public static getProjectName(projectPath?: string) {
+    let proj: any;
+
+    if (projectPath) {
+      proj = BaseWorker.getParsedJSON(`${projectPath}/project.json`);
+    } else {
+      proj = BaseWorker.getParsedJSON('project.json');
+    }
+
     return proj.name;
   }
 
@@ -137,16 +144,16 @@ export class BaseWorker extends RedactorService implements OnModuleInit {
     return pkg.version;
   }
 
-  public static getParsedJSON(name: string): any {
-    return JSON.parse(BaseWorker.getJSON(name));
+  public static getParsedJSON(relativePath: string): any {
+    return JSON.parse(BaseWorker.getJSON(relativePath));
   }
 
-  public static getJSON(name: string): string {
-    const firstPath = path.resolve(appRoot.toString(), name);
+  public static getJSON(relativePath: string): string {
+    const firstPath = path.resolve(appRoot.toString(), relativePath);
     if (fs.existsSync(firstPath)) {
       return fs.readFileSync(firstPath).toString();
     } else {
-      throw new Error(`${name} is not found in '${firstPath}'`);
+      throw new Error(`${relativePath} is not found in '${firstPath}'`);
     }
   }
 
