@@ -1,3 +1,10 @@
+## [1.77.6](https://github.com/ColdPBC/cold-monorepo/compare/v1.77.5...v1.77.6) (2023-12-22)
+
+
+### Bug Fixes
+
+* logging in platform services ([f9348dc](https://github.com/ColdPBC/cold-monorepo/commit/f9348dcf3bf8498777a4d21bc9c669272c0ba24f))
+
 ## [1.77.5](https://github.com/ColdPBC/cold-monorepo/compare/v1.77.4...v1.77.5) (2023-12-21)
 
 
