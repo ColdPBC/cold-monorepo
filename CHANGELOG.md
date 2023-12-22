@@ -1,3 +1,53 @@
+## [1.77.7](https://github.com/ColdPBC/cold-monorepo/compare/v1.77.6...v1.77.7) (2023-12-22)
+
+
+### Bug Fixes
+
+* remove health prefix from climatiq ([fc572fe](https://github.com/ColdPBC/cold-monorepo/commit/fc572fea9de748d885160a80937e0db69d662759))
+
+## [1.77.6](https://github.com/ColdPBC/cold-monorepo/compare/v1.77.5...v1.77.6) (2023-12-22)
+
+
+### Bug Fixes
+
+* logging in platform services ([f9348dc](https://github.com/ColdPBC/cold-monorepo/commit/f9348dcf3bf8498777a4d21bc9c669272c0ba24f))
+
+## [1.77.5](https://github.com/ColdPBC/cold-monorepo/compare/v1.77.4...v1.77.5) (2023-12-21)
+
+
+### Bug Fixes
+
+* primsa init issue with services that don't rely on the database ([57ea718](https://github.com/ColdPBC/cold-monorepo/commit/57ea718c557071cf43e29aac06f1aa22db864f01))
+
+## [1.77.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.77.3...v1.77.4) (2023-12-21)
+
+
+### Bug Fixes
+
+* nagging little bugs ([7df55c9](https://github.com/ColdPBC/cold-monorepo/commit/7df55c97a7989bd2ccd8b804305097723ca15e57))
+
+## [1.77.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.77.2...v1.77.3) (2023-12-21)
+
+
+### Bug Fixes
+
+* logging interceptor not respecting ENABLE_HEALTH_LOGS flag ([e0a65da](https://github.com/ColdPBC/cold-monorepo/commit/e0a65dac0dc93f3e8c408f24ec6585bc93386ba4))
+
+## [1.77.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.77.1...v1.77.2) (2023-12-21)
+
+
+### Bug Fixes
+
+* add undefined/null orgId check before checking for cold:Admin ([04b4d05](https://github.com/ColdPBC/cold-monorepo/commit/04b4d05555728ba9e3889dcd165d51d3c6ee1148))
+
+## [1.77.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.77.0...v1.77.1) (2023-12-21)
+
+
+### Bug Fixes
+
+* remove auth0 types ([ae0e422](https://github.com/ColdPBC/cold-monorepo/commit/ae0e422cf28d1c8eadb9ca5cbf2ca80a2f1dea33))
+* remove auth0 types ([#209](https://github.com/ColdPBC/cold-monorepo/issues/209)) ([657a4d0](https://github.com/ColdPBC/cold-monorepo/commit/657a4d07054a7359f9a6352a18300d36f71fe537))
+
 # [1.77.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.76.5...v1.77.0) (2023-12-21)
 
 

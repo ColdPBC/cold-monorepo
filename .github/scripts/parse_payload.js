@@ -1,6 +1,6 @@
 const parsePayload = (deploymentPayload, serviceNameToFind) => {
   try {
-    const parsedPayload = JSON.parse(deploymentPayload);
+    const parsedPayload = typeof deploymentPayload === 'string' ? JSON.parse(deploymentPayload) : deploymentPayload;
 
     // Find service domain for the specified service name
     if (serviceNameToFind) {
@@ -23,14 +23,14 @@ const parsePayload = (deploymentPayload, serviceNameToFind) => {
 const deploymentPayload = process.argv[2];
 
 if (!deploymentPayload) {
-  console.error('Usage: node parse_payload.js <deployment_payload_json>');
+  console.error('Usage: node parse_payload.js <deployment_payload_json> <service_name_to_find>');
   process.exit(1);
 }
 
 // Read service name to find from command line argument
 const serviceNameToFind = process.argv[3];
 
-// Parse and print the result
+// Parse and return the result
 try {
   const result = parsePayload(deploymentPayload, serviceNameToFind);
   console.log(result);

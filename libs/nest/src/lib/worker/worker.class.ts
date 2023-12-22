@@ -1,4 +1,4 @@
-import { Global, Injectable } from '@nestjs/common';
+import { Global, Injectable, OnModuleInit } from '@nestjs/common';
 import * as appRoot from 'app-root-path';
 import * as fs from 'fs';
 import { StatsD } from 'hot-shots';
@@ -14,7 +14,7 @@ import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 @Global()
-export class BaseWorker extends RedactorService {
+export class BaseWorker extends RedactorService implements OnModuleInit {
   public tags: Tags;
   public details: IWorkerDetails;
   protected logger: WorkerLogger;
@@ -99,6 +99,10 @@ export class BaseWorker extends RedactorService {
     } else {
       this.logger.warn('Package.json not found.  This can be ignored for now.', null);
     }
+  }
+
+  async onModuleInit() {
+    // Override in child class
   }
 
   public setTags(tags: Tags) {

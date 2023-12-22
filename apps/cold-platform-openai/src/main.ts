@@ -1,19 +1,29 @@
-/**
- * This is not a production server yet!
- * This is only a minimal backend to get started.
- */
-
-import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-
+import * as dotenv from 'dotenv';
+import { WinstonModule } from 'nest-winston';
+import { createLogger, Logger } from 'winston';
+// eslint-disable-next-line @nx/enforce-module-boundaries
+import winstonConfig from '../../../libs/nest/src/lib/worker/winston.config';
 import { AppModule } from './app/app.module';
 
-async function bootstrap() {
-  const app = await NestFactory.create(await AppModule.forRootAsync());
+dotenv.config();
 
-  const port = process.env['PORT'] || 7002;
-  await app.listen(port);
-  Logger.log(`🚀 Application is running on: ${process.env['API_SERVER_URL']}`);
+async function bootstrap(instance: Logger) {
+  const app = await NestFactory.create(AppModule.forRootAsync(), {
+    logger: WinstonModule.createLogger({
+      instance,
+    }),
+  });
+
+  //app.useGlobalPipes(new ResourceValidationPipe());
+  app.enableCors();
+
+  await app.listen(process.env['PORT'] || 7002, '0.0.0.0');
 }
 
-bootstrap();
+async function init() {
+  const instance = createLogger(winstonConfig('main'));
+  await bootstrap(instance);
+}
+
+init();
