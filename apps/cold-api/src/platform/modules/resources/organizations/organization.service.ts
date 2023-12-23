@@ -32,7 +32,10 @@ export class OrganizationService extends BaseWorker {
 
   override async onModuleInit() {
     await this.getOrganizations(true);
-    this.test_orgs = await this.darkly.getJSONFlag('org-whitelist');
+
+    this.darkly.subscribeToJsonFlagChanges('dynamic-org-white-list', value => {
+      this.test_orgs = value;
+    });
   }
 
   /***
