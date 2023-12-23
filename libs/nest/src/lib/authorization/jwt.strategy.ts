@@ -3,28 +3,27 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Span, TraceService } from 'nestjs-ddtrace';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { passportJwtSecret } from 'jwks-rsa';
-import * as dotenv from 'dotenv';
 import { JwtService } from '@nestjs/jwt';
 import { WorkerLogger } from '../worker';
-
-dotenv.config();
+import { ConfigService } from '@nestjs/config';
 
 @Span()
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   logger: WorkerLogger;
   private tracer: TraceService = new TraceService();
-  constructor(private readonly jwtService: JwtService) {
+
+  constructor(private config: ConfigService, private readonly jwtService: JwtService) {
     super({
       secretOrKeyProvider: passportJwtSecret({
         cache: true,
         rateLimit: true,
         jwksRequestsPerMinute: 5,
-        jwksUri: `https://${process.env['AUTH0_DOMAIN']}/.well-known/jwks.json`,
+        jwksUri: `https://${config.get<string>('AUTH0_DOMAIN')}/.well-known/jwks.json`,
       }),
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken() || ExtractJwt.fromUrlQueryParameter('access_token'),
-      audience: process.env['AUTH0_AUDIENCE'],
-      issuer: `https://${process.env['AUTH0_DOMAIN']}/`,
+      audience: config.get<string>('AUTH0_AUDIENCE'),
+      issuer: `https://${config.get<string>('AUTH0_DOMAIN')}/`,
       algorithms: ['RS256'],
     });
 
@@ -32,7 +31,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: any): Promise<unknown> {
-    if (!payload.aud.includes(process.env['AUTH0_AUDIENCE'])) {
+    if (!payload.aud.includes(this.config.get<string>('AUTH0_AUDIENCE'))) {
       return new UnauthorizedException('Invalid audience', payload);
     }
 
@@ -46,7 +45,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       throw new UnauthorizedException('Invalid token');
     }
     const decoded = this.jwtService.decode(token);
-
+    // todo: this should actually be the user id / email, not org_id
     if (decoded != null) {
       this.tracer.getTracer().appsec.setUser({ id: decoded['org_id'], email: decoded['org_id'] });
     }

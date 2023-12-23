@@ -3,15 +3,16 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { Request } from 'express';
 import { Injectable } from '@nestjs/common';
 import { WorkerLogger } from '@coldpbc/nest';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class RefreshTokenStrategy extends PassportStrategy(Strategy, 'jwt-refresh') {
   logger: WorkerLogger = new WorkerLogger('RefreshTokenStrategy');
 
-  constructor() {
+  constructor(config: ConfigService) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      secretOrKey: process.env['REFRESH_TOKEN_SECRET'],
+      secretOrKey: config.get<string>('REFRESH_TOKEN_SECRET'),
       passReqToCallback: true,
     });
   }
