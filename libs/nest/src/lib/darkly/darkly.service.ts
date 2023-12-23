@@ -56,35 +56,77 @@ export class DarklyService extends BaseWorker {
    */
   async getJSONFlag(flag: string, context?: DarklyContext): Promise<any> {
     const response = await this.client.variation(flag, context || this.context, null);
-    this.client.track(`${flag} called`, this.context);
-    this.logger.log(`flag: ${flag} called with response`, { context: context || this.context, response });
+    this.client.track(flag, this.context);
+    this.logger.log(`flag: ${flag} called is ${response ? 'enabled' : 'disabled'}`, {
+      context: context || this.context,
+      response,
+    });
 
     await this.client.flush();
 
     return response;
   }
 
-  async getFlag(flag: string, context?: DarklyContext): Promise<boolean> {
-    const response = await this.client.variation(flag, context || this.context, true);
-    this.logger.log(`flag: ${flag} called with response`, { context: context || this.context, response });
+  /**
+   * Get boolean flag
+   * @param flag
+   * @param defaultValue
+   * @param context
+   */
+  async getFlag(flag: string, defaultValue?: any, context?: DarklyContext): Promise<boolean> {
+    const response = await this.client.variation(flag, context || this.context, defaultValue);
+    this.logger.log(`flag: ${flag} is ${response ? 'enabled' : 'disabled'}`, {
+      context: context || this.context,
+      response,
+    });
 
-    this.client.track(`${flag} called`, this.context);
+    this.client.track(flag, this.context);
     await this.client.flush();
 
     return response;
   }
 
-  // Method to subscribe to feature flag changes
+  /**
+   * Subscribe to changes on specified json flag
+   * @param key
+   * @param callback
+   */
+  subscribeToJsonFlagChanges(key: string, callback: (flagValue: any) => void): void {
+    // Register a callback to be invoked when specified json feature flag changes
+    this.client.on(`update:${key}`, async (flag: any) => {
+      callback(await this.getJSONFlag(flag.key, this.context));
+    });
+  }
+
+  /**
+   * Subscribe to changes to all json flags
+   * @param callback
+   */
+  subscribeToAnyJsonFlagChanges(callback: (flagValue: any) => void): void {
+    // Register a callback to be invoked when any json feature flag changes
+    this.client.on(`update`, async (flag: any) => {
+      callback(await this.getJSONFlag(flag.key, this.context));
+    });
+  }
+
+  /**
+   * Subscribe to changes to specified boolean flag
+   * @param key
+   * @param callback
+   */
   subscribeToFlagChanges(key: string, callback: (flagValue: boolean) => void): void {
-    // Register a callback to be invoked when the feature flag changes
+    // Register a callback to be invoked when specified boolean feature flag changes
     this.client.on(`update:${key}`, async (flag: any) => {
       callback(await this.getFlag(flag.key, this.context));
     });
   }
 
-  // Method to subscribe to feature flag changes
-  subscribeToAnyChanges(callback: (flagValue: boolean) => void): void {
-    // Register a callback to be invoked when the feature flag changes
+  /**
+   * Subscribe to changes on all boolean flags
+   * @param callback
+   */
+  subscribeToAllChanges(callback: (flagValue: any) => void): void {
+    // Register a callback to be invoked when any boolean feature flag changes
     this.client.on(`update`, async (flag: string) => {
       callback(await this.getFlag(flag, this.context));
     });
