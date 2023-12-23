@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
-import { PassportModule } from '@nestjs/passport';
 import { CacheModule } from '@nestjs/cache-manager';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
@@ -11,7 +10,7 @@ import { redisStore } from 'cache-manager-redis-yet';
 
 import { PrismaModule, PrismaService } from './prisma';
 import { HealthController, HealthModule, HealthService } from './health';
-import { DarklyModule } from './darkly';
+import { DarklyService } from './darkly';
 import { ColdCacheModule } from './cache';
 import { AuthorizationModule, JwtAuthGuard, JwtStrategy } from './authorization';
 import { InterceptorModule } from './interceptors';
@@ -23,31 +22,23 @@ export class NestModule {
   static async forRootAsync() {
     const logger = new WorkerLogger('NestModule');
     const config = new ConfigService();
-    return {
-      module: NestModule,
-      imports: [
-        ConfigModule.forRoot({
-          isGlobal: true,
-        }),
-        CacheModule.registerAsync({
-          imports: [ConfigModule],
-          useFactory: async (cfg: ConfigService) => ({
-            store: await redisStore({
-              url: cfg.get<string>('REDISCLOUD_URL'),
-              ttl: 1000 * 60 * 60,
-            }),
-          }),
-          inject: [ConfigService],
-          isGlobal: true,
-        }),
-        HealthModule,
-        await DarklyModule.forFeatureAsync(),
-        PrismaModule,
-        PassportModule,
-        await AuthorizationModule.forFeatureAsync(),
-        HttpModule,
-        InterceptorModule,
-        DatadogTraceModule.forRoot({ controllers: true, providers: true }),
+    const darkly = new DarklyService(config);
+    await darkly.onModuleInit();
+
+    const imports: any = [
+      ConfigModule.forRoot({
+        isGlobal: true,
+      }),
+      HttpModule,
+    ];
+    const providers: any = [ConfigService];
+    const exports: any = [HttpModule, ConfigService];
+    const controllers: any = [];
+
+    //configure-enable-hot-shots-module
+    const enableHotShots = await darkly.getFlag('static-enable-hot-shots-module');
+    if (enableHotShots) {
+      imports.push(
         HotShotsModule.forRoot({
           port: 8125,
           host: '127.0.0.1',
@@ -68,23 +59,100 @@ export class NestModule {
             service: config.get('DD_SERVICE') || BaseWorker.getProjectName(),
           },
         }),
+      );
+    }
+
+    /**
+     * Datadog tracing module
+     */
+    const enableDDTrace = await darkly.getFlag('static-enable-data-dog-trace-module');
+    if (enableDDTrace) {
+      imports.push(
+        DatadogTraceModule.forRoot({
+          controllers: true,
+          providers: true,
+        }),
+      );
+    }
+
+    /**
+     * Health module
+     */
+    const enableHealthModule = await darkly.getFlag('static-enable-health-module');
+    if (enableHealthModule) {
+      imports.push(HealthModule);
+      controllers.push(HealthController);
+      providers.push(HealthService);
+      exports.push(HealthService);
+    }
+
+    /**
+     * Authorization module
+     */
+    const enableAuthorizationModule = await darkly.getFlag('static-enable-authorization-module');
+    if (enableAuthorizationModule) {
+      if (!config.get<string | boolean>('REDISCLOUD_URL', false)) {
+        throw new Error('REDISCLOUD_URL is not set in this environment; It is required for the authorization module to function properly.');
+      }
+
+      imports.push(
+        CacheModule.registerAsync({
+          imports: [ConfigModule],
+          useFactory: async (cfg: ConfigService) => ({
+            store: await redisStore({
+              url: cfg.get<string>('REDISCLOUD_URL'),
+              ttl: 1000 * 60 * 60,
+            }),
+          }),
+          inject: [ConfigService],
+          isGlobal: true,
+        }),
         ColdCacheModule,
-        ColdRabbitModule.forFeature(),
-      ],
-      controllers: [HealthController],
-      providers: [
-        PrismaService,
-        ConfigService,
-        JwtStrategy,
-        JwtService,
-        HealthService,
-        ColdRabbitService,
-        {
-          provide: APP_GUARD,
-          useClass: JwtAuthGuard,
-        },
-      ],
-      exports: [PrismaService, JwtStrategy, JwtService, HttpModule, ConfigService, HealthService, ColdRabbitService],
+        await AuthorizationModule.forFeatureAsync(),
+      );
+
+      providers.push(JwtStrategy, JwtService, {
+        provide: APP_GUARD,
+        useClass: JwtAuthGuard,
+      });
+
+      exports.push(JwtStrategy, JwtService);
+    }
+
+    /**
+     * Interceptors module
+     */
+    const enableInterceptorModule = await darkly.getFlag('static-enable-interceptors-module');
+    if (enableInterceptorModule) {
+      imports.push(InterceptorModule);
+    }
+
+    /**
+     * Prisma Module
+     */
+    const enablePrismaModule = await darkly.getFlag('static-enable-prisma-module');
+    if (enablePrismaModule) {
+      imports.push(PrismaModule);
+      providers.push(PrismaService);
+      exports.push(PrismaService);
+    }
+
+    /**
+     * Rabbit Module
+     */
+    const enableRabbitModule = await darkly.getFlag('static-enable-rabbit-module');
+    if (enableRabbitModule) {
+      imports.push(ColdRabbitModule.forFeature());
+      providers.push(ColdRabbitService);
+      exports.push(ColdRabbitService);
+    }
+
+    return {
+      module: NestModule,
+      imports,
+      controllers,
+      providers,
+      exports,
     };
   }
 }
