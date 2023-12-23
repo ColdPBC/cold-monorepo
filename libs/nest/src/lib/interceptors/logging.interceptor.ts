@@ -24,7 +24,7 @@ export class LoggingInterceptor implements NestInterceptor, OnModuleInit {
   async onModuleInit() {
     await this.darkly.onModuleInit();
 
-    this.darkly.subscribeToFlagChanges('configure-enable-health-check-logs', value => {
+    this.darkly.subscribeToFlagChanges('dynamic-enable-health-check-logs', value => {
       this.enableHealthLogs = value;
     });
   }
@@ -76,6 +76,7 @@ export class LoggingInterceptor implements NestInterceptor, OnModuleInit {
 
           this.tracer.getTracer().appsec.setUser(dd_user);
           this.tracer.getTracer().setUser(dd_user);
+
           if (this.enableHealthLogs) {
             this.logger.info(`${request.method} ${request.url}`, { duration: `${Date.now() - now}ms` });
           }
@@ -94,7 +95,7 @@ export class LoggingInterceptor implements NestInterceptor, OnModuleInit {
             method: context.getArgs()[1].properties?.replyTo ? 'REQUEST' : 'PUBLISH',
           };
           this.logger = new WorkerLogger(data.msg.name);
-          this.logger.log(`Processed ${data.method} message`, { ...data });
+          this.logger.log(`Processed ${data.method} message from Rabbit`, { ...data });
         }),
       );
     }
