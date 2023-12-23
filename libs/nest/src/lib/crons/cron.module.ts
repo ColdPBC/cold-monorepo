@@ -1,10 +1,11 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { ScheduleModule } from '@nestjs/schedule';
-import { PrismaModule, ColdCacheModule } from '@coldpbc/nest';
-import { TestOrgCleanup } from './testOrgCleanup.cron';
+import { CronService } from '@coldpbc/nest';
 
+@Global()
 @Module({
-  imports: [PrismaModule, ColdCacheModule, ScheduleModule.forRoot()],
-  providers: [TestOrgCleanup],
+  imports: [ScheduleModule.forRoot()],
+  providers: [CronService],
+  exports: [CronService],
 })
 export class CronModule {}
