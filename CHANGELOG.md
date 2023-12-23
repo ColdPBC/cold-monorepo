@@ -1,3 +1,21 @@
+# [1.78.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.77.8...v1.78.0) (2023-12-23)
+
+
+### Bug Fixes
+
+* add service, version tags to initialization logs ([b059c88](https://github.com/ColdPBC/cold-monorepo/commit/b059c886fd16ee80275e3220295cef71e0101842))
+* implement dynamic flag ([e61d2e6](https://github.com/ColdPBC/cold-monorepo/commit/e61d2e6b1590043afa65e02cbd69691446271490))
+* log health requests based on feature flag ([0a80ca7](https://github.com/ColdPBC/cold-monorepo/commit/0a80ca7bf04cb076244afeee06a86d4e5752df93))
+
+
+### Features
+
+* add json flag subscription functions ([2e3dbcc](https://github.com/ColdPBC/cold-monorepo/commit/2e3dbcc57be3004f3848c5ecb3dcbe3cb15e1bbc))
+* implement cron service ([f3011d3](https://github.com/ColdPBC/cold-monorepo/commit/f3011d391579610c76a105c7dec2eae08adbf3de))
+* implement darkly streaming ([6839740](https://github.com/ColdPBC/cold-monorepo/commit/6839740de7106b22b98e278e5631fc0139677dc2))
+* implement darkly streaming ([731fd49](https://github.com/ColdPBC/cold-monorepo/commit/731fd4970684b1e0f6be94fc2b06c97c85b01c8b))
+* load nest modules based on feature flags ([496ef3f](https://github.com/ColdPBC/cold-monorepo/commit/496ef3f612a919c67db083e6282066d011447fd4))
+
 ## [1.77.8](https://github.com/ColdPBC/cold-monorepo/compare/v1.77.7...v1.77.8) (2023-12-22)
 
 
