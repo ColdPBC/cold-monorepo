@@ -5234,31 +5234,31 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@launchdarkly/js-sdk-common@npm:1.1.0":
-  version: 1.1.0
-  resolution: "@launchdarkly/js-sdk-common@npm:1.1.0"
-  checksum: daa959039970ceb860746da9cb7c4dea975dcac71ed8c1bad42ff29e558ea0f85f58f72b801f578cef073cc98f5195ef1e72cab6bee9ca99c1dd56551e472c68
+"@launchdarkly/js-sdk-common@npm:2.1.0":
+  version: 2.1.0
+  resolution: "@launchdarkly/js-sdk-common@npm:2.1.0"
+  checksum: 9c06a02e9623f5d9ea4f4e9ee0eeef66b3342ccf021505ca64d67ca02676e9243c992703911f256aa71d9690c2312ac7150bfa9d287560dba9093d202b8ee6f2
   languageName: node
   linkType: hard
 
-"@launchdarkly/js-server-sdk-common@npm:1.2.3":
-  version: 1.2.3
-  resolution: "@launchdarkly/js-server-sdk-common@npm:1.2.3"
+"@launchdarkly/js-server-sdk-common@npm:2.1.1":
+  version: 2.1.1
+  resolution: "@launchdarkly/js-server-sdk-common@npm:2.1.1"
   dependencies:
-    "@launchdarkly/js-sdk-common": "npm:1.1.0"
+    "@launchdarkly/js-sdk-common": "npm:2.1.0"
     semver: "npm:7.5.4"
-  checksum: 448509777e2de954c0d58852f7b81adb21e6b1120aa59917bdea62a3d9cdf5cd68259bd5a79c24aeae4d557d0fa2b18b8bed056c54b107cae560da95641ca3dd
+  checksum: a7edd6c1d449d0496f4b2ef1440171f51b0369649549288f1bb55e3a231b5328973595379cce10dff90264adf240bef673fb4fb6bd7992be8e7fdc0fc96aa7b9
   languageName: node
   linkType: hard
 
-"@launchdarkly/node-server-sdk@npm:^8.1.0":
-  version: 8.2.4
-  resolution: "@launchdarkly/node-server-sdk@npm:8.2.4"
+"@launchdarkly/node-server-sdk@npm:^9.0.4":
+  version: 9.0.4
+  resolution: "@launchdarkly/node-server-sdk@npm:9.0.4"
   dependencies:
-    "@launchdarkly/js-server-sdk-common": "npm:1.2.3"
+    "@launchdarkly/js-server-sdk-common": "npm:2.1.1"
     https-proxy-agent: "npm:^5.0.1"
     launchdarkly-eventsource: "npm:2.0.1"
-  checksum: 246da4449eba150e14cc0973b61727d47c24f98b1b669294955f0ea29e0bfbaf3202670b06afe382a8c1329059ff21cadc7f14d91613eef0b6af7ea5e0a9812e
+  checksum: 7b84eeb67e6ea2fd8823f7f1b9309f28d885f62172d99e4d991c6e71240f01d2fe76e27416c1204daba9700abc02de585be6782d3c1930d15bd0c3d229e11e85
   languageName: node
   linkType: hard
 
@@ -18164,7 +18164,7 @@ __metadata:
     "@golevelup/ts-jest": "npm:^0.4.0"
     "@headlessui/react": "npm:^1.7.15"
     "@heroicons/react": "npm:^2.0.16"
-    "@launchdarkly/node-server-sdk": "npm:^8.1.0"
+    "@launchdarkly/node-server-sdk": "npm:^9.0.4"
     "@mdx-js/rollup": "npm:^2.3.0"
     "@mui/icons-material": "npm:^5.11.11"
     "@nestjs/axios": "npm:^3.0.0"
