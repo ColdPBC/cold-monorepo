@@ -18415,7 +18415,7 @@ __metadata:
     vite-plugin-turbosnap: "npm:^1.0.3"
     vite-tsconfig-paths: "npm:^4.0.2"
     vitest: "npm:~0.32.0"
-    web-vitals: "npm:^2.1.4"
+    web-vitals: "npm:^3.5.0"
     winston: "npm:^3.9.0"
     zod: "npm:^3.22.4"
     zod-prisma-types: "npm:^2.7.9"
@@ -43394,10 +43394,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"web-vitals@npm:^2.1.4":
-  version: 2.1.4
-  resolution: "web-vitals@npm:2.1.4"
-  checksum: 8d6fae84d0e4f2ea1d6da40067d8e6fd560df2a06a9f9484dbbd7a25eb5c961b97f66f2043c941866753465e0f00748773f33d3c88d8fd191e901a7207711ff1
+"web-vitals@npm:^3.5.0":
+  version: 3.5.0
+  resolution: "web-vitals@npm:3.5.0"
+  checksum: 8ec26186d277548b0426c5ed0dbd88a193cff7dedde52978e61a474659557f8534e48eba776b2fbe79591f5aab6ef84aa3f1722a8ff880fe38e74bcd66fa2f44
   languageName: node
   linkType: hard
 
