@@ -1,3 +1,10 @@
+## [1.78.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.78.2...v1.78.3) (2023-12-29)
+
+
+### Bug Fixes
+
+* move tracer to lib ([0699e53](https://github.com/ColdPBC/cold-monorepo/commit/0699e53b1356eeb21eec65b14fbd2e93d8bccb40))
+
 ## [1.78.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.78.1...v1.78.2) (2023-12-29)
 
 
