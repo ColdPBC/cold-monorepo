@@ -15,7 +15,7 @@ import { AuthorizationModule, JwtAuthGuard, JwtStrategy } from './authorization'
 import { InterceptorModule } from './interceptors';
 import { BaseWorker, WorkerLogger } from './worker';
 import { ColdRabbitModule, ColdRabbitService } from './rabbit';
-import { CronModule, CronService } from './crons';
+//import { CronModule, CronService } from './crons';
 import { DatadogTraceModule } from 'nestjs-ddtrace';
 
 @Module({})
@@ -67,12 +67,12 @@ export class NestModule {
     /**
      * Cron module
      */
-    const enableCronModule = await darkly.getFlag('static-enable-cron-module');
-    if (enableCronModule) {
-      imports.push(CronModule);
-      providers.push(CronService);
-      exports.push(CronService);
-    }
+    await darkly.getFlag('static-enable-cron-module');
+    /* if (enableCronModule) {
+       imports.push(CronModule);
+       providers.push(CronService);
+       exports.push(CronService);
+     }*/
 
     /**
      * Datadog tracing module
