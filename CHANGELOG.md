@@ -1,3 +1,10 @@
+## [1.78.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.78.0...v1.78.1) (2023-12-29)
+
+
+### Bug Fixes
+
+* add statuscode to logs ([f893973](https://github.com/ColdPBC/cold-monorepo/commit/f893973a6524926e59892d228003845cbfb1337b))
+
 # [1.78.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.77.8...v1.78.0) (2023-12-23)
 
 
