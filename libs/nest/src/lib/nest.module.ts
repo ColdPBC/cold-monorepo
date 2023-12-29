@@ -4,7 +4,6 @@ import { CacheModule } from '@nestjs/cache-manager';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { HttpModule } from '@nestjs/axios';
-import { DatadogTraceModule } from 'nestjs-ddtrace';
 import { HotShotsModule } from 'nestjs-hot-shots';
 import { redisStore } from 'cache-manager-redis-yet';
 
@@ -16,6 +15,7 @@ import { AuthorizationModule, JwtAuthGuard, JwtStrategy } from './authorization'
 import { InterceptorModule } from './interceptors';
 import { BaseWorker, WorkerLogger } from './worker';
 import { ColdRabbitModule, ColdRabbitService } from './rabbit';
+import { CronModule, CronService } from './crons';
 
 @Module({})
 export class NestModule {
@@ -35,6 +35,7 @@ export class NestModule {
     const exports: any = [HttpModule, ConfigService];
     const controllers: any = [];
 
+    logger.info('Configuring Nest Module...');
     //configure-enable-hot-shots-module
     const enableHotShots = await darkly.getFlag('static-enable-hot-shots-module');
     if (enableHotShots) {
@@ -63,16 +64,21 @@ export class NestModule {
     }
 
     /**
+     * Cron module
+     */
+    const enableCronModule = await darkly.getFlag('static-enable-cron-module');
+    if (enableCronModule) {
+      imports.push(CronModule);
+      providers.push(CronService);
+      exports.push(CronService);
+    }
+
+    /**
      * Datadog tracing module
      */
     const enableDDTrace = await darkly.getFlag('static-enable-data-dog-trace-module');
     if (enableDDTrace) {
-      imports.push(
-        DatadogTraceModule.forRoot({
-          controllers: true,
-          providers: true,
-        }),
-      );
+      imports.push(CronModule);
     }
 
     /**

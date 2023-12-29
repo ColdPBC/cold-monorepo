@@ -1,3 +1,4 @@
+import './tracer';
 import { NestFactory } from '@nestjs/core';
 import * as dotenv from 'dotenv';
 import { WinstonModule } from 'nest-winston';
