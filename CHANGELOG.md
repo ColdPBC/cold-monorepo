@@ -1,3 +1,11 @@
+## [1.78.5](https://github.com/ColdPBC/cold-monorepo/compare/v1.78.4...v1.78.5) (2023-12-29)
+
+
+### Bug Fixes
+
+* clean up cron/darkly/nest/rabbit modules ([1495817](https://github.com/ColdPBC/cold-monorepo/commit/14958179fef370e88ba30caef739cc4f15d947b0))
+* comment out cron module ([43b98c1](https://github.com/ColdPBC/cold-monorepo/commit/43b98c1eff19c51e538fbca4091b6bcd4a2e2ab3))
+
 ## [1.78.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.78.3...v1.78.4) (2023-12-29)
 
 
