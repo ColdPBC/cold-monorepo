@@ -33,7 +33,6 @@ export class RabbitService extends BaseWorker {
     try {
       const parsed = typeof data.msg === 'string' ? JSON.parse(data.msg) : data.msg;
 
-      this.logger.log(`Service Registration Request Received from rabbit`, parsed);
       const def = await this.integrations.registerService(parsed.name, parsed.type, parsed.label, parsed.definition);
 
       return def;

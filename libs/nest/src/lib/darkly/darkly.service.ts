@@ -57,7 +57,7 @@ export class DarklyService extends BaseWorker {
   async getJSONFlag(flag: string, context?: DarklyContext): Promise<any> {
     const response = await this.client.variation(flag, context || this.context, null);
     this.client.track(flag, this.context);
-    this.logger.log(`flag: ${flag} called is ${response ? 'enabled' : 'disabled'}`, {
+    this.logger.log(`JsonFlag: ${flag} called`, {
       context: context || this.context,
       response,
     });
@@ -75,9 +75,9 @@ export class DarklyService extends BaseWorker {
    */
   async getFlag(flag: string, defaultValue?: any, context?: DarklyContext): Promise<boolean> {
     const response = await this.client.variation(flag, context || this.context, defaultValue);
-    this.logger.log(`flag: ${flag} is ${response ? 'enabled' : 'disabled'}`, {
+    this.logger.log(`[${response ? '✅ Enabled' : '🛑Disabled'}] ${flag}`, {
       context: context || this.context,
-      response,
+      enabled: response,
     });
 
     this.client.track(flag, this.context);

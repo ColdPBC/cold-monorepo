@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { NestModule, PrismaModule } from '@coldpbc/nest';
+import { NestModule } from '@coldpbc/nest';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { Auth0Module } from './resources/auth0/auth0.module';
 import { ComponentDefinitionsModule } from './resources/component-definitions/component-definitions.module';
@@ -28,7 +28,6 @@ export class AppModule {
           },
           serveRoot: '../../../assets',
         }),
-        PrismaModule,
         Auth0Module,
         ComponentDefinitionsModule,
         PolicyDefinitionsModule,
@@ -38,9 +37,6 @@ export class AppModule {
         ActionsModule,
         IntegrationsModule,
       ],
-      controllers: [],
-      providers: [],
-      exports: [],
     };
   }
 }

@@ -16,6 +16,7 @@ import { InterceptorModule } from './interceptors';
 import { BaseWorker, WorkerLogger } from './worker';
 import { ColdRabbitModule, ColdRabbitService } from './rabbit';
 import { CronModule, CronService } from './crons';
+import { DatadogTraceModule } from 'nestjs-ddtrace';
 
 @Module({})
 export class NestModule {
@@ -78,7 +79,14 @@ export class NestModule {
      */
     const enableDDTrace = await darkly.getFlag('static-enable-data-dog-trace-module');
     if (enableDDTrace) {
-      imports.push(CronModule);
+      imports.push(
+        imports.push(
+          DatadogTraceModule.forRoot({
+            controllers: true,
+            providers: true,
+          }),
+        ),
+      );
     }
 
     /**

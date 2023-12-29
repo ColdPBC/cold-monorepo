@@ -1,6 +1,6 @@
 import { Global, Module } from '@nestjs/common';
 import { ScheduleModule } from '@nestjs/schedule';
-import { CronService } from '@coldpbc/nest';
+import { CronService } from './cron.service';
 
 @Global()
 @Module({
