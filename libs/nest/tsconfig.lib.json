@@ -3,15 +3,6 @@
   "compilerOptions": {
     "outDir": "../../dist/out-tsc",
     "declaration": true,
-    "esModuleInterop": true,
-    "module": "commonjs",
-    "emitDecoratorMetadata": true,
-    "removeComments": true,
-    "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true,
-    "sourceMap": true,
-    "incremental": true,
-    "skipLibCheck": true,
     "types": ["node"],
     "target": "es2021",
     "composite": true,
@@ -21,6 +12,6 @@
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src/**/*.ts", "../validation/**/*.ts"],
+  "include": ["prisma/seeds/*.ts","src/**/*.ts", "../validation/**/*.ts"],
   "exclude": ["jest.config.ts", "src/**/*.spec.ts", "src/**/*.test.ts"]
 }
