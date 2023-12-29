@@ -1,3 +1,10 @@
+## [1.78.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.78.1...v1.78.2) (2023-12-29)
+
+
+### Bug Fixes
+
+* add index to repo ([24b9ca0](https://github.com/ColdPBC/cold-monorepo/commit/24b9ca0d7b6164e1a7c5f59bbe5c1b51be4818e5))
+
 ## [1.78.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.78.0...v1.78.1) (2023-12-29)
 
 
