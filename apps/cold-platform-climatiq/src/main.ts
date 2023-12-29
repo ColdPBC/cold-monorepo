@@ -1,4 +1,3 @@
-import './tracer';
 import { NestFactory } from '@nestjs/core';
 import * as dotenv from 'dotenv';
 import { WinstonModule } from 'nest-winston';
@@ -7,6 +6,9 @@ import { createLogger, Logger } from 'winston';
 import winstonConfig from '../../../libs/nest/src/lib/worker/winston.config';
 import { AppModule } from './app.module';
 
+import { setup } from '@coldpbc/nest';
+
+setup();
 dotenv.config();
 
 async function bootstrap(instance: Logger) {
