@@ -57,6 +57,7 @@ export class LoggingInterceptor implements NestInterceptor, OnModuleInit {
             url: request.url,
             service: this.config.get('DD_SERVICE') || BaseWorker.getProjectName(),
             version: this.config.get('DD_VERSION') || BaseWorker.getPkgVersion(),
+            status: request.statusCode,
             method: request.method,
           });
 
