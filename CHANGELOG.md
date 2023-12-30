@@ -1,3 +1,10 @@
+## [1.79.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.79.1...v1.79.2) (2023-12-30)
+
+
+### Bug Fixes
+
+* troubleshoot tracer ([703337b](https://github.com/ColdPBC/cold-monorepo/commit/703337b82158898ddc6c935a94b58d78fc753558))
+
 ## [1.79.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.79.0...v1.79.1) (2023-12-30)
 
 
