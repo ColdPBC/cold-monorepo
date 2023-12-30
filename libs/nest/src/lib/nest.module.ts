@@ -67,7 +67,7 @@ export class NestModule {
     /**
      * Cron module
      */
-    await darkly.getFlag('static-enable-cron-module');
+    //await darkly.getFlag('static-enable-cron-module');
     /* if (enableCronModule) {
        imports.push(CronModule);
        providers.push(CronService);
@@ -80,12 +80,10 @@ export class NestModule {
     const enableDDTrace = await darkly.getFlag('static-enable-data-dog-trace-module');
     if (enableDDTrace) {
       imports.push(
-        imports.push(
-          DatadogTraceModule.forRoot({
-            controllers: true,
-            providers: true,
-          }),
-        ),
+        DatadogTraceModule.forRoot({
+          controllers: true,
+          providers: true,
+        }),
       );
     }
 
