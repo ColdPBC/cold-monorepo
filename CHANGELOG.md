@@ -1,3 +1,10 @@
+## [1.78.6](https://github.com/ColdPBC/cold-monorepo/compare/v1.78.5...v1.78.6) (2023-12-30)
+
+
+### Bug Fixes
+
+* fix dd trace module ([a79b307](https://github.com/ColdPBC/cold-monorepo/commit/a79b307a73d68f5b2a04d0e35b47cd6d3d95e34f))
+
 ## [1.78.5](https://github.com/ColdPBC/cold-monorepo/compare/v1.78.4...v1.78.5) (2023-12-29)
 
 
