@@ -1,21 +1,17 @@
 import './tracer';
 import { NestFactory } from '@nestjs/core';
 import * as dotenv from 'dotenv';
-import { WinstonModule } from 'nest-winston';
-import { createLogger } from 'winston';
 import { AppModule } from './platform/modules/app.module';
 import { OpenapiModule } from './platform/modules/swagger/openapi.module';
 // eslint-disable-next-line @nx/enforce-module-boundaries
-import winstonConfig from '../../../libs/nest/src/lib/worker/winston.config';
 import { patchNestjsSwagger } from '@anatine/zod-nestjs';
+import { WorkerLogger } from '@coldpbc/nest';
 
 dotenv.config();
 
 async function bootstrap(instance) {
   const app = await NestFactory.create(AppModule.forRootAsync(), {
-    logger: WinstonModule.createLogger({
-      instance,
-    }),
+    logger: instance,
   });
 
   //app.useGlobalPipes(new ResourceValidationPipe());
@@ -28,7 +24,7 @@ async function bootstrap(instance) {
 }
 
 async function init() {
-  const instance = createLogger(winstonConfig('main'));
+  const instance = new WorkerLogger('main');
   await bootstrap(instance);
 }
 

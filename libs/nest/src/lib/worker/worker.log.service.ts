@@ -7,6 +7,8 @@ import { BaseWorker } from './worker.class';
 import { Tags } from '../primitives';
 import { merge } from 'lodash';
 import { ConfigService } from '@nestjs/config'; /// test
+import tracer from 'dd-trace';
+import formats from 'dd-trace/ext/formats';
 
 /// test
 export class WorkerLogger implements LoggerService {
@@ -51,6 +53,14 @@ export class WorkerLogger implements LoggerService {
   }
 
   error(error: any, optionalParams?: any | any[]): void {
+    const span = tracer.scope().active();
+    const time = new Date().toISOString();
+    const record = { time, error };
+
+    if (span) {
+      tracer.inject(span.context(), formats.LOG, record);
+    }
+
     if (typeof error === 'string') {
       this.logger.error(error, { ...optionalParams, ...this.tags, context: this.context });
     } else if (error?.response?.data) {
@@ -72,6 +82,14 @@ export class WorkerLogger implements LoggerService {
   }
 
   warn(message: string, optionalParams?: any | any[]): void {
+    const span = tracer.scope().active();
+    const time = new Date().toISOString();
+    const record = { time, message };
+
+    if (span) {
+      tracer.inject(span.context(), formats.LOG, record);
+    }
+
     if (!optionalParams) {
       this.logger.warn(typeof message === 'string' ? message : this.redactor.redact(message), this.context, { ...this.tags });
     }
@@ -80,6 +98,14 @@ export class WorkerLogger implements LoggerService {
   }
 
   info(message: string, optionalParams?: any | any[]): void {
+    const span = tracer.scope().active();
+    const time = new Date().toISOString();
+    const record = { time, message };
+
+    if (span) {
+      tracer.inject(span.context(), formats.LOG, record);
+    }
+
     if (!optionalParams) {
       this.logger.info(typeof message === 'string' ? message : this.redactor.redact(message), this.context, { ...this.tags });
     }
@@ -88,6 +114,14 @@ export class WorkerLogger implements LoggerService {
   }
 
   verbose(message: string, optionalParams?: any | any[]): void {
+    const span = tracer.scope().active();
+    const time = new Date().toISOString();
+    const record = { time, message };
+
+    if (span) {
+      tracer.inject(span.context(), formats.LOG, record);
+    }
+
     if (!optionalParams) {
       this.logger.verbose(typeof message === 'string' ? message : this.redactor.redact(message), this.context, { ...this.tags });
     }
@@ -96,6 +130,14 @@ export class WorkerLogger implements LoggerService {
   }
 
   debug(message: any, optionalParams?: any | any[]): void {
+    const span = tracer.scope().active();
+    const time = new Date().toISOString();
+    const record = { time, message };
+
+    if (span) {
+      tracer.inject(span.context(), formats.LOG, record);
+    }
+
     if (!optionalParams) {
       this.logger.debug(typeof message === 'string' ? message : this.redactor.redact(message), this.context, { ...this.tags });
     }
@@ -104,6 +146,14 @@ export class WorkerLogger implements LoggerService {
   }
 
   log(message: any, optionalParams?: any | any[]): void {
+    const span = tracer.scope().active();
+    const time = new Date().toISOString();
+    const record = { time, message };
+
+    if (span) {
+      tracer.inject(span.context(), formats.LOG, record);
+    }
+
     if (!optionalParams) {
       this.logger.info(message, this.context, { ...this.tags });
     }

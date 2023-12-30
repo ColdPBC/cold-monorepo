@@ -3354,23 +3354,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@datadog/native-appsec@npm:4.0.0":
-  version: 4.0.0
-  resolution: "@datadog/native-appsec@npm:4.0.0"
+"@datadog/native-appsec@npm:6.0.0":
+  version: 6.0.0
+  resolution: "@datadog/native-appsec@npm:6.0.0"
   dependencies:
     node-gyp: "npm:latest"
     node-gyp-build: "npm:^3.9.0"
-  checksum: d1b4c5b096b70e2d76a3c872c897fdd967f0def08d6a608609c84a00755007d35deaa137c32368f76efb8d6ed15d76404173f3f056f79a85d36fb4feedefd680
+  checksum: a8a204c521504e7e66780d38e7ac9dff13449e946d48388cf2efd52c46e4a17cb0923946300ce376cf2f1b6bb143afe6ec543e917405a7470dfb1f7bcec9fc6e
   languageName: node
   linkType: hard
 
-"@datadog/native-iast-rewriter@npm:2.2.1":
-  version: 2.2.1
-  resolution: "@datadog/native-iast-rewriter@npm:2.2.1"
+"@datadog/native-iast-rewriter@npm:2.2.2":
+  version: 2.2.2
+  resolution: "@datadog/native-iast-rewriter@npm:2.2.2"
   dependencies:
     lru-cache: "npm:^7.14.0"
     node-gyp-build: "npm:^4.5.0"
-  checksum: 624b0c394244c45747dabc9d5233f4a14102ca802f868a06ee5ffe01555bcd4219de8e1599bac1da38b17fe1fec3f90b8f89df0187b3b37de142842aeec7779d
+  checksum: bbddc8866724961a65517f0382f65c71505f386e4bc047bd0ac1be2b00c3f9e1a62e8efca7af1df1230753ee7bdd388ea19b36e56d83fd13912a947189475979
   languageName: node
   linkType: hard
 
@@ -3395,9 +3395,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@datadog/pprof@npm:4.0.1":
-  version: 4.0.1
-  resolution: "@datadog/pprof@npm:4.0.1"
+"@datadog/pprof@npm:4.1.0":
+  version: 4.1.0
+  resolution: "@datadog/pprof@npm:4.1.0"
   dependencies:
     delay: "npm:^5.0.0"
     node-gyp: "npm:latest"
@@ -3405,7 +3405,7 @@ __metadata:
     p-limit: "npm:^3.1.0"
     pprof-format: "npm:^2.0.7"
     source-map: "npm:^0.7.4"
-  checksum: e1584c93a0bdb8fecad1253740022ef5015c2156159a8a907d75602ea2b50eb9e93dce958b4c335ab295e29aa327b62279f9876fe521f8dfbd9bc77230eabc14
+  checksum: dec8f56aa59de5e890e88703e0faeffa823bcdc3c8eaf15110aab70705bc27b804f2826ec59c3a4fa981746ce1264ede7310bd7efe0907ca84485e012966ddd0
   languageName: node
   linkType: hard
 
@@ -18308,7 +18308,7 @@ __metadata:
     corepack: "npm:^0.23.0"
     cz-conventional-changelog: "npm:^3.3.0"
     date-fns: "npm:^2.30.0"
-    dd-trace: "npm:^4.15.0"
+    dd-trace: "npm:^4.22.0"
     deep-object-diff: "npm:^1.1.9"
     dotenv: "npm:^16.0.3"
     eslint: "npm:8.55.0"
@@ -20016,15 +20016,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dd-trace@npm:^4.15.0":
-  version: 4.20.0
-  resolution: "dd-trace@npm:4.20.0"
+"dd-trace@npm:^4.22.0":
+  version: 4.22.0
+  resolution: "dd-trace@npm:4.22.0"
   dependencies:
-    "@datadog/native-appsec": "npm:4.0.0"
-    "@datadog/native-iast-rewriter": "npm:2.2.1"
+    "@datadog/native-appsec": "npm:6.0.0"
+    "@datadog/native-iast-rewriter": "npm:2.2.2"
     "@datadog/native-iast-taint-tracking": "npm:1.6.4"
     "@datadog/native-metrics": "npm:^2.0.0"
-    "@datadog/pprof": "npm:4.0.1"
+    "@datadog/pprof": "npm:4.1.0"
     "@datadog/sketches-js": "npm:^2.1.0"
     "@opentelemetry/api": "npm:^1.0.0"
     "@opentelemetry/core": "npm:^1.14.0"
@@ -20050,10 +20050,11 @@ __metadata:
     opentracing: "npm:>=0.12.1"
     path-to-regexp: "npm:^0.1.2"
     pprof-format: "npm:^2.0.7"
-    protobufjs: "npm:^7.2.4"
+    protobufjs: "npm:^7.2.5"
     retry: "npm:^0.13.1"
     semver: "npm:^7.5.4"
-  checksum: 187b671fb38ae56dbf7851ce1faf1b802057480838fb2d539e7e8452f6d7c9fcc6e1f9441e37d055ea4007d446a4d09175abbbca20b126230c3f5ef37b8a1048
+    tlhunter-sorted-set: "npm:^0.1.0"
+  checksum: 402930961a05dd8b208218c515e15941fc45246bc5aea2fa4646d612740d7bdab25c5e0c1c7a24102e0f5793c1c83ad82c765376c0c1eb115e19833215874924
   languageName: node
   linkType: hard
 
@@ -36052,7 +36053,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"protobufjs@npm:7.2.5, protobufjs@npm:^7.0.0, protobufjs@npm:^7.2.2, protobufjs@npm:^7.2.4":
+"protobufjs@npm:7.2.5, protobufjs@npm:^7.0.0, protobufjs@npm:^7.2.2, protobufjs@npm:^7.2.4, protobufjs@npm:^7.2.5":
   version: 7.2.5
   resolution: "protobufjs@npm:7.2.5"
   dependencies:
@@ -41202,6 +41203,13 @@ __metadata:
   version: 2.2.0
   resolution: "tinyspy@npm:2.2.0"
   checksum: bcc5a08c2dc7574d32e6dcc2e760ad95a3cf30249c22799815b6389179427c95573d27d2d965ebc5fca2b6d338c46678cd7337ea2a9cebacee3dc662176b07cb
+  languageName: node
+  linkType: hard
+
+"tlhunter-sorted-set@npm:^0.1.0":
+  version: 0.1.0
+  resolution: "tlhunter-sorted-set@npm:0.1.0"
+  checksum: 908019aadd169263f63b63e6864a61fe93c08657ac5c8496bd72b291620c88b7a81e18e735cfbf044da2f9439c1f36ee3e740dd806781431214f3b01ed3df0a3
   languageName: node
   linkType: hard
 
