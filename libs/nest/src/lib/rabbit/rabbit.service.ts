@@ -56,7 +56,9 @@ export class ColdRabbitService extends BaseWorker implements OnModuleInit {
    * @returns {Promise<void>} A Promise that resolves once the connection is closed.
    */
   public async disconnect(): Promise<void> {
-    await this.client?.managedConnection.close();
+    if (!this.client?.managedConnection?.isConnected()) {
+      await this.client?.managedConnection.close();
+    }
     this.logger.warn(`rabbit connection closed`);
   }
 
@@ -81,8 +83,10 @@ export class ColdRabbitService extends BaseWorker implements OnModuleInit {
   ): Promise<string> {
     try {
       await this.client?.publish(exchange, routingKey, { msg: data });
+
       this.logger.info(`message published to ${routingKey.toLowerCase()}`, { ...data });
-      await this.client?.managedConnection.close();
+
+      await this.disconnect();
       return 'success';
     } catch (err: any) {
       this.logger.error(err.messsage, { error: err });
