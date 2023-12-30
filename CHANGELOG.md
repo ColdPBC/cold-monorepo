@@ -1,3 +1,10 @@
+# [1.79.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.78.7...v1.79.0) (2023-12-30)
+
+
+### Features
+
+* add bayou webhook payload validation ([2bd110a](https://github.com/ColdPBC/cold-monorepo/commit/2bd110a7a6e4bdadadb2f3c8afb537a91cca6675))
+
 ## [1.78.7](https://github.com/ColdPBC/cold-monorepo/compare/v1.78.6...v1.78.7) (2023-12-30)
 
 
