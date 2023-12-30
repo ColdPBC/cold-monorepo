@@ -1,3 +1,10 @@
+## [1.79.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.79.0...v1.79.1) (2023-12-30)
+
+
+### Bug Fixes
+
+* add domain entry for bayou.coldclimate.online and .com ([47326f1](https://github.com/ColdPBC/cold-monorepo/commit/47326f1a34bea616e5046795bf15758c8b721c15))
+
 # [1.79.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.78.7...v1.79.0) (2023-12-30)
 
 
