@@ -1,3 +1,10 @@
+## [1.78.7](https://github.com/ColdPBC/cold-monorepo/compare/v1.78.6...v1.78.7) (2023-12-30)
+
+
+### Bug Fixes
+
+* fix disconnect issue? ([637097c](https://github.com/ColdPBC/cold-monorepo/commit/637097cf2186d8b3b0a39dd95d5936541a7ea878))
+
 ## [1.78.6](https://github.com/ColdPBC/cold-monorepo/compare/v1.78.5...v1.78.6) (2023-12-30)
 
 
