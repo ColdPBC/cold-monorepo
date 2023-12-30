@@ -15,6 +15,8 @@ export class AppService extends BaseWorker implements OnModuleInit {
     this.logger.log('AppService initialized');
   }
 
+  // Allow any because it's already been validated and we don't know what the payload will be
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   webhook(payload: any) {
     return payload;
   }
