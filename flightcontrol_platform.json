@@ -194,6 +194,7 @@
         {
           "id": "cold-platform-bayou-production",
           "name": "cold-platform-bayou",
+          "domain": "bayou.coldclimate.com",
           "cpu": 1,
           "port": 7004,
           "type": "fargate",
@@ -412,7 +413,7 @@
             "_platform.dockerfile"
           ],
           "maxInstances": 2,
-          "minInstances": 2,
+          "minInstances": 1,
           "healthCheckPath": "/health",
           "containerInsights": true,
           "enableCloudfrontSwr": true,
@@ -483,6 +484,7 @@
         {
           "id": "cold-platform-bayou-staging",
           "name": "cold-platform-bayou",
+          "domain": "bayou.coldclimate.online",
           "cpu": 1,
           "port": 7004,
           "type": "fargate",
@@ -500,7 +502,7 @@
             "_platform.dockerfile"
           ],
           "maxInstances": 2,
-          "minInstances": 2,
+          "minInstances": 1,
           "healthCheckPath": "/health",
           "containerInsights": true,
           "enableCloudfrontSwr": true,
