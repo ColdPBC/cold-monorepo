@@ -11,7 +11,7 @@ export class AppController {
 
   @Post('webhook')
   @Public()
-  @HttpCode(201)
+  @HttpCode(202)
   getData(@Body(new BayouValidationPipe('POST')) body: BayouWebhookDTO) {
     return this.appService.webhook(body);
   }
