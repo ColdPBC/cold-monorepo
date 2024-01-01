@@ -1,3 +1,11 @@
+## [1.79.7](https://github.com/ColdPBC/cold-monorepo/compare/v1.79.6...v1.79.7) (2024-01-01)
+
+
+### Bug Fixes
+
+* let service_definitions consumer process both RPC and ASYNC messages ([752a5c4](https://github.com/ColdPBC/cold-monorepo/commit/752a5c4bd541f17204e93fa5ddd899e93b9646b1))
+* skip record if service definition doesn't exist ([16208c9](https://github.com/ColdPBC/cold-monorepo/commit/16208c91d6c9ebcdccb9184a44487cfe3dea4d70))
+
 ## [1.79.6](https://github.com/ColdPBC/cold-monorepo/compare/v1.79.5...v1.79.6) (2024-01-01)
 
 
