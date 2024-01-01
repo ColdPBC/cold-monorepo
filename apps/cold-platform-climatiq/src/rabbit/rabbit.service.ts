@@ -1,16 +1,16 @@
 import {Injectable} from '@nestjs/common';
 import {BackOffStrategies, BaseWorker} from '@coldpbc/nest';
 import {Nack, RabbitRPC, RabbitSubscribe} from '@golevelup/nestjs-rabbitmq';
-import {ClimatiqService} from '../climatiq/climatiq.service';
 import {InjectQueue} from '@nestjs/bull';
 import {Queue} from 'bull';
+import {RabbitMessagePayload} from '../../../../libs/nest/src/lib/rabbit/rabbit.types';
 
 /**
  * RabbitService class.
  */
 @Injectable()
 export class RabbitService extends BaseWorker {
-  constructor(private readonly ClimatiqService: ClimatiqService, @InjectQueue('climatiq') private queue: Queue) {
+  constructor(@InjectQueue('climatiq') private queue: Queue) {
     super(RabbitService.name);
   }
 
@@ -28,15 +28,19 @@ export class RabbitService extends BaseWorker {
   @RabbitRPC({
     exchange: 'amq.direct',
     routingKey: `cold.platform.climatiq.rpc`,
-    queue: `cold.platform.climatiq.rpc`,
+    queue: `cold.platform.climatiq`,
     allowNonJsonMessages: false,
   })
-  async handleRPCMessages(msg: { event: string; data: never; from: string }): Promise<unknown> {
+  async handleRPCMessages(msg: RabbitMessagePayload): Promise<unknown> {
     try {
       const parsed = typeof msg.data == 'string' ? JSON.parse(msg.data) : msg.data;
-      this.logger.debug(`RPC Request Received from rabbit`, parsed);
+      this.logger.debug(`received RPC ${msg.event} request from ${msg.from}`, parsed);
       const job = await this.queue.add(parsed, { backoff: BackOffStrategies.EXPONENTIAL });
-      this.logger.info(`climatiq job added to queue`, { job });
+      this.logger.info(`${job.name} job added to ${job.queue['keyPrefix']} ${job.queue.name} queue`, {
+        id: job.id,
+        data: job.data,
+        from: msg.from,
+      });
       return job;
     } catch (err) {
       this.logger.error(err.message, { error: err, data: JSON.parse(msg.data) });
@@ -60,12 +64,12 @@ export class RabbitService extends BaseWorker {
     queue: `cold.platform.climatiq`,
     allowNonJsonMessages: false,
   })
-  async handleAsyncMessages(msg: { event: string; data: string; from: string }): Promise<unknown> {
+  async handleAsyncMessages(msg: RabbitMessagePayload): Promise<unknown> {
     try {
       const parsed = typeof msg.data == 'string' ? JSON.parse(msg.data) : msg.data;
-      this.logger.info(`Async rabbit request received from ${msg.from}`, { parsed, from: msg.from });
+      this.logger.info(`received async ${msg.event} request from ${msg.from}`, { parsed, from: msg.from });
       const job = await this.queue.add(msg.event, parsed, { backoff: BackOffStrategies.EXPONENTIAL });
-      this.logger.info(`Job added to ${job.queue['keyPrefix']} ${job.queue.name} ${job.name} queue`, {
+      this.logger.info(`${job.name} job added to ${job.queue['keyPrefix']} ${job.queue.name} queue`, {
         id: job.id,
         data: job.data,
         from: msg.from,

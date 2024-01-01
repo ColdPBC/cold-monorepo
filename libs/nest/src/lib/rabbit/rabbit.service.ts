@@ -2,6 +2,7 @@ import { AmqpConnection, RabbitMQConfig } from '@golevelup/nestjs-rabbitmq';
 import { Global, Injectable, OnModuleInit } from '@nestjs/common';
 import { BaseWorker } from '../worker';
 import { ConfigService } from '@nestjs/config';
+import { RabbitMessagePayload } from './rabbit.types';
 
 export enum WorkerTypes {
   PLATFORM = 'platform',
@@ -9,6 +10,10 @@ export enum WorkerTypes {
   AFFILIATE = 'affiliate',
   CORE = 'core',
 }
+
+export type RabbitMessageOptions = {
+  exchange: string;
+};
 
 @Global()
 @Injectable()
@@ -36,7 +41,7 @@ export class ColdRabbitService extends BaseWorker implements OnModuleInit {
       this.definition = pkg.definition;
 
       await this.publish(
-        'cold.service_definitions.registration',
+        'cold.service_definitions',
         {
           name: pkg.name,
           label: pkg.label,
@@ -67,15 +72,23 @@ export class ColdRabbitService extends BaseWorker implements OnModuleInit {
   /**
    * Publishes a message to a specified exchange with a given routing key.
    *
-   * @param {string} routingKey - The routing key for the message.
-   * @param {Object} [data] - The data to be included in the message.
-   * @param {string} event - The event to be included in the message.
-   * @param {string} [exchange='amq.direct'] - (Optional) The exchange to publish the message to.
-   * @returns {Promise<string>} A promise that resolves to 'success' if the message was successfully published, or an error message otherwise.
+   * @param {string} routingKey
+   * @param {any} data
+   * @param {string} event
+   * @param {RabbitMessageOptions} options
+   * @returns {Promise<void>}
+   * @throws {Error}
    */
-  public async publish(routingKey: string, data: any, event: string, exchange = 'amq.direct'): Promise<string> {
+  public async publish(
+    routingKey: string,
+    data: any,
+    event: string,
+    options: RabbitMessageOptions = {
+      exchange: 'amq.direct',
+    },
+  ): Promise<void> {
     try {
-      await this.client?.publish(exchange, routingKey, {
+      await this.client?.publish(options.exchange, routingKey, {
         data,
         event: event,
         from: this.config.getOrThrow('DD_SERVICE'),
@@ -84,8 +97,6 @@ export class ColdRabbitService extends BaseWorker implements OnModuleInit {
       this.logger.info(`message published to ${routingKey.toLowerCase()}`, { ...data });
 
       await this.disconnect();
-
-      return 'success';
     } catch (err: any) {
       this.logger.error(err.messsage, { error: err });
       return err.message;
@@ -94,23 +105,30 @@ export class ColdRabbitService extends BaseWorker implements OnModuleInit {
 
   /***
    * Create RPC message to rabbit
-   * @param routingKey
-   * @param data
-   * @param event
-   * @param exchange
+   * @param {string} routingKey
+   * @param body
+   * @param {RabbitMessageOptions} options
+   * @returns {any}
+   * @throws {Error}
    */
-  public async request(routingKey: string, data: any, event: string, exchange = 'amq.direct'): Promise<any> {
+  public async request(
+    routingKey: string,
+    body: RabbitMessagePayload,
+    options: RabbitMessageOptions = {
+      exchange: 'amq.direct',
+    },
+  ): Promise<any> {
     try {
       if (this.client?.managedConnection) {
         return;
       }
       const response = await this.client?.request({
-        exchange: exchange,
+        exchange: options.exchange,
         routingKey: routingKey,
-        payload: { msg: { data, event, from: this.config.getOrThrow('DD_SERVICE') } },
+        payload: body,
       });
 
-      this.logger.info(`message published to ${routingKey.toLowerCase()}`, { ...data });
+      this.logger.info(`message published to ${routingKey.toLowerCase()}`, { ...body });
 
       await this.client?.managedConnection.close();
       return response;
@@ -165,6 +183,7 @@ export class ColdRabbitService extends BaseWorker implements OnModuleInit {
       registerHandlers: true,
       connectionInitOptions: { wait: false, timeout: 3000 },
       prefetchCount: 1,
+      enableControllerDiscovery: true,
     };
   }
 }
