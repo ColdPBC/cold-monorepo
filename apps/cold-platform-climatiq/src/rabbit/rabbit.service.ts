@@ -45,21 +45,6 @@ export class RabbitService extends BaseWorker {
   }
 
   /**
-   * let response: Observable<AxiosResponse<unknown>>;
-   *
-   *       switch (parsed.action) {
-   *         case 'getComputeMetadata':
-   *           response = await this.ClimatiqService.getComputeMetadata();
-   *           return response;
-   *         case 'getEmissionEstimate':
-   *           response = await this.ClimatiqService.getEmissionEstimate(parsed.data);
-   *           return response;
-   *         default:
-   *           return new UnprocessableEntityException(`Unknown action specified: ${parsed.action}`);
-   *       }
-   */
-
-  /**
    * Handles async messages received from RabbitMQ.
    *
    * @param {object} msg - The data object containing the message.
