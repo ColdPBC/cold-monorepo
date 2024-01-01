@@ -1,7 +1,7 @@
 import {Injectable} from '@nestjs/common';
 import {BaseWorker} from '@coldpbc/nest';
 import {ServiceDefinitionsService} from './service_definitions.service';
-import {Nack, RabbitSubscribe} from '@golevelup/nestjs-rabbitmq';
+import {Nack, RabbitRPC} from '@golevelup/nestjs-rabbitmq';
 
 /**
  * RabbitService class.
@@ -23,15 +23,15 @@ export class RabbitService extends BaseWorker {
    *          If the RPC message is invalid or the action is unknown, an error response will be returned.
    * @param msg
    */
-  @RabbitSubscribe({
+  @RabbitRPC({
     exchange: 'amq.direct',
-    routingKey: `cold.integrations.registration`,
-    queue: `cold.integrations.registration`,
+    routingKey: `cold.service_definitions`,
+    queue: `cold.service_definitions`,
     allowNonJsonMessages: false,
   })
-  async subscribe(msg: { event: string; data: unknown; from: string }): Promise<any> {
+  async subscribe(msg: { event: string; data: unknown; from: string; isRPC: boolean }): Promise<void | Nack | boolean> {
     try {
-      this.logger.info(`Received ${msg.event} message from ${msg.from}`, {
+      this.logger.info(`Received ${msg.isRPC ? 'RPC' : 'Async'} ${msg.event} message from ${msg.from}`, {
         data: msg.data,
         from: msg.from,
         event: msg.event,
@@ -39,6 +39,10 @@ export class RabbitService extends BaseWorker {
       const parsed = typeof msg.data === 'string' ? JSON.parse(msg.data) : msg.data;
 
       await this.serviceDefinitions.registerService(parsed.name, parsed.type, parsed.label, parsed.definition);
+
+      if (msg.isRPC) {
+        return true;
+      }
     } catch (err) {
       this.logger.error(err.message, { stack: err.stack, data: msg.data, from: msg.from, event: msg.event });
 
