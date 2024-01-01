@@ -1,3 +1,11 @@
+## [1.79.5](https://github.com/ColdPBC/cold-monorepo/compare/v1.79.4...v1.79.5) (2024-01-01)
+
+
+### Bug Fixes
+
+* add redis job queues ([c77ec1b](https://github.com/ColdPBC/cold-monorepo/commit/c77ec1b3c6871479e5d8108c0ccd8b34faa8a45d))
+* return 202 (accepted) ([727f5fe](https://github.com/ColdPBC/cold-monorepo/commit/727f5fe21bb82a96cd3c1594cf41512628177b80))
+
 ## [1.79.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.79.3...v1.79.4) (2023-12-30)
 
 
