@@ -9,10 +9,10 @@ import { BayouValidationPipe } from './pipes/validation.pipe';
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @Post('webhook')
+  @Post('inbound')
   @Public()
   @HttpCode(202)
-  getData(@Body(new BayouValidationPipe('POST')) body: BayouWebhookDTO) {
+  processWebhook(@Body(new BayouValidationPipe('POST')) body: BayouWebhookDTO) {
     return this.appService.webhook(body);
   }
 }

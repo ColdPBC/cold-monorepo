@@ -6,7 +6,7 @@ import { JwtService } from '@nestjs/jwt';
 import { HttpModule } from '@nestjs/axios';
 import { HotShotsModule } from 'nestjs-hot-shots';
 import { redisStore } from 'cache-manager-redis-yet';
-
+import { BullModule } from '@nestjs/bull';
 import { PrismaModule, PrismaService } from './prisma';
 import { HealthController, HealthModule, HealthService } from './health';
 import { DarklyService } from './darkly';
@@ -17,6 +17,7 @@ import { BaseWorker, WorkerLogger } from './worker';
 import { ColdRabbitModule, ColdRabbitService } from './rabbit';
 //import { CronModule, CronService } from './crons';
 import { DatadogTraceModule } from 'nestjs-ddtrace';
+import { RedisServiceConfig } from './utility';
 
 @Module({})
 export class NestModule {
@@ -26,10 +27,18 @@ export class NestModule {
     const darkly = new DarklyService(config);
     await darkly.onModuleInit();
 
+    const parts = config.get('DD_SERVICE')?.split('-');
+
+    if (!parts) throw new Error('DD_SERVICE is not set in this environment; It is required for the modules to function properly.');
+
+    const type = parts.length > 2 ? parts[1] : 'core';
+    const project = parts.length > 2 ? parts[2] : parts[1];
+
     const imports: any = [
       ConfigModule.forRoot({
         isGlobal: true,
       }),
+      BullModule.forRoot(await RedisServiceConfig.getQueueConfig(type, project)),
       HttpModule,
     ];
     const providers: any = [ConfigService];

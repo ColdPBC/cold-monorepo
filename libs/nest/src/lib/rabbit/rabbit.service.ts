@@ -1,6 +1,7 @@
 import { AmqpConnection, RabbitMQConfig } from '@golevelup/nestjs-rabbitmq';
 import { Global, Injectable, OnModuleInit } from '@nestjs/common';
 import { BaseWorker } from '../worker';
+import { ConfigService } from '@nestjs/config';
 
 export enum WorkerTypes {
   PLATFORM = 'platform',
@@ -15,7 +16,7 @@ export class ColdRabbitService extends BaseWorker implements OnModuleInit {
   public registered = false;
   definition: any;
 
-  constructor(private readonly client: AmqpConnection) {
+  constructor(private readonly config: ConfigService, private readonly client: AmqpConnection) {
     super(ColdRabbitService.name);
   }
 
@@ -34,16 +35,17 @@ export class ColdRabbitService extends BaseWorker implements OnModuleInit {
     try {
       this.definition = pkg.definition;
 
-      const response = await this.client.publish('amq.direct', `cold.integrations.registration`, {
-        msg: {
+      await this.publish(
+        'cold.service_definitions.registration',
+        {
           name: pkg.name,
           label: pkg.label,
           type: pkg.service_type,
           definition: pkg.definition,
         },
-      });
+        'service_started',
+      );
 
-      this.logger.info('service registration sent', { response, tags: this.tags });
       this.registered = true;
     } catch (err: any) {
       this.logger.error(err.message, { error: err });
@@ -59,34 +61,30 @@ export class ColdRabbitService extends BaseWorker implements OnModuleInit {
     if (!this.client?.managedConnection?.isConnected()) {
       await this.client?.managedConnection.close();
     }
-    this.logger.warn(`rabbit connection closed`);
+    //this.logger.info(`rabbit connection closed`);
   }
 
   /**
    * Publishes a message to a specified exchange with a given routing key.
    *
    * @param {string} routingKey - The routing key for the message.
-   * @param {Object} [data] - (Optional) The data to be included in the message.
-   * @param {Object} data.data - (Optional) The additional data to be included in the message.
-   * @param {any} data.data.name - (Optional) The name value to be included in the additional data.
-   * @param {string} data.action - (Optional) The action to be included in the message.
+   * @param {Object} [data] - The data to be included in the message.
+   * @param {string} event - The event to be included in the message.
    * @param {string} [exchange='amq.direct'] - (Optional) The exchange to publish the message to.
    * @returns {Promise<string>} A promise that resolves to 'success' if the message was successfully published, or an error message otherwise.
    */
-  public async publish(
-    routingKey: string,
-    data?: {
-      data: { name: any };
-      action: string;
-    },
-    exchange = 'amq.direct',
-  ): Promise<string> {
+  public async publish(routingKey: string, data: any, event: string, exchange = 'amq.direct'): Promise<string> {
     try {
-      await this.client?.publish(exchange, routingKey, { msg: data });
+      await this.client?.publish(exchange, routingKey, {
+        data,
+        event: event,
+        from: this.config.getOrThrow('DD_SERVICE'),
+      });
 
       this.logger.info(`message published to ${routingKey.toLowerCase()}`, { ...data });
 
       await this.disconnect();
+
       return 'success';
     } catch (err: any) {
       this.logger.error(err.messsage, { error: err });
@@ -98,9 +96,10 @@ export class ColdRabbitService extends BaseWorker implements OnModuleInit {
    * Create RPC message to rabbit
    * @param routingKey
    * @param data
+   * @param event
    * @param exchange
    */
-  public async request(routingKey: string, data: any, exchange = 'amq.direct'): Promise<any> {
+  public async request(routingKey: string, data: any, event: string, exchange = 'amq.direct'): Promise<any> {
     try {
       if (this.client?.managedConnection) {
         return;
@@ -108,7 +107,7 @@ export class ColdRabbitService extends BaseWorker implements OnModuleInit {
       const response = await this.client?.request({
         exchange: exchange,
         routingKey: routingKey,
-        payload: { msg: data },
+        payload: { msg: { data, event, from: this.config.getOrThrow('DD_SERVICE') } },
       });
 
       this.logger.info(`message published to ${routingKey.toLowerCase()}`, { ...data });
@@ -122,9 +121,9 @@ export class ColdRabbitService extends BaseWorker implements OnModuleInit {
 
   private async exitHandler(options: any, exitCode: number) {
     if (options.cleanup) {
-      this.logger.warn('disconnecting from rabbit...');
+      //this.logger.warn('disconnecting from rabbit...');
       await this.disconnect();
-      this.logger.warn(`done!`);
+      this.logger.info(`done!`);
     }
 
     if (exitCode || exitCode === 0) {

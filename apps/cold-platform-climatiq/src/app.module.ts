@@ -6,6 +6,7 @@ import { ClimatiqService } from './climatiq/climatiq.service';
 import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { RabbitService } from './rabbit/rabbit.service';
+import { BullModule } from '@nestjs/bull';
 
 @Module({
   providers: [AppService],
@@ -20,6 +21,9 @@ export class AppModule {
         }),
         await NestModule.forRootAsync(),
         ClimatiqModule,
+        BullModule.registerQueue({
+          name: 'climatiq',
+        }),
       ],
       controllers: [],
       providers: [ClimatiqService, RabbitService],

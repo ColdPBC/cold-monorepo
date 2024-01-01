@@ -10,6 +10,7 @@ import { NewsModule } from './resources/news/news.module';
 import { ActionsModule } from './resources/actions/actions.module';
 import { ConfigModule } from '@nestjs/config';
 import { IntegrationsModule } from './resources/integrations/integrations.module';
+import { Service_definitionsModule } from './resources/service_definitions/service_definitions.module';
 
 @Module({})
 export class AppModule {
@@ -28,6 +29,7 @@ export class AppModule {
           },
           serveRoot: '../../../assets',
         }),
+        Service_definitionsModule,
         Auth0Module,
         ComponentDefinitionsModule,
         PolicyDefinitionsModule,

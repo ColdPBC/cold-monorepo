@@ -87,7 +87,7 @@ export class LoggingInterceptor implements NestInterceptor, OnModuleInit {
       return next.handle().pipe(
         tap(() => {
           const data = {
-            msg: context.getArgs()[0].msg,
+            data: context.getArgs()[0].data,
             fields: context.getArgs()[1].fields,
             properties: context.getArgs()[1].properties,
             content: JSON.parse(Buffer.from(context.getArgs()[1].content).toString()),
@@ -95,8 +95,8 @@ export class LoggingInterceptor implements NestInterceptor, OnModuleInit {
             version: this.config.get('DD_VERSION') || BaseWorker.getPkgVersion(),
             method: context.getArgs()[1].properties?.replyTo ? 'REQUEST' : 'PUBLISH',
           };
-          this.logger = new WorkerLogger(data.msg.name);
-          this.logger.log(`Processed ${data.method} message from Rabbit`, { ...data });
+          this.logger = new WorkerLogger(LoggingInterceptor.name);
+          this.logger.log(`Processed ${data.content.event} message from ${data.content.from}`, data);
         }),
       );
     }

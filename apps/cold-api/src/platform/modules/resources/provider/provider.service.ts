@@ -28,7 +28,7 @@ export class ProviderService extends BaseWorker {
         }
       }
 
-      const response = await this.rabbit.request(data.routingKey, data);
+      const response = await this.rabbit.request(data.routingKey, data, 'ui_request');
 
       return response;
     } catch (e: any) {

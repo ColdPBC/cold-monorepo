@@ -11,12 +11,12 @@
       "rpcOptions": {
         "queue": "cold.platform.bayou",
         "routing_key": "cold.platform.bayou.rpc",
-        "exchange": "direct"
+        "exchange": "amq.direct"
       },
       "publishOptions": {
         "queue": "cold.platform.bayou",
         "routing_key": "cold.platform.bayou",
-        "exchange": "direct"
+        "exchange": "amq.direct"
       }
     },
     "options": {
