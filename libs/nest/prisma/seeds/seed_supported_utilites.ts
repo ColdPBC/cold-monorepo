@@ -351,7 +351,8 @@ export async function seedUtilities() {
       });
 
       if (!service) {
-        throw new Error(`Service definition ${seed.service_definition_name} not found!`);
+        console.error(`Service definition ${seed.service_definition_name} not found! Skipping...`);
+        return;
       }
 
       set(utility, 'service_definition_id', service.id);
