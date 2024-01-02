@@ -37,7 +37,6 @@
       "configurations": {
         "development": {
           "buildTarget": "cold-api:build:development",
-          "inspect": true,
           "runtimeArgs": ["--trace-warnings"]
         },
         "production": {

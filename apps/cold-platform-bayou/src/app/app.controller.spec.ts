@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { BayouController } from './bayou.controller';
+import { BayouService } from './bayou.service';
 
 const testData = {
   event: 'account_created',
@@ -18,14 +18,14 @@ describe('AppController', () => {
 
   beforeAll(async () => {
     app = await Test.createTestingModule({
-      controllers: [AppController],
-      providers: [AppService],
+      controllers: [BayouController],
+      providers: [BayouService],
     }).compile();
   });
 
   describe('processWebhook', () => {
     it('should return "Hello API"', () => {
-      const appController = app.get<AppController>(AppController);
+      const appController = app.get<BayouController>(BayouController);
       expect(
         appController.processWebhook({
           event: 'new_bill',

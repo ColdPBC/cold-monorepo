@@ -23,8 +23,8 @@
       "description": "Get Bayou’s API integrated in minutes for many utilities. And get your utility account connected in one click.",
       "helptext": "",
       "flags": {
-        "show_api_tokens": false,
-        "show_account_id": false
+        "embeded": false,
+        "url_field": "bayou_onboarding_url"
       },
       "elements": []
     },

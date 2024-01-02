@@ -1,4 +1,5 @@
 import * as z from 'zod';
+import { external_id_schema } from './external_id_schema';
 
 export const webhook_events_schema = z.enum([
   'new_bill',
@@ -9,8 +10,6 @@ export const webhook_events_schema = z.enum([
   'new_unparsed_bill',
   'customer_must_reauthenticate',
 ]);
-
-export const external_id_schema = z.string().refine(val => val.startsWith('org_'), { message: 'invalid external_id' });
 
 export const meters_schema = z.array(
   z

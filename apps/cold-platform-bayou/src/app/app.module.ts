@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { NestModule } from '@coldpbc/nest';
 import { ConfigModule } from '@nestjs/config/dist/config.module';
-import { AppService } from './app.service';
-import { AppController } from './app.controller';
+import { BayouService } from './bayou.service';
+import { BayouController } from './bayou.controller';
 import { BullModule } from '@nestjs/bull';
 
 @Module({})
@@ -19,8 +19,8 @@ export class AppModule {
           name: 'outbound',
         }),
       ],
-      controllers: [AppController],
-      providers: [AppService],
+      controllers: [BayouController],
+      providers: [BayouService],
       exports: [],
     };
   }

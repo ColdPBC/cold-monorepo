@@ -62,7 +62,7 @@ export class WorkerLogger implements LoggerService {
     }
 
     if (typeof error === 'string') {
-      this.logger.error(error, { ...optionalParams, ...this.tags, context: this.context });
+      this.logger.error(error, { optionalParams, ...this.tags, context: this.context });
     } else if (error?.response?.data) {
       this.logger.error(
         error.response?.data?.message,

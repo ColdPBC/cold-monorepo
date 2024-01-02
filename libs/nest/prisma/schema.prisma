@@ -306,7 +306,7 @@ model service_definitions {
 /// @erd integrations
 model integrations {
   /// @zod.custom.use(z.string().uuid())
-  id                    String
+  id                    String              @id @default(uuid())
   service_definition_id String
   /// @zod.custom.use(z.string().uuid())
   organization_id       String
@@ -322,7 +322,7 @@ model integrations {
   service_definition    service_definitions @relation(fields: [service_definition_id], references: [id], onDelete: Cascade)
   organization          organizations       @relation(fields: [organization_id], references: [id], onDelete: Cascade)
 
-  @@unique([id])
+  @@unique(name: "integrationKey", [service_definition_id, organization_id])
 }
 
 /// @namespace Webhooks

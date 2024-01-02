@@ -2,14 +2,14 @@ import {Injectable} from '@nestjs/common';
 import {BaseWorker} from '@coldpbc/nest';
 import {Nack, RabbitRPC} from '@golevelup/nestjs-rabbitmq';
 import {RabbitSubscribe} from '@golevelup/nestjs-rabbitmq/lib/rabbitmq.decorators';
-import {AppService} from './app.service';
+import {BayouService} from './bayou.service';
 
 /**
  * RabbitService class.
  */
 @Injectable()
 export class RabbitService extends BaseWorker {
-  constructor(private readonly bayou: AppService) {
+  constructor(private readonly bayou: BayouService) {
     super(RabbitService.name);
   }
 
