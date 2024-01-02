@@ -50,7 +50,7 @@
     "@golevelup/nestjs-rabbitmq": "^4.1.0",
     "@headlessui/react": "^1.7.15",
     "@heroicons/react": "^2.0.16",
-    "@launchdarkly/node-server-sdk": "^8.1.0",
+    "@launchdarkly/node-server-sdk": "^9.0.5",
     "@mdx-js/rollup": "^2.3.0",
     "@mui/icons-material": "^5.11.11",
     "@nestjs/axios": "^3.0.0",
