@@ -7646,6 +7646,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@prisma/debug@npm:5.7.1":
+  version: 5.7.1
+  resolution: "@prisma/debug@npm:5.7.1"
+  checksum: acb904bd7be0d4b389f0c5db23dee3b4b0cfaf131de13aaa72d0cccbc3a0e9cec16637f520e1af8c91ce43f9e075d535b78cb5709227eac011d3e4964c9a6fb5
+  languageName: node
+  linkType: hard
+
 "@prisma/engine-core@npm:3.15.2":
   version: 3.15.2
   resolution: "@prisma/engine-core@npm:3.15.2"
@@ -7740,12 +7747,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@prisma/generator-helper@npm:^5.2.0, @prisma/generator-helper@npm:^5.4.2":
+"@prisma/generator-helper@npm:^5.2.0":
   version: 5.7.0
   resolution: "@prisma/generator-helper@npm:5.7.0"
   dependencies:
     "@prisma/debug": "npm:5.7.0"
   checksum: ebd9dec7a2afc2608a97c34514daa5b7bafe80344e946e76234d47d4dce3bd7200345b79da07dd1af2037f17ff00bf33b7794c404280868a2a8f076818fda5f5
+  languageName: node
+  linkType: hard
+
+"@prisma/generator-helper@npm:^5.5.2":
+  version: 5.7.1
+  resolution: "@prisma/generator-helper@npm:5.7.1"
+  dependencies:
+    "@prisma/debug": "npm:5.7.1"
+  checksum: 9184a6346d044af3b6a0ee0a20b705b588dc84d93094a1c9ee9b67fc28a5a523a1696fd600b55de17b10a7535052dca74f0f566cfa7e9a1c6effb7fd5b371ab0
   languageName: node
   linkType: hard
 
@@ -18513,7 +18529,7 @@ __metadata:
     web-vitals: "npm:^2.1.4"
     winston: "npm:^3.9.0"
     zod: "npm:^3.22.4"
-    zod-prisma-types: "npm:^2.7.9"
+    zod-prisma-types: "npm:^3.1.6"
   languageName: unknown
   linkType: soft
 
@@ -44504,21 +44520,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zod-prisma-types@npm:^2.7.9":
-  version: 2.8.1
-  resolution: "zod-prisma-types@npm:2.8.1"
+"zod-prisma-types@npm:^3.1.6":
+  version: 3.1.6
+  resolution: "zod-prisma-types@npm:3.1.6"
   dependencies:
-    "@prisma/generator-helper": "npm:^5.4.2"
+    "@prisma/generator-helper": "npm:^5.5.2"
     code-block-writer: "npm:^12.0.0"
     lodash: "npm:^4.17.21"
-    zod: "npm:^3.21.1"
+    zod: "npm:^3.22.4"
   bin:
     zod-prisma-types: dist/bin.js
-  checksum: f33d8f5a6fbb95c76c52cf114611118ec21c721f5ce0c35d97beacf86d2074b1e6476402861702e2ee029e026e577893eff791913414c351bab8d796ac9dc2e8
+  checksum: ee873b78c89bcd499db3f90d01ae0fa874027918d47a74fcb76f38967b0ebaa92ac6353e23c0ebfc2a948373a79ae904c6dcb696c39e47e8ec30e056a1b04c95
   languageName: node
   linkType: hard
 
-"zod@npm:^3.21.1, zod@npm:^3.21.4, zod@npm:^3.22.4":
+"zod@npm:^3.21.4, zod@npm:^3.22.4":
   version: 3.22.4
   resolution: "zod@npm:3.22.4"
   checksum: 73622ca36a916f785cf528fe612a884b3e0f183dbe6b33365a7d0fc92abdbedf7804c5e2bd8df0a278e1472106d46674281397a3dd800fa9031dc3429758c6ac
