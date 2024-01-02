@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Span } from 'nestjs-ddtrace';
-import { AuthenticatedUser, BaseWorker, CacheService, ColdRabbitService, PrismaService } from '@coldpbc/nest';
+import { AuthenticatedUser, BaseWorker, CacheService, ColdRabbitService, PrismaService, RabbitMessagePayload } from '@coldpbc/nest';
 
 @Span()
 @Injectable()
@@ -13,22 +13,29 @@ export class ProviderService extends BaseWorker {
    * Retrieves data from a provider.
    *
    * @param {AuthenticatedUser} user - The authenticated user.
-   * @param {any} payload - The payload containing routing key and action.
+   * @param body
    * @param {boolean} bpc - Flag indicating whether to use cached data.
    * @returns {Promise<any>} - A promise that resolves to the data retrieved from the provider.
    * @throws {Error} - If an error occurs during retrieval.
    */
-  async requestProviderDataRPC(user: AuthenticatedUser, data: any, bpc: boolean): Promise<any> {
+  async requestProviderDataRPC(
+    user: AuthenticatedUser,
+    body: {
+      routing_key: string;
+      payload: RabbitMessagePayload;
+    },
+    bpc: boolean,
+  ): Promise<any> {
     try {
       if (bpc) {
-        const cached = await this.cache.get(`${data.routingKey}:${data.action}`);
+        const cached = await this.cache.get(`${body.routing_key}:${body.payload.event}`);
         if (cached) {
           this.logger.info('Returning cached data', { user, ...cached });
           return cached;
         }
       }
 
-      const response = await this.rabbit.request(data.routingKey, data);
+      const response = await this.rabbit.request(body.routing_key, body.payload);
 
       return response;
     } catch (e: any) {

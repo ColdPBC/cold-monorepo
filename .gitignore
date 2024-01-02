@@ -43,7 +43,6 @@ yalc.*
 package-lock.json
 # Ignore all index barrel files
 /libs/react/src/**/**/index.ts
-index.ts
 /.nx/
 /.nx/
 /migrations.json

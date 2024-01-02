@@ -1,6 +1,8 @@
 import { AmqpConnection, RabbitMQConfig } from '@golevelup/nestjs-rabbitmq';
 import { Global, Injectable, OnModuleInit } from '@nestjs/common';
 import { BaseWorker } from '../worker';
+import { ConfigService } from '@nestjs/config';
+import { RabbitMessagePayload } from './rabbit.types';
 
 export enum WorkerTypes {
   PLATFORM = 'platform',
@@ -9,13 +11,17 @@ export enum WorkerTypes {
   CORE = 'core',
 }
 
+export type RabbitMessageOptions = {
+  exchange: string;
+};
+
 @Global()
 @Injectable()
 export class ColdRabbitService extends BaseWorker implements OnModuleInit {
   public registered = false;
   definition: any;
 
-  constructor(private readonly client: AmqpConnection) {
+  constructor(private readonly config: ConfigService, private readonly client: AmqpConnection) {
     super(ColdRabbitService.name);
   }
 
@@ -34,16 +40,17 @@ export class ColdRabbitService extends BaseWorker implements OnModuleInit {
     try {
       this.definition = pkg.definition;
 
-      const response = await this.client.publish('amq.direct', `cold.integrations.registration`, {
-        msg: {
+      await this.publish(
+        'cold.service_definitions',
+        {
           name: pkg.name,
           label: pkg.label,
           type: pkg.service_type,
           definition: pkg.definition,
         },
-      });
+        'service_started',
+      );
 
-      this.logger.info('service registration sent', { response, tags: this.tags });
       this.registered = true;
     } catch (err: any) {
       this.logger.error(err.message, { error: err });
@@ -56,34 +63,40 @@ export class ColdRabbitService extends BaseWorker implements OnModuleInit {
    * @returns {Promise<void>} A Promise that resolves once the connection is closed.
    */
   public async disconnect(): Promise<void> {
-    await this.client?.managedConnection.close();
-    this.logger.warn(`rabbit connection closed`);
+    if (!this.client?.managedConnection?.isConnected()) {
+      await this.client?.managedConnection.close();
+    }
+    //this.logger.info(`rabbit connection closed`);
   }
 
   /**
    * Publishes a message to a specified exchange with a given routing key.
    *
-   * @param {string} routingKey - The routing key for the message.
-   * @param {Object} [data] - (Optional) The data to be included in the message.
-   * @param {Object} data.data - (Optional) The additional data to be included in the message.
-   * @param {any} data.data.name - (Optional) The name value to be included in the additional data.
-   * @param {string} data.action - (Optional) The action to be included in the message.
-   * @param {string} [exchange='amq.direct'] - (Optional) The exchange to publish the message to.
-   * @returns {Promise<string>} A promise that resolves to 'success' if the message was successfully published, or an error message otherwise.
+   * @param {string} routingKey
+   * @param {any} data
+   * @param {string} event
+   * @param {RabbitMessageOptions} options
+   * @returns {Promise<void>}
+   * @throws {Error}
    */
   public async publish(
     routingKey: string,
-    data?: {
-      data: { name: any };
-      action: string;
+    data: any,
+    event: string,
+    options: RabbitMessageOptions = {
+      exchange: 'amq.direct',
     },
-    exchange = 'amq.direct',
-  ): Promise<string> {
+  ): Promise<void> {
     try {
-      await this.client?.publish(exchange, routingKey, { msg: data });
+      await this.client?.publish(options.exchange, routingKey, {
+        data,
+        event: event,
+        from: this.config.getOrThrow('DD_SERVICE'),
+      });
+
       this.logger.info(`message published to ${routingKey.toLowerCase()}`, { ...data });
-      await this.client?.managedConnection.close();
-      return 'success';
+
+      await this.disconnect();
     } catch (err: any) {
       this.logger.error(err.messsage, { error: err });
       return err.message;
@@ -92,22 +105,30 @@ export class ColdRabbitService extends BaseWorker implements OnModuleInit {
 
   /***
    * Create RPC message to rabbit
-   * @param routingKey
-   * @param data
-   * @param exchange
+   * @param {string} routingKey
+   * @param body
+   * @param {RabbitMessageOptions} options
+   * @returns {any}
+   * @throws {Error}
    */
-  public async request(routingKey: string, data: any, exchange = 'amq.direct'): Promise<any> {
+  public async request(
+    routingKey: string,
+    body: RabbitMessagePayload,
+    options: RabbitMessageOptions = {
+      exchange: 'amq.direct',
+    },
+  ): Promise<any> {
     try {
       if (this.client?.managedConnection) {
         return;
       }
       const response = await this.client?.request({
-        exchange: exchange,
+        exchange: options.exchange,
         routingKey: routingKey,
-        payload: { msg: data },
+        payload: body,
       });
 
-      this.logger.info(`message published to ${routingKey.toLowerCase()}`, { ...data });
+      this.logger.info(`message published to ${routingKey.toLowerCase()}`, { ...body });
 
       await this.client?.managedConnection.close();
       return response;
@@ -118,9 +139,9 @@ export class ColdRabbitService extends BaseWorker implements OnModuleInit {
 
   private async exitHandler(options: any, exitCode: number) {
     if (options.cleanup) {
-      this.logger.warn('disconnecting from rabbit...');
+      //this.logger.warn('disconnecting from rabbit...');
       await this.disconnect();
-      this.logger.warn(`done!`);
+      this.logger.info(`done!`);
     }
 
     if (exitCode || exitCode === 0) {
@@ -162,6 +183,7 @@ export class ColdRabbitService extends BaseWorker implements OnModuleInit {
       registerHandlers: true,
       connectionInitOptions: { wait: false, timeout: 3000 },
       prefetchCount: 1,
+      enableControllerDiscovery: true,
     };
   }
 }

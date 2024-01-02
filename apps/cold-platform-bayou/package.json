@@ -2,6 +2,7 @@
   "name": "cold-platform-bayou",
   "label": "Bayou Energy",
   "service_type": "platform",
+  "version": "0.0.1",
   "definition": {
     "logo_url": "https://www.bayou.energy/img/logo_bayou.svg",
     "platform_url": "https://www.bayou.energy",
@@ -10,12 +11,12 @@
       "rpcOptions": {
         "queue": "cold.platform.bayou",
         "routing_key": "cold.platform.bayou.rpc",
-        "exchange": "direct"
+        "exchange": "amq.direct"
       },
       "publishOptions": {
         "queue": "cold.platform.bayou",
         "routing_key": "cold.platform.bayou",
-        "exchange": "direct"
+        "exchange": "amq.direct"
       }
     },
     "options": {

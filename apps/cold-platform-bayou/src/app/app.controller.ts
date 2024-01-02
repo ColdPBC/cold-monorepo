@@ -1,17 +1,18 @@
 import { Controller, HttpCode, Post } from '@nestjs/common';
 import { AppService } from './app.service';
-import { ResourceValidationPipe } from '../../../cold-api/src/platform/pipes/resource.pipe';
-import { newsSchema } from '@coldpbc/nest';
-import { CreateArticleDto } from '../../../cold-api/src/platform/modules/resources/news/dto/news-article.dto';
+import { Public } from '@coldpbc/nest';
 import { Body } from '@nestjs/common/decorators/http/route-params.decorator';
+import { BayouWebhookDTO } from './schemas/bayou.webhook.schema';
+import { BayouValidationPipe } from './pipes/validation.pipe';
 
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @Post('webhook')
-  @HttpCode(201)
-  getData(@Body(new ResourceValidationPipe(newsSchema, 'POST')) body: CreateArticleDto) {
+  @Post('inbound')
+  @Public()
+  @HttpCode(202)
+  processWebhook(@Body(new BayouValidationPipe('POST')) body: BayouWebhookDTO) {
     return this.appService.webhook(body);
   }
 }

@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { Span } from 'nestjs-ddtrace';
-import { AuthenticatedUser, BaseWorker, CacheService, ColdRabbitService, PrismaService } from '@coldpbc/nest';
+import { AuthenticatedUser, BaseWorker, CacheService, PrismaService } from '@coldpbc/nest';
 import { integration_service_type } from '@prisma/client';
 
 @Span()
 @Injectable()
 export class IntegrationsService extends BaseWorker {
-  constructor(private prisma: PrismaService, private readonly cache: CacheService, private rabbit: ColdRabbitService) {
+  constructor(private prisma: PrismaService, private readonly cache: CacheService) {
     super('PolicyContentService');
   }
 
@@ -87,9 +87,9 @@ export class IntegrationsService extends BaseWorker {
         }
       }
 
-      const response = await this.rabbit.request(data.routingKey, data);
+      // const response = await this.rabbit.request(data.routingKey, data);
 
-      return response;
+      //return response;
     } catch (e: any) {
       this.logger.error(e.message, { user });
       throw e;

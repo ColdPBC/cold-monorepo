@@ -26,7 +26,9 @@ export class SurveysService extends BaseWorker {
   }
 
   override async onModuleInit() {
-    this.exclude_orgs = await this.darkly.getJSONFlag('org-whitelist');
+    this.darkly.subscribeToJsonFlagChanges('dynamic-org-white-list', value => {
+      this.exclude_orgs = value;
+    });
   }
 
   /***

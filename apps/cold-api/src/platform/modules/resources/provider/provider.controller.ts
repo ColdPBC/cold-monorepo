@@ -1,7 +1,7 @@
-import { Controller, ParseBoolPipe, Post, Query, Req, UseFilters, UseGuards } from '@nestjs/common';
+import { Body, Controller, ParseBoolPipe, Post, Query, Req, UseFilters, UseGuards } from '@nestjs/common';
 import { ApiOAuth2, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Span } from 'nestjs-ddtrace';
-import { AuthenticatedUser, BaseWorker, HttpExceptionFilter, JwtAuthGuard, RolesGuard } from '@coldpbc/nest';
+import { AuthenticatedUser, BaseWorker, HttpExceptionFilter, JwtAuthGuard, RabbitMessagePayload, RolesGuard } from '@coldpbc/nest';
 import { bpcDecoratorOptions } from '../_global/global.params';
 
 import { ProviderService } from './provider.service';
@@ -31,10 +31,11 @@ export class ProviderController extends BaseWorker {
       query: any;
       user: AuthenticatedUser;
     },
+    @Body() body: { routing_key: string; payload: RabbitMessagePayload },
     @Query('bpc', new ParseBoolPipe({ optional: true })) bpc: boolean,
   ) {
     if (!bpc) bpc = false;
 
-    return this.providerService.requestProviderDataRPC(req.user, req.body, bpc);
+    return this.providerService.requestProviderDataRPC(req.user, body, bpc);
   }
 }

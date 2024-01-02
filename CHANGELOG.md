@@ -1,3 +1,129 @@
+## [1.79.7](https://github.com/ColdPBC/cold-monorepo/compare/v1.79.6...v1.79.7) (2024-01-01)
+
+
+### Bug Fixes
+
+* let service_definitions consumer process both RPC and ASYNC messages ([752a5c4](https://github.com/ColdPBC/cold-monorepo/commit/752a5c4bd541f17204e93fa5ddd899e93b9646b1))
+* skip record if service definition doesn't exist ([16208c9](https://github.com/ColdPBC/cold-monorepo/commit/16208c91d6c9ebcdccb9184a44487cfe3dea4d70))
+
+## [1.79.6](https://github.com/ColdPBC/cold-monorepo/compare/v1.79.5...v1.79.6) (2024-01-01)
+
+
+### Bug Fixes
+
+* add redis job queues ([dfccb48](https://github.com/ColdPBC/cold-monorepo/commit/dfccb48bd808f9a384d9e25675b937614ada7b97))
+
+## [1.79.5](https://github.com/ColdPBC/cold-monorepo/compare/v1.79.4...v1.79.5) (2024-01-01)
+
+
+### Bug Fixes
+
+* add redis job queues ([c77ec1b](https://github.com/ColdPBC/cold-monorepo/commit/c77ec1b3c6871479e5d8108c0ccd8b34faa8a45d))
+* return 202 (accepted) ([727f5fe](https://github.com/ColdPBC/cold-monorepo/commit/727f5fe21bb82a96cd3c1594cf41512628177b80))
+
+## [1.79.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.79.3...v1.79.4) (2023-12-30)
+
+
+### Bug Fixes
+
+* coerce date to UTC ([a972cec](https://github.com/ColdPBC/cold-monorepo/commit/a972cecdcd0116ef32b4f56232505600c8b62253))
+
+## [1.79.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.79.2...v1.79.3) (2023-12-30)
+
+
+### Bug Fixes
+
+* troubleshoot tracer ([0e43322](https://github.com/ColdPBC/cold-monorepo/commit/0e43322c35fe46d157f417cc90dd9f8556cf2bdb))
+
+## [1.79.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.79.1...v1.79.2) (2023-12-30)
+
+
+### Bug Fixes
+
+* troubleshoot tracer ([703337b](https://github.com/ColdPBC/cold-monorepo/commit/703337b82158898ddc6c935a94b58d78fc753558))
+
+## [1.79.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.79.0...v1.79.1) (2023-12-30)
+
+
+### Bug Fixes
+
+* add domain entry for bayou.coldclimate.online and .com ([47326f1](https://github.com/ColdPBC/cold-monorepo/commit/47326f1a34bea616e5046795bf15758c8b721c15))
+
+# [1.79.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.78.7...v1.79.0) (2023-12-30)
+
+
+### Features
+
+* add bayou webhook payload validation ([2bd110a](https://github.com/ColdPBC/cold-monorepo/commit/2bd110a7a6e4bdadadb2f3c8afb537a91cca6675))
+
+## [1.78.7](https://github.com/ColdPBC/cold-monorepo/compare/v1.78.6...v1.78.7) (2023-12-30)
+
+
+### Bug Fixes
+
+* fix disconnect issue? ([637097c](https://github.com/ColdPBC/cold-monorepo/commit/637097cf2186d8b3b0a39dd95d5936541a7ea878))
+
+## [1.78.6](https://github.com/ColdPBC/cold-monorepo/compare/v1.78.5...v1.78.6) (2023-12-30)
+
+
+### Bug Fixes
+
+* fix dd trace module ([a79b307](https://github.com/ColdPBC/cold-monorepo/commit/a79b307a73d68f5b2a04d0e35b47cd6d3d95e34f))
+
+## [1.78.5](https://github.com/ColdPBC/cold-monorepo/compare/v1.78.4...v1.78.5) (2023-12-29)
+
+
+### Bug Fixes
+
+* clean up cron/darkly/nest/rabbit modules ([1495817](https://github.com/ColdPBC/cold-monorepo/commit/14958179fef370e88ba30caef739cc4f15d947b0))
+* comment out cron module ([43b98c1](https://github.com/ColdPBC/cold-monorepo/commit/43b98c1eff19c51e538fbca4091b6bcd4a2e2ab3))
+
+## [1.78.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.78.3...v1.78.4) (2023-12-29)
+
+
+### Bug Fixes
+
+* remove unnecesary configs ([b5c6f60](https://github.com/ColdPBC/cold-monorepo/commit/b5c6f607ce1cd74a859b557ddf8c4bba44ffd7a1))
+
+## [1.78.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.78.2...v1.78.3) (2023-12-29)
+
+
+### Bug Fixes
+
+* move tracer to lib ([0699e53](https://github.com/ColdPBC/cold-monorepo/commit/0699e53b1356eeb21eec65b14fbd2e93d8bccb40))
+
+## [1.78.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.78.1...v1.78.2) (2023-12-29)
+
+
+### Bug Fixes
+
+* add index to repo ([24b9ca0](https://github.com/ColdPBC/cold-monorepo/commit/24b9ca0d7b6164e1a7c5f59bbe5c1b51be4818e5))
+
+## [1.78.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.78.0...v1.78.1) (2023-12-29)
+
+
+### Bug Fixes
+
+* add statuscode to logs ([f893973](https://github.com/ColdPBC/cold-monorepo/commit/f893973a6524926e59892d228003845cbfb1337b))
+
+# [1.78.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.77.8...v1.78.0) (2023-12-23)
+
+
+### Bug Fixes
+
+* add service, version tags to initialization logs ([b059c88](https://github.com/ColdPBC/cold-monorepo/commit/b059c886fd16ee80275e3220295cef71e0101842))
+* implement dynamic flag ([e61d2e6](https://github.com/ColdPBC/cold-monorepo/commit/e61d2e6b1590043afa65e02cbd69691446271490))
+* log health requests based on feature flag ([0a80ca7](https://github.com/ColdPBC/cold-monorepo/commit/0a80ca7bf04cb076244afeee06a86d4e5752df93))
+
+
+### Features
+
+* add json flag subscription functions ([2e3dbcc](https://github.com/ColdPBC/cold-monorepo/commit/2e3dbcc57be3004f3848c5ecb3dcbe3cb15e1bbc))
+* implement cron service ([f3011d3](https://github.com/ColdPBC/cold-monorepo/commit/f3011d391579610c76a105c7dec2eae08adbf3de))
+* implement darkly streaming ([6839740](https://github.com/ColdPBC/cold-monorepo/commit/6839740de7106b22b98e278e5631fc0139677dc2))
+* implement darkly streaming ([731fd49](https://github.com/ColdPBC/cold-monorepo/commit/731fd4970684b1e0f6be94fc2b06c97c85b01c8b))
+* load nest modules based on feature flags ([496ef3f](https://github.com/ColdPBC/cold-monorepo/commit/496ef3f612a919c67db083e6282066d011447fd4))
+
 ## [1.77.8](https://github.com/ColdPBC/cold-monorepo/compare/v1.77.7...v1.77.8) (2023-12-22)
 
 

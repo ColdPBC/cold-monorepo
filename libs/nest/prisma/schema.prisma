@@ -260,8 +260,8 @@ model category_data {
 /// @actions
 model organizations {
   /// @zod.custom.use(z.string().uuid())
-  id                  String          @id @default(uuid())
-  name                String          @unique
+  id                  String             @id @default(uuid())
+  name                String             @unique
   enabled_connections Json
   display_name        String
   branding            Json?
@@ -274,28 +274,31 @@ model organizations {
   zip                 String?
   /// @DtoUpdateHidden
   /// @zod.custom.use(z.date().optional())
-  created_at          DateTime        @default(now())
+  created_at          DateTime           @default(now())
   /// @DtoUpdateHidden
   /// @DtoCreateHidden
   /// @DtoReadOnly
   /// @zod.custom.use(z.date().optional())
-  updated_at          DateTime        @updatedAt
-  isTest              Boolean         @default(false)
+  updated_at          DateTime           @updatedAt
+  isTest              Boolean            @default(false)
   actions             actions[]
   category_data       category_data[]
   survey_data         survey_data[]
   integrations        integrations[]
+  inbound_webhooks    inbound_webhooks[]
 }
 
 model service_definitions {
-  id           String                   @id @default(uuid())
-  name         String                   @unique
-  label        String
-  type         integration_service_type
-  definition   Json
-  created_at   DateTime                 @default(now())
-  updated_at   DateTime                 @updatedAt
-  integrations integrations[]
+  id                  String                   @id @default(uuid())
+  name                String                   @unique
+  label               String
+  type                integration_service_type
+  definition          Json
+  created_at          DateTime                 @default(now())
+  updated_at          DateTime                 @updatedAt
+  integrations        integrations[]
+  inbound_webhooks    inbound_webhooks[]
+  supported_utilities supported_utilities[]
 }
 
 /// @namespace Integrations
@@ -318,6 +321,58 @@ model integrations {
   updated_at            DateTime            @updatedAt
   service_definition    service_definitions @relation(fields: [service_definition_id], references: [id], onDelete: Cascade)
   organization          organizations       @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+
+  @@unique([id])
+}
+
+/// @namespace Webhooks
+/// @describe Integrations are a way to connect to external services
+/// @erd integrations
+model inbound_webhooks {
+  /// @zod.custom.use(z.string().cuid())
+  id                    String              @id @default(cuid())
+  /// @zod.custom.use(z.string().uuid())
+  service_definition_id String
+  /// @zod.custom.use(z.string().uuid())
+  organization_id       String
+  payload               Json
+  /// @DtoUpdateHidden
+  /// @zod.custom.use(z.date().optional())
+  created_at            DateTime            @default(now())
+  /// @DtoUpdateHidden
+  /// @DtoCreateHidden
+  /// @DtoReadOnly
+  /// @zod.custom.use(z.date().optional())
+  updated_at            DateTime            @updatedAt
+  service_definition    service_definitions @relation(fields: [service_definition_id], references: [id], onDelete: Cascade)
+  organization          organizations       @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+
+  @@unique([id])
+}
+
+/// @namespace Supported Utilities
+/// @describe List of supported utilities for a given service definition
+/// @erd integrations
+model supported_utilities {
+  /// @zod.custom.use(z.string().cuid())
+  id                    String @id @default(cuid())
+  /// @zod.custom.use(z.string().uuid())
+  service_definition_id String
+
+  /// @zod.custom.use(z.string())
+  name               String              @unique
+  /// @zod.custom.use(z.string())
+  label              String
+  data               Json
+  /// @DtoUpdateHidden
+  /// @zod.custom.use(z.date().optional())
+  created_at         DateTime            @default(now())
+  /// @DtoUpdateHidden
+  /// @DtoCreateHidden
+  /// @DtoReadOnly
+  /// @zod.custom.use(z.date().optional())
+  updated_at         DateTime            @updatedAt
+  service_definition service_definitions @relation(fields: [service_definition_id], references: [id], onDelete: Cascade)
 
   @@unique([id])
 }
