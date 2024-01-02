@@ -9913,29 +9913,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/addon-links@npm:7.5.3":
-  version: 7.5.3
-  resolution: "@storybook/addon-links@npm:7.5.3"
+"@storybook/addon-links@npm:7.6.7":
+  version: 7.6.7
+  resolution: "@storybook/addon-links@npm:7.6.7"
   dependencies:
-    "@storybook/client-logger": "npm:7.5.3"
-    "@storybook/core-events": "npm:7.5.3"
-    "@storybook/csf": "npm:^0.1.0"
+    "@storybook/csf": "npm:^0.1.2"
     "@storybook/global": "npm:^5.0.0"
-    "@storybook/manager-api": "npm:7.5.3"
-    "@storybook/preview-api": "npm:7.5.3"
-    "@storybook/router": "npm:7.5.3"
-    "@storybook/types": "npm:7.5.3"
-    prop-types: "npm:^15.7.2"
     ts-dedent: "npm:^2.0.0"
   peerDependencies:
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
-    react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
   peerDependenciesMeta:
     react:
       optional: true
-    react-dom:
-      optional: true
-  checksum: 8917d4e3f75f032e595a9a4980a1f68b5490d0bca73fa661654fc1dd9775fb321635a936ce69e2065b7169e35fb338ef84c71e811d9a883b60b7304fbe8cf4cb
+  checksum: 0cb9a33cd8e8ba2605ab2598df7cb14e56b482731053f451ce5201dcf93fca3be522df1a784d978553892b23621018231d19fce0ba89197612c498948201e716
   languageName: node
   linkType: hard
 
@@ -18315,7 +18305,7 @@ __metadata:
     "@storybook/addon-info": "npm:^5.3.21"
     "@storybook/addon-interactions": "npm:7.5.3"
     "@storybook/addon-knobs": "npm:^7.0.2"
-    "@storybook/addon-links": "npm:7.5.3"
+    "@storybook/addon-links": "npm:7.6.7"
     "@storybook/addon-mdx-gfm": "npm:7.5.3"
     "@storybook/addon-notes": "npm:^5.3.21"
     "@storybook/addon-postcss": "npm:^2.0.0"
