@@ -1,2 +1,2 @@
-export * from './object.util';
-export * from './redis.queue.config';
+export * from "./object.util"
+export * from "./redis.queue.config"
