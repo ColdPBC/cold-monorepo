@@ -1,3 +1,10 @@
+# [1.80.0-COLD-457.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.79.7...v1.80.0-COLD-457.1) (2024-01-02)
+
+
+### Features
+
+* Limit surveys in next steps to 3 ([1659167](https://github.com/ColdPBC/cold-monorepo/commit/16591677489cf87ad6b60d28b8995542c7bab2e3))
+
 ## [1.79.7](https://github.com/ColdPBC/cold-monorepo/compare/v1.79.6...v1.79.7) (2024-01-01)
 
 
