@@ -4,9 +4,6 @@
   "service_type": "platform",
   "version": "0.0.1",
   "definition": {
-    "logo_url": "https://www.bayou.energy/img/logo_bayou.svg",
-    "platform_url": "https://www.bayou.energy",
-    "enabled": true,
     "rabbitMQ": {
       "rpcOptions": {
         "queue": "cold.platform.bayou",
@@ -19,15 +16,16 @@
         "exchange": "amq.direct"
       }
     },
-    "options": {
+    "ui_options": {
+      "logo_url": "https://www.bayou.energy/img/logo_bayou.svg",
+      "platform_url": "https://www.bayou.energy",
       "description": "Get Bayou’s API integrated in minutes for many utilities. And get your utility account connected in one click.",
       "helptext": "",
       "flags": {
-        "embeded": false,
-        "url_field": "bayou_onboarding_url"
-      },
-      "elements": []
-    },
-    "fields": []
+        "embedable": false,
+        "iframe_url_property": "onboarding_link",
+        "iframe_url_token": "onboarding_token"
+      }
+    }
   }
 }

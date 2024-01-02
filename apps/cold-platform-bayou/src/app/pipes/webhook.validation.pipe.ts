@@ -44,7 +44,7 @@ export class BayouWebhookValidationPipe extends BaseWorker implements PipeTransf
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       console.error('received invalid webook payload', { ...JSON.parse(error.message), payload: value });
-      throw new BadRequestException(JSON.parse(error.message));
+      throw new BadRequestException({ message: 'webhook payload failed validation', ...JSON.parse(error.message) });
     }
   }
 }

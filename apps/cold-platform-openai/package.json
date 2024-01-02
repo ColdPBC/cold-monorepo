@@ -5,28 +5,17 @@
   "definition": {
     "logo_url": "./assets/black_logo.png",
     "platform_url": "https://www.open.ai",
-    "enabled": true,
     "rabbitMQ": {
-      "rpcOptions": {
+      "rpc": {
         "queue": "cold.platform.openai",
         "routing_key": "cold.platform.openai.rpc",
-        "exchange": "direct"
+        "exchange": "amq.direct"
       },
-      "publishOptions": {
+      "subscribe": {
         "queue": "cold.platform.openai",
         "routing_key": "cold.platform.openai",
-        "exchange": "direct"
+        "exchange": "amq.direct"
       }
-    },
-    "options": {
-      "description": "put description of service here",
-      "helptext": "",
-      "flags": {
-        "show_api_tokens": false,
-        "show_account_id": false
-      },
-      "elements": []
-    },
-    "fields": []
+    }
   }
 }
