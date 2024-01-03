@@ -1,7 +1,6 @@
 import { Body, Controller, HttpCode, Post, Req, UseFilters, UseGuards } from '@nestjs/common';
 import { BayouService } from './bayou.service';
 import { AuthenticatedUser, HttpExceptionFilter, JwtAuthGuard, Public, Role, Roles, RolesGuard } from '@coldpbc/nest';
-import { BayouWebhookDTO } from './schemas/bayou.webhook.schema';
 import { BayouWebhookValidationPipe } from './pipes/webhook.validation.pipe';
 import { BayouCustomerPayload } from './schemas/bayou.customer.schema';
 import { BayouCustomerPayloadValidationPipe } from './pipes/customer.validation.pipe';
@@ -14,7 +13,7 @@ export class BayouController {
   @Post('inbound')
   @Public()
   @HttpCode(202)
-  processWebhook(@Body(new BayouWebhookValidationPipe('POST')) body: BayouWebhookDTO) {
+  processWebhook(@Body(new BayouWebhookValidationPipe('POST')) body: never) {
     return this.appService.webhook(body);
   }
 
