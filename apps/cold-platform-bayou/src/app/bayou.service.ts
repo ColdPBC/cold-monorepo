@@ -7,7 +7,7 @@ import { BayouCustomerPayload } from './schemas/bayou.customer.schema';
 import { ConfigService } from '@nestjs/config';
 import { HttpService } from '@nestjs/axios';
 import { service_definitions } from '../../../../libs/nest/src/validation/generated/modelSchema/service_definitionsSchema';
-import { bills_readyDTO } from './schemas/bayou.webhook.schema';
+import { bill_parsedDTO, bills_readyDTO } from './schemas/bayou.webhook.schema';
 
 @Injectable()
 export class BayouService extends BaseWorker implements OnModuleInit {
@@ -41,38 +41,46 @@ export class BayouService extends BaseWorker implements OnModuleInit {
     this.logger.log('BayouService initialized');
   }
 
+  async billsWebhook(payload: bills_readyDTO) {
+    for (const bill of get(payload.object, 'bills_parsed', [])) {
+      await this.billWebhook({ event: payload.event, object: bill as bill_parsedDTO });
+    }
+  }
+
   // Allow any because it's already been validated, and we don't know what the payload will be
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  async webhook(payload: { event: string; object: bills_readyDTO }): Promise<{
+  async billWebhook(payload: { event: string; object: bill_parsedDTO }): Promise<{
     message: string;
   } | void> {
-    const integration = await this.prisma.integrations.findUnique({
-      where: {
-        integrationKey: {
-          organization_id: get(payload.object, 'external_id', ''),
-          service_definition_id: this.service.id,
+    try {
+      if (!payload.object.customer_external_id) {
+        throw new UnprocessableEntityException(`No customer_external_id found in payload`);
+      }
+
+      const integration = await this.prisma.integrations.findUnique({
+        where: {
+          integrationKey: {
+            organization_id: get(payload.object, 'customer_external_id'),
+            service_definition_id: this.service.id,
+          },
         },
-      },
-    });
+      });
 
-    switch (payload.event) {
-      case 'new_bill':
-      case 'updated_bill':
-      case 'bills_ready':
-        if (integration) {
-          const bills = await this.getBills(integration.organization_id);
+      if (!integration) {
+        throw new UnprocessableEntityException(`No integration found in DB for org: ${get(payload.object, 'external_id', '')}`);
+      }
 
-          if (!bills.data) {
-            throw new UnprocessableEntityException(`No bills found in Bayou for org: ${integration.organization_id}`);
-          }
+      const bill = await this.getBill(payload.object);
 
-          await this.rabbit.publish('cold.platform.climatiq', { bills: bills.data, payload }, payload.event);
-          return { message: 'webhook payload added to processing queue' };
-        }
-        break;
-      default:
-        this.logger.error(new UnprocessableEntityException(`${payload.event} webhook not yet implemented`));
-        return { message: `${payload.event} webhook not yet implemented` };
+      if (!bill) {
+        throw new UnprocessableEntityException(`Bill id ${bill.id} not found in Bayou for org: ${integration.organization_id}`);
+      }
+
+      await this.rabbit.publish('cold.platform.climatiq', { bills: bill.data, ...payload }, payload.event);
+      return { message: 'webhook payload added to processing queue' };
+    } catch (e) {
+      this.logger.error(e.message, { error: e, payload });
+      throw e;
     }
   }
 
@@ -84,6 +92,28 @@ export class BayouService extends BaseWorker implements OnModuleInit {
       if (e.response.status === 404) {
         return { data: null };
       } else {
+        this.logger.error(e.message, { error: e, orgId });
+        throw e;
+      }
+    }
+  }
+
+  async getBill(bill: bill_parsedDTO) {
+    try {
+      if (!bill) {
+        return null;
+      }
+      if (bill.status === 'locked') {
+        const unlocked = await this.axios.axiosRef.post(`/bills/${bill.id}/unlock`);
+        this.logger.info(`Bill ${bill.id} unlocked`, { unlocked });
+      }
+      const response = await this.axios.axiosRef.get(`/bills/${bill.id}`, this.axiosConfig);
+      return response.data;
+    } catch (e) {
+      if (e.response?.status === 404) {
+        return { data: null };
+      } else {
+        this.logger.error(e.message, { error: e, bill });
         throw e;
       }
     }

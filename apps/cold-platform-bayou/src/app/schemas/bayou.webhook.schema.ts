@@ -1,6 +1,8 @@
 import * as z from 'zod';
 import { external_id_schema } from './external_id_schema';
 
+export const numberStringSchema = z.union([z.string(), z.number()]).pipe(z.coerce.number());
+
 export const webhook_events_schema = z.enum([
   'new_bill',
   'updated_bill',
@@ -18,7 +20,7 @@ export const meters_schema = z.array(
       type: z.string(),
       billing_period_from: z.string().pipe(z.coerce.date()).optional(),
       billing_period_to: z.string().pipe(z.coerce.date()).optional(),
-      consumption: z.string().pipe(z.coerce.number()) || z.number(),
+      consumption: numberStringSchema.optional(),
       tariff: z.string().optional(),
       periods: z
         .array(
@@ -36,7 +38,7 @@ export const available_data_schema = z
   .object({
     account_numbers: z.array(
       z.object({
-        id: z.string(),
+        id: numberStringSchema,
         meters: meters_schema.optional(),
       }),
     ),
@@ -49,27 +51,29 @@ export const bill_parsed_schema = z
     external_id: external_id_schema.nullable().optional(),
     status: z.enum(['unlocked', 'locked', 'paid']),
     customer_id: z.number(),
-    customer_external_id: z.string().nullable(),
+    customer_external_id: external_id_schema,
     billed_on: z.string(),
     past_due: z.boolean().nullable().optional(),
-    outstanding_balance: z.number(),
+    outstanding_balance: numberStringSchema.nullable().optional(),
     billing_period_from: z.string().pipe(z.coerce.date()),
     billing_period_to: z.string().pipe(z.coerce.date()),
     utility: z.string(),
-    account_number: z.string() || z.number(),
-    electricity_consumption: z.number().nullable(),
-    electricity_amount: z.number().nullable().nullable(),
-    delivery_charge: z.number().nullable(),
-    supply_charge: z.number().nullable(),
-    community_solar_bill_credit: z.number().nullable(),
-    gas_consumption: z.string().pipe(z.coerce.number()) || z.number().nullable(),
-    gas_consumption_unit: z.enum(['therms', 'ccf']),
-    gas_amount: z.number(),
-    total_amount: z.number(),
+    account_number: numberStringSchema,
+    electricity_consumption: numberStringSchema.nullable().optional(),
+    electricity_amount: numberStringSchema.nullable().optional(),
+    delivery_charge: numberStringSchema.nullable().optional(),
+    supply_charge: numberStringSchema.nullable().optional(),
+    community_solar_bill_credit: numberStringSchema.nullable().optional(),
+    gas_consumption: numberStringSchema.optional(),
+    gas_consumption_unit: z.enum(['therms', 'ccf']).optional(),
+    gas_amount: numberStringSchema.nullable().optional(),
+    total_amount: numberStringSchema.optional(),
     meters: meters_schema,
-    file_url: z.string().url(),
+    file_url: z.string().url().optional(),
   })
   .strip();
+
+export type bill_parsedDTO = z.infer<typeof bill_parsed_schema>;
 
 export const bill_unparsed_schema = z
   .object({
@@ -77,7 +81,7 @@ export const bill_unparsed_schema = z
     id: z.number(),
     status: z.string().optional(),
     customer_id: z.number().optional(),
-    customer_external_id: z.string().optional(),
+    customer_external_id: external_id_schema.nullable().optional(),
     utility: z.string().optional(),
     utility_data_velocity: z.string().optional(),
     file_url: z.string().url().optional(),
@@ -108,7 +112,6 @@ export const intervals_ready_schema = z
   .object({
     event: z.literal('intervals_ready'),
     object: z.object({
-      id: z.number(),
       external_id: external_id_schema,
       first_interval_discovered: z.string().datetime({ offset: true }).pipe(z.coerce.date()),
       last_interval_discovered: z.string().datetime({ offset: true }).pipe(z.coerce.date()),
@@ -122,7 +125,7 @@ export const customer_has_filled_credentials_schema = z
     event: z.literal('customer_has_filled_credentials'),
     object: z.object({
       id: z.number(),
-      external_id: z.string(),
+      external_id: external_id_schema,
       utility: z.string(),
       utility_data_velocity: z.string(),
       has_filled_credentials: z.boolean(),
@@ -138,7 +141,7 @@ export const new_unparsed_bill_schema = z.object({
     id: z.number(),
     status: z.string(),
     customer_id: z.number(),
-    customer_external_id: z.string(),
+    customer_external_id: external_id_schema.optional(),
     utility: z.string(),
     utility_data_velocity: z.string(),
     file_url: z.string().url(),

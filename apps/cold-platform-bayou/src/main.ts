@@ -22,6 +22,7 @@ async function bootstrap(instance: Logger | WorkerLogger) {
 async function init() {
   const instance = new WorkerLogger('main'); //createLogger(winstonConfig('main'));
   await bootstrap(instance);
+  process.on('warning', e => instance.warn(e.message, { ...e }));
 }
 
 init();

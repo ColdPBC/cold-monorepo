@@ -4,6 +4,7 @@ import { AuthenticatedUser, HttpExceptionFilter, JwtAuthGuard, Public, Role, Rol
 import { BayouWebhookValidationPipe } from './pipes/webhook.validation.pipe';
 import { BayouCustomerPayload } from './schemas/bayou.customer.schema';
 import { BayouCustomerPayloadValidationPipe } from './pipes/customer.validation.pipe';
+import { bill_parsedDTO } from './schemas/bayou.webhook.schema';
 
 @Controller()
 @UseFilters(new HttpExceptionFilter(BayouController.name))
@@ -13,8 +14,17 @@ export class BayouController {
   @Post('inbound')
   @Public()
   @HttpCode(202)
-  processWebhook(@Body(new BayouWebhookValidationPipe('POST')) body: never) {
-    return this.appService.webhook(body);
+  processWebhook(@Body(new BayouWebhookValidationPipe('POST')) body: { event: string; object: bill_parsedDTO }) {
+    switch (body.event) {
+      case 'new_bill':
+      case 'updated_bill':
+        return this.appService.billWebhook(body);
+      /*case 'bills_ready':
+        if (!get(body.object, 'external_id', null)) throw new Error('No external_id found in payload');
+        return this.appService.billsWebhook(body as unknown as bills_readyDTO);*/
+      default:
+        return { message: `${body.event} webhook not yet implemented` };
+    }
   }
 
   @Post('customer')

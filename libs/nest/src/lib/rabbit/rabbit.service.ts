@@ -26,7 +26,6 @@ export class ColdRabbitService extends BaseWorker implements OnModuleInit {
 
   override async onModuleInit(): Promise<void> {
     await this.initializeExitHandlers();
-    //
   }
 
   /**
@@ -96,20 +95,15 @@ export class ColdRabbitService extends BaseWorker implements OnModuleInit {
       exchange: 'amq.direct',
     },
   ): Promise<void> {
-    try {
-      await this.client.publish(options.exchange, routingKey, {
-        data,
-        event: event,
-        from: this.config.getOrThrow('DD_SERVICE'),
-      });
+    await this.client.publish(options.exchange, routingKey, {
+      data,
+      event: event,
+      from: this.config.getOrThrow('DD_SERVICE'),
+    });
 
-      this.logger.info(`message published to ${routingKey.toLowerCase()}`, { ...data });
+    this.logger.info(`message published to ${routingKey.toLowerCase()}`, { ...data });
 
-      await this.disconnect();
-    } catch (err: any) {
-      this.logger.error(err.messsage, { error: err });
-      return err.message;
-    }
+    //await this.disconnect();
   }
 
   /***
@@ -131,7 +125,6 @@ export class ColdRabbitService extends BaseWorker implements OnModuleInit {
 
       this.logger.info(`message published to ${routingKey.toLowerCase()}`, { ...body });
 
-      await this.client?.managedConnection.close();
       return response;
     } catch (err: any) {
       this.logger.error(err.messsage, { error: err });
