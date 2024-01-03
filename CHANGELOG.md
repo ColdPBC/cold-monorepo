@@ -1,3 +1,10 @@
+# [1.82.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.81.0...v1.82.0) (2024-01-03)
+
+
+### Features
+
+* add create customer to bayou service ([d4eab7e](https://github.com/ColdPBC/cold-monorepo/commit/d4eab7ee4d7497ce35474ffc72ad53ced69ef2f7))
+
 # [1.81.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.80.0...v1.81.0) (2024-01-02)
 
 
