@@ -1,3 +1,10 @@
+## [1.82.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.82.0...v1.82.1) (2024-01-03)
+
+
+### Bug Fixes
+
+* new bill webhooks ([33d6bd3](https://github.com/ColdPBC/cold-monorepo/commit/33d6bd3e713c7cefe397f4f490db277af76c698d))
+
 # [1.82.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.81.0...v1.82.0) (2024-01-03)
 
 
