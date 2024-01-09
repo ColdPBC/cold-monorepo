@@ -50,7 +50,7 @@ export class OrganizationLocationsService extends BaseWorker {
     },
   ): Promise<organization_locations> {
     try {
-      if (!user.isColdAdmin && user.coldclimate_claims.org_id !== orgId) throw new UnprocessableEntityException(`Organization ${orgId} is invalid.`);
+      //if (!user.isColdAdmin && user.coldclimate_claims.org_id !== orgId) throw new UnprocessableEntityException(`Organization ${orgId} is invalid.`);
 
       if (!body.address && !body.city && !body.state && !body.postal_code)
         throw new UnprocessableEntityException(`Location not found for ${orgId} and address, city, state, zip not provided in metadata.`);
