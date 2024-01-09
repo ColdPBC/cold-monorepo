@@ -1,3 +1,10 @@
+# [1.83.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.82.1...v1.83.0) (2024-01-09)
+
+
+### Features
+
+* add location model and new routes ([234279a](https://github.com/ColdPBC/cold-monorepo/commit/234279adcfa0c33dc8d25e519230467c563006d6))
+
 ## [1.82.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.82.0...v1.82.1) (2024-01-03)
 
 
