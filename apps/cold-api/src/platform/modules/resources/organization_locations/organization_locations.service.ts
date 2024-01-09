@@ -16,7 +16,8 @@ export class OrganizationLocationsService extends BaseWorker {
 
   async getOrganizationLocations(user: AuthenticatedUser, orgId: string): Promise<Partial<organization_locations>[]> {
     try {
-      if (!user.isColdAdmin && user.coldclimate_claims.org_id !== orgId) throw new UnprocessableEntityException(`Organization ${orgId} is invalid.`);
+      if (!user.isColdAdmin && user.coldclimate_claims.org_id !== orgId)
+        throw new UnprocessableEntityException(`${user.coldclimate_claims.email} is ${user.isColdAdmin ? 'Cold:Admin' : 'not Cold:Admin'} bug is attempting to access ${orgId}.`);
 
       const locations = await this.prisma.organization_locations.findMany({
         where: {

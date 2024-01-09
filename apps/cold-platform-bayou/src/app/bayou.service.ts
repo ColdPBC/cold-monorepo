@@ -24,7 +24,7 @@ export class BayouService extends BaseWorker implements OnModuleInit {
     super(BayouService.name);
     const authHeader = `Basic ${Buffer.from(`${this.config.getOrThrow('BAYOU_API_KEY')}:`).toString('base64')}`;
     this.axiosConfig = {
-      baseURL: 'https://staging.bayou.energy/api/v2',
+      baseURL: config.getOrThrow('BAYOU_API_URL'),
       headers: {
         accept: 'application/json',
         'content-type': 'application/json',
@@ -160,7 +160,7 @@ export class BayouService extends BaseWorker implements OnModuleInit {
 
       // unlock bill data if locked
       if (bill.status === 'locked') {
-        const unlocked = await this.axios.axiosRef.post(`/bills/${bill.id}/unlock`);
+        const unlocked = await this.axios.axiosRef.post(`/bills/${bill.id}/unlock`, {}, this.axiosConfig);
         this.logger.info(`Bill ${bill.id} unlocked`, { unlocked });
       }
 
