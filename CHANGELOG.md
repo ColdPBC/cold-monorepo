@@ -1,3 +1,10 @@
+## [1.83.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.83.0...v1.83.1) (2024-01-09)
+
+
+### Bug Fixes
+
+* add jobs to redis on rabbit failure ([062eb88](https://github.com/ColdPBC/cold-monorepo/commit/062eb88a9faa54e252392a31cfbd4e8214f8d547))
+
 # [1.83.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.82.1...v1.83.0) (2024-01-09)
 
 
