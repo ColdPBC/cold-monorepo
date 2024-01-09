@@ -1,3 +1,10 @@
+## [1.83.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.83.3...v1.83.4) (2024-01-09)
+
+
+### Bug Fixes
+
+* move bayou URL to envVar ([4cd74b0](https://github.com/ColdPBC/cold-monorepo/commit/4cd74b0d64be5ad798b281b4f568f88e8cd22ae9))
+
 ## [1.83.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.83.2...v1.83.3) (2024-01-09)
 
 
