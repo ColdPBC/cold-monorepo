@@ -70,7 +70,7 @@
     "@nivo/bar": "^0.80.0",
     "@nivo/core": "^0.80.0",
     "@nivo/line": "^0.80.0",
-    "@nivo/parallel-coordinates": "^0.80.0",
+    "@nivo/parallel-coordinates": "^0.84.0",
     "@nivo/pie": "^0.80.0",
     "@nx/nest": "17.1.2",
     "@paralleldrive/cuid2": "^2.2.2",
