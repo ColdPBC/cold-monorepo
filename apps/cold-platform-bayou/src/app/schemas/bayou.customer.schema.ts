@@ -4,14 +4,14 @@ import { z } from 'zod';
 export const bayou_customer_payload_schema = z.object({
   external_id: external_id_schema,
   email: z.string().email(),
-  first_name: z.string(),
-  last_name: z.string(),
-  phone_number: z.string(),
-  address_line_1: z.string(),
+  first_name: z.string().optional(),
+  last_name: z.string().optional(),
+  phone_number: z.string().optional(),
+  address_line_1: z.string().optional(),
   address_line_2: z.string().optional(),
-  city: z.string(),
-  state: z.string(),
-  zipcode: z.string(),
+  city: z.string().optional(),
+  state: z.string().optional(),
+  zipcode: z.string().optional(),
   utility: z.string(),
 });
 

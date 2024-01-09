@@ -3,16 +3,6 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { BayouController } from './bayou.controller';
 import { BayouService } from './bayou.service';
 
-const testData = {
-  event: 'account_created',
-  data: {
-    utility: 'arizona_public_service',
-    organization: {
-      id: 'org_123',
-      email: 'test@example.com',
-    },
-  },
-};
 describe('AppController', () => {
   let app: TestingModule;
 

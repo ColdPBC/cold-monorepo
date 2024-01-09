@@ -4,6 +4,7 @@ import { ConfigModule } from '@nestjs/config/dist/config.module';
 import { BayouService } from './bayou.service';
 import { BayouController } from './bayou.controller';
 import { BullModule } from '@nestjs/bull';
+import { RabbitService } from './app.rabbit';
 
 @Module({})
 export class AppModule {
@@ -14,13 +15,13 @@ export class AppModule {
         ConfigModule.forRoot({
           isGlobal: true,
         }),
-        await NestModule.forRootAsync(),
+        await NestModule.forRootAsync(2),
         BullModule.registerQueue({
           name: 'outbound',
         }),
       ],
       controllers: [BayouController],
-      providers: [BayouService],
+      providers: [BayouService, RabbitService],
       exports: [],
     };
   }

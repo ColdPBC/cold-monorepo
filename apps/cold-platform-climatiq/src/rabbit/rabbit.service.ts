@@ -1,16 +1,16 @@
 import {Injectable} from '@nestjs/common';
-import {BackOffStrategies, BaseWorker} from '@coldpbc/nest';
+import {BackOffStrategies, BaseWorker, RabbitMessagePayload} from '@coldpbc/nest';
 import {Nack, RabbitRPC, RabbitSubscribe} from '@golevelup/nestjs-rabbitmq';
 import {InjectQueue} from '@nestjs/bull';
 import {Queue} from 'bull';
-import {RabbitMessagePayload} from '../../../../libs/nest/src/lib/rabbit/rabbit.types';
+import {ClimatiqService} from '../climatiq/climatiq.service';
 
 /**
  * RabbitService class.
  */
 @Injectable()
 export class RabbitService extends BaseWorker {
-  constructor(@InjectQueue('climatiq') private queue: Queue) {
+  constructor(@InjectQueue('climatiq') private queue: Queue, private readonly climatiq: ClimatiqService) {
     super(RabbitService.name);
   }
 
@@ -68,15 +68,17 @@ export class RabbitService extends BaseWorker {
     try {
       const parsed = typeof msg.data == 'string' ? JSON.parse(msg.data) : msg.data;
       this.logger.info(`received async ${msg.event} request from ${msg.from}`, { parsed, from: msg.from });
-      const job = await this.queue.add(msg.event, parsed, { backoff: BackOffStrategies.EXPONENTIAL });
+
+      const job = await this.queue.add(msg.from, parsed, { backoff: { type: BackOffStrategies.EXPONENTIAL } });
       this.logger.info(`${job.name} job added to ${job.queue['keyPrefix']} ${job.queue.name} queue`, {
         id: job.id,
-        data: job.data,
+        event: msg.event,
         from: msg.from,
+        data: job.data,
       });
     } catch (err) {
       this.logger.error(err.message, { ...msg });
-      return new Nack();
+      return new Nack(true);
     }
   }
 }

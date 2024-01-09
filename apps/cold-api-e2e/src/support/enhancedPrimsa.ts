@@ -19,12 +19,14 @@ export const enhancePrisma = <TPrismaClientCtor extends Constructor>(client: TPr
       if (typeof window !== 'undefined' && process.env.JEST_WORKER_ID === undefined) {
         // Return object with $use method if in the browser
         // Skip in Jest tests because window is defined in Jest tests
-        return { $use: () => {} };
+        return {
+          $use: () => {},
+        };
       }
 
       if (!global._blitz_prismaClient) {
         // eslint-disable-next-line no-shadow
-        const client = new target(...(args as any));
+        const client = new target(...(args as never));
 
         client.$reset = async function reset() {
           if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'production') {

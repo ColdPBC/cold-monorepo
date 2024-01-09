@@ -8,7 +8,7 @@ export class AppModule {
     return {
       module: AppModule,
       imports: [
-        await NestModule.forRootAsync(),
+        await NestModule.forRootAsync(2),
         ServeStaticModule.forRoot({
           serveStaticOptions: {
             index: false,

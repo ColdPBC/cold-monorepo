@@ -34,9 +34,6 @@ export class WorkerLogger implements LoggerService {
     const pkg = BaseWorker.getParsedJSON('package.json');
 
     this.tags = {
-      version: this.config.get('DD_VERSION') || BaseWorker.getPkgVersion(),
-      service: this.config.get('DD_SERVICE') || 'UNKNOWN',
-      env: this.config.get('NODE_ENV') || this.config.getOrThrow('DD_ENV') || 'unknown',
       app: pkg.name,
     };
     //Logger.overrideLogger(this.logger);
@@ -75,8 +72,8 @@ export class WorkerLogger implements LoggerService {
     } else {
       if (error?.message) {
         this.logger.error(error?.message, { error, meta: optionalParams, ...this.tags });
-      } else {
-        this.logger.error(error, { error, meta: optionalParams, ...this.tags });
+      } else if (!error) {
+        this.logger.error(optionalParams.error);
       }
     }
   }

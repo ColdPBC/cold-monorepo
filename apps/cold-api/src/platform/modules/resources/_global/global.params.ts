@@ -7,6 +7,14 @@ export const coldAdminOnly = [Role.ColdAdmin];
 export const coldAndCompanyAdmins = [Role.ColdAdmin, Role.CompanyOwner, Role.CompanyAdmin];
 export const companyRoles = [Role.CompanyOwner, Role.CompanyAdmin, Role.CompanyMember];
 
+export const nameDecoratorOptions = {
+  name: 'name',
+  type: String,
+  required: true,
+  example: 'Test Name',
+  description: 'Name of object',
+};
+
 export const userIdDecoratorOptions = {
   name: 'userId',
   type: String,

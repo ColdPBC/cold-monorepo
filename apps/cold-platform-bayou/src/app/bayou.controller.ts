@@ -1,4 +1,4 @@
-import { Body, Controller, HttpCode, Post, Req, UseFilters, UseGuards } from '@nestjs/common';
+import { Body, Controller, HttpCode, Param, Post, Req, UseFilters, UseGuards } from '@nestjs/common';
 import { BayouService } from './bayou.service';
 import { AuthenticatedUser, HttpExceptionFilter, JwtAuthGuard, Public, Role, Roles, RolesGuard } from '@coldpbc/nest';
 import { BayouWebhookValidationPipe } from './pipes/webhook.validation.pipe';
@@ -27,11 +27,13 @@ export class BayouController {
     }
   }
 
-  @Post('customer')
+  @Post('organizations/:orgId/locations/:locId/customer')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(...[Role.ColdAdmin, Role.CompanyOwner, Role.CompanyAdmin])
   @HttpCode(202)
   createCustomer(
+    @Param('orgId') orgId: string,
+    @Param('locId') locId: string,
     @Req()
     req: {
       body: never;
@@ -41,6 +43,6 @@ export class BayouController {
     },
     @Body(new BayouCustomerPayloadValidationPipe('POST')) body: BayouCustomerPayload,
   ) {
-    return this.appService.createCustomer(req.user, body);
+    return this.appService.createCustomer(req.user, orgId, locId, body);
   }
 }

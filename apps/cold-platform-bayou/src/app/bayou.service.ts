@@ -1,8 +1,8 @@
 import { ConflictException, Injectable, OnModuleInit, UnprocessableEntityException } from '@nestjs/common';
-import { AuthenticatedUser, BaseWorker, ColdRabbitService, PrismaService } from '@coldpbc/nest';
+import { AuthenticatedUser, BaseWorker, ColdRabbitService, Organizations, PrismaService } from '@coldpbc/nest';
 import { InjectQueue } from '@nestjs/bull';
 import { Queue } from 'bull';
-import { get } from 'lodash';
+import { get, set } from 'lodash';
 import { BayouCustomerPayload } from './schemas/bayou.customer.schema';
 import { ConfigService } from '@nestjs/config';
 import { HttpService } from '@nestjs/axios';
@@ -41,6 +41,26 @@ export class BayouService extends BaseWorker implements OnModuleInit {
     this.logger.log('BayouService initialized');
   }
 
+  toEnergyPayload(
+    data: bill_parsedDTO,
+    emission_factor: {
+      activity_id: string;
+      region?: string;
+    } = { activity_id: 'electricity-supply_grid-source_residual_mix', region: 'US' },
+  ) {
+    return {
+      emission_factor: {
+        activity_id: emission_factor.activity_id,
+        data_version: '^1',
+        region: emission_factor.region,
+      },
+      parameters: {
+        energy: 0,
+        energy_unit: 'kWh',
+      },
+    };
+  }
+
   async billsWebhook(payload: bills_readyDTO) {
     for (const bill of get(payload.object, 'bills_parsed', [])) {
       await this.billWebhook({ event: payload.event, object: bill as bill_parsedDTO });
@@ -60,7 +80,7 @@ export class BayouService extends BaseWorker implements OnModuleInit {
       const integration = await this.prisma.integrations.findUnique({
         where: {
           integrationKey: {
-            organization_id: get(payload.object, 'customer_external_id'),
+            location_id: get(payload.object, 'customer_external_id'),
             service_definition_id: this.service.id,
           },
         },
@@ -103,10 +123,13 @@ export class BayouService extends BaseWorker implements OnModuleInit {
       if (!bill) {
         return null;
       }
+
+      // unlock bill data if locked
       if (bill.status === 'locked') {
         const unlocked = await this.axios.axiosRef.post(`/bills/${bill.id}/unlock`);
         this.logger.info(`Bill ${bill.id} unlocked`, { unlocked });
       }
+
       const response = await this.axios.axiosRef.get(`/bills/${bill.id}`, this.axiosConfig);
       return response.data;
     } catch (e) {
@@ -125,74 +148,125 @@ export class BayouService extends BaseWorker implements OnModuleInit {
       return response.data;
     } catch (e) {
       if (e.response.status === 404) {
-        return { data: null };
+        return null;
       } else {
         throw e;
       }
     }
   }
 
-  private async getIntegration(orgId: string) {
+  private async getIntegration(service_definition_id: string, org_id: string, location_id: string) {
     return await this.prisma.integrations.findUnique({
       where: {
+        organization_id: org_id,
         integrationKey: {
-          organization_id: orgId,
-          service_definition_id: this.service.id,
+          location_id: location_id,
+          service_definition_id: service_definition_id,
         },
       },
     });
   }
 
-  async createCustomer(user: AuthenticatedUser, payload: BayouCustomerPayload) {
+  async createCustomer(user: AuthenticatedUser, orgId: string, locId: string, payload: BayouCustomerPayload) {
     try {
-      // accept external_id specified in payload if user is cold admin, otherwise use org_id from claims
-      const extId = user.isColdAdmin ? payload.external_id : user.coldclimate_claims.org_id;
-      const bayouCustomer = await this.getCustomer(extId);
-      let existingIntegration = await this.getIntegration(extId);
-
-      if (existingIntegration && bayouCustomer.data) {
-        throw new ConflictException(`Bayou customer (${bayouCustomer.data.id}) already exists for org: ${user.coldclimate_claims.org_id}`);
+      if (!user.isColdAdmin && user.coldclimate_claims.org_id !== orgId) {
+        throw new UnprocessableEntityException(`Organization ID (${orgId}) is invalid for this user`);
       }
 
-      if (!existingIntegration && bayouCustomer.data) {
-        this.logger.warn(`Bayou customer (${bayouCustomer.data.id}) already exists for org: ${user.coldclimate_claims.org_id}, but no integration found in DB`, {
-          bayou: bayouCustomer.data,
-        });
+      const service = await this.prisma.service_definitions.findUnique({
+        where: {
+          name: process.env['DD_SERVICE'],
+        },
+      });
 
-        existingIntegration = await this.prisma.integrations.create({
-          data: {
-            organization_id: extId,
-            service_definition_id: this.service.id,
-            metadata: bayouCustomer.data,
-          },
-        });
+      if (!service) {
+        throw new UnprocessableEntityException(`Service definition ${process.env['DD_SERVICE']} not found.`);
       }
 
-      const bayouResponse = await this.axios.axiosRef.post(`https://staging.bayou.energy/api/v2/customers`, payload, this.axiosConfig);
+      const existingIntegration = await this.getIntegration(service.id, orgId, locId);
 
-      const integrationData = {
-        organization_id: extId,
-        service_definition_id: this.service.id,
-        response: bayouResponse.data,
-      };
+      //check for duplicate customer in Bayou
+      const bayouCustomer = await this.getCustomer(locId);
 
-      if (!existingIntegration) {
+      if (bayouCustomer) {
+        // location exists in bayou
+        if (existingIntegration?.location_id == locId && bayouCustomer?.external_id === locId) {
+          throw new ConflictException(`Bayou customer (${bayouCustomer.id}) already linked for location: ${locId}`);
+        }
+
+        // location exists in bayou, but not linked to this service
+        if (!existingIntegration) {
+          this.logger.warn(`Bayou customer (${bayouCustomer.id}) already exists for location: ${locId}, but no integration found in DB`, {
+            bayou_data: bayouCustomer,
+          });
+
+          const integration = await this.prisma.integrations.create({
+            data: {
+              organization_id: orgId,
+              location_id: locId,
+              service_definition_id: service.id,
+              metadata: bayouCustomer,
+            },
+          });
+
+          this.logger.warn(`Linked Bayou customer (${bayouCustomer.id}) to new record in integrations`, {
+            bayou_data: bayouCustomer,
+            integration,
+          });
+
+          return bayouCustomer;
+        }
+      } else {
+        // location doesn't exist in bayou
+        const bayouResponse = await this.axios.axiosRef.post(`https://staging.bayou.energy/api/v2/customers`, payload, this.axiosConfig);
+
         await this.prisma.integrations.create({
           data: {
-            organization_id: extId,
-            service_definition_id: this.service.id,
+            organization_id: orgId,
+            service_definition_id: service.id,
+            location_id: locId,
             metadata: bayouResponse.data,
           },
         });
-      }
 
-      this.logger.info(`Bayou customer (${bayouResponse.data.id}) created for org: ${extId}`, integrationData);
-      return integrationData;
+        this.logger.info(`Bayou customer (${bayouResponse.data.id}) created for location: ${locId}`, {
+          org_id: orgId,
+          bayou_data: bayouResponse.data,
+        });
+
+        return bayouResponse.data;
+      }
     } catch (e) {
       throw new UnprocessableEntityException({
         message: e.message,
         error: e.response?.data,
       });
     }
+  }
+
+  toBayouPayload(data: { user: AuthenticatedUser; organization: Organizations; location_id: string; metadata: never }) {
+    if (!data.organization['id']) throw new UnprocessableEntityException('No organization id found in payload');
+    if (!data.organization.locations) throw new UnprocessableEntityException('No organization locations found in payload');
+    const location = data.organization.locations.find(l => l.id === data.location_id);
+    if (!location) throw new UnprocessableEntityException(`No location found for ${data.location_id}`);
+    if (!data.location_id) throw new UnprocessableEntityException('No location id found in payload');
+    if (!data.metadata['email'] && !data.user.coldclimate_claims.email) throw new UnprocessableEntityException('No email found in payload');
+    if (!data.metadata['utility']) throw new UnprocessableEntityException('No utility found in payload');
+
+    if (!data.metadata['email']) {
+      this.logger.warn(`No email found in payload, defaulting to user email`, data);
+      set(data.metadata, 'email', data.user.coldclimate_claims.email);
+    }
+
+    return {
+      external_id: data.location_id,
+      email: data.metadata['email'],
+      street: location?.address,
+      city: location?.city,
+      state: location?.state,
+      zipcode: location?.postal_code,
+      country: location?.country || 'US',
+      utility: data.metadata['utility'],
+    };
   }
 }
