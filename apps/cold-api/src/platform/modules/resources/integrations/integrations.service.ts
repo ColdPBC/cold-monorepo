@@ -1,4 +1,4 @@
-import { Injectable, UnprocessableEntityException } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
 import { Span } from 'nestjs-ddtrace';
 import { get } from 'lodash';
 import { AuthenticatedUser, BaseWorker, CacheService, ColdRabbitService, PrismaService } from '@coldpbc/nest';
@@ -135,27 +135,35 @@ export class IntegrationsService extends BaseWorker {
         location = await this.locations.createOrganizationLocation(user, orgId, body.metadata);
       }
 
-      try {
-        return await this.rabbit.request(
-          get(service.definition, 'rabbitMQ.rpcOptions.routing_key', 'deadletter'),
-          {
-            data: {
-              organization: org,
-              location_id: location.id,
-              service_definition_id: service.id,
-              metadata: body.metadata,
-              user: user,
-            },
-            from: 'cold.api',
-            event: 'integration.enabled',
+      const response = await this.rabbit.request(
+        get(service.definition, 'rabbitMQ.rpcOptions.routing_key', 'deadletter'),
+        {
+          data: {
+            organization: org,
+            location_id: location.id,
+            service_definition_id: service.id,
+            metadata: body.metadata,
+            user: user,
           },
-          {
-            exchange: 'amq.direct',
-            timeout: body.timeout || 2000,
-          },
-        );
-      } catch (e: any) {
-        this.logger.error(e.message, { user });
+          from: 'cold.api',
+          event: 'integration.enabled',
+        },
+        {
+          exchange: 'amq.direct',
+          timeout: body.timeout || 5000,
+        },
+      );
+      switch (response.status) {
+        case 201:
+        case 200:
+          return response.data;
+        case 404:
+          throw new NotFoundException(response.response);
+        case 409:
+          throw new ConflictException(response.response);
+        case 422:
+        default:
+          throw new UnprocessableEntityException(response.response);
       }
     } catch (e: any) {
       this.logger.error(e.message, { user });

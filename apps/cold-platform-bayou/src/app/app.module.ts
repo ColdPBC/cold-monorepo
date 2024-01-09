@@ -5,6 +5,7 @@ import { BayouService } from './bayou.service';
 import { BayouController } from './bayou.controller';
 import { BullModule } from '@nestjs/bull';
 import { RabbitService } from './app.rabbit';
+import { BayouQueueProcessor } from './outbound.processor';
 
 @Module({})
 export class AppModule {
@@ -15,13 +16,13 @@ export class AppModule {
         ConfigModule.forRoot({
           isGlobal: true,
         }),
-        await NestModule.forRootAsync(2),
+        await NestModule.forRootAsync(1),
         BullModule.registerQueue({
-          name: 'outbound',
+          name: 'bayou',
         }),
       ],
       controllers: [BayouController],
-      providers: [BayouService, RabbitService],
+      providers: [BayouService, RabbitService, BayouQueueProcessor],
       exports: [],
     };
   }

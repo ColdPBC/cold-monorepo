@@ -19,7 +19,7 @@ export class BayouService extends BaseWorker implements OnModuleInit {
     private prisma: PrismaService,
     private config: ConfigService,
     private rabbit: ColdRabbitService,
-    @InjectQueue('outbound') private queue: Queue,
+    @InjectQueue('bayou') private queue: Queue,
   ) {
     super(BayouService.name);
     const authHeader = `Basic ${Buffer.from(`${this.config.getOrThrow('BAYOU_API_KEY')}:`).toString('base64')}`;
@@ -168,79 +168,72 @@ export class BayouService extends BaseWorker implements OnModuleInit {
   }
 
   async createCustomer(user: AuthenticatedUser, orgId: string, locId: string, payload: BayouCustomerPayload) {
-    try {
-      if (!user.isColdAdmin && user.coldclimate_claims.org_id !== orgId) {
-        throw new UnprocessableEntityException(`Organization ID (${orgId}) is invalid for this user`);
+    if (!user.isColdAdmin && user.coldclimate_claims.org_id !== orgId) {
+      throw new UnprocessableEntityException(`Organization ID (${orgId}) is invalid for this user`);
+    }
+
+    const service = await this.prisma.service_definitions.findUnique({
+      where: {
+        name: process.env['DD_SERVICE'],
+      },
+    });
+
+    if (!service) {
+      throw new UnprocessableEntityException(`Service definition ${process.env['DD_SERVICE']} not found.`);
+    }
+
+    const existingIntegration = await this.getIntegration(service.id, orgId, locId);
+
+    //check for duplicate customer in Bayou
+    const bayouCustomer = await this.getCustomer(locId);
+
+    if (bayouCustomer) {
+      // location exists in bayou
+      if (existingIntegration?.location_id == locId && bayouCustomer?.external_id === locId) {
+        throw new ConflictException(`Bayou customer (${bayouCustomer.id}) already linked for location: ${locId}`);
       }
 
-      const service = await this.prisma.service_definitions.findUnique({
-        where: {
-          name: process.env['DD_SERVICE'],
-        },
-      });
+      // location exists in bayou, but not linked to this service
+      if (!existingIntegration) {
+        this.logger.warn(`Bayou customer (${bayouCustomer.id}) already exists for location: ${locId}, but no integration found in DB`, {
+          bayou_data: bayouCustomer,
+        });
 
-      if (!service) {
-        throw new UnprocessableEntityException(`Service definition ${process.env['DD_SERVICE']} not found.`);
-      }
-
-      const existingIntegration = await this.getIntegration(service.id, orgId, locId);
-
-      //check for duplicate customer in Bayou
-      const bayouCustomer = await this.getCustomer(locId);
-
-      if (bayouCustomer) {
-        // location exists in bayou
-        if (existingIntegration?.location_id == locId && bayouCustomer?.external_id === locId) {
-          throw new ConflictException(`Bayou customer (${bayouCustomer.id}) already linked for location: ${locId}`);
-        }
-
-        // location exists in bayou, but not linked to this service
-        if (!existingIntegration) {
-          this.logger.warn(`Bayou customer (${bayouCustomer.id}) already exists for location: ${locId}, but no integration found in DB`, {
-            bayou_data: bayouCustomer,
-          });
-
-          const integration = await this.prisma.integrations.create({
-            data: {
-              organization_id: orgId,
-              location_id: locId,
-              service_definition_id: service.id,
-              metadata: bayouCustomer,
-            },
-          });
-
-          this.logger.warn(`Linked Bayou customer (${bayouCustomer.id}) to new record in integrations`, {
-            bayou_data: bayouCustomer,
-            integration,
-          });
-
-          return bayouCustomer;
-        }
-      } else {
-        // location doesn't exist in bayou
-        const bayouResponse = await this.axios.axiosRef.post(`https://staging.bayou.energy/api/v2/customers`, payload, this.axiosConfig);
-
-        await this.prisma.integrations.create({
+        const integration = await this.prisma.integrations.create({
           data: {
             organization_id: orgId,
-            service_definition_id: service.id,
             location_id: locId,
-            metadata: bayouResponse.data,
+            service_definition_id: service.id,
+            metadata: bayouCustomer,
           },
         });
 
-        this.logger.info(`Bayou customer (${bayouResponse.data.id}) created for location: ${locId}`, {
-          org_id: orgId,
-          bayou_data: bayouResponse.data,
+        this.logger.warn(`Linked Bayou customer (${bayouCustomer.id}) to new record in integrations`, {
+          bayou_data: bayouCustomer,
+          integration,
         });
 
-        return bayouResponse.data;
+        return bayouCustomer;
       }
-    } catch (e) {
-      throw new UnprocessableEntityException({
-        message: e.message,
-        error: e.response?.data,
+    } else {
+      // location doesn't exist in bayou
+      const bayouResponse = await this.axios.axiosRef.post(`https://staging.bayou.energy/api/v2/customers`, payload, this.axiosConfig);
+
+      await this.prisma.integrations.create({
+        data: {
+          organization_id: orgId,
+          service_definition_id: service.id,
+          location_id: locId,
+          metadata: bayouResponse.data,
+        },
       });
+
+      this.logger.info(`Bayou customer (${bayouResponse.data.id}) created for location: ${locId}`, {
+        org_id: orgId,
+        bayou_data: bayouResponse.data,
+      });
+
+      return bayouResponse.data;
     }
   }
 

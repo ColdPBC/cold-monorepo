@@ -1,7 +1,9 @@
-import {Injectable, UnprocessableEntityException} from '@nestjs/common';
+import {Injectable} from '@nestjs/common';
 import {AuthenticatedUser, BaseWorker} from '@coldpbc/nest';
 import {Nack, RabbitRPC} from '@golevelup/nestjs-rabbitmq';
 import {RabbitSubscribe} from '@golevelup/nestjs-rabbitmq/lib/rabbitmq.decorators';
+import {Job, Queue} from 'bull';
+import {InjectQueue, OnQueueActive, OnQueueCompleted} from '@nestjs/bull';
 import {BayouService} from './bayou.service';
 
 /**
@@ -9,8 +11,18 @@ import {BayouService} from './bayou.service';
  */
 @Injectable()
 export class RabbitService extends BaseWorker {
-  constructor(private readonly bayou: BayouService) {
+  constructor(@InjectQueue('bayou') private queue: Queue, private readonly bayou: BayouService) {
     super(RabbitService.name);
+  }
+
+  @OnQueueActive()
+  onActive(job: Job) {
+    console.log(`Processing job ${job.id} of type ${job.name} with data ${job.data}...`);
+  }
+
+  @OnQueueCompleted()
+  onCompleted(job: Job) {
+    console.log(`Job ${job.id} of type ${job.name} completed`, { data: job.data });
   }
 
   /**
@@ -41,6 +53,15 @@ export class RabbitService extends BaseWorker {
     } catch (err) {
       this.logger.error(err.message, { err, data: msg.data, from: msg.from, event: msg.event });
 
+      if (!err.message.includes('already linked for location')) {
+        const job = await this.queue.add(msg.event, msg, { backoff: { type: 'exponential' } });
+        this.logger.info(` ${msg.event} job (${job.id}) created from message received from ${msg.from}`, {
+          data: msg.data,
+          from: msg.from,
+          event: msg.event,
+        });
+      }
+
       return err;
     }
   }
@@ -69,7 +90,12 @@ export class RabbitService extends BaseWorker {
         event: msg.event,
       });
 
-      await this.processMessage(msg.event, msg.from, msg.data);
+      const job = await this.queue.add(msg.event, msg.data, { backoff: { type: 'exponential' } });
+      this.logger.info(` ${msg.event} job (${job.id}) created from message received from ${msg.from}`, {
+        data: msg.data,
+        from: msg.from,
+        event: msg.event,
+      });
     } catch (err) {
       this.logger.error(err.message, {
         error: err,
@@ -91,8 +117,6 @@ export class RabbitService extends BaseWorker {
     switch (event) {
       case 'integration.enabled':
         return await this.bayou.createCustomer(user, data['organization']['id'], data['location_id'], this.bayou.toBayouPayload(data));
-      default:
-        throw new UnprocessableEntityException(`Unknown event: ${event}`);
     }
   }
 }

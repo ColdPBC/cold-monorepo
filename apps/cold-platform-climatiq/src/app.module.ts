@@ -20,7 +20,7 @@ export class AppModule {
         ConfigModule.forRoot({
           isGlobal: true,
         }),
-        await NestModule.forRootAsync(2),
+        await NestModule.forRootAsync(1),
         ClimatiqModule,
         BullModule.registerQueue({
           name: 'climatiq',
