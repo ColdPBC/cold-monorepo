@@ -1,3 +1,10 @@
+## [1.83.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.83.1...v1.83.2) (2024-01-09)
+
+
+### Bug Fixes
+
+* isColdAdmin check failing in staging? ([9c6796b](https://github.com/ColdPBC/cold-monorepo/commit/9c6796b24b4a6a238329e1d36b090538dac41b32))
+
 ## [1.83.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.83.0...v1.83.1) (2024-01-09)
 
 
