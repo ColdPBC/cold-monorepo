@@ -69,7 +69,7 @@ export class RabbitService extends BaseWorker {
       const parsed = typeof msg.data == 'string' ? JSON.parse(msg.data) : msg.data;
       this.logger.info(`received async ${msg.event} request from ${msg.from}`, { parsed, from: msg.from });
 
-      const job = await this.queue.add(msg.from, parsed, { backoff: { type: BackOffStrategies.EXPONENTIAL } });
+      const job = await this.queue.add(msg.event, parsed, { backoff: { type: BackOffStrategies.EXPONENTIAL } });
       this.logger.info(`${job.name} job added to ${job.queue['keyPrefix']} ${job.queue.name} queue`, {
         id: job.id,
         event: msg.event,

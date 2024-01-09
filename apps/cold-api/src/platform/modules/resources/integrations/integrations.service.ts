@@ -162,8 +162,9 @@ export class IntegrationsService extends BaseWorker {
         case 409:
           throw new ConflictException(response.response);
         case 422:
-        default:
           throw new UnprocessableEntityException(response.response);
+        default:
+          return response;
       }
     } catch (e: any) {
       this.logger.error(e.message, { user });

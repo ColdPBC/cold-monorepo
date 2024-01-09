@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { NestModule, PrismaModule } from '@coldpbc/nest';
 import { ServeStaticModule } from '@nestjs/serve-static';
+import { BullModule } from '@nestjs/bull';
 
 @Module({})
 export class AppModule {
@@ -17,6 +18,9 @@ export class AppModule {
           serveRoot: '../../../assets',
         }),
         PrismaModule,
+        BullModule.registerQueue({
+          name: 'openai',
+        }),
       ],
       controllers: [],
       providers: [],

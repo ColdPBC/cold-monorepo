@@ -1,5 +1,5 @@
 import { ConflictException, Injectable, OnModuleInit, UnprocessableEntityException } from '@nestjs/common';
-import { AuthenticatedUser, BaseWorker, ColdRabbitService, Organizations, PrismaService } from '@coldpbc/nest';
+import { AuthenticatedUser, BaseWorker, ColdRabbitService, Cuid2Generator, Organizations, PrismaService } from '@coldpbc/nest';
 import { InjectQueue } from '@nestjs/bull';
 import { Queue } from 'bull';
 import { get, set } from 'lodash';
@@ -41,13 +41,17 @@ export class BayouService extends BaseWorker implements OnModuleInit {
     this.logger.log('BayouService initialized');
   }
 
-  toEnergyPayload(
+  toElectrictyPayload(
     data: bill_parsedDTO,
     emission_factor: {
       activity_id: string;
       region?: string;
     } = { activity_id: 'electricity-supply_grid-source_residual_mix', region: 'US' },
   ) {
+    if (!data) {
+      throw new UnprocessableEntityException('No bill data found in payload');
+    }
+
     return {
       emission_factor: {
         activity_id: emission_factor.activity_id,
@@ -55,8 +59,8 @@ export class BayouService extends BaseWorker implements OnModuleInit {
         region: emission_factor.region,
       },
       parameters: {
-        energy: 0,
-        energy_unit: 'kWh',
+        energy: data.electricity_consumption,
+        energy_unit: 'Wh',
       },
     };
   }
@@ -92,11 +96,41 @@ export class BayouService extends BaseWorker implements OnModuleInit {
 
       const bill = await this.getBill(payload.object);
 
+      const convertDate = (dateString: string) => {
+        const [year, month, day] = dateString.split('-');
+
+        // Create a new Date object
+        return new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+      };
+
       if (!bill) {
         throw new UnprocessableEntityException(`Bill id ${bill.id} not found in Bayou for org: ${integration.organization_id}`);
       }
+      const created = await this.prisma.utility_bills.create({
+        data: {
+          id: new Cuid2Generator().setPrefix('utib').scopedId,
+          organization_id: integration.organization_id,
+          location_id: payload.object['customer_external_id'],
+          integration_id: integration.id,
+          period_from: convertDate(bill.billing_period_from),
+          period_to: convertDate(bill.billing_period_to),
+          data: bill,
+        },
+      });
 
-      await this.rabbit.publish('cold.platform.climatiq', { bills: bill.data, ...payload }, payload.event);
+      const climPayload = this.toElectrictyPayload(bill);
+
+      await this.rabbit.publish(
+        'cold.platform.climatiq',
+        {
+          location_id: get(payload.object, 'customer_external_id'),
+          integration_id: integration.id,
+          integration_data: bill,
+          utility_bill_id: created.id,
+          payload: climPayload,
+        },
+        payload.event,
+      );
       return { message: 'webhook payload added to processing queue' };
     } catch (e) {
       this.logger.error(e.message, { error: e, payload });

@@ -6,20 +6,20 @@ generator client {
 generator zod {
   provider                         = "zod-prisma-types"
   output                           = "../src/validation/generated"
-  addInputTypeValidation           = false
-  addSelectType                    = false
-  validateWhereUniqueInput         = false
-  addIncludeType                   = false
-  writeNullishInModelTypes         = false
-  createInputTypes                 = false
-  useDefaultValidators             = false
-  createRelationValuesTypes        = false
-  createPartialTypes               = false
-  createOptionalDefaultValuesTypes = false
-  writeBarrelFiles                 = false
-  useMultipleFiles                 = true
-  coerceDate                       = false
-  createModelTypes                 = true
+  createRelationValuesTypes        = "false"
+  addInputTypeValidation           = "false"
+  createPartialTypes               = "false"
+  addIncludeType                   = "false"
+  coerceDate                       = "false"
+  useMultipleFiles                 = "true"
+  createOptionalDefaultValuesTypes = "false"
+  writeBarrelFiles                 = "false"
+  createModelTypes                 = "true"
+  useDefaultValidators             = "false"
+  validateWhereUniqueInput         = "false"
+  writeNullishInModelTypes         = "false"
+  createInputTypes                 = "false"
+  addSelectType                    = "false"
 }
 
 datasource db {
@@ -280,37 +280,38 @@ model organizations {
   isTest              Boolean                  @default(false)
   actions             actions[]
   category_data       category_data[]
-  survey_data         survey_data[]
   integrations        integrations[]
-  emissions           emissions[]
-  utility_bills       utility_bills[]
   locations           organization_locations[]
+  survey_data         survey_data[]
+  utility_bills       utility_bills[]
 }
 
 model organization_locations {
-  id              String         @id @default(cuid())
+  id              String          @id @default(cuid())
+  organization_id String
   name            String?
   address         String
-  address_line_2  String?
   city            String
   state           String
+  country         String          @default("US")
+  created_at      DateTime        @default(now())
+  updated_at      DateTime        @updatedAt
+  address_line_2  String?
   postal_code     String
-  country         String         @default("US")
-  created_at      DateTime       @default(now())
-  updated_at      DateTime       @updatedAt
-  organization_id String
-  organizations   organizations? @relation(fields: [organization_id], references: [id])
+  emissions       emissions[]
   integrations    integrations[]
+  organizations   organizations   @relation(fields: [organization_id], references: [id])
+  utility_bills   utility_bills[]
 }
 
 model service_definitions {
   id                  String                   @id @default(uuid())
   name                String                   @unique
   label               String
-  type                integration_service_type
   definition          Json
   created_at          DateTime                 @default(now())
   updated_at          DateTime                 @updatedAt
+  type                integration_service_type
   integrations        integrations[]
   supported_utilities supported_utilities[]
 }
@@ -324,7 +325,6 @@ model integrations {
   service_definition_id String
   /// @zod.custom.use(z.string().uuid())
   organization_id       String
-  location_id           String?
   metadata              Json
   /// @DtoUpdateHidden
   /// @zod.custom.use(z.date().optional())
@@ -334,13 +334,14 @@ model integrations {
   /// @DtoReadOnly
   /// @zod.custom.use(z.date().optional())
   updated_at            DateTime                @updatedAt
-  service_definition    service_definitions     @relation(fields: [service_definition_id], references: [id], onDelete: Cascade)
-  unility_bills         utility_bills[]
+  location_id           String?
   emissions             emissions[]
   location              organization_locations? @relation(fields: [location_id], references: [id], onDelete: Cascade)
-  organization          organizations?          @relation(fields: [organization_id], references: [id])
+  organization          organizations           @relation(fields: [organization_id], references: [id])
+  service_definition    service_definitions     @relation(fields: [service_definition_id], references: [id], onDelete: Cascade)
+  unility_bills         utility_bills[]
 
-  @@unique(name: "integrationKey", [service_definition_id, location_id])
+  @@unique([service_definition_id, location_id], name: "integrationKey")
 }
 
 /// @namespace Supported Utilities
@@ -348,26 +349,23 @@ model integrations {
 /// @erd supported_utilities
 model supported_utilities {
   /// @zod.custom.use(z.string().cuid())
-  id                    String @id @default(cuid())
+  id                    String              @id @unique @default(cuid())
   /// @zod.custom.use(z.string().uuid())
   service_definition_id String
-
   /// @zod.custom.use(z.string())
-  name               String              @unique
+  name                  String              @unique
   /// @zod.custom.use(z.string())
-  label              String
-  data               Json
+  label                 String
+  data                  Json
   /// @DtoUpdateHidden
   /// @zod.custom.use(z.date().optional())
-  created_at         DateTime            @default(now())
+  created_at            DateTime            @default(now())
   /// @DtoUpdateHidden
   /// @DtoCreateHidden
   /// @DtoReadOnly
   /// @zod.custom.use(z.date().optional())
-  updated_at         DateTime            @updatedAt
-  service_definition service_definitions @relation(fields: [service_definition_id], references: [id], onDelete: Cascade)
-
-  @@unique([id])
+  updated_at            DateTime            @updatedAt
+  service_definition    service_definitions @relation(fields: [service_definition_id], references: [id], onDelete: Cascade)
 }
 
 /// @namespace Emissions
@@ -377,55 +375,50 @@ model emissions {
   /// @DtoCreateHidden
   /// @DtoReadOnly
   /// @zod.custom.use(z.string().uuid())
-  id               String               @id @default(uuid())
-  /// @zod.custom.use(z.string().uuid())
-  organization_id  String
-  /// @zod.custom.use(z.string().uuid())
-  integration_id   String
-  category         emissions_categories
-  /// @zod.custom.use(z.string())
-  subcategory      String
-  /// @zod.custom.use(z.string())
-  consumption_unit String
-  /// @zod.custom.use(z.number())
-  consumption      Float
-  /// @zod.custom.use(z.number())
-  emission         Float
-  /// @zod.custom.use(z.date())
-  period_from      DateTime
-  /// @zod.custom.use(z.date())
-  period_to        DateTime
+  id                      String                 @id @default(uuid())
   /// @DtoUpdateHidden
   /// @DtoCreateHidden
   /// @DtoReadOnly
   /// @zod.custom.use(z.date().optional())
-  created_at       DateTime             @default(now())
+  created_at              DateTime               @default(now())
   /// @DtoUpdateHidden
   /// @DtoCreateHidden
   /// @DtoReadOnly
   /// @zod.custom.use(z.date().optional())
-  updated_at       DateTime             @updatedAt
-  /// @DtoUpdateHidden
-  /// @DtoCreateHidden
-  /// @DtoReadOnly
-  organization     organizations        @relation(fields: [organization_id], references: [id], onDelete: Cascade)
-  integrations     integrations?        @relation(fields: [integration_id], references: [id], onDelete: Cascade)
+  updated_at              DateTime               @updatedAt
+  integration_id          String
+  activity_data           Json
+  constituent_gases       Json
+  integration_data        Json
+  name                    String
+  region                  String
+  category                String
+  co2_calculation_method  String
+  co2e                    Float
+  co2e_calculation_origin String
+  co2e_unit               String
+  emission_factor         Json
+  location_id             String
+  integrations            integrations           @relation(fields: [integration_id], references: [id], onDelete: Cascade)
+  location                organization_locations @relation(fields: [location_id], references: [id], onDelete: Cascade)
 }
 
 /// @namespace Utility Bills
 /// @describe List of utility bills for a given organization and integration
 /// @erd emissions
 model utility_bills {
-  id              String        @id @default(uuid())
-  organization_id String
+  id              String                 @id @default(cuid())
+  location_id     String
   integration_id  String
+  organization_id String
   period_from     DateTime
   period_to       DateTime
   data            Json
-  created_at      DateTime      @default(now())
-  updated_at      DateTime      @updatedAt
-  organization    organizations @relation(fields: [organization_id], references: [id], onDelete: Cascade)
-  integrations    integrations? @relation(fields: [integration_id], references: [id], onDelete: Cascade)
+  created_at      DateTime               @default(now())
+  updated_at      DateTime               @updatedAt
+  integration     integrations           @relation(fields: [integration_id], references: [id], onDelete: Cascade)
+  location        organization_locations @relation(fields: [location_id], references: [id], onDelete: Cascade)
+  organization    organizations          @relation(fields: [organization_id], references: [id], onDelete: Cascade)
 }
 
 enum integration_service_type {
@@ -454,11 +447,11 @@ enum component_definition_types {
 
 enum emissions_categories {
   ELECTRICITY
-  NATURAL_GAS
   FUEL
   WASTE
   WATER
   TRANSPORTATION
   OTHER
   TEST
+  NATURAL_GAS
 }
