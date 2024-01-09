@@ -1,3 +1,10 @@
+## [1.83.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.83.2...v1.83.3) (2024-01-09)
+
+
+### Bug Fixes
+
+* store utility bills ([39b96d7](https://github.com/ColdPBC/cold-monorepo/commit/39b96d740a857f9eafbf448bc8211e29380f3910))
+
 ## [1.83.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.83.1...v1.83.2) (2024-01-09)
 
 
