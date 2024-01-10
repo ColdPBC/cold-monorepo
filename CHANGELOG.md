@@ -1,3 +1,10 @@
+## [1.83.6](https://github.com/ColdPBC/cold-monorepo/compare/v1.83.5...v1.83.6) (2024-01-10)
+
+
+### Bug Fixes
+
+* missing service, version in logs ([2638cda](https://github.com/ColdPBC/cold-monorepo/commit/2638cda6ae80aaed24e572ff20a43f1e7b1e2b87))
+
 ## [1.83.5](https://github.com/ColdPBC/cold-monorepo/compare/v1.83.4...v1.83.5) (2024-01-10)
 
 
