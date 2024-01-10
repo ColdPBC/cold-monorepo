@@ -8,7 +8,7 @@ import { Tags } from '../primitives';
 import { merge } from 'lodash';
 import { ConfigService } from '@nestjs/config'; /// test
 import tracer from 'dd-trace';
-import formats from 'dd-trace/ext/formats';
+import formats from 'dd-trace/ext/formats'; /// test
 
 /// test
 export class WorkerLogger implements LoggerService {
@@ -35,6 +35,9 @@ export class WorkerLogger implements LoggerService {
 
     this.tags = {
       app: pkg.name,
+      version: this.config.get('DD_VERSION'),
+      environment: this.config.get('NODE_ENV'),
+      service: this.config.get('DD_SERVICE'),
     };
     //Logger.overrideLogger(this.logger);
     this.redactor = new RedactorService();
