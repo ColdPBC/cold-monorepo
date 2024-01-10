@@ -35,7 +35,7 @@ export class WorkerLogger implements LoggerService {
 
     this.tags = {
       app: pkg.name,
-      version: this.config.get('DD_VERSION'),
+      version: pkg.version,
       environment: this.config.get('NODE_ENV'),
       service: this.config.get('DD_SERVICE'),
     };
