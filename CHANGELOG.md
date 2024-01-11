@@ -1,3 +1,10 @@
+## [1.83.7-COLD-408.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.83.6...v1.83.7-COLD-408.1) (2024-01-11)
+
+
+### Bug Fixes
+
+* resolve txt input bug ([3805434](https://github.com/ColdPBC/cold-monorepo/commit/38054341fc1a9a03cdad684b542e905084d035be))
+
 ## [1.83.6](https://github.com/ColdPBC/cold-monorepo/compare/v1.83.5...v1.83.6) (2024-01-10)
 
 
