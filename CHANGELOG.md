@@ -1,3 +1,10 @@
+## [1.83.7](https://github.com/ColdPBC/cold-monorepo/compare/v1.83.6...v1.83.7) (2024-01-11)
+
+
+### Bug Fixes
+
+* update version in package.jsons ([53079a8](https://github.com/ColdPBC/cold-monorepo/commit/53079a8683830654223a906be68fbb5ca20b4ec0))
+
 ## [1.83.6](https://github.com/ColdPBC/cold-monorepo/compare/v1.83.5...v1.83.6) (2024-01-10)
 
 
