@@ -31,11 +31,33 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
     enterDone: 'transition ease-out duration-200 transform translate-y-0',
     exitActive: 'transition ease-in duration-200 transform translate-y-full',
   };
-  const [activeQuestion, setActiveQuestion] = React.useState<JSX.Element | undefined>(undefined);
-  const [additionalContextQuestion, setAdditionalContextQuestion] = React.useState<JSX.Element | undefined>(undefined);
   const [transitionClassNames, setTransitionClassNames] = React.useState<any>(nextQuestionTransitionClassNames);
   const { definition, id, name } = surveyData;
   const { sections } = definition;
+
+  const questions = Object.keys(sections)
+    .map(sectionKey => {
+      const category = getQuestionForKey({
+        value: sectionKey,
+        previousValue: '',
+        isFollowUp: false,
+      });
+      const followUps = Object.keys(sections[sectionKey].follow_up).map(followUpKey => {
+        return getQuestionForKey({
+          value: followUpKey,
+          previousValue: '',
+          isFollowUp: true,
+        });
+      });
+      return [category, ...followUps];
+    })
+    .flat();
+
+  const question = questions.find(question => {
+    return question.props.input_key === activeKey.value;
+  });
+
+  let additionalContextQuestion = undefined;
 
   const updateTransitionClassNames = (nextDirection: boolean) => {
     if (nextDirection) {
@@ -541,9 +563,9 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
       }
     }
     if (condition) {
-      setAdditionalContextQuestion(getQuestionForKey(activeKey, true));
+      return getQuestionForKey(activeKey, true);
     } else {
-      setAdditionalContextQuestion(undefined);
+      return undefined;
     }
   };
 
@@ -586,45 +608,16 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
     }
   }
 
-  const questions = Object.keys(sections)
-    .map(sectionKey => {
-      const category = getQuestionForKey({
-        value: sectionKey,
-        previousValue: '',
-        isFollowUp: false,
-      });
-      const followUps = Object.keys(sections[sectionKey].follow_up).map(followUpKey => {
-        return getQuestionForKey({
-          value: followUpKey,
-          previousValue: '',
-          isFollowUp: true,
-        });
-      });
-      return [category, ...followUps];
-    })
-    .flat();
+  additionalContextQuestion = checkAdditionalContext(activeKey);
 
-  const getActiveQuestion = () => {
-    const question = questions.find(question => {
-      return question.props.input_key === activeKey.value;
-    });
-    // show additional context
-    checkAdditionalContext(activeKey);
-    setActiveQuestion(question);
-  };
-
-  useEffect(() => {
-    getActiveQuestion();
-  }, [activeKey, surveyData]);
-
-  if (activeQuestion !== undefined) {
+  if (question !== undefined) {
     return (
       <div className={'w-full h-full relative flex items-center justify-center overflow-hidden pb-[93px]'}>
         <SwitchTransition>
-          <CSSTransition key={activeQuestion.props.input_key} timeout={150} classNames={transitionClassNames}>
+          <CSSTransition key={question.props.input_key} timeout={150} classNames={transitionClassNames}>
             <div className={'h-full w-full flex items-center justify-center px-[139px] shortScreen:px-[32px] shortWideScreen:px-[139px]'}>
               <div className={'w-full space-y-6'}>
-                {activeQuestion}
+                {question}
                 {additionalContextQuestion}
               </div>
             </div>
