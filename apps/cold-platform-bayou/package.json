@@ -2,7 +2,7 @@
   "name": "cold-platform-bayou",
   "label": "Bayou Energy",
   "service_type": "platform",
-  "version": "0.0.1",
+  "version": "1.83.5",
   "definition": {
     "rabbitMQ": {
       "rpcOptions": {

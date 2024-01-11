@@ -17,5 +17,6 @@
         "exchange": "amq.direct"
       }
     }
-  }
+  },
+  "version": "1.83.5"
 }

@@ -2,7 +2,7 @@
   "name": "cold-platform-climatiq",
   "label": "Climatiq",
   "service_type": "platform",
-  "version": "0.0.1",
+  "version": "1.83.5",
   "definition": {
     "logo_url": "./assets/climatiq.png",
     "platform_url": "https://www.climatiq.io",
