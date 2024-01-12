@@ -1,18 +1,52 @@
-import { Process, Processor } from '@nestjs/bull';
+import { OnQueueActive, Process, Processor } from '@nestjs/bull';
 import { Job } from 'bull';
-import { BaseWorker } from '@coldpbc/nest';
+import { BaseWorker, PrismaService } from '@coldpbc/nest';
+import { ClimatiqService } from '../climatiq/climatiq.service';
+import { emissions } from '../../../../libs/nest/src/validation/generated/modelSchema/emissionsSchema';
 
 @Processor('climatiq')
 export class OutboundQueueProcessor extends BaseWorker {
-  @Process('*')
-  async processMessages(job: Job<unknown>) {
-    switch (job.name) {
-      case 'getComputeMetadata':
-        return;
-      case 'getEmissionEstimate':
-        return;
-      default:
-        this.logger.error(`Unknown job name: ${job.name}`, { name: job.name, id: job.id, data: job.data });
-    }
+  constructor(private readonly climatiq: ClimatiqService, private readonly prisma: PrismaService) {
+    super(OutboundQueueProcessor.name);
+  }
+
+  @OnQueueActive()
+  onActive(job: Job) {
+    console.log(`Processing job ${job.id} of type ${job.name} with data ${job.data}...`);
+  }
+
+  @Process('new_bill')
+  async processMessages(job: Job) {
+    this.logger.info(`Received new bill event`, { name: job.name, id: job.id, data: job.data });
+
+    const { integration_id, location_id, integration_data, payload } = job.data;
+
+    const emission = await this.climatiq.getEmissionEstimate(payload);
+
+    const insertData: emissions = {
+      co2e: emission['co2e'],
+      co2e_calculation_origin: emission['co2e_calculation_origin'],
+      co2e_unit: emission['co2e_unit'],
+      co2_calculation_method: emission['co2e_calculation_method'],
+      location_id: location_id || job.data.location_id,
+      integration_id: integration_id || job.data.integration.id,
+      emission_factor: emission['emission_factor'],
+      activity_data: emission['activity_data'],
+      constituent_gases: emission['constituent_gases'],
+      integration_data: integration_data,
+      name: emission.emission_factor['name'],
+      category: emission.emission_factor['category'],
+      region: emission.emission_factor['region'],
+    };
+
+    await this.prisma.emissions.create({
+      // @ts-expect-error - Prisma type definitions are not up to date
+      data: insertData,
+    });
+    this.logger.info(`Emission estimate: ${JSON.stringify(emission)}`, {
+      name: job.name,
+      id: job.id,
+      data: job.data,
+    });
   }
 }

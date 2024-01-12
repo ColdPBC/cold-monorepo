@@ -14,7 +14,7 @@ import {
 import { postInviteOwnerExample, postOrganizationExample } from './examples/organization.examples';
 import { OrganizationService } from './organization.service';
 import { ApiBody, ApiOAuth2, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { Roles, JwtAuthGuard, RolesGuard, HttpExceptionFilter, BaseWorker, AuthenticatedUser, OrganizationsSchema } from '@coldpbc/nest';
+import { AuthenticatedUser, BaseWorker, HttpExceptionFilter, JwtAuthGuard, OrganizationsSchema, Roles, RolesGuard } from '@coldpbc/nest';
 import { CreateOrganizationDto } from './dto/organization.dto';
 
 @Span()
@@ -72,12 +72,12 @@ export class OrganizationController extends BaseWorker {
    * @param inviteUserDto
    * @param suppressEmail
    */
+  @Post(`:orgId/invitation`)
+  @Roles(...coldAndCompanyAdmins)
   @ApiOperation({
     summary: 'Invite User',
     operationId: 'InviteUser',
   })
-  @Post(`:orgId/invitation`)
-  @Roles(...coldAndCompanyAdmins)
   @ApiBody({
     schema: {
       example: postInviteOwnerExample,
@@ -304,7 +304,7 @@ export class OrganizationController extends BaseWorker {
   @Delete(':orgId/members')
   @ApiBody({
     schema: {
-      type: 'array',
+      type: 'object',
       example: { members: ['{{example_member_id}}'] },
       description: 'Array of member ids',
     },

@@ -11,6 +11,7 @@ import { ActionsModule } from './resources/actions/actions.module';
 import { ConfigModule } from '@nestjs/config';
 import { IntegrationsModule } from './resources/integrations/integrations.module';
 import { Service_definitionsModule } from './resources/service_definitions/service_definitions.module';
+import { OrganizationLocationsModule } from './resources/organization_locations/organization_locations.module';
 
 @Module({})
 export class AppModule {
@@ -21,7 +22,7 @@ export class AppModule {
         ConfigModule.forRoot({
           isGlobal: true,
         }),
-        await NestModule.forRootAsync(),
+        await NestModule.forRootAsync(1),
         ServeStaticModule.forRoot({
           serveStaticOptions: {
             index: false,
@@ -38,7 +39,10 @@ export class AppModule {
         NewsModule,
         ActionsModule,
         IntegrationsModule,
+        OrganizationLocationsModule,
       ],
+      services: [],
+      exports: [],
     };
   }
 }

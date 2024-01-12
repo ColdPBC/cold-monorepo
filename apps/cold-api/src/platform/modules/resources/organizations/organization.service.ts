@@ -478,12 +478,17 @@ export class OrganizationService extends BaseWorker {
         org.name = orgName;
       }
 
+      let existing: any | null;
+
       // search for existing organization by name
       await this.prisma.organizations.findUnique({
         where: { name: org.name },
       });
 
-      let existing: any = null;
+      if (existing) {
+        throw new ConflictException(`organization ${existing.name} already exists in db`);
+      }
+
       try {
         // search Auth0 for existing organization by name
         existing = (await this.getOrganization(<string>org.name, user, true)) as Auth0Organization;
@@ -530,9 +535,28 @@ export class OrganizationService extends BaseWorker {
         // create organization in database
         org.created_at = new Date();
 
-        await this.prisma.organizations.create({
+        existing = await this.prisma.organizations.create({
           data: org as any,
         });
+
+        if (org.street_address && org.city && org.state && org.zip) {
+          const location = await this.prisma.organization_locations.create({
+            data: {
+              name: 'Default',
+              organization_id: existing.id,
+              address: org.street_address,
+              city: org.city,
+              state: org.state,
+              postal_code: org.zip,
+              country: 'US',
+            },
+          });
+
+          await this.cache.set(`organizations:${existing.id}:locations`, location, {
+            ttl: 60 * 60 * 24 * 7,
+            update: true,
+          });
+        }
 
         await this.cache.set(`organizations:${auth0Org.id}`, auth0Org, {
           update: true,
@@ -546,7 +570,15 @@ export class OrganizationService extends BaseWorker {
 
       this.metrics.increment('cold.api.organizations.create', tags);
 
-      return org;
+      return (await this.prisma.organizations.findUnique({
+        where: {
+          id: existing.id,
+        },
+        include: {
+          locations: true,
+          integrations: true,
+        },
+      })) as organizations;
     } catch (e) {
       tags.status = 'failed';
 
@@ -555,7 +587,7 @@ export class OrganizationService extends BaseWorker {
       this.tracer.getTracer().dogstatsd.increment('cold.api.organizations.create', 1, tags);
 
       this.logger.error(e, { org, e });
-      throw e;
+      throw new UnprocessableEntityException(e.message, e);
     }
   }
 

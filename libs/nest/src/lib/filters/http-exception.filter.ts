@@ -3,7 +3,6 @@ import { Request, Response } from 'express';
 import { Span, TraceService } from 'nestjs-ddtrace';
 import { get } from 'lodash';
 import { BaseWorker } from '../worker';
-import safeStringify from 'fast-safe-stringify';
 import { ConfigService } from '@nestjs/config';
 
 @Span()
@@ -21,10 +20,10 @@ export class HttpExceptionFilter extends BaseWorker implements ExceptionFilter {
     const user: { coldclimate_claims?: any } = get(request, 'user', { coldclimate_claims: {} });
     this.traceService.getTracer().appsec.setUser({ ...user.coldclimate_claims });
 
-    if (status >= 400 && status < 500) {
+    if (status >= 400) {
       if (status !== 404) {
-        this.logger.error(JSON.parse(safeStringify(exception)), {
-          error: exception,
+        this.logger.error(exception.message, {
+          error: exception.getResponse(),
           stack: exception.stack,
           user: user,
           url: request.url,
@@ -38,8 +37,9 @@ export class HttpExceptionFilter extends BaseWorker implements ExceptionFilter {
       }
     }
     if (status < 300) {
-      this.logger.info(exception.message, {
+      this.logger.warn(exception.message, {
         user: user,
+        response: exception.getResponse(),
         url: request.url,
         method: request.method,
         body: request.body,
@@ -51,14 +51,11 @@ export class HttpExceptionFilter extends BaseWorker implements ExceptionFilter {
     }
 
     response.status(status).json({
-      message: exception.message.replace(/\n/g, ''),
       statusCode: status,
-      error: exception.name,
-      service: this.config.get('DD_SERVICE') || BaseWorker.getProjectName(),
+      error: exception.getResponse(),
       version: this.config.get('DD_VERSION') || BaseWorker.getPkgVersion(),
       timestamp: new Date().toISOString(),
       path: request.url,
-      meta: { user: user?.coldclimate_claims },
     });
   }
 }

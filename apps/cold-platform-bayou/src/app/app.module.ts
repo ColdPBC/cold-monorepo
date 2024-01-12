@@ -1,9 +1,11 @@
 import { Module } from '@nestjs/common';
 import { NestModule } from '@coldpbc/nest';
 import { ConfigModule } from '@nestjs/config/dist/config.module';
-import { AppService } from './app.service';
-import { AppController } from './app.controller';
+import { BayouService } from './bayou.service';
+import { BayouController } from './bayou.controller';
 import { BullModule } from '@nestjs/bull';
+import { RabbitService } from './app.rabbit';
+import { BayouQueueProcessor } from './outbound.processor';
 
 @Module({})
 export class AppModule {
@@ -14,13 +16,13 @@ export class AppModule {
         ConfigModule.forRoot({
           isGlobal: true,
         }),
-        await NestModule.forRootAsync(),
+        await NestModule.forRootAsync(1),
         BullModule.registerQueue({
-          name: 'outbound',
+          name: 'bayou',
         }),
       ],
-      controllers: [AppController],
-      providers: [AppService],
+      controllers: [BayouController],
+      providers: [BayouService, RabbitService, BayouQueueProcessor],
       exports: [],
     };
   }

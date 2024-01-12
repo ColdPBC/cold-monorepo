@@ -1,17 +1,18 @@
-import { Controller, Get, ParseBoolPipe, Post, Query, Req, UseFilters, UseGuards } from '@nestjs/common';
-import { ApiOAuth2, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Get, HttpCode, Param, ParseBoolPipe, Post, Query, Req, UseFilters, UseGuards } from '@nestjs/common';
+import { ApiBody, ApiOAuth2, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Span } from 'nestjs-ddtrace';
-import { AuthenticatedUser, BaseWorker, HttpExceptionFilter, JwtAuthGuard, RolesGuard } from '@coldpbc/nest';
-import { bpcDecoratorOptions } from '../_global/global.params';
+import { AuthenticatedUser, BaseWorker, HttpExceptionFilter, JwtAuthGuard, Roles, RolesGuard } from '@coldpbc/nest';
+import { bpcDecoratorOptions, coldAdminOnly, coldAndCompanyAdmins, orgIdDecoratorOptions } from '../_global/global.params';
 
 import { IntegrationsService } from './integrations.service';
+import { IntegrationBodySchema } from './examples/integration_examples';
 
 @Span()
 @UseGuards(JwtAuthGuard, RolesGuard)
 @ApiOAuth2(['openid'])
 @ApiTags('Integrations')
 @UseFilters(new HttpExceptionFilter(IntegrationsController.name))
-@Controller('integrations')
+@Controller()
 export class IntegrationsController extends BaseWorker {
   constructor(private readonly providerService: IntegrationsService) {
     super(IntegrationsService.name);
@@ -21,7 +22,9 @@ export class IntegrationsController extends BaseWorker {
     summary: 'Get Integrations',
     operationId: 'GetAllIntegrations',
   })
-  @Get()
+  @ApiTags('Integrations')
+  @Get('/integrations')
+  @Roles(...coldAdminOnly)
   @ApiQuery(bpcDecoratorOptions)
   getAllIntegrations(
     @Req()
@@ -35,16 +38,21 @@ export class IntegrationsController extends BaseWorker {
   ) {
     if (!bpc) bpc = false;
 
-    return this.providerService.requestProviderDataRPC(req.user, req.body, bpc);
+    return this.providerService.getAllIntegrations(req.user, req.body, bpc);
   }
 
   @ApiOperation({
-    summary: 'Get Data From Provider',
-    operationId: 'GetDataFromProvider',
+    summary: 'Get Organization Integrations',
+    operationId: 'getOrganizationIntegrations',
   })
-  @Post('rpc')
+  @ApiTags('Organizations : Integrations')
   @ApiQuery(bpcDecoratorOptions)
-  requestFromProvider(
+  @ApiParam(orgIdDecoratorOptions)
+  @Roles(...coldAndCompanyAdmins)
+  @HttpCode(200)
+  @Get('organizations/:orgId/integrations')
+  getOrganizationIntegrations(
+    @Param('orgId') orgId: string,
     @Req()
     req: {
       body: any;
@@ -56,6 +64,35 @@ export class IntegrationsController extends BaseWorker {
   ) {
     if (!bpc) bpc = false;
 
-    return this.providerService.requestProviderDataRPC(req.user, req.body, bpc);
+    return this.providerService.getOrganizationIntegrations(req.user, orgId, bpc);
+  }
+
+  @ApiOperation({
+    summary: 'Create Organization Integration',
+    operationId: 'createOrganizationIntegration',
+  })
+  @ApiQuery(bpcDecoratorOptions)
+  @ApiParam(orgIdDecoratorOptions)
+  @ApiBody(IntegrationBodySchema)
+  @Post('organizations/:orgId/locations/:locId/integrations')
+  @HttpCode(201)
+  createIntegration(
+    @Param('orgId') orgId: string,
+    @Param('locId') locId: string,
+    @Req()
+    req: {
+      body: any;
+      headers: any;
+      query: any;
+      user: AuthenticatedUser;
+    },
+    @Body()
+    body: {
+      organization_id: string;
+      service_definition_id: string;
+      metadata: any;
+    },
+  ) {
+    return this.providerService.createIntegration(req.user, orgId, locId, body);
   }
 }

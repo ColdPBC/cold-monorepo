@@ -7,6 +7,7 @@ import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { RabbitService } from './rabbit/rabbit.service';
 import { BullModule } from '@nestjs/bull';
+import { OutboundQueueProcessor } from './redis/outbound.processor';
 
 @Module({
   providers: [AppService],
@@ -19,14 +20,14 @@ export class AppModule {
         ConfigModule.forRoot({
           isGlobal: true,
         }),
-        await NestModule.forRootAsync(),
+        await NestModule.forRootAsync(1),
         ClimatiqModule,
         BullModule.registerQueue({
           name: 'climatiq',
         }),
       ],
       controllers: [],
-      providers: [ClimatiqService, RabbitService],
+      providers: [ClimatiqService, RabbitService, OutboundQueueProcessor],
       exports: [RabbitService],
     };
   }

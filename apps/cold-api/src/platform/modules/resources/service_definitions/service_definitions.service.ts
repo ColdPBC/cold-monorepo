@@ -1,7 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { Get, Injectable } from '@nestjs/common';
 import { Span } from 'nestjs-ddtrace';
-import { BaseWorker, CacheService, ColdRabbitService, PrismaService } from '@coldpbc/nest';
+import { AuthenticatedUser, BaseWorker, CacheService, ColdRabbitService, Cuid2Generator, PrismaService, Roles } from '@coldpbc/nest';
 import { integration_service_type } from '@prisma/client';
+import { allRoles } from '../_global/global.params';
 
 @Span()
 @Injectable()
@@ -22,6 +23,7 @@ export class ServiceDefinitionsService extends BaseWorker {
    */
   async registerService(name: string, type: integration_service_type, label: string, definition: any): Promise<any> {
     try {
+      const cuid2 = new Cuid2Generator('sdef');
       const existing = await this.prisma.service_definitions.findFirst({
         where: {
           name: name,
@@ -38,9 +40,11 @@ export class ServiceDefinitionsService extends BaseWorker {
         });
         return await this.prisma.service_definitions.update({
           where: {
-            id: existing.id,
+            name: existing.name,
           },
           data: {
+            //update ID to be scoped to service definition if it is not already
+            id: existing.id.includes('sdef') ? existing.id : cuid2.scopedId,
             name,
             type,
             label,
@@ -53,6 +57,7 @@ export class ServiceDefinitionsService extends BaseWorker {
 
       const service = await this.prisma.service_definitions.create({
         data: {
+          id: cuid2.scopedId,
           name,
           type,
           label,
@@ -64,6 +69,58 @@ export class ServiceDefinitionsService extends BaseWorker {
       return service;
     } catch (err) {
       this.logger.error(err.message, { error: err, definition });
+      throw err;
+    }
+  }
+
+  /**
+   * Gets a service by name.
+   *
+   * @param {string} name - The name of the service.
+   * @returns {Promise<any>} - A promise that resolves to the service.
+   * @throws {Error} - If an error occurs during retrieval.
+   */
+  async getService(user: AuthenticatedUser, name: string): Promise<any> {
+    try {
+      const service = await this.prisma.service_definitions.findUnique({
+        where: {
+          name: name,
+        },
+        include: {
+          integrations: user.isColdAdmin,
+        },
+      });
+
+      if (!service) throw new Error(`Service not found for ${name}`);
+
+      return service;
+    } catch (err) {
+      this.logger.error(err.message, { error: err, name });
+      throw err;
+    }
+  }
+
+  /**
+   * Gets all services.
+   *
+   * @returns {Promise<any>} - A promise that resolves to the services.
+   * @throws {Error} - If an error occurs during retrieval.
+   */
+  @Get('services')
+  @Roles(...allRoles)
+  async getServices(user: AuthenticatedUser): Promise<any> {
+    try {
+      const services = await this.prisma.service_definitions.findMany({
+        include: {
+          integrations: user.isColdAdmin,
+        },
+      });
+
+      if (!services) throw new Error(`Services not found`);
+
+      return services;
+    } catch (err) {
+      this.logger.error(err.message, { error: err });
       throw err;
     }
   }

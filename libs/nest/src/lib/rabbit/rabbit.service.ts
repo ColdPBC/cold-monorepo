@@ -3,6 +3,7 @@ import { Global, Injectable, OnModuleInit } from '@nestjs/common';
 import { BaseWorker } from '../worker';
 import { ConfigService } from '@nestjs/config';
 import { RabbitMessagePayload } from './rabbit.types';
+import { service_definitions } from '../../validation/generated/modelSchema/service_definitionsSchema';
 
 export enum WorkerTypes {
   PLATFORM = 'platform',
@@ -13,14 +14,12 @@ export enum WorkerTypes {
 
 export type RabbitMessageOptions = {
   exchange: string;
+  timeout?: number;
 };
 
 @Global()
 @Injectable()
 export class ColdRabbitService extends BaseWorker implements OnModuleInit {
-  public registered = false;
-  definition: any;
-
   constructor(private readonly config: ConfigService, private readonly client: AmqpConnection) {
     super(ColdRabbitService.name);
   }
@@ -36,24 +35,33 @@ export class ColdRabbitService extends BaseWorker implements OnModuleInit {
    * @throws {Error} - If an unknown WorkerType is specified in the definition.
    * @param pkg
    */
-  public async register_service(pkg: { name: string; label: string; service_type: WorkerTypes; definition: any }): Promise<void> {
+  public async register_service(pkg: { name: string; label: string; service_type: WorkerTypes; definition: service_definitions }): Promise<service_definitions> {
     try {
-      this.definition = pkg.definition;
-
-      await this.publish(
+      this.logger.info('Registering service with COLD_API', { ...pkg });
+      const response = await this.request(
         'cold.service_definitions',
         {
-          name: pkg.name,
-          label: pkg.label,
-          type: pkg.service_type,
-          definition: pkg.definition,
+          data: {
+            name: pkg.name,
+            label: pkg.label,
+            type: pkg.service_type,
+            definition: pkg.definition,
+          },
+          event: 'service_started',
+          isRPC: true,
+          from: pkg.name,
         },
-        'service_started',
+        {
+          exchange: 'amq.direct',
+          timeout: 30000,
+        },
       );
 
-      this.registered = true;
+      return response;
     } catch (err: any) {
       this.logger.error(err.message, { error: err });
+
+      throw err;
     }
   }
 
@@ -70,7 +78,7 @@ export class ColdRabbitService extends BaseWorker implements OnModuleInit {
   }
 
   /**
-   * Publishes a message to a specified exchange with a given routing key.
+   * Publishes an async message to a specified exchange with a given routing key.
    *
    * @param {string} routingKey
    * @param {any} data
@@ -87,50 +95,36 @@ export class ColdRabbitService extends BaseWorker implements OnModuleInit {
       exchange: 'amq.direct',
     },
   ): Promise<void> {
-    try {
-      await this.client?.publish(options.exchange, routingKey, {
-        data,
-        event: event,
-        from: this.config.getOrThrow('DD_SERVICE'),
-      });
+    await this.client.publish(options.exchange, routingKey, {
+      data,
+      event: event,
+      from: this.config.getOrThrow('DD_SERVICE'),
+    });
 
-      this.logger.info(`message published to ${routingKey.toLowerCase()}`, { ...data });
+    this.logger.info(`message published to ${routingKey.toLowerCase()}`, { ...data });
 
-      await this.disconnect();
-    } catch (err: any) {
-      this.logger.error(err.messsage, { error: err });
-      return err.message;
-    }
+    //await this.disconnect();
   }
 
   /***
-   * Create RPC message to rabbit
+   * Publish an RPC message to rabbit
    * @param {string} routingKey
    * @param body
    * @param {RabbitMessageOptions} options
    * @returns {any}
    * @throws {Error}
    */
-  public async request(
-    routingKey: string,
-    body: RabbitMessagePayload,
-    options: RabbitMessageOptions = {
-      exchange: 'amq.direct',
-    },
-  ): Promise<any> {
+  public async request(routingKey: string, body: RabbitMessagePayload, options?: RabbitMessageOptions): Promise<any> {
     try {
-      if (this.client?.managedConnection) {
-        return;
-      }
       const response = await this.client?.request({
-        exchange: options.exchange,
+        exchange: options?.exchange || 'amq.direct',
         routingKey: routingKey,
+        timeout: options?.timeout || 5000,
         payload: body,
       });
 
       this.logger.info(`message published to ${routingKey.toLowerCase()}`, { ...body });
 
-      await this.client?.managedConnection.close();
       return response;
     } catch (err: any) {
       this.logger.error(err.messsage, { error: err });

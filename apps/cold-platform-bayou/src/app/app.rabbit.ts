@@ -1,58 +1,80 @@
 import {Injectable} from '@nestjs/common';
-import {BaseWorker} from '@coldpbc/nest';
+import {AuthenticatedUser, BaseWorker} from '@coldpbc/nest';
 import {Nack, RabbitRPC} from '@golevelup/nestjs-rabbitmq';
 import {RabbitSubscribe} from '@golevelup/nestjs-rabbitmq/lib/rabbitmq.decorators';
-import {AppService} from './app.service';
+import {Job, Queue} from 'bull';
+import {InjectQueue, OnQueueActive, OnQueueCompleted} from '@nestjs/bull';
+import {BayouService} from './bayou.service';
 
 /**
  * RabbitService class.
  */
 @Injectable()
 export class RabbitService extends BaseWorker {
-  constructor(private readonly bayou: AppService) {
+  constructor(@InjectQueue('bayou') private queue: Queue, private readonly bayou: BayouService) {
     super(RabbitService.name);
+  }
+
+  @OnQueueActive()
+  onActive(job: Job) {
+    console.log(`Processing job ${job.id} of type ${job.name} with data ${job.data}...`);
+  }
+
+  @OnQueueCompleted()
+  onCompleted(job: Job) {
+    console.log(`Job ${job.id} of type ${job.name} completed`, { data: job.data });
   }
 
   /**
    * Handles RPC messages received from RabbitMQ.
    *
-   * @param data.msg - The RPC message in string format.
+   * @param { user: AuthenticatedUser; data: never; from: string; event: string } msg - The RPC message.
+   * @param msg.user - The user that triggered the event
+   *
+   * @param msg.from - The name of the service that sent the message.
+   * @param msg.event - The event that triggered the message
    *
    * @return - A Promise that resolves to the response of the RPC message.
    *          The response will be of type unknown.
    *          If the RPC message is valid and the action is recognized, the response will be the result of the corresponding action.
    *          If the RPC message is invalid or the action is unknown, an error response will be returned.
-   * @param msg
    */
   @RabbitRPC({
     exchange: 'amq.direct',
     routingKey: `cold.platform.bayou.rpc`,
-    queue: `cold.platform.bayou`,
+    queue: `cold.platform.bayou.rpc`,
     allowNonJsonMessages: false,
   })
-  async subscribe(msg: { data: unknown; from: string; action: string }): Promise<unknown> {
+  async subscribe(msg: { data: never; from: string; event: string }): Promise<unknown> {
     try {
-      const parsed = typeof msg.data === 'string' ? JSON.parse(msg.data) : msg.data;
-      this.logger.debug(`RPC Request Received from ${msg.from}`, { data: parsed, from: msg.from, action: msg.action });
+      this.logger.debug(`RPC Request Received from ${msg.from}`, { ...msg });
+
+      return await this.processMessage(msg.event, msg.from, msg.data);
     } catch (err) {
-      this.logger.error(err.message, { err, data: msg.data, from: msg.from, action: msg.action });
+      this.logger.error(err.message, { err, data: msg.data, from: msg.from, event: msg.event });
+
+      if (!err.message.includes('already linked for location')) {
+        const job = await this.queue.add(msg.event, msg, { backoff: { type: 'exponential' } });
+        this.logger.info(` ${msg.event} job (${job.id}) created from message received from ${msg.from}`, {
+          data: msg.data,
+          from: msg.from,
+          event: msg.event,
+        });
+      }
 
       return err;
     }
   }
 
   /**
-   * Handles RPC messages received from RabbitMQ.
+   * Handles ASYNC messages received from RabbitMQ.
    *
-   * @param data.msg - The RPC message in string format.
-   * @param data.from - The name of the service that sent the message.
-   * @param data.action - The action to be performed.
+   * @param msg - The ASYNC message.
+   * @param msg.from - The name of the service that sent the message.
+   * @param msg.event - The event that triggered the message
+   * @param msg.user - The user that triggered the event
+   * @param msg.metadata - The metadata associated with the event
    *
-   * @return - A Promise that resolves to the response of the RPC message.
-   *          The response will be of type unknown.
-   *          If the RPC message is valid and the action is recognized, the response will be the result of the corresponding action.
-   *          If the RPC message is invalid or the action is unknown, an error response will be returned.
-   * @param msg
    */
   @RabbitSubscribe({
     exchange: 'amq.direct',
@@ -60,17 +82,41 @@ export class RabbitService extends BaseWorker {
     queue: `cold.platform.bayou`,
     allowNonJsonMessages: false,
   })
-  async webhooks(msg: { data: unknown; from: string; action: string }): Promise<unknown> {
+  async asyncMessage(msg: { user: AuthenticatedUser; data: never; from: string; event: string }): Promise<void | Nack> {
     try {
-      const parsed = typeof msg.data === 'string' ? JSON.parse(msg.data) : msg.data;
+      this.logger.debug(`ASYNC ${msg.event} triggered by ${msg.user?.coldclimate_claims?.email} Request processed from ${msg.from}`, {
+        data: msg.data,
+        from: msg.from,
+        event: msg.event,
+      });
 
-      //const def = await this.integrations.registerService(parsed.name, parsed.type, parsed.label, parsed.definition);
-
-      return parsed;
+      const job = await this.queue.add(msg.event, msg.data, { backoff: { type: 'exponential' } });
+      this.logger.info(` ${msg.event} job (${job.id}) created from message received from ${msg.from}`, {
+        data: msg.data,
+        from: msg.from,
+        event: msg.event,
+      });
     } catch (err) {
-      this.logger.error(err.message, { error: err, from: msg.data, data: msg.data, action: msg.action });
+      this.logger.error(err.message, {
+        error: err,
+        user: msg.user,
+        from: msg.from,
+        data: msg.data,
+        event: msg.event,
+      });
 
       return new Nack();
+    }
+  }
+
+  async processMessage(event: string, from: string, data: never) {
+    this.logger.info(`Processing ${event} event triggered by ${data['user']['coldclimate_claims']['email']} from ${from}`, { data });
+
+    const user = data['user'];
+
+    switch (event) {
+      case 'integration.enabled':
+        return await this.bayou.createCustomer(user, data['organization']['id'], data['location_id'], this.bayou.toBayouPayload(data));
     }
   }
 }
