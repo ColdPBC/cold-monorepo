@@ -33,7 +33,6 @@ describe('API Tests', () => {
     owner.password = `ABC123-${fakeUser.password}`;
     owner.email = fakeUser.email.replace('hotmail.com', 'example.com').replace('yahoo.com', 'example.com').replace('gmail.com', 'example.com');
     let org: organizations;
-    let invitation: any;
 
     describe('News', () => {
       it('POST /news (not published)', async () => {
@@ -312,8 +311,6 @@ describe('API Tests', () => {
           });
 
           console.log(`/organizations/${org.id}/invitations?suppressEmail=true`, res.data);
-
-          invitation = res.data;
 
           expect(res.status).toBe(201);
         } catch (error) {

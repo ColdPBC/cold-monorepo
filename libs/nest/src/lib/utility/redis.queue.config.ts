@@ -30,18 +30,21 @@ export class RedisServiceConfig extends BaseWorker {
     return redisOpts;
   }
 
-  static async getQueueConfig(type: string, queueName: string): Promise<BullModuleOptions> {
+  static async getQueueConfig(type: string, queueName: string, db: number = 0): Promise<BullModuleOptions> {
     const max = get(process, 'env.MAX_RETRY_ATTEMPTS', 5) as number;
     const interval = get(process, 'env.RETRY_INTERVAL', 60000) as number;
     const concurrency = get(process, 'env.JOB_CONCURRENCY', 1) as number;
     const concurrency_interval = get(process, 'env.JOB_CONCURRENCY_INTERVAL', 1000) as number;
     const logger = new WorkerLogger(RedisServiceConfig.name);
     // max retry time is 24 hours
-    const maxRetryLength = 60000 * 60 * 24;
+    const maxRetryLength = get(process, 'env.MAX_RETRY_LENGTH', 60000 * 60 * 24) as number;
 
     return {
       name: `${queueName}`,
       //redis: await RedisServiceConfig.getRedisOpts(),
+      redis: {
+        db: db,
+      },
       url: get(process, 'env.REDISCLOUD_URL', 'redis://localhost:6379') as string,
       prefix: `${type}`,
       limiter: {
@@ -145,9 +148,9 @@ export interface RedisOptions {
 }
 
 export enum BackOffStrategies {
-  EXPONENTIAL,
-  HOURLY_PROGRESSIVE,
-  JITTER,
+  EXPONENTIAL = 'exponential',
+  HOURLY_PROGRESSIVE = 'hourly_progressive',
+  JITTER = 'jitter',
 }
 
 export interface IQueueLimiter {

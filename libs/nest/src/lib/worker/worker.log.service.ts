@@ -8,7 +8,7 @@ import { Tags } from '../primitives';
 import { merge } from 'lodash';
 import { ConfigService } from '@nestjs/config'; /// test
 import tracer from 'dd-trace';
-import formats from 'dd-trace/ext/formats';
+import formats from 'dd-trace/ext/formats'; /// test
 
 /// test
 export class WorkerLogger implements LoggerService {
@@ -34,10 +34,10 @@ export class WorkerLogger implements LoggerService {
     const pkg = BaseWorker.getParsedJSON('package.json');
 
     this.tags = {
-      version: this.config.get('DD_VERSION') || BaseWorker.getPkgVersion(),
-      service: this.config.get('DD_SERVICE') || 'UNKNOWN',
-      env: this.config.get('NODE_ENV') || this.config.getOrThrow('DD_ENV') || 'unknown',
       app: pkg.name,
+      version: pkg.version,
+      environment: this.config.get('NODE_ENV'),
+      service: this.config.get('DD_SERVICE'),
     };
     //Logger.overrideLogger(this.logger);
     this.redactor = new RedactorService();
@@ -62,7 +62,7 @@ export class WorkerLogger implements LoggerService {
     }
 
     if (typeof error === 'string') {
-      this.logger.error(error, { ...optionalParams, ...this.tags, context: this.context });
+      this.logger.error(error, { optionalParams, ...this.tags, context: this.context });
     } else if (error?.response?.data) {
       this.logger.error(
         error.response?.data?.message,
@@ -75,8 +75,8 @@ export class WorkerLogger implements LoggerService {
     } else {
       if (error?.message) {
         this.logger.error(error?.message, { error, meta: optionalParams, ...this.tags });
-      } else {
-        this.logger.error(error, { error, meta: optionalParams, ...this.tags });
+      } else if (!error) {
+        this.logger.error(optionalParams.error);
       }
     }
   }

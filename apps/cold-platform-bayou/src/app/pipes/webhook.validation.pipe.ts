@@ -9,9 +9,9 @@ import {
   new_unparsed_bill_schema,
 } from '../schemas/bayou.webhook.schema';
 
-export class BayouValidationPipe extends BaseWorker implements PipeTransform {
+export class BayouWebhookValidationPipe extends BaseWorker implements PipeTransform {
   constructor(private method?: 'POST' | 'PATCH' | 'PUT' | 'GET' | 'DELETE') {
-    super(BayouValidationPipe.name);
+    super(BayouWebhookValidationPipe.name);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -44,7 +44,7 @@ export class BayouValidationPipe extends BaseWorker implements PipeTransform {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       console.error('received invalid webook payload', { ...JSON.parse(error.message), payload: value });
-      throw new BadRequestException(JSON.parse(error.message));
+      throw new BadRequestException({ message: 'webhook payload failed validation', ...JSON.parse(error.message) });
     }
   }
 }

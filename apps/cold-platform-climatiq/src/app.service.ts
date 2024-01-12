@@ -12,6 +12,6 @@ export class AppService extends BaseWorker implements OnModuleInit {
 
     await this.rabbit.register_service(pkg);
 
-    this.logger.log('AppService initialized');
+    this.logger.log('Climatiq Service initialized');
   }
 }

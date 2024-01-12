@@ -1,16 +1,16 @@
 import '../../../libs/nest/src/lib/tracer';
 import { NestFactory } from '@nestjs/core';
 import * as dotenv from 'dotenv';
-import { WorkerLogger } from '@coldpbc/nest';
-
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import { AppModule } from './app/app.module';
+import { Logger } from 'winston';
+import { WorkerLogger } from '@coldpbc/nest';
 
 dotenv.config();
 
-async function bootstrap(logger: WorkerLogger) {
+async function bootstrap(instance: Logger | WorkerLogger) {
   const app = await NestFactory.create(AppModule.forRootAsync(), {
-    logger: logger,
+    logger: instance,
   });
 
   //app.useGlobalPipes(new ResourceValidationPipe());
@@ -20,8 +20,9 @@ async function bootstrap(logger: WorkerLogger) {
 }
 
 async function init() {
-  const instance = new WorkerLogger('main');
+  const instance = new WorkerLogger('main'); //createLogger(winstonConfig('main'));
   await bootstrap(instance);
+  process.on('warning', e => instance.warn(e.message, { ...e }));
 }
 
 init();

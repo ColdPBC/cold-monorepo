@@ -1,9 +1,85 @@
-# [1.80.0-COLD-457.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.79.7...v1.80.0-COLD-457.1) (2024-01-02)
+## [1.83.7](https://github.com/ColdPBC/cold-monorepo/compare/v1.83.6...v1.83.7) (2024-01-11)
+
+
+### Bug Fixes
+
+* update version in package.jsons ([53079a8](https://github.com/ColdPBC/cold-monorepo/commit/53079a8683830654223a906be68fbb5ca20b4ec0))
+
+## [1.83.6](https://github.com/ColdPBC/cold-monorepo/compare/v1.83.5...v1.83.6) (2024-01-10)
+
+
+### Bug Fixes
+
+* missing service, version in logs ([2638cda](https://github.com/ColdPBC/cold-monorepo/commit/2638cda6ae80aaed24e572ff20a43f1e7b1e2b87))
+
+## [1.83.5](https://github.com/ColdPBC/cold-monorepo/compare/v1.83.4...v1.83.5) (2024-01-10)
+
+
+### Bug Fixes
+
+* missing service, version in logs ([5f68626](https://github.com/ColdPBC/cold-monorepo/commit/5f68626b0ce0a86d01e426ddfa2b4599b9992e0a))
+
+## [1.83.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.83.3...v1.83.4) (2024-01-09)
+
+
+### Bug Fixes
+
+* move bayou URL to envVar ([4cd74b0](https://github.com/ColdPBC/cold-monorepo/commit/4cd74b0d64be5ad798b281b4f568f88e8cd22ae9))
+
+## [1.83.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.83.2...v1.83.3) (2024-01-09)
+
+
+### Bug Fixes
+
+* store utility bills ([39b96d7](https://github.com/ColdPBC/cold-monorepo/commit/39b96d740a857f9eafbf448bc8211e29380f3910))
+
+## [1.83.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.83.1...v1.83.2) (2024-01-09)
+
+
+### Bug Fixes
+
+* isColdAdmin check failing in staging? ([9c6796b](https://github.com/ColdPBC/cold-monorepo/commit/9c6796b24b4a6a238329e1d36b090538dac41b32))
+
+## [1.83.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.83.0...v1.83.1) (2024-01-09)
+
+
+### Bug Fixes
+
+* add jobs to redis on rabbit failure ([062eb88](https://github.com/ColdPBC/cold-monorepo/commit/062eb88a9faa54e252392a31cfbd4e8214f8d547))
+
+# [1.83.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.82.1...v1.83.0) (2024-01-09)
+
+### Features
+
+* add location model and new routes ([234279a](https://github.com/ColdPBC/cold-monorepo/commit/234279adcfa0c33dc8d25e519230467c563006d6))
+
+## [1.82.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.82.0...v1.82.1) (2024-01-03)
+
+
+### Bug Fixes
+
+* new bill webhooks ([33d6bd3](https://github.com/ColdPBC/cold-monorepo/commit/33d6bd3e713c7cefe397f4f490db277af76c698d))
+
+# [1.82.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.81.0...v1.82.0) (2024-01-03)
 
 
 ### Features
 
-* Limit surveys in next steps to 3 ([1659167](https://github.com/ColdPBC/cold-monorepo/commit/16591677489cf87ad6b60d28b8995542c7bab2e3))
+* add create customer to bayou service ([d4eab7e](https://github.com/ColdPBC/cold-monorepo/commit/d4eab7ee4d7497ce35474ffc72ad53ced69ef2f7))
+
+# [1.81.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.80.0...v1.81.0) (2024-01-02)
+
+
+### Features
+
+* add create customer to bayou service ([266518d](https://github.com/ColdPBC/cold-monorepo/commit/266518db9b50ce237971c722f1531067892327e5))
+
+# [1.80.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.79.7...v1.80.0) (2024-01-02)
+
+
+### Features
+
+* add create customer to bayou service ([eeb49df](https://github.com/ColdPBC/cold-monorepo/commit/eeb49df6ebc592b745677a4abb571e79459a0371))
 
 ## [1.79.7](https://github.com/ColdPBC/cold-monorepo/compare/v1.79.6...v1.79.7) (2024-01-01)
 
@@ -316,7 +392,7 @@
 * Added addtional context to surveys ([9c2e425](https://github.com/ColdPBC/cold-monorepo/commit/9c2e4252ef8dc74fbc05cfe74e6e78c9d35f03ce))
 * Create "service_definitions" model in database ([ddd6205](https://github.com/ColdPBC/cold-monorepo/commit/ddd620523b04d5f3d99c7ca53406e53bb2f798b6))
 * Initialize Climatiq and RabbitMQ services ([6c90b26](https://github.com/ColdPBC/cold-monorepo/commit/6c90b268afbddab0760a2973b8f3a268569d4162))
-* Update AppModule and add AppService in Climatiq app ([7e3a45b](https://github.com/ColdPBC/cold-monorepo/commit/7e3a45b661623d9afd15b81000ad38bc011e47cd))
+* Update AppModule and add BayouService in Climatiq app ([7e3a45b](https://github.com/ColdPBC/cold-monorepo/commit/7e3a45b661623d9afd15b81000ad38bc011e47cd))
 * update to survey input styling and improved logic ([dca46f5](https://github.com/ColdPBC/cold-monorepo/commit/dca46f5294e43b36d88ad510069a7366c2aea9b6))
 
 # [1.74.0-cold-000-climatiq.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.73.10...v1.74.0-cold-000-climatiq.1) (2023-12-10)

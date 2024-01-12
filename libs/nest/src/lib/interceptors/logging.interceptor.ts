@@ -1,7 +1,7 @@
 import { CallHandler, ExecutionContext, Injectable, NestInterceptor, OnModuleInit } from '@nestjs/common';
 import { Span, TraceService } from 'nestjs-ddtrace';
 import { Observable } from 'rxjs';
-import { get } from 'lodash';
+import { get, pick } from 'lodash';
 import { tap } from 'rxjs/operators';
 import { BaseWorker, DarklyService, WorkerLogger } from '@coldpbc/nest';
 import { Request } from 'express';
@@ -87,10 +87,10 @@ export class LoggingInterceptor implements NestInterceptor, OnModuleInit {
       return next.handle().pipe(
         tap(() => {
           const data = {
-            data: context.getArgs()[0].data,
+            //data: context.getArgs()[0].data,
             fields: context.getArgs()[1].fields,
             properties: context.getArgs()[1].properties,
-            content: JSON.parse(Buffer.from(context.getArgs()[1].content).toString()),
+            content: pick(JSON.parse(Buffer.from(context.getArgs()[1].content).toString()), ['event', 'from', 'user', 'metadata']),
             service: this.config.get('DD_SERVICE') || BaseWorker.getProjectName(),
             version: this.config.get('DD_VERSION') || BaseWorker.getPkgVersion(),
             method: context.getArgs()[1].properties?.replyTo ? 'REQUEST' : 'PUBLISH',

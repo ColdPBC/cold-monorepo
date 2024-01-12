@@ -21,7 +21,7 @@ import { RedisServiceConfig } from './utility';
 
 @Module({})
 export class NestModule {
-  static async forRootAsync() {
+  static async forRootAsync(db: number) {
     const logger = new WorkerLogger('NestModule');
     const config = new ConfigService();
     const darkly = new DarklyService(config);
@@ -38,7 +38,7 @@ export class NestModule {
       ConfigModule.forRoot({
         isGlobal: true,
       }),
-      BullModule.forRoot(await RedisServiceConfig.getQueueConfig(type, project)),
+      BullModule.forRoot(await RedisServiceConfig.getQueueConfig(type, project, db)),
       HttpModule,
     ];
     const providers: any = [ConfigService];
