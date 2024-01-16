@@ -955,7 +955,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/util-utf8-browser@npm:^3.0.0":
+"@aws-sdk/util-utf8-browser@npm:^3.0.0, @aws-sdk/util-utf8-browser@npm:^3.109.0":
   version: 3.259.0
   resolution: "@aws-sdk/util-utf8-browser@npm:3.259.0"
   dependencies:
@@ -4497,6 +4497,22 @@ __metadata:
   peerDependencies:
     react: ">= 16"
   checksum: a8a82c7057eea3ea21cf98c35b08cb600e1c6d1441cec1f1fd992c86b9e21a3322d7926fd9a65dadbfff3679b2c835949acb34c5a627bcff80c29629c30f8043
+  languageName: node
+  linkType: hard
+
+"@httptoolkit/websocket-stream@npm:^6.0.1":
+  version: 6.0.1
+  resolution: "@httptoolkit/websocket-stream@npm:6.0.1"
+  dependencies:
+    "@types/ws": "npm:*"
+    duplexify: "npm:^3.5.1"
+    inherits: "npm:^2.0.1"
+    isomorphic-ws: "npm:^4.0.1"
+    readable-stream: "npm:^2.3.3"
+    safe-buffer: "npm:^5.1.2"
+    ws: "npm:*"
+    xtend: "npm:^4.0.0"
+  checksum: 0f01af78c94357d1313621a8ddc3907af2b161cdd3964305fd916d0447e3647ec2484d46772fa435aeb736a657ac9ad1007aaba3ba9d147b5ef6c43b2cb04350
   languageName: node
   linkType: hard
 
@@ -14105,7 +14121,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/ws@npm:^8.5.5":
+"@types/ws@npm:*, @types/ws@npm:^8.5.5":
   version: 8.5.10
   resolution: "@types/ws@npm:8.5.10"
   dependencies:
@@ -16290,6 +16306,31 @@ __metadata:
   languageName: node
   linkType: hard
 
+"aws-crt@npm:^1.20.1":
+  version: 1.20.1
+  resolution: "aws-crt@npm:1.20.1"
+  dependencies:
+    "@aws-sdk/util-utf8-browser": "npm:^3.109.0"
+    "@httptoolkit/websocket-stream": "npm:^6.0.1"
+    axios: "npm:^1.6.0"
+    buffer: "npm:^6.0.3"
+    crypto-js: "npm:^4.2.0"
+    mqtt: "npm:^4.3.7"
+    process: "npm:^0.11.10"
+  checksum: 556ceb6fad30e4c3af532a7cbd3a4f73027082ecf9ecd6cf602d31f4bd558cd059d39a5b4da33f2d463fc272e14ea36a2659170f1a8639e7215d58a6d16a08cd
+  languageName: node
+  linkType: hard
+
+"aws-iot-device-sdk-v2@npm:^1.19.0":
+  version: 1.19.0
+  resolution: "aws-iot-device-sdk-v2@npm:1.19.0"
+  dependencies:
+    "@aws-sdk/util-utf8-browser": "npm:^3.109.0"
+    aws-crt: "npm:^1.20.1"
+  checksum: 4669019d9899736fa4579c52ad0cb501978788a425caab25d654c2ed43649d7a1172479ca2cd34f92f2e0a4359595cd3e8ae0b1ade587ff87c666e9c938d1d58
+  languageName: node
+  linkType: hard
+
 "aws-iot-device-sdk@npm:^2.2.13":
   version: 2.2.13
   resolution: "aws-iot-device-sdk@npm:2.2.13"
@@ -16375,6 +16416,17 @@ __metadata:
     form-data: "npm:^4.0.0"
     proxy-from-env: "npm:^1.1.0"
   checksum: 612bc93f8f738a518e7c5f9de9cc782bcd36aac6bae279160ef6a10260378e21c1786520eab3336898e3d66e0839ebdf739f327fb6d0431baa4d3235703a7652
+  languageName: node
+  linkType: hard
+
+"axios@npm:^1.6.0":
+  version: 1.6.5
+  resolution: "axios@npm:1.6.5"
+  dependencies:
+    follow-redirects: "npm:^1.15.4"
+    form-data: "npm:^4.0.0"
+    proxy-from-env: "npm:^1.1.0"
+  checksum: 465489d9bf8f039b9adbc8103b6299d6a5e26de77b27f0e4173d814d39bca8f4b4659d94e09ee40461aedccd8c2452f1e2b3edace1c9f81220060d2974ff9dc7
   languageName: node
   linkType: hard
 
@@ -18443,7 +18495,9 @@ __metadata:
     auth0: "npm:^4.2.0"
     auto-changelog: "npm:^2.4.0"
     autoprefixer: "npm:^10.4.14"
+    aws-crt: "npm:^1.20.1"
     aws-iot-device-sdk: "npm:^2.2.13"
+    aws-iot-device-sdk-v2: "npm:^1.19.0"
     aws-sdk: "npm:^2.1533.0"
     axios: "npm:^1.4.0"
     babel-loader: "npm:^9.1.2"
@@ -18484,6 +18538,7 @@ __metadata:
     global: "npm:^4.4.0"
     hot-shots: "npm:^10.0.0"
     husky: "npm:^8.0.3"
+    install: "npm:^0.13.0"
     jest: "npm:^29.6.4"
     jest-canvas-mock: "npm:^2.5.0"
     jest-environment-node: "npm:^29.4.1"
@@ -19571,7 +19626,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"crypto-js@npm:4.2.0":
+"crypto-js@npm:4.2.0, crypto-js@npm:^4.2.0":
   version: 4.2.0
   resolution: "crypto-js@npm:4.2.0"
   checksum: c7bcc56a6e01c3c397e95aa4a74e4241321f04677f9a618a8f48a63b5781617248afb9adb0629824792e7ec20ca0d4241a49b6b2938ae6f973ec4efc5c53c924
@@ -23428,6 +23483,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"follow-redirects@npm:^1.15.4":
+  version: 1.15.5
+  resolution: "follow-redirects@npm:1.15.5"
+  peerDependenciesMeta:
+    debug:
+      optional: true
+  checksum: d467f13c1c6aa734599b8b369cd7a625b20081af358f6204ff515f6f4116eb440de9c4e0c49f10798eeb0df26c95dd05d5e0d9ddc5786ab1a8a8abefe92929b4
+  languageName: node
+  linkType: hard
+
 "for-each@npm:^0.3.3":
   version: 0.3.3
   resolution: "for-each@npm:0.3.3"
@@ -26095,6 +26160,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"install@npm:^0.13.0":
+  version: 0.13.0
+  resolution: "install@npm:0.13.0"
+  checksum: 587789343de46cfdac4d6f153ff1137f9620c80cbe7c97460ba549b79c55b97c47362ef1942cf977d5ddb7eedf2319104aa4c899f12e10788cb38b0e062b7a32
+  languageName: node
+  linkType: hard
+
 "int64-buffer@npm:^0.1.9":
   version: 0.1.10
   resolution: "int64-buffer@npm:0.1.10"
@@ -27044,6 +27116,15 @@ __metadata:
     node-fetch: "npm:^2.6.1"
     unfetch: "npm:^4.2.0"
   checksum: 4e760d9a3f94b42c59fe5c6b53202469cecd864875dcac927668b1f43eb57698422a0086fadde47f7815752c4f4e30ecf1ce9a0eb09c44a871a2484dbc580b39
+  languageName: node
+  linkType: hard
+
+"isomorphic-ws@npm:^4.0.1":
+  version: 4.0.1
+  resolution: "isomorphic-ws@npm:4.0.1"
+  peerDependencies:
+    ws: "*"
+  checksum: d7190eadefdc28bdb93d67b5f0c603385aaf87724fa2974abb382ac1ec9756ed2cfb27065cbe76122879c2d452e2982bc4314317f3d6c737ddda6c047328771a
   languageName: node
   linkType: hard
 
@@ -44508,6 +44589,21 @@ __metadata:
     imurmurhash: "npm:^0.1.4"
     signal-exit: "npm:^4.0.1"
   checksum: 648efddba54d478d0e4330ab6f239976df3b9752b123db5dc9405d9b5af768fa9d70ce60c52fdbe61d1200d24350bc4fbcbaf09288496c2be050de126bd95b7e
+  languageName: node
+  linkType: hard
+
+"ws@npm:*":
+  version: 8.16.0
+  resolution: "ws@npm:8.16.0"
+  peerDependencies:
+    bufferutil: ^4.0.1
+    utf-8-validate: ">=5.0.2"
+  peerDependenciesMeta:
+    bufferutil:
+      optional: true
+    utf-8-validate:
+      optional: true
+  checksum: 7c511c59e979bd37b63c3aea4a8e4d4163204f00bd5633c053b05ed67835481995f61a523b0ad2b603566f9a89b34cb4965cb9fab9649fbfebd8f740cea57f17
   languageName: node
   linkType: hard
 

@@ -18,6 +18,7 @@ import { auth0UserMock } from './userMock';
 import { getNewsDefault } from './newsMock';
 import { getActionMock, getActionsMock } from './action';
 import { v4 as uuidv4 } from 'uuid';
+import { getDocumentsListTableMock } from "./componentMock";
 
 // Even if this uses vite as a bundler, it still uses the NODE_ENV variable
 export const getApiUrl = (path: string) => {
@@ -255,5 +256,9 @@ export const handlers = [
       return res(ctx.json(getSurveysMock()));
     },
   ),
+
+  rest.get(getApiUrl('/components/documents_list_table'), (req, res, ctx) => {
+    return res(ctx.json(getDocumentsListTableMock()));
+  }),
 
 ];
