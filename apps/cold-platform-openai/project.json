@@ -31,7 +31,9 @@
       },
       "configurations": {
         "development": {
-          "buildTarget": "cold-platform-openai:build:development"
+          "buildTarget": "cold-platform-openai:build:development",
+          "runtimeArgs": ["--trace-warnings"],
+          "port": 9002
         },
         "production": {
           "buildTarget": "cold-platform-openai:build:production"
