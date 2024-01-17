@@ -284,6 +284,7 @@ model organizations {
   locations           organization_locations[]
   survey_data         survey_data[]
   utility_bills       utility_bills[]
+  organization_files  organization_files[]
 }
 
 model organization_locations {
@@ -340,6 +341,7 @@ model integrations {
   organization          organizations           @relation(fields: [organization_id], references: [id])
   service_definition    service_definitions     @relation(fields: [service_definition_id], references: [id], onDelete: Cascade)
   unility_bills         utility_bills[]
+  files                 organization_files[]
 
   @@unique([service_definition_id, location_id], name: "integrationKey")
 }
@@ -419,6 +421,32 @@ model utility_bills {
   integration     integrations           @relation(fields: [integration_id], references: [id], onDelete: Cascade)
   location        organization_locations @relation(fields: [location_id], references: [id], onDelete: Cascade)
   organization    organizations          @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+}
+
+model organization_files {
+  id                  String        @id @default(cuid())
+  bucket              String?
+  key                 String?
+  original_name       String
+  organization_id     String
+  integration_id      String?
+  openai_assistant_id String?
+  mimetype            String?
+  size                Int?
+  acl                 String?
+  versionId           String?
+  fieldname           String?
+  encoding            String?
+  contentType         String?
+  location            String?
+  openai_file_id      String?       @unique
+  created_at          DateTime      @default(now())
+  updated_at          DateTime      @updatedAt
+  integration         integrations? @relation(fields: [integration_id], references: [id], onDelete: Cascade)
+  organization        organizations @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+
+  @@unique([organization_id, original_name], name: "fileNameKey")
+  @@unique([organization_id, bucket, key], name: "s3Key")
 }
 
 enum integration_service_type {

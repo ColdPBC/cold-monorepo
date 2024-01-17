@@ -1,9 +1,16 @@
-# [1.84.0-COLD-459.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.83.8...v1.84.0-COLD-459.1) (2024-01-16)
+## [1.83.10](https://github.com/ColdPBC/cold-monorepo/compare/v1.83.9...v1.83.10) (2024-01-17)
 
 
-### Features
+### Bug Fixes
 
-* Upload initial code ([4d8e276](https://github.com/ColdPBC/cold-monorepo/commit/4d8e276e92f89ed4e00621f73bf8f67103231dc4))
+* change env vars ([b2760b5](https://github.com/ColdPBC/cold-monorepo/commit/b2760b5509a0b73e302143969df757421c870f0d))
+
+## [1.83.9](https://github.com/ColdPBC/cold-monorepo/compare/v1.83.8...v1.83.9) (2024-01-16)
+
+
+### Bug Fixes
+
+* add file handling for openAI ([a11f663](https://github.com/ColdPBC/cold-monorepo/commit/a11f6632b6d93df83d46503b333dce9eb36c4ce2))
 
 ## [1.83.8](https://github.com/ColdPBC/cold-monorepo/compare/v1.83.7...v1.83.8) (2024-01-12)
 

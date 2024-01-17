@@ -1,22 +1,23 @@
 {
   "name": "cold-platform-openai",
   "label": "OpenAI",
-  "service_type": "platform",
   "definition": {
+    "service_type": "platform",
     "logo_url": "./assets/black_logo.png",
     "platform_url": "https://www.open.ai",
+    "show": true,
+    "locations": false,
     "rabbitMQ": {
-      "rpc": {
+      "rpcOptions": {
         "queue": "cold.platform.openai",
         "routing_key": "cold.platform.openai.rpc",
         "exchange": "amq.direct"
       },
-      "subscribe": {
+      "publishOptions": {
         "queue": "cold.platform.openai",
         "routing_key": "cold.platform.openai",
         "exchange": "amq.direct"
       }
     }
-  },
-  "version": "1.83.5"
+  }
 }
