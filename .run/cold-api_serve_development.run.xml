@@ -15,9 +15,9 @@
       <env name="AUTH0_ORG_ID" value="org_VWv3Al9pLEI4CaOH" />
       <env name="AUTH0_TOKEN_URL" value="https://dev-6qt527e13qyo4ls6.us.auth0.com/oauth/token" />
       <env name="AUTH0_UI_CLIENT_ID" value="7AtWz1WzXMty9QN38zrkfUj2JqxqpiFI" />
-      <env name="AWS_ACCESS_KEY_ID" value="AKIAVO7VVQFUDRWH6QWL" />
+      <env name="COLD_AWS_ACCESS_KEY_ID" value="AKIAVO7VVQFUDRWH6QWL" />
       <env name="AWS_REGION" value="us-east-1" />
-      <env name="AWS_SECRET_ACCESS_KEY" value="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" />
+      <env name="COLD_AWS_SECRET_ACCESS_KEY" value="jf8fLnXD7Ou4BBJ+YArFUlfEvZJR9srOC7VBNU7J" />
       <env name="DATABASE_URL" value="postgres://postgres:postgres@localhost:5432/colddb" />
       <env name="DD_SERVICE" value="cold-api" />
       <env name="LD_SDK_KEY" value="sdk-1d8c0508-63b9-4396-aceb-a3cd13ec16b2" />
