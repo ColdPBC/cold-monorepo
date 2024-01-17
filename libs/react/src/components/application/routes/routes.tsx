@@ -1,4 +1,4 @@
-import { DashboardLayout } from '../../pages';
+import { DashboardLayout, DocumentUpload } from "../../pages";
 import { Route, Routes } from 'react-router-dom';
 import { Settings } from '../../pages';
 import { Home } from '../../pages';
@@ -30,6 +30,10 @@ export const ColdRoutes = () => {
               <Route path={'/journey'} element={<Journey />} />
               <Route path={'/settings'} element={<Settings />} />
               {ldFlags.showActions261 && ActionRoutes()}
+              <Route
+                path="/documents"
+                element={<DocumentUpload />}
+              />
               <Route
                 path="*"
                 element={<div className={'text-tc-primary'}>Pending...</div>}

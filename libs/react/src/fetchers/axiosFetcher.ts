@@ -7,14 +7,18 @@ const baseURL = resolveAPIUrl();
 
 /**
  * Axios Fetcher function
- * @param params - Array of strings that represent the url path, method, and data to be passed to the fetcher
+ * @param params - Array of strings that represent the url path, method, data and headers to be passed to the fetcher
  */
-export const axiosFetcher = (params: Array<string>) => {
+export const axiosFetcher = (params: Array<any>) => {
   try {
+    // get headers from the params, if they exist
+    const headers = params[3] ? JSON.parse(params[3]) : {};
+
     const config = {
       baseURL: baseURL,
       headers: {
         'Content-Type': 'application/json',
+        ...headers,
       },
       method: 'GET',
     };
