@@ -1,3 +1,10 @@
+# [1.84.0-COLD-459.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.84.0-COLD-459.2...v1.84.0-COLD-459.3) (2024-01-17)
+
+
+### Features
+
+* create upload page and mqtt to wss connection handling ([9e6d572](https://github.com/ColdPBC/cold-monorepo/commit/9e6d57214009b09e24a2c13ed46fef4662ccfcb5))
+
 # [1.84.0-COLD-459.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.84.0-COLD-459.1...v1.84.0-COLD-459.2) (2024-01-17)
 
 
