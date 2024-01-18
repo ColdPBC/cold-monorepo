@@ -261,30 +261,31 @@ model category_data {
 /// @actions
 model organizations {
   /// @zod.custom.use(z.string().uuid())
-  id                  String                   @id
-  name                String                   @unique
-  enabled_connections Json
-  display_name        String
-  branding            Json?
-  phone               String?
+  id                       String                     @id
+  name                     String                     @unique
+  enabled_connections      Json
+  display_name             String
+  branding                 Json?
+  phone                    String?
   /// @zod.custom.use(z.string().email())
-  email               String?
+  email                    String?
   /// @DtoUpdateHidden
   /// @zod.custom.use(z.date().optional())
-  created_at          DateTime                 @default(now())
+  created_at               DateTime                   @default(now())
   /// @DtoUpdateHidden
   /// @DtoCreateHidden
   /// @DtoReadOnly
   /// @zod.custom.use(z.date().optional())
-  updated_at          DateTime                 @updatedAt
-  isTest              Boolean                  @default(false)
-  actions             actions[]
-  category_data       category_data[]
-  integrations        integrations[]
-  locations           organization_locations[]
-  survey_data         survey_data[]
-  utility_bills       utility_bills[]
-  organization_files  organization_files[]
+  updated_at               DateTime                   @updatedAt
+  isTest                   Boolean                    @default(false)
+  actions                  actions[]
+  category_data            category_data[]
+  integrations             integrations[]
+  locations                organization_locations[]
+  survey_data              survey_data[]
+  utility_bills            utility_bills[]
+  organization_files       organization_files[]
+  organization_compliances organization_compliances[]
 }
 
 model organization_locations {
@@ -449,6 +450,26 @@ model organization_files {
   @@unique([organization_id, bucket, key], name: "s3Key")
 }
 
+model compliance_definitions {
+  id                       String                     @id @default(cuid())
+  name                     String                     @unique
+  logo_url                 String
+  surveys                  Json
+  created_at               DateTime                   @default(now())
+  updated_at               DateTime                   @updatedAt
+  organization_compliances organization_compliances[]
+}
+
+model organization_compliances {
+  id                    String                 @id @default(cuid())
+  organization_id       String
+  compliance_id         String
+  created_at            DateTime               @default(now())
+  updated_at            DateTime               @updatedAt
+  organization          organizations          @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+  compliance_definition compliance_definitions @relation(fields: [compliance_id], references: [id], onDelete: Cascade)
+}
+
 enum integration_service_type {
   provider
   platform
@@ -461,6 +482,7 @@ enum survey_types {
   ENRICHMENT
   SOLUTION
   TEST
+  COMPLIANCE
 }
 
 enum component_definition_types {

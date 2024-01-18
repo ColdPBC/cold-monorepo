@@ -7,6 +7,44 @@
     "platform_url": "https://www.open.ai",
     "show": true,
     "locations": false,
+    "mqtt": {
+      "publish_schema": {
+        "$schema": "http://json-schema.org/draft-04/schema#",
+        "type": "object",
+        "properties": {
+          "event": {
+            "type": "string"
+          },
+          "payload": {
+            "type": "object",
+            "properties": {
+              "organization_id": {
+                "type": "string"
+              },
+              "compliance_id": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "organization_id",
+              "compliance_id"
+            ]
+          },
+          "swr_key": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "event",
+          "payload",
+          "swr_key"
+        ]
+      },
+      "publish_options": {
+        "topic": "cold/platform/openai",
+        "qos": 0
+      }
+    },
     "rabbitMQ": {
       "rpcOptions": {
         "queue": "cold.platform.openai",
