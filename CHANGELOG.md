@@ -1,25 +1,8 @@
-# [1.84.0-COLD-459.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.84.0-COLD-459.3...v1.84.0-COLD-459.4) (2024-01-18)
+## [1.83.11](https://github.com/ColdPBC/cold-monorepo/compare/v1.83.10...v1.83.11) (2024-01-17)
 
 
 ### Bug Fixes
 
-* mqttProvider ([98fd6ff](https://github.com/ColdPBC/cold-monorepo/commit/98fd6ff45982b762d24f22c5a1fd412c4e28aee5))
-
-# [1.84.0-COLD-459.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.84.0-COLD-459.2...v1.84.0-COLD-459.3) (2024-01-17)
-
-
-### Features
-
-* create upload page and mqtt to wss connection handling ([9e6d572](https://github.com/ColdPBC/cold-monorepo/commit/9e6d57214009b09e24a2c13ed46fef4662ccfcb5))
-
-# [1.84.0-COLD-459.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.84.0-COLD-459.1...v1.84.0-COLD-459.2) (2024-01-17)
-
-
-### Bug Fixes
-
-* add compliance survey type ([22159f0](https://github.com/ColdPBC/cold-monorepo/commit/22159f037dcf14d0d20435684eee2fff2ecfb986))
-* add file handling for openAI ([a11f663](https://github.com/ColdPBC/cold-monorepo/commit/a11f6632b6d93df83d46503b333dce9eb36c4ce2))
-* change env vars ([b2760b5](https://github.com/ColdPBC/cold-monorepo/commit/b2760b5509a0b73e302143969df757421c870f0d))
 * fix cert issue ([bc4bc1b](https://github.com/ColdPBC/cold-monorepo/commit/bc4bc1b0871c9afe37c899fc8f21ae01e3d041eb))
 
 ## [1.83.10](https://github.com/ColdPBC/cold-monorepo/compare/v1.83.9...v1.83.10) (2024-01-17)
