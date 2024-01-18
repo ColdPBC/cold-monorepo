@@ -3,9 +3,12 @@ import { YesNo } from '../yesNo/yesNo';
 import { Input } from '../../atoms/input/input';
 import { PercentSlider } from '../percentSlider/percentSlider';
 import { SelectOption } from '../selectOption/selectOption';
-import { InputTypes } from "@coldpbc/enums";
+import { InputTypes } from '@coldpbc/enums';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application';
+import { Card } from '../card';
+import { Markdown } from '../markdown';
+import { isUndefined } from 'lodash';
 
 export interface SurveyInputProps {
   input_key: string;
@@ -17,10 +20,14 @@ export interface SurveyInputProps {
   value: any | null;
   onFieldUpdated: (name: string, value: any) => void;
   isAdditional?: boolean;
+  ai_value?: any;
+  ai_attempted?: boolean;
+  ai_justification?: string;
 }
 
 const _SurveyInput = (props: SurveyInputProps) => {
-  const { input_key, prompt, options, tooltip, component, placeholder, onFieldUpdated, value, isAdditional} = props;
+  const { input_key, prompt, options, tooltip, component, placeholder, onFieldUpdated, value, isAdditional, ai_value, ai_attempted, ai_justification } = props;
+  const displayValue = value !== undefined ? value : ai_value;
 
   const inputComponent = () => {
     switch (component) {
@@ -30,7 +37,7 @@ const _SurveyInput = (props: SurveyInputProps) => {
             onChange={value => {
               onFieldUpdated(input_key, value);
             }}
-            value={value}
+            value={displayValue}
           />
         );
       case 'text':
@@ -39,7 +46,7 @@ const _SurveyInput = (props: SurveyInputProps) => {
             type={InputTypes.Text}
             input_props={{
               name: input_key,
-              value: value === null ? undefined : value,
+              value: displayValue === null ? undefined : displayValue,
               onChange: e => {
                 if (e.target.value === '') {
                   onFieldUpdated(input_key, null);
@@ -75,14 +82,14 @@ const _SurveyInput = (props: SurveyInputProps) => {
               type={InputTypes.Number}
               input_props={{
                 name: input_key,
-                value: value,
+                value: displayValue,
                 onValueChange: value => {
                   onFieldUpdated(input_key, value);
                 },
               }}
               numeric_input_props={{
                 name: input_key,
-                value: value === null ? undefined : value,
+                value: displayValue === null ? undefined : displayValue,
                 thousandSeparator: ',',
                 onValueChange: values => {
                   if (values.floatValue === undefined) {
@@ -105,14 +112,14 @@ const _SurveyInput = (props: SurveyInputProps) => {
             type={InputTypes.Number}
             input_props={{
               name: input_key,
-              value: value === null ? undefined : value,
+              value: displayValue === null ? undefined : displayValue,
               onValueChange: value => {
                 onFieldUpdated(input_key, value);
               },
             }}
             numeric_input_props={{
               name: input_key,
-              value: value === null ? undefined : value,
+              value: displayValue === null ? undefined : displayValue,
               thousandSeparator: ',',
               onValueChange: values => {
                 if (values.floatValue === undefined) {
@@ -131,7 +138,7 @@ const _SurveyInput = (props: SurveyInputProps) => {
       case 'percent_slider':
         return (
           <PercentSlider
-            value={value}
+            value={displayValue}
             onChange={value => {
               onFieldUpdated(input_key, value);
             }}
@@ -146,7 +153,7 @@ const _SurveyInput = (props: SurveyInputProps) => {
             onChange={value => {
               onFieldUpdated(input_key, value);
             }}
-            value={value}
+            value={displayValue}
           />
         );
       case 'select':
@@ -156,7 +163,7 @@ const _SurveyInput = (props: SurveyInputProps) => {
             onChange={value => {
               onFieldUpdated(input_key, value);
             }}
-            value={value}
+            value={displayValue}
           />
         );
       case 'textarea':
@@ -165,7 +172,7 @@ const _SurveyInput = (props: SurveyInputProps) => {
             type={InputTypes.TextArea}
             input_props={{
               name: input_key,
-              value: value === null ? undefined : value,
+              value: displayValue === null ? undefined : displayValue,
               onValueChange: value => {
                 onFieldUpdated(input_key, value);
               },
@@ -183,7 +190,7 @@ const _SurveyInput = (props: SurveyInputProps) => {
                 }
               },
               name: input_key,
-              value: value === null ? undefined : value,
+              value: displayValue === null ? undefined : displayValue,
               className:
                 'text-sm not-italic text-tc-primary font-medium bg-transparent w-full rounded-lg py-6 px-4 border border-bgc-accent focus:border focus:border-bgc-accent focus:ring-0 resize-none',
               placeholder: placeholder,
@@ -198,19 +205,33 @@ const _SurveyInput = (props: SurveyInputProps) => {
   };
 
   const getPrompt = () => {
-    let className = "text-left text-tc-primary";
-    if(isAdditional){
-      className += " text-h4";
+    let className = 'text-left text-tc-primary';
+    if (isAdditional) {
+      className += ' text-h4';
     } else {
-      className += " text-h3";
+      className += ' text-h3';
     }
     return <div className={className}>{prompt}</div>;
-  }
+  };
+
+  const getAISource = () => {
+    if (ai_attempted && !isUndefined(ai_value) && ai_justification && isUndefined(value)) {
+      return (
+        <Card glow={false} className={'border-[1px] border-purple-300 w-full bg-bgc-elevated'}>
+          <span>The answer below was predetermined based on the following information. Please review it and adjust to ensure accuracy:</span>
+          <Markdown markdown={ai_justification} />
+        </Card>
+      );
+    } else {
+      return null;
+    }
+  };
 
   return (
     <div className="w-full space-y-6">
       {getPrompt()}
       {tooltip && <div className="text-left text-sm not-italic font-medium text-tc-primary">{tooltip}</div>}
+      {getAISource()}
       <div className="w-full justify-center">{inputComponent()}</div>
     </div>
   );
