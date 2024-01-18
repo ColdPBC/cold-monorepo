@@ -37,7 +37,8 @@
       "configurations": {
         "development": {
           "buildTarget": "cold-api:build:development",
-          "runtimeArgs": ["--trace-warnings"]
+          "runtimeArgs": ["--trace-warnings"],
+          "port": 9001
         },
         "production": {
           "buildTarget": "cold-api:build:production"

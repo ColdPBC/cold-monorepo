@@ -1,3 +1,46 @@
+## [1.83.13](https://github.com/ColdPBC/cold-monorepo/compare/v1.83.12...v1.83.13) (2024-01-18)
+
+
+### Bug Fixes
+
+* typo in package.json ([1fc1f1b](https://github.com/ColdPBC/cold-monorepo/commit/1fc1f1b637ebe69fdb751451327b8c208eef03cb))
+
+## [1.83.12](https://github.com/ColdPBC/cold-monorepo/compare/v1.83.11...v1.83.12) (2024-01-18)
+
+
+### Bug Fixes
+
+* add compliances ([40f53f8](https://github.com/ColdPBC/cold-monorepo/commit/40f53f81e053b62d93099c6807e38a985828462d))
+* add compliances ([52e17e7](https://github.com/ColdPBC/cold-monorepo/commit/52e17e728a1972eac4ba2ab7da243feae42421af))
+
+## [1.83.11](https://github.com/ColdPBC/cold-monorepo/compare/v1.83.10...v1.83.11) (2024-01-17)
+
+
+### Bug Fixes
+
+* fix cert issue ([bc4bc1b](https://github.com/ColdPBC/cold-monorepo/commit/bc4bc1b0871c9afe37c899fc8f21ae01e3d041eb))
+
+## [1.83.10](https://github.com/ColdPBC/cold-monorepo/compare/v1.83.9...v1.83.10) (2024-01-17)
+
+
+### Bug Fixes
+
+* change env vars ([b2760b5](https://github.com/ColdPBC/cold-monorepo/commit/b2760b5509a0b73e302143969df757421c870f0d))
+
+## [1.83.9](https://github.com/ColdPBC/cold-monorepo/compare/v1.83.8...v1.83.9) (2024-01-16)
+
+
+### Bug Fixes
+
+* add file handling for openAI ([a11f663](https://github.com/ColdPBC/cold-monorepo/commit/a11f6632b6d93df83d46503b333dce9eb36c4ce2))
+
+## [1.83.8](https://github.com/ColdPBC/cold-monorepo/compare/v1.83.7...v1.83.8) (2024-01-12)
+
+
+### Bug Fixes
+
+* add onQueueFailed subscription ([7a5e904](https://github.com/ColdPBC/cold-monorepo/commit/7a5e9041eb31c8941c82e3426a945c05c787ff84))
+
 ## [1.83.7](https://github.com/ColdPBC/cold-monorepo/compare/v1.83.6...v1.83.7) (2024-01-11)
 
 

@@ -1,9 +1,11 @@
 {
   "name": "cold-platform-bayou",
   "label": "Bayou Energy",
-  "service_type": "platform",
-  "version": "1.83.5",
   "definition": {
+    "service_type": "platform",
+    "version": "1.83.5",
+    "show": true,
+    "locations": true,
     "rabbitMQ": {
       "rpcOptions": {
         "queue": "cold.platform.bayou",
@@ -22,7 +24,7 @@
       "description": "Get Bayou’s API integrated in minutes for many utilities. And get your utility account connected in one click.",
       "helptext": "",
       "flags": {
-        "embedable": false,
+        "embedable": true,
         "iframe_url_property": "onboarding_link",
         "iframe_url_token": "onboarding_token"
       }
