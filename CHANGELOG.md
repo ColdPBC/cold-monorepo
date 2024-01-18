@@ -1,3 +1,10 @@
+# [1.84.0-COLD-459.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.84.0-COLD-459.3...v1.84.0-COLD-459.4) (2024-01-18)
+
+
+### Bug Fixes
+
+* mqttProvider ([98fd6ff](https://github.com/ColdPBC/cold-monorepo/commit/98fd6ff45982b762d24f22c5a1fd412c4e28aee5))
+
 # [1.84.0-COLD-459.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.84.0-COLD-459.2...v1.84.0-COLD-459.3) (2024-01-17)
 
 
