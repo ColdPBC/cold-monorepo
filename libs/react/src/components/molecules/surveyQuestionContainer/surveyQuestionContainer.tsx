@@ -10,6 +10,7 @@ import { axiosFetcher } from '@coldpbc/fetchers';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application';
 import { useAuth0Wrapper } from '@coldpbc/hooks';
+import { isDefined } from 'class-validator';
 
 export interface SurveyQuestionContainerProps {
   activeKey: SurveyActiveKeyType;
@@ -63,8 +64,8 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
       if (submit) {
         update.skipped = followUp.value === null || followUp.value === undefined;
       }
-      if(followUp.additional_context) {
-        if(additional) {
+      if (followUp.additional_context) {
+        if (additional) {
           newSection = {
             ...section,
             follow_up: {
@@ -81,7 +82,7 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
         } else {
           const value = update.value;
           const conditionMet = ifAdditionalContextConditionMet(value, followUp.additional_context);
-          if(!conditionMet) {
+          if (!conditionMet) {
             newSection = {
               ...section,
               follow_up: {
@@ -126,8 +127,8 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
       if (submit) {
         update.skipped = section.value === null || section.value === undefined;
       }
-      if(section.additional_context){
-        if(additional) {
+      if (section.additional_context) {
+        if (additional) {
           newSection = {
             ...section,
             additional_context: {
@@ -138,7 +139,7 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
         } else {
           const value = update.value;
           const conditionMet = ifAdditionalContextConditionMet(value, section.additional_context);
-          if(!conditionMet) {
+          if (!conditionMet) {
             newSection = {
               ...section,
               ...update,
@@ -201,13 +202,13 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
             onFieldUpdated={(name, value) => {
               onFieldUpdated(key.value, value, true);
             }}
-            value={followUp.additional_context.value === undefined ? null : followUp.additional_context.value}
+            value={followUp.additional_context.value}
             isAdditional={true}
           />
         );
       }
       if (followUp) {
-        return <SurveyInput {...followUp} input_key={key.value} onFieldUpdated={onFieldUpdated} value={followUp.value === undefined ? null : followUp.value} />;
+        return <SurveyInput {...followUp} input_key={key.value} onFieldUpdated={onFieldUpdated} value={followUp.value} />;
       }
     } else {
       const section = sections[key.value];
@@ -221,7 +222,7 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
               onFieldUpdated={(name, value) => {
                 onFieldUpdated(key.value, value, true);
               }}
-              value={section.additional_context.value === undefined ? null : section.additional_context.value}
+              value={section.additional_context.value}
               isAdditional={true}
             />
           );
@@ -235,7 +236,7 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
             options={[]}
             tooltip={''}
             placeholder={''}
-            value={section.value === undefined ? null : section.value}
+            value={section.value}
           />
         );
       }
@@ -313,18 +314,54 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
       if (
         additionalContextQuestion &&
         sections[activeSectionKey].follow_up[activeFollowUpKey].additional_context &&
-        (sections[activeSectionKey].follow_up[activeFollowUpKey].additional_context?.value === undefined
-          || sections[activeSectionKey].follow_up[activeFollowUpKey].additional_context?.value === null)
+        (sections[activeSectionKey].follow_up[activeFollowUpKey].additional_context?.value === undefined ||
+          sections[activeSectionKey].follow_up[activeFollowUpKey].additional_context?.value === null)
       ) {
         buttonProps.disabled = true;
       }
-      if (activeSectionIndex === Object.keys(sections).length - 1 && activeFollowUpIndex === Object.keys(sections[activeSectionKey].follow_up).length - 1) {
-        buttonProps.label = 'Submit';
+
+      if (sections[activeSectionKey].follow_up[activeFollowUpKey].value === undefined && sections[activeSectionKey].follow_up[activeFollowUpKey].ai_value !== undefined) {
+        buttonProps.label = 'Confirm';
+        if (activeSectionIndex === Object.keys(sections).length - 1 && activeFollowUpIndex === Object.keys(sections[activeSectionKey].follow_up).length - 1) {
+          buttonProps.onClick = () => {
+            onSubmitButtonClicked();
+          };
+        } else {
+          buttonProps.onClick = () => {
+            onNextButtonClicked();
+          };
+        }
+      } else {
+        if (activeSectionIndex === Object.keys(sections).length - 1 && activeFollowUpIndex === Object.keys(sections[activeSectionKey].follow_up).length - 1) {
+          buttonProps.label = 'Submit';
+          buttonProps.onClick = () => {
+            onSubmitButtonClicked();
+          };
+        } else {
+          if (sections[activeSectionKey].follow_up[activeFollowUpKey].value === null || sections[activeSectionKey].follow_up[activeFollowUpKey].value === undefined) {
+            buttonProps.label = 'Skip';
+            buttonProps.onClick = () => {
+              onSkipButtonClicked();
+            };
+          } else {
+            buttonProps.label = 'Continue';
+            buttonProps.onClick = () => {
+              onNextButtonClicked();
+            };
+          }
+        }
+      }
+    } else {
+      if (additionalContextQuestion && sections[activeSectionKey].additional_context && sections[activeSectionKey].additional_context?.value === undefined) {
+        buttonProps.disabled = true;
+      }
+      if (sections[activeSectionKey].value === undefined && sections[activeSectionKey].ai_value !== undefined) {
+        buttonProps.label = 'Confirm';
         buttonProps.onClick = () => {
-          onSubmitButtonClicked();
+          onNextButtonClicked();
         };
       } else {
-        if (sections[activeSectionKey].follow_up[activeFollowUpKey].value === null || sections[activeSectionKey].follow_up[activeFollowUpKey].value === undefined) {
+        if (sections[activeSectionKey].value === null || sections[activeSectionKey].value === undefined) {
           buttonProps.label = 'Skip';
           buttonProps.onClick = () => {
             onSkipButtonClicked();
@@ -335,21 +372,6 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
             onNextButtonClicked();
           };
         }
-      }
-    } else {
-      if (additionalContextQuestion && sections[activeSectionKey].additional_context && sections[activeSectionKey].additional_context?.value === undefined) {
-        buttonProps.disabled = true;
-      }
-      if (sections[activeSectionKey].value === null || sections[activeSectionKey].value === undefined) {
-        buttonProps.label = 'Skip';
-        buttonProps.onClick = () => {
-          onSkipButtonClicked();
-        };
-      } else {
-        buttonProps.label = 'Continue';
-        buttonProps.onClick = () => {
-          onNextButtonClicked();
-        };
       }
     }
 
@@ -564,7 +586,7 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
       default:
         return false;
     }
-  }
+  };
 
   const getQuestionValue = (key: SurveyActiveKeyType) => {
     const activeSectionIndex = getSectionIndex(sections, activeKey);
@@ -576,7 +598,11 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
       const followUpKey = Object.keys(sections[activeSectionKey].follow_up)[followUpIndex];
       const followUp = sections[activeSectionKey].follow_up[followUpKey];
       if (followUp) {
-        return followUp.value;
+        if (followUp.ai_value !== undefined && (followUp.value === null || followUp.value === undefined)) {
+          return followUp.ai_value;
+        } else {
+          return followUp.value;
+        }
       }
     } else {
       const section = sections[key.value];
@@ -584,7 +610,7 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
         return section.value;
       }
     }
-  }
+  };
 
   const questions = Object.keys(sections)
     .map(sectionKey => {
