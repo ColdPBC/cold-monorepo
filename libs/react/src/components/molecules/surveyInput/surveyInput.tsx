@@ -218,6 +218,7 @@ const _SurveyInput = (props: SurveyInputProps) => {
     if (ai_attempted && !isUndefined(ai_value) && ai_justification && isUndefined(value)) {
       return (
         <Card glow={false} className={'border-[1px] border-purple-300 w-full bg-bgc-elevated'}>
+          <span>The answer below was predetermined based on the following information. Please review it and adjust to ensure accuracy:</span>
           <Markdown markdown={ai_justification} />
         </Card>
       );
