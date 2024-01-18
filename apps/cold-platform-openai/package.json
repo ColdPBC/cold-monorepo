@@ -21,7 +21,7 @@
               "organization_id": {
                 "type": "string"
               },
-              "compliance_id": {public
+              "compliance_id": {
                 "type": "string"
               }
             },
