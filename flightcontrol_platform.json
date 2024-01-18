@@ -18,6 +18,7 @@
         {
           "id": "cold-platform-openai-production",
           "name": "cold-platform-openai",
+          "domain": "openai.coldclimate.com",
           "cpu": 1,
           "port": 7003,
           "type": "fargate",
@@ -309,6 +310,7 @@
         {
           "id": "cold-platform-openai-staging",
           "name": "cold-platform-openai",
+          "domain": "openai.coldclimate.online",
           "cpu": 1,
           "port": 7003,
           "type": "fargate",
