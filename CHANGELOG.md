@@ -1,3 +1,10 @@
+# [1.84.0-COLD-462.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.83.11...v1.84.0-COLD-462.1) (2024-01-18)
+
+
+### Features
+
+* Create compliance overview and detail page. ([a057afc](https://github.com/ColdPBC/cold-monorepo/commit/a057afcc4800dadfd484ef43dfc44cf4c59a274c))
+
 ## [1.83.11](https://github.com/ColdPBC/cold-monorepo/compare/v1.83.10...v1.83.11) (2024-01-17)
 
 
