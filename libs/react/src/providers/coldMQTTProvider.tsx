@@ -1,8 +1,9 @@
-import React, { PropsWithChildren, useContext, useEffect } from 'react';
+import React, { PropsWithChildren, useEffect } from 'react';
 import mqtt from 'mqtt';
-import { useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
+import { useAuth0Wrapper } from '@coldpbc/hooks';
 
 export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
+  // const {Mqtt5Client} = mqtt5;
   const { user, orgId, getAccessTokenSilently, isAuthenticated } = useAuth0Wrapper();
 
   const [connectionStatus, setConnectionStatus] = React.useState(false);
@@ -26,56 +27,45 @@ export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
       const org_id = orgId;
       const token = await getToken();
       const env = import.meta.env.VITE_DD_ENV;
-      const url = `wss://a2r4jtij2021gz-ats.iot.us-east-1.amazonaws.com?x-auth0-domain=${auth0_domain}&x-amz-customauthorizer-name=${authorizer}&x-cold-org=${org_id}&token=${token}&mqtt-client-id=${Math.floor(
-        Math.random() * 1000,
-      )}&x-cold-env=${env}`;
+      const url = `wss://a2r4jtij2021gz-ats.iot.us-east-1.amazonaws.com:443/mqtt?x-auth0-domain=${auth0_domain}&x-amz-customauthorizer-name=${authorizer}&x-cold-org=${org_id}&x-cold-env=${env}&token=${token}`;
       const account_id = user?.email;
-      const subscription_topic = `${env}/ui/${org_id}/${account_id}/#`;
-      const publish_topic = `${env}/ui/${org_id}/${account_id}/test`;
+      const subscription_topic = `ui/${env}/${org_id}/${account_id}`;
+      const publish_topic = `platform/openai/${env}/${org_id}/${account_id}`;
 
-      if (user && orgId && account_id && isAuthenticated) {
-        const options = {
-          clean: true,
-          connectTimeout: 4000,
-        };
-        const client = mqtt.connect(url, options);
-
-        client.on('error', error => {
-          console.log(`Error: ${error}`);
-        });
+      if (user && orgId) {
+        const client = mqtt.connect(url, { clientId: `${org_id}-${Math.floor(Math.random() * 1000)}` });
 
         client.on('connect', () => {
           console.log('connected to IOT');
-          setConnectionStatus(true);
-          client.subscribe(subscription_topic, error => {
-            if (error) {
-              console.log(`error subscribing to ${subscription_topic}: ` + error);
+
+          client.subscribe(subscription_topic, { qos: 0, nl: false }, (err, grant) => {
+            if (!err) {
+              setMessages(messages.concat([`Subscription: ${subscription_topic}`]));
+              client.publish(publish_topic, JSON.stringify(grant));
             } else {
-              console.log(`topic: ${subscription_topic}`);
-            }
-          });
-          client.publish(publish_topic, 'Hello mqtt', error => {
-            if (error) {
-              console.log(`error publishing to ${publish_topic}: ` + error);
-            } else {
-              console.log(`publishing to: ${publish_topic}`);
+              console.log(err);
             }
           });
         });
+
+        client.on('message', (topic, payload, packet) => {
+          console.log(payload.toString());
+          setMessages(messages.concat(payload.toString()));
+        });
+
+        // client.start();
 
         client.on('close', () => {
-          console.log('Closing');
           setConnectionStatus(false);
-        });
-
-        client.on('message', packet => {
-          console.log('Message ' + packet);
+          console.log('disconnected');
         });
       }
     };
 
     connectToIOT();
   }, [user, orgId, getAccessTokenSilently, isAuthenticated]);
+
+  console.log(messages);
 
   return children;
 };
