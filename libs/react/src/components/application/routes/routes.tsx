@@ -11,6 +11,7 @@ import { useFlags } from 'launchdarkly-react-client-sdk';
 import { ActionRoutes } from './actionRoutes';
 import { Signup } from '../authentication';
 import { ProtectedRoute } from '../authentication';
+import { ComplianceRoutes } from './complianceRoutes';
 
 export const ColdRoutes = () => {
   const ldFlags = useFlags();
@@ -30,10 +31,9 @@ export const ColdRoutes = () => {
               <Route path={'/journey'} element={<Journey />} />
               <Route path={'/settings'} element={<Settings />} />
               {ldFlags.showActions261 && ActionRoutes()}
-              <Route
-                path="*"
-                element={<div className={'text-tc-primary'}>Pending...</div>}
-              />
+              {ComplianceRoutes()}
+              <Route path="/compliance" element={<div className={'text-tc-primary'}>Pending...</div>} />
+              <Route path="*" element={<div className={'text-tc-primary'}>Pending...</div>} />
             </Route>
           </Route>
         </Route>

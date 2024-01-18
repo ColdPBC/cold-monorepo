@@ -1,11 +1,5 @@
 import { rest } from 'msw';
-import {
-  getActionAllStepsComplete,
-  getActionMock,
-  getActionMockNoResources,
-  getActionNoDueDateSet,
-  getActionsMock,
-} from './action';
+import { getActionAllStepsComplete, getActionMock, getActionMockNoResources, getActionNoDueDateSet, getActionsMock } from './action';
 import {
   getCategoriesDataMock,
   getCategoriesEmptyDataMock,
@@ -18,64 +12,37 @@ import {
   getFootprintEmptyDataMock,
 } from './categoriesMock';
 import { getMembersNoInvitations } from './membersMock';
-import {
-  getNewsAllMissingProperties,
-  getNewsDefault,
-  getNewsSomeMissingProperties,
-} from './newsMock';
+import { getNewsAllMissingProperties, getNewsDefault, getNewsSomeMissingProperties } from './newsMock';
 import { ActionPayload } from '@coldpbc/interfaces';
 import { SubcategoryActionDetailsCard } from '@coldpbc/components';
 import { getOrganizationMembersMock } from './datagridMock';
+import { getCompliancePageSurveysMock, getCompliancePageSurveysMocksByName, getSurveyFormDataByName } from './surveyDataMock';
 
 export const getFootprintHandler = {
-  default: rest.get(
-    '*/organizations/:orgId/categories/company_decarbonization',
-    (req, res, ctx) => {
-      return res(ctx.json(getFootprintDataMock()));
-    },
-  ),
-  handle404: rest.get(
-    '*/organizations/:orgId/categories/company_decarbonization',
-    (req, res, ctx) => {
-      return res(ctx.status(404));
-    },
-  ),
-  empty: rest.get(
-    '*/organizations/:orgId/categories/company_decarbonization',
-    (req, res, ctx) => {
-      return res(ctx.json(getFootprintEmptyDataMock()));
-    },
-  ),
-  getFootprintDataFacilitiesAllFootprintsNull: rest.get(
-    '*/organizations/:orgId/categories/company_decarbonization',
-    (req, res, ctx) => {
-      return res(ctx.json(getFootprintDataFacilitiesAllFootprintsNull()));
-    },
-  ),
-  fiveSubCats: rest.get(
-    '*/organizations/:orgId/categories/company_decarbonization',
-    (req, res, ctx) => {
-      return res(ctx.json(getFootprintDataMockFiveSubCats()));
-    },
-  ),
-  twoSubCats: rest.get(
-    '*/organizations/:orgId/categories/company_decarbonization',
-    (req, res, ctx) => {
-      return res(ctx.json(getFootprintDataMockTwoSubCats()));
-    },
-  ),
-  threeSubCats: rest.get(
-    '*/organizations/:orgId/categories/company_decarbonization',
-    (req, res, ctx) => {
-      return res(ctx.json(getFootprintDataMockThreeSubCats()));
-    },
-  ),
-  allNullFootprintValues: rest.get(
-    '*/organizations/:orgId/categories/company_decarbonization',
-    (req, res, ctx) => {
-      return res(ctx.json(getFootprintAllNullFootprintValues()));
-    },
-  ),
+  default: rest.get('*/organizations/:orgId/categories/company_decarbonization', (req, res, ctx) => {
+    return res(ctx.json(getFootprintDataMock()));
+  }),
+  handle404: rest.get('*/organizations/:orgId/categories/company_decarbonization', (req, res, ctx) => {
+    return res(ctx.status(404));
+  }),
+  empty: rest.get('*/organizations/:orgId/categories/company_decarbonization', (req, res, ctx) => {
+    return res(ctx.json(getFootprintEmptyDataMock()));
+  }),
+  getFootprintDataFacilitiesAllFootprintsNull: rest.get('*/organizations/:orgId/categories/company_decarbonization', (req, res, ctx) => {
+    return res(ctx.json(getFootprintDataFacilitiesAllFootprintsNull()));
+  }),
+  fiveSubCats: rest.get('*/organizations/:orgId/categories/company_decarbonization', (req, res, ctx) => {
+    return res(ctx.json(getFootprintDataMockFiveSubCats()));
+  }),
+  twoSubCats: rest.get('*/organizations/:orgId/categories/company_decarbonization', (req, res, ctx) => {
+    return res(ctx.json(getFootprintDataMockTwoSubCats()));
+  }),
+  threeSubCats: rest.get('*/organizations/:orgId/categories/company_decarbonization', (req, res, ctx) => {
+    return res(ctx.json(getFootprintDataMockThreeSubCats()));
+  }),
+  allNullFootprintValues: rest.get('*/organizations/:orgId/categories/company_decarbonization', (req, res, ctx) => {
+    return res(ctx.json(getFootprintAllNullFootprintValues()));
+  }),
 };
 
 export const getCategoriesHandler = {
@@ -134,13 +101,11 @@ export const getActionHandler = {
       return res(ctx.json({}));
     }),
     rest.get('*/organizations/*/actions', (req, res, ctx) => {
-      const facilitiesActions = getActionsMock().filter(
-        (action) => action.action.subcategory === 'facilities',
-      );
+      const facilitiesActions = getActionsMock().filter(action => action.action.subcategory === 'facilities');
       facilitiesActions[0].action.dependent_surveys.forEach((survey, index) => {
         survey.submitted = index === 0;
       });
-      facilitiesActions[1].action.dependent_surveys.forEach((survey) => {
+      facilitiesActions[1].action.dependent_surveys.forEach(survey => {
         survey.submitted = true;
       });
       facilitiesActions[1].action.ready_to_execute = false;
@@ -166,12 +131,10 @@ export const getActionHandler = {
       return res(ctx.json({}));
     }),
     rest.get('*/organizations/*/actions', (req, res, ctx) => {
-      const facilitiesActions = getActionsMock().filter(
-        (action) => action.action.subcategory === 'facilities',
-      );
+      const facilitiesActions = getActionsMock().filter(action => action.action.subcategory === 'facilities');
       // set all facilities actions surveys to submitted and ready to execute to true
-      facilitiesActions.forEach((action) => {
-        action.action.dependent_surveys.forEach((survey) => {
+      facilitiesActions.forEach(action => {
+        action.action.dependent_surveys.forEach(survey => {
           survey.submitted = true;
         });
         action.action.ready_to_execute = true;
@@ -179,9 +142,7 @@ export const getActionHandler = {
       const actions = getActionsMock().map((actionPayload, index) => {
         if (actionPayload.action.subcategory === 'facilities') {
           // return the facilities action that matches the id
-          return facilitiesActions.find(
-            (facilityAction) => facilityAction.id === actionPayload.id,
-          );
+          return facilitiesActions.find(facilityAction => facilityAction.id === actionPayload.id);
         } else {
           return actionPayload;
         }
@@ -231,13 +192,11 @@ export const getActionHandler = {
   subcategoryActionsOverviewCard: [
     rest.get('*/organizations/*/actions', (req, res, ctx) => {
       // return actions with some of them having the ready_to_execute and all survey submitted
-      const facilitiesActions = getActionsMock().filter(
-        (action) => action.action.subcategory === 'facilities',
-      );
+      const facilitiesActions = getActionsMock().filter(action => action.action.subcategory === 'facilities');
       facilitiesActions[0].action.dependent_surveys.forEach((survey, index) => {
         survey.submitted = true;
       });
-      facilitiesActions[1].action.dependent_surveys.forEach((survey) => {
+      facilitiesActions[1].action.dependent_surveys.forEach(survey => {
         survey.submitted = true;
       });
       facilitiesActions[0].action.ready_to_execute = true;
@@ -260,7 +219,7 @@ export const getActionHandler = {
     rest.get('*/organizations/*/actions', (req, res, ctx) => {
       const actions = getActionsMock().map((actionPayload, index) => {
         // set all the surveys to submitted and ready to execute to true
-        actionPayload.action.dependent_surveys.forEach((survey) => {
+        actionPayload.action.dependent_surveys.forEach(survey => {
           survey.submitted = true;
         });
         actionPayload.action.ready_to_execute = true;
@@ -269,4 +228,11 @@ export const getActionHandler = {
       return res(ctx.json(actions));
     }),
   ],
+};
+
+export const getCompliancePageHandler = {
+  default: rest.get('*/organizations/*/surveys/:name', (req, res, ctx) => {
+    const { name } = req.params;
+    return res(ctx.json(getCompliancePageSurveysMocksByName(name as string)));
+  }),
 };

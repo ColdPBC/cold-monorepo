@@ -2,7 +2,7 @@ import { SurveyPayloadType, SurveySectionType } from '@coldpbc/interfaces';
 
 export const getSurveyFormDataByName = (name: string): SurveyPayloadType | undefined => {
   const surveys = getSurveysMock();
-  return surveys.find((s) => s.name === name);
+  return surveys.find(s => s.name === name);
 };
 
 export const getTestingSurveyFormDefinitionData = (): SurveyPayloadType => {
@@ -68,7 +68,7 @@ export const getTestingSurveyFormDefinitionData = (): SurveyPayloadType => {
             placeholder: 'Write in here',
             operator: '==', // could be ==, >, <, <=, >=
             comparison: true,
-          }
+          },
         },
         facilities: {
           title: 'Facilities',
@@ -1178,627 +1178,1676 @@ export function getSurveysMock(): SurveyPayloadType[] {
   surveys.push(getTestingSurveyFormDefinitionData());
   surveys.push(getJourneyOverviewMock());
   surveys.push({
-    "id": "5244b099-2978-4d0d-bce7-e5b124d48e2d",
-    "name": "footprint_overview",
-    "type": "FOOTPRINT",
-    "description": "Survey for evaluating a company's basic carbon emissions",
-    "created_at": "2023-09-28T01:21:31.390Z",
-    "updated_at": "2023-09-28T01:21:31.482Z",
-    "definition": {
-      "title": "Understanding your emissions",
-      "sections": {
-        "travel": {
-          "title": "Travel",
-          "prompt": "",
-          "component": null,
-          "follow_up": {
-            "travel_spend": {
-              "idx": 1,
-              "prompt": "How much did your company spend on travel costs in the last calendar year?",
-              "options": [],
-              "tooltip": "",
-              "component": "currency",
-              "placeholder": "Enter value"
+    id: '5244b099-2978-4d0d-bce7-e5b124d48e2d',
+    name: 'footprint_overview',
+    type: 'FOOTPRINT',
+    description: "Survey for evaluating a company's basic carbon emissions",
+    created_at: '2023-09-28T01:21:31.390Z',
+    updated_at: '2023-09-28T01:21:31.482Z',
+    definition: {
+      title: 'Understanding your emissions',
+      sections: {
+        travel: {
+          title: 'Travel',
+          prompt: '',
+          component: null,
+          follow_up: {
+            travel_spend: {
+              idx: 1,
+              prompt: 'How much did your company spend on travel costs in the last calendar year?',
+              options: [],
+              tooltip: '',
+              component: 'currency',
+              placeholder: 'Enter value',
             },
-            "travel_percent": {
-              "idx": 0,
-              "prompt": "Approximately what percent of employees travel for business?",
-              "options": [],
-              "tooltip": "",
-              "component": "percent_slider",
-              "placeholder": ""
+            travel_percent: {
+              idx: 0,
+              prompt: 'Approximately what percent of employees travel for business?',
+              options: [],
+              tooltip: '',
+              component: 'percent_slider',
+              placeholder: '',
             },
-            "air_spend_percent": {
-              "idx": 2,
-              "prompt": "Approximately what percentage of that expense was spent on air travel versus non-air travel (car, hotel, ground transportation)?",
-              "options": [],
-              "tooltip": "",
-              "component": "percent_slider",
-              "placeholder": ""
+            air_spend_percent: {
+              idx: 2,
+              prompt: 'Approximately what percentage of that expense was spent on air travel versus non-air travel (car, hotel, ground transportation)?',
+              options: [],
+              tooltip: '',
+              component: 'percent_slider',
+              placeholder: '',
             },
-            "fuel_cost_vehicles": {
-              "idx": 3,
-              "prompt": "What was the estimated total fuel cost of owned and leased vehicles?",
-              "options": [],
-              "tooltip": "",
-              "component": "currency",
-              "placeholder": "Enter value"
-            }
+            fuel_cost_vehicles: {
+              idx: 3,
+              prompt: 'What was the estimated total fuel cost of owned and leased vehicles?',
+              options: [],
+              tooltip: '',
+              component: 'currency',
+              placeholder: 'Enter value',
+            },
           },
-          "image_url": "https://cold-public-assets.s3.amazonaws.com/images%2FFootprint%20-%20Travel.png",
-          "category_idx": 3,
-          "category_description": "Emissions due to work travel"
+          image_url: 'https://cold-public-assets.s3.amazonaws.com/images%2FFootprint%20-%20Travel.png',
+          category_idx: 3,
+          category_description: 'Emissions due to work travel',
         },
-        "product": {
-          "title": "Product",
-          "prompt": "",
-          "component": null,
-          "follow_up": {
-            "cogs": {
-              "idx": 0,
-              "prompt": "What was your company's estimated total COGS for the last calendar year?",
-              "options": [],
-              "tooltip": "",
-              "component": "currency",
-              "placeholder": "Enter value"
+        product: {
+          title: 'Product',
+          prompt: '',
+          component: null,
+          follow_up: {
+            cogs: {
+              idx: 0,
+              prompt: "What was your company's estimated total COGS for the last calendar year?",
+              options: [],
+              tooltip: '',
+              component: 'currency',
+              placeholder: 'Enter value',
             },
-            "wood_spend": {
-              "idx": 4,
-              "prompt": "How much did you spend on wood in the last calendar year? ",
-              "options": [],
-              "tooltip": "",
-              "component": "currency",
-              "placeholder": "Enter value"
+            wood_spend: {
+              idx: 4,
+              prompt: 'How much did you spend on wood in the last calendar year? ',
+              options: [],
+              tooltip: '',
+              component: 'currency',
+              placeholder: 'Enter value',
             },
-            "metal_spend": {
-              "idx": 3,
-              "prompt": "How much did you spend on metal in the last calendar year? ",
-              "options": [],
-              "tooltip": "",
-              "component": "currency",
-              "placeholder": "Enter value"
+            metal_spend: {
+              idx: 3,
+              prompt: 'How much did you spend on metal in the last calendar year? ',
+              options: [],
+              tooltip: '',
+              component: 'currency',
+              placeholder: 'Enter value',
             },
-            "textile_spend": {
-              "idx": 1,
-              "prompt": "How much did you spend on textiles in the last calendar year? ",
-              "options": [],
-              "tooltip": "",
-              "component": "currency",
-              "placeholder": "Enter value"
+            textile_spend: {
+              idx: 1,
+              prompt: 'How much did you spend on textiles in the last calendar year? ',
+              options: [],
+              tooltip: '',
+              component: 'currency',
+              placeholder: 'Enter value',
             },
-            "chemical_spend": {
-              "idx": 5,
-              "prompt": "How much did you spend on chemicals in the last calendar year? ",
-              "options": [],
-              "tooltip": "",
-              "component": "currency",
-              "placeholder": "Enter value"
+            chemical_spend: {
+              idx: 5,
+              prompt: 'How much did you spend on chemicals in the last calendar year? ',
+              options: [],
+              tooltip: '',
+              component: 'currency',
+              placeholder: 'Enter value',
             },
-            "packaging_cost": {
-              "idx": 12,
-              "prompt": "What was your company's total cost of packaging materials in the last calendar year?",
-              "options": [],
-              "tooltip": "",
-              "component": "currency",
-              "placeholder": "Enter value"
+            packaging_cost: {
+              idx: 12,
+              prompt: "What was your company's total cost of packaging materials in the last calendar year?",
+              options: [],
+              tooltip: '',
+              component: 'currency',
+              placeholder: 'Enter value',
             },
-            "plastics_spend": {
-              "idx": 2,
-              "prompt": "How much did you spend on plastics & rubber in the last calendar year? ",
-              "options": [],
-              "tooltip": "",
-              "component": "currency",
-              "placeholder": "Enter value"
+            plastics_spend: {
+              idx: 2,
+              prompt: 'How much did you spend on plastics & rubber in the last calendar year? ',
+              options: [],
+              tooltip: '',
+              component: 'currency',
+              placeholder: 'Enter value',
             },
-            "air_import_percent": {
-              "idx": 9,
-              "prompt": "Approximately what percentage of that expense was spent on air-based versus bulk (train, cargo ship, etc) shipping?",
-              "options": [],
-              "tooltip": "",
-              "component": "percent_slider",
-              "placeholder": ""
+            air_import_percent: {
+              idx: 9,
+              prompt: 'Approximately what percentage of that expense was spent on air-based versus bulk (train, cargo ship, etc) shipping?',
+              options: [],
+              tooltip: '',
+              component: 'percent_slider',
+              placeholder: '',
             },
-            "air_outbound_percent": {
-              "idx": 11,
-              "prompt": "Approximately what percentage of that expense was spent on air-based versus ground-based shipping?",
-              "options": [],
-              "tooltip": "",
-              "component": "percent_slider",
-              "placeholder": ""
+            air_outbound_percent: {
+              idx: 11,
+              prompt: 'Approximately what percentage of that expense was spent on air-based versus ground-based shipping?',
+              options: [],
+              tooltip: '',
+              component: 'percent_slider',
+              placeholder: '',
             },
-            "import_shipping_cost": {
-              "idx": 8,
-              "prompt": "What was your company's total cost of import shipping in the last calendar year?",
-              "options": [],
-              "tooltip": "",
-              "component": "currency",
-              "placeholder": "Enter value"
+            import_shipping_cost: {
+              idx: 8,
+              prompt: "What was your company's total cost of import shipping in the last calendar year?",
+              options: [],
+              tooltip: '',
+              component: 'currency',
+              placeholder: 'Enter value',
             },
-            "apparel_leather_spend": {
-              "idx": 6,
-              "prompt": "How much did you spend on apparel & leather in the last calendar year?",
-              "options": [],
-              "tooltip": "",
-              "component": "currency",
-              "placeholder": "Enter value"
+            apparel_leather_spend: {
+              idx: 6,
+              prompt: 'How much did you spend on apparel & leather in the last calendar year?',
+              options: [],
+              tooltip: '',
+              component: 'currency',
+              placeholder: 'Enter value',
             },
-            "other_materials_spend": {
-              "idx": 7,
-              "prompt": "How much did you spend on Other materials in the last calendar year?",
-              "options": [],
-              "tooltip": "",
-              "component": "currency",
-              "placeholder": "Enter value"
+            other_materials_spend: {
+              idx: 7,
+              prompt: 'How much did you spend on Other materials in the last calendar year?',
+              options: [],
+              tooltip: '',
+              component: 'currency',
+              placeholder: 'Enter value',
             },
-            "outbound_shipping_cost": {
-              "idx": 10,
-              "prompt": "What was your company's total cost of shipping product to customers in the last calendar year?",
-              "options": [],
-              "tooltip": "",
-              "component": "currency",
-              "placeholder": "Enter value"
-            }
+            outbound_shipping_cost: {
+              idx: 10,
+              prompt: "What was your company's total cost of shipping product to customers in the last calendar year?",
+              options: [],
+              tooltip: '',
+              component: 'currency',
+              placeholder: 'Enter value',
+            },
           },
-          "image_url": "https://cold-public-assets.s3.us-east-2.amazonaws.com/splash_images/Machinery.png",
-          "category_idx": 4,
-          "category_description": "Emissions from product manufacturing and distribution"
+          image_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/splash_images/Machinery.png',
+          category_idx: 4,
+          category_description: 'Emissions from product manufacturing and distribution',
         },
-        "commuting": {
-          "title": "Commuting",
-          "prompt": "",
-          "component": null,
-          "follow_up": {
-            "commute_car": {
-              "idx": 3,
-              "prompt": "Approximately what percent of employees commute via car?",
-              "options": [],
-              "tooltip": "",
-              "component": "percent_slider",
-              "placeholder": ""
+        commuting: {
+          title: 'Commuting',
+          prompt: '',
+          component: null,
+          follow_up: {
+            commute_car: {
+              idx: 3,
+              prompt: 'Approximately what percent of employees commute via car?',
+              options: [],
+              tooltip: '',
+              component: 'percent_slider',
+              placeholder: '',
             },
-            "commute_length": {
-              "idx": 2,
-              "prompt": "What is the average one-way commute length in miles?",
-              "options": [],
-              "tooltip": "",
-              "component": "number",
-              "placeholder": "Enter value"
+            commute_length: {
+              idx: 2,
+              prompt: 'What is the average one-way commute length in miles?',
+              options: [],
+              tooltip: '',
+              component: 'number',
+              placeholder: 'Enter value',
             },
-            "commute_scooter": {
-              "idx": 6,
-              "prompt": "Approximately what percent of employees commute via scooter or ebike?",
-              "options": [],
-              "tooltip": "",
-              "component": "percent_slider",
-              "placeholder": ""
+            commute_scooter: {
+              idx: 6,
+              prompt: 'Approximately what percent of employees commute via scooter or ebike?',
+              options: [],
+              tooltip: '',
+              component: 'percent_slider',
+              placeholder: '',
             },
-            "average_work_week": {
-              "idx": 0,
-              "prompt": "How many days are in your company's average work week?",
-              "options": [],
-              "tooltip": "",
-              "component": "number",
-              "placeholder": "Enter value"
+            average_work_week: {
+              idx: 0,
+              prompt: "How many days are in your company's average work week?",
+              options: [],
+              tooltip: '',
+              component: 'number',
+              placeholder: 'Enter value',
             },
-            "commute_walk_bike": {
-              "idx": 4,
-              "prompt": "Approximately what percent of employees commute by walking or biking?",
-              "options": [],
-              "tooltip": "",
-              "component": "percent_slider",
-              "placeholder": ""
+            commute_walk_bike: {
+              idx: 4,
+              prompt: 'Approximately what percent of employees commute by walking or biking?',
+              options: [],
+              tooltip: '',
+              component: 'percent_slider',
+              placeholder: '',
             },
-            "commute_public_transit": {
-              "idx": 5,
-              "prompt": "Approximately what percent of employees commute by taking public transit?",
-              "options": [],
-              "tooltip": "",
-              "component": "percent_slider",
-              "placeholder": ""
+            commute_public_transit: {
+              idx: 5,
+              prompt: 'Approximately what percent of employees commute by taking public transit?',
+              options: [],
+              tooltip: '',
+              component: 'percent_slider',
+              placeholder: '',
             },
-            "commute_employee_percent": {
-              "idx": 1,
-              "prompt": "What percentage of employees regularly commute to work at company facilities?",
-              "options": [],
-              "tooltip": "",
-              "component": "percent_slider",
-              "placeholder": ""
-            }
+            commute_employee_percent: {
+              idx: 1,
+              prompt: 'What percentage of employees regularly commute to work at company facilities?',
+              options: [],
+              tooltip: '',
+              component: 'percent_slider',
+              placeholder: '',
+            },
           },
-          "image_url": "https://cold-public-assets.s3.us-east-2.amazonaws.com/splash_images/CommutingTravel.png",
-          "category_idx": 1,
-          "category_description": "Emissions from employee commuting"
+          image_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/splash_images/CommutingTravel.png',
+          category_idx: 1,
+          category_description: 'Emissions from employee commuting',
         },
-        "facilities": {
-          "title": "Facilities",
-          "prompt": "",
-          "component": null,
-          "follow_up": {
-            "diesel": {
-              "idx": 4,
-              "prompt": "How much did you spend on diesel for owned and leased spaces in the last calendar year?",
-              "options": [],
-              "tooltip": "",
-              "component": "currency",
-              "placeholder": "Enter value"
+        facilities: {
+          title: 'Facilities',
+          prompt: '',
+          component: null,
+          follow_up: {
+            diesel: {
+              idx: 4,
+              prompt: 'How much did you spend on diesel for owned and leased spaces in the last calendar year?',
+              options: [],
+              tooltip: '',
+              component: 'currency',
+              placeholder: 'Enter value',
             },
-            "gasoline": {
-              "idx": 3,
-              "prompt": "How much did you spend on gasoline for owned and leased spaces in the last calendar year?",
-              "options": [],
-              "tooltip": "",
-              "component": "currency",
-              "placeholder": "Enter value"
+            gasoline: {
+              idx: 3,
+              prompt: 'How much did you spend on gasoline for owned and leased spaces in the last calendar year?',
+              options: [],
+              tooltip: '',
+              component: 'currency',
+              placeholder: 'Enter value',
             },
-            "electricity": {
-              "idx": 0,
-              "prompt": "How much did you spend on electricity for owned and leased spaces in the last calendar year?",
-              "options": [],
-              "tooltip": "",
-              "component": "currency",
-              "placeholder": "Enter value"
+            electricity: {
+              idx: 0,
+              prompt: 'How much did you spend on electricity for owned and leased spaces in the last calendar year?',
+              options: [],
+              tooltip: '',
+              component: 'currency',
+              placeholder: 'Enter value',
             },
-            "heating_oil": {
-              "idx": 2,
-              "prompt": "How much did you spend on heating oil for owned and leased spaces in the last calendar year?",
-              "options": [],
-              "tooltip": "",
-              "component": "currency",
-              "placeholder": "Enter value"
+            heating_oil: {
+              idx: 2,
+              prompt: 'How much did you spend on heating oil for owned and leased spaces in the last calendar year?',
+              options: [],
+              tooltip: '',
+              component: 'currency',
+              placeholder: 'Enter value',
             },
-            "natural_gas": {
-              "idx": 1,
-              "prompt": "How much did you spend on natural gas for owned and leased spaces in the last calendar year?",
-              "options": [],
-              "tooltip": "",
-              "component": "currency",
-              "placeholder": "Enter value"
+            natural_gas: {
+              idx: 1,
+              prompt: 'How much did you spend on natural gas for owned and leased spaces in the last calendar year?',
+              options: [],
+              tooltip: '',
+              component: 'currency',
+              placeholder: 'Enter value',
             },
-            "renewable_percent": {
-              "idx": 5,
-              "prompt": "What percentage of your electricity spend was on renewable energy?",
-              "options": [],
-              "tooltip": "",
-              "component": "percent_slider",
-              "placeholder": ""
-            }
+            renewable_percent: {
+              idx: 5,
+              prompt: 'What percentage of your electricity spend was on renewable energy?',
+              options: [],
+              tooltip: '',
+              component: 'percent_slider',
+              placeholder: '',
+            },
           },
-          "image_url": "https://cold-public-assets.s3.amazonaws.com/images%2FFootprint%20-%20Facilities.png",
-          "category_idx": 0,
-          "category_description": "Emissions related to facilities you own or lease"
+          image_url: 'https://cold-public-assets.s3.amazonaws.com/images%2FFootprint%20-%20Facilities.png',
+          category_idx: 0,
+          category_description: 'Emissions related to facilities you own or lease',
         },
-        "operations": {
-          "title": "Operations",
-          "prompt": "",
-          "component": null,
-          "follow_up": {
-            "meals_and_e_spend": {
-              "idx": 1,
-              "prompt": "How much did your company spend on meals & entertainment in the last calendar year?",
-              "options": [],
-              "tooltip": "",
-              "component": "currency",
-              "placeholder": "Enter value"
+        operations: {
+          title: 'Operations',
+          prompt: '',
+          component: null,
+          follow_up: {
+            meals_and_e_spend: {
+              idx: 1,
+              prompt: 'How much did your company spend on meals & entertainment in the last calendar year?',
+              options: [],
+              tooltip: '',
+              component: 'currency',
+              placeholder: 'Enter value',
             },
-            "fuel_cost_machinery": {
-              "idx": 0,
-              "prompt": "What was the estimated total fuel cost (in USD) of owned and leased industrial machinery?",
-              "options": [],
-              "tooltip": "",
-              "component": "currency",
-              "placeholder": "Enter value"
+            fuel_cost_machinery: {
+              idx: 0,
+              prompt: 'What was the estimated total fuel cost (in USD) of owned and leased industrial machinery?',
+              options: [],
+              tooltip: '',
+              component: 'currency',
+              placeholder: 'Enter value',
             },
-            "cloud_software_spend": {
-              "idx": 5,
-              "prompt": "How much did your company spend on cloud software or cloud computing services in the last calendar year? ",
-              "options": [],
-              "tooltip": "",
-              "component": "currency",
-              "placeholder": "Enter value"
+            cloud_software_spend: {
+              idx: 5,
+              prompt: 'How much did your company spend on cloud software or cloud computing services in the last calendar year? ',
+              options: [],
+              tooltip: '',
+              component: 'currency',
+              placeholder: 'Enter value',
             },
-            "office_supplies_spend": {
-              "idx": 2,
-              "prompt": "How much did your company spend on office supplies (paper, snacks, other consumable goods) in the last calendar year?",
-              "options": [],
-              "tooltip": "",
-              "component": "currency",
-              "placeholder": "Enter value"
+            office_supplies_spend: {
+              idx: 2,
+              prompt: 'How much did your company spend on office supplies (paper, snacks, other consumable goods) in the last calendar year?',
+              options: [],
+              tooltip: '',
+              component: 'currency',
+              placeholder: 'Enter value',
             },
-            "office_equipment_spend": {
-              "idx": 4,
-              "prompt": "How much did your company spend on other office equipment (printers, computers, monitors, etc) in the last calendar year?",
-              "options": [],
-              "tooltip": "",
-              "component": "currency",
-              "placeholder": "Enter value"
+            office_equipment_spend: {
+              idx: 4,
+              prompt: 'How much did your company spend on other office equipment (printers, computers, monitors, etc) in the last calendar year?',
+              options: [],
+              tooltip: '',
+              component: 'currency',
+              placeholder: 'Enter value',
             },
-            "office_furniture_spend": {
-              "idx": 3,
-              "prompt": "How much did your company spend on Office furniture (desks, chairs, etc) in the last calendar year?",
-              "options": [],
-              "tooltip": "",
-              "component": "currency",
-              "placeholder": "Enter value"
+            office_furniture_spend: {
+              idx: 3,
+              prompt: 'How much did your company spend on Office furniture (desks, chairs, etc) in the last calendar year?',
+              options: [],
+              tooltip: '',
+              component: 'currency',
+              placeholder: 'Enter value',
             },
-            "purchased_vehicles_spend": {
-              "idx": 7,
-              "prompt": "How much did your company spend on Purchased vehicles in the last calendar year?",
-              "options": [],
-              "tooltip": "",
-              "component": "currency",
-              "placeholder": "Enter value"
+            purchased_vehicles_spend: {
+              idx: 7,
+              prompt: 'How much did your company spend on Purchased vehicles in the last calendar year?',
+              options: [],
+              tooltip: '',
+              component: 'currency',
+              placeholder: 'Enter value',
             },
-            "purchased_machinery_spend": {
-              "idx": 8,
-              "prompt": "How much did your company spend on purchased industrial machinery in the last calendar year?",
-              "options": [],
-              "tooltip": "",
-              "component": "currency",
-              "placeholder": "Enter value"
+            purchased_machinery_spend: {
+              idx: 8,
+              prompt: 'How much did your company spend on purchased industrial machinery in the last calendar year?',
+              options: [],
+              tooltip: '',
+              component: 'currency',
+              placeholder: 'Enter value',
             },
-            "professional_services_spend": {
-              "idx": 6,
-              "prompt": "How much did your company spend on Professional services (legal, consulting, accounting, etc) in the last calendar year?",
-              "options": [],
-              "tooltip": "",
-              "component": "currency",
-              "placeholder": "Enter value"
+            professional_services_spend: {
+              idx: 6,
+              prompt: 'How much did your company spend on Professional services (legal, consulting, accounting, etc) in the last calendar year?',
+              options: [],
+              tooltip: '',
+              component: 'currency',
+              placeholder: 'Enter value',
             },
-            "purchased_capital_goods_spend": {
-              "idx": 9,
-              "prompt": "How much did your company spend on Other purchased capital goods in the last calendar year?",
-              "options": [],
-              "tooltip": "",
-              "component": "currency",
-              "placeholder": "Enter value"
-            }
+            purchased_capital_goods_spend: {
+              idx: 9,
+              prompt: 'How much did your company spend on Other purchased capital goods in the last calendar year?',
+              options: [],
+              tooltip: '',
+              component: 'currency',
+              placeholder: 'Enter value',
+            },
           },
-          "image_url": "https://cold-public-assets.s3.us-east-2.amazonaws.com/splash_images/ClimateLeadership.png",
-          "category_idx": 5,
-          "category_description": "Emissions due to company operations"
+          image_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/splash_images/ClimateLeadership.png',
+          category_idx: 5,
+          category_description: 'Emissions due to company operations',
         },
-        "hybrid_work": {
-          "title": "Hybrid Work",
-          "prompt": "Do you have any policies that grant employees hybrid work opportunities (i.e. to work at home for one day a week, etc.)?",
-          "component": "yes_no",
-          "follow_up": {
-            "hybrid_commute_days": {
-              "idx": 1,
-              "prompt": "How many days per week do hybrid-working employees typically commute to work? ",
-              "options": [],
-              "tooltip": "",
-              "component": "number",
-              "placeholder": "Enter value"
+        hybrid_work: {
+          title: 'Hybrid Work',
+          prompt: 'Do you have any policies that grant employees hybrid work opportunities (i.e. to work at home for one day a week, etc.)?',
+          component: 'yes_no',
+          follow_up: {
+            hybrid_commute_days: {
+              idx: 1,
+              prompt: 'How many days per week do hybrid-working employees typically commute to work? ',
+              options: [],
+              tooltip: '',
+              component: 'number',
+              placeholder: 'Enter value',
             },
-            "hybrid_policy_coverage": {
-              "idx": 0,
-              "prompt": "What percent of your commuting employees do these policies cover? ",
-              "options": [],
-              "tooltip": "",
-              "component": "percent_slider",
-              "placeholder": ""
-            }
+            hybrid_policy_coverage: {
+              idx: 0,
+              prompt: 'What percent of your commuting employees do these policies cover? ',
+              options: [],
+              tooltip: '',
+              component: 'percent_slider',
+              placeholder: '',
+            },
           },
-          "image_url": "https://cold-public-assets.s3.amazonaws.com/images%2FFootprint%20-%20Hybrid%20Work.png",
-          "category_idx": 2,
-          "category_description": "Emissions that might be mitigated through work from home policies"
-        }
+          image_url: 'https://cold-public-assets.s3.amazonaws.com/images%2FFootprint%20-%20Hybrid%20Work.png',
+          category_idx: 2,
+          category_description: 'Emissions that might be mitigated through work from home policies',
+        },
       },
-      "image_url": "https://cold-public-assets.s3.amazonaws.com/images%2FFootprint%20-%20Overview.png",
-      "intro_markdown": "Now that we've finished understanding the basics of your company, we're going to dive into some of the numbers to do an initial evaluation of your carbon footprint."
-    }
-  })
-  surveys.push({
-    "id": "067d1343-86a7-4686-8e1b-7ae0de6b948b",
-    "name": "live_test_demo",
-    "type": "JOURNEY",
-    "description": "Here we go!!!",
-    "created_at": "2023-09-21T19:20:18.363Z",
-    "updated_at": "2023-09-21T19:20:18.371Z",
-    "definition": {
-      "title": "Are you kidding me?",
-      "sections": {
-        "troy": {
-          "title": "Troy's Section",
-          "prompt": "Do you want to talk about Troy?",
-          "component": "yes_no",
-          "follow_up": {
-            "ice_cream": {
-              "idx": 0,
-              "prompt": "What is troy's favorite ice cream?",
-              "options": [
-                "Vanilla",
-                "Chocolate",
-                "All of the above"
-              ],
-              "tooltip": "",
-              "component": "select",
-              "placeholder": "",
-              "value": "All of the above",
-              "skipped": false
-            }
-          },
-          "image_url": "https://images.unsplash.com/photo-1694618237009-39477c66a31b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2845&q=80",
-          "category_idx": 0,
-          "category_description": "Questions all about Troy",
-          "value": true,
-          "skipped": false
-        }
-      },
-      "image_url": "https://images.unsplash.com/photo-1695196312518-b1223a8298b5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=3387&q=80",
-      "intro_markdown": "Here is a brief introduction that is not styled yet",
-      "submitted": true
-    }
+      image_url: 'https://cold-public-assets.s3.amazonaws.com/images%2FFootprint%20-%20Overview.png',
+      intro_markdown:
+        "Now that we've finished understanding the basics of your company, we're going to dive into some of the numbers to do an initial evaluation of your carbon footprint.",
+    },
   });
   surveys.push({
-    "id": "6ec9038f-859b-4ec9-ac35-a21b6bd2cd34",
-    "name": "test_survey",
-    "type": "JOURNEY",
-    "description": "A survey that exercises lots of sections and components for Qaalib to test everything with the survey",
-    "created_at": "2023-10-11T16:04:52.531Z",
-    "updated_at": "2023-12-12T16:08:48.801Z",
-    "definition": {
-      "title": "Survey Test",
-      "sections": {
-        "general": {
-          "title": "General",
-          "value": null,
-          "prompt": "",
-          "component": null,
-          "follow_up": {
-            "general:0": {
-              "idx": 0,
-              "value": null,
-              "prompt": "Which regions do you sell your product into?",
-              "options": [
-                "North America",
-                "South America",
-                "Europe",
-                "Asia",
-                "Australia",
-                "Africa"
-              ],
-              "tooltip": "",
-              "component": "multi_select",
-              "placeholder": ""
+    id: '067d1343-86a7-4686-8e1b-7ae0de6b948b',
+    name: 'live_test_demo',
+    type: 'JOURNEY',
+    description: 'Here we go!!!',
+    created_at: '2023-09-21T19:20:18.363Z',
+    updated_at: '2023-09-21T19:20:18.371Z',
+    definition: {
+      title: 'Are you kidding me?',
+      sections: {
+        troy: {
+          title: "Troy's Section",
+          prompt: 'Do you want to talk about Troy?',
+          component: 'yes_no',
+          follow_up: {
+            ice_cream: {
+              idx: 0,
+              prompt: "What is troy's favorite ice cream?",
+              options: ['Vanilla', 'Chocolate', 'All of the above'],
+              tooltip: '',
+              component: 'select',
+              placeholder: '',
+              value: 'All of the above',
+              skipped: false,
             },
-            "general:1": {
-              "idx": 1,
-              "value": null,
-              "prompt": "What is your company's name?",
-              "options": [],
-              "tooltip": "Enter your company name",
-              "component": "text",
-              "placeholder": "Yourco"
-            },
-            "general:2": {
-              "idx": 2,
-              "value": null,
-              "prompt": "What is your favorite color of the primary colors?",
-              "options": [
-                "Red",
-                "Blue",
-                "Yellow"
-              ],
-              "tooltip": "Pick the one you like the most",
-              "component": "select",
-              "placeholder": ""
-            }
           },
-          "image_url": "https://images.unsplash.com/photo-1533038590840-1cde6e668a91?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1587&q=80",
-          "category_idx": 0,
-          "category_description": "General questions about your business"
+          image_url:
+            'https://images.unsplash.com/photo-1694618237009-39477c66a31b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2845&q=80',
+          category_idx: 0,
+          category_description: 'Questions all about Troy',
+          value: true,
+          skipped: false,
         },
-        "product": {
-          "title": "Product",
-          "value": true,
-          "prompt": "Does your company make a physical product?",
-          "component": "yes_no",
-          "follow_up": {
-            "product:0": {
-              "idx": 1,
-              "prompt": "Is your product made of metal?",
-              "options": [],
-              "tooltip": "Select yes or no",
-              "component": "yes_no",
-              "placeholder": "",
-              "additional_context": {
-                "prompt": "Why is it made of metal?",
-                "operator": "==",
-                "component": "textarea",
-                "comparison": "yes",
-                "placeholder": "Tell me"
-              },
-              "value": true,
-              "skipped": false
-            },
-            "product:1": {
-              "idx": 2,
-              "value": null,
-              "prompt": "How much does your product cost, in dollars?",
-              "options": [],
-              "tooltip": "Enter the cost to your company to produce",
-              "component": "currency",
-              "placeholder": "45",
-              "skipped": true
-            },
-            "product:2": {
-              "idx": 3,
-              "value": null,
-              "prompt": "What percent of your product is leather?",
-              "options": [],
-              "tooltip": "",
-              "component": "percent_slider",
-              "placeholder": "",
-              "skipped": true
-            },
-            "product:3": {
-              "idx": 4,
-              "value": null,
-              "prompt": "How many factories make your product?",
-              "options": [],
-              "tooltip": "Choose the number across all countries",
-              "component": "number",
-              "placeholder": "2",
-              "skipped": true
-            },
-            "addl_context_test": {
-              "idx": 0,
-              "prompt": "Do you like apples?",
-              "options": [],
-              "tooltip": "",
-              "component": "yes_no",
-              "placeholder": "",
-              "additional_context": {
-                "prompt": "Tell me why you like apples!",
-                "operator": "==",
-                "component": "textarea",
-                "comparison": "yes",
-                "placeholder": "Tell me"
-              }
-            }
-          },
-          "image_url": "https://images.unsplash.com/photo-1610891015188-5369212db097?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
-          "category_idx": 1,
-          "category_description": "Questions about how your products are produced",
-          "skipped": false
-        },
-        "facilities": {
-          "title": "Facilities",
-          "value": true,
-          "prompt": "Do you own or lease any facilities like offices or warehouses?",
-          "component": "yes_no",
-          "follow_up": {
-            "facilities:0": {
-              "idx": 0,
-              "value": [
-                "Black",
-                "Gray"
-              ],
-              "prompt": "What colors are your office carpets?",
-              "options": [
-                "Gray",
-                "Black",
-                "Orange",
-                "Blue",
-                "Purple"
-              ],
-              "tooltip": "If carpets are multiple colors choose all colors that apply",
-              "component": "multi_select",
-              "placeholder": "",
-              "skipped": false
-            }
-          },
-          "image_url": "https://images.unsplash.com/photo-1524758631624-e2822e304c36?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
-          "category_idx": 2,
-          "category_description": "Questions about your the facilities you own or lease",
-          "skipped": false
-        }
       },
-      "image_url": "https://images.unsplash.com/photo-1603437873662-dc1f44901825?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=3270&q=80",
-      "intro_markdown": "Welcome to Cold Climate!\n Let’s Start Your Journey to Absolute Zero™ \nWe will start with our basic company information survey. \nThis is a quick form to understand a little more about your company and what climate efforts you've already undertaken.",
-      "submitted": true
-    }
-  })
+      image_url:
+        'https://images.unsplash.com/photo-1695196312518-b1223a8298b5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=3387&q=80',
+      intro_markdown: 'Here is a brief introduction that is not styled yet',
+      submitted: true,
+    },
+  });
+  surveys.push({
+    id: '6ec9038f-859b-4ec9-ac35-a21b6bd2cd34',
+    name: 'test_survey',
+    type: 'JOURNEY',
+    description: 'A survey that exercises lots of sections and components for Qaalib to test everything with the survey',
+    created_at: '2023-10-11T16:04:52.531Z',
+    updated_at: '2023-12-12T16:08:48.801Z',
+    definition: {
+      title: 'Survey Test',
+      sections: {
+        general: {
+          title: 'General',
+          value: null,
+          prompt: '',
+          component: null,
+          follow_up: {
+            'general:0': {
+              idx: 0,
+              value: null,
+              prompt: 'Which regions do you sell your product into?',
+              options: ['North America', 'South America', 'Europe', 'Asia', 'Australia', 'Africa'],
+              tooltip: '',
+              component: 'multi_select',
+              placeholder: '',
+            },
+            'general:1': {
+              idx: 1,
+              value: null,
+              prompt: "What is your company's name?",
+              options: [],
+              tooltip: 'Enter your company name',
+              component: 'text',
+              placeholder: 'Yourco',
+            },
+            'general:2': {
+              idx: 2,
+              value: null,
+              prompt: 'What is your favorite color of the primary colors?',
+              options: ['Red', 'Blue', 'Yellow'],
+              tooltip: 'Pick the one you like the most',
+              component: 'select',
+              placeholder: '',
+            },
+          },
+          image_url:
+            'https://images.unsplash.com/photo-1533038590840-1cde6e668a91?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1587&q=80',
+          category_idx: 0,
+          category_description: 'General questions about your business',
+        },
+        product: {
+          title: 'Product',
+          value: true,
+          prompt: 'Does your company make a physical product?',
+          component: 'yes_no',
+          follow_up: {
+            'product:0': {
+              idx: 1,
+              prompt: 'Is your product made of metal?',
+              options: [],
+              tooltip: 'Select yes or no',
+              component: 'yes_no',
+              placeholder: '',
+              additional_context: {
+                prompt: 'Why is it made of metal?',
+                operator: '==',
+                component: 'textarea',
+                comparison: 'yes',
+                placeholder: 'Tell me',
+              },
+              value: true,
+              skipped: false,
+            },
+            'product:1': {
+              idx: 2,
+              value: null,
+              prompt: 'How much does your product cost, in dollars?',
+              options: [],
+              tooltip: 'Enter the cost to your company to produce',
+              component: 'currency',
+              placeholder: '45',
+              skipped: true,
+            },
+            'product:2': {
+              idx: 3,
+              value: null,
+              prompt: 'What percent of your product is leather?',
+              options: [],
+              tooltip: '',
+              component: 'percent_slider',
+              placeholder: '',
+              skipped: true,
+            },
+            'product:3': {
+              idx: 4,
+              value: null,
+              prompt: 'How many factories make your product?',
+              options: [],
+              tooltip: 'Choose the number across all countries',
+              component: 'number',
+              placeholder: '2',
+              skipped: true,
+            },
+            addl_context_test: {
+              idx: 0,
+              prompt: 'Do you like apples?',
+              options: [],
+              tooltip: '',
+              component: 'yes_no',
+              placeholder: '',
+              additional_context: {
+                prompt: 'Tell me why you like apples!',
+                operator: '==',
+                component: 'textarea',
+                comparison: 'yes',
+                placeholder: 'Tell me',
+              },
+            },
+          },
+          image_url:
+            'https://images.unsplash.com/photo-1610891015188-5369212db097?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
+          category_idx: 1,
+          category_description: 'Questions about how your products are produced',
+          skipped: false,
+        },
+        facilities: {
+          title: 'Facilities',
+          value: true,
+          prompt: 'Do you own or lease any facilities like offices or warehouses?',
+          component: 'yes_no',
+          follow_up: {
+            'facilities:0': {
+              idx: 0,
+              value: ['Black', 'Gray'],
+              prompt: 'What colors are your office carpets?',
+              options: ['Gray', 'Black', 'Orange', 'Blue', 'Purple'],
+              tooltip: 'If carpets are multiple colors choose all colors that apply',
+              component: 'multi_select',
+              placeholder: '',
+              skipped: false,
+            },
+          },
+          image_url:
+            'https://images.unsplash.com/photo-1524758631624-e2822e304c36?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
+          category_idx: 2,
+          category_description: 'Questions about your the facilities you own or lease',
+          skipped: false,
+        },
+      },
+      image_url:
+        'https://images.unsplash.com/photo-1603437873662-dc1f44901825?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=3270&q=80',
+      intro_markdown:
+        "Welcome to Cold Climate!\n Let’s Start Your Journey to Absolute Zero™ \nWe will start with our basic company information survey. \nThis is a quick form to understand a little more about your company and what climate efforts you've already undertaken.",
+      submitted: true,
+    },
+  });
+  surveys.push({
+    id: 'b5a544e8-c87e-48e2-9c92-d9352dcc2d33',
+    name: 'rei_mfg_survey',
+    type: 'TEST',
+    description: "Introductory survey to gather information about a brand's manufacturing practices",
+    created_at: '2024-01-17T17:36:53.231Z',
+    updated_at: '2024-01-17T17:36:53.232Z',
+    definition: {
+      title: 'Manufacturing Code of Conduct',
+      sections: {
+        MFG: {
+          title: 'Manufacturing Code of Conduct',
+          prompt: '',
+          component: null,
+          follow_up: {
+            'MFG-1': {
+              idx: 0,
+              prompt: 'Does your brand have in place a code of conduct for factories that manufacture the products you supply to REI?',
+              options: [],
+              tooltip: '',
+              component: 'yes_no',
+              placeholder: '',
+              additional_context: {
+                prompt: "Please describe how your brand plans to align with REI's expectation in this area.",
+                operator: '==',
+                component: 'textarea',
+                comparison: false,
+                placeholder: '',
+              },
+            },
+            'MFG-2': {
+              idx: 1,
+              prompt: 'Please indicate which of the following topics are included in your manufacturing code of conduct.',
+              options: [
+                'Transparency',
+                'Non-discrimination',
+                'Harassment and Abuse',
+                'Recruitment and Hiring',
+                'Freedom of Association & Collective Bargaining',
+                'Hours of Work',
+                'Compensation',
+                'Health & Safety',
+                'Environment',
+                'Community',
+                'Other',
+              ],
+              tooltip: 'Select all that apply.',
+              component: 'multi_select',
+              placeholder: '',
+              additional_context: {
+                prompt: 'Please enter other topics included in your code of conduct. If entering multiple, separate using commas',
+                operator: '==',
+                component: 'textarea',
+                comparison: ['Other'],
+                placeholder: '',
+              },
+            },
+            'MFG-3': {
+              idx: 2,
+              prompt: 'To which tiers of your supply chain has your code of conduct been formally communicated and implemented?',
+              options: [
+                'Tier 1 (finished product manufacturers)',
+                'Tier 2 (finished material/subcomponent manufacturers)',
+                'Tier 3 (raw material processors)',
+                'Tier 4 (raw material suppliers)',
+              ],
+              tooltip: 'Select all that apply.',
+              component: 'multi_select',
+              placeholder: '',
+            },
+            'MFG-4': {
+              idx: 3,
+              prompt: 'Is your brand’s manufacturing code of conduct publicly available?',
+              options: [],
+              tooltip: '',
+              component: 'yes_no',
+              placeholder: '',
+              additional_context: {
+                prompt: 'Provide the hyperlink',
+                operator: '==',
+                component: 'textarea',
+                comparison: true,
+                placeholder: '',
+              },
+            },
+            'MFG-5': {
+              idx: 4,
+              prompt:
+                'Does your brand have a means of ensuring that your manufacturing code of conduct is aligned with internationally recognized best practices (e.g., periodic benchmarking to the Ethical Trading Initiative Base Code)?',
+              options: [],
+              tooltip: '',
+              component: 'yes_no',
+              placeholder: '',
+            },
+            'MFG-6': {
+              idx: 5,
+              prompt: 'Does your brand have a means of verifying compliance with your manufacturing code of conduct?',
+              options: [],
+              tooltip: '',
+              component: 'yes_no',
+              placeholder: '',
+              additional_context: {
+                prompt: 'Please Describe',
+                tooltip: 'Limit your response to 100 words or less.',
+                operator: '==',
+                component: 'textarea',
+                comparison: true,
+                placeholder: '',
+              },
+            },
+            'MFG-7': {
+              idx: 6,
+              prompt:
+                'Approximately what percentage of your supply chain has undergone, during the last calendar year, a social and/or environmental audit aimed at verifying compliance with your manufacturing code of conduct?',
+              options: [],
+              tooltip: 'Calculate as an estimated percentage of either (a) total number of active factories or (b) total dollars of first-cost production.',
+              based_on: 'MFG-6',
+              component: 'table',
+              placeholder: '',
+            },
+            'MFG-8': {
+              idx: 7,
+              prompt: 'Does your brand routinely collaborate with other brands to conduct shared social and/or environmental audits of your suppliers?',
+              options: [],
+              tooltip: 'Calculate as an estimated percentage of either (a) total number of active factories or (b) total dollars of first-cost production.',
+              component: 'yes_no',
+              placeholder: '',
+            },
+            'MFG-9': {
+              idx: 8,
+              prompt: 'Is your brand’s supplier list publicly available?',
+              options: [],
+              tooltip: '',
+              component: 'yes_no',
+              placeholder: '',
+              additional_context: {
+                prompt: 'Provide the hyperlink',
+                operator: '==',
+                component: 'textarea',
+                comparison: true,
+                placeholder: '',
+              },
+            },
+            'MFG-10': {
+              idx: 9,
+              prompt: 'Please indicate which tiers of your supply chain are represented on your supplier list.',
+              options: [
+                'Tier 1 (finished product manufacturers)',
+                'Tier 2 (finished material/subcomponent manufacturers)',
+                'Tier 3 (raw material processors)',
+                'Tier 4 (raw material suppliers)',
+              ],
+              tooltip: 'Select all that apply.',
+              component: 'multi_select',
+              placeholder: '',
+            },
+            'MFG-11': {
+              idx: 10,
+              prompt: 'Does your brand have a formal process for utilizing social and/or environmental performance data in sourcing decisions?',
+              options: [],
+              tooltip: '',
+              component: 'yes_no',
+              placeholder: '',
+            },
+            'MFG-12': {
+              idx: 11,
+              prompt: 'Does your brand have an ongoing training program(s) for suppliers to promote improved sustainability performance within your supply chain?',
+              options: [],
+              tooltip: '',
+              component: 'yes_no',
+              placeholder: '',
+            },
+          },
+          image_url:
+            'https://images.unsplash.com/photo-1533038590840-1cde6e668a91?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1587&q=80',
+          category_idx: 0,
+          category_description:
+            'As part of the REI Product Impact Standards, REI expects each brand partner to have in place a code of conduct that outlines the social and environmental standards to be upheld within their supply chain.',
+        },
+      },
+      image_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/splash_images/General.png',
+      intro_markdown:
+        'Please complete the REI Manufacturing Code of Conduct survey to the best of your ability. If you have any questions, please contact your REI Merchandising contact.',
+    },
+  });
+  surveys.push({
+    id: 'b122c540-f736-4940-b179-b95b2d26e4e6',
+    name: 'rei_ghg_survey',
+    type: 'TEST',
+    description: '',
+    created_at: '2024-01-17T17:48:36.402Z',
+    updated_at: '2024-01-17T17:48:36.404Z',
+    definition: {
+      title: 'Greenhouse Gas Emissions & Climate',
+      sections: {
+        GHG: {
+          title: 'Greenhouse Gas Emissions & Climate',
+          prompt: '',
+          component: null,
+          follow_up: {
+            'GHG-1': {
+              idx: 0,
+              prompt: 'Has your brand measured its carbon footprint this year or within the last calendar year?',
+              options: [],
+              tooltip: 'Note: The term carbon is used here as a generally accepted shorthand for greenhouse gas.',
+              component: 'yes_no',
+              placeholder: '',
+            },
+            'GHG-2': {
+              idx: 1,
+              prompt: 'Was your carbon footprint calculated using an internationally recognized greenhouse gas accounting standard (e.g., the GHG Protocol)?',
+              options: ['Yes, using the GHG Protocol', 'Yes, using another GHG accounting standard (please indicate below)', 'No'],
+              tooltip: 'Note: The term carbon is used here as a generally accepted shorthand for greenhouse gas.',
+              based_on: 'GHG-1',
+              component: 'select',
+              placeholder: '',
+              additional_context: {
+                prompt: 'Please indicate which standard(s) you used. (Note: If entering multiple, separate using commas.)',
+                operator: '==',
+                component: 'textarea',
+                comparison: 'Yes, using another GHG accounting standard (please indicate below)',
+                placeholder: '',
+              },
+            },
+            'GHG-3': {
+              idx: 2,
+              prompt: 'Was your carbon footprint calculated using an internationally recognized greenhouse gas accounting standard (e.g., the GHG Protocol)?',
+              options: [
+                'Scope 1: Direct emissions from company vehicles & facilities',
+                'Scope 2: Indirect emission from purchased electricity, steam, heating & cooling for own use',
+                'Scope 3: Indirect emissions from purchased goods and services (i.e., Category 1)',
+                'Scope 3: Indirect emissions from all other upstream and downstream sources (i.e., Categories 2-15)',
+              ],
+              tooltip: '',
+              component: 'multi_select',
+              placeholder: '',
+            },
+            'GHG-4': {
+              idx: 3,
+              prompt: "Has your brand 's carbon footprint been verified by an independent third-party?",
+              options: [],
+              tooltip: '',
+              component: 'yes_no',
+              placeholder: '',
+              additional_context: {
+                prompt: 'Please provide the hyperlink to the verification document.',
+                operator: '==',
+                component: 'textarea',
+                comparison: true,
+                placeholder: '',
+              },
+            },
+            'GHG-5': {
+              idx: 4,
+              prompt: 'Does your brand report its carbon footprint publicly?',
+              options: [],
+              tooltip: '',
+              component: 'yes_no',
+              placeholder: '',
+              additional_context: {
+                prompt: 'Please provide the hyperlink to your most recent public report.',
+                operator: '==',
+                component: 'textarea',
+                comparison: true,
+                placeholder: '',
+              },
+            },
+            'GHG-6': {
+              idx: 5,
+              prompt: 'Does your brand calculate the carbon emissions from individual products you sell?',
+              options: [
+                'Yes, we calculate the carbon emissions from every product we sell, including those we sell to REI.',
+                'Yes, we calculate the carbon emissions from a subset of the products we sell, including those we sell to REI.',
+                'Yes, we calculate the carbon emissions from a subset of the products we sell, but not including those we sell to REI.',
+                'No',
+              ],
+              tooltip: '',
+              component: 'select',
+              placeholder: '',
+            },
+            'GHG-7': {
+              idx: 7,
+              prompt: 'Has your brand set a quantitative target(s) to reduce your carbon emissions?',
+              options: [],
+              tooltip: '',
+              component: 'yes_no',
+              placeholder: '',
+            },
+            'GHG-8': {
+              idx: 11,
+              prompt: 'Has your emission reduction target(s) been approved by the Science Based Targets Initiative (SBTi) or an equivalent framework?',
+              options: [
+                'Yes, our target(s) has been approved by the SBTi',
+                'No, but our target(s) is currently being evaluated by the SBTi for approval',
+                'No, but we’ve aligned our target(s) with the SBTi’s guidance',
+                'No, but we’ve aligned our target(s) with an equivalent framework for setting science-aligned reduction targets',
+                'No',
+              ],
+              tooltip:
+                'Note: REI considers a science-aligned target to be one that includes emissions from scopes 1, 2, and 3 and aligns with what the latest climate science indicates is necessary to limit global warming to 1.5oC above pre-industrial levels.',
+              component: 'select',
+              placeholder: '',
+            },
+            'GHG-10': {
+              idx: 13,
+              prompt:
+                'Did your brand’s carbon emissions over the previous year represent a measurable reduction in emissions intensity (i.e., carbon emissions per unit of product or dollar of revenue) relative to the prior year or a previous baseline year?',
+              options: ['Yes, a 1-25% reduction', 'Yes, a 26-50% reduction', 'Yes, a 51-75% reduction', 'Yes, a 76-99% reduction', 'Yes, a 100% reduction', 'No'],
+              tooltip: '',
+              component: 'select',
+              placeholder: '',
+            },
+            'GHG-11': {
+              idx: 14,
+              prompt: 'Does your brand generate and/or purchase carbon credits to “offset” all or a portion of your carbon emissions?',
+              options: [],
+              tooltip: '',
+              component: 'yes_no',
+              placeholder: '',
+            },
+            'GHG-12': {
+              idx: 15,
+              prompt: 'Please indicate whether the carbon credits you generate and/or purchase account for and include the following components of your carbon footprint.',
+              options: [
+                'Scope 1: Direct emissions from company vehicles & facilities',
+                'Scope 2: Indirect emission from purchased electricity, steam, heating & cooling for own use',
+                'A portion of scope 3 emissions, but not including those from all the products you sell to REI',
+                'All or a portion of scope 3 emissions, including all the products you sell to REI',
+                'Other',
+              ],
+              tooltip: 'Select all that apply.',
+              based_on: 'GHG-11',
+              component: 'multi_select',
+              placeholder: '',
+            },
+            'GHG-13': {
+              idx: 16,
+              prompt:
+                'Is your brand certified to a third-party standard that validates that you’ve purchased carbon credits sufficient to “offset” the relevant components of your carbon footprint (e.g., Climate Neutral Certified)?',
+              options: ['Yes, we’re Climate Neutral Certified', 'Yes, we’re certified to another carbon/climate neutrality standard (please describe below)', 'No'],
+              tooltip: '',
+              component: 'select',
+              placeholder: '',
+              additional_context: {
+                prompt: 'If you are certified by another carbon/climate neutrality standard, please indicate which standard(s) your brand is certified to.',
+                tooltip: '',
+                operator: '==',
+                component: 'textarea',
+                comparison: 'Yes, we’re certified to another carbon/climate neutrality standard (please describe below)',
+                placeholder: '',
+              },
+            },
+            'GHG-6A': {
+              idx: 6,
+              prompt: 'Please indicate whether your brand uses spend or material-based emissions factors to calculate your product carbon emissions.',
+              options: ['We use spend-based emissions factors', 'We use material-based emissions factors', 'Other'],
+              tooltip: 'Select all that apply.',
+              component: 'multi_select',
+              placeholder: '',
+              additional_context: {
+                prompt: 'Please describe.',
+                tooltip: 'Limit your response to 100 words or less.',
+                operator: '==',
+                component: 'textarea',
+                comparison: 'Other',
+                placeholder: '',
+              },
+            },
+            'GHG-7A': {
+              idx: 8,
+              prompt: 'Which components of your carbon footprint are covered by your quantitative reduction target?',
+              options: [
+                'Scope 1: Direct emissions from company vehicles & facilities',
+                'Scope 2: Indirect emissions from purchased electricity, steam, heating & cooling for own use',
+                'Scope 3: Indirect emissions from purchased goods and services (i.e., Category 1)',
+                'Scope 3: Indirect emissions from all other relevant upstream and downstream sources (i.e., Categories 2-15)',
+              ],
+              tooltip: 'Select all that apply.',
+              component: 'multi_select',
+              placeholder: '',
+            },
+            'GHG-7C': {
+              idx: 10,
+              prompt:
+                'Please select one of the following to indicate if your target is for absolute emissions reduction (i.e., total carbon emissions) or reduction in emissions intensity (i.e., carbon emissions per unit of product or dollar of revenue):',
+              options: ['Absolute emissions reduction', 'Reduction in emissions intensity'],
+              tooltip: '',
+              component: 'select',
+              placeholder: '',
+            },
+            'GHG-9A': {
+              idx: 12,
+              prompt: 'What are the primary components of your emissions reduction action plan?',
+              options: [
+                'Use of low-carbon materials or ingredients in products',
+                'Use of clean energy in product manufacturing',
+                'Use of clean energy to power operations (e.g., offices, distribution centers, etc.)',
+                'Minimization of materials waste in manufacturing',
+                'Energy efficiency in manufacturing',
+                'Use of circular business models (e.g., selling used products, renting or leasing products, product subscription, product recycling, etc.)',
+                'Supporting customers in reducing emissions during product use',
+                'Other (please describe)',
+              ],
+              tooltip: 'Select all that apply.',
+              component: 'multi_select',
+              placeholder: '',
+              additional_context: {
+                prompt: 'Please describe.',
+                tooltip: '',
+                operator: '==',
+                component: 'textarea',
+                comparison: 'Other',
+                placeholder: '',
+              },
+            },
+          },
+          image_url:
+            'https://images.unsplash.com/photo-1533038590840-1cde6e668a91?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1587&q=80',
+          category_idx: 0,
+          category_description:
+            'As part of the REI Product Impact Standards, REI expects each brand partner to measure their annual greenhouse gas (GHG) emissions , set a reduction target, and implement an action plan for reducing their emissions. The following section focuses on the steps your brand is taking to address your contribution to climate change.',
+        },
+      },
+      image_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/splash_images/General.png',
+      intro_markdown:
+        'Please complete the REI Greenhouse Gas Emissions & Climate survey to the best of your ability. If you have any questions, please contact your REI Sustainability Manager.',
+    },
+  });
+  surveys.push({
+    id: 'e85c4fb2-12dd-4be0-9027-5117c993e07f',
+    name: 'rei_pkg_survey',
+    type: 'TEST',
+    description: '',
+    created_at: '2024-01-17T17:51:59.384Z',
+    updated_at: '2024-01-17T17:51:59.386Z',
+    definition: {
+      title: 'Packaging - General',
+      sections: {
+        PKG: {
+          title: 'Packaging - General',
+          prompt: '',
+          component: null,
+          follow_up: {
+            'PKG-1': {
+              idx: 0,
+              prompt: 'Does your brand have a formal policy/target in place regarding the use of more sustainable product packaging?',
+              options: [],
+              tooltip: '',
+              component: 'textarea',
+              placeholder: '',
+            },
+            'PKG-2': {
+              idx: 1,
+              prompt: 'Has your brand been able to phase out the use of single-use plastics across any noteworthy areas of primary or secondary product packaging?',
+              options: [],
+              tooltip: '',
+              component: 'yes_no',
+              placeholder: '',
+              additional_context: {
+                prompt: 'Please describe the type of packaging phased out, the product category impacted and the alternative packaging used that avoids single-use plastics.',
+                tooltip: '',
+                operator: '==',
+                component: 'textarea',
+                comparison: true,
+                placeholder: '',
+              },
+            },
+            'PKG-3': {
+              idx: 2,
+              prompt: 'Are there other best sustainability practices for primary product packaging that you have in place that you’d like to share with REI?',
+              options: [],
+              tooltip: '',
+              component: 'yes_no',
+              placeholder: '',
+              additional_context: {
+                prompt: 'Please describe.',
+                tooltip: '',
+                operator: '==',
+                component: 'textarea',
+                comparison: true,
+                placeholder: '',
+              },
+            },
+            'PKG-4': {
+              idx: 3,
+              prompt:
+                'Are there any key resources or tools your brand has used to avoid the use of individual polybags or implement other packaging sustainability best practices that might be useful for other brands?',
+              options: [],
+              tooltip: '',
+              component: 'yes_no',
+              placeholder: '',
+              additional_context: {
+                prompt: 'Please describe.',
+                tooltip: '',
+                operator: '==',
+                component: 'textarea',
+                comparison: true,
+                placeholder: '',
+              },
+            },
+          },
+          image_url:
+            'https://images.unsplash.com/photo-1533038590840-1cde6e668a91?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1587&q=80',
+          category_idx: 0,
+          category_description: '',
+        },
+      },
+      image_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/splash_images/General.png',
+      intro_markdown:
+        'Please complete the REI Packaging - General survey below. This survey is intended to help REI understand your brand’s current efforts to reduce the environmental impact of your product packaging. Please complete this survey by October 1, 2021.',
+    },
+  });
   return surveys;
+}
+
+export function getCompliancePageSurveysMocksByName(name: string) {
+  const surveys = [];
+  surveys.push({
+    id: 'b5a544e8-c87e-48e2-9c92-d9352dcc2d33',
+    name: 'rei_mfg_survey',
+    type: 'TEST',
+    description: "Introductory survey to gather information about a brand's manufacturing practices",
+    created_at: '2024-01-17T17:36:53.231Z',
+    updated_at: '2024-01-17T17:36:53.232Z',
+    definition: {
+      title: 'Manufacturing Code of Conduct',
+      sections: {
+        MFG: {
+          title: 'Manufacturing Code of Conduct',
+          prompt: '',
+          component: null,
+          follow_up: {
+            'MFG-1': {
+              idx: 0,
+              prompt: 'Does your brand have in place a code of conduct for factories that manufacture the products you supply to REI?',
+              options: [],
+              tooltip: '',
+              component: 'yes_no',
+              placeholder: '',
+              value: true,
+              skipped: false,
+              additional_context: {
+                prompt: "Please describe how your brand plans to align with REI's expectation in this area.",
+                operator: '==',
+                component: 'textarea',
+                comparison: false,
+                placeholder: '',
+              },
+            },
+            'MFG-2': {
+              idx: 1,
+              prompt: 'Please indicate which of the following topics are included in your manufacturing code of conduct.',
+              options: [
+                'Transparency',
+                'Non-discrimination',
+                'Harassment and Abuse',
+                'Recruitment and Hiring',
+                'Freedom of Association & Collective Bargaining',
+                'Hours of Work',
+                'Compensation',
+                'Health & Safety',
+                'Environment',
+                'Community',
+                'Other',
+              ],
+              tooltip: 'Select all that apply.',
+              component: 'multi_select',
+              placeholder: '',
+              value: ['Transparency', 'Non-discrimination'],
+              skipped: false,
+              additional_context: {
+                prompt: 'Please enter other topics included in your code of conduct. If entering multiple, separate using commas',
+                operator: '==',
+                component: 'textarea',
+                comparison: ['Other'],
+                placeholder: '',
+              },
+            },
+            'MFG-3': {
+              idx: 2,
+              prompt: 'To which tiers of your supply chain has your code of conduct been formally communicated and implemented?',
+              options: [
+                'Tier 1 (finished product manufacturers)',
+                'Tier 2 (finished material/subcomponent manufacturers)',
+                'Tier 3 (raw material processors)',
+                'Tier 4 (raw material suppliers)',
+              ],
+              value: ['Tier 1 (finished product manufacturers)', 'Tier 2 (finished material/subcomponent manufacturers)'],
+              skipped: false,
+              tooltip: 'Select all that apply.',
+              component: 'multi_select',
+              placeholder: '',
+            },
+            'MFG-4': {
+              idx: 3,
+              prompt: 'Is your brand’s manufacturing code of conduct publicly available?',
+              options: [],
+              tooltip: '',
+              component: 'yes_no',
+              placeholder: '',
+              value: true,
+              skipped: false,
+              additional_context: {
+                prompt: 'Provide the hyperlink',
+                operator: '==',
+                component: 'textarea',
+                comparison: true,
+                placeholder: '',
+                value: 'https://www.google.com',
+              },
+            },
+            'MFG-5': {
+              idx: 4,
+              prompt:
+                'Does your brand have a means of ensuring that your manufacturing code of conduct is aligned with internationally recognized best practices (e.g., periodic benchmarking to the Ethical Trading Initiative Base Code)?',
+              options: [],
+              tooltip: '',
+              component: 'yes_no',
+              placeholder: '',
+              value: true,
+            },
+            'MFG-6': {
+              idx: 5,
+              prompt: 'Does your brand have a means of verifying compliance with your manufacturing code of conduct?',
+              options: [],
+              tooltip: '',
+              component: 'yes_no',
+              placeholder: '',
+              value: true,
+              skipped: false,
+              additional_context: {
+                prompt: 'Please Describe',
+                tooltip: 'Limit your response to 100 words or less.',
+                operator: '==',
+                component: 'textarea',
+                comparison: true,
+                placeholder: '',
+                value: 'We have a team of 10 people who do this',
+              },
+            },
+            'MFG-7': {
+              idx: 6,
+              prompt:
+                'Approximately what percentage of your supply chain has undergone, during the last calendar year, a social and/or environmental audit aimed at verifying compliance with your manufacturing code of conduct?',
+              options: [],
+              tooltip: 'Calculate as an estimated percentage of either (a) total number of active factories or (b) total dollars of first-cost production.',
+              based_on: 'MFG-6',
+              component: 'table',
+              placeholder: '',
+              value: '10%',
+              skipped: false,
+            },
+            'MFG-8': {
+              idx: 7,
+              prompt: 'Does your brand routinely collaborate with other brands to conduct shared social and/or environmental audits of your suppliers?',
+              options: [],
+              tooltip: 'Calculate as an estimated percentage of either (a) total number of active factories or (b) total dollars of first-cost production.',
+              component: 'yes_no',
+              placeholder: '',
+              value: true,
+              skipped: false,
+            },
+            'MFG-9': {
+              idx: 8,
+              prompt: 'Is your brand’s supplier list publicly available?',
+              options: [],
+              tooltip: '',
+              component: 'yes_no',
+              placeholder: '',
+              additional_context: {
+                prompt: 'Provide the hyperlink',
+                operator: '==',
+                component: 'textarea',
+                comparison: true,
+                placeholder: '',
+              },
+            },
+            'MFG-10': {
+              idx: 9,
+              prompt: 'Please indicate which tiers of your supply chain are represented on your supplier list.',
+              options: [
+                'Tier 1 (finished product manufacturers)',
+                'Tier 2 (finished material/subcomponent manufacturers)',
+                'Tier 3 (raw material processors)',
+                'Tier 4 (raw material suppliers)',
+              ],
+              tooltip: 'Select all that apply.',
+              component: 'multi_select',
+              placeholder: '',
+            },
+            'MFG-11': {
+              idx: 10,
+              prompt: 'Does your brand have a formal process for utilizing social and/or environmental performance data in sourcing decisions?',
+              options: [],
+              tooltip: '',
+              component: 'yes_no',
+              placeholder: '',
+            },
+            'MFG-12': {
+              idx: 11,
+              prompt: 'Does your brand have an ongoing training program(s) for suppliers to promote improved sustainability performance within your supply chain?',
+              options: [],
+              tooltip: '',
+              component: 'yes_no',
+              placeholder: '',
+            },
+          },
+          image_url:
+            'https://images.unsplash.com/photo-1533038590840-1cde6e668a91?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1587&q=80',
+          category_idx: 0,
+          category_description:
+            'As part of the REI Product Impact Standards, REI expects each brand partner to have in place a code of conduct that outlines the social and environmental standards to be upheld within their supply chain.',
+        },
+      },
+      image_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/splash_images/General.png',
+      intro_markdown:
+        'Please complete the REI Manufacturing Code of Conduct survey to the best of your ability. If you have any questions, please contact your REI Merchandising contact.',
+    },
+  });
+  surveys.push({
+    id: 'b122c540-f736-4940-b179-b95b2d26e4e6',
+    name: 'rei_ghg_survey',
+    type: 'TEST',
+    description: '',
+    created_at: '2024-01-17T17:48:36.402Z',
+    updated_at: '2024-01-17T17:48:36.404Z',
+    definition: {
+      title: 'Greenhouse Gas Emissions & Climate',
+      sections: {
+        GHG: {
+          title: 'Greenhouse Gas Emissions & Climate',
+          prompt: '',
+          component: null,
+          follow_up: {
+            'GHG-1': {
+              idx: 0,
+              prompt: 'Has your brand measured its carbon footprint this year or within the last calendar year?',
+              options: [],
+              tooltip: 'Note: The term carbon is used here as a generally accepted shorthand for greenhouse gas.',
+              component: 'yes_no',
+              placeholder: '',
+              optimized: true,
+            },
+            'GHG-2': {
+              idx: 1,
+              prompt: 'Was your carbon footprint calculated using an internationally recognized greenhouse gas accounting standard (e.g., the GHG Protocol)?',
+              options: ['Yes, using the GHG Protocol', 'Yes, using another GHG accounting standard (please indicate below)', 'No'],
+              tooltip: 'Note: The term carbon is used here as a generally accepted shorthand for greenhouse gas.',
+              based_on: 'GHG-1',
+              component: 'select',
+              placeholder: '',
+              additional_context: {
+                prompt: 'Please indicate which standard(s) you used. (Note: If entering multiple, separate using commas.)',
+                operator: '==',
+                component: 'textarea',
+                comparison: 'Yes, using another GHG accounting standard (please indicate below)',
+                placeholder: '',
+              },
+              optimized: true,
+            },
+            'GHG-3': {
+              idx: 2,
+              prompt: 'Was your carbon footprint calculated using an internationally recognized greenhouse gas accounting standard (e.g., the GHG Protocol)?',
+              options: [
+                'Scope 1: Direct emissions from company vehicles & facilities',
+                'Scope 2: Indirect emission from purchased electricity, steam, heating & cooling for own use',
+                'Scope 3: Indirect emissions from purchased goods and services (i.e., Category 1)',
+                'Scope 3: Indirect emissions from all other upstream and downstream sources (i.e., Categories 2-15)',
+              ],
+              tooltip: '',
+              component: 'multi_select',
+              placeholder: '',
+              optimized: true,
+            },
+            'GHG-4': {
+              idx: 3,
+              prompt: "Has your brand 's carbon footprint been verified by an independent third-party?",
+              options: [],
+              tooltip: '',
+              component: 'yes_no',
+              placeholder: '',
+              additional_context: {
+                prompt: 'Please provide the hyperlink to the verification document.',
+                operator: '==',
+                component: 'textarea',
+                comparison: true,
+                placeholder: '',
+              },
+              optimized: true,
+            },
+            'GHG-5': {
+              idx: 4,
+              prompt: 'Does your brand report its carbon footprint publicly?',
+              options: [],
+              tooltip: '',
+              component: 'yes_no',
+              placeholder: '',
+              additional_context: {
+                prompt: 'Please provide the hyperlink to your most recent public report.',
+                operator: '==',
+                component: 'textarea',
+                comparison: true,
+                placeholder: '',
+              },
+              optimized: true,
+            },
+            'GHG-6': {
+              idx: 5,
+              prompt: 'Does your brand calculate the carbon emissions from individual products you sell?',
+              options: [
+                'Yes, we calculate the carbon emissions from every product we sell, including those we sell to REI.',
+                'Yes, we calculate the carbon emissions from a subset of the products we sell, including those we sell to REI.',
+                'Yes, we calculate the carbon emissions from a subset of the products we sell, but not including those we sell to REI.',
+                'No',
+              ],
+              tooltip: '',
+              component: 'select',
+              placeholder: '',
+              optimized: true,
+            },
+            'GHG-7': {
+              idx: 7,
+              prompt: 'Has your brand set a quantitative target(s) to reduce your carbon emissions?',
+              options: [],
+              tooltip: '',
+              component: 'yes_no',
+              placeholder: '',
+              optimized: true,
+            },
+            'GHG-8': {
+              idx: 11,
+              prompt: 'Has your emission reduction target(s) been approved by the Science Based Targets Initiative (SBTi) or an equivalent framework?',
+              options: [
+                'Yes, our target(s) has been approved by the SBTi',
+                'No, but our target(s) is currently being evaluated by the SBTi for approval',
+                'No, but we’ve aligned our target(s) with the SBTi’s guidance',
+                'No, but we’ve aligned our target(s) with an equivalent framework for setting science-aligned reduction targets',
+                'No',
+              ],
+              tooltip:
+                'Note: REI considers a science-aligned target to be one that includes emissions from scopes 1, 2, and 3 and aligns with what the latest climate science indicates is necessary to limit global warming to 1.5oC above pre-industrial levels.',
+              component: 'select',
+              placeholder: '',
+              optimized: true,
+            },
+            'GHG-10': {
+              idx: 13,
+              prompt:
+                'Did your brand’s carbon emissions over the previous year represent a measurable reduction in emissions intensity (i.e., carbon emissions per unit of product or dollar of revenue) relative to the prior year or a previous baseline year?',
+              options: ['Yes, a 1-25% reduction', 'Yes, a 26-50% reduction', 'Yes, a 51-75% reduction', 'Yes, a 76-99% reduction', 'Yes, a 100% reduction', 'No'],
+              tooltip: '',
+              component: 'select',
+              placeholder: '',
+              optimized: true,
+            },
+            'GHG-11': {
+              idx: 14,
+              prompt: 'Does your brand generate and/or purchase carbon credits to “offset” all or a portion of your carbon emissions?',
+              options: [],
+              tooltip: '',
+              component: 'yes_no',
+              placeholder: '',
+              optimized: true,
+            },
+            'GHG-12': {
+              idx: 15,
+              prompt: 'Please indicate whether the carbon credits you generate and/or purchase account for and include the following components of your carbon footprint.',
+              options: [
+                'Scope 1: Direct emissions from company vehicles & facilities',
+                'Scope 2: Indirect emission from purchased electricity, steam, heating & cooling for own use',
+                'A portion of scope 3 emissions, but not including those from all the products you sell to REI',
+                'All or a portion of scope 3 emissions, including all the products you sell to REI',
+                'Other',
+              ],
+              tooltip: 'Select all that apply.',
+              based_on: 'GHG-11',
+              component: 'multi_select',
+              placeholder: '',
+            },
+            'GHG-13': {
+              idx: 16,
+              prompt:
+                'Is your brand certified to a third-party standard that validates that you’ve purchased carbon credits sufficient to “offset” the relevant components of your carbon footprint (e.g., Climate Neutral Certified)?',
+              options: ['Yes, we’re Climate Neutral Certified', 'Yes, we’re certified to another carbon/climate neutrality standard (please describe below)', 'No'],
+              tooltip: '',
+              component: 'select',
+              placeholder: '',
+              additional_context: {
+                prompt: 'If you are certified by another carbon/climate neutrality standard, please indicate which standard(s) your brand is certified to.',
+                tooltip: '',
+                operator: '==',
+                component: 'textarea',
+                comparison: 'Yes, we’re certified to another carbon/climate neutrality standard (please describe below)',
+                placeholder: '',
+              },
+            },
+            'GHG-6A': {
+              idx: 6,
+              prompt: 'Please indicate whether your brand uses spend or material-based emissions factors to calculate your product carbon emissions.',
+              options: ['We use spend-based emissions factors', 'We use material-based emissions factors', 'Other'],
+              tooltip: 'Select all that apply.',
+              component: 'multi_select',
+              placeholder: '',
+              additional_context: {
+                prompt: 'Please describe.',
+                tooltip: 'Limit your response to 100 words or less.',
+                operator: '==',
+                component: 'textarea',
+                comparison: 'Other',
+                placeholder: '',
+              },
+            },
+            'GHG-7A': {
+              idx: 8,
+              prompt: 'Which components of your carbon footprint are covered by your quantitative reduction target?',
+              options: [
+                'Scope 1: Direct emissions from company vehicles & facilities',
+                'Scope 2: Indirect emissions from purchased electricity, steam, heating & cooling for own use',
+                'Scope 3: Indirect emissions from purchased goods and services (i.e., Category 1)',
+                'Scope 3: Indirect emissions from all other relevant upstream and downstream sources (i.e., Categories 2-15)',
+              ],
+              tooltip: 'Select all that apply.',
+              component: 'multi_select',
+              placeholder: '',
+            },
+            'GHG-7C': {
+              idx: 10,
+              prompt:
+                'Please select one of the following to indicate if your target is for absolute emissions reduction (i.e., total carbon emissions) or reduction in emissions intensity (i.e., carbon emissions per unit of product or dollar of revenue):',
+              options: ['Absolute emissions reduction', 'Reduction in emissions intensity'],
+              tooltip: '',
+              component: 'select',
+              placeholder: '',
+            },
+            'GHG-9A': {
+              idx: 12,
+              prompt: 'What are the primary components of your emissions reduction action plan?',
+              options: [
+                'Use of low-carbon materials or ingredients in products',
+                'Use of clean energy in product manufacturing',
+                'Use of clean energy to power operations (e.g., offices, distribution centers, etc.)',
+                'Minimization of materials waste in manufacturing',
+                'Energy efficiency in manufacturing',
+                'Use of circular business models (e.g., selling used products, renting or leasing products, product subscription, product recycling, etc.)',
+                'Supporting customers in reducing emissions during product use',
+                'Other (please describe)',
+              ],
+              tooltip: 'Select all that apply.',
+              component: 'multi_select',
+              placeholder: '',
+              additional_context: {
+                prompt: 'Please describe.',
+                tooltip: '',
+                operator: '==',
+                component: 'textarea',
+                comparison: 'Other',
+                placeholder: '',
+              },
+            },
+          },
+          image_url:
+            'https://images.unsplash.com/photo-1533038590840-1cde6e668a91?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1587&q=80',
+          category_idx: 0,
+          category_description:
+            'As part of the REI Product Impact Standards, REI expects each brand partner to measure their annual greenhouse gas (GHG) emissions , set a reduction target, and implement an action plan for reducing their emissions. The following section focuses on the steps your brand is taking to address your contribution to climate change.',
+        },
+      },
+      image_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/splash_images/General.png',
+      intro_markdown:
+        'Please complete the REI Greenhouse Gas Emissions & Climate survey to the best of your ability. If you have any questions, please contact your REI Sustainability Manager.',
+    },
+  });
+  surveys.push({
+    id: 'e85c4fb2-12dd-4be0-9027-5117c993e07f',
+    name: 'rei_pkg_survey',
+    type: 'TEST',
+    description: '',
+    created_at: '2024-01-17T17:51:59.384Z',
+    updated_at: '2024-01-17T17:51:59.386Z',
+    definition: {
+      title: 'Packaging - General',
+      sections: {
+        PKG: {
+          title: 'Packaging - General',
+          prompt: '',
+          component: null,
+          follow_up: {
+            'PKG-1': {
+              idx: 0,
+              prompt: 'Does your brand have a formal policy/target in place regarding the use of more sustainable product packaging?',
+              options: [],
+              tooltip: '',
+              component: 'textarea',
+              placeholder: '',
+            },
+            'PKG-2': {
+              idx: 1,
+              prompt: 'Has your brand been able to phase out the use of single-use plastics across any noteworthy areas of primary or secondary product packaging?',
+              options: [],
+              tooltip: '',
+              component: 'yes_no',
+              placeholder: '',
+              additional_context: {
+                prompt: 'Please describe the type of packaging phased out, the product category impacted and the alternative packaging used that avoids single-use plastics.',
+                tooltip: '',
+                operator: '==',
+                component: 'textarea',
+                comparison: true,
+                placeholder: '',
+              },
+            },
+            'PKG-3': {
+              idx: 2,
+              prompt: 'Are there other best sustainability practices for primary product packaging that you have in place that you’d like to share with REI?',
+              options: [],
+              tooltip: '',
+              component: 'yes_no',
+              placeholder: '',
+              additional_context: {
+                prompt: 'Please describe.',
+                tooltip: '',
+                operator: '==',
+                component: 'textarea',
+                comparison: true,
+                placeholder: '',
+              },
+            },
+            'PKG-4': {
+              idx: 3,
+              prompt:
+                'Are there any key resources or tools your brand has used to avoid the use of individual polybags or implement other packaging sustainability best practices that might be useful for other brands?',
+              options: [],
+              tooltip: '',
+              component: 'yes_no',
+              placeholder: '',
+              additional_context: {
+                prompt: 'Please describe.',
+                tooltip: '',
+                operator: '==',
+                component: 'textarea',
+                comparison: true,
+                placeholder: '',
+              },
+            },
+          },
+          image_url:
+            'https://images.unsplash.com/photo-1533038590840-1cde6e668a91?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1587&q=80',
+          category_idx: 0,
+          category_description: '',
+        },
+      },
+      image_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/splash_images/General.png',
+      intro_markdown:
+        'Please complete the REI Packaging - General survey below. This survey is intended to help REI understand your brand’s current efforts to reduce the environmental impact of your product packaging. Please complete this survey by October 1, 2021.',
+    },
+  });
+  switch (name) {
+    case 'rei_mfg_survey':
+      return surveys[0];
+    case 'rei_ghg_survey':
+      return surveys[1];
+    case 'rei_pkg_survey':
+      return surveys[2];
+    default:
+      return surveys[0];
+  }
 }
