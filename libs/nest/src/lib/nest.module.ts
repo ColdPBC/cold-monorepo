@@ -12,7 +12,7 @@ import { HealthController, HealthModule, HealthService } from './health';
 import { DarklyService } from './darkly';
 import { ColdCacheModule } from './cache';
 import { AuthorizationModule, JwtAuthGuard, JwtStrategy } from './authorization';
-import { InterceptorModule, UserInterceptor } from './interceptors';
+import { InterceptorModule, OrgUserInterceptor } from './interceptors';
 import { BaseWorker, WorkerLogger } from './worker';
 import { ColdRabbitModule, ColdRabbitService } from './rabbit';
 //import { CronModule, CronService } from './crons';
@@ -55,7 +55,7 @@ export class NestModule {
       MqttService,
       {
         provide: APP_INTERCEPTOR,
-        useClass: UserInterceptor,
+        useClass: OrgUserInterceptor,
       },
     ];
 

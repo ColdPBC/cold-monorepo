@@ -5,7 +5,7 @@ import { map } from 'rxjs/operators';
 import { AuthenticatedUser } from '@coldpbc/nest';
 
 @Injectable()
-export class UserInterceptor implements NestInterceptor {
+export class OrgUserInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<unknown> {
     const request = context.switchToHttp().getRequest();
     const user = request.user as AuthenticatedUser;
