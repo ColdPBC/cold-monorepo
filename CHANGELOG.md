@@ -1,3 +1,10 @@
+# [1.84.0-COLD-462.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.84.0-COLD-462.1...v1.84.0-COLD-462.2) (2024-01-19)
+
+
+### Features
+
+* compliance page updates ([9ab491e](https://github.com/ColdPBC/cold-monorepo/commit/9ab491e6999e922ec7a45aae77548287604ffe3a))
+
 # [1.84.0-COLD-462.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.83.11...v1.84.0-COLD-462.1) (2024-01-18)
 
 
