@@ -362,6 +362,10 @@ export class AppService extends BaseWorker implements OnModuleInit {
         },
       });
 
+      if (!integrations) {
+        throw new NotFoundException(`Integration not found for organization ${org.id}`);
+      }
+
       const myAssistantFile = await this.client.beta.assistants.files.create(integrations.id, {
         file_id: openAIFileId,
       });
