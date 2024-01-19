@@ -1,3 +1,10 @@
+## [1.86.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.86.3...v1.86.4) (2024-01-19)
+
+
+### Bug Fixes
+
+* issue with empty arrays ([281c709](https://github.com/ColdPBC/cold-monorepo/commit/281c709645653b17a4f9215f85962f07f097ae59))
+
 ## [1.86.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.86.2...v1.86.3) (2024-01-19)
 
 
