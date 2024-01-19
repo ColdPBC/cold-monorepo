@@ -1,23 +1,11 @@
-import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post, Put, Query, Req, UseFilters, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post, Query, Req, UseFilters, UseGuards } from '@nestjs/common';
 import { ApiOAuth2, ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { survey_types } from '@prisma/client';
 import { Span } from 'nestjs-ddtrace';
 import { ResourceValidationPipe } from '../../../pipes/resource.pipe';
-import {
-  AuthenticatedUser,
-  BaseWorker,
-  HttpExceptionFilter,
-  JwtAuthGuard,
-  Role,
-  Roles,
-  RolesGuard,
-  SurveyDefinitionsEntity,
-  SurveyResponseSchema,
-  UpdateSurveyDefinitionsDto,
-  ZodCategoryResponseDto,
-} from '@coldpbc/nest';
-import { allRoles, bpcDecoratorOptions, coldAdminOnly, impersonateOrgDecoratorOptions, orgIdDecoratorOptions } from '../_global/global.params';
-import { ComplianceService } from './compliance.service';
+import { AuthenticatedUser, BaseWorker, HttpExceptionFilter, JwtAuthGuard, Role, Roles, RolesGuard, SurveyResponseSchema } from '@coldpbc/nest';
+import { allRoles, bpcDecoratorOptions, coldAdminOnly } from '../_global/global.params';
+import { ComplianceDefinitionService } from './compliance_definition.service';
+import { ComplianceDefinition, ComplianceDefinitionSchema } from './schemas/compliance_definition_schema';
 
 //import { UpdateSurveyDefinitionDto } from './dto/update-survey-definition.dto';
 
@@ -25,9 +13,10 @@ import { ComplianceService } from './compliance.service';
 @UseGuards(JwtAuthGuard, RolesGuard)
 @UseFilters(new HttpExceptionFilter(ComplianceController.name))
 @ApiOAuth2(['openid'])
+@ApiTags('Compliance Definitions')
 @Controller('compliance_definitions')
 export class ComplianceController extends BaseWorker {
-  constructor(private readonly surveyService: ComplianceService) {
+  constructor(private readonly complianceService: ComplianceDefinitionService) {
     super(ComplianceController.name);
   }
 
@@ -42,31 +31,17 @@ export class ComplianceController extends BaseWorker {
       query: any;
       user: AuthenticatedUser;
     },
-    @Body(new ResourceValidationPipe(SurveyResponseSchema, 'POST')) createSurvey: SurveyDefinitionsEntity,
+    @Body(new ResourceValidationPipe(ComplianceDefinitionSchema, 'POST')) definition: ComplianceDefinition,
   ) {
-    return this.surveyService.create(createSurvey, req.user);
+    return this.complianceService.create(req.user, definition);
   }
 
-  @Get('surveys')
-  @ApiTags('Surveys')
-  @Roles(...coldAdminOnly)
-  @ApiQuery({
-    name: 'type',
-    example: 'TEST',
-    required: false,
-    description: 'The type of surveys to return',
-  })
-  @ApiQuery({
-    name: 'name',
-    example: '{{test_survey_name}}',
-    required: false,
-    description: 'The type of surveys to return',
-  })
+  @Get()
+  @Roles(...allRoles)
   @ApiQuery(bpcDecoratorOptions)
-  @ApiQuery(impersonateOrgDecoratorOptions)
   @ApiResponse({
     status: 200,
-    description: 'Returns all survey definitions by type',
+    description: 'Returns all compliance definitions',
   })
   async findAll(
     @Req()
@@ -76,44 +51,32 @@ export class ComplianceController extends BaseWorker {
       query: any;
       user: AuthenticatedUser;
     },
-    @Query('type') type: survey_types,
-    @Query('name') name: string,
-    @Query('impersonateOrg') orgId?: string,
     @Query('bpc') bpc?: boolean,
   ) {
-    const response = await this.surveyService.findAll(req.user, { name: name, type: type }, bpc, orgId);
-
-    return response;
-
-    //return this.surveyService.findAll(req.user, bpc, orgId);
+    return await this.complianceService.findAll(bpc);
   }
 
   /**
-   * Get all surveys for an org
+   * Get all compliance definitions by name
    */
-  @Get('organizations/:orgId/surveys')
-  @Roles(...allRoles)
-  @ApiTags('Organizations : Surveys')
-  @ApiParam(orgIdDecoratorOptions)
-  @ApiQuery({
-    name: 'type',
-    example: 'TEST',
-    required: false,
-    description: 'The type of surveys to return',
+  @Get(':name')
+  @ApiOperation({
+    summary: 'Get by name',
+    operationId: 'GetComplianceDefinitionByName',
   })
-  @ApiQuery({
+  @Roles(...allRoles)
+  @ApiParam({
     name: 'name',
-    example: '{{test_survey_name}}',
-    required: false,
-    description: 'The name of survey to return',
+    example: '{{test_compliance_definition_name}}',
+    required: true,
+    description: 'The name of compliance definition to return',
   })
   @ApiQuery(bpcDecoratorOptions)
   @ApiResponse({
     status: 200,
-    description: 'Returns all survey definitions by type',
+    description: 'Returns all compliance definitions by type',
   })
-  async findAllByOrg(
-    @Param('orgId') orgId: string,
+  async findByName(
     @Req()
     req: {
       body: any;
@@ -121,214 +84,42 @@ export class ComplianceController extends BaseWorker {
       query: any;
       user: AuthenticatedUser;
     },
-    @Query('type') type: survey_types,
-    @Query('name') name: string,
-    @Query('bpc') bpc?: boolean,
-  ) {
-    if (!name && !type) {
-      // return new HttpException('Must provide either name or type query parameters', 400);
-    }
-    const response = await this.surveyService.findAll(req.user, { name, type }, bpc, orgId);
-
-    return response;
-
-    //return this.surveyService.findAll(req.user, bpc, orgId);
-  }
-
-  @ApiTags('Surveys')
-  @Get('surveys/types/:type')
-  @Roles(...coldAdminOnly)
-  @ApiParam({
-    name: 'type',
-    enum: survey_types,
-    example: `${survey_types.TEST}`,
-    required: true,
-    description: 'The type of surveys to return',
-  })
-  @ApiQuery(bpcDecoratorOptions)
-  @ApiResponse({
-    status: 200,
-    description: 'Returns all survey definitions by type',
-  })
-  async getAllByType(
-    @Param('type') type: survey_types,
-    @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: AuthenticatedUser;
-    },
-  ) {
-    const response = await this.surveyService.findByType(req.user, type);
-    return response;
-  }
-
-  @ApiTags('Surveys')
-  @Get('surveys/:name')
-  @ApiParam({
-    name: 'name',
-    required: true,
-    example: '{{test_survey_name}}',
-    description: 'The name of the survey to return',
-  })
-  @ApiQuery({
-    name: 'type',
-    enum: survey_types,
-    example: `${survey_types.TEST}`,
-    required: false,
-  })
-  @ApiQuery(bpcDecoratorOptions)
-  @ApiQuery(impersonateOrgDecoratorOptions)
-  @ApiResponse({
-    status: 200,
-    description: 'Returns a survey definition by name',
-  })
-  @Roles(...allRoles)
-  async findOne(
-    @Query('type') type: survey_types,
     @Param('name') name: string,
-    @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: AuthenticatedUser;
-    },
-    @Query('impersonateOrg') orgId?: string,
     @Query('bpc') bpc?: boolean,
   ) {
-    const response = await this.surveyService.findOne(name, req.user, bpc, orgId);
-
-    return response;
-  }
-
-  @Get('organizations/:orgId/surveys/:name')
-  @ApiTags('Organizations : Surveys')
-  @Roles(...allRoles)
-  @ApiQuery(bpcDecoratorOptions)
-  @ApiParam(orgIdDecoratorOptions)
-  @ApiParam({
-    name: 'name',
-    required: true,
-    example: '{{test_survey_name}}',
-  })
-  @ApiResponse({
-    status: 200,
-    description: 'Returns a survey definition by name',
-  })
-  async findOneByOrg(
-    @Param('orgId') orgId: string,
-    @Param('name') name: string,
-    @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: AuthenticatedUser;
-    },
-    @Query('bpc') bpc?: boolean,
-  ) {
-    const response = await this.surveyService.findOne(name, req.user, bpc, orgId);
-    return response;
+    return await this.complianceService.findOne(name, req.user, bpc);
   }
 
   @ApiOperation({
-    summary: 'Update survey by name',
-    operationId: 'UpdateSurveyByName',
+    summary: 'Update by name',
+    operationId: 'UpdateComplianceDefinitionByName',
   })
-  @ApiTags('Surveys')
-  @Patch('surveys/:name')
+  @Patch(':name')
   @Roles(...coldAdminOnly)
   @HttpCode(200)
   @ApiParam({
     name: 'name',
     required: true,
-    example: '{{test_survey_name}}',
+    type: 'string',
+    example: '{{test_compliance_definition_name}}',
   })
   update(
     @Param('name') name: string,
-    @Body(new ResourceValidationPipe(SurveyResponseSchema, 'PATCH')) updateSurvey: Partial<ZodCategoryResponseDto>,
+    @Body(new ResourceValidationPipe(SurveyResponseSchema, 'PATCH')) compliance: Partial<ComplianceDefinition>,
     @Req()
     req: {
       user: AuthenticatedUser;
     },
   ) {
-    return this.surveyService.update(name, updateSurvey as UpdateSurveyDefinitionsDto, req.user);
+    return this.complianceService.update(name, compliance as ComplianceDefinition, req.user);
   }
 
-  @ApiOperation({
-    summary: 'Submit survey results',
-  })
-  @ApiTags('Surveys')
-  @Put('surveys/:name')
-  @ApiQuery(impersonateOrgDecoratorOptions)
-  @ApiQuery(bpcDecoratorOptions)
-  @Roles(Role.ColdAdmin, Role.CompanyOwner, Role.CompanyAdmin, Role.CompanyMember)
-  @HttpCode(201)
-  @ApiParam({
-    name: 'name',
-    example: '{{test_survey_name}}',
-  })
-  submit(
-    @Param('name') name: string,
-    @Body() updateComponentDefinitionDto: any,
-    @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: AuthenticatedUser;
-    },
-    @Query('impersonateOrg') orgId?: string,
-  ) {
-    return this.surveyService.submitResults(name, updateComponentDefinitionDto, req.user, orgId);
-  }
-
-  @Put('organizations/:orgId/surveys/:name')
-  @Roles(...allRoles)
-  @ApiTags('Organizations : Surveys')
-  @ApiParam({
-    name: 'orgId',
-    required: true,
-    example: '{{test_organization_name}}',
-    description: 'The id of the organization',
-  })
+  @Delete(':name')
   @ApiParam({
     name: 'name',
     required: true,
     type: 'string',
-    example: '{{test_survey_name}}',
-  })
-  @ApiQuery({
-    name: 'bpc',
-    required: false,
-    description: 'Bypass Cache',
-  })
-  @HttpCode(201)
-  @Roles(Role.ColdAdmin, Role.CompanyOwner, Role.CompanyAdmin, Role.CompanyMember)
-  submitOrgSurvey(
-    @Param('orgId') orgId: string,
-    @Param('name') name: string,
-    @Body(new ResourceValidationPipe(SurveyResponseSchema, 'PUT')) updateComponentDefinitionDto: any, //UpdateSurveyDefinitionDto,
-    @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: AuthenticatedUser;
-    },
-  ) {
-    return this.surveyService.submitResults(name, updateComponentDefinitionDto, req.user, orgId);
-  }
-
-  @ApiTags('Surveys')
-  @Delete('surveys/:name')
-  @ApiParam({
-    name: 'name',
-    required: true,
-    type: 'string',
-    example: '{{test_survey_name}}',
+    example: '{{test_compliance_definition_name}}',
   })
   @HttpCode(204)
   @Roles(Role.ColdAdmin)
@@ -342,6 +133,6 @@ export class ComplianceController extends BaseWorker {
       user: AuthenticatedUser;
     },
   ) {
-    return this.surveyService.remove(name, req.user);
+    return this.complianceService.remove(name, req.user);
   }
 }
