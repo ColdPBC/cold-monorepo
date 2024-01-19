@@ -25,18 +25,13 @@ import { ComplianceService } from './compliance.service';
 @UseGuards(JwtAuthGuard, RolesGuard)
 @UseFilters(new HttpExceptionFilter(ComplianceController.name))
 @ApiOAuth2(['openid'])
-@Controller()
+@Controller('compliance_definitions')
 export class ComplianceController extends BaseWorker {
   constructor(private readonly surveyService: ComplianceService) {
     super(ComplianceController.name);
   }
 
-  @Post('')
-  @ApiTags('Surveys')
-  @ApiResponse({
-    status: 201,
-    description: 'Creates a new survey',
-  })
+  @Post()
   @HttpCode(201)
   @Roles(...coldAdminOnly)
   create(

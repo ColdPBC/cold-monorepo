@@ -12,9 +12,7 @@ export type OpenAIAssistant = {
   instructions: string;
   name: string;
   description?: string;
-  tools?: [{ type: 'code_interpreter' }];
-  file_ids?: string[];
-  metadata?: Array<unknown>;
+  tools: any;
 };
 
 @Injectable()
@@ -93,13 +91,57 @@ export class AppService extends BaseWorker implements OnModuleInit {
 
   async createAssistant(user: AuthenticatedUser, organization: organizations, service: service_definitions, assistant: OpenAIAssistant) {
     try {
+      let integration = await this.prisma.integrations.findFirst({
+        where: {
+          organization_id: organization.id,
+          service_definition_id: service.id,
+        },
+      });
+
+      if (integration) {
+        this.logger.warn('Integration already exists in the DB for this organization and service definition.', {
+          integration,
+          user,
+          organization,
+          service,
+        });
+
+        try {
+          const inOpenAi = await this.client.beta.assistants.retrieve(integration.id);
+          if (inOpenAi) {
+            this.logger.warn('Integration already exists in openAI for this organization.', {
+              integration,
+              user,
+              organization,
+              service,
+            });
+
+            return Object.assign(integration, inOpenAi);
+          }
+        } catch (e) {
+          if (e.status == 404) {
+            this.logger.warn('Integration exists in DB but not in OpenAI.  Record will be recreated in DB.', {
+              integration,
+              user,
+              organization,
+              service,
+            });
+            await this.prisma.integrations.delete({
+              where: {
+                id: integration.id,
+              },
+            });
+          }
+        }
+      }
+
       const openAIResponse = await this.client.beta.assistants.create(assistant);
 
       if (!openAIResponse.id.includes('asst_')) {
         this.logger.error(new Error('OpenAI assistant creation failed.'), openAIResponse);
       }
 
-      const integration = await this.prisma.integrations.create({
+      integration = await this.prisma.integrations.create({
         data: {
           id: openAIResponse.id,
           organization_id: organization.id,
@@ -108,7 +150,7 @@ export class AppService extends BaseWorker implements OnModuleInit {
         },
       });
 
-      this.logger.info(`OpenAI assistant (${openAIResponse}) created for ${organization.name}`, {
+      this.logger.info(`OpenAI assistant (${openAIResponse.name}) created for ${organization.name}`, {
         organization,
         user,
         integration,
@@ -116,7 +158,7 @@ export class AppService extends BaseWorker implements OnModuleInit {
         assistant: openAIResponse,
       });
 
-      return openAIResponse;
+      return Object.assign(integration, openAIResponse);
     } catch (e) {
       this.handleError(e, {
         organization,
@@ -247,6 +289,17 @@ export class AppService extends BaseWorker implements OnModuleInit {
       const assistantId = integration.id;
       const files = await this.client.beta.assistants.files.list(assistantId);
 
+      for (const file of files.data) {
+        const meta = await this.prisma.organization_files.findUnique({
+          where: {
+            openai_file_id: file.id,
+          },
+        });
+
+        if (meta) {
+          Object.assign(file, meta);
+        }
+      }
       this.logger.info(`User ${user.coldclimate_claims.email} retrieved a list of files for assistant: ${assistantId}`, {
         files,
         user,

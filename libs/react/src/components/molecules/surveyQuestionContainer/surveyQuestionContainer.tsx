@@ -126,6 +126,7 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
       const section = sections[key];
       if (submit) {
         update.skipped = section.value === null || section.value === undefined;
+        update.value = section.value ? section.value : null;
       }
       if (section.additional_context) {
         if (additional) {
@@ -362,15 +363,29 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
         };
       } else {
         if (sections[activeSectionKey].value === null || sections[activeSectionKey].value === undefined) {
-          buttonProps.label = 'Skip';
-          buttonProps.onClick = () => {
-            onSkipButtonClicked();
-          };
+          if (activeSectionIndex === Object.keys(sections).length - 1) {
+            buttonProps.label = 'Submit';
+            buttonProps.onClick = () => {
+              onSubmitButtonClicked();
+            };
+          } else {
+            buttonProps.label = 'Skip';
+            buttonProps.onClick = () => {
+              onSkipButtonClicked();
+            };
+          }
         } else {
-          buttonProps.label = 'Continue';
-          buttonProps.onClick = () => {
-            onNextButtonClicked();
-          };
+          if (sections[activeSectionKey].value === false) {
+            buttonProps.label = 'Submit';
+            buttonProps.onClick = () => {
+              onSubmitButtonClicked();
+            };
+          } else {
+            buttonProps.label = 'Continue';
+            buttonProps.onClick = () => {
+              onNextButtonClicked();
+            };
+          }
         }
       }
     }
