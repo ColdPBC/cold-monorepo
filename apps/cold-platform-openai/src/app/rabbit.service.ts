@@ -2,6 +2,7 @@ import {Injectable} from '@nestjs/common';
 import {BackOffStrategies, BaseWorker, PrismaService, RabbitMessagePayload, S3Service} from '@coldpbc/nest';
 import {Nack, RabbitRPC, RabbitSubscribe} from '@golevelup/nestjs-rabbitmq';
 import {InjectQueue} from '@nestjs/bull';
+import {omit} from 'lodash';
 import {toFile} from 'openai';
 import {Queue} from 'bull';
 import {AppService, OpenAIAssistant} from './app.service';
@@ -93,7 +94,13 @@ export class RabbitService extends BaseWorker {
 
           const response = await this.openAI.linkFileToAssistant(user, { id: uploaded.organization_id }, oaiFile.id, uploaded.key, uploaded.bucket);
 
-          this.logger.info(`Created new file `, { oaiFile, s3File, user, uploaded });
+          this.logger.info(`Created new file `, {
+            openai_file: oaiFile,
+            ...omit(s3File, ['Body']),
+            user,
+            uploaded,
+            openai_response: response,
+          });
           break;
         }
         default: {

@@ -144,6 +144,23 @@ export class AppService extends BaseWorker implements OnModuleInit {
     }
   }
 
+  async listFiles(user: AuthenticatedUser) {
+    try {
+      const openAIResponse = await this.client.files.list();
+
+      this.logger.info(`OpenAI files listed for ${user.coldclimate_claims.email}`, {
+        user,
+        openAi: openAIResponse,
+      });
+
+      return openAIResponse?.data;
+    } catch (e) {
+      this.handleError(e, {
+        user,
+      });
+    }
+  }
+
   async listAssistants(user: AuthenticatedUser) {
     try {
       const openAIResponse = await this.client.beta.assistants.list();
@@ -369,9 +386,15 @@ export class AppService extends BaseWorker implements OnModuleInit {
         throw new NotFoundException(`Integration not found for organization ${org.id}`);
       }
 
-      let myAssistantFile = await this.client.beta.assistants.files.retrieve(integrations.id, openAIFileId);
+      let myAssistantFile;
 
-      if (!myAssistantFile) {
+      try {
+        myAssistantFile = await this.client.beta.assistants.files.retrieve(integrations.id, openAIFileId);
+      } catch (e) {
+        if (e.status !== 404) {
+          this.logger.error(e.message, { error: e, user, organization: org, openai_file_id: openAIFileId });
+        }
+
         myAssistantFile = await this.client.beta.assistants.files.create(integrations.id, {
           file_id: openAIFileId,
         });
