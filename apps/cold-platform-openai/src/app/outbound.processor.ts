@@ -20,7 +20,7 @@ export class OutboundQueueProcessor extends BaseWorker {
   }
 
   @Process('file.uploaded')
-  async processMessages(job: Job) {
+  async processMessages() {
     //this.logger.info(`Received new file.uploaded job`, { name: job.name, id: job.id, data: job.data });
     /*await lastValueFrom(this.openAI.downloadFile(job)).then(async () => {
       const file = await this.openAI.client.files.create({

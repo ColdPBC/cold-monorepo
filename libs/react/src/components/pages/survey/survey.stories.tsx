@@ -15,7 +15,7 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-  render: (args) => (
+  render: args => (
     <StoryMockProvider handlers={getSurveyHandler.DEFAULT}>
       <Survey {...args} />
     </StoryMockProvider>
@@ -26,7 +26,7 @@ export const Default: Story = {
 };
 
 export const InitialSurvey: Story = {
-  render: (args) => (
+  render: args => (
     <StoryMockProvider handlers={getSurveyHandler.DEFAULT}>
       <Survey {...args} />
     </StoryMockProvider>
@@ -37,12 +37,23 @@ export const InitialSurvey: Story = {
 };
 
 export const IncompleteSurvey: Story = {
-  render: (args) => (
+  render: args => (
     <StoryMockProvider handlers={getSurveyHandler.incompleteSurvey}>
       <Survey {...args} />
     </StoryMockProvider>
   ),
   args: {
     surveyName: 'journey_overview',
+  },
+};
+
+export const AIAnsweredSurvey: Story = {
+  render: args => (
+    <StoryMockProvider handlers={getSurveyHandler.getAiAnsweredSurvey}>
+      <Survey {...args} />
+    </StoryMockProvider>
+  ),
+  args: {
+    surveyName: 'rei_pkg_survey',
   },
 };

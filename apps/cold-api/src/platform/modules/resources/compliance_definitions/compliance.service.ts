@@ -18,11 +18,11 @@ import {
 
 @Span()
 @Injectable()
-export class SurveysService extends BaseWorker {
+export class ComplianceService extends BaseWorker {
   exclude_orgs: Array<{ id: string; name: string; display_name: string }>;
 
   constructor(readonly darkly: DarklyService, private prisma: PrismaService, private readonly cache: CacheService) {
-    super('SurveysService');
+    super('ComplianceService');
   }
 
   override async onModuleInit() {
@@ -145,7 +145,7 @@ export class SurveysService extends BaseWorker {
     this.setTags({ user: user.coldclimate_claims, bpc, impersonateOrg });
     let surveys = [] as ZodSurveyResponseDto[];
 
-    if (impersonateOrg) {
+    if (impersonateOrg && user.isColdAdmin) {
       const surveyData = await this.prisma.survey_data.findMany({
         where: {
           organization_id: impersonateOrg,
