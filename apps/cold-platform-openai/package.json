@@ -1,60 +1,30 @@
 {
-  "name": "cold-platform-openai",
-  "label": "OpenAI",
-  "definition": {
+  "service": {
+    "name": "cold-platform-openai",
+    "label": "OpenAI",
     "service_type": "platform",
-    "logo_url": "./assets/black_logo.png",
-    "platform_url": "https://www.open.ai",
-    "show": true,
-    "locations": false,
-    "mqtt": {
-      "publish_schema": {
-        "$schema": "http://json-schema.org/draft-04/schema#",
-        "type": "object",
-        "properties": {
-          "event": {
-            "type": "string"
-          },
-          "payload": {
-            "type": "object",
-            "properties": {
-              "organization_id": {
-                "type": "string"
-              },
-              "compliance_id": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "organization_id",
-              "compliance_id"
-            ]
-          },
-          "swr_key": {
-            "type": "string"
-          }
+    "definition": {
+      "logo_url": "./assets/black_logo.png",
+      "platform_url": "https://www.open.ai",
+      "show": true,
+      "locations": false,
+      "mqtt": {
+        "publish_options": {
+          "base_topic": "/platform/openai",
+          "qos": 0
+        }
+      },
+      "rabbitMQ": {
+        "rpcOptions": {
+          "queue": "cold.platform.openai",
+          "routing_key": "cold.platform.openai.rpc",
+          "exchange": "amq.direct"
         },
-        "required": [
-          "event",
-          "payload",
-          "swr_key"
-        ]
-      },
-      "publish_options": {
-        "topic": "cold/platform/openai",
-        "qos": 0
-      }
-    },
-    "rabbitMQ": {
-      "rpcOptions": {
-        "queue": "cold.platform.openai",
-        "routing_key": "cold.platform.openai.rpc",
-        "exchange": "amq.direct"
-      },
-      "publishOptions": {
-        "queue": "cold.platform.openai",
-        "routing_key": "cold.platform.openai",
-        "exchange": "amq.direct"
+        "publishOptions": {
+          "queue": "cold.platform.openai",
+          "routing_key": "cold.platform.openai",
+          "exchange": "amq.direct"
+        }
       }
     }
   }

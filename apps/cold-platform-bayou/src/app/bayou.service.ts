@@ -37,7 +37,7 @@ export class BayouService extends BaseWorker implements OnModuleInit {
   async onModuleInit(): Promise<void> {
     const pkg = await BaseWorker.getParsedJSON('apps/cold-platform-bayou/package.json');
 
-    this.service = await this.rabbit.register_service(pkg);
+    this.service = await this.rabbit.register_service(pkg.service);
 
     this.logger.log('BayouService initialized');
   }
