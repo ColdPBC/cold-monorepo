@@ -135,4 +135,18 @@ export class OpenAIController extends BaseWorker {
   ) {
     return this.app.getAssistantFile(req.user, orgId, fileId); //this.rabbit.publish('cold.platform.openai', { orgId, uploaded: file }, 'file.uploaded');
   }
+
+  @Get('files')
+  @Roles(...coldAdminOnly)
+  async getFiles(
+    @Req()
+    req: {
+      body: never;
+      headers: never;
+      query: never;
+      user: AuthenticatedUser;
+    },
+  ) {
+    return this.app.listFiles(req.user);
+  }
 }
