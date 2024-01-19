@@ -1,3 +1,10 @@
+## [1.86.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.86.2...v1.86.3) (2024-01-19)
+
+
+### Bug Fixes
+
+* inability to download files ([e07e848](https://github.com/ColdPBC/cold-monorepo/commit/e07e848f8c2c9cc0ff9c73a0a7e0b012bb5afcfb))
+
 ## [1.86.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.86.1...v1.86.2) (2024-01-19)
 
 
