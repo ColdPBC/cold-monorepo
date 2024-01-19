@@ -33,23 +33,18 @@ export class ColdRabbitService extends BaseWorker implements OnModuleInit {
    *
    * @return {Promise<void>} - A promise that resolves to void when the service registration is complete.
    * @throws {Error} - If an unknown WorkerType is specified in the definition.
-   * @param pkg
+   * @param svc
    */
-  public async register_service(pkg: { name: string; label: string; service_type: WorkerTypes; definition: service_definitions }): Promise<service_definitions> {
+  public async register_service(svc: { name: string; label: string; service_type: WorkerTypes; definition: service_definitions }): Promise<service_definitions> {
     try {
-      this.logger.info('Registering service with COLD_API', { ...pkg });
+      this.logger.info('Registering service with COLD_API', { ...svc });
       const response = await this.request(
         'cold.service_definitions',
         {
-          data: {
-            name: pkg.name,
-            label: pkg.label,
-            type: pkg.service_type,
-            definition: pkg.definition,
-          },
+          data: svc,
           event: 'service_started',
           isRPC: true,
-          from: pkg.name,
+          from: svc.name,
         },
         {
           exchange: 'amq.direct',
@@ -177,7 +172,7 @@ export class ColdRabbitService extends BaseWorker implements OnModuleInit {
       registerHandlers: true,
       connectionInitOptions: { wait: false, timeout: 3000 },
       prefetchCount: 1,
-      enableControllerDiscovery: true,
+      enableControllerDiscovery: false,
     };
   }
 }

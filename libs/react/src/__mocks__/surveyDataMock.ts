@@ -2,7 +2,7 @@ import { SurveyPayloadType, SurveySectionType } from '@coldpbc/interfaces';
 
 export const getSurveyFormDataByName = (name: string): SurveyPayloadType | undefined => {
   const surveys = getSurveysMock();
-  return surveys.find((s) => s.name === name);
+  return surveys.find(s => s.name === name);
 };
 
 export const getTestingSurveyFormDefinitionData = (): SurveyPayloadType => {
@@ -68,7 +68,7 @@ export const getTestingSurveyFormDefinitionData = (): SurveyPayloadType => {
             placeholder: 'Write in here',
             operator: '==', // could be ==, >, <, <=, >=
             comparison: true,
-          }
+          },
         },
         facilities: {
           title: 'Facilities',
@@ -1178,627 +1178,611 @@ export function getSurveysMock(): SurveyPayloadType[] {
   surveys.push(getTestingSurveyFormDefinitionData());
   surveys.push(getJourneyOverviewMock());
   surveys.push({
-    "id": "5244b099-2978-4d0d-bce7-e5b124d48e2d",
-    "name": "footprint_overview",
-    "type": "FOOTPRINT",
-    "description": "Survey for evaluating a company's basic carbon emissions",
-    "created_at": "2023-09-28T01:21:31.390Z",
-    "updated_at": "2023-09-28T01:21:31.482Z",
-    "definition": {
-      "title": "Understanding your emissions",
-      "sections": {
-        "travel": {
-          "title": "Travel",
-          "prompt": "",
-          "component": null,
-          "follow_up": {
-            "travel_spend": {
-              "idx": 1,
-              "prompt": "How much did your company spend on travel costs in the last calendar year?",
-              "options": [],
-              "tooltip": "",
-              "component": "currency",
-              "placeholder": "Enter value"
+    id: '5244b099-2978-4d0d-bce7-e5b124d48e2d',
+    name: 'footprint_overview',
+    type: 'FOOTPRINT',
+    description: "Survey for evaluating a company's basic carbon emissions",
+    created_at: '2023-09-28T01:21:31.390Z',
+    updated_at: '2023-09-28T01:21:31.482Z',
+    definition: {
+      title: 'Understanding your emissions',
+      sections: {
+        travel: {
+          title: 'Travel',
+          prompt: '',
+          component: null,
+          follow_up: {
+            travel_spend: {
+              idx: 1,
+              prompt: 'How much did your company spend on travel costs in the last calendar year?',
+              options: [],
+              tooltip: '',
+              component: 'currency',
+              placeholder: 'Enter value',
             },
-            "travel_percent": {
-              "idx": 0,
-              "prompt": "Approximately what percent of employees travel for business?",
-              "options": [],
-              "tooltip": "",
-              "component": "percent_slider",
-              "placeholder": ""
+            travel_percent: {
+              idx: 0,
+              prompt: 'Approximately what percent of employees travel for business?',
+              options: [],
+              tooltip: '',
+              component: 'percent_slider',
+              placeholder: '',
             },
-            "air_spend_percent": {
-              "idx": 2,
-              "prompt": "Approximately what percentage of that expense was spent on air travel versus non-air travel (car, hotel, ground transportation)?",
-              "options": [],
-              "tooltip": "",
-              "component": "percent_slider",
-              "placeholder": ""
+            air_spend_percent: {
+              idx: 2,
+              prompt: 'Approximately what percentage of that expense was spent on air travel versus non-air travel (car, hotel, ground transportation)?',
+              options: [],
+              tooltip: '',
+              component: 'percent_slider',
+              placeholder: '',
             },
-            "fuel_cost_vehicles": {
-              "idx": 3,
-              "prompt": "What was the estimated total fuel cost of owned and leased vehicles?",
-              "options": [],
-              "tooltip": "",
-              "component": "currency",
-              "placeholder": "Enter value"
-            }
+            fuel_cost_vehicles: {
+              idx: 3,
+              prompt: 'What was the estimated total fuel cost of owned and leased vehicles?',
+              options: [],
+              tooltip: '',
+              component: 'currency',
+              placeholder: 'Enter value',
+            },
           },
-          "image_url": "https://cold-public-assets.s3.amazonaws.com/images%2FFootprint%20-%20Travel.png",
-          "category_idx": 3,
-          "category_description": "Emissions due to work travel"
+          image_url: 'https://cold-public-assets.s3.amazonaws.com/images%2FFootprint%20-%20Travel.png',
+          category_idx: 3,
+          category_description: 'Emissions due to work travel',
         },
-        "product": {
-          "title": "Product",
-          "prompt": "",
-          "component": null,
-          "follow_up": {
-            "cogs": {
-              "idx": 0,
-              "prompt": "What was your company's estimated total COGS for the last calendar year?",
-              "options": [],
-              "tooltip": "",
-              "component": "currency",
-              "placeholder": "Enter value"
+        product: {
+          title: 'Product',
+          prompt: '',
+          component: null,
+          follow_up: {
+            cogs: {
+              idx: 0,
+              prompt: "What was your company's estimated total COGS for the last calendar year?",
+              options: [],
+              tooltip: '',
+              component: 'currency',
+              placeholder: 'Enter value',
             },
-            "wood_spend": {
-              "idx": 4,
-              "prompt": "How much did you spend on wood in the last calendar year? ",
-              "options": [],
-              "tooltip": "",
-              "component": "currency",
-              "placeholder": "Enter value"
+            wood_spend: {
+              idx: 4,
+              prompt: 'How much did you spend on wood in the last calendar year? ',
+              options: [],
+              tooltip: '',
+              component: 'currency',
+              placeholder: 'Enter value',
             },
-            "metal_spend": {
-              "idx": 3,
-              "prompt": "How much did you spend on metal in the last calendar year? ",
-              "options": [],
-              "tooltip": "",
-              "component": "currency",
-              "placeholder": "Enter value"
+            metal_spend: {
+              idx: 3,
+              prompt: 'How much did you spend on metal in the last calendar year? ',
+              options: [],
+              tooltip: '',
+              component: 'currency',
+              placeholder: 'Enter value',
             },
-            "textile_spend": {
-              "idx": 1,
-              "prompt": "How much did you spend on textiles in the last calendar year? ",
-              "options": [],
-              "tooltip": "",
-              "component": "currency",
-              "placeholder": "Enter value"
+            textile_spend: {
+              idx: 1,
+              prompt: 'How much did you spend on textiles in the last calendar year? ',
+              options: [],
+              tooltip: '',
+              component: 'currency',
+              placeholder: 'Enter value',
             },
-            "chemical_spend": {
-              "idx": 5,
-              "prompt": "How much did you spend on chemicals in the last calendar year? ",
-              "options": [],
-              "tooltip": "",
-              "component": "currency",
-              "placeholder": "Enter value"
+            chemical_spend: {
+              idx: 5,
+              prompt: 'How much did you spend on chemicals in the last calendar year? ',
+              options: [],
+              tooltip: '',
+              component: 'currency',
+              placeholder: 'Enter value',
             },
-            "packaging_cost": {
-              "idx": 12,
-              "prompt": "What was your company's total cost of packaging materials in the last calendar year?",
-              "options": [],
-              "tooltip": "",
-              "component": "currency",
-              "placeholder": "Enter value"
+            packaging_cost: {
+              idx: 12,
+              prompt: "What was your company's total cost of packaging materials in the last calendar year?",
+              options: [],
+              tooltip: '',
+              component: 'currency',
+              placeholder: 'Enter value',
             },
-            "plastics_spend": {
-              "idx": 2,
-              "prompt": "How much did you spend on plastics & rubber in the last calendar year? ",
-              "options": [],
-              "tooltip": "",
-              "component": "currency",
-              "placeholder": "Enter value"
+            plastics_spend: {
+              idx: 2,
+              prompt: 'How much did you spend on plastics & rubber in the last calendar year? ',
+              options: [],
+              tooltip: '',
+              component: 'currency',
+              placeholder: 'Enter value',
             },
-            "air_import_percent": {
-              "idx": 9,
-              "prompt": "Approximately what percentage of that expense was spent on air-based versus bulk (train, cargo ship, etc) shipping?",
-              "options": [],
-              "tooltip": "",
-              "component": "percent_slider",
-              "placeholder": ""
+            air_import_percent: {
+              idx: 9,
+              prompt: 'Approximately what percentage of that expense was spent on air-based versus bulk (train, cargo ship, etc) shipping?',
+              options: [],
+              tooltip: '',
+              component: 'percent_slider',
+              placeholder: '',
             },
-            "air_outbound_percent": {
-              "idx": 11,
-              "prompt": "Approximately what percentage of that expense was spent on air-based versus ground-based shipping?",
-              "options": [],
-              "tooltip": "",
-              "component": "percent_slider",
-              "placeholder": ""
+            air_outbound_percent: {
+              idx: 11,
+              prompt: 'Approximately what percentage of that expense was spent on air-based versus ground-based shipping?',
+              options: [],
+              tooltip: '',
+              component: 'percent_slider',
+              placeholder: '',
             },
-            "import_shipping_cost": {
-              "idx": 8,
-              "prompt": "What was your company's total cost of import shipping in the last calendar year?",
-              "options": [],
-              "tooltip": "",
-              "component": "currency",
-              "placeholder": "Enter value"
+            import_shipping_cost: {
+              idx: 8,
+              prompt: "What was your company's total cost of import shipping in the last calendar year?",
+              options: [],
+              tooltip: '',
+              component: 'currency',
+              placeholder: 'Enter value',
             },
-            "apparel_leather_spend": {
-              "idx": 6,
-              "prompt": "How much did you spend on apparel & leather in the last calendar year?",
-              "options": [],
-              "tooltip": "",
-              "component": "currency",
-              "placeholder": "Enter value"
+            apparel_leather_spend: {
+              idx: 6,
+              prompt: 'How much did you spend on apparel & leather in the last calendar year?',
+              options: [],
+              tooltip: '',
+              component: 'currency',
+              placeholder: 'Enter value',
             },
-            "other_materials_spend": {
-              "idx": 7,
-              "prompt": "How much did you spend on Other materials in the last calendar year?",
-              "options": [],
-              "tooltip": "",
-              "component": "currency",
-              "placeholder": "Enter value"
+            other_materials_spend: {
+              idx: 7,
+              prompt: 'How much did you spend on Other materials in the last calendar year?',
+              options: [],
+              tooltip: '',
+              component: 'currency',
+              placeholder: 'Enter value',
             },
-            "outbound_shipping_cost": {
-              "idx": 10,
-              "prompt": "What was your company's total cost of shipping product to customers in the last calendar year?",
-              "options": [],
-              "tooltip": "",
-              "component": "currency",
-              "placeholder": "Enter value"
-            }
+            outbound_shipping_cost: {
+              idx: 10,
+              prompt: "What was your company's total cost of shipping product to customers in the last calendar year?",
+              options: [],
+              tooltip: '',
+              component: 'currency',
+              placeholder: 'Enter value',
+            },
           },
-          "image_url": "https://cold-public-assets.s3.us-east-2.amazonaws.com/splash_images/Machinery.png",
-          "category_idx": 4,
-          "category_description": "Emissions from product manufacturing and distribution"
+          image_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/splash_images/Machinery.png',
+          category_idx: 4,
+          category_description: 'Emissions from product manufacturing and distribution',
         },
-        "commuting": {
-          "title": "Commuting",
-          "prompt": "",
-          "component": null,
-          "follow_up": {
-            "commute_car": {
-              "idx": 3,
-              "prompt": "Approximately what percent of employees commute via car?",
-              "options": [],
-              "tooltip": "",
-              "component": "percent_slider",
-              "placeholder": ""
+        commuting: {
+          title: 'Commuting',
+          prompt: '',
+          component: null,
+          follow_up: {
+            commute_car: {
+              idx: 3,
+              prompt: 'Approximately what percent of employees commute via car?',
+              options: [],
+              tooltip: '',
+              component: 'percent_slider',
+              placeholder: '',
             },
-            "commute_length": {
-              "idx": 2,
-              "prompt": "What is the average one-way commute length in miles?",
-              "options": [],
-              "tooltip": "",
-              "component": "number",
-              "placeholder": "Enter value"
+            commute_length: {
+              idx: 2,
+              prompt: 'What is the average one-way commute length in miles?',
+              options: [],
+              tooltip: '',
+              component: 'number',
+              placeholder: 'Enter value',
             },
-            "commute_scooter": {
-              "idx": 6,
-              "prompt": "Approximately what percent of employees commute via scooter or ebike?",
-              "options": [],
-              "tooltip": "",
-              "component": "percent_slider",
-              "placeholder": ""
+            commute_scooter: {
+              idx: 6,
+              prompt: 'Approximately what percent of employees commute via scooter or ebike?',
+              options: [],
+              tooltip: '',
+              component: 'percent_slider',
+              placeholder: '',
             },
-            "average_work_week": {
-              "idx": 0,
-              "prompt": "How many days are in your company's average work week?",
-              "options": [],
-              "tooltip": "",
-              "component": "number",
-              "placeholder": "Enter value"
+            average_work_week: {
+              idx: 0,
+              prompt: "How many days are in your company's average work week?",
+              options: [],
+              tooltip: '',
+              component: 'number',
+              placeholder: 'Enter value',
             },
-            "commute_walk_bike": {
-              "idx": 4,
-              "prompt": "Approximately what percent of employees commute by walking or biking?",
-              "options": [],
-              "tooltip": "",
-              "component": "percent_slider",
-              "placeholder": ""
+            commute_walk_bike: {
+              idx: 4,
+              prompt: 'Approximately what percent of employees commute by walking or biking?',
+              options: [],
+              tooltip: '',
+              component: 'percent_slider',
+              placeholder: '',
             },
-            "commute_public_transit": {
-              "idx": 5,
-              "prompt": "Approximately what percent of employees commute by taking public transit?",
-              "options": [],
-              "tooltip": "",
-              "component": "percent_slider",
-              "placeholder": ""
+            commute_public_transit: {
+              idx: 5,
+              prompt: 'Approximately what percent of employees commute by taking public transit?',
+              options: [],
+              tooltip: '',
+              component: 'percent_slider',
+              placeholder: '',
             },
-            "commute_employee_percent": {
-              "idx": 1,
-              "prompt": "What percentage of employees regularly commute to work at company facilities?",
-              "options": [],
-              "tooltip": "",
-              "component": "percent_slider",
-              "placeholder": ""
-            }
+            commute_employee_percent: {
+              idx: 1,
+              prompt: 'What percentage of employees regularly commute to work at company facilities?',
+              options: [],
+              tooltip: '',
+              component: 'percent_slider',
+              placeholder: '',
+            },
           },
-          "image_url": "https://cold-public-assets.s3.us-east-2.amazonaws.com/splash_images/CommutingTravel.png",
-          "category_idx": 1,
-          "category_description": "Emissions from employee commuting"
+          image_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/splash_images/CommutingTravel.png',
+          category_idx: 1,
+          category_description: 'Emissions from employee commuting',
         },
-        "facilities": {
-          "title": "Facilities",
-          "prompt": "",
-          "component": null,
-          "follow_up": {
-            "diesel": {
-              "idx": 4,
-              "prompt": "How much did you spend on diesel for owned and leased spaces in the last calendar year?",
-              "options": [],
-              "tooltip": "",
-              "component": "currency",
-              "placeholder": "Enter value"
+        facilities: {
+          title: 'Facilities',
+          prompt: '',
+          component: null,
+          follow_up: {
+            diesel: {
+              idx: 4,
+              prompt: 'How much did you spend on diesel for owned and leased spaces in the last calendar year?',
+              options: [],
+              tooltip: '',
+              component: 'currency',
+              placeholder: 'Enter value',
             },
-            "gasoline": {
-              "idx": 3,
-              "prompt": "How much did you spend on gasoline for owned and leased spaces in the last calendar year?",
-              "options": [],
-              "tooltip": "",
-              "component": "currency",
-              "placeholder": "Enter value"
+            gasoline: {
+              idx: 3,
+              prompt: 'How much did you spend on gasoline for owned and leased spaces in the last calendar year?',
+              options: [],
+              tooltip: '',
+              component: 'currency',
+              placeholder: 'Enter value',
             },
-            "electricity": {
-              "idx": 0,
-              "prompt": "How much did you spend on electricity for owned and leased spaces in the last calendar year?",
-              "options": [],
-              "tooltip": "",
-              "component": "currency",
-              "placeholder": "Enter value"
+            electricity: {
+              idx: 0,
+              prompt: 'How much did you spend on electricity for owned and leased spaces in the last calendar year?',
+              options: [],
+              tooltip: '',
+              component: 'currency',
+              placeholder: 'Enter value',
             },
-            "heating_oil": {
-              "idx": 2,
-              "prompt": "How much did you spend on heating oil for owned and leased spaces in the last calendar year?",
-              "options": [],
-              "tooltip": "",
-              "component": "currency",
-              "placeholder": "Enter value"
+            heating_oil: {
+              idx: 2,
+              prompt: 'How much did you spend on heating oil for owned and leased spaces in the last calendar year?',
+              options: [],
+              tooltip: '',
+              component: 'currency',
+              placeholder: 'Enter value',
             },
-            "natural_gas": {
-              "idx": 1,
-              "prompt": "How much did you spend on natural gas for owned and leased spaces in the last calendar year?",
-              "options": [],
-              "tooltip": "",
-              "component": "currency",
-              "placeholder": "Enter value"
+            natural_gas: {
+              idx: 1,
+              prompt: 'How much did you spend on natural gas for owned and leased spaces in the last calendar year?',
+              options: [],
+              tooltip: '',
+              component: 'currency',
+              placeholder: 'Enter value',
             },
-            "renewable_percent": {
-              "idx": 5,
-              "prompt": "What percentage of your electricity spend was on renewable energy?",
-              "options": [],
-              "tooltip": "",
-              "component": "percent_slider",
-              "placeholder": ""
-            }
+            renewable_percent: {
+              idx: 5,
+              prompt: 'What percentage of your electricity spend was on renewable energy?',
+              options: [],
+              tooltip: '',
+              component: 'percent_slider',
+              placeholder: '',
+            },
           },
-          "image_url": "https://cold-public-assets.s3.amazonaws.com/images%2FFootprint%20-%20Facilities.png",
-          "category_idx": 0,
-          "category_description": "Emissions related to facilities you own or lease"
+          image_url: 'https://cold-public-assets.s3.amazonaws.com/images%2FFootprint%20-%20Facilities.png',
+          category_idx: 0,
+          category_description: 'Emissions related to facilities you own or lease',
         },
-        "operations": {
-          "title": "Operations",
-          "prompt": "",
-          "component": null,
-          "follow_up": {
-            "meals_and_e_spend": {
-              "idx": 1,
-              "prompt": "How much did your company spend on meals & entertainment in the last calendar year?",
-              "options": [],
-              "tooltip": "",
-              "component": "currency",
-              "placeholder": "Enter value"
+        operations: {
+          title: 'Operations',
+          prompt: '',
+          component: null,
+          follow_up: {
+            meals_and_e_spend: {
+              idx: 1,
+              prompt: 'How much did your company spend on meals & entertainment in the last calendar year?',
+              options: [],
+              tooltip: '',
+              component: 'currency',
+              placeholder: 'Enter value',
             },
-            "fuel_cost_machinery": {
-              "idx": 0,
-              "prompt": "What was the estimated total fuel cost (in USD) of owned and leased industrial machinery?",
-              "options": [],
-              "tooltip": "",
-              "component": "currency",
-              "placeholder": "Enter value"
+            fuel_cost_machinery: {
+              idx: 0,
+              prompt: 'What was the estimated total fuel cost (in USD) of owned and leased industrial machinery?',
+              options: [],
+              tooltip: '',
+              component: 'currency',
+              placeholder: 'Enter value',
             },
-            "cloud_software_spend": {
-              "idx": 5,
-              "prompt": "How much did your company spend on cloud software or cloud computing services in the last calendar year? ",
-              "options": [],
-              "tooltip": "",
-              "component": "currency",
-              "placeholder": "Enter value"
+            cloud_software_spend: {
+              idx: 5,
+              prompt: 'How much did your company spend on cloud software or cloud computing services in the last calendar year? ',
+              options: [],
+              tooltip: '',
+              component: 'currency',
+              placeholder: 'Enter value',
             },
-            "office_supplies_spend": {
-              "idx": 2,
-              "prompt": "How much did your company spend on office supplies (paper, snacks, other consumable goods) in the last calendar year?",
-              "options": [],
-              "tooltip": "",
-              "component": "currency",
-              "placeholder": "Enter value"
+            office_supplies_spend: {
+              idx: 2,
+              prompt: 'How much did your company spend on office supplies (paper, snacks, other consumable goods) in the last calendar year?',
+              options: [],
+              tooltip: '',
+              component: 'currency',
+              placeholder: 'Enter value',
             },
-            "office_equipment_spend": {
-              "idx": 4,
-              "prompt": "How much did your company spend on other office equipment (printers, computers, monitors, etc) in the last calendar year?",
-              "options": [],
-              "tooltip": "",
-              "component": "currency",
-              "placeholder": "Enter value"
+            office_equipment_spend: {
+              idx: 4,
+              prompt: 'How much did your company spend on other office equipment (printers, computers, monitors, etc) in the last calendar year?',
+              options: [],
+              tooltip: '',
+              component: 'currency',
+              placeholder: 'Enter value',
             },
-            "office_furniture_spend": {
-              "idx": 3,
-              "prompt": "How much did your company spend on Office furniture (desks, chairs, etc) in the last calendar year?",
-              "options": [],
-              "tooltip": "",
-              "component": "currency",
-              "placeholder": "Enter value"
+            office_furniture_spend: {
+              idx: 3,
+              prompt: 'How much did your company spend on Office furniture (desks, chairs, etc) in the last calendar year?',
+              options: [],
+              tooltip: '',
+              component: 'currency',
+              placeholder: 'Enter value',
             },
-            "purchased_vehicles_spend": {
-              "idx": 7,
-              "prompt": "How much did your company spend on Purchased vehicles in the last calendar year?",
-              "options": [],
-              "tooltip": "",
-              "component": "currency",
-              "placeholder": "Enter value"
+            purchased_vehicles_spend: {
+              idx: 7,
+              prompt: 'How much did your company spend on Purchased vehicles in the last calendar year?',
+              options: [],
+              tooltip: '',
+              component: 'currency',
+              placeholder: 'Enter value',
             },
-            "purchased_machinery_spend": {
-              "idx": 8,
-              "prompt": "How much did your company spend on purchased industrial machinery in the last calendar year?",
-              "options": [],
-              "tooltip": "",
-              "component": "currency",
-              "placeholder": "Enter value"
+            purchased_machinery_spend: {
+              idx: 8,
+              prompt: 'How much did your company spend on purchased industrial machinery in the last calendar year?',
+              options: [],
+              tooltip: '',
+              component: 'currency',
+              placeholder: 'Enter value',
             },
-            "professional_services_spend": {
-              "idx": 6,
-              "prompt": "How much did your company spend on Professional services (legal, consulting, accounting, etc) in the last calendar year?",
-              "options": [],
-              "tooltip": "",
-              "component": "currency",
-              "placeholder": "Enter value"
+            professional_services_spend: {
+              idx: 6,
+              prompt: 'How much did your company spend on Professional services (legal, consulting, accounting, etc) in the last calendar year?',
+              options: [],
+              tooltip: '',
+              component: 'currency',
+              placeholder: 'Enter value',
             },
-            "purchased_capital_goods_spend": {
-              "idx": 9,
-              "prompt": "How much did your company spend on Other purchased capital goods in the last calendar year?",
-              "options": [],
-              "tooltip": "",
-              "component": "currency",
-              "placeholder": "Enter value"
-            }
+            purchased_capital_goods_spend: {
+              idx: 9,
+              prompt: 'How much did your company spend on Other purchased capital goods in the last calendar year?',
+              options: [],
+              tooltip: '',
+              component: 'currency',
+              placeholder: 'Enter value',
+            },
           },
-          "image_url": "https://cold-public-assets.s3.us-east-2.amazonaws.com/splash_images/ClimateLeadership.png",
-          "category_idx": 5,
-          "category_description": "Emissions due to company operations"
+          image_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/splash_images/ClimateLeadership.png',
+          category_idx: 5,
+          category_description: 'Emissions due to company operations',
         },
-        "hybrid_work": {
-          "title": "Hybrid Work",
-          "prompt": "Do you have any policies that grant employees hybrid work opportunities (i.e. to work at home for one day a week, etc.)?",
-          "component": "yes_no",
-          "follow_up": {
-            "hybrid_commute_days": {
-              "idx": 1,
-              "prompt": "How many days per week do hybrid-working employees typically commute to work? ",
-              "options": [],
-              "tooltip": "",
-              "component": "number",
-              "placeholder": "Enter value"
+        hybrid_work: {
+          title: 'Hybrid Work',
+          prompt: 'Do you have any policies that grant employees hybrid work opportunities (i.e. to work at home for one day a week, etc.)?',
+          component: 'yes_no',
+          follow_up: {
+            hybrid_commute_days: {
+              idx: 1,
+              prompt: 'How many days per week do hybrid-working employees typically commute to work? ',
+              options: [],
+              tooltip: '',
+              component: 'number',
+              placeholder: 'Enter value',
             },
-            "hybrid_policy_coverage": {
-              "idx": 0,
-              "prompt": "What percent of your commuting employees do these policies cover? ",
-              "options": [],
-              "tooltip": "",
-              "component": "percent_slider",
-              "placeholder": ""
-            }
+            hybrid_policy_coverage: {
+              idx: 0,
+              prompt: 'What percent of your commuting employees do these policies cover? ',
+              options: [],
+              tooltip: '',
+              component: 'percent_slider',
+              placeholder: '',
+            },
           },
-          "image_url": "https://cold-public-assets.s3.amazonaws.com/images%2FFootprint%20-%20Hybrid%20Work.png",
-          "category_idx": 2,
-          "category_description": "Emissions that might be mitigated through work from home policies"
-        }
+          image_url: 'https://cold-public-assets.s3.amazonaws.com/images%2FFootprint%20-%20Hybrid%20Work.png',
+          category_idx: 2,
+          category_description: 'Emissions that might be mitigated through work from home policies',
+        },
       },
-      "image_url": "https://cold-public-assets.s3.amazonaws.com/images%2FFootprint%20-%20Overview.png",
-      "intro_markdown": "Now that we've finished understanding the basics of your company, we're going to dive into some of the numbers to do an initial evaluation of your carbon footprint."
-    }
-  })
-  surveys.push({
-    "id": "067d1343-86a7-4686-8e1b-7ae0de6b948b",
-    "name": "live_test_demo",
-    "type": "JOURNEY",
-    "description": "Here we go!!!",
-    "created_at": "2023-09-21T19:20:18.363Z",
-    "updated_at": "2023-09-21T19:20:18.371Z",
-    "definition": {
-      "title": "Are you kidding me?",
-      "sections": {
-        "troy": {
-          "title": "Troy's Section",
-          "prompt": "Do you want to talk about Troy?",
-          "component": "yes_no",
-          "follow_up": {
-            "ice_cream": {
-              "idx": 0,
-              "prompt": "What is troy's favorite ice cream?",
-              "options": [
-                "Vanilla",
-                "Chocolate",
-                "All of the above"
-              ],
-              "tooltip": "",
-              "component": "select",
-              "placeholder": "",
-              "value": "All of the above",
-              "skipped": false
-            }
-          },
-          "image_url": "https://images.unsplash.com/photo-1694618237009-39477c66a31b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2845&q=80",
-          "category_idx": 0,
-          "category_description": "Questions all about Troy",
-          "value": true,
-          "skipped": false
-        }
-      },
-      "image_url": "https://images.unsplash.com/photo-1695196312518-b1223a8298b5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=3387&q=80",
-      "intro_markdown": "Here is a brief introduction that is not styled yet",
-      "submitted": true
-    }
+      image_url: 'https://cold-public-assets.s3.amazonaws.com/images%2FFootprint%20-%20Overview.png',
+      intro_markdown:
+        "Now that we've finished understanding the basics of your company, we're going to dive into some of the numbers to do an initial evaluation of your carbon footprint.",
+    },
   });
   surveys.push({
-    "id": "6ec9038f-859b-4ec9-ac35-a21b6bd2cd34",
-    "name": "test_survey",
-    "type": "JOURNEY",
-    "description": "A survey that exercises lots of sections and components for Qaalib to test everything with the survey",
-    "created_at": "2023-10-11T16:04:52.531Z",
-    "updated_at": "2023-12-12T16:08:48.801Z",
-    "definition": {
-      "title": "Survey Test",
-      "sections": {
-        "general": {
-          "title": "General",
-          "value": null,
-          "prompt": "",
-          "component": null,
-          "follow_up": {
-            "general:0": {
-              "idx": 0,
-              "value": null,
-              "prompt": "Which regions do you sell your product into?",
-              "options": [
-                "North America",
-                "South America",
-                "Europe",
-                "Asia",
-                "Australia",
-                "Africa"
-              ],
-              "tooltip": "",
-              "component": "multi_select",
-              "placeholder": ""
+    id: '067d1343-86a7-4686-8e1b-7ae0de6b948b',
+    name: 'live_test_demo',
+    type: 'JOURNEY',
+    description: 'Here we go!!!',
+    created_at: '2023-09-21T19:20:18.363Z',
+    updated_at: '2023-09-21T19:20:18.371Z',
+    definition: {
+      title: 'Are you kidding me?',
+      sections: {
+        troy: {
+          title: "Troy's Section",
+          prompt: 'Do you want to talk about Troy?',
+          component: 'yes_no',
+          follow_up: {
+            ice_cream: {
+              idx: 0,
+              prompt: "What is troy's favorite ice cream?",
+              options: ['Vanilla', 'Chocolate', 'All of the above'],
+              tooltip: '',
+              component: 'select',
+              placeholder: '',
+              value: 'All of the above',
+              skipped: false,
             },
-            "general:1": {
-              "idx": 1,
-              "value": null,
-              "prompt": "What is your company's name?",
-              "options": [],
-              "tooltip": "Enter your company name",
-              "component": "text",
-              "placeholder": "Yourco"
-            },
-            "general:2": {
-              "idx": 2,
-              "value": null,
-              "prompt": "What is your favorite color of the primary colors?",
-              "options": [
-                "Red",
-                "Blue",
-                "Yellow"
-              ],
-              "tooltip": "Pick the one you like the most",
-              "component": "select",
-              "placeholder": ""
-            }
           },
-          "image_url": "https://images.unsplash.com/photo-1533038590840-1cde6e668a91?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1587&q=80",
-          "category_idx": 0,
-          "category_description": "General questions about your business"
+          image_url:
+            'https://images.unsplash.com/photo-1694618237009-39477c66a31b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2845&q=80',
+          category_idx: 0,
+          category_description: 'Questions all about Troy',
+          value: true,
+          skipped: false,
         },
-        "product": {
-          "title": "Product",
-          "value": true,
-          "prompt": "Does your company make a physical product?",
-          "component": "yes_no",
-          "follow_up": {
-            "product:0": {
-              "idx": 1,
-              "prompt": "Is your product made of metal?",
-              "options": [],
-              "tooltip": "Select yes or no",
-              "component": "yes_no",
-              "placeholder": "",
-              "additional_context": {
-                "prompt": "Why is it made of metal?",
-                "operator": "==",
-                "component": "textarea",
-                "comparison": "yes",
-                "placeholder": "Tell me"
-              },
-              "value": true,
-              "skipped": false
-            },
-            "product:1": {
-              "idx": 2,
-              "value": null,
-              "prompt": "How much does your product cost, in dollars?",
-              "options": [],
-              "tooltip": "Enter the cost to your company to produce",
-              "component": "currency",
-              "placeholder": "45",
-              "skipped": true
-            },
-            "product:2": {
-              "idx": 3,
-              "value": null,
-              "prompt": "What percent of your product is leather?",
-              "options": [],
-              "tooltip": "",
-              "component": "percent_slider",
-              "placeholder": "",
-              "skipped": true
-            },
-            "product:3": {
-              "idx": 4,
-              "value": null,
-              "prompt": "How many factories make your product?",
-              "options": [],
-              "tooltip": "Choose the number across all countries",
-              "component": "number",
-              "placeholder": "2",
-              "skipped": true
-            },
-            "addl_context_test": {
-              "idx": 0,
-              "prompt": "Do you like apples?",
-              "options": [],
-              "tooltip": "",
-              "component": "yes_no",
-              "placeholder": "",
-              "additional_context": {
-                "prompt": "Tell me why you like apples!",
-                "operator": "==",
-                "component": "textarea",
-                "comparison": "yes",
-                "placeholder": "Tell me"
-              }
-            }
-          },
-          "image_url": "https://images.unsplash.com/photo-1610891015188-5369212db097?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
-          "category_idx": 1,
-          "category_description": "Questions about how your products are produced",
-          "skipped": false
-        },
-        "facilities": {
-          "title": "Facilities",
-          "value": true,
-          "prompt": "Do you own or lease any facilities like offices or warehouses?",
-          "component": "yes_no",
-          "follow_up": {
-            "facilities:0": {
-              "idx": 0,
-              "value": [
-                "Black",
-                "Gray"
-              ],
-              "prompt": "What colors are your office carpets?",
-              "options": [
-                "Gray",
-                "Black",
-                "Orange",
-                "Blue",
-                "Purple"
-              ],
-              "tooltip": "If carpets are multiple colors choose all colors that apply",
-              "component": "multi_select",
-              "placeholder": "",
-              "skipped": false
-            }
-          },
-          "image_url": "https://images.unsplash.com/photo-1524758631624-e2822e304c36?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
-          "category_idx": 2,
-          "category_description": "Questions about your the facilities you own or lease",
-          "skipped": false
-        }
       },
-      "image_url": "https://images.unsplash.com/photo-1603437873662-dc1f44901825?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=3270&q=80",
-      "intro_markdown": "Welcome to Cold Climate!\n Let’s Start Your Journey to Absolute Zero™ \nWe will start with our basic company information survey. \nThis is a quick form to understand a little more about your company and what climate efforts you've already undertaken.",
-      "submitted": true
-    }
-  })
+      image_url:
+        'https://images.unsplash.com/photo-1695196312518-b1223a8298b5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=3387&q=80',
+      intro_markdown: 'Here is a brief introduction that is not styled yet',
+      submitted: true,
+    },
+  });
+  surveys.push({
+    id: '6ec9038f-859b-4ec9-ac35-a21b6bd2cd34',
+    name: 'test_survey',
+    type: 'JOURNEY',
+    description: 'A survey that exercises lots of sections and components for Qaalib to test everything with the survey',
+    created_at: '2023-10-11T16:04:52.531Z',
+    updated_at: '2023-12-12T16:08:48.801Z',
+    definition: {
+      title: 'Survey Test',
+      sections: {
+        general: {
+          title: 'General',
+          value: null,
+          prompt: '',
+          component: null,
+          follow_up: {
+            'general:0': {
+              idx: 0,
+              value: null,
+              prompt: 'Which regions do you sell your product into?',
+              options: ['North America', 'South America', 'Europe', 'Asia', 'Australia', 'Africa'],
+              tooltip: '',
+              component: 'multi_select',
+              placeholder: '',
+            },
+            'general:1': {
+              idx: 1,
+              value: null,
+              prompt: "What is your company's name?",
+              options: [],
+              tooltip: 'Enter your company name',
+              component: 'text',
+              placeholder: 'Yourco',
+            },
+            'general:2': {
+              idx: 2,
+              value: null,
+              prompt: 'What is your favorite color of the primary colors?',
+              options: ['Red', 'Blue', 'Yellow'],
+              tooltip: 'Pick the one you like the most',
+              component: 'select',
+              placeholder: '',
+            },
+          },
+          image_url:
+            'https://images.unsplash.com/photo-1533038590840-1cde6e668a91?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1587&q=80',
+          category_idx: 0,
+          category_description: 'General questions about your business',
+        },
+        product: {
+          title: 'Product',
+          value: true,
+          prompt: 'Does your company make a physical product?',
+          component: 'yes_no',
+          follow_up: {
+            'product:0': {
+              idx: 1,
+              prompt: 'Is your product made of metal?',
+              options: [],
+              tooltip: 'Select yes or no',
+              component: 'yes_no',
+              placeholder: '',
+              additional_context: {
+                prompt: 'Why is it made of metal?',
+                operator: '==',
+                component: 'textarea',
+                comparison: 'yes',
+                placeholder: 'Tell me',
+              },
+              value: true,
+              skipped: false,
+            },
+            'product:1': {
+              idx: 2,
+              value: null,
+              prompt: 'How much does your product cost, in dollars?',
+              options: [],
+              tooltip: 'Enter the cost to your company to produce',
+              component: 'currency',
+              placeholder: '45',
+              skipped: true,
+            },
+            'product:2': {
+              idx: 3,
+              value: null,
+              prompt: 'What percent of your product is leather?',
+              options: [],
+              tooltip: '',
+              component: 'percent_slider',
+              placeholder: '',
+              skipped: true,
+            },
+            'product:3': {
+              idx: 4,
+              value: null,
+              prompt: 'How many factories make your product?',
+              options: [],
+              tooltip: 'Choose the number across all countries',
+              component: 'number',
+              placeholder: '2',
+              skipped: true,
+            },
+            addl_context_test: {
+              idx: 0,
+              prompt: 'Do you like apples?',
+              options: [],
+              tooltip: '',
+              component: 'yes_no',
+              placeholder: '',
+              additional_context: {
+                prompt: 'Tell me why you like apples!',
+                operator: '==',
+                component: 'textarea',
+                comparison: 'yes',
+                placeholder: 'Tell me',
+              },
+            },
+          },
+          image_url:
+            'https://images.unsplash.com/photo-1610891015188-5369212db097?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
+          category_idx: 1,
+          category_description: 'Questions about how your products are produced',
+          skipped: false,
+        },
+        facilities: {
+          title: 'Facilities',
+          value: true,
+          prompt: 'Do you own or lease any facilities like offices or warehouses?',
+          component: 'yes_no',
+          follow_up: {
+            'facilities:0': {
+              idx: 0,
+              value: ['Black', 'Gray'],
+              prompt: 'What colors are your office carpets?',
+              options: ['Gray', 'Black', 'Orange', 'Blue', 'Purple'],
+              tooltip: 'If carpets are multiple colors choose all colors that apply',
+              component: 'multi_select',
+              placeholder: '',
+              skipped: false,
+            },
+          },
+          image_url:
+            'https://images.unsplash.com/photo-1524758631624-e2822e304c36?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
+          category_idx: 2,
+          category_description: 'Questions about your the facilities you own or lease',
+          skipped: false,
+        },
+      },
+      image_url:
+        'https://images.unsplash.com/photo-1603437873662-dc1f44901825?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=3270&q=80',
+      intro_markdown:
+        "Welcome to Cold Climate!\n Let’s Start Your Journey to Absolute Zero™ \nWe will start with our basic company information survey. \nThis is a quick form to understand a little more about your company and what climate efforts you've already undertaken.",
+      submitted: true,
+    },
+  });
   return surveys;
 }
