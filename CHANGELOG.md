@@ -1,3 +1,10 @@
+## [1.86.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.86.1...v1.86.2) (2024-01-19)
+
+
+### Bug Fixes
+
+* return proper error when integration not found ([c35f413](https://github.com/ColdPBC/cold-monorepo/commit/c35f4135173e0e19126dfd34370aef839724bf14))
+
 ## [1.86.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.86.0...v1.86.1) (2024-01-19)
 
 
