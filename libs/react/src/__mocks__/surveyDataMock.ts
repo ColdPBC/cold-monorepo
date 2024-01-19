@@ -2299,7 +2299,7 @@ export function getSurveysMock(): SurveyPayloadType[] {
   return surveys;
 }
 
-export function getCompliancePageSurveysMocksByName(name: string) {
+export function getCompliancePageSurveysMocksByName(name: string): SurveyPayloadType {
   const surveys = [];
   surveys.push({
     id: 'b5a544e8-c87e-48e2-9c92-d9352dcc2d33',
@@ -2323,8 +2323,6 @@ export function getCompliancePageSurveysMocksByName(name: string) {
               tooltip: '',
               component: 'yes_no',
               placeholder: '',
-              value: true,
-              skipped: false,
               additional_context: {
                 prompt: "Please describe how your brand plans to align with REI's expectation in this area.",
                 operator: '==',
@@ -2332,6 +2330,12 @@ export function getCompliancePageSurveysMocksByName(name: string) {
                 comparison: false,
                 placeholder: '',
               },
+              value: true,
+              skipped: false,
+              ai_attempted: true,
+              ai_justification:
+                'The answer below was predetermined based on the following information. Please review it and adjust to ensure accuracy:\n\n*Lorem Ipsum Dolor Et Amo sflksjdflksdjfldsjkfs*',
+              ai_value: true,
             },
             'MFG-2': {
               idx: 1,
@@ -2352,8 +2356,6 @@ export function getCompliancePageSurveysMocksByName(name: string) {
               tooltip: 'Select all that apply.',
               component: 'multi_select',
               placeholder: '',
-              value: ['Transparency', 'Non-discrimination'],
-              skipped: false,
               additional_context: {
                 prompt: 'Please enter other topics included in your code of conduct. If entering multiple, separate using commas',
                 operator: '==',
@@ -2361,6 +2363,12 @@ export function getCompliancePageSurveysMocksByName(name: string) {
                 comparison: ['Other'],
                 placeholder: '',
               },
+              value: ['Transparency', 'Non-discrimination'],
+              skipped: false,
+              ai_attempted: true,
+              ai_justification:
+                'The answer below was predetermined based on the following information. Please review it and adjust to ensure accuracy:\n\n*Lorem Ipsum Dolor Et Amo sflksjdflksdjfldsjkfs*',
+              ai_value: ['Transparency', 'Non-discrimination'],
             },
             'MFG-3': {
               idx: 2,
@@ -2371,11 +2379,15 @@ export function getCompliancePageSurveysMocksByName(name: string) {
                 'Tier 3 (raw material processors)',
                 'Tier 4 (raw material suppliers)',
               ],
-              value: ['Tier 1 (finished product manufacturers)', 'Tier 2 (finished material/subcomponent manufacturers)'],
-              skipped: false,
               tooltip: 'Select all that apply.',
               component: 'multi_select',
               placeholder: '',
+              value: ['Tier 1 (finished product manufacturers)', 'Tier 2 (finished material/subcomponent manufacturers)'],
+              skipped: false,
+              ai_attempted: true,
+              ai_justification:
+                'The answer below was predetermined based on the following information. Please review it and adjust to ensure accuracy:\n\n*Lorem Ipsum Dolor Et Amo sflksjdflksdjfldsjkfs*',
+              ai_value: ['Tier 1 (finished product manufacturers)', 'Tier 2 (finished material/subcomponent manufacturers)'],
             },
             'MFG-4': {
               idx: 3,
@@ -2384,8 +2396,6 @@ export function getCompliancePageSurveysMocksByName(name: string) {
               tooltip: '',
               component: 'yes_no',
               placeholder: '',
-              value: true,
-              skipped: false,
               additional_context: {
                 prompt: 'Provide the hyperlink',
                 operator: '==',
@@ -2394,6 +2404,12 @@ export function getCompliancePageSurveysMocksByName(name: string) {
                 placeholder: '',
                 value: 'https://www.google.com',
               },
+              value: true,
+              skipped: false,
+              ai_attempted: true,
+              ai_justification:
+                'The answer below was predetermined based on the following information. Please review it and adjust to ensure accuracy:\n\n*Lorem Ipsum Dolor Et Amo sflksjdflksdjfldsjkfs*',
+              ai_value: false,
             },
             'MFG-5': {
               idx: 4,
@@ -2404,6 +2420,11 @@ export function getCompliancePageSurveysMocksByName(name: string) {
               component: 'yes_no',
               placeholder: '',
               value: true,
+              skipped: false,
+              ai_attempted: true,
+              ai_justification:
+                'The answer below was predetermined based on the following information. Please review it and adjust to ensure accuracy:\n\n*Lorem Ipsum Dolor Et Amo sflksjdflksdjfldsjkfs*',
+              ai_value: false,
             },
             'MFG-6': {
               idx: 5,
@@ -2412,8 +2433,6 @@ export function getCompliancePageSurveysMocksByName(name: string) {
               tooltip: '',
               component: 'yes_no',
               placeholder: '',
-              value: true,
-              skipped: false,
               additional_context: {
                 prompt: 'Please Describe',
                 tooltip: 'Limit your response to 100 words or less.',
@@ -2423,6 +2442,12 @@ export function getCompliancePageSurveysMocksByName(name: string) {
                 placeholder: '',
                 value: 'We have a team of 10 people who do this',
               },
+              value: true,
+              skipped: false,
+              ai_attempted: true,
+              ai_justification:
+                'The answer below was predetermined based on the following information. Please review it and adjust to ensure accuracy:\n\n*Lorem Ipsum Dolor Et Amo sflksjdflksdjfldsjkfs*',
+              ai_value: false,
             },
             'MFG-7': {
               idx: 6,
@@ -2431,10 +2456,12 @@ export function getCompliancePageSurveysMocksByName(name: string) {
               options: [],
               tooltip: 'Calculate as an estimated percentage of either (a) total number of active factories or (b) total dollars of first-cost production.',
               based_on: 'MFG-6',
-              component: 'table',
+              component: 'textarea',
               placeholder: '',
-              value: '10%',
-              skipped: false,
+              ai_attempted: true,
+              ai_justification:
+                'The answer below was predetermined based on the following information. Please review it and adjust to ensure accuracy:\n\n*Lorem Ipsum Dolor Et Amo sflksjdflksdjfldsjkfs*',
+              ai_value: '10%',
             },
             'MFG-8': {
               idx: 7,
@@ -2443,8 +2470,10 @@ export function getCompliancePageSurveysMocksByName(name: string) {
               tooltip: 'Calculate as an estimated percentage of either (a) total number of active factories or (b) total dollars of first-cost production.',
               component: 'yes_no',
               placeholder: '',
-              value: true,
-              skipped: false,
+              ai_attempted: true,
+              ai_justification:
+                'The answer below was predetermined based on the following information. Please review it and adjust to ensure accuracy:\n\n*Lorem Ipsum Dolor Et Amo sflksjdflksdjfldsjkfs*',
+              ai_value: false,
             },
             'MFG-9': {
               idx: 8,
@@ -2460,6 +2489,10 @@ export function getCompliancePageSurveysMocksByName(name: string) {
                 comparison: true,
                 placeholder: '',
               },
+              ai_attempted: true,
+              ai_justification:
+                'The answer below was predetermined based on the following information. Please review it and adjust to ensure accuracy:\n\n*Lorem Ipsum Dolor Et Amo sflksjdflksdjfldsjkfs*',
+              ai_value: true,
             },
             'MFG-10': {
               idx: 9,
@@ -2473,6 +2506,10 @@ export function getCompliancePageSurveysMocksByName(name: string) {
               tooltip: 'Select all that apply.',
               component: 'multi_select',
               placeholder: '',
+              ai_attempted: true,
+              ai_justification:
+                'The answer below was predetermined based on the following information. Please review it and adjust to ensure accuracy:\n\n*Lorem Ipsum Dolor Et Amo sflksjdflksdjfldsjkfs*',
+              ai_value: ['Tier 4 (raw material suppliers)'],
             },
             'MFG-11': {
               idx: 10,
@@ -2481,6 +2518,9 @@ export function getCompliancePageSurveysMocksByName(name: string) {
               tooltip: '',
               component: 'yes_no',
               placeholder: '',
+              ai_attempted: true,
+              ai_justification:
+                'The answer below was predetermined based on the following information. Please review it and adjust to ensure accuracy:\n\n*Lorem Ipsum Dolor Et Amo sflksjdflksdjfldsjkfs*',
             },
             'MFG-12': {
               idx: 11,
@@ -2489,6 +2529,9 @@ export function getCompliancePageSurveysMocksByName(name: string) {
               tooltip: '',
               component: 'yes_no',
               placeholder: '',
+              ai_attempted: true,
+              ai_justification:
+                'The answer below was predetermined based on the following information. Please review it and adjust to ensure accuracy:\n\n*Lorem Ipsum Dolor Et Amo sflksjdflksdjfldsjkfs*',
             },
           },
           image_url:
@@ -2525,7 +2568,10 @@ export function getCompliancePageSurveysMocksByName(name: string) {
               tooltip: 'Note: The term carbon is used here as a generally accepted shorthand for greenhouse gas.',
               component: 'yes_no',
               placeholder: '',
-              optimized: true,
+              ai_attempted: true,
+              ai_justification:
+                'The answer below was predetermined based on the following information. Please review it and adjust to ensure accuracy:\n\n*Lorem Ipsum Dolor Et Amo sflksjdflksdjfldsjkfs*',
+              ai_value: true,
             },
             'GHG-2': {
               idx: 1,
@@ -2542,7 +2588,10 @@ export function getCompliancePageSurveysMocksByName(name: string) {
                 comparison: 'Yes, using another GHG accounting standard (please indicate below)',
                 placeholder: '',
               },
-              optimized: true,
+              ai_attempted: true,
+              ai_justification:
+                'The answer below was predetermined based on the following information. Please review it and adjust to ensure accuracy:\n\n*Lorem Ipsum Dolor Et Amo sflksjdflksdjfldsjkfs*',
+              ai_value: 'Yes, using the GHG Protocol',
             },
             'GHG-3': {
               idx: 2,
@@ -2556,7 +2605,10 @@ export function getCompliancePageSurveysMocksByName(name: string) {
               tooltip: '',
               component: 'multi_select',
               placeholder: '',
-              optimized: true,
+              ai_attempted: true,
+              ai_justification:
+                'The answer below was predetermined based on the following information. Please review it and adjust to ensure accuracy:\n\n*Lorem Ipsum Dolor Et Amo sflksjdflksdjfldsjkfs*',
+              ai_value: ['Scope 1: Direct emissions from company vehicles & facilities'],
             },
             'GHG-4': {
               idx: 3,
@@ -2572,7 +2624,10 @@ export function getCompliancePageSurveysMocksByName(name: string) {
                 comparison: true,
                 placeholder: '',
               },
-              optimized: true,
+              ai_attempted: true,
+              ai_justification:
+                'The answer below was predetermined based on the following information. Please review it and adjust to ensure accuracy:\n\n*Lorem Ipsum Dolor Et Amo sflksjdflksdjfldsjkfs*',
+              ai_value: true,
             },
             'GHG-5': {
               idx: 4,
@@ -2588,7 +2643,10 @@ export function getCompliancePageSurveysMocksByName(name: string) {
                 comparison: true,
                 placeholder: '',
               },
-              optimized: true,
+              ai_attempted: true,
+              ai_justification:
+                'The answer below was predetermined based on the following information. Please review it and adjust to ensure accuracy:\n\n*Lorem Ipsum Dolor Et Amo sflksjdflksdjfldsjkfs*',
+              ai_value: true,
             },
             'GHG-6': {
               idx: 5,
@@ -2602,7 +2660,10 @@ export function getCompliancePageSurveysMocksByName(name: string) {
               tooltip: '',
               component: 'select',
               placeholder: '',
-              optimized: true,
+              ai_attempted: true,
+              ai_justification:
+                'The answer below was predetermined based on the following information. Please review it and adjust to ensure accuracy:\n\n*Lorem Ipsum Dolor Et Amo sflksjdflksdjfldsjkfs*',
+              ai_value: ['No'],
             },
             'GHG-7': {
               idx: 7,
@@ -2611,7 +2672,10 @@ export function getCompliancePageSurveysMocksByName(name: string) {
               tooltip: '',
               component: 'yes_no',
               placeholder: '',
-              optimized: true,
+              ai_attempted: true,
+              ai_justification:
+                'The answer below was predetermined based on the following information. Please review it and adjust to ensure accuracy:\n\n*Lorem Ipsum Dolor Et Amo sflksjdflksdjfldsjkfs*',
+              ai_value: true,
             },
             'GHG-8': {
               idx: 11,
@@ -2627,7 +2691,10 @@ export function getCompliancePageSurveysMocksByName(name: string) {
                 'Note: REI considers a science-aligned target to be one that includes emissions from scopes 1, 2, and 3 and aligns with what the latest climate science indicates is necessary to limit global warming to 1.5oC above pre-industrial levels.',
               component: 'select',
               placeholder: '',
-              optimized: true,
+              ai_attempted: true,
+              ai_justification:
+                'The answer below was predetermined based on the following information. Please review it and adjust to ensure accuracy:\n\n*Lorem Ipsum Dolor Et Amo sflksjdflksdjfldsjkfs*',
+              ai_value: ['Yes, our target(s) has been approved by the SBTi'],
             },
             'GHG-10': {
               idx: 13,
@@ -2637,7 +2704,9 @@ export function getCompliancePageSurveysMocksByName(name: string) {
               tooltip: '',
               component: 'select',
               placeholder: '',
-              optimized: true,
+              ai_attempted: true,
+              ai_justification:
+                'The answer below was predetermined based on the following information. Please review it and adjust to ensure accuracy:\n\n*Lorem Ipsum Dolor Et Amo sflksjdflksdjfldsjkfs*',
             },
             'GHG-11': {
               idx: 14,
@@ -2646,7 +2715,9 @@ export function getCompliancePageSurveysMocksByName(name: string) {
               tooltip: '',
               component: 'yes_no',
               placeholder: '',
-              optimized: true,
+              ai_attempted: true,
+              ai_justification:
+                'The answer below was predetermined based on the following information. Please review it and adjust to ensure accuracy:\n\n*Lorem Ipsum Dolor Et Amo sflksjdflksdjfldsjkfs*',
             },
             'GHG-12': {
               idx: 15,
@@ -2662,6 +2733,9 @@ export function getCompliancePageSurveysMocksByName(name: string) {
               based_on: 'GHG-11',
               component: 'multi_select',
               placeholder: '',
+              ai_attempted: true,
+              ai_justification:
+                'The answer below was predetermined based on the following information. Please review it and adjust to ensure accuracy:\n\n*Lorem Ipsum Dolor Et Amo sflksjdflksdjfldsjkfs*',
             },
             'GHG-13': {
               idx: 16,
@@ -2679,6 +2753,9 @@ export function getCompliancePageSurveysMocksByName(name: string) {
                 comparison: 'Yes, we’re certified to another carbon/climate neutrality standard (please describe below)',
                 placeholder: '',
               },
+              ai_attempted: true,
+              ai_justification:
+                'The answer below was predetermined based on the following information. Please review it and adjust to ensure accuracy:\n\n*Lorem Ipsum Dolor Et Amo sflksjdflksdjfldsjkfs*',
             },
             'GHG-6A': {
               idx: 6,
@@ -2695,6 +2772,9 @@ export function getCompliancePageSurveysMocksByName(name: string) {
                 comparison: 'Other',
                 placeholder: '',
               },
+              ai_attempted: true,
+              ai_justification:
+                'The answer below was predetermined based on the following information. Please review it and adjust to ensure accuracy:\n\n*Lorem Ipsum Dolor Et Amo sflksjdflksdjfldsjkfs*',
             },
             'GHG-7A': {
               idx: 8,
@@ -2708,6 +2788,9 @@ export function getCompliancePageSurveysMocksByName(name: string) {
               tooltip: 'Select all that apply.',
               component: 'multi_select',
               placeholder: '',
+              ai_attempted: true,
+              ai_justification:
+                'The answer below was predetermined based on the following information. Please review it and adjust to ensure accuracy:\n\n*Lorem Ipsum Dolor Et Amo sflksjdflksdjfldsjkfs*',
             },
             'GHG-7C': {
               idx: 10,
@@ -2717,6 +2800,9 @@ export function getCompliancePageSurveysMocksByName(name: string) {
               tooltip: '',
               component: 'select',
               placeholder: '',
+              ai_attempted: true,
+              ai_justification:
+                'The answer below was predetermined based on the following information. Please review it and adjust to ensure accuracy:\n\n*Lorem Ipsum Dolor Et Amo sflksjdflksdjfldsjkfs*',
             },
             'GHG-9A': {
               idx: 12,
@@ -2742,6 +2828,9 @@ export function getCompliancePageSurveysMocksByName(name: string) {
                 comparison: 'Other',
                 placeholder: '',
               },
+              ai_attempted: true,
+              ai_justification:
+                'The answer below was predetermined based on the following information. Please review it and adjust to ensure accuracy:\n\n*Lorem Ipsum Dolor Et Amo sflksjdflksdjfldsjkfs*',
             },
           },
           image_url:
@@ -2778,6 +2867,11 @@ export function getCompliancePageSurveysMocksByName(name: string) {
               tooltip: '',
               component: 'textarea',
               placeholder: '',
+              value: 'We have a team of 10 people who do this',
+              ai_attempted: true,
+              ai_justification:
+                'The answer below was predetermined based on the following information. Please review it and adjust to ensure accuracy:\n\n*Lorem Ipsum Dolor Et Amo sflksjdflksdjfldsjkfs*',
+              ai_value: 'We have a team of 10 people who do this',
             },
             'PKG-2': {
               idx: 1,
@@ -2794,6 +2888,10 @@ export function getCompliancePageSurveysMocksByName(name: string) {
                 comparison: true,
                 placeholder: '',
               },
+              ai_attempted: true,
+              ai_justification:
+                'The answer below was predetermined based on the following information. Please review it and adjust to ensure accuracy:\n\n*Lorem Ipsum Dolor Et Amo sflksjdflksdjfldsjkfs*',
+              ai_value: false,
             },
             'PKG-3': {
               idx: 2,
@@ -2810,6 +2908,9 @@ export function getCompliancePageSurveysMocksByName(name: string) {
                 comparison: true,
                 placeholder: '',
               },
+              ai_attempted: true,
+              ai_justification:
+                'The answer below was predetermined based on the following information. Please review it and adjust to ensure accuracy:\n\n*Lorem Ipsum Dolor Et Amo sflksjdflksdjfldsjkfs*',
             },
             'PKG-4': {
               idx: 3,
@@ -2827,6 +2928,9 @@ export function getCompliancePageSurveysMocksByName(name: string) {
                 comparison: true,
                 placeholder: '',
               },
+              ai_attempted: true,
+              ai_justification:
+                'The answer below was predetermined based on the following information. Please review it and adjust to ensure accuracy:\n\n*Lorem Ipsum Dolor Et Amo sflksjdflksdjfldsjkfs*',
             },
           },
           image_url:

@@ -14,9 +14,11 @@ import {
 import { getMembersNoInvitations } from './membersMock';
 import { getNewsAllMissingProperties, getNewsDefault, getNewsSomeMissingProperties } from './newsMock';
 import { ActionPayload } from '@coldpbc/interfaces';
-import { SubcategoryActionDetailsCard } from '@coldpbc/components';
 import { getOrganizationMembersMock } from './datagridMock';
-import { getCompliancePageSurveysMock, getCompliancePageSurveysMocksByName, getSurveyFormDataByName } from './surveyDataMock';
+import { getCompliancePageSurveysMocksByName } from './surveyDataMock';
+import { forEach, forOwn } from 'lodash';
+import { getComplianceMock, getComplianceMockByName } from './complianceMock';
+import { getApiUrl } from './handlers';
 
 export const getFootprintHandler = {
   default: rest.get('*/organizations/:orgId/categories/company_decarbonization', (req, res, ctx) => {
@@ -192,6 +194,7 @@ export const getActionHandler = {
   subcategoryActionsOverviewCard: [
     rest.get('*/organizations/*/actions', (req, res, ctx) => {
       // return actions with some of them having the ready_to_execute and all survey submitted
+      console.log('subcategoryActionsOverviewCard');
       const facilitiesActions = getActionsMock().filter(action => action.action.subcategory === 'facilities');
       facilitiesActions[0].action.dependent_surveys.forEach((survey, index) => {
         survey.submitted = true;
@@ -231,8 +234,86 @@ export const getActionHandler = {
 };
 
 export const getCompliancePageHandler = {
-  default: rest.get('*/organizations/*/surveys/:name', (req, res, ctx) => {
+  default: [
+    rest.get(getApiUrl('/compliance'), (req, res, ctx) => {
+      const { name } = req.params;
+      return res(ctx.json(getComplianceMock()));
+    }),
+    rest.get(getApiUrl('/organizations/:orgId/compliance'), (req, res, ctx) => {
+      const { name } = req.params;
+      return res(ctx.json(getComplianceMock()));
+    }),
+    rest.post(getApiUrl('/organizations/:orgId/compliance'), async (req, res, ctx) => {
+      const body = await req.json();
+      const { name } = req.params;
+      const { orgId, complianceId } = body;
+      return res(ctx.json(getComplianceMock()[0]));
+    }),
+  ],
+  processing: [
+    rest.get(getApiUrl('/compliance'), (req, res, ctx) => {
+      const { name } = req.params;
+      return res(ctx.json(getComplianceMock()));
+    }),
+    rest.get(getApiUrl('/organizations/:orgId/compliance'), (req, res, ctx) => {
+      const { name } = req.params;
+      const compliances = getComplianceMock();
+      forEach(compliances, compliance => {
+        forEach(compliance.surveys, survey => {
+          forOwn(survey.definition.sections, (section, sectionKey) => {
+            // last 3 questions ai_attempted to undefined, use object key indexing to get the last 3 questions
+            Object.keys(section.follow_up)
+              .slice(-3)
+              .forEach((questionKey, index) => {
+                section.follow_up[questionKey].ai_attempted = undefined;
+              });
+          });
+        });
+      });
+      return res(ctx.json(compliances));
+    }),
+    rest.post(getApiUrl('/organizations/:orgId/compliance'), async (req, res, ctx) => {
+      const body = await req.json();
+      const { name } = req.params;
+      const { orgId, complianceId } = body;
+      return res(ctx.json(getComplianceMock()[0]));
+    }),
+  ],
+  activate: [
+    rest.get(getApiUrl('/compliance'), (req, res, ctx) => {
+      const { name } = req.params;
+      return res(ctx.json(getComplianceMock()));
+    }),
+    rest.get(getApiUrl('/organizations/:orgId/compliance'), (req, res, ctx) => {
+      const { name } = req.params;
+      return res(ctx.json([]));
+    }),
+    rest.post('*/organizations/*/compliance', async (req, res, ctx) => {
+      const body = await req.json();
+      const { name } = req.params;
+      const { orgId, complianceId } = body;
+      return res(ctx.json(getComplianceMock()[0]));
+    }),
+  ],
+};
+
+export const getComplianceDetailPageHandler = {
+  default: rest.get('*/organizations/*/compliance/:name', (req, res, ctx) => {
     const { name } = req.params;
-    return res(ctx.json(getCompliancePageSurveysMocksByName(name as string)));
+    const compliance = getComplianceMockByName(name as string);
+    return res(ctx.json(compliance));
+  }),
+  surveyComplete: rest.get('*/organizations/*/compliance/:name', (req, res, ctx) => {
+    const { name } = req.params;
+    const compliance = getComplianceMockByName(name as string);
+    // set one of the survey questions to all answered
+    forOwn(compliance.surveys[0].definition.sections, (section, sectionKey) => {
+      forOwn(section.follow_up, (question, questionKey) => {
+        // assign a random value to the question
+        question.value = true;
+        question.skipped = false;
+      });
+    });
+    return res(ctx.json(compliance));
   }),
 };

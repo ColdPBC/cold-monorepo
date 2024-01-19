@@ -1,94 +1,86 @@
 import React from 'react';
-import { BaseButton, Card, CenterColumnContent, Spinner } from '@coldpbc/components';
-import { useOrgSWR } from '@coldpbc/hooks';
+import { CenterColumnContent, Spinner } from '@coldpbc/components';
+import { useAuth0Wrapper, useColdContext, useOrgSWR } from '@coldpbc/hooks';
 import { axiosFetcher } from '@coldpbc/fetchers';
-import { ProgressBar } from '../../atoms/progressBar/progressBar';
-import { forOwn } from 'lodash';
+import { find } from 'lodash';
 import { ComplianceOverviewCard } from '../../organisms/complianceOverviewCard/complianceOverviewCard';
-import { useNavigate } from 'react-router-dom';
+import { Compliance } from '@coldpbc/interfaces';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import useSWR, { useSWRConfig } from 'swr';
+import { getComplianceProgress } from '@coldpbc/lib';
+import { isAxiosError } from 'axios';
+import { ErrorType } from '@coldpbc/enums';
 
-export const Compliance = () => {
+export const ComplianceOverview = () => {
+  const { orgId } = useAuth0Wrapper();
   const navigate = useNavigate();
-  const pkgSurvey = useOrgSWR(['/surveys/rei_pkg_survey', 'GET'], axiosFetcher);
-  const ghgSurvey = useOrgSWR(['/surveys/rei_ghg_survey', 'GET'], axiosFetcher);
-  const mfgSurvey = useOrgSWR(['/surveys/rei_mfg_survey', 'GET'], axiosFetcher);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const compliances = useSWR<Compliance[], any, any>(['/compliance', 'GET'], axiosFetcher);
+  const orgCompliances = useOrgSWR<Compliance[], any>(['/compliance', 'GET'], axiosFetcher);
+  const { mutate } = useSWRConfig();
+  const { logError } = useColdContext();
 
-  const getComplianceProgress = () => {
-    // loop through all the surveys and get the number of questions answered and the total number of questions
-    let totalQuestions = 0;
-    let answeredQuestions = 0;
-    let aiAnsweredQuestions = 0;
-    forOwn(pkgSurvey.data?.definition?.sections, (section, sectionKey) => {
-      forOwn(section.follow_up, question => {
-        totalQuestions++;
-        if (question.value !== null && question.value !== undefined) {
-          answeredQuestions++;
-        }
-        if (question.optimized === true) {
-          aiAnsweredQuestions++;
-        }
+  const getCTAOnClick = async (compliance: Compliance) => {
+    // check if the compliance is orgCompliance
+    const found = find(orgCompliances.data, { id: compliance.id });
+
+    if (found !== undefined) {
+      navigate(`/compliance/${compliance.name}`);
+      return;
+    } else {
+      const response = await axiosFetcher([
+        `/organizations/${orgId}/compliance/`,
+        'POST',
+        JSON.stringify({
+          org_id: orgId,
+          compliance_id: compliance.id,
+        }),
+      ]);
+      // todo: handle getting updates from the server
+      await mutate([`/organizations/${orgId}/compliance`, 'GET'], data => {
+        return [...data, response];
       });
-    });
-    forOwn(ghgSurvey.data?.definition?.sections, (section, sectionKey) => {
-      forOwn(section.follow_up, question => {
-        totalQuestions++;
-        if (question.value !== null && question.value !== undefined) {
-          answeredQuestions++;
-        }
-        if (question.optimized === true) {
-          aiAnsweredQuestions++;
-        }
-      });
-    });
-    forOwn(mfgSurvey.data?.definition?.sections, (section, sectionKey) => {
-      forOwn(section.follow_up, question => {
-        totalQuestions++;
-        if (question.value !== null && question.value !== undefined) {
-          answeredQuestions++;
-        }
-        if (question.optimized === true) {
-          aiAnsweredQuestions++;
-        }
-      });
-    });
-    return {
-      totalQuestions,
-      answeredQuestions,
-      aiAnsweredQuestions,
-      percentageAnswered: Math.round((answeredQuestions / totalQuestions) * 100),
-      percentageAIAnswered: Math.round((aiAnsweredQuestions / totalQuestions) * 100),
-      title: 'REI',
-    };
+    }
   };
 
-  const getCTAOnClick = () => {
-    navigate('/compliance/rei');
-  };
-
-  if (pkgSurvey.isLoading && ghgSurvey.isLoading && mfgSurvey.isLoading) {
+  if (compliances.isLoading || orgCompliances.isLoading) {
     return <Spinner />;
   }
 
-  if (pkgSurvey.error && ghgSurvey.error && mfgSurvey.error) {
+  if (compliances.error || orgCompliances.error) {
     console.log('Error loading compliance data');
   }
 
-  if (pkgSurvey.data && ghgSurvey.data && mfgSurvey.data) {
-    const complianceProgress = getComplianceProgress();
-
+  if (compliances.data && orgCompliances.data) {
     return (
       <CenterColumnContent title="Compliance">
-        <ComplianceOverviewCard
-          complianceData={complianceProgress}
-          isOverview={true}
-          onOverviewPage={true}
-          ctaOnClick={() => {
-            getCTAOnClick();
-          }}
-        />
+        <div className={'w-full space-y-10'}>
+          {compliances.data.map((compliance, index) => {
+            const complianceFound = find(orgCompliances.data, { id: compliance.id });
+            const complianceProgress = getComplianceProgress(
+              complianceFound === undefined
+                ? {
+                    ...compliance,
+                    surveys: [],
+                  }
+                : complianceFound,
+            );
+
+            return (
+              <ComplianceOverviewCard
+                complianceData={complianceProgress}
+                isOverview={true}
+                onOverviewPage={true}
+                ctaOnClick={() => {
+                  getCTAOnClick(compliance);
+                }}
+              />
+            );
+          })}
+        </div>
       </CenterColumnContent>
     );
   } else {
-    return '';
+    return null;
   }
 };

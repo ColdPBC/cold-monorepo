@@ -1,136 +1,88 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { CenterColumnContent, MainContent, Spinner } from '@coldpbc/components';
 import { ComplianceOverviewCard } from '../../organisms/complianceOverviewCard/complianceOverviewCard';
 import { useOrgSWR } from '@coldpbc/hooks';
 import { axiosFetcher } from '@coldpbc/fetchers';
-import { forOwn } from 'lodash';
-import { useNavigate } from 'react-router-dom';
+import { forEach, forOwn, isUndefined } from 'lodash';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { Compliance, SurveyPayloadType } from '@coldpbc/interfaces';
+import { getComplianceProgress } from '@coldpbc/lib';
+import { mutate as globalMutate } from 'swr/_internal';
 
 export const ComplianceDetail = () => {
   const navigate = useNavigate();
-  const pkgSurvey = useOrgSWR(['/surveys/rei_pkg_survey', 'GET'], axiosFetcher);
-  const ghgSurvey = useOrgSWR(['/surveys/rei_ghg_survey', 'GET'], axiosFetcher);
-  const mfgSurvey = useOrgSWR(['/surveys/rei_mfg_survey', 'GET'], axiosFetcher);
+  const params = useParams();
+  const complianceName = params['name'];
+  const [searchParams, setSearchParams] = useSearchParams();
+  const compliance = useOrgSWR<Compliance>([`/compliance/${complianceName}`, 'GET'], axiosFetcher);
 
-  const getComplianceProgress = () => {
-    // loop through all the surveys and get the number of questions answered and the total number of questions
+  const getComplianceProgressForSurvey = (survey: SurveyPayloadType) => {
     let totalQuestions = 0;
     let answeredQuestions = 0;
     let aiAnsweredQuestions = 0;
-    forOwn(pkgSurvey.data?.definition?.sections, (section, sectionKey) => {
+    let aiAttemptedQuestions = 0;
+    forOwn(survey.definition?.sections, (section, sectionKey) => {
       forOwn(section.follow_up, question => {
         totalQuestions++;
-        if (question.value !== null && question.value !== undefined) {
+        if (!isUndefined(question.ai_attempted)) {
+          aiAttemptedQuestions++;
+        }
+        if (question.value) {
           answeredQuestions++;
-        }
-        if (question.optimized === true) {
-          aiAnsweredQuestions++;
-        }
-      });
-    });
-    forOwn(ghgSurvey.data?.definition?.sections, (section, sectionKey) => {
-      forOwn(section.follow_up, question => {
-        totalQuestions++;
-        if (question.value !== null && question.value !== undefined) {
-          answeredQuestions++;
-        }
-        if (question.optimized === true) {
-          aiAnsweredQuestions++;
-        }
-      });
-    });
-    forOwn(mfgSurvey.data?.definition?.sections, (section, sectionKey) => {
-      forOwn(section.follow_up, question => {
-        totalQuestions++;
-        if (question.value !== null && question.value !== undefined) {
-          answeredQuestions++;
-        }
-        if (question.optimized === true) {
-          aiAnsweredQuestions++;
+        } else {
+          if (question.ai_value) {
+            aiAnsweredQuestions++;
+          }
         }
       });
     });
     return {
       totalQuestions,
+      aiAttemptedQuestions,
       answeredQuestions,
       aiAnsweredQuestions,
       percentageAnswered: Math.round((answeredQuestions / totalQuestions) * 100),
       percentageAIAnswered: Math.round((aiAnsweredQuestions / totalQuestions) * 100),
-      title: 'Overview',
+      title: survey.definition?.title,
     };
   };
 
-  const getComplianceProgressForSurvey = (survey: any) => {
-    let totalQuestions = 0;
-    let answeredQuestions = 0;
-    let aiAnsweredQuestions = 0;
-    forOwn(survey.data?.definition?.sections, (section, sectionKey) => {
-      forOwn(section.follow_up, question => {
-        totalQuestions++;
-        if (question.value !== null && question.value !== undefined) {
-          answeredQuestions++;
-        }
-        if (question.optimized === true) {
-          aiAnsweredQuestions++;
-        }
-      });
-    });
-    return {
-      totalQuestions,
-      answeredQuestions,
-      aiAnsweredQuestions,
-      percentageAnswered: Math.round((answeredQuestions / totalQuestions) * 100),
-      percentageAIAnswered: Math.round((aiAnsweredQuestions / totalQuestions) * 100),
-      title: survey.data?.definition?.title,
+  useEffect(() => {
+    // refresh compliance data when surveys are updated
+    const refreshComplianceData = async () => {
+      await compliance.mutate();
     };
-  };
+    refreshComplianceData();
+  }, [searchParams]);
 
-  if (pkgSurvey.isLoading && ghgSurvey.isLoading && mfgSurvey.isLoading) {
+  if (compliance.isLoading) {
     return <Spinner />;
   }
 
-  if (pkgSurvey.error && ghgSurvey.error && mfgSurvey.error) {
+  if (compliance.error) {
     console.log('Error loading compliance data');
   }
 
-  if (pkgSurvey.data && ghgSurvey.data && mfgSurvey.data) {
-    const complianceProgress = getComplianceProgress();
+  if (compliance.data) {
+    const complianceProgress = getComplianceProgress(compliance.data);
 
     return (
       <CenterColumnContent title="REI Compliance">
         <div className={'w-full space-y-10'}>
           <ComplianceOverviewCard complianceData={complianceProgress} isOverview={true} onOverviewPage={false} />
           <div className={'w-full space-y-[24px]'}>
-            {pkgSurvey.data && (
-              <ComplianceOverviewCard
-                complianceData={getComplianceProgressForSurvey(pkgSurvey)}
-                isOverview={false}
-                onOverviewPage={false}
-                ctaOnClick={() => {
-                  navigate('?surveyName=rei_pkg_survey');
-                }}
-              />
-            )}
-            {ghgSurvey.data && (
-              <ComplianceOverviewCard
-                complianceData={getComplianceProgressForSurvey(ghgSurvey)}
-                isOverview={false}
-                onOverviewPage={false}
-                ctaOnClick={() => {
-                  navigate('?surveyName=rei_ghg_survey');
-                }}
-              />
-            )}
-            {mfgSurvey.data && (
-              <ComplianceOverviewCard
-                complianceData={getComplianceProgressForSurvey(mfgSurvey)}
-                isOverview={false}
-                onOverviewPage={false}
-                ctaOnClick={() => {
-                  navigate('?surveyName=rei_mfg_survey');
-                }}
-              />
-            )}
+            {compliance.data?.surveys.map((survey, index) => {
+              return (
+                <ComplianceOverviewCard
+                  complianceData={getComplianceProgressForSurvey(survey)}
+                  isOverview={false}
+                  onOverviewPage={false}
+                  ctaOnClick={() => {
+                    navigate(`?surveyName=${survey.name}`);
+                  }}
+                />
+              );
+            })}
           </div>
         </div>
       </CenterColumnContent>

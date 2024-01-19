@@ -99,6 +99,7 @@ export default {
         showActions261: true,
         showNewsModuleCold310: true,
         showNextStepsCard: true,
+        showComplianceModule: true,
       },
     },
   },

@@ -31,7 +31,7 @@ export const ColdRoutes = () => {
               <Route path={'/journey'} element={<Journey />} />
               <Route path={'/settings'} element={<Settings />} />
               {ldFlags.showActions261 && ActionRoutes()}
-              {ComplianceRoutes()}
+              {ldFlags.showComplianceModule && ComplianceRoutes()}
               <Route path="/compliance" element={<div className={'text-tc-primary'}>Pending...</div>} />
               <Route path="*" element={<div className={'text-tc-primary'}>Pending...</div>} />
             </Route>

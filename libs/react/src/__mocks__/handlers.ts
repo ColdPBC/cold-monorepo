@@ -9,7 +9,7 @@ import {
   getOrganizationMembersMock,
   getTeamMemberDataGridMock,
 } from './datagridMock';
-import { getSurveyFormDataByName, getSurveysMock } from "./surveyDataMock";
+import { getSurveyFormDataByName, getSurveysMock } from './surveyDataMock';
 import { getRoles } from './roleMock';
 import { resolveAPIUrl } from '@coldpbc/fetchers';
 import { getOrganizationMock, getOrganizationsMock } from './organizationMock';
@@ -18,6 +18,8 @@ import { auth0UserMock } from './userMock';
 import { getNewsDefault } from './newsMock';
 import { getActionMock, getActionsMock } from './action';
 import { v4 as uuidv4 } from 'uuid';
+import { getComplianceMock, getComplianceMockByName } from './complianceMock';
+import { forOwn } from 'lodash';
 
 // Even if this uses vite as a bundler, it still uses the NODE_ENV variable
 export const getApiUrl = (path: string) => {
@@ -49,12 +51,9 @@ export const handlers = [
   }),
 
   // Mock data for footprint modules
-  rest.get(
-    getApiUrl('/organizations/:orgId/categories/company_decarbonization'),
-    (req, res, ctx) => {
-      return res(ctx.json({ ...getFootprintDataMock() }));
-    },
-  ),
+  rest.get(getApiUrl('/organizations/:orgId/categories/company_decarbonization'), (req, res, ctx) => {
+    return res(ctx.json({ ...getFootprintDataMock() }));
+  }),
 
   rest.get(getApiUrl('/company-users'), (req, res, ctx) => {
     return res(ctx.json(getDataGridUsersMock()));
@@ -100,78 +99,64 @@ export const handlers = [
     return res(ctx.json({ ...getOrganizationMembersMock() }));
   }),
 
-  rest.put(
-    getApiUrl('/organizations/:orgId/roles/:roleName/members/:userId'),
-    async (req, res, ctx) => {
-      const { orgId, roleName, userId } = req.params;
+  rest.put(getApiUrl('/organizations/:orgId/roles/:roleName/members/:userId'), async (req, res, ctx) => {
+    const { orgId, roleName, userId } = req.params;
+    return res(
+      ctx.json({
+        ...getOrganizationMembersMock(),
+        members: getOrganizationMembersMock().members.map(member => {
+          if (member.user_id === userId) {
+            member.role = roleName as string;
+          }
+          return member;
+        }),
+      }),
+    );
+  }),
+
+  rest.delete(getApiUrl('/organizations/:orgId/members'), async (req, res, ctx) => {
+    return res(ctx.json({}));
+  }),
+
+  rest.delete(getApiUrl('/organizations/:orgId/invitations/:userId'), async (req, res, ctx) => {
+    return res(ctx.json({}));
+  }),
+
+  rest.post(getApiUrl('/organizations/:orgId/invitation'), async (req, res, ctx) => {
+    const data = req.body as {
+      user_email: string;
+      inviter_name: string;
+      roleId: string;
+    };
+    const { orgId } = req.params;
+
+    try {
+      const { user_email, inviter_name, roleId } = data;
       return res(
         ctx.json({
-          ...getOrganizationMembersMock(),
-          members: getOrganizationMembersMock().members.map((member) => {
-            if (member.user_id === userId) {
-              member.role = roleName as string;
-            }
-            return member;
-          }),
+          id: uuidv4(),
+          client_id: 'i8rCPXsLq9b2YKOOWUTfvgUj0iYD7dE3',
+          inviter: {
+            name: inviter_name,
+          },
+          invitee: {
+            email: user_email,
+          },
+          invitation_url: '',
+          ticket_id: 'KpfUpW3PE6GwqgNsLUlLfwdkZS4373XO',
+          created_at: new Date().toISOString(),
+          expires_at: new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+          organization_id: orgId,
+          roles: [roleId],
         }),
       );
-    },
-  ),
-
-  rest.delete(
-    getApiUrl('/organizations/:orgId/members'),
-    async (req, res, ctx) => {
-      return res(ctx.json({}));
-    },
-  ),
-
-  rest.delete(
-    getApiUrl('/organizations/:orgId/invitations/:userId'),
-    async (req, res, ctx) => {
-      return res(ctx.json({}));
-    },
-  ),
-
-  rest.post(
-    getApiUrl('/organizations/:orgId/invitation'),
-    async (req, res, ctx) => {
-      const data = req.body as {
-        user_email: string;
-        inviter_name: string;
-        roleId: string;
-      };
-      const { orgId } = req.params;
-
-      try {
-        const { user_email, inviter_name, roleId } = data;
-        return res(
-          ctx.json({
-            id: uuidv4(),
-            client_id: 'i8rCPXsLq9b2YKOOWUTfvgUj0iYD7dE3',
-            inviter: {
-              name: inviter_name,
-            },
-            invitee: {
-              email: user_email,
-            },
-            invitation_url: '',
-            ticket_id: 'KpfUpW3PE6GwqgNsLUlLfwdkZS4373XO',
-            created_at: new Date().toISOString(),
-            expires_at: new Date(
-              new Date().getTime() + 7 * 24 * 60 * 60 * 1000,
-            ).toISOString(),
-            organization_id: orgId,
-            roles: [roleId],
-          }),
-        );
-      } catch (error) {
-        let message;
-        if (error instanceof Error) message = error.message;
-        else message = String(error);
-        return res(ctx.status(500), ctx.json({ message: message }));
-      }
-    },
-  ),
+    } catch (error) {
+      let message;
+      if (error instanceof Error) message = error.message;
+      else message = String(error);
+      return res(ctx.status(500), ctx.json({ message: message }));
+    }
+  }),
 
   rest.post(getApiUrl('/resources/:name'), async (req, res, ctx) => {
     return res(ctx.json({}));
@@ -181,23 +166,17 @@ export const handlers = [
     return res(ctx.json(getRoles()));
   }),
 
-  rest.get(
-    getApiUrl('/organizations/:orgId/surveys/:name'),
-    (req, res, ctx) => {
-      const { name } = req.params;
+  rest.get(getApiUrl('/organizations/:orgId/surveys/:name'), (req, res, ctx) => {
+    const { name } = req.params;
 
-      return res(ctx.json(getSurveyFormDataByName(name as string)));
-    },
-  ),
+    return res(ctx.json(getSurveyFormDataByName(name as string)));
+  }),
 
-  rest.put(
-    getApiUrl('/organizations/:orgId/surveys/:name'),
-    async (req, res, ctx) => {
-      const { data } = await req.json();
+  rest.put(getApiUrl('/organizations/:orgId/surveys/:name'), async (req, res, ctx) => {
+    const { data } = await req.json();
 
-      return res(ctx.json({}));
-    },
-  ),
+    return res(ctx.json({}));
+  }),
 
   rest.patch(getApiUrl(`/members/:emailOrId`), (req, res, ctx) => {
     return res(ctx.json({}));
@@ -242,18 +221,34 @@ export const handlers = [
     return res(ctx.json({ ...getActionMock() }));
   }),
 
-  rest.patch(
-    getApiUrl('/organizations/:orgId/actions/:actionId'),
-    (req, res, ctx) => {
-      return res(ctx.json({}));
-    },
-  ),
+  rest.patch(getApiUrl('/organizations/:orgId/actions/:actionId'), (req, res, ctx) => {
+    return res(ctx.json({}));
+  }),
 
-  rest.get(
-    getApiUrl('/organizations/:orgId/surveys'),
-    (req, res, ctx) => {
-      return res(ctx.json(getSurveysMock()));
-    },
-  ),
+  rest.get(getApiUrl('/organizations/:orgId/surveys'), (req, res, ctx) => {
+    return res(ctx.json(getSurveysMock()));
+  }),
 
+  rest.get(getApiUrl('/compliance'), (req, res, ctx) => {
+    const { name } = req.params;
+    return res(ctx.json(getComplianceMock()));
+  }),
+
+  rest.get(getApiUrl('/organizations/:orgId/compliance'), (req, res, ctx) => {
+    const { name } = req.params;
+    return res(ctx.json(getComplianceMock()));
+  }),
+
+  rest.post(getApiUrl('/organizations/:orgId/compliance'), async (req, res, ctx) => {
+    const body = await req.json();
+    const { name } = req.params;
+    const { orgId, complianceId } = body;
+    return res(ctx.json(getComplianceMock()[0]));
+  }),
+
+  rest.get(getApiUrl('/organizations/:orgId/compliance/:name'), (req, res, ctx) => {
+    const { name } = req.params;
+    const compliance = getComplianceMockByName(name as string);
+    return res(ctx.json(compliance));
+  }),
 ];
