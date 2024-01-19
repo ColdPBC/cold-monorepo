@@ -1,3 +1,19 @@
+# [1.87.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.86.5...v1.87.0) (2024-01-19)
+
+
+### Bug Fixes
+
+* make response consistant ([dc68e28](https://github.com/ColdPBC/cold-monorepo/commit/dc68e2852635fb4c36f84d13ac6702abb22552df))
+* prevent duplicate integrations ([96b2a9c](https://github.com/ColdPBC/cold-monorepo/commit/96b2a9cb6906e284f98656c86d995e24249828c0))
+* remove cold admin only restriction on surveys ([aab8f6f](https://github.com/ColdPBC/cold-monorepo/commit/aab8f6fbda26333ecb83a6d889d61df1035b3f29))
+* remove cold admin only restriction on surveys ([#231](https://github.com/ColdPBC/cold-monorepo/issues/231)) ([2eae370](https://github.com/ColdPBC/cold-monorepo/commit/2eae370b65f25ca77a0704b4fd8cd4b8cb9ba374))
+
+
+### Features
+
+* set section value to null if the section is skipped on submit ([d83001a](https://github.com/ColdPBC/cold-monorepo/commit/d83001ade37fdda306a881686173a0bf4a9da43f))
+* submit on last section if it is unanswered or is wanted to be jumped over by answering 'No' ([d3006e0](https://github.com/ColdPBC/cold-monorepo/commit/d3006e06b9e73799a15c7718700b07f2fae6b81b))
+
 ## [1.86.5](https://github.com/ColdPBC/cold-monorepo/compare/v1.86.4...v1.86.5) (2024-01-19)
 
 
