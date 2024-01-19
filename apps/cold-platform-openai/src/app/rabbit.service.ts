@@ -1,7 +1,9 @@
 import {Injectable} from '@nestjs/common';
-import {BackOffStrategies, BaseWorker, RabbitMessagePayload} from '@coldpbc/nest';
+import {BackOffStrategies, BaseWorker, PrismaService, RabbitMessagePayload, S3Service} from '@coldpbc/nest';
 import {Nack, RabbitRPC, RabbitSubscribe} from '@golevelup/nestjs-rabbitmq';
 import {InjectQueue} from '@nestjs/bull';
+import {omit} from 'lodash';
+import {toFile} from 'openai';
 import {Queue} from 'bull';
 import {AppService, OpenAIAssistant} from './app.service';
 import {organizations} from '../../../../libs/nest/src/validation/generated/modelSchema/organizationsSchema';
@@ -11,7 +13,7 @@ import {organizations} from '../../../../libs/nest/src/validation/generated/mode
  */
 @Injectable()
 export class RabbitService extends BaseWorker {
-  constructor(@InjectQueue('openai') private queue: Queue, private readonly openAI: AppService) {
+  constructor(@InjectQueue('openai') private queue: Queue, private readonly openAI: AppService, private readonly s3: S3Service, private readonly prisma: PrismaService) {
     super(RabbitService.name);
   }
 
@@ -70,13 +72,39 @@ export class RabbitService extends BaseWorker {
 
       switch (msg.event) {
         case 'file.uploaded': {
-          const destinationPath = `./uploads/${parsed.uploaded.filename}`;
-          const file = await this.openAI.client.files.create({
-            file: this.fs.createReadStream(destinationPath),
-            purpose: 'assistants',
+          const { uploaded, user } = parsed;
+          const s3File: any = await this.s3.getObject(user, 'cold-api-uploaded-files', uploaded.key);
+
+          const files = await this.openAI.client.files.list();
+          let oaiFile = files.data.find(async f => {
+            const s3File: any = await this.s3.getObject(user, 'cold-api-uploaded-files', uploaded.key);
+
+            return f.filename == `${uploaded.original_name}:${s3File.Metadata.md5hash}`;
           });
 
-          this.logger.info(`Created new file `, { file });
+          if (!oaiFile) {
+            oaiFile = await this.openAI.client.files.create({
+              file: await toFile(s3File.Body as Buffer, `${uploaded.original_name}:${s3File.Metadata.md5Hash}`),
+              purpose: 'assistants',
+            });
+          } else {
+            this.logger.warn(`File ${uploaded.original_name}:${s3File.Metadata.md5Hash} already exists in openAI`, {
+              oaiFile,
+              ...omit(s3File, ['Body']),
+              user,
+              uploaded,
+            });
+          }
+
+          const response = await this.openAI.linkFileToAssistant(user, { id: uploaded.organization_id }, oaiFile.id, uploaded.key, uploaded.bucket);
+
+          this.logger.info(`Created new file `, {
+            openai_file: oaiFile,
+            ...omit(s3File, ['Body']),
+            user,
+            uploaded,
+            openai_response: response,
+          });
           break;
         }
         default: {
@@ -92,7 +120,7 @@ export class RabbitService extends BaseWorker {
       }
     } catch (err) {
       this.logger.error(err.message, { ...msg });
-      return new Nack(true);
+      return new Nack();
     }
   }
 
@@ -111,9 +139,11 @@ export class RabbitService extends BaseWorker {
             instructions: `You are an AI sustainability expert. You help ${org.display_name} understand their impact on the environment and what tasks they must complete to meet a given set of compliance requirements. Enter your responses in a json format`,
             description: `OpenAI assistant for ${org.display_name}`,
             model: 'gpt-4-1106-preview',
+            tools: [{ type: 'retrieval' }],
           };
 
-          return await this.openAI.createAssistant(user, org, service, assistant);
+          const response = await this.openAI.createAssistant(user, org, service, assistant);
+          return response;
         }
       }
     } catch (e) {
@@ -131,11 +161,12 @@ export class RabbitService extends BaseWorker {
 
     switch (event) {
       case 'integration.enabled': {
-        const assistant: OpenAIAssistant = {
+        const assistant: any = {
           name: `${org.name}`,
           instructions: `You are an AI sustainability expert. You help ${org.display_name} understand their impact on the environment and what tasks they must complete to meet a given set of compliance requirements. Enter your responses in a json format`,
           description: `OpenAI assistant for ${org.display_name}`,
           model: 'gpt-4-1106-preview',
+          tools: [{ type: 'retrieval' }],
         };
 
         return await this.openAI.createAssistant(user, org, service, assistant);

@@ -2296,6 +2296,7 @@ export function getSurveysMock(): SurveyPayloadType[] {
         'Please complete the REI Packaging - General survey below. This survey is intended to help REI understand your brand’s current efforts to reduce the environmental impact of your product packaging. Please complete this survey by October 1, 2021.',
     },
   });
+
   return surveys;
 }
 

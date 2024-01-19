@@ -145,7 +145,7 @@ export class SurveysService extends BaseWorker {
     this.setTags({ user: user.coldclimate_claims, bpc, impersonateOrg });
     let surveys = [] as ZodSurveyResponseDto[];
 
-    if (impersonateOrg && user.isColdAdmin) {
+    if (impersonateOrg) {
       const surveyData = await this.prisma.survey_data.findMany({
         where: {
           organization_id: impersonateOrg,
