@@ -1,21 +1,31 @@
 {
-  "name": "cold-platform-climatiq",
-  "label": "Climatiq",
-  "service_type": "platform",
-  "version": "1.83.5",
-  "definition": {
-    "logo_url": "./assets/climatiq.png",
-    "platform_url": "https://www.climatiq.io",
-    "rabbitMQ": {
-      "rpc": {
-        "queue": "cold.platform.climatiq",
-        "routing_key": "cold.platform.climatiq.rpc",
-        "exchange": "amq.direct"
+  "service": {
+    "name": "cold-platform-climatiq",
+    "label": "Climatiq",
+    "service_type": "platform",
+    "definition": {
+      "version": "1.83.5",
+      "show": false,
+      "locations": false,
+      "logo_url": "./assets/climatiq.png",
+      "platform_url": "https://www.climatiq.io",
+      "mqtt": {
+        "publish_options": {
+          "base_topic": "/platform/climatiq",
+          "qos": 0
+        }
       },
-      "subscribe": {
-        "queue": "cold.platform.climatiq.rpc",
-        "routing_key": "cold.platform.climatiq",
-        "exchange": "amq.direct"
+      "rabbitMQ": {
+        "rpcOptions": {
+          "queue": "cold.platform.climatiq",
+          "routing_key": "cold.platform.climatiq.rpc",
+          "exchange": "amq.direct"
+        },
+        "publishOptions": {
+          "queue": "cold.platform.climatiq.rpc",
+          "routing_key": "cold.platform.climatiq",
+          "exchange": "amq.direct"
+        }
       }
     }
   }

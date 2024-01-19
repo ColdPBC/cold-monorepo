@@ -1632,6 +1632,80 @@
                 ]
             }
         },
+        "/organizations/{orgId}/locations/{locId}/integrations": {
+            "post": {
+                "operationId": "createLocationIntegration",
+                "summary": "Create Organization Location Specific Integration",
+                "parameters": [
+                    {
+                        "name": "orgId",
+                        "required": true,
+                        "in": "path",
+                        "example": "{{test_organization_id}}",
+                        "description": "Id of the Organization",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "locId",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "bpc",
+                        "required": false,
+                        "in": "query",
+                        "description": "Bypass Cache",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "description": "Integration Body Schema: You can pass location metadata to create a location if you do not have a location id. You can also pass a timeout number in milliseconds to override the default timeout for the service definition to define how long to wait before sending an async request",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "service_definition_id": "{{test_service_definition_id}}",
+                                    "location_id": "{{test_location_id}}",
+                                    "metadata": {
+                                        "name": "Headquarters",
+                                        "address": "{{$randomStreetAddress}}",
+                                        "address_line_2": "suite 100",
+                                        "city": "{{$randomCity}}",
+                                        "state": "MN",
+                                        "postal_code": "55401",
+                                        "utility": "speculoos_power"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Integrations"
+                ],
+                "security": [
+                    {
+                        "oauth2": [
+                            "openid"
+                        ]
+                    }
+                ]
+            }
+        },
         "/organizations/{orgId}/locations": {
             "get": {
                 "operationId": "OrganizationLocationsController_getOrganizationLocations",
@@ -2438,6 +2512,38 @@
                 ],
                 "responses": {
                     "204": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Organizations"
+                ],
+                "security": [
+                    {
+                        "oauth2": [
+                            "openid",
+                            "email",
+                            "profile"
+                        ]
+                    }
+                ]
+            }
+        },
+        "/organizations/{orgId}/files": {
+            "post": {
+                "operationId": "OrganizationController_uploadFile",
+                "parameters": [
+                    {
+                        "name": "orgId",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
                         "description": ""
                     }
                 },

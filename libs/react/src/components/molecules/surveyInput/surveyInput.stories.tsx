@@ -132,6 +132,59 @@ export const TextArea: Story = {
   },
 };
 
+export const AiAnswer: Story = {
+  render: args => {
+    return <SurveyInputStory {...args} />;
+  },
+  args: {
+    input_key: 'product:0',
+    prompt: 'Tell me about your product',
+    options: [],
+    tooltip: '',
+    component: 'yes_no',
+    placeholder: 'Write a few sentences about your product',
+    ai_attempted: true,
+    ai_justification: '*Lorem Ipsum Dolor Et Amo sflksjdflksdjfldsjkfs*',
+    ai_value: true,
+  },
+};
+
+export const UserAnswersAfterAIAnswers: Story = {
+  render: args => {
+    return <SurveyInputStory {...args} />;
+  },
+  args: {
+    input_key: 'product:0',
+    prompt: 'Tell me about your product',
+    options: [],
+    tooltip: '',
+    component: 'yes_no',
+    placeholder: 'Write a few sentences about your product',
+    ai_attempted: true,
+    ai_justification:
+      'The answer below was predetermined based on the following information. Please review it and adjust to ensure accuracy:\n\n*Lorem Ipsum Dolor Et Amo sflksjdflksdjfldsjkfs*',
+    ai_value: true,
+    value: true,
+  },
+};
+
+export const AIAttemptedButNoAnswer: Story = {
+  render: args => {
+    return <SurveyInputStory {...args} />;
+  },
+  args: {
+    input_key: 'product:0',
+    prompt: 'Tell me about your product',
+    options: [],
+    tooltip: '',
+    component: 'yes_no',
+    placeholder: 'Write a few sentences about your product',
+    ai_attempted: true,
+    ai_justification:
+      'The answer below was predetermined based on the following information. Please review it and adjust to ensure accuracy:\n\n*Lorem Ipsum Dolor Et Amo sflksjdflksdjfldsjkfs*',
+  },
+};
+
 const SurveyInputStory = (props: SurveyInputProps) => {
   const { input_key, prompt, options, tooltip, component, placeholder, value } = props;
   const [stateValue, setStateValue] = useState<any>(value);

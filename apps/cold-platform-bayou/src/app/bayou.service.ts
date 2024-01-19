@@ -8,6 +8,7 @@ import { ConfigService } from '@nestjs/config';
 import { HttpService } from '@nestjs/axios';
 import { service_definitions } from '../../../../libs/nest/src/validation/generated/modelSchema/service_definitionsSchema';
 import { bill_parsedDTO, bills_readyDTO } from './schemas/bayou.webhook.schema';
+import process from 'process';
 
 @Injectable()
 export class BayouService extends BaseWorker implements OnModuleInit {
@@ -19,7 +20,7 @@ export class BayouService extends BaseWorker implements OnModuleInit {
     private prisma: PrismaService,
     private config: ConfigService,
     private rabbit: ColdRabbitService,
-    @InjectQueue('bayou') private queue: Queue,
+    @InjectQueue(process.env?.DD_SERVICE?.split('-')[2]) private queue: Queue,
   ) {
     super(BayouService.name);
     const authHeader = `Basic ${Buffer.from(`${this.config.getOrThrow('BAYOU_API_KEY')}:`).toString('base64')}`;
@@ -36,7 +37,7 @@ export class BayouService extends BaseWorker implements OnModuleInit {
   async onModuleInit(): Promise<void> {
     const pkg = await BaseWorker.getParsedJSON('apps/cold-platform-bayou/package.json');
 
-    this.service = await this.rabbit.register_service(pkg);
+    this.service = await this.rabbit.register_service(pkg.service);
 
     this.logger.log('BayouService initialized');
   }
@@ -108,7 +109,7 @@ export class BayouService extends BaseWorker implements OnModuleInit {
       }
       const created = await this.prisma.utility_bills.create({
         data: {
-          id: new Cuid2Generator().setPrefix('utib').scopedId,
+          id: new Cuid2Generator().setPrefix('bill').scopedId,
           organization_id: integration.organization_id,
           location_id: payload.object['customer_external_id'],
           integration_id: integration.id,

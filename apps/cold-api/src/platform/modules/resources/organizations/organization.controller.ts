@@ -1,5 +1,6 @@
-import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post, Put, Query, Req, UseFilters, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post, Put, Query, Req, UploadedFile, UseFilters, UseGuards, UseInterceptors } from '@nestjs/common';
 import { Span } from 'nestjs-ddtrace';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { ResourceValidationPipe } from '../../../pipes/resource.pipe';
 import {
   allRoles,
@@ -14,8 +15,9 @@ import {
 import { postInviteOwnerExample, postOrganizationExample } from './examples/organization.examples';
 import { OrganizationService } from './organization.service';
 import { ApiBody, ApiOAuth2, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { AuthenticatedUser, BaseWorker, HttpExceptionFilter, JwtAuthGuard, OrganizationsSchema, Roles, RolesGuard } from '@coldpbc/nest';
+import { AuthenticatedUser, BaseWorker, HttpExceptionFilter, JwtAuthGuard, OrganizationsSchema, Roles, RolesGuard, S3Service } from '@coldpbc/nest';
 import { CreateOrganizationDto } from './dto/organization.dto';
+import multerS3 from 'multer-s3';
 
 @Span()
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -381,5 +383,30 @@ export class OrganizationController extends BaseWorker {
     this.logger.log(`Removing organization (${orgId}) invite in Auth0`, { orgId, invId, ...req.user });
 
     return this.orgService.deleteInvitation(orgId, invId, req.user);
+  }
+
+  @Post(':orgId/files')
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: multerS3(S3Service.getMulterS3Config()),
+    }),
+  )
+  async uploadFile(
+    @Param('orgId') orgId: string,
+    @UploadedFile() file: Express.MulterS3.File,
+    @Req()
+    req: {
+      body: never;
+      headers: never;
+      query: never;
+      user: AuthenticatedUser;
+    },
+  ) {
+    try {
+      return this.orgService.uploadFile(req.user, orgId, file);
+    } catch (error) {
+      console.error('Error uploading file:', error.message);
+      throw new Error('Failed to process the uploaded file.');
+    }
   }
 }

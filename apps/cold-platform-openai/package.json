@@ -1,22 +1,31 @@
 {
-  "name": "cold-platform-openai",
-  "label": "OpenAI",
-  "service_type": "platform",
-  "definition": {
-    "logo_url": "./assets/black_logo.png",
-    "platform_url": "https://www.open.ai",
-    "rabbitMQ": {
-      "rpc": {
-        "queue": "cold.platform.openai",
-        "routing_key": "cold.platform.openai.rpc",
-        "exchange": "amq.direct"
+  "service": {
+    "name": "cold-platform-openai",
+    "label": "OpenAI",
+    "service_type": "platform",
+    "definition": {
+      "logo_url": "./assets/black_logo.png",
+      "platform_url": "https://www.open.ai",
+      "show": true,
+      "locations": false,
+      "mqtt": {
+        "publish_options": {
+          "base_topic": "/platform/openai",
+          "qos": 0
+        }
       },
-      "subscribe": {
-        "queue": "cold.platform.openai",
-        "routing_key": "cold.platform.openai",
-        "exchange": "amq.direct"
+      "rabbitMQ": {
+        "rpcOptions": {
+          "queue": "cold.platform.openai",
+          "routing_key": "cold.platform.openai.rpc",
+          "exchange": "amq.direct"
+        },
+        "publishOptions": {
+          "queue": "cold.platform.openai",
+          "routing_key": "cold.platform.openai",
+          "exchange": "amq.direct"
+        }
       }
     }
-  },
-  "version": "1.83.5"
+  }
 }

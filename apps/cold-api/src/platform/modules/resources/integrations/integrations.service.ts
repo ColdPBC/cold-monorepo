@@ -87,7 +87,7 @@ export class IntegrationsService extends BaseWorker {
     }
   }
 
-  async createIntegration(
+  async createLocationIntegration(
     user: AuthenticatedUser,
     orgId: string,
     locId: string,
@@ -154,6 +154,101 @@ export class IntegrationsService extends BaseWorker {
         },
       );
       switch (response.status) {
+        case 201:
+        case 200:
+          return response.data;
+        case 404:
+          throw new NotFoundException(response.response);
+        case 409:
+          throw new ConflictException(response.response);
+        case 422:
+          throw new UnprocessableEntityException(response.response);
+        default:
+          return response;
+      }
+    } catch (e: any) {
+      this.logger.error(e.message, { user });
+      throw e;
+    }
+  }
+
+  async createIntegration(
+    user: AuthenticatedUser,
+    orgId: string,
+    body: {
+      service_definition_id: string;
+      timeout?: number;
+      metadata: any;
+    },
+  ): Promise<any> {
+    try {
+      const service = await this.prisma.service_definitions.findUnique({
+        where: {
+          id: body.service_definition_id,
+        },
+      });
+
+      if (!service) {
+        throw new UnprocessableEntityException(`Service definition ${body.service_definition_id} not found.`);
+      }
+
+      if (!get(service.definition, 'rabbitMQ.publishOptions.routing_key', false)) {
+        this.logger.warn(`Service definition ${body.service_definition_id} does not have a routing key at path 'rabbitMQ.publishOptions.routing_key'`, { service });
+      }
+
+      const org = await this.prisma.organizations.findUnique({
+        where: {
+          id: user.isColdAdmin ? orgId : user.coldclimate_claims.org_id,
+        },
+        include: {
+          integrations: true,
+        },
+      });
+
+      if (!org) {
+        throw new UnprocessableEntityException(`Organization ${orgId} is invalid.`);
+      }
+
+      let response = await this.rabbit.request(
+        get(service.definition, 'rabbitMQ.rpcOptions.routing_key', 'deadletter'),
+        {
+          data: {
+            organization: org,
+            service: service,
+            service_definition_id: service.id,
+            metadata: body.metadata,
+            user: user,
+          },
+          from: 'cold.api',
+          event: 'integration.enabled',
+        },
+        {
+          exchange: 'amq.direct',
+          timeout: body.timeout || 5000,
+        },
+      );
+
+      if (!response) {
+        response = await this.rabbit.publish(
+          get(service.definition, 'rabbitMQ.publishOptions.routing_key', 'deadletter'),
+          {
+            data: {
+              organization: org,
+              service: service,
+              service_definition_id: service.id,
+              metadata: body.metadata,
+              user: user,
+            },
+            from: 'cold.api',
+          },
+          'integration.enabled',
+          {
+            exchange: 'amq.direct',
+            timeout: body.timeout || 5000,
+          },
+        );
+      }
+      switch (response?.status) {
         case 201:
         case 200:
           return response.data;

@@ -6,20 +6,20 @@ generator client {
 generator zod {
   provider                         = "zod-prisma-types"
   output                           = "../src/validation/generated"
+  createModelTypes                 = "true"
   createRelationValuesTypes        = "false"
-  addInputTypeValidation           = "false"
-  createPartialTypes               = "false"
   addIncludeType                   = "false"
-  coerceDate                       = "false"
+  useDefaultValidators             = "false"
   useMultipleFiles                 = "true"
   createOptionalDefaultValuesTypes = "false"
-  writeBarrelFiles                 = "false"
-  createModelTypes                 = "true"
-  useDefaultValidators             = "false"
   validateWhereUniqueInput         = "false"
-  writeNullishInModelTypes         = "false"
-  createInputTypes                 = "false"
   addSelectType                    = "false"
+  addInputTypeValidation           = "false"
+  createInputTypes                 = "false"
+  writeBarrelFiles                 = "false"
+  writeNullishInModelTypes         = "false"
+  coerceDate                       = "false"
+  createPartialTypes               = "false"
 }
 
 datasource db {
@@ -261,29 +261,31 @@ model category_data {
 /// @actions
 model organizations {
   /// @zod.custom.use(z.string().uuid())
-  id                  String                   @id
-  name                String                   @unique
-  enabled_connections Json
-  display_name        String
-  branding            Json?
-  phone               String?
+  id                       String                     @id
+  name                     String                     @unique
+  enabled_connections      Json
+  display_name             String
+  branding                 Json?
+  phone                    String?
   /// @zod.custom.use(z.string().email())
-  email               String?
+  email                    String?
   /// @DtoUpdateHidden
   /// @zod.custom.use(z.date().optional())
-  created_at          DateTime                 @default(now())
+  created_at               DateTime                   @default(now())
   /// @DtoUpdateHidden
   /// @DtoCreateHidden
   /// @DtoReadOnly
   /// @zod.custom.use(z.date().optional())
-  updated_at          DateTime                 @updatedAt
-  isTest              Boolean                  @default(false)
-  actions             actions[]
-  category_data       category_data[]
-  integrations        integrations[]
-  locations           organization_locations[]
-  survey_data         survey_data[]
-  utility_bills       utility_bills[]
+  updated_at               DateTime                   @updatedAt
+  isTest                   Boolean                    @default(false)
+  actions                  actions[]
+  category_data            category_data[]
+  integrations             integrations[]
+  organization_compliances organization_compliances[]
+  organization_files       organization_files[]
+  locations                organization_locations[]
+  survey_data              survey_data[]
+  utility_bills            utility_bills[]
 }
 
 model organization_locations {
@@ -339,6 +341,7 @@ model integrations {
   location              organization_locations? @relation(fields: [location_id], references: [id], onDelete: Cascade)
   organization          organizations           @relation(fields: [organization_id], references: [id])
   service_definition    service_definitions     @relation(fields: [service_definition_id], references: [id], onDelete: Cascade)
+  files                 organization_files[]
   unility_bills         utility_bills[]
 
   @@unique([service_definition_id, location_id], name: "integrationKey")
@@ -388,17 +391,17 @@ model emissions {
   updated_at              DateTime               @updatedAt
   integration_id          String
   activity_data           Json
-  constituent_gases       Json
   integration_data        Json
   name                    String
   region                  String
   category                String
-  co2_calculation_method  String
   co2e                    Float
   co2e_calculation_origin String
   co2e_unit               String
   emission_factor         Json
   location_id             String
+  co2_calculation_method  String
+  constituent_gases       Json
   integrations            integrations           @relation(fields: [integration_id], references: [id], onDelete: Cascade)
   location                organization_locations @relation(fields: [location_id], references: [id], onDelete: Cascade)
 }
@@ -408,17 +411,64 @@ model emissions {
 /// @erd emissions
 model utility_bills {
   id              String                 @id @default(cuid())
-  location_id     String
   integration_id  String
-  organization_id String
   period_from     DateTime
   period_to       DateTime
   data            Json
   created_at      DateTime               @default(now())
   updated_at      DateTime               @updatedAt
+  location_id     String
+  organization_id String
   integration     integrations           @relation(fields: [integration_id], references: [id], onDelete: Cascade)
   location        organization_locations @relation(fields: [location_id], references: [id], onDelete: Cascade)
   organization    organizations          @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+}
+
+model organization_files {
+  bucket              String?
+  key                 String?
+  original_name       String
+  checksum            String?
+  organization_id     String
+  openai_assistant_id String?
+  openai_file_id      String?       @unique
+  created_at          DateTime      @default(now())
+  updated_at          DateTime      @updatedAt
+  id                  String        @id @default(cuid())
+  integration_id      String?
+  mimetype            String?
+  size                Int?
+  acl                 String?
+  contentType         String?
+  encoding            String?
+  fieldname           String?
+  location            String?
+  versionId           String?
+  integration         integrations? @relation(fields: [integration_id], references: [id], onDelete: Cascade)
+  organization        organizations @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+
+  @@unique([organization_id, bucket, key], name: "s3Key")
+}
+
+model compliance_definitions {
+  id                       String                     @id @default(cuid())
+  name                     String                     @unique
+  title                    String
+  logo_url                 String
+  surveys                  Json
+  created_at               DateTime                   @default(now())
+  updated_at               DateTime                   @updatedAt
+  organization_compliances organization_compliances[]
+}
+
+model organization_compliances {
+  id                    String                 @id @default(cuid())
+  organization_id       String
+  compliance_id         String
+  created_at            DateTime               @default(now())
+  updated_at            DateTime               @updatedAt
+  compliance_definition compliance_definitions @relation(fields: [compliance_id], references: [id], onDelete: Cascade)
+  organization          organizations          @relation(fields: [organization_id], references: [id], onDelete: Cascade)
 }
 
 enum integration_service_type {
@@ -432,6 +482,7 @@ enum survey_types {
   FOOTPRINT
   ENRICHMENT
   SOLUTION
+  COMPLIANCE
   TEST
 }
 

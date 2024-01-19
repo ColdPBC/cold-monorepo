@@ -4,9 +4,7 @@ import { Home } from './app/home';
 import { ColdContextProvider } from '@coldpbc/providers';
 import { datadogRum } from '@datadog/browser-rum';
 
-const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement,
-);
+const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 
 const domain = import.meta.env.VITE_AUTH0_DOMAIN;
 const clientId = import.meta.env.VITE_AUTH0_CLIENT_ID;
@@ -19,7 +17,7 @@ datadogRum.init({
   site: 'us5.datadoghq.com',
   service: 'ui',
   env: import.meta.env.VITE_DD_ENV,
-  allowedTracingUrls: [(url) => url.startsWith('<https://api.coldclimate>')],
+  allowedTracingUrls: [url => url.startsWith('<https://api.coldclimate>')],
   version: import.meta.env.VITE_DD_VERSION,
   sessionSampleRate: 100,
   premiumSampleRate: 100,
@@ -44,8 +42,7 @@ root.render(
           organization_name: urlParams.get('organization_name') || undefined,
         },
       }}
-      launchDarklyClientSideId={launchDarklyClientSideId}
-    >
+      launchDarklyClientSideId={launchDarklyClientSideId}>
       <Home />
     </ColdContextProvider>
   </StrictMode>,

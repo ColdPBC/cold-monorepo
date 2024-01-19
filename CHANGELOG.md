@@ -1,3 +1,111 @@
+## [1.86.5](https://github.com/ColdPBC/cold-monorepo/compare/v1.86.4...v1.86.5) (2024-01-19)
+
+
+### Bug Fixes
+
+* add missing 'all files' endpoint ([074a867](https://github.com/ColdPBC/cold-monorepo/commit/074a867a2f36177d1e8d3b51ce57c27b2854718e))
+* linking file with asssistant ([dbde396](https://github.com/ColdPBC/cold-monorepo/commit/dbde3967018254bb66bf6289667631578fc580dc))
+
+## [1.86.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.86.3...v1.86.4) (2024-01-19)
+
+
+### Bug Fixes
+
+* issue with empty arrays ([281c709](https://github.com/ColdPBC/cold-monorepo/commit/281c709645653b17a4f9215f85962f07f097ae59))
+
+## [1.86.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.86.2...v1.86.3) (2024-01-19)
+
+
+### Bug Fixes
+
+* inability to download files ([e07e848](https://github.com/ColdPBC/cold-monorepo/commit/e07e848f8c2c9cc0ff9c73a0a7e0b012bb5afcfb))
+
+## [1.86.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.86.1...v1.86.2) (2024-01-19)
+
+
+### Bug Fixes
+
+* return proper error when integration not found ([c35f413](https://github.com/ColdPBC/cold-monorepo/commit/c35f4135173e0e19126dfd34370aef839724bf14))
+
+## [1.86.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.86.0...v1.86.1) (2024-01-19)
+
+
+### Bug Fixes
+
+* fixing migration issues ([13993fd](https://github.com/ColdPBC/cold-monorepo/commit/13993fda5d496eb142bbedf0ccd0b86df9145e4c))
+
+# [1.86.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.85.0...v1.86.0) (2024-01-19)
+
+
+### Features
+
+* add compliance modules ([f5c937c](https://github.com/ColdPBC/cold-monorepo/commit/f5c937cb2a9e241f7e5c1ee18b2619b1f82f8e1e))
+
+# [1.85.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.84.0...v1.85.0) (2024-01-19)
+
+
+### Bug Fixes
+
+* move user-interceptor to library ([1993742](https://github.com/ColdPBC/cold-monorepo/commit/19937424d2adb1975aa22c7775542dd5814ff41c))
+* move user-interceptor to library ([f37df07](https://github.com/ColdPBC/cold-monorepo/commit/f37df0738663d1a110d2db08fa694ec531990ebc))
+* standardize service package.json ([224aa81](https://github.com/ColdPBC/cold-monorepo/commit/224aa81af7ea31304216d88a296bc3bc101dea8c))
+
+
+### Features
+
+* add openAI files controller ([7be70ed](https://github.com/ColdPBC/cold-monorepo/commit/7be70ed9be9ae854bf3e030fd8375fc5cc3e12dc))
+
+# [1.84.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.83.13...v1.84.0) (2024-01-18)
+
+
+### Features
+
+* Added hardcoded txt to ai justification ([6947e5f](https://github.com/ColdPBC/cold-monorepo/commit/6947e5fc97696d7a6168037d8edc111530aad4de))
+* handle survey ai answers ([9811e24](https://github.com/ColdPBC/cold-monorepo/commit/9811e248946b0e5840ff0a0ba3a48dd5214666e2))
+
+## [1.83.13](https://github.com/ColdPBC/cold-monorepo/compare/v1.83.12...v1.83.13) (2024-01-18)
+
+
+### Bug Fixes
+
+* typo in package.json ([1fc1f1b](https://github.com/ColdPBC/cold-monorepo/commit/1fc1f1b637ebe69fdb751451327b8c208eef03cb))
+
+## [1.83.12](https://github.com/ColdPBC/cold-monorepo/compare/v1.83.11...v1.83.12) (2024-01-18)
+
+
+### Bug Fixes
+
+* add compliances ([40f53f8](https://github.com/ColdPBC/cold-monorepo/commit/40f53f81e053b62d93099c6807e38a985828462d))
+* add compliances ([52e17e7](https://github.com/ColdPBC/cold-monorepo/commit/52e17e728a1972eac4ba2ab7da243feae42421af))
+
+## [1.83.11](https://github.com/ColdPBC/cold-monorepo/compare/v1.83.10...v1.83.11) (2024-01-17)
+
+
+### Bug Fixes
+
+* fix cert issue ([bc4bc1b](https://github.com/ColdPBC/cold-monorepo/commit/bc4bc1b0871c9afe37c899fc8f21ae01e3d041eb))
+
+## [1.83.10](https://github.com/ColdPBC/cold-monorepo/compare/v1.83.9...v1.83.10) (2024-01-17)
+
+
+### Bug Fixes
+
+* change env vars ([b2760b5](https://github.com/ColdPBC/cold-monorepo/commit/b2760b5509a0b73e302143969df757421c870f0d))
+
+## [1.83.9](https://github.com/ColdPBC/cold-monorepo/compare/v1.83.8...v1.83.9) (2024-01-16)
+
+
+### Bug Fixes
+
+* add file handling for openAI ([a11f663](https://github.com/ColdPBC/cold-monorepo/commit/a11f6632b6d93df83d46503b333dce9eb36c4ce2))
+
+## [1.83.8](https://github.com/ColdPBC/cold-monorepo/compare/v1.83.7...v1.83.8) (2024-01-12)
+
+
+### Bug Fixes
+
+* add onQueueFailed subscription ([7a5e904](https://github.com/ColdPBC/cold-monorepo/commit/7a5e9041eb31c8941c82e3426a945c05c787ff84))
+
 ## [1.83.7](https://github.com/ColdPBC/cold-monorepo/compare/v1.83.6...v1.83.7) (2024-01-11)
 
 
