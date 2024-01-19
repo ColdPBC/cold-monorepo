@@ -116,7 +116,7 @@ export class AppService extends BaseWorker implements OnModuleInit {
               service,
             });
 
-            return integration;
+            return Object.assign(integration, inOpenAi);
           }
         } catch (e) {
           if (e.status == 404) {
@@ -150,7 +150,7 @@ export class AppService extends BaseWorker implements OnModuleInit {
         },
       });
 
-      this.logger.info(`OpenAI assistant (${openAIResponse}) created for ${organization.name}`, {
+      this.logger.info(`OpenAI assistant (${openAIResponse.name}) created for ${organization.name}`, {
         organization,
         user,
         integration,
@@ -158,7 +158,7 @@ export class AppService extends BaseWorker implements OnModuleInit {
         assistant: openAIResponse,
       });
 
-      return openAIResponse;
+      return Object.assign(integration, openAIResponse);
     } catch (e) {
       this.handleError(e, {
         organization,
