@@ -1,14 +1,14 @@
 import { Module } from '@nestjs/common';
-import { NestModule, PrismaModule, S3Module, UserInterceptor } from '@coldpbc/nest';
+import { NestModule, OrgUserInterceptor, PrismaModule, S3Module } from '@coldpbc/nest';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { BullModule } from '@nestjs/bull';
-import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { OutboundQueueProcessor } from './outbound.processor';
 import process from 'process';
 import { RabbitService } from './rabbit.service';
 import { MulterModule } from '@nestjs/platform-express';
+import { OpenAIController } from './app.controller';
 
 @Module({})
 export class AppModule {
@@ -55,13 +55,13 @@ export class AppModule {
         }),
         await S3Module.forRootAsync(),
       ],
-      controllers: [AppController],
+      controllers: [OpenAIController],
       providers: [
         OutboundQueueProcessor,
         AppService,
         {
           provide: APP_INTERCEPTOR,
-          useClass: UserInterceptor,
+          useClass: OrgUserInterceptor,
         },
         RabbitService,
       ],
