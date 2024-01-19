@@ -73,10 +73,14 @@ export class RabbitService extends BaseWorker {
       switch (msg.event) {
         case 'file.uploaded': {
           const { uploaded, user } = parsed;
-          const s3File = await this.s3.getObject(user, 'cold-api-uploaded-files', uploaded.key);
+          const s3File: any = await this.s3.getObject(user, 'cold-api-uploaded-files', uploaded.key);
 
           const files = await this.openAI.client.files.list();
-          let oaiFile = files.data.find(f => f.filename == `${uploaded.original_name}:${s3File.Metadata.md5Hash}`);
+          let oaiFile = files.data.find(async f => {
+            const s3File: any = await this.s3.getObject(user, 'cold-api-uploaded-files', uploaded.key);
+
+            return f.filename == `${uploaded.original_name}:${s3File.Metadata.md5hash}`;
+          });
 
           if (!oaiFile) {
             oaiFile = await this.openAI.client.files.create({
@@ -86,7 +90,7 @@ export class RabbitService extends BaseWorker {
           } else {
             this.logger.warn(`File ${uploaded.original_name}:${s3File.Metadata.md5Hash} already exists in openAI`, {
               oaiFile,
-              s3File,
+              ...omit(s3File, ['Body']),
               user,
               uploaded,
             });
@@ -135,9 +139,11 @@ export class RabbitService extends BaseWorker {
             instructions: `You are an AI sustainability expert. You help ${org.display_name} understand their impact on the environment and what tasks they must complete to meet a given set of compliance requirements. Enter your responses in a json format`,
             description: `OpenAI assistant for ${org.display_name}`,
             model: 'gpt-4-1106-preview',
+            tools: [{ type: 'retrieval' }],
           };
 
-          return await this.openAI.createAssistant(user, org, service, assistant);
+          const response = await this.openAI.createAssistant(user, org, service, assistant);
+          return response;
         }
       }
     } catch (e) {
@@ -155,11 +161,12 @@ export class RabbitService extends BaseWorker {
 
     switch (event) {
       case 'integration.enabled': {
-        const assistant: OpenAIAssistant = {
+        const assistant: any = {
           name: `${org.name}`,
           instructions: `You are an AI sustainability expert. You help ${org.display_name} understand their impact on the environment and what tasks they must complete to meet a given set of compliance requirements. Enter your responses in a json format`,
           description: `OpenAI assistant for ${org.display_name}`,
           model: 'gpt-4-1106-preview',
+          tools: [{ type: 'retrieval' }],
         };
 
         return await this.openAI.createAssistant(user, org, service, assistant);
