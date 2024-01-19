@@ -55,7 +55,13 @@
             "VITE_DD_RUM_CLIENT_TOKEN": "pub92f690b0e4706ca7b9d2e7d7481f383e",
             "VITE_DD_SITE": "us5.datadoghq.com",
             "VITE_DD_VERSION": "1.70.0",
-            "VITE_LD_CLIENT_SIDE_ID": "644fe7fe13a8fb12f3ca0c1a"
+            "VITE_LD_CLIENT_SIDE_ID": "644fe7fe13a8fb12f3ca0c1a",
+            "VITE_OPENAI_URL": {
+              "fromService": {
+                "id": "cold-platform-openai-production",
+                "value": "origin"
+              }
+            }
           }
         },
         {
@@ -235,7 +241,13 @@
             "VITE_DD_RUM_CLIENT_TOKEN": "pub92f690b0e4706ca7b9d2e7d7481f383e",
             "VITE_DD_SERVICE": "cold-ui",
             "VITE_DD_SITE": "us5.datadoghq.com",
-            "VITE_LD_CLIENT_SIDE_ID": "644fe7fe13a8fb12f3ca0c19"
+            "VITE_LD_CLIENT_SIDE_ID": "644fe7fe13a8fb12f3ca0c19",
+            "VITE_OPENAI_URL": {
+              "fromService": {
+                "id": "cold-platform-openai-staging",
+                "value": "origin"
+              }
+            }
           }
         },
         {
@@ -411,7 +423,13 @@
             "VITE_DD_SERVICE": "cold-ui",
             "VITE_DD_SITE": "us5.datadoghq.com",
             "VITE_LD_CLIENT_SIDE_ID": "644fe7fe13a8fb12f3ca0c19",
-            "VITE_APP_VERSION": ""
+            "VITE_APP_VERSION": "",
+            "VITE_OPENAI_URL": {
+              "fromService": {
+                "id": "cold-platform-openai-preview",
+                "value": "origin"
+              }
+            }
           }
         },
         {
