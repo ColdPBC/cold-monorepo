@@ -1,3 +1,10 @@
+## [1.87.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.87.0...v1.87.1) (2024-01-19)
+
+
+### Bug Fixes
+
+* implement compliance definitions ([3b08fa2](https://github.com/ColdPBC/cold-monorepo/commit/3b08fa2919e432ea86603258ae1d7675961980fc))
+
 # [1.87.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.86.5...v1.87.0) (2024-01-19)
 
 

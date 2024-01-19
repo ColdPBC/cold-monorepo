@@ -13,6 +13,7 @@ import { ConfigModule } from '@nestjs/config';
 import { IntegrationsModule } from './resources/integrations/integrations.module';
 import { Service_definitionsModule } from './resources/service_definitions/service_definitions.module';
 import { OrganizationLocationsModule } from './resources/organization_locations/organization_locations.module';
+import { ComplianceDefinitionModule } from './resources/compliance_definitions/compliance_definition.module';
 
 @Module({})
 export class AppModule {
@@ -41,6 +42,7 @@ export class AppModule {
         ActionsModule,
         IntegrationsModule,
         OrganizationLocationsModule,
+        ComplianceDefinitionModule,
       ],
       providers: [
         {

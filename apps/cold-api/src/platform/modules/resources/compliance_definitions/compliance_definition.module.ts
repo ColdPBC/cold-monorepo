@@ -2,11 +2,12 @@ import { Module } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { CacheService, ColdCacheModule, JwtStrategy, PrismaModule } from '@coldpbc/nest';
 import { ComplianceController } from './compliance.controller';
-import { ComplianceService } from './compliance.service';
+import { ComplianceDefinitionService } from './compliance_definition.service';
 
 @Module({
   imports: [PrismaModule, ColdCacheModule],
   controllers: [ComplianceController],
-  providers: [ComplianceService, JwtService, JwtStrategy, CacheService],
+  providers: [ComplianceDefinitionService, JwtService, JwtStrategy, CacheService],
+  exports: [ComplianceDefinitionService],
 })
-export class ComplianceModule {}
+export class ComplianceDefinitionModule {}
