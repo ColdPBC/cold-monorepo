@@ -172,7 +172,7 @@ export class ColdRabbitService extends BaseWorker implements OnModuleInit {
       registerHandlers: true,
       connectionInitOptions: { wait: false, timeout: 3000 },
       prefetchCount: 1,
-      enableControllerDiscovery: true,
+      enableControllerDiscovery: false,
     };
   }
 }

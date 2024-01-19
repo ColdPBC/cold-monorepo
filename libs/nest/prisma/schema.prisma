@@ -428,6 +428,7 @@ model organization_files {
   bucket              String?
   key                 String?
   original_name       String
+  checksum            String?
   organization_id     String
   openai_assistant_id String?
   openai_file_id      String?       @unique
@@ -446,13 +447,13 @@ model organization_files {
   integration         integrations? @relation(fields: [integration_id], references: [id], onDelete: Cascade)
   organization        organizations @relation(fields: [organization_id], references: [id], onDelete: Cascade)
 
-  @@unique([organization_id, original_name], name: "fileNameKey")
   @@unique([organization_id, bucket, key], name: "s3Key")
 }
 
 model compliance_definitions {
   id                       String                     @id @default(cuid())
   name                     String                     @unique
+  title                    String
   logo_url                 String
   surveys                  Json
   created_at               DateTime                   @default(now())

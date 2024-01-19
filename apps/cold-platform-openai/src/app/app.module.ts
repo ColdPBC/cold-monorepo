@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { NestModule, OrgUserInterceptor, PrismaModule, S3Module } from '@coldpbc/nest';
+import { NestModule, OrgUserInterceptor, PrismaModule, S3Service } from '@coldpbc/nest';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { BullModule } from '@nestjs/bull';
 import { AppService } from './app.service';
@@ -53,11 +53,11 @@ export class AppModule {
         BullModule.registerQueue({
           name: process.env?.DD_SERVICE?.split('-')[2],
         }),
-        await S3Module.forRootAsync(),
       ],
       controllers: [OpenAIController],
       providers: [
         OutboundQueueProcessor,
+        S3Service,
         AppService,
         {
           provide: APP_INTERCEPTOR,

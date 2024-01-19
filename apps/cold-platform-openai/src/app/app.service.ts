@@ -2,6 +2,7 @@ import { AuthenticatedUser, BaseWorker, ColdRabbitService, MqttService, PrismaSe
 import { Injectable, NotFoundException, OnModuleInit, UnauthorizedException, UnprocessableEntityException } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import OpenAI from 'openai';
+import { get } from 'lodash';
 import { service_definitions } from '../../../../libs/nest/src/validation/generated/modelSchema/service_definitionsSchema';
 import { organizations } from '../../../../libs/nest/src/validation/generated/modelSchema/organizationsSchema';
 import { ConfigService } from '@nestjs/config';
@@ -20,6 +21,7 @@ export type OpenAIAssistant = {
 export class AppService extends BaseWorker implements OnModuleInit {
   client: OpenAI;
   service: service_definitions;
+  topic: string = '';
 
   constructor(
     private readonly mqtt: MqttService,
@@ -34,22 +36,23 @@ export class AppService extends BaseWorker implements OnModuleInit {
   }
 
   async onModuleInit(): Promise<void> {
-    const client = this.mqtt.connect();
-    client.on('error', error => {
-      this.logger.error(error.message, error);
-    });
-    client.on('connect', () => {
-      console.log('Connected to AWS IoT Core');
-      this.mqtt.subscribe('#');
-      this.mqtt.onMessage((topic, message) => {
-        this.logger.info(`Message published to ${topic}`, JSON.parse(message));
-      });
-    });
-
     const pkg = await BaseWorker.getParsedJSON('apps/cold-platform-openai/package.json');
 
     try {
       this.service = await this.rabbit.register_service(pkg.service);
+      this.topic = `${get(this.service, 'definition.mqtt.publish_options.base_topic', `/platform/openai`)}/${this.config.getOrThrow('NODE_ENV')}/#`;
+      const client = this.mqtt.connect();
+      client.on('error', error => {
+        this.logger.error(error.message, error);
+      });
+      client.on('connect', () => {
+        console.log('Connected to AWS IoT Core');
+
+        this.mqtt.subscribe(this.topic);
+        this.mqtt.onMessage((topic, message) => {
+          this.logger.info(`Message published to ${topic}`, JSON.parse(message));
+        });
+      });
     } catch (e) {
       this.logger.error(e.message, e);
       try {
@@ -352,7 +355,7 @@ export class AppService extends BaseWorker implements OnModuleInit {
     return openAIFile;
   }
 
-  async linkFileToAssistant(user: AuthenticatedUser, org: any, openAIFileId: string) {
+  async linkFileToAssistant(user: AuthenticatedUser, org: any, openAIFileId: string, key?: string, bucket?: string) {
     try {
       const integrations = await this.prisma.integrations.findFirst({
         where: {
@@ -366,17 +369,50 @@ export class AppService extends BaseWorker implements OnModuleInit {
         throw new NotFoundException(`Integration not found for organization ${org.id}`);
       }
 
-      const myAssistantFile = await this.client.beta.assistants.files.create(integrations.id, {
-        file_id: openAIFileId,
-      });
+      let myAssistantFile = await this.client.beta.assistants.files.retrieve(integrations.id, openAIFileId);
 
-      this.logger.info(`Created new assistant file ${myAssistantFile.id} for assistant ${myAssistantFile.assistant_id}`, {
-        user,
-        integrations,
-        organization: org,
-        assistant_file: myAssistantFile,
-      });
-      return { integrations, assistant_file: myAssistantFile };
+      if (!myAssistantFile) {
+        myAssistantFile = await this.client.beta.assistants.files.create(integrations.id, {
+          file_id: openAIFileId,
+        });
+
+        this.logger.info(`Created new assistant file ${myAssistantFile.id} for assistant ${myAssistantFile.assistant_id}`, {
+          user,
+          integrations,
+          organization: org,
+          assistant_file: myAssistantFile,
+        });
+      }
+
+      let orgFile;
+      if (key && bucket) {
+        orgFile = await this.prisma.organization_files.update({
+          where: {
+            s3Key: {
+              key: key,
+              bucket: bucket,
+              organization_id: org.id,
+            },
+          },
+          data: {
+            openai_assistant_id: integrations.id,
+            openai_file_id: myAssistantFile.id,
+            integration_id: integrations.id,
+          },
+        });
+      } else {
+        orgFile = await this.prisma.organization_files.update({
+          where: {
+            openai_file_id: openAIFileId,
+          },
+          data: {
+            openai_assistant_id: integrations.id,
+            openai_file_id: myAssistantFile.id,
+            integration_id: integrations.id,
+          },
+        });
+      }
+      return { integrations, assistant_file: myAssistantFile, organization_file: orgFile };
     } catch (e) {
       this.logger.error(e.message, e);
       this.handleError(e, { user, organization: org, openai_file_id: openAIFileId });

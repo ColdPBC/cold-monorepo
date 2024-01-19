@@ -1,7 +1,8 @@
 import {Injectable} from '@nestjs/common';
-import {BackOffStrategies, BaseWorker, RabbitMessagePayload} from '@coldpbc/nest';
+import {BackOffStrategies, BaseWorker, PrismaService, RabbitMessagePayload, S3Service} from '@coldpbc/nest';
 import {Nack, RabbitRPC, RabbitSubscribe} from '@golevelup/nestjs-rabbitmq';
 import {InjectQueue} from '@nestjs/bull';
+import {toFile} from 'openai';
 import {Queue} from 'bull';
 import {AppService, OpenAIAssistant} from './app.service';
 import {organizations} from '../../../../libs/nest/src/validation/generated/modelSchema/organizationsSchema';
@@ -11,7 +12,7 @@ import {organizations} from '../../../../libs/nest/src/validation/generated/mode
  */
 @Injectable()
 export class RabbitService extends BaseWorker {
-  constructor(@InjectQueue('openai') private queue: Queue, private readonly openAI: AppService) {
+  constructor(@InjectQueue('openai') private queue: Queue, private readonly openAI: AppService, private readonly s3: S3Service, private readonly prisma: PrismaService) {
     super(RabbitService.name);
   }
 
@@ -70,13 +71,29 @@ export class RabbitService extends BaseWorker {
 
       switch (msg.event) {
         case 'file.uploaded': {
-          const destinationPath = `./uploads/${parsed.uploaded.filename}`;
-          const file = await this.openAI.client.files.create({
-            file: this.fs.createReadStream(destinationPath),
-            purpose: 'assistants',
-          });
+          const { uploaded, user } = parsed;
+          const s3File = await this.s3.getObject(user, 'cold-api-uploaded-files', uploaded.key);
 
-          this.logger.info(`Created new file `, { file });
+          const files = await this.openAI.client.files.list();
+          let oaiFile = files.data.find(f => f.filename == `${uploaded.original_name}:${s3File.Metadata.md5Hash}`);
+
+          if (!oaiFile) {
+            oaiFile = await this.openAI.client.files.create({
+              file: await toFile(s3File.Body as Buffer, `${uploaded.original_name}:${s3File.Metadata.md5Hash}`),
+              purpose: 'assistants',
+            });
+          } else {
+            this.logger.warn(`File ${uploaded.original_name}:${s3File.Metadata.md5Hash} already exists in openAI`, {
+              oaiFile,
+              s3File,
+              user,
+              uploaded,
+            });
+          }
+
+          const response = await this.openAI.linkFileToAssistant(user, { id: uploaded.organization_id }, oaiFile.id, uploaded.key, uploaded.bucket);
+
+          this.logger.info(`Created new file `, { oaiFile, s3File, user, uploaded });
           break;
         }
         default: {
@@ -92,7 +109,7 @@ export class RabbitService extends BaseWorker {
       }
     } catch (err) {
       this.logger.error(err.message, { ...msg });
-      return new Nack(true);
+      return new Nack();
     }
   }
 

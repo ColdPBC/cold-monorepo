@@ -19,10 +19,12 @@ import { ColdRabbitModule, ColdRabbitService } from './rabbit';
 import { DatadogTraceModule } from 'nestjs-ddtrace';
 import { RedisServiceConfig } from './utility';
 import { MqttService } from './mqtt';
+import { S3Module } from './aws/s3/s3.module';
+import { S3Service } from './aws';
 
 @Module({})
 export class NestModule {
-  static async forRootAsync(db: number) {
+  static async forRootAsync(redisDB: number, bucket?: string) {
     const logger = new WorkerLogger('NestModule');
     const config = new ConfigService();
     const darkly = new DarklyService(config);
@@ -40,7 +42,7 @@ export class NestModule {
       ConfigModule.forRoot({
         isGlobal: true,
       }),
-      BullModule.forRoot(await RedisServiceConfig.getQueueConfig(type, project, db)),
+      BullModule.forRoot(await RedisServiceConfig.getQueueConfig(type, project, redisDB)),
       BullModule.registerQueue({
         name: project,
       }),
@@ -70,6 +72,13 @@ export class NestModule {
     const exports: any = [HttpModule, ConfigService, MqttService];
 
     logger.info('Configuring Nest Module...');
+
+    if (bucket) {
+      imports.push(S3Module.forRootAsync(bucket));
+      providers.push(S3Service);
+      exports.push(S3Service);
+    }
+
     //configure-enable-hot-shots-module
     const enableHotShots = await darkly.getFlag('static-enable-hot-shots-module');
     if (enableHotShots) {
