@@ -11,6 +11,7 @@
       <env name="VITE_COLD_API_AUDIENCE" value="https://api.coldclimate.online/" />
       <env name="VITE_DD_ENV" value="development" />
       <env name="VITE_LD_CLIENT_SIDE_ID" value="644fe7fe13a8fb12f3ca0c19" />
+      <env name="VITE_OPENAI_URL" value="https://openai.coldclimate.online" />
     </envs>
     <option name="arguments" value="" />
     <method v="2" />

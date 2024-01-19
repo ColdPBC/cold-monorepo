@@ -1,15 +1,19 @@
 import React from 'react';
-import { AppContent, BaseButton, Card, Datagrid } from '@coldpbc/components';
+import { AppContent, BaseButton, Card, Datagrid, Spinner } from '@coldpbc/components';
 import { ButtonTypes, ErrorType, GlobalSizes } from '@coldpbc/enums';
 import { isAxiosError } from 'axios';
-import { useAddToastMessage, useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
+import { useAddToastMessage, useAuth0Wrapper, useColdContext, useOrgSWR } from '@coldpbc/hooks';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { ToastMessage } from '@coldpbc/interfaces';
+import useSWR from 'swr';
+import { openAIFetcher } from '../../../fetchers/openAIFetcher';
 
 export const DocumentUpload = () => {
   const { orgId } = useAuth0Wrapper();
   const { addToastMessage } = useAddToastMessage();
   const { logError } = useColdContext();
+
+  const filesSWR = useSWR<any, any, any>([`/organization/${orgId}/files`, 'GET'], openAIFetcher);
 
   const uploadDocument = async (file: File) => {
     const formData = new FormData();
@@ -29,6 +33,19 @@ export const DocumentUpload = () => {
         message: 'Upload successful',
         type: ToastMessage.SUCCESS,
       });
+      await filesSWR.mutate(
+        (data: any) => {
+          return [
+            ...data,
+            {
+              original_name: file.name,
+            },
+          ];
+        },
+        {
+          revalidate: false,
+        },
+      );
     }
   };
 
@@ -40,34 +57,47 @@ export const DocumentUpload = () => {
     }
   };
 
-  const deleteDocument = () => {
-    console.log('delete document');
+  const getFileNameAndExtension = (file: any) => {
+    if (file.original_name) {
+      const lastDotIndex = file.original_name.lastIndexOf('.');
+      const name = file.original_name.substring(0, lastDotIndex);
+      const extension = file.original_name.substring(lastDotIndex + 1);
+      return { name, extension };
+    } else {
+      return {
+        name: file.object,
+        extension: file.object,
+      };
+    }
   };
 
-  const data = [
-    {
-      name: <div className="flex items-center text-tc-primary">billing</div>,
-      type: <span className="text-white font-medium text-sm leading-normal">docx</span>,
-      delete: (
-        <span className={'flex justify-end'}>
-          <BaseButton
-            size={GlobalSizes.medium}
-            variant={ButtonTypes.secondary}
-            onClick={() => {
-              deleteDocument();
-            }}
-            label={'Delete'}
-          />
-        </span>
-      ),
-    },
-  ];
+  if (filesSWR.error) {
+    logError(filesSWR.error.message, ErrorType.SWRError, filesSWR.error);
+  }
+
+  if (filesSWR.isLoading) {
+    return <Spinner />;
+  }
+
+  const data = filesSWR.data?.map((file: any) => {
+    const { name, extension } = getFileNameAndExtension(file);
+    return {
+      name: <div className="flex items-center text-tc-primary">{name}</div>,
+      type: <span className="text-white font-medium text-sm leading-normal">{extension}</span>,
+    };
+  });
 
   return (
     <AppContent title="Documents">
       <Card title={'Documents List'} className={'w-full px-4'}>
         <input id="file" type="file" onChange={handleFileChange} />
-        <Datagrid definitionURL={'/components/documents_list_table'} items={data} />
+        {data.length > 0 ? (
+          <Datagrid definitionURL={'/components/documents_list_table'} items={data} />
+        ) : (
+          <Card glow={false} className="flex items-center justify-center w-full bg-bgc-elevate border-1 border-bgc-elevated">
+            No documents uploaded
+          </Card>
+        )}
       </Card>
     </AppContent>
   );
