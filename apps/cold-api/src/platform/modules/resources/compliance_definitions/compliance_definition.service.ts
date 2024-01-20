@@ -1,6 +1,6 @@
 import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { Span } from 'nestjs-ddtrace';
-import { AuthenticatedUser, BaseWorker, CacheService, Cuid2Generator, DarklyService, PrismaService } from '@coldpbc/nest';
+import { AuthenticatedUser, BaseWorker, CacheService, ColdRabbitService, Cuid2Generator, DarklyService, PrismaService } from '@coldpbc/nest';
 import { ComplianceDefinition, OrgCompliance } from './compliance_definition_schema';
 
 @Span()
@@ -8,7 +8,7 @@ import { ComplianceDefinition, OrgCompliance } from './compliance_definition_sch
 export class ComplianceDefinitionService extends BaseWorker {
   exclude_orgs: Array<{ id: string; name: string; display_name: string }>;
 
-  constructor(readonly darkly: DarklyService, private prisma: PrismaService, private readonly cache: CacheService) {
+  constructor(readonly darkly: DarklyService, private prisma: PrismaService, private readonly cache: CacheService, private readonly rabbit: ColdRabbitService) {
     super('ComplianceDefinitionService');
   }
 
@@ -68,6 +68,10 @@ export class ComplianceDefinitionService extends BaseWorker {
           organization_id: orgId,
           compliance_id: definition.id,
         },
+        include: {
+          organization: true,
+          compliance_definition: true,
+        },
       });
 
       if (compliance) {
@@ -80,6 +84,10 @@ export class ComplianceDefinitionService extends BaseWorker {
           organization_id: orgId,
           compliance_id: definition.id,
         },
+        include: {
+          organization: true,
+          compliance_definition: true,
+        },
       });
 
       await this.cache.set(`compliance_definitions:name:${name}:org:${orgId}`, { update: true });
@@ -88,6 +96,45 @@ export class ComplianceDefinitionService extends BaseWorker {
         compliance_definition: name,
         organization: { id: orgId },
       });
+
+      const integrations = await this.prisma.integrations.findMany({
+        where: {
+          organization_id: orgId,
+        },
+        include: {
+          service_definition: true,
+        },
+      });
+
+      const integration = integrations.find(integration => integration.service_definition.name === 'cold-platform-openai');
+
+      const surveyNames = compliance.compliance_definition.surveys as string[];
+
+      const surveys: any[] = [];
+
+      for (const name of surveyNames) {
+        const survey = await this.prisma.survey_definitions.findFirst({
+          where: {
+            name: name,
+          },
+        });
+        if (survey) {
+          surveys.push(survey);
+        }
+      }
+
+      await this.rabbit.publish(
+        'cold.platform.openai',
+        {
+          organization: { id: orgId },
+          user,
+          compliance,
+          surveys,
+          integration,
+          from: 'cold-api',
+        },
+        'organization_compliances.created',
+      );
 
       return compliance as OrgCompliance;
     } catch (e) {

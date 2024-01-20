@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { NestModule, OrgUserInterceptor } from '@coldpbc/nest';
+import { ColdRabbitModule, NestModule, OrgUserInterceptor } from '@coldpbc/nest';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { Auth0Module } from './resources/auth0/auth0.module';
@@ -24,6 +24,7 @@ export class AppModule {
         ConfigModule.forRoot({
           isGlobal: true,
         }),
+        ColdRabbitModule.forFeature(),
         await NestModule.forRootAsync(1, 'cold-api-uploaded-files'),
         ServeStaticModule.forRoot({
           serveStaticOptions: {

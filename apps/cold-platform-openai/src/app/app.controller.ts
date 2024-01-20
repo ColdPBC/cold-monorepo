@@ -63,7 +63,7 @@ export class OpenAIController extends BaseWorker {
       user: AuthenticatedUser;
     },
   ) {
-    return this.app.linkFileToAssistant(req.user, orgId, fileId);
+    return this.app.linkFileToAssistant(req.user, { id: orgId }, fileId);
   }
 
   @Post('organization/:orgId/files')

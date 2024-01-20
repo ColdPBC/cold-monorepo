@@ -3,17 +3,26 @@ import {BackOffStrategies, BaseWorker, PrismaService, RabbitMessagePayload, S3Se
 import {Nack, RabbitRPC, RabbitSubscribe} from '@golevelup/nestjs-rabbitmq';
 import {InjectQueue} from '@nestjs/bull';
 import {omit} from 'lodash';
-import {toFile} from 'openai';
+import OpenAI, {toFile} from 'openai';
 import {Queue} from 'bull';
+
 import {AppService, OpenAIAssistant} from './app.service';
+
 import {organizations} from '../../../../libs/nest/src/validation/generated/modelSchema/organizationsSchema';
+import {OpenaiAssistant} from './openai.assistant';
 
 /**
  * RabbitService class.
  */
 @Injectable()
 export class RabbitService extends BaseWorker {
-  constructor(@InjectQueue('openai') private queue: Queue, private readonly openAI: AppService, private readonly s3: S3Service, private readonly prisma: PrismaService) {
+  constructor(
+    @InjectQueue('openai') private queue: Queue,
+    private assistant: OpenaiAssistant,
+    private readonly openAI: AppService,
+    private readonly s3: S3Service,
+    private readonly prisma: PrismaService,
+  ) {
     super(RabbitService.name);
   }
 
@@ -38,10 +47,25 @@ export class RabbitService extends BaseWorker {
     try {
       const parsed: unknown = typeof msg.data == 'string' ? JSON.parse(msg.data) : msg.data;
       this.logger.debug(`received RPC ${msg.event} request from ${msg.from}`, parsed);
-      //const job = await this.queue.add(parsed, { backoff: BackOffStrategies.EXPONENTIAL });
-      const response = this.processRPCMessage(msg.event, msg.from, parsed);
+      const client = new OpenAI({
+        organization: process.env['OPENAI_ORG_ID'],
+        apiKey: process.env['OPENAI_API_KEY'],
+      });
 
-      return response;
+      const comp = await client.chat.completions.create({
+        messages: [
+          {
+            role: 'user',
+            content: 'this is a test.',
+          },
+        ],
+        model: 'gpt-4-1106-preview',
+      });
+
+      this.logger.info(`Received response`, comp);
+      //const response = this.processRPCMessage(msg.event, msg.from, parsed);
+
+      return comp;
     } catch (err) {
       this.logger.error(err.message, { error: err, data: JSON.parse(msg.data) });
       return new Nack();
@@ -68,9 +92,11 @@ export class RabbitService extends BaseWorker {
     try {
       const parsed = typeof msg.data == 'string' ? JSON.parse(msg.data) : msg.data;
       this.logger.info(`received async ${msg.event} request from ${msg.from}`, { parsed, from: msg.from });
-      //
 
       switch (msg.event) {
+        case 'organization_compliances.created':
+          return await this.assistant.processComplianceJob(parsed);
+
         case 'file.uploaded': {
           const { uploaded, user } = parsed;
           const s3File: any = await this.s3.getObject(user, 'cold-api-uploaded-files', uploaded.key);
