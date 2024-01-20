@@ -97,7 +97,7 @@ export class OpenAIController extends BaseWorker {
       user: AuthenticatedUser;
     },
   ) {
-    return this.app.uploadToOpenAI(file); //this.rabbit.publish('cold.platform.openai', { orgId, uploaded: file }, 'file.uploaded');
+    return this.app.uploadToOpenAI(req.user, file); //this.rabbit.publish('cold.platform.openai', { orgId, uploaded: file }, 'file.uploaded');
   }
 
   @Get('organization/:orgId/files')

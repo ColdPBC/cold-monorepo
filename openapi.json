@@ -1948,6 +1948,133 @@
                 ]
             }
         },
+        "/compliance_definitions/{name}/organization/{orgId}": {
+            "post": {
+                "operationId": "ComplianceController_createOrgCompliance",
+                "parameters": [
+                    {
+                        "name": "orgId",
+                        "required": true,
+                        "in": "path",
+                        "example": "{{test_organization_id}}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "required": true,
+                        "in": "path",
+                        "example": "{{test_compliance_definition_name}}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Compliance Definitions"
+                ],
+                "security": [
+                    {
+                        "oauth2": [
+                            "openid"
+                        ]
+                    }
+                ]
+            },
+            "delete": {
+                "operationId": "ComplianceController_deactivateCompliance",
+                "parameters": [
+                    {
+                        "name": "orgId",
+                        "required": true,
+                        "in": "path",
+                        "example": "{{test_organization_id}}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "required": true,
+                        "in": "path",
+                        "example": "{{test_compliance_definition_name}}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "bpc",
+                        "required": false,
+                        "in": "query",
+                        "description": "Bypass Cache",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Compliance Definitions"
+                ],
+                "security": [
+                    {
+                        "oauth2": [
+                            "openid"
+                        ]
+                    }
+                ]
+            }
+        },
+        "/compliance_definitions/organization/{orgId}": {
+            "get": {
+                "operationId": "ComplianceController_getOrgComp",
+                "parameters": [
+                    {
+                        "name": "orgId",
+                        "required": true,
+                        "in": "path",
+                        "example": "{{test_organization_id}}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "bpc",
+                        "required": false,
+                        "in": "query",
+                        "description": "Bypass Cache",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns all activated compliances for an organization"
+                    }
+                },
+                "tags": [
+                    "Compliance Definitions"
+                ],
+                "security": [
+                    {
+                        "oauth2": [
+                            "openid"
+                        ]
+                    }
+                ]
+            }
+        },
         "/members/{email}": {
             "get": {
                 "operationId": "GetMember",

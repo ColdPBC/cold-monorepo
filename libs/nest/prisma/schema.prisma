@@ -469,6 +469,8 @@ model organization_compliances {
   updated_at            DateTime               @updatedAt
   compliance_definition compliance_definitions @relation(fields: [compliance_id], references: [id], onDelete: Cascade)
   organization          organizations          @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+
+  @@unique([organization_id, compliance_id], name: "orgKeyCompKey")
 }
 
 enum integration_service_type {

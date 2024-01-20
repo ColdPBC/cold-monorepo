@@ -5,7 +5,7 @@ import { ResourceValidationPipe } from '../../../pipes/resource.pipe';
 import { AuthenticatedUser, BaseWorker, HttpExceptionFilter, JwtAuthGuard, Role, Roles, RolesGuard, SurveyResponseSchema } from '@coldpbc/nest';
 import { allRoles, bpcDecoratorOptions, coldAdminOnly } from '../_global/global.params';
 import { ComplianceDefinitionService } from './compliance_definition.service';
-import { ComplianceDefinition, ComplianceDefinitionSchema } from './schemas/compliance_definition_schema';
+import { ComplianceDefinition, ComplianceDefinitionSchema } from './compliance_definition_schema';
 
 //import { UpdateSurveyDefinitionDto } from './dto/update-survey-definition.dto';
 
@@ -134,5 +134,92 @@ export class ComplianceController extends BaseWorker {
     },
   ) {
     return this.complianceService.remove(name, req.user);
+  }
+
+  @Post(':name/organization/:orgId')
+  @HttpCode(201)
+  @ApiParam({
+    name: 'name',
+    required: true,
+    type: 'string',
+    example: '{{test_compliance_definition_name}}',
+  })
+  @ApiParam({
+    name: 'orgId',
+    required: true,
+    type: 'string',
+    example: '{{test_organization_id}}',
+  })
+  @Roles(...coldAdminOnly)
+  createOrgCompliance(
+    @Param('orgId') orgId: string,
+    @Param('name') name: string,
+    @Req()
+    req: {
+      body: any;
+      headers: any;
+      query: any;
+      user: AuthenticatedUser;
+    },
+  ) {
+    return this.complianceService.activateOrgCompliance(req.user, name, orgId);
+  }
+
+  @Get('organization/:orgId')
+  @Roles(...allRoles)
+  @ApiQuery(bpcDecoratorOptions)
+  @ApiParam({
+    name: 'orgId',
+    required: true,
+    type: 'string',
+    example: '{{test_organization_id}}',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Returns all activated compliances for an organization',
+  })
+  async getOrgComp(
+    @Param('orgId') orgId: string,
+    @Req()
+    req: {
+      body: any;
+      headers: any;
+      query: any;
+      user: AuthenticatedUser;
+    },
+    @Query('bpc') bpc?: boolean,
+  ) {
+    return await this.complianceService.findOrgCompliances(req.user, orgId, bpc);
+  }
+
+  @Delete(':name/organization/:orgId')
+  @HttpCode(204)
+  @ApiParam({
+    name: 'name',
+    required: true,
+    type: 'string',
+    example: '{{test_compliance_definition_name}}',
+  })
+  @ApiParam({
+    name: 'orgId',
+    required: true,
+    type: 'string',
+    example: '{{test_organization_id}}',
+  })
+  @ApiQuery(bpcDecoratorOptions)
+  @Roles(...allRoles)
+  deactivateCompliance(
+    @Param('orgId') orgId: string,
+    @Param('name') name: string,
+    @Req()
+    req: {
+      body: any;
+      headers: any;
+      query: any;
+      user: AuthenticatedUser;
+    },
+    @Query('bpc') bpc?: boolean,
+  ) {
+    return this.complianceService.deactivate(name, orgId, req.user, bpc);
   }
 }
