@@ -1,3 +1,10 @@
+## [1.87.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.87.1...v1.87.2) (2024-01-20)
+
+
+### Bug Fixes
+
+* implement org compliances ([3b46b52](https://github.com/ColdPBC/cold-monorepo/commit/3b46b523a823e27f167d2d091e87f5e27c63cac8))
+
 ## [1.87.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.87.0...v1.87.1) (2024-01-19)
 
 
