@@ -330,7 +330,7 @@ export class AppService extends BaseWorker implements OnModuleInit {
       throw new NotFoundException(`Organization ${orgId} not found`);
     }
 
-    const openAIFile = await this.uploadToOpenAI(file);
+    const openAIFile = await this.uploadToOpenAI(user, file);
 
     const { integrations, assistant_file } = await this.linkFileToAssistant(user, org, openAIFile.id);
 
@@ -384,7 +384,7 @@ export class AppService extends BaseWorker implements OnModuleInit {
     return openAIFile;
   }
 
-  async uploadToOpenAI(file: Express.Multer.File) {
+  async uploadToOpenAI(user: AuthenticatedUser, file: Express.Multer.File) {
     const sourcePath = `./uploads/${file.filename}`;
     const destinationPath = `./uploads/${file.originalname}`;
 
@@ -410,7 +410,7 @@ export class AppService extends BaseWorker implements OnModuleInit {
           throw err;
         }
       }
-      console.log('Successfully renamed - AKA moved!');
+      console.log('Successfully renamed - AKA moved!', user.coldclimate_claims);
     });
 
     const openAIFile = await this.client.files.create({
