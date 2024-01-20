@@ -1,3 +1,10 @@
+## [1.87.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.87.2...v1.87.3) (2024-01-20)
+
+
+### Bug Fixes
+
+* implement full e2e processing between api/openai ([43f70a2](https://github.com/ColdPBC/cold-monorepo/commit/43f70a2dfeb45de40041642db8962622130b018f))
+
 ## [1.87.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.87.1...v1.87.2) (2024-01-20)
 
 
