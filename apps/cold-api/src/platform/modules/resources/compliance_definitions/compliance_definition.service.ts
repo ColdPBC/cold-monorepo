@@ -1,14 +1,14 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { Span } from 'nestjs-ddtrace';
-import { AuthenticatedUser, BaseWorker, CacheService, Cuid2Generator, DarklyService, PrismaService } from '@coldpbc/nest';
-import { ComplianceDefinition } from './schemas/compliance_definition_schema';
+import { AuthenticatedUser, BaseWorker, CacheService, ColdRabbitService, Cuid2Generator, DarklyService, PrismaService } from '@coldpbc/nest';
+import { ComplianceDefinition, OrgCompliance } from './compliance_definition_schema';
 
 @Span()
 @Injectable()
 export class ComplianceDefinitionService extends BaseWorker {
   exclude_orgs: Array<{ id: string; name: string; display_name: string }>;
 
-  constructor(readonly darkly: DarklyService, private prisma: PrismaService, private readonly cache: CacheService) {
+  constructor(readonly darkly: DarklyService, private prisma: PrismaService, private readonly cache: CacheService, private readonly rabbit: ColdRabbitService) {
     super('ComplianceDefinitionService');
   }
 
@@ -37,7 +37,7 @@ export class ComplianceDefinitionService extends BaseWorker {
         throw new BadRequestException(`A compliance definition with the name ${complianceDefinition.name} already exists`);
       }
 
-      complianceDefinition.id = new Cuid2Generator('compdf').scopedId;
+      complianceDefinition.id = new Cuid2Generator('compdef').scopedId;
       const response = await this.prisma.compliance_definitions.create({
         data: complianceDefinition,
       });
@@ -47,6 +47,98 @@ export class ComplianceDefinitionService extends BaseWorker {
       return response as ComplianceDefinition;
     } catch (e) {
       this.metrics.increment('cold.api.surveys.create', this.tags);
+      throw e;
+    }
+  }
+
+  /***
+   * This action activates a new compliance for org
+   * @param user
+   * @param name
+   * @param orgId
+   * @param bpc
+   */
+  async activateOrgCompliance(user: AuthenticatedUser, name: string, orgId: string, bpc?: boolean): Promise<OrgCompliance> {
+    this.setTags({ user: user.coldclimate_claims });
+    try {
+      const definition = await this.findOne(name, user, bpc);
+
+      let compliance = await this.prisma.organization_compliances.findFirst({
+        where: {
+          organization_id: orgId,
+          compliance_id: definition.id,
+        },
+        include: {
+          organization: true,
+          compliance_definition: true,
+        },
+      });
+
+      if (compliance) {
+        throw new ConflictException(`${name} is already activated for ${orgId}`);
+      }
+
+      compliance = await this.prisma.organization_compliances.create({
+        data: {
+          id: new Cuid2Generator('orgcomp').scopedId,
+          organization_id: orgId,
+          compliance_id: definition.id,
+        },
+        include: {
+          organization: true,
+          compliance_definition: true,
+        },
+      });
+
+      await this.cache.set(`compliance_definitions:name:${name}:org:${orgId}`, { update: true });
+
+      this.logger.info(`activated ${name} compliance for ${orgId}`, {
+        compliance_definition: name,
+        organization: { id: orgId },
+      });
+
+      const integrations = await this.prisma.integrations.findMany({
+        where: {
+          organization_id: orgId,
+        },
+        include: {
+          service_definition: true,
+        },
+      });
+
+      const integration = integrations.find(integration => integration.service_definition.name === 'cold-platform-openai');
+
+      const surveyNames = compliance.compliance_definition.surveys as string[];
+
+      const surveys: any[] = [];
+
+      for (const name of surveyNames) {
+        const survey = await this.prisma.survey_definitions.findFirst({
+          where: {
+            name: name,
+          },
+        });
+        if (survey) {
+          surveys.push(survey);
+        }
+      }
+
+      await this.rabbit.publish(
+        'cold.platform.openai',
+        {
+          organization: { id: orgId },
+          user,
+          compliance,
+          surveys,
+          integration,
+          from: 'cold-api',
+        },
+        'organization_compliances.created',
+      );
+
+      return compliance as OrgCompliance;
+    } catch (e) {
+      this.logger.error(e.message, { error: e });
       throw e;
     }
   }
@@ -72,6 +164,39 @@ export class ComplianceDefinitionService extends BaseWorker {
     await this.cache.set('compliance_definitions', definitions, { update: true });
 
     return definitions;
+  }
+
+  /***
+   * This action returns all compliances activated for an org
+   * @param user
+   * @param orgId
+   * @param bpc
+   */
+  async findOrgCompliances(user: AuthenticatedUser, orgId: string, bpc?: boolean): Promise<OrgCompliance[]> {
+    if (!bpc) {
+      const cached = (await this.cache.get(`compliance_definitions:org:${orgId}`)) as OrgCompliance[];
+      if (cached) {
+        return cached;
+      }
+    }
+
+    const orgCompliances = (await this.prisma.organization_compliances.findMany({
+      where: {
+        organization_id: orgId,
+      },
+      include: {
+        organization: true,
+        compliance_definition: true,
+      },
+    })) as unknown as OrgCompliance[];
+
+    if (!orgCompliances) {
+      return [];
+    }
+
+    await this.cache.set(`compliance_definitions:org:${orgId}`, orgCompliances, { update: true });
+
+    return orgCompliances;
   }
 
   /**
@@ -169,6 +294,47 @@ export class ComplianceDefinitionService extends BaseWorker {
       await this.prisma.compliance_definitions.delete({ where: { name: name } });
 
       this.logger.info(`deleted compliance definition: ${name}`, { id: def.id, name: def.name });
+    } catch (e) {
+      this.logger.error(e.message, { error: e });
+
+      throw e;
+    }
+  }
+
+  /***
+   * This action deactivates a named compliance for an org
+   * @param name
+   * @param orgId
+   * @param user
+   */
+  async deactivate(name: string, orgId: string, user: AuthenticatedUser, bpc?: boolean) {
+    this.setTags({
+      compliance_definition_name: name,
+      user: user.coldclimate_claims,
+      ...this.tags,
+    });
+    let compliance: OrgCompliance;
+    try {
+      const def = await this.findOne(name, user, bpc);
+
+      if (!bpc) {
+        compliance = (await this.cache.get(`compliance_definitions:name:${name}:org:${orgId}`)) as OrgCompliance;
+      } else {
+        compliance = (await this.prisma.organization_compliances.findFirst({
+          where: {
+            organization_id: orgId,
+            compliance_id: def.id,
+          },
+        })) as OrgCompliance;
+      }
+
+      if (!compliance) {
+        throw new NotFoundException(`Unable to find compliance definition with name: ${name} and org: ${orgId}`);
+      }
+
+      await this.prisma.organization_compliances.delete({ where: { id: compliance.id } });
+
+      this.logger.info(`deactivated compliance definition: ${name} for org: ${orgId}`, { id: def.id, name: def.name });
     } catch (e) {
       this.logger.error(e.message, { error: e });
 

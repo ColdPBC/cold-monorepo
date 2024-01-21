@@ -19,7 +19,8 @@ import { getNewsDefault } from './newsMock';
 import { getActionMock, getActionsMock } from './action';
 import { v4 as uuidv4 } from 'uuid';
 import { getComplianceMock, getComplianceMockByName } from './complianceMock';
-import { forOwn } from 'lodash';
+import { getDocumentsListTableMock } from './componentMock';
+import { getAllFilesMock } from './filesMock';
 
 // Even if this uses vite as a bundler, it still uses the NODE_ENV variable
 export const getApiUrl = (path: string) => {
@@ -250,5 +251,17 @@ export const handlers = [
     const { name } = req.params;
     const compliance = getComplianceMockByName(name as string);
     return res(ctx.json(compliance));
+  }),
+
+  rest.get(getApiUrl('/components/documents_list_table'), (req, res, ctx) => {
+    return res(ctx.json(getDocumentsListTableMock()));
+  }),
+
+  rest.get(getApiUrl('/organization/:orgId/files'), (req, res, ctx) => {
+    return res(ctx.json(getAllFilesMock()));
+  }),
+
+  rest.post(getApiUrl('/organizations/:orgId/files'), (req, res, ctx) => {
+    return res(ctx.json({}), ctx.status(201));
   }),
 ];

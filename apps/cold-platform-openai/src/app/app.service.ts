@@ -2,7 +2,6 @@ import { AuthenticatedUser, BaseWorker, ColdRabbitService, MqttService, PrismaSe
 import { Injectable, NotFoundException, OnModuleInit, UnauthorizedException, UnprocessableEntityException } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import OpenAI from 'openai';
-import { get } from 'lodash';
 import { service_definitions } from '../../../../libs/nest/src/validation/generated/modelSchema/service_definitionsSchema';
 import { organizations } from '../../../../libs/nest/src/validation/generated/modelSchema/organizationsSchema';
 import { ConfigService } from '@nestjs/config';
@@ -38,19 +37,6 @@ export class AppService extends BaseWorker implements OnModuleInit {
 
     try {
       this.service = await this.rabbit.register_service(pkg.service);
-      this.topic = `${get(this.service, 'definition.mqtt.publish_options.base_topic', `/platform/openai`)}/${this.config.getOrThrow('NODE_ENV')}/#`;
-      const client = this.mqtt.connect();
-      client.on('error', error => {
-        this.logger.error(error.message, error);
-      });
-      client.on('connect', () => {
-        console.log('Connected to AWS IoT Core');
-
-        this.mqtt.subscribe(this.topic);
-        this.mqtt.onMessage((topic, message) => {
-          this.logger.info(`Message published to ${topic}`, JSON.parse(message));
-        });
-      });
     } catch (e) {
       this.logger.error(e.message, e);
       try {
@@ -330,7 +316,7 @@ export class AppService extends BaseWorker implements OnModuleInit {
       throw new NotFoundException(`Organization ${orgId} not found`);
     }
 
-    const openAIFile = await this.uploadToOpenAI(file);
+    const openAIFile = await this.uploadToOpenAI(user, file);
 
     const { integrations, assistant_file } = await this.linkFileToAssistant(user, org, openAIFile.id);
 
@@ -384,7 +370,7 @@ export class AppService extends BaseWorker implements OnModuleInit {
     return openAIFile;
   }
 
-  async uploadToOpenAI(file: Express.Multer.File) {
+  async uploadToOpenAI(user: AuthenticatedUser, file: Express.Multer.File) {
     const sourcePath = `./uploads/${file.filename}`;
     const destinationPath = `./uploads/${file.originalname}`;
 
@@ -410,7 +396,7 @@ export class AppService extends BaseWorker implements OnModuleInit {
           throw err;
         }
       }
-      console.log('Successfully renamed - AKA moved!');
+      console.log('Successfully renamed - AKA moved!', user.coldclimate_claims);
     });
 
     const openAIFile = await this.client.files.create({
@@ -425,7 +411,15 @@ export class AppService extends BaseWorker implements OnModuleInit {
     return openAIFile;
   }
 
-  async linkFileToAssistant(user: AuthenticatedUser, org: any, openAIFileId: string, key?: string, bucket?: string) {
+  async linkFileToAssistant(
+    user: AuthenticatedUser,
+    org: {
+      id: string;
+    },
+    openAIFileId: string,
+    key?: string,
+    bucket?: string,
+  ) {
     try {
       const integrations = await this.prisma.integrations.findFirst({
         where: {
@@ -477,14 +471,23 @@ export class AppService extends BaseWorker implements OnModuleInit {
           },
         });
       } else {
-        orgFile = await this.prisma.organization_files.update({
+        orgFile = await this.prisma.organization_files.upsert({
           where: {
             openai_file_id: openAIFileId,
           },
-          data: {
+          create: {
             openai_assistant_id: integrations.id,
             openai_file_id: myAssistantFile.id,
             integration_id: integrations.id,
+            organization_id: integrations.organization_id,
+            original_name: myAssistantFile.filename || 'unknown',
+          },
+          update: {
+            openai_assistant_id: integrations.id,
+            openai_file_id: myAssistantFile.id,
+            integration_id: integrations.id,
+            organization_id: org.id,
+            original_name: myAssistantFile.filename || 'unknown',
           },
         });
       }

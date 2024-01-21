@@ -35,7 +35,7 @@ export class Cuid2Generator extends BaseWorker {
   }
 
   setPrefix(prefix: string) {
-    if (prefix.length > 6) throw new Error('Prefix must be between 3 and 6 characters');
+    if (prefix.length < 3) throw new Error('Prefix must at least 3 characters');
     this.prefix = prefix;
     this.generate(this.prefix);
 

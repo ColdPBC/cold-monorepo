@@ -18,6 +18,7 @@ import { getOrganizationMembersMock } from './datagridMock';
 import { getCompliancePageSurveysMocksByName } from './surveyDataMock';
 import { forEach, forOwn } from 'lodash';
 import { getComplianceMock, getComplianceMockByName } from './complianceMock';
+import { getAllFilesMock } from './filesMock';
 import { getApiUrl } from './handlers';
 
 export const getFootprintHandler = {
@@ -193,8 +194,6 @@ export const getActionHandler = {
   }),
   subcategoryActionsOverviewCard: [
     rest.get('*/organizations/*/actions', (req, res, ctx) => {
-      // return actions with some of them having the ready_to_execute and all survey submitted
-      console.log('subcategoryActionsOverviewCard');
       const facilitiesActions = getActionsMock().filter(action => action.action.subcategory === 'facilities');
       facilitiesActions[0].action.dependent_surveys.forEach((survey, index) => {
         survey.submitted = true;
@@ -316,4 +315,25 @@ export const getComplianceDetailPageHandler = {
     });
     return res(ctx.json(compliance));
   }),
+};
+
+export const getDocumentListHandler = {
+  default: [
+    rest.get(getApiUrl('/organization/:orgId/files'), (req, res, ctx) => {
+      return res(ctx.json(getAllFilesMock()));
+    }),
+
+    rest.post(getApiUrl('/organizations/:orgId/files'), (req, res, ctx) => {
+      return res(ctx.json({}), ctx.status(201));
+    }),
+  ],
+  noFiles: [
+    rest.get(getApiUrl('/organization/:orgId/files'), (req, res, ctx) => {
+      return res(ctx.json([]));
+    }),
+
+    rest.post(getApiUrl('/organizations/:orgId/files'), (req, res, ctx) => {
+      return res(ctx.json({}), ctx.status(201));
+    }),
+  ],
 };

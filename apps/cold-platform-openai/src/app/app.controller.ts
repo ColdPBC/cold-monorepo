@@ -63,7 +63,7 @@ export class OpenAIController extends BaseWorker {
       user: AuthenticatedUser;
     },
   ) {
-    return this.app.linkFileToAssistant(req.user, orgId, fileId);
+    return this.app.linkFileToAssistant(req.user, { id: orgId }, fileId);
   }
 
   @Post('organization/:orgId/files')
@@ -97,7 +97,7 @@ export class OpenAIController extends BaseWorker {
       user: AuthenticatedUser;
     },
   ) {
-    return this.app.uploadToOpenAI(file); //this.rabbit.publish('cold.platform.openai', { orgId, uploaded: file }, 'file.uploaded');
+    return this.app.uploadToOpenAI(req.user, file); //this.rabbit.publish('cold.platform.openai', { orgId, uploaded: file }, 'file.uploaded');
   }
 
   @Get('organization/:orgId/files')

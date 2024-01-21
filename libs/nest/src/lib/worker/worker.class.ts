@@ -47,10 +47,10 @@ export class BaseWorker extends RedactorService implements OnModuleInit {
       service: this.details.service,
       version: this.details.version,
       app: this.details.app,
-      home_dir: this.details.home_dir,
+      //home_dir: this.details.home_dir,
       env: this.details.env,
       host_name: this.details.host_name,
-      system_details: this.details.system_details,
+      //system_details: this.details.system_details,
     };
 
     this.tracer = new TraceService();

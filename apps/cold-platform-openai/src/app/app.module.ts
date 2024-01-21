@@ -9,6 +9,7 @@ import process from 'process';
 import { RabbitService } from './rabbit.service';
 import { MulterModule } from '@nestjs/platform-express';
 import { OpenAIController } from './app.controller';
+import { OpenaiAssistant } from './openai.assistant';
 
 @Module({})
 export class AppModule {
@@ -64,6 +65,7 @@ export class AppModule {
           useClass: OrgUserInterceptor,
         },
         RabbitService,
+        OpenaiAssistant,
       ],
       exports: [OutboundQueueProcessor],
     };
