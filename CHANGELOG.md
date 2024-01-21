@@ -1,3 +1,10 @@
+## [1.88.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.88.1...v1.88.2) (2024-01-21)
+
+
+### Bug Fixes
+
+* refactor files and createAssistant to work with new process ([be8d40e](https://github.com/ColdPBC/cold-monorepo/commit/be8d40ea73c7703e82d6e749a9defd3a864948f5))
+
 ## [1.88.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.88.0...v1.88.1) (2024-01-21)
 
 
