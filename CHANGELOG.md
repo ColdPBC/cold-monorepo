@@ -1,3 +1,10 @@
+## [1.88.6](https://github.com/ColdPBC/cold-monorepo/compare/v1.88.5...v1.88.6) (2024-01-21)
+
+
+### Bug Fixes
+
+* fix null reference issues ([6542f33](https://github.com/ColdPBC/cold-monorepo/commit/6542f33e1d6a0018b3bf484922c177e9776daf36))
+
 ## [1.88.5](https://github.com/ColdPBC/cold-monorepo/compare/v1.88.4...v1.88.5) (2024-01-21)
 
 
