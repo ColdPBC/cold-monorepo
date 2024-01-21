@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { set } from 'lodash';
+import { isArray, set } from 'lodash';
 import { resolveAPIUrl } from './helper';
 import cookies from 'js-cookie';
 
@@ -9,7 +9,7 @@ const baseURL = resolveAPIUrl();
  * Axios Fetcher function
  * @param params - Array of strings that represent the url path, method, and data to be passed to the fetcher
  */
-export const axiosFetcher = (params: Array<string>) => {
+export const axiosFetcher = (params: Array<any>) => {
   try {
     const config = {
       baseURL: baseURL,
@@ -31,18 +31,31 @@ export const axiosFetcher = (params: Array<string>) => {
     }
 
     if (params.length < 1) {
-      throw new Error(
-        'no url path was passed to the fetcher.  This is required',
-      );
+      throw new Error('no url path was passed to the fetcher.  This is required');
     }
 
-    return axios(params[0], config)
-      .then((res) => {
-        return res.data;
-      })
-      .catch((err) => {
-        return err;
-      });
+    if (isArray(params[0])) {
+      // then there is multiple urls to be called
+      return Promise.all(
+        params[0].map(url =>
+          axios(url, config)
+            .then(res => {
+              return res.data;
+            })
+            .catch(err => {
+              return err;
+            }),
+        ),
+      );
+    } else {
+      return axios(params[0], config)
+        .then(res => {
+          return res.data;
+        })
+        .catch(err => {
+          return err;
+        });
+    }
   } catch (e) {
     console.error(e);
     return e;

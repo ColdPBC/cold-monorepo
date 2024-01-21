@@ -235,15 +235,15 @@ export const getActionHandler = {
 
 export const getCompliancePageHandler = {
   default: [
-    rest.get(getApiUrl('/compliance'), (req, res, ctx) => {
+    rest.get(getApiUrl('/compliance_definitions'), (req, res, ctx) => {
       const { name } = req.params;
       return res(ctx.json(getComplianceMock()));
     }),
-    rest.get(getApiUrl('/organizations/:orgId/compliance'), (req, res, ctx) => {
+    rest.get(getApiUrl('/organizations/:orgId/compliance_definitions'), (req, res, ctx) => {
       const { name } = req.params;
       return res(ctx.json(getComplianceMock()));
     }),
-    rest.post(getApiUrl('/organizations/:orgId/compliance'), async (req, res, ctx) => {
+    rest.post(getApiUrl('/organizations/:orgId/compliance_definitions'), async (req, res, ctx) => {
       const body = await req.json();
       const { name } = req.params;
       const { orgId, complianceId } = body;
@@ -251,11 +251,11 @@ export const getCompliancePageHandler = {
     }),
   ],
   processing: [
-    rest.get(getApiUrl('/compliance'), (req, res, ctx) => {
+    rest.get(getApiUrl('/compliance_definitions'), (req, res, ctx) => {
       const { name } = req.params;
       return res(ctx.json(getComplianceMock()));
     }),
-    rest.get(getApiUrl('/organizations/:orgId/compliance'), (req, res, ctx) => {
+    rest.get(getApiUrl('/organizations/:orgId/compliance_definitions'), (req, res, ctx) => {
       const { name } = req.params;
       const compliances = getComplianceMock();
       forEach(compliances, compliance => {
@@ -272,7 +272,7 @@ export const getCompliancePageHandler = {
       });
       return res(ctx.json(compliances));
     }),
-    rest.post(getApiUrl('/organizations/:orgId/compliance'), async (req, res, ctx) => {
+    rest.post(getApiUrl('/organizations/:orgId/compliance_definitions'), async (req, res, ctx) => {
       const body = await req.json();
       const { name } = req.params;
       const { orgId, complianceId } = body;
@@ -280,15 +280,15 @@ export const getCompliancePageHandler = {
     }),
   ],
   activate: [
-    rest.get(getApiUrl('/compliance'), (req, res, ctx) => {
+    rest.get(getApiUrl('/compliance_definitions'), (req, res, ctx) => {
       const { name } = req.params;
       return res(ctx.json(getComplianceMock()));
     }),
-    rest.get(getApiUrl('/organizations/:orgId/compliance'), (req, res, ctx) => {
+    rest.get(getApiUrl('/organizations/:orgId/compliance_definitions'), (req, res, ctx) => {
       const { name } = req.params;
       return res(ctx.json([]));
     }),
-    rest.post('*/organizations/*/compliance', async (req, res, ctx) => {
+    rest.post('*/organizations/*/compliance_definitions', async (req, res, ctx) => {
       const body = await req.json();
       const { name } = req.params;
       const { orgId, complianceId } = body;
@@ -298,12 +298,12 @@ export const getCompliancePageHandler = {
 };
 
 export const getComplianceDetailPageHandler = {
-  default: rest.get('*/organizations/*/compliance/:name', (req, res, ctx) => {
+  default: rest.get('*/organizations/*/compliance_definitions/:name', (req, res, ctx) => {
     const { name } = req.params;
     const compliance = getComplianceMockByName(name as string);
     return res(ctx.json(compliance));
   }),
-  surveyComplete: rest.get('*/organizations/*/compliance/:name', (req, res, ctx) => {
+  surveyComplete: rest.get('*/organizations/*/compliance_definitions/:name', (req, res, ctx) => {
     const { name } = req.params;
     const compliance = getComplianceMockByName(name as string);
     // set one of the survey questions to all answered

@@ -1,54 +1,32 @@
 import React from 'react';
 import { CenterColumnContent, Spinner } from '@coldpbc/components';
-import { useAuth0Wrapper, useColdContext, useOrgSWR } from '@coldpbc/hooks';
+import { useAddToastMessage, useAuth0Wrapper, useColdContext, useOrgSWR } from '@coldpbc/hooks';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { find } from 'lodash';
-import { ComplianceOverviewCard } from '../../organisms/complianceOverviewCard/complianceOverviewCard';
-import { Compliance } from '@coldpbc/interfaces';
+import { Compliance, OrgCompliance, ToastMessage } from '@coldpbc/interfaces';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import useSWR, { useSWRConfig } from 'swr';
 import { getComplianceProgress } from '@coldpbc/lib';
 import { isAxiosError } from 'axios';
 import { ErrorType } from '@coldpbc/enums';
+import { ComplianceOverview } from '../../organisms/complianceOverview/complianceOverview';
 
-export const ComplianceOverview = () => {
+export const CompliancePage = () => {
+  const { addToastMessage } = useAddToastMessage();
   const { orgId } = useAuth0Wrapper();
   const navigate = useNavigate();
-  const [searchParams, setSearchParams] = useSearchParams();
-  const compliances = useSWR<Compliance[], any, any>(['/compliance', 'GET'], axiosFetcher);
-  const orgCompliances = useOrgSWR<Compliance[], any>(['/compliance', 'GET'], axiosFetcher);
+  const compliances = useSWR<Compliance[], any, any>(['/compliance_definitions', 'GET'], axiosFetcher);
+  const orgCompliances = useSWR<OrgCompliance[], any, any>([`/compliance_definitions/organization/${orgId}`, 'GET'], axiosFetcher);
   const { mutate } = useSWRConfig();
   const { logError } = useColdContext();
-
-  const getCTAOnClick = async (compliance: Compliance) => {
-    // check if the compliance is orgCompliance
-    const found = find(orgCompliances.data, { id: compliance.id });
-
-    if (found !== undefined) {
-      navigate(`/compliance/${compliance.name}`);
-      return;
-    } else {
-      const response = await axiosFetcher([
-        `/organizations/${orgId}/compliance/`,
-        'POST',
-        JSON.stringify({
-          org_id: orgId,
-          compliance_id: compliance.id,
-        }),
-      ]);
-      // todo: handle getting updates from the server
-      await mutate([`/organizations/${orgId}/compliance`, 'GET'], data => {
-        return [...data, response];
-      });
-    }
-  };
 
   if (compliances.isLoading || orgCompliances.isLoading) {
     return <Spinner />;
   }
 
   if (compliances.error || orgCompliances.error) {
-    console.log('Error loading compliance data');
+    logError(compliances.error, ErrorType.SWRError);
+    return null;
   }
 
   if (compliances.data && orgCompliances.data) {
@@ -56,26 +34,8 @@ export const ComplianceOverview = () => {
       <CenterColumnContent title="Compliance">
         <div className={'w-full space-y-10'}>
           {compliances.data.map((compliance, index) => {
-            const complianceFound = find(orgCompliances.data, { id: compliance.id });
-            const complianceProgress = getComplianceProgress(
-              complianceFound === undefined
-                ? {
-                    ...compliance,
-                    surveys: [],
-                  }
-                : complianceFound,
-            );
-
-            return (
-              <ComplianceOverviewCard
-                complianceData={complianceProgress}
-                isOverview={true}
-                onOverviewPage={true}
-                ctaOnClick={() => {
-                  getCTAOnClick(compliance);
-                }}
-              />
-            );
+            const complianceFound = find(orgCompliances.data, { compliance_id: compliance.id });
+            return <ComplianceOverview complianceData={compliance} orgComplianceData={complianceFound} />;
           })}
         </div>
       </CenterColumnContent>

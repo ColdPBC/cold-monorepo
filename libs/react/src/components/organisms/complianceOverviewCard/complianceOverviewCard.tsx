@@ -58,55 +58,8 @@ export const ComplianceOverviewCard = (props: ComplianceOverviewCardProps) => {
   };
 
   const getProgressBar = () => {
-    // show progress bar if the questions are being analyzed or if there are questions answered/ai answered
-    if (onOverviewPage) {
-      if (complianceData.aiAttemptedQuestions === 0) {
-        return null;
-      } else {
-        if (complianceData.aiAttemptedQuestions !== complianceData.totalQuestions) {
-          return (
-            <Card glow={false} className={'w-full border-1 border-bgc-accent'}>
-              <div className={'flex w-full justify-between font-body font-bold'}>
-                <div className={'flex space-x-[8px]'}>
-                  <Spinner size={GlobalSizes.medium} />
-                  <span>Analyzing...</span>
-                </div>
-                <div>
-                  {complianceData.aiAttemptedQuestions} / {complianceData.totalQuestions} Requirements Evaluated
-                </div>
-              </div>
-            </Card>
-          );
-        } else {
-          return (
-            <Card glow={false} className={'w-full border-1 border-bgc-accent'}>
-              <div className={'w-full gap-y-[10px]'}>
-                <div className={'w-full'}>
-                  <ProgressBar shades={getProgressBarShades()} />
-                </div>
-                <div className={'w-full gap-[8px]'}>
-                  {complianceData.answeredQuestions > 0 && (
-                    <div className={'flex w-full justify-between'}>
-                      <div className={'text-body font-bold text-bgc-primary'}>{complianceData.percentageAnswered}% Complete</div>
-                      <div className={'text-body font-bold text-bgc-primary'}>
-                        {complianceData.answeredQuestions} / {complianceData.totalQuestions} Requirements
-                      </div>
-                    </div>
-                  )}
-                  {complianceData.aiAnsweredQuestions > 0 && (
-                    <div className={'flex w-full justify-between'}>
-                      <div className={'text-body font-bold text-bgc-primary'}>{complianceData.percentageAIAnswered}% Needing review</div>
-                      <div className={'text-body font-bold text-bgc-primary'}>
-                        {complianceData.aiAnsweredQuestions} / {complianceData.totalQuestions} Requirements
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </Card>
-          );
-        }
-      }
+    if (isOverview) {
+      return null;
     } else {
       return (
         <Card glow={false} className={'w-full border-1 border-bgc-accent'}>

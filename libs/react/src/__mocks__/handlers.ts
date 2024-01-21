@@ -229,24 +229,24 @@ export const handlers = [
     return res(ctx.json(getSurveysMock()));
   }),
 
-  rest.get(getApiUrl('/compliance'), (req, res, ctx) => {
+  rest.get(getApiUrl('/compliance_definitions'), (req, res, ctx) => {
     const { name } = req.params;
     return res(ctx.json(getComplianceMock()));
   }),
 
-  rest.get(getApiUrl('/organizations/:orgId/compliance'), (req, res, ctx) => {
+  rest.get(getApiUrl('/organizations/:orgId/compliance_definitions'), (req, res, ctx) => {
     const { name } = req.params;
     return res(ctx.json(getComplianceMock()));
   }),
 
-  rest.post(getApiUrl('/organizations/:orgId/compliance'), async (req, res, ctx) => {
+  rest.post(getApiUrl('/organizations/:orgId/compliance_definitions'), async (req, res, ctx) => {
     const body = await req.json();
     const { name } = req.params;
     const { orgId, complianceId } = body;
     return res(ctx.json(getComplianceMock()[0]));
   }),
 
-  rest.get(getApiUrl('/organizations/:orgId/compliance/:name'), (req, res, ctx) => {
+  rest.get(getApiUrl('/organizations/:orgId/compliance_definitions/:name'), (req, res, ctx) => {
     const { name } = req.params;
     const compliance = getComplianceMockByName(name as string);
     return res(ctx.json(compliance));
