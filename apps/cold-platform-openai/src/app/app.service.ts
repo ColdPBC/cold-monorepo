@@ -318,7 +318,7 @@ export class AppService extends BaseWorker implements OnModuleInit {
 
     const openAIFile = await this.uploadToOpenAI(user, file);
 
-    const { integrations, assistant_file } = await this.linkFileToAssistant(user, org, openAIFile.id);
+    const { integrations, assistant_file } = await this.linkFile(user, org, openAIFile.id, file.originalname);
 
     const uploaded = await this.prisma.organization_files.upsert({
       where: {
@@ -413,10 +413,44 @@ export class AppService extends BaseWorker implements OnModuleInit {
 
   async linkFileToAssistant(
     user: AuthenticatedUser,
+    assistantId: string,
+    openAIFileId: string,
+  ): Promise<{
+    id: string;
+    object: string;
+    created_at: number;
+    assistant_id: string;
+  }> {
+    let myAssistantFile;
+    try {
+      myAssistantFile = await this.client.beta.assistants.files.retrieve(assistantId, openAIFileId);
+    } catch (e) {
+      if (e.status !== 404) {
+        this.logger.error(e.message, { error: e, user, openai_assistant_id: assistantId, openai_file_id: openAIFileId });
+      }
+
+      myAssistantFile = await this.client.beta.assistants.files.create(assistantId, {
+        file_id: openAIFileId,
+      });
+
+      this.logger.info(`Created new assistant file ${myAssistantFile.id} for assistant ${myAssistantFile.assistant_id}`, {
+        user,
+        openai_assistant_id: assistantId,
+        openai_file_id: openAIFileId,
+        assistant_file: myAssistantFile,
+      });
+    }
+
+    return myAssistantFile;
+  }
+
+  async linkFile(
+    user: AuthenticatedUser,
     org: {
       id: string;
     },
     openAIFileId: string,
+    filename: string,
     key?: string,
     bucket?: string,
   ) {
@@ -433,64 +467,41 @@ export class AppService extends BaseWorker implements OnModuleInit {
         throw new NotFoundException(`Integration not found for organization ${org.id}`);
       }
 
-      let myAssistantFile;
+      const myAssistantFile = await this.linkFileToAssistant(user, integrations.id, openAIFileId);
 
-      try {
-        myAssistantFile = await this.client.beta.assistants.files.retrieve(integrations.id, openAIFileId);
-      } catch (e) {
-        if (e.status !== 404) {
-          this.logger.error(e.message, { error: e, user, organization: org, openai_file_id: openAIFileId });
-        }
-
-        myAssistantFile = await this.client.beta.assistants.files.create(integrations.id, {
-          file_id: openAIFileId,
-        });
-
-        this.logger.info(`Created new assistant file ${myAssistantFile.id} for assistant ${myAssistantFile.assistant_id}`, {
-          user,
-          integrations,
-          organization: org,
-          assistant_file: myAssistantFile,
-        });
-      }
-
-      let orgFile;
+      let filter;
       if (key && bucket) {
-        orgFile = await this.prisma.organization_files.update({
-          where: {
-            s3Key: {
-              key: key,
-              bucket: bucket,
-              organization_id: org.id,
-            },
-          },
-          data: {
-            openai_assistant_id: integrations.id,
-            openai_file_id: myAssistantFile.id,
-            integration_id: integrations.id,
-          },
-        });
-      } else {
-        orgFile = await this.prisma.organization_files.upsert({
-          where: {
-            openai_file_id: openAIFileId,
-          },
-          create: {
-            openai_assistant_id: integrations.id,
-            openai_file_id: myAssistantFile.id,
-            integration_id: integrations.id,
-            organization_id: integrations.organization_id,
-            original_name: myAssistantFile.filename || 'unknown',
-          },
-          update: {
-            openai_assistant_id: integrations.id,
-            openai_file_id: myAssistantFile.id,
-            integration_id: integrations.id,
+        filter = {
+          s3Key: {
+            key: key,
+            bucket: bucket,
             organization_id: org.id,
-            original_name: myAssistantFile.filename || 'unknown',
           },
-        });
+        };
+      } else {
+        filter = {
+          openai_file_id: openAIFileId,
+        };
       }
+
+      const orgFile = await this.prisma.organization_files.upsert({
+        where: filter,
+        create: {
+          openai_assistant_id: integrations.id,
+          openai_file_id: myAssistantFile.id,
+          integration_id: integrations.id,
+          organization_id: integrations.organization_id,
+          original_name: filename || 'unknown',
+        },
+        update: {
+          openai_assistant_id: integrations.id,
+          openai_file_id: myAssistantFile.id,
+          integration_id: integrations.id,
+          organization_id: org.id,
+          original_name: filename || 'unknown',
+        },
+      });
+
       return { integrations, assistant_file: myAssistantFile, organization_file: orgFile };
     } catch (e) {
       this.logger.error(e.message, e);
