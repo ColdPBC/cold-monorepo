@@ -202,12 +202,12 @@ export class RabbitService extends BaseWorker {
   }
 
   async processAsyncMessage(event: string, from: string, parsed: any) {
-    const integration = parsed.integration;
-    const service = parsed.service;
-    const org: organizations = parsed.organization;
-    const user = parsed.user;
+    const integration = parsed.data.integration;
+    const service = parsed.data.service;
+    const org: organizations = parsed.data.organization;
+    const user = parsed.data.user;
 
-    this.logger.info(`Processing ${event} event triggered by ${user['coldclimate_claims']['email']} from ${from}`, {
+    this.logger.info(`Processing ${event} event triggered by ${user?.coldclimate_claims?.email} from ${from}`, {
       parsed,
       from,
       event,

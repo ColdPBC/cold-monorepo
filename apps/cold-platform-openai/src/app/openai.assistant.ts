@@ -168,7 +168,7 @@ export class OpenaiAssistant extends BaseWorker implements OnModuleInit {
         break;
       }
       case 'multi_select': {
-        additional_context = `Please provide an answer to the question contained in the 'prompt' property, limiting your response to only the values provided in the 'options' property. Since the 'component' is 'multi_select', you may include multiple applicable topic options in your response. Assume these 'options' cover all possible options and format your selections as a JSON string array. If you do not have enough information to answer, do not include an answer. `;
+        additional_context = `Please provide an answer to the question contained in the 'prompt' property which must conform to the following rules: limit your answer to only the values provided in the 'options' property in the provided JSON.  You may select as many values from the "options" property as are applicable however they MUST match the selected values exactly. If you are able to provide a precise answer, then format it as a JSON string array. Assume these 'options' cover all possible options and format your selections as a JSON string array. If you do not have enough information to answer, do not include an answer. `;
         break;
       }
       case 'textarea': {
@@ -176,7 +176,7 @@ export class OpenaiAssistant extends BaseWorker implements OnModuleInit {
         break;
       }
       case 'select': {
-        additional_context = `Please respond to the question in the 'prompt' property, and since the 'component' is 'select', you are to limit your response to one topic that you judge to be the most relevant to the question and format your answer as a JSON string. If you do not have enough information to answer, do not include an answer.`;
+        additional_context = `Please respond to the question in the 'prompt' property, and since the 'component' is 'select', you are to limit your response to one topic that you judge to be the most relevant to the question it MUST match the selected values exactly. If you are able to provide a precise answer, then format it as a JSON string array. If you do not have enough information to answer, do not include an answer.`;
         break;
       }
       case 'table': {
@@ -269,17 +269,27 @@ export class OpenaiAssistant extends BaseWorker implements OnModuleInit {
             this.logger.info(`Created thread ${thread.id}`);
 
             // create a new run for each followup item
-            const value = await this.sendMessage(thread.id, integration.id, follow_up);
+            const value = await this.sendMessage(thread.id, integration.id, follow_up, false, category_context);
+
+            if (value['error'] || (value['what_we_need'] && value['answer'])) {
+              value.answer = null;
+            }
 
             // update the survey with the response
             definition.sections[section].follow_up[item].ai_response = value;
+            definition.sections[section].follow_up[item].ai_answered = !!value.answer;
             definition.sections[section].follow_up[item].ai_attempted = true;
 
             // if there is additional context, create a new run for it
             if (follow_up['additional_context']) {
-              const additionalValue = await this.sendMessage(thread.id, integration.id, follow_up['additional_context'], true);
+              const additionalValue = await this.sendMessage(thread.id, integration.id, follow_up['additional_context'], true, category_context);
+
+              if (additionalValue['error'] || (additionalValue['what_we_need'] && additionalValue['answer'])) {
+                additionalValue.answer = null;
+              }
 
               definition.sections[section].follow_up[item].additional_context.ai_response = additionalValue;
+              definition.sections[section].follow_up[item].additional_context.ai_answered = !!additionalValue.answer;
               definition.sections[section].follow_up[item].additional_context.ai_attempted = true;
             }
 
