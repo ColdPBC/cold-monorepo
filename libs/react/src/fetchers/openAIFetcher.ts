@@ -1,21 +1,14 @@
-import axios from 'axios';
 import { set } from 'lodash';
-import { resolveAPIUrl } from './helper';
-import cookies from 'js-cookie';
+import axios from 'axios';
+import { resolveOpenAIUrl } from './helper';
 
-const baseURL = resolveAPIUrl();
-
-/**
- * Axios Fetcher function
- * @param params - Array of strings that represent the url path, method, data and headers to be passed to the fetcher
- */
-export const axiosFetcher = (params: Array<any>) => {
+export const openAIFetcher = (params: Array<any>) => {
   try {
     // get headers from the params, if they exist
     const headers = params[3] ? JSON.parse(params[3]) : {};
 
     const config = {
-      baseURL: baseURL,
+      baseURL: resolveOpenAIUrl(),
       headers: {
         'Content-Type': 'application/json',
         ...headers,
@@ -35,16 +28,14 @@ export const axiosFetcher = (params: Array<any>) => {
     }
 
     if (params.length < 1) {
-      throw new Error(
-        'no url path was passed to the fetcher.  This is required',
-      );
+      throw new Error('no url path was passed to the fetcher.  This is required');
     }
 
     return axios(params[0], config)
-      .then((res) => {
+      .then(res => {
         return res.data;
       })
-      .catch((err) => {
+      .catch(err => {
         return err;
       });
   } catch (e) {
