@@ -6,20 +6,20 @@ generator client {
 generator zod {
   provider                         = "zod-prisma-types"
   output                           = "../src/validation/generated"
-  createModelTypes                 = "true"
-  createRelationValuesTypes        = "false"
-  addIncludeType                   = "false"
-  useDefaultValidators             = "false"
   useMultipleFiles                 = "true"
+  useDefaultValidators             = "false"
   createOptionalDefaultValuesTypes = "false"
-  validateWhereUniqueInput         = "false"
-  addSelectType                    = "false"
   addInputTypeValidation           = "false"
   createInputTypes                 = "false"
-  writeBarrelFiles                 = "false"
-  writeNullishInModelTypes         = "false"
-  coerceDate                       = "false"
   createPartialTypes               = "false"
+  createModelTypes                 = "true"
+  createRelationValuesTypes        = "false"
+  addSelectType                    = "false"
+  writeNullishInModelTypes         = "false"
+  validateWhereUniqueInput         = "false"
+  writeBarrelFiles                 = "false"
+  coerceDate                       = "false"
+  addIncludeType                   = "false"
 }
 
 datasource db {
@@ -428,7 +428,6 @@ model organization_files {
   bucket              String?
   key                 String?
   original_name       String
-  checksum            String?
   organization_id     String
   openai_assistant_id String?
   openai_file_id      String?       @unique
@@ -444,6 +443,7 @@ model organization_files {
   fieldname           String?
   location            String?
   versionId           String?
+  checksum            String?
   integration         integrations? @relation(fields: [integration_id], references: [id], onDelete: Cascade)
   organization        organizations @relation(fields: [organization_id], references: [id], onDelete: Cascade)
 
@@ -453,11 +453,11 @@ model organization_files {
 model compliance_definitions {
   id                       String                     @id @default(cuid())
   name                     String                     @unique
-  title                    String
   logo_url                 String
   surveys                  Json
   created_at               DateTime                   @default(now())
   updated_at               DateTime                   @updatedAt
+  title                    String
   organization_compliances organization_compliances[]
 }
 
@@ -482,10 +482,10 @@ enum integration_service_type {
 enum survey_types {
   JOURNEY
   FOOTPRINT
-  COMPLIANCE
   ENRICHMENT
   SOLUTION
   TEST
+  COMPLIANCE
 }
 
 enum component_definition_types {
