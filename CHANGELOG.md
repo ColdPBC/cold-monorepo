@@ -1,3 +1,10 @@
+## [1.88.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.88.3...v1.88.4) (2024-01-21)
+
+
+### Bug Fixes
+
+* remove extra COMPLIANCE entry ([d92a964](https://github.com/ColdPBC/cold-monorepo/commit/d92a9642998eeb690ed9bed8b5d6ad1070221d83))
+
 ## [1.88.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.88.2...v1.88.3) (2024-01-21)
 
 
