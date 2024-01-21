@@ -17,12 +17,6 @@ export function getDocumentsListTableMock() {
           headerStyle: 'py-4',
           headerTitle: 'Document Type',
         },
-        {
-          field: 'delete',
-          hideTitle: 'true',
-          headerStyle: '',
-          headerTitle: 'Table Actions',
-        },
       ],
     },
   };
