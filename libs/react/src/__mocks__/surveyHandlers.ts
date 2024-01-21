@@ -252,9 +252,11 @@ export const getSurveyHandler = {
                     },
                     placeholder: '',
                   },
-                  ai_value: 'Yes',
                   ai_attempted: true,
-                  ai_justification: 'The answer is Yes because the company has a formal policy/target in place regarding the use of more sustainable product packaging.',
+                  ai_response: {
+                    justification: 'The answer is Yes because the company has a formal policy/target in place regarding the use of more sustainable product packaging.',
+                    answer: 'Yes',
+                  },
                 },
                 'PKG-2': {
                   idx: 1,
@@ -272,7 +274,10 @@ export const getSurveyHandler = {
                     placeholder: '',
                   },
                   ai_attempted: true,
-                  ai_justification: 'The answer is Yes because the company has a formal policy/target in place regarding the use of more sustainable product packaging.',
+                  ai_response: {
+                    justification: 'The answer is Yes because the company has a formal policy/target in place regarding the use of more sustainable product packaging.',
+                    answer: true,
+                  },
                 },
                 'PKG-3': {
                   idx: 2,
@@ -289,8 +294,10 @@ export const getSurveyHandler = {
                     comparison: true,
                     placeholder: '',
                   },
-                  ai_attempted: false,
-                  ai_justification: 'The answer is Yes because the company has a formal policy/target in place regarding the use of more sustainable product packaging.',
+                  ai_attempted: true,
+                  ai_response: {
+                    justification: 'The answer is Yes because the company has a formal policy/target in place regarding the use of more sustainable product packaging.',
+                  },
                 },
                 'PKG-4': {
                   idx: 3,
@@ -308,9 +315,11 @@ export const getSurveyHandler = {
                     comparison: true,
                     placeholder: '',
                   },
-                  ai_value: false,
                   ai_attempted: true,
-                  ai_justification: 'The answer is Yes because the company has a formal policy/target in place regarding the use of more sustainable product packaging.',
+                  ai_response: {
+                    justification: 'The answer is Yes because the company has a formal policy/target in place regarding the use of more sustainable product packaging.',
+                    answer: false,
+                  },
                 },
               },
               image_url:
