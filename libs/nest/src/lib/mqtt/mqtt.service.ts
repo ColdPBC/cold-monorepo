@@ -21,7 +21,7 @@ export class MqttService extends BaseWorker implements OnModuleInit {
     this.clientId = new Cuid2Generator(prefix).scopedId;
   }
 
-  connect(): mqtt.MqttClient {
+  connect(className?: string): mqtt.MqttClient {
     const privateKey = this.config.getOrThrow('MQTT_PRIVATE_KEY');
     const caRoot1 = this.config.getOrThrow('MQTT_CA_ROOT_1');
     const caRoot3 = this.config.getOrThrow('MQTT_CA_ROOT_3');
@@ -45,7 +45,7 @@ export class MqttService extends BaseWorker implements OnModuleInit {
 
       // Handle MQTT events
       this.mqttClient.on('connect', () => {
-        this.logger.log('Connected to AWS IoT Core');
+        this.logger.log(`${className} Connected to AWS IoT Core`);
         // You can subscribe to topics or perform other actions here
       });
 

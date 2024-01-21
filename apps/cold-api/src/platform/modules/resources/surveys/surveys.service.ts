@@ -1,15 +1,18 @@
 import { BadRequestException, HttpException, Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
 import { organizations, survey_types } from '@prisma/client';
+import { ConfigService } from '@nestjs/config';
 import { isUUID } from 'class-validator';
 import { diff } from 'deep-object-diff';
 import { filter, find, map, merge, omit } from 'lodash';
 import { Span } from 'nestjs-ddtrace';
 import { v4 } from 'uuid';
+import { MqttClient } from 'mqtt';
 import {
   AuthenticatedUser,
   BaseWorker,
   CacheService,
   DarklyService,
+  MqttService,
   PrismaService,
   SurveyDefinitionsEntity,
   UpdateSurveyDefinitionsDto,
@@ -20,8 +23,15 @@ import {
 @Injectable()
 export class SurveysService extends BaseWorker {
   exclude_orgs: Array<{ id: string; name: string; display_name: string }>;
+  socket: MqttClient;
 
-  constructor(readonly darkly: DarklyService, private prisma: PrismaService, private readonly cache: CacheService) {
+  constructor(
+    readonly darkly: DarklyService,
+    private config: ConfigService,
+    private prisma: PrismaService,
+    private readonly cache: CacheService,
+    private readonly mqtt: MqttService,
+  ) {
     super('SurveysService');
   }
 
@@ -29,6 +39,9 @@ export class SurveysService extends BaseWorker {
     this.darkly.subscribeToJsonFlagChanges('dynamic-org-white-list', value => {
       this.exclude_orgs = value;
     });
+
+    this.socket = this.mqtt.connect();
+    // await this.initListener();
   }
 
   /***
@@ -297,6 +310,8 @@ export class SurveysService extends BaseWorker {
   async submitResults(name: string, submission: any, user: AuthenticatedUser, impersonateOrg?: string): Promise<ZodSurveyResponseDto> {
     const org = (await this.cache.get(`organizations:${impersonateOrg && user.isColdAdmin ? impersonateOrg : user.coldclimate_claims.org_id}`)) as organizations;
 
+    const orgId = impersonateOrg && user.isColdAdmin ? impersonateOrg : user.coldclimate_claims.org_id;
+
     this.setTags({
       organization: omit(org, ['branding', 'phone', 'street_address', 'created_at', 'updated_at']),
       user: user.coldclimate_claims,
@@ -392,6 +407,16 @@ export class SurveysService extends BaseWorker {
 
         this.logger.info('created survey submission', response);
       }
+
+      /*
+      /organizations/:orgId/surveys/:name
+       */
+      this.mqtt.publish(
+        `/ui/${this.config.get('NODE_ENV')}/${orgId}/${user.coldclimate_claims.email}`,
+        JSON.stringify({
+          swr_key: `organizations/${orgId}/surveys/${name}`,
+        }),
+      );
 
       return await this.findOne(name, user, true, impersonateOrg);
     } catch (e) {
