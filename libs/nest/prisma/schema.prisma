@@ -485,7 +485,6 @@ enum survey_types {
   COMPLIANCE
   ENRICHMENT
   SOLUTION
-  COMPLIANCE
   TEST
 }
 
