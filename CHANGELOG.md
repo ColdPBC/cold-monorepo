@@ -1,9 +1,21 @@
-# [1.88.0-COLD-466.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.87.3...v1.88.0-COLD-466.1) (2024-01-21)
+# [1.88.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.87.3...v1.88.0) (2024-01-21)
+
+
+### Bug Fixes
+
+* add compliance survey type ([22159f0](https://github.com/ColdPBC/cold-monorepo/commit/22159f037dcf14d0d20435684eee2fff2ecfb986))
+* mqttProvider ([98fd6ff](https://github.com/ColdPBC/cold-monorepo/commit/98fd6ff45982b762d24f22c5a1fd412c4e28aee5))
 
 
 ### Features
 
-* update survey code to handle updated ai response ([777345f](https://github.com/ColdPBC/cold-monorepo/commit/777345fe5e4c1e030b4f9f15124023b9170d81b4))
+* add ld flag and removed button from table mock ([270f2af](https://github.com/ColdPBC/cold-monorepo/commit/270f2afbe4248f9b5bf989ac2e43b537ba593105))
+* add openai url env variable ([225aa51](https://github.com/ColdPBC/cold-monorepo/commit/225aa517ed0d2adc228b5cd71de46b0bc2088fc4))
+* added open api url to flightcontrol json ([85761b8](https://github.com/ColdPBC/cold-monorepo/commit/85761b8d734023ebcf0037b58205068700f41125))
+* create upload page and mqtt to wss connection handling ([9e6d572](https://github.com/ColdPBC/cold-monorepo/commit/9e6d57214009b09e24a2c13ed46fef4662ccfcb5))
+* removed fc file changes ([10f701c](https://github.com/ColdPBC/cold-monorepo/commit/10f701c0ecd7395cc36b9560392d70f3af2cf2b1))
+* updates to upload page ([704fa75](https://github.com/ColdPBC/cold-monorepo/commit/704fa755729881e0dde2526a24aa7a5662e167e7))
+* Upload initial code ([4d8e276](https://github.com/ColdPBC/cold-monorepo/commit/4d8e276e92f89ed4e00621f73bf8f67103231dc4))
 
 ## [1.87.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.87.2...v1.87.3) (2024-01-20)
 

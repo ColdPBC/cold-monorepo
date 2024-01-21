@@ -32,6 +32,14 @@ export function getSidebarMock() {
           route: '/journey',
         },
         {
+          key: 'documents_key',
+          icon: {
+            name: 'ColdDocumentsIcon',
+          },
+          label: 'Documents',
+          route: '/documents',
+        },
+        {
           key: 'actions_key',
           icon: {
             name: 'ColdActionsIcon',

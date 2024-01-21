@@ -482,6 +482,7 @@ enum integration_service_type {
 enum survey_types {
   JOURNEY
   FOOTPRINT
+  COMPLIANCE
   ENRICHMENT
   SOLUTION
   COMPLIANCE
