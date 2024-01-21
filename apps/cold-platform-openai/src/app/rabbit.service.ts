@@ -137,13 +137,13 @@ export class RabbitService extends BaseWorker {
     }
   }
 
-  async processRPCMessage(event: string, from: string, data: any) {
+  async processRPCMessage(event: string, from: string, parsed: any) {
     try {
-      this.logger.info(`Processing ${event} event triggered by ${data['user']['coldclimate_claims']['email']} from ${from}`, { data });
+      this.logger.info(`Processing ${event} event triggered by ${parsed.user?.coldclimate_claims?.email} from ${from}`, { parsed });
 
-      const service = data['service'];
-      const org: organizations = data['organization'];
-      const user = data['user'];
+      const service = parsed.service;
+      const org: organizations = parsed.organization;
+      const user = parsed.user;
 
       switch (event) {
         case 'integration.enabled': {
@@ -159,7 +159,7 @@ export class RabbitService extends BaseWorker {
           return response;
         }
         case 'file.uploaded': {
-          const { uploaded, user } = data;
+          const { uploaded, user } = parsed;
           const s3File: any = await this.s3.getObject(user, 'cold-api-uploaded-files', uploaded.key);
 
           const files = await this.openAI.client.files.list();
@@ -196,40 +196,39 @@ export class RabbitService extends BaseWorker {
         }
       }
     } catch (e) {
-      this.logger.error(e.message, { e, event, from, data });
+      this.logger.error(e.message, { e, event, from, parsed });
       throw e;
     }
   }
 
   async processAsyncMessage(event: string, from: string, parsed: any) {
-    const integration = parsed.data.integration;
-    const service = parsed.data.service;
-    const org: organizations = parsed.data.organization;
-    const user = parsed.data.user;
+    const service = parsed.service;
+    const organization: organizations = parsed.organization;
+    const user = parsed.user;
 
     this.logger.info(`Processing ${event} event triggered by ${user?.coldclimate_claims?.email} from ${from}`, {
       parsed,
       from,
       event,
       service,
-      org,
+      organization,
       user,
     });
 
     switch (event) {
       case 'organization_compliances.created':
-        return await this.assistant.processComplianceJob(parsed);
+        return await this.assistant.processComplianceJob({ event, from, ...parsed });
 
       case 'integration.enabled': {
         const assistant: OpenAIAssistant = {
-          name: `${org.name}`,
-          instructions: `You are an AI sustainability expert. You help ${org.display_name} understand their impact on the environment and what tasks they must complete to meet a given set of compliance requirements. Enter your responses in a json format`,
-          description: `OpenAI assistant for ${org.display_name}`,
+          name: `${organization.name}`,
+          instructions: `You are an AI sustainability expert. You help ${organization.display_name} understand their impact on the environment and what tasks they must complete to meet a given set of compliance requirements. Enter your responses in a json format`,
+          description: `OpenAI assistant for ${organization.display_name}`,
           model: 'gpt-4-1106-preview',
           tools: [{ type: 'retrieval' }, this.answerable, this.unanswerable],
         };
 
-        return await this.openAI.createAssistant(user, org, service, assistant);
+        return await this.openAI.createAssistant(user, organization, service, assistant);
       }
       case 'file.uploaded': {
         const { uploaded, user } = parsed;

@@ -229,12 +229,11 @@ export class OpenaiAssistant extends BaseWorker implements OnModuleInit {
   }
 
   async processComplianceJob(job: any) {
-    const { user, compliance, from, surveys, integration } = job;
+    const { user, compliance, from, surveys, integration, organization } = job;
     this.setTags({
       user: user.coldclimate_claims.email,
       from,
-      organization: { id: integration.organization_id },
-
+      organization,
       openai_assistant: integration.id,
       compliance: compliance.compliance_definition.name,
     });

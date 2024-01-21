@@ -26,6 +26,13 @@ export class OutboundQueueProcessor extends BaseWorker {
     throw new Error('Not implemented');
   }
 
+  @Process('integration.enabled')
+  async processIntegrationEnabled(job: Job) {
+    this.logger.info(`Received new integration.enabled job}`, { name: job.name, id: job.id });
+    const { user, organization, service, assistant } = job.data;
+    await this.openAI.createAssistant(user, organization, service, assistant);
+  }
+
   @Process('compliance.activated')
   async processCompliance(job: Job) {
     //this.logger.info(`Received new compliance.activated job}`, { name: job.name, id: job.id });
