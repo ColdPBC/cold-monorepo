@@ -49,11 +49,11 @@ export class OpenAIController extends BaseWorker {
     return this.app.listAssistants(req.user);
   }
 
-  @Put('organization/:orgId/files/:fileId')
+  @Put('assistant/:id/files/:fileId')
   @HttpCode(201)
   @Roles(...coldAdminOnly)
   linkFileToAssistant(
-    @Param('orgId') orgId: string,
+    @Param('id') id: string,
     @Param('fileId') fileId: string,
     @Req()
     req: {
@@ -63,7 +63,7 @@ export class OpenAIController extends BaseWorker {
       user: AuthenticatedUser;
     },
   ) {
-    return this.app.linkFileToAssistant(req.user, { id: orgId }, fileId);
+    return this.app.linkFileToAssistant(req.user, id, fileId);
   }
 
   @Post('organization/:orgId/files')

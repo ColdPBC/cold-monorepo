@@ -323,6 +323,7 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
 
       if (
         sections[activeSectionKey].follow_up[activeFollowUpKey].value === undefined &&
+        sections[activeSectionKey].follow_up[activeFollowUpKey].ai_response !== undefined &&
         sections[activeSectionKey].follow_up[activeFollowUpKey].ai_response?.answer !== undefined
       ) {
         buttonProps.label = 'Confirm';
@@ -359,7 +360,7 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
       if (additionalContextQuestion && sections[activeSectionKey].additional_context && sections[activeSectionKey].additional_context?.value === undefined) {
         buttonProps.disabled = true;
       }
-      if (sections[activeSectionKey].value === undefined && sections[activeSectionKey].ai_response?.answer !== undefined) {
+      if (sections[activeSectionKey].value === undefined && sections[activeSectionKey].ai_response !== undefined && sections[activeSectionKey].ai_response?.answer !== undefined) {
         buttonProps.label = 'Confirm';
         buttonProps.onClick = () => {
           onNextButtonClicked();
@@ -561,7 +562,7 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
     const section = sections[activeSectionKey];
     if (key.isFollowUp) {
       const followUp = section.follow_up[key.value];
-      const value = followUp.value;
+      const value = getQuestionValue(key);
       // if the follow up is unanswered then
       if (value === null || value === undefined) {
         condition = false;
@@ -571,7 +572,7 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
         }
       }
     } else {
-      const value = section.value;
+      const value = getQuestionValue(key);
       if (value === null || value === undefined) {
         condition = false;
       } else {
@@ -617,7 +618,7 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
       const followUp = sections[activeSectionKey].follow_up[followUpKey];
       if (followUp) {
         if (followUp.ai_response?.answer !== undefined && (followUp.value === null || followUp.value === undefined)) {
-          return followUp.ai_response?.answer;
+          return followUp.ai_response.answer;
         } else {
           return followUp.value;
         }

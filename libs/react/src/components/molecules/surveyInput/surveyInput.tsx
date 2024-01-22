@@ -20,14 +20,16 @@ export interface SurveyInputProps {
   value: any | null;
   onFieldUpdated: (name: string, value: any) => void;
   isAdditional?: boolean;
-  ai_value?: any;
   ai_attempted?: boolean;
-  ai_justification?: string;
+  ai_response?: {
+    justification?: string;
+    answer?: any;
+  };
 }
 
 const _SurveyInput = (props: SurveyInputProps) => {
-  const { input_key, prompt, options, tooltip, component, placeholder, onFieldUpdated, value, isAdditional, ai_value, ai_attempted, ai_justification } = props;
-  const displayValue = value !== undefined ? value : ai_value;
+  const { input_key, prompt, options, tooltip, component, placeholder, onFieldUpdated, value, isAdditional, ai_attempted, ai_response } = props;
+  const displayValue = value !== undefined ? value : ai_response?.answer;
 
   const inputComponent = () => {
     switch (component) {
@@ -215,11 +217,11 @@ const _SurveyInput = (props: SurveyInputProps) => {
   };
 
   const getAISource = () => {
-    if (ai_attempted && !isUndefined(ai_value) && ai_justification && isUndefined(value)) {
+    if (ai_attempted && !isUndefined(ai_response) && !isUndefined(ai_response.answer) && ai_response.justification && isUndefined(value)) {
       return (
         <Card glow={false} className={'border-[1px] border-purple-300 w-full bg-bgc-elevated'}>
           <span>The answer below was predetermined based on the following information. Please review it and adjust to ensure accuracy:</span>
-          <Markdown markdown={ai_justification} />
+          <Markdown markdown={ai_response.justification} />
         </Card>
       );
     } else {
