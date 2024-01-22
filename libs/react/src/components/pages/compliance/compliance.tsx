@@ -29,7 +29,11 @@ export const CompliancePage = () => {
         <div className={'w-full space-y-10'}>
           {compliances.data.map((compliance, index) => {
             const complianceFound = find(orgCompliances.data, { compliance_id: compliance.id });
-            return <ComplianceOverview complianceData={compliance} orgComplianceData={complianceFound} />;
+            return (
+              <div key={'compliance_' + index}>
+                <ComplianceOverview complianceData={compliance} orgComplianceData={complianceFound} />
+              </div>
+            );
           })}
         </div>
       </CenterColumnContent>

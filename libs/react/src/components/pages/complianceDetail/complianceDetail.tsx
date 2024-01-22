@@ -64,7 +64,11 @@ export const ComplianceDetail = () => {
             <ComplianceOverviewCard title={'Overview'} complianceData={totalComplianceProgress} isOverview={true} onOverviewPage={false} />
             <div className={'w-full space-y-[24px]'}>
               {compliance.compliance_definition.surveys.map((survey, index) => {
-                return <ComplianceSectionOverview surveyName={survey} setOverviewComplianceProgress={setComplianceProgress} overviewComplianceProgress={complianceProgress} />;
+                return (
+                  <div key={'survey_' + index}>
+                    <ComplianceSectionOverview surveyName={survey} setOverviewComplianceProgress={setComplianceProgress} overviewComplianceProgress={complianceProgress} />
+                  </div>
+                );
               })}
             </div>
           </div>
