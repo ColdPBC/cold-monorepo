@@ -144,8 +144,10 @@ export const AiAnswer: Story = {
     component: 'yes_no',
     placeholder: 'Write a few sentences about your product',
     ai_attempted: true,
-    ai_justification: '*Lorem Ipsum Dolor Et Amo sflksjdflksdjfldsjkfs*',
-    ai_value: true,
+    ai_response: {
+      justification: '*Lorem Ipsum Dolor Et Amo sflksjdflksdjfldsjkfs*',
+      answer: true,
+    },
   },
 };
 
@@ -161,9 +163,10 @@ export const UserAnswersAfterAIAnswers: Story = {
     component: 'yes_no',
     placeholder: 'Write a few sentences about your product',
     ai_attempted: true,
-    ai_justification:
-      'The answer below was predetermined based on the following information. Please review it and adjust to ensure accuracy:\n\n*Lorem Ipsum Dolor Et Amo sflksjdflksdjfldsjkfs*',
-    ai_value: true,
+    ai_response: {
+      justification: '*Lorem Ipsum Dolor Et Amo sflksjdflksdjfldsjkfs*',
+      answer: true,
+    },
     value: true,
   },
 };
@@ -180,8 +183,9 @@ export const AIAttemptedButNoAnswer: Story = {
     component: 'yes_no',
     placeholder: 'Write a few sentences about your product',
     ai_attempted: true,
-    ai_justification:
-      'The answer below was predetermined based on the following information. Please review it and adjust to ensure accuracy:\n\n*Lorem Ipsum Dolor Et Amo sflksjdflksdjfldsjkfs*',
+    ai_response: {
+      justification: '*Lorem Ipsum Dolor Et Amo sflksjdflksdjfldsjkfs*',
+    },
   },
 };
 
