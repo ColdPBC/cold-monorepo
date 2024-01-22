@@ -28,9 +28,9 @@ export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
       const org_id = orgId;
       const token = await getToken();
       const env = import.meta.env.VITE_DD_ENV;
-      const url = `wss://a2r4jtij2021gz-ats.iot.us-east-1.amazonaws.com:443/mqtt?x-auth0-domain=${auth0_domain}&x-amz-customauthorizer-name=${authorizer}&x-cold-org=${org_id}&x-cold-env=staging&token=${token}`;
+      const url = `wss://a2r4jtij2021gz-ats.iot.us-east-1.amazonaws.com:443/mqtt?x-auth0-domain=${auth0_domain}&x-amz-customauthorizer-name=${authorizer}&x-cold-org=${org_id}&x-cold-env=${env}&token=${token}`;
       const account_id = user?.email;
-      const subscription_topic = `ui/staging/${org_id}/${account_id}`;
+      const subscription_topic = `ui/${env}/${org_id}/${account_id}`;
 
       if (user && orgId) {
         client.current = mqtt.connect(url, { clientId: `${org_id}-${Math.floor(Math.random() * 1000)}` });
