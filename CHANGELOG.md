@@ -1,3 +1,10 @@
+## [1.90.6](https://github.com/ColdPBC/cold-monorepo/compare/v1.90.5...v1.90.6) (2024-01-22)
+
+
+### Bug Fixes
+
+* processing async rabbit ([5c11618](https://github.com/ColdPBC/cold-monorepo/commit/5c11618575f275068229fedc50f7a63771b144dd))
+
 ## [1.90.5](https://github.com/ColdPBC/cold-monorepo/compare/v1.90.4...v1.90.5) (2024-01-22)
 
 
