@@ -1,3 +1,15 @@
+# [1.92.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.91.0...v1.92.0) (2024-01-22)
+
+
+### Bug Fixes
+
+* add specific types for ai response answer ([4e9eef9](https://github.com/ColdPBC/cold-monorepo/commit/4e9eef91f120591a3d2e7eb36ad8eda6fb6c2a1a))
+
+
+### Features
+
+* fix typing issue ([c3ec93f](https://github.com/ColdPBC/cold-monorepo/commit/c3ec93ff908ea8c350b18fba55afffbd790156a6))
+
 # [1.91.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.90.9...v1.91.0) (2024-01-22)
 
 
