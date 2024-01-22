@@ -1,3 +1,11 @@
+# [1.91.0-COLD-470.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.90.8...v1.91.0-COLD-470.1) (2024-01-22)
+
+
+### Features
+
+* added check for component type ([0589da0](https://github.com/ColdPBC/cold-monorepo/commit/0589da0038abc438edb5e6271d64deb3129059fc))
+* added select option checks and skip addtional context ai response ([e709eb1](https://github.com/ColdPBC/cold-monorepo/commit/e709eb17f84db4e90d014df66ecada4338f910fa))
+
 ## [1.90.8](https://github.com/ColdPBC/cold-monorepo/compare/v1.90.7...v1.90.8) (2024-01-22)
 
 
