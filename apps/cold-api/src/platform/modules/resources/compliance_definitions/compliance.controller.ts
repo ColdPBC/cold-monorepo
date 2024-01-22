@@ -150,7 +150,7 @@ export class ComplianceController extends BaseWorker {
     type: 'string',
     example: '{{test_organization_id}}',
   })
-  @Roles(...coldAdminOnly)
+  @Roles(...allRoles)
   createOrgCompliance(
     @Param('orgId') orgId: string,
     @Param('name') name: string,
