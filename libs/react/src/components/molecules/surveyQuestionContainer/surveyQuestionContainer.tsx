@@ -5,7 +5,7 @@ import { IButtonProps, SurveyActiveKeyType, SurveyAdditionalContext, SurveyPaylo
 import { BaseButton } from '../../atoms';
 import { ButtonTypes, GlobalSizes } from '@coldpbc/enums';
 import { CSSTransition, SwitchTransition } from 'react-transition-group';
-import { getSectionIndex, isKeyValueFollowUp } from '@coldpbc/lib';
+import { getSectionIndex, isComponentTypeValid, isKeyValueFollowUp } from '@coldpbc/lib';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application';
@@ -213,7 +213,7 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
       }
     } else {
       const section = sections[key.value];
-      if (section && section.component !== null) {
+      if (section && isComponentTypeValid(section.component)) {
         if (additional && section.additional_context) {
           return (
             <SurveyInput
@@ -268,7 +268,7 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
       const activeFollowUpIndex = findIndex(Object.keys(sections[activeSectionKey].follow_up), followUpKey => {
         return followUpKey === activeKey.value;
       });
-      if (sections[activeSectionKey].component === null && sections[activeSectionKey].prompt === '') {
+      if (!isComponentTypeValid(sections[activeSectionKey].component) && sections[activeSectionKey].prompt === '') {
         if (activeFollowUpIndex === 0) {
           if (activeSectionIndex !== 0) {
             buttonProps.label = 'Previous';
@@ -408,7 +408,7 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
         return followUpKey === activeKey.value;
       });
       if (activeFollowUpIndex === Object.keys(sections[activeSectionKey].follow_up).length - 1) {
-        if (nextSection.component === null && nextSection.prompt === '') {
+        if (!isComponentTypeValid(nextSection.component) && nextSection.prompt === '') {
           setActiveKey({
             value: Object.keys(nextSection.follow_up)[0],
             previousValue: activeKey.value,
@@ -431,7 +431,7 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
       }
     } else {
       if (sections[activeSectionKey].value !== true) {
-        if (nextSection.component === null && nextSection.prompt === '') {
+        if (!isComponentTypeValid(nextSection.component) && nextSection.prompt === '') {
           setActiveKey({
             value: Object.keys(nextSection.follow_up)[0],
             previousValue: activeKey.value,
@@ -492,10 +492,10 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
       });
       if (activeFollowUpIndex === 0) {
         const section = sections[activeSectionKey];
-        if (section.component === null && section.prompt === '') {
+        if (!isComponentTypeValid(section.component) && section.prompt === '') {
           const previousSectionKey = Object.keys(sections)[activeSectionIndex - 1];
           const previousSection = sections[previousSectionKey];
-          if (previousSection.value !== true && previousSection.component !== null && previousSection.prompt !== '') {
+          if (previousSection.value !== true && isComponentTypeValid(previousSection.component) && previousSection.prompt !== '') {
             setActiveKey({
               value: previousSectionKey,
               previousValue: activeKey.value,
@@ -526,7 +526,7 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
     } else {
       const previousSectionKey = Object.keys(sections)[activeSectionIndex - 1];
       const previousSection = sections[previousSectionKey];
-      if (previousSection.value !== true && previousSection.component !== null && previousSection.prompt !== '') {
+      if (previousSection.value !== true && isComponentTypeValid(previousSection.component) && previousSection.prompt !== '') {
         setActiveKey({
           value: previousSectionKey,
           previousValue: activeKey.value,

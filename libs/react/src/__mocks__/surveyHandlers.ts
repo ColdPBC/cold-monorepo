@@ -233,7 +233,7 @@ export const getSurveyHandler = {
             PKG: {
               title: 'Packaging - General',
               prompt: '',
-              component: null,
+              component: {},
               follow_up: {
                 'PKG-1': {
                   idx: 0,

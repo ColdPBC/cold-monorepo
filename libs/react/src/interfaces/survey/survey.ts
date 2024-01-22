@@ -50,7 +50,7 @@ export interface SurveySectionsType {
 export interface SurveySectionType {
   title: string;
   prompt: string;
-  component: string | null;
+  component: any | null;
   follow_up: SurveySectionFollowUpsType;
   image_url: string;
   category_idx: number;

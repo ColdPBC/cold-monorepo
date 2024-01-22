@@ -29,9 +29,17 @@ export interface SurveyInputProps {
 
 const _SurveyInput = (props: SurveyInputProps) => {
   const { input_key, prompt, options, tooltip, component, placeholder, onFieldUpdated, value, isAdditional, ai_attempted, ai_response } = props;
-  const displayValue = value !== undefined ? value : ai_response?.answer;
+
+  const getDisplayValue = () => {
+    if (isAdditional) {
+      return value;
+    } else {
+      return value !== undefined ? value : ai_response?.answer;
+    }
+  };
 
   const inputComponent = () => {
+    const displayValue = getDisplayValue();
     switch (component) {
       case 'yes_no':
         return (
@@ -217,15 +225,19 @@ const _SurveyInput = (props: SurveyInputProps) => {
   };
 
   const getAISource = () => {
-    if (ai_attempted && !isUndefined(ai_response) && !isUndefined(ai_response.answer) && ai_response.justification && isUndefined(value)) {
-      return (
-        <Card glow={false} className={'border-[1px] border-purple-300 w-full bg-bgc-elevated'}>
-          <span>The answer below was predetermined based on the following information. Please review it and adjust to ensure accuracy:</span>
-          <Markdown markdown={ai_response.justification} />
-        </Card>
-      );
-    } else {
+    if (isAdditional) {
       return null;
+    } else {
+      if (ai_attempted && !isUndefined(ai_response) && !isUndefined(ai_response.answer) && ai_response.justification && isUndefined(value)) {
+        return (
+          <Card glow={false} className={'border-[1px] border-purple-300 w-full bg-bgc-elevated'}>
+            <span>The answer below was predetermined based on the following information. Please review it and adjust to ensure accuracy:</span>
+            <Markdown markdown={ai_response.justification} />
+          </Card>
+        );
+      } else {
+        return null;
+      }
     }
   };
 
