@@ -1,5 +1,6 @@
 import { findIndex, forOwn } from 'lodash';
 import { SurveyActiveKeyType, SurveySectionType } from '@coldpbc/interfaces';
+import { SurveyComponentType } from '@coldpbc/enums';
 
 export const getSectionIndex = (
   sections: {
@@ -10,13 +11,13 @@ export const getSectionIndex = (
   if (key.isFollowUp) {
     let activeIndex = 0;
     Object.keys(sections).find((sectionKey, sectionIndex) => {
-      return Object.keys(sections[sectionKey].follow_up).find((followUpKey) => {
+      return Object.keys(sections[sectionKey].follow_up).find(followUpKey => {
         return followUpKey === key.value ? (activeIndex = sectionIndex) : null;
       });
     });
     return activeIndex;
   } else {
-    return findIndex(Object.keys(sections), (sectionKey) => {
+    return findIndex(Object.keys(sections), sectionKey => {
       return sectionKey === key.value;
     });
   }
@@ -30,7 +31,7 @@ export const isKeyValueFollowUp = (
 ) => {
   // check all the keys in the sections for the follow_up key
   let isFollowUp = false;
-  forOwn(sections, (section) => {
+  forOwn(sections, section => {
     if (section.follow_up[key]) {
       isFollowUp = true;
     }
@@ -61,20 +62,18 @@ export const isPreviousKeyAhead = (
       return true;
     } else {
       // compare the index of the current follow_up to the index of the previous follow_up
-      const currentFollowUpIndex = findIndex(
-        Object.keys(currentSection.follow_up),
-        (followUpKey) => {
-          return followUpKey === key.value;
-        },
-      );
-      const previousFollowUpIndex = findIndex(
-        Object.keys(currentSection.follow_up),
-        (followUpKey) => {
-          return followUpKey === key.previousValue;
-        },
-      );
+      const currentFollowUpIndex = findIndex(Object.keys(currentSection.follow_up), followUpKey => {
+        return followUpKey === key.value;
+      });
+      const previousFollowUpIndex = findIndex(Object.keys(currentSection.follow_up), followUpKey => {
+        return followUpKey === key.previousValue;
+      });
       return previousFollowUpIndex > currentFollowUpIndex;
     }
   }
   return previousSectionIndex > currentSectionIndex;
+};
+
+export const isComponentTypeValid = (componentType: any | null) => {
+  return Object.keys(SurveyComponentType).includes(componentType);
 };
