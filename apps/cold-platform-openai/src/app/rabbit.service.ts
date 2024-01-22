@@ -130,7 +130,9 @@ export class RabbitService extends BaseWorker {
       const parsed = typeof msg.data == 'string' ? JSON.parse(msg.data) : msg.data;
       this.logger.info(`received async ${msg.event} request from ${msg.from}`, { parsed, from: msg.from });
 
-      await this.processAsyncMessage(msg.event, msg.from, parsed);
+      this.processAsyncMessage(msg.event, msg.from, parsed);
+
+      return new Nack();
     } catch (err) {
       this.logger.error(err.message, { ...msg });
       return new Nack();
