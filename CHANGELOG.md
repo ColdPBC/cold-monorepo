@@ -1,3 +1,10 @@
+## [1.90.5](https://github.com/ColdPBC/cold-monorepo/compare/v1.90.4...v1.90.5) (2024-01-22)
+
+
+### Bug Fixes
+
+* nested data object ([1f876c7](https://github.com/ColdPBC/cold-monorepo/commit/1f876c7f36eb7241b89a6e33aa7fee4d417a0d33))
+
 ## [1.90.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.90.3...v1.90.4) (2024-01-22)
 
 
