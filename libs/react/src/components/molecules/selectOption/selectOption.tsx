@@ -16,7 +16,7 @@ export const SelectOption = ({ options, onChange, value, isMultiSelect = false }
 
   const onOptionClick = (index: number) => {
     if (isMultiSelect) {
-      if (value === null) {
+      if (value === undefined || value === null) {
         onChange([options[index]]);
       } else {
         if (Array.isArray(value)) {
