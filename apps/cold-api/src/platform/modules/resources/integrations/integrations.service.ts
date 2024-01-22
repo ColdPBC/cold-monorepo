@@ -212,13 +212,11 @@ export class IntegrationsService extends BaseWorker {
       await this.rabbit.publish(
         get(service.definition, 'rabbitMQ.publishOptions.routing_key', 'deadletter'),
         {
-          data: {
-            organization: org,
-            service: service,
-            service_definition_id: service.id,
-            metadata: body.metadata,
-            user: user,
-          },
+          organization: org,
+          service: service,
+          service_definition_id: service.id,
+          metadata: body.metadata,
+          user: user,
           from: 'cold.api',
         },
         'integration.enabled',
