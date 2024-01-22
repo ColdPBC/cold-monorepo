@@ -48,7 +48,7 @@ export default defineConfig({
         'punycode',
         'process',
         'querystring',
-        // 'stream',
+        'stream',
         '_stream_duplex',
         '_stream_passthrough',
         '_stream_readable',
