@@ -61,7 +61,7 @@ export interface SurveySectionType {
   ai_attempted?: boolean;
   ai_response?: {
     justification?: string;
-    answer?: any;
+    answer?: string | boolean | number | Array<string>;
   };
 }
 
@@ -81,8 +81,8 @@ export interface SurveySectionFollowUpType {
   additional_context?: SurveyAdditionalContext;
   ai_attempted?: boolean;
   ai_response?: {
-    justification: string;
-    answer: string;
+    justification?: string;
+    answer?: string | boolean | number | Array<string>;
   };
 }
 
@@ -111,6 +111,7 @@ export interface SurveyAdditionalContext {
   operator: string;
   comparison: any;
   value?: any | null;
+  tooltip?: string;
 }
 
 export interface SurveyNextStep {
