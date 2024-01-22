@@ -166,18 +166,18 @@ export class RabbitService extends BaseWorker {
 
           const files = await this.openAI.client.files.list();
           let oaiFile = files.data.find(async f => {
-            const s3File: any = await this.s3.getObject(user, 'cold-api-uploaded-files', uploaded.key);
-
-            return f.filename == `${uploaded.original_name}:${s3File.Metadata.md5hash}`;
+            //const s3File: any = await this.s3.getObject(user, 'cold-api-uploaded-files', uploaded.key);
+            // this.logger.log('File exists in S3', )
+            return f.filename == `${uploaded.original_name}`;
           });
 
           if (!oaiFile) {
             oaiFile = await this.openAI.client.files.create({
-              file: await toFile(s3File.Body as Buffer, `${uploaded.original_name}:${s3File.Metadata.md5hash}`),
+              file: await toFile(s3File.Body as Buffer, `${uploaded.original_name}`),
               purpose: 'assistants',
             });
           } else {
-            this.logger.warn(`File ${uploaded.original_name}:${s3File.Metadata.md5hash} already exists in openAI`, {
+            this.logger.warn(`File ${uploaded.original_name} already exists in openAI`, {
               oaiFile,
               ...omit(s3File, ['Body']),
               user,
@@ -235,7 +235,7 @@ export class RabbitService extends BaseWorker {
       case 'file.uploaded': {
         const { uploaded, user } = parsed;
         const s3File: any = await this.s3.getObject(user, 'cold-api-uploaded-files', uploaded.key);
-        const filename = `${uploaded.original_name}:${s3File.Metadata.md5hash}`;
+        const filename = `${uploaded.original_name}`;
 
         const files = await this.openAI.client.files.list();
         let oaiFile = files.data.find(f => {
@@ -248,7 +248,7 @@ export class RabbitService extends BaseWorker {
             purpose: 'assistants',
           });
         } else {
-          this.logger.warn(`File ${uploaded.original_name}:${s3File.Metadata.md5Hash} already exists in openAI`, {
+          this.logger.warn(`File ${uploaded.original_name} already exists in openAI`, {
             oaiFile,
             ...omit(s3File, ['Body']),
             user,

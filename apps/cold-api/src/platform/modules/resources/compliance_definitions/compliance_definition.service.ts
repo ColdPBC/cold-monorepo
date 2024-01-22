@@ -162,15 +162,15 @@ export class ComplianceDefinitionService extends BaseWorker {
    */
   async findAll(bpc?: boolean): Promise<ComplianceDefinition[]> {
     if (!bpc) {
-      const cached = await this.cache.get('compliance_definitions');
+      /*const cached = await this.cache.get('compliance_definitions');
       if (cached) {
         return cached as unknown as ComplianceDefinition[];
-      }
+      }*/
     }
 
     const definitions = (await this.prisma.compliance_definitions.findMany()) as ComplianceDefinition[];
 
-    if (!definitions || definitions.length == 0 ) {
+    if (!definitions || definitions.length == 0) {
       throw new NotFoundException(`Unable to find any compliance definitions`);
     }
 
@@ -187,11 +187,11 @@ export class ComplianceDefinitionService extends BaseWorker {
    */
   async findOrgCompliances(user: AuthenticatedUser, orgId: string, bpc?: boolean): Promise<OrgCompliance[]> {
     if (!bpc) {
-      const cached = (await this.cache.get(`compliance_definitions:org:${orgId}`)) as OrgCompliance[];
+      /*const cached = (await this.cache.get(`compliance_definitions:org:${orgId}`)) as OrgCompliance[];
 
       if (cached && cached.length) {
         return cached;
-      }
+      }*/
     }
 
     const orgCompliances = (await this.prisma.organization_compliances.findMany({
@@ -223,13 +223,13 @@ export class ComplianceDefinitionService extends BaseWorker {
   async findOne(name: string, user: AuthenticatedUser, bypassCache?: boolean): Promise<ComplianceDefinition> {
     this.setTags({ user: user.coldclimate_claims, bpc: bypassCache });
 
-    if (!bypassCache) {
+    /*if (!bypassCache) {
       const cached = (await this.cache.get(`compliance_definitions:${name}`)) as ComplianceDefinition;
 
       if (cached) {
         return cached;
       }
-    }
+    }*/
     try {
       const def = (await this.prisma.compliance_definitions.findUnique({
         where: { name: name },
@@ -331,16 +331,12 @@ export class ComplianceDefinitionService extends BaseWorker {
     try {
       const def = await this.findOne(name, user, bpc);
 
-      if (!bpc) {
-        compliance = (await this.cache.get(`compliance_definitions:name:${name}:org:${orgId}`)) as OrgCompliance;
-      } else {
-        compliance = (await this.prisma.organization_compliances.findFirst({
-          where: {
-            organization_id: orgId,
-            compliance_id: def.id,
-          },
-        })) as OrgCompliance;
-      }
+      compliance = (await this.prisma.organization_compliances.findFirst({
+        where: {
+          organization_id: orgId,
+          compliance_id: def.id,
+        },
+      })) as OrgCompliance;
 
       if (!compliance) {
         throw new NotFoundException(`Unable to find compliance definition with name: ${name} and org: ${orgId}`);
