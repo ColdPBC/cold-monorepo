@@ -1,3 +1,10 @@
+# [1.89.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.88.7...v1.89.0) (2024-01-22)
+
+
+### Features
+
+* update survey code to handle updated ai response ([777345f](https://github.com/ColdPBC/cold-monorepo/commit/777345fe5e4c1e030b4f9f15124023b9170d81b4))
+
 ## [1.88.7](https://github.com/ColdPBC/cold-monorepo/compare/v1.88.6...v1.88.7) (2024-01-21)
 
 
