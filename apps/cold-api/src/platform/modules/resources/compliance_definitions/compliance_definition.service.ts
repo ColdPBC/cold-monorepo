@@ -72,6 +72,8 @@ export class ComplianceDefinitionService extends BaseWorker {
   async activateOrgCompliance(user: AuthenticatedUser, name: string, orgId: string, bpc?: boolean): Promise<OrgCompliance> {
     this.setTags({ user: user.coldclimate_claims });
     try {
+      await this.cache.delete(`compliance_definitions:name:${name}:org:${orgId}`);
+
       const definition = await this.findOne(name, user, bpc);
 
       let compliance = await this.prisma.organization_compliances.findFirst({
