@@ -32,6 +32,14 @@ export function getSidebarMock() {
           route: '/journey',
         },
         {
+          key: 'compliance_key',
+          icon: {
+            name: 'ColdComplianceIcon',
+          },
+          label: 'Compliance',
+          route: '/compliance',
+        },
+        {
           key: 'documents_key',
           icon: {
             name: 'ColdDocumentsIcon',

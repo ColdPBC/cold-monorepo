@@ -1,5 +1,5 @@
 import React from 'react';
-import { AppContent, BaseButton, Card, Datagrid, Spinner } from '@coldpbc/components';
+import { AppContent, BaseButton, Card, Datagrid, ErrorFallback, Spinner } from '@coldpbc/components';
 import { ButtonTypes, ErrorType, GlobalSizes } from '@coldpbc/enums';
 import { isAxiosError } from 'axios';
 import { useAddToastMessage, useAuth0Wrapper, useColdContext, useOrgSWR } from '@coldpbc/hooks';
@@ -7,8 +7,10 @@ import { axiosFetcher } from '@coldpbc/fetchers';
 import { ToastMessage } from '@coldpbc/interfaces';
 import useSWR from 'swr';
 import { openAIFetcher } from '../../../fetchers/openAIFetcher';
+import { withErrorBoundary } from 'react-error-boundary';
+import { isArray } from 'lodash';
 
-export const DocumentUpload = () => {
+export const _DocumentUpload = () => {
   const { orgId } = useAuth0Wrapper();
   const { addToastMessage } = useAddToastMessage();
   const { logError } = useColdContext();
@@ -79,13 +81,15 @@ export const DocumentUpload = () => {
     return <Spinner />;
   }
 
-  const data = filesSWR.data?.map((file: any) => {
-    const { name, extension } = getFileNameAndExtension(file);
-    return {
-      name: <div className="flex items-center text-tc-primary">{name}</div>,
-      type: <span className="text-white font-medium text-sm leading-normal">{extension}</span>,
-    };
-  });
+  const data = isArray(filesSWR.data)
+    ? filesSWR.data?.map((file: any) => {
+        const { name, extension } = getFileNameAndExtension(file);
+        return {
+          name: <div className="flex items-center text-tc-primary">{name}</div>,
+          type: <span className="text-white font-medium text-sm leading-normal">{extension}</span>,
+        };
+      })
+    : [];
 
   return (
     <AppContent title="Documents">
@@ -102,3 +106,7 @@ export const DocumentUpload = () => {
     </AppContent>
   );
 };
+
+export const DocumentUpload = withErrorBoundary(_DocumentUpload, {
+  FallbackComponent: props => <ErrorFallback {...props} />,
+});

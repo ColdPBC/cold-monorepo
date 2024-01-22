@@ -3,7 +3,21 @@
 
 ### Features
 
-* update survey code to handle updated ai response ([777345f](https://github.com/ColdPBC/cold-monorepo/commit/777345fe5e4c1e030b4f9f15124023b9170d81b4))
+* added keys to compliance overview nad detail page elements ([540c4cf](https://github.com/ColdPBC/cold-monorepo/commit/540c4cff644d241414075173f1e1064da9cb9e89))
+* adding MQTT and more updates to compliance handling ([36a7986](https://github.com/ColdPBC/cold-monorepo/commit/36a7986ce127ab2b083ebd933f126c311617a571))
+* compliance page updates ([9ab491e](https://github.com/ColdPBC/cold-monorepo/commit/9ab491e6999e922ec7a45aae77548287604ffe3a))
+* Create compliance overview and detail page. ([a057afc](https://github.com/ColdPBC/cold-monorepo/commit/a057afcc4800dadfd484ef43dfc44cf4c59a274c))
+* more compliance updates ([230d61a](https://github.com/ColdPBC/cold-monorepo/commit/230d61a57c485008c16c77d43e04e31d4c96931e))
+
+# [1.89.0-COLD-462.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.88.0...v1.89.0-COLD-462.1) (2024-01-22)
+
+
+### Features
+
+* adding MQTT and more updates to compliance handling ([36a7986](https://github.com/ColdPBC/cold-monorepo/commit/36a7986ce127ab2b083ebd933f126c311617a571))
+* compliance page updates ([9ab491e](https://github.com/ColdPBC/cold-monorepo/commit/9ab491e6999e922ec7a45aae77548287604ffe3a))
+* Create compliance overview and detail page. ([a057afc](https://github.com/ColdPBC/cold-monorepo/commit/a057afcc4800dadfd484ef43dfc44cf4c59a274c))
+* more compliance updates ([230d61a](https://github.com/ColdPBC/cold-monorepo/commit/230d61a57c485008c16c77d43e04e31d4c96931e))
 
 ## [1.88.7](https://github.com/ColdPBC/cold-monorepo/compare/v1.88.6...v1.88.7) (2024-01-21)
 
@@ -106,7 +120,6 @@
 
 
 ### Features
-
 * set section value to null if the section is skipped on submit ([d83001a](https://github.com/ColdPBC/cold-monorepo/commit/d83001ade37fdda306a881686173a0bf4a9da43f))
 * submit on last section if it is unanswered or is wanted to be jumped over by answering 'No' ([d3006e0](https://github.com/ColdPBC/cold-monorepo/commit/d3006e06b9e73799a15c7718700b07f2fae6b81b))
 
@@ -147,7 +160,6 @@
 * fixing migration issues ([13993fd](https://github.com/ColdPBC/cold-monorepo/commit/13993fda5d496eb142bbedf0ccd0b86df9145e4c))
 
 # [1.86.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.85.0...v1.86.0) (2024-01-19)
-
 
 ### Features
 
