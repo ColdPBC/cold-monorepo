@@ -1,3 +1,10 @@
+## [1.90.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.90.0...v1.90.1) (2024-01-22)
+
+
+### Bug Fixes
+
+* util.inspect bug? ([e04d10b](https://github.com/ColdPBC/cold-monorepo/commit/e04d10b6017f1db837a784ff5ba11caed32bc0ba))
+
 # [1.90.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.89.0...v1.90.0) (2024-01-22)
 
 
