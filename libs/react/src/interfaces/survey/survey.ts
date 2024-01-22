@@ -61,7 +61,7 @@ export interface SurveySectionType {
   ai_attempted?: boolean;
   ai_response?: {
     justification?: string;
-    answer?: any;
+    answer?: string | boolean | number | Array<string>;
   };
 }
 
@@ -82,7 +82,7 @@ export interface SurveySectionFollowUpType {
   ai_attempted?: boolean;
   ai_response?: {
     justification?: string;
-    answer?: any;
+    answer?: string | boolean | number | Array<string>;
   };
 }
 
