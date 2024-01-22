@@ -135,7 +135,7 @@
     "openai": "^4.24.7",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.1",
-    "postcss": "^8.4.31",
+    "postcss": "^8.4.33",
     "react": "^18.2.0",
     "react-chartjs-2": "^5.2.0",
     "react-cookie": "^4.1.1",
