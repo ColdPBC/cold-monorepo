@@ -170,7 +170,7 @@ export class ComplianceDefinitionService extends BaseWorker {
 
     const definitions = (await this.prisma.compliance_definitions.findMany()) as ComplianceDefinition[];
 
-    if (!definitions) {
+    if (!definitions || definitions.length == 0 ) {
       throw new NotFoundException(`Unable to find any compliance definitions`);
     }
 
@@ -188,7 +188,8 @@ export class ComplianceDefinitionService extends BaseWorker {
   async findOrgCompliances(user: AuthenticatedUser, orgId: string, bpc?: boolean): Promise<OrgCompliance[]> {
     if (!bpc) {
       const cached = (await this.cache.get(`compliance_definitions:org:${orgId}`)) as OrgCompliance[];
-      if (cached) {
+
+      if (cached && cached.length) {
         return cached;
       }
     }
@@ -203,7 +204,7 @@ export class ComplianceDefinitionService extends BaseWorker {
       },
     })) as unknown as OrgCompliance[];
 
-    if (!orgCompliances) {
+    if (!orgCompliances || orgCompliances.length == 0) {
       return [];
     }
 
