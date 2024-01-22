@@ -7,12 +7,7 @@ export interface SelectOptionProps {
   isMultiSelect?: boolean;
 }
 
-export const SelectOption = ({
-  options,
-  onChange,
-  value,
-  isMultiSelect = false,
-}: SelectOptionProps) => {
+export const SelectOption = ({ options, onChange, value, isMultiSelect = false }: SelectOptionProps) => {
   let vertical = true;
 
   if (options.length > 4) {
@@ -26,7 +21,7 @@ export const SelectOption = ({
       } else {
         if (Array.isArray(value)) {
           if (value.includes(options[index])) {
-            const newValues = value.filter((value) => value !== options[index]);
+            const newValues = value.filter(value => value !== options[index]);
             if (newValues.length === 0) {
               onChange(null);
             } else {
@@ -47,8 +42,7 @@ export const SelectOption = ({
   };
 
   const getClassName = (index: number) => {
-    let className =
-      'whitespace-normal text-sm not-italic font-semibold text-center text-tc-primary cursor-pointer';
+    let className = 'whitespace-normal text-sm not-italic font-semibold text-center text-tc-primary cursor-pointer';
 
     if (vertical) {
       className += ' p-2';
@@ -57,20 +51,16 @@ export const SelectOption = ({
     }
 
     if (isMultiSelect) {
-      if (value !== null && value.includes(options[index])) {
-        className +=
-          ' rounded-lg bg-primary-300 hover:bg-primary-200 grid grid-cols-1 place-content-center';
+      if (value !== null && value !== undefined && value.includes(options[index])) {
+        className += ' rounded-lg bg-primary-300 hover:bg-primary-200 grid grid-cols-1 place-content-center';
       } else {
-        className +=
-          ' rounded-lg bg-bgc-accent hover:bg-gray-50 grid grid-cols-1 place-content-center';
+        className += ' rounded-lg bg-bgc-accent hover:bg-gray-50 grid grid-cols-1 place-content-center';
       }
     } else {
-      if (value === options[index]) {
-        className +=
-          ' rounded-lg bg-primary-300 hover:bg-primary-200 grid grid-cols-1 place-content-center';
+      if (value !== null && value !== undefined && value === options[index]) {
+        className += ' rounded-lg bg-primary-300 hover:bg-primary-200 grid grid-cols-1 place-content-center';
       } else {
-        className +=
-          ' rounded-lg bg-bgc-accent hover:bg-gray-50 grid grid-cols-1 place-content-center';
+        className += ' rounded-lg bg-bgc-accent hover:bg-gray-50 grid grid-cols-1 place-content-center';
       }
     }
     return className;
@@ -79,24 +69,11 @@ export const SelectOption = ({
   if (vertical) {
     return (
       <div className={'w-full'}>
-        {isMultiSelect && (
-          <div
-            className={
-              'text-left text-xs not-italic font-normal text-tc-primary mb-2'
-            }
-          >
-            Select all that apply
-          </div>
-        )}
+        {isMultiSelect && <div className={'text-left text-xs not-italic font-normal text-tc-primary mb-2'}>Select all that apply</div>}
         <div className={'w-full space-y-4'}>
           {options.map((option, index) => {
             return (
-              <div
-                key={`select_option_${index}`}
-                className={getClassName(index)}
-                id={index.toString()}
-                onClick={() => onOptionClick(index)}
-              >
+              <div key={`select_option_${index}`} className={getClassName(index)} id={index.toString()} onClick={() => onOptionClick(index)}>
                 {option}
               </div>
             );
@@ -107,24 +84,11 @@ export const SelectOption = ({
   } else {
     return (
       <div className={'w-full'}>
-        {isMultiSelect && (
-          <div
-            className={
-              'text-left text-xs not-italic font-normal text-tc-primary mb-2'
-            }
-          >
-            Select all that apply
-          </div>
-        )}
+        {isMultiSelect && <div className={'text-left text-xs not-italic font-normal text-tc-primary mb-2'}>Select all that apply</div>}
         <div className={'w-full grid grid-cols-2 gap-4'}>
           {options.map((option, index) => {
             return (
-              <div
-                key={`select_option_${index}`}
-                className={getClassName(index)}
-                id={index.toString()}
-                onClick={() => onOptionClick(index)}
-              >
+              <div key={`select_option_${index}`} className={getClassName(index)} id={index.toString()} onClick={() => onOptionClick(index)}>
                 {option}
               </div>
             );
