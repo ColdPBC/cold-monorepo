@@ -1,3 +1,17 @@
+# [1.90.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.89.0...v1.90.0) (2024-01-22)
+
+
+### Features
+
+* added keys to compliance overview nad detail page elements ([540c4cf](https://github.com/ColdPBC/cold-monorepo/commit/540c4cff644d241414075173f1e1064da9cb9e89))
+* adding MQTT and more updates to compliance handling ([36a7986](https://github.com/ColdPBC/cold-monorepo/commit/36a7986ce127ab2b083ebd933f126c311617a571))
+* compliance page updates ([9ab491e](https://github.com/ColdPBC/cold-monorepo/commit/9ab491e6999e922ec7a45aae77548287604ffe3a))
+* Create compliance overview and detail page. ([a057afc](https://github.com/ColdPBC/cold-monorepo/commit/a057afcc4800dadfd484ef43dfc44cf4c59a274c))
+* handle compliance page error boundary and added check for documents list array type ([dba6b09](https://github.com/ColdPBC/cold-monorepo/commit/dba6b092c17637058f6e5a64f62665de8b9f5012))
+* more compliance updates ([230d61a](https://github.com/ColdPBC/cold-monorepo/commit/230d61a57c485008c16c77d43e04e31d4c96931e))
+* more updates to MQTT and compliance detail page ([77793a2](https://github.com/ColdPBC/cold-monorepo/commit/77793a2ae7f1665bfe22e75d99084c320ede0c8c))
+* use env variable to environment ([7b51932](https://github.com/ColdPBC/cold-monorepo/commit/7b51932850ea408a5287ae84881aa7a6b7532f5a))
+
 # [1.89.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.88.7...v1.89.0) (2024-01-22)
 
 
