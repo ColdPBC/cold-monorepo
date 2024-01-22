@@ -1,14 +1,15 @@
 import React from 'react';
-import { CenterColumnContent, Spinner } from '@coldpbc/components';
-import { useAddToastMessage, useAuth0Wrapper, useColdContext, useOrgSWR } from '@coldpbc/hooks';
+import { CenterColumnContent, ErrorFallback, Spinner } from '@coldpbc/components';
+import { useAuth0Wrapper, useColdContext, useOrgSWR } from '@coldpbc/hooks';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { find } from 'lodash';
 import { Compliance, OrgCompliance, ToastMessage } from '@coldpbc/interfaces';
 import useSWR, { useSWRConfig } from 'swr';
 import { ErrorType } from '@coldpbc/enums';
 import { ComplianceOverview } from '../../organisms/complianceOverview/complianceOverview';
+import { withErrorBoundary } from 'react-error-boundary';
 
-export const CompliancePage = () => {
+const _CompliancePage = () => {
   const { orgId } = useAuth0Wrapper();
   const compliances = useSWR<Compliance[], any, any>(['/compliance_definitions', 'GET'], axiosFetcher);
   const orgCompliances = useSWR<OrgCompliance[], any, any>([`/compliance_definitions/organization/${orgId}`, 'GET'], axiosFetcher);
@@ -42,3 +43,7 @@ export const CompliancePage = () => {
     return null;
   }
 };
+
+export const CompliancePage = withErrorBoundary(_CompliancePage, {
+  FallbackComponent: props => <ErrorFallback {...props} />,
+});

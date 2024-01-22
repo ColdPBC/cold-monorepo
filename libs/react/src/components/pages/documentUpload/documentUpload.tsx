@@ -8,6 +8,7 @@ import { ToastMessage } from '@coldpbc/interfaces';
 import useSWR from 'swr';
 import { openAIFetcher } from '../../../fetchers/openAIFetcher';
 import { withErrorBoundary } from 'react-error-boundary';
+import { isArray } from 'lodash';
 
 export const _DocumentUpload = () => {
   const { orgId } = useAuth0Wrapper();
@@ -80,13 +81,15 @@ export const _DocumentUpload = () => {
     return <Spinner />;
   }
 
-  const data = filesSWR.data?.map((file: any) => {
-    const { name, extension } = getFileNameAndExtension(file);
-    return {
-      name: <div className="flex items-center text-tc-primary">{name}</div>,
-      type: <span className="text-white font-medium text-sm leading-normal">{extension}</span>,
-    };
-  });
+  const data = isArray(filesSWR.data)
+    ? filesSWR.data?.map((file: any) => {
+        const { name, extension } = getFileNameAndExtension(file);
+        return {
+          name: <div className="flex items-center text-tc-primary">{name}</div>,
+          type: <span className="text-white font-medium text-sm leading-normal">{extension}</span>,
+        };
+      })
+    : [];
 
   return (
     <AppContent title="Documents">

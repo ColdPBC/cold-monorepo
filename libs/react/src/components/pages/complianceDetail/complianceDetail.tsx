@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { CenterColumnContent, MainContent, Spinner } from '@coldpbc/components';
+import { CenterColumnContent, ErrorFallback, MainContent, Spinner } from '@coldpbc/components';
 import { ComplianceOverviewCard } from '../../organisms/complianceOverviewCard/complianceOverviewCard';
 import { useAuth0Wrapper, useColdContext, useOrgSWR } from '@coldpbc/hooks';
 import { axiosFetcher } from '@coldpbc/fetchers';
@@ -9,8 +9,9 @@ import { Compliance, OrgCompliance, SurveyPayloadType } from '@coldpbc/interface
 import useSWR from 'swr';
 import { ComplianceSectionOverview } from '../../organisms/complianceSectionOverview/complianceSectionOverview';
 import { ErrorType } from '@coldpbc/enums';
+import { withErrorBoundary } from 'react-error-boundary';
 
-export const ComplianceDetail = () => {
+const _ComplianceDetail = () => {
   const { orgId } = useAuth0Wrapper();
   const { logError } = useColdContext();
   const [complianceProgress, setComplianceProgress] = React.useState<any>({});
@@ -82,3 +83,7 @@ export const ComplianceDetail = () => {
     return null;
   }
 };
+
+export const ComplianceDetail = withErrorBoundary(_ComplianceDetail, {
+  FallbackComponent: props => <ErrorFallback {...props} />,
+});
