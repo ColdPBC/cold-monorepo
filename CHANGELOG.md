@@ -1,3 +1,15 @@
+# [1.93.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.92.1...v1.93.0) (2024-01-22)
+
+
+### Bug Fixes
+
+* fix select option bug where it cant deal with undefined values ([2c6c011](https://github.com/ColdPBC/cold-monorepo/commit/2c6c0118dea293b3b2996cac8913436b58d6d57b))
+
+
+### Features
+
+* check component before submitting ([c5acfea](https://github.com/ColdPBC/cold-monorepo/commit/c5acfeae5087871b4ab563db4edbf4965320b847))
+
 ## [1.92.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.92.0...v1.92.1) (2024-01-22)
 
 
