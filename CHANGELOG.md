@@ -1,3 +1,52 @@
+## [1.88.7](https://github.com/ColdPBC/cold-monorepo/compare/v1.88.6...v1.88.7) (2024-01-21)
+
+
+### Bug Fixes
+
+* fix null reference issues ([5ebb1a2](https://github.com/ColdPBC/cold-monorepo/commit/5ebb1a2f191bf365b62143e3005e223a6176d696))
+
+## [1.88.6](https://github.com/ColdPBC/cold-monorepo/compare/v1.88.5...v1.88.6) (2024-01-21)
+
+
+### Bug Fixes
+
+* fix null reference issues ([6542f33](https://github.com/ColdPBC/cold-monorepo/commit/6542f33e1d6a0018b3bf484922c177e9776daf36))
+
+## [1.88.5](https://github.com/ColdPBC/cold-monorepo/compare/v1.88.4...v1.88.5) (2024-01-21)
+
+
+### Bug Fixes
+
+* add missing files!! ([d4a6147](https://github.com/ColdPBC/cold-monorepo/commit/d4a614798818314466a3208f9af97f97185e2e04))
+
+## [1.88.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.88.3...v1.88.4) (2024-01-21)
+
+
+### Bug Fixes
+
+* remove extra COMPLIANCE entry ([d92a964](https://github.com/ColdPBC/cold-monorepo/commit/d92a9642998eeb690ed9bed8b5d6ad1070221d83))
+
+## [1.88.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.88.2...v1.88.3) (2024-01-21)
+
+
+### Bug Fixes
+
+* remove extra COMPLIANCE entry ([d683a4e](https://github.com/ColdPBC/cold-monorepo/commit/d683a4ee77f31a4b48c6c95d5fa9d718821cbaf7))
+
+## [1.88.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.88.1...v1.88.2) (2024-01-21)
+
+
+### Bug Fixes
+
+* refactor files and createAssistant to work with new process ([be8d40e](https://github.com/ColdPBC/cold-monorepo/commit/be8d40ea73c7703e82d6e749a9defd3a864948f5))
+
+## [1.88.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.88.0...v1.88.1) (2024-01-21)
+
+
+### Bug Fixes
+
+* standardize survey responses ([a54a34e](https://github.com/ColdPBC/cold-monorepo/commit/a54a34e837f2b9f2acabe34fbace4ede850902b3))
+
 # [1.88.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.87.3...v1.88.0) (2024-01-21)
 
 

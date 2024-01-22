@@ -1,14 +1,23 @@
 import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { Span } from 'nestjs-ddtrace';
-import { AuthenticatedUser, BaseWorker, CacheService, ColdRabbitService, Cuid2Generator, DarklyService, PrismaService } from '@coldpbc/nest';
+import { ConfigService } from '@nestjs/config';
+import { MqttClient } from 'mqtt';
+import { AuthenticatedUser, BaseWorker, CacheService, ColdRabbitService, Cuid2Generator, DarklyService, MqttService, PrismaService } from '@coldpbc/nest';
 import { ComplianceDefinition, OrgCompliance } from './compliance_definition_schema';
 
 @Span()
 @Injectable()
 export class ComplianceDefinitionService extends BaseWorker {
   exclude_orgs: Array<{ id: string; name: string; display_name: string }>;
+  mqtt: MqttClient;
 
-  constructor(readonly darkly: DarklyService, private prisma: PrismaService, private readonly cache: CacheService, private readonly rabbit: ColdRabbitService) {
+  constructor(
+    readonly darkly: DarklyService,
+    private prisma: PrismaService,
+    private readonly cache: CacheService,
+    private config: ConfigService,
+    private readonly rabbit: ColdRabbitService,
+  ) {
     super('ComplianceDefinitionService');
   }
 
@@ -16,6 +25,8 @@ export class ComplianceDefinitionService extends BaseWorker {
     this.darkly.subscribeToJsonFlagChanges('dynamic-org-white-list', value => {
       this.exclude_orgs = value;
     });
+
+    this.mqtt = new MqttService(this.config).connect();
   }
 
   /***
