@@ -160,7 +160,7 @@ export class ComplianceDefinitionService extends BaseWorker {
    */
   async findAll(bpc?: boolean): Promise<ComplianceDefinition[]> {
     if (!bpc) {
-      const cached = this.cache.get('compliance_definitions');
+      const cached = await this.cache.get('compliance_definitions');
       if (cached) {
         return cached as unknown as ComplianceDefinition[];
       }
