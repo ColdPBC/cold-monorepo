@@ -1621,6 +1621,29 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/core@npm:^7.23.5":
+  version: 7.23.7
+  resolution: "@babel/core@npm:7.23.7"
+  dependencies:
+    "@ampproject/remapping": "npm:^2.2.0"
+    "@babel/code-frame": "npm:^7.23.5"
+    "@babel/generator": "npm:^7.23.6"
+    "@babel/helper-compilation-targets": "npm:^7.23.6"
+    "@babel/helper-module-transforms": "npm:^7.23.3"
+    "@babel/helpers": "npm:^7.23.7"
+    "@babel/parser": "npm:^7.23.6"
+    "@babel/template": "npm:^7.22.15"
+    "@babel/traverse": "npm:^7.23.7"
+    "@babel/types": "npm:^7.23.6"
+    convert-source-map: "npm:^2.0.0"
+    debug: "npm:^4.1.0"
+    gensync: "npm:^1.0.0-beta.2"
+    json5: "npm:^2.2.3"
+    semver: "npm:^6.3.1"
+  checksum: 956841695ea801c8b4196d01072e6c1062335960715a6fcfd4009831003b526b00627c78b373ed49b1658c3622c71142f7ff04235fe839cac4a1a25ed51b90aa
+  languageName: node
+  linkType: hard
+
 "@babel/generator@npm:^7.12.11, @babel/generator@npm:^7.12.5, @babel/generator@npm:^7.22.5, @babel/generator@npm:^7.22.9, @babel/generator@npm:^7.23.0, @babel/generator@npm:^7.23.5, @babel/generator@npm:^7.7.2":
   version: 7.23.5
   resolution: "@babel/generator@npm:7.23.5"
@@ -1630,6 +1653,18 @@ __metadata:
     "@jridgewell/trace-mapping": "npm:^0.3.17"
     jsesc: "npm:^2.5.1"
   checksum: 094af79c2e8fdb0cfd06b42ff6a39a8a95639bc987cace44f52ed5c46127f5469eb20ab5f4c8991fc00fa9c1445a1977cde8e44289d6be29ddbb315fb0fc1b45
+  languageName: node
+  linkType: hard
+
+"@babel/generator@npm:^7.23.6":
+  version: 7.23.6
+  resolution: "@babel/generator@npm:7.23.6"
+  dependencies:
+    "@babel/types": "npm:^7.23.6"
+    "@jridgewell/gen-mapping": "npm:^0.3.2"
+    "@jridgewell/trace-mapping": "npm:^0.3.17"
+    jsesc: "npm:^2.5.1"
+  checksum: 864090d5122c0aa3074471fd7b79d8a880c1468480cbd28925020a3dcc7eb6e98bedcdb38983df299c12b44b166e30915b8085a7bc126e68fa7e2aadc7bd1ac5
   languageName: node
   linkType: hard
 
@@ -1920,6 +1955,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/helpers@npm:^7.23.7":
+  version: 7.23.8
+  resolution: "@babel/helpers@npm:7.23.8"
+  dependencies:
+    "@babel/template": "npm:^7.22.15"
+    "@babel/traverse": "npm:^7.23.7"
+    "@babel/types": "npm:^7.23.6"
+  checksum: 4c392351910102403b6a7c922319077b179c276e422a4e45b243b45610f813a05a043b6b116cbf5eb4b437fb51b9a2dfc2b7c65f38a0de7fde1f97d08a675313
+  languageName: node
+  linkType: hard
+
 "@babel/highlight@npm:^7.23.4":
   version: 7.23.4
   resolution: "@babel/highlight@npm:7.23.4"
@@ -1937,6 +1983,15 @@ __metadata:
   bin:
     parser: ./bin/babel-parser.js
   checksum: 828c250ace0c58f9dc311fd13ad3da34e86ed27a5c6b4183ce9d85be250e78eeb71a13f6d51a368c46f8cbe51106c726bfbb158bf46a89db3a168a0002d3050a
+  languageName: node
+  linkType: hard
+
+"@babel/parser@npm:^7.23.6":
+  version: 7.23.6
+  resolution: "@babel/parser@npm:7.23.6"
+  bin:
+    parser: ./bin/babel-parser.js
+  checksum: 6be3a63d3c9d07b035b5a79c022327cb7e16cbd530140ecb731f19a650c794c315a72c699a22413ebeafaff14aa8f53435111898d59e01a393d741b85629fa7d
   languageName: node
   linkType: hard
 
@@ -2890,7 +2945,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-transform-react-jsx-self@npm:^7.18.6, @babel/plugin-transform-react-jsx-self@npm:^7.22.5":
+"@babel/plugin-transform-react-jsx-self@npm:^7.18.6, @babel/plugin-transform-react-jsx-self@npm:^7.23.3":
   version: 7.23.3
   resolution: "@babel/plugin-transform-react-jsx-self@npm:7.23.3"
   dependencies:
@@ -2901,7 +2956,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-transform-react-jsx-source@npm:^7.19.6, @babel/plugin-transform-react-jsx-source@npm:^7.22.5":
+"@babel/plugin-transform-react-jsx-source@npm:^7.19.6, @babel/plugin-transform-react-jsx-source@npm:^7.23.3":
   version: 7.23.3
   resolution: "@babel/plugin-transform-react-jsx-source@npm:7.23.3"
   dependencies:
@@ -3399,6 +3454,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/traverse@npm:^7.23.7":
+  version: 7.23.7
+  resolution: "@babel/traverse@npm:7.23.7"
+  dependencies:
+    "@babel/code-frame": "npm:^7.23.5"
+    "@babel/generator": "npm:^7.23.6"
+    "@babel/helper-environment-visitor": "npm:^7.22.20"
+    "@babel/helper-function-name": "npm:^7.23.0"
+    "@babel/helper-hoist-variables": "npm:^7.22.5"
+    "@babel/helper-split-export-declaration": "npm:^7.22.6"
+    "@babel/parser": "npm:^7.23.6"
+    "@babel/types": "npm:^7.23.6"
+    debug: "npm:^4.3.1"
+    globals: "npm:^11.1.0"
+  checksum: 3215e59429963c8dac85c26933372cdd322952aa9930e4bc5ef2d0e4bd7a1510d1ecf8f8fd860ace5d4d9fe496d23805a1ea019a86410aee4111de5f63ee84f9
+  languageName: node
+  linkType: hard
+
 "@babel/types@npm:7.8.3":
   version: 7.8.3
   resolution: "@babel/types@npm:7.8.3"
@@ -3418,6 +3491,17 @@ __metadata:
     "@babel/helper-validator-identifier": "npm:^7.22.20"
     to-fast-properties: "npm:^2.0.0"
   checksum: a623a4e7f396f1903659099da25bfa059694a49f42820f6b5288347f1646f0b37fb7cc550ba45644e9067149368ef34ccb1bd4a4251ec59b83b3f7765088f363
+  languageName: node
+  linkType: hard
+
+"@babel/types@npm:^7.23.6":
+  version: 7.23.6
+  resolution: "@babel/types@npm:7.23.6"
+  dependencies:
+    "@babel/helper-string-parser": "npm:^7.23.4"
+    "@babel/helper-validator-identifier": "npm:^7.22.20"
+    to-fast-properties: "npm:^2.0.0"
+  checksum: 07e70bb94d30b0231396b5e9a7726e6d9227a0a62e0a6830c0bd3232f33b024092e3d5a7d1b096a65bbf2bb43a9ab4c721bf618e115bfbb87b454fa060f88cbf
   languageName: node
   linkType: hard
 
@@ -13970,7 +14054,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/babel__core@npm:^7.0.0, @types/babel__core@npm:^7.1.14, @types/babel__core@npm:^7.18.0, @types/babel__core@npm:^7.20.4":
+"@types/babel__core@npm:^7.0.0, @types/babel__core@npm:^7.1.14, @types/babel__core@npm:^7.18.0, @types/babel__core@npm:^7.20.4, @types/babel__core@npm:^7.20.5":
   version: 7.20.5
   resolution: "@types/babel__core@npm:7.20.5"
   dependencies:
@@ -15595,17 +15679,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vitejs/plugin-react@npm:~4.0.0":
-  version: 4.0.4
-  resolution: "@vitejs/plugin-react@npm:4.0.4"
+"@vitejs/plugin-react@npm:~4.2.1":
+  version: 4.2.1
+  resolution: "@vitejs/plugin-react@npm:4.2.1"
   dependencies:
-    "@babel/core": "npm:^7.22.9"
-    "@babel/plugin-transform-react-jsx-self": "npm:^7.22.5"
-    "@babel/plugin-transform-react-jsx-source": "npm:^7.22.5"
+    "@babel/core": "npm:^7.23.5"
+    "@babel/plugin-transform-react-jsx-self": "npm:^7.23.3"
+    "@babel/plugin-transform-react-jsx-source": "npm:^7.23.3"
+    "@types/babel__core": "npm:^7.20.5"
     react-refresh: "npm:^0.14.0"
   peerDependencies:
-    vite: ^4.2.0
-  checksum: 3c2c4902be6d7787ad46a980dd3f460d56e1ce3e749b44f5bb5b595ee3d96c6af93b3ee325217f4cb176a313e476e21daf759cbb9740ae396cfd5b2445502ce6
+    vite: ^4.2.0 || ^5.0.0
+  checksum: d7fa6dacd3c246bcee482ff4b7037b2978b6ca002b79780ad4921e91ae4bc85ab234cfb94f8d4d825fed8488a0acdda2ff02b47c27b3055187c0727b18fc725e
   languageName: node
   linkType: hard
 
@@ -19608,7 +19693,7 @@ __metadata:
     "@typescript-eslint/parser": "npm:6.14.0"
     "@typescript-eslint/typescript-estree": "npm:^6.13.2"
     "@vegardit/prisma-generator-nestjs-dto": "npm:^1.5.1"
-    "@vitejs/plugin-react": "npm:~4.0.0"
+    "@vitejs/plugin-react": "npm:~4.2.1"
     "@vitest/coverage-v8": "npm:~0.32.0"
     "@vitest/ui": "npm:~0.32.0"
     "@zerollup/ts-transform-paths": "npm:^1.0.0"
