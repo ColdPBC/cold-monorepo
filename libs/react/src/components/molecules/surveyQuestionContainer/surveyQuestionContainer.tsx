@@ -68,6 +68,7 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
         if (additional) {
           newSection = {
             ...section,
+            component: isComponentTypeValid(section.component) ? section.component : null,
             follow_up: {
               ...section.follow_up,
               [key]: {
@@ -85,6 +86,7 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
           if (!conditionMet) {
             newSection = {
               ...section,
+              component: isComponentTypeValid(section.component) ? section.component : null,
               follow_up: {
                 ...section.follow_up,
                 [key]: {
@@ -100,6 +102,7 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
           } else {
             newSection = {
               ...section,
+              component: isComponentTypeValid(section.component) ? section.component : null,
               follow_up: {
                 ...section.follow_up,
                 [key]: {
@@ -113,6 +116,7 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
       } else {
         newSection = {
           ...section,
+          component: isComponentTypeValid(section.component) ? section.component : null,
           follow_up: {
             ...section.follow_up,
             [key]: {
@@ -132,6 +136,7 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
         if (additional) {
           newSection = {
             ...section,
+            component: isComponentTypeValid(section.component) ? section.component : null,
             additional_context: {
               ...section.additional_context,
               ...update,
@@ -144,6 +149,7 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
             newSection = {
               ...section,
               ...update,
+              component: isComponentTypeValid(section.component) ? section.component : null,
               additional_context: {
                 ...section.additional_context,
                 value: null,
@@ -153,6 +159,7 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
             newSection = {
               ...section,
               ...update,
+              component: isComponentTypeValid(section.component) ? section.component : null,
             };
           }
         }
@@ -160,6 +167,7 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
         newSection = {
           ...section,
           ...update,
+          component: isComponentTypeValid(section.component) ? section.component : null,
         };
       }
       if (update.value === false || update.skipped === true) {
