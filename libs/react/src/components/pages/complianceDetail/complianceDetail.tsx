@@ -60,9 +60,10 @@ export const ComplianceDetail = () => {
     if (compliance) {
       return (
         <CenterColumnContent title="REI Compliance">
-          <div className={'w-full space-y-10'}>
+          <div className={'w-full space-y-[24px]'}>
             <ComplianceOverviewCard title={'Overview'} complianceData={totalComplianceProgress} isOverview={true} onOverviewPage={false} />
-            <div className={'w-full space-y-[24px]'}>
+            <div className={'w-full space-y-[8px]'}>
+              <div className={'text-h3 text-tc-primary'}>Sections</div>
               {compliance.compliance_definition.surveys.map((survey, index) => {
                 return (
                   <div key={'survey_' + index}>

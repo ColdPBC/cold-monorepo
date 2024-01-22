@@ -73,27 +73,5 @@ export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
     connectToIOT();
   }, [user, orgId, getAccessTokenSilently, isAuthenticated]);
 
-  const subscribe = (topic: string) => {
-    client.current?.subscribe(topic, { qos: 0, nl: false }, (err, grant) => {
-      if (!err) {
-        setMessages(messages.concat([`Subscription: ${topic}`]));
-        client.current?.publish(topic, JSON.stringify(grant));
-      } else {
-        console.log(err);
-      }
-    });
-  };
-
-  const publish = (topic: string, message: string) => {
-    client.current?.publish(topic, message);
-  };
-
-  // create a context to store the client and expose the subscribe and publish methods
-  const context = {
-    client: client.current,
-    subscribe,
-    publish,
-  };
-
   return children;
 };
