@@ -1,3 +1,10 @@
+## [1.90.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.90.1...v1.90.2) (2024-01-22)
+
+
+### Bug Fixes
+
+* stream bug ([a0e4569](https://github.com/ColdPBC/cold-monorepo/commit/a0e456985dc07b313eb0885ec590a9716893a896))
+
 ## [1.90.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.90.0...v1.90.1) (2024-01-22)
 
 
