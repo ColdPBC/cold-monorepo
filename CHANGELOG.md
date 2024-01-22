@@ -1,10 +1,10 @@
-# [1.91.0-COLD-470.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.90.8...v1.91.0-COLD-470.1) (2024-01-22)
+## [1.90.9](https://github.com/ColdPBC/cold-monorepo/compare/v1.90.8...v1.90.9) (2024-01-22)
 
 
-### Features
+### Bug Fixes
 
-* added check for component type ([0589da0](https://github.com/ColdPBC/cold-monorepo/commit/0589da0038abc438edb5e6271d64deb3129059fc))
-* added select option checks and skip addtional context ai response ([e709eb1](https://github.com/ColdPBC/cold-monorepo/commit/e709eb17f84db4e90d014df66ecada4338f910fa))
+* fix compliance caching ([106bb18](https://github.com/ColdPBC/cold-monorepo/commit/106bb18296940beac720b16072c69d51e4caeaa0))
+* openAI hangups ([4abe96d](https://github.com/ColdPBC/cold-monorepo/commit/4abe96d2b41411586e1863aab9865f77e0e8dba3))
 
 ## [1.90.8](https://github.com/ColdPBC/cold-monorepo/compare/v1.90.7...v1.90.8) (2024-01-22)
 
