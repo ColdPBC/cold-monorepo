@@ -321,7 +321,10 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
         buttonProps.disabled = true;
       }
 
-      if (sections[activeSectionKey].follow_up[activeFollowUpKey].value === undefined && sections[activeSectionKey].follow_up[activeFollowUpKey].ai_value !== undefined) {
+      if (
+        sections[activeSectionKey].follow_up[activeFollowUpKey].value === undefined &&
+        sections[activeSectionKey].follow_up[activeFollowUpKey].ai_response?.answer !== undefined
+      ) {
         buttonProps.label = 'Confirm';
         if (activeSectionIndex === Object.keys(sections).length - 1 && activeFollowUpIndex === Object.keys(sections[activeSectionKey].follow_up).length - 1) {
           buttonProps.onClick = () => {
@@ -356,7 +359,7 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
       if (additionalContextQuestion && sections[activeSectionKey].additional_context && sections[activeSectionKey].additional_context?.value === undefined) {
         buttonProps.disabled = true;
       }
-      if (sections[activeSectionKey].value === undefined && sections[activeSectionKey].ai_value !== undefined) {
+      if (sections[activeSectionKey].value === undefined && sections[activeSectionKey].ai_response?.answer !== undefined) {
         buttonProps.label = 'Confirm';
         buttonProps.onClick = () => {
           onNextButtonClicked();
@@ -613,8 +616,8 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
       const followUpKey = Object.keys(sections[activeSectionKey].follow_up)[followUpIndex];
       const followUp = sections[activeSectionKey].follow_up[followUpKey];
       if (followUp) {
-        if (followUp.ai_value !== undefined && (followUp.value === null || followUp.value === undefined)) {
-          return followUp.ai_value;
+        if (followUp.ai_response?.answer !== undefined && (followUp.value === null || followUp.value === undefined)) {
+          return followUp.ai_response?.answer;
         } else {
           return followUp.value;
         }

@@ -58,9 +58,11 @@ export interface SurveySectionType {
   value?: any | null;
   skipped?: boolean;
   additional_context?: SurveyAdditionalContext;
-  ai_value?: any;
+  ai_response?: {
+    answer?: any;
+    justification?: string;
+  };
   ai_attempted?: boolean;
-  ai_justification?: string;
 }
 
 export interface SurveySectionFollowUpsType {
@@ -77,9 +79,11 @@ export interface SurveySectionFollowUpType {
   value?: any | null;
   skipped?: boolean;
   additional_context?: SurveyAdditionalContext;
-  ai_value?: any;
+  ai_response?: {
+    answer?: any;
+    justification?: string;
+  };
   ai_attempted?: boolean;
-  ai_justification?: string;
 }
 
 export interface SurveyPayloadType {

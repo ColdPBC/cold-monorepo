@@ -1,11 +1,9 @@
 import React from 'react';
-import { Compliance, OrgCompliance, ToastMessage } from '@coldpbc/interfaces';
-import { find } from 'lodash';
-import { getComplianceProgress } from '@coldpbc/lib';
-import { ComplianceOverviewCard } from '@coldpbc/components';
+import { Compliance, IButtonProps, OrgCompliance, ToastMessage } from '@coldpbc/interfaces';
+import { BaseButton, ComplianceOverviewCard } from '@coldpbc/components';
 import { axiosFetcher } from '@coldpbc/fetchers';
-import { isAxiosError } from 'axios/index';
-import { ErrorType } from '@coldpbc/enums';
+import { isAxiosError } from 'axios';
+import { ButtonTypes, ErrorType, GlobalSizes } from '@coldpbc/enums';
 import { useAddToastMessage, useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
 import { useNavigate } from 'react-router-dom';
 import { useSWRConfig } from 'swr';
@@ -23,64 +21,43 @@ export const ComplianceOverview = (props: ComplianceOverviewProps) => {
   const { mutate } = useSWRConfig();
   const { logError } = useColdContext();
 
-  const complianceProgress = getComplianceProgress(
-    orgComplianceData === undefined
-      ? {
-          ...complianceData,
-          surveys: [],
-        }
-      : complianceFound.compliance_definition,
-  );
-
-  const getCTAOnClick = async (compliance: Compliance) => {
-    // check if the compliance is orgCompliance
-    const found = find(orgCompliances.data, { compliance_id: compliance.id });
-
-    if (found !== undefined) {
-      navigate(`/compliance/${compliance.name}`);
+  const getCTAOnClick = async () => {
+    if (orgComplianceData !== undefined) {
+      navigate(`/compliance/${orgComplianceData.compliance_definition.name}`);
       return;
     } else {
-      const response = await axiosFetcher([`/compliance_definitions/${compliance.name}/organization/${orgId}`, 'POST']);
-      // todo: handle getting updates from the server
+      const response = await axiosFetcher([`/compliance_definitions/${complianceData.name}/organization/${orgId}`, 'POST']);
       if (isAxiosError(response)) {
-        logError(response.message, ErrorType.AxiosError, response);
         await addToastMessage({ message: 'Compliance could not be added', type: ToastMessage.FAILURE });
+        logError(response.message, ErrorType.AxiosError, response);
       } else {
-        const newComplianceData = response as {
-          id: string;
-          organization_id: string;
-          compliance_id: string;
-          created_at: string;
-          updated_at: string;
-        };
-        await mutate(
-          [`/compliance_definitions/organization/${orgId}`, 'GET'],
-          data => {
-            return [
-              ...data,
-              {
-                ...newComplianceData,
-                compliance_definition: compliance,
-              },
-            ];
-          },
-          {
-            revalidate: false,
-          },
-        );
         await addToastMessage({ message: 'Compliance activated', type: ToastMessage.SUCCESS });
+        await navigate(`/compliance/${complianceData.name}`);
       }
     }
   };
 
-  return (
-    <ComplianceOverviewCard
-      complianceData={complianceProgress}
-      isOverview={true}
-      onOverviewPage={true}
-      ctaOnClick={() => {
-        getCTAOnClick(compliance);
-      }}
-    />
-  );
+  const getCTAButton = (): IButtonProps => {
+    if (orgComplianceData !== undefined) {
+      return {
+        label: 'See Details',
+        variant: ButtonTypes.secondary,
+        size: GlobalSizes.large,
+        onClick: () => {
+          getCTAOnClick();
+        },
+      };
+    } else {
+      return {
+        label: 'Activate',
+        variant: ButtonTypes.primary,
+        size: GlobalSizes.large,
+        onClick: () => {
+          getCTAOnClick();
+        },
+      };
+    }
+  };
+
+  return <ComplianceOverviewCard complianceData={undefined} isOverview={true} onOverviewPage={true} ctas={[getCTAButton()]} title={complianceData.title} />;
 };

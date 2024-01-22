@@ -21,14 +21,6 @@ export const Default: Story = {
   ),
 };
 
-export const Processing: Story = {
-  render: args => (
-    <StoryMockProvider handlers={getCompliancePageHandler.processing}>
-      <CompliancePage />
-    </StoryMockProvider>
-  ),
-};
-
 export const Activate: Story = {
   render: args => (
     <StoryMockProvider handlers={getCompliancePageHandler.activate}>

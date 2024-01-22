@@ -1,28 +1,56 @@
 import React, { useEffect } from 'react';
 import { CenterColumnContent, MainContent, Spinner } from '@coldpbc/components';
 import { ComplianceOverviewCard } from '../../organisms/complianceOverviewCard/complianceOverviewCard';
-import { useAuth0Wrapper, useOrgSWR } from '@coldpbc/hooks';
+import { useAuth0Wrapper, useColdContext, useOrgSWR } from '@coldpbc/hooks';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { forEach, forOwn, isUndefined } from 'lodash';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { Compliance, OrgCompliance, SurveyPayloadType } from '@coldpbc/interfaces';
-import { getComplianceProgress } from '@coldpbc/lib';
-import { mutate as globalMutate } from 'swr/_internal';
 import useSWR from 'swr';
 import { ComplianceSectionOverview } from '../../organisms/complianceSectionOverview/complianceSectionOverview';
+import { ErrorType } from '@coldpbc/enums';
 
 export const ComplianceDetail = () => {
   const { orgId } = useAuth0Wrapper();
+  const { logError } = useColdContext();
+  const [complianceProgress, setComplianceProgress] = React.useState<any>({});
+  const [totalComplianceProgress, setTotalComplianceProgress] = React.useState<any>({});
   const params = useParams();
   const complianceName = params['name'];
   const orgCompliances = useSWR<OrgCompliance[], any, any>([`/compliance_definitions/organization/${orgId}`, 'GET'], axiosFetcher);
+
+  const getComplianceProgressForSurveys = () => {
+    let totalQuestions = 0;
+    let answeredQuestions = 0;
+    let aiAnsweredQuestions = 0;
+    let aiAttemptedQuestions = 0;
+    forOwn(complianceProgress, (progress, surveyName) => {
+      totalQuestions += progress.totalQuestions;
+      answeredQuestions += progress.answeredQuestions;
+      aiAnsweredQuestions += progress.aiAnsweredQuestions;
+      aiAttemptedQuestions += progress.aiAttemptedQuestions;
+    });
+    return {
+      totalQuestions,
+      aiAttemptedQuestions,
+      answeredQuestions,
+      aiAnsweredQuestions,
+      percentageAnswered: Math.round((answeredQuestions / totalQuestions) * 100),
+      percentageAIAnswered: Math.round((aiAnsweredQuestions / totalQuestions) * 100),
+    };
+  };
+
+  useEffect(() => {
+    setTotalComplianceProgress(getComplianceProgressForSurveys());
+  }, [complianceProgress]);
 
   if (orgCompliances.isLoading) {
     return <Spinner />;
   }
 
   if (orgCompliances.error) {
-    console.log('Error loading compliance data');
+    logError(orgCompliances.error, ErrorType.SWRError);
+    return null;
   }
 
   if (orgCompliances.data) {
@@ -33,9 +61,10 @@ export const ComplianceDetail = () => {
       return (
         <CenterColumnContent title="REI Compliance">
           <div className={'w-full space-y-10'}>
+            <ComplianceOverviewCard title={'Overview'} complianceData={totalComplianceProgress} isOverview={true} onOverviewPage={false} />
             <div className={'w-full space-y-[24px]'}>
               {compliance.compliance_definition.surveys.map((survey, index) => {
-                return <ComplianceSectionOverview surveyName={survey} />;
+                return <ComplianceSectionOverview surveyName={survey} setOverviewComplianceProgress={setComplianceProgress} overviewComplianceProgress={complianceProgress} />;
               })}
             </div>
           </div>

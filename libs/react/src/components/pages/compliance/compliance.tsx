@@ -4,20 +4,14 @@ import { useAddToastMessage, useAuth0Wrapper, useColdContext, useOrgSWR } from '
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { find } from 'lodash';
 import { Compliance, OrgCompliance, ToastMessage } from '@coldpbc/interfaces';
-import { useNavigate, useSearchParams } from 'react-router-dom';
 import useSWR, { useSWRConfig } from 'swr';
-import { getComplianceProgress } from '@coldpbc/lib';
-import { isAxiosError } from 'axios';
 import { ErrorType } from '@coldpbc/enums';
 import { ComplianceOverview } from '../../organisms/complianceOverview/complianceOverview';
 
 export const CompliancePage = () => {
-  const { addToastMessage } = useAddToastMessage();
   const { orgId } = useAuth0Wrapper();
-  const navigate = useNavigate();
   const compliances = useSWR<Compliance[], any, any>(['/compliance_definitions', 'GET'], axiosFetcher);
   const orgCompliances = useSWR<OrgCompliance[], any, any>([`/compliance_definitions/organization/${orgId}`, 'GET'], axiosFetcher);
-  const { mutate } = useSWRConfig();
   const { logError } = useColdContext();
 
   if (compliances.isLoading || orgCompliances.isLoading) {

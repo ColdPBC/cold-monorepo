@@ -17,7 +17,17 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   render: args => (
-    <StoryMockProvider memoryRouterProps={{ initialEntries: ['/compliance/rei'] }} handlers={[getComplianceDetailPageHandler.default]}>
+    <StoryMockProvider memoryRouterProps={{ initialEntries: ['/compliance/rei'] }} handlers={getComplianceDetailPageHandler.default}>
+      <Routes>
+        <Route path="/compliance/:name" element={<ComplianceDetail />} />
+      </Routes>
+    </StoryMockProvider>
+  ),
+};
+
+export const Analyzing: Story = {
+  render: args => (
+    <StoryMockProvider memoryRouterProps={{ initialEntries: ['/compliance/rei'] }} handlers={getComplianceDetailPageHandler.analyzing}>
       <Routes>
         <Route path="/compliance/:name" element={<ComplianceDetail />} />
       </Routes>
@@ -27,7 +37,7 @@ export const Default: Story = {
 
 export const SurveyComplete: Story = {
   render: args => (
-    <StoryMockProvider memoryRouterProps={{ initialEntries: ['/compliance/rei'] }} handlers={[getComplianceDetailPageHandler.surveyComplete]}>
+    <StoryMockProvider memoryRouterProps={{ initialEntries: ['/compliance/rei'] }} handlers={getComplianceDetailPageHandler.surveyComplete}>
       <Routes>
         <Route path="/compliance/:name" element={<ComplianceDetail />} />
       </Routes>
