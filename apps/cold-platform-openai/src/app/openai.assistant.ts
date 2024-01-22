@@ -99,7 +99,7 @@ export class OpenaiAssistant extends BaseWorker implements OnModuleInit {
       ' answers for those questions, and the answers that the company gave, labeled as askov_answers. You are tasked \n' +
       ' with helping this company understand if they can answer other sustainability-related questions based on \n' +
       ' their existing answers. \n' +
-      ' A user will provide a JSON formatted object that can include the following properties: \n' +
+      ' I will provide a JSON formatted "question" object that can include the following properties: \n' +
       '  - "idx": The index of the question \n' +
       '  - "prompt": The question to be answered \n' +
       '  - "component": used to determine how to structure your answer \n' +
@@ -126,7 +126,7 @@ export class OpenaiAssistant extends BaseWorker implements OnModuleInit {
 
     let response: any;
 
-    while (status.status !== 'completed') {
+    while (status.status !== 'completed' && status.status !== 'failed') {
       status = await this.client.beta.threads.runs.retrieve(threadId, run.id);
       if (!logged_in_progress) this.logger.info(`Received status ${status.status}`);
       logged_in_progress = true;
@@ -148,9 +148,15 @@ export class OpenaiAssistant extends BaseWorker implements OnModuleInit {
         });
       }
     }
+
     try {
-      if (!response) {
-        return { error: 'No response from OpenAI' };
+      if (status.status === 'failed') {
+        return {
+          error: {
+            message: 'OpenAI failed to process the request.',
+            status,
+          },
+        };
       }
 
       return JSON.parse(response);
@@ -204,18 +210,24 @@ export class OpenaiAssistant extends BaseWorker implements OnModuleInit {
     category_context?: string,
   ): Promise<any> {
     try {
+      if (category_context) {
+        category_context = `Consider the following context when answering questions: ${category_context} and `;
+      } else {
+        category_context = '';
+      }
+
       // const componentPrompt = this.getComponentPrompt(item);
       if (!isFolloup) {
         this.client.beta.threads.messages.create(threadId, {
           role: 'user',
-          content: `Consider the following context when answering questions: ${category_context} and ${this.getComponentPrompt(item.component)}: ${JSON.stringify(item.prompt)}`,
+          content: `${category_context} ${this.getComponentPrompt(item.component)}.  Here is the "question" JSON object: ${JSON.stringify(item)}`,
         });
       } else {
         this.client.beta.threads.messages.create(threadId, {
           role: 'user',
-          content: `Consider the following context when answering questions: ${category_context} and this next JSON question is specifically related to the previous question. ${this.getComponentPrompt(
+          content: `${category_context} this next JSON question is specifically related to the previous question. ${this.getComponentPrompt(
             item.component,
-          )}:  ${JSON.stringify(item)} `,
+          )}.  Here is the "question" JSON object:  ${JSON.stringify(item)} `,
         });
       }
 
@@ -244,7 +256,11 @@ export class OpenaiAssistant extends BaseWorker implements OnModuleInit {
       for (const survey of surveys) {
         this.logger.info(`Processing survey ${survey.definition.title} for compliance ${compliance.name}`);
 
-        const category_context = survey.definition.category_description;
+        let category_context;
+
+        if (!survey.definition.category_description || survey.definition.category_description === 'undefined') {
+          category_context = null;
+        }
 
         const definition = survey.definition;
 
