@@ -1,3 +1,10 @@
+## [1.90.7](https://github.com/ColdPBC/cold-monorepo/compare/v1.90.6...v1.90.7) (2024-01-22)
+
+
+### Bug Fixes
+
+* missing await ([c793f10](https://github.com/ColdPBC/cold-monorepo/commit/c793f10be34ea104d87445be70b73a9d336e93ca))
+
 ## [1.90.6](https://github.com/ColdPBC/cold-monorepo/compare/v1.90.5...v1.90.6) (2024-01-22)
 
 
