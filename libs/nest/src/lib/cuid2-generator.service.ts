@@ -8,7 +8,7 @@ import {Injectable} from '@nestjs/common';
 @Injectable()
 export class Cuid2Generator extends BaseWorker {
   id: string | undefined;
-  scopedId: string | undefined;
+  scopedId: string = '';
   createId: any;
   prefix: string | undefined;
 
@@ -35,7 +35,7 @@ export class Cuid2Generator extends BaseWorker {
   }
 
   setPrefix(prefix: string) {
-    if (prefix.length > 5) throw new Error('Prefix must be between 3 and 6 characters');
+    if (prefix.length < 3) throw new Error('Prefix must at least 3 characters');
     this.prefix = prefix;
     this.generate(this.prefix);
 
@@ -49,7 +49,6 @@ export class Cuid2Generator extends BaseWorker {
   generate(prefix?: string) {
     this.id = this.createId();
     if (prefix || this.prefix) this.scopedId = `${prefix || this.prefix}_${this.id}`;
-    else this.scopedId = undefined;
 
     return this;
   }

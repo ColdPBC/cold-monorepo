@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
-import { NestModule } from '@coldpbc/nest';
+import { ColdRabbitModule, NestModule, OrgUserInterceptor } from '@coldpbc/nest';
+import { APP_INTERCEPTOR } from '@nestjs/core';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { Auth0Module } from './resources/auth0/auth0.module';
 import { ComponentDefinitionsModule } from './resources/component-definitions/component-definitions.module';
@@ -12,6 +13,7 @@ import { ConfigModule } from '@nestjs/config';
 import { IntegrationsModule } from './resources/integrations/integrations.module';
 import { Service_definitionsModule } from './resources/service_definitions/service_definitions.module';
 import { OrganizationLocationsModule } from './resources/organization_locations/organization_locations.module';
+import { ComplianceDefinitionModule } from './resources/compliance_definitions/compliance_definition.module';
 
 @Module({})
 export class AppModule {
@@ -22,7 +24,8 @@ export class AppModule {
         ConfigModule.forRoot({
           isGlobal: true,
         }),
-        await NestModule.forRootAsync(1),
+        ColdRabbitModule.forFeature(),
+        await NestModule.forRootAsync(1, 'cold-api-uploaded-files'),
         ServeStaticModule.forRoot({
           serveStaticOptions: {
             index: false,
@@ -40,8 +43,14 @@ export class AppModule {
         ActionsModule,
         IntegrationsModule,
         OrganizationLocationsModule,
+        ComplianceDefinitionModule,
       ],
-      services: [],
+      providers: [
+        {
+          provide: APP_INTERCEPTOR,
+          useClass: OrgUserInterceptor,
+        },
+      ],
       exports: [],
     };
   }

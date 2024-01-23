@@ -1,6 +1,6 @@
 import Tracer from 'dd-trace';
 import { ConfigService } from '@nestjs/config';
-import { BaseWorker } from './worker/worker.class';
+import { BaseWorker } from './worker';
 
 console.log({ message: 'setting up tracer...' });
 const config = new ConfigService();
