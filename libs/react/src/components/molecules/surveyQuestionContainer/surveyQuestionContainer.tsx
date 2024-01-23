@@ -36,30 +36,6 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
   const { definition, id, name } = surveyData;
   const { sections } = definition;
 
-  const questions = Object.keys(sections)
-    .map(sectionKey => {
-      const category = getQuestionForKey({
-        value: sectionKey,
-        previousValue: '',
-        isFollowUp: false,
-      });
-      const followUps = Object.keys(sections[sectionKey].follow_up).map(followUpKey => {
-        return getQuestionForKey({
-          value: followUpKey,
-          previousValue: '',
-          isFollowUp: true,
-        });
-      });
-      return [category, ...followUps];
-    })
-    .flat();
-
-  const question = questions.find(question => {
-    return question.props.input_key === activeKey.value;
-  });
-
-  let additionalContextQuestion: JSX.Element | undefined = undefined;
-
   const updateTransitionClassNames = (nextDirection: boolean) => {
     if (nextDirection) {
       setTransitionClassNames(nextQuestionTransitionClassNames);
@@ -661,7 +637,29 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
     }
   };
 
-  additionalContextQuestion = checkAdditionalContext(activeKey);
+  const questions = Object.keys(sections)
+    .map(sectionKey => {
+      const category = getQuestionForKey({
+        value: sectionKey,
+        previousValue: '',
+        isFollowUp: false,
+      });
+      const followUps = Object.keys(sections[sectionKey].follow_up).map(followUpKey => {
+        return getQuestionForKey({
+          value: followUpKey,
+          previousValue: '',
+          isFollowUp: true,
+        });
+      });
+      return [category, ...followUps];
+    })
+    .flat();
+
+  const question = questions.find(question => {
+    return question.props.input_key === activeKey.value;
+  });
+
+  const additionalContextQuestion = checkAdditionalContext(activeKey);
 
   if (question !== undefined) {
     return (
