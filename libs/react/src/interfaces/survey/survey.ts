@@ -50,7 +50,7 @@ export interface SurveySectionsType {
 export interface SurveySectionType {
   title: string;
   prompt: string;
-  component: string | null;
+  component: any | null;
   follow_up: SurveySectionFollowUpsType;
   image_url: string;
   category_idx: number;
@@ -58,6 +58,11 @@ export interface SurveySectionType {
   value?: any | null;
   skipped?: boolean;
   additional_context?: SurveyAdditionalContext;
+  ai_attempted?: boolean;
+  ai_response?: {
+    justification?: string;
+    answer?: string | boolean | number | Array<string>;
+  };
 }
 
 export interface SurveySectionFollowUpsType {
@@ -74,6 +79,11 @@ export interface SurveySectionFollowUpType {
   value?: any | null;
   skipped?: boolean;
   additional_context?: SurveyAdditionalContext;
+  ai_attempted?: boolean;
+  ai_response?: {
+    justification?: string;
+    answer?: string | boolean | number | Array<string>;
+  };
 }
 
 export interface SurveyPayloadType {
@@ -101,11 +111,12 @@ export interface SurveyAdditionalContext {
   operator: string;
   comparison: any;
   value?: any | null;
+  tooltip?: string;
 }
 
 export interface SurveyNextStep {
-  name: string,
-  title: string,
-  started: boolean,
-  surveyProgress: number
+  name: string;
+  title: string;
+  started: boolean;
+  surveyProgress: number;
 }

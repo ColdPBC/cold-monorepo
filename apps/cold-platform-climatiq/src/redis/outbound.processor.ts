@@ -1,4 +1,4 @@
-import { OnQueueActive, Process, Processor } from '@nestjs/bull';
+import { OnQueueActive, OnQueueFailed, Process, Processor } from '@nestjs/bull';
 import { Job } from 'bull';
 import { BaseWorker, PrismaService } from '@coldpbc/nest';
 import { ClimatiqService } from '../climatiq/climatiq.service';
@@ -12,7 +12,12 @@ export class OutboundQueueProcessor extends BaseWorker {
 
   @OnQueueActive()
   onActive(job: Job) {
-    console.log(`Processing job ${job.id} of type ${job.name} with data ${job.data}...`);
+    this.logger.info(`Processing job ${job.id} of type ${job.name} with data ${job.data}`, job);
+  }
+
+  @OnQueueFailed()
+  onFailed(job: Job) {
+    this.logger.error(`Job ${job.id} of type ${job.name} FAILED ${job.failedReason}`, job);
   }
 
   @Process('new_bill')

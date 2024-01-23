@@ -1,262 +1,340 @@
 import { rest } from 'msw';
-import {
-  getJourneyOverviewMock,
-  getSurveyFormDataByName,
-  getSurveyMockSomeCompleted, getSurveysMock
-} from "./surveyDataMock";
+import { getJourneyOverviewMock, getSurveyFormDataByName, getSurveyMockSomeCompleted, getSurveysMock } from './surveyDataMock';
 import { getApiUrl } from './handlers';
-import { findIndex } from "lodash";
+import { findIndex } from 'lodash';
 
 export const getSurveyHandler = {
   DEFAULT: [
-    rest.get(
-      getApiUrl('*/organizations/:orgId/surveys/:name'),
-      (req, res, ctx) => {
-        const { name } = req.params;
+    rest.get(getApiUrl('*/organizations/:orgId/surveys/:name'), (req, res, ctx) => {
+      const { name } = req.params;
 
-        return res(ctx.json(getSurveyFormDataByName(name as string)));
-      },
-    ),
+      return res(ctx.json(getSurveyFormDataByName(name as string)));
+    }),
 
-    rest.put(
-      getApiUrl('*/organizations/:orgId/surveys/:name'),
-      async (req, res, ctx) => {
-        const { data } = await req.json();
+    rest.put(getApiUrl('*/organizations/:orgId/surveys/:name'), async (req, res, ctx) => {
+      const { data } = await req.json();
 
-        return res(ctx.json({}));
-      },
-    ),
+      return res(ctx.json({}));
+    }),
   ],
   initialIncomplete: [
-    rest.get(
-      getApiUrl('*/organizations/:orgId/surveys/:name'),
-      (req, res, ctx) => {
-        const { name } = req.params;
+    rest.get(getApiUrl('*/organizations/:orgId/surveys/:name'), (req, res, ctx) => {
+      const { name } = req.params;
 
-        return res(
-          ctx.json({
-            ...getJourneyOverviewMock(),
-            definition: {
-              ...getJourneyOverviewMock().definition,
-              submitted: undefined,
-            },
-          }),
-        );
-      },
-    ),
+      return res(
+        ctx.json({
+          ...getJourneyOverviewMock(),
+          definition: {
+            ...getJourneyOverviewMock().definition,
+            submitted: undefined,
+          },
+        }),
+      );
+    }),
 
-    rest.put(
-      getApiUrl('*/organizations/:orgId/surveys/:name'),
-      async (req, res, ctx) => {
-        const { data } = await req.json();
+    rest.put(getApiUrl('*/organizations/:orgId/surveys/:name'), async (req, res, ctx) => {
+      const { data } = await req.json();
 
-        return res(ctx.json({}));
-      },
-    ),
+      return res(ctx.json({}));
+    }),
   ],
   incompleteSurvey: [
-    rest.get(
-      getApiUrl('*/organizations/:orgId/surveys/:name'),
-      (req, res, ctx) => {
-        const { name } = req.params;
+    rest.get(getApiUrl('*/organizations/:orgId/surveys/:name'), (req, res, ctx) => {
+      const { name } = req.params;
 
-        return res(
-          ctx.json({
-            ...getSurveyMockSomeCompleted(),
-            definition: {
-              ...getSurveyMockSomeCompleted().definition,
-              submitted: undefined,
-            },
-          }),
-        );
-      },
-    ),
+      return res(
+        ctx.json({
+          ...getSurveyMockSomeCompleted(),
+          definition: {
+            ...getSurveyMockSomeCompleted().definition,
+            submitted: undefined,
+          },
+        }),
+      );
+    }),
 
-    rest.put(
-      getApiUrl('*/organizations/:orgId/surveys/:name'),
-      async (req, res, ctx) => {
-        const { data } = await req.json();
+    rest.put(getApiUrl('*/organizations/:orgId/surveys/:name'), async (req, res, ctx) => {
+      const { data } = await req.json();
 
-        return res(ctx.json({}));
-      },
-    ),
+      return res(ctx.json({}));
+    }),
   ],
   nextSteps: [
-    rest.get(
-      getApiUrl('*/organizations/:orgId/surveys'),
-      (req, res, ctx) => {
-        const { name } = req.params;
-        const surveys = getSurveysMock();
-        const qaalibTestIndex = findIndex(surveys, { name: 'qaalib_test' });
-        surveys[qaalibTestIndex] = {
-          ...surveys[qaalibTestIndex],
-          definition: {
-            ...surveys[qaalibTestIndex].definition,
-            submitted: true,
-          }
-        };
-        const journeyOverviewIndex = findIndex(surveys, { name: 'journey_overview' })
-        surveys[journeyOverviewIndex] = getSurveyMockSomeCompleted();
-        const testSurveyIndex = findIndex(surveys, { name: 'test_survey' })
-        surveys[testSurveyIndex] = {
-          ...surveys[testSurveyIndex],
-          definition: {
-            "title": "Welcome to Cold Climate!",
-            "image_url": "https://images.unsplash.com/photo-1603437873662-dc1f44901825?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=3270&q=80",
-            "intro_markdown": "Let’s Start Your Journey to Absolute Zero™ \nWe will start with our basic company information survey. \nThis is a quick form to understand a little more about your company and what climate efforts you've already undertaken.",
-            "sections": {
-              "general": {
-                "title": "General",
-                "prompt": "",
-                "component": null,
-                "follow_up": {
-                  "general:0": {
-                    "idx": 0,
-                    "prompt": "Which regions do you sell your product into?",
-                    "options": [
-                      "North America",
-                      "South America",
-                      "Europe",
-                      "Asia",
-                      "Australia",
-                      "Africa"
-                    ],
-                    "tooltip": "",
-                    "component": "multi_select",
-                    "placeholder": "",
-                    "value": [
-                      "Asia",
-                      "Africa"
-                    ],
-                    "skipped": false
-                  },
-                  "general:1": {
-                    "idx": 1,
-                    "prompt": "What is your company's name?",
-                    "options": [],
-                    "tooltip": "Enter your company name",
-                    "component": "text",
-                    "placeholder": "Yourco",
-                    "value": "Agriculture",
-                    "skipped": false
-                  },
-                  "general:2": {
-                    "idx": 2,
-                    "prompt": "What is your favorite color of the primary colors?",
-                    "options": [
-                      "Red",
-                      "Blue",
-                      "Yellow"
-                    ],
-                    "tooltip": "Pick the one you like the most",
-                    "component": "select",
-                    "placeholder": "",
-                    "value": "Blue",
-                    "skipped": false
-                  },
-                  "general:3": {
-                    "idx": 3,
-                    "prompt": "How many employees did your company have as of the end of last calendar year?",
-                    "options": [],
-                    "tooltip": "",
-                    "component": "number",
-                    "placeholder": "Enter number of employees",
-                    "additional_context": {
-                      "prompt": "Please explain your answer",
-                      "component": "textarea",
-                      "placeholder": "Write in here",
-                      "operator": "<",
-                      "comparison": 10,
-                      "value": null
-                    },
-                    "value": 11,
-                    "skipped": false
-                  }
+    rest.get(getApiUrl('*/organizations/:orgId/surveys'), (req, res, ctx) => {
+      const { name } = req.params;
+      const surveys = getSurveysMock();
+      const qaalibTestIndex = findIndex(surveys, { name: 'qaalib_test' });
+      surveys[qaalibTestIndex] = {
+        ...surveys[qaalibTestIndex],
+        definition: {
+          ...surveys[qaalibTestIndex].definition,
+          submitted: true,
+        },
+      };
+      const journeyOverviewIndex = findIndex(surveys, { name: 'journey_overview' });
+      surveys[journeyOverviewIndex] = getSurveyMockSomeCompleted();
+      const testSurveyIndex = findIndex(surveys, { name: 'test_survey' });
+      surveys[testSurveyIndex] = {
+        ...surveys[testSurveyIndex],
+        definition: {
+          title: 'Welcome to Cold Climate!',
+          image_url:
+            'https://images.unsplash.com/photo-1603437873662-dc1f44901825?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=3270&q=80',
+          intro_markdown:
+            "Let’s Start Your Journey to Absolute Zero™ \nWe will start with our basic company information survey. \nThis is a quick form to understand a little more about your company and what climate efforts you've already undertaken.",
+          sections: {
+            general: {
+              title: 'General',
+              prompt: '',
+              component: null,
+              follow_up: {
+                'general:0': {
+                  idx: 0,
+                  prompt: 'Which regions do you sell your product into?',
+                  options: ['North America', 'South America', 'Europe', 'Asia', 'Australia', 'Africa'],
+                  tooltip: '',
+                  component: 'multi_select',
+                  placeholder: '',
+                  value: ['Asia', 'Africa'],
+                  skipped: false,
                 },
-                "image_url": "https://images.unsplash.com/photo-1533038590840-1cde6e668a91?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1587&q=80",
-                "category_idx": 0,
-                "category_description": "General questions about your business"
+                'general:1': {
+                  idx: 1,
+                  prompt: "What is your company's name?",
+                  options: [],
+                  tooltip: 'Enter your company name',
+                  component: 'text',
+                  placeholder: 'Yourco',
+                  value: 'Agriculture',
+                  skipped: false,
+                },
+                'general:2': {
+                  idx: 2,
+                  prompt: 'What is your favorite color of the primary colors?',
+                  options: ['Red', 'Blue', 'Yellow'],
+                  tooltip: 'Pick the one you like the most',
+                  component: 'select',
+                  placeholder: '',
+                  value: 'Blue',
+                  skipped: false,
+                },
+                'general:3': {
+                  idx: 3,
+                  prompt: 'How many employees did your company have as of the end of last calendar year?',
+                  options: [],
+                  tooltip: '',
+                  component: 'number',
+                  placeholder: 'Enter number of employees',
+                  additional_context: {
+                    prompt: 'Please explain your answer',
+                    component: 'textarea',
+                    placeholder: 'Write in here',
+                    operator: '<',
+                    comparison: 10,
+                    value: null,
+                  },
+                  value: 11,
+                  skipped: false,
+                },
               },
-              "product": {
-                "title": "Product",
-                "prompt": "Does your company make a physical product?",
-                "component": "yes_no",
-                "follow_up": {
-                  "product:0": {
-                    "idx": 0,
-                    "prompt": "Is your product made of metal?",
-                    "options": [],
-                    "tooltip": "Select yes or no",
-                    "component": "yes_no",
-                    "placeholder": ""
-                  },
-                  "product:1": {
-                    "idx": 1,
-                    "prompt": "How much does your product cost, in dollars?",
-                    "options": [],
-                    "tooltip": "Enter the cost to your company to produce",
-                    "component": "currency",
-                    "placeholder": "45"
-                  },
-                  "product:2": {
-                    "idx": 2,
-                    "prompt": "What percent of your product is leather?",
-                    "options": [],
-                    "tooltip": "",
-                    "component": "percent_slider",
-                    "placeholder": ""
-                  },
-                  "product:3": {
-                    "idx": 3,
-                    "prompt": "How many factories make your product?",
-                    "options": [],
-                    "tooltip": "Choose the number across all countries",
-                    "component": "number",
-                    "placeholder": "2"
-                  }
+              image_url:
+                'https://images.unsplash.com/photo-1533038590840-1cde6e668a91?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1587&q=80',
+              category_idx: 0,
+              category_description: 'General questions about your business',
+            },
+            product: {
+              title: 'Product',
+              prompt: 'Does your company make a physical product?',
+              component: 'yes_no',
+              follow_up: {
+                'product:0': {
+                  idx: 0,
+                  prompt: 'Is your product made of metal?',
+                  options: [],
+                  tooltip: 'Select yes or no',
+                  component: 'yes_no',
+                  placeholder: '',
                 },
-                "image_url": "https://images.unsplash.com/photo-1610891015188-5369212db097?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
-                "category_idx": 1,
-                "category_description": "Questions about how your products are produced",
-                "additional_context": {
-                  "prompt": "Please explain your answer",
-                  "component": "textarea",
-                  "placeholder": "Write in here",
-                  "operator": "==",
-                  "comparison": true
-                }
+                'product:1': {
+                  idx: 1,
+                  prompt: 'How much does your product cost, in dollars?',
+                  options: [],
+                  tooltip: 'Enter the cost to your company to produce',
+                  component: 'currency',
+                  placeholder: '45',
+                },
+                'product:2': {
+                  idx: 2,
+                  prompt: 'What percent of your product is leather?',
+                  options: [],
+                  tooltip: '',
+                  component: 'percent_slider',
+                  placeholder: '',
+                },
+                'product:3': {
+                  idx: 3,
+                  prompt: 'How many factories make your product?',
+                  options: [],
+                  tooltip: 'Choose the number across all countries',
+                  component: 'number',
+                  placeholder: '2',
+                },
               },
-              "facilities": {
-                "title": "Facilities",
-                "prompt": "Do you own or lease any facilities like offices or warehouses?",
-                "component": "yes_no",
-                "follow_up": {
-                  "facilities:0": {
-                    "idx": 0,
-                    "prompt": "What colors are your office carpets?",
-                    "options": [
-                      "Gray",
-                      "Black",
-                      "Orange",
-                      "Blue",
-                      "Purple"
-                    ],
-                    "tooltip": "If carpets are multiple colors choose all colors that apply",
-                    "component": "multi_select",
-                    "placeholder": ""
-                  }
+              image_url:
+                'https://images.unsplash.com/photo-1610891015188-5369212db097?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
+              category_idx: 1,
+              category_description: 'Questions about how your products are produced',
+              additional_context: {
+                prompt: 'Please explain your answer',
+                component: 'textarea',
+                placeholder: 'Write in here',
+                operator: '==',
+                comparison: true,
+              },
+            },
+            facilities: {
+              title: 'Facilities',
+              prompt: 'Do you own or lease any facilities like offices or warehouses?',
+              component: 'yes_no',
+              follow_up: {
+                'facilities:0': {
+                  idx: 0,
+                  prompt: 'What colors are your office carpets?',
+                  options: ['Gray', 'Black', 'Orange', 'Blue', 'Purple'],
+                  tooltip: 'If carpets are multiple colors choose all colors that apply',
+                  component: 'multi_select',
+                  placeholder: '',
                 },
-                "image_url": "https://images.unsplash.com/photo-1524758631624-e2822e304c36?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
-                "category_idx": 2,
-                "category_description": "Questions about your the facilities you own or lease"
-              }
-            }
+              },
+              image_url:
+                'https://images.unsplash.com/photo-1524758631624-e2822e304c36?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
+              category_idx: 2,
+              category_description: 'Questions about your the facilities you own or lease',
+            },
           },
-        }
-        return res(
-          ctx.json(surveys),
-        );
-      },
-    ),
+        },
+      };
+      return res(ctx.json(surveys));
+    }),
+  ],
+  getAiAnsweredSurvey: [
+    rest.get(getApiUrl('*/organizations/:orgId/surveys/:name'), (req, res, ctx) => {
+      const { name } = req.params;
+      const survey = {
+        id: 'ca3ad2ed-619b-4ee0-834e-2e56c336dba8',
+        name: 'rei_pkg_survey',
+        type: 'REI',
+        description: '',
+        created_at: '2023-09-18T23:37:55.849Z',
+        updated_at: '2023-09-18T23:37:55.959Z',
+        definition: {
+          title: 'Packaging - General',
+          sections: {
+            PKG: {
+              title: 'Packaging - General',
+              prompt: '',
+              component: {},
+              follow_up: {
+                'PKG-1': {
+                  idx: 0,
+                  prompt: 'Does your brand have a formal policy/target in place regarding the use of more sustainable product packaging?',
+                  options: [],
+                  tooltip: '',
+                  component: 'textarea',
+                  placeholder: '',
+                  additional_context: {
+                    prompt: 'Please provide hyperlink(s) to any publicly available policies/targets related to the above packaging sustainability areas:',
+                    operator: 'has_any',
+                    tooltip: 'If entering multiple hyperlinks, separate using commas.',
+                    component: 'textarea',
+                    comparison: {
+                      b: true,
+                    },
+                    placeholder: '',
+                  },
+                  ai_attempted: true,
+                  ai_response: {
+                    justification: 'The answer is Yes because the company has a formal policy/target in place regarding the use of more sustainable product packaging.',
+                    answer: 'Yes',
+                  },
+                },
+                'PKG-2': {
+                  idx: 1,
+                  prompt: 'Has your brand been able to phase out the use of single-use plastics across any noteworthy areas of primary or secondary product packaging?',
+                  options: [],
+                  tooltip: '',
+                  component: 'yes_no',
+                  placeholder: '',
+                  additional_context: {
+                    prompt: 'Please describe the type of packaging phased out, the product category impacted and the alternative packaging used that avoids single-use plastics.',
+                    operator: '==',
+                    tooltip: '',
+                    component: 'textarea',
+                    comparison: true,
+                    placeholder: '',
+                  },
+                  ai_attempted: true,
+                  ai_response: {
+                    justification: 'The answer is Yes because the company has a formal policy/target in place regarding the use of more sustainable product packaging.',
+                    answer: true,
+                  },
+                },
+                'PKG-3': {
+                  idx: 2,
+                  prompt: 'Are there other best sustainability practices for primary product packaging that you have in place that you’d like to share with REI?',
+                  options: [],
+                  tooltip: '',
+                  component: 'yes_no',
+                  placeholder: '',
+                  additional_context: {
+                    prompt: 'Please describe.',
+                    operator: '==',
+                    tooltip: '',
+                    component: 'textarea',
+                    comparison: true,
+                    placeholder: '',
+                  },
+                  ai_attempted: true,
+                  ai_response: {
+                    justification: 'The answer is Yes because the company has a formal policy/target in place regarding the use of more sustainable product packaging.',
+                  },
+                },
+                'PKG-4': {
+                  idx: 3,
+                  prompt:
+                    'Are there any key resources or tools your brand has used to avoid the use of individual polybags or implement other packaging sustainability best practices that might be useful for other brands?',
+                  options: [],
+                  tooltip: '',
+                  component: 'yes_no',
+                  placeholder: '',
+                  additional_context: {
+                    prompt: 'Please describe.',
+                    operator: '==',
+                    tooltip: '',
+                    component: 'textarea',
+                    comparison: true,
+                    placeholder: '',
+                  },
+                  ai_attempted: true,
+                  ai_response: {
+                    justification: 'The answer is Yes because the company has a formal policy/target in place regarding the use of more sustainable product packaging.',
+                    answer: false,
+                  },
+                },
+              },
+              image_url:
+                'https://images.unsplash.com/photo-1533038590840-1cde6e668a91?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1587&q=80',
+              category_idx: 0,
+              category_description: '',
+            },
+          },
+          image_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/splash_images/General.png',
+          intro_markdown:
+            'Please complete the REI Packaging - General survey below. This survey is intended to help REI understand your brand’s current efforts to reduce the environmental impact of your product packaging. Please complete this survey by October 1, 2021.',
+        },
+      };
+
+      return res(ctx.json(survey));
+    }),
   ],
 };

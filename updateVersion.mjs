@@ -1,4 +1,6 @@
 import * as fs from 'fs';
+import path from "node:path";
+import {execSync} from "node:child_process";
 
 const files = () => ['flightcontrol.json', 'flightcontrol_platform.json'];
 
@@ -7,36 +9,70 @@ const updateFiles = (version) => {
         updateVersion(file, version);
     });
 }
-const updateVersion = (file, version) => {
-    fs.readFile(file, 'utf8', (err, data) => {
-      if (err) {
-        return console.log(err);
+
+function getFromLatestCommit(basePath) {
+  try {
+    // Use git to get the latest commit hash
+    const latestCommitHash = execSync('git rev-parse HEAD', { cwd: basePath }).toString().trim();
+
+    // Use git to get a list of files modified in the latest commit
+    const modifiedFiles = execSync(`git diff --name-only ${latestCommitHash}`, { cwd: basePath }).toString().split('\n');
+
+    // Extract unique directories from modified files
+    const modifiedDirectories = new Set();
+    modifiedFiles.forEach((file) => {
+      console.log(`${file} was modified in commit ${latestCommitHash} (${basePath})`);
+
+      const directory = path.dirname(file);
+      console.log(`directory: ${directory}`);
+      // Check if the directory is within 'apps' or 'libs'
+      if ((directory.startsWith('apps') && directory.includes('src')) || (directory.startsWith('libs') && directory.includes('src'))) {
+        const parts = directory.split('/');
+        const dir = path.join(parts[0], parts[1]);
+        console.log(`ADDING ${dir} to modified directories`);
+
+        modifiedDirectories.add(dir);
       }
-      console.log(`Updating ${file} to`, version );
-      const fcData = JSON.parse(data);
-      for (let e = 0; e < fcData.environments.length; e++) {
-        for (let s = 0; s < fcData.environments[e].services.length; s++) {
-          if (fcData.environments[e].services[s].envVariables?.VITE_APP_VERSION) {
-            fcData.environments[e].services[s].envVariables.VITE_APP_VERSION = version;
-            console.log(`Set ${fcData.environments[e].name}.${fcData.environments[e].services[s].name}.VITE_APP_VERSION to ${version}`);
+    });
+
+    return Array.from(modifiedDirectories);
+  } catch (error) {
+    console.error('Error getting directories modified in the latest commit:', error.message);
+    return [];
+  }
+}
+
+function updateVersions(updatedDirs, version) {
+  if (updatedDirs.length > 0) {
+    updatedDirs.forEach((dir) => {
+      const file = `./${dir}/package.json`;
+
+      if (fs.existsSync(file)) {
+        console.log(`updating version in ${file} to ${version}`);
+        fs.readFile(file, 'utf8', (err, data) => {
+          if (err) {
+            return console.log(err);
           }
 
-          if (fcData.environments[e].services[s].dockerLabels) {
-            Object.keys(fcData.environments[e].services[s].dockerLabels).forEach((key) => {
-              if (key === "com.datadoghq.tags.version") {
-                fcData.environments[e].services[s].dockerLabels[key] = version;
-                console.log(`Set ${fcData.environments[e].name}.${fcData.environments[e].services[s].name}.["com.datadoghq.tags.version"] to ${version}`);
-              }
-            });
-          }
-        }
+          const pkg = JSON.parse(data);
+          pkg.version = version;
+
+          fs.writeFile(file, JSON.stringify(pkg, null, 2), 'utf8', (err) => {
+            if (err) {
+              return console.log(err);
+            }
+          });
+        });
       }
-      fs.writeFile(file, JSON.stringify(fcData, null, 2), 'utf8', (err) => {
-        if (err) {
-          return console.log(err);
-        }
-      });
     });
+  }
+}
+
+const updateVersion = () => {
+  const pkg = JSON.parse(fs.readFileSync('./package.json', 'utf-8'));
+  updateVersions(getFromLatestCommit('./apps') , pkg.version);
+
+  updateVersions(getFromLatestCommit('./libs'), pkg.version);
 };
 
 updateFiles(process.argv[2]);

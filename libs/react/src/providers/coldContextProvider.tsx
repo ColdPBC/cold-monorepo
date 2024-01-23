@@ -7,6 +7,7 @@ import { Auth0ProviderOptions } from '@auth0/auth0-react';
 import { ColdAxiosInterceptorProvider } from './coldAxiosInterceptorProvider';
 import { datadogRum } from '@datadog/browser-rum';
 import { ErrorType } from '../enums/errors';
+import { ColdMQTTProvider } from "./coldMQTTProvider";
 
 export interface ColdContextProviderProps {
   auth0Options: Auth0ProviderOptions;
@@ -58,7 +59,11 @@ export const ColdContextProvider = (
       >
         <ColdAuthProvider>
           <ColdAxiosInterceptorProvider>
-            <ColdLDProvider>{children}</ColdLDProvider>
+            <ColdLDProvider>
+              <ColdMQTTProvider>
+                {children}
+              </ColdMQTTProvider>
+            </ColdLDProvider>
           </ColdAxiosInterceptorProvider>
         </ColdAuthProvider>
       </ColdContext.Provider>

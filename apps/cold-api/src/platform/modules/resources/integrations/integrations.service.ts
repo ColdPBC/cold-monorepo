@@ -87,7 +87,7 @@ export class IntegrationsService extends BaseWorker {
     }
   }
 
-  async createIntegration(
+  async createLocationIntegration(
     user: AuthenticatedUser,
     orgId: string,
     locId: string,
@@ -166,6 +166,74 @@ export class IntegrationsService extends BaseWorker {
         default:
           return response;
       }
+    } catch (e: any) {
+      this.logger.error(e.message, { user });
+      throw e;
+    }
+  }
+
+  async createIntegration(
+    user: AuthenticatedUser,
+    orgId: string,
+    body: {
+      service_definition_id: string;
+      timeout?: number;
+      metadata: any;
+    },
+  ): Promise<any> {
+    try {
+      const service = await this.prisma.service_definitions.findUnique({
+        where: {
+          id: body.service_definition_id,
+        },
+      });
+
+      if (!service) {
+        throw new UnprocessableEntityException(`Service definition ${body.service_definition_id} not found.`);
+      }
+
+      if (!get(service.definition, 'rabbitMQ.publishOptions.routing_key', false)) {
+        this.logger.warn(`Service definition ${body.service_definition_id} does not have a routing key at path 'rabbitMQ.publishOptions.routing_key'`, { service });
+      }
+
+      const org = await this.prisma.organizations.findUnique({
+        where: {
+          id: user.isColdAdmin ? orgId : user.coldclimate_claims.org_id,
+        },
+        include: {
+          integrations: true,
+        },
+      });
+
+      if (!org) {
+        throw new UnprocessableEntityException(`Organization ${orgId} is invalid.`);
+      }
+
+      await this.rabbit.publish(
+        get(service.definition, 'rabbitMQ.publishOptions.routing_key', 'deadletter'),
+        {
+          organization: org,
+          service: service,
+          service_definition_id: service.id,
+          metadata: body.metadata,
+          user: user,
+          from: 'cold.api',
+        },
+        'integration.enabled',
+        {
+          exchange: 'amq.direct',
+          timeout: body.timeout || 5000,
+        },
+      );
+
+      this.logger.info(`Integration enabled for ${org.name} with service ${service.name}`, {
+        user,
+        org,
+        service,
+        metadata: body.metadata,
+      });
+
+      return { message: `Integration enable request for ${org.name} with service ${service.name} was added to the queue` };
     } catch (e: any) {
       this.logger.error(e.message, { user });
       throw e;

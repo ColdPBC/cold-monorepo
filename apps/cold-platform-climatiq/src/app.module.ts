@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 
-import { NestModule } from '@coldpbc/nest';
+import { MqttService, NestModule } from '@coldpbc/nest';
 import { ClimatiqModule } from './climatiq/climatiq.module';
 import { ClimatiqService } from './climatiq/climatiq.service';
 import { AppService } from './app.service';
@@ -8,6 +8,7 @@ import { ConfigModule } from '@nestjs/config';
 import { RabbitService } from './rabbit/rabbit.service';
 import { BullModule } from '@nestjs/bull';
 import { OutboundQueueProcessor } from './redis/outbound.processor';
+import process from 'process';
 
 @Module({
   providers: [AppService],
@@ -23,11 +24,11 @@ export class AppModule {
         await NestModule.forRootAsync(1),
         ClimatiqModule,
         BullModule.registerQueue({
-          name: 'climatiq',
+          name: process.env?.DD_SERVICE?.split('-')[2],
         }),
       ],
       controllers: [],
-      providers: [ClimatiqService, RabbitService, OutboundQueueProcessor],
+      providers: [ClimatiqService, RabbitService, OutboundQueueProcessor, MqttService],
       exports: [RabbitService],
     };
   }
