@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { SurveyInput } from '../index';
 import { cloneDeep, findIndex, forEach } from 'lodash';
 import { IButtonProps, SurveyActiveKeyType, SurveyAdditionalContext, SurveyPayloadType, SurveySectionType } from '@coldpbc/interfaces';
@@ -57,7 +57,7 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
     return question.props.input_key === activeKey.value;
   });
 
-  let additionalContextQuestion = undefined;
+  let additionalContextQuestion: JSX.Element | undefined = undefined;
 
   const updateTransitionClassNames = (nextDirection: boolean) => {
     if (nextDirection) {
@@ -85,8 +85,8 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
       if (submit) {
         update.skipped = followUp.value === null || followUp.value === undefined;
       }
-      if(followUp.additional_context) {
-        if(additional) {
+      if (followUp.additional_context) {
+        if (additional) {
           newSection = {
             ...section,
             follow_up: {
@@ -103,7 +103,7 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
         } else {
           const value = update.value;
           const conditionMet = ifAdditionalContextConditionMet(value, followUp.additional_context);
-          if(!conditionMet) {
+          if (!conditionMet) {
             newSection = {
               ...section,
               follow_up: {
@@ -148,8 +148,8 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
       if (submit) {
         update.skipped = section.value === null || section.value === undefined;
       }
-      if(section.additional_context){
-        if(additional) {
+      if (section.additional_context) {
+        if (additional) {
           newSection = {
             ...section,
             additional_context: {
@@ -160,7 +160,7 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
         } else {
           const value = update.value;
           const conditionMet = ifAdditionalContextConditionMet(value, section.additional_context);
-          if(!conditionMet) {
+          if (!conditionMet) {
             newSection = {
               ...section,
               ...update,
@@ -335,8 +335,8 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
       if (
         additionalContextQuestion &&
         sections[activeSectionKey].follow_up[activeFollowUpKey].additional_context &&
-        (sections[activeSectionKey].follow_up[activeFollowUpKey].additional_context?.value === undefined
-          || sections[activeSectionKey].follow_up[activeFollowUpKey].additional_context?.value === null)
+        (sections[activeSectionKey].follow_up[activeFollowUpKey].additional_context?.value === undefined ||
+          sections[activeSectionKey].follow_up[activeFollowUpKey].additional_context?.value === null)
       ) {
         buttonProps.disabled = true;
       }
@@ -586,7 +586,7 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
       default:
         return false;
     }
-  }
+  };
 
   const getQuestionValue = (key: SurveyActiveKeyType) => {
     const activeSectionIndex = getSectionIndex(sections, activeKey);
@@ -606,7 +606,7 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
         return section.value;
       }
     }
-  }
+  };
 
   additionalContextQuestion = checkAdditionalContext(activeKey);
 
