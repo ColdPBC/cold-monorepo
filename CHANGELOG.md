@@ -1,3 +1,10 @@
+# [1.94.0-COLD-471.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.93.0...v1.94.0-COLD-471.1) (2024-01-23)
+
+
+### Features
+
+* added survey data validation before submitting ([2ae1758](https://github.com/ColdPBC/cold-monorepo/commit/2ae1758cf3d6b9d94f1589b4ae33fe517b2a839d))
+
 # [1.93.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.92.1...v1.93.0) (2024-01-22)
 
 
