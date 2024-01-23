@@ -1,9 +1,15 @@
-# [1.94.0-COLD-467.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.93.0...v1.94.0-COLD-467.1) (2024-01-23)
+# [1.94.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.93.0...v1.94.0) (2024-01-23)
+
+
+### Bug Fixes
+
+* resolve txt input bug ([3805434](https://github.com/ColdPBC/cold-monorepo/commit/38054341fc1a9a03cdad684b542e905084d035be))
 
 
 ### Features
 
-* added VITE_MQTT_URL to env variables and made fixes to resolve console errors ([9954052](https://github.com/ColdPBC/cold-monorepo/commit/9954052454dc322953be70c77279990540482769))
+* added specific typing to additionalContextQuestion ([e520daa](https://github.com/ColdPBC/cold-monorepo/commit/e520daa08528b7141ca99d64931835b0d3f4bd13))
+* fix survey question container error ([b13abee](https://github.com/ColdPBC/cold-monorepo/commit/b13abee117f7a057105cd427ebad38c3a374a106))
 
 # [1.93.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.92.1...v1.93.0) (2024-01-22)
 
