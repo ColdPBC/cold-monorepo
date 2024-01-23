@@ -1,6 +1,6 @@
 import React from 'react';
 import { SurveyInput } from '../index';
-import { cloneDeep, findIndex, forEach } from 'lodash';
+import { cloneDeep, findIndex, forEach, forOwn } from 'lodash';
 import { IButtonProps, SurveyActiveKeyType, SurveyAdditionalContext, SurveyPayloadType, SurveySectionType } from '@coldpbc/interfaces';
 import { BaseButton } from '../../atoms';
 import { ButtonTypes, GlobalSizes } from '@coldpbc/enums';
@@ -10,7 +10,6 @@ import { axiosFetcher } from '@coldpbc/fetchers';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application';
 import { useAuth0Wrapper } from '@coldpbc/hooks';
-import { isDefined } from 'class-validator';
 
 export interface SurveyQuestionContainerProps {
   activeKey: SurveyActiveKeyType;
@@ -44,6 +43,17 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
     }
   };
 
+  const validateSurveyData = (survey: SurveyPayloadType) => {
+    // loop through each section and check the component type. If it is invalid then set the value to null
+    const newSurvey = cloneDeep(survey);
+    forOwn(newSurvey.definition.sections, (section: SurveySectionType, key: string) => {
+      if (!isComponentTypeValid(section.component)) {
+        newSurvey.definition.sections[key]['component'] = null;
+      }
+    });
+    return newSurvey;
+  };
+
   const updateSurveyQuestion = (
     key: string,
     update: {
@@ -66,7 +76,6 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
         if (additional) {
           newSection = {
             ...section,
-            component: isComponentTypeValid(section.component) ? section.component : null,
             follow_up: {
               ...section.follow_up,
               [key]: {
@@ -84,7 +93,6 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
           if (!conditionMet) {
             newSection = {
               ...section,
-              component: isComponentTypeValid(section.component) ? section.component : null,
               follow_up: {
                 ...section.follow_up,
                 [key]: {
@@ -100,7 +108,6 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
           } else {
             newSection = {
               ...section,
-              component: isComponentTypeValid(section.component) ? section.component : null,
               follow_up: {
                 ...section.follow_up,
                 [key]: {
@@ -114,7 +121,6 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
       } else {
         newSection = {
           ...section,
-          component: isComponentTypeValid(section.component) ? section.component : null,
           follow_up: {
             ...section.follow_up,
             [key]: {
@@ -134,7 +140,6 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
         if (additional) {
           newSection = {
             ...section,
-            component: isComponentTypeValid(section.component) ? section.component : null,
             additional_context: {
               ...section.additional_context,
               ...update,
@@ -147,7 +152,6 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
             newSection = {
               ...section,
               ...update,
-              component: isComponentTypeValid(section.component) ? section.component : null,
               additional_context: {
                 ...section.additional_context,
                 value: null,
@@ -157,7 +161,6 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
             newSection = {
               ...section,
               ...update,
-              component: isComponentTypeValid(section.component) ? section.component : null,
             };
           }
         }
@@ -165,7 +168,6 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
         newSection = {
           ...section,
           ...update,
-          component: isComponentTypeValid(section.component) ? section.component : null,
         };
       }
       if (update.value === false || update.skipped === true) {
@@ -175,7 +177,7 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
         });
       }
     }
-    const newSurvey: SurveyPayloadType = cloneDeep(surveyData);
+    const newSurvey: SurveyPayloadType = validateSurveyData(surveyData);
     newSurvey.definition.sections[activeSectionKey] = newSection;
     newSurvey.definition.submitted = submit;
     return newSurvey;
