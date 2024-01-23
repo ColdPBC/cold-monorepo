@@ -46,7 +46,7 @@ const _NextActionsCard = () => {
           }
         })
         .map((action, index) => (
-          <div key={`action_item_${index}`}>
+          <div key={`action_item_${index}`} className={'w-full'}>
             <ActionItem
               actionPayload={action}
               variant={ActionItemVariants.narrow}
