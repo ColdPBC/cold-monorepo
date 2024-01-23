@@ -1,3 +1,11 @@
+# [1.96.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.95.0...v1.96.0) (2024-01-23)
+
+
+### Features
+
+* added VITE_MQTT_URL to env variables and made fixes to resolve console errors ([9954052](https://github.com/ColdPBC/cold-monorepo/commit/9954052454dc322953be70c77279990540482769))
+* resolve unexpected chromatic changes ([4c66292](https://github.com/ColdPBC/cold-monorepo/commit/4c66292a5ba3b503b3cbca745d24457493956759))
+
 # [1.95.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.94.0...v1.95.0) (2024-01-23)
 
 
