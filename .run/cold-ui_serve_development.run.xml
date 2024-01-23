@@ -12,6 +12,7 @@
       <env name="VITE_DD_ENV" value="development" />
       <env name="VITE_LD_CLIENT_SIDE_ID" value="644fe7fe13a8fb12f3ca0c19" />
       <env name="VITE_OPENAI_URL" value="https://openai.coldclimate.online" />
+      <env name="VITE_MQTT_URL" value="wss://a2r4jtij2021gz-ats.iot.us-east-1.amazonaws.com:443" />
     </envs>
     <option name="arguments" value="" />
     <method v="2" />

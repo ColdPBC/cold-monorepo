@@ -25,8 +25,10 @@ const _NewsCard = () => {
 
   return (
     <Card title={'Latest On Climate'} className="flex flex-col gap-4">
-      {filteredNewsItems?.map((newsItem: any) => (
-        <NewsItem item={newsItem} />
+      {filteredNewsItems?.map((newsItem: any, index: number) => (
+        <div key={'news_item_' + index} className={'w-full'}>
+          <NewsItem item={newsItem} />
+        </div>
       ))}
     </Card>
   );
