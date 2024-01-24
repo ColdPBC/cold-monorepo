@@ -1,3 +1,10 @@
+# [1.97.0-COLD-473.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.96.0...v1.97.0-COLD-473.1) (2024-01-24)
+
+
+### Features
+
+* make updates to action detail page and handle links to subcategory actions that dont exist ([8ea811c](https://github.com/ColdPBC/cold-monorepo/commit/8ea811cc127dc79e518c31ab51bde468b3aab017))
+
 # [1.96.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.95.0...v1.96.0) (2024-01-23)
 
 
