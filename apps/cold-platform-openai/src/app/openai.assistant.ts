@@ -3,8 +3,9 @@ import { service_definitions } from '../../../../libs/nest/src/validation/genera
 import { Injectable, NotFoundException, OnModuleInit, UnprocessableEntityException } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import OpenAI from 'openai';
-import { get } from 'lodash';
+import { get, pick } from 'lodash';
 import { ConfigService } from '@nestjs/config';
+import { integrations, organizations } from '@prisma/client';
 
 @Injectable()
 export class OpenaiAssistant extends BaseWorker implements OnModuleInit {
@@ -77,7 +78,7 @@ export class OpenaiAssistant extends BaseWorker implements OnModuleInit {
     throw new Error('Method not implemented.');
   }
 
-  getBasePrompt() {
+  getBasePrompt(customer: string) {
     /*const base: string =
       'The user will provide you with a JSON object which contains the following information: \n' +
       '- idx: The index of the question \n' +
@@ -93,45 +94,51 @@ export class OpenaiAssistant extends BaseWorker implements OnModuleInit {
       '3. multi_select: select all the applicable answers provided in the options property \n' +
       '4. single_select: select only one answer from the options property \n';*/
     const base =
-      'You are an AI sustainability expert. You help customers to understand \n' +
+      `You are an AI sustainability expert. You help ${customer} to understand ` +
       ' their impact on the environment and what tasks must be done to meet a given set of compliance requirements. \n' +
-      ' You may have been given a completed B Corp Impact Assessment for the company.  It has a set of questions, eligible \n' +
-      ' answers for those questions, and the answers that the company gave, labeled as askov_answers. You are tasked \n' +
+      ' If you have a completed B Corp Impact Assessment for the company, It has a set of questions, eligible \n' +
+      ' answers for those questions, and the answers that the company gave. You are tasked \n' +
       ' with helping this company understand if they can answer other sustainability-related questions based on \n' +
-      ' their existing answers. \n' +
-      ' I will provide a JSON formatted "question" object that can include the following properties: \n' +
-      '  - "idx": The index of the question \n' +
+      ' their existing answers, otherwise use whatever data you have to attempt to answer the questions. \n' +
+      ' The user will provide a JSON formatted "question" object that can include the following properties: \n' +
       '  - "prompt": The question to be answered \n' +
       '  - "component": used to determine how to structure your answer \n' +
       '  - "options": a list of options to be used to answer the question.  This will be included only if the component is a "select" or "multiselect". \n' +
       '  - "tooltip": additional instructions for answering the question \n' +
-      ' If there is a "tooltip" property, please consider it in your response. \n' +
+      ' If there is a "tooltip" property, please include it along with these instructions in answering the question. \n' +
       ' If you have enough information to answer the question, use the "answerable" response tool to provide an answer. \n' +
       ' If you do not have enough information, format your response using the unanswerable response tool: \n' +
-      '    - "reference": include a JSON object that describes the source material, if any, that you relied upon to determine that the prompt could not be answered. \n' +
       '    - "what_we_need": include a paragraph that describes what information you would need to effectively answer the question. \n' +
       ' IMPORTANT: always use the answerable or unanswerable response tool to respond to the user, and never add any other text to the response.';
 
     return base;
   }
 
-  async send(threadId: string, assistant_id: string) {
-    const run = await this.client.beta.threads.runs.create(threadId, {
-      assistant_id: assistant_id,
-      instructions: this.getBasePrompt(), // Assuming getBasePrompt() is defined.
+  async send(thread: OpenAI.Beta.Threads.Thread, integration: integrations, org: organizations) {
+    const run = await this.client.beta.threads.runs.create(thread.id, {
+      assistant_id: integration.id,
+      instructions: this.getBasePrompt(org.display_name), // Assuming getBasePrompt() is defined.
+    });
+
+    this.logger.info(`Created run ${run.id} for thread ${thread.id}`, {
+      run,
+      thread,
+      organization: integration['organization'],
     });
 
     let status: { status: string } = { status: 'running' };
-    let logged_in_progress = false;
+    let in_progress_logged = false; //only log the first time in_progress is received
 
     let response: any;
 
     while (status.status !== 'completed' && status.status !== 'failed') {
-      status = await this.client.beta.threads.runs.retrieve(threadId, run.id);
-      if (!logged_in_progress) this.logger.info(`Received status ${status.status}`);
-      logged_in_progress = true;
+      status = await this.client.beta.threads.runs.retrieve(thread.id, run.id);
+
+      if (!in_progress_logged) this.logger.info(`Received status ${status.status}`, { ...status });
+      in_progress_logged = true;
 
       if (status.status === 'requires_action') {
+        this.logger.info(`Received status ${status.status}`, { ...status });
         const toolCalls = status['required_action'].submit_tool_outputs.tool_calls;
 
         response = status['required_action'].submit_tool_outputs.tool_calls[0].function.arguments;
@@ -143,7 +150,7 @@ export class OpenaiAssistant extends BaseWorker implements OnModuleInit {
         }));
 
         // Submit the array of tool outputs back
-        await this.client.beta.threads.runs.submitToolOutputs(threadId, run.id, {
+        await this.client.beta.threads.runs.submitToolOutputs(thread.id, run.id, {
           tool_outputs: toolOutputs,
         });
       }
@@ -151,15 +158,22 @@ export class OpenaiAssistant extends BaseWorker implements OnModuleInit {
 
     try {
       if (status.status === 'failed') {
+        this.logger.error(`OpenAI failed to process the request.`, {
+          ...pick(status, ['id', 'status', 'created', 'modified', 'assistant_id', 'thread_id', 'file_ids', 'last_error']),
+        });
         return {
           error: {
             message: 'OpenAI failed to process the request.',
-            status,
+            ...pick(status, ['id', 'status', 'created', 'modified', 'assistant_id', 'thread_id', 'file_ids', 'last_error']),
           },
         };
       }
 
-      return JSON.parse(response);
+      try {
+        return JSON.parse(response);
+      } catch (e) {
+        return { error: { message: 'failed to process response JSON', response } };
+      }
     } catch (e) {
       this.logger.error(e.message, e);
       return response;
@@ -198,15 +212,16 @@ export class OpenaiAssistant extends BaseWorker implements OnModuleInit {
     return additional_context;
   }
 
-  async sendMessage(
-    threadId: string,
-    assistant_id: string,
+  async createMessage(
+    thread: OpenAI.Beta.Threads.Thread,
+    integration: integrations,
     item: {
       prompt: string;
       component: string;
       options: any;
     },
     isFolloup = false,
+    org: organizations,
     category_context?: string,
   ): Promise<any> {
     try {
@@ -216,36 +231,138 @@ export class OpenaiAssistant extends BaseWorker implements OnModuleInit {
         category_context = '';
       }
 
-      // const componentPrompt = this.getComponentPrompt(item);
+      let message;
       if (!isFolloup) {
-        this.client.beta.threads.messages.create(threadId, {
+        message = await this.client.beta.threads.messages.create(thread.id, {
           role: 'user',
-          content: `${category_context} ${this.getComponentPrompt(item.component)}.  Here is the "question" JSON object: ${JSON.stringify(item)}`,
+          content: `${category_context}${this.getComponentPrompt(item.component)}.  Here is the "question" JSON object: \`\`\`json ${JSON.stringify(item)}\`\`\``,
         });
       } else {
-        this.client.beta.threads.messages.create(threadId, {
+        message = await this.client.beta.threads.messages.create(thread.id, {
           role: 'user',
-          content: `${category_context} this next JSON question is specifically related to the previous question. ${this.getComponentPrompt(
+          content: `${category_context} this next JSON question is specifically related to the previous question and answer. ${this.getComponentPrompt(
             item.component,
-          )}.  Here is the "question" JSON object:  ${JSON.stringify(item)} `,
+          )}.  Here is the "question" JSON object: \`\`\`json ${JSON.stringify(item)}\`\`\``,
         });
       }
 
-      const value = await this.send(threadId, assistant_id);
-
-      return value;
+      this.logger.info(`Created message for ${item.prompt}`, { ...item, message });
+      return await this.send(thread, integration, org);
     } catch (e) {
       this.logger.error(e.message, e);
       throw e;
     }
   }
 
+  clearValuesOnError(value: any) {
+    if (value['error']) {
+      value.answer = null;
+      value.justification = null;
+      value.what_we_need = null;
+    } else if (value['what_we_need'] && value['answer']) {
+      value.answer = null;
+    }
+
+    return value;
+  }
+
+  async process_survey(survey: any, user, compliance, integration, org: organizations) {
+    this.logger.info(`Processing survey ${survey.definition.title} for compliance ${compliance.name}`);
+
+    let category_context;
+
+    if (!survey.definition.category_description || survey.definition.category_description === 'undefined') {
+      category_context = null;
+    }
+
+    const definition = survey.definition;
+
+    const sections = Object.keys(definition.sections);
+
+    // iterate over each section key
+    for (const section of sections) {
+      this.logger.info(`Processing ${definition.sections[section].title}`);
+
+      // get the followup items for the section
+      const items = Object.keys(definition.sections[section].follow_up);
+
+      // iterate over each followup item
+      for (const item of items) {
+        const follow_up = definition.sections[section].follow_up[item];
+
+        if (get(item, 'ai_answered', false)) {
+          this.logger.info(`Skipping ${section}.${item}: ${follow_up.prompt}; it has already been answered`, {
+            section_item: definition.sections[section].follow_up[item],
+          });
+          continue;
+        }
+
+        this.logger.info(`Processing ${section}.${item}: ${follow_up.prompt}`);
+
+        // create a new thread for each followup item
+        const thread = await this.client.beta.threads.create();
+        this.logger.info(`Created thread ${thread.id} for ${section}.${item}`, {
+          thread,
+          section_item: definition.sections[section].follow_up[item],
+        });
+
+        // create a new run for each followup item
+        let value = await this.createMessage(thread, integration, follow_up, false, org, category_context);
+
+        value = this.clearValuesOnError(value);
+
+        // update the survey with the response
+        definition.sections[section].follow_up[item].ai_response = value;
+        definition.sections[section].follow_up[item].ai_answered = !!value.answer;
+        definition.sections[section].follow_up[item].ai_attempted = true;
+
+        // if there is additional context, create a new run for it
+        if (follow_up['additional_context']) {
+          if (definition.sections[section].follow_up[item].additional_context.ai_answered) {
+            this.logger.info(`Skipping ${section}.${item}.additional_context: ${follow_up.prompt}; it has already been answered`, {
+              section_item: definition.sections[section].follow_up[item],
+            });
+            continue;
+          }
+
+          this.logger.info(`Processing ${section}.${item}.additional_context: ${follow_up.prompt}`);
+          let additionalValue = await this.createMessage(thread, integration, follow_up['additional_context'], true, org, category_context);
+
+          additionalValue = this.clearValuesOnError(additionalValue);
+
+          definition.sections[section].follow_up[item].additional_context.ai_response = additionalValue;
+          definition.sections[section].follow_up[item].additional_context.ai_answered = !!additionalValue.answer;
+          definition.sections[section].follow_up[item].additional_context.ai_attempted = true;
+        }
+
+        // publish the response to the rabbit queue
+        await this.rabbit.publish(
+          `cold.core.api.survey_data`,
+          {
+            data: {
+              organization: { id: integration.organization_id },
+              user,
+              survey,
+            },
+            from: 'cold.platform.openai',
+          },
+          'survey_data.updated',
+          {
+            exchange: 'amq.direct',
+            timeout: 5000,
+          },
+        );
+      }
+    }
+  }
+
   async processComplianceJob(job: any) {
-    const { user, compliance, from, surveys, integration, organization } = job;
+    const { user, compliance, from, surveys, integration } = job;
+    const organization = compliance.organization;
     this.setTags({
       user: user.coldclimate_claims.email,
       from,
-      organization,
+      organization: compliance.organization,
       openai_assistant: integration.id,
       compliance: compliance.compliance_definition.name,
     });
@@ -254,79 +371,7 @@ export class OpenaiAssistant extends BaseWorker implements OnModuleInit {
       this.logger.info(`Creating thread for compliance: ${compliance.compliance_definition.name}`);
 
       for (const survey of surveys) {
-        this.logger.info(`Processing survey ${survey.definition.title} for compliance ${compliance.name}`);
-
-        let category_context;
-
-        if (!survey.definition.category_description || survey.definition.category_description === 'undefined') {
-          category_context = null;
-        }
-
-        const definition = survey.definition;
-
-        const sections = Object.keys(definition.sections);
-
-        // iterate over each section key
-        for (const section of sections) {
-          this.logger.info(`Processing ${definition.sections[section].title}`);
-
-          // get the followup items for the section
-          const items = Object.keys(definition.sections[section].follow_up);
-
-          // iterate over each followup item
-          for (const item of items) {
-            const follow_up = definition.sections[section].follow_up[item];
-
-            this.logger.info(`Processing ${follow_up.prompt}`);
-
-            // create a new thread for each followup item
-            const thread = await this.client.beta.threads.create();
-            this.logger.info(`Created thread ${thread.id}`);
-
-            // create a new run for each followup item
-            const value = await this.sendMessage(thread.id, integration.id, follow_up, false, category_context);
-
-            if (value['error'] || (value['what_we_need'] && value['answer'])) {
-              value.answer = null;
-            }
-
-            // update the survey with the response
-            definition.sections[section].follow_up[item].ai_response = value;
-            definition.sections[section].follow_up[item].ai_answered = !!value.answer;
-            definition.sections[section].follow_up[item].ai_attempted = true;
-
-            // if there is additional context, create a new run for it
-            if (follow_up['additional_context']) {
-              const additionalValue = await this.sendMessage(thread.id, integration.id, follow_up['additional_context'], true, category_context);
-
-              if (additionalValue['error'] || (additionalValue['what_we_need'] && additionalValue['answer'])) {
-                additionalValue.answer = null;
-              }
-
-              definition.sections[section].follow_up[item].additional_context.ai_response = additionalValue;
-              definition.sections[section].follow_up[item].additional_context.ai_answered = !!additionalValue.answer;
-              definition.sections[section].follow_up[item].additional_context.ai_attempted = true;
-            }
-
-            // publish the response to the rabbit queue
-            await this.rabbit.publish(
-              `cold.core.api.survey_data`,
-              {
-                data: {
-                  organization: { id: integration.organization_id },
-                  user,
-                  survey,
-                },
-                from: 'cold.platform.openai',
-              },
-              'survey_data.updated',
-              {
-                exchange: 'amq.direct',
-                timeout: 5000,
-              },
-            );
-          }
-        }
+        this.process_survey(survey, user, compliance, integration, organization);
       }
     } catch (e) {
       this.logger.error(e.message, e);
