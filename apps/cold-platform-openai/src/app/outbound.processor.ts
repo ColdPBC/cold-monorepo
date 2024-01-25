@@ -1,11 +1,13 @@
 import { OnQueueActive, OnQueueFailed, Process, Processor } from '@nestjs/bull';
 import { Job } from 'bull';
-import { BaseWorker, PrismaService, S3Service } from '@coldpbc/nest';
+import { BaseWorker } from '@coldpbc/nest';
 import { AppService } from './app.service';
+import { OpenaiAssistant } from './openai.assistant';
+import OpenAI from 'openai';
 
 @Processor('openai')
 export class OutboundQueueProcessor extends BaseWorker {
-  constructor(private readonly openAI: AppService, private readonly prisma: PrismaService, private readonly s3: S3Service) {
+  constructor(private readonly openAI: AppService, private readonly assistant: OpenaiAssistant) {
     super(OutboundQueueProcessor.name);
   }
 
@@ -20,15 +22,68 @@ export class OutboundQueueProcessor extends BaseWorker {
   }
 
   @Process('file.uploaded')
-  async processMessages(job: Job) {
-    //this.logger.info(`Received new file.uploaded job`, { name: job.name, id: job.id, data: job.data });
-    /*await lastValueFrom(this.openAI.downloadFile(job)).then(async () => {
-      const file = await this.openAI.client.files.create({
-        file: this.fs.createReadStream(destinationPath),
-        purpose: 'assistants',
-      });
+  async processMessages() {
+    throw new Error('Not implemented');
+  }
 
-      this.logger.info(`Created new file ${file.id} for assistant ${job.data['assistantId']}`, { file, job });
+  @Process('integration.enabled')
+  async processIntegrationEnabled(job: Job) {
+    this.logger.info(`Received new integration.enabled job}`, { name: job.name, id: job.id });
+    const { user, organization, service, assistant } = job.data;
+    await this.openAI.createAssistant(user, organization, service, assistant);
+  }
+
+  @Process('compliance.activated')
+  async processCompliance(job: Job) {
+    //this.logger.info(`Received new compliance.activated job}`, { name: job.name, id: job.id });
+    const client = new OpenAI({
+      organization: process.env['OPENAI_ORG_ID'],
+      apiKey: process.env['OPENAI_API_KEY'],
+    });
+
+    this.logger.info(`Creating thread`);
+    const thread = await client.beta.threads.create();
+
+    this.logger.info(`Created thread`, thread);
+
+    //await this.assistant.processComplianceJob(job);
+
+    /*stream.on('connect', () => {
+      this.logger.info(`Connected to stream ${stream}`);
+    });
+    stream.on('message', message => {
+      this.logger.info(`Received message ${message}`);
+    });
+    stream.on('error', error => {
+      this.logger.error(`Received error ${error}`);
+    });
+    stream.on('end', () => {
+      this.logger.info(`Received end event`);
+    });
+    stream.on('chatCompletion', completion => {
+      completion.choices.forEach(choice => {
+        this.logger.info(`Received choice ${choice}`);
+      });
+    });
+    stream.on('chatCompletion', () => {
+      this.logger.info(`Received close event`);
     });*/
+
+    /**
+     * connect: () => void;
+     *   functionCall: (functionCall: ChatCompletionMessage.FunctionCall) => void;
+     *   message: (message: ChatCompletionMessageParam) => void;
+     *   chatCompletion: (completion: ChatCompletion) => void;
+     *   finalContent: (contentSnapshot: string) => void;
+     *   finalMessage: (message: ChatCompletionMessageParam) => void;
+     *   finalChatCompletion: (completion: ChatCompletion) => void;
+     *   finalFunctionCall: (functionCall: ChatCompletionMessage.FunctionCall) => void;
+     *   functionCallResult: (content: string) => void;
+     *   finalFunctionCallResult: (content: string) => void;
+     *   error: (error: OpenAIError) => void;
+     *   abort: (error: APIUserAbortError) => void;
+     *   end: () => void;
+     *   totalUsage:
+     */
   }
 }

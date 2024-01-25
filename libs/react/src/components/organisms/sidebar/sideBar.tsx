@@ -41,6 +41,8 @@ const _SideBar = (): JSX.Element => {
       const hasActions = actionsData && actionsData?.length > 0;
 
       return ldFlags.showActions261 && hasActions;
+    } else if (item.key === 'documents_key') {
+      return ldFlags.showComplianceModule;
     } else {
       return true;
     }

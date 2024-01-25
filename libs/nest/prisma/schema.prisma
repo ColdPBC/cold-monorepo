@@ -6,20 +6,20 @@ generator client {
 generator zod {
   provider                         = "zod-prisma-types"
   output                           = "../src/validation/generated"
-  createRelationValuesTypes        = "false"
-  addInputTypeValidation           = "false"
-  createPartialTypes               = "false"
-  addIncludeType                   = "false"
-  coerceDate                       = "false"
   useMultipleFiles                 = "true"
-  createOptionalDefaultValuesTypes = "false"
-  writeBarrelFiles                 = "false"
-  createModelTypes                 = "true"
   useDefaultValidators             = "false"
-  validateWhereUniqueInput         = "false"
-  writeNullishInModelTypes         = "false"
+  createOptionalDefaultValuesTypes = "false"
+  addInputTypeValidation           = "false"
   createInputTypes                 = "false"
+  createPartialTypes               = "false"
+  createModelTypes                 = "true"
+  createRelationValuesTypes        = "false"
   addSelectType                    = "false"
+  writeNullishInModelTypes         = "false"
+  validateWhereUniqueInput         = "false"
+  writeBarrelFiles                 = "false"
+  coerceDate                       = "false"
+  addIncludeType                   = "false"
 }
 
 datasource db {
@@ -281,11 +281,11 @@ model organizations {
   actions                  actions[]
   category_data            category_data[]
   integrations             integrations[]
+  organization_compliances organization_compliances[]
+  organization_files       organization_files[]
   locations                organization_locations[]
   survey_data              survey_data[]
   utility_bills            utility_bills[]
-  organization_files       organization_files[]
-  organization_compliances organization_compliances[]
 }
 
 model organization_locations {
@@ -341,8 +341,8 @@ model integrations {
   location              organization_locations? @relation(fields: [location_id], references: [id], onDelete: Cascade)
   organization          organizations           @relation(fields: [organization_id], references: [id])
   service_definition    service_definitions     @relation(fields: [service_definition_id], references: [id], onDelete: Cascade)
-  unility_bills         utility_bills[]
   files                 organization_files[]
+  unility_bills         utility_bills[]
 
   @@unique([service_definition_id, location_id], name: "integrationKey")
 }
@@ -391,17 +391,17 @@ model emissions {
   updated_at              DateTime               @updatedAt
   integration_id          String
   activity_data           Json
-  constituent_gases       Json
   integration_data        Json
   name                    String
   region                  String
   category                String
-  co2_calculation_method  String
   co2e                    Float
   co2e_calculation_origin String
   co2e_unit               String
   emission_factor         Json
   location_id             String
+  co2_calculation_method  String
+  constituent_gases       Json
   integrations            integrations           @relation(fields: [integration_id], references: [id], onDelete: Cascade)
   location                organization_locations @relation(fields: [location_id], references: [id], onDelete: Cascade)
 }
@@ -411,42 +411,42 @@ model emissions {
 /// @erd emissions
 model utility_bills {
   id              String                 @id @default(cuid())
-  location_id     String
   integration_id  String
-  organization_id String
   period_from     DateTime
   period_to       DateTime
   data            Json
   created_at      DateTime               @default(now())
   updated_at      DateTime               @updatedAt
+  location_id     String
+  organization_id String
   integration     integrations           @relation(fields: [integration_id], references: [id], onDelete: Cascade)
   location        organization_locations @relation(fields: [location_id], references: [id], onDelete: Cascade)
   organization    organizations          @relation(fields: [organization_id], references: [id], onDelete: Cascade)
 }
 
 model organization_files {
-  id                  String        @id @default(cuid())
   bucket              String?
   key                 String?
   original_name       String
   organization_id     String
-  integration_id      String?
   openai_assistant_id String?
-  mimetype            String?
-  size                Int?
-  acl                 String?
-  versionId           String?
-  fieldname           String?
-  encoding            String?
-  contentType         String?
-  location            String?
   openai_file_id      String?       @unique
   created_at          DateTime      @default(now())
   updated_at          DateTime      @updatedAt
+  id                  String        @id @default(cuid())
+  integration_id      String?
+  mimetype            String?
+  size                Int?
+  acl                 String?
+  contentType         String?
+  encoding            String?
+  fieldname           String?
+  location            String?
+  versionId           String?
+  checksum            String?
   integration         integrations? @relation(fields: [integration_id], references: [id], onDelete: Cascade)
   organization        organizations @relation(fields: [organization_id], references: [id], onDelete: Cascade)
 
-  @@unique([organization_id, original_name], name: "fileNameKey")
   @@unique([organization_id, bucket, key], name: "s3Key")
 }
 
@@ -457,6 +457,7 @@ model compliance_definitions {
   surveys                  Json
   created_at               DateTime                   @default(now())
   updated_at               DateTime                   @updatedAt
+  title                    String
   organization_compliances organization_compliances[]
 }
 
@@ -466,8 +467,10 @@ model organization_compliances {
   compliance_id         String
   created_at            DateTime               @default(now())
   updated_at            DateTime               @updatedAt
-  organization          organizations          @relation(fields: [organization_id], references: [id], onDelete: Cascade)
   compliance_definition compliance_definitions @relation(fields: [compliance_id], references: [id], onDelete: Cascade)
+  organization          organizations          @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+
+  @@unique([organization_id, compliance_id], name: "orgKeyCompKey")
 }
 
 enum integration_service_type {

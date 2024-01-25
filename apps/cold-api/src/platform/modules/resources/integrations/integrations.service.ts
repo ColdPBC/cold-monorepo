@@ -209,58 +209,31 @@ export class IntegrationsService extends BaseWorker {
         throw new UnprocessableEntityException(`Organization ${orgId} is invalid.`);
       }
 
-      let response = await this.rabbit.request(
-        get(service.definition, 'rabbitMQ.rpcOptions.routing_key', 'deadletter'),
+      await this.rabbit.publish(
+        get(service.definition, 'rabbitMQ.publishOptions.routing_key', 'deadletter'),
         {
-          data: {
-            organization: org,
-            service: service,
-            service_definition_id: service.id,
-            metadata: body.metadata,
-            user: user,
-          },
+          organization: org,
+          service: service,
+          service_definition_id: service.id,
+          metadata: body.metadata,
+          user: user,
           from: 'cold.api',
-          event: 'integration.enabled',
         },
+        'integration.enabled',
         {
           exchange: 'amq.direct',
           timeout: body.timeout || 5000,
         },
       );
 
-      if (!response) {
-        response = await this.rabbit.publish(
-          get(service.definition, 'rabbitMQ.publishOptions.routing_key', 'deadletter'),
-          {
-            data: {
-              organization: org,
-              service: service,
-              service_definition_id: service.id,
-              metadata: body.metadata,
-              user: user,
-            },
-            from: 'cold.api',
-          },
-          'integration.enabled',
-          {
-            exchange: 'amq.direct',
-            timeout: body.timeout || 5000,
-          },
-        );
-      }
-      switch (response?.status) {
-        case 201:
-        case 200:
-          return response.data;
-        case 404:
-          throw new NotFoundException(response.response);
-        case 409:
-          throw new ConflictException(response.response);
-        case 422:
-          throw new UnprocessableEntityException(response.response);
-        default:
-          return response;
-      }
+      this.logger.info(`Integration enabled for ${org.name} with service ${service.name}`, {
+        user,
+        org,
+        service,
+        metadata: body.metadata,
+      });
+
+      return { message: `Integration enable request for ${org.name} with service ${service.name} was added to the queue` };
     } catch (e: any) {
       this.logger.error(e.message, { user });
       throw e;

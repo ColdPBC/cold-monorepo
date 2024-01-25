@@ -9,7 +9,6 @@ export class MqttService extends BaseWorker implements OnModuleInit {
   private readonly iotEndpoint: string;
   private readonly clientId: string;
   private mqttClient: mqtt.MqttClient | undefined;
-  private readonly topicBase: string;
 
   constructor(private config: ConfigService) {
     super(MqttService.name);
@@ -17,12 +16,12 @@ export class MqttService extends BaseWorker implements OnModuleInit {
     if (parts.length < 2) throw new Error('Invalid DD_SERVICE');
     const pfxIdx = parts.length < 3 ? 1 : 2;
     const prefix = parts[pfxIdx].length < 7 ? parts[pfxIdx] : `${parts[pfxIdx].substring(0, 2)}${parts[pfxIdx].substring(parts[pfxIdx].length - 2, parts[pfxIdx].length)}`;
-    this.topicBase = parts.length < 3 ? `${process.env['NODE_ENV']}/${parts[1]}` : `${process.env['NODE_ENV']}/${parts[1]}/${parts[2]}`;
+    //this.topicBase = parts.length < 3 ? `${process.env['NODE_ENV']}/${parts[1]}` : `${process.env['NODE_ENV']}/${parts[1]}/${parts[2]}`;*/
     this.iotEndpoint = process.env['IOT_ENDPOINT'] || 'a2r4jtij2021gz-ats.iot.us-east-1.amazonaws.com';
     this.clientId = new Cuid2Generator(prefix).scopedId;
   }
 
-  connect(): mqtt.MqttClient {
+  connect(className?: string): mqtt.MqttClient {
     const privateKey = this.config.getOrThrow('MQTT_PRIVATE_KEY');
     const caRoot1 = this.config.getOrThrow('MQTT_CA_ROOT_1');
     const caRoot3 = this.config.getOrThrow('MQTT_CA_ROOT_3');
@@ -46,7 +45,7 @@ export class MqttService extends BaseWorker implements OnModuleInit {
 
       // Handle MQTT events
       this.mqttClient.on('connect', () => {
-        this.logger.log('Connected to AWS IoT Core');
+        this.logger.log(`${className} Connected to AWS IoT Core`);
         // You can subscribe to topics or perform other actions here
       });
 
@@ -63,8 +62,8 @@ export class MqttService extends BaseWorker implements OnModuleInit {
 
   subscribe(topic: string): void {
     if (this.mqttClient) {
-      this.mqttClient.subscribe(`${this.topicBase}/${topic}`);
-      this.logger.log(`Subscribed to topic: ${this.topicBase}/${topic}`);
+      this.mqttClient.subscribe(`${topic}`);
+      this.logger.log(`Subscribed to topic: ${topic}`);
     } else {
       this.logger.error('MQTT client is not connected');
     }

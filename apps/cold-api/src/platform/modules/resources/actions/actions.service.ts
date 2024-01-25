@@ -56,6 +56,10 @@ export class ActionsService extends BaseWorker {
   private async filterDependentSurveys(action, user: AuthenticatedUser, orgId: string) {
     const dep_surveys: any[] = [];
 
+    if (!action.dependent_surveys || action.dependent_surveys.length < 1) {
+      return action;
+    }
+
     for (const a of action.dependent_surveys) {
       try {
         const surveyResults = (await this.surveys.findOne(a.name, user, false, orgId)) as any;

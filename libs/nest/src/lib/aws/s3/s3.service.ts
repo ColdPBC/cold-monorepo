@@ -6,6 +6,8 @@ import { S3Client } from '@aws-sdk/client-s3';
 import multerS3 from 'multer-s3';
 import { BaseWorker } from '../../worker';
 import { AuthenticatedUser } from '../../primitives';
+import crypto from 'crypto';
+import stream from 'stream';
 
 @Injectable()
 export class S3Service extends BaseWorker {
@@ -37,12 +39,39 @@ export class S3Service extends BaseWorker {
     return new S3Client(S3Service.getS3Config());
   }
 
+  static async calculateChecksum(file: Express.Multer.File): Promise<string> {
+    const hash = crypto.createHash('md5');
+    // Create a readable stream from the buffer
+    const readStream = new stream.Readable();
+    readStream.push(file.buffer);
+    readStream.push(null);
+
+    // Pipe the stream through the hash to calculate checksum
+    await new Promise<void>((resolve, reject) => {
+      stream.pipeline(readStream, hash, error => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve();
+        }
+      });
+    });
+
+    return hash.digest('hex');
+  }
+
   static getMulterS3Config() {
     const config = new ConfigService();
     return {
       s3: S3Service.getS3Client(),
       bucket: 'cold-api-uploaded-files',
       contentType: multerS3.AUTO_CONTENT_TYPE,
+      metadata: async (req, file, cb) => {
+        const hash = await S3Service.calculateChecksum(file);
+        console.log(`${file.filename} Checksum: ${hash}`);
+        // Add custom metadata, such as the calculated hash
+        cb(null, { md5Hash: hash });
+      },
       key: function (req, file, cb) {
         const user = req['user'] as AuthenticatedUser;
         const orgId = req['orgId'];

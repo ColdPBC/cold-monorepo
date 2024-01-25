@@ -2,7 +2,7 @@ import { HttpService } from '@nestjs/axios';
 import { ConflictException, HttpException, Injectable, NotFoundException, UnauthorizedException, UnprocessableEntityException } from '@nestjs/common';
 import { Span } from 'nestjs-ddtrace';
 // eslint-disable-next-line @nx/enforce-module-boundaries
-import { Auth0Organization, Auth0TokenService, AuthenticatedUser, BaseWorker, CacheService, ColdRabbitService, DarklyService, PrismaService, Tags } from '@coldpbc/nest';
+import { Auth0Organization, Auth0TokenService, AuthenticatedUser, BaseWorker, CacheService, ColdRabbitService, DarklyService, PrismaService, S3Service, Tags } from '@coldpbc/nest';
 import { filter, find, first, kebabCase, map, merge, omit, pick, set } from 'lodash';
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { MemberService } from '../auth0/members/member.service';
@@ -27,6 +27,7 @@ export class OrganizationService extends BaseWorker {
     readonly darkly: DarklyService,
     private rabbit: ColdRabbitService,
     readonly integrations: IntegrationsService,
+    readonly s3: S3Service,
   ) {
     super('OrganizationService');
     this.httpService = new HttpService();
@@ -1029,7 +1030,7 @@ export class OrganizationService extends BaseWorker {
         throw new NotFoundException(`Organization ${orgId} not found`);
       }
 
-      const uploaded = await this.prisma.organization_files.upsert({
+      const existing = await this.prisma.organization_files.findUnique({
         where: {
           s3Key: {
             key: file.key,
@@ -1037,21 +1038,15 @@ export class OrganizationService extends BaseWorker {
             organization_id: orgId,
           },
         },
-        update: {
-          original_name: file.originalname,
-          organization_id: orgId,
-          versionId: file['versionId'],
-          bucket: file.bucket,
-          key: file.key,
-          mimetype: file.mimetype,
-          size: file.size,
-          acl: file.acl,
-          fieldname: file.fieldname,
-          encoding: file.encoding,
-          contentType: file.contentType,
-          location: file.location,
-        },
-        create: {
+      });
+
+      if (existing?.checksum === file.metadata.md5Hash) {
+        this.logger.warn(`file ${file.key} already exists in db`, file);
+        return new ConflictException(`file ${file.key} already exists in db for org ${orgId}`);
+      }
+
+      const uploaded = await this.prisma.organization_files.create({
+        data: {
           original_name: file.originalname,
           integration_id: null,
           organization_id: orgId,
@@ -1065,6 +1060,7 @@ export class OrganizationService extends BaseWorker {
           encoding: file.encoding,
           contentType: file.contentType,
           location: file.location,
+          checksum: file.metadata.md5Hash,
         },
       });
 
@@ -1087,6 +1083,7 @@ export class OrganizationService extends BaseWorker {
           }
         }
       }
+      return file;
     } catch (e) {
       this.logger.error(e);
       throw e;

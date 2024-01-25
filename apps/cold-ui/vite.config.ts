@@ -24,50 +24,9 @@ export default defineConfig({
     nxViteTsPaths(),
     nodePolyfills({
       // To exclude specific polyfills, add them to this list.
-      exclude: [
-        'assert',
-        'buffer',
-        'console',
-        'constants',
-        'child_process',
-        'readline',
-        'cluster',
-        'dgram',
-        'dns',
-        'http2',
-        'crypto',
-        'domain',
-        'events',
-        'net',
-        'repl',
-        // 'http',
-        // 'https',
-        // 'os',
-        'module',
-        'path',
-        'punycode',
-        'process',
-        'querystring',
-        // 'stream',
-        '_stream_duplex',
-        '_stream_passthrough',
-        '_stream_readable',
-        '_stream_transform',
-        '_stream_writable',
-        'string_decoder',
-        'sys',
-        'timers',
-        'tls',
-        // 'tty',
-        'url',
-        //'util',
-        'vm',
-        'timers/promises',
-        // 'zlib',
-        'fs', // Excludes the polyfill for `fs` and `node:fs`.
-      ],
+      exclude: [],
       // Whether to polyfill `node:` protocol imports.
-      protocolImports: false,
+      protocolImports: true,
     }),
   ],
   build: {
@@ -77,11 +36,7 @@ export default defineConfig({
       output: {
         manualChunks(id) {
           if (id.includes('node_modules')) {
-            return id
-              .toString()
-              .split('node_modules/')[1]
-              .split('/')[0]
-              .toString();
+            return id.toString().split('node_modules/')[1].split('/')[0].toString();
           }
         },
       },
