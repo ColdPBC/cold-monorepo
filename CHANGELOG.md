@@ -1,3 +1,10 @@
+# [1.97.0-COLD-478.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.96.1...v1.97.0-COLD-478.1) (2024-01-25)
+
+
+### Features
+
+* added scrollbar when overflows and auto margin for survey question flex tiem ([fcf4281](https://github.com/ColdPBC/cold-monorepo/commit/fcf428133d13a6d03d8a5944ed3f498340efebf2))
+
 ## [1.96.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.96.0...v1.96.1) (2024-01-24)
 
 
