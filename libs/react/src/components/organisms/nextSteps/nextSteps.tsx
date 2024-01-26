@@ -50,7 +50,7 @@ const _NextSteps = () => {
 
   const nextSteps = data
     ?.filter(survey => {
-      return !survey.definition.submitted;
+      return !survey.definition.submitted && survey.type !== 'COMPLIANCE';
     })
     .sort((a, b) => {
       const aDate = new Date(a.updated_at);
@@ -68,7 +68,7 @@ const _NextSteps = () => {
     }).splice(0, 3);
   
   if (!nextSteps?.length) {
-    return <div></div>;
+    return '';
   } else {
     return (
       <Card data-testid="next-steps" title={'Next Steps'} className={'max-w-[668px]'}>
