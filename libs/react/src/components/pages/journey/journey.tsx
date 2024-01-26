@@ -47,7 +47,7 @@ function _Journey() {
 
   if (auth0.user) {
     return (
-      <AppContent title="Climate Journey">
+      <AppContent title="Gap Assessment">
         <CenterColumnContent>
           {!isEmptyData ? (
             <Card>
