@@ -66,9 +66,9 @@ const _NextSteps = () => {
         surveyProgress: progress,
       };
     }).splice(0, 3);
-  
+
   if (!nextSteps?.length) {
-    return '';
+    return null;
   } else {
     return (
       <Card data-testid="next-steps" title={'Next Steps'} className={'max-w-[668px]'}>
