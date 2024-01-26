@@ -65,8 +65,8 @@ const _NextSteps = () => {
         started: progress > 0,
         surveyProgress: progress,
       };
-    });
-
+    }).splice(0, 3);
+  
   if (!nextSteps?.length) {
     return <div></div>;
   } else {
