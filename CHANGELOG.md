@@ -1,3 +1,11 @@
+# [1.100.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.99.0...v1.100.0) (2024-01-26)
+
+
+### Features
+
+* change user-facing journey modules to gap assessments for demo-ing ([f0803b1](https://github.com/ColdPBC/cold-monorepo/commit/f0803b17ffa5a49d7c694403bd495ba1d5686a3f))
+* change user-facing journey modules to gap assessments for demo-ing ([#247](https://github.com/ColdPBC/cold-monorepo/issues/247)) ([a23d514](https://github.com/ColdPBC/cold-monorepo/commit/a23d514eeb484eb86d4acff7f8f71231763e6e66))
+
 # [1.99.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.98.0...v1.99.0) (2024-01-26)
 
 

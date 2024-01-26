@@ -120,20 +120,12 @@ export const SubcategoryJourneyPreview = ({ subcategory_key, category_key, cardT
       </div>
 
       <div className="flex text-xs w-full">
-        <div className="flex flex-1 rounded-lg flex justify-between py-1.5 px-2 bg-bgc-accent">
-          <div>{curScoreQuadrant?.name}</div>
+        <div className="flex flex-1 rounded-lg justify-between py-1.5 px-2 bg-bgc-accent">
+          <div>Estimated Compliance</div>
           <div>
-            {subcategoryData.journey_score}/{scoreQuadrants[curScoreQuadrantIndex + 1] ? scoreQuadrants[curScoreQuadrantIndex + 1].bottom : 100}
+            {subcategoryData.journey_score}%
           </div>
         </div>
-        {curScoreQuadrantIndex < 3 && (
-          <>
-            <ArrowRightIcon className="mx-2 w-[24px] text-bgc-accent" />
-            <div className="rounded-lg flex py-1.5 px-2 bg-bgc-accent">
-              {scoreQuadrants[curScoreQuadrantIndex + 1] ? scoreQuadrants[curScoreQuadrantIndex + 1].name : 'Trailblazer'}
-            </div>
-          </>
-        )}
       </div>
     </Card>
   );

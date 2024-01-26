@@ -43,6 +43,9 @@ const _SideBar = (): JSX.Element => {
       return ldFlags.showActions261 && hasActions;
     } else if (item.key === 'documents_key') {
       return ldFlags.showComplianceModule;
+    } else if (item.key === 'journey_key') { // TODO: Delete this once we replace the journey page completely
+      item.label = "Gaps"
+      return true;
     } else {
       return true;
     }

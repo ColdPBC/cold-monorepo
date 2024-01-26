@@ -26,7 +26,7 @@ export function JourneyOverviewCard(
       ];
 
   return (
-    <Card title="Climate Journey" ctas={cta}>
+    <Card title="Gap Assessment" ctas={cta}>
       <div className="flex items-center justify-center self-stretch flex-col">
         <JourneySpiderChart setIsEmptyData={setIsEmptyData} />
         {isEmptyData && (
