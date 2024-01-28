@@ -9,7 +9,7 @@ import {Queue} from 'bull';
 import {AppService, OpenAIAssistant} from './app.service';
 
 import {organizations} from '../../../../libs/nest/src/validation/generated/modelSchema/organizationsSchema';
-import {OpenaiAssistant} from './openai.assistant';
+import {AssistantService} from './assistant/assistant.service';
 
 /**
  * RabbitService class.
@@ -72,7 +72,7 @@ export class RabbitService extends BaseWorker {
 
   constructor(
     @InjectQueue('openai') private queue: Queue,
-    private assistant: OpenaiAssistant,
+    private assistant: AssistantService,
     private readonly openAI: AppService,
     private readonly s3: S3Service,
     private readonly prisma: PrismaService,
@@ -218,8 +218,31 @@ export class RabbitService extends BaseWorker {
     });
 
     switch (event) {
-      case 'organization_compliances.created':
-        return await this.assistant.processComplianceJob({ event, from, ...parsed });
+      case 'organization_compliances.created': {
+        //this.logger.log(`Received new compliance.activated job}`, { name: job.name, id: job.id });
+        //const { surveys, user, compliance, integration, organization } = job.data;
+        const surveys = parsed.surveys;
+        try {
+          for (const survey of surveys) {
+            await this.queue.add(
+              'survey',
+              {
+                survey,
+                user,
+                compliance: parsed.compliance,
+                integration: parsed.integration,
+                organization: parsed.organization,
+              },
+              { backoff: { type: BackOffStrategies.EXPONENTIAL } },
+            );
+            //await this.assistant.process_survey(survey, user, compliance, integration, organization);
+            //this.process_survey(survey, user, compliance, integration, organization);
+          }
+        } catch (e) {
+          this.logger.error(e.message, e);
+        }
+      }
+      // return await this.assistant.processComplianceJob({ event, from, ...parsed });
 
       case 'integration.enabled': {
         const assistant: OpenAIAssistant = {

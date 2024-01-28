@@ -1,5 +1,5 @@
 import {init, isCuid} from '@paralleldrive/cuid2';
-import {BaseWorker} from './worker';
+import {BaseWorker} from '../worker';
 import {Injectable} from '@nestjs/common';
 
 /**

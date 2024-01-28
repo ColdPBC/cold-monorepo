@@ -2,7 +2,7 @@ import { Injectable, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as mqtt from 'mqtt';
 import { BaseWorker } from '../worker';
-import { Cuid2Generator } from '../cuid2-generator.service';
+import { Cuid2Generator } from '../utility';
 
 @Injectable()
 export class MqttService extends BaseWorker implements OnModuleInit {

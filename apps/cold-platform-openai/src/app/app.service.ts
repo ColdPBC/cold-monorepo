@@ -1,10 +1,8 @@
-import { AuthenticatedUser, BaseWorker, ColdRabbitService, MqttService, PrismaService, S3Service } from '@coldpbc/nest';
+import { AuthenticatedUser, BaseWorker, ColdRabbitService, PrismaService } from '@coldpbc/nest';
 import { Injectable, NotFoundException, OnModuleInit, UnauthorizedException, UnprocessableEntityException } from '@nestjs/common';
-import { HttpService } from '@nestjs/axios';
 import OpenAI from 'openai';
 import { service_definitions } from '../../../../libs/nest/src/validation/generated/modelSchema/service_definitionsSchema';
 import { organizations } from '../../../../libs/nest/src/validation/generated/modelSchema/organizationsSchema';
-import { ConfigService } from '@nestjs/config';
 
 export type OpenAIAssistant = {
   model: string;
@@ -20,14 +18,7 @@ export class AppService extends BaseWorker implements OnModuleInit {
   service: service_definitions;
   topic: string = '';
 
-  constructor(
-    private readonly mqtt: MqttService,
-    private readonly axios: HttpService,
-    private readonly s3: S3Service,
-    private readonly config: ConfigService,
-    private readonly prisma: PrismaService,
-    private rabbit: ColdRabbitService,
-  ) {
+  constructor(private readonly prisma: PrismaService, private rabbit: ColdRabbitService) {
     super(AppService.name);
     this.client = new OpenAI({ organization: process.env['OPENAI_ORG_ID'], apiKey: process.env['OPENAI_API_KEY'] });
   }
@@ -51,7 +42,6 @@ export class AppService extends BaseWorker implements OnModuleInit {
         this.handleError(e);
       }
     }
-    this.logger.log('OpenAI Service initialized');
   }
 
   handleError(e, meta?) {

@@ -1,28 +1,22 @@
-import { BaseWorker, ColdRabbitService, PrismaService, S3Service } from '@coldpbc/nest';
-import { service_definitions } from '../../../../libs/nest/src/validation/generated/modelSchema/service_definitionsSchema';
+import { BaseWorker, ColdRabbitService, PrismaService } from '@coldpbc/nest';
+import { service_definitions } from '../../../../../libs/nest/src/validation/generated/modelSchema/service_definitionsSchema';
 import { Injectable, NotFoundException, OnModuleInit, UnprocessableEntityException } from '@nestjs/common';
-import { HttpService } from '@nestjs/axios';
 import OpenAI from 'openai';
-import { get, pick } from 'lodash';
+import { get, has, pick } from 'lodash';
 import { ConfigService } from '@nestjs/config';
 import { integrations, organizations } from '@prisma/client';
+import { Job } from 'bull';
+import { OnQueueActive, OnQueueCompleted, OnQueueFailed, OnQueueProgress } from '@nestjs/bull';
+import { OpenAIResponse } from './validator/validator';
 
 @Injectable()
-export class OpenaiAssistant extends BaseWorker implements OnModuleInit {
+export class AssistantService extends BaseWorker implements OnModuleInit {
   client: OpenAI;
-  //socket: MqttClient;
   service: service_definitions;
   topic: string = '';
 
-  constructor(
-    //private readonly mqtt: MqttService,
-    private readonly axios: HttpService,
-    private readonly s3: S3Service,
-    private readonly config: ConfigService,
-    private readonly prisma: PrismaService,
-    private rabbit: ColdRabbitService,
-  ) {
-    super(OpenaiAssistant.name);
+  constructor(private readonly config: ConfigService, private readonly prisma: PrismaService, private rabbit: ColdRabbitService) {
+    super(AssistantService.name);
     this.client = new OpenAI({ organization: process.env['OPENAI_ORG_ID'], apiKey: process.env['OPENAI_API_KEY'] });
   }
 
@@ -47,7 +41,7 @@ export class OpenaiAssistant extends BaseWorker implements OnModuleInit {
         this.handleError(e);
       }
     }
-    this.logger.log('OpenAI Service initialized');
+    //this.logger.log('OpenAI Service initialized');
   }
 
   handleError(e, meta?) {
@@ -58,18 +52,6 @@ export class OpenaiAssistant extends BaseWorker implements OnModuleInit {
       this.logger.error(e.message, meta);
       throw new UnprocessableEntityException(e.message);
     }
-  }
-
-  subscribe(): void {
-    /* if (this.socket) {
-       this.socket.subscribe(this.topic);
-     }*/
-  }
-
-  async initListener() {
-    // this.socket.addListener('connect', this.subscribe.bind(this));
-    // this.socket.addListener('error', this.handleError.bind(this));
-    // this.socket.addListener('message', this.handleMessage.bind(this));
   }
 
   handleMessage(topic: string, message: Buffer) {
@@ -143,10 +125,12 @@ export class OpenaiAssistant extends BaseWorker implements OnModuleInit {
 
         response = status['required_action'].submit_tool_outputs.tool_calls[0].function.arguments;
 
+        response = new OpenAIResponse(response);
+
         // Create an array of tool outputs to submit, matching the schema
         const toolOutputs = toolCalls.map(toolCall => ({
           tool_call_id: toolCall.id,
-          output: response,
+          output: JSON.stringify(response),
         }));
 
         // Submit the array of tool outputs back
@@ -170,7 +154,11 @@ export class OpenaiAssistant extends BaseWorker implements OnModuleInit {
       }
 
       try {
-        return JSON.parse(response);
+        if (typeof response === 'string') {
+          response = JSON.parse(response);
+        } else {
+          return response;
+        }
       } catch (e) {
         return { error: { message: 'failed to process response JSON', response } };
       }
@@ -255,18 +243,36 @@ export class OpenaiAssistant extends BaseWorker implements OnModuleInit {
   }
 
   clearValuesOnError(value: any) {
-    if (value['error']) {
+    if (!value) return value;
+
+    if (typeof value === 'string') {
+      value = JSON.parse(value);
+    }
+
+    if (value?.error) {
       value.answer = null;
       value.justification = null;
       value.what_we_need = null;
-    } else if (value['what_we_need'] && value['answer']) {
+    } else if (value?.what_we_need && value?.answer) {
       value.answer = null;
     }
 
     return value;
   }
 
-  async process_survey(survey: any, user, compliance, integration, org: organizations) {
+  async process_survey(job: Job) {
+    const { survey, user, compliance, integration, organization } = job.data;
+    this.setTags({
+      survey: survey.definition.title,
+      organization: {
+        name: organization.name,
+        id: organization.id,
+      },
+      user: {
+        email: user.coldclimate_claims.email,
+        id: user.id,
+      },
+    });
     this.logger.info(`Processing survey ${survey.definition.title} for compliance ${compliance.name}`);
 
     let category_context;
@@ -279,41 +285,51 @@ export class OpenaiAssistant extends BaseWorker implements OnModuleInit {
 
     const sections = Object.keys(definition.sections);
 
+    const sdx = 0;
+
     // iterate over each section key
     for (const section of sections) {
-      this.logger.info(`Processing ${definition.sections[section].title}`);
+      await job.log(`Section | ${section}:${sdx + 1} of ${sections.length}`);
+      this.setTags({ section });
+      this.logger.info(`Processing ${section}: ${definition.sections[section].title}`);
 
       // get the followup items for the section
       const items = Object.keys(definition.sections[section].follow_up);
 
       // iterate over each followup item
       for (const item of items) {
-        const follow_up = definition.sections[section].follow_up[item];
+        const idx = parseInt(item.split('-')[1]);
 
-        if (get(item, 'ai_answered', false)) {
+        await job.log(`Question | section: ${section} question: ${item} of ${items.length}`);
+        const follow_up = definition.sections[section].follow_up[item];
+        this.setTags({ question: { key: item, prompt: follow_up.prompt } });
+
+        if (has(item, 'ai_response.answer') && !has(item, 'ai_response.what_we_need')) {
           this.logger.info(`Skipping ${section}.${item}: ${follow_up.prompt}; it has already been answered`, {
             section_item: definition.sections[section].follow_up[item],
           });
           continue;
         }
 
-        this.logger.info(`Processing ${section}.${item}: ${follow_up.prompt}`);
-
         // create a new thread for each followup item
         const thread = await this.client.beta.threads.create();
-        this.logger.info(`Created thread ${thread.id} for ${section}.${item}`, {
+        this.setTags({ thread: thread.id });
+
+        this.logger.info(`Created Thread | thread.id: ${thread.id} for ${section}.${item}`, {
           thread,
-          section_item: definition.sections[section].follow_up[item],
+          section_item: item,
+          section,
         });
 
+        this.logger.info(`Creating Message | ${section}.${item}: ${follow_up.prompt}`);
         // create a new run for each followup item
-        let value = await this.createMessage(thread, integration, follow_up, false, org, category_context);
+        let value = await this.createMessage(thread, integration, follow_up, false, organization, category_context);
 
         value = this.clearValuesOnError(value);
 
         // update the survey with the response
         definition.sections[section].follow_up[item].ai_response = value;
-        definition.sections[section].follow_up[item].ai_answered = !!value.answer;
+        definition.sections[section].follow_up[item].ai_answered = !!has(value, 'answer');
         definition.sections[section].follow_up[item].ai_attempted = true;
 
         // if there is additional context, create a new run for it
@@ -325,8 +341,8 @@ export class OpenaiAssistant extends BaseWorker implements OnModuleInit {
             continue;
           }
 
-          this.logger.info(`Processing ${section}.${item}.additional_context: ${follow_up.prompt}`);
-          let additionalValue = await this.createMessage(thread, integration, follow_up['additional_context'], true, org, category_context);
+          this.logger.info(`Creating Message | ${section}.${item}.additional_context: ${follow_up.prompt}`);
+          let additionalValue = await this.createMessage(thread, integration, follow_up['additional_context'], true, organization, category_context);
 
           additionalValue = this.clearValuesOnError(additionalValue);
 
@@ -352,29 +368,42 @@ export class OpenaiAssistant extends BaseWorker implements OnModuleInit {
             timeout: 5000,
           },
         );
+
+        await job.progress(idx / items.length);
       }
     }
   }
 
-  async processComplianceJob(job: any) {
-    const { user, compliance, from, surveys, integration } = job;
-    const organization = compliance.organization;
-    this.setTags({
-      user: user.coldclimate_claims.email,
-      from,
-      organization: compliance.organization,
-      openai_assistant: integration.id,
-      compliance: compliance.compliance_definition.name,
-    });
-
-    try {
-      this.logger.info(`Creating thread for compliance: ${compliance.compliance_definition.name}`);
-
-      for (const survey of surveys) {
-        this.process_survey(survey, user, compliance, integration, organization);
-      }
-    } catch (e) {
-      this.logger.error(e.message, e);
+  getTimerString(job: Job) {
+    if (job.finishedOn) {
+      return `Duration: ${this.getDuration(job)} seconds`;
+    } else {
+      return `Elapsed: ${(new Date().getTime() - job.processedOn) / 1000} seconds`;
     }
+  }
+
+  getDuration(job: Job) {
+    return (job.finishedOn - job.processedOn) / 1000;
+  }
+
+  @OnQueueActive()
+  async onActive(job: Job) {
+    const message = `Processing ${job.name} | id: ${job.id} title: ${job.data.survey.definition.title} | started: ${new Date(job.processedOn).toUTCString()}`;
+    await job.log(message);
+  }
+
+  @OnQueueFailed()
+  async onFailed(job: Job) {
+    await job.log(`${job.name} Job FAILED | id: ${job.id} reason: ${job.failedReason} | ${this.getTimerString(job)}`);
+  }
+
+  @OnQueueCompleted()
+  async onCompleted(job: Job) {
+    await job.log(`${job.name} Job COMPLETED | id: ${job.id} completed_on: ${new Date(job.finishedOn).toUTCString()} | ${this.getTimerString(job)}`);
+  }
+
+  @OnQueueProgress()
+  async onProgress(job: Job) {
+    await job.log(`${job.name} Job PROGRESS | id: ${job.id} progress: ${(await job.progress()) * 100}% | ${this.getTimerString(job)}`);
   }
 }

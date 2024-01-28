@@ -72,7 +72,7 @@ export class RedisServiceConfig extends BaseWorker {
               attemptsMade = 1;
             }
 
-            let retryTime = interval * 6 * (attemptsMade * attemptsMade);
+            let retryTime = interval * 60 * (attemptsMade * attemptsMade);
             if (attemptsMade < max) {
               logger.info(
                 JSON.stringify({
@@ -116,7 +116,7 @@ export class RedisServiceConfig extends BaseWorker {
       },
       defaultJobOptions: {
         attempts: max,
-        removeOnComplete: true,
+        removeOnComplete: false,
         removeOnFail: false,
       },
     };
