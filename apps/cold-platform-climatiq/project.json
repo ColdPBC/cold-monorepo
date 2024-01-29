@@ -31,6 +31,8 @@
       },
       "configurations": {
         "development": {
+          "runtimeArgs": ["--trace-warnings"],
+          "port": 9003,
           "buildTarget": "cold-platform-climatiq:build:development"
         },
         "production": {

@@ -242,3 +242,14 @@ export const IncompleteSurvey: Story = {
     surveyName: 'journey_overview',
   },
 };
+
+export const AIAnsweredSurvey: Story = {
+  render: args => (
+    <StoryMockProvider handlers={getSurveyHandler.getAiAnsweredSurvey}>
+      <Survey {...args} />
+    </StoryMockProvider>
+  ),
+  args: {
+    surveyName: 'rei_pkg_survey',
+  },
+};

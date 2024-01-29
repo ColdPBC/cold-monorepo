@@ -10,6 +10,7 @@ import { motion } from 'framer-motion';
 import { useOrgSWR } from '../../../hooks/useOrgSWR';
 import { useColdContext } from '@coldpbc/hooks';
 import { ErrorType } from '@coldpbc/enums';
+import { ActionPayload } from '@coldpbc/interfaces';
 
 const scoreQuadrants = [
   {
@@ -46,6 +47,7 @@ interface Props {
 export const SubcategoryJourneyPreview = ({ subcategory_key, category_key, cardTitle, to, containerClassName, glow }: Props) => {
   const ldFlags = useFlags();
   const { data, error } = useOrgSWR<any>(['/categories', 'GET'], axiosFetcher);
+  const { data: actionsData, error: actionsError } = useOrgSWR<ActionPayload[], any>(ldFlags.showActions261 ? [`/actions`, 'GET'] : null, axiosFetcher);
 
   const { logError } = useColdContext();
 
@@ -66,6 +68,26 @@ export const SubcategoryJourneyPreview = ({ subcategory_key, category_key, cardT
 
   const curScoreQuadrant = curScoreQuadrantIndex !== -1 ? scoreQuadrants[curScoreQuadrantIndex] : null;
 
+  const getActionsLink = (subcategory_key: string) => {
+    if (ldFlags.showActions261) {
+      if (!actionsData?.some(action => action.action.subcategory === subcategory_key)) {
+        return (
+          <Link to={to ?? `/actions`} className="w-[24px]">
+            <ArrowRightIcon />
+          </Link>
+        );
+      } else {
+        return (
+          <Link to={to ?? `/actions/${subcategory_key}`} className="w-[24px]">
+            <ArrowRightIcon />
+          </Link>
+        );
+      }
+    } else {
+      return null;
+    }
+  };
+
   return (
     <Card
       className={twMerge('gap-0 p-4 border-bgc-accent border rounded-lg w-[310px] text-white bg-bgc-elevated', containerClassName)}
@@ -73,11 +95,7 @@ export const SubcategoryJourneyPreview = ({ subcategory_key, category_key, cardT
       data-testid={'subcategory-journey-preview-' + subcategory_key}>
       <div className={'flex h-[24px] w-full' + (ldFlags.showActions261 ? ' justify-between' : ' justify-start')}>
         <h4 className="font-bold text-sm">{cardTitle ?? subcategoryName}</h4>
-        {ldFlags.showActions261 && (
-          <Link to={to ?? `/actions/${subcategory_key}`} className="w-[24px]">
-            <ArrowRightIcon />
-          </Link>
-        )}
+        {getActionsLink(subcategory_key)}
       </div>
 
       <div className="h-[12px] relative my-2 flex  w-full">

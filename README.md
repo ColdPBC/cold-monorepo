@@ -103,6 +103,62 @@ nx run-many -t <target1> <target2> -p <proj1> <proj2>
 
 Targets can be defined in the `package.json` or `projects.json`. Learn more [in the docs](https://nx.dev/core-features/run-tasks).
 
+## Integrations / Microservices
+This mono-repo contains various microservices that facilitate the Cold Climate Ecosystem. Each microservice is located in the `/apps` directory and are build upon the NestJS framework.  Each microservice is a standalone application that can be run independently of the others.  However, they are designed to work together to provide a seamless experience for the user.
+
+### Internal Services
+All microservices communcate with each other via RabbitMQ.  This is made easier through the use of the [Shared NestJS Library](./libs/nest/README.md). This library provides a set of decorators that can be used to easily define the RabbitMQ configuration for each microservice.  However it is still necessary to define the RabbitMQ configuration for the microservice.  This is done by adding the rabbitMQ configuration to  a `definition` object in the service's `package.json` file.  Any configuration options that aren't managed by launch darkly should be placed here.  If configured correctly the microservice will register itself in the cold climate db so that other services will be able to discover it and since it contains the RabbitMQ configuration the consuming services will know how to communicate with it. 
+```package.json
+"definition": {
+    "logo_url": "./assets/climatiq.png",
+    "platform_url": "https://www.climatiq.io",
+    "rabbitMQ": {
+      "rpc": {
+        "queue": "cold.platform.climatiq",
+        "routing_key": "cold.platform.climatiq.rpc",
+        "exchange": "amq.direct"
+      },
+      "subscribe": {
+        "queue": "cold.platform.climatiq.rpc",
+        "routing_key": "cold.platform.climatiq",
+        "exchange": "amq.direct"
+      }
+    }
+  }
+```
+### Customer Facing Integrations
+Since some of our microservice facilitate integrations into 3rd party data sources for customer data, they typically require some configuration steps to be performed by the user. The following microservices are customer facing and are designed to be consumed by the Cold Climate UI.
+- [Bayou Energy]()
+
+To make these microservices available to the Cold Climate UI, you must add a `ui_options` block to the `definition` object in the microservice's `package.json` file.  This will allow the UI to discover the microservice and provide the user with the ability to configure it.
+```package.json
+"definition": {
+    "rabbitMQ": {
+      "rpcOptions": {
+        "queue": "cold.platform.bayou",
+        "routing_key": "cold.platform.bayou.rpc",
+        "exchange": "amq.direct"
+      },
+      "publishOptions": {
+        "queue": "cold.platform.bayou",
+        "routing_key": "cold.platform.bayou",
+        "exchange": "amq.direct"
+      }
+    },
+    "ui_options": {
+      "logo_url": "https://www.bayou.energy/img/logo_bayou.svg",
+      "platform_url": "https://www.bayou.energy",
+      "description": "Get Bayou’s API integrated in minutes for many utilities. And get your utility account connected in one click.",
+      "helptext": "",
+      "flags": {
+        "embedable": false,
+        "iframe_url_property": "onboarding_link",
+        "iframe_url_token": "onboarding_token"
+      }
+    }
+  } 
+```
+
 ## Want better Editor Integration?
 
 Have a look at the [Nx Console extensions](https://nx.dev/nx-console). It provides autocomplete support, a UI for exploring and running tasks & generators, and more! Available for VSCode, IntelliJ and comes with a LSP for Vim users.

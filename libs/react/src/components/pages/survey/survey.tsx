@@ -9,6 +9,7 @@ import { useSearchParams } from 'react-router-dom';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application/errors/errorFallback';
 import { useOrgSWR, useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
+import { isComponentTypeValid } from '@coldpbc/lib';
 
 export interface SurveyProps {
   surveyName: string;
@@ -24,10 +25,7 @@ const _Survey = (props: SurveyProps) => {
   });
   const [show, setShow] = React.useState<boolean>(true);
   const [surveyData, setSurveyData] = React.useState<SurveyPayloadType>();
-  const { data, error, isLoading } = useOrgSWR<SurveyPayloadType, any>(
-    [`/surveys/${surveyName}`, 'GET'],
-    axiosFetcher,
-  );
+  const { data, error, isLoading } = useOrgSWR<SurveyPayloadType, any>([`/surveys/${surveyName}`, 'GET'], axiosFetcher);
   const [searchParams, setSearchParams] = useSearchParams();
   const [submitted, setSubmitted] = React.useState<boolean>(false);
   const { logError } = useColdContext();
@@ -39,18 +37,32 @@ const _Survey = (props: SurveyProps) => {
   const getStartKey = (surveyData: SurveyPayloadType) => {
     // loop the sections and follow up and find the first question that has not been answered yet
     let firstActiveKey: SurveyActiveKeyType | undefined = undefined;
-    find(Object.keys(surveyData.definition.sections), (key) => {
+    find(Object.keys(surveyData.definition.sections), key => {
       const section = surveyData.definition.sections[key];
-      if (section.component === null && isEmpty(section.prompt)) {
+      if (!isComponentTypeValid(section.component) && isEmpty(section.prompt)) {
         // check the followups
-        const foundInFollowUp = find(
-          Object.keys(section.follow_up),
-          (followUpKey) => {
+        const foundInFollowUp = find(Object.keys(section.follow_up), followUpKey => {
+          const followUp = section.follow_up[followUpKey];
+          if (followUp.value === undefined && followUp.skipped === undefined) {
+            firstActiveKey = {
+              value: followUpKey,
+              previousValue: '',
+              isFollowUp: true,
+            };
+            return true;
+          } else {
+            return false;
+          }
+        });
+        return foundInFollowUp !== undefined;
+      } else {
+        let foundQuestion = section.value === undefined && section.skipped === undefined;
+        // check the followups
+        if (!foundQuestion) {
+          // use find
+          const foundInFollowUp = find(Object.keys(section.follow_up), followUpKey => {
             const followUp = section.follow_up[followUpKey];
-            if (
-              followUp.value === undefined &&
-              followUp.skipped === undefined
-            ) {
+            if (followUp.value === undefined && followUp.skipped === undefined) {
               firstActiveKey = {
                 value: followUpKey,
                 previousValue: '',
@@ -60,34 +72,7 @@ const _Survey = (props: SurveyProps) => {
             } else {
               return false;
             }
-          },
-        );
-        return foundInFollowUp !== undefined;
-      } else {
-        let foundQuestion =
-          section.value === undefined && section.skipped === undefined;
-        // check the followups
-        if (!foundQuestion) {
-          // use find
-          const foundInFollowUp = find(
-            Object.keys(section.follow_up),
-            (followUpKey) => {
-              const followUp = section.follow_up[followUpKey];
-              if (
-                followUp.value === undefined &&
-                followUp.skipped === undefined
-              ) {
-                firstActiveKey = {
-                  value: followUpKey,
-                  previousValue: '',
-                  isFollowUp: true,
-                };
-                return true;
-              } else {
-                return false;
-              }
-            },
-          );
+          });
           foundQuestion = foundInFollowUp !== undefined;
         } else {
           firstActiveKey = {
@@ -108,7 +93,7 @@ const _Survey = (props: SurveyProps) => {
       if (!firstQuestionKey) {
         const firstSectionKey = Object.keys(surveyData.definition.sections)[0];
         const firstSection = surveyData.definition.sections[firstSectionKey];
-        if (firstSection.component === null && isEmpty(firstSection.prompt)) {
+        if (!isComponentTypeValid(firstSection.component) && isEmpty(firstSection.prompt)) {
           const firstFollowUpKey = Object.keys(firstSection.follow_up)[0];
           // get the first followup
           setActiveKey({
@@ -137,7 +122,7 @@ const _Survey = (props: SurveyProps) => {
       const sectionKeys = Object.keys(sections);
       for (let i = 0; i < sectionKeys.length; i++) {
         const section = sections[sectionKeys[i]];
-        if (section.component !== null && !isEmpty(section.prompt)) {
+        if (isComponentTypeValid(section.component) && !isEmpty(section.prompt)) {
           if (section.value !== undefined && section.skipped !== undefined) {
             return true;
           }
@@ -186,12 +171,9 @@ const _Survey = (props: SurveyProps) => {
       // sort the sections and set the sorted sections in the copy
       Object.keys(data.definition.sections)
         .sort((a, b) => {
-          return (
-            data.definition.sections[a].category_idx -
-            data.definition.sections[b].category_idx
-          );
+          return data.definition.sections[a].category_idx - data.definition.sections[b].category_idx;
         })
-        .forEach((key) => {
+        .forEach(key => {
           copy.definition.sections[key] = {
             ...data.definition.sections[key],
             follow_up: {},
@@ -199,14 +181,10 @@ const _Survey = (props: SurveyProps) => {
           // sort the followups and set the sorted followups in the copy
           Object.keys(data.definition.sections[key].follow_up)
             .sort((a, b) => {
-              return (
-                data.definition.sections[key].follow_up[a].idx -
-                data.definition.sections[key].follow_up[b].idx
-              );
+              return data.definition.sections[key].follow_up[a].idx - data.definition.sections[key].follow_up[b].idx;
             })
-            .forEach((followupKey) => {
-              copy.definition.sections[key].follow_up[followupKey] =
-                data.definition.sections[key].follow_up[followupKey];
+            .forEach(followupKey => {
+              copy.definition.sections[key].follow_up[followupKey] = data.definition.sections[key].follow_up[followupKey];
             });
         });
       setSurveyData(copy);
@@ -232,8 +210,7 @@ const _Survey = (props: SurveyProps) => {
         header={{
           title: {},
           dismiss: dismiss,
-        }}
-      >
+        }}>
         <div className="absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
           <Spinner size={GlobalSizes.xLarge} />
         </div>
@@ -251,20 +228,13 @@ const _Survey = (props: SurveyProps) => {
           dismiss: dismiss,
         }}
         className={'z-20'}
-        data-testid={'survey-takeover'}
-      >
+        data-testid={'survey-takeover'}>
         <div
           className={'flex flex-1'}
           style={{
             maxHeight: 'min(1000px, calc(100vh - 100px))',
-          }}
-        >
-          <SurveyLeftNav
-            surveyData={surveyData}
-            activeKey={activeKey}
-            setActiveKey={setActiveKey}
-            submitted={submitted}
-          />
+          }}>
+          <SurveyLeftNav surveyData={surveyData} activeKey={activeKey} setActiveKey={setActiveKey} submitted={submitted} />
           <SurveyRightNav
             activeKey={activeKey}
             setActiveKey={setActiveKey}
@@ -284,7 +254,7 @@ const _Survey = (props: SurveyProps) => {
 };
 
 export const Survey = withErrorBoundary(_Survey, {
-  FallbackComponent: (props) => <ErrorFallback {...props} />,
+  FallbackComponent: props => <ErrorFallback {...props} />,
   onError: (error, info) => {
     console.error('Error occurred in Survey: ', error);
   },

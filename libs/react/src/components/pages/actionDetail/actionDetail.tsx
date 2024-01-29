@@ -32,7 +32,7 @@ const _ActionDetail = ({ id }: Props) => {
 
   const { data: categoriesData } = useOrgSWR<any>(['/categories', 'GET'], axiosFetcher);
 
-  const isActionComplete = data?.action.steps.every(step => step.complete);
+  const isActionComplete = data?.action.steps.every(step => step.complete) && data?.action.ready_to_execute === true;
 
   const selectedAssignee = data?.action.assignee;
 

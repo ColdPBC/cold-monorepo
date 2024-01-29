@@ -43,7 +43,6 @@ yalc.*
 package-lock.json
 # Ignore all index barrel files
 /libs/react/src/**/**/index.ts
-index.ts
 /.nx/
 /.nx/
 /migrations.json
@@ -55,7 +54,7 @@ index.ts
 
 .yarn/*
 .yarn/cache
-.yarn/install-state.gz
+.yarn
 !.yarn/patches
 !.yarn/plugins
 !.yarn/releases

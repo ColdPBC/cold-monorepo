@@ -1,22 +1,32 @@
-import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from '@nestjs/common';
+import { CallHandler, ExecutionContext, Injectable, NestInterceptor, OnModuleInit } from '@nestjs/common';
 import { Span, TraceService } from 'nestjs-ddtrace';
 import { Observable } from 'rxjs';
-import { get } from 'lodash';
+import { get, pick } from 'lodash';
 import { tap } from 'rxjs/operators';
-import { BaseWorker, WorkerLogger } from '@coldpbc/nest';
+import { BaseWorker, DarklyService, WorkerLogger } from '@coldpbc/nest';
 import { Request } from 'express';
 import { ConfigService } from '@nestjs/config';
 import { isRabbitContext } from '@golevelup/nestjs-rabbitmq';
 
 @Span()
 @Injectable()
-export class LoggingInterceptor implements NestInterceptor {
+export class LoggingInterceptor implements NestInterceptor, OnModuleInit {
   logger: WorkerLogger;
   tracer: TraceService = new TraceService();
+  darkly: DarklyService = new DarklyService(this.config);
+  enableHealthLogs: boolean = false;
 
   constructor(private config: ConfigService) {
     this.logger = new WorkerLogger(LoggingInterceptor.name, { version: config.get('DD_VERSION') || BaseWorker.getPkgVersion() });
     //this.logger = new WorkerLogger(LoggingInterceptor.name, { version: process.env['DD_VERSION'] });
+  }
+
+  async onModuleInit() {
+    await this.darkly.onModuleInit();
+
+    this.darkly.subscribeToFlagChanges('dynamic-enable-health-check-logs', value => {
+      this.enableHealthLogs = value;
+    });
   }
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
@@ -47,6 +57,7 @@ export class LoggingInterceptor implements NestInterceptor {
             url: request.url,
             service: this.config.get('DD_SERVICE') || BaseWorker.getProjectName(),
             version: this.config.get('DD_VERSION') || BaseWorker.getPkgVersion(),
+            status: request.statusCode,
             method: request.method,
           });
 
@@ -66,7 +77,8 @@ export class LoggingInterceptor implements NestInterceptor {
 
           this.tracer.getTracer().appsec.setUser(dd_user);
           this.tracer.getTracer().setUser(dd_user);
-          if (process.env['ENABLE_HEALTH_LOGS']) {
+
+          if (this.enableHealthLogs) {
             this.logger.info(`${request.method} ${request.url}`, { duration: `${Date.now() - now}ms` });
           }
         }),
@@ -75,16 +87,16 @@ export class LoggingInterceptor implements NestInterceptor {
       return next.handle().pipe(
         tap(() => {
           const data = {
-            msg: context.getArgs()[0].msg,
+            //data: context.getArgs()[0].data,
             fields: context.getArgs()[1].fields,
             properties: context.getArgs()[1].properties,
-            content: JSON.parse(Buffer.from(context.getArgs()[1].content).toString()),
+            content: pick(JSON.parse(Buffer.from(context.getArgs()[1].content).toString()), ['event', 'from', 'user', 'metadata']),
             service: this.config.get('DD_SERVICE') || BaseWorker.getProjectName(),
             version: this.config.get('DD_VERSION') || BaseWorker.getPkgVersion(),
             method: context.getArgs()[1].properties?.replyTo ? 'REQUEST' : 'PUBLISH',
           };
-          this.logger = new WorkerLogger(data.msg.name);
-          this.logger.log(`Processed ${data.method} message`, { ...data });
+          this.logger = new WorkerLogger(LoggingInterceptor.name);
+          this.logger.log(`Processed ${data.content.event} message from ${data.content.from}`, data);
         }),
       );
     }

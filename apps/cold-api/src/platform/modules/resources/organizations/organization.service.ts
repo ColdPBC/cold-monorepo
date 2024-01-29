@@ -2,13 +2,14 @@ import { HttpService } from '@nestjs/axios';
 import { ConflictException, HttpException, Injectable, NotFoundException, UnauthorizedException, UnprocessableEntityException } from '@nestjs/common';
 import { Span } from 'nestjs-ddtrace';
 // eslint-disable-next-line @nx/enforce-module-boundaries
-import { Auth0Organization, Auth0TokenService, AuthenticatedUser, BaseWorker, CacheService, DarklyService, PrismaService, Tags } from '@coldpbc/nest';
+import { Auth0Organization, Auth0TokenService, AuthenticatedUser, BaseWorker, CacheService, ColdRabbitService, DarklyService, PrismaService, S3Service, Tags } from '@coldpbc/nest';
 import { filter, find, first, kebabCase, map, merge, omit, pick, set } from 'lodash';
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { MemberService } from '../auth0/members/member.service';
 import { RoleService } from '../auth0/roles/role.service';
 import { CreateOrganizationDto } from './dto/organization.dto';
 import { organizations } from '@prisma/client';
+import { IntegrationsService } from '../integrations/integrations.service';
 
 @Span()
 @Injectable()
@@ -24,6 +25,9 @@ export class OrganizationService extends BaseWorker {
     readonly roleService: RoleService,
     readonly memberService: MemberService,
     readonly darkly: DarklyService,
+    private rabbit: ColdRabbitService,
+    readonly integrations: IntegrationsService,
+    readonly s3: S3Service,
   ) {
     super('OrganizationService');
     this.httpService = new HttpService();
@@ -32,7 +36,10 @@ export class OrganizationService extends BaseWorker {
 
   override async onModuleInit() {
     await this.getOrganizations(true);
-    this.test_orgs = await this.darkly.getJSONFlag('org-whitelist');
+
+    this.darkly.subscribeToJsonFlagChanges('dynamic-org-white-list', value => {
+      this.test_orgs = value;
+    });
   }
 
   /***
@@ -475,12 +482,17 @@ export class OrganizationService extends BaseWorker {
         org.name = orgName;
       }
 
+      let existing: any | null;
+
       // search for existing organization by name
       await this.prisma.organizations.findUnique({
         where: { name: org.name },
       });
 
-      let existing: any = null;
+      if (existing) {
+        throw new ConflictException(`organization ${existing.name} already exists in db`);
+      }
+
       try {
         // search Auth0 for existing organization by name
         existing = (await this.getOrganization(<string>org.name, user, true)) as Auth0Organization;
@@ -527,9 +539,28 @@ export class OrganizationService extends BaseWorker {
         // create organization in database
         org.created_at = new Date();
 
-        await this.prisma.organizations.create({
+        existing = await this.prisma.organizations.create({
           data: org as any,
         });
+
+        if (org.street_address && org.city && org.state && org.zip) {
+          const location = await this.prisma.organization_locations.create({
+            data: {
+              name: 'Default',
+              organization_id: existing.id,
+              address: org.street_address,
+              city: org.city,
+              state: org.state,
+              postal_code: org.zip,
+              country: 'US',
+            },
+          });
+
+          await this.cache.set(`organizations:${existing.id}:locations`, location, {
+            ttl: 60 * 60 * 24 * 7,
+            update: true,
+          });
+        }
 
         await this.cache.set(`organizations:${auth0Org.id}`, auth0Org, {
           update: true,
@@ -543,7 +574,15 @@ export class OrganizationService extends BaseWorker {
 
       this.metrics.increment('cold.api.organizations.create', tags);
 
-      return org;
+      return (await this.prisma.organizations.findUnique({
+        where: {
+          id: existing.id,
+        },
+        include: {
+          locations: true,
+          integrations: true,
+        },
+      })) as organizations;
     } catch (e) {
       tags.status = 'failed';
 
@@ -552,7 +591,7 @@ export class OrganizationService extends BaseWorker {
       this.tracer.getTracer().dogstatsd.increment('cold.api.organizations.create', 1, tags);
 
       this.logger.error(e, { org, e });
-      throw e;
+      throw new UnprocessableEntityException(e.message, e);
     }
   }
 
@@ -977,5 +1016,77 @@ export class OrganizationService extends BaseWorker {
       }
     }
     return roleName;
+  }
+
+  async uploadFile(user: AuthenticatedUser, orgId: string, file: Express.MulterS3.File) {
+    try {
+      if (orgId !== user.coldclimate_claims.org_id && !user.isColdAdmin) {
+        throw new UnauthorizedException('You do not have permission to perform this action');
+      }
+
+      const org = await this.getOrganization(orgId, user, true);
+
+      if (!org) {
+        throw new NotFoundException(`Organization ${orgId} not found`);
+      }
+
+      const existing = await this.prisma.organization_files.findUnique({
+        where: {
+          s3Key: {
+            key: file.key,
+            bucket: file.bucket,
+            organization_id: orgId,
+          },
+        },
+      });
+
+      if (existing?.checksum === file.metadata.md5Hash) {
+        this.logger.warn(`file ${file.key} already exists in db`, file);
+        return new ConflictException(`file ${file.key} already exists in db for org ${orgId}`);
+      }
+
+      const uploaded = await this.prisma.organization_files.create({
+        data: {
+          original_name: file.originalname,
+          integration_id: null,
+          organization_id: orgId,
+          versionId: file['versionId'],
+          bucket: file.bucket,
+          key: file.key,
+          mimetype: file.mimetype,
+          size: file.size,
+          acl: file.acl,
+          fieldname: file.fieldname,
+          encoding: file.encoding,
+          contentType: file.contentType,
+          location: file.location,
+          checksum: file.metadata.md5Hash,
+        },
+      });
+
+      const integrations = await this.integrations.getOrganizationIntegrations(user, orgId, true);
+
+      if (integrations) {
+        for (const integration of integrations) {
+          const routingKey = integration.service_definition.definition.rabbitMQ.publishOptions.routing_key;
+          if (routingKey) {
+            await this.rabbit.publish(
+              routingKey,
+              {
+                user,
+                integration,
+                from: 'cold-api',
+                uploaded,
+              },
+              'file.uploaded',
+            );
+          }
+        }
+      }
+      return file;
+    } catch (e) {
+      this.logger.error(e);
+      throw e;
+    }
   }
 }

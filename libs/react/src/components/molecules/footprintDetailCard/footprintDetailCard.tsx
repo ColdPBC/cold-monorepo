@@ -10,6 +10,8 @@ import { ErrorFallback } from '../../application';
 import { useOrgSWR } from '../../../hooks/useOrgSWR';
 import { useColdContext } from '@coldpbc/hooks';
 import { ErrorType } from '@coldpbc/enums';
+import { ActionPayload } from '@coldpbc/interfaces';
+import { CardProps } from '@coldpbc/components';
 
 export interface FootprintDetailCardProps {
   colors: string[];
@@ -22,8 +24,7 @@ function _FootprintDetailCard(props: PropsWithChildren<FootprintDetailCardProps>
   const ldFlags = useFlags();
   const navigate = useNavigate();
   const [isEmpty, setIsEmpty] = useState(false);
-
-  // Get footprint data from SWR
+  const { data: actionsData, error: actionsError } = useOrgSWR<ActionPayload[], any>(ldFlags.showActions261 ? [`/actions`, 'GET'] : null, axiosFetcher);
   const { data, error } = useOrgSWR<any>(['/categories/company_decarbonization', 'GET'], axiosFetcher);
   const { logError } = useColdContext();
 
@@ -43,12 +44,22 @@ function _FootprintDetailCard(props: PropsWithChildren<FootprintDetailCardProps>
   const getCtas = (subcategoryName: string) => {
     const ctas = [];
     if (ldFlags.showActions261) {
-      ctas.push({
-        text: `View ${subcategoryName} Actions`,
-        action: () => {
-          navigate(`/actions/${props.subcategory_key}`);
-        },
-      });
+      // if there are no actions for this subcategory, navigate to the /actions page
+      if (!actionsData?.some(action => action.action.subcategory === props.subcategory_key)) {
+        ctas.push({
+          text: `View ${subcategoryName} Actions`,
+          action: () => {
+            navigate(`/actions`);
+          },
+        });
+      } else {
+        ctas.push({
+          text: `View ${subcategoryName} Actions`,
+          action: () => {
+            navigate(`/actions/${props.subcategory_key}`);
+          },
+        });
+      }
     }
     return ctas;
   };

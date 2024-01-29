@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { BaseWorker } from '@coldpbc/nest';
+import { BaseWorker, PrismaService } from '@coldpbc/nest';
 import { HttpService } from '@nestjs/axios';
 import { AxiosRequestConfig } from 'axios';
 
@@ -20,7 +20,7 @@ export class ClimatiqService extends BaseWorker {
   axiosConfig: AxiosRequestConfig;
   energyPayload: EnergyPayload;
 
-  constructor(private readonly axios: HttpService) {
+  constructor(private readonly axios: HttpService, private readonly prisma: PrismaService) {
     super(ClimatiqService.name);
 
     this.axiosConfig = {
@@ -44,8 +44,12 @@ export class ClimatiqService extends BaseWorker {
     };
   }
 
-  getEmissionEstimate(data: EnergyPayload) {
-    return this.axios.post('https://api.climatiq.io/estimate', data, this.axiosConfig);
+  async getEmissionEstimate(data: EnergyPayload) {
+    const response = await this.axios.post('https://beta4.api.climatiq.io/estimate', data, this.axiosConfig).toPromise();
+
+    const emission = response.data;
+
+    return emission;
   }
 
   async getComputeMetadata() {

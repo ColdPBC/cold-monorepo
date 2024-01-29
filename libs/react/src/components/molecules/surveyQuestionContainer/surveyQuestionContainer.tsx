@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { SurveyInput } from '../index';
-import { cloneDeep, findIndex, forEach } from 'lodash';
+import { cloneDeep, findIndex, forEach, forOwn } from 'lodash';
 import { IButtonProps, SurveyActiveKeyType, SurveyAdditionalContext, SurveyPayloadType, SurveySectionType } from '@coldpbc/interfaces';
 import { BaseButton, Spinner } from '../../atoms';
 import { ButtonTypes, GlobalSizes } from '@coldpbc/enums';
 import { CSSTransition, SwitchTransition } from 'react-transition-group';
-import { getSectionIndex, isKeyValueFollowUp } from '@coldpbc/lib';
+import { getSectionIndex, isComponentTypeValid, isKeyValueFollowUp } from '@coldpbc/lib';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application';
@@ -31,8 +31,6 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
     enterDone: 'transition ease-out duration-200 transform translate-y-0',
     exitActive: 'transition ease-in duration-200 transform translate-y-full',
   };
-  const [activeQuestion, setActiveQuestion] = React.useState<JSX.Element | undefined>(undefined);
-  const [additionalContextQuestion, setAdditionalContextQuestion] = React.useState<JSX.Element | undefined>(undefined);
   const [transitionClassNames, setTransitionClassNames] = React.useState<any>(nextQuestionTransitionClassNames);
   const { definition, id, name } = surveyData;
   const { sections } = definition;
@@ -43,6 +41,17 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
     } else {
       setTransitionClassNames(previousQuestionTransitionClassNames);
     }
+  };
+
+  const validateSurveyData = (survey: SurveyPayloadType) => {
+    // loop through each section and check the component type. If it is invalid then set the value to null
+    const newSurvey = cloneDeep(survey);
+    forOwn(newSurvey.definition.sections, (section: SurveySectionType, key: string) => {
+      if (!isComponentTypeValid(section.component)) {
+        newSurvey.definition.sections[key]['component'] = null;
+      }
+    });
+    return newSurvey;
   };
 
   const updateSurveyQuestion = (
@@ -63,8 +72,8 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
       if (submit) {
         update.skipped = followUp.value === null || followUp.value === undefined;
       }
-      if(followUp.additional_context) {
-        if(additional) {
+      if (followUp.additional_context) {
+        if (additional) {
           newSection = {
             ...section,
             follow_up: {
@@ -81,7 +90,7 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
         } else {
           const value = update.value;
           const conditionMet = ifAdditionalContextConditionMet(value, followUp.additional_context);
-          if(!conditionMet) {
+          if (!conditionMet) {
             newSection = {
               ...section,
               follow_up: {
@@ -125,9 +134,10 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
       const section = sections[key];
       if (submit) {
         update.skipped = section.value === null || section.value === undefined;
+        update.value = section.value ? section.value : null;
       }
-      if(section.additional_context){
-        if(additional) {
+      if (section.additional_context) {
+        if (additional) {
           newSection = {
             ...section,
             additional_context: {
@@ -138,7 +148,7 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
         } else {
           const value = update.value;
           const conditionMet = ifAdditionalContextConditionMet(value, section.additional_context);
-          if(!conditionMet) {
+          if (!conditionMet) {
             newSection = {
               ...section,
               ...update,
@@ -167,7 +177,7 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
         });
       }
     }
-    const newSurvey: SurveyPayloadType = cloneDeep(surveyData);
+    const newSurvey: SurveyPayloadType = validateSurveyData(surveyData);
     newSurvey.definition.sections[activeSectionKey] = newSection;
     newSurvey.definition.submitted = submit;
     return newSurvey;
@@ -201,17 +211,17 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
             onFieldUpdated={(name, value) => {
               onFieldUpdated(key.value, value, true);
             }}
-            value={followUp.additional_context.value === undefined ? null : followUp.additional_context.value}
+            value={followUp.additional_context.value}
             isAdditional={true}
           />
         );
       }
       if (followUp) {
-        return <SurveyInput {...followUp} input_key={key.value} onFieldUpdated={onFieldUpdated} value={followUp.value === undefined ? null : followUp.value} />;
+        return <SurveyInput {...followUp} input_key={key.value} onFieldUpdated={onFieldUpdated} value={followUp.value} />;
       }
     } else {
       const section = sections[key.value];
-      if (section && section.component !== null) {
+      if (section && isComponentTypeValid(section.component)) {
         if (additional && section.additional_context) {
           return (
             <SurveyInput
@@ -221,7 +231,7 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
               onFieldUpdated={(name, value) => {
                 onFieldUpdated(key.value, value, true);
               }}
-              value={section.additional_context.value === undefined ? null : section.additional_context.value}
+              value={section.additional_context.value}
               isAdditional={true}
             />
           );
@@ -235,7 +245,7 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
             options={[]}
             tooltip={''}
             placeholder={''}
-            value={section.value === undefined ? null : section.value}
+            value={section.value}
           />
         );
       }
@@ -266,7 +276,7 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
       const activeFollowUpIndex = findIndex(Object.keys(sections[activeSectionKey].follow_up), followUpKey => {
         return followUpKey === activeKey.value;
       });
-      if (sections[activeSectionKey].component === null && sections[activeSectionKey].prompt === '') {
+      if (!isComponentTypeValid(sections[activeSectionKey].component) && sections[activeSectionKey].prompt === '') {
         if (activeFollowUpIndex === 0) {
           if (activeSectionIndex !== 0) {
             buttonProps.label = 'Previous';
@@ -313,27 +323,45 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
       if (
         additionalContextQuestion &&
         sections[activeSectionKey].follow_up[activeFollowUpKey].additional_context &&
-        (sections[activeSectionKey].follow_up[activeFollowUpKey].additional_context?.value === undefined
-          || sections[activeSectionKey].follow_up[activeFollowUpKey].additional_context?.value === null)
+        (sections[activeSectionKey].follow_up[activeFollowUpKey].additional_context?.value === undefined ||
+          sections[activeSectionKey].follow_up[activeFollowUpKey].additional_context?.value === null)
       ) {
         buttonProps.disabled = true;
       }
-      if (activeSectionIndex === Object.keys(sections).length - 1 && activeFollowUpIndex === Object.keys(sections[activeSectionKey].follow_up).length - 1) {
-        buttonProps.label = 'Submit';
-        buttonProps.onClick = () => {
-          onSubmitButtonClicked();
-        };
-      } else {
-        if (sections[activeSectionKey].follow_up[activeFollowUpKey].value === null || sections[activeSectionKey].follow_up[activeFollowUpKey].value === undefined) {
-          buttonProps.label = 'Skip';
+
+      if (
+        sections[activeSectionKey].follow_up[activeFollowUpKey].value === undefined &&
+        sections[activeSectionKey].follow_up[activeFollowUpKey].ai_response !== undefined &&
+        sections[activeSectionKey].follow_up[activeFollowUpKey].ai_response?.answer !== undefined
+      ) {
+        buttonProps.label = 'Confirm';
+        if (activeSectionIndex === Object.keys(sections).length - 1 && activeFollowUpIndex === Object.keys(sections[activeSectionKey].follow_up).length - 1) {
           buttonProps.onClick = () => {
-            onSkipButtonClicked();
+            onSubmitButtonClicked();
           };
         } else {
-          buttonProps.label = 'Continue';
           buttonProps.onClick = () => {
             onNextButtonClicked();
           };
+        }
+      } else {
+        if (activeSectionIndex === Object.keys(sections).length - 1 && activeFollowUpIndex === Object.keys(sections[activeSectionKey].follow_up).length - 1) {
+          buttonProps.label = 'Submit';
+          buttonProps.onClick = () => {
+            onSubmitButtonClicked();
+          };
+        } else {
+          if (sections[activeSectionKey].follow_up[activeFollowUpKey].value === null || sections[activeSectionKey].follow_up[activeFollowUpKey].value === undefined) {
+            buttonProps.label = 'Skip';
+            buttonProps.onClick = () => {
+              onSkipButtonClicked();
+            };
+          } else {
+            buttonProps.label = 'Continue';
+            buttonProps.onClick = () => {
+              onNextButtonClicked();
+            };
+          }
         }
       }
     } else {
@@ -343,16 +371,37 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
       ) {
         buttonProps.disabled = true;
       }
-      if (sections[activeSectionKey].value === null || sections[activeSectionKey].value === undefined) {
-        buttonProps.label = 'Skip';
-        buttonProps.onClick = () => {
-          onSkipButtonClicked();
-        };
-      } else {
-        buttonProps.label = 'Continue';
+      if (sections[activeSectionKey].value === undefined && sections[activeSectionKey].ai_response !== undefined && sections[activeSectionKey].ai_response?.answer !== undefined) {
+        buttonProps.label = 'Confirm';
         buttonProps.onClick = () => {
           onNextButtonClicked();
         };
+      } else {
+        if (sections[activeSectionKey].value === null || sections[activeSectionKey].value === undefined) {
+          if (activeSectionIndex === Object.keys(sections).length - 1) {
+            buttonProps.label = 'Submit';
+            buttonProps.onClick = () => {
+              onSubmitButtonClicked();
+            };
+          } else {
+            buttonProps.label = 'Skip';
+            buttonProps.onClick = () => {
+              onSkipButtonClicked();
+            };
+          }
+        } else {
+          if (sections[activeSectionKey].value === false) {
+            buttonProps.label = 'Submit';
+            buttonProps.onClick = () => {
+              onSubmitButtonClicked();
+            };
+          } else {
+            buttonProps.label = 'Continue';
+            buttonProps.onClick = () => {
+              onNextButtonClicked();
+            };
+          }
+        }
       }
     }
 
@@ -370,7 +419,7 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
         return followUpKey === activeKey.value;
       });
       if (activeFollowUpIndex === Object.keys(sections[activeSectionKey].follow_up).length - 1) {
-        if (nextSection.component === null && nextSection.prompt === '') {
+        if (!isComponentTypeValid(nextSection.component) && nextSection.prompt === '') {
           setActiveKey({
             value: Object.keys(nextSection.follow_up)[0],
             previousValue: activeKey.value,
@@ -393,7 +442,7 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
       }
     } else {
       if (sections[activeSectionKey].value !== true) {
-        if (nextSection.component === null && nextSection.prompt === '') {
+        if (!isComponentTypeValid(nextSection.component) && nextSection.prompt === '') {
           setActiveKey({
             value: Object.keys(nextSection.follow_up)[0],
             previousValue: activeKey.value,
@@ -454,10 +503,10 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
       });
       if (activeFollowUpIndex === 0) {
         const section = sections[activeSectionKey];
-        if (section.component === null && section.prompt === '') {
+        if (!isComponentTypeValid(section.component) && section.prompt === '') {
           const previousSectionKey = Object.keys(sections)[activeSectionIndex - 1];
           const previousSection = sections[previousSectionKey];
-          if (previousSection.value !== true && previousSection.component !== null && previousSection.prompt !== '') {
+          if (previousSection.value !== true && isComponentTypeValid(previousSection.component) && previousSection.prompt !== '') {
             setActiveKey({
               value: previousSectionKey,
               previousValue: activeKey.value,
@@ -488,7 +537,7 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
     } else {
       const previousSectionKey = Object.keys(sections)[activeSectionIndex - 1];
       const previousSection = sections[previousSectionKey];
-      if (previousSection.value !== true && previousSection.component !== null && previousSection.prompt !== '') {
+      if (previousSection.value !== true && isComponentTypeValid(previousSection.component) && previousSection.prompt !== '') {
         setActiveKey({
           value: previousSectionKey,
           previousValue: activeKey.value,
@@ -524,7 +573,7 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
     const section = sections[activeSectionKey];
     if (key.isFollowUp) {
       const followUp = section.follow_up[key.value];
-      const value = followUp.value;
+      const value = getQuestionValue(key);
       // if the follow up is unanswered then
       if (value === null || value === undefined) {
         condition = false;
@@ -534,7 +583,7 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
         }
       }
     } else {
-      const value = section.value;
+      const value = getQuestionValue(key);
       if (value === null || value === undefined) {
         condition = false;
       } else {
@@ -544,9 +593,9 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
       }
     }
     if (condition) {
-      setAdditionalContextQuestion(getQuestionForKey(activeKey, true));
+      return getQuestionForKey(activeKey, true);
     } else {
-      setAdditionalContextQuestion(undefined);
+      return undefined;
     }
   };
 
@@ -567,7 +616,7 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
       default:
         return false;
     }
-  }
+  };
 
   const getQuestionValue = (key: SurveyActiveKeyType) => {
     const activeSectionIndex = getSectionIndex(sections, activeKey);
@@ -579,7 +628,11 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
       const followUpKey = Object.keys(sections[activeSectionKey].follow_up)[followUpIndex];
       const followUp = sections[activeSectionKey].follow_up[followUpKey];
       if (followUp) {
-        return followUp.value;
+        if (followUp.ai_response?.answer !== undefined && (followUp.value === null || followUp.value === undefined)) {
+          return followUp.ai_response.answer;
+        } else {
+          return followUp.value;
+        }
       }
     } else {
       const section = sections[key.value];
@@ -587,7 +640,7 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
         return section.value;
       }
     }
-  }
+  };
 
   const questions = Object.keys(sections)
     .map(sectionKey => {
@@ -607,27 +660,20 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
     })
     .flat();
 
-  const getActiveQuestion = () => {
-    const question = questions.find(question => {
-      return question.props.input_key === activeKey.value;
-    });
-    // show additional context
-    checkAdditionalContext(activeKey);
-    setActiveQuestion(question);
-  };
+  const question = questions.find(question => {
+    return question.props.input_key === activeKey.value;
+  });
 
-  useEffect(() => {
-    getActiveQuestion();
-  }, [activeKey, surveyData]);
+  const additionalContextQuestion = checkAdditionalContext(activeKey);
 
-  if (activeQuestion !== undefined) {
+  if (question !== undefined) {
     return (
       <div className={'w-full h-full relative flex items-center justify-center overflow-hidden pb-[93px]'} data-testid={'survey-question-container'}>
         <SwitchTransition>
-          <CSSTransition key={activeQuestion.props.input_key} timeout={150} classNames={transitionClassNames}>
+          <CSSTransition key={question.props.input_key} timeout={150} classNames={transitionClassNames}>
             <div className={'h-full w-full flex items-center justify-center px-[139px] shortScreen:px-[32px] shortWideScreen:px-[139px]'}>
               <div className={'w-full space-y-6'}>
-                {activeQuestion}
+                {question}
                 {additionalContextQuestion}
               </div>
             </div>

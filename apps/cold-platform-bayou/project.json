@@ -31,6 +31,8 @@
       },
       "configurations": {
         "development": {
+          "runtimeArgs": ["--trace-warnings"],
+          "port": 9004,
           "buildTarget": "cold-platform-bayou:build:development"
         },
         "production": {

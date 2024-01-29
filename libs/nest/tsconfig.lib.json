@@ -7,11 +7,11 @@
     "target": "es2021",
     "composite": true,
     "strictNullChecks": true,
-    "noImplicitAny": true,
+    "noImplicitAny": false,
     "strictBindCallApply": true,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src/**/*.ts", "../validation/**/*.ts"],
+  "include": ["prisma/seeds/*.ts","src/**/*.ts", "../validation/**/*.ts"],
   "exclude": ["jest.config.ts", "src/**/*.spec.ts", "src/**/*.test.ts"]
 }

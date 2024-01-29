@@ -1,21 +1,29 @@
-import { BadRequestException, ConflictException, Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable, NotFoundException, OnModuleInit, UnprocessableEntityException } from '@nestjs/common';
 import { filter, set } from 'lodash';
 import { Span } from 'nestjs-ddtrace';
 import { component_definition_types } from 'prisma/prisma-client';
-import { AuthenticatedUser, CacheService, BaseWorker, PrismaService, DarklyService } from '@coldpbc/nest';
+import { AuthenticatedUser, BaseWorker, CacheService, DarklyService, PrismaService } from '@coldpbc/nest';
 import { filterItemsByRole } from './component-definitions.utils';
 
 @Span()
 @Injectable()
-export class ComponentDefinitionsService extends BaseWorker {
+export class ComponentDefinitionsService extends BaseWorker implements OnModuleInit {
+  private test_orgs: any;
+
   constructor(readonly darkly: DarklyService, private prisma: PrismaService, private readonly cache: CacheService) {
     super('ComponentDefinitionsService');
   }
 
-  async getTestOrgs() {
-    const response = await this.darkly.getJSONFlag('org-whitelist');
-    return response;
+  async onModuleInit() {
+    this.darkly.subscribeToJsonFlagChanges('dynamic-org-white-list', value => {
+      this.test_orgs = value;
+    });
   }
+
+  async getTestOrgs() {
+    return this.test_orgs;
+  }
+
   /***
    * This action returns a component definition by type
    * @param user

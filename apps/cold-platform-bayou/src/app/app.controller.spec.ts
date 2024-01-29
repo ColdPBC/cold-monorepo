@@ -1,22 +1,27 @@
 import { Test, TestingModule } from '@nestjs/testing';
 
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { BayouController } from './bayou.controller';
+import { BayouService } from './bayou.service';
 
 describe('AppController', () => {
   let app: TestingModule;
 
   beforeAll(async () => {
     app = await Test.createTestingModule({
-      controllers: [AppController],
-      providers: [AppService],
+      controllers: [BayouController],
+      providers: [BayouService],
     }).compile();
   });
 
-  describe('getData', () => {
+  describe('processWebhook', () => {
     it('should return "Hello API"', () => {
-      const appController = app.get<AppController>(AppController);
-      expect(appController.getData()).toEqual({ message: 'Hello API' });
+      const appController = app.get<BayouController>(BayouController);
+      expect(
+        appController.processWebhook({
+          event: 'new_bill',
+          object: {},
+        }),
+      ).toEqual({ message: 'webhook payload added to processing queue' });
     });
   });
 });

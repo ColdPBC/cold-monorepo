@@ -5,13 +5,9 @@ import { resolveAPIUrl } from '@coldpbc/fetchers';
 import { ErrorType } from '@coldpbc/enums';
 import { useColdContext } from '@coldpbc/hooks';
 
-const setAxiosTokenInterceptor = async (
-  getAccessTokenSilently: (
-    options?: GetTokenSilentlyOptions,
-  ) => Promise<string>,
-): Promise<void> => {
-  axios.interceptors.request.use(async (config) => {
-    if (config.baseURL === resolveAPIUrl()) {
+const setAxiosTokenInterceptor = async (getAccessTokenSilently: (options?: GetTokenSilentlyOptions) => Promise<string>): Promise<void> => {
+  axios.interceptors.request.use(async config => {
+    if (config.baseURL === resolveAPIUrl() || config.baseURL === import.meta.env['VITE_OPENAI_URL']) {
       const audience = import.meta.env.VITE_COLD_API_AUDIENCE as string;
       const accessToken = await getAccessTokenSilently({
         authorizationParams: {
@@ -28,18 +24,12 @@ const setAxiosTokenInterceptor = async (
 const setAxiosResponseInterceptor = (coldContext: any) => {
   const { logError } = coldContext;
   axios.interceptors.response.use(
-    (response) => {
+    response => {
       return response;
     },
-    (error) => {
+    error => {
       // filter out 404 errors when fetching data from /categories
-      if (
-        !(
-          error.response &&
-          error.response.status === 404 &&
-          error.config.url?.includes('/categories')
-        )
-      ) {
+      if (!(error.response && error.response.status === 404 && error.config.url?.includes('/categories'))) {
         logError(error, ErrorType.AxiosError, {
           ...error,
         });
@@ -51,9 +41,7 @@ const setAxiosResponseInterceptor = (coldContext: any) => {
 
 type AxiosInterceptorProviderProps = { children: React.ReactNode };
 
-export const ColdAxiosInterceptorProvider = ({
-  children,
-}: AxiosInterceptorProviderProps) => {
+export const ColdAxiosInterceptorProvider = ({ children }: AxiosInterceptorProviderProps) => {
   const { getAccessTokenSilently } = useAuth0();
   const context = useColdContext();
   useEffect(() => {

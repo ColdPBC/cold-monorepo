@@ -1,4 +1,4 @@
-import { useParams, useSearchParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { AppContent, CenterColumnContent, RightColumnContent, SubcategoryActionDetailsCard, SubcategoryFootprintCard } from '@coldpbc/components';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { Card, SubcategoryJourneyPreview } from '../../molecules';
@@ -13,6 +13,7 @@ import { ErrorType } from '@coldpbc/enums';
 const _SubcategoryActionsList = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { logError } = useColdContext();
+  const navigate = useNavigate();
 
   const { name } = useParams();
 
