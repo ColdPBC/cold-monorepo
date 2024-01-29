@@ -1,19 +1,20 @@
 import { BaseWorker, ColdRabbitService, PrismaService } from '@coldpbc/nest';
-import { service_definitions } from '../../../../../libs/nest/src/validation/generated/modelSchema/service_definitionsSchema';
 import { Injectable, NotFoundException, OnModuleInit, UnprocessableEntityException } from '@nestjs/common';
 import OpenAI from 'openai';
 import { get, has, pick } from 'lodash';
 import { ConfigService } from '@nestjs/config';
-import { integrations, organizations } from '@prisma/client';
+import { integrations, organizations, service_definitions } from '@prisma/client';
 import { Job } from 'bull';
 import { OnQueueActive, OnQueueCompleted, OnQueueFailed, OnQueueProgress } from '@nestjs/bull';
 import { OpenAIResponse } from './validator/validator';
+import { Prompts } from './prompts/prompts';
 
 @Injectable()
 export class AssistantService extends BaseWorker implements OnModuleInit {
   client: OpenAI;
   service: service_definitions;
   topic: string = '';
+  prompts = new Prompts();
 
   constructor(private readonly config: ConfigService, private readonly prisma: PrismaService, private rabbit: ColdRabbitService) {
     super(AssistantService.name);
@@ -25,8 +26,6 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
 
     try {
       this.topic = `${get(this.service, 'definition.mqtt.publish_options.base_topic', `/platform/openai`)}/${this.config.getOrThrow('NODE_ENV')}/#`;
-      // this.socket = this.mqtt.connect();
-      // await this.initListener();
     } catch (e) {
       this.logger.error(e.message, e);
       try {
@@ -60,46 +59,10 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
     throw new Error('Method not implemented.');
   }
 
-  getBasePrompt(customer: string) {
-    /*const base: string =
-      'The user will provide you with a JSON object which contains the following information: \n' +
-      '- idx: The index of the question \n' +
-      '- prompt: The question to be answered \n' +
-      '- component: used to determine how to structure your answer \n' +
-      '- options: a list of options to be used to answer the question \n' +
-      '- tooltip: additional instructions for answering the question \n' +
-      '- basedOn: a key indicating which other question to which this one is related \n' +
-      '- additional_context: an object that may also contain a prompt and tooltip that should answered in addition to the main prompt \n' +
-      'Please use the following to understand how to interpret the component field: \n' +
-      '1. textarea: unless the prompt says otherwise, provide your answer in a paragraph form limited to 100 words or less \n' +
-      '2. yes_no: only answer with yes or no\n' +
-      '3. multi_select: select all the applicable answers provided in the options property \n' +
-      '4. single_select: select only one answer from the options property \n';*/
-    const base =
-      `You are an AI sustainability expert. You help ${customer} to understand ` +
-      ' their impact on the environment and what tasks must be done to meet a given set of compliance requirements. \n' +
-      ' If you have a completed B Corp Impact Assessment for the company, It has a set of questions, eligible \n' +
-      ' answers for those questions, and the answers that the company gave. You are tasked \n' +
-      ' with helping this company understand if they can answer other sustainability-related questions based on \n' +
-      ' their existing answers, otherwise use whatever data you have to attempt to answer the questions. \n' +
-      ' The user will provide a JSON formatted "question" object that can include the following properties: \n' +
-      '  - "prompt": The question to be answered \n' +
-      '  - "component": used to determine how to structure your answer \n' +
-      '  - "options": a list of options to be used to answer the question.  This will be included only if the component is a "select" or "multiselect". \n' +
-      '  - "tooltip": additional instructions for answering the question \n' +
-      ' If there is a "tooltip" property, please include it along with these instructions in answering the question. \n' +
-      ' If you have enough information to answer the question, use the "answerable" response tool to provide an answer. \n' +
-      ' If you do not have enough information, format your response using the unanswerable response tool: \n' +
-      '    - "what_we_need": include a paragraph that describes what information you would need to effectively answer the question. \n' +
-      ' IMPORTANT: always use the answerable or unanswerable response tool to respond to the user, and never add any other text to the response.';
-
-    return base;
-  }
-
   async send(thread: OpenAI.Beta.Threads.Thread, integration: integrations, org: organizations) {
     const run = await this.client.beta.threads.runs.create(thread.id, {
       assistant_id: integration.id,
-      instructions: this.getBasePrompt(org.display_name), // Assuming getBasePrompt() is defined.
+      instructions: this.prompts.getBasePrompt(org.display_name), // Assuming getBasePrompt() is defined.
     });
 
     this.logger.info(`Created run ${run.id} for thread ${thread.id}`, {
@@ -120,7 +83,8 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
       in_progress_logged = true;
 
       if (status.status === 'requires_action') {
-        this.logger.info(`Received status ${status.status}`, { ...status });
+        this.logger.info(`Thread: ${thread.id} | Status: ${status.status}`);
+
         const toolCalls = status['required_action'].submit_tool_outputs.tool_calls;
 
         response = status['required_action'].submit_tool_outputs.tool_calls[0].function.arguments;
@@ -145,6 +109,7 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
         this.logger.error(`OpenAI failed to process the request.`, {
           ...pick(status, ['id', 'status', 'created', 'modified', 'assistant_id', 'thread_id', 'file_ids', 'last_error']),
         });
+
         return {
           error: {
             message: 'OpenAI failed to process the request.',
@@ -166,38 +131,6 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
       this.logger.error(e.message, e);
       return response;
     }
-  }
-
-  getComponentPrompt(item: any) {
-    let additional_context = '';
-    switch (item) {
-      case 'yes_no': {
-        additional_context = `If you are able to answer the question, Please answer with a boolean value true or false.  If you do not have enough information to answer, do not include an answer. `;
-        break;
-      }
-      case 'multi_select': {
-        additional_context = `Please provide an answer to the question contained in the 'prompt' property which must conform to the following rules: limit your answer to only the values provided in the 'options' property in the provided JSON.  You may select as many values from the "options" property as are applicable however they MUST match the selected values exactly. If you are able to provide a precise answer, then format it as a JSON string array. Assume these 'options' cover all possible options and format your selections as a JSON string array. If you do not have enough information to answer, do not include an answer. `;
-        break;
-      }
-      case 'textarea': {
-        additional_context = `IF you are able to answer the question, Please provide your answer in a paragraph form limited to 100 words or less.  If you do not have enough information to answer, do not include an answer. `;
-        break;
-      }
-      case 'select': {
-        additional_context = `Please respond to the question in the 'prompt' property, and since the 'component' is 'select', you are to limit your response to one topic that you judge to be the most relevant to the question it MUST match the selected values exactly. If you are able to provide a precise answer, then format it as a JSON string array. If you do not have enough information to answer, do not include an answer.`;
-        break;
-      }
-      case 'table': {
-        additional_context = `Please respond to the question in the 'prompt' property. Your answer in a paragraph form limited to 100 words or less.  If you do not have enough information to answer, do not include an answer. `;
-        break;
-      }
-      default: {
-        this.logger.warn(`Unknown component ${item.component} found in survey section item.`, item);
-        break;
-      }
-    }
-
-    return additional_context;
   }
 
   async createMessage(
@@ -223,12 +156,12 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
       if (!isFolloup) {
         message = await this.client.beta.threads.messages.create(thread.id, {
           role: 'user',
-          content: `${category_context}${this.getComponentPrompt(item.component)}.  Here is the "question" JSON object: \`\`\`json ${JSON.stringify(item)}\`\`\``,
+          content: `${category_context}${this.prompts.getComponentPrompt(item.component)}.  Here is the "question" JSON object: \`\`\`json ${JSON.stringify(item)}\`\`\``,
         });
       } else {
         message = await this.client.beta.threads.messages.create(thread.id, {
           role: 'user',
-          content: `${category_context} this next JSON question is specifically related to the previous question and answer. ${this.getComponentPrompt(
+          content: `${category_context} this next JSON question is specifically related to the previous question and answer. ${this.prompts.getComponentPrompt(
             item.component,
           )}.  Here is the "question" JSON object: \`\`\`json ${JSON.stringify(item)}\`\`\``,
         });
