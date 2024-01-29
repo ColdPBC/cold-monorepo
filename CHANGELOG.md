@@ -1,3 +1,10 @@
+## [1.96.1-cold-475.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.96.1-cold-475.1...v1.96.1-cold-475.2) (2024-01-29)
+
+
+### Bug Fixes
+
+* cleanup code, move prompts to class ([cfe4120](https://github.com/ColdPBC/cold-monorepo/commit/cfe4120dac3a01dc00933d6c626ce3ad23f42a55))
+
 ## [1.96.1-cold-475.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.96.0...v1.96.1-cold-475.1) (2024-01-28)
 
 
