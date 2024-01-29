@@ -1,3 +1,17 @@
+# [1.100.0-COLD-301.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.99.0...v1.100.0-COLD-301.1) (2024-01-29)
+
+
+### Features
+
+* add next steps to interaction tests ([6c45c2f](https://github.com/ColdPBC/cold-monorepo/commit/6c45c2f832398bdf8ab858a4d3edee8b48dea6e5))
+* Added addtional context to interaction tests ([d02ea4e](https://github.com/ColdPBC/cold-monorepo/commit/d02ea4ef1ac9bbd7013601196b14530c3d2b7f43))
+* Added more interaction tests ([786bf3e](https://github.com/ColdPBC/cold-monorepo/commit/786bf3ed541ecb42f4603b7d78953c81bd52a4a9))
+* remove unneeded build storybook step ([afbb03c](https://github.com/ColdPBC/cold-monorepo/commit/afbb03c5d81a793e3a873d6a0ea3bb975dd71412))
+* setup interaction tests ([a15c1da](https://github.com/ColdPBC/cold-monorepo/commit/a15c1dadb693dffc3b4afeeddf18dc11bf3ed6c7))
+* update footprint empty data msw handlers to pass tests ([3ce471f](https://github.com/ColdPBC/cold-monorepo/commit/3ce471f96aced264cadd7194af7f9e02fa7ac60b))
+* update to action detail ([c4661f6](https://github.com/ColdPBC/cold-monorepo/commit/c4661f6e24f7b161b4376ff79a3987e30e73d242))
+* Update yaml to run storybook tests ([560f197](https://github.com/ColdPBC/cold-monorepo/commit/560f19766367fb496aef8b319ad2802566f5f563))
+
 # [1.99.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.98.0...v1.99.0) (2024-01-26)
 
 
