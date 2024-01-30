@@ -18,7 +18,6 @@ export const ComplianceOverview = (props: ComplianceOverviewProps) => {
   const { addToastMessage } = useAddToastMessage();
   const { orgId } = useAuth0Wrapper();
   const navigate = useNavigate();
-  const { mutate } = useSWRConfig();
   const { logError } = useColdContext();
 
   const getCTAOnClick = async () => {
@@ -59,5 +58,14 @@ export const ComplianceOverview = (props: ComplianceOverviewProps) => {
     }
   };
 
-  return <ComplianceOverviewCard complianceData={undefined} isOverview={true} onOverviewPage={true} ctas={[getCTAButton()]} title={complianceData.title} />;
+  return (
+    <ComplianceOverviewCard
+      complianceData={undefined}
+      isOverview={true}
+      onOverviewPage={true}
+      ctas={[getCTAButton()]}
+      title={complianceData.title}
+      logo_url={complianceData.logo_url}
+    />
+  );
 };
