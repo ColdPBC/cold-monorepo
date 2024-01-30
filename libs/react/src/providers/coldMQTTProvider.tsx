@@ -32,7 +32,6 @@ export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
         import.meta.env.VITE_MQTT_URL
       }/mqtt?x-auth0-domain=${auth0_domain}&x-amz-customauthorizer-name=${authorizer}&x-cold-org=${org_id}&x-cold-env=${env}&token=${token}`;
       const account_id = user?.email;
-      const subscription_topic = `ui/${env}/${org_id}/${account_id}`;
 
       if (user && orgId) {
         client.current = mqtt.connect(url, { clientId: `${org_id}-${Math.floor(Math.random() * 1000)}` });
@@ -62,9 +61,17 @@ export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
           console.log('disconnected');
         });
 
-        client.current?.subscribe(subscription_topic, { qos: 0, nl: false }, (err, grant) => {
+        client.current?.subscribe(`ui/${env}/${org_id}/${account_id}`, { qos: 0, nl: false }, (err, grant) => {
           if (!err) {
-            console.log(`Subscribed to ${subscription_topic}`);
+            console.log(`Subscribed to ui/${env}/${org_id}/${account_id}`);
+          } else {
+            console.log(err);
+          }
+        });
+
+        client.current?.subscribe(`ui/${env}/${org_id}/#`, { qos: 0, nl: false }, (err, grant) => {
+          if (!err) {
+            console.log(`Subscribed to ui/${env}/${org_id}/#`);
           } else {
             console.log(err);
           }
