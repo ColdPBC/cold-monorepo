@@ -66,7 +66,9 @@ export const ComplianceOverviewCard = (props: ComplianceOverviewCardProps) => {
                   {shades.map((shade, index) => {
                     return (
                       <div className={'flex w-full justify-between'} key={index}>
-                        <div className={'text-body font-bold text-bgc-primary'}>{shade.percentage}% Complete</div>
+                        <div className={'text-body font-bold text-bgc-primary'}>
+                          {shade.percentage}% {shade.color === HexColors.primary.DEFAULT ? 'Complete' : 'Needing Review'}
+                        </div>
                         <div className={'text-body font-bold text-bgc-primary'}>
                           {shade.color === HexColors.primary.DEFAULT ? complianceData.answeredQuestions : complianceData.aiAnsweredQuestions} / {complianceData.totalQuestions}{' '}
                           Requirements
@@ -139,9 +141,9 @@ export const ComplianceOverviewCard = (props: ComplianceOverviewCardProps) => {
           )}
           <div className="text-h4 flex-1">{title}</div>
         </div>
-        {ctas?.map(cta => {
+        {ctas?.map((cta, index) => {
           return (
-            <div className={'flex items-center'}>
+            <div className={'flex items-center'} key={`compliance_button_${index}`}>
               <BaseButton {...cta} />
             </div>
           );
