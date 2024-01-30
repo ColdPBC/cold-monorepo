@@ -1,3 +1,10 @@
+# [1.100.0-COLD-301.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.100.0-COLD-301.1...v1.100.0-COLD-301.2) (2024-01-30)
+
+
+### Features
+
+* add new compliance module to tests ([0b2e4ff](https://github.com/ColdPBC/cold-monorepo/commit/0b2e4fffc1c11f73b588fe8dfe99b48502b07440))
+
 # [1.100.0-COLD-301.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.99.0...v1.100.0-COLD-301.1) (2024-01-29)
 
 
