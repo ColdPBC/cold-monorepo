@@ -93,12 +93,12 @@ export const _DocumentUpload = () => {
 
   return (
     <AppContent title="Documents">
-      <Card title={'Documents List'} className={'w-full px-4'}>
-        <input id="file" type="file" onChange={handleFileChange} />
+      <Card title={'Documents List'} className={'w-full px-4'} data-testid={'documents-list-card'}>
+        <input id="file" type="file" onChange={handleFileChange} aria-label={'Document Upload'} />
         {data.length > 0 ? (
-          <Datagrid definitionURL={'/components/documents_list_table'} items={data} />
+          <Datagrid definitionURL={'/components/documents_list_table'} items={data} data-testid={'documents-list-table'} />
         ) : (
-          <Card glow={false} className="flex items-center justify-center w-full bg-bgc-elevate border-1 border-bgc-elevated">
+          <Card glow={false} className="flex items-center justify-center w-full bg-bgc-elevate border-1 border-bgc-elevated" data-testid={'documents-list-card-no-documents'}>
             No documents uploaded
           </Card>
         )}

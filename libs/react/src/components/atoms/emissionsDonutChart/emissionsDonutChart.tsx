@@ -63,6 +63,7 @@ export const EmissionsDonutChart = ({ variant, totalEmissions, isEmptyData, isLo
   const chartPlugins: PluginType<'doughnut'>[] = [
     {
       id: 'sliceThickness',
+      // @ts-expect-error todo: fix type error
       beforeDraw: (chart: ChartJS) => chartBeforeDraw(chart, hoverColorArray ?? []),
     },
   ];

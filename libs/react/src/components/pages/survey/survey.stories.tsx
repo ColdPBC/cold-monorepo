@@ -1,11 +1,12 @@
+import { ReactNode } from 'React';
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
-import { getSurveyFormDataByName, StoryMockProvider } from '@coldpbc/mocks';
+import { getAIAnsweredSurveyMock, getSurveyFormDataByName, StoryMockProvider } from '@coldpbc/mocks';
 import { getSurveyHandler } from '@coldpbc/mocks';
 import { Survey } from '@coldpbc/components';
 import { fireEvent, waitFor, within, userEvent } from '@storybook/testing-library';
 import { expect } from '@storybook/jest';
-import { SurveyPayloadType, SurveySectionFollowUpType, SurveySectionType } from "@coldpbc/interfaces";
+import { SurveyPayloadType, SurveySectionFollowUpType, SurveySectionType } from '@coldpbc/interfaces';
 
 const meta: Meta<typeof Survey> = {
   title: 'Pages/Survey',
@@ -71,9 +72,9 @@ export const Default: Story = {
       const answerQuestion = async (followUp: SurveySectionFollowUpType, followUpName: string) => {
         await waitFor(async () => {
           await expect(await within(surveyQuestionContainer).findByText(followUp.prompt)).toBeInTheDocument();
-        })
-        if(followUpName === 'general:3'){
-          await verifyAdditionalContext(followUpName)
+        });
+        if (followUpName === 'general:3') {
+          await verifyAdditionalContext(followUpName);
         } else {
           switch (followUp.component) {
             case 'text':
@@ -104,7 +105,7 @@ export const Default: Story = {
               break;
             case 'percent_slider':
               const percentSliderInput = await within(surveyQuestionContainer).findByTestId('percent-slider-input');
-              await fireEvent.input(percentSliderInput,  { target: { value: '50' } });
+              await fireEvent.input(percentSliderInput, { target: { value: '50' } });
               break;
           }
         }
@@ -125,8 +126,8 @@ export const Default: Story = {
         await waitFor(async () => {
           await expect(await within(surveySectionsProgress).findByText(section.category_description)).toBeInTheDocument();
         });
-        if(section.component){
-          if(sectionName === 'product'){
+        if (section.component) {
+          if (sectionName === 'product') {
             await verifyAdditionalContext(sectionName);
           } else {
             // get Yes answer
@@ -138,25 +139,24 @@ export const Default: Story = {
           const continueButton = await within(surveyQuestionContainer).findByRole('button', { name: 'Continue' });
           fireEvent.click(continueButton);
         }
-      }
+      };
 
       const verifyAdditionalContext = async (questionKey: string) => {
-        if(questionKey === "general:3"){
+        if (questionKey === 'general:3') {
           const numberInput = await within(surveyQuestionContainer).findByRole('textbox', { name: questionKey });
           await fireEvent.input(numberInput, { target: { value: '1' } });
-        } else if(questionKey === 'product'){
+        } else if (questionKey === 'product') {
           const yesAnswer = await within(surveyQuestionContainer).findByText('Yes');
           await fireEvent.click(yesAnswer);
         }
 
         await waitFor(async () => {
           await expect(surveyQuestionContainer.querySelector('textarea')).toBeInTheDocument();
-        })
+        });
         fireEvent.input(surveyQuestionContainer.querySelector('textarea'), { target: { value: 'test' } });
         await waitFor(async () => {
           await expect(await within(surveyQuestionContainer).findByRole('button', { name: 'Continue' })).toBeEnabled();
-        })
-
+        });
 
         await fireEvent.input(surveyQuestionContainer.querySelector('textarea'), { target: { value: '' } });
         await waitFor(async () => {
@@ -165,11 +165,11 @@ export const Default: Story = {
 
         await fireEvent.input(surveyQuestionContainer.querySelector('textarea'), { target: { value: 'test' } });
         await expect(await within(surveyQuestionContainer).findByRole('button', { name: 'Continue' })).toBeEnabled();
-      }
+      };
 
       await waitFor(async () => {
         await answerSectionQuestion(copy.definition.sections['general'], 'general');
-      })
+      });
       const generalSection = copy.definition.sections['general'];
       await answerQuestion(generalSection.follow_up['general:0'], 'general:0');
       await answerQuestion(generalSection.follow_up['general:1'], 'general:1');
@@ -179,7 +179,7 @@ export const Default: Story = {
       const productSection = copy.definition.sections['product'];
       await waitFor(async () => {
         await answerSectionQuestion(productSection, 'product');
-      })
+      });
       await answerQuestion(productSection.follow_up['product:0'], 'product:0');
       await answerQuestion(productSection.follow_up['product:1'], 'product:1');
       await answerQuestion(productSection.follow_up['product:2'], 'product:2');
@@ -188,9 +188,8 @@ export const Default: Story = {
       const facilitySection = copy.definition.sections['facilities'];
       await waitFor(async () => {
         await answerSectionQuestion(facilitySection, 'facilities');
-      })
+      });
       await answerQuestion(facilitySection.follow_up['facilities:0'], 'facilities:0');
-
     });
 
     // close the survey
@@ -198,7 +197,7 @@ export const Default: Story = {
       const surveyRightNav = await canvas.findByTestId('survey-right-nav-intro-outro');
       await waitFor(async () => {
         await expect(await within(surveyRightNav).findByText('Thanks!')).toBeInTheDocument();
-      })
+      });
 
       await waitFor(async () => {
         await expect(await within(surveyRightNav).findByText("Thanks for submitting your information. We'll take a look and get back to you soon.")).toBeInTheDocument();
@@ -251,5 +250,257 @@ export const AIAnsweredSurvey: Story = {
   ),
   args: {
     surveyName: 'rei_pkg_survey',
+  },
+  play: async ({ canvasElement, step, args }) => {
+    const canvas = within(canvasElement);
+    const user = userEvent.setup();
+    await step('Fill out survey', async () => {
+      const survey = getAIAnsweredSurveyMock();
+      const surveyRightNav = await canvas.findByTestId('survey-right-nav-intro-outro');
+      const welcomeText = await within(surveyRightNav).findByText(survey.definition.title);
+      await expect(welcomeText).toBeInTheDocument();
+      await expect(await canvas.findByTestId('survey-intro')).toBeInTheDocument();
+
+      const startButton = await within(surveyRightNav).findByRole('button', { name: 'Start' });
+      await userEvent.click(startButton);
+      const surveyQuestionContainer = await canvas.findByTestId('survey-question-container');
+      const surveySectionsProgress = await canvas.findByTestId('survey-sections-progress');
+      // sort sections object by order
+      const copy = {
+        ...survey,
+        definition: {
+          ...survey.definition,
+          sections: {},
+        },
+      } as SurveyPayloadType;
+
+      Object.keys(survey.definition.sections)
+        .sort((a, b) => {
+          return survey.definition.sections[a].category_idx - survey.definition.sections[b].category_idx;
+        })
+        .forEach(key => {
+          copy.definition.sections[key] = {
+            ...survey.definition.sections[key],
+            follow_up: {},
+          };
+          // sort the followups and set the sorted followups in the copy
+          Object.keys(survey.definition.sections[key].follow_up)
+            .sort((a, b) => {
+              return survey.definition.sections[key].follow_up[a].idx - survey.definition.sections[key].follow_up[b].idx;
+            })
+            .forEach(followupKey => {
+              copy.definition.sections[key].follow_up[followupKey] = survey.definition.sections[key].follow_up[followupKey];
+            });
+        });
+
+      const verifyAiResponse = async (followUp: SurveySectionFollowUpType, surveyQuestionContainer: HTMLElement) => {
+        // check if there is an AI response
+        const aiResponse = await within(surveyQuestionContainer).queryByTestId('survey-input-ai-response');
+        // verify the ai response justification is in the ai response
+        if (aiResponse && followUp.ai_response?.justification) {
+          await within(aiResponse).findByText(followUp.ai_response?.justification);
+          // verify button says 'Confirm'
+          const confirmButton = await within(surveyQuestionContainer).findByRole('button', { name: 'Confirm' });
+          // verify that its enabled
+          await expect(confirmButton).toBeEnabled();
+          // change answer to something else
+          // verify that the ai response is gone
+
+          switch (followUp.component) {
+            case 'text':
+              const questionInput = await within(surveyQuestionContainer).findByRole('textbox', { name: followUpName });
+              await fireEvent.input(questionInput, { target: { value: 'test' } });
+              break;
+            case 'select':
+              // choose the first option
+              const firstOption = await within(surveyQuestionContainer).findByText(followUp.options[0]);
+              await fireEvent.click(firstOption);
+              break;
+            case 'multi_select':
+              // choose the first option
+              const firstMultiSelectOption = await within(surveyQuestionContainer).findByText(followUp.options[0]);
+              await fireEvent.click(firstMultiSelectOption);
+              break;
+            case 'yes_no':
+              const yesAnswer = await within(surveyQuestionContainer).findByText('Yes');
+              await fireEvent.click(yesAnswer);
+              break;
+            case 'currency':
+              const currencyInput = await within(surveyQuestionContainer).findByRole('textbox', { name: followUpName });
+              await fireEvent.input(currencyInput, { target: { value: '100' } });
+              break;
+            case 'number':
+              const numberInput = await within(surveyQuestionContainer).findByRole('textbox', { name: followUpName });
+              await fireEvent.input(numberInput, { target: { value: '100' } });
+              break;
+            case 'percent_slider':
+              const percentSliderInput = await within(surveyQuestionContainer).findByTestId('percent-slider-input');
+              await fireEvent.input(percentSliderInput, { target: { value: '50' } });
+              break;
+          }
+          // verify that the ai response is gone
+          await expect(await within(surveyQuestionContainer).queryByTestId('survey-input-ai-response')).not.toBeInTheDocument();
+        }
+      };
+
+      const answerQuestion = async (followUp: SurveySectionFollowUpType, followUpName: string) => {
+        await waitFor(async () => {
+          await expect(await within(surveyQuestionContainer).findByText(followUp.prompt)).toBeInTheDocument();
+        });
+
+        await verifyAiResponse(followUp, surveyQuestionContainer);
+
+        // if(followUpName === 'PKG-1'){
+        //   // verify that there is an AI response with test id 'survey-input-ai-response'
+        //   const aiResponse = await within(surveyQuestionContainer).findByTestId('survey-input-ai-response');
+        //
+        // }
+        // if (followUpName === 'general:3') {
+        //   await verifyAdditionalContext(followUpName);
+        // } else {
+        //   switch (followUp.component) {
+        //     case 'text':
+        //       const questionInput = await within(surveyQuestionContainer).findByRole('textbox', { name: followUpName });
+        //       await fireEvent.input(questionInput, { target: { value: 'test' } });
+        //       break;
+        //     case 'select':
+        //       // choose the first option
+        //       const firstOption = await within(surveyQuestionContainer).findByText(followUp.options[0]);
+        //       await fireEvent.click(firstOption);
+        //       break;
+        //     case 'multi_select':
+        //       // choose the first option
+        //       const firstMultiSelectOption = await within(surveyQuestionContainer).findByText(followUp.options[0]);
+        //       await fireEvent.click(firstMultiSelectOption);
+        //       break;
+        //     case 'yes_no':
+        //       const yesAnswer = await within(surveyQuestionContainer).findByText('Yes');
+        //       await fireEvent.click(yesAnswer);
+        //       break;
+        //     case 'currency':
+        //       const currencyInput = await within(surveyQuestionContainer).findByRole('textbox', { name: followUpName });
+        //       await fireEvent.input(currencyInput, { target: { value: '100' } });
+        //       break;
+        //     case 'number':
+        //       const numberInput = await within(surveyQuestionContainer).findByRole('textbox', { name: followUpName });
+        //       await fireEvent.input(numberInput, { target: { value: '100' } });
+        //       break;
+        //     case 'percent_slider':
+        //       const percentSliderInput = await within(surveyQuestionContainer).findByTestId('percent-slider-input');
+        //       await fireEvent.input(percentSliderInput, { target: { value: '50' } });
+        //       break;
+        //   }
+        // }
+        //
+        // const continueButton = await within(surveyQuestionContainer).queryByRole('button', { name: 'Continue' });
+        // const submitButton = await within(surveyQuestionContainer).queryByRole('button', { name: 'Submit' });
+        // await waitFor(async () => {
+        //   await expect(continueButton || submitButton).toBeInTheDocument();
+        // });
+        // if (submitButton) {
+        //   await fireEvent.click(submitButton);
+        // } else if (continueButton) {
+        //   await fireEvent.click(continueButton);
+        // }
+      };
+
+      const answerSectionQuestion = async (section: SurveySectionType, sectionName: string) => {
+        await waitFor(async () => {
+          await expect(await within(surveySectionsProgress).findByText(section.category_description)).toBeInTheDocument();
+        });
+        if (section.component) {
+          if (sectionName === 'product') {
+            await verifyAdditionalContext(sectionName);
+          } else {
+            // get Yes answer
+            await waitFor(async () => {
+              await expect(await within(surveyQuestionContainer).findByText('Yes')).toBeInTheDocument();
+            });
+            fireEvent.click(await within(surveyQuestionContainer).findByText('Yes'));
+          }
+          const continueButton = await within(surveyQuestionContainer).findByRole('button', { name: 'Continue' });
+          fireEvent.click(continueButton);
+        }
+      };
+
+      const verifyAdditionalContext = async (questionKey: string) => {
+        if (questionKey === 'general:3') {
+          const numberInput = await within(surveyQuestionContainer).findByRole('textbox', { name: questionKey });
+          await fireEvent.input(numberInput, { target: { value: '1' } });
+        } else if (questionKey === 'product') {
+          const yesAnswer = await within(surveyQuestionContainer).findByText('Yes');
+          await fireEvent.click(yesAnswer);
+        }
+
+        await waitFor(async () => {
+          await expect(surveyQuestionContainer.querySelector('textarea')).toBeInTheDocument();
+        });
+        fireEvent.input(surveyQuestionContainer.querySelector('textarea'), { target: { value: 'test' } });
+        await waitFor(async () => {
+          await expect(await within(surveyQuestionContainer).findByRole('button', { name: 'Continue' })).toBeEnabled();
+        });
+
+        await fireEvent.input(surveyQuestionContainer.querySelector('textarea'), { target: { value: '' } });
+        await waitFor(async () => {
+          await expect(await within(surveyQuestionContainer).findByRole('button', { name: 'Continue' })).toBeDisabled();
+        });
+
+        await fireEvent.input(surveyQuestionContainer.querySelector('textarea'), { target: { value: 'test' } });
+        await expect(await within(surveyQuestionContainer).findByRole('button', { name: 'Continue' })).toBeEnabled();
+      };
+
+      // verify that there is an AI response
+      await answerQuestion(copy.definition.sections['PKG'].follow_up['PKG-1'], 'PKG-1');
+
+      // await waitFor(async () => {
+      //   await answerSectionQuestion(copy.definition.sections['general'], 'general');
+      // });
+      // const generalSection = copy.definition.sections['general'];
+      // await answerQuestion(generalSection.follow_up['general:0'], 'general:0');
+      // await answerQuestion(generalSection.follow_up['general:1'], 'general:1');
+      // await answerQuestion(generalSection.follow_up['general:2'], 'general:2');
+      // await answerQuestion(generalSection.follow_up['general:3'], 'general:3');
+      //
+      // const productSection = copy.definition.sections['product'];
+      // await waitFor(async () => {
+      //   await answerSectionQuestion(productSection, 'product');
+      // });
+      // await answerQuestion(productSection.follow_up['product:0'], 'product:0');
+      // await answerQuestion(productSection.follow_up['product:1'], 'product:1');
+      // await answerQuestion(productSection.follow_up['product:2'], 'product:2');
+      // await answerQuestion(productSection.follow_up['product:3'], 'product:3');
+      //
+      // const facilitySection = copy.definition.sections['facilities'];
+      // await waitFor(async () => {
+      //   await answerSectionQuestion(facilitySection, 'facilities');
+      // });
+      // await answerQuestion(facilitySection.follow_up['facilities:0'], 'facilities:0');
+    });
+
+    // close the survey
+    // await step('Close Survey', async () => {
+    //   const surveyRightNav = await canvas.findByTestId('survey-right-nav-intro-outro');
+    //   await waitFor(async () => {
+    //     await expect(await within(surveyRightNav).findByText('Thanks!')).toBeInTheDocument();
+    //   });
+    //
+    //   await waitFor(async () => {
+    //     await expect(await within(surveyRightNav).findByText("Thanks for submitting your information. We'll take a look and get back to you soon.")).toBeInTheDocument();
+    //   });
+    //   const continueButton = await within(surveyRightNav).findByRole('button', { name: 'Continue to Dashboard' });
+    //   fireEvent.click(continueButton);
+    // });
+    //
+    // await step('Survey Closed', async () => {
+    //   // make sure the survey is closed. expect the survey left nav and right nav to be gone
+    //   await waitFor(async () => {
+    //     const surveyLeftNav = await canvas.queryByTestId('survey-left-nav');
+    //     const surveyRightNav = await canvas.queryByTestId('survey-right-nav-intro-outro');
+    //     const surveyQuestionContainer = await canvas.queryByTestId('survey-question-container');
+    //     await expect(surveyLeftNav).not.toBeInTheDocument();
+    //     await expect(surveyRightNav).not.toBeInTheDocument();
+    //     await expect(surveyQuestionContainer).not.toBeInTheDocument();
+    //   });
+    // });
   },
 };
