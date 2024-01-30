@@ -668,18 +668,18 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
 
   if (question !== undefined) {
     return (
-      <div className={'w-full h-full relative flex items-center justify-center overflow-hidden pb-[93px]'} data-testid={'survey-question-container'}>
+      <div className={'w-full h-full relative flex flex-col space-y-[24px]'} data-testid={'survey-question-container'}>
         <SwitchTransition>
           <CSSTransition key={question.props.input_key} timeout={150} classNames={transitionClassNames}>
-            <div className={'h-full w-full flex items-center justify-center px-[139px] shortScreen:px-[32px] shortWideScreen:px-[139px]'}>
-              <div className={'w-full space-y-6'}>
+            <div className={'h-full w-full flex items-center justify-center overflow-y-auto px-[139px] shortScreen:px-[32px] shortWideScreen:px-[139px]'}>
+              <div className={'w-full space-y-6 m-auto'}>
                 {question}
                 {additionalContextQuestion}
               </div>
             </div>
           </CSSTransition>
         </SwitchTransition>
-        <div className={'absolute w-[540px] space-x-[15px] h-[40px] flex justify-end right-0 bottom-0 mb-[37px]'}>
+        <div className={'w-full space-x-[15px] h-[40px] flex justify-end right-0 bottom-0 mb-[37px]'}>
           {getPreviousButton()}
           {getNextButton()}
         </div>
