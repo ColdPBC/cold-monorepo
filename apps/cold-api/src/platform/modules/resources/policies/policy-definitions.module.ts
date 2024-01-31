@@ -9,5 +9,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
   imports: [ConfigModule, PrismaModule, ColdCacheModule],
   controllers: [PolicyDefinitionsController],
   providers: [ConfigService, PolicyDefinitionsService],
+  exports: [PolicyDefinitionsService],
 })
 export class PolicyDefinitionsModule {}

@@ -13,6 +13,6 @@ import { OrganizationLocationsService } from '../organization_locations/organiza
 @Module({
   imports: [HttpModule, ColdCacheModule, MemberModule, RoleModule, OrganizationModule],
   providers: [RoleService, OrganizationService, MemberService, IntegrationsService, OrganizationLocationsService, S3Service],
-  exports: [RoleService, OrganizationService, MemberService],
+  exports: [RoleService, OrganizationService, MemberService, IntegrationsService, OrganizationLocationsService, S3Service],
 })
 export class Auth0Module {}

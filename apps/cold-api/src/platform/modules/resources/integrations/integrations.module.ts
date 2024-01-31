@@ -8,6 +8,6 @@ import { OrganizationLocationsModule } from '../organization_locations/organizat
   imports: [PrismaModule, ColdCacheModule, ColdRabbitModule.forFeature(), OrganizationLocationsModule],
   controllers: [IntegrationsController],
   providers: [IntegrationsService, CacheService, ColdRabbitService],
-  exports: [IntegrationsService, ColdRabbitService],
+  exports: [IntegrationsService, ColdRabbitService, CacheService],
 })
 export class IntegrationsModule {}

@@ -7,5 +7,6 @@ import { NewsService } from './news.service';
   imports: [PrismaModule, ColdCacheModule],
   controllers: [NewsController],
   providers: [NewsService],
+  exports: [NewsService],
 })
 export class NewsModule {}

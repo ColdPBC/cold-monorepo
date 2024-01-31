@@ -1,4 +1,4 @@
-import { BadRequestException, HttpException, Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
+import { BadRequestException, Global, HttpException, Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
 import { organizations, survey_types } from '@prisma/client';
 import { ConfigService } from '@nestjs/config';
 import { isUUID } from 'class-validator';
@@ -20,6 +20,7 @@ import {
 } from '@coldpbc/nest';
 
 @Span()
+@Global()
 @Injectable()
 export class SurveysService extends BaseWorker {
   exclude_orgs: Array<{ id: string; name: string; display_name: string }>;
@@ -33,14 +34,14 @@ export class SurveysService extends BaseWorker {
     private readonly mqtt: MqttService,
   ) {
     super('SurveysService');
+
+    this.socket = this.mqtt.connect(SurveysService.name);
   }
 
   override async onModuleInit() {
     this.darkly.subscribeToJsonFlagChanges('dynamic-org-white-list', value => {
       this.exclude_orgs = value;
     });
-
-    this.socket = this.mqtt.connect();
     // await this.initListener();
   }
 
@@ -436,6 +437,13 @@ export class SurveysService extends BaseWorker {
 
       this.logger.error(e.message, { error: e });
 
+      this.mqtt.publish(
+        `/ui/${this.config.get('NODE_ENV')}/${orgId}/${user.coldclimate_claims.email}`,
+        JSON.stringify({
+          error: e,
+          swr_key: `organizations/${orgId}/surveys/${name}`,
+        }),
+      );
       throw new UnprocessableEntityException(e);
     }
   }
@@ -476,6 +484,13 @@ export class SurveysService extends BaseWorker {
       this.logger.info('updated definition', { name: definition.name, id: definition.id, type: definition.type });
 
       this.metrics.increment('cold.api.surveys.update', 1, this.tags);
+
+      this.mqtt.publish(
+        `/ui/${this.config.get('NODE_ENV')}/system/surveys/updated`,
+        JSON.stringify({
+          swr_key: `surveys/${name}`,
+        }),
+      );
 
       return this.findOne(name, user);
     } catch (e) {

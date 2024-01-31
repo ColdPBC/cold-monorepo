@@ -9,5 +9,6 @@ import { SurveysRabbitService } from './surveys.rabbit';
   imports: [PrismaModule, ColdCacheModule],
   controllers: [SurveysController],
   providers: [SurveysService, JwtService, JwtStrategy, CacheService, SurveysRabbitService, MqttService],
+  exports: [SurveysService, JwtService, JwtStrategy, CacheService, SurveysRabbitService, MqttService],
 })
 export class SurveysModule {}

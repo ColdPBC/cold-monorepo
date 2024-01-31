@@ -8,5 +8,6 @@ import { ServiceDefinitionsController } from './service_definitions.controller';
   imports: [PrismaModule, ColdCacheModule, ColdRabbitModule.forFeature()],
   controllers: [ServiceDefinitionsController],
   providers: [ServiceDefinitionsService, CacheService, ColdRabbitService, RabbitService],
+  exports: [ServiceDefinitionsService, CacheService, ColdRabbitService, RabbitService],
 })
 export class Service_definitionsModule {}
