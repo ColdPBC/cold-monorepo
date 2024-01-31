@@ -1,10 +1,39 @@
 import { get } from 'lodash';
 import { add } from 'date-fns';
 import * as url from 'url';
-import { BaseWorker, WorkerLogger } from '../worker';
+import { BaseWorker } from '../worker';
 import { BullModuleOptions } from '@nestjs/bull';
+import { DarklyService } from '../darkly';
+import { ConfigService } from '@nestjs/config';
 
 export class RedisServiceConfig extends BaseWorker {
+  max: number;
+  interval: number;
+  // max retry time is 24 hours
+  maxRetryLength: number;
+  concurrency: number;
+  concurrency_interval: number;
+  db: number;
+  removeOnComplete: any;
+  removeOnFail: any;
+  darkly: DarklyService;
+
+  constructor(private readonly config?: ConfigService) {
+    super(RedisServiceConfig.name);
+
+    if (!this.config) {
+      this.config = new ConfigService();
+    }
+
+    this.darkly = new DarklyService(this.config);
+    this.max = this.config.get('MAX_RETRY_ATTEMPTS', 5);
+    this.interval = this.config.get('RETRY_INTERVAL', 60000);
+    this.maxRetryLength = this.config.get('MAX_RETRY_LENGTH', 60000 * 60 * 24);
+    this.db = this.config.get('REDIS_DB', 1);
+    this.concurrency = this.config.get('JOB_CONCURRENCY', 1);
+    this.concurrency_interval = this.config.get('JOB_CONCURRENCY_INTERVAL', 1000);
+  }
+
   static async getRedisOpts() {
     const secrets: any = { REDISCLOUD_URL: 'redis://localhost:6379' };
 
@@ -30,62 +59,54 @@ export class RedisServiceConfig extends BaseWorker {
     return redisOpts;
   }
 
-  static async getQueueConfig(type: string, queueName: string, db: number = 0): Promise<BullModuleOptions> {
-    const max = get(process, 'env.MAX_RETRY_ATTEMPTS', 5) as number;
-    const interval = get(process, 'env.RETRY_INTERVAL', 60000) as number;
-    const concurrency = get(process, 'env.JOB_CONCURRENCY', 1) as number;
-    const concurrency_interval = get(process, 'env.JOB_CONCURRENCY_INTERVAL', 1000) as number;
-    const logger = new WorkerLogger(RedisServiceConfig.name);
-    // max retry time is 24 hours
-    const maxRetryLength = get(process, 'env.MAX_RETRY_LENGTH', 60000 * 60 * 24) as number;
-
+  async getQueueConfig(type: string, queueName: string): Promise<BullModuleOptions> {
     return {
       name: `${queueName}`,
       //redis: await RedisServiceConfig.getRedisOpts(),
       redis: {
-        db: db,
+        db: this.db,
       },
       url: get(process, 'env.REDISCLOUD_URL', 'redis://localhost:6379') as string,
       prefix: `${type}`,
       limiter: {
-        max: concurrency,
-        duration: concurrency_interval,
+        max: this.concurrency,
+        duration: this.concurrency_interval,
         bounceBack: false, // set to false to still process jobs that came in faster than the limiter rate
       },
       settings: {
         backoffStrategies: {
           jitter: (attemptsMade, err: any) => {
             // randomize retry time between 1 and 288 minutes.  If Max attempts is 5, then on the 5th attempt, the max random retry time is 1440 minutes (24 hours)
-            const retryTime = interval + Math.floor(Math.random() * (288 - 1 + 1) + 1) * attemptsMade;
+            const retryTime = this.interval + Math.floor(Math.random() * (288 - 1 + 1) + 1) * attemptsMade;
 
-            logger.info(
+            this.logger.info(
               JSON.stringify({
                 error: err,
-                message: `[${attemptsMade} of ${max}] Next Attempt: ${add(new Date(Date.now()), { seconds: retryTime / 1000 })}`,
+                message: `[${attemptsMade} of ${this.max}] Next Attempt: ${add(new Date(Date.now()), { seconds: retryTime / 1000 })}`,
               }),
             );
 
-            return retryTime <= maxRetryLength ? retryTime : maxRetryLength;
+            return retryTime <= this.maxRetryLength ? retryTime : this.maxRetryLength;
           },
           exponential: (attemptsMade: number, err: Error) => {
             if (attemptsMade == 0) {
               attemptsMade = 1;
             }
 
-            let retryTime = interval * 60 * (attemptsMade * attemptsMade);
-            if (attemptsMade < max) {
-              logger.info(
+            let retryTime = this.interval * 60 * (attemptsMade * attemptsMade);
+            if (attemptsMade < this.max) {
+              this.logger.info(
                 JSON.stringify({
                   error: err,
-                  message: `[${attemptsMade} of ${max}] Next Attempt: ${add(new Date(Date.now()), { seconds: retryTime / 1000 })}`,
+                  message: `[${attemptsMade} of ${this.max}] Next Attempt: ${add(new Date(Date.now()), { seconds: retryTime / 1000 })}`,
                 }),
               );
             } else {
-              retryTime = interval * 60 * 24;
-              logger.warn(
+              retryTime = this.interval * 60 * 24;
+              this.logger.warn(
                 JSON.stringify({
                   error: err,
-                  message: `[${attemptsMade} of ${max}] Final Attempt: ${add(new Date(Date.now()), { seconds: retryTime / 1000 })}`,
+                  message: `[${attemptsMade} of ${this.max}] Final Attempt: ${add(new Date(Date.now()), { seconds: retryTime / 1000 })}`,
                 }),
               );
             }
@@ -93,19 +114,19 @@ export class RedisServiceConfig extends BaseWorker {
           },
           hourly_progressive: (attemptsMade: number, err: Error) => {
             let retryTime = 60000 * 60 * attemptsMade;
-            if (attemptsMade < max - 1 && retryTime < maxRetryLength) {
-              logger.info(
+            if (attemptsMade < this.max - 1 && retryTime < this.maxRetryLength) {
+              this.logger.info(
                 JSON.stringify({
                   error: err,
-                  message: `[${attemptsMade} of ${max}] Next Attempt: ${add(new Date(Date.now()), { seconds: retryTime / 1000 })}`,
+                  message: `[${attemptsMade} of ${this.max}] Next Attempt: ${add(new Date(Date.now()), { seconds: retryTime / 1000 })}`,
                 }),
               );
             } else {
               retryTime = 60000 * 60 * 24;
-              logger.warn(
+              this.logger.warn(
                 JSON.stringify({
                   error: err,
-                  message: `[${attemptsMade} of ${max}] Final Attempt: ${add(new Date(Date.now()), { seconds: retryTime / 1000 })}`,
+                  message: `[${attemptsMade} of ${this.max}] Final Attempt: ${add(new Date(Date.now()), { seconds: retryTime / 1000 })}`,
                 }),
               );
             }
@@ -115,9 +136,9 @@ export class RedisServiceConfig extends BaseWorker {
         },
       },
       defaultJobOptions: {
-        attempts: max,
-        removeOnComplete: false,
-        removeOnFail: false,
+        attempts: this.max,
+        removeOnComplete: this.removeOnComplete,
+        removeOnFail: this.removeOnFail,
       },
     };
   }
@@ -139,8 +160,8 @@ export interface RedisOptions {
   };
   name: string;
   defaultJobOptions: {
-    removeOnFail: boolean;
-    removeOnComplete: boolean;
+    removeOnFail: any;
+    removeOnComplete: any;
     attempts: any;
   };
   redis?: any;
