@@ -23,17 +23,13 @@ export const Default: Story = {
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
     await step('FootprintOverviewCard', async () => {
-      // find text 2022 Company Footprint
-      const cardTitle = await canvas.findByText('2022 Company Footprint');
-      const card = cardTitle.parentElement.parentElement;
+      const card = await canvas.findByTestId('footprint-overview-card');
       // find Learn More button within card
       await within(card).findByText('Learn More');
       await within(card).findByTestId('footprint-overview-chart');
     });
     await step('JourneyOverviewCard', async () => {
-      // find text 2022 Company Footprint
-      const cardTitle = await canvas.findByText('Climate Journey');
-      const card = cardTitle.parentElement.parentElement;
+      const card = await canvas.findByTestId('journey-overview-card');
       // find Learn More button within card
       await within(card).findByText('Learn More');
       // find spider chart
@@ -43,8 +39,7 @@ export const Default: Story = {
       await canvas.findByText('Temperature Check');
     });
     await step('NextActionsCard', async () => {
-      const cardTitle = await canvas.findByText('Your Next Actions');
-      const card = cardTitle.parentElement.parentElement;
+      const card = await canvas.findByTestId('next-actions-card');
       await within(card).findByText('Learn More');
     });
   },
@@ -52,8 +47,8 @@ export const Default: Story = {
     launchdarkly: {
       flags: {
         showNextStepsCard: false,
-      }
-    }
+      },
+    },
   },
 };
 

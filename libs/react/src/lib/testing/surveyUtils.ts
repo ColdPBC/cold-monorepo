@@ -1,5 +1,5 @@
-import { SurveySectionFollowUpType } from '@coldpbc/interfaces';
-import { fireEvent, within } from '@storybook/testing-library';
+import { SurveySectionFollowUpType, SurveySectionType } from '@coldpbc/interfaces';
+import { fireEvent, waitFor, within } from '@storybook/testing-library';
 import { expect } from '@storybook/jest';
 
 export const enterInputValue = async (
@@ -61,12 +61,12 @@ export const enterInputValue = async (
   }
 };
 
-export const verifyAdditionalContext = async (followUp: SurveySectionFollowUpType, followUpName: string, surveyQuestionContainer: HTMLElement) => {
-  if (followUp.additional_context) {
+export const verifyAdditionalContext = async (question: SurveySectionFollowUpType | SurveySectionType, followUpName: string, surveyQuestionContainer: HTMLElement) => {
+  if (question.additional_context) {
     const id = `${followUpName}-additional`;
     let questionInput = null;
 
-    switch (followUp.additional_context.component) {
+    switch (question.additional_context.component) {
       case 'text':
         questionInput = await within(surveyQuestionContainer).queryByRole('textbox', { name: id });
         break;
@@ -92,31 +92,75 @@ export const verifyAdditionalContext = async (followUp: SurveySectionFollowUpTyp
         questionInput = await within(surveyQuestionContainer).queryByRole('textbox', { name: id });
         break;
     }
+
     if (questionInput !== null) {
       // verify the button is disabled
       await expect(await within(surveyQuestionContainer).findByRole('button', { name: 'Continue' })).toBeDisabled();
       // put in a value. use enterInputValue function
-      switch (followUp.additional_context.component) {
-        case 'text':
-          await enterInputValue(followUp, followUpName, surveyQuestionContainer, 'test', true);
-          break;
-        case 'yes_no':
-          await enterInputValue(followUp, followUpName, surveyQuestionContainer, 'Yes', true);
-          break;
-        case 'currency':
-          await enterInputValue(followUp, followUpName, surveyQuestionContainer, '100', true);
-          break;
-        case 'number':
-          await enterInputValue(followUp, followUpName, surveyQuestionContainer, '100', true);
-          break;
-        case 'percent_slider':
-          await enterInputValue(followUp, followUpName, surveyQuestionContainer, '50', true);
-          break;
-        case 'textarea':
-          await enterInputValue(followUp, followUpName, surveyQuestionContainer, 'test', true);
-          break;
+      if ('options' in question) {
+        switch (question.additional_context.component) {
+          case 'text':
+            await enterInputValue(question, followUpName, surveyQuestionContainer, 'test', true);
+            break;
+          case 'yes_no':
+            await enterInputValue(question, followUpName, surveyQuestionContainer, 'Yes', true);
+            break;
+          case 'currency':
+            await enterInputValue(question, followUpName, surveyQuestionContainer, '100', true);
+            break;
+          case 'number':
+            await enterInputValue(question, followUpName, surveyQuestionContainer, '100', true);
+            break;
+          case 'percent_slider':
+            await enterInputValue(question, followUpName, surveyQuestionContainer, '50', true);
+            break;
+          case 'textarea':
+            await enterInputValue(question, followUpName, surveyQuestionContainer, 'test', true);
+            break;
+        }
+      } else {
+        const mutatedQuestion = {
+          ...question,
+          tooltip: '',
+          options: [],
+          idx: 0,
+          placeholder: '',
+        } as SurveySectionFollowUpType;
+        switch (question.additional_context.component) {
+          case 'text':
+            await enterInputValue(mutatedQuestion, followUpName, surveyQuestionContainer, 'test', true);
+            break;
+          case 'yes_no':
+            await enterInputValue(mutatedQuestion, followUpName, surveyQuestionContainer, 'Yes', true);
+            break;
+          case 'currency':
+            await enterInputValue(mutatedQuestion, followUpName, surveyQuestionContainer, '100', true);
+            break;
+          case 'number':
+            await enterInputValue(mutatedQuestion, followUpName, surveyQuestionContainer, '100', true);
+            break;
+          case 'percent_slider':
+            await enterInputValue(mutatedQuestion, followUpName, surveyQuestionContainer, '50', true);
+            break;
+          case 'textarea':
+            await enterInputValue(mutatedQuestion, followUpName, surveyQuestionContainer, 'test', true);
+            break;
+        }
       }
       await expect(await within(surveyQuestionContainer).findByRole('button', { name: 'Continue' })).toBeEnabled();
     }
+  }
+};
+
+export const continueOrSubmit = async (surveyQuestionContainer: HTMLElement) => {
+  const continueButton = await within(surveyQuestionContainer).queryByRole('button', { name: 'Continue' });
+  const submitButton = await within(surveyQuestionContainer).queryByRole('button', { name: 'Submit' });
+  await waitFor(async () => {
+    await expect(continueButton || submitButton).toBeInTheDocument();
+  });
+  if (submitButton) {
+    fireEvent.click(submitButton);
+  } else if (continueButton) {
+    fireEvent.click(continueButton);
   }
 };

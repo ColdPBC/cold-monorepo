@@ -28,31 +28,37 @@ export const Default: Story = {
     await step('Find All Footprint Cards', async () => {
       // within each card's parentElement find the View {subcategoryName} Actions button
       const facilitiesCard = await canvas.findByTestId('footprint-detail-card-facilities');
-      const facilitiesCardButton = await within(facilitiesCard.parentElement).findByRole('button', {
+      const facilitiesCardButton = await within(facilitiesCard).findByRole('button', {
         name: 'View Facilities Actions',
       });
       const productCard = await canvas.findByTestId('footprint-detail-card-product');
-      const productCardButton = await within(productCard.parentElement).findByRole('button', {
+      const productCardButton = await within(productCard).findByRole('button', {
         name: 'View Product Actions',
       });
       const operationsCard = await canvas.findByTestId('footprint-detail-card-operations');
-      const operationsCardButton = await within(operationsCard.parentElement).findByRole('button', {
+      const operationsCardButton = await within(operationsCard).findByRole('button', {
         name: 'View Operations Actions',
       });
       const travelCard = await canvas.findByTestId('footprint-detail-card-travel');
-      const travelCardButton = await within(travelCard.parentElement).findByRole('button', {
+      const travelCardButton = await within(travelCard).findByRole('button', {
         name: 'View Travel Actions',
       });
       // check tables for each card
       const footprintData = getFootprintDataMock();
 
       const verifyTable = async (card: HTMLElement, subCategory: string) => {
-        const table = card.parentElement.querySelector('table');
-        const tableBody = table.querySelector('tbody');
-        const tableRows = await within(tableBody).findAllByTestId('table-row-element');
-        const newData = [];
+        const table = await within(card).findByTestId('footprint-detail-chart-table');
+        const tableRows = await within(table).findAllByTestId('table-row-element');
+        const newData: {
+          name: string;
+          footprint: number;
+        }[] = [];
         let newTotalFootprint = 0;
-        const newLegendRows = [];
+        const newLegendRows: {
+          value: number;
+          name: string;
+          percent: number;
+        }[] = [];
         // Transform chart data
         Object.keys(footprintData?.subcategories[subCategory].activities ?? {}).forEach((activityKey: any) => {
           const activity = footprintData?.subcategories[subCategory].activities[activityKey];
@@ -95,26 +101,26 @@ export const Default: Story = {
     });
     await step('Verify Footprint Overview Card', async () => {
       // find the footprint overview card with title 2022 Company Footprint
-      const footprintOverviewCard = await canvas.findByText('2022 Company Footprint');
-      await within(footprintOverviewCard.parentElement.parentElement).findAllByText('Travel');
-      await within(footprintOverviewCard.parentElement.parentElement).findAllByText('Operations');
-      await within(footprintOverviewCard.parentElement.parentElement).findAllByText('Product');
-      await within(footprintOverviewCard.parentElement.parentElement).findAllByText('Facilities');
+      const footprintOverviewCard = await canvas.findByTestId('footprint-overview-card');
+      await within(footprintOverviewCard).findAllByText('Travel');
+      await within(footprintOverviewCard).findAllByText('Operations');
+      await within(footprintOverviewCard).findAllByText('Product');
+      await within(footprintOverviewCard).findAllByText('Facilities');
     });
   },
 };
 
 export const EmptyData: Story = {
   render: args => (
-    <StoryMockProvider {...args} handlers={getFootprintHandler.empty}>
+    <StoryMockProvider {...args} handlers={[getFootprintHandler.empty]}>
       <Footprint />
     </StoryMockProvider>
   ),
   play: async ({ canvasElement, step }) => {
     await step('Verify Screen', async () => {
       const canvas = within(canvasElement);
-      await within(canvasElement).findByText("We'll be in touch as soon as your initial footprint results are available.");
-      await within(canvasElement).findByText('We are reviewing your data');
+      await within(canvasElement).findByText('We need more data to show your footprint');
+      await within(canvasElement).findByText('Please fill out the Footprint Overview survey using the link below to calculate your initial footprint.');
       await within(canvasElement).findByText('Footprint Breakdown');
     });
   },

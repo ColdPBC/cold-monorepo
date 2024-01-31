@@ -71,7 +71,7 @@ export const Default: Story = {
       const text = canvas.getByText('Facilities Score');
       await expect(text).toBeInTheDocument();
       // find Category Score number
-      const text2 = canvas.getByText('25/50');
+      const text2 = canvas.getByText('25%');
       await expect(text2).toBeInTheDocument();
     });
 
