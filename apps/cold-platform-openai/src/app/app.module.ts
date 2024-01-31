@@ -9,14 +9,7 @@ import { OpenAIController } from './app.controller';
 import { FileService } from './assistant/files/file.service';
 import { AssistantService } from './assistant/assistant.service';
 import { AssistantModule } from './assistant/assistant.module';
-import { BullModule, RegisterFlowProducerOptions, RegisterQueueOptions } from '@nestjs/bullmq';
-import { BullMQConfigService } from '../../../../libs/nest/src/lib/utility/bull-config.service';
-import { ConfigService } from '@nestjs/config';
-import { OpenaiFlowConsumerService } from './assistant/surveys/openai-flow-consumer/openai-flow-consumer.service';
-import { OpenaiSurveysService } from './assistant/surveys/openai-surveys/openai-surveys.service';
-import { OpenaiSurveyService } from './assistant/surveys/openai-survey/openai-survey.service';
-import { OpenaiSurveySectionService } from './assistant/surveys/openai-survey-section/openai-survey-section.service';
-import { OpenaiSurveySectionQuestionService } from './assistant/surveys/openai-survey-section-question/openai-survey-section-question.service';
+import { BullModule } from '@nestjs/bull';
 
 @Module({})
 export class AppModule {
