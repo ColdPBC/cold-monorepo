@@ -219,7 +219,7 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
         const follow_up = definition.sections[section].follow_up[item];
         this.setTags({ question: { key: item, prompt: follow_up.prompt } });
 
-        if (has(item, 'ai_response.answer') && !has(item, 'ai_response.what_we_need')) {
+        if (follow_up?.ai_response?.answer && !has(follow_up, 'ai_response.what_we_need')) {
           this.logger.info(`Skipping ${section}.${item}: ${follow_up.prompt}; it has already been answered`, {
             section_item: definition.sections[section].follow_up[item],
           });
@@ -228,7 +228,7 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
 
         // create a new thread for each followup item
         const thread = await this.client.beta.threads.create();
-        this.setTags({ thread: thread.id });
+        await this.setTags({ thread: thread.id });
 
         this.logger.info(`Created Thread | thread.id: ${thread.id} for ${section}.${item}`, {
           thread,
@@ -244,7 +244,9 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
 
         // update the survey with the response
         definition.sections[section].follow_up[item].ai_response = value;
-        definition.sections[section].follow_up[item].ai_answered = !!has(value, 'answer');
+        if (value) {
+          definition.sections[section].follow_up[item].ai_answered = !!value.answer;
+        }
         definition.sections[section].follow_up[item].ai_attempted = true;
 
         // if there is additional context, create a new run for it
@@ -262,7 +264,11 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
           additionalValue = this.clearValuesOnError(additionalValue);
 
           definition.sections[section].follow_up[item].additional_context.ai_response = additionalValue;
-          definition.sections[section].follow_up[item].additional_context.ai_answered = !!additionalValue.answer;
+
+          if (additionalValue) {
+            definition.sections[section].follow_up[item].additional_context.ai_answered = has(additionalValue, 'answer');
+          }
+
           definition.sections[section].follow_up[item].additional_context.ai_attempted = true;
         }
 
