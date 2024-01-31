@@ -7,7 +7,7 @@ import { integrations, organizations, service_definitions } from '@prisma/client
 import { Job } from 'bull';
 import { OnQueueActive, OnQueueCompleted, OnQueueFailed, OnQueueProgress } from '@nestjs/bull';
 import { OpenAIResponse } from './validator/validator';
-import { Prompts } from './prompts/prompts';
+import { Prompts } from './surveys/prompts/prompts';
 
 @Injectable()
 export class AssistantService extends BaseWorker implements OnModuleInit {
@@ -175,24 +175,6 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
     }
   }
 
-  clearValuesOnError(value: any) {
-    if (!value) return value;
-
-    if (typeof value === 'string') {
-      value = JSON.parse(value);
-    }
-
-    if (value?.error) {
-      value.answer = null;
-      value.justification = null;
-      value.what_we_need = null;
-    } else if (value?.what_we_need && value?.answer) {
-      value.answer = null;
-    }
-
-    return value;
-  }
-
   async process_survey(job: Job) {
     const { survey, user, compliance, integration, organization } = job.data;
     this.setTags({
@@ -305,6 +287,24 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
         await job.progress(idx / items.length);
       }
     }
+  }
+
+  clearValuesOnError(value: any) {
+    if (!value) return value;
+
+    if (typeof value === 'string') {
+      value = JSON.parse(value);
+    }
+
+    if (value?.error) {
+      value.answer = null;
+      value.justification = null;
+      value.what_we_need = null;
+    } else if (value?.what_we_need && value?.answer) {
+      value.answer = null;
+    }
+
+    return value;
   }
 
   getTimerString(job: Job) {

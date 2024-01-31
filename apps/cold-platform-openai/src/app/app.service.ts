@@ -1,8 +1,8 @@
 import { AuthenticatedUser, BaseWorker, ColdRabbitService, PrismaService } from '@coldpbc/nest';
-import { Injectable, NotFoundException, OnModuleInit, UnauthorizedException, UnprocessableEntityException } from '@nestjs/common';
+import { Injectable, NotFoundException, OnModuleInit, UnprocessableEntityException } from '@nestjs/common';
 import OpenAI from 'openai';
-import { service_definitions } from '../../../../libs/nest/src/validation/generated/modelSchema/service_definitionsSchema';
-import { organizations } from '../../../../libs/nest/src/validation/generated/modelSchema/organizationsSchema';
+import { organizations, service_definitions } from '@prisma/client';
+import { Tools } from './assistant/tools/tools';
 
 export type OpenAIAssistant = {
   model: string;
@@ -17,6 +17,7 @@ export class AppService extends BaseWorker implements OnModuleInit {
   client: OpenAI;
   service: service_definitions;
   topic: string = '';
+  tools = new Tools();
 
   constructor(private readonly prisma: PrismaService, private rabbit: ColdRabbitService) {
     super(AppService.name);
@@ -27,7 +28,7 @@ export class AppService extends BaseWorker implements OnModuleInit {
     const pkg = await BaseWorker.getParsedJSON('apps/cold-platform-openai/package.json');
 
     try {
-      this.service = await this.rabbit.register_service(pkg.service);
+      this.service = (await this.rabbit.register_service(pkg.service)) as service_definitions;
     } catch (e) {
       this.logger.error(e.message, e);
       try {
@@ -65,7 +66,19 @@ export class AppService extends BaseWorker implements OnModuleInit {
     }
   }
 
-  async createAssistant(user: AuthenticatedUser, organization: organizations, service: service_definitions, assistant: OpenAIAssistant) {
+  async createAssistant(parsed: any) {
+    const service = parsed.service;
+    const organization: organizations = parsed.organization;
+    const user = parsed.user;
+
+    const assistant: OpenAIAssistant = {
+      name: `${organization.name}`,
+      instructions: `You are an AI sustainability expert. You help ${organization.display_name} understand their impact on the environment and what tasks they must complete to meet a given set of compliance requirements. Enter your responses in a json format`,
+      description: `OpenAI assistant for ${organization.display_name}`,
+      model: 'gpt-4-1106-preview',
+      tools: [{ type: 'retrieval' }, this.tools.answerable, this.tools.unanswerable],
+    };
+
     try {
       let integration = await this.prisma.integrations.findFirst({
         where: {
@@ -162,23 +175,6 @@ export class AppService extends BaseWorker implements OnModuleInit {
     }
   }
 
-  async listFiles(user: AuthenticatedUser) {
-    try {
-      const openAIResponse = await this.client.files.list();
-
-      this.logger.info(`OpenAI files listed for ${user.coldclimate_claims.email}`, {
-        user,
-        openAi: openAIResponse,
-      });
-
-      return openAIResponse?.data;
-    } catch (e) {
-      this.handleError(e, {
-        user,
-      });
-    }
-  }
-
   async listAssistants(user: AuthenticatedUser) {
     try {
       const openAIResponse = await this.client.beta.assistants.list();
@@ -193,309 +189,6 @@ export class AppService extends BaseWorker implements OnModuleInit {
       this.handleError(e, {
         user,
       });
-    }
-  }
-
-  async deleteFile(user: AuthenticatedUser, assistantId: string, fileId: string) {
-    try {
-      const file = await this.client.beta.assistants.files.del(assistantId, fileId);
-      this.logger.info(`User ${user.coldclimate_claims.email} deleted file ${fileId}.`, { file, user });
-
-      return file;
-    } catch (e) {
-      this.handleError(e, {
-        user,
-        assistant_id: assistantId,
-        file_id: fileId,
-      });
-    }
-  }
-
-  async getAssistantFile(user: AuthenticatedUser, orgId: string, fileId: string) {
-    try {
-      const integration = await this.prisma.integrations.findFirstOrThrow({
-        where: {
-          organization_id: orgId,
-          service_definition_id: this.service.id,
-        },
-      });
-
-      const assistantId = integration.id;
-
-      const file = await this.client.beta.assistants.files.retrieve(assistantId, fileId);
-      this.logger.info(`User ${user.coldclimate_claims.email} requested file ${fileId}.`, { file, user });
-
-      const content = await this.client.files.content(file.id).withResponse();
-      this.logger.info(`Retrieved content for file ${fileId}.`, { content, user, file });
-      return file;
-    } catch (e) {
-      this.handleError(e, {
-        user,
-        org_id: orgId,
-        file_id: fileId,
-      });
-    }
-  }
-
-  async getFile(user: AuthenticatedUser, fileId: string) {
-    try {
-      const file = await this.client.files.retrieve(fileId);
-      this.logger.info(`User ${user.coldclimate_claims.email} requested file ${fileId}.`, { file, user });
-
-      const content = await this.client.files.content(fileId).withResponse();
-      this.logger.info(`Retrieved content for file ${fileId}.`, { content, user });
-      return file;
-    } catch (e) {
-      this.handleError(e, {
-        user,
-        file_id: fileId,
-      });
-    }
-  }
-
-  async listAssistantFiles(user: AuthenticatedUser, orgId: string) {
-    try {
-      const integration = await this.prisma.integrations.findFirstOrThrow({
-        where: {
-          organization_id: orgId,
-          service_definition_id: this.service.id,
-        },
-      });
-
-      const assistantId = integration.id;
-      const files = await this.client.beta.assistants.files.list(assistantId);
-
-      for (const file of files.data) {
-        const meta = await this.prisma.organization_files.findUnique({
-          where: {
-            openai_file_id: file.id,
-          },
-        });
-
-        if (meta) {
-          Object.assign(file, meta);
-        }
-      }
-      this.logger.info(`User ${user.coldclimate_claims.email} retrieved a list of files for assistant: ${assistantId}`, {
-        files,
-        user,
-        assistantId,
-      });
-
-      return files.data;
-    } catch (e) {
-      this.handleError(e, {
-        user,
-        org_id: orgId,
-      });
-    }
-  }
-
-  async uploadOrgFilesToOpenAI(user: AuthenticatedUser, orgId: string, file: Express.Multer.File) {
-    if (orgId !== user.coldclimate_claims.org_id && !user.isColdAdmin) {
-      throw new UnauthorizedException('You do not have permission to perform this action');
-    }
-
-    const org = await this.prisma.organizations.findUnique({
-      where: {
-        id: orgId,
-      },
-    });
-
-    if (!org) {
-      throw new NotFoundException(`Organization ${orgId} not found`);
-    }
-
-    const openAIFile = await this.uploadToOpenAI(user, file);
-
-    const { integrations, assistant_file } = await this.linkFile(user, org, openAIFile.id, file.originalname);
-
-    const uploaded = await this.prisma.organization_files.upsert({
-      where: {
-        openai_file_id: assistant_file.id,
-      },
-      update: {
-        original_name: file.originalname,
-        integration_id: integrations.id,
-        openai_assistant_id: integrations.id,
-        openai_file_id: assistant_file.id,
-        organization_id: orgId,
-        versionId: file['versionId'] || null,
-        bucket: null,
-        key: null,
-        mimetype: file.mimetype,
-        size: file.size,
-        acl: null,
-        fieldname: file.fieldname,
-        encoding: file.encoding || null,
-        contentType: file['contentType'] || file.mimetype,
-        location: file.filename,
-      },
-      create: {
-        original_name: file.originalname,
-        integration_id: integrations.id,
-        openai_assistant_id: integrations.id,
-        organization_id: orgId,
-        versionId: file['versionId'],
-        bucket: null,
-        key: null,
-        mimetype: file.mimetype,
-        size: file.size,
-        acl: null,
-        fieldname: file.fieldname,
-        encoding: file.encoding || null,
-        contentType: file['contentType'] || file.mimetype,
-        location: file.filename,
-      },
-    });
-
-    this.logger.info(`Stored new organization_file record in db`, {
-      user,
-      integrations,
-      organization: org,
-      assistant_file: assistant_file,
-      organization_file: uploaded,
-    });
-
-    return openAIFile;
-  }
-
-  async uploadToOpenAI(user: AuthenticatedUser, file: Express.Multer.File) {
-    const sourcePath = `./uploads/${file.filename}`;
-    const destinationPath = `./uploads/${file.originalname}`;
-
-    this.fs.rename(sourcePath, destinationPath, err => {
-      if (err) {
-        if (err.code === 'EXDEV') {
-          (sourcePath, destinationPath) => {
-            const readStream = this.fs.createReadStream(sourcePath);
-            const writeStream = this.fs.createWriteStream(destinationPath);
-
-            readStream.on('error', err => this.handleError(err));
-            writeStream.on('error', err => this.handleError(err));
-
-            readStream.on('close', function () {
-              this.fs.unlink(sourcePath, () => {
-                this.logger.info(`Successfully renamed - AKA moved!`);
-              });
-            });
-
-            readStream.pipe(writeStream);
-          };
-        } else {
-          throw err;
-        }
-      }
-      console.log('Successfully renamed - AKA moved!', user.coldclimate_claims);
-    });
-
-    const openAIFile = await this.client.files.create({
-      file: this.fs.createReadStream(destinationPath),
-      purpose: 'assistants',
-    });
-
-    this.logger.info(`Created new file ${openAIFile.id} with assistants purpose`, { openAIFile });
-
-    this.fs.rmSync(destinationPath);
-
-    return openAIFile;
-  }
-
-  async linkFileToAssistant(
-    user: AuthenticatedUser,
-    assistantId: string,
-    openAIFileId: string,
-  ): Promise<{
-    id: string;
-    object: string;
-    created_at: number;
-    assistant_id: string;
-  }> {
-    let myAssistantFile;
-    try {
-      myAssistantFile = await this.client.beta.assistants.files.retrieve(assistantId, openAIFileId);
-    } catch (e) {
-      if (e.status !== 404) {
-        this.logger.error(e.message, { error: e, user, openai_assistant_id: assistantId, openai_file_id: openAIFileId });
-      }
-
-      myAssistantFile = await this.client.beta.assistants.files.create(assistantId, {
-        file_id: openAIFileId,
-      });
-
-      this.logger.info(`Created new assistant file ${myAssistantFile.id} for assistant ${myAssistantFile.assistant_id}`, {
-        user,
-        openai_assistant_id: assistantId,
-        openai_file_id: openAIFileId,
-        assistant_file: myAssistantFile,
-      });
-    }
-
-    return myAssistantFile;
-  }
-
-  async linkFile(
-    user: AuthenticatedUser,
-    org: {
-      id: string;
-    },
-    openAIFileId: string,
-    filename: string,
-    key?: string,
-    bucket?: string,
-  ) {
-    try {
-      const integrations = await this.prisma.integrations.findFirst({
-        where: {
-          organization_id: org.id,
-          service_definition_id: this.service.id,
-          location_id: null,
-        },
-      });
-
-      if (!integrations) {
-        throw new NotFoundException(`Integration not found for organization ${org.id}`);
-      }
-
-      const myAssistantFile = await this.linkFileToAssistant(user, integrations.id, openAIFileId);
-
-      let filter;
-      if (key && bucket) {
-        filter = {
-          s3Key: {
-            key: key,
-            bucket: bucket,
-            organization_id: org.id,
-          },
-        };
-      } else {
-        filter = {
-          openai_file_id: openAIFileId,
-        };
-      }
-
-      const orgFile = await this.prisma.organization_files.upsert({
-        where: filter,
-        create: {
-          openai_assistant_id: integrations.id,
-          openai_file_id: myAssistantFile.id,
-          integration_id: integrations.id,
-          organization_id: integrations.organization_id,
-          original_name: filename || 'unknown',
-        },
-        update: {
-          openai_assistant_id: integrations.id,
-          openai_file_id: myAssistantFile.id,
-          integration_id: integrations.id,
-          organization_id: org.id,
-          original_name: filename || 'unknown',
-        },
-      });
-
-      return { integrations, assistant_file: myAssistantFile, organization_file: orgFile };
-    } catch (e) {
-      this.logger.error(e.message, e);
-      this.handleError(e, { user, organization: org, openai_file_id: openAIFileId });
     }
   }
 }
