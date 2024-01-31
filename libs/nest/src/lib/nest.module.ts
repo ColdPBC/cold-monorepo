@@ -17,8 +17,7 @@ import { BaseWorker, WorkerLogger } from './worker';
 import { ColdRabbitModule, ColdRabbitService } from './rabbit'; //import { CronModule, CronService } from './crons';
 import { DatadogTraceModule } from 'nestjs-ddtrace';
 import { MqttService } from './mqtt';
-import { S3Module } from './aws/s3/s3.module';
-import { S3Service } from './aws';
+import { S3Module, S3Service } from './aws';
 import { BullMQConfigService } from './utility/bull-config.service';
 
 @Module({})
@@ -29,11 +28,7 @@ export class NestModule {
     const darkly = new DarklyService(config);
     await darkly.onModuleInit();
 
-    const parts = config.getOrThrow('DD_SERVICE')?.split('-');
-
-    const type = parts.length > 2 ? parts[1] : 'core';
-    const project = parts.length > 2 ? parts[2] : parts[1];
-
+    const bullMQConfig = await new BullMQConfigService(config).createSharedConfiguration();
     /**
      * Imports Array
      */
@@ -41,10 +36,7 @@ export class NestModule {
       ConfigModule.forRoot({
         isGlobal: true,
       }),
-      BullModule.forRoot(await RedisServiceConfig.getQueueConfig(type, project, redisDB)),
-      BullModule.registerQueue({
-        name: project,
-      }),
+      BullModule.forRoot(bullMQConfig),
       HttpModule,
     ];
 
