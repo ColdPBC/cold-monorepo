@@ -48,7 +48,8 @@ const _UserSettings = () => {
           text: 'Log Out',
           action: handleLogout,
         },
-      ]}>
+      ]}
+      data-testid={'user-settings-card'}>
       <Modal
         setShowModal={setShowFirstNameModal}
         show={showFirstNameModal}

@@ -31,7 +31,7 @@ const _CompliancePage = () => {
           {compliances.data.map((compliance, index) => {
             const complianceFound = find(orgCompliances.data, { compliance_id: compliance.id });
             return (
-              <div key={'compliance_' + index}>
+              <div key={'compliance_' + index} data-testid={`compliance-${compliance.id}`}>
                 <ComplianceOverview complianceData={compliance} orgComplianceData={complianceFound} />
               </div>
             );

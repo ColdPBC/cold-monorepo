@@ -115,10 +115,7 @@ export const Input = (props: IInputProps) => {
             {input_label}
           </label>
         )}
-        <Textarea {...textarea_props} key={`input_${key}`} autoComplete={input_props.autoComplete || input_props.name} className={textarea_props?.className}
-                  data-testid={`${textarea_props?.name}_textarea`}
-                  aria-label={`${textarea_props?.name}`}
-        />
+        <Textarea {...textarea_props} key={`input_${key}`} autoComplete={input_props.autoComplete || input_props.name} className={textarea_props?.className} />
       </div>
     );
   }

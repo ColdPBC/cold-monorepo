@@ -10,8 +10,10 @@ export interface ActionItemProps {
   actionPayload: ActionPayload;
   variant: ActionItemVariants;
   showProgress?: boolean;
+  'data-testid'?: string;
 }
-export const ActionItem = ({ actionPayload, variant, showProgress = true }: ActionItemProps) => {
+export const ActionItem = (props: ActionItemProps) => {
+  const { actionPayload, variant, showProgress = true } = props;
   const navigate = useNavigate();
   const { action } = actionPayload;
 
@@ -123,7 +125,7 @@ export const ActionItem = ({ actionPayload, variant, showProgress = true }: Acti
   };
 
   return (
-    <div className={twMerge(getActionItemClass(), 'cursor-pointer')} onClick={onCTAClick}>
+    <div className={twMerge(getActionItemClass(), 'cursor-pointer')} onClick={onCTAClick} data-testid={props['data-testid']}>
       <div
         className={getImageClass()}
         style={{

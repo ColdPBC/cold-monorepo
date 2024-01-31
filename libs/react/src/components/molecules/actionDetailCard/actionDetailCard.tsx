@@ -80,7 +80,7 @@ const _ActionDetailCard = ({ actionPayload, setActionPayLoad, variant }: ActionD
   const getSurveysNeedCompletion = (action: Action) => {
     if (variant === ActionDetailCardVariants.ActionDetailProgress) {
       return (
-        <Card glow className={'text-tc-primary p-0 gap-[8px] px-[16px]'}>
+        <Card glow className={'text-tc-primary p-0 gap-[8px] px-[16px]'} data-testid={'action-detail-progress-card'}>
           <div className={'flex justify-start space-y-[8px]'}>
             <div className={'w-[664px]'}>
               <div className={'text-h4'}>Get Started</div>
@@ -94,7 +94,10 @@ const _ActionDetailCard = ({ actionPayload, setActionPayLoad, variant }: ActionD
       );
     } else {
       return (
-        <Disclosure as="div" className={'w-full p-[16px] space-y-[16px] border-[1px] border-bgc-accent rounded-lg bg-bgc-elevated text-tc-primary'}>
+        <Disclosure
+          as="div"
+          className={'w-full p-[16px] space-y-[16px] border-[1px] border-bgc-accent rounded-lg bg-bgc-elevated text-tc-primary'}
+          data-testid={'action-detail-progress-card'}>
           {({ open }) => (
             <>
               <Disclosure.Button className={'flex w-full space-x-[16px] justify-between items-center'}>
@@ -138,7 +141,7 @@ const _ActionDetailCard = ({ actionPayload, setActionPayLoad, variant }: ActionD
   const getActionIsNotReadyToExecute = (action: Action) => {
     if (variant === ActionDetailCardVariants.ActionDetailProgress) {
       return (
-        <Card glow={false} className={'h-[120px] p-0 px-[16px] text-tc-primary rounded-2xl border-[2px] border-bgc-accent bg-gray-10'}>
+        <Card glow={false} className={'h-[120px] p-0 px-[16px] text-tc-primary rounded-2xl border-[2px] border-bgc-accent bg-gray-10'} data-testid={'action-detail-progress-card'}>
           <div className={'absolute right-[0px] top-[-39px] w-[198px] h-[198px]'}>
             <ColdLogos name={ColdLogoNames.ColdSymbol} color={HexColors.primary.DEFAULT} className={'w-[198px] h-[198px]'} />
           </div>
@@ -153,7 +156,7 @@ const _ActionDetailCard = ({ actionPayload, setActionPayLoad, variant }: ActionD
       );
     } else {
       return (
-        <Card glow={false} className={'p-[16px] text-tc-primary rounded-lg border-[1px] border-bgc-accent bg-bgc-elevated'}>
+        <Card glow={false} className={'p-[16px] text-tc-primary rounded-lg border-[1px] border-bgc-accent bg-bgc-elevated'} data-testid={'action-detail-progress-card'}>
           <div className={'absolute top-[-39px] right-[-45px] w-[198px] h-[198px]'}>
             <ColdLogos name={ColdLogoNames.ColdSymbol} color={HexColors.primary.DEFAULT} className={'w-[198px] h-[198px]'} />
           </div>
@@ -169,7 +172,7 @@ const _ActionDetailCard = ({ actionPayload, setActionPayLoad, variant }: ActionD
   const getActionIsReadyToExecute = (action: Action) => {
     if (variant === ActionDetailCardVariants.ActionDetailProgress) {
       return (
-        <Card glow className={'text-tc-primary'}>
+        <Card glow className={'text-tc-primary'} data-testid={'action-detail-progress-card'}>
           <div className={'text-h4 text-left w-full'}>Steps</div>
           <div className={'w-full'} data-testid={'action-detail-progress-progress-bar'}>
             {getProgress()}
@@ -181,7 +184,7 @@ const _ActionDetailCard = ({ actionPayload, setActionPayLoad, variant }: ActionD
       );
     } else {
       return (
-        <div className={'space-y-[16px] w-full'}>
+        <div className={'space-y-[16px] w-full'} data-testid={'action-detail-progress-card'}>
           <StepDetails steps={action.steps} handleStepsUpdate={handleStepsUpdate} variant={StepDetailsVariants.SubcategoryActionDetailsCard} />
           <div className={'flex justify-center items-center w-full'}>
             <BaseButton

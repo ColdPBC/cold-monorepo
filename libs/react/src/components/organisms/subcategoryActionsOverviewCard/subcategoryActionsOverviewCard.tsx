@@ -36,8 +36,8 @@ const _SubcategoryActionsOverviewCard = ({ subcategory_key, category_key }: Subc
   }
 
   return (
-    <Card className={'w-[666px]'} glow={true}>
-      <div className={'text-tc-primary space-y-[16px]'} data-testid={'subcategory-actions-overview-card'}>
+    <Card className={'w-[666px]'} glow={true} data-testid={'subcategory-actions-overview-card'}>
+      <div className={'text-tc-primary space-y-[16px]'}>
         <div className={'text-h3'}>{subcategoryName}</div>
         {actions.map(action => {
           return (
@@ -46,6 +46,7 @@ const _SubcategoryActionsOverviewCard = ({ subcategory_key, category_key }: Subc
                 actionPayload={action}
                 variant={ActionItemVariants.wide}
                 showProgress={action.action.ready_to_execute && action.action.dependent_surveys.every(survey => survey.submitted)}
+                data-testid={`subcategory-action-item-${action.id}`}
               />
             </div>
           );

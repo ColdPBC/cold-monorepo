@@ -131,11 +131,12 @@ const _ActionDetail = ({ id }: Props) => {
         },
       }}
       className={'z-10'}
-      fullScreenWidth={false}>
+      fullScreenWidth={false}
+      data-testid={'action-detail'}>
       <div className="flex gap-6 my-6">
         <div className="grid gap-6 flex-1 flex flex-col">
           {isActionComplete && <CompletedBanner />}
-          <Card title="About this action" glow className="gap-0">
+          <Card title="About this action" glow className="gap-0" data-testid={'action-detail-overview-card'}>
             <div className="flex h-full">
               <div>
                 <div className="font-bold text-body leading-normal mt-4 mb-2">Objective</div>
@@ -173,7 +174,7 @@ const _ActionDetail = ({ id }: Props) => {
         </div>
         <div className="w-[437px]">
           <div className="sticky top-[40px] w-full grid gap-6">
-            <Card glow className="gap-0 p-0 overflow-visible">
+            <Card glow className="gap-0 p-0 overflow-visible" data-testid={'action-detail-assignee-card'}>
               <span className="p-4 w-full">
                 {selectedAssignee && <div className="font-medium text-xs leading-none mb-2">Steward</div>}
                 <UserSelectDropdown
@@ -228,7 +229,7 @@ const _ActionDetail = ({ id }: Props) => {
               </Dropdown>
             </Card>
             {data?.action.resources && (
-              <Card title="Resources" glow className="gap-4">
+              <Card title="Resources" glow className="gap-4" data-testid={'action-detail-resources-card'}>
                 {data?.action.resources.map(resource => (
                   <a
                     target="_blank"

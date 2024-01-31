@@ -5,6 +5,7 @@ import { ComplianceDetail } from './complianceDetail';
 import { Route, Routes } from 'react-router-dom';
 import { waitFor, within } from '@storybook/testing-library';
 import { expect } from '@storybook/jest';
+import { verifyComplianceDetailPage } from '../../../lib/testing/complianceUtils';
 
 const meta: Meta<typeof ComplianceDetail> = {
   title: 'Pages/ComplianceDetail',
@@ -36,6 +37,10 @@ export const Default: Story = {
       const complianceSectionOverviewCards = await canvas.findAllByTestId('compliance-section-overview-card');
       const complianceSets = getOrganizationComplianceMock();
       const reiCompliance = complianceSets.find(compliance => compliance.compliance_definition.name === 'rei');
+      if (!reiCompliance) {
+        throw new Error('Rei compliance is undefined');
+      }
+      await verifyComplianceDetailPage(reiCompliance, canvasElement);
       // verify the number of compliance-section-overview-card with the number of compliance surveys
       await expect(complianceSectionOverviewCards.length).toEqual(reiCompliance?.compliance_definition.surveys.length);
       // loop through each compliance-section-overview-card

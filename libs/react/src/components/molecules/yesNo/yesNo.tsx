@@ -1,12 +1,8 @@
 import React from 'react';
 
-export const YesNo = ({
-  onChange,
-  value,
-}: {
-  onChange: (value: any) => void;
-  value: any;
-}) => {
+export const YesNo = (props: { onChange: (value: any) => void; value: any; 'data-testid'?: string }) => {
+  const { onChange, value } = props;
+
   const onClick = (newValue: any) => {
     if (newValue === value) {
       onChange(null);
@@ -16,8 +12,7 @@ export const YesNo = ({
   };
 
   const getClassName = (newValue: any) => {
-    let className =
-      'text-sm not-italic font-semibold h-[72px] w-full rounded-lg bg-bgc-accent grid grid-cols-1 place-content-center cursor-pointer';
+    let className = 'text-sm not-italic font-semibold h-[72px] w-full rounded-lg bg-bgc-accent grid grid-cols-1 place-content-center cursor-pointer';
     if (newValue === value) {
       className += ' bg-primary-300 hover:bg-primary-200';
     } else {
@@ -28,7 +23,7 @@ export const YesNo = ({
   };
 
   return (
-    <div className={'w-full space-x-4 flex text-center text-tc-primary'}>
+    <div className={'w-full space-x-4 flex text-center text-tc-primary'} data-testid={props['data-testid']}>
       <div className={getClassName(true)} onClick={() => onClick(true)}>
         Yes
       </div>
