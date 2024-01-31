@@ -115,7 +115,6 @@ export const Default: Story = {
           await expect(await within(surveySectionsProgress).findByText(section.category_description)).toBeInTheDocument();
         });
         if (section.component) {
-          console.log('section', section);
           if (sectionName === 'product') {
             await enterInputValue(
               {
