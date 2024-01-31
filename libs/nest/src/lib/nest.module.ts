@@ -6,7 +6,7 @@ import { JwtService } from '@nestjs/jwt';
 import { HttpModule } from '@nestjs/axios';
 import { HotShotsModule } from 'nestjs-hot-shots';
 import { redisStore } from 'cache-manager-redis-yet';
-import { BullModule } from '@nestjs/bullmq';
+import { BullModule } from '@nestjs/bull';
 import { PrismaModule, PrismaService } from './prisma';
 import { HealthController, HealthModule, HealthService } from './health';
 import { DarklyService } from './darkly';
@@ -18,7 +18,7 @@ import { ColdRabbitModule, ColdRabbitService } from './rabbit'; //import { CronM
 import { DatadogTraceModule } from 'nestjs-ddtrace';
 import { MqttService } from './mqtt';
 import { S3Module, S3Service } from './aws';
-import { BullMQConfigService } from './utility/bull-config.service';
+import { RedisServiceConfig } from './utility';
 
 @Module({})
 export class NestModule {
@@ -28,7 +28,11 @@ export class NestModule {
     const darkly = new DarklyService(config);
     await darkly.onModuleInit();
 
-    const bullMQConfig = await new BullMQConfigService(config).createSharedConfiguration();
+    const parts = config.getOrThrow('DD_SERVICE')?.split('-');
+
+    const type = parts.length > 2 ? parts[1] : 'core';
+    const project = parts.length > 2 ? parts[2] : parts[1];
+
     /**
      * Imports Array
      */
@@ -36,7 +40,7 @@ export class NestModule {
       ConfigModule.forRoot({
         isGlobal: true,
       }),
-      BullModule.forRoot(bullMQConfig),
+      BullModule.forRoot(await new RedisServiceConfig().getQueueConfig(type, project)),
       HttpModule,
     ];
 
