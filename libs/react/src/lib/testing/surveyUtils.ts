@@ -92,7 +92,6 @@ export const verifyAdditionalContext = async (followUp: SurveySectionFollowUpTyp
         questionInput = await within(surveyQuestionContainer).queryByRole('textbox', { name: id });
         break;
     }
-    console.log(questionInput);
     if (questionInput !== null) {
       // verify the button is disabled
       await expect(await within(surveyQuestionContainer).findByRole('button', { name: 'Continue' })).toBeDisabled();
