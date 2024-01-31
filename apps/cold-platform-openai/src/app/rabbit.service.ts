@@ -1,32 +1,19 @@
-import {Injectable, Logger, LoggerService} from '@nestjs/common';
-import {BackOffStrategies, Cuid2Generator, PrismaService, RabbitMessagePayload, S3Service} from '@coldpbc/nest';
+import {Injectable} from '@nestjs/common';
+import {BackOffStrategies, BaseWorker, PrismaService, RabbitMessagePayload, S3Service} from '@coldpbc/nest';
 import {Nack, RabbitRPC, RabbitSubscribe} from '@golevelup/nestjs-rabbitmq';
-import {InjectFlowProducer, InjectQueue} from '@nestjs/bullmq';
+import {InjectQueue} from '@nestjs/bull';
 import {Queue} from 'bull';
 import {AppService} from './app.service';
-import {organizations, survey_definitions} from '@prisma/client';
-
+import {organizations} from '@prisma/client';
 import {FileService} from './assistant/files/file.service';
-
-import {FlowProducer} from 'bullmq';
 
 /**
  * RabbitService class.
  */
 @Injectable()
-export class RabbitService {
-  logger: LoggerService;
-
-  constructor(
-    @InjectFlowProducer('flow') private surveyFlow: FlowProducer,
-    @InjectQueue('openai-flows') private queue: Queue,
-    private readonly appService: AppService,
-    private readonly prisma: PrismaService,
-    private readonly s3: S3Service,
-  ) {
-    //super(RabbitService.name);
-
-    this.logger = new Logger();
+export class RabbitService extends BaseWorker {
+  constructor(@InjectQueue('openai') private queue: Queue, private readonly appService: AppService, private readonly prisma: PrismaService, private readonly s3: S3Service) {
+    super(RabbitService.name);
   }
 
   /**
@@ -49,7 +36,7 @@ export class RabbitService {
   async handleRPCMessages(msg: RabbitMessagePayload): Promise<any | Nack> {
     try {
       const parsed: unknown = typeof msg.data == 'string' ? JSON.parse(msg.data) : msg.data;
-      //     this.logger.log(`received RPC ${msg.event} request from ${msg.from}`, parsed);
+      this.logger.info(`received RPC ${msg.event} request from ${msg.from}`, parsed);
 
       return this.processRPCMessage(msg.event, msg.from, parsed);
     } catch (err) {
@@ -77,9 +64,9 @@ export class RabbitService {
   async handleAsyncMessages(msg: RabbitMessagePayload): Promise<void | Nack> {
     try {
       const parsed = typeof msg.data == 'string' ? JSON.parse(msg.data) : msg.data;
-      //     this.logger.debug(`received async ${msg.event} request from ${msg.from}`, { parsed, from: msg.from });
+      this.logger.info(`received async ${msg.event} request from ${msg.from}`, { parsed, from: msg.from });
 
-      this.processAsyncMessage(msg.event, msg.from, parsed);
+      this.processAsyncMessage(msg.event, msg.from, parsed.data);
 
       return new Nack();
     } catch (err) {
@@ -90,7 +77,7 @@ export class RabbitService {
 
   async processRPCMessage(event: string, from: string, parsed: any) {
     try {
-      this.logger.debug(`Processing ${event} event triggered by ${parsed.user?.coldclimate_claims?.email} from ${from}`, { parsed });
+      this.logger.info(`Processing ${event} event triggered by ${parsed.user?.coldclimate_claims?.email} from ${from}`, { parsed });
 
       switch (event) {
         case 'integration.enabled': {
@@ -113,7 +100,7 @@ export class RabbitService {
     const organization: organizations = parsed.organization;
     const user = parsed.user;
 
-    this.logger.log(`Processing ${event} event triggered by ${user?.coldclimate_claims?.email} from ${from}`, {
+    this.logger.info(`Processing ${event} event triggered by ${user?.coldclimate_claims?.email} from ${from}`, {
       parsed,
       from,
       event,
@@ -125,81 +112,21 @@ export class RabbitService {
     switch (event) {
       case 'organization_compliances.created':
         {
-          const flowCUID = new Cuid2Generator('flow');
           const surveys = parsed.surveys;
-          const flow = {
-            name: `${organization.id}:surveys`,
-            queueName: 'openai-flows',
-            opts: {
-              jobId: flowCUID.generate().scopedId,
-            },
-            children: [],
-          };
           try {
-            for (const survey of surveys as survey_definitions[]) {
-              const surveyFlow = {
-                name: `${organization.id}:${survey.name}`,
-                data: {
+            for (const survey of surveys) {
+              await this.queue.add(
+                'survey',
+                {
                   survey,
                   user,
                   compliance: parsed.compliance,
                   integration: parsed.integration,
                   organization: parsed.organization,
                 },
-                opts: {
-                  jobId: flowCUID.generate('survey').scopedId,
-                },
-                queueName: 'openai-survey',
-              };
-              /*
-const sections = Object.keys(survey.definition['sections']);
-
-// Add sections to survey flow
-for (const section of sections) {
-const sectionFlow = {
-id: flowCUID.generate(section).scopedId,
-name: `${organization.id}:${survey.name}:${section}`,
-data: {
-survey,
-user,
-compliance: parsed.compliance,
-integration: parsed.integration,
-organization: parsed.organization,
-section,
-},
-children: [],
-queueName: 'openai-survey-section',
-};
-
-const questions = Object.keys(survey.definition['sections'][section]['follow_up']);
-
-// Add questions to section flow
-for (const question of questions) {
-sectionFlow.children.push({
-id: flowCUID.generate(question).scopedId,
-name: `${organization.id}:${survey.name}:${section}:${question}`,
-data: {
-survey,
-user,
-compliance: parsed.compliance,
-integration: parsed.integration,
-organization: parsed.organization,
-section,
-question,
-},
-queueName: 'openai-survey-section-question',
-});
-}
-
-surveyFlow.children.push(sectionFlow);
-} // End of sections
-
-*/
-
-              flow.children.push(surveyFlow);
+                { backoff: { type: BackOffStrategies.EXPONENTIAL } },
+              );
             }
-
-            return await this.surveyFlow.add(flow);
           } catch (e) {
             this.logger.error(e.message, e);
           }
@@ -213,7 +140,7 @@ surveyFlow.children.push(sectionFlow);
       }
       default: {
         const job = await this.queue.add(event, parsed, { backoff: { type: BackOffStrategies.EXPONENTIAL } });
-        this.logger.log(`${job.name} job added to ${job.queue['keyPrefix']} ${job.queue.name} queue`, {
+        this.logger.info(`${job.name} job added to ${job.queue['keyPrefix']} ${job.queue.name} queue`, {
           id: job.id,
           event,
           from,

@@ -1,8 +1,8 @@
 import { BadRequestException, ConflictException, Global, Injectable, NotFoundException } from '@nestjs/common';
 import { Span } from 'nestjs-ddtrace';
-import { ConfigService } from '@nestjs/config';
-import { AuthenticatedUser, BaseWorker, CacheService, ColdRabbitService, Cuid2Generator, DarklyService, MqttService, PrismaService } from '@coldpbc/nest';
+import { AuthenticatedUser, BaseWorker, CacheService, Cuid2Generator, DarklyService, MqttService, PrismaService } from '@coldpbc/nest';
 import { ComplianceDefinition, OrgCompliance } from './compliance_definition_schema';
+import { BroadcastEventService } from '../../../utilities/events/broadcast.event.service';
 
 @Span()
 @Global()
@@ -14,9 +14,8 @@ export class ComplianceDefinitionService extends BaseWorker {
     readonly darkly: DarklyService,
     private prisma: PrismaService,
     private readonly cache: CacheService,
-    private config: ConfigService,
-    private readonly rabbit: ColdRabbitService,
     private readonly mqtt: MqttService,
+    private readonly event: BroadcastEventService,
   ) {
     super('ComplianceDefinitionService');
     this.mqtt.connect(ComplianceDefinitionService.name);
@@ -109,17 +108,6 @@ export class ComplianceDefinitionService extends BaseWorker {
         organization: { id: orgId },
       });
 
-      const integrations = await this.prisma.integrations.findMany({
-        where: {
-          organization_id: orgId,
-        },
-        include: {
-          service_definition: true,
-        },
-      });
-
-      const integration = integrations.find(integration => integration.service_definition.name === 'cold-platform-openai');
-
       const surveyNames = compliance.compliance_definition.surveys as string[];
 
       const surveys: any[] = [];
@@ -135,18 +123,7 @@ export class ComplianceDefinitionService extends BaseWorker {
         }
       }
 
-      await this.rabbit.publish(
-        'cold.platform.openai',
-        {
-          organization: { id: orgId },
-          user,
-          compliance,
-          surveys,
-          integration,
-          from: 'cold-api',
-        },
-        'organization_compliances.created',
-      );
+      await this.event.sendEvent(false, 'organization_compliances.created', { surveys, compliance }, user, orgId);
 
       return compliance as OrgCompliance;
     } catch (e) {

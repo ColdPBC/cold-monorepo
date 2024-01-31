@@ -2,7 +2,7 @@ import { HttpService } from '@nestjs/axios';
 import { ConflictException, HttpException, Injectable, NotFoundException, UnauthorizedException, UnprocessableEntityException } from '@nestjs/common';
 import { Span } from 'nestjs-ddtrace';
 // eslint-disable-next-line @nx/enforce-module-boundaries
-import { Auth0Organization, Auth0TokenService, AuthenticatedUser, BaseWorker, CacheService, ColdRabbitService, DarklyService, PrismaService, S3Service, Tags } from '@coldpbc/nest';
+import { Auth0Organization, Auth0TokenService, AuthenticatedUser, BaseWorker, CacheService, DarklyService, PrismaService, S3Service, Tags } from '@coldpbc/nest';
 import { filter, find, first, kebabCase, map, merge, omit, pick, set } from 'lodash';
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { MemberService } from '../auth0/members/member.service';
@@ -10,6 +10,7 @@ import { RoleService } from '../auth0/roles/role.service';
 import { CreateOrganizationDto } from './dto/organization.dto';
 import { organizations } from '@prisma/client';
 import { IntegrationsService } from '../integrations/integrations.service';
+import { BroadcastEventService } from '../../../utilities/events/broadcast.event.service';
 
 @Span()
 @Injectable()
@@ -25,7 +26,7 @@ export class OrganizationService extends BaseWorker {
     readonly roleService: RoleService,
     readonly memberService: MemberService,
     readonly darkly: DarklyService,
-    private rabbit: ColdRabbitService,
+    readonly events: BroadcastEventService,
     readonly integrations: IntegrationsService,
     readonly s3: S3Service,
   ) {
@@ -1020,10 +1021,6 @@ export class OrganizationService extends BaseWorker {
 
   async uploadFile(user: AuthenticatedUser, orgId: string, file: Express.MulterS3.File) {
     try {
-      if (orgId !== user.coldclimate_claims.org_id && !user.isColdAdmin) {
-        throw new UnauthorizedException('You do not have permission to perform this action');
-      }
-
       const org = await this.getOrganization(orgId, user, true);
 
       if (!org) {
@@ -1064,25 +1061,8 @@ export class OrganizationService extends BaseWorker {
         },
       });
 
-      const integrations = await this.integrations.getOrganizationIntegrations(user, orgId, true);
+      await this.events.sendEvent(false, 'file.uploaded', uploaded, user, orgId);
 
-      if (integrations) {
-        for (const integration of integrations) {
-          const routingKey = integration.service_definition.definition.rabbitMQ.publishOptions.routing_key;
-          if (routingKey) {
-            await this.rabbit.publish(
-              routingKey,
-              {
-                user,
-                integration,
-                from: 'cold-api',
-                uploaded,
-              },
-              'file.uploaded',
-            );
-          }
-        }
-      }
       return file;
     } catch (e) {
       this.logger.error(e);
