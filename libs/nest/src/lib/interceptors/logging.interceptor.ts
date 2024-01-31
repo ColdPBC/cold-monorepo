@@ -24,7 +24,7 @@ export class LoggingInterceptor implements NestInterceptor, OnModuleInit {
   async onModuleInit() {
     await this.darkly.onModuleInit();
 
-    this.darkly.subscribeToFlagChanges('dynamic-enable-health-check-logs', value => {
+    this.darkly.subscribeToBooleanFlagChanges('dynamic-enable-health-check-logs', value => {
       this.enableHealthLogs = value;
     });
   }
