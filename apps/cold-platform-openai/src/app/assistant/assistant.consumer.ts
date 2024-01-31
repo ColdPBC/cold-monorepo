@@ -21,6 +21,7 @@ export class AssistantConsumer extends BaseWorker {
     });
   }
 
+  @Process('openai')
   async process(job: Job) {
     this.logger.info(`Received job ${job.id} of type ${job.name}`);
     switch (job.name) {
@@ -29,7 +30,7 @@ export class AssistantConsumer extends BaseWorker {
       case 'integration.enabled':
         return this.processIntegrationEnabled(job);
       case 'survey':
-        return this.processSurvey(job);
+        return this.processCompliance(job);
       default: {
         const message = `Unknown job type ${job.name}`;
         const apiError = new UnprocessableEntityError(422, undefined, message, undefined);
