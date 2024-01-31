@@ -1,3 +1,11 @@
+# [1.102.0-COLD-301.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.102.0-COLD-301.1...v1.102.0-COLD-301.2) (2024-01-31)
+
+
+### Features
+
+* remove console log ([554f9c5](https://github.com/ColdPBC/cold-monorepo/commit/554f9c55d20f9764aa9a847bbe72afe3a7c08ecf))
+* updated application story to add document, compliance and settings tests ([9670f66](https://github.com/ColdPBC/cold-monorepo/commit/9670f66a468ff44967bc5fd1db16f12b2f15ea5e))
+
 # [1.102.0-COLD-301.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.101.0...v1.102.0-COLD-301.1) (2024-01-30)
 
 
