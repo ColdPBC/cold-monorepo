@@ -84,18 +84,26 @@ export class RabbitService extends BaseWorker {
   })
   async asyncMessage(msg: { user: AuthenticatedUser; data: never; from: string; event: string }): Promise<void | Nack> {
     try {
-      this.logger.debug(`ASYNC ${msg.event} triggered by ${msg.user?.coldclimate_claims?.email} Request processed from ${msg.from}`, {
+      this.logger.debug(`ASYNC ${msg.event} triggered by ${msg.user?.coldclimate_claims?.email} message processed from ${msg.from}`, {
         data: msg.data,
         from: msg.from,
         event: msg.event,
       });
 
-      const job = await this.queue.add(msg.event, msg.data, { backoff: { type: 'exponential' } });
-      this.logger.info(` ${msg.event} job (${job.id}) created from message received from ${msg.from}`, {
-        data: msg.data,
-        from: msg.from,
-        event: msg.event,
-      });
+      switch (msg.event) {
+        case 'integration.enabled': {
+          const job = await this.queue.add(msg.event, msg.data, { backoff: { type: 'exponential' } });
+          this.logger.info(` ${msg.event} job (${job.id}) created from message received from ${msg.from}`, {
+            data: msg.data,
+            from: msg.from,
+            event: msg.event,
+          });
+          break;
+        }
+        // event not recognized for this service
+        default:
+          return new Nack();
+      }
     } catch (err) {
       this.logger.error(err.message, {
         error: err,
