@@ -1,3 +1,11 @@
+## [1.96.1-cold-475.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.96.1-cold-475.2...v1.96.1-cold-475.3) (2024-01-31)
+
+
+### Bug Fixes
+
+* add module exports ([2eee8fb](https://github.com/ColdPBC/cold-monorepo/commit/2eee8fb1cd2316f2aa6a1b60b82a1da618dc22d1))
+* moved prompts to class ([bca4d28](https://github.com/ColdPBC/cold-monorepo/commit/bca4d28043ea4e6641ea821851a474a7f8470104))
+
 ## [1.96.1-cold-475.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.96.1-cold-475.1...v1.96.1-cold-475.2) (2024-01-29)
 
 
