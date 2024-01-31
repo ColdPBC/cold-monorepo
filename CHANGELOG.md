@@ -1,3 +1,10 @@
+# [1.102.0-COLD-301.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.102.0-COLD-301.2...v1.102.0-COLD-301.3) (2024-01-31)
+
+
+### Features
+
+* correct test errors ([282da7a](https://github.com/ColdPBC/cold-monorepo/commit/282da7aa22526f90b8ee10632e250fefc5f42917))
+
 # [1.102.0-COLD-301.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.102.0-COLD-301.1...v1.102.0-COLD-301.2) (2024-01-31)
 
 
