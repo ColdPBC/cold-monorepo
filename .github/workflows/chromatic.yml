@@ -103,6 +103,7 @@ jobs:
           skip: 'dependabot/**' # 👈 Skip dependabot PRs
           exitOnceUploaded: true,
           onlyChanged: true # 👈 Required option to enable TurboSnap
+          autoAcceptChanges: "main" # 👈 Option to accept all changes on main
           # 👇 Chromatic projectToken, refer to the manage page to obtain it.
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
           externals: /(public|.storybook|tailwind.config.js)/**
