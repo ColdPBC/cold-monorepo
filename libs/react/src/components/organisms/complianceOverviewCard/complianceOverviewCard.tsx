@@ -1,38 +1,44 @@
 import React from 'react';
-import { BaseButton, Card, Spinner } from '@coldpbc/components';
-import { ButtonTypes, GlobalSizes } from '@coldpbc/enums';
-import { ProgressBar } from '../../atoms/progressBar/progressBar';
+import { BaseButton, Card, Spinner, ProgressBar } from '@coldpbc/components';
+import { GlobalSizes } from '@coldpbc/enums';
 import { HexColors } from '@coldpbc/themes';
-import { IButtonProps } from '@coldpbc/interfaces';
+import { ComplianceProgress, IButtonProps } from '@coldpbc/interfaces';
 
 export type ComplianceOverviewCardProps = {
   title: string;
-  complianceData: any | undefined;
+  complianceData: ComplianceProgress | undefined;
   isOverview?: boolean;
   onOverviewPage?: boolean;
   ctas?: IButtonProps[];
+  logo_url?: string;
 };
 
 export const ComplianceOverviewCard = (props: ComplianceOverviewCardProps) => {
-  const { complianceData, isOverview, onOverviewPage, ctas, title } = props;
+  const { complianceData, isOverview, onOverviewPage, ctas, title, logo_url } = props;
 
   const showProgressBar = () => {
     // do not show progress bar if there are no questions answered
-    if (complianceData.answeredQuestions === 0 && complianceData.aiAnsweredQuestions === 0 && complianceData.aiAttemptedQuestions === 0) {
-      return false;
-    } else {
-      return true;
-    }
+    if (!complianceData) return false;
+
+    return !(complianceData.answeredQuestions === 0 && complianceData.aiAnsweredQuestions === 0 && complianceData.aiAttemptedQuestions === 0);
   };
 
   const getProgressBarShades = () => {
     const shades = [];
-    shades.push({ color: HexColors.primary.DEFAULT, percentage: complianceData.percentageAnswered });
-    shades.push({ color: HexColors.primary['100'], percentage: complianceData.percentageAIAnswered });
+    if (!complianceData) return [];
+
+    if (complianceData.answeredQuestions > 0) {
+      shades.push({ color: HexColors.primary.DEFAULT, percentage: complianceData.percentageAnswered, type: 'answered' });
+    }
+    if (complianceData.aiAnsweredQuestions > 0) {
+      shades.push({ color: HexColors.primary['100'], percentage: complianceData.percentageAIAnswered, type: 'aiAnswered' });
+    }
     return shades;
   };
 
   const getProgressBar = () => {
+    const shades = getProgressBarShades();
+    if (!complianceData) return null;
     if (isOverview) {
       if (!onOverviewPage) {
         if (complianceData.aiAttemptedQuestions !== complianceData.totalQuestions) {
@@ -54,21 +60,21 @@ export const ComplianceOverviewCard = (props: ComplianceOverviewCardProps) => {
             <Card glow={false} className={'w-full border-1 border-bgc-accent'} data-testid={'compliance-overview-progress-bar-ready'}>
               <div className={'w-full gap-y-[10px]'}>
                 <div className={'w-full'}>
-                  <ProgressBar shades={getProgressBarShades()} />
+                  <ProgressBar shades={shades} />
                 </div>
                 <div className={'w-full gap-[8px]'}>
-                  <div className={'flex w-full justify-between'}>
-                    <div className={'text-body font-bold text-bgc-primary'}>{complianceData.percentageAnswered}% Complete</div>
-                    <div className={'text-body font-bold text-bgc-primary'}>
-                      {complianceData.answeredQuestions} / {complianceData.totalQuestions} Requirements
-                    </div>
-                  </div>
-                  <div className={'flex w-full justify-between'}>
-                    <div className={'text-body font-bold text-bgc-primary'}>{complianceData.percentageAIAnswered}% Needing review</div>
-                    <div className={'text-body font-bold text-bgc-primary'}>
-                      {complianceData.aiAnsweredQuestions} / {complianceData.totalQuestions} Requirements
-                    </div>
-                  </div>
+                  {shades.map((shade, index) => {
+                    return (
+                      <div className={'flex w-full justify-between'} key={index}>
+                        <div className={'text-body font-bold text-bgc-primary'}>
+                          {shade.percentage}% {shade.type === 'answered' ? 'Complete' : 'Needing Review'}
+                        </div>
+                        <div className={'text-body font-bold text-bgc-primary'}>
+                          {shade.type === 'answered' ? complianceData.answeredQuestions : complianceData.aiAnsweredQuestions} / {complianceData.totalQuestions} Requirements
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             </Card>
@@ -102,18 +108,18 @@ export const ComplianceOverviewCard = (props: ComplianceOverviewCardProps) => {
                 </div>
               )}
               <div className={'w-full gap-[8px]'}>
-                <div className={'flex w-full justify-between'}>
-                  <div className={'text-body font-bold text-bgc-primary'}>{complianceData.percentageAnswered}% Complete</div>
-                  <div className={'text-body font-bold text-bgc-primary'}>
-                    {complianceData.answeredQuestions}/{complianceData.totalQuestions} Requirements
-                  </div>
-                </div>
-                <div className={'flex w-full justify-between'}>
-                  <div className={'text-body font-bold text-bgc-primary'}>{complianceData.percentageAIAnswered}% Needing review</div>
-                  <div className={'text-body font-bold text-bgc-primary'}>
-                    {complianceData.aiAnsweredQuestions}/{complianceData.totalQuestions} Requirements
-                  </div>
-                </div>
+                {shades.map((shade, index) => {
+                  return (
+                    <div className={'flex w-full justify-between'} key={index}>
+                      <div className={'text-body font-bold text-bgc-primary'}>
+                        {shade.percentage}% {shade.type === 'answered' ? 'Complete' : 'Needing Review'}
+                      </div>
+                      <div className={'text-body font-bold text-bgc-primary'}>
+                        {shade.type === 'answered' ? complianceData.answeredQuestions : complianceData.aiAnsweredQuestions} / {complianceData.totalQuestions} Requirements
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </Card>
@@ -126,18 +132,18 @@ export const ComplianceOverviewCard = (props: ComplianceOverviewCardProps) => {
     <Card className={'w-full gap-y-6'} data-testid={'compliance-overview-card'}>
       <div className={'w-full flex justify-between'}>
         <div className={'flex gap-x-4 items-center justify-center'}>
-          {isOverview && (
+          {logo_url && (
             <div className={'w-[60px] h-[60px] flex justify-center items-center bg-white rounded-2xl'}>
-              <img src="https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/ReiLogo.png" alt="compliance" />
+              <img src={`${logo_url}`} alt="compliance" />
             </div>
           )}
           <div className="text-h4 flex-1" data-testid={'compliance-overview-card-title'}>
             {title}
           </div>
         </div>
-        {ctas?.map(cta => {
+        {ctas?.map((cta, index) => {
           return (
-            <div className={'flex items-center'}>
+            <div className={'flex items-center'} key={`compliance_button_${index}`}>
               <BaseButton {...cta} />
             </div>
           );
