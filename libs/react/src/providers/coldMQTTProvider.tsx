@@ -65,7 +65,7 @@ export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
           if (!err) {
             console.log(`Subscribed to ui/${env}/${org_id}/${account_id}`);
           } else {
-            console.log(err);
+            console.log(`Error subscribing to ui/${env}/${org_id}/${account_id}` + err);
           }
         });
 
@@ -73,7 +73,15 @@ export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
           if (!err) {
             console.log(`Subscribed to ui/${env}/${org_id}/#`);
           } else {
-            console.log(err);
+            console.log(`Error subscribing to ui/${env}/${org_id}/#` + err);
+          }
+        });
+
+        client.current?.subscribe(`system/${env}`, { qos: 0, nl: false }, (err, grant) => {
+          if (!err) {
+            console.log(`Subscribed to system/${env}`);
+          } else {
+            console.log(`Error subscribing to system/${env}` + err);
           }
         });
       }
