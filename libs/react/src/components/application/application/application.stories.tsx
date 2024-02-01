@@ -11,15 +11,13 @@ import {
   getSurveyHandler,
   getActionsMock,
   getCategoriesDataMock,
-  getSurveysMock,
   getComplianceMock,
   getOrganizationComplianceMock,
 } from '@coldpbc/mocks';
 import { userEvent, waitFor, within } from '@storybook/testing-library';
-import { find, findKey, forEach, random, uniq, uniqBy } from 'lodash';
+import { find, forEach, random, uniq } from 'lodash';
 import { expect } from '@storybook/jest';
-import { verifyActionDetailPage, verifyActionsPage } from '@coldpbc/lib';
-import { verifyComplianceDetailPage } from '../../../lib/testing/complianceUtils';
+import { verifyActionDetailPage, verifyActionsPage, verifyComplianceDetailPage } from '@coldpbc/lib';
 
 const meta: Meta<typeof Application> = {
   title: 'Application/Application',
