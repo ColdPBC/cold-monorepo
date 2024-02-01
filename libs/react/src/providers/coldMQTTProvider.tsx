@@ -70,13 +70,7 @@ export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
 
         // for cold admin users, subscribe to system/env/cold
         if (user.coldclimate_claims.roles.includes('cold:admin')) {
-          client.current?.subscribe(`system/${env}/cold`, { qos: 0, nl: false }, (err, grant) => {
-            if (!err) {
-              console.log(`Subscribed to system/${env}/cold`);
-            } else {
-              console.log(`Error subscribing to system/${env}/cold` + err);
-            }
-          });
+          subscribeToTopic(`system/${env}/cold`);
         }
       }
     };
