@@ -1,3 +1,10 @@
+# [1.102.0-COLD-301.5](https://github.com/ColdPBC/cold-monorepo/compare/v1.102.0-COLD-301.4...v1.102.0-COLD-301.5) (2024-02-01)
+
+
+### Features
+
+* use takeover for signup page ([c299ca2](https://github.com/ColdPBC/cold-monorepo/commit/c299ca2451bd4b6319e51ad5e04cb4a656142822))
+
 # [1.102.0-COLD-301.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.102.0-COLD-301.3...v1.102.0-COLD-301.4) (2024-02-01)
 
 
