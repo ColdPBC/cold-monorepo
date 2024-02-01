@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import { Outlet, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
-import { ErrorFallback, SignupPage, Spinner } from '@coldpbc/components';
+import { ErrorFallback, SignupPage, Spinner, Takeover } from '@coldpbc/components';
 import { ErrorType, GlobalSizes } from '@coldpbc/enums';
 import ColdContext from '../../../context/coldContext';
 import { useLDClient } from 'launchdarkly-react-client-sdk';
@@ -111,9 +111,11 @@ const _ProtectedRoute = () => {
 
   if (isLoading || initialSurveySWR.isLoading || signedPolicySWR.isLoading) {
     return (
-      <div className="absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
-        <Spinner size={GlobalSizes.xLarge} />
-      </div>
+      <Takeover show={true} setShow={() => {}}>
+        <div className="absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
+          <Spinner size={GlobalSizes.xLarge} />
+        </div>
+      </Takeover>
     );
   }
 
@@ -143,9 +145,11 @@ const _ProtectedRoute = () => {
     return <Outlet />;
   } else {
     return (
-      <div className="absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
-        <Spinner size={GlobalSizes.xLarge} />
-      </div>
+      <Takeover show={true} setShow={() => {}}>
+        <div className="absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
+          <Spinner size={GlobalSizes.xLarge} />
+        </div>
+      </Takeover>
     );
   }
 };
