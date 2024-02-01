@@ -5467,7 +5467,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mapbox/node-pre-gyp@npm:^1.0.10, @mapbox/node-pre-gyp@npm:^1.0.11":
+"@mapbox/node-pre-gyp@npm:^1.0.11":
   version: 1.0.11
   resolution: "@mapbox/node-pre-gyp@npm:1.0.11"
   dependencies:
@@ -16059,14 +16059,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"argon2@npm:^0.30.3":
-  version: 0.30.3
-  resolution: "argon2@npm:0.30.3"
+"argon2@npm:^0.31.2":
+  version: 0.31.2
+  resolution: "argon2@npm:0.31.2"
   dependencies:
-    "@mapbox/node-pre-gyp": "npm:^1.0.10"
+    "@mapbox/node-pre-gyp": "npm:^1.0.11"
     "@phc/format": "npm:^1.0.0"
-    node-addon-api: "npm:^5.0.0"
-  checksum: 10/af617195c75562a40cdad3043128c472b041cc20a97b0441ca479938d2fcda1165d5035033175c1857b94aa8a1abb46e6413b23265f2507890f7309e4e406b8e
+    node-addon-api: "npm:^7.0.0"
+  checksum: 10/017165bc2da279fadbaedf955297db933944d7669ec0d3333579ed7f561c98b74474b46fb546e740b844ee5f4a902ca2e845487a90a1ef44a3f7928d4f18133f
   languageName: node
   linkType: hard
 
@@ -18809,7 +18809,7 @@ __metadata:
     "@vitest/ui": "npm:~0.32.0"
     "@zerollup/ts-transform-paths": "npm:^1.0.0"
     app-root-path: "npm:^3.1.0"
-    argon2: "npm:^0.30.3"
+    argon2: "npm:^0.31.2"
     async-mqtt: "npm:^2.6.3"
     auth0: "npm:^4.2.0"
     auto-changelog: "npm:^2.4.0"
@@ -33120,6 +33120,15 @@ __metadata:
   dependencies:
     node-gyp: "npm:latest"
   checksum: 10/8eea1d4d965930a177a0508695beb0d89b4c1d80bf330646a035357a1e8fc31e0d09686e2374996e96e757b947a7ece319f98ede3146683f162597c0bcb4df90
+  languageName: node
+  linkType: hard
+
+"node-addon-api@npm:^7.0.0":
+  version: 7.1.0
+  resolution: "node-addon-api@npm:7.1.0"
+  dependencies:
+    node-gyp: "npm:latest"
+  checksum: 10/e20487e98c76660f4957e81e85c45dfb667140d9be0bf872a3b3dfd86b4ea19c0275939116c90efebc0da7fc6af2c7b7b060512ceebe6417b1ed145a26910453
   languageName: node
   linkType: hard
 
