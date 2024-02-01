@@ -1,10 +1,10 @@
 import React from 'react';
 import { CenterColumnContent, ErrorFallback, Spinner } from '@coldpbc/components';
-import { useAuth0Wrapper, useColdContext, useOrgSWR } from '@coldpbc/hooks';
+import { useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { find } from 'lodash';
-import { Compliance, OrgCompliance, ToastMessage } from '@coldpbc/interfaces';
-import useSWR, { useSWRConfig } from 'swr';
+import { Compliance, OrgCompliance } from '@coldpbc/interfaces';
+import useSWR from 'swr';
 import { ErrorType } from '@coldpbc/enums';
 import { ComplianceOverview } from '../../organisms/complianceOverview/complianceOverview';
 import { withErrorBoundary } from 'react-error-boundary';
