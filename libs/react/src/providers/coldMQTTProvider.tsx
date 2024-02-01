@@ -3,6 +3,7 @@ import mqtt from 'mqtt';
 import { useAuth0Wrapper } from '@coldpbc/hooks';
 import ColdMQTTContext from '../context/coldMQTTContext';
 import { useSWRConfig } from 'swr';
+import { forEach } from 'lodash';
 
 export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
   const { user, orgId, getAccessTokenSilently, isAuthenticated } = useAuth0Wrapper();
@@ -61,28 +62,10 @@ export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
           console.log('disconnected');
         });
 
-        client.current?.subscribe(`ui/${env}/${org_id}/${account_id}`, { qos: 0, nl: false }, (err, grant) => {
-          if (!err) {
-            console.log(`Subscribed to ui/${env}/${org_id}/${account_id}`);
-          } else {
-            console.log(`Error subscribing to ui/${env}/${org_id}/${account_id}` + err);
-          }
-        });
+        const topics = [`ui/${env}/${org_id}/${account_id}`, `ui/${env}/${org_id}/#`, `system/${env}`];
 
-        client.current?.subscribe(`ui/${env}/${org_id}/#`, { qos: 0, nl: false }, (err, grant) => {
-          if (!err) {
-            console.log(`Subscribed to ui/${env}/${org_id}/#`);
-          } else {
-            console.log(`Error subscribing to ui/${env}/${org_id}/#` + err);
-          }
-        });
-
-        client.current?.subscribe(`system/${env}`, { qos: 0, nl: false }, (err, grant) => {
-          if (!err) {
-            console.log(`Subscribed to system/${env}`);
-          } else {
-            console.log(`Error subscribing to system/${env}` + err);
-          }
+        forEach(topics, topic => {
+          subscribeToTopic(topic);
         });
 
         // for cold admin users, subscribe to system/env/cold
@@ -100,6 +83,18 @@ export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
 
     connectToIOT();
   }, [user, orgId, getAccessTokenSilently, isAuthenticated]);
+
+  const subscribeToTopic = (topic: string) => {
+    if (client.current) {
+      client.current.subscribe(topic, (err, granted) => {
+        if (err) {
+          console.log('Error subscribing to topic ' + topic);
+        } else {
+          console.log('Subscribed to topic ' + topic);
+        }
+      });
+    }
+  };
 
   return children;
 };
