@@ -28,10 +28,10 @@ export const ComplianceOverviewCard = (props: ComplianceOverviewCardProps) => {
     if (!complianceData) return [];
 
     if (complianceData.answeredQuestions > 0) {
-      shades.push({ color: HexColors.primary.DEFAULT, percentage: complianceData.percentageAnswered });
+      shades.push({ color: HexColors.primary.DEFAULT, percentage: complianceData.percentageAnswered, type: 'answered' });
     }
     if (complianceData.aiAnsweredQuestions > 0) {
-      shades.push({ color: HexColors.primary['100'], percentage: complianceData.percentageAIAnswered });
+      shades.push({ color: HexColors.primary['100'], percentage: complianceData.percentageAIAnswered, type: 'aiAnswered' });
     }
     return shades;
   };
@@ -67,11 +67,10 @@ export const ComplianceOverviewCard = (props: ComplianceOverviewCardProps) => {
                     return (
                       <div className={'flex w-full justify-between'} key={index}>
                         <div className={'text-body font-bold text-bgc-primary'}>
-                          {shade.percentage}% {shade.color === HexColors.primary.DEFAULT ? 'Complete' : 'Needing Review'}
+                          {shade.percentage}% {shade.type === 'answered' ? 'Complete' : 'Needing Review'}
                         </div>
                         <div className={'text-body font-bold text-bgc-primary'}>
-                          {shade.color === HexColors.primary.DEFAULT ? complianceData.answeredQuestions : complianceData.aiAnsweredQuestions} / {complianceData.totalQuestions}{' '}
-                          Requirements
+                          {shade.type === 'answered' ? complianceData.answeredQuestions : complianceData.aiAnsweredQuestions} / {complianceData.totalQuestions} Requirements
                         </div>
                       </div>
                     );
@@ -113,11 +112,10 @@ export const ComplianceOverviewCard = (props: ComplianceOverviewCardProps) => {
                   return (
                     <div className={'flex w-full justify-between'} key={index}>
                       <div className={'text-body font-bold text-bgc-primary'}>
-                        {shade.percentage}% {shade.color === HexColors.primary.DEFAULT ? 'Complete' : 'Needing Review'}
+                        {shade.percentage}% {shade.type === 'answered' ? 'Complete' : 'Needing Review'}
                       </div>
                       <div className={'text-body font-bold text-bgc-primary'}>
-                        {shade.color === HexColors.primary.DEFAULT ? complianceData.answeredQuestions : complianceData.aiAnsweredQuestions} / {complianceData.totalQuestions}{' '}
-                        Requirements
+                        {shade.type === 'answered' ? complianceData.answeredQuestions : complianceData.aiAnsweredQuestions} / {complianceData.totalQuestions} Requirements
                       </div>
                     </div>
                   );
