@@ -1,5 +1,4 @@
-import { Compliance, OrgCompliance } from '../interfaces/compliance';
-import { getCompliancePageSurveysMocksByName } from './surveyDataMock';
+import { Compliance, OrgCompliance } from '@coldpbc/interfaces';
 
 export function getComplianceMock(): Compliance[] {
   return [
@@ -7,6 +6,7 @@ export function getComplianceMock(): Compliance[] {
       id: '3412521521355',
       name: 'rei',
       title: 'REI',
+      logo_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/ReiLogo.png',
       surveys: ['rei_mfg_survey', 'rei_ghg_survey', 'rei_pkg_survey'],
       created_at: '2020-03-03T23:50:31.000Z',
       updated_at: '2020-03-03T23:50:31.000Z',

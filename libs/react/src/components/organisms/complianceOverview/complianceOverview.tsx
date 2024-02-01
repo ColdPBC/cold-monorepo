@@ -1,12 +1,11 @@
 import React from 'react';
 import { Compliance, IButtonProps, OrgCompliance, ToastMessage } from '@coldpbc/interfaces';
-import { BaseButton, ComplianceOverviewCard } from '@coldpbc/components';
+import { ComplianceOverviewCard } from '@coldpbc/components';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { isAxiosError } from 'axios';
 import { ButtonTypes, ErrorType, GlobalSizes } from '@coldpbc/enums';
 import { useAddToastMessage, useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
 import { useNavigate } from 'react-router-dom';
-import { useSWRConfig } from 'swr';
 
 export interface ComplianceOverviewProps {
   complianceData: Compliance;
@@ -18,7 +17,6 @@ export const ComplianceOverview = (props: ComplianceOverviewProps) => {
   const { addToastMessage } = useAddToastMessage();
   const { orgId } = useAuth0Wrapper();
   const navigate = useNavigate();
-  const { mutate } = useSWRConfig();
   const { logError } = useColdContext();
 
   const getCTAOnClick = async () => {
@@ -59,5 +57,14 @@ export const ComplianceOverview = (props: ComplianceOverviewProps) => {
     }
   };
 
-  return <ComplianceOverviewCard complianceData={undefined} isOverview={true} onOverviewPage={true} ctas={[getCTAButton()]} title={complianceData.title} />;
+  return (
+    <ComplianceOverviewCard
+      complianceData={undefined}
+      isOverview={true}
+      onOverviewPage={true}
+      ctas={[getCTAButton()]}
+      title={complianceData.title}
+      logo_url={complianceData.logo_url}
+    />
+  );
 };
