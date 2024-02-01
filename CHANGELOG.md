@@ -19,6 +19,13 @@
 
 * increase z index of taoaster so it appears over a takeover ([5c8f65e](https://github.com/ColdPBC/cold-monorepo/commit/5c8f65e6ea892befade259bd1a5260a6b7898a83))
 
+# [1.103.0-COLD-301.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.103.0-COLD-301.1...v1.103.0-COLD-301.2) (2024-02-01)
+
+
+### Features
+
+* increase z index of taoaster so it appears over a takeover ([5c8f65e](https://github.com/ColdPBC/cold-monorepo/commit/5c8f65e6ea892befade259bd1a5260a6b7898a83))
+
 # [1.103.0-COLD-301.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.102.0...v1.103.0-COLD-301.1) (2024-02-01)
 
 
