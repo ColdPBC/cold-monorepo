@@ -24,7 +24,7 @@ export function JourneyOverviewCard(props: PropsWithChildren<JourneyOverviewCard
       ];
 
   return (
-    <Card title="Climate Journey" ctas={cta} data-testid="journey-overview-card">
+    <Card title="Gap Assessment" ctas={cta} data-testid="journey-overview-card">
       <div className="flex items-center justify-center self-stretch flex-col">
         <JourneySpiderChart setIsEmptyData={setIsEmptyData} />
         {isEmptyData && (

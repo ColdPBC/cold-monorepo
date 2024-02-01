@@ -235,7 +235,8 @@ export const Default: Story = {
       });
       await userEvent.click(closeButton);
       const surveyTakeoverClosed = await canvas.queryByTestId('survey-takeover');
-      return await expect(surveyTakeoverClosed).toBeNull();
+      await expect(surveyTakeoverClosed).toBeNull();
+      await userEvent.click(await within(sidebar).findByText('Home'));
     });
     await step('Verify Compliance Page', async () => {
       const complianceSidebarItem = await within(sidebar).findByText('Compliance');
@@ -266,7 +267,11 @@ export const Default: Story = {
         }
         await verifyComplianceDetailPage(orgComplianceSet, canvasElement);
       });
+      const homeSidebarItem = await within(sidebar).findByText('Home');
+      await userEvent.click(homeSidebarItem);
     });
+    // reset the page. click the sidebar
+    await userEvent.click(sidebar);
   },
 };
 
