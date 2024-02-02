@@ -3,6 +3,7 @@ import { seedFormDefinitions } from './seed_form_definitions';
 import { seedNews } from './seed_news';
 import { seedPolicies } from './seed_policy_content';
 import { seedUtilities } from './seed_supported_utilites';
+import { seedComponents } from './seed_components';
 
 export const seedDB = async () => {
   /**
@@ -13,6 +14,7 @@ export const seedDB = async () => {
   await seedPolicies();
   await seedNews();
   await seedUtilities();
+  await seedComponents();
   /**
    * Repeat the pattern above for any other tables you want to seed.
    */
