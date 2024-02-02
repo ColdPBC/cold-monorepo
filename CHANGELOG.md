@@ -1,3 +1,19 @@
+# [1.97.0-cold-475.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.96.1-cold-475.4...v1.97.0-cold-475.1) (2024-02-02)
+
+
+### Bug Fixes
+
+* get config settings from LD ([4a91b8c](https://github.com/ColdPBC/cold-monorepo/commit/4a91b8cc3b0935e66d52b8558eeda322fb90ec93))
+* implement re-usable service to broadcast rabbit to all integrations ([be21f09](https://github.com/ColdPBC/cold-monorepo/commit/be21f09c50c18fa03d620a9646e5c1a30d613897))
+* nack() messages when event is not supported by service ([66bbd5c](https://github.com/ColdPBC/cold-monorepo/commit/66bbd5c8e6ca81e2f3a6fbf2b8313d3a882f19d4))
+* null reference error ([11c8d0b](https://github.com/ColdPBC/cold-monorepo/commit/11c8d0bd6a4a1342177163fdf5bb25418876a459))
+* return instance to support non DI implementations ([41e64c1](https://github.com/ColdPBC/cold-monorepo/commit/41e64c1be7fcb2a73bb17fa0108d7e642197b05e))
+
+
+### Features
+
+* implement MQTT on all CRUD updates across all resources ([6a58144](https://github.com/ColdPBC/cold-monorepo/commit/6a5814444f3d53a41764b6db11c42717b0ff727d))
+
 ## [1.96.1-cold-475.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.96.1-cold-475.3...v1.96.1-cold-475.4) (2024-01-31)
 
 
