@@ -105,6 +105,7 @@ export const Default: Story = {
         const roleCells = row.querySelectorAll('td');
         return roleCells[1].textContent === 'dan.lindquist+8-27_1@coldclimate.com';
       });
+      if (!memberRow) throw new Error('Member row not found');
       // click the button in that row
       const tableButton = within(memberRow).getByTestId('table-actions');
       await userEvent.click(tableButton);
@@ -125,6 +126,7 @@ export const Default: Story = {
         const roleCells = row.querySelectorAll('td');
         return roleCells[1].textContent === 'dan.lindquist+8-27_1@coldclimate.com';
       });
+      if (!updatedMemberRow) throw new Error('Updated member row not found');
       await waitFor(async () => {
         const roleCells = await within(updatedMemberRow).findAllByRole('cell');
         await expect(roleCells[2].textContent).toBe('Member');
@@ -138,6 +140,7 @@ export const Default: Story = {
         const roleCells = within(row).getAllByRole('cell');
         return roleCells[2].textContent === 'Admin';
       });
+      if (!adminRow) throw new Error('Admin row not found');
       const secondCell = within(adminRow).getAllByRole('cell')[1];
       const email = secondCell.textContent as string;
       // find the button in that row
@@ -152,8 +155,8 @@ export const Default: Story = {
       // find text Remove User
       const removeButton = within(modal).getByRole('button', { name: 'Remove User' });
       const cancelButton = within(modal).getByRole('button', { name: 'Cancel' });
-      within(modal).getByText((content, element) => {
-        const hasText = element => element.textContent === `Are you sure you want to remove ${email} from your company?`;
+      within(modal).getByText((content, element: Element | null) => {
+        const hasText = (element: Element | null) => element?.textContent === `Are you sure you want to remove ${email} from your company?`;
         const elementHasText = hasText(element);
         const childrenDontHaveText = Array.from(element?.children || []).every(child => !hasText(child));
         return elementHasText && childrenDontHaveText;
@@ -177,6 +180,7 @@ export const Default: Story = {
         const roleCells = within(row).getAllByRole('cell');
         return roleCells[1].textContent === 'troy.morvant+api_test@coldclimate.com';
       });
+      if (!inviteRow) throw new Error('Invite row not found');
       // find the button in that row
       const tableButton = within(inviteRow).getByTestId('table-actions');
       // click the button
@@ -198,6 +202,7 @@ export const Default: Story = {
         const roleCells = within(row).getAllByRole('cell');
         return roleCells[1].textContent === 'troy.morvant+TEST_OWNER@coldclimate.com';
       });
+      if (!inviteRow) throw new Error('Invite row not found');
       // find the button in that row
       const tableButton = within(inviteRow).getByTestId('table-actions');
       // click the button
