@@ -4,11 +4,11 @@ import { ErrorFallback, SignupPage, Spinner, Takeover } from '@coldpbc/component
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { ErrorType, GlobalSizes } from '@coldpbc/enums';
 import { PolicySignedDataType } from '@coldpbc/interfaces';
+import { useAuth0Wrapper, useColdContext, useOrgSWR } from '@coldpbc/hooks';
 import ColdContext from '../../../context/coldContext';
 import { useLDClient } from 'launchdarkly-react-client-sdk';
 import useSWR from 'swr';
 import { get, has, isEmpty } from 'lodash';
-import { useAuth0Wrapper, useColdContext, useOrgSWR } from '@coldpbc/hooks';
 import { SurveyPayloadType } from '@coldpbc/interfaces';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorPage } from '../errors/errorPage';
