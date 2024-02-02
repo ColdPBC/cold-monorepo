@@ -1,3 +1,10 @@
+# [1.103.0-COLD-483-1.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.103.0-COLD-483-1.1...v1.103.0-COLD-483-1.2) (2024-02-02)
+
+
+### Features
+
+* make codebase improvements ([61564bf](https://github.com/ColdPBC/cold-monorepo/commit/61564bf67aa5a6d47c881c5687bb8554e36719ab))
+
 # [1.103.0-COLD-483-1.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.102.0...v1.103.0-COLD-483-1.1) (2024-02-02)
 
 
