@@ -1,25 +1,30 @@
-import { AuthenticatedUser, BaseWorker, PrismaService, S3Service } from '@coldpbc/nest';
+import { BaseWorker, IAuthenticatedUser, MqttService, PrismaService, S3Service } from '@coldpbc/nest';
 import { Injectable, NotFoundException, OnModuleInit, UnauthorizedException, UnprocessableEntityException } from '@nestjs/common';
 import OpenAI, { toFile } from 'openai';
-import { omit } from 'lodash';
+import { omit, pick } from 'lodash';
 import { AppService } from '../../app.service';
-import { organizations } from '@prisma/client';
+import { organizations, service_definitions } from '@prisma/client';
 import { APIPromise } from 'openai/core';
+import { Job } from 'bull';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class FileService extends BaseWorker implements OnModuleInit {
   client: OpenAI;
   package: any;
   service: any;
+  mqtt: MqttService;
 
   constructor(private readonly appService: AppService, private readonly prisma: PrismaService, private readonly s3: S3Service) {
     super(FileService.name);
     this.client = new OpenAI({ organization: process.env['OPENAI_ORG_ID'], apiKey: process.env['OPENAI_API_KEY'] });
+    this.mqtt = new MqttService(new ConfigService());
   }
 
   async onModuleInit(): Promise<void> {
     this.package = await BaseWorker.getParsedJSON('apps/cold-platform-openai/package.json');
     this.service = this.appService.service;
+    await this.mqtt.onModuleInit();
   }
 
   handleError(e, meta?) {
@@ -32,7 +37,7 @@ export class FileService extends BaseWorker implements OnModuleInit {
     }
   }
 
-  async listFiles(user: AuthenticatedUser) {
+  async listFiles(user: IAuthenticatedUser) {
     try {
       const openAIResponse = await this.client.files.list();
 
@@ -49,7 +54,7 @@ export class FileService extends BaseWorker implements OnModuleInit {
     }
   }
 
-  async deleteFile(user: AuthenticatedUser, assistantId: string, fileId: string) {
+  async deleteFile(user: IAuthenticatedUser, assistantId: string, fileId: string) {
     try {
       const file = await this.client.beta.assistants.files.del(assistantId, fileId);
       this.logger.info(`User ${user.coldclimate_claims.email} deleted file ${fileId}.`, { file, user });
@@ -64,7 +69,7 @@ export class FileService extends BaseWorker implements OnModuleInit {
     }
   }
 
-  async getAssistantFile(user: AuthenticatedUser, orgId: string, fileId: string) {
+  async getAssistantFile(user: IAuthenticatedUser, orgId: string, fileId: string) {
     try {
       const integration = await this.prisma.integrations.findFirstOrThrow({
         where: {
@@ -90,7 +95,7 @@ export class FileService extends BaseWorker implements OnModuleInit {
     }
   }
 
-  async getFile(user: AuthenticatedUser, fileId: string) {
+  async getFile(user: IAuthenticatedUser, fileId: string) {
     try {
       const file = await this.client.files.retrieve(fileId);
       this.logger.info(`User ${user.coldclimate_claims.email} requested file ${fileId}.`, { file, user });
@@ -106,7 +111,12 @@ export class FileService extends BaseWorker implements OnModuleInit {
     }
   }
 
-  async listAssistantFiles(user: AuthenticatedUser, orgId: string) {
+  /**
+   * List files for an assistant
+   * @param user
+   * @param orgId
+   */
+  async listAssistantFiles(user: IAuthenticatedUser, orgId: string) {
     try {
       const integration = await this.prisma.integrations.findFirstOrThrow({
         where: {
@@ -144,67 +154,99 @@ export class FileService extends BaseWorker implements OnModuleInit {
     }
   }
 
-  async uploadOrgFilesToOpenAI(parsed) {
-    const { uploaded, user, organization } = parsed;
+  /**
+   * Upload a file to OpenAI
+   * @param job
+   */
+  async uploadOrgFilesToOpenAI(job: Job) {
+    const { payload, user, organization, integration } = job.data;
 
-    if (organization.id !== user.coldclimate_claims.org_id && !user.isColdAdmin) {
-      throw new UnauthorizedException('You do not have permission to perform this action');
-    }
+    try {
+      if (organization.id !== user.coldclimate_claims.org_id && !user.isColdAdmin) {
+        throw new UnauthorizedException('You do not have permission to perform this action');
+      }
 
-    const s3File: any = await this.s3.getObject(user, 'cold-api-uploaded-files.service.ts', uploaded.key);
+      // Retrieve the file from the S3 bucket.
+      const s3File: any = await this.s3.getObject(user, payload.bucket, payload.key);
 
-    const files = await this.client.files.list();
+      // scope the file name to the organization in case another org uploads a file with the same name
+      const fileName = `${organization.name}-${payload.original_name}`;
 
-    let oaiFile = files.data.find(async f => {
-      return f.filename == `${uploaded.original_name}`;
-    });
+      // Check if a file with the same name already exists in OpenAI.
+      const files = await this.client.files.list();
 
-    if (!oaiFile) {
-      oaiFile = await this.client.files.create({
-        file: await toFile(s3File.Body as Buffer, `${uploaded.original_name}`),
-        purpose: 'assistants',
+      let oaiFile = files.data.find(async f => {
+        return f.filename == fileName;
       });
-    } else {
-      this.logger.warn(`File ${uploaded.original_name} already exists in openAI`, {
-        oaiFile,
-        ...omit(s3File, ['Body']),
+
+      // If the file does not exist in OpenAI, create a new file.
+      if (!oaiFile) {
+        oaiFile = await this.client.files.create({
+          file: await toFile(s3File.Body as Buffer, fileName),
+          purpose: 'assistants',
+        });
+      } else {
+        // If the file already exists in OpenAI, log a warning message.
+        this.logger.warn(`File ${payload.original_name} already exists in openAI`, {
+          oaiFile,
+          ...omit(s3File, ['Body']),
+          user,
+          payload,
+        });
+      }
+
+      // Link the file to the assistant.
+      const assistant_file = await this.linkFileToAssistant(user, integration.id, oaiFile.id);
+
+      // Create or update a record in the `organization_files` table in the database.
+      const persisted = await this.prisma.organization_files.update({
+        where: {
+          id: payload.id,
+        },
+        data: {
+          original_name: payload.original_name,
+          integration_id: integration.id,
+          openai_assistant_id: integration.id,
+          openai_file_id: assistant_file.id,
+        },
+      });
+
+      this.logger.info(`Stored new organization_file record in db`, {
         user,
-        uploaded,
+        integration,
+        organization: organization.id,
+        assistant_file: assistant_file,
+        organization_file: payload,
+      });
+
+      this.mqtt.publishToUI({
+        org_id: organization.id,
+        user: user,
+        swr_key: `/organizations/${organization.id}/files`,
+        action: 'create',
+        status: 'complete',
+        data: {
+          file: pick(persisted, ['id', 'original_name', 'mimetype', 'size']),
+        },
+      });
+
+      //return the persisted record.
+      return persisted;
+    } catch (e) {
+      this.mqtt.publishToUI({
+        org_id: organization.id,
+        user: user,
+        swr_key: `/organizations/${organization.id}/files`,
+        action: 'create',
+        status: 'failed',
+        data: {
+          file: pick(payload, ['id', 'original_name', 'mimetype', 'size']),
+        },
       });
     }
-
-    const { integrations, assistant_file } = await this.linkFile(user, organization.id, oaiFile.id, uploaded.originalname);
-
-    const persisted = await this.prisma.organization_files.upsert({
-      where: {
-        openai_file_id: assistant_file.id,
-      },
-      update: {
-        original_name: uploaded.originalname,
-        integration_id: integrations.id,
-        openai_assistant_id: integrations.id,
-        openai_file_id: assistant_file.id,
-      },
-      create: {
-        original_name: uploaded.originalname,
-        integration_id: integrations.id,
-        openai_assistant_id: integrations.id,
-        organization_id: organization.id,
-      },
-    });
-
-    this.logger.info(`Stored new organization_file record in db`, {
-      user,
-      integrations,
-      organization: organization.id,
-      assistant_file: assistant_file,
-      organization_file: uploaded,
-    });
-
-    return persisted;
   }
 
-  async uploadToOpenAI(user: AuthenticatedUser, file: Express.Multer.File) {
+  async uploadToOpenAI(user: IAuthenticatedUser, file: Express.Multer.File) {
     const sourcePath = `./uploads/${file.filename}`;
     const destinationPath = `./uploads/${file.originalname}`;
 
@@ -245,7 +287,13 @@ export class FileService extends BaseWorker implements OnModuleInit {
     return openAIFile;
   }
 
-  async linkFileToAssistant(user: AuthenticatedUser, assistantId: string, openAIFileId: string): Promise<APIPromise<OpenAI.Beta.Assistants.Files.AssistantFile>> {
+  /**
+   * From Controller: Link a file to an assistant and create or update a record in the `organization_files` table in the database.
+   * @param user
+   * @param assistantId
+   * @param openAIFileId
+   */
+  async linkFileToAssistant(user: IAuthenticatedUser, assistantId: string, openAIFileId: string): Promise<APIPromise<OpenAI.Beta.Assistants.Files.AssistantFile>> {
     let myAssistantFile: OpenAI.Beta.Assistants.Files.AssistantFile | PromiseLike<OpenAI.Beta.Assistants.Files.AssistantFile>;
 
     try {
@@ -270,12 +318,21 @@ export class FileService extends BaseWorker implements OnModuleInit {
     return myAssistantFile;
   }
 
-  async linkFile(user: AuthenticatedUser, org: organizations, openAIFileId: string, filename: string, key?: string, bucket?: string) {
+  /**
+   * Link a file to an assistant and create or update a record in the `organization_files` table in the database.
+   * @param user
+   * @param org
+   * @param openAIFileId
+   * @param filename
+   * @param key
+   * @param bucket
+   */
+  async linkFile(user: IAuthenticatedUser, org: organizations, openAIFileId: string, filename: string, service_definition: service_definitions, key?: string, bucket?: string) {
     try {
       const integrations = await this.prisma.integrations.findFirst({
         where: {
           organization_id: org.id,
-          service_definition_id: this.service.id,
+          service_definition_id: service_definition.id,
           location_id: null,
         },
       });

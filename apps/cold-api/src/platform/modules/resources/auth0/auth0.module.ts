@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { HttpModule } from '@nestjs/axios';
-import { ColdCacheModule, S3Service } from '@coldpbc/nest';
+import { ColdCacheModule, MqttService, S3Service } from '@coldpbc/nest';
 import { MemberModule } from './members/member.module';
 import { RoleModule } from './roles/role.module';
 import { OrganizationModule } from '../organizations/organization.module';
@@ -12,7 +12,7 @@ import { OrganizationLocationsService } from '../organization_locations/organiza
 
 @Module({
   imports: [HttpModule, ColdCacheModule, MemberModule, RoleModule, OrganizationModule],
-  providers: [RoleService, OrganizationService, MemberService, IntegrationsService, OrganizationLocationsService, S3Service],
-  exports: [RoleService, OrganizationService, MemberService, IntegrationsService, OrganizationLocationsService, S3Service],
+  providers: [RoleService, OrganizationService, MemberService, IntegrationsService, OrganizationLocationsService, S3Service, MqttService],
+  exports: [RoleService, OrganizationService, MemberService, IntegrationsService, OrganizationLocationsService, S3Service, MqttService],
 })
 export class Auth0Module {}

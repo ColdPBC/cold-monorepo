@@ -273,22 +273,15 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
         }
 
         // publish the response to the rabbit queue
-        await this.rabbit.publish(
-          `cold.core.api.survey_data`,
-          {
-            data: {
-              organization: { id: integration.organization_id },
-              user,
-              survey,
-            },
-            from: 'cold.platform.openai',
+        await this.rabbit.publish(`cold.core.api.survey_data`, {
+          event: 'survey_data.updated',
+          data: {
+            organization: { id: integration.organization_id },
+            user,
+            survey,
           },
-          'survey_data.updated',
-          {
-            exchange: 'amq.direct',
-            timeout: 5000,
-          },
-        );
+          from: 'cold.platform.openai',
+        });
 
         await job.progress(idx / items.length);
       }

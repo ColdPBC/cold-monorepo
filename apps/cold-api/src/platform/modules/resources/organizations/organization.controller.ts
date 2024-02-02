@@ -1,6 +1,5 @@
-import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post, Put, Query, Req, UploadedFile, UseFilters, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post, Put, Query, Req, UseFilters, UseGuards } from '@nestjs/common';
 import { Span } from 'nestjs-ddtrace';
-import { FileInterceptor } from '@nestjs/platform-express';
 import { ResourceValidationPipe } from '../../../pipes/resource.pipe';
 import {
   allRoles,
@@ -15,9 +14,8 @@ import {
 import { postInviteOwnerExample, postOrganizationExample } from './examples/organization.examples';
 import { OrganizationService } from './organization.service';
 import { ApiBody, ApiOAuth2, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { AuthenticatedUser, BaseWorker, HttpExceptionFilter, JwtAuthGuard, OrganizationsSchema, Roles, RolesGuard, S3Service } from '@coldpbc/nest';
+import { BaseWorker, HttpExceptionFilter, IAuthenticatedUser, JwtAuthGuard, OrganizationsSchema, Roles, RolesGuard } from '@coldpbc/nest';
 import { CreateOrganizationDto } from './dto/organization.dto';
-import multerS3 from 'multer-s3';
 
 @Span()
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -60,10 +58,10 @@ export class OrganizationController extends BaseWorker {
       body: any;
       headers: any;
       query: any;
-      user: AuthenticatedUser;
+      user: IAuthenticatedUser;
     },
   ) {
-    return this.orgService.createColdOrg(createOrganizationDTO, req.user);
+    return this.orgService.createColdOrg(createOrganizationDTO, req);
   }
 
   /***
@@ -100,14 +98,14 @@ export class OrganizationController extends BaseWorker {
       body: any;
       headers: any;
       query: any;
-      user: AuthenticatedUser;
+      user: IAuthenticatedUser;
     },
     @Body() inviteUserDto: { user_email: string; inviter_name: string; roleId: string },
     @Param('orgId') orgId: string,
     @Query('bpc') bpc?: boolean,
     @Query('suppressEmail') suppressEmail?: boolean,
   ) {
-    return this.orgService.inviteUser(orgId, inviteUserDto.user_email, inviteUserDto.inviter_name, inviteUserDto.roleId, suppressEmail, req.user, bpc);
+    return this.orgService.inviteUser(orgId, inviteUserDto.user_email, inviteUserDto.inviter_name, inviteUserDto.roleId, suppressEmail, req, bpc);
   }
 
   /***
@@ -152,12 +150,12 @@ export class OrganizationController extends BaseWorker {
       body: any;
       headers: any;
       query: any;
-      user: AuthenticatedUser;
+      user: IAuthenticatedUser;
     },
     @Query('bpc') bpc?: boolean,
   ) {
     if (!orgId) throw new Error('orgId is required');
-    return this.orgService.getOrganizationMembers(orgId, req.user, bpc);
+    return this.orgService.getOrganizationMembers(orgId, req, bpc);
   }
 
   /***
@@ -179,13 +177,13 @@ export class OrganizationController extends BaseWorker {
       body: any;
       headers: any;
       query: any;
-      user: AuthenticatedUser;
+      user: IAuthenticatedUser;
     },
     @Query('bpc') bpc?: boolean,
   ) {
     this.logger.info('getting organization', { orgId });
 
-    return await this.orgService.getOrganization(orgId, req.user, bpc);
+    return await this.orgService.getOrganization(orgId, req, bpc);
   }
 
   /***
@@ -212,7 +210,7 @@ export class OrganizationController extends BaseWorker {
       body: any;
       headers: any;
       query: any;
-      user: AuthenticatedUser;
+      user: IAuthenticatedUser;
     },
     @Query('bpc') bpc?: boolean,
   ) {
@@ -222,7 +220,7 @@ export class OrganizationController extends BaseWorker {
       roleName,
     });
 
-    return await this.orgService.addUserToOrganization(orgId, userId, req.user, roleName, bpc);
+    return await this.orgService.addUserToOrganization(orgId, userId, req, roleName, bpc);
   }
 
   /***
@@ -244,13 +242,13 @@ export class OrganizationController extends BaseWorker {
     req: {
       headers: any;
       query: any;
-      user: AuthenticatedUser;
+      user: IAuthenticatedUser;
     },
     @Param('orgId') orgId: string,
     @Param('userId') userId: string,
     @Query('bpc') bpc?: boolean,
   ) {
-    return this.orgService.getOrgUserRoles(orgId, userId, req.user, bpc);
+    return this.orgService.getOrgUserRoles(orgId, userId, req, bpc);
   }
 
   /***
@@ -279,7 +277,7 @@ export class OrganizationController extends BaseWorker {
       body: any;
       headers: any;
       query: any;
-      user: AuthenticatedUser;
+      user: IAuthenticatedUser;
     },
     @Param('orgId') orgId: string,
     @Param('roleName') roleName: string,
@@ -288,7 +286,7 @@ export class OrganizationController extends BaseWorker {
   ) {
     this.logger.info('update user roles', { orgId, userId, roleName });
 
-    return await this.orgService.updateOrgUserRoles(orgId, userId, req.user, roleName, bpc);
+    return await this.orgService.updateOrgUserRoles(orgId, userId, req, roleName, bpc);
   }
 
   /***
@@ -323,10 +321,10 @@ export class OrganizationController extends BaseWorker {
       body: any;
       headers: any;
       query: any;
-      user: AuthenticatedUser;
+      user: IAuthenticatedUser;
     },
   ) {
-    return await this.orgService.removeUserFromOrganization(orgId, body, req.user);
+    return await this.orgService.removeUserFromOrganization(orgId, body, req);
   }
 
   /***
@@ -353,10 +351,10 @@ export class OrganizationController extends BaseWorker {
       body: any;
       headers: any;
       query: any;
-      user: AuthenticatedUser;
+      user: IAuthenticatedUser;
     },
   ) {
-    return this.orgService.deleteOrganization(orgId, req.user);
+    return this.orgService.deleteOrganization(orgId, req);
   }
 
   /***
@@ -377,36 +375,11 @@ export class OrganizationController extends BaseWorker {
     @Param('invId') invId: string,
     @Req()
     req: {
-      user: AuthenticatedUser;
+      user: IAuthenticatedUser;
     },
   ) {
     this.logger.log(`Removing organization (${orgId}) invite in Auth0`, { orgId, invId, ...req.user });
 
-    return this.orgService.deleteInvitation(orgId, invId, req.user);
-  }
-
-  @Post(':orgId/files')
-  @UseInterceptors(
-    FileInterceptor('file', {
-      storage: multerS3(S3Service.getMulterS3Config()),
-    }),
-  )
-  async uploadFile(
-    @Param('orgId') orgId: string,
-    @UploadedFile() file: Express.MulterS3.File,
-    @Req()
-    req: {
-      body: never;
-      headers: never;
-      query: never;
-      user: AuthenticatedUser;
-    },
-  ) {
-    try {
-      return this.orgService.uploadFile(req.user, orgId, file);
-    } catch (error) {
-      console.error('Error uploading file:', error.message);
-      throw new Error('Failed to process the uploaded file.');
-    }
+    return this.orgService.deleteInvitation(orgId, invId, req);
   }
 }

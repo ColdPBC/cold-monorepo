@@ -16,7 +16,7 @@ export class OrganizationLocationsController extends BaseWorker {
 
   @Get('/:orgId/locations')
   getOrganizationLocations(@Req() req: any, @Param('orgId') orgId: string) {
-    return this.locationService.getOrganizationLocations(req.user, orgId);
+    return this.locationService.getOrganizationLocations(req, orgId);
   }
 
   @Post('/:orgId/locations')
@@ -28,6 +28,6 @@ export class OrganizationLocationsController extends BaseWorker {
   @ApiParam(orgIdDecoratorOptions)
   @ApiBody(LocationBodyExample)
   createLocation(@Req() req: any, @Param('orgId') orgId: string, @Body() body: any) {
-    return this.locationService.createOrganizationLocation(req.user, orgId, body);
+    return this.locationService.createOrganizationLocation(req, orgId, body);
   }
 }

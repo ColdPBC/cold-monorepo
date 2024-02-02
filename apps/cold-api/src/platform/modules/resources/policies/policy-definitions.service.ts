@@ -1,5 +1,5 @@
 import { ConflictException, Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
-import { BaseWorker, AuthenticatedUser, PrismaService, CacheService } from '@coldpbc/nest';
+import { BaseWorker, CacheService, MqttService, PrismaService } from '@coldpbc/nest';
 
 import { CreatePolicyDataDto } from './dto/create-policy-data.dto';
 import { CreatePolicyDefinition } from './dto/create-policy-definition.dto';
@@ -7,7 +7,7 @@ import { PolicyDefinitionDto } from './dto/policy-definition.dto';
 
 @Injectable()
 export class PolicyDefinitionsService extends BaseWorker {
-  constructor(private prisma: PrismaService, private readonly cache: CacheService) {
+  constructor(private prisma: PrismaService, private readonly cache: CacheService, private readonly mqtt: MqttService) {
     super('PolicyContentService');
   }
 
@@ -15,7 +15,8 @@ export class PolicyDefinitionsService extends BaseWorker {
    * This action creates a new policy definition
    * @param createPolicyDefinition
    */
-  async create(user: AuthenticatedUser, createPolicyDefinition: PolicyDefinitionDto): Promise<PolicyDefinitionDto> {
+  async create(req: any, createPolicyDefinition: PolicyDefinitionDto): Promise<PolicyDefinitionDto> {
+    const { user, url } = req;
     try {
       createPolicyDefinition.created_at = new Date();
 
@@ -31,8 +32,27 @@ export class PolicyDefinitionsService extends BaseWorker {
         bypassCache: true,
       });
 
+      this.mqtt.publishSystemCold({
+        swr_key: url,
+        action: 'create',
+        status: 'complete',
+        data: {
+          policy,
+        },
+      });
+
       return policy;
     } catch (e) {
+      this.mqtt.publishSystemCold({
+        swr_key: url,
+        action: 'create',
+        status: 'failed',
+        data: {
+          user: user,
+          error: e.message,
+        },
+      });
+
       this.logger.error(e, { user: user.coldclimate_claims, createPolicyDefinition });
       if (e.message.includes('Unique constraint failed on the fields')) {
         throw new ConflictException(`A policy exists with the name ${createPolicyDefinition.name} already exists`);
@@ -50,7 +70,8 @@ export class PolicyDefinitionsService extends BaseWorker {
    * @param id
    * @param updatedPolicy
    */
-  async update(id: number, updatedPolicy: CreatePolicyDefinition): Promise<PolicyDefinitionDto> {
+  async update(id: number, updatedPolicy: CreatePolicyDefinition, req: any): Promise<PolicyDefinitionDto> {
+    const { url, user } = req;
     try {
       let policy = await this.prisma.policy_definitions.findUnique({ where: { id } });
 
@@ -70,9 +91,26 @@ export class PolicyDefinitionsService extends BaseWorker {
       await this.cache.set('policy_definitions', policy, { update: true });
       await this.cache.set(`policy_definitions:name:${policy.name}`, policy, { update: true });
 
+      this.mqtt.publishSystemCold({
+        swr_key: url,
+        action: 'update',
+        status: 'complete',
+        data: {
+          policy,
+        },
+      });
+
       return policy;
     } catch (e) {
       this.logger.error(e, { updatedPolicy });
+      this.mqtt.publishSystemCold({
+        swr_key: url,
+        action: 'update',
+        status: 'failed',
+        data: {
+          error: e.message,
+        },
+      });
       throw e;
     }
   }
@@ -82,7 +120,8 @@ export class PolicyDefinitionsService extends BaseWorker {
    * @param id
    * @param user
    */
-  async createSignedData(id: number, user: AuthenticatedUser): Promise<CreatePolicyDataDto> {
+  async createSignedData(id: number, req: any): Promise<CreatePolicyDataDto> {
+    const { user, url } = req;
     try {
       const policyData: CreatePolicyDataDto = {
         id: id,
@@ -96,6 +135,17 @@ export class PolicyDefinitionsService extends BaseWorker {
 
       this.logger.info(`${user?.coldclimate_claims.email} signed policy ${id}`, policy);
 
+      this.mqtt.publishToUI({
+        org_id: user?.coldclimate_claims.org_id,
+        user: user,
+        swr_key: url,
+        action: 'create',
+        status: 'complete',
+        data: {
+          policy,
+        },
+      });
+
       return policy;
     } catch (e) {
       this.logger.error(e, { id, user: user?.coldclimate_claims });
@@ -103,6 +153,17 @@ export class PolicyDefinitionsService extends BaseWorker {
       if (e.message.includes('Unique constraint failed on the fields')) {
         throw new ConflictException(`User: ${user.coldclimate_claims.email} already signed policy: ${id}`);
       }
+
+      this.mqtt.publishToUI({
+        org_id: user?.coldclimate_claims.org_id,
+        user: user,
+        swr_key: url,
+        action: 'create',
+        status: 'failed',
+        data: {
+          error: e.message,
+        },
+      });
 
       throw e;
     }
@@ -142,7 +203,14 @@ export class PolicyDefinitionsService extends BaseWorker {
       }
     }
 
-    let policy: { id: number; name: string; definition: any } | null | undefined = await this.cache.get(`policy_definition:name:${name}`);
+    let policy:
+      | {
+          id: number;
+          name: string;
+          definition: any;
+        }
+      | null
+      | undefined = await this.cache.get(`policy_definition:name:${name}`);
 
     policy = await this.prisma.policy_definitions.findFirst({
       orderBy: {
@@ -164,7 +232,9 @@ export class PolicyDefinitionsService extends BaseWorker {
     return options.contentOnly ? policy.definition : policy;
   }
 
-  async findSignedDataByEmail(user: AuthenticatedUser): Promise<PolicyDefinitionDto[]> {
+  async findSignedDataByEmail(req: any): Promise<PolicyDefinitionDto[]> {
+    const { user } = req;
+
     const content = await this.prisma.policy_definitions.findMany({
       distinct: ['name'],
       orderBy: {

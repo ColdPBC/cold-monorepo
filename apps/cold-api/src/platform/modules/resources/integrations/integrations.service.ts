@@ -1,8 +1,9 @@
 import { ConflictException, Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
 import { Span } from 'nestjs-ddtrace';
 import { get } from 'lodash';
-import { AuthenticatedUser, BaseWorker, CacheService, ColdRabbitService, PrismaService } from '@coldpbc/nest';
+import { BaseWorker, CacheService, ColdRabbitService, MqttService, PrismaService } from '@coldpbc/nest';
 import { OrganizationLocationsService } from '../organization_locations/organization_locations.service';
+import { BroadcastEventService } from '../../../utilities/events/broadcast.event.service';
 
 @Span()
 @Injectable()
@@ -12,6 +13,8 @@ export class IntegrationsService extends BaseWorker {
     private readonly cache: CacheService,
     private readonly rabbit: ColdRabbitService,
     private readonly locations: OrganizationLocationsService,
+    private readonly broadcast: BroadcastEventService,
+    private readonly mqtt: MqttService,
   ) {
     super('PolicyContentService');
   }
@@ -25,7 +28,8 @@ export class IntegrationsService extends BaseWorker {
    * @returns {Promise<any>} - A promise that resolves to the data retrieved from the integrations.
    * @throws {Error} - If an error occurs during retrieval.
    */
-  async getAllIntegrations(user: AuthenticatedUser, data: any, bpc: boolean): Promise<any> {
+  async getAllIntegrations(req: any, data: any, bpc: boolean): Promise<any> {
+    const { user } = req;
     try {
       if (bpc) {
         const cached = await this.cache.get(`${data.routingKey}:${data.action}`);
@@ -56,7 +60,8 @@ export class IntegrationsService extends BaseWorker {
    * @returns {Promise<any>} - A promise that resolves to the data retrieved from the integrations.
    * @throws {Error} - If an error occurs during retrieval.
    */
-  async getOrganizationIntegrations(user: AuthenticatedUser, orgId: string, bpc?: boolean): Promise<any> {
+  async getOrganizationIntegrations(req: any, orgId: string, bpc?: boolean): Promise<any> {
+    const { user } = req;
     try {
       if (bpc) {
         const cached = await this.cache.get(`organizations:${orgId}:integrations`);
@@ -88,7 +93,7 @@ export class IntegrationsService extends BaseWorker {
   }
 
   async createLocationIntegration(
-    user: AuthenticatedUser,
+    req: any,
     orgId: string,
     locId: string,
     body: {
@@ -98,6 +103,7 @@ export class IntegrationsService extends BaseWorker {
       metadata: any;
     },
   ): Promise<any> {
+    const { user, url } = req;
     try {
       const service = await this.prisma.service_definitions.findUnique({
         where: {
@@ -153,6 +159,16 @@ export class IntegrationsService extends BaseWorker {
           timeout: body.timeout || 5000,
         },
       );
+
+      this.mqtt.publishSystemPublic({
+        swr_key: url,
+        action: 'create',
+        status: 'complete',
+        data: {
+          ...response,
+        },
+      });
+
       switch (response.status) {
         case 201:
         case 200:
@@ -168,12 +184,22 @@ export class IntegrationsService extends BaseWorker {
       }
     } catch (e: any) {
       this.logger.error(e.message, { user });
+
+      this.mqtt.publishSystemPublic({
+        swr_key: url,
+        action: 'create',
+        status: 'failed',
+        data: {
+          error: e.message,
+        },
+      });
+
       throw e;
     }
   }
 
   async createIntegration(
-    user: AuthenticatedUser,
+    req: any,
     orgId: string,
     body: {
       service_definition_id: string;
@@ -181,6 +207,7 @@ export class IntegrationsService extends BaseWorker {
       metadata: any;
     },
   ): Promise<any> {
+    const { user, url } = req;
     try {
       const service = await this.prisma.service_definitions.findUnique({
         where: {
@@ -209,17 +236,17 @@ export class IntegrationsService extends BaseWorker {
         throw new UnprocessableEntityException(`Organization ${orgId} is invalid.`);
       }
 
-      await this.rabbit.publish(
-        get(service.definition, 'rabbitMQ.publishOptions.routing_key', 'deadletter'),
+      await this.broadcast.sendEvent(
+        false,
+        'integration.enabled',
         {
           organization: org,
-          service: service,
           service_definition_id: service.id,
           metadata: body.metadata,
           user: user,
-          from: 'cold.api',
         },
-        'integration.enabled',
+        user,
+        orgId,
         {
           exchange: 'amq.direct',
           timeout: body.timeout || 5000,
@@ -233,8 +260,29 @@ export class IntegrationsService extends BaseWorker {
         metadata: body.metadata,
       });
 
+      this.mqtt.publishToUI({
+        org_id: org.id,
+        user: user,
+        swr_key: url,
+        action: 'create',
+        status: 'complete',
+        data: {
+          service_definition: service,
+          metadata: body.metadata,
+        },
+      });
+
       return { message: `Integration enable request for ${org.name} with service ${service.name} was added to the queue` };
     } catch (e: any) {
+      this.mqtt.publishSystemPublic({
+        swr_key: url,
+        action: 'create',
+        status: 'failed',
+        data: {
+          error: e.message,
+        },
+      });
+
       this.logger.error(e.message, { user });
       throw e;
     }

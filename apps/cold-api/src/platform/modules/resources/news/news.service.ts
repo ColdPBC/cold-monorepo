@@ -1,13 +1,13 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { news } from '@prisma/client';
 import { Span } from 'nestjs-ddtrace';
-import { AuthenticatedUser, BaseWorker, CacheService, PrismaService } from '@coldpbc/nest';
+import { BaseWorker, CacheService, MqttService, PrismaService } from '@coldpbc/nest';
 import { CreateArticleDto } from './dto/news-article.dto';
 
 @Span()
 @Injectable()
 export class NewsService extends BaseWorker {
-  constructor(private prisma: PrismaService, private readonly cache: CacheService) {
+  constructor(private prisma: PrismaService, private readonly cache: CacheService, private readonly mqtt: MqttService) {
     super('PolicyContentService');
   }
 
@@ -16,7 +16,8 @@ export class NewsService extends BaseWorker {
    * @param user AuthenticatedUser
    * @param payload CreateArticleDto
    */
-  async create(user: AuthenticatedUser, payload: CreateArticleDto): Promise<CreateArticleDto> {
+  async create(req: any, payload: CreateArticleDto): Promise<CreateArticleDto> {
+    const { user, url } = req;
     try {
       payload.created_at = new Date();
 
@@ -29,9 +30,28 @@ export class NewsService extends BaseWorker {
       //rebuild cache async
       await this.getArticles(user, 3, 0, true, true);
 
+      this.mqtt.publishSystemPublic({
+        swr_key: url,
+        action: 'create',
+        status: 'complete',
+        data: {
+          ...article,
+        },
+      });
+
       return article;
     } catch (e) {
       this.logger.error(e, { payload });
+
+      this.mqtt.publishSystemPublic({
+        swr_key: url,
+        action: 'create',
+        status: 'failed',
+        data: {
+          payload,
+          error: e.message,
+        },
+      });
       throw e;
     }
   }
@@ -41,7 +61,8 @@ export class NewsService extends BaseWorker {
    * @param user AuthenticatedUser
    * @param id string
    */
-  async delete(user: AuthenticatedUser, id: string): Promise<void> {
+  async delete(req: any, id: string): Promise<void> {
+    const { user, url } = req;
     const article = await this.prisma.news.findUnique({
       where: {
         id,
@@ -60,11 +81,19 @@ export class NewsService extends BaseWorker {
 
     this.logger.info(`deleted article ${id}`, article);
 
+    this.mqtt.publishSystemPublic({
+      swr_key: url,
+      action: 'delete',
+      status: 'complete',
+      data: {},
+    });
+
     //rebuild cache async
     await this.getArticles(user, 3, 0, true, true);
   }
 
-  async getArticles(user: AuthenticatedUser, take: number, skip: number, bpc: boolean, published = true): Promise<news[]> {
+  async getArticles(req: any, take: number, skip: number, bpc: boolean, published = true): Promise<news[]> {
+    const { user } = req;
     if (bpc) {
       const cached = await this.cache.get(`organizations:${user.coldclimate_claims.org_id}:news:${take}${skip}`);
       if (Array.isArray(cached) && cached.length == take) {

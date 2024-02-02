@@ -1,5 +1,5 @@
 import { Controller, Delete, Get, HttpCode, Param, Post, Put, Req, UploadedFile, UseFilters, UseGuards, UseInterceptors } from '@nestjs/common';
-import { allRoles, AuthenticatedUser, BaseWorker, coldAdminOnly, HttpExceptionFilter, JwtAuthGuard, OrgUserInterceptor, Roles, RolesGuard } from '@coldpbc/nest';
+import { allRoles, BaseWorker, coldAdminOnly, HttpExceptionFilter, IAuthenticatedUser, JwtAuthGuard, OrgUserInterceptor, Roles, RolesGuard } from '@coldpbc/nest';
 import { AppService } from './app.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { FileService } from './assistant/files/file.service';
@@ -17,7 +17,7 @@ export class OpenAIController extends BaseWorker {
   getModels(
     @Req()
     req: {
-      user: AuthenticatedUser;
+      user: IAuthenticatedUser;
     },
   ) {
     return this.app.listModels(req.user);
@@ -28,7 +28,7 @@ export class OpenAIController extends BaseWorker {
   deleteAssistant(
     @Req()
     req: {
-      user: AuthenticatedUser;
+      user: IAuthenticatedUser;
     },
     @Param('id') assistantId: string,
   ) {
@@ -41,7 +41,7 @@ export class OpenAIController extends BaseWorker {
   getAssistants(
     @Req()
     req: {
-      user: AuthenticatedUser;
+      user: IAuthenticatedUser;
     },
   ) {
     return this.app.listAssistants(req.user);
@@ -58,7 +58,7 @@ export class OpenAIController extends BaseWorker {
       body: any;
       headers: any;
       query: any;
-      user: AuthenticatedUser;
+      user: IAuthenticatedUser;
     },
   ) {
     return this.files.linkFileToAssistant(req.user, id, fileId);
@@ -74,7 +74,7 @@ export class OpenAIController extends BaseWorker {
       body: never;
       headers: never;
       query: never;
-      user: AuthenticatedUser;
+      user: IAuthenticatedUser;
     },
   ) {
     return this.files.uploadToOpenAI(req.user, file);
@@ -92,7 +92,7 @@ export class OpenAIController extends BaseWorker {
       body: never;
       headers: never;
       query: never;
-      user: AuthenticatedUser;
+      user: IAuthenticatedUser;
     },
   ) {
     return this.files.listAssistantFiles(req.user, orgId);
@@ -110,7 +110,7 @@ export class OpenAIController extends BaseWorker {
       body: never;
       headers: never;
       query: never;
-      user: AuthenticatedUser;
+      user: IAuthenticatedUser;
     },
   ) {
     return this.files.getAssistantFile(req.user, orgId, fileId);
@@ -124,7 +124,7 @@ export class OpenAIController extends BaseWorker {
       body: never;
       headers: never;
       query: never;
-      user: AuthenticatedUser;
+      user: IAuthenticatedUser;
     },
   ) {
     return this.files.listFiles(req.user);

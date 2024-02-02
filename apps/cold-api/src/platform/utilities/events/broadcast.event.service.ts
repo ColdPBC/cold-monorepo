@@ -1,4 +1,4 @@
-import { AuthenticatedUser, BaseWorker, ColdRabbitService, PrismaService } from '@coldpbc/nest';
+import { BaseWorker, ColdRabbitService, IAuthenticatedUser, PrismaService, RabbitMessageOptions } from '@coldpbc/nest';
 import { get, merge } from 'lodash';
 import { Global, Injectable } from '@nestjs/common';
 
@@ -22,18 +22,18 @@ export class BroadcastEventService extends BaseWorker {
    * @param {boolean} isRPC - Indicates whether the event is a Remote Procedure Call.
    * @param {string} event - The event name.
    * @param {any} data - The data to be sent with the event.
-   * @param {Request | AuthenticatedUser} requestOrUser - The request object or the user.
-   * @param {string} [orgId] - The organization id. This is optional when a request object is provided.
+   * @param request
+   * @param options
    * @returns {Promise<any | void>} The response from the event or void if it's an asynchronous event.
    * @throws Will throw an error if the user is required when authenticated request object is not provided.
    * @throws Will throw an error if the organization id is required and not provided.
    */
   async sendEvent(isRPC: boolean, event: string, data: any, request: Request): Promise<any | void>;
-  async sendEvent(isRPC: boolean, event: string, data: any, user: AuthenticatedUser): Promise<any | void>;
-  async sendEvent(isRPC: boolean, event: string, data: any, user: AuthenticatedUser, orgId: string): Promise<any | void>;
-  async sendEvent(isRPC: boolean, event: string, data: any, requestOrUser: Request | AuthenticatedUser, orgId?: string): Promise<any | void> {
+  async sendEvent(isRPC: boolean, event: string, data: any, user: IAuthenticatedUser): Promise<any | void>;
+  async sendEvent(isRPC: boolean, event: string, data: any, user: IAuthenticatedUser, orgId: string, options?: RabbitMessageOptions): Promise<any | void>;
+  async sendEvent(isRPC: boolean, event: string, data: any, requestOrUser: Request | IAuthenticatedUser, orgId?: string, options?: RabbitMessageOptions): Promise<any | void> {
     // Extract the user from the request or use the provided user
-    const currentUser = (requestOrUser['user'] || requestOrUser) as AuthenticatedUser;
+    const currentUser = (requestOrUser['user'] || requestOrUser) as IAuthenticatedUser;
 
     // If no user is provided, throw an error
     if (!currentUser) {
@@ -74,32 +74,31 @@ export class BroadcastEventService extends BaseWorker {
       },
     });
 
+    const responses: any[] = [];
     // Loop through each integration
     for (const integration of integrations) {
       const service_definition = integration.service_definition;
 
       // If the service definition doesn't have a routing key, log a warning and skip this iteration
-      const routingKey = get(service_definition, 'definition.rabbitMQ.publishOptions.routing_key');
+      const routingKey = get(service_definition, `definition.rabbitMQ.${isRPC ? 'rpcOptions' : 'publishOptions'}.routing_key`);
       if (!routingKey) {
         this.logger.warn('rabbitMQ.publishOptions.routing_key not found in service definition; unable to publish to service', { service_definition });
         continue;
       }
 
       // Merge the supplied data with the organization, service definition, integration, and user
-      const merged = merge(data, { organization, service_definition, integration, user: currentUser });
-
-      // Prepare the payload
-      const payload = {
-        from: 'cold-api',
-        ...merged,
-      };
+      const merged = merge({ payload: data }, { organization, service_definition, integration, user: currentUser });
 
       // If the event is an RPC, send an async event, otherwise send an RPC event and return the response
-      if (isRPC) {
-        this.sendAsyncEvent(routingKey, event, payload);
+      if (!isRPC) {
+        this.sendAsyncEvent(routingKey, event, merged, options);
       } else {
-        return this.sendRPCEvent(routingKey, event, payload);
+        responses.push(await this.sendRPCEvent(routingKey, event, merged, options));
       }
+    }
+
+    if (isRPC) {
+      return responses;
     }
   }
 
@@ -109,10 +108,11 @@ export class BroadcastEventService extends BaseWorker {
    * @param {string} routingKey - The routing key for the event.
    * @param {string} event - The event name.
    * @param {any} payload - The data to be sent with the event.
+   * @param options
    * @returns {Promise<void>} A Promise that resolves once the event is sent.
    */
-  async sendAsyncEvent(routingKey: string, event: string, payload: any): Promise<void> {
-    this.rabbit.publish(routingKey, event, payload);
+  async sendAsyncEvent(routingKey: string, event: string, payload: any, options?: RabbitMessageOptions): Promise<void> {
+    this.rabbit.publish(routingKey, { from: 'cold-api', event, data: payload }, options);
   }
 
   /**
@@ -121,9 +121,10 @@ export class BroadcastEventService extends BaseWorker {
    * @param {string} routingKey - The routing key for the event.
    * @param {string} event - The event name.
    * @param {any} payload - The data to be sent with the event.
+   * @param options
    * @returns {Promise<any>} A Promise that resolves with the response from the event.
    */
-  async sendRPCEvent(routingKey: string, event: string, payload: any): Promise<any> {
-    await this.rabbit.request(routingKey, { ...payload, event });
+  async sendRPCEvent(routingKey: string, event: string, payload: any, options?: RabbitMessageOptions): Promise<any> {
+    await this.rabbit.request(routingKey, { from: 'cold-api', event, data: payload }, options);
   }
 }

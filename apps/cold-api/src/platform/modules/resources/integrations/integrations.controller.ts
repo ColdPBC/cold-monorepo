@@ -1,7 +1,7 @@
 import { Body, Controller, Get, HttpCode, Param, ParseBoolPipe, Post, Query, Req, UseFilters, UseGuards } from '@nestjs/common';
 import { ApiBody, ApiOAuth2, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Span } from 'nestjs-ddtrace';
-import { AuthenticatedUser, BaseWorker, HttpExceptionFilter, JwtAuthGuard, Roles, RolesGuard } from '@coldpbc/nest';
+import { BaseWorker, HttpExceptionFilter, IAuthenticatedUser, JwtAuthGuard, Roles, RolesGuard } from '@coldpbc/nest';
 import { bpcDecoratorOptions, coldAdminOnly, coldAndCompanyAdmins, orgIdDecoratorOptions } from '../_global/global.params';
 
 import { IntegrationsService } from './integrations.service';
@@ -32,13 +32,13 @@ export class IntegrationsController extends BaseWorker {
       body: any;
       headers: any;
       query: any;
-      user: AuthenticatedUser;
+      user: IAuthenticatedUser;
     },
     @Query('bpc', new ParseBoolPipe({ optional: true })) bpc: boolean,
   ) {
     if (!bpc) bpc = false;
 
-    return this.providerService.getAllIntegrations(req.user, req.body, bpc);
+    return this.providerService.getAllIntegrations(req, req.body, bpc);
   }
 
   @ApiOperation({
@@ -58,13 +58,13 @@ export class IntegrationsController extends BaseWorker {
       body: any;
       headers: any;
       query: any;
-      user: AuthenticatedUser;
+      user: IAuthenticatedUser;
     },
     @Query('bpc', new ParseBoolPipe({ optional: true })) bpc: boolean,
   ) {
     if (!bpc) bpc = false;
 
-    return this.providerService.getOrganizationIntegrations(req.user, orgId, bpc);
+    return this.providerService.getOrganizationIntegrations(req, orgId, bpc);
   }
 
   @ApiOperation({
@@ -83,7 +83,7 @@ export class IntegrationsController extends BaseWorker {
       body: any;
       headers: any;
       query: any;
-      user: AuthenticatedUser;
+      user: IAuthenticatedUser;
     },
     @Body()
     body: {
@@ -92,7 +92,7 @@ export class IntegrationsController extends BaseWorker {
       metadata: any;
     },
   ) {
-    return this.providerService.createIntegration(req.user, orgId, body);
+    return this.providerService.createIntegration(req, orgId, body);
   }
 
   @ApiOperation({
@@ -112,7 +112,7 @@ export class IntegrationsController extends BaseWorker {
       body: any;
       headers: any;
       query: any;
-      user: AuthenticatedUser;
+      user: IAuthenticatedUser;
     },
     @Body()
     body: {
@@ -121,6 +121,6 @@ export class IntegrationsController extends BaseWorker {
       metadata: any;
     },
   ) {
-    return this.providerService.createLocationIntegration(req.user, orgId, locId, body);
+    return this.providerService.createLocationIntegration(req, orgId, locId, body);
   }
 }

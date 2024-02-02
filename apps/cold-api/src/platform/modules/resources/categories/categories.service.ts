@@ -9,10 +9,10 @@ import {detailedDiff, diff} from 'deep-object-diff';
 import {isEmpty, isUUID} from 'class-validator';
 import {Span} from 'nestjs-ddtrace';
 import {
-  AuthenticatedUser,
   BaseWorker,
   CacheService,
   DarklyService,
+  MqttService,
   ObjectUtils,
   PrismaService,
   Tags,
@@ -30,7 +30,7 @@ export class CategoriesService extends BaseWorker {
   test_orgs: Array<{ id: string; name: string; display_name: string }>;
   objectUtils = new ObjectUtils();
 
-  constructor(readonly darkly: DarklyService, private prisma: PrismaService, private readonly cache: CacheService) {
+  constructor(readonly darkly: DarklyService, private prisma: PrismaService, private readonly cache: CacheService, private readonly mqtt: MqttService) {
     super('CategoriesService');
   }
 
@@ -49,7 +49,8 @@ export class CategoriesService extends BaseWorker {
    * @returns {string}
    * @private
    */
-  private getCategoryCacheKey(user: AuthenticatedUser, orgId?: string, nameOrId?: string) {
+  private getCategoryCacheKey(req: any, orgId?: string, nameOrId?: string) {
+    const { user } = req;
     const keyName = isUUID(nameOrId) ? 'id' : 'name';
     // Return impersonated key
     if (orgId && user.isColdAdmin) {
@@ -85,8 +86,10 @@ export class CategoriesService extends BaseWorker {
    * @param {string} orgId
    * @returns {Promise<CategoryDefinitionDto>}
    */
-  async findFull(user: AuthenticatedUser, bypassCache?: boolean, orgId?: string): Promise<ZodCategoryDefinitionItemDto> {
-    const categoryCacheKey = this.getCategoryCacheKey(user, orgId);
+  async findFull(req: any, bypassCache?: boolean, orgId?: string): Promise<ZodCategoryDefinitionItemDto> {
+    const { user } = req;
+
+    const categoryCacheKey = this.getCategoryCacheKey(req, orgId);
 
     // Return cached
     if (!bypassCache) {
@@ -133,12 +136,14 @@ export class CategoriesService extends BaseWorker {
    * @param bypassCache
    * @param orgId
    */
-  async findByName(user: AuthenticatedUser, bypassCache?: boolean, orgId?: string, name?: string): Promise<ZodCategoryDefinitionItemDto | undefined> {
+  async findByName(req: any, bypassCache?: boolean, orgId?: string, name?: string): Promise<ZodCategoryDefinitionItemDto | undefined> {
+    const { user } = req;
+
     if (isEmpty(name) || name == ':name') {
       throw new BadRequestException(`Name is required!`);
     }
 
-    const categoryCacheKey = this.getCategoryCacheKey(user, orgId, name);
+    const categoryCacheKey = this.getCategoryCacheKey(req, orgId, name);
 
     if (!bypassCache) {
       const cached = (await this.cache.get(categoryCacheKey)) as ZodCategoryDefinitionItemDto;
@@ -148,7 +153,7 @@ export class CategoriesService extends BaseWorker {
       }
     }
 
-    const full = await this.findFull(user, bypassCache, orgId);
+    const full = await this.findFull(req, bypassCache, orgId);
     const def = full.definition ? get(full.definition, `categories.${name}`) : get(full, `categories.${name}`);
 
     await this.cache.set(categoryCacheKey, def, { ttl: 1000 * 60 * 60, update: true });
@@ -167,7 +172,9 @@ export class CategoriesService extends BaseWorker {
    * @param user
    * @param impersonateOrg
    */
-  async submitResults(submission: any, user: AuthenticatedUser, impersonateOrg?: string): Promise<ZodCategoryDefinitionItemDto> {
+  async submitResults(submission: any, req: any, impersonateOrg?: string): Promise<ZodCategoryDefinitionItemDto> {
+    const { user, url } = req;
+    let result: any;
     let org = (await this.cache.get(`organizations:${user.isColdAdmin && impersonateOrg ? impersonateOrg : user.coldclimate_claims.org_id}`)) as any;
     if (!org) {
       org = await this.prisma.organizations.findUnique({
@@ -188,7 +195,7 @@ export class CategoriesService extends BaseWorker {
     };
 
     try {
-      const categoryCacheKey = this.getCategoryCacheKey(user, impersonateOrg);
+      const categoryCacheKey = this.getCategoryCacheKey(req, impersonateOrg);
 
       const def = (await this.prisma.category_definitions.findFirst({
         orderBy: {
@@ -202,7 +209,7 @@ export class CategoriesService extends BaseWorker {
 
       await this.cache.delete(categoryCacheKey);
       for (const key of Object.keys(submission.definition)) {
-        await this.cache.delete(this.getCategoryCacheKey(user, impersonateOrg, key));
+        await this.cache.delete(this.getCategoryCacheKey(req, impersonateOrg, key));
       }
 
       const existing = (await this.prisma.category_data.findFirst({
@@ -224,7 +231,7 @@ export class CategoriesService extends BaseWorker {
 
         // deletes keys in the deleted object from the newData object
         newData = this.objectUtils.deleteKeys(newData, null); //merge(newData, difference.deleted);
-        await this.prisma.category_data.update({
+        result = await this.prisma.category_data.update({
           where: {
             id: existing.id,
           },
@@ -244,7 +251,7 @@ export class CategoriesService extends BaseWorker {
           data: diff(def.definition, submission.definition),
         };
 
-        await this.prisma.category_data.create({
+        result = await this.prisma.category_data.create({
           data: response,
         });
 
@@ -261,7 +268,18 @@ export class CategoriesService extends BaseWorker {
         this.logger.info('saved category submission', response);
       }
 
-      return await this.findFull(user, true, impersonateOrg);
+      this.mqtt.publishToUI({
+        org_id: user.coldclimate_claims.org_id,
+        user: user,
+        swr_key: url,
+        action: 'create',
+        status: 'complete',
+        data: {
+          ...result,
+        },
+      });
+
+      return await this.findFull(req, true, impersonateOrg);
     } catch (e) {
       tags.status = 'failed';
       tags.name = submission?.name;
@@ -270,6 +288,19 @@ export class CategoriesService extends BaseWorker {
       this.metrics.event(`${submission.name} category data submission failed`, `${org.display_name} new category data submission for ${submission.name} failed`, tags);
 
       this.tracer.getTracer().dogstatsd.increment('cold.api.categories.submission', 1, tags);
+
+      this.mqtt.publishToUI({
+        org_id: user.coldclimate_claims.org_id,
+        user: user,
+        swr_key: url,
+        action: 'create',
+        status: 'failed',
+        data: {
+          ...result,
+          error: e.message,
+        },
+      });
+
       throw new UnprocessableEntityException(e);
     }
   }
@@ -279,7 +310,9 @@ export class CategoriesService extends BaseWorker {
    * @param user
    * @param createCategoryDefinitionDto
    */
-  async create(user: AuthenticatedUser, createCategoryDefinitionDto: any): Promise<ZodCategoryDefinitionItemDto> {
+  async create(req: any, createCategoryDefinitionDto: any): Promise<ZodCategoryDefinitionItemDto> {
+    const { user, url } = req;
+
     const org = (await this.cache.get(`organizations:${user.coldclimate_claims.org_id}`)) as any;
     const tags: Tags = {
       name: createCategoryDefinitionDto.name,
@@ -294,7 +327,7 @@ export class CategoriesService extends BaseWorker {
       // await this.categoryDefinitionValidator.validate(createCategoryDefinitionDto);
 
       // delete cached category definition
-      await this.cache.delete(this.getCategoryCacheKey(user));
+      await this.cache.delete(this.getCategoryCacheKey(req));
 
       const existing = await this.prisma.category_definitions.findFirst({
         where: {
@@ -318,7 +351,7 @@ export class CategoriesService extends BaseWorker {
       this.logger.info('created category definition', definition);
 
       //rebuild cache async
-      await this.findFull(user, true);
+      await this.findFull(req, true);
 
       tags.status = 'complete';
 
@@ -329,6 +362,15 @@ export class CategoriesService extends BaseWorker {
       );
 
       this.tracer.getTracer().dogstatsd.increment('cold.api.categories.create', 1, tags);
+
+      this.mqtt.publishSystemPublic({
+        swr_key: url,
+        action: 'create',
+        status: 'complete',
+        data: {
+          ...definition,
+        },
+      });
 
       return definition;
     } catch (e) {
@@ -342,6 +384,15 @@ export class CategoriesService extends BaseWorker {
 
       this.tracer.getTracer().dogstatsd.increment('cold.api.categories.create', 1, tags);
 
+      this.mqtt.publishSystemPublic({
+        swr_key: url,
+        action: 'create',
+        status: 'failed',
+        data: {
+          error: e.message,
+        },
+      });
+
       throw new UnprocessableEntityException(e.message, e);
     }
   }
@@ -352,7 +403,9 @@ export class CategoriesService extends BaseWorker {
    * @param updateSurveyDefinitionDto
    * @param user
    */
-  async update(id: string, updateSurveyDefinitionDto: any, user: AuthenticatedUser): Promise<ZodCategoryDefinitionItemDto> {
+  async update(id: string, updateSurveyDefinitionDto: any, req: any): Promise<ZodCategoryDefinitionItemDto> {
+    const { user, url } = req;
+
     const org = (await this.cache.get(`organizations:${user.coldclimate_claims.org_id}`)) as any;
     const tags: Tags = {
       organization: omit(org, ['branding', 'phone', 'street_address', 'created_at', 'updated_at']),
@@ -361,12 +414,12 @@ export class CategoriesService extends BaseWorker {
     };
 
     try {
-      const def = await this.findFull(user, true);
+      const def = await this.findFull(req, true);
 
       if (def) {
         tags.id = def.id;
         tags.name = def.name;
-        await this.cache.delete(this.getCategoryCacheKey(user));
+        await this.cache.delete(this.getCategoryCacheKey(req));
       }
 
       const definition = await this.prisma.category_definitions.update({
@@ -392,13 +445,31 @@ export class CategoriesService extends BaseWorker {
 
       this.tracer.getTracer().dogstatsd.increment('cold.api.categories.update', 1, tags);
 
-      return await this.findFull(user, true);
+      this.mqtt.publishSystemPublic({
+        swr_key: url,
+        action: 'update',
+        status: 'complete',
+        data: {
+          ...updateSurveyDefinitionDto,
+        },
+      });
+
+      return await this.findFull(req, true);
     } catch (e) {
       tags.status = 'failed';
 
       this.metrics.event(`Update category definition: ${updateSurveyDefinitionDto?.name} failed `, `New category definition: ${updateSurveyDefinitionDto?.name} failed`, tags);
 
       this.tracer.getTracer().dogstatsd.increment('cold.api.categories.update', 1, tags);
+
+      this.mqtt.publishSystemPublic({
+        swr_key: url,
+        action: 'update',
+        status: 'failed',
+        data: {
+          error: e.message,
+        },
+      });
 
       throw new UnprocessableEntityException(e);
     }

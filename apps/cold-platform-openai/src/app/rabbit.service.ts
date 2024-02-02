@@ -4,7 +4,6 @@ import {Nack, RabbitRPC, RabbitSubscribe} from '@golevelup/nestjs-rabbitmq';
 import {InjectQueue} from '@nestjs/bull';
 import {Queue} from 'bull';
 import {AppService} from './app.service';
-import {organizations} from '@prisma/client';
 import {FileService} from './assistant/files/file.service';
 
 /**
@@ -12,7 +11,13 @@ import {FileService} from './assistant/files/file.service';
  */
 @Injectable()
 export class RabbitService extends BaseWorker {
-  constructor(@InjectQueue('openai') private queue: Queue, private readonly appService: AppService, private readonly prisma: PrismaService, private readonly s3: S3Service) {
+  constructor(
+    @InjectQueue('openai') private queue: Queue,
+    private readonly appService: AppService,
+    private readonly prisma: PrismaService,
+    private readonly s3: S3Service,
+    private readonly files: FileService,
+  ) {
     super(RabbitService.name);
   }
 
@@ -35,7 +40,7 @@ export class RabbitService extends BaseWorker {
   })
   async handleRPCMessages(msg: RabbitMessagePayload): Promise<any | Nack> {
     try {
-      const parsed: unknown = typeof msg.data == 'string' ? JSON.parse(msg.data) : msg.data;
+      const parsed: unknown = msg.data || msg;
       this.logger.info(`received RPC ${msg.event} request from ${msg.from}`, parsed);
 
       return this.processRPCMessage(msg.event, msg.from, parsed);
@@ -63,10 +68,10 @@ export class RabbitService extends BaseWorker {
   })
   async handleAsyncMessages(msg: RabbitMessagePayload): Promise<void | Nack> {
     try {
-      const parsed = typeof msg.data == 'string' ? JSON.parse(msg.data) : msg.data;
-      this.logger.info(`received async ${msg.event} request from ${msg.from}`, { parsed, from: msg.from });
+      msg.data = typeof msg.data == 'string' ? JSON.parse(msg.data) : msg.data;
+      this.logger.info(`received async ${msg.event} request from ${msg.from}`, { ...msg });
 
-      this.processAsyncMessage(msg.event, msg.from, parsed.data);
+      this.processAsyncMessage(msg.event, msg.from, msg.data);
 
       return new Nack();
     } catch (err) {
@@ -88,6 +93,9 @@ export class RabbitService extends BaseWorker {
           const uploader = new FileService(this.appService, this.prisma, this.s3);
           return await uploader.uploadOrgFilesToOpenAI(parsed);
         }
+        case 'organization_files.get': {
+          return await this.files.listAssistantFiles(parsed.user, parsed.organization.id);
+        }
       }
     } catch (e) {
       this.logger.error(e.message, { e, event, from, parsed });
@@ -96,9 +104,7 @@ export class RabbitService extends BaseWorker {
   }
 
   async processAsyncMessage(event: string, from: string, parsed: any) {
-    const service = parsed.service;
-    const organization: organizations = parsed.organization;
-    const user = parsed.user;
+    const { service, organization, user } = parsed;
 
     this.logger.info(`Processing ${event} event triggered by ${user?.coldclimate_claims?.email} from ${from}`, {
       parsed,
@@ -132,22 +138,8 @@ export class RabbitService extends BaseWorker {
           }
         }
         break;
-      case 'integration.enabled': {
-        return await this.queue.add('integration.enabled', parsed, { backoff: { type: BackOffStrategies.EXPONENTIAL } });
-      }
-      case 'file.uploaded': {
-        return await this.queue.add('file.uploaded', parsed, { backoff: { type: BackOffStrategies.EXPONENTIAL } });
-      }
-      default: {
-        const job = await this.queue.add(event, parsed, { backoff: { type: BackOffStrategies.EXPONENTIAL } });
-        this.logger.info(`${job.name} job added to ${job.queue['keyPrefix']} ${job.queue.name} queue`, {
-          id: job.id,
-          event,
-          from,
-          data: job.data,
-        });
-        break;
-      }
+      default:
+        return await this.queue.add(event, parsed, { backoff: { type: BackOffStrategies.EXPONENTIAL } });
     }
   }
 }

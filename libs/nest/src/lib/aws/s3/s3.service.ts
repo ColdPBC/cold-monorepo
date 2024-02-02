@@ -5,7 +5,7 @@ import { ConfigService } from '@nestjs/config';
 import { S3Client } from '@aws-sdk/client-s3';
 import multerS3 from 'multer-s3';
 import { BaseWorker } from '../../worker';
-import { AuthenticatedUser } from '../../primitives';
+import { IAuthenticatedUser } from '../../primitives';
 import crypto from 'crypto';
 import stream from 'stream';
 
@@ -73,7 +73,7 @@ export class S3Service extends BaseWorker {
         cb(null, { md5Hash: hash });
       },
       key: function (req, file, cb) {
-        const user = req['user'] as AuthenticatedUser;
+        const user = req['user'] as IAuthenticatedUser;
         const orgId = req['orgId'];
 
         // Adjust this based on your actual user object structure
@@ -82,7 +82,7 @@ export class S3Service extends BaseWorker {
     };
   }
 
-  async uploadStreamToS3(user: AuthenticatedUser, org_id: string, file: Express.MulterS3.File): Promise<AWS.S3.ManagedUpload.SendData> {
+  async uploadStreamToS3(user: IAuthenticatedUser, org_id: string, file: Express.MulterS3.File): Promise<AWS.S3.ManagedUpload.SendData> {
     const key = `${this.details.env}/${org_id}/${file.originalname}`;
 
     const params: AWS.S3.Types.PutObjectRequest = {
@@ -97,7 +97,7 @@ export class S3Service extends BaseWorker {
     return uploaded;
   }
 
-  async getObject(user: AuthenticatedUser, bucket: string, key: string) {
+  async getObject(user: IAuthenticatedUser, bucket: string, key: string) {
     try {
       const s3 = new AWS.S3({
         credentials: {
@@ -113,7 +113,8 @@ export class S3Service extends BaseWorker {
       };
 
       const response = await s3.getObject(params).promise();
-      this.logger.log(response['Body']);
+
+      console.log(response.ChecksumSHA256);
 
       return response;
     } catch (e: any) {
@@ -122,7 +123,7 @@ export class S3Service extends BaseWorker {
     }
   }
 
-  getSignedURL(user: AuthenticatedUser, bucket: string, key: string): string {
+  getSignedURL(user: IAuthenticatedUser, bucket: string, key: string): string {
     this.logger.info(`Generating signed URL for ${key} in bucket ${bucket}`);
     const url = this.client.getSignedUrl('getObject', { Bucket: bucket, Key: key });
 

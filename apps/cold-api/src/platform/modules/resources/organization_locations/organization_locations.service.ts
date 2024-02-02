@@ -1,11 +1,11 @@
-import { AuthenticatedUser, BaseWorker, Cuid2Generator, organization_locations, PrismaService } from '@coldpbc/nest';
+import { BaseWorker, Cuid2Generator, MqttService, organization_locations, PrismaService } from '@coldpbc/nest';
 import { Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
 
 @Injectable()
 export class OrganizationLocationsService extends BaseWorker {
   cuid2 = new Cuid2Generator().setPrefix('oloc');
 
-  constructor(private readonly prisma: PrismaService) {
+  constructor(private readonly prisma: PrismaService, private readonly mqtt: MqttService) {
     super(OrganizationLocationsService.name);
 
     if (!this.cuid2.prefix) {
@@ -14,7 +14,8 @@ export class OrganizationLocationsService extends BaseWorker {
     }
   }
 
-  async getOrganizationLocations(user: AuthenticatedUser, orgId: string): Promise<Partial<organization_locations>[]> {
+  async getOrganizationLocations(req: any, orgId: string): Promise<Partial<organization_locations>[]> {
+    const { user } = req;
     try {
       if (!user.isColdAdmin && user.coldclimate_claims.org_id !== orgId)
         throw new UnprocessableEntityException(`${user.coldclimate_claims.email} is ${user.isColdAdmin ? 'Cold:Admin' : 'not Cold:Admin'} bug is attempting to access ${orgId}.`);
@@ -38,7 +39,7 @@ export class OrganizationLocationsService extends BaseWorker {
   }
 
   async createOrganizationLocation(
-    user: AuthenticatedUser,
+    req: any,
     orgId: string,
     body: {
       city: string;
@@ -50,6 +51,7 @@ export class OrganizationLocationsService extends BaseWorker {
       name: string;
     },
   ): Promise<organization_locations> {
+    const { user, url } = req;
     try {
       //if (!user.isColdAdmin && user.coldclimate_claims.org_id !== orgId) throw new UnprocessableEntityException(`Organization ${orgId} is invalid.`);
 
@@ -73,9 +75,31 @@ export class OrganizationLocationsService extends BaseWorker {
         },
       })) as unknown as organization_locations;
 
+      this.mqtt.publishToUI({
+        org_id: orgId,
+        user,
+        swr_key: url,
+        action: 'create',
+        status: 'complete',
+        data: {
+          ...created,
+        },
+      });
+
       return created;
     } catch (e: any) {
       this.logger.error(e.message, { body });
+
+      this.mqtt.publishSystemPublic({
+        swr_key: url,
+        action: 'create',
+        status: 'failed',
+        data: {
+          error: e.message,
+          body,
+        },
+      });
+
       throw new UnprocessableEntityException(e);
     }
   }

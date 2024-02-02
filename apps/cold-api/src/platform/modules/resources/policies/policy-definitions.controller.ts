@@ -1,6 +1,6 @@
 import { Controller, Get, Param, ParseIntPipe, Post, Req, UseFilters, UseGuards } from '@nestjs/common';
 import { ApiOAuth2, ApiParam, ApiTags } from '@nestjs/swagger';
-import { RolesGuard, JwtAuthGuard, Roles, AuthenticatedUser, BaseWorker, HttpExceptionFilter, Public } from '@coldpbc/nest';
+import { BaseWorker, HttpExceptionFilter, IAuthenticatedUser, JwtAuthGuard, Public, Roles, RolesGuard } from '@coldpbc/nest';
 import { coldAdminOnly } from '../_global/global.params';
 import { PolicyDefinitionsService } from './policy-definitions.service';
 
@@ -16,7 +16,7 @@ export class PolicyDefinitionsController extends BaseWorker {
 
   /**
    * Get All Policies
-   * @param {{body: any, headers: any, query: any, user: AuthenticatedUser}} req
+   * @param {{body: any, headers: any, query: any, user: IAuthenticatedUser}} req
    * @returns {Promise<PolicyDefinitionDto[]>}
    */
   @Get()
@@ -28,7 +28,7 @@ export class PolicyDefinitionsController extends BaseWorker {
   /**
    * Get a Policy by name
    * @param {string} name
-   * @param {{body: any, headers: any, query: any, user: AuthenticatedUser}} req
+   * @param {{body: any, headers: any, query: any, user: IAuthenticatedUser}} req
    * @returns {Promise<PolicyDefinitionDto | string>}
    */
   @Get(':id')
@@ -56,7 +56,7 @@ export class PolicyDefinitionsController extends BaseWorker {
   /**
    * Get signed policy data by policy id
    * @param {number} id
-   * @param {{headers: any, query: any, user: AuthenticatedUser}} req
+   * @param {{headers: any, query: any, user: IAuthenticatedUser}} req
    * @returns {Promise<CreatePolicyDataDto>}
    */
   @Post(':id/signed')
@@ -67,15 +67,15 @@ export class PolicyDefinitionsController extends BaseWorker {
     req: {
       headers: any;
       query: any;
-      user: AuthenticatedUser;
+      user: IAuthenticatedUser;
     },
   ) {
-    return this.policyDefinitionsService.createSignedData(id, req.user);
+    return this.policyDefinitionsService.createSignedData(id, req);
   }
 
   /**
    * Get all signed policy data for user
-   * @param {{body: any, headers: any, query: any, user: AuthenticatedUser}} req
+   * @param {{body: any, headers: any, query: any, user: IAuthenticatedUser}} req
    * @returns {Promise<PolicyDefinitionDto[]>}
    */
   @Get('signed/user')
@@ -85,9 +85,9 @@ export class PolicyDefinitionsController extends BaseWorker {
       body: any;
       headers: any;
       query: any;
-      user: AuthenticatedUser;
+      user: IAuthenticatedUser;
     },
   ) {
-    return this.policyDefinitionsService.findSignedDataByEmail(req.user);
+    return this.policyDefinitionsService.findSignedDataByEmail(req);
   }
 }

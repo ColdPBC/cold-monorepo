@@ -6,25 +6,13 @@ import { diff } from 'deep-object-diff';
 import { filter, find, map, merge, omit } from 'lodash';
 import { Span } from 'nestjs-ddtrace';
 import { v4 } from 'uuid';
-import { MqttClient } from 'mqtt';
-import {
-  AuthenticatedUser,
-  BaseWorker,
-  CacheService,
-  DarklyService,
-  MqttService,
-  PrismaService,
-  SurveyDefinitionsEntity,
-  UpdateSurveyDefinitionsDto,
-  ZodSurveyResponseDto,
-} from '@coldpbc/nest';
+import { BaseWorker, CacheService, DarklyService, MqttService, PrismaService, SurveyDefinitionsEntity, UpdateSurveyDefinitionsDto, ZodSurveyResponseDto } from '@coldpbc/nest';
 
 @Span()
 @Global()
 @Injectable()
 export class SurveysService extends BaseWorker {
   exclude_orgs: Array<{ id: string; name: string; display_name: string }>;
-  socket: MqttClient;
 
   constructor(
     readonly darkly: DarklyService,
@@ -34,8 +22,6 @@ export class SurveysService extends BaseWorker {
     private readonly mqtt: MqttService,
   ) {
     super('SurveysService');
-
-    this.socket = this.mqtt.connect(SurveysService.name);
   }
 
   override async onModuleInit() {
@@ -50,7 +36,8 @@ export class SurveysService extends BaseWorker {
    * @param user
    * @param type
    */
-  async findByType(user: AuthenticatedUser, type: survey_types): Promise<ZodSurveyResponseDto[]> {
+  async findByType(req: any, type: survey_types): Promise<ZodSurveyResponseDto[]> {
+    const { user } = req;
     this.logger.tags = merge(this.tags, { survey_type: type, user: user.coldclimate_claims });
 
     try {
@@ -80,7 +67,8 @@ export class SurveysService extends BaseWorker {
    * @param createSurveyDefinitionDto
    * @param user
    */
-  async create(createSurveyDefinitionDto: Partial<SurveyDefinitionsEntity>, user: AuthenticatedUser): Promise<ZodSurveyResponseDto> {
+  async create(createSurveyDefinitionDto: Partial<SurveyDefinitionsEntity>, req: any): Promise<ZodSurveyResponseDto> {
+    const { user, url } = req;
     const org = (await this.cache.get(`organizations:${user.coldclimate_claims.org_id}`)) as organizations;
 
     this.setTags({
@@ -117,9 +105,19 @@ export class SurveysService extends BaseWorker {
       this.logger.info('created definition', definition);
 
       //rebuild cache async
-      await this.findByType(user, response.type);
+      await this.findByType(req, response.type);
 
       this.metrics.increment('cold.api.surveys.create', this.tags);
+
+      this.mqtt.publishSystemPublic({
+        swr_key: url,
+        action: 'create',
+        status: 'complete',
+        data: {
+          createSurveyDefinitionDto,
+          user: user.coldclimate_claims,
+        },
+      });
 
       return response;
     } catch (e) {
@@ -136,6 +134,18 @@ export class SurveysService extends BaseWorker {
       this.metrics.increment('cold.api.surveys.create', this.tags);
 
       this.logger.error(e.message, { error: e, data: createSurveyDefinitionDto });
+
+      this.mqtt.publishSystemPublic({
+        swr_key: url,
+        action: 'create',
+        status: 'failed',
+        data: {
+          error: e.message,
+          createSurveyDefinitionDto,
+          user: user.coldclimate_claims,
+        },
+      });
+
       throw e;
     }
   }
@@ -148,7 +158,7 @@ export class SurveysService extends BaseWorker {
    * @param impersonateOrg
    */
   async findAll(
-    user: AuthenticatedUser,
+    req: any,
     surveyFilter?: {
       name: string;
       type: string;
@@ -156,6 +166,7 @@ export class SurveysService extends BaseWorker {
     bpc?: boolean,
     impersonateOrg?: string,
   ): Promise<ZodSurveyResponseDto[]> {
+    const { user } = req;
     this.setTags({ user: user.coldclimate_claims, bpc, impersonateOrg });
     let surveys = [] as ZodSurveyResponseDto[];
 
@@ -167,7 +178,7 @@ export class SurveysService extends BaseWorker {
       });
 
       for (const item of surveyData) {
-        const def = await this.findOne(item.survey_definition_id, user, bpc, impersonateOrg);
+        const def = await this.findOne(item.survey_definition_id, req, bpc, impersonateOrg);
         if (def) {
           surveys.push(def);
         }
@@ -207,7 +218,8 @@ export class SurveysService extends BaseWorker {
    * @param bypassCache
    * @param impersonateOrg
    */
-  async findOne(name: string, user: AuthenticatedUser, bypassCache?: boolean, impersonateOrg?: string): Promise<ZodSurveyResponseDto> {
+  async findOne(name: string, req: any, bypassCache?: boolean, impersonateOrg?: string): Promise<ZodSurveyResponseDto> {
+    const { user } = req;
     const isID = isUUID(name);
 
     if (isID) {
@@ -218,7 +230,7 @@ export class SurveysService extends BaseWorker {
 
     this.setTags({ user: user.coldclimate_claims, bpc: bypassCache, impersonateOrg });
 
-    const surveyNameCacheKey = this.getSurveyNameCacheKey(impersonateOrg, user, name);
+    const surveyNameCacheKey = this.getSurveyNameCacheKey(impersonateOrg, { user }, name);
 
     this.setTags({ survey_name_cache_key: surveyNameCacheKey });
 
@@ -240,7 +252,7 @@ export class SurveysService extends BaseWorker {
         throw new NotFoundException(`Unable to find survey definition with name: ${name}`);
       }
 
-      const surveyTypeCacheKey = this.getSurveyTypeCacheKey(impersonateOrg, user, name, def);
+      const surveyTypeCacheKey = this.getSurveyTypeCacheKey(impersonateOrg, { user }, name, def);
 
       // Get Submission Results
       if ((user.isColdAdmin && impersonateOrg) || !user.isColdAdmin) {
@@ -272,7 +284,8 @@ export class SurveysService extends BaseWorker {
   }
 
   // get the cache key for the survey type
-  private getSurveyTypeCacheKey(impersonateOrg: string | undefined, user: AuthenticatedUser, name: string, def: any) {
+  private getSurveyTypeCacheKey(impersonateOrg: string | undefined, req: any, name: string, def: any) {
+    const { user } = req;
     let key: string;
     if (impersonateOrg && user.isColdAdmin) {
       // get cache data as impersonated org
@@ -288,7 +301,8 @@ export class SurveysService extends BaseWorker {
   }
 
   // get the cache key for the survey name
-  private getSurveyNameCacheKey(impersonateOrg: string | undefined, user: AuthenticatedUser, name: string, isId?: boolean) {
+  private getSurveyNameCacheKey(impersonateOrg: string | undefined, req: any, name: string, isId?: boolean) {
+    const { user } = req;
     let key: string;
     if (impersonateOrg && user.isColdAdmin) {
       key = `survey_definitions:org:${impersonateOrg}:${isId ? 'id' : 'name'}:${name}`;
@@ -308,7 +322,8 @@ export class SurveysService extends BaseWorker {
    * @param user
    * @param impersonateOrg
    */
-  async submitResults(name: string, submission: any, user: AuthenticatedUser, impersonateOrg?: string): Promise<ZodSurveyResponseDto> {
+  async submitResults(name: string, submission: any, req: any, impersonateOrg?: string): Promise<ZodSurveyResponseDto> {
+    const { user, url } = req;
     const org = (await this.cache.get(`organizations:${impersonateOrg && user.isColdAdmin ? impersonateOrg : user.coldclimate_claims.org_id}`)) as organizations;
 
     const orgId = impersonateOrg && user.isColdAdmin ? impersonateOrg : user.coldclimate_claims.org_id;
@@ -409,17 +424,18 @@ export class SurveysService extends BaseWorker {
         this.logger.info('created survey submission', response);
       }
 
-      /*
-      /organizations/:orgId/surveys/:name
-       */
-      this.mqtt.publish(
-        `/ui/${this.config.get('NODE_ENV')}/${orgId}/${user.coldclimate_claims.email}`,
-        JSON.stringify({
-          swr_key: `organizations/${orgId}/surveys/${name}`,
-        }),
-      );
+      this.mqtt.publishToUI({
+        org_id: orgId,
+        user: user,
+        swr_key: url,
+        action: 'update',
+        status: 'complete',
+        data: {
+          difference,
+        },
+      });
 
-      return await this.findOne(name, user, true, impersonateOrg);
+      return await this.findOne(name, req, true, impersonateOrg);
     } catch (e) {
       this.setTags({ status: 'failed' });
 
@@ -437,13 +453,16 @@ export class SurveysService extends BaseWorker {
 
       this.logger.error(e.message, { error: e });
 
-      this.mqtt.publish(
-        `/ui/${this.config.get('NODE_ENV')}/${orgId}/${user.coldclimate_claims.email}`,
-        JSON.stringify({
-          error: e,
-          swr_key: `organizations/${orgId}/surveys/${name}`,
-        }),
-      );
+      this.mqtt.publishToUI({
+        org_id: orgId,
+        user: user,
+        swr_key: url,
+        action: 'update',
+        status: 'failed',
+        data: {
+          error: e.message,
+        },
+      });
       throw new UnprocessableEntityException(e);
     }
   }
@@ -454,17 +473,18 @@ export class SurveysService extends BaseWorker {
    * @param updateSurveyDefinitionDto
    * @param user
    */
-  async update(name: string, updateSurveyDefinitionDto: UpdateSurveyDefinitionsDto, user: AuthenticatedUser): Promise<ZodSurveyResponseDto> {
-    const org = (await this.cache.get(`organizations:${user.coldclimate_claims.org_id}`)) as organizations;
+  async update(name: string, updateSurveyDefinitionDto: UpdateSurveyDefinitionsDto, req: any): Promise<ZodSurveyResponseDto> {
+    const { user, url } = req;
+    const org = (await this.cache.get(`organizations:${user?.coldclimate_claims?.org_id}`)) as organizations;
 
     this.setTags({
       organization: omit(org, ['branding', 'phone', 'street_address', 'created_at', 'updated_at']),
-      user: user.coldclimate_claims,
+      user: user?.coldclimate_claims,
       survey_name: updateSurveyDefinitionDto?.name,
     });
 
     try {
-      const def = await this.findOne(name, user);
+      const def = await this.findOne(name, req);
       if (def) {
         await this.cache.delete(`survey_definitions:name:${def.name}`);
         await this.cache.delete(`survey_definitions:type:${def.type}`);
@@ -485,20 +505,20 @@ export class SurveysService extends BaseWorker {
 
       this.metrics.increment('cold.api.surveys.update', 1, this.tags);
 
-      this.mqtt.publish(
-        `/ui/${this.config.get('NODE_ENV')}/system/surveys/updated`,
-        JSON.stringify({
-          swr_key: `surveys/${name}`,
-        }),
-      );
+      this.mqtt.publishSystemPublic({
+        swr_key: url,
+        action: 'update',
+        status: 'complete',
+        data: {},
+      });
 
-      return this.findOne(name, user);
+      return this.findOne(name, req);
     } catch (e) {
       this.setTags({ status: 'failed' });
 
       this.metrics.event(
         `Update ${updateSurveyDefinitionDto?.name} survey definition request failed`,
-        `${user.coldclimate_claims.email} failed to update ${updateSurveyDefinitionDto?.name} survey definition`,
+        `${user?.coldclimate_claims?.email} failed to update ${updateSurveyDefinitionDto?.name} survey definition`,
         {
           alert_type: 'error',
           date_happened: new Date(),
@@ -509,6 +529,16 @@ export class SurveysService extends BaseWorker {
       );
 
       this.metrics.increment('cold.api.surveys.update', 1, this.tags);
+
+      this.mqtt.publishSystemPublic({
+        swr_key: url,
+        action: 'update',
+        status: 'failed',
+        data: {
+          survey: name,
+          error: e.message,
+        },
+      });
 
       if (e.message.includes('Unable to find survey definition')) {
         throw new NotFoundException(e);
@@ -523,7 +553,8 @@ export class SurveysService extends BaseWorker {
    * @param name
    * @param user
    */
-  async remove(name: string, user: AuthenticatedUser) {
+  async remove(name: string, req: any) {
+    const { user, url } = req;
     const org = (await this.cache.get(`organizations:${user.coldclimate_claims.org_id}`)) as organizations;
     const tags: { [p: string]: any } | string[] = {
       survey_name: name,
@@ -533,7 +564,7 @@ export class SurveysService extends BaseWorker {
     };
 
     try {
-      const def = await this.findOne(name, user);
+      const def = await this.findOne(name, req);
       if (def) {
         await this.cache.delete(`survey_definitions:name:${def.name}`);
         await this.cache.delete(`survey_definitions:type:${def.type}`);
@@ -545,8 +576,18 @@ export class SurveysService extends BaseWorker {
 
       this.metrics.increment('cold.api.surveys.delete', 1, tags);
 
+      this.mqtt.publishSystemPublic({
+        swr_key: url,
+        action: 'delete',
+        status: 'complete',
+        data: {
+          survey: name,
+          user: user.coldclimate_claims,
+        },
+      });
+
       //rebuild type cache
-      await this.findByType(user, def.type);
+      await this.findByType(req, def.type);
     } catch (e) {
       if (e.message.includes('Survey definition does not exist')) {
         throw new NotFoundException(`${user.coldclimate_claims.email} attempted to delete a survey definition that does not exist: ${name}`);
@@ -557,6 +598,17 @@ export class SurveysService extends BaseWorker {
       this.metrics.event(`Delete ${name} survey definition request failed`, `${user.coldclimate_claims.email} failed to update ${name} survey definition`, tags);
 
       this.metrics.increment('cold.api.surveys.delete', 1, tags);
+
+      this.mqtt.publishSystemPublic({
+        swr_key: url,
+        action: 'delete',
+        status: 'failed',
+        data: {
+          survey: name,
+          error: e.message,
+          user,
+        },
+      });
 
       throw e;
     }

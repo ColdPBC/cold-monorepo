@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException, UnauthorizedException, UnprocessableEntityException } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { Span } from 'nestjs-ddtrace';
-import { Auth0TokenService, AuthenticatedUser, BaseWorker, CacheService } from '@coldpbc/nest';
+import { Auth0TokenService, BaseWorker, CacheService, MqttService } from '@coldpbc/nest';
 import { filter } from 'lodash';
 import { AxiosRequestConfig } from 'axios';
 
@@ -12,7 +12,7 @@ export class MemberService extends BaseWorker {
 
   private httpService: HttpService;
 
-  constructor(private readonly utilService: Auth0TokenService, readonly cacheService: CacheService) {
+  constructor(private readonly utilService: Auth0TokenService, readonly cacheService: CacheService, private readonly mqtt: MqttService) {
     super('MemberService');
     this.httpService = new HttpService();
   }
@@ -23,7 +23,8 @@ export class MemberService extends BaseWorker {
    * @param user
    * @param bpc
    */
-  async getMemberByEmail(email: string, user: AuthenticatedUser, bpc?: boolean, force?: boolean) {
+  async getMemberByEmail(email: string, req: any, bpc?: boolean, force?: boolean) {
+    const { user, url } = req;
     if (!force && !user.isColdAdmin && user.coldclimate_claims.email !== email) {
       throw new UnauthorizedException(`You are not authorized to get this user: ${email}`);
     }
@@ -162,26 +163,50 @@ export class MemberService extends BaseWorker {
   /***
    * Create member in Auth0
    */
-  async createMember(user: {
-    email_verified?: boolean;
-    given_name?: string;
-    picture?: string;
-    password?: string;
-    blocked?: boolean;
-    name?: string;
-    nickname?: string;
-    connection?: string;
-    family_name?: string;
-    verify_email?: boolean;
-    email: string;
-  }) {
+  async createMember(
+    req: any,
+    user: {
+      email_verified?: boolean;
+      given_name?: string;
+      picture?: string;
+      password?: string;
+      blocked?: boolean;
+      name?: string;
+      nickname?: string;
+      connection?: string;
+      family_name?: string;
+      verify_email?: boolean;
+      email: string;
+    },
+  ) {
+    const { url } = req;
     try {
       this.options = await this.utilService.init();
 
       const member = await this.httpService.axiosRef.post(`/users`, user, this.utilService.options);
+
+      this.mqtt.publishSystemPublic({
+        swr_key: url,
+        action: 'create',
+        status: 'complete',
+        data: {
+          user,
+        },
+      });
+
       return member.data;
     } catch (e) {
       this.logger.error(e.response.data);
+
+      this.mqtt.publishSystemPublic({
+        swr_key: url,
+        action: 'create',
+        status: 'failed',
+        data: {
+          error: e.message,
+          user,
+        },
+      });
       throw e.response.data;
     }
   }
@@ -190,7 +215,7 @@ export class MemberService extends BaseWorker {
    * Create member in Auth0
    */
   async updateUser(
-    user: AuthenticatedUser,
+    req: any,
     email: string,
     payload: {
       picture: string;
@@ -200,24 +225,47 @@ export class MemberService extends BaseWorker {
       given_name: string;
     },
   ) {
-    if (!user.isColdAdmin && user.coldclimate_claims.email !== email) {
-      throw new UnauthorizedException(`You are not authorized to update this user: ${email}`);
+    const { user, url } = req;
+    try {
+      if (!user.isColdAdmin && user.coldclimate_claims.email !== email) {
+        throw new UnauthorizedException(`You are not authorized to update this user: ${email}`);
+      }
+
+      this.options = await this.utilService.init();
+
+      const found = await this.getMemberByEmail(email, user, true);
+      if (!found) {
+        throw new NotFoundException(`User with email ${email} not found`);
+      }
+
+      if (!user.isColdAdmin && user.sub !== found.user_id) {
+        throw new UnauthorizedException('You are not authorized to update this user');
+      }
+
+      const member = await this.httpService.axiosRef.patch(`/users/${found.user_id}`, payload, this.utilService.options);
+      this.mqtt.publishSystemPublic({
+        swr_key: url,
+        action: 'update',
+        status: 'complete',
+        data: {
+          ...payload,
+        },
+      });
+      return member.data;
+    } catch (e) {
+      this.logger.error(e.message, e);
+      this.mqtt.publishToUI({
+        org_id: user.coldclimate_claims.org_id,
+        user: user,
+        swr_key: url,
+        action: 'update',
+        status: 'failed',
+        data: {
+          error: e.message,
+          ...payload,
+        },
+      });
     }
-
-    this.options = await this.utilService.init();
-
-    const found = await this.getMemberByEmail(email, user, true);
-    if (!found) {
-      throw new NotFoundException(`User with email ${email} not found`);
-    }
-
-    if (!user.isColdAdmin && user.sub !== found.user_id) {
-      throw new UnauthorizedException('You are not authorized to update this user');
-    }
-
-    const member = await this.httpService.axiosRef.patch(`/users/${found.user_id}`, payload, this.utilService.options);
-
-    return member.data;
   }
 
   /***

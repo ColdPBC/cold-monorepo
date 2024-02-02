@@ -16,11 +16,13 @@ import { InterceptorModule, OrgUserInterceptor } from './interceptors';
 import { BaseWorker, WorkerLogger } from './worker';
 import { ColdRabbitModule, ColdRabbitService } from './rabbit'; //import { CronModule, CronService } from './crons';
 import { DatadogTraceModule } from 'nestjs-ddtrace';
-import { MqttService } from './mqtt';
 import { S3Module, S3Service } from './aws';
 import { RedisServiceConfig } from './utility';
+import { MqttModule } from './mqtt';
 
-@Module({})
+@Module({
+  imports: [MqttModule],
+})
 export class NestModule {
   static async forRootAsync(redisDB: number, bucket?: string) {
     const logger = new WorkerLogger('NestModule');
@@ -42,6 +44,7 @@ export class NestModule {
       }),
       BullModule.forRoot(await new RedisServiceConfig().getQueueConfig(type, project)),
       HttpModule,
+      MqttModule,
     ];
 
     /**
@@ -49,7 +52,6 @@ export class NestModule {
      */
     const providers: any = [
       ConfigService,
-      MqttService,
       {
         provide: APP_INTERCEPTOR,
         useClass: OrgUserInterceptor,
@@ -64,7 +66,7 @@ export class NestModule {
     /**
      * Exports Array
      */
-    const exports: any = [HttpModule, ConfigService, MqttService];
+    const exports: any = [HttpModule, ConfigService];
 
     logger.info('Configuring Nest Module...');
 

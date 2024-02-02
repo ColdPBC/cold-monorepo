@@ -2,7 +2,7 @@ import { HttpService } from '@nestjs/axios';
 import { ConflictException, HttpException, Injectable, NotFoundException, UnauthorizedException, UnprocessableEntityException } from '@nestjs/common';
 import { Span } from 'nestjs-ddtrace';
 // eslint-disable-next-line @nx/enforce-module-boundaries
-import { Auth0Organization, Auth0TokenService, AuthenticatedUser, BaseWorker, CacheService, DarklyService, PrismaService, S3Service, Tags } from '@coldpbc/nest';
+import { Auth0Organization, Auth0TokenService, BaseWorker, CacheService, DarklyService, MqttService, PrismaService, S3Service, Tags } from '@coldpbc/nest';
 import { filter, find, first, kebabCase, map, merge, omit, pick, set } from 'lodash';
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { MemberService } from '../auth0/members/member.service';
@@ -29,6 +29,7 @@ export class OrganizationService extends BaseWorker {
     readonly events: BroadcastEventService,
     readonly integrations: IntegrationsService,
     readonly s3: S3Service,
+    readonly mqtt: MqttService,
   ) {
     super('OrganizationService');
     this.httpService = new HttpService();
@@ -53,48 +54,51 @@ export class OrganizationService extends BaseWorker {
    * @param user
    * @param updateCache
    */
-  async inviteUser(orgId: string, user_email: string, inviter_name: string, roleId: string | string[], suppressEmail = false, user, updateCache = true) {
-    if (user.coldclimate_claims.org_id !== orgId && !user.isColdAdmin) {
-      throw new HttpException('You do not have permission to perform this action', 403);
-    }
-
-    console.log(suppressEmail);
-    const org = await this.getOrganization(orgId, user, updateCache);
-
-    const tags: Tags = {
-      user: user.coldclimate_claims,
-      organization: omit(org, ['branding', 'phone', 'street_address', 'created_at', 'updated_at']),
-      ...this.tags,
-    };
-
-    if (!org) {
-      throw new NotFoundException(`organization ${orgId} not found`);
-    }
-
-    this.cache.delete(`organizations:${org.id}:invitations`);
-
-    this.options = await this.utilService.init();
-
-    // store as array
-    roleId = await this.roleService.convertRoleNamesToIds(Array.isArray(roleId) ? roleId : [roleId]);
-
-    const data = {
-      mimeType: 'application/json',
-      text: {
-        inviter: {
-          name: inviter_name,
-        },
-        client_id: process.env['AUTH0_UI_CLIENT_ID'],
-        invitee: {
-          email: user_email,
-        },
-        roles: roleId,
-        send_invitation_email: true,
-      },
-    };
-
-    this.logger.info('sending invitation', data);
+  async inviteUser(orgId: string, user_email: string, inviter_name: string, roleId: string | string[], suppressEmail = false, req: any, updateCache = true) {
+    const { user, url } = req;
+    const data = {};
     try {
+      if (user.coldclimate_claims.org_id !== orgId && !user.isColdAdmin) {
+        throw new HttpException('You do not have permission to perform this action', 403);
+      }
+
+      console.log(suppressEmail);
+      const org = await this.getOrganization(orgId, user, updateCache);
+
+      const tags: Tags = {
+        user: user.coldclimate_claims,
+        organization: omit(org, ['branding', 'phone', 'street_address', 'created_at', 'updated_at']),
+        ...this.tags,
+      };
+
+      if (!org) {
+        throw new NotFoundException(`organization ${orgId} not found`);
+      }
+
+      this.cache.delete(`organizations:${org.id}:invitations`);
+
+      this.options = await this.utilService.init();
+
+      // store as array
+      roleId = await this.roleService.convertRoleNamesToIds(Array.isArray(roleId) ? roleId : [roleId]);
+
+      const data = {
+        mimeType: 'application/json',
+        text: {
+          inviter: {
+            name: inviter_name,
+          },
+          client_id: process.env['AUTH0_UI_CLIENT_ID'],
+          invitee: {
+            email: user_email,
+          },
+          roles: roleId,
+          send_invitation_email: true,
+        },
+      };
+
+      this.logger.info('sending invitation', data);
+
       const invitation = await this.httpService.axiosRef.post(`/organizations/${org.id}/invitations`, { ...data.text }, this.options);
 
       this.logger.info(`invitation sent to ${data.text.invitee.email} for org ${org.id}`, data);
@@ -106,8 +110,29 @@ export class OrganizationService extends BaseWorker {
         this.metrics.increment('cold.api.invitations.sent', tags);
       }
 
+      this.mqtt.publishToUI({
+        org_id: orgId,
+        user: user,
+        swr_key: url,
+        action: 'create',
+        status: 'complete',
+        data: {
+          invitation,
+        },
+      });
+
       return invitation.data;
     } catch (e) {
+      this.mqtt.publishToUI({
+        org_id: orgId,
+        user: user,
+        swr_key: url,
+        action: 'create',
+        status: 'failed',
+        data: {
+          error: e.message,
+        },
+      });
       switch (e.response.status) {
         case 404:
           this.logger.error(e.response?.data ? e.response.data : e.response, data);
@@ -221,7 +246,8 @@ export class OrganizationService extends BaseWorker {
    * @param user
    * @param bypassCache
    */
-  async getOrganization(nameOrId: string, user: AuthenticatedUser, bypassCache = false): Promise<Auth0Organization> {
+  async getOrganization(nameOrId: string, req: any, bypassCache = false): Promise<Auth0Organization> {
+    const { user } = req;
     try {
       if (!nameOrId || nameOrId === ':name' || nameOrId === ':orgId') throw new UnprocessableEntityException(`Organization 'name' or 'id' is required`);
 
@@ -302,7 +328,8 @@ export class OrganizationService extends BaseWorker {
    * @param user
    * @param bypassCache
    */
-  async getOrganizationMembers(orgId: string, user: AuthenticatedUser, bypassCache = false) {
+  async getOrganizationMembers(orgId: string, req: any, bypassCache = false) {
+    const { user } = req;
     try {
       if (orgId !== user.coldclimate_claims.org_id && !user.isColdAdmin) {
         throw new HttpException('You do not have permission to perform this action', 403);
@@ -387,7 +414,8 @@ export class OrganizationService extends BaseWorker {
     }
   }
 
-  private async getOrgInvites(orgId: string, user: AuthenticatedUser, updateCache = false) {
+  private async getOrgInvites(orgId: string, req: any, updateCache = false) {
+    const { user } = req;
     try {
       // make sure org exists
       const org = await this.getOrganization(orgId, user, updateCache);
@@ -433,7 +461,8 @@ export class OrganizationService extends BaseWorker {
    * @param org
    * @param user
    */
-  async createOrganization(org: Partial<CreateOrganizationDto>, user: AuthenticatedUser): Promise<Auth0Organization> {
+  async createOrganization(org: Partial<CreateOrganizationDto>, req: any): Promise<Auth0Organization> {
+    const { user, url } = req;
     try {
       this.logger.info('creating organization', { org, user });
       this.options = await this.utilService.init();
@@ -454,6 +483,15 @@ export class OrganizationService extends BaseWorker {
       // update org list cache
       await this.getOrganizations(true);
 
+      this.mqtt.publishSystemCold({
+        swr_key: url,
+        action: 'create',
+        status: 'complete',
+        data: {
+          organization: saved.data,
+        },
+      });
+
       return saved.data;
     } catch (e) {
       this.logger.error(e);
@@ -468,7 +506,8 @@ export class OrganizationService extends BaseWorker {
    * @param bypassCache
    * @param impersonatedOrg
    */
-  async createColdOrg(org: Partial<CreateOrganizationDto>, user): Promise<Partial<organizations>> {
+  async createColdOrg(org: Partial<CreateOrganizationDto>, req: any): Promise<Partial<organizations>> {
+    const { user, url } = req;
     // Name should be kebabCased
     const orgName = kebabCase(org.display_name);
 
@@ -575,6 +614,15 @@ export class OrganizationService extends BaseWorker {
 
       this.metrics.increment('cold.api.organizations.create', tags);
 
+      this.mqtt.publishSystemCold({
+        swr_key: url,
+        action: 'create',
+        status: 'complete',
+        data: {
+          organization: auth0Org,
+        },
+      });
+
       return (await this.prisma.organizations.findUnique({
         where: {
           id: existing.id,
@@ -592,6 +640,16 @@ export class OrganizationService extends BaseWorker {
       this.tracer.getTracer().dogstatsd.increment('cold.api.organizations.create', 1, tags);
 
       this.logger.error(e, { org, e });
+
+      this.mqtt.publishSystemCold({
+        swr_key: url,
+        action: 'create',
+        status: 'failed',
+        data: {
+          error: e.message,
+        },
+      });
+
       throw new UnprocessableEntityException(e.message, e);
     }
   }
@@ -602,7 +660,8 @@ export class OrganizationService extends BaseWorker {
    * @param user
    * @param updateCache
    */
-  async deleteOrganization(orgId: string, user: AuthenticatedUser) {
+  async deleteOrganization(orgId: string, req: any) {
+    const { user, url } = req;
     // get org by id or name
     let org;
     try {
@@ -694,8 +753,22 @@ export class OrganizationService extends BaseWorker {
 
       await this.cache.delete(`organizations:${orgId}:members`);
       await this.cache.delete(`organizations:${orgId}:invitations`);
+
+      this.mqtt.publishSystemCold({
+        swr_key: url,
+        action: 'delete',
+        status: 'complete',
+      });
     } catch (e) {
       this.logger.error(e.message, { ...e.response?.data });
+      this.mqtt.publishSystemCold({
+        swr_key: url,
+        action: 'delete',
+        status: 'failed',
+        data: {
+          error: e.message,
+        },
+      });
     }
     await this.getOrganizations(true);
 
@@ -713,7 +786,9 @@ export class OrganizationService extends BaseWorker {
    * @param updateCache
    * @param impersonatedOrg
    */
-  async deleteInvitation(orgId: string, invId: string, user: AuthenticatedUser) {
+  async deleteInvitation(orgId: string, invId: string, req: any) {
+    const { user, url } = req;
+
     this.tags = merge(this.tags, {
       org_id: orgId,
       inv_id: invId,
@@ -732,7 +807,25 @@ export class OrganizationService extends BaseWorker {
       await this.httpService.axiosRef.delete(`/organizations/${orgId}/invitations/${invId}`, this.options);
 
       await this.getOrgInvites(orgId, user, true);
+      this.mqtt.publishToUI({
+        org_id: orgId,
+        user: user,
+        swr_key: url,
+        action: 'delete',
+        status: 'complete',
+        data: {},
+      });
     } catch (e) {
+      this.mqtt.publishToUI({
+        org_id: orgId,
+        user: user,
+        swr_key: url,
+        action: 'delete',
+        status: 'failed',
+        data: {
+          error: e.message,
+        },
+      });
       if (axios.isAxiosError(e)) {
         this.metrics.event(
           'Attempt to remove user invitation failed',
@@ -774,7 +867,8 @@ export class OrganizationService extends BaseWorker {
    * @param bypassCache
    *
    */
-  async addUserToOrganization(orgId: string, userId: string, user: AuthenticatedUser, roleName: string, bypassCache = false) {
+  async addUserToOrganization(orgId: string, userId: string, req: any, roleName: string, bypassCache = false) {
+    const { user, url } = req;
     this.tags = merge(this.tags, {
       org_id: orgId,
       role_name: roleName,
@@ -800,9 +894,32 @@ export class OrganizationService extends BaseWorker {
 
       this.logger.log(`user (${userId}) added to organization (${org.id}) in Auth0`, { ...this.tags });
 
+      this.mqtt.publishToUI({
+        org_id: orgId,
+        user: user,
+        swr_key: url,
+        action: 'create',
+        status: 'complete',
+        data: {
+          user: userId,
+          organization: { id: orgId },
+        },
+      });
       //refresh cache and return members
       return await this.getOrganizationMembers(orgId, user, true);
     } catch (e) {
+      this.mqtt.publishToUI({
+        org_id: orgId,
+        user: user,
+        swr_key: url,
+        action: 'create',
+        status: 'failed',
+        data: {
+          error: e.message,
+          user: userId,
+          organization: { id: orgId },
+        },
+      });
       if (axios.isAxiosError(e)) {
         this.metrics.event(
           'Attempt to add user to organization failed',
@@ -839,7 +956,8 @@ export class OrganizationService extends BaseWorker {
    * @param user
    * @param updateCache
    */
-  async removeUserFromOrganization(orgId: string, body: { members: string[] }, user: AuthenticatedUser) {
+  async removeUserFromOrganization(orgId: string, body: { members: string[] }, req: any) {
+    const { user, url } = req;
     this.tags = merge(this.tags, {
       org_id: orgId,
       members: body?.members,
@@ -863,8 +981,32 @@ export class OrganizationService extends BaseWorker {
       // update cache entries
       this.getOrganizationMembers(orgId, user, true);
 
+      this.mqtt.publishToUI({
+        org_id: orgId,
+        user: user,
+        swr_key: url,
+        action: 'delete',
+        status: 'complete',
+        data: {
+          body,
+          organization: { id: orgId },
+        },
+      });
+
       throw new HttpException(`Users removed from organization ${orgId}: ${JSON.parse(deleted.config.data).members}`, 204);
     } catch (e) {
+      this.mqtt.publishToUI({
+        org_id: orgId,
+        user: user,
+        swr_key: url,
+        action: 'delete',
+        status: 'failed',
+        data: {
+          error: e.message,
+          body,
+          organization: { id: orgId },
+        },
+      });
       if (e.status === 204) {
         throw e;
       }
@@ -915,7 +1057,8 @@ export class OrganizationService extends BaseWorker {
    * @param updateCache
    * @param impersonatedOrg
    */
-  async getOrgUserRoles(orgId: string, userId: string, user: AuthenticatedUser, bpc = false) {
+  async getOrgUserRoles(orgId: string, userId: string, req: any, bpc = false) {
+    const { user } = req;
     if (orgId !== user.coldclimate_claims.org_id && !user.isColdAdmin) {
       throw new HttpException('You do not have permission to perform this action', 403);
     }
@@ -948,7 +1091,8 @@ export class OrganizationService extends BaseWorker {
    * @param connection
    * @param updateCache
    */
-  async updateOrgUserRoles(orgId: string, userId: string, user: AuthenticatedUser, roleName: string, updateCache = false) {
+  async updateOrgUserRoles(orgId: string, userId: string, req: any, roleName: string, updateCache = false) {
+    const { user, url } = req;
     this.logger.tags = merge(this.tags, {
       org_id: orgId,
       user_id: userId,
@@ -981,8 +1125,33 @@ export class OrganizationService extends BaseWorker {
 
       const members = await this.getOrganizationMembers(orgId, user, true);
 
+      this.mqtt.publishToUI({
+        org_id: orgId,
+        user: user,
+        swr_key: url,
+        action: 'update',
+        status: 'complete',
+        data: {
+          user: userId,
+          organization: { id: orgId },
+        },
+      });
+
       return members;
     } catch (e) {
+      this.mqtt.publishToUI({
+        org_id: orgId,
+        user: user,
+        swr_key: url,
+        action: 'update',
+        status: 'failed',
+        data: {
+          error: e.message,
+          user: userId,
+          organization: { id: orgId },
+        },
+      });
+
       if (axios.isAxiosError(e)) {
         this.metrics.event(
           'Attempt to update user role failed',
@@ -999,74 +1168,6 @@ export class OrganizationService extends BaseWorker {
         this.logger.error(e.message, { ...e, ...this.tags });
         throw new UnprocessableEntityException(e.message, e);
       }
-    }
-  }
-
-  private resolveRoleProperties(roleName: string, user: AuthenticatedUser, userId: string, orgId: string) {
-    if (!roleName) {
-      roleName = 'company:member';
-    } else {
-      if (!user.isColdAdmin && roleName.startsWith('cold')) {
-        this.logger.error(`User: ${user.coldclimate_claims.email} in ${user.coldclimate_claims.org_id} attempted to update role ${roleName} for ${userId} in ${orgId}`, {
-          ...this.tags,
-        });
-        throw new HttpException('You do not have permission to perform this action', 403);
-      }
-      if (!roleName.includes(':')) {
-        roleName = `company:${roleName}`;
-      }
-    }
-    return roleName;
-  }
-
-  async uploadFile(user: AuthenticatedUser, orgId: string, file: Express.MulterS3.File) {
-    try {
-      const org = await this.getOrganization(orgId, user, true);
-
-      if (!org) {
-        throw new NotFoundException(`Organization ${orgId} not found`);
-      }
-
-      const existing = await this.prisma.organization_files.findUnique({
-        where: {
-          s3Key: {
-            key: file.key,
-            bucket: file.bucket,
-            organization_id: orgId,
-          },
-        },
-      });
-
-      if (existing?.checksum === file.metadata.md5Hash) {
-        this.logger.warn(`file ${file.key} already exists in db`, file);
-        return new ConflictException(`file ${file.key} already exists in db for org ${orgId}`);
-      }
-
-      const uploaded = await this.prisma.organization_files.create({
-        data: {
-          original_name: file.originalname,
-          integration_id: null,
-          organization_id: orgId,
-          versionId: file['versionId'],
-          bucket: file.bucket,
-          key: file.key,
-          mimetype: file.mimetype,
-          size: file.size,
-          acl: file.acl,
-          fieldname: file.fieldname,
-          encoding: file.encoding,
-          contentType: file.contentType,
-          location: file.location,
-          checksum: file.metadata.md5Hash,
-        },
-      });
-
-      await this.events.sendEvent(false, 'file.uploaded', uploaded, user, orgId);
-
-      return file;
-    } catch (e) {
-      this.logger.error(e);
-      throw e;
     }
   }
 }

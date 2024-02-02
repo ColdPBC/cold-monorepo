@@ -1,6 +1,6 @@
 import { BadRequestException, ConflictException, Global, Injectable, NotFoundException } from '@nestjs/common';
 import { Span } from 'nestjs-ddtrace';
-import { AuthenticatedUser, BaseWorker, CacheService, Cuid2Generator, DarklyService, MqttService, PrismaService } from '@coldpbc/nest';
+import { BaseWorker, CacheService, Cuid2Generator, DarklyService, MqttService, PrismaService } from '@coldpbc/nest';
 import { ComplianceDefinition, OrgCompliance } from './compliance_definition_schema';
 import { BroadcastEventService } from '../../../utilities/events/broadcast.event.service';
 
@@ -18,7 +18,6 @@ export class ComplianceDefinitionService extends BaseWorker {
     private readonly event: BroadcastEventService,
   ) {
     super('ComplianceDefinitionService');
-    this.mqtt.connect(ComplianceDefinitionService.name);
   }
 
   override async onModuleInit() {
@@ -32,7 +31,8 @@ export class ComplianceDefinitionService extends BaseWorker {
    * @param complianceDefinition
    * @param user
    */
-  async create(user: AuthenticatedUser, complianceDefinition: ComplianceDefinition): Promise<ComplianceDefinition> {
+  async create(req: any, complianceDefinition: ComplianceDefinition): Promise<ComplianceDefinition> {
+    const { user, url } = req;
     this.setTags({ user: user.coldclimate_claims, compliance_definition: complianceDefinition });
 
     try {
@@ -51,11 +51,28 @@ export class ComplianceDefinitionService extends BaseWorker {
         data: complianceDefinition,
       });
 
+      this.mqtt.publishSystemPublic({
+        swr_key: url,
+        action: 'create',
+        status: 'complete',
+        data: response,
+      });
+
       this.logger.info('created compliance definition', response);
 
       return response as ComplianceDefinition;
     } catch (e) {
       this.metrics.increment('cold.api.surveys.create', this.tags);
+      this.mqtt.publishSystemPublic({
+        swr_key: url,
+        action: 'create',
+        status: 'failed',
+        data: {
+          definition: complianceDefinition,
+          error: e.message,
+        },
+      });
+
       throw e;
     }
   }
@@ -67,12 +84,13 @@ export class ComplianceDefinitionService extends BaseWorker {
    * @param orgId
    * @param bpc
    */
-  async activateOrgCompliance(user: AuthenticatedUser, name: string, orgId: string, bpc?: boolean): Promise<OrgCompliance> {
+  async activateOrgCompliance(req: any, name: string, orgId: string, bpc?: boolean): Promise<OrgCompliance> {
+    const { user, url } = req;
     this.setTags({ user: user.coldclimate_claims });
     try {
       await this.cache.delete(`compliance_definitions:name:${name}:org:${orgId}`);
 
-      const definition = await this.findOne(name, user, bpc);
+      const definition = await this.findOne(name, req, bpc);
 
       let compliance = await this.prisma.organization_compliances.findFirst({
         where: {
@@ -125,9 +143,31 @@ export class ComplianceDefinitionService extends BaseWorker {
 
       await this.event.sendEvent(false, 'organization_compliances.created', { surveys, compliance }, user, orgId);
 
+      this.mqtt.publishToUI({
+        org_id: orgId,
+        user: user,
+        swr_key: url,
+        action: 'create',
+        status: 'complete',
+        data: {
+          ...compliance,
+        },
+      });
+
       return compliance as OrgCompliance;
     } catch (e) {
       this.logger.error(e.message, { error: e });
+
+      this.mqtt.publishToUI({
+        org_id: orgId,
+        user: user,
+        swr_key: url,
+        action: 'create',
+        status: 'failed',
+        data: {
+          error: e.message,
+        },
+      });
       throw e;
     }
   }
@@ -161,7 +201,7 @@ export class ComplianceDefinitionService extends BaseWorker {
    * @param orgId
    * @param bpc
    */
-  async findOrgCompliances(user: AuthenticatedUser, orgId: string, bpc?: boolean): Promise<OrgCompliance[]> {
+  async findOrgCompliances(req: any, orgId: string, bpc?: boolean): Promise<OrgCompliance[]> {
     if (!bpc) {
       /*const cached = (await this.cache.get(`compliance_definitions:org:${orgId}`)) as OrgCompliance[];
 
@@ -196,7 +236,8 @@ export class ComplianceDefinitionService extends BaseWorker {
    * @param bypassCache
    * @param impersonateOrg
    */
-  async findOne(name: string, user: AuthenticatedUser, bypassCache?: boolean): Promise<ComplianceDefinition> {
+  async findOne(name: string, req: any, bypassCache?: boolean): Promise<ComplianceDefinition> {
+    const { user } = req;
     this.setTags({ user: user.coldclimate_claims, bpc: bypassCache });
 
     /*if (!bypassCache) {
@@ -230,7 +271,8 @@ export class ComplianceDefinitionService extends BaseWorker {
    * @param complianceDefinition
    * @param user
    */
-  async update(name: string, complianceDefinition: ComplianceDefinition, user: AuthenticatedUser): Promise<ComplianceDefinition> {
+  async update(name: string, complianceDefinition: ComplianceDefinition, req: any): Promise<ComplianceDefinition> {
+    const { user, url } = req;
     this.setTags({
       user: user.coldclimate_claims,
       compliance_definition: complianceDefinition,
@@ -256,9 +298,29 @@ export class ComplianceDefinitionService extends BaseWorker {
 
       this.metrics.increment('cold.api.surveys.update', 1, this.tags);
 
+      this.mqtt.publishSystemPublic({
+        swr_key: url,
+        action: 'update',
+        status: 'complete',
+        data: {
+          ...definition,
+        },
+      });
+
       return definition as unknown as ComplianceDefinition;
     } catch (e) {
       this.logger.error(e.message, { error: e });
+
+      this.mqtt.publishSystemPublic({
+        swr_key: url,
+        action: 'create',
+        status: 'failed',
+        data: {
+          error: e.message,
+          ...complianceDefinition,
+        },
+      });
+
       throw e;
     }
   }
@@ -268,7 +330,8 @@ export class ComplianceDefinitionService extends BaseWorker {
    * @param name
    * @param user
    */
-  async remove(name: string, user: AuthenticatedUser) {
+  async remove(name: string, req: any) {
+    const { user, url } = req;
     this.setTags({
       compliance_definition_name: name,
       user: user.coldclimate_claims,
@@ -283,9 +346,25 @@ export class ComplianceDefinitionService extends BaseWorker {
 
       await this.prisma.compliance_definitions.delete({ where: { name: name } });
 
+      this.mqtt.publishSystemPublic({
+        swr_key: url,
+        action: 'delete',
+        status: 'complete',
+        data: {},
+      });
+
       this.logger.info(`deleted compliance definition: ${name}`, { id: def.id, name: def.name });
     } catch (e) {
       this.logger.error(e.message, { error: e });
+
+      this.mqtt.publishSystemPublic({
+        swr_key: url,
+        action: 'delete',
+        status: 'failed',
+        data: {
+          error: e.message,
+        },
+      });
 
       throw e;
     }
@@ -297,7 +376,8 @@ export class ComplianceDefinitionService extends BaseWorker {
    * @param orgId
    * @param user
    */
-  async deactivate(name: string, orgId: string, user: AuthenticatedUser, bpc?: boolean) {
+  async deactivate(req: any, name: string, orgId: string, bpc?: boolean) {
+    const { user, url } = req;
     this.setTags({
       compliance_definition_name: name,
       user: user.coldclimate_claims,
@@ -305,7 +385,7 @@ export class ComplianceDefinitionService extends BaseWorker {
     });
     let compliance: OrgCompliance;
     try {
-      const def = await this.findOne(name, user, bpc);
+      const def = await this.findOne(name, req, bpc);
 
       compliance = (await this.prisma.organization_compliances.findFirst({
         where: {
@@ -320,9 +400,25 @@ export class ComplianceDefinitionService extends BaseWorker {
 
       await this.prisma.organization_compliances.delete({ where: { id: compliance.id } });
 
+      this.mqtt.publishSystemPublic({
+        swr_key: url,
+        action: 'delete',
+        status: 'complete',
+        data: {},
+      });
+
       this.logger.info(`deactivated compliance definition: ${name} for org: ${orgId}`, { id: def.id, name: def.name });
     } catch (e) {
       this.logger.error(e.message, { error: e });
+
+      this.mqtt.publishSystemPublic({
+        swr_key: url,
+        action: 'delete',
+        status: 'failed',
+        data: {
+          error: e.message,
+        },
+      });
 
       throw e;
     }

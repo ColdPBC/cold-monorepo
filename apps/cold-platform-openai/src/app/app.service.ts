@@ -1,4 +1,4 @@
-import { AuthenticatedUser, BaseWorker, ColdRabbitService, PrismaService } from '@coldpbc/nest';
+import { BaseWorker, ColdRabbitService, IAuthenticatedUser, PrismaService } from '@coldpbc/nest';
 import { Injectable, NotFoundException, OnModuleInit, UnprocessableEntityException } from '@nestjs/common';
 import OpenAI from 'openai';
 import { organizations, service_definitions } from '@prisma/client';
@@ -55,7 +55,7 @@ export class AppService extends BaseWorker implements OnModuleInit {
     }
   }
 
-  async deleteAssistant(user: AuthenticatedUser, assistantId: string) {
+  async deleteAssistant(user: IAuthenticatedUser, assistantId: string) {
     try {
       const assistant = await this.client.beta.assistants.del(assistantId);
       this.logger.info(`User ${user.coldclimate_claims.email} deleted assistant ${assistantId}.`, { assistant, user });
@@ -158,7 +158,7 @@ export class AppService extends BaseWorker implements OnModuleInit {
     }
   }
 
-  async listModels(user: AuthenticatedUser) {
+  async listModels(user: IAuthenticatedUser) {
     try {
       const openAIResponse = await this.client.models.list();
 
@@ -175,7 +175,7 @@ export class AppService extends BaseWorker implements OnModuleInit {
     }
   }
 
-  async listAssistants(user: AuthenticatedUser) {
+  async listAssistants(user: IAuthenticatedUser) {
     try {
       const openAIResponse = await this.client.beta.assistants.list();
 

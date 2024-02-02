@@ -2,7 +2,7 @@ import { BadRequestException, ConflictException, Injectable, NotFoundException, 
 import { filter, set } from 'lodash';
 import { Span } from 'nestjs-ddtrace';
 import { component_definition_types } from 'prisma/prisma-client';
-import { AuthenticatedUser, BaseWorker, CacheService, DarklyService, PrismaService } from '@coldpbc/nest';
+import { BaseWorker, CacheService, DarklyService, MqttService, PrismaService } from '@coldpbc/nest';
 import { filterItemsByRole } from './component-definitions.utils';
 
 @Span()
@@ -10,7 +10,7 @@ import { filterItemsByRole } from './component-definitions.utils';
 export class ComponentDefinitionsService extends BaseWorker implements OnModuleInit {
   private test_orgs: any;
 
-  constructor(readonly darkly: DarklyService, private prisma: PrismaService, private readonly cache: CacheService) {
+  constructor(readonly darkly: DarklyService, private prisma: PrismaService, private readonly cache: CacheService, private readonly mqtt: MqttService) {
     super('ComponentDefinitionsService');
   }
 
@@ -29,7 +29,8 @@ export class ComponentDefinitionsService extends BaseWorker implements OnModuleI
    * @param user
    * @param type
    */
-  async findByType(user: AuthenticatedUser, type: component_definition_types): Promise<any[]> {
+  async findByType(req: any, type: component_definition_types): Promise<any[]> {
+    const { user } = req;
     try {
       const cached: any = await this.cache.get(`component_definitions:type:${type}`);
 
@@ -61,7 +62,8 @@ export class ComponentDefinitionsService extends BaseWorker implements OnModuleI
    * @param createComponentDefinitionDto
    * @param user
    */
-  async create(createComponentDefinitionDto: any, user: AuthenticatedUser): Promise<any> {
+  async create(createComponentDefinitionDto: any, req: any): Promise<any> {
+    const { user, url } = req;
     try {
       // delete cached definitions by type
       await this.cache.delete(`form_definitions:type:${createComponentDefinitionDto.type}`);
@@ -77,6 +79,15 @@ export class ComponentDefinitionsService extends BaseWorker implements OnModuleI
       //rebuild cache async
       await this.findByType(user, createComponentDefinitionDto.type);
 
+      this.mqtt.publishSystemPublic({
+        swr_key: url,
+        action: 'create',
+        status: 'complete',
+        data: {
+          ...definition,
+        },
+      });
+
       return definition;
     } catch (e) {
       this.logger.error(e, { user: user.coldclimate_claims, createComponentDefinitionDto });
@@ -87,6 +98,15 @@ export class ComponentDefinitionsService extends BaseWorker implements OnModuleI
         throw new UnprocessableEntityException(`Some properties not valid : ${e.message}`, e);
       }
 
+      this.mqtt.publishSystemPublic({
+        swr_key: url,
+        action: 'create',
+        status: 'failed',
+        data: {
+          error: e.message,
+        },
+      });
+
       throw e;
     }
   }
@@ -95,7 +115,8 @@ export class ComponentDefinitionsService extends BaseWorker implements OnModuleI
    * this action retunrs all component definitions
    * @param user
    */
-  async findAll(user: AuthenticatedUser): Promise<any[]> {
+  async findAll(req: any): Promise<any[]> {
+    const { user } = req;
     const definitions = (await this.prisma.component_definitions.findMany()) as any[];
 
     const filtered = filter(definitions, obj => {
@@ -115,7 +136,8 @@ export class ComponentDefinitionsService extends BaseWorker implements OnModuleI
    * @param user
    * @param bypassCache
    */
-  async findOne(name: string, user: AuthenticatedUser, bypassCache?: boolean): Promise<any> {
+  async findOne(name: string, req: any, bypassCache?: boolean): Promise<any> {
+    const { user } = req;
     try {
       let def: any;
 
@@ -165,7 +187,8 @@ export class ComponentDefinitionsService extends BaseWorker implements OnModuleI
    * @param updateComponentDefinitionDto
    * @param user
    */
-  async update(name: string, updateComponentDefinitionDto: any, user: AuthenticatedUser): Promise<any> {
+  async update(name: string, updateComponentDefinitionDto: any, req: any): Promise<any> {
+    const { user, url } = req;
     try {
       const def = await this.findOne(name, user);
       if (def) {
@@ -184,11 +207,30 @@ export class ComponentDefinitionsService extends BaseWorker implements OnModuleI
 
       this.logger.info('updated definition', definition);
 
+      this.mqtt.publishSystemPublic({
+        swr_key: url,
+        action: 'update',
+        status: 'complete',
+        data: {
+          ...definition,
+        },
+      });
+
       return definition;
     } catch (e) {
       if (e.status !== 404) {
         throw new UnprocessableEntityException(e.message, e);
       }
+
+      this.mqtt.publishSystemPublic({
+        swr_key: url,
+        action: 'update',
+        status: 'failed',
+        data: {
+          error: e.message,
+        },
+      });
+
       throw e;
     }
   }
@@ -198,7 +240,8 @@ export class ComponentDefinitionsService extends BaseWorker implements OnModuleI
    * @param name
    * @param user
    */
-  async remove(name: string, user: AuthenticatedUser) {
+  async remove(name: string, req: any) {
+    const { user, url } = req;
     try {
       const def = await this.findOne(name, user);
       if (def) {
@@ -210,10 +253,27 @@ export class ComponentDefinitionsService extends BaseWorker implements OnModuleI
       await this.findByType(user, def.type);
 
       await this.prisma.component_definitions.delete({ where: { name: name } });
+
+      this.mqtt.publishSystemPublic({
+        swr_key: url,
+        action: 'delete',
+        status: 'complete',
+        data: {},
+      });
     } catch (e) {
       if (e.message.includes('Record to delete does not exist')) {
         throw new NotFoundException(`${user.coldclimate_claims.email} attempted to delete a component definition that does not exist: ${name}`);
       }
+
+      this.mqtt.publishSystemPublic({
+        swr_key: url,
+        action: 'delete',
+        status: 'failed',
+        data: {
+          error: e.message,
+        },
+      });
+
       throw e;
     }
   }
