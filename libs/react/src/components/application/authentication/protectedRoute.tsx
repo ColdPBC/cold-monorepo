@@ -3,11 +3,11 @@ import { Outlet, useLocation, useNavigate, useSearchParams } from 'react-router-
 import { ErrorFallback, SignupPage, Spinner, Takeover } from '@coldpbc/components';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { ErrorType, GlobalSizes } from '@coldpbc/enums';
+import { PolicySignedDataType } from '@coldpbc/interfaces';
 import ColdContext from '../../../context/coldContext';
 import { useLDClient } from 'launchdarkly-react-client-sdk';
 import useSWR from 'swr';
 import { get, has, isEmpty } from 'lodash';
-import { PolicySignedDataType } from '@coldpbc/interfaces';
 import { useAuth0Wrapper, useColdContext, useOrgSWR } from '@coldpbc/hooks';
 import { SurveyPayloadType } from '@coldpbc/interfaces';
 import { withErrorBoundary } from 'react-error-boundary';
