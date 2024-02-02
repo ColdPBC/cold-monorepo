@@ -1,3 +1,10 @@
+# [1.103.0-COLD-484.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.102.0...v1.103.0-COLD-484.1) (2024-02-02)
+
+
+### Features
+
+* add seed components file ([6947106](https://github.com/ColdPBC/cold-monorepo/commit/6947106150da2f15e767ee216fe00f6c1abcc1c9))
+
 # [1.102.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.101.0...v1.102.0) (2024-02-01)
 
 
