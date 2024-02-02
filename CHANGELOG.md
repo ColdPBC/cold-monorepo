@@ -1,3 +1,4 @@
+
 # [1.97.0-cold-475.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.96.1-cold-475.4...v1.97.0-cold-475.1) (2024-02-02)
 
 
@@ -12,33 +13,52 @@
 
 ### Features
 
-* implement MQTT on all CRUD updates across all resources ([6a58144](https://github.com/ColdPBC/cold-monorepo/commit/6a5814444f3d53a41764b6db11c42717b0ff727d))
+* removed hardcoded REI compliance references and other changes ([3072e77](https://github.com/ColdPBC/cold-monorepo/commit/3072e7765ba50d51bac359312ac2346b4c85123b))
 
-## [1.96.1-cold-475.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.96.1-cold-475.3...v1.96.1-cold-475.4) (2024-01-31)
+# [1.101.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.100.0...v1.101.0) (2024-01-27)
+
+
+### Features
+
+* added scrollbar when overflows and auto margin for survey question flex tiem ([fcf4281](https://github.com/ColdPBC/cold-monorepo/commit/fcf428133d13a6d03d8a5944ed3f498340efebf2))
+
+# [1.100.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.99.0...v1.100.0) (2024-01-26)
+
+
+### Features
+
+* change user-facing journey modules to gap assessments for demo-ing ([f0803b1](https://github.com/ColdPBC/cold-monorepo/commit/f0803b17ffa5a49d7c694403bd495ba1d5686a3f))
+* change user-facing journey modules to gap assessments for demo-ing ([#247](https://github.com/ColdPBC/cold-monorepo/issues/247)) ([a23d514](https://github.com/ColdPBC/cold-monorepo/commit/a23d514eeb484eb86d4acff7f8f71231763e6e66))
+
+# [1.99.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.98.0...v1.99.0) (2024-01-26)
+
 
 
 ### Bug Fixes
 
-* clean up import ([8863b82](https://github.com/ColdPBC/cold-monorepo/commit/8863b820c3e2c987f52bc1dcd602165a2fe6470d))
-* implement file service ([1d5574b](https://github.com/ColdPBC/cold-monorepo/commit/1d5574bca6acadc64b281aaeecc968d67836a505))
-* make mqtt global ([378e4f3](https://github.com/ColdPBC/cold-monorepo/commit/378e4f30f884e94a2b819837638f0c94c6513bd4))
-
-## [1.96.1-cold-475.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.96.1-cold-475.2...v1.96.1-cold-475.3) (2024-01-31)
+* change empty string to null based on recommendation ([826c032](https://github.com/ColdPBC/cold-monorepo/commit/826c032b2571b093fbeb42ff3985b049196b1a2d))
 
 
-### Bug Fixes
+### Features
 
-* add module exports ([2eee8fb](https://github.com/ColdPBC/cold-monorepo/commit/2eee8fb1cd2316f2aa6a1b60b82a1da618dc22d1))
-* moved prompts to class ([bca4d28](https://github.com/ColdPBC/cold-monorepo/commit/bca4d28043ea4e6641ea821851a474a7f8470104))
+* remove COMPLIANCE type questions from next steps module and improve formatting when module is empty ([c80dc1b](https://github.com/ColdPBC/cold-monorepo/commit/c80dc1be455dfe4d63a8ea2f346cb56eb070e44e))
+* remove COMPLIANCE type surveys from next steps module and imp… ([#246](https://github.com/ColdPBC/cold-monorepo/issues/246)) ([88577df](https://github.com/ColdPBC/cold-monorepo/commit/88577dfeef15bd1b56b3e40379fd75bcaa43806a))
 
-## [1.96.1-cold-475.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.96.1-cold-475.1...v1.96.1-cold-475.2) (2024-01-29)
+# [1.98.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.97.0...v1.98.0) (2024-01-25)
 
 
-### Bug Fixes
+### Features
 
-* cleanup code, move prompts to class ([cfe4120](https://github.com/ColdPBC/cold-monorepo/commit/cfe4120dac3a01dc00933d6c626ce3ad23f42a55))
+* make updates to action detail page and handle links to subcategory actions that dont exist ([8ea811c](https://github.com/ColdPBC/cold-monorepo/commit/8ea811cc127dc79e518c31ab51bde468b3aab017))
 
-## [1.96.1-cold-475.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.96.0...v1.96.1-cold-475.1) (2024-01-28)
+# [1.97.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.96.1...v1.97.0) (2024-01-25)
+
+
+### Features
+
+* Limit surveys in next steps to 3 ([1659167](https://github.com/ColdPBC/cold-monorepo/commit/16591677489cf87ad6b60d28b8995542c7bab2e3))
+
+## [1.96.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.96.0...v1.96.1) (2024-01-24)
 
 
 ### Bug Fixes
@@ -474,7 +494,6 @@
 * add jobs to redis on rabbit failure ([062eb88](https://github.com/ColdPBC/cold-monorepo/commit/062eb88a9faa54e252392a31cfbd4e8214f8d547))
 
 # [1.83.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.82.1...v1.83.0) (2024-01-09)
-
 
 ### Features
 

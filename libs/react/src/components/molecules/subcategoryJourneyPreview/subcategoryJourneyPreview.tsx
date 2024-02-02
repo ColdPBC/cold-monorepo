@@ -10,6 +10,7 @@ import { motion } from 'framer-motion';
 import { useOrgSWR } from '../../../hooks/useOrgSWR';
 import { useColdContext } from '@coldpbc/hooks';
 import { ErrorType } from '@coldpbc/enums';
+import { ActionPayload } from '@coldpbc/interfaces';
 
 const scoreQuadrants = [
   {
@@ -43,16 +44,10 @@ interface Props {
   glow?: boolean;
 }
 
-export const SubcategoryJourneyPreview = ({
-  subcategory_key,
-  category_key,
-  cardTitle,
-  to,
-  containerClassName,
-  glow,
-}: Props) => {
+export const SubcategoryJourneyPreview = ({ subcategory_key, category_key, cardTitle, to, containerClassName, glow }: Props) => {
   const ldFlags = useFlags();
   const { data, error } = useOrgSWR<any>(['/categories', 'GET'], axiosFetcher);
+  const { data: actionsData, error: actionsError } = useOrgSWR<ActionPayload[], any>(ldFlags.showActions261 ? [`/actions`, 'GET'] : null, axiosFetcher);
 
   const { logError } = useColdContext();
 
@@ -61,8 +56,7 @@ export const SubcategoryJourneyPreview = ({
     return null;
   }
 
-  const subcategoryData =
-    data?.definition?.categories[category_key]?.subcategories[subcategory_key];
+  const subcategoryData = data?.definition?.categories[category_key]?.subcategories[subcategory_key];
 
   if (!subcategoryData || subcategoryData.journey_score === null) {
     return null;
@@ -70,48 +64,45 @@ export const SubcategoryJourneyPreview = ({
 
   const subcategoryName = subcategoryData.subcategory_name;
 
-  const curScoreQuadrantIndex = scoreQuadrants.findIndex(
-    (s) =>
-      subcategoryData.journey_score >= s.bottom &&
-      subcategoryData.journey_score <= s.top,
-  );
+  const curScoreQuadrantIndex = scoreQuadrants.findIndex(s => subcategoryData.journey_score >= s.bottom && subcategoryData.journey_score <= s.top);
 
-  const curScoreQuadrant =
-    curScoreQuadrantIndex !== -1 ? scoreQuadrants[curScoreQuadrantIndex] : null;
+  const curScoreQuadrant = curScoreQuadrantIndex !== -1 ? scoreQuadrants[curScoreQuadrantIndex] : null;
 
-  return (
-    <Card
-      className={twMerge(
-        'gap-0 p-4 border-bgc-accent border rounded-lg w-[310px] text-white bg-bgc-elevated',
-        containerClassName,
-      )}
-      glow={!!glow}
-    >
-      <div
-        className={
-          'flex h-[24px] w-full' +
-          (ldFlags.showActions261 ? ' justify-between' : ' justify-start')
-        }
-      >
-        <h4 className="font-bold text-sm">{cardTitle ?? subcategoryName}</h4>
-        {ldFlags.showActions261 && (
+  const getActionsLink = (subcategory_key: string) => {
+    if (ldFlags.showActions261) {
+      if (!actionsData?.some(action => action.action.subcategory === subcategory_key)) {
+        return (
+          <Link to={to ?? `/actions`} className="w-[24px]">
+            <ArrowRightIcon />
+          </Link>
+        );
+      } else {
+        return (
           <Link to={to ?? `/actions/${subcategory_key}`} className="w-[24px]">
             <ArrowRightIcon />
           </Link>
-        )}
+        );
+      }
+    } else {
+      return null;
+    }
+  };
+
+  return (
+    <Card className={twMerge('gap-0 p-4 border-bgc-accent border rounded-lg w-[310px] text-white bg-bgc-elevated', containerClassName)} glow={!!glow}>
+      <div className={'flex h-[24px] w-full' + (ldFlags.showActions261 ? ' justify-between' : ' justify-start')}>
+        <h4 className="font-bold text-sm">{cardTitle ?? subcategoryName}</h4>
+        {getActionsLink(subcategory_key)}
       </div>
 
       <div className="h-[12px] relative my-2 flex  w-full">
         <motion.div
-          className={clsx(
-            'h-[8px] absolute rounded-lg top-[2px] left-[2px] right-[2px]',
-            {
-              'bg-gray-130': curScoreQuadrantIndex === 0,
-              'bg-primary-100': curScoreQuadrantIndex === 1,
-              'bg-primary-200': curScoreQuadrantIndex === 2,
-              'bg-primary-300': curScoreQuadrantIndex === 3,
-            },
-          )}
+          className={clsx('h-[8px] absolute rounded-lg top-[2px] left-[2px] right-[2px]', {
+            'bg-gray-130': curScoreQuadrantIndex === 0,
+            'bg-primary-100': curScoreQuadrantIndex === 1,
+            'bg-primary-200': curScoreQuadrantIndex === 2,
+            'bg-primary-300': curScoreQuadrantIndex === 3,
+          })}
           initial={{
             width: 0,
           }}
@@ -129,25 +120,12 @@ export const SubcategoryJourneyPreview = ({
       </div>
 
       <div className="flex text-xs w-full">
-        <div className="flex flex-1 rounded-lg flex justify-between py-1.5 px-2 bg-bgc-accent">
-          <div>{curScoreQuadrant?.name}</div>
+        <div className="flex flex-1 rounded-lg justify-between py-1.5 px-2 bg-bgc-accent">
+          <div>Estimated Compliance</div>
           <div>
-            {subcategoryData.journey_score}/
-            {scoreQuadrants[curScoreQuadrantIndex + 1]
-              ? scoreQuadrants[curScoreQuadrantIndex + 1].bottom
-              : 100}
+            {subcategoryData.journey_score}%
           </div>
         </div>
-        {curScoreQuadrantIndex < 3 && (
-          <>
-            <ArrowRightIcon className="mx-2 w-[24px] text-bgc-accent" />
-            <div className="rounded-lg flex py-1.5 px-2 bg-bgc-accent">
-              {scoreQuadrants[curScoreQuadrantIndex + 1]
-                ? scoreQuadrants[curScoreQuadrantIndex + 1].name
-                : 'Trailblazer'}
-            </div>
-          </>
-        )}
       </div>
     </Card>
   );
