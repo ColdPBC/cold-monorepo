@@ -131,7 +131,7 @@ const seeds: Array<{
 export async function seedComponents() {
   await prisma.$connect();
 
-  console.log(`Seeding News...`);
+  console.log(`Seeding Components...`);
 
   let count = 0;
   await Promise.all(
@@ -171,8 +171,6 @@ export async function seedComponents() {
       }),
     );
   }
-
-  console.log(`${count} News stories seeded!`);
 
   await prisma.$disconnect();
 }
