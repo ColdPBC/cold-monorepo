@@ -185,7 +185,7 @@ export class MemberService extends BaseWorker {
 
       const member = await this.httpService.axiosRef.post(`/users`, user, this.utilService.options);
 
-      this.mqtt.publishSystemPublic({
+      this.mqtt.publishMQTT('public', {
         swr_key: url,
         action: 'create',
         status: 'complete',
@@ -198,7 +198,7 @@ export class MemberService extends BaseWorker {
     } catch (e) {
       this.logger.error(e.response.data);
 
-      this.mqtt.publishSystemPublic({
+      this.mqtt.publishMQTT('public', {
         swr_key: url,
         action: 'create',
         status: 'failed',
@@ -243,7 +243,7 @@ export class MemberService extends BaseWorker {
       }
 
       const member = await this.httpService.axiosRef.patch(`/users/${found.user_id}`, payload, this.utilService.options);
-      this.mqtt.publishSystemPublic({
+      this.mqtt.publishMQTT('public', {
         swr_key: url,
         action: 'update',
         status: 'complete',
@@ -254,7 +254,7 @@ export class MemberService extends BaseWorker {
       return member.data;
     } catch (e) {
       this.logger.error(e.message, e);
-      this.mqtt.publishToUI({
+      this.mqtt.publishMQTT('ui', {
         org_id: user.coldclimate_claims.org_id,
         user: user,
         swr_key: url,

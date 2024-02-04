@@ -36,7 +36,7 @@ export class MemberController extends BaseWorker {
     @Param('email') email: string,
     @Query('bpc') bpc?: boolean,
   ) {
-    return this.membersService.getMemberByEmail(email, req.user, bpc);
+    return this.membersService.getMemberByEmail(email, req, bpc);
   }
 
   /***
@@ -57,7 +57,7 @@ export class MemberController extends BaseWorker {
     },
     @Param('email') email: string,
   ) {
-    return this.membersService.updateUser(req.user, email, req.body);
+    return this.membersService.updateUser(req, email, req.body);
   }
 
   /***

@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { Auth0TokenService, CacheService, ColdCacheModule, DarklyService, JwtStrategy, PrismaModule, PrismaService } from '@coldpbc/nest';
-import { PolicyDefinitionsController } from './policy-definitions.controller';
-import { PolicyDefinitionsService } from './policy-definitions.service';
+import { Policy_definitionsController } from './policy_definitions.controller';
+import { Policy_definitionsService } from './policy_definitions.service';
 import { OrganizationService } from '../organizations/organization.service';
 import { mockDeep } from 'jest-mock-extended';
 import { RoleService } from '../auth0/roles/role.service';
@@ -10,13 +10,13 @@ import { JwtService } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
 describe('PolicyContentService', () => {
-  let service: PolicyDefinitionsService;
+  let service: Policy_definitionsService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [PrismaModule, ColdCacheModule, ConfigModule.forRoot({ isGlobal: true })],
-      controllers: [PolicyDefinitionsController],
-      providers: [PolicyDefinitionsService, ConfigService],
+      controllers: [Policy_definitionsController],
+      providers: [Policy_definitionsService, ConfigService],
       exports: [ConfigService],
     })
       .overrideProvider(OrganizationService)
@@ -41,7 +41,7 @@ describe('PolicyContentService', () => {
       })
       .compile();
 
-    service = module.get<PolicyDefinitionsService>(PolicyDefinitionsService);
+    service = module.get<Policy_definitionsService>(Policy_definitionsService);
   });
 
   it('should be defined', () => {

@@ -173,7 +173,7 @@ export class ActionsService extends BaseWorker {
 
       this.getActions(req, orgId, true);
 
-      this.mqtt.publishToUI({
+      this.mqtt.publishMQTT('ui', {
         org_id: user.coldclimate_claims.org_id,
         user: user,
         swr_key: url,
@@ -188,7 +188,7 @@ export class ActionsService extends BaseWorker {
     } catch (e) {
       this.logger.error(e, { user: user.coldclimate_claims, orgId, id, data, bpc });
 
-      this.mqtt.publishToUI({
+      this.mqtt.publishMQTT('ui', {
         org_id: user.coldclimate_claims.org_id,
         user: user,
         swr_key: url,
@@ -199,7 +199,7 @@ export class ActionsService extends BaseWorker {
           ...data,
         },
       });
-      return e;
+      throw e;
     }
   }
 
@@ -241,7 +241,7 @@ export class ActionsService extends BaseWorker {
 
       this.getActions(req, orgId, true);
 
-      this.mqtt.publishToUI({
+      this.mqtt.publishMQTT('ui', {
         org_id: user.coldclimate_claims.org_id,
         user: user,
         swr_key: url,
@@ -255,7 +255,7 @@ export class ActionsService extends BaseWorker {
       return updated;
     } catch (e) {
       this.logger.error(e, { user: user.coldclimate_claims, orgId, id, data, bpc });
-      this.mqtt.publishToUI({
+      this.mqtt.publishMQTT('ui', {
         org_id: user.coldclimate_claims.org_id,
         user: user,
         swr_key: url,
@@ -297,7 +297,7 @@ export class ActionsService extends BaseWorker {
       // refresh cache
       this.getActions(req, orgId, true);
 
-      this.mqtt.publishToUI({
+      this.mqtt.publishMQTT('ui', {
         org_id: user.coldclimate_claims.org_id,
         user: user,
         swr_key: url,
@@ -309,7 +309,7 @@ export class ActionsService extends BaseWorker {
     } catch (e) {
       this.logger.error(e, { user: user.coldclimate_claims, orgId, id });
 
-      this.mqtt.publishToUI({
+      this.mqtt.publishMQTT('ui', {
         org_id: user.coldclimate_claims.org_id,
         user: user,
         swr_key: url,

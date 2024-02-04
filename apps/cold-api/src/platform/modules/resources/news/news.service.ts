@@ -28,9 +28,9 @@ export class NewsService extends BaseWorker {
       this.logger.info('created news article', article);
 
       //rebuild cache async
-      await this.getArticles(user, 3, 0, true, true);
+      await this.getArticles(req, 3, 0, true, true);
 
-      this.mqtt.publishSystemPublic({
+      this.mqtt.publishMQTT('public', {
         swr_key: url,
         action: 'create',
         status: 'complete',
@@ -43,7 +43,7 @@ export class NewsService extends BaseWorker {
     } catch (e) {
       this.logger.error(e, { payload });
 
-      this.mqtt.publishSystemPublic({
+      this.mqtt.publishMQTT('public', {
         swr_key: url,
         action: 'create',
         status: 'failed',
@@ -81,7 +81,7 @@ export class NewsService extends BaseWorker {
 
     this.logger.info(`deleted article ${id}`, article);
 
-    this.mqtt.publishSystemPublic({
+    this.mqtt.publishMQTT('public', {
       swr_key: url,
       action: 'delete',
       status: 'complete',
@@ -89,7 +89,7 @@ export class NewsService extends BaseWorker {
     });
 
     //rebuild cache async
-    await this.getArticles(user, 3, 0, true, true);
+    await this.getArticles(req, 3, 0, true, true);
   }
 
   async getArticles(req: any, take: number, skip: number, bpc: boolean, published = true): Promise<news[]> {

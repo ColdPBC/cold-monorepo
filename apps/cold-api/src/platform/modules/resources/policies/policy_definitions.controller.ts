@@ -2,16 +2,16 @@ import { Controller, Get, Param, ParseIntPipe, Post, Req, UseFilters, UseGuards 
 import { ApiOAuth2, ApiParam, ApiTags } from '@nestjs/swagger';
 import { BaseWorker, HttpExceptionFilter, IAuthenticatedUser, JwtAuthGuard, Public, Roles, RolesGuard } from '@coldpbc/nest';
 import { coldAdminOnly } from '../_global/global.params';
-import { PolicyDefinitionsService } from './policy-definitions.service';
+import { Policy_definitionsService } from './policy_definitions.service';
 
 @UseGuards(JwtAuthGuard, RolesGuard)
 @ApiOAuth2(['openid'])
 @ApiTags('Policies')
-@UseFilters(new HttpExceptionFilter(PolicyDefinitionsController.name))
+@UseFilters(new HttpExceptionFilter(Policy_definitionsController.name))
 @Controller('policies')
-export class PolicyDefinitionsController extends BaseWorker {
-  constructor(private readonly policyDefinitionsService: PolicyDefinitionsService) {
-    super(PolicyDefinitionsService.name);
+export class Policy_definitionsController extends BaseWorker {
+  constructor(private readonly policyDefinitionsService: Policy_definitionsService) {
+    super(Policy_definitionsService.name);
   }
 
   /**

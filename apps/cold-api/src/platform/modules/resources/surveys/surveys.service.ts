@@ -109,7 +109,7 @@ export class SurveysService extends BaseWorker {
 
       this.metrics.increment('cold.api.surveys.create', this.tags);
 
-      this.mqtt.publishSystemPublic({
+      this.mqtt.publishMQTT('public', {
         swr_key: url,
         action: 'create',
         status: 'complete',
@@ -135,7 +135,7 @@ export class SurveysService extends BaseWorker {
 
       this.logger.error(e.message, { error: e, data: createSurveyDefinitionDto });
 
-      this.mqtt.publishSystemPublic({
+      this.mqtt.publishMQTT('public', {
         swr_key: url,
         action: 'create',
         status: 'failed',
@@ -230,7 +230,7 @@ export class SurveysService extends BaseWorker {
 
     this.setTags({ user: user.coldclimate_claims, bpc: bypassCache, impersonateOrg });
 
-    const surveyNameCacheKey = this.getSurveyNameCacheKey(impersonateOrg, { user }, name);
+    const surveyNameCacheKey = this.getSurveyNameCacheKey(impersonateOrg, req, name);
 
     this.setTags({ survey_name_cache_key: surveyNameCacheKey });
 
@@ -252,7 +252,7 @@ export class SurveysService extends BaseWorker {
         throw new NotFoundException(`Unable to find survey definition with name: ${name}`);
       }
 
-      const surveyTypeCacheKey = this.getSurveyTypeCacheKey(impersonateOrg, { user }, name, def);
+      const surveyTypeCacheKey = this.getSurveyTypeCacheKey(impersonateOrg, req, name, def);
 
       // Get Submission Results
       if ((user.isColdAdmin && impersonateOrg) || !user.isColdAdmin) {
@@ -424,7 +424,7 @@ export class SurveysService extends BaseWorker {
         this.logger.info('created survey submission', response);
       }
 
-      this.mqtt.publishToUI({
+      this.mqtt.publishMQTT('ui', {
         org_id: orgId,
         user: user,
         swr_key: url,
@@ -453,7 +453,7 @@ export class SurveysService extends BaseWorker {
 
       this.logger.error(e.message, { error: e });
 
-      this.mqtt.publishToUI({
+      this.mqtt.publishMQTT('ui', {
         org_id: orgId,
         user: user,
         swr_key: url,
@@ -505,7 +505,7 @@ export class SurveysService extends BaseWorker {
 
       this.metrics.increment('cold.api.surveys.update', 1, this.tags);
 
-      this.mqtt.publishSystemPublic({
+      this.mqtt.publishMQTT('public', {
         swr_key: url,
         action: 'update',
         status: 'complete',
@@ -530,7 +530,7 @@ export class SurveysService extends BaseWorker {
 
       this.metrics.increment('cold.api.surveys.update', 1, this.tags);
 
-      this.mqtt.publishSystemPublic({
+      this.mqtt.publishMQTT('public', {
         swr_key: url,
         action: 'update',
         status: 'failed',
@@ -576,7 +576,7 @@ export class SurveysService extends BaseWorker {
 
       this.metrics.increment('cold.api.surveys.delete', 1, tags);
 
-      this.mqtt.publishSystemPublic({
+      this.mqtt.publishMQTT('public', {
         swr_key: url,
         action: 'delete',
         status: 'complete',
@@ -599,7 +599,7 @@ export class SurveysService extends BaseWorker {
 
       this.metrics.increment('cold.api.surveys.delete', 1, tags);
 
-      this.mqtt.publishSystemPublic({
+      this.mqtt.publishMQTT('public', {
         swr_key: url,
         action: 'delete',
         status: 'failed',

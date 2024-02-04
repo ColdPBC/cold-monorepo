@@ -3,16 +3,14 @@ import { ConflictException, Injectable, NotFoundException } from '@nestjs/common
 import { Span } from 'nestjs-ddtrace';
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import { BaseWorker, CacheService, Cuid2Generator, DarklyService, MqttService, PrismaService, S3Service } from '@coldpbc/nest';
-import { AxiosRequestConfig } from 'axios';
-import { IntegrationsService } from '../integrations/integrations.service';
-import { BroadcastEventService } from '../../../utilities/events/broadcast.event.service';
-import { OrganizationService } from './organization.service';
+import { IntegrationsService } from '../../integrations/integrations.service';
+import { BroadcastEventService } from '../../../../utilities/events/broadcast.event.service';
+import { OrganizationService } from '../organization.service';
 import { pick } from 'lodash';
 
 @Span()
 @Injectable()
 export class OrganizationFilesService extends BaseWorker {
-  options: AxiosRequestConfig<any>;
   httpService: HttpService;
   prisma: PrismaService;
   test_orgs: Array<{ id: string; name: string; display_name: string }>;
@@ -110,7 +108,7 @@ export class OrganizationFilesService extends BaseWorker {
     } catch (e) {
       this.logger.error(e);
 
-      this.mqtt.publishToUI({
+      this.mqtt.publishMQTT('ui', {
         org_id: orgId,
         user: user,
         swr_key: url,
@@ -154,7 +152,7 @@ export class OrganizationFilesService extends BaseWorker {
 
       await this.events.sendEvent(false, 'file.deleted', file, user, orgId);
 
-      this.mqtt.publishToUI({
+      this.mqtt.publishMQTT('ui', {
         org_id: orgId,
         user: user,
         swr_key: url,
@@ -169,7 +167,7 @@ export class OrganizationFilesService extends BaseWorker {
     } catch (e) {
       this.logger.error(e);
 
-      this.mqtt.publishToUI({
+      this.mqtt.publishMQTT('ui', {
         org_id: orgId,
         user: user,
         swr_key: url,

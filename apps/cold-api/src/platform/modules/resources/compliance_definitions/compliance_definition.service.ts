@@ -51,7 +51,7 @@ export class ComplianceDefinitionService extends BaseWorker {
         data: complianceDefinition,
       });
 
-      this.mqtt.publishSystemPublic({
+      this.mqtt.publishMQTT('public', {
         swr_key: url,
         action: 'create',
         status: 'complete',
@@ -63,7 +63,7 @@ export class ComplianceDefinitionService extends BaseWorker {
       return response as ComplianceDefinition;
     } catch (e) {
       this.metrics.increment('cold.api.surveys.create', this.tags);
-      this.mqtt.publishSystemPublic({
+      this.mqtt.publishMQTT('public', {
         swr_key: url,
         action: 'create',
         status: 'failed',
@@ -143,7 +143,7 @@ export class ComplianceDefinitionService extends BaseWorker {
 
       await this.event.sendEvent(false, 'organization_compliances.created', { surveys, compliance }, user, orgId);
 
-      this.mqtt.publishToUI({
+      this.mqtt.publishMQTT('ui', {
         org_id: orgId,
         user: user,
         swr_key: url,
@@ -158,7 +158,7 @@ export class ComplianceDefinitionService extends BaseWorker {
     } catch (e) {
       this.logger.error(e.message, { error: e });
 
-      this.mqtt.publishToUI({
+      this.mqtt.publishMQTT('ui', {
         org_id: orgId,
         user: user,
         swr_key: url,
@@ -281,7 +281,7 @@ export class ComplianceDefinitionService extends BaseWorker {
     try {
       await this.cache.delete(`compliance_definition:${name}`);
 
-      const def = await this.findOne(name, user, true);
+      const def = await this.findOne(name, req, true);
 
       if (!def) {
         throw new NotFoundException(`Unable to find compliance definition with name: ${name}`);
@@ -298,7 +298,7 @@ export class ComplianceDefinitionService extends BaseWorker {
 
       this.metrics.increment('cold.api.surveys.update', 1, this.tags);
 
-      this.mqtt.publishSystemPublic({
+      this.mqtt.publishMQTT('public', {
         swr_key: url,
         action: 'update',
         status: 'complete',
@@ -311,7 +311,7 @@ export class ComplianceDefinitionService extends BaseWorker {
     } catch (e) {
       this.logger.error(e.message, { error: e });
 
-      this.mqtt.publishSystemPublic({
+      this.mqtt.publishMQTT('public', {
         swr_key: url,
         action: 'create',
         status: 'failed',
@@ -339,14 +339,14 @@ export class ComplianceDefinitionService extends BaseWorker {
     });
 
     try {
-      const def = await this.findOne(name, user);
+      const def = await this.findOne(name, req);
       if (def) {
         await this.cache.delete(`compliance_definition:name:${def.name}`);
       }
 
       await this.prisma.compliance_definitions.delete({ where: { name: name } });
 
-      this.mqtt.publishSystemPublic({
+      this.mqtt.publishMQTT('public', {
         swr_key: url,
         action: 'delete',
         status: 'complete',
@@ -357,7 +357,7 @@ export class ComplianceDefinitionService extends BaseWorker {
     } catch (e) {
       this.logger.error(e.message, { error: e });
 
-      this.mqtt.publishSystemPublic({
+      this.mqtt.publishMQTT('public', {
         swr_key: url,
         action: 'delete',
         status: 'failed',
@@ -400,7 +400,7 @@ export class ComplianceDefinitionService extends BaseWorker {
 
       await this.prisma.organization_compliances.delete({ where: { id: compliance.id } });
 
-      this.mqtt.publishSystemPublic({
+      this.mqtt.publishMQTT('public', {
         swr_key: url,
         action: 'delete',
         status: 'complete',
@@ -411,7 +411,7 @@ export class ComplianceDefinitionService extends BaseWorker {
     } catch (e) {
       this.logger.error(e.message, { error: e });
 
-      this.mqtt.publishSystemPublic({
+      this.mqtt.publishMQTT('public', {
         swr_key: url,
         action: 'delete',
         status: 'failed',

@@ -1,24 +1,24 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { Auth0TokenService, CacheService, DarklyService, JwtStrategy, PrismaService } from '@coldpbc/nest';
-import { PolicyDefinitionsController } from './policy-definitions.controller';
-import { PolicyDefinitionsService } from './policy-definitions.service';
+import { Policy_definitionsController } from './policy_definitions.controller';
+import { Policy_definitionsService } from './policy_definitions.service';
 import { mockDeep } from 'jest-mock-extended';
 import { JwtService } from '@nestjs/jwt';
 import { fullReqExample } from '../_global/global.examples';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
 describe('PolicyDefinitionsController', () => {
-  let controller: PolicyDefinitionsController;
-  let service: PolicyDefinitionsService;
+  let controller: Policy_definitionsController;
+  let service: Policy_definitionsService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [ConfigModule],
-      controllers: [PolicyDefinitionsController],
-      providers: [ConfigService, PolicyDefinitionsService, PrismaService, CacheService, DarklyService],
+      controllers: [Policy_definitionsController],
+      providers: [ConfigService, Policy_definitionsService, PrismaService, CacheService, DarklyService],
     })
-      .overrideProvider(PolicyDefinitionsService)
-      .useValue(mockDeep<PolicyDefinitionsService>())
+      .overrideProvider(Policy_definitionsService)
+      .useValue(mockDeep<Policy_definitionsService>())
       .overrideProvider(Auth0TokenService)
       .useValue(mockDeep<Auth0TokenService>())
       .overrideProvider(JwtService)
@@ -35,8 +35,8 @@ describe('PolicyDefinitionsController', () => {
       })
       .compile();
 
-    controller = module.get<PolicyDefinitionsController>(PolicyDefinitionsController);
-    service = module.get<PolicyDefinitionsService>(PolicyDefinitionsService);
+    controller = module.get<Policy_definitionsController>(Policy_definitionsController);
+    service = module.get<Policy_definitionsService>(Policy_definitionsService);
   });
 
   it('should be defined', () => {

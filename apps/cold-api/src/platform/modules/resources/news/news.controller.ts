@@ -95,6 +95,6 @@ export class NewsController extends BaseWorker {
       user: IAuthenticatedUser;
     },
   ) {
-    return this.newsService.create(req, req.body as CreateArticleDto);
+    return this.newsService.delete(req, id);
   }
 }

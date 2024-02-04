@@ -268,7 +268,7 @@ export class CategoriesService extends BaseWorker {
         this.logger.info('saved category submission', response);
       }
 
-      this.mqtt.publishToUI({
+      this.mqtt.publishMQTT('ui', {
         org_id: user.coldclimate_claims.org_id,
         user: user,
         swr_key: url,
@@ -289,7 +289,7 @@ export class CategoriesService extends BaseWorker {
 
       this.tracer.getTracer().dogstatsd.increment('cold.api.categories.submission', 1, tags);
 
-      this.mqtt.publishToUI({
+      this.mqtt.publishMQTT('ui', {
         org_id: user.coldclimate_claims.org_id,
         user: user,
         swr_key: url,
@@ -363,7 +363,7 @@ export class CategoriesService extends BaseWorker {
 
       this.tracer.getTracer().dogstatsd.increment('cold.api.categories.create', 1, tags);
 
-      this.mqtt.publishSystemPublic({
+      this.mqtt.publishMQTT('public', {
         swr_key: url,
         action: 'create',
         status: 'complete',
@@ -384,7 +384,7 @@ export class CategoriesService extends BaseWorker {
 
       this.tracer.getTracer().dogstatsd.increment('cold.api.categories.create', 1, tags);
 
-      this.mqtt.publishSystemPublic({
+      this.mqtt.publishMQTT('public', {
         swr_key: url,
         action: 'create',
         status: 'failed',
@@ -445,7 +445,7 @@ export class CategoriesService extends BaseWorker {
 
       this.tracer.getTracer().dogstatsd.increment('cold.api.categories.update', 1, tags);
 
-      this.mqtt.publishSystemPublic({
+      this.mqtt.publishMQTT('public', {
         swr_key: url,
         action: 'update',
         status: 'complete',
@@ -462,7 +462,7 @@ export class CategoriesService extends BaseWorker {
 
       this.tracer.getTracer().dogstatsd.increment('cold.api.categories.update', 1, tags);
 
-      this.mqtt.publishSystemPublic({
+      this.mqtt.publishMQTT('public', {
         swr_key: url,
         action: 'update',
         status: 'failed',

@@ -79,7 +79,7 @@ export class ComponentDefinitionsService extends BaseWorker implements OnModuleI
       //rebuild cache async
       await this.findByType(user, createComponentDefinitionDto.type);
 
-      this.mqtt.publishSystemPublic({
+      this.mqtt.publishMQTT('public', {
         swr_key: url,
         action: 'create',
         status: 'complete',
@@ -98,7 +98,7 @@ export class ComponentDefinitionsService extends BaseWorker implements OnModuleI
         throw new UnprocessableEntityException(`Some properties not valid : ${e.message}`, e);
       }
 
-      this.mqtt.publishSystemPublic({
+      this.mqtt.publishMQTT('public', {
         swr_key: url,
         action: 'create',
         status: 'failed',
@@ -207,7 +207,7 @@ export class ComponentDefinitionsService extends BaseWorker implements OnModuleI
 
       this.logger.info('updated definition', definition);
 
-      this.mqtt.publishSystemPublic({
+      this.mqtt.publishMQTT('public', {
         swr_key: url,
         action: 'update',
         status: 'complete',
@@ -222,7 +222,7 @@ export class ComponentDefinitionsService extends BaseWorker implements OnModuleI
         throw new UnprocessableEntityException(e.message, e);
       }
 
-      this.mqtt.publishSystemPublic({
+      this.mqtt.publishMQTT('public', {
         swr_key: url,
         action: 'update',
         status: 'failed',
@@ -243,7 +243,7 @@ export class ComponentDefinitionsService extends BaseWorker implements OnModuleI
   async remove(name: string, req: any) {
     const { user, url } = req;
     try {
-      const def = await this.findOne(name, user);
+      const def = await this.findOne(name, req);
       if (def) {
         await this.cache.delete(`component_definitions:name:${def.name}`);
         await this.cache.delete(`component_definitions:type:${def.type}`);
@@ -254,7 +254,7 @@ export class ComponentDefinitionsService extends BaseWorker implements OnModuleI
 
       await this.prisma.component_definitions.delete({ where: { name: name } });
 
-      this.mqtt.publishSystemPublic({
+      this.mqtt.publishMQTT('public', {
         swr_key: url,
         action: 'delete',
         status: 'complete',
@@ -265,7 +265,7 @@ export class ComponentDefinitionsService extends BaseWorker implements OnModuleI
         throw new NotFoundException(`${user.coldclimate_claims.email} attempted to delete a component definition that does not exist: ${name}`);
       }
 
-      this.mqtt.publishSystemPublic({
+      this.mqtt.publishMQTT('public', {
         swr_key: url,
         action: 'delete',
         status: 'failed',

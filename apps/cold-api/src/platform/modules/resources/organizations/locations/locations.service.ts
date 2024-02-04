@@ -2,11 +2,11 @@ import { BaseWorker, Cuid2Generator, MqttService, organization_locations, Prisma
 import { Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
 
 @Injectable()
-export class OrganizationLocationsService extends BaseWorker {
+export class LocationsService extends BaseWorker {
   cuid2 = new Cuid2Generator().setPrefix('oloc');
 
   constructor(private readonly prisma: PrismaService, private readonly mqtt: MqttService) {
-    super(OrganizationLocationsService.name);
+    super(LocationsService.name);
 
     if (!this.cuid2.prefix) {
       this.logger.warn('Cuid2 prefix not set, setting to "loc"');
@@ -75,7 +75,7 @@ export class OrganizationLocationsService extends BaseWorker {
         },
       })) as unknown as organization_locations;
 
-      this.mqtt.publishToUI({
+      this.mqtt.publishMQTT('ui', {
         org_id: orgId,
         user,
         swr_key: url,
@@ -90,7 +90,7 @@ export class OrganizationLocationsService extends BaseWorker {
     } catch (e: any) {
       this.logger.error(e.message, { body });
 
-      this.mqtt.publishSystemPublic({
+      this.mqtt.publishMQTT('public', {
         swr_key: url,
         action: 'create',
         status: 'failed',

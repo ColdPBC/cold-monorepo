@@ -6,7 +6,7 @@ import { CreatePolicyDefinition } from './dto/create-policy-definition.dto';
 import { PolicyDefinitionDto } from './dto/policy-definition.dto';
 
 @Injectable()
-export class PolicyDefinitionsService extends BaseWorker {
+export class Policy_definitionsService extends BaseWorker {
   constructor(private prisma: PrismaService, private readonly cache: CacheService, private readonly mqtt: MqttService) {
     super('PolicyContentService');
   }
@@ -32,7 +32,7 @@ export class PolicyDefinitionsService extends BaseWorker {
         bypassCache: true,
       });
 
-      this.mqtt.publishSystemCold({
+      this.mqtt.publishMQTT('cold', {
         swr_key: url,
         action: 'create',
         status: 'complete',
@@ -43,7 +43,7 @@ export class PolicyDefinitionsService extends BaseWorker {
 
       return policy;
     } catch (e) {
-      this.mqtt.publishSystemCold({
+      this.mqtt.publishMQTT('cold', {
         swr_key: url,
         action: 'create',
         status: 'failed',
@@ -71,7 +71,7 @@ export class PolicyDefinitionsService extends BaseWorker {
    * @param updatedPolicy
    */
   async update(id: number, updatedPolicy: CreatePolicyDefinition, req: any): Promise<PolicyDefinitionDto> {
-    const { url, user } = req;
+    const { url } = req;
     try {
       let policy = await this.prisma.policy_definitions.findUnique({ where: { id } });
 
@@ -91,7 +91,7 @@ export class PolicyDefinitionsService extends BaseWorker {
       await this.cache.set('policy_definitions', policy, { update: true });
       await this.cache.set(`policy_definitions:name:${policy.name}`, policy, { update: true });
 
-      this.mqtt.publishSystemCold({
+      this.mqtt.publishMQTT('cold', {
         swr_key: url,
         action: 'update',
         status: 'complete',
@@ -103,7 +103,7 @@ export class PolicyDefinitionsService extends BaseWorker {
       return policy;
     } catch (e) {
       this.logger.error(e, { updatedPolicy });
-      this.mqtt.publishSystemCold({
+      this.mqtt.publishMQTT('cold', {
         swr_key: url,
         action: 'update',
         status: 'failed',
@@ -135,7 +135,7 @@ export class PolicyDefinitionsService extends BaseWorker {
 
       this.logger.info(`${user?.coldclimate_claims.email} signed policy ${id}`, policy);
 
-      this.mqtt.publishToUI({
+      this.mqtt.publishMQTT('ui', {
         org_id: user?.coldclimate_claims.org_id,
         user: user,
         swr_key: url,
@@ -154,7 +154,7 @@ export class PolicyDefinitionsService extends BaseWorker {
         throw new ConflictException(`User: ${user.coldclimate_claims.email} already signed policy: ${id}`);
       }
 
-      this.mqtt.publishToUI({
+      this.mqtt.publishMQTT('ui', {
         org_id: user?.coldclimate_claims.org_id,
         user: user,
         swr_key: url,

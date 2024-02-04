@@ -134,7 +134,7 @@ export class ActionTemplatesService extends BaseWorker {
       // re-cache all actions
       this.getActionTemplates(req, true);
 
-      this.mqtt.publishSystemPublic({
+      this.mqtt.publishMQTT('public', {
         swr_key: url,
         action: 'create',
         status: 'complete',
@@ -147,7 +147,7 @@ export class ActionTemplatesService extends BaseWorker {
     } catch (e) {
       this.logger.error(e);
 
-      this.mqtt.publishToUI({
+      this.mqtt.publishMQTT('ui', {
         org_id: user.coldclimate_claims.org_id,
         user: user,
         swr_key: url,
@@ -192,7 +192,7 @@ export class ActionTemplatesService extends BaseWorker {
 
       this.getActionTemplates(req, true);
 
-      this.mqtt.publishSystemPublic({
+      this.mqtt.publishMQTT('public', {
         swr_key: url,
         action: 'update',
         status: 'complete',
@@ -207,7 +207,7 @@ export class ActionTemplatesService extends BaseWorker {
         throw new NotFoundException(`Action ${id} not found`);
       }
 
-      this.mqtt.publishSystemPublic({
+      this.mqtt.publishMQTT('public', {
         swr_key: url,
         action: 'update',
         status: 'failed',
@@ -245,7 +245,7 @@ export class ActionTemplatesService extends BaseWorker {
       // re-cache all actions
       await this.getActionTemplates(req, true);
 
-      this.mqtt.publishSystemPublic({
+      this.mqtt.publishMQTT('public', {
         swr_key: url,
         action: 'delete',
         status: 'complete',
@@ -262,7 +262,7 @@ export class ActionTemplatesService extends BaseWorker {
       } else {
         this.logger.error(e.message, { ...e });
 
-        this.mqtt.publishSystemPublic({
+        this.mqtt.publishMQTT('public', {
           swr_key: url,
           action: 'delete',
           status: 'failed',

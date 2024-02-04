@@ -3,26 +3,10 @@ import { ConfigService } from '@nestjs/config';
 import * as mqtt from 'mqtt';
 import { BaseWorker } from '../worker';
 import { Cuid2Generator } from '../utility';
-import { IAuthenticatedUser } from '../primitives';
+import { MqttSystemPayload, MqttUIPayload, MqttValidatorService } from './validator/mqtt.validator.service';
 
 export type MqttStatus = 'complete' | 'failed';
 export type MqttAction = 'create' | 'update' | 'delete';
-
-export interface MqttUIPayload {
-  org_id: string;
-  user: IAuthenticatedUser | string;
-  swr_key: string;
-  action: MqttAction;
-  status: MqttStatus;
-  data?: any;
-}
-
-export interface MqttSystemPayload {
-  swr_key: string;
-  action: MqttAction;
-  status: MqttStatus;
-  data?: any;
-}
 
 @Global()
 @Injectable()
@@ -37,7 +21,6 @@ export class MqttService extends BaseWorker implements OnModuleInit {
     if (parts.length < 2) throw new Error('Invalid DD_SERVICE');
     const pfxIdx = parts.length < 3 ? 1 : 2;
     const prefix = parts[pfxIdx].length < 7 ? parts[pfxIdx] : `${parts[pfxIdx].substring(0, 2)}${parts[pfxIdx].substring(parts[pfxIdx].length - 2, parts[pfxIdx].length)}`;
-    //this.topicBase = parts.length < 3 ? `${process.env['NODE_ENV']}/${parts[1]}` : `${process.env['NODE_ENV']}/${parts[1]}/${parts[2]}`;*/
     this.iotEndpoint = process.env['IOT_ENDPOINT'] || 'a2r4jtij2021gz-ats.iot.us-east-1.amazonaws.com';
     this.clientId = new Cuid2Generator(prefix).scopedId;
   }
@@ -111,7 +94,7 @@ export class MqttService extends BaseWorker implements OnModuleInit {
   publishToUI(payload: MqttUIPayload): void {
     if (this.mqttClient) {
       if (typeof payload.user !== 'string' && payload.user['coldclimate_claims']) {
-        payload.user = payload.user.coldclimate_claims.email;
+        payload.user = payload.user['coldclimate_claims']['email'];
       }
 
       const topic = `ui/${this.config.get('NODE_ENV', 'development')}/${payload.org_id}/${payload.user}`;
@@ -126,9 +109,45 @@ export class MqttService extends BaseWorker implements OnModuleInit {
   }
 
   /**
-   * Publishes system message
+   * Publish MQTT Message
+   * @param target
    * @param payload
    */
+  publishMQTT(target: 'public' | 'cold' | 'ui', payload: MqttSystemPayload | MqttUIPayload): void {
+    try {
+      const inputs = new MqttValidatorService(target, payload);
+
+      let topic;
+
+      switch (inputs.target) {
+        case 'public':
+          topic = `system/${this.config.get('NODE_ENV', 'development')}/public`;
+          break;
+        case 'cold':
+          topic = `system/${this.config.get('NODE_ENV', 'development')}/cold`;
+          break;
+        case 'ui':
+          topic = `ui/${this.config.get('NODE_ENV', 'development')}`;
+          break;
+      }
+
+      if (this.mqttClient) {
+        this.mqttClient.publish(topic, JSON.stringify(inputs.payload));
+
+        this.logger.log(`Published to system topic: ${topic}`, inputs.payload);
+      } else {
+        this.logger.error('MQTT client is not connected');
+      }
+    } catch (e: any) {
+      this.logger.error(e.message, e);
+    }
+  }
+
+  /*/**
+   * target: 'public' | 'cold' | 'ui'
+   * Publishes system message
+   * @param payload*/
+
   publishSystemPublic(payload: MqttSystemPayload): void {
     if (this.mqttClient) {
       const topic = `system/${this.config.get('NODE_ENV', 'development')}/public`;
