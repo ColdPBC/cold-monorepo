@@ -477,7 +477,7 @@ export class SurveysService extends BaseWorker {
 
       this.metrics.increment('cold.api.surveys.update', 1, this.tags);
 
-      return this.findOne(name, user);
+      return this.findOne(definition.name, user);
     } catch (e) {
       this.setTags({ status: 'failed' });
 
