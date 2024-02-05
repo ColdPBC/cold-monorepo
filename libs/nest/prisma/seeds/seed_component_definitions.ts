@@ -2,7 +2,7 @@ import { PrismaClient } from '@prisma/client';
 import { v4 } from 'uuid';
 
 const prisma = new PrismaClient();
-// Add new form_definition row data to the seeds array
+// Add new component_definition row data to the seeds array
 const seeds: Array<{
   name: string;
   type: string;
@@ -135,6 +135,22 @@ const seeds: Array<{
           route: '/journey',
         },
         {
+          key: 'documents_key',
+          icon: {
+            name: 'ColdDocumentsIcon',
+          },
+          label: 'Documents',
+          route: '/documents',
+        },
+        {
+          key: 'compliance_key',
+          icon: {
+            name: 'ColdComplianceIcon',
+          },
+          label: 'Compliance',
+          route: '/compliance',
+        },
+        {
           key: 'actions_key',
           icon: {
             name: 'ColdActionsIcon',
@@ -190,13 +206,13 @@ const seeds: Array<{
         },
         {
           key: 'settings_key',
-          placement: 'bottom',
           icon: {
             name: 'ColdSettingsIcon',
           },
           label: 'Settings',
-          route: '/settings',
           roles: ['cold:admin', 'company:admin', 'company:owner'],
+          route: '/settings',
+          placement: 'bottom',
         },
       ],
     },
@@ -252,7 +268,7 @@ const seeds: Array<{
   },
 ];
 
-export async function seedFormDefinitions() {
+export async function seedComponentDefinitions() {
   await prisma.$connect();
 
   console.log(`Seeding component_definitions...`);
