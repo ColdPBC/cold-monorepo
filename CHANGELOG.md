@@ -1,9 +1,10 @@
-# [1.103.0-COLD-484.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.102.0...v1.103.0-COLD-484.1) (2024-02-02)
+## [1.102.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.102.0...v1.102.1) (2024-02-05)
 
 
-### Features
+### Bug Fixes
 
-* add seed components file ([6947106](https://github.com/ColdPBC/cold-monorepo/commit/6947106150da2f15e767ee216fe00f6c1abcc1c9))
+* return survey definition correctly even if name is updated ([c01ec8b](https://github.com/ColdPBC/cold-monorepo/commit/c01ec8ba1d1fa0f19cce2c9afd4b16fd84ce661a))
+* return survey definition correctly even if name is updated ([#256](https://github.com/ColdPBC/cold-monorepo/issues/256)) ([6ce3e2a](https://github.com/ColdPBC/cold-monorepo/commit/6ce3e2a8e48daafcb407662350fb0899749f6591))
 
 # [1.102.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.101.0...v1.102.0) (2024-02-01)
 
