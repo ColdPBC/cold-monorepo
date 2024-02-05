@@ -2,7 +2,7 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 console.log('ENVIRONMENT:', process.env['NODE_ENV']);
-// Add new form_definition row data to the seeds array
+
 const seeds: Array<{
   name: string;
   type: string;
