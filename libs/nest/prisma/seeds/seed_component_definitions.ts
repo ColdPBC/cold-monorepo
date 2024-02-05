@@ -109,114 +109,112 @@ const seeds: Array<{
     type: 'NAVIGATION_SIDE',
     description: 'Provides links in the application sidebar',
     definition: {
-      definition: {
-        items: [
-          {
-            key: 'home_key',
-            icon: {
-              name: 'ColdHomeIcon',
-            },
-            label: 'Home',
-            route: '/home',
+      items: [
+        {
+          key: 'home_key',
+          icon: {
+            name: 'ColdHomeIcon',
           },
-          {
-            key: 'footprint_key',
-            icon: {
-              name: 'ColdFootprintIcon',
-            },
-            label: 'Footprint',
-            route: '/footprint',
+          label: 'Home',
+          route: '/home',
+        },
+        {
+          key: 'footprint_key',
+          icon: {
+            name: 'ColdFootprintIcon',
           },
-          {
-            key: 'journey_key',
-            icon: {
-              name: 'ColdJourneyIcon',
-            },
-            label: 'Journey',
-            route: '/journey',
+          label: 'Footprint',
+          route: '/footprint',
+        },
+        {
+          key: 'journey_key',
+          icon: {
+            name: 'ColdJourneyIcon',
           },
-          {
-            key: 'documents_key',
-            icon: {
-              name: 'ColdDocumentsIcon',
-            },
-            label: 'Documents',
-            route: '/documents',
+          label: 'Journey',
+          route: '/journey',
+        },
+        {
+          key: 'documents_key',
+          icon: {
+            name: 'ColdDocumentsIcon',
           },
-          {
-            key: 'compliance_key',
-            icon: {
-              name: 'ColdComplianceIcon',
-            },
-            label: 'Compliance',
-            route: '/compliance',
+          label: 'Documents',
+          route: '/documents',
+        },
+        {
+          key: 'compliance_key',
+          icon: {
+            name: 'ColdComplianceIcon',
           },
-          {
-            key: 'actions_key',
-            icon: {
-              name: 'ColdActionsIcon',
-            },
-            items: [
-              {
-                key: 'overview_actions_key',
-                label: 'Overview',
-                route: '/actions',
-              },
-              {
-                key: 'facilities_actions_key',
-                label: 'Facilities',
-                route: '/actions/facilities',
-              },
-              {
-                key: 'travel_actions_key',
-                label: 'Travel',
-                route: '/actions/travel',
-              },
-              {
-                key: 'operations_actions_key',
-                label: 'Operations',
-                route: '/actions/operations',
-              },
-              {
-                key: 'product_actions_key',
-                label: 'Product',
-                route: '/actions/product',
-              },
-              {
-                key: 'employee_footprint_actions_key',
-                label: 'Employee Footprint',
-                route: '/actions/employee_footprint',
-              },
-              {
-                key: 'employee_activation_actions_key',
-                label: 'Employee Activation',
-                route: '/actions/employee_activation',
-              },
-              {
-                key: 'internal_alignment_actions_key',
-                label: 'Internal Alignment',
-                route: '/actions/internal_alignment',
-              },
-              {
-                key: 'community_impact_actions_key',
-                label: 'Community Impact',
-                route: '/actions/community_impact',
-              },
-            ],
-            label: 'Actions',
+          label: 'Compliance',
+          route: '/compliance',
+        },
+        {
+          key: 'actions_key',
+          icon: {
+            name: 'ColdActionsIcon',
           },
-          {
-            key: 'settings_key',
-            icon: {
-              name: 'ColdSettingsIcon',
+          items: [
+            {
+              key: 'overview_actions_key',
+              label: 'Overview',
+              route: '/actions',
             },
-            label: 'Settings',
-            roles: ['cold:admin', 'company:admin', 'company:owner'],
-            route: '/settings',
-            placement: 'bottom',
+            {
+              key: 'facilities_actions_key',
+              label: 'Facilities',
+              route: '/actions/facilities',
+            },
+            {
+              key: 'travel_actions_key',
+              label: 'Travel',
+              route: '/actions/travel',
+            },
+            {
+              key: 'operations_actions_key',
+              label: 'Operations',
+              route: '/actions/operations',
+            },
+            {
+              key: 'product_actions_key',
+              label: 'Product',
+              route: '/actions/product',
+            },
+            {
+              key: 'employee_footprint_actions_key',
+              label: 'Employee Footprint',
+              route: '/actions/employee_footprint',
+            },
+            {
+              key: 'employee_activation_actions_key',
+              label: 'Employee Activation',
+              route: '/actions/employee_activation',
+            },
+            {
+              key: 'internal_alignment_actions_key',
+              label: 'Internal Alignment',
+              route: '/actions/internal_alignment',
+            },
+            {
+              key: 'community_impact_actions_key',
+              label: 'Community Impact',
+              route: '/actions/community_impact',
+            },
+          ],
+          label: 'Actions',
+        },
+        {
+          key: 'settings_key',
+          icon: {
+            name: 'ColdSettingsIcon',
           },
-        ],
-      },
+          label: 'Settings',
+          roles: ['cold:admin', 'company:admin', 'company:owner'],
+          route: '/settings',
+          placement: 'bottom',
+        },
+      ],
     },
   },
   // header navigation definition
