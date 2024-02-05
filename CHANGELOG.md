@@ -1,3 +1,11 @@
+# [1.103.0-COLD-483-1.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.103.0-COLD-483-1.3...v1.103.0-COLD-483-1.4) (2024-02-05)
+
+
+### Bug Fixes
+
+* return survey definition correctly even if name is updated ([c01ec8b](https://github.com/ColdPBC/cold-monorepo/commit/c01ec8ba1d1fa0f19cce2c9afd4b16fd84ce661a))
+* return survey definition correctly even if name is updated ([#256](https://github.com/ColdPBC/cold-monorepo/issues/256)) ([6ce3e2a](https://github.com/ColdPBC/cold-monorepo/commit/6ce3e2a8e48daafcb407662350fb0899749f6591))
+
 ## [1.102.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.102.0...v1.102.1) (2024-02-05)
 
 
