@@ -18830,7 +18830,7 @@ __metadata:
     class-transformer: "npm:^0.5.1"
     class-validator: "npm:^0.14.0"
     clsx: "npm:^2.0.0"
-    corepack: "npm:^0.23.0"
+    corepack: "npm:^0.24.1"
     cz-conventional-changelog: "npm:^3.3.0"
     date-fns: "npm:^2.30.0"
     dd-trace: "npm:^4.22.0"
@@ -19660,16 +19660,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"corepack@npm:^0.23.0":
-  version: 0.23.0
-  resolution: "corepack@npm:0.23.0"
+"corepack@npm:^0.24.1":
+  version: 0.24.1
+  resolution: "corepack@npm:0.24.1"
   bin:
     corepack: ./dist/corepack.js
     pnpm: ./dist/pnpm.js
     pnpx: ./dist/pnpx.js
     yarn: ./dist/yarn.js
     yarnpkg: ./dist/yarnpkg.js
-  checksum: 10/b51ce487dedb774b565866b6fb1d3079d4a9e5bd77f6adfea18dd5f95feeb69ce4f9a4aea5339df5ee4cbc68cb16c853369eb01888c44238c10771847ec33e75
+  checksum: 10/a4f44b7cdb796a12280e0e59c9f4ce4a2a029accdc6cbd597cd8af2a99992219a0f742a6218f615ec0b9a2fedc29e10793fc6f4a48e2eb2ed377260ee9165fa4
   languageName: node
   linkType: hard
 
