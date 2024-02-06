@@ -179,7 +179,8 @@ function _FootprintDetailChart({ colors, subcategory_key, period, setIsEmpty }: 
         theme={darkTableTheme.table}
         onMouseLeave={() => {
           setActiveSegment(null);
-        }}>
+        }}
+        data-testid={'footprint-detail-chart-table'}>
         <Table.Head className="text-white normal-case">
           <Table.HeadCell theme={darkTableTheme.table?.head?.cell}>Category</Table.HeadCell>
           <Table.HeadCell theme={darkTableTheme.table?.head?.cell}>Breakdown</Table.HeadCell>

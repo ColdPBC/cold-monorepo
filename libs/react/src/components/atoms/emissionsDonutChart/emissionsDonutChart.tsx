@@ -76,7 +76,7 @@ export const EmissionsDonutChart = ({ variant, totalEmissions, isEmptyData, isLo
     );
   } else if (isEmptyData) {
     return (
-      <div className="relative h-[100px] w-full -my-2">
+      <div className="relative h-[100px] w-full -my-2" data-testid={'footprint-overview-chart'}>
         <svg
           className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
           xmlns="http://www.w3.org/2000/svg"
@@ -144,7 +144,7 @@ export const EmissionsDonutChart = ({ variant, totalEmissions, isEmptyData, isLo
   });
 
   return (
-    <div className="w-full">
+    <div className="w-full" data-testid={'footprint-overview-chart'}>
       <div
         className={clsx('w-full relative', {
           'h-[255px] mt-2': variant === EmissionsDonutChartVariants.horizontal,

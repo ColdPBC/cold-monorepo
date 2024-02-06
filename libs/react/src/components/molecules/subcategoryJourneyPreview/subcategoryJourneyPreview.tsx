@@ -89,7 +89,10 @@ export const SubcategoryJourneyPreview = ({ subcategory_key, category_key, cardT
   };
 
   return (
-    <Card className={twMerge('gap-0 p-4 border-bgc-accent border rounded-lg w-[310px] text-white bg-bgc-elevated', containerClassName)} glow={!!glow}>
+    <Card
+      className={twMerge('gap-0 p-4 border-bgc-accent border rounded-lg w-[310px] text-white bg-bgc-elevated', containerClassName)}
+      glow={!!glow}
+      data-testid={'subcategory-journey-preview-' + subcategory_key}>
       <div className={'flex h-[24px] w-full' + (ldFlags.showActions261 ? ' justify-between' : ' justify-start')}>
         <h4 className="font-bold text-sm">{cardTitle ?? subcategoryName}</h4>
         {getActionsLink(subcategory_key)}

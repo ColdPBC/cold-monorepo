@@ -4,13 +4,14 @@ import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { BrowserRouter } from 'react-router-dom';
 import { StoryMockProvider } from '@coldpbc/mocks';
+import { Popover } from '@coldpbc/components';
 
-const meta = {
+const meta: Meta<typeof SideBar> = {
   title: 'Organisms/Sidebar',
   component: SideBar,
   tags: ['autodocs'],
   decorators: [withKnobs],
-} satisfies Meta<typeof SideBar>;
+};
 
 export default meta;
 type Story = StoryObj<typeof meta>;

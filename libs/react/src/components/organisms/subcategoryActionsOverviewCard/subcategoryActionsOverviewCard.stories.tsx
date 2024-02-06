@@ -1,22 +1,16 @@
 import { withKnobs } from '@storybook/addon-knobs';
-import { StoryObj } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 import {
   SubcategoryActionsOverviewCard,
   SubcategoryActionsOverviewCardProps,
 } from './subcategoryActionsOverviewCard';
 import { getActionHandler, StoryMockProvider } from '@coldpbc/mocks';
 
-const meta = {
+const meta: Meta<typeof SubcategoryActionsOverviewCard> = {
   title: 'Organisms/SubcategoryActionsOverviewCard',
   component: SubcategoryActionsOverviewCard,
   tags: ['autodocs'],
   decorators: [withKnobs],
-  argTypes: {
-    variant: {
-      control: 'select',
-      options: SubcategoryActionsOverviewCard,
-    },
-  },
 };
 
 export default meta;

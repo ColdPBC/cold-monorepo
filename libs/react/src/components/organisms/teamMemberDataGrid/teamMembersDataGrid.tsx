@@ -18,16 +18,11 @@ export interface TeamMembersDataGridProps {
   selectedMemberStatusType: MemberStatusType;
 }
 
-export const _TeamMembersDataGrid = ({
-  selectedMemberStatusType,
-}: TeamMembersDataGridProps) => {
+export const _TeamMembersDataGrid = ({ selectedMemberStatusType }: TeamMembersDataGridProps) => {
   const { logError } = useColdContext();
   const auth0 = useAuth0Wrapper();
 
-  const { data, error, isLoading, mutate } = useOrgSWR(
-    ['/members', 'GET'],
-    axiosFetcher,
-  );
+  const { data, error, isLoading, mutate } = useOrgSWR(['/members', 'GET'], axiosFetcher);
 
   const filterActions = (action: TableActionType) => {
     if (auth0.user?.coldclimate_claims.roles[0] === 'company:member') {
@@ -95,9 +90,7 @@ export const _TeamMembersDataGrid = ({
             },
             body: (
               <span>
-                Are you sure you want to remove{' '}
-                <span className="font-bold">{user.name}</span> from your
-                company?
+                Are you sure you want to remove <span className="font-bold">{user.name}</span> from your company?
               </span>
             ),
             footer: {
@@ -153,9 +146,7 @@ export const _TeamMembersDataGrid = ({
           },
           apiRequests: [
             {
-              url: auth0.getOrgSpecificUrl(
-                `/roles/:roleName/members/${user.user_id}`,
-              ),
+              url: auth0.getOrgSpecificUrl(`/roles/:roleName/members/${user.user_id}`),
               method: 'PUT',
             },
           ],
@@ -174,9 +165,7 @@ export const _TeamMembersDataGrid = ({
             },
             body: (
               <span>
-                Are you sure you want to remove{' '}
-                <span className="font-bold">{user.name}</span> from your
-                company?
+                Are you sure you want to remove <span className="font-bold">{user.name}</span> from your company?
               </span>
             ),
             footer: {
@@ -232,9 +221,7 @@ export const _TeamMembersDataGrid = ({
           },
           apiRequests: [
             {
-              url: auth0.getOrgSpecificUrl(
-                `/roles/:roleName/members/${user.user_id}`,
-              ),
+              url: auth0.getOrgSpecificUrl(`/roles/:roleName/members/${user.user_id}`),
               method: 'PUT',
             },
           ],
@@ -262,33 +249,19 @@ export const _TeamMembersDataGrid = ({
 
   const transformedData = useMemo(() => {
     return orderBy(data?.members, ['email'], ['asc'])
-      .filter(
-        (user) =>
-          (user.invitee && selectedMemberStatusType === 'Invitations') ||
-          (selectedMemberStatusType === 'Members' && !user.invitee),
-      )
-      .map((user) => {
+      .filter(user => (user.invitee && selectedMemberStatusType === 'Invitations') || (selectedMemberStatusType === 'Members' && !user.invitee))
+      .map(user => {
         return {
           name: (
             <div className="flex items-center">
               <span className="mr-4">
                 <Avatar size={GlobalSizes.medium} user={user} />
               </span>
-              <span className="text-white font-bold text-sm leading-normal">
-                {user.name}
-              </span>
+              <span className="text-white font-bold text-sm leading-normal">{user.name}</span>
             </div>
           ),
-          email: (
-            <span className="text-white font-medium text-sm leading-normal">
-              {user.email}
-            </span>
-          ),
-          role: (
-            <span className="text-white font-medium text-sm leading-normal">
-              {getRole(user)}
-            </span>
-          ),
+          email: <span className="text-white font-medium text-sm leading-normal">{user.email}</span>,
+          role: <span className="text-white font-medium text-sm leading-normal">{getRole(user)}</span>,
           actions: getActions(user).filter(filterActions),
         };
       });
@@ -312,31 +285,19 @@ export const _TeamMembersDataGrid = ({
     );
   }
 
-  if (
-    selectedMemberStatusType === 'Invitations' &&
-    transformedData.length === 0
-  ) {
-    return (
-      <div className="flex items-center justify-center p-4 pb-8 w-full">
-        No outstanding invitations
-      </div>
-    );
+  if (selectedMemberStatusType === 'Invitations' && transformedData.length === 0) {
+    return <div className="flex items-center justify-center p-4 pb-8 w-full">No outstanding invitations</div>;
   }
 
   if (data && auth0.user) {
-    return (
-      <Datagrid
-        items={transformedData}
-        definitionURL={'/components/team_member_table'}
-      />
-    );
+    return <Datagrid items={transformedData} definitionURL={'/components/team_member_table'} data-testid={'team-members-datagrid'} />;
   } else {
     return <></>;
   }
 };
 
 export const TeamMembersDataGrid = withErrorBoundary(_TeamMembersDataGrid, {
-  FallbackComponent: (props) => <ErrorFallback {...props} />,
+  FallbackComponent: props => <ErrorFallback {...props} />,
   onError: (error, info) => {
     console.error('Error occurred in TeamMembersDataGrid: ', error);
   },

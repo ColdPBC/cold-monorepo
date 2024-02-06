@@ -143,31 +143,23 @@ export const TableActions = (props: TableActionsProps) => {
       <Dropdown
         inline={true}
         label={
-          <TableActionButton
-            onClick={() => {
-              setShown(!shown);
-            }}
-          />
+          <div data-testid={'table-actions'}>
+            <TableActionButton
+              onClick={() => {
+                setShown(!shown);
+              }}
+            />
+          </div>
         }
         arrowIcon={false}
-        theme={flowbiteThemeOverride.dropdown}
-      >
+        theme={flowbiteThemeOverride.dropdown}>
         {actions.map((action, index, array) => {
           return (
             <div key={`${index}`}>
-              <Dropdown.Item
-                theme={flowbiteThemeOverride.dropdown.floating.item}
-                className="p-0 w-full"
-              >
-                <TableAction
-                  action={action}
-                  setActionsShown={setShown}
-                  openActionModal={setActionModal}
-                />
+              <Dropdown.Item theme={flowbiteThemeOverride.dropdown.floating.item} className="p-0 w-full">
+                <TableAction action={action} setActionsShown={setShown} openActionModal={setActionModal} />
               </Dropdown.Item>
-              {index + 1 < actions.length && (
-                <div className="bg-bgc-accent h-[1px] w-full" />
-              )}
+              {index + 1 < actions.length && <div className="bg-bgc-accent h-[1px] w-full" />}
             </div>
           );
         })}

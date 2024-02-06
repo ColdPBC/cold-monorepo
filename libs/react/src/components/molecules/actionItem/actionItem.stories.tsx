@@ -1,11 +1,11 @@
 import { ActionItem, ActionItemProps } from './actionItem';
 import { withKnobs } from '@storybook/addon-knobs';
-import { StoryObj } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 import { StoryMockProvider } from '@coldpbc/mocks';
 import { ActionItemVariants } from '@coldpbc/enums';
 import { getActionMock } from '@coldpbc/mocks';
 
-const meta = {
+const meta: Meta<typeof ActionItem> = {
   title: 'Molecules/ActionItem',
   component: ActionItem,
   tags: ['autodocs'],

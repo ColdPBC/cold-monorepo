@@ -71,11 +71,11 @@ const _NextSteps = () => {
     return null;
   } else {
     return (
-      <Card data-testid="next-steps" title={'Next Steps'} className={'max-w-[668px]'}>
+      <Card data-testid="next-steps-card" title={'Next Steps'} className={'max-w-[668px]'}>
         <div className={'space-y-6 w-full'}>
           {nextSteps?.map(nextStep => {
             return (
-              <div key={nextStep.title}>
+              <div key={nextStep.title} data-testid={`next-step-card`}>
                 <NextStepCard
                   nextStep={nextStep}
                   onNextStepClick={() => {

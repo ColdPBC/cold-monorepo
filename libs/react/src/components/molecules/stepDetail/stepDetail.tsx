@@ -30,7 +30,7 @@ export const StepDetail = ({ step, handleStepUpdate }: StepDetailProps) => {
   };
 
   return (
-    <Disclosure as="div">
+    <Disclosure as="div" data-testid={`step-detail`}>
       {({ open }) => (
         <div
           className={

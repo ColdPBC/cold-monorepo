@@ -1,12 +1,11 @@
 import React from 'react';
-import { AppContent, BaseButton, Card, Datagrid, ErrorFallback, Spinner } from '@coldpbc/components';
-import { ButtonTypes, ErrorType, GlobalSizes } from '@coldpbc/enums';
+import { AppContent, Card, Datagrid, ErrorFallback, Spinner } from '@coldpbc/components';
+import { ErrorType } from '@coldpbc/enums';
 import { isAxiosError } from 'axios';
-import { useAddToastMessage, useAuth0Wrapper, useColdContext, useOrgSWR } from '@coldpbc/hooks';
-import { axiosFetcher } from '@coldpbc/fetchers';
+import { useAddToastMessage, useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
+import { axiosFetcher, openAIFetcher } from '@coldpbc/fetchers';
 import { ToastMessage } from '@coldpbc/interfaces';
 import useSWR from 'swr';
-import { openAIFetcher } from '../../../fetchers/openAIFetcher';
 import { withErrorBoundary } from 'react-error-boundary';
 import { isArray } from 'lodash';
 
@@ -93,12 +92,12 @@ export const _DocumentUpload = () => {
 
   return (
     <AppContent title="Documents">
-      <Card title={'Documents List'} className={'w-full px-4'}>
-        <input id="file" type="file" onChange={handleFileChange} />
+      <Card title={'Documents List'} className={'w-full px-4'} data-testid={'documents-list-card'}>
+        <input id="file" type="file" onChange={handleFileChange} aria-label={'Document Upload'} />
         {data.length > 0 ? (
-          <Datagrid definitionURL={'/components/documents_list_table'} items={data} />
+          <Datagrid definitionURL={'/components/documents_list_table'} items={data} data-testid={'documents-list-table'} />
         ) : (
-          <Card glow={false} className="flex items-center justify-center w-full bg-bgc-elevate border-1 border-bgc-elevated">
+          <Card glow={false} className="flex items-center justify-center w-full bg-bgc-elevate border-1 border-bgc-elevated" data-testid={'documents-list-card-no-documents'}>
             No documents uploaded
           </Card>
         )}

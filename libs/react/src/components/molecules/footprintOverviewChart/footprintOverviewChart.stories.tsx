@@ -1,17 +1,15 @@
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
-import {
-  FootprintOverviewChart,
-} from './footprintOverviewChart';
+import { FootprintOverviewChart } from './footprintOverviewChart';
 import { getFootprintHandler, StoryMockProvider } from '../../../';
-import { EmissionsDonutChartVariants } from "../../atoms/emissionsDonutChart/emissionsDonutChart";
+import { EmissionsDonutChartVariants } from '../../atoms/emissionsDonutChart/emissionsDonutChart';
 
-const meta = {
+const meta: Meta<typeof FootprintOverviewChart> = {
   title: 'Molecules/FootprintOverviewChart',
   component: FootprintOverviewChart,
   tags: ['autodocs'],
   decorators: [withKnobs],
-} satisfies Meta<typeof FootprintOverviewChart>;
+};
 
 export default meta;
 type Story = StoryObj<typeof meta>;

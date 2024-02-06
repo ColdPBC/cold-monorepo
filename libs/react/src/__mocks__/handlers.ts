@@ -18,7 +18,7 @@ import { auth0UserMock } from './userMock';
 import { getNewsDefault } from './newsMock';
 import { getActionMock, getActionsMock } from './action';
 import { v4 as uuidv4 } from 'uuid';
-import { getComplianceMock, getComplianceMockByName } from './complianceMock';
+import { getComplianceMock, getComplianceMockByName, getOrganizationComplianceMock, getOrganizationComplianceMockByName } from './complianceMock';
 import { getDocumentsListTableMock } from './componentMock';
 import { getAllFilesMock } from './filesMock';
 
@@ -235,22 +235,18 @@ export const handlers = [
     return res(ctx.json(getComplianceMock()));
   }),
 
-  rest.get(getApiUrl('/organizations/:orgId/compliance_definitions'), (req, res, ctx) => {
-    const { name } = req.params;
-    return res(ctx.json(getComplianceMock()));
+  rest.get(getApiUrl('/compliance_definitions/organization/:orgId'), (req, res, ctx) => {
+    return res(ctx.json(getOrganizationComplianceMock()));
   }),
 
-  rest.post(getApiUrl('/organizations/:orgId/compliance_definitions'), async (req, res, ctx) => {
-    const body = await req.json();
-    const { name } = req.params;
-    const { orgId, complianceId } = body;
-    return res(ctx.json(getComplianceMock()[0]));
-  }),
-
-  rest.get(getApiUrl('/organizations/:orgId/compliance_definitions/:name'), (req, res, ctx) => {
-    const { name } = req.params;
-    const compliance = getComplianceMockByName(name as string);
-    return res(ctx.json(compliance));
+  rest.post(getApiUrl('/compliance_definitions/organization/:orgId'), (req, res, ctx) => {
+    const { name, orgId } = req.params;
+    return res(
+      ctx.json({
+        ...getOrganizationComplianceMockByName(name as string),
+        compliance_definition: undefined,
+      }),
+    );
   }),
 
   rest.get(getApiUrl('/components/documents_list_table'), (req, res, ctx) => {
