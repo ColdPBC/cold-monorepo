@@ -46,10 +46,10 @@ export function getOrganizationComplianceMock(): OrgCompliance[] {
   ];
 }
 
-export function getOrganizationComplianceMockByName(name: string) {
+export function getOrganizationComplianceMockByName(name: string): OrgCompliance {
   const orgCompliances = getOrganizationComplianceMock();
   const compliance = getComplianceMockByName(name);
-  const orgCompliance = orgCompliances.find(c => c.compliance_definition.id === compliance.id);
+  const orgCompliance = orgCompliances.find(c => c.compliance_definition.id === compliance.id) || orgCompliances[0];
   return {
     ...orgCompliance,
     compliance_definition: compliance,
