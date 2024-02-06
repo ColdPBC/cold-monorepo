@@ -79,7 +79,7 @@ jobs:
 
       - name: 🩻 Run Manual API E2E Tests
         if: github.event.inputs.api_url
-        run: API_SERVER_URL=${{ github.event.inputs.api_url }} DD_SITE=us5.datadoghq.com DD_API_KEY=${{secrets.DD_API_KEY}} DD_CIVISIBILITY_AGENTLESS_ENABLED=true NODE_OPTIONS="-r $(pwd)/.pnp.cjs -r dd-trace/ci/init" DD_ENV=test DD_SERVICE=cold-api-e2e yarn dlx nx run cold-api-e2e:e2e:ci
+        run: API_SERVER_URL=${{ github.event.inputs.api_url }} DD_SITE=us5.datadoghq.com DD_API_KEY=${{secrets.DD_API_KEY}} DD_CIVISIBILITY_AGENTLESS_ENABLED=true DD_ENV=test DD_SERVICE=cold-api-e2e yarn dlx nx run cold-api-e2e:e2e:ci
 
       - name: 🩻 Run Deployed API E2E Tests
         if: github.event.deployment_status.state == 'success'
