@@ -4,9 +4,18 @@ export function getComplianceMock(): Compliance[] {
   return [
     {
       id: '3412521521355',
+      name: 'bcorp',
+      title: 'B Corp',
+      logo_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/Certified_B_Corporation.svg',
+      surveys: ['rei_mfg_survey', 'rei_ghg_survey', 'rei_pkg_survey'],
+      created_at: '2020-03-03T23:50:31.000Z',
+      updated_at: '2020-03-03T23:50:31.000Z',
+    },
+    {
+      id: '3412521521355',
       name: 'rei',
       title: 'REI',
-      logo_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/ReiLogo.png',
+      logo_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/rei-logo-1.svg',
       surveys: ['rei_mfg_survey', 'rei_ghg_survey', 'rei_pkg_survey'],
       created_at: '2020-03-03T23:50:31.000Z',
       updated_at: '2020-03-03T23:50:31.000Z',
@@ -37,7 +46,7 @@ export function getOrganizationComplianceMock(): OrgCompliance[] {
   ];
 }
 
-export function getOrganizationComplianceMockByName(name: string): any {
+export function getOrganizationComplianceMockByName(name: string) {
   const orgCompliances = getOrganizationComplianceMock();
   const compliance = getComplianceMockByName(name);
   const orgCompliance = orgCompliances.find(c => c.compliance_definition.id === compliance.id);
