@@ -65,7 +65,7 @@ jobs:
         run: yarn
 
       - name: 🌈 Generate Prisma Client
-        if: github.event.deployment_status.state == 'success'
+        if: github.event.deployment_status.state == 'success' || github.event.inputs.api_url
         run: yarn dlx nx run cold-nest-library:prisma-generate
 
       - name: 🏗 build development
