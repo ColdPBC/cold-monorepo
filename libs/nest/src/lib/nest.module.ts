@@ -16,7 +16,7 @@ import { InterceptorModule, OrgUserInterceptor } from './interceptors';
 import { BaseWorker, WorkerLogger } from './worker';
 import { ColdRabbitModule, ColdRabbitService } from './rabbit'; //import { CronModule, CronService } from './crons';
 import { DatadogTraceModule } from 'nestjs-ddtrace';
-import { S3Module, S3Service } from './aws';
+import { S3Module, S3Service, SecretsModule, SecretsService } from './aws';
 import { RedisServiceConfig } from './utility';
 import { MqttModule } from './mqtt';
 
@@ -29,11 +29,14 @@ export class NestModule {
     const config = new ConfigService();
     const darkly = new DarklyService(config);
     await darkly.onModuleInit();
+    const ss = new SecretsService();
 
     const parts = config.getOrThrow('DD_SERVICE')?.split('-');
 
     const type = parts.length > 2 ? parts[1] : 'core';
     const project = parts.length > 2 ? parts[2] : parts[1];
+
+    const secrets = await ss.getSecrets(type);
 
     /**
      * Imports Array
@@ -41,7 +44,9 @@ export class NestModule {
     const imports: any = [
       ConfigModule.forRoot({
         isGlobal: true,
+        load: [() => secrets],
       }),
+      SecretsModule,
       BullModule.forRoot(await new RedisServiceConfig().getQueueConfig(type, project)),
       HttpModule,
       MqttModule,

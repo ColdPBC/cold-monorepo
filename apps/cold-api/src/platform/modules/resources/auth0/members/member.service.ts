@@ -24,7 +24,7 @@ export class MemberService extends BaseWorker {
    * @param bpc
    */
   async getMemberByEmail(email: string, req: any, bpc?: boolean, force?: boolean) {
-    const { user, url } = req;
+    const { user } = req;
     if (!force && !user.isColdAdmin && user.coldclimate_claims.email !== email) {
       throw new UnauthorizedException(`You are not authorized to get this user: ${email}`);
     }

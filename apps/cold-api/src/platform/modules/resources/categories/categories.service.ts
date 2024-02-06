@@ -137,8 +137,6 @@ export class CategoriesService extends BaseWorker {
    * @param orgId
    */
   async findByName(req: any, bypassCache?: boolean, orgId?: string, name?: string): Promise<ZodCategoryDefinitionItemDto | undefined> {
-    const { user } = req;
-
     if (isEmpty(name) || name == ':name') {
       throw new BadRequestException(`Name is required!`);
     }
