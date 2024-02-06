@@ -1,3 +1,10 @@
+# [1.94.0-COLD-472.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.93.0...v1.94.0-COLD-472.1) (2024-02-06)
+
+
+### Features
+
+* get access token only when the organization and user is authenticated ([67d687d](https://github.com/ColdPBC/cold-monorepo/commit/67d687da99c835d19aabfb6035ab3b1db2387fa8))
+
 # [1.93.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.92.1...v1.93.0) (2024-01-22)
 
 
