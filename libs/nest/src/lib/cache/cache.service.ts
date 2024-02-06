@@ -6,7 +6,7 @@ import { filter } from 'lodash';
 import { BaseWorker } from '../worker';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Store } from 'cache-manager';
-import { DarklyService } from '../darkly';
+import { ConfigService } from '@nestjs/config';
 
 @Global()
 @Span()
@@ -16,10 +16,10 @@ export class CacheService extends BaseWorker {
   defaultTTL: number;
   initialized: boolean = false;
 
-  constructor(@Inject(CACHE_MANAGER) private readonly cacheManager: RedisCache, private readonly darkly: DarklyService) {
+  constructor(@Inject(CACHE_MANAGER) private readonly cacheManager: RedisCache, private readonly config: ConfigService) {
     super('CacheService');
     this.store = this.cacheManager.store;
-    this.defaultTTL = process.env['CACHE_TTL'] ? parseInt(process.env['CACHE_TTL']) : 1000 * 60 * 60;
+    this.defaultTTL = parseInt(this.config.get('CACHE_TTL', `${1000 * 60 * 60}`));
 
     this.init();
   }

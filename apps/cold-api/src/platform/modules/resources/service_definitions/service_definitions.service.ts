@@ -1,13 +1,13 @@
 import { Get, Injectable } from '@nestjs/common';
 import { Span } from 'nestjs-ddtrace';
-import { AuthenticatedUser, BaseWorker, CacheService, ColdRabbitService, Cuid2Generator, PrismaService, Roles } from '@coldpbc/nest';
+import { BaseWorker, CacheService, ColdRabbitService, Cuid2Generator, IAuthenticatedUser, MqttService, PrismaService, Roles } from '@coldpbc/nest';
 import { integration_service_type } from '@prisma/client';
 import { allRoles } from '../_global/global.params';
 
 @Span()
 @Injectable()
 export class ServiceDefinitionsService extends BaseWorker {
-  constructor(private prisma: PrismaService, private readonly cache: CacheService, private rabbit: ColdRabbitService) {
+  constructor(private prisma: PrismaService, private readonly cache: CacheService, private rabbit: ColdRabbitService, private readonly mqtt: MqttService) {
     super('ServiceDefinitionsService');
   }
 
@@ -80,7 +80,7 @@ export class ServiceDefinitionsService extends BaseWorker {
    * @returns {Promise<any>} - A promise that resolves to the service.
    * @throws {Error} - If an error occurs during retrieval.
    */
-  async getService(user: AuthenticatedUser, name: string): Promise<any> {
+  async getService(user: IAuthenticatedUser, name: string): Promise<any> {
     try {
       const service = await this.prisma.service_definitions.findUnique({
         where: {
@@ -108,7 +108,7 @@ export class ServiceDefinitionsService extends BaseWorker {
    */
   @Get('services')
   @Roles(...allRoles)
-  async getServices(user: AuthenticatedUser): Promise<any> {
+  async getServices(user: IAuthenticatedUser): Promise<any> {
     try {
       const services = await this.prisma.service_definitions.findMany({
         include: {

@@ -24,7 +24,7 @@ export class SurveysRabbitService extends BaseWorker {
 
         const { organization, user, survey } = parsed;
 
-        return await this.surveys.submitResults(survey.name, survey, user, organization.id);
+        return await this.surveys.submitResults(survey.name, survey, { user }, organization.id);
       }
       default: {
         const e = new Error(`Received unknown RPC event: ${msg.event}`);
@@ -47,9 +47,9 @@ export class SurveysRabbitService extends BaseWorker {
 
         const parsed: any = typeof msg.data == 'string' ? JSON.parse(msg.data) : msg.data;
 
-        const { organization, user, survey } = parsed.data;
+        const { organization, user, survey } = parsed;
 
-        await this.surveys.submitResults(survey.name, survey, user, organization.id);
+        await this.surveys.submitResults(survey.name, survey, { user }, organization.id);
         break;
       }
       default: {

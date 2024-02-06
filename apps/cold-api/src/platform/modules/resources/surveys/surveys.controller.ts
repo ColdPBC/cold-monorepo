@@ -4,9 +4,9 @@ import { survey_types } from '@prisma/client';
 import { Span } from 'nestjs-ddtrace';
 import { ResourceValidationPipe } from '../../../pipes/resource.pipe';
 import {
-  AuthenticatedUser,
   BaseWorker,
   HttpExceptionFilter,
+  IAuthenticatedUser,
   JwtAuthGuard,
   Role,
   Roles,
@@ -44,11 +44,11 @@ export class SurveysController extends BaseWorker {
       body: any;
       headers: any;
       query: any;
-      user: AuthenticatedUser;
+      user: IAuthenticatedUser;
     },
     @Body(new ResourceValidationPipe(SurveyResponseSchema, 'POST')) createSurvey: SurveyDefinitionsEntity,
   ) {
-    return this.surveyService.create(createSurvey, req.user);
+    return this.surveyService.create(createSurvey, req);
   }
 
   @Get('surveys')
@@ -78,18 +78,18 @@ export class SurveysController extends BaseWorker {
       body: any;
       headers: any;
       query: any;
-      user: AuthenticatedUser;
+      user: IAuthenticatedUser;
     },
     @Query('type') type: survey_types,
     @Query('name') name: string,
     @Query('impersonateOrg') orgId?: string,
     @Query('bpc') bpc?: boolean,
   ) {
-    const response = await this.surveyService.findAll(req.user, { name: name, type: type }, bpc, orgId);
+    const response = await this.surveyService.findAll(req, { name: name, type: type }, bpc, orgId);
 
     return response;
 
-    //return this.surveyService.findAll(req.user, bpc, orgId);
+    //return this.surveyService.findAll(req, bpc, orgId);
   }
 
   /**
@@ -123,7 +123,7 @@ export class SurveysController extends BaseWorker {
       body: any;
       headers: any;
       query: any;
-      user: AuthenticatedUser;
+      user: IAuthenticatedUser;
     },
     @Query('type') type: survey_types,
     @Query('name') name: string,
@@ -132,11 +132,11 @@ export class SurveysController extends BaseWorker {
     if (!name && !type) {
       // return new HttpException('Must provide either name or type query parameters', 400);
     }
-    const response = await this.surveyService.findAll(req.user, { name, type }, bpc, orgId);
+    const response = await this.surveyService.findAll(req, { name, type }, bpc, orgId);
 
     return response;
 
-    //return this.surveyService.findAll(req.user, bpc, orgId);
+    //return this.surveyService.findAll(req, bpc, orgId);
   }
 
   @ApiTags('Surveys')
@@ -161,10 +161,10 @@ export class SurveysController extends BaseWorker {
       body: any;
       headers: any;
       query: any;
-      user: AuthenticatedUser;
+      user: IAuthenticatedUser;
     },
   ) {
-    const response = await this.surveyService.findByType(req.user, type);
+    const response = await this.surveyService.findByType(req, type);
     return response;
   }
 
@@ -197,12 +197,12 @@ export class SurveysController extends BaseWorker {
       body: any;
       headers: any;
       query: any;
-      user: AuthenticatedUser;
+      user: IAuthenticatedUser;
     },
     @Query('impersonateOrg') orgId?: string,
     @Query('bpc') bpc?: boolean,
   ) {
-    const response = await this.surveyService.findOne(name, req.user, bpc, orgId);
+    const response = await this.surveyService.findOne(name, req, bpc, orgId);
 
     return response;
   }
@@ -229,11 +229,11 @@ export class SurveysController extends BaseWorker {
       body: any;
       headers: any;
       query: any;
-      user: AuthenticatedUser;
+      user: IAuthenticatedUser;
     },
     @Query('bpc') bpc?: boolean,
   ) {
-    const response = await this.surveyService.findOne(name, req.user, bpc, orgId);
+    const response = await this.surveyService.findOne(name, req, bpc, orgId);
     return response;
   }
 
@@ -255,10 +255,10 @@ export class SurveysController extends BaseWorker {
     @Body(new ResourceValidationPipe(SurveyResponseSchema, 'PATCH')) updateSurvey: Partial<ZodCategoryResponseDto>,
     @Req()
     req: {
-      user: AuthenticatedUser;
+      user: IAuthenticatedUser;
     },
   ) {
-    return this.surveyService.update(name, updateSurvey as UpdateSurveyDefinitionsDto, req.user);
+    return this.surveyService.update(name, updateSurvey as UpdateSurveyDefinitionsDto, req);
   }
 
   @ApiOperation({
@@ -282,11 +282,11 @@ export class SurveysController extends BaseWorker {
       body: any;
       headers: any;
       query: any;
-      user: AuthenticatedUser;
+      user: IAuthenticatedUser;
     },
     @Query('impersonateOrg') orgId?: string,
   ) {
-    return this.surveyService.submitResults(name, updateComponentDefinitionDto, req.user, orgId);
+    return this.surveyService.submitResults(name, updateComponentDefinitionDto, req, orgId);
   }
 
   @Put('organizations/:orgId/surveys/:name')
@@ -320,10 +320,10 @@ export class SurveysController extends BaseWorker {
       body: any;
       headers: any;
       query: any;
-      user: AuthenticatedUser;
+      user: IAuthenticatedUser;
     },
   ) {
-    return this.surveyService.submitResults(name, updateComponentDefinitionDto, req.user, orgId);
+    return this.surveyService.submitResults(name, updateComponentDefinitionDto, req, orgId);
   }
 
   @ApiTags('Surveys')
@@ -343,9 +343,9 @@ export class SurveysController extends BaseWorker {
       body: any;
       headers: any;
       query: any;
-      user: AuthenticatedUser;
+      user: IAuthenticatedUser;
     },
   ) {
-    return this.surveyService.remove(name, req.user);
+    return this.surveyService.remove(name, req);
   }
 }

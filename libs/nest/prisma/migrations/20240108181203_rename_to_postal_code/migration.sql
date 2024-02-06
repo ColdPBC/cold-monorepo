@@ -1,7 +1,7 @@
 /*
   Warnings:
 
-  - You are about to drop the column `zip` on the `organization_locations` table. All the data in the column will be lost.
+  - You are about to drop the column `zip` on the `locations` table. All the data in the column will be lost.
 
 */
 -- AlterTable

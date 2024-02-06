@@ -99,39 +99,39 @@ describe('Survey Service', () => {
   });
 
   it('should return survey by type', async () => {
-    const result = await service.findByType(authenticatedUserExample, generateSurveyTypesMock());
+    const result = await service.findByType({ user: authenticatedUserExample }, generateSurveyTypesMock());
     expect(result).toEqual(surveys);
   });
 
   it('should create a new survey', async () => {
-    const result = await service.create(origin, authenticatedUserExample);
+    const result = await service.create(origin, { user: authenticatedUserExample });
     expect(result).toEqual(origin);
   });
 
   it('should update a survey', async () => {
-    const result = await service.update(updated.name, updated, authenticatedUserExample);
+    const result = await service.update(updated.name, updated, { user: authenticatedUserExample });
     //expect(result).toEqual(updated);
   });
 
   it('should delete a survey', async () => {
-    await service.remove(origin.name, authenticatedUserExample);
+    await service.remove(origin.name, { user: authenticatedUserExample });
     expect(prismaService.survey_definitions.delete).toHaveBeenCalledWith({ where: { name: origin.name } });
   });
 
   it('should throw an error when trying to get a survey that does not exist', async () => {
     jest.spyOn(prismaService.survey_definitions, 'findUnique').mockResolvedValue(null);
-    await expect(service.findOne(origin.name, authenticatedUserExample)).rejects.toThrow();
+    await expect(service.findOne(origin.name, { user: authenticatedUserExample })).rejects.toThrow();
   });
 
   it('should throw an error when trying to update a survey that does not exist', async () => {
     jest.spyOn(prismaService.survey_definitions, 'findUnique').mockResolvedValue(null);
-    await expect(service.update(origin.name, generateSurveyMock(), authenticatedUserExample)).rejects.toThrow();
+    await expect(service.update(origin.name, generateSurveyMock(), { user: authenticatedUserExample })).rejects.toThrow();
   });
 
   it('should throw an error when trying to delete a survey that does not exist', async () => {
     jest.spyOn(prismaService.survey_definitions, 'delete').mockImplementation(() => {
       throw new Error('Record to delete does not exist.');
     });
-    await expect(service.remove(origin.name, authenticatedUserExample)).rejects.toThrow();
+    await expect(service.remove(origin.name, { user: authenticatedUserExample })).rejects.toThrow();
   });
 });

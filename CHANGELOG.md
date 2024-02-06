@@ -1,10 +1,54 @@
-# [1.103.0-COLD-483-1.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.103.0-COLD-483-1.3...v1.103.0-COLD-483-1.4) (2024-02-05)
+## [1.104.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.104.1...v1.104.2) (2024-02-06)
+
+
+### Bug Fixes
+* broken import statements ([02e94e6](https://github.com/ColdPBC/cold-monorepo/commit/02e94e6a41f1726b46455d430c5ade29f64d4d2f))
+
+## [1.104.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.104.0...v1.104.1) (2024-02-06)
 
 
 ### Bug Fixes
 
-* return survey definition correctly even if name is updated ([c01ec8b](https://github.com/ColdPBC/cold-monorepo/commit/c01ec8ba1d1fa0f19cce2c9afd4b16fd84ce661a))
-* return survey definition correctly even if name is updated ([#256](https://github.com/ColdPBC/cold-monorepo/issues/256)) ([6ce3e2a](https://github.com/ColdPBC/cold-monorepo/commit/6ce3e2a8e48daafcb407662350fb0899749f6591))
+* switch to configService ([bc6d6b6](https://github.com/ColdPBC/cold-monorepo/commit/bc6d6b67494ea77ba11ad2c32a7a393aa54d6673))
+
+# [1.104.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.103.0...v1.104.0) (2024-02-06)
+
+
+### Bug Fixes
+
+* add module exports ([2eee8fb](https://github.com/ColdPBC/cold-monorepo/commit/2eee8fb1cd2316f2aa6a1b60b82a1da618dc22d1))
+* clean up import ([8863b82](https://github.com/ColdPBC/cold-monorepo/commit/8863b820c3e2c987f52bc1dcd602165a2fe6470d))
+* clean up location schema ([7babfa5](https://github.com/ColdPBC/cold-monorepo/commit/7babfa54a8c9508f019596741613c8c39f50348d))
+* cleanup code, move prompts to class ([cfe4120](https://github.com/ColdPBC/cold-monorepo/commit/cfe4120dac3a01dc00933d6c626ce3ad23f42a55))
+* get config settings from LD ([4a91b8c](https://github.com/ColdPBC/cold-monorepo/commit/4a91b8cc3b0935e66d52b8558eeda322fb90ec93))
+* implement file service ([1d5574b](https://github.com/ColdPBC/cold-monorepo/commit/1d5574bca6acadc64b281aaeecc968d67836a505))
+* implement re-usable service to broadcast rabbit to all integrations ([be21f09](https://github.com/ColdPBC/cold-monorepo/commit/be21f09c50c18fa03d620a9646e5c1a30d613897))
+* issue that would block redis jobs ([22f4f6c](https://github.com/ColdPBC/cold-monorepo/commit/22f4f6c65575562c084744abb791e18eea7b5015))
+* issue that would block redis jobs ([8ff1e74](https://github.com/ColdPBC/cold-monorepo/commit/8ff1e745a75c619e1ea21322438a3009615a7ebb))
+* make mqtt global ([378e4f3](https://github.com/ColdPBC/cold-monorepo/commit/378e4f30f884e94a2b819837638f0c94c6513bd4))
+* moved prompts to class ([bca4d28](https://github.com/ColdPBC/cold-monorepo/commit/bca4d28043ea4e6641ea821851a474a7f8470104))
+* nack() messages when event is not supported by service ([66bbd5c](https://github.com/ColdPBC/cold-monorepo/commit/66bbd5c8e6ca81e2f3a6fbf2b8313d3a882f19d4))
+* null reference error ([11c8d0b](https://github.com/ColdPBC/cold-monorepo/commit/11c8d0bd6a4a1342177163fdf5bb25418876a459))
+* re-organize organization modules ([d7f8076](https://github.com/ColdPBC/cold-monorepo/commit/d7f8076343d0e489c586aae68d75f3837516dd9a))
+* return instance to support non DI implementations ([41e64c1](https://github.com/ColdPBC/cold-monorepo/commit/41e64c1be7fcb2a73bb17fa0108d7e642197b05e))
+
+
+### Features
+
+* add secrets manager module ([2c45d05](https://github.com/ColdPBC/cold-monorepo/commit/2c45d0574851bdeebfdab780275dde56cb7817d1))
+* add secrets manager module ([bcf2a94](https://github.com/ColdPBC/cold-monorepo/commit/bcf2a941cc6374092aecda681094a16af7d26425))
+* implement MQTT on all CRUD updates across all resources ([6a58144](https://github.com/ColdPBC/cold-monorepo/commit/6a5814444f3d53a41764b6db11c42717b0ff727d))
+
+# [1.103.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.102.1...v1.103.0) (2024-02-05)
+
+
+### Features
+
+* add logging for seeding components ([2831821](https://github.com/ColdPBC/cold-monorepo/commit/283182136ebfdd0f5e37537135df85aa4021606e))
+* add seed components file ([6947106](https://github.com/ColdPBC/cold-monorepo/commit/6947106150da2f15e767ee216fe00f6c1abcc1c9))
+* code improvement ([3e6821c](https://github.com/ColdPBC/cold-monorepo/commit/3e6821cc82847b6572ccfc04ae8abd82ef1d6187))
+* correct component definition data ([2fc08fc](https://github.com/ColdPBC/cold-monorepo/commit/2fc08fca5928a7680fc69904b294f565004f9a6c))
+* reuse and rename seed form defitnitions to component definitions ([9d50887](https://github.com/ColdPBC/cold-monorepo/commit/9d508875c571ef3bfa8052679b2b6ee41ae37d6d))
 
 ## [1.102.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.102.0...v1.102.1) (2024-02-05)
 
@@ -17,20 +61,16 @@
 # [1.102.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.101.0...v1.102.0) (2024-02-01)
 
 
-### Features
+# [1.97.0-cold-475.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.96.1-cold-475.4...v1.97.0-cold-475.1) (2024-02-02)
 
-* add compliance sidebar item to filter based on ld flag ([f517acd](https://github.com/ColdPBC/cold-monorepo/commit/f517acd59b62cdd27f69feafb5bf736be2bab847))
-* add subscription to system/env/cold for cold admins ([0690be2](https://github.com/ColdPBC/cold-monorepo/commit/0690be21ca999c4db86adc98fab54b595585d97a))
-* add system/env to MQTT subscription ([ba51e9c](https://github.com/ColdPBC/cold-monorepo/commit/ba51e9cc8948e90b93ecde48830b96a3a626eb7e))
-* added using subscribe funtion to system/env/cold subscription ([463b748](https://github.com/ColdPBC/cold-monorepo/commit/463b748810b6514429fd9f49db1c1c65736fd17a))
-* correct complete to needing review for compliance overview ([b4256a3](https://github.com/ColdPBC/cold-monorepo/commit/b4256a3438880110070b2e2801ca0474714171c0))
-* dryifyed mqqtt topic subscription ([7cfbb90](https://github.com/ColdPBC/cold-monorepo/commit/7cfbb90e8afddee20ed575ad0d5dd2732c0c1b37))
-* removed hardcoded REI compliance references and other changes ([3072e77](https://github.com/ColdPBC/cold-monorepo/commit/3072e7765ba50d51bac359312ac2346b4c85123b))
-* removed using shade color to display UI ([cf6b720](https://github.com/ColdPBC/cold-monorepo/commit/cf6b720a9f7c81fe2816f2d20a0e9af75999497b))
-* subscribe mqtt to /orgid/# topic ([2135330](https://github.com/ColdPBC/cold-monorepo/commit/2135330ae5d38725a06d1eb5aa5c51dd2780c67a))
-* update to yarn lock ([bd771db](https://github.com/ColdPBC/cold-monorepo/commit/bd771dbae77e61d5f87045094988f23f30285376))
 
-# [1.102.0-COLD-480.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.101.0...v1.102.0-COLD-480.1) (2024-01-30)
+### Bug Fixes
+
+* get config settings from LD ([4a91b8c](https://github.com/ColdPBC/cold-monorepo/commit/4a91b8cc3b0935e66d52b8558eeda322fb90ec93))
+* implement re-usable service to broadcast rabbit to all integrations ([be21f09](https://github.com/ColdPBC/cold-monorepo/commit/be21f09c50c18fa03d620a9646e5c1a30d613897))
+* nack() messages when event is not supported by service ([66bbd5c](https://github.com/ColdPBC/cold-monorepo/commit/66bbd5c8e6ca81e2f3a6fbf2b8313d3a882f19d4))
+* null reference error ([11c8d0b](https://github.com/ColdPBC/cold-monorepo/commit/11c8d0bd6a4a1342177163fdf5bb25418876a459))
+* return instance to support non DI implementations ([41e64c1](https://github.com/ColdPBC/cold-monorepo/commit/41e64c1be7fcb2a73bb17fa0108d7e642197b05e))
 
 
 ### Features
@@ -53,6 +93,7 @@
 * change user-facing journey modules to gap assessments for demo-ing ([#247](https://github.com/ColdPBC/cold-monorepo/issues/247)) ([a23d514](https://github.com/ColdPBC/cold-monorepo/commit/a23d514eeb484eb86d4acff7f8f71231763e6e66))
 
 # [1.99.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.98.0...v1.99.0) (2024-01-26)
+
 
 
 ### Bug Fixes
@@ -84,6 +125,8 @@
 
 ### Bug Fixes
 
+* issue that would block redis jobs ([22f4f6c](https://github.com/ColdPBC/cold-monorepo/commit/22f4f6c65575562c084744abb791e18eea7b5015))
+* issue that would block redis jobs ([8ff1e74](https://github.com/ColdPBC/cold-monorepo/commit/8ff1e745a75c619e1ea21322438a3009615a7ebb))
 * openAI improvements ([317bdf4](https://github.com/ColdPBC/cold-monorepo/commit/317bdf47b15f0c3c7c59a22a02eb950f69ffaae0))
 
 # [1.96.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.95.0...v1.96.0) (2024-01-23)
