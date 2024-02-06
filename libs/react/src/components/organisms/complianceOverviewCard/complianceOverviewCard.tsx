@@ -1,5 +1,5 @@
 import React from 'react';
-import { BaseButton, Card, Spinner, ProgressBar } from '@coldpbc/components';
+import { BaseButton, Card, ProgressBar, Spinner } from '@coldpbc/components';
 import { GlobalSizes } from '@coldpbc/enums';
 import { HexColors } from '@coldpbc/themes';
 import { ComplianceProgress, IButtonProps } from '@coldpbc/interfaces';
@@ -134,7 +134,7 @@ export const ComplianceOverviewCard = (props: ComplianceOverviewCardProps) => {
         <div className={'flex gap-x-4 items-center justify-center'}>
           {logo_url && (
             <div className={'w-[60px] h-[60px] flex justify-center items-center bg-white rounded-2xl'}>
-              <img src={`${logo_url}`} alt="compliance" />
+              <img src={`${logo_url}`} className={'max-w-[55px] max-h-[55px]'} alt="compliance" />
             </div>
           )}
           <div className="text-h4 flex-1" data-testid={'compliance-overview-card-title'}>
