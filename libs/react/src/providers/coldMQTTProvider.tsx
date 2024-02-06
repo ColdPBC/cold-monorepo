@@ -1,7 +1,6 @@
-import React, { PropsWithChildren, useEffect, useRef, useState } from 'react';
+import React, { PropsWithChildren, useEffect, useRef } from 'react';
 import mqtt from 'mqtt';
 import { useAuth0Wrapper } from '@coldpbc/hooks';
-import ColdMQTTContext from '../context/coldMQTTContext';
 import { useSWRConfig } from 'swr';
 
 export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
@@ -13,26 +12,25 @@ export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
   useEffect(() => {
     const getToken = async () => {
       const audience = import.meta.env.VITE_COLD_API_AUDIENCE as string;
-      const token = await getAccessTokenSilently({
+      return await getAccessTokenSilently({
         authorizationParams: {
           audience: audience,
           scope: 'offline_access email profile openid',
         },
       });
-      return token;
     };
 
     const connectToIOT = async () => {
-      const auth0_domain = import.meta.env.VITE_AUTH0_DOMAIN;
-      const authorizer = 'mqtt_authorizer';
-      const org_id = orgId;
-      const token = await getToken();
-      const env = import.meta.env.VITE_DD_ENV;
-      const url = `wss://a2r4jtij2021gz-ats.iot.us-east-1.amazonaws.com:443/mqtt?x-auth0-domain=${auth0_domain}&x-amz-customauthorizer-name=${authorizer}&x-cold-org=${org_id}&x-cold-env=${env}&token=${token}`;
-      const account_id = user?.email;
-      const subscription_topic = `ui/${env}/${org_id}/${account_id}`;
-
       if (user && orgId) {
+        const auth0_domain = import.meta.env.VITE_AUTH0_DOMAIN;
+        const authorizer = 'mqtt_authorizer';
+        const org_id = orgId;
+        const token = await getToken();
+        const env = import.meta.env.VITE_DD_ENV;
+        const url = `wss://a2r4jtij2021gz-ats.iot.us-east-1.amazonaws.com:443/mqtt?x-auth0-domain=${auth0_domain}&x-amz-customauthorizer-name=${authorizer}&x-cold-org=${org_id}&x-cold-env=${env}&token=${token}`;
+        const account_id = user?.email;
+        const subscription_topic = `ui/${env}/${org_id}/${account_id}`;
+
         client.current = mqtt.connect(url, { clientId: `${org_id}-${Math.floor(Math.random() * 1000)}` });
 
         client.current.on('connect', () => {
