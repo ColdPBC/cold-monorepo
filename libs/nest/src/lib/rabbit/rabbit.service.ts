@@ -148,14 +148,15 @@ export class ColdRabbitService extends BaseWorker implements OnModuleInit {
   }
 
   static getRabbitConfig(): RabbitMQConfig {
+    const config = new ConfigService();
     return {
-      uri: process.env['RABBIT_MQ_URL'] || 'amqp://localhost:5672',
+      uri: config.get('RABBIT_MQ_URL', 'amqp://localhost:5672'),
       connectionManagerOptions: {
         heartbeatIntervalInSeconds: 30,
         reconnectTimeInSeconds: 3,
         connectionOptions: {
           clientProperties: {
-            connection_name: `${process.env['DD_SERVICE']}`,
+            connection_name: `${config.get('DD_SERVICE')}`,
           },
         },
       },

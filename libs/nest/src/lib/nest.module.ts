@@ -36,7 +36,18 @@ export class NestModule {
     const type = parts.length > 2 ? parts[1] : 'core';
     const project = parts.length > 2 ? parts[2] : parts[1];
 
+    const configSecrets: any = [];
+
     const secrets = await ss.getSecrets(type);
+
+    configSecrets.push(() => secrets);
+
+    if (type && project) {
+      const serviceSecrets = await ss.getSecrets(`${type}/${project}`);
+      if (serviceSecrets) {
+        configSecrets.push(() => serviceSecrets);
+      }
+    }
 
     /**
      * Imports Array
@@ -44,7 +55,7 @@ export class NestModule {
     const imports: any = [
       ConfigModule.forRoot({
         isGlobal: true,
-        load: [() => secrets],
+        load: configSecrets,
       }),
       SecretsModule,
       BullModule.forRoot(await new RedisServiceConfig().getQueueConfig(type, project)),

@@ -3,6 +3,7 @@ import { Injectable, NotFoundException, OnModuleInit, UnprocessableEntityExcepti
 import OpenAI from 'openai';
 import { organizations, service_definitions } from '@prisma/client';
 import { Tools } from './assistant/tools/tools';
+import { ConfigService } from '@nestjs/config';
 
 export type OpenAIAssistant = {
   model: string;
@@ -19,9 +20,12 @@ export class AppService extends BaseWorker implements OnModuleInit {
   topic: string = '';
   tools = new Tools();
 
-  constructor(private readonly prisma: PrismaService, private rabbit: ColdRabbitService) {
+  constructor(private readonly config: ConfigService, private readonly prisma: PrismaService, private rabbit: ColdRabbitService) {
     super(AppService.name);
-    this.client = new OpenAI({ organization: process.env['OPENAI_ORG_ID'], apiKey: process.env['OPENAI_API_KEY'] });
+    this.client = new OpenAI({
+      organization: config.getOrThrow('OPENAI_ORG_ID'),
+      apiKey: this.config.getOrThrow('OPENAI_API_KEY'),
+    });
   }
 
   async onModuleInit(): Promise<void> {

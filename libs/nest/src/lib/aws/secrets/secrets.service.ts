@@ -19,8 +19,9 @@ export class SecretsService extends BaseWorker {
   }
 
   async getSecrets(name: string): Promise<any> {
+    const secretName = `${this.config.getOrThrow('NODE_ENV')}/${name}`;
     try {
-      const result: GetSecretValueResponse = await this.client.getSecretValue({ SecretId: `${this.config.getOrThrow('NODE_ENV')}/${name}` }).promise();
+      const result: GetSecretValueResponse = await this.client.getSecretValue({ SecretId: secretName }).promise();
       let secret: any = {};
       if (result.SecretString) {
         secret = JSON.parse(result.SecretString);
@@ -30,10 +31,12 @@ export class SecretsService extends BaseWorker {
         this.logger.info(`${key} loaded`);
       });
 
+      this.logger.info(`Secrets loaded for ${secretName}`);
+
       return secret;
     } catch (err: any) {
-      this.logger.error(err.message, err);
-      throw err;
+      this.logger.error(`${err.message}: ${secretName}`, err);
+      //throw err;
     }
   }
 }

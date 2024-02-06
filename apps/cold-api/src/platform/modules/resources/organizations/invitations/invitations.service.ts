@@ -5,6 +5,7 @@ import { RoleService } from '../../auth0/roles/role.service';
 import { OrganizationService } from '../organization.service';
 import { HttpService } from '@nestjs/axios';
 import { find, merge, omit } from 'lodash';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class InvitationsService extends BaseWorker implements OnModuleInit {
@@ -12,6 +13,7 @@ export class InvitationsService extends BaseWorker implements OnModuleInit {
   test_orgs: Array<{ id: string; name: string; display_name: string }>;
 
   constructor(
+    private readonly config: ConfigService,
     private readonly roleService: RoleService,
     private readonly orgs: OrganizationService,
     private readonly cache: CacheService,
@@ -119,7 +121,7 @@ export class InvitationsService extends BaseWorker implements OnModuleInit {
           inviter: {
             name: inviter_name,
           },
-          client_id: process.env['AUTH0_UI_CLIENT_ID'],
+          client_id: config.get('AUTH0_UI_CLIENT_ID'),
           invitee: {
             email: user_email,
           },

@@ -6,6 +6,7 @@ import { AppService } from '../app.service';
 import { AssistantService } from './assistant.service';
 import { BaseWorker } from '@coldpbc/nest';
 import { FileService } from './files/file.service';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 @Processor('openai')
@@ -13,11 +14,16 @@ export class AssistantConsumer extends BaseWorker {
   client: OpenAI;
   started: Date;
 
-  constructor(private readonly appService: AppService, private readonly assistant: AssistantService, private readonly fileService: FileService) {
+  constructor(
+    private readonly config: ConfigService,
+    private readonly appService: AppService,
+    private readonly assistant: AssistantService,
+    private readonly fileService: FileService,
+  ) {
     super(AssistantConsumer.name);
     this.client = new OpenAI({
-      organization: process.env['OPENAI_ORG_ID'],
-      apiKey: process.env['OPENAI_API_KEY'],
+      organization: this.config.getOrThrow('OPENAI_ORG_ID'),
+      apiKey: this.config.getOrThrow('OPENAI_API_KEY'),
     });
   }
 

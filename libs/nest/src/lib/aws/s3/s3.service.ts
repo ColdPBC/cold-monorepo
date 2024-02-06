@@ -17,10 +17,10 @@ export class S3Service extends BaseWorker {
     super(S3Service.name);
     this.client = new AWS.S3({
       credentials: {
-        accessKeyId: config.getOrThrow('COLD_AWS_ACCESS_KEY_ID'),
-        secretAccessKey: config.getOrThrow('COLD_AWS_SECRET_ACCESS_KEY'),
+        accessKeyId: config.getOrThrow('AWS_ACCESS_KEY_ID'),
+        secretAccessKey: config.getOrThrow('AWS_SECRET_ACCESS_KEY'),
       },
-      region: config.get('AWS_REGION', 'us-east-1'),
+      region: config.getOrThrow('AWS_REGION', 'us-east-1'),
     });
   }
 
@@ -28,8 +28,8 @@ export class S3Service extends BaseWorker {
     const config = new ConfigService();
     return {
       credentials: {
-        accessKeyId: config.getOrThrow('COLD_AWS_ACCESS_KEY_ID'),
-        secretAccessKey: config.getOrThrow('COLD_AWS_SECRET_ACCESS_KEY'),
+        accessKeyId: config.getOrThrow('AWS_ACCESS_KEY_ID'),
+        secretAccessKey: config.getOrThrow('AWS_SECRET_ACCESS_KEY'),
       },
       region: config.get('AWS_REGION', 'us-east-1'),
     };
@@ -101,8 +101,8 @@ export class S3Service extends BaseWorker {
     try {
       const s3 = new AWS.S3({
         credentials: {
-          accessKeyId: this.config.getOrThrow('COLD_AWS_ACCESS_KEY_ID'),
-          secretAccessKey: this.config.getOrThrow('COLD_AWS_SECRET_ACCESS_KEY'),
+          accessKeyId: this.config.getOrThrow('AWS_ACCESS_KEY_ID'),
+          secretAccessKey: this.config.getOrThrow('AWS_SECRET_ACCESS_KEY'),
         },
         region: this.config.get('AWS_REGION', 'us-east-1'),
       });

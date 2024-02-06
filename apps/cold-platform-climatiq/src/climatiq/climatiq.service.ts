@@ -20,7 +20,7 @@ export class ClimatiqService extends BaseWorker {
   axiosConfig: AxiosRequestConfig;
   energyPayload: EnergyPayload;
 
-  constructor(private readonly axios: HttpService, private readonly prisma: PrismaService) {
+  constructor(private readonly config: ConfigService, private readonly axios: HttpService, private readonly prisma: PrismaService) {
     super(ClimatiqService.name);
 
     this.axiosConfig = {
@@ -29,7 +29,7 @@ export class ClimatiqService extends BaseWorker {
       },
     };
 
-    this.axiosConfig.headers.Authorization = `Bearer ${process.env.CLIMATIQ_API_KEY}`;
+    this.axiosConfig.headers.Authorization = `Bearer ${this.config.getOrThrow('CLIMATIQ_API_KEY')}`;
 
     this.energyPayload = {
       emission_factor: {

@@ -6,11 +6,12 @@ import { BayouController } from './bayou.controller';
 import { BullModule } from '@nestjs/bull';
 import { RabbitService } from './app.rabbit';
 import { BayouQueueProcessor } from './outbound.processor';
-import * as process from 'process';
+import { ConfigService } from '@nestjs/config';
 
 @Module({})
 export class AppModule {
   static async forRootAsync() {
+    const config = new ConfigService();
     return {
       module: AppModule,
       imports: [
@@ -19,7 +20,7 @@ export class AppModule {
         }),
         await NestModule.forRootAsync(1),
         BullModule.registerQueue({
-          name: process.env?.DD_SERVICE?.split('-')[2],
+          name: config.get('DD_SERVICE')?.split('-')[2],
         }),
       ],
       controllers: [BayouController],

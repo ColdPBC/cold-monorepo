@@ -20,7 +20,7 @@ export class BayouService extends BaseWorker implements OnModuleInit {
     private prisma: PrismaService,
     private config: ConfigService,
     private rabbit: ColdRabbitService,
-    @InjectQueue(process.env?.DD_SERVICE?.split('-')[2]) private queue: Queue,
+    @InjectQueue(process.env.DD_SERVICE?.split('-')[2]) private queue: Queue,
   ) {
     super(BayouService.name);
     const authHeader = `Basic ${Buffer.from(`${this.config.getOrThrow('BAYOU_API_KEY')}:`).toString('base64')}`;
@@ -209,7 +209,7 @@ export class BayouService extends BaseWorker implements OnModuleInit {
 
     const service = await this.prisma.service_definitions.findUnique({
       where: {
-        name: process.env['DD_SERVICE'],
+        name: this.config.getOrThrow('DD_SERVICE'),
       },
     });
 

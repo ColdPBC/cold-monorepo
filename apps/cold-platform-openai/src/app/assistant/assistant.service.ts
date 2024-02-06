@@ -18,7 +18,10 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
 
   constructor(private readonly config: ConfigService, private readonly prisma: PrismaService, private rabbit: ColdRabbitService) {
     super(AssistantService.name);
-    this.client = new OpenAI({ organization: process.env['OPENAI_ORG_ID'], apiKey: process.env['OPENAI_API_KEY'] });
+    this.client = new OpenAI({
+      organization: this.config.getOrThrow('OPENAI_ORG_ID'),
+      apiKey: this.config.getOrThrow('OPENAI_API_KEY'),
+    });
   }
 
   async onModuleInit(): Promise<void> {

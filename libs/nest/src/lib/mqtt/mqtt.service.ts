@@ -21,7 +21,7 @@ export class MqttService extends BaseWorker implements OnModuleInit {
     if (parts.length < 2) throw new Error('Invalid DD_SERVICE');
     const pfxIdx = parts.length < 3 ? 1 : 2;
     const prefix = parts[pfxIdx].length < 7 ? parts[pfxIdx] : `${parts[pfxIdx].substring(0, 2)}${parts[pfxIdx].substring(parts[pfxIdx].length - 2, parts[pfxIdx].length)}`;
-    this.iotEndpoint = process.env['IOT_ENDPOINT'] || 'a2r4jtij2021gz-ats.iot.us-east-1.amazonaws.com';
+    this.iotEndpoint = this.config.get('IOT_ENDPOINT', 'a2r4jtij2021gz-ats.iot.us-east-1.amazonaws.com');
     this.clientId = new Cuid2Generator(prefix).scopedId;
   }
 
