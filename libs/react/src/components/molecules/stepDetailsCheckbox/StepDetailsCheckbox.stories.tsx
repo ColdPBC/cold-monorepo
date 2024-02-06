@@ -5,12 +5,12 @@ import { StepDetailsCheckbox } from './stepDetailsCheckbox';
 import React from 'react';
 import { getActionMock } from '@coldpbc/mocks';
 
-const meta = {
+const meta: Meta<typeof StepDetailsCheckbox> = {
   title: 'Molecules/StepDetailsCheckbox',
   component: StepDetailsCheckbox,
   tags: ['autodocs'],
   decorators: [withKnobs],
-} satisfies Meta<typeof StepDetailsCheckbox>;
+};
 
 export default meta;
 type Story = StoryObj<typeof meta>;

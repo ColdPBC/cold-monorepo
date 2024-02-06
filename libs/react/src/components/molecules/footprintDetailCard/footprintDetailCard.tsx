@@ -65,7 +65,7 @@ function _FootprintDetailCard(props: PropsWithChildren<FootprintDetailCardProps>
   };
 
   return (
-    <Card title={subcategoryName} ctas={getCtas(subcategoryName)} className={className}>
+    <Card title={subcategoryName} ctas={getCtas(subcategoryName)} className={className} data-testid={`footprint-detail-card-${props.subcategory_key}`}>
       <div className="flex items-center justify-center self-stretch flex-col">
         <FootprintDetailChart {...rest} setIsEmpty={setIsEmpty} />
       </div>

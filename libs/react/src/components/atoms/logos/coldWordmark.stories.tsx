@@ -1,9 +1,9 @@
 import { ColdWordmark } from './coldWordmark';
 import { withKnobs } from '@storybook/addon-knobs';
-import { StoryObj } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 import { HexColors } from '../../../themes/cold_theme';
 
-const meta = {
+const meta: Meta<typeof ColdWordmark> = {
   title: 'Atoms/Logos/ColdWordmark',
   component: ColdWordmark,
   tags: ['autodocs'],

@@ -4,13 +4,13 @@ import { Meta, StoryObj } from '@storybook/react';
 import { getSurveyFormDataPayload } from '@coldpbc/mocks';
 import { SurveyRightNav, SurveyRightNavProps } from './surveyRightNav';
 
-const meta = {
+const meta: Meta<typeof SurveyRightNav> = {
   title: 'Organisms/SurveyRightNav',
   component: SurveyRightNav,
   tags: ['autodocs'],
   decorators: [withKnobs],
   argTypes: {},
-} satisfies Meta<typeof SurveyRightNav>;
+};
 
 export default meta;
 type Story = StoryObj<typeof meta>;

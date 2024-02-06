@@ -3,13 +3,13 @@ import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { Header } from './header';
 
-const meta = {
+const meta: Meta<typeof Header> = {
   title: 'Organisms/Header',
   component: Header,
   tags: ['autodocs'],
   decorators: [withKnobs],
   argTypes: {},
-} satisfies Meta<typeof Header>;
+};
 
 export default meta;
 type Story = StoryObj<typeof meta>;

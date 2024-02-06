@@ -3,7 +3,6 @@ import { ActionItemVariants, ErrorType } from '@coldpbc/enums';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { ActionPayload } from '@coldpbc/interfaces';
 import { useNavigate } from 'react-router-dom';
-import useSWR from 'swr';
 import { ActionItem } from '../actionItem';
 import { Card } from '../card';
 import { DateTime } from 'luxon';
@@ -26,7 +25,7 @@ const _NextActionsCard = () => {
   }
 
   return (
-    <Card glow title="Your Next Actions" ctas={[{ text: 'Learn More', action: () => navigate('/actions') }]}>
+    <Card glow title="Your Next Actions" ctas={[{ text: 'Learn More', action: () => navigate('/actions') }]} data-testid={'next-actions-card'}>
       {data
         ?.filter(actionPayload => actionPayload.action.steps.some(step => !step.complete))
         .slice(0, 3)

@@ -1,10 +1,11 @@
 import { withKnobs } from '@storybook/addon-knobs';
-import { StoryObj } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 import { DefaultHexColors } from '../../../enums/colors';
 import { ColdIcon } from './coldIcon';
 import { IconNames } from '../../../enums/iconNames';
+import { FormInput } from '@coldpbc/components';
 
-const meta = {
+const meta: Meta<typeof ColdIcon> = {
   title: 'Atoms/Icons/ColdIcon',
   component: ColdIcon,
   tags: ['autodocs'],

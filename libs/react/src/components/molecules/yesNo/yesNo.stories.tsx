@@ -3,12 +3,12 @@ import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { YesNo } from './yesNo';
 
-const meta = {
+const meta: Meta<typeof YesNo> = {
   title: 'Molecules/YesNo',
   component: YesNo,
   tags: ['autodocs'],
   decorators: [withKnobs],
-} satisfies Meta<typeof YesNo>;
+};
 
 export default meta;
 type Story = StoryObj<typeof meta>;

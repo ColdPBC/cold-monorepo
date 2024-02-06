@@ -1,5 +1,5 @@
 import { Outlet, useSearchParams } from 'react-router-dom';
-import { ActionDetail, Survey } from '../../pages';
+import { ActionDetail, Survey } from '@coldpbc/components';
 
 export const Interceptor = () => {
   const [params] = useSearchParams();

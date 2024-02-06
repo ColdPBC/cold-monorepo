@@ -3,13 +3,14 @@ import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { JourneyOverviewCard } from './journeyOverviewCard';
 import { getCategoriesHandler, StoryMockProvider } from '@coldpbc/mocks';
+import { FormSection } from '@coldpbc/components';
 
-const meta = {
+const meta: Meta<typeof JourneyOverviewCard> = {
   title: 'Molecules/JourneyOverviewCard',
   component: JourneyOverviewCard,
   tags: ['autodocs'],
   decorators: [withKnobs],
-} satisfies Meta<typeof JourneyOverviewCard>;
+};
 
 export default meta;
 type Story = StoryObj<typeof meta>;

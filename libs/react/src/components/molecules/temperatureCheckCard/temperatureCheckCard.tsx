@@ -1,7 +1,6 @@
 import { Card } from '../card';
 import { TemperatureCheckItem } from '../temperatureCheckItem';
 import { axiosFetcher } from '@coldpbc/fetchers';
-import useSWR from 'swr';
 import { forEach, some } from 'lodash';
 import { GlowPosition } from '../temperatureCheckItem';
 import { ColdFootprintIcon } from '../../atoms';
@@ -102,12 +101,8 @@ const _TemperatureCheckCard = ({ stats, cardTitle, cornerGlow }: Props) => {
   };
 
   return (
-    <Card title={cardTitle}>
-      <div className="grid gap-2 grid-cols-2 w-full relative">
-        {stats.map((stat, index) => (
-          <div key={'temperature_check_item_' + index}>{statComponentMapping[stat](getGlowPositionForIndex(index))}</div>
-        ))}
-      </div>
+    <Card title={cardTitle} data-testid={'temperature-check-card'}>
+      <div className="grid gap-2 grid-cols-2 w-full relative">{stats.map((stat, index) => statComponentMapping[stat](getGlowPositionForIndex(index)))}</div>
     </Card>
   );
 };

@@ -4,10 +4,9 @@ import { axiosFetcher } from '@coldpbc/fetchers';
 import { Card, SubcategoryJourneyPreview } from '../../molecules';
 import { ActionPayload } from '@coldpbc/interfaces';
 import { withErrorBoundary } from 'react-error-boundary';
-import { ErrorFallback } from '../../application/errors/errorFallback';
+import { ErrorFallback } from '../../application';
 import { useEffect } from 'react';
-import { useOrgSWR } from '../../../hooks/useOrgSWR';
-import { useColdContext } from '@coldpbc/hooks';
+import { useColdContext, useOrgSWR } from '@coldpbc/hooks';
 import { ErrorType } from '@coldpbc/enums';
 
 const _SubcategoryActionsList = () => {
@@ -64,7 +63,7 @@ const _SubcategoryActionsList = () => {
     <AppContent title={subcategoryName}>
       <CenterColumnContent>
         {subcategoryData?.subcategory_description && (
-          <Card glow>
+          <Card glow data-testid={'subcategory-description'}>
             <div className={'text-body text-tc-primary'}>{subcategoryData?.subcategory_description}</div>
           </Card>
         )}
@@ -72,7 +71,7 @@ const _SubcategoryActionsList = () => {
           ?.filter(actionPayload => actionPayload.action.subcategory === name)
           .map(actionPayload => {
             return (
-              <div key={actionPayload.id}>
+              <div key={actionPayload.id} data-testid={'subcategory-action-detail-card'}>
                 <SubcategoryActionDetailsCard actionPayload={actionPayload} />
               </div>
             );

@@ -1,18 +1,10 @@
-import {
-  EmissionsDonutChart,
-  EmissionsDonutChartVariants,
-  SubCategoryTotal,
-} from '../../atoms/emissionsDonutChart/emissionsDonutChart';
+import { EmissionsDonutChart, EmissionsDonutChartVariants, SubCategoryTotal } from '../../atoms/emissionsDonutChart/emissionsDonutChart';
 import { Card } from '../card';
 import useSWR from 'swr';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { useEffect, useState } from 'react';
 import { ChartData } from 'chart.js';
-import {
-  footprintSubcategoryColors,
-  getSchemeForColor,
-  HexColors,
-} from '@coldpbc/themes';
+import { footprintSubcategoryColors, getSchemeForColor, HexColors } from '@coldpbc/themes';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application/errors/errorFallback';
 import { useOrgSWR } from '../../../hooks/useOrgSWR';
@@ -28,11 +20,7 @@ interface Props {
 
 const gapStylingConstant = 100;
 
-const _SubcategoryFootprintCard = ({
-  variant = EmissionsDonutChartVariants.vertical,
-  period,
-  subcategory_key,
-}: Props) => {
+const _SubcategoryFootprintCard = ({ variant = EmissionsDonutChartVariants.vertical, period, subcategory_key }: Props) => {
   const [chartData, setChartData] = useState<ChartData<'doughnut'>>({
     datasets: [
       {
@@ -42,19 +30,12 @@ const _SubcategoryFootprintCard = ({
   });
 
   const [totalFootprint, setTotalFootprint] = useState(0);
-  const [subcategoryTotals, setSubcategoryTotals] = useState<
-    SubCategoryTotal[]
-  >([]);
+  const [subcategoryTotals, setSubcategoryTotals] = useState<SubCategoryTotal[]>([]);
 
-  const { data, error, isLoading } = useOrgSWR<any>(
-    ['/categories/company_decarbonization', 'GET'],
-    axiosFetcher,
-  );
+  const { data, error, isLoading } = useOrgSWR<any>(['/categories/company_decarbonization', 'GET'], axiosFetcher);
   const { logError } = useColdContext();
 
-  const colors = getSchemeForColor(
-    HexColors[footprintSubcategoryColors[subcategory_key]],
-  );
+  const colors = getSchemeForColor(HexColors[footprintSubcategoryColors[subcategory_key]]);
 
   if (error) {
     logError(error, ErrorType.SWRError);
@@ -66,7 +47,7 @@ const _SubcategoryFootprintCard = ({
   const isEmpty =
     !isLoading &&
     (!subcategoryData ||
-      !Object.keys(subcategoryData.activities).some((activityKey) => {
+      !Object.keys(subcategoryData.activities).some(activityKey => {
         const activity = subcategoryData.activities[activityKey];
 
         return activity.footprint && activity.footprint.value !== null;
@@ -84,31 +65,25 @@ const _SubcategoryFootprintCard = ({
     let newTotalFootprint = 0;
 
     // Transform chart data
-    Object.keys(data?.subcategories[subcategory_key].activities ?? {}).forEach(
-      (activityKey: any, index) => {
-        const activity =
-          data?.subcategories[subcategory_key].activities[activityKey];
-        const activityFootprint: number =
-          activity.footprint?.[period]?.value ?? 0;
+    Object.keys(data?.subcategories[subcategory_key].activities ?? {}).forEach((activityKey: any, index) => {
+      const activity = data?.subcategories[subcategory_key].activities[activityKey];
+      const activityFootprint: number = activity.footprint?.[period]?.value ?? 0;
 
-        if (activityFootprint > 0) {
-          newTotalFootprint += activityFootprint;
-          newSubcategoryTotals.push({
-            value: activityFootprint,
-            color: colors[index],
-            name: activity.activity_name,
-            subcategoryKey: subcategory_key,
-          });
-        }
-      },
-    );
+      if (activityFootprint > 0) {
+        newTotalFootprint += activityFootprint;
+        newSubcategoryTotals.push({
+          value: activityFootprint,
+          color: colors[index],
+          name: activity.activity_name,
+          subcategoryKey: subcategory_key,
+        });
+      }
+    });
 
     // Set spacer width
     const spacerValue = newTotalFootprint / gapStylingConstant;
 
-    newSubcategoryTotals = newSubcategoryTotals.sort(
-      (a, b) => b.value - a.value,
-    );
+    newSubcategoryTotals = newSubcategoryTotals.sort((a, b) => b.value - a.value);
 
     newSubcategoryTotals.forEach((sT, index) => {
       // Add percent of total footprint to each category
@@ -153,7 +128,7 @@ const _SubcategoryFootprintCard = ({
   const subcategoryName = subcategoryData?.subcategory_name;
 
   return (
-    <Card title={`${period} ${subcategoryName} Footprint`}>
+    <Card title={`${period} ${subcategoryName} Footprint`} data-testid={`subcategory-footprint-card-${subcategory_key}`}>
       <EmissionsDonutChart
         variant={variant}
         isEmptyData={isEmpty}
@@ -168,12 +143,9 @@ const _SubcategoryFootprintCard = ({
   );
 };
 
-export const SubcategoryFootprintCard = withErrorBoundary(
-  _SubcategoryFootprintCard,
-  {
-    FallbackComponent: (props) => <ErrorFallback {...props} />,
-    onError: (error, info) => {
-      console.error('Error occurred in SubcategoryFootprintCard: ', error);
-    },
+export const SubcategoryFootprintCard = withErrorBoundary(_SubcategoryFootprintCard, {
+  FallbackComponent: props => <ErrorFallback {...props} />,
+  onError: (error, info) => {
+    console.error('Error occurred in SubcategoryFootprintCard: ', error);
   },
-);
+});

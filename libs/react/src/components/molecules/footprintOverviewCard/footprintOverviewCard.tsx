@@ -22,27 +22,18 @@ export interface FootprintOverviewCardProps {
 
 const PERIOD = 2022;
 
-function _FootprintOverviewCard(
-  props: PropsWithChildren<FootprintOverviewCardProps>,
-) {
+function _FootprintOverviewCard(props: PropsWithChildren<FootprintOverviewCardProps>) {
   const navigate = useNavigate();
 
   // Get footprint data from SWR
-  const { data, isLoading, error } = useOrgSWR<any>(
-    ['/categories/company_decarbonization', 'GET'],
-    axiosFetcher,
-  );
+  const { data, isLoading, error } = useOrgSWR<any>(['/categories/company_decarbonization', 'GET'], axiosFetcher);
 
-  const surveyResponse = useOrgSWR<SurveyPayloadType>(
-    [`/surveys/footprint_overview`, 'GET'],
-    axiosFetcher,
-  );
+  const surveyResponse = useOrgSWR<SurveyPayloadType>([`/surveys/footprint_overview`, 'GET'], axiosFetcher);
 
   const { logError } = useColdContext();
 
   if (surveyResponse.error || error) {
-    if (surveyResponse.error)
-      logError(surveyResponse.error, ErrorType.SWRError);
+    if (surveyResponse.error) logError(surveyResponse.error, ErrorType.SWRError);
     if (error) logError(error, ErrorType.SWRError);
     return null;
   }
@@ -51,26 +42,13 @@ function _FootprintOverviewCard(
   // To do this, wrap all useSWR in custom wrappers like, useGetFootprint()
   const isEmptyFootprintData =
     !isLoading &&
-    !some(data.subcategories, (subcategory: any) =>
-      some(
-        subcategory.activities,
-        (activity: any) =>
-          activity.footprint && activity.footprint?.[PERIOD]?.value !== null,
-      ),
-    );
+    !some(data.subcategories, (subcategory: any) => some(subcategory.activities, (activity: any) => activity.footprint && activity.footprint?.[PERIOD]?.value !== null));
 
   let cardProps: CardProps = {};
   if (!props.headerless) {
     cardProps = {
-      title:
-        props.chartVariant === EmissionsDonutChartVariants.vertical &&
-        isEmptyFootprintData
-          ? 'Footprint Breakdown'
-          : `${PERIOD} Company Footprint`,
-      ctas:
-        props.chartVariant === EmissionsDonutChartVariants.horizontal
-          ? [{ text: 'Learn More', action: () => navigate('/footprint') }]
-          : [],
+      title: props.chartVariant === EmissionsDonutChartVariants.vertical && isEmptyFootprintData ? 'Footprint Breakdown' : `${PERIOD} Company Footprint`,
+      ctas: props.chartVariant === EmissionsDonutChartVariants.horizontal ? [{ text: 'Learn More', action: () => navigate('/footprint') }] : [],
     };
   }
 
@@ -79,44 +57,36 @@ function _FootprintOverviewCard(
   if (isLoading) return null;
 
   return (
-    <Card {...cardProps}>
+    <Card {...cardProps} data-testid={'footprint-overview-card'}>
       <div className={'flex flex-col items-start justify-center w-full'}>
-        <FootprintOverviewChart
-          variant={props.chartVariant ?? EmissionsDonutChartVariants.horizontal}
-          period={PERIOD}
-        />
-        {isEmptyFootprintData &&
-          props.chartVariant === EmissionsDonutChartVariants.horizontal && (
-            <div className="m-auto table w-1">
-              <h4 className="text-h4 text-center whitespace-nowrap m-4">
-                {isSurveyComplete
-                  ? 'We are reviewing your data'
-                  : 'We need more data to show your footprint'}
-              </h4>
-              <p className="text-center text-sm leading-normal">
-                {isSurveyComplete
-                  ? "We'll be in touch as soon as your initial footprint results are available."
-                  : 'Please fill out the Footprint Overview survey using the link below to calculate your initial footprint.'}
-              </p>
-              {!isSurveyComplete && (
-                <div className="mt-4 flex justify-center">
-                  <BaseButton
-                    onClick={() => {
-                      navigate('?surveyName=footprint_overview');
-                    }}
-                    label={'Initial Footprint Survey'}
-                  />
-                </div>
-              )}
-            </div>
-          )}
+        <FootprintOverviewChart variant={props.chartVariant ?? EmissionsDonutChartVariants.horizontal} period={PERIOD} />
+        {isEmptyFootprintData && props.chartVariant === EmissionsDonutChartVariants.horizontal && (
+          <div className="m-auto table w-1">
+            <h4 className="text-h4 text-center whitespace-nowrap m-4">{isSurveyComplete ? 'We are reviewing your data' : 'We need more data to show your footprint'}</h4>
+            <p className="text-center text-sm leading-normal">
+              {isSurveyComplete
+                ? "We'll be in touch as soon as your initial footprint results are available."
+                : 'Please fill out the Footprint Overview survey using the link below to calculate your initial footprint.'}
+            </p>
+            {!isSurveyComplete && (
+              <div className="mt-4 flex justify-center">
+                <BaseButton
+                  onClick={() => {
+                    navigate('?surveyName=footprint_overview');
+                  }}
+                  label={'Initial Footprint Survey'}
+                />
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </Card>
   );
 }
 
 export const FootprintOverviewCard = withErrorBoundary(_FootprintOverviewCard, {
-  FallbackComponent: (props) => <ErrorFallback {...props} />,
+  FallbackComponent: props => <ErrorFallback {...props} />,
   onError: (error, info) => {
     console.error('Error occurred in FootprintOverviewCard: ', error);
   },

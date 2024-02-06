@@ -2,12 +2,12 @@ import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { Markdown } from './markdown';
 
-const meta = {
+const meta: Meta<typeof Markdown> = {
   title: 'Molecules/Markdown',
   component: Markdown,
   tags: ['autodocs'],
   decorators: [withKnobs],
-} satisfies Meta<typeof Markdown>;
+};
 
 export default meta;
 type Story = StoryObj<typeof meta>;

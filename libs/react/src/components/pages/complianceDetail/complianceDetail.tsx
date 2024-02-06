@@ -73,7 +73,7 @@ const _ComplianceDetail = () => {
               <div className={'text-h3 text-tc-primary'}>Sections</div>
               {compliance.compliance_definition.surveys.map((survey, index) => {
                 return (
-                  <div key={'survey_' + index}>
+                  <div key={'survey_' + index} data-testid={'compliance-section-overview-card'}>
                     <ComplianceSectionOverview surveyName={survey} setOverviewComplianceProgress={setComplianceProgress} overviewComplianceProgress={complianceProgress} />
                   </div>
                 );
