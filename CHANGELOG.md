@@ -1,3 +1,10 @@
+## [1.104.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.104.2...v1.104.3) (2024-02-06)
+
+
+### Bug Fixes
+
+* broken migrations due to search and replace bug ([b3cad19](https://github.com/ColdPBC/cold-monorepo/commit/b3cad1927262f13b6adfdf6cbe6588a80af6999b))
+
 ## [1.104.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.104.1...v1.104.2) (2024-02-06)
 
 
