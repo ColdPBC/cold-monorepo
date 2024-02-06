@@ -77,7 +77,7 @@ services:
       AUTH0_UI_CLIENT_ID: i8rCPXsLq9b2YKOOWUTfvgUj0iYD7dE3
       LD_SDK_KEY: sdk-1d8c0508-63b9-4396-aceb-a3cd13ec16b2
       NODE_ENV: development
-      REDISCLOUD_URL: redis://cache:6379
+      REDISCLOUD_URL: openai://cache:6379
     volumes:
       - /usr/src/app/node_modules
   climatiq:
@@ -125,7 +125,7 @@ services:
       AUTH0_UI_CLIENT_ID: i8rCPXsLq9b2YKOOWUTfvgUj0iYD7dE3
       LD_SDK_KEY: sdk-1d8c0508-63b9-4396-aceb-a3cd13ec16b2
       NODE_ENV: development
-      REDISCLOUD_URL: redis://cache:6379
+      REDISCLOUD_URL: openai://cache:6379
       RABBIT_MQ_URL: amqp://guest:guest@rabbit:5672
     volumes:
       - /usr/src/app/node_modules
@@ -179,7 +179,7 @@ services:
       AUTH0_UI_CLIENT_ID: i8rCPXsLq9b2YKOOWUTfvgUj0iYD7dE3
       LD_SDK_KEY: sdk-1d8c0508-63b9-4396-aceb-a3cd13ec16b2
       NODE_ENV: development
-      REDISCLOUD_URL: redis://cache:6379
+      REDISCLOUD_URL: openai://cache:6379
       RABBIT_MQ_URL: amqp://guest:guest@rabbit:5672
     volumes:
       - /usr/src/app/node_modules
@@ -229,7 +229,7 @@ services:
       AUTH0_UI_CLIENT_ID: i8rCPXsLq9b2YKOOWUTfvgUj0iYD7dE3
       LD_SDK_KEY: sdk-1d8c0508-63b9-4396-aceb-a3cd13ec16b2
       NODE_ENV: development
-      REDISCLOUD_URL: redis://cache:6379
+      REDISCLOUD_URL: openai://cache:6379
       RABBIT_MQ_URL: amqp://guest:guest@rabbit:5672
     volumes:
       - /usr/src/app/node_modules
@@ -247,7 +247,7 @@ services:
       - cold
     ports:
       - '6379:6379'
-    command: redis-server --save 20 1 --loglevel warning
+    command: openai-server --save 20 1 --loglevel warning
 
   postgres:
     container_name: cold-postgres

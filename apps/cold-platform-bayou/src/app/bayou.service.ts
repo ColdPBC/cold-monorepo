@@ -1,5 +1,5 @@
 import { ConflictException, Injectable, OnModuleInit, UnprocessableEntityException } from '@nestjs/common';
-import { AuthenticatedUser, BaseWorker, ColdRabbitService, Cuid2Generator, Organizations, PrismaService } from '@coldpbc/nest';
+import { BaseWorker, ColdRabbitService, Cuid2Generator, IAuthenticatedUser, Organizations, PrismaService } from '@coldpbc/nest';
 import { InjectQueue } from '@nestjs/bull';
 import { Queue } from 'bull';
 import { get, set } from 'lodash';
@@ -20,7 +20,7 @@ export class BayouService extends BaseWorker implements OnModuleInit {
     private prisma: PrismaService,
     private config: ConfigService,
     private rabbit: ColdRabbitService,
-    @InjectQueue(process.env?.DD_SERVICE?.split('-')[2]) private queue: Queue,
+    @InjectQueue(process.env.DD_SERVICE?.split('-')[2]) private queue: Queue,
   ) {
     super(BayouService.name);
     const authHeader = `Basic ${Buffer.from(`${this.config.getOrThrow('BAYOU_API_KEY')}:`).toString('base64')}`;
@@ -121,17 +121,17 @@ export class BayouService extends BaseWorker implements OnModuleInit {
 
       const climPayload = this.toElectrictyPayload(bill);
 
-      await this.rabbit.publish(
-        'cold.platform.climatiq',
-        {
+      await this.rabbit.publish('cold.platform.climatiq', {
+        event: payload.event,
+        from: 'cold.platform.bayou',
+        data: {
           location_id: get(payload.object, 'customer_external_id'),
           integration_id: integration.id,
           integration_data: bill,
           utility_bill_id: created.id,
           payload: climPayload,
         },
-        payload.event,
-      );
+      });
       return { message: 'webhook payload added to processing queue' };
     } catch (e) {
       this.logger.error(e.message, { error: e, payload });
@@ -202,14 +202,14 @@ export class BayouService extends BaseWorker implements OnModuleInit {
     });
   }
 
-  async createCustomer(user: AuthenticatedUser, orgId: string, locId: string, payload: BayouCustomerPayload) {
+  async createCustomer(user: IAuthenticatedUser, orgId: string, locId: string, payload: BayouCustomerPayload) {
     if (!user.isColdAdmin && user.coldclimate_claims.org_id !== orgId) {
       throw new UnprocessableEntityException(`Organization ID (${orgId}) is invalid for this user`);
     }
 
     const service = await this.prisma.service_definitions.findUnique({
       where: {
-        name: process.env['DD_SERVICE'],
+        name: this.config.getOrThrow('DD_SERVICE'),
       },
     });
 
@@ -272,7 +272,7 @@ export class BayouService extends BaseWorker implements OnModuleInit {
     }
   }
 
-  toBayouPayload(data: { user: AuthenticatedUser; organization: Organizations; location_id: string; metadata: never }) {
+  toBayouPayload(data: { user: IAuthenticatedUser; organization: Organizations; location_id: string; metadata: never }) {
     if (!data.organization['id']) throw new UnprocessableEntityException('No organization id found in payload');
     if (!data.organization.locations) throw new UnprocessableEntityException('No organization locations found in payload');
     const location = data.organization.locations.find(l => l.id === data.location_id);

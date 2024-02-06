@@ -73,14 +73,50 @@ export class DarklyService extends BaseWorker {
    * @param defaultValue
    * @param context
    */
-  async getFlag(flag: string, defaultValue?: any, context?: DarklyContext): Promise<boolean> {
+  async getBooleanFlag(flag: string, defaultValue?: any, context?: DarklyContext): Promise<boolean> {
     const response = await this.client.variation(flag, context || this.context, defaultValue);
-    this.logger.log(`[${response ? '✅ Enabled' : '🛑Disabled'}] ${flag}`, {
-      context: context || this.context,
-      enabled: response,
-    });
+
+    if (typeof response === 'boolean') {
+      this.logger.log(`[${response ? '✅ Enabled' : '🛑Disabled'}] ${flag}`, {
+        context: context || this.context,
+        enabled: response,
+      });
+    }
 
     this.client.track(flag, this.context);
+
+    await this.client.flush();
+
+    return response;
+  }
+
+  /**
+   * Get string flag
+   * @param flag
+   * @param defaultValue
+   * @param context
+   */
+  async getStringFlag(flag: string, defaultValue?: any, context?: DarklyContext): Promise<string> {
+    const response = await this.client.variation(flag, context || this.context, defaultValue);
+
+    this.client.track(flag, this.context);
+
+    await this.client.flush();
+
+    return response;
+  }
+
+  /**
+   * Get numeric flag
+   * @param flag
+   * @param defaultValue
+   * @param context
+   */
+  async getNumberFlag(flag: string, defaultValue?: any, context?: DarklyContext): Promise<number> {
+    const response = await this.client.variation(flag, context || this.context, defaultValue);
+
+    this.client.track(flag, this.context);
+
     await this.client.flush();
 
     return response;
@@ -110,14 +146,38 @@ export class DarklyService extends BaseWorker {
   }
 
   /**
-   * Subscribe to changes to specified boolean flag
+   * Subscribe to changes to specified string flag
    * @param key
    * @param callback
    */
-  subscribeToFlagChanges(key: string, callback: (flagValue: boolean) => void): void {
+  subscribeToStringFlagChanges(key: string, callback: (flagValue: string) => void): void {
     // Register a callback to be invoked when specified boolean feature flag changes
     this.client.on(`update:${key}`, async (flag: any) => {
-      callback(await this.getFlag(flag.key, this.context));
+      callback(await this.getStringFlag(flag.key, this.context));
+    });
+  }
+
+  /**
+   * Subscribe to changes to specified number flag
+   * @param key
+   * @param callback
+   */
+  subscribeToNumericFlagChanges(key: string, callback: (flagValue: number) => void): void {
+    // Register a callback to be invoked when specified boolean feature flag changes
+    this.client.on(`update:${key}`, async (flag: any) => {
+      callback(await this.getNumberFlag(flag.key, this.context));
+    });
+  }
+
+  /**
+   * Subscribe to changes to specified boolean | string | number flag
+   * @param key
+   * @param callback
+   */
+  subscribeToBooleanFlagChanges(key: string, callback: (flagValue: boolean) => void): void {
+    // Register a callback to be invoked when specified boolean feature flag changes
+    this.client.on(`update:${key}`, async (flag: any) => {
+      callback(await this.getBooleanFlag(flag.key, this.context));
     });
   }
 
@@ -128,7 +188,7 @@ export class DarklyService extends BaseWorker {
   subscribeToAllChanges(callback: (flagValue: any) => void): void {
     // Register a callback to be invoked when any boolean feature flag changes
     this.client.on(`update`, async (flag: string) => {
-      callback(await this.getFlag(flag, this.context));
+      callback(await this.getBooleanFlag(flag, this.context));
     });
   }
 }

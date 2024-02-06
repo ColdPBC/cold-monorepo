@@ -2,13 +2,13 @@ import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/co
 import { Span } from 'nestjs-ddtrace';
 import { v4 } from 'uuid';
 import { merge } from 'lodash';
-import { AuthenticatedUser, BaseWorker, CacheService, CreateActionTemplatesDto, PrismaService, ZodCreateActionDto } from '@coldpbc/nest';
+import { BaseWorker, CacheService, CreateActionTemplatesDto, MqttService, PrismaService, ZodCreateActionDto } from '@coldpbc/nest';
 import { SurveysService } from '../surveys/surveys.service';
 
 @Span()
 @Injectable()
 export class ActionsService extends BaseWorker {
-  constructor(private readonly prisma: PrismaService, private readonly cacheService: CacheService, private readonly surveys: SurveysService) {
+  constructor(private readonly prisma: PrismaService, private readonly cacheService: CacheService, private readonly surveys: SurveysService, private readonly mqtt: MqttService) {
     super(ActionsService.name);
   }
 
@@ -19,7 +19,8 @@ export class ActionsService extends BaseWorker {
    * @param {boolean} bpc
    * @returns {Promise<any>}
    */
-  async getActions(user: AuthenticatedUser, orgId: string, bpc?: boolean) {
+  async getActions(req: any, orgId: string, bpc?: boolean) {
+    const { user } = req;
     try {
       if (!user.isColdAdmin && user.coldclimate_claims.org_id !== orgId) {
         this.logger.error(`User ${user.coldclimate_claims.email} attempted to get assignments for org ${orgId}`);
@@ -38,7 +39,7 @@ export class ActionsService extends BaseWorker {
       for (const actionItem of actions) {
         if (actionItem.action === null) continue;
 
-        actionItem.action = await this.filterDependentSurveys(actionItem.action as any, user, orgId);
+        actionItem.action = await this.filterDependentSurveys(actionItem.action as any, req, orgId);
 
         this.cacheService.set(`organizations:${orgId}:actions:${actionItem.id}`, actionItem, {
           ttl: 60 * 60 * 24,
@@ -53,7 +54,8 @@ export class ActionsService extends BaseWorker {
     }
   }
 
-  private async filterDependentSurveys(action, user: AuthenticatedUser, orgId: string) {
+  private async filterDependentSurveys(action, req: any, orgId: string) {
+    const { user } = req;
     const dep_surveys: any[] = [];
 
     if (!action.dependent_surveys || action.dependent_surveys.length < 1) {
@@ -62,7 +64,7 @@ export class ActionsService extends BaseWorker {
 
     for (const a of action.dependent_surveys) {
       try {
-        const surveyResults = (await this.surveys.findOne(a.name, user, false, orgId)) as any;
+        const surveyResults = (await this.surveys.findOne(a.name, req, false, orgId)) as any;
         dep_surveys.push({
           name: surveyResults.name,
           title: surveyResults.definition.title,
@@ -86,7 +88,8 @@ export class ActionsService extends BaseWorker {
    * @param {boolean} bpc
    * @returns {Promise<unknown>}
    */
-  async getAction(user: AuthenticatedUser, orgId: string, id: string, bpc?: boolean) {
+  async getAction(req: any, orgId: string, id: string, bpc?: boolean) {
+    const { user } = req;
     try {
       if (!user.isColdAdmin && user.coldclimate_claims.org_id !== orgId) {
         this.logger.error(`User ${user.coldclimate_claims.email} attempted to get action: ${id} for org ${orgId}`);
@@ -112,7 +115,7 @@ export class ActionsService extends BaseWorker {
         throw new NotFoundException(`Action ${id} not found`);
       }
 
-      await this.filterDependentSurveys(item.action, user, orgId);
+      await this.filterDependentSurveys(item.action, req, orgId);
 
       await this.cacheService.set(`organizations:${orgId}:actions:${id}`, item, { ttl: 60 * 60 * 24, update: true });
 
@@ -131,9 +134,9 @@ export class ActionsService extends BaseWorker {
    * @param {actionsPartial} data - data to merge with action template
    * @returns {Promise<unknown>}
    */
-  async createActionFromTemplate(user: AuthenticatedUser, orgId: string, id: string, data: CreateActionTemplatesDto, bpc?: boolean) {
+  async createActionFromTemplate(req: any, orgId: string, id: string, data: CreateActionTemplatesDto, bpc?: boolean) {
     let action: any;
-
+    const { user, url } = req;
     try {
       if (!user.isColdAdmin && user.coldclimate_claims.org_id !== orgId) {
         this.logger.error(`User ${user.coldclimate_claims.email} attempted to create an action for org ${orgId}`);
@@ -168,17 +171,40 @@ export class ActionsService extends BaseWorker {
         data: mergedData,
       });
 
-      this.getActions(user, orgId, true);
+      this.getActions(req, orgId, true);
+
+      this.mqtt.publishMQTT('ui', {
+        org_id: user.coldclimate_claims.org_id,
+        user: user,
+        swr_key: url,
+        action: 'create',
+        status: 'failed',
+        data: {
+          ...mergedData,
+        },
+      });
 
       return mergedAssignment;
     } catch (e) {
       this.logger.error(e, { user: user.coldclimate_claims, orgId, id, data, bpc });
-      return e;
+
+      this.mqtt.publishMQTT('ui', {
+        org_id: user.coldclimate_claims.org_id,
+        user: user,
+        swr_key: url,
+        action: 'create',
+        status: 'failed',
+        data: {
+          error: e.message,
+          ...data,
+        },
+      });
+      throw e;
     }
   }
 
   async updateAction(
-    user: AuthenticatedUser,
+    req: any,
     orgId: string,
     id: string,
     data: {
@@ -186,6 +212,7 @@ export class ActionsService extends BaseWorker {
     },
     bpc?: boolean,
   ) {
+    const { user, url } = req;
     try {
       if (!user.isColdAdmin && user.coldclimate_claims.org_id !== orgId) {
         this.logger.error(`User ${user.coldclimate_claims.email} attempted to create action for org ${orgId}`);
@@ -212,11 +239,33 @@ export class ActionsService extends BaseWorker {
         data: { action: mergedData },
       });
 
-      this.getActions(user, orgId, true);
+      this.getActions(req, orgId, true);
+
+      this.mqtt.publishMQTT('ui', {
+        org_id: user.coldclimate_claims.org_id,
+        user: user,
+        swr_key: url,
+        action: 'update',
+        status: 'complete',
+        data: {
+          ...data,
+        },
+      });
 
       return updated;
     } catch (e) {
       this.logger.error(e, { user: user.coldclimate_claims, orgId, id, data, bpc });
+      this.mqtt.publishMQTT('ui', {
+        org_id: user.coldclimate_claims.org_id,
+        user: user,
+        swr_key: url,
+        action: 'update',
+        status: 'failed',
+        data: {
+          error: e.message,
+          ...data,
+        },
+      });
       return e;
     }
   }
@@ -228,7 +277,8 @@ export class ActionsService extends BaseWorker {
    * @param {string} id
    * @returns {Promise<unknown>}
    */
-  async deleteAction(user: AuthenticatedUser, orgId: string, id: string) {
+  async deleteAction(req: any, orgId: string, id: string) {
+    const { user, url } = req;
     try {
       if (!user.isColdAdmin && user.coldclimate_claims.org_id !== orgId) {
         this.logger.error(`User ${user.coldclimate_claims.email} attempted to delete action for org ${orgId}`);
@@ -245,11 +295,31 @@ export class ActionsService extends BaseWorker {
       this.cacheService.delete(`organizations:${orgId}:actions`, true);
 
       // refresh cache
-      this.getActions(user, orgId, true);
+      this.getActions(req, orgId, true);
+
+      this.mqtt.publishMQTT('ui', {
+        org_id: user.coldclimate_claims.org_id,
+        user: user,
+        swr_key: url,
+        action: 'delete',
+        status: 'complete',
+      });
 
       return assignment;
     } catch (e) {
       this.logger.error(e, { user: user.coldclimate_claims, orgId, id });
+
+      this.mqtt.publishMQTT('ui', {
+        org_id: user.coldclimate_claims.org_id,
+        user: user,
+        swr_key: url,
+        action: 'delete',
+        status: 'failed',
+        data: {
+          error: e.message,
+        },
+      });
+
       return e;
     }
   }

@@ -3,20 +3,20 @@ import { Span } from 'nestjs-ddtrace';
 import { merge } from 'lodash';
 import { v4 } from 'uuid';
 import {
+  ActionTemplateSchema,
+  ActionTemplatesEntity,
+  BaseWorker,
+  CacheService,
+  MqttService,
+  PrismaService,
   ZodCreateActionTemplate,
   ZodCreateActionTemplateDto,
-  ActionTemplateSchema,
-  BaseWorker,
-  AuthenticatedUser,
-  CacheService,
-  ActionTemplatesEntity,
-  PrismaService,
 } from '@coldpbc/nest';
 
 @Span()
 @Injectable()
 export class ActionTemplatesService extends BaseWorker {
-  constructor(private readonly prisma: PrismaService, private readonly cacheService: CacheService) {
+  constructor(private readonly prisma: PrismaService, private readonly cacheService: CacheService, private readonly mqtt: MqttService) {
     super(ActionTemplatesService.name);
   }
 
@@ -26,7 +26,8 @@ export class ActionTemplatesService extends BaseWorker {
    * @param {boolean} bpc
    * @returns {Promise<any>}
    */
-  async getActionTemplates(user: AuthenticatedUser, bpc?: boolean): Promise<ActionTemplatesEntity[]> {
+  async getActionTemplates(req: any, bpc?: boolean): Promise<ActionTemplatesEntity[]> {
+    const { user } = req;
     this.setTags({ user: user.coldclimate_claims, bpc });
 
     try {
@@ -68,7 +69,8 @@ export class ActionTemplatesService extends BaseWorker {
    * @param {boolean} bpc
    * @returns {Promise<any>}
    */
-  async getActionTemplate(user: AuthenticatedUser, id: string, bpc?: boolean): Promise<ZodCreateActionTemplateDto> {
+  async getActionTemplate(req: any, id: string, bpc?: boolean): Promise<ZodCreateActionTemplateDto> {
+    const { user } = req;
     this.setTags({ user: user.coldclimate_claims, action_template_id: id, bpc });
 
     try {
@@ -112,7 +114,9 @@ export class ActionTemplatesService extends BaseWorker {
    * @param {ActionDefinitionsCreate} data
    * @returns action_templates
    */
-  async createActionTemplate(user: AuthenticatedUser, data: ZodCreateActionTemplate) {
+  async createActionTemplate(req: any, data: ZodCreateActionTemplate) {
+    const { user, url } = req;
+
     this.setTags({ user: user.coldclimate_claims, data });
 
     try {
@@ -128,11 +132,32 @@ export class ActionTemplatesService extends BaseWorker {
       });
 
       // re-cache all actions
-      this.getActionTemplates(user, true);
+      this.getActionTemplates(req, true);
 
+      this.mqtt.publishMQTT('public', {
+        swr_key: url,
+        action: 'create',
+        status: 'complete',
+        data: {
+          action,
+          user: user.coldclimate_claims,
+        },
+      });
       return action;
     } catch (e) {
       this.logger.error(e);
+
+      this.mqtt.publishMQTT('ui', {
+        org_id: user.coldclimate_claims.org_id,
+        user: user,
+        swr_key: url,
+        action: 'create',
+        status: 'failed',
+        data: {
+          error: e.message,
+          ...data,
+        },
+      });
       throw new UnprocessableEntityException(e.message, e);
     }
   }
@@ -144,7 +169,9 @@ export class ActionTemplatesService extends BaseWorker {
    * @param {UpdateActionTemplatesDto} data
    * @returns {Promise<action_templates>}
    */
-  async updateActionTemplate(user: AuthenticatedUser, id: string, data: ZodCreateActionTemplate): Promise<ActionTemplatesEntity> {
+  async updateActionTemplate(req: any, id: string, data: ZodCreateActionTemplate): Promise<ActionTemplatesEntity> {
+    const { user, url } = req;
+
     this.setTags({ user: user.coldclimate_claims, action_template_id: id, data });
 
     try {
@@ -154,7 +181,7 @@ export class ActionTemplatesService extends BaseWorker {
         throw new UnauthorizedException(`You are not authorized to update actions`);
       }
 
-      const existing = await this.getActionTemplate(user, id, true);
+      const existing = await this.getActionTemplate(req, id, true);
 
       const action = (await this.prisma.action_templates.update({
         where: {
@@ -163,13 +190,32 @@ export class ActionTemplatesService extends BaseWorker {
         data: { template: merge({ ...existing.template }, { ...data.template }) },
       })) as ActionTemplatesEntity;
 
-      this.getActionTemplates(user, true);
+      this.getActionTemplates(req, true);
+
+      this.mqtt.publishMQTT('public', {
+        swr_key: url,
+        action: 'update',
+        status: 'complete',
+        data: {
+          ...action,
+        },
+      });
 
       return action;
     } catch (e) {
       if (e.meta?.cause === 'Record to update not found.') {
         throw new NotFoundException(`Action ${id} not found`);
       }
+
+      this.mqtt.publishMQTT('public', {
+        swr_key: url,
+        action: 'update',
+        status: 'failed',
+        data: {
+          error: e.message,
+          ...data,
+        },
+      });
       this.logger.error(e);
       throw new UnprocessableEntityException(e.message, e);
     }
@@ -180,7 +226,8 @@ export class ActionTemplatesService extends BaseWorker {
    * @param {AuthenticatedUser} user
    * @param {string} id
    */
-  async deleteActionTemplate(user: AuthenticatedUser, id: string) {
+  async deleteActionTemplate(req: any, id: string) {
+    const { user, url } = req;
     this.setTags({ user: user.coldclimate_claims, action_template_id: id });
 
     try {
@@ -196,7 +243,13 @@ export class ActionTemplatesService extends BaseWorker {
 
       await this.cacheService.delete(`action-templates`, true);
       // re-cache all actions
-      await this.getActionTemplates(user, true);
+      await this.getActionTemplates(req, true);
+
+      this.mqtt.publishMQTT('public', {
+        swr_key: url,
+        action: 'delete',
+        status: 'complete',
+      });
 
       return `Action ${id} deleted`;
     } catch (e) {
@@ -208,6 +261,15 @@ export class ActionTemplatesService extends BaseWorker {
         throw new NotFoundException(`Action template ${id} not found`);
       } else {
         this.logger.error(e.message, { ...e });
+
+        this.mqtt.publishMQTT('public', {
+          swr_key: url,
+          action: 'delete',
+          status: 'failed',
+          data: {
+            error: e.message,
+          },
+        });
         throw new UnprocessableEntityException(e.meta?.cause, e);
       }
     }

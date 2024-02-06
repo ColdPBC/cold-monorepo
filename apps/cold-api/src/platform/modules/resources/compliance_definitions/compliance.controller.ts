@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post, Query, Req
 import { ApiOAuth2, ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Span } from 'nestjs-ddtrace';
 import { ResourceValidationPipe } from '../../../pipes/resource.pipe';
-import { AuthenticatedUser, BaseWorker, HttpExceptionFilter, JwtAuthGuard, Role, Roles, RolesGuard, SurveyResponseSchema } from '@coldpbc/nest';
+import { BaseWorker, HttpExceptionFilter, IAuthenticatedUser, JwtAuthGuard, Role, Roles, RolesGuard, SurveyResponseSchema } from '@coldpbc/nest';
 import { allRoles, bpcDecoratorOptions, coldAdminOnly } from '../_global/global.params';
 import { ComplianceDefinitionService } from './compliance_definition.service';
 import { ComplianceDefinition, ComplianceDefinitionSchema } from './compliance_definition_schema';
@@ -29,11 +29,11 @@ export class ComplianceController extends BaseWorker {
       body: any;
       headers: any;
       query: any;
-      user: AuthenticatedUser;
+      user: IAuthenticatedUser;
     },
     @Body(new ResourceValidationPipe(ComplianceDefinitionSchema, 'POST')) definition: ComplianceDefinition,
   ) {
-    return this.complianceService.create(req.user, definition);
+    return this.complianceService.create(req, definition);
   }
 
   @Get()
@@ -49,7 +49,7 @@ export class ComplianceController extends BaseWorker {
       body: any;
       headers: any;
       query: any;
-      user: AuthenticatedUser;
+      user: IAuthenticatedUser;
     },
     @Query('bpc') bpc?: boolean,
   ) {
@@ -82,12 +82,12 @@ export class ComplianceController extends BaseWorker {
       body: any;
       headers: any;
       query: any;
-      user: AuthenticatedUser;
+      user: IAuthenticatedUser;
     },
     @Param('name') name: string,
     @Query('bpc') bpc?: boolean,
   ) {
-    return await this.complianceService.findOne(name, req.user, bpc);
+    return await this.complianceService.findOne(name, req, bpc);
   }
 
   @ApiOperation({
@@ -108,10 +108,10 @@ export class ComplianceController extends BaseWorker {
     @Body(new ResourceValidationPipe(SurveyResponseSchema, 'PATCH')) compliance: Partial<ComplianceDefinition>,
     @Req()
     req: {
-      user: AuthenticatedUser;
+      user: IAuthenticatedUser;
     },
   ) {
-    return this.complianceService.update(name, compliance as ComplianceDefinition, req.user);
+    return this.complianceService.update(name, compliance as ComplianceDefinition, req);
   }
 
   @Delete(':name')
@@ -130,10 +130,10 @@ export class ComplianceController extends BaseWorker {
       body: any;
       headers: any;
       query: any;
-      user: AuthenticatedUser;
+      user: IAuthenticatedUser;
     },
   ) {
-    return this.complianceService.remove(name, req.user);
+    return this.complianceService.remove(name, req);
   }
 
   @Post(':name/organization/:orgId')
@@ -159,10 +159,10 @@ export class ComplianceController extends BaseWorker {
       body: any;
       headers: any;
       query: any;
-      user: AuthenticatedUser;
+      user: IAuthenticatedUser;
     },
   ) {
-    return this.complianceService.activateOrgCompliance(req.user, name, orgId);
+    return this.complianceService.activateOrgCompliance(req, name, orgId);
   }
 
   @Get('organization/:orgId')
@@ -185,11 +185,11 @@ export class ComplianceController extends BaseWorker {
       body: any;
       headers: any;
       query: any;
-      user: AuthenticatedUser;
+      user: IAuthenticatedUser;
     },
     @Query('bpc') bpc?: boolean,
   ) {
-    return await this.complianceService.findOrgCompliances(req.user, orgId, bpc);
+    return await this.complianceService.findOrgCompliances(req, orgId, bpc);
   }
 
   @Delete(':name/organization/:orgId')
@@ -216,10 +216,10 @@ export class ComplianceController extends BaseWorker {
       body: any;
       headers: any;
       query: any;
-      user: AuthenticatedUser;
+      user: IAuthenticatedUser;
     },
     @Query('bpc') bpc?: boolean,
   ) {
-    return this.complianceService.deactivate(name, orgId, req.user, bpc);
+    return this.complianceService.deactivate(req, name, orgId, bpc);
   }
 }

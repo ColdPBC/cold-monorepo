@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import { Reflector } from '@nestjs/core';
 import { BaseWorker } from '../../worker';
 import { CacheService } from '../../cache';
-import { AuthenticatedUser } from '../../primitives';
+import { IAuthenticatedUser } from '../../primitives';
 import { Organizations } from '../../../validation';
 import { isRabbitContext } from '@golevelup/nestjs-rabbitmq';
 
@@ -17,7 +17,7 @@ export class RolesGuard extends BaseWorker implements CanActivate {
     super('RolesGuard');
   }
 
-  async resolveRequest(request: any, user: AuthenticatedUser, roles: Array<string>) {
+  async resolveRequest(request: any, user: IAuthenticatedUser, roles: Array<string>) {
     let isValid = false;
     let orgId: string | null = null;
     const isColdAdmin = user?.coldclimate_claims?.roles?.includes('cold:admin');

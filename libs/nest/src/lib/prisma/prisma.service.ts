@@ -88,6 +88,8 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
         logger.error(e.message, { timestamp: e.timestamp, target: e.target });
       });
     }
+
+    return this;
   }
 
   async enableShutdownHooks(app: INestApplication) {

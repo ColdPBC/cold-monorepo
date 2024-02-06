@@ -14,26 +14,40 @@ import { ColdCacheModule } from './cache';
 import { AuthorizationModule, JwtAuthGuard, JwtStrategy } from './authorization';
 import { InterceptorModule, OrgUserInterceptor } from './interceptors';
 import { BaseWorker, WorkerLogger } from './worker';
-import { ColdRabbitModule, ColdRabbitService } from './rabbit';
-//import { CronModule, CronService } from './crons';
+import { ColdRabbitModule, ColdRabbitService } from './rabbit'; //import { CronModule, CronService } from './crons';
 import { DatadogTraceModule } from 'nestjs-ddtrace';
+import { S3Module, S3Service, SecretsModule, SecretsService } from './aws';
 import { RedisServiceConfig } from './utility';
-import { MqttService } from './mqtt';
-import { S3Module } from './aws/s3/s3.module';
-import { S3Service } from './aws';
+import { MqttModule } from './mqtt';
 
-@Module({})
+@Module({
+  imports: [MqttModule],
+})
 export class NestModule {
   static async forRootAsync(redisDB: number, bucket?: string) {
     const logger = new WorkerLogger('NestModule');
     const config = new ConfigService();
     const darkly = new DarklyService(config);
     await darkly.onModuleInit();
+    const ss = new SecretsService();
 
     const parts = config.getOrThrow('DD_SERVICE')?.split('-');
 
     const type = parts.length > 2 ? parts[1] : 'core';
     const project = parts.length > 2 ? parts[2] : parts[1];
+
+    const configSecrets: any = [];
+
+    const secrets = await ss.getSecrets(type);
+
+    configSecrets.push(() => secrets);
+
+    if (type && project) {
+      const serviceSecrets = await ss.getSecrets(`${type}/${project}`);
+      if (serviceSecrets) {
+        configSecrets.push(() => serviceSecrets);
+      }
+    }
 
     /**
      * Imports Array
@@ -41,12 +55,12 @@ export class NestModule {
     const imports: any = [
       ConfigModule.forRoot({
         isGlobal: true,
+        load: configSecrets,
       }),
-      BullModule.forRoot(await RedisServiceConfig.getQueueConfig(type, project, redisDB)),
-      BullModule.registerQueue({
-        name: project,
-      }),
+      SecretsModule,
+      BullModule.forRoot(await new RedisServiceConfig().getQueueConfig(type, project)),
       HttpModule,
+      MqttModule,
     ];
 
     /**
@@ -54,7 +68,6 @@ export class NestModule {
      */
     const providers: any = [
       ConfigService,
-      MqttService,
       {
         provide: APP_INTERCEPTOR,
         useClass: OrgUserInterceptor,
@@ -69,7 +82,7 @@ export class NestModule {
     /**
      * Exports Array
      */
-    const exports: any = [HttpModule, ConfigService, MqttService];
+    const exports: any = [HttpModule, ConfigService];
 
     logger.info('Configuring Nest Module...');
 
@@ -80,7 +93,7 @@ export class NestModule {
     }
 
     //configure-enable-hot-shots-module
-    const enableHotShots = await darkly.getFlag('static-enable-hot-shots-module');
+    const enableHotShots = await darkly.getBooleanFlag('static-enable-hot-shots-module');
     if (enableHotShots) {
       imports.push(
         HotShotsModule.forRoot({
@@ -119,7 +132,7 @@ export class NestModule {
     /**
      * Datadog tracing module
      */
-    const enableDDTrace = await darkly.getFlag('static-enable-data-dog-trace-module');
+    const enableDDTrace = await darkly.getBooleanFlag('static-enable-data-dog-trace-module');
     if (enableDDTrace) {
       imports.push(
         DatadogTraceModule.forRoot({
@@ -132,7 +145,7 @@ export class NestModule {
     /**
      * Health module
      */
-    const enableHealthModule = await darkly.getFlag('static-enable-health-module');
+    const enableHealthModule = await darkly.getBooleanFlag('static-enable-health-module');
     if (enableHealthModule) {
       imports.push(HealthModule);
       controllers.push(HealthController);
@@ -143,7 +156,7 @@ export class NestModule {
     /**
      * Authorization module
      */
-    const enableAuthorizationModule = await darkly.getFlag('static-enable-authorization-module');
+    const enableAuthorizationModule = await darkly.getBooleanFlag('static-enable-authorization-module');
     if (enableAuthorizationModule) {
       if (!config.get<string | boolean>('REDISCLOUD_URL', false)) {
         throw new Error('REDISCLOUD_URL is not set in this environment; It is required for the authorization module to function properly.');
@@ -176,7 +189,7 @@ export class NestModule {
     /**
      * Interceptors module
      */
-    const enableInterceptorModule = await darkly.getFlag('static-enable-interceptors-module');
+    const enableInterceptorModule = await darkly.getBooleanFlag('static-enable-interceptors-module');
     if (enableInterceptorModule) {
       imports.push(InterceptorModule);
     }
@@ -184,7 +197,7 @@ export class NestModule {
     /**
      * Prisma Module
      */
-    const enablePrismaModule = await darkly.getFlag('static-enable-prisma-module');
+    const enablePrismaModule = await darkly.getBooleanFlag('static-enable-prisma-module');
     if (enablePrismaModule) {
       imports.push(PrismaModule);
       providers.push(PrismaService);
@@ -194,7 +207,7 @@ export class NestModule {
     /**
      * Rabbit Module
      */
-    const enableRabbitModule = await darkly.getFlag('static-enable-rabbit-module');
+    const enableRabbitModule = await darkly.getBooleanFlag('static-enable-rabbit-module');
     if (enableRabbitModule) {
       imports.push(ColdRabbitModule.forFeature());
       providers.push(ColdRabbitService);
