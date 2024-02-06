@@ -50,7 +50,6 @@ jobs:
         with:
           node-version: "20.9.0"
       - name: 🪢 Install Yarn
-        if: github.event.deployment_status.state == 'success'
         run: corepack enable && yarn set version stable
 
       - name: 💼 Cache Node Modules
@@ -65,11 +64,9 @@ jobs:
         run: yarn
 
       - name: 🌈 Generate Prisma Client
-        if: github.event.deployment_status.state == 'success'
         run: yarn dlx nx run cold-nest-library:prisma-generate
 
       - name: 🏗 build development
-        if: github.event.deployment_status.state == 'success'
         run: yarn prebuild && yarn dlx nx reset && yarn dlx nx run cold-api:build:development
 
       - name: Parse Payload
