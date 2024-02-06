@@ -25,27 +25,29 @@ const _NextActionsCard = () => {
     return null;
   }
 
-  return (
-    <Card glow title="Your Next Actions" ctas={[{ text: 'Learn More', action: () => navigate('/actions') }]}>
-      {data
-        ?.filter(actionPayload => actionPayload.action.steps.some(step => !step.complete))
-        .slice(0, 3)
-        .sort((a, b) => {
-          // sort by target date first
-          let targetDateDiff: number | null = null;
-          if (a.action.due_date && b.action.due_date) {
-            targetDateDiff = DateTime.fromISO(a.action.due_date).diff(DateTime.fromISO(b.action.due_date)).toMillis();
-          }
-          // check if both have a target date and that diff is greater than 0
-          if (targetDateDiff) {
-            return targetDateDiff;
-          }
-          // sort by updated_date, which one was more recently updated
-          else {
-            return DateTime.fromISO(b.updated_at).diff(DateTime.fromISO(a.updated_at)).toMillis();
-          }
-        })
-        .map((action, index) => (
+  const actions = data
+    ?.filter(actionPayload => actionPayload.action.steps.some(step => !step.complete))
+    .slice(0, 3)
+    .sort((a, b) => {
+      // sort by target date first
+      let targetDateDiff: number | null = null;
+      if (a.action.due_date && b.action.due_date) {
+        targetDateDiff = DateTime.fromISO(a.action.due_date).diff(DateTime.fromISO(b.action.due_date)).toMillis();
+      }
+      // check if both have a target date and that diff is greater than 0
+      if (targetDateDiff) {
+        return targetDateDiff;
+      }
+      // sort by updated_date, which one was more recently updated
+      else {
+        return DateTime.fromISO(b.updated_at).diff(DateTime.fromISO(a.updated_at)).toMillis();
+      }
+    });
+
+  if (actions && actions.length > 0) {
+    return (
+      <Card glow title="Your Next Actions" ctas={[{ text: 'Learn More', action: () => navigate('/actions') }]}>
+        {actions?.map((action, index) => (
           <div key={`action_item_${index}`} className={'w-full'}>
             <ActionItem
               actionPayload={action}
@@ -54,8 +56,11 @@ const _NextActionsCard = () => {
             />
           </div>
         ))}
-    </Card>
-  );
+      </Card>
+    );
+  } else {
+    return null;
+  }
 };
 
 export const NextActionsCard = withErrorBoundary(_NextActionsCard, {
