@@ -77,7 +77,11 @@ jobs:
         id: parse_payload
         run: echo "::set-output name=service_url::$(node .github/scripts/parse_payload.js "${{ toJson(github.event.deployment.payload) }}" cold-api)"
 
-      - name: 🩻 Run API E2E Tests
-        if: github.event.deployment_status.state == 'success' || github.event.inputs.api_url
+      - name: 🩻 Run Manual API E2E Tests
+        if: github.event.inputs.api_url
+        run: API_SERVER_URL=${{ github.event.inputs.api_url }} DD_SITE=us5.datadoghq.com DD_API_KEY=${{secrets.DD_API_KEY}} DD_CIVISIBILITY_AGENTLESS_ENABLED=true NODE_OPTIONS="-r $(pwd)/.pnp.cjs -r dd-trace/ci/init" DD_ENV=test DD_SERVICE=cold-api-e2e yarn dlx nx run cold-api-e2e:e2e:ci
+
+      - name: 🩻 Run Deployed API E2E Tests
+        if: github.event.deployment_status.state == 'success'
         run: API_SERVER_URL=${{ steps.parse_payload.outputs.service_url }} DD_SITE=us5.datadoghq.com DD_API_KEY=${{secrets.DD_API_KEY}} DD_CIVISIBILITY_AGENTLESS_ENABLED=true NODE_OPTIONS="-r $(pwd)/.pnp.cjs -r dd-trace/ci/init" DD_ENV=test DD_SERVICE=cold-api-e2e yarn dlx nx run cold-api-e2e:e2e:ci
 
