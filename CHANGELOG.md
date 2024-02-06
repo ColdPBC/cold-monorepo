@@ -1,3 +1,31 @@
+# [1.104.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.103.0...v1.104.0) (2024-02-06)
+
+
+### Bug Fixes
+
+* add module exports ([2eee8fb](https://github.com/ColdPBC/cold-monorepo/commit/2eee8fb1cd2316f2aa6a1b60b82a1da618dc22d1))
+* clean up import ([8863b82](https://github.com/ColdPBC/cold-monorepo/commit/8863b820c3e2c987f52bc1dcd602165a2fe6470d))
+* clean up location schema ([7babfa5](https://github.com/ColdPBC/cold-monorepo/commit/7babfa54a8c9508f019596741613c8c39f50348d))
+* cleanup code, move prompts to class ([cfe4120](https://github.com/ColdPBC/cold-monorepo/commit/cfe4120dac3a01dc00933d6c626ce3ad23f42a55))
+* get config settings from LD ([4a91b8c](https://github.com/ColdPBC/cold-monorepo/commit/4a91b8cc3b0935e66d52b8558eeda322fb90ec93))
+* implement file service ([1d5574b](https://github.com/ColdPBC/cold-monorepo/commit/1d5574bca6acadc64b281aaeecc968d67836a505))
+* implement re-usable service to broadcast rabbit to all integrations ([be21f09](https://github.com/ColdPBC/cold-monorepo/commit/be21f09c50c18fa03d620a9646e5c1a30d613897))
+* issue that would block redis jobs ([22f4f6c](https://github.com/ColdPBC/cold-monorepo/commit/22f4f6c65575562c084744abb791e18eea7b5015))
+* issue that would block redis jobs ([8ff1e74](https://github.com/ColdPBC/cold-monorepo/commit/8ff1e745a75c619e1ea21322438a3009615a7ebb))
+* make mqtt global ([378e4f3](https://github.com/ColdPBC/cold-monorepo/commit/378e4f30f884e94a2b819837638f0c94c6513bd4))
+* moved prompts to class ([bca4d28](https://github.com/ColdPBC/cold-monorepo/commit/bca4d28043ea4e6641ea821851a474a7f8470104))
+* nack() messages when event is not supported by service ([66bbd5c](https://github.com/ColdPBC/cold-monorepo/commit/66bbd5c8e6ca81e2f3a6fbf2b8313d3a882f19d4))
+* null reference error ([11c8d0b](https://github.com/ColdPBC/cold-monorepo/commit/11c8d0bd6a4a1342177163fdf5bb25418876a459))
+* re-organize organization modules ([d7f8076](https://github.com/ColdPBC/cold-monorepo/commit/d7f8076343d0e489c586aae68d75f3837516dd9a))
+* return instance to support non DI implementations ([41e64c1](https://github.com/ColdPBC/cold-monorepo/commit/41e64c1be7fcb2a73bb17fa0108d7e642197b05e))
+
+
+### Features
+
+* add secrets manager module ([2c45d05](https://github.com/ColdPBC/cold-monorepo/commit/2c45d0574851bdeebfdab780275dde56cb7817d1))
+* add secrets manager module ([bcf2a94](https://github.com/ColdPBC/cold-monorepo/commit/bcf2a941cc6374092aecda681094a16af7d26425))
+* implement MQTT on all CRUD updates across all resources ([6a58144](https://github.com/ColdPBC/cold-monorepo/commit/6a5814444f3d53a41764b6db11c42717b0ff727d))
+
 # [1.103.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.102.1...v1.103.0) (2024-02-05)
 
 
