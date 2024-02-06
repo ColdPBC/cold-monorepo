@@ -1,3 +1,10 @@
+## [1.104.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.104.0...v1.104.1) (2024-02-06)
+
+
+### Bug Fixes
+
+* switch to configService ([bc6d6b6](https://github.com/ColdPBC/cold-monorepo/commit/bc6d6b67494ea77ba11ad2c32a7a393aa54d6673))
+
 # [1.104.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.103.0...v1.104.0) (2024-02-06)
 
 
