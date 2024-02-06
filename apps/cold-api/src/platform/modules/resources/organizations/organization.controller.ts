@@ -1,23 +1,12 @@
-import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post, Put, Query, Req, UploadedFile, UseFilters, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, Param, Post, Query, Req, UseFilters, UseGuards } from '@nestjs/common';
 import { Span } from 'nestjs-ddtrace';
-import { FileInterceptor } from '@nestjs/platform-express';
 import { ResourceValidationPipe } from '../../../pipes/resource.pipe';
-import {
-  allRoles,
-  bpcDecoratorOptions,
-  coldAdminOnly,
-  coldAndCompanyAdmins,
-  invIdDecoratorOptions,
-  orgIdDecoratorOptions,
-  roleNameDecoratorOptions,
-  userIdDecoratorOptions,
-} from '../_global/global.params';
-import { postInviteOwnerExample, postOrganizationExample } from './examples/organization.examples';
+import { allRoles, bpcDecoratorOptions, coldAdminOnly, orgIdDecoratorOptions } from '../_global/global.params';
+import { postOrganizationExample } from './examples/organization.examples';
 import { OrganizationService } from './organization.service';
 import { ApiBody, ApiOAuth2, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { AuthenticatedUser, BaseWorker, HttpExceptionFilter, JwtAuthGuard, OrganizationsSchema, Roles, RolesGuard, S3Service } from '@coldpbc/nest';
+import { BaseWorker, HttpExceptionFilter, IAuthenticatedUser, JwtAuthGuard, OrganizationsSchema, Roles, RolesGuard } from '@coldpbc/nest';
 import { CreateOrganizationDto } from './dto/organization.dto';
-import multerS3 from 'multer-s3';
 
 @Span()
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -60,54 +49,10 @@ export class OrganizationController extends BaseWorker {
       body: any;
       headers: any;
       query: any;
-      user: AuthenticatedUser;
+      user: IAuthenticatedUser;
     },
   ) {
-    return this.orgService.createColdOrg(createOrganizationDTO, req.user);
-  }
-
-  /***
-   * Invite a user to a company
-   * @param req
-   * @param bpc
-   * @param orgId
-   * @param inviteUserDto
-   * @param suppressEmail
-   */
-  @Post(`:orgId/invitation`)
-  @Roles(...coldAndCompanyAdmins)
-  @ApiOperation({
-    summary: 'Invite User',
-    operationId: 'InviteUser',
-  })
-  @ApiBody({
-    schema: {
-      example: postInviteOwnerExample,
-    },
-  })
-  @ApiQuery(bpcDecoratorOptions)
-  @ApiParam(orgIdDecoratorOptions)
-  @ApiQuery({
-    name: 'suppressEmail',
-    required: false,
-    description: 'Suppress Email',
-    type: Boolean,
-  })
-  @HttpCode(201)
-  inviteUser(
-    @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: AuthenticatedUser;
-    },
-    @Body() inviteUserDto: { user_email: string; inviter_name: string; roleId: string },
-    @Param('orgId') orgId: string,
-    @Query('bpc') bpc?: boolean,
-    @Query('suppressEmail') suppressEmail?: boolean,
-  ) {
-    return this.orgService.inviteUser(orgId, inviteUserDto.user_email, inviteUserDto.inviter_name, inviteUserDto.roleId, suppressEmail, req.user, bpc);
+    return this.orgService.createColdOrg(createOrganizationDTO, req);
   }
 
   /***
@@ -132,35 +77,6 @@ export class OrganizationController extends BaseWorker {
   }
 
   /***
-   * Get members for an organization
-   * @param orgId
-   * @param req
-   * @param bpc
-   */
-  @ApiOperation({
-    summary: 'Get Organization Members',
-    operationId: 'GetOrganizationMembers',
-  })
-  @Get(':orgId/members')
-  @Roles(...allRoles)
-  @ApiParam(orgIdDecoratorOptions)
-  @ApiQuery(bpcDecoratorOptions)
-  getOrgMembers(
-    @Param('orgId') orgId: string,
-    @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: AuthenticatedUser;
-    },
-    @Query('bpc') bpc?: boolean,
-  ) {
-    if (!orgId) throw new Error('orgId is required');
-    return this.orgService.getOrganizationMembers(orgId, req.user, bpc);
-  }
-
-  /***
    * **Internal Use Only** : Get organization from Auth0 by Name/ID
    */
   @ApiOperation({
@@ -179,154 +95,13 @@ export class OrganizationController extends BaseWorker {
       body: any;
       headers: any;
       query: any;
-      user: AuthenticatedUser;
+      user: IAuthenticatedUser;
     },
     @Query('bpc') bpc?: boolean,
   ) {
     this.logger.info('getting organization', { orgId });
 
-    return await this.orgService.getOrganization(orgId, req.user, bpc);
-  }
-
-  /***
-   * **Internal Use Only** : Add User to Organization and assign them to a role in Auth0
-   */
-  @ApiOperation({
-    summary: 'Add Member By ID',
-    operationId: 'AddMemberByID',
-    description: 'Add an existing member to the organization',
-  })
-  @Put(':orgId/roles/:roleName/members/:userId')
-  @ApiQuery(bpcDecoratorOptions)
-  @ApiParam(orgIdDecoratorOptions)
-  @ApiParam(roleNameDecoratorOptions)
-  @ApiParam(userIdDecoratorOptions)
-  @Roles(...coldAndCompanyAdmins)
-  @HttpCode(201)
-  async addMemberToOrganizationAndRole(
-    @Param('orgId') orgId: string,
-    @Param('roleName') roleName: string,
-    @Param('userId') userId: string,
-    @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: AuthenticatedUser;
-    },
-    @Query('bpc') bpc?: boolean,
-  ) {
-    this.logger.info('adding user to organization with role', {
-      orgId,
-      userId,
-      roleName,
-    });
-
-    return await this.orgService.addUserToOrganization(orgId, userId, req.user, roleName, bpc);
-  }
-
-  /***
-   * Get User roles in an organization
-   */
-  @ApiOperation({
-    summary: 'Get Member Roles',
-    operationId: 'GetOrgMemberRoles',
-    description: 'Returns all the organization roles for a member',
-  })
-  @Get(':orgId/members/:userId/roles')
-  @ApiQuery(bpcDecoratorOptions)
-  @ApiParam(orgIdDecoratorOptions)
-  @ApiParam(userIdDecoratorOptions)
-  @Roles(...coldAdminOnly)
-  @HttpCode(200)
-  getOrgUsersRoles(
-    @Req()
-    req: {
-      headers: any;
-      query: any;
-      user: AuthenticatedUser;
-    },
-    @Param('orgId') orgId: string,
-    @Param('userId') userId: string,
-    @Query('bpc') bpc?: boolean,
-  ) {
-    return this.orgService.getOrgUserRoles(orgId, userId, req.user, bpc);
-  }
-
-  /***
-   * **Internal Use Only** : Add member to organization roles in Auth0
-   * @param orgId
-   * @param userId
-   * @param roleName
-   * @param req
-   * @param bpc
-   */
-  @ApiOperation({
-    summary: 'Add Member To Role',
-    operationId: 'AddOrgMemberToRole',
-    description: 'Adds org member to a role',
-  })
-  @Patch(':orgId/roles/:roleName/members/:userId')
-  @ApiQuery(bpcDecoratorOptions)
-  @ApiParam(orgIdDecoratorOptions)
-  @ApiParam(roleNameDecoratorOptions)
-  @ApiParam(userIdDecoratorOptions)
-  @Roles(...coldAndCompanyAdmins)
-  @HttpCode(201)
-  async updateOrgUserRoles(
-    @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: AuthenticatedUser;
-    },
-    @Param('orgId') orgId: string,
-    @Param('roleName') roleName: string,
-    @Param('userId') userId: string,
-    @Query('bpc') bpc?: boolean,
-  ) {
-    this.logger.info('update user roles', { orgId, userId, roleName });
-
-    return await this.orgService.updateOrgUserRoles(orgId, userId, req.user, roleName, bpc);
-  }
-
-  /***
-   * Delete members of a company
-   * @param orgId
-   * @param body
-   * @param req
-   * @param bpc
-   */
-  @ApiOperation({
-    summary: 'Delete Members',
-    operationId: 'DeleteOrgMembers',
-    description: 'Deletes specified member ids from organization',
-  })
-  @Delete(':orgId/members')
-  @ApiBody({
-    schema: {
-      type: 'object',
-      example: { members: ['{{example_member_id}}'] },
-      description: 'Array of member ids',
-    },
-  })
-  @ApiQuery(bpcDecoratorOptions)
-  @ApiParam(orgIdDecoratorOptions)
-  @Roles(...coldAndCompanyAdmins)
-  @HttpCode(204)
-  async removeMembers(
-    @Param('orgId') orgId: string,
-    @Body() body: { members: string[] },
-    @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: AuthenticatedUser;
-    },
-  ) {
-    return await this.orgService.removeUserFromOrganization(orgId, body, req.user);
+    return await this.orgService.getOrganization(orgId, req, bpc);
   }
 
   /***
@@ -353,60 +128,9 @@ export class OrganizationController extends BaseWorker {
       body: any;
       headers: any;
       query: any;
-      user: AuthenticatedUser;
+      user: IAuthenticatedUser;
     },
   ) {
-    return this.orgService.deleteOrganization(orgId, req.user);
-  }
-
-  /***
-   * Delete an invitation by ID
-   * @param orgId
-   * @param invId
-   * @param req
-   * @param bpc
-   */
-  @Delete(':orgId/invitations/:invId')
-  @ApiParam(orgIdDecoratorOptions)
-  @ApiParam(invIdDecoratorOptions)
-  @ApiQuery(bpcDecoratorOptions)
-  @Roles(...coldAndCompanyAdmins)
-  @HttpCode(204)
-  removeInvitation(
-    @Param('orgId') orgId: string,
-    @Param('invId') invId: string,
-    @Req()
-    req: {
-      user: AuthenticatedUser;
-    },
-  ) {
-    this.logger.log(`Removing organization (${orgId}) invite in Auth0`, { orgId, invId, ...req.user });
-
-    return this.orgService.deleteInvitation(orgId, invId, req.user);
-  }
-
-  @Post(':orgId/files')
-  @UseInterceptors(
-    FileInterceptor('file', {
-      storage: multerS3(S3Service.getMulterS3Config()),
-    }),
-  )
-  async uploadFile(
-    @Param('orgId') orgId: string,
-    @UploadedFile() file: Express.MulterS3.File,
-    @Req()
-    req: {
-      body: never;
-      headers: never;
-      query: never;
-      user: AuthenticatedUser;
-    },
-  ) {
-    try {
-      return this.orgService.uploadFile(req.user, orgId, file);
-    } catch (error) {
-      console.error('Error uploading file:', error.message);
-      throw new Error('Failed to process the uploaded file.');
-    }
+    return this.orgService.deleteOrganization(orgId, req);
   }
 }

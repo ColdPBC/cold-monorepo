@@ -13,6 +13,7 @@ import { DarklyModule, DarklyService } from '../darkly';
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({
         store: redisStore,
+        db: configService.get('REDIS_DB', 0),
         url: `${configService.get<string>('REDISCLOUD_URL')}`,
         ttl: 1000 * 60 * 60,
       }),

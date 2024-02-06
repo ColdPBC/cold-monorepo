@@ -13,7 +13,7 @@ export enum WorkerTypes {
 }
 
 export type RabbitMessageOptions = {
-  exchange: string;
+  exchange?: string;
   timeout?: number;
 };
 
@@ -43,7 +43,6 @@ export class ColdRabbitService extends BaseWorker implements OnModuleInit {
         {
           data: svc,
           event: 'service_started',
-          isRPC: true,
           from: svc.name,
         },
         {
@@ -76,27 +75,17 @@ export class ColdRabbitService extends BaseWorker implements OnModuleInit {
    * Publishes an async message to a specified exchange with a given routing key.
    *
    * @param {string} routingKey
-   * @param {any} data
-   * @param {string} event
+   * @param payload
    * @param {RabbitMessageOptions} options
    * @returns {Promise<void>}
    * @throws {Error}
    */
-  public async publish(
-    routingKey: string,
-    data: any,
-    event: string,
-    options: RabbitMessageOptions = {
-      exchange: 'amq.direct',
-    },
-  ): Promise<void> {
-    await this.client.publish(options.exchange, routingKey, {
-      data,
-      event: event,
-      from: this.config.getOrThrow('DD_SERVICE'),
+  public async publish(routingKey: string, payload: RabbitMessagePayload, options?: RabbitMessageOptions): Promise<void> {
+    await this.client.publish(options?.exchange || 'amq.direct', routingKey, {
+      ...payload,
     });
 
-    this.logger.info(`message published to ${routingKey.toLowerCase()}`, { ...data });
+    this.logger.info(`message published to ${routingKey.toLowerCase()}`, { ...payload });
 
     //await this.disconnect();
   }
@@ -104,21 +93,22 @@ export class ColdRabbitService extends BaseWorker implements OnModuleInit {
   /***
    * Publish an RPC message to rabbit
    * @param {string} routingKey
-   * @param body
+   * @param payload
    * @param {RabbitMessageOptions} options
    * @returns {any}
    * @throws {Error}
    */
-  public async request(routingKey: string, body: RabbitMessagePayload, options?: RabbitMessageOptions): Promise<any> {
+  public async request(routingKey: string, payload: RabbitMessagePayload, options?: RabbitMessageOptions): Promise<any> {
     try {
-      const response = await this.client?.request({
+      const requestBody = {
         exchange: options?.exchange || 'amq.direct',
         routingKey: routingKey,
         timeout: options?.timeout || 5000,
-        payload: body,
-      });
+        payload,
+      };
+      const response = await this.client?.request(requestBody);
 
-      this.logger.info(`message published to ${routingKey.toLowerCase()}`, { ...body });
+      this.logger.info(`message published to ${routingKey.toLowerCase()}`, requestBody);
 
       return response;
     } catch (err: any) {

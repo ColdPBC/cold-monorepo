@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Param, Patch, Post, Query, Req, UseFilters, UseGuards } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { Span } from 'nestjs-ddtrace';
-import { ZodCreateActionDto, JwtAuthGuard, RolesGuard, HttpExceptionFilter, Roles, Role, AuthenticatedUser, BaseWorker, CreateActionTemplatesDto } from '@coldpbc/nest';
+import { BaseWorker, CreateActionTemplatesDto, HttpExceptionFilter, IAuthenticatedUser, JwtAuthGuard, Role, Roles, RolesGuard, ZodCreateActionDto } from '@coldpbc/nest';
 import { allRoles } from '../_global/global.params';
 import { ActionsService } from './actions.service';
 
@@ -17,7 +17,7 @@ export class ActionsController extends BaseWorker {
   /**
    * This action returns all assignments for an organization
    * @param {string} orgId
-   * @param {{body: any, headers: any, query: any, user: AuthenticatedUser}} req
+   * @param {{body: any, headers: any, query: any, user: IAuthenticatedUser}} req
    * @param {boolean} bpc
    * @returns {Promise<Actions>}
    */
@@ -32,11 +32,11 @@ export class ActionsController extends BaseWorker {
       body: any;
       headers: any;
       query: any;
-      user: AuthenticatedUser;
+      user: IAuthenticatedUser;
     },
     @Query('bpc') bpc?: boolean,
   ) {
-    return this.assignments.getActions(req.user, orgId, bpc);
+    return this.assignments.getActions(req, orgId, bpc);
   }
 
   /**
@@ -57,18 +57,18 @@ export class ActionsController extends BaseWorker {
       body: any;
       headers: any;
       query: any;
-      user: AuthenticatedUser;
+      user: IAuthenticatedUser;
     },
     @Query('bpc') bpc?: boolean,
   ) {
-    return this.assignments.getAction(req.user, orgId, id, bpc);
+    return this.assignments.getAction(req, orgId, id, bpc);
   }
 
   /**
    * This action creates a new assignment from template by id
    * @param {string} orgId
    * @param {string} id
-   * @param {{body: any, headers: any, query: any, user: AuthenticatedUser}} req
+   * @param {{body: any, headers: any, query: any, user: IAuthenticatedUser}} req
    * @param {actionsPartial} dto
    * @returns {Promise<unknown>}
    */
@@ -91,18 +91,18 @@ export class ActionsController extends BaseWorker {
       body: any;
       headers: any;
       query: any;
-      user: AuthenticatedUser;
+      user: IAuthenticatedUser;
     },
     @Body() dto: CreateActionTemplatesDto,
   ) {
-    return this.assignments.createActionFromTemplate(req.user, orgId, id, dto);
+    return this.assignments.createActionFromTemplate(req, orgId, id, dto);
   }
 
   /**
    * This function updates an action by id
    * @param {string} orgId
    * @param {string} id
-   * @param {{body: {name?: string}, headers: any, query: any, user: AuthenticatedUser}} req
+   * @param {{body: {name?: string}, headers: any, query: any, user: IAuthenticatedUser}} req
    * @param {actions} dto
    * @returns {Promise<any>}
    */
@@ -117,10 +117,10 @@ export class ActionsController extends BaseWorker {
       body: { name?: string };
       headers: any;
       query: any;
-      user: AuthenticatedUser;
+      user: IAuthenticatedUser;
     },
-    @Body() dto: {action: ZodCreateActionDto},
+    @Body() dto: { action: ZodCreateActionDto },
   ) {
-    return this.assignments.updateAction(req.user, orgId, id, dto);
+    return this.assignments.updateAction(req, orgId, id, dto);
   }
 }

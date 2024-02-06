@@ -1,7 +1,7 @@
 import { JwtService } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
 import { CacheService, ColdCacheModule, DarklyService, JwtStrategy, PrismaModule, PrismaService } from '@coldpbc/nest';
-import { PolicyDefinitionsModule } from '../policies/policy-definitions.module';
+import { Policy_definitionsModule } from '../policies/policy_definitions.module';
 import { ComponentDefinitionsController } from './component-definitions.controller';
 import { ComponentDefinitionsService } from './component-definitions.service';
 import { mockDeep } from 'jest-mock-extended';
@@ -12,7 +12,7 @@ describe('FormDefinitionsService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [ConfigModule, PrismaModule, ColdCacheModule, PolicyDefinitionsModule],
+      imports: [ConfigModule, PrismaModule, ColdCacheModule, Policy_definitionsModule],
       controllers: [ComponentDefinitionsController],
       providers: [ConfigService, ComponentDefinitionsService, JwtService, JwtStrategy, PrismaService, CacheService],
     })

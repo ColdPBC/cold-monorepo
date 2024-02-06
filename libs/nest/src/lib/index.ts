@@ -1,4 +1,3 @@
-export * from "./cuid2-generator.service"
 export * from "./nest.module"
 export * from "./tracer"
 export * from "./authorization/index"

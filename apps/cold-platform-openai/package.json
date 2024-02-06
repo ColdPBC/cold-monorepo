@@ -9,7 +9,13 @@
       "show": true,
       "locations": false,
       "mqtt": {
-        "publish_options": {
+        "publishes_to": {
+          "user": "ui/:ENVIRONMENT:/:ORG_ID:/:EMAIL:",
+          "org": "ui/:ENVIRONMENT:/:ORG_ID:/#",
+          "public": "system/:ENVIRONMENT:/public",
+          "cold": "system/:ENVIRONMENT:/cold"
+        },
+        "subscribes_to": {
           "base_topic": "/platform/openai",
           "qos": 0
         }

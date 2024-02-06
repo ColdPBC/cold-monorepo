@@ -1,4 +1,4 @@
-# See http://help.github.com/ignore-files/ for more about ignoring files.
+# See http://help.github.com/ignore-files/ for more about ignoring files.service.ts.
 
 # compiled output
 dist
@@ -43,7 +43,6 @@ yalc.*
 package-lock.json
 # Ignore all index barrel files
 /libs/react/src/**/**/index.ts
-/.nx/
 /.nx/
 /migrations.json
 **/*.d.ts

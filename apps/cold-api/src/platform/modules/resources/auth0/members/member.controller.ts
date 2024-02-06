@@ -4,7 +4,7 @@ import { Span } from 'nestjs-ddtrace';
 import { coldAdminOnly } from '../../_global/global.params';
 import { MemberService } from './member.service';
 
-import { Roles, JwtStrategy, RolesGuard, PermissionsGuard, JwtAuthGuard, BaseWorker, HttpExceptionFilter, AuthenticatedUser } from '@coldpbc/nest';
+import { BaseWorker, HttpExceptionFilter, IAuthenticatedUser, JwtAuthGuard, JwtStrategy, PermissionsGuard, Roles, RolesGuard } from '@coldpbc/nest';
 
 @Span()
 @UseGuards(JwtAuthGuard, RolesGuard, PermissionsGuard)
@@ -31,12 +31,12 @@ export class MemberController extends BaseWorker {
       body: any;
       headers: any;
       query: any;
-      user: AuthenticatedUser;
+      user: IAuthenticatedUser;
     },
     @Param('email') email: string,
     @Query('bpc') bpc?: boolean,
   ) {
-    return this.membersService.getMemberByEmail(email, req.user, bpc);
+    return this.membersService.getMemberByEmail(email, req, bpc);
   }
 
   /***
@@ -53,11 +53,11 @@ export class MemberController extends BaseWorker {
       body: any;
       headers: any;
       query: any;
-      user: AuthenticatedUser;
+      user: IAuthenticatedUser;
     },
     @Param('email') email: string,
   ) {
-    return this.membersService.updateUser(req.user, email, req.body);
+    return this.membersService.updateUser(req, email, req.body);
   }
 
   /***
@@ -86,9 +86,9 @@ export class MemberController extends BaseWorker {
       };
       headers: any;
       query: any;
-      user: AuthenticatedUser;
+      user: IAuthenticatedUser;
     },
   ) {
-    return this.membersService.createMember(req.body);
+    return this.membersService.createMember(req, req.body);
   }
 }

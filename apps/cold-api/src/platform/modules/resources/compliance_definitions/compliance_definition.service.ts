@@ -1,22 +1,21 @@
-import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ConflictException, Global, Injectable, NotFoundException } from '@nestjs/common';
 import { Span } from 'nestjs-ddtrace';
-import { ConfigService } from '@nestjs/config';
-import { MqttClient } from 'mqtt';
-import { AuthenticatedUser, BaseWorker, CacheService, ColdRabbitService, Cuid2Generator, DarklyService, MqttService, PrismaService } from '@coldpbc/nest';
+import { BaseWorker, CacheService, Cuid2Generator, DarklyService, MqttService, PrismaService } from '@coldpbc/nest';
 import { ComplianceDefinition, OrgCompliance } from './compliance_definition_schema';
+import { BroadcastEventService } from '../../../utilities/events/broadcast.event.service';
 
 @Span()
+@Global()
 @Injectable()
 export class ComplianceDefinitionService extends BaseWorker {
   exclude_orgs: Array<{ id: string; name: string; display_name: string }>;
-  mqtt: MqttClient;
 
   constructor(
     readonly darkly: DarklyService,
     private prisma: PrismaService,
     private readonly cache: CacheService,
-    private config: ConfigService,
-    private readonly rabbit: ColdRabbitService,
+    private readonly mqtt: MqttService,
+    private readonly event: BroadcastEventService,
   ) {
     super('ComplianceDefinitionService');
   }
@@ -25,8 +24,6 @@ export class ComplianceDefinitionService extends BaseWorker {
     this.darkly.subscribeToJsonFlagChanges('dynamic-org-white-list', value => {
       this.exclude_orgs = value;
     });
-
-    this.mqtt = new MqttService(this.config).connect();
   }
 
   /***
@@ -34,7 +31,8 @@ export class ComplianceDefinitionService extends BaseWorker {
    * @param complianceDefinition
    * @param user
    */
-  async create(user: AuthenticatedUser, complianceDefinition: ComplianceDefinition): Promise<ComplianceDefinition> {
+  async create(req: any, complianceDefinition: ComplianceDefinition): Promise<ComplianceDefinition> {
+    const { user, url } = req;
     this.setTags({ user: user.coldclimate_claims, compliance_definition: complianceDefinition });
 
     try {
@@ -53,11 +51,28 @@ export class ComplianceDefinitionService extends BaseWorker {
         data: complianceDefinition,
       });
 
+      this.mqtt.publishMQTT('public', {
+        swr_key: url,
+        action: 'create',
+        status: 'complete',
+        data: response,
+      });
+
       this.logger.info('created compliance definition', response);
 
       return response as ComplianceDefinition;
     } catch (e) {
       this.metrics.increment('cold.api.surveys.create', this.tags);
+      this.mqtt.publishMQTT('public', {
+        swr_key: url,
+        action: 'create',
+        status: 'failed',
+        data: {
+          definition: complianceDefinition,
+          error: e.message,
+        },
+      });
+
       throw e;
     }
   }
@@ -69,12 +84,13 @@ export class ComplianceDefinitionService extends BaseWorker {
    * @param orgId
    * @param bpc
    */
-  async activateOrgCompliance(user: AuthenticatedUser, name: string, orgId: string, bpc?: boolean): Promise<OrgCompliance> {
+  async activateOrgCompliance(req: any, name: string, orgId: string, bpc?: boolean): Promise<OrgCompliance> {
+    const { user, url } = req;
     this.setTags({ user: user.coldclimate_claims });
     try {
       await this.cache.delete(`compliance_definitions:name:${name}:org:${orgId}`);
 
-      const definition = await this.findOne(name, user, bpc);
+      const definition = await this.findOne(name, req, bpc);
 
       let compliance = await this.prisma.organization_compliances.findFirst({
         where: {
@@ -110,17 +126,6 @@ export class ComplianceDefinitionService extends BaseWorker {
         organization: { id: orgId },
       });
 
-      const integrations = await this.prisma.integrations.findMany({
-        where: {
-          organization_id: orgId,
-        },
-        include: {
-          service_definition: true,
-        },
-      });
-
-      const integration = integrations.find(integration => integration.service_definition.name === 'cold-platform-openai');
-
       const surveyNames = compliance.compliance_definition.surveys as string[];
 
       const surveys: any[] = [];
@@ -136,22 +141,33 @@ export class ComplianceDefinitionService extends BaseWorker {
         }
       }
 
-      await this.rabbit.publish(
-        'cold.platform.openai',
-        {
-          organization: { id: orgId },
-          user,
-          compliance,
-          surveys,
-          integration,
-          from: 'cold-api',
+      await this.event.sendEvent(false, 'organization_compliances.created', { surveys, compliance }, user, orgId);
+
+      this.mqtt.publishMQTT('ui', {
+        org_id: orgId,
+        user: user,
+        swr_key: url,
+        action: 'create',
+        status: 'complete',
+        data: {
+          ...compliance,
         },
-        'organization_compliances.created',
-      );
+      });
 
       return compliance as OrgCompliance;
     } catch (e) {
       this.logger.error(e.message, { error: e });
+
+      this.mqtt.publishMQTT('ui', {
+        org_id: orgId,
+        user: user,
+        swr_key: url,
+        action: 'create',
+        status: 'failed',
+        data: {
+          error: e.message,
+        },
+      });
       throw e;
     }
   }
@@ -185,7 +201,7 @@ export class ComplianceDefinitionService extends BaseWorker {
    * @param orgId
    * @param bpc
    */
-  async findOrgCompliances(user: AuthenticatedUser, orgId: string, bpc?: boolean): Promise<OrgCompliance[]> {
+  async findOrgCompliances(req: any, orgId: string, bpc?: boolean): Promise<OrgCompliance[]> {
     if (!bpc) {
       /*const cached = (await this.cache.get(`compliance_definitions:org:${orgId}`)) as OrgCompliance[];
 
@@ -220,7 +236,8 @@ export class ComplianceDefinitionService extends BaseWorker {
    * @param bypassCache
    * @param impersonateOrg
    */
-  async findOne(name: string, user: AuthenticatedUser, bypassCache?: boolean): Promise<ComplianceDefinition> {
+  async findOne(name: string, req: any, bypassCache?: boolean): Promise<ComplianceDefinition> {
+    const { user } = req;
     this.setTags({ user: user.coldclimate_claims, bpc: bypassCache });
 
     /*if (!bypassCache) {
@@ -254,7 +271,8 @@ export class ComplianceDefinitionService extends BaseWorker {
    * @param complianceDefinition
    * @param user
    */
-  async update(name: string, complianceDefinition: ComplianceDefinition, user: AuthenticatedUser): Promise<ComplianceDefinition> {
+  async update(name: string, complianceDefinition: ComplianceDefinition, req: any): Promise<ComplianceDefinition> {
+    const { user, url } = req;
     this.setTags({
       user: user.coldclimate_claims,
       compliance_definition: complianceDefinition,
@@ -263,7 +281,7 @@ export class ComplianceDefinitionService extends BaseWorker {
     try {
       await this.cache.delete(`compliance_definition:${name}`);
 
-      const def = await this.findOne(name, user, true);
+      const def = await this.findOne(name, req, true);
 
       if (!def) {
         throw new NotFoundException(`Unable to find compliance definition with name: ${name}`);
@@ -280,9 +298,29 @@ export class ComplianceDefinitionService extends BaseWorker {
 
       this.metrics.increment('cold.api.surveys.update', 1, this.tags);
 
+      this.mqtt.publishMQTT('public', {
+        swr_key: url,
+        action: 'update',
+        status: 'complete',
+        data: {
+          ...definition,
+        },
+      });
+
       return definition as unknown as ComplianceDefinition;
     } catch (e) {
       this.logger.error(e.message, { error: e });
+
+      this.mqtt.publishMQTT('public', {
+        swr_key: url,
+        action: 'create',
+        status: 'failed',
+        data: {
+          error: e.message,
+          ...complianceDefinition,
+        },
+      });
+
       throw e;
     }
   }
@@ -292,7 +330,8 @@ export class ComplianceDefinitionService extends BaseWorker {
    * @param name
    * @param user
    */
-  async remove(name: string, user: AuthenticatedUser) {
+  async remove(name: string, req: any) {
+    const { user, url } = req;
     this.setTags({
       compliance_definition_name: name,
       user: user.coldclimate_claims,
@@ -300,16 +339,32 @@ export class ComplianceDefinitionService extends BaseWorker {
     });
 
     try {
-      const def = await this.findOne(name, user);
+      const def = await this.findOne(name, req);
       if (def) {
         await this.cache.delete(`compliance_definition:name:${def.name}`);
       }
 
       await this.prisma.compliance_definitions.delete({ where: { name: name } });
 
+      this.mqtt.publishMQTT('public', {
+        swr_key: url,
+        action: 'delete',
+        status: 'complete',
+        data: {},
+      });
+
       this.logger.info(`deleted compliance definition: ${name}`, { id: def.id, name: def.name });
     } catch (e) {
       this.logger.error(e.message, { error: e });
+
+      this.mqtt.publishMQTT('public', {
+        swr_key: url,
+        action: 'delete',
+        status: 'failed',
+        data: {
+          error: e.message,
+        },
+      });
 
       throw e;
     }
@@ -321,7 +376,8 @@ export class ComplianceDefinitionService extends BaseWorker {
    * @param orgId
    * @param user
    */
-  async deactivate(name: string, orgId: string, user: AuthenticatedUser, bpc?: boolean) {
+  async deactivate(req: any, name: string, orgId: string, bpc?: boolean) {
+    const { user, url } = req;
     this.setTags({
       compliance_definition_name: name,
       user: user.coldclimate_claims,
@@ -329,7 +385,7 @@ export class ComplianceDefinitionService extends BaseWorker {
     });
     let compliance: OrgCompliance;
     try {
-      const def = await this.findOne(name, user, bpc);
+      const def = await this.findOne(name, req, bpc);
 
       compliance = (await this.prisma.organization_compliances.findFirst({
         where: {
@@ -344,9 +400,25 @@ export class ComplianceDefinitionService extends BaseWorker {
 
       await this.prisma.organization_compliances.delete({ where: { id: compliance.id } });
 
+      this.mqtt.publishMQTT('public', {
+        swr_key: url,
+        action: 'delete',
+        status: 'complete',
+        data: {},
+      });
+
       this.logger.info(`deactivated compliance definition: ${name} for org: ${orgId}`, { id: def.id, name: def.name });
     } catch (e) {
       this.logger.error(e.message, { error: e });
+
+      this.mqtt.publishMQTT('public', {
+        swr_key: url,
+        action: 'delete',
+        status: 'failed',
+        data: {
+          error: e.message,
+        },
+      });
 
       throw e;
     }

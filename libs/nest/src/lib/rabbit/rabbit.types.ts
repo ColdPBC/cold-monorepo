@@ -1,6 +1,6 @@
 export type RabbitMessagePayload = {
-  data: any;
+  method?: string;
   event: string;
-  isRPC?: boolean;
   from: string;
+  data: any;
 };

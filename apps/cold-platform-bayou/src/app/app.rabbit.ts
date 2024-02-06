@@ -1,5 +1,5 @@
 import {Injectable} from '@nestjs/common';
-import {AuthenticatedUser, BaseWorker} from '@coldpbc/nest';
+import {BaseWorker, IAuthenticatedUser} from '@coldpbc/nest';
 import {Nack, RabbitRPC} from '@golevelup/nestjs-rabbitmq';
 import {RabbitSubscribe} from '@golevelup/nestjs-rabbitmq/lib/rabbitmq.decorators';
 import {Job, Queue} from 'bull';
@@ -45,11 +45,17 @@ export class RabbitService extends BaseWorker {
     queue: `cold.platform.bayou.rpc`,
     allowNonJsonMessages: false,
   })
-  async subscribe(msg: { data: never; from: string; event: string }): Promise<unknown> {
+  async subscribe(msg): Promise<unknown> {
     try {
+      const parsed = msg;
       this.logger.debug(`RPC Request Received from ${msg.from}`, { ...msg });
 
-      return await this.processMessage(msg.event, msg.from, msg.data);
+      switch (parsed.event) {
+        case 'integration.enabled':
+          return await this.bayou.createCustomer(parsed.user, parsed['organization']['id'], parsed['location_id'], this.bayou.toBayouPayload(parsed));
+        default:
+          return new Nack();
+      }
     } catch (err) {
       this.logger.error(err.message, { err, data: msg.data, from: msg.from, event: msg.event });
 
@@ -82,20 +88,28 @@ export class RabbitService extends BaseWorker {
     queue: `cold.platform.bayou`,
     allowNonJsonMessages: false,
   })
-  async asyncMessage(msg: { user: AuthenticatedUser; data: never; from: string; event: string }): Promise<void | Nack> {
+  async asyncMessage(msg: { user: IAuthenticatedUser; data: never; from: string; event: string }): Promise<void | Nack> {
     try {
-      this.logger.debug(`ASYNC ${msg.event} triggered by ${msg.user?.coldclimate_claims?.email} Request processed from ${msg.from}`, {
+      this.logger.debug(`ASYNC ${msg.event} triggered by ${msg.user?.coldclimate_claims?.email} message processed from ${msg.from}`, {
         data: msg.data,
         from: msg.from,
         event: msg.event,
       });
 
-      const job = await this.queue.add(msg.event, msg.data, { backoff: { type: 'exponential' } });
-      this.logger.info(` ${msg.event} job (${job.id}) created from message received from ${msg.from}`, {
-        data: msg.data,
-        from: msg.from,
-        event: msg.event,
-      });
+      switch (msg.event) {
+        case 'integration.enabled': {
+          const job = await this.queue.add(msg.event, msg.data, { backoff: { type: 'exponential' } });
+          this.logger.info(` ${msg.event} job (${job.id}) created from message received from ${msg.from}`, {
+            data: msg.data,
+            from: msg.from,
+            event: msg.event,
+          });
+          break;
+        }
+        // event not recognized for this service
+        default:
+          return new Nack();
+      }
     } catch (err) {
       this.logger.error(err.message, {
         error: err,
@@ -106,17 +120,6 @@ export class RabbitService extends BaseWorker {
       });
 
       return new Nack();
-    }
-  }
-
-  async processMessage(event: string, from: string, data: never) {
-    this.logger.info(`Processing ${event} event triggered by ${data['user']['coldclimate_claims']['email']} from ${from}`, { data });
-
-    const user = data['user'];
-
-    switch (event) {
-      case 'integration.enabled':
-        return await this.bayou.createCustomer(user, data['organization']['id'], data['location_id'], this.bayou.toBayouPayload(data));
     }
   }
 }

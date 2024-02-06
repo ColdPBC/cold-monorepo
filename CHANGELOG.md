@@ -20,20 +20,16 @@
 # [1.102.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.101.0...v1.102.0) (2024-02-01)
 
 
-### Features
+# [1.97.0-cold-475.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.96.1-cold-475.4...v1.97.0-cold-475.1) (2024-02-02)
 
-* add compliance sidebar item to filter based on ld flag ([f517acd](https://github.com/ColdPBC/cold-monorepo/commit/f517acd59b62cdd27f69feafb5bf736be2bab847))
-* add subscription to system/env/cold for cold admins ([0690be2](https://github.com/ColdPBC/cold-monorepo/commit/0690be21ca999c4db86adc98fab54b595585d97a))
-* add system/env to MQTT subscription ([ba51e9c](https://github.com/ColdPBC/cold-monorepo/commit/ba51e9cc8948e90b93ecde48830b96a3a626eb7e))
-* added using subscribe funtion to system/env/cold subscription ([463b748](https://github.com/ColdPBC/cold-monorepo/commit/463b748810b6514429fd9f49db1c1c65736fd17a))
-* correct complete to needing review for compliance overview ([b4256a3](https://github.com/ColdPBC/cold-monorepo/commit/b4256a3438880110070b2e2801ca0474714171c0))
-* dryifyed mqqtt topic subscription ([7cfbb90](https://github.com/ColdPBC/cold-monorepo/commit/7cfbb90e8afddee20ed575ad0d5dd2732c0c1b37))
-* removed hardcoded REI compliance references and other changes ([3072e77](https://github.com/ColdPBC/cold-monorepo/commit/3072e7765ba50d51bac359312ac2346b4c85123b))
-* removed using shade color to display UI ([cf6b720](https://github.com/ColdPBC/cold-monorepo/commit/cf6b720a9f7c81fe2816f2d20a0e9af75999497b))
-* subscribe mqtt to /orgid/# topic ([2135330](https://github.com/ColdPBC/cold-monorepo/commit/2135330ae5d38725a06d1eb5aa5c51dd2780c67a))
-* update to yarn lock ([bd771db](https://github.com/ColdPBC/cold-monorepo/commit/bd771dbae77e61d5f87045094988f23f30285376))
 
-# [1.102.0-COLD-480.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.101.0...v1.102.0-COLD-480.1) (2024-01-30)
+### Bug Fixes
+
+* get config settings from LD ([4a91b8c](https://github.com/ColdPBC/cold-monorepo/commit/4a91b8cc3b0935e66d52b8558eeda322fb90ec93))
+* implement re-usable service to broadcast rabbit to all integrations ([be21f09](https://github.com/ColdPBC/cold-monorepo/commit/be21f09c50c18fa03d620a9646e5c1a30d613897))
+* nack() messages when event is not supported by service ([66bbd5c](https://github.com/ColdPBC/cold-monorepo/commit/66bbd5c8e6ca81e2f3a6fbf2b8313d3a882f19d4))
+* null reference error ([11c8d0b](https://github.com/ColdPBC/cold-monorepo/commit/11c8d0bd6a4a1342177163fdf5bb25418876a459))
+* return instance to support non DI implementations ([41e64c1](https://github.com/ColdPBC/cold-monorepo/commit/41e64c1be7fcb2a73bb17fa0108d7e642197b05e))
 
 
 ### Features
@@ -56,6 +52,7 @@
 * change user-facing journey modules to gap assessments for demo-ing ([#247](https://github.com/ColdPBC/cold-monorepo/issues/247)) ([a23d514](https://github.com/ColdPBC/cold-monorepo/commit/a23d514eeb484eb86d4acff7f8f71231763e6e66))
 
 # [1.99.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.98.0...v1.99.0) (2024-01-26)
+
 
 
 ### Bug Fixes
@@ -87,6 +84,8 @@
 
 ### Bug Fixes
 
+* issue that would block redis jobs ([22f4f6c](https://github.com/ColdPBC/cold-monorepo/commit/22f4f6c65575562c084744abb791e18eea7b5015))
+* issue that would block redis jobs ([8ff1e74](https://github.com/ColdPBC/cold-monorepo/commit/8ff1e745a75c619e1ea21322438a3009615a7ebb))
 * openAI improvements ([317bdf4](https://github.com/ColdPBC/cold-monorepo/commit/317bdf47b15f0c3c7c59a22a02eb950f69ffaae0))
 
 # [1.96.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.95.0...v1.96.0) (2024-01-23)

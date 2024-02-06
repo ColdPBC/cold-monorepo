@@ -1,6 +1,6 @@
 import { Body, Controller, HttpCode, Param, Post, Req, UseFilters, UseGuards } from '@nestjs/common';
 import { BayouService } from './bayou.service';
-import { AuthenticatedUser, HttpExceptionFilter, JwtAuthGuard, Public, Role, Roles, RolesGuard } from '@coldpbc/nest';
+import { HttpExceptionFilter, IAuthenticatedUser, JwtAuthGuard, Public, Role, Roles, RolesGuard } from '@coldpbc/nest';
 import { BayouWebhookValidationPipe } from './pipes/webhook.validation.pipe';
 import { BayouCustomerPayload } from './schemas/bayou.customer.schema';
 import { BayouCustomerPayloadValidationPipe } from './pipes/customer.validation.pipe';
@@ -40,7 +40,7 @@ export class BayouController {
       body: never;
       headers: never;
       query: never;
-      user: AuthenticatedUser;
+      user: IAuthenticatedUser;
     },
     @Body(new BayouCustomerPayloadValidationPipe('POST')) body: BayouCustomerPayload,
   ) {
