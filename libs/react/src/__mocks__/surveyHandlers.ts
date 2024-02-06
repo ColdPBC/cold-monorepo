@@ -1,5 +1,5 @@
 import { rest } from 'msw';
-import { getJourneyOverviewMock, getSurveyFormDataByName, getSurveyMockSomeCompleted, getSurveysMock } from './surveyDataMock';
+import { getAIAnsweredSurveyMock, getJourneyOverviewMock, getSurveyFormDataByName, getSurveyMockSomeCompleted, getSurveysMock } from './surveyDataMock';
 import { getApiUrl } from './handlers';
 import { findIndex } from 'lodash';
 
@@ -220,121 +220,7 @@ export const getSurveyHandler = {
   getAiAnsweredSurvey: [
     rest.get(getApiUrl('*/organizations/:orgId/surveys/:name'), (req, res, ctx) => {
       const { name } = req.params;
-      const survey = {
-        id: 'ca3ad2ed-619b-4ee0-834e-2e56c336dba8',
-        name: 'rei_pkg_survey',
-        type: 'REI',
-        description: '',
-        created_at: '2023-09-18T23:37:55.849Z',
-        updated_at: '2023-09-18T23:37:55.959Z',
-        definition: {
-          title: 'Packaging - General',
-          sections: {
-            PKG: {
-              title: 'Packaging - General',
-              prompt: '',
-              component: {},
-              follow_up: {
-                'PKG-1': {
-                  idx: 0,
-                  prompt: 'Does your brand have a formal policy/target in place regarding the use of more sustainable product packaging?',
-                  options: [],
-                  tooltip: '',
-                  component: 'textarea',
-                  placeholder: '',
-                  additional_context: {
-                    prompt: 'Please provide hyperlink(s) to any publicly available policies/targets related to the above packaging sustainability areas:',
-                    operator: 'has_any',
-                    tooltip: 'If entering multiple hyperlinks, separate using commas.',
-                    component: 'textarea',
-                    comparison: {
-                      b: true,
-                    },
-                    placeholder: '',
-                  },
-                  ai_attempted: true,
-                  ai_response: {
-                    justification: 'The answer is Yes because the company has a formal policy/target in place regarding the use of more sustainable product packaging.',
-                    answer: 'Yes',
-                  },
-                },
-                'PKG-2': {
-                  idx: 1,
-                  prompt: 'Has your brand been able to phase out the use of single-use plastics across any noteworthy areas of primary or secondary product packaging?',
-                  options: [],
-                  tooltip: '',
-                  component: 'yes_no',
-                  placeholder: '',
-                  additional_context: {
-                    prompt: 'Please describe the type of packaging phased out, the product category impacted and the alternative packaging used that avoids single-use plastics.',
-                    operator: '==',
-                    tooltip: '',
-                    component: 'textarea',
-                    comparison: true,
-                    placeholder: '',
-                  },
-                  ai_attempted: true,
-                  ai_response: {
-                    justification: 'The answer is Yes because the company has a formal policy/target in place regarding the use of more sustainable product packaging.',
-                    answer: true,
-                  },
-                },
-                'PKG-3': {
-                  idx: 2,
-                  prompt: 'Are there other best sustainability practices for primary product packaging that you have in place that you’d like to share with REI?',
-                  options: [],
-                  tooltip: '',
-                  component: 'yes_no',
-                  placeholder: '',
-                  additional_context: {
-                    prompt: 'Please describe.',
-                    operator: '==',
-                    tooltip: '',
-                    component: 'textarea',
-                    comparison: true,
-                    placeholder: '',
-                  },
-                  ai_attempted: true,
-                  ai_response: {
-                    justification: 'The answer is Yes because the company has a formal policy/target in place regarding the use of more sustainable product packaging.',
-                  },
-                },
-                'PKG-4': {
-                  idx: 3,
-                  prompt:
-                    'Are there any key resources or tools your brand has used to avoid the use of individual polybags or implement other packaging sustainability best practices that might be useful for other brands?',
-                  options: [],
-                  tooltip: '',
-                  component: 'yes_no',
-                  placeholder: '',
-                  additional_context: {
-                    prompt: 'Please describe.',
-                    operator: '==',
-                    tooltip: '',
-                    component: 'textarea',
-                    comparison: true,
-                    placeholder: '',
-                  },
-                  ai_attempted: true,
-                  ai_response: {
-                    justification: 'The answer is Yes because the company has a formal policy/target in place regarding the use of more sustainable product packaging.',
-                    answer: false,
-                  },
-                },
-              },
-              image_url:
-                'https://images.unsplash.com/photo-1533038590840-1cde6e668a91?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1587&q=80',
-              category_idx: 0,
-              category_description: '',
-            },
-          },
-          image_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/splash_images/General.png',
-          intro_markdown:
-            'Please complete the REI Packaging - General survey below. This survey is intended to help REI understand your brand’s current efforts to reduce the environmental impact of your product packaging. Please complete this survey by October 1, 2021.',
-        },
-      };
-
-      return res(ctx.json(survey));
+      return res(ctx.json(getAIAnsweredSurveyMock()));
     }),
   ],
 };

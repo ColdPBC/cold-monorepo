@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { withKnobs } from '@storybook/addon-knobs';
-import { StoryObj } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 import { InputTypes } from '../../../enums/inputs';
 import { FormInput } from './formInput';
 import { FormInputProps } from '../../../interfaces/form/form';
+import { YesNo } from '@coldpbc/components';
 
-const meta = {
+const meta: Meta<typeof FormInput> = {
   title: 'Molecules/FormInput',
   component: FormInput,
   tags: ['autodocs'],

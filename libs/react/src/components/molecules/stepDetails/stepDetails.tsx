@@ -35,13 +35,13 @@ export const StepDetails = ({
   };
 
   return (
-    <div className={getClassName()}>
+    <div className={getClassName()} data-testid={`step_details`}>
       {steps.map((step, index) => {
         return (
           <StepDetail
             step={step}
             handleStepUpdate={handleStepUpdate}
-            key={`step_detail_${index}_${snakeCase(step.description)}`}
+            key={`step_detail_${index}`}
           />
         );
       })}

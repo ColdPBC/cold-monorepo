@@ -5,9 +5,12 @@ export interface SelectOptionProps {
   onChange: (value: any) => void;
   value: string | string[] | null;
   isMultiSelect?: boolean;
+  'data-testid'?: string;
 }
 
-export const SelectOption = ({ options, onChange, value, isMultiSelect = false }: SelectOptionProps) => {
+export const SelectOption = (props: SelectOptionProps) => {
+  const { options, onChange, value, isMultiSelect = false } = props;
+
   let vertical = true;
 
   if (options.length > 4) {
@@ -68,7 +71,7 @@ export const SelectOption = ({ options, onChange, value, isMultiSelect = false }
 
   if (vertical) {
     return (
-      <div className={'w-full'}>
+      <div className={'w-full'} data-testid={props['data-testid']}>
         {isMultiSelect && <div className={'text-left text-xs not-italic font-normal text-tc-primary mb-2'}>Select all that apply</div>}
         <div className={'w-full space-y-4'}>
           {options.map((option, index) => {
@@ -83,7 +86,7 @@ export const SelectOption = ({ options, onChange, value, isMultiSelect = false }
     );
   } else {
     return (
-      <div className={'w-full'}>
+      <div className={'w-full'} data-testid={props['data-testid']}>
         {isMultiSelect && <div className={'text-left text-xs not-italic font-normal text-tc-primary mb-2'}>Select all that apply</div>}
         <div className={'w-full grid grid-cols-2 gap-4'}>
           {options.map((option, index) => {

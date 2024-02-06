@@ -43,7 +43,7 @@ export const ComplianceOverviewCard = (props: ComplianceOverviewCardProps) => {
       if (!onOverviewPage) {
         if (complianceData.aiAttemptedQuestions !== complianceData.totalQuestions) {
           return (
-            <Card glow={false} className={'w-full border-1 border-bgc-accent'}>
+            <Card glow={false} className={'w-full border-1 border-bgc-accent'} data-testid={'compliance-overview-progress-bar-analyzing'}>
               <div className={'flex w-full justify-between font-body font-bold'}>
                 <div className={'flex space-x-[8px]'}>
                   <Spinner size={GlobalSizes.medium} />
@@ -57,7 +57,7 @@ export const ComplianceOverviewCard = (props: ComplianceOverviewCardProps) => {
           );
         } else {
           return (
-            <Card glow={false} className={'w-full border-1 border-bgc-accent'}>
+            <Card glow={false} className={'w-full border-1 border-bgc-accent'} data-testid={'compliance-overview-progress-bar-ready'}>
               <div className={'w-full gap-y-[10px]'}>
                 <div className={'w-full'}>
                   <ProgressBar shades={shades} />
@@ -86,7 +86,7 @@ export const ComplianceOverviewCard = (props: ComplianceOverviewCardProps) => {
     } else {
       if (complianceData.aiAttemptedQuestions !== complianceData.totalQuestions) {
         return (
-          <Card glow={false} className={'w-full border-1 border-bgc-accent'}>
+          <Card glow={false} className={'w-full border-1 border-bgc-accent'} data-testid={'compliance-section-overview-progress-bar-analyzing'}>
             <div className={'flex w-full justify-between font-body font-bold'}>
               <div className={'flex space-x-[8px]'}>
                 <Spinner size={GlobalSizes.medium} />
@@ -100,7 +100,7 @@ export const ComplianceOverviewCard = (props: ComplianceOverviewCardProps) => {
         );
       } else {
         return (
-          <Card glow={false} className={'w-full border-1 border-bgc-accent'}>
+          <Card glow={false} className={'w-full border-1 border-bgc-accent'} data-testid={'compliance-section-overview-progress-bar-ready'}>
             <div className={'w-full gap-y-[10px]'}>
               {showProgressBar() && (
                 <div className={'w-full'}>
@@ -129,7 +129,7 @@ export const ComplianceOverviewCard = (props: ComplianceOverviewCardProps) => {
   };
 
   return (
-    <Card className={'w-full gap-y-6'}>
+    <Card className={'w-full gap-y-6'} data-testid={'compliance-overview-card'}>
       <div className={'w-full flex justify-between'}>
         <div className={'flex gap-x-4 items-center justify-center'}>
           {logo_url && (
@@ -137,7 +137,9 @@ export const ComplianceOverviewCard = (props: ComplianceOverviewCardProps) => {
               <img src={`${logo_url}`} alt="compliance" />
             </div>
           )}
-          <div className="text-h4 flex-1">{title}</div>
+          <div className="text-h4 flex-1" data-testid={'compliance-overview-card-title'}>
+            {title}
+          </div>
         </div>
         {ctas?.map((cta, index) => {
           return (

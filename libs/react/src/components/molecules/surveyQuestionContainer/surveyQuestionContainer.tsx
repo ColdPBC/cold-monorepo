@@ -2,7 +2,7 @@ import React from 'react';
 import { SurveyInput } from '../index';
 import { cloneDeep, findIndex, forEach, forOwn } from 'lodash';
 import { IButtonProps, SurveyActiveKeyType, SurveyAdditionalContext, SurveyPayloadType, SurveySectionType } from '@coldpbc/interfaces';
-import { BaseButton } from '../../atoms';
+import { BaseButton, Spinner } from '../../atoms';
 import { ButtonTypes, GlobalSizes } from '@coldpbc/enums';
 import { CSSTransition, SwitchTransition } from 'react-transition-group';
 import { getSectionIndex, isComponentTypeValid, isKeyValueFollowUp } from '@coldpbc/lib';
@@ -365,7 +365,10 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
         }
       }
     } else {
-      if (additionalContextQuestion && sections[activeSectionKey].additional_context && sections[activeSectionKey].additional_context?.value === undefined) {
+      if (additionalContextQuestion && sections[activeSectionKey].additional_context &&
+        (sections[activeSectionKey].additional_context?.value === undefined
+          || sections[activeSectionKey].additional_context?.value === null)
+      ) {
         buttonProps.disabled = true;
       }
       if (sections[activeSectionKey].value === undefined && sections[activeSectionKey].ai_response !== undefined && sections[activeSectionKey].ai_response?.answer !== undefined) {
@@ -665,7 +668,7 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
 
   if (question !== undefined) {
     return (
-      <div className={'w-full h-full relative flex flex-col space-y-[24px]'}>
+      <div className={'w-full h-full relative flex flex-col space-y-[24px]'} data-testid={'survey-question-container'}>
         <SwitchTransition>
           <CSSTransition key={question.props.input_key} timeout={150} classNames={transitionClassNames}>
             <div className={'h-full w-full flex items-center justify-center overflow-y-auto px-[139px] shortScreen:px-[32px] shortWideScreen:px-[139px]'}>

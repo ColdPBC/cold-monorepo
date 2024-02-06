@@ -15,7 +15,6 @@ export type StepDetailsAnimatedCheckboxProps = {
 export const StepDetailsAnimatedCheckbox = ({
   onCheckboxClick,
 }: StepDetailsAnimatedCheckboxProps) => {
-  
   const { View: AnimatedCheckbox, play } = useLottie(lottieCheckboxOptions);
 
   useEffect(() => {
@@ -23,7 +22,11 @@ export const StepDetailsAnimatedCheckbox = ({
   }, []);
 
   return (
-    <div className={'w-[32px] h-[32px]'} onClick={onCheckboxClick}>
+    <div
+      className={'w-[32px] h-[32px]'}
+      onClick={onCheckboxClick}
+      data-testid={'step-detail-checkbox'}
+    >
       {AnimatedCheckbox}
     </div>
   );

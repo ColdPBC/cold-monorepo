@@ -3,7 +3,7 @@ import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { GlobalSizes } from '../../../enums/sizes';
 
-const meta = {
+const meta: Meta<typeof Spinner> = {
   title: 'Atoms/Spinner',
   component: Spinner,
   tags: ['autodocs'],
@@ -14,7 +14,7 @@ const meta = {
       options: GlobalSizes,
     },
   },
-} satisfies Meta<typeof Spinner>;
+};
 
 export default meta;
 type Story = StoryObj<typeof meta>;

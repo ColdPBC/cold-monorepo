@@ -26,6 +26,7 @@ export const StepDetailsEmptyCheckBox = ({
         onMouseOver={onCheckboxHover}
         onMouseOut={onCheckboxHoverOut}
         className={'w-[32px] h-[32px] p-[4px]'}
+        data-testid={'step-detail-empty-checkbox'}
       >
         <div className={'w-[24px] h-[24px] rounded-full bg-gray-40'}></div>
       </div>
@@ -37,6 +38,7 @@ export const StepDetailsEmptyCheckBox = ({
         onMouseOver={onCheckboxHover}
         onMouseOut={onCheckboxHoverOut}
         className={'w-[32px] h-[32px] flex items-center justify-center'}
+        data-testid={'step-detail-empty-checkbox'}
       >
         <ColdIcon
           name={IconNames.ColdEmptyCheckboxIcon}

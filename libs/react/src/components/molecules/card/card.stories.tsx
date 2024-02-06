@@ -4,12 +4,12 @@ import { Meta, StoryObj } from '@storybook/react';
 import { Card } from './card';
 import { ButtonTypes } from '../../../enums/buttons';
 
-const meta = {
+const meta: Meta<typeof Card> = {
   title: 'Molecules/Card',
   component: Card,
   tags: ['autodocs'],
   decorators: [withKnobs],
-} satisfies Meta<typeof Card>;
+};
 
 export default meta;
 type Story = StoryObj<typeof meta>;

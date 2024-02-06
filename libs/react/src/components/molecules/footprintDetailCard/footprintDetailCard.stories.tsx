@@ -8,12 +8,12 @@ import { render } from 'react-dom';
 import { getFootprintHandler, StoryMockProvider } from '@coldpbc/mocks';
 import { InputTypes } from '@coldpbc/enums';
 
-const meta = {
+const meta: Meta<typeof FootprintDetailCard> = {
   title: 'Molecules/FootprintDetailCard',
   component: FootprintDetailCard,
   tags: ['autodocs'],
   decorators: [withKnobs],
-} satisfies Meta<typeof FootprintDetailCard>;
+};
 
 export default meta;
 type Story = StoryObj<typeof meta>;

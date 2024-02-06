@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import { withKnobs } from '@storybook/addon-knobs';
-import { StoryObj } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 import { SurveyIntro } from './surveyIntro';
 import { getSurveyFormDataPayload } from '@coldpbc/mocks';
-import { SurveyDefinitionType } from '@coldpbc/interfaces';
 
-const meta = {
+const meta: Meta<typeof SurveyIntro> = {
   title: 'Molecules/SurveyIntro',
   component: SurveyIntro,
   tags: ['autodocs'],

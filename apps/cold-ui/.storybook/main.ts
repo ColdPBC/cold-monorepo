@@ -14,6 +14,7 @@ const config: StorybookConfig = {
     'storybook-addon-auth0-react',
     'storybook-addon-cookie',
     'storybook-addon-launchdarkly',
+    '@storybook/addon-interactions',
   ],
   framework: {
     name: '@storybook/react-vite',

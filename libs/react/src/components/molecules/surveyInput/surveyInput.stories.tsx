@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { withKnobs } from '@storybook/addon-knobs';
-import { StoryObj } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 import { SurveyInput, SurveyInputProps } from './surveyInput';
 
-const meta = {
+const meta: Meta<typeof SurveyInput> = {
   title: 'Molecules/SurveyInput',
   component: SurveyInput,
   tags: ['autodocs'],
