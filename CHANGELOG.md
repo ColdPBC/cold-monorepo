@@ -1,3 +1,14 @@
+# [1.103.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.102.1...v1.103.0) (2024-02-05)
+
+
+### Features
+
+* add logging for seeding components ([2831821](https://github.com/ColdPBC/cold-monorepo/commit/283182136ebfdd0f5e37537135df85aa4021606e))
+* add seed components file ([6947106](https://github.com/ColdPBC/cold-monorepo/commit/6947106150da2f15e767ee216fe00f6c1abcc1c9))
+* code improvement ([3e6821c](https://github.com/ColdPBC/cold-monorepo/commit/3e6821cc82847b6572ccfc04ae8abd82ef1d6187))
+* correct component definition data ([2fc08fc](https://github.com/ColdPBC/cold-monorepo/commit/2fc08fca5928a7680fc69904b294f565004f9a6c))
+* reuse and rename seed form defitnitions to component definitions ([9d50887](https://github.com/ColdPBC/cold-monorepo/commit/9d508875c571ef3bfa8052679b2b6ee41ae37d6d))
+
 ## [1.102.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.102.0...v1.102.1) (2024-02-05)
 
 
