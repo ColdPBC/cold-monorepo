@@ -17,7 +17,7 @@ export class NewsService extends BaseWorker {
    * @param payload CreateArticleDto
    */
   async create(req: any, payload: CreateArticleDto): Promise<CreateArticleDto> {
-    const { user, url } = req;
+    const { url } = req;
     try {
       payload.created_at = new Date();
 
@@ -62,7 +62,7 @@ export class NewsService extends BaseWorker {
    * @param id string
    */
   async delete(req: any, id: string): Promise<void> {
-    const { user, url } = req;
+    const { url } = req;
     const article = await this.prisma.news.findUnique({
       where: {
         id,
