@@ -4,6 +4,7 @@ import { INestApplication, Module } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { join } from 'path';
 import { patchNestjsSwagger } from '@anatine/zod-nestjs';
+import { ConfigService } from '@nestjs/config';
 
 @Module({})
 export class OpenapiModule {

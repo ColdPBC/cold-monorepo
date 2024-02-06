@@ -121,7 +121,7 @@ export class InvitationsService extends BaseWorker implements OnModuleInit {
           inviter: {
             name: inviter_name,
           },
-          client_id: config.get('AUTH0_UI_CLIENT_ID'),
+          client_id: this.config.get('AUTH0_UI_CLIENT_ID'),
           invitee: {
             email: user_email,
           },

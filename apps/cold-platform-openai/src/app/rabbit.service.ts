@@ -5,6 +5,7 @@ import {InjectQueue} from '@nestjs/bull';
 import {Queue} from 'bull';
 import {AppService} from './app.service';
 import {FileService} from './assistant/files/file.service';
+import {ConfigService} from '@nestjs/config';
 
 /**
  * RabbitService class.
@@ -13,6 +14,7 @@ import {FileService} from './assistant/files/file.service';
 export class RabbitService extends BaseWorker {
   constructor(
     @InjectQueue('openai') private queue: Queue,
+    private readonly config: ConfigService,
     private readonly appService: AppService,
     private readonly prisma: PrismaService,
     private readonly s3: S3Service,
@@ -90,7 +92,7 @@ export class RabbitService extends BaseWorker {
           return response;
         }
         case 'file.uploaded': {
-          const uploader = new FileService(this.appService, this.prisma, this.s3);
+          const uploader = new FileService(this.config, this.appService, this.prisma, this.s3);
           return await uploader.uploadOrgFilesToOpenAI(parsed);
         }
         case 'organization_files.get': {

@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { BaseWorker, PrismaService } from '@coldpbc/nest';
 import { HttpService } from '@nestjs/axios';
 import { AxiosRequestConfig } from 'axios';
+import { ConfigService } from '@nestjs/config';
 
 export type EnergyPayload = {
   emission_factor: {
