@@ -50,7 +50,7 @@ jobs:
         with:
           node-version: "20.9.0"
       - name: 🪢 Install Yarn
-        if: github.event.deployment_status.state == 'success'
+        if: github.event.deployment_status.state == 'success' || github.event.inputs.api_url
         run: corepack enable && yarn set version stable
 
       - name: 💼 Cache Node Modules
