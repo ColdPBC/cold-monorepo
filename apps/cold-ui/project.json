@@ -18,6 +18,12 @@
         "development": {
           "mode": "development"
         },
+        "staging": {
+          "mode": "staging"
+        },
+        "test": {
+          "mode": "test"
+        },
         "production": {
           "mode": "production"
         }
@@ -32,6 +38,14 @@
       "configurations": {
         "development": {
           "buildTarget": "cold-ui:build:development",
+          "hmr": true
+        },
+        "staging": {
+          "buildTarget": "cold-ui:build:staging",
+          "hmr": true
+        },
+        "test": {
+          "buildTarget": "cold-ui:build:test",
           "hmr": true
         },
         "production": {
@@ -49,6 +63,12 @@
       "configurations": {
         "development": {
           "buildTarget": "cold-ui:build:development"
+        },
+        "staging": {
+          "buildTarget": "cold-ui:build:staging"
+        },
+        "test": {
+          "buildTarget": "cold-ui:build:test"
         },
         "production": {
           "buildTarget": "cold-ui:build:production"
