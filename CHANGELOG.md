@@ -1,3 +1,10 @@
+# [1.107.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.106.0...v1.107.0) (2024-02-07)
+
+
+### Features
+
+* dont display next actions module if there are no actions ([a6b294c](https://github.com/ColdPBC/cold-monorepo/commit/a6b294c7c71c80df2ca63571101f9a6fd4348d8d))
+
 # [1.106.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.105.0...v1.106.0) (2024-02-07)
 
 
