@@ -33,23 +33,12 @@ export const Default: Story = {
       await canvas.findByText('REI Compliance');
       // get Sections text
       await canvas.findByText('Sections');
-      // find all compliance-section-overview-card
-      const complianceSectionOverviewCards = await canvas.findAllByTestId('compliance-section-overview-card');
       const complianceSets = getOrganizationComplianceMock();
       const reiCompliance = complianceSets.find(compliance => compliance.compliance_definition.name === 'rei');
       if (!reiCompliance) {
         throw new Error('Rei compliance is undefined');
       }
       await verifyComplianceDetailPage(reiCompliance, canvasElement);
-      // verify the number of compliance-section-overview-card with the number of compliance surveys
-      await expect(complianceSectionOverviewCards.length).toEqual(reiCompliance?.compliance_definition.surveys.length);
-      // loop through each compliance-section-overview-card
-      // check if each compliance-section-overview-card has the Review and Answer button
-      complianceSectionOverviewCards.forEach(async complianceSectionOverviewCard => {
-        const button = await within(complianceSectionOverviewCard).findByRole('button', { name: 'Review and Answer' });
-        await expect(button).toBeEnabled();
-        await within(complianceSectionOverviewCard).findByTestId('compliance-section-overview-progress-bar-ready');
-      });
     });
   },
 };

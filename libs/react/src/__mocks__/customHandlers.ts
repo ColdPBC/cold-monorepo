@@ -15,7 +15,15 @@ import { getMembersNoInvitations } from './membersMock';
 import { getNewsAllMissingProperties, getNewsDefault, getNewsSomeMissingProperties } from './newsMock';
 import { ActionPayload } from '@coldpbc/interfaces';
 import { getOrganizationMembersMock } from './datagridMock';
-import { getComplianceMock, getComplianceMockByName, getOrganizationComplianceMock, getOrganizationComplianceMockByName } from './complianceMock';
+import {
+  getActivateOrgCompliancePageMock,
+  getComplianceMock,
+  getComplianceMockByName,
+  getDefaultCompliancePageMock,
+  getDefaultOrgCompliancePageMock,
+  getOrganizationComplianceMock,
+  getOrganizationComplianceMockByName,
+} from './complianceMock';
 import { getAllFilesMock } from './filesMock';
 import { getApiUrl } from './handlers';
 import { getSurveyFormDataByName } from './surveyDataMock';
@@ -235,10 +243,10 @@ export const getCompliancePageHandler = {
   default: [
     rest.get(getApiUrl('/compliance_definitions'), (req, res, ctx) => {
       const { name } = req.params;
-      return res(ctx.json(getComplianceMock()));
+      return res(ctx.json(getDefaultCompliancePageMock()));
     }),
     rest.get(getApiUrl('/compliance_definitions/organization/:orgId'), (req, res, ctx) => {
-      return res(ctx.json(getOrganizationComplianceMock()));
+      return res(ctx.json(getDefaultOrgCompliancePageMock()));
     }),
     rest.post(getApiUrl('/compliance_definitions/organization/:orgId'), (req, res, ctx) => {
       const { name, orgId } = req.params;
@@ -253,10 +261,10 @@ export const getCompliancePageHandler = {
   activate: [
     rest.get(getApiUrl('/compliance_definitions'), (req, res, ctx) => {
       const { name } = req.params;
-      return res(ctx.json(getComplianceMock()));
+      return res(ctx.json(getDefaultCompliancePageMock()));
     }),
     rest.get(getApiUrl('/compliance_definitions/organization/:orgId'), (req, res, ctx) => {
-      return res(ctx.json([]));
+      return res(ctx.json(getActivateOrgCompliancePageMock()));
     }),
     rest.post(getApiUrl('/compliance_definitions/organization/:orgId'), (req, res, ctx) => {
       const { name } = req.params;
