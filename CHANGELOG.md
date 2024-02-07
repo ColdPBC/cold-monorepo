@@ -1,3 +1,15 @@
+# [1.106.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.105.0...v1.106.0) (2024-02-07)
+
+
+### Bug Fixes
+
+* set max-h and max-w for logo in complianceOverviewCard.tsx ([54aded3](https://github.com/ColdPBC/cold-monorepo/commit/54aded3a1fa7d347a3371b65ce95c64da96e4068))
+
+
+### Features
+
+* added orgcompliance return type to getOrganizationComplianceMockByName function ([adfd27f](https://github.com/ColdPBC/cold-monorepo/commit/adfd27f3b210b53953729e167c591092af37c939))
+
 ## [1.105.1-cold-487.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.105.0...v1.105.1-cold-487.1) (2024-02-06)
 
 
