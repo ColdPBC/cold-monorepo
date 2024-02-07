@@ -11,6 +11,7 @@ export type ComplianceOverviewCardProps = {
   onOverviewPage?: boolean;
   ctas?: IButtonProps[];
   logo_url?: string;
+  'data-testid'?: string;
 };
 
 export const ComplianceOverviewCard = (props: ComplianceOverviewCardProps) => {
@@ -129,7 +130,7 @@ export const ComplianceOverviewCard = (props: ComplianceOverviewCardProps) => {
   };
 
   return (
-    <Card className={'w-full gap-y-6'} data-testid={'compliance-overview-card'}>
+    <Card className={'w-full gap-y-6'} data-testid={props['data-testid'] || 'compliance-overview-card'}>
       <div className={'w-full flex justify-between'}>
         <div className={'flex gap-x-4 items-center justify-center'}>
           {logo_url && (

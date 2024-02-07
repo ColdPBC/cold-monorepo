@@ -14,10 +14,10 @@ import {
   getComplianceMock,
   getOrganizationComplianceMock,
 } from '@coldpbc/mocks';
-import { userEvent, waitFor, within } from '@storybook/testing-library';
+import { userEvent, waitFor, waitForElementToBeRemoved, within } from '@storybook/testing-library';
 import { find, forEach, random, uniq } from 'lodash';
 import { expect } from '@storybook/jest';
-import { verifyActionDetailPage, verifyActionsPage, verifyComplianceDetailPage } from '@coldpbc/lib';
+import { verifyActionDetailPage, verifyActionsPage, verifyComplianceDetailPage, verifyCompliancePage } from '@coldpbc/lib';
 
 const meta: Meta<typeof Application> = {
   title: 'Application/Application',
@@ -242,35 +242,38 @@ export const Default: Story = {
       const complianceSidebarItem = await within(sidebar).findByText('Compliance');
       await userEvent.click(complianceSidebarItem);
       const complianceSets = getComplianceMock();
-      const complianceSet = complianceSets[0];
       const orgComplianceSets = getOrganizationComplianceMock();
-      await waitFor(async () => {
-        const complianceSidebarItem = await within(sidebar).findByText('Compliance');
-        await userEvent.click(complianceSidebarItem);
-        // check if compliance set is in orgComplianceSets
-        const orgComplianceSet = find(orgComplianceSets, { compliance_id: complianceSet.id });
-        const complianceCard = await canvas.findByTestId(`compliance-${complianceSet.id}`);
-        let button: HTMLElement;
-        if (orgComplianceSet) {
-          button = await within(complianceCard).findByRole('button', {
-            name: 'See Details',
-          });
-        } else {
-          button = await within(complianceCard).findByRole('button', {
-            name: 'Activate',
-          });
-        }
+      await verifyCompliancePage(complianceSets, orgComplianceSets, canvasElement);
+      const complianceSet = complianceSets[0];
+      const complianceCard = await canvas.findByTestId(`compliance-${complianceSet.id}`);
+      console.log('complianceCard', complianceCard);
+      let button: HTMLElement;
+      const orgComplianceSet = find(orgComplianceSets, { compliance_id: complianceSet.id });
+      if (orgComplianceSet) {
+        button = await within(complianceCard).findByRole('button', {
+          name: 'See Details',
+        });
         await userEvent.click(button);
-        // verify that we are on the compliance detail page
-        if (!orgComplianceSet) {
-          throw new Error('Org compliance set is undefined');
-        }
-        await verifyComplianceDetailPage(orgComplianceSet, canvasElement);
-      });
+        // await verifyComplianceDetailPage(orgComplianceSet, canvasElement);
+        await canvas.findByText(`${orgComplianceSet.compliance_definition.title} Compliance`);
+        // get Sections text
+        await canvas.findByText('Sections');
+        // find all compliance-section-overview-card
+        const complianceSectionOverviewCards = await canvas.findAllByTestId('compliance-section-overview-card');
+        // verify the number of compliance-section-overview-card with the number of compliance surveys
+        await expect(complianceSectionOverviewCards.length).toEqual(orgComplianceSet.compliance_definition.surveys.length);
+        const sidebarItem = await within(sidebar).findByText('Compliance');
+        await userEvent.click(sidebarItem);
+      } else {
+        button = await within(complianceCard).findByRole('button', {
+          name: 'Activate',
+        });
+      }
+      await verifyCompliancePage(complianceSets, orgComplianceSets, canvasElement);
+
       const homeSidebarItem = await within(sidebar).findByText('Home');
       await userEvent.click(homeSidebarItem);
     });
-    // reset the page. click the sidebar
     await userEvent.click(sidebar);
   },
 };

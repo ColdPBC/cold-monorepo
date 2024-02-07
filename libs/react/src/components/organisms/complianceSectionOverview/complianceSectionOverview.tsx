@@ -115,7 +115,16 @@ export const ComplianceSectionOverview = (props: ComplianceSectionOverviewProps)
 
   if (data) {
     const complianceData = getComplianceProgressForSurvey(data);
-    return <ComplianceOverviewCard complianceData={complianceData} isOverview={false} onOverviewPage={false} ctas={showCTA(complianceData)} title={data.definition?.title} />;
+    return (
+      <ComplianceOverviewCard
+        complianceData={complianceData}
+        isOverview={false}
+        onOverviewPage={false}
+        ctas={showCTA(complianceData)}
+        title={data.definition?.title}
+        data-testid={`compliance-section-overview-card-${surveyName}`}
+      />
+    );
   } else {
     return null;
   }
