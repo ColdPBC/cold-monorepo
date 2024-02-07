@@ -39,7 +39,7 @@ const _ActionDetail = ({ id }: Props) => {
   const handleUpdateAction = async (updatedAction: Partial<ActionPayload['action']>) => {
     if (!data) return;
 
-    const newAction: Pick<ActionPayload, 'action'> = {
+    const newAction: ActionPayload['action'] = {
       ...data.action,
       ...updatedAction,
     };
