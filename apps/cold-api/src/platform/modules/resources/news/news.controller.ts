@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, Param, ParseBoolPipe, Post, Query, Req, 
 import { ApiBody, ApiOAuth2, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Span } from 'nestjs-ddtrace';
 import { ResourceValidationPipe } from '../../../pipes/resource.pipe';
-import { newsSchema, AuthenticatedUser, BaseWorker, HttpExceptionFilter, Roles, JwtAuthGuard, RolesGuard } from '@coldpbc/nest';
+import { BaseWorker, HttpExceptionFilter, IAuthenticatedUser, JwtAuthGuard, newsSchema, Roles, RolesGuard } from '@coldpbc/nest';
 import { bpcDecoratorOptions, coldAdminOnly, skipDecoratorOptions, takeDecoratorOptions } from '../_global/global.params';
 import { CreateArticleDto } from './dto/news-article.dto';
 import { postNewsExample } from './examples/news.examples';
@@ -34,7 +34,7 @@ export class NewsController extends BaseWorker {
       body: any;
       headers: any;
       query: any;
-      user: AuthenticatedUser;
+      user: IAuthenticatedUser;
     },
     @Query('take') take: number,
     @Query('skip') skip: number,
@@ -45,7 +45,7 @@ export class NewsController extends BaseWorker {
     if (!skip) skip = 0;
     if (!bpc) bpc = false;
 
-    return this.newsService.getArticles(req.user, parseInt(String(take)), parseInt(String(skip)), bpc, publish);
+    return this.newsService.getArticles(req, parseInt(String(take)), parseInt(String(skip)), bpc, publish);
   }
 
   @ApiOperation({
@@ -67,10 +67,10 @@ export class NewsController extends BaseWorker {
       body: any;
       headers: any;
       query: any;
-      user: AuthenticatedUser;
+      user: IAuthenticatedUser;
     },
   ) {
-    return this.newsService.create(req.user, body as CreateArticleDto);
+    return this.newsService.create(req, body as CreateArticleDto);
   }
 
   @ApiOperation({
@@ -92,9 +92,9 @@ export class NewsController extends BaseWorker {
       body: any;
       headers: any;
       query: any;
-      user: AuthenticatedUser;
+      user: IAuthenticatedUser;
     },
   ) {
-    return this.newsService.create(req.user, req.body as CreateArticleDto);
+    return this.newsService.delete(req, id);
   }
 }

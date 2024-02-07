@@ -2,13 +2,13 @@
 import { CallHandler, ExecutionContext, Injectable, NestInterceptor, UnauthorizedException } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { AuthenticatedUser } from '@coldpbc/nest';
+import { IAuthenticatedUser } from '@coldpbc/nest';
 
 @Injectable()
 export class OrgUserInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<unknown> {
     const request = context.switchToHttp().getRequest();
-    const user = request.user as AuthenticatedUser;
+    const user = request.user as IAuthenticatedUser;
     const orgId = request.params?.orgId;
 
     if (orgId && user) {

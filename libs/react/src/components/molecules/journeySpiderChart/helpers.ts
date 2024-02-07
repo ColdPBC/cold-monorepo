@@ -1,51 +1,45 @@
-import { hexAToRGBA, rgbaToHex } from "@coldpbc/themes";
-import { ChartArea } from "chart.js";
+import { hexAToRGBA, rgbaToHex } from '@coldpbc/themes';
+import { ChartArea } from 'chart.js';
 
 const cache = new Map();
-let width:number;
-let height:number;
+let width: number;
+let height: number;
 export function createGradient(ctx: CanvasRenderingContext2D, chartArea: ChartArea, colorStart: string, colorEnd: string) {
-    if (!chartArea) {
-        // This case happens on initial chart load
-        return;
+  if (!chartArea) {
+    // This case happens on initial chart load
+    return;
+  }
+
+  const chartWidth = chartArea.right - chartArea.left;
+  const chartHeight = chartArea.bottom - chartArea.top;
+  if (width !== chartWidth || height !== chartHeight) {
+    cache.clear();
+  }
+  let gradient = cache.get(colorStart + colorEnd);
+
+  if (!gradient) {
+    // Create the gradient because this is either the first render
+    // or the size of the chart has changed
+    width = chartWidth;
+    height = chartHeight;
+
+    const centerX = (chartArea.left + chartArea.right) / 2;
+    const centerY = (chartArea.top + chartArea.bottom) / 2;
+    const r = Math.min((chartArea.right - chartArea.left) / 2, (chartArea.bottom - chartArea.top) / 2);
+    if (ctx !== null) {
+      gradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, r);
+
+      gradient.addColorStop(0, colorStart);
+      gradient.addColorStop(1, colorEnd);
+
+      cache.set(colorStart + colorEnd, gradient);
     }
+  }
 
-    const chartWidth = chartArea.right - chartArea.left;
-    const chartHeight = chartArea.bottom - chartArea.top;
-    if (width !== chartWidth || height !== chartHeight) {
-        cache.clear();
-    }
-    let gradient = cache.get(colorStart + colorEnd);
-
-    if (!gradient) {
-        // Create the gradient because this is either the first render
-        // or the size of the chart has changed
-        width = chartWidth;
-        height = chartHeight;
-
-        const centerX = ( chartArea.left + chartArea.right ) / 2;
-        const centerY = ( chartArea.top + chartArea.bottom ) / 2;
-        const r = Math.min(
-            ( chartArea.right - chartArea.left ) / 2,
-            ( chartArea.bottom - chartArea.top ) / 2
-        );
-
-        gradient = ctx.createRadialGradient( centerX, centerY, 0, centerX, centerY, r );
-
-        gradient.addColorStop( 0, colorStart );
-        gradient.addColorStop( 1, colorEnd );
-
-        cache.set( colorStart + colorEnd, gradient );
-    }
-
-    return gradient;
+  return gradient;
 }
 // Convenience function for getting a value along a gradient
-export function pickGradientValue(
-  hexColor1: string,
-  hexColor2: string,
-  percent: number,
-) {
+export function pickGradientValue(hexColor1: string, hexColor2: string, percent: number) {
   const w2 = percent;
   const w1 = 1 - w2;
 

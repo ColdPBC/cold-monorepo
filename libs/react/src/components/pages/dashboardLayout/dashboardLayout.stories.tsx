@@ -4,18 +4,18 @@ import { Meta, StoryObj } from '@storybook/react';
 import { DashboardLayout } from '../dashboardLayout/dashboardLayout';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
-const meta = {
+const meta: Meta<typeof DashboardLayout> = {
   title: 'Pages/Layout',
   component: DashboardLayout,
   tags: ['autodocs'],
   decorators: [withKnobs],
-} satisfies Meta<typeof DashboardLayout>;
+};
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-  render: (args) => {
+  render: args => {
     return (
       <BrowserRouter>
         <DashboardLayout {...args}>
@@ -31,8 +31,7 @@ export const Default: Story = {
       name: 'Qaalib Farah',
       given_name: 'Qaalib',
       family_name: 'Farah',
-      picture:
-        'https://img.uefa.com/imgml/TP/players/1/2023/324x324/250103758.jpg',
+      picture: 'https://img.uefa.com/imgml/TP/players/1/2023/324x324/250103758.jpg',
       email: 'qaalig.farah@coldclimate.com',
     },
   },

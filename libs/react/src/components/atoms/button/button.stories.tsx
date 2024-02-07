@@ -1,13 +1,13 @@
 import { BaseButton } from './button';
 import { withKnobs } from '@storybook/addon-knobs';
-import { StoryObj } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 import { ButtonTypes } from '@coldpbc/enums';
 import { IconNames } from '@coldpbc/enums';
 import { GlobalSizes } from '@coldpbc/enums';
 import React from 'react';
 import { Spinner } from '@coldpbc/components';
 
-const meta = {
+const meta: Meta<typeof BaseButton> = {
   title: 'Atoms/Button',
   component: BaseButton,
   tags: ['autodocs'],

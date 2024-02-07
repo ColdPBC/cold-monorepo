@@ -14,6 +14,7 @@ export interface CardProps {
     child?: React.ReactNode;
   }>;
   className?: string;
+  'data-testid'?: string;
 }
 
 export function Card(props: PropsWithChildren<CardProps>) {
@@ -22,11 +23,8 @@ export function Card(props: PropsWithChildren<CardProps>) {
 
   return (
     <div
-      className={twMerge(
-        'flex flex-col p-4 items-start gap-6 self-stretch bg-bgc-elevated rounded-2xl text-tc-primary relative overflow-hidden',
-        props.className,
-      )}
-    >
+      className={twMerge('flex flex-col p-4 items-start gap-6 self-stretch bg-bgc-elevated rounded-2xl text-tc-primary relative overflow-hidden', props.className)}
+      data-testid={props['data-testid']}>
       {glow && (
         <div className="w-[400px] h-20 justify-center flex items-center absolute top-[-40px] left-1/2 -translate-x-1/2 pointer-events-none">
           <div className="w-[400px] h-20 shrink-0 rounded-[200px] opacity-50 blur-[120px] bg-gradient-to-l from-primary via-primary via-[36.46%] to-bgc-accent" />
@@ -39,19 +37,14 @@ export function Card(props: PropsWithChildren<CardProps>) {
             props.title && <div className="text-h4 flex-1">{props.title}</div>
           }
           <div className={'flex space-x-4'}>
-            {props.ctas?.map((cta) => {
+            {props.ctas?.map(cta => {
               if (cta.child) {
                 return cta.child;
               } else {
                 return (
                   cta.text &&
                   cta.action !== undefined && (
-                    <BaseButton
-                      key={'button_' + snakeCase(cta.text)}
-                      label={cta.text}
-                      onClick={cta.action}
-                      variant={cta.variant || ButtonTypes.secondary}
-                    />
+                    <BaseButton key={'button_' + snakeCase(cta.text)} label={cta.text} onClick={cta.action} variant={cta.variant || ButtonTypes.secondary} />
                   )
                 );
               }

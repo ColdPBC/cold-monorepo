@@ -3,12 +3,12 @@ import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { PercentSlider } from './percentSlider';
 
-const meta = {
+const meta: Meta<typeof PercentSlider> = {
   title: 'Molecules/PercentSlider',
   component: PercentSlider,
   tags: ['autodocs'],
   decorators: [withKnobs],
-} satisfies Meta<typeof PercentSlider>;
+};
 
 export default meta;
 type Story = StoryObj<typeof meta>;

@@ -2,13 +2,14 @@ import React from 'react';
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { SelectOption, SelectOptionProps } from './selectOption';
+import { PercentSlider } from '@coldpbc/components';
 
-const meta = {
+const meta: Meta<typeof SelectOption> = {
   title: 'Molecules/SelectOption',
   component: SelectOption,
   tags: ['autodocs'],
   decorators: [withKnobs],
-} satisfies Meta<typeof SelectOption>;
+};
 
 export default meta;
 type Story = StoryObj<typeof meta>;

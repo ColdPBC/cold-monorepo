@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { withKnobs } from '@storybook/addon-knobs';
-import { StoryObj } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 import { Input } from './input';
 import { InputTypes } from '../../../enums/inputs';
 import { IInputProps } from '../../../interfaces/input';
-//todo: fix issues requiring @typescript-eslint/no-empty-function below
-const meta = {
+
+const meta: Meta<typeof Input> = {
   title: 'Atoms/Input',
   component: Input,
   tags: ['autodocs'],

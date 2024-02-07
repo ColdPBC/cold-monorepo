@@ -1,7 +1,7 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { Span } from 'nestjs-ddtrace';
-import { Auth0TokenService, BaseWorker, CacheService } from '@coldpbc/nest';
+import { Auth0TokenService, BaseWorker, CacheService, MqttService } from '@coldpbc/nest';
 import { filter, first } from 'lodash';
 import { AxiosRequestConfig } from 'axios';
 
@@ -11,7 +11,7 @@ export class RoleService extends BaseWorker {
   options: AxiosRequestConfig<any>;
   httpService: HttpService;
 
-  constructor(readonly cache: CacheService, readonly utilService: Auth0TokenService) {
+  constructor(readonly cache: CacheService, readonly utilService: Auth0TokenService, private readonly mqtt: MqttService) {
     super('Auth0OrganizationService');
     this.httpService = new HttpService();
 

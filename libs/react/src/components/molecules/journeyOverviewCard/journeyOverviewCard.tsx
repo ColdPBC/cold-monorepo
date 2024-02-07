@@ -8,9 +8,7 @@ export interface JourneyOverviewCardProps {
   omitCta?: boolean;
 }
 
-export function JourneyOverviewCard(
-  props: PropsWithChildren<JourneyOverviewCardProps>,
-) {
+export function JourneyOverviewCard(props: PropsWithChildren<JourneyOverviewCardProps>) {
   const navigate = useNavigate();
   const [isEmptyData, setIsEmptyData] = useState(false);
 
@@ -26,17 +24,13 @@ export function JourneyOverviewCard(
       ];
 
   return (
-    <Card title="Climate Journey" ctas={cta}>
+    <Card title="Gap Assessment" ctas={cta} data-testid="journey-overview-card">
       <div className="flex items-center justify-center self-stretch flex-col">
         <JourneySpiderChart setIsEmptyData={setIsEmptyData} />
         {isEmptyData && (
           <div className="m-auto table w-1">
-            <h4 className="text-h4 text-center whitespace-nowrap mx-8">
-              Our Climate Experts are reviewing your data
-            </h4>
-            <p className="text-center mt-4">
-              We'll get back to you as soon as the results are ready to discuss.
-            </p>
+            <h4 className="text-h4 text-center whitespace-nowrap mx-8">Our Climate Experts are reviewing your data</h4>
+            <p className="text-center mt-4">We'll get back to you as soon as the results are ready to discuss.</p>
           </div>
         )}
       </div>

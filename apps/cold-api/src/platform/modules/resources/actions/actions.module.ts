@@ -1,17 +1,17 @@
 import { Module } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { CacheService, ColdCacheModule, JwtStrategy, MqttService, PrismaModule } from '@coldpbc/nest';
+import { CacheService, ColdCacheModule, JwtStrategy, MqttModule, PrismaModule } from '@coldpbc/nest';
 import { CategoryValidationModule } from '../categories/validation/category-validation.module';
-import { SurveysModule } from '../surveys/surveys.module';
-import { SurveysService } from '../surveys/surveys.service';
 import { ActionTemplatesController } from './action-templates.controller';
 import { ActionTemplatesService } from './action-templates.service';
 import { ActionsController } from './actions.controller';
 import { ActionsService } from './actions.service';
+import { SurveysModule } from '../surveys/surveys.module';
 
 @Module({
-  imports: [PrismaModule, ColdCacheModule, CategoryValidationModule, SurveysModule],
+  imports: [PrismaModule, ColdCacheModule, SurveysModule, CategoryValidationModule, MqttModule],
   controllers: [ActionTemplatesController, ActionsController],
-  providers: [ActionTemplatesService, ActionsService, JwtService, SurveysService, JwtStrategy, CacheService, MqttService],
+  providers: [ActionTemplatesService, ActionsService, JwtService, JwtStrategy, CacheService],
+  exports: [ActionsService, ActionsService],
 })
 export class ActionsModule {}

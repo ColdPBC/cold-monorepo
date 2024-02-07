@@ -4,15 +4,15 @@ import { Span } from 'nestjs-ddtrace';
 import { ZodSerializerDto } from 'nestjs-zod';
 import { ResourceValidationPipe } from '../../../pipes/resource.pipe';
 import {
-  CreateActionTemplateItemSchema,
   ActionTemplateSchema,
-  ZodCreateActionTemplate,
-  Roles,
-  JwtAuthGuard,
-  RolesGuard,
-  HttpExceptionFilter,
-  AuthenticatedUser,
   BaseWorker,
+  CreateActionTemplateItemSchema,
+  HttpExceptionFilter,
+  IAuthenticatedUser,
+  JwtAuthGuard,
+  Roles,
+  RolesGuard,
+  ZodCreateActionTemplate,
 } from '@coldpbc/nest';
 import { coldAdminOnly } from '../_global/global.params';
 import { ActionTemplatesService } from './action-templates.service';
@@ -30,7 +30,7 @@ export class ActionTemplatesController extends BaseWorker {
 
   /**
    * This action returns all action templates
-   * @param {{body: any, headers: any, query: any, user: AuthenticatedUser}} req
+   * @param {{body: any, headers: any, query: any, user: IAuthenticatedUser}} req
    * @param {boolean} bpc
    * @returns {Promise<any>}
    */
@@ -46,17 +46,17 @@ export class ActionTemplatesController extends BaseWorker {
       body: any;
       headers: any;
       query: any;
-      user: AuthenticatedUser;
+      user: IAuthenticatedUser;
     },
     @Query('bpc') bpc?: boolean,
   ): Promise<any> {
-    return this.actions.getActionTemplates(req.user, bpc);
+    return this.actions.getActionTemplates(req, bpc);
   }
 
   /**
    * This action returns an action template by ID
    * @param {string} id
-   * @param {{body: any, headers: any, query: any, user: AuthenticatedUser}} req
+   * @param {{body: any, headers: any, query: any, user: IAuthenticatedUser}} req
    * @param {boolean} bpc
    * @returns {Promise<any>}
    */
@@ -80,16 +80,16 @@ export class ActionTemplatesController extends BaseWorker {
       body: any;
       headers: any;
       query: any;
-      user: AuthenticatedUser;
+      user: IAuthenticatedUser;
     },
     @Query('bpc') bpc?: boolean,
   ) {
-    return this.actions.getActionTemplate(req.user, id, bpc);
+    return this.actions.getActionTemplate(req, id, bpc);
   }
 
   /**
    * This action creates an action template
-   * @param {{body: ActionDefinitionsCreate, headers: any, query: any, user: AuthenticatedUser}} req
+   * @param {{body: ActionDefinitionsCreate, headers: any, query: any, user: IAuthenticatedUser}} req
    * @param body
    * @returns {Promise<Prisma.Prisma__action_definitionsClient<GetResult<Prisma.$action_definitionsPayload<DefaultArgs>, {data: any}, "create">, never, DefaultArgs>>}
    */
@@ -113,17 +113,17 @@ export class ActionTemplatesController extends BaseWorker {
     req: {
       headers: any;
       query: any;
-      user: AuthenticatedUser;
+      user: IAuthenticatedUser;
     },
   ) {
-    return this.actions.createActionTemplate(req.user, body);
+    return this.actions.createActionTemplate(req, body);
   }
 
   /**
    * This action updates an action template
    * @param {string} id
    * @param body
-   * @param {{body: ActionDefinitionsCreate, headers: any, query: any, user: AuthenticatedUser}} req
+   * @param {{body: ActionDefinitionsCreate, headers: any, query: any, user: IAuthenticatedUser}} req
    * @param {boolean} bpc
    * @returns {Promise<Prisma.Prisma__action_definitionsClient<GetResult<Prisma.$action_definitionsPayload<DefaultArgs>, {data: any, where: {id: string}}, "update">, never, DefaultArgs>>}
    */
@@ -149,15 +149,15 @@ export class ActionTemplatesController extends BaseWorker {
     @Param('id') id: string,
     @Body(new ResourceValidationPipe(CreateActionTemplateItemSchema, 'PATCH')) body: ZodCreateActionTemplate,
     @Req()
-    req: { headers: any; query: any; user: AuthenticatedUser },
+    req: { headers: any; query: any; user: IAuthenticatedUser },
   ) {
-    return this.actions.updateActionTemplate(req.user, id, body);
+    return this.actions.updateActionTemplate(req, id, body);
   }
 
   /**
    * This action deletes an action template
    * @param {string} id
-   * @param {{body: any, headers: any, query: any, user: AuthenticatedUser}} req
+   * @param {{body: any, headers: any, query: any, user: IAuthenticatedUser}} req
    * @returns {Promise<Prisma.Prisma__action_definitionsClient<GetResult<Prisma.$action_definitionsPayload<DefaultArgs>, {where: {id: string}}, "delete">, never, DefaultArgs>>}
    */
   @ApiOperation({
@@ -187,9 +187,9 @@ export class ActionTemplatesController extends BaseWorker {
       body: any;
       headers: any;
       query: any;
-      user: AuthenticatedUser;
+      user: IAuthenticatedUser;
     },
   ) {
-    return this.actions.deleteActionTemplate(req.user, id);
+    return this.actions.deleteActionTemplate(req, id);
   }
 }

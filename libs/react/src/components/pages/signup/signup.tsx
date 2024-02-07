@@ -1,5 +1,5 @@
 import React from 'react';
-import { ColdLogos, SignupForm, Spinner } from '@coldpbc/components';
+import { ColdLogos, SignupForm, Spinner, Takeover } from '@coldpbc/components';
 import { User } from '@auth0/auth0-react';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { PolicySignedDataType } from '@coldpbc/interfaces';
@@ -17,13 +17,12 @@ export interface SignupPageProps {
 
 const _SignupPage = ({ userData, signedPolicyData }: SignupPageProps) => {
   const { logError } = useColdContext();
-  const organizationSWR = useOrgSWR<any, any>(
-    [``, 'GET'],
-    axiosFetcher,
-  );
+  const [show, setShow] = React.useState<boolean>(true);
+  const organizationSWR = useOrgSWR<any, any>([``, 'GET'], axiosFetcher);
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  const onSubmit = async () => {};
+  const onSubmit = async () => {
+    setShow(false);
+  };
 
   if (organizationSWR.error) {
     logError(organizationSWR.error, ErrorType.SWRError);
@@ -38,63 +37,39 @@ const _SignupPage = ({ userData, signedPolicyData }: SignupPageProps) => {
     );
   }
 
-  const tos = signedPolicyData?.find((policy) => policy.name === 'tos');
-  const privacy = signedPolicyData?.find((policy) => policy.name === 'privacy');
+  const tos = signedPolicyData?.find(policy => policy.name === 'tos');
+  const privacy = signedPolicyData?.find(policy => policy.name === 'privacy');
   const { data: organizationData } = organizationSWR;
 
   if (tos && privacy && signedPolicyData) {
     return (
-      <div
-        className={
-          'fixed inset-0 flex flex-col h-screen w-screen overflow-y-auto'
-        }
-      >
-        <div className={'flex flex-1 max-h-[1040px]'}>
-          <div className={'pl-[40px] pr-[24px] pb-[40px] pt-[40px]'}>
+      <Takeover show={show} setShow={setShow} className={'fixed inset-0 flex flex-col h-screen w-screen overflow-y-auto pb-[40px]'} data-testid={'signup-takeover'}>
+        <div className="flex-1 flex max-h-[1040px]">
+          <div className={'pr-[24px]'}>
             <div
-              className={
-                'max-h-[963px] w-[668px] flex h-full items-center justify-center rounded-2xl'
-              }
+              className={'max-h-[963px] w-[668px] flex h-full items-center justify-center rounded-2xl'}
               style={{
                 background: `url('https://cold-public-assets.s3.us-east-2.amazonaws.com/splash_images/signup_image.jpeg'), lightgray 50% / cover no-repeat`,
-              }}
-            >
+              }}>
               <div className={'space-y-6 w-[438px]'}>
-                <ColdLogos
-                  name={ColdLogoNames.ColdWordmark}
-                  color={HexColors.tc.primary}
-                  width={153}
-                  height={48}
-                />
-                <div className={'text-tc-primary text-h1'}>
-                  Start Your Journey to Absolute Zero™
-                </div>
+                <ColdLogos name={ColdLogoNames.ColdWordmark} color={HexColors.tc.primary} width={153} height={48} />
+                <div className={'text-tc-primary text-h1'}>Start Your Journey to Absolute Zero™</div>
               </div>
             </div>
           </div>
-          <div
-            className={
-              'w-full h-full flex items-center justify-center p-[64px]'
-            }
-          >
+          <div className={'w-full h-full flex items-center justify-center p-[64px]'}>
             <SignupForm
               userData={userData}
               companyData={organizationData}
-              tosSigned={signedPolicyData.some(
-                (policy) =>
-                  policy.name === 'tos' && !isEmpty(policy.policy_data),
-              )}
-              privacySigned={signedPolicyData.some(
-                (policy) =>
-                  policy.name === 'privacy' && !isEmpty(policy.policy_data),
-              )}
+              tosSigned={signedPolicyData.some(policy => policy.name === 'tos' && !isEmpty(policy.policy_data))}
+              privacySigned={signedPolicyData.some(policy => policy.name === 'privacy' && !isEmpty(policy.policy_data))}
               tosData={tos}
               privacyData={privacy}
               onSubmit={onSubmit}
             />
           </div>
         </div>
-      </div>
+      </Takeover>
     );
   } else {
     return <div></div>;
@@ -102,7 +77,7 @@ const _SignupPage = ({ userData, signedPolicyData }: SignupPageProps) => {
 };
 
 export const SignupPage = withErrorBoundary(_SignupPage, {
-  FallbackComponent: (props) => <ErrorFallback {...props} />,
+  FallbackComponent: props => <ErrorFallback {...props} />,
   onError: (error, info) => {
     console.error('Error occurred in SignupPage: ', error);
   },

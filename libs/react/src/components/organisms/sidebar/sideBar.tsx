@@ -43,6 +43,12 @@ const _SideBar = (): JSX.Element => {
       return ldFlags.showActions261 && hasActions;
     } else if (item.key === 'documents_key') {
       return ldFlags.showComplianceModule;
+    } else if (item.key === 'compliance_key') {
+      return ldFlags.showComplianceModule;
+    } else if (item.key === 'journey_key') {
+      // TODO: Delete this once we replace the journey page completely
+      item.label = 'Gaps';
+      return true;
     } else {
       return true;
     }
@@ -119,7 +125,7 @@ const _SideBar = (): JSX.Element => {
     });
 
     return (
-      <FBSidebar theme={flowbiteThemeOverride.sidebar}>
+      <FBSidebar theme={flowbiteThemeOverride.sidebar} data-testid={'sidebar'}>
         <div className="flex px-4 self-stretch items-center">
           <div className="h-6 w-[76px]">
             <ColdWordmark color={HexColors.white} />

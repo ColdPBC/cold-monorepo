@@ -7,13 +7,13 @@ import {
   getTestingSurveyFormDefinitionData,
 } from '@coldpbc/mocks';
 
-const meta = {
+const meta: Meta<typeof SurveyLeftNav> = {
   title: 'Organisms/SurveyLeftNav',
   component: SurveyLeftNav,
   tags: ['autodocs'],
   decorators: [withKnobs],
   argTypes: {},
-} satisfies Meta<typeof SurveyLeftNav>;
+};
 
 export default meta;
 type Story = StoryObj<typeof meta>;

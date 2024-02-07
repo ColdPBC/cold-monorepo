@@ -2,6 +2,7 @@ import React, { PropsWithChildren, useEffect, useRef } from 'react';
 import mqtt from 'mqtt';
 import { useAuth0Wrapper } from '@coldpbc/hooks';
 import { useSWRConfig } from 'swr';
+import { forEach } from 'lodash';
 
 export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
   const { user, orgId, getAccessTokenSilently, isAuthenticated } = useAuth0Wrapper();
@@ -45,7 +46,7 @@ export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
             const parsedPayload = JSON.parse(payloadString);
             // if the payload is a json object, mutate the swr with the new swr_key
             if (parsedPayload.swr_key) {
-              mutate(parsedPayload.swr_key);
+              mutate([parsedPayload.swr_key, 'GET']);
             }
           } catch (e) {
             console.log(e);
@@ -57,18 +58,33 @@ export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
           console.log('disconnected');
         });
 
-        client.current?.subscribe(subscription_topic, { qos: 0, nl: false }, (err, grant) => {
-          if (!err) {
-            console.log(`Subscribed to ${subscription_topic}`);
-          } else {
-            console.log(err);
-          }
+        const topics = [`ui/${env}/${org_id}/${account_id}`, `ui/${env}/${org_id}/#`, `system/${env}`];
+
+        forEach(topics, topic => {
+          subscribeToTopic(topic);
         });
+
+        // for cold admin users, subscribe to system/env/cold
+        if (user.coldclimate_claims.roles.includes('cold:admin')) {
+          subscribeToTopic(`system/${env}/cold`);
+        }
       }
     };
 
     connectToIOT();
   }, [user, orgId, getAccessTokenSilently, isAuthenticated]);
+
+  const subscribeToTopic = (topic: string) => {
+    if (client.current) {
+      client.current.subscribe(topic, (err, granted) => {
+        if (err) {
+          console.log('Error subscribing to topic ' + topic);
+        } else {
+          console.log('Subscribed to topic ' + topic);
+        }
+      });
+    }
+  };
 
   return children;
 };

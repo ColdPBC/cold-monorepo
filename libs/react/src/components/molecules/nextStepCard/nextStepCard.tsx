@@ -31,6 +31,7 @@ export const NextStepCard = (props: NextStepCardProps) => {
           nextStep.started &&
           <Card
             className={'w-full border-[1px] border-bgc-accent'} glow={false}
+            data-testid={`next-step-card-progress`}
           >
             <div className={'flex w-full justify-center items-center space-x-2'}>
               <div className={'h-2 flex-1 w-full rounded-2xl bg-bgc-accent'}>

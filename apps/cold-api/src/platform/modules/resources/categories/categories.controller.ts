@@ -1,9 +1,9 @@
-import { Body, Controller, Get, HttpCode, Param, Put, Query, Req, UseFilters } from '@nestjs/common';
-import { ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { Span } from 'nestjs-ddtrace';
-import { Roles, HttpExceptionFilter, AuthenticatedUser, BaseWorker } from '@coldpbc/nest';
-import { allRoles, bpcDecoratorOptions, coldAdminOnly, orgIdDecoratorOptions } from '../_global/global.params';
-import { CategoriesService } from './categories.service';
+import {Body, Controller, Get, HttpCode, Param, Put, Query, Req, UseFilters} from '@nestjs/common';
+import {ApiOperation, ApiParam, ApiQuery, ApiTags} from '@nestjs/swagger';
+import {Span} from 'nestjs-ddtrace';
+import {BaseWorker, HttpExceptionFilter, IAuthenticatedUser, Roles} from '@coldpbc/nest';
+import {allRoles, bpcDecoratorOptions, coldAdminOnly, orgIdDecoratorOptions} from '../_global/global.params';
+import {CategoriesService} from './categories.service';
 
 /**
  * Categories (taxonomy) controller
@@ -19,7 +19,7 @@ export class CategoriesController extends BaseWorker {
 
   /**
    * Get all categories
-   * @param {{body: any, headers: any, query: any, user: AuthenticatedUser}} req
+   * @param {{body: any, headers: any, query: any, user: IAuthenticatedUser}} req
    * @param {string} orgId
    * @param {boolean} bpc
    * @returns {Promise<category_definitions>}
@@ -39,17 +39,17 @@ export class CategoriesController extends BaseWorker {
       body: any;
       headers: any;
       query: any;
-      user: AuthenticatedUser;
+      user: IAuthenticatedUser;
     },
     @Query('impersonateOrg') orgId?: string,
     @Query('bpc') bpc?: boolean,
   ) {
-    return this.categoriesService.findFull(req.user, bpc, orgId);
+    return this.categoriesService.findFull(req, bpc, orgId);
   }
 
   /**
    * Get all categories for an org
-   * @param {{body: any, headers: any, query: any, user: AuthenticatedUser}} req
+   * @param {{body: any, headers: any, query: any, user: IAuthenticatedUser}} req
    * @param {string} orgId
    * @param {boolean} bpc
    * @returns {Promise<category_definitions>}
@@ -70,18 +70,18 @@ export class CategoriesController extends BaseWorker {
       body: any;
       headers: any;
       query: any;
-      user: AuthenticatedUser;
+      user: IAuthenticatedUser;
     },
     @Param('orgId') orgId?: string,
     @Query('bpc') bpc?: boolean,
   ) {
-    return this.categoriesService.findFull(req.user, bpc, orgId);
+    return this.categoriesService.findFull(req, bpc, orgId);
   }
 
   /**
    * Get an organization category response by name
    * @param nameOrId
-   * @param {{body: any, headers: any, query: any, user: AuthenticatedUser}} req
+   * @param {{body: any, headers: any, query: any, user: IAuthenticatedUser}} req
    * @param {string} orgId
    * @param {boolean} bpc
    * @returns {Promise<CategoryDefinitionDto>}
@@ -108,19 +108,19 @@ export class CategoriesController extends BaseWorker {
       body: any;
       headers: any;
       query: any;
-      user: AuthenticatedUser;
+      user: IAuthenticatedUser;
     },
     @Param('orgId') orgId?: string,
     @Param('name') nameOrId?: string,
     @Query('bpc') bpc?: boolean,
   ) {
-    return this.categoriesService.findByName(req.user, bpc, orgId, nameOrId);
+    return this.categoriesService.findByName(req, bpc, orgId, nameOrId);
   }
 
   /**
    * Submit new org values for categories (taxonomy)
    * @param submitCategoryValuesDto
-   * @param {{body: any, headers: any, query: any, user: AuthenticatedUser}} req
+   * @param {{body: any, headers: any, query: any, user: IAuthenticatedUser}} req
    * @param {string} orgId optional
    * @returns {Promise<CreateSurveyDefinitionDto>}
    */
@@ -142,9 +142,9 @@ export class CategoriesController extends BaseWorker {
       body: any;
       headers: any;
       query: any;
-      user: AuthenticatedUser;
+      user: IAuthenticatedUser;
     },
   ) {
-    return this.categoriesService.submitResults(submitCategoryValuesDto, req.user, orgId);
+    return this.categoriesService.submitResults(submitCategoryValuesDto, req, orgId);
   }
 }

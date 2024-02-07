@@ -1,7 +1,6 @@
 import { StoryMockProvider, getCategoriesHandler } from '@coldpbc/mocks';
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
-import { CenterColumnContent } from '../../organisms';
 import { Journey } from './journey';
 
 const meta: Meta<typeof Journey> = {
@@ -15,7 +14,7 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-  render: (args) => (
+  render: args => (
     <StoryMockProvider {...args} handlers={[]}>
       <Journey />
     </StoryMockProvider>

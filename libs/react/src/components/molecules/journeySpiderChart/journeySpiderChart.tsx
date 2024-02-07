@@ -1,16 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Chart } from 'react-chartjs-2';
-import {
-  Chart as ChartJS,
-  ChartData,
-  ChartOptions,
-  Filler,
-  LineElement,
-  PointElement,
-  RadarController,
-  RadialLinearScale,
-  Title,
-} from 'chart.js';
+import { Chart as ChartJS, ChartData, ChartOptions, Filler, LineElement, PointElement, RadarController, RadialLinearScale, Title } from 'chart.js';
 import { HexColors } from '../../../themes/cold_theme';
 import { forEach, isNumber, isString, some } from 'lodash';
 import useSWR from 'swr';
@@ -25,14 +15,7 @@ import { useOrgSWR } from '../../../hooks/useOrgSWR';
 import { useColdContext } from '@coldpbc/hooks';
 import { ErrorType } from '@coldpbc/enums';
 
-ChartJS.register(
-  RadarController,
-  LineElement,
-  PointElement,
-  RadialLinearScale,
-  Title,
-  Filler,
-);
+ChartJS.register(RadarController, LineElement, PointElement, RadialLinearScale, Title, Filler);
 
 interface Props {
   setIsEmptyData?: (isEmpty: boolean) => void;
@@ -45,10 +28,7 @@ function _JourneySpiderChart({ setIsEmptyData }: Props) {
   const [chartData, setChartData] = useState<ChartData>(defaultChartData);
 
   // Fetch chart data
-  const { data, error, isLoading } = useOrgSWR<any>(
-    ['/categories', 'GET'],
-    axiosFetcher,
-  );
+  const { data, error, isLoading } = useOrgSWR<any>(['/categories', 'GET'], axiosFetcher);
   const { logError } = useColdContext();
 
   if (error) {
@@ -61,20 +41,15 @@ function _JourneySpiderChart({ setIsEmptyData }: Props) {
     !(
       data?.definition &&
       Object.keys(data.definition.categories).length !== 0 &&
-      some(data.definition.categories, (category: any) =>
-        some(
-          category.subcategories,
-          (subcategory: any) => subcategory.journey_score !== null,
-        ),
-      )
+      some(data.definition.categories, (category: any) => some(category.subcategories, (subcategory: any) => subcategory.journey_score !== null))
     ) || data?.response?.status === 404;
   useEffect(() => {
     if (!isEmpty) {
       const newLabels: string[] = [],
         newData: number[] = [];
       // Transform chart data
-      forEach(data?.definition.categories, (category) => {
-        forEach(category.subcategories, (subcategory) => {
+      forEach(data?.definition.categories, category => {
+        forEach(category.subcategories, subcategory => {
           if (subcategory?.journey_score) {
             newLabels.push(subcategory.subcategory_name);
             newData.push(subcategory.journey_score);
@@ -103,18 +78,10 @@ function _JourneySpiderChart({ setIsEmptyData }: Props) {
       const pointColors: string[] = [];
       newChartData.datasets[0].data.forEach((dataPoint: any) => {
         pointColors.push(
-          pickGradientValue(
-            HexColors.white,
-            HexColors.primary.DEFAULT,
-            (isNumber(dataPoint) ? dataPoint : 0) /
-              (isString(maxAxisValue)
-                ? parseFloat(maxAxisValue)
-                : maxAxisValue),
-          ),
+          pickGradientValue(HexColors.white, HexColors.primary.DEFAULT, (isNumber(dataPoint) ? dataPoint : 0) / (isString(maxAxisValue) ? parseFloat(maxAxisValue) : maxAxisValue)),
         );
       });
-      if (newChartOptions.elements?.point)
-        newChartOptions.elements.point.backgroundColor = pointColors;
+      if (newChartOptions.elements?.point) newChartOptions.elements.point.backgroundColor = pointColors;
 
       setChartOptions(newChartOptions);
       setChartData(newChartData);
@@ -128,18 +95,8 @@ function _JourneySpiderChart({ setIsEmptyData }: Props) {
     setTimeout(() => {
       setChartOptions({
         ...chartOptions,
-        backgroundColor: createGradient(
-          chart.ctx,
-          chart.chartArea,
-          HexColors.white + '00',
-          HexColors.primary.DEFAULT + '40',
-        ), // 25% transparency
-        borderColor: createGradient(
-          chart.ctx,
-          chart.chartArea,
-          HexColors.gray['130'],
-          HexColors.primary.DEFAULT,
-        ),
+        backgroundColor: createGradient(chart.ctx, chart.chartArea, HexColors.white + '00', HexColors.primary.DEFAULT + '40'), // 25% transparency
+        borderColor: createGradient(chart.ctx, chart.chartArea, HexColors.gray['130'], HexColors.primary.DEFAULT),
       });
     }, 100);
   };
@@ -157,7 +114,7 @@ function _JourneySpiderChart({ setIsEmptyData }: Props) {
   }
 
   return (
-    <div className="relative h-[284px] w-full" data-chromatic="ignore">
+    <div className="relative h-[284px] w-full" data-chromatic="ignore" data-testid={'journey-spider-chart'}>
       <Chart
         ref={chartRef}
         options={{
@@ -172,7 +129,7 @@ function _JourneySpiderChart({ setIsEmptyData }: Props) {
 }
 
 export const JourneySpiderChart = withErrorBoundary(_JourneySpiderChart, {
-  FallbackComponent: (props) => <ErrorFallback {...props} />,
+  FallbackComponent: props => <ErrorFallback {...props} />,
   onError: (error, info) => {
     console.error('Error occurred in JourneySpiderChart: ', error);
   },

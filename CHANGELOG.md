@@ -1,9 +1,222 @@
-# [1.94.0-COLD-472.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.93.0...v1.94.0-COLD-472.1) (2024-02-06)
+# [1.107.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.106.0...v1.107.0) (2024-02-07)
 
 
 ### Features
 
-* get access token only when the organization and user is authenticated ([67d687d](https://github.com/ColdPBC/cold-monorepo/commit/67d687da99c835d19aabfb6035ab3b1db2387fa8))
+* dont display next actions module if there are no actions ([a6b294c](https://github.com/ColdPBC/cold-monorepo/commit/a6b294c7c71c80df2ca63571101f9a6fd4348d8d))
+
+# [1.106.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.105.0...v1.106.0) (2024-02-07)
+
+
+### Bug Fixes
+
+* set max-h and max-w for logo in complianceOverviewCard.tsx ([54aded3](https://github.com/ColdPBC/cold-monorepo/commit/54aded3a1fa7d347a3371b65ce95c64da96e4068))
+
+
+### Features
+
+* added orgcompliance return type to getOrganizationComplianceMockByName function ([adfd27f](https://github.com/ColdPBC/cold-monorepo/commit/adfd27f3b210b53953729e167c591092af37c939))
+
+## [1.105.1-cold-487.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.105.0...v1.105.1-cold-487.1) (2024-02-06)
+
+
+### Bug Fixes
+
+* set max-h and max-w for logo in complianceOverviewCard.tsx ([54aded3](https://github.com/ColdPBC/cold-monorepo/commit/54aded3a1fa7d347a3371b65ce95c64da96e4068))
+
+# [1.105.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.104.3...v1.105.0) (2024-02-06)
+
+
+### Bug Fixes
+
+* correct storybook changes ([580a399](https://github.com/ColdPBC/cold-monorepo/commit/580a399492ab622fe65b312d04f0a0d19029c605))
+
+
+### Features
+
+* add new compliance module to tests ([0b2e4ff](https://github.com/ColdPBC/cold-monorepo/commit/0b2e4fffc1c11f73b588fe8dfe99b48502b07440))
+* add next steps to interaction tests ([6c45c2f](https://github.com/ColdPBC/cold-monorepo/commit/6c45c2f832398bdf8ab858a4d3edee8b48dea6e5))
+* Added addtional context to interaction tests ([d02ea4e](https://github.com/ColdPBC/cold-monorepo/commit/d02ea4ef1ac9bbd7013601196b14530c3d2b7f43))
+* Added more interaction tests ([786bf3e](https://github.com/ColdPBC/cold-monorepo/commit/786bf3ed541ecb42f4603b7d78953c81bd52a4a9))
+* code improvement ([4b5f415](https://github.com/ColdPBC/cold-monorepo/commit/4b5f415f13ff469950064a739766a87383f57d8f))
+* correct test errors ([282da7a](https://github.com/ColdPBC/cold-monorepo/commit/282da7aa22526f90b8ee10632e250fefc5f42917))
+* increase z index of taoaster so it appears over a takeover ([5c8f65e](https://github.com/ColdPBC/cold-monorepo/commit/5c8f65e6ea892befade259bd1a5260a6b7898a83))
+* make codebase improvements ([61564bf](https://github.com/ColdPBC/cold-monorepo/commit/61564bf67aa5a6d47c881c5687bb8554e36719ab))
+* remove console log ([554f9c5](https://github.com/ColdPBC/cold-monorepo/commit/554f9c55d20f9764aa9a847bbe72afe3a7c08ecf))
+* remove unneeded build storybook step ([afbb03c](https://github.com/ColdPBC/cold-monorepo/commit/afbb03c5d81a793e3a873d6a0ea3bb975dd71412))
+* setup interaction tests ([a15c1da](https://github.com/ColdPBC/cold-monorepo/commit/a15c1dadb693dffc3b4afeeddf18dc11bf3ed6c7))
+* update footprint empty data msw handlers to pass tests ([3ce471f](https://github.com/ColdPBC/cold-monorepo/commit/3ce471f96aced264cadd7194af7f9e02fa7ac60b))
+* update to action detail ([c4661f6](https://github.com/ColdPBC/cold-monorepo/commit/c4661f6e24f7b161b4376ff79a3987e30e73d242))
+* Update yaml to run storybook tests ([560f197](https://github.com/ColdPBC/cold-monorepo/commit/560f19766367fb496aef8b319ad2802566f5f563))
+* updated application story to add document, compliance and settings tests ([9670f66](https://github.com/ColdPBC/cold-monorepo/commit/9670f66a468ff44967bc5fd1db16f12b2f15ea5e))
+* use takeover for initial loading to not show guidance button ([80324d0](https://github.com/ColdPBC/cold-monorepo/commit/80324d067e6174984c09b079b44d95d994f98190))
+* use takeover for signup page ([c299ca2](https://github.com/ColdPBC/cold-monorepo/commit/c299ca2451bd4b6319e51ad5e04cb4a656142822))
+
+## [1.104.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.104.2...v1.104.3) (2024-02-06)
+
+
+### Bug Fixes
+
+* broken migrations due to search and replace bug ([b3cad19](https://github.com/ColdPBC/cold-monorepo/commit/b3cad1927262f13b6adfdf6cbe6588a80af6999b))
+
+## [1.104.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.104.1...v1.104.2) (2024-02-06)
+
+
+### Bug Fixes
+* broken import statements ([02e94e6](https://github.com/ColdPBC/cold-monorepo/commit/02e94e6a41f1726b46455d430c5ade29f64d4d2f))
+
+## [1.104.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.104.0...v1.104.1) (2024-02-06)
+
+
+### Bug Fixes
+
+* switch to configService ([bc6d6b6](https://github.com/ColdPBC/cold-monorepo/commit/bc6d6b67494ea77ba11ad2c32a7a393aa54d6673))
+
+# [1.104.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.103.0...v1.104.0) (2024-02-06)
+
+
+### Bug Fixes
+
+* add module exports ([2eee8fb](https://github.com/ColdPBC/cold-monorepo/commit/2eee8fb1cd2316f2aa6a1b60b82a1da618dc22d1))
+* clean up import ([8863b82](https://github.com/ColdPBC/cold-monorepo/commit/8863b820c3e2c987f52bc1dcd602165a2fe6470d))
+* clean up location schema ([7babfa5](https://github.com/ColdPBC/cold-monorepo/commit/7babfa54a8c9508f019596741613c8c39f50348d))
+* cleanup code, move prompts to class ([cfe4120](https://github.com/ColdPBC/cold-monorepo/commit/cfe4120dac3a01dc00933d6c626ce3ad23f42a55))
+* get config settings from LD ([4a91b8c](https://github.com/ColdPBC/cold-monorepo/commit/4a91b8cc3b0935e66d52b8558eeda322fb90ec93))
+* implement file service ([1d5574b](https://github.com/ColdPBC/cold-monorepo/commit/1d5574bca6acadc64b281aaeecc968d67836a505))
+* implement re-usable service to broadcast rabbit to all integrations ([be21f09](https://github.com/ColdPBC/cold-monorepo/commit/be21f09c50c18fa03d620a9646e5c1a30d613897))
+* issue that would block redis jobs ([22f4f6c](https://github.com/ColdPBC/cold-monorepo/commit/22f4f6c65575562c084744abb791e18eea7b5015))
+* issue that would block redis jobs ([8ff1e74](https://github.com/ColdPBC/cold-monorepo/commit/8ff1e745a75c619e1ea21322438a3009615a7ebb))
+* make mqtt global ([378e4f3](https://github.com/ColdPBC/cold-monorepo/commit/378e4f30f884e94a2b819837638f0c94c6513bd4))
+* moved prompts to class ([bca4d28](https://github.com/ColdPBC/cold-monorepo/commit/bca4d28043ea4e6641ea821851a474a7f8470104))
+* nack() messages when event is not supported by service ([66bbd5c](https://github.com/ColdPBC/cold-monorepo/commit/66bbd5c8e6ca81e2f3a6fbf2b8313d3a882f19d4))
+* null reference error ([11c8d0b](https://github.com/ColdPBC/cold-monorepo/commit/11c8d0bd6a4a1342177163fdf5bb25418876a459))
+* re-organize organization modules ([d7f8076](https://github.com/ColdPBC/cold-monorepo/commit/d7f8076343d0e489c586aae68d75f3837516dd9a))
+* return instance to support non DI implementations ([41e64c1](https://github.com/ColdPBC/cold-monorepo/commit/41e64c1be7fcb2a73bb17fa0108d7e642197b05e))
+
+
+### Features
+
+* add secrets manager module ([2c45d05](https://github.com/ColdPBC/cold-monorepo/commit/2c45d0574851bdeebfdab780275dde56cb7817d1))
+* add secrets manager module ([bcf2a94](https://github.com/ColdPBC/cold-monorepo/commit/bcf2a941cc6374092aecda681094a16af7d26425))
+* implement MQTT on all CRUD updates across all resources ([6a58144](https://github.com/ColdPBC/cold-monorepo/commit/6a5814444f3d53a41764b6db11c42717b0ff727d))
+
+# [1.103.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.102.1...v1.103.0) (2024-02-05)
+
+
+### Features
+
+* add logging for seeding components ([2831821](https://github.com/ColdPBC/cold-monorepo/commit/283182136ebfdd0f5e37537135df85aa4021606e))
+* add seed components file ([6947106](https://github.com/ColdPBC/cold-monorepo/commit/6947106150da2f15e767ee216fe00f6c1abcc1c9))
+* code improvement ([3e6821c](https://github.com/ColdPBC/cold-monorepo/commit/3e6821cc82847b6572ccfc04ae8abd82ef1d6187))
+* correct component definition data ([2fc08fc](https://github.com/ColdPBC/cold-monorepo/commit/2fc08fca5928a7680fc69904b294f565004f9a6c))
+* reuse and rename seed form defitnitions to component definitions ([9d50887](https://github.com/ColdPBC/cold-monorepo/commit/9d508875c571ef3bfa8052679b2b6ee41ae37d6d))
+
+## [1.102.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.102.0...v1.102.1) (2024-02-05)
+
+
+### Bug Fixes
+
+* return survey definition correctly even if name is updated ([c01ec8b](https://github.com/ColdPBC/cold-monorepo/commit/c01ec8ba1d1fa0f19cce2c9afd4b16fd84ce661a))
+* return survey definition correctly even if name is updated ([#256](https://github.com/ColdPBC/cold-monorepo/issues/256)) ([6ce3e2a](https://github.com/ColdPBC/cold-monorepo/commit/6ce3e2a8e48daafcb407662350fb0899749f6591))
+
+# [1.102.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.101.0...v1.102.0) (2024-02-01)
+
+
+# [1.97.0-cold-475.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.96.1-cold-475.4...v1.97.0-cold-475.1) (2024-02-02)
+
+
+### Bug Fixes
+
+* get config settings from LD ([4a91b8c](https://github.com/ColdPBC/cold-monorepo/commit/4a91b8cc3b0935e66d52b8558eeda322fb90ec93))
+* implement re-usable service to broadcast rabbit to all integrations ([be21f09](https://github.com/ColdPBC/cold-monorepo/commit/be21f09c50c18fa03d620a9646e5c1a30d613897))
+* nack() messages when event is not supported by service ([66bbd5c](https://github.com/ColdPBC/cold-monorepo/commit/66bbd5c8e6ca81e2f3a6fbf2b8313d3a882f19d4))
+* null reference error ([11c8d0b](https://github.com/ColdPBC/cold-monorepo/commit/11c8d0bd6a4a1342177163fdf5bb25418876a459))
+* return instance to support non DI implementations ([41e64c1](https://github.com/ColdPBC/cold-monorepo/commit/41e64c1be7fcb2a73bb17fa0108d7e642197b05e))
+
+
+### Features
+
+* removed hardcoded REI compliance references and other changes ([3072e77](https://github.com/ColdPBC/cold-monorepo/commit/3072e7765ba50d51bac359312ac2346b4c85123b))
+
+# [1.101.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.100.0...v1.101.0) (2024-01-27)
+
+
+### Features
+
+* added scrollbar when overflows and auto margin for survey question flex tiem ([fcf4281](https://github.com/ColdPBC/cold-monorepo/commit/fcf428133d13a6d03d8a5944ed3f498340efebf2))
+
+# [1.100.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.99.0...v1.100.0) (2024-01-26)
+
+
+### Features
+
+* change user-facing journey modules to gap assessments for demo-ing ([f0803b1](https://github.com/ColdPBC/cold-monorepo/commit/f0803b17ffa5a49d7c694403bd495ba1d5686a3f))
+* change user-facing journey modules to gap assessments for demo-ing ([#247](https://github.com/ColdPBC/cold-monorepo/issues/247)) ([a23d514](https://github.com/ColdPBC/cold-monorepo/commit/a23d514eeb484eb86d4acff7f8f71231763e6e66))
+
+# [1.99.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.98.0...v1.99.0) (2024-01-26)
+
+
+
+### Bug Fixes
+
+* change empty string to null based on recommendation ([826c032](https://github.com/ColdPBC/cold-monorepo/commit/826c032b2571b093fbeb42ff3985b049196b1a2d))
+
+
+### Features
+
+* remove COMPLIANCE type questions from next steps module and improve formatting when module is empty ([c80dc1b](https://github.com/ColdPBC/cold-monorepo/commit/c80dc1be455dfe4d63a8ea2f346cb56eb070e44e))
+* remove COMPLIANCE type surveys from next steps module and imp… ([#246](https://github.com/ColdPBC/cold-monorepo/issues/246)) ([88577df](https://github.com/ColdPBC/cold-monorepo/commit/88577dfeef15bd1b56b3e40379fd75bcaa43806a))
+
+# [1.98.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.97.0...v1.98.0) (2024-01-25)
+
+
+### Features
+
+* make updates to action detail page and handle links to subcategory actions that dont exist ([8ea811c](https://github.com/ColdPBC/cold-monorepo/commit/8ea811cc127dc79e518c31ab51bde468b3aab017))
+
+# [1.97.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.96.1...v1.97.0) (2024-01-25)
+
+
+### Features
+
+* Limit surveys in next steps to 3 ([1659167](https://github.com/ColdPBC/cold-monorepo/commit/16591677489cf87ad6b60d28b8995542c7bab2e3))
+
+## [1.96.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.96.0...v1.96.1) (2024-01-24)
+
+
+### Bug Fixes
+
+* issue that would block redis jobs ([22f4f6c](https://github.com/ColdPBC/cold-monorepo/commit/22f4f6c65575562c084744abb791e18eea7b5015))
+* issue that would block redis jobs ([8ff1e74](https://github.com/ColdPBC/cold-monorepo/commit/8ff1e745a75c619e1ea21322438a3009615a7ebb))
+* openAI improvements ([317bdf4](https://github.com/ColdPBC/cold-monorepo/commit/317bdf47b15f0c3c7c59a22a02eb950f69ffaae0))
+
+# [1.96.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.95.0...v1.96.0) (2024-01-23)
+
+
+### Features
+
+* added VITE_MQTT_URL to env variables and made fixes to resolve console errors ([9954052](https://github.com/ColdPBC/cold-monorepo/commit/9954052454dc322953be70c77279990540482769))
+* resolve unexpected chromatic changes ([4c66292](https://github.com/ColdPBC/cold-monorepo/commit/4c66292a5ba3b503b3cbca745d24457493956759))
+
+# [1.95.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.94.0...v1.95.0) (2024-01-23)
+
+
+### Features
+
+* added survey data validation before submitting ([2ae1758](https://github.com/ColdPBC/cold-monorepo/commit/2ae1758cf3d6b9d94f1589b4ae33fe517b2a839d))
+
+# [1.94.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.93.0...v1.94.0) (2024-01-23)
+
+
+### Bug Fixes
+
+* resolve txt input bug ([3805434](https://github.com/ColdPBC/cold-monorepo/commit/38054341fc1a9a03cdad684b542e905084d035be))
+
+
+### Features
+
+* added specific typing to additionalContextQuestion ([e520daa](https://github.com/ColdPBC/cold-monorepo/commit/e520daa08528b7141ca99d64931835b0d3f4bd13))
+* fix survey question container error ([b13abee](https://github.com/ColdPBC/cold-monorepo/commit/b13abee117f7a057105cd427ebad38c3a374a106))
 
 # [1.93.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.92.1...v1.93.0) (2024-01-22)
 
@@ -404,7 +617,6 @@
 * add jobs to redis on rabbit failure ([062eb88](https://github.com/ColdPBC/cold-monorepo/commit/062eb88a9faa54e252392a31cfbd4e8214f8d547))
 
 # [1.83.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.82.1...v1.83.0) (2024-01-09)
-
 
 ### Features
 

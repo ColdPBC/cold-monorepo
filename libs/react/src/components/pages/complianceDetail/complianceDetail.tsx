@@ -60,14 +60,20 @@ const _ComplianceDetail = () => {
     });
     if (compliance) {
       return (
-        <CenterColumnContent title="REI Compliance">
+        <CenterColumnContent title={`${compliance.compliance_definition.title} Compliance`}>
           <div className={'w-full space-y-[24px]'}>
-            <ComplianceOverviewCard title={'Overview'} complianceData={totalComplianceProgress} isOverview={true} onOverviewPage={false} />
+            <ComplianceOverviewCard
+              title={'Overview'}
+              complianceData={totalComplianceProgress}
+              isOverview={true}
+              onOverviewPage={false}
+              logo_url={compliance.compliance_definition.logo_url}
+            />
             <div className={'w-full space-y-[8px]'}>
               <div className={'text-h3 text-tc-primary'}>Sections</div>
               {compliance.compliance_definition.surveys.map((survey, index) => {
                 return (
-                  <div key={'survey_' + index}>
+                  <div key={'survey_' + index} data-testid={'compliance-section-overview-card'}>
                     <ComplianceSectionOverview surveyName={survey} setOverviewComplianceProgress={setComplianceProgress} overviewComplianceProgress={complianceProgress} />
                   </div>
                 );

@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { AuthenticatedUser } from '@coldpbc/nest';
+import { IAuthenticatedUser } from '@coldpbc/nest';
 import { MulterModule } from '@nestjs/platform-express';
 import multerS3 from 'multer-s3';
 import { S3Service } from './s3.service';
@@ -20,7 +20,7 @@ export class S3Module {
               bucket: bucket,
               contentType: multerS3.AUTO_CONTENT_TYPE,
               key: function (req, file, cb) {
-                const user = req['user'] as AuthenticatedUser;
+                const user = req['user'] as IAuthenticatedUser;
                 const hash = crypto.createHash('sha1');
                 hash.setEncoding('hex');
 

@@ -4,12 +4,12 @@ import { Meta, StoryObj } from '@storybook/react';
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import { RangeSlider } from './rangeSlider';
 
-const meta = {
+const meta: Meta<typeof RangeSlider> = {
   title: 'Atoms/RangeSlider',
   component: RangeSlider,
   tags: ['autodocs'],
   decorators: [withKnobs],
-} satisfies Meta<typeof RangeSlider>;
+};
 
 export default meta;
 type Story = StoryObj<typeof meta>;

@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { SurveyInput } from '../index';
-import { cloneDeep, findIndex, forEach } from 'lodash';
+import { cloneDeep, findIndex, forEach, forOwn } from 'lodash';
 import { IButtonProps, SurveyActiveKeyType, SurveyAdditionalContext, SurveyPayloadType, SurveySectionType } from '@coldpbc/interfaces';
-import { BaseButton } from '../../atoms';
+import { BaseButton, Spinner } from '../../atoms';
 import { ButtonTypes, GlobalSizes } from '@coldpbc/enums';
 import { CSSTransition, SwitchTransition } from 'react-transition-group';
 import { getSectionIndex, isComponentTypeValid, isKeyValueFollowUp } from '@coldpbc/lib';
@@ -10,7 +10,6 @@ import { axiosFetcher } from '@coldpbc/fetchers';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application';
 import { useAuth0Wrapper } from '@coldpbc/hooks';
-import { isDefined } from 'class-validator';
 
 export interface SurveyQuestionContainerProps {
   activeKey: SurveyActiveKeyType;
@@ -32,8 +31,6 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
     enterDone: 'transition ease-out duration-200 transform translate-y-0',
     exitActive: 'transition ease-in duration-200 transform translate-y-full',
   };
-  const [activeQuestion, setActiveQuestion] = React.useState<JSX.Element | undefined>(undefined);
-  const [additionalContextQuestion, setAdditionalContextQuestion] = React.useState<JSX.Element | undefined>(undefined);
   const [transitionClassNames, setTransitionClassNames] = React.useState<any>(nextQuestionTransitionClassNames);
   const { definition, id, name } = surveyData;
   const { sections } = definition;
@@ -44,6 +41,17 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
     } else {
       setTransitionClassNames(previousQuestionTransitionClassNames);
     }
+  };
+
+  const validateSurveyData = (survey: SurveyPayloadType) => {
+    // loop through each section and check the component type. If it is invalid then set the value to null
+    const newSurvey = cloneDeep(survey);
+    forOwn(newSurvey.definition.sections, (section: SurveySectionType, key: string) => {
+      if (!isComponentTypeValid(section.component)) {
+        newSurvey.definition.sections[key]['component'] = null;
+      }
+    });
+    return newSurvey;
   };
 
   const updateSurveyQuestion = (
@@ -68,7 +76,6 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
         if (additional) {
           newSection = {
             ...section,
-            component: isComponentTypeValid(section.component) ? section.component : null,
             follow_up: {
               ...section.follow_up,
               [key]: {
@@ -86,7 +93,6 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
           if (!conditionMet) {
             newSection = {
               ...section,
-              component: isComponentTypeValid(section.component) ? section.component : null,
               follow_up: {
                 ...section.follow_up,
                 [key]: {
@@ -102,7 +108,6 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
           } else {
             newSection = {
               ...section,
-              component: isComponentTypeValid(section.component) ? section.component : null,
               follow_up: {
                 ...section.follow_up,
                 [key]: {
@@ -116,7 +121,6 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
       } else {
         newSection = {
           ...section,
-          component: isComponentTypeValid(section.component) ? section.component : null,
           follow_up: {
             ...section.follow_up,
             [key]: {
@@ -136,7 +140,6 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
         if (additional) {
           newSection = {
             ...section,
-            component: isComponentTypeValid(section.component) ? section.component : null,
             additional_context: {
               ...section.additional_context,
               ...update,
@@ -149,7 +152,6 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
             newSection = {
               ...section,
               ...update,
-              component: isComponentTypeValid(section.component) ? section.component : null,
               additional_context: {
                 ...section.additional_context,
                 value: null,
@@ -159,7 +161,6 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
             newSection = {
               ...section,
               ...update,
-              component: isComponentTypeValid(section.component) ? section.component : null,
             };
           }
         }
@@ -167,7 +168,6 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
         newSection = {
           ...section,
           ...update,
-          component: isComponentTypeValid(section.component) ? section.component : null,
         };
       }
       if (update.value === false || update.skipped === true) {
@@ -177,7 +177,7 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
         });
       }
     }
-    const newSurvey: SurveyPayloadType = cloneDeep(surveyData);
+    const newSurvey: SurveyPayloadType = validateSurveyData(surveyData);
     newSurvey.definition.sections[activeSectionKey] = newSection;
     newSurvey.definition.submitted = submit;
     return newSurvey;
@@ -365,7 +365,10 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
         }
       }
     } else {
-      if (additionalContextQuestion && sections[activeSectionKey].additional_context && sections[activeSectionKey].additional_context?.value === undefined) {
+      if (additionalContextQuestion && sections[activeSectionKey].additional_context &&
+        (sections[activeSectionKey].additional_context?.value === undefined
+          || sections[activeSectionKey].additional_context?.value === null)
+      ) {
         buttonProps.disabled = true;
       }
       if (sections[activeSectionKey].value === undefined && sections[activeSectionKey].ai_response !== undefined && sections[activeSectionKey].ai_response?.answer !== undefined) {
@@ -590,9 +593,9 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
       }
     }
     if (condition) {
-      setAdditionalContextQuestion(getQuestionForKey(activeKey, true));
+      return getQuestionForKey(activeKey, true);
     } else {
-      setAdditionalContextQuestion(undefined);
+      return undefined;
     }
   };
 
@@ -657,33 +660,26 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
     })
     .flat();
 
-  const getActiveQuestion = () => {
-    const question = questions.find(question => {
-      return question.props.input_key === activeKey.value;
-    });
-    // show additional context
-    checkAdditionalContext(activeKey);
-    setActiveQuestion(question);
-  };
+  const question = questions.find(question => {
+    return question.props.input_key === activeKey.value;
+  });
 
-  useEffect(() => {
-    getActiveQuestion();
-  }, [activeKey, surveyData]);
+  const additionalContextQuestion = checkAdditionalContext(activeKey);
 
-  if (activeQuestion !== undefined) {
+  if (question !== undefined) {
     return (
-      <div className={'w-full h-full relative flex items-center justify-center overflow-hidden pb-[93px]'}>
+      <div className={'w-full h-full relative flex flex-col space-y-[24px]'} data-testid={'survey-question-container'}>
         <SwitchTransition>
-          <CSSTransition key={activeQuestion.props.input_key} timeout={150} classNames={transitionClassNames}>
-            <div className={'h-full w-full flex items-center justify-center px-[139px] shortScreen:px-[32px] shortWideScreen:px-[139px]'}>
-              <div className={'w-full space-y-6'}>
-                {activeQuestion}
+          <CSSTransition key={question.props.input_key} timeout={150} classNames={transitionClassNames}>
+            <div className={'h-full w-full flex items-center justify-center overflow-y-auto px-[139px] shortScreen:px-[32px] shortWideScreen:px-[139px]'}>
+              <div className={'w-full space-y-6 m-auto'}>
+                {question}
                 {additionalContextQuestion}
               </div>
             </div>
           </CSSTransition>
         </SwitchTransition>
-        <div className={'absolute w-[540px] space-x-[15px] h-[40px] flex justify-end right-0 bottom-0 mb-[37px]'}>
+        <div className={'w-full space-x-[15px] h-[40px] flex justify-end right-0 bottom-0 mb-[37px]'}>
           {getPreviousButton()}
           {getNextButton()}
         </div>

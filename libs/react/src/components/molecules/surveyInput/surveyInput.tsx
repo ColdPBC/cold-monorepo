@@ -48,6 +48,7 @@ const _SurveyInput = (props: SurveyInputProps) => {
               onFieldUpdated(input_key, value);
             }}
             value={displayValue}
+            data-testid={input_key + (isAdditional ? '-additional' : '')}
           />
         );
       case 'text':
@@ -71,6 +72,7 @@ const _SurveyInput = (props: SurveyInputProps) => {
                 'text-sm not-italic text-tc-primary font-medium bg-transparent w-full rounded-lg py-6 px-4 border border-bgc-accent focus:border focus:border-bgc-accent focus:ring-0',
               placeholder: placeholder,
               title: tooltip,
+              'aria-label': input_key + (isAdditional ? '-additional' : ''),
             }}
             container_classname={'w-full'}
           />
@@ -111,6 +113,7 @@ const _SurveyInput = (props: SurveyInputProps) => {
                 placeholder: placeholder,
                 title: tooltip,
                 className: 'text-sm not-italic text-tc-primary font-medium bg-transparent w-full h-full pl-0 pr-6 py-6 border-0 focus:border-0 focus:ring-0',
+                'aria-label': input_key + (isAdditional ? '-additional' : ''),
               }}
               container_classname={'w-full'}
             />
@@ -141,6 +144,7 @@ const _SurveyInput = (props: SurveyInputProps) => {
               title: tooltip,
               className:
                 'text-sm not-italic text-tc-primary font-medium bg-transparent w-full rounded-lg py-6 px-4 border border-bgc-accent focus:border focus:border-bgc-accent focus:ring-0',
+              'aria-label': input_key + (isAdditional ? '-additional' : ''),
             }}
             container_classname={'w-full h-full'}
           />
@@ -153,6 +157,7 @@ const _SurveyInput = (props: SurveyInputProps) => {
               onFieldUpdated(input_key, value);
             }}
             tooltip={tooltip}
+            data-testid={input_key + (isAdditional ? '-additional' : '')}
           />
         );
       case 'multi_select':
@@ -164,6 +169,7 @@ const _SurveyInput = (props: SurveyInputProps) => {
               onFieldUpdated(input_key, value);
             }}
             value={displayValue}
+            data-testid={input_key + (isAdditional ? '-additional' : '')}
           />
         );
       case 'select':
@@ -174,6 +180,7 @@ const _SurveyInput = (props: SurveyInputProps) => {
               onFieldUpdated(input_key, value);
             }}
             value={displayValue}
+            data-testid={input_key + (isAdditional ? '-additional' : '')}
           />
         );
       case 'textarea':
@@ -205,6 +212,7 @@ const _SurveyInput = (props: SurveyInputProps) => {
                 'text-sm not-italic text-tc-primary font-medium bg-transparent w-full rounded-lg py-6 px-4 border border-bgc-accent focus:border focus:border-bgc-accent focus:ring-0 resize-none',
               placeholder: placeholder,
               title: tooltip,
+              'aria-label': input_key + (isAdditional ? '-additional' : ''),
             }}
             container_classname={'w-full'}
           />
@@ -230,7 +238,7 @@ const _SurveyInput = (props: SurveyInputProps) => {
     } else {
       if (ai_attempted && !isUndefined(ai_response) && !isUndefined(ai_response.answer) && ai_response.justification && isUndefined(value)) {
         return (
-          <Card glow={false} className={'border-[1px] border-purple-300 w-full bg-bgc-elevated'}>
+          <Card glow={false} className={'border-[1px] border-purple-300 w-full bg-bgc-elevated'} data-testid={'survey-input-ai-response'}>
             <span>The answer below was predetermined based on the following information. Please review it and adjust to ensure accuracy:</span>
             <Markdown markdown={ai_response.justification} />
           </Card>

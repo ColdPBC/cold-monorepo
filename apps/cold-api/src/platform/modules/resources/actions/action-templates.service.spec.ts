@@ -1,8 +1,7 @@
 import { JwtService } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
-import { CacheService, PrismaService } from '@coldpbc/nest';
-import { authenticatedUserExample } from '../_global/global.examples';
-import { actionTemplatePostExample, actionTemplatePatchExample } from './examples/action-template.examples';
+import { CacheService, fullReqExample, PrismaService } from '@coldpbc/nest';
+import { actionTemplatePatchExample, actionTemplatePostExample } from './examples/action-template.examples';
 
 import { SurveysService } from '../surveys/surveys.service';
 import { v4 } from 'uuid';
@@ -59,23 +58,23 @@ describe('ActionsService', () => {
   });
 
   it('created action matches template', async () => {
-    const response = await actionTemplatesService.createActionTemplate(authenticatedUserExample, actionTemplatePostExample);
+    const response = await actionTemplatesService.createActionTemplate(fullReqExample, actionTemplatePostExample);
     expect(response).toMatchObject(actionTemplatePostExample);
   });
 
   it('get action matches template', async () => {
-    const response = await actionTemplatesService.getActionTemplates(authenticatedUserExample);
+    const response = await actionTemplatesService.getActionTemplates(fullReqExample);
     expect(response).toMatchObject([actionTemplatePostExample]);
   });
 
   it('update action matches template', async () => {
-    const response = await actionTemplatesService.updateActionTemplate(authenticatedUserExample, v4(), actionTemplatePatchExample);
+    const response = await actionTemplatesService.updateActionTemplate(fullReqExample, v4(), actionTemplatePatchExample);
     expect(response).toMatchObject(actionTemplatePatchExample);
   });
 
   it('delete action returns correct id', async () => {
     const id = v4();
-    const response = await actionTemplatesService.deleteActionTemplate(authenticatedUserExample, id);
+    const response = await actionTemplatesService.deleteActionTemplate(fullReqExample, id);
     expect(response).toEqual(`Action ${id} deleted`);
   });
 });

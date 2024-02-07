@@ -14,29 +14,14 @@ export interface SubcategoryActionsOverviewCardProps {
   category_key: string;
 }
 
-const _SubcategoryActionsOverviewCard = ({
-  subcategory_key,
-  category_key,
-}: SubcategoryActionsOverviewCardProps) => {
-  const { data, error } = useOrgSWR<ActionPayload[], any>(
-    [`/actions`, 'GET'],
-    axiosFetcher,
-  );
+const _SubcategoryActionsOverviewCard = ({ subcategory_key, category_key }: SubcategoryActionsOverviewCardProps) => {
+  const { data, error } = useOrgSWR<ActionPayload[], any>([`/actions`, 'GET'], axiosFetcher);
 
-  const { data: categoryData, error: categoryError } = useOrgSWR<any>(
-    ['/categories', 'GET'],
-    axiosFetcher,
-  );
+  const { data: categoryData, error: categoryError } = useOrgSWR<any>(['/categories', 'GET'], axiosFetcher);
 
-  const subcategoryName =
-    categoryData?.definition.categories[category_key].subcategories[
-      subcategory_key
-    ]?.subcategory_name;
+  const subcategoryName = categoryData?.definition.categories[category_key].subcategories[subcategory_key]?.subcategory_name;
 
-  const actions =
-    data?.filter(
-      (actionPayload) => actionPayload.action.subcategory === subcategory_key,
-    ) ?? [];
+  const actions = data?.filter(actionPayload => actionPayload.action.subcategory === subcategory_key) ?? [];
 
   const { logError } = useColdContext();
 
@@ -51,21 +36,17 @@ const _SubcategoryActionsOverviewCard = ({
   }
 
   return (
-    <Card className={'w-[666px]'} glow={true}>
+    <Card className={'w-[666px]'} glow={true} data-testid={'subcategory-actions-overview-card'}>
       <div className={'text-tc-primary space-y-[16px]'}>
         <div className={'text-h3'}>{subcategoryName}</div>
-        {actions.map((action) => {
+        {actions.map(action => {
           return (
             <div key={action.id}>
               <ActionItem
                 actionPayload={action}
                 variant={ActionItemVariants.wide}
-                showProgress={
-                  action.action.ready_to_execute &&
-                  action.action.dependent_surveys.every(
-                    (survey) => survey.submitted,
-                  )
-                }
+                showProgress={action.action.ready_to_execute && action.action.dependent_surveys.every(survey => survey.submitted)}
+                data-testid={`subcategory-action-item-${action.id}`}
               />
             </div>
           );
@@ -75,15 +56,9 @@ const _SubcategoryActionsOverviewCard = ({
   );
 };
 
-export const SubcategoryActionsOverviewCard = withErrorBoundary(
-  _SubcategoryActionsOverviewCard,
-  {
-    FallbackComponent: (props) => <ErrorFallback {...props} />,
-    onError: (error, info) => {
-      console.error(
-        'Error occurred in SubcategoryActionsOverviewCard: ',
-        error,
-      );
-    },
+export const SubcategoryActionsOverviewCard = withErrorBoundary(_SubcategoryActionsOverviewCard, {
+  FallbackComponent: props => <ErrorFallback {...props} />,
+  onError: (error, info) => {
+    console.error('Error occurred in SubcategoryActionsOverviewCard: ', error);
   },
-);
+});

@@ -3,7 +3,7 @@ import { ApiBody, ApiOAuth2, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@
 import { Span } from 'nestjs-ddtrace';
 import { component_definition_types } from 'prisma/prisma-client';
 import { ResourceValidationPipe } from '../../../pipes/resource.pipe';
-import { HttpExceptionFilter, AuthenticatedUser, BaseWorker, Roles, JwtAuthGuard, RolesGuard } from '@coldpbc/nest';
+import { BaseWorker, HttpExceptionFilter, IAuthenticatedUser, JwtAuthGuard, Roles, RolesGuard } from '@coldpbc/nest';
 import { allRoles, bpcDecoratorOptions, coldAdminOnly } from '../_global/global.params';
 import { ComponentDefinitionsService } from './component-definitions.service';
 import { ComponentDefinitionDto } from './dto/component-definition-dto';
@@ -41,11 +41,11 @@ export class ComponentDefinitionsController extends BaseWorker {
       body: any;
       headers: any;
       query: any;
-      user: AuthenticatedUser;
+      user: IAuthenticatedUser;
     },
     @Body(new ResourceValidationPipe(ComponentDefinitionSchema, 'POST')) createComponentDefinitionDto: ComponentDefinitionDto,
   ) {
-    return this.componentDefinitions.create(createComponentDefinitionDto, req.user);
+    return this.componentDefinitions.create(createComponentDefinitionDto, req);
   }
 
   @ApiOperation({
@@ -61,10 +61,10 @@ export class ComponentDefinitionsController extends BaseWorker {
       body: any;
       headers: any;
       query: any;
-      user: AuthenticatedUser;
+      user: IAuthenticatedUser;
     },
   ) {
-    return this.componentDefinitions.findAll(req.user);
+    return this.componentDefinitions.findAll(req);
   }
 
   @ApiOperation({
@@ -82,10 +82,10 @@ export class ComponentDefinitionsController extends BaseWorker {
     @Req()
     req: {
       headers: any;
-      user: AuthenticatedUser;
+      user: IAuthenticatedUser;
     },
   ) {
-    const response = await this.componentDefinitions.findByType(req.user, type);
+    const response = await this.componentDefinitions.findByType(req, type);
     return response;
   }
 
@@ -106,10 +106,10 @@ export class ComponentDefinitionsController extends BaseWorker {
     req: {
       headers: any;
       query: any;
-      user: AuthenticatedUser;
+      user: IAuthenticatedUser;
     },
   ) {
-    const response = await this.componentDefinitions.findOne(name, req.user);
+    const response = await this.componentDefinitions.findOne(name, req);
     return response;
   }
 
@@ -131,10 +131,10 @@ export class ComponentDefinitionsController extends BaseWorker {
     @Req()
     req: {
       headers: any;
-      user: AuthenticatedUser;
+      user: IAuthenticatedUser;
     },
   ) {
-    return this.componentDefinitions.update(name, updateComponentDefinitionDto, req.user);
+    return this.componentDefinitions.update(name, updateComponentDefinitionDto, req);
   }
 
   @ApiOperation({
@@ -156,10 +156,10 @@ export class ComponentDefinitionsController extends BaseWorker {
       body: any;
       headers: any;
       query: any;
-      user: AuthenticatedUser;
+      user: IAuthenticatedUser;
     },
   ) {
-    return this.componentDefinitions.remove(name, req.user);
+    return this.componentDefinitions.remove(name, req);
   }
 
   @ApiOperation({

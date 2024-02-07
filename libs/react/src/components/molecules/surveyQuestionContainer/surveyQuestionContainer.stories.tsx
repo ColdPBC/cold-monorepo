@@ -7,13 +7,13 @@ import {
 } from '@coldpbc/components';
 import { getSurveyFormDataPayload } from '@coldpbc/mocks';
 
-const meta = {
+const meta: Meta<typeof SurveyQuestionContainer> = {
   title: 'Molecules/SurveyQuestionContainer',
   component: SurveyQuestionContainer,
   tags: ['autodocs'],
   decorators: [withKnobs],
   argTypes: {},
-} satisfies Meta<typeof SurveyQuestionContainer>;
+};
 
 export default meta;
 type Story = StoryObj<typeof meta>;

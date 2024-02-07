@@ -11,7 +11,7 @@ import {
   userWithNames,
 } from '../../../__mocks__/userMock';
 
-const meta = {
+const meta: Meta<typeof Avatar> = {
   title: 'Atoms/Avatar',
   component: Avatar,
   tags: ['autodocs'],
@@ -30,7 +30,7 @@ const meta = {
     },
     user: User,
   },
-} satisfies Meta<typeof Avatar>;
+};
 
 export default meta;
 type Story = StoryObj<typeof meta>;

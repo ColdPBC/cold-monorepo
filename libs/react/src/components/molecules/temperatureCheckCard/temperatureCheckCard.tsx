@@ -1,7 +1,6 @@
 import { Card } from '../card';
 import { TemperatureCheckItem } from '../temperatureCheckItem';
 import { axiosFetcher } from '@coldpbc/fetchers';
-import useSWR from 'swr';
 import { forEach, some } from 'lodash';
 import { GlowPosition } from '../temperatureCheckItem';
 import { ColdFootprintIcon } from '../../atoms';
@@ -17,11 +16,7 @@ import { ErrorType } from '@coldpbc/enums';
 // TODO: set default period in constants somewhere and replace all hard-coded values
 const PERIOD = 2022;
 
-export type Stat =
-  | 'cold_score'
-  | 'footprint'
-  | 'emissions_avoided'
-  | 'actions_completed';
+export type Stat = 'cold_score' | 'footprint' | 'emissions_avoided' | 'actions_completed';
 
 interface Props {
   stats: Stat[];
@@ -30,20 +25,9 @@ interface Props {
 }
 
 const _TemperatureCheckCard = ({ stats, cardTitle, cornerGlow }: Props) => {
-  const {
-    data,
-    isLoading: isCategoryDataLoading,
-    error: categoryDataError,
-  } = useOrgSWR<any>(['/categories', 'GET'], axiosFetcher);
+  const { data, isLoading: isCategoryDataLoading, error: categoryDataError } = useOrgSWR<any>(['/categories', 'GET'], axiosFetcher);
 
-  const {
-    data: footprintData,
-    isLoading: isFootprintDataLoading,
-    error: footprintDataError,
-  } = useOrgSWR<any>(
-    ['/categories/company_decarbonization', 'GET'],
-    axiosFetcher,
-  );
+  const { data: footprintData, isLoading: isFootprintDataLoading, error: footprintDataError } = useOrgSWR<any>(['/categories/company_decarbonization', 'GET'], axiosFetcher);
   const { logError } = useColdContext();
 
   if (categoryDataError || footprintDataError) {
@@ -62,20 +46,14 @@ const _TemperatureCheckCard = ({ stats, cardTitle, cornerGlow }: Props) => {
   // Footprint value
   const isEmptyFootprintData =
     !isFootprintDataLoading &&
-    !some(footprintData.subcategories, (subcategory: any) =>
-      some(
-        subcategory.activities,
-        (activity: any) =>
-          activity.footprint && activity.footprint?.[PERIOD]?.value !== null,
-      ),
-    );
+    !some(footprintData.subcategories, (subcategory: any) => some(subcategory.activities, (activity: any) => activity.footprint && activity.footprint?.[PERIOD]?.value !== null));
 
   let totalFootprint = 0;
-  Object.keys(footprintData?.subcategories ?? {}).forEach((subcategoryKey) => {
+  Object.keys(footprintData?.subcategories ?? {}).forEach(subcategoryKey => {
     const subcategory = footprintData.subcategories[subcategoryKey];
 
     if (subcategory?.activities) {
-      forEach(subcategory.activities, (activity) => {
+      forEach(subcategory.activities, activity => {
         if (activity.footprint && PERIOD in activity.footprint) {
           const footprint = activity.footprint[PERIOD];
           if (footprint && footprint.value !== null) {
@@ -89,41 +67,23 @@ const _TemperatureCheckCard = ({ stats, cardTitle, cornerGlow }: Props) => {
   const statComponentMapping: {
     [key in Stat]: (glowPosition: GlowPosition) => JSX.Element;
   } = {
-    cold_score: (glowPosition) => (
-      <TemperatureCheckItem
-        title="Cold Score"
-        value={coldScore ?? null}
-        icon={<ColdScoreIcon className="fill-white stroke-white" />}
-        glowPosition={glowPosition}
-      />
+    cold_score: glowPosition => (
+      <TemperatureCheckItem title="Cold Score" value={coldScore ?? null} icon={<ColdScoreIcon className="fill-white stroke-white" />} glowPosition={glowPosition} />
     ),
-    footprint: (glowPosition) => (
+    footprint: glowPosition => (
       <TemperatureCheckItem
         title="Footprint"
-        value={
-          !isEmptyFootprintData ? Math.round(totalFootprint * 10) / 10 : null
-        }
+        value={!isEmptyFootprintData ? Math.round(totalFootprint * 10) / 10 : null}
         unitLabel="tCO2"
         icon={<ColdFootprintIconTwo className="." />}
         glowPosition={glowPosition}
       />
     ),
-    emissions_avoided: (glowPosition) => (
-      <TemperatureCheckItem
-        title="Emissions Avoided"
-        value={null}
-        icon={<ColdFootprintIcon className="stroke-white" />}
-        unitLabel="tCO2"
-        glowPosition={glowPosition}
-      />
+    emissions_avoided: glowPosition => (
+      <TemperatureCheckItem title="Emissions Avoided" value={null} icon={<ColdFootprintIcon className="stroke-white" />} unitLabel="tCO2" glowPosition={glowPosition} />
     ),
-    actions_completed: (glowPosition) => (
-      <TemperatureCheckItem
-        title="Actions Completed"
-        value={null}
-        icon={<ColdActionsCompletedIcon className="." />}
-        glowPosition={glowPosition}
-      />
+    actions_completed: glowPosition => (
+      <TemperatureCheckItem title="Actions Completed" value={null} icon={<ColdActionsCompletedIcon className="." />} glowPosition={glowPosition} />
     ),
   };
 
@@ -141,18 +101,14 @@ const _TemperatureCheckCard = ({ stats, cardTitle, cornerGlow }: Props) => {
   };
 
   return (
-    <Card title={cardTitle}>
-      <div className="grid gap-2 grid-cols-2 w-full relative">
-        {stats.map((stat, index) =>
-          statComponentMapping[stat](getGlowPositionForIndex(index)),
-        )}
-      </div>
+    <Card title={cardTitle} data-testid={'temperature-check-card'}>
+      <div className="grid gap-2 grid-cols-2 w-full relative">{stats.map((stat, index) => statComponentMapping[stat](getGlowPositionForIndex(index)))}</div>
     </Card>
   );
 };
 
 export const TemperatureCheckCard = withErrorBoundary(_TemperatureCheckCard, {
-  FallbackComponent: (props) => <ErrorFallback {...props} />,
+  FallbackComponent: props => <ErrorFallback {...props} />,
   onError: (error, info) => {
     console.error('Error occurred in TemperatureCheckCard: ', error);
   },

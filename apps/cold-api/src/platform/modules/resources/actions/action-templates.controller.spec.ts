@@ -10,6 +10,7 @@ import { PrismaClient } from '@prisma/client';
 import { DeepMockProxy, mockDeep } from 'jest-mock-extended';
 import { fullReqExample, noBodyReqExample } from '../_global/global.examples';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { SurveysModule } from '../surveys/surveys.module';
 
 const mock = {
   template: {
@@ -48,9 +49,9 @@ describe('ActionsController', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [ConfigModule],
+      imports: [ConfigModule, SurveysModule],
       controllers: [ActionsController, ActionTemplatesController],
-      providers: [ConfigService, ActionTemplatesService, PrismaService, ActionsService, JwtService, SurveysService, CacheService],
+      providers: [ConfigService, ActionTemplatesService, PrismaService, ActionsService, JwtService, CacheService],
     })
       .overrideProvider(PrismaService)
       .useValue(mockDeep<PrismaClient>())

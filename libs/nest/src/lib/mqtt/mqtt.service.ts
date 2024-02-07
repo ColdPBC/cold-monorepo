@@ -1,9 +1,14 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import { Global, Injectable, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as mqtt from 'mqtt';
 import { BaseWorker } from '../worker';
-import { Cuid2Generator } from '../cuid2-generator.service';
+import { Cuid2Generator } from '../utility';
+import { MqttSystemPayload, MqttUIPayload, MqttValidatorService } from './validator/mqtt.validator.service';
 
+export type MqttStatus = 'complete' | 'failed';
+export type MqttAction = 'create' | 'update' | 'delete';
+
+@Global()
 @Injectable()
 export class MqttService extends BaseWorker implements OnModuleInit {
   private readonly iotEndpoint: string;
@@ -16,9 +21,12 @@ export class MqttService extends BaseWorker implements OnModuleInit {
     if (parts.length < 2) throw new Error('Invalid DD_SERVICE');
     const pfxIdx = parts.length < 3 ? 1 : 2;
     const prefix = parts[pfxIdx].length < 7 ? parts[pfxIdx] : `${parts[pfxIdx].substring(0, 2)}${parts[pfxIdx].substring(parts[pfxIdx].length - 2, parts[pfxIdx].length)}`;
-    //this.topicBase = parts.length < 3 ? `${process.env['NODE_ENV']}/${parts[1]}` : `${process.env['NODE_ENV']}/${parts[1]}/${parts[2]}`;*/
-    this.iotEndpoint = process.env['IOT_ENDPOINT'] || 'a2r4jtij2021gz-ats.iot.us-east-1.amazonaws.com';
+    this.iotEndpoint = this.config.get('IOT_ENDPOINT', 'a2r4jtij2021gz-ats.iot.us-east-1.amazonaws.com');
     this.clientId = new Cuid2Generator(prefix).scopedId;
+  }
+
+  override async onModuleInit(): Promise<void> {
+    this.connect(MqttService.name);
   }
 
   connect(className?: string): mqtt.MqttClient {
@@ -79,9 +87,84 @@ export class MqttService extends BaseWorker implements OnModuleInit {
     }
   }
 
-  publish(topic: string, message: string): void {
+  /**
+   * Publishes message to the UI
+   * @param payload
+   */
+  publishToUI(payload: MqttUIPayload): void {
     if (this.mqttClient) {
-      this.mqttClient.publish(topic, message);
+      if (typeof payload.user !== 'string' && payload.user['coldclimate_claims']) {
+        payload.user = payload.user['coldclimate_claims']['email'];
+      }
+
+      const topic = `ui/${this.config.get('NODE_ENV', 'development')}/${payload.org_id}/${payload.user}`;
+
+      const stringed = JSON.stringify(payload);
+      this.mqttClient.publish(topic, stringed);
+
+      this.logger.log(`Published to UI topic: ${topic}`, payload);
+    } else {
+      this.logger.error('MQTT client is not connected');
+    }
+  }
+
+  /**
+   * Publish MQTT Message
+   * @param target
+   * @param payload
+   */
+  publishMQTT(target: 'public' | 'cold' | 'ui', payload: MqttSystemPayload | MqttUIPayload): void {
+    try {
+      const inputs = new MqttValidatorService(target, payload);
+
+      let topic;
+
+      switch (inputs.target) {
+        case 'public':
+          topic = `system/${this.config.get('NODE_ENV', 'development')}/public`;
+          break;
+        case 'cold':
+          topic = `system/${this.config.get('NODE_ENV', 'development')}/cold`;
+          break;
+        case 'ui':
+          topic = `ui/${this.config.get('NODE_ENV', 'development')}`;
+          break;
+      }
+
+      if (this.mqttClient) {
+        this.mqttClient.publish(topic, JSON.stringify(inputs.payload));
+
+        this.logger.log(`Published to system topic: ${topic}`, inputs.payload);
+      } else {
+        this.logger.error('MQTT client is not connected');
+      }
+    } catch (e: any) {
+      this.logger.error(e.message, e);
+    }
+  }
+
+  /*/**
+   * target: 'public' | 'cold' | 'ui'
+   * Publishes system message
+   * @param payload*/
+
+  publishSystemPublic(payload: MqttSystemPayload): void {
+    if (this.mqttClient) {
+      const topic = `system/${this.config.get('NODE_ENV', 'development')}/public`;
+      this.mqttClient.publish(topic, JSON.stringify(payload));
+
+      this.logger.log(`Published to system topic: ${topic}`, payload);
+    } else {
+      this.logger.error('MQTT client is not connected');
+    }
+  }
+
+  publishSystemCold(payload: MqttSystemPayload): void {
+    if (this.mqttClient) {
+      const topic = `system/${this.config.get('NODE_ENV', 'development')}/cold`;
+      this.mqttClient.publish(topic, JSON.stringify(payload));
+
+      this.logger.log(`Published to system topic: ${topic}`, payload);
     } else {
       this.logger.error('MQTT client is not connected');
     }
