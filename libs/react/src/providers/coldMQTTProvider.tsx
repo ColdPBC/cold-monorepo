@@ -7,7 +7,6 @@ export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
   const { user, orgId, getAccessTokenSilently, isAuthenticated } = useAuth0Wrapper();
   const client = useRef<mqtt.MqttClient | null>(null);
   const [connectionStatus, setConnectionStatus] = React.useState(false);
-  const [messages, setMessages] = React.useState<string[]>([]);
   const { mutate } = useSWRConfig();
   useEffect(() => {
     const getToken = async () => {
