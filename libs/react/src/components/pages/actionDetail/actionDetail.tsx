@@ -39,11 +39,9 @@ const _ActionDetail = ({ id }: Props) => {
   const handleUpdateAction = async (updatedAction: Partial<ActionPayload['action']>) => {
     if (!data) return;
 
-    const newAction: Pick<ActionPayload, 'action'> = {
-      action: {
-        ...data.action,
-        ...updatedAction,
-      },
+    const newAction: ActionPayload['action'] = {
+      ...data.action,
+      ...updatedAction,
     };
 
     await axiosFetcher([getOrgSpecificUrl(`/actions/${data.id}`), 'PATCH', JSON.stringify(newAction)]);
@@ -51,7 +49,10 @@ const _ActionDetail = ({ id }: Props) => {
     await mutate(
       {
         ...data,
-        ...newAction,
+        action: {
+          ...data.action,
+          ...updatedAction,
+        },
       },
       {
         revalidate: false,
