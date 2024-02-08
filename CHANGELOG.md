@@ -1,3 +1,11 @@
+## [1.107.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.107.0...v1.107.1) (2024-02-08)
+
+
+### Bug Fixes
+
+* correct action patch ([3968838](https://github.com/ColdPBC/cold-monorepo/commit/3968838151cfc3b2ec6d945a13671ef8b429fea8))
+* fix action typing issue ([7898eac](https://github.com/ColdPBC/cold-monorepo/commit/7898eacdf7279c0dda3eb8cb805f8ce6ced375bb))
+
 # [1.107.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.106.0...v1.107.0) (2024-02-07)
 
 
