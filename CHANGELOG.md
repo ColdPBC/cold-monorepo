@@ -1,3 +1,10 @@
+## [1.108.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.108.0...v1.108.1) (2024-02-09)
+
+
+### Bug Fixes
+
+* add configuration.module ([c5a4fdb](https://github.com/ColdPBC/cold-monorepo/commit/c5a4fdbcc897a4540abc2bab04a6d0fe15f12874))
+
 # [1.108.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.107.1...v1.108.0) (2024-02-09)
 
 
