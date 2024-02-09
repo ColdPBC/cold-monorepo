@@ -1,7 +1,6 @@
-import React, { PropsWithChildren, useEffect, useRef, useState } from 'react';
+import React, { PropsWithChildren, useEffect, useRef } from 'react';
 import mqtt from 'mqtt';
 import { useAuth0Wrapper } from '@coldpbc/hooks';
-import ColdMQTTContext from '../context/coldMQTTContext';
 import { useSWRConfig } from 'swr';
 import { forEach } from 'lodash';
 
@@ -9,32 +8,30 @@ export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
   const { user, orgId, getAccessTokenSilently, isAuthenticated } = useAuth0Wrapper();
   const client = useRef<mqtt.MqttClient | null>(null);
   const [connectionStatus, setConnectionStatus] = React.useState(false);
-  const [messages, setMessages] = React.useState<string[]>([]);
   const { mutate } = useSWRConfig();
   useEffect(() => {
     const getToken = async () => {
       const audience = import.meta.env.VITE_COLD_API_AUDIENCE as string;
-      const token = await getAccessTokenSilently({
+      return await getAccessTokenSilently({
         authorizationParams: {
           audience: audience,
           scope: 'offline_access email profile openid',
         },
       });
-      return token;
     };
 
     const connectToIOT = async () => {
-      const auth0_domain = import.meta.env.VITE_AUTH0_DOMAIN;
-      const authorizer = 'mqtt_authorizer';
-      const org_id = orgId;
-      const token = await getToken();
-      const env = import.meta.env.VITE_DD_ENV;
-      const url = `${
-        import.meta.env.VITE_MQTT_URL
-      }/mqtt?x-auth0-domain=${auth0_domain}&x-amz-customauthorizer-name=${authorizer}&x-cold-org=${org_id}&x-cold-env=${env}&token=${token}`;
-      const account_id = user?.email;
-
       if (user && orgId) {
+        const auth0_domain = import.meta.env.VITE_AUTH0_DOMAIN;
+        const authorizer = 'mqtt_authorizer';
+        const org_id = orgId;
+        const token = await getToken();
+        const env = import.meta.env.VITE_DD_ENV;
+        const url = `${
+          import.meta.env.VITE_MQTT_URL
+        }/mqtt?x-auth0-domain=${auth0_domain}&x-amz-customauthorizer-name=${authorizer}&x-cold-org=${org_id}&x-cold-env=${env}&token=${token}`;
+        const account_id = user?.email;
+
         client.current = mqtt.connect(url, { clientId: `${org_id}-${Math.floor(Math.random() * 1000)}` });
 
         client.current.on('connect', () => {
