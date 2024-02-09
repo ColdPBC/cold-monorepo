@@ -30,6 +30,7 @@ export class NestModule {
     const darkly = new DarklyService(config);
     await darkly.onModuleInit();
     const ss = new SecretsService();
+    await ss.onModuleInit();
 
     const parts = config.getOrThrow('DD_SERVICE')?.split('-');
 

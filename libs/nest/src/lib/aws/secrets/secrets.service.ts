@@ -1,12 +1,13 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, OnModuleInit } from '@nestjs/common';
 import { map } from 'lodash';
 import { SecretsManager } from 'aws-sdk';
 import { GetSecretValueResponse } from 'aws-sdk/clients/secretsmanager';
 import { BaseWorker } from '../../worker';
 import { ConfigService } from '@nestjs/config';
+import { ConfigurationModule } from '../../configuration';
 
 @Injectable()
-export class SecretsService extends BaseWorker {
+export class SecretsService extends BaseWorker implements OnModuleInit {
   client: SecretsManager;
   config: ConfigService;
 
@@ -16,6 +17,11 @@ export class SecretsService extends BaseWorker {
     this.client = new SecretsManager({
       region: this.config.get('AWS_REGION', 'us-east-1'),
     });
+  }
+
+  override async onModuleInit() {
+    this.logger.info('SecretsService initialized');
+    this.client = new SecretsManager(await ConfigurationModule.getAWSCredentials());
   }
 
   async getSecrets(name: string): Promise<any> {

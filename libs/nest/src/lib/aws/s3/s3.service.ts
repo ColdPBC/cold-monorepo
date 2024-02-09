@@ -8,6 +8,7 @@ import { BaseWorker } from '../../worker';
 import { IAuthenticatedUser } from '../../primitives';
 import crypto from 'crypto';
 import stream from 'stream';
+import { ConfigurationModule } from '../../configuration';
 
 @Injectable()
 export class S3Service extends BaseWorker {
@@ -24,15 +25,19 @@ export class S3Service extends BaseWorker {
     });
   }
 
-  static getS3Config(): { credentials: { accessKeyId: string; secretAccessKey: string }; region: string } {
-    const config = new ConfigService();
-    return {
+  static async getS3Config(): Promise<{
+    credentials: { accessKeyId: string; secretAccessKey: string };
+    region: string;
+  }> {
+    //const config = new ConfigService();
+    return await ConfigurationModule.getAWSCredentials();
+    /*return {
       credentials: {
         accessKeyId: config.getOrThrow('AWS_ACCESS_KEY_ID'),
         secretAccessKey: config.getOrThrow('AWS_SECRET_ACCESS_KEY'),
       },
       region: config.get('AWS_REGION', 'us-east-1'),
-    };
+    };*/
   }
 
   static getS3Client() {
