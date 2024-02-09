@@ -1,3 +1,11 @@
+# [1.108.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.107.1...v1.108.0) (2024-02-09)
+
+
+### Features
+
+* get access token only when the organization and user is authenticated ([67d687d](https://github.com/ColdPBC/cold-monorepo/commit/67d687da99c835d19aabfb6035ab3b1db2387fa8))
+* use mqtt url env variable ([8ba7d71](https://github.com/ColdPBC/cold-monorepo/commit/8ba7d71be0e67447a60e28e8301323b0598722f0))
+
 ## [1.107.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.107.0...v1.107.1) (2024-02-08)
 
 
