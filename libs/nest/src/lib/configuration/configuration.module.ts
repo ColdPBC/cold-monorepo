@@ -9,13 +9,14 @@ import * as process from 'process';
 export class ConfigurationModule {
   static async getAWSCredentials() {
     let awsCreds: any = {};
+    const config = new ConfigService();
 
     if (process.env['FC_ENV'] && process.env['AWS_ACCESS_KEY_ID'] && process.env['AWS_SECRET_ACCESS_KEY']) {
       awsCreds = {
-        region: process.env['AWS_REGION'] || 'us-east-1',
+        region: config.get('AWS_REGION', 'us-east-1'),
         credentials: {
-          accessKeyId: process.env['AWS_ACCESS_KEY_ID'],
-          secretAccessKey: process.env['AWS_SECRET_ACCESS_KEY'],
+          accessKeyId: config.get('AWS_ACCESS_KEY_ID'),
+          secretAccessKey: config.get('AWS_SECRET_ACCESS_KEY'),
         },
       };
 
@@ -23,11 +24,13 @@ export class ConfigurationModule {
     }
 
     const ssoCreds = await fromSSO({ profile: 'default' })();
+
     set(process.env, `AWS_ACCESS_KEY_ID`, ssoCreds.accessKeyId);
     set(process.env, `AWS_SECRET_ACCESS_KEY`, ssoCreds.secretAccessKey);
+
     if (ssoCreds.sessionToken) set(process.env, `AWS_SESSION_TOKEN`, ssoCreds.sessionToken);
 
-    return ssoCreds;
+    return { region: config.get('AWS_REGION', 'us-east-1'), ...ssoCreds };
   }
 
   static async forRootAsync() {
