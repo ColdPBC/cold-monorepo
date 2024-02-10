@@ -30,22 +30,20 @@ export class Auth0TokenService extends BaseWorker implements OnModuleInit {
   };
 
   httpService: HttpService;
-  config: ConfigService;
 
-  constructor(private cache: CacheService) {
+  constructor(private cache: CacheService, private config: ConfigService) {
     super(Auth0TokenService.name);
     this.httpService = new HttpService();
-    this.config = new ConfigService();
 
     this.tokenBody = {
-      client_id: this.config.get<string>('AUTH0_CLIENT_ID') || '',
-      client_secret: this.config.get<string>('AUTH0_CLIENT_SECRET') || '',
-      audience: `https://${this.config.get<string>('AUTH0_DOMAIN')}/api/v2/`,
+      client_id: this.config['internalConfig']['AUTH0_CLIENT_ID'],
+      client_secret: this.config['internalConfig']['AUTH0_CLIENT_SECRET'],
+      audience: `https://${this.config['internalConfig']['AUTH0_DOMAIN']}/api/v2/`,
       grant_type: 'client_credentials',
     };
 
     this.options = {
-      baseURL: `https://${this.config.get<string>('AUTH0_DOMAIN')}/api/v2`,
+      baseURL: `https://${this.config['internalConfig']['AUTH0_DOMAIN']}/api/v2`,
       headers: { 'content-type': 'application/json', Authorization: null },
       validateStatus: (status: any) => {
         return status >= 200 && status < 400;
@@ -66,8 +64,10 @@ export class Auth0TokenService extends BaseWorker implements OnModuleInit {
   async init(): Promise<AxiosRequestConfig<any>> {
     try {
       if (this.cache) {
-        let token: any = await this.cache.get('auth0-management-token');
-        if (!token) {
+        let token: any = await this.cache.get(`auth0-management-token-${process.env['NODE_ENV']}`);
+
+        if (!token || token['data']['expiresAt'] < new Date().getMilliseconds() / 1000) {
+          this.logger.error('Token Expired');
           token = await this.getManagementToken();
         }
 
@@ -96,9 +96,9 @@ export class Auth0TokenService extends BaseWorker implements OnModuleInit {
    */
   async getManagementToken() {
     const tokenBody = Object.assign({}, this.tokenBody);
-    tokenBody.client_id = this.config.get<string>('AUTH0_CLIENT_ID') || '';
+    tokenBody.client_id = this.config['internalConfig']['AUTH0_CLIENT_ID'] || '';
 
-    const tokenResponse = await this.httpService.axiosRef.post(`https://${this.config.get<string>('AUTH0_DOMAIN')}/oauth/token`, tokenBody, this.options);
+    const tokenResponse = await this.httpService.axiosRef.post(`https://${this.config['internalConfig']['AUTH0_DOMAIN']}/oauth/token`, tokenBody, this.options);
 
     if (tokenResponse.data['access_token']) {
       this.logger.info('Requested Auth0 Management Token');
@@ -106,7 +106,7 @@ export class Auth0TokenService extends BaseWorker implements OnModuleInit {
 
       if (this.cache) {
         await this.cache.set(
-          'auth0-management-token',
+          `auth0-management-token-${process.env['NODE_ENV']}`,
           { data: tokenResponse.data },
           {
             ttl: 1000 * 60 * 60 * 20,
