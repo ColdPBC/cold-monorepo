@@ -613,4 +613,111 @@ export class SurveysService extends BaseWorker {
       throw e;
     }
   }
+
+  /***
+   * This action removes an organization's named survey definition
+   * @param id
+   * @param orgId
+   * @param req
+   */
+  async delete(id: string, orgId: string, req: any) {
+    const { user, url } = req;
+    const org = (await this.cache.get(`organizations:${user.coldclimate_claims.org_id}`)) as organizations;
+    const tags: { [p: string]: any } | string[] = {
+      survey_name: name,
+      organization: omit(org, ['branding', 'phone', 'street_address', 'created_at', 'updated_at']),
+      user: user.coldclimate_claims,
+      ...this.tags,
+    };
+
+    try {
+      const def = await this.findOne(id, req);
+
+      if (!def) {
+        throw new NotFoundException(`Unable to find survey definition with id: ${id}`);
+      }
+
+      const survey = await this.prisma.survey_data.findFirst({
+        where: {
+          survey_definition_id: id,
+          organization_id: orgId,
+        },
+      });
+
+      if (!survey) {
+        throw new NotFoundException(`Unable to find survey data with survey definition id: ${id} and organization id: ${orgId}`);
+      }
+
+      await this.prisma.survey_data.delete({
+        where: {
+          id: survey.id,
+        },
+      });
+
+      this.logger.info(`deleted survey data for ${org.name}: ${id}`, {
+        id: def.id,
+        name: def.name,
+        type: def.type,
+        organization: org,
+      });
+
+      this.metrics.increment('cold.api.surveys.delete', 1, tags);
+      ///organizations/:orgId/surveys/:name
+      this.mqtt.publishMQTT('public', {
+        swr_key: url,
+        action: 'delete',
+        status: 'complete',
+        data: {
+          survey: name,
+          user: user.coldclimate_claims,
+        },
+      });
+
+      this.mqtt.publishMQTT('public', {
+        swr_key: `organizations/${orgId}/surveys/${def.name}`,
+        action: 'delete',
+        status: 'complete',
+        data: {
+          survey: name,
+          user: user.coldclimate_claims,
+        },
+      });
+
+      this.mqtt.publishMQTT('public', {
+        swr_key: `organizations/${orgId}/surveys`,
+        action: 'delete',
+        status: 'complete',
+        data: {
+          survey: name,
+          user: user.coldclimate_claims,
+        },
+      });
+
+      //rebuild type cache
+      await this.findByType(req, def.type);
+    } catch (e) {
+      if (e.message.includes('Survey definition does not exist')) {
+        throw new NotFoundException(`${user.coldclimate_claims.email} attempted to delete a survey definition that does not exist: ${name}`);
+      }
+
+      tags.status = 'failed';
+
+      this.metrics.event(`Delete ${name} survey definition request failed`, `${user.coldclimate_claims.email} failed to update ${name} survey definition`, tags);
+
+      this.metrics.increment('cold.api.surveys.delete', 1, tags);
+
+      this.mqtt.publishMQTT('public', {
+        swr_key: url,
+        action: 'delete',
+        status: 'failed',
+        data: {
+          survey: name,
+          error: e.message,
+          user,
+        },
+      });
+
+      throw e;
+    }
+  }
 }

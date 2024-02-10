@@ -348,4 +348,34 @@ export class SurveysController extends BaseWorker {
   ) {
     return this.surveyService.remove(name, req);
   }
+
+  @ApiTags('Surveys')
+  @Delete('organization/:orgId/surveys/:name')
+  @ApiParam({
+    name: 'name',
+    required: true,
+    type: 'string',
+    example: '{{test_survey_name}}',
+  })
+  @ApiParam({
+    name: 'orgId',
+    required: true,
+    type: 'string',
+    example: '{{test_organization_id}}',
+  })
+  @HttpCode(204)
+  @Roles(Role.ColdAdmin)
+  delete(
+    @Param('name') name: string,
+    @Param('orgId') orgId: string,
+    @Req()
+    req: {
+      body: any;
+      headers: any;
+      query: any;
+      user: IAuthenticatedUser;
+    },
+  ) {
+    return this.surveyService.remove(name, req);
+  }
 }
