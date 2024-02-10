@@ -19,8 +19,8 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     });
 
     this.logger = new WorkerLogger('JwtAuthGuard', {
-      service: this.config.get('DD_SERVICE') || BaseWorker.getProjectName(),
-      env: this.config.get('NODE_ENV') || this.config.getOrThrow('DD_ENV'),
+      service: this.config.getOrThrow('DD_SERVICE') || BaseWorker.getProjectName(),
+      env: this.config.getOrThrow('NODE_ENV'),
       version: this.config.get('DD_VERSION') || BaseWorker.getPkgVersion(),
     });
   }
