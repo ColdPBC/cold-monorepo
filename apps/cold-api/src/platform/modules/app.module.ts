@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { ColdRabbitModule, NestModule, OrgUserInterceptor } from '@coldpbc/nest';
+import { NestModule, OrgUserInterceptor } from '@coldpbc/nest';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { Auth0Module } from './resources/auth0/auth0.module';
@@ -9,7 +9,6 @@ import { SurveysModule } from './resources/surveys/surveys.module';
 import { CategoriesModule } from './resources/categories/categories.module';
 import { NewsModule } from './resources/news/news.module';
 import { ActionsModule } from './resources/actions/actions.module';
-import { ConfigModule } from '@nestjs/config';
 import { IntegrationsModule } from './resources/integrations/integrations.module';
 import { Service_definitionsModule } from './resources/service_definitions/service_definitions.module';
 import { LocationsModule } from './resources/organizations/locations/locations.module';
@@ -23,10 +22,6 @@ export class AppModule {
     return {
       module: AppModule,
       imports: [
-        ConfigModule.forRoot({
-          isGlobal: true,
-        }),
-        ColdRabbitModule.forFeature(),
         await NestModule.forRootAsync(1, 'cold-api-uploaded-files'),
         ServeStaticModule.forRoot({
           serveStaticOptions: {
