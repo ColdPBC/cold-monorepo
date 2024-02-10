@@ -30,10 +30,10 @@ export class MqttService extends BaseWorker implements OnModuleInit {
   }
 
   connect(className?: string): mqtt.MqttClient {
-    const privateKey = this.config.getOrThrow('MQTT_PRIVATE_KEY');
-    const caRoot1 = this.config.getOrThrow('MQTT_CA_ROOT_1');
-    const caRoot3 = this.config.getOrThrow('MQTT_CA_ROOT_3');
-    const mqttcert = this.config.getOrThrow('MQTT_CERT');
+    const privateKey = this.config['internalConfig']['MQTT_PRIVATE_KEY'];
+    const caRoot1 = this.config['internalConfig']['MQTT_CA_ROOT_1'];
+    const caRoot3 = this.config['internalConfig']['MQTT_CA_ROOT_3'];
+    const mqttcert = this.config['internalConfig']['MQTT_CERT'];
     try {
       // Read your AWS IoT Core device certificate, private key, and CA certificate
       const cert = `${Buffer.from(mqttcert, 'base64')}`;
