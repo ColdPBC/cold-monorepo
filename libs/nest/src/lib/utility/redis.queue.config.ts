@@ -1,6 +1,4 @@
-import { get } from 'lodash';
 import { add } from 'date-fns';
-import * as url from 'url';
 import { BaseWorker } from '../worker';
 import { BullModuleOptions } from '@nestjs/bull';
 import { DarklyService } from '../darkly';
@@ -18,12 +16,8 @@ export class RedisServiceConfig extends BaseWorker {
   removeOnFail: any;
   darkly: DarklyService;
 
-  constructor(private readonly config?: ConfigService) {
+  constructor(private readonly config: ConfigService) {
     super(RedisServiceConfig.name);
-
-    if (!this.config) {
-      this.config = new ConfigService();
-    }
 
     this.darkly = new DarklyService(this.config);
     this.max = this.config.get('MAX_RETRY_ATTEMPTS', 5);
@@ -34,31 +28,6 @@ export class RedisServiceConfig extends BaseWorker {
     this.concurrency_interval = this.config.get('JOB_CONCURRENCY_INTERVAL', 1000);
   }
 
-  static async getRedisOpts() {
-    const secrets: any = { REDISCLOUD_URL: 'redis://localhost:6379' };
-
-    const redisOpts: any = {};
-    try {
-      const redisUrl = new url.URL(secrets.REDISCLOUD_URL);
-      redisOpts.port = redisUrl.port || 6379;
-      redisOpts.host = redisUrl.hostname;
-      redisOpts.db = redisUrl.pathname ? redisUrl.pathname.split('/')[1] : 0;
-
-      if (redisUrl.password) {
-        redisOpts.password = redisUrl.password;
-        redisOpts.username = redisUrl.username;
-      }
-
-      if (redisUrl.protocol == 'rediss:') {
-        redisOpts.tls = { servername: redisUrl.hostname };
-      }
-    } catch (e: any) {
-      throw new Error(e.message);
-    }
-
-    return redisOpts;
-  }
-
   async getQueueConfig(type: string, queueName: string): Promise<BullModuleOptions> {
     return {
       name: `${queueName}`,
@@ -66,7 +35,7 @@ export class RedisServiceConfig extends BaseWorker {
       redis: {
         db: this.db,
       },
-      url: get(process, 'env.REDISCLOUD_URL', 'redis://localhost:6379') as string,
+      url: this.config['internalConfig']['REDISCLOUD_URL'],
       prefix: `${type}`,
       limiter: {
         max: this.concurrency,
