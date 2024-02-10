@@ -10,7 +10,7 @@ export class ConfigurationModule {
   static async getAWSCredentials() {
     let awsCreds: any = {};
 
-    if (process.env['AWS_ACCESS_KEY_ID'] && process.env['AWS_SECRET_ACCESS_KEY']) {
+    if (process.env['FC_ENV'] && process.env['AWS_ACCESS_KEY_ID'] && process.env['AWS_SECRET_ACCESS_KEY']) {
       awsCreds = {
         region: process.env['AWS_REGION'] || 'us-east-1',
         credentials: {
