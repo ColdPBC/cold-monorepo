@@ -6,17 +6,17 @@ console.log({ message: 'setting up tracer...' });
 const config = new ConfigService();
 const tracer = Tracer.init({
   service: config.get('DD_SERVICE') || BaseWorker.getProjectName(),
-  env: config.get('NODE_ENV') || config.getOrThrow('DD_ENV'),
+  env: config.getOrThrow('NODE_ENV'),
   version: config.get('DD_VERSION', BaseWorker.getPkgVersion()),
   logInjection: true,
   hostname: '127.0.0.1',
   profiling: true,
   runtimeMetrics: true,
   tags: {
-    service: config.get('DD_SERVICE') || BaseWorker.getProjectName(),
-    env: config.get('NODE_ENV') || config.getOrThrow('DD_ENV'),
+    service: config.getOrThrow('DD_SERVICE') || BaseWorker.getProjectName(),
+    env: config.getOrThrow('NODE_ENV'),
     version: config.get('DD_VERSION', BaseWorker.getPkgVersion()),
-    environment: config.get('NODE_ENV') || config.getOrThrow('DD_ENV'),
+    environment: config.getOrThrow('NODE_ENV'),
   },
   dogstatsd: {
     hostname: '127.0.0.1',

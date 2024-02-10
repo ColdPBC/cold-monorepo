@@ -7,17 +7,17 @@ import { BaseWorker } from '@coldpbc/nest';
 const config = new ConfigService();
 const tracer = Tracer.init({
   service: config.get('DD_SERVICE') || BaseWorker.getProjectName(),
-  env: config.get('NODE_ENV') || config.getOrThrow('DD_ENV'),
+  env: config.getOrThrow('NODE_ENV'),
   version: config.get('VERSION', BaseWorker.getPkgVersion()),
   logInjection: true,
   hostname: '127.0.0.1',
   profiling: true,
   runtimeMetrics: true,
   tags: {
-    service: config.get('DD_SERVICE') || BaseWorker.getProjectName(),
-    env: config.get('NODE_ENV') || config.getOrThrow('DD_ENV'),
+    service: config.get('DD_SERVICE'),
+    env: config.getOrThrow('NODE_ENV'),
     version: config.get('version', BaseWorker.getPkgVersion()),
-    environment: config.get('NODE_ENV') || config.getOrThrow('DD_ENV'),
+    environment: config.getOrThrow('NODE_ENV'),
   },
   dogstatsd: {
     hostname: '127.0.0.1',

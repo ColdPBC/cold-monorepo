@@ -29,10 +29,10 @@ export class BaseWorker extends RedactorService implements OnModuleInit {
     const config = new ConfigService();
 
     this.details = {
-      service: config.get('DD_SERVICE') || 'UNKNOWN',
+      service: config.getOrThrow('DD_SERVICE'),
       version: config.get('DD_VERSION') || BaseWorker.getPkgVersion(),
       home_dir: appRoot.toString(),
-      env: config.get('NODE_ENV') || config.getOrThrow('DD_ENVIRONMENT'),
+      env: config.getOrThrow('NODE_ENV'),
       host_name: hostname(),
       system_details: {
         load_avg: loadavg(),
