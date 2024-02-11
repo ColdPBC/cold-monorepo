@@ -206,6 +206,8 @@ model survey_data {
   survey_definition_id String
   organizations        organizations      @relation(fields: [organization_id], references: [id], onDelete: Cascade)
   survey_definition    survey_definitions @relation(fields: [survey_definition_id], references: [id], onDelete: Cascade)
+
+  @@unique([organization_id, survey_definition_id], name: "orgSurveyKey")
 }
 
 /// @namespace Categories
