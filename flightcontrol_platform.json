@@ -56,7 +56,10 @@
             "healthCheckInterval": 35
           },
           "envVariables": {
-            "DD_SERVICE": "cold-platform-openai"
+            "DD_SERVICE": "cold-platform-openai",
+            "DD_ENV": "production",
+            "NODE_ENV": "production",
+            "FC_ENV": "production"
           },
           "sidecars": [
             {
@@ -74,14 +77,12 @@
               "envVariables": {
                 "DD_ENV": "production",
                 "NODE_ENV": "production",
-                "DD_AGENT_MAJOR_VERSION": "7",
-                "DD_LOG_LEVEL": "ERROR",
-                "REDISCLOUD_URL": {
-                  "fromParameterStore": "fc_coldmonorepo_coldproduction_coldcachefcproduction_wyb007zj_primary_url"
-                },
+                "FC_ENV": "production",
                 "DD_API_KEY": {
                   "fromParameterStore": "fc.cold-api-fc.env.cold-production.8pr1zak.DD_API_KEY"
                 },
+                "DD_AGENT_MAJOR_VERSION": "7",
+                "DD_LOG_LEVEL": "ERROR",
                 "DD_POSTGRES_URL_VAR": "DATABASE_URL",
                 "DD_REDIS_URL_VAR": "REDISCLOUD_URL",
                 "DD_SERVICE": "cold-platform-openai",
@@ -144,7 +145,10 @@
             "healthCheckInterval": 35
           },
           "envVariables": {
-            "DD_SERVICE": "cold-platform-climatiq"
+            "DD_SERVICE": "cold-platform-climatiq",
+            "DD_ENV": "production",
+            "NODE_ENV": "production",
+            "FC_ENV": "production"
           },
           "sidecars": [
             {
@@ -163,9 +167,6 @@
                 "DD_SERVICE": "cold-datadog-production",
                 "DD_API_KEY": {
                   "fromParameterStore": "fc.cold-api-fc.env.cold-production.8pr1zak.DD_API_KEY"
-                },
-                "REDISCLOUD_URL": {
-                  "fromParameterStore": "fc_coldmonorepo_coldproduction_coldcachefcproduction_wyb007zj_primary_url"
                 },
                 "DD_AGENT_MAJOR_VERSION": "7",
                 "DD_LOG_LEVEL": "ERROR",
@@ -234,7 +235,10 @@
             "healthCheckInterval": 35
           },
           "envVariables": {
-            "DD_SERVICE": "cold-platform-bayou"
+            "DD_SERVICE": "cold-platform-bayou",
+            "DD_ENV": "production",
+            "NODE_ENV": "production",
+            "FC_ENV": "production"
           },
           "sidecars": [
             {
@@ -253,9 +257,6 @@
                 "DD_SERVICE": "cold-datadog-bayou-production",
                 "DD_API_KEY": {
                   "fromParameterStore": "fc.cold-api-fc.env.cold-production.8pr1zak.DD_API_KEY"
-                },
-                "REDISCLOUD_URL": {
-                  "fromParameterStore": "fc_coldmonorepo_coldproduction_coldcachefcproduction_wyb007zj_primary_url"
                 },
                 "DD_AGENT_MAJOR_VERSION": "7",
                 "DD_LOG_LEVEL": "ERROR",
@@ -283,14 +284,9 @@
         }
       ],
       "envVariables": {
-        "DD_API_KEY": {
-          "fromParameterStore": "fc.cold-api-fc.env.cold-production.8pr1zak.DD_API_KEY"
-        },
-        "NODE_ENV": "production",
         "DD_ENV": "production",
-        "REDISCLOUD_URL": {
-          "fromParameterStore": "fc_coldmonorepo_coldproduction_coldcachefcproduction_wyb007zj_primary_url"
-        }
+        "NODE_ENV": "production",
+        "FC_ENV": "production"
       }
     },
     {
@@ -347,7 +343,10 @@
             "healthCheckInterval": 35
           },
           "envVariables": {
-            "DD_SERVICE": "cold-platform-openai"
+            "DD_SERVICE": "cold-platform-openai",
+            "DD_ENV": "staging",
+            "NODE_ENV": "staging",
+            "FC_ENV": "staging"
           },
           "sidecars": [
             {
@@ -370,9 +369,6 @@
                 "DD_API_KEY": {
                   "fromParameterStore": "fc.cold-api-fc.env.cold-production.8pr1zak.DD_API_KEY"
                 },
-                "REDISCLOUD_URL": {
-                  "fromParameterStore": "fc_coldmonorepo_coldstaging_coldcachefcstaging_zc610oe6_primary_url"
-                },
                 "DD_POSTGRES_URL_VAR": "DATABASE_URL",
                 "DD_REDIS_URL_VAR": "REDISCLOUD_URL",
                 "DD_SERVICE": "cold-platform-openai",
@@ -384,7 +380,6 @@
                 "DD_METRICS_ENABLED": true,
                 "DD_ENABLE_DBM": true,
                 "DD_LOGS_INJECTION": true,
-
                 "DD_IAST_ENABLED": true,
                 "DD_PROCESS_AGENT": true,
                 "DD_PROFILING_ENABLED": true,
@@ -435,7 +430,11 @@
             "healthCheckInterval": 35
           },
           "envVariables": {
-            "DD_SERVICE": "cold-platform-climatiq"
+            "DD_SERVICE": "cold-platform-climatiq",
+            "DD_ENV": "staging",
+            "NODE_ENV": "staging",
+            "FC_ENV": "staging"
+
           },
           "sidecars": [
             {
@@ -454,9 +453,6 @@
                 "DD_SERVICE": "cold-datadog-staging",
                 "DD_API_KEY": {
                   "fromParameterStore": "fc.cold-api-fc.env.cold-production.8pr1zak.DD_API_KEY"
-                },
-                "REDISCLOUD_URL": {
-                  "fromParameterStore": "fc_coldmonorepo_coldstaging_coldcachefcstaging_zc610oe6_primary_url"
                 },
                 "DD_AGENT_MAJOR_VERSION": "7",
                 "DD_LOG_LEVEL": "ERROR",
@@ -524,7 +520,10 @@
             "healthCheckInterval": 35
           },
           "envVariables": {
-            "DD_SERVICE": "cold-platform-bayou"
+            "DD_SERVICE": "cold-platform-bayou",
+            "DD_ENV": "staging",
+            "NODE_ENV": "staging",
+            "FC_ENV": "staging"
           },
           "sidecars": [
             {
@@ -543,9 +542,6 @@
                 "DD_SERVICE": "cold-datadog-bayou-staging",
                 "DD_API_KEY": {
                   "fromParameterStore": "fc.cold-api-fc.env.cold-production.8pr1zak.DD_API_KEY"
-                },
-                "REDISCLOUD_URL": {
-                  "fromParameterStore": "fc_coldmonorepo_coldstaging_coldcachefcstaging_zc610oe6_primary_url"
                 },
                 "DD_AGENT_MAJOR_VERSION": "7",
                 "DD_LOG_LEVEL": "ERROR",
@@ -572,14 +568,9 @@
         }
       ],
       "envVariables": {
-        "DD_API_KEY": {
-          "fromParameterStore": "fc.cold-api-fc.env.cold-production.8pr1zak.DD_API_KEY"
-        },
         "NODE_ENV": "staging",
         "DD_ENV": "staging",
-        "REDISCLOUD_URL": {
-          "fromParameterStore": "fc_coldmonorepo_coldstaging_coldcachefcstaging_zc610oe6_primary_url"
-        },
+        "FC_ENV": "staging",
         "ENABLE_HEALTH_LOGS": false
       }
     },
@@ -641,7 +632,10 @@
             "healthCheckInterval": 35
           },
           "envVariables": {
-            "DD_SERVICE": "cold-platform-openai"
+            "DD_SERVICE": "cold-platform-openai",
+            "NODE_ENV": "test",
+            "DD_ENV": "test",
+            "FC_ENV": "test"
           },
           "sidecars": [
             {
@@ -661,9 +655,6 @@
                 "NODE_ENV": "test",
                 "DD_AGENT_MAJOR_VERSION": "7",
                 "DD_LOG_LEVEL": "ERROR",
-                "REDISCLOUD_URL": {
-                  "fromParameterStore": "fc_coldmonorepo_coldpreview_coldcachepreview_bm8g0o0i_primary_url"
-                },
                 "DD_API_KEY": {
                   "fromParameterStore": "fc.cold-api-fc.env.cold-production.8pr1zak.DD_API_KEY"
                 },
@@ -730,7 +721,10 @@
             "healthCheckInterval": 35
           },
           "envVariables": {
-            "DD_SERVICE": "cold-platform-climatiq"
+            "DD_SERVICE": "cold-platform-climatiq",
+            "NODE_ENV": "test",
+            "DD_ENV": "test",
+            "FC_ENV": "test"
           },
           "sidecars": [
             {
@@ -750,16 +744,12 @@
                 "DD_API_KEY": {
                   "fromParameterStore": "fc.cold-api-fc.env.cold-production.8pr1zak.DD_API_KEY"
                 },
-                "REDISCLOUD_URL": {
-                  "fromParameterStore": "fc_coldmonorepo_coldpreview_coldcachepreview_bm8g0o0i_primary_url"
-                },
                 "DD_AGENT_MAJOR_VERSION": "7",
                 "DD_LOG_LEVEL": "ERROR",
                 "DD_POSTGRES_URL_VAR": "DATABASE_URL",
                 "DD_REDIS_URL_VAR": "REDISCLOUD_URL",
                 "DD_SITE": "us5.datadoghq.com",
                 "DD_APM_ENABLED": true,
-
                 "DD_APPSEC_AUTOMATED_USER_EVENTS_TRACKING": true,
                 "DD_APPSEC_ENABLED": true,
                 "DD_DOGSTATSD_NON_LOCAL_TRAFFIC": true,
@@ -818,7 +808,10 @@
             "healthCheckInterval": 35
           },
           "envVariables": {
-            "DD_SERVICE": "cold-platform-bayou"
+            "DD_SERVICE": "cold-platform-bayou",
+            "NODE_ENV": "staging",
+            "DD_ENV": "staging",
+            "FC_ENV": "staging"
           },
           "sidecars": [
             {
@@ -838,9 +831,6 @@
                 "NODE_ENV": "test",
                 "DD_AGENT_MAJOR_VERSION": "7",
                 "DD_LOG_LEVEL": "ERROR",
-                "REDISCLOUD_URL": {
-                  "fromParameterStore": "fc_coldmonorepo_coldpreview_coldcachepreview_bm8g0o0i_primary_url"
-                },
                 "DD_API_KEY": {
                   "fromParameterStore": "fc.cold-api-fc.env.cold-production.8pr1zak.DD_API_KEY"
                 },
@@ -869,16 +859,9 @@
         "DD_API_KEY": {
           "fromParameterStore": "fc.cold-api-fc.env.cold-production.8pr1zak.DD_API_KEY"
         },
-        "REDISCLOUD_URL": {
-          "fromParameterStore": "fc_coldmonorepo_coldpreview_coldcachepreview_bm8g0o0i_primary_url"
-        },
-        "API_SERVER_DESCRIPTION": "Preview Server",
-        "API_SERVER_URL": "https://api.coldclimate.wtf",
-        "AUTH0_AUDIENCE": "https://api.coldclimate.wtf/",
-        "AUTH0_DOMAIN": "dev-6qt527e13qyo4ls6.us.auth0.com",
-        "CACHE_TTL": "604800000",
-        "NODE_ENV": "test",
-        "DD_ENV": "test"
+        "NODE_ENV": "staging",
+        "DD_ENV": "staging",
+        "FC_ENV": "staging"
       }
     }
   ]

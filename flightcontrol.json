@@ -105,7 +105,12 @@
             "healthCheckTimeout": 15,
             "healthCheckInterval": 35
           },
-          "envVariables": {},
+          "envVariables": {
+            "DD_SERVICE": "cold-api",
+            "DD_ENV": "production",
+            "FC_ENV": "production",
+            "NODE_ENV": "production"
+          },
           "sidecars": [
             {
               "name": "sidecar-dd-api-prod",
@@ -167,17 +172,9 @@
       ],
       "envVariables": {
         "DD_SERVICE": "cold-api",
-        "DD_API_KEY": {
-          "fromParameterStore": "fc.cold-api-fc.env.cold-production.8pr1zak.DD_API_KEY"
-        },
-        "REDISCLOUD_URL": {
-          "fromService": {
-            "id": "cold-cache-fc-production",
-            "value": "connectionString"
-          }
-        },
         "DD_ENV": "production",
-        "NODE_ENV": "production"
+        "NODE_ENV": "production",
+        "FC_ENV": "production"
       }
     },
     {
@@ -325,7 +322,9 @@
           ],
           "envVariables": {
             "DD_SERVICE": "cold-api",
-            "DD_ENV": "staging"
+            "DD_ENV": "staging",
+            "FC_ENV": "staging",
+            "NODE_ENV": "staging"
           }
         },
         {
@@ -345,12 +344,9 @@
         }
       ],
       "envVariables": {
-        "REDISCLOUD_URL": {
-          "fromService": {
-            "id": "cold-cache-fc-staging",
-            "value": "connectionString"
-          }
-        },
+        "DD_SERVICE": "cold-api",
+        "DD_ENV": "staging",
+        "FC_ENV": "staging",
         "NODE_ENV": "staging"
       }
     },
@@ -456,7 +452,10 @@
             "com.datadoghq.ad.instances": "[{\"database_autodiscovery\":{\"enabled\":true},\"collect_schemas\":{\"enabled\":true},\"dbm\":true,\"host\":\"${DATABASE_URL}\",\"port\": 5432,\"username\":\"datadog\",\"password\":\"${DD_POSTGRES_PASSWORD}\", \"tags\":[\"service:cold-rds-fc-${NODE_ENV}\",\"env:${NODE_ENV}\"]"
           },
           "envVariables": {
-            "DD_SERVICE": "cold-api"
+            "DD_SERVICE": "cold-api",
+            "DD_ENV": "test",
+            "FC_ENV": "test",
+            "NODE_ENV": "test"
           },
           "sidecars": [
             {
@@ -533,45 +532,10 @@
         }
       ],
       "envVariables": {
-        "REDISCLOUD_URL": {
-          "fromService": {
-            "id": "cold-cache-preview",
-            "value": "connectionString"
-          }
-        },
-        "API_SERVER_DESCRIPTION": "Preview Server",
-        "API_SERVER_URL": "https://api.coldclimate.wtf",
-        "AUTH0_AUDIENCE": "https://api.coldclimate.wtf/",
-        "AUTH0_DOMAIN": "dev-6qt527e13qyo4ls6.us.auth0.com",
-        "CACHE_TTL": "604800000",
+        "DD_SERVICE": "cold-api",
         "DD_ENV": "test",
-        "NODE_ENV": "test",
-        "DD_API_KEY": {
-          "fromParameterStore": "fc.cold-api-fc.env.cold-production.8pr1zak.DD_API_KEY"
-        },
-        "DD_AGENT_MAJOR_VERSION": "7",
-        "DD_LOG_LEVEL": "ERROR",
-        "DD_POSTGRES_URL_VAR": "DATABASE_URL",
-        "DD_REDIS_URL_VAR": "REDISCLOUD_URL",
-        "DD_SITE": "us5.datadoghq.com",
-        "DD_APM_ENABLED": true,
-        "DD_APPSEC_AUTOMATED_USER_EVENTS_TRACKING": true,
-        "DD_APPSEC_ENABLED": true,
-        "DD_DOGSTATSD_NON_LOCAL_TRAFFIC": true,
-        "DD_DYNO_HOST": true,
-        "DD_ENABLE_DBM": true,
-        "DD_IAST_ENABLED": true,
-        "DD_LISTENERS": 2,
-        "DD_CONTAINER_EXCLUDE": "name:datadog-agent",
-        "DD_LOGS_CONFIG_CONTAINER_COLLECT_ALL": false,
-        "DD_LOGS_INJECTION": true,
-        "DD_LOGS_ENABLED": true,
-        "DD_METRICS_ENABLED": true,
-        "DD_PROCESS_AGENT": true,
-        "DD_PROCESS_AGENT_ENABLED": true,
-        "DD_PROFILING_ENABLED": true,
-        "DD_REMOTE_CONFIGURATION_ENABLED": true,
-        "DD_USE_DOGSTATSD": true
+        "FC_ENV": "test",
+        "NODE_ENV": "test"
       }
     }
   ]
