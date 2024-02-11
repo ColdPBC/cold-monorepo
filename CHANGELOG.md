@@ -1,3 +1,10 @@
+## [1.109.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.109.0...v1.109.1) (2024-02-11)
+
+
+### Bug Fixes
+
+* broken LD initialization ([4d60573](https://github.com/ColdPBC/cold-monorepo/commit/4d60573afc4ed641c71b8d123020783f6342f485))
+
 # [1.109.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.108.1...v1.109.0) (2024-02-11)
 
 
