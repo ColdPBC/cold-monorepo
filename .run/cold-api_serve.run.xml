@@ -2,8 +2,12 @@
   <configuration default="false" name="cold-api:serve" type="NxRunConfigurationType">
     <option name="nx-projects" value="cold-api" />
     <option name="nx-targets" value="serve" />
-    <option name="nx-target-configuration" value="" />
-    <envs />
+    <option name="nx-target-configuration" value="production" />
+    <envs>
+      <env name="NODE_ENV" value="staging" />
+      <env name="DD_SERVICE" value="cold-api" />
+      <env name="LOG_FORMAT" value="pretty" />
+    </envs>
     <option name="arguments" value="" />
     <method v="2" />
   </configuration>
