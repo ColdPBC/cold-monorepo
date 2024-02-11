@@ -1,3 +1,25 @@
+# [1.109.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.108.1...v1.109.0) (2024-02-11)
+
+
+### Bug Fixes
+
+* add survey id key ([ccd1470](https://github.com/ColdPBC/cold-monorepo/commit/ccd14700de13a3660aefbe401a0dfac1182e35ce))
+* add survey id key ([5e55796](https://github.com/ColdPBC/cold-monorepo/commit/5e557960b62b3cb75538a17b7d55b67f0b976691))
+* get var from config ([69aa610](https://github.com/ColdPBC/cold-monorepo/commit/69aa6104ec78a902e8fa1a8e36273ae623744fdd))
+* inject prisma client ([2b803fe](https://github.com/ColdPBC/cold-monorepo/commit/2b803fe4111781c8d3603af5e1ff398075e8ba21))
+* remove redundant modue ([3fe7901](https://github.com/ColdPBC/cold-monorepo/commit/3fe7901bcb1a2d80f80b8dc04dda10ee4e262c58))
+* throw if DD_SERVICE || NODE_ENV not set ([efe91fd](https://github.com/ColdPBC/cold-monorepo/commit/efe91fda62b7dc536fa93d48bd847a87558fb101))
+* update configuration module to load vars from config ([cf204ec](https://github.com/ColdPBC/cold-monorepo/commit/cf204ec8ccefcc30a63ea88b169ba5e60456c195))
+* update mqtt service to load vars from config ([da654d1](https://github.com/ColdPBC/cold-monorepo/commit/da654d18dd153b6fbad0a8a02d06add82bdb752b))
+* update token service to load vars from config ([03d6e57](https://github.com/ColdPBC/cold-monorepo/commit/03d6e57027d8f08ffe25a7e33808130682bb4ad8))
+* use AWS creds from env vars if running in FC ([4a40fd7](https://github.com/ColdPBC/cold-monorepo/commit/4a40fd7e160b4138020cf69fb5ceea9d3e131f2a))
+* use loaded secrets ([22b69a7](https://github.com/ColdPBC/cold-monorepo/commit/22b69a797cb5b5cdc24b7662177d55e5369490c8))
+
+
+### Features
+
+* add delete surveys route ([66b3aa4](https://github.com/ColdPBC/cold-monorepo/commit/66b3aa4b73b0df40d1de952e1b4a5afac3d53096))
+
 ## [1.108.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.108.0...v1.108.1) (2024-02-09)
 
 
