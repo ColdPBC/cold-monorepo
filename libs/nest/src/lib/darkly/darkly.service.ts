@@ -26,8 +26,8 @@ export class DarklyService extends BaseWorker {
     if (this.client && this.context && this.initialized && this.sdkKey) return this;
   }
 
-  override async onModuleInit() {
-    this.sdkKey = this.config.getOrThrow('LD_SDK_KEY');
+  override async onModuleInit(sdkKey?: string) {
+    this.sdkKey = sdkKey ? sdkKey : this.config['internalConfig']['LD_SDK_KEY'];
 
     this.client = sdk.init(this.sdkKey, {
       logger: this.logger,

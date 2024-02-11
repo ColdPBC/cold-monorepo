@@ -27,8 +27,7 @@ export class NestModule {
   static async forRootAsync(redisDB: number, bucket?: string) {
     const logger = new WorkerLogger('NestModule');
     const config = new ConfigService();
-    const darkly = new DarklyService(config);
-    await darkly.onModuleInit();
+
     const ss = new SecretsService();
     await ss.onModuleInit();
     const service = config.getOrThrow('DD_SERVICE');
@@ -36,6 +35,9 @@ export class NestModule {
 
     const secrets = await ss.getRootSecrets(service);
     configSecrets.push(() => secrets);
+
+    const darkly = new DarklyService(config);
+    await darkly.onModuleInit(secrets['LD_SDK_KEY']);
 
     const serviceSecrets = await ss.getServiceSecrets(service);
     if (serviceSecrets) {
