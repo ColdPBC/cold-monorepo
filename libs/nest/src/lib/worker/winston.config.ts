@@ -6,14 +6,14 @@ const winstonConfig = (context: string, meta?: any) => {
   const config = {
     service: process.env['DD_SERVICE'] || meta?.service,
     version: process.env['DD_VERSION'] || meta?.version,
-    environment: process.env['NODE_ENV'] || process.env['DD_ENV'] || meta?.environment,
+    environment: process.env['NODE_ENV'] || meta?.environment,
     ...omit(meta, ['service', 'version', 'environment']),
     context: context,
     tags: ['nest.js', 'winston'],
     transports: [
       new winston.transports.Console({
         format:
-          process.env['NODE_ENV'] === 'development'
+          process.env['NODE_ENV'] === 'development' || process.env['LOG_FORMAT'] === 'pretty'
             ? winston.format.combine(winston.format.combine(winston.format.timestamp(), nestWinstonModuleUtilities.format.nestLike()))
             : winston.format.combine(winston.format.timestamp(), winston.format.json(), winston.format.align()),
       }),
