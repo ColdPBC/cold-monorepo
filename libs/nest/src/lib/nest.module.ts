@@ -31,24 +31,20 @@ export class NestModule {
     await darkly.onModuleInit();
     const ss = new SecretsService();
     await ss.onModuleInit();
-
-    const parts = config.getOrThrow('DD_SERVICE')?.split('-');
-
-    const type = parts.length > 2 ? parts[1] : 'core';
-    const project = parts.length > 2 ? parts[2] : parts[1];
-
+    const service = config.getOrThrow('DD_SERVICE');
     const configSecrets: any = [];
 
-    const secrets = await ss.getSecrets(type);
-
+    const secrets = await ss.getRootSecrets(service);
     configSecrets.push(() => secrets);
 
-    if (type && project) {
-      const serviceSecrets = await ss.getSecrets(`${type}/${project}`);
-      if (serviceSecrets) {
-        configSecrets.push(() => serviceSecrets);
-      }
+    const serviceSecrets = await ss.getServiceSecrets(service);
+    if (serviceSecrets) {
+      configSecrets.push(() => serviceSecrets);
     }
+
+    const parts = service.split('-');
+    const type = parts.length > 2 ? parts[1] : 'core';
+    const project = parts.length > 2 ? parts[2] : parts[1];
 
     /**
      * Imports Array
@@ -57,9 +53,10 @@ export class NestModule {
       ConfigModule.forRoot({
         isGlobal: true,
         load: configSecrets,
+        cache: false,
       }),
       SecretsModule,
-      BullModule.forRoot(await new RedisServiceConfig().getQueueConfig(type, project)),
+      BullModule.forRoot(await new RedisServiceConfig(config).getQueueConfig(type, project)),
       HttpModule,
       MqttModule,
     ];
@@ -105,14 +102,14 @@ export class NestModule {
             logger.error(err.message, {
               stack: err.stack,
               name: err.name,
-              env: config.get('NODE_ENV') || config.get('DD_ENV') || 'unknown',
+              env: config.get('NODE_ENV'),
               version: config.get('DD_VERSION') || BaseWorker.getPkgVersion(),
               service: config.get('DD_SERVICE') || BaseWorker.getProjectName(),
             });
           },
           prefix: 'cold_',
           globalTags: {
-            env: config.get('NODE_ENV') || config.getOrThrow('DD_ENV') || 'unknown',
+            env: config.get('NODE_ENV') || 'unknown',
             version: config.get('DD_VERSION') || BaseWorker.getPkgVersion(),
             service: config.get('DD_SERVICE') || BaseWorker.getProjectName(),
           },
@@ -166,12 +163,17 @@ export class NestModule {
       imports.push(
         CacheModule.registerAsync({
           imports: [ConfigModule],
-          useFactory: async (cfg: ConfigService) => ({
-            store: await redisStore({
-              url: cfg.get<string>('REDISCLOUD_URL'),
-              ttl: 1000 * 60 * 60,
-            }),
-          }),
+          useFactory: async secrets => {
+            return {
+              store: await redisStore({
+                url: secrets['internalConfig']['REDISCLOUD_URL'],
+                ttl: 1000 * 60 * 60,
+              }).catch(err => {
+                console.error(err);
+                throw new Error('Failed to connect to REDISCLOUD_URL');
+              }),
+            };
+          },
           inject: [ConfigService],
           isGlobal: true,
         }),

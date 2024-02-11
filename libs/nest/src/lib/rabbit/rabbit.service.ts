@@ -4,6 +4,7 @@ import { BaseWorker } from '../worker';
 import { ConfigService } from '@nestjs/config';
 import { RabbitMessagePayload } from './rabbit.types';
 import { service_definitions } from '../../validation/generated/modelSchema/service_definitionsSchema';
+import { SecretsService } from '../aws';
 
 export enum WorkerTypes {
   PLATFORM = 'platform',
@@ -147,16 +148,20 @@ export class ColdRabbitService extends BaseWorker implements OnModuleInit {
     process.on('uncaughtException', this.exitHandler.bind(this, { cleanup: false, exit: false }));
   }
 
-  static getRabbitConfig(): RabbitMQConfig {
-    const config = new ConfigService();
+  static async getRabbitConfig(): Promise<RabbitMQConfig> {
+    const secrets = new SecretsService();
+    await secrets.onModuleInit();
+    const response = await secrets.getRootSecrets(process.env['DD_SERVICE'] as string);
+    const url = response['RABBITMQ_URL'];
+
     return {
-      uri: config.get('RABBIT_MQ_URL', 'amqp://localhost:5672'),
+      uri: url,
       connectionManagerOptions: {
         heartbeatIntervalInSeconds: 30,
         reconnectTimeInSeconds: 3,
         connectionOptions: {
           clientProperties: {
-            connection_name: `${config.get('DD_SERVICE')}`,
+            connection_name: `${process.env['DD_SERVICE']}`,
           },
         },
       },

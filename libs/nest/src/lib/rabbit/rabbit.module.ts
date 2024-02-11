@@ -5,10 +5,10 @@ import { ConfigModule } from '@nestjs/config';
 
 @Module({})
 export class ColdRabbitModule {
-  static forFeature(): DynamicModule {
+  static async forFeature(): Promise<DynamicModule> {
     const module: DynamicModule = {
       module: ColdRabbitModule,
-      imports: [ConfigModule, RabbitMQModule.forRoot(RabbitMQModule, ColdRabbitService.getRabbitConfig())],
+      imports: [ConfigModule, RabbitMQModule.forRoot(RabbitMQModule, await ColdRabbitService.getRabbitConfig())],
       providers: [ColdRabbitService],
       exports: [ColdRabbitService, RabbitMQModule],
     };
