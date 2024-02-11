@@ -15,7 +15,6 @@ import { BroadcastEventService } from '../../../utilities/events/broadcast.event
 export class OrganizationService extends BaseWorker {
   options: AxiosRequestConfig<any>;
   httpService: HttpService;
-  prisma: PrismaService;
   test_orgs: Array<{ id: string; name: string; display_name: string }>;
 
   constructor(
@@ -26,10 +25,10 @@ export class OrganizationService extends BaseWorker {
     readonly integrations: IntegrationsService,
     readonly s3: S3Service,
     readonly mqtt: MqttService,
+    readonly prisma: PrismaService,
   ) {
     super('OrganizationService');
     this.httpService = new HttpService();
-    this.prisma = new PrismaService();
   }
 
   override async onModuleInit() {
@@ -77,59 +76,68 @@ export class OrganizationService extends BaseWorker {
       name?: string;
     } | null,
   ): Promise<Auth0Organization | Array<Auth0Organization> | Error> {
-    // if supplied, check filter has required properties
-    if (filters && !filters.id && !filters.name) {
-      this.logger.warn('invalid filter supplied, function will return array of organizations', filters);
+    try {
+      // if supplied, check filter has required properties
+      if (filters && !filters.id && !filters.name) {
+        this.logger.warn('invalid filter supplied, function will return array of organizations', filters);
 
-      filters = null;
-    }
-
-    let orgs: Array<Auth0Organization> | undefined;
-
-    if (!updateCache) {
-      orgs = (await this.cache.get('organizations')) as Array<Auth0Organization>;
-    }
-
-    // No orgs found in cache, so get latest list from Auth0
-    if (!orgs) {
-      this.options = await this.utilService.init();
-
-      const response = await this.httpService.axiosRef.get(`/organizations`, this.options);
-
-      if (!response.data) {
-        return new NotFoundException(`No Organizations found`);
+        filters = null;
       }
 
-      orgs = response.data;
+      let orgs: Array<Auth0Organization> | undefined;
 
-      this.cache.set('organizations', response.data, {
-        update: true,
-        wildcard: true,
-      });
-    }
-
-    if (!orgs) {
-      throw new NotFoundException(`No Organizations found`);
-    }
-
-    // if filter was supplied return org matching filter
-    if (filters && Array.isArray(orgs)) {
-      const found = first(filter(orgs, filters)) as Auth0Organization;
-      const org: Auth0Organization | undefined = found ? found : undefined; //only one should be returned by filter, however if more are returned only return the first
-
-      //no org matches filter
-      if (!org) {
-        throw new NotFoundException(`Organization not found`);
+      if (!updateCache) {
+        orgs = (await this.cache.get('organizations')) as Array<Auth0Organization>;
       }
 
-      this.cache.set(`organizations:${org.id}`, org, { ttl: 1000 * 60 * 60 * 24 * 7, update: true, wildcard: true });
-      this.cache.set(`organizations:${org.name}`, org, { ttl: 1000 * 60 * 60 * 24 * 7, update: true, wildcard: true });
+      // No orgs found in cache, so get latest list from Auth0
+      if (!orgs) {
+        this.options = await this.utilService.init();
 
-      return org;
+        const response = await this.httpService.axiosRef.get(`/organizations`, this.options);
+
+        if (!response.data) {
+          return new NotFoundException(`No Organizations found`);
+        }
+
+        orgs = response.data;
+
+        this.cache.set('organizations', response.data, {
+          update: true,
+          wildcard: true,
+        });
+      }
+
+      if (!orgs) {
+        throw new NotFoundException(`No Organizations found`);
+      }
+
+      // if filter was supplied return org matching filter
+      if (filters && Array.isArray(orgs)) {
+        const found = first(filter(orgs, filters)) as Auth0Organization;
+        const org: Auth0Organization | undefined = found ? found : undefined; //only one should be returned by filter, however if more are returned only return the first
+
+        //no org matches filter
+        if (!org) {
+          throw new NotFoundException(`Organization not found`);
+        }
+
+        this.cache.set(`organizations:${org.id}`, org, { ttl: 1000 * 60 * 60 * 24 * 7, update: true, wildcard: true });
+        this.cache.set(`organizations:${org.name}`, org, {
+          ttl: 1000 * 60 * 60 * 24 * 7,
+          update: true,
+          wildcard: true,
+        });
+
+        return org;
+      }
+
+      // return all orgs
+      return orgs;
+    } catch (e) {
+      this.logger.error(e);
+      throw e;
     }
-
-    // return all orgs
-    return orgs;
   }
 
   /***

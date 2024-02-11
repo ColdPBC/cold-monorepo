@@ -12,7 +12,6 @@ import { pick } from 'lodash';
 @Injectable()
 export class OrganizationFilesService extends BaseWorker {
   httpService: HttpService;
-  prisma: PrismaService;
   test_orgs: Array<{ id: string; name: string; display_name: string }>;
 
   constructor(
@@ -23,10 +22,10 @@ export class OrganizationFilesService extends BaseWorker {
     readonly s3: S3Service,
     readonly mqtt: MqttService,
     private readonly orgService: OrganizationService,
+    readonly prisma: PrismaService,
   ) {
     super('OrganizationFilesService');
     this.httpService = new HttpService();
-    this.prisma = new PrismaService();
   }
 
   override async onModuleInit() {
