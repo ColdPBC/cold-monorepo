@@ -4,12 +4,11 @@ import { ErrorFallback, SignupPage, Spinner, Takeover } from '@coldpbc/component
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { ErrorType, GlobalSizes } from '@coldpbc/enums';
 import { PolicySignedDataType } from '@coldpbc/interfaces';
-import { useAuth0Wrapper, useColdContext, useOrgSWR } from '@coldpbc/hooks';
+import { useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
 import ColdContext from '../../../context/coldContext';
 import { useLDClient } from 'launchdarkly-react-client-sdk';
 import useSWR from 'swr';
 import { get, has, isEmpty } from 'lodash';
-import { SurveyPayloadType } from '@coldpbc/interfaces';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorPage } from '../errors/errorPage';
 import { datadogRum } from '@datadog/browser-rum';
@@ -43,8 +42,6 @@ const _ProtectedRoute = () => {
     // check if company is already set
     // if (isUndefined(user?.coldclimate_claims.org_id)) return true;
   };
-
-  const initialSurveySWR = useOrgSWR<SurveyPayloadType, any>(user && isAuthenticated ? [`/surveys/journey_overview`, 'GET'] : null, axiosFetcher);
 
   const getAppState = () => {
     const { pathname, search } = location;
@@ -100,16 +97,7 @@ const _ProtectedRoute = () => {
     getUserMetadata();
   }, [getAccessTokenSilently, user, isAuthenticated, isLoading, appState, orgId, error]);
 
-  useEffect(() => {
-    if (initialSurveySWR.data?.definition && !needsSignup()) {
-      const surveyName = searchParams.get('surveyName');
-      if (!initialSurveySWR.data.definition.submitted && (!surveyName || (surveyName && surveyName !== 'journey_overview'))) {
-        navigate('/home?surveyName=journey_overview');
-      }
-    }
-  });
-
-  if (isLoading || initialSurveySWR.isLoading || signedPolicySWR.isLoading) {
+  if (isLoading || signedPolicySWR.isLoading) {
     return (
       <Takeover show={true} setShow={() => {}}>
         <div className="absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
@@ -119,17 +107,16 @@ const _ProtectedRoute = () => {
     );
   }
 
-  if (error || initialSurveySWR.error || signedPolicySWR.error) {
+  if (error || signedPolicySWR.error) {
     let errorMessage;
+
     if (error) {
       logError(error, ErrorType.Auth0Error);
       if (error.message === 'invitation not found or already used') {
         errorMessage = 'This link is no longer valid. Please request a new invitation from one of your administrators.';
       }
     }
-    if (initialSurveySWR.error) {
-      logError(initialSurveySWR.error, ErrorType.SWRError);
-    }
+
     if (signedPolicySWR.error) {
       logError(signedPolicySWR.error, ErrorType.SWRError);
     }

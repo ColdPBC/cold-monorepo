@@ -329,17 +329,6 @@ export const Handle404 = () => {
   );
 };
 
-export const NeedsToCompleteInitialSurvey: Story = {
-  render: () => {
-    return (
-      <StoryMockProvider handlers={getSurveyHandler.initialIncomplete}>
-        <Application />
-      </StoryMockProvider>
-    );
-  },
-  parameters: {},
-};
-
 export const ColdAdmin: Story = {
   render: () => {
     return (
