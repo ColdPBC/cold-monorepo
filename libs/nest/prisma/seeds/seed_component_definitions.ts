@@ -266,6 +266,25 @@ const seeds: Array<{
       ],
     },
   },
+  {
+    name: 'documents_list_table',
+    type: 'DATAGRID',
+    description: 'Provides details for the table of documents',
+    definition: {
+      items: [
+        {
+          field: 'name',
+          headerStyle: 'py-4',
+          headerTitle: 'Document Name',
+        },
+        {
+          field: 'type',
+          headerStyle: 'py-4',
+          headerTitle: 'Document Type',
+        },
+      ],
+    },
+  },
 ];
 
 export async function seedComponentDefinitions() {

@@ -1,3 +1,10 @@
+# [1.110.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.109.2...v1.110.0) (2024-02-12)
+
+
+### Features
+
+* add document list table to component seed definitions ([6875554](https://github.com/ColdPBC/cold-monorepo/commit/6875554a76a5bf062cc8e646480aff361be6afbd))
+
 ## [1.109.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.109.1...v1.109.2) (2024-02-12)
 
 
