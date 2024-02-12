@@ -9571,32 +9571,32 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sendgrid/client@npm:^7.7.0":
-  version: 7.7.0
-  resolution: "@sendgrid/client@npm:7.7.0"
+"@sendgrid/client@npm:^8.1.0":
+  version: 8.1.0
+  resolution: "@sendgrid/client@npm:8.1.0"
   dependencies:
-    "@sendgrid/helpers": "npm:^7.7.0"
-    axios: "npm:^0.26.0"
-  checksum: 10/4ed869ff7214e5f67833b8c90f4fac4b455425f72d697b7e0904355fa7bebd54d6b67593f1bbe3bef5a6f675c0d96768fe6231ecc10d47d29b768341f04bb8f7
+    "@sendgrid/helpers": "npm:^8.0.0"
+    axios: "npm:^1.6.0"
+  checksum: 10/a983464cb153cd98e9e40d9b5340677261c033bc5a64598dc69bafa975f5d0e408a957744d0a22e8938efb27ec917e8e8230ac98e9410c8652fa06b56f8dbd87
   languageName: node
   linkType: hard
 
-"@sendgrid/helpers@npm:^7.7.0":
-  version: 7.7.0
-  resolution: "@sendgrid/helpers@npm:7.7.0"
+"@sendgrid/helpers@npm:^8.0.0":
+  version: 8.0.0
+  resolution: "@sendgrid/helpers@npm:8.0.0"
   dependencies:
     deepmerge: "npm:^4.2.2"
-  checksum: 10/d84999fa4b66be448b114da43e20b6e7af1f67870490f83af203e3e50e4cface698118499d1e1e7a3b46de011d7be5a5a78400034dab0d5f9c2471b1bf9a5465
+  checksum: 10/23ff86dd7dcdcc6aec45a387978f9dcb31a7c2ec6f8450ca89542ecb63b6f7df7a2ce3ff6e5c9b003d9c6a7923fb74b00d8c58e70e6737ba0810360f0a074592
   languageName: node
   linkType: hard
 
-"@sendgrid/mail@npm:^7.7.0":
-  version: 7.7.0
-  resolution: "@sendgrid/mail@npm:7.7.0"
+"@sendgrid/mail@npm:^8.1.0":
+  version: 8.1.0
+  resolution: "@sendgrid/mail@npm:8.1.0"
   dependencies:
-    "@sendgrid/client": "npm:^7.7.0"
-    "@sendgrid/helpers": "npm:^7.7.0"
-  checksum: 10/e4e8051da361f3d20b1e49c6f53ed064715ae8dfd599dcbaf423bb5517fac4fb7ffc808374f01a060c798e16647060b40dfd3fa76e74226017f682fcf15e3cff
+    "@sendgrid/client": "npm:^8.1.0"
+    "@sendgrid/helpers": "npm:^8.0.0"
+  checksum: 10/7068288903cab738d53fa8bc404d0b4db545e2c129f647a94c43ec60cfddd87627d38f3b20ad8b1b34362ec27e92e53f63127c2c578aada2b09d9b9e838912cc
   languageName: node
   linkType: hard
 
@@ -17131,16 +17131,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:^0.26.0":
-  version: 0.26.1
-  resolution: "axios@npm:0.26.1"
-  dependencies:
-    follow-redirects: "npm:^1.14.8"
-  checksum: 10/02863f4a4fd4e43ad6e0c8bc9d1359a0863c43cc57bda42ea21dfce34681e3211df193b2bf2e8ee10b2c3870ab8d6bed38a3cf80cd6e8ee17749b7d73ccd4752
-  languageName: node
-  linkType: hard
-
-"axios@npm:^1.4.0, axios@npm:^1.5.1, axios@npm:^1.6.5":
+"axios@npm:^1.4.0, axios@npm:^1.5.1, axios@npm:^1.6.0, axios@npm:^1.6.5":
   version: 1.6.7
   resolution: "axios@npm:1.6.7"
   dependencies:
@@ -19204,7 +19195,7 @@ __metadata:
     "@semantic-release/git": "npm:^10.0.1"
     "@semantic-release/npm": "npm:^10.0.3"
     "@semantic-release/release-notes-generator": "npm:^11.0.1"
-    "@sendgrid/mail": "npm:^7.7.0"
+    "@sendgrid/mail": "npm:^8.1.0"
     "@storybook/addon-a11y": "npm:7.5.3"
     "@storybook/addon-actions": "npm:7.5.3"
     "@storybook/addon-docs": "npm:7.5.3"
@@ -24343,7 +24334,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"follow-redirects@npm:^1.0.0, follow-redirects@npm:^1.14.0, follow-redirects@npm:^1.14.8, follow-redirects@npm:^1.15.0, follow-redirects@npm:^1.15.4":
+"follow-redirects@npm:^1.0.0, follow-redirects@npm:^1.14.0, follow-redirects@npm:^1.15.0, follow-redirects@npm:^1.15.4":
   version: 1.15.5
   resolution: "follow-redirects@npm:1.15.5"
   peerDependenciesMeta:
