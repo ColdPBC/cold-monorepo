@@ -42,7 +42,7 @@ const _SideBar = (): JSX.Element => {
 
       return ldFlags.showActions261 && hasActions;
     } else if (item.key === 'documents_key') {
-      return ldFlags.showComplianceModule;
+      return ldFlags.showDocumentsUploadModuleCold492;
     } else if (item.key === 'compliance_key') {
       return ldFlags.showComplianceModule;
     } else if (item.key === 'journey_key') {
