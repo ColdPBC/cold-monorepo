@@ -32,15 +32,25 @@ export class AppModule {}
 ### Enhancers
 The following enhancers are available in this library:
 - **Modules**
-  - **PrismaModule** : 
-  This module provides a PrismaClient instance to your service.  It also provides a PrismaService which can be injected into your service's providers and provides a few helper methods for common database operations.
+  - **Authorization** :
+    This module provides a few helper methods for common Auth0 token operations in order to help you add user authentication to your service.
+    - **JwtAuth**: This guard is used to protect routes that require a valid JWT token.  It is used in conjunction with the AuthModule.
+    - **Permissions**:
+    This guard is used to protect routes that require specific permissions.  It is used in conjunction with the AuthModule.
+    - **Roles**:
+    This guard is used to protect routes that require specific roles.  It is used in conjunction with the AuthModule.
+    - **Auth0 Token Service**: 
+    - **Refresh Token Strategy**:
+    - **AccessToken Strategy**: 
   
+  - **AWS**: This top level module contains sub-modules that provide access to various AWS services.
+  - **S3** : For accessing files 
+  - **Secrets** : For accessing secrets in secrets manager
+  - **MQTT**: This module provides the ability to publish and subscribe to MQTT topics hosted on the MQTT Broker (AWS IOT Core).
+  - **PrismaModule** : This module provides a PrismaClient instance to your service.  It also provides a PrismaService which can be injected into your service's providers and provides a few helper methods for common database operations.
   - **CacheModule** : 
   This module provides a RedisClient instance to your service.  It also provides a CacheService which can be injected into your service's providers and provides a few helper methods for common cache operations.
 
-  - **AuthModule** :
-  This module provides a few helper methods for common Auth0 token operations in order to help you add user authentication to your service.
-  
   - **DarklyModule** : 
   This module provides a few helper methods for common LaunchDarkly operations in order to help you manage feature flags.
   
@@ -65,13 +75,6 @@ This enhancer is used to provide a common exception filter for all services.  It
   This decorator is used to define a route as public.  It is used in conjunction with the AuthModule.
   - **RolesDecorator**: 
   This decorator is used to define the roles required to access a route.  It is used in conjunction with the AuthModule.
-- **Guards**
-  - **JwtAuthGuard**: 
-  This guard is used to protect routes that require a valid JWT token.  It is used in conjunction with the AuthModule.
-  - **PermissionsGuard**: 
-  This guard is used to protect routes that require specific permissions.  It is used in conjunction with the AuthModule.
-  - **RolesGuard**: 
-  This guard is used to protect routes that require specific roles.  It is used in conjunction with the AuthModule.
 - **Interceptors**
   - **LoggingInterceptor**: 
   This interceptor is used to automatically log the request and response of a route.
@@ -80,24 +83,15 @@ This enhancer is used to provide a common exception filter for all services.  It
 
 
 ### Environment Variables
-Some of the modules contained in this library require certain environment variables to be set in order to function properly.  They should be stored in your IDE (Webstorm) or in a .env file in the root directory of your service.
 
-```dotenv
-# Cache Module
-REDIS_CLOUD_URL=redis://localhost:6379
+The following environment variables are required by this library:
+- **NODE_ENV** : 'development' | 'staging' | 'production'
+- **DD_SERVICE** : The name of the service (ie: cold-platform-openai)
 
-# Authorization Module
-AUTH0_AUDIENCE=https://api.coldclimate.online/
-AUTH0_CLIENT_ID=UG9T########HQFI
-AUTH0_CLIENT_SECRET=6r7D_6i########LoaIYb_
-AUTH0_DOMAIN=cold-climate-staging.us.auth0.com
+Optional:
+- **PORT**: This is technically optional, but recommended to avoid port collisions when running multiple services
+- **LOG_FORMAT**: Setting this value will print console logs in a human readable format
 
-# Darkly Module
-DARKLY_SDK_KEY=sdk-########-####-####-####-############
-
-# Prisma Module
-DATABASE_URL="postgres://CC_admin:EPSILON-desti########y1d.us-east-1.rds.amazonaws.com/cold_climate"
-```
 ### Running unit tests
 
 Run `nx test nest` to execute the unit tests via [Jest](https://jestjs.io).
