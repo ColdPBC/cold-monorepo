@@ -1,3 +1,10 @@
+# [1.110.0-COLD-493.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.109.1...v1.110.0-COLD-493.1) (2024-02-12)
+
+
+### Features
+
+* remove initial survey check on application and dependencies ([24afcbf](https://github.com/ColdPBC/cold-monorepo/commit/24afcbfe02c65296ec015d7d9b7ab7f7f7657486))
+
 ## [1.109.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.109.0...v1.109.1) (2024-02-11)
 
 
