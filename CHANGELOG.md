@@ -1,3 +1,10 @@
+## [1.109.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.109.1...v1.109.2) (2024-02-12)
+
+
+### Bug Fixes
+
+* add ability to override aws_profile via env variable ([87ab217](https://github.com/ColdPBC/cold-monorepo/commit/87ab21716fe8860e3159d5134a8756b9e38ac095))
+
 ## [1.109.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.109.0...v1.109.1) (2024-02-11)
 
 
