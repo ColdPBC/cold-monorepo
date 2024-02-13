@@ -4,9 +4,10 @@
     <option name="nx-targets" value="serve" />
     <option name="nx-target-configuration" value="production" />
     <envs>
-      <env name="NODE_ENV" value="staging" />
       <env name="DD_SERVICE" value="cold-api" />
       <env name="LOG_FORMAT" value="pretty" />
+      <env name="NODE_ENV" value="production" />
+      <env name="PORT" value="7001" />
     </envs>
     <option name="arguments" value="" />
     <method v="2" />
