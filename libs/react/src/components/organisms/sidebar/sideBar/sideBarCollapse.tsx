@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Sidebar } from 'flowbite-react';
-import { ColdIcon } from '../../../atoms/icons/coldIcon';
+import { ColdIcon } from '@coldpbc/components';
 import { flowbiteThemeOverride } from '../../../../themes/flowbiteThemeOverride';
 import { SideBarItem } from './sideBarItem';
-import { NavbarItem } from '../../../../interfaces/sideBar';
+import { NavbarItem } from '@coldpbc/interfaces';
 
 export interface SideBarCollapseProps {
   item: NavbarItem;
