@@ -1,3 +1,10 @@
+# [1.113.0-COLD-506.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.112.0...v1.113.0-COLD-506.1) (2024-02-13)
+
+
+### Features
+
+* updated nav for REI compliance mvp ([165b3ac](https://github.com/ColdPBC/cold-monorepo/commit/165b3acc2d4a11de4d1ef497930e52b8884af035))
+
 # [1.112.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.111.0...v1.112.0) (2024-02-13)
 
 
