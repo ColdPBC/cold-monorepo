@@ -21,7 +21,7 @@ export class FileService extends BaseWorker implements OnModuleInit {
       organization: this.config.getOrThrow('OPENAI_ORG_ID'),
       apiKey: this.config.getOrThrow('OPENAI_API_KEY'),
     });
-    this.mqtt = new MqttService(new ConfigService());
+    this.mqtt = new MqttService(this.config);
   }
 
   async onModuleInit(): Promise<void> {
@@ -303,7 +303,12 @@ export class FileService extends BaseWorker implements OnModuleInit {
       myAssistantFile = await this.client.beta.assistants.files.retrieve(assistantId, openAIFileId);
     } catch (e) {
       if (e.status !== 404) {
-        this.logger.error(e.message, { error: e, user, openai_assistant_id: assistantId, openai_file_id: openAIFileId });
+        this.logger.error(e.message, {
+          error: e,
+          user,
+          openai_assistant_id: assistantId,
+          openai_file_id: openAIFileId,
+        });
       }
 
       myAssistantFile = await this.client.beta.assistants.files.create(assistantId, {
