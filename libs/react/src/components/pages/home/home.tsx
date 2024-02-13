@@ -4,18 +4,13 @@ import { RightColumnContent } from '../../organisms/rightColumnContent/rightColu
 import { useAuth0 } from '@auth0/auth0-react';
 import { Spinner } from '../../atoms/spinner/spinner';
 import { AppContent } from '../../organisms/appContent/appContent';
-import {
-  FootprintOverviewCard,
-  JourneyOverviewCard,
-  NewsCard,
-  NextActionsCard,
-} from '../../molecules';
+import { FootprintOverviewCard, JourneyOverviewCard, NewsCard, NextActionsCard } from '../../molecules';
 import { TemperatureCheckCard } from '../../molecules/temperatureCheckCard';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import { EmissionsDonutChartVariants } from '../../atoms/emissionsDonutChart/emissionsDonutChart';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application/errors/errorFallback';
-import { NextSteps } from "../../organisms";
+import { NextSteps } from '../../organisms';
 
 function _Home() {
   const ldFlags = useFlags();
@@ -34,22 +29,12 @@ function _Home() {
       <AppContent title={'Welcome, ' + auth0.user?.given_name}>
         <CenterColumnContent>
           {ldFlags.showNextStepsCard && <NextSteps />}
-          <FootprintOverviewCard
-            chartVariant={EmissionsDonutChartVariants.horizontal}
-          />
-          <JourneyOverviewCard />
+          <FootprintOverviewCard chartVariant={EmissionsDonutChartVariants.horizontal} />
+          {ldFlags.showComplianceModule && <JourneyOverviewCard />}
           {ldFlags.showNewsModuleCold310 && <NewsCard />}
         </CenterColumnContent>
         <RightColumnContent>
-          <TemperatureCheckCard
-            cardTitle="Temperature Check"
-            stats={[
-              'cold_score',
-              'footprint',
-              'emissions_avoided',
-              'actions_completed',
-            ]}
-          />
+          <TemperatureCheckCard cardTitle="Temperature Check" stats={['cold_score', 'footprint', 'emissions_avoided', 'actions_completed']} />
           {ldFlags.showActions261 && <NextActionsCard />}
         </RightColumnContent>
       </AppContent>
@@ -59,7 +44,7 @@ function _Home() {
 }
 
 export const Home = withErrorBoundary(_Home, {
-  FallbackComponent: (props) => <ErrorFallback {...props} />,
+  FallbackComponent: props => <ErrorFallback {...props} />,
   onError: (error, info) => {
     console.error('Error occurred in Home: ', error);
   },
