@@ -1,3 +1,10 @@
+# [1.111.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.110.1...v1.111.0) (2024-02-13)
+
+
+### Features
+
+* added new document upload flag and put journry page and modules behind compliance flag ([42a8d0c](https://github.com/ColdPBC/cold-monorepo/commit/42a8d0cf09b0da2ef1cf76cc3e4e60553b3a8eea))
+
 ## [1.110.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.110.0...v1.110.1) (2024-02-12)
 
 
