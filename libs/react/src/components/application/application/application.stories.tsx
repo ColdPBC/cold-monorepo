@@ -347,3 +347,137 @@ export const ColdAdmin: Story = {
     },
   },
 };
+
+export const REIComplianceMVP: Story = {
+  render: () => {
+    return (
+      <StoryMockProvider>
+        <Application />
+      </StoryMockProvider>
+    );
+  },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const sidebar = await canvas.findByTestId('sidebar');
+    await step('Navigate to Actions Page', async () => {
+      const card = await canvas.findByTestId('next-actions-card');
+      // find Learn More button within card
+      const button = await within(card).findByText('Learn More');
+      await userEvent.click(button);
+      // verify that we are on the next actions page
+      await canvas.findByTestId('temperature-check-card');
+      await canvas.findByTestId('journey-overview-card');
+      await canvas.findAllByTestId('subcategory-actions-overview-card');
+      const actions = getActionsMock();
+      const actionPayload = actions[0];
+      const firstSubcategoryActionsItemCard = await canvas.findByTestId(`subcategory-action-item-${actionPayload.id}`);
+      // click the first subcategory actions item card
+      await userEvent.click(firstSubcategoryActionsItemCard);
+      await verifyActionDetailPage(actionPayload, canvasElement);
+      // navigate back to home page
+      const homeSidebarItem = await within(sidebar).findByText('Home');
+      await userEvent.click(homeSidebarItem);
+    });
+    await step('Navigate to Actions from Sidebar', async () => {
+      // click Actions sidebar item
+      const actionsSidebarItem = await within(sidebar).findByText('Actions');
+      await userEvent.click(actionsSidebarItem);
+      // verify we are on the overview page
+      await canvas.findByTestId('temperature-check-card');
+      await canvas.findByTestId('journey-overview-card');
+      await canvas.findAllByTestId('subcategory-actions-overview-card');
+      const homePage = await within(sidebar).findByText('Home');
+      await userEvent.click(homePage);
+    });
+    await step('Verify Settings Page', async () => {
+      await userEvent.click(await within(sidebar).findByText('Account Management'));
+      // verify that we are on the settings page
+      await canvas.findByTestId('team-member-settings-card');
+      await canvas.findByTestId('team-members-datagrid');
+      await userEvent.click(await within(sidebar).findByText('Home'));
+      await userEvent.click(await within(sidebar).findByText('User Management'));
+      await canvas.findByTestId('user-settings-card');
+      await userEvent.click(await within(sidebar).findByText('Home'));
+    });
+    await step('Verify Documents Page', async () => {
+      const documentsSidebarItem = await within(sidebar).findByText('Documents');
+      await userEvent.click(documentsSidebarItem);
+      // verify that we are on the documents page
+      await canvas.findByTestId('documents-list-card');
+      await canvas.findByTestId('documents-list-table');
+      // navigate back to home page
+      const homeSidebarItem = await within(sidebar).findByText('Home');
+      await userEvent.click(homeSidebarItem);
+    });
+    await step('Verify Next Steps Card', async () => {
+      const homeSidebarItem = await within(sidebar).findByText('Home');
+      await userEvent.click(homeSidebarItem);
+      // check next steps card. find all the next step cards and click the button in each of them
+      const nextStepsCard = await canvas.findByTestId('next-steps-card');
+      const nextStepCards = await within(nextStepsCard).findAllByTestId('next-step-card');
+      const nextStepCard = nextStepCards[0];
+      const button = await within(nextStepCard).findByRole('button');
+      const progressBar = await within(nextStepCard).queryByTestId('next-step-card-progress');
+      if (progressBar) {
+        await within(nextStepCard).findByText('Continue Survey');
+      } else {
+        await within(nextStepCard).findByText('Start Survey');
+      }
+      await button.click();
+      // check that we are on the survey page
+      const surveyTakeover = await canvas.findByTestId('survey-takeover');
+      // find close button and click it
+      const closeButton = await within(surveyTakeover).findByRole('button', {
+        name: 'Close',
+      });
+      await userEvent.click(closeButton);
+      const surveyTakeoverClosed = await canvas.queryByTestId('survey-takeover');
+      await expect(surveyTakeoverClosed).toBeNull();
+      await userEvent.click(await within(sidebar).findByText('Home'));
+    });
+    await step('Verify Compliance Page', async () => {
+      const complianceSidebarItem = await within(sidebar).findByText('Compliance');
+      await userEvent.click(complianceSidebarItem);
+      const complianceSets = getComplianceMock();
+      const orgComplianceSets = getOrganizationComplianceMock();
+      await verifyCompliancePage(complianceSets, orgComplianceSets, canvasElement);
+      const complianceSet = complianceSets[0];
+      const complianceCard = await canvas.findByTestId(`compliance-${complianceSet.id}`);
+      console.log('complianceCard', complianceCard);
+      let button: HTMLElement;
+      const orgComplianceSet = find(orgComplianceSets, { compliance_id: complianceSet.id });
+      if (orgComplianceSet) {
+        button = await within(complianceCard).findByRole('button', {
+          name: 'See Details',
+        });
+        await userEvent.click(button);
+        // await verifyComplianceDetailPage(orgComplianceSet, canvasElement);
+        await canvas.findByText(`${orgComplianceSet.compliance_definition.title} Compliance`);
+        // get Sections text
+        await canvas.findByText('Sections');
+        // find all compliance-section-overview-card
+        const complianceSectionOverviewCards = await canvas.findAllByTestId('compliance-section-overview-card');
+        // verify the number of compliance-section-overview-card with the number of compliance surveys
+        await expect(complianceSectionOverviewCards.length).toEqual(orgComplianceSet.compliance_definition.surveys.length);
+        const sidebarItem = await within(sidebar).findByText('Compliance');
+        await userEvent.click(sidebarItem);
+      } else {
+        button = await within(complianceCard).findByRole('button', {
+          name: 'Activate',
+        });
+      }
+      await verifyCompliancePage(complianceSets, orgComplianceSets, canvasElement);
+
+      const homeSidebarItem = await within(sidebar).findByText('Home');
+      await userEvent.click(homeSidebarItem);
+    });
+    await userEvent.click(sidebar);
+  },
+  parameters: {
+    launchdarkly: {
+      flags: {
+        showReiComplianceMvpSidebarCold506: true,
+      },
+    },
+  },
+};
