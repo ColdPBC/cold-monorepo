@@ -23,7 +23,9 @@ export class ConfigurationModule {
       return awsCreds;
     }
 
-    const ssoCreds = await fromSSO({ profile: 'default' })();
+    const profile = config.get('AWS_PROFILE', 'default');
+
+    const ssoCreds = await fromSSO({ profile: profile })();
 
     set(process.env, `AWS_ACCESS_KEY_ID`, ssoCreds.accessKeyId);
     set(process.env, `AWS_SECRET_ACCESS_KEY`, ssoCreds.secretAccessKey);

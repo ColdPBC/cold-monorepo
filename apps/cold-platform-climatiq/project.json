@@ -20,6 +20,7 @@
       },
       "configurations": {
         "development": {},
+        "staging": {},
         "production": {}
       }
     },
@@ -34,6 +35,9 @@
           "runtimeArgs": ["--trace-warnings"],
           "port": 9003,
           "buildTarget": "cold-platform-climatiq:build:development"
+        },
+        "staging": {
+          "buildTarget": "cold-platform-climatiq:build:staging"
         },
         "production": {
           "buildTarget": "cold-platform-climatiq:build:production"
