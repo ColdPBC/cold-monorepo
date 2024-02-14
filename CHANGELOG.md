@@ -1,9 +1,16 @@
-# [1.113.0-COLD-506.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.112.0...v1.113.0-COLD-506.1) (2024-02-13)
+## [1.112.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.112.0...v1.112.1) (2024-02-14)
 
 
-### Features
+### Bug Fixes
 
-* updated nav for REI compliance mvp ([165b3ac](https://github.com/ColdPBC/cold-monorepo/commit/165b3acc2d4a11de4d1ef497930e52b8884af035))
+* fix user undefined error and throw error when they occur during updating team member ([2dd6e48](https://github.com/ColdPBC/cold-monorepo/commit/2dd6e48805892692bd3caafbd9f9be4e00da7029))
+
+## [1.112.1-COLD-508.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.112.0...v1.112.1-COLD-508.1) (2024-02-14)
+
+
+### Bug Fixes
+
+* fix user undefined error and throw error when they occur during updating team member ([2dd6e48](https://github.com/ColdPBC/cold-monorepo/commit/2dd6e48805892692bd3caafbd9f9be4e00da7029))
 
 # [1.112.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.111.0...v1.112.0) (2024-02-13)
 
