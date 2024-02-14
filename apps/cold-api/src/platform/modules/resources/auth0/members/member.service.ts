@@ -254,6 +254,7 @@ export class MemberService extends BaseWorker {
       return member.data;
     } catch (e) {
       this.logger.error(e.message, e);
+
       this.mqtt.publishMQTT('ui', {
         org_id: user.coldclimate_claims.org_id,
         user: user,
@@ -265,6 +266,7 @@ export class MemberService extends BaseWorker {
           ...payload,
         },
       });
+
       throw e.message;
     }
   }
