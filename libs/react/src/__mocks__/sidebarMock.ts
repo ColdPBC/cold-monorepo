@@ -73,12 +73,12 @@ export function getSidebarMock() {
             },
             {
               key: 'settings_account_key',
-              label: 'Account Management',
+              label: 'Account',
               route: '/settings/account',
             },
             {
               key: 'settings_user_key',
-              label: 'User Management',
+              label: 'Users',
               route: '/settings/user',
             },
           ],

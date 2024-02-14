@@ -177,13 +177,13 @@ const seeds: Array<{
             },
             {
               key: 'settings_account_key',
-              label: 'Account Management',
+              label: 'Account',
               route: '/settings/account',
             },
             {
               key: 'settings_user_key',
-              label: 'User Management',
-              route: '/settings/user',
+              label: 'Users',
+              route: '/settings/users',
             },
           ],
           label: 'Settings',
