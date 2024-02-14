@@ -15,6 +15,7 @@ import {
   ComplianceRoutes,
   AccountSettingsPage,
   UserSettingsPage,
+  ActionsOverview,
 } from '@coldpbc/components';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 
@@ -29,7 +30,7 @@ export const ColdRoutes = () => {
           <Route path={'/home'} element={<Home />} />
           {ldFlags.showComplianceModule && ComplianceRoutes()}
           <Route path={'/assessments'} element={null} />
-          {ldFlags.showActions261 && ActionRoutes()}
+          {ldFlags.showActions261 && <Route path="/actions" element={<ActionsOverview />} />}
           <Route path={'/reports/carbon_footprint'} element={null} />
           {ldFlags.showDocumentsUploadModuleCold492 && <Route path="/documents" element={<DocumentUpload />} />}
           <Route path={'/settings/company_info'} element={null} />
