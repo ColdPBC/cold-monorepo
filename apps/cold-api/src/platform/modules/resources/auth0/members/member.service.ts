@@ -233,7 +233,7 @@ export class MemberService extends BaseWorker {
 
       this.options = await this.utilService.init();
 
-      const found = await this.getMemberByEmail(email, user, true);
+      const found = await this.getMemberByEmail(email, { user }, true);
       if (!found) {
         throw new NotFoundException(`User with email ${email} not found`);
       }
@@ -265,6 +265,7 @@ export class MemberService extends BaseWorker {
           ...payload,
         },
       });
+      throw e.message;
     }
   }
 
