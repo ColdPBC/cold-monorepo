@@ -5,7 +5,7 @@ import { withErrorBoundary } from 'react-error-boundary';
 
 const _AccountSettingsPage = () => {
   const ldFlags = useFlags();
-  return <MainContent title="Account Management">{ldFlags.showTeamMemberTable && <TeamMemberSettings />}</MainContent>;
+  return <MainContent title="Account">{ldFlags.showTeamMemberTable && <TeamMemberSettings />}</MainContent>;
 };
 
 export const AccountSettingsPage = withErrorBoundary(_AccountSettingsPage, {
