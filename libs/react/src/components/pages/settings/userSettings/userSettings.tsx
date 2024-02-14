@@ -4,7 +4,7 @@ import { withErrorBoundary } from 'react-error-boundary';
 
 const _UserSettingsPage = () => {
   return (
-    <MainContent title="User Settings">
+    <MainContent title="User Management">
       <UserSettings />
     </MainContent>
   );

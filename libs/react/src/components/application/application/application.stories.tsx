@@ -389,13 +389,23 @@ export const REIComplianceMVP: Story = {
       const homePage = await within(sidebar).findByText('Home');
       await userEvent.click(homePage);
     });
-    await step('Verify Settings Page', async () => {
+    await step('Verify Account Settings Page', async () => {
       await userEvent.click(await within(sidebar).findByText('Account Management'));
       // verify that we are on the settings page
+      // find test id main-content-title that has text Account Management
+      const title = await canvas.findByTestId('main-content-title');
+      await expect(title).toHaveTextContent('Account Management');
       await canvas.findByTestId('team-member-settings-card');
       await canvas.findByTestId('team-members-datagrid');
       await userEvent.click(await within(sidebar).findByText('Home'));
       await userEvent.click(await within(sidebar).findByText('User Management'));
+      await canvas.findByTestId('user-settings-card');
+      await userEvent.click(await within(sidebar).findByText('Home'));
+    });
+    await step('Verify User Settings Page', async () => {
+      await userEvent.click(await within(sidebar).findByText('User Management'));
+      const title = await canvas.findByTestId('main-content-title');
+      await expect(title).toHaveTextContent('User Management');
       await canvas.findByTestId('user-settings-card');
       await userEvent.click(await within(sidebar).findByText('Home'));
     });
