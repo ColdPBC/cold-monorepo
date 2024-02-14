@@ -23,14 +23,6 @@ export const Default: Story = {
       </StoryMockProvider>
     );
   },
-  args: {
-    user: {
-      coldclimate_claims: {
-        org_id: 'org_123',
-      },
-      name: 'John Doe',
-    },
-  },
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement.parentElement === null ? canvasElement : canvasElement.parentElement);
     await step('Update First and Last Name', async () => {
