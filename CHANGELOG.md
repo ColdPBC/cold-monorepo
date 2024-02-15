@@ -1,3 +1,54 @@
+## [1.112.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.112.0...v1.112.1) (2024-02-14)
+
+
+### Bug Fixes
+
+* fix user undefined error and throw error when they occur during updating team member ([2dd6e48](https://github.com/ColdPBC/cold-monorepo/commit/2dd6e48805892692bd3caafbd9f9be4e00da7029))
+
+## [1.112.1-COLD-508.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.112.0...v1.112.1-COLD-508.1) (2024-02-14)
+
+
+### Bug Fixes
+
+* fix user undefined error and throw error when they occur during updating team member ([2dd6e48](https://github.com/ColdPBC/cold-monorepo/commit/2dd6e48805892692bd3caafbd9f9be4e00da7029))
+
+# [1.112.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.111.0...v1.112.0) (2024-02-13)
+
+
+### Features
+
+* remove initial survey check on application and dependencies ([24afcbf](https://github.com/ColdPBC/cold-monorepo/commit/24afcbfe02c65296ec015d7d9b7ab7f7f7657486))
+
+# [1.111.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.110.1...v1.111.0) (2024-02-13)
+
+
+### Features
+
+* added new document upload flag and put journry page and modules behind compliance flag ([42a8d0c](https://github.com/ColdPBC/cold-monorepo/commit/42a8d0cf09b0da2ef1cf76cc3e4e60553b3a8eea))
+
+## [1.110.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.110.0...v1.110.1) (2024-02-12)
+
+
+### Bug Fixes
+
+* get rediscloud_url from secrets ([29e636d](https://github.com/ColdPBC/cold-monorepo/commit/29e636d857cc7642573eb42e71e2b044c50672f1))
+* only the service key should be passed not the entire package.json file ([ffec5cc](https://github.com/ColdPBC/cold-monorepo/commit/ffec5ccb34f93575639968322aa8224ec4d26fc5))
+* pass initialized config service ([ee1e8a7](https://github.com/ColdPBC/cold-monorepo/commit/ee1e8a73adda9acb4086588d44cc0e9736f4514f))
+
+# [1.110.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.109.2...v1.110.0) (2024-02-12)
+
+
+### Features
+
+* add document list table to component seed definitions ([6875554](https://github.com/ColdPBC/cold-monorepo/commit/6875554a76a5bf062cc8e646480aff361be6afbd))
+
+## [1.109.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.109.1...v1.109.2) (2024-02-12)
+
+
+### Bug Fixes
+
+* add ability to override aws_profile via env variable ([87ab217](https://github.com/ColdPBC/cold-monorepo/commit/87ab21716fe8860e3159d5134a8756b9e38ac095))
+
 ## [1.109.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.109.0...v1.109.1) (2024-02-11)
 
 

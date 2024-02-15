@@ -158,17 +158,17 @@ export class NestModule {
      */
     const enableAuthorizationModule = await darkly.getBooleanFlag('static-enable-authorization-module');
     if (enableAuthorizationModule) {
-      if (!config.get<string | boolean>('REDISCLOUD_URL', false)) {
+      if (!secrets['REDISCLOUD_URL']) {
         throw new Error('REDISCLOUD_URL is not set in this environment; It is required for the authorization module to function properly.');
       }
 
       imports.push(
         CacheModule.registerAsync({
           imports: [ConfigModule],
-          useFactory: async secrets => {
+          useFactory: async config => {
             return {
               store: await redisStore({
-                url: secrets['internalConfig']['REDISCLOUD_URL'],
+                url: config['internalConfig']['REDISCLOUD_URL'],
                 ttl: 1000 * 60 * 60,
               }).catch(err => {
                 console.error(err);

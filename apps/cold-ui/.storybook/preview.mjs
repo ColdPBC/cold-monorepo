@@ -100,6 +100,7 @@ export default {
         showNewsModuleCold310: true,
         showNextStepsCard: true,
         showComplianceModule: true,
+        showDocumentsUploadModuleCold492: true,
       },
     },
   },

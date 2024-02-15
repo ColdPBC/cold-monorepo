@@ -28,11 +28,11 @@ export const ColdRoutes = () => {
               <Route path={'/'} element={<Home />} />
               <Route path={'/home'} element={<Home />} />
               <Route path={'/footprint'} element={<Footprint />} />
-              <Route path={'/journey'} element={<Journey />} />
+              {ldFlags.showComplianceModule && <Route path={'/journey'} element={<Journey />} />}
               <Route path={'/settings'} element={<Settings />} />
               {ldFlags.showActions261 && ActionRoutes()}
               {ldFlags.showComplianceModule && ComplianceRoutes()}
-              {ldFlags.showComplianceModule && <Route path="/documents" element={<DocumentUpload />} />}
+              {ldFlags.showDocumentsUploadModuleCold492 && <Route path="/documents" element={<DocumentUpload />} />}
               <Route path="*" element={<div className={'text-tc-primary'}>Pending...</div>} />
             </Route>
           </Route>

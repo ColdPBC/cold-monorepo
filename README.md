@@ -17,10 +17,11 @@
    coming soon
 
 ## Getting Started
-- Make sure you've followed the instructions to set up your dev machine on [the Dev Setup Notion page](https://www.notion.so/coldclimate/Setting-Up-Your-Local-Environment-95c1f5398890412ab446d7ff94bcec7a?pvs=4), including Homebrew and Docker install
+- Make sure you've followed the instructions to set up your dev machine on [the Dev Setup Notion page](https://www.notion.so/coldclimate/Setting-Up-Your-Local-Environment-95c1f5398890412ab446d7ff94bcec7a?pvs=4), including Homebrew, Docker and the AWS CLI install
 - install node 20.9.0:
   ```bash
-    $ brew install node@20.9.0
+    $ nvm install node@20.9.0
+    $ nvm alias default 20.9.0
   ```
 - check yarn version 
     ```bash
@@ -51,27 +52,11 @@
 
 ### Environment Variables
 
-Either create a .env file in the root directory of the project and populate the following variables. Or make sure they are stored in your IDE (Webstorm). You can get them from the Heroku staging server or ask Troy.
+Either create a .env file in the root directory of the project and populate the following variables. Or make sure they are stored in your IDE (Webstorm).
 
 ```dotenv
 # General Settings
 NODE_ENV=development
-PORT=7001
-API_SERVER_DESCRIPTION=The staging server is our development server
-API_SERVER_URL=http://localhost:7001
-
-# Auth0 Variables
-AUTH0_AUDIENCE=https://api.coldclimate.online/
-AUTH0_CLIENT_ID=UG9T########HQFI
-AUTH0_CLIENT_SECRET=6r7D_6i########LoaIYb_
-AUTH0_DOMAIN=cold-climate-staging.us.auth0.com
-AUTH0_UI_CLIENT_ID=55HO8########SRWpG
-
-# Database
-DATABASE_URL="postgres://postgres:postgres@localhost/colddb"
-
-# Redis Cache
-REDISCLOUD_URL=redis://localhost:6379
 
 ```
 

@@ -20,6 +20,7 @@
       },
       "configurations": {
         "development": {},
+        "staging": {},
         "production": {}
       }
     },
@@ -34,6 +35,9 @@
           "buildTarget": "cold-platform-openai:build:development",
           "runtimeArgs": ["--trace-warnings"],
           "port": 9002
+        },
+        "staging": {
+          "buildTarget": "cold-platform-openai:build:staging"
         },
         "production": {
           "buildTarget": "cold-platform-openai:build:production"
