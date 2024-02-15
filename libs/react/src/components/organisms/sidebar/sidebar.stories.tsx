@@ -17,7 +17,7 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-  render: (args) => {
+  render: args => {
     return (
       <StoryMockProvider>
         <SideBar />
@@ -27,7 +27,7 @@ export const Default: Story = {
 };
 
 export const NoActions: Story = {
-  render: (args) => {
+  render: args => {
     return (
       <StoryMockProvider>
         <SideBar />
@@ -38,6 +38,23 @@ export const NoActions: Story = {
     launchdarkly: {
       flags: {
         showActions261: false,
+      },
+    },
+  },
+};
+
+export const REIComplianceMVP: Story = {
+  render: args => {
+    return (
+      <StoryMockProvider>
+        <SideBar />
+      </StoryMockProvider>
+    );
+  },
+  parameters: {
+    launchdarkly: {
+      flags: {
+        showReiComplianceMvpSidebarCold506: true,
       },
     },
   },

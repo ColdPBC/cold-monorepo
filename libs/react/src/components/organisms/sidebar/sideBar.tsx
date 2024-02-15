@@ -20,7 +20,9 @@ import { ErrorType } from '@coldpbc/enums';
 import { OrganizationSelector } from './sideBar/organizationSelector';
 
 const _SideBar = (): JSX.Element => {
-  const {
+  const ldFlags = useFlags();
+
+  let {
     data,
     error,
     isLoading,
@@ -28,8 +30,7 @@ const _SideBar = (): JSX.Element => {
     data: any;
     error: any;
     isLoading: boolean;
-  } = useSWR(['/components/sidebar_navigation', 'GET'], axiosFetcher);
-  const ldFlags = useFlags();
+  } = useSWR(ldFlags.showReiComplianceMvpSidebarCold506 ? ['/components/sidebar_navigation', 'GET'] : null, axiosFetcher);
 
   // Fetch actions if actions feature flag is present
   const { data: actionsData, error: actionsError } = useOrgSWR<ActionPayload[], any>(ldFlags.showActions261 ? [`/actions`, 'GET'] : null, axiosFetcher);
@@ -54,8 +55,133 @@ const _SideBar = (): JSX.Element => {
     }
   };
 
+  const getSidebarItems = () => {
+    if (!ldFlags.showReiComplianceMvpSidebarCold506) {
+      data = {
+        id: 'cc0267d8-f49c-493e-8ea0-2aaa58bb61f3',
+        name: 'sidebar_navigation',
+        type: 'NAVIGATION_SIDE',
+        description: 'Provides links in the application sidebar',
+        definition: {
+          items: [
+            {
+              key: 'home_key',
+              icon: {
+                name: 'ColdHomeIcon',
+              },
+              label: 'Home',
+              route: '/home',
+            },
+            {
+              key: 'footprint_key',
+              icon: {
+                name: 'ColdFootprintIcon',
+              },
+              label: 'Footprint',
+              route: '/footprint',
+            },
+            {
+              key: 'journey_key',
+              icon: {
+                name: 'ColdJourneyIcon',
+              },
+              label: 'Journey',
+              route: '/journey',
+            },
+            {
+              key: 'documents_key',
+              icon: {
+                name: 'ColdDocumentsIcon',
+              },
+              label: 'Documents',
+              route: '/documents',
+            },
+            {
+              key: 'compliance_key',
+              icon: {
+                name: 'ColdComplianceIcon',
+              },
+              label: 'Compliance',
+              route: '/compliance',
+            },
+            {
+              key: 'actions_key',
+              icon: {
+                name: 'ColdActionsIcon',
+              },
+              items: [
+                {
+                  key: 'overview_actions_key',
+                  label: 'Overview',
+                  route: '/actions',
+                },
+                {
+                  key: 'facilities_actions_key',
+                  label: 'Facilities',
+                  route: '/actions/facilities',
+                },
+                {
+                  key: 'travel_actions_key',
+                  label: 'Travel',
+                  route: '/actions/travel',
+                },
+                {
+                  key: 'operations_actions_key',
+                  label: 'Operations',
+                  route: '/actions/operations',
+                },
+                {
+                  key: 'product_actions_key',
+                  label: 'Product',
+                  route: '/actions/product',
+                },
+                {
+                  key: 'employee_footprint_actions_key',
+                  label: 'Employee Footprint',
+                  route: '/actions/employee_footprint',
+                },
+                {
+                  key: 'employee_activation_actions_key',
+                  label: 'Employee Activation',
+                  route: '/actions/employee_activation',
+                },
+                {
+                  key: 'internal_alignment_actions_key',
+                  label: 'Internal Alignment',
+                  route: '/actions/internal_alignment',
+                },
+                {
+                  key: 'community_impact_actions_key',
+                  label: 'Community Impact',
+                  route: '/actions/community_impact',
+                },
+              ],
+              label: 'Actions',
+            },
+            {
+              key: 'settings_key',
+              icon: {
+                name: 'ColdSettingsIcon',
+              },
+              label: 'Settings',
+              roles: ['cold:admin', 'company:admin', 'company:owner'],
+              route: '/settings',
+              placement: 'bottom',
+            },
+          ],
+        },
+        created_at: '2023-09-11T17:17:02.295Z',
+        updated_at: '2024-02-12T10:49:58.323Z',
+      };
+      isLoading = false;
+      error = null;
+    }
+  };
+
   const location = useLocation();
+
   const [activeChild, setActiveChild] = useState('');
+
   const { logError } = useColdContext();
 
   const getOrgSelector = () => {
@@ -83,6 +209,8 @@ const _SideBar = (): JSX.Element => {
     }
   }, [location.pathname, data]);
 
+  getSidebarItems();
+
   if (isLoading || auth0.isLoading)
     return (
       <div>
@@ -101,7 +229,7 @@ const _SideBar = (): JSX.Element => {
   let filteredSidebarItems = data.definition.items.filter(filterSidebar) ?? [];
 
   // filter nested action items
-  if (ldFlags.showActions261 && filteredSidebarItems.some((item: any) => item.key === 'actions_key')) {
+  if (!ldFlags.showReiComplianceMvpSidebarCold506 && ldFlags.showActions261 && filteredSidebarItems.some((item: any) => item.key === 'actions_key')) {
     filteredSidebarItems = filteredSidebarItems.map((item: any) => {
       if (item.key === 'actions_key') {
         return {

@@ -14,6 +14,7 @@ import { ErrorFallback } from '../../application/errors/errorFallback';
 import { useOrgSWR } from '../../../hooks/useOrgSWR';
 import { useColdContext } from '@coldpbc/hooks';
 import { ErrorType } from '@coldpbc/enums';
+import { useFlags } from 'launchdarkly-react-client-sdk';
 
 export interface FootprintOverviewCardProps {
   headerless?: boolean;
@@ -24,6 +25,7 @@ const PERIOD = 2022;
 
 function _FootprintOverviewCard(props: PropsWithChildren<FootprintOverviewCardProps>) {
   const navigate = useNavigate();
+  const ldFlags = useFlags();
 
   // Get footprint data from SWR
   const { data, isLoading, error } = useOrgSWR<any>(['/categories/company_decarbonization', 'GET'], axiosFetcher);
@@ -46,9 +48,13 @@ function _FootprintOverviewCard(props: PropsWithChildren<FootprintOverviewCardPr
 
   let cardProps: CardProps = {};
   if (!props.headerless) {
+    let footprintRoute = '/footprint';
+    if (ldFlags.showReiComplianceMvpSidebarCold506) {
+      footprintRoute = '/reports/carbon_footprint';
+    }
     cardProps = {
       title: props.chartVariant === EmissionsDonutChartVariants.vertical && isEmptyFootprintData ? 'Footprint Breakdown' : `${PERIOD} Company Footprint`,
-      ctas: props.chartVariant === EmissionsDonutChartVariants.horizontal ? [{ text: 'Learn More', action: () => navigate('/footprint') }] : [],
+      ctas: props.chartVariant === EmissionsDonutChartVariants.horizontal ? [{ text: 'Learn More', action: () => navigate(footprintRoute) }] : [],
     };
   }
 

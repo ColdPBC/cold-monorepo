@@ -1,3 +1,30 @@
+# [1.114.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.113.0...v1.114.0) (2024-02-15)
+
+
+### Features
+
+* created wizard flow with compliance sets ([9ed0c55](https://github.com/ColdPBC/cold-monorepo/commit/9ed0c556ead1a146b49f384fb3c263f3f098be93))
+* removed next and previous buttons from compliance wizard, renamed automation to progress route ([b729fcc](https://github.com/ColdPBC/cold-monorepo/commit/b729fccd4b2be92a2d661a117f709356b95a79af))
+
+# [1.114.0-COLD-497.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.113.0...v1.114.0-COLD-497.1) (2024-02-15)
+
+
+### Features
+
+* created wizard flow with compliance sets ([9ed0c55](https://github.com/ColdPBC/cold-monorepo/commit/9ed0c556ead1a146b49f384fb3c263f3f098be93))
+
+# [1.113.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.112.1...v1.113.0) (2024-02-15)
+
+
+### Features
+
+* correct actions route reference ([ae09760](https://github.com/ColdPBC/cold-monorepo/commit/ae09760dbcd59ac1f43ab617cfb12cd511f1e181))
+* Made updates for tests ([11fbb46](https://github.com/ColdPBC/cold-monorepo/commit/11fbb4639bea898c7638960992977736d97c1e07))
+* point footprint links to reports/carbon_footprint page ([d6e74c3](https://github.com/ColdPBC/cold-monorepo/commit/d6e74c3cc415f9167ff19ebdc0cff793f088b44c))
+* remove management from account and user management sidebar items ([535f1a3](https://github.com/ColdPBC/cold-monorepo/commit/535f1a36d312d2e6816538ab8614883ff2d57d91))
+* update settings pages with correct titles ([ecd9e42](https://github.com/ColdPBC/cold-monorepo/commit/ecd9e427c868f629b09349762126eafb4935f68c))
+* updated nav for REI compliance mvp ([165b3ac](https://github.com/ColdPBC/cold-monorepo/commit/165b3acc2d4a11de4d1ef497930e52b8884af035))
+
 ## [1.112.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.112.0...v1.112.1) (2024-02-14)
 
 

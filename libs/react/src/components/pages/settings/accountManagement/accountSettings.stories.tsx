@@ -1,13 +1,13 @@
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
-import { Settings } from './settings';
+import { AccountSettingsPage } from './accountSettings';
 import { getMembersHandler, StoryMockProvider } from '@coldpbc/mocks';
 import { fireEvent, userEvent, waitFor, within } from '@storybook/testing-library';
 import { expect } from '@storybook/jest';
 
-const meta: Meta<typeof Settings> = {
-  title: 'Pages/Settings',
-  component: Settings,
+const meta: Meta<typeof AccountSettingsPage> = {
+  title: 'Pages/AccountSettingsPage',
+  component: AccountSettingsPage,
   tags: ['autodocs'],
   decorators: [withKnobs],
 };
@@ -19,7 +19,7 @@ export const Default: Story = {
   render: args => {
     return (
       <StoryMockProvider handlers={[]}>
-        <Settings {...args} />
+        <AccountSettingsPage {...args} />
       </StoryMockProvider>
     );
   },
@@ -63,30 +63,6 @@ export const Default: Story = {
       // switch back to members
       await userEvent.click(canvas.getByText('Invitations'));
       await userEvent.click(canvas.getByText('Members'));
-    });
-    await step('Update First and Last Name', async () => {
-      const firstName = await canvas.getByLabelText('first-name');
-      const editFirstNameButton = await within(await canvas.getByTestId('edit-first-name-button')).getByRole('button', { name: 'Edit' });
-      fireEvent.click(editFirstNameButton);
-      const firstNameInput = await canvas.findByLabelText('firstName');
-      fireEvent.change(firstNameInput, { target: { value: 'Qaalib1' } });
-      const saveButton = await canvas.findByText('Save');
-      await userEvent.click(saveButton);
-      // check first name input value
-      await expect(firstNameInput).toHaveValue('Qaalib1');
-
-      // update last name
-      const editLastNameButton = await within(await canvas.getByTestId('edit-last-name-button')).getByRole('button', { name: 'Edit' });
-      fireEvent.click(editLastNameButton);
-      const lastNameInput = await canvas.findByLabelText('lastName');
-      fireEvent.change(lastNameInput, { target: { value: 'Farah1' } });
-      const saveLastNameButton = await canvas.findByText('Save');
-      await userEvent.click(saveLastNameButton);
-      // check last name input value
-      await expect(lastNameInput).toHaveValue('Farah1');
-    });
-    await step('Check Logout Button', async () => {
-      await canvas.findByText('Log Out');
     });
     await step('Check Update Role', async () => {
       // select a row with role cell with Member
@@ -210,7 +186,7 @@ export const NoInvitations: Story = {
   render: args => {
     return (
       <StoryMockProvider handlers={[getMembersHandler.noInvitations]}>
-        <Settings {...args} />
+        <AccountSettingsPage {...args} />
       </StoryMockProvider>
     );
   },
