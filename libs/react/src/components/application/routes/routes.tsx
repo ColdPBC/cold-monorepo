@@ -16,6 +16,7 @@ import {
   AccountSettingsPage,
   UserSettingsPage,
   ActionsOverview,
+  WizardRoutes,
 } from '@coldpbc/components';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 
@@ -37,6 +38,7 @@ export const ColdRoutes = () => {
           <Route path={'/settings/account'} element={<AccountSettingsPage />} />
           <Route path={'/settings/user'} element={<UserSettingsPage />} />
           <Route path="*" element={<div className={'text-tc-primary'}>Pending...</div>} />
+          {WizardRoutes()}
         </>
       );
     } else {
