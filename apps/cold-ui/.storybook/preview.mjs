@@ -101,6 +101,7 @@ export default {
         showNextStepsCard: true,
         showComplianceModule: true,
         showDocumentsUploadModuleCold492: true,
+        showREIComplianceMVPSidebarCold506: false,
       },
     },
   },

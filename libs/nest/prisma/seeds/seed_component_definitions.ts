@@ -119,20 +119,42 @@ const seeds: Array<{
           route: '/home',
         },
         {
-          key: 'footprint_key',
+          key: 'compliance_key',
           icon: {
-            name: 'ColdFootprintIcon',
+            name: 'ColdComplianceIcon',
           },
-          label: 'Footprint',
-          route: '/footprint',
+          label: 'Compliance',
+          route: '/compliance',
         },
         {
-          key: 'journey_key',
+          key: 'assessments_key',
           icon: {
             name: 'ColdJourneyIcon',
           },
-          label: 'Journey',
-          route: '/journey',
+          label: 'Assessments',
+          route: '/assessments',
+        },
+        {
+          key: 'actions_key',
+          icon: {
+            name: 'ColdActionsIcon',
+          },
+          label: 'Actions',
+          route: '/actions',
+        },
+        {
+          key: 'reports_key',
+          icon: {
+            name: 'ColdReportIcon',
+          },
+          label: 'Reports',
+          items: [
+            {
+              key: 'reports_carbon_footprint_key',
+              label: 'Carbon Footprint',
+              route: '/reports/carbon_footprint',
+            },
+          ],
         },
         {
           key: 'documents_key',
@@ -143,76 +165,30 @@ const seeds: Array<{
           route: '/documents',
         },
         {
-          key: 'compliance_key',
-          icon: {
-            name: 'ColdComplianceIcon',
-          },
-          label: 'Compliance',
-          route: '/compliance',
-        },
-        {
-          key: 'actions_key',
-          icon: {
-            name: 'ColdActionsIcon',
-          },
-          items: [
-            {
-              key: 'overview_actions_key',
-              label: 'Overview',
-              route: '/actions',
-            },
-            {
-              key: 'facilities_actions_key',
-              label: 'Facilities',
-              route: '/actions/facilities',
-            },
-            {
-              key: 'travel_actions_key',
-              label: 'Travel',
-              route: '/actions/travel',
-            },
-            {
-              key: 'operations_actions_key',
-              label: 'Operations',
-              route: '/actions/operations',
-            },
-            {
-              key: 'product_actions_key',
-              label: 'Product',
-              route: '/actions/product',
-            },
-            {
-              key: 'employee_footprint_actions_key',
-              label: 'Employee Footprint',
-              route: '/actions/employee_footprint',
-            },
-            {
-              key: 'employee_activation_actions_key',
-              label: 'Employee Activation',
-              route: '/actions/employee_activation',
-            },
-            {
-              key: 'internal_alignment_actions_key',
-              label: 'Internal Alignment',
-              route: '/actions/internal_alignment',
-            },
-            {
-              key: 'community_impact_actions_key',
-              label: 'Community Impact',
-              route: '/actions/community_impact',
-            },
-          ],
-          label: 'Actions',
-        },
-        {
           key: 'settings_key',
           icon: {
             name: 'ColdSettingsIcon',
           },
+          items: [
+            {
+              key: 'settings_company_info_key',
+              label: 'Company Info',
+              route: '/settings/company_info',
+            },
+            {
+              key: 'settings_account_key',
+              label: 'Account',
+              route: '/settings/account',
+            },
+            {
+              key: 'settings_user_key',
+              label: 'Users',
+              route: '/settings/users',
+            },
+          ],
           label: 'Settings',
           roles: ['cold:admin', 'company:admin', 'company:owner'],
           route: '/settings',
-          placement: 'bottom',
         },
       ],
     },

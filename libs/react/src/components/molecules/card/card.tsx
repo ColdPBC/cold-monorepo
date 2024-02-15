@@ -37,14 +37,14 @@ export function Card(props: PropsWithChildren<CardProps>) {
             props.title && <div className="text-h4 flex-1">{props.title}</div>
           }
           <div className={'flex space-x-4'}>
-            {props.ctas?.map(cta => {
+            {props.ctas?.map((cta, index) => {
               if (cta.child) {
-                return cta.child;
+                return <div key={`card_child_${index}`}>{cta.child}</div>;
               } else {
                 return (
                   cta.text &&
                   cta.action !== undefined && (
-                    <BaseButton key={'button_' + snakeCase(cta.text)} label={cta.text} onClick={cta.action} variant={cta.variant || ButtonTypes.secondary} />
+                    <BaseButton key={'button_' + snakeCase(cta.text) + `_${index}`} label={cta.text} onClick={cta.action} variant={cta.variant || ButtonTypes.secondary} />
                   )
                 );
               }

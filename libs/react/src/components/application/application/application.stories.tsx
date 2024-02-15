@@ -347,3 +347,20 @@ export const ColdAdmin: Story = {
     },
   },
 };
+
+export const REIComplianceMVP: Story = {
+  render: () => {
+    return (
+      <StoryMockProvider>
+        <Application />
+      </StoryMockProvider>
+    );
+  },
+  parameters: {
+    launchdarkly: {
+      flags: {
+        showReiComplianceMvpSidebarCold506: true,
+      },
+    },
+  },
+};
