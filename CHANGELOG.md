@@ -1,3 +1,11 @@
+# [1.114.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.113.0...v1.114.0) (2024-02-15)
+
+
+### Features
+
+* created wizard flow with compliance sets ([9ed0c55](https://github.com/ColdPBC/cold-monorepo/commit/9ed0c556ead1a146b49f384fb3c263f3f098be93))
+* removed next and previous buttons from compliance wizard, renamed automation to progress route ([b729fcc](https://github.com/ColdPBC/cold-monorepo/commit/b729fccd4b2be92a2d661a117f709356b95a79af))
+
 # [1.114.0-COLD-497.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.113.0...v1.114.0-COLD-497.1) (2024-02-15)
 
 
