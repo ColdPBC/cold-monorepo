@@ -21,11 +21,11 @@ export const Default: Story = {
         <Routes>
           <Route path={'/compliance'} element={<div className={'text-tc-primary'}>Compliance Home</div>} />
           <Route path={'/wizard'}>
-            <Route path="compliance/:name" element={<ComplianceWizard />}>
+            <Route path={'compliance/:name'} element={<ComplianceWizard />}>
               <Route path={'documents'} element={<div className={'text-tc-primary'}>Documents Upload Step</div>} />
               <Route path={'automate'} element={<div className={'text-tc-primary'}>Automation Step</div>} />
-              <Route path={'automation'} element={<div className={'text-tc-primary'}>Automation Processing Step</div>} />
-              <Route path={'survey'} element={<div className={'text-tc-primary'}>Survey Taking Step</div>} />
+              <Route path={'processing'} element={<div className={'text-tc-primary'}>Automation Processing Step</div>} />
+              <Route path={'questionnaire'} element={<div className={'text-tc-primary'}>Survey Taking Step</div>} />
             </Route>
           </Route>
           <Route path={'/assessments'} element={<div className={'text-tc-primary'}>Assessments</div>} />

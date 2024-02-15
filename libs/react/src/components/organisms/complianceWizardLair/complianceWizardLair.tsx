@@ -24,10 +24,6 @@ export const ComplianceWizardLair = (props: PropsWithChildren<ComplianceWizardLa
     navigate('/compliance');
   };
 
-  const completeWizard = () => {
-    navigate('/assessments');
-  };
-
   if (compliances.isLoading || orgCompliances.isLoading) {
     return <Spinner />;
   }
@@ -53,10 +49,10 @@ export const ComplianceWizardLair = (props: PropsWithChildren<ComplianceWizardLa
           </div>
           <div className={'flex flex-row justify-end items-center gap-x-4'}>
             <BaseButton
-              label={'Cold Automation'}
+              label={'Automate'}
               variant={ButtonTypes.primary}
               onClick={() => {
-                setCurrentStep('automation');
+                setCurrentStep('processing');
               }}
             />
             <BaseButton
@@ -67,38 +63,28 @@ export const ComplianceWizardLair = (props: PropsWithChildren<ComplianceWizardLa
               }}
             />
             <BaseButton
-              label={'Save & Exit'}
+              label={'Save and Exit'}
               variant={ButtonTypes.primary}
               onClick={() => {
                 backOutOfWizard();
-              }}
-            />
-            <BaseButton
-              label={'Go to Assessments'}
-              variant={ButtonTypes.primary}
-              onClick={() => {
-                completeWizard();
-              }}
-            />
-            <BaseButton
-              label={'Previous'}
-              variant={ButtonTypes.primary}
-              onClick={() => {
-                prevStep();
-              }}
-            />
-            <BaseButton
-              label={'Next'}
-              variant={ButtonTypes.primary}
-              onClick={() => {
-                nextStep();
               }}
             />
           </div>
         </div>
         <div className={'flex flex-row justify-between w-full space-x-4'}>
           <Card className={'w-full'} title={'Questionnaire Progress'}></Card>
-          <Card className={'w-full'} title={'Compliance Assessment'}></Card>
+          <Card
+            className={'w-full'}
+            title={'Assessment Preview'}
+            ctas={[
+              {
+                text: 'See Full Progress Assessment',
+                action: () => {
+                  navigate('/assessments');
+                },
+                variant: ButtonTypes.primary,
+              },
+            ]}></Card>
         </div>
         {children}
       </div>

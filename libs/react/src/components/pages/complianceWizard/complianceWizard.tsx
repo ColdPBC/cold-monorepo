@@ -20,14 +20,14 @@ export const ComplianceWizard = () => {
               route: '/automate',
             },
             {
-              title: 'Automation',
-              name: 'automation',
-              route: '/automation',
+              title: 'Processing',
+              name: 'processing',
+              route: '/processing',
             },
             {
-              title: 'Survey',
-              name: 'survey',
-              route: '/survey',
+              title: 'Questionnaire',
+              name: 'questionnaire',
+              route: '/questionnaire',
             },
           ]}
           baseURL={`/wizard/compliance/${name}`}>
