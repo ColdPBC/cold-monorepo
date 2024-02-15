@@ -31,7 +31,7 @@ export const ColdRoutes = () => {
           {ldFlags.showComplianceModule && ComplianceRoutes()}
           <Route path={'/assessments'} element={null} />
           {ldFlags.showActions261 && <Route path="/actions" element={<ActionsOverview />} />}
-          <Route path={'/reports/carbon_footprint'} element={null} />
+          <Route path={'/reports/carbon_footprint'} element={<Footprint />} />
           {ldFlags.showDocumentsUploadModuleCold492 && <Route path="/documents" element={<DocumentUpload />} />}
           <Route path={'/settings/company_info'} element={null} />
           <Route path={'/settings/account'} element={<AccountSettingsPage />} />
