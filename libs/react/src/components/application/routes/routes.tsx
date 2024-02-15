@@ -12,6 +12,7 @@ import { ActionRoutes } from './actionRoutes';
 import { Signup } from '../authentication';
 import { ProtectedRoute } from '../authentication';
 import { ComplianceRoutes } from './complianceRoutes';
+import { WizardRoutes } from './wizardRoutes';
 
 export const ColdRoutes = () => {
   const ldFlags = useFlags();
@@ -34,6 +35,7 @@ export const ColdRoutes = () => {
               {ldFlags.showComplianceModule && ComplianceRoutes()}
               {ldFlags.showDocumentsUploadModuleCold492 && <Route path="/documents" element={<DocumentUpload />} />}
               <Route path="*" element={<div className={'text-tc-primary'}>Pending...</div>} />
+              {WizardRoutes()}
             </Route>
           </Route>
         </Route>
