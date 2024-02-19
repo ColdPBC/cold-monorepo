@@ -4,7 +4,7 @@ import { Global, Injectable } from '@nestjs/common';
 
 @Global()
 @Injectable()
-export class BroadcastEventService extends BaseWorker {
+export class EventService extends BaseWorker {
   /**
    * Constructs a new instance of the BroadcastEventService.
    *
@@ -12,7 +12,7 @@ export class BroadcastEventService extends BaseWorker {
    * @param {ColdRabbitService} rabbit - The ColdRabbitService instance for RabbitMQ operations.
    */
   constructor(private readonly prisma: PrismaService, private readonly rabbit: ColdRabbitService) {
-    super(BroadcastEventService.name);
+    super(EventService.name);
   }
 
   /**
@@ -112,7 +112,7 @@ export class BroadcastEventService extends BaseWorker {
    * @returns {Promise<void>} A Promise that resolves once the event is sent.
    */
   async sendAsyncEvent(routingKey: string, event: string, payload: any, options?: RabbitMessageOptions): Promise<void> {
-    this.rabbit.publish(routingKey, { from: 'cold-api', event, data: payload }, options);
+    await this.rabbit.publish(routingKey, { from: 'cold-api', event, data: payload }, options);
   }
 
   /**
