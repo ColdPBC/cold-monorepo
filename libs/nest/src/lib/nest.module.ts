@@ -19,6 +19,7 @@ import { DatadogTraceModule } from 'nestjs-ddtrace';
 import { S3Module, S3Service, SecretsModule, SecretsService } from './aws';
 import { RedisServiceConfig } from './utility';
 import { MqttModule } from './mqtt';
+import { ConfigurationModule } from './configuration';
 
 @Module({
   imports: [MqttModule],
@@ -57,6 +58,7 @@ export class NestModule {
         load: configSecrets,
         cache: false,
       }),
+      ConfigurationModule.forRootAsync(config),
       SecretsModule,
       BullModule.forRoot(await new RedisServiceConfig(config).getQueueConfig(type, project)),
       HttpModule,
@@ -86,11 +88,9 @@ export class NestModule {
 
     logger.info('Configuring Nest Module...');
 
-    if (bucket) {
-      imports.push(S3Module.forRootAsync(bucket));
-      providers.push(S3Service);
-      exports.push(S3Service);
-    }
+    imports.push(S3Module.forRootAsync(secrets));
+    providers.push(S3Service);
+    exports.push(S3Service);
 
     //configure-enable-hot-shots-module
     const enableHotShots = await darkly.getBooleanFlag('static-enable-hot-shots-module');
@@ -214,7 +214,7 @@ export class NestModule {
      */
     const enableRabbitModule = await darkly.getBooleanFlag('static-enable-rabbit-module');
     if (enableRabbitModule) {
-      imports.push(ColdRabbitModule.forFeature());
+      imports.push(ColdRabbitModule.forRootAsync());
       providers.push(ColdRabbitService);
       exports.push(ColdRabbitService);
     }

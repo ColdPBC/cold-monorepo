@@ -1,29 +1,37 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { GetSecretValueResponse, SecretsManager } from '@aws-sdk/client-secrets-manager';
 import { fromSSO } from '@aws-sdk/credential-provider-sso';
 import { merge, set, unset } from 'lodash';
 import * as process from 'process';
+import { S3ConfigurationService } from './configuration.service';
 
-@Module({})
+@Global()
+@Module({
+  providers: [S3ConfigurationService],
+})
 export class ConfigurationModule {
-  static async getAWSCredentials() {
-    let awsCreds: any = {};
-    const config = new ConfigService();
+  static async getAWSCredentials(config?: ConfigService) {
+    if (!config) {
+      config = new ConfigService();
+    }
 
+    let awsCreds: any = {};
+
+    // FC_ENV should only be set in the Flight Control environment, not in SM
     if (process.env['FC_ENV'] && process.env['AWS_ACCESS_KEY_ID'] && process.env['AWS_SECRET_ACCESS_KEY']) {
       awsCreds = {
         region: config.get('AWS_REGION', 'us-east-1'),
         credentials: {
-          accessKeyId: config.get('AWS_ACCESS_KEY_ID'),
-          secretAccessKey: config.get('AWS_SECRET_ACCESS_KEY'),
+          accessKeyId: config.getOrThrow('AWS_ACCESS_KEY_ID'),
+          secretAccessKey: config.getOrThrow('AWS_SECRET_ACCESS_KEY'),
         },
       };
 
       return awsCreds;
     }
 
-    const profile = config.get('AWS_PROFILE', 'default');
+    const profile = config?.get('AWS_PROFILE', 'default');
 
     const ssoCreds = await fromSSO({ profile: profile })();
 
@@ -35,13 +43,37 @@ export class ConfigurationModule {
     return { region: config.get('AWS_REGION', 'us-east-1'), ...ssoCreds };
   }
 
-  static async forRootAsync() {
-    const config = new ConfigService();
+  static async forRootAsync(config?: ConfigService) {
+    const { configSecrets, secrets } = await this.getSecrets(config);
+
+    /**
+     * Imports Array
+     */
+    const imports: any = [
+      ConfigModule.forRoot({
+        isGlobal: true,
+        load: configSecrets,
+      }),
+    ];
+
+    return {
+      module: ConfigurationModule,
+      imports,
+      providers: [{ provide: 'SERVICE_SECRETS', useValue: secrets }, S3ConfigurationService, ConfigService],
+      exports: [ConfigModule, 'SERVICE_SECRETS', S3ConfigurationService, ConfigService],
+    };
+  }
+
+  static async getSecrets(config?: ConfigService) {
+    if (!config) {
+      config = new ConfigService();
+    }
+
     const configSecrets: any = [];
-    const credentials = await ConfigurationModule.getAWSCredentials();
+    const credentials = await ConfigurationModule.getAWSCredentials(config);
     const secrets = {};
 
-    if (!credentials.credentials?.accessKeyId) {
+    if (!credentials?.accessKeyId) {
       throw new Error('Unable to locate AWS Credentials!');
     }
 
@@ -73,22 +105,6 @@ export class ConfigurationModule {
       configSecrets.push(() => serviceSecrets);
       merge(secrets, serviceSecrets);
     }
-
-    /**
-     * Imports Array
-     */
-    const imports: any = [
-      ConfigModule.forRoot({
-        isGlobal: true,
-        load: configSecrets,
-      }),
-    ];
-
-    return {
-      module: ConfigurationModule,
-      imports,
-      providers: [{ provide: 'SERVICE_SECRETS', useValue: secrets }],
-      exports: [ConfigModule, 'SERVICE_SECRETS'],
-    };
+    return { configSecrets, secrets };
   }
 }

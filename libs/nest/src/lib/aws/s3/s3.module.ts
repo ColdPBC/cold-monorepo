@@ -1,11 +1,12 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { ConfigurationModule } from '@coldpbc/nest';
 import { S3Service } from './s3.service';
 
+@Global()
 @Module({})
 export class S3Module {
-  static async forRootAsync(bucket: string, secrets: any) {
+  static async forRootAsync(secrets: any) {
     const config = new ConfigService();
     return {
       module: S3Module,

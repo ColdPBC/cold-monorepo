@@ -2,7 +2,7 @@ import { ConflictException, Injectable, NotFoundException, UnprocessableEntityEx
 import { BaseWorker, CacheService, ColdRabbitService, MqttService, PrismaService } from '@coldpbc/nest';
 import { LocationsService } from '../locations/locations.service';
 import { get } from 'lodash';
-import { BroadcastEventService } from '../../../../utilities/events/broadcast.event.service';
+import { EventService } from '../../../utilities/events/event.service';
 
 @Injectable()
 export class OrganizationIntegrationsService extends BaseWorker {
@@ -12,7 +12,7 @@ export class OrganizationIntegrationsService extends BaseWorker {
     private readonly mqtt: MqttService,
     private readonly prisma: PrismaService,
     private readonly rabbit: ColdRabbitService,
-    private readonly broadcast: BroadcastEventService,
+    private readonly broadcast: EventService,
   ) {
     super(OrganizationIntegrationsService.name);
   }

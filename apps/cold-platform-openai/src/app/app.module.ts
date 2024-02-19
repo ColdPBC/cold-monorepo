@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { NestModule, OrgUserInterceptor, PrismaModule, S3Service } from '@coldpbc/nest';
+import { ConfigurationModule, NestModule, OrgUserInterceptor, PrismaModule } from '@coldpbc/nest';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { AppService } from './app.service';
 import { APP_INTERCEPTOR } from '@nestjs/core';
@@ -10,6 +10,7 @@ import { FileService } from './assistant/files/file.service';
 import { AssistantService } from './assistant/assistant.service';
 import { AssistantModule } from './assistant/assistant.module';
 import { BullModule } from '@nestjs/bull';
+import { EventsModule } from '../../../cold-api/src/platform/modules/utilities/events/events.module';
 
 @Module({})
 export class AppModule {
@@ -19,7 +20,9 @@ export class AppModule {
     return {
       module: AppModule,
       imports: [
-        await NestModule.forRootAsync(2),
+        await ConfigurationModule.forRootAsync(),
+        await NestModule.forRootAsync(2, 'cold-api-'),
+        await EventsModule.forRootAsync(),
         BullModule.registerQueue({
           name: 'openai',
         }),
@@ -38,7 +41,6 @@ export class AppModule {
       ],
       controllers: [OpenAIController],
       providers: [
-        S3Service,
         FileService,
         AppService,
         {

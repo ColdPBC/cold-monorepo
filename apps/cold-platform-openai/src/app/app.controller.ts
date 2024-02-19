@@ -68,7 +68,7 @@ export class OpenAIController extends BaseWorker {
   @UseInterceptors(FileInterceptor('file'))
   @Roles(...coldAdminOnly)
   async uploadFile(
-    @UploadedFile() file: Express.Multer.File,
+    @UploadedFile() file: any,
     @Req()
     req: {
       body: never;
@@ -86,7 +86,7 @@ export class OpenAIController extends BaseWorker {
   @Roles(...allRoles)
   async listFiles(
     @Param('orgId') orgId: string,
-    @UploadedFile() file: Express.Multer.File,
+    @UploadedFile() file: any,
     @Req()
     req: {
       body: never;

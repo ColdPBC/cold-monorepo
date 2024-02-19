@@ -2,7 +2,7 @@ import { BadRequestException, ConflictException, Global, Injectable, NotFoundExc
 import { Span } from 'nestjs-ddtrace';
 import { BaseWorker, CacheService, Cuid2Generator, DarklyService, MqttService, PrismaService } from '@coldpbc/nest';
 import { ComplianceDefinition, OrgCompliance } from './compliance_definition_schema';
-import { BroadcastEventService } from '../../../utilities/events/broadcast.event.service';
+import { EventService } from '../../utilities/events/event.service';
 
 @Span()
 @Global()
@@ -15,7 +15,7 @@ export class ComplianceDefinitionService extends BaseWorker {
     private prisma: PrismaService,
     private readonly cache: CacheService,
     private readonly mqtt: MqttService,
-    private readonly event: BroadcastEventService,
+    private readonly event: EventService,
   ) {
     super('ComplianceDefinitionService');
   }

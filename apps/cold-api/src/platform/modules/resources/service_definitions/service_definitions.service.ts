@@ -1,13 +1,13 @@
 import { Get, Injectable } from '@nestjs/common';
 import { Span } from 'nestjs-ddtrace';
-import { BaseWorker, CacheService, ColdRabbitService, Cuid2Generator, IAuthenticatedUser, MqttService, PrismaService, Roles } from '@coldpbc/nest';
+import { BaseWorker, Cuid2Generator, IAuthenticatedUser, PrismaService, Roles } from '@coldpbc/nest';
 import { integration_service_type } from '@prisma/client';
 import { allRoles } from '../_global/global.params';
 
 @Span()
 @Injectable()
 export class ServiceDefinitionsService extends BaseWorker {
-  constructor(private prisma: PrismaService, private readonly cache: CacheService, private rabbit: ColdRabbitService, private readonly mqtt: MqttService) {
+  constructor(private prisma: PrismaService) {
     super('ServiceDefinitionsService');
   }
 

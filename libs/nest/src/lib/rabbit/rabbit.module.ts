@@ -5,7 +5,7 @@ import { ConfigModule } from '@nestjs/config';
 
 @Module({})
 export class ColdRabbitModule {
-  static async forFeature(): Promise<DynamicModule> {
+  static async forRootAsync(): Promise<DynamicModule> {
     const module: DynamicModule = {
       module: ColdRabbitModule,
       imports: [ConfigModule, RabbitMQModule.forRoot(RabbitMQModule, await ColdRabbitService.getRabbitConfig())],

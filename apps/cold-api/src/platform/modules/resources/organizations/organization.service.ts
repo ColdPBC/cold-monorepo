@@ -2,13 +2,13 @@ import { HttpService } from '@nestjs/axios';
 import { ConflictException, HttpException, Injectable, NotFoundException, UnauthorizedException, UnprocessableEntityException } from '@nestjs/common';
 import { Span } from 'nestjs-ddtrace';
 // eslint-disable-next-line @nx/enforce-module-boundaries
-import { Auth0Organization, Auth0TokenService, BaseWorker, CacheService, DarklyService, MqttService, PrismaService, S3Service, Tags } from '@coldpbc/nest';
+import { Auth0Organization, Auth0TokenService, BaseWorker, CacheService, DarklyService, MqttService, PrismaService, Tags } from '@coldpbc/nest';
 import { filter, first, kebabCase, merge, omit, pick, set } from 'lodash';
 import { AxiosRequestConfig } from 'axios';
 import { CreateOrganizationDto } from './dto/organization.dto';
 import { organizations } from '@prisma/client';
 import { IntegrationsService } from '../integrations/integrations.service';
-import { BroadcastEventService } from '../../../utilities/events/broadcast.event.service';
+import { EventService } from '../../utilities/events/event.service';
 
 @Span()
 @Injectable()
@@ -21,9 +21,8 @@ export class OrganizationService extends BaseWorker {
     readonly cache: CacheService,
     readonly utilService: Auth0TokenService,
     readonly darkly: DarklyService,
-    readonly events: BroadcastEventService,
+    readonly events: EventService,
     readonly integrations: IntegrationsService,
-    readonly s3: S3Service,
     readonly mqtt: MqttService,
     readonly prisma: PrismaService,
   ) {
@@ -39,6 +38,29 @@ export class OrganizationService extends BaseWorker {
     });
 
     this.options = await this.utilService.init();
+
+    const orgs = (await this.getOrganizations(true)) as Array<Auth0Organization>;
+
+    for (const org of orgs) {
+      const existing = await this.prisma.organizations.findUnique({
+        where: {
+          id: org.id,
+        },
+      });
+
+      if (!existing) {
+        await this.prisma.organizations.create({
+          data: {
+            id: org.id,
+            name: org.name,
+            display_name: org.display_name,
+            enabled_connections: {},
+            branding: org.branding,
+            created_at: new Date(),
+          },
+        });
+      }
+    }
   }
 
   /***
@@ -70,7 +92,7 @@ export class OrganizationService extends BaseWorker {
    * If no filter is supplied it returns an array of Auth0Organizations
    */
   async getOrganizations(
-    updateCache = false,
+    bpc = false,
     filters?: {
       id?: string;
       name?: string;
@@ -86,7 +108,7 @@ export class OrganizationService extends BaseWorker {
 
       let orgs: Array<Auth0Organization> | undefined;
 
-      if (!updateCache) {
+      if (!bpc) {
         orgs = (await this.cache.get('organizations')) as Array<Auth0Organization>;
       }
 

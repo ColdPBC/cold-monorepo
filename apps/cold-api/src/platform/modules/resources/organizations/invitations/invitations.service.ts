@@ -1,11 +1,11 @@
 import { ConflictException, HttpException, Injectable, NotFoundException, OnModuleInit, UnprocessableEntityException } from '@nestjs/common';
-import { Auth0TokenService, BaseWorker, CacheService, DarklyService, MqttService, Tags } from '@coldpbc/nest';
+import { Auth0TokenService, BaseWorker, CacheService, DarklyService, MqttService, PrismaService, Tags } from '@coldpbc/nest';
 import { AxiosResponse, isAxiosError } from 'axios';
 import { RoleService } from '../../auth0/roles/role.service';
-import { OrganizationService } from '../organization.service';
 import { HttpService } from '@nestjs/axios';
 import { find, merge, omit } from 'lodash';
 import { ConfigService } from '@nestjs/config';
+import { organizations } from '@prisma/client';
 
 @Injectable()
 export class InvitationsService extends BaseWorker implements OnModuleInit {
@@ -13,9 +13,9 @@ export class InvitationsService extends BaseWorker implements OnModuleInit {
   test_orgs: Array<{ id: string; name: string; display_name: string }>;
 
   constructor(
+    private readonly prisma: PrismaService,
     private readonly config: ConfigService,
     private readonly roleService: RoleService,
-    private readonly orgs: OrganizationService,
     private readonly cache: CacheService,
     private readonly utilService: Auth0TokenService,
     private readonly darkly: DarklyService,
@@ -26,8 +26,6 @@ export class InvitationsService extends BaseWorker implements OnModuleInit {
   }
 
   override async onModuleInit() {
-    await this.orgs.getOrganizations(true);
-
     this.darkly.subscribeToJsonFlagChanges('dynamic-org-white-list', value => {
       this.test_orgs = value;
     });
@@ -39,7 +37,12 @@ export class InvitationsService extends BaseWorker implements OnModuleInit {
     const { user } = req;
     try {
       // make sure org exists
-      const org = await this.orgs.getOrganization(orgId, req, updateCache);
+      const orgs = (await this.cache.get('organizations')) as Array<organizations>;
+      const org = orgs.find(o => o.id === orgId);
+
+      if (!org) {
+        throw new NotFoundException(`unable to find org ${orgId}`);
+      }
 
       if (!user.isColdAdmin && orgId !== user.coldclimate_claims.org_id) {
         throw new HttpException('You do not have permission to perform this action', 403);
@@ -48,7 +51,7 @@ export class InvitationsService extends BaseWorker implements OnModuleInit {
       if (org?.id) {
         orgId = org.id;
       } else {
-        throw new NotFoundException(`unable to find org by name ${orgId}`);
+        throw new NotFoundException(`unable to find org by ${orgId}`);
       }
 
       let invitees: AxiosResponse;
@@ -85,9 +88,9 @@ export class InvitationsService extends BaseWorker implements OnModuleInit {
    * @param roleId
    * @param suppressEmail
    * @param user
-   * @param updateCache
+   * @param bpc
    */
-  async inviteUser(orgId: string, user_email: string, inviter_name: string, roleId: string | string[], suppressEmail = false, req: any, updateCache = true) {
+  async inviteUser(orgId: string, user_email: string, inviter_name: string, roleId: string | string[], suppressEmail = false, req: any, bpc = true) {
     const { user, url } = req;
     const data = {};
     try {
@@ -96,17 +99,29 @@ export class InvitationsService extends BaseWorker implements OnModuleInit {
       }
 
       console.log(suppressEmail);
-      const org = await this.orgs.getOrganization(orgId, req, updateCache);
+
+      let org: organizations = {} as organizations;
+
+      if (!bpc) {
+        const orgs = (await this.cache.get('organizations')) as Array<organizations>;
+        org = orgs.find(o => o.id === orgId) as organizations;
+      } else {
+        org = (await this.prisma.organizations.findUnique({
+          where: {
+            id: orgId,
+          },
+        })) as organizations;
+      }
+
+      if (!org) {
+        throw new NotFoundException(`organization ${orgId} not found`);
+      }
 
       const tags: Tags = {
         user: user.coldclimate_claims,
         organization: omit(org, ['branding', 'phone', 'street_address', 'created_at', 'updated_at']),
         ...this.tags,
       };
-
-      if (!org) {
-        throw new NotFoundException(`organization ${orgId} not found`);
-      }
 
       this.cache.delete(`organizations:${org.id}:invitations`);
 

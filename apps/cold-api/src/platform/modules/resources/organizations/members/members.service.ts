@@ -3,26 +3,27 @@ import { Auth0TokenService, BaseWorker, CacheService, MqttService } from '@coldp
 import { map, merge, set } from 'lodash';
 import axios from 'axios';
 import { RoleService } from '../../auth0/roles/role.service';
-import { OrganizationService } from '../organization.service';
 import { HttpService } from '@nestjs/axios';
 import { MemberService } from '../../auth0/members/member.service';
 import { OrgRolesService } from '../roles/roles.service';
 import { InvitationsService } from '../invitations/invitations.service';
+import { organizations } from '@prisma/client';
+import { OrganizationHelper } from '../helpers/organization.helper';
 
 @Injectable()
 export class MembersService extends BaseWorker implements OnModuleInit {
   options: any;
 
   constructor(
-    private readonly roleService: RoleService,
-    private readonly orgs: OrganizationService,
     private readonly cache: CacheService,
+    private readonly utilService: Auth0TokenService,
+    private readonly httpService: HttpService,
+    private readonly helper: OrganizationHelper,
+    private readonly mqtt: MqttService,
+    private readonly roleService: RoleService,
     private readonly memberService: MemberService,
     private readonly orgRoles: OrgRolesService,
-    private readonly utilService: Auth0TokenService,
     private readonly invitations: InvitationsService,
-    private readonly httpService: HttpService,
-    private readonly mqtt: MqttService,
   ) {
     super(MembersService.name);
   }
@@ -69,7 +70,8 @@ export class MembersService extends BaseWorker implements OnModuleInit {
         throw new HttpException('You do not have permission to perform this action', 403);
       }
 
-      const org = await this.orgs.getOrganization(orgId, req, bypassCache);
+      const orgs = (await this.cache.get('organizations')) as Array<organizations>;
+      const org = orgs.find(o => o.id === orgId) as organizations;
 
       if (!bypassCache) {
         const cached = await this.cache.get(`organizations:${orgId}:members`);
@@ -173,7 +175,12 @@ export class MembersService extends BaseWorker implements OnModuleInit {
         throw new HttpException('You do not have permission to perform this action', 403);
       }
 
-      const org = await this.orgs.getOrganization(orgId, req, bypassCache);
+      const orgs = (await this.cache.get('organizations')) as Array<organizations>;
+      const org = orgs.find(o => o.id === orgId);
+
+      if (!org) {
+        throw new NotFoundException(`Organization ${orgId} not found`);
+      }
 
       set(this.tags, 'org', org);
 

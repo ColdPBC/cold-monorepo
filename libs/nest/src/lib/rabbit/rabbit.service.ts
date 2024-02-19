@@ -1,7 +1,6 @@
 import { AmqpConnection, RabbitMQConfig } from '@golevelup/nestjs-rabbitmq';
 import { Global, Injectable, OnModuleInit } from '@nestjs/common';
 import { BaseWorker } from '../worker';
-import { ConfigService } from '@nestjs/config';
 import { RabbitMessagePayload } from './rabbit.types';
 import { service_definitions } from '../../validation/generated/modelSchema/service_definitionsSchema';
 import { SecretsService } from '../aws';
@@ -21,7 +20,7 @@ export type RabbitMessageOptions = {
 @Global()
 @Injectable()
 export class ColdRabbitService extends BaseWorker implements OnModuleInit {
-  constructor(private readonly config: ConfigService, private readonly client: AmqpConnection) {
+  constructor(private readonly client: AmqpConnection) {
     super(ColdRabbitService.name);
   }
 

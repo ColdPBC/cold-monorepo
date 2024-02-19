@@ -1,20 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { Span } from 'nestjs-ddtrace';
-import { BaseWorker, CacheService, ColdRabbitService, MqttService, PrismaService } from '@coldpbc/nest';
-import { LocationsService } from '../organizations/locations/locations.service';
-import { BroadcastEventService } from '../../../utilities/events/broadcast.event.service';
+import { BaseWorker, CacheService, PrismaService } from '@coldpbc/nest';
 
 @Span()
 @Injectable()
 export class IntegrationsService extends BaseWorker {
-  constructor(
-    private prisma: PrismaService,
-    private readonly cache: CacheService,
-    private readonly rabbit: ColdRabbitService,
-    private readonly locations: LocationsService,
-    private readonly broadcast: BroadcastEventService,
-    private readonly mqtt: MqttService,
-  ) {
+  constructor(private prisma: PrismaService, private readonly cache: CacheService) {
     super('PolicyContentService');
   }
 
