@@ -19,7 +19,7 @@ export class ConfigurationModule {
     let awsCreds: any = {};
 
     // FC_ENV should only be set in the Flight Control environment, not in SM
-    if (process.env['FC_ENV'] && process.env['AWS_ACCESS_KEY_ID'] && process.env['AWS_SECRET_ACCESS_KEY']) {
+    if (process.env['FC_ENV']) {
       awsCreds = {
         region: config.get('AWS_REGION', 'us-east-1'),
         credentials: {
@@ -28,7 +28,7 @@ export class ConfigurationModule {
         },
       };
 
-      return awsCreds;
+      return { ...awsCreds };
     }
 
     const profile = config?.get('AWS_PROFILE', 'default');
@@ -40,7 +40,7 @@ export class ConfigurationModule {
 
     if (ssoCreds.sessionToken) set(process.env, `AWS_SESSION_TOKEN`, ssoCreds.sessionToken);
 
-    return { region: config.get('AWS_REGION', 'us-east-1'), ...ssoCreds };
+    return { region: config.get('AWS_REGION', 'us-east-1'), credentials: ssoCreds };
   }
 
   static async forRootAsync(config?: ConfigService) {
@@ -70,19 +70,19 @@ export class ConfigurationModule {
     }
 
     const configSecrets: any = [];
-    const credentials = await ConfigurationModule.getAWSCredentials(config);
+    const aws = await ConfigurationModule.getAWSCredentials(config);
     const secrets = {};
 
-    if (!credentials?.accessKeyId) {
+    if (!aws.credentials?.accessKeyId) {
       throw new Error('Unable to locate AWS Credentials!');
     }
 
-    if (!credentials.credentials?.sessionToken) {
-      unset(credentials, 'Credentials.SessionToken');
+    if (!aws.credentials?.sessionToken) {
+      unset(aws.credentials, 'SessionToken');
     }
 
     const client = new SecretsManager({
-      ...credentials,
+      ...aws,
     });
 
     const parts = config.getOrThrow('DD_SERVICE')?.split('-');
