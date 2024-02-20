@@ -1,3 +1,10 @@
+## [1.114.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.114.1...v1.114.2) (2024-02-20)
+
+
+### Bug Fixes
+
+* make organization files a module ([d58fa9b](https://github.com/ColdPBC/cold-monorepo/commit/d58fa9b71cdf563f66aea192134dfcb6966e9b3b))
+
 ## [1.114.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.114.0...v1.114.1) (2024-02-20)
 
 
