@@ -60,24 +60,10 @@ services:
     ports:
       - '7001:7001'
     environment:
-      DATABASE_URL: postgres://postgres:postgres@postgres:5432/colddb
       PORT: 7001
-      API_ADMIN_EMAIL: api_admin@coldclimate.com
-      API_SERVER_DESCRIPTION: The staging server is our development server
-      API_SERVER_URL: http://localhost:7001
-      API_ADMIN_PASSWORD: ${API_ADMIN_PASSWORD}
-      DD_API_KEY: ${DD_API_KEY}
-      RABBIT_MQ_URL: amqp://guest:guest@rabbit:5672
-      AUTH0_CLIENT_SECRET: ${AUTH0_CLIENT_SECRET}
-      AUTH0_AUDIENCE: https://api.coldclimate.wtf/
-      AUTH0_CLIENT_ID: AocyNEqBocKfmU9AHUs0koGeZ73lbrkF
-      AUTH0_DOMAIN: dev-6qt527e13qyo4ls6.us.auth0.com
-      AUTH0_ORG_ID: org_VWv3Al9pLEI4CaOH
-      AUTH0_TOKEN_URL: https://dev-6qt527e13qyo4ls6.us.auth0.com/oauth/token
-      AUTH0_UI_CLIENT_ID: i8rCPXsLq9b2YKOOWUTfvgUj0iYD7dE3
-      LD_SDK_KEY: sdk-1d8c0508-63b9-4396-aceb-a3cd13ec16b2
       NODE_ENV: development
-      REDISCLOUD_URL: openai://cache:6379
+      DD_SERVICE: cold-api
+      LOG_FORMAT: pretty
     volumes:
       - /usr/src/app/node_modules
   climatiq:
@@ -92,8 +78,7 @@ services:
         NODE_ENV: development
         DD_SERVICE: cold-platform-climatiq
         DD_VERSION: 0.0.1
-        DD_API_KEY: ${DD_API_KEY}
-        FC_GIT_COMMIT_SHA: cdc3b19
+        LOG_FORMAT: pretty
         PORT: 7002
     container_name: cold-platform-climatiq
     restart: always
@@ -109,24 +94,9 @@ services:
       - '7002:7002'
     environment:
       PORT: 7002
-      DATABASE_URL: postgres://postgres:postgres@postgres:5432/colddb
-      API_ADMIN_EMAIL: api_admin@coldclimate.com
-      API_ADMIN_PASSWORD: ${API_ADMIN_PASSWORD}
-      DD_API_KEY: ${DD_API_KEY}
       DD_SERVICE: cold-platform-climatiq
-      AUTH0_CLIENT_SECRET: ${AUTH0_CLIENT_SECRET}
-      API_SERVER_DESCRIPTION: The staging server is our development server
-      API_SERVER_URL: http://api.coldclimate.wtf
-      AUTH0_AUDIENCE: https://api.coldclimate.wtf/
-      AUTH0_CLIENT_ID: AocyNEqBocKfmU9AHUs0koGeZ73lbrkF
-      AUTH0_DOMAIN: dev-6qt527e13qyo4ls6.us.auth0.com
-      AUTH0_ORG_ID: org_VWv3Al9pLEI4CaOH
-      AUTH0_TOKEN_URL: https://dev-6qt527e13qyo4ls6.us.auth0.com/oauth/token
-      AUTH0_UI_CLIENT_ID: i8rCPXsLq9b2YKOOWUTfvgUj0iYD7dE3
-      LD_SDK_KEY: sdk-1d8c0508-63b9-4396-aceb-a3cd13ec16b2
       NODE_ENV: development
-      REDISCLOUD_URL: openai://cache:6379
-      RABBIT_MQ_URL: amqp://guest:guest@rabbit:5672
+      LOG_FORMAT: pretty
     volumes:
       - /usr/src/app/node_modules
   openai:
@@ -142,8 +112,6 @@ services:
         DD_SERVICE: cold-platform-openai
         DD_VERSION: 0.0.1
         PORT: 7003
-        DD_API_KEY: ${DD_API_KEY}
-        FC_GIT_COMMIT_SHA: cdc3b19
     container_name: cold-platform-openai
     restart: always
     networks:
@@ -162,25 +130,11 @@ services:
     ports:
       - '7003:7003'
     environment:
-      DATABASE_URL: postgres://postgres:postgres@postgres:5432/colddb
       PORT: 7003
-      API_ADMIN_EMAIL: api_admin@coldclimate.com
-      API_ADMIN_PASSWORD: ${API_ADMIN_PASSWORD}
       DD_SERVICE: cold-platform-openai
       DD_API_KEY: ${DD_API_KEY}
-      AUTH0_CLIENT_SECRET: ${AUTH0_CLIENT_SECRET}
-      API_SERVER_DESCRIPTION: The staging server is our development server
-      API_SERVER_URL: http://localhost:7001
-      AUTH0_AUDIENCE: https://api.coldclimate.wtf/
-      AUTH0_CLIENT_ID: AocyNEqBocKfmU9AHUs0koGeZ73lbrkF
-      AUTH0_DOMAIN: dev-6qt527e13qyo4ls6.us.auth0.com
-      AUTH0_ORG_ID: org_VWv3Al9pLEI4CaOH
-      AUTH0_TOKEN_URL: https://dev-6qt527e13qyo4ls6.us.auth0.com/oauth/token
-      AUTH0_UI_CLIENT_ID: i8rCPXsLq9b2YKOOWUTfvgUj0iYD7dE3
-      LD_SDK_KEY: sdk-1d8c0508-63b9-4396-aceb-a3cd13ec16b2
       NODE_ENV: development
-      REDISCLOUD_URL: openai://cache:6379
-      RABBIT_MQ_URL: amqp://guest:guest@rabbit:5672
+      LOG_FORMAT: pretty
     volumes:
       - /usr/src/app/node_modules
   bayou:
@@ -213,24 +167,10 @@ services:
       - '7004:7004'
     environment:
       PORT: 7004
-      DATABASE_URL: postgres://postgres:postgres@postgres:5432/colddb
-      API_ADMIN_EMAIL: api_admin@coldclimate.com
-      API_ADMIN_PASSWORD: ${API_ADMIN_PASSWORD}
       DD_API_KEY: ${DD_API_KEY}
       DD_SERVICE: cold-platform-bayou
-      AUTH0_CLIENT_SECRET: ${AUTH0_CLIENT_SECRET}
-      API_SERVER_DESCRIPTION: The staging server is our development server
-      API_SERVER_URL: http://api.coldclimate.wtf
-      AUTH0_AUDIENCE: https://api.coldclimate.wtf/
-      AUTH0_CLIENT_ID: AocyNEqBocKfmU9AHUs0koGeZ73lbrkF
-      AUTH0_DOMAIN: dev-6qt527e13qyo4ls6.us.auth0.com
-      AUTH0_ORG_ID: org_VWv3Al9pLEI4CaOH
-      AUTH0_TOKEN_URL: https://dev-6qt527e13qyo4ls6.us.auth0.com/oauth/token
-      AUTH0_UI_CLIENT_ID: i8rCPXsLq9b2YKOOWUTfvgUj0iYD7dE3
-      LD_SDK_KEY: sdk-1d8c0508-63b9-4396-aceb-a3cd13ec16b2
       NODE_ENV: development
-      REDISCLOUD_URL: openai://cache:6379
-      RABBIT_MQ_URL: amqp://guest:guest@rabbit:5672
+      LOG_FORMAT: pretty
     volumes:
       - /usr/src/app/node_modules
   cache:
