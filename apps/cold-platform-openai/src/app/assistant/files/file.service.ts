@@ -249,7 +249,7 @@ export class FileService extends BaseWorker implements OnModuleInit {
     }
   }
 
-  async uploadToOpenAI(user: IAuthenticatedUser, file: Express.Multer.File) {
+  async uploadToOpenAI(user: IAuthenticatedUser, file: any) {
     const sourcePath = `./uploads/${file.filename}`;
     const destinationPath = `./uploads/${file.originalname}`;
 
