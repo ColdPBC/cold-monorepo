@@ -8,13 +8,13 @@ import { RoleModule } from '../auth0/roles/role.module';
 import { OrganizationFilesController } from './files/organization.files.controller';
 import { Auth0Module } from '../auth0/auth0.module';
 import { IntegrationsModule } from '../integrations/integrations.module';
-import { OrganizationFilesService } from './files/organization.files.service';
 import { OrganizationHelper } from './helpers/organization.helper';
 import { OrganizationIntegrationsModule } from './integrations/organization.integrations.module';
 import { InvitationsModule } from './invitations/invitations.module';
 import { LocationsModule } from './locations/locations.module';
 import { MembersModule } from './members/members.module';
 import { OrgRolesModule } from './roles/roles.module';
+import { OrganizationFilesModule } from './files/organization.files.module';
 
 @Module({
   imports: [
@@ -27,10 +27,12 @@ import { OrgRolesModule } from './roles/roles.module';
     RoleModule,
     MemberModule,
     MembersModule,
+    OrganizationFilesModule,
     OrgRolesModule,
+    OrganizationFilesModule,
   ],
   controllers: [OrganizationController, OrganizationFilesController],
-  providers: [OrganizationService, CacheService, OrganizationFilesService, OrganizationHelper],
+  providers: [OrganizationService, CacheService, OrganizationHelper],
   exports: [OrganizationHelper],
 })
 export class OrganizationModule {}
