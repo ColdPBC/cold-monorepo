@@ -53,7 +53,7 @@ export const AutomateComplianceStep = () => {
         <div className={'text-h1 text-left'}>Start Automation</div>
         <Markdown
           markdown={
-            `Cold Climate will pre-fill as much of the form as possible based on the documents below. You'll always be able to review and edit yourself before submitting anything. \n\nDocuments ` +
+            `Cold Climate will pre-fill as much of the form as possible based on the documents below. You'll always be able to review and edit yourself before submitting anything. \n\nDocuments` +
             `${documentsList}`
           }
         />

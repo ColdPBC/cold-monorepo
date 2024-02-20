@@ -248,7 +248,7 @@ export const getCompliancePageHandler = {
     rest.get(getApiUrl('/compliance_definitions/organization/:orgId'), (req, res, ctx) => {
       return res(ctx.json(getDefaultOrgCompliancePageMock()));
     }),
-    rest.post(getApiUrl('/compliance_definitions/organization/:orgId'), (req, res, ctx) => {
+    rest.post(getApiUrl('/compliance_definitions/:name/organization/:orgId'), (req, res, ctx) => {
       const { name, orgId } = req.params;
       return res(
         ctx.json({
@@ -266,7 +266,7 @@ export const getCompliancePageHandler = {
     rest.get(getApiUrl('/compliance_definitions/organization/:orgId'), (req, res, ctx) => {
       return res(ctx.json(getActivateOrgCompliancePageMock()));
     }),
-    rest.post(getApiUrl('/compliance_definitions/organization/:orgId'), (req, res, ctx) => {
+    rest.post(getApiUrl('/compliance_definitions/:name/organization/:orgId'), (req, res, ctx) => {
       const { name } = req.params;
       return res(
         ctx.json({
