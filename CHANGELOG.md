@@ -1,3 +1,10 @@
+## [1.114.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.114.0...v1.114.1) (2024-02-20)
+
+
+### Bug Fixes
+
+* inconsistent AWS credentials object ([5b261df](https://github.com/ColdPBC/cold-monorepo/commit/5b261df61c7037ab1c571af47da6070f69fc7fe7))
+
 # [1.114.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.113.0...v1.114.0) (2024-02-15)
 
 
