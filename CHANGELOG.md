@@ -1,3 +1,11 @@
+# [1.115.0-COLD-499.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.114.2...v1.115.0-COLD-499.1) (2024-02-20)
+
+
+### Features
+
+* added automate compliance flow step ([a24d563](https://github.com/ColdPBC/cold-monorepo/commit/a24d56350c46083821e5fb44ee5222e59d8046a3))
+* correct post requests to compliance endpoint ([5406c18](https://github.com/ColdPBC/cold-monorepo/commit/5406c180001a95fff60ab30f274db51fac93caf7))
+
 ## [1.114.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.114.1...v1.114.2) (2024-02-20)
 
 
