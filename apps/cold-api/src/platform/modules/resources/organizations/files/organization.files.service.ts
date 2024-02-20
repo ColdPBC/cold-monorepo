@@ -4,9 +4,9 @@ import { Span } from 'nestjs-ddtrace';
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import { BaseWorker, CacheService, Cuid2Generator, DarklyService, MqttService, PrismaService, S3Service } from '@coldpbc/nest';
 import { IntegrationsService } from '../../integrations/integrations.service';
-import { BroadcastEventService } from '../../../../utilities/events/broadcast.event.service';
-import { OrganizationService } from '../organization.service';
+import { EventService } from '../../../utilities/events/event.service';
 import { pick } from 'lodash';
+import { OrganizationHelper } from '../helpers/organization.helper';
 
 @Span()
 @Injectable()
@@ -17,11 +17,11 @@ export class OrganizationFilesService extends BaseWorker {
   constructor(
     readonly cache: CacheService,
     readonly darkly: DarklyService,
-    readonly events: BroadcastEventService,
+    readonly events: EventService,
     readonly integrations: IntegrationsService,
     readonly s3: S3Service,
     readonly mqtt: MqttService,
-    private readonly orgService: OrganizationService,
+    readonly helper: OrganizationHelper,
     readonly prisma: PrismaService,
   ) {
     super('OrganizationFilesService');
@@ -36,7 +36,7 @@ export class OrganizationFilesService extends BaseWorker {
 
   async getFiles(req: any, orgId: string, bpc?: boolean): Promise<any> {
     try {
-      const org = await this.orgService.getOrganization(orgId, req, bpc);
+      const org = await this.helper.getOrganizationById(orgId, req.user, bpc);
 
       if (!org) {
         throw new NotFoundException(`Organization ${orgId} not found`);
@@ -57,53 +57,80 @@ export class OrganizationFilesService extends BaseWorker {
     }
   }
 
-  async uploadFile(req: any, orgId: string, file: Express.MulterS3.File, bpc?: boolean) {
+  async uploadFile(req: any, orgId: string, file: Express.Multer.File, bpc?: boolean) {
     const { user, url } = req;
     try {
-      const org = await this.orgService.getOrganization(orgId, req, bpc);
+      const org = await this.helper.getOrganizationById(orgId, req.user, bpc);
 
       if (!org) {
         throw new NotFoundException(`Organization ${orgId} not found`);
       }
 
-      const existing = await this.prisma.organization_files.findUnique({
+      const hash = await S3Service.calculateChecksum(file);
+
+      const response = await this.s3.uploadStreamToS3(user, orgId, file);
+
+      let existing = await this.prisma.organization_files.findUnique({
         where: {
           s3Key: {
-            key: file.key,
-            bucket: file.bucket,
+            key: response.key,
+            bucket: response.bucket,
             organization_id: orgId,
           },
         },
       });
 
-      if (existing?.checksum === file.metadata.md5Hash) {
-        this.logger.warn(`file ${file.key} already exists in db`, file);
-        throw new ConflictException(`file ${file.key} already exists in db for org ${orgId}`);
+      if (existing) {
+        if (existing?.checksum === hash) {
+          this.logger.warn(`file ${file.filename} already exists in db`, file);
+          throw new ConflictException(`file ${file.filename} already exists in db for org ${orgId}`);
+        }
+
+        await this.prisma.organization_files.update({
+          where: {
+            id: existing.id,
+          },
+          data: {
+            id: new Cuid2Generator('ofile').scopedId,
+            original_name: file.originalname,
+            integration_id: null,
+            organization_id: orgId,
+            versionId: file['versionId'],
+            bucket: response.bucket,
+            key: response.key,
+            mimetype: file.mimetype,
+            size: file.size,
+            fieldname: file.fieldname,
+            encoding: file.encoding,
+            contentType: file.mimetype,
+            location: file.destination,
+            checksum: hash,
+          },
+        });
+      } else {
+        existing = await this.prisma.organization_files.create({
+          data: {
+            id: new Cuid2Generator('ofile').scopedId,
+            original_name: file.originalname,
+            integration_id: null,
+            organization_id: orgId,
+            versionId: response.uploaded.VersionId,
+            bucket: response.bucket,
+            key: response.key,
+            mimetype: file.mimetype,
+            size: file.size,
+            fieldname: file.fieldname,
+            encoding: file.encoding,
+            contentType: file.mimetype,
+            location: file.destination,
+            checksum: hash,
+          },
+        });
       }
 
-      const uploaded = await this.prisma.organization_files.create({
-        data: {
-          id: new Cuid2Generator('ofile').scopedId,
-          original_name: file.originalname,
-          integration_id: null,
-          organization_id: orgId,
-          versionId: file['versionId'],
-          bucket: file.bucket,
-          key: file.key,
-          mimetype: file.mimetype,
-          size: file.size,
-          acl: file.acl,
-          fieldname: file.fieldname,
-          encoding: file.encoding,
-          contentType: file.contentType,
-          location: file.location,
-          checksum: file.metadata.md5Hash,
-        },
-      });
+      await this.events.sendEvent(false, 'file.uploaded', existing, user, orgId);
 
-      await this.events.sendEvent(false, 'file.uploaded', uploaded, user, orgId);
-
-      return uploaded;
+      return existing;
     } catch (e) {
       this.logger.error(e);
 
@@ -126,7 +153,7 @@ export class OrganizationFilesService extends BaseWorker {
   async deleteFile(req: any, orgId: string, fileId: string) {
     const { user, url } = req;
     try {
-      const org = await this.orgService.getOrganization(orgId, req);
+      const org = await this.helper.getOrganizationById(orgId, req.user, true);
 
       if (!org) {
         throw new NotFoundException(`Organization ${orgId} not found`);

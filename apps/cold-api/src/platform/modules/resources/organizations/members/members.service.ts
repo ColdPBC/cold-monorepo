@@ -7,7 +7,6 @@ import { HttpService } from '@nestjs/axios';
 import { MemberService } from '../../auth0/members/member.service';
 import { OrgRolesService } from '../roles/roles.service';
 import { InvitationsService } from '../invitations/invitations.service';
-import { organizations } from '@prisma/client';
 import { OrganizationHelper } from '../helpers/organization.helper';
 
 @Injectable()
@@ -66,12 +65,7 @@ export class MembersService extends BaseWorker implements OnModuleInit {
   async getOrganizationMembers(orgId: string, req: any, bypassCache = false) {
     const { user } = req;
     try {
-      if (orgId !== user.coldclimate_claims.org_id && !user.isColdAdmin) {
-        throw new HttpException('You do not have permission to perform this action', 403);
-      }
-
-      const orgs = (await this.cache.get('organizations')) as Array<organizations>;
-      const org = orgs.find(o => o.id === orgId) as organizations;
+      const org = this.helper.getOrganizationById(orgId, user, bypassCache);
 
       if (!bypassCache) {
         const cached = await this.cache.get(`organizations:${orgId}:members`);
@@ -171,16 +165,7 @@ export class MembersService extends BaseWorker implements OnModuleInit {
     });
 
     try {
-      if (!user.isColdAdmin && orgId !== user.coldclimate_claims.org_id) {
-        throw new HttpException('You do not have permission to perform this action', 403);
-      }
-
-      const orgs = (await this.cache.get('organizations')) as Array<organizations>;
-      const org = orgs.find(o => o.id === orgId);
-
-      if (!org) {
-        throw new NotFoundException(`Organization ${orgId} not found`);
-      }
+      const org = await this.helper.getOrganizationById(orgId, user, bypassCache);
 
       set(this.tags, 'org', org);
 

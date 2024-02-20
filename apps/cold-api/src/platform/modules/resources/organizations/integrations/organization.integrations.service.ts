@@ -3,6 +3,7 @@ import { BaseWorker, CacheService, ColdRabbitService, MqttService, PrismaService
 import { LocationsService } from '../locations/locations.service';
 import { get } from 'lodash';
 import { EventService } from '../../../utilities/events/event.service';
+import { OrganizationHelper } from '../helpers/organization.helper';
 
 @Injectable()
 export class OrganizationIntegrationsService extends BaseWorker {
@@ -10,6 +11,7 @@ export class OrganizationIntegrationsService extends BaseWorker {
     private readonly cache: CacheService,
     private readonly locations: LocationsService,
     private readonly mqtt: MqttService,
+    private readonly helper: OrganizationHelper,
     private readonly prisma: PrismaService,
     private readonly rabbit: ColdRabbitService,
     private readonly broadcast: EventService,
@@ -190,18 +192,7 @@ export class OrganizationIntegrationsService extends BaseWorker {
         this.logger.warn(`Service definition ${body.service_definition_id} does not have a routing key at path 'rabbitMQ.publishOptions.routing_key'`, { service });
       }
 
-      const org = await this.prisma.organizations.findUnique({
-        where: {
-          id: user.isColdAdmin ? orgId : user.coldclimate_claims.org_id,
-        },
-        include: {
-          integrations: true,
-        },
-      });
-
-      if (!org) {
-        throw new UnprocessableEntityException(`Organization ${orgId} is invalid.`);
-      }
+      const org = await this.helper.getOrganizationById(orgId, user);
 
       await this.broadcast.sendEvent(
         false,

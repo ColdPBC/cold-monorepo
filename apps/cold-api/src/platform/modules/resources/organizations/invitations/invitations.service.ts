@@ -6,6 +6,7 @@ import { HttpService } from '@nestjs/axios';
 import { find, merge, omit } from 'lodash';
 import { ConfigService } from '@nestjs/config';
 import { organizations } from '@prisma/client';
+import { OrganizationHelper } from '../helpers/organization.helper';
 
 @Injectable()
 export class InvitationsService extends BaseWorker implements OnModuleInit {
@@ -17,6 +18,7 @@ export class InvitationsService extends BaseWorker implements OnModuleInit {
     private readonly config: ConfigService,
     private readonly roleService: RoleService,
     private readonly cache: CacheService,
+    private readonly helper: OrganizationHelper,
     private readonly utilService: Auth0TokenService,
     private readonly darkly: DarklyService,
     private readonly httpService: HttpService,
@@ -37,22 +39,9 @@ export class InvitationsService extends BaseWorker implements OnModuleInit {
     const { user } = req;
     try {
       // make sure org exists
-      const orgs = (await this.cache.get('organizations')) as Array<organizations>;
-      const org = orgs.find(o => o.id === orgId);
+      const org = await this.helper.getOrganizationById(orgId, user, false);
 
-      if (!org) {
-        throw new NotFoundException(`unable to find org ${orgId}`);
-      }
-
-      if (!user.isColdAdmin && orgId !== user.coldclimate_claims.org_id) {
-        throw new HttpException('You do not have permission to perform this action', 403);
-      }
-
-      if (org?.id) {
-        orgId = org.id;
-      } else {
-        throw new NotFoundException(`unable to find org by ${orgId}`);
-      }
+      orgId = org.id;
 
       let invitees: AxiosResponse;
 
@@ -100,22 +89,7 @@ export class InvitationsService extends BaseWorker implements OnModuleInit {
 
       console.log(suppressEmail);
 
-      let org: organizations = {} as organizations;
-
-      if (!bpc) {
-        const orgs = (await this.cache.get('organizations')) as Array<organizations>;
-        org = orgs.find(o => o.id === orgId) as organizations;
-      } else {
-        org = (await this.prisma.organizations.findUnique({
-          where: {
-            id: orgId,
-          },
-        })) as organizations;
-      }
-
-      if (!org) {
-        throw new NotFoundException(`organization ${orgId} not found`);
-      }
+      const org: organizations = await this.helper.getOrganizationById(orgId, user, bpc);
 
       const tags: Tags = {
         user: user.coldclimate_claims,
