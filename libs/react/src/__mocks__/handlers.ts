@@ -253,7 +253,7 @@ export const handlers = [
     return res(ctx.json(getDocumentsListTableMock()));
   }),
 
-  rest.get(getApiUrl('/organization/:orgId/files'), (req, res, ctx) => {
+  rest.get(getApiUrl('/organizations/:orgId/files'), (req, res, ctx) => {
     return res(ctx.json(getAllFilesMock()));
   }),
 

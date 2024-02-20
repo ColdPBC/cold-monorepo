@@ -673,7 +673,7 @@ export const getComplianceDetailPageHandler = {
 
 export const getDocumentListHandler = {
   default: [
-    rest.get(getApiUrl('/organization/:orgId/files'), (req, res, ctx) => {
+    rest.get(getApiUrl('/organizations/:orgId/files'), (req, res, ctx) => {
       return res(ctx.json(getAllFilesMock()));
     }),
 
@@ -682,7 +682,7 @@ export const getDocumentListHandler = {
     }),
   ],
   noFiles: [
-    rest.get(getApiUrl('/organization/:orgId/files'), (req, res, ctx) => {
+    rest.get(getApiUrl('/organizations/:orgId/files'), (req, res, ctx) => {
       return res(ctx.json([]));
     }),
 

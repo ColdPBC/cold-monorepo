@@ -9,6 +9,9 @@ export interface WizardProps {
     name: string;
     route: string;
   }[];
+  data: {
+    [key: string]: any;
+  };
 }
 
 interface WizardContextProps {
@@ -20,6 +23,10 @@ interface WizardContextProps {
     name: string;
     route: string;
   };
+  data: {
+    [key: string]: any;
+  };
+  navigateToStep: (stepName: string) => void;
 }
 
 export const WizardContext = React.createContext<WizardContextProps>({
@@ -31,6 +38,8 @@ export const WizardContext = React.createContext<WizardContextProps>({
     name: '',
     route: '',
   },
+  data: {},
+  navigateToStep: () => {},
 });
 
 export const Wizard = (props: PropsWithChildren<WizardProps>) => {
@@ -38,7 +47,7 @@ export const Wizard = (props: PropsWithChildren<WizardProps>) => {
 
   const location = useLocation();
 
-  const { steps, baseURL, children } = props;
+  const { steps, baseURL, children, data } = props;
 
   const [currentStep, setCurrentStep] = React.useState<{
     title: string;
@@ -94,6 +103,8 @@ export const Wizard = (props: PropsWithChildren<WizardProps>) => {
             navigateToStep(step.name);
           }
         },
+        data,
+        navigateToStep,
       }}>
       {children}
     </WizardContext.Provider>

@@ -2,7 +2,7 @@ import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { StoryMockProvider } from '@coldpbc/mocks';
 import { Route, Routes } from 'react-router-dom';
-import { ComplianceWizard } from '@coldpbc/components';
+import { ComplianceWizard, WizardRoutes } from '@coldpbc/components';
 
 const meta: Meta<typeof ComplianceWizard> = {
   title: 'Pages/ComplianceWizard',
@@ -20,14 +20,7 @@ export const Default: Story = {
       <StoryMockProvider memoryRouterProps={{ initialEntries: ['/wizard/compliance/rei'] }}>
         <Routes>
           <Route path={'/compliance'} element={<div className={'text-tc-primary'}>Compliance Home</div>} />
-          <Route path={'/wizard'}>
-            <Route path={'compliance/:name'} element={<ComplianceWizard />}>
-              <Route path={'documents'} element={<div className={'text-tc-primary'}>Documents Upload Step</div>} />
-              <Route path={'automate'} element={<div className={'text-tc-primary'}>Automation Step</div>} />
-              <Route path={'processing'} element={<div className={'text-tc-primary'}>Automation Processing Step</div>} />
-              <Route path={'questionnaire'} element={<div className={'text-tc-primary'}>Survey Taking Step</div>} />
-            </Route>
-          </Route>
+          {WizardRoutes()}
           <Route path={'/assessments'} element={<div className={'text-tc-primary'}>Assessments</div>} />
         </Routes>
       </StoryMockProvider>
@@ -38,17 +31,10 @@ export const Default: Story = {
 export const AutomationProcessingStep: Story = {
   render: args => {
     return (
-      <StoryMockProvider memoryRouterProps={{ initialEntries: ['/wizard/compliance/rei/automation'] }}>
+      <StoryMockProvider memoryRouterProps={{ initialEntries: ['/wizard/compliance/rei/processing'] }}>
         <Routes>
           <Route path={'/compliance'} element={<div className={'text-tc-primary'}>Compliance Home</div>} />
-          <Route path={'/wizard'}>
-            <Route path="compliance/:name" element={<ComplianceWizard />}>
-              <Route path={'documents'} element={<div className={'text-tc-primary'}>Documents Upload Step</div>} />
-              <Route path={'automate'} element={<div className={'text-tc-primary'}>Automation Step</div>} />
-              <Route path={'automation'} element={<div className={'text-tc-primary'}>Automation Processing Step</div>} />
-              <Route path={'survey'} element={<div className={'text-tc-primary'}>Survey Taking Step</div>} />
-            </Route>
-          </Route>
+          {WizardRoutes()}
           <Route path={'/assessments'} element={<div className={'text-tc-primary'}>Assessments</div>} />
         </Routes>
       </StoryMockProvider>
@@ -59,17 +45,24 @@ export const AutomationProcessingStep: Story = {
 export const QuestionnaireStep: Story = {
   render: args => {
     return (
-      <StoryMockProvider memoryRouterProps={{ initialEntries: ['/wizard/compliance/rei/survey'] }}>
+      <StoryMockProvider memoryRouterProps={{ initialEntries: ['/wizard/compliance/rei/questionnaire'] }}>
         <Routes>
           <Route path={'/compliance'} element={<div className={'text-tc-primary'}>Compliance Home</div>} />
-          <Route path={'/wizard'}>
-            <Route path="compliance/:name" element={<ComplianceWizard />}>
-              <Route path={'documents'} element={<div className={'text-tc-primary'}>Documents Upload Step</div>} />
-              <Route path={'automate'} element={<div className={'text-tc-primary'}>Automation Step</div>} />
-              <Route path={'automation'} element={<div className={'text-tc-primary'}>Automation Processing Step</div>} />
-              <Route path={'survey'} element={<div className={'text-tc-primary'}>Survey Taking Step</div>} />
-            </Route>
-          </Route>
+          {WizardRoutes()}
+          <Route path={'/assessments'} element={<div className={'text-tc-primary'}>Assessments</div>} />
+        </Routes>
+      </StoryMockProvider>
+    );
+  },
+};
+
+export const AutomateComplianceStep: Story = {
+  render: args => {
+    return (
+      <StoryMockProvider memoryRouterProps={{ initialEntries: ['/wizard/compliance/rei/automate'] }}>
+        <Routes>
+          <Route path={'/compliance'} element={<div className={'text-tc-primary'}>Compliance Home</div>} />
+          {WizardRoutes()}
           <Route path={'/assessments'} element={<div className={'text-tc-primary'}>Assessments</div>} />
         </Routes>
       </StoryMockProvider>
