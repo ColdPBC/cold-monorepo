@@ -14,7 +14,7 @@ export interface WizardProps {
   };
 }
 
-interface WizardContextProps {
+export interface WizardContextType {
   nextStep: () => void;
   prevStep: () => void;
   setCurrentStep: (currentStep: string) => void;
@@ -29,7 +29,7 @@ interface WizardContextProps {
   navigateToStep: (stepName: string) => void;
 }
 
-export const WizardContext = React.createContext<WizardContextProps>({
+export const WizardContext = React.createContext<WizardContextType>({
   nextStep: () => {},
   prevStep: () => {},
   setCurrentStep: () => {},
