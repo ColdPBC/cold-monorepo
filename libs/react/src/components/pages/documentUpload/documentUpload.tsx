@@ -3,9 +3,8 @@ import { AppContent, Card, Datagrid, ErrorFallback, Spinner } from '@coldpbc/com
 import { ErrorType } from '@coldpbc/enums';
 import { isAxiosError } from 'axios';
 import { useAddToastMessage, useAuth0Wrapper, useColdContext, useOrgSWR } from '@coldpbc/hooks';
-import { axiosFetcher, openAIFetcher } from '@coldpbc/fetchers';
+import { axiosFetcher } from '@coldpbc/fetchers';
 import { ToastMessage } from '@coldpbc/interfaces';
-import useSWR from 'swr';
 import { withErrorBoundary } from 'react-error-boundary';
 import { isArray } from 'lodash';
 
