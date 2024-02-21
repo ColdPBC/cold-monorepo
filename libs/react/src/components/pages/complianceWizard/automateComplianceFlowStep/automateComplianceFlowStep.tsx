@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { useAddToastMessage, useAuth0Wrapper, useColdContext, useOrgSWR } from '@coldpbc/hooks';
 import { axiosFetcher } from '@coldpbc/fetchers';
-import { Spinner, WizardContext, ComplianceWizardLairBase } from '@coldpbc/components';
+import { WizardContext, ComplianceWizardLairBase } from '@coldpbc/components';
 import { ButtonTypes, ErrorType } from '@coldpbc/enums';
 import { isAxiosError } from 'axios';
 import { ToastMessage } from '@coldpbc/interfaces';
