@@ -14,7 +14,7 @@ const meta: Meta<typeof ComplianceWizard> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
+export const DocumentsUploadStep: Story = {
   render: args => {
     return (
       <StoryMockProvider memoryRouterProps={{ initialEntries: ['/wizard/compliance/rei'] }}>
@@ -28,7 +28,21 @@ export const Default: Story = {
   },
 };
 
-export const AutomationProcessingStep: Story = {
+export const AutomateStep: Story = {
+  render: args => {
+    return (
+      <StoryMockProvider memoryRouterProps={{ initialEntries: ['/wizard/compliance/rei/automate'] }}>
+        <Routes>
+          <Route path={'/compliance'} element={<div className={'text-tc-primary'}>Compliance Home</div>} />
+          {WizardRoutes()}
+          <Route path={'/assessments'} element={<div className={'text-tc-primary'}>Assessments</div>} />
+        </Routes>
+      </StoryMockProvider>
+    );
+  },
+};
+
+export const ProcessingStep: Story = {
   render: args => {
     return (
       <StoryMockProvider memoryRouterProps={{ initialEntries: ['/wizard/compliance/rei/processing'] }}>
@@ -46,20 +60,6 @@ export const QuestionnaireStep: Story = {
   render: args => {
     return (
       <StoryMockProvider memoryRouterProps={{ initialEntries: ['/wizard/compliance/rei/questionnaire'] }}>
-        <Routes>
-          <Route path={'/compliance'} element={<div className={'text-tc-primary'}>Compliance Home</div>} />
-          {WizardRoutes()}
-          <Route path={'/assessments'} element={<div className={'text-tc-primary'}>Assessments</div>} />
-        </Routes>
-      </StoryMockProvider>
-    );
-  },
-};
-
-export const AutomateComplianceStep: Story = {
-  render: args => {
-    return (
-      <StoryMockProvider memoryRouterProps={{ initialEntries: ['/wizard/compliance/rei/automate'] }}>
         <Routes>
           <Route path={'/compliance'} element={<div className={'text-tc-primary'}>Compliance Home</div>} />
           {WizardRoutes()}

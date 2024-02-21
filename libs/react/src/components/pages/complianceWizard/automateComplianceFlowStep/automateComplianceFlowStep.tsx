@@ -1,14 +1,13 @@
 import React, { useContext } from 'react';
 import { useAddToastMessage, useAuth0Wrapper, useColdContext, useOrgSWR } from '@coldpbc/hooks';
 import { axiosFetcher } from '@coldpbc/fetchers';
-import { BaseButton, Markdown, Spinner, WizardContext } from '@coldpbc/components';
-import ReactMarkdown from 'react-markdown';
+import { Spinner, WizardContext, ComplianceWizardLairBase } from '@coldpbc/components';
 import { ButtonTypes, ErrorType } from '@coldpbc/enums';
 import { isAxiosError } from 'axios';
 import { ToastMessage } from '@coldpbc/interfaces';
 import { useSWRConfig } from 'swr';
 
-export const AutomateComplianceStep = () => {
+export const AutomateComplianceFlowStep = () => {
   const documents = useOrgSWR<any, any>(['/files'], axiosFetcher);
   const { logError } = useColdContext();
   const { orgId } = useAuth0Wrapper();
@@ -29,10 +28,6 @@ export const AutomateComplianceStep = () => {
     }
   };
 
-  if (documents.isLoading) {
-    return <Spinner />;
-  }
-
   if (documents.error) {
     logError(documents.error, ErrorType.SWRError);
     return null;
@@ -48,27 +43,14 @@ export const AutomateComplianceStep = () => {
     .join('');
 
   return (
-    <div className={'w-full h-full flex flex-col justify-center items-center text-tc-primary'}>
-      <div className={'w-[847px]'}>
-        <div className={'text-h1 text-left'}>Start Automation</div>
-        <Markdown
-          markdown={
-            `Cold Climate will pre-fill as much of the form as possible based on the documents below. You'll always be able to review and edit yourself before submitting anything. \n\nDocuments` +
-            `${documentsList}`
-          }
-        />
-        <div className={'w-full flex flex-row space-x-4'}>
-          <BaseButton className={'h-[72px] w-full bg-green-500 hover:bg-green-400 active:bg-green-300'} label={'Start'} onClick={() => startAutomation()} />
-          <BaseButton
-            className={'h-[72px] w-full'}
-            label={'Skip For Now'}
-            onClick={() => {
-              navigateToStep('questionnaire');
-            }}
-            variant={ButtonTypes.secondary}
-          />
-        </div>
-      </div>
-    </div>
+    <ComplianceWizardLairBase
+      title={'Start Automation'}
+      markdown={`Cold Climate will pre-fill as much of the form as possible based on the documents below. You'll always be able to review and edit yourself before submitting anything. \n\nDocuments ${documentsList}`}
+      ctas={[
+        { label: 'Start', onClick: () => startAutomation(), className: 'h-[72px] w-full bg-green-500 hover:bg-green-400 active:bg-green-300' },
+        { label: 'Skip For Now', onClick: () => navigateToStep('questionnaire'), variant: ButtonTypes.secondary, className: 'h-[72px] w-full' },
+      ]}
+      isLoading={documents.isLoading}
+    />
   );
 };
