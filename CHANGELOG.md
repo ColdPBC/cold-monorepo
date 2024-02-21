@@ -1,3 +1,11 @@
+# [1.115.0-COLD-499.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.115.0-COLD-499.1...v1.115.0-COLD-499.2) (2024-02-21)
+
+
+### Features
+
+* added new compliance lair base for steps that have the same layout ([c914541](https://github.com/ColdPBC/cold-monorepo/commit/c9145411e4e63e5280142da4dbb9f10c200161f8))
+* updated storybook mock provider to have wizard context ([f7a9b92](https://github.com/ColdPBC/cold-monorepo/commit/f7a9b920c680a136be9523bdc623be6c9e29ad90))
+
 # [1.115.0-COLD-499.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.114.2...v1.115.0-COLD-499.1) (2024-02-20)
 
 
