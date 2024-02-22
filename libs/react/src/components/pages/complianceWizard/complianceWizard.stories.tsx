@@ -2,7 +2,8 @@ import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { StoryMockProvider } from '@coldpbc/mocks';
 import { Route, Routes } from 'react-router-dom';
-import { ComplianceWizard, WizardRoutes } from '@coldpbc/components';
+import { ApplicationToaster, ComplianceWizard, WizardRoutes } from '@coldpbc/components';
+import React from 'react';
 
 const meta: Meta<typeof ComplianceWizard> = {
   title: 'Pages/ComplianceWizard',
@@ -14,7 +15,7 @@ const meta: Meta<typeof ComplianceWizard> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const DocumentsUploadStep: Story = {
+export const Default: Story = {
   render: args => {
     return (
       <StoryMockProvider memoryRouterProps={{ initialEntries: ['/wizard/compliance/rei'] }}>
@@ -23,26 +24,13 @@ export const DocumentsUploadStep: Story = {
           {WizardRoutes()}
           <Route path={'/assessments'} element={<div className={'text-tc-primary'}>Assessments</div>} />
         </Routes>
+        <ApplicationToaster />
       </StoryMockProvider>
     );
   },
 };
 
-export const AutomateStep: Story = {
-  render: args => {
-    return (
-      <StoryMockProvider memoryRouterProps={{ initialEntries: ['/wizard/compliance/rei/automate'] }}>
-        <Routes>
-          <Route path={'/compliance'} element={<div className={'text-tc-primary'}>Compliance Home</div>} />
-          {WizardRoutes()}
-          <Route path={'/assessments'} element={<div className={'text-tc-primary'}>Assessments</div>} />
-        </Routes>
-      </StoryMockProvider>
-    );
-  },
-};
-
-export const ProcessingStep: Story = {
+export const AutomationProcessingStep: Story = {
   render: args => {
     return (
       <StoryMockProvider memoryRouterProps={{ initialEntries: ['/wizard/compliance/rei/processing'] }}>
@@ -51,6 +39,7 @@ export const ProcessingStep: Story = {
           {WizardRoutes()}
           <Route path={'/assessments'} element={<div className={'text-tc-primary'}>Assessments</div>} />
         </Routes>
+        <ApplicationToaster />
       </StoryMockProvider>
     );
   },
@@ -65,6 +54,7 @@ export const QuestionnaireStep: Story = {
           {WizardRoutes()}
           <Route path={'/assessments'} element={<div className={'text-tc-primary'}>Assessments</div>} />
         </Routes>
+        <ApplicationToaster />
       </StoryMockProvider>
     );
   },

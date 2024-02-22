@@ -23,7 +23,7 @@ export const ComplianceWizard = () => {
     return null;
   }
 
-  if (name) {
+  if (name && compliances.data && orgCompliances.data) {
     return (
       <MainContent>
         <Wizard
