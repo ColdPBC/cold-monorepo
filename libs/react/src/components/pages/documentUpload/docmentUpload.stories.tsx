@@ -38,7 +38,7 @@ export const Default: Story = {
       await canvas.findByText('Document Name');
       await canvas.findByText('Document Type');
       // find file input with label Document Upload
-      const fileInput = (await canvas.findByLabelText('Document Upload')) as HTMLInputElement;
+      const fileInput = (await canvas.findByLabelText('Upload Documents')) as HTMLInputElement;
       const file = new File(['test file content'], 'fakeFile.txt', {
         type: 'text/plain',
       });
@@ -70,7 +70,7 @@ export const NoFiles: Story = {
       // find documents-list-card-no-documents in document-list-card
       await within(documentListCard).findByTestId('documents-list-card-no-documents');
       // upload a file
-      const fileInput = (await canvas.findByLabelText('Document Upload')) as HTMLInputElement;
+      const fileInput = (await canvas.findByLabelText('Upload Documents')) as HTMLInputElement;
       const file = new File(['test file content'], 'fakeFile.txt', {
         type: 'text/plain',
       });
