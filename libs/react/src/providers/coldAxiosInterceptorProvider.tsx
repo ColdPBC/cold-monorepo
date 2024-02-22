@@ -7,7 +7,7 @@ import { useColdContext } from '@coldpbc/hooks';
 
 const setAxiosTokenInterceptor = async (getAccessTokenSilently: (options?: GetTokenSilentlyOptions) => Promise<string>): Promise<void> => {
   axios.interceptors.request.use(async config => {
-    if (config.baseURL === resolveAPIUrl() || config.baseURL === import.meta.env['VITE_OPENAI_URL']) {
+    if (config.baseURL === resolveAPIUrl()) {
       const audience = import.meta.env.VITE_COLD_API_AUDIENCE as string;
       const accessToken = await getAccessTokenSilently({
         authorizationParams: {

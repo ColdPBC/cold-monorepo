@@ -1,3 +1,31 @@
+# [1.115.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.114.2...v1.115.0) (2024-02-22)
+
+
+### Features
+
+* added automate compliance flow step ([a24d563](https://github.com/ColdPBC/cold-monorepo/commit/a24d56350c46083821e5fb44ee5222e59d8046a3))
+* added new compliance lair base for steps that have the same layout ([c914541](https://github.com/ColdPBC/cold-monorepo/commit/c9145411e4e63e5280142da4dbb9f10c200161f8))
+* correct post requests to compliance endpoint ([5406c18](https://github.com/ColdPBC/cold-monorepo/commit/5406c180001a95fff60ab30f274db51fac93caf7))
+* remove open ai fetcher ([0b633b2](https://github.com/ColdPBC/cold-monorepo/commit/0b633b28676e8a0b77487056809a54b868f489de))
+* remove VITE_OPENAI_URL references ([43f6678](https://github.com/ColdPBC/cold-monorepo/commit/43f6678562639b741863bf232cc6c429f48b32ef))
+* updated storybook mock provider to have wizard context ([f7a9b92](https://github.com/ColdPBC/cold-monorepo/commit/f7a9b920c680a136be9523bdc623be6c9e29ad90))
+
+# [1.115.0-COLD-499.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.115.0-COLD-499.1...v1.115.0-COLD-499.2) (2024-02-21)
+
+
+### Features
+
+* added new compliance lair base for steps that have the same layout ([c914541](https://github.com/ColdPBC/cold-monorepo/commit/c9145411e4e63e5280142da4dbb9f10c200161f8))
+* updated storybook mock provider to have wizard context ([f7a9b92](https://github.com/ColdPBC/cold-monorepo/commit/f7a9b920c680a136be9523bdc623be6c9e29ad90))
+
+# [1.115.0-COLD-499.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.114.2...v1.115.0-COLD-499.1) (2024-02-20)
+
+
+### Features
+
+* added automate compliance flow step ([a24d563](https://github.com/ColdPBC/cold-monorepo/commit/a24d56350c46083821e5fb44ee5222e59d8046a3))
+* correct post requests to compliance endpoint ([5406c18](https://github.com/ColdPBC/cold-monorepo/commit/5406c180001a95fff60ab30f274db51fac93caf7))
+
 ## [1.114.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.114.1...v1.114.2) (2024-02-20)
 
 

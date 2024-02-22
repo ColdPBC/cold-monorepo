@@ -2,10 +2,9 @@ import React from 'react';
 import { AppContent, Card, Datagrid, ErrorFallback, Spinner } from '@coldpbc/components';
 import { ErrorType } from '@coldpbc/enums';
 import { isAxiosError } from 'axios';
-import { useAddToastMessage, useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
-import { axiosFetcher, openAIFetcher } from '@coldpbc/fetchers';
+import { useAddToastMessage, useAuth0Wrapper, useColdContext, useOrgSWR } from '@coldpbc/hooks';
+import { axiosFetcher } from '@coldpbc/fetchers';
 import { ToastMessage } from '@coldpbc/interfaces';
-import useSWR from 'swr';
 import { withErrorBoundary } from 'react-error-boundary';
 import { isArray } from 'lodash';
 
@@ -14,7 +13,7 @@ export const _DocumentUpload = () => {
   const { addToastMessage } = useAddToastMessage();
   const { logError } = useColdContext();
 
-  const filesSWR = useSWR<any, any, any>([`/organization/${orgId}/files`, 'GET'], openAIFetcher);
+  const filesSWR = useOrgSWR<any, any>([`/files`, 'GET'], axiosFetcher);
 
   const uploadDocument = async (file: File) => {
     const formData = new FormData();
