@@ -1,12 +1,16 @@
 import React from 'react';
 import { IButtonProps } from '@coldpbc/interfaces';
-import { BaseButton, Markdown, Spinner } from '@coldpbc/components';
+import { BaseButton, DocumentUploadButton, Markdown, Spinner } from '@coldpbc/components';
 import { GlobalSizes } from '@coldpbc/enums';
 
 export interface ComplianceWizardLairBaseProps {
   title: string;
   markdown: string;
-  ctas?: IButtonProps[];
+  ctas?: Array<
+    IButtonProps & {
+      isDocumentUpload?: boolean;
+    }
+  >;
   ['data-testid']?: string;
   isLoading?: boolean;
 }
@@ -24,7 +28,11 @@ export const ComplianceWizardLairBase = (props: ComplianceWizardLairBaseProps) =
             <Markdown markdown={markdown} />
             <div className={'w-full flex flex-row space-x-4'}>
               {ctas?.map((cta, index) => {
-                return <BaseButton key={index} {...cta} />;
+                if (cta.isDocumentUpload) {
+                  return <DocumentUploadButton key={`cta_${index}`} buttonProps={{ ...cta }} />;
+                } else {
+                  return <BaseButton key={`cta_${index}`} {...cta} />;
+                }
               })}
             </div>
           </div>

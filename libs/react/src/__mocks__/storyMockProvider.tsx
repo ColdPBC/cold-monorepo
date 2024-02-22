@@ -6,7 +6,7 @@ import { SWRConfig } from 'swr';
 import { MemoryRouter, MemoryRouterProps } from 'react-router-dom';
 import { Auth0ProviderOptions } from '@auth0/auth0-react';
 import { ErrorType } from '@coldpbc/enums';
-import { WizardContextType, WizardContext } from '@coldpbc/components';
+import { WizardContext, WizardContextType } from '@coldpbc/components';
 
 export const StoryMockProvider = (
   props: PropsWithChildren<{
