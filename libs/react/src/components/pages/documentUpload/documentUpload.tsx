@@ -1,61 +1,15 @@
 import React from 'react';
-import { AppContent, Card, Datagrid, ErrorFallback, Spinner } from '@coldpbc/components';
-import { ErrorType } from '@coldpbc/enums';
-import { isAxiosError } from 'axios';
-import { useAddToastMessage, useAuth0Wrapper, useColdContext, useOrgSWR } from '@coldpbc/hooks';
+import { AppContent, Card, Datagrid, DocumentUploadButton, ErrorFallback, Spinner } from '@coldpbc/components';
+import { ButtonTypes, ErrorType } from '@coldpbc/enums';
+import { useColdContext, useOrgSWR } from '@coldpbc/hooks';
 import { axiosFetcher } from '@coldpbc/fetchers';
-import { ToastMessage } from '@coldpbc/interfaces';
 import { withErrorBoundary } from 'react-error-boundary';
 import { isArray } from 'lodash';
 
 export const _DocumentUpload = () => {
-  const { orgId } = useAuth0Wrapper();
-  const { addToastMessage } = useAddToastMessage();
   const { logError } = useColdContext();
 
   const filesSWR = useOrgSWR<any, any>([`/files`, 'GET'], axiosFetcher);
-
-  const uploadDocument = async (file: File) => {
-    const formData = new FormData();
-    formData.append('file', file);
-    const headers = JSON.stringify({
-      'Content-Type': 'multipart/form-data',
-    });
-    const response = await axiosFetcher([`/organizations/${orgId}/files`, 'POST', formData, headers]);
-    if (isAxiosError(response)) {
-      await addToastMessage({
-        message: 'Upload failed',
-        type: ToastMessage.FAILURE,
-      });
-      logError(response.message, ErrorType.AxiosError, response);
-    } else {
-      await addToastMessage({
-        message: 'Upload successful',
-        type: ToastMessage.SUCCESS,
-      });
-      await filesSWR.mutate(
-        (data: any) => {
-          return [
-            ...data,
-            {
-              original_name: file.name,
-            },
-          ];
-        },
-        {
-          revalidate: false,
-        },
-      );
-    }
-  };
-
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files;
-    if (files) {
-      const file = files[0];
-      uploadDocument(file);
-    }
-  };
 
   const getFileNameAndExtension = (file: any) => {
     if (file.original_name) {
@@ -92,7 +46,12 @@ export const _DocumentUpload = () => {
   return (
     <AppContent title="Documents">
       <Card title={'Documents List'} className={'w-full px-4'} data-testid={'documents-list-card'}>
-        <input id="file" type="file" onChange={handleFileChange} aria-label={'Document Upload'} />
+        <DocumentUploadButton
+          buttonProps={{
+            label: 'Upload Documents',
+            variant: ButtonTypes.primary,
+          }}
+        />
         {data.length > 0 ? (
           <Datagrid definitionURL={'/components/documents_list_table'} items={data} data-testid={'documents-list-table'} />
         ) : (

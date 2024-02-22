@@ -1,3 +1,10 @@
+# [1.116.0-COLD-498.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.115.0...v1.116.0-COLD-498.1) (2024-02-22)
+
+
+### Features
+
+* create documents upload wizard ([318a259](https://github.com/ColdPBC/cold-monorepo/commit/318a259c56b3b64944de3949f66d8d7d6fbf8744))
+
 # [1.115.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.114.2...v1.115.0) (2024-02-22)
 
 
