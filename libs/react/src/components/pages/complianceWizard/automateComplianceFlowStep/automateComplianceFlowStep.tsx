@@ -8,12 +8,12 @@ import { ToastMessage } from '@coldpbc/interfaces';
 import { useSWRConfig } from 'swr';
 
 export const AutomateComplianceFlowStep = () => {
-  const documents = useOrgSWR<any, any>(['/files'], axiosFetcher);
+  const documents = useOrgSWR<any, any>(['/files', 'GET'], axiosFetcher);
   const { logError } = useColdContext();
   const { orgId } = useAuth0Wrapper();
   const { addToastMessage } = useAddToastMessage();
   const { nextStep, navigateToStep } = useContext(WizardContext);
-  const { mutate } = useSWRConfig();
+  const { mutate, cache } = useSWRConfig();
 
   const startAutomation = async () => {
     // post to start automation
@@ -32,7 +32,6 @@ export const AutomateComplianceFlowStep = () => {
     logError(documents.error, ErrorType.SWRError);
     return null;
   }
-
   // convert documents to list and then to concatenated string for markdown to display
   const documentsList: string = documents.data
     ?.map((document: any) => {

@@ -1,12 +1,12 @@
 import React from 'react';
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
-import { ApplicationToaster, DocumentsUploadWizard } from '@coldpbc/components';
+import { ApplicationToaster, DocumentsUploadComplianceFlowStep } from '@coldpbc/components';
 import { StoryMockProvider } from '@coldpbc/mocks';
 
-const meta: Meta<typeof DocumentsUploadWizard> = {
+const meta: Meta<typeof DocumentsUploadComplianceFlowStep> = {
   title: 'Organisms/DocumentsUploadWizard',
-  component: DocumentsUploadWizard,
+  component: DocumentsUploadComplianceFlowStep,
   tags: ['autodocs'],
   decorators: [withKnobs],
 };
@@ -39,7 +39,7 @@ export const Default: Story = {
           },
           navigateToStep: () => {},
         }}>
-        <DocumentsUploadWizard {...args} />
+        <DocumentsUploadComplianceFlowStep {...args} />
         <ApplicationToaster />
       </StoryMockProvider>
     );
