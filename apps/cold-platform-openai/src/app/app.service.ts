@@ -71,7 +71,12 @@ export class AppService extends BaseWorker implements OnModuleInit {
   }
 
   async createAssistant(parsed: any) {
-    const service = parsed.service;
+    const service = await this.prisma.service_definitions.findUnique({
+      where: {
+        name: 'cold-platform-openai',
+      },
+    });
+
     const organization: organizations = parsed.organization;
     const user = parsed.user;
 
