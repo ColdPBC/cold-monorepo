@@ -239,7 +239,7 @@ export const handlers = [
     return res(ctx.json(getOrganizationComplianceMock()));
   }),
 
-  rest.post(getApiUrl('/compliance_definitions/organization/:orgId'), (req, res, ctx) => {
+  rest.post(getApiUrl('/compliance_definitions/:name/organization/:orgId'), (req, res, ctx) => {
     const { name, orgId } = req.params;
     return res(
       ctx.json({
@@ -253,7 +253,7 @@ export const handlers = [
     return res(ctx.json(getDocumentsListTableMock()));
   }),
 
-  rest.get(getApiUrl('/organization/:orgId/files'), (req, res, ctx) => {
+  rest.get(getApiUrl('/organizations/:orgId/files'), (req, res, ctx) => {
     return res(ctx.json(getAllFilesMock()));
   }),
 
