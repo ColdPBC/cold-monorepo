@@ -1,3 +1,12 @@
+# [1.116.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.115.0...v1.116.0) (2024-02-22)
+
+
+### Features
+
+* create documents upload wizard ([318a259](https://github.com/ColdPBC/cold-monorepo/commit/318a259c56b3b64944de3949f66d8d7d6fbf8744))
+* Handle documents upload in document uploads step ([dee0457](https://github.com/ColdPBC/cold-monorepo/commit/dee045718485f5cefada5dce9ab455bc4e11275d))
+* made updates to reuse functions for document upload ([f9398c0](https://github.com/ColdPBC/cold-monorepo/commit/f9398c03b82d1515946e7dedba65c17ec7aa5d0c))
+
 # [1.116.0-COLD-498.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.115.0...v1.116.0-COLD-498.1) (2024-02-22)
 
 
