@@ -13,7 +13,7 @@ export const AutomateComplianceFlowStep = () => {
   const { orgId } = useAuth0Wrapper();
   const { addToastMessage } = useAddToastMessage();
   const { nextStep, navigateToStep } = useContext(WizardContext);
-  const { mutate, cache } = useSWRConfig();
+  const { mutate } = useSWRConfig();
 
   const startAutomation = async () => {
     // post to start automation

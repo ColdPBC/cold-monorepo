@@ -5,7 +5,7 @@ import { ApplicationToaster, DocumentsUploadComplianceFlowStep } from '@coldpbc/
 import { StoryMockProvider } from '@coldpbc/mocks';
 
 const meta: Meta<typeof DocumentsUploadComplianceFlowStep> = {
-  title: 'Organisms/DocumentsUploadWizard',
+  title: 'Organisms/DocumentsUploadComplianceFlowStep',
   component: DocumentsUploadComplianceFlowStep,
   tags: ['autodocs'],
   decorators: [withKnobs],
