@@ -1,3 +1,13 @@
+# [1.116.0-COLD-513.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.115.0...v1.116.0-COLD-513.1) (2024-02-23)
+
+
+### Features
+
+* adding multifetcher with mutliple urls ([3db8f97](https://github.com/ColdPBC/cold-monorepo/commit/3db8f970ce16510c0176dc12bcd959a8427bfff8))
+* create documents upload wizard ([318a259](https://github.com/ColdPBC/cold-monorepo/commit/318a259c56b3b64944de3949f66d8d7d6fbf8744))
+* Handle documents upload in document uploads step ([dee0457](https://github.com/ColdPBC/cold-monorepo/commit/dee045718485f5cefada5dce9ab455bc4e11275d))
+* made updates to reuse functions for document upload ([f9398c0](https://github.com/ColdPBC/cold-monorepo/commit/f9398c03b82d1515946e7dedba65c17ec7aa5d0c))
+
 # [1.116.0-COLD-498.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.115.0...v1.116.0-COLD-498.1) (2024-02-22)
 
 
