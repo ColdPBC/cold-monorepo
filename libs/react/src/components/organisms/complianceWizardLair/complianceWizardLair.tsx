@@ -2,7 +2,6 @@ import { BaseButton, Card, WizardContext } from '@coldpbc/components';
 import { PropsWithChildren, useContext, useEffect } from 'react';
 import { Compliance } from '@coldpbc/interfaces';
 import { ButtonTypes } from '@coldpbc/enums';
-import { useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { getComplianceProgressForSurvey } from '@coldpbc/lib';
 import { isArray } from 'lodash';
@@ -15,10 +14,8 @@ export const ComplianceWizardLair = (props: PropsWithChildren<ComplianceWizardLa
   const { children, name } = props;
   const navigate = useNavigate();
   const location = useLocation();
-  const { orgId } = useAuth0Wrapper();
-  const { logError } = useColdContext();
-  const { setCurrentStep, data, currentStep } = useContext(WizardContext);
-  const { compliances, orgCompliances, surveyData, files, baseURL } = data;
+  const { setCurrentStep, data } = useContext(WizardContext);
+  const { surveyData, files, baseURL } = data;
 
   const backOutOfWizard = () => {
     navigate('/compliance');
