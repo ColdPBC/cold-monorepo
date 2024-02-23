@@ -1,9 +1,17 @@
-# [1.116.0-COLD-513.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.115.0...v1.116.0-COLD-513.1) (2024-02-23)
+## [1.116.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.116.0...v1.116.1) (2024-02-22)
+
+
+### Bug Fixes
+
+* bug throwing 'no organizations found in DB...' error ([51111cf](https://github.com/ColdPBC/cold-monorepo/commit/51111cfc35df5fea40f8e9506753c2fa3d1b6633))
+* possible null reference ([747aac6](https://github.com/ColdPBC/cold-monorepo/commit/747aac6ac8d06d3b32cbd02497ee807790dee79d))
+* this should default to openai ([4e93cd2](https://github.com/ColdPBC/cold-monorepo/commit/4e93cd2c27ffa4ce80fbbce73e89d9d67216f3e3))
+
+# [1.116.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.115.0...v1.116.0) (2024-02-22)
 
 
 ### Features
 
-* adding multifetcher with mutliple urls ([3db8f97](https://github.com/ColdPBC/cold-monorepo/commit/3db8f970ce16510c0176dc12bcd959a8427bfff8))
 * create documents upload wizard ([318a259](https://github.com/ColdPBC/cold-monorepo/commit/318a259c56b3b64944de3949f66d8d7d6fbf8744))
 * Handle documents upload in document uploads step ([dee0457](https://github.com/ColdPBC/cold-monorepo/commit/dee045718485f5cefada5dce9ab455bc4e11275d))
 * made updates to reuse functions for document upload ([f9398c0](https://github.com/ColdPBC/cold-monorepo/commit/f9398c03b82d1515946e7dedba65c17ec7aa5d0c))

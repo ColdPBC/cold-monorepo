@@ -191,7 +191,7 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
         id: user.id,
       },
     });
-    this.logger.info(`Processing survey ${survey.definition.title} for compliance ${compliance.name}`);
+    this.logger.info(`Processing survey ${survey.definition.title} for compliance ${compliance?.name}`);
 
     let category_context;
 

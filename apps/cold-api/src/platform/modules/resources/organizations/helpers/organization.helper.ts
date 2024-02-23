@@ -9,22 +9,23 @@ export class OrganizationHelper extends BaseWorker {
   }
 
   async getOrganizations(bpc: boolean = false): Promise<Array<organizations>> {
-    let orgs: Array<organizations>;
+    let orgs: Array<organizations> = [];
     if (!bpc) {
       orgs = (await this.cache.get('organizations')) as Array<organizations>;
-    } else {
-      orgs = (await this.prisma.organizations.findMany()) as Array<organizations>;
     }
 
     if (!orgs) {
-      throw new NotFoundException('no organizations found in DB, Cache, or Auth0');
+      orgs = (await this.prisma.organizations.findMany()) as Array<organizations>;
+      if (!orgs) {
+        throw new NotFoundException('no organizations found in DB, Cache, or Auth0');
+      }
     }
 
     return orgs;
   }
 
   async getOrganizationById(id: string, user: AuthenticatedUser, bpc: boolean = false): Promise<organizations> {
-    if (!user || !user.coldclimate_claims.org_id || (!user.isColdAdmin && user.coldclimate_claims.org_id !== id)) {
+    if (!user.isColdAdmin && user.coldclimate_claims.org_id !== id) {
       throw new UnauthorizedException(`User is not authorized to access organization ${id}`);
     }
     let org: organizations;
