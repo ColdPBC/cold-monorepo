@@ -78,13 +78,9 @@ export const Wizard = (props: PropsWithChildren<WizardProps>) => {
   };
 
   useEffect(() => {
+    // handle the case where the user navigates to a step directly and not through the wizard
     const currentRoute = location.pathname.replace(baseURL, '');
     const foundStep = steps.find(step => step.route === currentRoute);
-    // if the currentRoute is empty then we are at the base URL. go to the first step
-    if (!currentRoute) {
-      setCurrentStep(steps[0]);
-      navigateToStep(steps[0].name);
-    }
     if (foundStep && !isEqual(foundStep, currentStep)) {
       setCurrentStep(foundStep);
     }
