@@ -17,7 +17,7 @@ type Story = StoryObj<typeof meta>;
 export const DocumentsUploadStep: Story = {
   render: args => {
     return (
-      <StoryMockProvider memoryRouterProps={{ initialEntries: ['/wizard/compliance/rei/documents'] }}>
+      <StoryMockProvider memoryRouterProps={{ initialEntries: ['/wizard/compliance/rei2/documents'] }}>
         <Routes>
           <Route path={'/compliance'} element={<div className={'text-tc-primary'}>Compliance Home</div>} />
           {WizardRoutes()}
@@ -31,7 +31,7 @@ export const DocumentsUploadStep: Story = {
 export const AutomateStep: Story = {
   render: args => {
     return (
-      <StoryMockProvider memoryRouterProps={{ initialEntries: ['/wizard/compliance/rei/automate'] }}>
+      <StoryMockProvider memoryRouterProps={{ initialEntries: ['/wizard/compliance/rei2/automate'] }}>
         <Routes>
           <Route path={'/compliance'} element={<div className={'text-tc-primary'}>Compliance Home</div>} />
           {WizardRoutes()}
@@ -45,7 +45,7 @@ export const AutomateStep: Story = {
 export const ProcessingStep: Story = {
   render: args => {
     return (
-      <StoryMockProvider memoryRouterProps={{ initialEntries: ['/wizard/compliance/rei/processing'] }}>
+      <StoryMockProvider memoryRouterProps={{ initialEntries: ['/wizard/compliance/rei2/processing'] }}>
         <Routes>
           <Route path={'/compliance'} element={<div className={'text-tc-primary'}>Compliance Home</div>} />
           {WizardRoutes()}
@@ -59,7 +59,7 @@ export const ProcessingStep: Story = {
 export const QuestionnaireStep: Story = {
   render: args => {
     return (
-      <StoryMockProvider memoryRouterProps={{ initialEntries: ['/wizard/compliance/rei/questionnaire'] }}>
+      <StoryMockProvider memoryRouterProps={{ initialEntries: ['/wizard/compliance/rei2/questionnaire'] }}>
         <Routes>
           <Route path={'/compliance'} element={<div className={'text-tc-primary'}>Compliance Home</div>} />
           {WizardRoutes()}
