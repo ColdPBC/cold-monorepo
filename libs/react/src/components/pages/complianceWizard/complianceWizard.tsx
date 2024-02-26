@@ -1,7 +1,7 @@
 import React from 'react';
+import useSWR from 'swr';
 import { Outlet, useParams } from 'react-router-dom';
 import { ComplianceWizardLair, MainContent, Spinner, Wizard } from '@coldpbc/components';
-import useSWR from 'swr';
 import { Compliance, OrgCompliance } from '@coldpbc/interfaces';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { useAuth0Wrapper, useColdContext, useOrgSWR } from '@coldpbc/hooks';
