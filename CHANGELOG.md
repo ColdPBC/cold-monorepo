@@ -1,16 +1,14 @@
-# [1.118.0-COLD-528.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.117.0...v1.118.0-COLD-528.1) (2024-02-27)
+# [1.118.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.117.0...v1.118.0) (2024-02-27)
 
 
 ### Features
 
-* created list item input component, added plus and subtract icons ([2a5dae1](https://github.com/ColdPBC/cold-monorepo/commit/2a5dae177c86c5b0c0220d8482492be44167d9ce))
-* updated styling for default input types ([4482218](https://github.com/ColdPBC/cold-monorepo/commit/448221877396bba124e79d09ed945f561bb019c8))
+* added processing step to compliance flow ([be0a790](https://github.com/ColdPBC/cold-monorepo/commit/be0a790be3db1ddd2a2e6f72915b024331a2aede))
 
 # [1.117.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.116.1...v1.117.0) (2024-02-27)
 
 
 ### Features
-
 * adding multifetcher with mutliple urls ([3db8f97](https://github.com/ColdPBC/cold-monorepo/commit/3db8f970ce16510c0176dc12bcd959a8427bfff8))
 * handle maintaining user progress ([ceb7af8](https://github.com/ColdPBC/cold-monorepo/commit/ceb7af8593a5c5fd4d1b83b486c61256b7b17c88))
 * have step stories use rei 2 compliance data ([67f28cc](https://github.com/ColdPBC/cold-monorepo/commit/67f28ccff2e8d3c9dbbec308d1940e8f0977af7c))

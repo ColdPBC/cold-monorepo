@@ -66,7 +66,7 @@ export const ComplianceWizardLair = (props: PropsWithChildren<ComplianceWizardLa
             label={'Automate'}
             variant={ButtonTypes.primary}
             onClick={() => {
-              setCurrentStep('processing');
+              setCurrentStep('automate');
             }}
           />
           <BaseButton

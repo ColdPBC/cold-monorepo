@@ -1,6 +1,6 @@
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
-import { StoryMockProvider } from '@coldpbc/mocks';
+import { getComplianceWizardFlowHandler, StoryMockProvider } from '@coldpbc/mocks';
 import { Route, Routes } from 'react-router-dom';
 import { ComplianceWizard, WizardRoutes } from '@coldpbc/components';
 
@@ -45,7 +45,7 @@ export const AutomateStep: Story = {
 export const ProcessingStep: Story = {
   render: args => {
     return (
-      <StoryMockProvider memoryRouterProps={{ initialEntries: ['/wizard/compliance/rei2/processing'] }}>
+      <StoryMockProvider memoryRouterProps={{ initialEntries: ['/wizard/compliance/rei2/processing'] }} handlers={getComplianceWizardFlowHandler.processing}>
         <Routes>
           <Route path={'/compliance'} element={<div className={'text-tc-primary'}>Compliance Home</div>} />
           {WizardRoutes()}
