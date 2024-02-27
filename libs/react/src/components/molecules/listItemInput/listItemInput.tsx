@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { IconNames, InputTypes } from '@coldpbc/enums';
 import { BaseButton, Input } from '@coldpbc/components';
-import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 export interface ListItemInputProps {
   value: string[] | null | undefined;
