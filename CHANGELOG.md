@@ -1,3 +1,10 @@
+# [1.118.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.117.0...v1.118.0) (2024-02-27)
+
+
+### Features
+
+* added processing step to compliance flow ([be0a790](https://github.com/ColdPBC/cold-monorepo/commit/be0a790be3db1ddd2a2e6f72915b024331a2aede))
+
 # [1.117.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.116.1...v1.117.0) (2024-02-27)
 
 
