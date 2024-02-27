@@ -1,3 +1,11 @@
+# [1.118.0-COLD-528.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.117.0...v1.118.0-COLD-528.1) (2024-02-27)
+
+
+### Features
+
+* created list item input component, added plus and subtract icons ([2a5dae1](https://github.com/ColdPBC/cold-monorepo/commit/2a5dae177c86c5b0c0220d8482492be44167d9ce))
+* updated styling for default input types ([4482218](https://github.com/ColdPBC/cold-monorepo/commit/448221877396bba124e79d09ed945f561bb019c8))
+
 # [1.117.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.116.1...v1.117.0) (2024-02-27)
 
 
