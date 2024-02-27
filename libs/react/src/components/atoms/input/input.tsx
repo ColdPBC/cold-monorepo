@@ -13,7 +13,10 @@ export const Input = (props: IInputProps) => {
     return (
       <div className={twMerge('col-span-full', container_classname)}>
         {input_label && (
-          <label {...input_label_props} htmlFor={numeric_input_props?.name} className={twMerge('block text-sm font-medium leading-6 text-gray-900', input_label_props?.className)}>
+          <label
+            {...input_label_props}
+            htmlFor={numeric_input_props?.name}
+            className={twMerge('block text-sm font-medium leading-6 text-tc-primary', input_label_props?.className)}>
             {input_label}
           </label>
         )}
@@ -39,7 +42,10 @@ export const Input = (props: IInputProps) => {
     return (
       <div className={twMerge('col-span-full', container_classname)}>
         {input_label && (
-          <label {...input_label_props} htmlFor={numeric_input_props?.name} className={twMerge('block text-sm font-medium leading-6 text-gray-900', input_label_props?.className)}>
+          <label
+            {...input_label_props}
+            htmlFor={numeric_input_props?.name}
+            className={twMerge('block text-sm font-medium leading-6 text-tc-primary', input_label_props?.className)}>
             {input_label}
           </label>
         )}
@@ -111,7 +117,7 @@ export const Input = (props: IInputProps) => {
             {...input_label_props}
             key={`lbl_${key}`}
             htmlFor={input_props.name}
-            className={twMerge('block text-sm font-medium leading-6 text-gray-900', input_label_props?.className)}>
+            className={twMerge('block text-sm font-medium leading-6 text-tc-primary', input_label_props?.className)}>
             {input_label}
           </label>
         )}
