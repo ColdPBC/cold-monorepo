@@ -1,8 +1,10 @@
-import { BaseButton, Card, Spinner, WizardContext } from '@coldpbc/components';
-import { PropsWithChildren, useContext } from 'react';
+import { BaseButton, Card, WizardContext } from '@coldpbc/components';
+import { PropsWithChildren, useContext, useEffect } from 'react';
 import { Compliance } from '@coldpbc/interfaces';
 import { ButtonTypes } from '@coldpbc/enums';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { getComplianceProgressForSurvey } from '@coldpbc/lib';
+import { isArray } from 'lodash';
 
 export interface ComplianceWizardLairProps {
   name: string;
@@ -11,11 +13,45 @@ export interface ComplianceWizardLairProps {
 export const ComplianceWizardLair = (props: PropsWithChildren<ComplianceWizardLairProps>) => {
   const { children, name } = props;
   const navigate = useNavigate();
-  const { setCurrentStep, currentStep, data } = useContext(WizardContext);
+  const location = useLocation();
+  const { setCurrentStep, data } = useContext(WizardContext);
+  const { surveyData, files, baseURL } = data;
 
   const backOutOfWizard = () => {
     navigate('/compliance');
   };
+
+  useEffect(() => {
+    // get the location path. only go to the user last step if the base url is the same as the location path
+    const locationPath = location.pathname;
+    if (locationPath === baseURL) {
+      if (surveyData) {
+        const complianceProgress = getComplianceProgressForSurvey(surveyData);
+        // avoid all this logic if the number of ai attempted questions is 0.
+        // this means the user has not started the automation process, so skip this logic
+        if (complianceProgress.aiAttemptedQuestions !== 0) {
+          // if the number of ai attempted questions is equal to the full number of questions, go to the questionnaire step
+          if (complianceProgress.aiAttemptedQuestions === complianceProgress.totalQuestions) {
+            setCurrentStep('questionnaire');
+            return;
+          }
+          // if the number of ai attempted questions is less than the full number of questions, go to the processing step
+          if (complianceProgress.aiAttemptedQuestions < complianceProgress.totalQuestions) {
+            setCurrentStep('processing');
+            return;
+          }
+        }
+      }
+
+      if (files && isArray(files) && files.length > 0) {
+        setCurrentStep('automate');
+        return;
+      }
+
+      setCurrentStep('documents');
+      return;
+    }
+  }, [surveyData, files, location.pathname]);
 
   const compliance = data['compliances'].find((compliance: Compliance) => compliance.name === name);
 

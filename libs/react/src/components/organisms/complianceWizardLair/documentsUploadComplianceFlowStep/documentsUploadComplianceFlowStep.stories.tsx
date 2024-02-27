@@ -26,16 +26,16 @@ export const Default: Story = {
           data: {
             compliances: [
               {
-                id: 'cmp-1',
-                name: 'rei',
-                title: 'REI',
+                id: 'cmp-4',
+                name: 'rei2',
                 logo_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/rei-logo-1.svg',
-                surveys: ['rei_mfg_survey', 'rei_ghg_survey', 'rei_pkg_survey'],
-                created_at: '2020-03-03T23:50:31.000Z',
-                updated_at: '2020-03-03T23:50:31.000Z',
+                surveys: ['rei_consolidated_survey'],
+                created_at: '2024-02-21T21:24:24.574Z',
+                updated_at: '2024-02-21T15:24:14.000Z',
+                title: 'REI Consolidated',
               },
             ],
-            name: 'rei',
+            name: 'rei2',
           },
           navigateToStep: () => {},
         }}>

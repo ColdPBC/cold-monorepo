@@ -1,10 +1,10 @@
 import React from 'react';
 import { Outlet, useParams } from 'react-router-dom';
-import { MainContent, Wizard, ComplianceWizardLair, Spinner } from '@coldpbc/components';
+import { ComplianceWizardLair, MainContent, Spinner, Wizard } from '@coldpbc/components';
 import useSWR from 'swr';
 import { Compliance, OrgCompliance } from '@coldpbc/interfaces';
 import { axiosFetcher } from '@coldpbc/fetchers';
-import { useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
+import { useAuth0Wrapper, useColdContext, useOrgSWR } from '@coldpbc/hooks';
 import { ErrorType } from '@coldpbc/enums';
 
 export const ComplianceWizard = () => {
@@ -12,14 +12,35 @@ export const ComplianceWizard = () => {
   const { orgId } = useAuth0Wrapper();
   const compliances = useSWR<Compliance[], any, any>(['/compliance_definitions', 'GET'], axiosFetcher);
   const orgCompliances = useSWR<OrgCompliance[], any, any>([`/compliance_definitions/organization/${orgId}`, 'GET'], axiosFetcher);
+
+  const getSurveyURL = () => {
+    if (name && compliances.data) {
+      const compliance = compliances.data.find(compliance => compliance.name === name);
+      return [`/surveys/${compliance?.surveys[0]}`, 'GET'];
+    } else {
+      return null;
+    }
+  };
+
+  const surveyData = useOrgSWR(getSurveyURL(), axiosFetcher);
+  const filesSWR = useOrgSWR<any, any>(['/files', 'GET'], axiosFetcher);
+
   const { logError } = useColdContext();
 
-  if (compliances.isLoading || orgCompliances.isLoading) {
+  if (compliances.isLoading || orgCompliances.isLoading || surveyData.isLoading || filesSWR.isLoading) {
     return <Spinner />;
   }
 
-  if (compliances.error || orgCompliances.error) {
-    logError(compliances.error, ErrorType.SWRError);
+  if (compliances.error || orgCompliances.error || surveyData.error || filesSWR.error) {
+    if (compliances.error) {
+      logError(compliances.error, ErrorType.SWRError);
+    }
+    if (orgCompliances.error) {
+      logError(orgCompliances.error, ErrorType.SWRError);
+    }
+    if (surveyData.error) {
+      logError(surveyData.error, ErrorType.SWRError);
+    }
     return null;
   }
 
@@ -54,6 +75,9 @@ export const ComplianceWizard = () => {
             name: name,
             compliances: compliances.data,
             orgCompliances: orgCompliances.data,
+            surveyData: surveyData.data,
+            files: filesSWR.data,
+            baseURL: `/wizard/compliance/${name}`,
           }}>
           <ComplianceWizardLair name={name}>
             <Outlet />

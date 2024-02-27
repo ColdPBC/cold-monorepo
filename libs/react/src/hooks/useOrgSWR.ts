@@ -1,19 +1,16 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import useSWR, { SWRConfiguration, SWRResponse } from 'swr';
 import { useColdContext } from './useColdContext';
+import { isArray } from 'lodash';
+import { multiFetcher } from '../fetchers/multiFetcher';
+import { axiosFetcher } from '@coldpbc/fetchers';
 
-export const useOrgSWR = <Data = any, Error = any>(
-  key: string[] | null,
-  fetcher: ((arg: string[]) => unknown) | null,
-  config?: SWRConfiguration,
-) => {
+export const useOrgSWR = <Data = any, Error = any>(key: Array<any> | null, fetcher: ((arg: string[]) => unknown) | null, config?: SWRConfiguration) => {
   const { impersonatingOrg } = useColdContext();
 
   const getKey = () => {
     if (authUser && key != null) {
-      const orgId = impersonatingOrg
-        ? impersonatingOrg.id
-        : authUser.coldclimate_claims.org_id;
+      const orgId = impersonatingOrg ? impersonatingOrg.id : authUser.coldclimate_claims.org_id;
       const orgKey = '/organizations/' + orgId + key[0];
       return [orgKey, ...key.slice(1)];
     } else {
@@ -21,12 +18,16 @@ export const useOrgSWR = <Data = any, Error = any>(
     }
   };
 
-  const {
-    user: authUser,
-    isLoading: authIsLoading,
-    isAuthenticated: authisAuthenticated,
-    error: authError,
-  } = useAuth0();
+  // to handle when multiple urls are passed to the fetcher
+  const getFetcher = () => {
+    if (isArray(key) && isArray(key[0])) {
+      return multiFetcher;
+    } else {
+      return axiosFetcher;
+    }
+  };
 
-  return useSWR(getKey(), fetcher, config) as SWRResponse<Data, Error, any>;
+  const { user: authUser, isLoading: authIsLoading, isAuthenticated: authisAuthenticated, error: authError } = useAuth0();
+
+  return useSWR(getKey(), getFetcher(), config) as SWRResponse<Data, Error, any>;
 };
