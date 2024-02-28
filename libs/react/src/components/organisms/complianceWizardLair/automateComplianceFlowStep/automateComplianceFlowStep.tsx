@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { useAddToastMessage, useAuth0Wrapper, useColdContext, useOrgSWR } from '@coldpbc/hooks';
 import { axiosFetcher } from '@coldpbc/fetchers';
-import { WizardContext, ComplianceWizardLairBase } from '@coldpbc/components';
+import { ComplianceWizardLairBase, WizardContext } from '@coldpbc/components';
 import { ButtonTypes, ErrorType } from '@coldpbc/enums';
 import { isAxiosError } from 'axios';
 import { ToastMessage } from '@coldpbc/interfaces';
@@ -12,7 +12,7 @@ export const AutomateComplianceFlowStep = () => {
   const { logError } = useColdContext();
   const { orgId } = useAuth0Wrapper();
   const { addToastMessage } = useAddToastMessage();
-  const { nextStep, navigateToStep } = useContext(WizardContext);
+  const { nextStep, setCurrentStep } = useContext(WizardContext);
   const { mutate } = useSWRConfig();
 
   const startAutomation = async () => {
@@ -47,7 +47,7 @@ export const AutomateComplianceFlowStep = () => {
       markdown={`Cold Climate will pre-fill as much of the form as possible based on the documents below. You'll always be able to review and edit yourself before submitting anything. \n\nDocuments ${documentsList}`}
       ctas={[
         { label: 'Start', onClick: () => startAutomation(), className: 'h-[72px] w-full bg-green-500 hover:bg-green-400 active:bg-green-300' },
-        { label: 'Skip For Now', onClick: () => navigateToStep('questionnaire'), variant: ButtonTypes.secondary, className: 'h-[72px] w-full' },
+        { label: 'Skip For Now', onClick: () => setCurrentStep('questionnaire'), variant: ButtonTypes.secondary, className: 'h-[72px] w-full' },
       ]}
       isLoading={documents.isLoading}
     />

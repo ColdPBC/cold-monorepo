@@ -1,7 +1,6 @@
 import { Compliance, OrgCompliance } from '@coldpbc/interfaces';
-import { userEvent, within } from '@storybook/testing-library';
+import { within } from '@storybook/testing-library';
 import { expect } from '@storybook/jest';
-import { getOrganizationComplianceMock } from '@coldpbc/mocks';
 import { find, forEach } from 'lodash';
 
 /**
@@ -20,7 +19,6 @@ export const verifyComplianceDetailPage = async (orgCompliance: OrgCompliance, c
   await expect(complianceSectionOverviewCards.length).toEqual(orgCompliance.compliance_definition.surveys.length);
   // loop through each compliance-section-overview-card
   // check if each compliance-section-overview-card has the Review and Answer button
-  console.log(complianceSectionOverviewCards);
   await forEach(orgCompliance.compliance_definition.surveys, async survey => {
     const complianceSectionOverviewCard = await canvas.findByTestId(`compliance-section-overview-card-${survey}`);
     const button = await within(complianceSectionOverviewCard).findByRole('button', { name: 'Review and Answer' });

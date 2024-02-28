@@ -1,11 +1,12 @@
+import React from 'react';
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
+import { ApplicationToaster, ProcessingComplianceFlowStep } from '@coldpbc/components';
 import { StoryMockProvider } from '@coldpbc/mocks';
-import { AutomateComplianceFlowStep } from '@coldpbc/components';
 
-const meta: Meta<typeof AutomateComplianceFlowStep> = {
-  title: 'Organisms/AutomateComplianceFlowStep',
-  component: AutomateComplianceFlowStep,
+const meta: Meta<typeof ProcessingComplianceFlowStep> = {
+  title: 'Organisms/ProcessingComplianceFlowStep',
+  component: ProcessingComplianceFlowStep,
   tags: ['autodocs'],
   decorators: [withKnobs],
 };
@@ -38,7 +39,8 @@ export const Default: Story = {
           },
           navigateToStep: () => {},
         }}>
-        <AutomateComplianceFlowStep />
+        <ProcessingComplianceFlowStep {...args} />
+        <ApplicationToaster />
       </StoryMockProvider>
     );
   },

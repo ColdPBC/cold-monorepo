@@ -1,23 +1,22 @@
-import React, { createContext } from 'react';
+import React from 'react';
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { Application } from './application';
 import {
-  StoryMockProvider,
-  getFootprintHandler,
-  getCategoriesHandler,
   auth0UserMock,
-  getSignupHandlersForApplicationSignup,
-  getSurveyHandler,
   getActionsMock,
   getCategoriesDataMock,
+  getCategoriesHandler,
   getComplianceMock,
+  getFootprintHandler,
   getOrganizationComplianceMock,
+  getSignupHandlersForApplicationSignup,
+  StoryMockProvider,
 } from '@coldpbc/mocks';
-import { userEvent, waitFor, waitForElementToBeRemoved, within } from '@storybook/testing-library';
+import { userEvent, within } from '@storybook/testing-library';
 import { find, forEach, random, uniq } from 'lodash';
 import { expect } from '@storybook/jest';
-import { verifyActionDetailPage, verifyActionsPage, verifyComplianceDetailPage, verifyCompliancePage } from '@coldpbc/lib';
+import { verifyActionDetailPage, verifyActionsPage, verifyCompliancePage } from '@coldpbc/lib';
 
 const meta: Meta<typeof Application> = {
   title: 'Application/Application',
@@ -246,7 +245,6 @@ export const Default: Story = {
       await verifyCompliancePage(complianceSets, orgComplianceSets, canvasElement);
       const complianceSet = complianceSets[0];
       const complianceCard = await canvas.findByTestId(`compliance-${complianceSet.id}`);
-      console.log('complianceCard', complianceCard);
       let button: HTMLElement;
       const orgComplianceSet = find(orgComplianceSets, { compliance_id: complianceSet.id });
       if (orgComplianceSet) {
