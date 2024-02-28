@@ -1,14 +1,12 @@
 import React from 'react';
-import { SurveyInput } from '../index';
+import { BaseButton, ErrorFallback, SurveyInput } from '@coldpbc/components';
 import { cloneDeep, findIndex, forEach, forOwn, isArray, isEqual } from 'lodash';
 import { IButtonProps, SurveyActiveKeyType, SurveyAdditionalContext, SurveyPayloadType, SurveySectionType } from '@coldpbc/interfaces';
-import { BaseButton } from '../../atoms';
 import { ButtonTypes, GlobalSizes } from '@coldpbc/enums';
 import { CSSTransition, SwitchTransition } from 'react-transition-group';
 import { getSectionIndex, isComponentTypeValid, isKeyValueFollowUp } from '@coldpbc/lib';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { withErrorBoundary } from 'react-error-boundary';
-import { ErrorFallback } from '../../application';
 import { useAuth0Wrapper } from '@coldpbc/hooks';
 
 export interface SurveyQuestionContainerProps {
