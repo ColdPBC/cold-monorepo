@@ -5,7 +5,7 @@ import { BaseButton, Input } from '@coldpbc/components';
 
 export interface ListItemInputProps {
   value: string[] | null | undefined;
-  onChange: (value: string[]) => void;
+  onChange: (value: string[] | null) => void;
   'data-testid'?: string;
 }
 
@@ -21,6 +21,9 @@ export const ListItemInput = (props: ListItemInputProps) => {
   };
 
   const addToList = (value: string) => {
+    if (value.length === 0) {
+      return;
+    }
     const newList = [...list, value];
     setList(newList);
     setNewListValue('');
@@ -30,7 +33,11 @@ export const ListItemInput = (props: ListItemInputProps) => {
   const removeFromList = (index: number) => {
     const newList = list.filter((_, idx) => idx !== index);
     setList(newList);
-    onChange(newList);
+    if (newList.length === 0) {
+      onChange(null);
+    } else {
+      onChange(newList);
+    }
   };
 
   const listWithTransition = () => {
@@ -74,6 +81,7 @@ export const ListItemInput = (props: ListItemInputProps) => {
 
   return (
     <div className={'flex flex-col w-full'}>
+      <div className={'flex flex-col w-full'}>{listWithTransition()}</div>
       <div className={'flex flex-row w-full'} data-testid={props['data-testid']}>
         <Input
           type={InputTypes.Text}
@@ -94,7 +102,6 @@ export const ListItemInput = (props: ListItemInputProps) => {
           iconRight={IconNames.PlusIcon}
         />
       </div>
-      <div className={'flex flex-col w-full'}>{listWithTransition()}</div>
     </div>
   );
 };
