@@ -1,3 +1,17 @@
+# [1.117.0-cold-520.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.116.0...v1.117.0-cold-520.1) (2024-02-28)
+
+
+### Bug Fixes
+
+* bug throwing 'no organizations found in DB...' error ([51111cf](https://github.com/ColdPBC/cold-monorepo/commit/51111cfc35df5fea40f8e9506753c2fa3d1b6633))
+* possible null reference ([747aac6](https://github.com/ColdPBC/cold-monorepo/commit/747aac6ac8d06d3b32cbd02497ee807790dee79d))
+* this should default to openai ([4e93cd2](https://github.com/ColdPBC/cold-monorepo/commit/4e93cd2c27ffa4ce80fbbce73e89d9d67216f3e3))
+
+
+### Features
+
+* add survey filter class ([f53ad9a](https://github.com/ColdPBC/cold-monorepo/commit/f53ad9a8409a3e108964f2a9fb0443fa07b0e73c))
+
 # [1.116.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.115.0...v1.116.0) (2024-02-22)
 
 
