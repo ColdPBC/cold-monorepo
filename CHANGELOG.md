@@ -1,3 +1,10 @@
+# [1.119.0-COLD-441.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.118.0...v1.119.0-COLD-441.1) (2024-02-28)
+
+
+### Features
+
+* add array comparison, has and in opertators ([4a4d349](https://github.com/ColdPBC/cold-monorepo/commit/4a4d3495bcc9e327935fc63a93aabecd59293ade))
+
 # [1.118.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.117.0...v1.118.0) (2024-02-27)
 
 
