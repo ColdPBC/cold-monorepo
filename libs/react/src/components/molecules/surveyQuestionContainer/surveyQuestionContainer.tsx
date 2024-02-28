@@ -1,8 +1,8 @@
 import React from 'react';
 import { SurveyInput } from '../index';
-import { cloneDeep, findIndex, forEach, forOwn } from 'lodash';
+import { cloneDeep, findIndex, forEach, forOwn, isArray, isEqual } from 'lodash';
 import { IButtonProps, SurveyActiveKeyType, SurveyAdditionalContext, SurveyPayloadType, SurveySectionType } from '@coldpbc/interfaces';
-import { BaseButton, Spinner } from '../../atoms';
+import { BaseButton } from '../../atoms';
 import { ButtonTypes, GlobalSizes } from '@coldpbc/enums';
 import { CSSTransition, SwitchTransition } from 'react-transition-group';
 import { getSectionIndex, isComponentTypeValid, isKeyValueFollowUp } from '@coldpbc/lib';
@@ -365,9 +365,10 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
         }
       }
     } else {
-      if (additionalContextQuestion && sections[activeSectionKey].additional_context &&
-        (sections[activeSectionKey].additional_context?.value === undefined
-          || sections[activeSectionKey].additional_context?.value === null)
+      if (
+        additionalContextQuestion &&
+        sections[activeSectionKey].additional_context &&
+        (sections[activeSectionKey].additional_context?.value === undefined || sections[activeSectionKey].additional_context?.value === null)
       ) {
         buttonProps.disabled = true;
       }
@@ -602,6 +603,10 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
   const ifAdditionalContextConditionMet = (value: any, additionalContext: SurveyAdditionalContext) => {
     switch (additionalContext.operator) {
       case '==':
+        // make comparison for arrays if both the value and comparison are arrays
+        if (isArray(value) && isArray(additionalContext.comparison)) {
+          return isEqual(value, additionalContext.comparison);
+        }
         return value === additionalContext.comparison;
       case '!=':
         return value !== additionalContext.comparison;
@@ -613,6 +618,18 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
         return value >= additionalContext.comparison;
       case '<=':
         return value <= additionalContext.comparison;
+      case 'in':
+        // check if the value is in the comparison array
+        if (isArray(additionalContext.comparison) && !isArray(value)) {
+          return additionalContext.comparison.includes(value);
+        }
+        return false;
+      case 'has':
+        // check if the comparison value is in the value array
+        if (isArray(value) && !isArray(additionalContext.comparison)) {
+          return value.includes(additionalContext.comparison);
+        }
+        return false;
       default:
         return false;
     }
