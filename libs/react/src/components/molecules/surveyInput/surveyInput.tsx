@@ -1,14 +1,9 @@
 import React from 'react';
-import { YesNo } from '../yesNo/yesNo';
-import { Input } from '../../atoms/input/input';
-import { PercentSlider } from '../percentSlider/percentSlider';
-import { SelectOption } from '../selectOption/selectOption';
 import { InputTypes } from '@coldpbc/enums';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application';
-import { Card } from '../card';
-import { Markdown } from '../markdown';
 import { isUndefined } from 'lodash';
+import { Card, Input, ListItemInput, Markdown, PercentSlider, SelectOption, YesNo } from '@coldpbc/components';
 
 export interface SurveyInputProps {
   input_key: string;
@@ -215,6 +210,16 @@ const _SurveyInput = (props: SurveyInputProps) => {
               'aria-label': input_key + (isAdditional ? '-additional' : ''),
             }}
             container_classname={'w-full'}
+          />
+        );
+      case 'multi_text':
+        return (
+          <ListItemInput
+            value={displayValue}
+            onChange={value => {
+              onFieldUpdated(input_key, value);
+            }}
+            data-testid={input_key + (isAdditional ? '-additional' : '')}
           />
         );
       default:
