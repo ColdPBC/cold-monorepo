@@ -26,7 +26,7 @@ import { SubtractIcon } from './subtractIcon';
 
 // TODO: Take the color attribute out of the IconProps
 export const ColdIcon = (props: IconProps) => {
-  const { name, color, strokeWidth, className } = props;
+  const { name } = props;
   switch (name) {
     case IconNames.ColdHomeIcon:
       return <ColdHomeIcon {...props} />;
