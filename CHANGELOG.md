@@ -1,10 +1,9 @@
-# [1.120.0-COLD-529.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.119.0...v1.120.0-COLD-529.1) (2024-02-29)
+# [1.120.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.119.0...v1.120.0) (2024-02-29)
 
 
 ### Features
 
-* point assessments to old journey page ([5f41bb2](https://github.com/ColdPBC/cold-monorepo/commit/5f41bb2bdaefdbfdea64fd3ec2e5e4091475f584))
-* remove company info from sidebar ([21581ee](https://github.com/ColdPBC/cold-monorepo/commit/21581eeb1d83420c8b58755c8943b4af0e9c3cd9))
+* add array comparison, has and in opertators ([4a4d349](https://github.com/ColdPBC/cold-monorepo/commit/4a4d3495bcc9e327935fc63a93aabecd59293ade))
 
 # [1.119.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.118.0...v1.119.0) (2024-02-29)
 
