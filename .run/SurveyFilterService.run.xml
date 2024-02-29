@@ -1,0 +1,16 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="SurveyFilterService" type="JavaScriptTestRunnerJest" nameIsGenerated="true">
+    <node-interpreter value="project" />
+    <jest-package value="$PROJECT_DIR$/node_modules/jest" />
+    <working-dir value="$PROJECT_DIR$/apps/cold-api" />
+    <envs>
+      <env name="DD_SERVICE" value="&quot;test_service&quot;" />
+    </envs>
+    <scope-kind value="SUITE" />
+    <test-file value="$PROJECT_DIR$/apps/cold-api/src/platform/modules/resources/surveys/filter/survey.filter.service.spec.ts" />
+    <test-names>
+      <test-name value="SurveyFilterService" />
+    </test-names>
+    <method v="2" />
+  </configuration>
+</component>
