@@ -13,7 +13,7 @@
 - /apps/cold-api - The backend API for the Cold Climate APP written in Typescript using the Nest.js framework.
 
 ## Getting Started
-- Make sure you've followed the instructions to set up your dev machine on [the Dev Setup Notion page](https://www.notion.so/coldclimate/Setting-Up-Your-Local-Environment-95c1f5398890412ab446d7ff94bcec7a?pvs=4), including Homebrew and Docker install
+- Make sure you've followed the instructions to set up your dev machine on [the Dev Setup Notion page](https://www.notion.so/coldclimate/Setting-Up-Your-Local-Environment-95c1f5398890412ab446d7ff94bcec7a?pvs=4), including Homebrew, Docker and most importantly, the AWS CLI install.
 - install node 20.9.0:
   ```bash
     $ brew install node@20.9.0
@@ -51,24 +51,10 @@ Either create a .env file in the root directory of the project and populate the 
 
 ```dotenv
 # General Settings
-NODE_ENV=development
-PORT=7001
-API_SERVER_DESCRIPTION=The staging server is our development server
-API_SERVER_URL=http://localhost:7001
-
-# Auth0 Variables
-AUTH0_AUDIENCE=https://api.coldclimate.online/
-AUTH0_CLIENT_ID=UG9T########HQFI
-AUTH0_CLIENT_SECRET=6r7D_6i########LoaIYb_
-AUTH0_DOMAIN=cold-climate-staging.us.auth0.com
-AUTH0_UI_CLIENT_ID=55HO8########SRWpG
-
-# Database
-DATABASE_URL="postgres://CC_admin:EPSILON-desti########y1d.us-east-1.rds.amazonaws.com/cold_climate"
-
-# Redis Cache
-REDISCLOUD_URL=redis://localhost:6379
-
+DD_SERVICE=cold-api;
+LOG_FORMAT=pretty;
+NODE_ENV=development;
+PORT=7001;
 ```
 
 ### Install Node Dependencies
@@ -84,7 +70,13 @@ In order to make calls to the database, you will need to run the following comma
 
 **NOTE**: you may receive a bunch of type errors if you do not run this command prior to building as this command generates the necessary types based on the DB schema.
 ```bash
-$ prisma generate --schema apps/cold-api/prisma/schema.prisma
+$ prisma generate --schema libs/nest/prisma/schema.prisma
+```
+
+or via yarn
+
+```bash
+$ yarn generate
 ```
 `prisma generate` will not only create the prisma client, but it will also generate the typescript types based on the schema, and place them in the `apps/cold-api/src/generated` directory.  The generated files will not conform to our linting rules, so you will need to also run `yarn lint` to fix the linting errors.
 
