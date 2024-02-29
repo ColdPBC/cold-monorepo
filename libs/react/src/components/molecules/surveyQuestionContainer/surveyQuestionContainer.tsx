@@ -605,7 +605,7 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
         if (isArray(value) && isArray(additionalContext.comparison)) {
           return isEqual(value, additionalContext.comparison);
         }
-        return value === additionalContext.comparison;
+        return isEqual(value, additionalContext.comparison);
       case '!=':
         return value !== additionalContext.comparison;
       case '>':
@@ -618,14 +618,28 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
         return value <= additionalContext.comparison;
       case 'in':
         // check if the value is in the comparison array
-        if (isArray(additionalContext.comparison) && !isArray(value)) {
-          return additionalContext.comparison.includes(value);
+        if (isArray(additionalContext.comparison)) {
+          if (!isArray(value)) {
+            return additionalContext.comparison.includes(value);
+          } else {
+            // check if any values in the value array are in the comparison array
+            return value.some((val: any) => {
+              return additionalContext.comparison.includes(val);
+            });
+          }
         }
         return false;
       case 'has':
         // check if the comparison value is in the value array
-        if (isArray(value) && !isArray(additionalContext.comparison)) {
-          return value.includes(additionalContext.comparison);
+        if (isArray(value)) {
+          if (!isArray(additionalContext.comparison)) {
+            return value.includes(additionalContext.comparison);
+          } else {
+            // check if any of the values in the comparison array are in the value array
+            return additionalContext.comparison.some((val: any) => {
+              return value.includes(val);
+            });
+          }
         }
         return false;
       default:
