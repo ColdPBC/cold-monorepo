@@ -35,7 +35,7 @@ export const ColdRoutes = () => {
           <Route path={'/reports/carbon_footprint'} element={<Footprint />} />
           {ldFlags.showDocumentsUploadModuleCold492 && <Route path="/documents" element={<DocumentUpload />} />}
           <Route path={'/settings/account'} element={<AccountSettingsPage />} />
-          <Route path={'/settings/user'} element={<UserSettingsPage />} />
+          <Route path={'/settings/users'} element={<UserSettingsPage />} />
           <Route path="*" element={<div className={'text-tc-primary'}>Pending...</div>} />
           {WizardRoutes()}
         </>
