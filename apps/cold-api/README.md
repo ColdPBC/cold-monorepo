@@ -13,7 +13,7 @@
 - /apps/cold-api - The backend API for the Cold Climate APP written in Typescript using the Nest.js framework.
 
 ## Getting Started
-- Make sure you've followed the instructions to set up your dev machine on [the Dev Setup Notion page](https://www.notion.so/coldclimate/Setting-Up-Your-Local-Environment-95c1f5398890412ab446d7ff94bcec7a?pvs=4), including Homebrew and Docker install
+- Make sure you've followed the instructions to set up your dev machine on [the Dev Setup Notion page](https://www.notion.so/coldclimate/Setting-Up-Your-Local-Environment-95c1f5398890412ab446d7ff94bcec7a?pvs=4), including Homebrew, Docker and most importantly, the AWS CLI install.
 - install node 20.9.0:
   ```bash
     $ brew install node@20.9.0
@@ -51,24 +51,10 @@ Either create a .env file in the root directory of the project and populate the 
 
 ```dotenv
 # General Settings
-NODE_ENV=development
-PORT=7001
-API_SERVER_DESCRIPTION=The staging server is our development server
-API_SERVER_URL=http://localhost:7001
-
-# Auth0 Variables
-AUTH0_AUDIENCE=https://api.coldclimate.online/
-AUTH0_CLIENT_ID=UG9T########HQFI
-AUTH0_CLIENT_SECRET=6r7D_6i########LoaIYb_
-AUTH0_DOMAIN=cold-climate-staging.us.auth0.com
-AUTH0_UI_CLIENT_ID=55HO8########SRWpG
-
-# Database
-DATABASE_URL="postgres://CC_admin:EPSILON-desti########y1d.us-east-1.rds.amazonaws.com/cold_climate"
-
-# Redis Cache
-REDISCLOUD_URL=redis://localhost:6379
-
+DD_SERVICE=cold-api;
+LOG_FORMAT=pretty;
+NODE_ENV=development;
+PORT=7001;
 ```
 
 ### Install Node Dependencies
@@ -84,7 +70,13 @@ In order to make calls to the database, you will need to run the following comma
 
 **NOTE**: you may receive a bunch of type errors if you do not run this command prior to building as this command generates the necessary types based on the DB schema.
 ```bash
-$ prisma generate --schema apps/cold-api/prisma/schema.prisma
+$ prisma generate --schema libs/nest/prisma/schema.prisma
+```
+
+or via yarn
+
+```bash
+$ yarn generate
 ```
 `prisma generate` will not only create the prisma client, but it will also generate the typescript types based on the schema, and place them in the `apps/cold-api/src/generated` directory.  The generated files will not conform to our linting rules, so you will need to also run `yarn lint` to fix the linting errors.
 
@@ -116,6 +108,135 @@ $ nx serve cold-ui
 ```
 
 ## API Documentation
+### JSONata Expression Language
+
+This API uses JSONata expressions to filter and transform data. Using the following JSON, we will demonstrate how to use JSONata expressions to filter and transform data.
+```json
+{
+  "sections": {
+    "APK": {
+      "follow_up": {
+        "APK-1": {
+          "value": 50
+        },
+        "APK-2": {
+          "value": 100
+        }
+      }
+    },
+    "GHG": {
+      "follow_up": {
+        "GHG-6": {
+          "value": ["Yes we use GHG"]
+        }
+      }
+    },
+    "MFG": {
+      "follow_up": {
+        "MFG-1": {
+          "value": true
+        }
+      }
+    },
+    "GEN": {
+      "follow_up": {
+        "GEN-8": {
+          "value": ["Apparel", "Footwear", "Packs"]
+        }
+      }
+    },
+    "DWN": {
+      "title": "Down",
+      "prompt": "",
+      "component": null,
+      "follow_up": {
+        "DWN-1": {
+          "prompt": "Does your brand have a means of ensuring that the products you supply to REI that contain virgin down meet this expectation?"
+        }
+      }
+    }
+  }
+}
+```
+
+#### Comparison Functions
+*Compare Boolean Values*: You can use `=`, `!=`, to compare boolean values
+```javascript
+{
+  dependency: {
+    expression: "$lookup(sections.*.follow_up, 'MFG-1').value = true"
+  }
+}
+```
+
+*Compare Numeric Values* : You can use `=`, `!=`, `>`, `<`, `>=`, `<=` to compare numeric values
+```javascript
+{
+  dependency: {
+    expression: "$lookup(sections.*.follow_up, 'APK-1').value >= 50"
+  }
+}
+
+```
+
+#### Array Functions
+*Compare Multiple Selected Values* : Using this expression you can check the selected values for the question are contained in the array of answers that satisfy the dependency
+```javascript
+{
+  dependency: {
+    expression: "true in $map($lookup(sections.*.follow_up, 'GEN-8').value, function($v) { $v in ['Apparel', 'Footwear', 'Packs', 'Ski wax', 'Sleeping bags', 'Tents', 'Treatments for gear and clothing'] })"
+  }
+}
+// returns true
+```
+
+*Compare Single Selection* : If the both the selected value and the list of acceptable values are stored as a single value Array (ie: ['Yes we use GHG']) can either use the same function as above:
+```javascript
+{
+  dependency: {
+    expression: "true in $map($lookup(sections.*.follow_up, 'GHG-6').value, function($v) { $v in ['Yes, we calculate the carbon emissions from a subset of the products we sell, including those we sell to REI.'] })"
+  }
+}
+// returns true
+```
+
+or you can simply compare arrays using the `=` operator
+```javascript
+{
+  dependency: {
+    expression: "$lookup(sections.*.follow_up, 'GHG-6').value = ['Yes, we calculate the carbon emissions from a subset of the products we sell, including those we sell to REI.'])"
+  }
+}
+```
+
+*Multiple Dependencies* : You can join expressions using `and` vs `or` to create more complex expressions
+
+```javascript
+{
+  dependency: {
+    expression: "$lookup(sections.*.follow_up, 'APK-1').value > 0 and $lookup(sections.*.follow_up, 'APK-2').value < 100"
+  }
+}
+// returns false
+```
+```javascript
+{
+  dependency: {
+    expression: "$lookup(sections.*.follow_up, 'APK-1').value > 0 and $lookup(sections.*.follow_up, 'APK-2').value <= 100"
+  }
+}
+// returns true
+```
+```javascript
+{
+  dependency: {
+    expression: "$lookup(sections.*.follow_up, 'APK-1').value > 0 or $lookup(sections.*.follow_up, 'APK-2').value < 100"
+  }
+}
+
+//returns true
+```
+
 ### View Swagger/OpenAPI Documentation
 
 - Run the app using any of the above scripts
