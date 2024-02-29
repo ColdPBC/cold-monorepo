@@ -21,10 +21,12 @@ import { ColdChevronDownIcon } from './coldChevronDownIcon';
 import { ColdCheckIcon } from './coldCheckIcon';
 import { ColdComplianceIcon } from './coldComplianceIcon';
 import { ColdDocumentsIcon } from './coldDocumentsIcon';
+import { PlusIcon } from './plusIcon';
+import { SubtractIcon } from './subtractIcon';
 
 // TODO: Take the color attribute out of the IconProps
 export const ColdIcon = (props: IconProps) => {
-  const { name, color, strokeWidth, className } = props;
+  const { name } = props;
   switch (name) {
     case IconNames.ColdHomeIcon:
       return <ColdHomeIcon {...props} />;
@@ -64,6 +66,10 @@ export const ColdIcon = (props: IconProps) => {
       return <ColdComplianceIcon {...props} />;
     case IconNames.ColdDocumentsIcon:
       return <ColdDocumentsIcon {...props} />;
+    case IconNames.PlusIcon:
+      return <PlusIcon {...props} />;
+    case IconNames.SubtractIcon:
+      return <SubtractIcon {...props} />;
     default:
     case IconNames.ColdSettingsIcon:
       return <ColdSettingsIcon {...props} />;

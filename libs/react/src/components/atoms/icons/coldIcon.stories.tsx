@@ -3,7 +3,6 @@ import { Meta, StoryObj } from '@storybook/react';
 import { DefaultHexColors } from '../../../enums/colors';
 import { ColdIcon } from './coldIcon';
 import { IconNames } from '../../../enums/iconNames';
-import { FormInput } from '@coldpbc/components';
 
 const meta: Meta<typeof ColdIcon> = {
   title: 'Atoms/Icons/ColdIcon',
@@ -25,8 +24,4 @@ const meta: Meta<typeof ColdIcon> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
-  args: {
-    name: IconNames.ColdSettingsIcon,
-  },
-};
+export const Default: Story = {};
