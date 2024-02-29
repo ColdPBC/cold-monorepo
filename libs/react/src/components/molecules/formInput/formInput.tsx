@@ -22,25 +22,19 @@ export const FormInput = ({
     switch (type) {
       case 'currency':
         return {
-          className:
-            'block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6',
           id: `${name}_${idx}`,
           name: name,
           value: value,
           prefix: '$',
-          onValueChange: (values) =>
-            onFieldUpdated(name, values.formattedValue),
+          onValueChange: values => onFieldUpdated(name, values.formattedValue),
           thousandSeparator: ',',
         };
       case 'number':
         return {
-          className:
-            'block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6',
           id: name,
           name: name,
           value: value,
-          onValueChange: (values) =>
-            onFieldUpdated(name, values.formattedValue),
+          onValueChange: values => onFieldUpdated(name, values.formattedValue),
           thousandSeparator: ',',
         };
       default:
@@ -56,10 +50,10 @@ export const FormInput = ({
         name: name,
         value: value,
         defaultValue: default_value,
-        onChange: (e) => onFieldUpdated(name, e.target.value),
+        onChange: e => onFieldUpdated(name, e.target.value),
         placeholder: placeholder,
         autoComplete: auto_complete || name,
-        onValueChange: (value) => {
+        onValueChange: value => {
           onFieldUpdated(name, value);
         },
         options: options,

@@ -11,18 +11,21 @@ export const Input = (props: IInputProps) => {
   function renderCurrency(): JSX.Element {
     const key = `${numeric_input_props?.name}_${idx}`;
     return (
-      <div className={container_classname || 'col-span-full'}>
+      <div className={twMerge('col-span-full', container_classname)}>
         {input_label && (
-          <label {...input_label_props} htmlFor={numeric_input_props?.name} className={input_label_props?.className || 'block text-sm font-medium leading-6 text-gray-900'}>
+          <label
+            {...input_label_props}
+            htmlFor={numeric_input_props?.name}
+            className={twMerge('block text-sm font-medium leading-6 text-tc-primary', input_label_props?.className)}>
             {input_label}
           </label>
         )}
         <NumericFormat
           {...numeric_input_props}
-          className={
-            numeric_input_props?.className ||
-            'block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
-          }
+          className={twMerge(
+            'text-sm not-italic text-tc-primary font-medium bg-transparent w-full rounded-lg py-6 px-4 border border-bgc-accent focus:border focus:border-bgc-accent focus:ring-0',
+            numeric_input_props?.className,
+          )}
           id={numeric_input_props?.name}
           key={`input_${key}`}
           name={numeric_input_props?.name}
@@ -37,18 +40,21 @@ export const Input = (props: IInputProps) => {
   function renderNumber(): JSX.Element {
     const key = `${input_props.name}_${idx}`;
     return (
-      <div className={container_classname || 'col-span-full'}>
+      <div className={twMerge('col-span-full', container_classname)}>
         {input_label && (
-          <label {...input_label_props} htmlFor={numeric_input_props?.name} className={input_label_props?.className || 'block text-sm font-medium leading-6 text-gray-900'}>
+          <label
+            {...input_label_props}
+            htmlFor={numeric_input_props?.name}
+            className={twMerge('block text-sm font-medium leading-6 text-tc-primary', input_label_props?.className)}>
             {input_label}
           </label>
         )}
         <NumericFormat
           {...numeric_input_props}
-          className={
-            numeric_input_props?.className ||
-            'block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
-          }
+          className={twMerge(
+            'text-sm not-italic text-tc-primary font-medium bg-transparent w-full rounded-lg py-6 px-4 border border-bgc-accent focus:border focus:border-bgc-accent focus:ring-0',
+            numeric_input_props?.className,
+          )}
           id={numeric_input_props?.name}
           key={`input_${key}`}
           name={numeric_input_props?.name}
@@ -63,13 +69,13 @@ export const Input = (props: IInputProps) => {
     // eslint-disable-next-line no-restricted-globals
     const key = `${name}_${idx}`;
     return (
-      <div key={key} className={container_classname || 'col-span-full'}>
+      <div key={key} className={twMerge('col-span-full', container_classname)}>
         {input_label && (
           <label
             {...input_label_props}
             key={`lbl_${key}`}
             htmlFor={input_props.name}
-            className={input_label_props?.className || 'block text-sm font-medium leading-6 text-gray-900'}>
+            className={twMerge('block text-sm font-medium leading-6 text-tc-primary', input_label_props?.className)}>
             {input_label}
           </label>
         )}
@@ -78,10 +84,10 @@ export const Input = (props: IInputProps) => {
           type={type || 'text'}
           key={`input_${key}`}
           autoComplete={input_props.autoComplete || input_props.name}
-          className={
-            input_props?.className ||
-            'block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
-          }
+          className={twMerge(
+            'text-sm not-italic text-tc-primary font-medium bg-transparent w-full rounded-lg py-6 px-4 border border-bgc-accent focus:border focus:border-bgc-accent focus:ring-0',
+            input_props?.className,
+          )}
           id={input_props.name}
         />
       </div>
@@ -105,17 +111,43 @@ export const Input = (props: IInputProps) => {
     // eslint-disable-next-line no-restricted-globals
     const key = `${name}_${idx}`;
     return (
-      <div key={key} className={container_classname || 'col-span-full'}>
+      <div key={key} className={twMerge('col-span-full', container_classname)}>
         {input_label && (
           <label
             {...input_label_props}
             key={`lbl_${key}`}
             htmlFor={input_props.name}
-            className={input_label_props?.className || 'block text-sm font-medium leading-6 text-gray-900'}>
+            className={twMerge('block text-sm font-medium leading-6 text-tc-primary', input_label_props?.className)}>
             {input_label}
           </label>
         )}
         <Textarea {...textarea_props} key={`input_${key}`} autoComplete={input_props.autoComplete || input_props.name} className={textarea_props?.className} />
+      </div>
+    );
+  }
+
+  function renderCheckbox(): JSX.Element {
+    // eslint-disable-next-line no-restricted-globals
+    const key = `${name}_${idx}`;
+    return (
+      <div key={key} className={twMerge('col-span-full', container_classname)}>
+        {input_label && (
+          <label
+            {...input_label_props}
+            key={`lbl_${key}`}
+            htmlFor={input_props.name}
+            className={twMerge('block text-sm font-medium leading-6 text-tc-primary', input_label_props?.className)}>
+            {input_label}
+          </label>
+        )}
+        <input
+          {...input_props}
+          type={'checkbox'}
+          key={`input_${key}`}
+          autoComplete={input_props.autoComplete || input_props.name}
+          className={twMerge('w-6 h-6 rounded border border-bgc-accent bg-transparent focus:ring-0 focus:ring-offset-0', input_props?.className)}
+          id={input_props.name}
+        />
       </div>
     );
   }
@@ -129,6 +161,8 @@ export const Input = (props: IInputProps) => {
       return renderSelect();
     case 'textarea':
       return renderTextArea();
+    case 'checkbox':
+      return renderCheckbox();
     default:
     case 'text':
       return renderText();

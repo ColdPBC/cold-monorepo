@@ -189,6 +189,21 @@ export const AIAttemptedButNoAnswer: Story = {
   },
 };
 
+export const MultiText: Story = {
+  render: args => {
+    return <SurveyInputStory {...args} />;
+  },
+  args: {
+    input_key: 'facilties:0',
+    prompt: 'For which brands are you completing this assessment?',
+    options: [],
+    tooltip:
+      "Note: In the boxes below, enter the name of the brand(s) for which you are completing the assessment. If completing the assessment on behalf of multiple brands, enter each brand's name in its own text box.",
+    component: 'multi_text',
+    placeholder: 'Write a few sentences about your product',
+  },
+};
+
 const SurveyInputStory = (props: SurveyInputProps) => {
   const { input_key, prompt, options, tooltip, component, placeholder, value } = props;
   const [stateValue, setStateValue] = useState<any>(value);
