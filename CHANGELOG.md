@@ -1,3 +1,10 @@
+## [1.121.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.121.0...v1.121.1) (2024-02-29)
+
+
+### Bug Fixes
+
+* add missing dependency ([cb7e395](https://github.com/ColdPBC/cold-monorepo/commit/cb7e395dcdcc26a0024aebeac5fa02f439a755a8))
+
 # [1.121.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.120.0...v1.121.0) (2024-02-29)
 
 
