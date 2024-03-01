@@ -8,9 +8,9 @@ import { ScoringModule } from './scoring/scoring.module';
 import { SurveyFilterService } from './filter/survey.filter.service';
 
 @Module({
-  controllers: [SurveysController, ScoringModule],
+  imports: [ScoringModule],
+  controllers: [SurveysController],
   providers: [SurveysService, JwtService, JwtStrategy, SurveysRabbitService, SurveyFilterService],
   exports: [SurveysService, JwtService, JwtStrategy, SurveysRabbitService],
-  imports: [ScoringModule],
 })
 export class SurveysModule {}

@@ -1,9 +1,9 @@
-# [1.123.0-COLD-530.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.122.1...v1.123.0-COLD-530.1) (2024-03-01)
+## [1.122.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.122.1...v1.122.2) (2024-03-01)
 
 
-### Features
+### Bug Fixes
 
-* update compliance page to activate and go to wizard ([1a055f3](https://github.com/ColdPBC/cold-monorepo/commit/1a055f337d99743113e29a3ff7a70a561e39d6fb))
+* survey dependency bug ([fd5bb65](https://github.com/ColdPBC/cold-monorepo/commit/fd5bb655e4f4495ca049165fc644d35ffa4852b9))>>>>>>> main
 
 ## [1.122.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.122.0...v1.122.1) (2024-03-01)
 
