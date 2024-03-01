@@ -1,3 +1,10 @@
+# [1.119.0-cold-520.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.119.0-cold-520.1...v1.119.0-cold-520.2) (2024-03-01)
+
+
+### Bug Fixes
+
+* send definition rather than whole survey ([c21e376](https://github.com/ColdPBC/cold-monorepo/commit/c21e376962ce32974d33eb583cb89ec8b0ee7260))
+
 # [1.119.0-cold-520.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.118.0...v1.119.0-cold-520.1) (2024-03-01)
 
 
