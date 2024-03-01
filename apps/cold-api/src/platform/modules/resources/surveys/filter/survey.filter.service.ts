@@ -59,32 +59,39 @@ export class SurveyFilterService extends BaseWorker {
         '    $complete := function($v){$total($v) = $answered($v)};\n' +
         '    $questions := function($v){$merge($map($keys($v.follow_up), function($key) { {$key: {"user_answered": $exists($v.follow_up[$key].value) and $v.follow_up[$key].value != null, "ai_answered": $exists($v.follow_up[$key].ai_response.answer) and $v.follow_up[$key].ai_response.answer != null}}}))};\n' +
         '    $createQuestions := function($v) {\n' +
-        '        $map($keys($v.follow_up), function($key, $v, $o) { $createQuestionObject($v, $key, $o) })\n' +
+        '        $map($keys($v.follow_up), function($key, $v, $o) { \n' +
+        '             $createQuestionObject($v, $key, $o)\n' +
+        '        })\n' +
         '    };\n' +
+        '    \n' +
         '    $createQuestionObject := function($idx, $key, $o) {\n' +
-        '        {\n' +
+        '        { \n' +
         '            $key: {\n' +
+        '                "score":$lookup(definition.sections.*.follow_up, $key).score,\n' +
         '                "user_answered": $exists($lookup(sections.*.follow_up, $key).value),\n' +
         '                "ai_answered": $exists($lookup(sections.*.follow_up, $key).ai_response.answer)\n' +
         '            }\n' +
         '        }\n' +
         '    };\n' +
+        '    \n' +
         '    $mergeQuestions := function($v) {\n' +
         '        $merge($createQuestions($v))\n' +
         '    };\n' +
+        '            \n' +
         '    $review := function($v){$count($v.follow_up[$k].ai_response.answer and $filter($v.follow_up.*, function($q) { $exists($q.value) }))};\n' +
-        '  \n' +
-        '  $map(sections.*, function($v, $k, $o) {\n' +
-        '    {\n' +
-        '      "section": $section($k),\n' +
-        '      "title": $title($v),\n' +
-        '      "total": $total($v),\n' +
-        '      "answered": $answered($v),\n' +
-        '      "complete": $complete($v),\n' +
-        '      "review": $count($keys($sift($mergeQuestions($v), function($v) { $v.user_answered = false and $v.ai_answered = true }))),\n' +
-        '      "questions": $mergeQuestions($v)\n' +
-        '    }\n' +
-        '  })\n' +
+        '    $sectionScore := function($v){$sum($v.follow_up.*.score)};\n' +
+        '    $map(definition.sections.*, function($v, $k, $o) {\n' +
+        '        {\n' +
+        '              "section": $section($k),\n' +
+        '              "section_score": $sectionScore($v),\n' +
+        '              "title": $title($v),\n' +
+        '              "total": $total($v),\n' +
+        '              "answered": $answered($v),\n' +
+        '              "complete": $complete($v),\n' +
+        '              "review": $count($keys($sift($mergeQuestions($v), function($v) { $v.user_answered = false and $v.ai_answered = true }))),\n' +
+        '              "questions": $mergeQuestions($v)\n' +
+        '        }\n' +
+        '    })\n' +
         ')',
     );
     set(filteredObject, 'progress', await progressExpression.evaluate(filteredObject));

@@ -8,6 +8,7 @@ import { Span } from 'nestjs-ddtrace';
 import { v4 } from 'uuid';
 import { BaseWorker, CacheService, DarklyService, MqttService, PrismaService, SurveyDefinitionsEntity, UpdateSurveyDefinitionsDto, ZodSurveyResponseDto } from '@coldpbc/nest';
 import { SurveyFilterService } from './filter/survey.filter.service';
+import { ScoringService } from './scoring/scoring.service';
 
 @Span()
 @Global()
@@ -22,6 +23,7 @@ export class SurveysService extends BaseWorker {
     private readonly cache: CacheService,
     private readonly mqtt: MqttService,
     private readonly filterService: SurveyFilterService,
+    private readonly scoreService: ScoringService,
   ) {
     super('SurveysService');
   }
@@ -278,7 +280,7 @@ export class SurveysService extends BaseWorker {
         update: true,
       });
 
-      return this.filterService.filterDependencies(def);
+      return this.scoreService.scoreSurvey(this.filterService.filterDependencies(def));
     } catch (e) {
       this.logger.error(e.message, { error: e });
       throw e;
