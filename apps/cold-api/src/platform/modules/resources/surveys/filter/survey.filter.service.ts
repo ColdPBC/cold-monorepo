@@ -10,33 +10,43 @@ export class SurveyFilterService extends BaseWorker {
   }
 
   async filterDependencies(jsonObject: any): Promise<any> {
+    // Create a deep copy of the JSON object
     const filteredObject = JSON.parse(JSON.stringify(jsonObject)); // Create a deep copy of the JSON object
 
+    // Iterate over each section in the filteredObject
     for (const sectionKey in filteredObject.sections) {
       const section = filteredObject.sections[sectionKey];
-      // Check for a filter at the section level
+      // Check for a dependency at the section level
       if (section.dependency?.expression) {
+        // Evaluate the JSONata expression for the dependency
         const jsonAtaX = jsonata(section.dependency.expression);
         const dependencyMet = await jsonAtaX.evaluate(filteredObject);
 
+        // If the dependency is not met, remove the section from the filteredObject
         if (!dependencyMet) {
           delete filteredObject.sections[sectionKey];
           continue; // No need to check follow-ups if the section is already removed
         } else {
+          // If the dependency is met, remove the dependency from the section
           delete filteredObject.sections[sectionKey].dependency;
         }
       }
 
+      // Iterate over each follow-up question in the section
       for (const currentQuestionKey in section.follow_up) {
         const currentQuestion = section.follow_up[currentQuestionKey];
 
+        // Check for a dependency at the follow-up question level
         if (currentQuestion.dependency?.expression) {
+          // Evaluate the JSONata expression for the dependency
           const jsonAtaX = jsonata(currentQuestion.dependency.expression);
           const dependencyMet = await jsonAtaX.evaluate(jsonObject);
 
+          // If the dependency is not met, remove the follow-up question from the section
           if (!dependencyMet) {
             delete filteredObject.sections[sectionKey].follow_up[currentQuestionKey];
           } else {
+            // If the dependency is met, remove the dependency from the follow-up question
             delete filteredObject.sections[sectionKey].follow_up[currentQuestionKey].dependency;
           }
         }
@@ -44,12 +54,34 @@ export class SurveyFilterService extends BaseWorker {
     }
 
     this.logger.info('Filtered Dependencies', { original: jsonObject, filtered: filteredObject });
+
+    // Create a JSONata expression to filter out empty sections
     const filterEmptySections = jsonata(`$sift(sections, function($v, $k, $i, $o) { $count($keys($v.follow_up)) > 0 })`);
 
+    // Evaluate the JSONata expression to get the filtered sections
     const filteredSections = await filterEmptySections.evaluate(filteredObject);
 
+    // Replace the sections in the filteredObject with the filtered sections
     filteredObject.sections = filteredSections;
 
+    /**
+     * This JSONata expression is used to transform and summarize data from a survey.
+     *
+     * @function $title - This function returns the title of a given section.
+     * @function $section - This function returns the key of a given section.
+     * @function $total - This function counts the total number of follow-up questions in a given section.
+     * @function $answered - This function counts the number of answered follow-up questions in a given section.
+     * @function $complete - This function checks if all follow-up questions in a given section have been answered.
+     * @function $questions - This function creates an object for each follow-up question, indicating whether the user and AI have answered the question.
+     * @function $createQuestions - This function creates an array of question objects for a given section.
+     * @function $createQuestionObject - This function creates an object for a given question, including the score and whether the user and AI have answered the question.
+     * @function $mergeQuestions - This function merges the question objects for a given section into a single object.
+     * @function $review - This function counts the number of questions that the AI has answered but the user has not.
+     * @function $sectionScore - This function calculates the total score for a given section.
+     * @function $map - This function iterates over each section and creates a new object for each one, including the section key, score, title, total number of questions, number of answered questions, whether the section is complete, number of questions to review, and the questions object.
+     */
+
+    // Create a JSONata expression to calculate the progress
     const progressExpression = jsonata(
       '(\n' +
         '    $title := function($v){$v.title};\n' +
@@ -94,7 +126,14 @@ export class SurveyFilterService extends BaseWorker {
         '    })\n' +
         ')',
     );
-    set(filteredObject, 'progress', await progressExpression.evaluate(filteredObject));
+
+    // Evaluate the JSONata expression to get the progress
+    const progress = await progressExpression.evaluate(filteredObject);
+
+    // Set the progress in the filteredObject
+    set(filteredObject, 'progress', progress);
+
+    // Return the filteredObject
     return filteredObject;
   }
 }
