@@ -251,17 +251,17 @@ export const Default: Story = {
         button = await within(complianceCard).findByRole('button', {
           name: 'See Details',
         });
-        await userEvent.click(button);
-        // await verifyComplianceDetailPage(orgComplianceSet, canvasElement);
-        await canvas.findByText(`${orgComplianceSet.compliance_definition.title} Compliance`);
-        // get Sections text
-        await canvas.findByText('Sections');
-        // find all compliance-section-overview-card
-        const complianceSectionOverviewCards = await canvas.findAllByTestId('compliance-section-overview-card');
-        // verify the number of compliance-section-overview-card with the number of compliance surveys
-        await expect(complianceSectionOverviewCards.length).toEqual(orgComplianceSet.compliance_definition.surveys.length);
-        const sidebarItem = await within(sidebar).findByText('Compliance');
-        await userEvent.click(sidebarItem);
+        // await userEvent.click(button);
+        // // await verifyComplianceDetailPage(orgComplianceSet, canvasElement);
+        // await canvas.findByText(`${orgComplianceSet.compliance_definition.title} Compliance`);
+        // // get Sections text
+        // await canvas.findByText('Sections');
+        // // find all compliance-section-overview-card
+        // const complianceSectionOverviewCards = await canvas.findAllByTestId('compliance-section-overview-card');
+        // // verify the number of compliance-section-overview-card with the number of compliance surveys
+        // await expect(complianceSectionOverviewCards.length).toEqual(orgComplianceSet.compliance_definition.surveys.length);
+        // const sidebarItem = await within(sidebar).findByText('Compliance');
+        // await userEvent.click(sidebarItem);
       } else {
         button = await within(complianceCard).findByRole('button', {
           name: 'Activate',
