@@ -1,3 +1,11 @@
+# [1.123.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.122.2...v1.123.0) (2024-03-01)
+
+
+### Features
+
+* Change POST to PUT to start ai processing ([49108b2](https://github.com/ColdPBC/cold-monorepo/commit/49108b226df884865f162882958e515f466cbf80))
+* update compliance page to activate and go to wizard ([1a055f3](https://github.com/ColdPBC/cold-monorepo/commit/1a055f337d99743113e29a3ff7a70a561e39d6fb))
+
 ## [1.122.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.122.1...v1.122.2) (2024-03-01)
 
 
