@@ -1,3 +1,11 @@
+# [1.119.0-cold-520.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.118.0...v1.119.0-cold-520.1) (2024-03-01)
+
+
+### Features
+
+* add progress array to response ([f11989c](https://github.com/ColdPBC/cold-monorepo/commit/f11989c7e3facce6161bc08de070bfddc2959c2a))
+* add scoring service ([b2822c2](https://github.com/ColdPBC/cold-monorepo/commit/b2822c2a432fc4c1873df6df0e72036e7a146599))
+* add survey filter class ([f53ad9a](https://github.com/ColdPBC/cold-monorepo/commit/f53ad9a8409a3e108964f2a9fb0443fa07b0e73c))
 
 # [1.118.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.117.0...v1.118.0) (2024-02-27)
 
