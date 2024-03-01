@@ -16,7 +16,7 @@ export class ScoringService extends BaseWorker {
    * question and returns the scored survey.
    * @param survey
    */
-  async scoreSurvey(survey: any): Promise<any> {
+  scoreSurvey(survey: any): Promise<any> {
     // Iterate over each section in the survey
     Object.keys(survey.sections).forEach(sectionKey => {
       // Get the follow-up questions for the current section

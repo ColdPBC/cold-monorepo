@@ -2292,7 +2292,11 @@ export const rei_pia_2024 = {
               placeholder: '',
             },
             rubric: {
-              score_map: {},
+              score_map: {
+                'We have successfully implemented guidelines': 1,
+                'We have not implemented guidelines': 0,
+                Other: 0.5,
+              },
             },
           },
         },
