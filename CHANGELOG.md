@@ -1,3 +1,10 @@
+## [1.122.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.122.0...v1.122.1) (2024-03-01)
+
+
+### Bug Fixes
+
+* survey dependency bug ([18b074c](https://github.com/ColdPBC/cold-monorepo/commit/18b074ca2345bfec2d85adfbd2415cfe5c7a60db))
+
 # [1.122.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.121.1...v1.122.0) (2024-03-01)
 
 
