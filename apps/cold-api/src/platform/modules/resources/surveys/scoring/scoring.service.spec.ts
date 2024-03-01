@@ -24,8 +24,8 @@ describe('ScoringService', () => {
     describe(`${complianceSet}: valid data`, () => {
       it('should score the survey', async () => {
         const mockData = generateMockData(complianceSet);
-        await service.scoreSurvey(mockData);
-        
+        await service.scoreSurvey(mockData.definition);
+
         expect(mockData).toBeDefined();
       });
     });

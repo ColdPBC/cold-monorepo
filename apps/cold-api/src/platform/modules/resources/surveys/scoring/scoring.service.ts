@@ -8,8 +8,8 @@ export class ScoringService extends BaseWorker {
   }
 
   async scoreSurvey(survey: any): Promise<any> {
-    Object.keys(survey.definition.sections).forEach(sectionKey => {
-      const followUps = survey.definition.sections[sectionKey].follow_up;
+    Object.keys(survey.sections).forEach(sectionKey => {
+      const followUps = survey.sections[sectionKey].follow_up;
       Object.keys(followUps).forEach(questionKey => {
         const question = followUps[questionKey];
 
