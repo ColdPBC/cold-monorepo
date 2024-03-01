@@ -4,10 +4,12 @@ import { JwtStrategy } from '@coldpbc/nest';
 import { SurveysController } from './surveys.controller';
 import { SurveysService } from './surveys.service';
 import { SurveysRabbitService } from './surveys.rabbit';
+import { ScoringModule } from './scoring/scoring.module';
 
 @Module({
   controllers: [SurveysController],
   providers: [SurveysService, JwtService, JwtStrategy, SurveysRabbitService],
   exports: [SurveysService, JwtService, JwtStrategy, SurveysRabbitService],
+  imports: [ScoringModule],
 })
 export class SurveysModule {}
