@@ -20,26 +20,11 @@ export interface SignupFormProps {
   onSubmit: () => void;
 }
 
-const _SignupForm = ({
-  userData,
-  companyData,
-  tosSigned,
-  privacySigned,
-  tosData,
-  privacyData,
-  onSubmit,
-}: SignupFormProps) => {
-  const [firstName, setFirstName] = React.useState<string | undefined>(
-    !userData?.given_name ? '' : userData?.given_name,
-  );
-  const [lastName, setLastName] = React.useState<string | undefined>(
-    !userData?.family_name ? '' : userData?.family_name,
-  );
-  const [companyName, setCompanyName] = React.useState<string | undefined>(
-    companyData?.name === undefined ? '' : companyData?.display_name,
-  );
-  const [isAgreedToPrivacyAndTOS, setIsAgreedToPrivacyAndTOS] =
-    React.useState<boolean>(tosSigned && privacySigned);
+const _SignupForm = ({ userData, companyData, tosSigned, privacySigned, tosData, privacyData, onSubmit }: SignupFormProps) => {
+  const [firstName, setFirstName] = React.useState<string | undefined>(!userData?.given_name ? '' : userData?.given_name);
+  const [lastName, setLastName] = React.useState<string | undefined>(!userData?.family_name ? '' : userData?.family_name);
+  const [companyName, setCompanyName] = React.useState<string | undefined>(companyData?.name === undefined ? '' : companyData?.display_name);
+  const [isAgreedToPrivacyAndTOS, setIsAgreedToPrivacyAndTOS] = React.useState<boolean>(tosSigned && privacySigned);
   const [disabled, setDisabled] = React.useState<boolean>(false);
   const [submitting, setSubmitting] = React.useState<boolean>(false);
   const { addToastMessage } = useAddToastMessage();
@@ -55,13 +40,9 @@ const _SignupForm = ({
   const onContinue = async () => {
     setDisabled(true);
     setSubmitting(true);
-    const promises = await Promise.all([
-      signPolicy('tos'),
-      signPolicy('privacy'),
-      postUserData(),
-    ]);
+    const promises = await Promise.all([signPolicy('tos'), signPolicy('privacy'), postUserData()]);
     // check if all promises are successful
-    if (promises.every((promise) => !isAxiosError(promise))) {
+    if (promises.every(promise => !isAxiosError(promise))) {
       await onSubmit();
     } else {
       await addToastMessage({
@@ -102,17 +83,15 @@ const _SignupForm = ({
     <div className={'text-tc-primary space-y-[32px]'}>
       <div className={'space-y-[8px]'}>
         <div className={'text-h2 font-bold pb-2'}>Welcome to Cold!</div>
-        <div className={'text-h4 font-bold'}>
-          Let's finish creating your account
-        </div>
+        <div className={'text-h4 font-bold'}>Let's finish creating your account</div>
       </div>
       <div>
         <div className={'space-y-[40px] py-[20px]'}>
           <Input
             input_props={{
               value: firstName,
-              onChange: (e) => setFirstName(e.target.value),
-              onValueChange: (name) => setFirstName(name),
+              onChange: e => setFirstName(e.target.value),
+              onValueChange: name => setFirstName(name),
               name: 'firstName',
               className:
                 'text-sm not-italic text-tc-primary font-medium bg-transparent w-full rounded-lg p-[16px] border border-bgc-accent focus:border focus:border-bgc-accent focus:ring-0',
@@ -127,8 +106,8 @@ const _SignupForm = ({
           <Input
             input_props={{
               value: lastName,
-              onChange: (e) => setLastName(e.target.value),
-              onValueChange: (name) => setLastName(name),
+              onChange: e => setLastName(e.target.value),
+              onValueChange: name => setLastName(name),
               name: 'lastName',
               className:
                 'text-sm not-italic text-tc-primary font-medium bg-transparent w-full rounded-lg p-[16px] border border-bgc-accent focus:border focus:border-bgc-accent focus:ring-0',
@@ -143,8 +122,8 @@ const _SignupForm = ({
           <Input
             input_props={{
               value: companyName,
-              onChange: (e) => setCompanyName(e.target.value),
-              onValueChange: (name) => setCompanyName(name),
+              onChange: e => setCompanyName(e.target.value),
+              onValueChange: name => setCompanyName(name),
               name: 'companyName',
               className:
                 'text-sm not-italic font-medium bg-transparent w-full rounded-lg p-[16px] border border-bgc-accent' +
@@ -165,32 +144,21 @@ const _SignupForm = ({
               type={InputTypes.Checkbox}
               input_props={{
                 checked: isAgreedToPrivacyAndTOS,
-                onChange: (e) => setIsAgreedToPrivacyAndTOS(e.target.checked),
-                onValueChange: (agreed) => setIsAgreedToPrivacyAndTOS(agreed),
+                onChange: e => setIsAgreedToPrivacyAndTOS(e.target.checked),
+                onValueChange: agreed => setIsAgreedToPrivacyAndTOS(agreed),
                 name: 'isAgreedToPrivacyAndTOS',
-                className:
-                  'w-6 h-6 rounded border border-bgc-accent bg-transparent focus:ring-0 focus:ring-offset-0',
+                className: 'w-6 h-6 rounded border border-bgc-accent bg-transparent focus:ring-0 focus:ring-offset-0 px-0 py-0',
                 disabled: tosSigned && privacySigned,
                 'aria-label': 'isAgreedToPrivacyAndTOS',
               }}
             />
             <div>
               I agree to the Cold Climate Platform{' '}
-              <a
-                className={'underline'}
-                href={'/terms'}
-                target={'_blank'}
-                rel="noreferrer"
-              >
+              <a className={'underline'} href={'/terms'} target={'_blank'} rel="noreferrer">
                 Terms And Conditions
               </a>{' '}
               and{' '}
-              <a
-                className={'underline'}
-                href={'/privacy'}
-                target={'_blank'}
-                rel="noreferrer"
-              >
+              <a className={'underline'} href={'/privacy'} target={'_blank'} rel="noreferrer">
                 Privacy Policy
               </a>
             </div>
@@ -198,11 +166,7 @@ const _SignupForm = ({
         </div>
       </div>
       <div>
-        <BaseButton
-          onClick={onContinue}
-          variant={ButtonTypes.primary}
-          disabled={disabled}
-        >
+        <BaseButton onClick={onContinue} variant={ButtonTypes.primary} disabled={disabled}>
           <div className={'flex gap-2'}>
             <span>Continue</span>
             {submitting && <Spinner size={GlobalSizes.small} />}
@@ -214,7 +178,7 @@ const _SignupForm = ({
 };
 
 export const SignupForm = withErrorBoundary(_SignupForm, {
-  FallbackComponent: (props) => <ErrorFallback {...props} />,
+  FallbackComponent: props => <ErrorFallback {...props} />,
   onError: (error, info) => {
     console.error('Error occurred in SignupForm: ', error);
   },

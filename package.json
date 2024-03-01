@@ -1,7 +1,7 @@
 {
   "name": "cold-monorepo-nx",
   "packageManager": "yarn@4.1.0",
-  "version": "1.119.0-cold-520.2",
+  "version": "1.121.1",
   "license": "MIT",
   "engines": {
     "node": ">=20.9.0",
@@ -124,6 +124,7 @@
     "got": "^14.0.0",
     "hot-shots": "^10.0.0",
     "js-cookie": "^3.0.5",
+    "jsonata": "^2.0.4",
     "json-stringify-safe": "^5.0.1",
     "jsonata": "^2.0.4",
     "jwks-rsa": "^3.0.1",

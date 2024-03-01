@@ -1,17 +1,47 @@
-# [1.119.0-cold-520.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.119.0-cold-520.1...v1.119.0-cold-520.2) (2024-03-01)
+
+## [1.121.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.121.0...v1.121.1) (2024-02-29)
 
 
 ### Bug Fixes
 
-* send definition rather than whole survey ([c21e376](https://github.com/ColdPBC/cold-monorepo/commit/c21e376962ce32974d33eb583cb89ec8b0ee7260))
 
-# [1.119.0-cold-520.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.118.0...v1.119.0-cold-520.1) (2024-03-01)
+* add missing dependency ([cb7e395](https://github.com/ColdPBC/cold-monorepo/commit/cb7e395dcdcc26a0024aebeac5fa02f439a755a8))
+
+# [1.121.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.120.0...v1.121.0) (2024-02-29)
+
+
+### Bug Fixes
+
+* update /settings/user to /settings/users ([8f02a47](https://github.com/ColdPBC/cold-monorepo/commit/8f02a47757d60ec6619cb52ae006d67e16a1aa0a))
+
+
+### Features
+
+* added checkbox input type ([4c0cbe0](https://github.com/ColdPBC/cold-monorepo/commit/4c0cbe0f3fa9bb9b5183b2733ae27468efb9d99b))
+* created list item input component, added plus and subtract icons ([2a5dae1](https://github.com/ColdPBC/cold-monorepo/commit/2a5dae177c86c5b0c0220d8482492be44167d9ce))
+* has any operator to check if the value array has any of the comparison array values ([231de0e](https://github.com/ColdPBC/cold-monorepo/commit/231de0e22028afe1857cd09daca6110410e1670f))
+* point assessments to old journey page ([5f41bb2](https://github.com/ColdPBC/cold-monorepo/commit/5f41bb2bdaefdbfdea64fd3ec2e5e4091475f584))
+* put list on top of list item input, prevent submission of empty values and empty list ([70a88f3](https://github.com/ColdPBC/cold-monorepo/commit/70a88f395e196aaee3c99279790ebe8870d8833a))
+* remove company info from sidebar ([21581ee](https://github.com/ColdPBC/cold-monorepo/commit/21581eeb1d83420c8b58755c8943b4af0e9c3cd9))
+* update form input number, currency styling ([d03e513](https://github.com/ColdPBC/cold-monorepo/commit/d03e513e4e396c8d1bc6819f5855496c1ddf0963))
+* update icons to use color prop ([41f133f](https://github.com/ColdPBC/cold-monorepo/commit/41f133f0841474e6650e4a0232e9f4ab09c5876c))
+* updated styling for default input types ([4482218](https://github.com/ColdPBC/cold-monorepo/commit/448221877396bba124e79d09ed945f561bb019c8))
+
+# [1.120.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.119.0...v1.120.0) (2024-02-29)
+
+
+### Features
+
+* add array comparison, has and in opertators ([4a4d349](https://github.com/ColdPBC/cold-monorepo/commit/4a4d3495bcc9e327935fc63a93aabecd59293ade))
+
+# [1.119.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.118.0...v1.119.0) (2024-02-29)
+
 
 
 ### Features
 
 * add progress array to response ([f11989c](https://github.com/ColdPBC/cold-monorepo/commit/f11989c7e3facce6161bc08de070bfddc2959c2a))
-* add scoring service ([b2822c2](https://github.com/ColdPBC/cold-monorepo/commit/b2822c2a432fc4c1873df6df0e72036e7a146599))
+
 * add survey filter class ([f53ad9a](https://github.com/ColdPBC/cold-monorepo/commit/f53ad9a8409a3e108964f2a9fb0443fa07b0e73c))
 
 # [1.118.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.117.0...v1.118.0) (2024-02-27)

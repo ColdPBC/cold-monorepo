@@ -171,11 +171,6 @@ const seeds: Array<{
           },
           items: [
             {
-              key: 'settings_company_info_key',
-              label: 'Company Info',
-              route: '/settings/company_info',
-            },
-            {
               key: 'settings_account_key',
               label: 'Account',
               route: '/settings/account',

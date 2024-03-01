@@ -1,21 +1,21 @@
 import { Route, Routes } from 'react-router-dom';
 import {
-  ApplicationToaster,
-  Terms,
-  Home,
-  Settings,
-  DocumentUpload,
-  DashboardLayout,
-  Interceptor,
-  Footprint,
-  Journey,
-  ActionRoutes,
-  Signup,
-  ProtectedRoute,
-  ComplianceRoutes,
   AccountSettingsPage,
-  UserSettingsPage,
+  ActionRoutes,
   ActionsOverview,
+  ApplicationToaster,
+  ComplianceRoutes,
+  DashboardLayout,
+  DocumentUpload,
+  Footprint,
+  Home,
+  Interceptor,
+  Journey,
+  ProtectedRoute,
+  Settings,
+  Signup,
+  Terms,
+  UserSettingsPage,
   WizardRoutes,
 } from '@coldpbc/components';
 import { useFlags } from 'launchdarkly-react-client-sdk';
@@ -30,13 +30,12 @@ export const ColdRoutes = () => {
           <Route path={'/'} element={<Home />} />
           <Route path={'/home'} element={<Home />} />
           {ldFlags.showComplianceModule && ComplianceRoutes()}
-          <Route path={'/assessments'} element={null} />
+          <Route path={'/assessments'} element={<Journey />} />
           {ldFlags.showActions261 && <Route path="/actions" element={<ActionsOverview />} />}
           <Route path={'/reports/carbon_footprint'} element={<Footprint />} />
           {ldFlags.showDocumentsUploadModuleCold492 && <Route path="/documents" element={<DocumentUpload />} />}
-          <Route path={'/settings/company_info'} element={null} />
           <Route path={'/settings/account'} element={<AccountSettingsPage />} />
-          <Route path={'/settings/user'} element={<UserSettingsPage />} />
+          <Route path={'/settings/users'} element={<UserSettingsPage />} />
           <Route path="*" element={<div className={'text-tc-primary'}>Pending...</div>} />
           {WizardRoutes()}
         </>

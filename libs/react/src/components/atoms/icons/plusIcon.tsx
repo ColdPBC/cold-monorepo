@@ -1,7 +1,6 @@
-import React from 'react';
 import { IconProps } from '@coldpbc/interfaces';
 
-export const ColdPlusIcon = (props: IconProps) => {
+export const PlusIcon = (props: IconProps) => {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none" {...props}>
       <path
