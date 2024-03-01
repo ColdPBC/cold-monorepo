@@ -1,3 +1,14 @@
+# [1.122.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.121.1...v1.122.0) (2024-03-01)
+
+
+### Bug Fixes
+
+* send definition rather than whole survey ([c21e376](https://github.com/ColdPBC/cold-monorepo/commit/c21e376962ce32974d33eb583cb89ec8b0ee7260))
+
+
+### Features
+
+* add scoring service ([b2822c2](https://github.com/ColdPBC/cold-monorepo/commit/b2822c2a432fc4c1873df6df0e72036e7a146599))
 
 ## [1.121.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.121.0...v1.121.1) (2024-02-29)
 
