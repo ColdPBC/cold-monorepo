@@ -1,14 +1,42 @@
-# [1.122.0-COLD-501.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.121.1...v1.122.0-COLD-501.1) (2024-03-02)
+# [1.123.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.122.2...v1.123.0) (2024-03-01)
 
 
 ### Features
 
-* compliance survey questionnaire ([ee48487](https://github.com/ColdPBC/cold-monorepo/commit/ee48487eb4db62e07490adc1a84576a993490ba7))
+* Change POST to PUT to start ai processing ([49108b2](https://github.com/ColdPBC/cold-monorepo/commit/49108b226df884865f162882958e515f466cbf80))
+* update compliance page to activate and go to wizard ([1a055f3](https://github.com/ColdPBC/cold-monorepo/commit/1a055f337d99743113e29a3ff7a70a561e39d6fb))
+
+## [1.122.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.122.1...v1.122.2) (2024-03-01)
+
+
+### Bug Fixes
+
+* survey dependency bug ([fd5bb65](https://github.com/ColdPBC/cold-monorepo/commit/fd5bb655e4f4495ca049165fc644d35ffa4852b9))>>>>>>> main
+
+## [1.122.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.122.0...v1.122.1) (2024-03-01)
+
+
+### Bug Fixes
+
+* survey dependency bug ([18b074c](https://github.com/ColdPBC/cold-monorepo/commit/18b074ca2345bfec2d85adfbd2415cfe5c7a60db))
+
+# [1.122.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.121.1...v1.122.0) (2024-03-01)
+
+
+### Bug Fixes
+
+* send definition rather than whole survey ([c21e376](https://github.com/ColdPBC/cold-monorepo/commit/c21e376962ce32974d33eb583cb89ec8b0ee7260))
+
+
+### Features
+
+* add scoring service ([b2822c2](https://github.com/ColdPBC/cold-monorepo/commit/b2822c2a432fc4c1873df6df0e72036e7a146599))
 
 ## [1.121.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.121.0...v1.121.1) (2024-02-29)
 
 
 ### Bug Fixes
+
 
 * add missing dependency ([cb7e395](https://github.com/ColdPBC/cold-monorepo/commit/cb7e395dcdcc26a0024aebeac5fa02f439a755a8))
 
@@ -42,9 +70,11 @@
 # [1.119.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.118.0...v1.119.0) (2024-02-29)
 
 
+
 ### Features
 
 * add progress array to response ([f11989c](https://github.com/ColdPBC/cold-monorepo/commit/f11989c7e3facce6161bc08de070bfddc2959c2a))
+
 * add survey filter class ([f53ad9a](https://github.com/ColdPBC/cold-monorepo/commit/f53ad9a8409a3e108964f2a9fb0443fa07b0e73c))
 
 # [1.118.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.117.0...v1.118.0) (2024-02-27)

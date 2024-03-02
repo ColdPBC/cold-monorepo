@@ -12,12 +12,13 @@ export const AutomateComplianceFlowStep = () => {
   const { logError } = useColdContext();
   const { orgId } = useAuth0Wrapper();
   const { addToastMessage } = useAddToastMessage();
-  const { nextStep, setCurrentStep } = useContext(WizardContext);
+  const { nextStep, setCurrentStep, data } = useContext(WizardContext);
   const { mutate } = useSWRConfig();
+  const { name } = data;
 
   const startAutomation = async () => {
     // post to start automation
-    const response = await axiosFetcher([`/compliance_definitions/rei/organization/${orgId}`, 'POST']);
+    const response = await axiosFetcher([`/compliance_definitions/${name}/organization/${orgId}`, 'PUT']);
     if (isAxiosError(response)) {
       await addToastMessage({ message: 'Automation could not be started', type: ToastMessage.FAILURE });
       logError(response.message, ErrorType.AxiosError, response);

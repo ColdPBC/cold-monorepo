@@ -14,6 +14,7 @@ export interface ComplianceOverviewProps {
 
 export const ComplianceOverview = (props: ComplianceOverviewProps) => {
   const { complianceData, orgComplianceData } = props;
+  const [loading, setLoading] = React.useState<boolean>(false);
   const { addToastMessage } = useAddToastMessage();
   const { orgId } = useAuth0Wrapper();
   const navigate = useNavigate();
@@ -21,8 +22,7 @@ export const ComplianceOverview = (props: ComplianceOverviewProps) => {
 
   const getCTAOnClick = async () => {
     if (orgComplianceData !== undefined) {
-      navigate(`/compliance/${orgComplianceData.compliance_definition.name}`);
-      return;
+      await navigate(`/wizard/compliance/${orgComplianceData.compliance_definition.name}`);
     } else {
       const response = await axiosFetcher([`/compliance_definitions/${complianceData.name}/organization/${orgId}`, 'POST']);
       if (isAxiosError(response)) {
@@ -30,7 +30,7 @@ export const ComplianceOverview = (props: ComplianceOverviewProps) => {
         logError(response.message, ErrorType.AxiosError, response);
       } else {
         await addToastMessage({ message: 'Compliance activated', type: ToastMessage.SUCCESS });
-        await navigate(`/compliance/${complianceData.name}`);
+        await navigate(`/wizard/compliance/${complianceData.name}`);
       }
     }
   };
@@ -41,18 +41,24 @@ export const ComplianceOverview = (props: ComplianceOverviewProps) => {
         label: 'See Details',
         variant: ButtonTypes.secondary,
         size: GlobalSizes.large,
-        onClick: () => {
-          getCTAOnClick();
+        onClick: async () => {
+          setLoading(true);
+          await getCTAOnClick();
+          setLoading(false);
         },
+        loading: loading,
       };
     } else {
       return {
         label: 'Activate',
         variant: ButtonTypes.primary,
         size: GlobalSizes.large,
-        onClick: () => {
-          getCTAOnClick();
+        onClick: async () => {
+          setLoading(true);
+          await getCTAOnClick();
+          setLoading(false);
         },
+        loading: loading,
       };
     }
   };
