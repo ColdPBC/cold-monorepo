@@ -18,9 +18,11 @@ import { auth0UserMock } from './userMock';
 import { getNewsDefault } from './newsMock';
 import { getActionMock, getActionsMock } from './action';
 import { v4 as uuidv4 } from 'uuid';
-import { getComplianceMock, getComplianceMockByName, getOrganizationComplianceMock, getOrganizationComplianceMockByName } from './complianceMock';
+import { getComplianceMock, getOrganizationComplianceMock, getOrganizationComplianceMockByName } from './complianceMock';
 import { getDocumentsListTableMock } from './componentMock';
 import { getAllFilesMock } from './filesMock';
+import { returnUpdatedSurvey } from './helpers';
+import { ComplianceSurveyPayloadType } from '@coldpbc/interfaces';
 
 // Even if this uses vite as a bundler, it still uses the NODE_ENV variable
 export const getApiUrl = (path: string) => {
@@ -174,9 +176,10 @@ export const handlers = [
   }),
 
   rest.put(getApiUrl('/organizations/:orgId/surveys/:name'), async (req, res, ctx) => {
-    const { data } = await req.json();
-
-    return res(ctx.json({}));
+    const response = await req.json();
+    const surveys = getSurveysMock() as ComplianceSurveyPayloadType[];
+    const updatedSurvey = returnUpdatedSurvey(response, surveys);
+    return res(ctx.json(updatedSurvey));
   }),
 
   rest.patch(getApiUrl(`/members/:emailOrId`), (req, res, ctx) => {

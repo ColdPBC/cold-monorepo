@@ -8,7 +8,7 @@ import { ErrorType, GlobalSizes } from '@coldpbc/enums';
 import { useSearchParams } from 'react-router-dom';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application/errors/errorFallback';
-import { useOrgSWR, useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
+import { useAuth0Wrapper, useColdContext, useOrgSWR } from '@coldpbc/hooks';
 import { isComponentTypeValid } from '@coldpbc/lib';
 
 export interface SurveyProps {

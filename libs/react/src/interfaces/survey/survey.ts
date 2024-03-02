@@ -120,3 +120,48 @@ export interface SurveyNextStep {
   started: boolean;
   surveyProgress: number;
 }
+
+export interface ComplianceSurveyPayloadType {
+  id: string;
+  name: string;
+  type: string;
+  definition: {
+    title: string;
+    image_url: string;
+    intro_markdown: string;
+    sections: {
+      [key: string]: ComplianceSurveySectionType;
+    };
+    submitted?: boolean;
+    progress: Array<ComplianceSurveySectionProgressType>;
+  };
+  description: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ComplianceSurveySectionType extends SurveySectionType {
+  category: string;
+}
+
+export interface ComplianceSurveyActiveKeyType extends SurveyActiveKeyType {
+  category: string;
+  section: string;
+}
+
+export interface ComplianceSurveySectionProgressType {
+  answered: number;
+  complete: boolean;
+  questions: {
+    [key: string]: ComplianceSurveyProgressQuestionType;
+  };
+  review: number;
+  section: string;
+  title: string;
+  total: number;
+}
+
+export interface ComplianceSurveyProgressQuestionType {
+  ai_answered: boolean;
+  user_answered: boolean;
+}

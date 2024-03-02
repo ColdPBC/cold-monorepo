@@ -14497,6 +14497,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/react-collapse@npm:^5.0.4":
+  version: 5.0.4
+  resolution: "@types/react-collapse@npm:5.0.4"
+  dependencies:
+    "@types/react": "npm:*"
+  checksum: 10/b4fecc3245fea612caa940d34deae6d4673068d622e44959d1b716b11431c65e7a5b9ad8f4247cce6adc70d26dca76b629da9701f30f6796402e5f0272c5f788
+  languageName: node
+  linkType: hard
+
 "@types/react-dom@npm:^18.0.0, @types/react-dom@npm:^18.2.15":
   version: 18.2.18
   resolution: "@types/react-dom@npm:18.2.18"
@@ -19259,6 +19268,7 @@ __metadata:
     "@types/passport-jwt": "npm:^3.0.13"
     "@types/prop-types": "npm:^15.7.10"
     "@types/react": "npm:^18.2.37"
+    "@types/react-collapse": "npm:^5.0.4"
     "@types/react-dom": "npm:^18.2.15"
     "@types/react-lottie": "npm:^1.2.6"
     "@types/react-router-dom": "npm:5.3.3"
@@ -19336,6 +19346,7 @@ __metadata:
     js-cookie: "npm:^3.0.5"
     jsdom: "npm:~22.1.0"
     json-stringify-safe: "npm:^5.0.1"
+    jsonata: "npm:^2.0.4"
     jwks-rsa: "npm:^3.0.1"
     launchdarkly-react-client-sdk: "npm:3.0.6"
     lodash: "npm:^4.17.21"
@@ -19365,6 +19376,7 @@ __metadata:
     prop-types: "npm:^15.8.1"
     react: "npm:^18.2.0"
     react-chartjs-2: "npm:^5.2.0"
+    react-collapse: "npm:^5.1.1"
     react-cookie: "npm:^4.1.1"
     react-docgen-typescript-loader: "npm:^3.7.2"
     react-dom: "npm:^18.2.0"
@@ -29633,6 +29645,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"jsonata@npm:^2.0.4":
+  version: 2.0.4
+  resolution: "jsonata@npm:2.0.4"
+  checksum: 10/eb613eee1cb139f56b411891184df0612a049ca2174592ce18fab4423ce77ed8024b952ccec5d7b84a605f9a9f1c251416d8ad8055bef75bb022378b1961cb68
+  languageName: node
+  linkType: hard
+
 "jsonc-eslint-parser@npm:^2.1.0":
   version: 2.4.0
   resolution: "jsonc-eslint-parser@npm:2.4.0"
@@ -37882,6 +37901,15 @@ __metadata:
   peerDependencies:
     react: ^15.3.0 || ^16.0.0 || ^17.0.0 || ^18.0.0
   checksum: 10/45411b2e1d5e77ce8586ef0fa6cef2d394da4660af90a2c0f044a2170a0b601ac023ac2bc62d6109201969329a8dbd13bd1a4bd4027be3980e4fde7c6a48bee3
+  languageName: node
+  linkType: hard
+
+"react-collapse@npm:^5.1.1":
+  version: 5.1.1
+  resolution: "react-collapse@npm:5.1.1"
+  peerDependencies:
+    react: ">=16.3.0"
+  checksum: 10/20e2ad938272e1da13c4e1e44fce131236007378f3b0e3eb19c72fb21b7fd6797a44af167ddc2dc194d2645efda5aa34f3da06fb2ae7bca0a21f3989d46b2622
   languageName: node
   linkType: hard
 
