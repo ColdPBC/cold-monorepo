@@ -21,4 +21,5 @@ export enum IconNames {
   ColdDocumentsIcon = 'ColdDocumentsIcon',
   PlusIcon = 'PlusIcon',
   SubtractIcon = 'SubtractIcon',
+  ColdComplianceSurveyCheckBoxIcon = 'ColdComplianceSurveyCheckBoxIcon',
 }

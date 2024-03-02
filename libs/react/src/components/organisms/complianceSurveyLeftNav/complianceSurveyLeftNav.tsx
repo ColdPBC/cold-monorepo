@@ -59,7 +59,7 @@ export const ComplianceSurveyLeftNav = (props: ComplianceSurveyLeftNavProps) => 
     if (categoryComplete) {
       return (
         <div className={'w-[24px] h-[24px]'}>
-          <ColdIcon name={IconNames.ColdSmallCheckBoxIcon} />
+          <ColdIcon name={IconNames.ColdComplianceSurveyCheckBoxIcon} />
         </div>
       );
     } else if (someComplete) {
@@ -79,7 +79,7 @@ export const ComplianceSurveyLeftNav = (props: ComplianceSurveyLeftNavProps) => 
     if (progressSection?.complete) {
       return (
         <div className={'w-[12px] h-[12px]'}>
-          <ColdIcon name={IconNames.ColdSmallCheckBoxIcon} />
+          <ColdIcon name={IconNames.ColdComplianceSurveyCheckBoxIcon} />
         </div>
       );
     } else {

@@ -31,7 +31,7 @@ export const ComplianceSurveyRightNav = (props: ComplianceSurveyRightNavProps) =
       return (
         <div key={key} className={'h-[34px] flex flex-row space-x-2 items-center hover:bg-gray-70 cursor-pointer'} onClick={() => onClick(key)}>
           <div className={'w-[24px] h-[24px]'}>
-            <ColdIcon name={IconNames.ColdSmallCheckBoxIcon} className={' '} />
+            <ColdIcon name={IconNames.ColdComplianceSurveyCheckBoxIcon} className={' '} />
           </div>
           <div className={'w-full text-body line-clamp-1'}>
             {question.idx + 1}. {question.prompt}
