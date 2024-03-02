@@ -254,16 +254,6 @@ export const sortComplianceSurvey = (surveyData: ComplianceSurveyPayloadType): C
           copy.definition.sections[key].follow_up[followUpKey] = surveyData.definition.sections[key].follow_up[followUpKey];
         });
     });
-  // let sectionIterator = 0;
-  // forOwn(copy.definition.sections, (section, key) => {
-  //   sectionIterator++;
-  //   console.log(`section ${sectionIterator} ${key}`);
-  //   let followUpIterator = 0;
-  //   forOwn(section.follow_up, (followUp, followUpKey) => {
-  //     followUpIterator++;
-  //     console.log(`follow up ${followUpIterator} ${followUpKey}`);
-  //   });
-  // });
   return copy;
 };
 

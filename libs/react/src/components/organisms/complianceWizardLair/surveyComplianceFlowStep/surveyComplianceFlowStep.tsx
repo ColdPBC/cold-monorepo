@@ -38,14 +38,7 @@ export const SurveyComplianceFlowStep = () => {
   return (
     <div className={'h-[708px] w-full flex flex-row relative text-tc-primary'}>
       <div className={'flex w-auto h-full'}>
-        <ComplianceSurveyLeftNav
-          complianceSet={surveyState}
-          goToKey={name => {
-            console.log(name);
-          }}
-          activeKey={activeKey}
-          setActiveKey={setActiveKey}
-        />
+        <ComplianceSurveyLeftNav complianceSet={surveyState} activeKey={activeKey} setActiveKey={setActiveKey} />
       </div>
       <div className={'flex w-full h-full'}>
         <ComplianceSurveyRightNav surveyData={surveyState} activeKey={activeKey} setActiveKey={setActiveKey} surveyOpen={surveyOpen} setSurveyOpen={setSurveyOpen} />

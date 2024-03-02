@@ -89,7 +89,7 @@ const _SurveySectionsProgress = ({ sections, activeKey }: SurveySectionsProgress
   useEffect(() => {
     setScrollable(isScrollable());
   }, [scrollable, activeKey]);
-  console.log(activeKey);
+
   return (
     <div
       className={'w-[668px] h-full rounded-2xl relative overflow-hidden'}
@@ -114,8 +114,6 @@ const _SurveySectionsProgress = ({ sections, activeKey }: SurveySectionsProgress
           <SurveySectionsProgressBar sections={sections} activeKey={activeKey} sectionLocations={sectionLocations} getActiveSectionIndex={getActiveSectionIndex} />
           <div className={'z-10 pl-6'}>
             {Object.keys(sections).map((sectionKey, index) => {
-              console.log('sectionKey', sectionKey);
-              console.log('sections', sections);
               return (
                 <div key={'section_component_' + index} ref={elem => (sectionHeights[index] = elem)}>
                   <SurveySections sections={sections} section={sections[sectionKey]} sectionIndex={index} activeKey={activeKey} getActiveSectionIndex={getActiveSectionIndex} />

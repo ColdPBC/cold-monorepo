@@ -346,7 +346,6 @@ export const ComplianceSurveyQuestionnaire = (props: ComplianceSurveyQuestionnai
     setSendingSurvey(true);
     const newSurvey = updateSurveyQuestion(surveyData, activeKey, { value: getQuestionValue(surveyData, activeKey), skipped: false });
     const response = (await putSurveyData(newSurvey as ComplianceSurveyPayloadType, getOrgSpecificUrl)) as ComplianceSurveyPayloadType;
-    console.log(response);
     setSurveyData(response);
     await mutate([getOrgSpecificUrl(`/surveys/${newSurvey.name}`), 'GET'], response);
     updateTransitionClassNames(true);
@@ -362,7 +361,6 @@ export const ComplianceSurveyQuestionnaire = (props: ComplianceSurveyQuestionnai
     });
     const response = (await putSurveyData(newSurvey as ComplianceSurveyPayloadType, getOrgSpecificUrl)) as ComplianceSurveyPayloadType;
     setSurveyData(response);
-    console.log(response);
     await mutate([getOrgSpecificUrl(`/surveys/${newSurvey.name}`), 'GET'], response);
     updateTransitionClassNames(true);
     setSendingSurvey(false);
@@ -374,11 +372,10 @@ export const ComplianceSurveyQuestionnaire = (props: ComplianceSurveyQuestionnai
     setSendingSurvey(true);
     const newSurvey = updateSurveyQuestion(surveyData, activeKey, { value: getQuestionValue(surveyData, activeKey), skipped: false }, true);
     const response = (await putSurveyData(newSurvey as ComplianceSurveyPayloadType, getOrgSpecificUrl)) as ComplianceSurveyPayloadType;
-    console.log(response);
     setSurveyData(response);
     updateTransitionClassNames(true);
     setSendingSurvey(false);
-    goToNextQuestion();
+    submitSurvey();
   };
 
   const onPreviousButtonClicked = () => {

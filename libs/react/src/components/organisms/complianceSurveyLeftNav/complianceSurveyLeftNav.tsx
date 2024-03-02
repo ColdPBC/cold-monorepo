@@ -8,7 +8,6 @@ import { ColdIcon } from '../../atoms';
 
 export interface ComplianceSurveyLeftNavProps {
   complianceSet: ComplianceSurveyPayloadType;
-  goToKey: (key: string) => void;
   activeKey: ComplianceSurveyActiveKeyType;
   setActiveKey: (activeKey: ComplianceSurveyActiveKeyType) => void;
 }
@@ -41,7 +40,6 @@ export const ComplianceSurveyLeftNav = (props: ComplianceSurveyLeftNavProps) => 
 
   const goToKey = (key: string) => {
     const activeKey = getFirstFollowUpKeyFromSection(key, complianceSet);
-    console.log(activeKey);
     setActiveKey(activeKey);
   };
 
@@ -51,7 +49,6 @@ export const ComplianceSurveyLeftNav = (props: ComplianceSurveyLeftNavProps) => 
     const progressSections = filter(complianceSet.definition.progress, (section: ComplianceSurveySectionProgressType) => {
       return complianceSet.definition.sections[section.section]?.category === category;
     });
-    console.log(progressSections);
     const categoryComplete = every(progressSections, (section, index) => {
       return section.complete;
     });

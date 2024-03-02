@@ -48,7 +48,6 @@ export const returnUpdatedSurvey = (payload: ComplianceSurveyPayloadType, survey
     copy.definition.progress[index].complete = complete;
     copy.definition.progress[index].review = review;
     copy.definition.progress[index].total = total;
-    console.log(copy.definition.progress[index]);
   });
   return copy;
 };
