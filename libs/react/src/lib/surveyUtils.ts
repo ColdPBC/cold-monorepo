@@ -452,3 +452,28 @@ export const putSurveyData = async (survey: ComplianceSurveyPayloadType, getOrgS
     }),
   ]);
 };
+
+export const allOtherSurveyQuestionsAnswered = (surveyData: ComplianceSurveyPayloadType, activeKey: ComplianceSurveyActiveKeyType) => {
+  // check all the questions in the section and follow up
+  // use the progress to check all sections except the current one are complete
+  const sections = surveyData.definition.sections;
+  const activeSectionKey = activeKey.section;
+  let allOtherSectionsComplete = true;
+  forEach(surveyData.definition.progress, (progress, key) => {
+    if (progress.section !== activeKey.section) {
+      if (!progress.complete) {
+        allOtherSectionsComplete = false;
+      }
+    }
+  });
+  // check if all the questions in the section are answered
+  const section = sections[activeSectionKey];
+  let allOtherQuestionsAnswered = true;
+  forEach(section.follow_up, (followUp, key) => {
+    if (followUp.value === undefined && activeKey.value !== key) {
+      allOtherQuestionsAnswered = false;
+    }
+  });
+
+  return allOtherSectionsComplete && allOtherQuestionsAnswered;
+};

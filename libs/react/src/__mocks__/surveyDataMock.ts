@@ -1,4 +1,5 @@
-import { ComplianceSurveyPayloadType, SurveyPayloadType, SurveySectionType } from '@coldpbc/interfaces';
+import { ComplianceSurveyPayloadType, ComplianceSurveyProgressQuestionType, ComplianceSurveySectionProgressType, SurveyPayloadType, SurveySectionType } from '@coldpbc/interfaces';
+import { forEach, forOwn } from 'lodash';
 
 export const getSurveyFormDataByName = (name: string): SurveyPayloadType | ComplianceSurveyPayloadType | undefined => {
   const surveys = getSurveysMock();
@@ -3005,6 +3006,26 @@ export function getSurveysMock(): Array<SurveyPayloadType | ComplianceSurveyPayl
                 answer: ['No'],
               },
             },
+            'GHG-6A': {
+              idx: 6,
+              prompt: 'Please indicate whether your brand uses spend or material-based emissions factors to calculate your product carbon emissions.',
+              options: ['We use spend-based emissions factors', 'We use material-based emissions factors', 'Other'],
+              tooltip: 'Select all that apply.',
+              component: 'multi_select',
+              placeholder: '',
+              additional_context: {
+                prompt: 'Please describe.',
+                tooltip: 'Limit your response to 100 words or less.',
+                operator: '==',
+                component: 'textarea',
+                comparison: 'Other',
+                placeholder: '',
+              },
+              ai_attempted: true,
+              ai_response: {
+                justification: '*Lorem Ipsum Dolor Et Amo sflksjdflksdjfldsjkfs*',
+              },
+            },
             'GHG-7': {
               idx: 7,
               prompt: 'Has your brand set a quantitative target(s) to reduce your carbon emissions?',
@@ -3016,6 +3037,36 @@ export function getSurveysMock(): Array<SurveyPayloadType | ComplianceSurveyPayl
               ai_response: {
                 justification: '*Lorem Ipsum Dolor Et Amo sflksjdflksdjfldsjkfs*',
                 answer: true,
+              },
+            },
+            'GHG-7A': {
+              idx: 8,
+              prompt: 'Which components of your carbon footprint are covered by your quantitative reduction target?',
+              options: [
+                'Scope 1: Direct emissions from company vehicles & facilities',
+                'Scope 2: Indirect emissions from purchased electricity, steam, heating & cooling for own use',
+                'Scope 3: Indirect emissions from purchased goods and services (i.e., Category 1)',
+                'Scope 3: Indirect emissions from all other relevant upstream and downstream sources (i.e., Categories 2-15)',
+              ],
+              tooltip: 'Select all that apply.',
+              component: 'multi_select',
+              placeholder: '',
+              ai_attempted: true,
+              ai_response: {
+                justification: '*Lorem Ipsum Dolor Et Amo sflksjdflksdjfldsjkfs*',
+              },
+            },
+            'GHG-7B': {
+              idx: 10,
+              prompt:
+                'Please select one of the following to indicate if your target is for absolute emissions reduction (i.e., total carbon emissions) or reduction in emissions intensity (i.e., carbon emissions per unit of product or dollar of revenue):',
+              options: ['Absolute emissions reduction', 'Reduction in emissions intensity'],
+              tooltip: '',
+              component: 'select',
+              placeholder: '',
+              ai_attempted: true,
+              ai_response: {
+                justification: '*Lorem Ipsum Dolor Et Amo sflksjdflksdjfldsjkfs*',
               },
             },
             'GHG-8': {
@@ -3036,6 +3087,35 @@ export function getSurveysMock(): Array<SurveyPayloadType | ComplianceSurveyPayl
               ai_response: {
                 justification: '*Lorem Ipsum Dolor Et Amo sflksjdflksdjfldsjkfs*',
                 answer: ['Yes, our target(s) has been approved by the SBTi'],
+              },
+            },
+            'GHG-9': {
+              idx: 12,
+              prompt: 'What are the primary components of your emissions reduction action plan?',
+              options: [
+                'Use of low-carbon materials or ingredients in products',
+                'Use of clean energy in product manufacturing',
+                'Use of clean energy to power operations (e.g., offices, distribution centers, etc.)',
+                'Minimization of materials waste in manufacturing',
+                'Energy efficiency in manufacturing',
+                'Use of circular business models (e.g., selling used products, renting or leasing products, product subscription, product recycling, etc.)',
+                'Supporting customers in reducing emissions during product use',
+                'Other (please describe)',
+              ],
+              tooltip: 'Select all that apply.',
+              component: 'multi_select',
+              placeholder: '',
+              additional_context: {
+                prompt: 'Please describe.',
+                tooltip: '',
+                operator: '==',
+                component: 'textarea',
+                comparison: 'Other',
+                placeholder: '',
+              },
+              ai_attempted: true,
+              ai_response: {
+                justification: '*Lorem Ipsum Dolor Et Amo sflksjdflksdjfldsjkfs*',
               },
             },
             'GHG-10': {
@@ -3103,85 +3183,6 @@ export function getSurveysMock(): Array<SurveyPayloadType | ComplianceSurveyPayl
                 justification: '*Lorem Ipsum Dolor Et Amo sflksjdflksdjfldsjkfs*',
               },
             },
-            'GHG-6A': {
-              idx: 6,
-              prompt: 'Please indicate whether your brand uses spend or material-based emissions factors to calculate your product carbon emissions.',
-              options: ['We use spend-based emissions factors', 'We use material-based emissions factors', 'Other'],
-              tooltip: 'Select all that apply.',
-              component: 'multi_select',
-              placeholder: '',
-              additional_context: {
-                prompt: 'Please describe.',
-                tooltip: 'Limit your response to 100 words or less.',
-                operator: '==',
-                component: 'textarea',
-                comparison: 'Other',
-                placeholder: '',
-              },
-              ai_attempted: true,
-              ai_response: {
-                justification: '*Lorem Ipsum Dolor Et Amo sflksjdflksdjfldsjkfs*',
-              },
-            },
-            'GHG-7A': {
-              idx: 8,
-              prompt: 'Which components of your carbon footprint are covered by your quantitative reduction target?',
-              options: [
-                'Scope 1: Direct emissions from company vehicles & facilities',
-                'Scope 2: Indirect emissions from purchased electricity, steam, heating & cooling for own use',
-                'Scope 3: Indirect emissions from purchased goods and services (i.e., Category 1)',
-                'Scope 3: Indirect emissions from all other relevant upstream and downstream sources (i.e., Categories 2-15)',
-              ],
-              tooltip: 'Select all that apply.',
-              component: 'multi_select',
-              placeholder: '',
-              ai_attempted: true,
-              ai_response: {
-                justification: '*Lorem Ipsum Dolor Et Amo sflksjdflksdjfldsjkfs*',
-              },
-            },
-            'GHG-7C': {
-              idx: 10,
-              prompt:
-                'Please select one of the following to indicate if your target is for absolute emissions reduction (i.e., total carbon emissions) or reduction in emissions intensity (i.e., carbon emissions per unit of product or dollar of revenue):',
-              options: ['Absolute emissions reduction', 'Reduction in emissions intensity'],
-              tooltip: '',
-              component: 'select',
-              placeholder: '',
-              ai_attempted: true,
-              ai_response: {
-                justification: '*Lorem Ipsum Dolor Et Amo sflksjdflksdjfldsjkfs*',
-              },
-            },
-            'GHG-9A': {
-              idx: 12,
-              prompt: 'What are the primary components of your emissions reduction action plan?',
-              options: [
-                'Use of low-carbon materials or ingredients in products',
-                'Use of clean energy in product manufacturing',
-                'Use of clean energy to power operations (e.g., offices, distribution centers, etc.)',
-                'Minimization of materials waste in manufacturing',
-                'Energy efficiency in manufacturing',
-                'Use of circular business models (e.g., selling used products, renting or leasing products, product subscription, product recycling, etc.)',
-                'Supporting customers in reducing emissions during product use',
-                'Other (please describe)',
-              ],
-              tooltip: 'Select all that apply.',
-              component: 'multi_select',
-              placeholder: '',
-              additional_context: {
-                prompt: 'Please describe.',
-                tooltip: '',
-                operator: '==',
-                component: 'textarea',
-                comparison: 'Other',
-                placeholder: '',
-              },
-              ai_attempted: true,
-              ai_response: {
-                justification: '*Lorem Ipsum Dolor Et Amo sflksjdflksdjfldsjkfs*',
-              },
-            },
           },
           image_url:
             'https://images.unsplash.com/photo-1533038590840-1cde6e668a91?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1587&q=80',
@@ -3220,7 +3221,7 @@ export function getSurveysMock(): Array<SurveyPayloadType | ComplianceSurveyPayl
               ai_answered: false,
               user_answered: false,
             },
-            'GEN-6a': {
+            'GEN-6A': {
               ai_answered: false,
               user_answered: false,
             },
@@ -3278,6 +3279,14 @@ export function getSurveysMock(): Array<SurveyPayloadType | ComplianceSurveyPayl
               ai_answered: false,
               user_answered: false,
             },
+            'MFG-7': {
+              ai_answered: false,
+              user_answered: false,
+            },
+            'MFG-8': {
+              ai_answered: false,
+              user_answered: false,
+            },
             'MFG-9': {
               ai_answered: false,
               user_answered: false,
@@ -3286,11 +3295,11 @@ export function getSurveysMock(): Array<SurveyPayloadType | ComplianceSurveyPayl
           review: 0,
           section: 'MFG',
           title: 'Manufacturing Code of Conduct',
-          total: 10,
+          total: 12,
         },
         {
           answered: 0,
-          complete: false,
+          complete: true,
           questions: {
             'CHEM-1': {
               ai_answered: false,
@@ -3330,22 +3339,6 @@ export function getSurveysMock(): Array<SurveyPayloadType | ComplianceSurveyPayl
               ai_answered: false,
               user_answered: false,
             },
-            'GHG-10': {
-              ai_answered: false,
-              user_answered: false,
-            },
-            'GHG-11': {
-              ai_answered: false,
-              user_answered: false,
-            },
-            'GHG-12': {
-              ai_answered: false,
-              user_answered: false,
-            },
-            'GHG-13': {
-              ai_answered: false,
-              user_answered: false,
-            },
             'GHG-2': {
               ai_answered: false,
               user_answered: false,
@@ -3366,6 +3359,10 @@ export function getSurveysMock(): Array<SurveyPayloadType | ComplianceSurveyPayl
               ai_answered: false,
               user_answered: false,
             },
+            'GHG-6A': {
+              ai_answered: false,
+              user_answered: false,
+            },
             'GHG-7': {
               ai_answered: false,
               user_answered: false,
@@ -3378,10 +3375,6 @@ export function getSurveysMock(): Array<SurveyPayloadType | ComplianceSurveyPayl
               ai_answered: false,
               user_answered: false,
             },
-            'GHG-7C': {
-              ai_answered: false,
-              user_answered: false,
-            },
             'GHG-8': {
               ai_answered: false,
               user_answered: false,
@@ -3390,7 +3383,19 @@ export function getSurveysMock(): Array<SurveyPayloadType | ComplianceSurveyPayl
               ai_answered: false,
               user_answered: false,
             },
-            'GHG-9A': {
+            'GHG-10': {
+              ai_answered: false,
+              user_answered: false,
+            },
+            'GHG-11': {
+              ai_answered: false,
+              user_answered: false,
+            },
+            'GHG-12': {
+              ai_answered: false,
+              user_answered: false,
+            },
+            'GHG-13': {
               ai_answered: false,
               user_answered: false,
             },
@@ -3398,11 +3403,11 @@ export function getSurveysMock(): Array<SurveyPayloadType | ComplianceSurveyPayl
           review: 0,
           section: 'GHG',
           title: 'GHG Emissions & Climate',
-          total: 17,
+          total: 16,
         },
         {
           answered: 0,
-          complete: false,
+          complete: true,
           questions: {
             'PFAS-A1': {
               ai_answered: false,
@@ -3424,7 +3429,7 @@ export function getSurveysMock(): Array<SurveyPayloadType | ComplianceSurveyPayl
         },
         {
           answered: 0,
-          complete: false,
+          complete: true,
           questions: {
             'APP-1': {
               ai_answered: false,
@@ -3442,7 +3447,7 @@ export function getSurveysMock(): Array<SurveyPayloadType | ComplianceSurveyPayl
         },
         {
           answered: 0,
-          complete: false,
+          complete: true,
           questions: {
             'COL-1': {
               ai_answered: false,
@@ -3460,7 +3465,7 @@ export function getSurveysMock(): Array<SurveyPayloadType | ComplianceSurveyPayl
         },
         {
           answered: 0,
-          complete: false,
+          complete: true,
           questions: {
             'COP-1': {
               ai_answered: false,
@@ -3478,7 +3483,7 @@ export function getSurveysMock(): Array<SurveyPayloadType | ComplianceSurveyPayl
         },
         {
           answered: 0,
-          complete: false,
+          complete: true,
           questions: {
             'MKT-1': {
               ai_answered: false,
@@ -3500,7 +3505,7 @@ export function getSurveysMock(): Array<SurveyPayloadType | ComplianceSurveyPayl
         },
         {
           answered: 0,
-          complete: false,
+          complete: true,
           questions: {
             'ISS-1': {
               ai_answered: false,
@@ -3518,7 +3523,7 @@ export function getSurveysMock(): Array<SurveyPayloadType | ComplianceSurveyPayl
         },
         {
           answered: 0,
-          complete: false,
+          complete: true,
           questions: {
             'INC-1': {
               ai_answered: false,
@@ -3540,7 +3545,7 @@ export function getSurveysMock(): Array<SurveyPayloadType | ComplianceSurveyPayl
         },
         {
           answered: 0,
-          complete: false,
+          complete: true,
           questions: {
             'PSA-1': {
               ai_answered: false,
@@ -3584,7 +3589,7 @@ export function getSurveysMock(): Array<SurveyPayloadType | ComplianceSurveyPayl
         },
         {
           answered: 0,
-          complete: false,
+          complete: true,
           questions: {
             'APK-1': {
               ai_answered: false,
@@ -3622,7 +3627,7 @@ export function getSurveysMock(): Array<SurveyPayloadType | ComplianceSurveyPayl
         },
         {
           answered: 0,
-          complete: false,
+          complete: true,
           questions: {
             'PRD-1': {
               ai_answered: false,
@@ -3660,7 +3665,7 @@ export function getSurveysMock(): Array<SurveyPayloadType | ComplianceSurveyPayl
         },
         {
           answered: 0,
-          complete: false,
+          complete: true,
           questions: {
             'CRP-1': {
               ai_answered: false,
@@ -7962,7 +7967,64 @@ export function getAIAnsweredSurveyMock(): SurveyPayloadType {
   };
 }
 
-export function getSurveyCompliancFlowStepSurveyMock(name: string) {
-  const survey = getSurveyFormDataByName(name);
-  // loop through the sections and follow_ups and set the ai answered
+export function getSurveyComplianceFlowSomeCompleteSurveyMock(name: string) {
+  const survey = getSurveyFormDataByName(name) as ComplianceSurveyPayloadType;
+  // loop through the sections and follow_ups and set some values to be completed
+  if (survey) {
+    forEach(survey.definition.progress, (progressSection: ComplianceSurveySectionProgressType, index) => {
+      if (progressSection.section === 'GHG') {
+        progressSection.complete = false;
+      } else {
+        progressSection.complete = true;
+      }
+      forOwn(progressSection.questions, (question: ComplianceSurveyProgressQuestionType, questionKey) => {
+        if (questionKey === 'GHG-12' || questionKey === 'GHG-13') {
+          question.user_answered = false;
+        } else {
+          question.user_answered = true;
+        }
+      });
+    });
+    forOwn(survey.definition.sections, (section, sectionKey) => {
+      forOwn(section.follow_up, (followUp, followUpKey) => {
+        if (followUpKey === 'GHG-12' || followUpKey === 'GHG-13') {
+          followUp.value = undefined;
+        } else {
+          followUp.value = true;
+        }
+      });
+    });
+  }
+  return survey;
+}
+
+export function getSurveyAllOtherQuestionsAnsweredSurveyMock(name: string) {
+  const survey = getSurveyFormDataByName(name) as ComplianceSurveyPayloadType;
+  // loop through the sections and follow_ups and set some values to be completed
+  if (survey) {
+    forOwn(survey.definition.sections, (section, sectionKey) => {
+      forOwn(section.follow_up, (followUp, followUpKey) => {
+        if (followUpKey === 'GHG-13') {
+          followUp.value = undefined;
+        } else {
+          followUp.value = true;
+        }
+      });
+    });
+    forEach(survey.definition.progress, (progressSection: ComplianceSurveySectionProgressType, index) => {
+      if (progressSection.section === 'GHG') {
+        progressSection.complete = false;
+      } else {
+        progressSection.complete = true;
+      }
+      forOwn(progressSection.questions, (question: ComplianceSurveyProgressQuestionType, questionKey) => {
+        if (questionKey === 'GHG-13') {
+          question.user_answered = false;
+        } else {
+          question.user_answered = true;
+        }
+      });
+    });
+  }
+  return survey;
 }

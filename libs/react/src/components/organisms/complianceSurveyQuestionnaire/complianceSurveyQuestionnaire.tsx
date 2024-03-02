@@ -2,7 +2,15 @@ import { ComplianceSurveyActiveKeyType, ComplianceSurveyPayloadType, IButtonProp
 import { useAuth0Wrapper } from '@coldpbc/hooks';
 import React from 'react';
 import { findIndex, size } from 'lodash';
-import { getQuestionValue, getSectionIndex, ifAdditionalContextConditionMet, isComponentTypeValid, putSurveyData, updateSurveyQuestion } from '@coldpbc/lib';
+import {
+  allOtherSurveyQuestionsAnswered,
+  getQuestionValue,
+  getSectionIndex,
+  ifAdditionalContextConditionMet,
+  isComponentTypeValid,
+  putSurveyData,
+  updateSurveyQuestion,
+} from '@coldpbc/lib';
 import { BaseButton, SurveyInput } from '@coldpbc/components';
 import { ButtonTypes, GlobalSizes } from '@coldpbc/enums';
 import { CSSTransition, SwitchTransition } from 'react-transition-group';
@@ -177,7 +185,7 @@ export const ComplianceSurveyQuestionnaire = (props: ComplianceSurveyQuestionnai
       loading: sendingSurvey,
     };
     const activeSectionIndex = getSectionIndex(sections, activeKey);
-    const activeSectionKey = Object.keys(sections)[activeSectionIndex];
+    const activeSectionKey = activeKey.section;
     if (activeKey.isFollowUp) {
       const activeFollowUpIndex = Object.keys(sections[activeSectionKey].follow_up).findIndex(followUpKey => {
         return followUpKey === activeKey.value;
@@ -209,7 +217,7 @@ export const ComplianceSurveyQuestionnaire = (props: ComplianceSurveyQuestionnai
         }
       } else {
         if (activeSectionIndex === Object.keys(sections).length - 1 && activeFollowUpIndex === Object.keys(sections[activeSectionKey].follow_up).length - 1) {
-          buttonProps.label = 'Submit';
+          buttonProps.label = 'Save';
           buttonProps.onClick = () => {
             onSubmitButtonClicked();
           };
@@ -243,7 +251,7 @@ export const ComplianceSurveyQuestionnaire = (props: ComplianceSurveyQuestionnai
       } else {
         if (sections[activeSectionKey].value === null || sections[activeSectionKey].value === undefined) {
           if (activeSectionIndex === Object.keys(sections).length - 1) {
-            buttonProps.label = 'Submit';
+            buttonProps.label = 'Save';
             buttonProps.onClick = () => {
               onSubmitButtonClicked();
             };
@@ -255,7 +263,7 @@ export const ComplianceSurveyQuestionnaire = (props: ComplianceSurveyQuestionnai
           }
         } else {
           if (sections[activeSectionKey].value === false) {
-            buttonProps.label = 'Submit';
+            buttonProps.label = 'Save';
             buttonProps.onClick = () => {
               onSubmitButtonClicked();
             };
@@ -267,6 +275,14 @@ export const ComplianceSurveyQuestionnaire = (props: ComplianceSurveyQuestionnai
           }
         }
       }
+    }
+
+    if (allOtherSurveyQuestionsAnswered(surveyData, activeKey)) {
+      buttonProps.label = 'Submit & Close';
+      buttonProps.onClick = () => {
+        onSubmitButtonClicked();
+      };
+      buttonProps.disabled = getQuestionValue(surveyData, activeKey) === undefined || getQuestionValue(surveyData, activeKey) === null;
     }
 
     return <BaseButton {...buttonProps} />;

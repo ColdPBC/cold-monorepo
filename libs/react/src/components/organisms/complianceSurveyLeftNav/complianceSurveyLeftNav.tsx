@@ -55,9 +55,6 @@ export const ComplianceSurveyLeftNav = (props: ComplianceSurveyLeftNavProps) => 
     const someComplete = some(progressSections, (section, index) => {
       return section.complete;
     });
-    // if the category is complete, show a checkmark.
-    // if not, show a circle, but if the category is open, show a subtract icon.
-    // else, show empty icon.
 
     if (categoryComplete) {
       return (
@@ -104,7 +101,7 @@ export const ComplianceSurveyLeftNav = (props: ComplianceSurveyLeftNavProps) => 
 
   const getNavbar = (): ReactNode => {
     return (
-      <div className={'text-tc-primary w-[351px] bg-transparent h-full p-[30px] flex flex-col space-y-4'}>
+      <div className={'text-tc-primary w-[351px] bg-transparent h-full p-[30px] flex flex-col space-y-[8px]'}>
         {map(getGroupedSections(), (sections, key) => {
           return (
             <div className={'flex flex-col bg-transparent w-full'}>
