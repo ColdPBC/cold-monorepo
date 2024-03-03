@@ -1,6 +1,6 @@
 import { ComplianceSurveyActiveKeyType, ComplianceSurveyPayloadType, ComplianceSurveySectionProgressType, ComplianceSurveySectionType } from '@coldpbc/interfaces';
 import { every, filter, find, forOwn, map, some, uniq } from 'lodash';
-import { ReactNode, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { getFirstFollowUpKeyFromSection } from '@coldpbc/lib';
 import { Collapse } from 'react-collapse';
 import { IconNames } from '@coldpbc/enums';
@@ -142,6 +142,10 @@ export const ComplianceSurveyLeftNav = (props: ComplianceSurveyLeftNavProps) => 
       </div>
     );
   };
+
+  useEffect(() => {
+    setCategoryOpened(activeKey.category);
+  }, [activeKey.section]);
 
   return <div className={'flex flex-col bg-bgc-main border-[3px] border-bgc-accent h-full'}>{getNavbar()}</div>;
 };
