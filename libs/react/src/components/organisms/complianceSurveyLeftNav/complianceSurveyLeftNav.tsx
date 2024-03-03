@@ -1,6 +1,6 @@
 import { ComplianceSurveyActiveKeyType, ComplianceSurveyPayloadType, ComplianceSurveySectionProgressType, ComplianceSurveySectionType } from '@coldpbc/interfaces';
 import { every, filter, find, forOwn, map, some, uniq } from 'lodash';
-import { ReactNode, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { getFirstFollowUpKeyFromSection } from '@coldpbc/lib';
 import { Collapse } from 'react-collapse';
 import { IconNames } from '@coldpbc/enums';
@@ -92,6 +92,7 @@ export const ComplianceSurveyLeftNav = (props: ComplianceSurveyLeftNavProps) => 
   };
 
   const isCollapseOpen = (sections: { [key: string]: ComplianceSurveySectionType }, category: string) => {
+    console.log(category, categoryOpened);
     return category === categoryOpened;
   };
 
@@ -100,18 +101,19 @@ export const ComplianceSurveyLeftNav = (props: ComplianceSurveyLeftNavProps) => 
   };
 
   const getNavbar = (): ReactNode => {
+    console.log(activeKey);
     return (
-      <div className={'text-tc-primary w-[351px] bg-transparent h-full p-[30px] flex flex-col space-y-[8px]'}>
+      <div className={'text-tc-primary w-[351px] bg-transparent h-full pl-[30px] pt-[30px] pb-[30px] flex flex-col space-y-[8px]'}>
         {map(getGroupedSections(), (sections, key) => {
           return (
             <div className={'flex flex-col bg-transparent w-full'}>
               <div
-                className={'text-h3 text-tc-primary cursor-pointer flex flex-row space-x-2 items-center'}
+                className={'text-h3 text-tc-primary cursor-pointer flex flex-row space-x-3 items-center'}
                 onClick={() => {
                   openCategory(key);
                 }}>
                 {getSidebarIcon(key)}
-                <div>{key}</div>
+                <div className={'text-left whitespace-normal'}>{key}</div>
                 <div className={'flex justify-center items-center'}>
                   {isCollapseOpen(sections, key) ? <ColdIcon name={IconNames.ColdChevronUpIcon} /> : <ColdIcon name={IconNames.ColdChevronDownIcon} />}
                 </div>
@@ -124,11 +126,11 @@ export const ComplianceSurveyLeftNav = (props: ComplianceSurveyLeftNavProps) => 
                 <div className={'flex flex-col space-y-[7px]'}>
                   {map(sections, (section, key) => {
                     return (
-                      <div className={'w-full pl-5 flex flex-row space-x-2 items-center'}>
+                      <div
+                        className={`w-full h-[25px] pl-5 flex flex-row space-x-3 items-center cursor-pointer ${key === activeKey.section ? 'bg-bgc-accent' : ''}`}
+                        onClick={() => goToKey(key)}>
                         {getSectionIcon(key)}
-                        <div className={'text-caption bg-transparent cursor-pointer'} onClick={() => goToKey(key)}>
-                          {section.title}
-                        </div>
+                        <div className={'text-caption bg-transparent'}>{section.title}</div>
                       </div>
                     );
                   })}
@@ -140,6 +142,10 @@ export const ComplianceSurveyLeftNav = (props: ComplianceSurveyLeftNavProps) => 
       </div>
     );
   };
+
+  useEffect(() => {
+    setCategoryOpened(activeKey.category);
+  }, [activeKey.section]);
 
   return <div className={'flex flex-col bg-bgc-main border-[3px] border-bgc-accent h-full'}>{getNavbar()}</div>;
 };
