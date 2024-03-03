@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, Param, ParseBoolPipe, Post, Query, Req } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, Param, ParseBoolPipe, Post, Put, Query, Req } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { bpcDecoratorOptions, coldAndCompanyAdmins, orgIdDecoratorOptions } from '../../_global/global.params';
 import { BaseWorker, IAuthenticatedUser, Roles } from '@coldpbc/nest';
@@ -63,6 +63,34 @@ export class OrganizationIntegrationsController extends BaseWorker {
     },
   ) {
     return this.orgIntegrationsService.createIntegration(req, orgId, body);
+  }
+
+  @ApiOperation({
+    summary: 'Create Organization Integration',
+    operationId: 'createOrganizationIntegration',
+  })
+  @ApiQuery(bpcDecoratorOptions)
+  @ApiParam(orgIdDecoratorOptions)
+  @ApiBody(IntegrationBodySchema)
+  @Put('organizations/:orgId/integrations')
+  @HttpCode(201)
+  activateIntegration(
+    @Param('orgId') orgId: string,
+    @Req()
+    req: {
+      body: any;
+      headers: any;
+      query: any;
+      user: IAuthenticatedUser;
+    },
+    @Body()
+    body: {
+      organization_id: string;
+      service_definition_id: string;
+      metadata: any;
+    },
+  ) {
+    return this.orgIntegrationsService.enableIntegration(req, orgId, body);
   }
 
   @ApiOperation({

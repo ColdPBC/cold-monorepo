@@ -16,7 +16,7 @@ export class EventService extends BaseWorker {
   }
 
   /**
-   * This method is used to send an event.
+   * This method is used to send an event to all enabled integrations.
    * It either takes a request object or an orgId and a user.
    *
    * @param {boolean} isRPC - Indicates whether the event is a Remote Procedure Call.
@@ -28,10 +28,17 @@ export class EventService extends BaseWorker {
    * @throws Will throw an error if the user is required when authenticated request object is not provided.
    * @throws Will throw an error if the organization id is required and not provided.
    */
-  async sendEvent(isRPC: boolean, event: string, data: any, request: Request): Promise<any | void>;
-  async sendEvent(isRPC: boolean, event: string, data: any, user: IAuthenticatedUser): Promise<any | void>;
-  async sendEvent(isRPC: boolean, event: string, data: any, user: IAuthenticatedUser, orgId: string, options?: RabbitMessageOptions): Promise<any | void>;
-  async sendEvent(isRPC: boolean, event: string, data: any, requestOrUser: Request | IAuthenticatedUser, orgId?: string, options?: RabbitMessageOptions): Promise<any | void> {
+  async sendIntegrationEvent(isRPC: boolean, event: string, data: any, request: Request): Promise<any | void>;
+  async sendIntegrationEvent(isRPC: boolean, event: string, data: any, user: IAuthenticatedUser): Promise<any | void>;
+  async sendIntegrationEvent(isRPC: boolean, event: string, data: any, user: IAuthenticatedUser, orgId: string, options?: RabbitMessageOptions): Promise<any | void>;
+  async sendIntegrationEvent(
+    isRPC: boolean,
+    event: string,
+    data: any,
+    requestOrUser: Request | IAuthenticatedUser,
+    orgId?: string,
+    options?: RabbitMessageOptions,
+  ): Promise<any | void> {
     // Extract the user from the request or use the provided user
     const currentUser = (requestOrUser['user'] || requestOrUser) as IAuthenticatedUser;
 

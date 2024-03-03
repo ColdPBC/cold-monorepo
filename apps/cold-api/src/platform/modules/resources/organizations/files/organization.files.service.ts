@@ -128,7 +128,7 @@ export class OrganizationFilesService extends BaseWorker {
         });
       }
 
-      await this.events.sendEvent(false, 'file.uploaded', existing, user, orgId);
+      await this.events.sendIntegrationEvent(false, 'file.uploaded', existing, user, orgId);
 
       return existing;
     } catch (e) {
@@ -176,7 +176,7 @@ export class OrganizationFilesService extends BaseWorker {
         },
       });
 
-      await this.events.sendEvent(false, 'file.deleted', file, user, orgId);
+      await this.events.sendIntegrationEvent(false, 'file.deleted', file, user, orgId);
 
       this.mqtt.publishMQTT('ui', {
         org_id: orgId,

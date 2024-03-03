@@ -33,8 +33,8 @@ export class AssistantConsumer extends BaseWorker {
     switch (job.name) {
       case 'file.uploaded':
         return this.processFileJob(job);
-      case 'integration.enabled':
-        return this.processIntegrationEnabled(job);
+      case 'compliance_automation.enabled':
+        return this.processCompliance(job);
       case 'survey':
         return this.processCompliance(job);
       default: {
@@ -46,24 +46,21 @@ export class AssistantConsumer extends BaseWorker {
     }
   }
 
+  @Process('organization.created')
+  async processOrganizationCreated(job: Job) {
+    this.logger.info(`Received ${job.name} job: ${job.id} `);
+    return this.appService.createAssistant(job.data);
+  }
+
   @Process('file.uploaded')
   async processFileJob(job: Job) {
     return this.fileService.uploadOrgFilesToOpenAI(job);
   }
 
-  @Process('integration.enabled')
-  async processIntegrationEnabled(job: Job) {
-    try {
-      return await this.appService.createAssistant(job.data);
-    } catch (e) {
-      this.logger.error(e.message, e);
-      throw e;
-    }
-  }
-
-  @Process('survey')
+  @Process('compliance_automation.enabled')
   async processCompliance(job: Job) {
     try {
+      this.logger.info(`Received ${job.name} job: ${job.id} `);
       await this.assistant.process_survey(job);
     } catch (e) {
       this.logger.error(e.message, e);
