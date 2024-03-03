@@ -47,19 +47,19 @@ If you have trouble with the canvas package dependency on Apple silicon, you mig
 This repo includes two  `docker-compose` files to help you easily run all the dependent services:
 
 **docker-compose.yml** : 
-Use this file to start only the Redis server and the Postgres database; this is useful if you want to debug the API server locally.
+Use this file to start only the Redis, Rabbit, Postgres and Proxy server ; this is useful if you want to debug the API server locally.
 
 Execute the following command:
   ```bash
   $  docker compose up
   ```
 
-**docker-compose.all.yml** : 
-Use this file to start the Redis server, Postgres database, and the API server; this is useful if you are primarily working on the frontend and just want a `no-fuss` way to run the backend services in the background.
+**docker-compose-core.yml** : 
+Use this file to start all services; this is useful if you are primarily working on the frontend and just want a `no-fuss` way to run the backend services in the background.
   
 Execute the following command:
   ```bash
-  $   docker compose -f docker-compose.yml up
+  $   docker compose -f docker-compose-core.yml up
   ```
 
 ## UI Server
