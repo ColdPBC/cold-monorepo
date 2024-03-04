@@ -7982,8 +7982,12 @@ export function getSurveyComplianceFlowSomeCompleteSurveyMock(name: string) {
           question.user_answered = false;
         } else {
           question.user_answered = true;
+          question.ai_answered = true;
+          progressSection.answered += 1;
         }
       });
+      progressSection.answered = progressSection.answered - 1;
+      progressSection.review = 1;
     });
     forOwn(survey.definition.sections, (section, sectionKey) => {
       forOwn(section.follow_up, (followUp, followUpKey) => {
@@ -8022,6 +8026,7 @@ export function getSurveyAllOtherQuestionsAnsweredSurveyMock(name: string) {
           question.user_answered = false;
         } else {
           question.user_answered = true;
+          progressSection.answered += 1;
         }
       });
     });

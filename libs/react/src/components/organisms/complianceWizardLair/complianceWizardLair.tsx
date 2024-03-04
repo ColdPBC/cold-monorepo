@@ -5,6 +5,7 @@ import { ButtonTypes } from '@coldpbc/enums';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { getComplianceProgressForSurvey } from '@coldpbc/lib';
 import { isArray } from 'lodash';
+import { ComplianceProgressCard } from './complianceProgressCard/complianceProgressCard';
 
 export interface ComplianceWizardLairProps {
   name: string;
@@ -86,9 +87,9 @@ export const ComplianceWizardLair = (props: PropsWithChildren<ComplianceWizardLa
         </div>
       </div>
       <div className={'flex flex-row justify-between w-full space-x-4'}>
-        <Card className={'w-full'} title={'Questionnaire Progress'}></Card>
+        <ComplianceProgressCard surveyData={surveyData} />
         <Card
-          className={'w-full'}
+          className={'w-1/2'}
           title={'Assessment Preview'}
           ctas={[
             {

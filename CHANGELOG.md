@@ -1,3 +1,10 @@
+# [1.125.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.124.0...v1.125.0) (2024-03-04)
+
+
+### Features
+
+* create compliance progress card ([90bf66a](https://github.com/ColdPBC/cold-monorepo/commit/90bf66aa68d9f13523a5a97a6b3de1bc1f0a9834))
+
 # [1.124.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.123.3...v1.124.0) (2024-03-04)
 
 
