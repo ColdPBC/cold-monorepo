@@ -7993,9 +7993,12 @@ export function getSurveyComplianceFlowSomeCompleteSurveyMock(name: string) {
       forOwn(section.follow_up, (followUp, followUpKey) => {
         if (followUpKey === 'GHG-12' || followUpKey === 'GHG-13') {
           followUp.value = undefined;
+          followUp.score = 0;
         } else {
           followUp.value = true;
+          followUp.score = 2;
         }
+        followUp.max_score = 2;
       });
     });
   }
@@ -8010,9 +8013,12 @@ export function getSurveyAllOtherQuestionsAnsweredSurveyMock(name: string) {
       forOwn(section.follow_up, (followUp, followUpKey) => {
         if (followUpKey === 'GHG-13') {
           followUp.value = undefined;
+          followUp.score = 0;
         } else {
           followUp.value = true;
+          followUp.score = 2;
         }
+        followUp.max_score = 2;
       });
     });
     forEach(survey.definition.progress, (progressSection: ComplianceSurveySectionProgressType, index) => {

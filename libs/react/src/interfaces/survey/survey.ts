@@ -84,6 +84,8 @@ export interface SurveySectionFollowUpType {
     justification?: string;
     answer?: string | boolean | number | Array<string>;
   };
+  score?: number;
+  max_score?: number;
 }
 
 export interface SurveyPayloadType {
