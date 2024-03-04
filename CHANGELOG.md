@@ -1,3 +1,11 @@
+## [1.123.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.123.0...v1.123.1) (2024-03-04)
+
+
+### Bug Fixes
+
+* bug preventing progress from being added to survey ([04f0da0](https://github.com/ColdPBC/cold-monorepo/commit/04f0da0f826af5d3982c9f5e10d78307fe787f3b))
+* refactor compliances ([a3dadc4](https://github.com/ColdPBC/cold-monorepo/commit/a3dadc47a269c81b0762b73a1adf1dab33d15041))
+
 # [1.123.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.122.2...v1.123.0) (2024-03-01)
 
 
