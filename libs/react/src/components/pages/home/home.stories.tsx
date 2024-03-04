@@ -61,3 +61,20 @@ export const EmptyFootprintData: Story = {
     );
   },
 };
+
+export const REIComplianceMVP: Story = {
+  render: () => {
+    return (
+      <StoryMockProvider handlers={[getFootprintHandler.empty, getCategoriesHandler.empty]}>
+        <Home />
+      </StoryMockProvider>
+    );
+  },
+  parameters: {
+    launchdarkly: {
+      flags: {
+        showNewHomePageComplianceReiMvp: true,
+      },
+    },
+  },
+};

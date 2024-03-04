@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
-import { CenterColumnContent, ErrorFallback, MainContent, Spinner } from '@coldpbc/components';
+import { CenterColumnContent, ErrorFallback, Spinner } from '@coldpbc/components';
 import { ComplianceOverviewCard } from '../../organisms/complianceOverviewCard/complianceOverviewCard';
-import { useAuth0Wrapper, useColdContext, useOrgSWR } from '@coldpbc/hooks';
+import { useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
 import { axiosFetcher } from '@coldpbc/fetchers';
-import { forEach, forOwn, isUndefined } from 'lodash';
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import { Compliance, OrgCompliance, SurveyPayloadType } from '@coldpbc/interfaces';
+import { forOwn } from 'lodash';
+import { useParams } from 'react-router-dom';
+import { OrgCompliance } from '@coldpbc/interfaces';
 import useSWR from 'swr';
 import { ComplianceSectionOverview } from '../../organisms/complianceSectionOverview/complianceSectionOverview';
 import { ErrorType } from '@coldpbc/enums';
@@ -18,7 +18,7 @@ const _ComplianceDetail = () => {
   const [totalComplianceProgress, setTotalComplianceProgress] = React.useState<any>({});
   const params = useParams();
   const complianceName = params['name'];
-  const orgCompliances = useSWR<OrgCompliance[], any, any>([`/compliance_definitions/organization/${orgId}`, 'GET'], axiosFetcher);
+  const orgCompliances = useSWR<OrgCompliance[], any, any>([`/compliance_definitions/organizations/${orgId}`, 'GET'], axiosFetcher);
 
   const getComplianceProgressForSurveys = () => {
     let totalQuestions = 0;

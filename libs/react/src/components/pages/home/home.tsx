@@ -25,20 +25,33 @@ function _Home() {
   }
 
   if (auth0.user) {
-    return (
-      <AppContent title={'Welcome, ' + auth0.user?.given_name}>
-        <CenterColumnContent>
-          {ldFlags.showNextStepsCard && <NextSteps />}
-          <FootprintOverviewCard chartVariant={EmissionsDonutChartVariants.horizontal} />
-          {ldFlags.showComplianceModule && <JourneyOverviewCard />}
-          {ldFlags.showNewsModuleCold310 && <NewsCard />}
-        </CenterColumnContent>
-        <RightColumnContent>
-          <TemperatureCheckCard cardTitle="Temperature Check" stats={['cold_score', 'footprint', 'emissions_avoided', 'actions_completed']} />
-          {ldFlags.showActions261 && <NextActionsCard />}
-        </RightColumnContent>
-      </AppContent>
-    );
+    if (ldFlags.showNewHomePageComplianceReiMvp) {
+      return (
+        <AppContent title={'Welcome, ' + auth0.user?.given_name}>
+          <CenterColumnContent>
+            {ldFlags.showNextStepsCard && <NextSteps />}
+            {ldFlags.showComplianceModule && <JourneyOverviewCard />}
+            {ldFlags.showNewsModuleCold310 && <NewsCard />}
+          </CenterColumnContent>
+          <RightColumnContent></RightColumnContent>
+        </AppContent>
+      );
+    } else {
+      return (
+        <AppContent title={'Welcome, ' + auth0.user?.given_name}>
+          <CenterColumnContent>
+            {ldFlags.showNextStepsCard && <NextSteps />}
+            <FootprintOverviewCard chartVariant={EmissionsDonutChartVariants.horizontal} />
+            {ldFlags.showComplianceModule && <JourneyOverviewCard />}
+            {ldFlags.showNewsModuleCold310 && <NewsCard />}
+          </CenterColumnContent>
+          <RightColumnContent>
+            <TemperatureCheckCard cardTitle="Temperature Check" stats={['cold_score', 'footprint', 'emissions_avoided', 'actions_completed']} />
+            {ldFlags.showActions261 && <NextActionsCard />}
+          </RightColumnContent>
+        </AppContent>
+      );
+    }
   }
   return null;
 }

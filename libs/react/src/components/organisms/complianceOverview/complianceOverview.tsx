@@ -24,7 +24,7 @@ export const ComplianceOverview = (props: ComplianceOverviewProps) => {
     if (orgComplianceData !== undefined) {
       await navigate(`/wizard/compliance/${orgComplianceData.compliance_definition.name}`);
     } else {
-      const response = await axiosFetcher([`/compliance_definitions/${complianceData.name}/organization/${orgId}`, 'POST']);
+      const response = await axiosFetcher([`/compliance_definitions/${complianceData.name}/organizations/${orgId}`, 'POST']);
       if (isAxiosError(response)) {
         await addToastMessage({ message: 'Compliance could not be added', type: ToastMessage.FAILURE });
         logError(response.message, ErrorType.AxiosError, response);

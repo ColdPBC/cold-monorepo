@@ -17,7 +17,7 @@ export const getComplianceWizardFlowHandler = {
       const compliance = getComplianceMock();
       return res(ctx.json(compliance));
     }),
-    rest.get(getApiUrl('/compliance_definitions/organization/:orgId'), (req, res, ctx) => {
+    rest.get(getApiUrl('/compliance_definitions/organizations/:orgId'), (req, res, ctx) => {
       const compliance = getOrganizationComplianceMock();
       return res(ctx.json(compliance));
     }),
@@ -47,7 +47,7 @@ export const getComplianceWizardFlowHandler = {
       const compliance = getComplianceMock();
       return res(ctx.json(compliance));
     }),
-    rest.get(getApiUrl('/compliance_definitions/organization/:orgId'), (req, res, ctx) => {
+    rest.get(getApiUrl('/compliance_definitions/organizations/:orgId'), (req, res, ctx) => {
       const compliance = getOrganizationComplianceMock();
       return res(ctx.json(compliance));
     }),
@@ -77,7 +77,7 @@ export const getComplianceWizardFlowHandler = {
       const compliance = getComplianceMock();
       return res(ctx.json(compliance));
     }),
-    rest.get(getApiUrl('/compliance_definitions/organization/:orgId'), (req, res, ctx) => {
+    rest.get(getApiUrl('/compliance_definitions/organizations/:orgId'), (req, res, ctx) => {
       const compliance = getOrganizationComplianceMock();
       return res(ctx.json(compliance));
     }),
@@ -112,7 +112,7 @@ export const getComplianceWizardFlowHandler = {
       const compliance = getComplianceMock();
       return res(ctx.json(compliance));
     }),
-    rest.get(getApiUrl('/compliance_definitions/organization/:orgId'), (req, res, ctx) => {
+    rest.get(getApiUrl('/compliance_definitions/organizations/:orgId'), (req, res, ctx) => {
       const compliance = getOrganizationComplianceMock();
       return res(ctx.json(compliance));
     }),

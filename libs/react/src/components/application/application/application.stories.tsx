@@ -358,6 +358,7 @@ export const REIComplianceMVP: Story = {
     launchdarkly: {
       flags: {
         showReiComplianceMvpSidebarCold506: true,
+        showNewHomePageComplianceReiMvp: true,
       },
     },
   },
