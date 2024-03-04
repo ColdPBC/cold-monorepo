@@ -1,3 +1,38 @@
+# [1.124.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.123.3...v1.124.0) (2024-03-04)
+
+
+### Features
+
+* compliance survey questionnaire ([ee48487](https://github.com/ColdPBC/cold-monorepo/commit/ee48487eb4db62e07490adc1a84576a993490ba7))
+* created custom checkbox icon ([01217fc](https://github.com/ColdPBC/cold-monorepo/commit/01217fcd8b673bbf4d2a01c39f56596101a82abc))
+* handle last question of the survey answered ([a031b4c](https://github.com/ColdPBC/cold-monorepo/commit/a031b4cbef703bb3fbfcc81436b61b9977323079))
+* on submit close survey ([bcc2da4](https://github.com/ColdPBC/cold-monorepo/commit/bcc2da4d8a3e474bdc92ca945becea2ef1d5cd6a))
+* revert small checkbox icon ([5e84335](https://github.com/ColdPBC/cold-monorepo/commit/5e84335b74fd80090177e1b78a187e9176ad5a36))
+* set category opened when navigated to section ([914da20](https://github.com/ColdPBC/cold-monorepo/commit/914da20a000587230fc62d1ed545fcfbec4fa4c2))
+* show highlighted background for section when selected ([d45facb](https://github.com/ColdPBC/cold-monorepo/commit/d45facb0b647857d07b1a7928c573c118112cac7))
+
+## [1.123.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.123.2...v1.123.3) (2024-03-04)
+
+
+### Bug Fixes
+
+* add logging and simplify file uploads ([296b014](https://github.com/ColdPBC/cold-monorepo/commit/296b014afc81f5d295b800a5652b7b75e33c4a7d))
+
+## [1.123.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.123.1...v1.123.2) (2024-03-04)
+
+
+### Bug Fixes
+
+* add missing 'await' that was causing members to not be returned ([263a51d](https://github.com/ColdPBC/cold-monorepo/commit/263a51d634ed76b87ce9172d05c2c7434f4adc82))
+
+## [1.123.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.123.0...v1.123.1) (2024-03-04)
+
+
+### Bug Fixes
+
+* bug preventing progress from being added to survey ([04f0da0](https://github.com/ColdPBC/cold-monorepo/commit/04f0da0f826af5d3982c9f5e10d78307fe787f3b))
+* refactor compliances ([a3dadc4](https://github.com/ColdPBC/cold-monorepo/commit/a3dadc47a269c81b0762b73a1adf1dab33d15041))
+
 # [1.123.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.122.2...v1.123.0) (2024-03-01)
 
 

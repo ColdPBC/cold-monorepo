@@ -1,11 +1,11 @@
-import {Injectable} from '@nestjs/common';
-import {BackOffStrategies, BaseWorker, PrismaService, RabbitMessagePayload, S3Service} from '@coldpbc/nest';
-import {Nack, RabbitRPC, RabbitSubscribe} from '@golevelup/nestjs-rabbitmq';
-import {InjectQueue} from '@nestjs/bull';
-import {Queue} from 'bull';
-import {AppService} from './app.service';
-import {FileService} from './assistant/files/file.service';
-import {ConfigService} from '@nestjs/config';
+import { Injectable } from '@nestjs/common';
+import { BackOffStrategies, BaseWorker, PrismaService, RabbitMessagePayload, S3Service } from '@coldpbc/nest';
+import { Nack, RabbitRPC, RabbitSubscribe } from '@golevelup/nestjs-rabbitmq';
+import { InjectQueue } from '@nestjs/bull';
+import { Queue } from 'bull';
+import { AppService } from './app.service';
+import { FileService } from './assistant/files/file.service';
+import { ConfigService } from '@nestjs/config';
 
 /**
  * RabbitService class.
@@ -87,7 +87,7 @@ export class RabbitService extends BaseWorker {
       this.logger.info(`Processing ${event} event triggered by ${parsed.user?.coldclimate_claims?.email} from ${from}`, { parsed });
 
       switch (event) {
-        case 'integration.enabled': {
+        case 'organization.created': {
           const response = await this.appService.createAssistant(parsed);
           return response;
         }
@@ -106,28 +106,28 @@ export class RabbitService extends BaseWorker {
   }
 
   async processAsyncMessage(event: string, from: string, parsed: any) {
-    const { service, organization, user } = parsed;
+    const { user } = parsed;
 
     this.logger.info(`Processing ${event} event triggered by ${user?.coldclimate_claims?.email} from ${from}`, {
-      parsed,
-      from,
-      event,
-      service,
-      organization,
-      user,
+      ...parsed,
     });
 
     switch (event) {
-      case 'organization_compliances.created':
+      case 'organization.created': {
+        const response = await this.appService.createAssistant(parsed);
+        return response;
+      }
+      case 'compliance_automation.enabled':
         {
           const surveys = parsed.surveys;
           try {
             for (const survey of surveys) {
               await this.queue.add(
-                'survey',
+                event,
                 {
                   survey,
                   user,
+                  on_update_url: parsed.on_update_url,
                   compliance: parsed.compliance,
                   integration: parsed.integration,
                   organization: parsed.organization,
@@ -140,8 +140,10 @@ export class RabbitService extends BaseWorker {
           }
         }
         break;
-      default:
+      case 'file.uploaded':
         return await this.queue.add(event, parsed, { backoff: { type: BackOffStrategies.EXPONENTIAL } });
+      default:
+        return new Nack();
     }
   }
 }

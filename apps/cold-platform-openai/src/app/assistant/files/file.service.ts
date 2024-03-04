@@ -162,6 +162,7 @@ export class FileService extends BaseWorker implements OnModuleInit {
    * @param job
    */
   async uploadOrgFilesToOpenAI(job: Job) {
+    this.logger.info(`Received job ${job.id} of type ${job.name}`, { job: job.data });
     const { payload, user, organization, integration } = job.data;
 
     try {

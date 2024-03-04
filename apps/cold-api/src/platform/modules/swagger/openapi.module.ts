@@ -13,23 +13,37 @@ export class OpenapiModule {
     const customOptions = new DocumentBuilder()
       .setTitle('V1 REST API')
       .setTermsOfService('http://www.coldclimate.com/tos')
-      .addServer(`https://api.coldclimate.com/v1`, 'Production Server')
+      .addServer(`https://api.coldclimate.com/v1`, 'Production Server', {
+        clientId: { default: '{{auth0_client_id}}' },
+        clientSecret: { default: '{{auth0_client_secret' },
+      })
       .addServer(`https://api.coldclimate.online/v1`, 'Staging Server')
-      .addOAuth2({
+      .addSecurity('oauth2', {
         type: 'oauth2',
         flows: {
-          implicit: {
-            authorizationUrl: `https://${config.get('AUTH0_DOMAIN')}/authorize?audience=${config.get('AUTH0_AUDIENCE')}`,
+          authorizationCode: {
+            refreshUrl: '{{auth0_token_url}}',
+            authorizationUrl: `{{auth0_auth_url}}`,
+            tokenUrl: `{{auth0_token_url}}`,
             scopes: {
-              all: 'openid profile email',
+              openid: 'openid',
+              profile: 'profile',
+              email: 'email',
+              offline_access: 'offline_access',
             },
           },
         },
       })
+      .addSecurity('openId', {
+        type: 'openIdConnect',
+        openIdConnectUrl: `https://${config.get('AUTH0_DOMAIN')}/.well-known/openid-configuration`,
+      })
+      .addSecurityRequirements('openId', ['profile', 'email', 'openid', 'offline_access'])
       .setDescription('🌱 This is a restful api for the cold platform 🌱 ')
       // eslint-disable-next-line @typescript-eslint/no-var-requires
       .setVersion(process?.env?.npm_package_version || '0.0.0')
       .build();
+
     const document = SwaggerModule.createDocument(app, customOptions, {
       deepScanRoutes: true,
     });
@@ -48,6 +62,7 @@ export class OpenapiModule {
             oauth2RedirectUrl: `${config.get('API_SERVER_URL')}/oauth2-redirect.html`,
             oauth: {
               clientId: config.get('AUTH0_CLIENT_ID') || '',
+              clientSecret: config.get('AUTH0_CLIENT_SECRET') || '',
             },
           },
         }),
