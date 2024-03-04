@@ -1,3 +1,10 @@
+# [1.126.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.125.0...v1.126.0) (2024-03-04)
+
+
+### Features
+
+* use plus and subtract icons for compliance survey nav ([5532389](https://github.com/ColdPBC/cold-monorepo/commit/55323896de522788cec6a92c91ab82a9d93b860e))
+
 # [1.125.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.124.0...v1.125.0) (2024-03-04)
 
 
