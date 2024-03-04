@@ -1,13 +1,14 @@
 import React from 'react';
 import useSWR from 'swr';
 import { Outlet, useParams } from 'react-router-dom';
-import { ComplianceWizardLair, MainContent, Spinner, Wizard } from '@coldpbc/components';
+import { ComplianceWizardLair, ErrorFallback, MainContent, Spinner, Wizard } from '@coldpbc/components';
 import { Compliance, OrgCompliance } from '@coldpbc/interfaces';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { useAuth0Wrapper, useColdContext, useOrgSWR } from '@coldpbc/hooks';
 import { ErrorType } from '@coldpbc/enums';
+import { withErrorBoundary } from 'react-error-boundary';
 
-export const ComplianceWizard = () => {
+const _ComplianceWizard = () => {
   const { name } = useParams();
   const { orgId } = useAuth0Wrapper();
   const compliances = useSWR<Compliance[], any, any>(['/compliance_definitions', 'GET'], axiosFetcher);
@@ -89,3 +90,10 @@ export const ComplianceWizard = () => {
     return null;
   }
 };
+
+export const ComplianceWizard = withErrorBoundary(_ComplianceWizard, {
+  FallbackComponent: props => <ErrorFallback {...props} />,
+  onError: (error, info) => {
+    console.error('Error occurred in ComplianceWizard: ', error);
+  },
+});

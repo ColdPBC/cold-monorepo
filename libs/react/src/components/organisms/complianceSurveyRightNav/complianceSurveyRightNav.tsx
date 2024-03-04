@@ -2,6 +2,9 @@ import { ComplianceSurveyActiveKeyType, ComplianceSurveyPayloadType, SurveySecti
 import { find, map } from 'lodash';
 import { ColdIcon } from '../../atoms';
 import { IconNames } from '@coldpbc/enums';
+import { withErrorBoundary } from 'react-error-boundary';
+import { ErrorFallback } from '../../application';
+import React from 'react';
 
 export interface ComplianceSurveyRightNavProps {
   activeKey: ComplianceSurveyActiveKeyType;
@@ -11,7 +14,7 @@ export interface ComplianceSurveyRightNavProps {
   setSurveyOpen: (surveyOpen: boolean) => void;
 }
 
-export const ComplianceSurveyRightNav = (props: ComplianceSurveyRightNavProps) => {
+const _ComplianceSurveyRightNav = (props: ComplianceSurveyRightNavProps) => {
   const { activeKey, setActiveKey, surveyData, setSurveyOpen, surveyOpen } = props;
 
   const onClick = (key: string) => {
@@ -66,3 +69,10 @@ export const ComplianceSurveyRightNav = (props: ComplianceSurveyRightNavProps) =
     </div>
   );
 };
+
+export const ComplianceSurveyRightNav = withErrorBoundary(_ComplianceSurveyRightNav, {
+  FallbackComponent: props => <ErrorFallback {...props} />,
+  onError: (error, info) => {
+    console.error('Error occurred in ComplianceSurveyRightNav: ', error);
+  },
+});
