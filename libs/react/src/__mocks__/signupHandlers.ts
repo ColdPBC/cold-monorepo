@@ -1,10 +1,6 @@
 import { rest } from 'msw';
-import {
-  getEmptyPoliciesSignedMock,
-  getPoliciesSignedMock,
-  getPolicyMockByName,
-} from './policyMock';
-import { getApiUrl, handlers } from './handlers';
+import { getEmptyPoliciesSignedMock, getPolicyMockByName } from './policyMock';
+import { getApiUrl } from './handlers';
 import { auth0UserMock } from './userMock';
 import { getSidebarMock } from './sidebarMock';
 import { getCategoriesDataMock, getFootprintDataMock } from './categoriesMock';
@@ -17,13 +13,7 @@ import {
   getTeamMemberDataGridMock,
 } from './datagridMock';
 import { getOrganizationMock } from './organizationMock';
-import {
-  changeUserRoles,
-  deleteUserInvitation,
-  removeUserFromOrganization,
-  resendInvitation,
-  sendInvitation,
-} from './helper';
+import { changeUserRoles, deleteUserInvitation, removeUserFromOrganization, resendInvitation, sendInvitation } from './helpers/helper';
 import { getRoles } from './roleMock';
 import { getSurveyFormDataByName } from './surveyDataMock';
 
@@ -173,12 +163,9 @@ export const getSignupHandlersForApplicationSignup = {
       }),
 
       // Mock data for footprint modules
-      rest.get(
-        getApiUrl('/categories/company_decarbonization'),
-        (req, res, ctx) => {
-          return res(ctx.json({ ...getFootprintDataMock() }));
-        },
-      ),
+      rest.get(getApiUrl('/categories/company_decarbonization'), (req, res, ctx) => {
+        return res(ctx.json({ ...getFootprintDataMock() }));
+      }),
 
       rest.get(getApiUrl('/company-users'), (req, res, ctx) => {
         return res(ctx.json(getDataGridUsersMock()));
@@ -220,90 +207,71 @@ export const getSignupHandlersForApplicationSignup = {
         return res(ctx.json({ ...getOrganizationMembersMock() }));
       }),
 
-      rest.post(
-        getApiUrl('/organizations/:orgId/members/:userId/role/:roleName'),
-        async (req, res, ctx) => {
-          const { orgId, userId, roleName } = req.params;
-          await changeUserRoles(
-            orgId as string,
-            userId as string,
-            roleName as string,
-          );
-          return res(ctx.json({}));
-        },
-      ),
+      rest.post(getApiUrl('/organizations/:orgId/members/:userId/role/:roleName'), async (req, res, ctx) => {
+        const { orgId, userId, roleName } = req.params;
+        await changeUserRoles(orgId as string, userId as string, roleName as string);
+        return res(ctx.json({}));
+      }),
 
-      rest.delete(
-        getApiUrl('/organizations/:orgId/member'),
-        async (req, res, ctx) => {
-          const { orgId } = req.params;
-          let data: { members: string[] };
-          if (req.body) {
-            data = req.body as { members: string[] };
-            await removeUserFromOrganization(data.members, orgId as string);
-          }
-          return res(ctx.json({}));
-        },
-      ),
+      rest.delete(getApiUrl('/organizations/:orgId/member'), async (req, res, ctx) => {
+        const { orgId } = req.params;
+        let data: { members: string[] };
+        if (req.body) {
+          data = req.body as { members: string[] };
+          await removeUserFromOrganization(data.members, orgId as string);
+        }
+        return res(ctx.json({}));
+      }),
 
-      rest.delete(
-        getApiUrl('/organizations/:orgId/invitation'),
-        async (req, res, ctx) => {
-          let data: {
+      rest.delete(getApiUrl('/organizations/:orgId/invitation'), async (req, res, ctx) => {
+        let data: {
+          org_id: string;
+          user_email: string;
+        };
+        if (req.body) {
+          data = req.body as {
             org_id: string;
             user_email: string;
           };
-          if (req.body) {
-            data = req.body as {
-              org_id: string;
-              user_email: string;
-            };
-            await deleteUserInvitation(data.org_id, data.user_email);
-          }
-          return res(ctx.json({}));
-        },
-      ),
+          await deleteUserInvitation(data.org_id, data.user_email);
+        }
+        return res(ctx.json({}));
+      }),
 
-      rest.post(
-        getApiUrl('/organizations/:orgId/invitation'),
-        async (req, res, ctx) => {
-          const data = req.body as {
-            org_id: string;
-            user_email: string;
-            inviter_name: string;
-            roleId: string;
-          };
-          try {
-            if (data) {
-              const { org_id, user_email, inviter_name, roleId } = data;
-              await sendInvitation(org_id, user_email, inviter_name, roleId);
-            }
-            return res(ctx.json({}));
-          } catch (error) {
-            let message;
-            if (error instanceof Error) message = error.message;
-            else message = String(error);
-            return res(ctx.status(500), ctx.json({ message: message }));
-          }
-        },
-      ),
-
-      rest.patch(
-        getApiUrl('/organizations/:orgId/invitation'),
-        async (req, res, ctx) => {
-          const data = req.body as {
-            org_id: string;
-            user_email: string;
-            inviter_name: string;
-            roleId: string;
-          };
+      rest.post(getApiUrl('/organizations/:orgId/invitation'), async (req, res, ctx) => {
+        const data = req.body as {
+          org_id: string;
+          user_email: string;
+          inviter_name: string;
+          roleId: string;
+        };
+        try {
           if (data) {
             const { org_id, user_email, inviter_name, roleId } = data;
-            await resendInvitation(org_id, user_email);
+            await sendInvitation(org_id, user_email, inviter_name, roleId);
           }
           return res(ctx.json({}));
-        },
-      ),
+        } catch (error) {
+          let message;
+          if (error instanceof Error) message = error.message;
+          else message = String(error);
+          return res(ctx.status(500), ctx.json({ message: message }));
+        }
+      }),
+
+      rest.patch(getApiUrl('/organizations/:orgId/invitation'), async (req, res, ctx) => {
+        const data = req.body as {
+          org_id: string;
+          user_email: string;
+          inviter_name: string;
+          roleId: string;
+        };
+        if (data) {
+          const { org_id, user_email, inviter_name, roleId } = data;
+          await resendInvitation(org_id, user_email);
+        }
+        return res(ctx.json({}));
+      }),
 
       rest.post(getApiUrl('/resources/:name'), async (req, res, ctx) => {
         return res(ctx.json({}));
@@ -313,23 +281,17 @@ export const getSignupHandlersForApplicationSignup = {
         return res(ctx.json(getRoles()));
       }),
 
-      rest.get(
-        getApiUrl('/organizations/:orgId/surveys/:name'),
-        (req, res, ctx) => {
-          const { name } = req.params;
+      rest.get(getApiUrl('/organizations/:orgId/surveys/:name'), (req, res, ctx) => {
+        const { name } = req.params;
 
-          return res(ctx.json(getSurveyFormDataByName(name as string)));
-        },
-      ),
+        return res(ctx.json(getSurveyFormDataByName(name as string)));
+      }),
 
-      rest.put(
-        getApiUrl('/organizations/:orgId/surveys/:name'),
-        async (req, res, ctx) => {
-          const { data } = await req.json();
+      rest.put(getApiUrl('/organizations/:orgId/surveys/:name'), async (req, res, ctx) => {
+        const { data } = await req.json();
 
-          return res(ctx.json({}));
-        },
-      ),
+        return res(ctx.json({}));
+      }),
     ],
     getSignUpHandler.DEFAULT,
   ].flat(),

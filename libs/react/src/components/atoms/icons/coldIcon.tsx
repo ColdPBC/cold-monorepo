@@ -23,6 +23,7 @@ import { ColdComplianceIcon } from './coldComplianceIcon';
 import { ColdDocumentsIcon } from './coldDocumentsIcon';
 import { PlusIcon } from './plusIcon';
 import { SubtractIcon } from './subtractIcon';
+import { ColdComplianceSurveyCheckBoxIcon } from './coldComplianceSurveyCheckBoxIcon';
 
 // TODO: Take the color attribute out of the IconProps
 export const ColdIcon = (props: IconProps) => {
@@ -70,6 +71,8 @@ export const ColdIcon = (props: IconProps) => {
       return <PlusIcon {...props} />;
     case IconNames.SubtractIcon:
       return <SubtractIcon {...props} />;
+    case IconNames.ColdComplianceSurveyCheckBoxIcon:
+      return <ColdComplianceSurveyCheckBoxIcon {...props} />;
     default:
     case IconNames.ColdSettingsIcon:
       return <ColdSettingsIcon {...props} />;

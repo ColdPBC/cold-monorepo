@@ -1,5 +1,5 @@
 import { Route } from 'react-router-dom';
-import { AutomateComplianceFlowStep, ComplianceWizard, DocumentsUploadComplianceFlowStep, ProcessingComplianceFlowStep } from '@coldpbc/components';
+import { AutomateComplianceFlowStep, ComplianceWizard, DocumentsUploadComplianceFlowStep, ProcessingComplianceFlowStep, SurveyComplianceFlowStep } from '@coldpbc/components';
 
 export const WizardRoutes = () => {
   return (
@@ -8,7 +8,7 @@ export const WizardRoutes = () => {
         <Route path={'documents'} element={<DocumentsUploadComplianceFlowStep />} />
         <Route path={'automate'} element={<AutomateComplianceFlowStep />} />
         <Route path={'processing'} element={<ProcessingComplianceFlowStep />} />
-        <Route path={'questionnaire'} element={<div className={'text-tc-primary'}>Survey Taking Step</div>} />
+        <Route path={'questionnaire'} element={<SurveyComplianceFlowStep />} />
       </Route>
     </Route>
   );

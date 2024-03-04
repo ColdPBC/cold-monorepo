@@ -1,12 +1,6 @@
 import React, { PropsWithChildren } from 'react';
-import { BaseButton, Spinner } from '../../atoms';
-import { ColdLogos } from '../../atoms';
-import {
-  ButtonTypes,
-  ColdLogoNames,
-  GlobalSizes,
-  IconNames,
-} from '@coldpbc/enums';
+import { BaseButton, ColdLogos, Spinner } from '../../atoms';
+import { ButtonTypes, ColdLogoNames, GlobalSizes, IconNames } from '@coldpbc/enums';
 import { HexColors } from '@coldpbc/themes';
 import { twMerge } from 'tailwind-merge';
 import clsx from 'clsx';
@@ -27,33 +21,23 @@ export interface TakeoverProps {
   isLoading?: boolean;
   className?: string;
   fullScreenWidth?: boolean;
-  "data-testid"?: string;
+  'data-testid'?: string;
+  containClassName?: string;
 }
 
 export const Takeover = (props: PropsWithChildren<TakeoverProps>) => {
-  const { children, show, setShow, header, isLoading, className, fullScreenWidth = true, } = props;
+  const { children, show, setShow, header, isLoading, className, fullScreenWidth = true, containClassName } = props;
 
   const getHeaderComponent = () => {
     if (header && !isLoading) {
       return (
-        <div
-          className={
-            'w-full flex h-[40px]' +
-            (header.title ? ' justify-between' : ' justify-end')
-          }
-        >
+        <div className={'w-full flex h-[40px]' + (header.title ? ' justify-between' : ' justify-end')}>
           {header.title ? (
             header.title.text ? (
-              <div className={'text-h3 text-tc-primary'}>
-                {header.title.text}
-              </div>
+              <div className={'text-h3 text-tc-primary'}>{header.title.text}</div>
             ) : (
               <div className={'flex items-center'}>
-                <ColdLogos
-                  name={ColdLogoNames.ColdWordmark}
-                  color={HexColors.white}
-                  className={'w-[76px] h-[24px]'}
-                />
+                <ColdLogos name={ColdLogoNames.ColdWordmark} color={HexColors.white} className={'w-[76px] h-[24px]'} />
               </div>
             )
           ) : (
@@ -71,6 +55,7 @@ export const Takeover = (props: PropsWithChildren<TakeoverProps>) => {
               label={header.dismiss.label}
               iconRight={IconNames.CloseModalIcon}
               variant={ButtonTypes.secondary}
+              className={'bg-transparent'}
             />
           )}
         </div>
@@ -84,9 +69,12 @@ export const Takeover = (props: PropsWithChildren<TakeoverProps>) => {
     return (
       <div className={twMerge('fixed h-screen w-screen bg-bgc-main z-10 inset-0', className)} data-testid={props['data-testid']}>
         <div
-          className={clsx('flex flex-col overflow-y-scroll h-full px-[40px] pt-[40px]', {
-            'max-w-[1440px] m-auto': !fullScreenWidth,
-          })}>
+          className={twMerge(
+            clsx('flex flex-col overflow-y-scroll h-full px-[40px] pt-[40px]', {
+              'max-w-[1440px] m-auto': !fullScreenWidth,
+            }),
+            containClassName,
+          )}>
           {getHeaderComponent()}
           <div className="flex-1 flex flex-col">
             {isLoading ? (
