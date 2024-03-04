@@ -1,3 +1,10 @@
+# [1.128.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.127.0...v1.128.0) (2024-03-04)
+
+
+### Features
+
+* include max score in survey response ([156fe47](https://github.com/ColdPBC/cold-monorepo/commit/156fe47400d13a1f434c8a1d753ca8b9ccb77587))
+
 # [1.127.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.126.1...v1.127.0) (2024-03-04)
 
 
