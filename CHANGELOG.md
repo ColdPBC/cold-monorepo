@@ -1,3 +1,11 @@
+# [1.127.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.126.1...v1.127.0) (2024-03-04)
+
+
+### Features
+
+* home page update for rei compliance mvp ([52df416](https://github.com/ColdPBC/cold-monorepo/commit/52df4160e56a0c19f96955bd081ff5d5c42ff70b))
+* update compliance_definitions/organization to organizations ([7b5caed](https://github.com/ColdPBC/cold-monorepo/commit/7b5caedfe26477de44b2277c07516abefa6a40cb))
+
 ## [1.126.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.126.0...v1.126.1) (2024-03-04)
 
 
