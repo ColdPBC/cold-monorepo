@@ -37,7 +37,9 @@ export const returnUpdatedSurvey = (payload: ComplianceSurveyPayloadType, survey
         copy.definition.progress[index].questions[questionKey].user_answered = questionAnswered;
         copy.definition.progress[index].questions[questionKey].ai_answered = question.ai_attempted !== undefined;
         answered += questionAnswered ? 1 : 0;
-        review += question.ai_attempted ? 1 : 0;
+        if (!questionAnswered) {
+          review += question.ai_attempted ? 1 : 0;
+        }
         total += 1;
       });
     }
