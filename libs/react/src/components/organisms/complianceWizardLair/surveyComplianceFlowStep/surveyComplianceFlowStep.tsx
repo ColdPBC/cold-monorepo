@@ -1,10 +1,11 @@
 import React, { useContext, useEffect } from 'react';
-import { ComplianceSurveyLeftNav, ComplianceSurveyQuestionnaire, ComplianceSurveyRightNav, Spinner, Takeover, WizardContext } from '@coldpbc/components';
+import { ComplianceSurveyLeftNav, ComplianceSurveyQuestionnaire, ComplianceSurveyRightNav, ErrorFallback, Spinner, Takeover, WizardContext } from '@coldpbc/components';
 import { ComplianceSurveyActiveKeyType, ComplianceSurveyPayloadType } from '@coldpbc/interfaces';
 import { getStartingKey, sortComplianceSurvey } from '@coldpbc/lib';
 import { GlobalSizes } from '@coldpbc/enums';
+import { withErrorBoundary } from 'react-error-boundary';
 
-export const SurveyComplianceFlowStep = () => {
+const _SurveyComplianceFlowStep = () => {
   const { data } = useContext(WizardContext);
   const { surveyData } = data as { surveyData: ComplianceSurveyPayloadType };
   const [activeKey, setActiveKey] = React.useState<ComplianceSurveyActiveKeyType>({
@@ -69,3 +70,10 @@ export const SurveyComplianceFlowStep = () => {
     </div>
   );
 };
+
+export const SurveyComplianceFlowStep = withErrorBoundary(_SurveyComplianceFlowStep, {
+  FallbackComponent: props => <ErrorFallback {...props} />,
+  onError: (error, info) => {
+    console.error('Error occurred in SurveyComplianceFlowStep: ', error);
+  },
+});

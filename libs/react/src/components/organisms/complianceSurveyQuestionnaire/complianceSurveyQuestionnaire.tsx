@@ -11,10 +11,11 @@ import {
   putSurveyData,
   updateSurveyQuestion,
 } from '@coldpbc/lib';
-import { BaseButton, SurveyInput } from '@coldpbc/components';
+import { BaseButton, ErrorFallback, SurveyInput } from '@coldpbc/components';
 import { ButtonTypes, GlobalSizes } from '@coldpbc/enums';
 import { CSSTransition, SwitchTransition } from 'react-transition-group';
 import { useSWRConfig } from 'swr';
+import { withErrorBoundary } from 'react-error-boundary';
 
 export interface ComplianceSurveyQuestionnaireProps {
   activeKey: ComplianceSurveyActiveKeyType;
@@ -24,7 +25,7 @@ export interface ComplianceSurveyQuestionnaireProps {
   setSurveyData: (surveyData: ComplianceSurveyPayloadType) => void;
 }
 
-export const ComplianceSurveyQuestionnaire = (props: ComplianceSurveyQuestionnaireProps) => {
+const _ComplianceSurveyQuestionnaire = (props: ComplianceSurveyQuestionnaireProps) => {
   const { activeKey, setActiveKey, submitSurvey, surveyData, setSurveyData } = props;
   const { getOrgSpecificUrl } = useAuth0Wrapper();
   const [sendingSurvey, setSendingSurvey] = React.useState<boolean>(false);
@@ -560,3 +561,10 @@ export const ComplianceSurveyQuestionnaire = (props: ComplianceSurveyQuestionnai
     return <></>;
   }
 };
+
+export const ComplianceSurveyQuestionnaire = withErrorBoundary(_ComplianceSurveyQuestionnaire, {
+  FallbackComponent: props => <ErrorFallback {...props} />,
+  onError: (error, info) => {
+    console.error('Error occurred in ComplianceSurveyQuestionnaire: ', error);
+  },
+});

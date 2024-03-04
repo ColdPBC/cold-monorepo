@@ -1,9 +1,10 @@
 import React, { useContext } from 'react';
-import { ComplianceWizardLairBase, WizardContext } from '@coldpbc/components';
+import { ComplianceWizardLairBase, ErrorFallback, WizardContext } from '@coldpbc/components';
 import { ButtonTypes } from '@coldpbc/enums';
 import { Compliance } from '@coldpbc/interfaces';
+import { withErrorBoundary } from 'react-error-boundary';
 
-export const DocumentsUploadComplianceFlowStep = () => {
+const _DocumentsUploadComplianceFlowStep = () => {
   const { nextStep, data } = useContext(WizardContext);
   const complianceSet = data['compliances'].find((compliance: Compliance) => compliance.name === data['name']);
   const { title } = complianceSet;
@@ -19,3 +20,10 @@ export const DocumentsUploadComplianceFlowStep = () => {
     />
   );
 };
+
+export const DocumentsUploadComplianceFlowStep = withErrorBoundary(_DocumentsUploadComplianceFlowStep, {
+  FallbackComponent: props => <ErrorFallback {...props} />,
+  onError: (error, info) => {
+    console.error('Error occurred in DocumentsUploadComplianceFlowStep: ', error);
+  },
+});

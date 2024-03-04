@@ -1,14 +1,15 @@
 import React from 'react';
-import { Card, ProgressBar } from '@coldpbc/components';
+import { Card, ErrorFallback, ProgressBar } from '@coldpbc/components';
 import { ComplianceSurveyPayloadType } from '@coldpbc/interfaces';
 import { HexColors } from '@coldpbc/themes';
 import { sumBy } from 'lodash';
+import { withErrorBoundary } from 'react-error-boundary';
 
 export interface ComplianceProgressCardProps {
   surveyData: ComplianceSurveyPayloadType;
 }
 
-export const ComplianceProgressCard = (props: ComplianceProgressCardProps) => {
+const _ComplianceProgressCard = (props: ComplianceProgressCardProps) => {
   const { surveyData } = props;
   const { progress } = surveyData.definition;
   const totalQuestions = sumBy(progress, value => {
@@ -60,3 +61,10 @@ export const ComplianceProgressCard = (props: ComplianceProgressCardProps) => {
     </Card>
   );
 };
+
+export const ComplianceProgressCard = withErrorBoundary(_ComplianceProgressCard, {
+  FallbackComponent: props => <ErrorFallback {...props} />,
+  onError: (error, info) => {
+    console.error('Error occurred in ComplianceProgressCard: ', error);
+  },
+});
