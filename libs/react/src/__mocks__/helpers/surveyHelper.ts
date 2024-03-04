@@ -12,8 +12,8 @@ export const returnUpdatedSurvey = (payload: ComplianceSurveyPayloadType, survey
   } as ComplianceSurveyPayloadType;
 
   forOwn(copy.definition.sections, (section, sectionKey) => {
-    const index = copy.definition.progress.findIndex(progress => progress.section === sectionKey);
-    copy.definition.progress[index] = {
+    const index = copy.definition.progress.sections.findIndex(progress => progress.section === sectionKey);
+    copy.definition.progress.sections[index] = {
       answered: 0,
       complete: false,
       questions: {},
@@ -27,15 +27,15 @@ export const returnUpdatedSurvey = (payload: ComplianceSurveyPayloadType, survey
     let review = 0;
     let total = 0;
     if (index !== -1) {
-      copy.definition.progress[index].questions = {};
+      copy.definition.progress.sections[index].questions = {};
       forOwn(section.follow_up, (question, questionKey) => {
-        copy.definition.progress[index].questions[questionKey] = {
+        copy.definition.progress.sections[index].questions[questionKey] = {
           user_answered: false,
           ai_answered: false,
         };
         const questionAnswered = question.value !== null && question.value !== undefined;
-        copy.definition.progress[index].questions[questionKey].user_answered = questionAnswered;
-        copy.definition.progress[index].questions[questionKey].ai_answered = question.ai_attempted !== undefined;
+        copy.definition.progress.sections[index].questions[questionKey].user_answered = questionAnswered;
+        copy.definition.progress.sections[index].questions[questionKey].ai_answered = question.ai_attempted !== undefined;
         answered += questionAnswered ? 1 : 0;
         if (!questionAnswered) {
           review += question.ai_attempted ? 1 : 0;
@@ -46,10 +46,10 @@ export const returnUpdatedSurvey = (payload: ComplianceSurveyPayloadType, survey
     if (answered === total) {
       complete = true;
     }
-    copy.definition.progress[index].answered = answered;
-    copy.definition.progress[index].complete = complete;
-    copy.definition.progress[index].review = review;
-    copy.definition.progress[index].total = total;
+    copy.definition.progress.sections[index].answered = answered;
+    copy.definition.progress.sections[index].complete = complete;
+    copy.definition.progress.sections[index].review = review;
+    copy.definition.progress.sections[index].total = total;
   });
   return copy;
 };

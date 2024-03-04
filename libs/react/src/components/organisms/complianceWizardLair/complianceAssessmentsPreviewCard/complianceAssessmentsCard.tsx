@@ -3,7 +3,6 @@ import { ComplianceSurveyPayloadType } from '@coldpbc/interfaces';
 import { Card, ErrorFallback, ProgressBar } from '@coldpbc/components';
 import { ButtonTypes } from '@coldpbc/enums';
 import { useNavigate } from 'react-router-dom';
-import { forOwn } from 'lodash';
 import { HexColors } from '@coldpbc/themes';
 import { withErrorBoundary } from 'react-error-boundary';
 
@@ -15,15 +14,8 @@ const _ComplianceAssessmentsCard = (props: ComplianceAssessmentsCardProps) => {
   const { surveyData } = props;
   const navigate = useNavigate();
 
-  let totalScore = 0;
-  let maxPossibleScore = 0;
-
-  forOwn(surveyData.definition.sections, section => {
-    forOwn(section.follow_up, (question, key) => {
-      totalScore += question.score || 0;
-      maxPossibleScore += question.max_score || 0;
-    });
-  });
+  const totalScore = surveyData.definition.progress.total_score;
+  const maxPossibleScore = surveyData.definition.progress.total_max_score;
 
   const percentage = totalScore === 0 || maxPossibleScore === 0 ? 0 : (totalScore / maxPossibleScore) * 100;
 

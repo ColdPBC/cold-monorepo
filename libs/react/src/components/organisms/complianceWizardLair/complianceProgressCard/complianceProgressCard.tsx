@@ -12,13 +12,14 @@ export interface ComplianceProgressCardProps {
 const _ComplianceProgressCard = (props: ComplianceProgressCardProps) => {
   const { surveyData } = props;
   const { progress } = surveyData.definition;
-  const totalQuestions = sumBy(progress, value => {
+  const { sections } = progress;
+  const totalQuestions = sumBy(sections, value => {
     return value.total;
   });
-  const totalComplete = sumBy(progress, value => {
+  const totalComplete = sumBy(sections, value => {
     return value.answered;
   });
-  const totalNeedsReview = sumBy(progress, value => {
+  const totalNeedsReview = sumBy(sections, value => {
     return value.review;
   });
   const totalUnanswered = totalQuestions - (totalComplete + totalNeedsReview);

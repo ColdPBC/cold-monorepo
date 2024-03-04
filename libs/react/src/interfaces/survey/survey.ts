@@ -135,11 +135,17 @@ export interface ComplianceSurveyPayloadType {
       [key: string]: ComplianceSurveySectionType;
     };
     submitted?: boolean;
-    progress: Array<ComplianceSurveySectionProgressType>;
+    progress: ComplianceSurveyProgressType;
   };
   description: string;
   created_at: string;
   updated_at: string;
+}
+
+export interface ComplianceSurveyProgressType {
+  sections: Array<ComplianceSurveySectionProgressType>;
+  total_score: number;
+  total_max_score: number;
 }
 
 export interface ComplianceSurveySectionType extends SurveySectionType {
