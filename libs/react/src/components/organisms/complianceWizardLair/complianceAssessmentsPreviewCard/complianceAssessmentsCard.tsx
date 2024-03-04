@@ -1,16 +1,17 @@
 import React from 'react';
 import { ComplianceSurveyPayloadType } from '@coldpbc/interfaces';
-import { Card, ProgressBar } from '@coldpbc/components';
+import { Card, ErrorFallback, ProgressBar } from '@coldpbc/components';
 import { ButtonTypes } from '@coldpbc/enums';
 import { useNavigate } from 'react-router-dom';
 import { forOwn } from 'lodash';
 import { HexColors } from '@coldpbc/themes';
+import { withErrorBoundary } from 'react-error-boundary';
 
 export interface ComplianceAssessmentsCardProps {
   surveyData: ComplianceSurveyPayloadType;
 }
 
-export const ComplianceAssessmentsCard = (props: ComplianceAssessmentsCardProps) => {
+const _ComplianceAssessmentsCard = (props: ComplianceAssessmentsCardProps) => {
   const { surveyData } = props;
   const navigate = useNavigate();
 
@@ -23,8 +24,6 @@ export const ComplianceAssessmentsCard = (props: ComplianceAssessmentsCardProps)
       maxPossibleScore += question.max_score || 0;
     });
   });
-  console.log('totalScore', totalScore);
-  console.log('maxPossibleScore', maxPossibleScore);
 
   const percentage = totalScore === 0 || maxPossibleScore === 0 ? 0 : (totalScore / maxPossibleScore) * 100;
 
@@ -59,3 +58,10 @@ export const ComplianceAssessmentsCard = (props: ComplianceAssessmentsCardProps)
     </Card>
   );
 };
+
+export const ComplianceAssessmentsCard = withErrorBoundary(_ComplianceAssessmentsCard, {
+  FallbackComponent: props => <ErrorFallback {...props} />,
+  onError: (error, info) => {
+    console.error('Error occurred in ComplianceAssessmentsCard: ', error);
+  },
+});
