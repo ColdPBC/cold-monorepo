@@ -15,6 +15,62 @@ export class EventService extends BaseWorker {
     super(EventService.name);
   }
 
+  async sendPlatformEvent(
+    routingKey: string,
+    event: string,
+    data: any,
+    requestOrUser: Request | IAuthenticatedUser,
+    orgId?: string,
+    options?: RabbitMessageOptions,
+  ): Promise<any | void> {
+    // Extract the user from the request or use the provided user
+    const currentUser = (requestOrUser['user'] || requestOrUser) as IAuthenticatedUser;
+
+    // If no user is provided, throw an error
+    if (!currentUser) {
+      throw new Error('User is required, when authenticated request object is not provided');
+    }
+
+    let org: string = '';
+    if (!orgId) {
+      // If orgId is not provided, try to extract it from the request or the user's claims
+      if (requestOrUser instanceof Request && !requestOrUser['params'].orgId) {
+        org = currentUser.coldclimate_claims.org_id;
+      } else if (requestOrUser instanceof Request && requestOrUser['params'].orgId) {
+        // if orgId is not provided, try to get it from request otherwise get it from user claims;
+        org = get(requestOrUser, 'params.orgId', currentUser.coldclimate_claims.org_id);
+      }
+    } else {
+      // If orgId is provided but doesn't start with 'org_', throw an error
+      if (!orgId || !orgId.startsWith('org_')) {
+        throw new Error('Organization id is required.');
+      }
+      org = orgId;
+    }
+
+    // Fetch the organization from the database
+    const organization = await this.prisma.organizations.findUnique({
+      where: {
+        id: org,
+      },
+    });
+
+    // Fetch all integrations for the organization
+    const integrations = await this.prisma.integrations.findMany({
+      where: {
+        organization_id: orgId,
+      },
+      include: {
+        service_definition: true,
+      },
+    });
+
+    // Merge the supplied data with the organization, service definition, integration, and user
+    const merged = merge({ payload: data }, { organization, integrations, user: currentUser });
+
+    await this.sendAsyncEvent(routingKey, event, merged, options);
+  }
+
   /**
    * This method is used to send an event to all enabled integrations.
    * It either takes a request object or an orgId and a user.

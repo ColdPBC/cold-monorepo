@@ -106,18 +106,17 @@ export class RabbitService extends BaseWorker {
   }
 
   async processAsyncMessage(event: string, from: string, parsed: any) {
-    const { service, organization, user } = parsed;
+    const { user } = parsed;
 
     this.logger.info(`Processing ${event} event triggered by ${user?.coldclimate_claims?.email} from ${from}`, {
-      parsed,
-      from,
-      event,
-      service,
-      organization,
-      user,
+      ...parsed,
     });
 
     switch (event) {
+      case 'organization.created': {
+        const response = await this.appService.createAssistant(parsed);
+        return response;
+      }
       case 'compliance_automation.enabled':
         {
           const surveys = parsed.surveys;
@@ -141,8 +140,10 @@ export class RabbitService extends BaseWorker {
           }
         }
         break;
-      default:
+      case 'file.uploaded':
         return await this.queue.add(event, parsed, { backoff: { type: BackOffStrategies.EXPONENTIAL } });
+      default:
+        return new Nack();
     }
   }
 }
