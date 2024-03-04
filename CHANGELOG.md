@@ -1,3 +1,11 @@
+## [1.126.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.126.0...v1.126.1) (2024-03-04)
+
+
+### Bug Fixes
+
+* s3 bug related to file uploads ([588ec12](https://github.com/ColdPBC/cold-monorepo/commit/588ec12c83354d17a7e44d5b2ad4f28c03a6b12e))
+* s3 bug related to file uploads ([5785029](https://github.com/ColdPBC/cold-monorepo/commit/5785029fc1c746d58481abbe6da37fc53e1bbbd4))
+
 # [1.126.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.125.0...v1.126.0) (2024-03-04)
 
 
