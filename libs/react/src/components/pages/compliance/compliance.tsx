@@ -1,5 +1,5 @@
 import React from 'react';
-import { CenterColumnContent, ErrorFallback, Spinner, ComplianceOverview } from '@coldpbc/components';
+import { CenterColumnContent, ComplianceOverview, ErrorFallback, Spinner } from '@coldpbc/components';
 import { useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { find } from 'lodash';
@@ -11,7 +11,7 @@ import { withErrorBoundary } from 'react-error-boundary';
 const _CompliancePage = () => {
   const { orgId } = useAuth0Wrapper();
   const compliances = useSWR<Compliance[], any, any>(['/compliance_definitions', 'GET'], axiosFetcher);
-  const orgCompliances = useSWR<OrgCompliance[], any, any>([`/compliance_definitions/organization/${orgId}`, 'GET'], axiosFetcher);
+  const orgCompliances = useSWR<OrgCompliance[], any, any>([`/compliance_definitions/organizations/${orgId}`, 'GET'], axiosFetcher);
   const { logError } = useColdContext();
 
   if (compliances.isLoading || orgCompliances.isLoading) {

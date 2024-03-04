@@ -11,7 +11,7 @@ export const ComplianceWizard = () => {
   const { name } = useParams();
   const { orgId } = useAuth0Wrapper();
   const compliances = useSWR<Compliance[], any, any>(['/compliance_definitions', 'GET'], axiosFetcher);
-  const orgCompliances = useSWR<OrgCompliance[], any, any>([`/compliance_definitions/organization/${orgId}`, 'GET'], axiosFetcher);
+  const orgCompliances = useSWR<OrgCompliance[], any, any>([`/compliance_definitions/organizations/${orgId}`, 'GET'], axiosFetcher);
 
   const getSurveyURL = () => {
     if (name && compliances.data) {

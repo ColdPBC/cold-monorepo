@@ -18,12 +18,12 @@ export const AutomateComplianceFlowStep = () => {
 
   const startAutomation = async () => {
     // post to start automation
-    const response = await axiosFetcher([`/compliance_definitions/${name}/organization/${orgId}`, 'PUT']);
+    const response = await axiosFetcher([`/compliance_definitions/${name}/organizations/${orgId}`, 'PUT']);
     if (isAxiosError(response)) {
       await addToastMessage({ message: 'Automation could not be started', type: ToastMessage.FAILURE });
       logError(response.message, ErrorType.AxiosError, response);
     } else {
-      await mutate([`/compliance_definitions/organization/${orgId}`, 'GET']);
+      await mutate([`/compliance_definitions/organizations/${orgId}`, 'GET']);
       await addToastMessage({ message: 'Compliance activated', type: ToastMessage.SUCCESS });
       nextStep();
     }

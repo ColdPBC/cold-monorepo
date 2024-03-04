@@ -238,11 +238,11 @@ export const handlers = [
     return res(ctx.json(getComplianceMock()));
   }),
 
-  rest.get(getApiUrl('/compliance_definitions/organization/:orgId'), (req, res, ctx) => {
+  rest.get(getApiUrl('/compliance_definitions/organizations/:orgId'), (req, res, ctx) => {
     return res(ctx.json(getOrganizationComplianceMock()));
   }),
 
-  rest.post(getApiUrl('/compliance_definitions/:name/organization/:orgId'), (req, res, ctx) => {
+  rest.post(getApiUrl('/compliance_definitions/:name/organizations/:orgId'), (req, res, ctx) => {
     const { name, orgId } = req.params;
     return res(
       ctx.json({
