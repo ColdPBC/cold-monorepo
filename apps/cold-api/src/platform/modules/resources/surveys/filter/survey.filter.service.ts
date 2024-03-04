@@ -15,7 +15,7 @@ export class SurveyFilterService extends BaseWorker {
 
     // Iterate over each section in the filteredObject
     for (const sectionKey in filteredObject.sections) {
-      const section = filteredObject.sections[sectionKey];
+      const section = filteredObject.definition.sections[sectionKey];
       // Check for a dependency at the section level
       if (section.dependency?.expression) {
         // Evaluate the JSONata expression for the dependency
@@ -24,11 +24,11 @@ export class SurveyFilterService extends BaseWorker {
 
         // If the dependency is not met, remove the section from the filteredObject
         if (!dependencyMet) {
-          delete filteredObject.sections[sectionKey];
+          delete filteredObject.definition.sections[sectionKey];
           continue; // No need to check follow-ups if the section is already removed
         } else {
           // If the dependency is met, remove the dependency from the section
-          delete filteredObject.sections[sectionKey].dependency;
+          delete filteredObject.definition.sections[sectionKey].dependency;
         }
       }
 
@@ -44,25 +44,25 @@ export class SurveyFilterService extends BaseWorker {
 
           // If the dependency is not met, remove the follow-up question from the section
           if (!dependencyMet) {
-            delete filteredObject.sections[sectionKey].follow_up[currentQuestionKey];
+            delete filteredObject.definition.sections[sectionKey].follow_up[currentQuestionKey];
           } else {
             // If the dependency is met, remove the dependency from the follow-up question
-            delete filteredObject.sections[sectionKey].follow_up[currentQuestionKey].dependency;
+            delete filteredObject.definition.sections[sectionKey].follow_up[currentQuestionKey].dependency;
           }
         }
       }
     }
 
-    this.logger.info('Filtered Dependencies', { original: jsonObject, filtered: filteredObject });
+    this.logger.info('Filtered Dependencies', { original: jsonObject.definition, filtered: filteredObject.definition });
 
     // Create a JSONata expression to filter out empty sections
     const filterEmptySections = jsonata(`$sift(sections, function($v, $k, $i, $o) { $count($keys($v.follow_up)) > 0 })`);
 
     // Evaluate the JSONata expression to get the filtered sections
-    const filteredSections = await filterEmptySections.evaluate(filteredObject);
+    const filteredSections = await filterEmptySections.evaluate(filteredObject.definition);
 
     // Replace the sections in the filteredObject with the filtered sections
-    filteredObject.sections = filteredSections;
+    filteredObject.definition.sections = filteredSections;
 
     /**
      * This JSONata expression is used to transform and summarize data from a survey.

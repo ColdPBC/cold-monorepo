@@ -18,9 +18,9 @@ export class ScoringService extends BaseWorker {
    */
   scoreSurvey(survey: any): Promise<any> {
     // Iterate over each section in the survey
-    Object.keys(survey.sections).forEach(sectionKey => {
+    Object.keys(survey.definition.sections).forEach(sectionKey => {
       // Get the follow-up questions for the current section
-      const followUps = survey.sections[sectionKey].follow_up;
+      const followUps = survey.definition.sections[sectionKey].follow_up;
 
       // Iterate over each follow-up questions
       Object.keys(followUps).forEach(questionKey => {
