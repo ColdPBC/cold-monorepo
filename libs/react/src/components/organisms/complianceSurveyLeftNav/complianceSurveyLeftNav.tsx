@@ -1,17 +1,19 @@
 import { ComplianceSurveyActiveKeyType, ComplianceSurveyPayloadType, ComplianceSurveySectionProgressType, ComplianceSurveySectionType } from '@coldpbc/interfaces';
 import { every, filter, find, forOwn, map, some, uniq } from 'lodash';
-import { ReactNode, useEffect, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import { getFirstFollowUpKeyFromSection } from '@coldpbc/lib';
 import { Collapse } from 'react-collapse';
 import { IconNames } from '@coldpbc/enums';
 import { ColdIcon } from '../../atoms';
+import { withErrorBoundary } from 'react-error-boundary';
+import { ErrorFallback } from '../../application';
 
 export interface ComplianceSurveyLeftNavProps {
   complianceSet: ComplianceSurveyPayloadType;
   activeKey: ComplianceSurveyActiveKeyType;
   setActiveKey: (activeKey: ComplianceSurveyActiveKeyType) => void;
 }
-export const ComplianceSurveyLeftNav = (props: ComplianceSurveyLeftNavProps) => {
+const _ComplianceSurveyLeftNav = (props: ComplianceSurveyLeftNavProps) => {
   const { complianceSet, activeKey, setActiveKey } = props;
   const [categoryOpened, setCategoryOpened] = useState<string>(activeKey.category);
   // group and sort sections by section category. 1. Practices, 2. Product, 3. Environment, 4. Diversity & Inclusion
@@ -104,7 +106,7 @@ export const ComplianceSurveyLeftNav = (props: ComplianceSurveyLeftNavProps) => 
       <div className={'text-tc-primary w-[351px] bg-transparent h-full pl-[30px] pt-[30px] pb-[30px] flex flex-col space-y-[8px]'}>
         {map(getGroupedSections(), (sections, key) => {
           return (
-            <div className={'flex flex-col bg-transparent w-full'}>
+            <div className={'flex flex-col bg-transparent w-full'} key={key}>
               <div
                 className={'text-h3 text-tc-primary cursor-pointer flex flex-row space-x-3 items-center'}
                 onClick={() => {
@@ -132,7 +134,8 @@ export const ComplianceSurveyLeftNav = (props: ComplianceSurveyLeftNavProps) => 
                     return (
                       <div
                         className={`w-full h-[25px] pl-5 flex flex-row space-x-3 items-center cursor-pointer ${key === activeKey.section ? 'bg-bgc-accent' : ''}`}
-                        onClick={() => goToKey(key)}>
+                        onClick={() => goToKey(key)}
+                        key={key}>
                         {getSectionIcon(key)}
                         <div className={'text-caption bg-transparent'}>{section.title}</div>
                       </div>
@@ -153,3 +156,10 @@ export const ComplianceSurveyLeftNav = (props: ComplianceSurveyLeftNavProps) => 
 
   return <div className={'flex flex-col bg-bgc-main border-[3px] border-bgc-accent h-full'}>{getNavbar()}</div>;
 };
+
+export const ComplianceSurveyLeftNav = withErrorBoundary(_ComplianceSurveyLeftNav, {
+  FallbackComponent: props => <ErrorFallback {...props} />,
+  onError: (error, info) => {
+    console.error('Error occurred in ComplianceSurveyLeftNav: ', error);
+  },
+});
