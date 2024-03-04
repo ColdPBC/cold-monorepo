@@ -1,3 +1,10 @@
+## [1.123.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.123.1...v1.123.2) (2024-03-04)
+
+
+### Bug Fixes
+
+* add missing 'await' that was causing members to not be returned ([263a51d](https://github.com/ColdPBC/cold-monorepo/commit/263a51d634ed76b87ce9172d05c2c7434f4adc82))
+
 ## [1.123.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.123.0...v1.123.1) (2024-03-04)
 
 
