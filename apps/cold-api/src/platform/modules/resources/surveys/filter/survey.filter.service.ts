@@ -112,7 +112,7 @@ export class SurveyFilterService extends BaseWorker {
         '            \n' +
         '    $review := function($v){$count($v.follow_up[$k].ai_response.answer and $filter($v.follow_up.*, function($q) { $exists($q.value) }))};\n' +
         '    $sectionScore := function($v){$sum($v.follow_up.*.score)};\n' +
-        '    $map(definition.sections.*, function($v, $k, $o) {\n' +
+        '    $map(sections.*, function($v, $k, $o) {\n' +
         '        {\n' +
         '              "section": $section($k),\n' +
         '              "section_score": $sectionScore($v),\n' +
