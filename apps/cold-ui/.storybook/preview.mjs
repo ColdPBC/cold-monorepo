@@ -1,7 +1,7 @@
-import documentationTemplate from './documentationTemplate.mdx';
+import documentationTemplate from "./documentationTemplate.mdx";
 import "../src/styles.css";
-import 'flowbite';
-import {auth0UserMock, worker} from '../../../libs/react/src';
+import "flowbite";
+import { auth0UserMock, worker } from "../../../libs/react/src";
 
 // Storybook executes this module in both bootstap phase (Node)
 // and a story's runtime (browser). However, we cannot call `setupWorker`
@@ -102,6 +102,7 @@ export default {
         showComplianceModule: true,
         showDocumentsUploadModuleCold492: true,
         showREIComplianceMVPSidebarCold506: false,
+        showNewHomePageComplianceReiMvp: false
       },
     },
   },
