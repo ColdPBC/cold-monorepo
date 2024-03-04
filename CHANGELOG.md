@@ -1,3 +1,10 @@
+# [1.129.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.128.0...v1.129.0) (2024-03-04)
+
+
+### Features
+
+* add error boundary for compliance flow ([8d3af39](https://github.com/ColdPBC/cold-monorepo/commit/8d3af3941b3ee3ab6b65b9a7201d98b55bf26707))
+
 # [1.128.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.127.0...v1.128.0) (2024-03-04)
 
 

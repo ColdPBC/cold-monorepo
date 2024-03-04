@@ -1,9 +1,10 @@
 import React, { useContext, useEffect } from 'react';
-import { Spinner, WizardContext } from '@coldpbc/components';
+import { ErrorFallback, Spinner, WizardContext } from '@coldpbc/components';
 import { GlobalSizes } from '@coldpbc/enums';
 import { getComplianceProgressForSurvey } from '@coldpbc/lib';
+import { withErrorBoundary } from 'react-error-boundary';
 
-export const ProcessingComplianceFlowStep = () => {
+const _ProcessingComplianceFlowStep = () => {
   const { nextStep, data } = useContext(WizardContext);
   const { surveyData } = data;
 
@@ -32,3 +33,10 @@ export const ProcessingComplianceFlowStep = () => {
     </div>
   );
 };
+
+export const ProcessingComplianceFlowStep = withErrorBoundary(_ProcessingComplianceFlowStep, {
+  FallbackComponent: props => <ErrorFallback {...props} />,
+  onError: (error, info) => {
+    console.error('Error occurred in ProcessingComplianceFlowStep: ', error);
+  },
+});
