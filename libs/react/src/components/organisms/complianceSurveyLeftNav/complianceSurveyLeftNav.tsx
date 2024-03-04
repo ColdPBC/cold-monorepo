@@ -113,7 +113,13 @@ export const ComplianceSurveyLeftNav = (props: ComplianceSurveyLeftNavProps) => 
                 {getSidebarIcon(key)}
                 <div className={`text-left whitespace-normal`}>{key}</div>
                 <div className={'flex justify-center items-center'}>
-                  {isCollapseOpen(key) ? <ColdIcon name={IconNames.ColdChevronUpIcon} /> : <ColdIcon name={IconNames.ColdChevronDownIcon} />}
+                  {isCollapseOpen(key) ? (
+                    <ColdIcon name={IconNames.SubtractIcon} />
+                  ) : (
+                    <div className={'w-[24px] h-[24px] flex justify-center items-center'}>
+                      <ColdIcon name={IconNames.PlusIcon} />
+                    </div>
+                  )}
                 </div>
               </div>
               <Collapse
