@@ -26,7 +26,7 @@ export class S3ConfigurationService extends BaseWorker {
       return awsCreds;
     }
 
-    const profile = this.config.get('AWS_PROFILE', 'admin');
+    const profile = this.config.get('AWS_PROFILE', 'SSO-SYSADMIN');
 
     const ssoCreds = await fromSSO({ profile: profile })();
 

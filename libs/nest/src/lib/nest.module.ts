@@ -19,7 +19,6 @@ import { DatadogTraceModule } from 'nestjs-ddtrace';
 import { S3Module, S3Service, SecretsModule, SecretsService } from './aws';
 import { RedisServiceConfig } from './utility';
 import { MqttModule } from './mqtt';
-import { ConfigurationModule } from './configuration';
 
 @Module({
   imports: [MqttModule],
@@ -45,6 +44,12 @@ export class NestModule {
       configSecrets.push(() => serviceSecrets);
     }
 
+    const configModule = ConfigModule.forRoot({
+      isGlobal: true,
+      load: configSecrets,
+      cache: false,
+    });
+
     const parts = service.split('-');
     const type = parts.length > 2 ? parts[1] : 'core';
     const project = parts.length > 2 ? parts[2] : parts[1];
@@ -53,12 +58,7 @@ export class NestModule {
      * Imports Array
      */
     const imports: any = [
-      ConfigModule.forRoot({
-        isGlobal: true,
-        load: configSecrets,
-        cache: false,
-      }),
-      ConfigurationModule.forRootAsync(config),
+      configModule, //ConfigurationModule.forRootAsync(),
       SecretsModule,
       BullModule.forRoot(await new RedisServiceConfig(config).getQueueConfig(type, project)),
       HttpModule,
@@ -88,7 +88,7 @@ export class NestModule {
 
     logger.info('Configuring Nest Module...');
 
-    imports.push(S3Module.forRootAsync(secrets));
+    imports.push(S3Module);
     providers.push(S3Service);
     exports.push(S3Service);
 

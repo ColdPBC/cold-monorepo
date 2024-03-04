@@ -3,7 +3,8 @@ import { get, map } from 'lodash';
 import { SecretsManager } from 'aws-sdk';
 import { GetSecretValueResponse } from 'aws-sdk/clients/secretsmanager';
 import { BaseWorker } from '../../worker';
-import { ConfigurationModule } from '../../configuration';
+import process from 'process';
+import { fromSSO } from '@aws-sdk/credential-provider-sso';
 
 @Injectable()
 export class SecretsService extends BaseWorker implements OnModuleInit {
@@ -18,7 +19,26 @@ export class SecretsService extends BaseWorker implements OnModuleInit {
   }
 
   override async onModuleInit() {
-    this.client = new SecretsManager(await ConfigurationModule.getAWSCredentials());
+    let awsCreds: any = {};
+
+    // FC_ENV should only be set in the Flight Control environment, not in SM
+    if (process.env['FC_ENV'] && process.env['AWS_ACCESS_KEY_ID'] && process.env['AWS_SECRET_ACCESS_KEY']) {
+      awsCreds = {
+        region: process.env['AWS_REGION'] || 'us-east-1',
+        credentials: {
+          accessKeyId: process.env['AWS_ACCESS_KEY_ID'],
+          secretAccessKey: process.env['AWS_SECRET_ACCESS_KEY'],
+        },
+      };
+
+      return { ...awsCreds };
+    }
+
+    const profile = process.env['AWS_PROFILE'] || 'SSO-SYSADMIN';
+    const ssoCreds = await fromSSO({ profile: profile })();
+
+    this.client = new SecretsManager({ region: process.env['AWS_REGION'] || 'us-east-1', ...ssoCreds });
+
     this.logger.info('SecretsService initialized');
   }
 

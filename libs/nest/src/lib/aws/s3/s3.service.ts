@@ -1,5 +1,5 @@
 // s3.service.ts
-import { Injectable } from '@nestjs/common';
+import { Injectable, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { BaseWorker } from '../../worker';
 import { IAuthenticatedUser } from '../../primitives';
@@ -7,15 +7,25 @@ import crypto from 'crypto';
 import stream from 'stream';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { GetObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
-import { S3ConfigurationService } from '../../configuration';
 
 @Injectable()
-export class S3Service extends BaseWorker {
+export class S3Service extends BaseWorker implements OnModuleInit {
   client: S3Client;
 
-  constructor(private readonly config: ConfigService, private readonly s3Config: S3ConfigurationService) {
+  constructor(private readonly config: ConfigService) {
     super(S3Service.name);
-    this.client = new S3Client(s3Config.getAWSCredentials());
+    this.client = new S3Client('us-east-1');
+  }
+
+  override async onModuleInit(): Promise<void> {
+    await super.onModuleInit();
+    const altCreds = {
+      region: this.config.get('AWS_REGION', 'us-east-1'),
+      accessKeyId: this.config.getOrThrow('AWS_ACCESS_KEY_ID'),
+      secretAccessKey: this.config.getOrThrow('AWS_SECRET_ACCESS_KEY'),
+    };
+    this.client = new S3Client(altCreds);
+    this.logger.info('S3 Client initialized');
   }
 
   static async calculateChecksum(file): Promise<string> {
@@ -71,20 +81,13 @@ export class S3Service extends BaseWorker {
         key,
         bucket,
       });
-      const s3 = new S3Client({
-        credentials: {
-          accessKeyId: this.config.getOrThrow('AWS_ACCESS_KEY_ID'),
-          secretAccessKey: this.config.getOrThrow('AWS_SECRET_ACCESS_KEY'),
-        },
-        region: this.config.get('AWS_REGION', 'us-east-1'),
-      });
 
       const params = new GetObjectCommand({
         Bucket: bucket,
         Key: key,
       });
 
-      const response = await s3.send(params);
+      const response = await this.client.send(params);
 
       console.log(response.ChecksumSHA256);
 

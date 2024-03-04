@@ -1,7 +1,7 @@
 import { BaseWorker, IAuthenticatedUser, MqttService, PrismaService, S3Service } from '@coldpbc/nest';
 import { Injectable, NotFoundException, OnModuleInit, UnauthorizedException, UnprocessableEntityException } from '@nestjs/common';
 import OpenAI, { toFile } from 'openai';
-import { omit, pick } from 'lodash';
+import { find, omit, pick } from 'lodash';
 import { AppService } from '../../app.service';
 import { organizations, service_definitions } from '@prisma/client';
 import { APIPromise } from 'openai/core';
@@ -179,8 +179,8 @@ export class FileService extends BaseWorker implements OnModuleInit {
       // Check if a file with the same name already exists in OpenAI.
       const files = await this.client.files.list();
 
-      let oaiFile = files.data.find(async f => {
-        return f.filename == fileName;
+      let oaiFile = find(files.data, f => {
+        return f.filename === fileName;
       });
 
       // If the file does not exist in OpenAI, create a new file.

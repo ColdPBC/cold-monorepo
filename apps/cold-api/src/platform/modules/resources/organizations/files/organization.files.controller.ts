@@ -1,10 +1,9 @@
 import { Controller, Delete, Get, OnModuleInit, Param, ParseFilePipe, Post, Query, Req, UploadedFile, UseFilters, UseGuards, UseInterceptors } from '@nestjs/common';
 import multerS3 from 'multer-s3';
-import { allRoles, coldAndCompanyAdmins, HttpExceptionFilter, IAuthenticatedUser, JwtAuthGuard, Roles, RolesGuard, S3ConfigurationService, S3Service } from '@coldpbc/nest';
+import { allRoles, coldAndCompanyAdmins, HttpExceptionFilter, IAuthenticatedUser, JwtAuthGuard, Roles, RolesGuard, S3Service } from '@coldpbc/nest';
 import { Span } from 'nestjs-ddtrace';
 import { ApiOAuth2, ApiTags } from '@nestjs/swagger';
 import { OrganizationFilesService } from './organization.files.service';
-import { ConfigService } from '@nestjs/config';
 import { FileInterceptor } from '@nestjs/platform-express';
 
 @Span()
@@ -16,12 +15,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 export class OrganizationFilesController implements OnModuleInit {
   multerConfig: any;
 
-  constructor(
-    private readonly orgFiles: OrganizationFilesService,
-    private readonly config: ConfigService,
-    private readonly s3Config: S3ConfigurationService,
-    private readonly s3: S3Service,
-  ) {}
+  constructor(private readonly orgFiles: OrganizationFilesService, private readonly s3: S3Service) {}
 
   async onModuleInit() {
     this.multerConfig = {
