@@ -100,6 +100,7 @@ export class SurveyFilterService extends BaseWorker {
         '        { \n' +
         '            $key: {\n' +
         '                "score":$lookup(definition.sections.*.follow_up, $key).score,\n' +
+        '                "max_score":$lookup(definition.sections.*.follow_up, $key).max_score,\n' +
         '                "user_answered": $exists($lookup(sections.*.follow_up, $key).value),\n' +
         '                "ai_answered": $exists($lookup(sections.*.follow_up, $key).ai_response.answer)\n' +
         '            }\n' +

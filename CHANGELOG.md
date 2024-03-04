@@ -1,9 +1,9 @@
-# [1.128.0-COLD-538.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.127.0...v1.128.0-COLD-538.1) (2024-03-04)
+# [1.128.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.127.0...v1.128.0) (2024-03-04)
 
 
 ### Features
 
-* add error boundary for compliance flow ([8d3af39](https://github.com/ColdPBC/cold-monorepo/commit/8d3af3941b3ee3ab6b65b9a7201d98b55bf26707))
+* include max score in survey response ([156fe47](https://github.com/ColdPBC/cold-monorepo/commit/156fe47400d13a1f434c8a1d753ca8b9ccb77587))
 
 # [1.127.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.126.1...v1.127.0) (2024-03-04)
 

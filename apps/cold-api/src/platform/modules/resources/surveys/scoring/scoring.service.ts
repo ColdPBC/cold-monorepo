@@ -30,7 +30,7 @@ export class ScoringService extends BaseWorker {
         // Check if the question has a rubric and a score map
         if (question.rubric && question.rubric.score_map) {
           let score = 0;
-
+          let maxScore = 0;
           // If the question component is 'multi_select' or 'select' and the value is an array
           if ((question.component === 'multi_select' || question.component === 'select') && Array.isArray(question.value)) {
             // Sum up the scores for each selected option
@@ -42,12 +42,18 @@ export class ScoringService extends BaseWorker {
             score = question.rubric.score_map[question.value] || 0;
           }
 
-          // If the question has a maximum score, cap the score
-          if (question.rubric.max_score && score > question.rubric.max_score) {
-            score = question.rubric.max_score;
+          if (question.rubric.max_score) {
+            maxScore = question.rubric.max_score;
+            // If the question has a maximum score, cap the score
+            if (score > question.rubric.max_score) {
+              score = question.rubric.max_score;
+            }
+          } else {
+            maxScore = this.getTopScore(question);
           }
 
           // Set the score for the question
+          question.max_score = maxScore;
           question.score = score;
         }
       });
@@ -55,5 +61,13 @@ export class ScoringService extends BaseWorker {
 
     // return the scored survey
     return survey;
+  }
+
+  private getTopScore(question) {
+    let maxScore = 0;
+    Object.keys(question.rubric.score_map).forEach(value =>
+      parseInt(question.rubric.score_map[value]) > maxScore ? (maxScore = parseInt(question.rubric.score_map[value])) : maxScore,
+    );
+    return maxScore;
   }
 }
