@@ -1,6 +1,310 @@
 {
     "openapi": "3.0.0",
     "paths": {
+        "/organizations": {
+            "post": {
+                "operationId": "CreateOrganization",
+                "summary": "Create Organization",
+                "parameters": [
+                    {
+                        "name": "bpc",
+                        "required": false,
+                        "in": "query",
+                        "description": "Bypass Cache",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "example": {
+                                    "display_name": "Test API Organization {{$randomAlphaNumeric}}{{$randomAlphaNumeric}}",
+                                    "branding": {},
+                                    "city": "Minneapolis",
+                                    "email": "info@example.com",
+                                    "phone": "18005551212",
+                                    "state": "MN",
+                                    "street_address": "404 Washington Avenue North",
+                                    "zip": "55401"
+                                },
+                                "$ref": "#/components/schemas/CreateOrganizationDto"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Organizations"
+                ],
+                "security": [
+                    {
+                        "oauth2": [
+                            "openid",
+                            "email",
+                            "profile"
+                        ]
+                    }
+                ]
+            },
+            "get": {
+                "operationId": "GetOrganizations",
+                "summary": "Get Organizations",
+                "parameters": [
+                    {
+                        "name": "bpc",
+                        "required": false,
+                        "in": "query",
+                        "description": "Bypass Cache",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    {
+                        "name": "filter",
+                        "required": false,
+                        "in": "query",
+                        "deprecated": true,
+                        "description": "Optional: provide either tha name or the id to filter results",
+                        "example": {
+                            "name": "{{test_company_name}}",
+                            "id": "{{test_company_id}}"
+                        },
+                        "schema": {}
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Organizations"
+                ],
+                "security": [
+                    {
+                        "oauth2": [
+                            "openid",
+                            "email",
+                            "profile"
+                        ]
+                    }
+                ]
+            }
+        },
+        "/organizations/{orgId}": {
+            "get": {
+                "operationId": "GetOrganization",
+                "summary": "Get Organization",
+                "description": "Get Organization by Name or ID",
+                "parameters": [
+                    {
+                        "name": "orgId",
+                        "required": true,
+                        "in": "path",
+                        "example": "{{test_organization_id}}",
+                        "description": "Id of the Organization",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "bpc",
+                        "required": false,
+                        "in": "query",
+                        "description": "Bypass Cache",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Organizations"
+                ],
+                "security": [
+                    {
+                        "oauth2": [
+                            "openid",
+                            "email",
+                            "profile"
+                        ]
+                    }
+                ]
+            },
+            "delete": {
+                "operationId": "DeleteOrg",
+                "summary": "Delete Organization",
+                "description": "Deletes specified organization",
+                "parameters": [
+                    {
+                        "name": "orgId",
+                        "required": true,
+                        "in": "path",
+                        "example": "{{test_organization_id}}",
+                        "description": "Id of the Organization",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "bpc",
+                        "required": false,
+                        "in": "query",
+                        "description": "Bypass Cache",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Organizations"
+                ],
+                "security": [
+                    {
+                        "oauth2": [
+                            "openid",
+                            "email",
+                            "profile"
+                        ]
+                    }
+                ]
+            }
+        },
+        "/organizations/{orgId}/files": {
+            "get": {
+                "operationId": "OrganizationFilesController_getFiles",
+                "parameters": [
+                    {
+                        "name": "orgId",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "bpc",
+                        "required": true,
+                        "in": "query",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Organizations"
+                ],
+                "security": [
+                    {
+                        "oauth2": [
+                            "openid",
+                            "email",
+                            "profile"
+                        ]
+                    }
+                ]
+            },
+            "post": {
+                "operationId": "OrganizationFilesController_uploadFile",
+                "parameters": [
+                    {
+                        "name": "orgId",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "bpc",
+                        "required": true,
+                        "in": "query",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Organizations"
+                ],
+                "security": [
+                    {
+                        "oauth2": [
+                            "openid",
+                            "email",
+                            "profile"
+                        ]
+                    }
+                ]
+            }
+        },
+        "/organizations/{orgId}/files/{id}": {
+            "delete": {
+                "operationId": "OrganizationFilesController_deleteFile",
+                "parameters": [
+                    {
+                        "name": "orgId",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Organizations"
+                ],
+                "security": [
+                    {
+                        "oauth2": [
+                            "openid",
+                            "email",
+                            "profile"
+                        ]
+                    }
+                ]
+            }
+        },
         "/service_definitions/{name}": {
             "get": {
                 "operationId": "getServiceDefinition",
@@ -155,7 +459,6 @@
                         "required": true,
                         "in": "path",
                         "schema": {
-                            "type": "string",
                             "enum": [
                                 "UNKNOWN",
                                 "FORM",
@@ -164,7 +467,8 @@
                                 "NAVIGATION_FOOTER",
                                 "DATAGRID",
                                 "TEST"
-                            ]
+                            ],
+                            "type": "string"
                         }
                     }
                 ],
@@ -306,7 +610,7 @@
         },
         "/policies": {
             "get": {
-                "operationId": "PolicyDefinitionsController_findAll",
+                "operationId": "Policy_definitionsController_findAll",
                 "parameters": [],
                 "responses": {
                     "200": {
@@ -327,7 +631,7 @@
         },
         "/policies/{id}": {
             "get": {
-                "operationId": "PolicyDefinitionsController_findByName",
+                "operationId": "Policy_definitionsController_findByName",
                 "parameters": [
                     {
                         "name": "id",
@@ -357,7 +661,7 @@
         },
         "/policies/{id}/content": {
             "get": {
-                "operationId": "PolicyDefinitionsController_findContentByName",
+                "operationId": "Policy_definitionsController_findContentByName",
                 "parameters": [
                     {
                         "name": "id",
@@ -387,7 +691,7 @@
         },
         "/policies/{id}/signed": {
             "post": {
-                "operationId": "PolicyDefinitionsController_signPolicy",
+                "operationId": "Policy_definitionsController_signPolicy",
                 "parameters": [
                     {
                         "name": "id",
@@ -418,7 +722,7 @@
         },
         "/policies/signed/user": {
             "get": {
-                "operationId": "PolicyDefinitionsController_findSigned",
+                "operationId": "Policy_definitionsController_findSigned",
                 "parameters": [],
                 "responses": {
                     "200": {
@@ -594,15 +898,15 @@
                         "example": "TEST",
                         "description": "The type of surveys to return",
                         "schema": {
-                            "type": "string",
                             "enum": [
                                 "JOURNEY",
                                 "FOOTPRINT",
                                 "ENRICHMENT",
                                 "SOLUTION",
-                                "COMPLIANCE",
-                                "TEST"
-                            ]
+                                "TEST",
+                                "COMPLIANCE"
+                            ],
+                            "type": "string"
                         }
                     }
                 ],
@@ -667,8 +971,8 @@
                                 "FOOTPRINT",
                                 "ENRICHMENT",
                                 "SOLUTION",
-                                "COMPLIANCE",
-                                "TEST"
+                                "TEST",
+                                "COMPLIANCE"
                             ],
                             "type": "string"
                         }
@@ -912,6 +1216,46 @@
                 ],
                 "tags": [
                     "Organizations : Surveys"
+                ]
+            }
+        },
+        "/surveys/{name}/organizations/{orgId}": {
+            "delete": {
+                "operationId": "SurveysController_delete",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "required": true,
+                        "in": "path",
+                        "example": "{{test_survey_name}}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "orgId",
+                        "required": true,
+                        "in": "path",
+                        "example": "{{test_organization_id}}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": ""
+                    }
+                },
+                "security": [
+                    {
+                        "oauth2": [
+                            "openid"
+                        ]
+                    }
+                ],
+                "tags": [
+                    "Surveys"
                 ]
             }
         },
@@ -1527,190 +1871,9 @@
                 ]
             }
         },
-        "/organizations/{orgId}/integrations": {
-            "get": {
-                "operationId": "getOrganizationIntegrations",
-                "summary": "Get Organization Integrations",
-                "parameters": [
-                    {
-                        "name": "orgId",
-                        "required": true,
-                        "in": "path",
-                        "example": "{{test_organization_id}}",
-                        "description": "Id of the Organization",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "bpc",
-                        "required": false,
-                        "in": "query",
-                        "description": "Bypass Cache",
-                        "schema": {
-                            "type": "boolean"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": ""
-                    }
-                },
-                "tags": [
-                    "Integrations",
-                    "Organizations : Integrations"
-                ],
-                "security": [
-                    {
-                        "oauth2": [
-                            "openid"
-                        ]
-                    }
-                ]
-            },
-            "post": {
-                "operationId": "createOrganizationIntegration",
-                "summary": "Create Organization Integration",
-                "parameters": [
-                    {
-                        "name": "orgId",
-                        "required": true,
-                        "in": "path",
-                        "example": "{{test_organization_id}}",
-                        "description": "Id of the Organization",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "bpc",
-                        "required": false,
-                        "in": "query",
-                        "description": "Bypass Cache",
-                        "schema": {
-                            "type": "boolean"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "required": true,
-                    "description": "Integration Body Schema: You can pass location metadata to create a location if you do not have a location id. You can also pass a timeout number in milliseconds to override the default timeout for the service definition to define how long to wait before sending an async request",
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "type": "object",
-                                "example": {
-                                    "service_definition_id": "{{test_service_definition_id}}",
-                                    "location_id": "{{test_location_id}}",
-                                    "metadata": {
-                                        "name": "Headquarters",
-                                        "address": "{{$randomStreetAddress}}",
-                                        "address_line_2": "suite 100",
-                                        "city": "{{$randomCity}}",
-                                        "state": "MN",
-                                        "postal_code": "55401",
-                                        "utility": "speculoos_power"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "201": {
-                        "description": ""
-                    }
-                },
-                "tags": [
-                    "Integrations"
-                ],
-                "security": [
-                    {
-                        "oauth2": [
-                            "openid"
-                        ]
-                    }
-                ]
-            }
-        },
-        "/organizations/{orgId}/locations/{locId}/integrations": {
-            "post": {
-                "operationId": "createLocationIntegration",
-                "summary": "Create Organization Location Specific Integration",
-                "parameters": [
-                    {
-                        "name": "orgId",
-                        "required": true,
-                        "in": "path",
-                        "example": "{{test_organization_id}}",
-                        "description": "Id of the Organization",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "locId",
-                        "required": true,
-                        "in": "path",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "bpc",
-                        "required": false,
-                        "in": "query",
-                        "description": "Bypass Cache",
-                        "schema": {
-                            "type": "boolean"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "required": true,
-                    "description": "Integration Body Schema: You can pass location metadata to create a location if you do not have a location id. You can also pass a timeout number in milliseconds to override the default timeout for the service definition to define how long to wait before sending an async request",
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "type": "object",
-                                "example": {
-                                    "service_definition_id": "{{test_service_definition_id}}",
-                                    "location_id": "{{test_location_id}}",
-                                    "metadata": {
-                                        "name": "Headquarters",
-                                        "address": "{{$randomStreetAddress}}",
-                                        "address_line_2": "suite 100",
-                                        "city": "{{$randomCity}}",
-                                        "state": "MN",
-                                        "postal_code": "55401",
-                                        "utility": "speculoos_power"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "201": {
-                        "description": ""
-                    }
-                },
-                "tags": [
-                    "Integrations"
-                ],
-                "security": [
-                    {
-                        "oauth2": [
-                            "openid"
-                        ]
-                    }
-                ]
-            }
-        },
         "/organizations/{orgId}/locations": {
             "get": {
-                "operationId": "OrganizationLocationsController_getOrganizationLocations",
+                "operationId": "LocationsController_getLocations",
                 "parameters": [
                     {
                         "name": "orgId",
@@ -1925,7 +2088,7 @@
                         "name": "name",
                         "required": true,
                         "in": "path",
-                        "example": "{{test_compliance_definition_name}}",
+                        "example": "{{compliance_definition_name}}",
                         "schema": {
                             "type": "string"
                         }
@@ -1948,10 +2111,20 @@
                 ]
             }
         },
-        "/compliance_definitions/{name}/organization/{orgId}": {
-            "post": {
-                "operationId": "ComplianceController_createOrgCompliance",
+        "/compliance_definitions/{name}/organizations/{orgId}": {
+            "put": {
+                "operationId": "ActivateOrganziationComplianceAutomation",
+                "summary": "Activate Compliance Automation For Organization",
                 "parameters": [
+                    {
+                        "name": "name",
+                        "required": true,
+                        "in": "path",
+                        "example": "{{compliance_definition_name}}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
                     {
                         "name": "orgId",
                         "required": true,
@@ -1960,19 +2133,10 @@
                         "schema": {
                             "type": "string"
                         }
-                    },
-                    {
-                        "name": "name",
-                        "required": true,
-                        "in": "path",
-                        "example": "{{test_compliance_definition_name}}",
-                        "schema": {
-                            "type": "string"
-                        }
                     }
                 ],
                 "responses": {
-                    "201": {
+                    "200": {
                         "description": ""
                     }
                 },
@@ -2003,7 +2167,7 @@
                         "name": "name",
                         "required": true,
                         "in": "path",
-                        "example": "{{test_compliance_definition_name}}",
+                        "example": "{{compliance_definition_name}}",
                         "schema": {
                             "type": "string"
                         }
@@ -2015,6 +2179,44 @@
                         "description": "Bypass Cache",
                         "schema": {
                             "type": "boolean"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Compliance Definitions"
+                ],
+                "security": [
+                    {
+                        "oauth2": [
+                            "openid"
+                        ]
+                    }
+                ]
+            },
+            "post": {
+                "operationId": "ComplianceController_createOrgCompliance",
+                "parameters": [
+                    {
+                        "name": "orgId",
+                        "required": true,
+                        "in": "path",
+                        "example": "{{test_organization_id}}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "required": true,
+                        "in": "path",
+                        "example": "{{compliance_definition_name}}",
+                        "schema": {
+                            "type": "string"
                         }
                     }
                 ],
@@ -2035,7 +2237,7 @@
                 ]
             }
         },
-        "/compliance_definitions/organization/{orgId}": {
+        "/compliance_definitions/organizations/{orgId}": {
             "get": {
                 "operationId": "ComplianceController_getOrgComp",
                 "parameters": [
@@ -2065,6 +2267,363 @@
                 },
                 "tags": [
                     "Compliance Definitions"
+                ],
+                "security": [
+                    {
+                        "oauth2": [
+                            "openid"
+                        ]
+                    }
+                ]
+            }
+        },
+        "/organizations/{orgId}/integrations": {
+            "get": {
+                "operationId": "getOrganizationIntegrations",
+                "summary": "Get Organization Integrations",
+                "parameters": [
+                    {
+                        "name": "orgId",
+                        "required": true,
+                        "in": "path",
+                        "example": "{{test_organization_id}}",
+                        "description": "Id of the Organization",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "bpc",
+                        "required": false,
+                        "in": "query",
+                        "description": "Bypass Cache",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Organizations : Integrations"
+                ]
+            },
+            "post": {
+                "operationId": "createOrganizationIntegration",
+                "summary": "Create Organization Integration",
+                "parameters": [
+                    {
+                        "name": "orgId",
+                        "required": true,
+                        "in": "path",
+                        "example": "{{test_organization_id}}",
+                        "description": "Id of the Organization",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "bpc",
+                        "required": false,
+                        "in": "query",
+                        "description": "Bypass Cache",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "description": "Integration Body Schema: You can pass location metadata to create a location if you do not have a location id. You can also pass a timeout number in milliseconds to override the default timeout for the service definition to define how long to wait before sending an async request",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "service_definition_id": "{{test_service_definition_id}}",
+                                    "location_id": "{{test_location_id}}",
+                                    "metadata": {
+                                        "name": "Headquarters",
+                                        "address": "{{$randomStreetAddress}}",
+                                        "address_line_2": "suite 100",
+                                        "city": "{{$randomCity}}",
+                                        "state": "MN",
+                                        "postal_code": "55401",
+                                        "utility": "speculoos_power"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": ""
+                    }
+                }
+            },
+            "put": {
+                "operationId": "createOrganizationIntegration",
+                "summary": "Create Organization Integration",
+                "parameters": [
+                    {
+                        "name": "orgId",
+                        "required": true,
+                        "in": "path",
+                        "example": "{{test_organization_id}}",
+                        "description": "Id of the Organization",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "bpc",
+                        "required": false,
+                        "in": "query",
+                        "description": "Bypass Cache",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "description": "Integration Body Schema: You can pass location metadata to create a location if you do not have a location id. You can also pass a timeout number in milliseconds to override the default timeout for the service definition to define how long to wait before sending an async request",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "service_definition_id": "{{test_service_definition_id}}",
+                                    "location_id": "{{test_location_id}}",
+                                    "metadata": {
+                                        "name": "Headquarters",
+                                        "address": "{{$randomStreetAddress}}",
+                                        "address_line_2": "suite 100",
+                                        "city": "{{$randomCity}}",
+                                        "state": "MN",
+                                        "postal_code": "55401",
+                                        "utility": "speculoos_power"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/organizations/{orgId}/locations/{locId}/integrations": {
+            "post": {
+                "operationId": "createLocationIntegration",
+                "summary": "Create Organization Location Specific Integration",
+                "parameters": [
+                    {
+                        "name": "orgId",
+                        "required": true,
+                        "in": "path",
+                        "example": "{{test_organization_id}}",
+                        "description": "Id of the Organization",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "locId",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "bpc",
+                        "required": false,
+                        "in": "query",
+                        "description": "Bypass Cache",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "description": "Integration Body Schema: You can pass location metadata to create a location if you do not have a location id. You can also pass a timeout number in milliseconds to override the default timeout for the service definition to define how long to wait before sending an async request",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "service_definition_id": "{{test_service_definition_id}}",
+                                    "location_id": "{{test_location_id}}",
+                                    "metadata": {
+                                        "name": "Headquarters",
+                                        "address": "{{$randomStreetAddress}}",
+                                        "address_line_2": "suite 100",
+                                        "city": "{{$randomCity}}",
+                                        "state": "MN",
+                                        "postal_code": "55401",
+                                        "utility": "speculoos_power"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/organizations/{orgId}/invitation": {
+            "post": {
+                "operationId": "InviteUser",
+                "summary": "Invite User",
+                "parameters": [
+                    {
+                        "name": "orgId",
+                        "required": true,
+                        "in": "path",
+                        "example": "{{test_organization_id}}",
+                        "description": "Id of the Organization",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "bpc",
+                        "required": false,
+                        "in": "query",
+                        "description": "Bypass Cache",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    {
+                        "name": "suppressEmail",
+                        "required": false,
+                        "in": "query",
+                        "description": "Suppress Email",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "example": {
+                                    "user_email": "test.owner@example.com",
+                                    "inviter_name": "Cold Climate",
+                                    "roleId": "company:owner"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/organizations/{orgId}/invitations/{invId}": {
+            "delete": {
+                "operationId": "InvitationsController_removeInvitation",
+                "parameters": [
+                    {
+                        "name": "orgId",
+                        "required": true,
+                        "in": "path",
+                        "example": "{{test_organization_id}}",
+                        "description": "Id of the Organization",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "invId",
+                        "required": true,
+                        "in": "path",
+                        "description": "Id of the invitation",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "bpc",
+                        "required": false,
+                        "in": "query",
+                        "description": "Bypass Cache",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/roles/{nameOrId}": {
+            "get": {
+                "operationId": "GetRoleByNameID",
+                "summary": "Get Role By Name/ID",
+                "description": "Will accept either the role name or id and return the role's details",
+                "parameters": [
+                    {
+                        "name": "nameOrId",
+                        "required": true,
+                        "in": "path",
+                        "example": "company:owner",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Roles"
+                ],
+                "security": [
+                    {
+                        "oauth2": [
+                            "openid"
+                        ]
+                    }
+                ]
+            }
+        },
+        "/roles": {
+            "get": {
+                "operationId": "GetAllRoles",
+                "summary": "Get All Roles",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Roles"
                 ],
                 "security": [
                     {
@@ -2165,226 +2724,6 @@
                 ]
             }
         },
-        "/roles/{nameOrId}": {
-            "get": {
-                "operationId": "GetRoleByNameID",
-                "summary": "Get Role By Name/ID",
-                "description": "Will accept either the role name or id and return the role's details",
-                "parameters": [
-                    {
-                        "name": "nameOrId",
-                        "required": true,
-                        "in": "path",
-                        "example": "company:owner",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": ""
-                    }
-                },
-                "tags": [
-                    "Roles"
-                ],
-                "security": [
-                    {
-                        "oauth2": [
-                            "openid"
-                        ]
-                    }
-                ]
-            }
-        },
-        "/roles": {
-            "get": {
-                "operationId": "GetAllRoles",
-                "summary": "Get All Roles",
-                "parameters": [],
-                "responses": {
-                    "200": {
-                        "description": ""
-                    }
-                },
-                "tags": [
-                    "Roles"
-                ],
-                "security": [
-                    {
-                        "oauth2": [
-                            "openid"
-                        ]
-                    }
-                ]
-            }
-        },
-        "/organizations": {
-            "post": {
-                "operationId": "CreateOrganization",
-                "summary": "Create Organization",
-                "parameters": [
-                    {
-                        "name": "bpc",
-                        "required": false,
-                        "in": "query",
-                        "description": "Bypass Cache",
-                        "schema": {
-                            "type": "boolean"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "example": {
-                                    "display_name": "Test API Organization {{$randomAlphaNumeric}}{{$randomAlphaNumeric}}",
-                                    "branding": {},
-                                    "city": "Minneapolis",
-                                    "email": "info@example.com",
-                                    "phone": "18005551212",
-                                    "state": "MN",
-                                    "street_address": "404 Washington Avenue North",
-                                    "zip": "55401"
-                                },
-                                "$ref": "#/components/schemas/CreateOrganizationDto"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "201": {
-                        "description": ""
-                    }
-                },
-                "tags": [
-                    "Organizations"
-                ],
-                "security": [
-                    {
-                        "oauth2": [
-                            "openid",
-                            "email",
-                            "profile"
-                        ]
-                    }
-                ]
-            },
-            "get": {
-                "operationId": "GetOrganizations",
-                "summary": "Get Organizations",
-                "parameters": [
-                    {
-                        "name": "bpc",
-                        "required": false,
-                        "in": "query",
-                        "description": "Bypass Cache",
-                        "schema": {
-                            "type": "boolean"
-                        }
-                    },
-                    {
-                        "name": "filter",
-                        "required": false,
-                        "in": "query",
-                        "deprecated": true,
-                        "description": "Optional: provide either tha name or the id to filter results",
-                        "example": {
-                            "name": "{{test_company_name}}",
-                            "id": "{{test_company_id}}"
-                        },
-                        "schema": {}
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": ""
-                    }
-                },
-                "tags": [
-                    "Organizations"
-                ],
-                "security": [
-                    {
-                        "oauth2": [
-                            "openid",
-                            "email",
-                            "profile"
-                        ]
-                    }
-                ]
-            }
-        },
-        "/organizations/{orgId}/invitation": {
-            "post": {
-                "operationId": "InviteUser",
-                "summary": "Invite User",
-                "parameters": [
-                    {
-                        "name": "orgId",
-                        "required": true,
-                        "in": "path",
-                        "example": "{{test_organization_id}}",
-                        "description": "Id of the Organization",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "bpc",
-                        "required": false,
-                        "in": "query",
-                        "description": "Bypass Cache",
-                        "schema": {
-                            "type": "boolean"
-                        }
-                    },
-                    {
-                        "name": "suppressEmail",
-                        "required": false,
-                        "in": "query",
-                        "description": "Suppress Email",
-                        "schema": {
-                            "type": "boolean"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "example": {
-                                    "user_email": "test.owner@example.com",
-                                    "inviter_name": "Cold Climate",
-                                    "roleId": "company:owner"
-                                }
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "201": {
-                        "description": ""
-                    }
-                },
-                "tags": [
-                    "Organizations"
-                ],
-                "security": [
-                    {
-                        "oauth2": [
-                            "openid",
-                            "email",
-                            "profile"
-                        ]
-                    }
-                ]
-            }
-        },
         "/organizations/{orgId}/members": {
             "get": {
                 "operationId": "GetOrganizationMembers",
@@ -2414,19 +2753,7 @@
                     "200": {
                         "description": ""
                     }
-                },
-                "tags": [
-                    "Organizations"
-                ],
-                "security": [
-                    {
-                        "oauth2": [
-                            "openid",
-                            "email",
-                            "profile"
-                        ]
-                    }
-                ]
+                }
             },
             "delete": {
                 "operationId": "DeleteOrgMembers",
@@ -2473,26 +2800,14 @@
                     "204": {
                         "description": ""
                     }
-                },
-                "tags": [
-                    "Organizations"
-                ],
-                "security": [
-                    {
-                        "oauth2": [
-                            "openid",
-                            "email",
-                            "profile"
-                        ]
-                    }
-                ]
+                }
             }
         },
-        "/organizations/{orgId}": {
+        "/organizations/{orgId}/members/{userId}/roles": {
             "get": {
-                "operationId": "GetOrganization",
-                "summary": "Get Organization",
-                "description": "Get Organization by Name or ID",
+                "operationId": "GetOrgMemberRoles",
+                "summary": "Get Member Roles",
+                "description": "Returns all the organization roles for a member",
                 "parameters": [
                     {
                         "name": "orgId",
@@ -2500,6 +2815,16 @@
                         "in": "path",
                         "example": "{{test_organization_id}}",
                         "description": "Id of the Organization",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "userId",
+                        "required": true,
+                        "in": "path",
+                        "example": "{{test_owner_id}}",
+                        "description": "User Id",
                         "schema": {
                             "type": "string"
                         }
@@ -2518,24 +2843,14 @@
                     "200": {
                         "description": ""
                     }
-                },
-                "tags": [
-                    "Organizations"
-                ],
-                "security": [
-                    {
-                        "oauth2": [
-                            "openid",
-                            "email",
-                            "profile"
-                        ]
-                    }
-                ]
-            },
-            "delete": {
-                "operationId": "DeleteOrg",
-                "summary": "Delete Organization",
-                "description": "Deletes specified organization",
+                }
+            }
+        },
+        "/organizations/{orgId}/members/{userId}/roles/{roleName}": {
+            "put": {
+                "operationId": "AddMemberByID",
+                "summary": "Add Member By ID",
+                "description": "Add an existing member to the organization",
                 "parameters": [
                     {
                         "name": "orgId",
@@ -2543,6 +2858,25 @@
                         "in": "path",
                         "example": "{{test_organization_id}}",
                         "description": "Id of the Organization",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "roleName",
+                        "required": true,
+                        "in": "path",
+                        "description": "Role Name e.g. `company:owner`",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "userId",
+                        "required": true,
+                        "in": "path",
+                        "example": "{{test_owner_id}}",
+                        "description": "User Id",
                         "schema": {
                             "type": "string"
                         }
@@ -2558,22 +2892,10 @@
                     }
                 ],
                 "responses": {
-                    "204": {
+                    "201": {
                         "description": ""
                     }
-                },
-                "tags": [
-                    "Organizations"
-                ],
-                "security": [
-                    {
-                        "oauth2": [
-                            "openid",
-                            "email",
-                            "profile"
-                        ]
-                    }
-                ]
+                }
             }
         },
         "/organizations/{orgId}/roles/{roleName}/members/{userId}": {
@@ -2625,19 +2947,7 @@
                     "201": {
                         "description": ""
                     }
-                },
-                "tags": [
-                    "Organizations"
-                ],
-                "security": [
-                    {
-                        "oauth2": [
-                            "openid",
-                            "email",
-                            "profile"
-                        ]
-                    }
-                ]
+                }
             },
             "patch": {
                 "operationId": "AddOrgMemberToRole",
@@ -2687,158 +2997,7 @@
                     "201": {
                         "description": ""
                     }
-                },
-                "tags": [
-                    "Organizations"
-                ],
-                "security": [
-                    {
-                        "oauth2": [
-                            "openid",
-                            "email",
-                            "profile"
-                        ]
-                    }
-                ]
-            }
-        },
-        "/organizations/{orgId}/members/{userId}/roles": {
-            "get": {
-                "operationId": "GetOrgMemberRoles",
-                "summary": "Get Member Roles",
-                "description": "Returns all the organization roles for a member",
-                "parameters": [
-                    {
-                        "name": "orgId",
-                        "required": true,
-                        "in": "path",
-                        "example": "{{test_organization_id}}",
-                        "description": "Id of the Organization",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "userId",
-                        "required": true,
-                        "in": "path",
-                        "example": "{{test_owner_id}}",
-                        "description": "User Id",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "bpc",
-                        "required": false,
-                        "in": "query",
-                        "description": "Bypass Cache",
-                        "schema": {
-                            "type": "boolean"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": ""
-                    }
-                },
-                "tags": [
-                    "Organizations"
-                ],
-                "security": [
-                    {
-                        "oauth2": [
-                            "openid",
-                            "email",
-                            "profile"
-                        ]
-                    }
-                ]
-            }
-        },
-        "/organizations/{orgId}/invitations/{invId}": {
-            "delete": {
-                "operationId": "OrganizationController_removeInvitation",
-                "parameters": [
-                    {
-                        "name": "orgId",
-                        "required": true,
-                        "in": "path",
-                        "example": "{{test_organization_id}}",
-                        "description": "Id of the Organization",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "invId",
-                        "required": true,
-                        "in": "path",
-                        "description": "Id of the invitation",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "bpc",
-                        "required": false,
-                        "in": "query",
-                        "description": "Bypass Cache",
-                        "schema": {
-                            "type": "boolean"
-                        }
-                    }
-                ],
-                "responses": {
-                    "204": {
-                        "description": ""
-                    }
-                },
-                "tags": [
-                    "Organizations"
-                ],
-                "security": [
-                    {
-                        "oauth2": [
-                            "openid",
-                            "email",
-                            "profile"
-                        ]
-                    }
-                ]
-            }
-        },
-        "/organizations/{orgId}/files": {
-            "post": {
-                "operationId": "OrganizationController_uploadFile",
-                "parameters": [
-                    {
-                        "name": "orgId",
-                        "required": true,
-                        "in": "path",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": ""
-                    }
-                },
-                "tags": [
-                    "Organizations"
-                ],
-                "security": [
-                    {
-                        "oauth2": [
-                            "openid",
-                            "email",
-                            "profile"
-                        ]
-                    }
-                ]
+                }
             }
         }
     },
@@ -2853,7 +3012,15 @@
     "servers": [
         {
             "url": "https://api.coldclimate.com/v1",
-            "description": "Production Server"
+            "description": "Production Server",
+            "variables": {
+                "clientId": {
+                    "default": "{{auth0_client_id}}"
+                },
+                "clientSecret": {
+                    "default": "{{auth0_client_secret"
+                }
+            }
         },
         {
             "url": "https://api.coldclimate.online/v1",
@@ -2865,16 +3032,29 @@
             "oauth2": {
                 "type": "oauth2",
                 "flows": {
-                    "implicit": {
-                        "authorizationUrl": "https://dev-6qt527e13qyo4ls6.us.auth0.com/authorize?audience=https://api.coldclimate.wtf/",
+                    "authorizationCode": {
+                        "refreshUrl": "{{auth0_token_url}}",
+                        "authorizationUrl": "{{auth0_auth_url}}",
+                        "tokenUrl": "{{auth0_token_url}}",
                         "scopes": {
-                            "all": "openid profile email"
+                            "openid": "openid",
+                            "profile": "profile",
+                            "email": "email",
+                            "offline_access": "offline_access"
                         }
                     }
                 }
+            },
+            "openId": {
+                "type": "openIdConnect",
+                "openIdConnectUrl": "https://dev-6qt527e13qyo4ls6.us.auth0.com/.well-known/openid-configuration"
             }
         },
         "schemas": {
+            "CreateOrganizationDto": {
+                "type": "object",
+                "properties": {}
+            },
             "ComponentDefinitionDto": {
                 "type": "object",
                 "properties": {}
@@ -2886,11 +3066,17 @@
             "CreateArticleDto": {
                 "type": "object",
                 "properties": {}
-            },
-            "CreateOrganizationDto": {
-                "type": "object",
-                "properties": {}
             }
         }
-    }
+    },
+    "security": [
+        {
+            "openId": [
+                "profile",
+                "email",
+                "openid",
+                "offline_access"
+            ]
+        }
+    ]
 }

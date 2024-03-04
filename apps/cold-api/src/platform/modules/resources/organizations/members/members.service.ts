@@ -65,7 +65,7 @@ export class MembersService extends BaseWorker implements OnModuleInit {
   async getOrganizationMembers(orgId: string, req: any, bypassCache = false) {
     const { user } = req;
     try {
-      const org = this.helper.getOrganizationById(orgId, user, bypassCache);
+      const org = await this.helper.getOrganizationById(orgId, user, bypassCache);
 
       if (!bypassCache) {
         const cached = await this.cache.get(`organizations:${orgId}:members`);

@@ -1,4 +1,4 @@
-import { BaseWorker, ColdRabbitService, IAuthenticatedUser, PrismaService } from '@coldpbc/nest';
+import { BaseWorker, ColdRabbitService, DarklyService, IAuthenticatedUser, PrismaService } from '@coldpbc/nest';
 import { Injectable, NotFoundException, OnModuleInit, UnprocessableEntityException } from '@nestjs/common';
 import OpenAI from 'openai';
 import { organizations, service_definitions } from '@prisma/client';
@@ -20,7 +20,7 @@ export class AppService extends BaseWorker implements OnModuleInit {
   topic: string = '';
   tools = new Tools();
 
-  constructor(private readonly config: ConfigService, private readonly prisma: PrismaService, private rabbit: ColdRabbitService) {
+  constructor(private readonly config: ConfigService, private readonly prisma: PrismaService, private rabbit: ColdRabbitService, private darkly: DarklyService) {
     super(AppService.name);
     this.client = new OpenAI({
       organization: config.getOrThrow('OPENAI_ORG_ID'),

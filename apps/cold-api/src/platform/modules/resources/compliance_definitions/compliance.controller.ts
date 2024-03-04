@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post, Query, Req, UseFilters, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post, Put, Query, Req, UseFilters, UseGuards } from '@nestjs/common';
 import { ApiOAuth2, ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Span } from 'nestjs-ddtrace';
 import { ResourceValidationPipe } from '../../../pipes/resource.pipe';
@@ -7,20 +7,18 @@ import { allRoles, bpcDecoratorOptions, coldAdminOnly } from '../_global/global.
 import { ComplianceDefinitionService } from './compliance_definition.service';
 import { ComplianceDefinition, ComplianceDefinitionSchema } from './compliance_definition_schema';
 
-//import { UpdateSurveyDefinitionDto } from './dto/update-survey-definition.dto';
-
 @Span()
 @UseGuards(JwtAuthGuard, RolesGuard)
 @UseFilters(new HttpExceptionFilter(ComplianceController.name))
 @ApiOAuth2(['openid'])
 @ApiTags('Compliance Definitions')
-@Controller('compliance_definitions')
+@Controller()
 export class ComplianceController extends BaseWorker {
   constructor(private readonly complianceService: ComplianceDefinitionService) {
     super(ComplianceController.name);
   }
 
-  @Post()
+  @Post('compliance_definitions')
   @HttpCode(201)
   @Roles(...coldAdminOnly)
   create(
@@ -36,7 +34,7 @@ export class ComplianceController extends BaseWorker {
     return this.complianceService.create(req, definition);
   }
 
-  @Get()
+  @Get('compliance_definitions')
   @Roles(...allRoles)
   @ApiQuery(bpcDecoratorOptions)
   @ApiResponse({
@@ -59,7 +57,7 @@ export class ComplianceController extends BaseWorker {
   /**
    * Get all compliance definitions by name
    */
-  @Get(':name')
+  @Get('compliance_definitions/:name')
   @ApiOperation({
     summary: 'Get by name',
     operationId: 'GetComplianceDefinitionByName',
@@ -94,7 +92,7 @@ export class ComplianceController extends BaseWorker {
     summary: 'Update by name',
     operationId: 'UpdateComplianceDefinitionByName',
   })
-  @Patch(':name')
+  @Patch('compliance_definitions/:name')
   @Roles(...coldAdminOnly)
   @HttpCode(200)
   @ApiParam({
@@ -114,12 +112,42 @@ export class ComplianceController extends BaseWorker {
     return this.complianceService.update(name, compliance as ComplianceDefinition, req);
   }
 
-  @Delete(':name')
+  @ApiOperation({
+    summary: 'Activate Compliance Automation For Organization',
+    operationId: 'ActivateOrganziationComplianceAutomation',
+  })
+  @Put('compliance_definitions/:name/organizations/:orgId')
+  @Roles(...allRoles)
+  @HttpCode(200)
   @ApiParam({
     name: 'name',
     required: true,
     type: 'string',
-    example: '{{test_compliance_definition_name}}',
+    example: '{{compliance_definition_name}}',
+  })
+  @ApiParam({
+    name: 'orgId',
+    required: true,
+    type: 'string',
+    example: '{{test_organization_id}}',
+  })
+  activate(
+    @Param('name') name: string,
+    @Param('orgId') orgId: string,
+    @Req()
+    req: {
+      user: IAuthenticatedUser;
+    },
+  ) {
+    return this.complianceService.activate(orgId, req, name);
+  }
+
+  @Delete('compliance_definitions/:name')
+  @ApiParam({
+    name: 'name',
+    required: true,
+    type: 'string',
+    example: '{{compliance_definition_name}}',
   })
   @HttpCode(204)
   @Roles(Role.ColdAdmin)
@@ -136,13 +164,42 @@ export class ComplianceController extends BaseWorker {
     return this.complianceService.remove(name, req);
   }
 
-  @Post(':name/organization/:orgId')
+  @Delete('compliance_definitions/:name/organizations/:orgId')
+  @ApiParam({
+    name: 'name',
+    required: true,
+    type: 'string',
+    example: '{{compliance_definition_name}}',
+  })
+  @ApiParam({
+    name: 'orgId',
+    required: true,
+    type: 'string',
+    example: '{{test_organization_id}}',
+  })
+  @HttpCode(204)
+  @Roles(Role.ColdAdmin)
+  deleteOrgCompliance(
+    @Param('name') name: string,
+    @Param('orgId') orgId: string,
+    @Req()
+    req: {
+      body: any;
+      headers: any;
+      query: any;
+      user: IAuthenticatedUser;
+    },
+  ) {
+    return this.complianceService.deactivate(name, orgId, req);
+  }
+
+  @Post('compliance_definitions/:name/organizations/:orgId')
   @HttpCode(201)
   @ApiParam({
     name: 'name',
     required: true,
     type: 'string',
-    example: '{{test_compliance_definition_name}}',
+    example: '{{compliance_definition_name}}',
   })
   @ApiParam({
     name: 'orgId',
@@ -162,10 +219,10 @@ export class ComplianceController extends BaseWorker {
       user: IAuthenticatedUser;
     },
   ) {
-    return this.complianceService.activateOrgCompliance(req, name, orgId);
+    return this.complianceService.createOrgCompliance(req, name, orgId);
   }
 
-  @Get('organization/:orgId')
+  @Get('compliance_definitions/organizations/:orgId')
   @Roles(...allRoles)
   @ApiQuery(bpcDecoratorOptions)
   @ApiParam({
@@ -192,13 +249,13 @@ export class ComplianceController extends BaseWorker {
     return await this.complianceService.findOrgCompliances(req, orgId, bpc);
   }
 
-  @Delete(':name/organization/:orgId')
+  @Delete('compliance_definitions/:name/organizations/:orgId')
   @HttpCode(204)
   @ApiParam({
     name: 'name',
     required: true,
     type: 'string',
-    example: '{{test_compliance_definition_name}}',
+    example: '{{compliance_definition_name}}',
   })
   @ApiParam({
     name: 'orgId',
@@ -220,6 +277,6 @@ export class ComplianceController extends BaseWorker {
     },
     @Query('bpc') bpc?: boolean,
   ) {
-    return this.complianceService.deactivate(req, name, orgId, bpc);
+    return this.complianceService.deactivate(name, orgId, req, bpc);
   }
 }

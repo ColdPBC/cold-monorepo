@@ -167,6 +167,91 @@ export class OrganizationIntegrationsService extends BaseWorker {
     }
   }
 
+  /**
+   * Enable Integration For Organization
+   * @param req
+   * @param orgId
+   * @param body
+   */
+  async enableIntegration(
+    req: any,
+    orgId: string,
+    body: {
+      service_definition_id: string;
+      timeout?: number;
+      metadata: any;
+    },
+  ): Promise<any> {
+    const { user, url } = req;
+    try {
+      const service = await this.prisma.service_definitions.findUnique({
+        where: {
+          id: body.service_definition_id,
+        },
+      });
+
+      if (!service) {
+        throw new UnprocessableEntityException(`Service definition ${body.service_definition_id} not found.`);
+      }
+
+      if (!get(service.definition, 'rabbitMQ.publishOptions.routing_key', false)) {
+        this.logger.warn(`Service definition ${body.service_definition_id} does not have a routing key at path 'rabbitMQ.publishOptions.routing_key'`, { service });
+      }
+
+      const org = await this.helper.getOrganizationById(orgId, user);
+
+      await this.broadcast.sendIntegrationEvent(
+        false,
+        'compliance.activated',
+        {
+          organization: org,
+          service_definition_id: service.id,
+          metadata: body.metadata,
+          user: user,
+        },
+        user,
+        orgId,
+        {
+          exchange: 'amq.direct',
+          timeout: body.timeout || 5000,
+        },
+      );
+
+      this.logger.info(`Integration enabled for ${org.name} with service ${service.name}`, {
+        user,
+        org,
+        service,
+        metadata: body.metadata,
+      });
+
+      this.mqtt.publishMQTT('ui', {
+        org_id: org.id,
+        user: user,
+        swr_key: url,
+        action: 'update',
+        status: 'complete',
+        data: {
+          service_definition: service,
+          metadata: body.metadata,
+        },
+      });
+
+      return { message: `Integration enable request for ${org.name} with service ${service.name} was added to the queue` };
+    } catch (e: any) {
+      this.mqtt.publishMQTT('public', {
+        swr_key: url,
+        action: 'create',
+        status: 'failed',
+        data: {
+          error: e.message,
+        },
+      });
+
+      this.logger.error(e.message, { user });
+      throw e;
+    }
+  }
+
   async createIntegration(
     req: any,
     orgId: string,
@@ -194,7 +279,7 @@ export class OrganizationIntegrationsService extends BaseWorker {
 
       const org = await this.helper.getOrganizationById(orgId, user);
 
-      await this.broadcast.sendEvent(
+      await this.broadcast.sendIntegrationEvent(
         false,
         'integration.enabled',
         {

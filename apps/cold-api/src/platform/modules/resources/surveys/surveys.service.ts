@@ -280,7 +280,9 @@ export class SurveysService extends BaseWorker {
         update: true,
       });
 
-      return this.scoreService.scoreSurvey(this.filterService.filterDependencies(def.definition));
+      const scored = await this.filterService.filterDependencies(this.scoreService.scoreSurvey(def.definition));
+
+      return scored;
     } catch (e) {
       this.logger.error(e.message, { error: e });
       throw e;

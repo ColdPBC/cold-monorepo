@@ -66,6 +66,11 @@ export class S3Service extends BaseWorker {
 
   async getObject(user: IAuthenticatedUser, bucket: string, key: string) {
     try {
+      this.logger.info(`Getting object from S3: ${key} in bucket ${bucket}`, {
+        user: user.coldclimate_claims,
+        key,
+        bucket,
+      });
       const s3 = new S3Client({
         credentials: {
           accessKeyId: this.config.getOrThrow('AWS_ACCESS_KEY_ID'),

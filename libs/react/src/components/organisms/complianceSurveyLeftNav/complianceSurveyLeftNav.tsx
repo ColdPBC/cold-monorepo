@@ -91,8 +91,7 @@ export const ComplianceSurveyLeftNav = (props: ComplianceSurveyLeftNavProps) => 
     }
   };
 
-  const isCollapseOpen = (sections: { [key: string]: ComplianceSurveySectionType }, category: string) => {
-    console.log(category, categoryOpened);
+  const isCollapseOpen = (category: string) => {
     return category === categoryOpened;
   };
 
@@ -101,7 +100,6 @@ export const ComplianceSurveyLeftNav = (props: ComplianceSurveyLeftNavProps) => 
   };
 
   const getNavbar = (): ReactNode => {
-    console.log(activeKey);
     return (
       <div className={'text-tc-primary w-[351px] bg-transparent h-full pl-[30px] pt-[30px] pb-[30px] flex flex-col space-y-[8px]'}>
         {map(getGroupedSections(), (sections, key) => {
@@ -113,13 +111,13 @@ export const ComplianceSurveyLeftNav = (props: ComplianceSurveyLeftNavProps) => 
                   openCategory(key);
                 }}>
                 {getSidebarIcon(key)}
-                <div className={'text-left whitespace-normal'}>{key}</div>
+                <div className={`text-left whitespace-normal`}>{key}</div>
                 <div className={'flex justify-center items-center'}>
-                  {isCollapseOpen(sections, key) ? <ColdIcon name={IconNames.ColdChevronUpIcon} /> : <ColdIcon name={IconNames.ColdChevronDownIcon} />}
+                  {isCollapseOpen(key) ? <ColdIcon name={IconNames.ColdChevronUpIcon} /> : <ColdIcon name={IconNames.ColdChevronDownIcon} />}
                 </div>
               </div>
               <Collapse
-                isOpened={isCollapseOpen(sections, key)}
+                isOpened={isCollapseOpen(key)}
                 theme={{
                   collapse: 'transition-all h-auto duration-300 ease-in-out',
                 }}>
