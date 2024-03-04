@@ -1,3 +1,25 @@
+## [1.123.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.123.2...v1.123.3) (2024-03-04)
+
+
+### Bug Fixes
+
+* add logging and simplify file uploads ([296b014](https://github.com/ColdPBC/cold-monorepo/commit/296b014afc81f5d295b800a5652b7b75e33c4a7d))
+
+## [1.123.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.123.1...v1.123.2) (2024-03-04)
+
+
+### Bug Fixes
+
+* add missing 'await' that was causing members to not be returned ([263a51d](https://github.com/ColdPBC/cold-monorepo/commit/263a51d634ed76b87ce9172d05c2c7434f4adc82))
+
+## [1.123.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.123.0...v1.123.1) (2024-03-04)
+
+
+### Bug Fixes
+
+* bug preventing progress from being added to survey ([04f0da0](https://github.com/ColdPBC/cold-monorepo/commit/04f0da0f826af5d3982c9f5e10d78307fe787f3b))
+* refactor compliances ([a3dadc4](https://github.com/ColdPBC/cold-monorepo/commit/a3dadc47a269c81b0762b73a1adf1dab33d15041))
+
 # [1.123.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.122.2...v1.123.0) (2024-03-01)
 
 

@@ -1,9 +1,8 @@
 import { HttpService } from '@nestjs/axios';
 import { ConflictException, HttpException, Injectable, NotFoundException, UnauthorizedException, UnprocessableEntityException } from '@nestjs/common';
-import { Span } from 'nestjs-ddtrace';
-// eslint-disable-next-line @nx/enforce-module-boundaries
+import { Span } from 'nestjs-ddtrace'; // eslint-disable-next-line @nx/enforce-module-boundaries
 import { Auth0Organization, Auth0TokenService, BaseWorker, CacheService, DarklyService, MqttService, PrismaService, Tags } from '@coldpbc/nest';
-import { filter, first, kebabCase, merge, omit, pick, set } from 'lodash';
+import { filter, first, get, kebabCase, merge, omit, pick, set } from 'lodash';
 import { AxiosRequestConfig } from 'axios';
 import { CreateOrganizationDto } from './dto/organization.dto';
 import { organizations } from '@prisma/client';
@@ -16,6 +15,7 @@ export class OrganizationService extends BaseWorker {
   options: AxiosRequestConfig<any>;
   httpService: HttpService;
   test_orgs: Array<{ id: string; name: string; display_name: string }>;
+  openAI: any;
 
   constructor(
     readonly cache: CacheService,
@@ -42,14 +42,14 @@ export class OrganizationService extends BaseWorker {
     const orgs = (await this.getOrganizations(true)) as Array<Auth0Organization>;
 
     for (const org of orgs) {
-      const existing = await this.prisma.organizations.findUnique({
+      let existing = await this.prisma.organizations.findUnique({
         where: {
           id: org.id,
         },
       });
 
       if (!existing) {
-        await this.prisma.organizations.create({
+        existing = await this.prisma.organizations.create({
           data: {
             id: org.id,
             name: org.name,
@@ -58,6 +58,32 @@ export class OrganizationService extends BaseWorker {
             branding: org.branding,
             created_at: new Date(),
           },
+        });
+      }
+
+      // insure openai service is enabled for all organizations
+      this.openAI = await this.prisma.service_definitions.findUnique({
+        where: {
+          name: 'cold-platform-openai',
+        },
+      });
+
+      if (!this.openAI) {
+        this.logger.error('OpenAI service definition not found');
+        continue;
+      }
+
+      const openAIAsst = await this.prisma.integrations.findFirst({
+        where: {
+          organization_id: org.id,
+          service_definition_id: this.openAI?.id,
+        },
+      });
+
+      if (this.openAI && !openAIAsst) {
+        await this.events.sendAsyncEvent(get(this.openAI, 'definition.rabbitMQ.publishOptions.routing_key', 'deadletter'), 'organization.created', {
+          organization: existing,
+          service: this.openAI,
         });
       }
     }
@@ -165,7 +191,7 @@ export class OrganizationService extends BaseWorker {
   /***
    * Get Organization by name or id
    * @param nameOrId
-   * @param user
+   * @param req
    * @param bypassCache
    */
   async getOrganization(nameOrId: string, req: any, bypassCache = false): Promise<Auth0Organization> {
@@ -222,7 +248,7 @@ export class OrganizationService extends BaseWorker {
   /***
    * Create an organization in Auth0
    * @param org
-   * @param user
+   * @param req
    */
   async createOrganization(org: Partial<CreateOrganizationDto>, req: any): Promise<Auth0Organization> {
     const { user, url } = req;
@@ -265,9 +291,7 @@ export class OrganizationService extends BaseWorker {
   /***
    * Create a new Cold Organization
    * @param org
-   * @param user
-   * @param bypassCache
-   * @param impersonatedOrg
+   * @param req
    */
   async createColdOrg(org: Partial<CreateOrganizationDto>, req: any): Promise<Partial<organizations>> {
     const { user, url } = req;
@@ -377,6 +401,15 @@ export class OrganizationService extends BaseWorker {
 
       this.metrics.increment('cold.api.organizations.create', tags);
 
+      if (this.openAI) {
+        await this.events.sendAsyncEvent(get(this.openAI, 'definition.rabbitMQ.publishOptions.routing_key', 'deadletter'), 'organization.created', {
+          organization: existing,
+          service: this.openAI,
+        });
+      } else {
+        this.logger.error('OpenAI service definition not found; unable to create assistant for new organization');
+      }
+
       this.mqtt.publishMQTT('cold', {
         swr_key: url,
         action: 'create',
@@ -420,8 +453,7 @@ export class OrganizationService extends BaseWorker {
   /***
    * Delete an organization in Auth0
    * @param orgId
-   * @param user
-   * @param updateCache
+   * @param req
    */
   async deleteOrganization(orgId: string, req: any) {
     const { user, url } = req;

@@ -13,6 +13,7 @@ import { OrganizationHelper } from '../helpers/organization.helper';
 export class OrganizationFilesService extends BaseWorker {
   httpService: HttpService;
   test_orgs: Array<{ id: string; name: string; display_name: string }>;
+  openAI: any;
 
   constructor(
     readonly cache: CacheService,
@@ -32,6 +33,16 @@ export class OrganizationFilesService extends BaseWorker {
     this.darkly.subscribeToJsonFlagChanges('dynamic-org-white-list', value => {
       this.test_orgs = value;
     });
+
+    this.openAI = await this.prisma.service_definitions.findUnique({
+      where: {
+        name: 'cold-platform-openai',
+      },
+    });
+
+    if (!this.openAI) {
+      this.logger.error('OpenAI service definition not found; file uploads to openAI will not work');
+    }
   }
 
   async getFiles(req: any, orgId: string, bpc?: boolean): Promise<any> {
@@ -128,7 +139,10 @@ export class OrganizationFilesService extends BaseWorker {
         });
       }
 
-      await this.events.sendEvent(false, 'file.uploaded', existing, user, orgId);
+      //const routingKey = get(this.openAI.definition, 'rabbitMQ.publishOptions.routing_key', 'dead_letter');
+      //await this.events.sendPlatformEvent(routingKey, 'file.uploaded', { existing, user, organization: org }, req);
+
+      await this.events.sendIntegrationEvent(false, 'file.uploaded', existing, user, orgId);
 
       return existing;
     } catch (e) {
@@ -176,7 +190,7 @@ export class OrganizationFilesService extends BaseWorker {
         },
       });
 
-      await this.events.sendEvent(false, 'file.deleted', file, user, orgId);
+      await this.events.sendIntegrationEvent(false, 'file.deleted', file, user, orgId);
 
       this.mqtt.publishMQTT('ui', {
         org_id: orgId,

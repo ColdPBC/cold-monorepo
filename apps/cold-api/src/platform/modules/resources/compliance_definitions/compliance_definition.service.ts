@@ -3,12 +3,14 @@ import { Span } from 'nestjs-ddtrace';
 import { BaseWorker, CacheService, Cuid2Generator, DarklyService, MqttService, PrismaService } from '@coldpbc/nest';
 import { ComplianceDefinition, OrgCompliance } from './compliance_definition_schema';
 import { EventService } from '../../utilities/events/event.service';
+import { get } from 'lodash';
 
 @Span()
 @Global()
 @Injectable()
 export class ComplianceDefinitionService extends BaseWorker {
   exclude_orgs: Array<{ id: string; name: string; display_name: string }>;
+  openAI_definition: any;
 
   constructor(
     readonly darkly: DarklyService,
@@ -23,6 +25,81 @@ export class ComplianceDefinitionService extends BaseWorker {
   override async onModuleInit() {
     this.darkly.subscribeToJsonFlagChanges('dynamic-org-white-list', value => {
       this.exclude_orgs = value;
+    });
+
+    this.openAI_definition = await this.prisma.service_definitions.findFirst({
+      where: {
+        name: 'cold-platform-openai',
+      },
+    });
+  }
+
+  async activate(orgId: string, req: any, compliance_name: string): Promise<any> {
+    const { user, url } = req;
+    const compliance_definition = await this.prisma.compliance_definitions.findUnique({
+      where: {
+        name: compliance_name,
+      },
+    });
+
+    if (!compliance_definition) {
+      throw new NotFoundException(`${compliance_name} compliance definition does not exist`);
+    }
+
+    const compliance = await this.prisma.organization_compliances.findFirst({
+      where: {
+        organization_id: orgId,
+        compliance_id: compliance_definition.id,
+      },
+      include: {
+        organization: true,
+        compliance_definition: true,
+      },
+    });
+
+    if (!compliance) {
+      throw new NotFoundException(`${compliance_name} compliance does not exist for ${orgId}`);
+    }
+
+    const organization = await this.prisma.organizations.findUnique({
+      where: {
+        id: orgId,
+      },
+    });
+
+    const surveyNames = compliance.compliance_definition.surveys as string[];
+
+    const surveys: any[] = [];
+
+    for (const name of surveyNames) {
+      const survey = await this.prisma.survey_definitions.findFirst({
+        where: {
+          name: name,
+        },
+      });
+      if (survey) {
+        surveys.push(survey);
+      }
+    }
+
+    const routingKey = get(this.openAI_definition, 'definition.rabbitMQ.publishOptions.routing_key', 'dead_letter');
+
+    await this.event.sendAsyncEvent(routingKey, 'compliance_automation.enabled', {
+      user,
+      on_update_url: `/organizations/${orgId}/surveys/${compliance_name}`,
+      surveys,
+      service: this.openAI_definition,
+      organization,
+      compliance,
+    });
+
+    this.mqtt.publishMQTT('public', {
+      swr_key: url,
+      action: 'create',
+      status: 'complete',
+      data: {
+        compliance,
+      },
     });
   }
 
@@ -84,7 +161,7 @@ export class ComplianceDefinitionService extends BaseWorker {
    * @param orgId
    * @param bpc
    */
-  async activateOrgCompliance(req: any, name: string, orgId: string, bpc?: boolean): Promise<OrgCompliance> {
+  async createOrgCompliance(req: any, name: string, orgId: string, bpc?: boolean): Promise<OrgCompliance> {
     const { user, url } = req;
     this.setTags({ user: user.coldclimate_claims });
     try {
@@ -104,7 +181,7 @@ export class ComplianceDefinitionService extends BaseWorker {
       });
 
       if (compliance) {
-        throw new ConflictException(`${name} is already activated for ${orgId}`);
+        throw new ConflictException(`${name} is already created for ${orgId}`);
       }
 
       compliance = await this.prisma.organization_compliances.create({
@@ -119,29 +196,12 @@ export class ComplianceDefinitionService extends BaseWorker {
         },
       });
 
-      await this.cache.set(`compliance_definitions:name:${name}:org:${orgId}`, { update: true });
+      await this.cache.set(`compliance_definitions:name:${name}:org:${orgId}`, compliance, { update: true });
 
-      this.logger.info(`activated ${name} compliance for ${orgId}`, {
+      this.logger.info(`created ${name} compliance for ${orgId}`, {
         compliance_definition: name,
         organization: { id: orgId },
       });
-
-      const surveyNames = compliance.compliance_definition.surveys as string[];
-
-      const surveys: any[] = [];
-
-      for (const name of surveyNames) {
-        const survey = await this.prisma.survey_definitions.findFirst({
-          where: {
-            name: name,
-          },
-        });
-        if (survey) {
-          surveys.push(survey);
-        }
-      }
-
-      await this.event.sendEvent(false, 'organization_compliances.created', { surveys, compliance }, user, orgId);
 
       this.mqtt.publishMQTT('ui', {
         org_id: orgId,
@@ -374,9 +434,10 @@ export class ComplianceDefinitionService extends BaseWorker {
    * This action deactivates a named compliance for an org
    * @param name
    * @param orgId
-   * @param user
+   * @param req
+   * @param bpc
    */
-  async deactivate(req: any, name: string, orgId: string, bpc?: boolean) {
+  async deactivate(name: string, orgId: string, req: any, bpc?: boolean) {
     const { user, url } = req;
     this.setTags({
       compliance_definition_name: name,
