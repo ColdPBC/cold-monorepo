@@ -128,7 +128,7 @@
     "json-stringify-safe": "^5.0.1",
     "jsonata": "^2.0.4",
     "jwks-rsa": "^3.0.1",
-    "launchdarkly-react-client-sdk": "3.0.6",
+    "launchdarkly-react-client-sdk": "3.0.10",
     "lodash": "^4.17.21",
     "lottie-react": "^2.4.0",
     "luxon": "^3.4.3",
