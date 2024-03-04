@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { ConfigurationModule, NestModule, OrgUserInterceptor, PrismaModule } from '@coldpbc/nest';
+import { NestModule, OrgUserInterceptor, PrismaModule } from '@coldpbc/nest';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { AppService } from './app.service';
 import { APP_INTERCEPTOR } from '@nestjs/core';
@@ -20,7 +20,6 @@ export class AppModule {
     return {
       module: AppModule,
       imports: [
-        await ConfigurationModule.forRootAsync(),
         await NestModule.forRootAsync(2, 'cold-api-'),
         await EventsModule.forRootAsync(),
         BullModule.registerQueue({
