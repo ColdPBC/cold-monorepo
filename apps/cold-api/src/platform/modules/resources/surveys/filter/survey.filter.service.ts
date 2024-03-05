@@ -15,7 +15,7 @@ export class SurveyFilterService extends BaseWorker {
 
     // Iterate over each section in the filteredObject
     for (const sectionKey in filteredObject.sections) {
-      const section = filteredObject.sections[sectionKey];
+      const section = filteredObject.definition.sections[sectionKey];
       // Check for a dependency at the section level
       if (section.dependency?.expression) {
         // Evaluate the JSONata expression for the dependency
@@ -24,11 +24,11 @@ export class SurveyFilterService extends BaseWorker {
 
         // If the dependency is not met, remove the section from the filteredObject
         if (!dependencyMet) {
-          delete filteredObject.sections[sectionKey];
+          delete filteredObject.definition.sections[sectionKey];
           continue; // No need to check follow-ups if the section is already removed
         } else {
           // If the dependency is met, remove the dependency from the section
-          delete filteredObject.sections[sectionKey].dependency;
+          delete filteredObject.definition.sections[sectionKey].dependency;
         }
       }
 
@@ -44,25 +44,25 @@ export class SurveyFilterService extends BaseWorker {
 
           // If the dependency is not met, remove the follow-up question from the section
           if (!dependencyMet) {
-            delete filteredObject.sections[sectionKey].follow_up[currentQuestionKey];
+            delete filteredObject.definition.sections[sectionKey].follow_up[currentQuestionKey];
           } else {
             // If the dependency is met, remove the dependency from the follow-up question
-            delete filteredObject.sections[sectionKey].follow_up[currentQuestionKey].dependency;
+            delete filteredObject.definition.sections[sectionKey].follow_up[currentQuestionKey].dependency;
           }
         }
       }
     }
 
-    this.logger.info('Filtered Dependencies', { original: jsonObject, filtered: filteredObject });
+    this.logger.info('Filtered Dependencies', { original: jsonObject.definition, filtered: filteredObject.definition });
 
     // Create a JSONata expression to filter out empty sections
     const filterEmptySections = jsonata(`$sift(sections, function($v, $k, $i, $o) { $count($keys($v.follow_up)) > 0 })`);
 
     // Evaluate the JSONata expression to get the filtered sections
-    const filteredSections = await filterEmptySections.evaluate(filteredObject);
+    const filteredSections = await filterEmptySections.evaluate(filteredObject.definition);
 
     // Replace the sections in the filteredObject with the filtered sections
-    filteredObject.sections = filteredSections;
+    filteredObject.definition.sections = filteredSections;
 
     /**
      * This JSONata expression is used to transform and summarize data from a survey.
@@ -80,52 +80,74 @@ export class SurveyFilterService extends BaseWorker {
      * @function $sectionScore - This function calculates the total score for a given section.
      * @function $map - This function iterates over each section and creates a new object for each one, including the section key, score, title, total number of questions, number of answered questions, whether the section is complete, number of questions to review, and the questions object.
      */
-
     // Create a JSONata expression to calculate the progress
     const progressExpression = jsonata(
-      '(\n' +
-        '    $title := function($v){$v.title};\n' +
-        '    $section := function($k){$keys(sections)[$k]};\n' +
-        '    $total := function($v){$count($keys($v.follow_up))};\n' +
-        '    $answered := function($v){$count($filter($v.follow_up.*, function($q) { $exists($q.value) }))};\n' +
-        '    $complete := function($v){$total($v) = $answered($v)};\n' +
-        '    $questions := function($v){$merge($map($keys($v.follow_up), function($key) { {$key: {"user_answered": $exists($v.follow_up[$key].value) and $v.follow_up[$key].value != null, "ai_answered": $exists($v.follow_up[$key].ai_response.answer) and $v.follow_up[$key].ai_response.answer != null}}}))};\n' +
-        '    $createQuestions := function($v) {\n' +
-        '        $map($keys($v.follow_up), function($key, $v, $o) { \n' +
-        '             $createQuestionObject($v, $key, $o)\n' +
-        '        })\n' +
-        '    };\n' +
-        '    \n' +
-        '    $createQuestionObject := function($idx, $key, $o) {\n' +
-        '        { \n' +
-        '            $key: {\n' +
-        '                "score":$lookup(definition.sections.*.follow_up, $key).score,\n' +
-        '                "max_score":$lookup(definition.sections.*.follow_up, $key).max_score,\n' +
-        '                "user_answered": $exists($lookup(sections.*.follow_up, $key).value),\n' +
-        '                "ai_answered": $exists($lookup(sections.*.follow_up, $key).ai_response.answer)\n' +
-        '            }\n' +
-        '        }\n' +
-        '    };\n' +
-        '    \n' +
-        '    $mergeQuestions := function($v) {\n' +
-        '        $merge($createQuestions($v))\n' +
-        '    };\n' +
+      '  (\n' +
+        '        $title := function($v){$v.title};\n' +
+        '        $section := function($k){$keys(sections)[$k]};\n' +
+        '        $total := function($v){$count($keys($v.follow_up))};\n' +
+        '        $answered := function($v){$count($filter($v.follow_up.*, function($q) { $exists($q.value) }))};\n' +
+        '        $complete := function($v){$total($v) = $answered($v)};\n' +
+        '        $questions := function($v){$merge($map($keys($v.follow_up), function($key) { {$key: {"user_answered": $exists($v.follow_up[$key].value) and $v.follow_up[$key].value != null, "ai_answered": $exists($v.follow_up[$key].ai_response.answer) and $v.follow_up[$key].ai_response.answer != null}}}))};\n' +
+        '        $createQuestions := function($v) {\n' +
+        '            $map($keys($v.follow_up), function($key, $v, $o) { \n' +
+        '                $createQuestionObject($v, $key, $o)\n' +
+        '            })\n' +
+        '        };\n' +
         '            \n' +
-        '    $review := function($v){$count($v.follow_up[$k].ai_response.answer and $filter($v.follow_up.*, function($q) { $exists($q.value) }))};\n' +
-        '    $sectionScore := function($v){$sum($v.follow_up.*.score)};\n' +
-        '    $map(sections.*, function($v, $k, $o) {\n' +
+        '        $createQuestionObject := function($idx, $key, $o) {\n' +
+        '            { \n' +
+        '                $key: {\n' +
+        '                    "max_score": $lookup(definition.sections.*.follow_up, $key).max_score,\n' +
+        '                    "score":$lookup(definition.sections.*.follow_up, $key).score,\n' +
+        '                    "user_answered": $exists($lookup(definition.sections.*.follow_up, $key).value),\n' +
+        '                    "ai_answered": $exists($lookup(definition.sections.*.follow_up, $key).ai_response.answer)\n' +
+        '                }\n' +
+        '            }\n' +
+        '        };\n' +
+        '            \n' +
+        '        $mergeQuestions := function($v) {\n' +
+        '            $merge($createQuestions($v))\n' +
+        '        };\n' +
+        '        \n' +
+        '        $review := function($v){$count($v.follow_up[$k].ai_response.answer and $filter($v.follow_up.*, function($q) { $exists($q.value) }))};\n' +
+        '        $sectionScore := function($v){$sum($v.follow_up.*.score)};\n' +
+        '        $maxSectionScore := function($v){$sum($v.follow_up.*.max_score)};\n' +
+        '        $totalScore := $map(definition.sections.*, function($v, $k, $o) {\n' +
+        '            $sum($v.follow_up.*.score)\n' +
+        '        });\n' +
+        '        $totalReview := $sum($map(definition.sections.*, function($v, $k, $o) {\n' +
+        '            $count($keys($sift($mergeQuestions($v), function($v) { $v.user_answered = false and $v.ai_answered = true })))\n' +
+        '        }));\n' +
+        '                \n' +
+        '        $totalQuestionCount := function(){$count($keys(definition.sections.*.follow_up))};\n' +
+        '        $totalQuestionAnswered := function(){$count(definition.sections.*.follow_up.*.value)};\n' +
+        '\n' +
+        '        $totalMaxScore := function(){$sum(definition.sections.*.follow_up.*.max_score)}; \n' +
+        '        \n' +
         '        {\n' +
-        '              "section": $section($k),\n' +
-        '              "section_score": $sectionScore($v),\n' +
-        '              "title": $title($v),\n' +
-        '              "total": $total($v),\n' +
-        '              "answered": $answered($v),\n' +
-        '              "complete": $complete($v),\n' +
-        '              "review": $count($keys($sift($mergeQuestions($v), function($v) { $v.user_answered = false and $v.ai_answered = true }))),\n' +
-        '              "questions": $mergeQuestions($v)\n' +
+        '            "total_score": $sum($totalScore),\n' +
+        '            "total_max_score": $sum($totalMaxScore()),\n' +
+        '            "total_review": $totalReview,\n' +
+        '            "question_count": $totalQuestionCount(),\n' +
+        '            "percentage": $sum($totalScore) / $sum($totalMaxScore()) * 100,\n' +
+        '            "questions_answered": $totalQuestionAnswered(),\n' +
+        '            "sections":$map(definition.sections.*, function($v, $k, $o) {\n' +
+        '                {\n' +
+        '                    "section": $section($k),\n' +
+        '                    "section_score": $sectionScore($v),\n' +
+        '                    "section_max_score": $maxSectionScore($v),\n' +
+        '                    "title": $title($v),\n' +
+        '                    "total": $total($v),\n' +
+        '                    "answered": $answered($v),\n' +
+        '                    "complete": $complete($v),\n' +
+        '                    "review": $count($keys($sift($mergeQuestions($v), function($v) { $v.user_answered = false and $v.ai_answered = true }))),\n' +
+        '                    "questions": $mergeQuestions($v)\n' +
+        '                }\n' +
+        '            })\n' +
         '        }\n' +
-        '    })\n' +
-        ')',
+        '   )\n' +
+        '',
     );
 
     // Evaluate the JSONata expression to get the progress

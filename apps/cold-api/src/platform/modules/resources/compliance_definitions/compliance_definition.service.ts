@@ -61,12 +61,6 @@ export class ComplianceDefinitionService extends BaseWorker {
       throw new NotFoundException(`${compliance_name} compliance does not exist for ${orgId}`);
     }
 
-    const organization = await this.prisma.organizations.findUnique({
-      where: {
-        id: orgId,
-      },
-    });
-
     const surveyNames = compliance.compliance_definition.surveys as string[];
 
     const surveys: any[] = [];
@@ -84,14 +78,25 @@ export class ComplianceDefinitionService extends BaseWorker {
 
     const routingKey = get(this.openAI_definition, 'definition.rabbitMQ.publishOptions.routing_key', 'dead_letter');
 
-    await this.event.sendAsyncEvent(routingKey, 'compliance_automation.enabled', {
+    await this.event.sendIntegrationEvent(
+      false,
+      'compliance_automation.enabled',
+      {
+        on_update_url: `/organizations/${orgId}/surveys/${compliance_name}`,
+        surveys,
+        service: this.openAI_definition,
+        compliance,
+      },
       user,
-      on_update_url: `/organizations/${orgId}/surveys/${compliance_name}`,
-      surveys,
-      service: this.openAI_definition,
-      organization,
-      compliance,
-    });
+      orgId,
+    );
+    /* await this.event.sendAsyncEvent(routingKey, 'compliance_automation.enabled', {
+       user,
+       on_update_url: `/organizations/${orgId}/surveys/${compliance_name}`,
+       surveys,
+       service: this.openAI_definition,
+       compliance,
+     });*/
 
     this.mqtt.publishMQTT('public', {
       swr_key: url,
