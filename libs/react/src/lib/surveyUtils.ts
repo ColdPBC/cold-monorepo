@@ -449,7 +449,6 @@ export const putSurveyData = async (survey: ComplianceSurveyPayloadType, getOrgS
     'PUT',
     JSON.stringify({
       definition: survey.definition,
-      progress: survey.progress,
     }),
   ]);
 };
