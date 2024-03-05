@@ -137,7 +137,7 @@ const _ComplianceSurveyLeftNav = (props: ComplianceSurveyLeftNavProps) => {
                         onClick={() => goToKey(key)}
                         key={key}>
                         {getSectionIcon(key)}
-                        <div className={'text-caption bg-transparent'}>{section.title}</div>
+                        <div className={'text-caption bg-transparent line-clamp-1'}>{section.title}</div>
                       </div>
                     );
                   })}
