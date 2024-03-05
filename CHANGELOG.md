@@ -1,3 +1,10 @@
+## [1.130.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.130.1...v1.130.2) (2024-03-05)
+
+
+### Bug Fixes
+
+* trying to debug build issues ([c84d2dc](https://github.com/ColdPBC/cold-monorepo/commit/c84d2dc10391c93b51b8e20fcd2597a527593974))
+
 ## [1.130.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.130.0...v1.130.1) (2024-03-05)
 
 
