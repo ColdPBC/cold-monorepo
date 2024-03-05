@@ -1,5 +1,5 @@
-import { ComplianceSurveyActiveKeyType, ComplianceSurveyPayloadType, SurveySectionFollowUpType } from '@coldpbc/interfaces';
-import { find, map } from 'lodash';
+import { ComplianceSurveyActiveKeyType, ComplianceSurveyPayloadType, SurveySectionFollowUpsType, SurveySectionFollowUpType } from '@coldpbc/interfaces';
+import { find, keys, map } from 'lodash';
 import { ColdIcon } from '../../atoms';
 import { IconNames } from '@coldpbc/enums';
 import { withErrorBoundary } from 'react-error-boundary';
@@ -26,10 +26,13 @@ const _ComplianceSurveyRightNav = (props: ComplianceSurveyRightNavProps) => {
     setSurveyOpen(true);
   };
 
-  const getQuestionItem = (question: SurveySectionFollowUpType, key: string) => {
+  const getQuestionItem = (question: SurveySectionFollowUpType, key: string, questions: SurveySectionFollowUpsType) => {
     // check the progress of the survey. if the question has been answered, show a checkmark. if not, show a circle.
     const progressSection = find(surveyData.progress.sections, section => section.section === activeKey.section);
     const progressQuestion = progressSection?.questions[key];
+    // get the index of the question in the questions object
+    const index = keys(questions).indexOf(key) + 1;
+
     if (progressQuestion?.user_answered) {
       return (
         <div key={key} className={'h-[34px] flex flex-row space-x-2 items-center hover:bg-gray-70 cursor-pointer'} onClick={() => onClick(key)}>
@@ -37,7 +40,7 @@ const _ComplianceSurveyRightNav = (props: ComplianceSurveyRightNavProps) => {
             <ColdIcon name={IconNames.ColdComplianceSurveyCheckBoxIcon} className={' '} />
           </div>
           <div className={'w-full text-body line-clamp-1'}>
-            {question.idx + 1}. {question.prompt}
+            {index}. {question.prompt}
           </div>
         </div>
       );
@@ -48,7 +51,7 @@ const _ComplianceSurveyRightNav = (props: ComplianceSurveyRightNavProps) => {
             <div className={'rounded-full h-[24px] w-[24px] bg-gray-70'}></div>
           </div>
           <div className={'w-full text-body line-clamp-1'}>
-            {question.idx + 1}. {question.prompt}
+            {index}. {question.prompt}
           </div>
         </div>
       );
@@ -64,7 +67,7 @@ const _ComplianceSurveyRightNav = (props: ComplianceSurveyRightNavProps) => {
         <div className={'text-h2'}>{surveyData.definition.sections[activeKey.section].title}</div>
       </div>
       {map(sectionQuestions, (question, key, questions) => {
-        return getQuestionItem(question, key);
+        return getQuestionItem(question, key, questions);
       })}
     </div>
   );
