@@ -5,6 +5,7 @@ import { ButtonTypes } from '@coldpbc/enums';
 import { useNavigate } from 'react-router-dom';
 import { HexColors } from '@coldpbc/themes';
 import { withErrorBoundary } from 'react-error-boundary';
+import { get } from 'lodash';
 
 export interface ComplianceAssessmentsCardProps {
   surveyData: ComplianceSurveyPayloadType;
@@ -13,7 +14,7 @@ export interface ComplianceAssessmentsCardProps {
 const _ComplianceAssessmentsCard = (props: ComplianceAssessmentsCardProps) => {
   const { surveyData } = props;
   const navigate = useNavigate();
-  const percentage = surveyData.definition.progress.percentage * 100;
+  const percentage = get(surveyData, 'definition.progress.percentage', 0) * 100;
 
   return (
     <Card

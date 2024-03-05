@@ -3,6 +3,7 @@ import { Card, ErrorFallback, ProgressBar } from '@coldpbc/components';
 import { ComplianceSurveyPayloadType } from '@coldpbc/interfaces';
 import { HexColors } from '@coldpbc/themes';
 import { withErrorBoundary } from 'react-error-boundary';
+import { get } from 'lodash';
 
 export interface ComplianceProgressCardProps {
   surveyData: ComplianceSurveyPayloadType;
@@ -10,10 +11,9 @@ export interface ComplianceProgressCardProps {
 
 const _ComplianceProgressCard = (props: ComplianceProgressCardProps) => {
   const { surveyData } = props;
-  const { progress } = surveyData.definition;
-  const totalQuestions = progress.question_count;
-  const totalComplete = progress.questions_answered;
-  const totalNeedsReview = progress.total_review;
+  const totalQuestions = get(surveyData, 'definition.progress.question_count', 0);
+  const totalComplete = get(surveyData, 'definition.progress.questions_answered', 0);
+  const totalNeedsReview = get(surveyData, 'definition.progress.total_review', 0);
   const totalUnanswered = totalQuestions - totalComplete;
 
   const shades = [];

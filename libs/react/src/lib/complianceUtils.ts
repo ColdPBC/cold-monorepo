@@ -1,26 +1,39 @@
 import { SurveyPayloadType } from '@coldpbc/interfaces';
-import { forOwn, isUndefined } from 'lodash';
+import { forOwn, get, isUndefined } from 'lodash';
 
 export const getComplianceProgressForSurvey = (survey: SurveyPayloadType) => {
   let totalQuestions = 0;
   let answeredQuestions = 0;
   let aiAnsweredQuestions = 0;
   let aiAttemptedQuestions = 0;
-  forOwn(survey.definition?.sections, (section, sectionKey) => {
-    forOwn(section.follow_up, question => {
-      totalQuestions++;
-      if (!isUndefined(question.ai_attempted)) {
-        aiAttemptedQuestions++;
-      }
-      if (question.value) {
-        answeredQuestions++;
-      } else {
-        if (question.ai_response?.answer) {
-          aiAnsweredQuestions++;
+  forOwn(
+    get(survey, 'definition.sections', {
+      section: {
+        follow_up: {
+          0: {
+            ai_attempted: false,
+            value: undefined,
+            ai_response: undefined,
+          },
+        },
+      },
+    }),
+    (section, sectionKey) => {
+      forOwn(section.follow_up, question => {
+        totalQuestions++;
+        if (!isUndefined(question.ai_attempted)) {
+          aiAttemptedQuestions++;
         }
-      }
-    });
-  });
+        if (question.value) {
+          answeredQuestions++;
+        } else {
+          if (question.ai_response?.answer) {
+            aiAnsweredQuestions++;
+          }
+        }
+      });
+    },
+  );
   return {
     totalQuestions,
     aiAttemptedQuestions,
