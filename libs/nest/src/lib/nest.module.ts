@@ -60,7 +60,7 @@ export class NestModule {
     const imports: any = [
       configModule, //ConfigurationModule.forRootAsync(),
       SecretsModule,
-      BullModule.forRoot(await new RedisServiceConfig(config).getQueueConfig(type, project)),
+      BullModule.forRoot(await new RedisServiceConfig(secrets).getQueueConfig(type, project)),
       HttpModule,
       MqttModule,
     ];

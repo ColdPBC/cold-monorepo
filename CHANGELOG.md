@@ -1,3 +1,17 @@
+# [1.131.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.130.3...v1.131.0) (2024-03-05)
+
+
+### Features
+
+* allow input value to be submitted with list ([e89f3e9](https://github.com/ColdPBC/cold-monorepo/commit/e89f3e9fab2ff223b57fcca3e76f88c4dec66422))
+
+## [1.130.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.130.2...v1.130.3) (2024-03-05)
+
+
+### Bug Fixes
+
+* trying to debug build issues ([dc7a226](https://github.com/ColdPBC/cold-monorepo/commit/dc7a2269da5c9973efe20f48cf606675babc1700))
+
 ## [1.130.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.130.1...v1.130.2) (2024-03-05)
 
 
