@@ -1,3 +1,10 @@
+## [1.130.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.130.0...v1.130.1) (2024-03-05)
+
+
+### Bug Fixes
+
+* issues caused by other refactoring ([68fcccd](https://github.com/ColdPBC/cold-monorepo/commit/68fcccda34bcc6ce230ab449eef6fdd1302cff85))
+
 # [1.130.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.129.0...v1.130.0) (2024-03-04)
 
 
