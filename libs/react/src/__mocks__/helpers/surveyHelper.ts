@@ -1,5 +1,5 @@
-import { ComplianceSurveyPayloadType } from '@coldpbc/interfaces';
 import { find, forEach, forOwn } from 'lodash';
+import { ComplianceSurveyPayloadType } from '@coldpbc/interfaces';
 
 /***
  * Helper method to mock return response from the server
