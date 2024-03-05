@@ -71,7 +71,7 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
     this.logger.info(`Created run ${run.id} for thread ${thread.id}`, {
       run,
       thread,
-      organization: integration['organization'],
+      organization: org,
     });
 
     let status: { status: string } = { status: 'running' };
@@ -188,7 +188,7 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
       },
       user: {
         email: user.coldclimate_claims.email,
-        id: user.id,
+        id: user.id || user.coldclimate_claims.id,
       },
     });
     this.logger.info(`Processing survey ${survey.definition.title} for compliance ${compliance?.name}`);
@@ -204,6 +204,9 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
     const sections = Object.keys(definition.sections);
 
     const sdx = 0;
+
+    // create a new thread for each automation run
+    const thread = await this.client.beta.threads.create();
 
     // iterate over each section key
     for (const section of sections) {
@@ -229,8 +232,6 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
           continue;
         }
 
-        // create a new thread for each followup item
-        const thread = await this.client.beta.threads.create();
         await this.setTags({ thread: thread.id });
 
         this.logger.info(`Created Thread | thread.id: ${thread.id} for ${section}.${item}`, {
