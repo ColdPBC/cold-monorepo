@@ -1,12 +1,10 @@
-import { BaseButton, WizardContext } from '@coldpbc/components';
+import { BaseButton, ComplianceAssessmentsCard, ComplianceProgressCard, WizardContext } from '@coldpbc/components';
 import { PropsWithChildren, useContext, useEffect } from 'react';
 import { Compliance } from '@coldpbc/interfaces';
 import { ButtonTypes } from '@coldpbc/enums';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { getComplianceProgressForSurvey } from '@coldpbc/lib';
 import { isArray } from 'lodash';
-import { ComplianceProgressCard } from './complianceProgressCard/complianceProgressCard';
-import { ComplianceAssessmentsCard } from './complianceAssessmentsPreviewCard/complianceAssessmentsCard';
 
 export interface ComplianceWizardLairProps {
   name: string;
