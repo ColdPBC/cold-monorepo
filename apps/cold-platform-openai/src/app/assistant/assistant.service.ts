@@ -205,90 +205,109 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
 
     const sdx = 0;
 
-    // create a new thread for each automation run
-    const thread = await this.client.beta.threads.create();
-
+    const reqs: any[] = [];
     // iterate over each section key
     for (const section of sections) {
-      await job.log(`Section | ${section}:${sdx + 1} of ${sections.length}`);
-      this.setTags({ section });
-      this.logger.info(`Processing ${section}: ${definition.sections[section].title}`);
+      // create a new thread for each section run
+      const thread = await this.client.beta.threads.create();
 
-      // get the followup items for the section
-      const items = Object.keys(definition.sections[section].follow_up);
+      reqs.push(this.processSection(job, section, sdx, sections, definition, thread, integration, organization, category_context, user, survey));
+    }
 
-      // iterate over each followup item
-      for (const item of items) {
-        const idx = parseInt(item.split('-')[1]);
+    await Promise.all(reqs);
+  }
 
-        await job.log(`Question | section: ${section} question: ${item} of ${items.length}`);
-        const follow_up = definition.sections[section].follow_up[item];
-        this.setTags({ question: { key: item, prompt: follow_up.prompt } });
+  private async processSection(
+    job,
+    section: string,
+    sdx: number,
+    sections: string[],
+    definition,
+    thread: OpenAI.Beta.Threads.Thread,
+    integration,
+    organization,
+    category_context,
+    user,
+    survey,
+  ) {
+    await job.log(`Section | ${section}:${sdx + 1} of ${sections.length}`);
+    this.setTags({ section });
+    this.logger.info(`Processing ${section}: ${definition.sections[section].title}`);
 
-        if (follow_up?.ai_response?.answer && !has(follow_up, 'ai_response.what_we_need')) {
-          this.logger.info(`Skipping ${section}.${item}: ${follow_up.prompt}; it has already been answered`, {
+    // get the followup items for the section
+    const items = Object.keys(definition.sections[section].follow_up);
+
+    // iterate over each followup item
+    for (const item of items) {
+      const idx = parseInt(item.split('-')[1]);
+
+      await job.log(`Question | section: ${section} question: ${item} of ${items.length}`);
+      const follow_up = definition.sections[section].follow_up[item];
+      this.setTags({ question: { key: item, prompt: follow_up.prompt } });
+
+      if (follow_up?.ai_response?.answer && !has(follow_up, 'ai_response.what_we_need')) {
+        this.logger.info(`Skipping ${section}.${item}: ${follow_up.prompt}; it has already been answered`, {
+          section_item: definition.sections[section].follow_up[item],
+        });
+        continue;
+      }
+
+      await this.setTags({ thread: thread.id });
+
+      this.logger.info(`Created Thread | thread.id: ${thread.id} for ${section}.${item}`, {
+        thread,
+        section_item: item,
+        section,
+      });
+
+      this.logger.info(`Creating Message | ${section}.${item}: ${follow_up.prompt}`);
+      // create a new run for each followup item
+      let value = await this.createMessage(thread, integration, follow_up, false, organization, category_context);
+
+      value = this.clearValuesOnError(value);
+
+      // update the survey with the response
+      definition.sections[section].follow_up[item].ai_response = value;
+      if (value) {
+        definition.sections[section].follow_up[item].ai_answered = !!value.answer;
+      }
+      definition.sections[section].follow_up[item].ai_attempted = true;
+
+      // if there is additional context, create a new run for it
+      if (follow_up['additional_context']) {
+        if (definition.sections[section].follow_up[item].additional_context.ai_answered) {
+          this.logger.info(`Skipping ${section}.${item}.additional_context: ${follow_up.prompt}; it has already been answered`, {
             section_item: definition.sections[section].follow_up[item],
           });
           continue;
         }
 
-        await this.setTags({ thread: thread.id });
+        this.logger.info(`Creating Message | ${section}.${item}.additional_context: ${follow_up.prompt}`);
+        let additionalValue = await this.createMessage(thread, integration, follow_up['additional_context'], true, organization, category_context);
 
-        this.logger.info(`Created Thread | thread.id: ${thread.id} for ${section}.${item}`, {
-          thread,
-          section_item: item,
-          section,
-        });
+        additionalValue = this.clearValuesOnError(additionalValue);
 
-        this.logger.info(`Creating Message | ${section}.${item}: ${follow_up.prompt}`);
-        // create a new run for each followup item
-        let value = await this.createMessage(thread, integration, follow_up, false, organization, category_context);
+        definition.sections[section].follow_up[item].additional_context.ai_response = additionalValue;
 
-        value = this.clearValuesOnError(value);
-
-        // update the survey with the response
-        definition.sections[section].follow_up[item].ai_response = value;
-        if (value) {
-          definition.sections[section].follow_up[item].ai_answered = !!value.answer;
-        }
-        definition.sections[section].follow_up[item].ai_attempted = true;
-
-        // if there is additional context, create a new run for it
-        if (follow_up['additional_context']) {
-          if (definition.sections[section].follow_up[item].additional_context.ai_answered) {
-            this.logger.info(`Skipping ${section}.${item}.additional_context: ${follow_up.prompt}; it has already been answered`, {
-              section_item: definition.sections[section].follow_up[item],
-            });
-            continue;
-          }
-
-          this.logger.info(`Creating Message | ${section}.${item}.additional_context: ${follow_up.prompt}`);
-          let additionalValue = await this.createMessage(thread, integration, follow_up['additional_context'], true, organization, category_context);
-
-          additionalValue = this.clearValuesOnError(additionalValue);
-
-          definition.sections[section].follow_up[item].additional_context.ai_response = additionalValue;
-
-          if (additionalValue) {
-            definition.sections[section].follow_up[item].additional_context.ai_answered = has(additionalValue, 'answer');
-          }
-
-          definition.sections[section].follow_up[item].additional_context.ai_attempted = true;
+        if (additionalValue) {
+          definition.sections[section].follow_up[item].additional_context.ai_answered = has(additionalValue, 'answer');
         }
 
-        // publish the response to the rabbit queue
-        await this.rabbit.publish(`cold.core.api.survey_data`, {
-          event: 'survey_data.updated',
-          data: {
-            organization: { id: integration.organization_id },
-            user,
-            survey,
-          },
-          from: 'cold.platform.openai',
-        });
-
-        await job.progress(idx / items.length);
+        definition.sections[section].follow_up[item].additional_context.ai_attempted = true;
       }
+
+      // publish the response to the rabbit queue
+      await this.rabbit.publish(`cold.core.api.survey_data`, {
+        event: 'survey_data.updated',
+        data: {
+          organization: { id: integration.organization_id },
+          user,
+          survey,
+        },
+        from: 'cold.platform.openai',
+      });
+
+      await job.progress(idx / items.length);
     }
   }
 
