@@ -36,6 +36,7 @@ export class SurveyFilterService extends BaseWorker {
       for (const currentQuestionKey in section.follow_up) {
         const currentQuestion = section.follow_up[currentQuestionKey];
 
+        delete currentQuestion.rubric;
         // Check for a dependency at the follow-up question level
         if (currentQuestion.dependency?.expression) {
           // Evaluate the JSONata expression for the dependency
