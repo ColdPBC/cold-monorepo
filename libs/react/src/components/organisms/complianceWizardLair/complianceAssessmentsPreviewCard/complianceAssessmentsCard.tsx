@@ -13,11 +13,7 @@ export interface ComplianceAssessmentsCardProps {
 const _ComplianceAssessmentsCard = (props: ComplianceAssessmentsCardProps) => {
   const { surveyData } = props;
   const navigate = useNavigate();
-
-  const totalScore = surveyData.definition.progress.total_score;
-  const maxPossibleScore = surveyData.definition.progress.total_max_score;
-
-  const percentage = totalScore === 0 || maxPossibleScore === 0 ? 0 : (totalScore / maxPossibleScore) * 100;
+  const percentage = surveyData.definition.progress.percentage * 100;
 
   return (
     <Card

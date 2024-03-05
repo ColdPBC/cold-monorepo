@@ -146,6 +146,10 @@ export interface ComplianceSurveyProgressType {
   sections: Array<ComplianceSurveySectionProgressType>;
   total_score: number;
   total_max_score: number;
+  total_review: number;
+  question_count: number;
+  percentage: number;
+  questions_answered: number;
 }
 
 export interface ComplianceSurveySectionType extends SurveySectionType {

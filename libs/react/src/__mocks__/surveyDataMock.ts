@@ -3709,6 +3709,10 @@ export function getSurveysMock(): Array<SurveyPayloadType | ComplianceSurveyPayl
         ],
         total_score: 0,
         total_max_score: 100,
+        total_review: 0,
+        question_count: 87,
+        percentage: 0,
+        questions_answered: 0,
       },
       image_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/splash_images/General.png',
       intro_markdown:
@@ -7999,10 +8003,14 @@ export function getSurveyComplianceFlowSomeCompleteSurveyMock(name: string) {
           followUp.value = undefined;
         } else {
           followUp.value = true;
-          survey.definition.progress.total_score += 2;
         }
       });
     });
+    survey.definition.progress.question_count = 87;
+    survey.definition.progress.questions_answered = 15;
+    survey.definition.progress.percentage = 0.5;
+    survey.definition.progress.total_review = 20;
+    survey.definition.progress.total_score = 95;
     survey.definition.progress.total_max_score = 100;
   }
   return survey;
@@ -8033,9 +8041,15 @@ export function getSurveyAllOtherQuestionsAnsweredSurveyMock(name: string) {
           followUp.value = undefined;
         } else {
           followUp.value = true;
+          survey.definition.progress.questions_answered += 1;
         }
       });
+      survey.definition.progress.question_count += 1;
     });
+    survey.definition.progress.question_count = 87;
+    survey.definition.progress.questions_answered = 80;
+    survey.definition.progress.percentage = 0.5;
+    survey.definition.progress.total_review = 5;
     survey.definition.progress.total_score = 95;
     survey.definition.progress.total_max_score = 100;
   }
