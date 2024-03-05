@@ -13,7 +13,7 @@ export interface ComplianceAssessmentsCardProps {
 const _ComplianceAssessmentsCard = (props: ComplianceAssessmentsCardProps) => {
   const { surveyData } = props;
   const navigate = useNavigate();
-  const percentage = surveyData.definition.progress.percentage * 100;
+  const percentage = surveyData.progress.percentage * 100;
 
   return (
     <Card
