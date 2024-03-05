@@ -1,3 +1,16 @@
+# [1.132.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.131.0...v1.132.0) (2024-03-05)
+
+
+### Features
+
+* add error boundary to compliance assessments ([ff16930](https://github.com/ColdPBC/cold-monorepo/commit/ff16930df7b112b1734a1c5390a16c5ae319f744))
+* add small card outline to progress card ([e06d6d0](https://github.com/ColdPBC/cold-monorepo/commit/e06d6d05a1e34bd94c33067ffab3bb7792a71ab3))
+* create new compliance assessments preview card ([daa4ccf](https://github.com/ColdPBC/cold-monorepo/commit/daa4ccfd51f3343e1dafaae452e4626a2348ae29))
+* update progress card percentage to fixed 0 decimal points ([3f585d2](https://github.com/ColdPBC/cold-monorepo/commit/3f585d2049ca4718f0bd9d2cb7342d34d3b1884b))
+* update survey mutating ([55c1200](https://github.com/ColdPBC/cold-monorepo/commit/55c120074440a5282c2cbec1b7278006e4096dfa))
+* use progress for compliance progress and assessments preview card ([52de3ae](https://github.com/ColdPBC/cold-monorepo/commit/52de3ae420f47d7b3623c533bb4862c427581f1b))
+* use survey progress total score and max score for assessments preview card ([4f33be1](https://github.com/ColdPBC/cold-monorepo/commit/4f33be139bd5546ef605e63742cfd5c003139db5))
+
 # [1.131.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.130.3...v1.131.0) (2024-03-05)
 
 
