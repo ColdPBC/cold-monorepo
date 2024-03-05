@@ -1,3 +1,10 @@
+# [1.133.0-COLD-541.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.132.0...v1.133.0-COLD-541.1) (2024-03-05)
+
+
+### Features
+
+* handle incorrect data structure for progress card and assessments preview ([57a81a7](https://github.com/ColdPBC/cold-monorepo/commit/57a81a74b176dcae7a02149e8bc47fa30284ee7c))
+
 # [1.132.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.131.0...v1.132.0) (2024-03-05)
 
 
