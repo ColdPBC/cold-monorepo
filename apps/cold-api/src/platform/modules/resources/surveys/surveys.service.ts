@@ -242,7 +242,7 @@ export class SurveysService extends BaseWorker {
       const cached = (await this.cache.get(surveyNameCacheKey)) as ZodSurveyResponseDto;
 
       if (cached) {
-        return cached;
+        //return cached;
       }
     }
     try {
