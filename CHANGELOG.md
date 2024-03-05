@@ -1,3 +1,10 @@
+# [1.140.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.139.0...v1.140.0) (2024-03-05)
+
+
+### Features
+
+* remove multiply 100 from assessments preview percentage ([00aa1ad](https://github.com/ColdPBC/cold-monorepo/commit/00aa1ad6935adc6b224828f46714dd432d6b8931))
+
 # [1.139.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.138.0...v1.139.0) (2024-03-05)
 
 
