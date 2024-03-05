@@ -1,3 +1,10 @@
+## [1.140.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.140.2...v1.140.3) (2024-03-05)
+
+
+### Bug Fixes
+
+* strip rubric from the survey ([f1d7c21](https://github.com/ColdPBC/cold-monorepo/commit/f1d7c21346b07a41c14f4f13c2ad03ac7d8bc469))
+
 ## [1.140.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.140.1...v1.140.2) (2024-03-05)
 
 
