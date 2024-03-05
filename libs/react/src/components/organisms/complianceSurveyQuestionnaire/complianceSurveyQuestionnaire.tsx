@@ -306,7 +306,7 @@ const _ComplianceSurveyQuestionnaire = (props: ComplianceSurveyQuestionnaireProp
             previousValue: activeKey.value,
             isFollowUp: true,
             section: nextSectionKey,
-            category: nextSection.category,
+            category: nextSection.section_type,
           });
         } else {
           setActiveKey({
@@ -314,7 +314,7 @@ const _ComplianceSurveyQuestionnaire = (props: ComplianceSurveyQuestionnaireProp
             previousValue: activeKey.value,
             isFollowUp: false,
             section: nextSectionKey,
-            category: nextSection.category,
+            category: nextSection.section_type,
           });
         }
       } else {
@@ -324,7 +324,7 @@ const _ComplianceSurveyQuestionnaire = (props: ComplianceSurveyQuestionnaireProp
           previousValue: activeKey.value,
           isFollowUp: true,
           section: activeSectionKey,
-          category: sections[activeSectionKey].category,
+          category: sections[activeSectionKey].section_type,
         });
       }
     } else {
@@ -335,7 +335,7 @@ const _ComplianceSurveyQuestionnaire = (props: ComplianceSurveyQuestionnaireProp
             previousValue: activeKey.value,
             isFollowUp: true,
             section: nextSectionKey,
-            category: nextSection.category,
+            category: nextSection.section_type,
           });
         } else {
           setActiveKey({
@@ -343,7 +343,7 @@ const _ComplianceSurveyQuestionnaire = (props: ComplianceSurveyQuestionnaireProp
             previousValue: activeKey.value,
             isFollowUp: false,
             section: nextSectionKey,
-            category: nextSection.category,
+            category: nextSection.section_type,
           });
         }
       } else {
@@ -353,7 +353,7 @@ const _ComplianceSurveyQuestionnaire = (props: ComplianceSurveyQuestionnaireProp
           previousValue: activeKey.value,
           isFollowUp: true,
           section: activeSectionKey,
-          category: sections[activeSectionKey].category,
+          category: sections[activeSectionKey].section_type,
         });
       }
     }
@@ -420,7 +420,7 @@ const _ComplianceSurveyQuestionnaire = (props: ComplianceSurveyQuestionnaireProp
               previousValue: activeKey.value,
               isFollowUp: false,
               section: previousSectionKey,
-              category: previousSection.category,
+              category: previousSection.section_type,
             });
           } else {
             setActiveKey({
@@ -428,7 +428,7 @@ const _ComplianceSurveyQuestionnaire = (props: ComplianceSurveyQuestionnaireProp
               previousValue: activeKey.value,
               isFollowUp: true,
               section: previousSectionKey,
-              category: previousSection.category,
+              category: previousSection.section_type,
             });
           }
         } else {
@@ -437,7 +437,7 @@ const _ComplianceSurveyQuestionnaire = (props: ComplianceSurveyQuestionnaireProp
             previousValue: activeKey.value,
             isFollowUp: false,
             section: activeSectionKey,
-            category: sections[activeSectionKey].category,
+            category: sections[activeSectionKey].section_type,
           });
         }
       } else {
@@ -447,7 +447,7 @@ const _ComplianceSurveyQuestionnaire = (props: ComplianceSurveyQuestionnaireProp
           previousValue: activeKey.value,
           isFollowUp: true,
           section: activeSectionKey,
-          category: sections[activeSectionKey].category,
+          category: sections[activeSectionKey].section_type,
         });
       }
     } else {
@@ -459,7 +459,7 @@ const _ComplianceSurveyQuestionnaire = (props: ComplianceSurveyQuestionnaireProp
           previousValue: activeKey.value,
           isFollowUp: false,
           section: previousSectionKey,
-          category: previousSection.category,
+          category: previousSection.section_type,
         });
       } else {
         const previousSectionLastFollowUpKey = Object.keys(previousSection.follow_up)[Object.keys(previousSection.follow_up).length - 1];
@@ -468,7 +468,7 @@ const _ComplianceSurveyQuestionnaire = (props: ComplianceSurveyQuestionnaireProp
           previousValue: activeKey.value,
           isFollowUp: true,
           section: previousSectionKey,
-          category: previousSection.category,
+          category: previousSection.section_type,
         });
       }
     }
@@ -515,7 +515,7 @@ const _ComplianceSurveyQuestionnaire = (props: ComplianceSurveyQuestionnaireProp
         previousValue: '',
         isFollowUp: false,
         section: sectionKey,
-        category: sections[sectionKey].category,
+        category: sections[sectionKey].section_type,
       });
       const followUps = Object.keys(sections[sectionKey].follow_up).map(followUpKey => {
         return getQuestionForKey({
@@ -523,7 +523,7 @@ const _ComplianceSurveyQuestionnaire = (props: ComplianceSurveyQuestionnaireProp
           previousValue: '',
           isFollowUp: true,
           section: sectionKey,
-          category: sections[sectionKey].category,
+          category: sections[sectionKey].section_type,
         });
       });
       return [category, ...followUps];

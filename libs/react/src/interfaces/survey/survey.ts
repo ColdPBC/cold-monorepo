@@ -153,7 +153,7 @@ export interface ComplianceSurveyProgressType {
 }
 
 export interface ComplianceSurveySectionType extends SurveySectionType {
-  category: string;
+  section_type: string;
 }
 
 export interface ComplianceSurveyActiveKeyType extends SurveyActiveKeyType {
