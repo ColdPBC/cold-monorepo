@@ -1,3 +1,10 @@
+# [1.139.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.138.0...v1.139.0) (2024-03-05)
+
+
+### Features
+
+* use subtract icon section that has completed ([70d41ec](https://github.com/ColdPBC/cold-monorepo/commit/70d41eca26b069c9c6831234e1e251526da8b442))
+
 # [1.138.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.137.1...v1.138.0) (2024-03-05)
 
 
