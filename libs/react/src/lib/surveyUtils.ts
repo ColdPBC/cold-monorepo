@@ -104,7 +104,7 @@ export const getFirstUnansweredKey = (surveyData: ComplianceSurveyPayloadType): 
           firstActiveKey = {
             value: followUpKey,
             section: key,
-            category: section.category,
+            category: section.section_type,
             previousValue: '',
             isFollowUp: true,
           };
@@ -125,7 +125,7 @@ export const getFirstUnansweredKey = (surveyData: ComplianceSurveyPayloadType): 
             firstActiveKey = {
               value: followUpKey,
               section: key,
-              category: section.category,
+              category: section.section_type,
               previousValue: '',
               isFollowUp: true,
             };
@@ -139,7 +139,7 @@ export const getFirstUnansweredKey = (surveyData: ComplianceSurveyPayloadType): 
         firstActiveKey = {
           value: key,
           section: key,
-          category: section.category,
+          category: section.section_type,
           previousValue: '',
           isFollowUp: false,
         };
@@ -189,7 +189,7 @@ export const getStartingKey = (surveyData: ComplianceSurveyPayloadType): Complia
       return {
         value: firstFollowUpKey,
         section: firstSectionKey,
-        category: firstSection.category,
+        category: firstSection.section_type,
         previousValue: '',
         isFollowUp: true,
       };
@@ -197,7 +197,7 @@ export const getStartingKey = (surveyData: ComplianceSurveyPayloadType): Complia
       return {
         value: firstSectionKey,
         section: firstSectionKey,
-        category: firstSection.category,
+        category: firstSection.section_type,
         previousValue: '',
         isFollowUp: false,
       };
@@ -222,7 +222,7 @@ export const getFirstFollowUpKeyFromSection = (sectionName: string, surveyData: 
   return {
     value: firstFollowUpKey,
     section: sectionName,
-    category: section.category,
+    category: section.section_type,
     previousValue: '',
     isFollowUp: true,
   };
@@ -459,7 +459,7 @@ export const allOtherSurveyQuestionsAnswered = (surveyData: ComplianceSurveyPayl
   const sections = surveyData.definition.sections;
   const activeSectionKey = activeKey.section;
   let allOtherSectionsComplete = true;
-  forEach(surveyData.definition.sections, (progress, key) => {
+  forEach(surveyData.progress.sections, (progress, key) => {
     if (progress.section !== activeKey.section) {
       if (!progress.complete) {
         allOtherSectionsComplete = false;

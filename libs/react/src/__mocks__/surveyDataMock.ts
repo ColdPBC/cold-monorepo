@@ -2574,7 +2574,7 @@ export function getSurveysMock(): Array<SurveyPayloadType | ComplianceSurveyPayl
             'https://images.unsplash.com/photo-1533038590840-1cde6e668a91?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1587&q=80',
           category_idx: 0,
           category_description: 'General questions about your business',
-          category: 'Practices',
+          section_type: 'Practices',
         },
         PKG: {
           title: 'Packaging - General',
@@ -2661,7 +2661,7 @@ export function getSurveysMock(): Array<SurveyPayloadType | ComplianceSurveyPayl
             'https://images.unsplash.com/photo-1533038590840-1cde6e668a91?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1587&q=80',
           category_idx: 1,
           category_description: '',
-          category: 'Product',
+          section_type: 'Product',
         },
         MFG: {
           title: 'Manufacturing Code of Conduct',
@@ -2889,7 +2889,7 @@ export function getSurveysMock(): Array<SurveyPayloadType | ComplianceSurveyPayl
           category_idx: 2,
           category_description:
             'As part of the REI Product Impact Standards, REI expects each brand partner to have in place a code of conduct that outlines the social and environmental standards to be upheld within their supply chain.',
-          category: 'Product',
+          section_type: 'Product',
         },
         GHG: {
           title: 'Greenhouse Gas Emissions & Climate',
@@ -3189,7 +3189,7 @@ export function getSurveysMock(): Array<SurveyPayloadType | ComplianceSurveyPayl
           category_idx: 3,
           category_description:
             'As part of the REI Product Impact Standards, REI expects each brand partner to measure their annual greenhouse gas (GHG) emissions , set a reduction target, and implement an action plan for reducing their emissions. The following section focuses on the steps your brand is taking to address your contribution to climate change.',
-          category: 'Environment',
+          section_type: 'Environment',
         },
       },
       image_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/splash_images/General.png',

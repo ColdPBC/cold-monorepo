@@ -24,7 +24,7 @@ const _ComplianceSurveyLeftNav = (props: ComplianceSurveyLeftNavProps) => {
   } => {
     const sections = complianceSet.definition.sections;
     // get all the unique section categories
-    const sectionCategories = uniq(Object.keys(sections).map(key => sections[key].category));
+    const sectionCategories = uniq(Object.keys(sections).map(key => sections[key].section_type));
     // create grouped section object with keys as section categories and empty to start with
     const groupedSections: {
       [key: string]: {
@@ -35,7 +35,7 @@ const _ComplianceSurveyLeftNav = (props: ComplianceSurveyLeftNavProps) => {
       groupedSections[category] = {};
     });
     forOwn(sections, (section, key) => {
-      groupedSections[section.category][key] = section;
+      groupedSections[section.section_type][key] = section;
     });
     return groupedSections;
   };
@@ -49,7 +49,7 @@ const _ComplianceSurveyLeftNav = (props: ComplianceSurveyLeftNavProps) => {
     // function to get the right icon.
     // check progress of the section. if all questions are answered, show a checkmark. if not, show a circle.
     const progressSections = filter(complianceSet.progress.sections, (section: ComplianceSurveySectionProgressType) => {
-      return complianceSet.definition.sections[section.section]?.category === category;
+      return complianceSet.definition.sections[section.section]?.section_type === category;
     });
     const categoryComplete = every(progressSections, (section, index) => {
       return section.complete;
