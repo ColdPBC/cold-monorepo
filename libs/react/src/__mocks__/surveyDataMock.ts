@@ -3246,7 +3246,6 @@ export function getSurveysMock(): Array<SurveyPayloadType | ComplianceSurveyPayl
             },
           },
           review: 0,
-          section: 'GEN',
           title: 'Brand Information',
           total: 9,
         },
@@ -3304,7 +3303,6 @@ export function getSurveysMock(): Array<SurveyPayloadType | ComplianceSurveyPayl
             },
           },
           review: 0,
-          section: 'MFG',
           title: 'Manufacturing Code of Conduct',
           total: 12,
         },
@@ -3338,7 +3336,6 @@ export function getSurveysMock(): Array<SurveyPayloadType | ComplianceSurveyPayl
             },
           },
           review: 0,
-          section: 'CHEM',
           title: 'Restricted Substances List & Chemicals Management',
           total: 6,
         },
@@ -3412,8 +3409,7 @@ export function getSurveysMock(): Array<SurveyPayloadType | ComplianceSurveyPayl
             },
           },
           review: 0,
-          section: 'GHG',
-          title: 'GHG Emissions & Climate',
+          title: 'Greenhouse Gas Emissions & Climate',
           total: 16,
         },
         {
@@ -3434,7 +3430,6 @@ export function getSurveysMock(): Array<SurveyPayloadType | ComplianceSurveyPayl
             },
           },
           review: 0,
-          section: 'PFAS',
           title: 'Per- and Polyfluoroalkyl Substances',
           total: 3,
         },
@@ -3452,7 +3447,6 @@ export function getSurveysMock(): Array<SurveyPayloadType | ComplianceSurveyPayl
             },
           },
           review: 0,
-          section: 'APP',
           title: 'Diversity & Inclusion: Cultural Appropriation',
           total: 2,
         },
@@ -3470,7 +3464,6 @@ export function getSurveysMock(): Array<SurveyPayloadType | ComplianceSurveyPayl
             },
           },
           review: 0,
-          section: 'COL',
           title: 'Diversity & Inclusion: Inclusive Colorways',
           total: 2,
         },
@@ -3488,7 +3481,6 @@ export function getSurveysMock(): Array<SurveyPayloadType | ComplianceSurveyPayl
             },
           },
           review: 0,
-          section: 'COP',
           title: 'Diversity & Inclusion: Inclusive Copy',
           total: 2,
         },
@@ -3510,7 +3502,6 @@ export function getSurveysMock(): Array<SurveyPayloadType | ComplianceSurveyPayl
             },
           },
           review: 0,
-          section: 'MKT',
           title: 'Diversity & Inclusion: Marketing Diversity',
           total: 3,
         },
@@ -3528,7 +3519,6 @@ export function getSurveysMock(): Array<SurveyPayloadType | ComplianceSurveyPayl
             },
           },
           review: 0,
-          section: 'ISS',
           title: 'Diversity & Inclusion: Inclusive Sizing',
           total: 2,
         },
@@ -3550,7 +3540,6 @@ export function getSurveysMock(): Array<SurveyPayloadType | ComplianceSurveyPayl
             },
           },
           review: 0,
-          section: 'INC',
           title: 'Diversity & Inclusion: General',
           total: 3,
         },
@@ -3568,7 +3557,6 @@ export function getSurveysMock(): Array<SurveyPayloadType | ComplianceSurveyPayl
             },
           },
           review: 0,
-          section: 'PSA',
           title: 'Product Sustainability & Preferred Attributes',
           total: 2,
         },
@@ -3594,7 +3582,6 @@ export function getSurveysMock(): Array<SurveyPayloadType | ComplianceSurveyPayl
             },
           },
           review: 0,
-          section: 'PKG',
           title: 'Packaging - General',
           total: 4,
         },
@@ -3632,7 +3619,6 @@ export function getSurveysMock(): Array<SurveyPayloadType | ComplianceSurveyPayl
             },
           },
           review: 0,
-          section: 'APK',
           title: 'Packaging - Apparel',
           total: 7,
         },
@@ -3670,7 +3656,6 @@ export function getSurveysMock(): Array<SurveyPayloadType | ComplianceSurveyPayl
             },
           },
           review: 0,
-          section: 'PRD',
           title: 'Product Care, Repair, Reuse & End-of-life',
           total: 7,
         },
@@ -3712,7 +3697,6 @@ export function getSurveysMock(): Array<SurveyPayloadType | ComplianceSurveyPayl
             },
           },
           review: 0,
-          section: 'CRP',
           title: 'Core Practices',
           total: 8,
         },
@@ -8866,8 +8850,9 @@ export function getSurveyComplianceFlowSomeCompleteSurveyMock(name: string) {
   const survey = getSurveyFormDataByName(name) as ComplianceSurveyPayloadType;
   // loop through the sections and follow_ups and set some values to be completed
   if (survey) {
+    const ghgSection = survey.definition.sections['GHG'];
     forEach(survey.progress.sections, (progressSection: ComplianceSurveySectionProgressType, index) => {
-      if (progressSection.section === 'GHG') {
+      if (progressSection.title === ghgSection.title) {
         progressSection.complete = false;
       } else {
         progressSection.complete = true;
@@ -8907,8 +8892,9 @@ export function getSurveyAllOtherQuestionsAnsweredSurveyMock(name: string) {
   const survey = getSurveyFormDataByName(name) as ComplianceSurveyPayloadType;
   // loop through the sections and follow_ups and set some values to be completed
   if (survey) {
+    const ghgSection = survey.definition.sections['GHG'];
     forEach(survey.progress.sections, (progressSection: ComplianceSurveySectionProgressType, index) => {
-      if (progressSection.section === 'GHG') {
+      if (progressSection.title === ghgSection.title) {
         progressSection.complete = false;
       } else {
         progressSection.complete = true;

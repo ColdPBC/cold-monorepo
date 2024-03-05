@@ -1,3 +1,58 @@
+# [1.139.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.138.0...v1.139.0) (2024-03-05)
+
+
+### Features
+
+* use subtract icon section that has completed ([70d41ec](https://github.com/ColdPBC/cold-monorepo/commit/70d41eca26b069c9c6831234e1e251526da8b442))
+
+# [1.138.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.137.1...v1.138.0) (2024-03-05)
+
+
+### Features
+
+* add index to question number ([7dc78ca](https://github.com/ColdPBC/cold-monorepo/commit/7dc78ca0a01a8bb580eddaec121f979a2118eba0))
+* do not send progress as well as definition ([6b4406e](https://github.com/ColdPBC/cold-monorepo/commit/6b4406e007f94526727989a7fcd68a93419186c5))
+* sections not complete, dont show checkmark ([6bed2f2](https://github.com/ColdPBC/cold-monorepo/commit/6bed2f2ad031ee03277da68e136838c7d28d9151))
+
+## [1.137.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.137.0...v1.137.1) (2024-03-05)
+
+
+### Bug Fixes
+
+* temporarily remove caching for getting an org survey ([ebcc8f9](https://github.com/ColdPBC/cold-monorepo/commit/ebcc8f9446b1e329d81a65f1bcd6ad412d8eb9ea))
+* temporarily remove caching for getting an org survey ([#311](https://github.com/ColdPBC/cold-monorepo/issues/311)) ([fb18eff](https://github.com/ColdPBC/cold-monorepo/commit/fb18eff6c1dd52641732e2d06d963f091da85f01))
+
+# [1.137.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.136.0...v1.137.0) (2024-03-05)
+
+
+### Features
+
+* add line clamp for section names ([0b3e32c](https://github.com/ColdPBC/cold-monorepo/commit/0b3e32c5e165c0fb241dda6c3a6f463acc65ecf5))
+
+# [1.136.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.135.0...v1.136.0) (2024-03-05)
+
+
+### Features
+
+* remove check to take user to processing ([ff69f06](https://github.com/ColdPBC/cold-monorepo/commit/ff69f06f670e2f25a7c4752602d26f9948a753d9))
+* use question index instead of idx for question number in a section ([370f5f2](https://github.com/ColdPBC/cold-monorepo/commit/370f5f2bd1f2a87741912a510571e50f2acf659a))
+
+# [1.135.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.134.0...v1.135.0) (2024-03-05)
+
+
+### Features
+
+* if there are any attempted ai questions, then go to questionnaire ([e362c52](https://github.com/ColdPBC/cold-monorepo/commit/e362c52364637918cd50971f59bd7327c71d6ed8))
+
+# [1.134.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.133.0...v1.134.0) (2024-03-05)
+
+
+
+### Features
+
+* category issue ([7400d7a](https://github.com/ColdPBC/cold-monorepo/commit/7400d7a5f53a7082a0ba2cc7bd78695c6b7f5308))
+* fix issue ([7863418](https://github.com/ColdPBC/cold-monorepo/commit/7863418fefdbe808940f4bc708069a4fedc66b64))
+
 # [1.133.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.132.0...v1.133.0) (2024-03-05)
 
 

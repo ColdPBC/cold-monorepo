@@ -1,7 +1,7 @@
 import { ComplianceSurveyActiveKeyType, ComplianceSurveyPayloadType, IButtonProps, SurveyActiveKeyType } from '@coldpbc/interfaces';
 import { useAuth0Wrapper } from '@coldpbc/hooks';
 import React from 'react';
-import { findIndex, size } from 'lodash';
+import { findIndex, keys, size } from 'lodash';
 import {
   allOtherSurveyQuestionsAnswered,
   getQuestionValue,
@@ -537,13 +537,15 @@ const _ComplianceSurveyQuestionnaire = (props: ComplianceSurveyQuestionnaireProp
   const additionalContextQuestion = checkAdditionalContext(activeKey);
 
   if (question !== undefined) {
+    const activeSection = surveyData.definition.sections[activeKey.section];
+    const questionIndex = keys(activeSection.follow_up).indexOf(activeKey.value) + 1;
     return (
       <div className={'w-full h-full relative flex flex-col space-y-[24px]'} data-testid={'survey-question-container'}>
         <div className={'flex flex-col'}>
           <div className={'text-caption font-bold'}>{activeKey.category}</div>
           <div className={'text-h2'}>{surveyData.definition.sections[activeKey.section].title}</div>
           <div className={'text-caption'}>
-            ( Question {surveyData.definition.sections[activeKey.section].follow_up[activeKey.value].idx + 1}
+            ( Question {questionIndex}
             {' of '}
             {size(surveyData.definition.sections[activeKey.section].follow_up)})
           </div>

@@ -48,8 +48,10 @@ const _ComplianceSurveyLeftNav = (props: ComplianceSurveyLeftNavProps) => {
   const getSidebarIcon = (category: string) => {
     // function to get the right icon.
     // check progress of the section. if all questions are answered, show a checkmark. if not, show a circle.
+
     const progressSections = filter(complianceSet.progress.sections, (section: ComplianceSurveySectionProgressType) => {
-      return complianceSet.definition.sections[section.section]?.section_type === category;
+      const foundSection = find(complianceSet.definition.sections, { title: section.title });
+      return foundSection?.section_type === category;
     });
     const categoryComplete = every(progressSections, (section, index) => {
       return section.complete;
@@ -77,18 +79,36 @@ const _ComplianceSurveyLeftNav = (props: ComplianceSurveyLeftNavProps) => {
 
   const getSectionIcon = (sectionKey: string) => {
     // check progress check if the section is complete, show a checkmark. if not, show a circle.
-    const progressSection = find(complianceSet.progress.sections, section => section.section === sectionKey);
-    if (progressSection?.complete) {
-      return (
-        <div className={'w-[12px] h-[12px]'}>
-          <ColdIcon name={IconNames.ColdComplianceSurveyCheckBoxIcon} />
-        </div>
-      );
+    const section = complianceSet.definition.sections[sectionKey];
+    const progressSection = find(complianceSet.progress.sections, { title: section.title });
+    if (activeKey.section === sectionKey) {
+      return <div className={'w-[12px] h-[12px] flex justify-center items-center rounded-full bg-cold-starkWhite'}></div>;
     } else {
-      if (activeKey.section === sectionKey) {
-        return <div className={'w-[12px] h-[12px] flex justify-center items-center rounded-full bg-cold-starkWhite'}></div>;
+      if (progressSection?.complete) {
+        return (
+          <div className={'w-[12px] h-[12px]'}>
+            <ColdIcon name={IconNames.ColdComplianceSurveyCheckBoxIcon} />
+          </div>
+        );
       } else {
-        return <div className={'w-[12px] h-[12px] flex justify-center items-center rounded-full bg-gray-70'}></div>;
+        if (progressSection === undefined) {
+          return <div className={'w-[12px] h-[12px] flex justify-center items-center rounded-full bg-gray-70'}></div>;
+        }
+        const someComplete = some(
+          map(progressSection.questions, (question, key) => {
+            return question.user_answered;
+          }),
+          question => question === true,
+        );
+        if (someComplete) {
+          return (
+            <div className={'w-[12px] h-[12px] flex justify-center items-center rounded-full bg-gray-70'}>
+              <ColdIcon name={IconNames.SubtractIcon} />
+            </div>
+          );
+        } else {
+          return <div className={'w-[12px] h-[12px] flex justify-center items-center rounded-full bg-gray-70'}></div>;
+        }
       }
     }
   };
@@ -137,7 +157,7 @@ const _ComplianceSurveyLeftNav = (props: ComplianceSurveyLeftNavProps) => {
                         onClick={() => goToKey(key)}
                         key={key}>
                         {getSectionIcon(key)}
-                        <div className={'text-caption bg-transparent'}>{section.title}</div>
+                        <div className={'text-caption bg-transparent line-clamp-1'}>{section.title}</div>
                       </div>
                     );
                   })}
