@@ -1,3 +1,10 @@
+## [1.140.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.140.1...v1.140.2) (2024-03-05)
+
+
+### Bug Fixes
+
+* compliance filtering issue ([7e62721](https://github.com/ColdPBC/cold-monorepo/commit/7e62721a58e6647159f406825be528b04c380034))
+
 ## [1.140.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.140.0...v1.140.1) (2024-03-05)
 
 
