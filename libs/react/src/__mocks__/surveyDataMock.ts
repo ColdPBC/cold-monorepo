@@ -3409,7 +3409,7 @@ export function getSurveysMock(): Array<SurveyPayloadType | ComplianceSurveyPayl
             },
           },
           review: 0,
-          title: 'GHG Emissions & Climate',
+          title: 'Greenhouse Gas Emissions & Climate',
           total: 16,
         },
         {
