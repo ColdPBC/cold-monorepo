@@ -50,7 +50,7 @@ const _ComplianceProgressCard = (props: ComplianceProgressCardProps) => {
         <ProgressBar shades={shades} />
         <div className={'flex flex-row text-tc-primary text-body justify-between'}>
           <div className={'text-left'}>{textArray.join(', ')}</div>
-          <div>{`(${percentage}% Complete)`}</div>
+          <div>{`(${percentage.toFixed(0)}% Complete)`}</div>
         </div>
       </div>
     </Card>
