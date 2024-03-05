@@ -14,7 +14,7 @@ export class SurveyFilterService extends BaseWorker {
     const filteredObject = JSON.parse(JSON.stringify(jsonObject)); // Create a deep copy of the JSON object
 
     // Iterate over each section in the filteredObject
-    for (const sectionKey in filteredObject.sections) {
+    for (const sectionKey in filteredObject.definition.sections) {
       const section = filteredObject.definition.sections[sectionKey];
       // Check for a dependency at the section level
       if (section.dependency?.expression) {
