@@ -1,3 +1,22 @@
+## [1.130.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.130.0...v1.130.1) (2024-03-05)
+
+
+### Bug Fixes
+
+* issues caused by other refactoring ([68fcccd](https://github.com/ColdPBC/cold-monorepo/commit/68fcccda34bcc6ce230ab449eef6fdd1302cff85))
+
+# [1.130.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.129.0...v1.130.0) (2024-03-04)
+
+
+### Bug Fixes
+
+* revert to including `definition` object ([3442d2c](https://github.com/ColdPBC/cold-monorepo/commit/3442d2c366f2d865d2d24598c1d4b794fe3d9eae))
+
+
+### Features
+
+* update progress object to add: ([666f8c1](https://github.com/ColdPBC/cold-monorepo/commit/666f8c156df21960cd363fec326cfa37610926bf))
+
 # [1.129.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.128.0...v1.129.0) (2024-03-04)
 
 
