@@ -8008,7 +8008,7 @@ export function getSurveyComplianceFlowSomeCompleteSurveyMock(name: string) {
     });
     survey.definition.progress.question_count = 87;
     survey.definition.progress.questions_answered = 15;
-    survey.definition.progress.percentage = 0.5;
+    survey.definition.progress.percentage = 0.95;
     survey.definition.progress.total_review = 20;
     survey.definition.progress.total_score = 95;
     survey.definition.progress.total_max_score = 100;
@@ -8048,7 +8048,7 @@ export function getSurveyAllOtherQuestionsAnsweredSurveyMock(name: string) {
     });
     survey.definition.progress.question_count = 87;
     survey.definition.progress.questions_answered = 80;
-    survey.definition.progress.percentage = 0.5;
+    survey.definition.progress.percentage = 0.98;
     survey.definition.progress.total_review = 5;
     survey.definition.progress.total_score = 95;
     survey.definition.progress.total_max_score = 100;
