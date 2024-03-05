@@ -81,17 +81,34 @@ const _ComplianceSurveyLeftNav = (props: ComplianceSurveyLeftNavProps) => {
     // check progress check if the section is complete, show a checkmark. if not, show a circle.
     const section = complianceSet.definition.sections[sectionKey];
     const progressSection = find(complianceSet.progress.sections, { title: section.title });
-    if (progressSection?.complete) {
-      return (
-        <div className={'w-[12px] h-[12px]'}>
-          <ColdIcon name={IconNames.ColdComplianceSurveyCheckBoxIcon} />
-        </div>
-      );
+    if (activeKey.section === sectionKey) {
+      return <div className={'w-[12px] h-[12px] flex justify-center items-center rounded-full bg-cold-starkWhite'}></div>;
     } else {
-      if (activeKey.section === sectionKey) {
-        return <div className={'w-[12px] h-[12px] flex justify-center items-center rounded-full bg-cold-starkWhite'}></div>;
+      if (progressSection?.complete) {
+        return (
+          <div className={'w-[12px] h-[12px]'}>
+            <ColdIcon name={IconNames.ColdComplianceSurveyCheckBoxIcon} />
+          </div>
+        );
       } else {
-        return <div className={'w-[12px] h-[12px] flex justify-center items-center rounded-full bg-gray-70'}></div>;
+        if (progressSection === undefined) {
+          return <div className={'w-[12px] h-[12px] flex justify-center items-center rounded-full bg-gray-70'}></div>;
+        }
+        const someComplete = some(
+          map(progressSection.questions, (question, key) => {
+            return question.user_answered;
+          }),
+          question => question === true,
+        );
+        if (someComplete) {
+          return (
+            <div className={'w-[12px] h-[12px] flex justify-center items-center rounded-full bg-gray-70'}>
+              <ColdIcon name={IconNames.SubtractIcon} />
+            </div>
+          );
+        } else {
+          return <div className={'w-[12px] h-[12px] flex justify-center items-center rounded-full bg-gray-70'}></div>;
+        }
       }
     }
   };
