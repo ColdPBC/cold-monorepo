@@ -168,7 +168,6 @@ export interface ComplianceSurveySectionProgressType {
     [key: string]: ComplianceSurveyProgressQuestionType;
   };
   review: number;
-  section: string;
   title: string;
   total: number;
 }

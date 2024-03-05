@@ -48,8 +48,10 @@ const _ComplianceSurveyLeftNav = (props: ComplianceSurveyLeftNavProps) => {
   const getSidebarIcon = (category: string) => {
     // function to get the right icon.
     // check progress of the section. if all questions are answered, show a checkmark. if not, show a circle.
+
     const progressSections = filter(complianceSet.progress.sections, (section: ComplianceSurveySectionProgressType) => {
-      return complianceSet.definition.sections[section.section]?.section_type === category;
+      const foundSection = find(complianceSet.definition.sections, { title: section.title });
+      return foundSection?.section_type === category;
     });
     const categoryComplete = every(progressSections, (section, index) => {
       return section.complete;
@@ -77,7 +79,8 @@ const _ComplianceSurveyLeftNav = (props: ComplianceSurveyLeftNavProps) => {
 
   const getSectionIcon = (sectionKey: string) => {
     // check progress check if the section is complete, show a checkmark. if not, show a circle.
-    const progressSection = find(complianceSet.progress.sections, section => section.section === sectionKey);
+    const section = complianceSet.definition.sections[sectionKey];
+    const progressSection = find(complianceSet.progress.sections, { title: section.title });
     if (progressSection?.complete) {
       return (
         <div className={'w-[12px] h-[12px]'}>

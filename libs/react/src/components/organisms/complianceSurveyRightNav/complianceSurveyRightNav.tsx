@@ -28,7 +28,8 @@ const _ComplianceSurveyRightNav = (props: ComplianceSurveyRightNavProps) => {
 
   const getQuestionItem = (question: SurveySectionFollowUpType, key: string, questions: SurveySectionFollowUpsType) => {
     // check the progress of the survey. if the question has been answered, show a checkmark. if not, show a circle.
-    const progressSection = find(surveyData.progress.sections, section => section.section === activeKey.section);
+    const activeSection = surveyData.definition.sections[activeKey.section];
+    const progressSection = find(surveyData.progress.sections, section => section.title === activeSection.title);
     const progressQuestion = progressSection?.questions[key];
     // get the index of the question in the questions object
     const index = keys(questions).indexOf(key) + 1;
