@@ -24,13 +24,12 @@ export const returnUpdatedSurvey = (payload: ComplianceSurveyPayloadType, survey
   };
 
   forOwn(copy.definition.sections, (section, sectionKey) => {
-    const index = payload.progress.sections.findIndex(progress => progress.section === sectionKey);
+    const index = payload.progress.sections.findIndex(progress => progress.title === section.title);
     copy.progress.sections[index] = {
       answered: 0,
       complete: false,
       questions: {},
       review: 0,
-      section: sectionKey,
       title: section.title,
       total: 0,
     };

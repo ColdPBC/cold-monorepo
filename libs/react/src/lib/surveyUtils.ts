@@ -449,6 +449,7 @@ export const putSurveyData = async (survey: ComplianceSurveyPayloadType, getOrgS
     'PUT',
     JSON.stringify({
       definition: survey.definition,
+      progress: survey.progress,
     }),
   ]);
 };
@@ -458,16 +459,16 @@ export const allOtherSurveyQuestionsAnswered = (surveyData: ComplianceSurveyPayl
   // use the progress to check all sections except the current one are complete
   const sections = surveyData.definition.sections;
   const activeSectionKey = activeKey.section;
+  const section = sections[activeSectionKey];
   let allOtherSectionsComplete = true;
   forEach(surveyData.progress.sections, (progress, key) => {
-    if (progress.section !== activeKey.section) {
+    if (progress.title !== section.title) {
       if (!progress.complete) {
         allOtherSectionsComplete = false;
       }
     }
   });
   // check if all the questions in the section are answered
-  const section = sections[activeSectionKey];
   let allOtherQuestionsAnswered = true;
   forEach(section.follow_up, (followUp, key) => {
     if (followUp.value === undefined && activeKey.value !== key) {
