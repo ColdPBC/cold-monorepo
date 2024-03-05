@@ -2,7 +2,6 @@ import React from 'react';
 import { Card, ErrorFallback, ProgressBar } from '@coldpbc/components';
 import { ComplianceSurveyPayloadType } from '@coldpbc/interfaces';
 import { HexColors } from '@coldpbc/themes';
-import { sumBy } from 'lodash';
 import { withErrorBoundary } from 'react-error-boundary';
 
 export interface ComplianceProgressCardProps {
@@ -12,16 +11,10 @@ export interface ComplianceProgressCardProps {
 const _ComplianceProgressCard = (props: ComplianceProgressCardProps) => {
   const { surveyData } = props;
   const { progress } = surveyData.definition;
-  const totalQuestions = sumBy(progress, value => {
-    return value.total;
-  });
-  const totalComplete = sumBy(progress, value => {
-    return value.answered;
-  });
-  const totalNeedsReview = sumBy(progress, value => {
-    return value.review;
-  });
-  const totalUnanswered = totalQuestions - (totalComplete + totalNeedsReview);
+  const totalQuestions = progress.question_count;
+  const totalComplete = progress.questions_answered;
+  const totalNeedsReview = progress.total_review;
+  const totalUnanswered = totalQuestions - totalComplete;
 
   const shades = [];
 
@@ -49,15 +42,19 @@ const _ComplianceProgressCard = (props: ComplianceProgressCardProps) => {
     textArray.push(`${totalUnanswered} To Answer`);
   }
 
+  const percentage = totalQuestions === 0 ? 0 : (totalComplete / totalQuestions) * 100;
+
   return (
     <Card title={'Questionnaire Progress'} className={'w-1/2'}>
-      <div className={'w-full flex flex-col space-y-[10px]'}>
-        <ProgressBar shades={shades} />
-        <div className={'flex flex-row text-tc-primary text-body justify-between'}>
-          <div className={'text-left'}>{textArray.join(', ')}</div>
-          <div>{`(${((totalComplete / totalQuestions) * 100).toFixed(2)}% Complete)`}</div>
+      <Card glow={false} className={'w-full bg-bgc-elevated border-[1px] border-bgc-accent'}>
+        <div className={'w-full flex flex-col space-y-[10px]'}>
+          <ProgressBar shades={shades} />
+          <div className={'flex flex-row text-tc-primary text-body justify-between'}>
+            <div className={'text-left'}>{textArray.join(', ')}</div>
+            <div>{`(${percentage.toFixed(0)}% Complete)`}</div>
+          </div>
         </div>
-      </div>
+      </Card>
     </Card>
   );
 };

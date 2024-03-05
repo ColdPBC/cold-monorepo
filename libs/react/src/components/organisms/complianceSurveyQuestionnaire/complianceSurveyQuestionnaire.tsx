@@ -364,7 +364,9 @@ const _ComplianceSurveyQuestionnaire = (props: ComplianceSurveyQuestionnaireProp
     const newSurvey = updateSurveyQuestion(surveyData, activeKey, { value: getQuestionValue(surveyData, activeKey), skipped: false });
     const response = (await putSurveyData(newSurvey as ComplianceSurveyPayloadType, getOrgSpecificUrl)) as ComplianceSurveyPayloadType;
     setSurveyData(response);
-    await mutate([getOrgSpecificUrl(`/surveys/${newSurvey.name}`), 'GET'], response);
+    await mutate([getOrgSpecificUrl(`/surveys/${newSurvey.name}`), 'GET'], response, {
+      revalidate: false,
+    });
     updateTransitionClassNames(true);
     setSendingSurvey(false);
     goToNextQuestion();
@@ -378,7 +380,9 @@ const _ComplianceSurveyQuestionnaire = (props: ComplianceSurveyQuestionnaireProp
     });
     const response = (await putSurveyData(newSurvey as ComplianceSurveyPayloadType, getOrgSpecificUrl)) as ComplianceSurveyPayloadType;
     setSurveyData(response);
-    await mutate([getOrgSpecificUrl(`/surveys/${newSurvey.name}`), 'GET'], response);
+    await mutate([getOrgSpecificUrl(`/surveys/${newSurvey.name}`), 'GET'], response, {
+      revalidate: false,
+    });
     updateTransitionClassNames(true);
     setSendingSurvey(false);
     goToNextQuestion();
@@ -390,6 +394,9 @@ const _ComplianceSurveyQuestionnaire = (props: ComplianceSurveyQuestionnaireProp
     const newSurvey = updateSurveyQuestion(surveyData, activeKey, { value: getQuestionValue(surveyData, activeKey), skipped: false }, true);
     const response = (await putSurveyData(newSurvey as ComplianceSurveyPayloadType, getOrgSpecificUrl)) as ComplianceSurveyPayloadType;
     setSurveyData(response);
+    await mutate([getOrgSpecificUrl(`/surveys/${newSurvey.name}`), 'GET'], response, {
+      revalidate: false,
+    });
     updateTransitionClassNames(true);
     setSendingSurvey(false);
     submitSurvey();

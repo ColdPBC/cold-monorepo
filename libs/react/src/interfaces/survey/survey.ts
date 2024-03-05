@@ -84,6 +84,8 @@ export interface SurveySectionFollowUpType {
     justification?: string;
     answer?: string | boolean | number | Array<string>;
   };
+  score?: number;
+  max_score?: number;
 }
 
 export interface SurveyPayloadType {
@@ -133,11 +135,21 @@ export interface ComplianceSurveyPayloadType {
       [key: string]: ComplianceSurveySectionType;
     };
     submitted?: boolean;
-    progress: Array<ComplianceSurveySectionProgressType>;
+    progress: ComplianceSurveyProgressType;
   };
   description: string;
   created_at: string;
   updated_at: string;
+}
+
+export interface ComplianceSurveyProgressType {
+  sections: Array<ComplianceSurveySectionProgressType>;
+  total_score: number;
+  total_max_score: number;
+  total_review: number;
+  question_count: number;
+  percentage: number;
+  questions_answered: number;
 }
 
 export interface ComplianceSurveySectionType extends SurveySectionType {

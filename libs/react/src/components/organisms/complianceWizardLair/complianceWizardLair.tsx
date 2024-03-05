@@ -1,11 +1,10 @@
-import { BaseButton, Card, WizardContext } from '@coldpbc/components';
+import { BaseButton, ComplianceAssessmentsCard, ComplianceProgressCard, WizardContext } from '@coldpbc/components';
 import { PropsWithChildren, useContext, useEffect } from 'react';
 import { Compliance } from '@coldpbc/interfaces';
 import { ButtonTypes } from '@coldpbc/enums';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { getComplianceProgressForSurvey } from '@coldpbc/lib';
 import { isArray } from 'lodash';
-import { ComplianceProgressCard } from './complianceProgressCard/complianceProgressCard';
 
 export interface ComplianceWizardLairProps {
   name: string;
@@ -88,18 +87,7 @@ export const ComplianceWizardLair = (props: PropsWithChildren<ComplianceWizardLa
       </div>
       <div className={'flex flex-row justify-between w-full space-x-4'}>
         <ComplianceProgressCard surveyData={surveyData} />
-        <Card
-          className={'w-1/2'}
-          title={'Assessment Preview'}
-          ctas={[
-            {
-              text: 'See Full Progress Assessment',
-              action: () => {
-                navigate('/assessments');
-              },
-              variant: ButtonTypes.primary,
-            },
-          ]}></Card>
+        <ComplianceAssessmentsCard surveyData={surveyData} />
       </div>
       {children}
     </div>

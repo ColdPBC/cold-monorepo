@@ -459,7 +459,7 @@ export const allOtherSurveyQuestionsAnswered = (surveyData: ComplianceSurveyPayl
   const sections = surveyData.definition.sections;
   const activeSectionKey = activeKey.section;
   let allOtherSectionsComplete = true;
-  forEach(surveyData.definition.progress, (progress, key) => {
+  forEach(surveyData.definition.progress.sections, (progress, key) => {
     if (progress.section !== activeKey.section) {
       if (!progress.complete) {
         allOtherSectionsComplete = false;
