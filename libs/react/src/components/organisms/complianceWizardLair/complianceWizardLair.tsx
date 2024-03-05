@@ -32,9 +32,6 @@ export const ComplianceWizardLair = (props: PropsWithChildren<ComplianceWizardLa
         if (complianceProgress.aiAttemptedQuestions > 0) {
           setCurrentStep('questionnaire');
           return;
-        } else if (complianceProgress.aiAttemptedQuestions === 0) {
-          setCurrentStep('processing');
-          return;
         }
       }
 
