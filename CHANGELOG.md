@@ -1,4 +1,4 @@
-# [1.135.0-COLD-559.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.134.0...v1.135.0-COLD-559.1) (2024-03-05)
+# [1.135.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.134.0...v1.135.0) (2024-03-05)
 
 
 ### Features
