@@ -1,3 +1,11 @@
+# [1.134.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.133.0...v1.134.0) (2024-03-05)
+
+
+### Features
+
+* category issue ([7400d7a](https://github.com/ColdPBC/cold-monorepo/commit/7400d7a5f53a7082a0ba2cc7bd78695c6b7f5308))
+* fix issue ([7863418](https://github.com/ColdPBC/cold-monorepo/commit/7863418fefdbe808940f4bc708069a4fedc66b64))
+
 # [1.133.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.132.0...v1.133.0) (2024-03-05)
 
 
