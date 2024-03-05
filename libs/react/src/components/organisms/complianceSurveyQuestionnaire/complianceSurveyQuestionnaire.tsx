@@ -9,6 +9,7 @@ import {
   ifAdditionalContextConditionMet,
   isComponentTypeValid,
   putSurveyData,
+  sortComplianceSurvey,
   updateSurveyQuestion,
 } from '@coldpbc/lib';
 import { BaseButton, ErrorFallback, SurveyInput } from '@coldpbc/components';
@@ -363,8 +364,9 @@ const _ComplianceSurveyQuestionnaire = (props: ComplianceSurveyQuestionnaireProp
     setSendingSurvey(true);
     const newSurvey = updateSurveyQuestion(surveyData, activeKey, { value: getQuestionValue(surveyData, activeKey), skipped: false });
     const response = (await putSurveyData(newSurvey as ComplianceSurveyPayloadType, getOrgSpecificUrl)) as ComplianceSurveyPayloadType;
-    setSurveyData(response);
-    await mutate([getOrgSpecificUrl(`/surveys/${newSurvey.name}`), 'GET'], response, {
+    const sortedSurvey = sortComplianceSurvey(response);
+    setSurveyData(sortedSurvey);
+    await mutate([getOrgSpecificUrl(`/surveys/${newSurvey.name}`), 'GET'], sortedSurvey, {
       revalidate: false,
     });
     updateTransitionClassNames(true);
@@ -379,8 +381,9 @@ const _ComplianceSurveyQuestionnaire = (props: ComplianceSurveyQuestionnaireProp
       value: null,
     });
     const response = (await putSurveyData(newSurvey as ComplianceSurveyPayloadType, getOrgSpecificUrl)) as ComplianceSurveyPayloadType;
-    setSurveyData(response);
-    await mutate([getOrgSpecificUrl(`/surveys/${newSurvey.name}`), 'GET'], response, {
+    const sortedSurvey = sortComplianceSurvey(response);
+    setSurveyData(sortedSurvey);
+    await mutate([getOrgSpecificUrl(`/surveys/${newSurvey.name}`), 'GET'], sortedSurvey, {
       revalidate: false,
     });
     updateTransitionClassNames(true);
@@ -393,8 +396,9 @@ const _ComplianceSurveyQuestionnaire = (props: ComplianceSurveyQuestionnaireProp
     setSendingSurvey(true);
     const newSurvey = updateSurveyQuestion(surveyData, activeKey, { value: getQuestionValue(surveyData, activeKey), skipped: false }, true);
     const response = (await putSurveyData(newSurvey as ComplianceSurveyPayloadType, getOrgSpecificUrl)) as ComplianceSurveyPayloadType;
-    setSurveyData(response);
-    await mutate([getOrgSpecificUrl(`/surveys/${newSurvey.name}`), 'GET'], response, {
+    const sortedSurvey = sortComplianceSurvey(response);
+    setSurveyData(sortedSurvey);
+    await mutate([getOrgSpecificUrl(`/surveys/${newSurvey.name}`), 'GET'], sortedSurvey, {
       revalidate: false,
     });
     updateTransitionClassNames(true);
