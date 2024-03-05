@@ -20,12 +20,12 @@ export class RedisServiceConfig extends BaseWorker {
     super(RedisServiceConfig.name);
 
     this.darkly = new DarklyService(this.config);
-    this.max = this.config.get('MAX_RETRY_ATTEMPTS', 5);
-    this.interval = this.config.get('RETRY_INTERVAL', 60000);
-    this.maxRetryLength = this.config.get('MAX_RETRY_LENGTH', 60000 * 60 * 24);
-    this.db = this.config.get('REDIS_DB', 1);
-    this.concurrency = this.config.get('JOB_CONCURRENCY', 1);
-    this.concurrency_interval = this.config.get('JOB_CONCURRENCY_INTERVAL', 1000);
+    this.max = this.config['MAX_RETRY_ATTEMPTS'] || 5;
+    this.interval = this.config['RETRY_INTERVAL'] || 60000;
+    this.maxRetryLength = this.config['MAX_RETRY_LENGTH'] || 60000 * 60 * 24;
+    this.db = this.config['REDIS_DB'] || 1;
+    this.concurrency = this.config['JOB_CONCURRENCY'] || 1;
+    this.concurrency_interval = this.config['JOB_CONCURRENCY_INTERVAL'] || 1000;
   }
 
   async getQueueConfig(type: string, queueName: string): Promise<BullModuleOptions> {
@@ -33,9 +33,13 @@ export class RedisServiceConfig extends BaseWorker {
       name: `${queueName}`,
       //redis: await RedisServiceConfig.getRedisOpts(),
       redis: {
-        db: this.db,
+        db: 1,
+        tls: {
+          rejectUnauthorized: false,
+          requestCert: false,
+        },
       },
-      url: this.config['internalConfig']['REDISCLOUD_URL'],
+      url: this.config['REDISCLOUD_URL'],
       prefix: `${type}`,
       limiter: {
         max: this.concurrency,
