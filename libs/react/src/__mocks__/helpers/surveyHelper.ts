@@ -8,23 +8,25 @@ import { ComplianceSurveyPayloadType } from '@coldpbc/interfaces';
  */
 export const returnUpdatedSurvey = (payload: ComplianceSurveyPayloadType, surveys: ComplianceSurveyPayloadType[]) => {
   const fullSurvey = find(surveys, survey => survey.definition.title === payload.definition.title);
+  if (!fullSurvey) {
+    return payload;
+  }
   const copy = {
     ...fullSurvey,
     definition: payload.definition,
+    progress: {
+      sections: fullSurvey.progress.sections,
+      question_count: 0,
+      questions_answered: 0,
+      total_review: 0,
+      percentage: 0,
+      total_score: 0,
+      total_max_score: 0,
+    },
   } as ComplianceSurveyPayloadType;
 
-  copy.progress = {
-    sections: payload.progress.sections,
-    question_count: 0,
-    questions_answered: 0,
-    total_review: 0,
-    percentage: 0,
-    total_score: 0,
-    total_max_score: 0,
-  };
-
   forOwn(copy.definition.sections, (section, sectionKey) => {
-    const index = payload.progress.sections.findIndex(progress => progress.title === section.title);
+    const index = fullSurvey.progress.sections.findIndex(progress => progress.title === section.title);
     copy.progress.sections[index] = {
       answered: 0,
       complete: false,
