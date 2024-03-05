@@ -1,3 +1,10 @@
+# [1.133.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.132.0...v1.133.0) (2024-03-05)
+
+
+### Features
+
+* make change to survey progress to be put out of definition structure ([18dc398](https://github.com/ColdPBC/cold-monorepo/commit/18dc39897dbd3e8f15998611da93a0e061556713))
+
 # [1.133.0-COLD-542.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.132.0...v1.133.0-COLD-542.1) (2024-03-05)
 
 
