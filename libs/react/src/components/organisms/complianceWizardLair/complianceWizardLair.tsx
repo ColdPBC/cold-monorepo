@@ -29,17 +29,12 @@ export const ComplianceWizardLair = (props: PropsWithChildren<ComplianceWizardLa
         const complianceProgress = getComplianceProgressForSurvey(surveyData);
         // avoid all this logic if the number of ai attempted questions is 0.
         // this means the user has not started the automation process, so skip this logic
-        if (complianceProgress.aiAttemptedQuestions !== 0) {
-          // if the number of ai attempted questions is equal to the full number of questions, go to the questionnaire step
-          if (complianceProgress.aiAttemptedQuestions === complianceProgress.totalQuestions) {
-            setCurrentStep('questionnaire');
-            return;
-          }
-          // if the number of ai attempted questions is less than the full number of questions, go to the processing step
-          if (complianceProgress.aiAttemptedQuestions < complianceProgress.totalQuestions) {
-            setCurrentStep('processing');
-            return;
-          }
+        if (complianceProgress.aiAttemptedQuestions > 0) {
+          setCurrentStep('questionnaire');
+          return;
+        } else if (complianceProgress.aiAttemptedQuestions === 0) {
+          setCurrentStep('processing');
+          return;
         }
       }
 
