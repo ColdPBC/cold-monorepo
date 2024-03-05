@@ -1,7 +1,7 @@
 {
   "name": "cold-monorepo-nx",
   "packageManager": "yarn@4.1.0",
-  "version": "1.133.0-COLD-542.1",
+  "version": "1.133.0-COLD-558.1",
   "license": "MIT",
   "engines": {
     "node": ">=20.9.0",
