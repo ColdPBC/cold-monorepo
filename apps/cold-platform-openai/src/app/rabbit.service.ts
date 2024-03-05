@@ -119,7 +119,13 @@ export class RabbitService extends BaseWorker {
       }
       case 'compliance_automation.enabled':
         {
-          const surveys = parsed.payload.surveys;
+          let surveys;
+          if (parsed.surveys) {
+            surveys = parsed.surveys;
+          } else {
+            surveys = parsed.payload.surveys;
+          }
+
           try {
             for (const survey of surveys) {
               await this.queue.add(
