@@ -3,6 +3,7 @@ import { BaseWorker } from '../worker';
 import { BullModuleOptions } from '@nestjs/bull';
 import { DarklyService } from '../darkly';
 import { ConfigService } from '@nestjs/config';
+import { set } from 'lodash';
 
 export class RedisServiceConfig extends BaseWorker {
   max: number;
@@ -29,15 +30,11 @@ export class RedisServiceConfig extends BaseWorker {
   }
 
   async getQueueConfig(type: string, queueName: string): Promise<BullModuleOptions> {
-    return {
+    const config = {
       name: `${queueName}`,
       //redis: await RedisServiceConfig.getRedisOpts(),
       redis: {
-        db: 1,
-        tls: {
-          rejectUnauthorized: false,
-          requestCert: false,
-        },
+        db: this.db,
       },
       url: this.config['REDISCLOUD_URL'],
       prefix: `${type}`,
@@ -114,6 +111,15 @@ export class RedisServiceConfig extends BaseWorker {
         removeOnFail: this.removeOnFail,
       },
     };
+
+    if (process.env['NODE_ENV'] !== 'development') {
+      set(config.redis, 'tls', {
+        rejectUnauthorized: false,
+        requestCert: false,
+      });
+    }
+
+    return config;
   }
 }
 
