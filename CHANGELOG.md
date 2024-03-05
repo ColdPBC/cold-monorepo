@@ -1,3 +1,10 @@
+# [1.137.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.136.0...v1.137.0) (2024-03-05)
+
+
+### Features
+
+* add line clamp for section names ([0b3e32c](https://github.com/ColdPBC/cold-monorepo/commit/0b3e32c5e165c0fb241dda6c3a6f463acc65ecf5))
+
 # [1.136.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.135.0...v1.136.0) (2024-03-05)
 
 
