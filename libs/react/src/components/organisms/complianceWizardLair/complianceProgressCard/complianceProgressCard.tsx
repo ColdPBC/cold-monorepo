@@ -10,7 +10,7 @@ export interface ComplianceProgressCardProps {
 
 const _ComplianceProgressCard = (props: ComplianceProgressCardProps) => {
   const { surveyData } = props;
-  const { progress } = surveyData.definition;
+  const { progress } = surveyData;
   const totalQuestions = progress.question_count;
   const totalComplete = progress.questions_answered;
   const totalNeedsReview = progress.total_review;

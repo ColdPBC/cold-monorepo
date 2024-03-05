@@ -1,5 +1,5 @@
-import { ComplianceSurveyPayloadType } from '@coldpbc/interfaces';
 import { find, forEach, forOwn } from 'lodash';
+import { ComplianceSurveyPayloadType } from '@coldpbc/interfaces';
 
 /***
  * Helper method to mock return response from the server
@@ -13,8 +13,8 @@ export const returnUpdatedSurvey = (payload: ComplianceSurveyPayloadType, survey
     definition: payload.definition,
   } as ComplianceSurveyPayloadType;
 
-  copy.definition.progress = {
-    sections: payload.definition.progress.sections,
+  copy.progress = {
+    sections: payload.progress.sections,
     question_count: 0,
     questions_answered: 0,
     total_review: 0,
@@ -24,8 +24,8 @@ export const returnUpdatedSurvey = (payload: ComplianceSurveyPayloadType, survey
   };
 
   forOwn(copy.definition.sections, (section, sectionKey) => {
-    const index = payload.definition.progress.sections.findIndex(progress => progress.section === sectionKey);
-    copy.definition.progress.sections[index] = {
+    const index = payload.progress.sections.findIndex(progress => progress.section === sectionKey);
+    copy.progress.sections[index] = {
       answered: 0,
       complete: false,
       questions: {},
@@ -39,15 +39,15 @@ export const returnUpdatedSurvey = (payload: ComplianceSurveyPayloadType, survey
     let review = 0;
     let total = 0;
     if (index !== -1) {
-      copy.definition.progress.sections[index].questions = {};
+      copy.progress.sections[index].questions = {};
       forOwn(section.follow_up, (question, questionKey) => {
-        copy.definition.progress.sections[index].questions[questionKey] = {
+        copy.progress.sections[index].questions[questionKey] = {
           user_answered: false,
           ai_answered: false,
         };
         const questionAnswered = question.value !== null && question.value !== undefined;
-        copy.definition.progress.sections[index].questions[questionKey].user_answered = questionAnswered;
-        copy.definition.progress.sections[index].questions[questionKey].ai_answered = question.ai_attempted !== undefined;
+        copy.progress.sections[index].questions[questionKey].user_answered = questionAnswered;
+        copy.progress.sections[index].questions[questionKey].ai_answered = question.ai_attempted !== undefined;
         answered += questionAnswered ? 1 : 0;
         if (!questionAnswered) {
           review += question.ai_attempted ? 1 : 0;
@@ -58,19 +58,19 @@ export const returnUpdatedSurvey = (payload: ComplianceSurveyPayloadType, survey
     if (answered === total) {
       complete = true;
     }
-    copy.definition.progress.sections[index].answered = answered;
-    copy.definition.progress.sections[index].complete = complete;
-    copy.definition.progress.sections[index].review = review;
-    copy.definition.progress.sections[index].total = total;
+    copy.progress.sections[index].answered = answered;
+    copy.progress.sections[index].complete = complete;
+    copy.progress.sections[index].review = review;
+    copy.progress.sections[index].total = total;
   });
-  forEach(copy.definition.progress.sections, section => {
-    copy.definition.progress.question_count += section.total;
-    copy.definition.progress.total_review += section.review;
-    copy.definition.progress.questions_answered += section.answered;
+  forEach(copy.progress.sections, section => {
+    copy.progress.question_count += section.total;
+    copy.progress.total_review += section.review;
+    copy.progress.questions_answered += section.answered;
   });
-  copy.definition.progress.percentage = 0.7;
-  copy.definition.progress.total_score = 95;
-  copy.definition.progress.total_max_score = 100;
+  copy.progress.percentage = 0.7;
+  copy.progress.total_score = 95;
+  copy.progress.total_max_score = 100;
 
   return copy;
 };

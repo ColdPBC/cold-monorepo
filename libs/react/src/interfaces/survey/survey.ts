@@ -135,8 +135,8 @@ export interface ComplianceSurveyPayloadType {
       [key: string]: ComplianceSurveySectionType;
     };
     submitted?: boolean;
-    progress: ComplianceSurveyProgressType;
   };
+  progress: ComplianceSurveyProgressType;
   description: string;
   created_at: string;
   updated_at: string;

@@ -3192,531 +3192,531 @@ export function getSurveysMock(): Array<SurveyPayloadType | ComplianceSurveyPayl
           category: 'Environment',
         },
       },
-      progress: {
-        sections: [
-          {
-            answered: 0,
-            complete: false,
-            questions: {
-              'GEN-1': {
-                ai_answered: false,
-                user_answered: false,
-              },
-              'GEN-2': {
-                ai_answered: false,
-                user_answered: false,
-              },
-              'GEN-3': {
-                ai_answered: false,
-                user_answered: false,
-              },
-              'GEN-4': {
-                ai_answered: false,
-                user_answered: false,
-              },
-              'GEN-5': {
-                ai_answered: false,
-                user_answered: false,
-              },
-              'GEN-6': {
-                ai_answered: false,
-                user_answered: false,
-              },
-              'GEN-6A': {
-                ai_answered: false,
-                user_answered: false,
-              },
-              'GEN-7': {
-                ai_answered: false,
-                user_answered: false,
-              },
-              'GEN-8': {
-                ai_answered: false,
-                user_answered: false,
-              },
-            },
-            review: 0,
-            section: 'GEN',
-            title: 'Brand Information',
-            total: 9,
-          },
-          {
-            answered: 0,
-            complete: false,
-            questions: {
-              'MFG-1': {
-                ai_answered: false,
-                user_answered: false,
-              },
-              'MFG-10': {
-                ai_answered: false,
-                user_answered: false,
-              },
-              'MFG-11': {
-                ai_answered: false,
-                user_answered: false,
-              },
-              'MFG-12': {
-                ai_answered: false,
-                user_answered: false,
-              },
-              'MFG-2': {
-                ai_answered: false,
-                user_answered: false,
-              },
-              'MFG-3': {
-                ai_answered: false,
-                user_answered: false,
-              },
-              'MFG-4': {
-                ai_answered: false,
-                user_answered: false,
-              },
-              'MFG-5': {
-                ai_answered: false,
-                user_answered: false,
-              },
-              'MFG-6': {
-                ai_answered: false,
-                user_answered: false,
-              },
-              'MFG-7': {
-                ai_answered: false,
-                user_answered: false,
-              },
-              'MFG-8': {
-                ai_answered: false,
-                user_answered: false,
-              },
-              'MFG-9': {
-                ai_answered: false,
-                user_answered: false,
-              },
-            },
-            review: 0,
-            section: 'MFG',
-            title: 'Manufacturing Code of Conduct',
-            total: 12,
-          },
-          {
-            answered: 0,
-            complete: true,
-            questions: {
-              'CHEM-1': {
-                ai_answered: false,
-                user_answered: false,
-              },
-              'CHEM-2': {
-                ai_answered: false,
-                user_answered: false,
-              },
-              'CHEM-3': {
-                ai_answered: false,
-                user_answered: false,
-              },
-              'CHEM-4': {
-                ai_answered: false,
-                user_answered: false,
-              },
-              'CHEM-4A': {
-                ai_answered: false,
-                user_answered: false,
-              },
-              'CHEM-5': {
-                ai_answered: false,
-                user_answered: false,
-              },
-            },
-            review: 0,
-            section: 'CHEM',
-            title: 'Restricted Substances List & Chemicals Management',
-            total: 6,
-          },
-          {
-            answered: 0,
-            complete: false,
-            questions: {
-              'GHG-1': {
-                ai_answered: false,
-                user_answered: false,
-              },
-              'GHG-2': {
-                ai_answered: false,
-                user_answered: false,
-              },
-              'GHG-3': {
-                ai_answered: false,
-                user_answered: false,
-              },
-              'GHG-4': {
-                ai_answered: false,
-                user_answered: false,
-              },
-              'GHG-5': {
-                ai_answered: false,
-                user_answered: false,
-              },
-              'GHG-6': {
-                ai_answered: false,
-                user_answered: false,
-              },
-              'GHG-6A': {
-                ai_answered: false,
-                user_answered: false,
-              },
-              'GHG-7': {
-                ai_answered: false,
-                user_answered: false,
-              },
-              'GHG-7A': {
-                ai_answered: false,
-                user_answered: false,
-              },
-              'GHG-7B': {
-                ai_answered: false,
-                user_answered: false,
-              },
-              'GHG-8': {
-                ai_answered: false,
-                user_answered: false,
-              },
-              'GHG-9': {
-                ai_answered: false,
-                user_answered: false,
-              },
-              'GHG-10': {
-                ai_answered: false,
-                user_answered: false,
-              },
-              'GHG-11': {
-                ai_answered: false,
-                user_answered: false,
-              },
-              'GHG-12': {
-                ai_answered: false,
-                user_answered: false,
-              },
-              'GHG-13': {
-                ai_answered: false,
-                user_answered: false,
-              },
-            },
-            review: 0,
-            section: 'GHG',
-            title: 'GHG Emissions & Climate',
-            total: 16,
-          },
-          {
-            answered: 0,
-            complete: true,
-            questions: {
-              'PFAS-A1': {
-                ai_answered: false,
-                user_answered: false,
-              },
-              'PFAS-A2': {
-                ai_answered: false,
-                user_answered: false,
-              },
-              'PFAS-T1': {
-                ai_answered: false,
-                user_answered: false,
-              },
-            },
-            review: 0,
-            section: 'PFAS',
-            title: 'Per- and Polyfluoroalkyl Substances',
-            total: 3,
-          },
-          {
-            answered: 0,
-            complete: true,
-            questions: {
-              'APP-1': {
-                ai_answered: false,
-                user_answered: false,
-              },
-              'APP-2': {
-                ai_answered: false,
-                user_answered: false,
-              },
-            },
-            review: 0,
-            section: 'APP',
-            title: 'Diversity & Inclusion: Cultural Appropriation',
-            total: 2,
-          },
-          {
-            answered: 0,
-            complete: true,
-            questions: {
-              'COL-1': {
-                ai_answered: false,
-                user_answered: false,
-              },
-              'COL-2': {
-                ai_answered: false,
-                user_answered: false,
-              },
-            },
-            review: 0,
-            section: 'COL',
-            title: 'Diversity & Inclusion: Inclusive Colorways',
-            total: 2,
-          },
-          {
-            answered: 0,
-            complete: true,
-            questions: {
-              'COP-1': {
-                ai_answered: false,
-                user_answered: false,
-              },
-              'COP-2': {
-                ai_answered: false,
-                user_answered: false,
-              },
-            },
-            review: 0,
-            section: 'COP',
-            title: 'Diversity & Inclusion: Inclusive Copy',
-            total: 2,
-          },
-          {
-            answered: 0,
-            complete: true,
-            questions: {
-              'MKT-1': {
-                ai_answered: false,
-                user_answered: false,
-              },
-              'MKT-2': {
-                ai_answered: false,
-                user_answered: false,
-              },
-              'MKT-3': {
-                ai_answered: false,
-                user_answered: false,
-              },
-            },
-            review: 0,
-            section: 'MKT',
-            title: 'Diversity & Inclusion: Marketing Diversity',
-            total: 3,
-          },
-          {
-            answered: 0,
-            complete: true,
-            questions: {
-              'ISS-1': {
-                ai_answered: false,
-                user_answered: false,
-              },
-              'ISS-2': {
-                ai_answered: false,
-                user_answered: false,
-              },
-            },
-            review: 0,
-            section: 'ISS',
-            title: 'Diversity & Inclusion: Inclusive Sizing',
-            total: 2,
-          },
-          {
-            answered: 0,
-            complete: true,
-            questions: {
-              'INC-1': {
-                ai_answered: false,
-                user_answered: false,
-              },
-              'INC-2': {
-                ai_answered: false,
-                user_answered: false,
-              },
-              'INC-3': {
-                ai_answered: false,
-                user_answered: false,
-              },
-            },
-            review: 0,
-            section: 'INC',
-            title: 'Diversity & Inclusion: General',
-            total: 3,
-          },
-          {
-            answered: 0,
-            complete: true,
-            questions: {
-              'PSA-1': {
-                ai_answered: false,
-                user_answered: false,
-              },
-              'PSA-2': {
-                ai_answered: false,
-                user_answered: false,
-              },
-            },
-            review: 0,
-            section: 'PSA',
-            title: 'Product Sustainability & Preferred Attributes',
-            total: 2,
-          },
-          {
-            answered: 0,
-            complete: false,
-            questions: {
-              'PKG-1': {
-                ai_answered: false,
-                user_answered: false,
-              },
-              'PKG-2': {
-                ai_answered: false,
-                user_answered: false,
-              },
-              'PKG-3': {
-                ai_answered: false,
-                user_answered: false,
-              },
-              'PKG-4': {
-                ai_answered: false,
-                user_answered: false,
-              },
-            },
-            review: 0,
-            section: 'PKG',
-            title: 'Packaging - General',
-            total: 4,
-          },
-          {
-            answered: 0,
-            complete: true,
-            questions: {
-              'APK-1': {
-                ai_answered: false,
-                user_answered: false,
-              },
-              'APK-2': {
-                ai_answered: false,
-                user_answered: false,
-              },
-              'APK-3': {
-                ai_answered: false,
-                user_answered: false,
-              },
-              'APK-4': {
-                ai_answered: false,
-                user_answered: false,
-              },
-              'APK-5': {
-                ai_answered: false,
-                user_answered: false,
-              },
-              'APK-6': {
-                ai_answered: false,
-                user_answered: false,
-              },
-              'APK-7': {
-                ai_answered: false,
-                user_answered: false,
-              },
-            },
-            review: 0,
-            section: 'APK',
-            title: 'Packaging - Apparel',
-            total: 7,
-          },
-          {
-            answered: 0,
-            complete: true,
-            questions: {
-              'PRD-1': {
-                ai_answered: false,
-                user_answered: false,
-              },
-              'PRD-2': {
-                ai_answered: false,
-                user_answered: false,
-              },
-              'PRD-3': {
-                ai_answered: false,
-                user_answered: false,
-              },
-              'PRD-4': {
-                ai_answered: false,
-                user_answered: false,
-              },
-              'PRD-5': {
-                ai_answered: false,
-                user_answered: false,
-              },
-              'PRD-6': {
-                ai_answered: false,
-                user_answered: false,
-              },
-              'PRD-7': {
-                ai_answered: false,
-                user_answered: false,
-              },
-            },
-            review: 0,
-            section: 'PRD',
-            title: 'Product Care, Repair, Reuse & End-of-life',
-            total: 7,
-          },
-          {
-            answered: 0,
-            complete: true,
-            questions: {
-              'CRP-1': {
-                ai_answered: false,
-                user_answered: false,
-              },
-              'CRP-2': {
-                ai_answered: false,
-                user_answered: false,
-              },
-              'CRP-3': {
-                ai_answered: false,
-                user_answered: false,
-              },
-              'CRP-4': {
-                ai_answered: false,
-                user_answered: false,
-              },
-              'CRP-5': {
-                ai_answered: false,
-                user_answered: false,
-              },
-              'CRP-6': {
-                ai_answered: false,
-                user_answered: false,
-              },
-              'CRP-7': {
-                ai_answered: false,
-                user_answered: false,
-              },
-              'CRP-8': {
-                ai_answered: false,
-                user_answered: false,
-              },
-            },
-            review: 0,
-            section: 'CRP',
-            title: 'Core Practices',
-            total: 8,
-          },
-        ],
-        total_score: 0,
-        total_max_score: 100,
-        total_review: 0,
-        question_count: 87,
-        percentage: 0,
-        questions_answered: 0,
-      },
       image_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/splash_images/General.png',
       intro_markdown:
         'Please complete the REI Packaging - General survey below. This survey is intended to help REI understand your brand’s current efforts to reduce the environmental impact of your product packaging. Please complete this survey by October 1, 2021.',
+    },
+    progress: {
+      total_score: 0,
+      total_max_score: 100,
+      total_review: 0,
+      question_count: 87,
+      percentage: 0,
+      questions_answered: 0,
+      sections: [
+        {
+          answered: 0,
+          complete: false,
+          questions: {
+            'GEN-1': {
+              ai_answered: false,
+              user_answered: false,
+            },
+            'GEN-2': {
+              ai_answered: false,
+              user_answered: false,
+            },
+            'GEN-3': {
+              ai_answered: false,
+              user_answered: false,
+            },
+            'GEN-4': {
+              ai_answered: false,
+              user_answered: false,
+            },
+            'GEN-5': {
+              ai_answered: false,
+              user_answered: false,
+            },
+            'GEN-6': {
+              ai_answered: false,
+              user_answered: false,
+            },
+            'GEN-6A': {
+              ai_answered: false,
+              user_answered: false,
+            },
+            'GEN-7': {
+              ai_answered: false,
+              user_answered: false,
+            },
+            'GEN-8': {
+              ai_answered: false,
+              user_answered: false,
+            },
+          },
+          review: 0,
+          section: 'GEN',
+          title: 'Brand Information',
+          total: 9,
+        },
+        {
+          answered: 0,
+          complete: false,
+          questions: {
+            'MFG-1': {
+              ai_answered: false,
+              user_answered: false,
+            },
+            'MFG-10': {
+              ai_answered: false,
+              user_answered: false,
+            },
+            'MFG-11': {
+              ai_answered: false,
+              user_answered: false,
+            },
+            'MFG-12': {
+              ai_answered: false,
+              user_answered: false,
+            },
+            'MFG-2': {
+              ai_answered: false,
+              user_answered: false,
+            },
+            'MFG-3': {
+              ai_answered: false,
+              user_answered: false,
+            },
+            'MFG-4': {
+              ai_answered: false,
+              user_answered: false,
+            },
+            'MFG-5': {
+              ai_answered: false,
+              user_answered: false,
+            },
+            'MFG-6': {
+              ai_answered: false,
+              user_answered: false,
+            },
+            'MFG-7': {
+              ai_answered: false,
+              user_answered: false,
+            },
+            'MFG-8': {
+              ai_answered: false,
+              user_answered: false,
+            },
+            'MFG-9': {
+              ai_answered: false,
+              user_answered: false,
+            },
+          },
+          review: 0,
+          section: 'MFG',
+          title: 'Manufacturing Code of Conduct',
+          total: 12,
+        },
+        {
+          answered: 0,
+          complete: true,
+          questions: {
+            'CHEM-1': {
+              ai_answered: false,
+              user_answered: false,
+            },
+            'CHEM-2': {
+              ai_answered: false,
+              user_answered: false,
+            },
+            'CHEM-3': {
+              ai_answered: false,
+              user_answered: false,
+            },
+            'CHEM-4': {
+              ai_answered: false,
+              user_answered: false,
+            },
+            'CHEM-4A': {
+              ai_answered: false,
+              user_answered: false,
+            },
+            'CHEM-5': {
+              ai_answered: false,
+              user_answered: false,
+            },
+          },
+          review: 0,
+          section: 'CHEM',
+          title: 'Restricted Substances List & Chemicals Management',
+          total: 6,
+        },
+        {
+          answered: 0,
+          complete: false,
+          questions: {
+            'GHG-1': {
+              ai_answered: false,
+              user_answered: false,
+            },
+            'GHG-2': {
+              ai_answered: false,
+              user_answered: false,
+            },
+            'GHG-3': {
+              ai_answered: false,
+              user_answered: false,
+            },
+            'GHG-4': {
+              ai_answered: false,
+              user_answered: false,
+            },
+            'GHG-5': {
+              ai_answered: false,
+              user_answered: false,
+            },
+            'GHG-6': {
+              ai_answered: false,
+              user_answered: false,
+            },
+            'GHG-6A': {
+              ai_answered: false,
+              user_answered: false,
+            },
+            'GHG-7': {
+              ai_answered: false,
+              user_answered: false,
+            },
+            'GHG-7A': {
+              ai_answered: false,
+              user_answered: false,
+            },
+            'GHG-7B': {
+              ai_answered: false,
+              user_answered: false,
+            },
+            'GHG-8': {
+              ai_answered: false,
+              user_answered: false,
+            },
+            'GHG-9': {
+              ai_answered: false,
+              user_answered: false,
+            },
+            'GHG-10': {
+              ai_answered: false,
+              user_answered: false,
+            },
+            'GHG-11': {
+              ai_answered: false,
+              user_answered: false,
+            },
+            'GHG-12': {
+              ai_answered: false,
+              user_answered: false,
+            },
+            'GHG-13': {
+              ai_answered: false,
+              user_answered: false,
+            },
+          },
+          review: 0,
+          section: 'GHG',
+          title: 'GHG Emissions & Climate',
+          total: 16,
+        },
+        {
+          answered: 0,
+          complete: true,
+          questions: {
+            'PFAS-A1': {
+              ai_answered: false,
+              user_answered: false,
+            },
+            'PFAS-A2': {
+              ai_answered: false,
+              user_answered: false,
+            },
+            'PFAS-T1': {
+              ai_answered: false,
+              user_answered: false,
+            },
+          },
+          review: 0,
+          section: 'PFAS',
+          title: 'Per- and Polyfluoroalkyl Substances',
+          total: 3,
+        },
+        {
+          answered: 0,
+          complete: true,
+          questions: {
+            'APP-1': {
+              ai_answered: false,
+              user_answered: false,
+            },
+            'APP-2': {
+              ai_answered: false,
+              user_answered: false,
+            },
+          },
+          review: 0,
+          section: 'APP',
+          title: 'Diversity & Inclusion: Cultural Appropriation',
+          total: 2,
+        },
+        {
+          answered: 0,
+          complete: true,
+          questions: {
+            'COL-1': {
+              ai_answered: false,
+              user_answered: false,
+            },
+            'COL-2': {
+              ai_answered: false,
+              user_answered: false,
+            },
+          },
+          review: 0,
+          section: 'COL',
+          title: 'Diversity & Inclusion: Inclusive Colorways',
+          total: 2,
+        },
+        {
+          answered: 0,
+          complete: true,
+          questions: {
+            'COP-1': {
+              ai_answered: false,
+              user_answered: false,
+            },
+            'COP-2': {
+              ai_answered: false,
+              user_answered: false,
+            },
+          },
+          review: 0,
+          section: 'COP',
+          title: 'Diversity & Inclusion: Inclusive Copy',
+          total: 2,
+        },
+        {
+          answered: 0,
+          complete: true,
+          questions: {
+            'MKT-1': {
+              ai_answered: false,
+              user_answered: false,
+            },
+            'MKT-2': {
+              ai_answered: false,
+              user_answered: false,
+            },
+            'MKT-3': {
+              ai_answered: false,
+              user_answered: false,
+            },
+          },
+          review: 0,
+          section: 'MKT',
+          title: 'Diversity & Inclusion: Marketing Diversity',
+          total: 3,
+        },
+        {
+          answered: 0,
+          complete: true,
+          questions: {
+            'ISS-1': {
+              ai_answered: false,
+              user_answered: false,
+            },
+            'ISS-2': {
+              ai_answered: false,
+              user_answered: false,
+            },
+          },
+          review: 0,
+          section: 'ISS',
+          title: 'Diversity & Inclusion: Inclusive Sizing',
+          total: 2,
+        },
+        {
+          answered: 0,
+          complete: true,
+          questions: {
+            'INC-1': {
+              ai_answered: false,
+              user_answered: false,
+            },
+            'INC-2': {
+              ai_answered: false,
+              user_answered: false,
+            },
+            'INC-3': {
+              ai_answered: false,
+              user_answered: false,
+            },
+          },
+          review: 0,
+          section: 'INC',
+          title: 'Diversity & Inclusion: General',
+          total: 3,
+        },
+        {
+          answered: 0,
+          complete: true,
+          questions: {
+            'PSA-1': {
+              ai_answered: false,
+              user_answered: false,
+            },
+            'PSA-2': {
+              ai_answered: false,
+              user_answered: false,
+            },
+          },
+          review: 0,
+          section: 'PSA',
+          title: 'Product Sustainability & Preferred Attributes',
+          total: 2,
+        },
+        {
+          answered: 0,
+          complete: false,
+          questions: {
+            'PKG-1': {
+              ai_answered: false,
+              user_answered: false,
+            },
+            'PKG-2': {
+              ai_answered: false,
+              user_answered: false,
+            },
+            'PKG-3': {
+              ai_answered: false,
+              user_answered: false,
+            },
+            'PKG-4': {
+              ai_answered: false,
+              user_answered: false,
+            },
+          },
+          review: 0,
+          section: 'PKG',
+          title: 'Packaging - General',
+          total: 4,
+        },
+        {
+          answered: 0,
+          complete: true,
+          questions: {
+            'APK-1': {
+              ai_answered: false,
+              user_answered: false,
+            },
+            'APK-2': {
+              ai_answered: false,
+              user_answered: false,
+            },
+            'APK-3': {
+              ai_answered: false,
+              user_answered: false,
+            },
+            'APK-4': {
+              ai_answered: false,
+              user_answered: false,
+            },
+            'APK-5': {
+              ai_answered: false,
+              user_answered: false,
+            },
+            'APK-6': {
+              ai_answered: false,
+              user_answered: false,
+            },
+            'APK-7': {
+              ai_answered: false,
+              user_answered: false,
+            },
+          },
+          review: 0,
+          section: 'APK',
+          title: 'Packaging - Apparel',
+          total: 7,
+        },
+        {
+          answered: 0,
+          complete: true,
+          questions: {
+            'PRD-1': {
+              ai_answered: false,
+              user_answered: false,
+            },
+            'PRD-2': {
+              ai_answered: false,
+              user_answered: false,
+            },
+            'PRD-3': {
+              ai_answered: false,
+              user_answered: false,
+            },
+            'PRD-4': {
+              ai_answered: false,
+              user_answered: false,
+            },
+            'PRD-5': {
+              ai_answered: false,
+              user_answered: false,
+            },
+            'PRD-6': {
+              ai_answered: false,
+              user_answered: false,
+            },
+            'PRD-7': {
+              ai_answered: false,
+              user_answered: false,
+            },
+          },
+          review: 0,
+          section: 'PRD',
+          title: 'Product Care, Repair, Reuse & End-of-life',
+          total: 7,
+        },
+        {
+          answered: 0,
+          complete: true,
+          questions: {
+            'CRP-1': {
+              ai_answered: false,
+              user_answered: false,
+            },
+            'CRP-2': {
+              ai_answered: false,
+              user_answered: false,
+            },
+            'CRP-3': {
+              ai_answered: false,
+              user_answered: false,
+            },
+            'CRP-4': {
+              ai_answered: false,
+              user_answered: false,
+            },
+            'CRP-5': {
+              ai_answered: false,
+              user_answered: false,
+            },
+            'CRP-6': {
+              ai_answered: false,
+              user_answered: false,
+            },
+            'CRP-7': {
+              ai_answered: false,
+              user_answered: false,
+            },
+            'CRP-8': {
+              ai_answered: false,
+              user_answered: false,
+            },
+          },
+          review: 0,
+          section: 'CRP',
+          title: 'Core Practices',
+          total: 8,
+        },
+      ],
     },
   });
 
@@ -7165,6 +7165,893 @@ export function getSurveysMock(): Array<SurveyPayloadType | ComplianceSurveyPayl
       image_url: 'https://cold-public-assets.s3.amazonaws.com/images%2FReduce%20Packaging%20Footprint.png',
       intro_markdown: '',
     },
+    progress: {
+      total_score: 0,
+      total_max_score: 87,
+      total_review: 0,
+      question_count: 113,
+      percentage: 0,
+      questions_answered: 0,
+      sections: [
+        {
+          section_score: 0,
+          section_max_score: 3,
+          title: 'Flame Retardant (FR) Chemicals',
+          total: 3,
+          answered: 0,
+          complete: false,
+          review: 0,
+          questions: {
+            'FR-1': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+            'FR-2': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+            'FR-3': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+          },
+        },
+        {
+          section_score: 0,
+          section_max_score: 2,
+          title: 'Wool',
+          total: 2,
+          answered: 0,
+          complete: false,
+          review: 0,
+          questions: {
+            'WL-1': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+            'WL-2': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+          },
+        },
+        {
+          section_score: 0,
+          section_max_score: 3,
+          title: 'Animal Fur & Exotic Leather',
+          total: 3,
+          answered: 0,
+          complete: false,
+          review: 0,
+          questions: {
+            'AFL-1': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+            'AFL-2': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+            'AFL-3': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+          },
+        },
+        {
+          section_score: 0,
+          section_max_score: 3,
+          title: 'Packaging - Apparel',
+          total: 6,
+          answered: 0,
+          complete: false,
+          review: 0,
+          questions: {
+            'APK-1': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+            'APK-2': {
+              user_answered: false,
+              ai_answered: false,
+            },
+            'APK-3': {
+              user_answered: false,
+              ai_answered: false,
+            },
+            'APK-4': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+            'APK-5': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+            'APK-6': {
+              user_answered: false,
+              ai_answered: false,
+            },
+          },
+        },
+        {
+          section_score: 0,
+          section_max_score: 2,
+          title: 'Diversity & Inclusion: Cultural Appropriation',
+          total: 2,
+          answered: 0,
+          complete: false,
+          review: 0,
+          questions: {
+            'APP-1': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+            'APP-2': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+          },
+        },
+        {
+          section_score: 0,
+          section_max_score: 2,
+          title: 'Bisphenol A',
+          total: 2,
+          answered: 0,
+          complete: false,
+          review: 0,
+          questions: {
+            'BPA-1': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+            'BPA-2': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+          },
+        },
+        {
+          section_score: 0,
+          section_max_score: 2,
+          title: 'Diversity & Inclusion: Inclusive Colorways',
+          total: 2,
+          answered: 0,
+          complete: false,
+          review: 0,
+          questions: {
+            'COL-1': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+            'COL-2': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+          },
+        },
+        {
+          section_score: 0,
+          section_max_score: 2,
+          title: 'Diversity & Inclusion: Inclusive Copy',
+          total: 2,
+          answered: 0,
+          complete: false,
+          review: 0,
+          questions: {
+            'COP-1': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+            'COP-2': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+          },
+        },
+        {
+          section_score: 0,
+          section_max_score: 3,
+          title: 'Core Practices',
+          total: 6,
+          answered: 0,
+          complete: false,
+          review: 0,
+          questions: {
+            'CRP-1': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+            'CRP-2': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+            'CRP-3': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+            'CRP-4': {
+              user_answered: false,
+              ai_answered: false,
+            },
+            'CRP-5': {
+              user_answered: false,
+              ai_answered: false,
+            },
+            'CRP-6': {
+              user_answered: false,
+              ai_answered: false,
+            },
+          },
+        },
+        {
+          section_score: 0,
+          section_max_score: 1,
+          title: 'Diversity & Inclusion: Diverse Hair Type Inclusion',
+          total: 1,
+          answered: 0,
+          complete: false,
+          review: 0,
+          questions: {
+            'DHT-1': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+          },
+        },
+        {
+          section_score: 0,
+          section_max_score: 2,
+          title: 'Down',
+          total: 2,
+          answered: 0,
+          complete: false,
+          review: 0,
+          questions: {
+            'DWN-1': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+            'DWN-2': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+          },
+        },
+        {
+          title: 'Brand Information',
+          total: 11,
+          answered: 0,
+          complete: false,
+          review: 0,
+          questions: {
+            'GEN-2': {
+              user_answered: false,
+              ai_answered: false,
+            },
+            'GEN-3': {
+              user_answered: false,
+              ai_answered: false,
+            },
+            'GEN-0:1': {
+              user_answered: false,
+              ai_answered: false,
+            },
+            'GEN-0:2': {
+              user_answered: false,
+              ai_answered: false,
+            },
+            'GEN-0:3': {
+              user_answered: false,
+              ai_answered: false,
+            },
+            'GEN-1:1': {
+              user_answered: false,
+              ai_answered: false,
+            },
+            'GEN-1:2': {
+              user_answered: false,
+              ai_answered: false,
+            },
+            'GEN-1:3': {
+              user_answered: false,
+              ai_answered: false,
+            },
+            'GEN-1:4': {
+              user_answered: false,
+              ai_answered: false,
+            },
+            'GEN-1:5': {
+              user_answered: false,
+              ai_answered: false,
+            },
+            'GEN-1:6': {
+              user_answered: false,
+              ai_answered: false,
+            },
+          },
+        },
+        {
+          section_score: 0,
+          section_max_score: 17,
+          title: 'GHG Emissions & Climate',
+          total: 20,
+          answered: 0,
+          complete: false,
+          review: 0,
+          questions: {
+            'GHG-1': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+            'GHG-2': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+            'GHG-3': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+            'GHG-4': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+            'GHG-5': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+            'GHG-6': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+            'GHG-7': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+            'GHG-8': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+            'GHG-9': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+            'GHG-10': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+            'GHG-11': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+            'GHG-12': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+            'GHG-13': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+            'GHG-6A': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+            'GHG-7A': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+            'GHG-7C': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+            'GHG-9A': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+            'GHG-7B:1': {
+              user_answered: false,
+              ai_answered: false,
+            },
+            'GHG-7B:2': {
+              user_answered: false,
+              ai_answered: false,
+            },
+            'GHG-7B:3': {
+              user_answered: false,
+              ai_answered: false,
+            },
+          },
+        },
+        {
+          section_score: 0,
+          section_max_score: 6,
+          title: 'Diversity & Inclusion: General',
+          total: 6,
+          answered: 0,
+          complete: false,
+          review: 0,
+          questions: {
+            'INC-1': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+            'INC-2': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+            'INC-3': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+            'INC-4': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+            'INC-5': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+            'INC-6': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+          },
+        },
+        {
+          section_score: 0,
+          section_max_score: 2,
+          title: 'Diversity & Inclusion: Inclusive Sizing',
+          total: 2,
+          answered: 0,
+          complete: false,
+          review: 0,
+          questions: {
+            'ISS-1': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+            'ISS-2': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+          },
+        },
+        {
+          section_score: 0,
+          section_max_score: 11,
+          title: 'Manufacturing Code of Conduct & Responsible Sourcing',
+          total: 15,
+          answered: 0,
+          complete: false,
+          review: 0,
+          questions: {
+            'MFG-0': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+            'MFG-1': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+            'MFG-2': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+            'MFG-3': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+            'MFG-4': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+            'MFG-5': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+            'MFG-7': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+            'MFG-8': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+            'MFG-9': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+            'MFG-10': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+            'MFG-11': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+            'MFG-6:1': {
+              user_answered: false,
+              ai_answered: false,
+            },
+            'MFG-6:2': {
+              user_answered: false,
+              ai_answered: false,
+            },
+            'MFG-6:3': {
+              user_answered: false,
+              ai_answered: false,
+            },
+            'MFG-6:4': {
+              user_answered: false,
+              ai_answered: false,
+            },
+          },
+        },
+        {
+          section_score: 0,
+          section_max_score: 3,
+          title: 'Diversity & Inclusion: Marketing Diversity',
+          total: 3,
+          answered: 0,
+          complete: false,
+          review: 0,
+          questions: {
+            'MKT-1': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+            'MKT-2': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+            'MKT-3': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+          },
+        },
+        {
+          section_score: 0,
+          section_max_score: 4,
+          title: 'Packaging - General',
+          total: 4,
+          answered: 0,
+          complete: false,
+          review: 0,
+          questions: {
+            'PKG-2': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+            'PKG-3': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+            'PKG-1:1': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+            'PKG-1:2': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+          },
+        },
+        {
+          section_score: 0,
+          section_max_score: 6,
+          title: 'Product Care, Repair, Reuse & End-of-life',
+          total: 7,
+          answered: 0,
+          complete: false,
+          review: 0,
+          questions: {
+            'PRD-1': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+            'PRD-2': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+            'PRD-3': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+            'PRD-4': {
+              user_answered: false,
+              ai_answered: false,
+            },
+            'PRD-5': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+            'PRD-6': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+            'PRD-7': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+          },
+        },
+        {
+          section_score: 0,
+          section_max_score: 3,
+          title: 'Product Sustainability & Preferred Attributes',
+          total: 3,
+          answered: 0,
+          complete: false,
+          review: 0,
+          questions: {
+            'PSA-1': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+            'PSA-2:1': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+            'PSA-2:2': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+          },
+        },
+        {
+          section_score: 0,
+          section_max_score: 3,
+          title: 'Sunscreen Ingredients',
+          total: 3,
+          answered: 0,
+          complete: false,
+          review: 0,
+          questions: {
+            'SUN-1': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+            'SUN-2': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+            'SUN-3': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+          },
+        },
+        {
+          section_score: 0,
+          section_max_score: 5,
+          title: 'Restricted Substances List & Chemicals Management',
+          total: 6,
+          answered: 0,
+          complete: false,
+          review: 0,
+          questions: {
+            'CHEM-0': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+            'CHEM-1': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+            'CHEM-2': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+            'CHEM-3': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+            'CHEM-4': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+            'CHEM-3A': {
+              user_answered: false,
+              ai_answered: false,
+            },
+          },
+        },
+        {
+          section_score: 0,
+          section_max_score: 2,
+          title: 'Per- and Polyfluoroalkyl Substances',
+          total: 2,
+          answered: 0,
+          complete: false,
+          review: 0,
+          questions: {
+            'PFAS-1': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+            'PFAS-2': {
+              max_score: 1,
+              score: 0,
+              user_answered: false,
+              ai_answered: false,
+            },
+          },
+        },
+      ],
+    },
   });
 
   return surveys;
@@ -7979,7 +8866,7 @@ export function getSurveyComplianceFlowSomeCompleteSurveyMock(name: string) {
   const survey = getSurveyFormDataByName(name) as ComplianceSurveyPayloadType;
   // loop through the sections and follow_ups and set some values to be completed
   if (survey) {
-    forEach(survey.definition.progress.sections, (progressSection: ComplianceSurveySectionProgressType, index) => {
+    forEach(survey.progress.sections, (progressSection: ComplianceSurveySectionProgressType, index) => {
       if (progressSection.section === 'GHG') {
         progressSection.complete = false;
       } else {
@@ -8006,12 +8893,12 @@ export function getSurveyComplianceFlowSomeCompleteSurveyMock(name: string) {
         }
       });
     });
-    survey.definition.progress.question_count = 87;
-    survey.definition.progress.questions_answered = 15;
-    survey.definition.progress.percentage = 0.95;
-    survey.definition.progress.total_review = 20;
-    survey.definition.progress.total_score = 95;
-    survey.definition.progress.total_max_score = 100;
+    survey.progress.question_count = 87;
+    survey.progress.questions_answered = 15;
+    survey.progress.percentage = 0.95;
+    survey.progress.total_review = 20;
+    survey.progress.total_score = 95;
+    survey.progress.total_max_score = 100;
   }
   return survey;
 }
@@ -8020,7 +8907,7 @@ export function getSurveyAllOtherQuestionsAnsweredSurveyMock(name: string) {
   const survey = getSurveyFormDataByName(name) as ComplianceSurveyPayloadType;
   // loop through the sections and follow_ups and set some values to be completed
   if (survey) {
-    forEach(survey.definition.progress.sections, (progressSection: ComplianceSurveySectionProgressType, index) => {
+    forEach(survey.progress.sections, (progressSection: ComplianceSurveySectionProgressType, index) => {
       if (progressSection.section === 'GHG') {
         progressSection.complete = false;
       } else {
@@ -8041,17 +8928,17 @@ export function getSurveyAllOtherQuestionsAnsweredSurveyMock(name: string) {
           followUp.value = undefined;
         } else {
           followUp.value = true;
-          survey.definition.progress.questions_answered += 1;
+          survey.progress.questions_answered += 1;
         }
       });
-      survey.definition.progress.question_count += 1;
+      survey.progress.question_count += 1;
     });
-    survey.definition.progress.question_count = 87;
-    survey.definition.progress.questions_answered = 80;
-    survey.definition.progress.percentage = 0.98;
-    survey.definition.progress.total_review = 5;
-    survey.definition.progress.total_score = 95;
-    survey.definition.progress.total_max_score = 100;
+    survey.progress.question_count = 87;
+    survey.progress.questions_answered = 80;
+    survey.progress.percentage = 0.98;
+    survey.progress.total_review = 5;
+    survey.progress.total_score = 95;
+    survey.progress.total_max_score = 100;
   }
   return survey;
 }
