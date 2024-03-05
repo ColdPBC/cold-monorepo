@@ -46,13 +46,15 @@ const _ComplianceProgressCard = (props: ComplianceProgressCardProps) => {
 
   return (
     <Card title={'Questionnaire Progress'} className={'w-1/2'}>
-      <div className={'w-full flex flex-col space-y-[10px]'}>
-        <ProgressBar shades={shades} />
-        <div className={'flex flex-row text-tc-primary text-body justify-between'}>
-          <div className={'text-left'}>{textArray.join(', ')}</div>
-          <div>{`(${percentage.toFixed(0)}% Complete)`}</div>
+      <Card glow={false} className={'w-full bg-bgc-elevated border-[1px] border-bgc-accent'}>
+        <div className={'w-full flex flex-col space-y-[10px]'}>
+          <ProgressBar shades={shades} />
+          <div className={'flex flex-row text-tc-primary text-body justify-between'}>
+            <div className={'text-left'}>{textArray.join(', ')}</div>
+            <div>{`(${percentage.toFixed(0)}% Complete)`}</div>
+          </div>
         </div>
-      </div>
+      </Card>
     </Card>
   );
 };
