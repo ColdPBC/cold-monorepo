@@ -193,14 +193,6 @@ const _ComplianceSurveyQuestionnaire = (props: ComplianceSurveyQuestionnaireProp
         return followUpKey === activeKey.value;
       });
       const activeFollowUpKey = Object.keys(sections[activeSectionKey].follow_up)[activeFollowUpIndex];
-      if (
-        additionalContextQuestion &&
-        sections[activeSectionKey].follow_up[activeFollowUpKey].additional_context &&
-        (sections[activeSectionKey].follow_up[activeFollowUpKey].additional_context?.value === undefined ||
-          sections[activeSectionKey].follow_up[activeFollowUpKey].additional_context?.value === null)
-      ) {
-        buttonProps.disabled = true;
-      }
 
       if (
         sections[activeSectionKey].follow_up[activeFollowUpKey].value === undefined &&
@@ -238,13 +230,6 @@ const _ComplianceSurveyQuestionnaire = (props: ComplianceSurveyQuestionnaireProp
         }
       }
     } else {
-      if (
-        additionalContextQuestion &&
-        sections[activeSectionKey].additional_context &&
-        (sections[activeSectionKey].additional_context?.value === undefined || sections[activeSectionKey].additional_context?.value === null)
-      ) {
-        buttonProps.disabled = true;
-      }
       if (sections[activeSectionKey].value === undefined && sections[activeSectionKey].ai_response !== undefined && sections[activeSectionKey].ai_response?.answer !== undefined) {
         buttonProps.label = 'Confirm';
         buttonProps.onClick = () => {
