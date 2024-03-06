@@ -1,3 +1,11 @@
+# [1.149.0-COLD-595.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.149.0-COLD-595.1...v1.149.0-COLD-595.2) (2024-03-06)
+
+
+### Features
+
+* handle when survey is different than response from the API ([76ed8af](https://github.com/ColdPBC/cold-monorepo/commit/76ed8af0d86306446e8b43b217e08ebeeb35ec50))
+* sort survey sections by category and then idx ([4f755a4](https://github.com/ColdPBC/cold-monorepo/commit/4f755a44ea1add6bf5ccc313bf518d612e20984e))
+
 # [1.149.0-COLD-595.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.148.0...v1.149.0-COLD-595.1) (2024-03-06)
 
 
