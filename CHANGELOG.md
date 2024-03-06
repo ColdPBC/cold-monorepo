@@ -1,3 +1,10 @@
+# [1.142.0-COLD-552.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.141.0...v1.142.0-COLD-552.1) (2024-03-06)
+
+
+### Features
+
+* underline text on hover for compliance question ([3b8bf5c](https://github.com/ColdPBC/cold-monorepo/commit/3b8bf5cee156b93c74b8782acd47d99ff247a160))
+
 # [1.141.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.140.3...v1.141.0) (2024-03-05)
 
 
