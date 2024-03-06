@@ -122,7 +122,10 @@ export class SurveyFilterService extends BaseWorker {
         '        }));\n' +
         '                \n' +
         '        $totalQuestionCount := function(){$count($keys(definition.sections.*.follow_up))};\n' +
-        '        $totalQuestionAnswered := function(){$count($exists(definition.sections.*.follow_up.*.value))};\n' +
+        '        $totalQuestionAnswered := $count($map(definition.sections.*.follow_up.*, function($v, $k, $o) {\n' +
+        "            $v.component = 'select' or $v.component = 'multi_select' ? $join($v.value, ',') : $v.value\n" +
+        '        }\n' +
+        '        ));\n' +
         '\n' +
         '        $totalMaxScore := function(){$sum(definition.sections.*.follow_up.*.max_score)}; \n' +
         '        \n' +
