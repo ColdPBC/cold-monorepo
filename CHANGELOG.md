@@ -1,3 +1,10 @@
+## [1.141.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.141.0...v1.141.1) (2024-03-06)
+
+
+### Bug Fixes
+
+* broken QuestionAnswered count ([47f68cf](https://github.com/ColdPBC/cold-monorepo/commit/47f68cf6c4745a3d94799f8bf875cfa2b48c0fb1))
+
 # [1.141.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.140.3...v1.141.0) (2024-03-05)
 
 
