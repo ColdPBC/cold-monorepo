@@ -1,9 +1,8 @@
 import { ComplianceSurveyActiveKeyType, ComplianceSurveyPayloadType, SurveySectionFollowUpsType, SurveySectionFollowUpType } from '@coldpbc/interfaces';
 import { find, keys, map } from 'lodash';
-import { ColdIcon } from '../../atoms';
+import { ColdIcon, ErrorFallback } from '@coldpbc/components';
 import { IconNames } from '@coldpbc/enums';
 import { withErrorBoundary } from 'react-error-boundary';
-import { ErrorFallback } from '../../application';
 import React from 'react';
 
 export interface ComplianceSurveyRightNavProps {
