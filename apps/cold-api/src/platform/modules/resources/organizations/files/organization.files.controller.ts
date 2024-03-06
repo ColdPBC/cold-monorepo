@@ -1,10 +1,10 @@
-import { Controller, Delete, Get, OnModuleInit, Param, ParseFilePipe, Post, Query, Req, UploadedFile, UseFilters, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Controller, Delete, Get, OnModuleInit, Param, Post, Query, Req, UploadedFiles, UseFilters, UseGuards, UseInterceptors } from '@nestjs/common';
 import multerS3 from 'multer-s3';
 import { allRoles, coldAndCompanyAdmins, HttpExceptionFilter, IAuthenticatedUser, JwtAuthGuard, Roles, RolesGuard, S3Service } from '@coldpbc/nest';
 import { Span } from 'nestjs-ddtrace';
 import { ApiOAuth2, ApiTags } from '@nestjs/swagger';
 import { OrganizationFilesService } from './organization.files.service';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { AnyFilesInterceptor } from '@nestjs/platform-express';
 
 @Span()
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -61,19 +61,12 @@ export class OrganizationFilesController implements OnModuleInit {
 
   @Post(':orgId/files')
   @Roles(...allRoles)
-  @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(AnyFilesInterceptor())
   async uploadFile(
     @Param('orgId') orgId: string,
     @Query('bpc') bpc: boolean,
-    @UploadedFile(
-      new ParseFilePipe({
-        validators: [
-          // new MaxFileSizeValidator({ maxSize: 1000 }),
-          // new FileTypeValidator({ fileType: 'image/jpeg' }),
-        ],
-      }),
-    )
-    file: Express.Multer.File,
+    @UploadedFiles()
+    file: Array<Express.Multer.File>,
     @Req()
     req: {
       body: never;
