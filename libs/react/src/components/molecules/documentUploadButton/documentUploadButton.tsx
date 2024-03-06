@@ -2,7 +2,7 @@ import { useAddToastMessage, useAuth0Wrapper, useColdContext } from '@coldpbc/ho
 import React, { useRef } from 'react';
 import { forEach } from 'lodash';
 import { axiosFetcher } from '@coldpbc/fetchers';
-import { isAxiosError } from 'axios';
+import { AxiosRequestConfig, isAxiosError } from 'axios';
 import { IButtonProps, ToastMessage } from '@coldpbc/interfaces';
 import { ErrorType } from '@coldpbc/enums';
 import { BaseButton } from '@coldpbc/components';
@@ -28,10 +28,13 @@ export const DocumentUploadButton = (props: DocumentUploadButtonProps) => {
     forEach(files, file => {
       formData.append('file', file);
     });
-    const headers = JSON.stringify({
-      'Content-Type': 'multipart/form-data',
-    });
-    const response = await axiosFetcher([`/organizations/${orgId}/files`, 'POST', formData, headers]);
+    const config = JSON.stringify({
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+      timeout: 60000,
+    } as AxiosRequestConfig);
+    const response = await axiosFetcher([`/organizations/${orgId}/files`, 'POST', formData, config]);
     if (isAxiosError(response)) {
       await addToastMessage({
         message: 'Upload failed',

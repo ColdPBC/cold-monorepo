@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { isArray, set } from 'lodash';
 import { resolveAPIUrl } from './helper';
-import cookies from 'js-cookie';
 
 const baseURL = resolveAPIUrl();
 
@@ -11,16 +10,15 @@ const baseURL = resolveAPIUrl();
  */
 export const axiosFetcher = (params: Array<any>) => {
   try {
-    // get headers from the params, if they exist
-    const headers = params[3] ? JSON.parse(params[3]) : {};
+    const passedConfig = params[3] ? JSON.parse(params[3]) : {};
 
     const config = {
       baseURL: baseURL,
       headers: {
         'Content-Type': 'application/json',
-        ...headers,
       },
       method: 'GET',
+      ...passedConfig,
     };
 
     if (params.length >= 1) {
