@@ -1,3 +1,10 @@
+# [1.142.0-COLD-574.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.142.0-COLD-574.1...v1.142.0-COLD-574.2) (2024-03-06)
+
+
+### Features
+
+* allow ai answer array to answer single select option ([e4e6e83](https://github.com/ColdPBC/cold-monorepo/commit/e4e6e83017ad122cd83230ca682265e5bcb5f75f))
+
 # [1.142.0-COLD-574.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.141.0...v1.142.0-COLD-574.1) (2024-03-06)
 
 
