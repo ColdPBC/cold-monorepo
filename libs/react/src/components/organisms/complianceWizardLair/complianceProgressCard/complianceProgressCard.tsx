@@ -45,7 +45,7 @@ const _ComplianceProgressCard = (props: ComplianceProgressCardProps) => {
   const percentage = totalQuestions === 0 ? 0 : (totalComplete / totalQuestions) * 100;
 
   return (
-    <Card title={'Questionnaire Progress'} className={'w-1/2'}>
+    <Card title={'Questionnaire Progress'} className={'w-1/2 gap-4'}>
       <Card glow={false} className={'w-full bg-bgc-elevated border-[1px] border-bgc-accent'}>
         <div className={'w-full flex flex-col space-y-[10px]'}>
           <ProgressBar shades={shades} />

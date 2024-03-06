@@ -16,7 +16,7 @@ const _ComplianceAssessmentsCard = (props: ComplianceAssessmentsCardProps) => {
   const percentage = surveyData.progress.percentage;
 
   return (
-    <Card title={'Assessment Preview'} className={'w-1/2'} >
+    <Card title={'Assessment Preview'} className={'w-1/2 gap-4'} >
       <Card className={'w-full bg-bgc-elevated border-[1px] border-bgc-accent'} glow={false}>
         <div className={'w-full flex flex-col space-y-[10px]'}>
           <ProgressBar

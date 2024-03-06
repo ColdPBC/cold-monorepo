@@ -1,3 +1,5 @@
+import {OrgCompliance} from "../compliance";
+
 export interface SurveyFormDefinitionPayloadType {
   id: string;
   name: string;
@@ -117,6 +119,7 @@ export interface SurveyAdditionalContext {
 }
 
 export interface SurveyNextStep {
+  compliance?: OrgCompliance,
   name: string;
   title: string;
   started: boolean;
