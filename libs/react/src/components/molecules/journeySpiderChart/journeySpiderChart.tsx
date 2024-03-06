@@ -37,12 +37,8 @@ function _JourneySpiderChart({ setIsEmptyData }: Props) {
   }
 
   // Update chart data on receiving new data
-  const isEmpty =
-    !(
-      data?.definition &&
-      Object.keys(data.definition.categories).length !== 0 &&
-      some(data.definition.categories, (category: any) => some(category.subcategories, (subcategory: any) => subcategory.journey_score !== null))
-    ) || data?.response?.status === 404;
+  const isEmpty = true;
+
   useEffect(() => {
     if (!isEmpty) {
       const newLabels: string[] = [],
