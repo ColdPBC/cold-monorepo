@@ -1,3 +1,42 @@
+# [1.141.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.140.3...v1.141.0) (2024-03-05)
+
+
+### Features
+
+* sort api response ([436ad9b](https://github.com/ColdPBC/cold-monorepo/commit/436ad9b432fe0c0808906eb64fd1443f48086c2b))
+
+## [1.140.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.140.2...v1.140.3) (2024-03-05)
+
+
+### Bug Fixes
+
+* strip rubric from the survey ([f1d7c21](https://github.com/ColdPBC/cold-monorepo/commit/f1d7c21346b07a41c14f4f13c2ad03ac7d8bc469))
+
+## [1.140.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.140.1...v1.140.2) (2024-03-05)
+
+
+### Bug Fixes
+
+* compliance filtering issue ([7e62721](https://github.com/ColdPBC/cold-monorepo/commit/7e62721a58e6647159f406825be528b04c380034))
+
+## [1.140.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.140.0...v1.140.1) (2024-03-05)
+
+
+### Bug Fixes
+
+* create thread on each section and run all sections in parallel ([86c7c35](https://github.com/ColdPBC/cold-monorepo/commit/86c7c3574bdbea058e98f69f5e54220948273532))
+* darkly initilization issue ([66a90b7](https://github.com/ColdPBC/cold-monorepo/commit/66a90b73894d7dee4e4a419bee1a903b6972f20f))
+* make gpt model configured via darkly ([99c1750](https://github.com/ColdPBC/cold-monorepo/commit/99c17504e19cbb34bad9989b2ac9717d69b3b3b1))
+* request size issue ([3d36621](https://github.com/ColdPBC/cold-monorepo/commit/3d36621426c05c920eaeba5f61847a8b6b8e6917))
+* tls issue with redis ([12f398d](https://github.com/ColdPBC/cold-monorepo/commit/12f398db128c2a6c5a8cd44c0032cca89285bc72))
+
+# [1.140.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.139.0...v1.140.0) (2024-03-05)
+
+
+### Features
+
+* remove multiply 100 from assessments preview percentage ([00aa1ad](https://github.com/ColdPBC/cold-monorepo/commit/00aa1ad6935adc6b224828f46714dd432d6b8931))
+
 # [1.139.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.138.0...v1.139.0) (2024-03-05)
 
 
