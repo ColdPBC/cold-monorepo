@@ -64,7 +64,7 @@ const _NextSteps = () => {
 
   const nextSteps = data
     ?.filter(survey => {
-      return !survey.definition.submitted && survey.type === 'COMPLIANCE';
+      return !survey.definition.submitted && includes(complianceSurveys, survey.name);
     })
     .sort((a, b) => {
       const aDate = new Date(a.updated_at);
