@@ -1,3 +1,11 @@
+# [1.143.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.142.0...v1.143.0) (2024-03-06)
+
+
+### Features
+
+* make the assessments page empty for right now ([d22020b](https://github.com/ColdPBC/cold-monorepo/commit/d22020bd7b12ef393a315c49c673c15e65d108f1))
+* update text of card when it's not populated with data ([9f34cd5](https://github.com/ColdPBC/cold-monorepo/commit/9f34cd5ad2a0daea47bf2f0a99afed11636cdfa3))
+
 # [1.142.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.141.3...v1.142.0) (2024-03-06)
 
 
