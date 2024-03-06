@@ -38,7 +38,7 @@ const _ComplianceSurveyLeftNav = (props: ComplianceSurveyLeftNavProps) => {
 
   const getNavbar = (): ReactNode => {
     return (
-      <div className={'text-tc-primary w-[351px] bg-transparent h-full pl-[30px] pt-[30px] pb-[30px] flex flex-col space-y-[8px]'}>
+      <div className={'text-tc-primary w-[351px] bg-transparent h-full pl-[30px] pt-[30px] pb-[30px] flex flex-col space-y-[8px] overflow-y-auto'}>
         {map(getGroupedSections(), (sections, key) => {
           return <ComplianceSurveyCollapse key={key} category={key} sections={sections} setActiveKey={setActiveKey} activeKey={activeKey} complianceSet={complianceSet} />;
         })}
