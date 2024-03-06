@@ -4,16 +4,16 @@ import { RightColumnContent } from '../../organisms/rightColumnContent/rightColu
 import { useAuth0 } from '@auth0/auth0-react';
 import { Spinner } from '../../atoms/spinner/spinner';
 import { axiosFetcher } from '@coldpbc/fetchers';
-import useSWR from 'swr';
 import { Card, JourneyOverviewCard } from '../../molecules';
 import { AppContent } from '../../organisms/appContent/appContent';
 import { DismissableInfoCard } from '../../molecules/dismissableInfoCard';
 import { JourneyDetailView } from '../../molecules/journeyDetailView';
-import { TemperatureCheckCard } from '../../molecules/temperatureCheckCard';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application/errors/errorFallback';
 import { useColdContext, useOrgSWR } from '@coldpbc/hooks';
 import { ErrorType } from '@coldpbc/enums';
+import { ColdAssessmentsProvider } from '@coldpbc/providers';
+
 
 const PERIOD = 2022;
 
@@ -25,9 +25,7 @@ function _Journey() {
   );
 
   const isEmptyData =
-    (data?.definition &&
-      Object.keys(data.definition.categories).length === 0) ||
-    data?.response?.status === 404;
+    true;
 
   const auth0 = useAuth0();
 
@@ -47,30 +45,29 @@ function _Journey() {
 
   if (auth0.user) {
     return (
-      <AppContent title="Gap Assessment">
-        <CenterColumnContent>
-          {!isEmptyData ? (
-            <Card>
-              <JourneyDetailView />
-            </Card>
-          ) : (
-            <>
-              <DismissableInfoCard
-                text="Your Cold Score is a measure of your company's progress towards climate leadership. The higher your score, the more progress you've made!"
-                onDismiss={() => {}}
-                dismissKey="journey-page"
-              />
-              <JourneyOverviewCard omitCta={true} />
-            </>
-          )}
-        </CenterColumnContent>
-        <RightColumnContent>
-          <TemperatureCheckCard
-            cardTitle="Temperature Check"
-            stats={['cold_score', 'footprint']}
-          />
-        </RightColumnContent>
-      </AppContent>
+      <ColdAssessmentsProvider>
+        <AppContent title="Assessments">
+          <CenterColumnContent>
+            {!isEmptyData ? (
+              <Card>
+                <JourneyDetailView />
+              </Card>
+            ) : (
+              <>
+                <DismissableInfoCard
+                  text="Assessments show how much progress you've made towards a particular compliance set. Higher scores mean you're closer to doing everything possible for this compliance set."
+                  onDismiss={() => {}}
+                  dismissKey="journey-page"
+                />
+                <JourneyOverviewCard omitCta={true} />
+              </>
+            )}
+          </CenterColumnContent>
+          <RightColumnContent>
+          </RightColumnContent>
+        </AppContent>
+      </ColdAssessmentsProvider>
+
     );
   }
 
