@@ -1,9 +1,8 @@
 import { ComplianceSurveyActiveKeyType, ComplianceSurveyPayloadType, SurveySectionFollowUpsType, SurveySectionFollowUpType } from '@coldpbc/interfaces';
 import { find, keys, map } from 'lodash';
-import { ColdIcon } from '../../atoms';
+import { ColdIcon, ErrorFallback } from '@coldpbc/components';
 import { IconNames } from '@coldpbc/enums';
 import { withErrorBoundary } from 'react-error-boundary';
-import { ErrorFallback } from '../../application';
 import React from 'react';
 
 export interface ComplianceSurveyRightNavProps {
@@ -36,7 +35,7 @@ const _ComplianceSurveyRightNav = (props: ComplianceSurveyRightNavProps) => {
 
     if (progressQuestion?.user_answered) {
       return (
-        <div key={key} className={'h-[34px] flex flex-row space-x-2 items-center hover:bg-gray-70 cursor-pointer'} onClick={() => onClick(key)}>
+        <div key={key} className={'h-[34px] flex flex-row space-x-2 items-center hover:underline cursor-pointer'} onClick={() => onClick(key)}>
           <div className={'w-[24px] h-[24px]'}>
             <ColdIcon name={IconNames.ColdComplianceSurveyCheckBoxIcon} className={' '} />
           </div>
@@ -47,7 +46,7 @@ const _ComplianceSurveyRightNav = (props: ComplianceSurveyRightNavProps) => {
       );
     } else {
       return (
-        <div key={key} className={'h-[34px] flex flex-row space-x-2 items-center hover:bg-gray-70 cursor-pointer'} onClick={() => onClick(key)}>
+        <div key={key} className={'h-[34px] flex flex-row space-x-2 items-center hover:underline cursor-pointer'} onClick={() => onClick(key)}>
           <div className={'w-[24px] h-[24px] flex items-center justify-center'}>
             <div className={'rounded-full h-[24px] w-[24px] bg-gray-70'}></div>
           </div>
