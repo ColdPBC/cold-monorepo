@@ -1,9 +1,11 @@
-# [1.145.0-COLD-581.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.144.0...v1.145.0-COLD-581.1) (2024-03-06)
+# [1.145.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.144.0...v1.145.0) (2024-03-06)
 
 
 ### Features
 
-* if any questions are answered show the questionnaire ([aafd774](https://github.com/ColdPBC/cold-monorepo/commit/aafd7745078a59ed7041ba1f58211823050b6e28))
+* add and use active key to local storage ([a6cda28](https://github.com/ColdPBC/cold-monorepo/commit/a6cda28b1d294208b10969a5abd98a3d5f339086))
+* allow ai answer array to answer single select option ([e4e6e83](https://github.com/ColdPBC/cold-monorepo/commit/e4e6e83017ad122cd83230ca682265e5bcb5f75f))
+* handle collapse free form ([affe944](https://github.com/ColdPBC/cold-monorepo/commit/affe944ed8a7229b2ab19b1d2acf175ee01533a3))
 
 # [1.144.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.143.0...v1.144.0) (2024-03-06)
 

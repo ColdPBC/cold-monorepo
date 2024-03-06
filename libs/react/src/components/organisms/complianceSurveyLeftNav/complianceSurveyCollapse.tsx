@@ -1,0 +1,138 @@
+import { ColdIcon } from '@coldpbc/components';
+import { IconNames } from '@coldpbc/enums';
+import { Collapse } from 'react-collapse';
+import { every, filter, find, map, some } from 'lodash';
+import React, { useEffect } from 'react';
+import { getFirstFollowUpKeyFromSection } from '@coldpbc/lib';
+import { ComplianceSurveyActiveKeyType, ComplianceSurveyPayloadType, ComplianceSurveySectionProgressType, ComplianceSurveySectionType } from '@coldpbc/interfaces';
+
+export interface ComplianceSurveyCollapseProps {
+  category: string;
+  complianceSet: ComplianceSurveyPayloadType;
+  sections: { [p: string]: ComplianceSurveySectionType };
+  setActiveKey: (activeKey: ComplianceSurveyActiveKeyType) => void;
+  activeKey: ComplianceSurveyActiveKeyType;
+}
+
+export const ComplianceSurveyCollapse = (props: ComplianceSurveyCollapseProps) => {
+  const { complianceSet, category, sections, setActiveKey, activeKey } = props;
+  const [expanded, setExpanded] = React.useState(false);
+
+  const goToSection = (section: string) => {
+    const activeKey = getFirstFollowUpKeyFromSection(section, complianceSet.definition.sections[section]);
+    setActiveKey(activeKey);
+  };
+
+  const getSidebarIcon = (category: string) => {
+    // function to get the right icon.
+    // check progress of the section. if all questions are answered, show a checkmark. if not, show a circle.
+
+    const progressSections = filter(complianceSet.progress.sections, (section: ComplianceSurveySectionProgressType) => {
+      const foundSection = find(complianceSet.definition.sections, { title: section.title });
+      return foundSection?.section_type === category;
+    });
+    const categoryComplete = every(progressSections, (section, index) => {
+      return section.complete;
+    });
+    const someComplete = some(progressSections, (section, index) => {
+      return section.complete;
+    });
+
+    if (categoryComplete) {
+      return (
+        <div className={'w-[24px] h-[24px]'}>
+          <ColdIcon name={IconNames.ColdComplianceSurveyCheckBoxIcon} />
+        </div>
+      );
+    } else if (someComplete) {
+      return (
+        <div className={'w-[24px] h-[24px] flex justify-center items-center rounded-full bg-gray-70'}>
+          <ColdIcon name={IconNames.SubtractIcon} />
+        </div>
+      );
+    } else {
+      return <div className={'w-[24px] h-[24px] flex justify-center items-center rounded-full bg-gray-70'}></div>;
+    }
+  };
+
+  const getSectionIcon = (sectionKey: string) => {
+    // check progress check if the section is complete, show a checkmark. if not, show a circle.
+    const section = complianceSet.definition.sections[sectionKey];
+    const progressSection = find(complianceSet.progress.sections, { title: section.title });
+    if (activeKey.section === sectionKey) {
+      return <div className={'w-[12px] h-[12px] flex justify-center items-center rounded-full bg-cold-starkWhite'}></div>;
+    } else {
+      if (progressSection?.complete) {
+        return (
+          <div className={'w-[12px] h-[12px]'}>
+            <ColdIcon name={IconNames.ColdComplianceSurveyCheckBoxIcon} />
+          </div>
+        );
+      } else {
+        if (progressSection === undefined) {
+          return <div className={'w-[12px] h-[12px] flex justify-center items-center rounded-full bg-gray-70'}></div>;
+        }
+        const someComplete = some(
+          map(progressSection.questions, (question, key) => {
+            return question.user_answered;
+          }),
+          question => question === true,
+        );
+        if (someComplete) {
+          return (
+            <div className={'w-[12px] h-[12px] flex justify-center items-center rounded-full bg-gray-70'}>
+              <ColdIcon name={IconNames.SubtractIcon} />
+            </div>
+          );
+        } else {
+          return <div className={'w-[12px] h-[12px] flex justify-center items-center rounded-full bg-gray-70'}></div>;
+        }
+      }
+    }
+  };
+
+  useEffect(() => {
+    setExpanded(activeKey.category === category || expanded);
+  }, [activeKey.section]);
+
+  return (
+    <div className={'flex flex-col bg-transparent w-full'}>
+      <div
+        className={'text-h3 text-tc-primary cursor-pointer flex flex-row space-x-3 items-center'}
+        onClick={() => {
+          setExpanded(!expanded);
+        }}>
+        {getSidebarIcon(category)}
+        <div className={`text-left whitespace-normal`}>{category}</div>
+        <div className={'flex justify-center items-center'}>
+          {expanded ? (
+            <ColdIcon name={IconNames.SubtractIcon} />
+          ) : (
+            <div className={'w-[24px] h-[24px] flex justify-center items-center'}>
+              <ColdIcon name={IconNames.PlusIcon} />
+            </div>
+          )}
+        </div>
+      </div>
+      <Collapse
+        isOpened={expanded}
+        theme={{
+          collapse: 'transition-all h-auto duration-300 ease-in-out',
+        }}>
+        <div className={'flex flex-col space-y-[7px]'}>
+          {map(sections, (section, key) => {
+            return (
+              <div
+                className={`w-full h-[25px] pl-5 flex flex-row space-x-3 items-center cursor-pointer ${key === activeKey.section ? 'bg-bgc-accent' : ''}`}
+                onClick={() => goToSection(key)}
+                key={key}>
+                {getSectionIcon(key)}
+                <div className={'text-caption bg-transparent line-clamp-1'}>{section.title}</div>
+              </div>
+            );
+          })}
+        </div>
+      </Collapse>
+    </div>
+  );
+};

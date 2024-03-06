@@ -1,9 +1,10 @@
 import React from 'react';
+import { isArray, isEqual } from 'lodash';
 
 export interface SelectOptionProps {
   options: string[];
   onChange: (value: any) => void;
-  value: string | string[] | null;
+  value: string[] | null | undefined;
   isMultiSelect?: boolean;
   'data-testid'?: string;
 }
@@ -36,10 +37,14 @@ export const SelectOption = (props: SelectOptionProps) => {
         }
       }
     } else {
-      if (value === options[index]) {
-        onChange(null);
+      if (value === undefined || value === null) {
+        onChange([options[index]]);
       } else {
-        onChange(options[index]);
+        if (isArray(value) && isEqual(value[0], options[index])) {
+          onChange(null);
+        } else {
+          onChange([options[index]]);
+        }
       }
     }
   };
@@ -60,7 +65,7 @@ export const SelectOption = (props: SelectOptionProps) => {
         className += ' rounded-lg bg-bgc-accent hover:bg-gray-50 grid grid-cols-1 place-content-center';
       }
     } else {
-      if (value !== null && value !== undefined && value === options[index]) {
+      if (value !== null && value !== undefined && isArray(value) && isEqual(value[0], options[index])) {
         className += ' rounded-lg bg-primary-300 hover:bg-primary-200 grid grid-cols-1 place-content-center';
       } else {
         className += ' rounded-lg bg-bgc-accent hover:bg-gray-50 grid grid-cols-1 place-content-center';
