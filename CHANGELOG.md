@@ -1,3 +1,20 @@
+# [1.144.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.143.0...v1.144.0) (2024-03-06)
+
+
+### Bug Fixes
+
+* improve look and feel of long questions (COLD-572) ([500f239](https://github.com/ColdPBC/cold-monorepo/commit/500f2390d7f9cdd972800f5eb2f5b4b3dd54e58e))
+* swap users and account settings ([89ac8e7](https://github.com/ColdPBC/cold-monorepo/commit/89ac8e770250a3dd25c16ad4b63b5ffe432bb6ec))
+* update copy (COLD-550) ([33b2817](https://github.com/ColdPBC/cold-monorepo/commit/33b28174b116e48c6cd413adf9d2e5a2db42e80c))
+
+
+### Features
+
+* align look and feel of progress bars (COLD-580) ([5c18905](https://github.com/ColdPBC/cold-monorepo/commit/5c18905dc0e7ad31830b90929a6e592d599e1fd7))
+* improve look and feel of AI box ([b8b6abf](https://github.com/ColdPBC/cold-monorepo/commit/b8b6abfd563876ea66314ffa16bd50dd3d239e20))
+* more tweaks for look and feel of assessment cards (COLD-580) ([7a9d5ef](https://github.com/ColdPBC/cold-monorepo/commit/7a9d5ef416e4c088fcf6b5bcf4f97111ebb91b20))
+* some copy tweaks (COLD-545) ([a83bd0c](https://github.com/ColdPBC/cold-monorepo/commit/a83bd0c08788ce5c2bcfb3d6dd4fd8af0d3c5415))
+
 # [1.143.0-cold-544.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.142.0...v1.143.0-cold-544.1) (2024-03-06)
 
 ### Bug Fixes
