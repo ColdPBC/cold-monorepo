@@ -46,7 +46,7 @@ const _AutomateComplianceFlowStep = () => {
   return (
     <ComplianceWizardLairBase
       title={'Start Automation'}
-      markdown={`Cold will pre-fill as much of the form as possible based on the documents below. You'll always be able to review and edit all responses yourself before submission. \n\nDocuments ${documentsList}`}
+      markdown={`Cold will pre-fill as much of the form as possible based on the documents below. You'll always be able to review and edit responses yourself before submission. \n\nDocuments being used: ${documentsList}`}
       ctas={[
         { label: 'Start', onClick: () => startAutomation(), className: 'h-[72px] w-full bg-green-500 hover:bg-green-400 active:bg-green-300' },
         { label: 'Skip For Now', onClick: () => setCurrentStep('questionnaire'), variant: ButtonTypes.secondary, className: 'h-[72px] w-full' },
