@@ -1,10 +1,10 @@
 import React from 'react';
+import { withErrorBoundary } from 'react-error-boundary';
+import { isArray } from 'lodash';
 import { AppContent, Card, Datagrid, DocumentUploadButton, ErrorFallback, Spinner } from '@coldpbc/components';
 import { ButtonTypes, ErrorType } from '@coldpbc/enums';
 import { useColdContext, useOrgSWR } from '@coldpbc/hooks';
 import { axiosFetcher } from '@coldpbc/fetchers';
-import { withErrorBoundary } from 'react-error-boundary';
-import { isArray } from 'lodash';
 
 export const _DocumentUpload = () => {
   const { logError } = useColdContext();
