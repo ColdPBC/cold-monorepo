@@ -228,9 +228,19 @@ const _SurveyInput = (props: SurveyInputProps) => {
   };
 
   const getPrompt = () => {
-    const className = 'text-left text-tc-primary font-medium';
+    const className = 'text-left text-tc-primary';
 
-    return <div className={className}>{prompt}</div>;
+    const promptWithLinebreaks = prompt.split("\n");
+
+    return (
+      <div className={className}>
+        {promptWithLinebreaks.map((prompt) => {
+          return (
+            <div className={'mb-4'}>{prompt}</div>
+          );
+        })}
+      </div>
+    );
   };
 
   const getAISource = () => {
