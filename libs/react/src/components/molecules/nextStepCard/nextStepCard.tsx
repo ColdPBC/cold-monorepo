@@ -17,11 +17,11 @@ export const NextStepCard = (props: NextStepCardProps) => {
       data-testid={`next-step-card-${nextStep.title}`}
     >
       <div className="flex justify-end items-center gap-2 self-stretch h-[40px]">
-        <div className="text-h5 flex-1">{nextStep.title}</div>
+        <div className="text-h5 flex-1">{nextStep.compliance?.compliance_definition.title}</div>
         <div className={'flex space-x-4'}>
           <BaseButton
             key={'button_' + snakeCase(nextStep.title)}
-            label={nextStep.started ? 'Continue Survey' : 'Start Survey'}
+            label={nextStep.started ? 'Continue' : 'Start'}
             onClick={onNextStepClick}
             variant={ButtonTypes.primary}
           />

@@ -1,14 +1,19 @@
 import React from 'react';
 import { Card, ErrorFallback, NextStepCard, Spinner } from '@coldpbc/components';
-import { useColdContext, useOrgSWR } from '@coldpbc/hooks';
+import {useAuth0Wrapper, useColdContext, useOrgSWR} from '@coldpbc/hooks';
 import { axiosFetcher } from '@coldpbc/fetchers';
-import { SurveyNextStep, SurveyPayloadType } from '@coldpbc/interfaces';
+import {OrgCompliance, SurveyNextStep, SurveyPayloadType} from '@coldpbc/interfaces';
 import { startCase } from 'lodash';
 import { useNavigate } from 'react-router-dom';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorType } from '@coldpbc/enums';
+import useSWR from "swr";
+import { flatMap, find, includes } from "lodash";
 
 const _NextSteps = () => {
+  const { orgId } = useAuth0Wrapper();
+  const orgCompliances = useSWR<OrgCompliance[], any, any>([`/compliance_definitions/organizations/${orgId}`, 'GET'], axiosFetcher);
+
   const { data, isLoading, error } = useOrgSWR<SurveyPayloadType[]>(['/surveys', 'GET'], axiosFetcher);
   const { logError } = useColdContext();
   const navigate = useNavigate();
@@ -39,7 +44,7 @@ const _NextSteps = () => {
     }
   };
 
-  if (isLoading) {
+  if (isLoading || orgCompliances.isLoading) {
     return <Spinner />;
   }
 
@@ -47,10 +52,19 @@ const _NextSteps = () => {
     logError(error, ErrorType.SWRError);
     return <div></div>;
   }
+  if (orgCompliances.error) {
+    logError(orgCompliances.error, ErrorType.SWRError);
+    return <div></div>;
+  }
+
+  const compliances = orgCompliances.data;
+  const complianceSurveys = flatMap(compliances, (compliance) => {
+    return compliance.compliance_definition.surveys;
+  });
 
   const nextSteps = data
     ?.filter(survey => {
-      return !survey.definition.submitted && survey.type !== 'COMPLIANCE';
+      return !survey.definition.submitted && survey.type === 'COMPLIANCE';
     })
     .sort((a, b) => {
       const aDate = new Date(a.updated_at);
@@ -60,6 +74,7 @@ const _NextSteps = () => {
     .map((survey): SurveyNextStep => {
       const progress = getSurveyProgress(survey);
       return {
+        compliance: find(compliances, (compliance) => {return includes(compliance.compliance_definition.surveys, survey.name)}),
         name: survey.name,
         title: startCase(survey.name),
         started: progress > 0,
@@ -79,7 +94,7 @@ const _NextSteps = () => {
                 <NextStepCard
                   nextStep={nextStep}
                   onNextStepClick={() => {
-                    navigate(`?surveyName=${nextStep.name}`);
+                    navigate(`/wizard/compliance/${nextStep.compliance?.compliance_definition.name}`);
                   }}
                 />
               </div>
