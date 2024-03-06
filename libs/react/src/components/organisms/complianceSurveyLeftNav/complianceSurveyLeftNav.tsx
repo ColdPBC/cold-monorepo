@@ -2,8 +2,7 @@ import { ComplianceSurveyActiveKeyType, ComplianceSurveyPayloadType, ComplianceS
 import { forOwn, map, uniq } from 'lodash';
 import React, { ReactNode } from 'react';
 import { withErrorBoundary } from 'react-error-boundary';
-import { ErrorFallback } from '../../application';
-import { ComplianceSurveyCollapse } from './complianceSurveyCollapse';
+import { ComplianceSurveyCollapse, ErrorFallback } from '@coldpbc/components';
 
 export interface ComplianceSurveyLeftNavProps {
   complianceSet: ComplianceSurveyPayloadType;
@@ -38,7 +37,7 @@ const _ComplianceSurveyLeftNav = (props: ComplianceSurveyLeftNavProps) => {
 
   const getNavbar = (): ReactNode => {
     return (
-      <div className={'text-tc-primary w-[351px] bg-transparent h-full pl-[30px] pt-[30px] pb-[30px] flex flex-col space-y-[8px]'}>
+      <div className={'text-tc-primary w-[351px] bg-transparent h-full pl-[30px] pt-[30px] pb-[30px] flex flex-col space-y-[8px] overflow-y-auto'}>
         {map(getGroupedSections(), (sections, key) => {
           return <ComplianceSurveyCollapse key={key} category={key} sections={sections} setActiveKey={setActiveKey} activeKey={activeKey} complianceSet={complianceSet} />;
         })}

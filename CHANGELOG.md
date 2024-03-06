@@ -1,3 +1,17 @@
+# [1.148.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.147.1...v1.148.0) (2024-03-06)
+
+
+### Features
+
+* add scroll bar when left nav items are too high ([e8f8596](https://github.com/ColdPBC/cold-monorepo/commit/e8f859683bb240bdeb39c9b698d524e240dc87ad))
+
+# [1.148.0-COLD-587.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.147.1...v1.148.0-COLD-587.1) (2024-03-06)
+
+
+### Features
+
+* add scroll bar when left nav items are too high ([e8f8596](https://github.com/ColdPBC/cold-monorepo/commit/e8f859683bb240bdeb39c9b698d524e240dc87ad))
+
 ## [1.147.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.147.0...v1.147.1) (2024-03-06)
 
 
