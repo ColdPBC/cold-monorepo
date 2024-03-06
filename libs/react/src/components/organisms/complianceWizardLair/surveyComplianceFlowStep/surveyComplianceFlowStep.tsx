@@ -24,9 +24,17 @@ const _SurveyComplianceFlowStep = () => {
     if (!surveyData) {
       return;
     }
-    const key = getStartingKey(surveyData);
-    setActiveKey(key);
+    const key = getStartingKey(sortedSurvey);
+    const activeKeyFromStorage = localStorage.getItem('complianceActiveKey');
+    const keyToBeUsed = activeKeyFromStorage ? JSON.parse(activeKeyFromStorage) : key;
+    setActiveKey(keyToBeUsed);
   }, []);
+
+  useEffect(() => {
+    if (activeKey.section !== '') {
+      localStorage.setItem('complianceActiveKey', JSON.stringify(activeKey));
+    }
+  }, [activeKey]);
 
   if (!sortedSurvey) {
     return null;
