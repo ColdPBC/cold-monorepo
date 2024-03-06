@@ -2,6 +2,7 @@ import { cloneDeep, find, findIndex, forEach, forOwn, isEmpty } from 'lodash';
 import {
   ComplianceSurveyActiveKeyType,
   ComplianceSurveyPayloadType,
+  ComplianceSurveySectionType,
   SurveyActiveKeyType,
   SurveyAdditionalContext,
   SurveyPayloadType,
@@ -215,10 +216,8 @@ export const getSectionFromKey = (key: SurveyActiveKeyType, surveyData: SurveyPa
   }
 };
 
-export const getFirstFollowUpKeyFromSection = (sectionName: string, surveyData: ComplianceSurveyPayloadType): ComplianceSurveyActiveKeyType => {
-  const section = surveyData.definition.sections[sectionName];
+export const getFirstFollowUpKeyFromSection = (sectionName: string, section: ComplianceSurveySectionType): ComplianceSurveyActiveKeyType => {
   const firstFollowUpKey = Object.keys(section.follow_up)[0];
-
   return {
     value: firstFollowUpKey,
     section: sectionName,

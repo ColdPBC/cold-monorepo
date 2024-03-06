@@ -1,3 +1,98 @@
+## [1.147.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.147.0...v1.147.1) (2024-03-06)
+
+
+### Bug Fixes
+
+* only show surveys for activated compliances ([65eddb5](https://github.com/ColdPBC/cold-monorepo/commit/65eddb56999c1118373af03ce2326802219c9010))
+
+# [1.147.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.146.0...v1.147.0) (2024-03-06)
+
+
+### Features
+
+* if any questions are answered show the questionnaire ([aafd774](https://github.com/ColdPBC/cold-monorepo/commit/aafd7745078a59ed7041ba1f58211823050b6e28))
+
+# [1.146.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.145.0...v1.146.0) (2024-03-06)
+
+
+### Bug Fixes
+
+* reduce spacing in wizard top cards ([eb46f48](https://github.com/ColdPBC/cold-monorepo/commit/eb46f48e79b584be438999c9798c927e3ea8ca75))
+
+
+### Features
+
+* show compliances with next steps module ([dee174b](https://github.com/ColdPBC/cold-monorepo/commit/dee174be162a8d894d84fc2913371a7cd3df79c0))
+
+# [1.146.0-cold-583.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.145.0...v1.146.0-cold-583.1) (2024-03-06)
+
+
+### Bug Fixes
+
+* reduce spacing in wizard top cards ([eb46f48](https://github.com/ColdPBC/cold-monorepo/commit/eb46f48e79b584be438999c9798c927e3ea8ca75))
+
+
+### Features
+
+* show compliances with next steps module ([dee174b](https://github.com/ColdPBC/cold-monorepo/commit/dee174be162a8d894d84fc2913371a7cd3df79c0))
+
+# [1.145.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.144.0...v1.145.0) (2024-03-06)
+
+
+### Features
+
+* add and use active key to local storage ([a6cda28](https://github.com/ColdPBC/cold-monorepo/commit/a6cda28b1d294208b10969a5abd98a3d5f339086))
+* allow ai answer array to answer single select option ([e4e6e83](https://github.com/ColdPBC/cold-monorepo/commit/e4e6e83017ad122cd83230ca682265e5bcb5f75f))
+* handle collapse free form ([affe944](https://github.com/ColdPBC/cold-monorepo/commit/affe944ed8a7229b2ab19b1d2acf175ee01533a3))
+
+# [1.144.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.143.0...v1.144.0) (2024-03-06)
+
+
+### Bug Fixes
+
+* improve look and feel of long questions (COLD-572) ([500f239](https://github.com/ColdPBC/cold-monorepo/commit/500f2390d7f9cdd972800f5eb2f5b4b3dd54e58e))
+* swap users and account settings ([89ac8e7](https://github.com/ColdPBC/cold-monorepo/commit/89ac8e770250a3dd25c16ad4b63b5ffe432bb6ec))
+* update copy (COLD-550) ([33b2817](https://github.com/ColdPBC/cold-monorepo/commit/33b28174b116e48c6cd413adf9d2e5a2db42e80c))
+
+
+### Features
+
+* align look and feel of progress bars (COLD-580) ([5c18905](https://github.com/ColdPBC/cold-monorepo/commit/5c18905dc0e7ad31830b90929a6e592d599e1fd7))
+* improve look and feel of AI box ([b8b6abf](https://github.com/ColdPBC/cold-monorepo/commit/b8b6abfd563876ea66314ffa16bd50dd3d239e20))
+* more tweaks for look and feel of assessment cards (COLD-580) ([7a9d5ef](https://github.com/ColdPBC/cold-monorepo/commit/7a9d5ef416e4c088fcf6b5bcf4f97111ebb91b20))
+* some copy tweaks (COLD-545) ([a83bd0c](https://github.com/ColdPBC/cold-monorepo/commit/a83bd0c08788ce5c2bcfb3d6dd4fd8af0d3c5415))
+
+# [1.143.0-cold-544.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.142.0...v1.143.0-cold-544.1) (2024-03-06)
+
+### Bug Fixes
+
+* improve look and feel of long questions (COLD-572) ([500f239](https://github.com/ColdPBC/cold-monorepo/commit/500f2390d7f9cdd972800f5eb2f5b4b3dd54e58e))
+* swap users and account settings ([89ac8e7](https://github.com/ColdPBC/cold-monorepo/commit/89ac8e770250a3dd25c16ad4b63b5ffe432bb6ec))
+* update copy (COLD-550) ([33b2817](https://github.com/ColdPBC/cold-monorepo/commit/33b28174b116e48c6cd413adf9d2e5a2db42e80c))
+
+# [1.143.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.142.0...v1.143.0) (2024-03-06)
+
+### Features
+
+* align look and feel of progress bars (COLD-580) ([5c18905](https://github.com/ColdPBC/cold-monorepo/commit/5c18905dc0e7ad31830b90929a6e592d599e1fd7))
+* improve look and feel of AI box ([b8b6abf](https://github.com/ColdPBC/cold-monorepo/commit/b8b6abfd563876ea66314ffa16bd50dd3d239e20))
+* more tweaks for look and feel of assessment cards (COLD-580) ([7a9d5ef](https://github.com/ColdPBC/cold-monorepo/commit/7a9d5ef416e4c088fcf6b5bcf4f97111ebb91b20))
+* some copy tweaks (COLD-545) ([a83bd0c](https://github.com/ColdPBC/cold-monorepo/commit/a83bd0c08788ce5c2bcfb3d6dd4fd8af0d3c5415))
+* make the assessments page empty for right now ([d22020b](https://github.com/ColdPBC/cold-monorepo/commit/d22020bd7b12ef393a315c49c673c15e65d108f1))
+* update text of card when it's not populated with data ([9f34cd5](https://github.com/ColdPBC/cold-monorepo/commit/9f34cd5ad2a0daea47bf2f0a99afed11636cdfa3))
+
+# [1.142.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.141.3...v1.142.0) (2024-03-06)
+
+
+### Bug Fixes
+
+* broken QuestionAnswered count ([4b04ad4](https://github.com/ColdPBC/cold-monorepo/commit/4b04ad40759803f21554b4e531804a43429161f6))
+
+
+### Features
+
+* underline text on hover for compliance question ([3b8bf5c](https://github.com/ColdPBC/cold-monorepo/commit/3b8bf5cee156b93c74b8782acd47d99ff247a160))
+
 ## [1.141.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.141.2...v1.141.3) (2024-03-06)
 
 

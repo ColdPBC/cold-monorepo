@@ -18,19 +18,19 @@ export function JourneyOverviewCard(props: PropsWithChildren<JourneyOverviewCard
         {
           text: 'Learn More',
           action: () => {
-            navigate('/journey');
+            navigate('/assessments');
           },
         },
       ];
 
   return (
-    <Card title="Gap Assessment" ctas={cta} data-testid="journey-overview-card">
+    <Card title="Assessments" ctas={cta} data-testid="journey-overview-card">
       <div className="flex items-center justify-center self-stretch flex-col">
         <JourneySpiderChart setIsEmptyData={setIsEmptyData} />
         {isEmptyData && (
           <div className="m-auto table w-1">
-            <h4 className="text-h4 text-center whitespace-nowrap mx-8">Our Climate Experts are reviewing your data</h4>
-            <p className="text-center mt-4">We'll get back to you as soon as the results are ready to discuss.</p>
+            <h4 className="text-h4 text-center whitespace-nowrap mx-8">Waiting on your first assessment</h4>
+            <p className="text-center mt-4">Results will appear here as soon as they are ready.</p>
           </div>
         )}
       </div>

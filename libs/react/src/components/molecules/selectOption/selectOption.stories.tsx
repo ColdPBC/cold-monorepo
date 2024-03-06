@@ -2,7 +2,6 @@ import React from 'react';
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { SelectOption, SelectOptionProps } from './selectOption';
-import { PercentSlider } from '@coldpbc/components';
 
 const meta: Meta<typeof SelectOption> = {
   title: 'Molecules/SelectOption',
@@ -15,11 +14,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 const Component = (props: SelectOptionProps) => {
-  const [value, setValue] = React.useState<string | string[] | null>(
-    props.value,
-  );
+  const [value, setValue] = React.useState<string[] | null | undefined>(props.value);
 
-  const onChange = (value: string | null) => {
+  const onChange = (value: string[] | null | undefined) => {
     setValue(value);
   };
 
@@ -27,21 +24,17 @@ const Component = (props: SelectOptionProps) => {
 };
 
 export const Default: Story = {
-  render: (args) => {
+  render: args => {
     return <Component {...args} />;
   },
   args: {
     value: null,
-    options: [
-      'Limited (0-5% Year-over-Year)',
-      'Moderated (5-15% Year-over-Year)',
-      'Smile spoke total few great had never their too. Amongst moments do in arrived at my replied.',
-    ],
+    options: ['Limited (0-5% Year-over-Year)', 'Moderated (5-15% Year-over-Year)', 'Smile spoke total few great had never their too. Amongst moments do in arrived at my replied.'],
   },
 };
 
 export const HorizontalLayout: Story = {
-  render: (args) => {
+  render: args => {
     return <Component {...args} />;
   },
   args: {
@@ -60,36 +53,23 @@ export const HorizontalLayout: Story = {
 };
 
 export const MultiSelect: Story = {
-  render: (args) => {
+  render: args => {
     return <Component {...args} />;
   },
   args: {
     value: null,
-    options: [
-      'Limited (0-5% Year-over-Year)',
-      'Moderated (5-15% Year-over-Year)',
-      'Aggressive (>15% Year-over-Year)',
-    ],
+    options: ['Limited (0-5% Year-over-Year)', 'Moderated (5-15% Year-over-Year)', 'Aggressive (>15% Year-over-Year)'],
     isMultiSelect: true,
   },
 };
 
 export const MultiSelectHorizontalLayout: Story = {
-  render: (args) => {
+  render: args => {
     return <Component {...args} />;
   },
   args: {
     value: null,
-    options: [
-      'North America United States',
-      'North America Canada, Mexico, Central America',
-      'South America',
-      'Europe',
-      'Asia',
-      'Africa',
-      'Australia',
-      'No Applicable',
-    ],
+    options: ['North America United States', 'North America Canada, Mexico, Central America', 'South America', 'Europe', 'Asia', 'Africa', 'Australia', 'No Applicable'],
     isMultiSelect: true,
   },
 };

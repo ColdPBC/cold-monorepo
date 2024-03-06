@@ -24,7 +24,7 @@ const _ProcessingComplianceFlowStep = () => {
       <div className={'w-[827px] flex flex-col space-y-4'}>
         <div className={'text-h1 text-left'}>Hang tight! Automation in progress.</div>
         <div className={'text-body text-left'}>
-          Cold Climate is working to pre-fill the form. This page will automatically update and we’ll send you an email when it’s complete.
+          Cold is working to pre-fill the form. This page will automatically update and we’ll notify you when it’s complete.
         </div>
         <div className={'w-full flex justify-center'}>
           <Spinner size={GlobalSizes.xLarge} />
