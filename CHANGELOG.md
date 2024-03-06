@@ -1,3 +1,15 @@
+# [1.146.0-cold-583.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.145.0...v1.146.0-cold-583.1) (2024-03-06)
+
+
+### Bug Fixes
+
+* reduce spacing in wizard top cards ([eb46f48](https://github.com/ColdPBC/cold-monorepo/commit/eb46f48e79b584be438999c9798c927e3ea8ca75))
+
+
+### Features
+
+* show compliances with next steps module ([dee174b](https://github.com/ColdPBC/cold-monorepo/commit/dee174be162a8d894d84fc2913371a7cd3df79c0))
+
 # [1.145.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.144.0...v1.145.0) (2024-03-06)
 
 
