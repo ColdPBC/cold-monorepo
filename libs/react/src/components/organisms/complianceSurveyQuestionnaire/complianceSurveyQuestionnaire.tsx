@@ -1,5 +1,3 @@
-import { ComplianceSurveyActiveKeyType, ComplianceSurveyPayloadType, IButtonProps, SurveyActiveKeyType } from '@coldpbc/interfaces';
-import { useAuth0Wrapper } from '@coldpbc/hooks';
 import React from 'react';
 import { findIndex, keys, size } from 'lodash';
 import {
@@ -14,6 +12,8 @@ import {
 } from '@coldpbc/lib';
 import { BaseButton, ErrorFallback, SurveyInput } from '@coldpbc/components';
 import { ButtonTypes, GlobalSizes } from '@coldpbc/enums';
+import { ComplianceSurveyActiveKeyType, ComplianceSurveyPayloadType, IButtonProps, SurveyActiveKeyType } from '@coldpbc/interfaces';
+import { useAuth0Wrapper } from '@coldpbc/hooks';
 import { CSSTransition, SwitchTransition } from 'react-transition-group';
 import { useSWRConfig } from 'swr';
 import { withErrorBoundary } from 'react-error-boundary';
