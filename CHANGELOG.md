@@ -1,3 +1,10 @@
+# [1.149.0-COLD-595.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.148.0...v1.149.0-COLD-595.1) (2024-03-06)
+
+
+### Features
+
+* remove prevention of submission of additional context if no answer provided ([3d8e47f](https://github.com/ColdPBC/cold-monorepo/commit/3d8e47f65c41d26bd511df70c4627d9023e9c191))
+
 # [1.148.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.147.1...v1.148.0) (2024-03-06)
 
 
