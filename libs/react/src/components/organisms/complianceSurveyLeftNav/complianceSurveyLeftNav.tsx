@@ -2,8 +2,7 @@ import { ComplianceSurveyActiveKeyType, ComplianceSurveyPayloadType, ComplianceS
 import { forOwn, map, uniq } from 'lodash';
 import React, { ReactNode } from 'react';
 import { withErrorBoundary } from 'react-error-boundary';
-import { ErrorFallback } from '../../application';
-import { ComplianceSurveyCollapse } from './complianceSurveyCollapse';
+import { ComplianceSurveyCollapse, ErrorFallback } from '@coldpbc/components';
 
 export interface ComplianceSurveyLeftNavProps {
   complianceSet: ComplianceSurveyPayloadType;
