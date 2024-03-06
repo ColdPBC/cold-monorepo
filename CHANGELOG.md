@@ -1,3 +1,10 @@
+# [1.142.0-COLD-574.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.141.0...v1.142.0-COLD-574.1) (2024-03-06)
+
+
+### Features
+
+* handle collapse free form ([affe944](https://github.com/ColdPBC/cold-monorepo/commit/affe944ed8a7229b2ab19b1d2acf175ee01533a3))
+
 # [1.141.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.140.3...v1.141.0) (2024-03-05)
 
 
