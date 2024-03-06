@@ -228,13 +228,19 @@ const _SurveyInput = (props: SurveyInputProps) => {
   };
 
   const getPrompt = () => {
-    let className = 'text-left text-tc-primary';
-    if (isAdditional) {
-      className += ' text-h4';
-    } else {
-      className += ' text-h3';
-    }
-    return <div className={className}>{prompt}</div>;
+    const className = 'text-left text-tc-primary';
+
+    const promptWithLinebreaks = prompt.split("\n");
+
+    return (
+      <div className={className}>
+        {promptWithLinebreaks.map((prompt) => {
+          return (
+            <div className={'mb-4'}>{prompt}</div>
+          );
+        })}
+      </div>
+    );
   };
 
   const getAISource = () => {
@@ -244,8 +250,7 @@ const _SurveyInput = (props: SurveyInputProps) => {
       if (ai_attempted && !isUndefined(ai_response) && !isUndefined(ai_response.answer) && ai_response.justification && isUndefined(value)) {
         return (
           <Card glow={false} className={'border-[1px] border-purple-300 w-full bg-bgc-elevated'} data-testid={'survey-input-ai-response'}>
-            <span>The answer below was predetermined based on the following information. Please review it and adjust to ensure accuracy:</span>
-            <Markdown markdown={ai_response.justification} />
+            <Markdown className={'!text-sm'} markdown={"✨"+ai_response.justification} />
           </Card>
         );
       } else {
@@ -258,8 +263,8 @@ const _SurveyInput = (props: SurveyInputProps) => {
     <div className="w-full space-y-6">
       {getPrompt()}
       {tooltip && <div className="text-left text-sm not-italic font-medium text-tc-primary">{tooltip}</div>}
-      {getAISource()}
       <div className="w-full justify-center">{inputComponent()}</div>
+      {getAISource()}
     </div>
   );
 };
