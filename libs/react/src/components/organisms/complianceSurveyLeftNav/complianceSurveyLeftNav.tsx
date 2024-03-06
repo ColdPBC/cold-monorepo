@@ -1,12 +1,9 @@
-import { ComplianceSurveyActiveKeyType, ComplianceSurveyPayloadType, ComplianceSurveySectionProgressType, ComplianceSurveySectionType } from '@coldpbc/interfaces';
-import { every, filter, find, forOwn, map, some, uniq } from 'lodash';
-import React, { ReactNode, useEffect, useState } from 'react';
-import { getFirstFollowUpKeyFromSection } from '@coldpbc/lib';
-import { Collapse } from 'react-collapse';
-import { IconNames } from '@coldpbc/enums';
-import { ColdIcon } from '../../atoms';
+import { ComplianceSurveyActiveKeyType, ComplianceSurveyPayloadType, ComplianceSurveySectionType } from '@coldpbc/interfaces';
+import { forOwn, map, uniq } from 'lodash';
+import React, { ReactNode } from 'react';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application';
+import { ComplianceSurveyCollapse } from './complianceSurveyCollapse';
 
 export interface ComplianceSurveyLeftNavProps {
   complianceSet: ComplianceSurveyPayloadType;
@@ -15,8 +12,7 @@ export interface ComplianceSurveyLeftNavProps {
 }
 const _ComplianceSurveyLeftNav = (props: ComplianceSurveyLeftNavProps) => {
   const { complianceSet, activeKey, setActiveKey } = props;
-  const [categoryOpened, setCategoryOpened] = useState<string>(activeKey.category);
-  // group and sort sections by section category. 1. Practices, 2. Product, 3. Environment, 4. Diversity & Inclusion
+
   const getGroupedSections = (): {
     [key: string]: {
       [key: string]: ComplianceSurveySectionType;
@@ -40,139 +36,15 @@ const _ComplianceSurveyLeftNav = (props: ComplianceSurveyLeftNavProps) => {
     return groupedSections;
   };
 
-  const goToKey = (key: string) => {
-    const activeKey = getFirstFollowUpKeyFromSection(key, complianceSet);
-    setActiveKey(activeKey);
-  };
-
-  const getSidebarIcon = (category: string) => {
-    // function to get the right icon.
-    // check progress of the section. if all questions are answered, show a checkmark. if not, show a circle.
-
-    const progressSections = filter(complianceSet.progress.sections, (section: ComplianceSurveySectionProgressType) => {
-      const foundSection = find(complianceSet.definition.sections, { title: section.title });
-      return foundSection?.section_type === category;
-    });
-    const categoryComplete = every(progressSections, (section, index) => {
-      return section.complete;
-    });
-    const someComplete = some(progressSections, (section, index) => {
-      return section.complete;
-    });
-
-    if (categoryComplete) {
-      return (
-        <div className={'w-[24px] h-[24px]'}>
-          <ColdIcon name={IconNames.ColdComplianceSurveyCheckBoxIcon} />
-        </div>
-      );
-    } else if (someComplete) {
-      return (
-        <div className={'w-[24px] h-[24px] flex justify-center items-center rounded-full bg-gray-70'}>
-          <ColdIcon name={IconNames.SubtractIcon} />
-        </div>
-      );
-    } else {
-      return <div className={'w-[24px] h-[24px] flex justify-center items-center rounded-full bg-gray-70'}></div>;
-    }
-  };
-
-  const getSectionIcon = (sectionKey: string) => {
-    // check progress check if the section is complete, show a checkmark. if not, show a circle.
-    const section = complianceSet.definition.sections[sectionKey];
-    const progressSection = find(complianceSet.progress.sections, { title: section.title });
-    if (activeKey.section === sectionKey) {
-      return <div className={'w-[12px] h-[12px] flex justify-center items-center rounded-full bg-cold-starkWhite'}></div>;
-    } else {
-      if (progressSection?.complete) {
-        return (
-          <div className={'w-[12px] h-[12px]'}>
-            <ColdIcon name={IconNames.ColdComplianceSurveyCheckBoxIcon} />
-          </div>
-        );
-      } else {
-        if (progressSection === undefined) {
-          return <div className={'w-[12px] h-[12px] flex justify-center items-center rounded-full bg-gray-70'}></div>;
-        }
-        const someComplete = some(
-          map(progressSection.questions, (question, key) => {
-            return question.user_answered;
-          }),
-          question => question === true,
-        );
-        if (someComplete) {
-          return (
-            <div className={'w-[12px] h-[12px] flex justify-center items-center rounded-full bg-gray-70'}>
-              <ColdIcon name={IconNames.SubtractIcon} />
-            </div>
-          );
-        } else {
-          return <div className={'w-[12px] h-[12px] flex justify-center items-center rounded-full bg-gray-70'}></div>;
-        }
-      }
-    }
-  };
-
-  const isCollapseOpen = (category: string) => {
-    return category === categoryOpened;
-  };
-
-  const openCategory = (category: string) => {
-    setCategoryOpened(category);
-  };
-
   const getNavbar = (): ReactNode => {
     return (
       <div className={'text-tc-primary w-[351px] bg-transparent h-full pl-[30px] pt-[30px] pb-[30px] flex flex-col space-y-[8px]'}>
         {map(getGroupedSections(), (sections, key) => {
-          return (
-            <div className={'flex flex-col bg-transparent w-full'} key={key}>
-              <div
-                className={'text-h3 text-tc-primary cursor-pointer flex flex-row space-x-3 items-center'}
-                onClick={() => {
-                  openCategory(key);
-                }}>
-                {getSidebarIcon(key)}
-                <div className={`text-left whitespace-normal`}>{key}</div>
-                <div className={'flex justify-center items-center'}>
-                  {isCollapseOpen(key) ? (
-                    <ColdIcon name={IconNames.SubtractIcon} />
-                  ) : (
-                    <div className={'w-[24px] h-[24px] flex justify-center items-center'}>
-                      <ColdIcon name={IconNames.PlusIcon} />
-                    </div>
-                  )}
-                </div>
-              </div>
-              <Collapse
-                isOpened={isCollapseOpen(key)}
-                theme={{
-                  collapse: 'transition-all h-auto duration-300 ease-in-out',
-                }}>
-                <div className={'flex flex-col space-y-[7px]'}>
-                  {map(sections, (section, key) => {
-                    return (
-                      <div
-                        className={`w-full h-[25px] pl-5 flex flex-row space-x-3 items-center cursor-pointer ${key === activeKey.section ? 'bg-bgc-accent' : ''}`}
-                        onClick={() => goToKey(key)}
-                        key={key}>
-                        {getSectionIcon(key)}
-                        <div className={'text-caption bg-transparent line-clamp-1'}>{section.title}</div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </Collapse>
-            </div>
-          );
+          return <ComplianceSurveyCollapse key={key} category={key} sections={sections} setActiveKey={setActiveKey} activeKey={activeKey} complianceSet={complianceSet} />;
         })}
       </div>
     );
   };
-
-  useEffect(() => {
-    setCategoryOpened(activeKey.category);
-  }, [activeKey.section]);
 
   return <div className={'flex flex-col bg-bgc-main border-[3px] border-bgc-accent h-full'}>{getNavbar()}</div>;
 };
