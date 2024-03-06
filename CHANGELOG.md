@@ -1,3 +1,10 @@
+## [1.147.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.147.0...v1.147.1) (2024-03-06)
+
+
+### Bug Fixes
+
+* only show surveys for activated compliances ([65eddb5](https://github.com/ColdPBC/cold-monorepo/commit/65eddb56999c1118373af03ce2326802219c9010))
+
 # [1.147.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.146.0...v1.147.0) (2024-03-06)
 
 
