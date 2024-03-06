@@ -14,7 +14,7 @@ export class SurveyFilterService extends BaseWorker {
     const filteredObject = JSON.parse(JSON.stringify(jsonObject)); // Create a deep copy of the JSON object
 
     // Iterate over each section in the filteredObject
-    for (const sectionKey in filteredObject.definition.sections) {
+    for (const sectionKey of Object.keys(filteredObject.definition.sections)) {
       const section = filteredObject.definition.sections[sectionKey];
       // Check for a dependency at the section level
       if (section.dependency?.expression) {
@@ -33,7 +33,7 @@ export class SurveyFilterService extends BaseWorker {
       }
 
       // Iterate over each follow-up question in the section
-      for (const currentQuestionKey in section.follow_up) {
+      for (const currentQuestionKey of Object.keys(section.follow_up)) {
         const currentQuestion = section.follow_up[currentQuestionKey];
 
         delete currentQuestion.rubric;
