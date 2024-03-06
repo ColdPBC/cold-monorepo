@@ -1,3 +1,29 @@
+# [1.142.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.141.3...v1.142.0) (2024-03-06)
+
+
+### Bug Fixes
+
+* broken QuestionAnswered count ([4b04ad4](https://github.com/ColdPBC/cold-monorepo/commit/4b04ad40759803f21554b4e531804a43429161f6))
+
+
+### Features
+
+* underline text on hover for compliance question ([3b8bf5c](https://github.com/ColdPBC/cold-monorepo/commit/3b8bf5cee156b93c74b8782acd47d99ff247a160))
+
+## [1.141.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.141.2...v1.141.3) (2024-03-06)
+
+
+### Bug Fixes
+
+* broken QuestionAnswered count ([3c40731](https://github.com/ColdPBC/cold-monorepo/commit/3c407316defdd965690738b14ae9286777e9be0a))
+
+## [1.141.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.141.1...v1.141.2) (2024-03-06)
+
+
+### Bug Fixes
+
+* broken QuestionAnswered count ([a671531](https://github.com/ColdPBC/cold-monorepo/commit/a67153117d2b56fd2edfd32aa4be00dd300ed258))
+
 ## [1.141.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.141.0...v1.141.1) (2024-03-06)
 
 
