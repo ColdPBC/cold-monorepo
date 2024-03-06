@@ -28,6 +28,7 @@ const _ComplianceAssessmentsCard = (props: ComplianceAssessmentsCardProps) => {
             ]}
           />
           <div className={'flex flex-row text-tc-primary text-body justify-between'}>
+            <div></div>
             <div>{`${percentage.toFixed(0)}% Satisfied`}</div>
           </div>
         </div>
