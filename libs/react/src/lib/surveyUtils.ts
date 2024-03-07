@@ -1,4 +1,4 @@
-import { cloneDeep, find, findIndex, forEach, forOwn, isEmpty } from 'lodash';
+import { cloneDeep, find, findIndex, forEach, forOwn, isEmpty, uniq } from 'lodash';
 import {
   ComplianceSurveyActiveKeyType,
   ComplianceSurveyPayloadType,
@@ -235,24 +235,35 @@ export const sortComplianceSurvey = (surveyData: ComplianceSurveyPayloadType): C
       sections: {},
     },
   } as ComplianceSurveyPayloadType;
-  // sort the sections and set the sorted sections in the copy. sort the follow up for each section
-  Object.keys(surveyData.definition.sections)
-    .sort((a, b) => {
-      return surveyData.definition.sections[a].category_idx - surveyData.definition.sections[b].category_idx;
-    })
-    .forEach(key => {
+
+  const sortedSectionKeys = Object.keys(surveyData.definition.sections).sort((a, b) => {
+    return surveyData.definition.sections[a].category_idx - surveyData.definition.sections[b].category_idx;
+  });
+
+  const sectionCategories = uniq(
+    sortedSectionKeys.map(key => {
+      return surveyData.definition.sections[key].section_type;
+    }),
+  );
+
+  sectionCategories.forEach(category => {
+    const categorySections = sortedSectionKeys.filter(key => {
+      return surveyData.definition.sections[key].section_type === category;
+    });
+    categorySections.forEach(key => {
       copy.definition.sections[key] = {
         ...surveyData.definition.sections[key],
         follow_up: {},
       };
-      Object.keys(surveyData.definition.sections[key].follow_up)
-        .sort((a, b) => {
-          return surveyData.definition.sections[key].follow_up[a].idx - surveyData.definition.sections[key].follow_up[b].idx;
-        })
-        .forEach(followUpKey => {
-          copy.definition.sections[key].follow_up[followUpKey] = surveyData.definition.sections[key].follow_up[followUpKey];
-        });
+      const followUpKeys = Object.keys(surveyData.definition.sections[key].follow_up).sort((a, b) => {
+        return surveyData.definition.sections[key].follow_up[a].idx - surveyData.definition.sections[key].follow_up[b].idx;
+      });
+      followUpKeys.forEach(followUpKey => {
+        copy.definition.sections[key].follow_up[followUpKey] = surveyData.definition.sections[key].follow_up[followUpKey];
+      });
     });
+  });
+
   return copy;
 };
 

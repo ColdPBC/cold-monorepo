@@ -2,7 +2,7 @@ import { useAddToastMessage, useAuth0Wrapper, useColdContext } from '@coldpbc/ho
 import React, { useRef } from 'react';
 import { forEach } from 'lodash';
 import { axiosFetcher } from '@coldpbc/fetchers';
-import { isAxiosError } from 'axios';
+import { AxiosRequestConfig, isAxiosError } from 'axios';
 import { IButtonProps, ToastMessage } from '@coldpbc/interfaces';
 import { ErrorType } from '@coldpbc/enums';
 import { BaseButton } from '@coldpbc/components';
@@ -14,6 +14,7 @@ export interface DocumentUploadButtonProps {
 
 export const DocumentUploadButton = (props: DocumentUploadButtonProps) => {
   const { buttonProps } = props;
+  const [sending, setSending] = React.useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { orgId } = useAuth0Wrapper();
   const { addToastMessage } = useAddToastMessage();
@@ -21,15 +22,19 @@ export const DocumentUploadButton = (props: DocumentUploadButtonProps) => {
   const { mutate } = useSWRConfig();
 
   const handleChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSending(true);
     const files = event.target.files;
     const formData = new FormData();
     forEach(files, file => {
       formData.append('file', file);
     });
-    const headers = JSON.stringify({
-      'Content-Type': 'multipart/form-data',
-    });
-    const response = await axiosFetcher([`/organizations/${orgId}/files`, 'POST', formData, headers]);
+    const config = JSON.stringify({
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+      timeout: 60000,
+    } as AxiosRequestConfig);
+    const response = await axiosFetcher([`/organizations/${orgId}/files`, 'POST', formData, config]);
     if (isAxiosError(response)) {
       await addToastMessage({
         message: 'Upload failed',
@@ -58,16 +63,17 @@ export const DocumentUploadButton = (props: DocumentUploadButtonProps) => {
         },
       );
       props.buttonProps?.onClick && props.buttonProps?.onClick();
+      setSending(false);
     }
   };
 
-  const uploadButton = () => {
+  const uploadButton = async () => {
     if (fileInputRef.current !== null) fileInputRef.current.click();
   };
 
   return (
     <>
-      <BaseButton {...buttonProps} onClick={() => uploadButton()} />
+      <BaseButton {...buttonProps} onClick={() => uploadButton()} disabled={sending} loading={sending} />
       <input onChange={handleChange} ref={fileInputRef} type="file" aria-label={'Upload Documents'} hidden multiple />
     </>
   );
