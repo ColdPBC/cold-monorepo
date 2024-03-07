@@ -1,3 +1,10 @@
+# [1.150.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.149.0...v1.150.0) (2024-03-07)
+
+
+### Features
+
+* add spinner and disable button when uploading ([722edee](https://github.com/ColdPBC/cold-monorepo/commit/722edee835663ed6a674319fd097a098fdf76b83))
+* add timeout to axiosfetcher options ([dee7ae1](https://github.com/ColdPBC/cold-monorepo/commit/dee7ae10f8268c51de9e1a02efdf59a3a191cfa1))
 
 # [1.149.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.148.0...v1.149.0) (2024-03-06)
 
