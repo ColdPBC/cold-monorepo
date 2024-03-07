@@ -1,3 +1,10 @@
+# [1.151.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.150.1...v1.151.0) (2024-03-07)
+
+
+### Features
+
+* show next actions and emissions charts again, but put emissions chart behind a flag ([b6e660c](https://github.com/ColdPBC/cold-monorepo/commit/b6e660c665f1ddab0657d27e2ce87747580aeb85))
+
 ## [1.150.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.150.0...v1.150.1) (2024-03-07)
 
 
