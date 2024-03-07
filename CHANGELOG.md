@@ -1,3 +1,10 @@
+# [1.154.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.153.0...v1.154.0) (2024-03-07)
+
+
+### Features
+
+* increase robustness of next steps module ([0ffd364](https://github.com/ColdPBC/cold-monorepo/commit/0ffd36438db014c36befd23a4e209a998956dff4))
+
 # [1.153.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.152.0...v1.153.0) (2024-03-07)
 
 
