@@ -21,7 +21,7 @@ export interface FootprintOverviewCardProps {
   chartVariant?: EmissionsDonutChartVariants;
 }
 
-const PERIOD = 2022;
+const PERIOD = 2023;
 
 function _FootprintOverviewCard(props: PropsWithChildren<FootprintOverviewCardProps>) {
   const navigate = useNavigate();
@@ -44,7 +44,7 @@ function _FootprintOverviewCard(props: PropsWithChildren<FootprintOverviewCardPr
   // To do this, wrap all useSWR in custom wrappers like, useGetFootprint()
   const isEmptyFootprintData =
     !isLoading &&
-    !some(data.subcategories, (subcategory: any) => some(subcategory.activities, (activity: any) => activity.footprint && activity.footprint?.[PERIOD]?.value !== null));
+    !some(data.subcategories, (subcategory: any) => some(subcategory.activities, (activity: any) => activity.footprint && activity.footprint?.[PERIOD]?.value !== undefined));
 
   let cardProps: CardProps = {};
   if (!props.headerless) {
@@ -68,22 +68,12 @@ function _FootprintOverviewCard(props: PropsWithChildren<FootprintOverviewCardPr
         <FootprintOverviewChart variant={props.chartVariant ?? EmissionsDonutChartVariants.horizontal} period={PERIOD} />
         {isEmptyFootprintData && props.chartVariant === EmissionsDonutChartVariants.horizontal && (
           <div className="m-auto table w-1">
-            <h4 className="text-h4 text-center whitespace-nowrap m-4">{isSurveyComplete ? 'We are reviewing your data' : 'We need more data to show your footprint'}</h4>
+            <h4 className="text-h4 text-center whitespace-nowrap m-4">{isSurveyComplete ? 'We are reviewing your data' : 'We need more data to show your '+PERIOD+' footprint'}</h4>
             <p className="text-center text-sm leading-normal">
               {isSurveyComplete
                 ? "We'll be in touch as soon as your initial footprint results are available."
-                : 'Please fill out the Footprint Overview survey using the link below to calculate your initial footprint.'}
+                : "We'll be in touch soon to collect info needed for your latest footprint."}
             </p>
-            {!isSurveyComplete && (
-              <div className="mt-4 flex justify-center">
-                <BaseButton
-                  onClick={() => {
-                    navigate('?surveyName=footprint_overview');
-                  }}
-                  label={'Initial Footprint Survey'}
-                />
-              </div>
-            )}
           </div>
         )}
       </div>
