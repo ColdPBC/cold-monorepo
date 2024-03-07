@@ -1,3 +1,10 @@
+# [1.152.0-cold-609.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.151.0...v1.152.0-cold-609.1) (2024-03-07)
+
+
+### Features
+
+* move to 2023 for footprinting year ([e772b4c](https://github.com/ColdPBC/cold-monorepo/commit/e772b4ccc4b088c6579ba3d2fa2d0782e3de49ae))
+
 # [1.151.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.150.1...v1.151.0) (2024-03-07)
 
 
