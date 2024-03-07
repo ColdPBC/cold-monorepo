@@ -1,3 +1,64 @@
+## [1.150.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.150.0...v1.150.1) (2024-03-07)
+
+
+### Bug Fixes
+
+* tweak prompts ([c5bdd42](https://github.com/ColdPBC/cold-monorepo/commit/c5bdd420cd4d218204984d991cbd0861781594cb))
+
+# [1.150.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.149.0...v1.150.0) (2024-03-07)
+
+
+### Features
+
+* add spinner and disable button when uploading ([722edee](https://github.com/ColdPBC/cold-monorepo/commit/722edee835663ed6a674319fd097a098fdf76b83))
+* add timeout to axiosfetcher options ([dee7ae1](https://github.com/ColdPBC/cold-monorepo/commit/dee7ae10f8268c51de9e1a02efdf59a3a191cfa1))
+
+# [1.149.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.148.0...v1.149.0) (2024-03-06)
+
+
+### Features
+
+* add spinner and disable button when uploading ([722edee](https://github.com/ColdPBC/cold-monorepo/commit/722edee835663ed6a674319fd097a098fdf76b83))
+* handle when survey is different than response from the API ([76ed8af](https://github.com/ColdPBC/cold-monorepo/commit/76ed8af0d86306446e8b43b217e08ebeeb35ec50))
+* remove prevention of submission of additional context if no answer provided ([3d8e47f](https://github.com/ColdPBC/cold-monorepo/commit/3d8e47f65c41d26bd511df70c4627d9023e9c191))
+* sort survey sections by category and then idx ([4f755a4](https://github.com/ColdPBC/cold-monorepo/commit/4f755a44ea1add6bf5ccc313bf518d612e20984e))
+
+# [1.149.0-COLD-595.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.149.0-COLD-595.1...v1.149.0-COLD-595.2) (2024-03-06)
+
+
+### Features
+
+* handle when survey is different than response from the API ([76ed8af](https://github.com/ColdPBC/cold-monorepo/commit/76ed8af0d86306446e8b43b217e08ebeeb35ec50))
+* sort survey sections by category and then idx ([4f755a4](https://github.com/ColdPBC/cold-monorepo/commit/4f755a44ea1add6bf5ccc313bf518d612e20984e))
+
+# [1.149.0-COLD-595.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.148.0...v1.149.0-COLD-595.1) (2024-03-06)
+
+
+### Features
+
+* remove prevention of submission of additional context if no answer provided ([3d8e47f](https://github.com/ColdPBC/cold-monorepo/commit/3d8e47f65c41d26bd511df70c4627d9023e9c191))
+
+# [1.148.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.147.1...v1.148.0) (2024-03-06)
+
+
+### Features
+
+* add scroll bar when left nav items are too high ([e8f8596](https://github.com/ColdPBC/cold-monorepo/commit/e8f859683bb240bdeb39c9b698d524e240dc87ad))
+
+# [1.148.0-COLD-587.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.147.1...v1.148.0-COLD-587.1) (2024-03-06)
+
+
+### Features
+
+* add scroll bar when left nav items are too high ([e8f8596](https://github.com/ColdPBC/cold-monorepo/commit/e8f859683bb240bdeb39c9b698d524e240dc87ad))
+
+## [1.147.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.147.0...v1.147.1) (2024-03-06)
+
+
+### Bug Fixes
+
+* only show surveys for activated compliances ([65eddb5](https://github.com/ColdPBC/cold-monorepo/commit/65eddb56999c1118373af03ce2326802219c9010))
+
 # [1.147.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.146.0...v1.147.0) (2024-03-06)
 
 

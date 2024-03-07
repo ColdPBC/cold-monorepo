@@ -1,5 +1,3 @@
-import { ComplianceSurveyActiveKeyType, ComplianceSurveyPayloadType, IButtonProps, SurveyActiveKeyType } from '@coldpbc/interfaces';
-import { useAuth0Wrapper } from '@coldpbc/hooks';
 import React from 'react';
 import { findIndex, keys, size } from 'lodash';
 import {
@@ -14,6 +12,8 @@ import {
 } from '@coldpbc/lib';
 import { BaseButton, ErrorFallback, SurveyInput } from '@coldpbc/components';
 import { ButtonTypes, GlobalSizes } from '@coldpbc/enums';
+import { ComplianceSurveyActiveKeyType, ComplianceSurveyPayloadType, IButtonProps, SurveyActiveKeyType } from '@coldpbc/interfaces';
+import { useAuth0Wrapper } from '@coldpbc/hooks';
 import { CSSTransition, SwitchTransition } from 'react-transition-group';
 import { useSWRConfig } from 'swr';
 import { withErrorBoundary } from 'react-error-boundary';
@@ -193,14 +193,6 @@ const _ComplianceSurveyQuestionnaire = (props: ComplianceSurveyQuestionnaireProp
         return followUpKey === activeKey.value;
       });
       const activeFollowUpKey = Object.keys(sections[activeSectionKey].follow_up)[activeFollowUpIndex];
-      if (
-        additionalContextQuestion &&
-        sections[activeSectionKey].follow_up[activeFollowUpKey].additional_context &&
-        (sections[activeSectionKey].follow_up[activeFollowUpKey].additional_context?.value === undefined ||
-          sections[activeSectionKey].follow_up[activeFollowUpKey].additional_context?.value === null)
-      ) {
-        buttonProps.disabled = true;
-      }
 
       if (
         sections[activeSectionKey].follow_up[activeFollowUpKey].value === undefined &&
@@ -238,13 +230,6 @@ const _ComplianceSurveyQuestionnaire = (props: ComplianceSurveyQuestionnaireProp
         }
       }
     } else {
-      if (
-        additionalContextQuestion &&
-        sections[activeSectionKey].additional_context &&
-        (sections[activeSectionKey].additional_context?.value === undefined || sections[activeSectionKey].additional_context?.value === null)
-      ) {
-        buttonProps.disabled = true;
-      }
       if (sections[activeSectionKey].value === undefined && sections[activeSectionKey].ai_response !== undefined && sections[activeSectionKey].ai_response?.answer !== undefined) {
         buttonProps.label = 'Confirm';
         buttonProps.onClick = () => {
@@ -290,8 +275,9 @@ const _ComplianceSurveyQuestionnaire = (props: ComplianceSurveyQuestionnaireProp
     return <BaseButton {...buttonProps} />;
   };
 
-  const goToNextQuestion = () => {
-    const activeSectionIndex = getSectionIndex(sections, activeKey);
+  const goToNextQuestion = (key: ComplianceSurveyActiveKeyType, surveyData: ComplianceSurveyPayloadType) => {
+    const sections = surveyData.definition.sections;
+    const activeSectionIndex = getSectionIndex(sections, key);
     const activeSectionKey = Object.keys(sections)[activeSectionIndex];
     const nextSectionKey = Object.keys(sections)[activeSectionIndex + 1];
     const nextSection = sections[nextSectionKey];
@@ -304,7 +290,7 @@ const _ComplianceSurveyQuestionnaire = (props: ComplianceSurveyQuestionnaireProp
         if (!isComponentTypeValid(nextSection.component) && nextSection.prompt === '') {
           setActiveKey({
             value: Object.keys(nextSection.follow_up)[0],
-            previousValue: activeKey.value,
+            previousValue: key.value,
             isFollowUp: true,
             section: nextSectionKey,
             category: nextSection.section_type,
@@ -312,7 +298,7 @@ const _ComplianceSurveyQuestionnaire = (props: ComplianceSurveyQuestionnaireProp
         } else {
           setActiveKey({
             value: nextSectionKey,
-            previousValue: activeKey.value,
+            previousValue: key.value,
             isFollowUp: false,
             section: nextSectionKey,
             category: nextSection.section_type,
@@ -322,7 +308,7 @@ const _ComplianceSurveyQuestionnaire = (props: ComplianceSurveyQuestionnaireProp
         const nextFollowUpKey = Object.keys(sections[activeSectionKey].follow_up)[activeFollowUpIndex + 1];
         setActiveKey({
           value: nextFollowUpKey,
-          previousValue: activeKey.value,
+          previousValue: key.value,
           isFollowUp: true,
           section: activeSectionKey,
           category: sections[activeSectionKey].section_type,
@@ -333,7 +319,7 @@ const _ComplianceSurveyQuestionnaire = (props: ComplianceSurveyQuestionnaireProp
         if (!isComponentTypeValid(nextSection.component) && nextSection.prompt === '') {
           setActiveKey({
             value: Object.keys(nextSection.follow_up)[0],
-            previousValue: activeKey.value,
+            previousValue: key.value,
             isFollowUp: true,
             section: nextSectionKey,
             category: nextSection.section_type,
@@ -341,7 +327,7 @@ const _ComplianceSurveyQuestionnaire = (props: ComplianceSurveyQuestionnaireProp
         } else {
           setActiveKey({
             value: nextSectionKey,
-            previousValue: activeKey.value,
+            previousValue: key.value,
             isFollowUp: false,
             section: nextSectionKey,
             category: nextSection.section_type,
@@ -351,7 +337,7 @@ const _ComplianceSurveyQuestionnaire = (props: ComplianceSurveyQuestionnaireProp
         const nextFollowUpKey = Object.keys(sections[activeSectionKey].follow_up)[0];
         setActiveKey({
           value: nextFollowUpKey,
-          previousValue: activeKey.value,
+          previousValue: key.value,
           isFollowUp: true,
           section: activeSectionKey,
           category: sections[activeSectionKey].section_type,
@@ -371,7 +357,7 @@ const _ComplianceSurveyQuestionnaire = (props: ComplianceSurveyQuestionnaireProp
     });
     updateTransitionClassNames(true);
     setSendingSurvey(false);
-    goToNextQuestion();
+    goToNextQuestion(activeKey, sortedSurvey);
   };
 
   const onSkipButtonClicked = async () => {
@@ -388,7 +374,7 @@ const _ComplianceSurveyQuestionnaire = (props: ComplianceSurveyQuestionnaireProp
     });
     updateTransitionClassNames(true);
     setSendingSurvey(false);
-    goToNextQuestion();
+    goToNextQuestion(activeKey, sortedSurvey);
   };
 
   const onSubmitButtonClicked = async () => {
