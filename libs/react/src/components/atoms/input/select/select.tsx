@@ -38,7 +38,7 @@ export const Select = (props: SelectProps) => {
       name={name}
     >
       {({ open }) => (
-        <div className={'relative space-y-2'}>
+        <div className={'relative space-y-2 '+className}>
           {label && (
             <Listbox.Label className="block text-left text-eyebrow text-tc-primary">
               {label}

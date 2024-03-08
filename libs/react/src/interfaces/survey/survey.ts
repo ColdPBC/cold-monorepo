@@ -173,6 +173,8 @@ export interface ComplianceSurveySectionProgressType {
   review: number;
   title: string;
   total: number;
+  section_score: number;
+  section_max_score: number;
 }
 
 export interface ComplianceSurveyProgressQuestionType {
