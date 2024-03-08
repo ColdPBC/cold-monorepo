@@ -1,3 +1,15 @@
+# [1.155.0-cold-522.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.154.0...v1.155.0-cold-522.1) (2024-03-08)
+
+
+### Bug Fixes
+
+* properly support multiple urls in OrgSWR ([6b8cc3a](https://github.com/ColdPBC/cold-monorepo/commit/6b8cc3a790d380444452632165291069f10439c2))
+
+
+### Features
+
+* set up assessments page to use compliance info ([1641b5b](https://github.com/ColdPBC/cold-monorepo/commit/1641b5b14844c32902dc7b5add613f43af67a8ce))
+
 # [1.154.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.153.0...v1.154.0) (2024-03-07)
 
 
