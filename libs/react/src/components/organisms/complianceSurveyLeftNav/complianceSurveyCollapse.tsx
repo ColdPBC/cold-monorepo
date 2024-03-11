@@ -23,10 +23,7 @@ export const ComplianceSurveyCollapse = (props: ComplianceSurveyCollapseProps) =
     setActiveKey(activeKey);
   };
 
-  const getSidebarIcon = (category: string) => {
-    // function to get the right icon.
-    // check progress of the section. if all questions are answered, show a checkmark. if not, show a circle.
-
+  const getCategoryIcon = (category: string) => {
     const progressSections = filter(complianceSet.progress.sections, (section: ComplianceSurveySectionProgressType) => {
       const foundSection = find(complianceSet.definition.sections, { title: section.title });
       return foundSection?.section_type === category;
@@ -34,8 +31,10 @@ export const ComplianceSurveyCollapse = (props: ComplianceSurveyCollapseProps) =
     const categoryComplete = every(progressSections, (section, index) => {
       return section.complete;
     });
-    const someComplete = some(progressSections, (section, index) => {
-      return section.complete;
+    const someQuestionsComplete = some(progressSections, (section, index) => {
+      return some(section.questions, (question, key) => {
+        return question.user_answered;
+      });
     });
 
     if (categoryComplete) {
@@ -44,7 +43,7 @@ export const ComplianceSurveyCollapse = (props: ComplianceSurveyCollapseProps) =
           <ColdIcon name={IconNames.ColdComplianceSurveyCheckBoxIcon} />
         </div>
       );
-    } else if (someComplete) {
+    } else if (someQuestionsComplete) {
       return (
         <div className={'w-[24px] h-[24px] flex justify-center items-center rounded-full bg-gray-70'}>
           <ColdIcon name={IconNames.SubtractIcon} />
@@ -102,7 +101,7 @@ export const ComplianceSurveyCollapse = (props: ComplianceSurveyCollapseProps) =
         onClick={() => {
           setExpanded(!expanded);
         }}>
-        {getSidebarIcon(category)}
+        {getCategoryIcon(category)}
         <div className={`text-left whitespace-normal`}>{category}</div>
         <div className={'flex justify-center items-center'}>
           {expanded ? (
