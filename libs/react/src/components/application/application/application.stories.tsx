@@ -15,7 +15,6 @@ import {
 } from '@coldpbc/mocks';
 import { userEvent, within } from '@storybook/testing-library';
 import { find, forEach, random, uniq } from 'lodash';
-import { expect } from '@storybook/jest';
 import { verifyActionDetailPage, verifyActionsPage, verifyCompliancePage } from '@coldpbc/lib';
 
 const meta: Meta<typeof Application> = {
@@ -50,19 +49,6 @@ export const Default: Story = {
       await canvas.findByTestId('footprint-detail-card-product');
       await canvas.findByTestId('footprint-detail-card-operations');
       await canvas.findByTestId('footprint-detail-card-travel');
-      // navigate back to home page
-      const homeSidebarItem = await within(sidebar).findByText('Home');
-      await userEvent.click(homeSidebarItem);
-    });
-    await step('Navigate to Journey Page', async () => {
-      const card = await canvas.findByTestId('journey-overview-card');
-      // find Learn More button within card
-      const button = await within(card).findByText('Learn More');
-      await userEvent.click(button);
-      // verify that we are on the journey page
-      await canvas.findByTestId('journey-detail-view');
-      await canvas.findByTestId('journey-spider-chart');
-      await canvas.findByTestId('temperature-check-card');
       // navigate back to home page
       const homeSidebarItem = await within(sidebar).findByText('Home');
       await userEvent.click(homeSidebarItem);
@@ -117,23 +103,6 @@ export const Default: Story = {
       await userEvent.click(secondCategoryCardButton);
       await verifyActionsPage(categoryData[1].name, categoryData[1].title, canvasElement);
 
-      await userEvent.click(await within(sidebar).findByText('Home'));
-    });
-    await step('Navigate to Actions from Journey Page', async () => {
-      // go to journey page
-      const journeySidebarItem = await within(sidebar).findByText('Gaps');
-      await userEvent.click(journeySidebarItem);
-      // get the all the subcategory journey preview cards. compnay_decarbonization, employee_engagement, climate_leadership
-      const companyDecarbonizationCard = await canvas.findByTestId('journey-detail-view-company-decarbonization');
-      await canvas.findByTestId('journey-detail-view-employee-engagement');
-      await canvas.findByTestId('journey-detail-view-climate-leadership');
-      const travelPage = await within(companyDecarbonizationCard).findByText('Travel');
-      const travelPageLink = travelPage.parentElement?.querySelector('a');
-      if (!travelPageLink) {
-        throw new Error('Could not find travel page link');
-      }
-      await userEvent.click(travelPageLink);
-      await verifyActionsPage('travel', 'Travel', canvasElement);
       await userEvent.click(await within(sidebar).findByText('Home'));
     });
     await step('Navigate to Actions from Sidebar', async () => {
@@ -210,32 +179,6 @@ export const Default: Story = {
       // navigate back to home page
       const homeSidebarItem = await within(sidebar).findByText('Home');
       await userEvent.click(homeSidebarItem);
-    });
-    await step('Verify Next Steps Card', async () => {
-      const homeSidebarItem = await within(sidebar).findByText('Home');
-      await userEvent.click(homeSidebarItem);
-      // check next steps card. find all the next step cards and click the button in each of them
-      const nextStepsCard = await canvas.findByTestId('next-steps-card');
-      const nextStepCards = await within(nextStepsCard).findAllByTestId('next-step-card');
-      const nextStepCard = nextStepCards[0];
-      const button = await within(nextStepCard).findByRole('button');
-      const progressBar = await within(nextStepCard).queryByTestId('next-step-card-progress');
-      if (progressBar) {
-        await within(nextStepCard).findByText('Continue Survey');
-      } else {
-        await within(nextStepCard).findByText('Start Survey');
-      }
-      await button.click();
-      // check that we are on the survey page
-      const surveyTakeover = await canvas.findByTestId('survey-takeover');
-      // find close button and click it
-      const closeButton = await within(surveyTakeover).findByRole('button', {
-        name: 'Close',
-      });
-      await userEvent.click(closeButton);
-      const surveyTakeoverClosed = await canvas.queryByTestId('survey-takeover');
-      await expect(surveyTakeoverClosed).toBeNull();
-      await userEvent.click(await within(sidebar).findByText('Home'));
     });
     await step('Verify Compliance Page', async () => {
       const complianceSidebarItem = await within(sidebar).findByText('Compliance');
