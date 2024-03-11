@@ -1,3 +1,10 @@
+# [1.156.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.155.0...v1.156.0) (2024-03-11)
+
+
+### Features
+
+* add rounded to survey compliance flow step ([8cd374f](https://github.com/ColdPBC/cold-monorepo/commit/8cd374fe338f45c7b67351ed3545b769d1a62309))
+
 # [1.155.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.154.0...v1.155.0) (2024-03-11)
 
 

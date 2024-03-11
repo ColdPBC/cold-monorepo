@@ -61,7 +61,7 @@ const _ComplianceSurveyRightNav = (props: ComplianceSurveyRightNavProps) => {
   const sectionQuestions = surveyData.definition.sections[activeKey.section].follow_up;
 
   return (
-    <div className={'w-full h-full bg-bgc-accent pr-[99px] pl-[72px] pt-[38px] pb-[38px] text-tc-primary space-y-[18px] flex flex-col overflow-y-auto'}>
+    <div className={'w-full h-full bg-bgc-accent pr-[99px] pl-[72px] pt-[38px] pb-[38px] text-tc-primary space-y-[18px] flex flex-col overflow-y-auto rounded-r-lg'}>
       <div className={'flex flex-col'}>
         <div className={'text-caption font-bold'}>{activeKey.category}</div>
         <div className={'text-h2'}>{surveyData.definition.sections[activeKey.section].title}</div>
