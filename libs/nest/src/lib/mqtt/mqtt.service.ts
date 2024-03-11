@@ -1,4 +1,4 @@
-import { Global, Injectable, OnModuleInit } from '@nestjs/common';
+import { Global, Injectable, OnModuleInit, UnprocessableEntityException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as mqtt from 'mqtt';
 import { BaseWorker } from '../worker';
@@ -121,13 +121,15 @@ export class MqttService extends BaseWorker implements OnModuleInit {
 
       switch (inputs.target) {
         case 'public':
-          topic = `system/${this.config.get('NODE_ENV', 'development')}/public`;
-          break;
         case 'cold':
-          topic = `system/${this.config.get('NODE_ENV', 'development')}/cold`;
+          topic = `system/${this.config.get('NODE_ENV', 'development')}/${target}/`;
           break;
         case 'ui':
-          topic = `ui/${this.config.get('NODE_ENV', 'development')}`;
+          // TODO: Refactor and clean up
+          if (payload['org_id'] === undefined) {
+            throw new UnprocessableEntityException('org_id is required');
+          }
+          topic = `ui/${this.config.get('NODE_ENV', 'development')}/${payload['org_id']}/`;
           break;
       }
 
