@@ -50,11 +50,15 @@ const _NextSteps = () => {
 
   if (error) {
     logError(error, ErrorType.SWRError);
-    return <div></div>;
+    return;
   }
   if (orgCompliances.error) {
     logError(orgCompliances.error, ErrorType.SWRError);
-    return <div></div>;
+    return;
+  }
+
+  if (!orgCompliances.data?.length) {
+    return;
   }
 
   const compliances = orgCompliances.data;

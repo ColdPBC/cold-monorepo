@@ -1,3 +1,32 @@
+# [1.154.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.153.0...v1.154.0) (2024-03-07)
+
+
+### Features
+
+* increase robustness of next steps module ([0ffd364](https://github.com/ColdPBC/cold-monorepo/commit/0ffd36438db014c36befd23a4e209a998956dff4))
+
+# [1.153.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.152.0...v1.153.0) (2024-03-07)
+
+
+### Features
+
+* one more for move to 2023 for footprinting year ([2664cdd](https://github.com/ColdPBC/cold-monorepo/commit/2664cdde586a4bf582f607dd97c6ec4ccdb68608))
+
+# [1.152.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.151.0...v1.152.0) (2024-03-07)
+
+
+### Features
+
+* move to 2023 for footprinting year ([e772b4c](https://github.com/ColdPBC/cold-monorepo/commit/e772b4ccc4b088c6579ba3d2fa2d0782e3de49ae))
+* move to 2023 for footprinting year ([#325](https://github.com/ColdPBC/cold-monorepo/issues/325)) ([53c9e06](https://github.com/ColdPBC/cold-monorepo/commit/53c9e061ceb2c9bc787576d76cdb399591b54935))
+
+# [1.151.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.150.1...v1.151.0) (2024-03-07)
+
+
+### Features
+
+* show next actions and emissions charts again, but put emissions chart behind a flag ([b6e660c](https://github.com/ColdPBC/cold-monorepo/commit/b6e660c665f1ddab0657d27e2ce87747580aeb85))
+
 ## [1.150.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.150.0...v1.150.1) (2024-03-07)
 
 
