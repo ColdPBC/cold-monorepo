@@ -1,3 +1,16 @@
+# [1.155.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.154.0...v1.155.0) (2024-03-11)
+
+
+### Bug Fixes
+
+* make filter code a bit cleaner ([bb815b2](https://github.com/ColdPBC/cold-monorepo/commit/bb815b2971c19d8fb0e719df878dce7d631045d6))
+* tweak prompts ([b5768d0](https://github.com/ColdPBC/cold-monorepo/commit/b5768d061b0ce08de623c73e0f6469280928d4ce))
+
+
+### Features
+
+* support multiple file uploads ([16c417b](https://github.com/ColdPBC/cold-monorepo/commit/16c417b00a4a40f846dfd10081453d933283819e))
+
 # [1.154.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.153.0...v1.154.0) (2024-03-07)
 
 
