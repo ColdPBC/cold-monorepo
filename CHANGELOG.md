@@ -1,3 +1,10 @@
+# [1.157.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.156.0...v1.157.0) (2024-03-11)
+
+
+### Features
+
+* have subtract icon when a question is complete for a category ([12b97a4](https://github.com/ColdPBC/cold-monorepo/commit/12b97a4df5c0a6ed408f470dee3df3d3998b9428))
+
 # [1.156.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.155.0...v1.156.0) (2024-03-11)
 
 
