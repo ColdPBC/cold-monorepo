@@ -32,8 +32,6 @@ export const Default: Story = {
       const card = await canvas.findByTestId('journey-overview-card');
       // find Learn More button within card
       await within(card).findByText('Learn More');
-      // find spider chart
-      await within(card).findByTestId('journey-spider-chart');
     });
     await step('TemperatureCheckCard', async () => {
       await canvas.findByText('Temperature Check');

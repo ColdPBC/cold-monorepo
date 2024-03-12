@@ -45,7 +45,7 @@ const _ComplianceSurveyLeftNav = (props: ComplianceSurveyLeftNavProps) => {
     );
   };
 
-  return <div className={'flex flex-col bg-bgc-main border-[3px] border-bgc-accent h-full'}>{getNavbar()}</div>;
+  return <div className={'flex flex-col bg-bgc-main border-[3px] border-bgc-accent h-full rounded-l-lg'}>{getNavbar()}</div>;
 };
 
 export const ComplianceSurveyLeftNav = withErrorBoundary(_ComplianceSurveyLeftNav, {

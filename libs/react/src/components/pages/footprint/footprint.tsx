@@ -18,7 +18,7 @@ import { useOrgSWR } from '../../../hooks/useOrgSWR';
 import { ErrorType } from '@coldpbc/enums';
 import { useColdContext } from '@coldpbc/hooks';
 
-const PERIOD = 2022;
+const PERIOD = 2023;
 
 function _Footprint() {
   const auth0 = useAuth0();
@@ -41,7 +41,7 @@ function _Footprint() {
         subcategory.activities,
         (activity: any) =>
           activity.footprint?.[PERIOD] &&
-          activity.footprint?.[PERIOD].value !== null,
+          activity.footprint?.[PERIOD].value !== undefined,
       ),
     );
 

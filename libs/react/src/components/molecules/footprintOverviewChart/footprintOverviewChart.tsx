@@ -59,7 +59,7 @@ function _FootprintOverviewChart(
         subcategory.activities,
         (activity: any) =>
           activity.footprint &&
-          activity.footprint?.[props.period]?.value !== null,
+          activity.footprint?.[props.period]?.value !== undefined,
       ),
     );
 

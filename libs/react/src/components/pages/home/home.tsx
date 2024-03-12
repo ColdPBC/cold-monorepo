@@ -30,10 +30,13 @@ function _Home() {
         <AppContent title={'Welcome, ' + auth0.user?.given_name}>
           <CenterColumnContent>
             {ldFlags.showNextStepsCard && <NextSteps />}
+            {ldFlags.showFootprintOnHome && <FootprintOverviewCard chartVariant={EmissionsDonutChartVariants.horizontal} />}
             {ldFlags.showComplianceModule && <JourneyOverviewCard />}
             {ldFlags.showNewsModuleCold310 && <NewsCard />}
           </CenterColumnContent>
-          <RightColumnContent></RightColumnContent>
+          <RightColumnContent>
+            {ldFlags.showActions261 && <NextActionsCard />}
+          </RightColumnContent>
         </AppContent>
       );
     } else {
