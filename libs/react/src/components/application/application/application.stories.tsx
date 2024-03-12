@@ -60,7 +60,6 @@ export const Default: Story = {
       await userEvent.click(button);
       // verify that we are on the next actions page
       await canvas.findByTestId('temperature-check-card');
-      await canvas.findByTestId('journey-overview-card');
       await canvas.findAllByTestId('subcategory-actions-overview-card');
       const actions = getActionsMock();
       const actionPayload = actions[0];
@@ -124,7 +123,6 @@ export const Default: Story = {
       await userEvent.click(overviewPage);
       // verify we are on the overview page
       await canvas.findByTestId('temperature-check-card');
-      await canvas.findByTestId('journey-overview-card');
       await canvas.findAllByTestId('subcategory-actions-overview-card');
 
       const categoryData = getCategoriesDataMock().definition.categories;

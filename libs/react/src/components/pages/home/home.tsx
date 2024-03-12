@@ -11,6 +11,7 @@ import { EmissionsDonutChartVariants } from '../../atoms/emissionsDonutChart/emi
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application/errors/errorFallback';
 import { NextSteps } from '../../organisms';
+import { ColdAssessmentsProvider } from '@coldpbc/providers';
 
 function _Home() {
   const ldFlags = useFlags();
@@ -31,7 +32,7 @@ function _Home() {
           <CenterColumnContent>
             {ldFlags.showNextStepsCard && <NextSteps />}
             {ldFlags.showFootprintOnHome && <FootprintOverviewCard chartVariant={EmissionsDonutChartVariants.horizontal} />}
-            {ldFlags.showComplianceModule && <JourneyOverviewCard />}
+            {ldFlags.showComplianceModule && <ColdAssessmentsProvider><JourneyOverviewCard /></ColdAssessmentsProvider>}
             {ldFlags.showNewsModuleCold310 && <NewsCard />}
           </CenterColumnContent>
           <RightColumnContent>
@@ -45,7 +46,7 @@ function _Home() {
           <CenterColumnContent>
             {ldFlags.showNextStepsCard && <NextSteps />}
             <FootprintOverviewCard chartVariant={EmissionsDonutChartVariants.horizontal} />
-            {ldFlags.showComplianceModule && <JourneyOverviewCard />}
+            {ldFlags.showComplianceModule && <ColdAssessmentsProvider><JourneyOverviewCard /></ColdAssessmentsProvider>}
             {ldFlags.showNewsModuleCold310 && <NewsCard />}
           </CenterColumnContent>
           <RightColumnContent>

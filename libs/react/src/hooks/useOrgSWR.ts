@@ -11,8 +11,15 @@ export const useOrgSWR = <Data = any, Error = any>(key: Array<any> | null, fetch
   const getKey = () => {
     if (authUser && key != null) {
       const orgId = impersonatingOrg ? impersonatingOrg.id : authUser.coldclimate_claims.org_id;
-      const orgKey = '/organizations/' + orgId + key[0];
-      return [orgKey, ...key.slice(1)];
+      if (isArray(key) && isArray(key[0])) {
+        const orgKeys = key[0].map(keyString => {
+          return '/organizations/' + orgId + keyString;
+        });
+        return [orgKeys, ...key.slice(1)];
+      } else {
+        const orgKey = '/organizations/' + orgId + key[0];
+        return [orgKey, ...key.slice(1)];
+      }
     } else {
       return null;
     }

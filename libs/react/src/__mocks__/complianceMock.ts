@@ -79,6 +79,15 @@ export function getOrganizationComplianceMock(): OrgCompliance[] {
       organization: {},
       compliance_definition: getComplianceMockByName('amazon'),
     },
+    {
+      id: '4',
+      organization_id: '3412521521355',
+      compliance_id: 'cmp-4',
+      created_at: '2020-03-03T23:50:31.000Z',
+      updated_at: '2020-03-03T23:50:31.000Z',
+      organization: {},
+      compliance_definition: getComplianceMockByName('rei2'),
+    }
   ];
 }
 
@@ -107,4 +116,87 @@ export function getDefaultOrgCompliancePageMock(): OrgCompliance[] {
 
 export function getActivateOrgCompliancePageMock(): OrgCompliance[] {
   return [];
+}
+
+export function getAssessmentsComplianceMock(): OrgCompliance[] {
+  return [
+    {
+      "id": "orgcomp_s5nd91vh8jduzw0m",
+      "organization_id": "org_q8G8YXcencJjsCnv",
+      "compliance_id": "compdef_s4h9rd5wuorvhthy",
+      "created_at": "2024-03-01T20:05:01.181Z",
+      "updated_at": "2024-03-01T20:05:01.181Z",
+      "organization": {
+        "id": "org_q8G8YXcencJjsCnv",
+        "name": "peak-staging-test",
+        "enabled_connections": [
+          {
+            "connection_id": "con_Asb5pjVccChYIxa5",
+            "assign_membership_on_login": false
+          },
+          {
+            "connection_id": "con_kYFtdnBxyBdYzTtK",
+            "assign_membership_on_login": false
+          }
+        ],
+        "display_name": "Peak Staging Test",
+        "branding": null,
+        "phone": null,
+        "email": null,
+        "created_at": "2024-03-01T19:34:31.251Z",
+        "updated_at": "2024-03-01T19:34:31.252Z",
+        "isTest": false
+      },
+      "compliance_definition": {
+        "id": "compdef_s4h9rd5wuorvhthy",
+        "name": "rei_pia_2024",
+        "logo_url": "https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/rei-logo-1.svg",
+        "surveys": [
+          "rei_pia_2024_2"
+        ],
+        "created_at": "2024-03-01T19:51:37.808Z",
+        "updated_at": "2024-03-06T05:05:43.546Z",
+        "title": "REI Product Impact Assessment 2024"
+      }
+    },
+    {
+      "id": "orgcomp_wqtyy2rtvusmcm46",
+      "organization_id": "org_q8G8YXcencJjsCnv",
+      "compliance_id": "compdef_obu8yu9fbhex3inz",
+      "created_at": "2024-03-08T20:40:06.829Z",
+      "updated_at": "2024-03-08T20:40:06.829Z",
+      "organization": {
+        "id": "org_q8G8YXcencJjsCnv",
+        "name": "peak-staging-test",
+        "enabled_connections": [
+          {
+            "connection_id": "con_Asb5pjVccChYIxa5",
+            "assign_membership_on_login": false
+          },
+          {
+            "connection_id": "con_kYFtdnBxyBdYzTtK",
+            "assign_membership_on_login": false
+          }
+        ],
+        "display_name": "Peak Staging Test",
+        "branding": null,
+        "phone": null,
+        "email": null,
+        "created_at": "2024-03-01T19:34:31.251Z",
+        "updated_at": "2024-03-01T19:34:31.252Z",
+        "isTest": false
+      },
+      "compliance_definition": {
+        "id": "compdef_obu8yu9fbhex3inz",
+        "name": "amazon",
+        "logo_url": "https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/Amazon_icon.svg",
+        "surveys": [
+          "rei_pia_2024"
+        ],
+        "created_at": "2024-02-05T19:28:02.001Z",
+        "updated_at": "2024-02-05T20:36:23.025Z",
+        "title": "Amazon"
+      }
+    }
+  ];
 }
