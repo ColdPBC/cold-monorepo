@@ -32,7 +32,7 @@ export class OpenAIController extends BaseWorker {
     },
     @Param('id') assistantId: string,
   ) {
-    return this.app.deleteAssistant(req.user, assistantId);
+    return this.app.deleteAssistant({ user: req.user, integration: { id: assistantId } });
   }
 
   @Roles(...coldAdminOnly)
