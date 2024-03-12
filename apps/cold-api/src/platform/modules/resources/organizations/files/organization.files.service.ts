@@ -68,100 +68,105 @@ export class OrganizationFilesService extends BaseWorker {
     }
   }
 
-  async uploadFile(req: any, orgId: string, file: Express.Multer.File, bpc?: boolean) {
+  async uploadFile(req: any, orgId: string, files: Array<Express.Multer.File>, bpc?: boolean) {
     const { user, url } = req;
-    try {
-      const org = await this.helper.getOrganizationById(orgId, req.user, bpc);
+    const org = await this.helper.getOrganizationById(orgId, req.user, bpc);
+    const existingFiles: any = [];
 
-      if (!org) {
-        throw new NotFoundException(`Organization ${orgId} not found`);
-      }
-
-      const hash = await S3Service.calculateChecksum(file);
-
-      const response = await this.s3.uploadStreamToS3(user, orgId, file);
-
-      let existing = await this.prisma.organization_files.findUnique({
-        where: {
-          s3Key: {
-            key: response.key,
-            bucket: response.bucket,
-            organization_id: orgId,
-          },
-        },
-      });
-
-      if (existing) {
-        if (existing?.checksum === hash) {
-          this.logger.warn(`file ${file.filename} already exists in db`, file);
-          throw new ConflictException(`file ${file.filename} already exists in db for org ${orgId}`);
+    for (const file of files) {
+      try {
+        if (!org) {
+          throw new NotFoundException(`Organization ${orgId} not found`);
         }
 
-        await this.prisma.organization_files.update({
+        const hash = await S3Service.calculateChecksum(file);
+
+        const response = await this.s3.uploadStreamToS3(user, orgId, file);
+
+        let existing = await this.prisma.organization_files.findUnique({
           where: {
-            id: existing.id,
-          },
-          data: {
-            id: new Cuid2Generator('ofile').scopedId,
-            original_name: file.originalname,
-            integration_id: null,
-            organization_id: orgId,
-            versionId: file['versionId'],
-            bucket: response.bucket,
-            key: response.key,
-            mimetype: file.mimetype,
-            size: file.size,
-            fieldname: file.fieldname,
-            encoding: file.encoding,
-            contentType: file.mimetype,
-            location: file.destination,
-            checksum: hash,
+            s3Key: {
+              key: response.key,
+              bucket: response.bucket,
+              organization_id: orgId,
+            },
           },
         });
-      } else {
-        existing = await this.prisma.organization_files.create({
+
+        if (existing) {
+          if (existing?.checksum === hash) {
+            this.logger.warn(`file ${file.originalname} already exists in db`, pick(file, ['id', 'original_name', 'mimetype', 'size']));
+            throw new ConflictException(`file ${file.originalname} already exists in db for org ${orgId}`);
+          }
+
+          await this.prisma.organization_files.update({
+            where: {
+              id: existing.id,
+            },
+            data: {
+              id: new Cuid2Generator('ofile').scopedId,
+              original_name: file.originalname,
+              integration_id: null,
+              organization_id: orgId,
+              versionId: file['versionId'],
+              bucket: response.bucket,
+              key: response.key,
+              mimetype: file.mimetype,
+              size: file.size,
+              fieldname: file.fieldname,
+              encoding: file.encoding,
+              contentType: file.mimetype,
+              location: file.destination,
+              checksum: hash,
+            },
+          });
+        } else {
+          existing = await this.prisma.organization_files.create({
+            data: {
+              id: new Cuid2Generator('ofile').scopedId,
+              original_name: file.originalname,
+              integration_id: null,
+              organization_id: orgId,
+              versionId: response.uploaded.VersionId,
+              bucket: response.bucket,
+              key: response.key,
+              mimetype: file.mimetype,
+              size: file.size,
+              fieldname: file.fieldname,
+              encoding: file.encoding,
+              contentType: file.mimetype,
+              location: file.destination,
+              checksum: hash,
+            },
+          });
+        }
+
+        //const routingKey = get(this.openAI.definition, 'rabbitMQ.publishOptions.routing_key', 'dead_letter');
+        //await this.events.sendPlatformEvent(routingKey, 'file.uploaded', { existing, user, organization: org }, req);
+
+        await this.events.sendIntegrationEvent(false, 'file.uploaded', existing, user, orgId);
+
+        existingFiles.push(existing);
+      } catch (e) {
+        this.logger.error(e.message, { user, orgId, file: pick(file, ['id', 'original_name', 'mimetype', 'size']) });
+
+        this.mqtt.publishMQTT('ui', {
+          org_id: orgId,
+          user: user,
+          swr_key: url,
+          action: 'create',
+          status: 'failed',
           data: {
-            id: new Cuid2Generator('ofile').scopedId,
-            original_name: file.originalname,
-            integration_id: null,
-            organization_id: orgId,
-            versionId: response.uploaded.VersionId,
-            bucket: response.bucket,
-            key: response.key,
-            mimetype: file.mimetype,
-            size: file.size,
-            fieldname: file.fieldname,
-            encoding: file.encoding,
-            contentType: file.mimetype,
-            location: file.destination,
-            checksum: hash,
+            error: e.message,
+            file: pick(file, ['id', 'original_name', 'mimetype', 'size']),
           },
         });
+
+        throw e;
       }
-
-      //const routingKey = get(this.openAI.definition, 'rabbitMQ.publishOptions.routing_key', 'dead_letter');
-      //await this.events.sendPlatformEvent(routingKey, 'file.uploaded', { existing, user, organization: org }, req);
-
-      await this.events.sendIntegrationEvent(false, 'file.uploaded', existing, user, orgId);
-
-      return existing;
-    } catch (e) {
-      this.logger.error(e);
-
-      this.mqtt.publishMQTT('ui', {
-        org_id: orgId,
-        user: user,
-        swr_key: url,
-        action: 'create',
-        status: 'failed',
-        data: {
-          error: e.message,
-          file: pick(file, ['id', 'original_name', 'mimetype', 'size']),
-        },
-      });
-
-      throw e;
     }
+
+    return existingFiles;
   }
 
   async deleteFile(req: any, orgId: string, fileId: string) {
