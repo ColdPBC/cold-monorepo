@@ -2,6 +2,7 @@ import { Global, Injectable, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as mqtt from 'mqtt';
 import { BaseWorker } from '../worker';
+import { get } from 'lodash';
 import { Cuid2Generator } from '../utility';
 import { MqttSystemPayload, MqttUIPayload, MqttValidatorService } from './validator/mqtt.validator.service';
 
@@ -99,10 +100,7 @@ export class MqttService extends BaseWorker implements OnModuleInit {
 
       const topic = `ui/${this.config.get('NODE_ENV', 'development')}/${payload.org_id}/${payload.user}`;
 
-      const stringed = JSON.stringify(payload);
-      this.mqttClient.publish(topic, stringed);
-
-      this.logger.log(`Published to UI topic: ${topic}`, payload);
+      this.publishMQTT('ui', payload, topic);
     } else {
       this.logger.error('MQTT client is not connected');
     }
@@ -112,29 +110,26 @@ export class MqttService extends BaseWorker implements OnModuleInit {
    * Publish MQTT Message
    * @param target
    * @param payload
+   * @param topic (optional) | Overrides the topic that would be derived from the target
    */
-  publishMQTT(target: 'public' | 'cold' | 'ui', payload: MqttSystemPayload | MqttUIPayload): void {
+  publishMQTT(target: 'public' | 'cold' | 'ui', payload: MqttSystemPayload | MqttUIPayload, topic?: string): void {
     try {
       const inputs = new MqttValidatorService(target, payload);
 
-      let topic;
-
       switch (inputs.target) {
         case 'public':
-          topic = `system/${this.config.get('NODE_ENV', 'development')}/public`;
-          break;
         case 'cold':
-          topic = `system/${this.config.get('NODE_ENV', 'development')}/cold`;
+          topic = topic ? topic : `system/${this.config.get('NODE_ENV', 'development')}/${inputs.target}/`;
           break;
         case 'ui':
-          topic = `ui/${this.config.get('NODE_ENV', 'development')}`;
+          topic = topic ? topic : `ui/${this.config.get('NODE_ENV', 'development')}/${get(inputs.payload, 'org_id')}/${get(inputs.payload, 'user')}`;
           break;
       }
 
-      if (this.mqttClient) {
+      if (this.mqttClient && topic) {
         this.mqttClient.publish(topic, JSON.stringify(inputs.payload));
 
-        this.logger.log(`Published to system topic: ${topic}`, inputs.payload);
+        this.logger.log(`Published to topic: ${topic}`, inputs.payload);
       } else {
         this.logger.error('MQTT client is not connected');
       }
@@ -151,9 +146,8 @@ export class MqttService extends BaseWorker implements OnModuleInit {
   publishSystemPublic(payload: MqttSystemPayload): void {
     if (this.mqttClient) {
       const topic = `system/${this.config.get('NODE_ENV', 'development')}/public`;
-      this.mqttClient.publish(topic, JSON.stringify(payload));
 
-      this.logger.log(`Published to system topic: ${topic}`, payload);
+      this.publishMQTT('public', payload, topic);
     } else {
       this.logger.error('MQTT client is not connected');
     }
@@ -162,7 +156,8 @@ export class MqttService extends BaseWorker implements OnModuleInit {
   publishSystemCold(payload: MqttSystemPayload): void {
     if (this.mqttClient) {
       const topic = `system/${this.config.get('NODE_ENV', 'development')}/cold`;
-      this.mqttClient.publish(topic, JSON.stringify(payload));
+
+      this.publishMQTT('cold', payload, topic);
 
       this.logger.log(`Published to system topic: ${topic}`, payload);
     } else {
