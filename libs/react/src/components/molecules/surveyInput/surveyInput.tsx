@@ -3,7 +3,7 @@ import { InputTypes } from '@coldpbc/enums';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application';
 import { isUndefined } from 'lodash';
-import { Card, Input, ListItemInput, Markdown, PercentSlider, SelectOption, YesNo } from '@coldpbc/components';
+import { Card, Input, ListItem, Markdown, PercentSlider, SelectOption, YesNo } from '@coldpbc/components';
 
 export interface SurveyInputProps {
   input_key: string;
@@ -214,12 +214,15 @@ const _SurveyInput = (props: SurveyInputProps) => {
         );
       case 'multi_text':
         return (
-          <ListItemInput
+          <ListItem
             value={displayValue}
             onChange={value => {
               onFieldUpdated(input_key, value);
             }}
             data-testid={input_key + (isAdditional ? '-additional' : '')}
+            input_props={{
+              placeholder: placeholder,
+            }}
           />
         );
       default:
@@ -230,14 +233,12 @@ const _SurveyInput = (props: SurveyInputProps) => {
   const getPrompt = () => {
     const className = 'text-left text-tc-primary';
 
-    const promptWithLinebreaks = prompt.split("\n");
+    const promptWithLinebreaks = prompt.split('\n');
 
     return (
       <div className={className}>
-        {promptWithLinebreaks.map((prompt) => {
-          return (
-            <div className={'mb-4'}>{prompt}</div>
-          );
+        {promptWithLinebreaks.map(prompt => {
+          return <div className={'mb-4'}>{prompt}</div>;
         })}
       </div>
     );
@@ -250,7 +251,7 @@ const _SurveyInput = (props: SurveyInputProps) => {
       if (ai_attempted && !isUndefined(ai_response) && !isUndefined(ai_response.answer) && ai_response.justification && isUndefined(value)) {
         return (
           <Card glow={false} className={'border-[1px] border-purple-300 w-full bg-bgc-elevated'} data-testid={'survey-input-ai-response'}>
-            <Markdown className={'!text-sm'} markdown={"✨"+ai_response.justification} />
+            <Markdown className={'!text-sm'} markdown={'✨' + ai_response.justification} />
           </Card>
         );
       } else {
