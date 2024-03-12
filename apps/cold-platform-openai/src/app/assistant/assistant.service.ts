@@ -7,16 +7,15 @@ import { integrations, organizations, service_definitions } from '@prisma/client
 import { Job } from 'bull';
 import { OnQueueActive, OnQueueCompleted, OnQueueFailed, OnQueueProgress } from '@nestjs/bull';
 import { OpenAIResponse } from './validator/validator';
-import { Prompts } from './surveys/prompts/prompts';
+import { PromptsService } from './surveys/prompts/prompts.service';
 
 @Injectable()
 export class AssistantService extends BaseWorker implements OnModuleInit {
   client: OpenAI;
   service: service_definitions;
   topic: string = '';
-  prompts = new Prompts();
 
-  constructor(private readonly config: ConfigService, private readonly prisma: PrismaService, private rabbit: ColdRabbitService) {
+  constructor(private readonly config: ConfigService, private readonly prisma: PrismaService, private rabbit: ColdRabbitService, private prompts: PromptsService) {
     super(AssistantService.name);
     this.client = new OpenAI({
       organization: this.config.getOrThrow('OPENAI_ORG_ID'),
@@ -65,7 +64,7 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
   async send(thread: OpenAI.Beta.Threads.Thread, integration: integrations, org: organizations) {
     const run = await this.client.beta.threads.runs.create(thread.id, {
       assistant_id: integration.id,
-      instructions: this.prompts.getBasePrompt(org.display_name), // Assuming getBasePrompt() is defined.
+      instructions: await this.prompts.getBasePrompt(org), // Assuming getBasePrompt() is defined.
     });
 
     this.logger.info(`Created run ${run.id} for thread ${thread.id}`, {
@@ -139,12 +138,13 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
   async createMessage(
     thread: OpenAI.Beta.Threads.Thread,
     integration: integrations,
+    questionKey: string,
     item: {
       prompt: string;
       component: string;
       options: any;
     },
-    isFolloup = false,
+    isFollowUp = false, // this is a follow-up question that should only be presented if the previous question was answered
     org: organizations,
     category_context?: string,
   ): Promise<any> {
@@ -156,16 +156,19 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
       }
 
       let message;
-      if (!isFolloup) {
+      if (!isFollowUp) {
         message = await this.client.beta.threads.messages.create(thread.id, {
           role: 'user',
-          content: `${category_context}${this.prompts.getComponentPrompt(item.component)}.  Here is the "question" JSON object: \`\`\`json ${JSON.stringify(item)}\`\`\``,
+          content: `${category_context}${await this.prompts.getComponentPrompt(questionKey, item)}.  Here is the "question" JSON object: \`\`\`json ${JSON.stringify(item)}\`\`\``,
         });
       } else {
         message = await this.client.beta.threads.messages.create(thread.id, {
           role: 'user',
           content: `${category_context} this next JSON question is specifically related to the previous question and answer. ${this.prompts.getComponentPrompt(
             item.component,
+          content: `${category_context} this next JSON question is specifically related to the previous question and answer. ${await this.prompts.getComponentPrompt(
+            questionKey,
+            item,
           )}.  Here is the "question" JSON object: \`\`\`json ${JSON.stringify(item)}\`\`\``,
         });
       }
@@ -252,7 +255,7 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
         continue;
       }
 
-      await this.setTags({ thread: thread.id });
+      this.setTags({ thread: thread.id });
 
       this.logger.info(`Created Thread | thread.id: ${thread.id} for ${section}.${item}`, {
         thread,
@@ -262,7 +265,7 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
 
       this.logger.info(`Creating Message | ${section}.${item}: ${follow_up.prompt}`);
       // create a new run for each followup item
-      let value = await this.createMessage(thread, integration, follow_up, false, organization, category_context);
+      let value = await this.createMessage(thread, integration, item, follow_up, false, organization, category_context);
 
       value = this.clearValuesOnError(value);
 
@@ -283,7 +286,7 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
         }
 
         this.logger.info(`Creating Message | ${section}.${item}.additional_context: ${follow_up.prompt}`);
-        let additionalValue = await this.createMessage(thread, integration, follow_up['additional_context'], true, organization, category_context);
+        let additionalValue = await this.createMessage(thread, integration, item, follow_up['additional_context'], true, organization, category_context);
 
         additionalValue = this.clearValuesOnError(additionalValue);
 
