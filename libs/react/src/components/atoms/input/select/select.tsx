@@ -9,6 +9,7 @@ export interface SelectProps {
   name: string;
   value?: any;
   onChange: (value: InputOption) => void;
+  className?: string;
 }
 
 function classNames(...classes: string[]) {
@@ -16,7 +17,7 @@ function classNames(...classes: string[]) {
 }
 
 export const Select = (props: SelectProps) => {
-  const { options, name, label, value, onChange } = props;
+  const { options, name, label, value, onChange, className } = props;
 
   const onListBoxChange = (value: InputOption) => {
     onChange(value);

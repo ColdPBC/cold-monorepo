@@ -134,6 +134,7 @@ export interface ComplianceSurveyPayloadType {
     title: string;
     image_url: string;
     intro_markdown: string;
+    version?: string | number;
     sections: {
       [key: string]: ComplianceSurveySectionType;
     };
@@ -173,11 +174,13 @@ export interface ComplianceSurveySectionProgressType {
   review: number;
   title: string;
   total: number;
-  section_score: number;
-  section_max_score: number;
+  section_score?: number;
+  section_max_score?: number;
 }
 
 export interface ComplianceSurveyProgressQuestionType {
   ai_answered: boolean;
   user_answered: boolean;
+  max_score?: number;
+  score?: number;
 }

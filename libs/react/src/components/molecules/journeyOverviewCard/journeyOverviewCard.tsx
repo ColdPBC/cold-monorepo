@@ -1,6 +1,6 @@
-import React, {PropsWithChildren, useContext, useState} from 'react';
+import React, {PropsWithChildren, useContext} from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Select, Card, JourneySpiderChart, JourneyComplianceSwitcher } from '@coldpbc/components';
+import { Card, JourneySpiderChart, JourneyComplianceSwitcher } from '@coldpbc/components';
 import {AssessmentsContext} from "@coldpbc/context";
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface

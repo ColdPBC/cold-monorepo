@@ -12,7 +12,6 @@ import {find, isArray} from "lodash";
 export const ColdAssessmentsProvider = ({ children }: PropsWithChildren) => {
   const { logError } = useColdContext();
 
-  let currentAssessment = '';
   const data:AssessmentsContextData = {};
 
   const { orgId } = useAuth0Wrapper();
@@ -31,15 +30,15 @@ export const ColdAssessmentsProvider = ({ children }: PropsWithChildren) => {
   // get the org surveys related to the compliance sets
   const surveysList:string[] = [];
   const surveyMap: { [k: string]: string } = {};
+  const complianceMap: { [compliance_name: string]: OrgCompliance} = {};
   if (orgCompliances.data?.length) {
     // use the first compliance set as a default
-
 
     // Code assumes new model of just one survey per compliance set
     orgCompliances.data.forEach( compliance => {
       surveysList.push(`/surveys/${compliance.compliance_definition.surveys[0]}`);
       surveyMap[compliance.compliance_definition.surveys[0]] = compliance.compliance_definition.name;
-      data[compliance.compliance_definition.name] = {compliance: compliance, section_types: {}};
+      complianceMap[compliance.compliance_definition.name] = compliance;
     });
   }
 
@@ -60,18 +59,19 @@ export const ColdAssessmentsProvider = ({ children }: PropsWithChildren) => {
 
   if (surveyData.data) {
     surveyData.data.forEach( (survey: ComplianceSurveyPayloadType) => {
-
       // find all the sections in the progress element
       if (survey.progress !== undefined && isArray(survey.progress.sections)) {
         survey.progress.sections.forEach(section => {
-
           // bucket them by their section type
           if (survey.definition?.sections) {
             const sectionType = find(survey.definition.sections, {'title': section.title})?.section_type;
 
             if (section.section_score !== undefined && section.section_max_score !== undefined && sectionType !== undefined) {
-              if (!data[surveyMap[survey.name]].section_types.length) {
-                data[surveyMap[survey.name]].section_types[sectionType] = {score: 0, max: 0}
+              if (!data[surveyMap[survey.name]]) {
+                data[surveyMap[survey.name]] = {compliance: complianceMap[surveyMap[survey.name]], section_types: {}};
+              }
+              if (!data[surveyMap[survey.name]].section_types[sectionType]) {
+                data[surveyMap[survey.name]].section_types[sectionType] = {score: 0, max: 0};
               }
 
               const sectionTypeData = data[surveyMap[survey.name]]["section_types"][sectionType];
