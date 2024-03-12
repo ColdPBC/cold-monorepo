@@ -1,3 +1,10 @@
+# [1.159.0-COLD-614.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.158.0...v1.159.0-COLD-614.1) (2024-03-12)
+
+
+### Features
+
+* update list item input design ([db19d00](https://github.com/ColdPBC/cold-monorepo/commit/db19d00881a2b8dfd8f4487236a340cd795353b5))
+
 # [1.158.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.157.0...v1.158.0) (2024-03-12)
 
 
