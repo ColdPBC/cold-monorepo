@@ -24,12 +24,12 @@ export const Default: Story = {
   ),
 };
 
-export const EmptyData = () => {
-  return (
-    <StoryMockProvider handlers={getAssessmentsHandler.empty}>
+export const Empty: Story = {
+  render: args => (
+    <StoryMockProvider {...args} handlers={getAssessmentsHandler.empty}>
       <ColdAssessmentsProvider>
         <Journey />
       </ColdAssessmentsProvider>
     </StoryMockProvider>
-  );
+  ),
 };
