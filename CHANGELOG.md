@@ -1,3 +1,10 @@
+# [1.158.0-COLD-573.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.157.0...v1.158.0-COLD-573.1) (2024-03-11)
+
+
+### Features
+
+* mqtt updates ([59acc3b](https://github.com/ColdPBC/cold-monorepo/commit/59acc3ba771f2d45c63c29939181c7cb221fbb3f))
+
 # [1.157.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.156.0...v1.157.0) (2024-03-11)
 
 

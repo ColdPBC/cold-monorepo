@@ -30,22 +30,30 @@ export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
         const url = `${
           import.meta.env.VITE_MQTT_URL
         }/mqtt?x-auth0-domain=${auth0_domain}&x-amz-customauthorizer-name=${authorizer}&x-cold-org=${org_id}&x-cold-env=${env}&token=${token}`;
-        const account_id = user?.email;
 
         client.current = mqtt.connect(url, { clientId: `${org_id}-${Math.floor(Math.random() * 1000)}` });
 
         client.current.on('connect', () => {
           console.log('connected to IOT');
           setConnectionStatus(true);
+
+          const topics = [`ui/${env}/${org_id}/#`, `system/${env}/public/#`];
+
+          forEach(topics, topic => {
+            subscribeToTopic(topic, client.current);
+          });
+
+          if (user.coldclimate_claims.roles.includes('cold:admin')) {
+            subscribeToTopic(`system/${env}/cold/#`, client.current);
+          }
         });
 
         client.current.on('message', (topic, payload, packet) => {
-          console.log('New Message ' + payload.toString());
-          const payloadString = payload.toString();
+          const payloadString = packet.payload.toString();
+          console.log(`Received message for topic ${topic} ` + payloadString);
           try {
-            // convert the payload to a json object
             const parsedPayload = JSON.parse(payloadString);
-            // if the payload is a json object, mutate the swr with the new swr_key
+            console.log(`Parsed payload for topic ${topic} ` + parsedPayload);
             if (parsedPayload.swr_key) {
               mutate([parsedPayload.swr_key, 'GET']);
             }
@@ -58,26 +66,15 @@ export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
           setConnectionStatus(false);
           console.log('disconnected');
         });
-
-        const topics = [`ui/${env}/${org_id}/${account_id}`, `ui/${env}/${org_id}/#`, `system/${env}`];
-
-        forEach(topics, topic => {
-          subscribeToTopic(topic);
-        });
-
-        // for cold admin users, subscribe to system/env/cold
-        if (user.coldclimate_claims.roles.includes('cold:admin')) {
-          subscribeToTopic(`system/${env}/cold`);
-        }
       }
     };
 
     connectToIOT();
   }, [user, orgId, getAccessTokenSilently, isAuthenticated]);
 
-  const subscribeToTopic = (topic: string) => {
-    if (client.current) {
-      client.current.subscribe(topic, (err, granted) => {
+  const subscribeToTopic = (topic: string, client: mqtt.MqttClient | null) => {
+    if (client) {
+      client.subscribe(topic, (err, granted) => {
         if (err) {
           console.log('Error subscribing to topic ' + topic);
         } else {
