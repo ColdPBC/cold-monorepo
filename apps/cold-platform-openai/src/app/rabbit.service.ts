@@ -117,6 +117,10 @@ export class RabbitService extends BaseWorker {
         const response = await this.appService.createAssistant(parsed);
         return response;
       }
+      case 'organization.deleted': {
+        const response = await this.appService.deleteAssistant(parsed);
+        return response;
+      }
       case 'compliance_automation.enabled':
         {
           let surveys;

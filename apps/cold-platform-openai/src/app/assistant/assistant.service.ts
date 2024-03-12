@@ -162,11 +162,10 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
           content: `${category_context}${await this.prompts.getComponentPrompt(questionKey, item)}.  Here is the "question" JSON object: \`\`\`json ${JSON.stringify(item)}\`\`\``,
         });
       } else {
+        //append category and followup prompt to component prompt
         message = await this.client.beta.threads.messages.create(thread.id, {
           role: 'user',
-          content: `${category_context} this next JSON question is specifically related to the previous question and answer. ${this.prompts.getComponentPrompt(
-            item.component,
-          content: `${category_context} this next JSON question is specifically related to the previous question and answer. ${await this.prompts.getComponentPrompt(
+          content: `${category_context} this next JSON question is specifically related to your previous answer. ${await this.prompts.getComponentPrompt(
             questionKey,
             item,
           )}.  Here is the "question" JSON object: \`\`\`json ${JSON.stringify(item)}\`\`\``,
