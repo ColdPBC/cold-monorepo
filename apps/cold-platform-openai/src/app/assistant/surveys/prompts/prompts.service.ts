@@ -1,8 +1,10 @@
-import { BaseWorker } from '@coldpbc/nest';
+import { BaseWorker, DarklyService } from '@coldpbc/nest';
+import { Injectable } from '@nestjs/common';
 
-export class Prompts extends BaseWorker {
-  constructor() {
-    super(Prompts.name);
+@Injectable()
+export class PromptsService extends BaseWorker {
+  constructor(private readonly darkly: DarklyService) {
+    super(PromptsService.name);
   }
 
   async getComponentPrompt(key: string, item: any) {
@@ -57,23 +59,12 @@ export class Prompts extends BaseWorker {
     return component_prompt;
   }
 
-  getBasePrompt(customer: string) {
-    const base =
-      `You are an AI sustainability expert. You help ${customer} to understand ` +
-      ' their impact on the environment and what tasks must be done to meet a given set of compliance requirements. You are tasked \n' +
-      ' with helping this company understand if they can answer other sustainability-related questions based on \n' +
-      ' data found in the files provided, otherwise use whatever public data you have to attempt to answer the questions. \n' +
-      ' The user will provide a JSON formatted "question" object that can include the following properties: \n' +
-      '  - "prompt": The question to be answered \n' +
-      '  - "component": used to determine how to structure your answer \n' +
-      '  - "options": a list of options to be used to answer the question.  This will be included only if the component is a "select" or "multiselect". \n' +
-      '  - "tooltip": additional instructions for answering the question \n' +
-      ' If there is a "tooltip" property, please include it along with these instructions in answering the question. \n' +
-      ' If you have enough information to answer the question, use the "answerable" response tool to provide an answer. \n' +
-      ' If you do not have enough information, format your response using the unanswerable response tool: \n' +
-      '    - "what_we_need": include a paragraph that describes what information you would need to effectively answer the question. \n' +
-      ' IMPORTANT: always use the answerable or unanswerable response tool to respond to the user, and never add any other text to the response.';
-
+  async getBasePrompt(organization: any) {
+    const base = await this.darkly.getJSONFlag('dynamic-ai-base-prompt', {
+      kind: 'organization',
+      key: organization.name,
+      name: organization.display_name,
+    });
     return base;
   }
 }
