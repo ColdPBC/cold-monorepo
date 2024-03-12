@@ -1,7 +1,7 @@
-import React, { PropsWithChildren, useState } from 'react';
-import { Card } from '../card/card';
+import React, {PropsWithChildren, useContext} from 'react';
 import { useNavigate } from 'react-router-dom';
-import { JourneySpiderChart } from '../journeySpiderChart/journeySpiderChart';
+import { Card, JourneySpiderChart, JourneyComplianceSwitcher } from '@coldpbc/components';
+import {AssessmentsContext} from "@coldpbc/context";
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface JourneyOverviewCardProps {
@@ -10,7 +10,9 @@ export interface JourneyOverviewCardProps {
 
 export function JourneyOverviewCard(props: PropsWithChildren<JourneyOverviewCardProps>) {
   const navigate = useNavigate();
-  const [isEmptyData, setIsEmptyData] = useState(false);
+  const {currentAssessment, data} = useContext(AssessmentsContext);
+
+  const isEmptyData = !data[currentAssessment];
 
   const cta = props.omitCta
     ? []
@@ -25,8 +27,9 @@ export function JourneyOverviewCard(props: PropsWithChildren<JourneyOverviewCard
 
   return (
     <Card title="Assessments" ctas={cta} data-testid="journey-overview-card">
+      <JourneyComplianceSwitcher />
       <div className="flex items-center justify-center self-stretch flex-col">
-        <JourneySpiderChart setIsEmptyData={setIsEmptyData} />
+        <JourneySpiderChart />
         {isEmptyData && (
           <div className="m-auto table w-1">
             <h4 className="text-h4 text-center whitespace-nowrap mx-8">Waiting on your first assessment</h4>

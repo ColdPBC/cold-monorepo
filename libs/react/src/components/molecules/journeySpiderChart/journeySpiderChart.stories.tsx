@@ -1,8 +1,9 @@
-import { getCategoriesHandler, StoryMockProvider } from '@coldpbc/mocks';
+import {getAssessmentsHandler, StoryMockProvider} from '@coldpbc/mocks';
 import { withKnobs } from '@storybook/addon-knobs';
-import { Meta, StoryObj } from '@storybook/react';
+import { Meta } from '@storybook/react';
 import React from 'react';
 import { JourneySpiderChart } from './journeySpiderChart';
+import {ColdAssessmentsProvider} from "@coldpbc/providers";
 
 const meta: Meta<typeof JourneySpiderChart> = {
   title: 'Molecules/JourneySpiderChart',
@@ -12,26 +13,23 @@ const meta: Meta<typeof JourneySpiderChart> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
-  render: (args) => {
-    return <JourneySpiderChart />;
-  },
-};
-
-export const EmptyData = () => {
+export const Default = () => {
   return (
-    <StoryMockProvider handlers={[getCategoriesHandler.empty]}>
-      <JourneySpiderChart />
+    <StoryMockProvider handlers={getAssessmentsHandler.default}>
+      <ColdAssessmentsProvider>
+        <JourneySpiderChart />
+      </ColdAssessmentsProvider>
     </StoryMockProvider>
   );
 };
 
-export const Handle404 = () => {
+export const EmptyData = () => {
   return (
-    <StoryMockProvider handlers={[getCategoriesHandler.handle404]}>
-      <JourneySpiderChart />
+    <StoryMockProvider handlers={getAssessmentsHandler.empty}>
+      <ColdAssessmentsProvider>
+        <JourneySpiderChart />
+      </ColdAssessmentsProvider>
     </StoryMockProvider>
   );
 };

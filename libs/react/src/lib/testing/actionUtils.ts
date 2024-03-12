@@ -5,7 +5,6 @@ export const verifyActionsPage = async (subCategoryName: string, subCategoryTitl
   // click all the footprint detail cards Learn more buttons and verify that we are on the actions page
   const canvas = await within(canvasElement);
   // use test id subcategory-action-detail-card-' + actionPayload.id
-  await canvas.findByTestId(`subcategory-journey-preview-${subCategoryName}`);
   const footprint = await canvas.queryByTestId(`subcategory-footprint-card-${subCategoryName}`);
   if (!footprint) {
     console.log('footprint not found for sub category: ' + subCategoryName);

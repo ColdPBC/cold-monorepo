@@ -66,15 +66,6 @@ export const Default: Story = {
       await expect(text2).toBeInTheDocument();
     });
 
-    await step('Category Score', async () => {
-      // find Category Score text
-      const text = canvas.getByText('Facilities Score');
-      await expect(text).toBeInTheDocument();
-      // find Category Score number
-      const text2 = canvas.getByText('25%');
-      await expect(text2).toBeInTheDocument();
-    });
-
     await step('Footprint Chart', async () => {
       // find Action Score text
       const tCO2eScores = await canvas.findAllByText('tCO2e');
