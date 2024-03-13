@@ -34,6 +34,8 @@ export const SelectOption = (props: SelectOptionProps) => {
           } else {
             onChange([...value, options[index]]);
           }
+        } else {
+          onChange([options[index]]);
         }
       }
     } else {
