@@ -77,17 +77,6 @@ const _SubcategoryActionsList = () => {
             );
           })}
       </CenterColumnContent>
-      <RightColumnContent>
-        <SubcategoryJourneyPreview
-          category_key={category}
-          subcategory_key={name}
-          cardTitle={`${subcategoryName} Score`}
-          to="/journey"
-          containerClassName="border-0 w-full rounded-2xl"
-          glow
-        />
-        {category === 'company_decarbonization' && <SubcategoryFootprintCard period={2022} subcategory_key={name} />}
-      </RightColumnContent>
     </AppContent>
   );
 };
