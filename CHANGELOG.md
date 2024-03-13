@@ -1,3 +1,10 @@
+## [1.162.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.162.0...v1.162.1) (2024-03-13)
+
+
+### Bug Fixes
+
+* bug in policies throwing 500 error ([af83962](https://github.com/ColdPBC/cold-monorepo/commit/af839624dbc2a359ba880b3d202a8a24dab64c56))
+
 # [1.162.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.161.1...v1.162.0) (2024-03-13)
 
 
