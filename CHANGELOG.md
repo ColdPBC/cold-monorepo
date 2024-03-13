@@ -1,3 +1,14 @@
+# [1.163.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.162.1...v1.163.0) (2024-03-13)
+
+
+### Features
+
+* make base prompt configurable via darkly ([90bd510](https://github.com/ColdPBC/cold-monorepo/commit/90bd510f18d03f27187311277c0fef0e31dc4158))
+* make base prompt configurable via darkly ([9e1c241](https://github.com/ColdPBC/cold-monorepo/commit/9e1c241340c462af5232433b4932e24c8e7b7292))
+* make component prompts configurable via darkly ([7e1d978](https://github.com/ColdPBC/cold-monorepo/commit/7e1d97863241a442c6616aba6e3d90ee27321625))
+* make tools configurable via darkly ([9bba0e6](https://github.com/ColdPBC/cold-monorepo/commit/9bba0e612038f221fb25ad9d5954062f04e152da))
+* update delete assistant function ([20071d0](https://github.com/ColdPBC/cold-monorepo/commit/20071d05ad0fd4fd3fd944a9fc22e8fb313b704d))
+
 ## [1.162.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.162.0...v1.162.1) (2024-03-13)
 
 
