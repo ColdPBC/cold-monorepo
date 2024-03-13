@@ -38,7 +38,7 @@ export const ListItemInput = (props: ListItemInputProps) => {
         type={InputTypes.Text}
         input_props={{
           name: 'listInput',
-          value: value === null ? list[index] : undefined,
+          value: value !== null ? list[index] : undefined,
           onChange: e => updateCurrentValue(e.target.value),
           onValueChange: e => updateCurrentValue(e.target.value),
           'aria-label': 'listInput',
