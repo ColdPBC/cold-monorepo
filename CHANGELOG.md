@@ -1,3 +1,10 @@
+## [1.161.1-COLD-621.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.161.0...v1.161.1-COLD-621.1) (2024-03-13)
+
+
+### Bug Fixes
+
+* allow select when value provided is a string ([b3675fa](https://github.com/ColdPBC/cold-monorepo/commit/b3675fab8e63ce8b596f0a0daca7c5970746a337))
+
 # [1.161.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.160.0...v1.161.0) (2024-03-13)
 
 
