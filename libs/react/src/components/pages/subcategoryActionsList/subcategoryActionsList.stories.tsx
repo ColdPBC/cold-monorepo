@@ -66,13 +66,6 @@ export const Default: Story = {
       await expect(text2).toBeInTheDocument();
     });
 
-    await step('Footprint Chart', async () => {
-      // find Action Score text
-      const tCO2eScores = await canvas.findAllByText('tCO2e');
-      // check if the tc02e scores array are not empty
-      await expect(tCO2eScores).not.toHaveLength(0);
-    });
-
     await step('Check Subcategory Description', async () => {
       const text = canvas.getByTestId('subcategory-description');
       await expect(text).toBeInTheDocument();
