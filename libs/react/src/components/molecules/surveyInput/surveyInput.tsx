@@ -3,7 +3,7 @@ import { InputTypes } from '@coldpbc/enums';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application';
 import { isUndefined } from 'lodash';
-import { Card, Input, ListItemInput, PercentSlider, SelectOption, YesNo } from '@coldpbc/components';
+import { Card, Input, ListItem, PercentSlider, SelectOption, YesNo } from '@coldpbc/components';
 
 export interface SurveyInputProps {
   input_key: string;
@@ -210,12 +210,15 @@ const _SurveyInput = (props: SurveyInputProps) => {
         );
       case 'multi_text':
         return (
-          <ListItemInput
+          <ListItem
             value={displayValue}
             onChange={value => {
               onFieldUpdated(input_key, value);
             }}
             data-testid={input_key + (isAdditional ? '-additional' : '')}
+            input_props={{
+              placeholder: placeholder,
+            }}
           />
         );
       default:
@@ -226,14 +229,12 @@ const _SurveyInput = (props: SurveyInputProps) => {
   const getPrompt = () => {
     const className = 'text-left text-tc-primary';
 
-    const promptWithLinebreaks = prompt.split("\n");
+    const promptWithLinebreaks = prompt.split('\n');
 
     return (
       <div className={className}>
-        {promptWithLinebreaks.map((prompt) => {
-          return (
-            <div className={'mb-4'}>{prompt}</div>
-          );
+        {promptWithLinebreaks.map(prompt => {
+          return <div className={'mb-4'}>{prompt}</div>;
         })}
       </div>
     );
