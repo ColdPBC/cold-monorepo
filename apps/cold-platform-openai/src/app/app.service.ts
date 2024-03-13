@@ -18,9 +18,14 @@ export class AppService extends BaseWorker implements OnModuleInit {
   client: OpenAI;
   service: service_definitions;
   topic: string = '';
-  tools = new Tools();
 
-  constructor(private readonly config: ConfigService, private readonly prisma: PrismaService, private rabbit: ColdRabbitService, private darkly: DarklyService) {
+  constructor(
+    private readonly config: ConfigService,
+    private readonly prisma: PrismaService,
+    private rabbit: ColdRabbitService,
+    private darkly: DarklyService,
+    private tools: Tools,
+  ) {
     super(AppService.name);
     this.client = new OpenAI({
       organization: config.getOrThrow('OPENAI_ORG_ID'),
@@ -59,14 +64,18 @@ export class AppService extends BaseWorker implements OnModuleInit {
     }
   }
 
-  async deleteAssistant(user: IAuthenticatedUser, assistantId: string) {
+  async deleteAssistant(parsed: any) {
+    const { user, integration } = parsed;
     try {
-      const assistant = await this.client.beta.assistants.del(assistantId);
-      this.logger.info(`User ${user.coldclimate_claims.email} deleted assistant ${assistantId}.`, { assistant, user });
+      const assistant = await this.client.beta.assistants.del(integration.id);
+      this.logger.info(`User ${user.coldclimate_claims.email} deleted assistant ${integration.id}`, {
+        assistant,
+        user,
+      });
 
       return assistant;
     } catch (e) {
-      this.handleError(e, { assistant_id: assistantId, user });
+      this.handleError(e.message, { error: e, parsed });
     }
   }
 
@@ -89,7 +98,7 @@ export class AppService extends BaseWorker implements OnModuleInit {
         name: organization.display_name,
         key: organization.name,
       }),
-      tools: [{ type: 'retrieval' }, this.tools.answerable, this.tools.unanswerable],
+      tools: [{ type: 'retrieval' }, await this.tools.answerable(organization), await this.tools.unanswerable(organization)],
     };
 
     try {

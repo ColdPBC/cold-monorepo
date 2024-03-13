@@ -11,6 +11,8 @@ import { AssistantService } from './assistant/assistant.service';
 import { AssistantModule } from './assistant/assistant.module';
 import { BullModule } from '@nestjs/bull';
 import { EventsModule } from '../../../cold-api/src/platform/modules/utilities/events/events.module';
+import { PromptsService } from './assistant/surveys/prompts/prompts.service';
+import { Tools } from './assistant/tools/tools';
 
 @Module({})
 export class AppModule {
@@ -48,6 +50,8 @@ export class AppModule {
         },
         RabbitService,
         AssistantService,
+        PromptsService,
+        Tools,
       ],
       exports: [],
     };
