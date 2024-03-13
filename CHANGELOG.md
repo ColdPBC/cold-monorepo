@@ -1,3 +1,10 @@
+# [1.160.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.159.1...v1.160.0) (2024-03-13)
+
+
+### Features
+
+* show ai icon if question is ai answered ([fd2a17e](https://github.com/ColdPBC/cold-monorepo/commit/fd2a17e9cb53b90a7ea076b7c92c9fe589888b0a))
+
 ## [1.159.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.159.0...v1.159.1) (2024-03-12)
 
 

@@ -4,6 +4,7 @@ import { ColdIcon, ErrorFallback } from '@coldpbc/components';
 import { IconNames } from '@coldpbc/enums';
 import { withErrorBoundary } from 'react-error-boundary';
 import React from 'react';
+import { HexColors } from '@coldpbc/themes';
 
 export interface ComplianceSurveyRightNavProps {
   activeKey: ComplianceSurveyActiveKeyType;
@@ -45,16 +46,27 @@ const _ComplianceSurveyRightNav = (props: ComplianceSurveyRightNavProps) => {
         </div>
       );
     } else {
-      return (
-        <div key={key} className={'h-[34px] flex flex-row space-x-2 items-center hover:underline cursor-pointer'} onClick={() => onClick(key)}>
-          <div className={'w-[24px] h-[24px] flex items-center justify-center'}>
-            <div className={'rounded-full h-[24px] w-[24px] bg-gray-70'}></div>
+      if (progressQuestion?.ai_answered) {
+        return (
+          <div key={key} className={'h-[34px] flex flex-row space-x-2 items-center hover:underline cursor-pointer'} onClick={() => onClick(key)}>
+            <div className={'h-[24px] w-[24px] rounded-full flex items-center justify-center bg-gray-70'}>
+              <ColdIcon name={IconNames.ColdAiIcon} color={HexColors.white} />
+            </div>
+            <div className={'w-full text-body line-clamp-1'}>
+              {index}. {question.prompt}
+            </div>
           </div>
-          <div className={'w-full text-body line-clamp-1'}>
-            {index}. {question.prompt}
+        );
+      } else {
+        return (
+          <div key={key} className={'h-[34px] flex flex-row space-x-2 items-center hover:underline cursor-pointer'} onClick={() => onClick(key)}>
+            <div className={'h-[24px] w-[24px] rounded-full bg-gray-70'}></div>
+            <div className={'w-full text-body line-clamp-1'}>
+              {index}. {question.prompt}
+            </div>
           </div>
-        </div>
-      );
+        );
+      }
     }
   };
 
