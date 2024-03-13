@@ -61,7 +61,7 @@ export const SelectOption = (props: SelectOptionProps) => {
     }
 
     if (isMultiSelect) {
-      if (value !== null && value !== undefined && value.includes(options[index])) {
+      if (value !== null && value !== undefined && isArray(value) && value.includes(options[index])) {
         className += ' rounded-lg bg-primary-300 hover:bg-primary-200 grid grid-cols-1 place-content-center';
       } else {
         className += ' rounded-lg bg-bgc-accent hover:bg-gray-50 grid grid-cols-1 place-content-center';
