@@ -1,71 +1,45 @@
-import { axiosFetcher } from '@coldpbc/fetchers';
-import useSWR from 'swr';
 import { JourneySpiderChart } from '../journeySpiderChart';
 import { SubcategoryJourneyPreview } from '../subcategoryJourneyPreview';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application/errors/errorFallback';
-import { useOrgSWR } from '../../../hooks/useOrgSWR';
-import { useColdContext } from '@coldpbc/hooks';
-import { ErrorType } from '@coldpbc/enums';
+import React, {useContext} from "react";
+import {AssessmentsContext} from "@coldpbc/context";
+import {map} from "lodash";
+import {Card, DismissableInfoCard, JourneyComplianceSwitcher, JourneyOverviewCard} from "@coldpbc/components";
 
 const _JourneyDetailView = () => {
-  const { data, error } = useOrgSWR<any>(['/categories', 'GET'], axiosFetcher);
-  const { logError } = useColdContext();
+  const {currentAssessment, data} = useContext(AssessmentsContext);
 
-  if (error) {
-    logError(error, ErrorType.SWRError);
-    return null;
-  }
-
-  const showCompanySection =
-    data?.definition?.categories['company_decarbonization']?.subcategories['facilities'] ||
-    data?.definition?.categories['company_decarbonization']?.subcategories['operations'] ||
-    data?.definition?.categories['company_decarbonization']?.subcategories['travel'] ||
-    data?.definition?.categories['company_decarbonization']?.subcategories['product'];
-
-  const showEmployeeSection =
-    data?.definition?.categories['employee_engagement']?.subcategories['employee_footprint'] ||
-    data?.definition?.categories['employee_engagement']?.subcategories['employee_activation'];
-
-  const showLeadershipSection =
-    data?.definition?.categories['climate_leadership']?.subcategories['internal_alignment'] ||
-    data?.definition?.categories['climate_leadership']?.subcategories['community_impact'];
+  const isEmptyData = !data[currentAssessment];
 
   return (
-    <div data-testid={'journey-detail-view'}>
-      <div className="mt-4 mb-10 mx-auto">
-        <JourneySpiderChart />
-      </div>
-      {showCompanySection && (
-        <>
-          <h2 className="text-xl mt-6 mb-3 font-bold text-white">Company Decarbonization</h2>
-          <div className="grid grid-cols-2 gap-4" data-testid={'journey-detail-view-company-decarbonization'}>
-            <SubcategoryJourneyPreview subcategory_key="facilities" category_key="company_decarbonization" />
-            <SubcategoryJourneyPreview subcategory_key="operations" category_key="company_decarbonization" />
-            <SubcategoryJourneyPreview subcategory_key="travel" category_key="company_decarbonization" />
-            <SubcategoryJourneyPreview subcategory_key="product" category_key="company_decarbonization" />
+    !isEmptyData ? (
+      <Card title={data[currentAssessment].compliance?.compliance_definition.title}>
+        <JourneyComplianceSwitcher />
+        <div data-testid={'journey-detail-view'}>
+          <div className="mt-4 mb-10 mx-auto">
+            <JourneySpiderChart/>
           </div>
-        </>
-      )}
-      {showEmployeeSection && (
-        <>
-          <h2 className="text-xl mt-6 mb-3 font-bold text-white">Employee Engagement</h2>
-          <div className="grid grid-cols-2 gap-4" data-testid={'journey-detail-view-employee-engagement'}>
-            <SubcategoryJourneyPreview subcategory_key="employee_footprint" category_key="employee_engagement" />
-            <SubcategoryJourneyPreview subcategory_key="employee_activation" category_key="employee_engagement" />
+          <h2 className="text-xl mt-6 mb-3 font-bold text-white">Categories</h2>
+          <div className="grid grid-cols-2 gap-4" data-testid={'journey-detail-view-categories'}>
+            {map(data[currentAssessment].section_types, (sectionInfo, sectionType) => {
+              return (
+                <SubcategoryJourneyPreview section_type={sectionType} score={Math.floor((sectionInfo?.percentage || 0)*100)} />
+              );
+            })}
           </div>
-        </>
-      )}
-      {showLeadershipSection && (
-        <>
-          <h2 className="text-xl mt-6 mb-3 font-bold text-white">Climate Leadership</h2>
-          <div className="grid grid-cols-2 gap-4" data-testid={'journey-detail-view-climate-leadership'}>
-            <SubcategoryJourneyPreview subcategory_key="internal_alignment" category_key="climate_leadership" />
-            <SubcategoryJourneyPreview subcategory_key="community_impact" category_key="climate_leadership" />
-          </div>
-        </>
-      )}
-    </div>
+        </div>
+      </Card>
+      ) : (
+      <>
+        <DismissableInfoCard
+          text="Assessments show how much progress you've made towards a particular compliance set. Higher scores mean you're closer to doing everything possible for this compliance set."
+          onDismiss={() => {}}
+          dismissKey="journey-page"
+        />
+        <JourneyOverviewCard omitCta={true} />
+      </>
+    )
   );
 };
 

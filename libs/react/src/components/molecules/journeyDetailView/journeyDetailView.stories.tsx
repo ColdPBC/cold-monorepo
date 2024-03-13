@@ -1,9 +1,10 @@
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { JourneyDetailView } from './journeyDetailView';
-import { StoryMockProvider } from '@coldpbc/mocks';
+import {getAssessmentsHandler, StoryMockProvider} from '@coldpbc/mocks';
 import { Card } from '../card';
 import { CenterColumnContent } from '../../organisms';
+import {ColdAssessmentsProvider} from "@coldpbc/providers";
 
 const meta: Meta<typeof JourneyDetailView> = {
   title: 'Molecules/JourneyDetailView',
@@ -18,13 +19,48 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   render: (args) => {
     return (
-      <StoryMockProvider handlers={[]}>
-        <CenterColumnContent>
-          <Card>
-            <JourneyDetailView />
-          </Card>
-        </CenterColumnContent>
+      <StoryMockProvider handlers={getAssessmentsHandler.default}>
+        <ColdAssessmentsProvider>
+            <CenterColumnContent>
+            <Card>
+              <JourneyDetailView />
+            </Card>
+          </CenterColumnContent>
+        </ColdAssessmentsProvider>
       </StoryMockProvider>
     );
   },
 };
+
+export const SingleCompliance: Story = {
+  render: (args) => {
+    return (
+      <StoryMockProvider handlers={getAssessmentsHandler.single}>
+        <ColdAssessmentsProvider>
+          <CenterColumnContent>
+            <Card>
+              <JourneyDetailView />
+            </Card>
+          </CenterColumnContent>
+        </ColdAssessmentsProvider>
+      </StoryMockProvider>
+    );
+  },
+};
+
+export const Empty: Story = {
+  render: (args) => {
+    return (
+      <StoryMockProvider handlers={getAssessmentsHandler.empty}>
+        <ColdAssessmentsProvider>
+          <CenterColumnContent>
+            <Card>
+              <JourneyDetailView />
+            </Card>
+          </CenterColumnContent>
+        </ColdAssessmentsProvider>
+      </StoryMockProvider>
+    );
+  },
+};
+

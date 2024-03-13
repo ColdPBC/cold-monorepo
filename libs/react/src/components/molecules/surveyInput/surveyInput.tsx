@@ -3,7 +3,7 @@ import { InputTypes } from '@coldpbc/enums';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application';
 import { isUndefined } from 'lodash';
-import { Card, Input, ListItem, Markdown, PercentSlider, SelectOption, YesNo } from '@coldpbc/components';
+import { Card, Input, ListItem, PercentSlider, SelectOption, YesNo } from '@coldpbc/components';
 
 export interface SurveyInputProps {
   input_key: string;
@@ -26,11 +26,7 @@ const _SurveyInput = (props: SurveyInputProps) => {
   const { input_key, prompt, options, tooltip, component, placeholder, onFieldUpdated, value, isAdditional, ai_attempted, ai_response } = props;
 
   const getDisplayValue = () => {
-    if (isAdditional) {
-      return value;
-    } else {
-      return value !== undefined ? value : ai_response?.answer;
-    }
+    return value !== undefined ? value : ai_response?.answer;
   };
 
   const inputComponent = () => {
@@ -245,19 +241,35 @@ const _SurveyInput = (props: SurveyInputProps) => {
   };
 
   const getAISource = () => {
-    if (isAdditional) {
-      return null;
-    } else {
-      if (ai_attempted && !isUndefined(ai_response) && !isUndefined(ai_response.answer) && ai_response.justification && isUndefined(value)) {
-        return (
-          <Card glow={false} className={'border-[1px] border-purple-300 w-full bg-bgc-elevated'} data-testid={'survey-input-ai-response'}>
-            <Markdown className={'!text-sm'} markdown={'✨' + ai_response.justification} />
-          </Card>
-        );
-      } else {
-        return null;
+    let justification = '';
+    let originalAnswer = '';
+    if (ai_attempted && !isUndefined(ai_response) && !isUndefined(ai_response.answer) && ai_response.justification) {
+      justification = ai_response.justification;
+      if (!isUndefined(value)) {
+        if (ai_response.answer === true) {
+          originalAnswer = "Yes";
+        } else if (ai_response.answer === false) {
+          originalAnswer = "No";
+        } else if (Array.isArray(ai_response.answer)) {
+          originalAnswer = ai_response.answer.join(", ");
+        } else {
+          originalAnswer = ai_response.answer;
+        }
       }
+    } else {
+      return null;
     }
+
+    return (
+      <Card glow={false} className={'border-[1px] border-purple-300 w-full bg-bgc-elevated'}
+            data-testid={'survey-input-ai-response'}>
+        <div className={"text-sm space-y-3"}>
+          <div className={"font-bold"}>✨ Cold AI</div>
+          {originalAnswer && <div><span className={"font-bold"}>Original Answer:</span> {originalAnswer}</div>}
+          <div><span className={"font-bold"}>Why:</span> {justification}</div>
+        </div>
+      </Card>
+    );
   };
 
   return (

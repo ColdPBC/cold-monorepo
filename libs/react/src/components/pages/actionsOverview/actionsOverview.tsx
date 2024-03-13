@@ -21,7 +21,6 @@ const _ActionsOverview = () => {
       </CenterColumnContent>
       <RightColumnContent>
         <TemperatureCheckCard cardTitle="Temperature Check" stats={['cold_score', 'actions_completed']} cornerGlow />
-        {ldFlags.showComplianceModule && <JourneyOverviewCard />}
       </RightColumnContent>
     </AppContent>
   );

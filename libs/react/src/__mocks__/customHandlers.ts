@@ -16,7 +16,7 @@ import { getNewsAllMissingProperties, getNewsDefault, getNewsSomeMissingProperti
 import { ActionPayload } from '@coldpbc/interfaces';
 import { getOrganizationMembersMock } from './datagridMock';
 import {
-  getActivateOrgCompliancePageMock,
+  getActivateOrgCompliancePageMock, getAssessmentsComplianceMock,
   getDefaultCompliancePageMock,
   getDefaultOrgCompliancePageMock,
   getOrganizationComplianceMock,
@@ -24,7 +24,10 @@ import {
 } from './complianceMock';
 import { getAllFilesMock } from './filesMock';
 import { getApiUrl } from './handlers';
-import { getSurveyFormDataByName } from './surveyDataMock';
+import {
+  getAssessmentSurveyWithProgressMock,
+  getSurveyFormDataByName
+} from './surveyDataMock';
 
 export const getFootprintHandler = {
   default: rest.get('*/organizations/:orgId/categories/company_decarbonization', (req, res, ctx) => {
@@ -688,4 +691,42 @@ export const getDocumentListHandler = {
       return res(ctx.json({}), ctx.status(201));
     }),
   ],
+};
+
+export const getAssessmentsHandler = {
+  default: [
+    rest.get(getApiUrl('/compliance_definitions/organizations/:orgId'), (req, res, ctx) => {
+      const compliance = getAssessmentsComplianceMock();
+      return res(ctx.json(compliance));
+    }),
+    rest.get(getApiUrl('/organizations/:orgId/surveys/:name'), (req, res, ctx) => {
+      const survey = getAssessmentSurveyWithProgressMock();
+
+      const { name } = req.params;
+      if (name === "rei_pia_2024_2")
+        survey.name = "rei_pia_2024_2";
+
+      return res(ctx.json(survey));
+    }),
+  ],
+  single: [
+    rest.get(getApiUrl('/compliance_definitions/organizations/:orgId'), (req, res, ctx) => {
+      const compliance = getAssessmentsComplianceMock();
+      return res(ctx.json([compliance[0]]));
+    }),
+    rest.get(getApiUrl('/organizations/:orgId/surveys/:name'), (req, res, ctx) => {
+      const survey = getAssessmentSurveyWithProgressMock();
+
+      const { name } = req.params;
+      if (name === "rei_pia_2024_2")
+        survey.name = "rei_pia_2024_2";
+
+      return res(ctx.json(survey));
+    }),
+  ],
+  empty: [
+    rest.get(getApiUrl('/compliance_definitions/organizations/:orgId'), (req, res, ctx) => {
+      return res(ctx.json([]));
+    }),
+  ]
 };
