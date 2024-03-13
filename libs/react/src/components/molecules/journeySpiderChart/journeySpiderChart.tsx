@@ -1,56 +1,39 @@
-import { useEffect, useRef, useState } from 'react';
+import {useContext, useEffect, useRef, useState} from 'react';
 import { Chart } from 'react-chartjs-2';
 import { Chart as ChartJS, ChartData, ChartOptions, Filler, LineElement, PointElement, RadarController, RadialLinearScale, Title } from 'chart.js';
 import { HexColors } from '../../../themes/cold_theme';
-import { forEach, isNumber, isString, some } from 'lodash';
-import useSWR from 'swr';
-import { axiosFetcher } from '../../../fetchers/axiosFetcher';
-import { Spinner } from '../../atoms/spinner/spinner';
+import { forEach, isNumber, isString } from 'lodash';
 import { defaultChartData, options } from './constants';
 import { createGradient, pickGradientValue } from './helpers';
 import { EmptyChart } from './emptyChart';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application/errors/errorFallback';
-import { useOrgSWR } from '../../../hooks/useOrgSWR';
-import { useColdContext } from '@coldpbc/hooks';
-import { ErrorType } from '@coldpbc/enums';
+import {AssessmentsContext} from "@coldpbc/context";
 
 ChartJS.register(RadarController, LineElement, PointElement, RadialLinearScale, Title, Filler);
 
-interface Props {
-  setIsEmptyData?: (isEmpty: boolean) => void;
-}
+function _JourneySpiderChart() {
+  const {currentAssessment, data} = useContext(AssessmentsContext);
 
-function _JourneySpiderChart({ setIsEmptyData }: Props) {
   const chartRef = useRef<ChartJS>(null);
 
   const [chartOptions, setChartOptions] = useState<ChartOptions>(options);
   const [chartData, setChartData] = useState<ChartData>(defaultChartData);
 
-  // Fetch chart data
-  const { data, error, isLoading } = useOrgSWR<any>(['/categories', 'GET'], axiosFetcher);
-  const { logError } = useColdContext();
+  // Handle empty state
+  const isEmpty = !data[currentAssessment];
 
-  if (error) {
-    logError(error, ErrorType.SWRError);
-    return null;
-  }
-
-  // Update chart data on receiving new data
-  const isEmpty = true;
-
+  // normalize all the data
   useEffect(() => {
     if (!isEmpty) {
-      const newLabels: string[] = [],
-        newData: number[] = [];
+      const newLabels: string[] = [], newData: number[] = [];
+
       // Transform chart data
-      forEach(data?.definition.categories, category => {
-        forEach(category.subcategories, subcategory => {
-          if (subcategory?.journey_score) {
-            newLabels.push(subcategory.subcategory_name);
-            newData.push(subcategory.journey_score);
+      forEach(data[currentAssessment].section_types, (section_type, name) => {
+          if (section_type.percentage !== undefined) {
+            newLabels.push(name);
+            newData.push(Math.floor(section_type.percentage * 100));
           }
-        });
       });
 
       const newChartData: ChartData = {
@@ -81,11 +64,12 @@ function _JourneySpiderChart({ setIsEmptyData }: Props) {
 
       setChartOptions(newChartOptions);
       setChartData(newChartData);
-      if (setIsEmptyData) setIsEmptyData(false);
-    } else {
-      if (setIsEmptyData) setIsEmptyData(true);
     }
   }, [data, chartRef.current]);
+
+  if (isEmpty) {
+    return <EmptyChart />;
+  }
 
   const handleResize = (chart: ChartJS) => {
     setTimeout(() => {
@@ -96,18 +80,6 @@ function _JourneySpiderChart({ setIsEmptyData }: Props) {
       });
     }, 100);
   };
-
-  if (isLoading) {
-    return (
-      <div className="h-[284px] flex items-center">
-        <Spinner />
-      </div>
-    );
-  } else if (isEmpty) {
-    return <EmptyChart />;
-  } else if (error) {
-    return <div></div>;
-  }
 
   return (
     <div className="relative h-[284px] w-full" data-chromatic="ignore" data-testid={'journey-spider-chart'}>

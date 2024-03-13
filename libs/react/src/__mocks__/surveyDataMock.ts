@@ -8858,8 +8858,9 @@ export function getSurveyComplianceFlowSomeCompleteSurveyMock(name: string) {
         progressSection.complete = true;
       }
       forOwn(progressSection.questions, (question: ComplianceSurveyProgressQuestionType, questionKey) => {
-        if (questionKey === 'GHG-12' || questionKey === 'GHG-13') {
+        if (progressSection.title === ghgSection.title) {
           question.user_answered = false;
+          question.ai_answered = true;
         } else {
           question.user_answered = true;
           question.ai_answered = true;
@@ -8927,4 +8928,2377 @@ export function getSurveyAllOtherQuestionsAnsweredSurveyMock(name: string) {
     survey.progress.total_max_score = 100;
   }
   return survey;
+}
+
+export function getAssessmentSurveyWithProgressMock(): ComplianceSurveyPayloadType {
+  return {
+    "id": "004466f6-158a-417d-a1bf-3d82d1b4d9b7",
+    "name": "rei_pia_2024",
+    "type": "COMPLIANCE",
+    "description": "2024 version of REI's product impact assessment",
+    "created_at": "2024-03-01T19:55:09.562Z",
+    "updated_at": "2024-03-06T05:05:44.302Z",
+    "definition": {
+      "title": "REI 2024 Product Impact Assessment",
+      "version": 2024,
+      "sections": {
+        "FR": {
+          "title": "Flame Retardant (FR) Chemicals",
+          "prompt": "",
+          "component": null,
+          "follow_up": {
+            "FR-1": {
+              "idx": 59,
+              "prompt": "The REI Product Impact Standards include the expectation that all camping shelters supplied to REI be free of prohibited flame retardant (FR) chemicals.\n(See REI’s Product Impact Standards for a list of prohibited FR chemicals.)\n\nDoes your brand have a formal policy/target in place regarding the use of FR chemicals in your products?",
+              "options": [],
+              "tooltip": "",
+              "component": "yes_no",
+              "placeholder": "",
+              "score": 0,
+              "max_score": 1
+            },
+            "FR-3": {
+              "idx": 61,
+              "prompt": "Does your brand have plans to transition away from the use of all flame retardants in your tents?",
+              "options": [],
+              "tooltip": "",
+              "component": "yes_no",
+              "placeholder": "",
+              "additional_context": {
+                "prompt": "Please describe",
+                "operator": "==",
+                "component": "textarea",
+                "comparison": true,
+                "placeholder": ""
+              },
+              "score": 0,
+              "max_score": 1
+            }
+          },
+          "image_url": "https://cold-public-assets.s3.amazonaws.com/images%2FReduce%20Packaging%20Footprint.png",
+          "category_idx": 7,
+          "section_type": "Materials",
+          "category_description": ""
+        },
+        "AFL": {
+          "title": "Animal Fur & Exotic Leather",
+          "prompt": "",
+          "component": null,
+          "follow_up": {
+            "AFL-1": {
+              "idx": 66,
+              "prompt": "The REI Product Impact Standards include the expectation that products supplied to REI do not contain animal fur or exotic leather. (See REI’s Product Impact Standards for a definition of exotic leather.)\n\nDoes your brand have a formal policy/target in place regarding the use of animal fur and exotic leather in your products?",
+              "options": [],
+              "tooltip": "",
+              "component": "yes_no",
+              "placeholder": "",
+              "score": 1,
+              "value": true,
+              "skipped": false,
+              "max_score": 1
+            },
+            "AFL-2": {
+              "idx": 67,
+              "prompt": "Is the policy/target publicly available?",
+              "options": [],
+              "tooltip": "",
+              "component": "yes_no",
+              "placeholder": "",
+              "additional_context": {
+                "prompt": "Please provide the hyperlink",
+                "operator": "==",
+                "component": "textarea",
+                "comparison": true,
+                "placeholder": ""
+              },
+              "score": 0,
+              "max_score": 1
+            },
+            "AFL-3": {
+              "idx": 68,
+              "prompt": "Does your brand have a formal policy/target in place regarding the geographic origin of the leather used in your products (e.g., avoiding sourcing from regions undergoing deforestation, etc.)?",
+              "options": [],
+              "tooltip": "",
+              "component": "yes_no",
+              "placeholder": "",
+              "score": 0,
+              "max_score": 1
+            }
+          },
+          "image_url": "https://cold-public-assets.s3.amazonaws.com/images%2FReduce%20Packaging%20Footprint.png",
+          "category_idx": 10,
+          "section_type": "Materials",
+          "category_description": ""
+        },
+        "APK": {
+          "title": "Packaging - Apparel",
+          "prompt": "",
+          "component": null,
+          "follow_up": {
+            "APK-1": {
+              "idx": 94,
+              "prompt": "REI’s Vendor Guide indicates that brands shipping non-white apparel items to REI should do so without individual polybags. Brands will be charged a $.01/unit polybag recycling fee for apparel items arriving in individual polybags at an REI receiving location. Please refer to REI’s Vendor Guide (available on the REI Partners Site) for more information.\n\nApproximately what percentage of the apparel product units your brand shipped to REI during the past calendar year were packaged in individual polybags?",
+              "options": [
+                "Unknown",
+                "0%",
+                "1-25%",
+                "26-50%",
+                "51-75%",
+                "76-99%",
+                "100%"
+              ],
+              "tooltip": "",
+              "component": "select",
+              "placeholder": "",
+              "score": 0,
+              "max_score": 1
+            },
+            "APK-2": {
+              "idx": 95,
+              "prompt": "Approximately what percentage of the apparel product units your brand shipped to REI during the past calendar year were packaged in a master polybag containing all units in each carton?",
+              "options": [
+                "Unknown",
+                "0%",
+                "1-25%",
+                "26-50%",
+                "51-75%",
+                "76-99%",
+                "100%"
+              ],
+              "tooltip": "",
+              "component": "select",
+              "placeholder": ""
+            },
+            "APK-4": {
+              "idx": 97,
+              "prompt": "Approximately what percentage of the apparel product units that you ship to REI during the coming year will be packaged in individual polybags?",
+              "options": [
+                "Unknown",
+                "0%",
+                "1-25%",
+                "26-50%",
+                "51-75%",
+                "76-99%",
+                "100%"
+              ],
+              "tooltip": "",
+              "component": "select",
+              "placeholder": "",
+              "score": 0,
+              "max_score": 1
+            },
+            "APK-5": {
+              "idx": 98,
+              "prompt": "As of the Spring 2024 product season, have you implemented as your standard practice the shipment of non-white apparel products to REI without the use of individual polybags?",
+              "options": [],
+              "tooltip": "",
+              "component": "yes_no",
+              "placeholder": "",
+              "score": 0,
+              "max_score": 1
+            }
+          },
+          "image_url": "https://cold-public-assets.s3.amazonaws.com/images%2FReduce%20Packaging%20Footprint.png",
+          "category_idx": 20,
+          "section_type": "Product",
+          "category_description": ""
+        },
+        "APP": {
+          "title": "Diversity & Inclusion: Cultural Appropriation",
+          "prompt": "",
+          "component": null,
+          "follow_up": {
+            "APP-1": {
+              "idx": 69,
+              "prompt": "As part of the REI Product Impact Standards, REI has established several expectations related to diversity and inclusion that we would like brand partners to implement. The following questions are intended to understand brand partners’ current state in implementing these practices.\n\nThe REI Product Impact Standards include the expectation that each brand partner has in place creative controls to prevent cultural appropriation: plagiarism, theft and/or inappropriate use of designs, patterns, forms, materials, words/names, etc. that are culturally meaningful to and/or originated from underrepresented communities. These creative controls should ensure that the development of products, promotions, and marketing used during annual cultural moments (e.g., Pride, Black History Month etc.) is shaped by members of the represented communities.\n\nWhich option below best describes how your brand is actively mitigating cultural appropriation, as of Spring 2024 product lines and marketing?",
+              "options": [
+                "We have successfully implemented creative controls, documented processes and policies to avoid cultural appropriation",
+                "We have some creative controls in place to identify and mitigate cultural appropriation in our design process, but do not have a formal policy or process",
+                "We do not currently have creative controls in place to address cultural appropriation"
+              ],
+              "tooltip": "",
+              "component": "select",
+              "placeholder": "",
+              "score": 0.5,
+              "value": "We have some creative controls in place to identify and mitigate cultural appropriation in our design process, but do not have a formal policy or process",
+              "skipped": false,
+              "max_score": 1
+            },
+            "APP-2": {
+              "idx": 70,
+              "prompt": "Which creative controls is your brand currently using to prevent cultural appropriation?",
+              "options": [
+                "Hiring BIPOC creatives or design collectives",
+                "Partnering with Native/Indigenous consultants or organizations (tribal organizations, nonprofits, etc.) to ensure appropriate use of cultural designs",
+                "Philanthropy/grantmaking to Native/Indigenous causes",
+                "Transparency about the source of a design’s inspiration (on product labeling, PI provided to REI, your website, etc.)",
+                "Clarity around source of product names that are derived from cultural traditions, places, or language",
+                "Use of marketing channels (website, social media, catalogue, etc.) to elevate Native artists, issues impacting tribal communities, etc.",
+                "Reviewing potential product concerns with our REI Merchandising and/or Inclusion Marketing contacts",
+                "Other"
+              ],
+              "tooltip": "",
+              "component": "multi_select",
+              "placeholder": "",
+              "additional_context": {
+                "prompt": "Please describe",
+                "operator": "has",
+                "component": "textarea",
+                "comparison": "Other",
+                "placeholder": ""
+              },
+              "score": 0,
+              "max_score": 1
+            }
+          },
+          "image_url": "https://cold-public-assets.s3.amazonaws.com/images%2FReduce%20Packaging%20Footprint.png",
+          "category_idx": 11,
+          "section_type": "D & I",
+          "category_description": ""
+        },
+        "BPA": {
+          "title": "Bisphenol A",
+          "prompt": "",
+          "component": null,
+          "follow_up": {
+            "BPA-1": {
+              "idx": 54,
+              "prompt": "The REI Product Impact Standards include the expectation that products supplied to REI that are meant to come in direct contact with food or liquids for human consumption be free of Bisphenol A (BPA).\n\nDoes your brand have a formal policy/target in place regarding the use of BPA in your products?",
+              "options": [],
+              "tooltip": "",
+              "component": "yes_no",
+              "placeholder": "",
+              "score": 0,
+              "max_score": 1
+            }
+          },
+          "image_url": "https://cold-public-assets.s3.amazonaws.com/images%2FReduce%20Packaging%20Footprint.png",
+          "category_idx": 5,
+          "section_type": "Materials",
+          "category_description": ""
+        },
+        "COL": {
+          "title": "Diversity & Inclusion: Inclusive Colorways",
+          "prompt": "",
+          "component": null,
+          "follow_up": {
+            "COL-1": {
+              "idx": 76,
+              "prompt": "The REI Product Impact Standards include the expectation that all wearable products supplied to REI be available in colorways appropriate for a range of skin tones/complexions; and that product marketed as ‘Nude’ including those with embellishments and/or linings intended to give the impression of bare skin or to mimic skin tone, be available in a range of tones.\n\nWhich of the following describes the active creative controls your brand has in place to ensure colorways of wearable products are appropriate for a variety of skin tones/complexions?",
+              "options": [
+                "We have creative controls in place",
+                "We do NOT have creative controls in place"
+              ],
+              "tooltip": "",
+              "component": "select",
+              "placeholder": "",
+              "score": 0,
+              "max_score": 1
+            },
+            "COL-2": {
+              "idx": 77,
+              "prompt": "Which of the following strategies is your brand currently using to address inclusion in its color offering?",
+              "options": [
+                "Offering a range of tones within products marketed as ‘Nude’ or intended to mimic skin",
+                "Offering a range of tones for product embellishments and/or linings intended to give the impression of bare skin",
+                "Diverse pool of product testers",
+                "Feedback from employee resource groups or similar",
+                "Designer/design team education on inclusion topics",
+                "Diversity/inclusion reviews within product development/creative process",
+                "Testing to ensure the availability of colorways to complement a range of complexions",
+                "Participating in communities of practice related to inclusive design",
+                "Other"
+              ],
+              "tooltip": "",
+              "component": "multi_select",
+              "placeholder": "",
+              "additional_context": {
+                "prompt": "Please describe",
+                "operator": "has",
+                "component": "textarea",
+                "comparison": "Other",
+                "placeholder": ""
+              },
+              "score": 0,
+              "max_score": 1
+            }
+          },
+          "image_url": "https://cold-public-assets.s3.amazonaws.com/images%2FReduce%20Packaging%20Footprint.png",
+          "category_idx": 14,
+          "section_type": "D & I",
+          "category_description": ""
+        },
+        "COP": {
+          "title": "Diversity & Inclusion: Inclusive Copy",
+          "prompt": "",
+          "component": null,
+          "follow_up": {
+            "COP-1": {
+              "idx": 74,
+              "prompt": "The REI Product Impact Standards include the expectation that each brand partner has in place creative controls to prevent the use of language in naming conventions (as applied to product, collection, color, or design); product information; marketing assets, etc., that negatively impact underrepresented groups (e.g., by reinforcing stereotypes, utilizing slurs, coopting cultural language, etc.).\n\nDoes your brand currently have in place policies or creative controls related to inclusive product copy?",
+              "options": [],
+              "tooltip": "",
+              "component": "yes_no",
+              "placeholder": "",
+              "score": 1,
+              "value": true,
+              "skipped": false,
+              "max_score": 1
+            },
+            "COP-2": {
+              "idx": 75,
+              "prompt": "Which of the following policies or creative controls do you utilize as it relates to inclusive product copy?",
+              "options": [
+                "Diversity & inclusion guidance in my brand’s style guide",
+                "Use of other diversity style guides (e.g., NABJ Style Guide, GLAAD Media Guide, etc.)",
+                "Diverse pool of product testers",
+                "Feedback from employee resource groups or similar",
+                "Designer/design team education on inclusion topics",
+                "Diversity/inclusion reviews within product development/creative process",
+                "Participating in communities of practice related to inclusive copy",
+                "Other"
+              ],
+              "tooltip": "",
+              "component": "multi_select",
+              "placeholder": "",
+              "additional_context": {
+                "prompt": "Please describe",
+                "operator": "has",
+                "component": "textarea",
+                "comparison": "Other",
+                "placeholder": "",
+                "value": null
+              },
+              "score": 0.25,
+              "value": [
+                "Diversity & inclusion guidance in my brand’s style guide",
+                "Use of other diversity style guides (e.g., NABJ Style Guide, GLAAD Media Guide, etc.)"
+              ],
+              "skipped": false,
+              "max_score": 1
+            }
+          },
+          "image_url": "https://cold-public-assets.s3.amazonaws.com/images%2FReduce%20Packaging%20Footprint.png",
+          "category_idx": 13,
+          "section_type": "D & I",
+          "category_description": ""
+        },
+        "CRP": {
+          "title": "Core Practices",
+          "prompt": "",
+          "component": null,
+          "follow_up": {
+            "CRP-1": {
+              "idx": 107,
+              "prompt": "Is your brand an active member of or participant in any of the following globally recognized sustainability forums?",
+              "options": [
+                "1% for the Planet",
+                "American Apparel & Footwear Association: Social Responsibility or Environmental Committees",
+                "B Corp",
+                "bluesign®",
+                "Business Social Compliance Initiative",
+                "Change Climate (formerly known as Climate Neutral)",
+                "Ethical Trading Initiative",
+                "Fair Factories Clearinghouse",
+                "Fair Labor Association",
+                "Fair Wear Foundation",
+                "Footwear Distributors & Retailers of America",
+                "Global Social Compliance Programme",
+                "Green Chemistry & Commerce Council",
+                "International Labour Organization Better Work Programme",
+                "Leather Working Group",
+                "Outdoor Industry Association Climate Action Corps",
+                "Outdoor Industry Association Sustainability Working Group",
+                "PeopleForBikes Sustainability Working Group",
+                "Retail Industry Leaders Association: Sustainability Workgroups",
+                "Science Based Targets Initiative",
+                "Snowsports Industries America ClimateUnited",
+                "Social and Labor Convergence Program",
+                "Sustainable Apparel Coalition",
+                "Textile Exchange",
+                "The Microfibre Consortium",
+                "Zero Discharge of Hazardous Chemicals",
+                "Others"
+              ],
+              "tooltip": "",
+              "component": "multi_select",
+              "placeholder": "",
+              "additional_context": {
+                "prompt": "Please list here",
+                "operator": "has",
+                "component": "textarea",
+                "comparison": "Others",
+                "placeholder": "",
+                "value": null
+              },
+              "score": 1,
+              "value": [
+                "bluesign®",
+                "Change Climate (formerly known as Climate Neutral)",
+                "Fair Factories Clearinghouse",
+                "Fair Factories Clearinghouse",
+                "Fair Factories Clearinghouse",
+                "B Corp"
+              ],
+              "skipped": false,
+              "max_score": 1
+            },
+            "CRP-2": {
+              "idx": 108,
+              "prompt": "Does your brand have an ongoing commitment to donating a specific portion of your sales or profits to philanthropic causes?",
+              "options": [],
+              "tooltip": "",
+              "component": "yes_no",
+              "placeholder": "",
+              "additional_context": {
+                "prompt": "Please describe",
+                "operator": "==",
+                "component": "textarea",
+                "comparison": true,
+                "placeholder": ""
+              },
+              "score": 0,
+              "max_score": 1
+            },
+            "CRP-3": {
+              "idx": 109,
+              "prompt": "Does your brand publish regular public-facing updates on your sustainability commitments and progress toward those commitments (e.g., annual sustainability report)?",
+              "options": [],
+              "tooltip": "",
+              "component": "yes_no",
+              "placeholder": "",
+              "additional_context": {
+                "prompt": "Please provide the hyperlink.",
+                "operator": "==",
+                "component": "textarea",
+                "comparison": true,
+                "placeholder": "",
+                "value": null
+              },
+              "score": 0,
+              "value": false,
+              "skipped": false,
+              "max_score": 1
+            },
+            "CRP-4": {
+              "idx": 110,
+              "prompt": "(Optional) We want to explore ways we can best convene and support you and other brands we work with to deliver more inclusive and culturally relevant offerings to our customer, and extend positive impacts to the broader community. What practices, information, or other resources would you be interested in?",
+              "options": [
+                "Attending a talk or lecture on DEI topics specific to product (webinar, lunch and learn, etc.)",
+                "Participating in collaborative learning sessions",
+                "Presenting a talk or learning session",
+                "Diversity & inclusion resource lists (reading, viewing, activities)",
+                "Collaborating on an industry-wide DEI style guide",
+                "Participating in an industry community of practice",
+                "Integration of inclusion discussions in the buying process",
+                "Consultation with REI’s Inclusion Marketing team on specific topics",
+                "Connections to inclusion organizations or ambassadors",
+                "Other"
+              ],
+              "tooltip": "",
+              "component": "multi_select",
+              "placeholder": "",
+              "additional_context": {
+                "prompt": "Please describe",
+                "operator": "has",
+                "component": "textarea",
+                "comparison": "Other",
+                "placeholder": "",
+                "value": null
+              },
+              "value": null,
+              "skipped": true
+            },
+            "CRP-5": {
+              "idx": 111,
+              "prompt": "(Optional) As part of our ongoing support, we have offered various resources including virtual trainings, panels, and an inclusive design playbook. If you or your team have utilized or attended any of these resources/events, what was helpful and what would you like to see more of?",
+              "options": [],
+              "tooltip": "",
+              "component": "textarea",
+              "placeholder": "",
+              "value": "Oops",
+              "skipped": false
+            },
+            "CRP-6": {
+              "idx": 112,
+              "prompt": "(Optional) If there are any other general comments or questions you would like to share with REI regarding product impact, please enter them below.",
+              "options": [],
+              "tooltip": "",
+              "component": "textarea",
+              "placeholder": ""
+            }
+          },
+          "image_url": "https://cold-public-assets.s3.amazonaws.com/images%2FReduce%20Packaging%20Footprint.png",
+          "category_idx": 22,
+          "section_type": "Practices",
+          "category_description": ""
+        },
+        "DHT": {
+          "title": "Diversity & Inclusion: Diverse Hair Type Inclusion",
+          "prompt": "",
+          "component": null,
+          "follow_up": {
+            "DHT-1": {
+              "idx": 80,
+              "prompt": "The REI Product Impact Standards has an expectation that each brand partner that produces headwear (helmets, hats, headbands, hoods, balaclavas, hijab, etc.) to have in place guidelines for ensuring an inclusive assortment for a variety of hair types, including higher-volume and textured hair.\n\nWhich of the below options best represents how your brand is approaching the Diverse Hair Type Inclusion expectation?",
+              "options": [
+                "We have successfully implemented guidelines",
+                "We have not implemented guidelines",
+                "Other"
+              ],
+              "tooltip": "",
+              "component": "select",
+              "placeholder": "",
+              "additional_context": {
+                "prompt": "Please describe",
+                "operator": "has",
+                "component": "textarea",
+                "comparison": "Other",
+                "placeholder": ""
+              },
+              "score": 0,
+              "max_score": 1
+            }
+          },
+          "image_url": "https://cold-public-assets.s3.amazonaws.com/images%2FReduce%20Packaging%20Footprint.png",
+          "category_idx": 16,
+          "section_type": "D & I",
+          "category_description": ""
+        },
+        "DWN": {
+          "title": "Down",
+          "prompt": "",
+          "component": null,
+          "follow_up": {
+            "DWN-1": {
+              "idx": 62,
+              "prompt": "The REI Product Impact Standards include the expectation that all products supplied to REI that contain virgin down meet standards that safeguard the well-being of ducks and geese in the down supply chain and prohibit live-plucking and force-feeding.\n\nDoes your brand have a formal policy/target in place regarding animal welfare in your down supply chain?",
+              "options": [],
+              "tooltip": "",
+              "component": "yes_no",
+              "placeholder": "",
+              "score": 1,
+              "value": true,
+              "skipped": false,
+              "max_score": 1
+            },
+            "DWN-2": {
+              "idx": 63,
+              "prompt": "Is the policy/target publicly available?",
+              "options": [],
+              "tooltip": "",
+              "component": "yes_no",
+              "placeholder": "",
+              "additional_context": {
+                "prompt": "Please provide the hyperlink",
+                "operator": "==",
+                "component": "textarea",
+                "comparison": true,
+                "placeholder": ""
+              },
+              "score": 0,
+              "max_score": 1
+            }
+          },
+          "image_url": "https://cold-public-assets.s3.amazonaws.com/images%2FReduce%20Packaging%20Footprint.png",
+          "category_idx": 8,
+          "section_type": "Materials",
+          "category_description": ""
+        },
+        "GEN": {
+          "title": "Brand Information",
+          "prompt": "",
+          "component": null,
+          "follow_up": {
+            "GEN-2": {
+              "idx": 9,
+              "prompt": "How many employees, if any, are currently dedicated to product sustainability at your brand?",
+              "options": [
+                "0",
+                "1",
+                "2-5",
+                "6-10",
+                "11-25",
+                "26-50",
+                "51+"
+              ],
+              "tooltip": "Note: Select the total number of full-time equivalents working on sustainability at your corporate headquarters, in regional offices, and/or at your parent company.",
+              "component": "select",
+              "placeholder": "",
+              "value": null,
+              "skipped": true
+            },
+            "GEN-3": {
+              "idx": 10,
+              "prompt": "Please indicate if your brand has supplied to REI in the past 12 months, or anticipates supplying to REI in the next 12 months, products that fall into any of the following categories.",
+              "options": [
+                "Apparel",
+                "Accessories (textile-based)",
+                "Cookware",
+                "Footwear",
+                "Headwear",
+                "Other textile products",
+                "Packs",
+                "Products that contain down",
+                "Products that contain leather",
+                "Products that contain wool",
+                "Ski wax",
+                "Sleeping bags",
+                "Sunscreens or other formulated sun-protection products",
+                "Tents",
+                "Treatments for gear and clothing",
+                "Water bottles, food containers, dinnerware or utensils",
+                "None of the above"
+              ],
+              "tooltip": "Note: This is not an exhaustive list of product categories sold at REI. Your selection below will determine whether you see questions in the online version of the assessment that are specifically related to each product category.",
+              "component": "multi_select",
+              "placeholder": "",
+              "value": [
+                "Ski wax",
+                "Sunscreens or other formulated sun-protection products",
+                "Sunscreens or other formulated sun-protection products",
+                "Other textile products",
+                "Other textile products",
+                "Other textile products",
+                "Headwear",
+                "Cookware",
+                "Packs",
+                "Sleeping bags",
+                "Tents",
+                "Water bottles, food containers, dinnerware or utensils",
+                "Treatments for gear and clothing",
+                "Water bottles, food containers, dinnerware or utensils",
+                "Treatments for gear and clothing",
+                "Treatments for gear and clothing",
+                "Water bottles, food containers, dinnerware or utensils",
+                "Treatments for gear and clothing",
+                "Treatments for gear and clothing",
+                "Apparel",
+                "Products that contain down"
+              ],
+              "skipped": false
+            },
+            "GEN-0:1": {
+              "idx": 0,
+              "prompt": "What is your REI Vendor ID?",
+              "options": [],
+              "tooltip": "",
+              "component": "text",
+              "placeholder": "",
+              "value": "213523532",
+              "skipped": false
+            },
+            "GEN-0:2": {
+              "idx": 1,
+              "prompt": "What is your Vendor Name?",
+              "options": [],
+              "tooltip": "",
+              "component": "text",
+              "placeholder": "",
+              "value": "Ben's Amazing Wool Company",
+              "skipped": false
+            },
+            "GEN-0:3": {
+              "idx": 2,
+              "prompt": "For which brand(s) are you completing the assessment?",
+              "options": [],
+              "tooltip": "",
+              "component": "multi_text",
+              "placeholder": "",
+              "value": [
+                "Socks",
+                "Hats",
+                "Other good stuff"
+              ],
+              "skipped": false
+            },
+            "GEN-1:1": {
+              "idx": 3,
+              "prompt": "List the name, email, and title of the person completing this assessment.",
+              "options": [],
+              "tooltip": "",
+              "component": "textarea",
+              "placeholder": "",
+              "value": "Ben, Head of Product, ben.quam@coldclimate.com",
+              "skipped": false
+            },
+            "GEN-1:2": {
+              "idx": 4,
+              "prompt": "List your brand's Product Sustainability Contact, if different from your response in the previous question",
+              "options": [],
+              "tooltip": "Please include name, email, and title",
+              "component": "textarea",
+              "placeholder": "",
+              "value": "contact example",
+              "skipped": false
+            },
+            "GEN-1:3": {
+              "idx": 5,
+              "prompt": "List your brand's Diversity, Equity, & Inclusion (DEI) Contact, if different from your response in the previous question(s)",
+              "options": [],
+              "tooltip": "Please include name, email, and title",
+              "component": "textarea",
+              "placeholder": "",
+              "value": null,
+              "skipped": true
+            },
+            "GEN-1:4": {
+              "idx": 6,
+              "prompt": "List any additional contacts for Product Sustainability",
+              "options": [],
+              "tooltip": "Please include names, emails, and titles",
+              "component": "textarea",
+              "placeholder": "",
+              "value": null,
+              "skipped": true
+            },
+            "GEN-1:5": {
+              "idx": 7,
+              "prompt": "List any additional contacts for Diversity, Equity, & Inclusion (DEI)",
+              "options": [],
+              "tooltip": "Please include names, emails, and titles",
+              "component": "textarea",
+              "placeholder": "",
+              "value": null,
+              "skipped": true
+            },
+            "GEN-1:6": {
+              "idx": 8,
+              "prompt": "List any additional contacts that supported filling out this assessment",
+              "options": [],
+              "tooltip": "Please include names, emails, and titles",
+              "component": "textarea",
+              "placeholder": "",
+              "value": null,
+              "skipped": true
+            }
+          },
+          "image_url": "https://cold-public-assets.s3.amazonaws.com/images%2FReduce%20Packaging%20Footprint.png",
+          "category_idx": 0,
+          "section_type": "Practices",
+          "category_description": ""
+        },
+        "GHG": {
+          "title": "GHG Emissions & Climate",
+          "prompt": "",
+          "component": null,
+          "follow_up": {
+            "GHG-1": {
+              "idx": 32,
+              "prompt": "As part of the REI Product Impact Standards, REI expects each brand partner to measure their annual greenhouse gas (GHG) emissions, set a reduction target, and implement an action plan for reducing their emissions. The following section focuses on the steps your brand is taking to address your contribution to climate change.\n\nHas your brand measured its carbon footprint this year or within the last calendar year?",
+              "options": [],
+              "tooltip": "Note: The term “carbon” is used here as a generally accepted shorthand for “greenhouse gas”.",
+              "component": "yes_no",
+              "placeholder": "",
+              "score": 0,
+              "value": null,
+              "skipped": true,
+              "max_score": 1
+            },
+            "GHG-7": {
+              "idx": 39,
+              "prompt": "Has your brand set a quantitative target(s) to reduce your carbon emissions?",
+              "options": [],
+              "tooltip": "",
+              "component": "yes_no",
+              "placeholder": "",
+              "score": 1,
+              "value": true,
+              "skipped": false,
+              "max_score": 1
+            },
+            "GHG-8": {
+              "idx": 45,
+              "prompt": "Has your emission reduction target(s) been approved by the Science Based Targets Initiative (SBTi) or an equivalent framework?",
+              "options": [
+                "Yes, our target(s) has been approved by the SBTi",
+                "No, but our target(s) is currently being evaluated by the SBTi for approval",
+                "No, but we’ve aligned our target(s) with the SBTi’s guidance",
+                "No, but we’ve aligned our target(s) with an equivalent framework for setting science-aligned reduction targets",
+                "No"
+              ],
+              "tooltip": "Note: REI considers a science-aligned target to be one that includes emissions from scopes 1, 2, and 3 and aligns with what the latest climate science indicates is necessary to limit global warming to 1.5 degrees C above pre-industrial levels",
+              "component": "select",
+              "placeholder": "",
+              "score": 1,
+              "value": [
+                "Yes, our target(s) has been approved by the SBTi"
+              ],
+              "skipped": false,
+              "max_score": 1
+            },
+            "GHG-9": {
+              "idx": 46,
+              "prompt": "Has your brand established an emissions reduction action plan or roadmap that guides your efforts to achieve your reduction targets?",
+              "options": [],
+              "tooltip": "",
+              "component": "yes_no",
+              "placeholder": "",
+              "score": 1,
+              "value": true,
+              "skipped": false,
+              "max_score": 1
+            },
+            "GHG-10": {
+              "idx": 48,
+              "prompt": "Did your brand’s carbon emissions over the previous year represent a measurable reduction in emissions intensity (i.e., carbon emissions per unit of product or dollar of revenue) relative to the prior year or a previous baseline year?",
+              "options": [
+                "Yes, a 1-25% reduction",
+                "Yes, a 26-50% reduction",
+                "Yes, a 51-75% reduction",
+                "Yes, a 76-99% reduction",
+                "Yes, a 100% reduction",
+                "No"
+              ],
+              "tooltip": "",
+              "component": "select",
+              "placeholder": "",
+              "score": 0.4,
+              "value": [
+                "Yes, a 26-50% reduction"
+              ],
+              "skipped": false,
+              "max_score": 1
+            },
+            "GHG-11": {
+              "idx": 49,
+              "prompt": "Does your brand generate and/or purchase carbon credits to “offset” all or a portion of your carbon emissions?",
+              "options": [],
+              "tooltip": "",
+              "component": "yes_no",
+              "placeholder": "",
+              "score": 1,
+              "value": true,
+              "skipped": false,
+              "max_score": 1
+            },
+            "GHG-12": {
+              "idx": 50,
+              "prompt": "Please indicate whether the carbon credits you generate and/or purchase account for and include the following components of your carbon footprint.",
+              "options": [
+                "Scope 1: Direct emissions from company vehicles & facilitie",
+                "Scope 2: Indirect emission from purchased electricity, steam, heating & cooling for own use",
+                "A portion of scope 3 emissions, but not including those from all the products you sell to REI",
+                "All or a portion of scope 3 emissions, including all the products you sell to REI",
+                "Other"
+              ],
+              "tooltip": "",
+              "component": "multi_select",
+              "placeholder": "",
+              "score": 0.6000000000000001,
+              "value": [
+                "Scope 1: Direct emissions from company vehicles & facilitie",
+                "Scope 2: Indirect emission from purchased electricity, steam, heating & cooling for own use",
+                "A portion of scope 3 emissions, but not including those from all the products you sell to REI"
+              ],
+              "skipped": false,
+              "max_score": 1
+            },
+            "GHG-13": {
+              "idx": 51,
+              "prompt": "Is your brand certified to a third-party standard that validates that you’ve purchased carbon credits sufficient to “offset” the relevant components of your carbon footprint (e.g., Climate Neutral Certified)?",
+              "options": [
+                "Yes, we’re Climate Neutral Certified",
+                "Yes, we’re certified to another carbon/climate neutrality standard",
+                "No"
+              ],
+              "tooltip": "",
+              "component": "select",
+              "placeholder": "",
+              "additional_context": {
+                "prompt": "If you are certified by another carbon/climate neutrality standard, please indicate which standard(s) your brand is certified to.",
+                "operator": "==",
+                "component": "textarea",
+                "comparison": "Yes, we’re certified to another carbon/climate neutrality standard",
+                "placeholder": "",
+                "value": null
+              },
+              "score": 1,
+              "value": [
+                "Yes, we’re Climate Neutral Certified"
+              ],
+              "skipped": false,
+              "max_score": 1
+            },
+            "GHG-7A": {
+              "idx": 40,
+              "prompt": "Which components of your carbon footprint are covered by your quantitative reduction target?",
+              "options": [
+                "Scope 1: Direct emissions from company vehicles & facilities",
+                "Scope 2: Indirect emission from purchased electricity, steam, heating & cooling for own use",
+                "Scope 3: Indirect emissions from purchased goods and services (i.e., Category 1)",
+                "Scope 3: Indirect emissions from all other upstream and downstream sources (i.e., Categories 2-15)"
+              ],
+              "tooltip": "",
+              "component": "multi_select",
+              "placeholder": "",
+              "score": 0,
+              "value": null,
+              "skipped": true,
+              "max_score": 1
+            },
+            "GHG-7C": {
+              "idx": 44,
+              "prompt": "Please select one of the following to indicate if your target is for absolute emissions reduction (i.e., total carbon emissions) or reduction in emissions intensity (i.e., carbon emissions per unit of product or dollar of revenue):",
+              "options": [
+                "Absolute emissions reduction",
+                "Reduction in emissions intensity"
+              ],
+              "tooltip": "",
+              "component": "select",
+              "placeholder": "",
+              "score": 1,
+              "value": [
+                "Absolute emissions reduction"
+              ],
+              "skipped": false,
+              "max_score": 1
+            },
+            "GHG-9A": {
+              "idx": 47,
+              "prompt": "What are the primary components of your emissions reduction action plan?",
+              "options": [
+                "Use of low-carbon materials or ingredients in products",
+                "Use of clean energy in product manufacturing",
+                "Use of clean energy to power operations (e.g., offices, distribution centers, etc.)",
+                "Minimization of materials waste in manufacturing",
+                "Energy efficiency in manufacturing",
+                "Use of circular business models (e.g., selling used products, renting or leasing products, product subscription, product recycling, etc.)",
+                "Supporting customers in reducing emissions during product use",
+                "Reduction in emissions from air freight",
+                "Other"
+              ],
+              "tooltip": "",
+              "component": "multi_select",
+              "placeholder": "",
+              "additional_context": {
+                "prompt": "Please describe",
+                "operator": "has",
+                "component": "textarea",
+                "comparison": "Other",
+                "placeholder": "",
+                "value": null
+              },
+              "score": 0.25,
+              "value": [
+                "Use of low-carbon materials or ingredients in products",
+                "Use of clean energy in product manufacturing"
+              ],
+              "skipped": false,
+              "max_score": 1
+            },
+            "GHG-7B:1": {
+              "idx": 41,
+              "prompt": "Please tell us about your quantitative Scope 3 reduction targets.\n\nWhat percent reduction are you aiming to achieve from your baseline year to your target year?",
+              "options": [],
+              "tooltip": "",
+              "component": "percent_slider",
+              "placeholder": "",
+              "value": 51,
+              "skipped": false
+            },
+            "GHG-7B:2": {
+              "idx": 42,
+              "prompt": "Please tell us about your quantitative Scope 3 reduction targets.\n\nWhat year are you using as your baseline year?",
+              "options": [],
+              "tooltip": "",
+              "component": "text",
+              "placeholder": "",
+              "value": 1998,
+              "skipped": false
+            },
+            "GHG-7B:3": {
+              "idx": 43,
+              "prompt": "Please tell us about your quantitative Scope 3 reduction targets.\n\nWhat year are you using as your target year?",
+              "options": [],
+              "tooltip": "",
+              "component": "text",
+              "placeholder": "",
+              "value": 2345,
+              "skipped": false
+            }
+          },
+          "image_url": "https://cold-public-assets.s3.amazonaws.com/images%2FReduce%20Packaging%20Footprint.png",
+          "category_idx": 3,
+          "section_type": "Environment",
+          "category_description": ""
+        },
+        "INC": {
+          "title": "Diversity & Inclusion: General",
+          "prompt": "",
+          "component": null,
+          "follow_up": {
+            "INC-1": {
+              "idx": 81,
+              "prompt": "This subset of questions is related to diversity, equity and inclusion practices at your organization, not limited to the product space. As REI seeks to progress a more inclusive outdoor industry, we are hoping to understand where brands are at.\n\nDoes your brand have a policy/policies in place regarding nondiscrimination as related to employment, customer service, grant-making or other areas?",
+              "options": [],
+              "tooltip": "",
+              "component": "yes_no",
+              "placeholder": "",
+              "score": 0,
+              "max_score": 1
+            },
+            "INC-4": {
+              "idx": 84,
+              "prompt": "Does your brand have/plan to create product that is designed beyond the gender binary (i.e. not women or men's only)?",
+              "options": [
+                "Yes",
+                "No",
+                "Other"
+              ],
+              "tooltip": "",
+              "component": "select",
+              "placeholder": "",
+              "additional_context": {
+                "prompt": "Please describe",
+                "operator": "has",
+                "component": "textarea",
+                "comparison": "Other",
+                "placeholder": ""
+              },
+              "score": 0,
+              "max_score": 1
+            },
+            "INC-5": {
+              "idx": 85,
+              "prompt": "Does your brand have in place a policy or practice for pay equity across gender and race?",
+              "options": [
+                "Yes",
+                "No",
+                "Other"
+              ],
+              "tooltip": "",
+              "component": "select",
+              "placeholder": "",
+              "additional_context": {
+                "prompt": "Please describe",
+                "operator": "has",
+                "component": "textarea",
+                "comparison": "Other",
+                "placeholder": ""
+              },
+              "score": 0,
+              "max_score": 1
+            },
+            "INC-6": {
+              "idx": 86,
+              "prompt": "Does your brand have in place a policy for healthcare explicitly inclusive of the LGBTQ+ community?",
+              "options": [
+                "Yes",
+                "No",
+                "Other"
+              ],
+              "tooltip": "",
+              "component": "select",
+              "placeholder": "",
+              "additional_context": {
+                "prompt": "Please describe",
+                "operator": "has",
+                "component": "textarea",
+                "comparison": "Other",
+                "placeholder": ""
+              },
+              "score": 0,
+              "max_score": 1
+            }
+          },
+          "image_url": "https://cold-public-assets.s3.amazonaws.com/images%2FReduce%20Packaging%20Footprint.png",
+          "category_idx": 17,
+          "section_type": "D & I",
+          "category_description": ""
+        },
+        "ISS": {
+          "title": "Diversity & Inclusion: Inclusive Sizing",
+          "prompt": "",
+          "component": null,
+          "follow_up": {
+            "ISS-1": {
+              "idx": 78,
+              "prompt": "The REI Product Impact Standard has an expectation that each brand partner that sells wearable products offered in a variety of sizes to provide REI at least one sample size outside the standard size range for marketing photography. \n\nAs a standard practice, does your brand currently send REI at least one sample size outside the standard size range for marketing photography of wearable products?",
+              "options": [],
+              "tooltip": "",
+              "component": "yes_no",
+              "placeholder": "",
+              "score": 1,
+              "value": true,
+              "skipped": false,
+              "max_score": 1
+            },
+            "ISS-2": {
+              "idx": 79,
+              "prompt": "The REI Product Impact Standards has an expectation that all brand partners who sell wearable products offered in a variety of sizes maintain the same price within a style regardless of size. \n\nDoes your brand currently maintain the same price across wearable products offered in a variety of sizes regardless of size?",
+              "options": [],
+              "tooltip": "",
+              "component": "yes_no",
+              "placeholder": "",
+              "score": 0,
+              "max_score": 1
+            }
+          },
+          "image_url": "https://cold-public-assets.s3.amazonaws.com/images%2FReduce%20Packaging%20Footprint.png",
+          "category_idx": 15,
+          "section_type": "D & I",
+          "category_description": ""
+        },
+        "MFG": {
+          "title": "Manufacturing Code of Conduct & Responsible Sourcing",
+          "prompt": "",
+          "component": null,
+          "follow_up": {
+            "MFG-0": {
+              "idx": 11,
+              "prompt": "Does your brand have in place a code of conduct for factories that manufacture the products you supply to REI?",
+              "options": [],
+              "tooltip": "",
+              "component": "yes_no",
+              "placeholder": "",
+              "score": 0,
+              "value": null,
+              "skipped": true,
+              "max_score": 1
+            },
+            "MFG-8": {
+              "idx": 22,
+              "prompt": "Is your brand’s supplier list publicly available?",
+              "options": [],
+              "tooltip": "",
+              "component": "yes_no",
+              "placeholder": "",
+              "additional_context": {
+                "prompt": "Please provide the hyperlink.",
+                "operator": "==",
+                "component": "textarea",
+                "comparison": true,
+                "placeholder": "",
+                "value": "fasa"
+              },
+              "score": 1,
+              "value": true,
+              "skipped": false,
+              "max_score": 1
+            },
+            "MFG-9": {
+              "idx": 23,
+              "prompt": "Please indicate which tiers of your supply chain are represented on your supplier list.",
+              "options": [
+                "Tier 1 (finished product manufacturers)",
+                "Tier 2 (finished material/subcomponent manufacturers)",
+                "Tier 3 (raw material processors)",
+                "Tier 4 (raw material suppliers)"
+              ],
+              "tooltip": "",
+              "component": "multi_select",
+              "placeholder": "",
+              "score": 0.75,
+              "value": [
+                "Tier 2 (finished material/subcomponent manufacturers)",
+                "Tier 1 (finished product manufacturers)",
+                "Tier 1 (finished product manufacturers)"
+              ],
+              "skipped": false,
+              "max_score": 1
+            },
+            "MFG-10": {
+              "idx": 24,
+              "prompt": "Does your brand have a formal process for utilizing social and/or environmental performance data in sourcing decisions?",
+              "options": [],
+              "tooltip": "",
+              "component": "yes_no",
+              "placeholder": "",
+              "score": 1,
+              "value": true,
+              "skipped": true,
+              "max_score": 1
+            },
+            "MFG-11": {
+              "idx": 25,
+              "prompt": "Does your brand have an ongoing training program(s) for suppliers to promote improved sustainability performance within your supply chain?",
+              "options": [],
+              "tooltip": "",
+              "component": "yes_no",
+              "placeholder": "",
+              "score": 0,
+              "value": null,
+              "skipped": true,
+              "max_score": 1
+            }
+          },
+          "image_url": "https://cold-public-assets.s3.amazonaws.com/images%2FReduce%20Packaging%20Footprint.png",
+          "category_idx": 1,
+          "section_type": "Practices",
+          "category_description": ""
+        },
+        "MKT": {
+          "title": "Diversity & Inclusion: Marketing Diversity",
+          "prompt": "",
+          "component": null,
+          "follow_up": {
+            "MKT-1": {
+              "idx": 71,
+              "prompt": "The REI Product Impact Standards include the expectation that each brand partner has in place guidelines for marketing assets, photo casting and production that ensure diverse and inclusive representation across race, age, gender identity/expression, body size and disability. Content supplied to REI by influencers and affiliate media, as well as photography, marketing copy, and other content, shall reflect the same inclusive representation.\n\nWhich option below best describes your brand’s status, as of Spring 2023 product lines and marketing, in addressing diverse and inclusive representation in its marketing and photo casting?",
+              "options": [
+                "We have successfully implemented guidelines and targets to ensure inclusive representation across a range of identities/diversity dimensions",
+                "We have some practices in place, but do not yet have formal guidelines or targets in place",
+                "We do not currently have guidelines or targets related to diversity and inclusion within our marketing or photography"
+              ],
+              "tooltip": "",
+              "component": "select",
+              "placeholder": "",
+              "additional_context": {
+                "prompt": "Describe how your brand plans to align with REI's expectation in this area.",
+                "operator": "==",
+                "component": "textarea",
+                "comparison": "We do not currently have guidelines or targets related to diversity and inclusion within our marketing or photography",
+                "placeholder": "",
+                "value": null
+              },
+              "score": 0,
+              "value": null,
+              "skipped": true,
+              "max_score": 1
+            }
+          },
+          "image_url": "https://cold-public-assets.s3.amazonaws.com/images%2FReduce%20Packaging%20Footprint.png",
+          "category_idx": 12,
+          "section_type": "D & I",
+          "category_description": ""
+        },
+        "PKG": {
+          "title": "Packaging - General",
+          "prompt": "",
+          "component": null,
+          "follow_up": {
+            "PKG-2": {
+              "idx": 92,
+              "prompt": "Has your brand been able to phase out the use of single-use plastics across any noteworthy areas of primary or secondary product packaging?",
+              "options": [],
+              "tooltip": "",
+              "component": "yes_no",
+              "placeholder": "",
+              "additional_context": {
+                "prompt": "Please describe the type of packaging phased out, the product category impacted and the alternative packaging used that avoids single-use plastics.",
+                "operator": "==",
+                "component": "textarea",
+                "comparison": true,
+                "placeholder": "",
+                "value": null
+              },
+              "score": 0,
+              "value": null,
+              "skipped": true,
+              "max_score": 1
+            },
+            "PKG-3": {
+              "idx": 93,
+              "prompt": "Are there other best sustainability practices for primary product packaging that you have in place that you’d like to share with REI?",
+              "options": [],
+              "tooltip": "",
+              "component": "yes_no",
+              "placeholder": "",
+              "additional_context": {
+                "prompt": "Please describe",
+                "operator": "==",
+                "component": "textarea",
+                "comparison": true,
+                "placeholder": "",
+                "value": null
+              },
+              "score": 0,
+              "value": null,
+              "skipped": true,
+              "max_score": 1
+            },
+            "PKG-1:1": {
+              "idx": 90,
+              "prompt": "Please indicate whether your brand has formal policies/targets in place regarding the use of more sustainable product packaging.",
+              "options": [
+                "FSC certified packaging materials",
+                "Recycled packaging materials",
+                "Recyclable packaging",
+                "Reduced packaging volume",
+                "How2Recycle logo on packaging",
+                "Primary plastic packaging elimination"
+              ],
+              "tooltip": "",
+              "component": "multi_select",
+              "placeholder": "",
+              "score": 0,
+              "value": null,
+              "skipped": true,
+              "max_score": 1
+            }
+          },
+          "image_url": "https://cold-public-assets.s3.amazonaws.com/images%2FReduce%20Packaging%20Footprint.png",
+          "category_idx": 19,
+          "section_type": "Product",
+          "category_description": ""
+        },
+        "PRD": {
+          "title": "Product Care, Repair, Reuse & End-of-life",
+          "prompt": "",
+          "component": null,
+          "follow_up": {
+            "PRD-1": {
+              "idx": 100,
+              "prompt": "Does your brand provide customers with guidance for how to use and care for your product in an environmentally responsible manner?",
+              "options": [],
+              "tooltip": "",
+              "component": "yes_no",
+              "placeholder": "",
+              "score": 0,
+              "value": null,
+              "skipped": true,
+              "max_score": 1
+            },
+            "PRD-2": {
+              "idx": 101,
+              "prompt": "Does your brand offer a lifetime warranty for products?",
+              "options": [],
+              "tooltip": "",
+              "component": "yes_no",
+              "placeholder": "",
+              "additional_context": {
+                "prompt": "Please provide a link to your warranty policy, if available",
+                "operator": "==",
+                "component": "textarea",
+                "comparison": true,
+                "placeholder": "",
+                "value": null
+              },
+              "score": 0,
+              "value": null,
+              "skipped": true,
+              "max_score": 1
+            },
+            "PRD-3": {
+              "idx": 102,
+              "prompt": "Does your brand provide product repair services to your customers?",
+              "options": [],
+              "tooltip": "",
+              "component": "yes_no",
+              "placeholder": "",
+              "score": 0,
+              "max_score": 1
+            },
+            "PRD-5": {
+              "idx": 104,
+              "prompt": "Does your brand sell used products?",
+              "options": [],
+              "tooltip": "",
+              "component": "yes_no",
+              "placeholder": "",
+              "score": 0,
+              "max_score": 1
+            },
+            "PRD-6": {
+              "idx": 105,
+              "prompt": "Does your brand rent or lease products to your customers?",
+              "options": [],
+              "tooltip": "",
+              "component": "yes_no",
+              "placeholder": "",
+              "score": 0,
+              "max_score": 1
+            },
+            "PRD-7": {
+              "idx": 106,
+              "prompt": "Does your brand offer solutions for your customers to donate and/or recycle products at end-of-life?",
+              "options": [],
+              "tooltip": "",
+              "component": "yes_no",
+              "placeholder": "",
+              "additional_context": {
+                "prompt": "Please describe",
+                "operator": "==",
+                "component": "textarea",
+                "comparison": true,
+                "placeholder": ""
+              },
+              "score": 0,
+              "max_score": 1
+            }
+          },
+          "image_url": "https://cold-public-assets.s3.amazonaws.com/images%2FReduce%20Packaging%20Footprint.png",
+          "category_idx": 21,
+          "section_type": "Product",
+          "category_description": ""
+        },
+        "PSA": {
+          "title": "Product Sustainability & Preferred Attributes",
+          "prompt": "",
+          "component": null,
+          "follow_up": {
+            "PSA-1": {
+              "idx": 87,
+              "prompt": "Does your brand utilize a formal methodology or tool to measure the sustainability of your materials and/or finished products?",
+              "options": [],
+              "tooltip": "",
+              "component": "yes_no",
+              "placeholder": "",
+              "additional_context": {
+                "prompt": "Please describe. Limit your response to 100 words or less.",
+                "operator": "==",
+                "component": "textarea",
+                "comparison": true,
+                "placeholder": "",
+                "value": "kjnlpnnpjo"
+              },
+              "score": 1,
+              "value": true,
+              "skipped": false,
+              "max_score": 1
+            },
+            "PSA-2:1": {
+              "idx": 88,
+              "prompt": "Please select which of REI's preferred sustainability attributes your brand has policies or targets in place for (if any)",
+              "options": [
+                "bluesign®",
+                "Certified organic/organic ingredients",
+                "Climate Neutral Certified",
+                "Fair trade certification",
+                "Forest Stewardship Council certification (FSC)",
+                "Leather Working Group certification (LWG)",
+                "Organically grown cotton",
+                "Recycled materials",
+                "Responsibly sourced down",
+                "Responsibly sourced wool"
+              ],
+              "tooltip": "",
+              "component": "multi_select",
+              "placeholder": "",
+              "score": 0,
+              "max_score": 1
+            }
+          },
+          "image_url": "https://cold-public-assets.s3.amazonaws.com/images%2FReduce%20Packaging%20Footprint.png",
+          "category_idx": 18,
+          "section_type": "Product",
+          "category_description": ""
+        },
+        "SUN": {
+          "title": "Sunscreen Ingredients",
+          "prompt": "",
+          "component": null,
+          "follow_up": {
+            "SUN-1": {
+              "idx": 56,
+              "prompt": "The REI Product Impact Standards include the expectation that sunscreens and formulated sun-protection products supplied to REI be free of oxybenzone and contain only active ingredients that are generally recognized as safe and effective.\n\nDoes your brand have a formal policy/target in place regarding the use of oxybenzone in your products?",
+              "options": [],
+              "tooltip": "",
+              "component": "yes_no",
+              "placeholder": "",
+              "score": 0,
+              "max_score": 1
+            },
+            "SUN-3": {
+              "idx": 58,
+              "prompt": "Does your brand have a formal policy/target in place that includes avoiding the use of other active sunscreen ingredients?",
+              "options": [],
+              "tooltip": "",
+              "component": "yes_no",
+              "placeholder": "",
+              "additional_context": {
+                "prompt": "Please indicate which other active sunscreen ingredients your brand formally avoids using.",
+                "operator": "==",
+                "component": "textarea",
+                "comparison": true,
+                "placeholder": ""
+              },
+              "score": 0,
+              "max_score": 1
+            }
+          },
+          "image_url": "https://cold-public-assets.s3.amazonaws.com/images%2FReduce%20Packaging%20Footprint.png",
+          "category_idx": 6,
+          "section_type": "Materials",
+          "category_description": ""
+        },
+        "CHEM": {
+          "title": "Restricted Substances List & Chemicals Management",
+          "prompt": "",
+          "component": null,
+          "follow_up": {
+            "CHEM-0": {
+              "idx": 26,
+              "prompt": "As part of the REI Product Impact Standards, REI expects each brand partner to have in place a Restricted Substances List (RSL) that specifies which substances are banned or restricted in products and that meets or exceeds all applicable regulatory requirements.\n\nDoes your brand have an RSL in place for the products you supply to REI?",
+              "options": [],
+              "tooltip": "Note: Brands that sell products in categories regulated by the U.S. Food and Drug Administration (FDA) or U.S. Department of Agriculture (USDA) do not need to have a separate RSL for their products in these categories.",
+              "component": "yes_no",
+              "placeholder": "",
+              "additional_context": {
+                "prompt": "Describe how your brand plans to align with REI's expectation in this area.",
+                "operator": "==",
+                "component": "textarea",
+                "comparison": false,
+                "placeholder": "",
+                "value": null
+              },
+              "score": 1,
+              "value": true,
+              "skipped": false,
+              "max_score": 1
+            },
+            "CHEM-1": {
+              "idx": 27,
+              "prompt": "Does your brand have a means of verifying that products you supply to REI comply with your RSL?",
+              "options": [],
+              "tooltip": "",
+              "component": "yes_no",
+              "placeholder": "",
+              "additional_context": {
+                "prompt": "Please describe how your brand verifies that products you supply to REI comply with your RSL.",
+                "operator": "==",
+                "component": "textarea",
+                "comparison": true,
+                "placeholder": "",
+                "value": "Here's some example text"
+              },
+              "score": 1,
+              "value": true,
+              "skipped": false,
+              "max_score": 1
+            },
+            "CHEM-2": {
+              "idx": 28,
+              "prompt": "Please indicate whether your brand’s chemicals management program consists of the following components that aid in verifying compliance with your RSL.",
+              "options": [
+                "A chemical testing program that tests materials, ingredients and/or products for compliance with your RSL and/or other standards for managing chemicals or ingredients.",
+                "An input-stream management system aimed at managing the chemistry and/or ingredients entering the manufacturing process."
+              ],
+              "tooltip": "",
+              "component": "multi_select",
+              "placeholder": "",
+              "score": 0.5,
+              "value": [
+                "A chemical testing program that tests materials, ingredients and/or products for compliance with your RSL and/or other standards for managing chemicals or ingredients."
+              ],
+              "skipped": false,
+              "max_score": 1
+            },
+            "CHEM-3": {
+              "idx": 29,
+              "prompt": "Is your RSL aligned to an internationally recognized third-party RSL?",
+              "options": [],
+              "tooltip": "",
+              "component": "yes_no",
+              "placeholder": "",
+              "score": 1,
+              "value": true,
+              "skipped": false,
+              "max_score": 1
+            },
+            "CHEM-4": {
+              "idx": 31,
+              "prompt": "Is your brand’s RSL publicly available?",
+              "options": [],
+              "tooltip": "",
+              "component": "yes_no",
+              "placeholder": "",
+              "additional_context": {
+                "prompt": "Please provide the hyperlink",
+                "operator": "==",
+                "component": "textarea",
+                "comparison": true,
+                "placeholder": "",
+                "value": null
+              },
+              "score": 1,
+              "value": true,
+              "skipped": false,
+              "max_score": 1
+            },
+            "CHEM-3A": {
+              "idx": 30,
+              "prompt": "Please specify which third-party RSL(s).",
+              "options": [
+                "American Apparel and Footwear Association (AAFA)",
+                "AFIRM",
+                "bluesign",
+                "ZDHC MSRL",
+                "REACH",
+                "OEKO-TEX",
+                "Other"
+              ],
+              "tooltip": "",
+              "component": "multi_select",
+              "placeholder": "",
+              "additional_context": {
+                "prompt": "Please specify any additional third party RSL(s)",
+                "operator": "has",
+                "component": "textarea",
+                "comparison": "Other",
+                "placeholder": "",
+                "value": null
+              },
+              "value": [
+                "bluesign",
+                "REACH",
+                "Other"
+              ],
+              "skipped": false
+            }
+          },
+          "image_url": "https://cold-public-assets.s3.amazonaws.com/images%2FReduce%20Packaging%20Footprint.png",
+          "category_idx": 2,
+          "section_type": "Materials",
+          "category_description": ""
+        },
+        "PFAS": {
+          "title": "Per- and Polyfluoroalkyl Substances",
+          "prompt": "",
+          "component": null,
+          "follow_up": {
+            "PFAS-1": {
+              "idx": 52,
+              "prompt": "The REI Product Impact Standards include the existing expectation that all apparel, footwear, packs, sleeping bags or tents supplied to REI be free of long-chain PFAS and that all ski wax and gear & clothing treatments supplied to REI be free of long-chain and short-chain PFAS.\n\nDoes your brand have a formal policy/target in place regarding the presence of PFAS in your products?",
+              "options": [],
+              "tooltip": "",
+              "component": "yes_no",
+              "placeholder": "",
+              "score": 1,
+              "value": true,
+              "skipped": false,
+              "max_score": 1
+            },
+            "PFAS-2": {
+              "idx": 53,
+              "prompt": "Is the policy/target publicly available?",
+              "options": [],
+              "tooltip": "",
+              "component": "yes_no",
+              "placeholder": "",
+              "additional_context": {
+                "prompt": "Please provide the hyperlink",
+                "operator": "==",
+                "component": "textarea",
+                "comparison": true,
+                "placeholder": "",
+                "value": null
+              },
+              "score": 0,
+              "value": null,
+              "skipped": true,
+              "max_score": 1
+            }
+          },
+          "image_url": "https://cold-public-assets.s3.amazonaws.com/images%2FReduce%20Packaging%20Footprint.png",
+          "category_idx": 4,
+          "section_type": "Materials",
+          "category_description": ""
+        }
+      },
+      "image_url": "https://cold-public-assets.s3.amazonaws.com/images%2FReduce%20Packaging%20Footprint.png",
+      "intro_markdown": ""
+    },
+    "progress": {
+      "total_score": 22.25,
+      "total_max_score": 64,
+      "total_review": 0,
+      "question_count": 83,
+      "percentage": 34.765625,
+      "questions_answered": 55,
+      "sections": [
+        {
+          "section_score": 0,
+          "section_max_score": 2,
+          "title": "Flame Retardant (FR) Chemicals",
+          "total": 2,
+          "answered": 0,
+          "complete": false,
+          "review": 0,
+          "questions": {
+            "FR-1": {
+              "max_score": 1,
+              "score": 0,
+              "user_answered": false,
+              "ai_answered": false
+            },
+            "FR-3": {
+              "max_score": 1,
+              "score": 0,
+              "user_answered": false,
+              "ai_answered": false
+            }
+          }
+        },
+        {
+          "section_score": 1,
+          "section_max_score": 3,
+          "title": "Animal Fur & Exotic Leather",
+          "total": 3,
+          "answered": 1,
+          "complete": false,
+          "review": 0,
+          "questions": {
+            "AFL-1": {
+              "max_score": 1,
+              "score": 1,
+              "user_answered": true,
+              "ai_answered": false
+            },
+            "AFL-2": {
+              "max_score": 1,
+              "score": 0,
+              "user_answered": false,
+              "ai_answered": false
+            },
+            "AFL-3": {
+              "max_score": 1,
+              "score": 0,
+              "user_answered": false,
+              "ai_answered": false
+            }
+          }
+        },
+        {
+          "section_score": 0,
+          "section_max_score": 3,
+          "title": "Packaging - Apparel",
+          "total": 4,
+          "answered": 0,
+          "complete": false,
+          "review": 0,
+          "questions": {
+            "APK-1": {
+              "max_score": 1,
+              "score": 0,
+              "user_answered": false,
+              "ai_answered": false
+            },
+            "APK-2": {
+              "user_answered": false,
+              "ai_answered": false
+            },
+            "APK-4": {
+              "max_score": 1,
+              "score": 0,
+              "user_answered": false,
+              "ai_answered": false
+            },
+            "APK-5": {
+              "max_score": 1,
+              "score": 0,
+              "user_answered": false,
+              "ai_answered": false
+            }
+          }
+        },
+        {
+          "section_score": 0.5,
+          "section_max_score": 2,
+          "title": "Diversity & Inclusion: Cultural Appropriation",
+          "total": 2,
+          "answered": 1,
+          "complete": false,
+          "review": 0,
+          "questions": {
+            "APP-1": {
+              "max_score": 1,
+              "score": 0.5,
+              "user_answered": true,
+              "ai_answered": false
+            },
+            "APP-2": {
+              "max_score": 1,
+              "score": 0,
+              "user_answered": false,
+              "ai_answered": false
+            }
+          }
+        },
+        {
+          "section_score": 0,
+          "section_max_score": 1,
+          "title": "Bisphenol A",
+          "total": 1,
+          "answered": 0,
+          "complete": false,
+          "review": 0,
+          "questions": {
+            "BPA-1": {
+              "max_score": 1,
+              "score": 0,
+              "user_answered": false,
+              "ai_answered": false
+            }
+          }
+        },
+        {
+          "section_score": 0,
+          "section_max_score": 2,
+          "title": "Diversity & Inclusion: Inclusive Colorways",
+          "total": 2,
+          "answered": 0,
+          "complete": false,
+          "review": 0,
+          "questions": {
+            "COL-1": {
+              "max_score": 1,
+              "score": 0,
+              "user_answered": false,
+              "ai_answered": false
+            },
+            "COL-2": {
+              "max_score": 1,
+              "score": 0,
+              "user_answered": false,
+              "ai_answered": false
+            }
+          }
+        },
+        {
+          "section_score": 1.25,
+          "section_max_score": 2,
+          "title": "Diversity & Inclusion: Inclusive Copy",
+          "total": 2,
+          "answered": 2,
+          "complete": true,
+          "review": 0,
+          "questions": {
+            "COP-1": {
+              "max_score": 1,
+              "score": 1,
+              "user_answered": true,
+              "ai_answered": false
+            },
+            "COP-2": {
+              "max_score": 1,
+              "score": 0.25,
+              "user_answered": true,
+              "ai_answered": false
+            }
+          }
+        },
+        {
+          "section_score": 1,
+          "section_max_score": 3,
+          "title": "Core Practices",
+          "total": 6,
+          "answered": 4,
+          "complete": false,
+          "review": 0,
+          "questions": {
+            "CRP-1": {
+              "max_score": 1,
+              "score": 1,
+              "user_answered": true,
+              "ai_answered": false
+            },
+            "CRP-2": {
+              "max_score": 1,
+              "score": 0,
+              "user_answered": false,
+              "ai_answered": false
+            },
+            "CRP-3": {
+              "max_score": 1,
+              "score": 0,
+              "user_answered": true,
+              "ai_answered": false
+            },
+            "CRP-4": {
+              "user_answered": true,
+              "ai_answered": false
+            },
+            "CRP-5": {
+              "user_answered": true,
+              "ai_answered": false
+            },
+            "CRP-6": {
+              "user_answered": false,
+              "ai_answered": false
+            }
+          }
+        },
+        {
+          "section_score": 0,
+          "section_max_score": 1,
+          "title": "Diversity & Inclusion: Diverse Hair Type Inclusion",
+          "total": 1,
+          "answered": 0,
+          "complete": false,
+          "review": 0,
+          "questions": {
+            "DHT-1": {
+              "max_score": 1,
+              "score": 0,
+              "user_answered": false,
+              "ai_answered": false
+            }
+          }
+        },
+        {
+          "section_score": 1,
+          "section_max_score": 2,
+          "title": "Down",
+          "total": 2,
+          "answered": 1,
+          "complete": false,
+          "review": 0,
+          "questions": {
+            "DWN-1": {
+              "max_score": 1,
+              "score": 1,
+              "user_answered": true,
+              "ai_answered": false
+            },
+            "DWN-2": {
+              "max_score": 1,
+              "score": 0,
+              "user_answered": false,
+              "ai_answered": false
+            }
+          }
+        },
+        {
+          "title": "Brand Information",
+          "total": 11,
+          "answered": 11,
+          "complete": true,
+          "review": 0,
+          "questions": {
+            "GEN-2": {
+              "user_answered": true,
+              "ai_answered": false
+            },
+            "GEN-3": {
+              "user_answered": true,
+              "ai_answered": false
+            },
+            "GEN-0:1": {
+              "user_answered": true,
+              "ai_answered": false
+            },
+            "GEN-0:2": {
+              "user_answered": true,
+              "ai_answered": false
+            },
+            "GEN-0:3": {
+              "user_answered": true,
+              "ai_answered": false
+            },
+            "GEN-1:1": {
+              "user_answered": true,
+              "ai_answered": false
+            },
+            "GEN-1:2": {
+              "user_answered": true,
+              "ai_answered": false
+            },
+            "GEN-1:3": {
+              "user_answered": true,
+              "ai_answered": false
+            },
+            "GEN-1:4": {
+              "user_answered": true,
+              "ai_answered": false
+            },
+            "GEN-1:5": {
+              "user_answered": true,
+              "ai_answered": false
+            },
+            "GEN-1:6": {
+              "user_answered": true,
+              "ai_answered": false
+            }
+          }
+        },
+        {
+          "section_score": 7.25,
+          "section_max_score": 11,
+          "title": "GHG Emissions & Climate",
+          "total": 14,
+          "answered": 14,
+          "complete": true,
+          "review": 0,
+          "questions": {
+            "GHG-1": {
+              "max_score": 1,
+              "score": 0,
+              "user_answered": true,
+              "ai_answered": false
+            },
+            "GHG-7": {
+              "max_score": 1,
+              "score": 1,
+              "user_answered": true,
+              "ai_answered": false
+            },
+            "GHG-8": {
+              "max_score": 1,
+              "score": 1,
+              "user_answered": true,
+              "ai_answered": false
+            },
+            "GHG-9": {
+              "max_score": 1,
+              "score": 1,
+              "user_answered": true,
+              "ai_answered": false
+            },
+            "GHG-10": {
+              "max_score": 1,
+              "score": 0.4,
+              "user_answered": true,
+              "ai_answered": false
+            },
+            "GHG-11": {
+              "max_score": 1,
+              "score": 1,
+              "user_answered": true,
+              "ai_answered": false
+            },
+            "GHG-12": {
+              "max_score": 1,
+              "score": 0.6000000000000001,
+              "user_answered": true,
+              "ai_answered": false
+            },
+            "GHG-13": {
+              "max_score": 1,
+              "score": 1,
+              "user_answered": true,
+              "ai_answered": false
+            },
+            "GHG-7A": {
+              "max_score": 1,
+              "score": 0,
+              "user_answered": true,
+              "ai_answered": false
+            },
+            "GHG-7C": {
+              "max_score": 1,
+              "score": 1,
+              "user_answered": true,
+              "ai_answered": false
+            },
+            "GHG-9A": {
+              "max_score": 1,
+              "score": 0.25,
+              "user_answered": true,
+              "ai_answered": false
+            },
+            "GHG-7B:1": {
+              "user_answered": true,
+              "ai_answered": false
+            },
+            "GHG-7B:2": {
+              "user_answered": true,
+              "ai_answered": false
+            },
+            "GHG-7B:3": {
+              "user_answered": true,
+              "ai_answered": false
+            }
+          }
+        },
+        {
+          "section_score": 0,
+          "section_max_score": 4,
+          "title": "Diversity & Inclusion: General",
+          "total": 4,
+          "answered": 0,
+          "complete": false,
+          "review": 0,
+          "questions": {
+            "INC-1": {
+              "max_score": 1,
+              "score": 0,
+              "user_answered": false,
+              "ai_answered": false
+            },
+            "INC-4": {
+              "max_score": 1,
+              "score": 0,
+              "user_answered": false,
+              "ai_answered": false
+            },
+            "INC-5": {
+              "max_score": 1,
+              "score": 0,
+              "user_answered": false,
+              "ai_answered": false
+            },
+            "INC-6": {
+              "max_score": 1,
+              "score": 0,
+              "user_answered": false,
+              "ai_answered": false
+            }
+          }
+        },
+        {
+          "section_score": 1,
+          "section_max_score": 2,
+          "title": "Diversity & Inclusion: Inclusive Sizing",
+          "total": 2,
+          "answered": 1,
+          "complete": false,
+          "review": 0,
+          "questions": {
+            "ISS-1": {
+              "max_score": 1,
+              "score": 1,
+              "user_answered": true,
+              "ai_answered": false
+            },
+            "ISS-2": {
+              "max_score": 1,
+              "score": 0,
+              "user_answered": false,
+              "ai_answered": false
+            }
+          }
+        },
+        {
+          "section_score": 2.75,
+          "section_max_score": 5,
+          "title": "Manufacturing Code of Conduct & Responsible Sourcing",
+          "total": 5,
+          "answered": 5,
+          "complete": true,
+          "review": 0,
+          "questions": {
+            "MFG-0": {
+              "max_score": 1,
+              "score": 0,
+              "user_answered": true,
+              "ai_answered": false
+            },
+            "MFG-8": {
+              "max_score": 1,
+              "score": 1,
+              "user_answered": true,
+              "ai_answered": false
+            },
+            "MFG-9": {
+              "max_score": 1,
+              "score": 0.75,
+              "user_answered": true,
+              "ai_answered": false
+            },
+            "MFG-10": {
+              "max_score": 1,
+              "score": 1,
+              "user_answered": true,
+              "ai_answered": false
+            },
+            "MFG-11": {
+              "max_score": 1,
+              "score": 0,
+              "user_answered": true,
+              "ai_answered": false
+            }
+          }
+        },
+        {
+          "section_score": 0,
+          "section_max_score": 1,
+          "title": "Diversity & Inclusion: Marketing Diversity",
+          "total": 1,
+          "answered": 1,
+          "complete": true,
+          "review": 0,
+          "questions": {
+            "MKT-1": {
+              "max_score": 1,
+              "score": 0,
+              "user_answered": true,
+              "ai_answered": false
+            }
+          }
+        },
+        {
+          "section_score": 0,
+          "section_max_score": 3,
+          "title": "Packaging - General",
+          "total": 3,
+          "answered": 3,
+          "complete": true,
+          "review": 0,
+          "questions": {
+            "PKG-2": {
+              "max_score": 1,
+              "score": 0,
+              "user_answered": true,
+              "ai_answered": false
+            },
+            "PKG-3": {
+              "max_score": 1,
+              "score": 0,
+              "user_answered": true,
+              "ai_answered": false
+            },
+            "PKG-1:1": {
+              "max_score": 1,
+              "score": 0,
+              "user_answered": true,
+              "ai_answered": false
+            }
+          }
+        },
+        {
+          "section_score": 0,
+          "section_max_score": 6,
+          "title": "Product Care, Repair, Reuse & End-of-life",
+          "total": 6,
+          "answered": 2,
+          "complete": false,
+          "review": 0,
+          "questions": {
+            "PRD-1": {
+              "max_score": 1,
+              "score": 0,
+              "user_answered": true,
+              "ai_answered": false
+            },
+            "PRD-2": {
+              "max_score": 1,
+              "score": 0,
+              "user_answered": true,
+              "ai_answered": false
+            },
+            "PRD-3": {
+              "max_score": 1,
+              "score": 0,
+              "user_answered": false,
+              "ai_answered": false
+            },
+            "PRD-5": {
+              "max_score": 1,
+              "score": 0,
+              "user_answered": false,
+              "ai_answered": false
+            },
+            "PRD-6": {
+              "max_score": 1,
+              "score": 0,
+              "user_answered": false,
+              "ai_answered": false
+            },
+            "PRD-7": {
+              "max_score": 1,
+              "score": 0,
+              "user_answered": false,
+              "ai_answered": false
+            }
+          }
+        },
+        {
+          "section_score": 1,
+          "section_max_score": 2,
+          "title": "Product Sustainability & Preferred Attributes",
+          "total": 2,
+          "answered": 1,
+          "complete": false,
+          "review": 0,
+          "questions": {
+            "PSA-1": {
+              "max_score": 1,
+              "score": 1,
+              "user_answered": true,
+              "ai_answered": false
+            },
+            "PSA-2:1": {
+              "max_score": 1,
+              "score": 0,
+              "user_answered": false,
+              "ai_answered": false
+            }
+          }
+        },
+        {
+          "section_score": 0,
+          "section_max_score": 2,
+          "title": "Sunscreen Ingredients",
+          "total": 2,
+          "answered": 0,
+          "complete": false,
+          "review": 0,
+          "questions": {
+            "SUN-1": {
+              "max_score": 1,
+              "score": 0,
+              "user_answered": false,
+              "ai_answered": false
+            },
+            "SUN-3": {
+              "max_score": 1,
+              "score": 0,
+              "user_answered": false,
+              "ai_answered": false
+            }
+          }
+        },
+        {
+          "section_score": 4.5,
+          "section_max_score": 5,
+          "title": "Restricted Substances List & Chemicals Management",
+          "total": 6,
+          "answered": 6,
+          "complete": true,
+          "review": 0,
+          "questions": {
+            "CHEM-0": {
+              "max_score": 1,
+              "score": 1,
+              "user_answered": true,
+              "ai_answered": false
+            },
+            "CHEM-1": {
+              "max_score": 1,
+              "score": 1,
+              "user_answered": true,
+              "ai_answered": false
+            },
+            "CHEM-2": {
+              "max_score": 1,
+              "score": 0.5,
+              "user_answered": true,
+              "ai_answered": false
+            },
+            "CHEM-3": {
+              "max_score": 1,
+              "score": 1,
+              "user_answered": true,
+              "ai_answered": false
+            },
+            "CHEM-4": {
+              "max_score": 1,
+              "score": 1,
+              "user_answered": true,
+              "ai_answered": false
+            },
+            "CHEM-3A": {
+              "user_answered": true,
+              "ai_answered": false
+            }
+          }
+        },
+        {
+          "section_score": 1,
+          "section_max_score": 2,
+          "title": "Per- and Polyfluoroalkyl Substances",
+          "total": 2,
+          "answered": 2,
+          "complete": true,
+          "review": 0,
+          "questions": {
+            "PFAS-1": {
+              "max_score": 1,
+              "score": 1,
+              "user_answered": true,
+              "ai_answered": false
+            },
+            "PFAS-2": {
+              "max_score": 1,
+              "score": 0,
+              "user_answered": true,
+              "ai_answered": false
+            }
+          }
+        }
+      ]
+    }
+  };
 }

@@ -350,7 +350,7 @@ export class SurveysController extends BaseWorker {
   }
 
   @ApiTags('Surveys')
-  @Delete('surveys/:name/organizations/:orgId/')
+  @Delete('surveys/:name/organizations/:orgId')
   @ApiParam({
     name: 'name',
     required: true,
@@ -376,6 +376,6 @@ export class SurveysController extends BaseWorker {
       user: IAuthenticatedUser;
     },
   ) {
-    return this.surveyService.remove(name, req);
+    return this.surveyService.delete(name, orgId, req);
   }
 }

@@ -1,7 +1,8 @@
-import { StoryMockProvider, getCategoriesHandler } from '@coldpbc/mocks';
+import {StoryMockProvider, getCategoriesHandler, getAssessmentsHandler} from '@coldpbc/mocks';
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { Journey } from './journey';
+import {ColdAssessmentsProvider} from "@coldpbc/providers";
 
 const meta: Meta<typeof Journey> = {
   title: 'Pages/Journey',
@@ -15,16 +16,20 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   render: args => (
-    <StoryMockProvider {...args} handlers={[]}>
-      <Journey />
+    <StoryMockProvider {...args} handlers={getAssessmentsHandler.default}>
+      <ColdAssessmentsProvider>
+        <Journey />
+      </ColdAssessmentsProvider>
     </StoryMockProvider>
   ),
 };
 
-export const EmptyData = () => {
-  return (
-    <StoryMockProvider handlers={[getCategoriesHandler.empty]}>
-      <Journey />
+export const Empty: Story = {
+  render: args => (
+    <StoryMockProvider {...args} handlers={getAssessmentsHandler.empty}>
+      <ColdAssessmentsProvider>
+        <Journey />
+      </ColdAssessmentsProvider>
     </StoryMockProvider>
-  );
+  ),
 };
