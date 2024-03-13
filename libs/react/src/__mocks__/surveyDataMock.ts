@@ -8858,8 +8858,9 @@ export function getSurveyComplianceFlowSomeCompleteSurveyMock(name: string) {
         progressSection.complete = true;
       }
       forOwn(progressSection.questions, (question: ComplianceSurveyProgressQuestionType, questionKey) => {
-        if (questionKey === 'GHG-12' || questionKey === 'GHG-13') {
+        if (progressSection.title === ghgSection.title) {
           question.user_answered = false;
+          question.ai_answered = true;
         } else {
           question.user_answered = true;
           question.ai_answered = true;
