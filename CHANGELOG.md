@@ -1,3 +1,11 @@
+# [1.162.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.161.1...v1.162.0) (2024-03-13)
+
+
+### Features
+
+* resolve issue with list item input when values already provided ([58bba97](https://github.com/ColdPBC/cold-monorepo/commit/58bba97f59cc904cd9b9fd5937ed35e9897203a0))
+* update list item input design ([db19d00](https://github.com/ColdPBC/cold-monorepo/commit/db19d00881a2b8dfd8f4487236a340cd795353b5))
+
 ## [1.161.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.161.0...v1.161.1) (2024-03-13)
 
 
