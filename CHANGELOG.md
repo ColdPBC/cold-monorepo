@@ -1,3 +1,16 @@
+# [1.161.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.160.0...v1.161.0) (2024-03-13)
+
+
+### Bug Fixes
+
+* remove broken test ([c5efc76](https://github.com/ColdPBC/cold-monorepo/commit/c5efc765cfb2b0d2ef77cb3089e2d0052e3cfeb9))
+* Remove journey module on subcategory actions list page ([f4cf554](https://github.com/ColdPBC/cold-monorepo/commit/f4cf554ec0ab87abb29cde6d1262aa84486ab8b6))
+
+
+### Features
+
+* Update AI message look and feel and add it for additional context ([5dd8798](https://github.com/ColdPBC/cold-monorepo/commit/5dd8798fa8da2657556dc8c6fc6ab7997cf71db6))
+
 # [1.160.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.159.1...v1.160.0) (2024-03-13)
 
 
