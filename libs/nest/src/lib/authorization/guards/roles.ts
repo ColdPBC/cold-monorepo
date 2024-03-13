@@ -136,7 +136,7 @@ export class RolesGuard extends BaseWorker implements CanActivate {
 
     this.setTags({
       action: 'resolveRequest',
-      user: user.coldclimate_claims,
+      user: user?.coldclimate_claims,
       required_roles: roles,
       url: request.url,
       method: request.method,
