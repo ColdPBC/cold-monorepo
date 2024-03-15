@@ -1,3 +1,10 @@
+## [1.163.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.163.0...v1.163.1) (2024-03-15)
+
+
+### Bug Fixes
+
+* make sure logo doesn't bleed over the bounding area ([9525479](https://github.com/ColdPBC/cold-monorepo/commit/9525479e7893264e7ba992323850c062f7787284))
+
 # [1.163.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.162.1...v1.163.0) (2024-03-13)
 
 
