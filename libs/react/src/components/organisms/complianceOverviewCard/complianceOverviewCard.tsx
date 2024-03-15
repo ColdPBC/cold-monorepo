@@ -134,7 +134,7 @@ export const ComplianceOverviewCard = (props: ComplianceOverviewCardProps) => {
       <div className={'w-full flex justify-between'}>
         <div className={'flex gap-x-4 items-center justify-center'}>
           {logo_url && (
-            <div className={'w-[60px] h-[60px] flex justify-center items-center bg-white rounded-2xl'}>
+            <div className={'w-[60px] h-[60px] flex justify-center items-center bg-white rounded-2xl overflow-hidden'}>
               <img src={`${logo_url}`} className={'max-w-[55px] max-h-[55px]'} alt="compliance" />
             </div>
           )}
