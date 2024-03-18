@@ -1,5 +1,6 @@
 import React from 'react';
 import { findIndex, get, keys, size } from 'lodash';
+import { BaseButton, ColdIcon, ErrorFallback, SurveyInput } from '@coldpbc/components';
 import {
   getAccurateBookmarkedValue,
   getQuestionValue,
@@ -9,7 +10,6 @@ import {
   sortComplianceSurvey,
   updateSurveyQuestion,
 } from '@coldpbc/lib';
-import { BaseButton, ColdIcon, ErrorFallback, SurveyInput } from '@coldpbc/components';
 import { ButtonTypes, GlobalSizes, IconNames } from '@coldpbc/enums';
 import { ComplianceSurveyActiveKeyType, ComplianceSurveyPayloadType, ComplianceSurveySavedQuestionType, IButtonProps, SurveyActiveKeyType } from '@coldpbc/interfaces';
 import { useAuth0Wrapper } from '@coldpbc/hooks';
