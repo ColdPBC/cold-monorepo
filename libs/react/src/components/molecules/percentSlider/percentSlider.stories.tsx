@@ -19,14 +19,13 @@ export const Default: Story = {
     const [value, setValue] = React.useState<number | null>(args.value);
 
     const onChange = (value: number | null) => {
-      console.log('value', value);
       setValue(value);
     };
 
     return <PercentSlider {...args} onChange={onChange} value={value} />;
   },
   args: {
-    value: 'estimated',
+    value: 50,
     tooltip: 'Select estimated percentage',
   },
 };
