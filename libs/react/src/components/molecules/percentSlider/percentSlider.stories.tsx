@@ -14,18 +14,19 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-  render: (args) => {
+  render: args => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const [value, setValue] = React.useState<number | null>(args.value);
 
     const onChange = (value: number | null) => {
+      console.log('value', value);
       setValue(value);
     };
 
     return <PercentSlider {...args} onChange={onChange} value={value} />;
   },
   args: {
-    value: 50,
+    value: 'estimated',
     tooltip: 'Select estimated percentage',
   },
 };

@@ -11,28 +11,62 @@ export interface PercentSliderProps {
 
 export const PercentSlider = (props: PercentSliderProps) => {
   const { tooltip, value, onChange } = props;
+  const [inputValue, setInputValue] = React.useState<any | null>(value);
 
   const onRangeChange = (values: number[]) => {
+    setInputValue(values[0]);
     onChange(values[0]);
   };
 
   const onInputValueChange = (values: any, sourceInfo: any) => {
     if (values.floatValue === undefined) {
+      setInputValue(null);
       onChange(null);
     } else {
+      setInputValue(values.floatValue);
       onChange(values.floatValue);
     }
   };
 
   const getInputValue = () => {
-    return value;
+    let formattedValue = inputValue === null ? '' : inputValue;
+    try {
+      formattedValue = parseInt(formattedValue);
+      if (isNaN(formattedValue)) {
+        formattedValue = null;
+      } else {
+        if (formattedValue > 100) {
+          formattedValue = 100;
+        } else if (formattedValue < 0) {
+          formattedValue = 0;
+        }
+      }
+    } catch (e) {
+      formattedValue = null;
+    }
+    return formattedValue;
   };
 
   const getRangeValue = () => {
-    if (value === null) {
+    if (inputValue === null) {
       return 0;
     } else {
-      return value;
+      let formattedValue = inputValue;
+      try {
+        formattedValue = parseInt(formattedValue);
+        if (isNaN(formattedValue)) {
+          formattedValue = null;
+        } else {
+          if (formattedValue > 100) {
+            formattedValue = 100;
+          } else if (formattedValue < 0) {
+            formattedValue = 0;
+          }
+        }
+      } catch (e) {
+        formattedValue = null;
+      }
+      return formattedValue;
     }
   };
 
@@ -50,6 +84,8 @@ export const PercentSlider = (props: PercentSliderProps) => {
           }
           allowNegative={false}
           data-testid={props['data-testid']}
+          max={100}
+          min={0}
         />
         <div className={'grid content-center w-full'}>
           <RangeSlider min={0} max={100} onChange={onRangeChange} defaultValue={getRangeValue()} title={tooltip} />
