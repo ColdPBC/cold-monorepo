@@ -50,7 +50,7 @@ const _SurveyComplianceFlowStep = () => {
   useEffect(() => {
     const newSavedQuestions = getSavedQuestionsInSurvey(surveyState);
     setSavedQuestions(newSavedQuestions);
-    if (newSavedQuestions.length === 0) {
+    if (newSavedQuestions.length === 0 && activeKey.section === 'savedQuestions') {
       const key = getStartingKey(sortedSurvey);
       setActiveKey(key);
     }
