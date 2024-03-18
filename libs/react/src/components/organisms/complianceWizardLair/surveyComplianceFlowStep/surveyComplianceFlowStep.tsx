@@ -10,15 +10,16 @@ import {
   WizardContext,
 } from '@coldpbc/components';
 import { ComplianceSurveyActiveKeyType, ComplianceSurveyPayloadType, ComplianceSurveySavedQuestionType } from '@coldpbc/interfaces';
-import { getSavedQuestionsInSurvey, getStartingKey, sortComplianceSurvey } from '@coldpbc/lib';
+import { getAccurateBookmarkedValue, getQuestionValue, getSavedQuestionsInSurvey, getStartingKey, putSurveyData, sortComplianceSurvey, updateSurveyQuestion } from '@coldpbc/lib';
 import { GlobalSizes } from '@coldpbc/enums';
 import { withErrorBoundary } from 'react-error-boundary';
 import { useAuth0Wrapper } from '@coldpbc/hooks';
 import { get, set } from 'lodash';
+import { mutate } from 'swr';
 
 const _SurveyComplianceFlowStep = () => {
   const { data } = useContext(WizardContext);
-  const { orgId } = useAuth0Wrapper();
+  const { orgId, getOrgSpecificUrl } = useAuth0Wrapper();
   const { surveyData, name } = data as { surveyData: ComplianceSurveyPayloadType; name: string };
   const [activeKey, setActiveKey] = React.useState<ComplianceSurveyActiveKeyType>({
     value: '',
@@ -32,6 +33,26 @@ const _SurveyComplianceFlowStep = () => {
   const originalSavedQuestionsState = getSavedQuestionsInSurvey(sortedSurvey);
   const [surveyState, setSurveyState] = React.useState<ComplianceSurveyPayloadType>(sortedSurvey);
   const [savedQuestions, setSavedQuestions] = React.useState<Array<ComplianceSurveySavedQuestionType>>(originalSavedQuestionsState);
+  const [bookmarked, setBookmarked] = React.useState<{
+    [key: string]: boolean;
+  }>({});
+
+  const onSurveyClose = async () => {
+    if (activeKey.section === 'savedQuestions') {
+      const bookmarkedQuestion = getAccurateBookmarkedValue(surveyState.definition.sections, activeKey, bookmarked);
+      const newSurvey = updateSurveyQuestion(surveyData, activeKey, {
+        value: getQuestionValue(surveyData, activeKey),
+        skipped: false,
+        saved: bookmarkedQuestion,
+      });
+      const response = (await putSurveyData(newSurvey as ComplianceSurveyPayloadType, getOrgSpecificUrl)) as ComplianceSurveyPayloadType;
+      const sortedSurvey = sortComplianceSurvey(response);
+      setSurveyState(sortedSurvey);
+      await mutate([getOrgSpecificUrl(`/surveys/${newSurvey.name}`), 'GET'], sortedSurvey, {
+        revalidate: false,
+      });
+    }
+  };
 
   useEffect(() => {
     if (!surveyData || !orgId) {
@@ -95,9 +116,12 @@ const _SurveyComplianceFlowStep = () => {
             activeKey={activeKey}
             setActiveKey={setActiveKey}
             submitSurvey={() => {
+              onSurveyClose();
               setSurveyOpen(false);
             }}
             savedQuestions={savedQuestions}
+            bookmarked={bookmarked}
+            setBookmarked={setBookmarked}
           />
         ) : (
           <ComplianceSurveyQuestionnaire

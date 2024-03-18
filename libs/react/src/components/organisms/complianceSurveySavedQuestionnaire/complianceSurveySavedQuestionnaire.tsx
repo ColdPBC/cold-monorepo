@@ -1,6 +1,14 @@
 import React from 'react';
 import { findIndex, get, keys, size } from 'lodash';
-import { getQuestionValue, getSectionIndex, ifAdditionalContextConditionMet, putSurveyData, sortComplianceSurvey, updateSurveyQuestion } from '@coldpbc/lib';
+import {
+  getAccurateBookmarkedValue,
+  getQuestionValue,
+  getSectionIndex,
+  ifAdditionalContextConditionMet,
+  putSurveyData,
+  sortComplianceSurvey,
+  updateSurveyQuestion,
+} from '@coldpbc/lib';
 import { BaseButton, ColdIcon, ErrorFallback, SurveyInput } from '@coldpbc/components';
 import { ButtonTypes, GlobalSizes, IconNames } from '@coldpbc/enums';
 import { ComplianceSurveyActiveKeyType, ComplianceSurveyPayloadType, ComplianceSurveySavedQuestionType, IButtonProps, SurveyActiveKeyType } from '@coldpbc/interfaces';
@@ -16,15 +24,16 @@ export interface ComplianceSurveySavedQuestionnaireProps {
   surveyData: ComplianceSurveyPayloadType;
   setSurveyData: (surveyData: ComplianceSurveyPayloadType) => void;
   savedQuestions: ComplianceSurveySavedQuestionType[];
+  bookmarked: {
+    [key: string]: boolean;
+  };
+  setBookmarked: (bookmarked: { [key: string]: boolean }) => void;
 }
 
 const _ComplianceSurveySavedQuestionnaire = (props: ComplianceSurveySavedQuestionnaireProps) => {
-  const { activeKey, setActiveKey, submitSurvey, surveyData, setSurveyData, savedQuestions } = props;
+  const { activeKey, setActiveKey, submitSurvey, surveyData, setSurveyData, savedQuestions, bookmarked, setBookmarked } = props;
   const { getOrgSpecificUrl } = useAuth0Wrapper();
   const [sendingSurvey, setSendingSurvey] = React.useState<boolean>(false);
-  const [bookmarked, setBookmarked] = React.useState<{
-    [key: string]: boolean;
-  }>({});
   const nextQuestionTransitionClassNames = {
     enter: 'transform translate-x-full',
     enterDone: 'transition ease-out duration-200 transform translate-x-0',
@@ -190,7 +199,7 @@ const _ComplianceSurveySavedQuestionnaire = (props: ComplianceSurveySavedQuestio
 
   const onNextButtonClicked = async () => {
     setSendingSurvey(true);
-    const bookmarkedQuestion = getAcurateBookmarkedValue(activeKey.value);
+    const bookmarkedQuestion = getAccurateBookmarkedValue(sections, activeKey, bookmarked);
     const newSurvey = updateSurveyQuestion(surveyData, activeKey, { value: getQuestionValue(surveyData, activeKey), skipped: false, saved: bookmarkedQuestion });
     const response = (await putSurveyData(newSurvey as ComplianceSurveyPayloadType, getOrgSpecificUrl)) as ComplianceSurveyPayloadType;
     const sortedSurvey = sortComplianceSurvey(response);
@@ -205,7 +214,7 @@ const _ComplianceSurveySavedQuestionnaire = (props: ComplianceSurveySavedQuestio
 
   const onSkipButtonClicked = async () => {
     setSendingSurvey(true);
-    const bookmarkedQuestion = getAcurateBookmarkedValue(activeKey.value);
+    const bookmarkedQuestion = getAccurateBookmarkedValue(sections, activeKey, bookmarked);
     const newSurvey = updateSurveyQuestion(surveyData, activeKey, {
       skipped: true,
       value: null,
@@ -225,7 +234,7 @@ const _ComplianceSurveySavedQuestionnaire = (props: ComplianceSurveySavedQuestio
   const onSubmitButtonClicked = async () => {
     // tell the difference between a skipped question and a question that was answered
     setSendingSurvey(true);
-    const bookmarkedQuestion = getAcurateBookmarkedValue(activeKey.value);
+    const bookmarkedQuestion = getAccurateBookmarkedValue(sections, activeKey, bookmarked);
     const newSurvey = updateSurveyQuestion(
       surveyData,
       activeKey,
@@ -322,14 +331,6 @@ const _ComplianceSurveySavedQuestionnaire = (props: ComplianceSurveySavedQuestio
       [activeKey.value]: !bookmarkedQuestion,
     });
     setSendingSurvey(false);
-  };
-
-  const getAcurateBookmarkedValue = (key: string) => {
-    const sectionIndex = getSectionIndex(sections, activeKey);
-    const activeSection = sections[Object.keys(sections)[sectionIndex]];
-    const question = activeSection.follow_up[key];
-    const bookMarkState = get(bookmarked, `${key}`, undefined);
-    return bookMarkState === undefined ? question.saved : bookMarkState;
   };
 
   if (question !== undefined) {
