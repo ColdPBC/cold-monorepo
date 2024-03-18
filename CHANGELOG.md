@@ -1,3 +1,10 @@
+# [1.164.0-cold-637.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.163.1...v1.164.0-cold-637.1) (2024-03-18)
+
+
+### Features
+
+* make assistant instructions configurable from launch darkly ([9c16e88](https://github.com/ColdPBC/cold-monorepo/commit/9c16e88a1e8378902ab110cceafc1fbe48c9c633))
+
 ## [1.163.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.163.0...v1.163.1) (2024-03-15)
 
 
