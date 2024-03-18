@@ -10,9 +10,9 @@ import {
   sortComplianceSurvey,
   updateSurveyQuestion,
 } from '@coldpbc/lib';
-import { BaseButton, ErrorFallback, SurveyInput } from '@coldpbc/components';
-import { ButtonTypes, GlobalSizes } from '@coldpbc/enums';
-import { ComplianceSurveyActiveKeyType, ComplianceSurveyPayloadType, IButtonProps, SurveyActiveKeyType } from '@coldpbc/interfaces';
+import { BaseButton, ColdIcon, ErrorFallback, SurveyInput } from '@coldpbc/components';
+import { ButtonTypes, GlobalSizes, IconNames } from '@coldpbc/enums';
+import { ComplianceSurveyActiveKeyType, ComplianceSurveyPayloadType, ComplianceSurveySavedQuestionType, IButtonProps, SurveyActiveKeyType } from '@coldpbc/interfaces';
 import { useAuth0Wrapper } from '@coldpbc/hooks';
 import { CSSTransition, SwitchTransition } from 'react-transition-group';
 import { useSWRConfig } from 'swr';
@@ -24,10 +24,11 @@ export interface ComplianceSurveyQuestionnaireProps {
   submitSurvey: () => void;
   surveyData: ComplianceSurveyPayloadType;
   setSurveyData: (surveyData: ComplianceSurveyPayloadType) => void;
+  savedQuestions: Array<ComplianceSurveySavedQuestionType>;
 }
 
 const _ComplianceSurveyQuestionnaire = (props: ComplianceSurveyQuestionnaireProps) => {
-  const { activeKey, setActiveKey, submitSurvey, surveyData, setSurveyData } = props;
+  const { activeKey, setActiveKey, submitSurvey, surveyData, setSurveyData, savedQuestions } = props;
   const { getOrgSpecificUrl } = useAuth0Wrapper();
   const [sendingSurvey, setSendingSurvey] = React.useState<boolean>(false);
   const nextQuestionTransitionClassNames = {
@@ -44,6 +45,7 @@ const _ComplianceSurveyQuestionnaire = (props: ComplianceSurveyQuestionnaireProp
   const [transitionClassNames, setTransitionClassNames] = React.useState<any>(nextQuestionTransitionClassNames);
   const { definition, id, name } = surveyData;
   const { sections } = definition;
+  const inSavedQuestions = activeKey.section === 'savedQuestions';
 
   const updateTransitionClassNames = (nextDirection: boolean) => {
     if (nextDirection) {
@@ -526,18 +528,47 @@ const _ComplianceSurveyQuestionnaire = (props: ComplianceSurveyQuestionnaireProp
 
   const additionalContextQuestion = checkAdditionalContext(activeKey);
 
+  const bookMarkQuestion = async () => {
+    if (inSavedQuestions) {
+      return;
+    }
+    setSendingSurvey(true);
+    // check if the question is already saved
+    const section = surveyData.definition.sections[activeKey.section];
+    const question = section.follow_up[activeKey.value];
+    const newSurvey = updateSurveyQuestion(surveyData, activeKey, { saved: !question.saved });
+    const response = (await putSurveyData(newSurvey as ComplianceSurveyPayloadType, getOrgSpecificUrl)) as ComplianceSurveyPayloadType;
+    const sortedSurvey = sortComplianceSurvey(response);
+    setSurveyData(sortedSurvey);
+    await mutate([getOrgSpecificUrl(`/surveys/${newSurvey.name}`), 'GET'], sortedSurvey, {
+      revalidate: false,
+    });
+    setSendingSurvey(false);
+  };
+
   if (question !== undefined) {
     const activeSection = surveyData.definition.sections[activeKey.section];
     const questionIndex = keys(activeSection.follow_up).indexOf(activeKey.value) + 1;
+    const bookmarked = activeSection.follow_up[activeKey.value].saved;
     return (
       <div className={'w-full h-full relative flex flex-col space-y-[24px]'} data-testid={'survey-question-container'}>
-        <div className={'flex flex-col'}>
-          <div className={'text-caption font-bold'}>{activeKey.category}</div>
-          <div className={'text-h2'}>{surveyData.definition.sections[activeKey.section].title}</div>
-          <div className={'text-caption'}>
-            ( Question {questionIndex}
-            {' of '}
-            {size(surveyData.definition.sections[activeKey.section].follow_up)})
+        <div className={'flex flex-row justify-between'}>
+          <div className={'flex flex-col'}>
+            <div className={'text-caption font-bold'}>{activeKey.category}</div>
+            <div className={'text-h2'}>{surveyData.definition.sections[activeKey.section].title}</div>
+            <div className={'text-caption'}>
+              ( Question {questionIndex}
+              {' of '}
+              {size(surveyData.definition.sections[activeKey.section].follow_up)})
+            </div>
+          </div>
+          <div className={'flex flex-row items-start space-x-4'}>
+            <div className={'h-[60px] w-[60px] rounded-lg flex justify-center items-center bg-transparent cursor-pointer hover:bg-bgc-accent'} onClick={bookMarkQuestion}>
+              {bookmarked ? <ColdIcon name={IconNames.ColdFilledBookMarkIcon} color={'white'} /> : <ColdIcon name={IconNames.ColdBookmarkIcon} color={'white'} />}
+            </div>
+            <div className={'h-[60px] w-[60px] rounded-lg flex justify-center items-center bg-transparent cursor-pointer hover:bg-bgc-accent'} onClick={submitSurvey}>
+              <ColdIcon name={IconNames.CloseModalIcon} />
+            </div>
           </div>
         </div>
         <div className={'h-full w-full flex items-start justify-center overflow-y-auto'}>

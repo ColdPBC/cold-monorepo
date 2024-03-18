@@ -1,7 +1,16 @@
 import React, { useContext, useEffect } from 'react';
-import { ComplianceSurveyLeftNav, ComplianceSurveyQuestionnaire, ComplianceSurveyRightNav, ErrorFallback, Spinner, Takeover, WizardContext } from '@coldpbc/components';
-import { ComplianceSurveyActiveKeyType, ComplianceSurveyPayloadType } from '@coldpbc/interfaces';
-import { getStartingKey, sortComplianceSurvey } from '@coldpbc/lib';
+import {
+  ComplianceSurveyLeftNav,
+  ComplianceSurveyQuestionnaire,
+  ComplianceSurveyRightNav,
+  ComplianceSurveySavedQuestionnaire,
+  ErrorFallback,
+  Spinner,
+  Takeover,
+  WizardContext,
+} from '@coldpbc/components';
+import { ComplianceSurveyActiveKeyType, ComplianceSurveyPayloadType, ComplianceSurveySavedQuestionType } from '@coldpbc/interfaces';
+import { getSavedQuestionsInSurvey, getStartingKey, sortComplianceSurvey } from '@coldpbc/lib';
 import { GlobalSizes } from '@coldpbc/enums';
 import { withErrorBoundary } from 'react-error-boundary';
 
@@ -17,7 +26,9 @@ const _SurveyComplianceFlowStep = () => {
   });
   const [surveyOpen, setSurveyOpen] = React.useState(false);
   const sortedSurvey = sortComplianceSurvey(surveyData);
+  const originalSavedQuestionsState = getSavedQuestionsInSurvey(sortedSurvey);
   const [surveyState, setSurveyState] = React.useState<ComplianceSurveyPayloadType>(sortedSurvey);
+  const [savedQuestions, setSavedQuestions] = React.useState<Array<ComplianceSurveySavedQuestionType>>(originalSavedQuestionsState);
 
   useEffect(() => {
     // set start active key
@@ -36,6 +47,15 @@ const _SurveyComplianceFlowStep = () => {
     }
   }, [activeKey]);
 
+  useEffect(() => {
+    const newSavedQuestions = getSavedQuestionsInSurvey(surveyState);
+    setSavedQuestions(newSavedQuestions);
+    if (newSavedQuestions.length === 0 && activeKey.section === 'savedQuestions') {
+      const key = getStartingKey(sortedSurvey);
+      setActiveKey(key);
+    }
+  }, [surveyState]);
+
   if (!sortedSurvey) {
     return null;
   }
@@ -47,33 +67,42 @@ const _SurveyComplianceFlowStep = () => {
   return (
     <div className={'h-[708px] w-full flex flex-row relative text-tc-primary'}>
       <div className={'flex w-auto h-full'}>
-        <ComplianceSurveyLeftNav complianceSet={surveyState} activeKey={activeKey} setActiveKey={setActiveKey} />
+        <ComplianceSurveyLeftNav surveyData={surveyState} savedQuestions={savedQuestions} activeKey={activeKey} setActiveKey={setActiveKey} />
       </div>
       <div className={'flex w-full h-full'}>
-        <ComplianceSurveyRightNav surveyData={surveyState} activeKey={activeKey} setActiveKey={setActiveKey} surveyOpen={surveyOpen} setSurveyOpen={setSurveyOpen} />
-      </div>
-      <Takeover
-        show={surveyOpen}
-        setShow={setSurveyOpen}
-        className={'absolute h-full w-full p-[30px] bg-transparent'}
-        containClassName={'bg-bgc-elevated rounded-lg'}
-        header={{
-          dismiss: {
-            dismissible: true,
-            onClick: () => {
-              setSurveyOpen(false);
-            },
-          },
-        }}>
-        <ComplianceSurveyQuestionnaire
+        <ComplianceSurveyRightNav
           surveyData={surveyState}
-          setSurveyData={setSurveyState}
+          savedQuestions={savedQuestions}
           activeKey={activeKey}
           setActiveKey={setActiveKey}
-          submitSurvey={() => {
-            setSurveyOpen(false);
-          }}
+          surveyOpen={surveyOpen}
+          setSurveyOpen={setSurveyOpen}
         />
+      </div>
+      <Takeover show={surveyOpen} setShow={setSurveyOpen} className={'absolute h-full w-full p-[30px] bg-transparent'} containClassName={'bg-bgc-elevated rounded-lg'}>
+        {activeKey.section === 'savedQuestions' ? (
+          <ComplianceSurveySavedQuestionnaire
+            surveyData={surveyState}
+            setSurveyData={setSurveyState}
+            activeKey={activeKey}
+            setActiveKey={setActiveKey}
+            submitSurvey={() => {
+              setSurveyOpen(false);
+            }}
+            savedQuestions={savedQuestions}
+          />
+        ) : (
+          <ComplianceSurveyQuestionnaire
+            surveyData={surveyState}
+            setSurveyData={setSurveyState}
+            activeKey={activeKey}
+            setActiveKey={setActiveKey}
+            submitSurvey={() => {
+              setSurveyOpen(false);
+            }}
+            savedQuestions={savedQuestions}
+          />
+        )}
       </Takeover>
     </div>
   );
