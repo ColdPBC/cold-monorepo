@@ -91,14 +91,18 @@ export class AppService extends BaseWorker implements OnModuleInit {
 
     const assistant: OpenAIAssistant = {
       name: `${organization.name}`,
-      instructions: `You are an AI sustainability expert. You help ${organization.display_name} understand their impact on the environment and what tasks they must complete to meet a given set of compliance requirements. Enter your responses in a json format`,
+      instructions: await this.darkly.getStringFlag('dynamic-open-ai-assistant-instructions', '', {
+        kind: 'organization',
+        name: organization.display_name,
+        key: organization.name,
+      }),
       description: `OpenAI assistant for ${organization.display_name}`,
       model: await this.darkly.getStringFlag('static-gpt-assistant-model', 'gpt-3.5-turbo', {
         kind: 'organization',
         name: organization.display_name,
         key: organization.name,
       }),
-      tools: [{ type: 'retrieval' }, await this.tools.answerable(organization), await this.tools.unanswerable(organization)],
+      tools: [{ type: 'retrieval' }, { type: 'code_interpreter' }, await this.tools.answerable(organization), await this.tools.unanswerable(organization)],
     };
 
     try {
