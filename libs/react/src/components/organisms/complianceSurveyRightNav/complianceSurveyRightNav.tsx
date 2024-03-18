@@ -1,5 +1,11 @@
-import { ComplianceSurveyActiveKeyType, ComplianceSurveyPayloadType, SurveySectionFollowUpsType, SurveySectionFollowUpType } from '@coldpbc/interfaces';
-import { find, keys, map } from 'lodash';
+import {
+  ComplianceSurveyActiveKeyType,
+  ComplianceSurveyPayloadType,
+  ComplianceSurveySavedQuestionType,
+  SurveySectionFollowUpsType,
+  SurveySectionFollowUpType,
+} from '@coldpbc/interfaces';
+import { find, findIndex, map } from 'lodash';
 import { ColdIcon, ErrorFallback } from '@coldpbc/components';
 import { IconNames } from '@coldpbc/enums';
 import { withErrorBoundary } from 'react-error-boundary';
@@ -10,12 +16,13 @@ export interface ComplianceSurveyRightNavProps {
   activeKey: ComplianceSurveyActiveKeyType;
   setActiveKey: (activeKey: ComplianceSurveyActiveKeyType) => void;
   surveyData: ComplianceSurveyPayloadType;
+  savedQuestions: Array<ComplianceSurveySavedQuestionType>;
   surveyOpen: boolean;
   setSurveyOpen: (surveyOpen: boolean) => void;
 }
 
 const _ComplianceSurveyRightNav = (props: ComplianceSurveyRightNavProps) => {
-  const { activeKey, setActiveKey, surveyData, setSurveyOpen, surveyOpen } = props;
+  const { activeKey, setActiveKey, surveyData, setSurveyOpen, savedQuestions } = props;
 
   const onClick = (key: string) => {
     // open modal with
@@ -26,61 +33,96 @@ const _ComplianceSurveyRightNav = (props: ComplianceSurveyRightNavProps) => {
     setSurveyOpen(true);
   };
 
-  const getQuestionItem = (question: SurveySectionFollowUpType, key: string, questions: SurveySectionFollowUpsType) => {
-    // check the progress of the survey. if the question has been answered, show a checkmark. if not, show a circle.
-    const activeSection = surveyData.definition.sections[activeKey.section];
+  const getQuestionItemIcon = (key: string, inSavedQuestions?: boolean) => {
+    let activeSection = surveyData.definition.sections[activeKey.section];
+    if (inSavedQuestions) {
+      const question = find(savedQuestions, (saved: ComplianceSurveySavedQuestionType) => saved.followUpKey === key);
+      if (question) {
+        activeSection = surveyData.definition.sections[question.sectionKey];
+      }
+    }
     const progressSection = find(surveyData.progress.sections, section => section.title === activeSection.title);
     const progressQuestion = progressSection?.questions[key];
-    // get the index of the question in the questions object
-    const index = keys(questions).indexOf(key) + 1;
 
     if (progressQuestion?.user_answered) {
       return (
-        <div key={key} className={'h-[34px] flex flex-row space-x-2 items-center hover:underline cursor-pointer'} onClick={() => onClick(key)}>
-          <div className={'w-[24px] h-[24px]'}>
-            <ColdIcon name={IconNames.ColdComplianceSurveyCheckBoxIcon} className={' '} />
-          </div>
-          <div className={'w-full text-body line-clamp-1'}>
-            {index}. {question.prompt}
-          </div>
+        <div className={'w-[24px] h-[24px]'}>
+          <ColdIcon name={IconNames.ColdComplianceSurveyCheckBoxIcon} className={' '} />
         </div>
       );
     } else {
       if (progressQuestion?.ai_answered) {
         return (
-          <div key={key} className={'h-[34px] flex flex-row space-x-2 items-center hover:underline cursor-pointer'} onClick={() => onClick(key)}>
-            <div className={'h-[24px] w-[24px] rounded-full flex items-center justify-center bg-gray-70'}>
-              <ColdIcon name={IconNames.ColdAiIcon} color={HexColors.white} />
-            </div>
-            <div className={'w-full text-body line-clamp-1'}>
-              {index}. {question.prompt}
-            </div>
+          <div className={'h-[24px] w-[24px] rounded-full flex items-center justify-center bg-gray-70'}>
+            <ColdIcon name={IconNames.ColdAiIcon} color={HexColors.white} />
           </div>
         );
       } else {
-        return (
-          <div key={key} className={'h-[34px] flex flex-row space-x-2 items-center hover:underline cursor-pointer'} onClick={() => onClick(key)}>
-            <div className={'h-[24px] w-[24px] rounded-full bg-gray-70'}></div>
-            <div className={'w-full text-body line-clamp-1'}>
-              {index}. {question.prompt}
-            </div>
-          </div>
-        );
+        return <div className={'h-[24px] w-[24px] rounded-full bg-gray-70'}></div>;
       }
     }
   };
 
-  const sectionQuestions = surveyData.definition.sections[activeKey.section].follow_up;
+  const getQuestionItem = (question: SurveySectionFollowUpType, key: string, questions: SurveySectionFollowUpsType, inSavedQuestions?: boolean) => {
+    let index = 0;
+    if (inSavedQuestions) {
+      index = findIndex(savedQuestions, (saved: ComplianceSurveySavedQuestionType) => saved.followUpKey === key) + 1;
+    } else {
+      index = Object.keys(questions).indexOf(key) + 1;
+    }
+
+    let prompt = question.prompt;
+
+    if (inSavedQuestions) {
+      prompt = `${savedQuestions[index - 1].category} - ${savedQuestions[index - 1].sectionTitle} - ${savedQuestions[index - 1].prompt}`;
+    }
+    return (
+      <div key={key} className={'h-[34px] flex flex-row space-x-2 items-center hover:underline cursor-pointer'} onClick={() => onClick(key)}>
+        {getQuestionItemIcon(key, inSavedQuestions)}
+        <div className={'w-full text-body line-clamp-1'}>
+          {index}. {prompt}
+        </div>
+      </div>
+    );
+  };
+
+  const getRightNavTitle = () => {
+    if (activeKey.section === 'savedQuestions') {
+      return 'Saved Questions';
+    } else {
+      return surveyData.definition.sections[activeKey.section].title;
+    }
+  };
+
+  const getQuestionItems = () => {
+    const inSavedQuestions = activeKey.section === 'savedQuestions';
+    if (activeKey.section === 'savedQuestions') {
+      return map(savedQuestions, (question, key, questions) => {
+        return getQuestionItem(
+          question,
+          question.followUpKey,
+          {
+            [question.followUpKey]: surveyData.definition.sections[question.sectionKey].follow_up[question.followUpKey],
+          },
+          inSavedQuestions,
+        );
+      });
+    } else {
+      const sectionQuestions = surveyData.definition.sections[activeKey.section].follow_up;
+
+      return map(sectionQuestions, (question, key, questions) => {
+        return getQuestionItem(question, key, questions, inSavedQuestions);
+      });
+    }
+  };
 
   return (
     <div className={'w-full h-full bg-bgc-accent pr-[99px] pl-[72px] pt-[38px] pb-[38px] text-tc-primary space-y-[18px] flex flex-col overflow-y-auto rounded-r-lg'}>
       <div className={'flex flex-col'}>
         <div className={'text-caption font-bold'}>{activeKey.category}</div>
-        <div className={'text-h2'}>{surveyData.definition.sections[activeKey.section].title}</div>
+        <div className={'text-h2'}>{getRightNavTitle()}</div>
       </div>
-      {map(sectionQuestions, (question, key, questions) => {
-        return getQuestionItem(question, key, questions);
-      })}
+      {getQuestionItems()}
     </div>
   );
 };
