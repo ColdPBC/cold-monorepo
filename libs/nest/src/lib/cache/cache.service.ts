@@ -42,7 +42,7 @@ export class CacheService extends BaseWorker {
 
     this.setTags({ action: 'get', key });
 
-    const response = await this.store.get<T>(key);
+    const response = await this.cacheManager.store.get<T>(key);
 
     this.metrics.increment('cold.api.cache', this.tags);
 
@@ -61,13 +61,13 @@ export class CacheService extends BaseWorker {
         options = { ttl: this.defaultTTL, update: false, wildcard: false };
       }
 
-      if (options.update && (await this.store.get(key))) {
+      if (options.update && (await this.cacheManager.store.get(key))) {
         await this.delete(key, options.wildcard);
       }
 
       this.metrics.increment('cold.api.cache', this.tags);
 
-      return await this.store.set(key, value, options.ttl);
+      return await this.cacheManager.store.set(key, value, options.ttl);
     } catch (err: any) {
       this.logger.error(err.message, { error: err, key: key, value: value, options: options });
     }

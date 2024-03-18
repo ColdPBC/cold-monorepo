@@ -28,6 +28,7 @@ export class InvitationsService extends BaseWorker implements OnModuleInit {
   }
 
   override async onModuleInit() {
+    await this.darkly.onModuleInit();
     this.darkly.subscribeToJsonFlagChanges('dynamic-org-white-list', value => {
       this.test_orgs = value;
     });

@@ -1,11 +1,9 @@
 import { Module } from '@nestjs/common';
 import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
-import { CacheModule } from '@nestjs/cache-manager';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { HttpModule } from '@nestjs/axios';
 import { HotShotsModule } from 'nestjs-hot-shots';
-import { redisStore } from 'cache-manager-redis-yet';
 import { BullModule } from '@nestjs/bull';
 import { PrismaModule, PrismaService } from './prisma';
 import { HealthController, HealthModule, HealthService } from './health';
@@ -162,26 +160,7 @@ export class NestModule {
         throw new Error('REDISCLOUD_URL is not set in this environment; It is required for the authorization module to function properly.');
       }
 
-      imports.push(
-        CacheModule.registerAsync({
-          imports: [ConfigModule],
-          useFactory: async config => {
-            return {
-              store: await redisStore({
-                url: config['internalConfig']['REDISCLOUD_URL'],
-                ttl: 1000 * 60 * 60,
-              }).catch(err => {
-                console.error(err);
-                throw new Error('Failed to connect to REDISCLOUD_URL');
-              }),
-            };
-          },
-          inject: [ConfigService],
-          isGlobal: true,
-        }),
-        ColdCacheModule,
-        await AuthorizationModule.forFeatureAsync(),
-      );
+      imports.push(ColdCacheModule.forRootAsync(secrets), await AuthorizationModule.forFeatureAsync());
 
       providers.push(JwtStrategy, JwtService, {
         provide: APP_GUARD,
