@@ -4,10 +4,13 @@ import { ComplianceSurveyActiveKeyType, ComplianceSurveyPayloadType } from '@col
 import { getStartingKey, sortComplianceSurvey } from '@coldpbc/lib';
 import { GlobalSizes } from '@coldpbc/enums';
 import { withErrorBoundary } from 'react-error-boundary';
+import { useAuth0Wrapper } from '@coldpbc/hooks';
+import { get, set } from 'lodash';
 
 const _SurveyComplianceFlowStep = () => {
   const { data } = useContext(WizardContext);
-  const { surveyData } = data as { surveyData: ComplianceSurveyPayloadType };
+  const { orgId } = useAuth0Wrapper();
+  const { surveyData, name } = data as { surveyData: ComplianceSurveyPayloadType; name: string };
   const [activeKey, setActiveKey] = React.useState<ComplianceSurveyActiveKeyType>({
     value: '',
     section: '',
@@ -20,19 +23,24 @@ const _SurveyComplianceFlowStep = () => {
   const [surveyState, setSurveyState] = React.useState<ComplianceSurveyPayloadType>(sortedSurvey);
 
   useEffect(() => {
-    // set start active key
-    if (!surveyData) {
+    if (!surveyData || !orgId) {
       return;
     }
+    // runs when the component mounts and/or when the orgId changes via impersonation
     const key = getStartingKey(sortedSurvey);
-    const activeKeyFromStorage = localStorage.getItem('complianceActiveKey');
-    const keyToBeUsed = activeKeyFromStorage ? JSON.parse(activeKeyFromStorage) : key;
+    const orgStorage = localStorage.getItem(orgId);
+    const parsedOrgStorage = orgStorage ? JSON.parse(orgStorage) : {};
+    const activeKeyFromStorage = get(parsedOrgStorage, `compliance.${name}.complianceActiveKey`, null);
+    const keyToBeUsed = activeKeyFromStorage ? activeKeyFromStorage : key;
     setActiveKey(keyToBeUsed);
-  }, []);
+  }, [orgId]);
 
   useEffect(() => {
-    if (activeKey.section !== '') {
-      localStorage.setItem('complianceActiveKey', JSON.stringify(activeKey));
+    if (activeKey.section !== '' && orgId) {
+      const orgStorage = localStorage.getItem(orgId);
+      const parsedOrgStorage = orgStorage ? JSON.parse(orgStorage) : {};
+      set(parsedOrgStorage, `compliance.${name}.complianceActiveKey`, activeKey);
+      localStorage.setItem(orgId, JSON.stringify(parsedOrgStorage));
     }
   }, [activeKey]);
 
