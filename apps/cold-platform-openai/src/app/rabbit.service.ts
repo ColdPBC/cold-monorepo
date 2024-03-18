@@ -1,5 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { BackOffStrategies, BaseWorker, PrismaService, RabbitMessagePayload, S3Service } from '@coldpbc/nest';
+import {
+  BackOffStrategies,
+  BaseWorker,
+  CacheService,
+  PrismaService,
+  RabbitMessagePayload,
+  S3Service,
+} from '@coldpbc/nest';
 import { Nack, RabbitRPC, RabbitSubscribe } from '@golevelup/nestjs-rabbitmq';
 import { InjectQueue } from '@nestjs/bull';
 import { Queue } from 'bull';
@@ -19,6 +26,7 @@ export class RabbitService extends BaseWorker {
     private readonly prisma: PrismaService,
     private readonly s3: S3Service,
     private readonly files: FileService,
+    private readonly cache: CacheService,
   ) {
     super(RabbitService.name);
   }
@@ -132,18 +140,30 @@ export class RabbitService extends BaseWorker {
 
           try {
             for (const survey of surveys) {
-              await this.queue.add(
+              let jobs: number[] = await this.cache.get(`jobs:${event}:${parsed.organization.id}:${parsed.payload.compliance.compliance_id}`);
+
+              if (typeof jobs === 'string') {
+                jobs = JSON.parse(jobs) as [];
+              } else if (!jobs) {
+                jobs = [];
+              }
+
+              const job = await this.queue.add(
                 event,
                 {
                   survey,
                   user,
-                  on_update_url: parsed.on_update_url,
-                  compliance: parsed.compliance,
+                  on_update_url: parsed.payload.on_update_url,
                   integration: parsed.integration,
+                  payload: parsed.payload,
                   organization: parsed.organization,
                 },
-                { backoff: { type: BackOffStrategies.EXPONENTIAL } },
+                { backoff: { type: BackOffStrategies.EXPONENTIAL }, removeOnComplete: true },
               );
+
+              jobs.push(typeof job.id === 'number' ? job.id : parseInt(job.id));
+
+              await this.cache.set(`jobs:${event}:${parsed.organization.id}:${parsed.payload.compliance.compliance_id}`, jobs, { ttl: 60 * 60 * 24 * 7 });
             }
           } catch (e) {
             this.logger.error(e.message, e);

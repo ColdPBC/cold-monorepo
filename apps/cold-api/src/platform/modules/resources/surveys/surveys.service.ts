@@ -626,9 +626,15 @@ export class SurveysService extends BaseWorker {
    * @param orgId
    * @param req
    */
-  async delete(id: string, orgId: string, req: any) {
+  async delete(name: string, orgId: string, req: any) {
     const { user, url } = req;
-    const org = (await this.cache.get(`organizations:${user.coldclimate_claims.org_id}`)) as organizations;
+
+    const org = await this.prisma.organizations.findUnique({
+      where: {
+        id: orgId,
+      },
+    });
+
     const tags: { [p: string]: any } | string[] = {
       survey_name: name,
       organization: omit(org, ['branding', 'phone', 'street_address', 'created_at', 'updated_at']),
@@ -636,31 +642,38 @@ export class SurveysService extends BaseWorker {
       ...this.tags,
     };
 
+    if (!org) {
+      throw new NotFoundException(`Organization with id: ${orgId} does not exist`);
+    }
+
     try {
-      const def = await this.findOne(id, req);
+      const def = await this.findOne(name, req);
 
       if (!def) {
-        throw new NotFoundException(`Unable to find survey definition with id: ${id}`);
+        throw new NotFoundException(`Unable to find survey definition with name: ${name}`);
       }
 
-      const survey = await this.prisma.survey_data.findFirst({
+      if (!def) {
+        throw new NotFoundException(`Survey ${name} does not exist`);
+      }
+      const surveyData = await this.prisma.survey_data.findFirst({
         where: {
-          survey_definition_id: id,
+          survey_definition_id: def.id,
           organization_id: orgId,
         },
       });
 
-      if (!survey) {
-        throw new NotFoundException(`Unable to find survey data with survey definition id: ${id} and organization id: ${orgId}`);
+      if (!surveyData) {
+        throw new NotFoundException(`Unable to find survey data with survey definition id: ${def.id} and organization id: ${orgId}`);
       }
 
       await this.prisma.survey_data.delete({
         where: {
-          id: survey.id,
+          id: surveyData.id,
         },
       });
 
-      this.logger.info(`deleted survey data for ${org.name}: ${id}`, {
+      this.logger.info(`deleted survey data for ${org.name}: ${def.id}`, {
         id: def.id,
         name: def.name,
         type: def.type,

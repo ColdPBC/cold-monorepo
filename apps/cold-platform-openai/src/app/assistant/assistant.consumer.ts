@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { Process, Processor } from '@nestjs/bull';
+import { OnQueueActive, OnQueueCompleted, OnQueueFailed, OnQueueProgress, Process, Processor } from '@nestjs/bull';
 import { Job } from 'bull';
 import OpenAI, { UnprocessableEntityError } from 'openai';
 import { AppService } from '../app.service';
 import { AssistantService } from './assistant.service';
-import { BaseWorker } from '@coldpbc/nest';
+import { BaseWorker, CacheService } from '@coldpbc/nest';
 import { FileService } from './files/file.service';
 import { ConfigService } from '@nestjs/config';
 
@@ -19,6 +19,7 @@ export class AssistantConsumer extends BaseWorker {
     private readonly appService: AppService,
     private readonly assistant: AssistantService,
     private readonly fileService: FileService,
+    private readonly cache: CacheService,
   ) {
     super(AssistantConsumer.name);
     this.client = new OpenAI({
@@ -66,5 +67,48 @@ export class AssistantConsumer extends BaseWorker {
       this.logger.error(e.message, e);
       throw e;
     }
+  }
+
+  @OnQueueActive()
+  async onActive(job: Job) {
+    const message = `Processing ${job.name} | id: ${job.id} title: ${job.data.survey.definition.title} | started: ${new Date(job.processedOn).toUTCString()}`;
+    await job.log(message);
+  }
+
+  @OnQueueFailed()
+  async onFailed(job: Job) {
+    const jobs = (await this.cache.get(`jobs:openai:${job.data.organization.id}:${job.data.payload.compliance.compliance_id}`)) as number[];
+    jobs.splice(jobs.indexOf(typeof job.id === 'number' ? job.id : parseInt(job.id)), 1);
+
+    await job.log(`Job FAILED | id: ${job.id} reason: ${job.failedReason} | ${this.getTimerString(job)}`);
+  }
+
+  @OnQueueCompleted()
+  async onCompleted(job: Job) {
+    const jobs = (await this.cache.get(`jobs:${job.name}:${job.data.organization.id}:${job.data.payload.compliance.compliance_id}`)) as number[];
+    if (jobs) {
+      jobs.splice(jobs.indexOf(typeof job.id === 'number' ? job.id : parseInt(job.id)), 1);
+
+      await this.cache.set(`jobs:${job.name}:${job.data.organization.id}:${job.data.payload.compliance.compliance_id}`, jobs, { ttl: 60 * 60 * 24 * 7 });
+    }
+
+    await job.log(`${job.name} Job COMPLETED | id: ${job.id} completed_on: ${new Date(job.finishedOn).toUTCString()} | ${this.getTimerString(job)}`);
+  }
+
+  @OnQueueProgress()
+  async onProgress(job: Job) {
+    await job.log(`${job.name} Job PROGRESS | id: ${job.id} progress: ${(await job.progress()) * 100}% | ${this.getTimerString(job)}`);
+  }
+
+  getTimerString(job: Job) {
+    if (job.finishedOn) {
+      return `Duration: ${this.getDuration(job)} seconds`;
+    } else {
+      return `Elapsed: ${(new Date().getTime() - job.processedOn) / 1000} seconds`;
+    }
+  }
+
+  getDuration(job: Job) {
+    return (job.finishedOn - job.processedOn) / 1000;
   }
 }

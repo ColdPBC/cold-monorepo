@@ -55,6 +55,8 @@ export class DarklyService extends BaseWorker {
    * @returns {Promise<any>}
    */
   async getJSONFlag(flag: string, context?: DarklyContext): Promise<any> {
+    if (!this.client.on) await this.onModuleInit();
+
     const response = await this.client.variation(flag, context || this.context, null);
     this.client.track(flag, this.context);
     this.logger.log(`JsonFlag: ${flag} called`, {
@@ -74,14 +76,14 @@ export class DarklyService extends BaseWorker {
    * @param context
    */
   async getBooleanFlag(flag: string, defaultValue?: any, context?: DarklyContext): Promise<boolean> {
-    const response = await this.client.variation(flag, context || this.context, defaultValue);
+    if (!this.client.on) await this.onModuleInit();
 
-    if (typeof response === 'boolean') {
-      this.logger.log(`[${response ? '✅ Enabled' : '🛑Disabled'}] ${flag}`, {
-        context: context || this.context,
-        enabled: response,
-      });
-    }
+    const response = (await this.client.variation(flag, context || this.context, defaultValue)) as boolean;
+
+    this.logger.log(`[${response ? '✅ Enabled' : '🛑Disabled'}] ${flag}`, {
+      context: context || this.context,
+      enabled: response,
+    });
 
     this.client.track(flag, this.context);
 
@@ -97,6 +99,8 @@ export class DarklyService extends BaseWorker {
    * @param context
    */
   async getStringFlag(flag: string, defaultValue?: any, context?: DarklyContext): Promise<string> {
+    if (!this.client.on) await this.onModuleInit();
+
     const response = await this.client.variation(flag, context || this.context, defaultValue);
 
     this.client.track(flag, this.context);
@@ -113,6 +117,8 @@ export class DarklyService extends BaseWorker {
    * @param context
    */
   async getNumberFlag(flag: string, defaultValue?: any, context?: DarklyContext): Promise<number> {
+    if (!this.client.on) await this.onModuleInit();
+
     const response = await this.client.variation(flag, context || this.context, defaultValue);
 
     this.client.track(flag, this.context);
@@ -127,7 +133,8 @@ export class DarklyService extends BaseWorker {
    * @param key
    * @param callback
    */
-  subscribeToJsonFlagChanges(key: string, callback: (flagValue: any) => void): void {
+  async subscribeToJsonFlagChanges(key: string, callback: (flagValue: any) => void): Promise<void> {
+    if (!this.client.on) await this.onModuleInit();
     // Register a callback to be invoked when specified json feature flag changes
     this.client.on(`update:${key}`, async (flag: any) => {
       callback(await this.getJSONFlag(flag.key, this.context));
@@ -138,7 +145,9 @@ export class DarklyService extends BaseWorker {
    * Subscribe to changes to all json flags
    * @param callback
    */
-  subscribeToAnyJsonFlagChanges(callback: (flagValue: any) => void): void {
+  async subscribeToAnyJsonFlagChanges(callback: (flagValue: any) => void): Promise<void> {
+    if (!this.client.on) await this.onModuleInit();
+
     // Register a callback to be invoked when any json feature flag changes
     this.client.on(`update`, async (flag: any) => {
       callback(await this.getJSONFlag(flag.key, this.context));
@@ -150,7 +159,8 @@ export class DarklyService extends BaseWorker {
    * @param key
    * @param callback
    */
-  subscribeToStringFlagChanges(key: string, callback: (flagValue: string) => void): void {
+  async subscribeToStringFlagChanges(key: string, callback: (flagValue: string) => void): Promise<void> {
+    if (!this.client.on) await this.onModuleInit();
     // Register a callback to be invoked when specified boolean feature flag changes
     this.client.on(`update:${key}`, async (flag: any) => {
       callback(await this.getStringFlag(flag.key, this.context));
@@ -174,7 +184,9 @@ export class DarklyService extends BaseWorker {
    * @param key
    * @param callback
    */
-  subscribeToBooleanFlagChanges(key: string, callback: (flagValue: boolean) => void): void {
+  async subscribeToBooleanFlagChanges(key: string, callback: (flagValue: boolean) => void): Promise<void> {
+    if (!this.client.on) await this.onModuleInit();
+
     // Register a callback to be invoked when specified boolean feature flag changes
     this.client.on(`update:${key}`, async (flag: any) => {
       callback(await this.getBooleanFlag(flag.key, this.context));
@@ -185,7 +197,8 @@ export class DarklyService extends BaseWorker {
    * Subscribe to changes on all boolean flags
    * @param callback
    */
-  subscribeToAllChanges(callback: (flagValue: any) => void): void {
+  async subscribeToAllChanges(callback: (flagValue: any) => void): Promise<void> {
+    if (!this.client.on) await this.onModuleInit();
     // Register a callback to be invoked when any boolean feature flag changes
     this.client.on(`update`, async (flag: string) => {
       callback(await this.getBooleanFlag(flag, this.context));

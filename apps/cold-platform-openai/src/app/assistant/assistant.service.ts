@@ -1,11 +1,11 @@
-import { BaseWorker, ColdRabbitService, PrismaService } from '@coldpbc/nest';
+import { BaseWorker, CacheService, ColdRabbitService, DarklyService, PrismaService } from '@coldpbc/nest';
 import { Injectable, NotFoundException, OnModuleInit, UnprocessableEntityException } from '@nestjs/common';
 import OpenAI from 'openai';
 import { get, has, pick } from 'lodash';
 import { ConfigService } from '@nestjs/config';
 import { integrations, organizations, service_definitions } from '@prisma/client';
-import { Job } from 'bull';
-import { OnQueueActive, OnQueueCompleted, OnQueueFailed, OnQueueProgress } from '@nestjs/bull';
+import { Job, Queue } from 'bull';
+import { InjectQueue } from '@nestjs/bull';
 import { OpenAIResponse } from './validator/validator';
 import { PromptsService } from './surveys/prompts/prompts.service';
 
@@ -15,7 +15,15 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
   service: service_definitions;
   topic: string = '';
 
-  constructor(private readonly config: ConfigService, private readonly prisma: PrismaService, private rabbit: ColdRabbitService, private prompts: PromptsService) {
+  constructor(
+    private readonly config: ConfigService,
+    private readonly prisma: PrismaService,
+    private rabbit: ColdRabbitService,
+    private prompts: PromptsService,
+    private cache: CacheService,
+    private readonly darkly: DarklyService,
+    @InjectQueue('openai') private queue: Queue,
+  ) {
     super(AssistantService.name);
     this.client = new OpenAI({
       organization: this.config.getOrThrow('OPENAI_ORG_ID'),
@@ -61,9 +69,10 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
     throw new Error('Method not implemented.');
   }
 
-  async send(thread: OpenAI.Beta.Threads.Thread, integration: integrations, org: organizations) {
+  async send(thread: OpenAI.Beta.Threads.Thread, integration: integrations, org: organizations, message: any) {
     const run = await this.client.beta.threads.runs.create(thread.id, {
       assistant_id: integration.id,
+      model: await this.darkly.getStringFlag('dynamic-gpt-assistant-model', 'gpt-3.5'),
       instructions: await this.prompts.getBasePrompt(org), // Assuming getBasePrompt() is defined.
     });
 
@@ -156,15 +165,20 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
       }
 
       let message;
+      const files = await this.client.beta.assistants.files.list(integration.id);
+      const fileIds = files.data.map(file => file.id);
+
       if (!isFollowUp) {
         message = await this.client.beta.threads.messages.create(thread.id, {
           role: 'user',
           content: `${category_context}${await this.prompts.getComponentPrompt(questionKey, item)}.  Here is the "question" JSON object: \`\`\`json ${JSON.stringify(item)}\`\`\``,
+          file_ids: fileIds,
         });
       } else {
         //append category and followup prompt to component prompt
         message = await this.client.beta.threads.messages.create(thread.id, {
           role: 'user',
+          file_ids: fileIds,
           content: `${category_context} this next JSON question is specifically related to your previous answer. ${await this.prompts.getComponentPrompt(
             questionKey,
             item,
@@ -173,7 +187,7 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
       }
 
       this.logger.info(`Created message for ${item.prompt}`, { ...item, message });
-      return await this.send(thread, integration, org);
+      return await this.send(thread, integration, org, message);
     } catch (e) {
       this.logger.error(e.message, e);
       throw e;
@@ -181,9 +195,10 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
   }
 
   async process_survey(job: Job) {
-    const { survey, user, compliance, integration, organization } = job.data;
+    const { survey, user, compliance, integration, organization, on_update_url } = job.data;
     this.setTags({
       survey: survey.definition.title,
+      url: on_update_url,
       organization: {
         name: organization.name,
         id: organization.id,
@@ -214,13 +229,14 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
       const thread = await this.client.beta.threads.create();
 
       reqs.push(this.processSection(job, section, sdx, sections, definition, thread, integration, organization, category_context, user, survey));
+      //await this.processSection(job, section, sdx, sections, definition, thread, integration, organization, category_context, user, survey);
     }
 
     await Promise.all(reqs);
   }
 
-  private async processSection(
-    job,
+  public async processSection(
+    job: Job,
     section: string,
     sdx: number,
     sections: string[],
@@ -241,9 +257,13 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
 
     // iterate over each followup item
     for (const item of items) {
+      if (await this.isDuplicateOrCanceled(organization, job, section, item)) {
+        continue;
+      }
+
       const idx = parseInt(item.split('-')[1]);
 
-      await job.log(`Question | section: ${section} question: ${item} of ${items.length}`);
+      await job.log(`Question | section: ${section} question: ${item} (${items.indexOf(item)} of ${items.length})`);
       const follow_up = definition.sections[section].follow_up[item];
       this.setTags({ question: { key: item, prompt: follow_up.prompt } });
 
@@ -304,12 +324,37 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
         data: {
           organization: { id: integration.organization_id },
           user,
+          on_update_url: job.data.on_update_url,
           survey,
         },
         from: 'cold.platform.openai',
       });
 
       await job.progress(idx / items.length);
+    }
+  }
+
+  private async isDuplicateOrCanceled(organization, job: Job, section: string, item: string) {
+    const jobs = (await this.cache.get(`jobs:${job.name}:${organization.id}:${job.data.payload.compliance.compliance_id}`)) as number[];
+
+    if (!jobs) {
+      return false;
+    }
+
+    const newestJob = jobs.sort().reverse()[0];
+    const currentJobId = typeof job.id === 'number' ? job.id : parseInt(job.id);
+
+    if (currentJobId < newestJob) {
+      await job.log(`Job replaced by ${newestJob}, will not process question ${section}:${item}`);
+      this.logger.warn(`Job replaced by ${newestJob}, will not process question ${section}:${item}`);
+
+      return true;
+    }
+
+    const currentJob = await this.queue.getJob(job.id);
+    if (!currentJob) {
+      this.logger.warn(`Job ${job.id} no longer found in queue; will not process question ${section}:${item}`);
+      return true;
     }
   }
 
@@ -341,26 +386,5 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
 
   getDuration(job: Job) {
     return (job.finishedOn - job.processedOn) / 1000;
-  }
-
-  @OnQueueActive()
-  async onActive(job: Job) {
-    const message = `Processing ${job.name} | id: ${job.id} title: ${job.data.survey.definition.title} | started: ${new Date(job.processedOn).toUTCString()}`;
-    await job.log(message);
-  }
-
-  @OnQueueFailed()
-  async onFailed(job: Job) {
-    await job.log(`${job.name} Job FAILED | id: ${job.id} reason: ${job.failedReason} | ${this.getTimerString(job)}`);
-  }
-
-  @OnQueueCompleted()
-  async onCompleted(job: Job) {
-    await job.log(`${job.name} Job COMPLETED | id: ${job.id} completed_on: ${new Date(job.finishedOn).toUTCString()} | ${this.getTimerString(job)}`);
-  }
-
-  @OnQueueProgress()
-  async onProgress(job: Job) {
-    await job.log(`${job.name} Job PROGRESS | id: ${job.id} progress: ${(await job.progress()) * 100}% | ${this.getTimerString(job)}`);
   }
 }

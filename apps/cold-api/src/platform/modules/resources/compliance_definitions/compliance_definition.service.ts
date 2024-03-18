@@ -3,7 +3,6 @@ import { Span } from 'nestjs-ddtrace';
 import { BaseWorker, CacheService, Cuid2Generator, DarklyService, MqttService, PrismaService } from '@coldpbc/nest';
 import { ComplianceDefinition, OrgCompliance } from './compliance_definition_schema';
 import { EventService } from '../../utilities/events/event.service';
-import { get } from 'lodash';
 
 @Span()
 @Global()
@@ -76,7 +75,7 @@ export class ComplianceDefinitionService extends BaseWorker {
       }
     }
 
-    const routingKey = get(this.openAI_definition, 'definition.rabbitMQ.publishOptions.routing_key', 'dead_letter');
+    //const routingKey = get(this.openAI_definition, 'definition.rabbitMQ.publishOptions.routing_key', 'dead_letter');
 
     await this.event.sendIntegrationEvent(
       false,
@@ -110,8 +109,8 @@ export class ComplianceDefinitionService extends BaseWorker {
 
   /***
    * This action creates a new compliance definition
+   * @param req
    * @param complianceDefinition
-   * @param user
    */
   async create(req: any, complianceDefinition: ComplianceDefinition): Promise<ComplianceDefinition> {
     const { user, url } = req;
@@ -161,7 +160,7 @@ export class ComplianceDefinitionService extends BaseWorker {
 
   /***
    * This action activates a new compliance for org
-   * @param user
+   * @param req
    * @param name
    * @param orgId
    * @param bpc
@@ -262,7 +261,7 @@ export class ComplianceDefinitionService extends BaseWorker {
 
   /***
    * This action returns all compliances activated for an org
-   * @param user
+   * @param req
    * @param orgId
    * @param bpc
    */
@@ -297,9 +296,8 @@ export class ComplianceDefinitionService extends BaseWorker {
   /**
    * This action returns a compliance definition by name
    * @param name
-   * @param user
+   * @param req
    * @param bypassCache
-   * @param impersonateOrg
    */
   async findOne(name: string, req: any, bypassCache?: boolean): Promise<ComplianceDefinition> {
     const { user } = req;
@@ -334,7 +332,7 @@ export class ComplianceDefinitionService extends BaseWorker {
    * This action updates a named compliance definition
    * @param name
    * @param complianceDefinition
-   * @param user
+   * @param req
    */
   async update(name: string, complianceDefinition: ComplianceDefinition, req: any): Promise<ComplianceDefinition> {
     const { user, url } = req;
@@ -393,7 +391,7 @@ export class ComplianceDefinitionService extends BaseWorker {
   /***
    * This action removes a named compliance definition
    * @param name
-   * @param user
+   * @param req
    */
   async remove(name: string, req: any) {
     const { user, url } = req;
