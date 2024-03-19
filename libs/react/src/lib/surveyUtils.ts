@@ -1,4 +1,4 @@
-import { cloneDeep, find, findIndex, forEach, forOwn, isEmpty, uniq } from 'lodash';
+import { cloneDeep, find, findIndex, forEach, forOwn, get, isEmpty, uniq } from 'lodash';
 import {
   ComplianceSurveyActiveKeyType,
   ComplianceSurveyPayloadType,
@@ -507,4 +507,18 @@ export const getSavedQuestionsInSurvey = (surveyData: ComplianceSurveyPayloadTyp
     }
   });
   return savedQuestions;
+};
+
+export const getAccurateBookmarkedValue = (
+  sections: { [p: string]: ComplianceSurveySectionType },
+  activeKey: ComplianceSurveyActiveKeyType,
+  bookmarked: {
+    [key: string]: boolean;
+  },
+) => {
+  const sectionIndex = getSectionIndex(sections, activeKey);
+  const activeSection = sections[Object.keys(sections)[sectionIndex]];
+  const question = activeSection.follow_up[activeKey.value];
+  const bookMarkState = get(bookmarked, `${activeKey.value}`, undefined);
+  return bookMarkState === undefined ? question.saved : bookMarkState;
 };
