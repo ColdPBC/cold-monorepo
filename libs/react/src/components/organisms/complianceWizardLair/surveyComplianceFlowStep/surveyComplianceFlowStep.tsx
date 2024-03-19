@@ -15,6 +15,7 @@ import { GlobalSizes } from '@coldpbc/enums';
 import { withErrorBoundary } from 'react-error-boundary';
 import { useAuth0Wrapper } from '@coldpbc/hooks';
 import { get, set } from 'lodash';
+import { getOrgStorage, setOrgStorage } from '../../../../lib/orgStorage';
 
 const _SurveyComplianceFlowStep = () => {
   const { data } = useContext(WizardContext);
@@ -39,8 +40,7 @@ const _SurveyComplianceFlowStep = () => {
     }
     // runs when the component mounts and/or when the orgId changes via impersonation
     const key = getStartingKey(sortedSurvey);
-    const orgStorage = localStorage.getItem(orgId);
-    const parsedOrgStorage = orgStorage ? JSON.parse(orgStorage) : {};
+    const parsedOrgStorage = getOrgStorage(orgId);
     const activeKeyFromStorage = get(parsedOrgStorage, `compliance.${name}.complianceActiveKey`, null);
     const keyToBeUsed = activeKeyFromStorage ? activeKeyFromStorage : key;
     setActiveKey(keyToBeUsed);
@@ -48,10 +48,9 @@ const _SurveyComplianceFlowStep = () => {
 
   useEffect(() => {
     if (activeKey.section !== '' && orgId) {
-      const orgStorage = localStorage.getItem(orgId);
-      const parsedOrgStorage = orgStorage ? JSON.parse(orgStorage) : {};
+      const parsedOrgStorage = getOrgStorage(orgId);
       set(parsedOrgStorage, `compliance.${name}.complianceActiveKey`, activeKey);
-      localStorage.setItem(orgId, JSON.stringify(parsedOrgStorage));
+      setOrgStorage(orgId, parsedOrgStorage);
     }
   }, [activeKey]);
 
