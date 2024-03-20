@@ -3,7 +3,7 @@ import { organizations, survey_types } from '@prisma/client';
 import { ConfigService } from '@nestjs/config';
 import { isUUID } from 'class-validator';
 import { diff } from 'deep-object-diff';
-import { filter, find, map, merge, omit } from 'lodash';
+import { filter, find, merge, omit } from 'lodash';
 import { Span } from 'nestjs-ddtrace';
 import { v4 } from 'uuid';
 import { BaseWorker, CacheService, DarklyService, MqttService, PrismaService, SurveyDefinitionsEntity, UpdateSurveyDefinitionsDto, ZodSurveyResponseDto } from '@coldpbc/nest';
@@ -227,25 +227,8 @@ export class SurveysService extends BaseWorker {
     this.setTags({ user: user.coldclimate_claims, bpc, organization });
     let surveys = [] as ZodSurveyResponseDto[];
 
-    if (organization) {
-      const surveyData = await this.prisma.survey_data.findMany({
-        where: {
-          organization_id: organization.id,
-        },
-      });
-
-      for (const item of surveyData) {
-        const def = await this.findOne(item.survey_definition_id, req, bpc, organization.id);
-        if (def) {
-          surveys.push(def);
-        }
-      }
-
-      this.logger.info(`found ${surveys.length} surveys for org: ${organization.name}`, { surveys: map(surveys, 'id') });
-    } else {
-      surveys = (await this.prisma.survey_definitions.findMany()) as ZodSurveyResponseDto[];
-      this.logger.info(`found ${surveys.length} surveys`);
-    }
+    surveys = (await this.prisma.survey_definitions.findMany()) as ZodSurveyResponseDto[];
+    this.logger.info(`found ${surveys.length} surveys`);
 
     if (surveyFilter?.name || surveyFilter?.type) {
       surveys = filter(surveys, survey => {
@@ -521,8 +504,6 @@ export class SurveysService extends BaseWorker {
       if (def) {
         await this.cache.delete(`survey_definitions:name:${def.name}`);
         await this.cache.delete(`survey_definitions:type:${def.type}`);
-        await this.cache.delete(this.getSurveyNameCacheKey(organization.id, req, def.name));
-        await this.cache.delete(this.getSurveyTypeCacheKey(org.id, req, def.type));
       }
 
       const definition = await this.prisma.survey_definitions.update({
