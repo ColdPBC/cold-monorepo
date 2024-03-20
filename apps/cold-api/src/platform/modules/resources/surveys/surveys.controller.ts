@@ -131,7 +131,7 @@ export class SurveysController extends BaseWorker {
     @Query('name') name: string,
     @Query('bpc') bpc?: boolean,
   ) {
-    const response = await this.surveyService.findAll(req, { name, type }, bpc);
+    const response = await this.surveyService.findAllSubmittedSurveysByOrg(req, { name, type }, bpc);
 
     return response;
 
