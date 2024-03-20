@@ -6,6 +6,7 @@ import {
   ColdActionsIcon,
   ColdAiIcon,
   ColdBillingIcon,
+  ColdBookmarkIcon,
   ColdCheckIcon,
   ColdChevronDownIcon,
   ColdChevronUpIcon,
@@ -13,6 +14,7 @@ import {
   ColdComplianceSurveyCheckBoxIcon,
   ColdDocumentsIcon,
   ColdEmptyCheckboxIcon,
+  ColdFilledBookMarkIcon,
   ColdFootprintIcon,
   ColdFootprintIconTwo,
   ColdHomeIcon,
@@ -78,6 +80,10 @@ export const ColdIcon = (props: IconProps) => {
       return <ColdComplianceSurveyCheckBoxIcon {...props} />;
     case IconNames.ColdAiIcon:
       return <ColdAiIcon {...props} />;
+    case IconNames.ColdBookmarkIcon:
+      return <ColdBookmarkIcon {...props} />;
+    case IconNames.ColdFilledBookMarkIcon:
+      return <ColdFilledBookMarkIcon {...props} />;
     default:
     case IconNames.ColdSettingsIcon:
       return <ColdSettingsIcon {...props} />;

@@ -90,6 +90,10 @@ export const ComplianceSurveyCollapse = (props: ComplianceSurveyCollapseProps) =
     }
   };
 
+  const isSectionActive = (section: string) => {
+    return activeKey.section === section;
+  };
+
   useEffect(() => {
     setExpanded(activeKey.category === category || expanded);
   }, [activeKey.section]);
@@ -122,7 +126,7 @@ export const ComplianceSurveyCollapse = (props: ComplianceSurveyCollapseProps) =
           {map(sections, (section, key) => {
             return (
               <div
-                className={`w-full h-[25px] pl-5 flex flex-row space-x-3 items-center cursor-pointer ${key === activeKey.section ? 'bg-bgc-accent' : ''}`}
+                className={`w-full h-[25px] pl-5 flex flex-row space-x-3 items-center cursor-pointer ${isSectionActive(key) ? 'bg-bgc-accent' : ''}`}
                 onClick={() => goToSection(key)}
                 key={key}>
                 {getSectionIcon(key)}

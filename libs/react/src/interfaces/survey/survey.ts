@@ -1,4 +1,4 @@
-import {OrgCompliance} from "../compliance";
+import { OrgCompliance } from '../compliance';
 
 export interface SurveyFormDefinitionPayloadType {
   id: string;
@@ -88,6 +88,7 @@ export interface SurveySectionFollowUpType {
   };
   score?: number;
   max_score?: number;
+  saved?: boolean;
 }
 
 export interface SurveyPayloadType {
@@ -119,7 +120,7 @@ export interface SurveyAdditionalContext {
 }
 
 export interface SurveyNextStep {
-  compliance?: OrgCompliance,
+  compliance?: OrgCompliance;
   name: string;
   title: string;
   started: boolean;
@@ -183,4 +184,11 @@ export interface ComplianceSurveyProgressQuestionType {
   user_answered: boolean;
   max_score?: number;
   score?: number;
+}
+
+export interface ComplianceSurveySavedQuestionType extends SurveySectionFollowUpType {
+  sectionKey: string;
+  sectionTitle: string;
+  followUpKey: string;
+  category: string;
 }

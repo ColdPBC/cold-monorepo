@@ -1,7 +1,8 @@
-import { cloneDeep, find, findIndex, forEach, forOwn, isEmpty, uniq } from 'lodash';
+import { cloneDeep, find, findIndex, forEach, forOwn, get, isEmpty, uniq } from 'lodash';
 import {
   ComplianceSurveyActiveKeyType,
   ComplianceSurveyPayloadType,
+  ComplianceSurveySavedQuestionType,
   ComplianceSurveySectionType,
   SurveyActiveKeyType,
   SurveyAdditionalContext,
@@ -263,7 +264,6 @@ export const sortComplianceSurvey = (surveyData: ComplianceSurveyPayloadType): C
       });
     });
   });
-
   return copy;
 };
 
@@ -283,6 +283,7 @@ export const updateSurveyQuestion = (
   update: {
     value?: any | null;
     skipped?: boolean;
+    saved?: boolean;
   },
   submit?: boolean,
   additional?: boolean,
@@ -486,4 +487,38 @@ export const allOtherSurveyQuestionsAnswered = (surveyData: ComplianceSurveyPayl
   });
 
   return allOtherSectionsComplete && allOtherQuestionsAnswered;
+};
+
+export const getSavedQuestionsInSurvey = (surveyData: ComplianceSurveyPayloadType): Array<ComplianceSurveySavedQuestionType> => {
+  const savedQuestions = Array<ComplianceSurveySavedQuestionType>();
+  forOwn(surveyData.definition.sections, (section, sectionKey) => {
+    if (sectionKey !== 'savedQuestions') {
+      forOwn(section.follow_up, (followUp, followUpKey) => {
+        if (followUp.saved) {
+          savedQuestions.push({
+            sectionKey: sectionKey,
+            sectionTitle: section.title,
+            followUpKey: followUpKey,
+            category: section.section_type,
+            ...followUp,
+          });
+        }
+      });
+    }
+  });
+  return savedQuestions;
+};
+
+export const getAccurateBookmarkedValue = (
+  sections: { [p: string]: ComplianceSurveySectionType },
+  activeKey: ComplianceSurveyActiveKeyType,
+  bookmarked: {
+    [key: string]: boolean;
+  },
+) => {
+  const sectionIndex = getSectionIndex(sections, activeKey);
+  const activeSection = sections[Object.keys(sections)[sectionIndex]];
+  const question = activeSection.follow_up[activeKey.value];
+  const bookMarkState = get(bookmarked, `${activeKey.value}`, undefined);
+  return bookMarkState === undefined ? question.saved : bookMarkState;
 };
