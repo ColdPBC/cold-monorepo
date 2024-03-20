@@ -1,12 +1,11 @@
 
-## [1.166.1-cold-567.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.166.1-cold-567.1...v1.166.1-cold-567.2) (2024-03-20)
+# [1.167.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.166.1...v1.167.0) (2024-03-20)
 
 
-### Bug Fixes
+### Features
 
-* route to return all survey results for an org. ([3a17571](https://github.com/ColdPBC/cold-monorepo/commit/3a1757146c66f4e71ad74980a4a691f8fa8cc73d))
+* make assistant instructions configurable from launch darkly ([9c16e88](https://github.com/ColdPBC/cold-monorepo/commit/9c16e88a1e8378902ab110cceafc1fbe48c9c633))
 
-## [1.166.1-cold-567.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.166.0...v1.166.1-cold-567.1) (2024-03-20)
 
 ## [1.166.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.166.0...v1.166.1) (2024-03-20)
 
