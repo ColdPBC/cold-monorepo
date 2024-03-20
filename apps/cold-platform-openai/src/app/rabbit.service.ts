@@ -140,7 +140,7 @@ export class RabbitService extends BaseWorker {
 
           try {
             for (const survey of surveys) {
-              let jobs: number[] = await this.cache.get(`jobs:${event}:${parsed.organization.id}:${parsed.payload.compliance.compliance_id}`);
+              let jobs: number[] = await this.cache.get(`jobs:${event}:${parsed.organization.id}:${parsed.payload.compliance?.compliance_id}`);
 
               if (typeof jobs === 'string') {
                 jobs = JSON.parse(jobs) as [];
@@ -163,7 +163,7 @@ export class RabbitService extends BaseWorker {
 
               jobs.push(typeof job.id === 'number' ? job.id : parseInt(job.id));
 
-              await this.cache.set(`jobs:${event}:${parsed.organization.id}:${parsed.payload.compliance.compliance_id}`, jobs, { ttl: 60 * 60 * 24 * 7 });
+              await this.cache.set(`jobs:${event}:${parsed.organization.id}:${parsed.payload.compliance?.compliance_id}`, jobs, { ttl: 60 * 60 * 24 * 7 });
             }
           } catch (e) {
             this.logger.error(e.message, e);
