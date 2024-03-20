@@ -36,18 +36,18 @@ export class SurveysService extends BaseWorker {
   }
 
   /***
-   * This action returns a component definition by type
+   * This action returns a survey definition by type
    * @param user
    * @param type
    */
-  async findByType(req: any, type: survey_types): Promise<ZodSurveyResponseDto[]> {
+  async findDefinitionByType(req: any, type: survey_types, bpc?: boolean): Promise<ZodSurveyResponseDto[]> {
     const { user } = req;
     this.logger.tags = merge(this.tags, { survey_type: type, user: user.coldclimate_claims });
 
     try {
       const cached: any = await this.cache.get(`survey_definitions:type:${type}`);
 
-      if (cached) {
+      if (cached && !bpc) {
         return cached;
       }
 
@@ -60,6 +60,56 @@ export class SurveysService extends BaseWorker {
       });
 
       return surveys;
+    } catch (e) {
+      this.logger.error(e.message, { error: e });
+      throw new UnprocessableEntityException(e);
+    }
+  }
+
+  async findAllDefinitions(req: any, bpc?: boolean): Promise<ZodSurveyResponseDto[]> {
+    const { user } = req;
+    this.setTags({ user: user.coldclimate_claims });
+
+    try {
+      const cached: any = await this.cache.get(`survey_definitions`);
+
+      if (cached && !bpc) {
+        return cached;
+      }
+
+      const surveys = (await this.prisma.survey_definitions.findMany()) as unknown as ZodSurveyResponseDto[];
+
+      await this.cache.set(`survey_definitions`, surveys, {
+        ttl: 1000 * 60 * 60 * 24, // persist since it will be fairly static
+      });
+
+      return surveys;
+    } catch (e) {
+      this.logger.error(e.message, { error: e });
+      throw new UnprocessableEntityException(e);
+    }
+  }
+
+  async findDefinitionByName(req: any, name: string, bpc?: boolean): Promise<ZodSurveyResponseDto[]> {
+    const { user } = req;
+    this.setTags({ user: user.coldclimate_claims });
+
+    try {
+      let def: any;
+
+      if (bpc) {
+        def = (await this.prisma.survey_definitions.findUnique({
+          where: { name: name },
+        })) as unknown as ZodSurveyResponseDto[];
+
+        await this.cache.set(`survey_definitions:name:${name}`, def, {
+          ttl: 1000 * 60 * 60 * 24, // persist since it will be fairly static
+        });
+      } else {
+        def = await this.cache.get(`survey_definitions:name:${name}`);
+      }
+
+      return def;
     } catch (e) {
       this.logger.error(e.message, { error: e });
       throw new UnprocessableEntityException(e);
@@ -93,6 +143,8 @@ export class SurveysService extends BaseWorker {
 
       // delete cached definitions by type
       await this.cache.delete(`survey_definitions`, true);
+      await this.cache.delete(`survey_definitions:type:${createSurveyDefinitionDto.type}`, true);
+      await this.cache.delete(`survey_definitions:name:${createSurveyDefinitionDto.name}`, true);
 
       const definition = createSurveyDefinitionDto;
 
@@ -109,7 +161,9 @@ export class SurveysService extends BaseWorker {
       this.logger.info('created definition', definition);
 
       //rebuild cache async
-      await this.findByType(req, response.type);
+      this.findDefinitionByType(req, response.type);
+      this.findDefinitionByName(req, response.name);
+      this.findAllDefinitions(req);
 
       this.metrics.increment('cold.api.surveys.create', this.tags);
 
@@ -168,27 +222,26 @@ export class SurveysService extends BaseWorker {
       type: string;
     },
     bpc?: boolean,
-    impersonateOrg?: string,
   ): Promise<ZodSurveyResponseDto[]> {
-    const { user } = req;
-    this.setTags({ user: user.coldclimate_claims, bpc, impersonateOrg });
+    const { user, organization } = req;
+    this.setTags({ user: user.coldclimate_claims, bpc, organization });
     let surveys = [] as ZodSurveyResponseDto[];
 
-    if (impersonateOrg) {
+    if (organization) {
       const surveyData = await this.prisma.survey_data.findMany({
         where: {
-          organization_id: impersonateOrg,
+          organization_id: organization.id,
         },
       });
 
       for (const item of surveyData) {
-        const def = await this.findOne(item.survey_definition_id, req, bpc, impersonateOrg);
+        const def = await this.findOne(item.survey_definition_id, req, bpc, organization.id);
         if (def) {
           surveys.push(def);
         }
       }
 
-      this.logger.info(`found ${surveys.length} surveys for org: ${impersonateOrg}`, { surveys: map(surveys, 'id') });
+      this.logger.info(`found ${surveys.length} surveys for org: ${organization.name}`, { surveys: map(surveys, 'id') });
     } else {
       surveys = (await this.prisma.survey_definitions.findMany()) as ZodSurveyResponseDto[];
       this.logger.info(`found ${surveys.length} surveys`);
@@ -222,8 +275,8 @@ export class SurveysService extends BaseWorker {
    * @param bypassCache
    * @param impersonateOrg
    */
-  async findOne(name: string, req: any, bypassCache?: boolean, impersonateOrg?: string): Promise<ZodSurveyResponseDto> {
-    const { user } = req;
+  async findOne(name: string, req: any, bpc?: boolean, impersonateOrg?: string): Promise<ZodSurveyResponseDto> {
+    const { user, organization } = req;
     const isID = isUUID(name);
 
     if (isID) {
@@ -232,19 +285,14 @@ export class SurveysService extends BaseWorker {
       this.setTags({ survey_name: name });
     }
 
-    this.setTags({ user: user.coldclimate_claims, bpc: bypassCache, impersonateOrg });
+    this.setTags({ user: user.coldclimate_claims, bpc, organization });
 
-    const surveyNameCacheKey = this.getSurveyNameCacheKey(impersonateOrg, req, name);
+    const surveyNameCacheKey = this.getSurveyNameCacheKey(organization, req, name);
 
     this.setTags({ survey_name_cache_key: surveyNameCacheKey });
 
-    if (!bypassCache) {
-      const cached = (await this.cache.get(surveyNameCacheKey)) as ZodSurveyResponseDto;
+    let def;
 
-      if (cached) {
-        //return cached;
-      }
-    }
     try {
       const filter = isID ? { id: name } : { name: name };
       // Get Definition
@@ -256,14 +304,12 @@ export class SurveysService extends BaseWorker {
         throw new NotFoundException(`Unable to find survey definition with name: ${name}`);
       }
 
-      const surveyTypeCacheKey = this.getSurveyTypeCacheKey(impersonateOrg, req, name, def);
-
       // Get Submission Results
       if ((user.isColdAdmin && impersonateOrg) || !user.isColdAdmin) {
         const submission = await this.prisma.survey_data.findFirst({
           where: {
             survey_definition_id: def.id,
-            organization_id: user.isColdAdmin && impersonateOrg ? impersonateOrg : user.coldclimate_claims.org_id,
+            organization_id: organization.id,
           },
         });
 
@@ -271,14 +317,6 @@ export class SurveysService extends BaseWorker {
 
         this.setTags({ survey_data_id: submission?.id });
       }
-
-      await this.cache.set(surveyNameCacheKey, def, {
-        update: true,
-      });
-
-      await this.cache.set(surveyTypeCacheKey, def, {
-        update: true,
-      });
 
       const scored = await this.filterService.filterDependencies(this.scoreService.scoreSurvey(def));
 
@@ -290,33 +328,23 @@ export class SurveysService extends BaseWorker {
   }
 
   // get the cache key for the survey type
-  private getSurveyTypeCacheKey(impersonateOrg: string | undefined, req: any, name: string, def: any) {
-    const { user } = req;
-    let key: string;
-    if (impersonateOrg && user.isColdAdmin) {
-      // get cache data as impersonated org
-      key = `survey_definitions:org:${impersonateOrg}:type:${def?.type}`;
-    } else {
-      // get cache data if cold admin else as org user
-      key = user.isColdAdmin ? `survey_definitions:type:${def.type}` : `survey_definitions:org:${user.coldclimate_claims.org_id}:name:${name}`;
-    }
+  private getSurveyTypeCacheKey(impersonateOrg: string | undefined, req: any, def: any) {
+    const { user, organization } = req;
 
-    this.setTags({ survey_type: def.type, survey_type_cache_key: key });
+    const key = `survey_definitions:type:${def?.type}`;
+
+    this.setTags({ user: user.coldclimate_claims, survey_type: def.type, survey_type_cache_key: key, organization });
 
     return key;
   }
 
   // get the cache key for the survey name
   private getSurveyNameCacheKey(impersonateOrg: string | undefined, req: any, name: string, isId?: boolean) {
-    const { user } = req;
-    let key: string;
-    if (impersonateOrg && user.isColdAdmin) {
-      key = `survey_definitions:org:${impersonateOrg}:${isId ? 'id' : 'name'}:${name}`;
-    } else {
-      key = user.isColdAdmin ? `survey_definitions:${isId ? 'id' : 'name'}:${name}` : `survey_definitions:org:${user.coldclimate_claims.org_id}:${isId ? 'id' : 'name'}:${name}`;
-    }
+    const { user, organization } = req;
 
-    this.setTags({ survey_name: name, survey_name_cache_key: key });
+    const key = `survey_definitions:${isId ? 'id' : 'name'}:${name}`;
+
+    this.setTags({ user: user.coldclimate_claims, survey_name: name, survey_name_cache_key: key, organization });
 
     return key;
   }
@@ -329,10 +357,24 @@ export class SurveysService extends BaseWorker {
    * @param impersonateOrg
    */
   async submitResults(name: string, submission: any, req: any, impersonateOrg?: string): Promise<ZodSurveyResponseDto> {
-    const { user, url } = req;
-    const org = (await this.cache.get(`organizations:${impersonateOrg && user.isColdAdmin ? impersonateOrg : user.coldclimate_claims.org_id}`)) as organizations;
+    if (!req.organization && impersonateOrg) {
+      req.organization = await this.prisma.organizations.findUnique({
+        where: {
+          id: impersonateOrg,
+        },
+      });
 
-    const orgId = impersonateOrg && user.isColdAdmin ? impersonateOrg : user.coldclimate_claims.org_id;
+      if (!req.organization) {
+        throw new NotFoundException(`Organization with id: ${impersonateOrg} does not exist`);
+      }
+
+      this.setTags({ organization: omit(req.organization, ['branding', 'phone', 'street_address', 'created_at', 'updated_at']) });
+    }
+
+    const { user, url, organization } = req;
+    const org = organization;
+
+    const orgId = org.id;
 
     this.setTags({
       organization: omit(org, ['branding', 'phone', 'street_address', 'created_at', 'updated_at']),
@@ -340,19 +382,6 @@ export class SurveysService extends BaseWorker {
     });
 
     try {
-      const surveyCacheKey = () => {
-        let key: string;
-        if (impersonateOrg && user.isColdAdmin) {
-          key = `survey_definitions:org:${impersonateOrg}`;
-        } else {
-          key = `survey_definitions:org:${user.coldclimate_claims.org_id}`;
-        }
-
-        this.setTags({ survey_cache_key: key });
-
-        return key;
-      };
-
       const def = await this.prisma.survey_definitions.findUnique({
         where: { name: name },
       });
@@ -363,13 +392,11 @@ export class SurveysService extends BaseWorker {
         throw new NotFoundException(`Unable to find survey definition with name: ${name}`);
       }
 
-      await this.cache.delete(surveyCacheKey(), true);
-
       const difference = omit(diff(def.definition as any, submission.definition), ['id', 'created_at', 'updated_at', 'survey_definition_id', 'organization_id']);
       const existing = (await this.prisma.survey_data.findFirst({
         where: {
           survey_definition_id: def.id,
-          organization_id: user.isColdAdmin && impersonateOrg ? impersonateOrg : user.coldclimate_claims.org_id,
+          organization_id: org.id,
         },
       })) as any;
 
@@ -385,7 +412,7 @@ export class SurveysService extends BaseWorker {
           data: existing,
         });
 
-        if (!find(this.exclude_orgs, { id: user.coldclimate_claims.org_id })) {
+        if (!find(this.exclude_orgs, { id: org.id })) {
           if (submission?.definition?.submitted) {
             this.setTags({ status: 'completed' });
 
@@ -412,7 +439,7 @@ export class SurveysService extends BaseWorker {
         const response = {
           id: v4(),
           created_at: new Date(),
-          organization_id: user.isColdAdmin && impersonateOrg ? impersonateOrg : user.coldclimate_claims.org_id,
+          organization_id: org.id,
           survey_definition_id: def.id,
           data: difference,
         };
@@ -421,7 +448,7 @@ export class SurveysService extends BaseWorker {
           data: response,
         });
 
-        if (!find(this.exclude_orgs, { id: user.coldclimate_claims.org_id })) {
+        if (!find(this.exclude_orgs, { id: org.id })) {
           this.setTags({ status: 'created' });
 
           this.metrics.increment('cold.api.surveys.submission', this.tags);
@@ -480,8 +507,8 @@ export class SurveysService extends BaseWorker {
    * @param user
    */
   async update(name: string, updateSurveyDefinitionDto: UpdateSurveyDefinitionsDto, req: any): Promise<ZodSurveyResponseDto> {
-    const { user, url } = req;
-    const org = (await this.cache.get(`organizations:${user?.coldclimate_claims?.org_id}`)) as organizations;
+    const { user, url, organization } = req;
+    const org = organization;
 
     this.setTags({
       organization: omit(org, ['branding', 'phone', 'street_address', 'created_at', 'updated_at']),
@@ -494,6 +521,8 @@ export class SurveysService extends BaseWorker {
       if (def) {
         await this.cache.delete(`survey_definitions:name:${def.name}`);
         await this.cache.delete(`survey_definitions:type:${def.type}`);
+        await this.cache.delete(this.getSurveyNameCacheKey(organization.id, req, def.name));
+        await this.cache.delete(this.getSurveyTypeCacheKey(org.id, req, def.type));
       }
 
       const definition = await this.prisma.survey_definitions.update({
@@ -560,8 +589,9 @@ export class SurveysService extends BaseWorker {
    * @param user
    */
   async remove(name: string, req: any) {
-    const { user, url } = req;
-    const org = (await this.cache.get(`organizations:${user.coldclimate_claims.org_id}`)) as organizations;
+    const { user, url, organziation } = req;
+    const org = organziation;
+
     const tags: { [p: string]: any } | string[] = {
       survey_name: name,
       organization: omit(org, ['branding', 'phone', 'street_address', 'created_at', 'updated_at']),
@@ -593,7 +623,7 @@ export class SurveysService extends BaseWorker {
       });
 
       //rebuild type cache
-      await this.findByType(req, def.type);
+      await this.findDefinitionByType(req, def.type);
     } catch (e) {
       if (e.message.includes('Survey definition does not exist')) {
         throw new NotFoundException(`${user.coldclimate_claims.email} attempted to delete a survey definition that does not exist: ${name}`);
@@ -713,7 +743,7 @@ export class SurveysService extends BaseWorker {
       });
 
       //rebuild type cache
-      await this.findByType(req, def.type);
+      await this.findDefinitionByType(req, def.type);
     } catch (e) {
       if (e.message.includes('Survey definition does not exist')) {
         throw new NotFoundException(`${user.coldclimate_claims.email} attempted to delete a survey definition that does not exist: ${name}`);

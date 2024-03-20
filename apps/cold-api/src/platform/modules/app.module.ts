@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
-import { NestModule, OrgUserInterceptor } from '@coldpbc/nest';
-import { APP_INTERCEPTOR } from '@nestjs/core';
+import { NestModule } from '@coldpbc/nest';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { Service_definitionsModule } from './resources/service_definitions/service_definitions.module';
 import { Auth0Module } from './resources/auth0/auth0.module';
@@ -44,12 +43,7 @@ export class AppModule {
         LocationsModule,
         ComplianceDefinitionModule,
       ],
-      providers: [
-        {
-          provide: APP_INTERCEPTOR,
-          useClass: OrgUserInterceptor,
-        },
-      ],
+      providers: [],
       exports: [],
     };
   }
