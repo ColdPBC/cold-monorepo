@@ -1,3 +1,10 @@
+## [1.167.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.167.1...v1.167.2) (2024-03-20)
+
+
+### Bug Fixes
+
+* issue that could result in AI responses not being returned ([d96e71d](https://github.com/ColdPBC/cold-monorepo/commit/d96e71d611eb10a601e50c541d8abb82861a557c))
+
 ## [1.167.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.167.0...v1.167.1) (2024-03-20)
 
 
