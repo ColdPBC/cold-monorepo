@@ -1,3 +1,10 @@
+## [1.167.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.167.0...v1.167.1) (2024-03-20)
+
+
+### Bug Fixes
+
+* route to return all survey results for an org. ([3a17571](https://github.com/ColdPBC/cold-monorepo/commit/3a1757146c66f4e71ad74980a4a691f8fa8cc73d))
+* route to return all survey results for an org. ([919d05e](https://github.com/ColdPBC/cold-monorepo/commit/919d05e69bdae1f992b912a591adc522e32cd0f4))
 
 # [1.167.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.166.1...v1.167.0) (2024-03-20)
 
