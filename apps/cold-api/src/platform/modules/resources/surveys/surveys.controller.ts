@@ -201,11 +201,16 @@ export class SurveysController extends BaseWorker {
 
   @ApiTags('Surveys')
   @Get('surveys/:name')
+  @ApiOperation({
+    summary: 'Gets survey for user org by surey name',
+    operationId: 'UpdateSurveyByName',
+    deprecated: true,
+  })
   @ApiParam({
     name: 'name',
     required: true,
     example: '{{test_survey_name}}',
-    description: 'The name of the survey to return',
+    description: 'The name of the survey definition to return',
   })
   @ApiQuery({
     name: 'type',
@@ -271,6 +276,7 @@ export class SurveysController extends BaseWorker {
   @ApiOperation({
     summary: 'Update survey by name',
     operationId: 'UpdateSurveyByName',
+    deprecated: true,
   })
   @ApiTags('Surveys')
   @Patch('surveys/:name')
@@ -295,6 +301,7 @@ export class SurveysController extends BaseWorker {
 
   @ApiOperation({
     summary: 'Submit survey results',
+    deprecated: true,
   })
   @ApiTags('Surveys')
   @Put('surveys/:name')
