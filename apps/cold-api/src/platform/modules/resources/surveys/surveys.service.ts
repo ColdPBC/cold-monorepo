@@ -3,7 +3,7 @@ import { organizations, survey_types } from '@prisma/client';
 import { ConfigService } from '@nestjs/config';
 import { isUUID } from 'class-validator';
 import { diff } from 'deep-object-diff';
-import { filter, find, merge, omit } from 'lodash';
+import { filter, find, map, merge, omit } from 'lodash';
 import { Span } from 'nestjs-ddtrace';
 import { v4 } from 'uuid';
 import { BaseWorker, CacheService, DarklyService, MqttService, PrismaService, SurveyDefinitionsEntity, UpdateSurveyDefinitionsDto, ZodSurveyResponseDto } from '@coldpbc/nest';
@@ -208,6 +208,71 @@ export class SurveysService extends BaseWorker {
     }
   }
 
+  /**
+   * This action returns all survey results for an organization
+   * @param req
+   * @param surveyFilter
+   * @param bpc
+   */
+  async findAllSubmittedSurveysByOrg(
+    req: any,
+    surveyFilter?: {
+      name: string;
+      type: string;
+    },
+    bpc?: boolean,
+  ): Promise<ZodSurveyResponseDto[]> {
+    const { user, organization } = req;
+    this.setTags({ user: user.coldclimate_claims, bpc, organization });
+
+    let surveys = [] as ZodSurveyResponseDto[];
+
+    if (organization) {
+      const surveyData = await this.prisma.survey_data.findMany({
+        where: {
+          organization_id: organization.id,
+        },
+      });
+
+      for (const item of surveyData) {
+        const def = await this.prisma.survey_definitions.findUnique({
+          where: {
+            id: item.survey_definition_id,
+          },
+        });
+
+        if (def) {
+          const survey = await this.findOne(def.name, req, bpc, organization.id);
+          if (survey) {
+            surveys.push(survey);
+          }
+        }
+      }
+
+      if (surveyFilter?.name || surveyFilter?.type) {
+        surveys = filter(surveys, survey => {
+          if (surveyFilter.name && surveyFilter.type) {
+            return survey.name === surveyFilter.name && survey.type === surveyFilter.type;
+          } else if (surveyFilter.name) {
+            return survey.name === surveyFilter.name;
+          } else if (surveyFilter.type) {
+            return survey.type === surveyFilter.type;
+          } else {
+            return true;
+          }
+        });
+
+        if (surveys.length === 0) {
+          throw new HttpException(`No surveys found with supplied filter`, 404);
+        }
+      }
+
+      this.logger.info(`found ${surveys.length} surveys for org: ${organization.name}`, { surveys: map(surveys, 'id') });
+    }
+
+    return surveys;
+  }
+
   /***
    * This action returns all survey definitions
    * @param user
@@ -270,21 +335,26 @@ export class SurveysService extends BaseWorker {
 
     this.setTags({ user: user.coldclimate_claims, bpc, organization });
 
-    const surveyNameCacheKey = this.getSurveyNameCacheKey(organization, req, name);
-
-    this.setTags({ survey_name_cache_key: surveyNameCacheKey });
-
-    let def;
+    let def, cached;
 
     try {
-      const filter = isID ? { id: name } : { name: name };
-      // Get Definition
-      const def = (await this.prisma.survey_definitions.findUnique({
-        where: filter,
-      })) as ZodSurveyResponseDto;
+      if (!bpc) {
+        const surveyCacheKey = this.getSurveyCacheKey(organization, req, name, isID);
+        cached = (await this.cache.get(surveyCacheKey)) as ZodSurveyResponseDto;
+      }
+
+      if (!cached) {
+        // Get Definition
+        const filter = isID ? { id: name } : { name: name };
+        def = (await this.prisma.survey_definitions.findUnique({
+          where: filter,
+        })) as ZodSurveyResponseDto;
+      } else {
+        def = cached;
+      }
 
       if (!def) {
-        throw new NotFoundException(`Unable to find survey definition with name: ${name}`);
+        throw new NotFoundException(`Unable to find survey definition by ${isID ? 'id' : 'name'}: ${name}`);
       }
 
       // Get Submission Results
@@ -322,7 +392,7 @@ export class SurveysService extends BaseWorker {
   }
 
   // get the cache key for the survey name
-  private getSurveyNameCacheKey(impersonateOrg: string | undefined, req: any, name: string, isId?: boolean) {
+  private getSurveyCacheKey(impersonateOrg: string | undefined, req: any, name: string, isId?: boolean) {
     const { user, organization } = req;
 
     const key = `survey_definitions:${isId ? 'id' : 'name'}:${name}`;
