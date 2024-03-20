@@ -197,7 +197,7 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
   async process_survey(job: Job) {
     const { survey, user, compliance, integration, organization, on_update_url } = job.data;
     this.setTags({
-      survey: survey.definition.title,
+      survey: survey?.definition?.title,
       url: on_update_url,
       organization: {
         name: organization.name,
