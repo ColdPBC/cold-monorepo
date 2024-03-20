@@ -1,3 +1,14 @@
+## [1.166.1-cold-567.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.166.0...v1.166.1-cold-567.1) (2024-03-20)
+
+
+### Bug Fixes
+
+* bug with `GET /surveys` route.  Was returning empty array now returns all survey definitions. ([097621a](https://github.com/ColdPBC/cold-monorepo/commit/097621ac826763dc3238bd79def73bd190ee1f1b))
+* deprecate old survey routes ([3eaefcd](https://github.com/ColdPBC/cold-monorepo/commit/3eaefcdeeaa8cce0a4e370da8d4665cff4043e7a))
+* route to return all survey results for an org. ([919d05e](https://github.com/ColdPBC/cold-monorepo/commit/919d05e69bdae1f992b912a591adc522e32cd0f4))
+* store job data in cache so that it can be used to cancel previous jobs ([93d8811](https://github.com/ColdPBC/cold-monorepo/commit/93d88113adbac36cba9660122c41f825fbfed8f7))
+* survey data bugs ([5074dd6](https://github.com/ColdPBC/cold-monorepo/commit/5074dd6fbe1b73e35f02deb096fda2958c096664))
+
 ## [1.166.1-cold-647.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.166.0...v1.166.1-cold-647.1) (2024-03-20)
 
 
