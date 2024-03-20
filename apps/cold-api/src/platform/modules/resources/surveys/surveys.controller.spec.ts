@@ -57,13 +57,13 @@ describe('Surveys Controller', () => {
   });
 
   it('FindOne called', async () => {
-    await controller.findOne('TEST', 'test', fullReqExample);
+    await controller.findByName('TEST', 'test', fullReqExample);
     expect(service.findOne).toHaveBeenCalled();
   });
 
   it('FindAllByType called', async () => {
-    await controller.getAllByType('TEST', fullReqExample);
-    expect(service.findByType).toHaveBeenCalled();
+    await controller.getAllByType('TEST', false, fullReqExample);
+    expect(service.findDefinitionByType).toHaveBeenCalled();
   });
 
   it('SubmitResults called', async () => {

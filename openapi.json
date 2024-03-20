@@ -927,9 +927,58 @@
                 ]
             }
         },
+        "/surveys/name/{name}": {
+            "get": {
+                "operationId": "SurveysController_findDefinitionByName",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "required": true,
+                        "in": "path",
+                        "example": "{{test_survey_name}}",
+                        "description": "The name of the survey to return",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "impersonateOrg",
+                        "required": true,
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "bpc",
+                        "required": false,
+                        "in": "query",
+                        "description": "Bypass Cache",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns a survey definition by name"
+                    }
+                },
+                "security": [
+                    {
+                        "oauth2": [
+                            "openid"
+                        ]
+                    }
+                ],
+                "tags": [
+                    "Surveys"
+                ]
+            }
+        },
         "/surveys/{name}": {
             "get": {
-                "operationId": "SurveysController_findOne",
+                "operationId": "SurveysController_findByName",
                 "parameters": [
                     {
                         "name": "name",

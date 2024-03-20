@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_GUARD } from '@nestjs/core';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { HttpModule } from '@nestjs/axios';
@@ -10,7 +10,7 @@ import { HealthController, HealthModule, HealthService } from './health';
 import { DarklyService } from './darkly';
 import { ColdCacheModule } from './cache';
 import { AuthorizationModule, JwtAuthGuard, JwtStrategy } from './authorization';
-import { InterceptorModule, OrgUserInterceptor } from './interceptors';
+import { InterceptorModule } from './interceptors';
 import { BaseWorker, WorkerLogger } from './worker';
 import { ColdRabbitModule, ColdRabbitService } from './rabbit'; //import { CronModule, CronService } from './crons';
 import { DatadogTraceModule } from 'nestjs-ddtrace';
@@ -66,13 +66,7 @@ export class NestModule {
     /**
      * Providers Array
      */
-    const providers: any = [
-      ConfigService,
-      {
-        provide: APP_INTERCEPTOR,
-        useClass: OrgUserInterceptor,
-      },
-    ];
+    const providers: any = [ConfigService];
 
     /**
      * Controllers Array
@@ -171,14 +165,6 @@ export class NestModule {
     }
 
     /**
-     * Interceptors module
-     */
-    const enableInterceptorModule = await darkly.getBooleanFlag('static-enable-interceptors-module');
-    if (enableInterceptorModule) {
-      imports.push(InterceptorModule);
-    }
-
-    /**
      * Prisma Module
      */
     const enablePrismaModule = await darkly.getBooleanFlag('static-enable-prisma-module');
@@ -186,6 +172,14 @@ export class NestModule {
       imports.push(PrismaModule);
       providers.push(PrismaService);
       exports.push(PrismaService);
+    }
+
+    /**
+     * Interceptors module
+     */
+    const enableInterceptorModule = await darkly.getBooleanFlag('static-enable-interceptors-module');
+    if (enableInterceptorModule) {
+      imports.push(InterceptorModule);
     }
 
     /**
