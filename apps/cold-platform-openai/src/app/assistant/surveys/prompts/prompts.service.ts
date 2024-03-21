@@ -60,11 +60,30 @@ export class PromptsService extends BaseWorker {
   }
 
   async getBasePrompt(organization: any) {
+    /**
+     * @description This action retrieves the instructions for the OpenAI assistant.
+     */
+    const instructions = await this.darkly.getStringFlag('dynamic-open-ai-assistant-instructions', '', {
+      kind: 'organization',
+      name: organization.display_name,
+      key: organization.name,
+    });
+
+    /**
+     * @description This action retrieves the base prompt for the OpenAI assistant.
+     */
     const base = await this.darkly.getJSONFlag('dynamic-ai-base-prompt', {
       kind: 'organization',
       key: organization.name,
       name: organization.display_name,
     });
+
+    // If instructions are present, include them with the base prompt
+    if (instructions.length > 0) {
+      return `${instructions} ${base}`;
+    }
+
+    // If no instructions are present, return just the base prompt
     return base;
   }
 }

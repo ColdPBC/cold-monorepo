@@ -91,7 +91,7 @@ const _ComplianceSurveyQuestionnaire = (props: ComplianceSurveyQuestionnaireProp
         );
       }
       if (followUp) {
-        return <SurveyInput {...followUp} input_key={key.value} onFieldUpdated={onFieldUpdated} value={followUp.value} />;
+        return <SurveyInput {...followUp} input_key={key.value} onFieldUpdated={onFieldUpdated} value={followUp.value} prompt={`${followUpIndex + 1}. ${followUp.prompt}`} />;
       }
     } else {
       const section = sections[key.value];

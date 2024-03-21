@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Card } from '../card';
 import { motion } from 'framer-motion';
+import { getOrgStorage, setOrgStorage } from '../../../lib/orgStorage';
+import { useAuth0Wrapper } from '@coldpbc/hooks';
+import { get, set } from 'lodash';
 
 interface Props {
   text: string;
@@ -9,16 +12,21 @@ interface Props {
 }
 
 export const DismissableInfoCard = ({ text, onDismiss, dismissKey }: Props) => {
+  const { orgId } = useAuth0Wrapper();
   const localStorageKey = `dissmissable-info-${dismissKey}`;
-  const previouslyDismissed = localStorage.getItem(localStorageKey) === 'true';
+  const parsedOrgStorage = getOrgStorage(orgId || '');
+  const previouslyDismissed = get(parsedOrgStorage, localStorageKey, false) === 'true';
 
   const [dismissed, setDismissed] = useState(previouslyDismissed);
   const [show, setShow] = useState(!previouslyDismissed);
 
   const handleDismiss = () => {
-    localStorage.setItem(localStorageKey, 'true');
+    if (orgId) {
+      const parsedOrgStorage = getOrgStorage(orgId);
+      set(parsedOrgStorage, localStorageKey, 'true');
+      setOrgStorage(orgId, parsedOrgStorage);
+    }
     setDismissed(true);
-
     if (onDismiss) onDismiss();
   };
 

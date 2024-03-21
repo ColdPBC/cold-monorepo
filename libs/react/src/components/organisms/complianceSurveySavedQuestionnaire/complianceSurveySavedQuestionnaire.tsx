@@ -75,6 +75,9 @@ const _ComplianceSurveySavedQuestionnaire = (props: ComplianceSurveySavedQuestio
     const activeSectionKey = Object.keys(sections)[activeSectionIndex];
     const followUpKey = key.value;
     const followUp = sections[activeSectionKey].follow_up[followUpKey];
+    const followUpIndex = findIndex(Object.keys(sections[activeSectionKey].follow_up), followUpKey => {
+      return followUpKey === key.value;
+    });
     if (additional && followUp.additional_context) {
       return (
         <SurveyInput
@@ -90,7 +93,7 @@ const _ComplianceSurveySavedQuestionnaire = (props: ComplianceSurveySavedQuestio
       );
     }
     if (followUp) {
-      return <SurveyInput {...followUp} input_key={key.value} onFieldUpdated={onFieldUpdated} value={followUp.value} />;
+      return <SurveyInput {...followUp} input_key={key.value} onFieldUpdated={onFieldUpdated} value={followUp.value} prompt={`${followUpIndex + 1}. ${followUp.prompt}`} />;
     }
 
     return <></>;

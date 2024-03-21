@@ -98,12 +98,12 @@ describe('Survey Service', () => {
     expect(service).toBeDefined();
   });
 
-  it('should return survey by type', async () => {
-    const result = await service.findByType({ user: authenticatedUserExample }, generateSurveyTypesMock());
+  it('should return survey definition by type', async () => {
+    const result = await service.findDefinitionByType({ user: authenticatedUserExample }, generateSurveyTypesMock());
     expect(result).toEqual(surveys);
   });
 
-  it('should create a new survey', async () => {
+  it('should create a new survey definition', async () => {
     const result = await service.create(origin, { user: authenticatedUserExample });
     expect(result).toEqual(origin);
   });
