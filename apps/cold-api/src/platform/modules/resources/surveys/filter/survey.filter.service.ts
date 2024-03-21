@@ -87,7 +87,7 @@ export class SurveyFilterService extends BaseWorker {
         '        $title := function($v){$v.title};\n' +
         '        $section := function($k){$keys(sections)[$k]};\n' +
         '        $total := function($v){$count($keys($v.follow_up))};\n' +
-        '        $answered := function($v){$count($filter($v.follow_up.*, function($q) { $exists($q.value) }))};\n' +
+        '        $answered := function($v){$count($filter($v.follow_up.*, function($q) { $exists($q.value) and $q.value != null and $q.value != "" and $q.value != "null" }))};\n' +
         '        $complete := function($v){$total($v) = $answered($v)};\n' +
         '        $questions := function($v){$merge($map($keys($v.follow_up), function($key) { {$key: {"user_answered": $exists($v.follow_up[$key].value) and $v.follow_up[$key].value != null, "ai_answered": $exists($v.follow_up[$key].ai_response.answer) and $v.follow_up[$key].ai_response.answer != null}}}))};\n' +
         '        $createQuestions := function($v) {\n' +
@@ -131,7 +131,7 @@ export class SurveyFilterService extends BaseWorker {
         '            "total_max_score": $sum($totalMaxScore()),\n' +
         '            "total_review": $totalReview,\n' +
         '            "question_count": $totalQuestionCount(),\n' +
-        '            "percentage": $sum($totalScore) / $sum($totalMaxScore()) * 100,\n' +
+        '            "percentage": $round($sum($totalScore) / $sum($totalMaxScore()) * 100),\n' +
         '            "questions_answered": $totalQuestionAnswered(),\n' +
         '            "sections":$map(definition.sections.*, function($v, $k, $o) {\n' +
         '                {\n' +
