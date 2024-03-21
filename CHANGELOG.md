@@ -1,3 +1,10 @@
+## [1.169.1-cold-582.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.169.0...v1.169.1-cold-582.1) (2024-03-21)
+
+
+### Bug Fixes
+
+* bug counting questions with `null` as answer ([8d2cce2](https://github.com/ColdPBC/cold-monorepo/commit/8d2cce2ca0f6344e3cd4d3a7246cee607e4447d8))
+
 # [1.169.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.168.0...v1.169.0) (2024-03-21)
 
 
