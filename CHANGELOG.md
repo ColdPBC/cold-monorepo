@@ -1,3 +1,10 @@
+## [1.167.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.167.2...v1.167.3) (2024-03-21)
+
+
+### Bug Fixes
+
+* remove SurveyUpdate interceptor from update ([000ecb4](https://github.com/ColdPBC/cold-monorepo/commit/000ecb4406db01c3db035c74cf176045f2a50cbd))
+
 ## [1.167.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.167.1...v1.167.2) (2024-03-20)
 
 
