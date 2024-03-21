@@ -331,7 +331,6 @@ export class SurveysController extends BaseWorker {
   @Put('organizations/:orgId/surveys/:name')
   @Roles(...allRoles)
   @ApiTags('Organizations : Surveys')
-  @UseInterceptors(SurveysUpdateInterceptor)
   @ApiParam({
     name: 'orgId',
     required: true,
