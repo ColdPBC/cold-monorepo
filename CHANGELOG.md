@@ -1,3 +1,17 @@
+# [1.168.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.167.3...v1.168.0) (2024-03-21)
+
+
+### Bug Fixes
+
+* correct subcategory journey preview story ([53c12d3](https://github.com/ColdPBC/cold-monorepo/commit/53c12d371f851ce202586c6c8ed2d80f63ae3dff))
+
+
+### Features
+
+* handle local storage for expanded sections ([107c803](https://github.com/ColdPBC/cold-monorepo/commit/107c8035c92c52126b5e6e12b954095befeb5c10))
+* remove percent slider unnecessary try catch when parsing int ([1f069ae](https://github.com/ColdPBC/cold-monorepo/commit/1f069aee24545afd1e4106cd0da4c3398b76e6cd))
+* update dismissible to use org partitioned local storage ([a71be34](https://github.com/ColdPBC/cold-monorepo/commit/a71be341acc7a3ff9937f2b6dfe22a74fc60ed90))
+
 ## [1.167.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.167.2...v1.167.3) (2024-03-21)
 
 
