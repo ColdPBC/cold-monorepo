@@ -1,10 +1,12 @@
-import { ColdIcon } from '@coldpbc/components';
+import { ColdIcon, WizardContext } from '@coldpbc/components';
 import { IconNames } from '@coldpbc/enums';
 import { Collapse } from 'react-collapse';
-import { every, filter, find, map, some } from 'lodash';
-import React, { useEffect } from 'react';
+import { every, filter, find, get, map, set, some } from 'lodash';
+import React, { useContext, useEffect } from 'react';
 import { getFirstFollowUpKeyFromSection } from '@coldpbc/lib';
 import { ComplianceSurveyActiveKeyType, ComplianceSurveyPayloadType, ComplianceSurveySectionProgressType, ComplianceSurveySectionType } from '@coldpbc/interfaces';
+import { useAuth0Wrapper } from '@coldpbc/hooks';
+import { getOrgStorage, setOrgStorage } from '../../../lib/orgStorage';
 
 export interface ComplianceSurveyCollapseProps {
   category: string;
@@ -15,7 +17,9 @@ export interface ComplianceSurveyCollapseProps {
 }
 
 export const ComplianceSurveyCollapse = (props: ComplianceSurveyCollapseProps) => {
+  const { orgId } = useAuth0Wrapper();
   const { complianceSet, category, sections, setActiveKey, activeKey } = props;
+  const { data } = useContext(WizardContext);
   const [expanded, setExpanded] = React.useState(false);
 
   const goToSection = (section: string) => {
@@ -94,8 +98,25 @@ export const ComplianceSurveyCollapse = (props: ComplianceSurveyCollapseProps) =
     return activeKey.section === section;
   };
 
+  const onCategoryClick = () => {
+    const name: string = data.name;
+    if (orgId) {
+      const orgStorage = getOrgStorage(orgId);
+      set(orgStorage, `compliance.${name}.expandedSections.${category}`, !expanded);
+      setOrgStorage(orgId, orgStorage);
+    }
+    setExpanded(!expanded);
+  };
+
   useEffect(() => {
-    setExpanded(activeKey.category === category || expanded);
+    let expandedInStorage = false;
+    if (orgId) {
+      const orgStorage = getOrgStorage(orgId);
+      expandedInStorage = get(orgStorage, `compliance.${data.name}.expandedSections.${category}`, false);
+      set(orgStorage, `compliance.${data.name}.expandedSections.${category}`, activeKey.category === category || expanded || expandedInStorage);
+      setOrgStorage(orgId, orgStorage);
+    }
+    setExpanded(activeKey.category === category || expanded || expandedInStorage);
   }, [activeKey.section]);
 
   return (
@@ -103,7 +124,7 @@ export const ComplianceSurveyCollapse = (props: ComplianceSurveyCollapseProps) =
       <div
         className={'text-h3 text-tc-primary cursor-pointer flex flex-row space-x-3 items-center'}
         onClick={() => {
-          setExpanded(!expanded);
+          onCategoryClick();
         }}>
         {getCategoryIcon(category)}
         <div className={`text-left whitespace-normal`}>{category}</div>

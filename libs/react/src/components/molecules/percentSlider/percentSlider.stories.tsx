@@ -29,3 +29,54 @@ export const Default: Story = {
     tooltip: 'Select estimated percentage',
   },
 };
+
+export const MoreThan100: Story = {
+  render: args => {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const [value, setValue] = React.useState<number | null>(args.value);
+
+    const onChange = (value: number | null) => {
+      setValue(value);
+    };
+
+    return <PercentSlider {...args} onChange={onChange} value={value} />;
+  },
+  args: {
+    value: 101,
+    tooltip: 'Select estimated percentage',
+  },
+};
+
+export const LessThan0: Story = {
+  render: args => {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const [value, setValue] = React.useState<number | null>(args.value);
+
+    const onChange = (value: number | null) => {
+      setValue(value);
+    };
+
+    return <PercentSlider {...args} onChange={onChange} value={value} />;
+  },
+  args: {
+    value: -1,
+    tooltip: 'Select estimated percentage',
+  },
+};
+
+export const NonIntString: Story = {
+  render: args => {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const [value, setValue] = React.useState<number | null>(args.value);
+
+    const onChange = (value: number | null) => {
+      setValue(value);
+    };
+
+    return <PercentSlider {...args} onChange={onChange} value={value} />;
+  },
+  args: {
+    value: 'string',
+    tooltip: 'Select estimated percentage',
+  },
+};
