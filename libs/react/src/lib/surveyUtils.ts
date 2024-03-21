@@ -1,4 +1,4 @@
-import { cloneDeep, find, findIndex, forEach, forOwn, get, isEmpty, uniq } from 'lodash';
+import { cloneDeep, find, findIndex, forEach, forOwn, get, isBoolean, isEmpty, isNumber, isString, uniq } from 'lodash';
 import {
   ComplianceSurveyActiveKeyType,
   ComplianceSurveyPayloadType,
@@ -521,4 +521,77 @@ export const getAccurateBookmarkedValue = (
   const question = activeSection.follow_up[activeKey.value];
   const bookMarkState = get(bookmarked, `${activeKey.value}`, undefined);
   return bookMarkState === undefined ? question.saved : bookMarkState;
+};
+
+export const validateAIResponse = () => {};
+
+export const isAIResponseValueValid = (followUp: {
+  ai_response?: {
+    justification?: string;
+    answer?: string | boolean | number | Array<string>;
+  };
+  component: string;
+  options: Array<string>;
+}) => {
+  const { ai_response, component, options } = followUp;
+  let isValid = false;
+  if (!ai_response || !ai_response.answer) {
+    return isValid;
+  }
+  switch (component) {
+    case 'yes_no':
+      if (isBoolean(ai_response.answer)) {
+        isValid = true;
+      }
+      break;
+    case 'textarea':
+    case 'text':
+      if (isString(ai_response.answer)) {
+        isValid = true;
+      }
+      break;
+    case 'currency':
+    case 'number':
+      if (isNumber(ai_response.answer)) {
+        isValid = true;
+      }
+      break;
+    case 'percent_slider':
+      if (isNumber(ai_response.answer) && ai_response.answer >= 0 && ai_response.answer <= 100) {
+        isValid = true;
+      }
+      break;
+    case 'multi_select':
+    case 'select':
+      if (Array.isArray(ai_response.answer) && ai_response.answer.length > 0) {
+        let allStrings = true;
+        let foundOptions = true;
+        if (component === 'select' && ai_response.answer.length !== 1) {
+          return false;
+        }
+        forEach(ai_response.answer, answer => {
+          if (!isString(answer)) {
+            allStrings = false;
+          }
+          if (!find(options, option => option === answer)) {
+            foundOptions = false;
+          }
+        });
+        isValid = allStrings && foundOptions;
+      }
+      break;
+    case 'multi_text':
+      if (Array.isArray(ai_response.answer) && ai_response.answer.length > 0) {
+        let allStrings = true;
+        forEach(ai_response.answer, answer => {
+          if (!isString(answer)) {
+            allStrings = false;
+          }
+        });
+        isValid = allStrings;
+      }
+      break;
+    default:
+  }
+  return isValid;
 };
