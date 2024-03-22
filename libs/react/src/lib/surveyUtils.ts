@@ -553,8 +553,6 @@ export const getAccurateBookmarkedValue = (
   return bookMarkState === undefined ? question.saved : bookMarkState;
 };
 
-export const validateAIResponse = () => {};
-
 export const isAIResponseValueValid = (followUp: {
   ai_response?: {
     justification?: string;
