@@ -10,7 +10,7 @@ import { CategoriesModule } from './resources/categories/categories.module';
 import { NewsModule } from './resources/news/news.module';
 import { ActionsModule } from './resources/actions/actions.module';
 import { IntegrationsModule } from './resources/integrations/integrations.module';
-import { LocationsModule } from './resources/organizations/locations/locations.module';
+import { FacilitiesModule } from './resources/organizations/facilities/facilities.module';
 import { ComplianceDefinitionModule } from './resources/compliance_definitions/compliance_definition.module';
 import { OrganizationModule } from './resources/organizations/organization.module';
 import { EventsModule } from './utilities/events/events.module';
@@ -40,7 +40,7 @@ export class AppModule {
         NewsModule,
         ActionsModule,
         IntegrationsModule,
-        LocationsModule,
+        FacilitiesModule,
         ComplianceDefinitionModule,
       ],
       providers: [],

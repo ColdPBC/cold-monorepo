@@ -1,6 +1,6 @@
-import { ConflictException, Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
+import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { BaseWorker, CacheService, ColdRabbitService, MqttService, PrismaService } from '@coldpbc/nest';
-import { LocationsService } from '../locations/locations.service';
+import { FacilitiesService } from '../facilities/facilities.service';
 import { get } from 'lodash';
 import { EventService } from '../../../utilities/events/event.service';
 import { OrganizationHelper } from '../helpers/organization.helper';
@@ -9,7 +9,7 @@ import { OrganizationHelper } from '../helpers/organization.helper';
 export class OrganizationIntegrationsService extends BaseWorker {
   constructor(
     private readonly cache: CacheService,
-    private readonly locations: LocationsService,
+    private readonly facilities: FacilitiesService,
     private readonly mqtt: MqttService,
     private readonly helper: OrganizationHelper,
     private readonly prisma: PrismaService,
@@ -24,7 +24,6 @@ export class OrganizationIntegrationsService extends BaseWorker {
    *
    * @param {AuthenticatedUser} user - The authenticated user.
    * @param {string} orgId
-   * @param location_id
    * @param {boolean} bpc - Flag indicating whether to use cached data.
    * @returns {Promise<any>} - A promise that resolves to the data retrieved from the integrations.
    * @throws {Error} - If an error occurs during retrieval.
@@ -61,7 +60,7 @@ export class OrganizationIntegrationsService extends BaseWorker {
     }
   }
 
-  async createLocationIntegration(
+  async createFacilityIntegration(
     req: any,
     orgId: string,
     locId: string,
@@ -76,7 +75,7 @@ export class OrganizationIntegrationsService extends BaseWorker {
     try {
       const service = await this.prisma.service_definitions.findUnique({
         where: {
-          id: body.service_definition_id,
+          name: 'cold-platform-bayou',
         },
       });
 
@@ -90,7 +89,7 @@ export class OrganizationIntegrationsService extends BaseWorker {
         },
         include: {
           integrations: true,
-          locations: true,
+          facilities: true,
         },
       });
 
@@ -98,30 +97,30 @@ export class OrganizationIntegrationsService extends BaseWorker {
         throw new UnprocessableEntityException(`Organization ${orgId} is invalid.`);
       }
 
-      let location;
+      let facility;
 
       if (locId) {
-        location = org.locations.find(l => l.id === locId);
+        facility = org.facilities.find(l => l.id === locId);
       } else {
-        location = org.locations.find(l => l.address === body.metadata?.address);
+        facility = org.facilities.find(l => l.address === body.metadata?.address);
       }
 
-      if (!location) {
-        location = await this.locations.createOrganizationLocation(user, orgId, body.metadata);
+      if (!facility) {
+        facility = await this.facilities.createOrganizationFacility(user, orgId, body.metadata);
       }
 
-      const response = await this.rabbit.request(
+      await this.rabbit.publish(
         get(service.definition, 'rabbitMQ.rpcOptions.routing_key', 'deadletter'),
         {
           data: {
             organization: org,
-            location_id: location.id,
+            facility_id: facility.id,
             service_definition_id: service.id,
             metadata: body.metadata,
             user: user,
           },
           from: 'cold.api',
-          event: 'integration.enabled',
+          event: 'facility.integration.enabled',
         },
         {
           exchange: 'amq.direct',
@@ -134,23 +133,12 @@ export class OrganizationIntegrationsService extends BaseWorker {
         action: 'create',
         status: 'complete',
         data: {
-          ...response,
+          facility: facility,
+          organization: org,
+          service_definition: service,
+          metadata: body.metadata,
         },
       });
-
-      switch (response.status) {
-        case 201:
-        case 200:
-          return response.data;
-        case 404:
-          throw new NotFoundException(response.response);
-        case 409:
-          throw new ConflictException(response.response);
-        case 422:
-          throw new UnprocessableEntityException(response.response);
-        default:
-          return response;
-      }
     } catch (e: any) {
       this.logger.error(e.message, { user });
 

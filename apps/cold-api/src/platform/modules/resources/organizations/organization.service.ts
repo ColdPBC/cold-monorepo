@@ -211,6 +211,9 @@ export class OrganizationService extends BaseWorker {
 
         let org = (await this.prisma.organizations.findUnique({
           where: filter,
+          include: {
+            facilities: true,
+          },
         })) as unknown as Auth0Organization;
 
         if (org) {
@@ -371,7 +374,7 @@ export class OrganizationService extends BaseWorker {
         });
 
         if (org.street_address && org.city && org.state && org.zip) {
-          const location = await this.prisma.organization_locations.create({
+          const facility = await this.prisma.organization_facilities.create({
             data: {
               name: 'Default',
               organization_id: existing.id,
@@ -383,7 +386,7 @@ export class OrganizationService extends BaseWorker {
             },
           });
 
-          await this.cache.set(`organizations:${existing.id}:locations`, location, {
+          await this.cache.set(`organizations:${existing.id}:facilities`, facility, {
             ttl: 60 * 60 * 24 * 7,
             update: true,
           });
@@ -424,7 +427,7 @@ export class OrganizationService extends BaseWorker {
           id: existing.id,
         },
         include: {
-          locations: true,
+          facilities: true,
           integrations: true,
         },
       })) as organizations;

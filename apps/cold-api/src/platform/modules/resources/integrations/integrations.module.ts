@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { IntegrationsController } from './integrations.controller';
 import { IntegrationsService } from './integrations.service';
-import { LocationsModule } from '../organizations/locations/locations.module';
+import { FacilitiesModule } from '../organizations/facilities/facilities.module';
 
 @Module({
-  imports: [LocationsModule],
+  imports: [FacilitiesModule],
   controllers: [IntegrationsController],
   providers: [IntegrationsService],
   exports: [IntegrationsService],
