@@ -28,14 +28,9 @@ const _SurveyInput = (props: SurveyInputProps) => {
 
   const getDisplayValue = () => {
     // get the value to be displayed
-    // if the value is undefined, then use the ai_response value
-    // if the ai_response value is invalid, then use the value
     let displayValue = value;
-    if (isUndefined(displayValue)) {
+    if (isUndefined(displayValue) && isAIResponseValueValid(props)) {
       displayValue = ai_response?.answer;
-    }
-    if (!isAIResponseValueValid(props)) {
-      displayValue = value;
     }
     return displayValue;
   };
@@ -254,7 +249,7 @@ const _SurveyInput = (props: SurveyInputProps) => {
   const getAISource = () => {
     let justification = '';
     let originalAnswer = '';
-    if (ai_attempted && !isUndefined(ai_response) && !isUndefined(ai_response.answer) && ai_response.justification) {
+    if (ai_attempted && !isUndefined(ai_response) && !isUndefined(ai_response.answer) && ai_response.justification && isAIResponseValueValid(props)) {
       justification = ai_response.justification;
       if (!isUndefined(value)) {
         if (ai_response.answer === true) {
