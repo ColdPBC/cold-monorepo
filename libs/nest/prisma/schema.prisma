@@ -484,6 +484,14 @@ model organization_compliances {
   @@unique([organization_id, compliance_id], name: "orgKeyCompKey")
 }
 
+model emission_scopes {
+  id         String   @id @default(cuid())
+  scope      String
+  label      String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
 enum integration_service_type {
   provider
   platform
