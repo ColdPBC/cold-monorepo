@@ -978,14 +978,16 @@
         },
         "/surveys/{name}": {
             "get": {
-                "operationId": "SurveysController_findByName",
+                "operationId": "UpdateSurveyByName",
+                "summary": "Gets survey for user org by surey name",
+                "deprecated": true,
                 "parameters": [
                     {
                         "name": "name",
                         "required": true,
                         "in": "path",
                         "example": "{{test_survey_name}}",
-                        "description": "The name of the survey to return",
+                        "description": "The name of the survey definition to return",
                         "schema": {
                             "type": "string"
                         }
@@ -1046,6 +1048,7 @@
             "patch": {
                 "operationId": "UpdateSurveyByName",
                 "summary": "Update survey by name",
+                "deprecated": true,
                 "parameters": [
                     {
                         "name": "name",
@@ -1076,6 +1079,7 @@
             "put": {
                 "operationId": "SurveysController_submit",
                 "summary": "Submit survey results",
+                "deprecated": true,
                 "parameters": [
                     {
                         "name": "name",
