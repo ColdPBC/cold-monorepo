@@ -1,3 +1,13 @@
+# [1.172.0-cold-649.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.171.0...v1.172.0-cold-649.1) (2024-03-22)
+
+
+### Features
+
+* create facilities resource ([de6c960](https://github.com/ColdPBC/cold-monorepo/commit/de6c96066e2f78ab0640c93232d257f92448d306))
+* create organization_facilities model ([4bf6813](https://github.com/ColdPBC/cold-monorepo/commit/4bf68138490f9bea5d0ed977c66898aae9809b54))
+* create organization_facilities model ([65e31d1](https://github.com/ColdPBC/cold-monorepo/commit/65e31d1f0b6354c6a0b7e9e334461631daae9010))
+* create organization_facilities model ([4c6edaf](https://github.com/ColdPBC/cold-monorepo/commit/4c6edaf767f301f8b5d608a152e13d9dcde5968f))
+
 # [1.171.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.170.0...v1.171.0) (2024-03-22)
 
 
