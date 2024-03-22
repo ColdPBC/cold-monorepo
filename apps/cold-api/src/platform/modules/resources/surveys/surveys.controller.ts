@@ -1,7 +1,8 @@
-import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post, Put, Query, Req, UseFilters, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post, Put, Query, Req, UseFilters, UseGuards, UseInterceptors } from '@nestjs/common';
 import { ApiOAuth2, ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { survey_types } from '@prisma/client';
 import { Span } from 'nestjs-ddtrace';
+import { SurveysUpdateInterceptor } from './interceptors/surveys.update.interceptor';
 import { ResourceValidationPipe } from '../../../pipes/resource.pipe';
 import {
   BaseWorker,
@@ -36,6 +37,7 @@ export class SurveysController extends BaseWorker {
     status: 201,
     description: 'Creates a new survey',
   })
+  @UseInterceptors(SurveysUpdateInterceptor)
   @HttpCode(201)
   @Roles(...coldAdminOnly)
   create(
@@ -85,7 +87,7 @@ export class SurveysController extends BaseWorker {
     @Query('impersonateOrg') orgId?: string,
     @Query('bpc') bpc?: boolean,
   ) {
-    const response = await this.surveyService.findAll(req, { name: name, type: type }, bpc, orgId);
+    const response = await this.surveyService.findAll(req, { name: name, type: type }, bpc);
 
     return response;
 
@@ -129,10 +131,7 @@ export class SurveysController extends BaseWorker {
     @Query('name') name: string,
     @Query('bpc') bpc?: boolean,
   ) {
-    if (!name && !type) {
-      // return new HttpException('Must provide either name or type query parameters', 400);
-    }
-    const response = await this.surveyService.findAll(req, { name, type }, bpc, orgId);
+    const response = await this.surveyService.findAllSubmittedSurveysByOrg(req, { name, type }, bpc);
 
     return response;
 
@@ -156,6 +155,7 @@ export class SurveysController extends BaseWorker {
   })
   async getAllByType(
     @Param('type') type: survey_types,
+    @Query('bpc') bpc: boolean,
     @Req()
     req: {
       body: any;
@@ -164,17 +164,53 @@ export class SurveysController extends BaseWorker {
       user: IAuthenticatedUser;
     },
   ) {
-    const response = await this.surveyService.findByType(req, type);
+    const response = await this.surveyService.findDefinitionByType(req, type, bpc);
     return response;
   }
 
   @ApiTags('Surveys')
-  @Get('surveys/:name')
+  @Get('surveys/name/:name')
   @ApiParam({
     name: 'name',
     required: true,
     example: '{{test_survey_name}}',
     description: 'The name of the survey to return',
+  })
+  @ApiQuery(bpcDecoratorOptions)
+  @ApiResponse({
+    status: 200,
+    description: 'Returns a survey definition by name',
+  })
+  @Roles(...allRoles)
+  async findDefinitionByName(
+    @Param('name') name: string,
+    @Req()
+    req: {
+      body: any;
+      headers: any;
+      query: any;
+      user: IAuthenticatedUser;
+    },
+    @Query('impersonateOrg') orgId?: string,
+    @Query('bpc') bpc?: boolean,
+  ) {
+    const response = await this.surveyService.findDefinitionByName(req, name, bpc);
+
+    return response;
+  }
+
+  @ApiTags('Surveys')
+  @Get('surveys/:name')
+  @ApiOperation({
+    summary: 'Gets survey for user org by surey name',
+    operationId: 'UpdateSurveyByName',
+    deprecated: true,
+  })
+  @ApiParam({
+    name: 'name',
+    required: true,
+    example: '{{test_survey_name}}',
+    description: 'The name of the survey definition to return',
   })
   @ApiQuery({
     name: 'type',
@@ -189,7 +225,7 @@ export class SurveysController extends BaseWorker {
     description: 'Returns a survey definition by name',
   })
   @Roles(...allRoles)
-  async findOne(
+  async findByName(
     @Query('type') type: survey_types,
     @Param('name') name: string,
     @Req()
@@ -202,7 +238,7 @@ export class SurveysController extends BaseWorker {
     @Query('impersonateOrg') orgId?: string,
     @Query('bpc') bpc?: boolean,
   ) {
-    const response = await this.surveyService.findOne(name, req, bpc, orgId);
+    const response = await this.surveyService.findOne(name, req, bpc);
 
     return response;
   }
@@ -240,11 +276,13 @@ export class SurveysController extends BaseWorker {
   @ApiOperation({
     summary: 'Update survey by name',
     operationId: 'UpdateSurveyByName',
+    deprecated: true,
   })
   @ApiTags('Surveys')
   @Patch('surveys/:name')
   @Roles(...coldAdminOnly)
   @HttpCode(200)
+  @UseInterceptors(SurveysUpdateInterceptor)
   @ApiParam({
     name: 'name',
     required: true,
@@ -263,6 +301,7 @@ export class SurveysController extends BaseWorker {
 
   @ApiOperation({
     summary: 'Submit survey results',
+    deprecated: true,
   })
   @ApiTags('Surveys')
   @Put('surveys/:name')

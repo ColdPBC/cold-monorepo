@@ -69,7 +69,7 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
     throw new Error('Method not implemented.');
   }
 
-  async send(thread: OpenAI.Beta.Threads.Thread, integration: integrations, org: organizations, message: any) {
+  async send(thread: OpenAI.Beta.Threads.Thread, integration: integrations, org: organizations) {
     const run = await this.client.beta.threads.runs.create(thread.id, {
       assistant_id: integration.id,
       model: await this.darkly.getStringFlag('dynamic-gpt-assistant-model', 'gpt-3.5'),
@@ -132,9 +132,9 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
       try {
         if (typeof response === 'string') {
           response = JSON.parse(response);
-        } else {
-          return response;
         }
+
+        return response;
       } catch (e) {
         return { error: { message: 'failed to process response JSON', response } };
       }
@@ -187,7 +187,7 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
       }
 
       this.logger.info(`Created message for ${item.prompt}`, { ...item, message });
-      return await this.send(thread, integration, org, message);
+      return await this.send(thread, integration, org);
     } catch (e) {
       this.logger.error(e.message, e);
       throw e;
@@ -197,7 +197,7 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
   async process_survey(job: Job) {
     const { survey, user, compliance, integration, organization, on_update_url } = job.data;
     this.setTags({
-      survey: survey.definition.title,
+      survey: survey?.definition?.title,
       url: on_update_url,
       organization: {
         name: organization.name,

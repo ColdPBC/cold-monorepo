@@ -1,3 +1,90 @@
+# [1.171.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.170.0...v1.171.0) (2024-03-22)
+
+
+### Features
+
+* add cookie to set 5 min expiration when users start the automation ([85abae0](https://github.com/ColdPBC/cold-monorepo/commit/85abae0a4279c8a04aec9261ee8f95b3b7998263))
+
+# [1.170.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.169.0...v1.170.0) (2024-03-22)
+
+
+### Features
+
+* update util function with missing operators and reuse it in the old survey questionnaire ([9913391](https://github.com/ColdPBC/cold-monorepo/commit/991339142cebe41ceba416c32eb83035777a74a9))
+
+# [1.169.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.168.0...v1.169.0) (2024-03-21)
+
+
+### Features
+
+* add question number to saved and regular questionnaire ([4fa114c](https://github.com/ColdPBC/cold-monorepo/commit/4fa114c932544f461b85024062f1178d95f93f5d))
+
+# [1.168.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.167.3...v1.168.0) (2024-03-21)
+
+
+### Bug Fixes
+
+* correct subcategory journey preview story ([53c12d3](https://github.com/ColdPBC/cold-monorepo/commit/53c12d371f851ce202586c6c8ed2d80f63ae3dff))
+
+
+### Features
+
+* handle local storage for expanded sections ([107c803](https://github.com/ColdPBC/cold-monorepo/commit/107c8035c92c52126b5e6e12b954095befeb5c10))
+* remove percent slider unnecessary try catch when parsing int ([1f069ae](https://github.com/ColdPBC/cold-monorepo/commit/1f069aee24545afd1e4106cd0da4c3398b76e6cd))
+* update dismissible to use org partitioned local storage ([a71be34](https://github.com/ColdPBC/cold-monorepo/commit/a71be341acc7a3ff9937f2b6dfe22a74fc60ed90))
+
+## [1.167.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.167.2...v1.167.3) (2024-03-21)
+
+
+### Bug Fixes
+
+* remove SurveyUpdate interceptor from update ([000ecb4](https://github.com/ColdPBC/cold-monorepo/commit/000ecb4406db01c3db035c74cf176045f2a50cbd))
+
+## [1.167.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.167.1...v1.167.2) (2024-03-20)
+
+
+### Bug Fixes
+
+* issue that could result in AI responses not being returned ([d96e71d](https://github.com/ColdPBC/cold-monorepo/commit/d96e71d611eb10a601e50c541d8abb82861a557c))
+
+## [1.167.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.167.0...v1.167.1) (2024-03-20)
+
+
+### Bug Fixes
+
+* route to return all survey results for an org. ([3a17571](https://github.com/ColdPBC/cold-monorepo/commit/3a1757146c66f4e71ad74980a4a691f8fa8cc73d))
+* route to return all survey results for an org. ([919d05e](https://github.com/ColdPBC/cold-monorepo/commit/919d05e69bdae1f992b912a591adc522e32cd0f4))
+
+# [1.167.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.166.1...v1.167.0) (2024-03-20)
+
+
+### Features
+
+* make assistant instructions configurable from launch darkly ([9c16e88](https://github.com/ColdPBC/cold-monorepo/commit/9c16e88a1e8378902ab110cceafc1fbe48c9c633))
+
+
+## [1.166.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.166.0...v1.166.1) (2024-03-20)
+
+
+### Bug Fixes
+
+* bug with `GET /surveys` route.  Was returning empty array now returns all survey definitions. ([097621a](https://github.com/ColdPBC/cold-monorepo/commit/097621ac826763dc3238bd79def73bd190ee1f1b))
+* deprecate old survey routes ([3eaefcd](https://github.com/ColdPBC/cold-monorepo/commit/3eaefcdeeaa8cce0a4e370da8d4665cff4043e7a))
+
+* route to return all survey results for an org. ([919d05e](https://github.com/ColdPBC/cold-monorepo/commit/919d05e69bdae1f992b912a591adc522e32cd0f4))
+* store job data in cache so that it can be used to cancel previous jobs ([93d8811](https://github.com/ColdPBC/cold-monorepo/commit/93d88113adbac36cba9660122c41f825fbfed8f7))
+* survey data bugs ([5074dd6](https://github.com/ColdPBC/cold-monorepo/commit/5074dd6fbe1b73e35f02deb096fda2958c096664))
+
+
+## [1.166.1-cold-647.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.166.0...v1.166.1-cold-647.1) (2024-03-20)
+
+
+### Bug Fixes
+
+* store job data in cache so that it can be used to cancel previous jobs ([93d8811](https://github.com/ColdPBC/cold-monorepo/commit/93d88113adbac36cba9660122c41f825fbfed8f7))
+* survey data bugs ([5074dd6](https://github.com/ColdPBC/cold-monorepo/commit/5074dd6fbe1b73e35f02deb096fda2958c096664))
+
+
 # [1.166.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.165.1...v1.166.0) (2024-03-19)
 
 
@@ -33,6 +120,7 @@
 
 * add saved survey questionnaire handling ([54298db](https://github.com/ColdPBC/cold-monorepo/commit/54298db19b686c890092d3b04eb159104b0cbe33))
 * check for saved questions only in the saved questions section ([d2a7e35](https://github.com/ColdPBC/cold-monorepo/commit/d2a7e35d96fa52e29c19f2949d75f9fa4bf95397))
+
 
 ## [1.163.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.163.0...v1.163.1) (2024-03-15)
 

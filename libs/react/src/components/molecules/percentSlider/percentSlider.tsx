@@ -30,19 +30,15 @@ export const PercentSlider = (props: PercentSliderProps) => {
 
   const getInputValue = () => {
     let formattedValue = inputValue === null ? '' : inputValue;
-    try {
-      formattedValue = parseInt(formattedValue);
-      if (isNaN(formattedValue)) {
-        formattedValue = null;
-      } else {
-        if (formattedValue > 100) {
-          formattedValue = 100;
-        } else if (formattedValue < 0) {
-          formattedValue = 0;
-        }
-      }
-    } catch (e) {
+    formattedValue = parseInt(formattedValue);
+    if (isNaN(formattedValue)) {
       formattedValue = null;
+    } else {
+      if (formattedValue > 100) {
+        formattedValue = 100;
+      } else if (formattedValue < 0) {
+        formattedValue = 0;
+      }
     }
     return formattedValue;
   };
@@ -52,19 +48,15 @@ export const PercentSlider = (props: PercentSliderProps) => {
       return 0;
     } else {
       let formattedValue = inputValue;
-      try {
-        formattedValue = parseInt(formattedValue);
-        if (isNaN(formattedValue)) {
-          formattedValue = null;
-        } else {
-          if (formattedValue > 100) {
-            formattedValue = 100;
-          } else if (formattedValue < 0) {
-            formattedValue = 0;
-          }
-        }
-      } catch (e) {
+      formattedValue = parseInt(formattedValue);
+      if (isNaN(formattedValue)) {
         formattedValue = null;
+      } else {
+        if (formattedValue > 100) {
+          formattedValue = 100;
+        } else if (formattedValue < 0) {
+          formattedValue = 0;
+        }
       }
       return formattedValue;
     }
