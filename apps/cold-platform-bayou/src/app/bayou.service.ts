@@ -274,7 +274,7 @@ export class BayouService extends BaseWorker implements OnModuleInit {
 
   toBayouPayload(data: { user: IAuthenticatedUser; organization: Organizations; location_id: string; metadata: never }) {
     if (!data.organization['id']) throw new UnprocessableEntityException('No organization id found in payload');
-    if (!data.organization.locations) throw new UnprocessableEntityException('No organization locations found in payload');
+    if (!data.organization.locations) throw new UnprocessableEntityException('No organization facilities found in payload');
     const location = data.organization.locations.find(l => l.id === data.location_id);
     if (!location) throw new UnprocessableEntityException(`No location found for ${data.location_id}`);
     if (!data.location_id) throw new UnprocessableEntityException('No location id found in payload');
