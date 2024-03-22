@@ -7,10 +7,28 @@ import { axiosFetcher } from '@coldpbc/fetchers';
 import { useAuth0Wrapper, useColdContext, useOrgSWR } from '@coldpbc/hooks';
 import { ErrorType } from '@coldpbc/enums';
 import { withErrorBoundary } from 'react-error-boundary';
+import { useLDClient } from 'launchdarkly-react-client-sdk';
+import { LDContext } from '@launchdarkly/node-server-sdk';
 
 const _ComplianceWizard = () => {
   const { name } = useParams();
   const { orgId } = useAuth0Wrapper();
+  const ldClient = useLDClient();
+  if (ldClient && orgId && name) {
+    const orgContext: LDContext = {
+      kind: 'organization',
+      key: orgId,
+    };
+    const complianceContext: LDContext = {
+      kind: 'complianceSet',
+      key: name,
+    };
+    ldClient.identify({
+      kind: 'multi',
+      organization: orgContext,
+      complianceSet: complianceContext,
+    });
+  }
   const compliances = useSWR<Compliance[], any, any>(['/compliance_definitions', 'GET'], axiosFetcher);
   const orgCompliances = useSWR<OrgCompliance[], any, any>([`/compliance_definitions/organizations/${orgId}`, 'GET'], axiosFetcher);
 

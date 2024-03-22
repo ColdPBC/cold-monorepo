@@ -350,7 +350,10 @@ const _ComplianceSurveyQuestionnaire = (props: ComplianceSurveyQuestionnaireProp
 
   const onNextButtonClicked = async () => {
     setSendingSurvey(true);
-    const newSurvey = updateSurveyQuestion(surveyData, activeKey, { value: getQuestionValue(surveyData, activeKey), skipped: false });
+    const newSurvey = updateSurveyQuestion(surveyData, activeKey, {
+      value: getQuestionValue(surveyData, activeKey),
+      skipped: false,
+    });
     const response = (await putSurveyData(newSurvey as ComplianceSurveyPayloadType, getOrgSpecificUrl)) as ComplianceSurveyPayloadType;
     const sortedSurvey = sortComplianceSurvey(response);
     setSurveyData(sortedSurvey);
@@ -382,7 +385,15 @@ const _ComplianceSurveyQuestionnaire = (props: ComplianceSurveyQuestionnaireProp
   const onSubmitButtonClicked = async () => {
     // tell the difference between a skipped question and a question that was answered
     setSendingSurvey(true);
-    const newSurvey = updateSurveyQuestion(surveyData, activeKey, { value: getQuestionValue(surveyData, activeKey), skipped: false }, true);
+    const newSurvey = updateSurveyQuestion(
+      surveyData,
+      activeKey,
+      {
+        value: getQuestionValue(surveyData, activeKey),
+        skipped: false,
+      },
+      true,
+    );
     const response = (await putSurveyData(newSurvey as ComplianceSurveyPayloadType, getOrgSpecificUrl)) as ComplianceSurveyPayloadType;
     const sortedSurvey = sortComplianceSurvey(response);
     setSurveyData(sortedSurvey);
