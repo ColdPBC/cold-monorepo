@@ -1,3 +1,10 @@
+# [1.171.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.170.0...v1.171.0) (2024-03-22)
+
+
+### Features
+
+* add cookie to set 5 min expiration when users start the automation ([85abae0](https://github.com/ColdPBC/cold-monorepo/commit/85abae0a4279c8a04aec9261ee8f95b3b7998263))
+
 # [1.170.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.169.0...v1.170.0) (2024-03-22)
 
 
