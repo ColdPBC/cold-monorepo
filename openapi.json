@@ -1924,9 +1924,9 @@
                 ]
             }
         },
-        "/organizations/{orgId}/locations": {
+        "/organizations/{orgId}/facilities": {
             "get": {
-                "operationId": "LocationsController_getLocations",
+                "operationId": "FacilitiesController_getLocations",
                 "parameters": [
                     {
                         "name": "orgId",
@@ -1943,7 +1943,7 @@
                     }
                 },
                 "tags": [
-                    "Organizations : Locations"
+                    "Organizations : Facilities"
                 ],
                 "security": [
                     {
@@ -1954,8 +1954,8 @@
                 ]
             },
             "post": {
-                "operationId": "createLocation",
-                "summary": "Create Organization Location",
+                "operationId": "createFacility",
+                "summary": "Create Organization Facility",
                 "parameters": [
                     {
                         "name": "orgId",
@@ -2002,7 +2002,7 @@
                     }
                 },
                 "tags": [
-                    "Organizations : Locations"
+                    "Organizations : Facilities"
                 ],
                 "security": [
                     {
@@ -2473,10 +2473,10 @@
                 }
             }
         },
-        "/organizations/{orgId}/locations/{locId}/integrations": {
+        "/organizations/{orgId}/facilities/{facId}/integrations": {
             "post": {
-                "operationId": "createLocationIntegration",
-                "summary": "Create Organization Location Specific Integration",
+                "operationId": "createFacilityIntegration",
+                "summary": "Create Organization Facility Integration",
                 "parameters": [
                     {
                         "name": "orgId",
@@ -2489,7 +2489,7 @@
                         }
                     },
                     {
-                        "name": "locId",
+                        "name": "facId",
                         "required": true,
                         "in": "path",
                         "schema": {
