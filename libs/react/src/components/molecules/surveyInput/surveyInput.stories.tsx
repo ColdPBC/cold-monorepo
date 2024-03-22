@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { SurveyInput, SurveyInputProps } from './surveyInput';
-import { isNumber } from 'lodash';
-import { isAIResponseValueValid } from '@coldpbc/lib';
 
 const meta: Meta<typeof SurveyInput> = {
   title: 'Molecules/SurveyInput',
@@ -143,12 +141,12 @@ export const AiAnswer: Story = {
     prompt: 'Tell me about your product',
     options: [],
     tooltip: '',
-    component: 'select',
+    component: 'yes_no',
     placeholder: 'Write a few sentences about your product',
     ai_attempted: true,
     ai_response: {
       justification: '*Lorem Ipsum Dolor Et Amo sflksjdflksdjfldsjkfs*',
-      answer: '1',
+      answer: true,
     },
   },
 };
@@ -206,15 +204,32 @@ export const MultiText: Story = {
   },
 };
 
+export const AIIncorrectAIAnswer: Story = {
+  render: args => {
+    return <SurveyInputStory {...args} />;
+  },
+  args: {
+    input_key: 'product:0',
+    prompt: 'Tell me about your product',
+    options: [],
+    tooltip: '',
+    component: 'yes_no',
+    placeholder: 'Write a few sentences about your product',
+    ai_attempted: true,
+    ai_response: {
+      justification: '*Lorem Ipsum Dolor Et Amo sflksjdflksdjfldsjkfs*',
+      answer: 'true',
+    },
+  },
+};
+
 const SurveyInputStory = (props: SurveyInputProps) => {
   const { input_key, prompt, options, tooltip, component, placeholder, value } = props;
   const [stateValue, setStateValue] = useState<any>(value);
-  console.log(isAIResponseValueValid(props));
   return (
     <SurveyInput
       {...props}
       onFieldUpdated={(name: string, value: any) => {
-        console.log('onFieldUpdated', isNumber(value), value);
         setStateValue(value);
       }}
       value={stateValue}
