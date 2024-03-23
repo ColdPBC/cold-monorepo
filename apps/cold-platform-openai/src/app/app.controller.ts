@@ -47,15 +47,14 @@ export class OpenAIController extends BaseWorker {
     for (const asst of assts) {
       const int = await this.prisma.integrations.findUnique({ where: { id: asst.id } });
       if (!int) {
-        this.logger.warn(`No integration found for assistant ${asst.id} in ${process.env['NODE_ENV']}`);
+        this.logger.warn(`No integration found for assistant ${asst.name}(${asst.id}) in ${process.env['NODE_ENV']}`);
       }
 
       const org = await this.prisma.organizations.findUnique({ where: { name: asst.name } });
-      if (!int) {
-        this.logger.warn(`No organization found for assistant ${asst.name} in ${process.env['NODE_ENV']}`);
-      }
-
-      if (org?.isTest) {
+      if (!org) {
+        this.logger.warn(`No organization found for assistant ${asst.name}(${asst.id}) in ${process.env['NODE_ENV']}`);
+      } else if (org?.isTest) {
+        this.logger.warn(`deleting assistant ${asst.name}(${asst.id})`, { org, integration: int });
         //await this.app.deleteAssistant({ user: req.user, integration: { id: asst.id } });
       }
     }

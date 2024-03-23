@@ -75,6 +75,7 @@ export class AppService extends BaseWorker implements OnModuleInit {
 
       return assistant;
     } catch (e) {
+      this.logger.error(`FAILED: delete assistant ${integration.id}`, { ...parsed });
       this.handleError(e.message, { error: e, parsed });
     }
   }
