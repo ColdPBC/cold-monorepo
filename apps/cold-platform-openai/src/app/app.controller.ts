@@ -1,5 +1,5 @@
 import { Controller, Delete, Get, HttpCode, Param, Post, Put, Req, UploadedFile, UseFilters, UseGuards, UseInterceptors } from '@nestjs/common';
-import { allRoles, BaseWorker, coldAdminOnly, HttpExceptionFilter, IAuthenticatedUser, JwtAuthGuard, OrgUserInterceptor, Roles, RolesGuard } from '@coldpbc/nest';
+import { allRoles, BaseWorker, coldAdminOnly, HttpExceptionFilter, IAuthenticatedUser, JwtAuthGuard, OrgUserInterceptor, PrismaService, Roles, RolesGuard } from '@coldpbc/nest';
 import { AppService } from './app.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { FileService } from './assistant/files/file.service';
@@ -8,7 +8,7 @@ import { FileService } from './assistant/files/file.service';
 @UseFilters(new HttpExceptionFilter(OpenAIController.name))
 @Controller()
 export class OpenAIController extends BaseWorker {
-  constructor(private app: AppService, private readonly files: FileService) {
+  constructor(private app: AppService, private readonly files: FileService, private readonly prisma: PrismaService) {
     super(OpenAIController.name);
   }
 
@@ -33,6 +33,32 @@ export class OpenAIController extends BaseWorker {
     @Param('id') assistantId: string,
   ) {
     return this.app.deleteAssistant({ user: req.user, integration: { id: assistantId } });
+  }
+
+  @Delete('assistants')
+  @Roles(...coldAdminOnly)
+  async deleteAllAssistants(
+    @Req()
+    req: {
+      user: IAuthenticatedUser;
+    },
+  ) {
+    const assts = await this.app.listAssistants(req.user);
+    for (const asst of assts) {
+      const int = await this.prisma.integrations.findUnique({ where: { id: asst.id } });
+      if (!int) {
+        this.logger.warn(`No integration found for assistant ${asst.id} in ${process.env['NODE_ENV']}`);
+      }
+
+      const org = await this.prisma.organizations.findUnique({ where: { name: asst.name } });
+      if (!int) {
+        this.logger.warn(`No organization found for assistant ${asst.name} in ${process.env['NODE_ENV']}`);
+      }
+
+      if (org?.isTest) {
+        //await this.app.deleteAssistant({ user: req.user, integration: { id: asst.id } });
+      }
+    }
   }
 
   @Roles(...coldAdminOnly)

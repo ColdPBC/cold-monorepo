@@ -187,6 +187,31 @@
                 ]
             }
         },
+        "/organizations/testOrgs": {
+            "delete": {
+                "operationId": "DeleteTestOrgs",
+                "summary": "Delete Test Organizations",
+                "description": "Deletes all test organizations",
+                "parameters": [],
+                "responses": {
+                    "204": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Organizations"
+                ],
+                "security": [
+                    {
+                        "oauth2": [
+                            "openid",
+                            "email",
+                            "profile"
+                        ]
+                    }
+                ]
+            }
+        },
         "/organizations/{orgId}/files": {
             "get": {
                 "operationId": "OrganizationFilesController_getFiles",

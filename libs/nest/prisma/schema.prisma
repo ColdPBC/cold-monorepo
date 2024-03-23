@@ -311,7 +311,7 @@ model organization_facilities {
   postal_code     String
   emissions       emissions[]
   integrations    integrations[]
-  organizations   organizations   @relation(fields: [organization_id], references: [id])
+  organizations   organizations   @relation(fields: [organization_id], references: [id], onDelete: Cascade)
   utility_bills   utility_bills[]
 }
 
@@ -345,15 +345,15 @@ model integrations {
   /// @DtoReadOnly
   /// @zod.custom.use(z.date().optional())
   updated_at            DateTime                 @updatedAt
-  location_id           String?
+  facility_id           String?
   emissions             emissions[]
-  location              organization_facilities? @relation(fields: [location_id], references: [id], onDelete: Cascade)
-  organization          organizations            @relation(fields: [organization_id], references: [id])
+  facility              organization_facilities? @relation(fields: [facility_id], references: [id], onDelete: Cascade)
+  organization          organizations            @relation(fields: [organization_id], references: [id], onDelete: Cascade)
   service_definition    service_definitions      @relation(fields: [service_definition_id], references: [id], onDelete: Cascade)
   files                 organization_files[]
   unility_bills         utility_bills[]
 
-  @@unique([service_definition_id, location_id], name: "integrationKey")
+  @@unique([service_definition_id, facility_id], name: "integrationKey")
 }
 
 /// @namespace Supported Utilities
@@ -408,11 +408,11 @@ model emissions {
   co2e_calculation_origin String
   co2e_unit               String
   emission_factor         Json
-  location_id             String
+  facility_id             String
   co2_calculation_method  String
   constituent_gases       Json
   integrations            integrations            @relation(fields: [integration_id], references: [id], onDelete: Cascade)
-  location                organization_facilities @relation(fields: [location_id], references: [id], onDelete: Cascade)
+  facility                organization_facilities @relation(fields: [facility_id], references: [id], onDelete: Cascade)
 }
 
 /// @namespace Utility Bills
@@ -426,10 +426,10 @@ model utility_bills {
   data            Json
   created_at      DateTime                @default(now())
   updated_at      DateTime                @updatedAt
-  location_id     String
+  facility_id     String
   organization_id String
   integration     integrations            @relation(fields: [integration_id], references: [id], onDelete: Cascade)
-  location        organization_facilities @relation(fields: [location_id], references: [id], onDelete: Cascade)
+  facility        organization_facilities @relation(fields: [facility_id], references: [id], onDelete: Cascade)
   organization    organizations           @relation(fields: [organization_id], references: [id], onDelete: Cascade)
 }
 

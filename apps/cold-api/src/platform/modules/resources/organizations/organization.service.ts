@@ -2,7 +2,7 @@ import { HttpService } from '@nestjs/axios';
 import { ConflictException, HttpException, Injectable, NotFoundException, UnauthorizedException, UnprocessableEntityException } from '@nestjs/common';
 import { Span } from 'nestjs-ddtrace'; // eslint-disable-next-line @nx/enforce-module-boundaries
 import { Auth0Organization, Auth0TokenService, BaseWorker, CacheService, DarklyService, MqttService, PrismaService, Tags } from '@coldpbc/nest';
-import { filter, first, get, kebabCase, merge, omit, pick, set } from 'lodash';
+import { get, kebabCase, merge, omit, pick, set } from 'lodash';
 import { AxiosRequestConfig } from 'axios';
 import { CreateOrganizationDto } from './dto/organization.dto';
 import { organizations } from '@prisma/client';
@@ -122,17 +122,18 @@ export class OrganizationService extends BaseWorker {
     filters?: {
       id?: string;
       name?: string;
+      isTest?: boolean;
     } | null,
-  ): Promise<Auth0Organization | Array<Auth0Organization> | Error> {
+  ): Promise<Array<Auth0Organization>> {
     try {
       // if supplied, check filter has required properties
-      if (filters && !filters.id && !filters.name) {
-        this.logger.warn('invalid filter supplied, function will return array of organizations', filters);
+      if (filters && !filters.id && !filters.name && !filters.isTest) {
+        this.logger.warn('invalid filter supplied, function will return array of all organizations', filters);
 
         filters = null;
       }
 
-      let orgs: Array<Auth0Organization> | undefined;
+      let orgs: any;
 
       if (!bpc) {
         orgs = (await this.cache.get('organizations')) as Array<Auth0Organization>;
@@ -142,15 +143,25 @@ export class OrganizationService extends BaseWorker {
       if (!orgs) {
         this.options = await this.utilService.init();
 
-        const response = await this.httpService.axiosRef.get(`/organizations`, this.options);
+        //const response = await this.httpService.axiosRef.get(`/organizations`, this.options);
 
-        if (!response.data) {
-          return new NotFoundException(`No Organizations found`);
+        const queryOptions = {
+          include: {
+            facilities: true,
+          },
+        };
+
+        if (filters) {
+          set(queryOptions, 'where', { ...filters });
         }
 
-        orgs = response.data;
+        orgs = await this.prisma.organizations.findMany(queryOptions);
 
-        this.cache.set('organizations', response.data, {
+        if (!orgs) {
+          throw new NotFoundException(`No Organizations found`);
+        }
+
+        this.cache.set('organizations', orgs, {
           update: true,
           wildcard: true,
         });
@@ -160,6 +171,7 @@ export class OrganizationService extends BaseWorker {
         throw new NotFoundException(`No Organizations found`);
       }
 
+      /*
       // if filter was supplied return org matching filter
       if (filters && Array.isArray(orgs)) {
         const found = first(filter(orgs, filters)) as Auth0Organization;
@@ -179,7 +191,7 @@ export class OrganizationService extends BaseWorker {
 
         return org;
       }
-
+*/
       // return all orgs
       return orgs;
     } catch (e) {
@@ -455,21 +467,20 @@ export class OrganizationService extends BaseWorker {
 
   /***
    * Delete an organization in Auth0
-   * @param orgId
+   * @param org
    * @param req
    */
-  async deleteOrganization(orgId: string, req: any) {
-    const { user, url } = req;
-    // get org by id or name
-    let org;
+  async deleteOrganization(org: any, req: any) {
+    const { user, url, organization } = req;
+
     try {
-      try {
+      /*try {
         org = (await this.getOrganization(orgId, req, false)) as Auth0Organization;
       } catch (e) {
         if (e.status !== 404) {
           throw e;
         }
-      }
+      }*/
 
       this.tags = merge(this.tags, {
         organization: omit(org, ['branding', 'phone', 'street_address', 'created_at', 'updated_at']),
@@ -477,8 +488,8 @@ export class OrganizationService extends BaseWorker {
         status: 'started',
       });
 
-      if (!orgId?.includes('org_')) {
-        throw new UnprocessableEntityException(`${orgId} is not a valid organization id`);
+      if (!org?.id?.includes('org_')) {
+        throw new UnprocessableEntityException(`${org.id} is not a valid organization id`);
       }
 
       // don't del cold-climate
@@ -486,27 +497,12 @@ export class OrganizationService extends BaseWorker {
         throw new HttpException('cannot delete cold-climate org', 422);
       }
 
-      // if org not found in db and the function was called with an org name throw error
-      if (!orgId.includes('org_') && !org?.id) {
-        // org not found in db
-
-        throw new HttpException(
-          `Unable to find org name: ${orgId} in the database.  To insure this gets deleted from auth0, you must call this route again with the org id instead of name`,
-          404,
-        );
-      }
-
-      // Use id returned from db if orgId is not an id
-      if (!orgId.includes('org_')) {
-        orgId = org.id;
-      }
-
       // delete org from auth0
       try {
         this.options = await this.utilService.init();
-        await this.httpService.axiosRef.delete(`/organizations/${orgId}`, this.options);
+        await this.httpService.axiosRef.delete(`/organizations/${org.id}`, this.options);
 
-        this.logger.info(`organization ${orgId} deleted from auth0`);
+        this.logger.info(`organization ${org.id} deleted from auth0`);
       } catch (e) {
         if (e.response.status !== 404) {
           set(this.tags, 'status', 'failed');
@@ -525,32 +521,53 @@ export class OrganizationService extends BaseWorker {
           this.metrics.increment('cold.api.organizations.delete');
 
           this.logger.error(e, { ...e.response?.data });
-          throw new UnprocessableEntityException(e.message, e.response?.data);
-        } else {
-          throw new NotFoundException(`Organization ${orgId} not found`);
+          // continue if Auth0 begins rate limiting
+          if (e.response.status !== 429) {
+            throw new UnprocessableEntityException(e.message, e.response?.data);
+          }
         }
       }
 
-      // delete org from db
+      // delete org assistant from openAI
+      try {
+        const serviceReponses = await this.events.sendIntegrationEvent(true, 'organization.deleted', { organization }, req);
+
+        this.logger.info(`organization ${org.id} deleted response received from services`, serviceReponses);
+      } catch (e) {
+        this.logger.error(e.message, { ...e.response?.data });
+      }
+
+      // if org not found in db and the function was called with an org name throw error
+      if (!org.id.includes('org_') && !org?.id) {
+        // org not found in db
+
+        throw new HttpException(
+          `Unable to find org name: ${org.id} in the database.  To insure this gets deleted from auth0, you must call this route again with the org id instead of name`,
+          404,
+        );
+      }
+
       if (org) {
         try {
+          // delete org from db
           await this.prisma.organizations.delete({
             where: {
-              id: orgId,
+              id: org.id,
             },
           });
 
-          this.logger.info(`organization ${orgId} deleted from db`);
+          this.logger.info(`organization ${org.id} deleted from db`);
         } catch (e) {
           if (!e.message.includes('Record to delete does not exist')) {
             this.logger.error(e.message, { ...e.response?.data });
           }
-          this.logger.info(`organization ${orgId} not found in db`);
+          this.logger.info(`organization ${org.id} not found in db`);
         }
       }
 
-      await this.cache.delete(`organizations:${orgId}:members`);
-      await this.cache.delete(`organizations:${orgId}:invitations`);
+      // delete org from cache
+      await this.cache.delete(`organizations:${org.id}:members`);
+      await this.cache.delete(`organizations:${org.id}:invitations`);
 
       this.mqtt.publishMQTT('cold', {
         swr_key: url,
@@ -573,6 +590,6 @@ export class OrganizationService extends BaseWorker {
     set(this.tags, 'status', 'completed');
 
     this.metrics.increment('cold.api.organizations.delete', this.tags);
-    throw new HttpException(`Organization ${orgId} deleted`, 204);
+    throw new HttpException(`Organization ${org.id} deleted`, 204);
   }
 }
