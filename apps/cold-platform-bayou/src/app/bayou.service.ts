@@ -223,14 +223,14 @@ export class BayouService extends BaseWorker implements OnModuleInit {
     const bayouCustomer = await this.getCustomer(facility_id);
 
     if (bayouCustomer) {
-      // location exists in bayou
+      // facility exists in bayou
       if (existingIntegration?.facility_id == facility_id && bayouCustomer?.external_id === facility_id) {
-        throw new ConflictException(`Bayou customer (${bayouCustomer.id}) already linked for location: ${facility_id}`);
+        throw new ConflictException(`Bayou customer (${bayouCustomer.id}) already linked for facility: ${facility_id}`);
       }
 
-      // location exists in bayou, but not linked to this service
+      // facility exists in bayou, but not linked to this service
       if (!existingIntegration) {
-        this.logger.warn(`Bayou customer (${bayouCustomer.id}) already exists for location: ${facility_id}, but no integration found in DB`, {
+        this.logger.warn(`Bayou customer (${bayouCustomer.id}) already exists for facility: ${facility_id}, but no integration found in DB`, {
           bayou_data: bayouCustomer,
         });
 
@@ -251,7 +251,7 @@ export class BayouService extends BaseWorker implements OnModuleInit {
         return bayouCustomer;
       }
     } else {
-      // location doesn't exist in bayou
+      // facility doesn't exist in bayou
       const bayouResponse = await this.axios.axiosRef.post(`https://staging.bayou.energy/api/v2/customers`, payload, this.axiosConfig);
 
       await this.prisma.integrations.create({
@@ -263,7 +263,7 @@ export class BayouService extends BaseWorker implements OnModuleInit {
         },
       });
 
-      this.logger.info(`Bayou customer (${bayouResponse.data.id}) created for location: ${facility_id}`, {
+      this.logger.info(`Bayou customer (${bayouResponse.data.id}) created for facility: ${facility_id}`, {
         org_id: orgId,
         bayou_data: bayouResponse.data,
       });
@@ -272,13 +272,19 @@ export class BayouService extends BaseWorker implements OnModuleInit {
     }
   }
 
-  toBayouPayload(data: { user: IAuthenticatedUser; organization: Organizations; location_id: string; metadata: never }) {
+  toBayouPayload(data: { user: IAuthenticatedUser; organization: Organizations; facility_id: string; metadata: never }) {
     if (!data.organization['id']) throw new UnprocessableEntityException('No organization id found in payload');
-    if (!data.organization.locations) throw new UnprocessableEntityException('No organization facilities found in payload');
-    const location = data.organization.locations.find(l => l.id === data.location_id);
-    if (!location) throw new UnprocessableEntityException(`No location found for ${data.location_id}`);
-    if (!data.location_id) throw new UnprocessableEntityException('No location id found in payload');
+
+    if (!data.organization.facilities) throw new UnprocessableEntityException('No organization facilities found in payload');
+
+    const facility = data.organization.facilities.find(l => l.id === data.facility_id);
+
+    if (!facility) throw new UnprocessableEntityException(`No facility found for ${data.facility_id}`);
+
+    if (!data.facility_id) throw new UnprocessableEntityException('No facility id found in payload');
+
     if (!data.metadata['email'] && !data.user.coldclimate_claims.email) throw new UnprocessableEntityException('No email found in payload');
+
     if (!data.metadata['utility']) throw new UnprocessableEntityException('No utility found in payload');
 
     if (!data.metadata['email']) {
@@ -287,13 +293,13 @@ export class BayouService extends BaseWorker implements OnModuleInit {
     }
 
     return {
-      external_id: data.location_id,
+      external_id: data.facility_id,
       email: data.metadata['email'],
-      street: location?.address,
-      city: location?.city,
-      state: location?.state,
-      zipcode: location?.postal_code,
-      country: location?.country || 'US',
+      street: facility?.address,
+      city: facility?.city,
+      state: facility?.state,
+      zipcode: facility?.postal_code,
+      country: facility?.country || 'US',
       utility: data.metadata['utility'],
     };
   }

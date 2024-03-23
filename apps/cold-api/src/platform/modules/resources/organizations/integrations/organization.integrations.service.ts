@@ -66,7 +66,7 @@ export class OrganizationIntegrationsService extends BaseWorker {
     locId: string,
     body: {
       service_definition_id: string;
-      location_id?: string;
+      facility_id?: string;
       timeout?: number;
       metadata: any;
     },

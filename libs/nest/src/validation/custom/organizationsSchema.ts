@@ -25,7 +25,7 @@ export const OrganizationsSchema = z.object({
         .nullable(),
     })
     .optional(),
-  locations: z.array(organization_facilitiesSchema).optional(),
+  facilities: z.array(organization_facilitiesSchema).optional(),
   phone: z.string().nullable(),
   email: z.string().email().nullable(),
   /**

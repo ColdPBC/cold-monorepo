@@ -10,13 +10,13 @@ import { FacilityBodyExample } from './examples/facility_example';
 @ApiOAuth2(['openid'])
 @Controller('organizations')
 export class FacilitiesController extends BaseWorker {
-  constructor(private readonly locationService: FacilitiesService) {
+  constructor(private readonly facilitiesService: FacilitiesService) {
     super(FacilitiesController.name);
   }
 
   @Get('/:orgId/facilities')
-  getLocations(@Req() req: any, @Param('orgId') orgId: string) {
-    return this.locationService.getOrganizationFacilities(req, orgId);
+  getFacilities(@Req() req: any, @Param('orgId') orgId: string) {
+    return this.facilitiesService.getOrganizationFacilities(req, orgId);
   }
 
   @Post('/:orgId/facilities')
@@ -28,6 +28,6 @@ export class FacilitiesController extends BaseWorker {
   @ApiParam(orgIdDecoratorOptions)
   @ApiBody(FacilityBodyExample)
   createFacility(@Req() req: any, @Param('orgId') orgId: string, @Body() body: any) {
-    return this.locationService.createOrganizationFacility(req, orgId, body);
+    return this.facilitiesService.createOrganizationFacility(req, orgId, body);
   }
 }

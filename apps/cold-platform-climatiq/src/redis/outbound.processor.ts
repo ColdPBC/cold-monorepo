@@ -24,7 +24,7 @@ export class OutboundQueueProcessor extends BaseWorker {
   async processMessages(job: Job) {
     this.logger.info(`Received new bill event`, { name: job.name, id: job.id, data: job.data });
 
-    const { integration_id, location_id, integration_data, payload } = job.data;
+    const { integration_id, facility_id, integration_data, payload } = job.data;
 
     const emission = await this.climatiq.getEmissionEstimate(payload);
 
@@ -33,7 +33,7 @@ export class OutboundQueueProcessor extends BaseWorker {
       co2e_calculation_origin: emission['co2e_calculation_origin'],
       co2e_unit: emission['co2e_unit'],
       co2_calculation_method: emission['co2e_calculation_method'],
-      location_id: location_id || job.data.location_id,
+      facility_id: facility_id || job.data.facility_id,
       integration_id: integration_id || job.data.integration.id,
       emission_factor: emission['emission_factor'],
       activity_data: emission['activity_data'],

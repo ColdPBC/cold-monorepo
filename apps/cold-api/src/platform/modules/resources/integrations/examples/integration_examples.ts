@@ -5,7 +5,7 @@ export const IntegrationBodySchema = {
     type: 'object',
     example: {
       service_definition_id: '{{test_service_definition_id}}',
-      location_id: '{{test_location_id}}',
+      facility_id: '{{test_facility_id}}',
       metadata: {
         name: 'Headquarters',
         address: '{{$randomStreetAddress}}',

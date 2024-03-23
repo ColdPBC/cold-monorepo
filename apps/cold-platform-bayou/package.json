@@ -5,7 +5,7 @@
     "service_type": "platform",
     "definition": {
       "show": true,
-      "locations": true,
+      "facilities": true,
       "mqtt": {
         "publish_options": {
           "base_topic": "/platform/bayou",
