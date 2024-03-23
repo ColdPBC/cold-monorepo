@@ -267,13 +267,6 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
       const follow_up = definition.sections[section].follow_up[item];
       this.setTags({ question: { key: item, prompt: follow_up.prompt } });
 
-      if (follow_up?.ai_response?.answer && !has(follow_up, 'ai_response.what_we_need')) {
-        this.logger.info(`Skipping ${section}.${item}: ${follow_up.prompt}; it has already been answered`, {
-          section_item: definition.sections[section].follow_up[item],
-        });
-        continue;
-      }
-
       this.setTags({ thread: thread.id });
 
       this.logger.info(`Created Thread | thread.id: ${thread.id} for ${section}.${item}`, {
@@ -288,30 +281,24 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
 
       value = this.clearValuesOnError(value);
 
-      // update the survey with the response
-      definition.sections[section].follow_up[item].ai_response = value;
       if (value) {
-        definition.sections[section].follow_up[item].ai_answered = !!value.answer;
+        // update the survey with the response
+        definition.sections[section].follow_up[item].ai_response = value;
+        definition.sections[section].follow_up[item].ai_answered = has(value, 'answer');
       }
+
       definition.sections[section].follow_up[item].ai_attempted = true;
 
       // if there is additional context, create a new run for it
       if (follow_up['additional_context']) {
-        if (definition.sections[section].follow_up[item].additional_context.ai_answered) {
-          this.logger.info(`Skipping ${section}.${item}.additional_context: ${follow_up.prompt}; it has already been answered`, {
-            section_item: definition.sections[section].follow_up[item],
-          });
-          continue;
-        }
-
         this.logger.info(`Creating Message | ${section}.${item}.additional_context: ${follow_up.prompt}`);
         let additionalValue = await this.createMessage(thread, integration, item, follow_up['additional_context'], true, organization, category_context);
 
         additionalValue = this.clearValuesOnError(additionalValue);
 
-        definition.sections[section].follow_up[item].additional_context.ai_response = additionalValue;
-
         if (additionalValue) {
+          definition.sections[section].follow_up[item].additional_context.ai_response = additionalValue;
+
           definition.sections[section].follow_up[item].additional_context.ai_answered = has(additionalValue, 'answer');
         }
 
