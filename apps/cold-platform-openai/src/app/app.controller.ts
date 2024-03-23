@@ -43,6 +43,8 @@ export class OpenAIController extends BaseWorker {
       user: IAuthenticatedUser;
     },
   ) {
+    const deletedCount: any = [];
+
     const assts = await this.app.listAssistants(req.user);
     for (const asst of assts) {
       const int = await this.prisma.integrations.findUnique({ where: { id: asst.id } });
@@ -55,9 +57,11 @@ export class OpenAIController extends BaseWorker {
         this.logger.warn(`No organization found for assistant ${asst.name}(${asst.id}) in ${process.env['NODE_ENV']}`);
       } else if (org?.isTest) {
         this.logger.warn(`deleting assistant ${asst.name}(${asst.id})`, { org, integration: int });
-        //await this.app.deleteAssistant({ user: req.user, integration: { id: asst.id } });
+        await this.app.deleteAssistant({ user: req.user, integration: { id: asst.id } });
+        deletedCount.push({ id: asst.id, name: asst.name });
       }
     }
+    return deletedCount;
   }
 
   @Roles(...coldAdminOnly)
