@@ -1,9 +1,29 @@
-## [1.169.1-cold-582.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.169.0...v1.169.1-cold-582.1) (2024-03-21)
+
+# [1.172.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.171.0...v1.172.0) (2024-03-23)
 
 
-### Bug Fixes
+### Features
 
-* bug counting questions with `null` as answer ([8d2cce2](https://github.com/ColdPBC/cold-monorepo/commit/8d2cce2ca0f6344e3cd4d3a7246cee607e4447d8))
+* emission_scopes model ([24bf372](https://github.com/ColdPBC/cold-monorepo/commit/24bf3726636eda11474f130919a01663675ac235))
+
+# [1.170.0-cold-650.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.169.0...v1.170.0-cold-650.1) (2024-03-22)
+
+# [1.171.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.170.0...v1.171.0) (2024-03-22)
+
+
+### Features
+
+
+* emission_scopes model ([24bf372](https://github.com/ColdPBC/cold-monorepo/commit/24bf3726636eda11474f130919a01663675ac235))
+* add cookie to set 5 min expiration when users start the automation ([85abae0](https://github.com/ColdPBC/cold-monorepo/commit/85abae0a4279c8a04aec9261ee8f95b3b7998263))
+
+# [1.170.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.169.0...v1.170.0) (2024-03-22)
+
+
+### Features
+
+* update util function with missing operators and reuse it in the old survey questionnaire ([9913391](https://github.com/ColdPBC/cold-monorepo/commit/991339142cebe41ceba416c32eb83035777a74a9))
+
 
 # [1.169.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.168.0...v1.169.0) (2024-03-21)
 

@@ -1,10 +1,10 @@
 import React from 'react';
 import { BaseButton, ErrorFallback, SurveyInput } from '@coldpbc/components';
-import { cloneDeep, findIndex, forEach, forOwn, isArray, isEqual } from 'lodash';
+import { cloneDeep, findIndex, forEach, forOwn } from 'lodash';
 import { IButtonProps, SurveyActiveKeyType, SurveyAdditionalContext, SurveyPayloadType, SurveySectionType } from '@coldpbc/interfaces';
 import { ButtonTypes, GlobalSizes } from '@coldpbc/enums';
 import { CSSTransition, SwitchTransition } from 'react-transition-group';
-import { getSectionIndex, isComponentTypeValid, isKeyValueFollowUp } from '@coldpbc/lib';
+import { getSectionIndex, ifAdditionalContextConditionMet, isComponentTypeValid, isKeyValueFollowUp } from '@coldpbc/lib';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { withErrorBoundary } from 'react-error-boundary';
 import { useAuth0Wrapper } from '@coldpbc/hooks';
@@ -595,55 +595,6 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
       return getQuestionForKey(activeKey, true);
     } else {
       return undefined;
-    }
-  };
-
-  const ifAdditionalContextConditionMet = (value: any, additionalContext: SurveyAdditionalContext) => {
-    switch (additionalContext.operator) {
-      case '==':
-        // make comparison for arrays if both the value and comparison are arrays
-        if (isArray(value) && isArray(additionalContext.comparison)) {
-          return isEqual(value, additionalContext.comparison);
-        }
-        return isEqual(value, additionalContext.comparison);
-      case '!=':
-        return value !== additionalContext.comparison;
-      case '>':
-        return value > additionalContext.comparison;
-      case '<':
-        return value < additionalContext.comparison;
-      case '>=':
-        return value >= additionalContext.comparison;
-      case '<=':
-        return value <= additionalContext.comparison;
-      case 'in':
-        // check if the value is in the comparison array
-        if (isArray(additionalContext.comparison)) {
-          if (!isArray(value)) {
-            return additionalContext.comparison.includes(value);
-          } else {
-            // check if any values in the value array are in the comparison array
-            return value.some((val: any) => {
-              return additionalContext.comparison.includes(val);
-            });
-          }
-        }
-        return false;
-      case 'has':
-        // check if the comparison value is in the value array
-        if (isArray(value)) {
-          if (!isArray(additionalContext.comparison)) {
-            return value.includes(additionalContext.comparison);
-          } else {
-            // check if any of the values in the comparison array are in the value array
-            return additionalContext.comparison.some((val: any) => {
-              return value.includes(val);
-            });
-          }
-        }
-        return false;
-      default:
-        return false;
     }
   };
 
