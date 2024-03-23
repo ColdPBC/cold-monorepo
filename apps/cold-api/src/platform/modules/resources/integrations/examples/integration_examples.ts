@@ -1,6 +1,6 @@
 export const IntegrationBodySchema = {
   description:
-    'Integration Body Schema: You can pass location metadata to create a location if you do not have a location id. You can also pass a timeout number in milliseconds to override the default timeout for the service definition to define how long to wait before sending an async request',
+    'Integration Body Schema: You can pass facility metadata to create a facility if you do not have a facility id. You can also pass a timeout number in milliseconds to override the default timeout for the service definition to define how long to wait before sending an async request',
   schema: {
     type: 'object',
     example: {
