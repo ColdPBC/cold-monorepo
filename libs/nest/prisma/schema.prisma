@@ -257,9 +257,9 @@ model category_data {
 }
 
 /// @namespace Organizations
-/// @erd organization_locations
+/// @erd organization_facilities
 /// @erd survey_data
-/// @zod.import(["import { organization_locationsSchema } from '../../custom'"])
+/// @zod.import(["import { organization_facilitiesSchema } from '../../custom'"])
 /// @actions
 model organizations {
   /// @zod.custom.use(z.string().uuid())
@@ -285,12 +285,19 @@ model organizations {
   integrations             integrations[]
   organization_compliances organization_compliances[]
   organization_files       organization_files[]
-  locations                organization_locations[]
+  facilities               organization_facilities[]
   survey_data              survey_data[]
   utility_bills            utility_bills[]
 }
 
-model organization_locations {
+/// @namespace Organization_Facilities
+/// @erd utility_bills
+/// @erd integrations
+/// @erd emissions
+/// @erd organizations
+/// @zod.import(["import { organization_facilitiesSchema } from '../../custom'"])
+/// @actions
+model organization_facilities {
   id              String          @id @default(cuid())
   organization_id String
   name            String?
@@ -304,7 +311,7 @@ model organization_locations {
   postal_code     String
   emissions       emissions[]
   integrations    integrations[]
-  organizations   organizations   @relation(fields: [organization_id], references: [id])
+  organizations   organizations   @relation(fields: [organization_id], references: [id], onDelete: Cascade)
   utility_bills   utility_bills[]
 }
 
@@ -325,28 +332,28 @@ model service_definitions {
 /// @erd integrations
 model integrations {
   /// @zod.custom.use(z.string().uuid())
-  id                    String                  @id @default(uuid())
+  id                    String                   @id @default(uuid())
   service_definition_id String
   /// @zod.custom.use(z.string().uuid())
   organization_id       String
   metadata              Json
   /// @DtoUpdateHidden
   /// @zod.custom.use(z.date().optional())
-  created_at            DateTime                @default(now())
+  created_at            DateTime                 @default(now())
   /// @DtoUpdateHidden
   /// @DtoCreateHidden
   /// @DtoReadOnly
   /// @zod.custom.use(z.date().optional())
-  updated_at            DateTime                @updatedAt
-  location_id           String?
+  updated_at            DateTime                 @updatedAt
+  facility_id           String?
   emissions             emissions[]
-  location              organization_locations? @relation(fields: [location_id], references: [id], onDelete: Cascade)
-  organization          organizations           @relation(fields: [organization_id], references: [id])
-  service_definition    service_definitions     @relation(fields: [service_definition_id], references: [id], onDelete: Cascade)
+  facility              organization_facilities? @relation(fields: [facility_id], references: [id], onDelete: Cascade)
+  organization          organizations            @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+  service_definition    service_definitions      @relation(fields: [service_definition_id], references: [id], onDelete: Cascade)
   files                 organization_files[]
   unility_bills         utility_bills[]
 
-  @@unique([service_definition_id, location_id], name: "integrationKey")
+  @@unique([service_definition_id, facility_id], name: "integrationKey")
 }
 
 /// @namespace Supported Utilities
@@ -380,17 +387,17 @@ model emissions {
   /// @DtoCreateHidden
   /// @DtoReadOnly
   /// @zod.custom.use(z.string().uuid())
-  id                      String                 @id @default(uuid())
+  id                      String                  @id @default(uuid())
   /// @DtoUpdateHidden
   /// @DtoCreateHidden
   /// @DtoReadOnly
   /// @zod.custom.use(z.date().optional())
-  created_at              DateTime               @default(now())
+  created_at              DateTime                @default(now())
   /// @DtoUpdateHidden
   /// @DtoCreateHidden
   /// @DtoReadOnly
   /// @zod.custom.use(z.date().optional())
-  updated_at              DateTime               @updatedAt
+  updated_at              DateTime                @updatedAt
   integration_id          String
   activity_data           Json
   integration_data        Json
@@ -401,29 +408,29 @@ model emissions {
   co2e_calculation_origin String
   co2e_unit               String
   emission_factor         Json
-  location_id             String
+  facility_id             String
   co2_calculation_method  String
   constituent_gases       Json
-  integrations            integrations           @relation(fields: [integration_id], references: [id], onDelete: Cascade)
-  location                organization_locations @relation(fields: [location_id], references: [id], onDelete: Cascade)
+  integrations            integrations            @relation(fields: [integration_id], references: [id], onDelete: Cascade)
+  facility                organization_facilities @relation(fields: [facility_id], references: [id], onDelete: Cascade)
 }
 
 /// @namespace Utility Bills
 /// @describe List of utility bills for a given organization and integration
 /// @erd emissions
 model utility_bills {
-  id              String                 @id @default(cuid())
+  id              String                  @id @default(cuid())
   integration_id  String
   period_from     DateTime
   period_to       DateTime
   data            Json
-  created_at      DateTime               @default(now())
-  updated_at      DateTime               @updatedAt
-  location_id     String
+  created_at      DateTime                @default(now())
+  updated_at      DateTime                @updatedAt
+  facility_id     String
   organization_id String
-  integration     integrations           @relation(fields: [integration_id], references: [id], onDelete: Cascade)
-  location        organization_locations @relation(fields: [location_id], references: [id], onDelete: Cascade)
-  organization    organizations          @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+  integration     integrations            @relation(fields: [integration_id], references: [id], onDelete: Cascade)
+  facility        organization_facilities @relation(fields: [facility_id], references: [id], onDelete: Cascade)
+  organization    organizations           @relation(fields: [organization_id], references: [id], onDelete: Cascade)
 }
 
 model organization_files {

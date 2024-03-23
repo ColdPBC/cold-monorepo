@@ -1,10 +1,10 @@
-import {Injectable} from '@nestjs/common';
-import {BaseWorker, IAuthenticatedUser} from '@coldpbc/nest';
-import {Nack, RabbitRPC} from '@golevelup/nestjs-rabbitmq';
-import {RabbitSubscribe} from '@golevelup/nestjs-rabbitmq/lib/rabbitmq.decorators';
-import {Job, Queue} from 'bull';
-import {InjectQueue, OnQueueActive, OnQueueCompleted} from '@nestjs/bull';
-import {BayouService} from './bayou.service';
+import { Injectable } from '@nestjs/common';
+import { BaseWorker, IAuthenticatedUser } from '@coldpbc/nest';
+import { Nack, RabbitRPC } from '@golevelup/nestjs-rabbitmq';
+import { RabbitSubscribe } from '@golevelup/nestjs-rabbitmq/lib/rabbitmq.decorators';
+import { Job, Queue } from 'bull';
+import { InjectQueue, OnQueueActive, OnQueueCompleted } from '@nestjs/bull';
+import { BayouService } from './bayou.service';
 
 /**
  * RabbitService class.
@@ -51,15 +51,26 @@ export class RabbitService extends BaseWorker {
       this.logger.debug(`RPC Request Received from ${msg.from}`, { ...msg });
 
       switch (parsed.event) {
-        case 'integration.enabled':
-          return await this.bayou.createCustomer(parsed.user, parsed['organization']['id'], parsed['location_id'], this.bayou.toBayouPayload(parsed));
+        case 'organization.deleted': {
+          this.logger.warn(`Organization deleted event received from ${msg.from}`, {
+            data: msg.data,
+            from: msg.from,
+            event: msg.event,
+          });
+          return {
+            status: 'done',
+            message: 'Organization deleted event received, but Bayou does not support deleting accounts through their api',
+          };
+        }
+        case 'facility.integration.enabled':
+          return await this.bayou.createCustomer(parsed.user, parsed['organization']['id'], parsed['facility_id'], this.bayou.toBayouPayload(parsed));
         default:
           return new Nack();
       }
     } catch (err) {
       this.logger.error(err.message, { err, data: msg.data, from: msg.from, event: msg.event });
 
-      if (!err.message.includes('already linked for location')) {
+      if (!err.message.includes('already linked for Facility')) {
         const job = await this.queue.add(msg.event, msg, { backoff: { type: 'exponential' } });
         this.logger.info(` ${msg.event} job (${job.id}) created from message received from ${msg.from}`, {
           data: msg.data,
@@ -97,7 +108,7 @@ export class RabbitService extends BaseWorker {
       });
 
       switch (msg.event) {
-        case 'integration.enabled': {
+        case 'facility.integration.enabled': {
           const job = await this.queue.add(msg.event, msg.data, { backoff: { type: 'exponential' } });
           this.logger.info(` ${msg.event} job (${job.id}) created from message received from ${msg.from}`, {
             data: msg.data,

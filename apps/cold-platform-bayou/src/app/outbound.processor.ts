@@ -9,7 +9,7 @@ export class BayouQueueProcessor extends BaseWorker {
     super(BayouQueueProcessor.name);
   }
 
-  @Process('integration.enabled')
+  @Process('facility.integration.enabled')
   async processMessages(job: Job) {
     const { data } = job['data'];
     const { event, user, from, organization } = data;

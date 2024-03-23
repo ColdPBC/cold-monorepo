@@ -85,7 +85,7 @@ export class BayouService extends BaseWorker implements OnModuleInit {
       const integration = await this.prisma.integrations.findUnique({
         where: {
           integrationKey: {
-            location_id: get(payload.object, 'customer_external_id'),
+            facility_id: get(payload.object, 'customer_external_id'),
             service_definition_id: this.service.id,
           },
         },
@@ -111,7 +111,7 @@ export class BayouService extends BaseWorker implements OnModuleInit {
         data: {
           id: new Cuid2Generator().setPrefix('bill').scopedId,
           organization_id: integration.organization_id,
-          location_id: payload.object['customer_external_id'],
+          facility_id: payload.object['customer_external_id'],
           integration_id: integration.id,
           period_from: convertDate(bill.billing_period_from),
           period_to: convertDate(bill.billing_period_to),
@@ -125,7 +125,7 @@ export class BayouService extends BaseWorker implements OnModuleInit {
         event: payload.event,
         from: 'cold.platform.bayou',
         data: {
-          location_id: get(payload.object, 'customer_external_id'),
+          facility_id: get(payload.object, 'customer_external_id'),
           integration_id: integration.id,
           integration_data: bill,
           utility_bill_id: created.id,
@@ -190,19 +190,19 @@ export class BayouService extends BaseWorker implements OnModuleInit {
     }
   }
 
-  private async getIntegration(service_definition_id: string, org_id: string, location_id: string) {
+  private async getIntegration(service_definition_id: string, org_id: string, facility_id: string) {
     return await this.prisma.integrations.findUnique({
       where: {
         organization_id: org_id,
         integrationKey: {
-          location_id: location_id,
+          facility_id: facility_id,
           service_definition_id: service_definition_id,
         },
       },
     });
   }
 
-  async createCustomer(user: IAuthenticatedUser, orgId: string, locId: string, payload: BayouCustomerPayload) {
+  async createCustomer(user: IAuthenticatedUser, orgId: string, facility_id: string, payload: BayouCustomerPayload) {
     if (!user.isColdAdmin && user.coldclimate_claims.org_id !== orgId) {
       throw new UnprocessableEntityException(`Organization ID (${orgId}) is invalid for this user`);
     }
@@ -217,27 +217,27 @@ export class BayouService extends BaseWorker implements OnModuleInit {
       throw new UnprocessableEntityException(`Service definition ${process.env['DD_SERVICE']} not found.`);
     }
 
-    const existingIntegration = await this.getIntegration(service.id, orgId, locId);
+    const existingIntegration = await this.getIntegration(service.id, orgId, facility_id);
 
     //check for duplicate customer in Bayou
-    const bayouCustomer = await this.getCustomer(locId);
+    const bayouCustomer = await this.getCustomer(facility_id);
 
     if (bayouCustomer) {
       // location exists in bayou
-      if (existingIntegration?.location_id == locId && bayouCustomer?.external_id === locId) {
-        throw new ConflictException(`Bayou customer (${bayouCustomer.id}) already linked for location: ${locId}`);
+      if (existingIntegration?.facility_id == facility_id && bayouCustomer?.external_id === facility_id) {
+        throw new ConflictException(`Bayou customer (${bayouCustomer.id}) already linked for location: ${facility_id}`);
       }
 
       // location exists in bayou, but not linked to this service
       if (!existingIntegration) {
-        this.logger.warn(`Bayou customer (${bayouCustomer.id}) already exists for location: ${locId}, but no integration found in DB`, {
+        this.logger.warn(`Bayou customer (${bayouCustomer.id}) already exists for location: ${facility_id}, but no integration found in DB`, {
           bayou_data: bayouCustomer,
         });
 
         const integration = await this.prisma.integrations.create({
           data: {
             organization_id: orgId,
-            location_id: locId,
+            facility_id: facility_id,
             service_definition_id: service.id,
             metadata: bayouCustomer,
           },
@@ -258,12 +258,12 @@ export class BayouService extends BaseWorker implements OnModuleInit {
         data: {
           organization_id: orgId,
           service_definition_id: service.id,
-          location_id: locId,
+          facility_id: facility_id,
           metadata: bayouResponse.data,
         },
       });
 
-      this.logger.info(`Bayou customer (${bayouResponse.data.id}) created for location: ${locId}`, {
+      this.logger.info(`Bayou customer (${bayouResponse.data.id}) created for location: ${facility_id}`, {
         org_id: orgId,
         bayou_data: bayouResponse.data,
       });
@@ -274,7 +274,7 @@ export class BayouService extends BaseWorker implements OnModuleInit {
 
   toBayouPayload(data: { user: IAuthenticatedUser; organization: Organizations; location_id: string; metadata: never }) {
     if (!data.organization['id']) throw new UnprocessableEntityException('No organization id found in payload');
-    if (!data.organization.locations) throw new UnprocessableEntityException('No organization locations found in payload');
+    if (!data.organization.locations) throw new UnprocessableEntityException('No organization facilities found in payload');
     const location = data.organization.locations.find(l => l.id === data.location_id);
     if (!location) throw new UnprocessableEntityException(`No location found for ${data.location_id}`);
     if (!data.location_id) throw new UnprocessableEntityException('No location id found in payload');

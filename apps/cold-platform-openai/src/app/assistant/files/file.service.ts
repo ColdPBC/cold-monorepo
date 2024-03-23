@@ -342,7 +342,7 @@ export class FileService extends BaseWorker implements OnModuleInit {
         where: {
           organization_id: org.id,
           service_definition_id: service_definition.id,
-          location_id: null,
+          facility_id: null,
         },
       });
 

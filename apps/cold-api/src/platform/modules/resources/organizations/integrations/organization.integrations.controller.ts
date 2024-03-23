@@ -94,17 +94,17 @@ export class OrganizationIntegrationsController extends BaseWorker {
   }
 
   @ApiOperation({
-    summary: 'Create Organization Location Specific Integration',
-    operationId: 'createLocationIntegration',
+    summary: 'Create Organization Facility Integration',
+    operationId: 'createFacilityIntegration',
   })
   @ApiQuery(bpcDecoratorOptions)
   @ApiParam(orgIdDecoratorOptions)
   @ApiBody(IntegrationBodySchema)
-  @Post('organizations/:orgId/locations/:locId/integrations')
+  @Post('organizations/:orgId/facilities/:facId/integrations')
   @HttpCode(201)
-  createLocationIntegration(
+  createFacilityIntegration(
     @Param('orgId') orgId: string,
-    @Param('locId') locId: string,
+    @Param('facId') facId: string,
     @Req()
     req: {
       body: any;
@@ -119,6 +119,6 @@ export class OrganizationIntegrationsController extends BaseWorker {
       metadata: any;
     },
   ) {
-    return this.orgIntegrationsService.createLocationIntegration(req, orgId, locId, body);
+    return this.orgIntegrationsService.createFacilityIntegration(req, orgId, facId, body);
   }
 }

@@ -28,7 +28,7 @@ export class BayouController {
   }
 
   //BayouCustomerPayloadValidationPipe
-  @Post('organizations/:orgId/locations/:locId/customer')
+  @Post('organizations/:orgId/facilities/:locId/customer')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(...[Role.ColdAdmin, Role.CompanyOwner, Role.CompanyAdmin])
   @HttpCode(202)
