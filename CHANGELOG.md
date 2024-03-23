@@ -1,3 +1,11 @@
+## [1.173.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.173.0...v1.173.1) (2024-03-23)
+
+
+### Bug Fixes
+
+* rename missed location > facility ([32da050](https://github.com/ColdPBC/cold-monorepo/commit/32da0506ba914ef9171825f5ebeb6ad5cd1b98c7))
+* rename missed location > facility ([52dfff8](https://github.com/ColdPBC/cold-monorepo/commit/52dfff85fa55173818ad28051e4140d744ec471a))
+
 # [1.173.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.172.1...v1.173.0) (2024-03-23)
 
 
