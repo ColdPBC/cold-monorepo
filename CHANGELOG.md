@@ -1,3 +1,9 @@
+# [1.172.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.171.0...v1.172.0) (2024-03-23)
+
+
+### Features
+
+* emission_scopes model ([24bf372](https://github.com/ColdPBC/cold-monorepo/commit/24bf3726636eda11474f130919a01663675ac235))
 
 # [1.170.0-cold-650.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.169.0...v1.170.0-cold-650.1) (2024-03-22)
 
