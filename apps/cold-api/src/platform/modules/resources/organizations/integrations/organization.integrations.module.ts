@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { OrganizationIntegrationsController } from './organization.integrations.controller';
 import { OrganizationIntegrationsService } from './organization.integrations.service';
-import { LocationsModule } from '../locations/locations.module';
+import { FacilitiesModule } from '../facilities/facilities.module';
 import { OrganizationHelper } from '../helpers/organization.helper';
 
 @Module({
-  imports: [LocationsModule],
+  imports: [FacilitiesModule],
   providers: [OrganizationIntegrationsService, OrganizationHelper],
   controllers: [OrganizationIntegrationsController],
 })

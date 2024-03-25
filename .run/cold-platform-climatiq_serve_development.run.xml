@@ -1,0 +1,17 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="cold-platform-climatiq:serve:development" type="NxRunConfigurationType" folderName="Climatiq: Serve">
+    <option name="nx-projects" value="cold-platform-climatiq" />
+    <option name="nx-targets" value="serve" />
+    <option name="nx-target-configuration" value="development" />
+    <envs>
+      <env name="CLIMATIQ_API_KEY" value="0YY90XF4CS4RZMNTHPZAVHC5EGSD" />
+      <env name="CLIMATIQ_API_URL" value="https://beta4.api.climatiq.io" />
+      <env name="DD_SERVICE" value="cold-platform-climatiq" />
+      <env name="NODE_ENV" value="development" />
+      <env name="PORT" value="7003" />
+      <env name="LOG_FORMAT" value="pretty" />
+    </envs>
+    <option name="arguments" value="" />
+    <method v="2" />
+  </configuration>
+</component>

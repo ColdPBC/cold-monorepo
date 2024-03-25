@@ -1,5 +1,5 @@
 import * as z from 'zod';
-import organization_locationsSchema from './organization_locationsSchema';
+import organization_facilitiesSchema from './organization_facilitiesSchema';
 
 /**
  * @namespace Organizations
@@ -25,7 +25,7 @@ export const OrganizationsSchema = z.object({
         .nullable(),
     })
     .optional(),
-  locations: z.array(organization_locationsSchema).optional(),
+  facilities: z.array(organization_facilitiesSchema).optional(),
   phone: z.string().nullable(),
   email: z.string().email().nullable(),
   /**
