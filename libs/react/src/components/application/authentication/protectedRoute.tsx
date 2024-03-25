@@ -12,6 +12,8 @@ import { get, has, isEmpty } from 'lodash';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorPage } from '../errors/errorPage';
 import { datadogRum } from '@datadog/browser-rum';
+import { checkContextValue, getUpdatedContext } from '@coldpbc/lib';
+import { LDContext } from 'launchdarkly-js-sdk-common';
 
 const _ProtectedRoute = () => {
   const { user, error, loginWithRedirect, isAuthenticated, isLoading, getAccessTokenSilently, orgId } = useAuth0Wrapper();
@@ -62,10 +64,19 @@ const _ProtectedRoute = () => {
           if (!error) {
             if (isAuthenticated) {
               if (ldClient && orgId) {
-                await ldClient.identify({
+                const currentContext = ldClient.getContext() as LDContext;
+                const isContextSet = checkContextValue(currentContext, {
                   kind: 'organization',
                   key: orgId,
                 });
+                if (!isContextSet) {
+                  await ldClient.identify(
+                    getUpdatedContext(currentContext, {
+                      kind: 'organization',
+                      key: orgId,
+                    }),
+                  );
+                }
               }
               datadogRum.setUser(user?.coldclimate_claims);
             } else {

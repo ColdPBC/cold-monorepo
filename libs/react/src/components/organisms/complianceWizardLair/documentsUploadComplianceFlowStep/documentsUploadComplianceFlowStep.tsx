@@ -7,7 +7,6 @@ import { useFlags } from 'launchdarkly-react-client-sdk';
 const _DocumentsUploadComplianceFlowStep = () => {
   const { nextStep } = useContext(WizardContext);
   const { complianceSetFlowMarkdown } = useFlags();
-
   return (
     <ComplianceWizardLairBase
       markdown={complianceSetFlowMarkdown}

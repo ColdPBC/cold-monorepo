@@ -9,26 +9,12 @@ import { ErrorType } from '@coldpbc/enums';
 import { withErrorBoundary } from 'react-error-boundary';
 import { useLDClient } from 'launchdarkly-react-client-sdk';
 import { LDContext } from '@launchdarkly/node-server-sdk';
+import { checkContextValue, getUpdatedContext } from '@coldpbc/lib';
 
 const _ComplianceWizard = () => {
   const { name } = useParams();
   const { orgId } = useAuth0Wrapper();
   const ldClient = useLDClient();
-  if (ldClient && orgId && name) {
-    const orgContext: LDContext = {
-      kind: 'organization',
-      key: orgId,
-    };
-    const complianceContext: LDContext = {
-      kind: 'complianceSet',
-      key: name,
-    };
-    ldClient.identify({
-      kind: 'multi',
-      organization: orgContext,
-      complianceSet: complianceContext,
-    });
-  }
   const compliances = useSWR<Compliance[], any, any>(['/compliance_definitions', 'GET'], axiosFetcher);
   const orgCompliances = useSWR<OrgCompliance[], any, any>([`/compliance_definitions/organizations/${orgId}`, 'GET'], axiosFetcher);
 
@@ -44,7 +30,38 @@ const _ComplianceWizard = () => {
   const surveyData = useOrgSWR(getSurveyURL(), axiosFetcher);
   const filesSWR = useOrgSWR<any, any>(['/files', 'GET'], axiosFetcher);
 
+  const setLDContext = () => {
+    if (ldClient && orgId && name) {
+      const orgContext: LDContext = {
+        kind: 'organization',
+        key: orgId,
+      };
+      const complianceContext: LDContext = {
+        kind: 'complianceSet',
+        key: name,
+      };
+      const isContextSet = checkContextValue(ldClient.getContext() as LDContext, {
+        kind: 'complianceSet',
+        key: name,
+      });
+      if (!isContextSet) {
+        ldClient.identify(
+          getUpdatedContext(
+            ldClient.getContext() as LDContext,
+            {
+              kind: 'complianceSet',
+              key: name,
+            },
+            true,
+          ),
+        );
+      }
+    }
+  };
+
   const { logError } = useColdContext();
+
+  setLDContext();
 
   if (compliances.isLoading || orgCompliances.isLoading || surveyData.isLoading || filesSWR.isLoading) {
     return <Spinner />;
