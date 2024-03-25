@@ -11,7 +11,7 @@ import { IntegrationsModule } from '../integrations/integrations.module';
 import { OrganizationHelper } from './helpers/organization.helper';
 import { OrganizationIntegrationsModule } from './integrations/organization.integrations.module';
 import { InvitationsModule } from './invitations/invitations.module';
-import { LocationsModule } from './locations/locations.module';
+import { FacilitiesModule } from './facilities/facilities.module';
 import { MembersModule } from './members/members.module';
 import { OrgRolesModule } from './roles/roles.module';
 import { OrganizationFilesModule } from './files/organization.files.module';
@@ -20,7 +20,7 @@ import { OrganizationFilesModule } from './files/organization.files.module';
   imports: [
     OrganizationIntegrationsModule,
     InvitationsModule,
-    LocationsModule,
+    FacilitiesModule,
     Auth0Module,
     IntegrationsModule,
     HttpModule,

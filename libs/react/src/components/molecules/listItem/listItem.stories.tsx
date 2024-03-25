@@ -39,7 +39,6 @@ const ListItemStory = (props: ListItemProps) => {
     <ListItem
       value={stateValue}
       onChange={(value: string[] | null) => {
-        console.log('value', value);
         setStateValue(value);
       }}
       input_props={{

@@ -10,12 +10,21 @@ import {
   WizardContext,
 } from '@coldpbc/components';
 import { ComplianceSurveyActiveKeyType, ComplianceSurveyPayloadType, ComplianceSurveySavedQuestionType } from '@coldpbc/interfaces';
-import { getAccurateBookmarkedValue, getQuestionValue, getSavedQuestionsInSurvey, getStartingKey, putSurveyData, sortComplianceSurvey, updateSurveyQuestion } from '@coldpbc/lib';
+import {
+  getAccurateBookmarkedValue,
+  getOrgStorage,
+  getQuestionValue,
+  getSavedQuestionsInSurvey,
+  getStartingKey,
+  putSurveyData,
+  setOrgStorage,
+  sortComplianceSurvey,
+  updateSurveyQuestion,
+} from '@coldpbc/lib';
 import { GlobalSizes } from '@coldpbc/enums';
 import { withErrorBoundary } from 'react-error-boundary';
 import { useAuth0Wrapper } from '@coldpbc/hooks';
 import { get, set } from 'lodash';
-import { getOrgStorage, setOrgStorage } from '../../../../lib/orgStorage';
 import { mutate } from 'swr';
 
 const _SurveyComplianceFlowStep = () => {

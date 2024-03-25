@@ -99,6 +99,10 @@ export class RabbitService extends BaseWorker {
           const response = await this.appService.createAssistant(parsed);
           return response;
         }
+        case 'organization.deleted': {
+          const response = await this.appService.deleteAssistant(parsed);
+          return response;
+        }
         case 'file.uploaded': {
           const uploader = new FileService(this.config, this.appService, this.prisma, this.s3);
           return await uploader.uploadOrgFilesToOpenAI(parsed);

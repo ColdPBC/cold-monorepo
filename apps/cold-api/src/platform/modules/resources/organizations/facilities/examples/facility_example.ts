@@ -1,4 +1,4 @@
-export const LocationBodyExample = {
+export const FacilityBodyExample = {
   schema: {
     type: 'object',
     example: {

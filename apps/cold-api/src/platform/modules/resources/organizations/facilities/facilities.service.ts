@@ -1,26 +1,26 @@
-import { BaseWorker, Cuid2Generator, MqttService, organization_locations, PrismaService } from '@coldpbc/nest';
+import { BaseWorker, Cuid2Generator, MqttService, organization_facilities, PrismaService } from '@coldpbc/nest';
 import { Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
 
 @Injectable()
-export class LocationsService extends BaseWorker {
-  cuid2 = new Cuid2Generator().setPrefix('oloc');
+export class FacilitiesService extends BaseWorker {
+  cuid2 = new Cuid2Generator().setPrefix('ofac');
 
   constructor(private readonly prisma: PrismaService, private readonly mqtt: MqttService) {
-    super(LocationsService.name);
+    super(FacilitiesService.name);
 
     if (!this.cuid2.prefix) {
-      this.logger.warn('Cuid2 prefix not set, setting to "loc"');
-      this.cuid2 = this.cuid2.setPrefix('oloc');
+      this.logger.warn('Cuid2 prefix not set, setting to "ofac"');
+      this.cuid2 = this.cuid2.setPrefix('ofac');
     }
   }
 
-  async getOrganizationLocations(req: any, orgId: string): Promise<Partial<organization_locations>[]> {
+  async getOrganizationFacilities(req: any, orgId: string): Promise<Partial<organization_facilities>[]> {
     const { user } = req;
     try {
       if (!user.isColdAdmin && user.coldclimate_claims.org_id !== orgId)
         throw new UnprocessableEntityException(`${user.coldclimate_claims.email} is ${user.isColdAdmin ? 'Cold:Admin' : 'not Cold:Admin'} bug is attempting to access ${orgId}.`);
 
-      const locations = await this.prisma.organization_locations.findMany({
+      const facilities = await this.prisma.organization_facilities.findMany({
         where: {
           organization_id: orgId,
         },
@@ -29,16 +29,16 @@ export class LocationsService extends BaseWorker {
         },
       });
 
-      if (!locations) throw new NotFoundException(`Locations not found for ${orgId}`);
+      if (!facilities) throw new NotFoundException(`Facilities not found for ${orgId}`);
 
-      return locations;
+      return facilities;
     } catch (e) {
       this.logger.error(e.message, { organization_id: orgId, user });
       throw new UnprocessableEntityException(e);
     }
   }
 
-  async createOrganizationLocation(
+  async createOrganizationFacility(
     req: any,
     orgId: string,
     body: {
@@ -50,15 +50,15 @@ export class LocationsService extends BaseWorker {
       country: string;
       name: string;
     },
-  ): Promise<organization_locations> {
+  ): Promise<organization_facilities> {
     const { user, url } = req;
     try {
       //if (!user.isColdAdmin && user.coldclimate_claims.org_id !== orgId) throw new UnprocessableEntityException(`Organization ${orgId} is invalid.`);
 
       if (!body.address && !body.city && !body.state && !body.postal_code)
-        throw new UnprocessableEntityException(`Location not found for ${orgId} and address, city, state, zip not provided in metadata.`);
+        throw new UnprocessableEntityException(`Facility not found for ${orgId} and address, city, state, zip not provided in metadata.`);
 
-      const created = (await this.prisma.organization_locations.create({
+      const created = (await this.prisma.organization_facilities.create({
         data: {
           id: this.cuid2.setId().scopedId,
           name: body.name || body.address,
@@ -73,7 +73,7 @@ export class LocationsService extends BaseWorker {
         include: {
           organizations: true,
         },
-      })) as unknown as organization_locations;
+      })) as unknown as organization_facilities;
 
       this.mqtt.publishMQTT('ui', {
         org_id: orgId,

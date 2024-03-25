@@ -7,7 +7,7 @@
       "logo_url": "./assets/black_logo.png",
       "platform_url": "https://www.open.ai",
       "show": true,
-      "locations": false,
+      "facilities": false,
       "mqtt": {
         "publishes_to": {
           "user": "ui/:ENVIRONMENT:/:ORG_ID:/:EMAIL:",

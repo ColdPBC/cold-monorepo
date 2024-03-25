@@ -4,8 +4,8 @@ import * as z from 'zod';
 // ORGANIZATION LOCATIONS SCHEMA
 /////////////////////////////////////////
 
-export const organization_locationsSchema = z.object({
-  id: z.string().refine(val => val.startsWith('oloc_'), { message: 'id must start with oloc_' }),
+export const organization_facilitiesSchema = z.object({
+  id: z.string().refine(val => val.startsWith('ofac_'), { message: 'id must start with ofac_' }),
   name: z.string().nullable().optional(),
   address: z.string(),
   address_line_2: z.string().nullable().optional(),
@@ -18,6 +18,6 @@ export const organization_locationsSchema = z.object({
   organization_id: z.string().nullable(),
 });
 
-export type organization_locations = z.infer<typeof organization_locationsSchema>;
+export type organization_facilities = z.infer<typeof organization_facilitiesSchema>;
 
-export default organization_locationsSchema;
+export default organization_facilitiesSchema;

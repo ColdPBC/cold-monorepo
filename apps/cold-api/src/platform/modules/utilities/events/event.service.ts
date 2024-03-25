@@ -103,34 +103,40 @@ export class EventService extends BaseWorker {
       throw new Error('User is required, when authenticated request object is not provided');
     }
 
-    let org: string = '';
-    if (!orgId) {
-      // If orgId is not provided, try to extract it from the request or the user's claims
-      if (requestOrUser instanceof Request && !requestOrUser['params'].orgId) {
-        org = currentUser.coldclimate_claims.org_id;
-      } else if (requestOrUser instanceof Request && requestOrUser['params'].orgId) {
-        // if orgId is not provided, try to get it from request otherwise get it from user claims;
-        org = get(requestOrUser, 'params.orgId', currentUser.coldclimate_claims.org_id);
-      }
-    } else {
-      // If orgId is provided but doesn't start with 'org_', throw an error
-      if (!orgId || !orgId.startsWith('org_')) {
-        throw new Error('Organization id is required.');
-      }
-      org = orgId;
+    let org: any = null;
+    if (requestOrUser['organization']) {
+      org = requestOrUser['organization'];
+      orgId = org.id;
     }
 
-    // Fetch the organization from the database
-    const organization = await this.prisma.organizations.findUnique({
-      where: {
-        id: org,
-      },
-    });
+    if (!org) {
+      if (!orgId) {
+        // If orgId is not provided, try to extract it from the request or the user's claims
+        if (requestOrUser instanceof Request && !requestOrUser['params'].orgId) {
+          orgId = currentUser.coldclimate_claims.org_id;
+        } else if (requestOrUser instanceof Request && requestOrUser['params'].orgId) {
+          // if orgId is not provided, try to get it from request otherwise get it from user claims;
+          orgId = get(requestOrUser, 'params.orgId', currentUser.coldclimate_claims.org_id);
+        }
+      } else {
+        // If orgId is provided but doesn't start with 'org_', throw an error
+        if (!orgId.startsWith('org_')) {
+          throw new Error('Organization id is required.');
+        }
+      }
+
+      // Fetch the organization from the database
+      org = await this.prisma.organizations.findUnique({
+        where: {
+          id: orgId,
+        },
+      });
+    }
 
     // Fetch all integrations for the organization
     const integrations = await this.prisma.integrations.findMany({
       where: {
-        organization_id: orgId,
+        organization_id: org.id,
       },
       include: {
         service_definition: true,
@@ -150,7 +156,15 @@ export class EventService extends BaseWorker {
       }
 
       // Merge the supplied data with the organization, service definition, integration, and user
-      const merged = merge({ payload: data }, { organization, service_definition, integration, user: currentUser });
+      const merged = merge(
+        { payload: data },
+        {
+          organization: org,
+          service_definition,
+          integration,
+          user: currentUser,
+        },
+      );
 
       // If the event is an RPC, send an async event, otherwise send an RPC event and return the response
       if (!isRPC) {

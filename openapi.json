@@ -187,6 +187,31 @@
                 ]
             }
         },
+        "/organizations/testOrgs": {
+            "delete": {
+                "operationId": "DeleteTestOrgs",
+                "summary": "Delete Test Organizations",
+                "description": "Deletes all test organizations",
+                "parameters": [],
+                "responses": {
+                    "204": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Organizations"
+                ],
+                "security": [
+                    {
+                        "oauth2": [
+                            "openid",
+                            "email",
+                            "profile"
+                        ]
+                    }
+                ]
+            }
+        },
         "/organizations/{orgId}/files": {
             "get": {
                 "operationId": "OrganizationFilesController_getFiles",
@@ -978,14 +1003,16 @@
         },
         "/surveys/{name}": {
             "get": {
-                "operationId": "SurveysController_findByName",
+                "operationId": "UpdateSurveyByName",
+                "summary": "Gets survey for user org by surey name",
+                "deprecated": true,
                 "parameters": [
                     {
                         "name": "name",
                         "required": true,
                         "in": "path",
                         "example": "{{test_survey_name}}",
-                        "description": "The name of the survey to return",
+                        "description": "The name of the survey definition to return",
                         "schema": {
                             "type": "string"
                         }
@@ -1046,6 +1073,7 @@
             "patch": {
                 "operationId": "UpdateSurveyByName",
                 "summary": "Update survey by name",
+                "deprecated": true,
                 "parameters": [
                     {
                         "name": "name",
@@ -1076,6 +1104,7 @@
             "put": {
                 "operationId": "SurveysController_submit",
                 "summary": "Submit survey results",
+                "deprecated": true,
                 "parameters": [
                     {
                         "name": "name",
@@ -1920,9 +1949,9 @@
                 ]
             }
         },
-        "/organizations/{orgId}/locations": {
+        "/organizations/{orgId}/facilities": {
             "get": {
-                "operationId": "LocationsController_getLocations",
+                "operationId": "FacilitiesController_getLocations",
                 "parameters": [
                     {
                         "name": "orgId",
@@ -1939,7 +1968,7 @@
                     }
                 },
                 "tags": [
-                    "Organizations : Locations"
+                    "Organizations : Facilities"
                 ],
                 "security": [
                     {
@@ -1950,8 +1979,8 @@
                 ]
             },
             "post": {
-                "operationId": "createLocation",
-                "summary": "Create Organization Location",
+                "operationId": "createFacility",
+                "summary": "Create Organization Facility",
                 "parameters": [
                     {
                         "name": "orgId",
@@ -1998,7 +2027,7 @@
                     }
                 },
                 "tags": [
-                    "Organizations : Locations"
+                    "Organizations : Facilities"
                 ],
                 "security": [
                     {
@@ -2469,10 +2498,10 @@
                 }
             }
         },
-        "/organizations/{orgId}/locations/{locId}/integrations": {
+        "/organizations/{orgId}/facilities/{facId}/integrations": {
             "post": {
-                "operationId": "createLocationIntegration",
-                "summary": "Create Organization Location Specific Integration",
+                "operationId": "createFacilityIntegration",
+                "summary": "Create Organization Facility Integration",
                 "parameters": [
                     {
                         "name": "orgId",
@@ -2485,7 +2514,7 @@
                         }
                     },
                     {
-                        "name": "locId",
+                        "name": "facId",
                         "required": true,
                         "in": "path",
                         "schema": {
