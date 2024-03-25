@@ -1,3 +1,10 @@
+# [1.174.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.173.1...v1.174.0) (2024-03-25)
+
+
+### Features
+
+* add response validator to justification ([f08b4c3](https://github.com/ColdPBC/cold-monorepo/commit/f08b4c32e4b0b465933d3a831d3a28cc1866c779))
+
 ## [1.173.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.173.0...v1.173.1) (2024-03-23)
 
 
