@@ -6,6 +6,7 @@ import {
   getQuestionValue,
   getSectionIndex,
   ifAdditionalContextConditionMet,
+  isAIResponseValueValid,
   putSurveyData,
   sortComplianceSurvey,
   updateSurveyQuestion,
@@ -148,8 +149,11 @@ const _ComplianceSurveySavedQuestionnaire = (props: ComplianceSurveySavedQuestio
     if (activeKey.isFollowUp) {
       if (
         sections[activeSectionKey].follow_up[activeFollowUpKey].value === undefined &&
-        sections[activeSectionKey].follow_up[activeFollowUpKey].ai_response !== undefined &&
-        sections[activeSectionKey].follow_up[activeFollowUpKey].ai_response?.answer !== undefined
+        isAIResponseValueValid({
+          ai_response: sections[activeSectionKey].follow_up[activeFollowUpKey].ai_response,
+          component: sections[activeSectionKey].follow_up[activeFollowUpKey].component,
+          options: sections[activeSectionKey].follow_up[activeFollowUpKey].options,
+        })
       ) {
         buttonProps.label = 'Confirm';
         if (activeFollowUpIndex === savedQuestions.length - 1) {
@@ -203,7 +207,11 @@ const _ComplianceSurveySavedQuestionnaire = (props: ComplianceSurveySavedQuestio
   const onNextButtonClicked = async () => {
     setSendingSurvey(true);
     const bookmarkedQuestion = getAccurateBookmarkedValue(sections, activeKey, bookmarked);
-    const newSurvey = updateSurveyQuestion(surveyData, activeKey, { value: getQuestionValue(surveyData, activeKey), skipped: false, saved: bookmarkedQuestion });
+    const newSurvey = updateSurveyQuestion(surveyData, activeKey, {
+      value: getQuestionValue(surveyData, activeKey),
+      skipped: false,
+      saved: bookmarkedQuestion,
+    });
     const response = (await putSurveyData(newSurvey as ComplianceSurveyPayloadType, getOrgSpecificUrl)) as ComplianceSurveyPayloadType;
     const sortedSurvey = sortComplianceSurvey(response);
     setSurveyData(sortedSurvey);

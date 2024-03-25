@@ -4,6 +4,7 @@ import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application';
 import { isUndefined } from 'lodash';
 import { Card, Input, ListItem, PercentSlider, SelectOption, YesNo } from '@coldpbc/components';
+import { isAIResponseValueValid } from '@coldpbc/lib';
 
 export interface SurveyInputProps {
   input_key: string;
@@ -26,7 +27,12 @@ const _SurveyInput = (props: SurveyInputProps) => {
   const { input_key, prompt, options, tooltip, component, placeholder, onFieldUpdated, value, isAdditional, ai_attempted, ai_response } = props;
 
   const getDisplayValue = () => {
-    return value !== undefined ? value : ai_response?.answer;
+    // get the value to be displayed
+    let displayValue = value;
+    if (isUndefined(displayValue) && isAIResponseValueValid(props)) {
+      displayValue = ai_response?.answer;
+    }
+    return displayValue;
   };
 
   const inputComponent = () => {
@@ -243,15 +249,15 @@ const _SurveyInput = (props: SurveyInputProps) => {
   const getAISource = () => {
     let justification = '';
     let originalAnswer = '';
-    if (ai_attempted && !isUndefined(ai_response) && !isUndefined(ai_response.answer) && ai_response.justification) {
+    if (ai_attempted && !isUndefined(ai_response) && !isUndefined(ai_response.answer) && ai_response.justification && isAIResponseValueValid(props)) {
       justification = ai_response.justification;
       if (!isUndefined(value)) {
         if (ai_response.answer === true) {
-          originalAnswer = "Yes";
+          originalAnswer = 'Yes';
         } else if (ai_response.answer === false) {
-          originalAnswer = "No";
+          originalAnswer = 'No';
         } else if (Array.isArray(ai_response.answer)) {
-          originalAnswer = ai_response.answer.join(", ");
+          originalAnswer = ai_response.answer.join(', ');
         } else {
           originalAnswer = ai_response.answer;
         }
@@ -261,12 +267,17 @@ const _SurveyInput = (props: SurveyInputProps) => {
     }
 
     return (
-      <Card glow={false} className={'border-[1px] border-purple-300 w-full bg-bgc-elevated'}
-            data-testid={'survey-input-ai-response'}>
-        <div className={"text-sm space-y-3"}>
-          <div className={"font-bold"}>✨ Cold AI</div>
-          {originalAnswer && <div><span className={"font-bold"}>Original Answer:</span> {originalAnswer}</div>}
-          <div><span className={"font-bold"}>Why:</span> {justification}</div>
+      <Card glow={false} className={'border-[1px] border-purple-300 w-full bg-bgc-elevated'} data-testid={'survey-input-ai-response'}>
+        <div className={'text-sm space-y-3'}>
+          <div className={'font-bold'}>✨ Cold AI</div>
+          {originalAnswer && (
+            <div>
+              <span className={'font-bold'}>Original Answer:</span> {originalAnswer}
+            </div>
+          )}
+          <div>
+            <span className={'font-bold'}>Why:</span> {justification}
+          </div>
         </div>
       </Card>
     );

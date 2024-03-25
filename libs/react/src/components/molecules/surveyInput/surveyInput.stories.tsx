@@ -204,6 +204,25 @@ export const MultiText: Story = {
   },
 };
 
+export const AIIncorrectAIAnswer: Story = {
+  render: args => {
+    return <SurveyInputStory {...args} />;
+  },
+  args: {
+    input_key: 'product:0',
+    prompt: 'Tell me about your product',
+    options: [],
+    tooltip: '',
+    component: 'yes_no',
+    placeholder: 'Write a few sentences about your product',
+    ai_attempted: true,
+    ai_response: {
+      justification: '*Lorem Ipsum Dolor Et Amo sflksjdflksdjfldsjkfs*',
+      answer: 'true',
+    },
+  },
+};
+
 const SurveyInputStory = (props: SurveyInputProps) => {
   const { input_key, prompt, options, tooltip, component, placeholder, value } = props;
   const [stateValue, setStateValue] = useState<any>(value);

@@ -5,6 +5,7 @@ import {
   getQuestionValue,
   getSectionIndex,
   ifAdditionalContextConditionMet,
+  isAIResponseValueValid,
   isComponentTypeValid,
   putSurveyData,
   sortComplianceSurvey,
@@ -198,8 +199,11 @@ const _ComplianceSurveyQuestionnaire = (props: ComplianceSurveyQuestionnaireProp
 
       if (
         sections[activeSectionKey].follow_up[activeFollowUpKey].value === undefined &&
-        sections[activeSectionKey].follow_up[activeFollowUpKey].ai_response !== undefined &&
-        sections[activeSectionKey].follow_up[activeFollowUpKey].ai_response?.answer !== undefined
+        isAIResponseValueValid({
+          ai_response: sections[activeSectionKey].follow_up[activeFollowUpKey].ai_response,
+          component: sections[activeSectionKey].follow_up[activeFollowUpKey].component,
+          options: sections[activeSectionKey].follow_up[activeFollowUpKey].options,
+        })
       ) {
         buttonProps.label = 'Confirm';
         if (activeSectionIndex === Object.keys(sections).length - 1 && activeFollowUpIndex === Object.keys(sections[activeSectionKey].follow_up).length - 1) {

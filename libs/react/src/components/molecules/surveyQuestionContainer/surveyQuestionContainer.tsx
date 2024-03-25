@@ -4,7 +4,7 @@ import { cloneDeep, findIndex, forEach, forOwn } from 'lodash';
 import { IButtonProps, SurveyActiveKeyType, SurveyAdditionalContext, SurveyPayloadType, SurveySectionType } from '@coldpbc/interfaces';
 import { ButtonTypes, GlobalSizes } from '@coldpbc/enums';
 import { CSSTransition, SwitchTransition } from 'react-transition-group';
-import { getSectionIndex, ifAdditionalContextConditionMet, isComponentTypeValid, isKeyValueFollowUp } from '@coldpbc/lib';
+import { getSectionIndex, ifAdditionalContextConditionMet, isAIResponseValueValid, isComponentTypeValid, isKeyValueFollowUp } from '@coldpbc/lib';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { withErrorBoundary } from 'react-error-boundary';
 import { useAuth0Wrapper } from '@coldpbc/hooks';
@@ -329,8 +329,11 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
 
       if (
         sections[activeSectionKey].follow_up[activeFollowUpKey].value === undefined &&
-        sections[activeSectionKey].follow_up[activeFollowUpKey].ai_response !== undefined &&
-        sections[activeSectionKey].follow_up[activeFollowUpKey].ai_response?.answer !== undefined
+        isAIResponseValueValid({
+          ai_response: sections[activeSectionKey].follow_up[activeFollowUpKey].ai_response,
+          component: sections[activeSectionKey].follow_up[activeFollowUpKey].component,
+          options: sections[activeSectionKey].follow_up[activeFollowUpKey].options,
+        })
       ) {
         buttonProps.label = 'Confirm';
         if (activeSectionIndex === Object.keys(sections).length - 1 && activeFollowUpIndex === Object.keys(sections[activeSectionKey].follow_up).length - 1) {
