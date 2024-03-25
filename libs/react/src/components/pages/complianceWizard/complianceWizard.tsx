@@ -32,14 +32,6 @@ const _ComplianceWizard = () => {
 
   const setLDContext = () => {
     if (ldClient && orgId && name) {
-      const orgContext: LDContext = {
-        kind: 'organization',
-        key: orgId,
-      };
-      const complianceContext: LDContext = {
-        kind: 'complianceSet',
-        key: name,
-      };
       const isContextSet = checkContextValue(ldClient.getContext() as LDContext, {
         kind: 'complianceSet',
         key: name,
