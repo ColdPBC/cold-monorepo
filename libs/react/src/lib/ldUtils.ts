@@ -33,7 +33,6 @@ export const getUpdatedContext = (
 ): LDContext | LDMultiKindContext | LDSingleKindContext => {
   // this means that the context is not set. return a new context
   if (context.anonymous === true || resetContext === true) {
-    console.log(newContext);
     return newContext;
   }
   // If the context is a multi context, we need to update the specific context
