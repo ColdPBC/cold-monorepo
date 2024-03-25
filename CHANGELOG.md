@@ -1,8 +1,52 @@
+## [1.173.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.173.0...v1.173.1) (2024-03-23)
+
+
+### Bug Fixes
+
+* rename missed location > facility ([32da050](https://github.com/ColdPBC/cold-monorepo/commit/32da0506ba914ef9171825f5ebeb6ad5cd1b98c7))
+* rename missed location > facility ([52dfff8](https://github.com/ColdPBC/cold-monorepo/commit/52dfff85fa55173818ad28051e4140d744ec471a))
+
+# [1.173.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.172.1...v1.173.0) (2024-03-23)
+
+
+### Bug Fixes
+
+* add missing migrations ([b2e1e4d](https://github.com/ColdPBC/cold-monorepo/commit/b2e1e4d00c00e51068faf9f1a3e75683b7b1ec5a))
+* rename locations to facilities ([7327c3c](https://github.com/ColdPBC/cold-monorepo/commit/7327c3c4f9ec2bd996d9134acd9e14ac3f22c306))
+
+
+### Features
+
+* create facilities resource ([de6c960](https://github.com/ColdPBC/cold-monorepo/commit/de6c96066e2f78ab0640c93232d257f92448d306))
+* create organization_facilities model ([4bf6813](https://github.com/ColdPBC/cold-monorepo/commit/4bf68138490f9bea5d0ed977c66898aae9809b54))
+* create organization_facilities model ([65e31d1](https://github.com/ColdPBC/cold-monorepo/commit/65e31d1f0b6354c6a0b7e9e334461631daae9010))
+* create organization_facilities model ([4c6edaf](https://github.com/ColdPBC/cold-monorepo/commit/4c6edaf767f301f8b5d608a152e13d9dcde5968f))
+* emission_scopes model ([07aa574](https://github.com/ColdPBC/cold-monorepo/commit/07aa57498a9f61643826ff150af7adc6b4178226))
+* support mass deleting orgs ([75cc450](https://github.com/ColdPBC/cold-monorepo/commit/75cc450c5419772e438c4ec47e993846801cbd11))
+
+## [1.172.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.172.0...v1.172.1) (2024-03-23)
+
+
+### Bug Fixes
+
+* bug counting questions with `null` as answer ([8d2cce2](https://github.com/ColdPBC/cold-monorepo/commit/8d2cce2ca0f6344e3cd4d3a7246cee607e4447d8))
+
+# [1.172.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.171.0...v1.172.0) (2024-03-23)
+
+
+### Features
+
+* emission_scopes model ([24bf372](https://github.com/ColdPBC/cold-monorepo/commit/24bf3726636eda11474f130919a01663675ac235))
+
+# [1.170.0-cold-650.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.169.0...v1.170.0-cold-650.1) (2024-03-22)
+
 # [1.171.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.170.0...v1.171.0) (2024-03-22)
 
 
 ### Features
 
+
+* emission_scopes model ([24bf372](https://github.com/ColdPBC/cold-monorepo/commit/24bf3726636eda11474f130919a01663675ac235))
 * add cookie to set 5 min expiration when users start the automation ([85abae0](https://github.com/ColdPBC/cold-monorepo/commit/85abae0a4279c8a04aec9261ee8f95b3b7998263))
 
 # [1.170.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.169.0...v1.170.0) (2024-03-22)
@@ -11,6 +55,7 @@
 ### Features
 
 * update util function with missing operators and reuse it in the old survey questionnaire ([9913391](https://github.com/ColdPBC/cold-monorepo/commit/991339142cebe41ceba416c32eb83035777a74a9))
+
 
 # [1.169.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.168.0...v1.169.0) (2024-03-21)
 

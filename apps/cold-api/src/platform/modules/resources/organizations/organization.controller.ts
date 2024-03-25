@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpCode, Param, Post, Query, Req, UseFilters, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, NotFoundException, Param, Post, Query, Req, UseFilters, UseGuards } from '@nestjs/common';
 import { Span } from 'nestjs-ddtrace';
 import { ResourceValidationPipe } from '../../../pipes/resource.pipe';
 import { allRoles, bpcDecoratorOptions, coldAdminOnly, orgIdDecoratorOptions } from '../_global/global.params';
@@ -13,7 +13,7 @@ import { CreateOrganizationDto } from './dto/organization.dto';
 @ApiOAuth2(['openid', 'email', 'profile'])
 @ApiTags('Organizations')
 @UseFilters(new HttpExceptionFilter(OrganizationController.name))
-@Controller('organizations')
+@Controller()
 export class OrganizationController extends BaseWorker {
   constructor(private readonly orgService: OrganizationService) {
     super('OrganizationController');
@@ -31,7 +31,7 @@ export class OrganizationController extends BaseWorker {
     summary: 'Create Organization',
     operationId: 'CreateOrganization',
   })
-  @Post()
+  @Post('organizations')
   @Roles(...coldAdminOnly)
   @ApiQuery(bpcDecoratorOptions)
   @ApiBody({
@@ -62,7 +62,7 @@ export class OrganizationController extends BaseWorker {
     summary: 'Get Organizations',
     operationId: 'GetOrganizations',
   })
-  @Get()
+  @Get('organizations')
   @Roles(...coldAdminOnly)
   @ApiQuery(bpcDecoratorOptions)
   @ApiQuery({
@@ -84,7 +84,7 @@ export class OrganizationController extends BaseWorker {
     operationId: 'GetOrganization',
     description: 'Get Organization by Name or ID',
   })
-  @Get(':orgId')
+  @Get('organizations/:orgId')
   @ApiQuery(bpcDecoratorOptions)
   @ApiParam(orgIdDecoratorOptions)
   @Roles(...allRoles)
@@ -116,7 +116,7 @@ export class OrganizationController extends BaseWorker {
     operationId: 'DeleteOrg',
     description: 'Deletes specified organization',
   })
-  @Delete(':orgId')
+  @Delete('organizations/:orgId')
   @ApiQuery(bpcDecoratorOptions)
   @ApiParam(orgIdDecoratorOptions)
   @Roles(...coldAdminOnly)
@@ -131,6 +131,45 @@ export class OrganizationController extends BaseWorker {
       user: IAuthenticatedUser;
     },
   ) {
-    return this.orgService.deleteOrganization(orgId, req);
+    const org = await this.orgService.getOrganization(orgId, req);
+    if (!org) {
+      throw new NotFoundException('Organization not found');
+    }
+
+    return this.orgService.deleteOrganization(org, req);
+  }
+
+  /***
+   * **Internal Use Only** : Delete all test orgs
+   * @param res
+   * @param req
+   */
+  @ApiOperation({
+    summary: 'Delete Test Organizations',
+    operationId: 'DeleteTestOrgs',
+    description: 'Deletes all test organizations',
+  })
+  @Delete('test')
+  @Roles(...coldAdminOnly)
+  @HttpCode(204)
+  async deleteTestOrgs(
+    @Req()
+    req: {
+      body: any;
+      headers: any;
+      query: any;
+      user: IAuthenticatedUser;
+    },
+  ) {
+    const orgs = await this.orgService.getOrganizations(true, { isTest: true });
+    if (orgs) {
+      const deletePromises: any = [];
+      for (const org of orgs) {
+        deletePromises.push(this.orgService.deleteOrganization(org, req));
+      }
+      return await Promise.all(deletePromises);
+    } else {
+      throw new NotFoundException('No test organizations found');
+    }
   }
 }

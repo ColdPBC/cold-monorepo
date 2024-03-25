@@ -1,0 +1,15 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="cold-platform-climatiq:serve:production" type="NxRunConfigurationType" folderName="Climatiq: Serve">
+    <option name="nx-projects" value="cold-platform-climatiq" />
+    <option name="nx-targets" value="serve" />
+    <option name="nx-target-configuration" value="production" />
+    <envs>
+      <env name="DD_SERVICE" value="cold-platform-climatiq" />
+      <env name="LOG_FORMAT" value="pretty" />
+      <env name="NODE_ENV" value="production" />
+      <env name="PORT" value="7003" />
+    </envs>
+    <option name="arguments" value="" />
+    <method v="2" />
+  </configuration>
+</component>

@@ -6,7 +6,7 @@
     "definition": {
       "version": "1.83.5",
       "show": false,
-      "locations": false,
+      "facilities": false,
       "logo_url": "./assets/climatiq.png",
       "platform_url": "https://www.climatiq.io",
       "mqtt": {

@@ -1,0 +1,15 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="cold-platform-bayou:serve:production" type="NxRunConfigurationType" folderName="Bayou: Serve">
+    <option name="nx-projects" value="cold-platform-bayou" />
+    <option name="nx-targets" value="serve" />
+    <option name="nx-target-configuration" value="production" />
+    <envs>
+      <env name="DD_SERVICE" value="cold-platform-bayou" />
+      <env name="NODE_ENV" value="production" />
+      <env name="PORT" value="7004" />
+      <env name="LOG_FORMAT" value="pretty" />
+    </envs>
+    <option name="arguments" value="" />
+    <method v="2" />
+  </configuration>
+</component>
