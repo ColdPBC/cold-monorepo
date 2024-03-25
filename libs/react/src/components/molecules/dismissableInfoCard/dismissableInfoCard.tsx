@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Card } from '../card';
 import { motion } from 'framer-motion';
-import { getOrgStorage, setOrgStorage } from '../../../lib/orgStorage';
+import { getOrgStorage, setOrgStorage } from '@coldpbc/lib';
 import { useAuth0Wrapper } from '@coldpbc/hooks';
 import { get, set } from 'lodash';
 
