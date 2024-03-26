@@ -17,7 +17,7 @@ import { LDContext } from 'launchdarkly-js-sdk-common';
 import { datadogLogs } from '@datadog/browser-logs';
 
 const _ProtectedRoute = () => {
-  const { user, error, loginWithRedirect, isAuthenticated, isLoading, getAccessTokenSilently, orgId } = useAuth0Wrapper();
+  const { user, error, loginWithRedirect, isAuthenticated, isLoading, getAccessTokenSilently, orgId, logout } = useAuth0Wrapper();
   const { auth0Options } = useContext(ColdContext);
 
   const { logError, logBrowser } = useColdContext();
@@ -102,12 +102,12 @@ const _ProtectedRoute = () => {
           if (get(e, 'error') === 'login_required') {
             logBrowser('User needs to login', 'error', { error: e });
             logError(e, ErrorType.Auth0Error);
-            await loginWithRedirect();
+            await logout();
           }
           if (get(e, 'error') === 'consent_required') {
             logBrowser('User needs to give consent', 'error', { error: e });
             logError(e, ErrorType.Auth0Error);
-            await loginWithRedirect();
+            await logout();
           }
         }
         logBrowser('Error occurred while logging user in', 'error', { error: e });
