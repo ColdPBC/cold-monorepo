@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="cold-ui:serve:production" type="NxRunConfigurationType">
+  <configuration default="false" name="cold-ui:serve:production" type="NxRunConfigurationType" folderName="UI">
     <option name="nx-projects" value="cold-ui" />
     <option name="nx-targets" value="serve" />
     <option name="nx-target-configuration" value="production" />
