@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="cold-api:serve" type="NxRunConfigurationType">
+  <configuration default="false" name="cold-api:serve" type="NxRunConfigurationType" folderName="API: Serve">
     <option name="nx-projects" value="cold-api" />
     <option name="nx-targets" value="serve" />
     <option name="nx-target-configuration" value="production" />

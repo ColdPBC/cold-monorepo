@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="cold-api:test:ci" type="NxRunConfigurationType">
+  <configuration default="false" name="cold-api:test:ci" type="NxRunConfigurationType" folderName="API: Build">
     <option name="nx-projects" value="cold-api" />
     <option name="nx-targets" value="test" />
     <option name="nx-target-configuration" value="ci" />
