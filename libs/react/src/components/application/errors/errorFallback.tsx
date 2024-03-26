@@ -7,7 +7,15 @@ export type ErrorFallbackProps = {
 };
 
 export const ErrorFallback = ({ error }: ErrorFallbackProps) => {
-  const { logError } = useColdContext();
+  const { logError, logBrowser } = useColdContext();
   logError(error, ErrorType.RenderingError);
+  logBrowser(
+    'Error rendering component',
+    'error',
+    {
+      error: { ...error },
+    },
+    error,
+  );
   return <div></div>;
 };

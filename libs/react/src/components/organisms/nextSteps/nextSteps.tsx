@@ -1,21 +1,20 @@
 import React from 'react';
 import { Card, ErrorFallback, NextStepCard, Spinner } from '@coldpbc/components';
-import {useAuth0Wrapper, useColdContext, useOrgSWR} from '@coldpbc/hooks';
+import { useAuth0Wrapper, useColdContext, useOrgSWR } from '@coldpbc/hooks';
 import { axiosFetcher } from '@coldpbc/fetchers';
-import {OrgCompliance, SurveyNextStep, SurveyPayloadType} from '@coldpbc/interfaces';
-import { startCase } from 'lodash';
+import { OrgCompliance, SurveyNextStep, SurveyPayloadType } from '@coldpbc/interfaces';
+import { find, flatMap, includes, startCase } from 'lodash';
 import { useNavigate } from 'react-router-dom';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorType } from '@coldpbc/enums';
-import useSWR from "swr";
-import { flatMap, find, includes } from "lodash";
+import useSWR from 'swr';
 
 const _NextSteps = () => {
   const { orgId } = useAuth0Wrapper();
   const orgCompliances = useSWR<OrgCompliance[], any, any>([`/compliance_definitions/organizations/${orgId}`, 'GET'], axiosFetcher);
 
   const { data, isLoading, error } = useOrgSWR<SurveyPayloadType[]>(['/surveys', 'GET'], axiosFetcher);
-  const { logError } = useColdContext();
+  const { logError, logBrowser } = useColdContext();
   const navigate = useNavigate();
 
   const getSurveyProgress = (survey: SurveyPayloadType): number => {
@@ -49,20 +48,24 @@ const _NextSteps = () => {
   }
 
   if (error) {
+    logBrowser('Error fetching surveys', 'error', { ...error }, error);
     logError(error, ErrorType.SWRError);
     return;
   }
   if (orgCompliances.error) {
+    logBrowser('Error fetching org compliances', 'error', { ...orgCompliances.error }, orgCompliances.error);
     logError(orgCompliances.error, ErrorType.SWRError);
     return;
   }
+
+  logBrowser('Next steps loaded', 'info', { surveys: data, orgCompliances: orgCompliances.data });
 
   if (!orgCompliances.data?.length) {
     return;
   }
 
   const compliances = orgCompliances.data;
-  const complianceSurveys = flatMap(compliances, (compliance) => {
+  const complianceSurveys = flatMap(compliances, compliance => {
     return compliance.compliance_definition.surveys;
   });
 
@@ -78,13 +81,16 @@ const _NextSteps = () => {
     .map((survey): SurveyNextStep => {
       const progress = getSurveyProgress(survey);
       return {
-        compliance: find(compliances, (compliance) => {return includes(compliance.compliance_definition.surveys, survey.name)}),
+        compliance: find(compliances, compliance => {
+          return includes(compliance.compliance_definition.surveys, survey.name);
+        }),
         name: survey.name,
         title: startCase(survey.name),
         started: progress > 0,
         surveyProgress: progress,
       };
-    }).splice(0, 3);
+    })
+    .splice(0, 3);
 
   if (!nextSteps?.length) {
     return null;

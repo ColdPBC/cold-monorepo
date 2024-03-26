@@ -1,19 +1,18 @@
 import { withErrorBoundary } from 'react-error-boundary';
-import { BaseButton, ErrorFallback, Input, Spinner } from '@coldpbc/components';
+import { ErrorFallback, Spinner } from '@coldpbc/components';
 import { useColdContext } from '@coldpbc/hooks';
 import { axiosFetcher } from '@coldpbc/fetchers';
-import { ButtonTypes, ErrorType, InputTypes } from '@coldpbc/enums';
+import { ErrorType } from '@coldpbc/enums';
 import React, { useEffect, useState } from 'react';
-import { InputOption } from '@coldpbc/interfaces';
 import useSWR from 'swr';
-import { CheckIcon, ChevronDownIcon } from '@heroicons/react/20/solid';
+import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import { flowbiteThemeOverride } from '@coldpbc/themes';
 import { Dropdown } from 'flowbite-react';
 import { find } from 'lodash';
 
 const _OrganizationSelector = () => {
   const { data, error, isLoading } = useSWR<any, any, any>(['/organizations', 'GET'], axiosFetcher);
-  const { logError, setImpersonatingOrg, impersonatingOrg } = useColdContext();
+  const { logError, setImpersonatingOrg, impersonatingOrg, logBrowser } = useColdContext();
   const unselectedOrg = {
     id: '0',
     name: 'unselected',
@@ -23,6 +22,7 @@ const _OrganizationSelector = () => {
   const [selectedOrg, setSelectedOrg] = useState<any>(initialValue);
 
   const onOrgSelect = (org: any) => {
+    logBrowser(`New impersonating organization selected: ${org.display_name}`, 'info', { org: org });
     setSelectedOrg(org);
     if (org.name === 'unselected') {
       setImpersonatingOrg(undefined);
@@ -42,9 +42,12 @@ const _OrganizationSelector = () => {
   }
 
   if (error) {
+    logBrowser('Error loading organizations data', 'error', { ...error }, error);
     logError(error, ErrorType.SWRError);
     return null;
   }
+
+  logBrowser('Organizations data for organization selector loaded', 'info', { data, selectedOrg });
 
   return (
     <div className={'w-full p-4'}>

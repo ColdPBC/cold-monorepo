@@ -7,7 +7,7 @@ import { useColdContext, useOrgSWR } from '@coldpbc/hooks';
 import { axiosFetcher } from '@coldpbc/fetchers';
 
 export const _DocumentUpload = () => {
-  const { logError } = useColdContext();
+  const { logError, logBrowser } = useColdContext();
 
   const filesSWR = useOrgSWR<any, any>([`/files`, 'GET'], axiosFetcher);
 
@@ -26,6 +26,7 @@ export const _DocumentUpload = () => {
   };
 
   if (filesSWR.error) {
+    logBrowser('Error fetching files', 'error', { ...filesSWR.error }, filesSWR.error);
     logError(filesSWR.error.message, ErrorType.SWRError, filesSWR.error);
   }
 
@@ -42,6 +43,11 @@ export const _DocumentUpload = () => {
         };
       })
     : [];
+
+  logBrowser('Fetched files', 'info', {
+    files: data,
+    filesSWR: filesSWR.data,
+  });
 
   return (
     <AppContent title="Documents">

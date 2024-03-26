@@ -1,10 +1,9 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { CenterColumnContent } from '../../organisms/centerColumnContent/centerColumnContent';
 import { RightColumnContent } from '../../organisms/rightColumnContent/rightColumnContent';
 import { useAuth0 } from '@auth0/auth0-react';
 import { Spinner } from '../../atoms/spinner/spinner';
 import { axiosFetcher } from '@coldpbc/fetchers';
-import useSWR from 'swr';
 import { some } from 'lodash';
 import { FootprintOverviewCard } from '../../molecules';
 import { FootprintDetailCard } from '../../molecules/footprintDetailCard';
@@ -22,14 +21,12 @@ const PERIOD = 2023;
 
 function _Footprint() {
   const auth0 = useAuth0();
-  const { logError } = useColdContext();
+  const { logError, logBrowser } = useColdContext();
   // Get footprint data from SWR
-  const { data, error, isLoading } = useOrgSWR<any>(
-    ['/categories/company_decarbonization', 'GET'],
-    axiosFetcher,
-  );
+  const { data, error, isLoading } = useOrgSWR<any>(['/categories/company_decarbonization', 'GET'], axiosFetcher);
 
   if (error) {
+    logBrowser('Error fetching footprint data', 'error', { ...error }, error);
     logError(error, ErrorType.SWRError);
     return null;
   }
@@ -37,12 +34,7 @@ function _Footprint() {
   const isEmptyFootprintData =
     !isLoading &&
     !some(data.subcategories, (subcategory: any) =>
-      some(
-        subcategory.activities,
-        (activity: any) =>
-          activity.footprint?.[PERIOD] &&
-          activity.footprint?.[PERIOD].value !== undefined,
-      ),
+      some(subcategory.activities, (activity: any) => activity.footprint?.[PERIOD] && activity.footprint?.[PERIOD].value !== undefined),
     );
 
   if (auth0.isLoading) {
@@ -54,36 +46,26 @@ function _Footprint() {
   }
 
   if (auth0.error) {
+    logBrowser('Error fetching auth0 user', 'error', { ...auth0.error }, auth0.error);
     logError(auth0.error, ErrorType.Auth0Error);
     return null;
   }
 
   if (auth0.user) {
+    logBrowser('User authenticated', 'info', {
+      user: auth0.user,
+      isEmptyFootprintData,
+      data,
+    });
     return (
       <AppContent title="Footprint">
         <CenterColumnContent>
           {!isEmptyFootprintData ? (
             <>
-              <FootprintDetailCard
-                colors={getSchemeForColor(HexColors.lightblue)}
-                period={PERIOD}
-                subcategory_key="facilities"
-              />
-              <FootprintDetailCard
-                colors={getSchemeForColor(HexColors.teal)}
-                period={PERIOD}
-                subcategory_key="product"
-              />
-              <FootprintDetailCard
-                colors={getSchemeForColor(HexColors.green)}
-                period={PERIOD}
-                subcategory_key="operations"
-              />
-              <FootprintDetailCard
-                colors={getSchemeForColor(HexColors.purple)}
-                period={PERIOD}
-                subcategory_key="travel"
-              />
+              <FootprintDetailCard colors={getSchemeForColor(HexColors.lightblue)} period={PERIOD} subcategory_key="facilities" />
+              <FootprintDetailCard colors={getSchemeForColor(HexColors.teal)} period={PERIOD} subcategory_key="product" />
+              <FootprintDetailCard colors={getSchemeForColor(HexColors.green)} period={PERIOD} subcategory_key="operations" />
+              <FootprintDetailCard colors={getSchemeForColor(HexColors.purple)} period={PERIOD} subcategory_key="travel" />
             </>
           ) : (
             <>
@@ -92,17 +74,12 @@ function _Footprint() {
                 onDismiss={() => {}}
                 dismissKey="footprint-page"
               />
-              <FootprintOverviewCard
-                chartVariant={EmissionsDonutChartVariants.horizontal}
-                headerless
-              />
+              <FootprintOverviewCard chartVariant={EmissionsDonutChartVariants.horizontal} headerless />
             </>
           )}
         </CenterColumnContent>
         <RightColumnContent>
-          <FootprintOverviewCard
-            chartVariant={EmissionsDonutChartVariants.vertical}
-          />
+          <FootprintOverviewCard chartVariant={EmissionsDonutChartVariants.vertical} />
         </RightColumnContent>
       </AppContent>
     );
@@ -112,7 +89,7 @@ function _Footprint() {
 }
 
 export const Footprint = withErrorBoundary(_Footprint, {
-  FallbackComponent: (props) => <ErrorFallback {...props} />,
+  FallbackComponent: props => <ErrorFallback {...props} />,
   onError: (error, info) => {
     console.error('Error occurred in Footprint: ', error);
   },

@@ -12,7 +12,7 @@ import { ToastMessage } from '@coldpbc/interfaces';
 
 const _AutomateComplianceFlowStep = () => {
   const documents = useOrgSWR<any, any>(['/files', 'GET'], axiosFetcher);
-  const { logError } = useColdContext();
+  const { logError, logBrowser } = useColdContext();
   const { orgId } = useAuth0Wrapper();
   const { addToastMessage } = useAddToastMessage();
   const { nextStep, setCurrentStep, data } = useContext(WizardContext);
@@ -21,7 +21,7 @@ const _AutomateComplianceFlowStep = () => {
   // get cookie using the orgId
   let initialState = false;
   if (orgId) {
-    initialState = Cookies.get(`automationKickoff-${orgId}`) === 'true';
+    initialState = Cookies.get(`automationKickoff-${orgId}-${name}`) === 'true';
   }
   const [automationKickoff, setAutomationKickoff] = useState(initialState);
 
@@ -29,13 +29,28 @@ const _AutomateComplianceFlowStep = () => {
     // post to start automation
     const response = await axiosFetcher([`/compliance_definitions/${name}/organizations/${orgId}`, 'PUT']);
     if (isAxiosError(response)) {
+      logBrowser(
+        'Error starting automation',
+        'error',
+        {
+          response,
+          orgId,
+          name,
+        },
+        response,
+      );
       await addToastMessage({ message: 'Automation could not be started', type: ToastMessage.FAILURE });
     } else {
       // set cookie to true. it should expire in 5 minutes
+      logBrowser('Automation successfully started', 'info', {
+        response,
+        orgId,
+        name,
+      });
       await mutate([`/compliance_definitions/organizations/${orgId}`, 'GET']);
       await addToastMessage({ message: 'Compliance activated', type: ToastMessage.SUCCESS });
       const expires = addMinutes(new Date(), 5);
-      Cookies.set(`automationKickoff-${orgId}`, 'true', {
+      Cookies.set(`automationKickoff-${orgId}-${name}`, 'true', {
         expires: expires,
       });
       setAutomationKickoff(true);
@@ -44,6 +59,7 @@ const _AutomateComplianceFlowStep = () => {
   };
 
   if (documents.error) {
+    logBrowser('Error fetching documents', 'error', { ...documents.error }, documents.error);
     logError(documents.error, ErrorType.SWRError);
     return null;
   }
@@ -52,7 +68,7 @@ const _AutomateComplianceFlowStep = () => {
     ?.map((document: any) => {
       // separate the original_name of each document to file name and extension. use the file name only
       const fileName = document.original_name.split('.')[0];
-      return ` \n * [${fileName}]`;
+      return ` \n * ${fileName}`;
     })
     .join('');
 
@@ -69,8 +85,18 @@ const _AutomateComplianceFlowStep = () => {
       title={'Start Automation'}
       markdown={`Cold will pre-fill as much of the form as possible based on the documents below. You'll always be able to review and edit responses yourself before submission. \n\nDocuments being used: ${documentsList}`}
       ctas={[
-        { label: 'Start', onClick: () => startAutomation(), className: getAutomationButtonClassName(), disabled: automationKickoff },
-        { label: 'Skip For Now', onClick: () => setCurrentStep('questionnaire'), variant: ButtonTypes.secondary, className: 'h-[72px] w-full' },
+        {
+          label: 'Start',
+          onClick: () => startAutomation(),
+          className: getAutomationButtonClassName(),
+          disabled: automationKickoff,
+        },
+        {
+          label: 'Skip For Now',
+          onClick: () => setCurrentStep('questionnaire'),
+          variant: ButtonTypes.secondary,
+          className: 'h-[72px] w-full',
+        },
       ]}
       isLoading={documents.isLoading}
     />

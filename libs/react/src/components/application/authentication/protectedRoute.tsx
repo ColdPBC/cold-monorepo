@@ -14,12 +14,13 @@ import { ErrorPage } from '../errors/errorPage';
 import { datadogRum } from '@datadog/browser-rum';
 import { checkContextValue, getUpdatedContext } from '@coldpbc/lib';
 import { LDContext } from 'launchdarkly-js-sdk-common';
+import { datadogLogs } from '@datadog/browser-logs';
 
 const _ProtectedRoute = () => {
   const { user, error, loginWithRedirect, isAuthenticated, isLoading, getAccessTokenSilently, orgId } = useAuth0Wrapper();
   const { auth0Options } = useContext(ColdContext);
 
-  const { logError } = useColdContext();
+  const { logError, logBrowser } = useColdContext();
 
   const ldClient = useLDClient();
 
@@ -70,16 +71,22 @@ const _ProtectedRoute = () => {
                   key: orgId,
                 });
                 if (!isContextSet) {
-                  await ldClient.identify(
-                    getUpdatedContext(currentContext, {
-                      kind: 'organization',
-                      key: orgId,
-                    }),
-                  );
+                  const newContext = getUpdatedContext(currentContext, {
+                    kind: 'organization',
+                    key: orgId,
+                  });
+                  logBrowser('Setting LD context for organization', 'info', {
+                    isContextSet,
+                    orgId,
+                    newContext,
+                  });
+                  await ldClient.identify(newContext);
                 }
               }
               datadogRum.setUser(user?.coldclimate_claims);
+              datadogLogs.setUser(user?.coldclimate_claims);
             } else {
+              logBrowser('Logging in user', 'info', { user, isAuthenticated });
               await loginWithRedirect({
                 appState: appState,
                 authorizationParams: {
@@ -93,14 +100,17 @@ const _ProtectedRoute = () => {
       } catch (e) {
         if (has(e, 'error')) {
           if (get(e, 'error') === 'login_required') {
+            logBrowser('User needs to login', 'error', { error: e });
             logError(e, ErrorType.Auth0Error);
             await loginWithRedirect();
           }
           if (get(e, 'error') === 'consent_required') {
+            logBrowser('User needs to give consent', 'error', { error: e });
             logError(e, ErrorType.Auth0Error);
             await loginWithRedirect();
           }
         }
+        logBrowser('Error occurred while logging user in', 'error', { error: e });
         logError(e, ErrorType.Auth0Error);
       }
     };
@@ -122,6 +132,7 @@ const _ProtectedRoute = () => {
     let errorMessage;
 
     if (error) {
+      logBrowser('Error occurred in ProtectedRoute', 'error', { ...error }, error);
       logError(error, ErrorType.Auth0Error);
       if (error.message === 'invitation not found or already used') {
         errorMessage = 'This link is no longer valid. Please request a new invitation from one of your administrators.';
@@ -129,6 +140,7 @@ const _ProtectedRoute = () => {
     }
 
     if (signedPolicySWR.error) {
+      logBrowser('Error occurred in ProtectedRoute', 'error', { error: signedPolicySWR.error }, signedPolicySWR.error);
       logError(signedPolicySWR.error, ErrorType.SWRError);
     }
 
@@ -137,11 +149,13 @@ const _ProtectedRoute = () => {
 
   if (isAuthenticated && user) {
     if (needsSignup()) {
+      logBrowser('User needs to sign up', 'info', { user });
       return <SignupPage signedPolicyData={signedPolicySWR.data} userData={user} />;
     }
-
+    logBrowser('User is authenticated', 'info', { user, isAuthenticated, orgId });
     return <Outlet />;
   } else {
+    logBrowser('User is not authenticated', 'info', { user, isAuthenticated, orgId, isLoading, error });
     return (
       <Takeover show={true} setShow={() => {}}>
         <div className="absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">

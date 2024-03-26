@@ -23,12 +23,13 @@ import {
 } from '@coldpbc/lib';
 import { GlobalSizes } from '@coldpbc/enums';
 import { withErrorBoundary } from 'react-error-boundary';
-import { useAuth0Wrapper } from '@coldpbc/hooks';
+import { useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
 import { get, set } from 'lodash';
 import { mutate } from 'swr';
 
 const _SurveyComplianceFlowStep = () => {
   const { data } = useContext(WizardContext);
+  const { logBrowser } = useColdContext();
   const { orgId, getOrgSpecificUrl } = useAuth0Wrapper();
   const { surveyData, name } = data as { surveyData: ComplianceSurveyPayloadType; name: string };
   const [activeKey, setActiveKey] = React.useState<ComplianceSurveyActiveKeyType>({
@@ -49,6 +50,13 @@ const _SurveyComplianceFlowStep = () => {
 
   const onSurveyClose = async () => {
     if (activeKey.section === 'savedQuestions') {
+      logBrowser('Saved question closed', 'info', {
+        data,
+        orgId,
+        surveyData,
+        activeKey,
+        bookmarked,
+      });
       const bookmarkedQuestion = getAccurateBookmarkedValue(surveyState.definition.sections, activeKey, bookmarked);
       const newSurvey = updateSurveyQuestion(surveyData, activeKey, {
         value: getQuestionValue(surveyData, activeKey),
@@ -81,11 +89,24 @@ const _SurveyComplianceFlowStep = () => {
       const parsedOrgStorage = getOrgStorage(orgId);
       set(parsedOrgStorage, `compliance.${name}.complianceActiveKey`, activeKey);
       setOrgStorage(orgId, parsedOrgStorage);
+      logBrowser('Active key updated', 'info', {
+        data,
+        orgId,
+        activeKey,
+        surveyData,
+      });
     }
   }, [activeKey]);
 
   useEffect(() => {
     const newSavedQuestions = getSavedQuestionsInSurvey(surveyState);
+    logBrowser('Saved questions updated', 'info', {
+      oldSavedQuestions: savedQuestions,
+      newSavedQuestions,
+      data,
+      orgId,
+      activeKey,
+    });
     setSavedQuestions(newSavedQuestions);
     if (newSavedQuestions.length === 0 && activeKey.section === 'savedQuestions') {
       const key = getStartingKey(sortedSurvey);
@@ -100,6 +121,15 @@ const _SurveyComplianceFlowStep = () => {
   if (activeKey.section === '') {
     return <Spinner size={GlobalSizes.xLarge} />;
   }
+
+  logBrowser('Survey Compliance Flow Step', 'info', {
+    data,
+    orgId,
+    surveyData,
+    activeKey,
+    bookmarked,
+    savedQuestions,
+  });
 
   return (
     <div className={'h-[708px] w-full flex flex-row relative text-tc-primary'}>

@@ -36,6 +36,7 @@ export const StoryMockProvider = (
     } as Auth0ProviderOptions,
     launchDarklyClientSideId: '',
     logError: (error: any, type: ErrorType, context?: object) => {},
+    logBrowser: (message: string, type: any, context?: any, error?: any) => {},
     impersonatingOrg: impersonatingOrg,
     setImpersonatingOrg: setImpersonatingOrg,
   };
