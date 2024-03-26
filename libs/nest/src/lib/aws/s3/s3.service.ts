@@ -95,7 +95,7 @@ export class S3Service extends BaseWorker implements OnModuleInit {
     }
   }
 
-  async getObject(user: IAuthenticatedUser, bucket: string, key: string) {
+  async getObject(user: IAuthenticatedUser | AuthenticatedUser, bucket: string, key: string) {
     try {
       this.logger.info(`Getting object from S3: ${key} in bucket ${bucket}`, {
         user: user.coldclimate_claims,
