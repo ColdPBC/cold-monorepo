@@ -7,7 +7,7 @@ import { integrations, organizations, service_definitions } from '@prisma/client
 import { Job, Queue } from 'bull';
 import { InjectQueue } from '@nestjs/bull';
 import { OpenAIResponse } from './validator/validator';
-import { PromptsService } from './surveys/prompts/prompts.service';
+import { PromptsService } from '../prompts/prompts.service';
 
 @Injectable()
 export class AssistantService extends BaseWorker implements OnModuleInit {

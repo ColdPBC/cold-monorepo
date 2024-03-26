@@ -7,6 +7,7 @@ export class PromptsService extends BaseWorker {
     super(PromptsService.name);
   }
 
+  //TODO: finish adding all the langchain variants
   async getComponentPrompt(key: string, item: any) {
     let component_prompt = '';
     switch (item.component) {
@@ -59,6 +60,7 @@ export class PromptsService extends BaseWorker {
     return component_prompt;
   }
 
+  //TODO: make this compliant with langChain
   async getBasePrompt(organization: any) {
     /**
      * @description This action retrieves the instructions for the OpenAI assistant.

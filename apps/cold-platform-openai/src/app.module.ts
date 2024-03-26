@@ -10,11 +10,17 @@ import { FileService } from './assistant/files/file.service';
 import { AssistantService } from './assistant/assistant.service';
 import { AssistantModule } from './assistant/assistant.module';
 import { BullModule } from '@nestjs/bull';
-import { EventsModule } from '../../../cold-api/src/platform/modules/utilities/events/events.module';
-import { PromptsService } from './assistant/surveys/prompts/prompts.service';
+import { PromptsService } from './prompts/prompts.service';
 import { Tools } from './assistant/tools/tools';
+import { PineconeModule } from './pinecone/pinecone.module';
+import { LangchainModule } from './langchain/langchain.module';
+import { ChatModule } from './chat/chat.module';
+import { LangchainLoaderService } from './langchain/langchain.loader.service';
 
-@Module({})
+@Module({
+  imports: [PineconeModule, LangchainModule, ChatModule],
+  providers: [LangchainLoaderService],
+})
 export class AppModule {
   static async forRootAsync() {
     //const config = new ConfigService();
@@ -23,7 +29,6 @@ export class AppModule {
       module: AppModule,
       imports: [
         await NestModule.forRootAsync(2, 'cold-api-'),
-        await EventsModule.forRootAsync(),
         BullModule.registerQueue({
           name: 'openai',
         }),
