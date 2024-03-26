@@ -16,6 +16,7 @@ import { PineconeModule } from './pinecone/pinecone.module';
 import { LangchainModule } from './langchain/langchain.module';
 import { ChatModule } from './chat/chat.module';
 import { LangchainLoaderService } from './langchain/langchain.loader.service';
+import { LoadersModule } from './langchain/loaders/loaders.module';
 
 @Module({
   imports: [PineconeModule, LangchainModule, ChatModule],
@@ -44,6 +45,10 @@ export class AppModule {
         }),
         PrismaModule,
         AssistantModule,
+        PineconeModule,
+        LangchainModule,
+        LoadersModule,
+        ChatModule,
       ],
       controllers: [OpenAIController],
       providers: [

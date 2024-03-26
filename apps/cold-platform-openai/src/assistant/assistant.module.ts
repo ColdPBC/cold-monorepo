@@ -6,11 +6,12 @@ import { FileService } from './files/file.service';
 import { PromptsService } from '../prompts/prompts.service';
 import { Tools } from './tools/tools';
 import { BullModule } from '@nestjs/bull';
-import { DarklyModule } from '@coldpbc/nest';
+import { ColdRabbitModule, DarklyModule } from '@coldpbc/nest';
 
 @Module({
   imports: [
     DarklyModule.forRoot(),
+    ColdRabbitModule.forRootAsync(),
     BullModule.registerQueue({
       name: 'openai',
     }),

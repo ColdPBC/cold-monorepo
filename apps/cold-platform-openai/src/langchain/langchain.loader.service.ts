@@ -1,18 +1,30 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { AuthenticatedUser, BaseWorker, DarklyService, S3Service } from '@coldpbc/nest';
-import { S3Loader } from 'langchain/document_loaders/web/s3';
 import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
 import { PineconeService } from '../pinecone/pinecone.service';
 import { ConfigService } from '@nestjs/config';
 import { OpenAIEmbeddings } from 'langchain/embeddings/openai';
 import { PineconeStore } from 'langchain/vectorstores/pinecone';
+import { PDFLoader } from './loaders/pdf.loader';
+import { WordLoader } from './loaders/word.loader';
+import { XlsLoader } from './loaders/xls.loader';
+import { TextLoader } from './loaders/text.loader';
 
 @Injectable()
 export class LangchainLoaderService extends BaseWorker implements OnModuleInit {
   chunkSize: number;
   overlapSize: number;
 
-  constructor(private readonly darkly: DarklyService, private s3Service: S3Service, private readonly pineconeService: PineconeService, private readonly config: ConfigService) {
+  constructor(
+    private readonly darkly: DarklyService,
+    private s3: S3Service,
+    private readonly pc: PineconeService,
+    private readonly config: ConfigService,
+    private readonly pdfLoader: PDFLoader,
+    private readonly wordLoader: WordLoader,
+    private readonly xlsLoader: XlsLoader,
+    private readonly textLoader: TextLoader,
+  ) {
     super(LangchainLoaderService.name);
   }
 
@@ -38,48 +50,39 @@ export class LangchainLoaderService extends BaseWorker implements OnModuleInit {
 
   async ingestData(user: AuthenticatedUser, organization: any, namespaceName?: string) {
     try {
-      const tmpPath = process.env.NODE_ENV === 'production' ? '/tmp' : 'tmp';
-
       const openAIapiKey = this.config.get<string>('OPENAI_API_KEY');
       const bucket = `cold-api-uploaded-files/${process.env['NODE_ENV']}/${organization.id}`;
-      const index = this.pineconeService.pinecone.Index(namespaceName);
+      const index = this.pc.pinecone.Index(namespaceName);
 
       // Create index if it doesn't exist
       if (!index) {
-        await this.pineconeService.createIndex(organization.name);
+        await this.pc.createIndex(organization.name);
       }
 
-      const s3Docs = await this.s3Service.listObjects(user, organization, bucket);
+      const s3Docs = await this.s3.listObjects(user, organization, bucket);
 
       for (const doc of s3Docs) {
-        const loader = new S3Loader({
-          bucket: bucket,
-          key: doc.Key,
-          s3Config: {
-            region: 'us-east-1',
-            credentials: {
-              accessKeyId: this.config.getOrThrow('AWS_ACCESS_KEY_ID'),
-              secretAccessKey: this.config.getOrThrow('AWS_SECRET_ACCESS_KEY'),
-            },
-          },
-          unstructuredAPIURL: '',
-          unstructuredAPIKey: '', // this will be soon required
-        });
+        const s3File = await this.s3.getObject(user, bucket, doc.Key);
+        let content: any;
+
+        switch (s3File.ContentType) {
+          case 'application/pdf':
+            content = await this.pdfLoader.load(s3File.Body as unknown as Buffer);
+            break;
+        }
 
         const textSplitter = new RecursiveCharacterTextSplitter({
           chunkSize: Number(this.chunkSize),
           chunkOverlap: Number(this.overlapSize),
         });
 
-        const rawDoc = await loader.load();
-
-        const splitDoc = await textSplitter.splitDocuments(rawDoc);
+        const document = await textSplitter.splitDocuments(content);
 
         const embeddings = new OpenAIEmbeddings({
           openAIApiKey: openAIapiKey as string,
         });
 
-        await PineconeStore.fromDocuments(splitDoc, embeddings, {
+        await PineconeStore.fromDocuments(document, embeddings, {
           pineconeIndex: index,
           namespace: namespaceName as string,
           textKey: 'text',
