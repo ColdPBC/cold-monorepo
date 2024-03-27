@@ -1,3 +1,10 @@
+# [1.176.0-cold-657.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.176.0-cold-657.2...v1.176.0-cold-657.3) (2024-03-27)
+
+
+### Features
+
+* adding chat components ([0bdf526](https://github.com/ColdPBC/cold-monorepo/commit/0bdf52685c06f86226030b717e9914e8f69f3b2c))
+
 # [1.176.0-cold-657.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.176.0-cold-657.1...v1.176.0-cold-657.2) (2024-03-27)
 
 
