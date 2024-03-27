@@ -6,7 +6,7 @@ import { AuthenticatedUser, IAuthenticatedUser } from '../../primitives';
 import crypto from 'crypto';
 import stream from 'stream';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
-import { GetObjectCommand, ListObjectsCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import { GetObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 
 @Injectable()
 export class S3Service extends BaseWorker implements OnModuleInit {
@@ -73,26 +73,6 @@ export class S3Service extends BaseWorker implements OnModuleInit {
     });
 
     return { file, key, uploaded, bucket };
-  }
-
-  async listObjects(user: AuthenticatedUser, organization: any, bucket: string) {
-    try {
-      this.logger.info(`listing objects from S3: ${bucket}`, {
-        user: user.coldclimate_claims,
-        bucket: `cold-api-uploaded-files/${process.env['NODE_ENV']}/`,
-      });
-
-      const { Contents: files } = await this.client.send(new ListObjectsCommand({ Bucket: bucket }));
-
-      if (!files) {
-        return [];
-      }
-
-      return files;
-    } catch (e: any) {
-      this.logger.error(`Error getting object from S3: ${e.message}`, e);
-      throw e;
-    }
   }
 
   async getObject(user: IAuthenticatedUser | AuthenticatedUser, bucket: string, key: string) {
