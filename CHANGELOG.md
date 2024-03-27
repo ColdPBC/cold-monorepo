@@ -1,3 +1,10 @@
+## [1.176.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.176.0...v1.176.1) (2024-03-27)
+
+
+### Bug Fixes
+
+* issue where nulls were being counted answered ([efa2b04](https://github.com/ColdPBC/cold-monorepo/commit/efa2b040cb9784fe0137eba1f8dd00583e99b2fd))
+
 # [1.176.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.175.0...v1.176.0) (2024-03-27)
 
 
