@@ -1,3 +1,10 @@
+## [1.176.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.176.2...v1.176.3) (2024-03-27)
+
+
+### Bug Fixes
+
+* darkly rate limit bug ([58dc581](https://github.com/ColdPBC/cold-monorepo/commit/58dc5811c21b43b5c4d71c047080d0e2b52a7f55))
+
 ## [1.176.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.176.1...v1.176.2) (2024-03-27)
 
 
