@@ -284,6 +284,7 @@ export const updateSurveyQuestion = (
     value?: any | null;
     skipped?: boolean;
     saved?: boolean;
+    document_link?: string;
   },
   submit?: boolean,
   additional?: boolean,
