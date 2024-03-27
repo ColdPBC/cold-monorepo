@@ -36,6 +36,7 @@ const _SideBar = (): JSX.Element => {
   const { data: actionsData, error: actionsError } = useOrgSWR<ActionPayload[], any>(ldFlags.showActions261 ? [`/actions`, 'GET'] : null, axiosFetcher);
 
   const auth0 = useAuth0Wrapper();
+  const { logBrowser } = useColdContext();
 
   const filterSidebar = (item: NavbarItem) => {
     if (item.key === 'actions_key') {
@@ -219,9 +220,18 @@ const _SideBar = (): JSX.Element => {
     );
 
   if (error || actionsError || auth0.error) {
-    if (error) logError(error, ErrorType.SWRError);
-    if (actionsError) logError(actionsError, ErrorType.SWRError);
-    if (auth0.error) logError(auth0.error, ErrorType.Auth0Error);
+    if (error) {
+      logBrowser('Error loading sidebar data', 'error', { ...error }, error);
+      logError(error, ErrorType.SWRError);
+    }
+    if (actionsError) {
+      logBrowser('Error loading actions data', 'error', { ...actionsError }, actionsError);
+      logError(actionsError, ErrorType.SWRError);
+    }
+    if (auth0.error) {
+      logBrowser('Error loading auth0 data', 'error', { ...auth0.error }, auth0.error);
+      logError(auth0.error, ErrorType.Auth0Error);
+    }
     return <></>;
   }
 
@@ -246,6 +256,7 @@ const _SideBar = (): JSX.Element => {
 
   if (filteredSidebarItems) {
     // Separate the items into top and bottom nav items
+    logBrowser('Sidebar data loaded', 'info', { data, actionsData, filteredSidebarItems });
     const topItems: NavbarItem[] = clone(filteredSidebarItems);
 
     const bottomItems = remove(topItems, (item: NavbarItem) => {

@@ -1,10 +1,11 @@
 import React, { PropsWithChildren, useEffect, useRef } from 'react';
 import mqtt from 'mqtt';
-import { useAuth0Wrapper } from '@coldpbc/hooks';
+import { useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
 import { useSWRConfig } from 'swr';
 import { forEach } from 'lodash';
 
 export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
+  const { logBrowser } = useColdContext();
   const { user, orgId, getAccessTokenSilently, isAuthenticated } = useAuth0Wrapper();
   const client = useRef<mqtt.MqttClient | null>(null);
   const [connectionStatus, setConnectionStatus] = React.useState(false);
@@ -34,7 +35,7 @@ export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
         client.current = mqtt.connect(url, { clientId: `${org_id}-${Math.floor(Math.random() * 1000)}` });
 
         client.current.on('connect', () => {
-          console.log('connected to IOT');
+          logBrowser('Connected to IOT', 'info');
           setConnectionStatus(true);
 
           const topics = [`ui/${env}/${org_id}/#`, `system/${env}/public/#`];
@@ -50,21 +51,21 @@ export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
 
         client.current.on('message', (topic, payload, packet) => {
           const payloadString = packet.payload.toString();
-          console.log(`Received message for topic ${topic} ` + payloadString);
+          logBrowser('Received message from IOT', 'info', { topic, payloadString, packet });
           try {
             const parsedPayload = JSON.parse(payloadString);
-            console.log(`Parsed payload for topic ${topic} ` + parsedPayload);
+            logBrowser('Received message from IOT', 'info', { topic, parsedPayload, packet });
             if (parsedPayload.swr_key) {
               mutate([parsedPayload.swr_key, 'GET']);
             }
           } catch (e) {
-            console.log(e);
+            logBrowser('Error parsing payload from IOT', 'error', { topic, payloadString, packet, e }, e);
           }
         });
 
         client.current.on('close', () => {
           setConnectionStatus(false);
-          console.log('disconnected');
+          logBrowser('Connection to IOT closed', 'info');
         });
       }
     };
@@ -76,9 +77,9 @@ export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
     if (client) {
       client.subscribe(topic, (err, granted) => {
         if (err) {
-          console.log('Error subscribing to topic ' + topic);
+          logBrowser('Error subscribing to topic ' + topic, 'error', { err }, err);
         } else {
-          console.log('Subscribed to topic ' + topic);
+          logBrowser('Subscribed to topic ' + topic, 'info', { topic, granted });
         }
       });
     }

@@ -1,6 +1,7 @@
 import React, { PropsWithChildren, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { isEqual } from 'lodash';
+import { useColdContext } from '@coldpbc/hooks';
 
 export interface WizardProps {
   baseURL: string;
@@ -44,7 +45,7 @@ export const WizardContext = React.createContext<WizardContextType>({
 
 export const Wizard = (props: PropsWithChildren<WizardProps>) => {
   const navigate = useNavigate();
-
+  const { logBrowser } = useColdContext();
   const location = useLocation();
 
   const { steps, baseURL, children, data } = props;
@@ -58,6 +59,13 @@ export const Wizard = (props: PropsWithChildren<WizardProps>) => {
   const nextStep = () => {
     const currentIndex = steps.findIndex(step => isEqual(step, currentStep));
     if (currentIndex < steps.length - 1) {
+      logBrowser('Navigating to next step', 'info', {
+        currentStep,
+        nextStep: steps[currentIndex + 1],
+        steps,
+        data,
+        location,
+      });
       setCurrentStep(steps[currentIndex + 1]);
       navigateToStep(steps[currentIndex + 1].name);
     }
@@ -66,6 +74,13 @@ export const Wizard = (props: PropsWithChildren<WizardProps>) => {
   const prevStep = () => {
     const currentIndex = steps.findIndex(step => isEqual(step, currentStep));
     if (currentIndex > 0) {
+      logBrowser('Navigating to previous step', 'info', {
+        currentStep,
+        prevStep: steps[currentIndex + 1],
+        steps,
+        data,
+        location,
+      });
       setCurrentStep(steps[currentIndex - 1]);
       navigateToStep(steps[currentIndex - 1].name);
     }
@@ -81,6 +96,14 @@ export const Wizard = (props: PropsWithChildren<WizardProps>) => {
     // handle the case where the user navigates to a step directly and not through the wizard
     const currentRoute = location.pathname.replace(baseURL, '');
     const foundStep = steps.find(step => step.route === currentRoute);
+    logBrowser(`Navigated to ${foundStep?.name} step`, 'info', {
+      currentRoute,
+      currentStep,
+      foundStep,
+      steps,
+      data,
+      location,
+    });
     if (foundStep && !isEqual(foundStep, currentStep)) {
       setCurrentStep(foundStep);
     }

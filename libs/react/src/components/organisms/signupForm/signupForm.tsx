@@ -4,7 +4,7 @@ import { BaseButton, Input, Spinner } from '@coldpbc/components';
 import { ButtonTypes, GlobalSizes, InputTypes } from '@coldpbc/enums';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { PolicyType, ToastMessage } from '@coldpbc/interfaces';
-import { useAddToastMessage } from '@coldpbc/hooks';
+import { useAddToastMessage, useColdContext } from '@coldpbc/hooks';
 import { isAxiosError } from 'axios';
 import { mutate } from 'swr';
 import { withErrorBoundary } from 'react-error-boundary';
@@ -28,6 +28,7 @@ const _SignupForm = ({ userData, companyData, tosSigned, privacySigned, tosData,
   const [disabled, setDisabled] = React.useState<boolean>(false);
   const [submitting, setSubmitting] = React.useState<boolean>(false);
   const { addToastMessage } = useAddToastMessage();
+  const { logBrowser } = useColdContext();
 
   useEffect(() => {
     if (isAgreedToPrivacyAndTOS && companyName && firstName && lastName) {
@@ -43,8 +44,33 @@ const _SignupForm = ({ userData, companyData, tosSigned, privacySigned, tosData,
     const promises = await Promise.all([signPolicy('tos'), signPolicy('privacy'), postUserData()]);
     // check if all promises are successful
     if (promises.every(promise => !isAxiosError(promise))) {
+      logBrowser('User signed up', 'info', {
+        firstName,
+        lastName,
+        companyName,
+        userData,
+        companyData,
+        tosSigned,
+        privacySigned,
+        tosData,
+        privacyData,
+      });
       await onSubmit();
     } else {
+      logBrowser('Error signing up user', 'error', {
+        promises: {
+          ...promises,
+        },
+        firstName,
+        lastName,
+        companyName,
+        userData,
+        companyData,
+        tosSigned,
+        privacySigned,
+        tosData,
+        privacyData,
+      });
       await addToastMessage({
         message: 'Error creating account',
         type: ToastMessage.FAILURE,

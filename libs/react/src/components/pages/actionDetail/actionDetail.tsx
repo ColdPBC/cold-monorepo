@@ -17,13 +17,14 @@ import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application';
 import { useAuth0Wrapper, useColdContext, useOrgSWR } from '@coldpbc/hooks';
 import { getFormattedUserName } from '@coldpbc/lib';
+import { isAxiosError } from 'axios';
 
 interface Props {
   id: string;
 }
 
 const _ActionDetail = ({ id }: Props) => {
-  const { logError } = useColdContext();
+  const { logError, logBrowser } = useColdContext();
   const [searchParams, setSearchParams] = useSearchParams();
   const { getOrgSpecificUrl } = useAuth0Wrapper();
   const [show, setShow] = useState(true);
@@ -44,7 +45,7 @@ const _ActionDetail = ({ id }: Props) => {
       ...updatedAction,
     };
 
-    await axiosFetcher([getOrgSpecificUrl(`/actions/${data.id}`), 'PATCH', JSON.stringify(newAction)]);
+    const response = await axiosFetcher([getOrgSpecificUrl(`/actions/${data.id}`), 'PATCH', JSON.stringify(newAction)]);
 
     await mutate(
       {
@@ -58,6 +59,22 @@ const _ActionDetail = ({ id }: Props) => {
         revalidate: false,
       },
     );
+    if (isAxiosError(response)) {
+      logBrowser(
+        'Action failed to update',
+        'error',
+        {
+          action: newAction,
+          response,
+        },
+        response,
+      );
+    } else {
+      logBrowser('Action updated', 'info', {
+        action: newAction,
+        response,
+      });
+    }
 
     await globalMutate([getOrgSpecificUrl(`/actions`), 'GET']);
   };
@@ -112,9 +129,19 @@ const _ActionDetail = ({ id }: Props) => {
   };
 
   if (error) {
+    logBrowser(
+      'Error fetching action',
+      'error',
+      {
+        error,
+      },
+      error,
+    );
     logError(error, ErrorType.SWRError);
     return null;
   }
+
+  logBrowser('ActionDetail', 'info', { data, categoriesData });
 
   return (
     <Takeover

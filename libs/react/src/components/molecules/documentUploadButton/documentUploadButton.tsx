@@ -18,7 +18,7 @@ export const DocumentUploadButton = (props: DocumentUploadButtonProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { orgId } = useAuth0Wrapper();
   const { addToastMessage } = useAddToastMessage();
-  const { logError } = useColdContext();
+  const { logError, logBrowser } = useColdContext();
   const { mutate } = useSWRConfig();
 
   const handleChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,6 +36,7 @@ export const DocumentUploadButton = (props: DocumentUploadButtonProps) => {
     } as AxiosRequestConfig);
     const response = await axiosFetcher([`/organizations/${orgId}/files`, 'POST', formData, config]);
     if (isAxiosError(response)) {
+      logBrowser('Upload failed', 'error', { ...response, orgId, formData: { ...formData } }, response);
       await addToastMessage({
         message: 'Upload failed',
         type: ToastMessage.FAILURE,
@@ -46,6 +47,7 @@ export const DocumentUploadButton = (props: DocumentUploadButtonProps) => {
         message: 'Upload successful',
         type: ToastMessage.SUCCESS,
       });
+      logBrowser('Upload successful', 'info', { response, orgId, formData: { ...formData } });
       await mutate(
         [`/organizations/${orgId}/files`, 'GET'],
         (cachedData: any) => {
