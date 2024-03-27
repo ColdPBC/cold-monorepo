@@ -1,3 +1,11 @@
+# [1.177.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.176.3...v1.177.0) (2024-03-27)
+
+
+### Features
+
+* add document link button to compliance survey ([d6dca9a](https://github.com/ColdPBC/cold-monorepo/commit/d6dca9af744af8e1b33529c005744d149e3c792b))
+* changes to encure consistency ([9555251](https://github.com/ColdPBC/cold-monorepo/commit/9555251dc49eeb92b7482a3ee01fe6d5bead24cf))
+
 ## [1.176.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.176.2...v1.176.3) (2024-03-27)
 
 
