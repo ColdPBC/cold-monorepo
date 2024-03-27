@@ -14,7 +14,7 @@ import {
 import { BaseButton, ColdIcon, ErrorFallback, SurveyDocumentLinkModal, SurveyInput } from '@coldpbc/components';
 import { ButtonTypes, GlobalSizes, IconNames } from '@coldpbc/enums';
 import { ComplianceSurveyActiveKeyType, ComplianceSurveyPayloadType, ComplianceSurveySavedQuestionType, IButtonProps, SurveyActiveKeyType } from '@coldpbc/interfaces';
-import { useAuth0Wrapper } from '@coldpbc/hooks';
+import { useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
 import { CSSTransition, SwitchTransition } from 'react-transition-group';
 import { useSWRConfig } from 'swr';
 import { withErrorBoundary } from 'react-error-boundary';
@@ -31,6 +31,7 @@ export interface ComplianceSurveyQuestionnaireProps {
 const _ComplianceSurveyQuestionnaire = (props: ComplianceSurveyQuestionnaireProps) => {
   const { activeKey, setActiveKey, submitSurvey, surveyData, setSurveyData, savedQuestions } = props;
   const { getOrgSpecificUrl } = useAuth0Wrapper();
+  const { logBrowser } = useColdContext();
   const [sendingSurvey, setSendingSurvey] = React.useState<boolean>(false);
   const [documentLinkModalOpen, setDocumentLinkModalOpen] = React.useState<boolean>(false);
   const nextQuestionTransitionClassNames = {
@@ -66,6 +67,17 @@ const _ComplianceSurveyQuestionnaire = (props: ComplianceSurveyQuestionnaireProp
       category: activeKey.category,
     });
     const newSurvey = updateSurveyQuestion(surveyData, activeKey, { value }, undefined, additional);
+    logBrowser('Compliance Survey Question Updated', 'info', {
+      key,
+      value,
+      newActiveKey: {
+        value: activeKey.value,
+        previousValue: activeKey.value,
+        isFollowUp: activeKey.isFollowUp,
+        section: activeKey.section,
+        category: activeKey.category,
+      },
+    });
     setSurveyData(newSurvey as ComplianceSurveyPayloadType);
   };
 
@@ -353,6 +365,13 @@ const _ComplianceSurveyQuestionnaire = (props: ComplianceSurveyQuestionnaireProp
         });
       }
     }
+    logBrowser('Next Question Loaded', 'info', {
+      key,
+      activeSectionIndex,
+      activeSectionKey,
+      nextSectionKey,
+      nextSection,
+    });
   };
 
   const onNextButtonClicked = async () => {
@@ -367,6 +386,12 @@ const _ComplianceSurveyQuestionnaire = (props: ComplianceSurveyQuestionnaireProp
     setSurveyData(sortedSurvey);
     await mutate([getOrgSpecificUrl(`/surveys/${newSurvey.name}`), 'GET'], sortedSurvey, {
       revalidate: false,
+    });
+    logBrowser('Compliance Survey Next Button Clicked', 'info', {
+      activeKey,
+      newSurvey,
+      response,
+      sortedSurvey,
     });
     updateTransitionClassNames(true);
     setSendingSurvey(false);
@@ -385,6 +410,12 @@ const _ComplianceSurveyQuestionnaire = (props: ComplianceSurveyQuestionnaireProp
     setSurveyData(sortedSurvey);
     await mutate([getOrgSpecificUrl(`/surveys/${newSurvey.name}`), 'GET'], sortedSurvey, {
       revalidate: false,
+    });
+    logBrowser('Compliance Survey Skip Button Clicked', 'info', {
+      activeKey,
+      newSurvey,
+      response,
+      sortedSurvey,
     });
     updateTransitionClassNames(true);
     setSendingSurvey(false);
@@ -409,6 +440,12 @@ const _ComplianceSurveyQuestionnaire = (props: ComplianceSurveyQuestionnaireProp
     setSurveyData(sortedSurvey);
     await mutate([getOrgSpecificUrl(`/surveys/${newSurvey.name}`), 'GET'], sortedSurvey, {
       revalidate: false,
+    });
+    logBrowser('Compliance Survey Submit Button Clicked', 'info', {
+      activeKey,
+      newSurvey,
+      response,
+      sortedSurvey,
     });
     updateTransitionClassNames(true);
     setSendingSurvey(false);
@@ -486,6 +523,12 @@ const _ComplianceSurveyQuestionnaire = (props: ComplianceSurveyQuestionnaireProp
         });
       }
     }
+    logBrowser('Previous Button Clicked', 'info', {
+      activeKey,
+      activeSectionIndex,
+      activeSectionKey,
+      sections,
+    });
     updateTransitionClassNames(false);
   };
 
@@ -565,6 +608,12 @@ const _ComplianceSurveyQuestionnaire = (props: ComplianceSurveyQuestionnaireProp
     await mutate([getOrgSpecificUrl(`/surveys/${newSurvey.name}`), 'GET'], sortedSurvey, {
       revalidate: false,
     });
+    logBrowser('Compliance survey Question Bookmarked', 'info', {
+      activeKey,
+      newSurvey,
+      response,
+      sortedSurvey,
+    });
     setSendingSurvey(false);
   };
 
@@ -586,6 +635,11 @@ const _ComplianceSurveyQuestionnaire = (props: ComplianceSurveyQuestionnaireProp
     const activeSection = surveyData.definition.sections[activeKey.section];
     const questionIndex = keys(activeSection.follow_up).indexOf(activeKey.value) + 1;
     const bookmarked = activeSection.follow_up[activeKey.value].saved;
+    logBrowser('Compliance survey Question Loaded', 'info', {
+      activeKey,
+      questionIndex,
+      bookmarked,
+    });
     return (
       <div className={'w-full h-full relative flex flex-col space-y-[24px]'} data-testid={'survey-question-container'}>
         <div className={'flex flex-row justify-between'}>

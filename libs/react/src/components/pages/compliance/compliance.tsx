@@ -12,18 +12,28 @@ const _CompliancePage = () => {
   const { orgId } = useAuth0Wrapper();
   const compliances = useSWR<Compliance[], any, any>(['/compliance_definitions', 'GET'], axiosFetcher);
   const orgCompliances = useSWR<OrgCompliance[], any, any>([`/compliance_definitions/organizations/${orgId}`, 'GET'], axiosFetcher);
-  const { logError } = useColdContext();
+  const { logError, logBrowser } = useColdContext();
 
   if (compliances.isLoading || orgCompliances.isLoading) {
     return <Spinner />;
   }
 
   if (compliances.error || orgCompliances.error) {
+    logBrowser(
+      'Error loading compliance data',
+      'error',
+      {
+        compliances,
+        orgCompliances,
+      },
+      compliances.error || orgCompliances.error,
+    );
     logError(compliances.error, ErrorType.SWRError);
     return null;
   }
 
   if (compliances.data && orgCompliances.data) {
+    logBrowser('Compliance data loaded', 'info', { compliances, orgCompliances });
     return (
       <CenterColumnContent title="Compliance">
         <div className={'w-full space-y-10'}>

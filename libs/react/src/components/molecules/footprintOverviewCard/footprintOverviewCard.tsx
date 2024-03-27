@@ -1,11 +1,8 @@
-import React, { PropsWithChildren, useState } from 'react';
+import React, { PropsWithChildren } from 'react';
 import { Card, CardProps } from '../card/card';
 import { useNavigate } from 'react-router-dom';
 import { FootprintOverviewChart } from '../footprintOverviewChart/footprintOverviewChart';
-import useSWR from 'swr';
-import clsx from 'clsx';
 import { axiosFetcher } from '../../../fetchers/axiosFetcher';
-import { BaseButton } from '../../atoms';
 import { some } from 'lodash';
 import { SurveyPayloadType } from '@coldpbc/interfaces';
 import { EmissionsDonutChartVariants } from '../../atoms/emissionsDonutChart/emissionsDonutChart';
@@ -32,9 +29,10 @@ function _FootprintOverviewCard(props: PropsWithChildren<FootprintOverviewCardPr
 
   const surveyResponse = useOrgSWR<SurveyPayloadType>([`/surveys/footprint_overview`, 'GET'], axiosFetcher);
 
-  const { logError } = useColdContext();
+  const { logError, logBrowser } = useColdContext();
 
   if (surveyResponse.error || error) {
+    logBrowser('Error fetching footprint data', 'error', { ...surveyResponse.error, ...error }, surveyResponse.error || error);
     if (surveyResponse.error) logError(surveyResponse.error, ErrorType.SWRError);
     if (error) logError(error, ErrorType.SWRError);
     return null;
@@ -54,7 +52,15 @@ function _FootprintOverviewCard(props: PropsWithChildren<FootprintOverviewCardPr
     }
     cardProps = {
       title: props.chartVariant === EmissionsDonutChartVariants.vertical && isEmptyFootprintData ? 'Footprint Breakdown' : `${PERIOD} Company Footprint`,
-      ctas: props.chartVariant === EmissionsDonutChartVariants.horizontal ? [{ text: 'Learn More', action: () => navigate(footprintRoute) }] : [],
+      ctas:
+        props.chartVariant === EmissionsDonutChartVariants.horizontal
+          ? [
+              {
+                text: 'Learn More',
+                action: () => navigate(footprintRoute),
+              },
+            ]
+          : [],
     };
   }
 
@@ -62,13 +68,23 @@ function _FootprintOverviewCard(props: PropsWithChildren<FootprintOverviewCardPr
 
   if (isLoading) return null;
 
+  logBrowser('Footprint Overview Card data loaded', 'info', {
+    isEmptyFootprintData,
+    data,
+    surveyResponse,
+    isSurveyComplete,
+    ldFlags,
+  });
+
   return (
     <Card {...cardProps} data-testid={'footprint-overview-card'}>
       <div className={'flex flex-col items-start justify-center w-full'}>
         <FootprintOverviewChart variant={props.chartVariant ?? EmissionsDonutChartVariants.horizontal} period={PERIOD} />
         {isEmptyFootprintData && props.chartVariant === EmissionsDonutChartVariants.horizontal && (
           <div className="m-auto table w-1">
-            <h4 className="text-h4 text-center whitespace-nowrap m-4">{isSurveyComplete ? 'We are reviewing your data' : 'We need more data to show your '+PERIOD+' footprint'}</h4>
+            <h4 className="text-h4 text-center whitespace-nowrap m-4">
+              {isSurveyComplete ? 'We are reviewing your data' : 'We need more data to show your ' + PERIOD + ' footprint'}
+            </h4>
             <p className="text-center text-sm leading-normal">
               {isSurveyComplete
                 ? "We'll be in touch as soon as your initial footprint results are available."

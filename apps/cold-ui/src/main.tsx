@@ -3,6 +3,7 @@ import * as ReactDOM from 'react-dom/client';
 import { Home } from './app/home';
 import { ColdContextProvider } from '@coldpbc/providers';
 import { datadogRum } from '@datadog/browser-rum';
+import { datadogLogs } from '@datadog/browser-logs';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 
@@ -27,6 +28,16 @@ datadogRum.init({
   trackUserInteractions: true,
 });
 datadogRum.startSessionReplayRecording();
+
+datadogLogs.init({
+  clientToken: 'pub92f690b0e4706ca7b9d2e7d7481f383e',
+  site: 'us5.datadoghq.com',
+  service: 'ui',
+  forwardErrorsToLogs: true,
+  env: import.meta.env.VITE_DD_ENV,
+  version: import.meta.env.VITE_DD_VERSION,
+  sessionSampleRate: 100,
+});
 
 root.render(
   <StrictMode>

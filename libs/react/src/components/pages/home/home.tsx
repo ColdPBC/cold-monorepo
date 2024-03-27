@@ -12,8 +12,10 @@ import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application/errors/errorFallback';
 import { NextSteps } from '../../organisms';
 import { ColdAssessmentsProvider } from '@coldpbc/providers';
+import { useColdContext } from '@coldpbc/hooks';
 
 function _Home() {
+  const { logBrowser } = useColdContext();
   const ldFlags = useFlags();
   const auth0 = useAuth0();
 
@@ -26,18 +28,21 @@ function _Home() {
   }
 
   if (auth0.user) {
+    logBrowser('Home page loaded', 'info', { user: auth0.user, ldFlags: ldFlags });
     if (ldFlags.showNewHomePageComplianceReiMvp) {
       return (
         <AppContent title={'Welcome, ' + auth0.user?.given_name}>
           <CenterColumnContent>
             {ldFlags.showNextStepsCard && <NextSteps />}
             {ldFlags.showFootprintOnHome && <FootprintOverviewCard chartVariant={EmissionsDonutChartVariants.horizontal} />}
-            {ldFlags.showComplianceModule && <ColdAssessmentsProvider><JourneyOverviewCard /></ColdAssessmentsProvider>}
+            {ldFlags.showComplianceModule && (
+              <ColdAssessmentsProvider>
+                <JourneyOverviewCard />
+              </ColdAssessmentsProvider>
+            )}
             {ldFlags.showNewsModuleCold310 && <NewsCard />}
           </CenterColumnContent>
-          <RightColumnContent>
-            {ldFlags.showActions261 && <NextActionsCard />}
-          </RightColumnContent>
+          <RightColumnContent>{ldFlags.showActions261 && <NextActionsCard />}</RightColumnContent>
         </AppContent>
       );
     } else {
@@ -46,7 +51,11 @@ function _Home() {
           <CenterColumnContent>
             {ldFlags.showNextStepsCard && <NextSteps />}
             <FootprintOverviewCard chartVariant={EmissionsDonutChartVariants.horizontal} />
-            {ldFlags.showComplianceModule && <ColdAssessmentsProvider><JourneyOverviewCard /></ColdAssessmentsProvider>}
+            {ldFlags.showComplianceModule && (
+              <ColdAssessmentsProvider>
+                <JourneyOverviewCard />
+              </ColdAssessmentsProvider>
+            )}
             {ldFlags.showNewsModuleCold310 && <NewsCard />}
           </CenterColumnContent>
           <RightColumnContent>

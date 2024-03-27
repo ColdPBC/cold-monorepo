@@ -7,7 +7,7 @@ import { CSSTransition, SwitchTransition } from 'react-transition-group';
 import { getSectionIndex, ifAdditionalContextConditionMet, isAIResponseValueValid, isComponentTypeValid, isKeyValueFollowUp } from '@coldpbc/lib';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { withErrorBoundary } from 'react-error-boundary';
-import { useAuth0Wrapper } from '@coldpbc/hooks';
+import { useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
 
 export interface SurveyQuestionContainerProps {
   activeKey: SurveyActiveKeyType;
@@ -19,6 +19,7 @@ export interface SurveyQuestionContainerProps {
 
 const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surveyData, setSurveyData }: SurveyQuestionContainerProps) => {
   const { getOrgSpecificUrl } = useAuth0Wrapper();
+  const { logBrowser } = useColdContext();
   const nextQuestionTransitionClassNames = {
     enter: 'transform translate-y-full',
     enterDone: 'transition ease-out duration-200 transform translate-y-0',
@@ -178,6 +179,7 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
     const newSurvey: SurveyPayloadType = validateSurveyData(surveyData);
     newSurvey.definition.sections[activeSectionKey] = newSection;
     newSurvey.definition.submitted = submit;
+    logBrowser('SurveyQuestionContainer question updated', 'info', { newSurvey });
     return newSurvey;
   };
 
@@ -473,6 +475,7 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
     setSurveyData(newSurvey);
     goToNextQuestion();
     updateTransitionClassNames(true);
+    logBrowser('SurveyQuestionContainer next clicked', 'info', { activeKey, newSurvey });
     putSurveyData(newSurvey);
   };
 
@@ -484,6 +487,7 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
     setSurveyData(newSurvey);
     goToNextQuestion();
     updateTransitionClassNames(true);
+    logBrowser('SurveyQuestionContainer skip clicked', 'info', { activeKey, newSurvey });
     putSurveyData(newSurvey);
   };
 
@@ -493,6 +497,7 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
     setSurveyData(newSurvey);
     updateTransitionClassNames(true);
     await putSurveyData(newSurvey);
+    logBrowser('SurveyQuestionContainer submit clicked', 'info', { activeKey, newSurvey });
     submitSurvey();
   };
 
@@ -555,6 +560,7 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
         });
       }
     }
+    logBrowser('SurveyQuestionContainer previous clicked', 'info', { activeKey });
     updateTransitionClassNames(false);
   };
 
@@ -648,6 +654,8 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
   });
 
   const additionalContextQuestion = checkAdditionalContext(activeKey);
+
+  logBrowser('SurveyQuestionContainer loaded', 'info', { question, additionalContextQuestion });
 
   if (question !== undefined) {
     return (

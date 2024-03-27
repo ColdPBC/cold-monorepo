@@ -4,10 +4,13 @@ import axios from 'axios';
 import { resolveAPIUrl } from '@coldpbc/fetchers';
 import { ErrorType } from '@coldpbc/enums';
 import { useColdContext } from '@coldpbc/hooks';
+import { ColdContextType } from '@coldpbc/context';
 
-const setAxiosTokenInterceptor = async (getAccessTokenSilently: (options?: GetTokenSilentlyOptions) => Promise<string>): Promise<void> => {
+const setAxiosTokenInterceptor = async (getAccessTokenSilently: (options?: GetTokenSilentlyOptions) => Promise<string>, context: ColdContextType): Promise<void> => {
+  const { logBrowser } = context;
   axios.interceptors.request.use(async config => {
     if (config.baseURL === resolveAPIUrl()) {
+      logBrowser('Axios request sent', 'info', { config });
       const audience = import.meta.env.VITE_COLD_API_AUDIENCE as string;
       const accessToken = await getAccessTokenSilently({
         authorizationParams: {
@@ -21,10 +24,16 @@ const setAxiosTokenInterceptor = async (getAccessTokenSilently: (options?: GetTo
   });
 };
 
-const setAxiosResponseInterceptor = (coldContext: any) => {
-  const { logError } = coldContext;
+const setAxiosResponseInterceptor = (coldContext: ColdContextType) => {
+  const { logError, logBrowser } = coldContext;
   axios.interceptors.response.use(
     response => {
+      logBrowser('Axios response received', 'info', {
+        response: {
+          ...response,
+          request: JSON.parse(response.request?.responseText),
+        },
+      });
       return response;
     },
     error => {
@@ -34,6 +43,17 @@ const setAxiosResponseInterceptor = (coldContext: any) => {
           ...error,
         });
       }
+      logBrowser(
+        'Axios error',
+        'error',
+        {
+          error: {
+            ...error,
+            request: JSON.parse(error.request?.responseText),
+          },
+        },
+        error,
+      );
       return Promise.reject(error);
     },
   );
@@ -46,7 +66,7 @@ export const ColdAxiosInterceptorProvider = ({ children }: AxiosInterceptorProvi
   const context = useColdContext();
   useEffect(() => {
     const getAccessToken = async () => {
-      await setAxiosTokenInterceptor(getAccessTokenSilently);
+      await setAxiosTokenInterceptor(getAccessTokenSilently, context);
     };
     getAccessToken();
   }, [getAccessTokenSilently]);

@@ -13,7 +13,7 @@ import {
 } from '@coldpbc/lib';
 import { ButtonTypes, GlobalSizes, IconNames } from '@coldpbc/enums';
 import { ComplianceSurveyActiveKeyType, ComplianceSurveyPayloadType, ComplianceSurveySavedQuestionType, IButtonProps, SurveyActiveKeyType } from '@coldpbc/interfaces';
-import { useAuth0Wrapper } from '@coldpbc/hooks';
+import { useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
 import { CSSTransition, SwitchTransition } from 'react-transition-group';
 import { useSWRConfig } from 'swr';
 import { withErrorBoundary } from 'react-error-boundary';
@@ -34,6 +34,7 @@ export interface ComplianceSurveySavedQuestionnaireProps {
 const _ComplianceSurveySavedQuestionnaire = (props: ComplianceSurveySavedQuestionnaireProps) => {
   const { activeKey, setActiveKey, submitSurvey, surveyData, setSurveyData, savedQuestions, bookmarked, setBookmarked } = props;
   const { getOrgSpecificUrl } = useAuth0Wrapper();
+  const { logBrowser } = useColdContext();
   const [sendingSurvey, setSendingSurvey] = React.useState<boolean>(false);
   const [documentLinkModalOpen, setDocumentLinkModalOpen] = React.useState<boolean>(false);
   const nextQuestionTransitionClassNames = {
@@ -68,6 +69,13 @@ const _ComplianceSurveySavedQuestionnaire = (props: ComplianceSurveySavedQuestio
       category: surveyData.definition.title,
     });
     const newSurvey = updateSurveyQuestion(surveyData, activeKey, { value }, undefined, additional);
+    logBrowser('Updating saved question', 'info', {
+      activeKey,
+      key,
+      value,
+      additional,
+      newSurvey,
+    });
     setSurveyData(newSurvey as ComplianceSurveyPayloadType);
   };
 
@@ -222,6 +230,14 @@ const _ComplianceSurveySavedQuestionnaire = (props: ComplianceSurveySavedQuestio
     await mutate([getOrgSpecificUrl(`/surveys/${newSurvey.name}`), 'GET'], sortedSurvey, {
       revalidate: false,
     });
+    logBrowser('Navigating to next saved question', 'info', {
+      activeKey,
+      bookmarked,
+      bookmarkedQuestion,
+      newSurvey,
+      response,
+      sortedSurvey,
+    });
     updateTransitionClassNames(true);
     setSendingSurvey(false);
     goToNextQuestion(activeKey, sortedSurvey);
@@ -241,6 +257,14 @@ const _ComplianceSurveySavedQuestionnaire = (props: ComplianceSurveySavedQuestio
     setSurveyData(sortedSurvey);
     await mutate([getOrgSpecificUrl(`/surveys/${newSurvey.name}`), 'GET'], sortedSurvey, {
       revalidate: false,
+    });
+    logBrowser('Skipping saved question', 'info', {
+      activeKey,
+      bookmarked,
+      bookmarkedQuestion,
+      newSurvey,
+      response,
+      sortedSurvey,
     });
     updateTransitionClassNames(true);
     setSendingSurvey(false);
@@ -268,6 +292,14 @@ const _ComplianceSurveySavedQuestionnaire = (props: ComplianceSurveySavedQuestio
     await mutate([getOrgSpecificUrl(`/surveys/${newSurvey.name}`), 'GET'], sortedSurvey, {
       revalidate: false,
     });
+    logBrowser('Submitting saved question', 'info', {
+      activeKey,
+      bookmarked,
+      bookmarkedQuestion,
+      newSurvey,
+      response,
+      sortedSurvey,
+    });
     updateTransitionClassNames(true);
     setSendingSurvey(false);
     submitSurvey();
@@ -286,6 +318,11 @@ const _ComplianceSurveySavedQuestionnaire = (props: ComplianceSurveySavedQuestio
       isFollowUp: true,
       section: 'savedQuestions',
       category: surveyData.definition.title,
+    });
+    logBrowser('Navigating to previous saved question', 'info', {
+      activeKey,
+      previousFollowUpKey,
+      savedQuestions,
     });
     updateTransitionClassNames(false);
   };
@@ -348,6 +385,11 @@ const _ComplianceSurveySavedQuestionnaire = (props: ComplianceSurveySavedQuestio
       ...bookmarked,
       [activeKey.value]: !bookmarkedQuestion,
     });
+    logBrowser('Unbookmarked question', 'info', {
+      activeKey,
+      bookmarked,
+      bookmarkedQuestion,
+    });
     setSendingSurvey(false);
   };
 
@@ -371,6 +413,15 @@ const _ComplianceSurveySavedQuestionnaire = (props: ComplianceSurveySavedQuestio
     const questionIndex = keys(activeSection.follow_up).indexOf(activeKey.value) + 1;
     const bookMarkedState = get(bookmarked, `${activeKey.value}`, undefined);
     const bookmarkedForQuestion = get(bookmarked, `${activeKey.value}`, undefined) === undefined ? activeSection.follow_up[activeKey.value].saved : bookMarkedState;
+
+    logBrowser('Rendering compliance saved question', 'info', {
+      activeKey,
+      activeSection,
+      questionIndex,
+      bookmarkedForQuestion,
+      savedQuestions,
+      surveyData,
+    });
 
     return (
       <div className={'w-full h-full relative flex flex-col space-y-[24px]'} data-testid={'survey-question-container'}>
