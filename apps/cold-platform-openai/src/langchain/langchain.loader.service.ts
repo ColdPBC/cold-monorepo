@@ -22,7 +22,6 @@ export class LangchainLoaderService extends BaseWorker implements OnModuleInit {
     private s3: S3Service,
     private readonly pc: PineconeService,
     private readonly config: ConfigService,
-    private readonly pdfLoader: PDFLoader,
     private readonly wordLoader: WordLoader,
     private readonly xlsLoader: XlsLoader,
     private readonly cache: CacheService,
