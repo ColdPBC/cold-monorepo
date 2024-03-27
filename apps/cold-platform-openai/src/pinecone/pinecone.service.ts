@@ -2,6 +2,8 @@ import { Injectable, OnModuleInit } from '@nestjs/common';
 import { BaseWorker } from '@coldpbc/nest';
 import { Pinecone } from '@pinecone-database/pinecone';
 import { ConfigService } from '@nestjs/config';
+import { PineconeStore } from 'langchain/vectorstores/pinecone';
+import { OpenAIEmbeddings } from 'langchain/embeddings/openai';
 
 @Injectable()
 export class PineconeService extends BaseWorker implements OnModuleInit {
@@ -19,6 +21,32 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
     } catch (error) {
       console.log('error', error);
       throw new Error('Failed to initialize Pinecone Client');
+    }
+  }
+
+  async getVectorStore(indexName: string) {
+    if (!this.pinecone) {
+      await this.onModuleInit();
+    }
+
+    try {
+      const index = this.pinecone.Index(indexName);
+
+      const vectorStore = await PineconeStore.fromExistingIndex(
+        new OpenAIEmbeddings({
+          openAIApiKey: this.config.getOrThrow('PINECONE_API_KEY') as string,
+        }),
+        {
+          pineconeIndex: index,
+          textKey: 'text',
+          namespace: indexName,
+        },
+      );
+
+      return vectorStore;
+    } catch (error) {
+      this.logger.error(error.message, { ...error });
+      throw new Error('Error fetching vector store');
     }
   }
 
