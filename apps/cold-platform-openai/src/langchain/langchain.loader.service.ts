@@ -1,14 +1,16 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
-import { AuthenticatedUser, BaseWorker, DarklyService, S3Service } from '@coldpbc/nest';
-import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
+import { ConflictException, Injectable, OnModuleInit } from '@nestjs/common';
+import { AuthenticatedUser, BaseWorker, CacheService, DarklyService, S3Service } from '@coldpbc/nest';
 import { PineconeService } from '../pinecone/pinecone.service';
 import { ConfigService } from '@nestjs/config';
 import { OpenAIEmbeddings } from 'langchain/embeddings/openai';
 import { PineconeStore } from 'langchain/vectorstores/pinecone';
-import { PDFLoader } from './loaders/pdf.loader';
 import { WordLoader } from './loaders/word.loader';
 import { XlsLoader } from './loaders/xls.loader';
-import { TextLoader } from './loaders/text.loader';
+import { TextLoader } from 'langchain/document_loaders/fs/text';
+import { PDFLoader } from 'langchain/document_loaders/fs/pdf';
+import { CSVLoader } from 'langchain/document_loaders/fs/csv';
+import { JSONLoader } from 'langchain/document_loaders/fs/json';
+import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
 
 @Injectable()
 export class LangchainLoaderService extends BaseWorker implements OnModuleInit {
@@ -23,7 +25,7 @@ export class LangchainLoaderService extends BaseWorker implements OnModuleInit {
     private readonly pdfLoader: PDFLoader,
     private readonly wordLoader: WordLoader,
     private readonly xlsLoader: XlsLoader,
-    private readonly textLoader: TextLoader,
+    private readonly cache: CacheService,
   ) {
     super(LangchainLoaderService.name);
   }
@@ -35,8 +37,25 @@ export class LangchainLoaderService extends BaseWorker implements OnModuleInit {
     this.overlapSize = await this.darkly.getNumberFlag('dynamic-langchain-overlapSize', 100);
   }
 
-  getFileType(filePath: string): string {
-    const extension = filePath.split('.').pop();
+  getCacheKey(file: any) {
+    const split = `pinecone:${file.key.replaceAll('/', ':')}`.split(':');
+    split.pop();
+    split.push(file.checksum);
+    return split.join(':');
+  }
+
+  async getDocContent(file: any, user: AuthenticatedUser): Promise<any> {
+    const bucket = `cold-api-uploaded-files`;
+
+    const extension = file.key.split('.').pop();
+    const s3File = await this.s3.getObject(user, bucket, file.key);
+
+    const cacheKey = this.getCacheKey(file);
+
+    const exists = await this.cache.get(cacheKey);
+    if (exists) {
+      throw new ConflictException(`${file.key} (${file.checksum}) already ingested`);
+    }
 
     switch (extension) {
       case 'docx':
@@ -89,8 +108,14 @@ export class LangchainLoaderService extends BaseWorker implements OnModuleInit {
         });
       }
 
+      await this.cache.set(this.getCacheKey(payload), payload.checksum, { ttl: 0 });
+
       return { message: `${organization.name} S3 file ingestion complete` };
     } catch (error) {
+      if (error instanceof ConflictException) {
+        this.logger.warn(error.message);
+        return;
+      }
       console.log('error', error);
       throw new Error('Failed to ingest your data');
     }
