@@ -1,3 +1,10 @@
+## [1.176.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.176.1...v1.176.2) (2024-03-27)
+
+
+### Bug Fixes
+
+* bug breaking check marks ([331b460](https://github.com/ColdPBC/cold-monorepo/commit/331b460dee0f6a723b04ed8533fc4a3357294a50))
+
 ## [1.176.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.176.0...v1.176.1) (2024-03-27)
 
 
