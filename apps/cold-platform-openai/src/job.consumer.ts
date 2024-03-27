@@ -2,15 +2,16 @@ import { Injectable } from '@nestjs/common';
 import { OnQueueActive, OnQueueCompleted, OnQueueFailed, OnQueueProgress, Process, Processor } from '@nestjs/bull';
 import { Job } from 'bull';
 import OpenAI, { UnprocessableEntityError } from 'openai';
-import { AppService } from '../app.service';
-import { AssistantService } from './assistant.service';
+import { AppService } from './app.service';
+import { AssistantService } from './assistant/assistant.service';
 import { BaseWorker, CacheService } from '@coldpbc/nest';
-import { FileService } from './files/file.service';
+import { FileService } from './assistant/files/file.service';
 import { ConfigService } from '@nestjs/config';
+import { LangchainLoaderService } from './langchain/langchain.loader.service';
 
 @Injectable()
 @Processor('openai')
-export class AssistantConsumer extends BaseWorker {
+export class JobConsumer extends BaseWorker {
   client: OpenAI;
   started: Date;
 
@@ -21,7 +22,7 @@ export class AssistantConsumer extends BaseWorker {
     private readonly fileService: FileService,
     private readonly cache: CacheService,
   ) {
-    super(AssistantConsumer.name);
+    super(JobConsumer.name);
     this.client = new OpenAI({
       organization: this.config.getOrThrow('OPENAI_ORG_ID'),
       apiKey: this.config.getOrThrow('OPENAI_API_KEY'),
