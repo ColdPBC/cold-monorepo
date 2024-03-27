@@ -599,7 +599,7 @@ const _ComplianceSurveyQuestionnaire = (props: ComplianceSurveyQuestionnaireProp
             </div>
           </div>
           <div className={'flex flex-row items-start space-x-4 h-[60px]'}>
-            <div className={'relative h-[60px] w-[60px] flex justify-center items-center'}>
+            <div className={'relative h-full w-[60px] flex justify-center items-center'}>
               <div
                 className={'h-full w-[60px] rounded-lg flex justify-center items-center bg-transparent cursor-pointer hover:bg-bgc-accent'}
                 onClick={() => {

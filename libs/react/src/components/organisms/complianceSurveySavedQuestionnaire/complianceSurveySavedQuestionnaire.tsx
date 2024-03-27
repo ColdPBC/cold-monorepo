@@ -380,8 +380,8 @@ const _ComplianceSurveySavedQuestionnaire = (props: ComplianceSurveySavedQuestio
               {size(activeSection.follow_up)})
             </div>
           </div>
-          <div className={'flex flex-row items-start space-x-4'}>
-            <div className={'relative h-[60px] w-[60px] flex justify-center items-center'}>
+          <div className={'flex flex-row items-start space-x-4 h-[60px]'}>
+            <div className={'relative h-full w-[60px] flex justify-center items-center'}>
               <div
                 className={'h-full w-[60px] rounded-lg flex justify-center items-center bg-transparent cursor-pointer hover:bg-bgc-accent'}
                 onClick={() => {
@@ -393,7 +393,7 @@ const _ComplianceSurveySavedQuestionnaire = (props: ComplianceSurveySavedQuestio
                   <ColdIcon name={IconNames.ColdDocumentUploadIcon} />
                 )}
               </div>
-              <div className={'absolute top-full'}>
+              <div className={'absolute top-full z-10'}>
                 {documentLinkModalOpen && (
                   <SurveyDocumentLinkModal
                     show={documentLinkModalOpen}
@@ -405,10 +405,10 @@ const _ComplianceSurveySavedQuestionnaire = (props: ComplianceSurveySavedQuestio
                 )}
               </div>
             </div>
-            <div className={'h-[60px] w-[60px] rounded-lg flex justify-center items-center bg-transparent cursor-pointer hover:bg-bgc-accent'} onClick={unBookMarkQuestion}>
+            <div className={'h-full w-[60px] rounded-lg flex justify-center items-center bg-transparent cursor-pointer hover:bg-bgc-accent'} onClick={unBookMarkQuestion}>
               {bookmarkedForQuestion ? <ColdIcon name={IconNames.ColdFilledBookMarkIcon} color={'white'} /> : <ColdIcon name={IconNames.ColdBookmarkIcon} color={'white'} />}
             </div>
-            <div className={'h-[60px] w-[60px] rounded-lg flex justify-center items-center bg-transparent cursor-pointer hover:bg-bgc-accent'} onClick={submitSurvey}>
+            <div className={'h-full w-[60px] rounded-lg flex justify-center items-center bg-transparent cursor-pointer hover:bg-bgc-accent'} onClick={submitSurvey}>
               <ColdIcon name={IconNames.CloseModalIcon} />
             </div>
           </div>
