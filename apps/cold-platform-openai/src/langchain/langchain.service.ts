@@ -1,66 +1,16 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { BaseWorker, DarklyService } from '@coldpbc/nest';
 import { PineconeStore } from 'langchain/vectorstores/pinecone';
-import { createOpenAIFnRunnable } from 'langchain/chains/openai_functions';
 import { OpenAI } from 'langchain/llms/openai';
 import { ConfigService } from '@nestjs/config';
-import { ChatPromptTemplate, HumanMessagePromptTemplate, SystemMessagePromptTemplate } from 'langchain/prompts';
-import { JsonOutputFunctionsParser } from 'langchain/output_parsers';
-import { ChatOpenAI } from '@langchain/openai';
+import { answerable } from './tools/answerable';
+import { unanswerable } from './tools/unanswerable';
+import { ConversationalRetrievalQAChain } from 'langchain/chains';
 
 @Injectable()
 export class LangchainService extends BaseWorker implements OnModuleInit {
-  answerable_schema = {
-    name: 'answerable',
-    description: 'Used when a question is answerable by the assistant',
-    parameters: {
-      type: 'object',
-      required: ['answer'],
-      properties: {
-        answer: {
-          type: ['boolean', 'string', 'array'],
-          items: {
-            type: 'string',
-          },
-          description: 'The answer to the prompt.',
-        },
-        justification: {
-          type: 'string',
-          description: 'A paragraph justifying the answer provided',
-        },
-        source: {
-          type: 'object',
-          description: 'a JSON object that describes the source material, if any, that you relied upon to answer the question.',
-        },
-      },
-    },
-  };
-
-  unanswerable_schema = {
-    name: 'answerable',
-    description: 'Used when a question is answerable by the assistant',
-    parameters: {
-      type: 'object',
-      required: ['answer'],
-      properties: {
-        answer: {
-          type: ['boolean', 'string', 'array'],
-          items: {
-            type: 'string',
-          },
-          description: 'The answer to the prompt.',
-        },
-        justification: {
-          type: 'string',
-          description: 'A paragraph justifying the answer provided',
-        },
-        source: {
-          type: 'object',
-          description: 'a JSON object that describes the source material, if any, that you relied upon to answer the question.',
-        },
-      },
-    },
-  };
+  answerable_schema = answerable;
+  unanswerable_schema = unanswerable;
 
   condense_prompt: string = `Given the chat history and a follow-up question, rephrase the follow-up question to be a standalone question that encompasses all necessary context from the chat history.
 
@@ -74,6 +24,7 @@ export class LangchainService extends BaseWorker implements OnModuleInit {
 
   temperature: number = 0.5;
   openAIapiKey: string = '';
+  returnSourceDocuments: boolean = true;
 
   base_prompt: string = `You are an AI sustainability expert tasked with helping %%COMPANY%% interpret and answer questions based on relating to sustainability and corporate governance and instructions based on specific provided documents. The context from these documents has been processed and made accessible to you.  Your mission is to generate answers that are accurate, succinct, and comprehensive, drawing upon the information contained in the context of the documents. If the answer isn't readily found in the documents, you should make use of your training data and understood context to infer and provide the most plausible response.
  You are also capable of evaluating, comparing the content of these documents. Hence, if asked to compare or analyze the documents, use your AI understanding to deliver an insightful response.  You are also free to use any content from the company's website to provide a more comprehensive answer.  You must provide references to any sources that you relied upon in answering all questions.
@@ -123,46 +74,63 @@ export class LangchainService extends BaseWorker implements OnModuleInit {
   async onModuleInit(): Promise<void> {
     this.logger.log('Langchain Service Initialized');
     this.openAIapiKey = this.config.getOrThrow('OPENAI_API_KEY');
+    this.returnSourceDocuments = await this.darkly.getBooleanFlag('dynamic-rag-return-source-documents');
   }
 
   async initializePrompts() {
     this.condense_prompt = await this.darkly.getStringFlag('dynamic-condense-prompt');
   }
 
-  async makeChain(vectorstore: PineconeStore, returnSourceDocuments: boolean = true) {
-    const prompt = new ChatPromptTemplate({
-      promptMessages: [
-        SystemMessagePromptTemplate.fromTemplate('Generate details of a hypothetical person.'),
-        HumanMessagePromptTemplate.fromTemplate('Additional context: {inputText}'),
-      ],
-      inputVariables: ['inputText'],
-    });
-
-    const outputParser = new JsonOutputFunctionsParser();
-
+  makeChain(vectorstore: PineconeStore, openAIapiKey: string) {
     const model = new OpenAI({
-      temperature: await this.darkly.getNumberFlag('dynamic-gpt-model-temperature'), // increase temperature to get more creative answers
-      modelName: await this.darkly.getStringFlag('dynamic-gpt-assistant-model'),
-      openAIApiKey: this.openAIapiKey,
+      temperature: this.temperature, // increase temepreature to get more creative answers
+      modelName: 'gpt-3.5-turbo', //change this to gpt-4 if you have access
+      openAIApiKey: openAIapiKey,
     });
 
-    const chatModel = new ChatOpenAI();
-    const chain = createOpenAIFnRunnable({
-      functions: [this.answerable_schema, this.unanswerable_schema],
-      llm: chatModel,
-      prompt,
-      enforceSingleFunctionUsage: true, // Default is true
-      outputParser,
+    // Configures the chain to use the QA_PROMPT and CONDENSE_PROMPT prompts and to not return the source documents
+    const chain = ConversationalRetrievalQAChain.fromLLM(model, vectorstore.asRetriever(), {
+      qaTemplate: this.base_prompt,
+      questionGeneratorTemplate: this.condense_prompt,
+      returnSourceDocuments,
     });
-
-    /* // Configures the chain to use the base_prompt and condense_prompt and a flag that indicates whether to return source documents
-     const chain = ConversationalRetrievalQAChain.fromLLM(model, vectorstore.asRetriever(), {
-       qaTemplate: this.base_prompt,
-       questionGeneratorChainOptions: { template: this.condense_prompt },
-       questionGeneratorTemplate: this.condense_prompt,
-       returnSourceDocuments,
-     });*/
-
     return chain;
   }
+
+  /* async makeChain(vectorstore: PineconeStore, returnSourceDocuments: boolean = true) {
+     const prompt = new ChatPromptTemplate({
+       promptMessages: [
+         SystemMessagePromptTemplate.fromTemplate('Generate details of a hypothetical person.'),
+         HumanMessagePromptTemplate.fromTemplate('Additional context: {inputText}'),
+       ],
+       inputVariables: ['inputText'],
+     });
+
+     const outputParser = new JsonOutputFunctionsParser();
+
+     const model = new OpenAI({
+       temperature: await this.darkly.getNumberFlag('dynamic-gpt-model-temperature'), // increase temperature to get more creative answers
+       modelName: await this.darkly.getStringFlag('dynamic-gpt-assistant-model'),
+       openAIApiKey: this.openAIapiKey,
+     });
+
+     const chatModel = new ChatOpenAI();
+     const chain = createOpenAIFnRunnable({
+       functions: [this.answerable_schema, this.unanswerable_schema],
+       llm: chatModel,
+       prompt,
+       enforceSingleFunctionUsage: true, // Default is true
+       outputParser,
+     });
+
+     /* // Configures the chain to use the base_prompt and condense_prompt and a flag that indicates whether to return source documents
+      const chain = ConversationalRetrievalQAChain.fromLLM(model, vectorstore.asRetriever(), {
+        qaTemplate: this.base_prompt,
+        questionGeneratorChainOptions: { template: this.condense_prompt },
+        questionGeneratorTemplate: this.condense_prompt,
+        returnSourceDocuments,
+      });
+
+     return chain;
+   }*/
 }
