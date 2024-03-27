@@ -100,7 +100,7 @@ export class SurveyFilterService extends BaseWorker {
                          $key: {
                              "max_score": $lookup(definition.sections.*.follow_up, $key).max_score,
                              "score":$lookup(definition.sections.*.follow_up, $key).score,
-                             "user_answered": $exists($lookup(definition.sections.*.follow_up, $key).value) and $q.value != null and $q.value != "" and $q.value != "null" ,
+                             "user_answered": $exists($lookup(definition.sections.*.follow_up, $key).value) and $lookup(definition.sections.*.follow_up, $key).value != null and $lookup(definition.sections.*.follow_up, $key).value != "" and $lookup(definition.sections.*.follow_up, $key).value != "null" ,
                              "ai_answered": $exists($lookup(definition.sections.*.follow_up, $key).ai_response.answer)
                          }
                      }
@@ -146,7 +146,7 @@ export class SurveyFilterService extends BaseWorker {
                          }
                      })
                  }
-    )`,
+       )`,
     );
 
     // Evaluate the JSONata expression to get the progress
