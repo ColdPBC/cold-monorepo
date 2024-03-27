@@ -209,6 +209,7 @@ const _ComplianceSurveySavedQuestionnaire = (props: ComplianceSurveySavedQuestio
 
   const onNextButtonClicked = async () => {
     setSendingSurvey(true);
+    setDocumentLinkModalOpen(false);
     const bookmarkedQuestion = getAccurateBookmarkedValue(sections, activeKey, bookmarked);
     const newSurvey = updateSurveyQuestion(surveyData, activeKey, {
       value: getQuestionValue(surveyData, activeKey),
@@ -228,6 +229,7 @@ const _ComplianceSurveySavedQuestionnaire = (props: ComplianceSurveySavedQuestio
 
   const onSkipButtonClicked = async () => {
     setSendingSurvey(true);
+    setDocumentLinkModalOpen(false);
     const bookmarkedQuestion = getAccurateBookmarkedValue(sections, activeKey, bookmarked);
     const newSurvey = updateSurveyQuestion(surveyData, activeKey, {
       skipped: true,
@@ -248,6 +250,7 @@ const _ComplianceSurveySavedQuestionnaire = (props: ComplianceSurveySavedQuestio
   const onSubmitButtonClicked = async () => {
     // tell the difference between a skipped question and a question that was answered
     setSendingSurvey(true);
+    setDocumentLinkModalOpen(false);
     const bookmarkedQuestion = getAccurateBookmarkedValue(sections, activeKey, bookmarked);
     const newSurvey = updateSurveyQuestion(
       surveyData,
@@ -272,6 +275,7 @@ const _ComplianceSurveySavedQuestionnaire = (props: ComplianceSurveySavedQuestio
 
   const onPreviousButtonClicked = () => {
     // got the previous question in the saved questions
+    setDocumentLinkModalOpen(false);
     const activeFollowUpIndex = savedQuestions.findIndex(savedQuestion => {
       return savedQuestion.followUpKey === activeKey.value;
     });
