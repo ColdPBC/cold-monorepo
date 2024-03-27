@@ -1,3 +1,18 @@
+# [1.176.0-cold-657.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.176.0-cold-657.1...v1.176.0-cold-657.2) (2024-03-27)
+
+
+### Bug Fixes
+
+* check if assistant still exists ([45601f8](https://github.com/ColdPBC/cold-monorepo/commit/45601f8dd4b13a37d05a1b38b152834ec06e5b87))
+* delete jobs from cache ([0aae188](https://github.com/ColdPBC/cold-monorepo/commit/0aae188c8ed87cdbb7c1e6fc7720071905385dbb))
+* remove unused custom loaders ([5a95589](https://github.com/ColdPBC/cold-monorepo/commit/5a9558946b6f4fc22f2bad64fe84b027e2ff9361))
+
+
+### Features
+
+* add additional file types ([e231584](https://github.com/ColdPBC/cold-monorepo/commit/e23158453c6f1df14b1cd4d759b0cd99d5415133))
+* get/set checksum cache to prevent dupes from being added to the index ([e25d1d9](https://github.com/ColdPBC/cold-monorepo/commit/e25d1d9618b8599e816dcdf0091304cd116d8744))
+
 # [1.176.0-cold-657.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.175.0...v1.176.0-cold-657.1) (2024-03-26)
 
 
