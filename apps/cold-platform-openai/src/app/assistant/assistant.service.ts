@@ -14,6 +14,7 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
   client: OpenAI;
   service: service_definitions;
   topic: string = '';
+  model: string;
 
   constructor(
     private readonly config: ConfigService,
@@ -50,7 +51,7 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
         this.handleError(e);
       }
     }
-    //this.logger.log('OpenAI Service initialized');
+    this.model = await this.darkly.getStringFlag('dynamic-gpt-assistant-model', 'gpt-3.5');
   }
 
   handleError(e, meta?) {
@@ -72,7 +73,7 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
   async send(thread: OpenAI.Beta.Threads.Thread, integration: integrations, org: organizations) {
     const run = await this.client.beta.threads.runs.create(thread.id, {
       assistant_id: integration.id,
-      model: await this.darkly.getStringFlag('dynamic-gpt-assistant-model', 'gpt-3.5'),
+      model: this.model,
       instructions: await this.prompts.getBasePrompt(org), // Assuming getBasePrompt() is defined.
     });
 
