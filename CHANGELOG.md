@@ -1,3 +1,12 @@
+# [1.176.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.175.0...v1.176.0) (2024-03-27)
+
+
+### Features
+
+* added browser logging for the ui ([9c65df4](https://github.com/ColdPBC/cold-monorepo/commit/9c65df4ba1c5e647efef93c92196fda3bd754242))
+* logout user when auth0 error occurs ([b435f5b](https://github.com/ColdPBC/cold-monorepo/commit/b435f5b5538e04872200db5762219b0973258a0a))
+* update error page to have better message and re login button ([72df5e1](https://github.com/ColdPBC/cold-monorepo/commit/72df5e101fdca3edf5e00531aeee0db8670b2605))
+
 # [1.175.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.174.0...v1.175.0) (2024-03-25)
 
 
