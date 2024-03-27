@@ -8,8 +8,8 @@ export class WordLoader extends BaseWorker {
     super(WordLoader.name);
   }
 
-  async load(buffer: Buffer) {
-    const { value } = await mammoth.extractRawText({ buffer });
-    return value;
+  async load(buffer: Buffer): Promise<any> {
+    const { value } = await mammoth.convertToHtml({ buffer });
+    return { data: value, type: 'html' };
   }
 }
