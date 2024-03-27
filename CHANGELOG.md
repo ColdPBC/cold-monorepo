@@ -1,3 +1,10 @@
+# [1.176.0-COLD-652.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.175.0...v1.176.0-COLD-652.1) (2024-03-27)
+
+
+### Features
+
+* add document link button to compliance survey ([d6dca9a](https://github.com/ColdPBC/cold-monorepo/commit/d6dca9af744af8e1b33529c005744d149e3c792b))
+
 # [1.175.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.174.0...v1.175.0) (2024-03-25)
 
 
