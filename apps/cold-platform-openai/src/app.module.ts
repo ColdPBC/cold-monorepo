@@ -17,6 +17,7 @@ import { LangchainModule } from './langchain/langchain.module';
 import { ChatModule } from './chat/chat.module';
 import { LangchainLoaderService } from './langchain/langchain.loader.service';
 import { LoadersModule } from './langchain/loaders/loaders.module';
+import { JobConsumer } from './job.consumer';
 
 @Module({
   imports: [PineconeModule, LangchainModule, ChatModule],
@@ -53,6 +54,7 @@ export class AppModule {
       controllers: [OpenAIController],
       providers: [
         FileService,
+        JobConsumer,
         AppService,
         {
           provide: APP_INTERCEPTOR,
