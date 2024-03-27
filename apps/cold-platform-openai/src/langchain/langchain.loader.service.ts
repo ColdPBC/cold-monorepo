@@ -4,8 +4,8 @@ import { PineconeService } from '../pinecone/pinecone.service';
 import { ConfigService } from '@nestjs/config';
 import { OpenAIEmbeddings } from 'langchain/embeddings/openai';
 import { PineconeStore } from 'langchain/vectorstores/pinecone';
-import { WordLoader } from './loaders/word.loader';
-import { XlsLoader } from './loaders/xls.loader';
+import { WordLoader } from './custom_loaders/word.loader';
+import { XlsLoader } from './custom_loaders/xls.loader';
 import { TextLoader } from 'langchain/document_loaders/fs/text';
 import { PDFLoader } from 'langchain/document_loaders/fs/pdf';
 import { CSVLoader } from 'langchain/document_loaders/fs/csv';
@@ -58,47 +58,83 @@ export class LangchainLoaderService extends BaseWorker implements OnModuleInit {
 
     switch (extension) {
       case 'docx':
-        return 'Word Document';
-      case 'xlsx':
-        return 'Excel Spreadsheet';
-      default:
-        return 'Unknown';
+        return await this.wordLoader.load(Buffer.from(await s3File.Body.transformToByteArray()));
+      case 'xlsx': {
+        const data = await this.xlsLoader.load(await s3File.Body.transformToByteArray());
+        return { data, type: 'documents' };
+      }
+      case 'pdf': {
+        const loader = new PDFLoader(new Blob([await s3File.Body.transformToByteArray()]), { splitPages: false });
+        const data = await loader.load();
+        return { data, type: 'pdf' };
+      }
+      case 'csv': {
+        const loader = new CSVLoader(new Blob([await s3File.Body.transformToByteArray()], { type: 'text/csv' }));
+        const data = await loader.load();
+        return { data, type: 'csv' };
+      }
+      case 'json': {
+        const loader = new JSONLoader(new Blob([await s3File.Body.transformToString()], { type: 'application/json' }));
+        const data = await loader.load();
+        return { data, type: 'json' };
+      }
+      default: {
+        const loader = new TextLoader(new Blob([await s3File.Body.transformToString()], { type: 'text/plain' }));
+        const data = loader.load();
+        return { data, type: 'text' };
+      }
     }
   }
 
-  async ingestData(user: AuthenticatedUser, organization: any, namespaceName?: string) {
+  async ingestData(user: AuthenticatedUser, organization: any, payload: any, namespaceName?: string) {
     try {
-      const openAIapiKey = this.config.get<string>('OPENAI_API_KEY');
-      const bucket = `cold-api-uploaded-files/${process.env['NODE_ENV']}/${organization.id}`;
-      const index = this.pc.pinecone.Index(namespaceName);
-
-      // Create index if it doesn't exist
-      if (!index) {
-        await this.pc.createIndex(organization.name);
+      if (!(await this.darkly.getBooleanFlag('config-enable-pinecone-injestion'))) {
+        const message = 'Pinecone ingestion is disabled.  To enable, turn on targeting for `config-enable-pinecone-injestion` flag in launch darkly';
+        this.logger.warn(message);
+        return message;
       }
 
-      const s3Docs = await this.s3.listObjects(user, organization, bucket);
+      if (!namespaceName) {
+        namespaceName = organization.name;
+      }
 
-      for (const doc of s3Docs) {
-        const s3File = await this.s3.getObject(user, bucket, doc.Key);
-        let content: any;
+      const openAIapiKey = this.config.get<string>('OPENAI_API_KEY');
 
-        switch (s3File.ContentType) {
-          case 'application/pdf':
-            content = await this.pdfLoader.load(s3File.Body as unknown as Buffer);
-            break;
-        }
+      await this.pc.createIndex(organization.name);
 
+      const index = this.pc.pinecone.Index(organization.name);
+
+      const content = await this.getDocContent(payload, user);
+
+      const embeddings = new OpenAIEmbeddings({
+        openAIApiKey: openAIapiKey as string,
+      });
+
+      if (Array.isArray(content.data) && content.type === 'documents') {
+        await PineconeStore.fromDocuments(content, embeddings, {
+          pineconeIndex: index,
+          namespace: namespaceName as string,
+        });
+      } else if (content.type === 'html') {
+        const textSplitter = RecursiveCharacterTextSplitter.fromLanguage('html', {
+          chunkSize: Number(this.chunkSize),
+          chunkOverlap: Number(this.overlapSize),
+        });
+
+        const documents = await textSplitter.createDocuments([content.data]);
+        const splitDocs = await textSplitter.splitDocuments(documents);
+
+        await PineconeStore.fromDocuments(splitDocs, embeddings, {
+          pineconeIndex: index,
+          namespace: namespaceName as string,
+        });
+      } else {
         const textSplitter = new RecursiveCharacterTextSplitter({
           chunkSize: Number(this.chunkSize),
           chunkOverlap: Number(this.overlapSize),
         });
 
-        const document = await textSplitter.splitDocuments(content);
-
-        const embeddings = new OpenAIEmbeddings({
-          openAIApiKey: openAIapiKey as string,
-        });
+        const document = await textSplitter.splitDocuments(content.data);
 
         await PineconeStore.fromDocuments(document, embeddings, {
           pineconeIndex: index,

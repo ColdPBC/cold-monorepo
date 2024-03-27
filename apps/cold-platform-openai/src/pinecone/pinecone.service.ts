@@ -1,4 +1,4 @@
-import { ConflictException, Injectable, OnModuleInit } from '@nestjs/common';
+import { Injectable, OnModuleInit } from '@nestjs/common';
 import { BaseWorker } from '@coldpbc/nest';
 import { Pinecone } from '@pinecone-database/pinecone';
 import { ConfigService } from '@nestjs/config';
@@ -76,24 +76,26 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
       await this.onModuleInit();
     }
 
-    const index = this.pinecone.Index(targetIndex);
-    if (index) {
-      throw new ConflictException(`Index ${targetIndex} already exists`);
-    }
-
-    await this.pinecone.createIndex({
-      name: targetIndex,
-      dimension: dimension,
-      spec: {
-        serverless: {
-          cloud: 'aws',
-          region: 'us-east-1',
+    try {
+      await this.pinecone.createIndex({
+        name: targetIndex,
+        dimension: dimension,
+        spec: {
+          serverless: {
+            cloud: 'aws',
+            region: 'us-east-1',
+          },
         },
-      },
-      waitUntilReady: true,
-    });
+        suppressConflicts: true,
+        waitUntilReady: true,
+      });
 
-    return await this.describeIndex(targetIndex);
+      return await this.describeIndex(targetIndex);
+    } catch (e) {
+      if (e.statusCode !== 404) {
+        this.logger.error(e.message, { ...e });
+      }
+    }
   }
 
   async getIndexNamespaces(targetIndex: string) {

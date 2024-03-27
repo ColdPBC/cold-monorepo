@@ -21,6 +21,7 @@ export class JobConsumer extends BaseWorker {
     private readonly assistant: AssistantService,
     private readonly fileService: FileService,
     private readonly cache: CacheService,
+    private readonly loader: LangchainLoaderService,
   ) {
     super(JobConsumer.name);
     this.client = new OpenAI({
@@ -33,6 +34,15 @@ export class JobConsumer extends BaseWorker {
   async process(job: Job) {
     this.logger.info(`Received job ${job.id} of type ${job.name}`);
     switch (job.name) {
+      case 'file.delete': {
+        const split = `pinecone:${job.data.payload.key.replaceAll('/', ':')}`.split(':');
+        split.pop();
+        split.push(job.data.payload.checksum);
+        const cacheKey = split.join(':');
+
+        await this.cache.delete(cacheKey);
+        return this.fileService.deleteFile(job.data.user, job.data.integration.id, job.data.payload.key);
+      }
       case 'file.uploaded':
         return this.processFileJob(job);
       case 'compliance_automation.enabled':
@@ -56,7 +66,19 @@ export class JobConsumer extends BaseWorker {
 
   @Process('file.uploaded')
   async processFileJob(job: Job) {
+    await this.loader.ingestData(job.data.user, job.data.organization, job.data.payload);
     return this.fileService.uploadOrgFilesToOpenAI(job);
+  }
+
+  @Process('file.deleted')
+  async deleteFileJob(job: Job) {
+    const split = `pinecone:${job.data.payload.key.replaceAll('/', ':')}`.split(':');
+    split.pop();
+    split.push(job.data.payload.checksum);
+    const cacheKey = split.join(':');
+
+    await this.cache.delete(cacheKey);
+    return this.fileService.deleteFile(job.data.user, job.data.integration.id, job.data.payload.key);
   }
 
   @Process('compliance_automation.enabled')

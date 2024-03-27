@@ -16,7 +16,7 @@ import { PineconeModule } from './pinecone/pinecone.module';
 import { LangchainModule } from './langchain/langchain.module';
 import { ChatModule } from './chat/chat.module';
 import { LangchainLoaderService } from './langchain/langchain.loader.service';
-import { LoadersModule } from './langchain/loaders/loaders.module';
+import { LoadersModule } from './langchain/custom_loaders/loaders.module';
 import { JobConsumer } from './job.consumer';
 
 @Module({
