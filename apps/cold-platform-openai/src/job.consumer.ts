@@ -71,25 +71,26 @@ export class AssistantConsumer extends BaseWorker {
 
   @OnQueueActive()
   async onActive(job: Job) {
-    const message = `Processing ${job.name} | id: ${job.id} title: ${job.data.survey.definition.title} | started: ${new Date(job.processedOn).toUTCString()}`;
+    const message = `Processing ${job.name} | id: ${job.id} title: ${job.data.survey?.definition?.title} | started: ${new Date(job.processedOn).toUTCString()}`;
     await job.log(message);
   }
 
   @OnQueueFailed()
   async onFailed(job: Job) {
-    const jobs = (await this.cache.get(`jobs:openai:${job.data.organization.id}:${job.data.payload.compliance.compliance_id}`)) as number[];
-    jobs.splice(jobs.indexOf(typeof job.id === 'number' ? job.id : parseInt(job.id)), 1);
-
+    const jobs = (await this.cache.get(`jobs:openai:${job.data.organization.name}:${job.data.payload?.compliance?.compliance_id}`)) as number[];
+    if (Array.isArray(jobs) && jobs.length > 0) {
+      jobs.splice(jobs.indexOf(typeof job.id === 'number' ? job.id : parseInt(job.id)), 1);
+    }
     await job.log(`Job FAILED | id: ${job.id} reason: ${job.failedReason} | ${this.getTimerString(job)}`);
   }
 
   @OnQueueCompleted()
   async onCompleted(job: Job) {
-    const jobs = (await this.cache.get(`jobs:${job.name}:${job.data.organization.id}:${job.data.payload.compliance.compliance_id}`)) as number[];
+    const jobs = (await this.cache.get(`jobs:${job.name}:${job.data.organization.id}:${job.data.payload.compliance?.compliance_id}`)) as number[];
     if (jobs) {
       jobs.splice(jobs.indexOf(typeof job.id === 'number' ? job.id : parseInt(job.id)), 1);
 
-      await this.cache.set(`jobs:${job.name}:${job.data.organization.id}:${job.data.payload.compliance.compliance_id}`, jobs, { ttl: 60 * 60 * 24 * 7 });
+      await this.cache.set(`jobs:${job.name}:${job.data.organization.id}:${job.data.payload.compliance?.compliance_id}`, jobs, { ttl: 60 * 60 * 24 * 7 });
     }
 
     await job.log(`${job.name} Job COMPLETED | id: ${job.id} completed_on: ${new Date(job.finishedOn).toUTCString()} | ${this.getTimerString(job)}`);
