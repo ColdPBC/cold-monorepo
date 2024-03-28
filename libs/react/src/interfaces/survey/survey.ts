@@ -90,6 +90,7 @@ export interface SurveySectionFollowUpType {
   max_score?: number;
   saved?: boolean;
   document_link?: string;
+  corresponding_question?: string;
 }
 
 export interface SurveyPayloadType {

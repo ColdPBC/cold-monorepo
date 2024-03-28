@@ -16,6 +16,7 @@ export interface SurveyInputProps {
   value: any | null;
   onFieldUpdated: (name: string, value: any) => void;
   isAdditional?: boolean;
+  corresponding_question?: string;
   ai_attempted?: boolean;
   ai_response?: {
     justification?: string;
