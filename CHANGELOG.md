@@ -1,3 +1,10 @@
+## [1.179.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.179.1...v1.179.2) (2024-03-28)
+
+
+### Bug Fixes
+
+* create index prior to running ([f94e486](https://github.com/ColdPBC/cold-monorepo/commit/f94e4861f9580168722c6942b12dc374ebf96969))
+
 ## [1.179.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.179.0...v1.179.1) (2024-03-28)
 
 
