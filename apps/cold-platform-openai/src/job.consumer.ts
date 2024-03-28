@@ -4,10 +4,11 @@ import { Job } from 'bull';
 import OpenAI, { UnprocessableEntityError } from 'openai';
 import { AppService } from './app.service';
 import { AssistantService } from './assistant/assistant.service';
-import { BaseWorker, CacheService } from '@coldpbc/nest';
+import { BaseWorker, CacheService, DarklyService } from '@coldpbc/nest';
 import { FileService } from './assistant/files/file.service';
 import { ConfigService } from '@nestjs/config';
 import { LangchainLoaderService } from './langchain/langchain.loader.service';
+import { ChatService } from './chat/chat.service';
 
 @Injectable()
 @Processor('openai')
@@ -22,6 +23,8 @@ export class JobConsumer extends BaseWorker {
     private readonly fileService: FileService,
     private readonly cache: CacheService,
     private readonly loader: LangchainLoaderService,
+    private readonly darkly: DarklyService,
+    private readonly chat: ChatService,
   ) {
     super(JobConsumer.name);
     this.client = new OpenAI({
@@ -85,7 +88,16 @@ export class JobConsumer extends BaseWorker {
   async processCompliance(job: Job) {
     try {
       this.logger.info(`Received ${job.name} job: ${job.id} `);
-      await this.assistant.process_survey(job);
+      const useRag = await this.darkly.getBooleanFlag('dynamic-enable-rag-processing', false, {
+        kind: 'organization',
+        key: job.data.organization.name,
+        name: job.data.organization.display_name,
+      });
+      if (useRag) {
+        await this.chat.process_survey(job);
+      } else {
+        await this.assistant.process_survey(job);
+      }
     } catch (e) {
       this.logger.error(e.message, e);
       throw e;

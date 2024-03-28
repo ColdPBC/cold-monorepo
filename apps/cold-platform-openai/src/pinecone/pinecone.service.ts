@@ -31,14 +31,12 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
 
     try {
       const index = this.pinecone.Index(indexName);
-
       const vectorStore = await PineconeStore.fromExistingIndex(
         new OpenAIEmbeddings({
-          openAIApiKey: this.config.getOrThrow('PINECONE_API_KEY') as string,
+          openAIApiKey: this.config.getOrThrow('OPENAI_API_KEY') as string,
         }),
         {
           pineconeIndex: index,
-          textKey: 'text',
           namespace: indexName,
         },
       );

@@ -10,18 +10,17 @@ import { FileService } from './assistant/files/file.service';
 import { AssistantService } from './assistant/assistant.service';
 import { AssistantModule } from './assistant/assistant.module';
 import { BullModule } from '@nestjs/bull';
-import { PromptsService } from './prompts/prompts.service';
 import { Tools } from './assistant/tools/tools';
 import { PineconeModule } from './pinecone/pinecone.module';
 import { LangchainModule } from './langchain/langchain.module';
 import { ChatModule } from './chat/chat.module';
-import { LangchainLoaderService } from './langchain/langchain.loader.service';
 import { LoadersModule } from './langchain/custom_loaders/loaders.module';
 import { JobConsumer } from './job.consumer';
+import { ChatService } from './chat/chat.service';
 
 @Module({
-  imports: [PineconeModule, LangchainModule, ChatModule],
-  providers: [LangchainLoaderService],
+  imports: [],
+  providers: [],
 })
 export class AppModule {
   static async forRootAsync() {
@@ -62,7 +61,7 @@ export class AppModule {
         },
         RabbitService,
         AssistantService,
-        PromptsService,
+        ChatService,
         Tools,
       ],
       exports: [],
