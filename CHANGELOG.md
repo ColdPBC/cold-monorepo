@@ -1,3 +1,29 @@
+# [1.178.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.177.0...v1.178.0) (2024-03-28)
+
+
+### Bug Fixes
+
+* check if assistant still exists ([45601f8](https://github.com/ColdPBC/cold-monorepo/commit/45601f8dd4b13a37d05a1b38b152834ec06e5b87))
+* delete jobs from cache ([0aae188](https://github.com/ColdPBC/cold-monorepo/commit/0aae188c8ed87cdbb7c1e6fc7720071905385dbb))
+* dependency resolution ([cf88f56](https://github.com/ColdPBC/cold-monorepo/commit/cf88f5625ece0e6740cb8b5894d8f28ca522b8f3))
+* remove unused custom loaders ([5a95589](https://github.com/ColdPBC/cold-monorepo/commit/5a9558946b6f4fc22f2bad64fe84b027e2ff9361))
+* tsconfig issues ([ab0e1ce](https://github.com/ColdPBC/cold-monorepo/commit/ab0e1ced9eeead2190c9a1f4a563f7e52234a1b0))
+
+
+### Features
+
+* add additional file types ([e231584](https://github.com/ColdPBC/cold-monorepo/commit/e23158453c6f1df14b1cd4d759b0cd99d5415133))
+* add chat module ([69f0dac](https://github.com/ColdPBC/cold-monorepo/commit/69f0dac549398ba54d3cbe32a7933beb88e877b8))
+* add langchain module ([b38b94f](https://github.com/ColdPBC/cold-monorepo/commit/b38b94f152496ae0cad87f5f65a4c33a89e099a4))
+* add listObjects method ([c86f14d](https://github.com/ColdPBC/cold-monorepo/commit/c86f14d8c9b34606cbec7676f34319002febdc03))
+* add package deps ([97c8b2e](https://github.com/ColdPBC/cold-monorepo/commit/97c8b2ec4a6178339c515c350b7de8928ec6abed))
+* add pdf, xls, word loaders ([1f47517](https://github.com/ColdPBC/cold-monorepo/commit/1f475179f4d5406da396a99b80fc1f1310739793))
+* add pinecone module ([64b4ff3](https://github.com/ColdPBC/cold-monorepo/commit/64b4ff37ce1af8f6a11210b2d7dc8ceee09043ce))
+* adding chat components ([0bdf526](https://github.com/ColdPBC/cold-monorepo/commit/0bdf52685c06f86226030b717e9914e8f69f3b2c))
+* get/set checksum cache to prevent dupes from being added to the index ([e25d1d9](https://github.com/ColdPBC/cold-monorepo/commit/e25d1d9618b8599e816dcdf0091304cd116d8744))
+* improved documents in response ([b1e3412](https://github.com/ColdPBC/cold-monorepo/commit/b1e3412d778461370f5fbfa537f29401537d00d8))
+* initial support for RAG ([dc65a47](https://github.com/ColdPBC/cold-monorepo/commit/dc65a4754dfa9089fac0fd913d2b0124953cf089))
+
 # [1.176.0-cold-657.5](https://github.com/ColdPBC/cold-monorepo/compare/v1.176.0-cold-657.4...v1.176.0-cold-657.5) (2024-03-28)
 
 
