@@ -1,7 +1,7 @@
 import '../../../libs/nest/src/lib/tracer';
 import { NestFactory } from '@nestjs/core';
 import * as dotenv from 'dotenv'; // eslint-disable-next-line @nx/enforce-module-boundaries
-import { AppModule } from './app/app.module';
+import { AppModule } from './app.module';
 
 dotenv.config();
 

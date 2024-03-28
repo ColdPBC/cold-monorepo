@@ -122,7 +122,7 @@ export class MqttService extends BaseWorker implements OnModuleInit {
           topic = topic ? topic : `system/${this.config.get('NODE_ENV', 'development')}/${inputs.target}/`;
           break;
         case 'ui':
-          topic = topic ? topic : `ui/${this.config.get('NODE_ENV', 'development')}/${get(inputs.payload, 'org_id')}/${get(inputs.payload, 'user')}`;
+          topic = topic ? topic : `ui/${this.config.get('NODE_ENV', 'development')}/${get(inputs.payload, 'org_id')}/${get(inputs.payload, 'user.coldclimate_claims.email')}`;
           break;
       }
 

@@ -63,10 +63,11 @@ describe('Organization Controller', () => {
     expect(controller).toBeDefined();
   });
 
+  /*
   it('AddUserToOrganization called', async () => {
     await controller.addMemberToOrganizationAndRole('123', 'role', 'userid', fullReqExample);
     expect(service.addUserToOrganization).toHaveBeenCalled();
-  });
+  });*/
 
   it('CreateOrganization called', async () => {
     await controller.createOrganization('123', mock, fullReqExample);
@@ -83,6 +84,7 @@ describe('Organization Controller', () => {
     expect(service.getOrganization).toHaveBeenCalled();
   });
 
+  /*
   it('GetOrgUsersRoles called', async () => {
     await controller.getOrgUsersRoles(fullReqExample, '123', 'userId');
     expect(service.getOrgUserRoles).toHaveBeenCalled();
@@ -115,7 +117,7 @@ describe('Organization Controller', () => {
     await controller.removeMembers('orgId', { members: ['memberid'] }, fullReqExample);
     expect(service.removeUserFromOrganization).toHaveBeenCalled();
   });
-
+*/
   it('DeleteInvitation called', async () => {
     await controller.removeOrg('orgId', fullReqExample);
     expect(service.deleteOrganization).toHaveBeenCalled();

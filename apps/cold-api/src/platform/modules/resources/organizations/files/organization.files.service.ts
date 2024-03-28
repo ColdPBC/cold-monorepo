@@ -81,7 +81,7 @@ export class OrganizationFilesService extends BaseWorker {
 
         const hash = await S3Service.calculateChecksum(file);
 
-        const response = await this.s3.uploadStreamToS3(user, orgId, file);
+        const response = await this.s3.uploadStreamToS3(user, org.name, file);
 
         let existing = await this.prisma.organization_files.findUnique({
           where: {
@@ -96,7 +96,7 @@ export class OrganizationFilesService extends BaseWorker {
         if (existing) {
           if (existing?.checksum === hash) {
             this.logger.warn(`file ${file.originalname} already exists in db`, pick(file, ['id', 'original_name', 'mimetype', 'size']));
-            throw new ConflictException(`file ${file.originalname} already exists in db for org ${orgId}`);
+            throw new ConflictException(`file ${file.originalname} already exists in db for org ${org.name}`);
           }
 
           await this.prisma.organization_files.update({

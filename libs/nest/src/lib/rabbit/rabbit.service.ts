@@ -4,6 +4,7 @@ import { BaseWorker } from '../worker';
 import { RabbitMessagePayload } from './rabbit.types';
 import { service_definitions } from '../../validation/generated/modelSchema/service_definitionsSchema';
 import { SecretsService } from '../aws';
+import { omit } from 'lodash';
 
 export enum WorkerTypes {
   PLATFORM = 'platform',
@@ -85,7 +86,7 @@ export class ColdRabbitService extends BaseWorker implements OnModuleInit {
       ...payload,
     });
 
-    this.logger.info(`message published to ${routingKey.toLowerCase()}`, { ...payload });
+    this.logger.info(`message published to ${routingKey.toLowerCase()}`, { ...omit(payload.data, ['survey', 'surveys', 'definition']) });
 
     //await this.disconnect();
   }
@@ -108,7 +109,7 @@ export class ColdRabbitService extends BaseWorker implements OnModuleInit {
       };
       const response = await this.client?.request(requestBody);
 
-      this.logger.info(`message published to ${routingKey.toLowerCase()}`, requestBody);
+      this.logger.info(`message published to ${routingKey.toLowerCase()}`, { ...omit(requestBody.payload.data, ['survey', 'surveys', 'definition']) });
 
       return response;
     } catch (err: any) {
