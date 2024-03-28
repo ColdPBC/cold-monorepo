@@ -31,55 +31,14 @@ export class ChatService extends BaseWorker implements OnModuleInit {
 
   async onModuleInit() {}
 
-  async askQuestion(indexName: string, question: any, prompts: PromptsService, company_name: string, documents: string): Promise<any> {
-    const CONDENSE_PROMPT = `Given the chat history and a follow-up question, rephrase the follow-up question to be a standalone question that encompasses all necessary context from the chat history.
-
-Chat History:
-{chat_history}
-Follow-up input: {question}
-
-Make sure your standalone question is self-contained, clear, and specific. Rephrased standalone question:`;
-
-    const qa_prompt_1 = `System: You are an AI sustainability expert tasked with helping our customer interpret and answer questions relating to sustainability and corporate governance based on the following documents: ${documents}.
-    The context from relevant documents has been processed and made accessible to you.  Your mission is to generate answers that are accurate, succinct, and comprehensive, drawing upon the information contained in the context of the documents. If the answer isn't readily found in the documents, you should make use of your training data and understood context to infer and provide the most plausible response.
- You are also capable of evaluating, comparing the content of these documents. Hence, if asked to compare or analyze the documents, use your AI understanding to deliver an insightful response.  You are also free to use any content from the company's website to provide a more comprehensive answer.  You must provide references which must include the name of any files used to determine your answer.
-
- The user will provide a JSON formatted "question" object that can include the following properties:
-  - "prompt": The question to be answered
-  - "component": used to determine how to structure your answer
-  - "options": a list of options to be used to answer the question.  This will be included only if the component is a "select" or "multiselect".
-  - "tooltip": additional instructions for answering the question
-
- {component_prompt}
-
- If you have enough information to answer the question, format your response as JSON containing only the following properties:
- "answer": which should contain your answer to the question,
- "justification": a short paragraph that explains how you arrived at your answer,
- "source": a list of sources you used to arrive at your answer.  This can include any uploaded documents, the company's website, or other public sources.
-
- If you do not have enough information, format your response as JSON containing only the following properties:
-  "what_we_need": include a paragraph that describes what information you would need to effectively answer the question.
-  "justification": a short paragraph that explains why you need this information.
-
- IMPORTANT: always follow these instructions anytime you respond to the user, and never add any other text to the response.
-
- Here is the context from the documents:
-
- Context: {context}
-
- Here is the user's json object:
-
- Question: {question}
-`;
+  async askQuestion(indexName: string, question: any, prompts: PromptsService, company_name: string): Promise<any> {
     const vectorStore = await this.pc.getVectorStore(indexName);
 
-    const component_prompt = await prompts.getComponentPrompt(question);
+    const sanitized_base = await prompts.getPrompt(question);
 
-    const sanitized_base = qa_prompt_1.replace('{component_prompt}', component_prompt);
+    // Create Template from base prompt
     const baseTemplate = PromptTemplate.fromTemplate(sanitized_base);
 
-    console.log(baseTemplate.inputVariables);
-    // ['adjective', 'content']
     const formattedPromptTemplate = await baseTemplate.format({
       question: JSON.stringify(question),
       company: company_name,
@@ -93,19 +52,9 @@ Make sure your standalone question is self-contained, clear, and specific. Rephr
       openAIApiKey: this.openAIapiKey,
     });
 
-    /*const chain = ConversationalRetrievalQAChain.fromLLM(model, vectorStore.asRetriever(), {
-      returnSourceDocuments: true,
-    });*/
-
-    /* const chain = ConversationalRetrievalQAChain.fromLLM(model, vectorStore.asRetriever(), {
-       qaTemplate: prompts.prompt_template,
-       questionGeneratorTemplate: prompts.condense_template,
-       returnSourceDocuments: true,
-     });*/
-
     const chain = ConversationalRetrievalQAChain.fromLLM(model, vectorStore.asRetriever(), {
       qaTemplate: sanitized_base,
-      questionGeneratorTemplate: CONDENSE_PROMPT,
+      questionGeneratorTemplate: prompts.condense_template,
       returnSourceDocuments: true,
     });
 
@@ -157,47 +106,20 @@ Make sure your standalone question is self-contained, clear, and specific. Rephr
 
     const reqs: any[] = [];
 
-    const documents = await this.prisma.organization_files.findMany({
-      where: {
-        organization_id: organization.id,
-      },
-    });
-
-    const documentNames: string[] = [];
-
-    if (documents && documents.length > 0) {
-      for (const doc of documents) {
-        documentNames.push(doc['original_name']);
-      }
-    }
-
     //initialize prompts service with survey name so that it has the correct context for darkly
-    const prompts = await new PromptsService(this.darkly, survey.name, organization).initialize();
+    const prompts = await new PromptsService(this.darkly, survey.name, organization, this.prisma).initialize();
 
     // iterate over each section key
     for (const section of sections) {
       // create a new thread for each section run
-      reqs.push(this.processSection(job, section, sdx, sections, definition, integration, organization, category_context, user, survey, prompts, documentNames.join(',')));
+      reqs.push(this.processSection(job, section, sdx, sections, definition, integration, organization, category_context, user, survey, prompts));
       //await this.processSection(job, section, sdx, sections, definition, thread, integration, organization, category_context, user, survey);
     }
 
     await Promise.all(reqs);
   }
 
-  public async processSection(
-    job: Job,
-    section: string,
-    sdx: number,
-    sections: string[],
-    definition,
-    integration,
-    organization,
-    category_context,
-    user,
-    survey,
-    prompts,
-    documents,
-  ) {
+  public async processSection(job: Job, section: string, sdx: number, sections: string[], definition, integration, organization, category_context, user, survey, prompts) {
     await job.log(`Section | ${section}:${sdx + 1} of ${sections.length}`);
     this.setTags({ section });
     this.logger.info(`Processing ${section}: ${definition.sections[section].title}`);
@@ -226,7 +148,7 @@ Make sure your standalone question is self-contained, clear, and specific. Rephr
 
       this.logger.info(`Sending Message | ${section}.${item}: ${follow_up.prompt}`);
       // create a new run for each followup item
-      const value = await this.askQuestion(organization.name, follow_up, prompts, organization.display_name, documents);
+      const value = await this.askQuestion(organization.name, follow_up, prompts, organization.display_name);
 
       // update the survey with the response
       definition.sections[section].follow_up[item].ai_response = value;
@@ -245,7 +167,7 @@ Make sure your standalone question is self-contained, clear, and specific. Rephr
         }
 
         this.logger.info(`Creating Message | ${section}.${item}.additional_context: ${follow_up.prompt}`);
-        const additionalValue = await this.askQuestion(organization.name, follow_up['additional_context'], prompts, organization.display_name, documents);
+        const additionalValue = await this.askQuestion(organization.name, follow_up['additional_context'], prompts, organization.display_name);
 
         definition.sections[section].follow_up[item].additional_context.ai_response = additionalValue;
 
