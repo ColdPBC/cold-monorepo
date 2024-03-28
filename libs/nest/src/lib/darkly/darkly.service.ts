@@ -132,22 +132,50 @@ export class DarklyService extends BaseWorker {
    * Subscribe to changes on specified json flag
    * @param key
    * @param callback
+   * @param context
    */
-  async subscribeToJsonFlagChanges(key: string, callback: (flagValue: any) => void): Promise<void> {
+  async subscribeToJsonFlagChanges(
+    key: string,
+    callback: (flagValue: any) => void | any,
+    context?: {
+      kind: string;
+      key: string;
+      name: string;
+    },
+  ): Promise<void> {
     if (!this.client.on) await this.onModuleInit();
+    if (!context) context = this.context;
     // Register a callback to be invoked when specified json feature flag changes
-    this.client.on(`update:${key}`, async (flag: any) => {
-      callback(await this.getJSONFlag(flag.key, this.context));
-    });
+    this.client.on(
+      `update:${key}`,
+      async (
+        flag: any,
+        context: {
+          kind: string;
+          key: string;
+          name: string;
+        },
+      ) => {
+        callback(await this.getJSONFlag(flag.key, context));
+      },
+    );
   }
 
   /**
    * Subscribe to changes to all json flags
    * @param callback
+   * @param context
    */
-  async subscribeToAnyJsonFlagChanges(callback: (flagValue: any) => void): Promise<void> {
+  async subscribeToAnyJsonFlagChanges(
+    callback: (flagValue: any) => void | any,
+    context?: {
+      kind: string;
+      key: string;
+      name: string;
+    },
+  ): Promise<void> {
     if (!this.client.on) await this.onModuleInit();
-
+    if (!context) context = this.context;
     // Register a callback to be invoked when any json feature flag changes
     this.client.on(`update`, async (flag: any) => {
       callback(await this.getJSONFlag(flag.key, this.context));
@@ -158,9 +186,19 @@ export class DarklyService extends BaseWorker {
    * Subscribe to changes to specified string flag
    * @param key
    * @param callback
+   * @param context
    */
-  async subscribeToStringFlagChanges(key: string, callback: (flagValue: string) => void): Promise<void> {
+  async subscribeToStringFlagChanges(
+    key: string,
+    callback: (flagValue: string) => void | string,
+    context?: {
+      kind: string;
+      key: string;
+      name: string;
+    },
+  ): Promise<void> {
     if (!this.client.on) await this.onModuleInit();
+    if (!context) context = this.context;
     // Register a callback to be invoked when specified boolean feature flag changes
     this.client.on(`update:${key}`, async (flag: any) => {
       callback(await this.getStringFlag(flag.key, this.context));
@@ -171,8 +209,19 @@ export class DarklyService extends BaseWorker {
    * Subscribe to changes to specified number flag
    * @param key
    * @param callback
+   * @param context
    */
-  subscribeToNumericFlagChanges(key: string, callback: (flagValue: number) => void): void {
+  async subscribeToNumericFlagChanges(
+    key: string,
+    callback: (flagValue: number) => void | number,
+    context?: {
+      kind: string;
+      key: string;
+      name: string;
+    },
+  ): Promise<void> {
+    if (!this.client.on) await this.onModuleInit();
+    if (!context) context = this.context;
     // Register a callback to be invoked when specified boolean feature flag changes
     this.client.on(`update:${key}`, async (flag: any) => {
       callback(await this.getNumberFlag(flag.key, this.context));
@@ -183,10 +232,19 @@ export class DarklyService extends BaseWorker {
    * Subscribe to changes to specified boolean | string | number flag
    * @param key
    * @param callback
+   * @param context
    */
-  async subscribeToBooleanFlagChanges(key: string, callback: (flagValue: boolean) => void): Promise<void> {
+  async subscribeToBooleanFlagChanges(
+    key: string,
+    callback: (flagValue: boolean) => void | boolean,
+    context?: {
+      kind: string;
+      key: string;
+      name: string;
+    },
+  ): Promise<void> {
     if (!this.client.on) await this.onModuleInit();
-
+    if (!context) context = this.context;
     // Register a callback to be invoked when specified boolean feature flag changes
     this.client.on(`update:${key}`, async (flag: any) => {
       callback(await this.getBooleanFlag(flag.key, this.context));
@@ -196,9 +254,18 @@ export class DarklyService extends BaseWorker {
   /**
    * Subscribe to changes on all boolean flags
    * @param callback
+   * @param context
    */
-  async subscribeToAllChanges(callback: (flagValue: any) => void): Promise<void> {
+  async subscribeToAllChanges(
+    callback: (flagValue: any) => void | any,
+    context?: {
+      kind: string;
+      key: string;
+      name: string;
+    },
+  ): Promise<void> {
     if (!this.client.on) await this.onModuleInit();
+    if (!context) context = this.context;
     // Register a callback to be invoked when any boolean feature flag changes
     this.client.on(`update`, async (flag: string) => {
       callback(await this.getBooleanFlag(flag, this.context));

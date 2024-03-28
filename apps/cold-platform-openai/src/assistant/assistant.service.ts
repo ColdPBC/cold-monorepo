@@ -7,7 +7,7 @@ import { integrations, organizations, service_definitions } from '@prisma/client
 import { Job, Queue } from 'bull';
 import { InjectQueue } from '@nestjs/bull';
 import { OpenAIResponse } from './validator/validator';
-import { PromptsService } from './surveys/prompts/prompts.service';
+import { PromptsService } from '../prompts/prompts.service';
 
 @Injectable()
 export class AssistantService extends BaseWorker implements OnModuleInit {
@@ -20,7 +20,6 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
     private readonly config: ConfigService,
     private readonly prisma: PrismaService,
     private rabbit: ColdRabbitService,
-    private prompts: PromptsService,
     private cache: CacheService,
     private readonly darkly: DarklyService,
     @InjectQueue('openai') private queue: Queue,
@@ -51,6 +50,7 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
         this.handleError(e);
       }
     }
+
     this.model = await this.darkly.getStringFlag('dynamic-gpt-assistant-model', 'gpt-3.5');
   }
 
@@ -70,11 +70,11 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
     throw new Error('Method not implemented.');
   }
 
-  async send(thread: OpenAI.Beta.Threads.Thread, integration: integrations, org: organizations) {
+  async send(thread: OpenAI.Beta.Threads.Thread, integration: integrations, org: organizations, prompts: PromptsService): Promise<any> {
     const run = await this.client.beta.threads.runs.create(thread.id, {
       assistant_id: integration.id,
       model: this.model,
-      instructions: await this.prompts.getBasePrompt(org), // Assuming getBasePrompt() is defined.
+      instructions: await prompts.getBasePrompt(org), // Assuming getBasePrompt() is defined.
     });
 
     this.logger.info(`Created run ${run.id} for thread ${thread.id}`, {
@@ -156,6 +156,7 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
     },
     isFollowUp = false, // this is a follow-up question that should only be presented if the previous question was answered
     org: organizations,
+    prompts: PromptsService,
     category_context?: string,
   ): Promise<any> {
     try {
@@ -172,7 +173,7 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
       if (!isFollowUp) {
         message = await this.client.beta.threads.messages.create(thread.id, {
           role: 'user',
-          content: `${category_context}${await this.prompts.getComponentPrompt(questionKey, item)}.  Here is the "question" JSON object: \`\`\`json ${JSON.stringify(item)}\`\`\``,
+          content: `${category_context}${await prompts.getComponentPrompt(item)}.  Here is the "question" JSON object: \`\`\`json ${JSON.stringify(item)}\`\`\``,
           file_ids: fileIds,
         });
       } else {
@@ -180,15 +181,14 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
         message = await this.client.beta.threads.messages.create(thread.id, {
           role: 'user',
           file_ids: fileIds,
-          content: `${category_context} this next JSON question is specifically related to your previous answer. ${await this.prompts.getComponentPrompt(
-            questionKey,
+          content: `${category_context} this next JSON question is specifically related to your previous answer. ${await prompts.getComponentPrompt(
             item,
           )}.  Here is the "question" JSON object: \`\`\`json ${JSON.stringify(item)}\`\`\``,
         });
       }
 
       this.logger.info(`Created message for ${item.prompt}`, { ...item, message });
-      return await this.send(thread, integration, org);
+      return await this.send(thread, integration, org, prompts);
     } catch (e) {
       this.logger.error(e.message, e);
       throw e;
@@ -224,12 +224,16 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
     const sdx = 0;
 
     const reqs: any[] = [];
+
+    //initialize prompts service with survey name so that it has the correct context for darkly
+    const prompts = await new PromptsService(this.darkly, survey.name, organization).initialize();
+
     // iterate over each section key
     for (const section of sections) {
       // create a new thread for each section run
       const thread = await this.client.beta.threads.create();
 
-      reqs.push(this.processSection(job, section, sdx, sections, definition, thread, integration, organization, category_context, user, survey));
+      reqs.push(this.processSection(job, section, sdx, sections, definition, thread, integration, organization, category_context, user, survey, prompts));
       //await this.processSection(job, section, sdx, sections, definition, thread, integration, organization, category_context, user, survey);
     }
 
@@ -248,6 +252,7 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
     category_context,
     user,
     survey,
+    prompts: PromptsService,
   ) {
     await job.log(`Section | ${section}:${sdx + 1} of ${sections.length}`);
     this.setTags({ section });
@@ -285,7 +290,7 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
 
       this.logger.info(`Creating Message | ${section}.${item}: ${follow_up.prompt}`);
       // create a new run for each followup item
-      let value = await this.createMessage(thread, integration, item, follow_up, false, organization, category_context);
+      let value = await this.createMessage(thread, integration, item, follow_up, false, organization, prompts, category_context);
 
       value = this.clearValuesOnError(value);
 
@@ -306,7 +311,7 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
         }
 
         this.logger.info(`Creating Message | ${section}.${item}.additional_context: ${follow_up.prompt}`);
-        let additionalValue = await this.createMessage(thread, integration, item, follow_up['additional_context'], true, organization, category_context);
+        let additionalValue = await this.createMessage(thread, integration, item, follow_up['additional_context'], true, organization, prompts, category_context);
 
         additionalValue = this.clearValuesOnError(additionalValue);
 

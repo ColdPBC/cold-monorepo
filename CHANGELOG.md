@@ -1,40 +1,60 @@
-# [1.177.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.176.3...v1.177.0) (2024-03-27)
+# [1.176.0-cold-657.5](https://github.com/ColdPBC/cold-monorepo/compare/v1.176.0-cold-657.4...v1.176.0-cold-657.5) (2024-03-28)
+
+
+### Bug Fixes
+
+* tsconfig issues ([ab0e1ce](https://github.com/ColdPBC/cold-monorepo/commit/ab0e1ced9eeead2190c9a1f4a563f7e52234a1b0))
 
 
 ### Features
 
-* add document link button to compliance survey ([d6dca9a](https://github.com/ColdPBC/cold-monorepo/commit/d6dca9af744af8e1b33529c005744d149e3c792b))
-* changes to encure consistency ([9555251](https://github.com/ColdPBC/cold-monorepo/commit/9555251dc49eeb92b7482a3ee01fe6d5bead24cf))
+* improved documents in response ([b1e3412](https://github.com/ColdPBC/cold-monorepo/commit/b1e3412d778461370f5fbfa537f29401537d00d8))
 
-## [1.176.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.176.2...v1.176.3) (2024-03-27)
-
-
-### Bug Fixes
-
-* darkly rate limit bug ([58dc581](https://github.com/ColdPBC/cold-monorepo/commit/58dc5811c21b43b5c4d71c047080d0e2b52a7f55))
-
-## [1.176.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.176.1...v1.176.2) (2024-03-27)
-
-
-### Bug Fixes
-
-* bug breaking check marks ([331b460](https://github.com/ColdPBC/cold-monorepo/commit/331b460dee0f6a723b04ed8533fc4a3357294a50))
-
-## [1.176.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.176.0...v1.176.1) (2024-03-27)
-
-
-### Bug Fixes
-
-* issue where nulls were being counted answered ([efa2b04](https://github.com/ColdPBC/cold-monorepo/commit/efa2b040cb9784fe0137eba1f8dd00583e99b2fd))
-
-# [1.176.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.175.0...v1.176.0) (2024-03-27)
+# [1.176.0-cold-657.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.176.0-cold-657.3...v1.176.0-cold-657.4) (2024-03-28)
 
 
 ### Features
 
-* added browser logging for the ui ([9c65df4](https://github.com/ColdPBC/cold-monorepo/commit/9c65df4ba1c5e647efef93c92196fda3bd754242))
-* logout user when auth0 error occurs ([b435f5b](https://github.com/ColdPBC/cold-monorepo/commit/b435f5b5538e04872200db5762219b0973258a0a))
-* update error page to have better message and re login button ([72df5e1](https://github.com/ColdPBC/cold-monorepo/commit/72df5e101fdca3edf5e00531aeee0db8670b2605))
+* initial support for RAG ([dc65a47](https://github.com/ColdPBC/cold-monorepo/commit/dc65a4754dfa9089fac0fd913d2b0124953cf089))
+
+# [1.176.0-cold-657.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.176.0-cold-657.2...v1.176.0-cold-657.3) (2024-03-27)
+
+
+### Features
+
+* adding chat components ([0bdf526](https://github.com/ColdPBC/cold-monorepo/commit/0bdf52685c06f86226030b717e9914e8f69f3b2c))
+
+# [1.176.0-cold-657.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.176.0-cold-657.1...v1.176.0-cold-657.2) (2024-03-27)
+
+
+### Bug Fixes
+
+* check if assistant still exists ([45601f8](https://github.com/ColdPBC/cold-monorepo/commit/45601f8dd4b13a37d05a1b38b152834ec06e5b87))
+* delete jobs from cache ([0aae188](https://github.com/ColdPBC/cold-monorepo/commit/0aae188c8ed87cdbb7c1e6fc7720071905385dbb))
+* remove unused custom loaders ([5a95589](https://github.com/ColdPBC/cold-monorepo/commit/5a9558946b6f4fc22f2bad64fe84b027e2ff9361))
+
+
+### Features
+
+* add additional file types ([e231584](https://github.com/ColdPBC/cold-monorepo/commit/e23158453c6f1df14b1cd4d759b0cd99d5415133))
+* get/set checksum cache to prevent dupes from being added to the index ([e25d1d9](https://github.com/ColdPBC/cold-monorepo/commit/e25d1d9618b8599e816dcdf0091304cd116d8744))
+
+# [1.176.0-cold-657.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.175.0...v1.176.0-cold-657.1) (2024-03-26)
+
+
+### Bug Fixes
+
+* dependency resolution ([cf88f56](https://github.com/ColdPBC/cold-monorepo/commit/cf88f5625ece0e6740cb8b5894d8f28ca522b8f3))
+
+
+### Features
+
+* add chat module ([69f0dac](https://github.com/ColdPBC/cold-monorepo/commit/69f0dac549398ba54d3cbe32a7933beb88e877b8))
+* add langchain module ([b38b94f](https://github.com/ColdPBC/cold-monorepo/commit/b38b94f152496ae0cad87f5f65a4c33a89e099a4))
+* add listObjects method ([c86f14d](https://github.com/ColdPBC/cold-monorepo/commit/c86f14d8c9b34606cbec7676f34319002febdc03))
+* add package deps ([97c8b2e](https://github.com/ColdPBC/cold-monorepo/commit/97c8b2ec4a6178339c515c350b7de8928ec6abed))
+* add pdf, xls, word loaders ([1f47517](https://github.com/ColdPBC/cold-monorepo/commit/1f475179f4d5406da396a99b80fc1f1310739793))
+* add pinecone module ([64b4ff3](https://github.com/ColdPBC/cold-monorepo/commit/64b4ff37ce1af8f6a11210b2d7dc8ceee09043ce))
 
 # [1.175.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.174.0...v1.175.0) (2024-03-25)
 

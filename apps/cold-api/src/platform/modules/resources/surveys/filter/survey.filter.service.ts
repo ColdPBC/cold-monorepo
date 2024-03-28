@@ -54,7 +54,7 @@ export class SurveyFilterService extends BaseWorker {
       }
     }
 
-    this.logger.info('Filtered Dependencies', { original: jsonObject.definition, filtered: filteredObject.definition });
+    this.logger.info('Filtered Dependencies');
 
     // Create a JSONata expression to filter out empty sections
     const filterEmptySections = jsonata(`$sift(sections, function($v, $k, $i, $o) { $count($keys($v.follow_up)) > 0 })`);

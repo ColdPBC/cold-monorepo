@@ -13,6 +13,7 @@ import { Queue } from 'bull';
 import { AppService } from './app.service';
 import { FileService } from './assistant/files/file.service';
 import { ConfigService } from '@nestjs/config';
+import { LangchainLoaderService } from './langchain/langchain.loader.service';
 
 /**
  * RabbitService class.
@@ -27,6 +28,7 @@ export class RabbitService extends BaseWorker {
     private readonly s3: S3Service,
     private readonly files: FileService,
     private readonly cache: CacheService,
+    private readonly loader: LangchainLoaderService,
   ) {
     super(RabbitService.name);
   }
@@ -105,6 +107,7 @@ export class RabbitService extends BaseWorker {
         }
         case 'file.uploaded': {
           const uploader = new FileService(this.config, this.appService, this.prisma, this.s3);
+          await this.loader.ingestData(parsed.user, parsed.organization, parsed.payload);
           return await uploader.uploadOrgFilesToOpenAI(parsed);
         }
         case 'organization_files.get': {
@@ -176,6 +179,10 @@ export class RabbitService extends BaseWorker {
         break;
       case 'file.uploaded':
         return await this.queue.add(event, parsed, { backoff: { type: BackOffStrategies.EXPONENTIAL } });
+
+      case 'file.deleted':
+        return await this.queue.add(event, parsed, { backoff: { type: BackOffStrategies.EXPONENTIAL } });
+
       default:
         return new Nack();
     }
