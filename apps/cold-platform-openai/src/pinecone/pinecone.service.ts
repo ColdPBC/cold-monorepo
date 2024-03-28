@@ -30,6 +30,8 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
     }
 
     try {
+      await this.createIndex(indexName);
+      
       const index = this.pinecone.Index(indexName);
       const vectorStore = await PineconeStore.fromExistingIndex(
         new OpenAIEmbeddings({
