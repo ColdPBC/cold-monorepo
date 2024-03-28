@@ -644,8 +644,8 @@ const _ComplianceSurveyQuestionnaire = (props: ComplianceSurveyQuestionnaireProp
       <div className={'w-full h-full relative flex flex-col space-y-[24px]'} data-testid={'survey-question-container'}>
         <div className={'flex flex-row justify-between'}>
           <div className={'flex flex-col'}>
-            <div className={'text-caption font-bold'}>{activeKey.category}</div>
-            <div className={'text-h2'}>{surveyData.definition.sections[activeKey.section].title}</div>
+            <div className={'text-caption font-bold'}>{activeKey.category}{question.props.corresponding_question ? ' > '+surveyData.definition.sections[activeKey.section].title : ''}</div>
+            <div className={'text-h2'}>{question.props.corresponding_question ? question.props.corresponding_question : surveyData.definition.sections[activeKey.section].title}</div>
             <div className={'text-caption'}>
               ( Question {questionIndex}
               {' of '}
