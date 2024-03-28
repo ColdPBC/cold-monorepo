@@ -1,3 +1,10 @@
+# [1.176.0-cold-657.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.176.0-cold-657.3...v1.176.0-cold-657.4) (2024-03-28)
+
+
+### Features
+
+* initial support for RAG ([dc65a47](https://github.com/ColdPBC/cold-monorepo/commit/dc65a4754dfa9089fac0fd913d2b0124953cf089))
+
 # [1.176.0-cold-657.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.176.0-cold-657.2...v1.176.0-cold-657.3) (2024-03-27)
 
 
