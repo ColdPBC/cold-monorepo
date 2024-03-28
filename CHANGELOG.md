@@ -1,3 +1,11 @@
+## [1.179.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.179.0...v1.179.1) (2024-03-28)
+
+
+### Bug Fixes
+
+* disable assistant creation if Rag flag is on ([88a6d43](https://github.com/ColdPBC/cold-monorepo/commit/88a6d437b2371d168f03233213380985267b3f86))
+* disable assistant creation if Rag flag is on ([#358](https://github.com/ColdPBC/cold-monorepo/issues/358)) ([2e4b444](https://github.com/ColdPBC/cold-monorepo/commit/2e4b4447070702e99fc90f282c97937406e2a27a))
+
 # [1.179.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.178.0...v1.179.0) (2024-03-28)
 
 
