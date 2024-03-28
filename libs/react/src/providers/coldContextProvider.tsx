@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useEffect } from 'react';
+import React, { PropsWithChildren } from 'react';
 import ColdContext from '../context/coldContext';
 import { ColdAuthProvider } from './coldAuthProvider';
 import { BrowserRouter } from 'react-router-dom';
@@ -7,16 +7,15 @@ import { Auth0ProviderOptions } from '@auth0/auth0-react';
 import { ColdAxiosInterceptorProvider } from './coldAxiosInterceptorProvider';
 import { datadogRum } from '@datadog/browser-rum';
 import { ErrorType } from '../enums/errors';
-import { ColdMQTTProvider } from "./coldMQTTProvider";
+import { ColdMQTTProvider } from './coldMQTTProvider';
+import { datadogLogs, StatusType } from '@datadog/browser-logs';
 
 export interface ColdContextProviderProps {
   auth0Options: Auth0ProviderOptions;
   launchDarklyClientSideId: string;
 }
 
-export const ColdContextProvider = (
-  props: PropsWithChildren<ColdContextProviderProps>,
-) => {
+export const ColdContextProvider = (props: PropsWithChildren<ColdContextProviderProps>) => {
   const { auth0Options, launchDarklyClientSideId, children } = props;
 
   const getImpersonatingOrg = () => {
@@ -28,16 +27,19 @@ export const ColdContextProvider = (
     }
   };
 
-  const [impersonatingOrg, setImpersonatingOrg] = React.useState<
-    any | undefined
-  >(getImpersonatingOrg());
+  const [impersonatingOrg, setImpersonatingOrg] = React.useState<any | undefined>(getImpersonatingOrg());
 
   const logError = (error: any, type: ErrorType, context?: object) => {
     error.name = type;
     datadogRum.addError(error, context);
   };
 
+  const logBrowser = (message: string, type: StatusType, context?: any, error?: any) => {
+    datadogLogs.logger.log(message, context, type, error);
+  };
+
   const setSelectedOrg = (org: any) => {
+    logBrowser('Impersonating new organization', 'info', { org: org });
     setImpersonatingOrg(org);
     if (org) {
       sessionStorage.setItem('impersonatingOrg', JSON.stringify(org));
@@ -53,16 +55,14 @@ export const ColdContextProvider = (
           auth0Options: auth0Options,
           launchDarklyClientSideId: launchDarklyClientSideId,
           logError: logError,
+          logBrowser: logBrowser,
           impersonatingOrg: impersonatingOrg,
           setImpersonatingOrg: setSelectedOrg,
-        }}
-      >
+        }}>
         <ColdAuthProvider>
           <ColdAxiosInterceptorProvider>
             <ColdLDProvider>
-              <ColdMQTTProvider>
-                {children}
-              </ColdMQTTProvider>
+              <ColdMQTTProvider>{children}</ColdMQTTProvider>
             </ColdLDProvider>
           </ColdAxiosInterceptorProvider>
         </ColdAuthProvider>

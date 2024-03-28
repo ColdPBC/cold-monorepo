@@ -16,7 +16,7 @@ export interface SignupPageProps {
 }
 
 const _SignupPage = ({ userData, signedPolicyData }: SignupPageProps) => {
-  const { logError } = useColdContext();
+  const { logError, logBrowser } = useColdContext();
   const [show, setShow] = React.useState<boolean>(true);
   const organizationSWR = useOrgSWR<any, any>([``, 'GET'], axiosFetcher);
 
@@ -25,6 +25,7 @@ const _SignupPage = ({ userData, signedPolicyData }: SignupPageProps) => {
   };
 
   if (organizationSWR.error) {
+    logBrowser('Error fetching organization data', 'error', { error: organizationSWR.error }, organizationSWR.error);
     logError(organizationSWR.error, ErrorType.SWRError);
     return <div></div>;
   }
@@ -42,6 +43,12 @@ const _SignupPage = ({ userData, signedPolicyData }: SignupPageProps) => {
   const { data: organizationData } = organizationSWR;
 
   if (tos && privacy && signedPolicyData) {
+    logBrowser('Signup page loaded', 'info', {
+      signedPolicyData,
+      organizationData,
+      tos,
+      privacy,
+    });
     return (
       <Takeover show={show} setShow={setShow} className={'fixed inset-0 flex flex-col h-screen w-screen overflow-y-auto pb-[40px]'} data-testid={'signup-takeover'}>
         <div className="flex-1 flex max-h-[1040px]">

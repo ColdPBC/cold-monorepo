@@ -1,0 +1,42 @@
+(
+            $title := function($v){$v.title};
+                        $section := function($k){$keys(sections)[$k]};
+                        $total := function($v){$count($keys($v.follow_up))};
+                        $answered := function($v){$count($filter($v.follow_up.*, function($q) { $exists($q.value) }))};
+                        $complete := function($v){$total($v) = $answered($v)};
+                        $questions := function($v){$merge($map($keys($v.follow_up), function($key) { {$key: {"user_answered": $exists($v.follow_up[$key].value) and $v.follow_up[$key].value != null, "ai_answered": $exists($v.follow_up[$key].ai_response.answer) and $v.follow_up[$key].ai_response.answer != null}}}))};
+                        $createQuestions := function($v) {
+                            $map($keys($v.follow_up), function($key, $v, $o) {
+                                 $createQuestionObject($v, $key, $o)
+                            })
+                        };
+
+                        $createQuestionObject := function($idx, $key, $o) {
+                            {
+                                $key: {
+                                    "score":$lookup(definition.sections.*.follow_up, $key).score,
+                                    "user_answered": $exists($lookup(sections.*.follow_up, $key).value),
+                                    "ai_answered": $exists($lookup(sections.*.follow_up, $key).ai_response.answer)
+                                }
+                            }
+                        };
+
+                        $mergeQuestions := function($v) {
+                            $merge($createQuestions($v))
+                        };
+
+                        $review := function($v){$count($v.follow_up[$k].ai_response.answer and $filter($v.follow_up.*, function($q) { $exists($q.value) }))};
+                        $sectionScore := function($v){$sum($v.follow_up.*.score)};
+                        $map(definition.sections.*, function($v, $k, $o) {
+                            {
+                                  "section": $section($k),
+                                  "section_score": $sectionScore($v),
+                                  "title": $title($v),
+                                  "total": $total($v),
+                                  "answered": $answered($v),
+                                  "complete": $complete($v),
+                                  "review": $count($keys($sift($mergeQuestions($v), function($v) { $v.user_answered = false and $v.ai_answered = true }))),
+                                  "questions": $mergeQuestions($v)
+                            }
+                        })
+        )

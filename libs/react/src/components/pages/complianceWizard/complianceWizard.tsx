@@ -15,6 +15,7 @@ const _ComplianceWizard = () => {
   const { name } = useParams();
   const { orgId } = useAuth0Wrapper();
   const ldClient = useLDClient();
+  const { logBrowser } = useColdContext();
   const compliances = useSWR<Compliance[], any, any>(['/compliance_definitions', 'GET'], axiosFetcher);
   const orgCompliances = useSWR<OrgCompliance[], any, any>([`/compliance_definitions/organizations/${orgId}`, 'GET'], axiosFetcher);
 
@@ -37,16 +38,16 @@ const _ComplianceWizard = () => {
         key: name,
       });
       if (!isContextSet) {
-        ldClient.identify(
-          getUpdatedContext(
-            ldClient.getContext() as LDContext,
-            {
-              kind: 'complianceSet',
-              key: name,
-            },
-            true,
-          ),
+        const newContext = getUpdatedContext(
+          ldClient.getContext() as LDContext,
+          {
+            kind: 'complianceSet',
+            key: name,
+          },
+          true,
         );
+        logBrowser('Setting new LD context for compliance set', 'info', { newContext, isContextSet, name, orgId });
+        ldClient.identify(newContext);
       }
     }
   };
@@ -61,18 +62,29 @@ const _ComplianceWizard = () => {
 
   if (compliances.error || orgCompliances.error || surveyData.error || filesSWR.error) {
     if (compliances.error) {
+      logBrowser('Error fetching compliances', 'error', { error: compliances.error }, compliances.error);
       logError(compliances.error, ErrorType.SWRError);
     }
     if (orgCompliances.error) {
+      logBrowser('Error fetching org compliances', 'error', { error: orgCompliances.error }, orgCompliances.error);
       logError(orgCompliances.error, ErrorType.SWRError);
     }
     if (surveyData.error) {
+      logBrowser('Error fetching survey data', 'error', { error: surveyData.error }, surveyData.error);
       logError(surveyData.error, ErrorType.SWRError);
     }
     return null;
   }
 
   if (name && compliances.data && orgCompliances.data) {
+    logBrowser('Compliance wizard loaded', 'info', {
+      name,
+      compliances: compliances.data,
+      orgCompliances: orgCompliances.data,
+      orgId,
+      surveyData: surveyData.data,
+      files: filesSWR.data,
+    });
     return (
       <MainContent>
         <Wizard

@@ -1,9 +1,7 @@
 import { ActionPayload } from '@coldpbc/interfaces';
 import { ActionItem, Card } from '@coldpbc/components';
 import { ActionItemVariants, ErrorType } from '@coldpbc/enums';
-import { useAuth0 } from '@auth0/auth0-react';
 import { axiosFetcher } from '@coldpbc/fetchers';
-import useSWR from 'swr';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application/errors/errorFallback';
 import { useOrgSWR } from '../../../hooks/useOrgSWR';
@@ -23,17 +21,25 @@ const _SubcategoryActionsOverviewCard = ({ subcategory_key, category_key }: Subc
 
   const actions = data?.filter(actionPayload => actionPayload.action.subcategory === subcategory_key) ?? [];
 
-  const { logError } = useColdContext();
+  const { logError, logBrowser } = useColdContext();
 
   if (error || categoryError) {
-    if (error) logError(error, ErrorType.SWRError);
-    if (categoryError) logError(categoryError, ErrorType.SWRError);
+    if (error) {
+      logBrowser('Error loading actions data', 'error', { ...error }, error);
+      logError(error, ErrorType.SWRError);
+    }
+    if (categoryError) {
+      logBrowser('Error loading category data', 'error', { ...categoryError }, categoryError);
+      logError(categoryError, ErrorType.SWRError);
+    }
     return null;
   }
 
   if (!actions.length) {
     return null;
   }
+
+  logBrowser('Actions data loaded', 'info', { actions, categoryData, subcategoryName, data });
 
   return (
     <Card className={'w-[666px]'} glow={true} data-testid={'subcategory-actions-overview-card'}>
