@@ -117,6 +117,11 @@ Make sure your standalone question is self-contained, clear, and specific. Rephr
     });
 
     const answer = JSON.parse(response.text);
+    this.logger.info(`Answered ${question.prompt} with ${answer.answer}`, {
+      answer,
+      formattedPromptTemplate,
+    });
+
     set(answer, 'reference', response.sourceDocuments);
 
     return answer;
