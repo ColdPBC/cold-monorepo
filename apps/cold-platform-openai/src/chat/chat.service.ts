@@ -1,12 +1,12 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
-import { BaseWorker, CacheService, ColdRabbitService, DarklyService } from '@coldpbc/nest';
+import { BaseWorker, CacheService, ColdRabbitService, DarklyService, PrismaService } from '@coldpbc/nest';
 import { PineconeService } from '../pinecone/pinecone.service';
 import { LangchainService } from '../langchain/langchain.service';
 import { ConfigService } from '@nestjs/config';
 import { PromptsService } from '../prompts/prompts.service';
 import { Job, Queue } from 'bull';
 import { InjectQueue } from '@nestjs/bull';
-import { has } from 'lodash';
+import { has, set } from 'lodash';
 import { OpenAI } from 'langchain/llms/openai';
 import { PromptTemplate } from '@langchain/core/prompts';
 import { ConversationalRetrievalQAChain } from 'langchain/chains';
@@ -19,6 +19,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
     private readonly config: ConfigService,
     private readonly pc: PineconeService,
     private readonly lc: LangchainService,
+    private readonly prisma: PrismaService,
     private readonly darkly: DarklyService,
     private cache: CacheService,
     @InjectQueue('openai') private queue: Queue,
@@ -30,22 +31,18 @@ export class ChatService extends BaseWorker implements OnModuleInit {
 
   async onModuleInit() {}
 
-  async askQuestion(indexName: string, question: any, prompts: PromptsService, company_name: string): Promise<any> {
+  async askQuestion(indexName: string, question: any, prompts: PromptsService, company_name: string, documents: string): Promise<any> {
     const CONDENSE_PROMPT = `Given the chat history and a follow-up question, rephrase the follow-up question to be a standalone question that encompasses all necessary context from the chat history.
 
 Chat History:
 {chat_history}
-
 Follow-up input: {question}
 
 Make sure your standalone question is self-contained, clear, and specific. Rephrased standalone question:`;
 
-    const qa_prompt_1 = `You are an AI sustainability expert. You help our customer understand
- their impact on the environment and what tasks must be done to meet a given set of compliance requirements.
- If you have a completed B Corp Impact Assessment for the company, It has a set of questions, eligible
- answers for those questions, and the answers that the company gave. You are tasked
- with helping this company understand if they can answer other sustainability-related questions based on
- their existing answers, otherwise use whatever data you have to attempt to answer the questions.
+    const qa_prompt_1 = `System: You are an AI sustainability expert tasked with helping our customer interpret and answer questions relating to sustainability and corporate governance based on the following documents: ${documents}.
+    The context from relevant documents has been processed and made accessible to you.  Your mission is to generate answers that are accurate, succinct, and comprehensive, drawing upon the information contained in the context of the documents. If the answer isn't readily found in the documents, you should make use of your training data and understood context to infer and provide the most plausible response.
+ You are also capable of evaluating, comparing the content of these documents. Hence, if asked to compare or analyze the documents, use your AI understanding to deliver an insightful response.  You are also free to use any content from the company's website to provide a more comprehensive answer.  You must provide references which must include the name of any files used to determine your answer.
 
  The user will provide a JSON formatted "question" object that can include the following properties:
   - "prompt": The question to be answered
@@ -53,23 +50,12 @@ Make sure your standalone question is self-contained, clear, and specific. Rephr
   - "options": a list of options to be used to answer the question.  This will be included only if the component is a "select" or "multiselect".
   - "tooltip": additional instructions for answering the question
 
-  If the component is "select" or "multi_select", you must format your answer as a string array.  The user will provide a list of options that the company can choose from however it is critically important that you only choose from the values provided in the "options" property.
-  If the component is a 'select' then only select one value from the 'options' array, however if the component is 'multi_select' then may select one or more values from the 'options' array.
-
-  If the component is a "yes_no" then you will need to format your answer as a boolean.
-
-  If the component is 'text' then you will need to format your answer as a short sentence.
-
-  If the component is a 'number' then you will need to format your answer as a number.
-
-  If the component is a 'percent_slider' then you must format your answer as a number between 0 and 100.
-
+ {component_prompt}
 
  If you have enough information to answer the question, format your response as JSON containing only the following properties:
  "answer": which should contain your answer to the question,
  "justification": a short paragraph that explains how you arrived at your answer,
  "source": a list of sources you used to arrive at your answer.  This can include any uploaded documents, the company's website, or other public sources.
-
 
  If you do not have enough information, format your response as JSON containing only the following properties:
   "what_we_need": include a paragraph that describes what information you would need to effectively answer the question.
@@ -89,13 +75,13 @@ Make sure your standalone question is self-contained, clear, and specific. Rephr
 
     const component_prompt = await prompts.getComponentPrompt(question);
 
-    const baseTemplate = PromptTemplate.fromTemplate(prompts.prompt_template);
+    const sanitized_base = qa_prompt_1.replace('{component_prompt}', component_prompt);
+    const baseTemplate = PromptTemplate.fromTemplate(sanitized_base);
 
     console.log(baseTemplate.inputVariables);
     // ['adjective', 'content']
     const formattedPromptTemplate = await baseTemplate.format({
       question: JSON.stringify(question),
-      component_prompt,
       company: company_name,
       chat_history: [],
       context: vectorStore,
@@ -118,19 +104,22 @@ Make sure your standalone question is self-contained, clear, and specific. Rephr
      });*/
 
     const chain = ConversationalRetrievalQAChain.fromLLM(model, vectorStore.asRetriever(), {
-      qaTemplate: qa_prompt_1,
+      qaTemplate: sanitized_base,
       questionGeneratorTemplate: CONDENSE_PROMPT,
       returnSourceDocuments: true,
     });
 
     const response = await chain.invoke({
       query: formattedPromptTemplate,
-      component_prompt: component_prompt,
       question: formattedPromptTemplate,
+      includeSourceDocuments: true,
       chat_history: [],
     });
 
-    return JSON.parse(response.text);
+    const answer = JSON.parse(response.text);
+    set(answer, 'reference', response.sourceDocuments);
+
+    return answer;
   }
 
   async process_survey(job: Job) {
@@ -163,20 +152,47 @@ Make sure your standalone question is self-contained, clear, and specific. Rephr
 
     const reqs: any[] = [];
 
+    const documents = await this.prisma.organization_files.findMany({
+      where: {
+        organization_id: organization.id,
+      },
+    });
+
+    const documentNames: string[] = [];
+
+    if (documents && documents.length > 0) {
+      for (const doc of documents) {
+        documentNames.push(doc['original_name']);
+      }
+    }
+
     //initialize prompts service with survey name so that it has the correct context for darkly
     const prompts = await new PromptsService(this.darkly, survey.name, organization).initialize();
 
     // iterate over each section key
     for (const section of sections) {
       // create a new thread for each section run
-      reqs.push(this.processSection(job, section, sdx, sections, definition, integration, organization, category_context, user, survey, prompts));
+      reqs.push(this.processSection(job, section, sdx, sections, definition, integration, organization, category_context, user, survey, prompts, documentNames.join(',')));
       //await this.processSection(job, section, sdx, sections, definition, thread, integration, organization, category_context, user, survey);
     }
 
     await Promise.all(reqs);
   }
 
-  public async processSection(job: Job, section: string, sdx: number, sections: string[], definition, integration, organization, category_context, user, survey, prompts) {
+  public async processSection(
+    job: Job,
+    section: string,
+    sdx: number,
+    sections: string[],
+    definition,
+    integration,
+    organization,
+    category_context,
+    user,
+    survey,
+    prompts,
+    documents,
+  ) {
     await job.log(`Section | ${section}:${sdx + 1} of ${sections.length}`);
     this.setTags({ section });
     this.logger.info(`Processing ${section}: ${definition.sections[section].title}`);
@@ -205,7 +221,7 @@ Make sure your standalone question is self-contained, clear, and specific. Rephr
 
       this.logger.info(`Sending Message | ${section}.${item}: ${follow_up.prompt}`);
       // create a new run for each followup item
-      const value = await this.askQuestion(organization.name, follow_up, prompts, organization.display_name);
+      const value = await this.askQuestion(organization.name, follow_up, prompts, organization.display_name, documents);
 
       // update the survey with the response
       definition.sections[section].follow_up[item].ai_response = value;
@@ -224,7 +240,7 @@ Make sure your standalone question is self-contained, clear, and specific. Rephr
         }
 
         this.logger.info(`Creating Message | ${section}.${item}.additional_context: ${follow_up.prompt}`);
-        const additionalValue = await this.askQuestion(organization.name, follow_up['additional_context'], prompts, organization.display_name);
+        const additionalValue = await this.askQuestion(organization.name, follow_up['additional_context'], prompts, organization.display_name, documents);
 
         definition.sections[section].follow_up[item].additional_context.ai_response = additionalValue;
 

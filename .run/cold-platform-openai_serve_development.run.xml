@@ -7,7 +7,6 @@
       <env name="DD_SERVICE" value="cold-platform-openai" />
       <env name="LOG_FORMAT" value="pretty" />
       <env name="NODE_ENV" value="development" />
-      <env name="PINECONE_API_KEY" value="8424c553-ead6-4866-9fe2-c3f0fe67f7f9" />
       <env name="PORT" value="7002" />
     </envs>
     <option name="arguments" value="" />
