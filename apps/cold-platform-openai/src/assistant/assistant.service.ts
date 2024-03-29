@@ -74,11 +74,11 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
     throw new Error('Method not implemented.');
   }
 
-  async send(thread: OpenAI.Beta.Threads.Thread, integration: integrations, org: organizations, prompts: PromptsService): Promise<any> {
+  async send(thread: OpenAI.Beta.Threads.Thread, integration: integrations, org: organizations, prompts: PromptsService, item: any): Promise<any> {
     const run = await this.client.beta.threads.runs.create(thread.id, {
       assistant_id: integration.id,
       model: this.model,
-      instructions: prompts.instructions_prompt,
+      instructions: await prompts.getPrompt(item),
     });
 
     this.logger.info(`Created run ${run.id} for thread ${thread.id}`, {
@@ -197,7 +197,7 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
 
       this.logger.info(`Created message for ${item.prompt}`, { ...item, message });
 
-      return await this.send(thread, integration, org, prompts);
+      return await this.send(thread, integration, org, prompts, item);
     } catch (e) {
       this.logger.error(e.message, e);
       throw e;
@@ -231,8 +231,6 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
     const sections = Object.keys(definition.sections);
 
     const sdx = 0;
-
-    const reqs: any[] = [];
 
     //initialize prompts service with survey name so that it has the correct context for darkly
     const prompts = await new PromptsService(this.darkly, survey.name, organization, this.prisma).initialize();
