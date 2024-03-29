@@ -1,3 +1,11 @@
+## [1.179.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.179.2...v1.179.3) (2024-03-29)
+
+
+### Bug Fixes
+
+* add sleeps to prevent rate limiter ([daa6368](https://github.com/ColdPBC/cold-monorepo/commit/daa6368898ff22f8e1fdb08607305f8e23939e1f))
+* centralize prompt processing ([f0a8fca](https://github.com/ColdPBC/cold-monorepo/commit/f0a8fca9d773ae9dc4861294adbdcb213259b6f6))
+
 ## [1.179.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.179.1...v1.179.2) (2024-03-28)
 
 
