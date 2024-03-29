@@ -1,3 +1,10 @@
+## [1.179.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.179.3...v1.179.4) (2024-03-29)
+
+
+### Bug Fixes
+
+* incorrect kind value ([d11ec9a](https://github.com/ColdPBC/cold-monorepo/commit/d11ec9ae53d919faeea642a805c3520a0a7f11b2))
+
 ## [1.179.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.179.2...v1.179.3) (2024-03-29)
 
 
