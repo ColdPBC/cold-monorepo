@@ -32,48 +32,54 @@ export class ChatService extends BaseWorker implements OnModuleInit {
   async onModuleInit() {}
 
   async askQuestion(indexName: string, question: any, prompts: PromptsService, company_name: string): Promise<any> {
-    const vectorStore = await this.pc.getVectorStore(indexName);
+    try {
+      const vectorStore = await this.pc.getVectorStore(indexName);
 
-    const sanitized_base = await prompts.getPrompt(question);
+      const sanitized_base = await prompts.getPrompt(question);
 
-    // Create Template from base prompt
-    const baseTemplate = PromptTemplate.fromTemplate(sanitized_base);
+      // Create Template from base prompt
+      const baseTemplate = PromptTemplate.fromTemplate(sanitized_base);
 
-    const formattedPromptTemplate = await baseTemplate.format({
-      question: JSON.stringify(question),
-      company: company_name,
-      chat_history: [],
-      context: vectorStore,
-    });
+      const formattedPromptTemplate = await baseTemplate.format({
+        question: JSON.stringify(question),
+        company: company_name,
+        chat_history: [],
+        context: vectorStore,
+      });
 
-    const model = new OpenAI({
-      temperature: 0.5,
-      modelName: prompts.model,
-      openAIApiKey: this.openAIapiKey,
-    });
+      const model = new OpenAI({
+        temperature: 0.5,
+        modelName: prompts.model,
+        openAIApiKey: this.openAIapiKey,
+      });
 
-    const chain = ConversationalRetrievalQAChain.fromLLM(model, vectorStore.asRetriever(), {
-      qaTemplate: sanitized_base,
-      questionGeneratorTemplate: prompts.condense_template,
-      returnSourceDocuments: true,
-    });
+      const chain = ConversationalRetrievalQAChain.fromLLM(model, vectorStore.asRetriever(), {
+        qaTemplate: sanitized_base,
+        questionGeneratorTemplate: prompts.condense_template,
+        returnSourceDocuments: true,
+      });
 
-    const response = await chain.invoke({
-      query: formattedPromptTemplate,
-      question: formattedPromptTemplate,
-      includeSourceDocuments: true,
-      chat_history: [],
-    });
+      const response = await chain.invoke({
+        query: formattedPromptTemplate,
+        question: formattedPromptTemplate,
+        includeSourceDocuments: true,
+        chat_history: [],
+      });
 
-    const answer = JSON.parse(response.text);
-    this.logger.info(`Answered ${question.prompt} with ${answer.answer}`, {
-      answer,
-      formattedPromptTemplate,
-    });
+      const answer = JSON.parse(response.text);
+      this.logger.info(`${answer.answer ? '✅ Answered' : '❌ Did NOT Answer'} ${question.idx ? question.idx : 'additional_context'}`, {
+        question: question.prompt,
+        answer,
+        formattedPromptTemplate,
+      });
 
-    set(answer, 'reference', response.sourceDocuments);
+      set(answer, 'reference', response.sourceDocuments);
 
-    return answer;
+      return answer;
+    } catch (error) {
+      this.logger.error(`Error asking question ${question.prompt}`, error);
+      throw error;
+    }
   }
 
   async process_survey(job: Job) {
@@ -129,68 +135,72 @@ export class ChatService extends BaseWorker implements OnModuleInit {
 
     // iterate over each followup item
     for (const item of items) {
-      if (await this.isDuplicateOrCanceled(organization, job, section, item)) {
-        continue;
-      }
+      try {
+        if (await this.isDuplicateOrCanceled(organization, job, section, item)) {
+          continue;
+        }
 
-      const idx = parseInt(item.split('-')[1]);
+        const idx = parseInt(item.split('-')[1]);
 
-      await job.log(`Question | section: ${section} question: ${item} (${items.indexOf(item)} of ${items.length})`);
-      const follow_up = definition.sections[section].follow_up[item];
-      this.setTags({ question: { key: item, prompt: follow_up.prompt } });
+        await job.log(`Question | section: ${section} question: ${item} (${items.indexOf(item)} of ${items.length})`);
+        const follow_up = definition.sections[section].follow_up[item];
+        this.setTags({ question: { key: item, prompt: follow_up.prompt } });
 
-      if (follow_up?.ai_response?.answer && !has(follow_up, 'ai_response.what_we_need')) {
-        this.logger.info(`Skipping ${section}.${item}: ${follow_up.prompt}; it has already been answered`, {
-          section_item: definition.sections[section].follow_up[item],
-        });
-        continue;
-      }
-
-      this.logger.info(`Sending Message | ${section}.${item}: ${follow_up.prompt}`);
-      // create a new run for each followup item
-      const value = await this.askQuestion(organization.name, follow_up, prompts, organization.display_name);
-
-      // update the survey with the response
-      definition.sections[section].follow_up[item].ai_response = value;
-      if (value) {
-        definition.sections[section].follow_up[item].ai_answered = !!value.answer;
-      }
-      definition.sections[section].follow_up[item].ai_attempted = true;
-
-      // if there is additional context, create a new run for it
-      if (follow_up['additional_context']) {
-        if (definition.sections[section].follow_up[item].additional_context.ai_answered) {
-          this.logger.info(`Skipping ${section}.${item}.additional_context: ${follow_up.prompt}; it has already been answered`, {
+        if (follow_up?.ai_response?.answer && !has(follow_up, 'ai_response.what_we_need')) {
+          this.logger.info(`Skipping ${section}.${item}: ${follow_up.prompt}; it has already been answered`, {
             section_item: definition.sections[section].follow_up[item],
           });
           continue;
         }
 
-        this.logger.info(`Creating Message | ${section}.${item}.additional_context: ${follow_up.prompt}`);
-        const additionalValue = await this.askQuestion(organization.name, follow_up['additional_context'], prompts, organization.display_name);
+        this.logger.info(`Sending Message | ${section}.${item}: ${follow_up.prompt}`);
+        // create a new run for each followup item
+        const value = await this.askQuestion(organization.name, follow_up, prompts, organization.display_name);
 
-        definition.sections[section].follow_up[item].additional_context.ai_response = additionalValue;
+        // update the survey with the response
+        definition.sections[section].follow_up[item].ai_response = value;
+        if (value) {
+          definition.sections[section].follow_up[item].ai_answered = !!value.answer;
+        }
+        definition.sections[section].follow_up[item].ai_attempted = true;
 
-        if (additionalValue) {
-          definition.sections[section].follow_up[item].additional_context.ai_answered = has(additionalValue, 'answer');
+        // if there is additional context, create a new run for it
+        if (follow_up['additional_context']) {
+          if (definition.sections[section].follow_up[item].additional_context.ai_answered) {
+            this.logger.info(`Skipping ${section}.${item}.additional_context: ${follow_up.prompt}; it has already been answered`, {
+              section_item: definition.sections[section].follow_up[item],
+            });
+            continue;
+          }
+
+          this.logger.info(`Creating Message | ${section}.${item}.additional_context: ${follow_up.prompt}`);
+          const additionalValue = await this.askQuestion(organization.name, follow_up['additional_context'], prompts, organization.display_name);
+
+          definition.sections[section].follow_up[item].additional_context.ai_response = additionalValue;
+
+          if (additionalValue) {
+            definition.sections[section].follow_up[item].additional_context.ai_answered = has(additionalValue, 'answer');
+          }
+
+          definition.sections[section].follow_up[item].additional_context.ai_attempted = true;
         }
 
-        definition.sections[section].follow_up[item].additional_context.ai_attempted = true;
+        // publish the response to the rabbit queue
+        await this.rabbit.publish(`cold.core.api.survey_data`, {
+          event: 'survey_data.updated',
+          data: {
+            organization: { id: integration.organization_id },
+            user,
+            on_update_url: job.data.on_update_url,
+            survey,
+          },
+          from: 'cold.platform.openai',
+        });
+
+        await job.progress(idx / items.length);
+      } catch (error) {
+        this.logger.error(`Error processing ${section}.${item}: ${error.message}`, error);
       }
-
-      // publish the response to the rabbit queue
-      await this.rabbit.publish(`cold.core.api.survey_data`, {
-        event: 'survey_data.updated',
-        data: {
-          organization: { id: integration.organization_id },
-          user,
-          on_update_url: job.data.on_update_url,
-          survey,
-        },
-        from: 'cold.platform.openai',
-      });
-
-      await job.progress(idx / items.length);
     }
   }
 

@@ -15,7 +15,7 @@ export class PromptsService extends BaseWorker {
   private number_prompt: string;
   private base_prompt: string;
   private nodocs_prompt: string;
-  private instructions_prompt: string;
+  instructions_prompt: string;
   model: string;
   temperature: number;
   max_tokens: number;
@@ -49,6 +49,8 @@ export class PromptsService extends BaseWorker {
   }
 
   async initialize() {
+    await this.initializeFlagValues();
+
     const documents = await this.prisma.organization_files.findMany({
       where: {
         organization_id: this.organization.id,
@@ -70,7 +72,6 @@ export class PromptsService extends BaseWorker {
       this.base_prompt = this.base_prompt.replace(`{documents}`, ` based on the following documents: ${documents}.`);
     }
 
-    await this.initializeFlagValues();
     await this.subscribeToFlagUpdates();
 
     return this;
@@ -84,7 +85,7 @@ export class PromptsService extends BaseWorker {
       name: this.compliance_set,
     });
 
-    await this.darkly.getBooleanFlag('dynamic-enable-rag-processing', false, {
+    this.is_rag = await this.darkly.getBooleanFlag('dynamic-enable-rag-processing', false, {
       kind: 'org-compliance-set',
       key: this.organization.name,
       name: this.compliance_set,
@@ -183,8 +184,8 @@ export class PromptsService extends BaseWorker {
     });
 
     this.nodocs_prompt = await this.darkly.getStringFlag('ai-no-documents-prompt', '', {
-      kind: 'model-compliance-set',
-      key: this.model,
+      kind: 'org-compliance-set',
+      key: this.organization.name,
       name: this.compliance_set || 'default',
     });
 

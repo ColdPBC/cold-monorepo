@@ -31,6 +31,10 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
     });
   }
 
+  async sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
   async onModuleInit(): Promise<void> {
     const pkg = await BaseWorker.getParsedJSON('apps/cold-platform-openai/package.json');
 
@@ -74,7 +78,7 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
     const run = await this.client.beta.threads.runs.create(thread.id, {
       assistant_id: integration.id,
       model: this.model,
-      instructions: await prompts.getBasePrompt(org), // Assuming getBasePrompt() is defined.
+      instructions: prompts.instructions_prompt,
     });
 
     this.logger.info(`Created run ${run.id} for thread ${thread.id}`, {
@@ -176,6 +180,8 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
           content: `${category_context}${await prompts.getComponentPrompt(item)}.  Here is the "question" JSON object: \`\`\`json ${JSON.stringify(item)}\`\`\``,
           file_ids: fileIds,
         });
+
+        await this.sleep((Math.floor(Math.random() * 8) + 3) * 1000); // sleep for 1-5 seconds to avoid rate limiting
       } else {
         //append category and followup prompt to component prompt
         message = await this.client.beta.threads.messages.create(thread.id, {
@@ -185,9 +191,12 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
             item,
           )}.  Here is the "question" JSON object: \`\`\`json ${JSON.stringify(item)}\`\`\``,
         });
+
+        await this.sleep((Math.floor(Math.random() * 8) + 3) * 1000); // sleep for 1-5 seconds to avoid rate limiting
       }
 
       this.logger.info(`Created message for ${item.prompt}`, { ...item, message });
+
       return await this.send(thread, integration, org, prompts);
     } catch (e) {
       this.logger.error(e.message, e);
@@ -226,18 +235,21 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
     const reqs: any[] = [];
 
     //initialize prompts service with survey name so that it has the correct context for darkly
-    const prompts = await new PromptsService(this.darkly, survey.name, organization).initialize();
+    const prompts = await new PromptsService(this.darkly, survey.name, organization, this.prisma).initialize();
 
     // iterate over each section key
     for (const section of sections) {
       // create a new thread for each section run
+      await this.sleep((Math.floor(Math.random() * 3) + 3) * 1000); // sleep for 1-5 seconds to avoid rate limiting
+
       const thread = await this.client.beta.threads.create();
 
-      reqs.push(this.processSection(job, section, sdx, sections, definition, thread, integration, organization, category_context, user, survey, prompts));
+      await this.processSection(job, section, sdx, sections, definition, thread, integration, organization, category_context, user, survey, prompts);
+      //reqs.push(this.processSection(job, section, sdx, sections, definition, thread, integration, organization, category_context, user, survey, prompts));
       //await this.processSection(job, section, sdx, sections, definition, thread, integration, organization, category_context, user, survey);
     }
 
-    await Promise.all(reqs);
+    // await Promise.all(reqs);
   }
 
   public async processSection(

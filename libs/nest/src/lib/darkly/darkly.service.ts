@@ -14,7 +14,7 @@ export interface DarklyContext {
 export class DarklyService extends BaseWorker {
   client: sdk.LDClient = {} as sdk.LDClient;
   context: DarklyContext = {
-    kind: 'host',
+    kind: 'multi',
     name: 'hostname',
     key: 'cold-api-nest',
   };

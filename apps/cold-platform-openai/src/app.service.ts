@@ -1,4 +1,4 @@
-import { BaseWorker, ColdRabbitService, Cuid2Generator, DarklyService, IAuthenticatedUser, PrismaService } from '@coldpbc/nest';
+import { BaseWorker, ColdRabbitService, DarklyService, IAuthenticatedUser, PrismaService } from '@coldpbc/nest';
 import { Injectable, NotFoundException, OnModuleInit, UnprocessableEntityException } from '@nestjs/common';
 import OpenAI from 'openai';
 import { organizations, service_definitions } from '@prisma/client';
@@ -81,12 +81,6 @@ export class AppService extends BaseWorker implements OnModuleInit {
   }
 
   async createAssistant(parsed: any) {
-    const isRag = await this.darkly.getBooleanFlag('dynamic-enable-rag-processing', false, {
-      kind: 'organization',
-      name: parsed.organization.display_name,
-      key: parsed.organization.name,
-    });
-
     const service = await this.prisma.service_definitions.findUnique({
       where: {
         name: 'cold-platform-openai',
@@ -157,33 +151,27 @@ export class AppService extends BaseWorker implements OnModuleInit {
         }
       }
 
-      let id: string;
       let metadata: any = {};
 
-      if (!isRag) {
-        const openAIResponse = await this.client.beta.assistants.create(assistant);
+      const openAIResponse = await this.client.beta.assistants.create(assistant);
 
-        if (!openAIResponse.id.includes('asst_')) {
-          this.logger.error(new Error('OpenAI assistant creation failed.'), openAIResponse);
-        }
-
-        id = openAIResponse.id;
-        metadata = JSON.parse(JSON.stringify(openAIResponse));
-
-        this.logger.info(`OpenAI assistant (${openAIResponse.name}) created for ${organization.name}`, {
-          organization,
-          user,
-          integration,
-          payload: assistant,
-          assistant: openAIResponse,
-        });
-      } else {
-        id = new Cuid2Generator('rag').generate().scopedId;
+      if (!openAIResponse.id.includes('asst_')) {
+        this.logger.error(new Error('OpenAI assistant creation failed.'), openAIResponse);
       }
+
+      metadata = JSON.parse(JSON.stringify(openAIResponse));
+
+      this.logger.info(`OpenAI assistant (${openAIResponse.name}) created for ${organization.name}`, {
+        organization,
+        user,
+        integration,
+        payload: assistant,
+        assistant: openAIResponse,
+      });
 
       integration = await this.prisma.integrations.create({
         data: {
-          id: id,
+          id: openAIResponse.id,
           organization_id: organization.id,
           service_definition_id: service.id,
           metadata: metadata,

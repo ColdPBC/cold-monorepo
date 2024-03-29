@@ -13,6 +13,9 @@ import { ColdRabbitModule, DarklyModule } from '@coldpbc/nest';
     BullModule.registerQueue({
       name: 'openai',
     }),
+    BullModule.registerQueue({
+      name: 'openai_assistant',
+    }),
   ],
   providers: [AppService, AssistantService, FileService, Tools],
 })
