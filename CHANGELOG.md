@@ -1,3 +1,10 @@
+# [1.177.0-COLD-634.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.176.3...v1.177.0-COLD-634.1) (2024-03-29)
+
+
+### Features
+
+* emission carb footprint changes ([3482a06](https://github.com/ColdPBC/cold-monorepo/commit/3482a0629f78f64e1ad72c02b828aa3dee5e6e76))
+
 ## [1.176.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.176.2...v1.176.3) (2024-03-27)
 
 
