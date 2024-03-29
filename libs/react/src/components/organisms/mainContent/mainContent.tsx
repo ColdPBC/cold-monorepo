@@ -1,7 +1,10 @@
 import React, { PropsWithChildren } from 'react';
+import { Spinner } from '@coldpbc/components';
+import { GlobalSizes } from '@coldpbc/enums';
 
 export interface MainContentProps {
   title?: string;
+  isLoading?: boolean;
 }
 
 export function MainContent(props: PropsWithChildren<MainContentProps>) {
@@ -15,7 +18,7 @@ export function MainContent(props: PropsWithChildren<MainContentProps>) {
           </div>
         )
       }
-      {props.children}
+      {props.isLoading ? <Spinner size={GlobalSizes.xLarge} /> : props.children}
     </div>
   );
 }

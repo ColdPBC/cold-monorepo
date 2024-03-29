@@ -23,6 +23,7 @@ import { getDocumentsListTableMock } from './componentMock';
 import { getAllFilesMock } from './filesMock';
 import { returnUpdatedSurvey } from './helpers';
 import { ComplianceSurveyPayloadType } from '@coldpbc/interfaces';
+import { getDefaultEmissionMock } from './emissionMocks';
 
 // Even if this uses vite as a bundler, it still uses the NODE_ENV variable
 export const getApiUrl = (path: string) => {
@@ -262,5 +263,9 @@ export const handlers = [
 
   rest.post(getApiUrl('/organizations/:orgId/files'), (req, res, ctx) => {
     return res(ctx.json({}), ctx.status(201));
+  }),
+
+  rest.get(getApiUrl('/organizations/:orgId/emissions'), (req, res, ctx) => {
+    return res(ctx.json(getDefaultEmissionMock()), ctx.status(201));
   }),
 ];

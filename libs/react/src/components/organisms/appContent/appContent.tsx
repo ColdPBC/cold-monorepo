@@ -1,21 +1,20 @@
 import React, { PropsWithChildren } from 'react';
+import { Spinner } from '../../atoms';
+import { GlobalSizes } from '@coldpbc/enums';
 
 export interface AppContentProps {
   title?: string;
+  isLoading?: boolean;
 }
 
-export function AppContent(
-  props: PropsWithChildren<AppContentProps>,
-) {
+export function AppContent(props: PropsWithChildren<AppContentProps>) {
   return (
-    <div className='w-full'>
+    <div className="w-full">
       {
         // show title if we have one
         props.title && <div className="text-h1 self-stretch text-tc-primary mb-4">{props.title}</div>
       }
-      <div className="flex gap-6 flex-1">
-        {props.children}
-      </div>
+      <div className="flex gap-6 flex-1">{props.isLoading ? <Spinner size={GlobalSizes.xLarge} /> : props.children}</div>
     </div>
   );
 }

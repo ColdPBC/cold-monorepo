@@ -17193,7 +17193,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:^1.4.0, axios@npm:^1.5.1, axios@npm:^1.6.5":
+"axios@npm:^1.5.1, axios@npm:^1.6.5":
   version: 1.6.7
   resolution: "axios@npm:1.6.7"
   dependencies:
@@ -17201,6 +17201,17 @@ __metadata:
     form-data: "npm:^4.0.0"
     proxy-from-env: "npm:^1.1.0"
   checksum: 10/a1932b089ece759cd261f175d9ebf4d41c8994cf0c0767cda86055c7a19bcfdade8ae3464bf4cec4c8b142f4a657dc664fb77a41855e8376cf38b86d7a86518f
+  languageName: node
+  linkType: hard
+
+"axios@npm:^1.6.8":
+  version: 1.6.8
+  resolution: "axios@npm:1.6.8"
+  dependencies:
+    follow-redirects: "npm:^1.15.6"
+    form-data: "npm:^4.0.0"
+    proxy-from-env: "npm:^1.1.0"
+  checksum: 10/3f9a79eaf1d159544fca9576261ff867cbbff64ed30017848e4210e49f3b01e97cf416390150e6fdf6633f336cd43dc1151f890bbd09c3c01ad60bb0891eee63
   languageName: node
   linkType: hard
 
@@ -18734,6 +18745,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"chartjs-plugin-datalabels@npm:^2.2.0":
+  version: 2.2.0
+  resolution: "chartjs-plugin-datalabels@npm:2.2.0"
+  peerDependencies:
+    chart.js: ">=3.0.0"
+  checksum: 10/e87c2f30d4f6f84b4b1a28c00d1b032d0100f87f8f296a498507047bd2f7fe98eced583a2c09f30e55806e79a0ca7e0db027cc3bed9b27688980e55701a6945f
+  languageName: node
+  linkType: hard
+
 "check-error@npm:^1.0.3":
   version: 1.0.3
   resolution: "check-error@npm:1.0.3"
@@ -19344,7 +19364,7 @@ __metadata:
     autoprefixer: "npm:^10.4.14"
     aws-iot-device-sdk: "npm:^2.2.13"
     aws-sdk: "npm:^2.1533.0"
-    axios: "npm:^1.4.0"
+    axios: "npm:^1.6.8"
     babel-loader: "npm:^9.1.2"
     babel-plugin-named-exports-order: "npm:^0.0.2"
     barrelsby: "npm:^2.8.1"
@@ -19354,6 +19374,7 @@ __metadata:
     cache-manager-ioredis-yet: "npm:^1.2.2"
     cache-manager-redis-yet: "npm:^4.1.2"
     chart.js: "npm:^4.4.0"
+    chartjs-plugin-datalabels: "npm:^2.2.0"
     chromatic: "npm:^7.1.0"
     class-transformer: "npm:^0.5.1"
     class-validator: "npm:^0.14.0"
@@ -19432,6 +19453,7 @@ __metadata:
     react-range: "npm:^1.8.14"
     react-router: "npm:^6.12.1"
     react-router-dom: "npm:^6.16.0"
+    react-select: "npm:^5.8.0"
     react-test-renderer: "npm:18.2.0"
     react-transition-group: "npm:^4.4.5"
     redis: "npm:^4.6.7"
@@ -24417,6 +24439,16 @@ __metadata:
     debug:
       optional: true
   checksum: 10/d467f13c1c6aa734599b8b369cd7a625b20081af358f6204ff515f6f4116eb440de9c4e0c49f10798eeb0df26c95dd05d5e0d9ddc5786ab1a8a8abefe92929b4
+  languageName: node
+  linkType: hard
+
+"follow-redirects@npm:^1.15.6":
+  version: 1.15.6
+  resolution: "follow-redirects@npm:1.15.6"
+  peerDependenciesMeta:
+    debug:
+      optional: true
+  checksum: 10/70c7612c4cab18e546e36b991bbf8009a1a41cf85354afe04b113d1117569abf760269409cb3eb842d9f7b03d62826687086b081c566ea7b1e6613cf29030bf7
   languageName: node
   linkType: hard
 
@@ -38410,7 +38442,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-select@npm:^5.7.0":
+"react-select@npm:^5.7.0, react-select@npm:^5.8.0":
   version: 5.8.0
   resolution: "react-select@npm:5.8.0"
   dependencies:
