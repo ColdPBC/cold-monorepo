@@ -1,3 +1,10 @@
+## [1.179.6](https://github.com/ColdPBC/cold-monorepo/compare/v1.179.5...v1.179.6) (2024-03-29)
+
+
+### Bug Fixes
+
+* increase instance count ([69bca25](https://github.com/ColdPBC/cold-monorepo/commit/69bca25323628bba326fbf63ed4ddf446cb5eacf))
+
 ## [1.179.5](https://github.com/ColdPBC/cold-monorepo/compare/v1.179.4...v1.179.5) (2024-03-29)
 
 
