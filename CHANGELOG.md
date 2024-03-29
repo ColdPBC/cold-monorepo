@@ -1,3 +1,10 @@
+## [1.179.5](https://github.com/ColdPBC/cold-monorepo/compare/v1.179.4...v1.179.5) (2024-03-29)
+
+
+### Bug Fixes
+
+* missing complete prompt ([a2ac57a](https://github.com/ColdPBC/cold-monorepo/commit/a2ac57a0d829518805e55b98f0dcbd7027fb775d))
+
 ## [1.179.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.179.3...v1.179.4) (2024-03-29)
 
 
