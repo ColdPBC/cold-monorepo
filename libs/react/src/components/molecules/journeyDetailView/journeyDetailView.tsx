@@ -5,7 +5,7 @@ import { ErrorFallback } from '../../application/errors/errorFallback';
 import React, { useContext } from 'react';
 import { AssessmentsContext } from '@coldpbc/context';
 import { map } from 'lodash';
-import { Card, DismissableInfoCard, JourneyComplianceSwitcher, JourneyOverviewCard } from '@coldpbc/components';
+import { Card, ComplianceTargetProgressBar, DismissableInfoCard, JourneyComplianceSwitcher, JourneyOverviewCard } from '@coldpbc/components';
 import { useColdContext } from '@coldpbc/hooks';
 
 const _JourneyDetailView = () => {
@@ -21,10 +21,17 @@ const _JourneyDetailView = () => {
   });
 
   return !isEmptyData ? (
-    <Card title={data[currentAssessment].compliance?.compliance_definition.title}>
+    <Card title={data[currentAssessment].compliance?.compliance_definition.title} glow={false}>
       <JourneyComplianceSwitcher />
       <div data-testid={'journey-detail-view'}>
-        <div className="mt-4 mb-10 mx-auto">
+        <div className="flex flex-col space-y-10 mt-4 mb-10 mx-auto">
+          <ComplianceTargetProgressBar />
+          {data[currentAssessment].survey_type === 'SCOREBASED' && (
+            <div className={'flex flex-col text-tc-primary'}>
+              <div className={'text-h4'}> Points by Section</div>
+              <div className={'text-eyebrow'}>Current points by section of the questionnaire</div>
+            </div>
+          )}
           <JourneySpiderChart />
         </div>
         <h2 className="text-xl mt-6 mb-3 font-bold text-white">Categories</h2>

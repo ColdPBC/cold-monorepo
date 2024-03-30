@@ -16,7 +16,8 @@ import { getNewsAllMissingProperties, getNewsDefault, getNewsSomeMissingProperti
 import { ActionPayload } from '@coldpbc/interfaces';
 import { getOrganizationMembersMock } from './datagridMock';
 import {
-  getActivateOrgCompliancePageMock, getAssessmentsComplianceMock,
+  getActivateOrgCompliancePageMock,
+  getAssessmentsComplianceMock,
   getDefaultCompliancePageMock,
   getDefaultOrgCompliancePageMock,
   getOrganizationComplianceMock,
@@ -24,10 +25,7 @@ import {
 } from './complianceMock';
 import { getAllFilesMock } from './filesMock';
 import { getApiUrl } from './handlers';
-import {
-  getAssessmentSurveyWithProgressMock,
-  getSurveyFormDataByName
-} from './surveyDataMock';
+import { getAssessmentSurveyWithProgressMock, getSurveyFormDataByName } from './surveyDataMock';
 
 export const getFootprintHandler = {
   default: rest.get('*/organizations/:orgId/categories/company_decarbonization', (req, res, ctx) => {
@@ -700,11 +698,10 @@ export const getAssessmentsHandler = {
       return res(ctx.json(compliance));
     }),
     rest.get(getApiUrl('/organizations/:orgId/surveys/:name'), (req, res, ctx) => {
-      const survey = getAssessmentSurveyWithProgressMock();
-
       const { name } = req.params;
-      if (name === "rei_pia_2024_2")
-        survey.name = "rei_pia_2024_2";
+      const survey = getAssessmentSurveyWithProgressMock(name as string);
+
+      if (name === 'rei_pia_2024_2') survey.name = 'rei_pia_2024_2';
 
       return res(ctx.json(survey));
     }),
@@ -715,11 +712,10 @@ export const getAssessmentsHandler = {
       return res(ctx.json([compliance[0]]));
     }),
     rest.get(getApiUrl('/organizations/:orgId/surveys/:name'), (req, res, ctx) => {
-      const survey = getAssessmentSurveyWithProgressMock();
-
       const { name } = req.params;
-      if (name === "rei_pia_2024_2")
-        survey.name = "rei_pia_2024_2";
+      const survey = getAssessmentSurveyWithProgressMock(name as string);
+
+      if (name === 'rei_pia_2024_2') survey.name = 'rei_pia_2024_2';
 
       return res(ctx.json(survey));
     }),
@@ -728,5 +724,5 @@ export const getAssessmentsHandler = {
     rest.get(getApiUrl('/compliance_definitions/organizations/:orgId'), (req, res, ctx) => {
       return res(ctx.json([]));
     }),
-  ]
+  ],
 };

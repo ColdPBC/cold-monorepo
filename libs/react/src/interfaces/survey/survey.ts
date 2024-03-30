@@ -151,6 +151,7 @@ export interface ComplianceSurveyPayloadType {
 
 export interface ComplianceSurveyProgressType {
   sections: Array<ComplianceSurveySectionProgressType>;
+  total_target_score: number;
   total_score: number;
   total_max_score: number;
   total_review: number;
