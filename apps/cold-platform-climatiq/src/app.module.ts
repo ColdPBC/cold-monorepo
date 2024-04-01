@@ -21,7 +21,7 @@ export class AppModule {
         ConfigModule.forRoot({
           isGlobal: true,
         }),
-        await NestModule.forRootAsync(1),
+        await NestModule.forRootAsync(),
         ClimatiqModule,
         BullModule.registerQueue({
           name: process.env?.DD_SERVICE?.split('-')[2],

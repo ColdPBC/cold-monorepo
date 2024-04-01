@@ -29,7 +29,7 @@ export class AppModule {
     return {
       module: AppModule,
       imports: [
-        await NestModule.forRootAsync(2, 'cold-api-'),
+        await NestModule.forRootAsync(),
         BullModule.registerQueue({
           name: 'openai',
         }),
