@@ -569,7 +569,7 @@ export const isAIResponseValueValid = (followUp: {
   }
   switch (component) {
     case 'yes_no':
-      if (isBoolean(ai_response.answer)) {
+      if (isBoolean(ai_response.answer) || (isString(ai_response.answer) && (ai_response.answer.toLowerCase() === 'yes' || ai_response.answer.toLowerCase() === 'no'))) {
         isValid = true;
       }
       break;
@@ -623,4 +623,28 @@ export const isAIResponseValueValid = (followUp: {
     default:
   }
   return isValid;
+};
+
+export const getAIResponseValue = (followUp: {
+  ai_response?: {
+    justification?: string;
+    answer?: string | boolean | number | Array<string>;
+  };
+  component: string;
+  options: Array<string>;
+}) => {
+  const { ai_response, component } = followUp;
+  switch (component) {
+    case 'yes_no':
+      if (isString(ai_response?.answer)) {
+        if (ai_response?.answer.toLowerCase() === 'yes') {
+          return true;
+        } else if (ai_response?.answer.toLowerCase() === 'no') {
+          return false;
+        }
+      }
+      return ai_response?.answer;
+    default:
+      return ai_response?.answer;
+  }
 };
