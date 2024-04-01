@@ -1,3 +1,18 @@
+# [1.180.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.179.6...v1.180.0) (2024-04-01)
+
+
+### Bug Fixes
+
+* moved openai tools out from under langchain folder ([a7d04ea](https://github.com/ColdPBC/cold-monorepo/commit/a7d04eacbafd75e3b6d7dc93cab4b42cecc6e7bf))
+* remove unused params ([fe0f071](https://github.com/ColdPBC/cold-monorepo/commit/fe0f0719f960385005551ab16cd72ddb6b6a6faa))
+* using wrong model flag name ([4cd5e67](https://github.com/ColdPBC/cold-monorepo/commit/4cd5e676279e49ff9e9cf2e18bbd0127658cc0b2))
+
+
+### Features
+
+* refactor to remove langchain from calling openai ([2e6ed61](https://github.com/ColdPBC/cold-monorepo/commit/2e6ed61728eb9e36f20f729cd53f0ae9dabd6d2b))
+* store links between files and vector records ([9476c0b](https://github.com/ColdPBC/cold-monorepo/commit/9476c0be23a51d9554a9b43c764093bb09672e63))
+
 ## [1.179.6](https://github.com/ColdPBC/cold-monorepo/compare/v1.179.5...v1.179.6) (2024-03-29)
 
 
