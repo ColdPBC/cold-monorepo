@@ -1,3 +1,10 @@
+## [1.180.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.180.3...v1.180.4) (2024-04-01)
+
+
+### Bug Fixes
+
+* prompt bug ([af91500](https://github.com/ColdPBC/cold-monorepo/commit/af91500335507f60593f87d64ee79fa5bda35e13))
+
 ## [1.180.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.180.2...v1.180.3) (2024-04-01)
 
 
