@@ -1,32 +1,13 @@
 import { useContext } from 'react';
 import { ColdEmissionsContext } from '@coldpbc/context';
-import { EmissionPayload } from '@coldpbc/interfaces';
 import { Card, EmissionsDonutChart, EmissionsDonutChartVariants, SubCategoryTotal } from '@coldpbc/components';
-import { forEach, forOwn, isArray, map, uniq } from 'lodash';
+import { forEach, forOwn, isArray } from 'lodash';
 import { ChartData } from 'chart.js';
 import { HexColors } from '@coldpbc/themes';
 
 export const EmissionsAllScopesCard = () => {
-  const {
-    data,
-    selectedFacility,
-    selectedYear,
-  }: {
-    data: EmissionPayload;
-    selectedFacility: string;
-    selectedYear: number;
-  } = useContext(ColdEmissionsContext);
-
-  const uniqueScopes = uniq(
-    map(data.definition, facility => {
-      if (facility.facility_id.toString() !== selectedFacility && selectedFacility !== 'all') return [];
-      return map(facility.periods, period => {
-        return map(period.emissions, emission => {
-          return emission.scope.ghg_category;
-        }).flat();
-      }).flat();
-    }).flat(),
-  );
+  const { data, selectedFacility, selectedYear } = useContext(ColdEmissionsContext);
+  const { emissions, uniqueScopes } = data;
 
   const scopeColors: {
     [key: number]: 'lightblue' | 'purple' | 'green' | 'teal';
@@ -57,14 +38,16 @@ export const EmissionsAllScopesCard = () => {
   const hoverColorArray = Array<string>();
 
   forEach(uniqueScopes, scope => {
-    let value = 0;
     let nullFootprint = true;
-    forEach(data.definition, facility => {
-      if (facility.facility_id.toString() === selectedFacility || selectedFacility === 'all') {
+    forEach(emissions?.definition, facility => {
+      if (facility.facility_id.toString() === selectedFacility.value || selectedFacility.value === 'all') {
         forEach(facility.periods, period => {
-          if (period.value !== selectedYear) return;
+          if (period.value.toString() !== selectedYear.value && selectedYear.value !== 'all') {
+            return;
+          }
           forEach(period.emissions, emission => {
             if (emission.scope.ghg_category === scope) {
+              let value = 0;
               forEach(emission.activities, activity => {
                 value += activity.tco2e;
                 totalEmissions += activity.tco2e;
@@ -96,7 +79,7 @@ export const EmissionsAllScopesCard = () => {
     });
   });
 
-  const totalsSorted = totals.sort((a, b) => a.value - b.value);
+  const totalsSorted = totals.sort((a, b) => b.value - a.value);
 
   forEach(totalsSorted, total => {
     chartData.labels?.push(total.name);
@@ -113,6 +96,10 @@ export const EmissionsAllScopesCard = () => {
     // @ts-ignore
     chartData.datasets[0].backgroundColor?.push('#FFFFFF00'); // make spacer transparent
   });
+
+  if (chartData.datasets[0].data.length < 1) {
+    return null;
+  }
 
   return (
     <Card title="Scope 1, 2, 3">

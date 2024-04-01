@@ -2,15 +2,19 @@ import { EmissionFacility } from '@coldpbc/interfaces';
 import { Card } from '@coldpbc/components';
 import { forOwn, isArray, map, max } from 'lodash';
 import { BarElement, CategoryScale, Chart as ChartJS, ChartData, ChartOptions, LinearScale, Title } from 'chart.js';
-import { HexColors } from '@coldpbc/themes';
 import { Bar } from 'react-chartjs-2';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
+import { useContext } from 'react';
+import { ColdEmissionsContext } from '@coldpbc/context';
+import { HexColors } from '@coldpbc/themes';
 
 export interface EmissionsYearlyCarbonFootprintChartProps {
   emissionFacilities?: EmissionFacility[];
 }
 
 export const EmissionsYearlyCarbonFootprintChart = (props: EmissionsYearlyCarbonFootprintChartProps) => {
+  const { selectedFacility, selectedYear, data } = useContext(ColdEmissionsContext);
+  const { emissions } = data;
   const yearsData: {
     [year: string]: number;
   } = {};
@@ -24,8 +28,15 @@ export const EmissionsYearlyCarbonFootprintChart = (props: EmissionsYearlyCarbon
       },
     ],
   };
-  map(props.emissionFacilities, facility => {
+
+  map(emissions?.definition, facility => {
+    if (selectedFacility.value !== 'all' && selectedFacility.value !== facility.facility_id.toString()) {
+      return;
+    }
     map(facility.periods, period => {
+      if (selectedYear.value !== 'all' && selectedYear.value !== period.value.toString()) {
+        return;
+      }
       let yearEmissions = yearsData[period.value] || 0;
       map(period.emissions, emission => {
         map(emission.activities, activity => {
@@ -54,14 +65,22 @@ export const EmissionsYearlyCarbonFootprintChart = (props: EmissionsYearlyCarbon
         color: 'white',
         align: 'top',
         anchor: 'end',
+        formatter: function (value, context) {
+          return Math.round(value * 100) / 100;
+        },
       },
     },
     scales: {
-      yAxis: {
-        max: maxEmission + 30,
-      },
       y: {
-        display: false,
+        ticks: {
+          color: 'white',
+        },
+        max: Math.round(maxEmission + (maxEmission > 10 ? maxEmission / 10 : 1)),
+      },
+      x: {
+        ticks: {
+          color: 'white',
+        },
       },
     },
   };
@@ -69,7 +88,7 @@ export const EmissionsYearlyCarbonFootprintChart = (props: EmissionsYearlyCarbon
   ChartJS.register(CategoryScale, LinearScale, BarElement, Title);
 
   return (
-    <Card title={'Emissions'}>
+    <Card title={'Emissions'} glow={false}>
       <div className={'flex flex-col space-y-4'}>
         <div className={'text-left text-label'}>Thousands of tones of carbon dioxide equivalents (tCO2e) per year</div>
         <Bar className={'w-full'} plugins={[ChartDataLabels]} options={chartOptions} data={yearsChartData} width={'897.001px'} height={'294px'} />

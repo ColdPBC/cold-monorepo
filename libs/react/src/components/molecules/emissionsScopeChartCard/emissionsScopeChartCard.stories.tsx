@@ -19,9 +19,36 @@ export const Default = () => {
   return (
     <ColdEmissionsContext.Provider
       value={{
-        data: getDefaultEmissionMock(),
-        selectedFacility: 'all',
-        selectedYear: 2020,
+        data: {
+          emissions: getDefaultEmissionMock(),
+          uniqueScopes: [1, 2, 3],
+          yearOptions: [
+            {
+              id: 0,
+              name: '2020 Emissions',
+              value: '2020',
+            },
+          ],
+          facilityOptions: [
+            {
+              id: 0,
+              name: 'All Facilities',
+              value: 'all',
+            },
+          ],
+        },
+        selectedFacility: {
+          id: 0,
+          name: 'All Facilities',
+          value: 'all',
+        },
+        setSelectedYear: option => {},
+        selectedYear: {
+          id: 0,
+          name: '2020 Emissions',
+          value: '2020',
+        },
+        setSelectedFacility: option => {},
       }}>
       <EmissionsScopeChartCard scope_category={1} />;
     </ColdEmissionsContext.Provider>

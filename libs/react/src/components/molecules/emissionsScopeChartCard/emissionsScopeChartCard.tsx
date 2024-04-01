@@ -1,14 +1,13 @@
-import { ReactNode, useContext, useRef } from 'react';
+import { useContext, useRef } from 'react';
 import { Chart as ChartJS, ChartOptions } from 'chart.js';
 import { useActiveSegment } from '@coldpbc/hooks';
-import { forEach, map, sortBy } from 'lodash';
+import { capitalize, forEach, map, sortBy } from 'lodash';
 import { Plugin as PluginType } from 'chart.js/dist/types';
 import { Card, FootprintDetailChip } from '@coldpbc/components';
 import { Chart } from 'react-chartjs-2';
 import { Table } from 'flowbite-react';
 import { darkTableTheme, getSchemeForColor, HexColors } from '@coldpbc/themes';
 import { formatTonnes } from '@coldpbc/lib';
-import { EmissionPayload } from '@coldpbc/interfaces';
 import { ColdEmissionsContext } from '@coldpbc/context';
 
 export interface EmissionsScopeChartCardProps {
@@ -17,15 +16,8 @@ export interface EmissionsScopeChartCardProps {
 
 export const EmissionsScopeChartCard = (props: EmissionsScopeChartCardProps) => {
   const { scope_category } = props;
-  const {
-    data,
-    selectedFacility,
-    selectedYear,
-  }: {
-    data: EmissionPayload;
-    selectedFacility: string;
-    selectedYear: number;
-  } = useContext(ColdEmissionsContext);
+  const { data, selectedFacility, selectedYear } = useContext(ColdEmissionsContext);
+  const { emissions } = data;
 
   // get all the scope activities and their emissions. also get the total emissions for the scope
   // and the percentage of the total emissions that each activity contributes
@@ -77,17 +69,17 @@ export const EmissionsScopeChartCard = (props: EmissionsScopeChartCardProps) => 
         },
       ],
       data: Array<{
-        activity: string | ReactNode;
+        activity: string;
         percentage: string;
         tCO2e: number;
       }>(),
     },
   };
 
-  forEach(data.definition, facility => {
-    if (facility.facility_id.toString() === selectedFacility || selectedFacility === 'all') {
+  forEach(emissions?.definition, facility => {
+    if (facility.facility_id.toString() === selectedFacility.value || selectedFacility.value === 'all') {
       forEach(facility.periods, period => {
-        if (period.value !== selectedYear) {
+        if (period.value.toString() !== selectedYear.value && selectedYear.value !== 'all') {
           return;
         }
         forEach(period.emissions, emission => {
@@ -161,8 +153,9 @@ export const EmissionsScopeChartCard = (props: EmissionsScopeChartCardProps) => 
   if (!emissionsDataSet.chartData.datasets[0].data.length) {
     return null;
   }
+
   return (
-    <Card title={`Scope ${scope_category}`}>
+    <Card title={`Scope ${scope_category}`} className={'w-full'}>
       <div className="relative w-full flex items-center">
         <div
           className="h-[182px] w-[182px] relative ml-2 mr-6"
@@ -205,7 +198,7 @@ export const EmissionsScopeChartCard = (props: EmissionsScopeChartCardProps) => 
                     }}
                     className="mr-2 h-[10px] w-[10px] min-w-[10px] rounded-xl"
                   />
-                  {row.activity}
+                  <div className={'w-[166px] truncate'}>{capitalize(row.activity)}</div>
                 </Table.Cell>
                 <Table.Cell theme={darkTableTheme.table?.body?.cell}>{row.percentage}</Table.Cell>
                 <Table.Cell theme={darkTableTheme.table?.body?.cell}>{formatTonnes(row.tCO2e)}</Table.Cell>

@@ -1,74 +1,32 @@
-import React from 'react';
-import { ColdEmissionsContext } from '@coldpbc/context';
-import { AppContent, CenterColumnContent, Dropdown, EmissionsAllScopesCard, EmissionsScopeChartCard, RightColumnContent } from '@coldpbc/components';
-import { find, forEach, map, uniq } from 'lodash';
+import React, { useContext } from 'react';
+import { AppContent, CenterColumnContent, EmissionsAllScopesCard, EmissionsScopeChartCard, RightColumnContent, Select } from '@coldpbc/components';
 import { EmissionPayload } from '@coldpbc/interfaces';
-import { subYears } from 'date-fns';
+import { ColdEmissionsContext } from '@coldpbc/context';
 
 export const EmissionsCarbonFootprintCharts = ({ emissionPayload }: { emissionPayload: EmissionPayload | undefined }) => {
-  const [selectedYear, setSelectedYear] = React.useState<string>(subYears(new Date(), 1).getFullYear().toString());
-  const [selectedFacility, setSelectedFacility] = React.useState<string>('all');
+  const { data, selectedYear, setSelectedYear } = useContext(ColdEmissionsContext);
 
-  const uniqueScopes = uniq(
-    map(emissionPayload?.definition, facility => {
-      return map(facility.periods, period => {
-        return map(period.emissions, emission => {
-          return emission.scope.ghg_category;
-        }).flat();
-      }).flat();
-    }).flat(),
-  );
-
-  const yearOptions = Array<{
-    label: string;
-    value: string;
-  }>();
-  const facilityOptions = Array<{
-    label: string;
-    value: string;
-  }>();
-
-  facilityOptions.push({
-    label: 'All Facilities',
-    value: 'all',
-  });
-
-  forEach(emissionPayload?.definition, facility => {
-    facilityOptions.push({
-      label: facility.facility_name,
-      value: facility.facility_id.toString(),
-    });
-    forEach(facility.periods, period => {
-      if (find(yearOptions, { value: period.value.toString() })) {
-        return;
-      }
-      yearOptions.push({
-        label: `${period.value} Emissions`,
-        value: period.value.toString(),
-      });
-    });
-  });
+  const { uniqueScopes, yearOptions } = data;
 
   return (
-    <ColdEmissionsContext.Provider
-      value={{
-        data: emissionPayload,
-        selectedYear: parseInt(selectedYear),
-        selectedFacility: selectedFacility,
-      }}>
-      <div className={'flex flex-col space-y-[35px]'}>
-        <div className={'flex flex-row space-x-4 justify-start'}>
-          <Dropdown options={yearOptions} selected={selectedYear} onSelect={setSelectedYear} containerClassName={'w-[255px]'} />
-          <Dropdown options={facilityOptions} selected={selectedFacility} onSelect={setSelectedFacility} containerClassName={'w-[255px]'} />
-        </div>
+    <div className={'flex flex-col space-y-[35px] w-full'}>
+      <div className={'flex flex-row justify-between w-full'}>
+        <div className={'text-tc-primary text-h2'}>Emissions Details By Scope</div>
+        <Select
+          options={yearOptions}
+          value={selectedYear.name}
+          onChange={input => {
+            setSelectedYear(input);
+          }}
+          name={'Year'}
+          className={'w-[255px]'}
+        />
+      </div>
+      <div className={'flex flex-row'}>
         <AppContent>
           <CenterColumnContent>
             {uniqueScopes.map(scope => {
-              return (
-                <div key={scope} data-testid={`emission-scope-chart-scope-${scope}`} className={'w-full'}>
-                  <EmissionsScopeChartCard scope_category={scope} />
-                </div>
-              );
+              return <EmissionsScopeChartCard scope_category={scope} key={scope} />;
             })}
           </CenterColumnContent>
           <RightColumnContent>
@@ -76,6 +34,6 @@ export const EmissionsCarbonFootprintCharts = ({ emissionPayload }: { emissionPa
           </RightColumnContent>
         </AppContent>
       </div>
-    </ColdEmissionsContext.Provider>
+    </div>
   );
 };
