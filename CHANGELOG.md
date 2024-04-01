@@ -1,3 +1,10 @@
+# [1.177.0-COLD-634.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.177.0-COLD-634.1...v1.177.0-COLD-634.2) (2024-04-01)
+
+
+### Features
+
+* carbon footprint updates based on design ([3ff67c9](https://github.com/ColdPBC/cold-monorepo/commit/3ff67c9586752ee34510569dc6c108b59018d4ea))
+
 # [1.177.0-COLD-634.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.176.3...v1.177.0-COLD-634.1) (2024-03-29)
 
 
