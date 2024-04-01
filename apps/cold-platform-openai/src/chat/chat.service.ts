@@ -13,6 +13,7 @@ import { RecordMetadata, ScoredPineconeRecord } from '@pinecone-database/pinecon
 @Injectable()
 export class ChatService extends BaseWorker implements OnModuleInit {
   openAIapiKey: string;
+  prompts: PromptsService;
 
   constructor(
     private readonly config: ConfigService,
@@ -53,11 +54,10 @@ export class ChatService extends BaseWorker implements OnModuleInit {
     return docs.join('\n\n').substring(0, 3000);
   }
 
-  async askQuestion(indexName: string, question: any, prompts: PromptsService, company_name: string, user: AuthenticatedUser, tags): Promise<any> {
+  async askQuestion(indexName: string, question: any, company_name: string, user: AuthenticatedUser, tags): Promise<any> {
     try {
       this.setTags(tags);
 
-      prompts = new PromptsService(this.darkly, company_name, { name: company_name }, this.prisma);
       // Get Chat History
       let messages = (await this.cache.get(`openai:thread:${user.coldclimate_claims.id}`)) as ChatCompletionMessageParam[];
 
@@ -143,7 +143,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
 
       context.push(content);
 
-      const with_context = await prompts.getPrompt(question, JSON.stringify(context), docs.length > 0);
+      const with_context = await this.prompts.getPrompt(question, JSON.stringify(context), docs.length > 0);
 
       const sanitized_base = with_context.replace('{question}', JSON.stringify(question));
 
@@ -182,6 +182,10 @@ export class ChatService extends BaseWorker implements OnModuleInit {
       });
 
       set(ai_response, 'references', references);
+
+      if (ai_response.prompt) {
+        delete ai_response.prompt;
+      }
 
       messages.push({
         role: 'assistant',
@@ -254,19 +258,19 @@ export class ChatService extends BaseWorker implements OnModuleInit {
     const reqs: any[] = [];
 
     //initialize prompts service with survey name so that it has the correct context for darkly
-    const prompts = await new PromptsService(this.darkly, survey.name, organization, this.prisma).initialize();
+    this.prompts = await new PromptsService(this.darkly, survey.name, organization, this.prisma).initialize();
 
     // iterate over each section key
     for (const section of sections) {
       // create a new thread for each section run
-      reqs.push(this.processSection(job, section, sdx, sections, definition, integration, organization, category_context, user, survey, prompts));
+      reqs.push(this.processSection(job, section, sdx, sections, definition, integration, organization, category_context, user, survey));
       //await this.processSection(job, section, sdx, sections, definition, thread, integration, organization, category_context, user, survey);
     }
 
     await Promise.all(reqs);
   }
 
-  public async processSection(job: Job, section: string, sdx: number, sections: string[], definition, integration, organization, category_context, user, survey, prompts) {
+  public async processSection(job: Job, section: string, sdx: number, sections: string[], definition, integration, organization, category_context, user, survey) {
     await job.log(`Section | ${section}:${sdx + 1} of ${sections.length}`);
     this.logger.info(`Processing ${section}: ${definition.sections[section].title}`, { section });
 
@@ -295,7 +299,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
         this.logger.info(`Sending Message | ${section}.${item}: ${follow_up.prompt}`);
 
         // create a new run for each followup item
-        const value = await this.askQuestion(organization.name, follow_up, prompts, organization.name, job.data.user, {
+        const value = await this.askQuestion(organization.name, follow_up, organization.name, job.data.user, {
           question: {
             survey: job.data['survey'].definition.title,
             section: section,
@@ -321,7 +325,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
           }
 
           this.logger.info(`Creating Message | ${section}.${item}.additional_context: ${follow_up.prompt}`);
-          const additionalValue = await this.askQuestion(organization.name, follow_up['additional_context'], prompts, organization.display_name, job.data.user, {
+          const additionalValue = await this.askQuestion(organization.name, follow_up['additional_context'], organization.display_name, job.data.user, {
             question: {
               key: item,
               text: follow_up.prompt,
