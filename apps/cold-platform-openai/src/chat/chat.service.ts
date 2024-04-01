@@ -1,15 +1,14 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
-import { BaseWorker, CacheService, ColdRabbitService, DarklyService, PrismaService } from '@coldpbc/nest';
+import { AuthenticatedUser, BaseWorker, CacheService, ColdRabbitService, DarklyService, PrismaService } from '@coldpbc/nest';
 import { PineconeService } from '../pinecone/pinecone.service';
-import { LangchainService } from '../langchain/langchain.service';
 import { ConfigService } from '@nestjs/config';
 import { PromptsService } from '../prompts/prompts.service';
 import { Job, Queue } from 'bull';
 import { InjectQueue } from '@nestjs/bull';
 import { has, set } from 'lodash';
-import { OpenAI } from 'langchain/llms/openai';
-import { PromptTemplate } from '@langchain/core/prompts';
-import { ConversationalRetrievalQAChain } from 'langchain/chains';
+import OpenAI from 'openai';
+import { ChatCompletionMessageParam } from 'openai/resources/chat/completions';
+import { RecordMetadata, ScoredPineconeRecord } from '@pinecone-database/pinecone';
 
 @Injectable()
 export class ChatService extends BaseWorker implements OnModuleInit {
@@ -18,7 +17,6 @@ export class ChatService extends BaseWorker implements OnModuleInit {
   constructor(
     private readonly config: ConfigService,
     private readonly pc: PineconeService,
-    private readonly lc: LangchainService,
     private readonly prisma: PrismaService,
     private readonly darkly: DarklyService,
     private cache: CacheService,
@@ -31,51 +29,158 @@ export class ChatService extends BaseWorker implements OnModuleInit {
 
   async onModuleInit() {}
 
-  async askQuestion(indexName: string, question: any, prompts: PromptsService, company_name: string): Promise<any> {
+  async extractTextFromDocument(qualifyingDocs: ScoredPineconeRecord<RecordMetadata>[]) {
+    // Use a map to deduplicate matches by URL
+    const docs = Array.isArray(qualifyingDocs)
+      ? qualifyingDocs.map(match => {
+          const item = {
+            name: match.metadata['file_name'],
+            text: match.metadata.chunk as string,
+          };
+          if (typeof item.text === 'string') {
+            try {
+              item.text = JSON.parse(item.text);
+            } catch (e) {
+              this.logger.warn(`Unable to parse snippet to Object due to trunacting`, { ...e, item });
+            }
+
+            return JSON.stringify(item);
+          }
+        })
+      : [];
+
+    // Join all the chunks of text together, truncate to the maximum number of tokens, and return the result
+    return docs.join('\n\n').substring(0, 3000);
+  }
+
+  async askQuestion(indexName: string, question: any, prompts: PromptsService, company_name: string, user: AuthenticatedUser): Promise<any> {
     try {
-      const vectorStore = await this.pc.getVectorStore(indexName);
+      // Get Chat History
+      let messages = (await this.cache.get(`openai:thread:${user.coldclimate_claims.id}`)) as ChatCompletionMessageParam[];
 
-      const sanitized_base = await prompts.getPrompt(question);
+      if (!messages) {
+        messages = [] as ChatCompletionMessageParam[];
+      }
 
-      // Create Template from base prompt
-      const baseTemplate = PromptTemplate.fromTemplate(sanitized_base);
-
-      const formattedPromptTemplate = await baseTemplate.format({
-        question: JSON.stringify(question),
-        company: company_name,
-        chat_history: [],
-        context: vectorStore,
+      const context: any = [];
+      const openai = new OpenAI({
+        organization: this.config.getOrThrow('OPENAI_ORG_ID'),
+        apiKey: this.config.getOrThrow('OPENAI_API_KEY'),
       });
 
-      const model = new OpenAI({
+      /**
+       * This prompt is used to condense the chat history and follow-up question into a single standalone question for the purpose
+       * of providing context to the AI model to query the vector index for the most relevant information.
+       */
+
+      let condense_prompt = `Given the chat history and a follow-up question, rephrase the follow-up question to be a standalone question that encompasses all necessary context from the chat history.
+        Chat History:
+        {chat_history}
+
+        Follow-up input:
+        {question}
+
+        Make sure your standalone question is self-contained, clear, and specific. Rephrased standalone question:
+      `;
+
+      // If there are messages, get the last message and rephrase the current question to be a standalone question
+      let rephrased_question: string;
+      if (Array.isArray(messages) && messages.length > 0) {
+        let lastMessage = messages[messages.length - 1].content;
+        if (typeof lastMessage !== 'string') {
+          lastMessage = JSON.stringify(lastMessage);
+        }
+        //const parsed = JSON.parse(lastMessage);
+        condense_prompt = condense_prompt.replace('{chat_history}', lastMessage).replace('{question}', question.prompt);
+
+        // Define the system message
+        const systemMessage: ChatCompletionMessageParam = {
+          role: 'system',
+          content: condense_prompt,
+        };
+
+        const response = await openai.chat.completions.create({
+          model: await prompts.model,
+          messages: [systemMessage], // only send the last two
+          temperature: 0.5,
+          user: user.coldclimate_claims.id,
+        });
+
+        if (response.choices[0].message.content) {
+          rephrased_question = response.choices[0].message.content;
+
+          this.logger.info(`Generated Pinecone Query`, {
+            previous_message: lastMessage,
+            current_question: question.promp,
+            pincone_query: rephrased_question,
+          });
+        }
+      }
+
+      if (!rephrased_question) {
+        rephrased_question = question.prompt;
+      }
+
+      // Get the context content from the Pinecone index
+      const docs = (await this.pc.getContext(rephrased_question, indexName, indexName, 0.8, false)) as ScoredPineconeRecord[];
+
+      const content = await this.extractTextFromDocument(docs as ScoredPineconeRecord<RecordMetadata>[]);
+
+      context.push(content);
+
+      const with_context = await prompts.getPrompt(question, JSON.stringify(context));
+
+      const sanitized_base = with_context.replace('{question}', JSON.stringify(question));
+
+      // Define the system message
+      const systemMessage: ChatCompletionMessageParam = {
+        role: 'system',
+        content: sanitized_base,
+      };
+
+      messages.push(systemMessage);
+
+      // Ask OpenAI for a streaming chat completion given the prompt
+      const response = await openai.chat.completions.create({
+        response_format: { type: 'json_object' },
+        model: await prompts.model,
+        messages: [systemMessage], // only send the last two
         temperature: 0.5,
-        modelName: prompts.model,
-        openAIApiKey: this.openAIapiKey,
+        user: user.coldclimate_claims.id,
       });
 
-      const chain = ConversationalRetrievalQAChain.fromLLM(model, vectorStore.asRetriever(), {
-        qaTemplate: sanitized_base,
-        questionGeneratorTemplate: prompts.condense_template,
-        returnSourceDocuments: true,
+      let ai_response: any;
+      if (typeof response.choices[0].message.content === 'string') {
+        ai_response = JSON.parse(response.choices[0].message.content);
+      }
+
+      const references = docs.map(doc => {
+        return {
+          name: doc.metadata['file_name'],
+          score: doc.score,
+          text: doc.metadata.chunk,
+        };
       });
 
-      const response = await chain.invoke({
-        query: formattedPromptTemplate,
-        question: formattedPromptTemplate,
-        includeSourceDocuments: true,
-        chat_history: [],
+      set(ai_response, 'references', references);
+
+      messages.push({
+        role: 'assistant',
+        content: ai_response,
       });
 
-      const answer = JSON.parse(response.text);
-      this.logger.info(`${answer.answer ? '✅ Answered' : '❌ Did NOT Answer'} ${question.idx ? question.idx : 'additional_context'}`, {
-        question: question.prompt,
-        answer,
-        formattedPromptTemplate,
+      // Save the thread to the cache
+      await this.cache.set(`openai:thread:${user.coldclimate_claims.id}`, messages, { ttl: 60 * 60 * 24 });
+
+      this.logger.info(`${ai_response.answer ? '✅ Answered' : '❌ Did NOT Answer'} ${question.idx ? question.idx : 'additional_context'}`, {
+        pinecone_query: rephrased_question,
+        document_content: context,
+        survey_question: question.prompt,
+        ai_prompt: sanitized_base,
+        ai_response,
       });
 
-      set(answer, 'reference', response.sourceDocuments);
-
-      return answer;
+      return ai_response;
     } catch (error) {
       this.logger.error(`Error asking question ${question.prompt}`, error);
       throw error;
@@ -155,7 +260,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
 
         this.logger.info(`Sending Message | ${section}.${item}: ${follow_up.prompt}`);
         // create a new run for each followup item
-        const value = await this.askQuestion(organization.name, follow_up, prompts, organization.display_name);
+        const value = await this.askQuestion(organization.name, follow_up, prompts, organization.name, job.data.user);
 
         // update the survey with the response
         definition.sections[section].follow_up[item].ai_response = value;
@@ -174,7 +279,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
           }
 
           this.logger.info(`Creating Message | ${section}.${item}.additional_context: ${follow_up.prompt}`);
-          const additionalValue = await this.askQuestion(organization.name, follow_up['additional_context'], prompts, organization.display_name);
+          const additionalValue = await this.askQuestion(organization.name, follow_up['additional_context'], prompts, organization.display_name, job.data.user);
 
           definition.sections[section].follow_up[item].additional_context.ai_response = additionalValue;
 
