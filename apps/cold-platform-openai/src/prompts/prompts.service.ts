@@ -366,6 +366,7 @@ export class PromptsService extends BaseWorker {
       return this.nodocs_prompt;
     }
 
+    await this.initializeFlagValues();
     const component_prompt = await this.getComponentPrompt(question);
     const sanitized_base = this.base_prompt.replace('{component_prompt}', component_prompt).replace('{context}', context);
 

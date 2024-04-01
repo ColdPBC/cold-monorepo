@@ -258,11 +258,12 @@ export class ChatService extends BaseWorker implements OnModuleInit {
         }
 
         this.logger.info(`Sending Message | ${section}.${item}: ${follow_up.prompt}`);
+
         // create a new run for each followup item
         const value = await this.askQuestion(organization.name, follow_up, prompts, organization.name, job.data.user, {
           question: {
             key: item,
-            prompt: follow_up.prompt,
+            text: follow_up.prompt,
           },
         });
 
@@ -286,7 +287,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
           const additionalValue = await this.askQuestion(organization.name, follow_up['additional_context'], prompts, organization.display_name, job.data.user, {
             question: {
               key: item,
-              prompt: follow_up.prompt,
+              text: follow_up.prompt,
             },
           });
 
@@ -319,6 +320,13 @@ export class ChatService extends BaseWorker implements OnModuleInit {
   }
 
   private async isDuplicateOrCanceled(organization, job: Job, section: string, item: string) {
+    const exists = await this.queue.getJob(job.id);
+    if (!exists) {
+      this.logger.warn(`Job ${job.id} no longer found in queue; will not process question ${section}:${item}`);
+      await this.cache.delete(`jobs:${job.name}:${organization.id}:${job.data.payload.compliance.compliance_id}`);
+      return true;
+    }
+
     const jobs = (await this.cache.get(`jobs:${job.name}:${organization.id}:${job.data.payload.compliance.compliance_id}`)) as number[];
 
     if (!jobs) {
