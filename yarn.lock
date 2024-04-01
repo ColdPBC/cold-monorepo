@@ -8528,6 +8528,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@pinecone-database/doc-splitter@npm:^0.0.1":
+  version: 0.0.1
+  resolution: "@pinecone-database/doc-splitter@npm:0.0.1"
+  checksum: 10/d6d622c2515bed55c1ea2a91403d2ae1cc88981f2739a368c3cbac04669fc6faf67fc5cf0616e321e4caf97c611b98dfb808f484ac2ff19b335aba695e4c8adb
+  languageName: node
+  linkType: hard
+
 "@pinecone-database/pinecone@npm:^2.0.0, @pinecone-database/pinecone@npm:^2.1.0":
   version: 2.1.0
   resolution: "@pinecone-database/pinecone@npm:2.1.0"
@@ -14259,6 +14266,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/diff-match-patch@npm:^1.0.36":
+  version: 1.0.36
+  resolution: "@types/diff-match-patch@npm:1.0.36"
+  checksum: 10/7d7ce03422fcc3e79d0cda26e4748aeb176b75ca4b4e5f38459b112bf24660d628424bdb08d330faefa69039d19a5316e7a102a8ab68b8e294c8346790e55113
+  languageName: node
+  linkType: hard
+
 "@types/doctrine@npm:^0.0.3":
   version: 0.0.3
   resolution: "@types/doctrine@npm:0.0.3"
@@ -16521,6 +16535,41 @@ __metadata:
     clean-stack: "npm:^5.2.0"
     indent-string: "npm:^5.0.0"
   checksum: 10/37834eb0dac6ebd05ca8aa82e00deeb65fb7b1462c68ccb620221ba1753640fcb249e46c03401b470701a58826b65426deda83783fc2e8347c4b5037b2724d9b
+  languageName: node
+  linkType: hard
+
+"ai@npm:^3.0.16":
+  version: 3.0.16
+  resolution: "ai@npm:3.0.16"
+  dependencies:
+    eventsource-parser: "npm:1.1.2"
+    jsondiffpatch: "npm:^0.6.0"
+    nanoid: "npm:3.3.6"
+    secure-json-parse: "npm:2.7.0"
+    solid-swr-store: "npm:0.10.7"
+    sswr: "npm:2.0.0"
+    swr: "npm:2.2.0"
+    swr-store: "npm:0.10.6"
+    swrv: "npm:1.0.4"
+    zod-to-json-schema: "npm:^3.22.4"
+  peerDependencies:
+    react: ^18.2.0
+    solid-js: ^1.7.7
+    svelte: ^3.0.0 || ^4.0.0
+    vue: ^3.3.4
+    zod: ^3.0.0
+  peerDependenciesMeta:
+    react:
+      optional: true
+    solid-js:
+      optional: true
+    svelte:
+      optional: true
+    vue:
+      optional: true
+    zod:
+      optional: true
+  checksum: 10/7ae96227b8d1aeb339c3dc226cb4338d8e3cbac11353567b8c7b9452336003a47ce4ade2a926577554db4f8e61d068398c51ae633fe06c558b92dc84ac0bf845
   languageName: node
   linkType: hard
 
@@ -19655,6 +19704,7 @@ __metadata:
     "@nx/webpack": "npm:17.1.2"
     "@nx/workspace": "npm:17.1.3"
     "@paralleldrive/cuid2": "npm:^2.2.2"
+    "@pinecone-database/doc-splitter": "npm:^0.0.1"
     "@pinecone-database/pinecone": "npm:^2.1.0"
     "@prisma/client": "npm:^5.6.0"
     "@react-buddy/ide-toolbox": "npm:^2.3.1"
@@ -19747,6 +19797,7 @@ __metadata:
     "@vitest/coverage-v8": "npm:~0.32.0"
     "@vitest/ui": "npm:~0.32.0"
     "@zerollup/ts-transform-paths": "npm:^1.0.0"
+    ai: "npm:^3.0.16"
     app-root-path: "npm:^3.1.0"
     argon2: "npm:^0.30.3"
     async-mqtt: "npm:^2.6.3"
@@ -22152,6 +22203,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"diff-match-patch@npm:^1.0.5":
+  version: 1.0.5
+  resolution: "diff-match-patch@npm:1.0.5"
+  checksum: 10/fd1ab417eba9559bda752a4dfc9a8ac73fa2ca8b146d29d153964b437168e301c09d8a688fae0cd81d32dc6508a4918a94614213c85df760793f44e245173bb6
+  languageName: node
+  linkType: hard
+
 "diff-sequences@npm:^28.1.1":
   version: 28.1.1
   resolution: "diff-sequences@npm:28.1.1"
@@ -23787,6 +23845,13 @@ __metadata:
   version: 3.3.0
   resolution: "events@npm:3.3.0"
   checksum: 10/a3d47e285e28d324d7180f1e493961a2bbb4cad6412090e4dec114f4db1f5b560c7696ee8e758f55e23913ede856e3689cd3aa9ae13c56b5d8314cd3b3ddd1be
+  languageName: node
+  linkType: hard
+
+"eventsource-parser@npm:1.1.2":
+  version: 1.1.2
+  resolution: "eventsource-parser@npm:1.1.2"
+  checksum: 10/14e94997dff896fb7bc85b29e89d6a62e747650d905b006249bcf48ba13efcbf3ee2b67948f4fa2638836b5a77ea079e25e941c0e41a720323e7867b1ebdda14
   languageName: node
   linkType: hard
 
@@ -30144,6 +30209,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"jsondiffpatch@npm:^0.6.0":
+  version: 0.6.0
+  resolution: "jsondiffpatch@npm:0.6.0"
+  dependencies:
+    "@types/diff-match-patch": "npm:^1.0.36"
+    chalk: "npm:^5.3.0"
+    diff-match-patch: "npm:^1.0.5"
+  bin:
+    jsondiffpatch: bin/jsondiffpatch.js
+  checksum: 10/124b9797c266c693e69f8d23216e64d5ca4b21a4ec10e3a769a7b8cb19602ba62522f9a3d0c55299c1bfbe5ad955ca9ad2852439ca2c6b6316b8f91a5c218e94
+  languageName: node
+  linkType: hard
+
 "jsonfile@npm:^4.0.0":
   version: 4.0.0
   resolution: "jsonfile@npm:4.0.0"
@@ -34156,6 +34234,15 @@ __metadata:
   dependencies:
     node-gyp: "npm:latest"
   checksum: 10/5520e22c64e2b5b495b1d765d6334c989b848bbe1502fec89c5857cabcc7f9f0474563377259e7574bff1c8a041d3b90e9ffa1f5e15502ffddee7b2550cc26a0
+  languageName: node
+  linkType: hard
+
+"nanoid@npm:3.3.6":
+  version: 3.3.6
+  resolution: "nanoid@npm:3.3.6"
+  bin:
+    nanoid: bin/nanoid.cjs
+  checksum: 10/67235c39d1bc05851383dadde5cf77ae1c90c2a1d189e845c7f20f646f0488d875ad5f5226bbba072a88cebbb085a3f784a6673117daf785bdf614a852550362
   languageName: node
   linkType: hard
 
@@ -40835,7 +40922,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"secure-json-parse@npm:^2.7.0":
+"secure-json-parse@npm:2.7.0, secure-json-parse@npm:^2.7.0":
   version: 2.7.0
   resolution: "secure-json-parse@npm:2.7.0"
   checksum: 10/974386587060b6fc5b1ac06481b2f9dbbb0d63c860cc73dc7533f27835fdb67b0ef08762dbfef25625c15bc0a0c366899e00076cb0d556af06b71e22f1dede4c
@@ -41536,6 +41623,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"solid-swr-store@npm:0.10.7":
+  version: 0.10.7
+  resolution: "solid-swr-store@npm:0.10.7"
+  peerDependencies:
+    solid-js: ^1.2
+    swr-store: ^0.10
+  checksum: 10/c2b51b64ae70659382b1679125367c4c541393c3e5078aa7f9616f2f4897d69a387ce26d6335048b5cc52a4fc3e55d69e21524493509ddfbd1b981903204940a
+  languageName: node
+  linkType: hard
+
 "sonic-boom@npm:^3.7.0":
   version: 3.8.0
   resolution: "sonic-boom@npm:3.8.0"
@@ -41900,6 +41997,17 @@ __metadata:
   dependencies:
     minipass: "npm:^3.1.1"
   checksum: 10/7638a61e91432510718e9265d48d0438a17d53065e5184f1336f234ef6aa3479663942e41e97df56cda06bb24d9d0b5ef342c10685add3cac7267a82d7fa6718
+  languageName: node
+  linkType: hard
+
+"sswr@npm:2.0.0":
+  version: 2.0.0
+  resolution: "sswr@npm:2.0.0"
+  dependencies:
+    swrev: "npm:^4.0.0"
+  peerDependencies:
+    svelte: ^4.0.0
+  checksum: 10/be9442a8a2dc461f1422921c0bd37867b416a6a46188d4ea47bf46dcab8b69342a8b6eff6e2f880cc42f489394b481906d34654905e195c011106d5c7a64343e
   languageName: node
   linkType: hard
 
@@ -42948,6 +43056,26 @@ __metadata:
   languageName: node
   linkType: hard
 
+"swr-store@npm:0.10.6":
+  version: 0.10.6
+  resolution: "swr-store@npm:0.10.6"
+  dependencies:
+    dequal: "npm:^2.0.3"
+  checksum: 10/1f3683829c27da2ad4d3bb8d43838f3da435399f488a45dd090ad89b7fe46124d4a9f49bbb21a124ccb107d3aa30741e949aa00e75fdba3f91da9519c82a84a3
+  languageName: node
+  linkType: hard
+
+"swr@npm:2.2.0":
+  version: 2.2.0
+  resolution: "swr@npm:2.2.0"
+  dependencies:
+    use-sync-external-store: "npm:^1.2.0"
+  peerDependencies:
+    react: ^16.11.0 || ^17.0.0 || ^18.0.0
+  checksum: 10/998484b73a24ff1074d999332a10c3efe9277ed9dd1e202bb6ac5963b90bb4802bccc87910b3ba18931da77b5c019f2ed4f0f45b9bb2711dbfa43d57a57da875
+  languageName: node
+  linkType: hard
+
 "swr@npm:^2.1.5":
   version: 2.2.4
   resolution: "swr@npm:2.2.4"
@@ -42957,6 +43085,22 @@ __metadata:
   peerDependencies:
     react: ^16.11.0 || ^17.0.0 || ^18.0.0
   checksum: 10/feb2fb5d3feb5accf93ce81108d659b941f9df6114d7744ccd148349255ed4d072e228e269d5aa3f81e4198cc120672929f5d1709cd52169d8e279314a5af4fd
+  languageName: node
+  linkType: hard
+
+"swrev@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "swrev@npm:4.0.0"
+  checksum: 10/07808a4cc83747a5a0dceeb20cd63073d6d376a75d7ba6a1bb0263078d7dbb5efa555bba4d991b98f4f89792f8cfc0d21221e011b0ee78419dc10f2817e89b09
+  languageName: node
+  linkType: hard
+
+"swrv@npm:1.0.4":
+  version: 1.0.4
+  resolution: "swrv@npm:1.0.4"
+  peerDependencies:
+    vue: ">=3.2.26 < 4"
+  checksum: 10/0085f89ba48e9b25969cc928b2b4fc4ae4755497419c2d4f5955dbda158d0e71f4747a7b981040459e81ff34e9553c2627cfe422a9a8d77f8eb28362ff1375c0
   languageName: node
   linkType: hard
 
@@ -46785,7 +46929,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zod-to-json-schema@npm:^3.22.3":
+"zod-to-json-schema@npm:^3.22.3, zod-to-json-schema@npm:^3.22.4":
   version: 3.22.5
   resolution: "zod-to-json-schema@npm:3.22.5"
   peerDependencies:
