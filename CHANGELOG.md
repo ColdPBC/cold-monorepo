@@ -1,3 +1,10 @@
+## [1.180.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.180.1...v1.180.2) (2024-04-01)
+
+
+### Bug Fixes
+
+* bug that would prevent updated flag values getting passed to prompt service ([eab4854](https://github.com/ColdPBC/cold-monorepo/commit/eab485446aad1b12327e79a56e58dc537f92c45f))
+
 ## [1.180.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.180.0...v1.180.1) (2024-04-01)
 
 
