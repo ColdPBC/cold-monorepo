@@ -53,8 +53,9 @@ export class ChatService extends BaseWorker implements OnModuleInit {
     return docs.join('\n\n').substring(0, 3000);
   }
 
-  async askQuestion(indexName: string, question: any, prompts: PromptsService, company_name: string, user: AuthenticatedUser): Promise<any> {
+  async askQuestion(indexName: string, question: any, prompts: PromptsService, company_name: string, user: AuthenticatedUser, tags): Promise<any> {
     try {
+      this.setTags(tags);
       // Get Chat History
       let messages = (await this.cache.get(`openai:thread:${user.coldclimate_claims.id}`)) as ChatCompletionMessageParam[];
 
@@ -232,8 +233,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
 
   public async processSection(job: Job, section: string, sdx: number, sections: string[], definition, integration, organization, category_context, user, survey, prompts) {
     await job.log(`Section | ${section}:${sdx + 1} of ${sections.length}`);
-    this.setTags({ section });
-    this.logger.info(`Processing ${section}: ${definition.sections[section].title}`);
+    this.logger.info(`Processing ${section}: ${definition.sections[section].title}`, { section });
 
     // get the followup items for the section
     const items = Object.keys(definition.sections[section].follow_up);
@@ -249,7 +249,6 @@ export class ChatService extends BaseWorker implements OnModuleInit {
 
         await job.log(`Question | section: ${section} question: ${item} (${items.indexOf(item)} of ${items.length})`);
         const follow_up = definition.sections[section].follow_up[item];
-        this.setTags({ question: { key: item, prompt: follow_up.prompt } });
 
         if (follow_up?.ai_response?.answer && !has(follow_up, 'ai_response.what_we_need')) {
           this.logger.info(`Skipping ${section}.${item}: ${follow_up.prompt}; it has already been answered`, {
@@ -260,7 +259,12 @@ export class ChatService extends BaseWorker implements OnModuleInit {
 
         this.logger.info(`Sending Message | ${section}.${item}: ${follow_up.prompt}`);
         // create a new run for each followup item
-        const value = await this.askQuestion(organization.name, follow_up, prompts, organization.name, job.data.user);
+        const value = await this.askQuestion(organization.name, follow_up, prompts, organization.name, job.data.user, {
+          question: {
+            key: item,
+            prompt: follow_up.prompt,
+          },
+        });
 
         // update the survey with the response
         definition.sections[section].follow_up[item].ai_response = value;
@@ -279,7 +283,12 @@ export class ChatService extends BaseWorker implements OnModuleInit {
           }
 
           this.logger.info(`Creating Message | ${section}.${item}.additional_context: ${follow_up.prompt}`);
-          const additionalValue = await this.askQuestion(organization.name, follow_up['additional_context'], prompts, organization.display_name, job.data.user);
+          const additionalValue = await this.askQuestion(organization.name, follow_up['additional_context'], prompts, organization.display_name, job.data.user, {
+            question: {
+              key: item,
+              prompt: follow_up.prompt,
+            },
+          });
 
           definition.sections[section].follow_up[item].additional_context.ai_response = additionalValue;
 
