@@ -78,7 +78,7 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
     const run = await this.client.beta.threads.runs.create(thread.id, {
       assistant_id: integration.id,
       model: this.model,
-      instructions: await prompts.getPrompt(item),
+      instructions: await prompts.getPrompt(item, null, true),
     });
 
     this.logger.info(`Created run ${run.id} for thread ${thread.id}`, {

@@ -56,6 +56,8 @@ export class ChatService extends BaseWorker implements OnModuleInit {
   async askQuestion(indexName: string, question: any, prompts: PromptsService, company_name: string, user: AuthenticatedUser, tags): Promise<any> {
     try {
       this.setTags(tags);
+
+      prompts = new PromptsService(this.darkly, company_name, { name: company_name }, this.prisma);
       // Get Chat History
       let messages = (await this.cache.get(`openai:thread:${user.coldclimate_claims.id}`)) as ChatCompletionMessageParam[];
 
@@ -92,7 +94,15 @@ export class ChatService extends BaseWorker implements OnModuleInit {
           lastMessage = JSON.stringify(lastMessage);
         }
         //const parsed = JSON.parse(lastMessage);
-        condense_prompt = condense_prompt.replace('{chat_history}', lastMessage).replace('{question}', question.prompt);
+        const chat_history_prompt = condense_prompt.replace('{chat_history}', lastMessage || '');
+        if (chat_history_prompt) {
+          condense_prompt = chat_history_prompt;
+        }
+
+        const question_prompt = condense_prompt.replace('{question}', question.prompt);
+        if (question_prompt) {
+          condense_prompt = question_prompt;
+        }
 
         // Define the system message
         const systemMessage: ChatCompletionMessageParam = {
@@ -101,7 +111,11 @@ export class ChatService extends BaseWorker implements OnModuleInit {
         };
 
         const response = await openai.chat.completions.create({
-          model: await prompts.model,
+          model: await this.darkly.getStringFlag('dynamic-gpt-assistant-model', 'gpt-3.5-turbo', {
+            kind: 'org-compliance-set',
+            key: indexName,
+            name: tags['survey'],
+          }),
           messages: [systemMessage], // only send the last two
           temperature: 0.5,
           user: user.coldclimate_claims.id,
@@ -129,7 +143,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
 
       context.push(content);
 
-      const with_context = await prompts.getPrompt(question, JSON.stringify(context));
+      const with_context = await prompts.getPrompt(question, JSON.stringify(context), docs.length > 0);
 
       const sanitized_base = with_context.replace('{question}', JSON.stringify(question));
 
@@ -144,7 +158,11 @@ export class ChatService extends BaseWorker implements OnModuleInit {
       // Ask OpenAI for a streaming chat completion given the prompt
       const response = await openai.chat.completions.create({
         response_format: { type: 'json_object' },
-        model: await prompts.model,
+        model: await this.darkly.getStringFlag('dynamic-gpt-assistant-model', 'gpt-3.5-turbo', {
+          kind: 'org-compliance-set',
+          key: indexName,
+          name: tags['survey'],
+        }),
         messages: [systemMessage], // only send the last two
         temperature: 0.5,
         user: user.coldclimate_claims.id,
@@ -190,6 +208,23 @@ export class ChatService extends BaseWorker implements OnModuleInit {
 
   async process_survey(job: Job) {
     const { survey, user, compliance, integration, organization, on_update_url } = job.data;
+    const index = await this.pc.listIndexes();
+
+    if (!index.includes(organization.name)) {
+      this.logger.warn(`Index ${organization.name} not found; creating...`);
+      await this.pc.createIndex(organization.name);
+
+      const files = await this.prisma.organization_files.findMany({ where: { organization_id: organization.id } });
+
+      if (!files || files.length === 0) {
+        this.logger.warn(`No files found for organization ${organization.name}`);
+      } else if (files.length > 0) {
+        for (const file of files) {
+          await this.pc.ingestData(user, organization, file, organization.id);
+        }
+      }
+    }
+
     this.setTags({
       survey: survey?.definition?.title,
       url: on_update_url,
@@ -262,6 +297,8 @@ export class ChatService extends BaseWorker implements OnModuleInit {
         // create a new run for each followup item
         const value = await this.askQuestion(organization.name, follow_up, prompts, organization.name, job.data.user, {
           question: {
+            survey: job.data['survey'].definition.title,
+            section: section,
             key: item,
             text: follow_up.prompt,
           },

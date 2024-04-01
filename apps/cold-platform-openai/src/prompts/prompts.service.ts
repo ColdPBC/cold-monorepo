@@ -361,12 +361,13 @@ export class PromptsService extends BaseWorker {
   }
 
   //Returns the prompt for the OpenAI assistant
-  async getPrompt(question: any, context?: any) {
-    if (!this.has_docs) {
+  async getPrompt(question: any, context?: any, has_docs?: boolean) {
+    await this.initializeFlagValues();
+
+    if (!has_docs && !this.has_docs) {
       return this.nodocs_prompt;
     }
 
-    await this.initializeFlagValues();
     const component_prompt = await this.getComponentPrompt(question);
     const sanitized_base = this.base_prompt.replace('{component_prompt}', component_prompt).replace('{context}', context);
 
