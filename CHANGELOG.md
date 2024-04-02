@@ -1,3 +1,10 @@
+## [1.180.5](https://github.com/ColdPBC/cold-monorepo/compare/v1.180.4...v1.180.5) (2024-04-02)
+
+
+### Bug Fixes
+
+* add tooltip to question.prompt ([9f4fa22](https://github.com/ColdPBC/cold-monorepo/commit/9f4fa2277edb58d41598d46367b9e214588a90e6))
+
 ## [1.180.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.180.3...v1.180.4) (2024-04-01)
 
 
