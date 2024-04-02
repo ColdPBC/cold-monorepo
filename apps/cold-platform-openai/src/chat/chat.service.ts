@@ -145,6 +145,8 @@ export class ChatService extends BaseWorker implements OnModuleInit {
 
       const with_context = await this.prompts.getPrompt(question, JSON.stringify(context), docs.length > 0);
 
+      set(question, 'prompt', `${question.prompt} ${question.tooltip}`);
+
       const sanitized_base = with_context.replace('{question}', JSON.stringify(question));
 
       // Define the system message
