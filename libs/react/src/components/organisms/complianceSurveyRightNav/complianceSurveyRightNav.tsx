@@ -12,6 +12,7 @@ import { withErrorBoundary } from 'react-error-boundary';
 import React from 'react';
 import { HexColors } from '@coldpbc/themes';
 import { useColdContext } from '@coldpbc/hooks';
+import { isAIResponseValueValid } from '@coldpbc/lib';
 
 export interface ComplianceSurveyRightNavProps {
   activeKey: ComplianceSurveyActiveKeyType;
@@ -37,6 +38,7 @@ const _ComplianceSurveyRightNav = (props: ComplianceSurveyRightNavProps) => {
 
   const getQuestionItemIcon = (key: string, inSavedQuestions?: boolean) => {
     let activeSection = surveyData.definition.sections[activeKey.section];
+    const followUp = activeSection.follow_up[key];
     if (inSavedQuestions) {
       const question = find(savedQuestions, (saved: ComplianceSurveySavedQuestionType) => saved.followUpKey === key);
       if (question) {
@@ -53,7 +55,7 @@ const _ComplianceSurveyRightNav = (props: ComplianceSurveyRightNavProps) => {
         </div>
       );
     } else {
-      if (progressQuestion?.ai_answered) {
+      if (progressQuestion?.ai_answered && isAIResponseValueValid(followUp)) {
         return (
           <div className={'h-[24px] w-[24px] rounded-full flex items-center justify-center bg-gray-70'}>
             <ColdIcon name={IconNames.ColdAiIcon} color={HexColors.white} />
