@@ -16,7 +16,6 @@ const _JourneyDetailView = () => {
 
   logBrowser('Data loaded for journey detail view', 'info', {
     currentAssessment,
-    data,
     isEmptyData,
   });
 

@@ -47,32 +47,14 @@ const _ActionDetail = ({ id }: Props) => {
 
     const response = await axiosFetcher([getOrgSpecificUrl(`/actions/${data.id}`), 'PATCH', JSON.stringify(newAction)]);
 
-    await mutate(
-      {
-        ...data,
-        action: {
-          ...data.action,
-          ...updatedAction,
-        },
-      },
-      {
-        revalidate: false,
-      },
-    );
     if (isAxiosError(response)) {
-      logBrowser(
-        'Action failed to update',
-        'error',
-        {
-          action: newAction,
-          response,
-        },
-        response,
-      );
+      logBrowser('Action failed to update', 'error', {
+        newAction,
+      });
     } else {
+      await mutate();
       logBrowser('Action updated', 'info', {
-        action: newAction,
-        response,
+        newAction,
       });
     }
 
@@ -141,7 +123,7 @@ const _ActionDetail = ({ id }: Props) => {
     return null;
   }
 
-  logBrowser('ActionDetail', 'info', { data, categoriesData });
+  logBrowser('ActionDetail', 'info', { actionId: id });
 
   return (
     <Takeover

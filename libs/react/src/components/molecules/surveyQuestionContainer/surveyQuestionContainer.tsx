@@ -179,7 +179,12 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
     const newSurvey: SurveyPayloadType = validateSurveyData(surveyData);
     newSurvey.definition.sections[activeSectionKey] = newSection;
     newSurvey.definition.submitted = submit;
-    logBrowser('SurveyQuestionContainer question updated', 'info', { newSurvey });
+    logBrowser('SurveyQuestionContainer question updated', 'info', {
+      key,
+      update,
+      submit,
+      additional,
+    });
     return newSurvey;
   };
 
@@ -475,7 +480,7 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
     setSurveyData(newSurvey);
     goToNextQuestion();
     updateTransitionClassNames(true);
-    logBrowser('SurveyQuestionContainer next clicked', 'info', { activeKey, newSurvey });
+    logBrowser('SurveyQuestionContainer next clicked', 'info', { activeKey });
     putSurveyData(newSurvey);
   };
 
@@ -487,7 +492,7 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
     setSurveyData(newSurvey);
     goToNextQuestion();
     updateTransitionClassNames(true);
-    logBrowser('SurveyQuestionContainer skip clicked', 'info', { activeKey, newSurvey });
+    logBrowser('SurveyQuestionContainer skip clicked', 'info', { activeKey });
     putSurveyData(newSurvey);
   };
 
@@ -497,7 +502,7 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
     setSurveyData(newSurvey);
     updateTransitionClassNames(true);
     await putSurveyData(newSurvey);
-    logBrowser('SurveyQuestionContainer submit clicked', 'info', { activeKey, newSurvey });
+    logBrowser('SurveyQuestionContainer submit clicked', 'info', { activeKey });
     submitSurvey();
   };
 
@@ -655,7 +660,7 @@ const _SurveyQuestionContainer = ({ activeKey, setActiveKey, submitSurvey, surve
 
   const additionalContextQuestion = checkAdditionalContext(activeKey);
 
-  logBrowser('SurveyQuestionContainer loaded', 'info', { question, additionalContextQuestion });
+  logBrowser('SurveyQuestionContainer loaded', 'info', { activeKey });
 
   if (question !== undefined) {
     return (

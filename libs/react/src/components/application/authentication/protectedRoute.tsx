@@ -112,6 +112,7 @@ const _ProtectedRoute = () => {
         }
         logBrowser('Error occurred while logging user in', 'error', { error: e });
         logError(e, ErrorType.Auth0Error);
+        await logout();
       }
     };
 
