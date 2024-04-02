@@ -270,6 +270,15 @@ export class ChatService extends BaseWorker implements OnModuleInit {
     }
 
     await Promise.all(reqs);
+
+    this.logger.info(`✅ Finished processing survey ${survey.definition.title}`, {
+      survey: survey.definition.title,
+      user,
+      compliance,
+      integration,
+      organization,
+      on_update_url,
+    });
   }
 
   public async processSection(job: Job, section: string, sdx: number, sections: string[], definition, integration, organization, category_context, user, survey) {
@@ -360,6 +369,8 @@ export class ChatService extends BaseWorker implements OnModuleInit {
         this.logger.error(`Error processing ${section}.${item}: ${error.message}`, error);
       }
     }
+
+    this.logger.info(`✅ Finished processing ${section}: ${definition.sections[section].title}`, { section });
   }
 
   private async isDuplicateOrCanceled(organization, job: Job, section: string, item: string) {
