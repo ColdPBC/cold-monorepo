@@ -1,3 +1,10 @@
+## [1.180.12](https://github.com/ColdPBC/cold-monorepo/compare/v1.180.11...v1.180.12) (2024-04-02)
+
+
+### Bug Fixes
+
+* add log entry when section is done and when survey is complete ([209cb1f](https://github.com/ColdPBC/cold-monorepo/commit/209cb1fd0be5522dd9a2450cb2df79874afbf881))
+
 ## [1.180.11](https://github.com/ColdPBC/cold-monorepo/compare/v1.180.10...v1.180.11) (2024-04-02)
 
 
