@@ -1,3 +1,16 @@
+# [1.183.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.182.0...v1.183.0) (2024-04-02)
+
+
+### Bug Fixes
+
+* incorrect rabbit payload ([97dcfc1](https://github.com/ColdPBC/cold-monorepo/commit/97dcfc19ad3bd4adcafdeb06a3c65b84626dd681))
+
+
+### Features
+
+* implement freeplay integration ([13a17e3](https://github.com/ColdPBC/cold-monorepo/commit/13a17e34a84a8949cbdf3552e63ffcb6ac9e78b6))
+* implement freeplay integration ([5449082](https://github.com/ColdPBC/cold-monorepo/commit/54490823279482b913554d9b366271580bc50d8a))
+
 # [1.182.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.181.0...v1.182.0) (2024-04-02)
 
 
