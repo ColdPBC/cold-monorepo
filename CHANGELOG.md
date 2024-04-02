@@ -1,3 +1,10 @@
+## [1.183.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.183.0...v1.183.1) (2024-04-02)
+
+
+### Bug Fixes
+
+* get fP api key from config ([4541eb3](https://github.com/ColdPBC/cold-monorepo/commit/4541eb3af2f2725d5e8b072142bbdb9c3e8708c4))
+
 # [1.183.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.182.0...v1.183.0) (2024-04-02)
 
 
