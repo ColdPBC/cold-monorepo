@@ -1,3 +1,10 @@
+# [1.182.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.181.0...v1.182.0) (2024-04-02)
+
+
+### Features
+
+* update logging to be lean for large data from the API ([60d4ce4](https://github.com/ColdPBC/cold-monorepo/commit/60d4ce48c6298c5d9548d75d3cb610b0715d19b4))
+
 # [1.181.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.180.12...v1.181.0) (2024-04-02)
 
 
