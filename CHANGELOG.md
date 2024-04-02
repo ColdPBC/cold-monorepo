@@ -1,3 +1,10 @@
+# [1.177.0-COLD-634.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.177.0-COLD-634.2...v1.177.0-COLD-634.3) (2024-04-02)
+
+
+### Features
+
+* more changes for the scope cahrt ([d1f56e2](https://github.com/ColdPBC/cold-monorepo/commit/d1f56e2faa4c19d39cdde53eef082ab0b7692d27))
+
 # [1.177.0-COLD-634.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.177.0-COLD-634.1...v1.177.0-COLD-634.2) (2024-04-01)
 
 
