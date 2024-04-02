@@ -1,3 +1,10 @@
+# [1.183.0-COLD-653.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.182.0...v1.183.0-COLD-653.1) (2024-04-02)
+
+
+### Features
+
+* add progress bar for assessments for compliances that are score based ([068da70](https://github.com/ColdPBC/cold-monorepo/commit/068da7087ac459994c70e00b5d0ac7c395f77e25))
+
 # [1.182.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.181.0...v1.182.0) (2024-04-02)
 
 
