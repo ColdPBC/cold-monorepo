@@ -58,9 +58,6 @@ const _SignupForm = ({ userData, companyData, tosSigned, privacySigned, tosData,
       await onSubmit();
     } else {
       logBrowser('Error signing up user', 'error', {
-        promises: {
-          ...promises,
-        },
         firstName,
         lastName,
         companyName,
