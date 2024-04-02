@@ -2,7 +2,7 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { BaseWorker } from '../../worker';
-import { IAuthenticatedUser } from '../../primitives';
+import { AuthenticatedUser, IAuthenticatedUser } from '../../primitives';
 import crypto from 'crypto';
 import stream from 'stream';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
@@ -75,7 +75,7 @@ export class S3Service extends BaseWorker implements OnModuleInit {
     return { file, key, uploaded, bucket };
   }
 
-  async getObject(user: IAuthenticatedUser, bucket: string, key: string) {
+  async getObject(user: IAuthenticatedUser | AuthenticatedUser, bucket: string, key: string) {
     try {
       this.logger.info(`Getting object from S3: ${key} in bucket ${bucket}`, {
         user: user.coldclimate_claims,

@@ -485,7 +485,7 @@ export class SurveysService extends BaseWorker {
             this.logger.info('completed survey submission', difference);
           } else {
             this.setTags({ status: 'updated' });
-            this.logger.info('updated survey submission', difference);
+            this.logger.info('updated survey submission', { name: name, org });
           }
         }
       } else {
@@ -513,12 +513,10 @@ export class SurveysService extends BaseWorker {
       this.mqtt.publishMQTT('ui', {
         org_id: orgId,
         user: user,
-        swr_key: url,
+        swr_key: url || `/organizations/${orgId}/surveys/${name}`,
         action: 'update',
         status: 'complete',
-        data: {
-          difference,
-        },
+        data: 'data too large to log',
       });
 
       return await this.findOne(name, req, true, impersonateOrg);

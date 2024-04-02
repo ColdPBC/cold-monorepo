@@ -22,7 +22,7 @@ import { MqttModule } from './mqtt';
   imports: [MqttModule],
 })
 export class NestModule {
-  static async forRootAsync(redisDB: number, bucket?: string) {
+  static async forRootAsync() {
     const logger = new WorkerLogger('NestModule');
     const config = new ConfigService();
 

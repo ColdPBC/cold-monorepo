@@ -4,7 +4,7 @@ import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application';
 import { isUndefined } from 'lodash';
 import { Card, Input, ListItem, PercentSlider, SelectOption, YesNo } from '@coldpbc/components';
-import { isAIResponseValueValid } from '@coldpbc/lib';
+import { getAIResponseValue, isAIResponseValueValid } from '@coldpbc/lib';
 
 export interface SurveyInputProps {
   input_key: string;
@@ -16,6 +16,7 @@ export interface SurveyInputProps {
   value: any | null;
   onFieldUpdated: (name: string, value: any) => void;
   isAdditional?: boolean;
+  corresponding_question?: string;
   ai_attempted?: boolean;
   ai_response?: {
     justification?: string;
@@ -30,7 +31,7 @@ const _SurveyInput = (props: SurveyInputProps) => {
     // get the value to be displayed
     let displayValue = value;
     if (isUndefined(displayValue) && isAIResponseValueValid(props)) {
-      displayValue = ai_response?.answer;
+      displayValue = getAIResponseValue(props);
     }
     return displayValue;
   };

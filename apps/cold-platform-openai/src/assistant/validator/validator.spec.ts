@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import {OpenAIResponse} from './validator';
-import {Job, JobId, JobOptions, JobStatus} from 'bull';
+import { OpenAIResponse } from './validator';
+import { Job, JobId, JobOptions, JobStatus } from 'bull';
 
 describe('Validator', () => {
   let job: Job;

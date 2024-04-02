@@ -59,6 +59,10 @@ export class FileService extends BaseWorker implements OnModuleInit {
 
   async deleteFile(user: IAuthenticatedUser, assistantId: string, fileId: string) {
     try {
+      const assistant = await this.client.beta.assistants.retrieve(assistantId);
+      if (!assistant) {
+        this.logger.error(`Assistant ${assistantId} not found`, { user, assistantId });
+      }
       const file = await this.client.beta.assistants.files.del(assistantId, fileId);
       this.logger.info(`User ${user.coldclimate_claims.email} deleted file ${fileId}.`, { file, user });
 

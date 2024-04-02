@@ -89,6 +89,8 @@ export interface SurveySectionFollowUpType {
   score?: number;
   max_score?: number;
   saved?: boolean;
+  document_link?: string;
+  corresponding_question?: string;
 }
 
 export interface SurveyPayloadType {
