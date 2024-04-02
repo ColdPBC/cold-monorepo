@@ -1,3 +1,46 @@
+## [1.180.12](https://github.com/ColdPBC/cold-monorepo/compare/v1.180.11...v1.180.12) (2024-04-02)
+
+
+### Bug Fixes
+
+* add log entry when section is done and when survey is complete ([209cb1f](https://github.com/ColdPBC/cold-monorepo/commit/209cb1fd0be5522dd9a2450cb2df79874afbf881))
+
+## [1.180.11](https://github.com/ColdPBC/cold-monorepo/compare/v1.180.10...v1.180.11) (2024-04-02)
+
+
+### Bug Fixes
+
+* logging issue ([906f8e1](https://github.com/ColdPBC/cold-monorepo/commit/906f8e14a10e8701b62840289855e9bd7067fe85))
+
+## [1.180.10](https://github.com/ColdPBC/cold-monorepo/compare/v1.180.9...v1.180.10) (2024-04-02)
+
+
+### Bug Fixes
+
+* fix incorrect eval of false ([51703fc](https://github.com/ColdPBC/cold-monorepo/commit/51703fc0263d1340d809e68892fee25f61038ead))
+
+## [1.180.9](https://github.com/ColdPBC/cold-monorepo/compare/v1.180.8...v1.180.9) (2024-04-02)
+
+
+### Bug Fixes
+
+* fix incorrect eval of false ([1fd5cf9](https://github.com/ColdPBC/cold-monorepo/commit/1fd5cf9dd5f274c24d0a7c36e973c8602bfc8827))
+
+## [1.180.8](https://github.com/ColdPBC/cold-monorepo/compare/v1.180.7...v1.180.8) (2024-04-02)
+
+
+### Bug Fixes
+
+* fix incorrect eval of false ([c896d34](https://github.com/ColdPBC/cold-monorepo/commit/c896d34a575a561a754f4a8c4482091ec9772884))
+
+## [1.180.7](https://github.com/ColdPBC/cold-monorepo/compare/v1.180.6...v1.180.7) (2024-04-02)
+
+
+### Bug Fixes
+
+* incorrectly sets ai_answered: false when yes_no answer is false ([c82f2e7](https://github.com/ColdPBC/cold-monorepo/commit/c82f2e7f6d3fb2bbfce89167debbcfbe6b1fffea))
+* incorrectly sets ai_answered: false when yes_no answer is false ([#352](https://github.com/ColdPBC/cold-monorepo/issues/352)) ([f2aacaf](https://github.com/ColdPBC/cold-monorepo/commit/f2aacaf5d76acb8e47def48fe6da0dc43557731c))
+
 ## [1.180.6](https://github.com/ColdPBC/cold-monorepo/compare/v1.180.5...v1.180.6) (2024-04-02)
 
 

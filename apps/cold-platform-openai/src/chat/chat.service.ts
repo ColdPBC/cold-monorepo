@@ -56,8 +56,6 @@ export class ChatService extends BaseWorker implements OnModuleInit {
 
   async askQuestion(indexName: string, question: any, company_name: string, user: AuthenticatedUser, tags): Promise<any> {
     try {
-      this.setTags(tags);
-
       // Get Chat History
       let messages = (await this.cache.get(`openai:thread:${user.coldclimate_claims.id}`)) as ChatCompletionMessageParam[];
 
@@ -128,6 +126,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
             previous_message: lastMessage,
             current_question: question.promp,
             pincone_query: rephrased_question,
+            ...tags,
           });
         }
       }
@@ -203,11 +202,12 @@ export class ChatService extends BaseWorker implements OnModuleInit {
         survey_question: question.prompt,
         ai_prompt: sanitized_base,
         ai_response,
+        ...tags,
       });
 
       return ai_response;
     } catch (error) {
-      this.logger.error(`Error asking question ${question.prompt}`, error);
+      this.logger.error(`Error asking question ${question.prompt}`, { error, ...tags });
       throw error;
     }
   }
@@ -270,6 +270,15 @@ export class ChatService extends BaseWorker implements OnModuleInit {
     }
 
     await Promise.all(reqs);
+
+    this.logger.info(`✅ Finished processing survey ${survey.definition.title}`, {
+      survey: survey.definition.title,
+      user,
+      compliance,
+      integration,
+      organization,
+      on_update_url,
+    });
   }
 
   public async processSection(job: Job, section: string, sdx: number, sections: string[], definition, integration, organization, category_context, user, survey) {
@@ -313,7 +322,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
         // update the survey with the response
         definition.sections[section].follow_up[item].ai_response = value;
         if (value) {
-          definition.sections[section].follow_up[item].ai_answered = !!value.answer;
+          definition.sections[section].follow_up[item].ai_answered = typeof value.answer != 'undefined';
         }
         definition.sections[section].follow_up[item].ai_attempted = true;
 
@@ -337,7 +346,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
           definition.sections[section].follow_up[item].additional_context.ai_response = additionalValue;
 
           if (additionalValue) {
-            definition.sections[section].follow_up[item].additional_context.ai_answered = has(additionalValue, 'answer');
+            definition.sections[section].follow_up[item].additional_context.ai_answered = typeof value.answer != 'undefined';
           }
 
           definition.sections[section].follow_up[item].additional_context.ai_attempted = true;
@@ -360,6 +369,8 @@ export class ChatService extends BaseWorker implements OnModuleInit {
         this.logger.error(`Error processing ${section}.${item}: ${error.message}`, error);
       }
     }
+
+    this.logger.info(`✅ Finished processing ${section}: ${definition.sections[section].title}`, { section });
   }
 
   private async isDuplicateOrCanceled(organization, job: Job, section: string, item: string) {
