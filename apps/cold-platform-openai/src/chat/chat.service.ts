@@ -5,10 +5,12 @@ import { ConfigService } from '@nestjs/config';
 import { PromptsService } from '../prompts/prompts.service';
 import { Job, Queue } from 'bull';
 import { InjectQueue } from '@nestjs/bull';
-import { has, set } from 'lodash';
+import { find, has, set } from 'lodash';
 import OpenAI from 'openai';
 import { ChatCompletionMessageParam } from 'openai/resources/chat/completions';
 import { RecordMetadata, ScoredPineconeRecord } from '@pinecone-database/pinecone';
+import { FPSession, FreeplayService } from '../freeplay/freeplay.service';
+import { FormattedPrompt } from 'freeplay/thin';
 
 @Injectable()
 export class ChatService extends BaseWorker implements OnModuleInit {
@@ -23,12 +25,51 @@ export class ChatService extends BaseWorker implements OnModuleInit {
     private cache: CacheService,
     @InjectQueue('openai') private queue: Queue,
     private rabbit: ColdRabbitService,
+    private fp: FreeplayService,
   ) {
     super(ChatService.name);
     this.openAIapiKey = this.config.getOrThrow('OPENAI_API_KEY');
   }
 
   async onModuleInit() {}
+
+  async resetAIResponses(user, survey: any, organization: any) {
+    this.logger.info(`✅ Started processing survey ${survey.definition.title}`, {
+      survey: survey.definition.title,
+      user,
+      survey_name: survey.definition.title,
+      organization: { id: organization.id, name: organization.name, display_name: organization.display_name },
+    });
+    const surveyData = await this.prisma.survey_data.findFirst({
+      where: { survey_definition_id: survey.id, organization_id: organization.id },
+    });
+
+    if (!surveyData) {
+      return;
+    }
+
+    // Iterate over each section
+    for (const sectionKey in surveyData.data['sections']) {
+      const section = surveyData.data['sections'][sectionKey];
+
+      // Iterate over each follow_up item in the section
+      for (const followUpKey in section.follow_up) {
+        const followUpItem = section.follow_up[followUpKey];
+
+        // If the followUpItem has an 'ai_response' property, set it to null
+        if ('ai_response' in followUpItem) {
+          delete followUpItem.ai_response;
+          delete followUpItem.ai_answered;
+          delete followUpItem.ai_attempted;
+        }
+      }
+    }
+
+    await this.prisma.survey_data.update({
+      where: { id: surveyData.id },
+      data: { data: surveyData.data },
+    });
+  }
 
   async extractTextFromDocument(qualifyingDocs: ScoredPineconeRecord<RecordMetadata>[]) {
     // Use a map to deduplicate matches by URL
@@ -54,7 +95,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
     return docs.join('\n\n').substring(0, 3000);
   }
 
-  async askQuestion(indexName: string, question: any, company_name: string, user: AuthenticatedUser, tags): Promise<any> {
+  async askQuestion(indexName: string, question: any, company_name: string, user: AuthenticatedUser, session): Promise<any> {
     try {
       // Get Chat History
       let messages = (await this.cache.get(`openai:thread:${user.coldclimate_claims.id}`)) as ChatCompletionMessageParam[];
@@ -69,105 +110,36 @@ export class ChatService extends BaseWorker implements OnModuleInit {
         apiKey: this.config.getOrThrow('OPENAI_API_KEY'),
       });
 
-      /**
-       * This prompt is used to condense the chat history and follow-up question into a single standalone question for the purpose
-       * of providing context to the AI model to query the vector index for the most relevant information.
-       */
+      const { rephrased_question, docs } = await this.getDocumentContent(messages, question, openai, indexName, session, user, context);
 
-      let condense_prompt = `Given the chat history and a follow-up question, rephrase the follow-up question to be a standalone question that encompasses all necessary context from the chat history.
-        Chat History:
-        {chat_history}
-
-        Follow-up input:
-        {question}
-
-        Make sure your standalone question is self-contained, clear, and specific. Rephrased standalone question:
-      `;
-
-      // If there are messages, get the last message and rephrase the current question to be a standalone question
-      let rephrased_question: string;
-      if (Array.isArray(messages) && messages.length > 0) {
-        let lastMessage = messages[messages.length - 1].content;
-        if (typeof lastMessage !== 'string') {
-          lastMessage = JSON.stringify(lastMessage);
-        }
-        //const parsed = JSON.parse(lastMessage);
-        const chat_history_prompt = condense_prompt.replace('{chat_history}', lastMessage || '');
-        if (chat_history_prompt) {
-          condense_prompt = chat_history_prompt;
-        }
-
-        const question_prompt = condense_prompt.replace('{question}', question.prompt);
-        if (question_prompt) {
-          condense_prompt = question_prompt;
-        }
-
-        // Define the system message
-        const systemMessage: ChatCompletionMessageParam = {
-          role: 'system',
-          content: condense_prompt,
-        };
-
-        const response = await openai.chat.completions.create({
-          model: await this.darkly.getStringFlag('dynamic-gpt-assistant-model', 'gpt-3.5-turbo', {
-            kind: 'org-compliance-set',
-            key: indexName,
-            name: tags['survey'],
-          }),
-          messages: [systemMessage], // only send the last two
-          temperature: 0.5,
-          user: user.coldclimate_claims.id,
-        });
-
-        if (response.choices[0].message.content) {
-          rephrased_question = response.choices[0].message.content;
-
-          this.logger.info(`Generated Pinecone Query`, {
-            previous_message: lastMessage,
-            current_question: question.promp,
-            pincone_query: rephrased_question,
-            ...tags,
-          });
-        }
-      }
-
-      if (!rephrased_question) {
-        rephrased_question = question.prompt;
-      }
-
-      // Get the context content from the Pinecone index
-      const docs = (await this.pc.getContext(rephrased_question, indexName, indexName, 0.8, false)) as ScoredPineconeRecord[];
-
-      const content = await this.extractTextFromDocument(docs as ScoredPineconeRecord<RecordMetadata>[]);
-
-      context.push(content);
-
-      const with_context = await this.prompts.getPrompt(question, JSON.stringify(context), docs.length > 0);
-
-      set(question, 'prompt', `${question.prompt} ${question.tooltip}`);
-
-      const sanitized_base = with_context.replace('{question}', question.prompt);
-
-      // Define the system message
-      const systemMessage: ChatCompletionMessageParam = {
-        role: 'system',
-        content: sanitized_base,
+      const vars = {
+        component_prompt: (await this.prompts.getComponentPrompt(question)) || '',
+        context: JSON.stringify(context),
+        question: question.prompt,
       };
+      const sanitized_base = (await this.fp.getPrompt('survey_question_prompt', vars, true)) as FormattedPrompt;
 
-      messages.push(systemMessage);
+      const start = new Date();
 
-      // Ask OpenAI for a streaming chat completion given the prompt
       const response = await openai.chat.completions.create({
         response_format: { type: 'json_object' },
         model: await this.darkly.getStringFlag('dynamic-gpt-assistant-model', 'gpt-3.5-turbo', {
           kind: 'org-compliance-set',
           key: indexName,
-          name: tags['survey'],
+          name: session['survey'],
         }),
-        messages: [systemMessage], // only send the last two
-        temperature: 0.5,
+        messages: sanitized_base.messages as unknown as ChatCompletionMessageParam[],
         user: user.coldclimate_claims.id,
       });
+
+      const message = {
+        role: response.choices[0].message.role,
+        content: response.choices[0].message.content,
+      };
+
+      const fpMessages = sanitized_base.allMessages(message);
+
+      this.logger.info('FPMessages', fpMessages);
 
       let ai_response: any;
       if (typeof response.choices[0].message.content === 'string') {
@@ -202,23 +174,138 @@ export class ChatService extends BaseWorker implements OnModuleInit {
         survey_question: question.prompt,
         ai_prompt: sanitized_base,
         ai_response,
-        ...tags,
+        session_id: session.sessionId,
+        ...session.customMetadata,
       });
+
+      const end = new Date();
+      const recording = await this.fp.recordCompletion(session, vars, sanitized_base, response, start, end);
+
+      this.logger.info('Recording', recording);
 
       return ai_response;
     } catch (error) {
-      this.logger.error(`Error asking question ${question.prompt}`, { error, ...tags });
+      this.logger.error(`Error asking question ${question.prompt}`, { error, ...session });
       throw error;
     }
+  }
+
+  private async getDocumentContent(
+    messages: ChatCompletionMessageParam[],
+    question: any,
+    openai: OpenAI,
+    indexName: string,
+    session: { [x: string]: any },
+    user: AuthenticatedUser,
+    context: any,
+  ) {
+    /**
+     * This prompt is used to condense the chat history and follow-up question into a single standalone question for the purpose
+     * of providing context to the AI model to query the vector index for the most relevant information.
+     */
+
+    // If there are messages, get the last message and include it in the prompt
+    let rephrased_question: string;
+    let lastMessage: string = '';
+    if (Array.isArray(messages) && messages.length > 0) {
+      const prevMessage = messages[messages.length - 1].content;
+      if (typeof prevMessage !== 'string') {
+        lastMessage = JSON.stringify(prevMessage);
+      }
+    }
+
+    const vars = {
+      chat_history: lastMessage || '',
+      question: `${question.prompt}. ${question.tooltip}`,
+    };
+    const condense_prompt = (await this.fp.getPrompt('vector_query', vars, true)) as FormattedPrompt;
+
+    const start = new Date();
+    const condenseResponse = await openai.chat.completions.create({
+      model: await this.darkly.getStringFlag('dynamic-gpt-assistant-model', 'gpt-3.5-turbo', {
+        kind: 'org-compliance-set',
+        key: indexName,
+        name: session['survey'],
+      }),
+      messages: condense_prompt.messages as unknown as ChatCompletionMessageParam[],
+      user: user.coldclimate_claims.id,
+    });
+
+    const end = new Date();
+
+    const message = {
+      role: condenseResponse.choices[0].message.role,
+      content: condenseResponse.choices[0].message.content,
+    };
+    const fpMessages = condense_prompt.allMessages(message);
+
+    this.logger.info('FPMessages', fpMessages);
+
+    const recording = await this.fp.recordCompletion(session, vars, condense_prompt, condenseResponse, start, end);
+
+    this.logger.info('Recording', recording);
+
+    if (condenseResponse.choices[0].message.content) {
+      rephrased_question = condenseResponse.choices[0].message.content;
+
+      this.logger.info(`Generated Pinecone Query`, {
+        previous_message: lastMessage,
+        current_question: question.promp,
+        pincone_query: rephrased_question,
+        ...session,
+      });
+    }
+
+    if (!rephrased_question) {
+      rephrased_question = question.prompt;
+    }
+
+    // Get the context content from the Pinecone index
+    const docs = (await this.pc.getContext(rephrased_question, indexName, indexName, 0.8, false)) as ScoredPineconeRecord[];
+
+    const content = await this.extractTextFromDocument(docs as ScoredPineconeRecord<RecordMetadata>[]);
+
+    context.push(content);
+    return { rephrased_question, docs };
   }
 
   async process_survey(job: Job) {
     const { survey, user, compliance, integration, organization, on_update_url } = job.data;
     const index = await this.pc.listIndexes();
 
-    if (!index.includes(organization.name)) {
+    await this.resetAIResponses(user, survey, organization);
+
+    this.logger.info(`✅ Started processing survey ${survey.definition.title}`, {
+      survey: survey.definition.title,
+      user,
+      compliance,
+      integration,
+      organization,
+      on_update_url,
+    });
+    // create a session
+    const session = (await this.fp.createSession({
+      survey: survey.definition.title,
+      organization: organization.name,
+      user: user.coldclimate_claims.email,
+    })) as FPSession;
+
+    this.logger.info(`Session created for survey ${survey.definition.title}`, session);
+    const idx = find(index, { name: organization.name });
+    if (!idx) {
       this.logger.warn(`Index ${organization.name} not found; creating...`);
       await this.pc.createIndex(organization.name);
+      // clear existing vectors since the index was just created
+      const vectors = await this.prisma.vector_records.findMany({ where: { organization_id: organization.id } });
+      if (Array.isArray(vectors)) {
+        for (const vector of vectors) {
+          try {
+            await this.prisma.vector_records.delete({ where: { id: vector.id } });
+          } catch (e) {
+            this.logger.error(`Error deleting vector ${vector.id}`, e);
+          }
+        }
+      }
 
       const files = await this.prisma.organization_files.findMany({ where: { organization_id: organization.id } });
 
@@ -226,7 +313,9 @@ export class ChatService extends BaseWorker implements OnModuleInit {
         this.logger.warn(`No files found for organization ${organization.name}`);
       } else if (files.length > 0) {
         for (const file of files) {
-          await this.pc.ingestData(user, organization, file, organization.id);
+          const cacheKey = this.pc.getCacheKey(file);
+          await this.cache.delete(cacheKey);
+          await this.pc.ingestData(user, organization, file, organization.name);
         }
       }
     }
@@ -265,7 +354,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
     // iterate over each section key
     for (const section of sections) {
       // create a new thread for each section run
-      reqs.push(this.processSection(job, section, sdx, sections, definition, integration, organization, category_context, user, survey));
+      reqs.push(this.processSection(job, section, sdx, sections, definition, integration, organization, category_context, user, session));
       //await this.processSection(job, section, sdx, sections, definition, thread, integration, organization, category_context, user, survey);
     }
 
@@ -281,7 +370,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
     });
   }
 
-  public async processSection(job: Job, section: string, sdx: number, sections: string[], definition, integration, organization, category_context, user, survey) {
+  public async processSection(job: Job, section: string, sdx: number, sections: string[], definition, integration, organization, category_context, user, session: FPSession) {
     await job.log(`Section | ${section}:${sdx + 1} of ${sections.length}`);
     this.logger.info(`Processing ${section}: ${definition.sections[section].title}`, { section });
 
@@ -310,14 +399,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
         this.logger.info(`Sending Message | ${section}.${item}: ${follow_up.prompt}`);
 
         // create a new run for each followup item
-        const value = await this.askQuestion(organization.name, follow_up, organization.name, job.data.user, {
-          question: {
-            survey: job.data['survey'].definition.title,
-            section: section,
-            key: item,
-            text: follow_up.prompt,
-          },
-        });
+        const value = await this.askQuestion(organization.name, follow_up, organization.name, job.data.user, session);
 
         // update the survey with the response
         definition.sections[section].follow_up[item].ai_response = value;
@@ -336,12 +418,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
           }
 
           this.logger.info(`Creating Message | ${section}.${item}.additional_context: ${follow_up.prompt}`);
-          const additionalValue = await this.askQuestion(organization.name, follow_up['additional_context'], organization.display_name, job.data.user, {
-            question: {
-              key: item,
-              text: follow_up.prompt,
-            },
-          });
+          const additionalValue = await this.askQuestion(organization.name, follow_up['additional_context'], organization.display_name, job.data.user, session);
 
           definition.sections[section].follow_up[item].additional_context.ai_response = additionalValue;
 
@@ -359,7 +436,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
             organization: { id: integration.organization_id },
             user,
             on_update_url: job.data.on_update_url,
-            survey,
+            survey: job.data.survey,
           },
           from: 'cold.platform.openai',
         });
@@ -375,7 +452,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
 
   private async isDuplicateOrCanceled(organization, job: Job, section: string, item: string) {
     const exists = await this.queue.getJob(job.id);
-    if (!exists) {
+    if (!exists || !exists.data.survey) {
       this.logger.warn(`Job ${job.id} no longer found in queue; will not process question ${section}:${item}`);
       await this.cache.delete(`jobs:${job.name}:${organization.id}:${job.data.payload.compliance.compliance_id}`);
       return true;
