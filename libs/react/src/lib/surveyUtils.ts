@@ -1,4 +1,4 @@
-import { cloneDeep, find, findIndex, forEach, forOwn, get, isArray, isBoolean, isEmpty, isEqual, isNumber, isString, uniq } from 'lodash';
+import { cloneDeep, find, findIndex, forEach, forOwn, get, isArray, isBoolean, isEmpty, isEqual, isNumber, isString, isUndefined, uniq } from 'lodash';
 import {
   ComplianceSurveyActiveKeyType,
   ComplianceSurveyPayloadType,
@@ -564,7 +564,7 @@ export const isAIResponseValueValid = (followUp: {
 }) => {
   const { ai_response, component, options } = followUp;
   let isValid = false;
-  if (!ai_response || !ai_response.answer) {
+  if (isUndefined(ai_response) || isUndefined(ai_response.answer)) {
     return isValid;
   }
   switch (component) {
