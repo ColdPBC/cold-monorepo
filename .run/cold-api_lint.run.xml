@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="cold-api:lint" type="NxRunConfigurationType">
+  <configuration default="false" name="cold-api:lint" type="NxRunConfigurationType" folderName="API: Build">
     <option name="nx-projects" value="cold-api" />
     <option name="nx-targets" value="lint" />
     <option name="nx-target-configuration" value="" />

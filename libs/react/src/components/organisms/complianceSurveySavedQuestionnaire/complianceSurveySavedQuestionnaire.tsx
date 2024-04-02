@@ -1,18 +1,19 @@
 import React from 'react';
 import { findIndex, get, keys, size } from 'lodash';
-import { BaseButton, ColdIcon, ErrorFallback, SurveyInput } from '@coldpbc/components';
+import { BaseButton, ColdIcon, ErrorFallback, SurveyDocumentLinkModal, SurveyInput } from '@coldpbc/components';
 import {
   getAccurateBookmarkedValue,
   getQuestionValue,
   getSectionIndex,
   ifAdditionalContextConditionMet,
+  isAIResponseValueValid,
   putSurveyData,
   sortComplianceSurvey,
   updateSurveyQuestion,
 } from '@coldpbc/lib';
 import { ButtonTypes, GlobalSizes, IconNames } from '@coldpbc/enums';
 import { ComplianceSurveyActiveKeyType, ComplianceSurveyPayloadType, ComplianceSurveySavedQuestionType, IButtonProps, SurveyActiveKeyType } from '@coldpbc/interfaces';
-import { useAuth0Wrapper } from '@coldpbc/hooks';
+import { useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
 import { CSSTransition, SwitchTransition } from 'react-transition-group';
 import { useSWRConfig } from 'swr';
 import { withErrorBoundary } from 'react-error-boundary';
@@ -33,7 +34,9 @@ export interface ComplianceSurveySavedQuestionnaireProps {
 const _ComplianceSurveySavedQuestionnaire = (props: ComplianceSurveySavedQuestionnaireProps) => {
   const { activeKey, setActiveKey, submitSurvey, surveyData, setSurveyData, savedQuestions, bookmarked, setBookmarked } = props;
   const { getOrgSpecificUrl } = useAuth0Wrapper();
+  const { logBrowser } = useColdContext();
   const [sendingSurvey, setSendingSurvey] = React.useState<boolean>(false);
+  const [documentLinkModalOpen, setDocumentLinkModalOpen] = React.useState<boolean>(false);
   const nextQuestionTransitionClassNames = {
     enter: 'transform translate-x-full',
     enterDone: 'transition ease-out duration-200 transform translate-x-0',
@@ -66,6 +69,13 @@ const _ComplianceSurveySavedQuestionnaire = (props: ComplianceSurveySavedQuestio
       category: surveyData.definition.title,
     });
     const newSurvey = updateSurveyQuestion(surveyData, activeKey, { value }, undefined, additional);
+    logBrowser('Updating saved question', 'info', {
+      activeKey,
+      key,
+      value,
+      additional,
+      newSurvey,
+    });
     setSurveyData(newSurvey as ComplianceSurveyPayloadType);
   };
 
@@ -107,6 +117,7 @@ const _ComplianceSurveySavedQuestionnaire = (props: ComplianceSurveySavedQuestio
         onPreviousButtonClicked();
       },
       textSize: GlobalSizes.small,
+      disabled: sendingSurvey,
     };
     const questionIndex = findIndex(savedQuestions, savedQuestion => {
       return savedQuestion.followUpKey === activeKey.value;
@@ -135,6 +146,7 @@ const _ComplianceSurveySavedQuestionnaire = (props: ComplianceSurveySavedQuestio
       },
       textSize: GlobalSizes.small,
       loading: sendingSurvey,
+      disabled: sendingSurvey,
     };
     const activeSectionIndex = getSectionIndex(sections, activeKey);
 
@@ -148,8 +160,11 @@ const _ComplianceSurveySavedQuestionnaire = (props: ComplianceSurveySavedQuestio
     if (activeKey.isFollowUp) {
       if (
         sections[activeSectionKey].follow_up[activeFollowUpKey].value === undefined &&
-        sections[activeSectionKey].follow_up[activeFollowUpKey].ai_response !== undefined &&
-        sections[activeSectionKey].follow_up[activeFollowUpKey].ai_response?.answer !== undefined
+        isAIResponseValueValid({
+          ai_response: sections[activeSectionKey].follow_up[activeFollowUpKey].ai_response,
+          component: sections[activeSectionKey].follow_up[activeFollowUpKey].component,
+          options: sections[activeSectionKey].follow_up[activeFollowUpKey].options,
+        })
       ) {
         buttonProps.label = 'Confirm';
         if (activeFollowUpIndex === savedQuestions.length - 1) {
@@ -202,13 +217,26 @@ const _ComplianceSurveySavedQuestionnaire = (props: ComplianceSurveySavedQuestio
 
   const onNextButtonClicked = async () => {
     setSendingSurvey(true);
+    setDocumentLinkModalOpen(false);
     const bookmarkedQuestion = getAccurateBookmarkedValue(sections, activeKey, bookmarked);
-    const newSurvey = updateSurveyQuestion(surveyData, activeKey, { value: getQuestionValue(surveyData, activeKey), skipped: false, saved: bookmarkedQuestion });
+    const newSurvey = updateSurveyQuestion(surveyData, activeKey, {
+      value: getQuestionValue(surveyData, activeKey),
+      skipped: false,
+      saved: bookmarkedQuestion,
+    });
     const response = (await putSurveyData(newSurvey as ComplianceSurveyPayloadType, getOrgSpecificUrl)) as ComplianceSurveyPayloadType;
     const sortedSurvey = sortComplianceSurvey(response);
     setSurveyData(sortedSurvey);
     await mutate([getOrgSpecificUrl(`/surveys/${newSurvey.name}`), 'GET'], sortedSurvey, {
       revalidate: false,
+    });
+    logBrowser('Navigating to next saved question', 'info', {
+      activeKey,
+      bookmarked,
+      bookmarkedQuestion,
+      newSurvey,
+      response,
+      sortedSurvey,
     });
     updateTransitionClassNames(true);
     setSendingSurvey(false);
@@ -217,6 +245,7 @@ const _ComplianceSurveySavedQuestionnaire = (props: ComplianceSurveySavedQuestio
 
   const onSkipButtonClicked = async () => {
     setSendingSurvey(true);
+    setDocumentLinkModalOpen(false);
     const bookmarkedQuestion = getAccurateBookmarkedValue(sections, activeKey, bookmarked);
     const newSurvey = updateSurveyQuestion(surveyData, activeKey, {
       skipped: true,
@@ -229,6 +258,14 @@ const _ComplianceSurveySavedQuestionnaire = (props: ComplianceSurveySavedQuestio
     await mutate([getOrgSpecificUrl(`/surveys/${newSurvey.name}`), 'GET'], sortedSurvey, {
       revalidate: false,
     });
+    logBrowser('Skipping saved question', 'info', {
+      activeKey,
+      bookmarked,
+      bookmarkedQuestion,
+      newSurvey,
+      response,
+      sortedSurvey,
+    });
     updateTransitionClassNames(true);
     setSendingSurvey(false);
     goToNextQuestion(activeKey, sortedSurvey);
@@ -237,6 +274,7 @@ const _ComplianceSurveySavedQuestionnaire = (props: ComplianceSurveySavedQuestio
   const onSubmitButtonClicked = async () => {
     // tell the difference between a skipped question and a question that was answered
     setSendingSurvey(true);
+    setDocumentLinkModalOpen(false);
     const bookmarkedQuestion = getAccurateBookmarkedValue(sections, activeKey, bookmarked);
     const newSurvey = updateSurveyQuestion(
       surveyData,
@@ -254,6 +292,14 @@ const _ComplianceSurveySavedQuestionnaire = (props: ComplianceSurveySavedQuestio
     await mutate([getOrgSpecificUrl(`/surveys/${newSurvey.name}`), 'GET'], sortedSurvey, {
       revalidate: false,
     });
+    logBrowser('Submitting saved question', 'info', {
+      activeKey,
+      bookmarked,
+      bookmarkedQuestion,
+      newSurvey,
+      response,
+      sortedSurvey,
+    });
     updateTransitionClassNames(true);
     setSendingSurvey(false);
     submitSurvey();
@@ -261,6 +307,7 @@ const _ComplianceSurveySavedQuestionnaire = (props: ComplianceSurveySavedQuestio
 
   const onPreviousButtonClicked = () => {
     // got the previous question in the saved questions
+    setDocumentLinkModalOpen(false);
     const activeFollowUpIndex = savedQuestions.findIndex(savedQuestion => {
       return savedQuestion.followUpKey === activeKey.value;
     });
@@ -271,6 +318,11 @@ const _ComplianceSurveySavedQuestionnaire = (props: ComplianceSurveySavedQuestio
       isFollowUp: true,
       section: 'savedQuestions',
       category: surveyData.definition.title,
+    });
+    logBrowser('Navigating to previous saved question', 'info', {
+      activeKey,
+      previousFollowUpKey,
+      savedQuestions,
     });
     updateTransitionClassNames(false);
   };
@@ -326,12 +378,31 @@ const _ComplianceSurveySavedQuestionnaire = (props: ComplianceSurveySavedQuestio
 
   const additionalContextQuestion = checkAdditionalContext(activeKey);
 
-  const bookMarkQuestion = async () => {
+  const unBookMarkQuestion = async () => {
     setSendingSurvey(true);
     const bookmarkedQuestion = get(bookmarked, `${activeKey.value}`, true);
     setBookmarked({
       ...bookmarked,
       [activeKey.value]: !bookmarkedQuestion,
+    });
+    logBrowser('Unbookmarked question', 'info', {
+      activeKey,
+      bookmarked,
+      bookmarkedQuestion,
+    });
+    setSendingSurvey(false);
+  };
+
+  const saveDocumentLink = async (key: string, value: any) => {
+    setSendingSurvey(true);
+    setDocumentLinkModalOpen(false);
+    const newSurvey = updateSurveyQuestion(surveyData, activeKey, { document_link: value });
+    setSurveyData(newSurvey as ComplianceSurveyPayloadType);
+    const response = (await putSurveyData(newSurvey as ComplianceSurveyPayloadType, getOrgSpecificUrl)) as ComplianceSurveyPayloadType;
+    const sortedSurvey = sortComplianceSurvey(response);
+    setSurveyData(sortedSurvey);
+    await mutate([getOrgSpecificUrl(`/surveys/${newSurvey.name}`), 'GET'], sortedSurvey, {
+      revalidate: false,
     });
     setSendingSurvey(false);
   };
@@ -342,6 +413,15 @@ const _ComplianceSurveySavedQuestionnaire = (props: ComplianceSurveySavedQuestio
     const questionIndex = keys(activeSection.follow_up).indexOf(activeKey.value) + 1;
     const bookMarkedState = get(bookmarked, `${activeKey.value}`, undefined);
     const bookmarkedForQuestion = get(bookmarked, `${activeKey.value}`, undefined) === undefined ? activeSection.follow_up[activeKey.value].saved : bookMarkedState;
+
+    logBrowser('Rendering compliance saved question', 'info', {
+      activeKey,
+      activeSection,
+      questionIndex,
+      bookmarkedForQuestion,
+      savedQuestions,
+      surveyData,
+    });
 
     return (
       <div className={'w-full h-full relative flex flex-col space-y-[24px]'} data-testid={'survey-question-container'}>
@@ -355,11 +435,35 @@ const _ComplianceSurveySavedQuestionnaire = (props: ComplianceSurveySavedQuestio
               {size(activeSection.follow_up)})
             </div>
           </div>
-          <div className={'flex flex-row items-start space-x-4'}>
-            <div className={'h-[60px] w-[60px] rounded-lg flex justify-center items-center bg-transparent cursor-pointer hover:bg-bgc-accent'} onClick={bookMarkQuestion}>
+          <div className={'flex flex-row items-start space-x-4 h-[60px]'}>
+            <div className={'relative h-full w-[60px] flex justify-center items-center'}>
+              <div
+                className={'h-full w-[60px] rounded-lg flex justify-center items-center bg-transparent cursor-pointer hover:bg-bgc-accent'}
+                onClick={() => {
+                  setDocumentLinkModalOpen(!documentLinkModalOpen);
+                }}>
+                {activeSection.follow_up[activeKey.value].document_link ? (
+                  <ColdIcon name={IconNames.ColdFilledDocumentUploadIcon} />
+                ) : (
+                  <ColdIcon name={IconNames.ColdDocumentUploadIcon} />
+                )}
+              </div>
+              <div className={'absolute top-full z-10'}>
+                {documentLinkModalOpen && (
+                  <SurveyDocumentLinkModal
+                    show={documentLinkModalOpen}
+                    setShowModal={setDocumentLinkModalOpen}
+                    surveyDocumentLink={activeSection.follow_up[activeKey.value].document_link}
+                    questionKey={activeKey.value}
+                    saveSurveyDocumentLink={saveDocumentLink}
+                  />
+                )}
+              </div>
+            </div>
+            <div className={'h-full w-[60px] rounded-lg flex justify-center items-center bg-transparent cursor-pointer hover:bg-bgc-accent'} onClick={unBookMarkQuestion}>
               {bookmarkedForQuestion ? <ColdIcon name={IconNames.ColdFilledBookMarkIcon} color={'white'} /> : <ColdIcon name={IconNames.ColdBookmarkIcon} color={'white'} />}
             </div>
-            <div className={'h-[60px] w-[60px] rounded-lg flex justify-center items-center bg-transparent cursor-pointer hover:bg-bgc-accent'} onClick={submitSurvey}>
+            <div className={'h-full w-[60px] rounded-lg flex justify-center items-center bg-transparent cursor-pointer hover:bg-bgc-accent'} onClick={submitSurvey}>
               <ColdIcon name={IconNames.CloseModalIcon} />
             </div>
           </div>

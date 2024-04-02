@@ -28,7 +28,7 @@ const _Survey = (props: SurveyProps) => {
   const { data, error, isLoading } = useOrgSWR<SurveyPayloadType, any>([`/surveys/${surveyName}`, 'GET'], axiosFetcher);
   const [searchParams, setSearchParams] = useSearchParams();
   const [submitted, setSubmitted] = React.useState<boolean>(false);
-  const { logError } = useColdContext();
+  const { logError, logBrowser } = useColdContext();
 
   const submitSurvey = () => {
     setSubmitted(true);
@@ -199,6 +199,7 @@ const _Survey = (props: SurveyProps) => {
 
   if (error) {
     logError(error, ErrorType.SWRError);
+    logBrowser('Error fetching survey data', 'error', { data, error });
     return <div></div>;
   }
 
@@ -219,6 +220,7 @@ const _Survey = (props: SurveyProps) => {
   }
 
   if (surveyData) {
+    logBrowser('Survey data fetched', 'info', { surveyData, searchParams, activeKey });
     return (
       <Takeover
         show={show}

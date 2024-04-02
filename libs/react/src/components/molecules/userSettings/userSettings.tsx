@@ -7,8 +7,10 @@ import { Card } from '../card';
 import { Modal } from '../modal';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application';
+import { useColdContext } from '@coldpbc/hooks';
 
 const _UserSettings = () => {
+  const { logBrowser } = useColdContext();
   const { logout: auth0Logout, user } = useAuth0();
 
   const [updatedUser, setUpdatedUser] = useState(user ?? null);
@@ -30,8 +32,13 @@ const _UserSettings = () => {
   };
 
   const handleLogout = () => {
+    logBrowser('User logging out', 'info', {
+      email,
+      user,
+      updatedUser,
+    });
+    localStorage.clear();
     sessionStorage.clear();
-
     auth0Logout({
       logoutParams: {
         returnTo: window.location.origin,

@@ -3,6 +3,7 @@ import { allRoles, BaseWorker, coldAdminOnly, HttpExceptionFilter, IAuthenticate
 import { AppService } from './app.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { FileService } from './assistant/files/file.service';
+import { filter } from 'lodash';
 
 @UseGuards(JwtAuthGuard, RolesGuard)
 @UseFilters(new HttpExceptionFilter(OpenAIController.name))
@@ -43,22 +44,50 @@ export class OpenAIController extends BaseWorker {
       user: IAuthenticatedUser;
     },
   ) {
+    const protectedAsst = [
+      'bombas',
+      'peak-design',
+      'ovative-group',
+      'branch-basics',
+      'cold-climate-production',
+      'cold-climate-staging',
+      'cold-demo-account',
+      'e-2-e-test-company',
+      'cold-climate-development',
+    ];
+    const deleted: any = [];
+    const failed: any = [];
     const assts = await this.app.listAssistants(req.user);
-    for (const asst of assts) {
+
+    const deleteMe = filter(assts, item => {
+      return !protectedAsst.includes(item.name);
+    });
+
+    for (const asst of deleteMe) {
+      try {
+        await this.app.deleteAssistant({ user: req.user, integration: { id: asst.id } });
+        deleted.push(asst.name);
+      } catch (e) {
+        this.logger.error(e.message, e);
+        failed.push(asst.name);
+      }
+    }
+    /*for (const asst of assts) {
       const int = await this.prisma.integrations.findUnique({ where: { id: asst.id } });
       if (!int) {
-        this.logger.warn(`No integration found for assistant ${asst.id} in ${process.env['NODE_ENV']}`);
+        this.logger.warn(`No integration found for assistant ${asst.name}(${asst.id}) in ${process.env['NODE_ENV']}`);
       }
 
       const org = await this.prisma.organizations.findUnique({ where: { name: asst.name } });
-      if (!int) {
-        this.logger.warn(`No organization found for assistant ${asst.name} in ${process.env['NODE_ENV']}`);
+      if (!org) {
+        this.logger.warn(`No organization found for assistant ${asst.name}(${asst.id}) in ${process.env['NODE_ENV']}`);
+      } else if (org?.isTest) {
+        this.logger.warn(`deleting assistant ${asst.name}(${asst.id})`, { org, integration: int });
+        await this.app.deleteAssistant({ user: req.user, integration: { id: asst.id } });
+        deletedCount.push({ id: asst.id, name: asst.name });
       }
-
-      if (org?.isTest) {
-        //await this.app.deleteAssistant({ user: req.user, integration: { id: asst.id } });
-      }
-    }
+    }*/
+    return { deleted, failed, assts };
   }
 
   @Roles(...coldAdminOnly)

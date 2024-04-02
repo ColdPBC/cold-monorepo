@@ -2,15 +2,17 @@ import { Injectable } from '@nestjs/common';
 import { OnQueueActive, OnQueueCompleted, OnQueueFailed, OnQueueProgress, Process, Processor } from '@nestjs/bull';
 import { Job } from 'bull';
 import OpenAI, { UnprocessableEntityError } from 'openai';
-import { AppService } from '../app.service';
-import { AssistantService } from './assistant.service';
-import { BaseWorker, CacheService } from '@coldpbc/nest';
-import { FileService } from './files/file.service';
+import { AppService } from './app.service';
+import { AssistantService } from './assistant/assistant.service';
+import { BaseWorker, CacheService, DarklyService } from '@coldpbc/nest';
+import { FileService } from './assistant/files/file.service';
 import { ConfigService } from '@nestjs/config';
+import { ChatService } from './chat/chat.service';
+import { PineconeService } from './pinecone/pinecone.service';
 
 @Injectable()
 @Processor('openai')
-export class AssistantConsumer extends BaseWorker {
+export class JobConsumer extends BaseWorker {
   client: OpenAI;
   started: Date;
 
@@ -20,8 +22,11 @@ export class AssistantConsumer extends BaseWorker {
     private readonly assistant: AssistantService,
     private readonly fileService: FileService,
     private readonly cache: CacheService,
+    private readonly loader: PineconeService,
+    private readonly darkly: DarklyService,
+    private readonly chat: ChatService,
   ) {
-    super(AssistantConsumer.name);
+    super(JobConsumer.name);
     this.client = new OpenAI({
       organization: this.config.getOrThrow('OPENAI_ORG_ID'),
       apiKey: this.config.getOrThrow('OPENAI_API_KEY'),
@@ -32,6 +37,15 @@ export class AssistantConsumer extends BaseWorker {
   async process(job: Job) {
     this.logger.info(`Received job ${job.id} of type ${job.name}`);
     switch (job.name) {
+      case 'file.delete': {
+        const split = `pinecone:${job.data.payload.key.replaceAll('/', ':')}`.split(':');
+        split.pop();
+        split.push(job.data.payload.checksum);
+        const cacheKey = split.join(':');
+
+        await this.cache.delete(cacheKey);
+        return this.fileService.deleteFile(job.data.user, job.data.integration.id, job.data.payload.key);
+      }
       case 'file.uploaded':
         return this.processFileJob(job);
       case 'compliance_automation.enabled':
@@ -55,14 +69,35 @@ export class AssistantConsumer extends BaseWorker {
 
   @Process('file.uploaded')
   async processFileJob(job: Job) {
+    await this.loader.ingestData(job.data.user, job.data.organization, job.data.payload);
     return this.fileService.uploadOrgFilesToOpenAI(job);
+  }
+
+  @Process('file.deleted')
+  async deleteFileJob(job: Job) {
+    const split = `pinecone:${job.data.payload.key.replaceAll('/', ':')}`.split(':');
+    split.pop();
+    split.push(job.data.payload.checksum);
+    const cacheKey = split.join(':');
+
+    await this.cache.delete(cacheKey);
+    return this.fileService.deleteFile(job.data.user, job.data.integration.id, job.data.payload.key);
   }
 
   @Process('compliance_automation.enabled')
   async processCompliance(job: Job) {
     try {
       this.logger.info(`Received ${job.name} job: ${job.id} `);
-      await this.assistant.process_survey(job);
+      const useRag = await this.darkly.getBooleanFlag('dynamic-enable-rag-processing', false, {
+        kind: 'org-compliance-set',
+        key: job.data.organization.name,
+        name: job.data.payload.compliance.compliance_definition.name,
+      });
+      if (useRag) {
+        await this.chat.process_survey(job);
+      } else {
+        await this.assistant.process_survey(job);
+      }
     } catch (e) {
       this.logger.error(e.message, e);
       throw e;
@@ -71,25 +106,26 @@ export class AssistantConsumer extends BaseWorker {
 
   @OnQueueActive()
   async onActive(job: Job) {
-    const message = `Processing ${job.name} | id: ${job.id} title: ${job.data.survey.definition.title} | started: ${new Date(job.processedOn).toUTCString()}`;
+    const message = `Processing ${job.name} | id: ${job.id} title: ${job.data.survey?.definition?.title} | started: ${new Date(job.processedOn).toUTCString()}`;
     await job.log(message);
   }
 
   @OnQueueFailed()
   async onFailed(job: Job) {
-    const jobs = (await this.cache.get(`jobs:openai:${job.data.organization.id}:${job.data.payload.compliance.compliance_id}`)) as number[];
-    jobs.splice(jobs.indexOf(typeof job.id === 'number' ? job.id : parseInt(job.id)), 1);
-
+    const jobs = (await this.cache.get(`jobs:openai:${job.data.organization.name}:${job.data.payload?.compliance?.compliance_id}`)) as number[];
+    if (Array.isArray(jobs) && jobs.length > 0) {
+      jobs.splice(jobs.indexOf(typeof job.id === 'number' ? job.id : parseInt(job.id)), 1);
+    }
     await job.log(`Job FAILED | id: ${job.id} reason: ${job.failedReason} | ${this.getTimerString(job)}`);
   }
 
   @OnQueueCompleted()
   async onCompleted(job: Job) {
-    const jobs = (await this.cache.get(`jobs:${job.name}:${job.data.organization.id}:${job.data.payload.compliance.compliance_id}`)) as number[];
+    const jobs = (await this.cache.get(`jobs:${job.name}:${job.data.organization.id}:${job.data.payload.compliance?.compliance_id}`)) as number[];
     if (jobs) {
       jobs.splice(jobs.indexOf(typeof job.id === 'number' ? job.id : parseInt(job.id)), 1);
 
-      await this.cache.set(`jobs:${job.name}:${job.data.organization.id}:${job.data.payload.compliance.compliance_id}`, jobs, { ttl: 60 * 60 * 24 * 7 });
+      await this.cache.set(`jobs:${job.name}:${job.data.organization.id}:${job.data.payload.compliance?.compliance_id}`, jobs, { ttl: 60 * 60 * 24 * 7 });
     }
 
     await job.log(`${job.name} Job COMPLETED | id: ${job.id} completed_on: ${new Date(job.finishedOn).toUTCString()} | ${this.getTimerString(job)}`);

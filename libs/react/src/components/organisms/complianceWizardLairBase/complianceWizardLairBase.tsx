@@ -4,7 +4,7 @@ import { BaseButton, DocumentUploadButton, Markdown, Spinner } from '@coldpbc/co
 import { GlobalSizes } from '@coldpbc/enums';
 
 export interface ComplianceWizardLairBaseProps {
-  title: string;
+  title?: string;
   markdown: string;
   ctas?: Array<
     IButtonProps & {
@@ -24,7 +24,7 @@ export const ComplianceWizardLairBase = (props: ComplianceWizardLairBaseProps) =
           <Spinner size={GlobalSizes.xLarge} />
         ) : (
           <div className={'w-full h-full space-y-[24px]'}>
-            <div className={'text-h1 text-left'}>{title}</div>
+            {title && <div className={'text-h1 text-left'}>{title}</div>}
             <Markdown markdown={markdown} />
             <div className={'w-full flex flex-row space-x-4'}>
               {ctas?.map((cta, index) => {

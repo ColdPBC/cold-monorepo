@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { BaseWorker, MqttService, RabbitMessagePayload } from '@coldpbc/nest';
 import { SurveysService } from './surveys.service';
 import { Nack, RabbitRPC } from '@golevelup/nestjs-rabbitmq';
+import { omit } from 'lodash';
 
 @Injectable()
 export class SurveysRabbitService extends BaseWorker {
@@ -18,7 +19,7 @@ export class SurveysRabbitService extends BaseWorker {
   async processRPCMessages(msg: RabbitMessagePayload): Promise<any> {
     switch (msg.event) {
       case 'survey_data.updated': {
-        this.logger.info(`Received ${msg.event} message from ${msg.from}`, { ...msg });
+        this.logger.info(`Received ${msg.event} message from ${msg.from}`, omit(msg.data, ['survey']));
 
         const parsed: any = typeof msg.data == 'string' ? JSON.parse(msg.data) : msg.data;
 
@@ -43,7 +44,7 @@ export class SurveysRabbitService extends BaseWorker {
   async processAsyncMessages(msg: RabbitMessagePayload): Promise<void> {
     switch (msg.event) {
       case 'survey_data.updated': {
-        this.logger.info(`Received ${msg.event} message from ${msg.from}`, { ...msg });
+        this.logger.info(`Received ${msg.event} message from ${msg.from}`, omit(msg.data, ['survey']));
 
         const parsed: any = typeof msg.data == 'string' ? JSON.parse(msg.data) : msg.data;
 

@@ -3,7 +3,6 @@ import { Card } from '../card/card';
 import { useNavigate } from 'react-router-dom';
 import { FootprintDetailChart } from '../footprintDetailChart';
 import { axiosFetcher } from '@coldpbc/fetchers';
-import useSWR from 'swr';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application';
@@ -11,7 +10,6 @@ import { useOrgSWR } from '../../../hooks/useOrgSWR';
 import { useColdContext } from '@coldpbc/hooks';
 import { ErrorType } from '@coldpbc/enums';
 import { ActionPayload } from '@coldpbc/interfaces';
-import { CardProps } from '@coldpbc/components';
 
 export interface FootprintDetailCardProps {
   colors: string[];
@@ -26,13 +24,14 @@ function _FootprintDetailCard(props: PropsWithChildren<FootprintDetailCardProps>
   const [isEmpty, setIsEmpty] = useState(false);
   const { data: actionsData, error: actionsError } = useOrgSWR<ActionPayload[], any>(ldFlags.showActions261 ? [`/actions`, 'GET'] : null, axiosFetcher);
   const { data, error } = useOrgSWR<any>(['/categories/company_decarbonization', 'GET'], axiosFetcher);
-  const { logError } = useColdContext();
+  const { logError, logBrowser } = useColdContext();
 
   if (isEmpty) {
     return null;
   }
 
   if (error) {
+    logBrowser('Error fetching footprint data', 'error', { ...error }, error);
     logError(error, ErrorType.SWRError);
     return null;
   }
@@ -63,6 +62,13 @@ function _FootprintDetailCard(props: PropsWithChildren<FootprintDetailCardProps>
     }
     return ctas;
   };
+
+  logBrowser('Footprint data loaded', 'info', {
+    isEmpty,
+    data,
+    actionsData,
+    actionsError,
+  });
 
   return (
     <Card title={subcategoryName} ctas={getCtas(subcategoryName)} className={className} data-testid={`footprint-detail-card-${props.subcategory_key}`}>

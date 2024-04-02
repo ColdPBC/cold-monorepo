@@ -3,10 +3,9 @@ import { IconNames } from '@coldpbc/enums';
 import { Collapse } from 'react-collapse';
 import { every, filter, find, get, map, set, some } from 'lodash';
 import React, { useContext, useEffect } from 'react';
-import { getFirstFollowUpKeyFromSection } from '@coldpbc/lib';
+import { getFirstFollowUpKeyFromSection, getOrgStorage, setOrgStorage } from '@coldpbc/lib';
 import { ComplianceSurveyActiveKeyType, ComplianceSurveyPayloadType, ComplianceSurveySectionProgressType, ComplianceSurveySectionType } from '@coldpbc/interfaces';
 import { useAuth0Wrapper } from '@coldpbc/hooks';
-import { getOrgStorage, setOrgStorage } from '../../../lib/orgStorage';
 
 export interface ComplianceSurveyCollapseProps {
   category: string;

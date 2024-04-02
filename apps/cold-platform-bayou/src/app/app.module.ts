@@ -18,7 +18,7 @@ export class AppModule {
         ConfigModule.forRoot({
           isGlobal: true,
         }),
-        await NestModule.forRootAsync(1),
+        await NestModule.forRootAsync(),
         BullModule.registerQueue({
           name: config.get('DD_SERVICE')?.split('-')[2],
         }),

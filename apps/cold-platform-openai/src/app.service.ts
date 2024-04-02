@@ -75,6 +75,7 @@ export class AppService extends BaseWorker implements OnModuleInit {
 
       return assistant;
     } catch (e) {
+      this.logger.error(`FAILED: delete assistant ${integration.id}`, { ...parsed, error: { ...e } });
       this.handleError(e.message, { error: e, parsed });
     }
   }
@@ -150,20 +151,15 @@ export class AppService extends BaseWorker implements OnModuleInit {
         }
       }
 
+      let metadata: any = {};
+
       const openAIResponse = await this.client.beta.assistants.create(assistant);
 
       if (!openAIResponse.id.includes('asst_')) {
         this.logger.error(new Error('OpenAI assistant creation failed.'), openAIResponse);
       }
 
-      integration = await this.prisma.integrations.create({
-        data: {
-          id: openAIResponse.id,
-          organization_id: organization.id,
-          service_definition_id: service.id,
-          metadata: JSON.parse(JSON.stringify(openAIResponse)),
-        },
-      });
+      metadata = JSON.parse(JSON.stringify(openAIResponse));
 
       this.logger.info(`OpenAI assistant (${openAIResponse.name}) created for ${organization.name}`, {
         organization,
@@ -173,7 +169,16 @@ export class AppService extends BaseWorker implements OnModuleInit {
         assistant: openAIResponse,
       });
 
-      return Object.assign(integration, openAIResponse);
+      integration = await this.prisma.integrations.create({
+        data: {
+          id: openAIResponse.id,
+          organization_id: organization.id,
+          service_definition_id: service.id,
+          metadata: metadata,
+        },
+      });
+
+      return Object.assign(integration, metadata);
     } catch (e) {
       this.handleError(e, {
         organization,

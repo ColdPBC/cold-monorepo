@@ -30,6 +30,41 @@ export class OrganizationService extends BaseWorker {
     this.httpService = new HttpService();
   }
 
+  private async syncOpenAIAssistants(org) {
+    let existing = await this.prisma.organizations.findUnique({
+      where: {
+        id: org.id,
+      },
+    });
+
+    if (!existing) {
+      existing = await this.prisma.organizations.create({
+        data: {
+          id: org.id,
+          name: org.name,
+          display_name: org.display_name,
+          enabled_connections: {},
+          branding: org.branding,
+          created_at: new Date(),
+        },
+      });
+    }
+
+    const openAIAsst = await this.prisma.integrations.findFirst({
+      where: {
+        organization_id: org.id,
+        service_definition_id: this.openAI?.id,
+      },
+    });
+
+    if (this.openAI && !openAIAsst) {
+      await this.events.sendAsyncEvent(get(this.openAI, 'definition.rabbitMQ.publishOptions.routing_key', 'deadletter'), 'organization.created', {
+        organization: existing,
+        service: this.openAI,
+      });
+    }
+  }
+
   override async onModuleInit() {
     await this.getOrganizations(true);
 
@@ -38,53 +73,19 @@ export class OrganizationService extends BaseWorker {
     });
 
     this.options = await this.utilService.init();
+    // insure openai service is enabled for all organizations
+    this.openAI = await this.prisma.service_definitions.findUnique({
+      where: {
+        name: 'cold-platform-openai',
+      },
+    });
 
-    const orgs = (await this.getOrganizations(true)) as Array<Auth0Organization>;
-
-    for (const org of orgs) {
-      let existing = await this.prisma.organizations.findUnique({
-        where: {
-          id: org.id,
-        },
-      });
-
-      if (!existing) {
-        existing = await this.prisma.organizations.create({
-          data: {
-            id: org.id,
-            name: org.name,
-            display_name: org.display_name,
-            enabled_connections: {},
-            branding: org.branding,
-            created_at: new Date(),
-          },
-        });
-      }
-
-      // insure openai service is enabled for all organizations
-      this.openAI = await this.prisma.service_definitions.findUnique({
-        where: {
-          name: 'cold-platform-openai',
-        },
-      });
-
-      if (!this.openAI) {
-        this.logger.error('OpenAI service definition not found');
-        continue;
-      }
-
-      const openAIAsst = await this.prisma.integrations.findFirst({
-        where: {
-          organization_id: org.id,
-          service_definition_id: this.openAI?.id,
-        },
-      });
-
-      if (this.openAI && !openAIAsst) {
-        await this.events.sendAsyncEvent(get(this.openAI, 'definition.rabbitMQ.publishOptions.routing_key', 'deadletter'), 'organization.created', {
-          organization: existing,
-          service: this.openAI,
-        });
+    if (!this.openAI) {
+      this.logger.error('OpenAI service definition not found');
+    } else {
+      const orgs = (await this.getOrganizations(true)) as Array<Auth0Organization>;
+      for (const org of orgs) {
+        this.syncOpenAIAssistants(org);
       }
     }
   }
