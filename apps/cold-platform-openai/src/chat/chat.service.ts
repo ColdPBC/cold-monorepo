@@ -56,8 +56,6 @@ export class ChatService extends BaseWorker implements OnModuleInit {
 
   async askQuestion(indexName: string, question: any, company_name: string, user: AuthenticatedUser, tags): Promise<any> {
     try {
-      this.setTags(tags);
-
       // Get Chat History
       let messages = (await this.cache.get(`openai:thread:${user.coldclimate_claims.id}`)) as ChatCompletionMessageParam[];
 
@@ -128,6 +126,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
             previous_message: lastMessage,
             current_question: question.promp,
             pincone_query: rephrased_question,
+            ...tags,
           });
         }
       }
@@ -203,11 +202,12 @@ export class ChatService extends BaseWorker implements OnModuleInit {
         survey_question: question.prompt,
         ai_prompt: sanitized_base,
         ai_response,
+        ...tags,
       });
 
       return ai_response;
     } catch (error) {
-      this.logger.error(`Error asking question ${question.prompt}`, error);
+      this.logger.error(`Error asking question ${question.prompt}`, { error, ...tags });
       throw error;
     }
   }
