@@ -1,6 +1,7 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import Freeplay, { getCallInfo, getSessionInfo } from 'freeplay/thin';
 import { BaseWorker } from '@coldpbc/nest';
+import { ConfigService } from '@nestjs/config';
 
 export interface FPSession {
   sessionId: string;
@@ -19,11 +20,11 @@ export interface IFPSession {
 export class FreeplayService extends BaseWorker implements OnModuleInit {
   public client: Freeplay;
 
-  constructor() {
+  constructor(private readonly config: ConfigService) {
     super(FreeplayService.name);
 
     this.client = new Freeplay({
-      freeplayApiKey: process.env['FREEPLAY_API_KEY'],
+      freeplayApiKey: this.config.getOrThrow('FREEPLAY_API_KEY'),
       baseUrl: 'https://coldclimate.freeplay.ai/api',
     });
   }

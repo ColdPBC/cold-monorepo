@@ -168,17 +168,16 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
   async ingestData(user: AuthenticatedUser, organization: any, filePayload: any, namespaceName?: string) {
     let vectors: PineconeRecord[];
     try {
+      if (!(await this.darkly.getBooleanFlag('config-enable-pinecone-injestion'))) {
+        const message = 'Pinecone ingestion is disabled.  To enable, turn on targeting for `config-enable-pinecone-injestion` flag in launch darkly';
+        this.logger.warn(message);
+        return message;
+      }
       const cacheKey = this.getCacheKey(filePayload);
 
       const exists = await this.cache.get(cacheKey);
       if (exists) {
         throw new ConflictException(`${filePayload.key} (${filePayload.checksum}) already ingested`);
-      }
-
-      if (!(await this.darkly.getBooleanFlag('config-enable-pinecone-injestion'))) {
-        const message = 'Pinecone ingestion is disabled.  To enable, turn on targeting for `config-enable-pinecone-injestion` flag in launch darkly';
-        this.logger.warn(message);
-        return message;
       }
 
       const org_file = await this.prisma.organization_files.findUnique({
@@ -313,7 +312,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
     }
 
     try {
-      await this.pinecone.createIndex({
+      const idx = await this.pinecone.createIndex({
         name: targetIndex,
         dimension: dimension,
         spec: {
@@ -326,7 +325,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
         waitUntilReady: true,
       });
 
-      return await this.describeIndex(targetIndex);
+      return idx;
     } catch (e) {
       if (e.statusCode !== 404) {
         this.logger.error(e.message, { ...e });
