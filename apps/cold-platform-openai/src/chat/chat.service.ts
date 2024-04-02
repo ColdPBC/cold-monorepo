@@ -313,7 +313,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
         // update the survey with the response
         definition.sections[section].follow_up[item].ai_response = value;
         if (value) {
-          definition.sections[section].follow_up[item].ai_answered = !!value.answer;
+          definition.sections[section].follow_up[item].ai_answered = value.answer && value.answer.length > 0;
         }
         definition.sections[section].follow_up[item].ai_attempted = true;
 
@@ -337,7 +337,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
           definition.sections[section].follow_up[item].additional_context.ai_response = additionalValue;
 
           if (additionalValue) {
-            definition.sections[section].follow_up[item].additional_context.ai_answered = has(additionalValue, 'answer');
+            definition.sections[section].follow_up[item].additional_context.ai_answered = has(additionalValue, 'answer') && additionalValue.answer.length > 0;
           }
 
           definition.sections[section].follow_up[item].additional_context.ai_attempted = true;
