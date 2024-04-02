@@ -340,7 +340,7 @@ export class PromptsService extends BaseWorker {
       case 'yes_no':
         return this.yes_no_prompt;
       case 'multi_select':
-        return this.multi_select_prompt;
+        return this.multi_select_prompt.replace('{options}', item.options.join(', '));
       case 'text':
         return this.text_prompt;
       case 'textarea':
@@ -348,7 +348,7 @@ export class PromptsService extends BaseWorker {
       case 'multi_text':
         return this.multi_text_prompt;
       case 'select':
-        return this.select_prompt;
+        return this.select_prompt.replace('{options}', item.options.join(', '));
       case 'number':
         return this.number_prompt;
       case 'percent_slider':
