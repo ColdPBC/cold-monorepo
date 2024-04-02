@@ -74,7 +74,6 @@ const _ComplianceSurveySavedQuestionnaire = (props: ComplianceSurveySavedQuestio
       key,
       value,
       additional,
-      newSurvey,
     });
     setSurveyData(newSurvey as ComplianceSurveyPayloadType);
   };
@@ -234,9 +233,6 @@ const _ComplianceSurveySavedQuestionnaire = (props: ComplianceSurveySavedQuestio
       activeKey,
       bookmarked,
       bookmarkedQuestion,
-      newSurvey,
-      response,
-      sortedSurvey,
     });
     updateTransitionClassNames(true);
     setSendingSurvey(false);
@@ -262,9 +258,6 @@ const _ComplianceSurveySavedQuestionnaire = (props: ComplianceSurveySavedQuestio
       activeKey,
       bookmarked,
       bookmarkedQuestion,
-      newSurvey,
-      response,
-      sortedSurvey,
     });
     updateTransitionClassNames(true);
     setSendingSurvey(false);
@@ -296,9 +289,6 @@ const _ComplianceSurveySavedQuestionnaire = (props: ComplianceSurveySavedQuestio
       activeKey,
       bookmarked,
       bookmarkedQuestion,
-      newSurvey,
-      response,
-      sortedSurvey,
     });
     updateTransitionClassNames(true);
     setSendingSurvey(false);
@@ -322,7 +312,6 @@ const _ComplianceSurveySavedQuestionnaire = (props: ComplianceSurveySavedQuestio
     logBrowser('Navigating to previous saved question', 'info', {
       activeKey,
       previousFollowUpKey,
-      savedQuestions,
     });
     updateTransitionClassNames(false);
   };
@@ -416,11 +405,8 @@ const _ComplianceSurveySavedQuestionnaire = (props: ComplianceSurveySavedQuestio
 
     logBrowser('Rendering compliance saved question', 'info', {
       activeKey,
-      activeSection,
       questionIndex,
       bookmarkedForQuestion,
-      savedQuestions,
-      surveyData,
     });
 
     return (

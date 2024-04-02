@@ -52,10 +52,9 @@ function _Footprint() {
   }
 
   if (auth0.user) {
-    logBrowser('User authenticated', 'info', {
+    logBrowser('Footprint page loaded', 'info', {
       user: auth0.user,
       isEmptyFootprintData,
-      data,
     });
     return (
       <AppContent title="Footprint">

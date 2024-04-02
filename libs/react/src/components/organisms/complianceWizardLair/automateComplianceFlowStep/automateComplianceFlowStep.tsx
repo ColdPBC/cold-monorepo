@@ -29,21 +29,14 @@ const _AutomateComplianceFlowStep = () => {
     // post to start automation
     const response = await axiosFetcher([`/compliance_definitions/${name}/organizations/${orgId}`, 'PUT']);
     if (isAxiosError(response)) {
-      logBrowser(
-        'Error starting automation',
-        'error',
-        {
-          response,
-          orgId,
-          name,
-        },
-        response,
-      );
+      logBrowser('Error starting automation', 'error', {
+        orgId,
+        name,
+      });
       await addToastMessage({ message: 'Automation could not be started', type: ToastMessage.FAILURE });
     } else {
       // set cookie to true. it should expire in 5 minutes
       logBrowser('Automation successfully started', 'info', {
-        response,
         orgId,
         name,
       });

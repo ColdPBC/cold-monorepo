@@ -220,7 +220,7 @@ const _Survey = (props: SurveyProps) => {
   }
 
   if (surveyData) {
-    logBrowser('Survey data fetched', 'info', { surveyData, searchParams, activeKey });
+    logBrowser('Survey data fetched', 'info', { searchParams, activeKey });
     return (
       <Takeover
         show={show}
