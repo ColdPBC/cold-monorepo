@@ -1,3 +1,10 @@
+## [1.180.11](https://github.com/ColdPBC/cold-monorepo/compare/v1.180.10...v1.180.11) (2024-04-02)
+
+
+### Bug Fixes
+
+* logging issue ([906f8e1](https://github.com/ColdPBC/cold-monorepo/commit/906f8e14a10e8701b62840289855e9bd7067fe85))
+
 ## [1.180.10](https://github.com/ColdPBC/cold-monorepo/compare/v1.180.9...v1.180.10) (2024-04-02)
 
 
