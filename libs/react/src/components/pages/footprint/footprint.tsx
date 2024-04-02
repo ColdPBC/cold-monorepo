@@ -1,21 +1,22 @@
 import React from 'react';
-import { CenterColumnContent } from '../../organisms/centerColumnContent/centerColumnContent';
-import { RightColumnContent } from '../../organisms/rightColumnContent/rightColumnContent';
+import {
+  AppContent,
+  CenterColumnContent,
+  DismissableInfoCard,
+  EmissionsDonutChartVariants,
+  ErrorFallback,
+  FootprintDetailCard,
+  FootprintOverviewCard,
+  RightColumnContent,
+  Spinner,
+} from '@coldpbc/components';
 import { useAuth0 } from '@auth0/auth0-react';
-import { Spinner } from '../../atoms/spinner/spinner';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { some } from 'lodash';
-import { FootprintOverviewCard } from '../../molecules';
-import { FootprintDetailCard } from '../../molecules/footprintDetailCard';
 import { getSchemeForColor, HexColors } from '@coldpbc/themes';
-import { AppContent } from '../../organisms/appContent';
-import { DismissableInfoCard } from '../../molecules/dismissableInfoCard';
-import { EmissionsDonutChartVariants } from '../../atoms/emissionsDonutChart/emissionsDonutChart';
 import { withErrorBoundary } from 'react-error-boundary';
-import { ErrorFallback } from '../../application/errors/errorFallback';
-import { useOrgSWR } from '../../../hooks/useOrgSWR';
+import { useColdContext, useOrgSWR } from '@coldpbc/hooks';
 import { ErrorType } from '@coldpbc/enums';
-import { useColdContext } from '@coldpbc/hooks';
 
 const PERIOD = 2023;
 
