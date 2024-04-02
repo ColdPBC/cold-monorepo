@@ -44,10 +44,7 @@ export const _DocumentUpload = () => {
       })
     : [];
 
-  logBrowser('Fetched files', 'info', {
-    files: data,
-    filesSWR: filesSWR.data,
-  });
+  logBrowser('Fetched files successfully', 'info');
 
   return (
     <AppContent title="Documents">

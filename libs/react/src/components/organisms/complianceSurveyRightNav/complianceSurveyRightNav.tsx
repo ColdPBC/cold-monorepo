@@ -129,7 +129,7 @@ const _ComplianceSurveyRightNav = (props: ComplianceSurveyRightNavProps) => {
     }
   };
 
-  logBrowser('ComplianceSurveyRightNav', 'info', { activeKey, surveyData, savedQuestions });
+  logBrowser('ComplianceSurveyRightNav', 'info', { activeKey });
 
   return (
     <div className={'w-full h-full bg-bgc-accent pr-[99px] pt-[38px] pb-[38px] text-tc-primary space-y-[18px] flex flex-col overflow-y-auto rounded-r-lg'}>

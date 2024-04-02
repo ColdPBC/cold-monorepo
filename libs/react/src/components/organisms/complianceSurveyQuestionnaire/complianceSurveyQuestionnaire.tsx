@@ -370,7 +370,6 @@ const _ComplianceSurveyQuestionnaire = (props: ComplianceSurveyQuestionnaireProp
       activeSectionIndex,
       activeSectionKey,
       nextSectionKey,
-      nextSection,
     });
   };
 
@@ -390,8 +389,6 @@ const _ComplianceSurveyQuestionnaire = (props: ComplianceSurveyQuestionnaireProp
     logBrowser('Compliance Survey Next Button Clicked', 'info', {
       activeKey,
       newSurvey,
-      response,
-      sortedSurvey,
     });
     updateTransitionClassNames(true);
     setSendingSurvey(false);
@@ -414,8 +411,6 @@ const _ComplianceSurveyQuestionnaire = (props: ComplianceSurveyQuestionnaireProp
     logBrowser('Compliance Survey Skip Button Clicked', 'info', {
       activeKey,
       newSurvey,
-      response,
-      sortedSurvey,
     });
     updateTransitionClassNames(true);
     setSendingSurvey(false);
@@ -444,8 +439,6 @@ const _ComplianceSurveyQuestionnaire = (props: ComplianceSurveyQuestionnaireProp
     logBrowser('Compliance Survey Submit Button Clicked', 'info', {
       activeKey,
       newSurvey,
-      response,
-      sortedSurvey,
     });
     updateTransitionClassNames(true);
     setSendingSurvey(false);
@@ -527,7 +520,6 @@ const _ComplianceSurveyQuestionnaire = (props: ComplianceSurveyQuestionnaireProp
       activeKey,
       activeSectionIndex,
       activeSectionKey,
-      sections,
     });
     updateTransitionClassNames(false);
   };
@@ -610,9 +602,6 @@ const _ComplianceSurveyQuestionnaire = (props: ComplianceSurveyQuestionnaireProp
     });
     logBrowser('Compliance survey Question Bookmarked', 'info', {
       activeKey,
-      newSurvey,
-      response,
-      sortedSurvey,
     });
     setSendingSurvey(false);
   };
@@ -644,8 +633,13 @@ const _ComplianceSurveyQuestionnaire = (props: ComplianceSurveyQuestionnaireProp
       <div className={'w-full h-full relative flex flex-col space-y-[24px]'} data-testid={'survey-question-container'}>
         <div className={'flex flex-row justify-between'}>
           <div className={'flex flex-col'}>
-            <div className={'text-caption font-bold'}>{activeKey.category}{question.props.corresponding_question ? ' > '+surveyData.definition.sections[activeKey.section].title : ''}</div>
-            <div className={'text-h2'}>{question.props.corresponding_question ? question.props.corresponding_question : surveyData.definition.sections[activeKey.section].title}</div>
+            <div className={'text-caption font-bold'}>
+              {activeKey.category}
+              {question.props.corresponding_question ? ' > ' + surveyData.definition.sections[activeKey.section].title : ''}
+            </div>
+            <div className={'text-h2'}>
+              {question.props.corresponding_question ? question.props.corresponding_question : surveyData.definition.sections[activeKey.section].title}
+            </div>
             <div className={'text-caption'}>
               ( Question {questionIndex}
               {' of '}
