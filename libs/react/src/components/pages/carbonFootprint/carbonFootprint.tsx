@@ -1,11 +1,14 @@
 import React from 'react';
 import {
   AppContent,
+  Card,
+  CenterColumnContent,
   DismissableInfoCard,
   EmissionsCarbonFootprintCharts,
+  EmissionsDonutChart,
   EmissionsDonutChartVariants,
   EmissionsYearlyCarbonFootprintChart,
-  FootprintOverviewCard,
+  ErrorFallback,
   Select,
   Spinner,
 } from '@coldpbc/components';
@@ -16,8 +19,9 @@ import { EmissionPayload, InputOption } from '@coldpbc/interfaces';
 import { find, forEach, map, uniq } from 'lodash';
 import { ColdEmissionsContext } from '@coldpbc/context';
 import { isAxiosError } from 'axios';
+import { withErrorBoundary } from 'react-error-boundary';
 
-export const CarbonFootprint = () => {
+const _CarbonFootprint = () => {
   const { logError, logBrowser } = useColdContext();
   const { data, isLoading, error } = useOrgSWR<EmissionPayload, any>(['/emissions', 'GET'], axiosFetcher);
   const [selectedFacility, setSelectedFacility] = React.useState<InputOption>({
@@ -65,15 +69,33 @@ export const CarbonFootprint = () => {
     return null;
   }
 
-  if (isAxiosError(error) && error.response?.status === 404) {
+  if (isAxiosError(data) && data?.response?.status === 404) {
     return (
       <AppContent title="Carbon Footprint">
-        <DismissableInfoCard
-          text="Your footprint is a snapshot of the greenhouse gases your company emitted over a specific timeframe. It is measured in tons of carbon dioxide equivalent, expressed as tCO2e."
-          onDismiss={() => {}}
-          dismissKey="footprint-page"
-        />
-        <FootprintOverviewCard chartVariant={EmissionsDonutChartVariants.horizontal} headerless />
+        <CenterColumnContent>
+          <div className={'flex flex-col space-y-[35px]'}>
+            <DismissableInfoCard
+              text="Your footprint is a snapshot of the greenhouse gases your company emitted over a specific timeframe. It is measured in tons of carbon dioxide equivalent, expressed as tCO2e."
+              onDismiss={() => {}}
+              dismissKey="footprint-page"
+            />
+            <Card>
+              <EmissionsDonutChart
+                isEmptyData={true}
+                subcategoryTotals={[]}
+                variant={EmissionsDonutChartVariants.horizontal}
+                chartData={{
+                  labels: [],
+                  datasets: [],
+                }}
+              />
+              <div className="m-auto table w-1">
+                <h4 className="text-h4 text-center whitespace-nowrap m-4">{'We need more data to show your footprint'}</h4>
+                <p className="text-center text-sm leading-normal">We'll be in touch soon to collect info needed for your latest footprint</p>
+              </div>
+            </Card>
+          </div>
+        </CenterColumnContent>
       </AppContent>
     );
   }
@@ -121,31 +143,24 @@ export const CarbonFootprint = () => {
         setSelectedFacility: setSelectedFacility,
       }}>
       <AppContent title="Carbon Footprint" isLoading={isLoading}>
-        {uniqueScopes === undefined || uniqueScopes.length === 0 ? (
-          <>
-            <DismissableInfoCard
-              text="Your footprint is a snapshot of the greenhouse gases your company emitted over a specific timeframe. It is measured in tons of carbon dioxide equivalent, expressed as tCO2e."
-              onDismiss={() => {}}
-              dismissKey="footprint-page"
-            />
-            <FootprintOverviewCard chartVariant={EmissionsDonutChartVariants.horizontal} headerless />
-          </>
-        ) : (
-          <div className={'flex flex-col space-y-[35px]'}>
-            <Select
-              options={facilityOptions}
-              value={selectedFacility.name}
-              onChange={input => {
-                setSelectedFacility(input);
-              }}
-              name={'Facility'}
-              className={'w-[255px]'}
-            />
-            <EmissionsYearlyCarbonFootprintChart emissionFacilities={data?.definition} />
-            <EmissionsCarbonFootprintCharts emissionPayload={data} />
-          </div>
-        )}
+        <div className={'flex flex-col space-y-[35px]'}>
+          <Select
+            options={facilityOptions}
+            value={selectedFacility.name}
+            onChange={input => {
+              setSelectedFacility(input);
+            }}
+            name={'Facility'}
+            className={'w-[255px]'}
+          />
+          <EmissionsYearlyCarbonFootprintChart />
+          <EmissionsCarbonFootprintCharts />
+        </div>
       </AppContent>
     </ColdEmissionsContext.Provider>
   );
 };
+
+export const CarbonFootprint = withErrorBoundary(_CarbonFootprint, {
+  FallbackComponent: props => <ErrorFallback {...props} />,
+});

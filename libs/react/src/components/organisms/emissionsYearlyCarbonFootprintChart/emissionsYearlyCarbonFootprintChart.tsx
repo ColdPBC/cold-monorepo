@@ -1,18 +1,14 @@
-import { EmissionFacility } from '@coldpbc/interfaces';
-import { Card } from '@coldpbc/components';
+import { Card, ErrorFallback } from '@coldpbc/components';
 import { forOwn, isArray, map, max } from 'lodash';
 import { BarElement, CategoryScale, Chart as ChartJS, ChartData, ChartOptions, LinearScale, Title } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import { useContext } from 'react';
+import React, { useContext } from 'react';
 import { ColdEmissionsContext } from '@coldpbc/context';
 import { HexColors } from '@coldpbc/themes';
+import { withErrorBoundary } from 'react-error-boundary';
 
-export interface EmissionsYearlyCarbonFootprintChartProps {
-  emissionFacilities?: EmissionFacility[];
-}
-
-export const EmissionsYearlyCarbonFootprintChart = (props: EmissionsYearlyCarbonFootprintChartProps) => {
+const _EmissionsYearlyCarbonFootprintChart = () => {
   const { selectedFacility, selectedYear, data } = useContext(ColdEmissionsContext);
   const { emissions } = data;
   const yearsData: {
@@ -86,6 +82,10 @@ export const EmissionsYearlyCarbonFootprintChart = (props: EmissionsYearlyCarbon
   };
 
   ChartJS.register(CategoryScale, LinearScale, BarElement, Title);
+  console.log({
+    chartOptions,
+    yearsChartData,
+  });
 
   return (
     <Card title={'Emissions'} glow={false}>
@@ -96,3 +96,7 @@ export const EmissionsYearlyCarbonFootprintChart = (props: EmissionsYearlyCarbon
     </Card>
   );
 };
+
+export const EmissionsYearlyCarbonFootprintChart = withErrorBoundary(_EmissionsYearlyCarbonFootprintChart, {
+  FallbackComponent: props => <ErrorFallback {...props} />,
+});

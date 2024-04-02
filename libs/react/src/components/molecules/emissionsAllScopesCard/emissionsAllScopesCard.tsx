@@ -1,11 +1,12 @@
-import { useContext } from 'react';
+import React, { useContext } from 'react';
 import { ColdEmissionsContext } from '@coldpbc/context';
-import { Card, EmissionsDonutChart, EmissionsDonutChartVariants, SubCategoryTotal } from '@coldpbc/components';
+import { Card, EmissionsDonutChart, EmissionsDonutChartVariants, ErrorFallback, SubCategoryTotal } from '@coldpbc/components';
 import { forEach, forOwn, isArray } from 'lodash';
 import { ChartData } from 'chart.js';
 import { HexColors } from '@coldpbc/themes';
+import { withErrorBoundary } from 'react-error-boundary';
 
-export const EmissionsAllScopesCard = () => {
+const _EmissionsAllScopesCard = ({ variant, title }: { variant?: EmissionsDonutChartVariants; title?: string }) => {
   const { data, selectedFacility, selectedYear } = useContext(ColdEmissionsContext);
   const { emissions, uniqueScopes } = data;
 
@@ -102,9 +103,9 @@ export const EmissionsAllScopesCard = () => {
   }
 
   return (
-    <Card title="Scope 1, 2, 3">
+    <Card title={`${title ? title : 'Scope 1, 2, 3'}`}>
       <EmissionsDonutChart
-        variant={EmissionsDonutChartVariants.vertical}
+        variant={variant ? variant : EmissionsDonutChartVariants.vertical}
         chartData={chartData}
         subcategoryTotals={totalsSorted}
         totalEmissions={totalEmissions}
@@ -113,3 +114,7 @@ export const EmissionsAllScopesCard = () => {
     </Card>
   );
 };
+
+export const EmissionsAllScopesCard = withErrorBoundary(_EmissionsAllScopesCard, {
+  FallbackComponent: props => <ErrorFallback {...props} />,
+});

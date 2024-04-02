@@ -1,20 +1,22 @@
-import { useContext, useRef } from 'react';
+import React, { useContext, useRef } from 'react';
 import { Chart as ChartJS, ChartOptions } from 'chart.js';
 import { useActiveSegment } from '@coldpbc/hooks';
 import { capitalize, forEach, map, sortBy } from 'lodash';
 import { Plugin as PluginType } from 'chart.js/dist/types';
-import { Card, FootprintDetailChip } from '@coldpbc/components';
+import { Card, ErrorFallback, FootprintDetailChip } from '@coldpbc/components';
 import { Chart } from 'react-chartjs-2';
 import { Table } from 'flowbite-react';
 import { darkTableTheme, getSchemeForColor, HexColors } from '@coldpbc/themes';
 import { formatTonnes } from '@coldpbc/lib';
 import { ColdEmissionsContext } from '@coldpbc/context';
+import { ScopeColors } from '@coldpbc/enums';
+import { withErrorBoundary } from 'react-error-boundary';
 
 export interface EmissionsScopeChartCardProps {
   scope_category: number;
 }
 
-export const EmissionsScopeChartCard = (props: EmissionsScopeChartCardProps) => {
+const _EmissionsScopeChartCard = (props: EmissionsScopeChartCardProps) => {
   const { scope_category } = props;
   const { data, selectedFacility, selectedYear } = useContext(ColdEmissionsContext);
   const { emissions } = data;
@@ -29,7 +31,7 @@ export const EmissionsScopeChartCard = (props: EmissionsScopeChartCardProps) => 
     };
   } = {};
 
-  const colors = getSchemeForColor(HexColors.green);
+  const colors = getSchemeForColor(HexColors[ScopeColors[scope_category]]);
 
   const emissionsDataSet = {
     chartData: {
@@ -210,3 +212,7 @@ export const EmissionsScopeChartCard = (props: EmissionsScopeChartCardProps) => 
     </Card>
   );
 };
+
+export const EmissionsScopeChartCard = withErrorBoundary(_EmissionsScopeChartCard, {
+  FallbackComponent: props => <ErrorFallback {...props} />,
+});

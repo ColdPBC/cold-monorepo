@@ -1,9 +1,9 @@
 import React, { useContext } from 'react';
-import { AppContent, CenterColumnContent, EmissionsAllScopesCard, EmissionsScopeChartCard, RightColumnContent, Select } from '@coldpbc/components';
-import { EmissionPayload } from '@coldpbc/interfaces';
+import { AppContent, CenterColumnContent, EmissionsAllScopesCard, EmissionsScopeChartCard, ErrorFallback, RightColumnContent, Select } from '@coldpbc/components';
 import { ColdEmissionsContext } from '@coldpbc/context';
+import { withErrorBoundary } from 'react-error-boundary';
 
-export const EmissionsCarbonFootprintCharts = ({ emissionPayload }: { emissionPayload: EmissionPayload | undefined }) => {
+const _EmissionsCarbonFootprintCharts = () => {
   const { data, selectedYear, setSelectedYear } = useContext(ColdEmissionsContext);
 
   const { uniqueScopes, yearOptions } = data;
@@ -37,3 +37,7 @@ export const EmissionsCarbonFootprintCharts = ({ emissionPayload }: { emissionPa
     </div>
   );
 };
+
+export const EmissionsCarbonFootprintCharts = withErrorBoundary(_EmissionsCarbonFootprintCharts, {
+  FallbackComponent: props => <ErrorFallback {...props} />,
+});
