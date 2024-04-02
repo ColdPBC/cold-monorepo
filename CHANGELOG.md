@@ -1,3 +1,12 @@
+# [1.181.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.180.12...v1.181.0) (2024-04-02)
+
+
+### Features
+
+* handle when the answer is undefined, instead of checking if the value exists or not ([46fcad2](https://github.com/ColdPBC/cold-monorepo/commit/46fcad2e12e244f1593ee7da475977f0196e1e0b))
+* have 'yes' and 'no' be used as true for ai responses ([7bb21ca](https://github.com/ColdPBC/cold-monorepo/commit/7bb21ca4880b8e87df36014af6c8d5af4a47e361))
+* have 'yes' and 'no' be used as true for ai responses ([#366](https://github.com/ColdPBC/cold-monorepo/issues/366)) ([dae713b](https://github.com/ColdPBC/cold-monorepo/commit/dae713b6ffea9c6d77a0080fff02c1f2d03d9404))
+
 ## [1.180.12](https://github.com/ColdPBC/cold-monorepo/compare/v1.180.11...v1.180.12) (2024-04-02)
 
 
