@@ -10,7 +10,6 @@ const setAxiosTokenInterceptor = async (getAccessTokenSilently: (options?: GetTo
   const { logBrowser } = context;
   axios.interceptors.request.use(async config => {
     if (config.baseURL === resolveAPIUrl()) {
-      logBrowser('Axios request sent', 'info', { config });
       const audience = import.meta.env.VITE_COLD_API_AUDIENCE as string;
       const accessToken = await getAccessTokenSilently({
         authorizationParams: {
@@ -19,6 +18,10 @@ const setAxiosTokenInterceptor = async (getAccessTokenSilently: (options?: GetTo
         },
       });
       config.headers['Authorization'] = `Bearer ${accessToken}`;
+      logBrowser('Axios request sent', 'info', {
+        url: config.url,
+        headers: config.headers,
+      });
     }
     return config;
   });
@@ -29,10 +32,8 @@ const setAxiosResponseInterceptor = (coldContext: ColdContextType) => {
   axios.interceptors.response.use(
     response => {
       logBrowser('Axios response received', 'info', {
-        response: {
-          ...response,
-          request: JSON.parse(response.request?.responseText),
-        },
+        url: response.config.url,
+        status: response.status,
       });
       return response;
     },
@@ -40,20 +41,14 @@ const setAxiosResponseInterceptor = (coldContext: ColdContextType) => {
       // filter out 404 errors when fetching data from /categories
       if (!(error.response && error.response.status === 404 && error.config.url?.includes('/categories'))) {
         logError(error, ErrorType.AxiosError, {
-          ...error,
+          url: error.config.url,
+          status: error.response?.status,
         });
       }
-      logBrowser(
-        'Axios error',
-        'error',
-        {
-          error: {
-            ...error,
-            request: JSON.parse(error.request?.responseText),
-          },
-        },
-        error,
-      );
+      logBrowser('Axios error', 'error', {
+        url: error.config.url,
+        status: error.response?.status,
+      });
       return Promise.reject(error);
     },
   );

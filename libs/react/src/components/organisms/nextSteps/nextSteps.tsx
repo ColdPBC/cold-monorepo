@@ -58,7 +58,9 @@ const _NextSteps = () => {
     return;
   }
 
-  logBrowser('Next steps loaded', 'info', { surveys: data, orgCompliances: orgCompliances.data });
+  logBrowser('Next steps loaded', 'info', {
+    orgId,
+  });
 
   if (!orgCompliances.data?.length) {
     return;

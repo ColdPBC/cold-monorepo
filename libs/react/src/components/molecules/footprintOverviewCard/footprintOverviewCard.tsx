@@ -70,10 +70,7 @@ function _FootprintOverviewCard(props: PropsWithChildren<FootprintOverviewCardPr
 
   logBrowser('Footprint Overview Card data loaded', 'info', {
     isEmptyFootprintData,
-    data,
-    surveyResponse,
     isSurveyComplete,
-    ldFlags,
   });
 
   return (

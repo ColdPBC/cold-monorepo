@@ -63,7 +63,6 @@ export const Wizard = (props: PropsWithChildren<WizardProps>) => {
         currentStep,
         nextStep: steps[currentIndex + 1],
         steps,
-        data,
         location,
       });
       setCurrentStep(steps[currentIndex + 1]);
@@ -78,7 +77,6 @@ export const Wizard = (props: PropsWithChildren<WizardProps>) => {
         currentStep,
         prevStep: steps[currentIndex + 1],
         steps,
-        data,
         location,
       });
       setCurrentStep(steps[currentIndex - 1]);
@@ -96,15 +94,14 @@ export const Wizard = (props: PropsWithChildren<WizardProps>) => {
     // handle the case where the user navigates to a step directly and not through the wizard
     const currentRoute = location.pathname.replace(baseURL, '');
     const foundStep = steps.find(step => step.route === currentRoute);
-    logBrowser(`Navigated to ${foundStep?.name} step`, 'info', {
-      currentRoute,
-      currentStep,
-      foundStep,
-      steps,
-      data,
-      location,
-    });
     if (foundStep && !isEqual(foundStep, currentStep)) {
+      logBrowser(`Navigating to ${foundStep.name} step`, 'info', {
+        currentRoute,
+        currentStep,
+        foundStep,
+        steps,
+        location,
+      });
       setCurrentStep(foundStep);
     }
   }, [location.pathname]);

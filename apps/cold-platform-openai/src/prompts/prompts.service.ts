@@ -79,7 +79,7 @@ export class PromptsService extends BaseWorker {
 
   private async initializeFlagValues() {
     // Retrieve the GPT model, temperature, and other settings
-    this.model = await this.darkly.getStringFlag('dynamic-gpt-model', 'gpt-3.5-turbo', {
+    this.model = await this.darkly.getStringFlag('dynamic-gpt-assistant-model', 'gpt-3.5-turbo', {
       kind: 'org-compliance-set',
       key: this.organization.name,
       name: this.compliance_set,
@@ -340,7 +340,7 @@ export class PromptsService extends BaseWorker {
       case 'yes_no':
         return this.yes_no_prompt;
       case 'multi_select':
-        return this.multi_select_prompt;
+        return this.multi_select_prompt.replace('{options}', item.options.join(', '));
       case 'text':
         return this.text_prompt;
       case 'textarea':
@@ -348,7 +348,7 @@ export class PromptsService extends BaseWorker {
       case 'multi_text':
         return this.multi_text_prompt;
       case 'select':
-        return this.select_prompt;
+        return this.select_prompt.replace('{options}', item.options.join(', '));
       case 'number':
         return this.number_prompt;
       case 'percent_slider':
@@ -361,19 +361,21 @@ export class PromptsService extends BaseWorker {
   }
 
   //Returns the prompt for the OpenAI assistant
-  async getPrompt(question: any) {
-    if (!this.has_docs) {
+  async getPrompt(question: any, context?: any, has_docs?: boolean) {
+    await this.initializeFlagValues();
+
+    if (!has_docs && !this.has_docs) {
       return this.nodocs_prompt;
     }
 
     const component_prompt = await this.getComponentPrompt(question);
-    const sanitized_base = this.base_prompt.replace('{component_prompt}', component_prompt);
+    const sanitized_base = this.base_prompt.replace('{component_prompt}', component_prompt).replace('{context}', context);
 
     /**
      * @description This action retrieves the base prompt for the OpenAI assistant.
      */
     // If instructions are present, include them with the base prompt
-    if (this.instructions_prompt.length > 0) {
+    if (!this.is_rag && this.instructions_prompt.length > 0) {
       return `${this.instructions_prompt} ${sanitized_base}`;
     }
 

@@ -36,18 +36,18 @@ export const DocumentUploadButton = (props: DocumentUploadButtonProps) => {
     } as AxiosRequestConfig);
     const response = await axiosFetcher([`/organizations/${orgId}/files`, 'POST', formData, config]);
     if (isAxiosError(response)) {
-      logBrowser('Upload failed', 'error', { ...response, orgId, formData: { ...formData } }, response);
+      logBrowser('Upload failed', 'error', { orgId, formData: { ...formData } });
       await addToastMessage({
         message: 'Upload failed',
         type: ToastMessage.FAILURE,
       });
-      logError(response.message, ErrorType.AxiosError, response);
+      logError(response.message, ErrorType.AxiosError);
     } else {
       await addToastMessage({
         message: 'Upload successful',
         type: ToastMessage.SUCCESS,
       });
-      logBrowser('Upload successful', 'info', { response, orgId, formData: { ...formData } });
+      logBrowser('File Upload successful', 'info', { orgId, formData: { ...formData } });
       await mutate(
         [`/organizations/${orgId}/files`, 'GET'],
         (cachedData: any) => {

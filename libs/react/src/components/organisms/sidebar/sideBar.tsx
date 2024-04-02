@@ -256,7 +256,7 @@ const _SideBar = (): JSX.Element => {
 
   if (filteredSidebarItems) {
     // Separate the items into top and bottom nav items
-    logBrowser('Sidebar data loaded', 'info', { data, actionsData, filteredSidebarItems });
+    logBrowser('Sidebar data loaded', 'info', { data, filteredSidebarItems });
     const topItems: NavbarItem[] = clone(filteredSidebarItems);
 
     const bottomItems = remove(topItems, (item: NavbarItem) => {

@@ -51,15 +51,18 @@ export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
 
         client.current.on('message', (topic, payload, packet) => {
           const payloadString = packet.payload.toString();
-          logBrowser('Received message from IOT', 'info', { topic, payloadString, packet });
+          logBrowser('Received message from IOT', 'info', { topic });
           try {
             const parsedPayload = JSON.parse(payloadString);
-            logBrowser('Received message from IOT', 'info', { topic, parsedPayload, packet });
+            logBrowser('Parsed payload from IOT', 'info', {
+              topic,
+              swr_key: parsedPayload.swr_key,
+            });
             if (parsedPayload.swr_key) {
               mutate([parsedPayload.swr_key, 'GET']);
             }
           } catch (e) {
-            logBrowser('Error parsing payload from IOT', 'error', { topic, payloadString, packet, e }, e);
+            logBrowser('Error parsing payload from IOT', 'error', { topic, e }, e);
           }
         });
 

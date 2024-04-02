@@ -21,7 +21,7 @@ export class AppModule {
     return {
       module: AppModule,
       imports: [
-        await NestModule.forRootAsync(1, 'cold-api-uploaded-files'),
+        await NestModule.forRootAsync(),
         await EventsModule.forRootAsync(),
         ServeStaticModule.forRoot({
           serveStaticOptions: {

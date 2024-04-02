@@ -7,8 +7,8 @@ import { AssistantService } from './assistant/assistant.service';
 import { BaseWorker, CacheService, DarklyService } from '@coldpbc/nest';
 import { FileService } from './assistant/files/file.service';
 import { ConfigService } from '@nestjs/config';
-import { LangchainLoaderService } from './langchain/langchain.loader.service';
 import { ChatService } from './chat/chat.service';
+import { PineconeService } from './pinecone/pinecone.service';
 
 @Injectable()
 @Processor('openai')
@@ -22,7 +22,7 @@ export class JobConsumer extends BaseWorker {
     private readonly assistant: AssistantService,
     private readonly fileService: FileService,
     private readonly cache: CacheService,
-    private readonly loader: LangchainLoaderService,
+    private readonly loader: PineconeService,
     private readonly darkly: DarklyService,
     private readonly chat: ChatService,
   ) {

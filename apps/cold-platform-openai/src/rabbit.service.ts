@@ -13,7 +13,7 @@ import { Queue } from 'bull';
 import { AppService } from './app.service';
 import { FileService } from './assistant/files/file.service';
 import { ConfigService } from '@nestjs/config';
-import { LangchainLoaderService } from './langchain/langchain.loader.service';
+import { PineconeService } from './pinecone/pinecone.service';
 
 /**
  * RabbitService class.
@@ -28,7 +28,7 @@ export class RabbitService extends BaseWorker {
     private readonly s3: S3Service,
     private readonly files: FileService,
     private readonly cache: CacheService,
-    private readonly loader: LangchainLoaderService,
+    private readonly pc: PineconeService,
   ) {
     super(RabbitService.name);
   }
@@ -107,7 +107,7 @@ export class RabbitService extends BaseWorker {
         }
         case 'file.uploaded': {
           const uploader = new FileService(this.config, this.appService, this.prisma, this.s3);
-          await this.loader.ingestData(parsed.user, parsed.organization, parsed.payload);
+          await this.pc.ingestData(parsed.user, parsed.organization, parsed.payload.compliance, parsed.payload);
           return await uploader.uploadOrgFilesToOpenAI(parsed);
         }
         case 'organization_files.get': {

@@ -1,7 +1,7 @@
 {
   "name": "cold-monorepo-nx",
   "packageManager": "yarn@4.1.0",
-  "version": "1.179.6",
+  "version": "1.182.0",
   "license": "MIT",
   "engines": {
     "node": ">=20.9.0",
@@ -85,6 +85,7 @@
     "@nivo/pie": "^0.80.0",
     "@nx/nest": "17.1.2",
     "@paralleldrive/cuid2": "^2.2.2",
+    "@pinecone-database/doc-splitter": "^0.0.1",
     "@pinecone-database/pinecone": "^2.1.0",
     "@prisma/client": "^5.6.0",
     "@semantic-release/exec": "^6.0.3",
@@ -95,6 +96,7 @@
     "@types/numeral": "^2.0.4",
     "@types/react-collapse": "^5.0.4",
     "@vegardit/prisma-generator-nestjs-dto": "^1.5.1",
+    "ai": "^3.0.16",
     "app-root-path": "^3.1.0",
     "argon2": "^0.30.3",
     "async-mqtt": "^2.6.3",

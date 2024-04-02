@@ -1,3 +1,119 @@
+# [1.182.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.181.0...v1.182.0) (2024-04-02)
+
+
+### Features
+
+* update logging to be lean for large data from the API ([60d4ce4](https://github.com/ColdPBC/cold-monorepo/commit/60d4ce48c6298c5d9548d75d3cb610b0715d19b4))
+
+# [1.181.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.180.12...v1.181.0) (2024-04-02)
+
+
+### Features
+
+* handle when the answer is undefined, instead of checking if the value exists or not ([46fcad2](https://github.com/ColdPBC/cold-monorepo/commit/46fcad2e12e244f1593ee7da475977f0196e1e0b))
+* have 'yes' and 'no' be used as true for ai responses ([7bb21ca](https://github.com/ColdPBC/cold-monorepo/commit/7bb21ca4880b8e87df36014af6c8d5af4a47e361))
+* have 'yes' and 'no' be used as true for ai responses ([#366](https://github.com/ColdPBC/cold-monorepo/issues/366)) ([dae713b](https://github.com/ColdPBC/cold-monorepo/commit/dae713b6ffea9c6d77a0080fff02c1f2d03d9404))
+
+## [1.180.12](https://github.com/ColdPBC/cold-monorepo/compare/v1.180.11...v1.180.12) (2024-04-02)
+
+
+### Bug Fixes
+
+* add log entry when section is done and when survey is complete ([209cb1f](https://github.com/ColdPBC/cold-monorepo/commit/209cb1fd0be5522dd9a2450cb2df79874afbf881))
+
+## [1.180.11](https://github.com/ColdPBC/cold-monorepo/compare/v1.180.10...v1.180.11) (2024-04-02)
+
+
+### Bug Fixes
+
+* logging issue ([906f8e1](https://github.com/ColdPBC/cold-monorepo/commit/906f8e14a10e8701b62840289855e9bd7067fe85))
+
+## [1.180.10](https://github.com/ColdPBC/cold-monorepo/compare/v1.180.9...v1.180.10) (2024-04-02)
+
+
+### Bug Fixes
+
+* fix incorrect eval of false ([51703fc](https://github.com/ColdPBC/cold-monorepo/commit/51703fc0263d1340d809e68892fee25f61038ead))
+
+## [1.180.9](https://github.com/ColdPBC/cold-monorepo/compare/v1.180.8...v1.180.9) (2024-04-02)
+
+
+### Bug Fixes
+
+* fix incorrect eval of false ([1fd5cf9](https://github.com/ColdPBC/cold-monorepo/commit/1fd5cf9dd5f274c24d0a7c36e973c8602bfc8827))
+
+## [1.180.8](https://github.com/ColdPBC/cold-monorepo/compare/v1.180.7...v1.180.8) (2024-04-02)
+
+
+### Bug Fixes
+
+* fix incorrect eval of false ([c896d34](https://github.com/ColdPBC/cold-monorepo/commit/c896d34a575a561a754f4a8c4482091ec9772884))
+
+## [1.180.7](https://github.com/ColdPBC/cold-monorepo/compare/v1.180.6...v1.180.7) (2024-04-02)
+
+
+### Bug Fixes
+
+* incorrectly sets ai_answered: false when yes_no answer is false ([c82f2e7](https://github.com/ColdPBC/cold-monorepo/commit/c82f2e7f6d3fb2bbfce89167debbcfbe6b1fffea))
+* incorrectly sets ai_answered: false when yes_no answer is false ([#352](https://github.com/ColdPBC/cold-monorepo/issues/352)) ([f2aacaf](https://github.com/ColdPBC/cold-monorepo/commit/f2aacaf5d76acb8e47def48fe6da0dc43557731c))
+
+## [1.180.6](https://github.com/ColdPBC/cold-monorepo/compare/v1.180.5...v1.180.6) (2024-04-02)
+
+
+### Bug Fixes
+
+* add tooltip to question.prompt ([3c76506](https://github.com/ColdPBC/cold-monorepo/commit/3c76506f1c1c7b6250789401e00a191e10432aa4))
+
+## [1.180.5](https://github.com/ColdPBC/cold-monorepo/compare/v1.180.4...v1.180.5) (2024-04-02)
+
+
+### Bug Fixes
+
+* add tooltip to question.prompt ([9f4fa22](https://github.com/ColdPBC/cold-monorepo/commit/9f4fa2277edb58d41598d46367b9e214588a90e6))
+
+## [1.180.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.180.3...v1.180.4) (2024-04-01)
+
+
+### Bug Fixes
+
+* prompt bug ([af91500](https://github.com/ColdPBC/cold-monorepo/commit/af91500335507f60593f87d64ee79fa5bda35e13))
+
+## [1.180.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.180.2...v1.180.3) (2024-04-01)
+
+
+### Bug Fixes
+
+* prompt bug ([0284ded](https://github.com/ColdPBC/cold-monorepo/commit/0284dedf3cda9d8de9db35548f552cf784951bf9))
+
+## [1.180.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.180.1...v1.180.2) (2024-04-01)
+
+
+### Bug Fixes
+
+* bug that would prevent updated flag values getting passed to prompt service ([eab4854](https://github.com/ColdPBC/cold-monorepo/commit/eab485446aad1b12327e79a56e58dc537f92c45f))
+
+## [1.180.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.180.0...v1.180.1) (2024-04-01)
+
+
+### Bug Fixes
+
+* logging question key ([4f7815a](https://github.com/ColdPBC/cold-monorepo/commit/4f7815ad20f51d99263c15cc9a37eb66ab823ecf))
+
+# [1.180.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.179.6...v1.180.0) (2024-04-01)
+
+
+### Bug Fixes
+
+* moved openai tools out from under langchain folder ([a7d04ea](https://github.com/ColdPBC/cold-monorepo/commit/a7d04eacbafd75e3b6d7dc93cab4b42cecc6e7bf))
+* remove unused params ([fe0f071](https://github.com/ColdPBC/cold-monorepo/commit/fe0f0719f960385005551ab16cd72ddb6b6a6faa))
+* using wrong model flag name ([4cd5e67](https://github.com/ColdPBC/cold-monorepo/commit/4cd5e676279e49ff9e9cf2e18bbd0127658cc0b2))
+
+
+### Features
+
+* refactor to remove langchain from calling openai ([2e6ed61](https://github.com/ColdPBC/cold-monorepo/commit/2e6ed61728eb9e36f20f729cd53f0ae9dabd6d2b))
+* store links between files and vector records ([9476c0b](https://github.com/ColdPBC/cold-monorepo/commit/9476c0be23a51d9554a9b43c764093bb09672e63))
+
 ## [1.179.6](https://github.com/ColdPBC/cold-monorepo/compare/v1.179.5...v1.179.6) (2024-03-29)
 
 
