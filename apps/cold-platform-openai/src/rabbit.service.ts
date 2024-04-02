@@ -107,7 +107,7 @@ export class RabbitService extends BaseWorker {
         }
         case 'file.uploaded': {
           const uploader = new FileService(this.config, this.appService, this.prisma, this.s3);
-          await this.pc.ingestData(parsed.user, parsed.organization, parsed.payload.compliance, parsed.payload);
+          await this.pc.ingestData(parsed.user, parsed.organization, parsed.payload);
           return await uploader.uploadOrgFilesToOpenAI(parsed);
         }
         case 'organization_files.get': {
