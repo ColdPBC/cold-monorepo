@@ -1,3 +1,15 @@
+# [1.184.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.183.3...v1.184.0) (2024-04-03)
+
+
+### Bug Fixes
+
+* clean up context prompt ([7cb0b64](https://github.com/ColdPBC/cold-monorepo/commit/7cb0b649fea7132a2e18f5a38dfb1115d377f7f2))
+
+
+### Features
+
+* check if the ai response is valid before showing ai icon ([813d1e6](https://github.com/ColdPBC/cold-monorepo/commit/813d1e67178feef779c792138a746ff8d3cb740f))
+
 ## [1.183.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.183.2...v1.183.3) (2024-04-03)
 
 
