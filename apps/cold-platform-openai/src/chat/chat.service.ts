@@ -136,9 +136,18 @@ export class ChatService extends BaseWorker implements OnModuleInit {
 
       const { rephrased_question, docs } = await this.getDocumentContent(messages, question, openai, indexName, session, user, context);
 
+      const context_content = context.map(doc => {
+        return `
+
+        file: ${doc.metadata['file_name']}
+        text: ${doc.metadata.chunk}
+        score: ${doc.score}
+
+        `;
+      });
       const vars = {
         component_prompt: (await this.prompts.getComponentPrompt(question)) || '',
-        context: JSON.stringify(context),
+        context: context_content.join('<br />'),
         question: question.prompt,
       };
       const sanitized_base = (await this.fp.getPrompt('survey_question_prompt', vars, true)) as FormattedPrompt;
@@ -163,9 +172,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
         content: response.choices[0].message.content,
       };
 
-      const fpMessages = sanitized_base.allMessages(message);
-
-      this.logger.info('FPMessages', fpMessages);
+      sanitized_base.allMessages(message);
 
       let ai_response: any;
       if (typeof response.choices[0].message.content === 'string') {
@@ -199,13 +206,11 @@ export class ChatService extends BaseWorker implements OnModuleInit {
       }
 
       const references = docs.map(doc => {
-        return `
-
-        file: ${doc.metadata['file_name']}
-        text: ${doc.metadata.chunk}
-        score: ${doc.score}
-
-        `;
+        return {
+          file: doc.metadata['file_name'],
+          text: doc.metadata.chunk,
+          score: doc.score,
+        };
       });
 
       set(ai_response, 'references', references);
@@ -235,7 +240,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
       const end = new Date();
       const recording = await this.fp.recordCompletion(session, vars, sanitized_base, response, start, end);
 
-      this.logger.info('Recording', recording);
+      this.logger.info('Sending run stats to FreePlay', recording);
 
       return ai_response;
     } catch (error) {
