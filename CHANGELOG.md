@@ -1,3 +1,10 @@
+## [1.184.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.184.0...v1.184.1) (2024-04-03)
+
+
+### Bug Fixes
+
+* issues with formatting ([86e6442](https://github.com/ColdPBC/cold-monorepo/commit/86e64422173c02b678a8cc6de71a0509197d0d45))
+
 # [1.184.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.183.3...v1.184.0) (2024-04-03)
 
 
