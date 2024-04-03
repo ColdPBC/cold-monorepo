@@ -1,8 +1,8 @@
 import { useColdContext, useOrgSWR } from '@coldpbc/hooks';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { EmissionPayload, InputOption } from '@coldpbc/interfaces';
-import { ErrorType } from '@coldpbc/enums';
-import { Card, EmissionsAllScopesCard, EmissionsDonutChart, EmissionsDonutChartVariants, ErrorFallback, Spinner } from '@coldpbc/components';
+import { EmissionsScopesCardVariants, ErrorType } from '@coldpbc/enums';
+import { Card, EmissionsDonutChart, EmissionsDonutChartVariants, EmissionsScopesCard, ErrorFallback, Spinner } from '@coldpbc/components';
 import React from 'react';
 import { isAxiosError } from 'axios';
 import { ColdEmissionsContext } from '@coldpbc/context';
@@ -119,7 +119,7 @@ const _EmissionsOverviewCard = () => {
         setSelectedYear,
         setSelectedFacility,
       }}>
-      <EmissionsAllScopesCard variant={EmissionsDonutChartVariants.horizontal} title={'Emissions Overview'} />
+      <EmissionsScopesCard variant={EmissionsScopesCardVariants.horizontal} title={'Emissions Overview'} />
     </ColdEmissionsContext.Provider>
   );
 };

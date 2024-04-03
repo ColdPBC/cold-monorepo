@@ -3,11 +3,11 @@ import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import React from 'react';
 import { getDefaultEmissionMock } from '@coldpbc/mocks';
-import { EmissionsAllScopesCard } from '@coldpbc/components';
+import { EmissionsScopesCard } from '@coldpbc/components';
 
-const meta: Meta<typeof EmissionsAllScopesCard> = {
-  title: 'Molecules/EmissionsAllScopesCard',
-  component: EmissionsAllScopesCard,
+const meta: Meta<typeof EmissionsScopesCard> = {
+  title: 'Molecules/EmissionsScopesCard',
+  component: EmissionsScopesCard,
   tags: ['autodocs'],
   decorators: [withKnobs],
 };
@@ -45,12 +45,12 @@ export const Default = () => {
         setSelectedYear: option => {},
         selectedYear: {
           id: 0,
-          name: 'All Years',
+          name: 'All Year',
           value: 'all',
         },
         setSelectedFacility: option => {},
       }}>
-      <EmissionsAllScopesCard />;
+      <EmissionsScopesCard />;
     </ColdEmissionsContext.Provider>
   );
 };

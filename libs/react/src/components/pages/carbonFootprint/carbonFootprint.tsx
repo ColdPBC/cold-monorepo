@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   AppContent,
   Card,
@@ -24,6 +24,7 @@ import { withErrorBoundary } from 'react-error-boundary';
 const _CarbonFootprint = () => {
   const { logError, logBrowser } = useColdContext();
   const { data, isLoading, error } = useOrgSWR<EmissionPayload, any>(['/emissions', 'GET'], axiosFetcher);
+  const [isSingleYear, setIsSingleYear] = React.useState<boolean>(false);
   const [selectedFacility, setSelectedFacility] = React.useState<InputOption>({
     id: 0,
     name: 'All Facilities',
@@ -58,6 +59,37 @@ const _CarbonFootprint = () => {
     name: 'All Years',
     value: 'all',
   });
+
+  useEffect(() => {
+    // check if there is only one year
+    const yearSet = new Set<number>();
+    forEach(data?.definition, (facility, index) => {
+      if (yearSet.size > 1 || (selectedFacility.value !== 'all' && selectedFacility.value !== facility.facility_id.toString())) {
+        return;
+      }
+      forEach(facility.periods, (period, index) => {
+        yearSet.add(period.value);
+      });
+    });
+    if (yearSet.size === 1) {
+      setIsSingleYear(true);
+      const singleYearOption = find(yearOptions, { value: Array.from(yearSet)[0].toString() });
+      setSelectedYear(
+        singleYearOption || {
+          id: 0,
+          name: 'All Years',
+          value: 'all',
+        },
+      );
+    } else {
+      setIsSingleYear(false);
+      setSelectedYear({
+        id: 0,
+        name: 'All Years',
+        value: 'all',
+      });
+    }
+  }, [data, selectedFacility]);
 
   if (isLoading) {
     return <Spinner />;
@@ -141,19 +173,22 @@ const _CarbonFootprint = () => {
         setSelectedYear: setSelectedYear,
         selectedFacility: selectedFacility,
         setSelectedFacility: setSelectedFacility,
+        isSingleYear: isSingleYear,
       }}>
       <AppContent title="Carbon Footprint" isLoading={isLoading}>
         <div className={'flex flex-col space-y-[35px]'}>
-          <Select
-            options={facilityOptions}
-            value={selectedFacility.name}
-            onChange={input => {
-              setSelectedFacility(input);
-            }}
-            name={'Facility'}
-            className={'w-[255px]'}
-          />
-          <EmissionsYearlyCarbonFootprintChart />
+          {!isSingleYear && (
+            <Select
+              options={facilityOptions}
+              value={selectedFacility.name}
+              onChange={input => {
+                setSelectedFacility(input);
+              }}
+              name={'Facility'}
+              className={'w-[255px]'}
+            />
+          )}
+          {!isSingleYear && <EmissionsYearlyCarbonFootprintChart />}
           <EmissionsCarbonFootprintCharts />
         </div>
       </AppContent>

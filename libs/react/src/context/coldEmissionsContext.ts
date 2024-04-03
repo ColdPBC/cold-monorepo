@@ -14,6 +14,7 @@ export type ColdEmissionsContextType = {
   setSelectedYear: (option: InputOption) => void;
   selectedFacility: InputOption;
   setSelectedFacility: (option: InputOption) => void;
+  isSingleYear: boolean;
 };
 
 export const ColdEmissionsContext = createContext({
@@ -30,4 +31,5 @@ export const ColdEmissionsContext = createContext({
     value: 'all',
   },
   setSelectedFacility: (facility: InputOption) => {},
+  isSingleYear: false,
 } as ColdEmissionsContextType);

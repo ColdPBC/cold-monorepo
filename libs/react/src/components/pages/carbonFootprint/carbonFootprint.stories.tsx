@@ -28,3 +28,11 @@ export const EmptyData: Story = {
     </StoryMockProvider>
   ),
 };
+
+export const SingleYear: Story = {
+  render: args => (
+    <StoryMockProvider handlers={getEmissionsOverviewCardHandler.singleYear}>
+      <CarbonFootprint />
+    </StoryMockProvider>
+  ),
+};

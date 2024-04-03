@@ -26,6 +26,7 @@ import {
 import { getAllFilesMock } from './filesMock';
 import { getApiUrl } from './handlers';
 import { getAssessmentSurveyWithProgressMock, getSurveyFormDataByName } from './surveyDataMock';
+import { getSingleYearsEmissionMock } from './emissionMocks';
 
 export const getFootprintHandler = {
   default: rest.get('*/organizations/:orgId/categories/company_decarbonization', (req, res, ctx) => {
@@ -732,6 +733,11 @@ export const getEmissionsOverviewCardHandler = {
     rest.get(getApiUrl('/organizations/:orgId/emissions'), (req, res, ctx) => {
       // return 404
       return res(ctx.status(404));
+    }),
+  ],
+  singleYear: [
+    rest.get(getApiUrl('/organizations/:orgId/emissions'), (req, res, ctx) => {
+      return res(ctx.json(getSingleYearsEmissionMock()));
     }),
   ],
 };
