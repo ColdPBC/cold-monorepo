@@ -1,3 +1,11 @@
+## [1.184.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.184.2...v1.184.3) (2024-04-03)
+
+
+### Bug Fixes
+
+* possible null reference ([2621cb6](https://github.com/ColdPBC/cold-monorepo/commit/2621cb6abcfb0ceaec391a0b7e34621a246ae09d))
+* update FP session to contain relevant metadata ([3546471](https://github.com/ColdPBC/cold-monorepo/commit/354647176deeb0269d372392eee537ad56b29e89))
+
 ## [1.184.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.184.1...v1.184.2) (2024-04-03)
 
 
