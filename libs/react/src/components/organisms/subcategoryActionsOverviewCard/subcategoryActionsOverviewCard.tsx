@@ -39,7 +39,7 @@ const _SubcategoryActionsOverviewCard = ({ subcategory_key, category_key }: Subc
     return null;
   }
 
-  logBrowser('Actions data loaded', 'info', { actions, categoryData, subcategoryName, data });
+  logBrowser('Actions data loaded', 'info', { actions, categoryData, subcategoryName });
 
   return (
     <Card className={'w-[666px]'} glow={true} data-testid={'subcategory-actions-overview-card'}>
