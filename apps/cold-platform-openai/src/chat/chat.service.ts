@@ -126,7 +126,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
    * @param user
    * @param session
    */
-  async askQuestion(indexName: string, question: any, company_name: string, user: AuthenticatedUser, session, additional_context?: any): Promise<any> {
+  async askQuestion(indexName: string, question: any, company_name: string, user: AuthenticatedUser, session: FPSession, additional_context?: any): Promise<any> {
     try {
       // Get Chat History
       let messages = (await this.cache.get(`openai:thread:${user.coldclimate_claims.id}`)) as ChatCompletionMessageParam[];
@@ -141,7 +141,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
         apiKey: this.config.getOrThrow('OPENAI_API_KEY'),
       });
 
-      const { rephrased_question, docs } = await this.getDocumentContent(messages, question, openai, indexName, user, context, additional_context);
+      const { rephrased_question, docs } = await this.getDocumentContent(messages, question, openai, indexName, user, context, session, additional_context);
 
       const vars = {
         component_prompt: (await this.prompts.getComponentPrompt(question)) || '',
@@ -256,6 +256,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
    * @param indexName
    * @param user
    * @param context
+   * @param session
    * @param additional_context
    * @private
    */
@@ -266,6 +267,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
     indexName: string,
     user: AuthenticatedUser,
     context: any,
+    session: FPSession,
     additional_context,
   ) {
     /**
@@ -284,9 +286,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
     }
 
     const vectorSession = (await this.fp.createSession({
-      user: user.coldclimate_claims.email,
-      survey: 'survey',
-      organization: 'organization',
+      ...session.customMetadata,
     })) as FPSession;
 
     let vars: any;
@@ -335,7 +335,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
 
       this.logger.info(`Generated Pinecone Query`, {
         previous_message: lastMessage,
-        current_question: question.promp,
+        current_question: question.prompt,
         pincone_query: rephrased_question,
         session_id: vectorSession.sessionId,
         ...vectorSession.customMetadata,
@@ -383,16 +383,6 @@ export class ChatService extends BaseWorker implements OnModuleInit {
       organization,
       on_update_url,
     });
-
-    // Create a session for the survey
-    const session = (await this.fp.createSession({
-      survey: survey.definition.title,
-      organization: organization.name,
-      user: user.coldclimate_claims.email,
-    })) as FPSession;
-
-    // Log the creation of the session
-    this.logger.info(`Session created for survey ${survey.definition.title}`, session);
 
     // Find the index for the organization
     const idx = find(index, { name: organization.name });
@@ -472,6 +462,17 @@ export class ChatService extends BaseWorker implements OnModuleInit {
 
     // Iterate over each section
     for (const section of sections) {
+      // Create a session for the survey
+      const session = (await this.fp.createSession({
+        survey: survey.definition.title,
+        organization: organization.name,
+        user: user.coldclimate_claims.email,
+        section: section,
+      })) as FPSession;
+
+      // Log the creation of the session
+      this.logger.info(`Session created for survey ${survey.definition.title}`, session);
+
       // Create a new thread for each section run
       reqs.push(this.processSection(job, section, sdx, sections, definition, integration, organization, category_context, user, session));
     }
@@ -516,6 +517,8 @@ export class ChatService extends BaseWorker implements OnModuleInit {
         if (await this.isDuplicateOrCanceled(organization, job, section, item)) {
           continue;
         }
+
+        //set(session.customMetadata, 'key', item);
 
         const idx = parseInt(item.split('-')[1]);
 
