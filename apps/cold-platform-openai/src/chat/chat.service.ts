@@ -195,9 +195,9 @@ export class ChatService extends BaseWorker implements OnModuleInit {
             }
             break;
           case 'yes_no':
-            if (ai_response.answer.toLowerCase() === 'yes') {
+            if (typeof ai_response.answer === 'string' && ai_response.answer?.toLowerCase() === 'yes') {
               ai_response.answer = true;
-            } else if (ai_response.answer.toLowerCase() === 'no') {
+            } else if (typeof ai_response.answer === 'string' && ai_response.answer?.toLowerCase() === 'no') {
               ai_response.answer = false;
             }
             break;
