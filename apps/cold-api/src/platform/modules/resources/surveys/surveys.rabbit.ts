@@ -41,22 +41,28 @@ export class SurveysRabbitService extends BaseWorker {
     queue: `cold.core.api.survey_data`,
     allowNonJsonMessages: false,
   })
-  async processAsyncMessages(msg: RabbitMessagePayload): Promise<void> {
-    switch (msg.event) {
-      case 'survey_data.updated': {
-        this.logger.info(`Received ${msg.event} message from ${msg.from}`, omit(msg.data, ['survey']));
+  async processAsyncMessages(msg: RabbitMessagePayload): Promise<void | Nack> {
+    try {
+      switch (msg.event) {
+        case 'survey_data.updated': {
+          this.logger.info(`Received ${msg.event} message from ${msg.from}`, omit(msg.data, ['survey']));
 
-        const parsed: any = typeof msg.data == 'string' ? JSON.parse(msg.data) : msg.data;
+          const parsed: any = typeof msg.data == 'string' ? JSON.parse(msg.data) : msg.data;
 
-        const { organization, user, survey } = parsed;
+          const { organization, user, survey } = parsed;
 
-        await this.surveys.submitResults(survey.name, survey, { user }, organization.id);
-        break;
+          await this.surveys.submitResults(survey.name, survey, { user }, organization.id);
+          break;
+        }
+        default: {
+          const e = new Error(`Received unknown ASYNC event: ${msg.event}`);
+          this.logger.error(e.message, e.stack);
+          return new Nack(false);
+        }
       }
-      default: {
-        const e = new Error(`Received unknown RPC event: ${msg.event}`);
-        this.logger.error(e.message, e.stack);
-      }
+    } catch (err) {
+      this.logger.error(err.message, err.stack);
+      return new Nack(false);
     }
   }
 }

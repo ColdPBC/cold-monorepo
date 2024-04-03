@@ -5,6 +5,8 @@ import { LangchainModule } from '../langchain/langchain.module';
 import { LangchainService } from '../langchain/langchain.service';
 import { BullModule } from '@nestjs/bull';
 import { ColdRabbitModule } from '@coldpbc/nest';
+import { FreeplayModule } from '../freeplay/freeplay.module';
+import { FreeplayService } from '../freeplay/freeplay.service';
 
 @Module({
   imports: [
@@ -14,7 +16,8 @@ import { ColdRabbitModule } from '@coldpbc/nest';
     ColdRabbitModule.forRootAsync(),
     PineconeModule,
     LangchainModule,
+    FreeplayModule,
   ],
-  providers: [ChatService, LangchainService],
+  providers: [ChatService, LangchainService, FreeplayService],
 })
 export class ChatModule {}

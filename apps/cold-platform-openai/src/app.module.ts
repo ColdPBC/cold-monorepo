@@ -17,9 +17,10 @@ import { ChatModule } from './chat/chat.module';
 import { LoadersModule } from './langchain/custom_loaders/loaders.module';
 import { JobConsumer } from './job.consumer';
 import { ChatService } from './chat/chat.service';
+import { FreeplayModule } from './freeplay/freeplay.module';
 
 @Module({
-  imports: [],
+  imports: [FreeplayModule],
   providers: [],
 })
 export class AppModule {

@@ -158,6 +158,23 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@anthropic-ai/sdk@npm:^0.19.0":
+  version: 0.19.1
+  resolution: "@anthropic-ai/sdk@npm:0.19.1"
+  dependencies:
+    "@types/node": "npm:^18.11.18"
+    "@types/node-fetch": "npm:^2.6.4"
+    abort-controller: "npm:^3.0.0"
+    agentkeepalive: "npm:^4.2.1"
+    digest-fetch: "npm:^1.3.0"
+    form-data-encoder: "npm:1.7.2"
+    formdata-node: "npm:^4.3.2"
+    node-fetch: "npm:^2.6.7"
+    web-streams-polyfill: "npm:^3.2.1"
+  checksum: 10/bc4f953f5eea3dbd0005e90dc92f6eb5ce40c9fc0a71f224756c36a1eb1655012884b152768329fe6012cac7d26c2adbb70e2362dfb9a85cb85a795063a3ea8b
+  languageName: node
+  linkType: hard
+
 "@anthropic-ai/sdk@npm:^0.9.1":
   version: 0.9.1
   resolution: "@anthropic-ai/sdk@npm:0.9.1"
@@ -17612,7 +17629,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:^0.26.0":
+"axios@npm:^0.26.0, axios@npm:^0.26.1":
   version: 0.26.1
   resolution: "axios@npm:0.26.1"
   dependencies:
@@ -19864,6 +19881,7 @@ __metadata:
     flowbite: "npm:^1.6.5"
     flowbite-react: "npm:^0.7.0"
     framer-motion: "npm:^10.16.4"
+    freeplay: "npm:^0.2.44"
     global: "npm:^4.4.0"
     got: "npm:^14.0.0"
     hot-shots: "npm:^10.0.0"
@@ -25226,6 +25244,20 @@ __metadata:
     react-dom:
       optional: true
   checksum: 10/8dc61e16af34ea7c7e830e03f588c54b7a186a767787eb6373ac692bbffa219959d50b7cf983f54305951e121ea7d50ebd4819920290fc6ad58b03fc5eb2bdde
+  languageName: node
+  linkType: hard
+
+"freeplay@npm:^0.2.44":
+  version: 0.2.44
+  resolution: "freeplay@npm:0.2.44"
+  dependencies:
+    "@anthropic-ai/sdk": "npm:^0.19.0"
+    axios: "npm:^0.26.1"
+    encoding: "npm:^0.1.13"
+    mustache: "npm:^4.2.0"
+    openai: "npm:^4.0.0"
+    uuid: "npm:^9.0.0"
+  checksum: 10/153a1bd2abddc2194a74ae77b23ea852412543348fb0f2e0e95d473d6c0f32d019bae2b8339a280ef1e713d8e46f1712b91ef4b7bda0eff627e1ea7150883243
   languageName: node
   linkType: hard
 
@@ -34234,6 +34266,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"mustache@npm:^4.2.0":
+  version: 4.2.0
+  resolution: "mustache@npm:4.2.0"
+  bin:
+    mustache: bin/mustache
+  checksum: 10/6e668bd5803255ab0779c3983b9412b5c4f4f90e822230e0e8f414f5449ed7a137eed29430e835aa689886f663385cfe05f808eb34b16e1f3a95525889b05cd3
+  languageName: node
+  linkType: hard
+
 "mute-stream@npm:0.0.8":
   version: 0.0.8
   resolution: "mute-stream@npm:0.0.8"
@@ -35881,6 +35922,24 @@ __metadata:
     is-docker: "npm:^2.1.1"
     is-wsl: "npm:^2.2.0"
   checksum: 10/acd81a1d19879c818acb3af2d2e8e9d81d17b5367561e623248133deb7dd3aefaed527531df2677d3e6aaf0199f84df57b6b2262babff8bf46ea0029aac536c9
+  languageName: node
+  linkType: hard
+
+"openai@npm:^4.0.0":
+  version: 4.32.0
+  resolution: "openai@npm:4.32.0"
+  dependencies:
+    "@types/node": "npm:^18.11.18"
+    "@types/node-fetch": "npm:^2.6.4"
+    abort-controller: "npm:^3.0.0"
+    agentkeepalive: "npm:^4.2.1"
+    form-data-encoder: "npm:1.7.2"
+    formdata-node: "npm:^4.3.2"
+    node-fetch: "npm:^2.6.7"
+    web-streams-polyfill: "npm:^3.2.1"
+  bin:
+    openai: bin/cli
+  checksum: 10/93fb3d6cdba227ffc3650d14c810742c9a7c3490c7c10386737a7892a8400f1aa58cdc55fb139a30edd7c0bfad245ecfc68db9f119873b098aef22cb1d1bb7f0
   languageName: node
   linkType: hard
 

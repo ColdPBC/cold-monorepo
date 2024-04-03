@@ -1,11 +1,78 @@
-# [1.183.0-COLD-634.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.182.0...v1.183.0-COLD-634.1) (2024-04-02)
+# [1.185.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.184.3...v1.185.0) (2024-04-03)
 
 
 ### Features
 
-* carbon footprint updates based on design ([3ff67c9](https://github.com/ColdPBC/cold-monorepo/commit/3ff67c9586752ee34510569dc6c108b59018d4ea))
-* emission carb footprint changes ([3482a06](https://github.com/ColdPBC/cold-monorepo/commit/3482a0629f78f64e1ad72c02b828aa3dee5e6e76))
-* more changes for the scope cahrt ([d1f56e2](https://github.com/ColdPBC/cold-monorepo/commit/d1f56e2faa4c19d39cdde53eef082ab0b7692d27))
+* updates to logging to be more leaner ([81dbde9](https://github.com/ColdPBC/cold-monorepo/commit/81dbde958bfc6973be12202e5413f33e94cd6046))
+* updates to logging to be more leaner ([#370](https://github.com/ColdPBC/cold-monorepo/issues/370)) ([e6db07e](https://github.com/ColdPBC/cold-monorepo/commit/e6db07e5b492f3c56d14ee5fc68e137f0fee13c5))
+
+## [1.184.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.184.2...v1.184.3) (2024-04-03)
+
+
+### Bug Fixes
+
+* possible null reference ([2621cb6](https://github.com/ColdPBC/cold-monorepo/commit/2621cb6abcfb0ceaec391a0b7e34621a246ae09d))
+* update FP session to contain relevant metadata ([3546471](https://github.com/ColdPBC/cold-monorepo/commit/354647176deeb0269d372392eee537ad56b29e89))
+
+## [1.184.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.184.1...v1.184.2) (2024-04-03)
+
+
+### Bug Fixes
+
+* attempt to address additional_context issue ([1c6afb7](https://github.com/ColdPBC/cold-monorepo/commit/1c6afb7db8b4a56fafbd207cd3562474e4eba218))
+
+## [1.184.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.184.0...v1.184.1) (2024-04-03)
+
+
+### Bug Fixes
+
+* issues with formatting ([86e6442](https://github.com/ColdPBC/cold-monorepo/commit/86e64422173c02b678a8cc6de71a0509197d0d45))
+
+# [1.184.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.183.3...v1.184.0) (2024-04-03)
+
+
+### Bug Fixes
+
+* clean up context prompt ([7cb0b64](https://github.com/ColdPBC/cold-monorepo/commit/7cb0b649fea7132a2e18f5a38dfb1115d377f7f2))
+
+
+### Features
+
+* check if the ai response is valid before showing ai icon ([813d1e6](https://github.com/ColdPBC/cold-monorepo/commit/813d1e67178feef779c792138a746ff8d3cb740f))
+
+## [1.183.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.183.2...v1.183.3) (2024-04-03)
+
+
+### Bug Fixes
+
+* troubleshoot flightcontrol e2e test support ([00ee219](https://github.com/ColdPBC/cold-monorepo/commit/00ee2190e7164f1a04adf4a92f3bebb4f049929a))
+
+## [1.183.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.183.1...v1.183.2) (2024-04-03)
+
+
+### Bug Fixes
+
+* add logging, comments, and response validation for selects and yes_no ([2513f19](https://github.com/ColdPBC/cold-monorepo/commit/2513f19c5442ef30ea2f55faae7556619a9c3e1b))
+
+## [1.183.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.183.0...v1.183.1) (2024-04-02)
+
+
+### Bug Fixes
+
+* get fP api key from config ([4541eb3](https://github.com/ColdPBC/cold-monorepo/commit/4541eb3af2f2725d5e8b072142bbdb9c3e8708c4))
+
+# [1.183.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.182.0...v1.183.0) (2024-04-02)
+
+
+### Bug Fixes
+
+* incorrect rabbit payload ([97dcfc1](https://github.com/ColdPBC/cold-monorepo/commit/97dcfc19ad3bd4adcafdeb06a3c65b84626dd681))
+
+
+### Features
+
+* implement freeplay integration ([13a17e3](https://github.com/ColdPBC/cold-monorepo/commit/13a17e34a84a8949cbdf3552e63ffcb6ac9e78b6))
+* implement freeplay integration ([5449082](https://github.com/ColdPBC/cold-monorepo/commit/54490823279482b913554d9b366271580bc50d8a))
 
 # [1.182.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.181.0...v1.182.0) (2024-04-02)
 

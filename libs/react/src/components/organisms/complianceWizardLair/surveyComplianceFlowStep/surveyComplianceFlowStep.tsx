@@ -51,9 +51,7 @@ const _SurveyComplianceFlowStep = () => {
   const onSurveyClose = async () => {
     if (activeKey.section === 'savedQuestions') {
       logBrowser('Saved question closed', 'info', {
-        data,
         orgId,
-        surveyData,
         activeKey,
         bookmarked,
       });
@@ -90,25 +88,22 @@ const _SurveyComplianceFlowStep = () => {
       set(parsedOrgStorage, `compliance.${name}.complianceActiveKey`, activeKey);
       setOrgStorage(orgId, parsedOrgStorage);
       logBrowser('Active key updated', 'info', {
-        data,
         orgId,
         activeKey,
-        surveyData,
       });
     }
   }, [activeKey]);
 
   useEffect(() => {
     const newSavedQuestions = getSavedQuestionsInSurvey(surveyState);
-    logBrowser('Saved questions updated', 'info', {
-      oldSavedQuestions: savedQuestions,
-      newSavedQuestions,
-      data,
-      orgId,
-      activeKey,
-    });
     setSavedQuestions(newSavedQuestions);
     if (newSavedQuestions.length === 0 && activeKey.section === 'savedQuestions') {
+      logBrowser('Saved questions updated', 'info', {
+        oldSavedQuestions: savedQuestions,
+        newSavedQuestions,
+        orgId,
+        activeKey,
+      });
       const key = getStartingKey(sortedSurvey);
       setActiveKey(key);
     }
@@ -123,9 +118,7 @@ const _SurveyComplianceFlowStep = () => {
   }
 
   logBrowser('Survey Compliance Flow Step', 'info', {
-    data,
     orgId,
-    surveyData,
     activeKey,
     bookmarked,
     savedQuestions,
