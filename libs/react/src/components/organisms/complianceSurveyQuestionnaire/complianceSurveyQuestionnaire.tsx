@@ -388,7 +388,6 @@ const _ComplianceSurveyQuestionnaire = (props: ComplianceSurveyQuestionnaireProp
     });
     logBrowser('Compliance Survey Next Button Clicked', 'info', {
       activeKey,
-      newSurvey,
     });
     updateTransitionClassNames(true);
     setSendingSurvey(false);
@@ -410,7 +409,6 @@ const _ComplianceSurveyQuestionnaire = (props: ComplianceSurveyQuestionnaireProp
     });
     logBrowser('Compliance Survey Skip Button Clicked', 'info', {
       activeKey,
-      newSurvey,
     });
     updateTransitionClassNames(true);
     setSendingSurvey(false);
@@ -438,7 +436,6 @@ const _ComplianceSurveyQuestionnaire = (props: ComplianceSurveyQuestionnaireProp
     });
     logBrowser('Compliance Survey Submit Button Clicked', 'info', {
       activeKey,
-      newSurvey,
     });
     updateTransitionClassNames(true);
     setSendingSurvey(false);
