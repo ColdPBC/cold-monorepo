@@ -102,13 +102,21 @@ export class ChatService extends BaseWorker implements OnModuleInit {
             }
 
             // Return the item: string
-            return item;
+            const file = `
+            <br />
+            _____________________ <br />
+            file: ${item.name} <br />
+            text: ${item.text} <br />
+            score: ${match.score} <br />
+            _____________________
+            <br />`;
+            return JSON.stringify(file);
           }
         })
       : [];
 
     // Join all the chunks of text together, truncate to the maximum number of tokens, and return the result
-    return docs.join('\n\n').substring(0, 3000);
+    return docs.join('  \n\n  ').substring(0, 3000);
   }
 
   /**
@@ -136,20 +144,12 @@ export class ChatService extends BaseWorker implements OnModuleInit {
 
       const { rephrased_question, docs } = await this.getDocumentContent(messages, question, openai, indexName, session, user, context);
 
-      const context_content = context.map(doc => {
-        return `
-
-        file: ${doc.metadata['file_name']}
-        text: ${doc.metadata.chunk}
-        score: ${doc.score}
-
-        `;
-      });
       const vars = {
         component_prompt: (await this.prompts.getComponentPrompt(question)) || '',
-        context: context_content.join('<br />'),
-        question: question.prompt,
+        context: context[0] || '',
+        question: `${question.prompt} ${question.tooltip || ''}`,
       };
+
       const sanitized_base = (await this.fp.getPrompt('survey_question_prompt', vars, true)) as FormattedPrompt;
 
       const start = new Date();
@@ -336,7 +336,10 @@ export class ChatService extends BaseWorker implements OnModuleInit {
 
     const content = await this.extractTextFromDocument(docs as ScoredPineconeRecord<RecordMetadata>[]);
 
-    context.push(content);
+    if (content) {
+      context.push(content);
+    }
+
     return { rephrased_question, docs };
   }
 
