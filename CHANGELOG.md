@@ -1,3 +1,10 @@
+## [1.183.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.183.2...v1.183.3) (2024-04-03)
+
+
+### Bug Fixes
+
+* troubleshoot flightcontrol e2e test support ([00ee219](https://github.com/ColdPBC/cold-monorepo/commit/00ee2190e7164f1a04adf4a92f3bebb4f049929a))
+
 ## [1.183.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.183.1...v1.183.2) (2024-04-03)
 
 
