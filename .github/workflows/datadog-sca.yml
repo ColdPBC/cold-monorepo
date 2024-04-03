@@ -13,7 +13,8 @@ jobs:
         id: datadog-software-composition-analysis
         uses: DataDog/datadog-sca-github-action@main
         with:
-          dd_api_key: ${{ secrets.DD_API_KEY }}
+          datadog-hostname: api.us5.datadoghq.com
+          dd_api_key: ${{ secrets.DATADOG_API }}
           dd_app_key: ${{ secrets.DD_APP_KEY }}
           dd_service: cold-monorepo
           dd_env: ci
