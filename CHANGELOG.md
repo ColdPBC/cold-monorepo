@@ -1,3 +1,11 @@
+# [1.185.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.184.3...v1.185.0) (2024-04-03)
+
+
+### Features
+
+* updates to logging to be more leaner ([81dbde9](https://github.com/ColdPBC/cold-monorepo/commit/81dbde958bfc6973be12202e5413f33e94cd6046))
+* updates to logging to be more leaner ([#370](https://github.com/ColdPBC/cold-monorepo/issues/370)) ([e6db07e](https://github.com/ColdPBC/cold-monorepo/commit/e6db07e5b492f3c56d14ee5fc68e137f0fee13c5))
+
 ## [1.184.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.184.2...v1.184.3) (2024-04-03)
 
 
