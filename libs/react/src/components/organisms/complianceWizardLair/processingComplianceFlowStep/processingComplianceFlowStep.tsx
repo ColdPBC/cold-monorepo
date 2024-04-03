@@ -16,12 +16,10 @@ const _ProcessingComplianceFlowStep = () => {
       if (complianceProgress.aiAttemptedQuestions !== 0) {
         logBrowser('Compliance set automation progress update', 'info', {
           complianceProgress,
-          data,
         });
         if (complianceProgress.aiAttemptedQuestions === complianceProgress.totalQuestions) {
           logBrowser('Compliance set automation complete. Going to next step', 'info', {
             complianceProgress,
-            data,
           });
           nextStep();
         }

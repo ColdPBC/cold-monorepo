@@ -5,10 +5,12 @@ import { ConfigService } from '@nestjs/config';
 import { PromptsService } from '../prompts/prompts.service';
 import { Job, Queue } from 'bull';
 import { InjectQueue } from '@nestjs/bull';
-import { has, set } from 'lodash';
+import { find, set } from 'lodash';
 import OpenAI from 'openai';
 import { ChatCompletionMessageParam } from 'openai/resources/chat/completions';
 import { RecordMetadata, ScoredPineconeRecord } from '@pinecone-database/pinecone';
+import { FPSession, FreeplayService } from '../freeplay/freeplay.service';
+import { FormattedPrompt } from 'freeplay/thin';
 
 @Injectable()
 export class ChatService extends BaseWorker implements OnModuleInit {
@@ -23,6 +25,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
     private cache: CacheService,
     @InjectQueue('openai') private queue: Queue,
     private rabbit: ColdRabbitService,
+    private fp: FreeplayService,
   ) {
     super(ChatService.name);
     this.openAIapiKey = this.config.getOrThrow('OPENAI_API_KEY');
@@ -30,6 +33,57 @@ export class ChatService extends BaseWorker implements OnModuleInit {
 
   async onModuleInit() {}
 
+  /**
+   * Reset the AI responses when re-processing a survey
+   * @param user
+   * @param survey
+   * @param organization
+   */
+  async resetAIResponses(user, survey: any, organization: any) {
+    this.logger.info(`Clearing previous ai_responses for ${organization.name}: ${survey.name}`, {
+      user,
+      survey: survey.name,
+      organization: { id: organization.id, name: organization.name, display_name: organization.display_name },
+    });
+    const surveyData = await this.prisma.survey_data.findFirst({
+      where: { survey_definition_id: survey.id, organization_id: organization.id },
+    });
+
+    if (!surveyData) {
+      return;
+    }
+
+    // Iterate over each section
+    for (const sectionKey in surveyData.data['sections']) {
+      const section = surveyData.data['sections'][sectionKey];
+
+      // Iterate over each follow_up item in the section
+      for (const followUpKey in section.follow_up) {
+        const followUpItem = section.follow_up[followUpKey];
+
+        // If the followUpItem has an 'ai_response' property, set it to null
+        if ('ai_response' in followUpItem) {
+          delete followUpItem.ai_response;
+          delete followUpItem.ai_answered;
+          delete followUpItem.ai_attempted;
+        }
+      }
+    }
+
+    await this.prisma.survey_data.update({
+      where: { id: surveyData.id },
+      data: { data: surveyData.data },
+    });
+  }
+
+  /**
+   * This method is used to extract text from a list of documents.
+   * It deduplicates matches by URL, joins all the chunks of text together,
+   * truncates to the maximum number of tokens, and returns the result.
+   *
+   * @param {ScoredPineconeRecord<RecordMetadata>[]} qualifyingDocs - An array of documents from which to extract text.
+   * @returns {string} - A string containing the extracted text from the documents.
+   */
   async extractTextFromDocument(qualifyingDocs: ScoredPineconeRecord<RecordMetadata>[]) {
     // Use a map to deduplicate matches by URL
     const docs = Array.isArray(qualifyingDocs)
@@ -38,23 +92,41 @@ export class ChatService extends BaseWorker implements OnModuleInit {
             name: match.metadata['file_name'],
             text: match.metadata.chunk as string,
           };
+          // If the text is a string, try to parse it as JSON
           if (typeof item.text === 'string') {
             try {
-              item.text = JSON.parse(item.text);
+              item.text = JSON.stringify(JSON.parse(item.text));
             } catch (e) {
-              this.logger.warn(`Unable to parse snippet to Object due to trunacting`, { ...e, item });
+              // Do nothing as it is not a JSON string
             }
 
-            return JSON.stringify(item);
+            // Return the item: string
+            const file = `
+            _____________________   \n
+            file: ${item.name},     \n
+            score: ${match.score}   \n
+            _____________________   \n
+            text: ${item.text}      \n
+            _____________________   \n
+           `;
+            return JSON.stringify(file);
           }
         })
       : [];
 
     // Join all the chunks of text together, truncate to the maximum number of tokens, and return the result
-    return docs.join('\n\n').substring(0, 3000);
+    return docs.join('  \n\n  ').substring(0, 3000);
   }
 
-  async askQuestion(indexName: string, question: any, company_name: string, user: AuthenticatedUser, tags): Promise<any> {
+  /**
+   * Ask a question to the AI model
+   * @param indexName
+   * @param question
+   * @param company_name
+   * @param user
+   * @param session
+   */
+  async askQuestion(indexName: string, question: any, company_name: string, user: AuthenticatedUser, session: FPSession, additional_context?: any): Promise<any> {
     try {
       // Get Chat History
       let messages = (await this.cache.get(`openai:thread:${user.coldclimate_claims.id}`)) as ChatCompletionMessageParam[];
@@ -69,116 +141,74 @@ export class ChatService extends BaseWorker implements OnModuleInit {
         apiKey: this.config.getOrThrow('OPENAI_API_KEY'),
       });
 
-      /**
-       * This prompt is used to condense the chat history and follow-up question into a single standalone question for the purpose
-       * of providing context to the AI model to query the vector index for the most relevant information.
-       */
+      const { rephrased_question, docs } = await this.getDocumentContent(messages, question, openai, indexName, user, context, session, additional_context);
 
-      let condense_prompt = `Given the chat history and a follow-up question, rephrase the follow-up question to be a standalone question that encompasses all necessary context from the chat history.
-        Chat History:
-        {chat_history}
-
-        Follow-up input:
-        {question}
-
-        Make sure your standalone question is self-contained, clear, and specific. Rephrased standalone question:
-      `;
-
-      // If there are messages, get the last message and rephrase the current question to be a standalone question
-      let rephrased_question: string;
-      if (Array.isArray(messages) && messages.length > 0) {
-        let lastMessage = messages[messages.length - 1].content;
-        if (typeof lastMessage !== 'string') {
-          lastMessage = JSON.stringify(lastMessage);
-        }
-        //const parsed = JSON.parse(lastMessage);
-        const chat_history_prompt = condense_prompt.replace('{chat_history}', lastMessage || '');
-        if (chat_history_prompt) {
-          condense_prompt = chat_history_prompt;
-        }
-
-        const question_prompt = condense_prompt.replace('{question}', question.prompt);
-        if (question_prompt) {
-          condense_prompt = question_prompt;
-        }
-
-        // Define the system message
-        const systemMessage: ChatCompletionMessageParam = {
-          role: 'system',
-          content: condense_prompt,
-        };
-
-        const response = await openai.chat.completions.create({
-          model: await this.darkly.getStringFlag('dynamic-gpt-assistant-model', 'gpt-3.5-turbo', {
-            kind: 'org-compliance-set',
-            key: indexName,
-            name: tags['survey'],
-          }),
-          messages: [systemMessage], // only send the last two
-          temperature: 0.5,
-          user: user.coldclimate_claims.id,
-        });
-
-        if (response.choices[0].message.content) {
-          rephrased_question = response.choices[0].message.content;
-
-          this.logger.info(`Generated Pinecone Query`, {
-            previous_message: lastMessage,
-            current_question: question.promp,
-            pincone_query: rephrased_question,
-            ...tags,
-          });
-        }
-      }
-
-      if (!rephrased_question) {
-        rephrased_question = question.prompt;
-      }
-
-      // Get the context content from the Pinecone index
-      const docs = (await this.pc.getContext(rephrased_question, indexName, indexName, 0.8, false)) as ScoredPineconeRecord[];
-
-      const content = await this.extractTextFromDocument(docs as ScoredPineconeRecord<RecordMetadata>[]);
-
-      context.push(content);
-
-      const with_context = await this.prompts.getPrompt(question, JSON.stringify(context), docs.length > 0);
-
-      set(question, 'prompt', `${question.prompt} ${question.tooltip}`);
-
-      const sanitized_base = with_context.replace('{question}', question.prompt);
-
-      // Define the system message
-      const systemMessage: ChatCompletionMessageParam = {
-        role: 'system',
-        content: sanitized_base,
+      const vars = {
+        component_prompt: (await this.prompts.getComponentPrompt(question)) || '',
+        context: context[0] || '',
+        question: additional_context ? rephrased_question : `${question.prompt} ${question.tooltip || ''}`,
       };
 
-      messages.push(systemMessage);
+      const sanitized_base = (await this.fp.getPrompt('survey_question_prompt', vars, true)) as FormattedPrompt;
 
-      // Ask OpenAI for a streaming chat completion given the prompt
+      const start = new Date();
+
       const response = await openai.chat.completions.create({
         response_format: { type: 'json_object' },
-        model: await this.darkly.getStringFlag('dynamic-gpt-assistant-model', 'gpt-3.5-turbo', {
-          kind: 'org-compliance-set',
-          key: indexName,
-          name: tags['survey'],
-        }),
-        messages: [systemMessage], // only send the last two
-        temperature: 0.5,
+        model: sanitized_base.promptInfo.model,
+        max_tokens: sanitized_base.promptInfo.modelParameters.max_tokens,
+        temperature: sanitized_base.promptInfo.modelParameters.temperature,
+        frequency_penalty: sanitized_base.promptInfo.modelParameters.frequency_penalty,
+        presence_penalty: sanitized_base.promptInfo.modelParameters.presence_penalty,
+        logit_bias: sanitized_base.promptInfo.modelParameters.logit_bias,
+        stop: sanitized_base.promptInfo.modelParameters.stop,
+        messages: sanitized_base.messages as unknown as ChatCompletionMessageParam[],
         user: user.coldclimate_claims.id,
       });
+
+      const message = {
+        role: response.choices[0].message.role,
+        content: response.choices[0].message.content,
+      };
+
+      sanitized_base.allMessages(message);
 
       let ai_response: any;
       if (typeof response.choices[0].message.content === 'string') {
         ai_response = JSON.parse(response.choices[0].message.content);
       }
 
+      /**
+       * This is a temporary fix to sanitize ai_response since function calls are not yet supported in this function.
+       * todo: remove this once function calls are supported
+       */
+      if (ai_response.answer) {
+        switch (question.component) {
+          case 'select':
+          case 'multi_select':
+            if (!Array.isArray(ai_response.answer)) {
+              if (ai_response.answer.includes(',')) {
+                ai_response.answer = ai_response.answer.split(',').map((item: string) => item.trim());
+              } else {
+                ai_response.answer = [ai_response.answer];
+              }
+            }
+            break;
+          case 'yes_no':
+            if (typeof ai_response.answer === 'string' && ai_response.answer?.toLowerCase() === 'yes') {
+              ai_response.answer = true;
+            } else if (typeof ai_response.answer === 'string' && ai_response.answer?.toLowerCase() === 'no') {
+              ai_response.answer = false;
+            }
+            break;
+        }
+      }
+
       const references = docs.map(doc => {
         return {
-          name: doc.metadata['file_name'],
-          score: doc.score,
+          file: doc.metadata['file_name'],
           text: doc.metadata.chunk,
+          score: doc.score,
         };
       });
 
@@ -194,7 +224,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
       });
 
       // Save the thread to the cache
-      await this.cache.set(`openai:thread:${user.coldclimate_claims.id}`, messages, { ttl: 60 * 60 * 24 });
+      await this.cache.set(`openai:thread:${user.coldclimate_claims.email}`, messages, { ttl: 60 * 60 * 24 });
 
       this.logger.info(`${ai_response.answer ? '✅ Answered' : '❌ Did NOT Answer'} ${question.idx ? question.idx : 'additional_context'}`, {
         pinecone_query: rephrased_question,
@@ -202,35 +232,195 @@ export class ChatService extends BaseWorker implements OnModuleInit {
         survey_question: question.prompt,
         ai_prompt: sanitized_base,
         ai_response,
-        ...tags,
+        session_id: session.sessionId,
+        ...session.customMetadata,
       });
+
+      const end = new Date();
+      const recording = await this.fp.recordCompletion(session, vars, sanitized_base, response, start, end);
+
+      this.logger.info(`Sending ${sanitized_base.promptInfo.templateName} run stats to FreePlay`, recording);
 
       return ai_response;
     } catch (error) {
-      this.logger.error(`Error asking question ${question.prompt}`, { error, ...tags });
+      this.logger.error(`Error asking question ${question.prompt}`, { error, ...session });
       throw error;
     }
   }
 
+  /**
+   * Get the document content from the Pinecone index
+   * @param messages
+   * @param question
+   * @param openai
+   * @param indexName
+   * @param user
+   * @param context
+   * @param session
+   * @param additional_context
+   * @private
+   */
+  private async getDocumentContent(
+    messages: ChatCompletionMessageParam[],
+    question: any,
+    openai: OpenAI,
+    indexName: string,
+    user: AuthenticatedUser,
+    context: any,
+    session: FPSession,
+    additional_context,
+  ) {
+    /**
+     * This prompt is used to condense the chat history and follow-up question into a single standalone question for the purpose
+     * of providing context to the AI model to query the vector index for the most relevant information.
+     */
+    let rephrased_question: string;
+    let lastMessage: string = '';
+
+    // If there are messages, get the last message and include it in the prompt
+    if (Array.isArray(messages) && messages.length > 0) {
+      const prevMessage = messages[messages.length - 1].content;
+      if (typeof prevMessage !== 'string') {
+        lastMessage = JSON.stringify(prevMessage);
+      }
+    }
+
+    const vectorSession = (await this.fp.createSession({
+      ...session.customMetadata,
+    })) as FPSession;
+
+    let vars: any;
+    if (additional_context) {
+      vars = {
+        chat_history: question.prompt,
+        question: additional_context.prompt || '',
+      };
+    } else {
+      vars = {
+        chat_history: lastMessage || '',
+        question: `${question.prompt}. ${question.tooltip}`,
+      };
+    }
+
+    const condense_prompt = (await this.fp.getPrompt('vector_query', vars, true)) as FormattedPrompt;
+
+    const start = new Date();
+    const condenseResponse = await openai.chat.completions.create({
+      model: condense_prompt.promptInfo.model,
+      max_tokens: condense_prompt.promptInfo.modelParameters.max_tokens,
+      temperature: condense_prompt.promptInfo.modelParameters.temperature,
+      frequency_penalty: condense_prompt.promptInfo.modelParameters.frequency_penalty,
+      presence_penalty: condense_prompt.promptInfo.modelParameters.presence_penalty,
+      logit_bias: condense_prompt.promptInfo.modelParameters.logit_bias,
+      stop: condense_prompt.promptInfo.modelParameters.stop,
+      messages: condense_prompt.messages as unknown as ChatCompletionMessageParam[],
+      user: user.coldclimate_claims.id,
+    });
+
+    const end = new Date();
+
+    const message = {
+      role: condenseResponse.choices[0].message.role,
+      content: condenseResponse.choices[0].message.content,
+    };
+
+    condense_prompt.allMessages(message);
+
+    const recording = await this.fp.recordCompletion(vectorSession, vars, condense_prompt, condenseResponse, start, end);
+
+    this.logger.info(`Sending ${condense_prompt.promptInfo.templateName} run stats to FreePlay `, recording);
+
+    if (condenseResponse.choices[0].message.content) {
+      rephrased_question = condenseResponse.choices[0].message.content;
+
+      this.logger.info(`Generated Pinecone Query`, {
+        previous_message: lastMessage,
+        current_question: question.prompt,
+        pincone_query: rephrased_question,
+        session_id: vectorSession.sessionId,
+        ...vectorSession.customMetadata,
+      });
+    }
+
+    if (!rephrased_question) {
+      rephrased_question = question.prompt;
+    }
+
+    // Get the context content from the Pinecone index
+    const docs = (await this.pc.getContext(rephrased_question, indexName, indexName, 0.8, false)) as ScoredPineconeRecord[];
+
+    const content = await this.extractTextFromDocument(docs as ScoredPineconeRecord<RecordMetadata>[]);
+
+    if (content) {
+      context.push(content);
+    }
+
+    return { rephrased_question, docs };
+  }
+
+  /**
+   * This method is used to process a survey.
+   *
+   * @param {Job} job - The job object containing the survey data.
+   * @returns {Promise<void>} - A promise that resolves when the survey processing is complete.
+   */
   async process_survey(job: Job) {
+    // Destructure the necessary data from the job
     const { survey, user, compliance, integration, organization, on_update_url } = job.data;
+
+    // Get the list of indexes
     const index = await this.pc.listIndexes();
 
-    if (!index.includes(organization.name)) {
+    // Reset the AI responses for the survey
+    await this.resetAIResponses(user, survey, organization);
+
+    // Log the start of the survey processing
+    this.logger.info(`✅ Started processing survey ${survey.definition.title}`, {
+      survey: survey.definition.title,
+      user,
+      compliance,
+      integration,
+      organization,
+      on_update_url,
+    });
+
+    // Find the index for the organization
+    const idx = find(index, { name: organization.name });
+
+    // If the index does not exist, create it
+    if (!idx) {
       this.logger.warn(`Index ${organization.name} not found; creating...`);
       await this.pc.createIndex(organization.name);
 
+      // Clear existing vectors since the index was just created
+      const vectors = await this.prisma.vector_records.findMany({ where: { organization_id: organization.id } });
+      if (Array.isArray(vectors)) {
+        for (const vector of vectors) {
+          try {
+            await this.prisma.vector_records.delete({ where: { id: vector.id } });
+          } catch (e) {
+            this.logger.error(`Error deleting vector ${vector.id}`, e);
+          }
+        }
+      }
+
+      // Get the files for the organization
       const files = await this.prisma.organization_files.findMany({ where: { organization_id: organization.id } });
 
+      // If no files are found, log a warning
       if (!files || files.length === 0) {
         this.logger.warn(`No files found for organization ${organization.name}`);
       } else if (files.length > 0) {
+        // If files are found, ingest the data for each file
         for (const file of files) {
-          await this.pc.ingestData(user, organization, file, organization.id);
+          const cacheKey = this.pc.getCacheKey(file);
+          await this.cache.delete(cacheKey);
+          await this.pc.ingestData(user, organization, file, organization.name);
         }
       }
     }
 
+    // Set the tags for the survey
     this.setTags({
       survey: survey?.definition?.title,
       url: on_update_url,
@@ -243,34 +433,54 @@ export class ChatService extends BaseWorker implements OnModuleInit {
         id: user.id || user.coldclimate_claims.id,
       },
     });
+
+    // Log the start of the survey processing
     this.logger.info(`Processing survey ${survey.definition.title} for compliance ${compliance?.name}`);
 
+    // Initialize the category context
     let category_context;
 
+    // If the survey definition does not have a category description, set the category context to null
     if (!survey.definition.category_description || survey.definition.category_description === 'undefined') {
       category_context = null;
     }
 
+    // Get the survey definition
     const definition = survey.definition;
 
+    // Get the sections of the survey
     const sections = Object.keys(definition.sections);
 
+    // Initialize the section index
     const sdx = 0;
 
+    // Initialize the requests array
     const reqs: any[] = [];
 
-    //initialize prompts service with survey name so that it has the correct context for darkly
+    // Initialize the prompts service with the survey name so that it has the correct context for darkly
     this.prompts = await new PromptsService(this.darkly, survey.name, organization, this.prisma).initialize();
 
-    // iterate over each section key
+    // Iterate over each section
     for (const section of sections) {
-      // create a new thread for each section run
-      reqs.push(this.processSection(job, section, sdx, sections, definition, integration, organization, category_context, user, survey));
-      //await this.processSection(job, section, sdx, sections, definition, thread, integration, organization, category_context, user, survey);
+      // Create a session for the survey
+      const session = (await this.fp.createSession({
+        survey: survey.definition.title,
+        organization: organization.name,
+        user: user.coldclimate_claims.email,
+        section: section,
+      })) as FPSession;
+
+      // Log the creation of the session
+      this.logger.info(`Session created for survey ${survey.definition.title}`, session);
+
+      // Create a new thread for each section run
+      reqs.push(this.processSection(job, section, sdx, sections, definition, integration, organization, category_context, user, session));
     }
 
+    // Wait for all the sections to be processed
     await Promise.all(reqs);
 
+    // Log the end of the survey processing
     this.logger.info(`✅ Finished processing survey ${survey.definition.title}`, {
       survey: survey.definition.title,
       user,
@@ -281,7 +491,20 @@ export class ChatService extends BaseWorker implements OnModuleInit {
     });
   }
 
-  public async processSection(job: Job, section: string, sdx: number, sections: string[], definition, integration, organization, category_context, user, survey) {
+  /**
+   * Process the section
+   * @param job
+   * @param section
+   * @param sdx
+   * @param sections
+   * @param definition
+   * @param integration
+   * @param organization
+   * @param category_context
+   * @param user
+   * @param session
+   */
+  public async processSection(job: Job, section: string, sdx: number, sections: string[], definition, integration, organization, category_context, user, session: FPSession) {
     await job.log(`Section | ${section}:${sdx + 1} of ${sections.length}`);
     this.logger.info(`Processing ${section}: ${definition.sections[section].title}`, { section });
 
@@ -295,58 +518,84 @@ export class ChatService extends BaseWorker implements OnModuleInit {
           continue;
         }
 
+        //set(session.customMetadata, 'key', item);
+
         const idx = parseInt(item.split('-')[1]);
 
         await job.log(`Question | section: ${section} question: ${item} (${items.indexOf(item)} of ${items.length})`);
         const follow_up = definition.sections[section].follow_up[item];
 
-        if (follow_up?.ai_response?.answer && !has(follow_up, 'ai_response.what_we_need')) {
+        if (follow_up?.ai_response?.value) {
           this.logger.info(`Skipping ${section}.${item}: ${follow_up.prompt}; it has already been answered`, {
-            section_item: definition.sections[section].follow_up[item],
+            survey: job.data.survey?.name,
+            section: section,
+            key: item,
+            question: follow_up.prompt,
+            answer: follow_up.value,
+            ai_answer: follow_up.ai_response.answer,
+            justification: follow_up.ai_response.justification,
           });
           continue;
         }
 
-        this.logger.info(`Sending Message | ${section}.${item}: ${follow_up.prompt}`);
-
-        // create a new run for each followup item
-        const value = await this.askQuestion(organization.name, follow_up, organization.name, job.data.user, {
-          question: {
-            survey: job.data['survey'].definition.title,
-            section: section,
-            key: item,
-            text: follow_up.prompt,
-          },
+        this.logger.info(`Processing Message | ${section}.${item}`, {
+          survey: job.data.survey?.name,
+          section: section,
+          key: item,
         });
 
+        // create a new run for each followup item
+        const value = await this.askQuestion(organization.name, follow_up, organization.name, job.data.user, session);
+
         // update the survey with the response
-        definition.sections[section].follow_up[item].ai_response = value;
         if (value) {
+          definition.sections[section].follow_up[item].ai_response = value;
           definition.sections[section].follow_up[item].ai_answered = typeof value.answer != 'undefined';
+
+          this.logger.info(`Ai responded: ${section}.${item}`, {
+            survey: job.data.survey?.name,
+            section: section,
+            key: item,
+            question: follow_up.prompt,
+            answer: follow_up.value,
+            ai_answer: follow_up.ai_response.answer,
+            justification: follow_up.ai_response.justification,
+          });
         }
+
         definition.sections[section].follow_up[item].ai_attempted = true;
 
+        /*
+
+         */
         // if there is additional context, create a new run for it
         if (follow_up['additional_context']) {
-          if (definition.sections[section].follow_up[item].additional_context.ai_answered) {
-            this.logger.info(`Skipping ${section}.${item}.additional_context: ${follow_up.prompt}; it has already been answered`, {
-              section_item: definition.sections[section].follow_up[item],
+          if (definition.sections[section].follow_up[item].additional_context.value) {
+            this.logger.info(`Skipping ${section}.${item}.additional_context; it has already been answered`, {
+              survey: job.data.survey?.name,
+              section: section,
+              key: item,
+              additional_context: definition.sections[section].follow_up[item].additional_context,
             });
             continue;
           }
 
-          this.logger.info(`Creating Message | ${section}.${item}.additional_context: ${follow_up.prompt}`);
-          const additionalValue = await this.askQuestion(organization.name, follow_up['additional_context'], organization.display_name, job.data.user, {
-            question: {
-              key: item,
-              text: follow_up.prompt,
-            },
-          });
-
-          definition.sections[section].follow_up[item].additional_context.ai_response = additionalValue;
+          this.logger.info(`Processing Question | ${section}.${item}.additional_context: ${follow_up.prompt}`);
+          const additionalValue = await this.askQuestion(organization.name, follow_up, organization.display_name, job.data.user, session, follow_up['additional_context']);
 
           if (additionalValue) {
+            definition.sections[section].follow_up[item].additional_context.ai_response = additionalValue;
             definition.sections[section].follow_up[item].additional_context.ai_answered = typeof value.answer != 'undefined';
+
+            this.logger.info(`Ai responded: ${section}.${item}`, {
+              survey: job.data.survey?.name,
+              section: section,
+              key: item,
+              question: follow_up.prompt,
+              answer: follow_up.value,
+              ai_answer: follow_up.ai_response.answer,
+              justification: follow_up.ai_response.justification,
+            });
           }
 
           definition.sections[section].follow_up[item].additional_context.ai_attempted = true;
@@ -359,7 +608,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
             organization: { id: integration.organization_id },
             user,
             on_update_url: job.data.on_update_url,
-            survey,
+            survey: job.data.survey,
           },
           from: 'cold.platform.openai',
         });
@@ -373,9 +622,17 @@ export class ChatService extends BaseWorker implements OnModuleInit {
     this.logger.info(`✅ Finished processing ${section}: ${definition.sections[section].title}`, { section });
   }
 
+  /**
+   * Check if the job is a duplicate or has been canceled
+   * @param organization
+   * @param job
+   * @param section
+   * @param item
+   * @private
+   */
   private async isDuplicateOrCanceled(organization, job: Job, section: string, item: string) {
     const exists = await this.queue.getJob(job.id);
-    if (!exists) {
+    if (!exists || !exists.data.survey) {
       this.logger.warn(`Job ${job.id} no longer found in queue; will not process question ${section}:${item}`);
       await this.cache.delete(`jobs:${job.name}:${organization.id}:${job.data.payload.compliance.compliance_id}`);
       return true;

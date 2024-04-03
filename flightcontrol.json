@@ -80,7 +80,7 @@
             "libs/nest/src/**",
             "_api.dockerfile"
           ],
-          "maxInstances": 2,
+          "maxInstances": 4,
           "minInstances": 2,
           "healthCheckPath": "/health",
           "containerInsights": true,
@@ -96,10 +96,10 @@
             "com.datadoghq.tags.version": "1.0.0"
           },
           "autoscaling": {
-            "cpuThreshold": 90,
-            "memoryThreshold": 90,
+            "cpuThreshold": 70,
+            "memoryThreshold": 60,
             "cooldownTimerSecs": 300,
-            "requestsPerTarget": 500
+            "requestsPerTarget": 50
           },
           "experimental": {
             "healthCheckTimeout": 15,
@@ -253,13 +253,13 @@
             "_api.dockerfile"
           ],
           "autoscaling": {
-            "cpuThreshold": 90,
-            "memoryThreshold": 90,
-            "cooldownTimerSecs": 300,
-            "requestsPerTarget": 500
+            "cpuThreshold": 70,
+            "memoryThreshold": 70,
+            "cooldownTimerSecs": 60,
+            "requestsPerTarget": 160
           },
-          "maxInstances": 2,
-          "minInstances": 1,
+          "maxInstances": 3,
+          "minInstances": 2,
           "healthCheckPath": "/health",
           "containerInsights": true,
           "enableCloudfrontSwr": false,
