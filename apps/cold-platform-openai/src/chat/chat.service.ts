@@ -5,7 +5,7 @@ import { ConfigService } from '@nestjs/config';
 import { PromptsService } from '../prompts/prompts.service';
 import { Job, Queue } from 'bull';
 import { InjectQueue } from '@nestjs/bull';
-import { find, has, set } from 'lodash';
+import { find, set } from 'lodash';
 import OpenAI from 'openai';
 import { ChatCompletionMessageParam } from 'openai/resources/chat/completions';
 import { RecordMetadata, ScoredPineconeRecord } from '@pinecone-database/pinecone';
@@ -33,6 +33,12 @@ export class ChatService extends BaseWorker implements OnModuleInit {
 
   async onModuleInit() {}
 
+  /**
+   * Reset the AI responses when re-processing a survey
+   * @param user
+   * @param survey
+   * @param organization
+   */
   async resetAIResponses(user, survey: any, organization: any) {
     this.logger.info(`✅ Started processing survey ${survey.definition.title}`, {
       survey: survey.definition.title,
@@ -71,6 +77,14 @@ export class ChatService extends BaseWorker implements OnModuleInit {
     });
   }
 
+  /**
+   * This method is used to extract text from a list of documents.
+   * It deduplicates matches by URL, joins all the chunks of text together,
+   * truncates to the maximum number of tokens, and returns the result.
+   *
+   * @param {ScoredPineconeRecord<RecordMetadata>[]} qualifyingDocs - An array of documents from which to extract text.
+   * @returns {string} - A string containing the extracted text from the documents.
+   */
   async extractTextFromDocument(qualifyingDocs: ScoredPineconeRecord<RecordMetadata>[]) {
     // Use a map to deduplicate matches by URL
     const docs = Array.isArray(qualifyingDocs)
@@ -79,14 +93,16 @@ export class ChatService extends BaseWorker implements OnModuleInit {
             name: match.metadata['file_name'],
             text: match.metadata.chunk as string,
           };
+          // If the text is a string, try to parse it as JSON
           if (typeof item.text === 'string') {
             try {
-              item.text = JSON.parse(item.text);
+              item.text = JSON.stringify(JSON.parse(item.text));
             } catch (e) {
-              this.logger.warn(`Unable to parse snippet to Object due to trunacting`, { ...e, item });
+              // Do nothing as it is not a JSON string
             }
 
-            return JSON.stringify(item);
+            // Return the item: string
+            return item;
           }
         })
       : [];
@@ -95,6 +111,14 @@ export class ChatService extends BaseWorker implements OnModuleInit {
     return docs.join('\n\n').substring(0, 3000);
   }
 
+  /**
+   * Ask a question to the AI model
+   * @param indexName
+   * @param question
+   * @param company_name
+   * @param user
+   * @param session
+   */
   async askQuestion(indexName: string, question: any, company_name: string, user: AuthenticatedUser, session): Promise<any> {
     try {
       // Get Chat History
@@ -123,11 +147,13 @@ export class ChatService extends BaseWorker implements OnModuleInit {
 
       const response = await openai.chat.completions.create({
         response_format: { type: 'json_object' },
-        model: await this.darkly.getStringFlag('dynamic-gpt-assistant-model', 'gpt-3.5-turbo', {
-          kind: 'org-compliance-set',
-          key: indexName,
-          name: session['survey'],
-        }),
+        model: sanitized_base.promptInfo.model,
+        max_tokens: sanitized_base.promptInfo.modelParameters.max_tokens,
+        temperature: sanitized_base.promptInfo.modelParameters.temperature,
+        frequency_penalty: sanitized_base.promptInfo.modelParameters.frequency_penalty,
+        presence_penalty: sanitized_base.promptInfo.modelParameters.presence_penalty,
+        logit_bias: sanitized_base.promptInfo.modelParameters.logit_bias,
+        stop: sanitized_base.promptInfo.modelParameters.stop,
         messages: sanitized_base.messages as unknown as ChatCompletionMessageParam[],
         user: user.coldclimate_claims.id,
       });
@@ -146,12 +172,40 @@ export class ChatService extends BaseWorker implements OnModuleInit {
         ai_response = JSON.parse(response.choices[0].message.content);
       }
 
+      /**
+       * This is a temporary fix to sanitize ai_response since function calls are not yet supported in this function.
+       * todo: remove this once function calls are supported
+       */
+      if (ai_response.answer) {
+        switch (question.component) {
+          case 'select':
+          case 'multi_select':
+            if (!Array.isArray(ai_response.answer)) {
+              if (ai_response.answer.includes(',')) {
+                ai_response.answer = ai_response.answer.split(',').map((item: string) => item.trim());
+              } else {
+                ai_response.answer = [ai_response.answer];
+              }
+            }
+            break;
+          case 'yes_no':
+            if (ai_response.answer.toLowerCase() === 'yes') {
+              ai_response.answer = true;
+            } else if (ai_response.answer.toLowerCase() === 'no') {
+              ai_response.answer = false;
+            }
+            break;
+        }
+      }
+
       const references = docs.map(doc => {
-        return {
-          name: doc.metadata['file_name'],
-          score: doc.score,
-          text: doc.metadata.chunk,
-        };
+        return `
+
+        file: ${doc.metadata['file_name']}
+        text: ${doc.metadata.chunk}
+        score: ${doc.score}
+
+        `;
       });
 
       set(ai_response, 'references', references);
@@ -190,6 +244,17 @@ export class ChatService extends BaseWorker implements OnModuleInit {
     }
   }
 
+  /**
+   * Get the document content from the Pinecone index
+   * @param messages
+   * @param question
+   * @param openai
+   * @param indexName
+   * @param session
+   * @param user
+   * @param context
+   * @private
+   */
   private async getDocumentContent(
     messages: ChatCompletionMessageParam[],
     question: any,
@@ -203,10 +268,10 @@ export class ChatService extends BaseWorker implements OnModuleInit {
      * This prompt is used to condense the chat history and follow-up question into a single standalone question for the purpose
      * of providing context to the AI model to query the vector index for the most relevant information.
      */
-
-    // If there are messages, get the last message and include it in the prompt
     let rephrased_question: string;
     let lastMessage: string = '';
+
+    // If there are messages, get the last message and include it in the prompt
     if (Array.isArray(messages) && messages.length > 0) {
       const prevMessage = messages[messages.length - 1].content;
       if (typeof prevMessage !== 'string') {
@@ -222,11 +287,13 @@ export class ChatService extends BaseWorker implements OnModuleInit {
 
     const start = new Date();
     const condenseResponse = await openai.chat.completions.create({
-      model: await this.darkly.getStringFlag('dynamic-gpt-assistant-model', 'gpt-3.5-turbo', {
-        kind: 'org-compliance-set',
-        key: indexName,
-        name: session['survey'],
-      }),
+      model: condense_prompt.promptInfo.model,
+      max_tokens: condense_prompt.promptInfo.modelParameters.max_tokens,
+      temperature: condense_prompt.promptInfo.modelParameters.temperature,
+      frequency_penalty: condense_prompt.promptInfo.modelParameters.frequency_penalty,
+      presence_penalty: condense_prompt.promptInfo.modelParameters.presence_penalty,
+      logit_bias: condense_prompt.promptInfo.modelParameters.logit_bias,
+      stop: condense_prompt.promptInfo.modelParameters.stop,
       messages: condense_prompt.messages as unknown as ChatCompletionMessageParam[],
       user: user.coldclimate_claims.id,
     });
@@ -269,12 +336,23 @@ export class ChatService extends BaseWorker implements OnModuleInit {
     return { rephrased_question, docs };
   }
 
+  /**
+   * This method is used to process a survey.
+   *
+   * @param {Job} job - The job object containing the survey data.
+   * @returns {Promise<void>} - A promise that resolves when the survey processing is complete.
+   */
   async process_survey(job: Job) {
+    // Destructure the necessary data from the job
     const { survey, user, compliance, integration, organization, on_update_url } = job.data;
+
+    // Get the list of indexes
     const index = await this.pc.listIndexes();
 
+    // Reset the AI responses for the survey
     await this.resetAIResponses(user, survey, organization);
 
+    // Log the start of the survey processing
     this.logger.info(`✅ Started processing survey ${survey.definition.title}`, {
       survey: survey.definition.title,
       user,
@@ -283,19 +361,26 @@ export class ChatService extends BaseWorker implements OnModuleInit {
       organization,
       on_update_url,
     });
-    // create a session
+
+    // Create a session for the survey
     const session = (await this.fp.createSession({
       survey: survey.definition.title,
       organization: organization.name,
       user: user.coldclimate_claims.email,
     })) as FPSession;
 
+    // Log the creation of the session
     this.logger.info(`Session created for survey ${survey.definition.title}`, session);
+
+    // Find the index for the organization
     const idx = find(index, { name: organization.name });
+
+    // If the index does not exist, create it
     if (!idx) {
       this.logger.warn(`Index ${organization.name} not found; creating...`);
       await this.pc.createIndex(organization.name);
-      // clear existing vectors since the index was just created
+
+      // Clear existing vectors since the index was just created
       const vectors = await this.prisma.vector_records.findMany({ where: { organization_id: organization.id } });
       if (Array.isArray(vectors)) {
         for (const vector of vectors) {
@@ -307,11 +392,14 @@ export class ChatService extends BaseWorker implements OnModuleInit {
         }
       }
 
+      // Get the files for the organization
       const files = await this.prisma.organization_files.findMany({ where: { organization_id: organization.id } });
 
+      // If no files are found, log a warning
       if (!files || files.length === 0) {
         this.logger.warn(`No files found for organization ${organization.name}`);
       } else if (files.length > 0) {
+        // If files are found, ingest the data for each file
         for (const file of files) {
           const cacheKey = this.pc.getCacheKey(file);
           await this.cache.delete(cacheKey);
@@ -320,6 +408,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
       }
     }
 
+    // Set the tags for the survey
     this.setTags({
       survey: survey?.definition?.title,
       url: on_update_url,
@@ -332,34 +421,43 @@ export class ChatService extends BaseWorker implements OnModuleInit {
         id: user.id || user.coldclimate_claims.id,
       },
     });
+
+    // Log the start of the survey processing
     this.logger.info(`Processing survey ${survey.definition.title} for compliance ${compliance?.name}`);
 
+    // Initialize the category context
     let category_context;
 
+    // If the survey definition does not have a category description, set the category context to null
     if (!survey.definition.category_description || survey.definition.category_description === 'undefined') {
       category_context = null;
     }
 
+    // Get the survey definition
     const definition = survey.definition;
 
+    // Get the sections of the survey
     const sections = Object.keys(definition.sections);
 
+    // Initialize the section index
     const sdx = 0;
 
+    // Initialize the requests array
     const reqs: any[] = [];
 
-    //initialize prompts service with survey name so that it has the correct context for darkly
+    // Initialize the prompts service with the survey name so that it has the correct context for darkly
     this.prompts = await new PromptsService(this.darkly, survey.name, organization, this.prisma).initialize();
 
-    // iterate over each section key
+    // Iterate over each section
     for (const section of sections) {
-      // create a new thread for each section run
+      // Create a new thread for each section run
       reqs.push(this.processSection(job, section, sdx, sections, definition, integration, organization, category_context, user, session));
-      //await this.processSection(job, section, sdx, sections, definition, thread, integration, organization, category_context, user, survey);
     }
 
+    // Wait for all the sections to be processed
     await Promise.all(reqs);
 
+    // Log the end of the survey processing
     this.logger.info(`✅ Finished processing survey ${survey.definition.title}`, {
       survey: survey.definition.title,
       user,
@@ -370,6 +468,19 @@ export class ChatService extends BaseWorker implements OnModuleInit {
     });
   }
 
+  /**
+   * Process the section
+   * @param job
+   * @param section
+   * @param sdx
+   * @param sections
+   * @param definition
+   * @param integration
+   * @param organization
+   * @param category_context
+   * @param user
+   * @param session
+   */
   public async processSection(job: Job, section: string, sdx: number, sections: string[], definition, integration, organization, category_context, user, session: FPSession) {
     await job.log(`Section | ${section}:${sdx + 1} of ${sections.length}`);
     this.logger.info(`Processing ${section}: ${definition.sections[section].title}`, { section });
@@ -389,41 +500,77 @@ export class ChatService extends BaseWorker implements OnModuleInit {
         await job.log(`Question | section: ${section} question: ${item} (${items.indexOf(item)} of ${items.length})`);
         const follow_up = definition.sections[section].follow_up[item];
 
-        if (follow_up?.ai_response?.answer && !has(follow_up, 'ai_response.what_we_need')) {
+        if (follow_up?.ai_response?.value) {
           this.logger.info(`Skipping ${section}.${item}: ${follow_up.prompt}; it has already been answered`, {
-            section_item: definition.sections[section].follow_up[item],
+            survey: job.data.survey?.name,
+            section: section,
+            key: item,
+            question: follow_up.prompt,
+            answer: follow_up.value,
+            ai_answer: follow_up.ai_response.answer,
+            justification: follow_up.ai_response.justification,
           });
           continue;
         }
 
-        this.logger.info(`Sending Message | ${section}.${item}: ${follow_up.prompt}`);
+        this.logger.info(`Processing Message | ${section}.${item}`, {
+          survey: job.data.survey?.name,
+          section: section,
+          key: item,
+        });
 
         // create a new run for each followup item
         const value = await this.askQuestion(organization.name, follow_up, organization.name, job.data.user, session);
 
         // update the survey with the response
-        definition.sections[section].follow_up[item].ai_response = value;
         if (value) {
+          definition.sections[section].follow_up[item].ai_response = value;
           definition.sections[section].follow_up[item].ai_answered = typeof value.answer != 'undefined';
+
+          this.logger.info(`Ai responded: ${section}.${item}`, {
+            survey: job.data.survey?.name,
+            section: section,
+            key: item,
+            question: follow_up.prompt,
+            answer: follow_up.value,
+            ai_answer: follow_up.ai_response.answer,
+            justification: follow_up.ai_response.justification,
+          });
         }
+
         definition.sections[section].follow_up[item].ai_attempted = true;
 
+        /*
+
+         */
         // if there is additional context, create a new run for it
         if (follow_up['additional_context']) {
-          if (definition.sections[section].follow_up[item].additional_context.ai_answered) {
-            this.logger.info(`Skipping ${section}.${item}.additional_context: ${follow_up.prompt}; it has already been answered`, {
-              section_item: definition.sections[section].follow_up[item],
+          if (definition.sections[section].follow_up[item].additional_context.value) {
+            this.logger.info(`Skipping ${section}.${item}.additional_context; it has already been answered`, {
+              survey: job.data.survey?.name,
+              section: section,
+              key: item,
+              additional_context: definition.sections[section].follow_up[item].additional_context,
             });
             continue;
           }
 
-          this.logger.info(`Creating Message | ${section}.${item}.additional_context: ${follow_up.prompt}`);
+          this.logger.info(`Processing Question | ${section}.${item}.additional_context: ${follow_up.prompt}`);
           const additionalValue = await this.askQuestion(organization.name, follow_up['additional_context'], organization.display_name, job.data.user, session);
 
-          definition.sections[section].follow_up[item].additional_context.ai_response = additionalValue;
-
           if (additionalValue) {
+            definition.sections[section].follow_up[item].additional_context.ai_response = additionalValue;
             definition.sections[section].follow_up[item].additional_context.ai_answered = typeof value.answer != 'undefined';
+
+            this.logger.info(`Ai responded: ${section}.${item}`, {
+              survey: job.data.survey?.name,
+              section: section,
+              key: item,
+              question: follow_up.prompt,
+              answer: follow_up.value,
+              ai_answer: follow_up.ai_response.answer,
+              justification: follow_up.ai_response.justification,
+            });
           }
 
           definition.sections[section].follow_up[item].additional_context.ai_attempted = true;
@@ -450,6 +597,14 @@ export class ChatService extends BaseWorker implements OnModuleInit {
     this.logger.info(`✅ Finished processing ${section}: ${definition.sections[section].title}`, { section });
   }
 
+  /**
+   * Check if the job is a duplicate or has been canceled
+   * @param organization
+   * @param job
+   * @param section
+   * @param item
+   * @private
+   */
   private async isDuplicateOrCanceled(organization, job: Job, section: string, item: string) {
     const exists = await this.queue.getJob(job.id);
     if (!exists || !exists.data.survey) {
