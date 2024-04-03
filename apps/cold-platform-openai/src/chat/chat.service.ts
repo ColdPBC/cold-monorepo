@@ -309,9 +309,8 @@ export class ChatService extends BaseWorker implements OnModuleInit {
       role: condenseResponse.choices[0].message.role,
       content: condenseResponse.choices[0].message.content,
     };
-    const fpMessages = condense_prompt.allMessages(message);
 
-    this.logger.info('FPMessages', fpMessages);
+    condense_prompt.allMessages(message);
 
     const recording = await this.fp.recordCompletion(session, vars, condense_prompt, condenseResponse, start, end);
 
