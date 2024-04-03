@@ -40,10 +40,9 @@ export class ChatService extends BaseWorker implements OnModuleInit {
    * @param organization
    */
   async resetAIResponses(user, survey: any, organization: any) {
-    this.logger.info(`✅ Started processing survey ${survey.definition.title}`, {
-      survey: survey.definition.title,
+    this.logger.info(`Clearing previous ai_responses for ${organization.name}: ${survey.name}`, {
       user,
-      survey_name: survey.definition.title,
+      survey: survey.name,
       organization: { id: organization.id, name: organization.name, display_name: organization.display_name },
     });
     const surveyData = await this.prisma.survey_data.findFirst({
@@ -103,13 +102,13 @@ export class ChatService extends BaseWorker implements OnModuleInit {
 
             // Return the item: string
             const file = `
-            <br />
-            _____________________ <br />
-            file: ${item.name} <br />
-            text: ${item.text} <br />
-            score: ${match.score} <br />
-            _____________________
-            <br />`;
+            _____________________   \n
+            file: ${item.name},     \n
+            score: ${match.score}   \n
+            _____________________   \n
+            text: ${item.text}      \n
+            _____________________   \n
+           `;
             return JSON.stringify(file);
           }
         })
@@ -127,7 +126,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
    * @param user
    * @param session
    */
-  async askQuestion(indexName: string, question: any, company_name: string, user: AuthenticatedUser, session): Promise<any> {
+  async askQuestion(indexName: string, question: any, company_name: string, user: AuthenticatedUser, session, additional_context?: any): Promise<any> {
     try {
       // Get Chat History
       let messages = (await this.cache.get(`openai:thread:${user.coldclimate_claims.id}`)) as ChatCompletionMessageParam[];
@@ -142,12 +141,12 @@ export class ChatService extends BaseWorker implements OnModuleInit {
         apiKey: this.config.getOrThrow('OPENAI_API_KEY'),
       });
 
-      const { rephrased_question, docs } = await this.getDocumentContent(messages, question, openai, indexName, session, user, context);
+      const { rephrased_question, docs } = await this.getDocumentContent(messages, question, openai, indexName, user, context, additional_context);
 
       const vars = {
         component_prompt: (await this.prompts.getComponentPrompt(question)) || '',
         context: context[0] || '',
-        question: `${question.prompt} ${question.tooltip || ''}`,
+        question: additional_context ? rephrased_question : `${question.prompt} ${question.tooltip || ''}`,
       };
 
       const sanitized_base = (await this.fp.getPrompt('survey_question_prompt', vars, true)) as FormattedPrompt;
@@ -225,7 +224,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
       });
 
       // Save the thread to the cache
-      await this.cache.set(`openai:thread:${user.coldclimate_claims.id}`, messages, { ttl: 60 * 60 * 24 });
+      await this.cache.set(`openai:thread:${user.coldclimate_claims.email}`, messages, { ttl: 60 * 60 * 24 });
 
       this.logger.info(`${ai_response.answer ? '✅ Answered' : '❌ Did NOT Answer'} ${question.idx ? question.idx : 'additional_context'}`, {
         pinecone_query: rephrased_question,
@@ -240,7 +239,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
       const end = new Date();
       const recording = await this.fp.recordCompletion(session, vars, sanitized_base, response, start, end);
 
-      this.logger.info('Sending run stats to FreePlay', recording);
+      this.logger.info(`Sending ${sanitized_base.promptInfo.templateName} run stats to FreePlay`, recording);
 
       return ai_response;
     } catch (error) {
@@ -255,9 +254,9 @@ export class ChatService extends BaseWorker implements OnModuleInit {
    * @param question
    * @param openai
    * @param indexName
-   * @param session
    * @param user
    * @param context
+   * @param additional_context
    * @private
    */
   private async getDocumentContent(
@@ -265,9 +264,9 @@ export class ChatService extends BaseWorker implements OnModuleInit {
     question: any,
     openai: OpenAI,
     indexName: string,
-    session: { [x: string]: any },
     user: AuthenticatedUser,
     context: any,
+    additional_context,
   ) {
     /**
      * This prompt is used to condense the chat history and follow-up question into a single standalone question for the purpose
@@ -284,10 +283,25 @@ export class ChatService extends BaseWorker implements OnModuleInit {
       }
     }
 
-    const vars = {
-      chat_history: lastMessage || '',
-      question: `${question.prompt}. ${question.tooltip}`,
-    };
+    const vectorSession = (await this.fp.createSession({
+      user: user.coldclimate_claims.email,
+      survey: 'survey',
+      organization: 'organization',
+    })) as FPSession;
+
+    let vars: any;
+    if (additional_context) {
+      vars = {
+        chat_history: question.prompt,
+        question: additional_context.prompt || '',
+      };
+    } else {
+      vars = {
+        chat_history: lastMessage || '',
+        question: `${question.prompt}. ${question.tooltip}`,
+      };
+    }
+
     const condense_prompt = (await this.fp.getPrompt('vector_query', vars, true)) as FormattedPrompt;
 
     const start = new Date();
@@ -312,9 +326,9 @@ export class ChatService extends BaseWorker implements OnModuleInit {
 
     condense_prompt.allMessages(message);
 
-    const recording = await this.fp.recordCompletion(session, vars, condense_prompt, condenseResponse, start, end);
+    const recording = await this.fp.recordCompletion(vectorSession, vars, condense_prompt, condenseResponse, start, end);
 
-    this.logger.info('Recording', recording);
+    this.logger.info(`Sending ${condense_prompt.promptInfo.templateName} run stats to FreePlay `, recording);
 
     if (condenseResponse.choices[0].message.content) {
       rephrased_question = condenseResponse.choices[0].message.content;
@@ -323,7 +337,8 @@ export class ChatService extends BaseWorker implements OnModuleInit {
         previous_message: lastMessage,
         current_question: question.promp,
         pincone_query: rephrased_question,
-        ...session,
+        session_id: vectorSession.sessionId,
+        ...vectorSession.customMetadata,
       });
     }
 
@@ -563,7 +578,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
           }
 
           this.logger.info(`Processing Question | ${section}.${item}.additional_context: ${follow_up.prompt}`);
-          const additionalValue = await this.askQuestion(organization.name, follow_up['additional_context'], organization.display_name, job.data.user, session);
+          const additionalValue = await this.askQuestion(organization.name, follow_up, organization.display_name, job.data.user, session, follow_up['additional_context']);
 
           if (additionalValue) {
             definition.sections[section].follow_up[item].additional_context.ai_response = additionalValue;
