@@ -19866,6 +19866,7 @@ __metadata:
     framer-motion: "npm:^10.16.4"
     global: "npm:^4.4.0"
     got: "npm:^14.0.0"
+    hex-color-opacity: "npm:^0.4.2"
     hot-shots: "npm:^10.0.0"
     husky: "npm:^8.0.3"
     jest: "npm:^29.6.4"
@@ -26788,6 +26789,13 @@ __metadata:
     glob: "npm:^7.1.6"
     readable-stream: "npm:^3.6.0"
   checksum: 10/97a14bef913036d74f2c60727d186bc2758b6b2f6239f4c4ea410e2cdbc5287249ddaf4b52c0e7e5c9d5fd179c9aeac51fc1f346ad5e2e5f7cacbd4fc6ba2281
+  languageName: node
+  linkType: hard
+
+"hex-color-opacity@npm:^0.4.2":
+  version: 0.4.2
+  resolution: "hex-color-opacity@npm:0.4.2"
+  checksum: 10/991e839a7cae2e408a29776f0f3ce9259bb215efc7eeda0b74e78d669544e4cb4d2d220816654961241a2da735a5ab6f6d6f8b630b37342b766f6e4bfe571468
   languageName: node
   linkType: hard
 
