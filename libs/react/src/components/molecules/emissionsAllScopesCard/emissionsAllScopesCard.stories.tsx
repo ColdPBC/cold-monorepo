@@ -25,8 +25,8 @@ export const Default = () => {
           yearOptions: [
             {
               id: 0,
-              name: '2020 Emissions',
-              value: '2020',
+              name: 'All Year',
+              value: 'all',
             },
           ],
           facilityOptions: [

@@ -11,10 +11,12 @@ import opacity from 'hex-color-opacity';
 import { Plugin as PluginType } from 'chart.js/dist/types';
 import { AnyObject, EmptyObject } from 'chart.js/dist/types/basic';
 import { InputOption } from '@coldpbc/interfaces';
+import { useColdContext } from '@coldpbc/hooks';
 
 const _EmissionsYearlyCarbonFootprintChart = () => {
   const chartRef = React.useRef(null);
   const { selectedFacility, selectedYear, setSelectedYear, data } = useContext(ColdEmissionsContext);
+  const { logBrowser } = useColdContext();
   const { emissions, yearOptions } = data;
   const yearsData: {
     [year: string]: number;
@@ -141,6 +143,8 @@ const _EmissionsYearlyCarbonFootprintChart = () => {
       },
     },
   ];
+
+  logBrowser('EmissionsYearlyCarbonFootprintChart', 'info', { yearsChartData, chartOptions });
 
   return (
     <Card title={'Emissions'} glow={false}>
