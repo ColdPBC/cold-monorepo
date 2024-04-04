@@ -112,7 +112,7 @@ const _CarbonFootprint = () => {
         return;
       }
       yearOptions.push({
-        id: index,
+        id: index + 1,
         name: `${period.value} Emissions`,
         value: period.value.toString(),
       });
