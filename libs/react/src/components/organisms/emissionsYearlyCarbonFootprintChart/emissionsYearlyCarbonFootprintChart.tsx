@@ -7,9 +7,11 @@ import React, { useContext } from 'react';
 import { ColdEmissionsContext } from '@coldpbc/context';
 import { HexColors } from '@coldpbc/themes';
 import { withErrorBoundary } from 'react-error-boundary';
+import { useColdContext } from '@coldpbc/hooks';
 
 const _EmissionsYearlyCarbonFootprintChart = () => {
   const { selectedFacility, selectedYear, data } = useContext(ColdEmissionsContext);
+  const { logBrowser } = useColdContext();
   const { emissions } = data;
   const yearsData: {
     [year: string]: number;
@@ -82,10 +84,8 @@ const _EmissionsYearlyCarbonFootprintChart = () => {
   };
 
   ChartJS.register(CategoryScale, LinearScale, BarElement, Title);
-  console.log({
-    chartOptions,
-    yearsChartData,
-  });
+
+  logBrowser('EmissionsYearlyCarbonFootprintChart', 'info', { yearsChartData, chartOptions });
 
   return (
     <Card title={'Emissions'} glow={false}>
