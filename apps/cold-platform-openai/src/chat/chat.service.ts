@@ -154,7 +154,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
       const start = new Date();
 
       const response = await openai.chat.completions.create({
-        response_format: { type: 'json_object' },
+        response_format: sanitized_base.promptInfo.model === 'gpt-3.5-turbo-16k-0613' ? undefined : { type: 'json_object' },
         model: sanitized_base.promptInfo.model,
         max_tokens: sanitized_base.promptInfo.modelParameters.max_tokens,
         temperature: sanitized_base.promptInfo.modelParameters.temperature,
