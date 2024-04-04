@@ -70,6 +70,7 @@ const _CarbonFootprint = () => {
   }
 
   if (isAxiosError(data) && data?.response?.status === 404) {
+    logBrowser('No emissions data found', 'error', { data }, data);
     return (
       <AppContent title="Carbon Footprint">
         <CenterColumnContent>
@@ -127,6 +128,8 @@ const _CarbonFootprint = () => {
       }).flat();
     }).flat(),
   ).sort();
+
+  logBrowser('CarbonFootprint', 'info', { data, uniqueScopes, facilityOptions, yearOptions });
 
   return (
     <ColdEmissionsContext.Provider
