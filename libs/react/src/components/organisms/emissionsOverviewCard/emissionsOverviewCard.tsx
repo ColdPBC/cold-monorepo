@@ -118,6 +118,7 @@ const _EmissionsOverviewCard = () => {
         selectedFacility: selectedFacility,
         setSelectedYear,
         setSelectedFacility,
+        isSingleYear: false,
       }}>
       <EmissionsScopesCard variant={EmissionsScopesCardVariants.horizontal} title={'Emissions Overview'} />
     </ColdEmissionsContext.Provider>

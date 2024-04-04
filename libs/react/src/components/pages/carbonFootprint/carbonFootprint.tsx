@@ -16,7 +16,7 @@ import { useColdContext, useOrgSWR } from '@coldpbc/hooks';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { ErrorType } from '@coldpbc/enums';
 import { EmissionPayload, InputOption } from '@coldpbc/interfaces';
-import { find, forEach, map, uniq } from 'lodash';
+import { find, forEach, map, sortBy, uniq } from 'lodash';
 import { ColdEmissionsContext } from '@coldpbc/context';
 import { isAxiosError } from 'axios';
 import { withErrorBoundary } from 'react-error-boundary';
@@ -133,6 +133,8 @@ const _CarbonFootprint = () => {
     );
   }
 
+  const yearSet = new Set<number>();
+
   forEach(data?.definition, (facility, index) => {
     facilityOptions.push({
       id: index + 1,
@@ -140,14 +142,15 @@ const _CarbonFootprint = () => {
       value: facility.facility_id.toString(),
     });
     forEach(facility.periods, (period, index) => {
-      if (find(yearOptions, { value: period.value.toString() })) {
-        return;
-      }
-      yearOptions.push({
-        id: index + 1,
-        name: `${period.value} Emissions`,
-        value: period.value.toString(),
-      });
+      yearSet.add(period.value);
+    });
+  });
+
+  forEach(sortBy(Array.from(yearSet)), (year, index) => {
+    yearOptions.push({
+      id: index + 1,
+      name: `${year} Emissions`,
+      value: year.toString(),
     });
   });
 

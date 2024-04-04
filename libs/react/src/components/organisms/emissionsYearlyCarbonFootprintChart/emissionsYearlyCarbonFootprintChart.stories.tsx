@@ -63,6 +63,7 @@ export const Default: Story = {
           setSelectedYear: setSelectedYear,
           selectedYear: selectedYear,
           setSelectedFacility: option => {},
+          isSingleYear: false,
         }}>
         <EmissionsYearlyCarbonFootprintChart />;
       </ColdEmissionsContext.Provider>
@@ -117,6 +118,7 @@ export const YearSelected: Story = {
           setSelectedYear: setSelectedYear,
           selectedYear: selectedYear,
           setSelectedFacility: option => {},
+          isSingleYear: false,
         }}>
         <EmissionsYearlyCarbonFootprintChart />;
       </ColdEmissionsContext.Provider>

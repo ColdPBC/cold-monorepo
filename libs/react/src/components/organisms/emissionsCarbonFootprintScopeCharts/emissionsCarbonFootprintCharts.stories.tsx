@@ -49,6 +49,7 @@ export const Default: Story = {
             value: 'all',
           },
           setSelectedFacility: option => {},
+          isSingleYear: false,
         }}>
         <EmissionsCarbonFootprintCharts />;
       </ColdEmissionsContext.Provider>

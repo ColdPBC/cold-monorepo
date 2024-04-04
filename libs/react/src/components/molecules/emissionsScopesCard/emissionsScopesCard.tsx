@@ -4,10 +4,10 @@ import { Card, EmissionsDonutChart, EmissionsDonutChartVariants, ErrorFallback, 
 import { forEach, forOwn, isArray, max } from 'lodash';
 import { withErrorBoundary } from 'react-error-boundary';
 import clsx from 'clsx';
-import { formatTonnes } from '@coldpbc/lib';
 import { EmissionsScopesCardVariants } from '@coldpbc/enums';
 import { ChartData } from 'chart.js';
 import { HexColors } from '@coldpbc/themes';
+import { formatTonnes } from '@coldpbc/lib';
 
 const _EmissionsScopesCard = ({ variant, title }: { variant?: EmissionsScopesCardVariants; title?: string }) => {
   const { data, selectedFacility, selectedYear } = useContext(ColdEmissionsContext);
@@ -127,7 +127,7 @@ const _EmissionsScopesCard = ({ variant, title }: { variant?: EmissionsScopesCar
   });
 
   return (
-    <Card glow={false} title={title}>
+    <Card glow={true} title={title}>
       {variant ? (
         <EmissionsDonutChart
           variant={variant ? EmissionsDonutChartVariants.horizontal : EmissionsDonutChartVariants.vertical}
@@ -137,10 +137,10 @@ const _EmissionsScopesCard = ({ variant, title }: { variant?: EmissionsScopesCar
           hoverColorArray={hoverColorArray}
         />
       ) : (
-        <div className={'flex flex-col w-full'}>
-          <div className={'w-full flex flex-row items-end font-extrabold text-left'}>
+        <div className={'flex flex-col w-full space-y-[24px]'}>
+          <div className={'w-full flex flex-row items-end font-extrabold text-left space-x-1'}>
             <div className={'text-h1'}>{formatTonnes(totalEmissions)}</div>
-            <div className={'text-h3'}>tCO2e</div>
+            <div className={`text-h3 ${totalEmissions >= 1000 ? 'mb-[8px]' : 'mb-[6px]'}`}>tCO2e</div>
           </div>
           <div className="w-full m-auto mt-2">{detailViews}</div>
         </div>

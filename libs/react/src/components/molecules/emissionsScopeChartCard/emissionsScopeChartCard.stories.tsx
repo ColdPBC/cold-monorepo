@@ -49,6 +49,7 @@ export const Default = () => {
           value: 'all',
         },
         setSelectedFacility: option => {},
+        isSingleYear: false,
       }}>
       <EmissionsScopeChartCard scope_category={1} />;
     </ColdEmissionsContext.Provider>
