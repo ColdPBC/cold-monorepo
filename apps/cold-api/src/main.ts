@@ -21,9 +21,9 @@ async function bootstrap(instance) {
   const getOrigin = () => {
     switch (process.env['NODE_ENV']) {
       case 'production':
-        return 'https://api.coldclimate.com';
+        return 'https://app.coldclimate.com';
       case 'staging':
-        return 'https://api.coldclimate.online';
+        return 'https://app.coldclimate.online';
       default:
         return 'http://localhost:4200';
     }
