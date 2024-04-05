@@ -1,4 +1,5 @@
 export class CreateScopeDto {
-  scope: string;
+  scope: number;
+  sub_scope: number | null;
   label: string;
 }
