@@ -1,3 +1,17 @@
+# [1.186.0-cold-661.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.185.2...v1.186.0-cold-661.1) (2024-04-05)
+
+
+### Bug Fixes
+
+* updated swagger decorators ([3ab05fe](https://github.com/ColdPBC/cold-monorepo/commit/3ab05fe4ae857974e09fd3514f01e2227c32b76a))
+
+
+### Features
+
+* add emission_scopes routes ([9bdc5a5](https://github.com/ColdPBC/cold-monorepo/commit/9bdc5a51e50971ff2d9961b4098aad0a604ea19d))
+* add ghg sub-scopes ([faa206f](https://github.com/ColdPBC/cold-monorepo/commit/faa206f3ed689988792710f019def40d114e4a78))
+* add ghg sub-scopes ([5a9433a](https://github.com/ColdPBC/cold-monorepo/commit/5a9433a62564d45cb911e01871189b0647fd3fd1))
+
 ## [1.185.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.185.1...v1.185.2) (2024-04-04)
 
 
