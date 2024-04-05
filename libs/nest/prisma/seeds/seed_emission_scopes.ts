@@ -288,9 +288,13 @@ const seeds = {
   ],
 };
 // Add new form_definition row data to the seeds array
-const createEmissionScopes = (scope: string, labels: Array<string>): Array<emission_scope> => {
-  const scopes = labels.map(label => {
-    return { id: new Cuid2Generator().generate('scope').scopedId, scope, label };
+const createEmissionScopes = (key: string, labels: Array<string>): Array<emission_scope> => {
+  const parts = key.split('.');
+  const scope = +parts[0];
+  const sub_scope = +parts[1] ? +parts[1] : null;
+
+  const scopes: Array<emission_scope> = labels.map(label => {
+    return { id: new Cuid2Generator('scope').generate().scopedId, scope, sub_scope, label };
   });
 
   return scopes;
@@ -298,7 +302,8 @@ const createEmissionScopes = (scope: string, labels: Array<string>): Array<emiss
 
 type emission_scope = {
   id?: string;
-  scope: string;
+  scope: number;
+  sub_scope?: number | null;
   label: string;
   created_at?: string;
   updated_at?: string;

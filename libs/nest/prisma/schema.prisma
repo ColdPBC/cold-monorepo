@@ -6,20 +6,20 @@ generator client {
 generator zod {
   provider                         = "zod-prisma-types"
   output                           = "../src/validation/generated"
+  createModelTypes                 = "true"
+  validateWhereUniqueInput         = "false"
+  addIncludeType                   = "false"
+  createRelationValuesTypes        = "false"
+  addInputTypeValidation           = "false"
   useMultipleFiles                 = "true"
   useDefaultValidators             = "false"
-  createOptionalDefaultValuesTypes = "false"
-  addInputTypeValidation           = "false"
   createInputTypes                 = "false"
-  createPartialTypes               = "false"
-  createModelTypes                 = "true"
-  createRelationValuesTypes        = "false"
+  createOptionalDefaultValuesTypes = "false"
   addSelectType                    = "false"
+  createPartialTypes               = "false"
   writeNullishInModelTypes         = "false"
-  validateWhereUniqueInput         = "false"
   writeBarrelFiles                 = "false"
   coerceDate                       = "false"
-  addIncludeType                   = "false"
 }
 
 datasource db {
@@ -284,8 +284,8 @@ model organizations {
   category_data            category_data[]
   integrations             integrations[]
   organization_compliances organization_compliances[]
-  organization_files       organization_files[]
   facilities               organization_facilities[]
+  organization_files       organization_files[]
   survey_data              survey_data[]
   utility_bills            utility_bills[]
   vector_records           vector_records[]
@@ -409,11 +409,11 @@ model emissions {
   co2e_calculation_origin String
   co2e_unit               String
   emission_factor         Json
-  facility_id             String
   co2_calculation_method  String
   constituent_gases       Json
-  integrations            integrations            @relation(fields: [integration_id], references: [id], onDelete: Cascade)
+  facility_id             String
   facility                organization_facilities @relation(fields: [facility_id], references: [id], onDelete: Cascade)
+  integrations            integrations            @relation(fields: [integration_id], references: [id], onDelete: Cascade)
 }
 
 /// @namespace Utility Bills
@@ -427,10 +427,10 @@ model utility_bills {
   data            Json
   created_at      DateTime                @default(now())
   updated_at      DateTime                @updatedAt
-  facility_id     String
   organization_id String
-  integration     integrations            @relation(fields: [integration_id], references: [id], onDelete: Cascade)
+  facility_id     String
   facility        organization_facilities @relation(fields: [facility_id], references: [id], onDelete: Cascade)
+  integration     integrations            @relation(fields: [integration_id], references: [id], onDelete: Cascade)
   organization    organizations           @relation(fields: [organization_id], references: [id], onDelete: Cascade)
 }
 
@@ -489,20 +489,21 @@ model organization_compliances {
 model vector_records {
   id                   String             @id @default(cuid())
   metadata             Json
-  organization_id      String
-  organization         organizations      @relation(fields: [organization_id], references: [id], onDelete: Cascade)
-  organization_file    organization_files @relation(fields: [organization_file_id], references: [id], onDelete: Cascade)
-  organization_file_id String
   created_at           DateTime           @default(now())
   updated_at           DateTime           @updatedAt
+  organization_file_id String
+  organization_id      String
+  organization_file    organization_files @relation(fields: [organization_file_id], references: [id], onDelete: Cascade)
+  organization         organizations      @relation(fields: [organization_id], references: [id], onDelete: Cascade)
 }
 
 model emission_scopes {
   id         String   @id @default(cuid())
-  scope      String
   label      String
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
+  sub_scope  Int?
+  scope      Int
 }
 
 enum integration_service_type {
