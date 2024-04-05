@@ -12,6 +12,7 @@ import { ToastMessage } from '@coldpbc/interfaces';
 
 const _AutomateComplianceFlowStep = () => {
   const documents = useOrgSWR<any, any>(['/files', 'GET'], axiosFetcher);
+  const [isSending, setIsSending] = useState(false);
   const { logError, logBrowser } = useColdContext();
   const { orgId } = useAuth0Wrapper();
   const { addToastMessage } = useAddToastMessage();
@@ -26,6 +27,7 @@ const _AutomateComplianceFlowStep = () => {
   const [automationKickoff, setAutomationKickoff] = useState(initialState);
 
   const startAutomation = async () => {
+    setIsSending(true);
     // post to start automation
     const response = await axiosFetcher([`/compliance_definitions/${name}/organizations/${orgId}`, 'PUT']);
     if (isAxiosError(response)) {
@@ -49,6 +51,7 @@ const _AutomateComplianceFlowStep = () => {
       setAutomationKickoff(true);
       nextStep();
     }
+    setIsSending(false);
   };
 
   if (documents.error) {
@@ -66,7 +69,7 @@ const _AutomateComplianceFlowStep = () => {
     .join('');
 
   const getAutomationButtonClassName = () => {
-    if (automationKickoff) {
+    if (automationKickoff || isSending) {
       return 'h-[72px] w-full';
     } else {
       return 'h-[72px] w-full bg-green-500 hover:bg-green-400 active:bg-green-300';
@@ -82,7 +85,8 @@ const _AutomateComplianceFlowStep = () => {
           label: 'Start',
           onClick: () => startAutomation(),
           className: getAutomationButtonClassName(),
-          disabled: automationKickoff,
+          disabled: automationKickoff || isSending,
+          loading: isSending,
         },
         {
           label: 'Skip For Now',
