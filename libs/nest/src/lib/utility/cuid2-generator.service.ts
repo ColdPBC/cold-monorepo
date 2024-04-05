@@ -1,23 +1,21 @@
-import {init, isCuid} from '@paralleldrive/cuid2';
-import {BaseWorker} from '../worker';
-import {Injectable} from '@nestjs/common';
+import { init, isCuid } from '@paralleldrive/cuid2';
+import { Injectable } from '@nestjs/common';
+import * as os from 'os';
 
 /**
  * CUID2 class!
  */
 @Injectable()
-export class Cuid2Generator extends BaseWorker {
+export class Cuid2Generator {
   id: string | undefined;
   scopedId: string = '';
   createId: any;
   prefix: string | undefined;
 
   constructor(prefix?: string) {
-    super('Cuid2Generator');
-
     this.createId = init({
       length: 16,
-      fingerprint: this.details.host_name,
+      fingerprint: os.hostname(),
     });
 
     this.setId(prefix);

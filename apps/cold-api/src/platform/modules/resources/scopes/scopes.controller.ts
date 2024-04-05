@@ -10,8 +10,9 @@ const _bodySchema = {
   schema: {
     type: 'object',
     example: {
-      scope: '1',
-      label: 'Natural gas liquids',
+      scope: 1,
+      sub_scope: 3,
+      label: 'Test Natural gas liquids',
     },
   },
 };
