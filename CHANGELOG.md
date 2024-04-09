@@ -1,3 +1,11 @@
+# [1.189.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.188.0...v1.189.0) (2024-04-09)
+
+
+### Features
+
+* update the language of our authentication errors ([27690b9](https://github.com/ColdPBC/cold-monorepo/commit/27690b913b38eebfd85d2df9713fc4ce39be67d5))
+* update the language of our authentication errors ([#383](https://github.com/ColdPBC/cold-monorepo/issues/383)) ([9e29e32](https://github.com/ColdPBC/cold-monorepo/commit/9e29e3277cc3f8731f1d2e225e61d4fd6ecdc0df))
+
 # [1.188.0-cold-708.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.187.0...v1.188.0-cold-708.1) (2024-04-09)
 
 
