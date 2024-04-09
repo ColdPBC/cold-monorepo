@@ -1,8 +1,10 @@
+import React from 'react';
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { EmissionsYearlyCarbonFootprintChart } from '@coldpbc/components';
 import { getDefaultEmissionMock } from '@coldpbc/mocks';
 import { ColdEmissionsContext } from '@coldpbc/context';
+import { InputOption } from '@coldpbc/interfaces';
 
 const meta = {
   title: 'Organisms/EmissionsYearlyCarbonFootprintChart',
@@ -16,6 +18,12 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   render: () => {
+    const [selectedYear, setSelectedYear] = React.useState<InputOption>({
+      id: 0,
+      name: 'All Years',
+      value: 'all',
+    });
+
     return (
       <ColdEmissionsContext.Provider
         value={{
@@ -27,6 +35,16 @@ export const Default: Story = {
                 id: 0,
                 name: 'All Years',
                 value: 'all',
+              },
+              {
+                id: 1,
+                name: '2022',
+                value: '2022',
+              },
+              {
+                id: 2,
+                name: '2023',
+                value: '2023',
               },
             ],
             facilityOptions: [
@@ -42,12 +60,62 @@ export const Default: Story = {
             name: 'All Facilities',
             value: 'all',
           },
-          setSelectedYear: option => {},
-          selectedYear: {
+          setSelectedYear: setSelectedYear,
+          selectedYear: selectedYear,
+          setSelectedFacility: option => {},
+        }}>
+        <EmissionsYearlyCarbonFootprintChart />;
+      </ColdEmissionsContext.Provider>
+    );
+  },
+};
+
+export const YearSelected: Story = {
+  render: () => {
+    const [selectedYear, setSelectedYear] = React.useState<InputOption>({
+      id: 1,
+      name: '2022',
+      value: '2022',
+    });
+
+    return (
+      <ColdEmissionsContext.Provider
+        value={{
+          data: {
+            emissions: getDefaultEmissionMock(),
+            uniqueScopes: [1, 2, 3],
+            yearOptions: [
+              {
+                id: 0,
+                name: 'All Years',
+                value: 'all',
+              },
+              {
+                id: 1,
+                name: '2022',
+                value: '2022',
+              },
+              {
+                id: 2,
+                name: '2023',
+                value: '2023',
+              },
+            ],
+            facilityOptions: [
+              {
+                id: 0,
+                name: 'All Facilities',
+                value: 'all',
+              },
+            ],
+          },
+          selectedFacility: {
             id: 0,
-            name: 'All Years',
+            name: 'All Facilities',
             value: 'all',
           },
+          setSelectedYear: setSelectedYear,
+          selectedYear: selectedYear,
           setSelectedFacility: option => {},
         }}>
         <EmissionsYearlyCarbonFootprintChart />;

@@ -10,7 +10,7 @@ import { find, forEach, map, uniq } from 'lodash';
 
 export const ColdEmissionsProvider = ({ children }: PropsWithChildren) => {
   const { logError, logBrowser } = useColdContext();
-  const { data, isLoading, error } = useOrgSWR<EmissionPayload, any>(['/emissions', 'GET'], axiosFetcher);
+  const { data, isLoading, error } = useOrgSWR<EmissionPayload, any>(['/footprints', 'GET'], axiosFetcher);
   const [selectedFacility, setSelectedFacility] = React.useState<InputOption>({
     id: 0,
     name: 'All Facilities',
@@ -61,11 +61,11 @@ export const ColdEmissionsProvider = ({ children }: PropsWithChildren) => {
   if (isAxiosError(data) && data?.response?.status === 404) {
     logBrowser('No emissions data found', 'error', { data }, data);
   } else {
-    forEach(data?.definition, (facility, index) => {
+    forEach(data, (facility, index) => {
       facilityOptions.push({
         id: index + 1,
         name: facility.facility_name,
-        value: facility.facility_id.toString(),
+        value: facility.facility_id,
       });
       forEach(facility.periods, (period, index) => {
         if (find(yearOptions, { value: period.value.toString() })) {
@@ -80,7 +80,7 @@ export const ColdEmissionsProvider = ({ children }: PropsWithChildren) => {
     });
 
     uniqueScopes = uniq(
-      map(data?.definition, facility => {
+      map(data, facility => {
         return map(facility.periods, period => {
           return map(period.emissions, emission => {
             return emission.scope.ghg_category;
