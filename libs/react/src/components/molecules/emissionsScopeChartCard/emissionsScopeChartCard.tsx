@@ -1,6 +1,6 @@
 import React, { useContext, useRef } from 'react';
-import { Chart as ChartJS, ChartOptions } from 'chart.js';
 import { useActiveSegment } from '@coldpbc/hooks';
+import { Chart as ChartJS, ChartOptions } from 'chart.js';
 import { capitalize, forEach, map, sortBy } from 'lodash';
 import { Plugin as PluginType } from 'chart.js/dist/types';
 import { Card, ErrorFallback, FootprintDetailChip } from '@coldpbc/components';
