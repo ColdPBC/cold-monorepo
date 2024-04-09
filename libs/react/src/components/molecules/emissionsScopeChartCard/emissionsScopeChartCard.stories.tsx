@@ -4,7 +4,6 @@ import { Meta, StoryObj } from '@storybook/react';
 import React from 'react';
 import { EmissionsScopeChartCard } from '@coldpbc/components';
 import { getDefaultEmissionMock } from '@coldpbc/mocks';
-import {EmissionsScopeChartCard} from "./emissionsScopeChartCard";
 
 const meta: Meta<typeof EmissionsScopeChartCard> = {
   title: 'Molecules/EmissionsScopeChartCard',
