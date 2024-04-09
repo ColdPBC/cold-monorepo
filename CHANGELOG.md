@@ -1,3 +1,10 @@
+## [1.191.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.191.0...v1.191.1) (2024-04-09)
+
+
+### Bug Fixes
+
+* add ghg_subcategory to unique key due to duplicates ([f9bbcfc](https://github.com/ColdPBC/cold-monorepo/commit/f9bbcfc27e2f1d1cccac166cdb54e166663fa579))
+
 # [1.191.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.190.0...v1.191.0) (2024-04-09)
 
 
