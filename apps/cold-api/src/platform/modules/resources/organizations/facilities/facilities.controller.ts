@@ -1,5 +1,5 @@
-import { Body, Controller, Get, Param, Post, Req, UseGuards } from '@nestjs/common';
-import { BaseWorker, JwtAuthGuard, RolesGuard } from '@coldpbc/nest';
+import { Body, Controller, Get, Param, Post, Req, UseGuards, UseInterceptors } from '@nestjs/common';
+import { BaseWorker, JwtAuthGuard, OrgUserInterceptor, RolesGuard } from '@coldpbc/nest';
 import { ApiBody, ApiOAuth2, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { FacilitiesService } from './facilities.service';
 import { bpcDecoratorOptions, orgIdDecoratorOptions } from '../../_global/global.params';
@@ -7,6 +7,7 @@ import { FacilityBodyExample } from './examples/facility_example';
 
 @ApiTags('Organizations : Facilities')
 @UseGuards(JwtAuthGuard, RolesGuard)
+@UseInterceptors(OrgUserInterceptor)
 @ApiOAuth2(['openid'])
 @Controller('organizations')
 export class FacilitiesController extends BaseWorker {

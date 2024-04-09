@@ -1,4 +1,6 @@
+
 # [1.187.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.186.0...v1.187.0) (2024-04-05)
+
 
 
 ### Features
@@ -7,6 +9,7 @@
 * add ghg sub-scopes ([5a9433a](https://github.com/ColdPBC/cold-monorepo/commit/5a9433a62564d45cb911e01871189b0647fd3fd1))
 
 # [1.186.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.185.2...v1.186.0) (2024-04-05)
+
 
 
 ### Bug Fixes

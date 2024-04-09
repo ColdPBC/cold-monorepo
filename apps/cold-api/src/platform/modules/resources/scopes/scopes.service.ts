@@ -13,8 +13,7 @@ export class ScopesService extends BaseWorker {
     const scopes = await this.prisma.emission_scopes.create({
       data: {
         id: new Cuid2Generator('scope').scopedId,
-        scope: createScopeDto.scope,
-        label: createScopeDto.label,
+        ...createScopeDto,
       },
     });
 
