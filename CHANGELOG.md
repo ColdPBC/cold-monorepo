@@ -1,4 +1,14 @@
+# [1.188.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.187.0...v1.188.0) (2024-04-09)
+
+
+### Features
+
+* add facility footprint endpoints ([9ec3741](https://github.com/ColdPBC/cold-monorepo/commit/9ec3741af101be2bdaa02a1729e8ef00d7af76b8))
+* add facility footprint endpoints ([#382](https://github.com/ColdPBC/cold-monorepo/issues/382)) ([724e8ec](https://github.com/ColdPBC/cold-monorepo/commit/724e8ecc988176d4e0f89aa0b34fe9b76fa9cb1e))
+* add survey proceessing metrics ([be851a9](https://github.com/ColdPBC/cold-monorepo/commit/be851a9a73d8081510edfcc3d25ae2aa72f45ab9))
+
 # [1.187.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.186.0...v1.187.0) (2024-04-05)
+
 
 
 ### Features
@@ -7,6 +17,7 @@
 * add ghg sub-scopes ([5a9433a](https://github.com/ColdPBC/cold-monorepo/commit/5a9433a62564d45cb911e01871189b0647fd3fd1))
 
 # [1.186.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.185.2...v1.186.0) (2024-04-05)
+
 
 
 ### Bug Fixes

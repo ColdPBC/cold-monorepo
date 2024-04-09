@@ -83,8 +83,41 @@ export class OrganizationService extends BaseWorker {
     if (!this.openAI) {
       this.logger.error('OpenAI service definition not found');
     } else {
-      const orgs = (await this.getOrganizations(true)) as Array<Auth0Organization>;
+      let orgs = (await this.getOrganizations(true)) as Array<Auth0Organization>;
+
+      if (!orgs || orgs.length === 0) {
+        this.options = await this.utilService.init();
+
+        // since no orgs exist in DB get any organizations from Auth0
+        const response = await this.httpService.axiosRef.get(`/organizations`, this.options);
+        orgs = response.data;
+      }
+
+      const connections = await this.getConnections();
+
       for (const org of orgs) {
+        const orgData = {
+          id: org.id,
+          name: org.name,
+          enabled_connections: connections.map(con => {
+            return {
+              connection_id: con.id,
+              assign_membership_on_login: false,
+            };
+          }),
+          display_name: org.display_name,
+          isTest: process.env['NODE_ENV'] === 'production' ? false : true,
+          created_at: new Date(),
+        };
+
+        this.prisma.organizations.upsert({
+          where: {
+            id: org.id,
+          },
+          create: orgData,
+          update: orgData,
+        });
+
         this.syncOpenAIAssistants(org);
       }
     }
