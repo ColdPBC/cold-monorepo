@@ -136,7 +136,7 @@ const _ProtectedRoute = () => {
       logBrowser('Error occurred in ProtectedRoute', 'error', { ...error }, error);
       logError(error, ErrorType.Auth0Error);
       if (error.message === 'invitation not found or already used') {
-        errorMessage = 'This link is no longer valid. Please request a new invitation from one of your administrators.';
+        errorMessage = 'This invitation has either expired or already been used. If you have already accepted the invite, try logging in again with the button below.';
       }
     }
 
