@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import { Cuid2Generator } from '../../src/lib/utility/cuid2-generator.service';
+import { kebabCase } from 'lodash';
 
 const prisma = new PrismaClient();
 console.log('ENVIRONMENT:', process.env['NODE_ENV']);
@@ -294,7 +295,13 @@ const createEmissionScopes = (key: string, labels: Array<string>): Array<emissio
   const sub_scope = +parts[1] ? +parts[1] : null;
 
   const scopes: Array<emission_scope> = labels.map(label => {
-    return { id: new Cuid2Generator('scope').generate().scopedId, scope, sub_scope, label };
+    return {
+      id: new Cuid2Generator('scope').generate().scopedId,
+      ghg_category: scope,
+      ghg_subcategory: sub_scope,
+      label,
+      name: kebabCase(label.toLowerCase()),
+    };
   });
 
   return scopes;
@@ -302,9 +309,11 @@ const createEmissionScopes = (key: string, labels: Array<string>): Array<emissio
 
 type emission_scope = {
   id?: string;
-  scope: number;
-  sub_scope?: number | null;
+  ghg_category: number;
+  ghg_subcategory?: number | null;
+  organization_id?: string;
   label: string;
+  name: string;
   created_at?: string;
   updated_at?: string;
 };
@@ -323,12 +332,18 @@ export async function seedScopes() {
     for (const scope of scopes) {
       const result = await prisma.emission_scopes.upsert({
         where: {
-          id: scope.id,
+          ghgCategoryLabel: {
+            ghg_category: scope.ghg_category,
+            label: scope.label,
+          },
         },
-        update: scope,
-        create: {
-          ...scope,
+        update: {
+          ghg_category: scope.ghg_category,
+          ghg_subcategory: scope.ghg_subcategory,
+          label: scope.label,
+          name: scope.name,
         },
+        create: scope,
       });
 
       count++;
