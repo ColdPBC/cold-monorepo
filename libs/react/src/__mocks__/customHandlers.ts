@@ -736,7 +736,7 @@ export const getEmissionsOverviewCardHandler = {
     }),
   ],
   singleYear: [
-    rest.get(getApiUrl('/organizations/:orgId/emissions'), (req, res, ctx) => {
+    rest.get(getApiUrl('/organizations/:orgId/footprints'), (req, res, ctx) => {
       return res(ctx.json(getSingleYearsEmissionMock()));
     }),
   ],
