@@ -35,7 +35,7 @@ const _EmissionsYearlyCarbonFootprintChart = () => {
   };
   const tickColors = Array<string>();
 
-  map(emissions?.definition, facility => {
+  map(emissions, facility => {
     if (selectedFacility.value !== 'all' && selectedFacility.value !== facility.facility_id.toString()) {
       return;
     }

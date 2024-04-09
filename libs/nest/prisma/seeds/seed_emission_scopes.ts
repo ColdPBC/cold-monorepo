@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import { Cuid2Generator } from '../../src/lib/utility/cuid2-generator.service';
+import { kebabCase } from 'lodash';
 
 const prisma = new PrismaClient();
 console.log('ENVIRONMENT:', process.env['NODE_ENV']);
@@ -288,9 +289,19 @@ const seeds = {
   ],
 };
 // Add new form_definition row data to the seeds array
-const createEmissionScopes = (scope: string, labels: Array<string>): Array<emission_scope> => {
-  const scopes = labels.map(label => {
-    return { id: new Cuid2Generator().generate('scope').scopedId, scope, label };
+const createEmissionScopes = (key: string, labels: Array<string>): Array<emission_scope> => {
+  const parts = key.split('.');
+  const scope = +parts[0];
+  const sub_scope = +parts[1] ? +parts[1] : 0;
+
+  const scopes: Array<emission_scope> = labels.map(label => {
+    return {
+      id: new Cuid2Generator('scope').generate().scopedId,
+      ghg_category: scope,
+      ghg_subcategory: sub_scope,
+      label,
+      name: kebabCase(label.toLowerCase()),
+    };
   });
 
   return scopes;
@@ -298,8 +309,11 @@ const createEmissionScopes = (scope: string, labels: Array<string>): Array<emiss
 
 type emission_scope = {
   id?: string;
-  scope: string;
+  ghg_category: number;
+  ghg_subcategory: number;
+  organization_id?: string;
   label: string;
+  name: string;
   created_at?: string;
   updated_at?: string;
 };
@@ -318,12 +332,19 @@ export async function seedScopes() {
     for (const scope of scopes) {
       const result = await prisma.emission_scopes.upsert({
         where: {
-          id: scope.id,
+          ghgCategoryLabel: {
+            ghg_subcategory: scope.ghg_subcategory,
+            ghg_category: scope.ghg_category,
+            label: scope.label,
+          },
         },
-        update: scope,
-        create: {
-          ...scope,
+        update: {
+          ghg_category: scope.ghg_category,
+          ghg_subcategory: scope.ghg_subcategory,
+          label: scope.label,
+          name: scope.name,
         },
+        create: scope,
       });
 
       count++;

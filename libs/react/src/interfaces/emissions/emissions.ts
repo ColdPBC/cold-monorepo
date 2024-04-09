@@ -1,20 +1,17 @@
-export interface EmissionPayload {
-  id: string;
-  name: string;
-  type: string;
-  description: string;
-  created_at: string;
-  updated_at: string;
-  definition: EmissionFacility[];
-}
+export interface EmissionPayload extends Array<EmissionFacility> {}
 
 export interface EmissionFacility {
-  facility_id: number;
+  facility_id: string;
   facility_name: string;
   periods: EmissionPeriod[];
 }
 
 export interface EmissionPeriod {
+  id: string;
+  facility_id: string;
+  organization_id: string;
+  created_at: string;
+  updated_at: string;
   type: string;
   value: number;
   emissions: EmissionCategory[];
@@ -23,7 +20,7 @@ export interface EmissionPeriod {
 export interface EmissionCategory {
   scope: {
     ghg_category: number;
-    ghg_subcategory?: number;
+    ghg_subcategory: number;
   };
   activities: EmissionActivity[];
 }

@@ -730,7 +730,7 @@ export const getAssessmentsHandler = {
 
 export const getEmissionsOverviewCardHandler = {
   empty: [
-    rest.get(getApiUrl('/organizations/:orgId/emissions'), (req, res, ctx) => {
+    rest.get(getApiUrl('/organizations/:orgId/footprints'), (req, res, ctx) => {
       // return 404
       return res(ctx.status(404));
     }),

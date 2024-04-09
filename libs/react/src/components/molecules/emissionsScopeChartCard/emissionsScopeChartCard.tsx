@@ -1,6 +1,6 @@
 import React, { useContext, useRef } from 'react';
-import { Chart as ChartJS, ChartOptions } from 'chart.js';
 import { useActiveSegment } from '@coldpbc/hooks';
+import { Chart as ChartJS, ChartOptions } from 'chart.js';
 import { capitalize, forEach, map, sortBy } from 'lodash';
 import { Plugin as PluginType } from 'chart.js/dist/types';
 import { Card, ErrorFallback, FootprintDetailChip } from '@coldpbc/components';
@@ -78,7 +78,7 @@ const _EmissionsScopeChartCard = (props: EmissionsScopeChartCardProps) => {
     },
   };
 
-  forEach(emissions?.definition, facility => {
+  forEach(emissions, facility => {
     if (facility.facility_id.toString() === selectedFacility.value || selectedFacility.value === 'all') {
       forEach(facility.periods, period => {
         if (period.value.toString() !== selectedYear.value && selectedYear.value !== 'all') {

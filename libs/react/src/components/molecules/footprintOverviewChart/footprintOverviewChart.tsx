@@ -3,11 +3,9 @@ import { ChartData } from 'chart.js';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { footprintSubcategoryColors, HexColors } from '@coldpbc/themes';
 import { forEach, isArray, some } from 'lodash';
-import { EmissionsDonutChart, EmissionsDonutChartVariants, SubCategoryTotal } from '../../atoms/emissionsDonutChart/emissionsDonutChart';
+import { EmissionsDonutChart, EmissionsDonutChartVariants, ErrorFallback, SubCategoryTotal } from '@coldpbc/components';
 import { withErrorBoundary } from 'react-error-boundary';
-import { ErrorFallback } from '../../application/errors/errorFallback';
-import { useOrgSWR } from '../../../hooks/useOrgSWR';
-import { useColdContext } from '@coldpbc/hooks';
+import { useColdContext, useOrgSWR } from '@coldpbc/hooks';
 import { ErrorType } from '@coldpbc/enums';
 
 const MAX_CATEGORIES = 4;

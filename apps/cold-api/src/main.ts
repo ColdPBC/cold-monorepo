@@ -6,6 +6,7 @@ import { AppModule } from './platform/modules/app.module';
 import { patchNestjsSwagger } from '@anatine/zod-nestjs';
 import { WorkerLogger } from '@coldpbc/nest';
 import { json, urlencoded } from 'express';
+import { OpenapiModule } from './platform/modules/swagger/openapi.module';
 
 dotenv.config();
 
@@ -29,6 +30,7 @@ async function bootstrap(instance) {
     }
   };
   app.enableCors({ allowedHeaders: '*', exposedHeaders: '*', origin: `${getOrigin()}` });
+  OpenapiModule.register(app);
   patchNestjsSwagger();
 
   await app.listen(process.env['PORT'] || 7001, '0.0.0.0');

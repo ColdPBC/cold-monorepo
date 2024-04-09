@@ -1,8 +1,7 @@
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
-import { SubcategoryFootprintCard } from './subcategoryFootprintCard';
-import { getCategoriesHandler, StoryMockProvider } from '@coldpbc/mocks';
-import { EmissionsDonutChartVariants } from '../../atoms/emissionsDonutChart/emissionsDonutChart';
+import { StoryMockProvider } from '@coldpbc/mocks';
+import { EmissionsDonutChartVariants, SubcategoryFootprintCard } from '@coldpbc/components';
 
 const meta: Meta<typeof SubcategoryFootprintCard> = {
   title: 'Molecules/SubcategoryFootprintCard',
@@ -15,28 +14,20 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-  render: (args) => {
+  render: args => {
     return (
       <StoryMockProvider handlers={[]}>
-        <SubcategoryFootprintCard
-          subcategory_key="facilities"
-          period={2022}
-          variant={EmissionsDonutChartVariants.vertical}
-        />
+        <SubcategoryFootprintCard subcategory_key="facilities" period={2022} variant={EmissionsDonutChartVariants.vertical} />
       </StoryMockProvider>
     );
   },
 };
 
 export const Product: Story = {
-  render: (args) => {
+  render: args => {
     return (
       <StoryMockProvider handlers={[]}>
-        <SubcategoryFootprintCard
-          subcategory_key="product"
-          period={2022}
-          variant={EmissionsDonutChartVariants.vertical}
-        />
+        <SubcategoryFootprintCard subcategory_key="product" period={2022} variant={EmissionsDonutChartVariants.vertical} />
       </StoryMockProvider>
     );
   },

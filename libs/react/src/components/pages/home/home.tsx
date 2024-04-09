@@ -1,14 +1,9 @@
 import React from 'react';
-import { CenterColumnContent } from '../../organisms/centerColumnContent/centerColumnContent';
-import { RightColumnContent } from '../../organisms/rightColumnContent/rightColumnContent';
 import { useAuth0 } from '@auth0/auth0-react';
-import { Spinner } from '../../atoms/spinner/spinner';
-import { AppContent } from '../../organisms/appContent/appContent';
 import { FootprintOverviewCard, JourneyOverviewCard, NewsCard, NextActionsCard } from '../../molecules';
 import { useFlags } from 'launchdarkly-react-client-sdk';
-import { EmissionsDonutChartVariants } from '../../atoms/emissionsDonutChart/emissionsDonutChart';
+import { AppContent, CenterColumnContent, EmissionsDonutChartVariants, ErrorFallback, RightColumnContent, Spinner } from '@coldpbc/components';
 import { withErrorBoundary } from 'react-error-boundary';
-import { ErrorFallback } from '../../application/errors/errorFallback';
 import { EmissionsOverviewCard, NextSteps } from '../../organisms';
 import { ColdAssessmentsProvider } from '@coldpbc/providers';
 import { useColdContext } from '@coldpbc/hooks';

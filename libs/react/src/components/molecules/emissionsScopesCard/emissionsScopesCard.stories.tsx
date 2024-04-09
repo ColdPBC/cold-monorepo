@@ -25,8 +25,8 @@ export const Default = () => {
           yearOptions: [
             {
               id: 0,
-              name: '2020 Emissions',
-              value: '2020',
+              name: 'All Years',
+              value: 'all',
             },
           ],
           facilityOptions: [
@@ -45,7 +45,7 @@ export const Default = () => {
         setSelectedYear: option => {},
         selectedYear: {
           id: 0,
-          name: 'All Year',
+          name: 'All Years',
           value: 'all',
         },
         setSelectedFacility: option => {},

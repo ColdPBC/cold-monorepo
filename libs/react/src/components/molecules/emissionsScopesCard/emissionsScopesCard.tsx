@@ -8,6 +8,7 @@ import { EmissionsScopesCardVariants } from '@coldpbc/enums';
 import { ChartData } from 'chart.js';
 import { HexColors } from '@coldpbc/themes';
 import { formatTonnes } from '@coldpbc/lib';
+import { isAxiosError } from 'axios';
 
 const _EmissionsScopesCard = ({ variant, title }: { variant?: EmissionsScopesCardVariants; title?: string }) => {
   const { data, selectedFacility, selectedYear } = useContext(ColdEmissionsContext);
@@ -41,9 +42,29 @@ const _EmissionsScopesCard = ({ variant, title }: { variant?: EmissionsScopesCar
   let totalEmissions = 0;
   const hoverColorArray = Array<string>();
 
+  if (isAxiosError(emissions) && emissions?.response?.status === 404) {
+    return (
+      <Card title={'Emissions Overview'}>
+        <EmissionsDonutChart
+          isEmptyData={true}
+          subcategoryTotals={[]}
+          variant={EmissionsDonutChartVariants.horizontal}
+          chartData={{
+            labels: [],
+            datasets: [],
+          }}
+        />
+        <div className="m-auto table w-1">
+          <h4 className="text-h4 text-center whitespace-nowrap m-4">{'We need more data to show your footprint'}</h4>
+          <p className="text-center text-sm leading-normal">We'll be in touch soon to collect info needed for your latest footprint</p>
+        </div>
+      </Card>
+    );
+  }
+
   forEach(uniqueScopes, scope => {
     let nullFootprint = true;
-    forEach(emissions?.definition, facility => {
+    forEach(emissions, facility => {
       if (facility.facility_id.toString() === selectedFacility.value || selectedFacility.value === 'all') {
         forEach(facility.periods, period => {
           if (period.value.toString() !== selectedYear.value && selectedYear.value !== 'all') {

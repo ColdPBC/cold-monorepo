@@ -1,8 +1,7 @@
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
-import { FootprintOverviewChart } from './footprintOverviewChart';
 import { getFootprintHandler, StoryMockProvider } from '../../../';
-import { EmissionsDonutChartVariants } from '../../atoms/emissionsDonutChart/emissionsDonutChart';
+import { EmissionsDonutChartVariants, FootprintOverviewChart } from '@coldpbc/components';
 
 const meta: Meta<typeof FootprintOverviewChart> = {
   title: 'Molecules/FootprintOverviewChart',

@@ -25,7 +25,7 @@ export const Default = () => {
           yearOptions: [
             {
               id: 0,
-              name: 'All Year',
+              name: 'All Years',
               value: 'all',
             },
           ],
@@ -45,7 +45,7 @@ export const Default = () => {
         setSelectedYear: option => {},
         selectedYear: {
           id: 0,
-          name: 'All Year',
+          name: 'All Years',
           value: 'all',
         },
         setSelectedFacility: option => {},
