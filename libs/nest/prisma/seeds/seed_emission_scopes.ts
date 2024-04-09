@@ -292,7 +292,7 @@ const seeds = {
 const createEmissionScopes = (key: string, labels: Array<string>): Array<emission_scope> => {
   const parts = key.split('.');
   const scope = +parts[0];
-  const sub_scope = +parts[1] ? +parts[1] : null;
+  const sub_scope = +parts[1] ? +parts[1] : 0;
 
   const scopes: Array<emission_scope> = labels.map(label => {
     return {
@@ -310,7 +310,7 @@ const createEmissionScopes = (key: string, labels: Array<string>): Array<emissio
 type emission_scope = {
   id?: string;
   ghg_category: number;
-  ghg_subcategory?: number | null;
+  ghg_subcategory: number;
   organization_id?: string;
   label: string;
   name: string;
@@ -333,6 +333,7 @@ export async function seedScopes() {
       const result = await prisma.emission_scopes.upsert({
         where: {
           ghgCategoryLabel: {
+            ghg_subcategory: scope.ghg_subcategory,
             ghg_category: scope.ghg_category,
             label: scope.label,
           },

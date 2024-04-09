@@ -509,8 +509,8 @@ model emission_scopes {
   organization_id String?
   organization    organizations? @relation(fields: [organization_id], references: [id], onDelete: Cascade)
 
-  @@unique([ghg_category, name], name: "ghgCategoryName")
-  @@unique([ghg_category, label], name: "ghgCategoryLabel")
+  @@unique([ghg_category, ghg_subcategory, name], name: "ghgCategoryName")
+  @@unique([ghg_category, ghg_subcategory, label], name: "ghgCategoryLabel")
 }
 
 model facility_footprints {
