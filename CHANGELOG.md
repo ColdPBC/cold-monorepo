@@ -1,3 +1,11 @@
+# [1.191.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.190.0...v1.191.0) (2024-04-09)
+
+
+### Features
+
+* added bar highlighting and other changes when a year/bar is selected ([49cec73](https://github.com/ColdPBC/cold-monorepo/commit/49cec73846dbee000d7692dac0e4fd36efac6e75))
+* update endpoint and emissions payload type ([aa725cd](https://github.com/ColdPBC/cold-monorepo/commit/aa725cdfa72a350f86820b97edeeb20c36eb553c))
+
 # [1.190.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.189.0...v1.190.0) (2024-04-09)
 
 
