@@ -5,6 +5,7 @@ import { forEach, forOwn, isArray } from 'lodash';
 import { ChartData } from 'chart.js';
 import { HexColors } from '@coldpbc/themes';
 import { withErrorBoundary } from 'react-error-boundary';
+import { isAxiosError } from 'axios';
 
 const _EmissionsAllScopesCard = ({ variant, title }: { variant?: EmissionsDonutChartVariants; title?: string }) => {
   const { data, selectedFacility, selectedYear } = useContext(ColdEmissionsContext);
@@ -37,6 +38,26 @@ const _EmissionsAllScopesCard = ({ variant, title }: { variant?: EmissionsDonutC
   const totals: Array<SubCategoryTotal> = [];
   let totalEmissions = 0;
   const hoverColorArray = Array<string>();
+
+  if (isAxiosError(emissions) && emissions?.response?.status === 404) {
+    return (
+      <Card title={'Emissions Overview'}>
+        <EmissionsDonutChart
+          isEmptyData={true}
+          subcategoryTotals={[]}
+          variant={EmissionsDonutChartVariants.horizontal}
+          chartData={{
+            labels: [],
+            datasets: [],
+          }}
+        />
+        <div className="m-auto table w-1">
+          <h4 className="text-h4 text-center whitespace-nowrap m-4">{'We need more data to show your footprint'}</h4>
+          <p className="text-center text-sm leading-normal">We'll be in touch soon to collect info needed for your latest footprint</p>
+        </div>
+      </Card>
+    );
+  }
 
   forEach(uniqueScopes, scope => {
     let nullFootprint = true;
