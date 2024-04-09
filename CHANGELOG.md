@@ -1,3 +1,41 @@
+# [1.189.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.188.0...v1.189.0) (2024-04-09)
+
+
+### Features
+
+* update the language of our authentication errors ([27690b9](https://github.com/ColdPBC/cold-monorepo/commit/27690b913b38eebfd85d2df9713fc4ce39be67d5))
+* update the language of our authentication errors ([#383](https://github.com/ColdPBC/cold-monorepo/issues/383)) ([9e29e32](https://github.com/ColdPBC/cold-monorepo/commit/9e29e3277cc3f8731f1d2e225e61d4fd6ecdc0df))
+
+# [1.188.0-cold-708.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.187.0...v1.188.0-cold-708.1) (2024-04-09)
+
+
+### Features
+
+* update the language of our authentication errors ([27690b9](https://github.com/ColdPBC/cold-monorepo/commit/27690b913b38eebfd85d2df9713fc4ce39be67d5))
+
+# [1.187.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.186.0...v1.187.0) (2024-04-05)
+
+
+### Features
+
+* add ghg sub-scopes ([faa206f](https://github.com/ColdPBC/cold-monorepo/commit/faa206f3ed689988792710f019def40d114e4a78))
+* add ghg sub-scopes ([5a9433a](https://github.com/ColdPBC/cold-monorepo/commit/5a9433a62564d45cb911e01871189b0647fd3fd1))
+
+# [1.186.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.185.2...v1.186.0) (2024-04-05)
+
+
+### Bug Fixes
+
+* updated swagger decorators ([3ab05fe](https://github.com/ColdPBC/cold-monorepo/commit/3ab05fe4ae857974e09fd3514f01e2227c32b76a))
+
+
+### Features
+
+* add emission_scopes routes ([9bdc5a5](https://github.com/ColdPBC/cold-monorepo/commit/9bdc5a51e50971ff2d9961b4098aad0a604ea19d))
+* add ghg sub-scopes ([faa206f](https://github.com/ColdPBC/cold-monorepo/commit/faa206f3ed689988792710f019def40d114e4a78))
+* add ghg sub-scopes ([5a9433a](https://github.com/ColdPBC/cold-monorepo/commit/5a9433a62564d45cb911e01871189b0647fd3fd1))
+
+
 ## [1.185.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.185.1...v1.185.2) (2024-04-04)
 
 

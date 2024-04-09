@@ -16,12 +16,15 @@ export const ErrorPage = ({ error }: ErrorPageProps) => {
 
   return (
     <div className={'fixed inset-0 h-screen w-screen bg-bgc-main flex flex-col items-center justify-center'}>
-      <div className={'text-tc-primary text-h2 w-1/2 flex flex-col items-center justify-center space-y-10'}>
-        <div>{error}</div>
-        <div>
-          An error occurred accessing your account. Please contact us at <a href="mailto: support@coldclimate.com">support@coldclimate.com</a>.
+      <div className={'text-tc-primary w-1/2 max-w-96 flex flex-col items-center justify-center space-y-10'}>
+        <div className={'text-h2'}>
+          Authentication failed
         </div>
-        <BaseButton onClick={handleLogout} label={'Re Login'} variant={ButtonTypes.secondary} className={'w-auto'} />
+        {error ? <div>{error}</div> : ''}
+        <BaseButton onClick={handleLogout} label={'Login Again '} variant={ButtonTypes.secondary} className={'w-auto'}/>
+        <div>If you're still having issues, please contact us at <a
+          href="mailto: support@coldclimate.com">support@coldclimate.com</a>.
+        </div>
       </div>
     </div>
   );
