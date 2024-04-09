@@ -61,7 +61,7 @@ const _EmissionsAllScopesCard = ({ variant, title }: { variant?: EmissionsDonutC
 
   forEach(uniqueScopes, scope => {
     let nullFootprint = true;
-    forEach(emissions?.definition, facility => {
+    forEach(emissions, facility => {
       if (facility.facility_id.toString() === selectedFacility.value || selectedFacility.value === 'all') {
         forEach(facility.periods, period => {
           if (period.value.toString() !== selectedYear.value && selectedYear.value !== 'all') {

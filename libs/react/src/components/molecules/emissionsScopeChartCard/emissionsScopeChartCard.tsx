@@ -78,7 +78,7 @@ const _EmissionsScopeChartCard = (props: EmissionsScopeChartCardProps) => {
     },
   };
 
-  forEach(emissions?.definition, facility => {
+  forEach(emissions, facility => {
     if (facility.facility_id.toString() === selectedFacility.value || selectedFacility.value === 'all') {
       forEach(facility.periods, period => {
         if (period.value.toString() !== selectedYear.value && selectedYear.value !== 'all') {

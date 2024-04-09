@@ -265,7 +265,7 @@ export const handlers = [
     return res(ctx.json({}), ctx.status(201));
   }),
 
-  rest.get(getApiUrl('/organizations/:orgId/emissions'), (req, res, ctx) => {
+  rest.get(getApiUrl('/organizations/:orgId/footprints'), (req, res, ctx) => {
     return res(ctx.json(getDefaultEmissionMock()), ctx.status(201));
   }),
 ];
