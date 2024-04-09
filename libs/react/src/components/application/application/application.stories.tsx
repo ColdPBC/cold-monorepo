@@ -2,7 +2,14 @@ import React from 'react';
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { Application } from './application';
-import { auth0UserMock, getCategoriesHandler, getFootprintHandler, getSignupHandlersForApplicationSignup, StoryMockProvider } from '@coldpbc/mocks';
+import {
+  auth0UserMock,
+  getCategoriesHandler,
+  getEmissionsOverviewCardHandler,
+  getFootprintHandler,
+  getSignupHandlersForApplicationSignup,
+  StoryMockProvider,
+} from '@coldpbc/mocks';
 
 const meta: Meta<typeof Application> = {
   title: 'Application/Application',
@@ -94,7 +101,7 @@ export const ColdAdmin: Story = {
   },
 };
 
-export const REIComplianceMVP: Story = {
+export const NewCarbonFootprintModule: Story = {
   render: () => {
     return (
       <StoryMockProvider>
@@ -105,8 +112,24 @@ export const REIComplianceMVP: Story = {
   parameters: {
     launchdarkly: {
       flags: {
-        showReiComplianceMvpSidebarCold506: true,
-        showNewHomePageComplianceReiMvp: true,
+        showNewCarbonFootprintModuleCold634: true,
+      },
+    },
+  },
+};
+
+export const EmptyEmissions: Story = {
+  render: () => {
+    return (
+      <StoryMockProvider handlers={getEmissionsOverviewCardHandler.empty}>
+        <Application />
+      </StoryMockProvider>
+    );
+  },
+  parameters: {
+    launchdarkly: {
+      flags: {
+        showNewCarbonFootprintModuleCold634: true,
       },
     },
   },
