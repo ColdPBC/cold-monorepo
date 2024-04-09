@@ -1,3 +1,14 @@
+# [1.190.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.189.0...v1.190.0) (2024-04-09)
+
+
+### Features
+
+* added logging to emission charts ([a8c3594](https://github.com/ColdPBC/cold-monorepo/commit/a8c3594c8381d8628e6c3e29cc38c5c35e6dc57f))
+* carbon footprint updates based on design ([3ff67c9](https://github.com/ColdPBC/cold-monorepo/commit/3ff67c9586752ee34510569dc6c108b59018d4ea))
+* emission carb footprint changes ([3482a06](https://github.com/ColdPBC/cold-monorepo/commit/3482a0629f78f64e1ad72c02b828aa3dee5e6e76))
+* making code more reusable ([515f1a0](https://github.com/ColdPBC/cold-monorepo/commit/515f1a09c920b46beb30a8f1bcfc09495134521c))
+* more changes for the scope cahrt ([d1f56e2](https://github.com/ColdPBC/cold-monorepo/commit/d1f56e2faa4c19d39cdde53eef082ab0b7692d27))
+
 # [1.189.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.188.0...v1.189.0) (2024-04-09)
 
 
