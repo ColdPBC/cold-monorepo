@@ -2,11 +2,11 @@ import './tracer';
 import { NestFactory } from '@nestjs/core';
 import * as dotenv from 'dotenv';
 import { AppModule } from './platform/modules/app.module';
-import { OpenapiModule } from './platform/modules/swagger/openapi.module';
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import { patchNestjsSwagger } from '@anatine/zod-nestjs';
 import { WorkerLogger } from '@coldpbc/nest';
 import { json, urlencoded } from 'express';
+import { OpenapiModule } from './platform/modules/swagger/openapi.module';
 
 dotenv.config();
 
@@ -19,8 +19,17 @@ async function bootstrap(instance) {
   app.use(urlencoded({ extended: true, limit: '50mb' }));
 
   //app.useGlobalPipes(new ResourceValidationPipe());
-  app.enableCors();
-
+  const getOrigin = () => {
+    switch (process.env['NODE_ENV']) {
+      case 'production':
+        return 'https://app.coldclimate.com';
+      case 'staging':
+        return 'https://app.coldclimate.online';
+      default:
+        return 'http://localhost:4200';
+    }
+  };
+  app.enableCors({ allowedHeaders: '*', exposedHeaders: '*', origin: `${getOrigin()}` });
   OpenapiModule.register(app);
   patchNestjsSwagger();
 

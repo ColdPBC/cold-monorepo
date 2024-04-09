@@ -1,15 +1,11 @@
 import React, { PropsWithChildren } from 'react';
-import { Card, CardProps } from '../card/card';
 import { useNavigate } from 'react-router-dom';
-import { FootprintOverviewChart } from '../footprintOverviewChart/footprintOverviewChart';
-import { axiosFetcher } from '../../../fetchers/axiosFetcher';
+import { Card, CardProps, EmissionsDonutChartVariants, ErrorFallback, FootprintOverviewChart } from '@coldpbc/components';
+import { axiosFetcher } from '@coldpbc/fetchers';
 import { some } from 'lodash';
 import { SurveyPayloadType } from '@coldpbc/interfaces';
-import { EmissionsDonutChartVariants } from '../../atoms/emissionsDonutChart/emissionsDonutChart';
 import { withErrorBoundary } from 'react-error-boundary';
-import { ErrorFallback } from '../../application/errors/errorFallback';
-import { useOrgSWR } from '../../../hooks/useOrgSWR';
-import { useColdContext } from '@coldpbc/hooks';
+import { useColdContext, useOrgSWR } from '@coldpbc/hooks';
 import { ErrorType } from '@coldpbc/enums';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 

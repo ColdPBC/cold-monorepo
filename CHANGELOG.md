@@ -1,19 +1,152 @@
-# [1.183.0-COLD-653.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.182.0...v1.183.0-COLD-653.1) (2024-04-02)
+## [1.191.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.191.0...v1.191.1) (2024-04-09)
+
+
+### Bug Fixes
+
+* add ghg_subcategory to unique key due to duplicates ([f9bbcfc](https://github.com/ColdPBC/cold-monorepo/commit/f9bbcfc27e2f1d1cccac166cdb54e166663fa579))
+
+# [1.191.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.190.0...v1.191.0) (2024-04-09)
 
 
 ### Features
 
-* add progress bar for assessments for compliances that are score based ([068da70](https://github.com/ColdPBC/cold-monorepo/commit/068da7087ac459994c70e00b5d0ac7c395f77e25))
+* added bar highlighting and other changes when a year/bar is selected ([49cec73](https://github.com/ColdPBC/cold-monorepo/commit/49cec73846dbee000d7692dac0e4fd36efac6e75))
+* update endpoint and emissions payload type ([aa725cd](https://github.com/ColdPBC/cold-monorepo/commit/aa725cdfa72a350f86820b97edeeb20c36eb553c))
+
+# [1.190.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.189.0...v1.190.0) (2024-04-09)
+
+
+### Features
+
+* added logging to emission charts ([a8c3594](https://github.com/ColdPBC/cold-monorepo/commit/a8c3594c8381d8628e6c3e29cc38c5c35e6dc57f))
+* carbon footprint updates based on design ([3ff67c9](https://github.com/ColdPBC/cold-monorepo/commit/3ff67c9586752ee34510569dc6c108b59018d4ea))
+* emission carb footprint changes ([3482a06](https://github.com/ColdPBC/cold-monorepo/commit/3482a0629f78f64e1ad72c02b828aa3dee5e6e76))
+* making code more reusable ([515f1a0](https://github.com/ColdPBC/cold-monorepo/commit/515f1a09c920b46beb30a8f1bcfc09495134521c))
+* more changes for the scope cahrt ([d1f56e2](https://github.com/ColdPBC/cold-monorepo/commit/d1f56e2faa4c19d39cdde53eef082ab0b7692d27))
+
+# [1.189.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.188.0...v1.189.0) (2024-04-09)
+
+
+### Features
+
+* update the language of our authentication errors ([27690b9](https://github.com/ColdPBC/cold-monorepo/commit/27690b913b38eebfd85d2df9713fc4ce39be67d5))
+* update the language of our authentication errors ([#383](https://github.com/ColdPBC/cold-monorepo/issues/383)) ([9e29e32](https://github.com/ColdPBC/cold-monorepo/commit/9e29e3277cc3f8731f1d2e225e61d4fd6ecdc0df))
+
+# [1.188.0-cold-708.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.187.0...v1.188.0-cold-708.1) (2024-04-09)
+
+
+### Features
+
+* update the language of our authentication errors ([27690b9](https://github.com/ColdPBC/cold-monorepo/commit/27690b913b38eebfd85d2df9713fc4ce39be67d5))
+
+# [1.187.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.186.0...v1.187.0) (2024-04-05)
+
+
+### Features
+
+* add ghg sub-scopes ([faa206f](https://github.com/ColdPBC/cold-monorepo/commit/faa206f3ed689988792710f019def40d114e4a78))
+* add ghg sub-scopes ([5a9433a](https://github.com/ColdPBC/cold-monorepo/commit/5a9433a62564d45cb911e01871189b0647fd3fd1))
+
+# [1.186.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.185.2...v1.186.0) (2024-04-05)
+
+
+### Bug Fixes
+
+* updated swagger decorators ([3ab05fe](https://github.com/ColdPBC/cold-monorepo/commit/3ab05fe4ae857974e09fd3514f01e2227c32b76a))
+
+
+### Features
+
+* add emission_scopes routes ([9bdc5a5](https://github.com/ColdPBC/cold-monorepo/commit/9bdc5a51e50971ff2d9961b4098aad0a604ea19d))
+* add ghg sub-scopes ([faa206f](https://github.com/ColdPBC/cold-monorepo/commit/faa206f3ed689988792710f019def40d114e4a78))
+* add ghg sub-scopes ([5a9433a](https://github.com/ColdPBC/cold-monorepo/commit/5a9433a62564d45cb911e01871189b0647fd3fd1))
+
+
+## [1.185.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.185.1...v1.185.2) (2024-04-04)
+
+
+### Bug Fixes
+
+* 204 issue ([441030e](https://github.com/ColdPBC/cold-monorepo/commit/441030e87558f9b5cb7305fe0890a95ba61ae64d))
+
+## [1.185.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.185.0...v1.185.1) (2024-04-04)
+
+### Bug Fixes
+
+* intermittent 502 errors ([8ad9392](https://github.com/ColdPBC/cold-monorepo/commit/8ad9392f7fa7d9e4c599ca8d31bcb8563ec9d7ff))
+
+# [1.185.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.184.3...v1.185.0) (2024-04-03)
+
+### Features
+
+* updates to logging to be more leaner ([81dbde9](https://github.com/ColdPBC/cold-monorepo/commit/81dbde958bfc6973be12202e5413f33e94cd6046))
+* updates to logging to be more leaner ([#370](https://github.com/ColdPBC/cold-monorepo/issues/370)) ([e6db07e](https://github.com/ColdPBC/cold-monorepo/commit/e6db07e5b492f3c56d14ee5fc68e137f0fee13c5))
+
+## [1.184.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.184.2...v1.184.3) (2024-04-03)
+
+### Bug Fixes
+
+* possible null reference ([2621cb6](https://github.com/ColdPBC/cold-monorepo/commit/2621cb6abcfb0ceaec391a0b7e34621a246ae09d))
+* update FP session to contain relevant metadata ([3546471](https://github.com/ColdPBC/cold-monorepo/commit/354647176deeb0269d372392eee537ad56b29e89))
+
+## [1.184.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.184.1...v1.184.2) (2024-04-03)
+
+### Bug Fixes
+
+* attempt to address additional_context issue ([1c6afb7](https://github.com/ColdPBC/cold-monorepo/commit/1c6afb7db8b4a56fafbd207cd3562474e4eba218))
+
+## [1.184.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.184.0...v1.184.1) (2024-04-03)
+
+### Bug Fixes
+
+* issues with formatting ([86e6442](https://github.com/ColdPBC/cold-monorepo/commit/86e64422173c02b678a8cc6de71a0509197d0d45))
+
+# [1.184.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.183.3...v1.184.0) (2024-04-03)
+
+### Bug Fixes
+
+* clean up context prompt ([7cb0b64](https://github.com/ColdPBC/cold-monorepo/commit/7cb0b649fea7132a2e18f5a38dfb1115d377f7f2))
+
+### Features
+
+* check if the ai response is valid before showing ai icon ([813d1e6](https://github.com/ColdPBC/cold-monorepo/commit/813d1e67178feef779c792138a746ff8d3cb740f))
+
+## [1.183.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.183.2...v1.183.3) (2024-04-03)
+
+### Bug Fixes
+
+* troubleshoot flightcontrol e2e test support ([00ee219](https://github.com/ColdPBC/cold-monorepo/commit/00ee2190e7164f1a04adf4a92f3bebb4f049929a))
+
+## [1.183.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.183.1...v1.183.2) (2024-04-03)
+
+### Bug Fixes
+
+* add logging, comments, and response validation for selects and yes_no ([2513f19](https://github.com/ColdPBC/cold-monorepo/commit/2513f19c5442ef30ea2f55faae7556619a9c3e1b))
+
+## [1.183.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.183.0...v1.183.1) (2024-04-02)
+
+### Bug Fixes
+
+* get fP api key from config ([4541eb3](https://github.com/ColdPBC/cold-monorepo/commit/4541eb3af2f2725d5e8b072142bbdb9c3e8708c4))
+
+# [1.183.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.182.0...v1.183.0) (2024-04-02)
+
+### Bug Fixes
+
+* incorrect rabbit payload ([97dcfc1](https://github.com/ColdPBC/cold-monorepo/commit/97dcfc19ad3bd4adcafdeb06a3c65b84626dd681))
+
+### Features
+
+* implement freeplay integration ([13a17e3](https://github.com/ColdPBC/cold-monorepo/commit/13a17e34a84a8949cbdf3552e63ffcb6ac9e78b6))
+* implement freeplay integration ([5449082](https://github.com/ColdPBC/cold-monorepo/commit/54490823279482b913554d9b366271580bc50d8a))
 
 # [1.182.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.181.0...v1.182.0) (2024-04-02)
-
 
 ### Features
 
 * update logging to be lean for large data from the API ([60d4ce4](https://github.com/ColdPBC/cold-monorepo/commit/60d4ce48c6298c5d9548d75d3cb610b0715d19b4))
 
 # [1.181.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.180.12...v1.181.0) (2024-04-02)
-
 
 ### Features
 
@@ -23,13 +156,11 @@
 
 ## [1.180.12](https://github.com/ColdPBC/cold-monorepo/compare/v1.180.11...v1.180.12) (2024-04-02)
 
-
 ### Bug Fixes
 
 * add log entry when section is done and when survey is complete ([209cb1f](https://github.com/ColdPBC/cold-monorepo/commit/209cb1fd0be5522dd9a2450cb2df79874afbf881))
 
 ## [1.180.11](https://github.com/ColdPBC/cold-monorepo/compare/v1.180.10...v1.180.11) (2024-04-02)
-
 
 ### Bug Fixes
 
@@ -37,13 +168,11 @@
 
 ## [1.180.10](https://github.com/ColdPBC/cold-monorepo/compare/v1.180.9...v1.180.10) (2024-04-02)
 
-
 ### Bug Fixes
 
 * fix incorrect eval of false ([51703fc](https://github.com/ColdPBC/cold-monorepo/commit/51703fc0263d1340d809e68892fee25f61038ead))
 
 ## [1.180.9](https://github.com/ColdPBC/cold-monorepo/compare/v1.180.8...v1.180.9) (2024-04-02)
-
 
 ### Bug Fixes
 
@@ -51,13 +180,11 @@
 
 ## [1.180.8](https://github.com/ColdPBC/cold-monorepo/compare/v1.180.7...v1.180.8) (2024-04-02)
 
-
 ### Bug Fixes
 
 * fix incorrect eval of false ([c896d34](https://github.com/ColdPBC/cold-monorepo/commit/c896d34a575a561a754f4a8c4482091ec9772884))
 
 ## [1.180.7](https://github.com/ColdPBC/cold-monorepo/compare/v1.180.6...v1.180.7) (2024-04-02)
-
 
 ### Bug Fixes
 
@@ -66,13 +193,11 @@
 
 ## [1.180.6](https://github.com/ColdPBC/cold-monorepo/compare/v1.180.5...v1.180.6) (2024-04-02)
 
-
 ### Bug Fixes
 
 * add tooltip to question.prompt ([3c76506](https://github.com/ColdPBC/cold-monorepo/commit/3c76506f1c1c7b6250789401e00a191e10432aa4))
 
 ## [1.180.5](https://github.com/ColdPBC/cold-monorepo/compare/v1.180.4...v1.180.5) (2024-04-02)
-
 
 ### Bug Fixes
 
@@ -80,13 +205,11 @@
 
 ## [1.180.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.180.3...v1.180.4) (2024-04-01)
 
-
 ### Bug Fixes
 
 * prompt bug ([af91500](https://github.com/ColdPBC/cold-monorepo/commit/af91500335507f60593f87d64ee79fa5bda35e13))
 
 ## [1.180.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.180.2...v1.180.3) (2024-04-01)
-
 
 ### Bug Fixes
 
@@ -94,13 +217,11 @@
 
 ## [1.180.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.180.1...v1.180.2) (2024-04-01)
 
-
 ### Bug Fixes
 
 * bug that would prevent updated flag values getting passed to prompt service ([eab4854](https://github.com/ColdPBC/cold-monorepo/commit/eab485446aad1b12327e79a56e58dc537f92c45f))
 
 ## [1.180.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.180.0...v1.180.1) (2024-04-01)
-
 
 ### Bug Fixes
 
@@ -108,13 +229,11 @@
 
 # [1.180.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.179.6...v1.180.0) (2024-04-01)
 
-
 ### Bug Fixes
 
 * moved openai tools out from under langchain folder ([a7d04ea](https://github.com/ColdPBC/cold-monorepo/commit/a7d04eacbafd75e3b6d7dc93cab4b42cecc6e7bf))
 * remove unused params ([fe0f071](https://github.com/ColdPBC/cold-monorepo/commit/fe0f0719f960385005551ab16cd72ddb6b6a6faa))
 * using wrong model flag name ([4cd5e67](https://github.com/ColdPBC/cold-monorepo/commit/4cd5e676279e49ff9e9cf2e18bbd0127658cc0b2))
-
 
 ### Features
 
@@ -123,13 +242,11 @@
 
 ## [1.179.6](https://github.com/ColdPBC/cold-monorepo/compare/v1.179.5...v1.179.6) (2024-03-29)
 
-
 ### Bug Fixes
 
 * increase instance count ([69bca25](https://github.com/ColdPBC/cold-monorepo/commit/69bca25323628bba326fbf63ed4ddf446cb5eacf))
 
 ## [1.179.5](https://github.com/ColdPBC/cold-monorepo/compare/v1.179.4...v1.179.5) (2024-03-29)
-
 
 ### Bug Fixes
 
@@ -137,13 +254,11 @@
 
 ## [1.179.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.179.3...v1.179.4) (2024-03-29)
 
-
 ### Bug Fixes
 
 * incorrect kind value ([d11ec9a](https://github.com/ColdPBC/cold-monorepo/commit/d11ec9ae53d919faeea642a805c3520a0a7f11b2))
 
 ## [1.179.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.179.2...v1.179.3) (2024-03-29)
-
 
 ### Bug Fixes
 
@@ -152,13 +267,11 @@
 
 ## [1.179.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.179.1...v1.179.2) (2024-03-28)
 
-
 ### Bug Fixes
 
 * create index prior to running ([f94e486](https://github.com/ColdPBC/cold-monorepo/commit/f94e4861f9580168722c6942b12dc374ebf96969))
 
 ## [1.179.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.179.0...v1.179.1) (2024-03-28)
-
 
 ### Bug Fixes
 
@@ -167,14 +280,12 @@
 
 # [1.179.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.178.0...v1.179.0) (2024-03-28)
 
-
 ### Features
 
 * use the corresponding question (question summary) when it's available ([ba9d2c5](https://github.com/ColdPBC/cold-monorepo/commit/ba9d2c5bb3c5817e78bd0e3f7ec347ed3b69149b))
 * use the corresponding question (question summary) when it's available ([#357](https://github.com/ColdPBC/cold-monorepo/issues/357)) ([b3c9aa3](https://github.com/ColdPBC/cold-monorepo/commit/b3c9aa364e1133b0d49b84c77cc9592ec239da62))
 
 # [1.178.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.177.0...v1.178.0) (2024-03-28)
-
 
 ### Bug Fixes
 
@@ -183,7 +294,6 @@
 * dependency resolution ([cf88f56](https://github.com/ColdPBC/cold-monorepo/commit/cf88f5625ece0e6740cb8b5894d8f28ca522b8f3))
 * remove unused custom loaders ([5a95589](https://github.com/ColdPBC/cold-monorepo/commit/5a9558946b6f4fc22f2bad64fe84b027e2ff9361))
 * tsconfig issues ([ab0e1ce](https://github.com/ColdPBC/cold-monorepo/commit/ab0e1ced9eeead2190c9a1f4a563f7e52234a1b0))
-
 
 ### Features
 
@@ -201,11 +311,9 @@
 
 # [1.176.0-cold-657.5](https://github.com/ColdPBC/cold-monorepo/compare/v1.176.0-cold-657.4...v1.176.0-cold-657.5) (2024-03-28)
 
-
 ### Bug Fixes
 
 * tsconfig issues ([ab0e1ce](https://github.com/ColdPBC/cold-monorepo/commit/ab0e1ced9eeead2190c9a1f4a563f7e52234a1b0))
-
 
 ### Features
 
@@ -213,13 +321,11 @@
 
 # [1.176.0-cold-657.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.176.0-cold-657.3...v1.176.0-cold-657.4) (2024-03-28)
 
-
 ### Features
 
 * initial support for RAG ([dc65a47](https://github.com/ColdPBC/cold-monorepo/commit/dc65a4754dfa9089fac0fd913d2b0124953cf089))
 
 # [1.176.0-cold-657.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.176.0-cold-657.2...v1.176.0-cold-657.3) (2024-03-27)
-
 
 ### Features
 
@@ -227,13 +333,11 @@
 
 # [1.176.0-cold-657.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.176.0-cold-657.1...v1.176.0-cold-657.2) (2024-03-27)
 
-
 ### Bug Fixes
 
 * check if assistant still exists ([45601f8](https://github.com/ColdPBC/cold-monorepo/commit/45601f8dd4b13a37d05a1b38b152834ec06e5b87))
 * delete jobs from cache ([0aae188](https://github.com/ColdPBC/cold-monorepo/commit/0aae188c8ed87cdbb7c1e6fc7720071905385dbb))
 * remove unused custom loaders ([5a95589](https://github.com/ColdPBC/cold-monorepo/commit/5a9558946b6f4fc22f2bad64fe84b027e2ff9361))
-
 
 ### Features
 
@@ -242,11 +346,9 @@
 
 # [1.176.0-cold-657.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.175.0...v1.176.0-cold-657.1) (2024-03-26)
 
-
 ### Bug Fixes
 
 * dependency resolution ([cf88f56](https://github.com/ColdPBC/cold-monorepo/commit/cf88f5625ece0e6740cb8b5894d8f28ca522b8f3))
-
 
 ### Features
 
@@ -258,7 +360,6 @@
 * add pinecone module ([64b4ff3](https://github.com/ColdPBC/cold-monorepo/commit/64b4ff37ce1af8f6a11210b2d7dc8ceee09043ce))
 
 # [1.175.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.174.0...v1.175.0) (2024-03-25)
-
 
 ### Features
 

@@ -1,15 +1,12 @@
-import { EmissionsDonutChart, EmissionsDonutChartVariants, SubCategoryTotal } from '../../atoms/emissionsDonutChart/emissionsDonutChart';
+import { EmissionsDonutChart, EmissionsDonutChartVariants, ErrorFallback, SubCategoryTotal } from '@coldpbc/components';
 import { Card } from '../card';
-import useSWR from 'swr';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { useEffect, useState } from 'react';
 import { ChartData } from 'chart.js';
 import { footprintSubcategoryColors, getSchemeForColor, HexColors } from '@coldpbc/themes';
 import { withErrorBoundary } from 'react-error-boundary';
-import { ErrorFallback } from '../../application/errors/errorFallback';
-import { useOrgSWR } from '../../../hooks/useOrgSWR';
 import { ErrorType } from '@coldpbc/enums';
-import { useColdContext } from '@coldpbc/hooks';
+import { useColdContext, useOrgSWR } from '@coldpbc/hooks';
 
 interface Props {
   variant?: EmissionsDonutChartVariants;

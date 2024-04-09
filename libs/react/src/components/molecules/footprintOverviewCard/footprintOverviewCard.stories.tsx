@@ -1,13 +1,8 @@
 import React from 'react';
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
-import { FootprintOverviewCard } from './footprintOverviewCard';
-import {
-  StoryMockProvider,
-  getFootprintHandler,
-  FootprintDetailChart,
-} from '../../../';
-import { EmissionsDonutChartVariants } from '../../atoms/emissionsDonutChart/emissionsDonutChart';
+import { getFootprintHandler, StoryMockProvider } from '../../../';
+import { EmissionsDonutChartVariants, FootprintOverviewCard } from '@coldpbc/components';
 
 const meta: Meta<typeof FootprintOverviewCard> = {
   title: 'Molecules/FootprintOverviewCard',
@@ -20,7 +15,7 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-  render: (args) => {
+  render: args => {
     return (
       <StoryMockProvider handlers={[]}>
         <div className="w-[668px]">
@@ -32,7 +27,7 @@ export const Default: Story = {
 };
 
 export const Headerless: Story = {
-  render: (args) => {
+  render: args => {
     return (
       <StoryMockProvider handlers={[]}>
         <div className="w-[668px]">
@@ -44,13 +39,11 @@ export const Headerless: Story = {
 };
 
 export const Vertical: Story = {
-  render: (args) => {
+  render: args => {
     return (
       <StoryMockProvider handlers={[]}>
         <div className="w-[437px]">
-          <FootprintOverviewCard
-            chartVariant={EmissionsDonutChartVariants.vertical}
-          />
+          <FootprintOverviewCard chartVariant={EmissionsDonutChartVariants.vertical} />
         </div>
       </StoryMockProvider>
     );

@@ -1,16 +1,10 @@
 import React from 'react';
-import { CenterColumnContent } from '../../organisms/centerColumnContent/centerColumnContent';
-import { RightColumnContent } from '../../organisms/rightColumnContent/rightColumnContent';
 import { useAuth0 } from '@auth0/auth0-react';
-import { Spinner } from '../../atoms/spinner/spinner';
-import { AppContent } from '../../organisms/appContent/appContent';
 import { FootprintOverviewCard, JourneyOverviewCard, NewsCard, NextActionsCard } from '../../molecules';
-import { TemperatureCheckCard } from '../../molecules/temperatureCheckCard';
 import { useFlags } from 'launchdarkly-react-client-sdk';
-import { EmissionsDonutChartVariants } from '../../atoms/emissionsDonutChart/emissionsDonutChart';
+import { AppContent, CenterColumnContent, EmissionsDonutChartVariants, ErrorFallback, RightColumnContent, Spinner } from '@coldpbc/components';
 import { withErrorBoundary } from 'react-error-boundary';
-import { ErrorFallback } from '../../application/errors/errorFallback';
-import { NextSteps } from '../../organisms';
+import { EmissionsOverviewCard, NextSteps } from '../../organisms';
 import { ColdAssessmentsProvider } from '@coldpbc/providers';
 import { useColdContext } from '@coldpbc/hooks';
 
@@ -29,42 +23,22 @@ function _Home() {
 
   if (auth0.user) {
     logBrowser('Home page loaded', 'info', { user: auth0.user, ldFlags: ldFlags });
-    if (ldFlags.showNewHomePageComplianceReiMvp) {
-      return (
-        <AppContent title={'Welcome, ' + auth0.user?.given_name}>
-          <CenterColumnContent>
-            {ldFlags.showNextStepsCard && <NextSteps />}
-            {ldFlags.showFootprintOnHome && <FootprintOverviewCard chartVariant={EmissionsDonutChartVariants.horizontal} />}
-            {ldFlags.showComplianceModule && (
-              <ColdAssessmentsProvider>
-                <JourneyOverviewCard />
-              </ColdAssessmentsProvider>
-            )}
-            {ldFlags.showNewsModuleCold310 && <NewsCard />}
-          </CenterColumnContent>
-          <RightColumnContent>{ldFlags.showActions261 && <NextActionsCard />}</RightColumnContent>
-        </AppContent>
-      );
-    } else {
-      return (
-        <AppContent title={'Welcome, ' + auth0.user?.given_name}>
-          <CenterColumnContent>
-            {ldFlags.showNextStepsCard && <NextSteps />}
-            <FootprintOverviewCard chartVariant={EmissionsDonutChartVariants.horizontal} />
-            {ldFlags.showComplianceModule && (
-              <ColdAssessmentsProvider>
-                <JourneyOverviewCard />
-              </ColdAssessmentsProvider>
-            )}
-            {ldFlags.showNewsModuleCold310 && <NewsCard />}
-          </CenterColumnContent>
-          <RightColumnContent>
-            <TemperatureCheckCard cardTitle="Temperature Check" stats={['cold_score', 'footprint', 'emissions_avoided', 'actions_completed']} />
-            {ldFlags.showActions261 && <NextActionsCard />}
-          </RightColumnContent>
-        </AppContent>
-      );
-    }
+
+    return (
+      <AppContent title={'Welcome, ' + auth0.user?.given_name}>
+        <CenterColumnContent>
+          {ldFlags.showNextStepsCard && <NextSteps />}
+          {ldFlags.showNewCarbonFootprintModuleCold634 ? <EmissionsOverviewCard /> : <FootprintOverviewCard chartVariant={EmissionsDonutChartVariants.horizontal} />}
+          {ldFlags.showComplianceModule && (
+            <ColdAssessmentsProvider>
+              <JourneyOverviewCard />
+            </ColdAssessmentsProvider>
+          )}
+          {ldFlags.showNewsModuleCold310 && <NewsCard />}
+        </CenterColumnContent>
+        <RightColumnContent>{ldFlags.showActions261 && <NextActionsCard />}</RightColumnContent>
+      </AppContent>
+    );
   }
   return null;
 }

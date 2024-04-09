@@ -80,7 +80,7 @@
             "libs/nest/src/**",
             "_api.dockerfile"
           ],
-          "maxInstances": 2,
+          "maxInstances": 4,
           "minInstances": 2,
           "healthCheckPath": "/health",
           "containerInsights": true,
@@ -96,10 +96,10 @@
             "com.datadoghq.tags.version": "1.0.0"
           },
           "autoscaling": {
-            "cpuThreshold": 90,
-            "memoryThreshold": 90,
+            "cpuThreshold": 70,
+            "memoryThreshold": 60,
             "cooldownTimerSecs": 300,
-            "requestsPerTarget": 500
+            "requestsPerTarget": 50
           },
           "experimental": {
             "healthCheckTimeout": 15,
@@ -113,7 +113,7 @@
           },
           "sidecars": [
             {
-              "name": "sidecar-dd-api-prod",
+              "name": "cold-datadog-api-production",
               "image": "datadog/agent",
               "cpuAllotment": 0.5,
               "memoryAllotment": 0.25,
@@ -125,7 +125,10 @@
                 5000
               ],
               "envVariables": {
-                "DD_SERVICE": "cold-datadog-production",
+                "DD_SERVICE": "cold-datadog-openai-production",
+                "ECS_FARGATE": true,
+                "DD_OTLP_CONFIG_RECEIVER_PROTOCOLS_GRPC_ENDPOINT": "0.0.0.0:4317",
+                "DD_OTLP_CONFIG_RECEIVER_PROTOCOLS_HTTP_ENDPOINT": "0.0.0.0:4318",
                 "DD_API_KEY": {
                   "fromParameterStore": "fc.cold-api-fc.env.cold-production.8pr1zak.DD_API_KEY"
                 },
@@ -253,13 +256,13 @@
             "_api.dockerfile"
           ],
           "autoscaling": {
-            "cpuThreshold": 90,
-            "memoryThreshold": 90,
-            "cooldownTimerSecs": 300,
-            "requestsPerTarget": 500
+            "cpuThreshold": 70,
+            "memoryThreshold": 70,
+            "cooldownTimerSecs": 60,
+            "requestsPerTarget": 160
           },
-          "maxInstances": 2,
-          "minInstances": 1,
+          "maxInstances": 3,
+          "minInstances": 2,
           "healthCheckPath": "/health",
           "containerInsights": true,
           "enableCloudfrontSwr": false,
@@ -279,7 +282,7 @@
           },
           "sidecars": [
             {
-              "name": "sidecar-dd-api-staging",
+              "name": "cold-datadog-api-staging",
               "image": "datadog/agent",
               "cpuAllotment": 0.5,
               "memoryAllotment": 0.25,
@@ -291,8 +294,11 @@
                 5000
               ],
               "envVariables": {
-                "DD_SERVICE": "cold-datadog-staging",
+                "DD_SERVICE": "cold-datadog-api-staging",
                 "DD_ENV": "staging",
+                "ECS_FARGATE": true,
+                "DD_OTLP_CONFIG_RECEIVER_PROTOCOLS_GRPC_ENDPOINT": "0.0.0.0:4317",
+                "DD_OTLP_CONFIG_RECEIVER_PROTOCOLS_HTTP_ENDPOINT": "0.0.0.0:4318",
                 "DD_AGENT_MAJOR_VERSION": "7",
                 "DD_LOG_LEVEL": "ERROR",
                 "DD_API_KEY": {
@@ -459,7 +465,7 @@
           },
           "sidecars": [
             {
-              "name": "cold-datadog-preview",
+              "name": "cold-datadog-api-preview",
               "image": "datadog/agent",
               "cpuAllotment": 0.5,
               "memoryAllotment": 0.25,
@@ -471,7 +477,7 @@
                 5000
               ],
               "envVariables": {
-                "DD_SERVICE": "cold-datadog-test",
+                "DD_SERVICE": "cold-datadog-api-preview",
                 "DD_API_KEY": {
                   "fromParameterStore": "fc.cold-api-fc.env.cold-production.8pr1zak.DD_API_KEY"
                 },
@@ -481,6 +487,9 @@
                 "DD_REDIS_URL_VAR": "REDISCLOUD_URL",
                 "DD_SITE": "us5.datadoghq.com",
                 "DD_APM_ENABLED": true,
+                "ECS_FARGATE": true,
+                "DD_OTLP_CONFIG_RECEIVER_PROTOCOLS_GRPC_ENDPOINT": "0.0.0.0:4317",
+                "DD_OTLP_CONFIG_RECEIVER_PROTOCOLS_HTTP_ENDPOINT": "0.0.0.0:4318",
                 "DD_APPSEC_AUTOMATED_USER_EVENTS_TRACKING": true,
                 "DD_APPSEC_ENABLED": true,
                 "DD_DOGSTATSD_NON_LOCAL_TRAFFIC": true,

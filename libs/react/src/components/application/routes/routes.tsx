@@ -1,9 +1,9 @@
 import { Route, Routes } from 'react-router-dom';
 import {
   AccountSettingsPage,
-  ActionRoutes,
   ActionsOverview,
   ApplicationToaster,
+  CarbonFootprint,
   ComplianceRoutes,
   DashboardLayout,
   DocumentUpload,
@@ -12,7 +12,6 @@ import {
   Interceptor,
   Journey,
   ProtectedRoute,
-  Settings,
   Signup,
   Terms,
   UserSettingsPage,
@@ -24,37 +23,21 @@ export const ColdRoutes = () => {
   const ldFlags = useFlags();
 
   const getFilteredRoutes = () => {
-    if (ldFlags.showReiComplianceMvpSidebarCold506) {
-      return (
-        <>
-          <Route path={'/'} element={<Home />} />
-          <Route path={'/home'} element={<Home />} />
-          {ldFlags.showComplianceModule && ComplianceRoutes()}
-          <Route path={'/assessments'} element={<Journey />} />
-          {ldFlags.showActions261 && <Route path="/actions" element={<ActionsOverview />} />}
-          <Route path={'/reports/carbon_footprint'} element={<Footprint />} />
-          {ldFlags.showDocumentsUploadModuleCold492 && <Route path="/documents" element={<DocumentUpload />} />}
-          <Route path={'/settings/account'} element={<AccountSettingsPage />} />
-          <Route path={'/settings/users'} element={<UserSettingsPage />} />
-          <Route path="*" element={<div className={'text-tc-primary'}>Pending...</div>} />
-          {WizardRoutes()}
-        </>
-      );
-    } else {
-      return (
-        <>
-          <Route path={'/'} element={<Home />} />
-          <Route path={'/home'} element={<Home />} />
-          <Route path={'/footprint'} element={<Footprint />} />
-          {ldFlags.showComplianceModule && <Route path={'/journey'} element={<Journey />} />}
-          <Route path={'/settings'} element={<Settings />} />
-          {ldFlags.showActions261 && ActionRoutes()}
-          {ldFlags.showComplianceModule && ComplianceRoutes()}
-          {ldFlags.showDocumentsUploadModuleCold492 && <Route path="/documents" element={<DocumentUpload />} />}
-          <Route path="*" element={<div className={'text-tc-primary'}>Pending...</div>} />
-        </>
-      );
-    }
+    return (
+      <>
+        <Route path={'/'} element={<Home />} />
+        <Route path={'/home'} element={<Home />} />
+        {ldFlags.showComplianceModule && ComplianceRoutes()}
+        <Route path={'/assessments'} element={<Journey />} />
+        {ldFlags.showActions261 && <Route path="/actions" element={<ActionsOverview />} />}
+        <Route path={'/reports/carbon_footprint'} element={ldFlags.showNewCarbonFootprintModuleCold634 ? <CarbonFootprint /> : <Footprint />} />
+        {ldFlags.showDocumentsUploadModuleCold492 && <Route path="/documents" element={<DocumentUpload />} />}
+        <Route path={'/settings/account'} element={<AccountSettingsPage />} />
+        <Route path={'/settings/users'} element={<UserSettingsPage />} />
+        <Route path="*" element={<div className={'text-tc-primary'}>Pending...</div>} />
+        {WizardRoutes()}
+      </>
+    );
   };
 
   return (

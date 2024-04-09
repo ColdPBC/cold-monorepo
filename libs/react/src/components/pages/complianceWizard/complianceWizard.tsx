@@ -79,11 +79,7 @@ const _ComplianceWizard = () => {
   if (name && compliances.data && orgCompliances.data) {
     logBrowser('Compliance wizard loaded', 'info', {
       name,
-      compliances: compliances.data,
-      orgCompliances: orgCompliances.data,
       orgId,
-      surveyData: surveyData.data,
-      files: filesSWR.data,
     });
     return (
       <MainContent>
