@@ -127,8 +127,8 @@ export class ChatService extends BaseWorker implements OnModuleInit {
    * @param session
    */
   async askQuestion(indexName: string, question: any, company_name: string, user: AuthenticatedUser, session: FPSession, additional_context?: any): Promise<any> {
+    const start = new Date();
     try {
-      const start = new Date();
       // Get Chat History
       let messages = (await this.cache.get(`openai:thread:${user.coldclimate_claims.id}`)) as ChatCompletionMessageParam[];
 
@@ -225,7 +225,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
       // Save the thread to the cache
       await this.cache.set(`openai:thread:${user.coldclimate_claims.email}`, messages, { ttl: 60 * 60 * 24 });
 
-      this.logger.info(`${ai_response.answer ? '✅ Answered' : '❌ Did NOT Answer'} ${question.idx ? question.idx : 'additional_context'}`, {
+      this.logger.info(`${ai_response.answer != 'undefined' ? '✅ Answered' : '❌ Did NOT Answer'} ${question.idx ? question.idx : 'additional_context'}`, {
         pinecone_query: rephrased_question,
         document_content: context,
         survey_question: question.prompt,
@@ -238,37 +238,11 @@ export class ChatService extends BaseWorker implements OnModuleInit {
       const end = new Date();
       const recording = await this.fp.recordCompletion(session, vars, sanitized_base, response, start, end);
 
-      this.metrics.histogram('openai.survey.section.question.duration', end.getTime() - start.getTime(), {
-        organization: company_name,
-        survey: session.customMetadata.survey,
-        user: session.customMetadata.user,
-      });
-
       this.logger.info(`Sending ${sanitized_base.promptInfo.templateName} run stats to FreePlay`, recording);
-      this.metrics.event(
-        'openai.question.complete',
-        `Completed Processing question`,
-        { alert_type: 'success' },
-        {
-          organization: company_name,
-          user: user.coldclimate_claims.email,
-          survey: session.customMetadata.survey,
-        },
-      );
 
       return ai_response;
     } catch (error) {
       this.logger.error(`Error asking question ${question.prompt}`, { error, ...session });
-      this.metrics.event(
-        'openai.question.failed',
-        `Failed Processing question`,
-        { alert_type: 'error' },
-        {
-          organization: company_name,
-          user: user.coldclimate_claims.email,
-          survey: session.customMetadata.survey,
-        },
-      );
 
       throw error;
     }
@@ -403,8 +377,8 @@ export class ChatService extends BaseWorker implements OnModuleInit {
       await this.resetAIResponses(user, survey, organization);
 
       // Log the start of the survey processing
-      this.logger.info(`✅ Started processing survey ${survey.definition.title}`, {
-        survey: survey.definition.title,
+      this.logger.info(`✅ Started processing survey ${survey.name}`, {
+        survey: survey.name,
         user,
         compliance,
         integration,
@@ -492,14 +466,14 @@ export class ChatService extends BaseWorker implements OnModuleInit {
       for (const section of sections) {
         // Create a session for the survey
         const session = (await this.fp.createSession({
-          survey: survey.definition.title,
+          survey: survey.name,
           organization: organization.name,
           user: user.coldclimate_claims.email,
           section: section,
         })) as FPSession;
 
         // Log the creation of the session
-        this.logger.info(`Session created for survey ${survey.definition.title}`, session);
+        this.logger.info(`Session created for survey ${survey.name}`, session);
 
         // Create a new thread for each section run
         reqs.push(this.processSection(job, section, sdx, sections, definition, integration, organization, category_context, user, session));
@@ -508,22 +482,12 @@ export class ChatService extends BaseWorker implements OnModuleInit {
       // Wait for all the sections to be processed
       await Promise.all(reqs);
 
-      this.metrics.histogram('openai.survey.duration', new Date().getTime() - start.getTime(), {
-        survey: survey.name,
-        organization: organization.name,
-        user: user.coldclimate_claims.email,
+      this.sendMetrics('survey', 'completed', {
+        sendEvent: true,
+        start,
+        tags: { survey: survey.name, organization: organization.name, user: user.coldclimate_claims.email },
       });
 
-      this.metrics.event(
-        'openai.survey.completed',
-        `Completed Processing ${survey.name}`,
-        { alert_type: 'success' },
-        {
-          survey: survey.name,
-          organization: organization.name,
-          user: user.coldclimate_claims.email,
-        },
-      );
       // Log the end of the survey processing
       this.logger.info(`✅ Finished processing survey ${survey.definition.title}`, {
         survey: survey.definition.title,
@@ -536,15 +500,53 @@ export class ChatService extends BaseWorker implements OnModuleInit {
     } catch (e) {
       this.logger.error(`Error processing survey ${job.data.survey.name}`, e);
 
-      this.metrics.event(
-        'openai.survey.failed',
-        `Completed Processing ${job.data.survey.name}`,
-        { alert_type: 'error' },
-        {
-          survey: job.data.survey.name,
-          organization: job.data.organization.name,
-          user: job.data.user.coldclimate_claims.email,
+      this.sendMetrics('survey', 'failed', {
+        start,
+        sendEvent: true,
+        tags: {
+          survey: job.data.survey?.name,
+          organization: job.data.organization?.name,
+          user: job.data.user?.coldclimate_claims?.email,
+          error: e.message,
         },
+      });
+    }
+  }
+
+  private sendMetrics(
+    resource: string,
+    status: string,
+    options: {
+      start?: Date;
+      sendEvent?: boolean;
+      tags: { [key: string]: any };
+    },
+  ) {
+    const tags = {
+      ...options.tags,
+      status,
+    };
+
+    this.metrics.increment(`openai.${resource}`, 1, tags);
+
+    if (options.start) {
+      this.metrics.histogram(`openai.${resource}.duration`, new Date().getTime() - options.start.getTime(), tags);
+    }
+
+    if (options.sendEvent) {
+      let alert_type: 'info' | 'error' | 'success' | 'warning' = 'success';
+      if (status === 'started') {
+        alert_type = 'info';
+      }
+      if (status === 'failed') {
+        alert_type = 'error';
+      }
+
+      this.metrics.event(
+        `openai.survey.${status}`,
+        `${resource} ${status} processing: ${options.tags.survey.name} ${options.tags.error ? ' | ' + options.tags.error.message : ''}`,
+        { alert_type: alert_type },
+        tags,
       );
     }
   }
@@ -565,87 +567,55 @@ export class ChatService extends BaseWorker implements OnModuleInit {
   public async processSection(job: Job, section: string, sdx: number, sections: string[], definition, integration, organization, category_context, user, session: FPSession) {
     const start = new Date();
 
-    await job.log(`Section | ${section}:${sdx + 1} of ${sections.length}`);
-    this.logger.info(`Processing ${section}: ${definition.sections[section].title}`, { section });
+    try {
+      await job.log(`Section | ${section}:${sdx + 1} of ${sections.length}`);
+      this.logger.info(`Processing ${section}: ${definition.sections[section].title}`, { section });
 
-    // get the followup items for the section
-    const items = Object.keys(definition.sections[section].follow_up);
+      // get the followup items for the section
+      const items = Object.keys(definition.sections[section].follow_up);
 
-    // iterate over each followup item
-    for (const item of items) {
-      try {
-        if (await this.isDuplicateOrCanceled(organization, job, section, item)) {
-          continue;
-        }
+      // iterate over each followup item
+      for (const item of items) {
+        try {
+          if (await this.isDuplicateOrCanceled(organization, job, section, item)) {
+            continue;
+          }
 
-        //set(session.customMetadata, 'key', item);
+          //set(session.customMetadata, 'key', item);
 
-        const idx = parseInt(item.split('-')[1]);
+          const idx = parseInt(item.split('-')[1]);
 
-        await job.log(`Question | section: ${section} question: ${item} (${items.indexOf(item)} of ${items.length})`);
-        const follow_up = definition.sections[section].follow_up[item];
+          await job.log(`Question | section: ${section} question: ${item} (${items.indexOf(item)} of ${items.length})`);
+          const follow_up = definition.sections[section].follow_up[item];
 
-        if (follow_up?.ai_response?.value) {
-          this.logger.info(`Skipping ${section}.${item}: ${follow_up.prompt}; it has already been answered`, {
-            survey: job.data.survey?.name,
-            section: section,
-            key: item,
-            question: follow_up.prompt,
-            answer: follow_up.value,
-            ai_answer: follow_up.ai_response.answer,
-            justification: follow_up.ai_response.justification,
-          });
-          continue;
-        }
-
-        this.logger.info(`Processing Message | ${section}.${item}`, {
-          survey: job.data.survey?.name,
-          section: section,
-          key: item,
-        });
-
-        // create a new run for each followup item
-        const value = await this.askQuestion(organization.name, follow_up, organization.name, job.data.user, session);
-
-        // update the survey with the response
-        if (value) {
-          definition.sections[section].follow_up[item].ai_response = value;
-          definition.sections[section].follow_up[item].ai_answered = typeof value.answer != 'undefined';
-
-          this.logger.info(`Ai responded: ${section}.${item}`, {
-            survey: job.data.survey?.name,
-            section: section,
-            key: item,
-            question: follow_up.prompt,
-            answer: follow_up.value,
-            ai_answer: follow_up.ai_response.answer,
-            justification: follow_up.ai_response.justification,
-          });
-        }
-
-        definition.sections[section].follow_up[item].ai_attempted = true;
-
-        /*
-
-         */
-        // if there is additional context, create a new run for it
-        if (follow_up['additional_context']) {
-          if (definition.sections[section].follow_up[item].additional_context.value) {
-            this.logger.info(`Skipping ${section}.${item}.additional_context; it has already been answered`, {
+          if (follow_up?.ai_response?.value) {
+            this.logger.info(`Skipping ${section}.${item}: ${follow_up.prompt}; it has already been answered`, {
               survey: job.data.survey?.name,
               section: section,
               key: item,
-              additional_context: definition.sections[section].follow_up[item].additional_context,
+              question: follow_up.prompt,
+              answer: follow_up.value,
+              ai_answer: follow_up.ai_response.answer,
+              justification: follow_up.ai_response.justification,
+              organization,
+              user: user.coldclimate_claims.email,
             });
             continue;
           }
 
-          this.logger.info(`Processing Question | ${section}.${item}.additional_context: ${follow_up.prompt}`);
-          const additionalValue = await this.askQuestion(organization.name, follow_up, organization.display_name, job.data.user, session, follow_up['additional_context']);
+          this.logger.info(`Processing Message | ${section}.${item}`, {
+            survey: job.data.survey?.name,
+            section: section,
+            key: item,
+          });
 
-          if (additionalValue) {
-            definition.sections[section].follow_up[item].additional_context.ai_response = additionalValue;
-            definition.sections[section].follow_up[item].additional_context.ai_answered = typeof value.answer != 'undefined';
+          // create a new run for each followup item
+          const value = await this.askQuestion(organization.name, follow_up, organization.name, job.data.user, session);
+
+          // update the survey with the response
+          if (value) {
+            definition.sections[section].follow_up[item].ai_response = value;
+            definition.sections[section].follow_up[item].ai_answered = typeof value.answer != 'undefined';
 
             this.logger.info(`Ai responded: ${section}.${item}`, {
               survey: job.data.survey?.name,
@@ -656,39 +626,125 @@ export class ChatService extends BaseWorker implements OnModuleInit {
               ai_answer: follow_up.ai_response.answer,
               justification: follow_up.ai_response.justification,
             });
+
+            this.sendMetrics('survey.question', 'completed', {
+              sendEvent: true,
+              start,
+              tags: {
+                survey: job.data.survey?.name,
+                section: section,
+                key: item,
+                ai_answered: typeof value.answer != 'undefined',
+                organization: organization.name,
+                user: user.coldclimate_claims.email,
+              },
+            });
           }
 
-          definition.sections[section].follow_up[item].additional_context.ai_attempted = true;
+          definition.sections[section].follow_up[item].ai_attempted = true;
+
+          // if there is additional context, create a new run for it
+          if (follow_up['additional_context']) {
+            if (definition.sections[section].follow_up[item].additional_context.value) {
+              this.logger.info(`Skipping ${section}.${item}.additional_context; it has already been answered`, {
+                survey: job.data.survey?.name,
+                section: section,
+                key: item,
+                additional_context: definition.sections[section].follow_up[item].additional_context,
+              });
+              continue;
+            }
+
+            this.logger.info(`Processing Question | ${section}.${item}.additional_context: ${follow_up.prompt}`);
+            const additionalValue = await this.askQuestion(organization.name, follow_up, organization.display_name, job.data.user, session, follow_up['additional_context']);
+
+            if (additionalValue) {
+              definition.sections[section].follow_up[item].additional_context.ai_response = additionalValue;
+              definition.sections[section].follow_up[item].additional_context.ai_answered = typeof value.answer != 'undefined';
+
+              this.logger.info(`Ai responded: ${section}.${item}`, {
+                survey: job.data.survey?.name,
+                section: section,
+                key: item,
+                question: follow_up.prompt,
+                answer: follow_up.value,
+                ai_answer: follow_up.ai_response.answer,
+                justification: follow_up.ai_response.justification,
+              });
+
+              this.sendMetrics('survey.question', 'completed', {
+                sendEvent: true,
+                start,
+                tags: {
+                  survey: job.data.survey?.name,
+                  section: section,
+                  key: item,
+                  ai_answered: typeof value.answer != 'undefined',
+                  organization: organization.name,
+                  user: user.coldclimate_claims?.email,
+                },
+              });
+            }
+
+            definition.sections[section].follow_up[item].additional_context.ai_attempted = true;
+          }
+
+          // publish the response to the rabbit queue
+          await this.rabbit.publish(`cold.core.api.survey_data`, {
+            event: 'survey_data.updated',
+            data: {
+              organization: { id: integration.organization_id },
+              user,
+              on_update_url: job.data.on_update_url,
+              survey: job.data.survey,
+            },
+            from: 'cold.platform.openai',
+          });
+
+          await job.progress(idx / items.length);
+        } catch (error) {
+          this.sendMetrics('survey.question', `failed`, {
+            start,
+            sendEvent: true,
+            tags: {
+              section: section,
+              question: item,
+              survey: job.data.survey.name,
+              organization: job.data.organization.name,
+              user: job.data.user?.coldclimate_claims?.email,
+              error: error,
+            },
+          });
+          this.logger.error(`Error processing ${section}.${item}: ${error.message}`, error);
         }
-
-        // publish the response to the rabbit queue
-        await this.rabbit.publish(`cold.core.api.survey_data`, {
-          event: 'survey_data.updated',
-          data: {
-            organization: { id: integration.organization_id },
-            user,
-            on_update_url: job.data.on_update_url,
-            survey: job.data.survey,
-          },
-          from: 'cold.platform.openai',
-        });
-
-        await job.progress(idx / items.length);
-      } catch (error) {
-        this.logger.error(`Error processing ${section}.${item}: ${error.message}`, error);
-        this.metrics.event('openai.survey.section.failed', `Failed Processing ${section}`, { alert_type: 'error' });
       }
+      this.sendMetrics('survey.section', 'completed', {
+        start,
+        sendEvent: true,
+        tags: {
+          section: section,
+          survey: job.data.survey.name,
+          organization: job.data.organization.name,
+          user: job.data.user.coldclimate_claims.email,
+        },
+      });
+
+      this.logger.info(`✅ Finished processing ${section}: ${definition.sections[section].title}`, { section });
+    } catch (e) {
+      this.sendMetrics('survey.section', 'failed', {
+        start,
+        sendEvent: true,
+        tags: {
+          section: section,
+          survey: job.data.survey.name,
+          organization: job.data.organization.name,
+          user: job.data.user.coldclimate_claims.email,
+          error: e,
+        },
+      });
+
+      throw e;
     }
-
-    this.metrics.histogram('openai.survey.section.duration', new Date().getTime() - start.getTime(), {
-      section,
-      organization: organization.name,
-      user: user.coldclimate_claims.email,
-    });
-
-    this.metrics.event('openai.survey.section.completed', `Completed Processing ${section}`, { alert_type: 'success' });
-
-    this.logger.info(`✅ Finished processing ${section}: ${definition.sections[section].title}`, { section });
   }
 
   /**
