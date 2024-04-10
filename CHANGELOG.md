@@ -1,3 +1,10 @@
+## [1.191.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.191.1...v1.191.2) (2024-04-10)
+
+
+### Bug Fixes
+
+* delete env.staging file ([7bc1e2f](https://github.com/ColdPBC/cold-monorepo/commit/7bc1e2f236fd6db76d91de18f68fe0e6938409b4))
+
 ## [1.191.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.191.0...v1.191.1) (2024-04-09)
 
 
