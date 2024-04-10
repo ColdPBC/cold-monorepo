@@ -1,3 +1,10 @@
+## [1.191.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.191.3...v1.191.4) (2024-04-10)
+
+
+### Bug Fixes
+
+* use correct field for question summary ([e839520](https://github.com/ColdPBC/cold-monorepo/commit/e839520f7236e8091c193ed54f17bdd3b97b1638))
+
 ## [1.191.4-cold-667.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.191.3...v1.191.4-cold-667.1) (2024-04-10)
 
 
