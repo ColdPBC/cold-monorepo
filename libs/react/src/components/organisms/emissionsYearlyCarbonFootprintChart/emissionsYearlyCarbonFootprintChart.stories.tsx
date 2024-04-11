@@ -2,7 +2,7 @@ import React from 'react';
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { EmissionsYearlyCarbonFootprintChart } from '@coldpbc/components';
-import { getDefaultEmissionMock } from '@coldpbc/mocks';
+import { getDefaultEmissionMock, StoryMockProvider } from '@coldpbc/mocks';
 import { ColdEmissionsContext } from '@coldpbc/context';
 import { InputOption } from '@coldpbc/interfaces';
 
@@ -25,48 +25,50 @@ export const Default: Story = {
     });
 
     return (
-      <ColdEmissionsContext.Provider
-        value={{
-          data: {
-            emissions: getDefaultEmissionMock(),
-            uniqueScopes: [1, 2, 3],
-            yearOptions: [
-              {
-                id: 0,
-                name: 'All Years',
-                value: 'all',
-              },
-              {
-                id: 1,
-                name: '2022',
-                value: '2022',
-              },
-              {
-                id: 2,
-                name: '2023',
-                value: '2023',
-              },
-            ],
-            facilityOptions: [
-              {
-                id: 0,
-                name: 'All Facilities',
-                value: 'all',
-              },
-            ],
-          },
-          selectedFacility: {
-            id: 0,
-            name: 'All Facilities',
-            value: 'all',
-          },
-          setSelectedYear: setSelectedYear,
-          selectedYear: selectedYear,
-          setSelectedFacility: option => {},
-          isSingleYear: false,
-        }}>
-        <EmissionsYearlyCarbonFootprintChart />;
-      </ColdEmissionsContext.Provider>
+      <StoryMockProvider>
+        <ColdEmissionsContext.Provider
+          value={{
+            data: {
+              emissions: getDefaultEmissionMock(),
+              uniqueScopes: [1, 2, 3],
+              yearOptions: [
+                {
+                  id: 0,
+                  name: 'All Years',
+                  value: 'all',
+                },
+                {
+                  id: 1,
+                  name: '2022',
+                  value: '2022',
+                },
+                {
+                  id: 2,
+                  name: '2023',
+                  value: '2023',
+                },
+              ],
+              facilityOptions: [
+                {
+                  id: 0,
+                  name: 'All Facilities',
+                  value: 'all',
+                },
+              ],
+            },
+            selectedFacility: {
+              id: 0,
+              name: 'All Facilities',
+              value: 'all',
+            },
+            setSelectedYear: setSelectedYear,
+            selectedYear: selectedYear,
+            setSelectedFacility: option => {},
+            isSingleYear: false,
+          }}>
+          <EmissionsYearlyCarbonFootprintChart />;
+        </ColdEmissionsContext.Provider>
+      </StoryMockProvider>
     );
   },
 };
@@ -80,48 +82,50 @@ export const YearSelected: Story = {
     });
 
     return (
-      <ColdEmissionsContext.Provider
-        value={{
-          data: {
-            emissions: getDefaultEmissionMock(),
-            uniqueScopes: [1, 2, 3],
-            yearOptions: [
-              {
-                id: 0,
-                name: 'All Years',
-                value: 'all',
-              },
-              {
-                id: 1,
-                name: '2022',
-                value: '2022',
-              },
-              {
-                id: 2,
-                name: '2023',
-                value: '2023',
-              },
-            ],
-            facilityOptions: [
-              {
-                id: 0,
-                name: 'All Facilities',
-                value: 'all',
-              },
-            ],
-          },
-          selectedFacility: {
-            id: 0,
-            name: 'All Facilities',
-            value: 'all',
-          },
-          setSelectedYear: setSelectedYear,
-          selectedYear: selectedYear,
-          setSelectedFacility: option => {},
-          isSingleYear: false,
-        }}>
-        <EmissionsYearlyCarbonFootprintChart />;
-      </ColdEmissionsContext.Provider>
+      <StoryMockProvider>
+        <ColdEmissionsContext.Provider
+          value={{
+            data: {
+              emissions: getDefaultEmissionMock(),
+              uniqueScopes: [1, 2, 3],
+              yearOptions: [
+                {
+                  id: 0,
+                  name: 'All Years',
+                  value: 'all',
+                },
+                {
+                  id: 1,
+                  name: '2022',
+                  value: '2022',
+                },
+                {
+                  id: 2,
+                  name: '2023',
+                  value: '2023',
+                },
+              ],
+              facilityOptions: [
+                {
+                  id: 0,
+                  name: 'All Facilities',
+                  value: 'all',
+                },
+              ],
+            },
+            selectedFacility: {
+              id: 0,
+              name: 'All Facilities',
+              value: 'all',
+            },
+            setSelectedYear: setSelectedYear,
+            selectedYear: selectedYear,
+            setSelectedFacility: option => {},
+            isSingleYear: false,
+          }}>
+          <EmissionsYearlyCarbonFootprintChart />;
+        </ColdEmissionsContext.Provider>
+      </StoryMockProvider>
     );
   },
 };
