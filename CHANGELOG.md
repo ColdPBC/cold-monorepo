@@ -1,3 +1,11 @@
+# [1.193.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.192.0...v1.193.0) (2024-04-11)
+
+
+### Features
+
+* add progress bar for assessments for compliances that are score based ([068da70](https://github.com/ColdPBC/cold-monorepo/commit/068da7087ac459994c70e00b5d0ac7c395f77e25))
+* use correct data fields ([4fae29d](https://github.com/ColdPBC/cold-monorepo/commit/4fae29d2038dc230c34dd2ec8745492ce4d96c8a))
+
 # [1.192.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.191.4...v1.192.0) (2024-04-11)
 
 
