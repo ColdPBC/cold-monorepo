@@ -1,3 +1,19 @@
+# [1.194.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.193.0...v1.194.0) (2024-04-11)
+
+
+### Bug Fixes
+
+* fix showing faciility selector when a single year ([72751f7](https://github.com/ColdPBC/cold-monorepo/commit/72751f72b6ecdc1e59c9ba7470573495f8709520))
+
+
+### Features
+
+* add learn more button to emissions overview card ([a6fe296](https://github.com/ColdPBC/cold-monorepo/commit/a6fe296328c3785a3b0e849ce8cb003411b0c241))
+* added sorting to year data for charts and updated stories ([41835bc](https://github.com/ColdPBC/cold-monorepo/commit/41835bcd6e58ff4036b44ab3d77f029cbe4a947c))
+* handle single year emissions ([767b1a0](https://github.com/ColdPBC/cold-monorepo/commit/767b1a04ad390b79e02638a2c67d3cd440fc840d))
+* remove header from emissions scope card ([f1623d4](https://github.com/ColdPBC/cold-monorepo/commit/f1623d489a2c396bccc4d9e7caf844494b6e5614))
+* update provider to use single year emissions ([426a76a](https://github.com/ColdPBC/cold-monorepo/commit/426a76aa6cd848a810f1c2ab95fe012fbb420112))
+
 # [1.193.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.192.0...v1.193.0) (2024-04-11)
 
 
