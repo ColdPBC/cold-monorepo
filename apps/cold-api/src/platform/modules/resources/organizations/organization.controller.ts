@@ -140,6 +140,42 @@ export class OrganizationController extends BaseWorker {
   }
 
   /***
+   * **Internal Use Only** : Delete an organization by ID
+   * @param res
+   * @param orgId
+   * @param req
+   * @param bpc
+   */
+  @ApiOperation({
+    summary: 'Delete Organization',
+    operationId: 'DeleteOrg',
+    description: 'Deletes specified organization',
+  })
+  @Delete('organizations')
+  @ApiQuery(bpcDecoratorOptions)
+  @Roles(...coldAdminOnly)
+  @HttpCode(204)
+  async removeOrgs(
+    @Req()
+    req: {
+      body: { organizations: string[] };
+      headers: any;
+      query: any;
+      user: IAuthenticatedUser;
+    },
+  ) {
+    const { organizations } = req.body;
+    for (const orgId of organizations) {
+      try {
+        const org = await this.orgService.getOrganization(orgId, req);
+        await this.orgService.deleteOrganization(org, req);
+      } catch (e) {
+        this.logger.info('Organization not found', { orgId });
+      }
+    }
+  }
+
+  /***
    * **Internal Use Only** : Delete all test orgs
    * @param res
    * @param req

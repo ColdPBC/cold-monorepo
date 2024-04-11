@@ -18,9 +18,10 @@ import { LoadersModule } from './langchain/custom_loaders/loaders.module';
 import { JobConsumer } from './job.consumer';
 import { ChatService } from './chat/chat.service';
 import { FreeplayModule } from './freeplay/freeplay.module';
+import { CrawlerModule } from './crawler/crawler.module';
 
 @Module({
-  imports: [FreeplayModule],
+  imports: [FreeplayModule, CrawlerModule],
   providers: [],
 })
 export class AppModule {
@@ -37,6 +38,9 @@ export class AppModule {
         MulterModule.register({
           dest: './uploads',
         }),
+        BullModule.registerQueue({
+          name: 'openai_crawler',
+        }),
         ServeStaticModule.forRoot({
           serveStaticOptions: {
             index: false,
@@ -50,6 +54,7 @@ export class AppModule {
         LangchainModule,
         LoadersModule,
         ChatModule,
+        await CrawlerModule.forRootAsync(),
       ],
       controllers: [OpenAIController],
       providers: [

@@ -269,6 +269,7 @@ model organizations {
   display_name             String
   branding                 Json?
   phone                    String?
+  website                  String?
   /// @zod.custom.use(z.string().email())
   email                    String?
   /// @DtoUpdateHidden
