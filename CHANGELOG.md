@@ -1,3 +1,12 @@
+# [1.192.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.191.4...v1.192.0) (2024-04-11)
+
+
+### Features
+
+* add throttle to swr mutates from MQTT messages to 10 per minute ([6991fea](https://github.com/ColdPBC/cold-monorepo/commit/6991feadd6b3f765aac85eedac7e9320024678fa))
+* added loading and disabling for automate button when kicked off ([9fa8325](https://github.com/ColdPBC/cold-monorepo/commit/9fa8325e7cf39aca37ceebff90938394a5273ba4))
+* adding keep previous data to compliance set survey call to prevent undefined during revalidation ([2d261d5](https://github.com/ColdPBC/cold-monorepo/commit/2d261d5a61ee3cb95e855fecc17b2542d1409f51))
+
 ## [1.191.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.191.3...v1.191.4) (2024-04-10)
 
 ### Bug Fixes
