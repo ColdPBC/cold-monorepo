@@ -15,7 +15,11 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   render: () => {
-    return <EmissionsOverviewCard />;
+    return (
+      <StoryMockProvider>
+        <EmissionsOverviewCard />
+      </StoryMockProvider>
+    );
   },
 };
 

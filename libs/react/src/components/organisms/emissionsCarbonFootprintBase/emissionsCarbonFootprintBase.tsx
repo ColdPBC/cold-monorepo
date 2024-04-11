@@ -16,7 +16,7 @@ import { useColdContext } from '@coldpbc/hooks';
 
 export const EmissionsCarbonFootprintBase = () => {
   const { logBrowser } = useColdContext();
-  const { data, setSelectedFacility, selectedFacility } = useContext(ColdEmissionsContext);
+  const { data, setSelectedFacility, selectedFacility, isSingleYear } = useContext(ColdEmissionsContext);
   const { facilityOptions, emissions } = data;
 
   if (isAxiosError(emissions) && emissions?.response?.status === 404) {
@@ -54,16 +54,18 @@ export const EmissionsCarbonFootprintBase = () => {
   return (
     <AppContent title="Carbon Footprint">
       <div className={'flex flex-col space-y-[35px]'}>
-        <Select
-          options={facilityOptions}
-          value={selectedFacility.name}
-          onChange={input => {
-            setSelectedFacility(input);
-          }}
-          name={'Facility'}
-          className={'w-[255px]'}
-        />
-        <EmissionsYearlyCarbonFootprintChart />
+        {!isSingleYear && (
+          <Select
+            options={facilityOptions}
+            value={selectedFacility.name}
+            onChange={input => {
+              setSelectedFacility(input);
+            }}
+            name={'Facility'}
+            className={'w-[255px]'}
+          />
+        )}
+        {!isSingleYear && <EmissionsYearlyCarbonFootprintChart />}
         <EmissionsCarbonFootprintCharts />
       </div>
     </AppContent>

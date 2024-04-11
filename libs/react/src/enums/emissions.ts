@@ -5,3 +5,8 @@ export const ScopeColors: {
   2: 'teal',
   3: 'green',
 };
+
+export enum EmissionsScopesCardVariants {
+  horizontal = 'horizontal',
+  vertical = 'vertical',
+}

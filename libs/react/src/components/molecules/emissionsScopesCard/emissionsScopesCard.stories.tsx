@@ -1,12 +1,13 @@
+import { ColdEmissionsContext } from '@coldpbc/context';
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
-import { EmissionsCarbonFootprintCharts } from '@coldpbc/components';
+import React from 'react';
 import { getDefaultEmissionMock, StoryMockProvider } from '@coldpbc/mocks';
-import { ColdEmissionsContext } from '@coldpbc/context';
+import { EmissionsScopesCard } from '@coldpbc/components';
 
-const meta: Meta<typeof EmissionsCarbonFootprintCharts> = {
-  title: 'Organisms/EmissionsCarbonFootprintCharts',
-  component: EmissionsCarbonFootprintCharts,
+const meta: Meta<typeof EmissionsScopesCard> = {
+  title: 'Molecules/EmissionsScopesCard',
+  component: EmissionsScopesCard,
   tags: ['autodocs'],
   decorators: [withKnobs],
 };
@@ -52,7 +53,7 @@ export const Default: Story = {
             setSelectedFacility: option => {},
             isSingleYear: false,
           }}>
-          <EmissionsCarbonFootprintCharts />;
+          <EmissionsScopesCard />;
         </ColdEmissionsContext.Provider>
       </StoryMockProvider>
     );

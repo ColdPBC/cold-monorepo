@@ -1,12 +1,13 @@
-import { EmissionsAllScopesCard, EmissionsDonutChartVariants, ErrorFallback } from '@coldpbc/components';
 import React from 'react';
+import { EmissionsScopesCardVariants } from '@coldpbc/enums';
+import { EmissionsScopesCard, ErrorFallback } from '@coldpbc/components';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ColdEmissionsProvider } from '@coldpbc/providers';
 
 const _EmissionsOverviewCard = () => {
   return (
     <ColdEmissionsProvider>
-      <EmissionsAllScopesCard variant={EmissionsDonutChartVariants.horizontal} title={'Emissions Overview'} />
+      <EmissionsScopesCard variant={EmissionsScopesCardVariants.horizontal} title={'Emissions Overview'} />
     </ColdEmissionsProvider>
   );
 };
