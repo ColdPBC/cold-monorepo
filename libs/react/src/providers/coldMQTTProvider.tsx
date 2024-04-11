@@ -1,8 +1,8 @@
 import React, { PropsWithChildren, useEffect, useRef } from 'react';
 import mqtt from 'mqtt';
-import { useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
 import { useSWRConfig } from 'swr';
 import { forEach } from 'lodash';
+import { useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
 
 export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
   const { logBrowser } = useColdContext();
