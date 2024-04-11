@@ -1,8 +1,8 @@
 import React, { ReactNode, useContext } from 'react';
 import { ColdEmissionsContext } from '@coldpbc/context';
-import { Card, EmissionsDonutChart, EmissionsDonutChartVariants, ErrorFallback, FootprintOverviewVerticalDetail, SubCategoryTotal } from '@coldpbc/components';
 import { forEach, forOwn, isArray, max } from 'lodash';
 import { withErrorBoundary } from 'react-error-boundary';
+import { Card, EmissionsDonutChart, EmissionsDonutChartVariants, ErrorFallback, FootprintOverviewVerticalDetail, SubCategoryTotal } from '@coldpbc/components';
 import clsx from 'clsx';
 import { ButtonTypes, EmissionsScopesCardVariants } from '@coldpbc/enums';
 import { ChartData } from 'chart.js';
