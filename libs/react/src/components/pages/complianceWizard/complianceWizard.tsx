@@ -28,7 +28,10 @@ const _ComplianceWizard = () => {
     }
   };
 
-  const surveyData = useOrgSWR(getSurveyURL(), axiosFetcher);
+  const surveyData = useOrgSWR<any, any>(getSurveyURL(), axiosFetcher, {
+    keepPreviousData: true,
+  });
+
   const filesSWR = useOrgSWR<any, any>(['/files', 'GET'], axiosFetcher);
 
   const setLDContext = () => {
