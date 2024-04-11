@@ -28,7 +28,7 @@ const _EmissionsScopesCard = ({ variant, title }: { variant?: EmissionsScopesCar
         },
       ];
     } else {
-      return [];
+      return undefined;
     }
   };
 
@@ -62,7 +62,7 @@ const _EmissionsScopesCard = ({ variant, title }: { variant?: EmissionsScopesCar
 
   if (isAxiosError(emissions) && emissions?.response?.status === 404) {
     return (
-      <Card title={title} ctas={getCTAs()}>
+      <Card title={title} ctas={getCTAs()} glow={false}>
         <EmissionsDonutChart
           isEmptyData={true}
           subcategoryTotals={[]}
@@ -166,7 +166,7 @@ const _EmissionsScopesCard = ({ variant, title }: { variant?: EmissionsScopesCar
   });
 
   return (
-    <Card glow={true} title={title} ctas={getCTAs()}>
+    <Card glow={false} title={title} ctas={getCTAs()}>
       {variant ? (
         <EmissionsDonutChart
           variant={variant ? EmissionsDonutChartVariants.horizontal : EmissionsDonutChartVariants.vertical}
