@@ -4,15 +4,33 @@ import { Card, EmissionsDonutChart, EmissionsDonutChartVariants, ErrorFallback, 
 import { forEach, forOwn, isArray, max } from 'lodash';
 import { withErrorBoundary } from 'react-error-boundary';
 import clsx from 'clsx';
-import { EmissionsScopesCardVariants } from '@coldpbc/enums';
+import { ButtonTypes, EmissionsScopesCardVariants } from '@coldpbc/enums';
 import { ChartData } from 'chart.js';
 import { HexColors } from '@coldpbc/themes';
 import { formatTonnes } from '@coldpbc/lib';
 import { isAxiosError } from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const _EmissionsScopesCard = ({ variant, title }: { variant?: EmissionsScopesCardVariants; title?: string }) => {
   const { data, selectedFacility, selectedYear } = useContext(ColdEmissionsContext);
   const { emissions, uniqueScopes } = data;
+  const navigate = useNavigate();
+
+  const getCTAs = () => {
+    if (title === 'Emissions Overview') {
+      return [
+        {
+          text: 'Learn More',
+          action: () => {
+            navigate('/reports/carbon_footprint');
+          },
+          variant: ButtonTypes.secondary,
+        },
+      ];
+    } else {
+      return [];
+    }
+  };
 
   const scopeColors: {
     [key: number]: 'lightblue' | 'purple' | 'green' | 'teal';
@@ -44,7 +62,7 @@ const _EmissionsScopesCard = ({ variant, title }: { variant?: EmissionsScopesCar
 
   if (isAxiosError(emissions) && emissions?.response?.status === 404) {
     return (
-      <Card title={'Emissions Overview'}>
+      <Card title={title} ctas={getCTAs()}>
         <EmissionsDonutChart
           isEmptyData={true}
           subcategoryTotals={[]}
@@ -148,7 +166,7 @@ const _EmissionsScopesCard = ({ variant, title }: { variant?: EmissionsScopesCar
   });
 
   return (
-    <Card glow={true} title={title}>
+    <Card glow={true} title={title} ctas={getCTAs()}>
       {variant ? (
         <EmissionsDonutChart
           variant={variant ? EmissionsDonutChartVariants.horizontal : EmissionsDonutChartVariants.vertical}
