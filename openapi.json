@@ -187,7 +187,7 @@
                 ]
             }
         },
-        "/organizations/testOrgs": {
+        "/test": {
             "delete": {
                 "operationId": "DeleteTestOrgs",
                 "summary": "Delete Test Organizations",
@@ -1951,7 +1951,7 @@
         },
         "/organizations/{orgId}/facilities": {
             "get": {
-                "operationId": "FacilitiesController_getLocations",
+                "operationId": "FacilitiesController_getFacilities",
                 "parameters": [
                     {
                         "name": "orgId",
@@ -2415,14 +2415,14 @@
                 ],
                 "requestBody": {
                     "required": true,
-                    "description": "Integration Body Schema: You can pass location metadata to create a location if you do not have a location id. You can also pass a timeout number in milliseconds to override the default timeout for the service definition to define how long to wait before sending an async request",
+                    "description": "Integration Body Schema: You can pass facility metadata to create a facility if you do not have a facility id. You can also pass a timeout number in milliseconds to override the default timeout for the service definition to define how long to wait before sending an async request",
                     "content": {
                         "application/json": {
                             "schema": {
                                 "type": "object",
                                 "example": {
                                     "service_definition_id": "{{test_service_definition_id}}",
-                                    "location_id": "{{test_location_id}}",
+                                    "facility_id": "{{test_facility_id}}",
                                     "metadata": {
                                         "name": "Headquarters",
                                         "address": "{{$randomStreetAddress}}",
@@ -2469,14 +2469,14 @@
                 ],
                 "requestBody": {
                     "required": true,
-                    "description": "Integration Body Schema: You can pass location metadata to create a location if you do not have a location id. You can also pass a timeout number in milliseconds to override the default timeout for the service definition to define how long to wait before sending an async request",
+                    "description": "Integration Body Schema: You can pass facility metadata to create a facility if you do not have a facility id. You can also pass a timeout number in milliseconds to override the default timeout for the service definition to define how long to wait before sending an async request",
                     "content": {
                         "application/json": {
                             "schema": {
                                 "type": "object",
                                 "example": {
                                     "service_definition_id": "{{test_service_definition_id}}",
-                                    "location_id": "{{test_location_id}}",
+                                    "facility_id": "{{test_facility_id}}",
                                     "metadata": {
                                         "name": "Headquarters",
                                         "address": "{{$randomStreetAddress}}",
@@ -2533,14 +2533,14 @@
                 ],
                 "requestBody": {
                     "required": true,
-                    "description": "Integration Body Schema: You can pass location metadata to create a location if you do not have a location id. You can also pass a timeout number in milliseconds to override the default timeout for the service definition to define how long to wait before sending an async request",
+                    "description": "Integration Body Schema: You can pass facility metadata to create a facility if you do not have a facility id. You can also pass a timeout number in milliseconds to override the default timeout for the service definition to define how long to wait before sending an async request",
                     "content": {
                         "application/json": {
                             "schema": {
                                 "type": "object",
                                 "example": {
                                     "service_definition_id": "{{test_service_definition_id}}",
-                                    "location_id": "{{test_location_id}}",
+                                    "facility_id": "{{test_facility_id}}",
                                     "metadata": {
                                         "name": "Headquarters",
                                         "address": "{{$randomStreetAddress}}",
@@ -3073,6 +3073,200 @@
                 ],
                 "responses": {
                     "201": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/footprints": {
+            "get": {
+                "operationId": "FootprintsController_findAll",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/organizations/{orgId}/footprints": {
+            "post": {
+                "operationId": "FootprintsController_create",
+                "parameters": [
+                    {
+                        "name": "orgId",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": ""
+                    }
+                }
+            },
+            "get": {
+                "operationId": "FootprintsController_findAllByOrg",
+                "parameters": [
+                    {
+                        "name": "orgId",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/organizations/{orgId}/facilities/{facId}/footprints": {
+            "get": {
+                "operationId": "FootprintsController_findAllByOrgFacility",
+                "parameters": [
+                    {
+                        "name": "orgId",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "facId",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/organizations/{orgId}/facilities/{facId}/footprints/{id}": {
+            "get": {
+                "operationId": "FootprintsController_findOne",
+                "parameters": [
+                    {
+                        "name": "orgId",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "facId",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            },
+            "patch": {
+                "operationId": "FootprintsController_update",
+                "parameters": [
+                    {
+                        "name": "orgId",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "facId",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            },
+            "delete": {
+                "operationId": "FootprintsController_remove",
+                "parameters": [
+                    {
+                        "name": "orgId",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "facId",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
                         "description": ""
                     }
                 }

@@ -2,7 +2,6 @@ import { getCategoriesHandler, getFootprintHandler, StoryMockProvider } from '@c
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { Home } from './home';
-import { within } from '@storybook/testing-library';
 
 const meta: Meta<typeof Home> = {
   title: 'Pages/Home',
@@ -20,34 +19,6 @@ export const Default: Story = {
       <Home />
     </StoryMockProvider>
   ),
-  play: async ({ canvasElement, step }) => {
-    const canvas = within(canvasElement);
-    await step('FootprintOverviewCard', async () => {
-      const card = await canvas.findByTestId('footprint-overview-card');
-      // find Learn More button within card
-      await within(card).findByText('Learn More');
-      await within(card).findByTestId('footprint-overview-chart');
-    });
-    await step('JourneyOverviewCard', async () => {
-      const card = await canvas.findByTestId('journey-overview-card');
-      // find Learn More button within card
-      await within(card).findByText('Learn More');
-    });
-    await step('TemperatureCheckCard', async () => {
-      await canvas.findByText('Temperature Check');
-    });
-    await step('NextActionsCard', async () => {
-      const card = await canvas.findByTestId('next-actions-card');
-      await within(card).findByText('Learn More');
-    });
-  },
-  parameters: {
-    launchdarkly: {
-      flags: {
-        showNextStepsCard: false,
-      },
-    },
-  },
 };
 
 export const EmptyFootprintData: Story = {

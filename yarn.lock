@@ -17638,7 +17638,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:^1.4.0, axios@npm:^1.5.1, axios@npm:^1.6.5":
+"axios@npm:^1.5.1, axios@npm:^1.6.5":
   version: 1.6.7
   resolution: "axios@npm:1.6.7"
   dependencies:
@@ -17646,6 +17646,17 @@ __metadata:
     form-data: "npm:^4.0.0"
     proxy-from-env: "npm:^1.1.0"
   checksum: 10/a1932b089ece759cd261f175d9ebf4d41c8994cf0c0767cda86055c7a19bcfdade8ae3464bf4cec4c8b142f4a657dc664fb77a41855e8376cf38b86d7a86518f
+  languageName: node
+  linkType: hard
+
+"axios@npm:^1.6.8":
+  version: 1.6.8
+  resolution: "axios@npm:1.6.8"
+  dependencies:
+    follow-redirects: "npm:^1.15.6"
+    form-data: "npm:^4.0.0"
+    proxy-from-env: "npm:^1.1.0"
+  checksum: 10/3f9a79eaf1d159544fca9576261ff867cbbff64ed30017848e4210e49f3b01e97cf416390150e6fdf6633f336cd43dc1151f890bbd09c3c01ad60bb0891eee63
   languageName: node
   linkType: hard
 
@@ -19203,6 +19214,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"chartjs-plugin-datalabels@npm:^2.2.0":
+  version: 2.2.0
+  resolution: "chartjs-plugin-datalabels@npm:2.2.0"
+  peerDependencies:
+    chart.js: ">=3.0.0"
+  checksum: 10/e87c2f30d4f6f84b4b1a28c00d1b032d0100f87f8f296a498507047bd2f7fe98eced583a2c09f30e55806e79a0ca7e0db027cc3bed9b27688980e55701a6945f
+  languageName: node
+  linkType: hard
+
 "check-error@npm:^1.0.3":
   version: 1.0.3
   resolution: "check-error@npm:1.0.3"
@@ -19823,7 +19843,7 @@ __metadata:
     autoprefixer: "npm:^10.4.14"
     aws-iot-device-sdk: "npm:^2.2.13"
     aws-sdk: "npm:^2.1533.0"
-    axios: "npm:^1.4.0"
+    axios: "npm:^1.6.8"
     babel-loader: "npm:^9.1.2"
     babel-plugin-named-exports-order: "npm:^0.0.2"
     barrelsby: "npm:^2.8.1"
@@ -19833,6 +19853,7 @@ __metadata:
     cache-manager-ioredis-yet: "npm:^1.2.2"
     cache-manager-redis-yet: "npm:^4.1.2"
     chart.js: "npm:^4.4.0"
+    chartjs-plugin-datalabels: "npm:^2.2.0"
     chromatic: "npm:^7.1.0"
     class-transformer: "npm:^0.5.1"
     class-validator: "npm:^0.14.0"
@@ -19863,6 +19884,7 @@ __metadata:
     freeplay: "npm:^0.2.44"
     global: "npm:^4.4.0"
     got: "npm:^14.0.0"
+    hex-color-opacity: "npm:^0.4.2"
     hot-shots: "npm:^10.0.0"
     husky: "npm:^8.0.3"
     jest: "npm:^29.6.4"
@@ -24936,6 +24958,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"follow-redirects@npm:^1.15.6":
+  version: 1.15.6
+  resolution: "follow-redirects@npm:1.15.6"
+  peerDependenciesMeta:
+    debug:
+      optional: true
+  checksum: 10/70c7612c4cab18e546e36b991bbf8009a1a41cf85354afe04b113d1117569abf760269409cb3eb842d9f7b03d62826687086b081c566ea7b1e6613cf29030bf7
+  languageName: node
+  linkType: hard
+
 "for-each@npm:^0.3.3":
   version: 0.3.3
   resolution: "for-each@npm:0.3.3"
@@ -26789,6 +26821,13 @@ __metadata:
     glob: "npm:^7.1.6"
     readable-stream: "npm:^3.6.0"
   checksum: 10/97a14bef913036d74f2c60727d186bc2758b6b2f6239f4c4ea410e2cdbc5287249ddaf4b52c0e7e5c9d5fd179c9aeac51fc1f346ad5e2e5f7cacbd4fc6ba2281
+  languageName: node
+  linkType: hard
+
+"hex-color-opacity@npm:^0.4.2":
+  version: 0.4.2
+  resolution: "hex-color-opacity@npm:0.4.2"
+  checksum: 10/991e839a7cae2e408a29776f0f3ce9259bb215efc7eeda0b74e78d669544e4cb4d2d220816654961241a2da735a5ab6f6d6f8b630b37342b766f6e4bfe571468
   languageName: node
   linkType: hard
 

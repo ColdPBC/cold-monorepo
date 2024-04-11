@@ -75,7 +75,7 @@ const _ComplianceSurveyRightNav = (props: ComplianceSurveyRightNavProps) => {
       index = Object.keys(questions).indexOf(key) + 1;
     }
 
-    let prompt = question.corresponding_question ? question.corresponding_question : question.prompt;
+    let prompt = question.question_summary ? question.question_summary : question.prompt;
     let hasDocumentLink = false;
 
     if (inSavedQuestions) {
