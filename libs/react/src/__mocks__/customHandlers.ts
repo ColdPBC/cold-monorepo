@@ -698,9 +698,9 @@ export const getAssessmentsHandler = {
       return res(ctx.json(compliance));
     }),
     rest.get(getApiUrl('/organizations/:orgId/surveys/:name'), (req, res, ctx) => {
-      const survey = getAssessmentSurveyWithProgressMock();
-
       const { name } = req.params;
+      const survey = getAssessmentSurveyWithProgressMock(name as string);
+
       if (name === 'rei_pia_2024_2') survey.name = 'rei_pia_2024_2';
 
       return res(ctx.json(survey));
@@ -712,9 +712,9 @@ export const getAssessmentsHandler = {
       return res(ctx.json([compliance[0]]));
     }),
     rest.get(getApiUrl('/organizations/:orgId/surveys/:name'), (req, res, ctx) => {
-      const survey = getAssessmentSurveyWithProgressMock();
-
       const { name } = req.params;
+      const survey = getAssessmentSurveyWithProgressMock(name as string);
+
       if (name === 'rei_pia_2024_2') survey.name = 'rei_pia_2024_2';
 
       return res(ctx.json(survey));
@@ -723,6 +723,20 @@ export const getAssessmentsHandler = {
   empty: [
     rest.get(getApiUrl('/compliance_definitions/organizations/:orgId'), (req, res, ctx) => {
       return res(ctx.json([]));
+    }),
+  ],
+  scoreBasedCompliance: [
+    rest.get(getApiUrl('/compliance_definitions/organizations/:orgId'), (req, res, ctx) => {
+      const complianceSet = getOrganizationComplianceMockByName('b_corp_2024');
+
+      return res(ctx.json([complianceSet]));
+    }),
+    rest.get(getApiUrl('/organizations/:orgId/surveys/:name'), (req, res, ctx) => {
+      const { name } = req.params;
+
+      const survey = getAssessmentSurveyWithProgressMock(name as string);
+
+      return res(ctx.json(survey));
     }),
   ],
 };
