@@ -20,7 +20,7 @@ async function bootstrap(instance) {
 
   //app.useGlobalPipes(new ResourceValidationPipe());
   const getOrigin = () => {
-    switch (process.env['NODE_ENV']) {
+    switch (process.env['DD_ENV']) {
       case 'production':
         return 'https://app.coldclimate.com';
       case 'staging':

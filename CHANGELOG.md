@@ -1,12 +1,29 @@
-# [1.192.0-COLD-653.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.191.1...v1.192.0-COLD-653.1) (2024-04-09)
+## [1.191.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.191.3...v1.191.4) (2024-04-10)
 
+### Bug Fixes
 
-### Features
+* use correct field for question summary ([e839520](https://github.com/ColdPBC/cold-monorepo/commit/e839520f7236e8091c193ed54f17bdd3b97b1638))
 
-* add progress bar for assessments for compliances that are score based ([068da70](https://github.com/ColdPBC/cold-monorepo/commit/068da7087ac459994c70e00b5d0ac7c395f77e25))
+## [1.191.4-cold-667.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.191.3...v1.191.4-cold-667.1) (2024-04-10)
+
+### Bug Fixes
+
+* use correct field for question summary ([e839520](https://github.com/ColdPBC/cold-monorepo/commit/e839520f7236e8091c193ed54f17bdd3b97b1638))
+
+## [1.191.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.191.2...v1.191.3) (2024-04-10)
+
+### Bug Fixes
+
+* delete env file for api ([8ce64df](https://github.com/ColdPBC/cold-monorepo/commit/8ce64df9ac324d5dc8e7989d7b7a52be265d28a9))
+* use different env variable for CORS resolution ([7d5a990](https://github.com/ColdPBC/cold-monorepo/commit/7d5a9909f61447e7c998cb5143a42e03ef15ab6b))
+
+## [1.191.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.191.1...v1.191.2) (2024-04-10)
+
+### Bug Fixes
+
+* delete env.staging file ([7bc1e2f](https://github.com/ColdPBC/cold-monorepo/commit/7bc1e2f236fd6db76d91de18f68fe0e6938409b4))
 
 ## [1.191.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.191.0...v1.191.1) (2024-04-09)
-
 
 ### Bug Fixes
 
@@ -14,14 +31,12 @@
 
 # [1.191.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.190.0...v1.191.0) (2024-04-09)
 
-
 ### Features
 
 * added bar highlighting and other changes when a year/bar is selected ([49cec73](https://github.com/ColdPBC/cold-monorepo/commit/49cec73846dbee000d7692dac0e4fd36efac6e75))
 * update endpoint and emissions payload type ([aa725cd](https://github.com/ColdPBC/cold-monorepo/commit/aa725cdfa72a350f86820b97edeeb20c36eb553c))
 
 # [1.190.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.189.0...v1.190.0) (2024-04-09)
-
 
 ### Features
 
@@ -33,7 +48,6 @@
 
 # [1.189.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.188.0...v1.189.0) (2024-04-09)
 
-
 ### Features
 
 * update the language of our authentication errors ([27690b9](https://github.com/ColdPBC/cold-monorepo/commit/27690b913b38eebfd85d2df9713fc4ce39be67d5))
@@ -41,13 +55,11 @@
 
 # [1.188.0-cold-708.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.187.0...v1.188.0-cold-708.1) (2024-04-09)
 
-
 ### Features
 
 * update the language of our authentication errors ([27690b9](https://github.com/ColdPBC/cold-monorepo/commit/27690b913b38eebfd85d2df9713fc4ce39be67d5))
 
 # [1.187.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.186.0...v1.187.0) (2024-04-05)
-
 
 ### Features
 
@@ -56,11 +68,9 @@
 
 # [1.186.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.185.2...v1.186.0) (2024-04-05)
 
-
 ### Bug Fixes
 
 * updated swagger decorators ([3ab05fe](https://github.com/ColdPBC/cold-monorepo/commit/3ab05fe4ae857974e09fd3514f01e2227c32b76a))
-
 
 ### Features
 
@@ -68,9 +78,7 @@
 * add ghg sub-scopes ([faa206f](https://github.com/ColdPBC/cold-monorepo/commit/faa206f3ed689988792710f019def40d114e4a78))
 * add ghg sub-scopes ([5a9433a](https://github.com/ColdPBC/cold-monorepo/commit/5a9433a62564d45cb911e01871189b0647fd3fd1))
 
-
 ## [1.185.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.185.1...v1.185.2) (2024-04-04)
-
 
 ### Bug Fixes
 
