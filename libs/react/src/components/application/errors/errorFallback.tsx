@@ -1,21 +1,18 @@
 import React from 'react';
-import { ErrorType } from '../../../enums/errors';
+import { ErrorType } from '@coldpbc/enums';
 import { useColdContext } from '@coldpbc/hooks';
+import { FallbackProps } from 'react-error-boundary';
 
-export type ErrorFallbackProps = {
-  error: Error;
-};
-
-export const ErrorFallback = ({ error }: ErrorFallbackProps) => {
+export const ErrorFallback = (props: FallbackProps) => {
   const { logError, logBrowser } = useColdContext();
-  logError(error, ErrorType.RenderingError);
+  logError(props.error, ErrorType.RenderingError);
   logBrowser(
     'Error rendering component',
     'error',
     {
-      error: { ...error },
+      props,
     },
-    error,
+    props.error,
   );
   return <div></div>;
 };

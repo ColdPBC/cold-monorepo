@@ -90,7 +90,7 @@ export interface SurveySectionFollowUpType {
   max_score?: number;
   saved?: boolean;
   document_link?: string;
-  corresponding_question?: string;
+  question_summary?: string;
 }
 
 export interface SurveyPayloadType {
@@ -145,6 +145,8 @@ export interface ComplianceSurveyPayloadType {
     submission_date?: string;
     due_date?: string;
     term?: string;
+    target_score?: number;
+    compliance_type?: string;
   };
   progress: ComplianceSurveyProgressType;
   description: string;

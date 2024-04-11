@@ -1,18 +1,11 @@
 import { PropsWithChildren } from 'react';
 import { ChartData } from 'chart.js';
-import useSWR from 'swr';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { footprintSubcategoryColors, HexColors } from '@coldpbc/themes';
 import { forEach, isArray, some } from 'lodash';
-import {
-  EmissionsDonutChart,
-  EmissionsDonutChartVariants,
-  SubCategoryTotal,
-} from '../../atoms/emissionsDonutChart/emissionsDonutChart';
+import { EmissionsDonutChart, EmissionsDonutChartVariants, ErrorFallback, SubCategoryTotal } from '@coldpbc/components';
 import { withErrorBoundary } from 'react-error-boundary';
-import { ErrorFallback } from '../../application/errors/errorFallback';
-import { useOrgSWR } from '../../../hooks/useOrgSWR';
-import { useColdContext } from '@coldpbc/hooks';
+import { useColdContext, useOrgSWR } from '@coldpbc/hooks';
 import { ErrorType } from '@coldpbc/enums';
 
 const MAX_CATEGORIES = 4;
@@ -32,16 +25,11 @@ export interface FootprintOverviewChartProps {
 
 const gapStylingConstant = 100;
 
-function _FootprintOverviewChart(
-  props: PropsWithChildren<FootprintOverviewChartProps>,
-) {
+function _FootprintOverviewChart(props: PropsWithChildren<FootprintOverviewChartProps>) {
   const { variant = EmissionsDonutChartVariants.horizontal, period } = props;
 
   // Get footprint data from SWR
-  const { data, isLoading, error } = useOrgSWR<any>(
-    ['/categories/company_decarbonization', 'GET'],
-    axiosFetcher,
-  );
+  const { data, isLoading, error } = useOrgSWR<any>(['/categories/company_decarbonization', 'GET'], axiosFetcher);
 
   const { logError } = useColdContext();
 
@@ -55,28 +43,21 @@ function _FootprintOverviewChart(
   const isEmptyFootprintData =
     !isLoading &&
     !some(data?.subcategories, (subcategory: any) =>
-      some(
-        subcategory.activities,
-        (activity: any) =>
-          activity.footprint &&
-          activity.footprint?.[props.period]?.value !== undefined,
-      ),
+      some(subcategory.activities, (activity: any) => activity.footprint && activity.footprint?.[props.period]?.value !== undefined),
     );
 
   // Add up all the information from the footprint
   const subcategoryTotals: SubCategoryTotal[] = [];
   let totalFootprint = 0;
-  Object.keys(data?.subcategories ?? {}).forEach((subcategoryKey) => {
+  Object.keys(data?.subcategories ?? {}).forEach(subcategoryKey => {
     const subcategory = data.subcategories[subcategoryKey];
     let value = 0;
-    const color =
-      HexColors[footprintSubcategoryColors[subcategoryKey]]?.DEFAULT ||
-      HexColors.primary.DEFAULT;
+    const color = HexColors[footprintSubcategoryColors[subcategoryKey]]?.DEFAULT || HexColors.primary.DEFAULT;
 
     let nullFootprint = true;
 
     if (subcategory?.activities) {
-      forEach(subcategory.activities, (activity) => {
+      forEach(subcategory.activities, activity => {
         if (activity?.footprint && period in activity.footprint) {
           const footprint = activity.footprint[period];
           if (footprint && footprint.value !== null) {
@@ -144,22 +125,16 @@ function _FootprintOverviewChart(
       subcategoryTotals={subcategoryTotals}
       hoverColorArray={subcategoryTotals
         .sort((a, b) => b.value - a.value)
-        .map((subcategory) => {
-          return (
-            HexColors[footprintSubcategoryColors[subcategory.subcategoryKey]]
-              ?.DEFAULT_BRIGHTEN || HexColors.primary.DEFAULT
-          );
+        .map(subcategory => {
+          return HexColors[footprintSubcategoryColors[subcategory.subcategoryKey]]?.DEFAULT_BRIGHTEN || HexColors.primary.DEFAULT;
         })}
     />
   );
 }
 
-export const FootprintOverviewChart = withErrorBoundary(
-  _FootprintOverviewChart,
-  {
-    FallbackComponent: (props) => <ErrorFallback {...props} />,
-    onError: (error, info) => {
-      console.error('Error occurred in FootprintOverviewChart: ', error);
-    },
+export const FootprintOverviewChart = withErrorBoundary(_FootprintOverviewChart, {
+  FallbackComponent: props => <ErrorFallback {...props} />,
+  onError: (error, info) => {
+    console.error('Error occurred in FootprintOverviewChart: ', error);
   },
-);
+});

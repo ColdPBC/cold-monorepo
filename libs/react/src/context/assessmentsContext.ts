@@ -1,11 +1,14 @@
 import { createContext } from 'react';
-import {InputOption, OrgCompliance} from "@coldpbc/interfaces";
+import { ComplianceSurveyProgressType, OrgCompliance } from '@coldpbc/interfaces';
 
 export interface AssessmentsContextData {
   [compliance_name: string]: {
-    compliance?: OrgCompliance,
-    section_types: { [section_type_name: string]: { score: number, max: number, percentage?: number } }
-  }
+    compliance?: OrgCompliance;
+    section_types: { [section_type_name: string]: { score: number; max: number; percentage?: number } };
+    progress_data: ComplianceSurveyProgressType;
+    compliance_type?: string;
+    target_score?: number;
+  };
 }
 
 export interface AssessmentsContextType {
@@ -17,6 +20,5 @@ export interface AssessmentsContextType {
 export const AssessmentsContext = createContext<AssessmentsContextType>({
   currentAssessment: '',
   setCurrentAssessment: () => {},
-  data: {}
+  data: {},
 });
-

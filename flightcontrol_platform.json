@@ -63,7 +63,7 @@
           },
           "sidecars": [
             {
-              "name": "cold-datadog-fc-production",
+              "name": "cold-datadog-openai-production",
               "image": "datadog/agent",
               "cpuAllotment": 0.5,
               "memoryAllotment": 0.25,
@@ -78,6 +78,9 @@
                 "DD_ENV": "production",
                 "NODE_ENV": "production",
                 "FC_ENV": "production",
+                "ECS_FARGATE": true,
+                "DD_OTLP_CONFIG_RECEIVER_PROTOCOLS_GRPC_ENDPOINT": "0.0.0.0:4317",
+                "DD_OTLP_CONFIG_RECEIVER_PROTOCOLS_HTTP_ENDPOINT": "0.0.0.0:4318",
                 "DD_API_KEY": {
                   "fromParameterStore": "fc.cold-api-fc.env.cold-production.8pr1zak.DD_API_KEY"
                 },
@@ -152,7 +155,7 @@
           },
           "sidecars": [
             {
-              "name": "sidecar-dd-climatiq-prod",
+              "name": "cold-datadog-climatiq-production",
               "image": "datadog/agent",
               "cpuAllotment": 0.5,
               "memoryAllotment": 0.25,
@@ -165,6 +168,9 @@
               ],
               "envVariables": {
                 "DD_SERVICE": "cold-datadog-production",
+                "ECS_FARGATE": true,
+                "DD_OTLP_CONFIG_RECEIVER_PROTOCOLS_GRPC_ENDPOINT": "0.0.0.0:4317",
+                "DD_OTLP_CONFIG_RECEIVER_PROTOCOLS_HTTP_ENDPOINT": "0.0.0.0:4318",
                 "DD_API_KEY": {
                   "fromParameterStore": "fc.cold-api-fc.env.cold-production.8pr1zak.DD_API_KEY"
                 },
@@ -242,7 +248,7 @@
           },
           "sidecars": [
             {
-              "name": "sidecar-dd-bayou-prod",
+              "name": "cold-datadog-bayou-production",
               "image": "datadog/agent",
               "cpuAllotment": 0.5,
               "memoryAllotment": 0.25,
@@ -255,6 +261,9 @@
               ],
               "envVariables": {
                 "DD_SERVICE": "cold-datadog-bayou-production",
+                "ECS_FARGATE": true,
+                "DD_OTLP_CONFIG_RECEIVER_PROTOCOLS_GRPC_ENDPOINT": "0.0.0.0:4317",
+                "DD_OTLP_CONFIG_RECEIVER_PROTOCOLS_HTTP_ENDPOINT": "0.0.0.0:4318",
                 "DD_API_KEY": {
                   "fromParameterStore": "fc.cold-api-fc.env.cold-production.8pr1zak.DD_API_KEY"
                 },
@@ -350,7 +359,7 @@
           },
           "sidecars": [
             {
-              "name": "cold-datadog-fc-staging",
+              "name": "cold-datadog-openai-staging",
               "image": "datadog/agent",
               "cpuAllotment": 0.5,
               "memoryAllotment": 0.25,
@@ -364,6 +373,9 @@
               "envVariables": {
                 "DD_ENV": "staging",
                 "NODE_ENV": "staging",
+                "ECS_FARGATE": true,
+                "DD_OTLP_CONFIG_RECEIVER_PROTOCOLS_GRPC_ENDPOINT": "0.0.0.0:4317",
+                "DD_OTLP_CONFIG_RECEIVER_PROTOCOLS_HTTP_ENDPOINT": "0.0.0.0:4318",
                 "DD_AGENT_MAJOR_VERSION": "7",
                 "DD_LOG_LEVEL": "ERROR",
                 "DD_API_KEY": {
@@ -438,7 +450,7 @@
           },
           "sidecars": [
             {
-              "name": "sidecar-dd-climatiq-staging",
+              "name": "cold-datadog-climatiq-staging",
               "image": "datadog/agent",
               "cpuAllotment": 0.5,
               "memoryAllotment": 0.25,
@@ -450,7 +462,10 @@
                 5000
               ],
               "envVariables": {
-                "DD_SERVICE": "cold-datadog-staging",
+                "DD_SERVICE": "sidecar-dd-climatiq-staging",
+                "ECS_FARGATE": true,
+                "DD_OTLP_CONFIG_RECEIVER_PROTOCOLS_GRPC_ENDPOINT": "0.0.0.0:4317",
+                "DD_OTLP_CONFIG_RECEIVER_PROTOCOLS_HTTP_ENDPOINT": "0.0.0.0:4318",
                 "DD_API_KEY": {
                   "fromParameterStore": "fc.cold-api-fc.env.cold-production.8pr1zak.DD_API_KEY"
                 },
@@ -527,7 +542,7 @@
           },
           "sidecars": [
             {
-              "name": "sidecar-dd-bayou-staging",
+              "name": "cold-datadog-bayou-staging",
               "image": "datadog/agent",
               "cpuAllotment": 0.5,
               "memoryAllotment": 0.25,
@@ -540,6 +555,9 @@
               ],
               "envVariables": {
                 "DD_SERVICE": "cold-datadog-bayou-staging",
+                "ECS_FARGATE": true,
+                "DD_OTLP_CONFIG_RECEIVER_PROTOCOLS_GRPC_ENDPOINT": "0.0.0.0:4317",
+                "DD_OTLP_CONFIG_RECEIVER_PROTOCOLS_HTTP_ENDPOINT": "0.0.0.0:4318",
                 "DD_API_KEY": {
                   "fromParameterStore": "fc.cold-api-fc.env.cold-production.8pr1zak.DD_API_KEY"
                 },
@@ -639,7 +657,7 @@
           },
           "sidecars": [
             {
-              "name": "cold-datadog-fc-preview",
+              "name": "cold-datadog-openai-preview",
               "image": "datadog/agent",
               "cpuAllotment": 0.5,
               "memoryAllotment": 0.25,
@@ -653,6 +671,9 @@
               "envVariables": {
                 "DD_ENV": "test",
                 "NODE_ENV": "test",
+                "ECS_FARGATE": true,
+                "DD_OTLP_CONFIG_RECEIVER_PROTOCOLS_GRPC_ENDPOINT": "0.0.0.0:4317",
+                "DD_OTLP_CONFIG_RECEIVER_PROTOCOLS_HTTP_ENDPOINT": "0.0.0.0:4318",
                 "DD_AGENT_MAJOR_VERSION": "7",
                 "DD_LOG_LEVEL": "ERROR",
                 "DD_API_KEY": {
@@ -728,7 +749,7 @@
           },
           "sidecars": [
             {
-              "name": "sidecar-dd-climatiq-preview",
+              "name": "cold-datadog-climatiq-preview",
               "image": "datadog/agent",
               "cpuAllotment": 0.5,
               "memoryAllotment": 0.25,
@@ -741,6 +762,9 @@
               ],
               "envVariables": {
                 "DD_SERVICE": "cold-datadog-test",
+                "ECS_FARGATE": true,
+                "DD_OTLP_CONFIG_RECEIVER_PROTOCOLS_GRPC_ENDPOINT": "0.0.0.0:4317",
+                "DD_OTLP_CONFIG_RECEIVER_PROTOCOLS_HTTP_ENDPOINT": "0.0.0.0:4318",
                 "DD_API_KEY": {
                   "fromParameterStore": "fc.cold-api-fc.env.cold-production.8pr1zak.DD_API_KEY"
                 },
@@ -815,7 +839,7 @@
           },
           "sidecars": [
             {
-              "name": "cold-datadog-fc-preview",
+              "name": "cold-datadog-bayou-preview",
               "image": "datadog/agent",
               "cpuAllotment": 0.5,
               "memoryAllotment": 0.25,
@@ -829,6 +853,9 @@
               "envVariables": {
                 "DD_ENV": "test",
                 "NODE_ENV": "test",
+                "ECS_FARGATE": true,
+                "DD_OTLP_CONFIG_RECEIVER_PROTOCOLS_GRPC_ENDPOINT": "0.0.0.0:4317",
+                "DD_OTLP_CONFIG_RECEIVER_PROTOCOLS_HTTP_ENDPOINT": "0.0.0.0:4318",
                 "DD_AGENT_MAJOR_VERSION": "7",
                 "DD_LOG_LEVEL": "ERROR",
                 "DD_API_KEY": {
