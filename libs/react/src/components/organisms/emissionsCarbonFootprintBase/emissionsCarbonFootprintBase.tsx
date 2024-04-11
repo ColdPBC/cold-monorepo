@@ -54,15 +54,17 @@ export const EmissionsCarbonFootprintBase = () => {
   return (
     <AppContent title="Carbon Footprint">
       <div className={'flex flex-col space-y-[35px]'}>
-        <Select
-          options={facilityOptions}
-          value={selectedFacility.name}
-          onChange={input => {
-            setSelectedFacility(input);
-          }}
-          name={'Facility'}
-          className={'w-[255px]'}
-        />
+        {!isSingleYear && (
+          <Select
+            options={facilityOptions}
+            value={selectedFacility.name}
+            onChange={input => {
+              setSelectedFacility(input);
+            }}
+            name={'Facility'}
+            className={'w-[255px]'}
+          />
+        )}
         {!isSingleYear && <EmissionsYearlyCarbonFootprintChart />}
         <EmissionsCarbonFootprintCharts />
       </div>
