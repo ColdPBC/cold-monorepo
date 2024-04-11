@@ -1,10 +1,10 @@
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { JourneyDetailView } from './journeyDetailView';
-import {getAssessmentsHandler, StoryMockProvider} from '@coldpbc/mocks';
+import { getAssessmentsHandler, StoryMockProvider } from '@coldpbc/mocks';
 import { Card } from '../card';
 import { CenterColumnContent } from '../../organisms';
-import {ColdAssessmentsProvider} from "@coldpbc/providers";
+import { ColdAssessmentsProvider } from '@coldpbc/providers';
 
 const meta: Meta<typeof JourneyDetailView> = {
   title: 'Molecules/JourneyDetailView',
@@ -17,11 +17,11 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-  render: (args) => {
+  render: args => {
     return (
       <StoryMockProvider handlers={getAssessmentsHandler.default}>
         <ColdAssessmentsProvider>
-            <CenterColumnContent>
+          <CenterColumnContent>
             <Card>
               <JourneyDetailView />
             </Card>
@@ -33,7 +33,7 @@ export const Default: Story = {
 };
 
 export const SingleCompliance: Story = {
-  render: (args) => {
+  render: args => {
     return (
       <StoryMockProvider handlers={getAssessmentsHandler.single}>
         <ColdAssessmentsProvider>
@@ -49,7 +49,7 @@ export const SingleCompliance: Story = {
 };
 
 export const Empty: Story = {
-  render: (args) => {
+  render: args => {
     return (
       <StoryMockProvider handlers={getAssessmentsHandler.empty}>
         <ColdAssessmentsProvider>
@@ -64,3 +64,18 @@ export const Empty: Story = {
   },
 };
 
+export const ScoreBasedCompliance: Story = {
+  render: args => {
+    return (
+      <StoryMockProvider handlers={getAssessmentsHandler.scoreBasedCompliance}>
+        <ColdAssessmentsProvider>
+          <CenterColumnContent>
+            <Card>
+              <JourneyDetailView />
+            </Card>
+          </CenterColumnContent>
+        </ColdAssessmentsProvider>
+      </StoryMockProvider>
+    );
+  },
+};

@@ -6,7 +6,8 @@ export interface AssessmentsContextData {
     compliance?: OrgCompliance;
     section_types: { [section_type_name: string]: { score: number; max: number; percentage?: number } };
     progress_data: ComplianceSurveyProgressType;
-    survey_type: string;
+    compliance_type?: string;
+    target_score?: number;
   };
 }
 

@@ -59,7 +59,6 @@ export const Default: Story = {
                 },
               },
               progress_data: {
-                total_target_score: 80,
                 total_score: 10,
                 total_max_score: 117.35000000000008,
                 total_review: 0,
@@ -1448,7 +1447,8 @@ export const Default: Story = {
                   },
                 ],
               },
-              survey_type: 'SCOREBASED',
+              compliance_type: 'target_score',
+              target_score: 80,
             },
           },
         }}>

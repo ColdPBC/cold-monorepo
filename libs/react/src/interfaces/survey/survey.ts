@@ -142,6 +142,8 @@ export interface ComplianceSurveyPayloadType {
       [key: string]: ComplianceSurveySectionType;
     };
     submitted?: boolean;
+    target_score?: number;
+    compliance_type?: string;
   };
   progress: ComplianceSurveyProgressType;
   description: string;
@@ -151,7 +153,6 @@ export interface ComplianceSurveyPayloadType {
 
 export interface ComplianceSurveyProgressType {
   sections: Array<ComplianceSurveySectionProgressType>;
-  total_target_score: number;
   total_score: number;
   total_max_score: number;
   total_review: number;

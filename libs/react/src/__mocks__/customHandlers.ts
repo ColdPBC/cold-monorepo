@@ -725,6 +725,20 @@ export const getAssessmentsHandler = {
       return res(ctx.json([]));
     }),
   ],
+  scoreBasedCompliance: [
+    rest.get(getApiUrl('/compliance_definitions/organizations/:orgId'), (req, res, ctx) => {
+      const complianceSet = getOrganizationComplianceMockByName('b_corp_2024');
+
+      return res(ctx.json([complianceSet]));
+    }),
+    rest.get(getApiUrl('/organizations/:orgId/surveys/:name'), (req, res, ctx) => {
+      const { name } = req.params;
+
+      const survey = getAssessmentSurveyWithProgressMock(name as string);
+
+      return res(ctx.json(survey));
+    }),
+  ],
 };
 
 export const getEmissionsOverviewCardHandler = {

@@ -19,13 +19,15 @@ const _JourneyDetailView = () => {
     isEmptyData,
   });
 
+  const showTargetScore = data[currentAssessment]?.compliance_type === 'target_score' && data[currentAssessment]?.target_score !== undefined;
+
   return !isEmptyData ? (
     <Card title={data[currentAssessment].compliance?.compliance_definition.title} glow={false}>
       <JourneyComplianceSwitcher />
       <div data-testid={'journey-detail-view'}>
         <div className="flex flex-col space-y-10 mt-4 mb-10 mx-auto">
           <ComplianceTargetProgressBar />
-          {data[currentAssessment].survey_type === 'SCOREBASED' && (
+          {showTargetScore && (
             <div className={'flex flex-col text-tc-primary'}>
               <div className={'text-h4'}> Points by Section</div>
               <div className={'text-eyebrow'}>Current points by section of the questionnaire</div>

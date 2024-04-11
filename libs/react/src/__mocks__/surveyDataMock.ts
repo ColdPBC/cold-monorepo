@@ -11656,9 +11656,10 @@ export function getSurveysMock(): Array<SurveyPayloadType | ComplianceSurveyPayl
       },
       image_url: 'https://cold-public-assets.s3.amazonaws.com/images%2FReduce%20Packaging%20Footprint.png',
       intro_markdown: '',
+      target_score: 80,
+      compliance_type: 'target_score',
     },
     progress: {
-      total_target_score: 80,
       total_score: 10,
       total_max_score: 117.35000000000008,
       total_review: 0,
@@ -15540,7 +15541,6 @@ export function getAssessmentSurveyWithProgressMock(name: string): ComplianceSur
           intro_markdown: '',
         },
         progress: {
-          total_target_score: 50,
           total_score: 22.25,
           total_max_score: 64,
           total_review: 0,

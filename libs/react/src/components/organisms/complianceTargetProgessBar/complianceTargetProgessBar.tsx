@@ -5,11 +5,13 @@ import { HexColors } from '@coldpbc/themes';
 
 export const ComplianceTargetProgressBar = () => {
   const { currentAssessment, data } = useContext(AssessmentsContext);
-  if (!data[currentAssessment] || data[currentAssessment].survey_type !== 'SCOREBASED') return null;
+
+  if (!(data[currentAssessment] && data[currentAssessment].compliance_type !== 'target-score' && data[currentAssessment].target_score !== undefined)) return null;
+
   const progressData = data[currentAssessment].progress_data;
   const totalScore = Math.round(progressData.total_score);
   const totalMaxScore = Math.round(progressData.total_max_score);
-  const totalTargetScore = Math.round(progressData.total_target_score);
+  const totalTargetScore = Math.round(data[currentAssessment].target_score || 0);
   const complianceTitle = data[currentAssessment].compliance?.compliance_definition.title;
 
   return (

@@ -71,7 +71,8 @@ export const ColdAssessmentsProvider = ({ children }: PropsWithChildren) => {
                   compliance: complianceMap[surveyMap[survey.name]],
                   section_types: {},
                   progress_data: survey.progress,
-                  survey_type: survey.type,
+                  compliance_type: survey.definition.compliance_type,
+                  target_score: survey.definition.target_score,
                 };
               }
               if (!data[surveyMap[survey.name]].section_types[sectionType]) {
