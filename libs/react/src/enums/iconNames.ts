@@ -27,4 +27,5 @@ export enum IconNames {
   ColdFilledBookMarkIcon = 'ColdFilledBookMarkIcon',
   ColdDocumentUploadIcon = 'ColdDocumentUploadIcon',
   ColdFilledDocumentUploadIcon = 'ColdFilledDocumentUploadIcon',
+  ColdInvertedCheckmarkIcon = 'ColdInvertedCheckmarkIcon',
 }

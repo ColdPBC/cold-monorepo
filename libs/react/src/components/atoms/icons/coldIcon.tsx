@@ -20,6 +20,7 @@ import {
   ColdFootprintIcon,
   ColdFootprintIconTwo,
   ColdHomeIcon,
+  ColdInvertedCheckmarkIcon,
   ColdJourneyIcon,
   ColdReportIcon,
   ColdRightArrowIcon,
@@ -90,6 +91,8 @@ export const ColdIcon = (props: IconProps) => {
       return <ColdDocumentUploadIcon {...props} />;
     case IconNames.ColdFilledDocumentUploadIcon:
       return <ColdFilledDocumentUploadIcon {...props} />;
+    case IconNames.ColdInvertedCheckmarkIcon:
+      return <ColdInvertedCheckmarkIcon {...props} />;
     default:
     case IconNames.ColdSettingsIcon:
       return <ColdSettingsIcon {...props} />;
