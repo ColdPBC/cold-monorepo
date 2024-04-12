@@ -1,15 +1,36 @@
-import React, { useContext } from 'react';
+import React, { ReactNode, useContext } from 'react';
 import { ColdEmissionsContext } from '@coldpbc/context';
-import { Card, EmissionsDonutChart, EmissionsDonutChartVariants, ErrorFallback, SubCategoryTotal } from '@coldpbc/components';
-import { forEach, forOwn, isArray } from 'lodash';
+import { forEach, forOwn, isArray, max } from 'lodash';
+import { withErrorBoundary } from 'react-error-boundary';
+import { Card, EmissionsDonutChart, EmissionsDonutChartVariants, ErrorFallback, FootprintOverviewVerticalDetail, SubCategoryTotal } from '@coldpbc/components';
+import clsx from 'clsx';
+import { ButtonTypes, EmissionsScopesCardVariants } from '@coldpbc/enums';
 import { ChartData } from 'chart.js';
 import { HexColors } from '@coldpbc/themes';
-import { withErrorBoundary } from 'react-error-boundary';
+import { formatTonnes } from '@coldpbc/lib';
 import { isAxiosError } from 'axios';
+import { useNavigate } from 'react-router-dom';
 
-const _EmissionsAllScopesCard = ({ variant, title }: { variant?: EmissionsDonutChartVariants; title?: string }) => {
+const _EmissionsScopesCard = ({ variant, title }: { variant?: EmissionsScopesCardVariants; title?: string }) => {
   const { data, selectedFacility, selectedYear } = useContext(ColdEmissionsContext);
   const { emissions, uniqueScopes } = data;
+  const navigate = useNavigate();
+
+  const getCTAs = () => {
+    if (title === 'Emissions Overview') {
+      return [
+        {
+          text: 'Learn More',
+          action: () => {
+            navigate('/reports/carbon_footprint');
+          },
+          variant: ButtonTypes.secondary,
+        },
+      ];
+    } else {
+      return undefined;
+    }
+  };
 
   const scopeColors: {
     [key: number]: 'lightblue' | 'purple' | 'green' | 'teal';
@@ -41,7 +62,7 @@ const _EmissionsAllScopesCard = ({ variant, title }: { variant?: EmissionsDonutC
 
   if (isAxiosError(emissions) && emissions?.response?.status === 404) {
     return (
-      <Card title={'Emissions Overview'}>
+      <Card title={title} ctas={getCTAs()} glow={false}>
         <EmissionsDonutChart
           isEmptyData={true}
           subcategoryTotals={[]}
@@ -123,19 +144,50 @@ const _EmissionsAllScopesCard = ({ variant, title }: { variant?: EmissionsDonutC
     return null;
   }
 
+  const maxTotal = max(totalsSorted.map(t => t.value)) ?? 0;
+
+  const detailViews = Array<ReactNode>();
+
+  forEach(totalsSorted, total => {
+    const leftAlign = detailViews.length < 2;
+    const bottomAlign = detailViews.length === 1 || detailViews.length === 2;
+    detailViews.push(
+      <div
+        key={total.name}
+        className={clsx({
+          'absolute w-[210px] inline-flex gap-2 items-start': variant === EmissionsScopesCardVariants.horizontal,
+          'left-1/2 translate-x-[104px] justify-start': variant === EmissionsScopesCardVariants.horizontal && leftAlign,
+          'right-1/2 translate-x-[-104px] justify-end': variant === EmissionsScopesCardVariants.horizontal && !leftAlign,
+          'bottom-0': bottomAlign,
+        })}>
+        <FootprintOverviewVerticalDetail color={total.color} title={total.name} percent={total.percent ?? 0} emissions={total.value} percentWidth={total.value / maxTotal} />
+      </div>,
+    );
+  });
+
   return (
-    <Card title={`${title ? title : 'Scope 1, 2, 3'}`}>
-      <EmissionsDonutChart
-        variant={variant ? variant : EmissionsDonutChartVariants.vertical}
-        chartData={chartData}
-        subcategoryTotals={totalsSorted}
-        totalEmissions={totalEmissions}
-        hoverColorArray={hoverColorArray}
-      />
+    <Card glow={false} title={title} ctas={getCTAs()}>
+      {variant ? (
+        <EmissionsDonutChart
+          variant={variant ? EmissionsDonutChartVariants.horizontal : EmissionsDonutChartVariants.vertical}
+          chartData={chartData}
+          subcategoryTotals={totalsSorted}
+          totalEmissions={totalEmissions}
+          hoverColorArray={hoverColorArray}
+        />
+      ) : (
+        <div className={'flex flex-col w-full space-y-[24px]'}>
+          <div className={'w-full flex flex-row items-end font-extrabold text-left space-x-1'}>
+            <div className={'text-h1'}>{formatTonnes(totalEmissions)}</div>
+            <div className={`text-h3 ${totalEmissions >= 1000 ? 'mb-[8px]' : 'mb-[6px]'}`}>tCO2e</div>
+          </div>
+          <div className="w-full m-auto mt-2">{detailViews}</div>
+        </div>
+      )}
     </Card>
   );
 };
 
-export const EmissionsAllScopesCard = withErrorBoundary(_EmissionsAllScopesCard, {
+export const EmissionsScopesCard = withErrorBoundary(_EmissionsScopesCard, {
   FallbackComponent: props => <ErrorFallback {...props} />,
 });

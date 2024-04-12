@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from 'react';
+import React, { PropsWithChildren, useEffect } from 'react';
 import { useColdContext, useOrgSWR } from '@coldpbc/hooks';
 import { EmissionPayload, InputOption } from '@coldpbc/interfaces';
 import { axiosFetcher } from '@coldpbc/fetchers';
@@ -6,11 +6,12 @@ import { Spinner } from '@coldpbc/components';
 import { ErrorType } from '@coldpbc/enums';
 import { ColdEmissionsContext } from '@coldpbc/context';
 import { isAxiosError } from 'axios';
-import { find, forEach, map, uniq } from 'lodash';
+import { find, forEach, map, sortBy, uniq } from 'lodash';
 
 export const ColdEmissionsProvider = ({ children }: PropsWithChildren) => {
   const { logError, logBrowser } = useColdContext();
   const { data, isLoading, error } = useOrgSWR<EmissionPayload, any>(['/footprints', 'GET'], axiosFetcher);
+  const [isSingleYear, setIsSingleYear] = React.useState<boolean>(false);
   const [selectedFacility, setSelectedFacility] = React.useState<InputOption>({
     id: 0,
     name: 'All Facilities',
@@ -46,6 +47,37 @@ export const ColdEmissionsProvider = ({ children }: PropsWithChildren) => {
     value: 'all',
   });
 
+  useEffect(() => {
+    if (!data) return;
+    const yearSet = new Set<number>();
+    forEach(data, (facility, index) => {
+      if (yearSet.size > 1 || (selectedFacility.value !== 'all' && selectedFacility.value !== facility.facility_id.toString())) {
+        return;
+      }
+      forEach(facility.periods, (period, index) => {
+        yearSet.add(period.value);
+      });
+    });
+    if (yearSet.size === 1) {
+      setIsSingleYear(true);
+      const singleYearOption = find(yearOptions, { value: Array.from(yearSet)[0].toString() });
+      setSelectedYear(
+        singleYearOption || {
+          id: 0,
+          name: 'All Years',
+          value: 'all',
+        },
+      );
+    } else {
+      setIsSingleYear(false);
+      setSelectedYear({
+        id: 0,
+        name: 'All Years',
+        value: 'all',
+      });
+    }
+  }, [data, selectedFacility]);
+
   if (isLoading) {
     return <Spinner />;
   }
@@ -61,6 +93,8 @@ export const ColdEmissionsProvider = ({ children }: PropsWithChildren) => {
   if (isAxiosError(data) && data?.response?.status === 404) {
     logBrowser('No emissions data found', 'error', { data }, data);
   } else {
+    const yearSet = new Set<number>();
+
     forEach(data, (facility, index) => {
       facilityOptions.push({
         id: index + 1,
@@ -68,14 +102,7 @@ export const ColdEmissionsProvider = ({ children }: PropsWithChildren) => {
         value: facility.facility_id,
       });
       forEach(facility.periods, (period, index) => {
-        if (find(yearOptions, { value: period.value.toString() })) {
-          return;
-        }
-        yearOptions.push({
-          id: index,
-          name: `${period.value} Emissions`,
-          value: period.value.toString(),
-        });
+        yearSet.add(period.value);
       });
     });
 
@@ -88,6 +115,14 @@ export const ColdEmissionsProvider = ({ children }: PropsWithChildren) => {
         }).flat();
       }).flat(),
     ).sort();
+
+    forEach(sortBy(Array.from(yearSet)), (year, index) => {
+      yearOptions.push({
+        id: index + 1,
+        name: `${year} Emissions`,
+        value: year.toString(),
+      });
+    });
   }
 
   logBrowser('Emissions Provider', 'info', { data, uniqueScopes, facilityOptions, yearOptions });
@@ -105,6 +140,7 @@ export const ColdEmissionsProvider = ({ children }: PropsWithChildren) => {
         setSelectedYear: setSelectedYear,
         selectedFacility: selectedFacility,
         setSelectedFacility: setSelectedFacility,
+        isSingleYear: isSingleYear,
       }}>
       {children}
     </ColdEmissionsContext.Provider>

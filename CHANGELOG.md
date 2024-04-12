@@ -1,5 +1,44 @@
-## [1.191.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.191.3...v1.191.4) (2024-04-10)
+# [1.195.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.194.0...v1.195.0) (2024-04-12)
 
+
+### Features
+
+* show scopes percentage to 2 decimal points ([e1ad7fe](https://github.com/ColdPBC/cold-monorepo/commit/e1ad7feee4e3c022d2289a2a8778ce2740b6cd47))
+
+# [1.194.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.193.0...v1.194.0) (2024-04-11)
+
+
+### Bug Fixes
+
+* fix showing faciility selector when a single year ([72751f7](https://github.com/ColdPBC/cold-monorepo/commit/72751f72b6ecdc1e59c9ba7470573495f8709520))
+
+
+### Features
+
+* add learn more button to emissions overview card ([a6fe296](https://github.com/ColdPBC/cold-monorepo/commit/a6fe296328c3785a3b0e849ce8cb003411b0c241))
+* added sorting to year data for charts and updated stories ([41835bc](https://github.com/ColdPBC/cold-monorepo/commit/41835bcd6e58ff4036b44ab3d77f029cbe4a947c))
+* handle single year emissions ([767b1a0](https://github.com/ColdPBC/cold-monorepo/commit/767b1a04ad390b79e02638a2c67d3cd440fc840d))
+* remove header from emissions scope card ([f1623d4](https://github.com/ColdPBC/cold-monorepo/commit/f1623d489a2c396bccc4d9e7caf844494b6e5614))
+* update provider to use single year emissions ([426a76a](https://github.com/ColdPBC/cold-monorepo/commit/426a76aa6cd848a810f1c2ab95fe012fbb420112))
+
+# [1.193.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.192.0...v1.193.0) (2024-04-11)
+
+
+### Features
+
+* add progress bar for assessments for compliances that are score based ([068da70](https://github.com/ColdPBC/cold-monorepo/commit/068da7087ac459994c70e00b5d0ac7c395f77e25))
+* use correct data fields ([4fae29d](https://github.com/ColdPBC/cold-monorepo/commit/4fae29d2038dc230c34dd2ec8745492ce4d96c8a))
+
+# [1.192.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.191.4...v1.192.0) (2024-04-11)
+
+
+### Features
+
+* add throttle to swr mutates from MQTT messages to 10 per minute ([6991fea](https://github.com/ColdPBC/cold-monorepo/commit/6991feadd6b3f765aac85eedac7e9320024678fa))
+* added loading and disabling for automate button when kicked off ([9fa8325](https://github.com/ColdPBC/cold-monorepo/commit/9fa8325e7cf39aca37ceebff90938394a5273ba4))
+* adding keep previous data to compliance set survey call to prevent undefined during revalidation ([2d261d5](https://github.com/ColdPBC/cold-monorepo/commit/2d261d5a61ee3cb95e855fecc17b2542d1409f51))
+
+## [1.191.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.191.3...v1.191.4) (2024-04-10)
 
 ### Bug Fixes
 
@@ -7,13 +46,11 @@
 
 ## [1.191.4-cold-667.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.191.3...v1.191.4-cold-667.1) (2024-04-10)
 
-
 ### Bug Fixes
 
 * use correct field for question summary ([e839520](https://github.com/ColdPBC/cold-monorepo/commit/e839520f7236e8091c193ed54f17bdd3b97b1638))
 
 ## [1.191.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.191.2...v1.191.3) (2024-04-10)
-
 
 ### Bug Fixes
 
@@ -22,13 +59,11 @@
 
 ## [1.191.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.191.1...v1.191.2) (2024-04-10)
 
-
 ### Bug Fixes
 
 * delete env.staging file ([7bc1e2f](https://github.com/ColdPBC/cold-monorepo/commit/7bc1e2f236fd6db76d91de18f68fe0e6938409b4))
 
 ## [1.191.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.191.0...v1.191.1) (2024-04-09)
-
 
 ### Bug Fixes
 
@@ -36,14 +71,12 @@
 
 # [1.191.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.190.0...v1.191.0) (2024-04-09)
 
-
 ### Features
 
 * added bar highlighting and other changes when a year/bar is selected ([49cec73](https://github.com/ColdPBC/cold-monorepo/commit/49cec73846dbee000d7692dac0e4fd36efac6e75))
 * update endpoint and emissions payload type ([aa725cd](https://github.com/ColdPBC/cold-monorepo/commit/aa725cdfa72a350f86820b97edeeb20c36eb553c))
 
 # [1.190.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.189.0...v1.190.0) (2024-04-09)
-
 
 ### Features
 
@@ -55,7 +88,6 @@
 
 # [1.189.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.188.0...v1.189.0) (2024-04-09)
 
-
 ### Features
 
 * update the language of our authentication errors ([27690b9](https://github.com/ColdPBC/cold-monorepo/commit/27690b913b38eebfd85d2df9713fc4ce39be67d5))
@@ -63,13 +95,11 @@
 
 # [1.188.0-cold-708.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.187.0...v1.188.0-cold-708.1) (2024-04-09)
 
-
 ### Features
 
 * update the language of our authentication errors ([27690b9](https://github.com/ColdPBC/cold-monorepo/commit/27690b913b38eebfd85d2df9713fc4ce39be67d5))
 
 # [1.187.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.186.0...v1.187.0) (2024-04-05)
-
 
 ### Features
 
@@ -78,11 +108,9 @@
 
 # [1.186.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.185.2...v1.186.0) (2024-04-05)
 
-
 ### Bug Fixes
 
 * updated swagger decorators ([3ab05fe](https://github.com/ColdPBC/cold-monorepo/commit/3ab05fe4ae857974e09fd3514f01e2227c32b76a))
-
 
 ### Features
 
@@ -90,9 +118,7 @@
 * add ghg sub-scopes ([faa206f](https://github.com/ColdPBC/cold-monorepo/commit/faa206f3ed689988792710f019def40d114e4a78))
 * add ghg sub-scopes ([5a9433a](https://github.com/ColdPBC/cold-monorepo/commit/5a9433a62564d45cb911e01871189b0647fd3fd1))
 
-
 ## [1.185.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.185.1...v1.185.2) (2024-04-04)
-
 
 ### Bug Fixes
 
