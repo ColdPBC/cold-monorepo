@@ -53,9 +53,9 @@ export class FreeplayService extends BaseWorker implements OnModuleInit {
       inputs: promptVars,
       sessionInfo: getSessionInfo(session),
       promptInfo: prompt.promptInfo,
-      callInfo: getCallInfo(prompt.promptInfo, start, end),
+      callInfo: getCallInfo(prompt?.promptInfo, start, end),
       responseInfo: {
-        isComplete: 'stop_sequence' === openAIResponse.choices[0].stop,
+        isComplete: 'stop_sequence' === openAIResponse?.choices[0]?.stop,
       },
     });
 

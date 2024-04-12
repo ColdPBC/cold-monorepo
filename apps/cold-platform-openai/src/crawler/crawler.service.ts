@@ -27,6 +27,6 @@ export class CrawlerService extends BaseWorker {
   }
 
   async addCrawlPageJob(data: any) {
-    return await this.crawlerQueue.add('crawl_site', data);
+    return await this.crawlerQueue.add('crawl_site', data, { removeOnFail: true, removeOnComplete: true, attempts: 2 });
   }
 }

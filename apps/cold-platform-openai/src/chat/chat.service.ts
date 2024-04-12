@@ -118,20 +118,39 @@ export class ChatService extends BaseWorker implements OnModuleInit {
     return docs.join('  \n\n  ').substring(0, 3000);
   }
 
-  async askQuestion(question: string, company_name: string, user: AuthenticatedUser) {
+  async askQuestion(question: any, company_name: string, user: AuthenticatedUser) {
+    const organization = await this.prisma.organizations.findUnique({
+      where: { name: company_name },
+    });
+    this.prompts = await new PromptsService(this.darkly, 'chat', organization, this.prisma).initialize();
+
+    if (typeof question !== 'string') {
+      return await this.askSurveyQuestion(question, company_name, user);
+    }
+
     const start = new Date();
 
     const session = (await this.fp.createSession({
       question: question,
       organization: company_name,
       user: user.coldclimate_claims.email,
-      survey: null,
+      survey: 'chat',
     })) as FPSession;
 
-    let messages = (await this.cache.get(`openai:thread:${user.coldclimate_claims.id}`)) as ChatCompletionMessageParam[];
+    let messages = (await this.cache.get(`openai:thread:${company_name}:${user.coldclimate_claims.email}`)) as ChatCompletionMessageParam[];
 
     if (!messages) {
-      messages = [] as ChatCompletionMessageParam[];
+      messages = [
+        {
+          role: 'user',
+          content: `{ "prompt": ${question} }`,
+        },
+      ] as ChatCompletionMessageParam[];
+    } else {
+      messages.push({
+        role: 'user',
+        content: `{ "prompt": ${question} }`,
+      });
     }
 
     const context: any = [];
@@ -143,7 +162,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
     for (const message of messages) {
       context.push(message);
     }
-    const { rephrased_question, docs } = await this.getDocumentContent(messages, question, openai, company_name, user, context);
+    const { rephrased_question, docs } = await this.getDocumentContent(messages, { prompt: question }, openai, company_name, user, context);
 
     const vars = {
       component_prompt: '',
@@ -194,7 +213,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
     });
 
     // Save the thread to the cache
-    await this.cache.set(`openai:thread:${user.coldclimate_claims.email}`, messages, { ttl: 60 * 60 * 24 });
+    await this.cache.set(`openai:thread:${company_name}:${user.coldclimate_claims.email}`, messages, { ttl: 60 * 60 * 24 });
 
     this.logger.info(`${ai_response.answer != 'undefined' ? '✅ Answered' : '❌ Did NOT Answer'}`, {
       pinecone_query: rephrased_question,
@@ -208,7 +227,6 @@ export class ChatService extends BaseWorker implements OnModuleInit {
 
     const end = new Date();
     const recording = await this.fp.recordCompletion(session, vars, sanitized_base, response, start, end);
-
     this.logger.info(`Sending ${sanitized_base.promptInfo.templateName} run stats to FreePlay`, recording);
 
     return ai_response;
@@ -226,7 +244,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
     const start = new Date();
     try {
       // Get Chat History
-      let messages = (await this.cache.get(`openai:thread:${user.coldclimate_claims.id}`)) as ChatCompletionMessageParam[];
+      let messages = (await this.cache.get(`openai:thread:${user.coldclimate_claims.email}`)) as ChatCompletionMessageParam[];
 
       if (!messages) {
         messages = [] as ChatCompletionMessageParam[];
@@ -312,7 +330,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
       });
 
       // Save the thread to the cache
-      await this.cache.set(`openai:thread:${user.coldclimate_claims.email}`, messages, { ttl: 60 * 60 * 24 });
+      await this.cache.set(`openai:thread:${user.coldclimate_claims.email}`, messages, { ttl: 1000 * 60 * 60 * 24 });
 
       this.logger.info(`${ai_response.answer != 'undefined' ? '✅ Answered' : '❌ Did NOT Answer'} ${question.idx ? question.idx : 'additional_context'}`, {
         pinecone_query: rephrased_question,
@@ -380,6 +398,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
 
     let vectorSession;
     if (session) {
+      // create vector session
       vectorSession = (await this.fp.createSession({
         ...session.customMetadata,
       })) as FPSession;
@@ -445,7 +464,11 @@ export class ChatService extends BaseWorker implements OnModuleInit {
     }
 
     // Get the context content from the Pinecone index
-    const docs = (await this.pc.getContext(rephrased_question, indexName, indexName, 0.8, false)) as ScoredPineconeRecord[];
+    let docs = (await this.pc.getContext(rephrased_question, indexName, indexName, 0.8, false)) as ScoredPineconeRecord[];
+
+    if (docs.length < 1) {
+      docs = (await this.pc.getContext(question.prompt, indexName, indexName, 0.6, false)) as ScoredPineconeRecord[];
+    }
 
     const content = await this.extractTextFromDocument(docs as ScoredPineconeRecord<RecordMetadata>[]);
 

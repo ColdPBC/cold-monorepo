@@ -137,6 +137,10 @@ export class RabbitService extends BaseWorker {
           const pcResponse = await this.pc.createIndex(parsed.organization.name);
           const response = await this.appService.createAssistant(parsed);
           if (parsed.organization.website) {
+            let url = parsed.organization.website;
+            if (url.indexOf('/') === url.length - 1) {
+              url = url.slice(0, -1);
+            }
             await this.crawlerQueue.add(event, { url: parsed.organization.website, depth: 0, ...parsed });
           }
           return { pinecone: pcResponse, assistant: response };

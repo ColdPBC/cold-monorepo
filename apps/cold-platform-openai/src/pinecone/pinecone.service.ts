@@ -52,7 +52,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
     const embedding = await this.embedString(message);
 
     // Retrieve the matches for the embeddings from the specified namespace
-    const matches = await this.getMatchesFromEmbeddings(embedding, 3, namespace, indexName);
+    const matches = await this.getMatchesFromEmbeddings(embedding, 5, namespace, indexName);
 
     // Filter out the matches that have a score lower than the minimum score
     const qualifyingDocs = matches.filter(m => m.score && m.score > minScore);
@@ -371,13 +371,13 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
   async chunkedUpsert(index: Index, vectors: Array<PineconeRecord<RecordMetadata>>, namespace: string, chunkSize = 1000) {
     try {
       // Split the vectors into chunks
-      // const chunks = this.sliceIntoChunks<PineconeRecord>(vectors, chunkSize);
+      const chunks = this.sliceIntoChunks<PineconeRecord>(vectors, chunkSize);
 
       // Upsert each chunk of vectors into the index
       await Promise.allSettled(
-        vectors.map(async chunk => {
+        chunks.map(async chunk => {
           try {
-            await index.namespace(namespace).upsert([chunk]);
+            await index.namespace(namespace).upsert(chunk);
           } catch (e) {
             this.logger.error('Error upserting chunk', { error: e, namespace, chunk });
             throw e;

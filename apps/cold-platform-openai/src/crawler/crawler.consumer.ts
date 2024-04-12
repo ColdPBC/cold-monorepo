@@ -1,5 +1,5 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
-import { BaseWorker, DarklyService } from '@coldpbc/nest';
+import { BaseWorker, CacheService, DarklyService } from '@coldpbc/nest';
 import cheerio from 'cheerio';
 import { NodeHtmlMarkdown } from 'node-html-markdown';
 import { Process, Processor } from '@nestjs/bull';
@@ -7,6 +7,7 @@ import { Job } from 'bull';
 import { CrawlerService } from './crawler.service';
 import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
 import { PineconeService } from '../pinecone/pinecone.service';
+import { omit } from 'lodash';
 
 interface Page {
   url: string;
@@ -16,15 +17,12 @@ interface Page {
 @Injectable()
 @Processor('openai_crawler')
 export class CrawlerConsumer extends BaseWorker implements OnModuleInit {
-  private seen = new Set<string>();
-  private pages: Page[] = [];
-  private queue: { url: string; depth: number }[] = [];
   maxDepth: number;
   maxPages: number;
 
   chunkSize: number;
 
-  constructor(private readonly crawler: CrawlerService, private readonly pc: PineconeService, private readonly darkly: DarklyService) {
+  constructor(private readonly crawler: CrawlerService, private readonly pc: PineconeService, private readonly darkly: DarklyService, private readonly cache: CacheService) {
     super(CrawlerConsumer.name);
     this.maxDepth = 3;
     this.maxPages = 10;
@@ -46,66 +44,75 @@ export class CrawlerConsumer extends BaseWorker implements OnModuleInit {
     });
 
     try {
+      await this.addToSeen(job.data?.organization?.name, job.data.url);
+
       const index = await this.pc.getIndex(job.data.organization.name);
 
-      // Add the start URL to the queue
-      //this.addToQueue(job.data.url);
+      // Extract hostname from URL
       const urlParts = new URL(job.data.url);
       const hostname = urlParts.hostname;
 
-      this.logger.info('Added start URL to queue', job.data.url);
-      // While there are URLs in the queue and we haven't reached the maximum number of pages...
-      while (await this.shouldContinueCrawling(job.id)) {
-        // Dequeue the next URL and depth
-        //const { url, depth } = this.queue.shift()!;
+      // Fetch the HTML
+      const html = await this.fetchPage(job.data.url);
+      if (!html) {
+        return {};
+      }
 
-        // If the depth is too great or we've already seen this URL, skip it
-        if (this.isAlreadySeen(job.data.url)) {
-          job.log(`Skipping URL ${job.data.url}`);
-          return {};
+      // Extract new URLs from the HTML
+      const newURLS = this.extractUrls(html, job.data?.url);
+      // loop through the newly discovered URLs
+      for (const newURL of newURLS) {
+        // skip if we've already seen this URL
+        if (await this.isAlreadySeen(job.data?.organization?.name, newURL)) {
+          continue;
         }
-        // Add the URL to the set of seen URLs
-        this.seen.add(job.data.url);
 
-        // Fetch the page HTML
-        const html = await this.fetchPage(job.data.url);
-        if (!html) continue;
+        // If the URL is on the same domain, add it to the queue
+        const newURLParts = new URL(newURL);
+        if (newURLParts.hostname === hostname) {
+          const pjob = await this.crawler.addCrawlPageJob({
+            url: newURL,
+            depth: 0,
+            parent: job.id,
+            ...omit(job.data, ['url']),
+          });
 
-        // Parse the HTML and add the page to the list of crawled pages
-        const documents = await htmlSplitter.createDocuments([this.parseHtml(html)]);
-
-        const vectors = await Promise.all(
-          documents.flat().map(page =>
-            this.pc.embedWebContent(page, {
-              organization: job.data.organization.name,
-              type: 'webpage',
-              url: job.data.url,
-            }),
-          ),
-        );
-        await this.pc.chunkedUpsert(index, vectors, job.data.organization.name);
-
-        this.logger.info('indexed page', job.data.url);
-
-        const newURLS = this.extractUrls(html, job.data.url);
-        for (const newURL of newURLS) {
-          if (this.isAlreadySeen(newURL)) {
-            this.logger.info('Skipping seen URL', newURL);
-            continue;
-          }
-          const newURLParts = new URL(newURL);
-          if (newURLParts.hostname === hostname) {
-            delete job.data.url;
-            const pjob = await this.crawler.addCrawlPageJob({
-              url: newURL,
-              depth: 0,
-              parent: job.id,
-              ...job.data,
-            });
-            this.logger.info('Added new URL to crawl page queue', pjob.id);
-          }
+          this.logger.info('Added new URL to crawl page queue', { job: pjob.id, url: newURL });
+          // Cache the URL as seen
+          await this.addToSeen(job.data?.organization?.name, newURL);
         }
       }
+
+      const checksum = await this.cache.calculateChecksum(Buffer.from(html));
+      const cached = await this.cache.get(`crawler:${job.data.organization.name}:${checksum}`);
+
+      if (cached) {
+        this.logger.info('Skipping page, already indexed', job.data.url);
+        return {};
+      }
+      // Parse the HTML and create a Pinecone document
+      const documents = await htmlSplitter.createDocuments([this.parseHtml(html)]);
+
+      // Create embeddings for the document and upsert them into the Pinecone index
+      const vectors = await Promise.all(
+        documents.flat().map(page =>
+          this.pc.embedWebContent(page, {
+            organization: job.data.organization.name,
+            type: 'webpage',
+            url: job.data.url,
+          }),
+        ),
+      );
+      await this.pc.chunkedUpsert(index, vectors, job.data?.organization?.name);
+
+      // Cache the checksum of the page
+      await this.cache.set(`crawler:${job.data.organization.name}:${checksum}`, {
+        organization: job.data.organization.name,
+        type: 'webpage',
+        url: job.data.url,
+      });
+
+      this.logger.info('indexed page', job.data?.url);
     } catch (e) {
       this.logger.error('Failed to crawl pages', e);
       throw e;
@@ -118,8 +125,29 @@ export class CrawlerConsumer extends BaseWorker implements OnModuleInit {
     return depth > this.maxDepth;
   }
 
-  private isAlreadySeen(url: string) {
-    return this.seen.has(url);
+  private async isAlreadySeen(company_name: string, url: string) {
+    const lastSlash = url.lastIndexOf('/');
+    if (lastSlash === url.length - 1) {
+      url = url.slice(0, -1);
+    }
+
+    const seen = ((await this.cache.get(`crawler:${company_name}:seen`)) as string[]) || [];
+    const isSeen = seen.indexOf(url) > -1;
+    return isSeen;
+  }
+
+  private async addToSeen(company_name: string, url: string) {
+    if (url.indexOf('/') === url.length - 1) {
+      url = url.slice(0, -1);
+    }
+
+    const seen = ((await this.cache.get(`crawler:${company_name}:seen`)) as string[]) || [];
+    if (!seen.includes(url)) {
+      seen.push(url);
+      this.logger.info(`Added URL to seen list: ${url}`);
+    }
+
+    await this.cache.set(`crawler:${company_name}:seen`, seen);
   }
 
   private async shouldContinueCrawling(jobId: any) {
@@ -131,14 +159,6 @@ export class CrawlerConsumer extends BaseWorker implements OnModuleInit {
     }
     this.logger.info(`Job is active: ${await job?.isActive()}`);
     return job?.isActive();
-  }
-
-  private addToQueue(url: string, depth = 0) {
-    this.queue.push({ url, depth });
-  }
-
-  private addNewUrlsToQueue(urls: string[], depth: number) {
-    this.queue.push(...urls.map(url => ({ url, depth: depth + 1 })));
   }
 
   private async fetchPage(url: string): Promise<string> {
