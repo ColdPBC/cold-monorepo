@@ -1,3 +1,10 @@
+## [1.195.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.195.0...v1.195.1) (2024-04-12)
+
+
+### Bug Fixes
+
+* make sure the AI response is captured in Freeplay ([6911040](https://github.com/ColdPBC/cold-monorepo/commit/69110406b3420908289607e40da9b8d8baa01db2))
+
 # [1.195.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.194.0...v1.195.0) (2024-04-12)
 
 
