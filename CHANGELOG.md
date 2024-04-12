@@ -1,3 +1,10 @@
+# [1.195.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.194.0...v1.195.0) (2024-04-12)
+
+
+### Features
+
+* show scopes percentage to 2 decimal points ([e1ad7fe](https://github.com/ColdPBC/cold-monorepo/commit/e1ad7feee4e3c022d2289a2a8778ce2740b6cd47))
+
 # [1.194.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.193.0...v1.194.0) (2024-04-11)
 
 
