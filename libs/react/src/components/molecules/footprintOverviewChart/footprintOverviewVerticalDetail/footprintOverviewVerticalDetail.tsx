@@ -1,17 +1,12 @@
 import React, { PropsWithChildren } from 'react';
 import { FootprintDetailChip } from '../../../atoms/footprintDetailChip/footprintDetailChip';
-import {
-  FootprintOverviewDetail,
-} from '../footprintOverviewChart';
+import { FootprintOverviewDetail } from '../footprintOverviewChart';
 
 export interface FootprintOverviewVerticalDetailProps extends FootprintOverviewDetail {
   percentWidth: number;
-};
+}
 
-export function FootprintOverviewVerticalDetail(
-  props: PropsWithChildren<FootprintOverviewVerticalDetailProps>,
-) {
-
+export function FootprintOverviewVerticalDetail(props: PropsWithChildren<FootprintOverviewVerticalDetailProps>) {
   return (
     <div className="mb-3">
       <div className={'text-body font-bold text-tc-primary'}>{props.title}</div>
@@ -23,10 +18,8 @@ export function FootprintOverviewVerticalDetail(
             width: `calc((100% - 113px) * ${props.percentWidth})`,
           }}
         />
-        <div className='flex'>
-          <div className={'text-body text-tc-primary mx-1'}>
-            {props.percent.toFixed(0) + '%'}
-          </div>
+        <div className="flex">
+          <div className={'text-body text-tc-primary mx-1'}>{props.percent.toFixed(2) + '%'}</div>
           <FootprintDetailChip emissions={props.emissions} />
         </div>
       </div>
