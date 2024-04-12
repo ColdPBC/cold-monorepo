@@ -1,3 +1,15 @@
+# [1.196.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.195.1...v1.196.0) (2024-04-12)
+
+
+### Bug Fixes
+
+* cors issue ([bad0954](https://github.com/ColdPBC/cold-monorepo/commit/bad0954e756337e0467dd2db06afe32942b748aa))
+
+
+### Features
+
+* add crawler service ([36d5954](https://github.com/ColdPBC/cold-monorepo/commit/36d59544e992b8447f8a393d2ed4e3b9bcef8c76))
+
 ## [1.195.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.195.0...v1.195.1) (2024-04-12)
 
 
