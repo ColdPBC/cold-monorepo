@@ -165,13 +165,6 @@ export class ChatService extends BaseWorker implements OnModuleInit {
         user: user.coldclimate_claims.id,
       });
 
-      const message = {
-        role: response.choices[0].message.role,
-        content: response.choices[0].message.content,
-      };
-
-      sanitized_base.allMessages(message);
-
       let ai_response: any;
       if (typeof response.choices[0].message.content === 'string') {
         ai_response = JSON.parse(response.choices[0].message.content);
