@@ -204,6 +204,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
       if (doc.metadata['url']) {
         set(metadata, 'url', doc.metadata['url']);
       }
+      return metadata;
     });
 
     set(ai_response, 'references', references);
@@ -323,6 +324,8 @@ export class ChatService extends BaseWorker implements OnModuleInit {
         if (doc.metadata['url']) {
           set(metadata, 'url', doc.metadata['url']);
         }
+
+        return metadata;
       });
 
       set(ai_response, 'references', references);
