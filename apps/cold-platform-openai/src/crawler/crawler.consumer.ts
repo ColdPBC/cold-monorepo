@@ -9,11 +9,6 @@ import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
 import { PineconeService } from '../pinecone/pinecone.service';
 import { omit } from 'lodash';
 
-interface Page {
-  url: string;
-  content: string;
-}
-
 @Injectable()
 @Processor('openai_crawler')
 export class CrawlerConsumer extends BaseWorker implements OnModuleInit {
@@ -39,15 +34,33 @@ export class CrawlerConsumer extends BaseWorker implements OnModuleInit {
 
   @Process('crawl_site')
   async crawl(job: Job): Promise<any> {
+    const killCrawler = await this.darkly.getBooleanFlag('kill-crawler', false, {
+      kind: 'organization',
+      key: job.data.organization.name,
+      name: job.data.organization.displayName,
+    });
+
+    if (killCrawler) {
+      this.logger.info('Crawler killed in darkly', job.data.organization.name);
+      return {};
+    }
+
     const htmlSplitter = RecursiveCharacterTextSplitter.fromLanguage('html', {
       chunkSize: Number(1000),
     });
 
     try {
+      job.data.url = this.stripLastSlash(job.data.url);
+
       await this.addToSeen(job.data?.organization?.name, job.data.url);
 
       const index = await this.pc.getIndex(job.data.organization.name);
 
+      // Check if we should continue crawling
+      if (this.urlBlocked(job.data.url)) {
+        this.logger.info('URL blocked', job.data.url);
+        return {};
+      }
       // Extract hostname from URL
       const urlParts = new URL(job.data.url);
       const hostname = urlParts.hostname;
@@ -61,7 +74,8 @@ export class CrawlerConsumer extends BaseWorker implements OnModuleInit {
       // Extract new URLs from the HTML
       const newURLS = this.extractUrls(html, job.data?.url);
       // loop through the newly discovered URLs
-      for (const newURL of newURLS) {
+      for (let newURL of newURLS) {
+        newURL = this.stripLastSlash(newURL);
         // skip if we've already seen this URL
         if (await this.isAlreadySeen(job.data?.organization?.name, newURL)) {
           continue;
@@ -125,11 +139,16 @@ export class CrawlerConsumer extends BaseWorker implements OnModuleInit {
     return depth > this.maxDepth;
   }
 
-  private async isAlreadySeen(company_name: string, url: string) {
+  private stripLastSlash(url: string) {
     const lastSlash = url.lastIndexOf('/');
     if (lastSlash === url.length - 1) {
       url = url.slice(0, -1);
     }
+    return url;
+  }
+
+  private async isAlreadySeen(company_name: string, url: string) {
+    url = this.stripLastSlash(url);
 
     const seen = ((await this.cache.get(`crawler:${company_name}:seen`)) as string[]) || [];
     const isSeen = seen.indexOf(url) > -1;
@@ -137,9 +156,7 @@ export class CrawlerConsumer extends BaseWorker implements OnModuleInit {
   }
 
   private async addToSeen(company_name: string, url: string) {
-    if (url.indexOf('/') === url.length - 1) {
-      url = url.slice(0, -1);
-    }
+    url = this.stripLastSlash(url);
 
     const seen = ((await this.cache.get(`crawler:${company_name}:seen`)) as string[]) || [];
     if (!seen.includes(url)) {
@@ -179,6 +196,26 @@ export class CrawlerConsumer extends BaseWorker implements OnModuleInit {
 
     this.logger.info('Parsed page');
     return NodeHtmlMarkdown.translate($.html());
+  }
+
+  private urlBlocked(url: string): boolean {
+    const parsed = new URL(url);
+
+    if (
+      url.includes('mailto:') ||
+      url.includes('tel:') ||
+      url.includes('javascript:') ||
+      parsed.pathname.endsWith('jpg') ||
+      parsed.pathname.endsWith('png') ||
+      parsed.pathname.endsWith('bmp') ||
+      parsed.pathname.endsWith('gif') ||
+      parsed.pathname.endsWith('mp4') ||
+      parsed.pathname.endsWith('zip') ||
+      parsed.pathname.endsWith('gzip') ||
+      parsed.pathname.endsWith('gz')
+    ) {
+      return true;
+    }
   }
 
   private extractUrls(html: string, baseUrl: string): string[] {

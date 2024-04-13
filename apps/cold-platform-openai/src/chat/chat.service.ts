@@ -90,6 +90,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
       ? qualifyingDocs.map(match => {
           const item = {
             name: match.metadata['file_name'],
+            url: match.metadata['url'],
             text: match.metadata.chunk as string,
           };
           // If the text is a string, try to parse it as JSON
@@ -101,15 +102,10 @@ export class ChatService extends BaseWorker implements OnModuleInit {
             }
 
             // Return the item: string
-            const file = `
-            _____________________   \n
-            file: ${item.name},     \n
-            score: ${match.score}   \n
-            _____________________   \n
-            text: ${item.text}      \n
-            _____________________   \n
-           `;
-            return JSON.stringify(file);
+            const page = `"${item.text} (${item.url})"`;
+
+            const file = `"${item.text} (${item.name})"`;
+            return JSON.stringify(item.url ? page : file);
           }
         })
       : [];
@@ -198,11 +194,16 @@ export class ChatService extends BaseWorker implements OnModuleInit {
     }
 
     const references = docs.map(doc => {
-      return {
-        file: doc.metadata['file_name'],
+      const metadata = {
         text: doc.metadata.chunk,
         score: doc.score,
       };
+      if (doc.metadata['file_name']) {
+        set(metadata, 'file', doc.metadata['file_name']);
+      }
+      if (doc.metadata['url']) {
+        set(metadata, 'url', doc.metadata['url']);
+      }
     });
 
     set(ai_response, 'references', references);
@@ -311,11 +312,17 @@ export class ChatService extends BaseWorker implements OnModuleInit {
       }
 
       const references = docs.map(doc => {
-        return {
-          file: doc.metadata['file_name'],
+        const metadata = {
           text: doc.metadata.chunk,
           score: doc.score,
         };
+
+        if (doc.metadata['file_name']) {
+          set(metadata, 'file', doc.metadata['file_name']);
+        }
+        if (doc.metadata['url']) {
+          set(metadata, 'url', doc.metadata['url']);
+        }
       });
 
       set(ai_response, 'references', references);
@@ -777,7 +784,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
             }
 
             this.logger.info(`Processing Question | ${section}.${item}.additional_context: ${follow_up.prompt}`);
-            const additionalValue = await this.askSurveyQuestion(follow_up, organization.display_name, job.data.user, session, follow_up['additional_context']);
+            const additionalValue = await this.askSurveyQuestion(follow_up, organization.name, job.data.user, session, follow_up['additional_context']);
 
             if (additionalValue) {
               definition.sections[section].follow_up[item].additional_context.ai_response = additionalValue;

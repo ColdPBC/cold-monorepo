@@ -184,7 +184,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
   }
 
   async ingestData(user: AuthenticatedUser, organization: any, filePayload: any, namespaceName?: string) {
-    let vectors: PineconeRecord[];
+    let vectors: PineconeRecord[] = [];
     try {
       if (!(await this.darkly.getBooleanFlag('config-enable-pinecone-injestion'))) {
         const message = 'Pinecone ingestion is disabled.  To enable, turn on targeting for `config-enable-pinecone-injestion` flag in launch darkly';
@@ -379,7 +379,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
           try {
             await index.namespace(namespace).upsert(chunk);
           } catch (e) {
-            this.logger.error('Error upserting chunk', { error: e, namespace, chunk });
+            this.logger.error('Error upserting chunk', { error: e, namespace });
             throw e;
           }
         }),
@@ -392,7 +392,6 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
       this.logger.error('Encountered error when upserting into index', {
         error: e,
         namespace,
-        pinecone_record: vectors,
       });
       throw new Error(`Error upserting vectors into index: ${e}`);
     }
