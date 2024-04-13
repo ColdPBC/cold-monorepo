@@ -1,3 +1,10 @@
+## [1.197.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.197.0...v1.197.1) (2024-04-13)
+
+
+### Bug Fixes
+
+* null items in reference array ([b6ef905](https://github.com/ColdPBC/cold-monorepo/commit/b6ef90557532ffdc9639313ae920ea9e3b41882d))
+
 # [1.197.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.196.0...v1.197.0) (2024-04-13)
 
 
