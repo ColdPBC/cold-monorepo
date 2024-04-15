@@ -1,3 +1,10 @@
+# [1.198.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.197.1...v1.198.0) (2024-04-15)
+
+
+### Features
+
+* add feature flag to control throttling ([d685382](https://github.com/ColdPBC/cold-monorepo/commit/d685382484654789975ada538a6577a478f9b9fb))
+
 ## [1.197.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.197.0...v1.197.1) (2024-04-13)
 
 
