@@ -22,6 +22,7 @@ import { PineconeService } from './pinecone/pinecone.service';
 export class RabbitService extends BaseWorker {
   constructor(
     @InjectQueue('openai') private queue: Queue,
+    @InjectQueue('openai_crawler') private crawlerQueue: Queue,
     private readonly config: ConfigService,
     private readonly appService: AppService,
     private readonly prisma: PrismaService,
@@ -99,6 +100,9 @@ export class RabbitService extends BaseWorker {
       switch (event) {
         case 'organization.created': {
           const response = await this.appService.createAssistant(parsed);
+          if (parsed.organization.website) {
+            await this.crawlerQueue.add(event, { url: parsed.organization.website, depth: 0 });
+          }
           return response;
         }
         case 'organization.deleted': {
@@ -129,12 +133,39 @@ export class RabbitService extends BaseWorker {
 
     switch (event) {
       case 'organization.created': {
-        const response = await this.appService.createAssistant(parsed);
-        return response;
+        try {
+          const pcResponse = await this.pc.createIndex(parsed.organization.name);
+          const response = await this.appService.createAssistant(parsed);
+          if (parsed.organization.website) {
+            let url = parsed.organization.website;
+            if (url.indexOf('/') === url.length - 1) {
+              url = url.slice(0, -1);
+            }
+            await this.crawlerQueue.add(event, { url: parsed.organization.website, depth: 0, ...parsed });
+          }
+          return { pinecone: pcResponse, assistant: response };
+        } catch (e) {
+          this.logger.error('Failed to create Pinecone index', e);
+          throw e;
+        }
       }
       case 'organization.deleted': {
-        const response = await this.appService.deleteAssistant(parsed);
-        return response;
+        let pcResponse, response;
+        try {
+          response = await this.appService.deleteAssistant(parsed);
+          this.logger.info('OpenAI Assistant deleted', response);
+        } catch (e) {
+          this.logger.error('Failed to delete OpenAI Assistant', e);
+        }
+
+        try {
+          pcResponse = await this.pc.deleteIndex(parsed.organization.name);
+          this.logger.info('Pinecone index deleted', pcResponse);
+        } catch (e) {
+          this.logger.error('Failed to delete Pinecone index', e);
+        }
+
+        return { assistant: response, pinecone: pcResponse };
       }
       case 'compliance_automation.enabled':
         {

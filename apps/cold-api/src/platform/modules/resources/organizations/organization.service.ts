@@ -347,6 +347,8 @@ export class OrganizationService extends BaseWorker {
     // Name should be kebabCased
     const orgName = kebabCase(org.display_name);
 
+    await this.cache.delete('organizations');
+
     const tags: Tags = {
       org_name: orgName,
       user: user.coldclimate_claims,
@@ -533,6 +535,8 @@ export class OrganizationService extends BaseWorker {
 
       // delete org from auth0
       try {
+        await this.cache.delete(`organizations`);
+
         this.options = await this.utilService.init();
         await this.httpService.axiosRef.delete(`/organizations/${org.id}`, this.options);
 

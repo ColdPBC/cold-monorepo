@@ -1,6 +1,6 @@
 import { ConflictException, Injectable, OnModuleInit } from '@nestjs/common';
 import { AuthenticatedUser, BaseWorker, CacheService, Cuid2Generator, DarklyService, PrismaService } from '@coldpbc/nest';
-import { Index, Pinecone, PineconeRecord, ScoredPineconeRecord } from '@pinecone-database/pinecone';
+import { Index, Pinecone, PineconeRecord, RecordMetadata, ScoredPineconeRecord } from '@pinecone-database/pinecone';
 import { ConfigService } from '@nestjs/config';
 import { PineconeStore } from '@langchain/pinecone';
 import { Document } from '@langchain/core/documents';
@@ -52,7 +52,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
     const embedding = await this.embedString(message);
 
     // Retrieve the matches for the embeddings from the specified namespace
-    const matches = await this.getMatchesFromEmbeddings(embedding, 3, namespace, indexName);
+    const matches = await this.getMatchesFromEmbeddings(embedding, 5, namespace, indexName);
 
     // Filter out the matches that have a score lower than the minimum score
     const qualifyingDocs = matches.filter(m => m.score && m.score > minScore);
@@ -112,6 +112,24 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
     }
   }
 
+  async embedWebContent(doc: Document, metadata: any) {
+    // Generate OpenAI embeddings for the document content
+    const embedding = await this.embedString(doc.pageContent);
+
+    // Return the vector embedding object
+    const record = {
+      id: this.idGenerator.generate().scopedId, // The ID of the vector
+      values: embedding, // The vector values are the OpenAI embeddings
+      metadata: {
+        // The metadata includes details about the document
+        chunk: doc.pageContent, // The chunk of text that the vector represents
+        ...metadata,
+      },
+    } as PineconeRecord;
+
+    return record;
+  }
+
   async embedDocument(doc: Document, org_file: any): Promise<PineconeRecord> {
     try {
       // Generate OpenAI embeddings for the document content
@@ -166,7 +184,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
   }
 
   async ingestData(user: AuthenticatedUser, organization: any, filePayload: any, namespaceName?: string) {
-    let vectors: PineconeRecord[];
+    let vectors: PineconeRecord[] = [];
     try {
       if (!(await this.darkly.getBooleanFlag('config-enable-pinecone-injestion'))) {
         const message = 'Pinecone ingestion is disabled.  To enable, turn on targeting for `config-enable-pinecone-injestion` flag in launch darkly';
@@ -204,8 +222,10 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
       // Get the vector embeddings for the documents
       vectors = await Promise.all(content.flat().map(doc => this.embedDocument(doc, org_file)));
 
+      const chunkSize = await this.darkly.getNumberFlag('dynamic-langchain-chunkSize', 1000);
+
       // Upsert vectors into the Pinecone index
-      await this.chunkedUpsert(index!, vectors, namespaceName, 10);
+      await this.chunkedUpsert(index!, vectors, namespaceName, chunkSize);
 
       await this.cache.set(this.getCacheKey(filePayload), filePayload.checksum, { ttl: 0 });
 
@@ -272,7 +292,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
     }
   }
 
-  async addOpenAIEmbeddings(targetIndex: string, embeddings: any[]) {
+  async injestWebContent(targetIndex: string, embeddings: Array<PineconeRecord<any>>) {
     if (!this.pinecone) {
       await this.onModuleInit();
     }
@@ -306,6 +326,21 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
     }
   }
 
+  async getIndex(targetIndex: string) {
+    if (!this.pinecone) {
+      await this.onModuleInit();
+    }
+
+    try {
+      const index = this.pinecone.Index(targetIndex);
+
+      return index;
+    } catch (error) {
+      this.logger.error(error.message, { ...error });
+      throw error;
+    }
+  }
+
   async createIndex(targetIndex: string, dimension: number = 1536) {
     if (!this.pinecone) {
       await this.onModuleInit();
@@ -333,7 +368,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
     }
   }
 
-  async chunkedUpsert(index: Index, vectors: Array<PineconeRecord>, namespace: string, chunkSize = 10) {
+  async chunkedUpsert(index: Index, vectors: Array<PineconeRecord<RecordMetadata>>, namespace: string, chunkSize = 1000) {
     try {
       // Split the vectors into chunks
       const chunks = this.sliceIntoChunks<PineconeRecord>(vectors, chunkSize);
@@ -344,17 +379,19 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
           try {
             await index.namespace(namespace).upsert(chunk);
           } catch (e) {
-            this.logger.error('Error upserting chunk', { error: e, namespace, chunk, pinecone_record: vectors });
+            this.logger.error('Error upserting chunk', { error: e, namespace });
+            throw e;
           }
         }),
       );
+
+      this.logger.info('Upserted vectors into index', { namespace, chunkSize, total: vectors.length });
 
       return true;
     } catch (e) {
       this.logger.error('Encountered error when upserting into index', {
         error: e,
         namespace,
-        pinecone_record: vectors,
       });
       throw new Error(`Error upserting vectors into index: ${e}`);
     }

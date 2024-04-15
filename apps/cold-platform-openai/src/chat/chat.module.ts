@@ -7,6 +7,7 @@ import { BullModule } from '@nestjs/bull';
 import { ColdRabbitModule } from '@coldpbc/nest';
 import { FreeplayModule } from '../freeplay/freeplay.module';
 import { FreeplayService } from '../freeplay/freeplay.service';
+import { ChatController } from './chat.controller';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { FreeplayService } from '../freeplay/freeplay.service';
     LangchainModule,
     FreeplayModule,
   ],
+  controllers: [ChatController],
   providers: [ChatService, LangchainService, FreeplayService],
 })
 export class ChatModule {}

@@ -7,6 +7,8 @@ import { BaseWorker } from '../worker';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Store } from 'cache-manager';
 import { ConfigService } from '@nestjs/config';
+import crypto from 'crypto';
+import stream from 'stream';
 
 @Global()
 @Span()
@@ -33,6 +35,31 @@ export class CacheService extends BaseWorker {
     this.initialized = true;
 
     return this.initialized;
+  }
+
+  async calculateChecksum(content: Buffer): Promise<string> {
+    return await CacheService.calculateChecksum(content);
+  }
+
+  static async calculateChecksum(content: Buffer): Promise<string> {
+    const hash = crypto.createHash('md5');
+    // Create a readable stream from the buffer
+    const readStream = new stream.Readable();
+    readStream.push(content);
+    readStream.push(null);
+
+    // Pipe the stream through the hash to calculate checksum
+    await new Promise<void>((resolve, reject) => {
+      stream.pipeline(readStream, hash, error => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve();
+        }
+      });
+    });
+
+    return hash.digest('hex');
   }
 
   async get<T>(key: string): Promise<T | undefined> {

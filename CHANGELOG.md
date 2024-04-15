@@ -1,3 +1,50 @@
+# [1.198.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.197.1...v1.198.0) (2024-04-15)
+
+
+### Features
+
+* add feature flag to control throttling ([d685382](https://github.com/ColdPBC/cold-monorepo/commit/d685382484654789975ada538a6577a478f9b9fb))
+
+## [1.197.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.197.0...v1.197.1) (2024-04-13)
+
+
+### Bug Fixes
+
+* null items in reference array ([b6ef905](https://github.com/ColdPBC/cold-monorepo/commit/b6ef90557532ffdc9639313ae920ea9e3b41882d))
+
+# [1.197.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.196.0...v1.197.0) (2024-04-13)
+
+
+### Features
+
+* add crawler service ([c5e3d78](https://github.com/ColdPBC/cold-monorepo/commit/c5e3d7845eea6093b9239e726493ccb451df209f))
+
+# [1.196.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.195.1...v1.196.0) (2024-04-12)
+
+
+### Bug Fixes
+
+* cors issue ([bad0954](https://github.com/ColdPBC/cold-monorepo/commit/bad0954e756337e0467dd2db06afe32942b748aa))
+
+
+### Features
+
+* add crawler service ([36d5954](https://github.com/ColdPBC/cold-monorepo/commit/36d59544e992b8447f8a393d2ed4e3b9bcef8c76))
+
+## [1.195.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.195.0...v1.195.1) (2024-04-12)
+
+
+### Bug Fixes
+
+* make sure the AI response is captured in Freeplay ([6911040](https://github.com/ColdPBC/cold-monorepo/commit/69110406b3420908289607e40da9b8d8baa01db2))
+
+# [1.195.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.194.0...v1.195.0) (2024-04-12)
+
+
+### Features
+
+* show scopes percentage to 2 decimal points ([e1ad7fe](https://github.com/ColdPBC/cold-monorepo/commit/e1ad7feee4e3c022d2289a2a8778ce2740b6cd47))
+
 # [1.194.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.193.0...v1.194.0) (2024-04-11)
 
 

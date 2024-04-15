@@ -12,6 +12,7 @@ export const OrganizationsSchema = z.object({
   name: z.string(),
   enabled_connections: z.record(z.string(), z.boolean()),
   display_name: z.string(),
+  website: z.string().url().optional().nullable(),
   branding: z
     .object({
       logo: z.string().url().optional(),
