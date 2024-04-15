@@ -1,3 +1,10 @@
+# [1.199.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.198.0...v1.199.0) (2024-04-15)
+
+
+### Features
+
+* add keep previous to application swr config ([0005d5c](https://github.com/ColdPBC/cold-monorepo/commit/0005d5c40e9def970df241645ef6b397bac1f5bc))
+
 # [1.198.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.197.1...v1.198.0) (2024-04-15)
 
 
