@@ -2,6 +2,7 @@ import { ColdRoutes } from '../routes';
 import { matchRoutes, useLocation } from 'react-router-dom';
 import { GuidanceButton } from '../../molecules';
 import { useFlags } from 'launchdarkly-react-client-sdk';
+import { SWRConfig } from 'swr';
 
 export const Application = () => {
   const location = useLocation();
@@ -15,11 +16,16 @@ export const Application = () => {
     }
     return matchRoutes(routes, location.pathname);
   };
-
+  console.log('ldFlags.ldFlags.swrKeepPreviousData', ldFlags.swrKeepPreviousData);
   return (
-    <div className="max-w-[1440px] m-auto overflow-x-clip">
-      <ColdRoutes />
-      {shouldRenderGuidanceButton() && <GuidanceButton />}
-    </div>
+    <SWRConfig
+      value={{
+        keepPreviousData: ldFlags.swrKeepPreviousData,
+      }}>
+      <div className="max-w-[1440px] m-auto overflow-x-clip">
+        <ColdRoutes />
+        {shouldRenderGuidanceButton() && <GuidanceButton />}
+      </div>
+    </SWRConfig>
   );
 };
