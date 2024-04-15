@@ -3,6 +3,7 @@ import mqtt from 'mqtt';
 import { useSWRConfig } from 'swr';
 import { forEach } from 'lodash';
 import { useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
+import { useFlags } from 'launchdarkly-react-client-sdk';
 
 export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
   const { logBrowser } = useColdContext();
@@ -10,6 +11,7 @@ export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
   const client = useRef<mqtt.MqttClient | null>(null);
   const [connectionStatus, setConnectionStatus] = React.useState(false);
   const { mutate } = useSWRConfig();
+  const flags = useFlags();
   useEffect(() => {
     const getToken = async () => {
       const audience = import.meta.env.VITE_COLD_API_AUDIENCE as string;
@@ -59,22 +61,24 @@ export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
               swr_key: parsedPayload.swr_key,
             });
             if (parsedPayload.swr_key) {
-              const storage = localStorage.getItem('api-calls');
-              const parsedStorage = storage ? JSON.parse(storage) : {};
-              const waitMS = 100 * 60; // 10 per minute
-              const lastCall = parsedStorage[parsedPayload.swr_key] ? new Date(parsedStorage[parsedPayload.swr_key]) : new Date(0);
-              const now = new Date();
-              if (now.getTime() - lastCall.getTime() < waitMS) {
-                logBrowser('Skipping SWR call', 'info', {
-                  topic,
-                  swr_key: parsedPayload.swr_key,
-                  lastCall: lastCall.toISOString(),
-                  now: now.toISOString(),
-                });
-                return;
+              if (flags.throttleSwrMutateCalls) {
+                const storage = localStorage.getItem('api-calls');
+                const parsedStorage = storage ? JSON.parse(storage) : {};
+                const waitMS = 100 * 60; // 10 per minute
+                const lastCall = parsedStorage[parsedPayload.swr_key] ? new Date(parsedStorage[parsedPayload.swr_key]) : new Date(0);
+                const now = new Date();
+                if (now.getTime() - lastCall.getTime() < waitMS) {
+                  logBrowser('Skipping SWR call', 'info', {
+                    topic,
+                    swr_key: parsedPayload.swr_key,
+                    lastCall: lastCall.toISOString(),
+                    now: now.toISOString(),
+                  });
+                  return;
+                }
+                parsedStorage[parsedPayload.swr_key] = new Date().toISOString();
+                localStorage.setItem('api-calls', JSON.stringify(parsedStorage));
               }
-              parsedStorage[parsedPayload.swr_key] = new Date().toISOString();
-              localStorage.setItem('api-calls', JSON.stringify(parsedStorage));
               await mutate([parsedPayload.swr_key, 'GET']);
             }
           } catch (e) {
