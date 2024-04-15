@@ -16,7 +16,7 @@ export const Application = () => {
     }
     return matchRoutes(routes, location.pathname);
   };
-  console.log('ldFlags.ldFlags.swrKeepPreviousData', ldFlags.swrKeepPreviousData);
+
   return (
     <SWRConfig
       value={{
