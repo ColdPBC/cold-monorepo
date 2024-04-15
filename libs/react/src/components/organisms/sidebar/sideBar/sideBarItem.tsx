@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { SidebarItem } from 'flowbite-react/lib/esm/components/Sidebar/SidebarItem';
 import { ColdIcon } from '../../../atoms/icons/coldIcon';
 import { flowbiteThemeOverride } from '../../../../themes/flowbiteThemeOverride';
 import { Link } from 'react-router-dom';
 import { NavbarItem } from '../../../../interfaces/sideBar';
+import { Sidebar } from 'flowbite-react';
 
 export interface SideBarItemProps {
   item: NavbarItem;
@@ -16,13 +16,9 @@ export const SideBarItem = (props: SideBarItemProps) => {
   const { item, activeChild, setActiveChild } = props;
 
   return (
-    <SidebarItem
+    <Sidebar.Item
       className="sidebar-item"
-      icon={
-        item.icon
-          ? () => <ColdIcon className={'.'} name={item.icon?.name} />
-          : undefined
-      }
+      icon={item.icon ? () => <ColdIcon className={'.'} name={item.icon?.name} /> : undefined}
       key={item.key}
       theme={flowbiteThemeOverride.sidebar.item}
       active={activeChild === item.key}
@@ -30,9 +26,8 @@ export const SideBarItem = (props: SideBarItemProps) => {
         setActiveChild(item.key);
       }}
       as={Link}
-      to={item.route}
-    >
+      to={item.route}>
       {item.label}
-    </SidebarItem>
+    </Sidebar.Item>
   );
 };
