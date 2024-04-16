@@ -82,7 +82,7 @@ export class ChatController extends BaseWorker {
     if (req.body.prompt) {
       return await this.chatService.getDocumentContent([], req.body, company.name, req.user, []);
     } else if (req.body.query) {
-      return await this.pc.getContext(req.body.prompt, company.name, company.name, 0.8, false);
+      return await this.pc.getContext(req.body.query, company.name, company.name, 0.8, false);
     }
   }
 }
