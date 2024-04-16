@@ -184,6 +184,50 @@ export function getOrganizationComplianceMock(): OrgCompliance[] {
         title: 'Climate Action Corps Progress Report 2023',
       },
     },
+    {
+      id: 'orgcomp_2',
+      organization_id: 'org_g2zzR5rwTKVAIwCn',
+      compliance_id: 'compdef_q4si19qzwqh0h03g',
+      created_at: '2024-03-18T15:55:43.345Z',
+      updated_at: '2024-03-18T15:55:43.345Z',
+      organization: {
+        id: 'org_g2zzR5rwTKVAIwCn',
+        name: 'cold-climate-staging',
+        enabled_connections: [
+          {
+            connection_id: 'con_7DptYmJNrY0PYCrx',
+            assign_membership_on_login: false,
+          },
+          {
+            connection_id: 'con_kYFtdnBxyBdYzTtK',
+            assign_membership_on_login: false,
+          },
+        ],
+        display_name: 'Cold Climate',
+        branding: {
+          colors: {
+            primary: '#2892D7',
+            page_background: '#0A1C2B',
+          },
+          logo_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/cold-climate-logo/black/Asset+2.svg',
+        },
+        phone: null,
+        website: null,
+        email: null,
+        created_at: '2023-08-10T21:48:11.103Z',
+        updated_at: '2023-08-10T21:48:11.106Z',
+        isTest: false,
+      },
+      compliance_definition: {
+        id: 'compdef_q8ctv3dxn00s3bic',
+        name: 'one_percent_for_planet_DEMO',
+        logo_url: 'https://cold-public-assets.s3.amazonaws.com/images%2F1percent_for_planet_logo.png',
+        surveys: ['one_percent_for_planet_DEMO'],
+        created_at: '2024-03-18T16:42:54.309Z',
+        updated_at: '2024-03-18T16:42:54.309Z',
+        title: '1% for the Planet',
+      },
+    },
   ];
 }
 
