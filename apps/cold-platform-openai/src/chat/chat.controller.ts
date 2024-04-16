@@ -56,4 +56,33 @@ export class ChatController extends BaseWorker {
       return await this.chatService.askQuestion(req.body, company.name, req.user);
     }
   }
+
+  // Add methods here
+  @Put('organization/:orgId/search')
+  @Roles(Role.ColdAdmin)
+  async search(
+    @Param('orgId') orgId: string,
+    @Req()
+    req: {
+      body: { prompt?: string; query?: string };
+      headers: any;
+      query: any;
+      user: IAuthenticatedUser;
+    },
+  ) {
+    const company = await this.prisma.organizations.findUnique({
+      where: {
+        id: orgId,
+      },
+    });
+    if (!company) {
+      throw new NotFoundException(`Organization ${orgId} not found`);
+    }
+
+    if (req.body.prompt) {
+      return await this.chatService.getDocumentContent([], req.body, company.name, req.user, []);
+    } else if (req.body.query) {
+      return await this.pc.getContext(req.body.prompt, company.name, company.name, 0.8, false);
+    }
+  }
 }

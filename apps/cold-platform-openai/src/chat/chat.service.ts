@@ -158,7 +158,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
     for (const message of messages) {
       context.push(message);
     }
-    const { rephrased_question, docs } = await this.getDocumentContent(messages, { prompt: question }, openai, company_name, user, context);
+    const { rephrased_question, docs } = await this.getDocumentContent(messages, { prompt: question }, company_name, user, context);
 
     const vars = {
       component_prompt: '',
@@ -217,7 +217,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
     // Save the thread to the cache
     await this.cache.set(`openai:thread:${company_name}:${user.coldclimate_claims.email}`, messages, { ttl: 60 * 60 * 24 });
 
-    this.logger.info(`${ai_response.answer != 'undefined' ? '✅ Answered' : '❌ Did NOT Answer'}`, {
+    this.logger.info(`${ai_response.answer !== 'undefined' ? '✅ Answered' : '❌ Did NOT Answer'}`, {
       pinecone_query: rephrased_question,
       document_content: context,
       prompt: question,
@@ -258,7 +258,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
         apiKey: this.config.getOrThrow('OPENAI_API_KEY'),
       });
 
-      const { rephrased_question, docs } = await this.getDocumentContent(messages, question, openai, company_name, user, context, session, additional_context);
+      const { rephrased_question, docs } = await this.getDocumentContent(messages, question, company_name, user, context, session, additional_context);
 
       const vars = {
         component_prompt: (await this.prompts.getComponentPrompt(question)) || '',
@@ -336,13 +336,13 @@ export class ChatService extends BaseWorker implements OnModuleInit {
 
       messages.push({
         role: 'assistant',
-        content: ai_response,
+        content: ai_response.answer || ai_response.justification,
       });
 
       // Save the thread to the cache
       await this.cache.set(`openai:thread:${user.coldclimate_claims.email}`, messages, { ttl: 1000 * 60 * 60 * 24 });
 
-      this.logger.info(`${ai_response.answer != 'undefined' ? '✅ Answered' : '❌ Did NOT Answer'} ${question.idx ? question.idx : 'additional_context'}`, {
+      this.logger.info(`${ai_response.answer !== 'undefined' ? '✅ Answered' : '❌ Did NOT Answer'} ${question.idx ? question.idx : 'additional_context'}`, {
         pinecone_query: rephrased_question,
         document_content: context,
         survey_question: question.prompt,
@@ -352,6 +352,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
         ...session?.customMetadata,
       });
 
+      this.metrics.increment('openai.questions.answered', 1, { section: session?.customMetadata?.survey });
       if (!session) {
         return ai_response;
       }
@@ -381,16 +382,20 @@ export class ChatService extends BaseWorker implements OnModuleInit {
    * @param additional_context
    * @private
    */
-  private async getDocumentContent(
+  async getDocumentContent(
     messages: ChatCompletionMessageParam[],
     question: any,
-    openai: OpenAI,
     indexName: string,
     user: AuthenticatedUser,
     context: any,
     session?: FPSession,
     additional_context?,
   ) {
+    const openai = new OpenAI({
+      organization: this.config.getOrThrow('OPENAI_ORG_ID'),
+      apiKey: this.config.getOrThrow('OPENAI_API_KEY'),
+    });
+
     /**
      * This prompt is used to condense the chat history and follow-up question into a single standalone question for the purpose
      * of providing context to the AI model to query the vector index for the most relevant information.
@@ -746,7 +751,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
           // update the survey with the response
           if (value) {
             definition.sections[section].follow_up[item].ai_response = value;
-            definition.sections[section].follow_up[item].ai_answered = typeof value.answer != 'undefined';
+            definition.sections[section].follow_up[item].ai_answered = typeof value.answer !== 'undefined';
 
             this.logger.info(`Ai responded: ${section}.${item}`, {
               survey: job.data.survey?.name,
@@ -765,7 +770,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
                 survey: job.data.survey?.name,
                 section: section,
                 key: item,
-                ai_answered: typeof value.answer != 'undefined',
+                ai_answered: typeof value.answer !== 'undefined',
                 organization: organization.name,
                 user: user.coldclimate_claims.email,
               },
@@ -791,7 +796,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
 
             if (additionalValue) {
               definition.sections[section].follow_up[item].additional_context.ai_response = additionalValue;
-              definition.sections[section].follow_up[item].additional_context.ai_answered = typeof value.answer != 'undefined';
+              definition.sections[section].follow_up[item].additional_context.ai_answered = typeof value.answer !== 'undefined';
 
               this.logger.info(`Ai responded: ${section}.${item}`, {
                 survey: job.data.survey?.name,
@@ -810,7 +815,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
                   survey: job.data.survey?.name,
                   section: section,
                   key: item,
-                  ai_answered: typeof value.answer != 'undefined',
+                  ai_answered: typeof value.answer !== 'undefined',
                   organization: organization.name,
                   user: user.coldclimate_claims?.email,
                 },

@@ -171,9 +171,12 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
 
   async embedString(input: string) {
     try {
+      if (!input) {
+        throw new Error(`Input is requrired: ${input}`);
+      }
       const response = await this.openai.embeddings.create({
         model: 'text-embedding-ada-002',
-        input: input.replace(/\n/g, ' '),
+        input: input?.replace(/\n/g, ' ') || '',
       });
 
       return response.data[0].embedding;
@@ -228,7 +231,6 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
       await this.chunkedUpsert(index!, vectors, namespaceName, chunkSize);
 
       await this.cache.set(this.getCacheKey(filePayload), filePayload.checksum, { ttl: 0 });
-
       return { message: `${organization.name} S3 file ingestion complete` };
     } catch (error) {
       if (error instanceof ConflictException) {
@@ -360,8 +362,10 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
         waitUntilReady: true,
       });
 
+      this.metrics.increment('pinecone.index', 1, { index: targetIndex, status: 'created' });
       return idx;
     } catch (e) {
+      this.metrics.increment('pinecone.index', 1, { index: targetIndex, status: 'failed' });
       if (e.statusCode !== 404) {
         this.logger.error(e.message, { ...e });
       }
@@ -378,8 +382,10 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
         chunks.map(async chunk => {
           try {
             await index.namespace(namespace).upsert(chunk);
+            this.metrics.increment('pinecone.index.upsert', 1, { namespace: namespace, status: 'completed' });
           } catch (e) {
             this.logger.error('Error upserting chunk', { error: e, namespace });
+            this.metrics.increment('pinecone.index.upsert', 1, { namespace: namespace, status: 'failed' });
             throw e;
           }
         }),
