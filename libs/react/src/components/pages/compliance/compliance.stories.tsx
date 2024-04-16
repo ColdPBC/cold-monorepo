@@ -1,18 +1,15 @@
 import {
-  StoryMockProvider,
-  getActionHandler,
-  getCompliancePageHandler,
-  getComplianceMock,
-  getDefaultCompliancePageMock,
-  getDefaultOrgCompliancePageMock,
   getActivateCompliancePageMock,
   getActivateOrgCompliancePageMock,
+  getCompliancePageHandler,
+  getDefaultCompliancePageMock,
+  getDefaultOrgCompliancePageMock,
+  StoryMockProvider,
 } from '@coldpbc/mocks';
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { CompliancePage } from '@coldpbc/components';
 import { within } from '@storybook/testing-library';
-import { expect } from '@storybook/jest';
 import { verifyCompliancePage } from '@coldpbc/lib';
 
 const meta: Meta<typeof CompliancePage> = {
@@ -56,5 +53,20 @@ export const Activate: Story = {
       const orgComplianceSets = getActivateOrgCompliancePageMock();
       await verifyCompliancePage(complianceSets, orgComplianceSets, canvasElement);
     });
+  },
+};
+
+export const NewPage: Story = {
+  render: args => (
+    <StoryMockProvider>
+      <CompliancePage />
+    </StoryMockProvider>
+  ),
+  parameters: {
+    launchdarkly: {
+      flags: {
+        showNewCompliancePageHomeCold671: true,
+      },
+    },
   },
 };

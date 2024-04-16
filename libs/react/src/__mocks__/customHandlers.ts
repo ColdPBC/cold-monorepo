@@ -13,7 +13,7 @@ import {
 } from './categoriesMock';
 import { getMembersNoInvitations } from './membersMock';
 import { getNewsAllMissingProperties, getNewsDefault, getNewsSomeMissingProperties } from './newsMock';
-import { ActionPayload } from '@coldpbc/interfaces';
+import { ActionPayload, ComplianceSurveyPayloadType } from '@coldpbc/interfaces';
 import { getOrganizationMembersMock } from './datagridMock';
 import {
   getActivateOrgCompliancePageMock,
@@ -27,6 +27,8 @@ import { getAllFilesMock } from './filesMock';
 import { getApiUrl } from './handlers';
 import { getAssessmentSurveyWithProgressMock, getSurveyFormDataByName } from './surveyDataMock';
 import { getSingleYearsEmissionMock } from './emissionMocks';
+import { set } from 'lodash';
+import { addDays } from 'date-fns';
 
 export const getFootprintHandler = {
   default: rest.get('*/organizations/:orgId/categories/company_decarbonization', (req, res, ctx) => {
@@ -752,6 +754,171 @@ export const getEmissionsOverviewCardHandler = {
   singleYear: [
     rest.get(getApiUrl('/organizations/:orgId/footprints'), (req, res, ctx) => {
       return res(ctx.json(getSingleYearsEmissionMock()));
+    }),
+  ],
+};
+
+export const getComplianceSetOverviewHandler = {
+  notActive: [
+    rest.get(getApiUrl('/compliance_definitions/organizations/:orgId'), (req, res, ctx) => {
+      const complianceSets = getOrganizationComplianceMock();
+      return res(ctx.json(complianceSets.filter(c => c.compliance_definition.name !== 'b_corp_2024')));
+    }),
+  ],
+  inProgress: [
+    rest.get(getApiUrl('/compliance_definitions/organizations/:orgId'), (req, res, ctx) => {
+      const complianceSets = getOrganizationComplianceMock();
+      return res(ctx.json(complianceSets));
+    }),
+    rest.get(getApiUrl('/organizations/:orgId/surveys/:name'), (req, res, ctx) => {
+      const survey = getSurveyFormDataByName('b_corp_2024') as ComplianceSurveyPayloadType;
+      return res(
+        ctx.json({
+          ...survey,
+          progress: {
+            ...survey.progress,
+            percentage: 0,
+          },
+        }),
+      );
+    }),
+  ],
+  inProgress50Percent: [
+    rest.get(getApiUrl('/compliance_definitions/organizations/:orgId'), (req, res, ctx) => {
+      const complianceSets = getOrganizationComplianceMock();
+      return res(ctx.json(complianceSets));
+    }),
+    rest.get(getApiUrl('/organizations/:orgId/surveys/:name'), (req, res, ctx) => {
+      const survey = getSurveyFormDataByName('b_corp_2024') as ComplianceSurveyPayloadType;
+      return res(
+        ctx.json({
+          ...survey,
+          progress: {
+            ...survey.progress,
+            percentage: 50,
+          },
+        }),
+      );
+    }),
+  ],
+  inProgress100Percent: [
+    rest.get(getApiUrl('/compliance_definitions/organizations/:orgId'), (req, res, ctx) => {
+      const complianceSets = getOrganizationComplianceMock();
+      return res(ctx.json(complianceSets));
+    }),
+    rest.get(getApiUrl('/organizations/:orgId/surveys/:name'), (req, res, ctx) => {
+      const survey = getSurveyFormDataByName('b_corp_2024') as ComplianceSurveyPayloadType;
+      return res(
+        ctx.json({
+          ...survey,
+          progress: {
+            ...survey.progress,
+            percentage: 100,
+          },
+        }),
+      );
+    }),
+  ],
+  submittedByUser: [
+    rest.get(getApiUrl('/compliance_definitions/organizations/:orgId'), (req, res, ctx) => {
+      const complianceSets = getOrganizationComplianceMock();
+      return res(ctx.json(complianceSets));
+    }),
+    rest.get(getApiUrl('/organizations/:orgId/surveys/:name'), (req, res, ctx) => {
+      const survey = getSurveyFormDataByName('b_corp_2024') as ComplianceSurveyPayloadType;
+      set(survey, 'definition.submitted', true);
+      return res(
+        ctx.json({
+          ...survey,
+          progress: {
+            ...survey.progress,
+            percentage: 100,
+          },
+        }),
+      );
+    }),
+  ],
+  submittedByCold: [
+    rest.get(getApiUrl('/compliance_definitions/organizations/:orgId'), (req, res, ctx) => {
+      const complianceSets = getOrganizationComplianceMock();
+      return res(ctx.json(complianceSets));
+    }),
+    rest.get(getApiUrl('/organizations/:orgId/surveys/:name'), (req, res, ctx) => {
+      const survey = getSurveyFormDataByName('b_corp_2024') as ComplianceSurveyPayloadType;
+      set(survey, 'status.0', {
+        name: 'cold_submitted',
+        date: '2024-01-17T17:36:53.231Z',
+      });
+      return res(
+        ctx.json({
+          ...survey,
+          progress: {
+            ...survey.progress,
+            percentage: 100,
+          },
+        }),
+      );
+    }),
+  ],
+  withDueDate: [
+    rest.get(getApiUrl('/compliance_definitions/organizations/:orgId'), (req, res, ctx) => {
+      const complianceSets = getOrganizationComplianceMock();
+      return res(ctx.json(complianceSets));
+    }),
+    rest.get(getApiUrl('/organizations/:orgId/surveys/:name'), (req, res, ctx) => {
+      const survey = getSurveyFormDataByName('b_corp_2024') as ComplianceSurveyPayloadType;
+      set(survey, 'definition.due_date', addDays(new Date(), 30).toString());
+      return res(
+        ctx.json({
+          ...survey,
+          progress: {
+            ...survey.progress,
+            percentage: 100,
+          },
+        }),
+      );
+    }),
+  ],
+  withNearDueDate: [
+    rest.get(getApiUrl('/compliance_definitions/organizations/:orgId'), (req, res, ctx) => {
+      const complianceSets = getOrganizationComplianceMock();
+      return res(ctx.json(complianceSets));
+    }),
+    rest.get(getApiUrl('/organizations/:orgId/surveys/:name'), (req, res, ctx) => {
+      const survey = getSurveyFormDataByName('b_corp_2024') as ComplianceSurveyPayloadType;
+      set(survey, 'definition.due_date', addDays(new Date(), 5).toString());
+      return res(
+        ctx.json({
+          ...survey,
+          progress: {
+            ...survey.progress,
+            percentage: 100,
+          },
+        }),
+      );
+    }),
+  ],
+  withNearDueDateButSubmitted: [
+    rest.get(getApiUrl('/compliance_definitions/organizations/:orgId'), (req, res, ctx) => {
+      const complianceSets = getOrganizationComplianceMock();
+      return res(ctx.json(complianceSets));
+    }),
+    rest.get(getApiUrl('/organizations/:orgId/surveys/:name'), (req, res, ctx) => {
+      const survey = getSurveyFormDataByName('b_corp_2024') as ComplianceSurveyPayloadType;
+      set(survey, 'definition.due_date', addDays(new Date(), 5).toString());
+      set(survey, 'status.0', {
+        name: 'cold_submitted',
+        date: '2024-01-17T17:36:53.231Z',
+      });
+      return res(
+        ctx.json({
+          ...survey,
+          progress: {
+            ...survey.progress,
+            percentage: 100,
+          },
+        }),
+      );
     }),
   ],
 };

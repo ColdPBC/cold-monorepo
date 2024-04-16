@@ -82,15 +82,18 @@ export interface SurveySectionFollowUpType {
   skipped?: boolean;
   additional_context?: SurveyAdditionalContext;
   ai_attempted?: boolean;
+  ai_answered?: boolean;
   ai_response?: {
     justification?: string;
     answer?: string | boolean | number | Array<string>;
+    what_we_need?: string;
   };
   score?: number;
   max_score?: number;
   saved?: boolean;
-  document_link?: string;
+  document_link?: string | null;
   question_summary?: string;
+  corresponding_question?: string;
 }
 
 export interface SurveyPayloadType {
@@ -119,6 +122,13 @@ export interface SurveyAdditionalContext {
   comparison: any;
   value?: any | null;
   tooltip?: string;
+  ai_attempted?: boolean;
+  ai_answered?: boolean;
+  ai_response?: {
+    justification?: string;
+    answer?: string | boolean | number | Array<string>;
+    what_we_need?: string;
+  };
 }
 
 export interface SurveyNextStep {
@@ -142,13 +152,13 @@ export interface ComplianceSurveyPayloadType {
       [key: string]: ComplianceSurveySectionType;
     };
     submitted?: boolean;
-    submission_date?: string;
     due_date?: string;
     term?: string;
     target_score?: number;
     compliance_type?: string;
   };
   progress: ComplianceSurveyProgressType;
+  status?: ComplianceSurveyStatusType[];
   description: string;
   created_at: string;
   updated_at: string;
@@ -162,6 +172,11 @@ export interface ComplianceSurveyProgressType {
   question_count: number;
   percentage: number;
   questions_answered: number;
+}
+
+export interface ComplianceSurveyStatusType {
+  name: string;
+  date: string;
 }
 
 export interface ComplianceSurveySectionType extends SurveySectionType {
