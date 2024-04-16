@@ -50,7 +50,7 @@ export class CrawlerConsumer extends BaseWorker implements OnModuleInit {
     });
 
     try {
-      job.data.url = this.stripLastSlash(job.data.url);
+      job.data.url = this.cleanURL(job.data.url);
 
       await this.addToSeen(job.data?.organization?.name, job.data.url);
 
@@ -75,7 +75,7 @@ export class CrawlerConsumer extends BaseWorker implements OnModuleInit {
       const newURLS = this.extractUrls(html, job.data?.url);
       // loop through the newly discovered URLs
       for (let newURL of newURLS) {
-        newURL = this.stripLastSlash(newURL);
+        newURL = this.cleanURL(newURL);
         // skip if we've already seen this URL
         if (await this.isAlreadySeen(job.data?.organization?.name, newURL)) {
           continue;
@@ -111,13 +111,13 @@ export class CrawlerConsumer extends BaseWorker implements OnModuleInit {
       const vectors = await Promise.all(
         documents.flat().map(page =>
           this.pc.embedWebContent(page, {
-            organization: job.data.organization.name,
+            organization: job.data?.organization?.name,
             type: 'webpage',
-            url: job.data.url,
+            url: job?.data?.url,
           }),
         ),
       );
-      await this.pc.chunkedUpsert(index, vectors, job.data?.organization?.name);
+      await this.pc.chunkedUpsert(index, vectors, job?.data?.organization?.name);
 
       // Cache the checksum of the page
       await this.cache.set(`crawler:${job.data.organization.name}:${checksum}`, {
@@ -127,8 +127,10 @@ export class CrawlerConsumer extends BaseWorker implements OnModuleInit {
       });
 
       this.logger.info('indexed page', job.data?.url);
+      this.metrics.increment('crawler.jobs', 1, { organization_name: job.data.organization.name, status: 'completed' });
     } catch (e) {
       this.logger.error('Failed to crawl pages', e);
+      this.metrics.increment('crawler.jobs', 1, { organization_name: job.data.organization.name, status: 'failed' });
       throw e;
     }
 
@@ -137,6 +139,15 @@ export class CrawlerConsumer extends BaseWorker implements OnModuleInit {
 
   private isTooDeep(depth: number) {
     return depth > this.maxDepth;
+  }
+
+  private cleanURL(url: string) {
+    const lastSlash = url.lastIndexOf('#');
+    if (lastSlash > -1) {
+      url = url.slice(0, lastSlash);
+    }
+
+    return this.stripLastSlash(url);
   }
 
   private stripLastSlash(url: string) {
@@ -148,7 +159,7 @@ export class CrawlerConsumer extends BaseWorker implements OnModuleInit {
   }
 
   private async isAlreadySeen(company_name: string, url: string) {
-    url = this.stripLastSlash(url);
+    url = this.cleanURL(url);
 
     const seen = ((await this.cache.get(`crawler:${company_name}:seen`)) as string[]) || [];
     const isSeen = seen.indexOf(url) > -1;
@@ -156,7 +167,7 @@ export class CrawlerConsumer extends BaseWorker implements OnModuleInit {
   }
 
   private async addToSeen(company_name: string, url: string) {
-    url = this.stripLastSlash(url);
+    url = this.cleanURL(url);
 
     const seen = ((await this.cache.get(`crawler:${company_name}:seen`)) as string[]) || [];
     if (!seen.includes(url)) {

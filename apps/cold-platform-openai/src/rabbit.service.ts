@@ -101,7 +101,14 @@ export class RabbitService extends BaseWorker {
         case 'organization.created': {
           const response = await this.appService.createAssistant(parsed);
           if (parsed.organization.website) {
-            await this.crawlerQueue.add(event, { url: parsed.organization.website, depth: 0 });
+            await this.crawlerQueue.add(
+              event,
+              { url: parsed.organization.website, depth: 0 },
+              {
+                removeOnFail: true,
+                removeOnComplete: true,
+              },
+            );
           }
           return response;
         }
@@ -141,7 +148,15 @@ export class RabbitService extends BaseWorker {
             if (url.indexOf('/') === url.length - 1) {
               url = url.slice(0, -1);
             }
-            await this.crawlerQueue.add(event, { url: parsed.organization.website, depth: 0, ...parsed });
+            await this.crawlerQueue.add(
+              event,
+              {
+                url: parsed.organization.website,
+                depth: 0,
+                ...parsed,
+              },
+              { removeOnFail: true, removeOnComplete: true },
+            );
           }
           return { pinecone: pcResponse, assistant: response };
         } catch (e) {
@@ -209,10 +224,18 @@ export class RabbitService extends BaseWorker {
         }
         break;
       case 'file.uploaded':
-        return await this.queue.add(event, parsed, { backoff: { type: BackOffStrategies.EXPONENTIAL } });
+        return await this.queue.add(event, parsed, {
+          removeOnFail: true,
+          removeOnComplete: true,
+          backoff: { type: BackOffStrategies.EXPONENTIAL },
+        });
 
       case 'file.deleted':
-        return await this.queue.add(event, parsed, { backoff: { type: BackOffStrategies.EXPONENTIAL } });
+        return await this.queue.add(event, parsed, {
+          removeOnFail: true,
+          removeOnComplete: true,
+          backoff: { type: BackOffStrategies.EXPONENTIAL },
+        });
 
       default:
         return new Nack();

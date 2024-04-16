@@ -5,6 +5,7 @@ import { BullModule } from '@nestjs/bull';
 import { PineconeModule } from '../pinecone/pinecone.module';
 import { PineconeService } from '../pinecone/pinecone.service';
 import { LangchainModule } from '../langchain/langchain.module';
+import { CrawlerController } from './crawler.controller';
 
 @Module({})
 export class CrawlerModule {
@@ -18,6 +19,7 @@ export class CrawlerModule {
         PineconeModule,
         LangchainModule,
       ],
+      controllers: [CrawlerController],
       providers: [CrawlerService, CrawlerConsumer, PineconeService],
       exports: [],
     };

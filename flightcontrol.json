@@ -19,7 +19,7 @@
           "singlePageApp": true,
           "buildType": "nixpacks",
           "basePath": ".",
-          "buildCommand": "yarn && yarn postinstall && yarn prebuild && yarn dlx nx build cold-ui:build:production",
+          "buildCommand": "yarn && yarn postinstall && yarn prebuild && yarn dlx nx run cold-ui:build:production",
           "outputDirectory": "dist/apps/cold-ui",
           "watchPaths": [
             "apps/cold-ui/**",
@@ -198,7 +198,7 @@
           "singlePageApp": true,
           "buildType": "nixpacks",
           "basePath": ".",
-          "buildCommand": "yarn prebuild && yarn dlx nx build cold-ui:build:production",
+          "buildCommand": "yarn prebuild && yarn dlx nx run cold-ui:build:production",
           "outputDirectory": "dist/apps/cold-ui",
           "watchPaths": [
             "apps/cold-ui/**",
@@ -376,7 +376,7 @@
           "singlePageApp": true,
           "buildType": "nixpacks",
           "basePath": ".",
-          "buildCommand": "yarn prebuild && yarn dlx nx build cold-ui:build:development",
+          "buildCommand": "yarn prebuild && yarn dlx nx run cold-ui:build:development",
           "outputDirectory": "dist/apps/cold-ui",
           "watchPaths": [
             "apps/cold-ui/**",
