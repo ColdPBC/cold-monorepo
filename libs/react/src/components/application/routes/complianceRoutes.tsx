@@ -1,5 +1,5 @@
 import { Route } from 'react-router-dom';
-import { ComplianceDetail, CompliancePage } from '@coldpbc/components';
+import { CompliancePage } from '@coldpbc/components';
 
 export const ComplianceRoutes = () => {
   return (
