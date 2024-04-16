@@ -1,3 +1,11 @@
+# [1.199.0-COLD-671.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.198.0...v1.199.0-COLD-671.1) (2024-04-16)
+
+
+### Features
+
+* create new compliance page ([5c4fd2c](https://github.com/ColdPBC/cold-monorepo/commit/5c4fd2c50aae27cc52ca08017e5ddbdf8dfdae29))
+* initial changes ([4fbf0c0](https://github.com/ColdPBC/cold-monorepo/commit/4fbf0c0ad77553e729f69cb0e51cf826995ceee1))
+
 # [1.198.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.197.1...v1.198.0) (2024-04-15)
 
 
