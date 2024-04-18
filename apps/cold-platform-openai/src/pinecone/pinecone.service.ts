@@ -1,12 +1,12 @@
 import { ConflictException, Injectable, OnModuleInit } from '@nestjs/common';
 import { AuthenticatedUser, BaseWorker, CacheService, Cuid2Generator, DarklyService, PrismaService } from '@coldpbc/nest';
-import { Index, Pinecone, PineconeRecord, RecordMetadata, ScoredPineconeRecord } from '@pinecone-database/pinecone';
+import { Pinecone, PineconeRecord, ScoredPineconeRecord } from '@pinecone-database/pinecone';
 import { ConfigService } from '@nestjs/config';
-import { PineconeStore } from '@langchain/pinecone';
 import { Document } from '@langchain/core/documents';
-import { OpenAIEmbeddings } from 'langchain/embeddings/openai';
 import OpenAI from 'openai';
 import { LangchainLoaderService } from '../langchain/langchain.loader.service';
+import { organization_files } from '@prisma/client';
+import { pick } from 'lodash';
 
 export type PineconeMetadata = {
   url: string;
@@ -35,11 +35,65 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
     });
   }
 
+  async getIndexDetails(org_name) {
+    let config = await this.darkly.getJSONFlag(
+      'config-embedding-model',
+
+      {
+        kind: 'organization',
+        key: org_name,
+        name: org_name,
+      },
+    );
+
+    if (!config) {
+      config = {
+        dimension: 3072,
+        model: 'text-embedding-3-large',
+      };
+    }
+
+    const indexName = `${org_name}-${config.model.split('-').slice(2).join('-')}`;
+
+    await this.createIndex(indexName, config.dimension);
+
+    return { indexName, config };
+  }
+
   async onModuleInit(): Promise<void> {
     try {
       this.pinecone = new Pinecone({
         apiKey: this.config.getOrThrow('PINECONE_API_KEY'),
       });
+
+      await this.darkly.onModuleInit();
+      const orgs = await this.prisma.organizations.findMany({
+        include: {
+          organization_files: {
+            include: {
+              vector_records: true,
+            },
+          },
+        },
+      });
+
+      for (const org of orgs) {
+        await this.getIndexDetails(org.name);
+        for (const file of org.organization_files) {
+          this.ingestData(
+            {
+              coldclimate_claims: {
+                email: 'svc@coldclimate.com',
+                org_id: org.id,
+                id: '',
+                roles: ['cold:admin'],
+              },
+            },
+            org,
+            file,
+          );
+        }
+      }
     } catch (error) {
       console.log('error', error);
       throw new Error('Failed to initialize Pinecone Client');
@@ -48,8 +102,14 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
 
   // The function `getContext` is used to retrieve the context of a given message
   async getContext(message: string, namespace: string, indexName: string, minScore = 0.7, getOnlyText = true): Promise<string | ScoredPineconeRecord[]> {
+    const config = await this.darkly.getJSONFlag('config-embedding-model', {
+      kind: 'organization',
+      key: indexName,
+      name: indexName,
+    });
+
     // Get the embeddings of the input message
-    const embedding = await this.embedString(message);
+    const embedding = await this.embedString(message, config);
 
     // Retrieve the matches for the embeddings from the specified namespace
     const matches = await this.getMatchesFromEmbeddings(embedding, 5, namespace, indexName);
@@ -67,7 +127,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
     const docs = matches
       ? qualifyingDocs.map(match => {
           const item = {
-            name: match.metadata['file_name'],
+            name: match.metadata['file_name'] || match.metadata['url'],
             text: match.metadata.chunk,
           };
           return JSON.stringify(item);
@@ -75,11 +135,17 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
       : [];
 
     // Join all the chunks of text together, truncate to the maximum number of tokens, and return the result
-    return docs.join('\n').substring(0, 3000);
+    return docs.join('\n');
   }
 
   // The function `getMatchesFromEmbeddings` is used to retrieve matches for the given embeddings
   async getMatchesFromEmbeddings(embeddings: number[], topK: number, namespace: string, indexName: string): Promise<ScoredPineconeRecord<PineconeMetadata>[]> {
+    const config = await this.darkly.getJSONFlag('config-embedding-model', {
+      kind: 'organization',
+      key: indexName,
+      name: indexName,
+    });
+
     // Obtain a client for Pinecone
     const pinecone = new Pinecone({
       apiKey: this.config.getOrThrow('PINECONE_API_KEY'),
@@ -87,12 +153,12 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
 
     // Retrieve the list of indexes to check if expected index exists
     const indexes = await this.listIndexes();
-    if (!indexes || indexes.filter(i => i.name === indexName).length !== 1) {
+    if (!indexes || indexes.filter(i => i.name === `${indexName}-${config.model}`).length !== 1) {
       throw new Error(`Index ${indexName} does not exist`);
     }
 
     // Get the Pinecone index
-    const index = pinecone!.Index<PineconeMetadata>(indexName);
+    const index = pinecone!.Index<PineconeMetadata>(`${indexName}-${config.model}`);
 
     // Get the namespace
     const pineconeNamespace = index.namespace(namespace ?? '');
@@ -107,14 +173,20 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
       return queryResult.matches || [];
     } catch (e) {
       // Log the error and throw it
-      this.logger.log('Error querying embeddings: ', e);
+      this.logger.log(`Error querying embeddings: ${e.message}`, { ...e });
       throw new Error(`Error querying embeddings: ${e}`);
     }
   }
 
   async embedWebContent(doc: Document, metadata: any) {
+    const config = await this.darkly.getJSONFlag('config-embedding-model', {
+      kind: 'organization',
+      key: metadata.organization,
+      name: metadata.organization,
+    });
+
     // Generate OpenAI embeddings for the document content
-    const embedding = await this.embedString(doc.pageContent);
+    const embedding = await this.embedString(doc.pageContent, config);
 
     // Return the vector embedding object
     const record = {
@@ -130,10 +202,10 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
     return record;
   }
 
-  async embedDocument(doc: Document, org_file: any): Promise<PineconeRecord> {
+  async embedDocument(doc: Document, org_file: any, org_name: string): Promise<PineconeRecord> {
     try {
       // Generate OpenAI embeddings for the document content
-      const embedding = await this.embedString(doc.pageContent);
+      const embedding = await this.embedString(doc.pageContent, org_name);
 
       // Return the vector embedding object
       const record = {
@@ -153,11 +225,16 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
         },
       } as PineconeRecord;
 
+      const indexDetails = await this.getIndexDetails(org_name);
+
       await this.prisma.vector_records.create({
         data: {
           id: record.id,
           organization_id: org_file.organization_id,
           organization_file_id: org_file.id,
+          values: embedding,
+          namespace: org_name,
+          index_name: indexDetails.indexName,
           metadata: record.metadata,
         },
       });
@@ -169,15 +246,19 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
     }
   }
 
-  async embedString(input: string) {
+  async embedString(input: string, org_name: string) {
     try {
       if (!input) {
         throw new Error(`Input is requrired: ${input}`);
       }
-      const response = await this.openai.embeddings.create({
-        model: 'text-embedding-ada-002',
+
+      const indexDetail = await this.getIndexDetails(org_name);
+      const embeddingConfig = {
+        model: indexDetail.config.model, //await this.darkly.getStringFlag('dynamic-ai-embedding-model', 'text-embedding-3-large'),
         input: input?.replace(/\n/g, ' ') || '',
-      });
+      };
+
+      const response = await this.openai.embeddings.create(embeddingConfig);
 
       return response.data[0].embedding;
     } catch (e) {
@@ -186,52 +267,87 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
     }
   }
 
-  async ingestData(user: AuthenticatedUser, organization: any, filePayload: any, namespaceName?: string) {
-    let vectors: PineconeRecord[] = [];
+  async uploadData(organization: any, user: any, filePayload: any, index: any) {
+    try {
+      if (filePayload.vector_records && filePayload.vector_records.length > 0) {
+        for (const v of filePayload.vector_records) {
+          const found = await index.namespace(organization.name).query({
+            vector: v.values,
+            topK: 1,
+            includeValues: true,
+          });
+          if (found.matches < 1) {
+            this.logger.info(`upserting missing ${v.id} of ${filePayload.original_name}`);
+            await index.namespace(organization.name).upsert([v]);
+          } else {
+            this.logger.info(`${v.id} of ${filePayload.original_name} already injected`);
+          }
+        }
+      } else {
+        // Load the document content from the file and split it into chunks
+        const content = await this.lc.getDocContent(filePayload, user);
+
+        // Get the vector embeddings for the document
+        const embeddings = await Promise.all(content.flat().map(doc => this.embedDocument(doc, filePayload, organization.name)));
+        for (const v of embeddings) {
+          await index.namespace(organization.name).upsert([v]);
+          this.metrics.increment('pinecone.index.upsert', 1, { namespace: organization.name, status: 'completed' });
+
+          const item = pick(v, ['id', 'values', 'metadata']);
+          await index.namespace(organization.name).upsert([item]);
+          this.metrics.increment('pinecone.index.upsert', 1, { namespace: organization.name, status: 'completed' });
+        }
+      }
+    } catch (e) {
+      this.logger.error('Error upserting chunk', { error: e, namespace: organization.name });
+
+      this.metrics.increment('pinecone.index.upsert', 1, { namespace: organization.name, status: 'failed' });
+      throw e;
+    }
+
+    await this.cache.set(this.getCacheKey(filePayload), filePayload.checksum, { ttl: 0 });
+  }
+
+  async ingestData(
+    user:
+      | AuthenticatedUser
+      | {
+          coldclimate_claims: { email: string };
+        },
+    organization: any,
+    filePayload: organization_files,
+    namespaceName?: string,
+  ) {
+    const vectors: PineconeRecord[] = [];
     try {
       if (!(await this.darkly.getBooleanFlag('config-enable-pinecone-injestion'))) {
         const message = 'Pinecone ingestion is disabled.  To enable, turn on targeting for `config-enable-pinecone-injestion` flag in launch darkly';
         this.logger.warn(message);
         return message;
       }
-      const cacheKey = this.getCacheKey(filePayload);
 
-      const exists = await this.cache.get(cacheKey);
-      if (exists) {
-        throw new ConflictException(`${filePayload.key} (${filePayload.checksum}) already ingested`);
-      }
-
-      const org_file = await this.prisma.organization_files.findUnique({
-        where: {
-          s3Key: {
-            organization_id: organization.id,
-            key: filePayload.key,
-            bucket: filePayload.bucket,
-          },
-        },
-      });
-
+      const details = await this.getIndexDetails(organization.name);
       if (!namespaceName) {
         namespaceName = organization.name;
       }
 
-      await this.createIndex(organization.name);
+      const org_file = await this.prisma.organization_files.findUnique({
+        where: {
+          id: filePayload.id,
+        },
+        include: {
+          vector_records: {
+            where: {
+              index_name: details.indexName,
+              namespace: namespaceName,
+            },
+          },
+        },
+      });
 
-      const index = this.pinecone.Index(organization.name);
+      const index = await this.getIndex(organization.name);
 
-      // Load the document content from the file and split it into chunks
-      const content = await this.lc.getDocContent(filePayload, user);
-
-      // Get the vector embeddings for the documents
-      vectors = await Promise.all(content.flat().map(doc => this.embedDocument(doc, org_file)));
-
-      const chunkSize = await this.darkly.getNumberFlag('dynamic-langchain-chunkSize', 1000);
-
-      // Upsert vectors into the Pinecone index
-      await this.chunkedUpsert(index!, vectors, namespaceName, chunkSize);
-
-      await this.cache.set(this.getCacheKey(filePayload), filePayload.checksum, { ttl: 0 });
-      return { message: `${organization.name} S3 file ingestion complete` };
+      await this.uploadData(organization, user, org_file, index);
     } catch (error) {
       if (error instanceof ConflictException) {
         this.logger.warn(error.message);
@@ -252,33 +368,6 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
     }
   }
 
-  async getVectorStore(indexName: string) {
-    if (!this.pinecone) {
-      await this.onModuleInit();
-    }
-
-    try {
-      await this.createIndex(indexName);
-
-      const index = this.pinecone.Index(indexName);
-
-      const vectorStore = await PineconeStore.fromExistingIndex(
-        new OpenAIEmbeddings({
-          openAIApiKey: this.config.getOrThrow('OPENAI_API_KEY') as string,
-        }),
-        {
-          pineconeIndex: index,
-          namespace: indexName,
-        },
-      );
-
-      return vectorStore;
-    } catch (error) {
-      this.logger.error(error.message, { ...error });
-      throw new Error('Error fetching vector store');
-    }
-  }
-
   async listIndexes() {
     if (!this.pinecone) {
       await this.onModuleInit();
@@ -294,47 +383,15 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
     }
   }
 
-  async injestWebContent(targetIndex: string, embeddings: Array<PineconeRecord<any>>) {
-    if (!this.pinecone) {
-      await this.onModuleInit();
-    }
-
-    try {
-      const index = this.pinecone.Index(targetIndex);
-
-      const upsertResponse = await index.upsert(embeddings);
-
-      return upsertResponse;
-    } catch (error) {
-      this.logger.error(error.message, { ...error });
-      throw error;
-    }
-  }
-
-  async describeIndex(targetIndex: string) {
-    if (!this.pinecone) {
-      await this.onModuleInit();
-    }
-
-    try {
-      const index = this.pinecone.Index(targetIndex);
-
-      const indexStatsResponse = await index.describeIndexStats();
-
-      return indexStatsResponse;
-    } catch (error) {
-      this.logger.error(error.message, { ...error });
-      throw error;
-    }
-  }
-
   async getIndex(targetIndex: string) {
+    const details = await this.getIndexDetails(targetIndex);
+
     if (!this.pinecone) {
       await this.onModuleInit();
     }
 
     try {
-      const index = this.pinecone.Index(targetIndex);
+      const index = this.pinecone.Index(details.indexName);
 
       return index;
     } catch (error) {
@@ -343,9 +400,14 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
     }
   }
 
-  async createIndex(targetIndex: string, dimension: number = 1536) {
+  async createIndex(targetIndex: string, dimension: number) {
     if (!this.pinecone) {
       await this.onModuleInit();
+    }
+
+    const response = await this.pinecone.listIndexes();
+    if (response.indexes.some(item => item.name === targetIndex)) {
+      return this.pinecone.index(targetIndex);
     }
 
     try {
@@ -362,6 +424,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
         waitUntilReady: true,
       });
 
+      this.logger.info(`created index for ${targetIndex}`);
       this.metrics.increment('pinecone.index', 1, { index: targetIndex, status: 'created' });
       return idx;
     } catch (e) {
@@ -372,82 +435,16 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
     }
   }
 
-  async chunkedUpsert(index: Index, vectors: Array<PineconeRecord<RecordMetadata>>, namespace: string, chunkSize = 1000) {
-    try {
-      // Split the vectors into chunks
-      const chunks = this.sliceIntoChunks<PineconeRecord>(vectors, chunkSize);
-
-      // Upsert each chunk of vectors into the index
-      await Promise.allSettled(
-        chunks.map(async chunk => {
-          try {
-            await index.namespace(namespace).upsert(chunk);
-            this.metrics.increment('pinecone.index.upsert', 1, { namespace: namespace, status: 'completed' });
-          } catch (e) {
-            this.logger.error('Error upserting chunk', { error: e, namespace });
-            this.metrics.increment('pinecone.index.upsert', 1, { namespace: namespace, status: 'failed' });
-            throw e;
-          }
-        }),
-      );
-
-      this.logger.info('Upserted vectors into index', { namespace, chunkSize, total: vectors.length });
-
-      return true;
-    } catch (e) {
-      this.logger.error('Encountered error when upserting into index', {
-        error: e,
-        namespace,
-      });
-      throw new Error(`Error upserting vectors into index: ${e}`);
-    }
-  }
-
-  async getIndexNamespaces(targetIndex: string) {
-    if (!this.pinecone) {
-      await this.onModuleInit();
-    }
-
-    try {
-      const index = this.pinecone.Index(targetIndex);
-
-      const indexStatsResponse = await index.describeIndexStats();
-
-      const namespaces = Object.keys(indexStatsResponse.namespaces);
-
-      return namespaces;
-    } catch (error) {
-      this.logger.error(error.message, { ...error });
-      throw error;
-    }
-  }
-
   async deleteIndex(targetIndex: string) {
     if (!this.pinecone) {
       await this.onModuleInit();
     }
 
     try {
-      await this.pinecone.deleteIndex(targetIndex);
+      const indexDetails = await this.getIndexDetails(targetIndex);
+      await this.pinecone.deleteIndex(indexDetails.indexName);
 
       return { message: 'Index deleted successfully.' };
-    } catch (error) {
-      this.logger.error(error.message, { ...error });
-      throw error;
-    }
-  }
-
-  async deleteIndexNamespaces(targetIndex: string) {
-    if (!this.pinecone) {
-      await this.onModuleInit();
-    }
-
-    try {
-      const index = this.pinecone.Index(targetIndex);
-
-      await index.deleteAll();
-
-      return { message: 'Namespace deleted successfully.' };
     } catch (error) {
       this.logger.error(error.message, { ...error });
       throw error;
@@ -460,8 +457,4 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
     split.push(filePayload.checksum);
     return split.join(':');
   }
-
-  sliceIntoChunks = <T>(arr: T[], chunkSize: number) => {
-    return Array.from({ length: Math.ceil(arr.length / chunkSize) }, (_, i) => arr.slice(i * chunkSize, (i + 1) * chunkSize));
-  };
 }

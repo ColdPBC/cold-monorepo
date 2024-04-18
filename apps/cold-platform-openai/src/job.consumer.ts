@@ -37,15 +37,8 @@ export class JobConsumer extends BaseWorker {
   async process(job: Job) {
     this.logger.info(`Received job ${job.id} of type ${job.name}`);
     switch (job.name) {
-      case 'file.delete': {
-        const split = `pinecone:${job.data.payload.key.replaceAll('/', ':')}`.split(':');
-        split.pop();
-        split.push(job.data.payload.checksum);
-        const cacheKey = split.join(':');
-
-        await this.cache.delete(cacheKey);
-        return this.fileService.deleteFile(job.data.user, job.data.integration.id, job.data.payload.key);
-      }
+      case 'file.delete':
+        return this.deleteFileJob(job);
       case 'file.uploaded':
         return this.processFileJob(job);
       case 'compliance_automation.enabled':
@@ -75,12 +68,16 @@ export class JobConsumer extends BaseWorker {
 
   @Process('file.deleted')
   async deleteFileJob(job: Job) {
-    const split = `pinecone:${job.data.payload.key.replaceAll('/', ':')}`.split(':');
-    split.pop();
-    split.push(job.data.payload.checksum);
-    const cacheKey = split.join(':');
+    const { vectors } = job.data.payload;
+    const index = await this.loader.getIndex(job.data.organization.name);
 
-    await this.cache.delete(cacheKey);
+    if (Array.isArray(vectors)) {
+      const deleted = [];
+      for (const vector of vectors) {
+        await index.namespace(job.data.organization.name).deleteOne(vector.id);
+        deleted.push(vector.id);
+      }
+    }
     return this.fileService.deleteFile(job.data.user, job.data.integration.id, job.data.payload.key);
   }
 
