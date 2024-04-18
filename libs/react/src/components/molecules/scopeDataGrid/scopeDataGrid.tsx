@@ -11,10 +11,11 @@ import { withErrorBoundary } from 'react-error-boundary';
 export interface ScopeDataGridProps {
   scope_category: number;
   byActivity: boolean;
+  maxEmissions: number;
 }
 
 const _ScopeDataGrid = (props: ScopeDataGridProps) => {
-  const { scope_category, byActivity } = props;
+  const { scope_category, byActivity, maxEmissions } = props;
   const { data, selectedFacility, selectedYear } = useContext(ColdEmissionsContext);
   const { emissions } = data;
 
@@ -183,7 +184,7 @@ const _ScopeDataGrid = (props: ScopeDataGridProps) => {
         <Table.Body className="divide-y">
           {tableData.data.map((row, i) => (
             <Table.Row key={`${row.activity}-${i}`} theme={darkTableTheme.table?.row}>
-              <Table.Cell className="flex items-center font-bold" theme={darkTableTheme.table?.body?.cell}>
+              <Table.Cell className="flex items-center font-bold min-w-[379px]" theme={darkTableTheme.table?.body?.cell}>
                 <div
                   style={{
                     background: colors[i],
@@ -193,7 +194,20 @@ const _ScopeDataGrid = (props: ScopeDataGridProps) => {
                 />
                 <div className={'w-[359px] truncate'}>{capitalize(row.activity)}</div>
               </Table.Cell>
-              <Table.Cell theme={darkTableTheme.table?.body?.cell}>{row.percentage}</Table.Cell>
+              <Table.Cell theme={darkTableTheme.table?.body?.cell}>
+                <div className={'flex flex-row items-center h-full'}>
+                  <div className={'min-w-[65px] h-full'}>{row.percentage}</div>
+                  <div className={'w-full flex flex-row items-center h-full'}>
+                    <div
+                      className="h-1 rounded-lg"
+                      style={{
+                        backgroundColor: colors[i],
+                        width: `${(row.tCO2e / maxEmissions) * 100}%`,
+                      }}
+                    />
+                  </div>
+                </div>
+              </Table.Cell>
               <Table.Cell theme={darkTableTheme.table?.body?.cell}>{formatTonnes(row.tCO2e)}</Table.Cell>
             </Table.Row>
           ))}

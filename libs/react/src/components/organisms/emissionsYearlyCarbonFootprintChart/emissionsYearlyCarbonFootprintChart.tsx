@@ -1,7 +1,7 @@
 import { Card, ErrorFallback } from '@coldpbc/components';
-import { forEach, forOwn, get, isArray, map, reduce } from 'lodash';
-import { BarElement, CategoryScale, Chart as ChartJS, ChartData, ChartEvent, ChartOptions, LinearScale, Title, Tooltip } from 'chart.js';
-import { Bar } from 'react-chartjs-2';
+import { find, forEach, forOwn, get, isArray, map, reduce } from 'lodash';
+import { BarElement, CategoryScale, Chart as ChartJS, ChartData, ChartEvent, ChartOptions, LinearScale, LineController, LineElement, PointElement, Title, Tooltip } from 'chart.js';
+import { Chart } from 'react-chartjs-2';
 import React, { useContext } from 'react';
 import { ColdEmissionsContext } from '@coldpbc/context';
 import { HexColors } from '@coldpbc/themes';
@@ -10,6 +10,7 @@ import opacity from 'hex-color-opacity';
 import { Plugin as PluginType } from 'chart.js/dist/types';
 import { useColdContext } from '@coldpbc/hooks';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
+import regression, { DataPoint } from 'regression';
 
 const _EmissionsYearlyCarbonFootprintChart = () => {
   const chartRef = React.useRef(null);
@@ -23,7 +24,7 @@ const _EmissionsYearlyCarbonFootprintChart = () => {
     };
   } = {};
 
-  const yearsChartData: ChartData<'bar'> = {
+  const yearsChartData: ChartData = {
     labels: Array<string>(),
     datasets: [
       {
@@ -38,6 +39,7 @@ const _EmissionsYearlyCarbonFootprintChart = () => {
           bottomLeft: 4,
           bottomRight: 4,
         },
+        label: 'Scope 3',
       },
       {
         data: Array<number>(),
@@ -45,6 +47,7 @@ const _EmissionsYearlyCarbonFootprintChart = () => {
         barThickness: 76,
         borderSkipped: false,
         minBarLength: 10,
+        label: 'Scope 2',
       },
       {
         data: Array<number>(),
@@ -58,12 +61,14 @@ const _EmissionsYearlyCarbonFootprintChart = () => {
           bottomLeft: 0,
           bottomRight: 0,
         },
+        label: 'Scope 1',
       },
     ],
   };
   const tickColors = Array<string>();
   const defaultScopeColors = [HexColors.lightblue['200'], HexColors.purple['200'], HexColors.teal['200']];
   let maxEmission = 0;
+  const regressionData: DataPoint[] = Array<DataPoint>();
 
   map(emissions, facility => {
     if (selectedFacility.value !== 'all' && selectedFacility.value !== facility.facility_id.toString()) {
@@ -71,14 +76,17 @@ const _EmissionsYearlyCarbonFootprintChart = () => {
     }
     map(facility.periods, period => {
       const yearEmissions = yearsData[period.value.toString()] || {};
+      let yearEmissionsTotal = get(yearEmissions, 'total', 0);
       map(period.emissions, emission => {
         const scope = emission.scope.ghg_category;
         let scopeEmissions = get(yearEmissions, scope.toString(), 0);
         map(emission.activities, activity => {
+          yearEmissionsTotal += activity.tco2e;
           scopeEmissions += activity.tco2e;
         });
         yearEmissions[scope.toString()] = scopeEmissions;
       });
+      yearEmissions.total = yearEmissionsTotal;
       yearsData[period.value.toString()] = yearEmissions;
     });
   });
@@ -132,6 +140,9 @@ const _EmissionsYearlyCarbonFootprintChart = () => {
 
   forOwn(yearsData, (emissions, year) => {
     // iterate over the scopes and get the total emission for the year
+    if (selectedYear.value === 'all') {
+      regressionData.push([Object.keys(yearsData).indexOf(year), emissions.total]);
+    }
     let totalEmission = 0;
     forOwn(emissions, (emission, scope) => {
       if (scope === 'total') {
@@ -141,17 +152,25 @@ const _EmissionsYearlyCarbonFootprintChart = () => {
     });
     maxEmission = maxEmission < totalEmission ? totalEmission : maxEmission;
   });
+  const regressionResult = regression.linear(regressionData);
 
-  const getMaxYTick = () => {
-    const max = Math.round(maxEmission + (maxEmission > 10 ? maxEmission / 10 : 1));
+  if (selectedYear.value === 'all') {
+    yearsChartData.datasets.push({
+      data: map(regressionResult.points, point => point[1]),
+      backgroundColor: HexColors.gray['90'],
+      borderColor: HexColors.gray['90'],
+      borderWidth: 3,
+      type: 'line',
+    });
+  }
 
-    return max;
-  };
-
-  const chartOptions: ChartOptions<'bar'> = {
+  const chartOptions: ChartOptions = {
     responsive: true,
     backgroundColor: 'transparent',
     plugins: {
+      tooltip: {
+        enabled: true,
+      },
       datalabels: {
         color: 'white',
         opacity: context => {
@@ -168,12 +187,19 @@ const _EmissionsYearlyCarbonFootprintChart = () => {
         formatter: function (value, context) {
           const dataSetArray = Array<number>();
           forEach(context.chart.data.datasets, (dataset, index) => {
-            if (dataset.data[context.dataIndex] !== undefined) {
-              dataSetArray.push(dataset.data[context.dataIndex] as number);
+            if (selectedYear.value === 'all') {
+              if (index < context.chart.data.datasets.length - 1) {
+                if (dataset.data[context.dataIndex] !== undefined) {
+                  dataSetArray.push(dataset.data[context.dataIndex] as number);
+                }
+              }
+            } else {
+              if (dataset.data[context.dataIndex] !== undefined) {
+                dataSetArray.push(dataset.data[context.dataIndex] as number);
+              }
             }
           });
           const total = reduce(dataSetArray, (sum, num) => sum + num, 0);
-          // only show the label for the top most bar
           if (context.datasetIndex === dataSetArray.length - 1) {
             return Math.round(total * 100) / 100;
           } else {
@@ -207,16 +233,24 @@ const _EmissionsYearlyCarbonFootprintChart = () => {
       }
       const index = element.index;
       const yearOption = get(yearOptions, index + 1);
-      setSelectedYear(yearOption);
+      const allYearsOption = find(yearOptions, { value: 'all' });
+      // if the year is already selected, select 'all' option
+      if (selectedYear.value === yearOption.value && allYearsOption) {
+        setSelectedYear(allYearsOption);
+        return;
+      } else {
+        setSelectedYear(yearOption);
+        return;
+      }
     },
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore - inject this into the chart options
     selectedYear,
   };
 
-  ChartJS.register(CategoryScale, LinearScale, BarElement, Title);
+  ChartJS.register(CategoryScale, LinearScale, BarElement, Title, PointElement, LineElement, LineController, Tooltip);
 
-  const barPlugins: PluginType<'bar'>[] = [Tooltip, ChartDataLabels];
+  const barPlugins: PluginType[] = [ChartDataLabels];
 
   logBrowser('EmissionsYearlyCarbonFootprintChart', 'info', { yearsChartData, chartOptions });
 
@@ -232,6 +266,7 @@ const _EmissionsYearlyCarbonFootprintChart = () => {
   console.log({
     maxEmission,
     yearsData,
+    regressionResult,
   });
 
   return (
@@ -245,7 +280,7 @@ const _EmissionsYearlyCarbonFootprintChart = () => {
             {getScopeLegend(3)}
           </div>
         </div>
-        <Bar className={'w-full'} ref={chartRef} plugins={barPlugins} options={chartOptions} data={yearsChartData} width={'897.001px'} height={'294px'} />
+        <Chart type={'bar'} className={'w-full'} ref={chartRef} plugins={barPlugins} options={chartOptions} data={yearsChartData} width={'897.001px'} height={'294px'} />
       </div>
     </Card>
   );

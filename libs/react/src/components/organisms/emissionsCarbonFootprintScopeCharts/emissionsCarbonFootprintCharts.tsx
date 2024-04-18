@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
-import { Card, ErrorFallback, FootprintDetailChip, ScopeDataGrid } from '@coldpbc/components';
+import { CarbonFootprintDetailChip, Card, ErrorFallback, ScopeDataGrid } from '@coldpbc/components';
 import { ColdEmissionsContext } from '@coldpbc/context';
 import { withErrorBoundary } from 'react-error-boundary';
-import { forEach, get, set, sortBy } from 'lodash';
+import { findIndex, forEach, get, set, sortBy } from 'lodash';
 import { ChartOptions } from 'chart.js';
 import { useActiveSegment } from '@coldpbc/hooks';
 import { Chart } from 'react-chartjs-2';
@@ -64,20 +64,37 @@ const _EmissionsCarbonFootprintCharts = () => {
         forEach(period.emissions, emission => {
           const scopeNumber = emission.scope.ghg_category;
           const scopeActivities = get(allScopeActivities, scopeNumber, {});
+          const subcategory = emission.scope.ghg_subcategory;
           forEach(emission.activities, activity => {
             totalEmissions += activity.tco2e;
-            const scopeActivity = get(scopeActivities, activity.name, {
-              emissions: 0,
-              percentage: '0%',
-            });
-            if (scopeActivity.emissions === 0) {
+            if (byActivity) {
+              const scopeActivity = get(scopeActivities, activity.name, {
+                emissions: 0,
+                percentage: '0%',
+              });
               scopeActivity.emissions += activity.tco2e;
               scopeActivity.percentage = '0%';
+              set(scopeActivities, activity.name, scopeActivity);
             } else {
-              scopeActivity.emissions = activity.tco2e;
-              scopeActivity.percentage = '0%';
+              // by category
+              if (scopeNumber in [1, 2]) {
+                const scopeActivity = get(scopeActivities, `Scope ${scopeNumber}`, {
+                  emissions: 0,
+                  percentage: '0%',
+                });
+                scopeActivity.emissions += activity.tco2e;
+                scopeActivity.percentage = '0%';
+                set(scopeActivities, `Scope ${scopeNumber}`, scopeActivity);
+              } else {
+                const scopeActivity = get(scopeActivities, `Category ${subcategory}`, {
+                  emissions: 0,
+                  percentage: '0%',
+                });
+                scopeActivity.emissions += activity.tco2e;
+                scopeActivity.percentage = '0%';
+                set(scopeActivities, `Category ${subcategory}`, scopeActivity);
+              }
             }
-            set(scopeActivities, activity.name, scopeActivity);
           });
           set(allScopeActivities, scopeNumber, scopeActivities);
         });
@@ -91,25 +108,52 @@ const _EmissionsCarbonFootprintCharts = () => {
     color: string;
   }>();
 
+  let maxEmissions = 0;
   // sort the activities by emissions in each scope
   forEach(allScopeActivities, (scopeActivities, scope) => {
-    const sortedActivities = sortBy(Object.keys(scopeActivities), activity => {
-      return -scopeActivities[activity].emissions;
-    });
+    let sortedActivities = Array<string>();
+    if (byActivity) {
+      sortedActivities = sortBy(Object.keys(scopeActivities), activity => {
+        return -scopeActivities[activity].emissions;
+      });
+    } else {
+      sortedActivities = sortBy(Object.keys(scopeActivities), activity => {
+        return activity;
+      });
+    }
     const scopeColor = get(scopeColors, scope, scopeColors['1']);
     forEach(sortedActivities, (activity, index) => {
-      allEmissions.push({
-        activity,
-        emissions: scopeActivities[activity].emissions,
-        color: scopeColor[index],
-      });
-      // const scopeActivity = scopeActivities[activity];
-      // scopeActivity.percentage = ((scopeActivity.emissions / totalEmissions) * 100).toFixed(1) + '%';
-      // emissionsDataSet.chartData.datasets[0].data.push(scopeActivity.emissions);
-      // emissionsDataSet.chartData.datasets[0].backgroundColor.push(scopeColor[index]);
-      // emissionsDataSet.chartData.datasets[0].hoverBackgroundColor.push(scopeColor[index]);
-      // emissionsDataSet.chartData.datasets[0].borderColor.push(scopeColor[index]);
-      // emissionsDataSet.chartData.labels.push(activity);
+      if (scope === '3' && byActivity) {
+        if (index < 3) {
+          allEmissions.push({
+            activity,
+            emissions: scopeActivities[activity].emissions,
+            color: scopeColor[index],
+          });
+        } else {
+          // get from allEmissions with activity 'Other Activities'
+          const otherActivitiesIndex = findIndex(allEmissions, emission => {
+            return emission.activity === 'Other Activities';
+          });
+          if (otherActivitiesIndex !== -1) {
+            const otherActivities = allEmissions[otherActivitiesIndex];
+            otherActivities.emissions += scopeActivities[activity].emissions;
+            set(allEmissions, otherActivitiesIndex, otherActivities);
+          } else {
+            allEmissions.push({
+              activity: 'Other Activities',
+              emissions: scopeActivities[activity].emissions,
+              color: scopeColor[index],
+            });
+          }
+        }
+      } else {
+        allEmissions.push({
+          activity,
+          emissions: scopeActivities[activity].emissions,
+          color: scopeColor[index],
+        });
+      }
     });
   });
 
@@ -118,10 +162,13 @@ const _EmissionsCarbonFootprintCharts = () => {
   });
 
   forEach(sortedEmissions, (emission, index) => {
+    if (emission.emissions > maxEmissions) {
+      maxEmissions = emission.emissions;
+    }
     emissionsDataSet.chartData.datasets[0].data.push(emission.emissions);
     emissionsDataSet.chartData.datasets[0].backgroundColor.push(emission.color);
     emissionsDataSet.chartData.datasets[0].hoverBackgroundColor.push(emission.color);
-    emissionsDataSet.chartData.datasets[0].borderColor.push(emission.color);
+    emissionsDataSet.chartData.datasets[0].borderColor.push('black');
     emissionsDataSet.chartData.labels.push(emission.activity);
   });
 
@@ -140,6 +187,11 @@ const _EmissionsCarbonFootprintCharts = () => {
     maintainAspectRatio: false,
     cutout: '80%',
     onHover: segmentOnHover,
+    plugins: {
+      tooltip: {
+        enabled: false,
+      },
+    },
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore - inject this into the chart options
     activeSegment,
@@ -150,7 +202,8 @@ const _EmissionsCarbonFootprintCharts = () => {
   };
 
   console.log({
-    totalEmissions,
+    maxEmissions,
+    allScopeActivities,
   });
 
   return (
@@ -170,15 +223,21 @@ const _EmissionsCarbonFootprintCharts = () => {
               </div>
             </div>
             <div className={'flex flex-row gap-[32px]'}>
-              <div className={'flex flex-col justify-between'}>
-                <div className={'w-[300px] h-[300px] relative'}>
-                  <FootprintDetailChip emissions={totalEmissions} large center />
-                  <Chart options={chartOptions} type="doughnut" data={emissionsDataSet.chartData} plugins={chartPlugins} data-chromatic="ignore" width={300} height={300} />
+              <div className={'flex flex-col justify-between w-[347px]'}>
+                <div className={'w-[347px] h-[347px] relative'}>
+                  <CarbonFootprintDetailChip emissions={totalEmissions} center />
+                  <Chart options={chartOptions} type="doughnut" data={emissionsDataSet.chartData} plugins={chartPlugins} data-chromatic="ignore" />
+                </div>
+                <div className={'w-full h-[77px] flex flex-row gap-[16px]'}>
+                  <div className={'h-full w-[77px]'}>Change</div>
+                  <div className={'text-caption text-tc-disabled whitespace-pre-wrap'}>
+                    Emissions factors and methodology powered by The Change Climate Project, the leading independent emissions accounting & certification nonprofit.
+                  </div>
                 </div>
               </div>
               <div className={'flex flex-col gap-[16px]'}>
                 {uniqueScopes.map(scope => {
-                  return <ScopeDataGrid scope_category={scope} key={scope} byActivity={byActivity} />;
+                  return <ScopeDataGrid scope_category={scope} key={scope} byActivity={byActivity} maxEmissions={maxEmissions} />;
                 })}
               </div>
             </div>

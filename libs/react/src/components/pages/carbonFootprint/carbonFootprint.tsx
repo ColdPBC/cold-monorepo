@@ -4,6 +4,8 @@ import { withErrorBoundary } from 'react-error-boundary';
 import { ColdEmissionsProvider } from '@coldpbc/providers';
 
 const _CarbonFootprint = () => {
+  // todo: add hover effect capability to donut chart and table
+  // todo: add tooltip to bar chart
   return (
     <ColdEmissionsProvider>
       <EmissionsCarbonFootprintBase />
