@@ -2,8 +2,8 @@ export const ScopeColors: {
   [key: number]: 'lightblue' | 'purple' | 'green' | 'teal';
 } = {
   1: 'lightblue',
-  2: 'teal',
-  3: 'green',
+  2: 'purple',
+  3: 'teal',
 };
 
 export enum EmissionsScopesCardVariants {
