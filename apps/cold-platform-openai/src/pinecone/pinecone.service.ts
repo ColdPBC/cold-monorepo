@@ -6,7 +6,6 @@ import { Document } from '@langchain/core/documents';
 import OpenAI from 'openai';
 import { LangchainLoaderService } from '../langchain/langchain.loader.service';
 import { organization_files } from '@prisma/client';
-import { pick } from 'lodash';
 
 export type PineconeMetadata = {
   url: string;
@@ -227,17 +226,21 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
 
       const indexDetails = await this.getIndexDetails(org_name);
 
-      await this.prisma.vector_records.create({
-        data: {
-          id: record.id,
-          organization_id: org_file.organization_id,
-          organization_file_id: org_file.id,
-          values: embedding,
-          namespace: org_name,
-          index_name: indexDetails.indexName,
-          metadata: record.metadata,
-        },
-      });
+      try {
+        await this.prisma.vector_records.create({
+          data: {
+            id: record.id,
+            organization_id: org_file.organization_id,
+            organization_file_id: org_file.id,
+            values: embedding,
+            namespace: org_name,
+            index_name: indexDetails.indexName,
+            metadata: record.metadata,
+          },
+        });
+      } catch (e) {
+        this.logger.error(e.message, { ...e });
+      }
 
       return record;
     } catch (error) {
@@ -255,7 +258,8 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
       const indexDetail = await this.getIndexDetails(org_name);
       const embeddingConfig = {
         model: indexDetail.config.model, //await this.darkly.getStringFlag('dynamic-ai-embedding-model', 'text-embedding-3-large'),
-        input: input?.replace(/\n/g, ' ') || '',
+        // eslint-disable-next-line no-control-regex
+        input: input?.replace(/\n/g, ' ').replace(/[\x00-\x08\x0E-\x1F\x7F-\uFFFF]/g, '') || '',
       };
 
       const response = await this.openai.embeddings.create(embeddingConfig);
@@ -278,7 +282,8 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
           });
           if (found.matches < 1) {
             this.logger.info(`upserting missing ${v.id} of ${filePayload.original_name}`);
-            await index.namespace(organization.name).upsert([v]);
+            const item = { id: v.id, values: v.values, metadata: v.metadata };
+            await index.namespace(organization.name).upsert([item]);
           } else {
             this.logger.info(`${v.id} of ${filePayload.original_name} already injected`);
           }
@@ -290,19 +295,19 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
         // Get the vector embeddings for the document
         const embeddings = await Promise.all(content.flat().map(doc => this.embedDocument(doc, filePayload, organization.name)));
         for (const v of embeddings) {
-          await index.namespace(organization.name).upsert([v]);
+          const record = { id: v.id, values: v.values, metadata: v.metadata };
+          await index.namespace(organization.name).upsert([record]);
           this.metrics.increment('pinecone.index.upsert', 1, { namespace: organization.name, status: 'completed' });
 
-          const item = pick(v, ['id', 'values', 'metadata']);
-          await index.namespace(organization.name).upsert([item]);
-          this.metrics.increment('pinecone.index.upsert', 1, { namespace: organization.name, status: 'completed' });
+          //const item = pick(v, ['id', 'values', 'metadata']);
+          // await index.namespace(organization.name).upsert([item]);
+          // this.metrics.increment('pinecone.index.upsert', 1, { namespace: organization.name, status: 'completed' });
         }
       }
     } catch (e) {
       this.logger.error('Error upserting chunk', { error: e, namespace: organization.name });
 
       this.metrics.increment('pinecone.index.upsert', 1, { namespace: organization.name, status: 'failed' });
-      throw e;
     }
 
     await this.cache.set(this.getCacheKey(filePayload), filePayload.checksum, { ttl: 0 });
