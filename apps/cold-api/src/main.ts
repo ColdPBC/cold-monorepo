@@ -15,7 +15,9 @@ async function bootstrap(instance) {
     logger: instance,
   });
 
-  const server = this.refHost.httpAdapter.getHttpServer();
+  const httpAdapter = app.getHttpAdapter();
+  const server = httpAdapter.getHttpServer();
+  
   server.keepAliveTimeout = 61000;
   server.headersTimeout = 65000;
   
