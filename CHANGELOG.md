@@ -1,3 +1,10 @@
+## [1.201.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.201.1...v1.201.2) (2024-04-18)
+
+
+### Bug Fixes
+
+* improved file injection process ([02c6f25](https://github.com/ColdPBC/cold-monorepo/commit/02c6f25407c60bb615c1bf810fa425d96eb1404b))
+
 ## [1.201.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.201.0...v1.201.1) (2024-04-18)
 
 
