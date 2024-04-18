@@ -223,7 +223,7 @@ const _EmissionsCarbonFootprintCharts = () => {
               </div>
             </div>
             <div className={'flex flex-row gap-[32px]'}>
-              <div className={'flex flex-col justify-between w-[347px]'}>
+              <div className={'flex flex-col justify-between w-[347px] gap-[32px]'}>
                 <div className={'w-[347px] h-[347px] relative'}>
                   <CarbonFootprintDetailChip emissions={totalEmissions} center />
                   <Chart options={chartOptions} type="doughnut" data={emissionsDataSet.chartData} plugins={chartPlugins} data-chromatic="ignore" />

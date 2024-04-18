@@ -5,7 +5,9 @@ import { ColdEmissionsProvider } from '@coldpbc/providers';
 
 const _CarbonFootprint = () => {
   // todo: add hover effect capability to donut chart and table
-  // todo: add tooltip to bar chart
+  // todo: add hover effect to table rows
+  // todo: update bar chart tooltip to custom one
+  // todo: regression line for bar chart
   return (
     <ColdEmissionsProvider>
       <EmissionsCarbonFootprintBase />

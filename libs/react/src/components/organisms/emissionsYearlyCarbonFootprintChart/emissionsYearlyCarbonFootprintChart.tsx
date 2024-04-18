@@ -1,5 +1,5 @@
 import { Card, ErrorFallback } from '@coldpbc/components';
-import { find, forEach, forOwn, get, isArray, map, reduce } from 'lodash';
+import { find, forEach, forOwn, get, isArray, map, reduce, set } from 'lodash';
 import { BarElement, CategoryScale, Chart as ChartJS, ChartData, ChartEvent, ChartOptions, LinearScale, LineController, LineElement, PointElement, Title, Tooltip } from 'chart.js';
 import { Chart } from 'react-chartjs-2';
 import React, { useContext } from 'react';
@@ -32,13 +32,8 @@ const _EmissionsYearlyCarbonFootprintChart = () => {
         backgroundColor: Array<string>(),
         barThickness: 76,
         borderSkipped: false,
+        borderRadius: [],
         minBarLength: 10,
-        borderRadius: {
-          topLeft: 0,
-          topRight: 0,
-          bottomLeft: 4,
-          bottomRight: 4,
-        },
         label: 'Scope 3',
       },
       {
@@ -46,6 +41,7 @@ const _EmissionsYearlyCarbonFootprintChart = () => {
         backgroundColor: Array<string>(),
         barThickness: 76,
         borderSkipped: false,
+        borderRadius: [],
         minBarLength: 10,
         label: 'Scope 2',
       },
@@ -53,14 +49,9 @@ const _EmissionsYearlyCarbonFootprintChart = () => {
         data: Array<number>(),
         backgroundColor: Array<string>(),
         barThickness: 76,
+        borderRadius: [],
         borderSkipped: false,
         minBarLength: 20,
-        borderRadius: {
-          topLeft: 4,
-          topRight: 4,
-          bottomLeft: 0,
-          bottomRight: 0,
-        },
         label: 'Scope 1',
       },
     ],
@@ -156,7 +147,9 @@ const _EmissionsYearlyCarbonFootprintChart = () => {
 
   if (selectedYear.value === 'all') {
     yearsChartData.datasets.push({
-      data: map(regressionResult.points, point => point[1]),
+      data: map(regressionResult.points, point => {
+        return [point[0], point[1]];
+      }),
       backgroundColor: HexColors.gray['90'],
       borderColor: HexColors.gray['90'],
       borderWidth: 3,
@@ -167,9 +160,20 @@ const _EmissionsYearlyCarbonFootprintChart = () => {
   const chartOptions: ChartOptions = {
     responsive: true,
     backgroundColor: 'transparent',
+    elements: {
+      point: {
+        radius: 0,
+      },
+    },
     plugins: {
       tooltip: {
         enabled: true,
+        mode: 'index',
+        callbacks: {
+          title: function (tooltipItem) {
+            return '';
+          },
+        },
       },
       datalabels: {
         color: 'white',
@@ -252,6 +256,90 @@ const _EmissionsYearlyCarbonFootprintChart = () => {
 
   const barPlugins: PluginType[] = [ChartDataLabels];
 
+  forOwn(yearsData, (emissions, year) => {
+    const yearIndex = Object.keys(yearsData).indexOf(year);
+    // check all the datasets and get the first and last dataset with data
+    const firstDataSetIndex = 0;
+    const lastDataSetIndex = 0;
+    const specificYearChartData = Array<number>();
+    forEach(yearsChartData.datasets, (dataset, index) => {
+      if (selectedYear.value === 'all' && index === yearsChartData.datasets.length - 1) {
+        return;
+      }
+      if (dataset.data[yearIndex] !== undefined && dataset.data[yearIndex] !== 0) {
+        specificYearChartData.push(index);
+      }
+    });
+    if (specificYearChartData.length === 1) {
+      const firstDataSet = yearsChartData.datasets[specificYearChartData[0]];
+      const firstBorderRadiuses = get(
+        firstDataSet,
+        'borderRadius',
+        Array<{
+          topLeft: number;
+          topRight: number;
+          bottomLeft: number;
+          bottomRight: number;
+        }>(),
+      );
+      firstBorderRadiuses.push({
+        topLeft: 4,
+        topRight: 4,
+        bottomLeft: 4,
+        bottomRight: 4,
+      });
+      set(yearsChartData.datasets[firstDataSetIndex], 'borderRadius', firstBorderRadiuses);
+    } else {
+      const firstDataSet = yearsChartData.datasets[specificYearChartData[0]];
+      const lastDataSet = yearsChartData.datasets[specificYearChartData[specificYearChartData.length - 1]];
+      const firstBorderRadiuses = get(
+        firstDataSet,
+        'borderRadius',
+        Array<{
+          topLeft: number;
+          topRight: number;
+          bottomLeft: number;
+          bottomRight: number;
+        }>(),
+      );
+      const lastBorderRadiuses = get(
+        lastDataSet,
+        'borderRadius',
+        Array<{
+          topLeft: number;
+          topRight: number;
+          bottomLeft: number;
+          bottomRight: number;
+        }>(),
+      );
+      firstBorderRadiuses.push({
+        topLeft: 0,
+        topRight: 0,
+        bottomLeft: 4,
+        bottomRight: 4,
+      });
+      lastBorderRadiuses.push({
+        topLeft: 4,
+        topRight: 4,
+        bottomLeft: 0,
+        bottomRight: 0,
+      });
+      set(yearsChartData.datasets[lastDataSetIndex], 'borderRadius', lastBorderRadiuses);
+      set(yearsChartData.datasets[firstDataSetIndex], 'borderRadius', firstBorderRadiuses);
+    }
+  });
+
+  // add a fake third year to the char data for linear regression testing
+  // if (yearsChartData.labels) {
+  //   yearsChartData.labels.push('2024');
+  // }
+  // yearsChartData.datasets.forEach(dataset => {
+  //   dataset.data.push(500);
+  //   if (isArray(dataset.backgroundColor)) {
+  //     dataset.backgroundColor.push(HexColors.gray['90']);
+  //   }
+  // });
+
   logBrowser('EmissionsYearlyCarbonFootprintChart', 'info', { yearsChartData, chartOptions });
 
   const getScopeLegend = (scope: number) => {
@@ -267,6 +355,7 @@ const _EmissionsYearlyCarbonFootprintChart = () => {
     maxEmission,
     yearsData,
     regressionResult,
+    yearsChartData,
   });
 
   return (
