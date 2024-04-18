@@ -1,3 +1,10 @@
+## [1.201.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.201.2...v1.201.3) (2024-04-18)
+
+
+### Bug Fixes
+
+* partial fix for files with invalid unicode characters causing app to crash. ([02bda42](https://github.com/ColdPBC/cold-monorepo/commit/02bda4235566ae8eb99b9d541f454b0b49b56607))
+
 ## [1.201.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.201.1...v1.201.2) (2024-04-18)
 
 
