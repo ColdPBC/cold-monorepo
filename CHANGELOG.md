@@ -1,3 +1,10 @@
+## [1.201.9](https://github.com/ColdPBC/cold-monorepo/compare/v1.201.8...v1.201.9) (2024-04-19)
+
+
+### Bug Fixes
+
+* update ui staging to still hit localhost for the API ([9d4009b](https://github.com/ColdPBC/cold-monorepo/commit/9d4009b05ef2d568a3d9b32b20d9030d0885b47f))
+
 ## [1.201.8](https://github.com/ColdPBC/cold-monorepo/compare/v1.201.7...v1.201.8) (2024-04-19)
 
 
