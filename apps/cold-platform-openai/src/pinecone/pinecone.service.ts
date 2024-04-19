@@ -62,21 +62,26 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
     return { indexName, config };
   }
 
-  async syncOrgFiles(user: AuthenticatedUser, orgId: string) {
+  async syncOrgFiles(
+    user:
+      | AuthenticatedUser
+      | {
+          coldclimate_claims: { org_id: string; roles: string[]; id: string; email: string };
+        },
+    orgId: string,
+    delay: number = 0,
+  ) {
     const org = await this.prisma.organizations.findUnique({
       where: {
         id: orgId,
       },
       include: {
-        organization_files: {
-          include: {
-            vector_records: true,
-          },
-        },
+        organization_files: true,
       },
     });
 
     const details = await this.getIndexDetails(org.name);
+
     for (const file of org.organization_files) {
       await this.queue.add(
         'sync_files',
@@ -86,7 +91,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
           file,
           index_details: details,
         },
-        { removeOnComplete: true },
+        { removeOnComplete: true, delay },
       );
     }
   }
@@ -94,12 +99,9 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
   async syncAllOrgFiles(user: AuthenticatedUser) {
     await this.darkly.onModuleInit();
     const orgs = await this.prisma.organizations.findMany({
-      include: {
-        organization_files: {
-          include: {
-            vector_records: true,
-          },
-        },
+      select: {
+        id: true,
+        name: true,
       },
     });
 
@@ -113,6 +115,28 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
       this.pinecone = new Pinecone({
         apiKey: this.config.getOrThrow('PINECONE_API_KEY'),
       });
+
+      const orgs = await this.prisma.organizations.findMany({
+        select: {
+          id: true,
+          name: true,
+        },
+      });
+
+      for (const org of orgs) {
+        await this.syncOrgFiles(
+          {
+            coldclimate_claims: {
+              id: 'system',
+              email: 'system',
+              org_id: org.id,
+              roles: ['cold:admin'],
+            },
+          },
+          org.id,
+          60000 * 4,
+        );
+      }
     } catch (error) {
       console.log('error', error);
       throw new Error('Failed to initialize Pinecone Client');
@@ -121,12 +145,6 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
 
   // The function `getContext` is used to retrieve the context of a given message
   async getContext(message: string, namespace: string, indexName: string, minScore = 0.7, getOnlyText = true): Promise<string | ScoredPineconeRecord[]> {
-    const config = await this.darkly.getJSONFlag('config-embedding-model', {
-      kind: 'organization',
-      key: indexName,
-      name: indexName,
-    });
-
     // Get the embeddings of the input message
     const embedding = await this.embedString(message, indexName);
 
@@ -198,12 +216,6 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
   }
 
   async embedWebContent(doc: Document, metadata: any) {
-    const config = await this.darkly.getJSONFlag('config-embedding-model', {
-      kind: 'organization',
-      key: metadata.organization,
-      name: metadata.organization,
-    });
-
     // Generate OpenAI embeddings for the document content
     const embedding = await this.embedString(doc.pageContent, metadata.organization);
 
