@@ -97,7 +97,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
               file,
               index_details: details,
             },
-            { removeOnComplete: true },
+            { removeOnComplete: true, delay: 60000 * 5 },
           );
         }
       }
