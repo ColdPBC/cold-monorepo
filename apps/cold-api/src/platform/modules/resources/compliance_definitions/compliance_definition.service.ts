@@ -61,7 +61,7 @@ export class ComplianceDefinitionService extends BaseWorker {
     }
 
     let surveyNames: string[];
-    if (Array.isArray(compliance.surveys_override)) {
+    if (Array.isArray(compliance.surveys_override) && compliance.surveys_override.length > 0) {
       surveyNames = compliance.surveys_override as string[];
     } else {
       surveyNames = compliance.compliance_definition.surveys as string[];
