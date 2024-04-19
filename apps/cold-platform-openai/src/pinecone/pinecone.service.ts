@@ -94,6 +94,8 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
         { removeOnComplete: true, delay },
       );
     }
+
+    return { message: 'Syncing org files', org };
   }
 
   async syncAllOrgFiles(user: AuthenticatedUser) {
@@ -106,8 +108,10 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
     });
 
     for (const org of orgs) {
-      await this.syncOrgFiles(user, org.id);
+      this.syncOrgFiles(user, org.id);
     }
+
+    return { message: 'Sync jobs created for all files across all orgs', orgs };
   }
 
   async onModuleInit(): Promise<void> {
@@ -145,11 +149,12 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
 
   // The function `getContext` is used to retrieve the context of a given message
   async getContext(message: string, namespace: string, indexName: string, minScore = 0.7, getOnlyText = true): Promise<string | ScoredPineconeRecord[]> {
+    const indexDetails = await this.getIndexDetails(indexName);
     // Get the embeddings of the input message
     const embedding = await this.embedString(message, indexName);
 
     // Retrieve the matches for the embeddings from the specified namespace
-    const matches = await this.getMatchesFromEmbeddings(embedding, 5, namespace, indexName);
+    const matches = await this.getMatchesFromEmbeddings(embedding, 5, namespace, indexDetails.indexName);
 
     // Filter out the matches that have a score lower than the minimum score
     const qualifyingDocs = matches.filter(m => m.score && m.score > minScore);
@@ -190,12 +195,12 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
 
     // Retrieve the list of indexes to check if expected index exists
     const indexes = await this.listIndexes();
-    if (!indexes || indexes.filter(i => i.name === `${indexName}-${config.model}`).length !== 1) {
+    if (!indexes || indexes.filter(i => i.name === `${indexName}`).length !== 1) {
       throw new Error(`Index ${indexName} does not exist`);
     }
 
     // Get the Pinecone index
-    const index = pinecone!.Index<PineconeMetadata>(`${indexName}-${config.model}`);
+    const index = pinecone!.Index<PineconeMetadata>(`${indexName}`);
 
     // Get the namespace
     const pineconeNamespace = index.namespace(namespace ?? '');
