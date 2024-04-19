@@ -1,3 +1,18 @@
+# [1.202.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.201.9...v1.202.0) (2024-04-19)
+
+
+### Bug Fixes
+
+* add surveys_override to request body ([6610d7a](https://github.com/ColdPBC/cold-monorepo/commit/6610d7a36441eb2bb6b1a3b72d1900fa2a21a612))
+* specifically check for empty surveys_override array. ([81e9502](https://github.com/ColdPBC/cold-monorepo/commit/81e9502b24499c9d97279c210e354c566286a052))
+
+
+### Features
+
+* add surveys_override to organization_compliances table ([4c67128](https://github.com/ColdPBC/cold-monorepo/commit/4c67128c337fffdfac20428a44f35a2ef4fb4044))
+* add surveys_override to organization_compliances table ([#396](https://github.com/ColdPBC/cold-monorepo/issues/396)) ([742f30e](https://github.com/ColdPBC/cold-monorepo/commit/742f30e282a03e7fb057644fe1a6772d65aa3d3a))
+* return surveys_override if present otherwise return surveys array ([94ab318](https://github.com/ColdPBC/cold-monorepo/commit/94ab318cf5bd41b67446036654c1ecfdbef62857))
+
 ## [1.201.9](https://github.com/ColdPBC/cold-monorepo/compare/v1.201.8...v1.201.9) (2024-04-19)
 
 
