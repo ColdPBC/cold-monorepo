@@ -1,4 +1,4 @@
-import { BadRequestException, ConflictException, Global, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Global, Injectable, NotFoundException } from '@nestjs/common';
 import { Span } from 'nestjs-ddtrace';
 import { BaseWorker, CacheService, Cuid2Generator, DarklyService, MqttService, PrismaService } from '@coldpbc/nest';
 import { ComplianceDefinition, OrgCompliance } from './compliance_definition_schema';
@@ -160,7 +160,7 @@ export class ComplianceDefinitionService extends BaseWorker {
   }
 
   /***
-   * This action activates a new compliance for org
+   * This action creates/updates a compliance for org
    * @param req
    * @param name
    * @param orgId
@@ -174,27 +174,25 @@ export class ComplianceDefinitionService extends BaseWorker {
 
       const definition = await this.findOne(name, req, bpc);
 
-      let compliance = await this.prisma.organization_compliances.findFirst({
-        where: {
-          organization_id: orgId,
-          compliance_id: definition.id,
-        },
-        include: {
-          organization: true,
-          compliance_definition: true,
-        },
-      });
+      const data = {
+        organization_id: orgId,
+        compliance_id: definition.id,
+      };
 
-      if (compliance) {
-        throw new ConflictException(`${name} is already created for ${orgId}`);
+      if (req.body.surveys_override) {
+        data['surveys_override'] = req.body.surveys_override;
       }
 
-      compliance = await this.prisma.organization_compliances.create({
-        data: {
-          id: new Cuid2Generator('orgcomp').scopedId,
-          organization_id: orgId,
-          compliance_id: definition.id,
+      const compliance = await this.prisma.organization_compliances.upsert({
+        where: {
+          orgKeyCompKey: {
+            organization_id: orgId,
+            compliance_id: definition.id,
+          },
         },
+        update: { ...data },
+        create: { ...data },
+
         include: {
           organization: true,
           compliance_definition: true,
