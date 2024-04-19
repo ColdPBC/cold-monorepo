@@ -60,7 +60,12 @@ export class ComplianceDefinitionService extends BaseWorker {
       throw new NotFoundException(`${compliance_name} compliance does not exist for ${orgId}`);
     }
 
-    const surveyNames = compliance.compliance_definition.surveys as string[];
+    let surveyNames: string[];
+    if (Array.isArray(compliance.surveys_override)) {
+      surveyNames = compliance.surveys_override as string[];
+    } else {
+      surveyNames = compliance.compliance_definition.surveys as string[];
+    }
 
     const surveys: any[] = [];
 
@@ -72,10 +77,13 @@ export class ComplianceDefinitionService extends BaseWorker {
       });
       if (survey) {
         surveys.push(survey);
+      } else {
+        this.logger.error(`Survey ${name} referenced in ${Array.isArray(compliance.surveys_override) ? 'surveys_override' : 'surveys'} array not found for ${compliance_name}`);
+        throw new NotFoundException(
+          `Survey ${name} referenced in ${Array.isArray(compliance.surveys_override) ? 'surveys_override' : 'surveys'} array not found for ${compliance_name}`,
+        );
       }
     }
-
-    //const routingKey = get(this.openAI_definition, 'definition.rabbitMQ.publishOptions.routing_key', 'dead_letter');
 
     await this.event.sendIntegrationEvent(
       false,
@@ -89,13 +97,6 @@ export class ComplianceDefinitionService extends BaseWorker {
       user,
       orgId,
     );
-    /* await this.event.sendAsyncEvent(routingKey, 'compliance_automation.enabled', {
-       user,
-       on_update_url: `/organizations/${orgId}/surveys/${compliance_name}`,
-       surveys,
-       service: this.openAI_definition,
-       compliance,
-     });*/
 
     this.mqtt.publishMQTT('public', {
       swr_key: url,
