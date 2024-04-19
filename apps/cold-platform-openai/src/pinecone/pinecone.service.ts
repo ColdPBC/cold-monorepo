@@ -6,6 +6,8 @@ import { Document } from '@langchain/core/documents';
 import OpenAI from 'openai';
 import { LangchainLoaderService } from '../langchain/langchain.loader.service';
 import { organization_files } from '@prisma/client';
+import { InjectQueue } from '@nestjs/bull';
+import { Queue } from 'bull';
 
 export type PineconeMetadata = {
   url: string;
@@ -26,6 +28,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
     private readonly darkly: DarklyService,
     private readonly lc: LangchainLoaderService,
     private readonly prisma: PrismaService,
+    @InjectQueue('pinecone') private readonly queue: Queue,
   ) {
     super(PineconeService.name);
     this.openai = new OpenAI({
@@ -77,19 +80,24 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
       });
 
       for (const org of orgs) {
-        await this.getIndexDetails(org.name);
+        const details = await this.getIndexDetails(org.name);
         for (const file of org.organization_files) {
-          this.ingestData(
+          await this.queue.add(
+            'sync_files',
             {
-              coldclimate_claims: {
-                email: 'svc@coldclimate.com',
-                org_id: org.id,
-                id: '',
-                roles: ['cold:admin'],
+              user: {
+                coldclimate_claims: {
+                  email: 'svc@coldclimate.com',
+                  org_id: org.id,
+                  id: '',
+                  roles: ['cold:admin'],
+                },
               },
+              organization: org,
+              file,
+              index_details: details,
             },
-            org,
-            file,
+            { removeOnComplete: true },
           );
         }
       }
@@ -257,7 +265,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
 
       const indexDetail = await this.getIndexDetails(org_name);
       const embeddingConfig = {
-        model: indexDetail.config.model, //await this.darkly.getStringFlag('dynamic-ai-embedding-model', 'text-embedding-3-large'),
+        model: indexDetail.config.model,
         // eslint-disable-next-line no-control-regex
         input: input?.replace(/\n/g, ' ').replace(/[\x00-\x08\x0E-\x1F\x7F-\uFFFF]/g, '') || '',
       };
@@ -283,7 +291,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
           if (found.matches < 1) {
             this.logger.info(`upserting missing ${v.id} of ${filePayload.original_name}`);
             const item = { id: v.id, values: v.values, metadata: v.metadata };
-            await index.namespace(organization.name).upsert([item]);
+            index.namespace(organization.name).upsert([item]);
           } else {
             this.logger.info(`${v.id} of ${filePayload.original_name} already injected`);
           }
@@ -296,12 +304,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
         const embeddings = await Promise.all(content.flat().map(doc => this.embedDocument(doc, filePayload, organization.name)));
         for (const v of embeddings) {
           const record = { id: v.id, values: v.values, metadata: v.metadata };
-          await index.namespace(organization.name).upsert([record]);
-          this.metrics.increment('pinecone.index.upsert', 1, { namespace: organization.name, status: 'completed' });
-
-          //const item = pick(v, ['id', 'values', 'metadata']);
-          // await index.namespace(organization.name).upsert([item]);
-          // this.metrics.increment('pinecone.index.upsert', 1, { namespace: organization.name, status: 'completed' });
+          index.namespace(organization.name).upsert([record]);
         }
       }
     } catch (e) {
@@ -309,8 +312,6 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
 
       this.metrics.increment('pinecone.index.upsert', 1, { namespace: organization.name, status: 'failed' });
     }
-
-    await this.cache.set(this.getCacheKey(filePayload), filePayload.checksum, { ttl: 0 });
   }
 
   async ingestData(
@@ -322,6 +323,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
     organization: any,
     filePayload: organization_files,
     namespaceName?: string,
+    indexDetails?: any,
   ) {
     const vectors: PineconeRecord[] = [];
     try {
@@ -331,7 +333,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
         return message;
       }
 
-      const details = await this.getIndexDetails(organization.name);
+      const details = indexDetails || (await this.getIndexDetails(organization.name));
       if (!namespaceName) {
         namespaceName = organization.name;
       }

@@ -16,6 +16,9 @@ export class CrawlerModule {
         BullModule.registerQueue({
           name: 'openai_crawler',
         }),
+        BullModule.registerQueue({
+          name: 'pinecone',
+        }),
         PineconeModule,
         LangchainModule,
       ],
