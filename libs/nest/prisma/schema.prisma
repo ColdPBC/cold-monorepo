@@ -480,6 +480,7 @@ model organization_compliances {
   id                    String                 @id @default(cuid())
   organization_id       String
   compliance_id         String
+  surveys_override      Json?
   created_at            DateTime               @default(now())
   updated_at            DateTime               @updatedAt
   compliance_definition compliance_definitions @relation(fields: [compliance_id], references: [id], onDelete: Cascade)
