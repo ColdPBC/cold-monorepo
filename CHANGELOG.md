@@ -1,3 +1,10 @@
+## [1.201.7](https://github.com/ColdPBC/cold-monorepo/compare/v1.201.6...v1.201.7) (2024-04-19)
+
+
+### Bug Fixes
+
+* bug causing OOM due to retrieving too many vectors in DB. ([78ebc82](https://github.com/ColdPBC/cold-monorepo/commit/78ebc82c2522f3e9420030f26c66e09b337e7f54))
+
 ## [1.201.6](https://github.com/ColdPBC/cold-monorepo/compare/v1.201.5...v1.201.6) (2024-04-19)
 
 
