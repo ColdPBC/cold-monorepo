@@ -1,3 +1,10 @@
+## [1.201.5](https://github.com/ColdPBC/cold-monorepo/compare/v1.201.4...v1.201.5) (2024-04-19)
+
+
+### Bug Fixes
+
+* move to redis job due to service failing health checks on startup ([1354439](https://github.com/ColdPBC/cold-monorepo/commit/1354439018cb274948b97b5a7d0fc546d3fe435a))
+
 ## [1.201.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.201.3...v1.201.4) (2024-04-19)
 
 
