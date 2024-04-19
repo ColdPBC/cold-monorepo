@@ -169,7 +169,7 @@ export class OrganizationFilesService extends BaseWorker {
     return existingFiles;
   }
 
-  async deleteFile(req: any, orgId: string, fileId: string) {
+  async deleteFile(req: any, orgId: string, fileIds: string[]) {
     const { user, url } = req;
     try {
       const org = await this.helper.getOrganizationById(orgId, req.user, true);
@@ -178,37 +178,45 @@ export class OrganizationFilesService extends BaseWorker {
         throw new NotFoundException(`Organization ${orgId} not found`);
       }
 
-      const file = await this.prisma.organization_files.findUnique({
-        where: {
-          id: fileId,
-          organization_id: orgId,
-        },
-      });
+      for (const fileId of fileIds) {
+        const file = await this.prisma.organization_files.findUnique({
+          where: {
+            id: fileId,
+            organization_id: orgId,
+          },
+        });
 
-      if (!file) {
-        throw new NotFoundException(`File ${fileId} not found`);
+        if (!file) {
+          throw new NotFoundException(`File ${fileId} not found`);
+        }
+
+        const vectors = await this.prisma.vector_records.findMany({
+          where: {
+            organization_file_id: fileId,
+          },
+        });
+
+        await this.events.sendIntegrationEvent(false, 'file.deleted', { file, vectors }, user, orgId);
+
+        await this.prisma.organization_files.delete({
+          where: {
+            id: fileId,
+          },
+        });
+
+        this.mqtt.publishMQTT('ui', {
+          org_id: orgId,
+          user: user,
+          swr_key: url,
+          action: 'delete',
+          status: 'complete',
+          data: {
+            file_id: fileId,
+          },
+        });
       }
 
-      await this.prisma.organization_files.delete({
-        where: {
-          id: fileId,
-        },
-      });
-
-      await this.events.sendIntegrationEvent(false, 'file.deleted', file, user, orgId);
-
-      this.mqtt.publishMQTT('ui', {
-        org_id: orgId,
-        user: user,
-        swr_key: url,
-        action: 'delete',
-        status: 'complete',
-        data: {
-          file_id: fileId,
-        },
-      });
-
-      return file;
+      return;
     } catch (e) {
       this.logger.error(e);
 
@@ -220,7 +228,7 @@ export class OrganizationFilesService extends BaseWorker {
         status: 'failed',
         data: {
           error: e.message,
-          file_id: fileId,
+          file_ids: fileIds,
         },
       });
 

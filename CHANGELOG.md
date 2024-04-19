@@ -1,3 +1,59 @@
+## [1.201.8](https://github.com/ColdPBC/cold-monorepo/compare/v1.201.7...v1.201.8) (2024-04-19)
+
+
+### Bug Fixes
+
+* bugs in question routes ([e2f40f4](https://github.com/ColdPBC/cold-monorepo/commit/e2f40f4d2abea484ec1893e6d4429397fd193a39))
+
+## [1.201.7](https://github.com/ColdPBC/cold-monorepo/compare/v1.201.6...v1.201.7) (2024-04-19)
+
+
+### Bug Fixes
+
+* bug causing OOM due to retrieving too many vectors in DB. ([78ebc82](https://github.com/ColdPBC/cold-monorepo/commit/78ebc82c2522f3e9420030f26c66e09b337e7f54))
+
+## [1.201.6](https://github.com/ColdPBC/cold-monorepo/compare/v1.201.5...v1.201.6) (2024-04-19)
+
+
+### Bug Fixes
+
+* move to redis job due to service failing health checks on startup ([95c5d37](https://github.com/ColdPBC/cold-monorepo/commit/95c5d3783788bd9b2526221ce481716796f59cab))
+
+## [1.201.5](https://github.com/ColdPBC/cold-monorepo/compare/v1.201.4...v1.201.5) (2024-04-19)
+
+
+### Bug Fixes
+
+* move to redis job due to service failing health checks on startup ([1354439](https://github.com/ColdPBC/cold-monorepo/commit/1354439018cb274948b97b5a7d0fc546d3fe435a))
+
+## [1.201.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.201.3...v1.201.4) (2024-04-19)
+
+
+### Bug Fixes
+
+* move to redis job due to service failing health checks on startup ([cf5d8f7](https://github.com/ColdPBC/cold-monorepo/commit/cf5d8f7ed7fc4cfc10e8df0261464facab46c16b))
+
+## [1.201.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.201.2...v1.201.3) (2024-04-18)
+
+
+### Bug Fixes
+
+* partial fix for files with invalid unicode characters causing app to crash. ([02bda42](https://github.com/ColdPBC/cold-monorepo/commit/02bda4235566ae8eb99b9d541f454b0b49b56607))
+
+## [1.201.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.201.1...v1.201.2) (2024-04-18)
+
+
+### Bug Fixes
+
+* improved file injection process ([02c6f25](https://github.com/ColdPBC/cold-monorepo/commit/02c6f25407c60bb615c1bf810fa425d96eb1404b))
+
+## [1.201.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.201.0...v1.201.1) (2024-04-18)
+
+
+### Bug Fixes
+
+* 502 issues ([3a8ca10](https://github.com/ColdPBC/cold-monorepo/commit/3a8ca10e1567d0d64aad01c7933a4593e59761e0))
+
 # [1.201.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.200.0...v1.201.0) (2024-04-16)
 
 
