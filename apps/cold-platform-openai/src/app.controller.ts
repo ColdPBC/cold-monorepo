@@ -4,12 +4,13 @@ import { AppService } from './app.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { FileService } from './assistant/files/file.service';
 import { filter } from 'lodash';
+import { PineconeService } from './pinecone/pinecone.service';
 
 @UseGuards(JwtAuthGuard, RolesGuard)
 @UseFilters(new HttpExceptionFilter(OpenAIController.name))
 @Controller()
 export class OpenAIController extends BaseWorker {
-  constructor(private app: AppService, private readonly files: FileService, private readonly prisma: PrismaService) {
+  constructor(private app: AppService, private readonly files: FileService, private readonly prisma: PrismaService, private readonly pc: PineconeService) {
     super(OpenAIController.name);
   }
 
@@ -22,6 +23,29 @@ export class OpenAIController extends BaseWorker {
     },
   ) {
     return this.app.listModels(req.user);
+  }
+
+  @Get('files/organization/:orgId')
+  @Roles(...coldAdminOnly)
+  syncOrgFiles(
+    @Param('orgId') orgId: string,
+    @Req()
+    req: {
+      user: IAuthenticatedUser;
+    },
+  ) {
+    return this.pc.syncOrgFiles(req.user, orgId);
+  }
+
+  @Get('files')
+  @Roles(...coldAdminOnly)
+  syncAllOrgFiles(
+    @Req()
+    req: {
+      user: IAuthenticatedUser;
+    },
+  ) {
+    return this.pc.syncAllOrgFiles(req.user);
   }
 
   @Delete('assistants/:id')

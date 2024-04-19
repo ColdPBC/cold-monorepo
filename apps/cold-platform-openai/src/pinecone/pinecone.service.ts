@@ -62,45 +62,57 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
     return { indexName, config };
   }
 
+  async syncOrgFiles(user: AuthenticatedUser, orgId: string) {
+    const org = await this.prisma.organizations.findUnique({
+      where: {
+        id: orgId,
+      },
+      include: {
+        organization_files: {
+          include: {
+            vector_records: true,
+          },
+        },
+      },
+    });
+
+    const details = await this.getIndexDetails(org.name);
+    for (const file of org.organization_files) {
+      await this.queue.add(
+        'sync_files',
+        {
+          user,
+          organization: org,
+          file,
+          index_details: details,
+        },
+        { removeOnComplete: true },
+      );
+    }
+  }
+
+  async syncAllOrgFiles(user: AuthenticatedUser) {
+    await this.darkly.onModuleInit();
+    const orgs = await this.prisma.organizations.findMany({
+      include: {
+        organization_files: {
+          include: {
+            vector_records: true,
+          },
+        },
+      },
+    });
+
+    for (const org of orgs) {
+      await this.syncOrgFiles(user, org.id);
+    }
+  }
+
   async onModuleInit(): Promise<void> {
     try {
       this.pinecone = new Pinecone({
         apiKey: this.config.getOrThrow('PINECONE_API_KEY'),
       });
-
-      await this.darkly.onModuleInit();
-      const orgs = await this.prisma.organizations.findMany({
-        include: {
-          organization_files: {
-            include: {
-              vector_records: true,
-            },
-          },
-        },
-      });
-
-      for (const org of orgs) {
-        const details = await this.getIndexDetails(org.name);
-        for (const file of org.organization_files) {
-          await this.queue.add(
-            'sync_files',
-            {
-              user: {
-                coldclimate_claims: {
-                  email: 'svc@coldclimate.com',
-                  org_id: org.id,
-                  id: '',
-                  roles: ['cold:admin'],
-                },
-              },
-              organization: org,
-              file,
-              index_details: details,
-            },
-            { removeOnComplete: true, delay: 60000 * 5 },
-          );
-        }
-      }
     } catch (error) {
       console.log('error', error);
       throw new Error('Failed to initialize Pinecone Client');
@@ -116,7 +128,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
     });
 
     // Get the embeddings of the input message
-    const embedding = await this.embedString(message, config);
+    const embedding = await this.embedString(message, indexName);
 
     // Retrieve the matches for the embeddings from the specified namespace
     const matches = await this.getMatchesFromEmbeddings(embedding, 5, namespace, indexName);
@@ -193,7 +205,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
     });
 
     // Generate OpenAI embeddings for the document content
-    const embedding = await this.embedString(doc.pageContent, config);
+    const embedding = await this.embedString(doc.pageContent, metadata.organization);
 
     // Return the vector embedding object
     const record = {
