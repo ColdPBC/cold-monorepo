@@ -1,42 +1,33 @@
-import React, { useContext } from 'react';
-import { capitalize, forEach, get, map, sortBy } from 'lodash';
-import { ErrorFallback } from '@coldpbc/components';
+import React from 'react';
+import { capitalize, forEach, map, orderBy, sortBy } from 'lodash';
+import { ColdIcon, ErrorFallback } from '@coldpbc/components';
 import { Table } from 'flowbite-react';
-import { darkTableTheme, getSchemeForColor, HexColors } from '@coldpbc/themes';
+import { darkTableTheme } from '@coldpbc/themes';
 import { formatTonnes } from '@coldpbc/lib';
-import { ColdEmissionsContext } from '@coldpbc/context';
-import { ScopeColors } from '@coldpbc/enums';
+import { EmissionsScope3Categories, IconNames } from '@coldpbc/enums';
 import { withErrorBoundary } from 'react-error-boundary';
 
 export interface ScopeDataGridProps {
   scope_category: number;
   byActivity: boolean;
   maxEmissions: number;
+  totalEmissions: number;
+  allEmissions: { scope: number; activity: string; emissions: number; color: string }[];
+  otherActivities: { scope: number; activity: string; emissions: number; color: string }[];
+  selectedActivity: {
+    scope: number;
+    activity: string;
+  } | null;
+  setSelectedActivity: (selectedActivity: { scope: number; activity: string } | null) => void;
+  getActivityFromSegment: () => { scope: number; activity: string; emissions: number; color: string } | null;
 }
 
 const _ScopeDataGrid = (props: ScopeDataGridProps) => {
-  const { scope_category, byActivity, maxEmissions } = props;
-  const { data, selectedFacility, selectedYear } = useContext(ColdEmissionsContext);
-  const { emissions } = data;
+  const { scope_category, byActivity, maxEmissions, selectedActivity, setSelectedActivity, getActivityFromSegment, allEmissions, totalEmissions, otherActivities } = props;
+  const activityFromSegment = getActivityFromSegment();
+  const [showOtherActivities, setShowOtherActivities] = React.useState(false);
 
-  // get all the scope activities and their emissions. also get the total emissions for the scope
-  // and the percentage of the total emissions that each activity contributes
-  let totalEmissions = 0;
-  const scopeActivities: {
-    [key: string]: {
-      emissions: number;
-      percentage: string;
-    };
-  } = {};
-
-  const scopeByCategory: {
-    [key: string]: {
-      emissions: number;
-      percentage: string;
-    };
-  } = {};
-
-  const colors = getSchemeForColor(HexColors[ScopeColors[scope_category]]);
+  const scopeEmissions = allEmissions.filter(emission => emission.scope === scope_category);
 
   const tableData = {
     definition: [
@@ -66,110 +57,152 @@ const _ScopeDataGrid = (props: ScopeDataGridProps) => {
       activity: string;
       percentage: string;
       tCO2e: number;
+      color: string;
     }>(),
   };
 
-  forEach(emissions, facility => {
-    if (facility.facility_id.toString() === selectedFacility.value || selectedFacility.value === 'all') {
-      forEach(facility.periods, period => {
-        if (period.value.toString() !== selectedYear.value && selectedYear.value !== 'all') {
-          return;
-        }
-        forEach(period.emissions, emission => {
-          forEach(emission.activities, activity => {
-            totalEmissions += activity.tco2e;
-            if (emission.scope.ghg_category === scope_category) {
-              if (byActivity) {
-                if (scopeActivities[activity.name]) {
-                  scopeActivities[activity.name].emissions += activity.tco2e;
-                  scopeActivities[activity.name].percentage = '0%';
-                } else {
-                  scopeActivities[activity.name] = {
-                    emissions: activity.tco2e,
-                    percentage: '0%',
-                  };
-                }
-              } else {
-                if (scope_category !== 3) {
-                  const emissions = get(scopeByCategory, emission.scope.ghg_category.toString(), {
-                    emissions: 0,
-                    percentage: '0%',
-                  });
-                  emissions.emissions += activity.tco2e;
-                  scopeByCategory[emission.scope.ghg_category] = emissions;
-                } else {
-                  // use the ghg_subcategory to group the emissions
-                  const emissions = get(scopeByCategory, emission.scope.ghg_subcategory, {
-                    emissions: 0,
-                    percentage: '0%',
-                  });
-                  emissions.emissions += activity.tco2e;
-                  scopeByCategory[emission.scope.ghg_subcategory] = emissions;
-                }
-              }
-            }
-          });
-        });
-      });
+  const sortedActivities = sortBy(scopeEmissions, emission => {
+    if (byActivity) {
+      return -emission.emissions;
+    } else {
+      if (scope_category === 3) {
+        return EmissionsScope3Categories.indexOf(emission.activity);
+      } else {
+        return -emission.emissions;
+      }
     }
-  });
-
-  const sortedActivities = sortBy(Object.keys(scopeActivities), activity => {
-    return -scopeActivities[activity].emissions;
   });
 
   if (byActivity) {
     forEach(sortedActivities, (activity, index) => {
-      const scopeActivity = scopeActivities[activity];
-      scopeActivity.percentage = ((scopeActivity.emissions / totalEmissions) * 100).toFixed(2) + '%';
-      if (scope_category === 3) {
-        // for the first 3 activities, use their names. but for the others, use 'Other Activities' and sum their emissions into one table row
-        if (index < 3) {
-          tableData.data.push({
-            activity: activity,
-            percentage: scopeActivity.percentage,
-            tCO2e: scopeActivity.emissions,
-          });
-        } else {
-          const otherActivities = get(tableData.data, '3', {
-            activity: 'Other Activities',
-            percentage: '0%',
-            tCO2e: 0,
-          });
-          otherActivities.tCO2e += scopeActivity.emissions;
-          otherActivities.percentage = ((otherActivities.tCO2e / totalEmissions) * 100).toFixed(2) + '%';
-          tableData.data[3] = otherActivities;
-        }
-      } else {
-        tableData.data.push({
-          activity: activity,
-          percentage: scopeActivity.percentage,
-          tCO2e: scopeActivity.emissions,
-        });
-      }
+      const percentage = ((activity.emissions / totalEmissions) * 100).toFixed(2) + '%';
+      tableData.data.push({
+        activity: activity.activity,
+        percentage: percentage,
+        tCO2e: activity.emissions,
+        color: activity.color,
+      });
     });
   } else {
-    forEach(scopeByCategory, (scopeActivity, scope) => {
-      scopeActivity.percentage = ((scopeActivity.emissions / totalEmissions) * 100).toFixed(2) + '%';
+    forEach(sortedActivities, activity => {
+      const percentage = ((activity.emissions / totalEmissions) * 100).toFixed(2) + '%';
       if (scope_category === 3) {
         tableData.data.push({
-          activity: `Category ${scope}`,
-          percentage: scopeActivity.percentage,
-          tCO2e: scopeActivity.emissions,
+          activity: activity.activity,
+          percentage: percentage,
+          tCO2e: activity.emissions,
+          color: activity.color,
         });
       } else {
         tableData.data.push({
-          activity: `Scope ${scope}`,
-          percentage: scopeActivity.percentage,
-          tCO2e: scopeActivity.emissions,
+          activity: `Scope ${scope_category}`,
+          percentage: percentage,
+          tCO2e: activity.emissions,
+          color: activity.color,
         });
       }
     });
+  }
+
+  // for scope 3 and by activity, we need to put activity name 'Other Activities' at the end of the table data
+  if (scope_category === 3 && byActivity) {
+    const otherActivity = tableData.data.find(activity => activity.activity === 'Other Activities');
+    if (otherActivity) {
+      tableData.data = tableData.data.filter(activity => activity.activity !== 'Other Activities');
+      tableData.data.push(otherActivity);
+    }
+    // add other activities to the end of the table data
+    // sort the other activities by emissions and then name
+    if (showOtherActivities) {
+      const sortedOtherActivities = orderBy(otherActivities, ['emissions', 'activity'], ['desc', 'asc']);
+      forEach(sortedOtherActivities, activity => {
+        const percentage = ((activity.emissions / totalEmissions) * 100).toFixed(2) + '%';
+        tableData.data.push({
+          activity: activity.activity,
+          percentage: percentage,
+          tCO2e: activity.emissions,
+          color: 'transparent',
+        });
+      });
+    }
   }
 
   if (tableData.data.length < 1) {
     return null;
   }
+
+  const getTableRowClassName = (activity: string, color: string) => {
+    if (isRowSelected(activity)) {
+      return `px-4 py-4 bg-gray-70`;
+    } else {
+      return 'px-4 py-4';
+    }
+  };
+
+  const getTableActivityWidth = (activity: string) => {
+    if (scope_category === 3 && !byActivity) {
+      return 'w-full';
+    } else {
+      return 'w-full';
+    }
+  };
+
+  const getTableActivityClassName = (activity: string) => {
+    if (isRowSelected(activity)) {
+      return `px-0 py-0 pr-3 bg-gray-70 w-full`;
+    } else {
+      return 'px-4 py-4 w-full';
+    }
+  };
+
+  const isRowSelected = (activity: string) => {
+    if (activityFromSegment) {
+      return activityFromSegment.activity === activity && activityFromSegment.scope === scope_category;
+    } else {
+      return selectedActivity?.activity === activity && selectedActivity.scope === scope_category;
+    }
+  };
+
+  const getCategoryChip = (category: string) => {
+    // get the category number from the category name
+    if (!byActivity && scope_category === 3) {
+      const categoryNumber = EmissionsScope3Categories.indexOf(category) + 1;
+      return <div className={'rounded-[20px] bg-gray-50 px-[8px] text-label mr-4'}>{`Category ${categoryNumber}`}</div>;
+    } else {
+      return null;
+    }
+  };
+
+  const getTableActivityItem = (row: { activity: string; percentage: string; tCO2e: number; color: string }) => {
+    return (
+      <Table.Cell className={`flex items-center font-bold ${getTableActivityClassName(row.activity)}`} theme={darkTableTheme.table?.body?.cell}>
+        {isRowSelected(row.activity) && (
+          <div
+            className="h-[51px] w-[4px]"
+            style={{
+              backgroundColor: row.color,
+            }}></div>
+        )}
+        <div
+          style={{
+            background: row.color,
+            border: '2px solid rgba(0, 0, 0, 0.2)',
+          }}
+          className={`mr-2 h-[10px] w-[10px] min-w-[10px] rounded-xl ${isRowSelected(row.activity) ? 'ml-4' : ''}`}
+        />
+        {getCategoryChip(row.activity)}
+        <div className={`${getTableActivityWidth(row.activity)} truncate`}>{capitalize(row.activity)}</div>
+        {
+          // show 'Other Activities' row only for scope 3 and by activity
+          scope_category === 3 && byActivity && row.activity === 'Other Activities' && (
+            <div className={'w-[24px] h-[24px] p-[8px]'}>
+              <ColdIcon name={showOtherActivities ? IconNames.ColdChevronDownIcon : IconNames.ColdChevronUpIcon} />
+            </div>
+          )
+        }
+      </Table.Cell>
+    );
+  };
 
   return (
     <div className={'w-auto h-auto'}>
@@ -183,32 +216,39 @@ const _ScopeDataGrid = (props: ScopeDataGridProps) => {
         </Table.Head>
         <Table.Body className="divide-y">
           {tableData.data.map((row, i) => (
-            <Table.Row key={`${row.activity}-${i}`} theme={darkTableTheme.table?.row}>
-              <Table.Cell className="flex items-center font-bold min-w-[379px]" theme={darkTableTheme.table?.body?.cell}>
-                <div
-                  style={{
-                    background: colors[i],
-                    border: '2px solid rgba(0, 0, 0, 0.2)',
-                  }}
-                  className="mr-2 h-[10px] w-[10px] min-w-[10px] rounded-xl"
-                />
-                <div className={'w-[359px] truncate'}>{capitalize(row.activity)}</div>
-              </Table.Cell>
-              <Table.Cell theme={darkTableTheme.table?.body?.cell}>
+            <Table.Row
+              key={`${row.activity}-${i}`}
+              theme={darkTableTheme.table?.row}
+              className={`cursor-pointer`}
+              onMouseEnter={() => {
+                setSelectedActivity({ scope: scope_category, activity: row.activity });
+              }}
+              onMouseLeave={() => {
+                setSelectedActivity(null);
+              }}
+              onClick={() => {
+                if (scope_category === 3 && byActivity && row.activity === 'Other Activities') {
+                  setShowOtherActivities(!showOtherActivities);
+                }
+              }}>
+              {getTableActivityItem(row)}
+              <Table.Cell theme={darkTableTheme.table?.body?.cell} className={`${getTableRowClassName(row.activity, row.color)}`}>
                 <div className={'flex flex-row items-center h-full'}>
                   <div className={'min-w-[65px] h-full'}>{row.percentage}</div>
                   <div className={'w-full flex flex-row items-center h-full'}>
                     <div
                       className="h-1 rounded-lg"
                       style={{
-                        backgroundColor: colors[i],
+                        backgroundColor: row.color,
                         width: `${(row.tCO2e / maxEmissions) * 100}%`,
                       }}
                     />
                   </div>
                 </div>
               </Table.Cell>
-              <Table.Cell theme={darkTableTheme.table?.body?.cell}>{formatTonnes(row.tCO2e)}</Table.Cell>
+              <Table.Cell theme={darkTableTheme.table?.body?.cell} className={`${getTableRowClassName(row.activity, row.color)}`}>
+                {formatTonnes(row.tCO2e)}
+              </Table.Cell>
             </Table.Row>
           ))}
         </Table.Body>

@@ -14,11 +14,11 @@ export interface ActiveSegment {
 export const useActiveSegment = ({ chartHasSpacers }: { chartHasSpacers: boolean }) => {
   const [activeSegment, setActiveSegment] = useState<null | ActiveSegment>(null);
 
-  const animateSegmentThickness = (index: number, medium: ActiveSegmentMedium) => {
+  const animateSegmentThickness = (index: number, medium: ActiveSegmentMedium, thickness?: number) => {
     setActiveSegment({
       index,
       medium,
-      thickness: DEFAULT_SEGMENT_THICKNESS + 10,
+      thickness: thickness ? thickness : DEFAULT_SEGMENT_THICKNESS + 10,
     });
   };
 
@@ -26,6 +26,7 @@ export const useActiveSegment = ({ chartHasSpacers }: { chartHasSpacers: boolean
     event: ChartEvent,
     elements: ActiveElement[],
     chart: ChartJS<keyof ChartTypeRegistry, (number | [number, number] | Point | BubbleDataPoint | null)[], unknown>,
+    thickness?: number,
   ) => {
     // animate thickness of segment on hover
     const currentHoveredElement = elements[0];
@@ -35,7 +36,7 @@ export const useActiveSegment = ({ chartHasSpacers }: { chartHasSpacers: boolean
       currentHoveredElement.index !== activeSegment?.index &&
       (currentHoveredElement.index % 2 === 0 || !chartHasSpacers) // spacer will be odd number
     ) {
-      animateSegmentThickness(currentHoveredElement.index, 'segment');
+      animateSegmentThickness(currentHoveredElement.index, 'segment', thickness);
     }
     // remove extra thickness if mouse is not over segment or a legend item
     else if (!currentHoveredElement && activeSegment?.medium === 'segment') {
@@ -43,23 +44,31 @@ export const useActiveSegment = ({ chartHasSpacers }: { chartHasSpacers: boolean
     }
   };
 
-  const chartBeforeDraw = (chart: ChartJS, hoverColorArray?: string[]) => {
+  const chartBeforeDraw = (chart: ChartJS, hoverColorArray?: string[], useDefaultThickness?: boolean, updateInnerRadius?: boolean) => {
     chart.getDatasetMeta(0).data.forEach((slice, index) => {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       const chartActiveSegment = chart.config.options?.activeSegment as ActiveSegment;
       if (chartActiveSegment && index === chartActiveSegment.index) {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        slice.outerRadius = chartActiveSegment.thickness;
+        if (updateInnerRadius) {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          slice.innerRadius = chartActiveSegment.thickness;
+        } else {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          slice.outerRadius = chartActiveSegment.thickness;
+        }
 
         if (hoverColorArray) {
           slice.options.backgroundColor = hoverColorArray[index === 0 ? 0 : index / 2];
         }
       } else {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        slice.outerRadius = DEFAULT_SEGMENT_THICKNESS;
+        if (!useDefaultThickness) {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          slice.outerRadius = DEFAULT_SEGMENT_THICKNESS;
+        }
       }
     });
   };

@@ -1,28 +1,27 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { CarbonFootprintDetailChip, Card, ErrorFallback, ScopeDataGrid } from '@coldpbc/components';
 import { ColdEmissionsContext } from '@coldpbc/context';
 import { withErrorBoundary } from 'react-error-boundary';
-import { findIndex, forEach, get, set, sortBy } from 'lodash';
-import { ChartOptions } from 'chart.js';
+import { findIndex, forEach, get, includes, isArray, set, sortBy } from 'lodash';
+import { ChartData, ChartOptions } from 'chart.js';
 import { useActiveSegment } from '@coldpbc/hooks';
 import { Chart } from 'react-chartjs-2';
 import { Plugin as PluginType } from 'chart.js/dist/types';
 import { getSchemeForColor, HexColors } from '@coldpbc/themes';
-import { ScopeColors } from '@coldpbc/enums';
+import { EmissionsScope3Categories, ScopeColors } from '@coldpbc/enums';
 
 const _EmissionsCarbonFootprintCharts = () => {
   const [byActivity, setByActivity] = React.useState(true);
+  const [selectedActivity, setSelectedActivity] = React.useState<{
+    scope: number;
+    activity: string;
+  } | null>(null);
+
   const { data, selectedYear, setSelectedYear, selectedFacility, setSelectedFacility, isSingleYear } = useContext(ColdEmissionsContext);
 
   const { uniqueScopes, emissions } = data;
 
   let totalEmissions = 0;
-  // const scopeActivities: {
-  //   [key: string]: {
-  //     emissions: number;
-  //     percentage: string;
-  //   };
-  // } = {};
 
   const allScopeActivities: {
     [key: string]: {
@@ -33,26 +32,23 @@ const _EmissionsCarbonFootprintCharts = () => {
     };
   } = {};
 
-  // const colors = getSchemeForColor(HexColors[ScopeColors[scope_category]]);
   const scopeColors = {
     '1': getSchemeForColor(HexColors[ScopeColors['1']]),
     '2': getSchemeForColor(HexColors[ScopeColors['2']]),
     '3': getSchemeForColor(HexColors[ScopeColors['3']]),
   };
 
-  const emissionsDataSet = {
-    chartData: {
-      datasets: [
-        {
-          data: Array<number>(),
-          backgroundColor: Array<string>(),
-          borderColor: Array<string>(),
-          borderWidth: 1,
-          hoverBackgroundColor: Array<string>(),
-        },
-      ],
-      labels: Array<string>(),
-    },
+  const emissionsDataSet: ChartData<'doughnut'> = {
+    datasets: [
+      {
+        data: Array<number>(),
+        backgroundColor: Array<string>(),
+        borderColor: Array<string>(),
+        borderWidth: 1,
+        hoverBackgroundColor: Array<string>(),
+      },
+    ],
+    labels: Array<string | null>(),
   };
 
   forEach(emissions, facility => {
@@ -77,7 +73,7 @@ const _EmissionsCarbonFootprintCharts = () => {
               set(scopeActivities, activity.name, scopeActivity);
             } else {
               // by category
-              if (scopeNumber in [1, 2]) {
+              if (includes([1, 2], scopeNumber)) {
                 const scopeActivity = get(scopeActivities, `Scope ${scopeNumber}`, {
                   emissions: 0,
                   percentage: '0%',
@@ -86,13 +82,14 @@ const _EmissionsCarbonFootprintCharts = () => {
                 scopeActivity.percentage = '0%';
                 set(scopeActivities, `Scope ${scopeNumber}`, scopeActivity);
               } else {
-                const scopeActivity = get(scopeActivities, `Category ${subcategory}`, {
+                const subCategoryName = EmissionsScope3Categories[subcategory - 1];
+                const scopeActivity = get(scopeActivities, `${subCategoryName}`, {
                   emissions: 0,
                   percentage: '0%',
                 });
                 scopeActivity.emissions += activity.tco2e;
                 scopeActivity.percentage = '0%';
-                set(scopeActivities, `Category ${subcategory}`, scopeActivity);
+                set(scopeActivities, `${subCategoryName}`, scopeActivity);
               }
             }
           });
@@ -103,12 +100,20 @@ const _EmissionsCarbonFootprintCharts = () => {
   });
 
   const allEmissions = Array<{
+    scope: number;
+    activity: string;
+    emissions: number;
+    color: string;
+  }>();
+  const otherActivities = Array<{
+    scope: number;
     activity: string;
     emissions: number;
     color: string;
   }>();
 
   let maxEmissions = 0;
+
   // sort the activities by emissions in each scope
   forEach(allScopeActivities, (scopeActivities, scope) => {
     let sortedActivities = Array<string>();
@@ -117,15 +122,22 @@ const _EmissionsCarbonFootprintCharts = () => {
         return -scopeActivities[activity].emissions;
       });
     } else {
-      sortedActivities = sortBy(Object.keys(scopeActivities), activity => {
-        return activity;
-      });
+      if (scope === '3') {
+        sortedActivities = sortBy(Object.keys(scopeActivities), activity => {
+          return EmissionsScope3Categories.indexOf(activity);
+        });
+      } else {
+        sortedActivities = sortBy(Object.keys(scopeActivities), activity => {
+          return activity;
+        });
+      }
     }
-    const scopeColor = get(scopeColors, scope, scopeColors['1']);
+    const scopeColor = get(scopeColors, scope, scopeColors['2']);
     forEach(sortedActivities, (activity, index) => {
       if (scope === '3' && byActivity) {
-        if (index < 3) {
+        if (index < 4) {
           allEmissions.push({
+            scope: Number(scope),
             activity,
             emissions: scopeActivities[activity].emissions,
             color: scopeColor[index],
@@ -141,14 +153,22 @@ const _EmissionsCarbonFootprintCharts = () => {
             set(allEmissions, otherActivitiesIndex, otherActivities);
           } else {
             allEmissions.push({
+              scope: Number(scope),
               activity: 'Other Activities',
               emissions: scopeActivities[activity].emissions,
               color: scopeColor[index],
             });
           }
+          otherActivities.push({
+            scope: Number(scope),
+            activity,
+            emissions: scopeActivities[activity].emissions,
+            color: scopeColor[index],
+          });
         }
       } else {
         allEmissions.push({
+          scope: Number(scope),
           activity,
           emissions: scopeActivities[activity].emissions,
           color: scopeColor[index],
@@ -161,32 +181,56 @@ const _EmissionsCarbonFootprintCharts = () => {
     return -emission.emissions;
   });
 
+  const gapStylingConstant = 100;
+  const spacerValue = maxEmissions / gapStylingConstant;
+
+  const hoverColorArray = Array<string>();
+
   forEach(sortedEmissions, (emission, index) => {
     if (emission.emissions > maxEmissions) {
       maxEmissions = emission.emissions;
     }
-    emissionsDataSet.chartData.datasets[0].data.push(emission.emissions);
-    emissionsDataSet.chartData.datasets[0].backgroundColor.push(emission.color);
-    emissionsDataSet.chartData.datasets[0].hoverBackgroundColor.push(emission.color);
-    emissionsDataSet.chartData.datasets[0].borderColor.push('black');
-    emissionsDataSet.chartData.labels.push(emission.activity);
+    emissionsDataSet.datasets[0].data.push(emission.emissions);
+    if (isArray(emissionsDataSet.datasets[0].backgroundColor)) {
+      emissionsDataSet.datasets[0].backgroundColor?.push(emission.color);
+    }
+    if (isArray(emissionsDataSet.datasets[0].hoverBackgroundColor)) {
+      emissionsDataSet.datasets[0].hoverBackgroundColor?.push(emission.color);
+    }
+    hoverColorArray.push(emission.color);
+    if (isArray(emissionsDataSet.datasets[0].borderColor)) {
+      emissionsDataSet.datasets[0].borderColor?.push('black');
+    }
+    emissionsDataSet.labels?.push(emission.activity);
+    emissionsDataSet.labels?.push(null);
+    if (isArray(emissionsDataSet.datasets[0].hoverBackgroundColor)) {
+      emissionsDataSet.datasets[0].hoverBackgroundColor?.push('#FFFFFF00');
+    }
+    if (isArray(emissionsDataSet.datasets[0].hoverBackgroundColor)) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      emissionsDataSet.datasets[0].backgroundColor?.push('#FFFFFF00'); // make spacer transparent
+    }
+    emissionsDataSet.datasets[0].data.push(spacerValue);
   });
 
   const { activeSegment, setActiveSegment, animateSegmentThickness, segmentOnHover, chartBeforeDraw } = useActiveSegment({ chartHasSpacers: false });
 
   const chartPlugins: PluginType<'doughnut'>[] = [
-    // {
-    //   id: 'sliceThickness',
-    //   // @ts-expect-error todo: fix type error
-    //   beforeDraw: (chart: ChartJS) => chartBeforeDraw(chart, hoverColorArray ?? []),
-    // },
+    {
+      id: 'sliceThickness',
+      // @ts-expect-error todo: fix type error
+      beforeDraw: (chart: ChartJS) => chartBeforeDraw(chart, undefined, true, true),
+    },
   ];
 
   const chartOptions: ChartOptions<'doughnut'> = {
     responsive: true,
     maintainAspectRatio: false,
     cutout: '80%',
-    onHover: segmentOnHover,
+    onHover: (event, elements, chart) => {
+      segmentOnHover(event, elements, chart, 125);
+    },
     plugins: {
       tooltip: {
         enabled: false,
@@ -201,10 +245,36 @@ const _EmissionsCarbonFootprintCharts = () => {
     setByActivity(isActivity);
   };
 
-  console.log({
-    maxEmissions,
-    allScopeActivities,
-  });
+  const getActivityFromSegment = () => {
+    if (activeSegment !== null && activeSegment.index !== undefined) {
+      const index = activeSegment.index;
+      return sortedEmissions[index / 2];
+    } else {
+      return null;
+    }
+  };
+
+  const getActivityIndex = (scope: number, activity: string) => {
+    const index = findIndex(sortedEmissions, emission => {
+      return emission.scope === scope && emission.activity === activity;
+    });
+    return getIndexOffsetForSegment(index);
+  };
+
+  const getIndexOffsetForSegment = (index: number) => {
+    return index === 0 ? 0 : index + index;
+  };
+
+  useEffect(() => {
+    if (selectedActivity) {
+      const index = getActivityIndex(selectedActivity.scope, selectedActivity.activity);
+      if (index !== -1) {
+        animateSegmentThickness(index, 'segment', 125);
+      }
+    } else {
+      setActiveSegment(null);
+    }
+  }, [selectedActivity]);
 
   return (
     <div className={'flex flex-col space-y-[35px] w-full'}>
@@ -226,10 +296,12 @@ const _EmissionsCarbonFootprintCharts = () => {
               <div className={'flex flex-col justify-between w-[347px] gap-[32px]'}>
                 <div className={'w-[347px] h-[347px] relative'}>
                   <CarbonFootprintDetailChip emissions={totalEmissions} center />
-                  <Chart options={chartOptions} type="doughnut" data={emissionsDataSet.chartData} plugins={chartPlugins} data-chromatic="ignore" />
+                  <Chart options={chartOptions} type="doughnut" data={emissionsDataSet} plugins={chartPlugins} data-chromatic="ignore" />
                 </div>
                 <div className={'w-full h-[77px] flex flex-row gap-[16px]'}>
-                  <div className={'h-full w-[77px]'}>Change</div>
+                  <div className={'h-full w-[77px] whitespace-pre-wrap'}>
+                    <img src={'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/Change+Climate+Logo.png'} alt={'Change Climate logo'} />
+                  </div>
                   <div className={'text-caption text-tc-disabled whitespace-pre-wrap'}>
                     Emissions factors and methodology powered by The Change Climate Project, the leading independent emissions accounting & certification nonprofit.
                   </div>
@@ -237,7 +309,20 @@ const _EmissionsCarbonFootprintCharts = () => {
               </div>
               <div className={'flex flex-col gap-[16px]'}>
                 {uniqueScopes.map(scope => {
-                  return <ScopeDataGrid scope_category={scope} key={scope} byActivity={byActivity} maxEmissions={maxEmissions} />;
+                  return (
+                    <ScopeDataGrid
+                      scope_category={scope}
+                      key={scope}
+                      byActivity={byActivity}
+                      allEmissions={sortedEmissions}
+                      otherActivities={otherActivities}
+                      maxEmissions={maxEmissions}
+                      totalEmissions={totalEmissions}
+                      setSelectedActivity={setSelectedActivity}
+                      selectedActivity={selectedActivity}
+                      getActivityFromSegment={getActivityFromSegment}
+                    />
+                  );
                 })}
               </div>
             </div>

@@ -7,7 +7,10 @@ const _CarbonFootprint = () => {
   // todo: add hover effect capability to donut chart and table
   // todo: add hover effect to table rows
   // todo: update bar chart tooltip to custom one
-  // todo: regression line for bar chart
+  // todo: update table to have a dropdown for 'Other Activities'
+  // todo: remove linear regression when data is for 2 years only
+  // todo: push other activities to 5th instead of 4th row
+  // todo: add category name
   return (
     <ColdEmissionsProvider>
       <EmissionsCarbonFootprintBase />
