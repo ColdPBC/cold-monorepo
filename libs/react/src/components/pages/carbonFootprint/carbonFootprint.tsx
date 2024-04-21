@@ -4,7 +4,7 @@ import { withErrorBoundary } from 'react-error-boundary';
 import { ColdEmissionsProvider } from '@coldpbc/providers';
 
 const _CarbonFootprint = () => {
-  // todo: update bar chart tooltip to custom one
+  // todo: fix table activity widths
   return (
     <ColdEmissionsProvider>
       <EmissionsCarbonFootprintBase />

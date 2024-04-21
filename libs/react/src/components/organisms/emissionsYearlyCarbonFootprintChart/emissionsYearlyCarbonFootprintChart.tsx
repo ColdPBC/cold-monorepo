@@ -16,6 +16,7 @@ import {
   PointElement,
   Title,
   Tooltip,
+  TooltipItem,
   TooltipModel,
 } from 'chart.js';
 import { Chart } from 'react-chartjs-2';
@@ -88,6 +89,9 @@ const _EmissionsYearlyCarbonFootprintChart = () => {
     map(facility.periods, period => {
       const yearEmissions = yearsData[period.value.toString()] || {};
       let yearEmissionsTotal = get(yearEmissions, 'total', 0);
+      forEach(['1', '2', '3'], (scope: string) => {
+        yearEmissions[scope] = get(yearEmissions, scope, 0);
+      });
       map(period.emissions, emission => {
         const scope = emission.scope.ghg_category;
         let scopeEmissions = get(yearEmissions, scope.toString(), 0);
@@ -130,7 +134,11 @@ const _EmissionsYearlyCarbonFootprintChart = () => {
           scopeIndex = 0;
           break;
       }
-      yearsChartData.datasets[scopeIndex].data.push(emission);
+      if (emission === 0) {
+        yearsChartData.datasets[scopeIndex].data.push(null);
+      } else {
+        yearsChartData.datasets[scopeIndex].data.push(emission);
+      }
       if (isArray(yearsChartData.datasets[scopeIndex].backgroundColor)) {
         if (selectedYear.value === 'all') {
           // @ts-ignore
@@ -203,6 +211,15 @@ const _EmissionsYearlyCarbonFootprintChart = () => {
         enabled: true,
         position: 'nearest',
         mode: 'index',
+        filter: function (tooltipItem) {
+          return tooltipItem.datasetIndex !== 3;
+        },
+        callbacks: {
+          title: (tooltipItems: TooltipItem<keyof ChartTypeRegistry>[]) => {
+            // return the title for the tooltip 'Year: 2020'
+            return `Year: ${tooltipItems[0].label}`;
+          },
+        },
       },
       datalabels: {
         color: 'white',
@@ -222,12 +239,12 @@ const _EmissionsYearlyCarbonFootprintChart = () => {
           forEach(context.chart.data.datasets, (dataset, index) => {
             if (selectedYear.value === 'all') {
               if (index < context.chart.data.datasets.length - 1) {
-                if (dataset.data[context.dataIndex] !== undefined) {
+                if (dataset.data[context.dataIndex] !== undefined && dataset.data[context.dataIndex] !== null) {
                   dataSetArray.push(dataset.data[context.dataIndex] as number);
                 }
               }
             } else {
-              if (dataset.data[context.dataIndex] !== undefined) {
+              if (dataset.data[context.dataIndex] !== undefined && dataset.data[context.dataIndex] !== null) {
                 dataSetArray.push(dataset.data[context.dataIndex] as number);
               }
             }
@@ -239,11 +256,15 @@ const _EmissionsYearlyCarbonFootprintChart = () => {
             if (context.chart.data.datasets.length === 4 && index === context.chart.data.datasets.length - 1) {
               return;
             }
-            if (dataset.data[currentDataIndex] !== undefined) {
+            if (dataset.data[currentDataIndex] !== undefined && dataset.data[currentDataIndex] !== null) {
               lastDataSetIndex = index;
             }
           });
-
+          console.log({
+            dataSetArray,
+            total,
+            lastDataSetIndex,
+          });
           if (context.datasetIndex === lastDataSetIndex) {
             return Math.round(total * 100) / 100;
           } else {
@@ -306,7 +327,7 @@ const _EmissionsYearlyCarbonFootprintChart = () => {
       if (yearsChartData.datasets.length === 4 && index === yearsChartData.datasets.length - 1) {
         return;
       }
-      if (dataset.data[yearIndex] !== undefined && dataset.data[yearIndex] !== 0) {
+      if (dataset.data[yearIndex] !== undefined && dataset.data[yearIndex] !== null) {
         specificYearChartData.push(index);
       }
     });
@@ -380,6 +401,11 @@ const _EmissionsYearlyCarbonFootprintChart = () => {
       </div>
     );
   };
+
+  console.log({
+    yearsChartData,
+    yearsData,
+  });
 
   return (
     <Card title={'Emissions'} glow={false} className={'w-auto'}>
