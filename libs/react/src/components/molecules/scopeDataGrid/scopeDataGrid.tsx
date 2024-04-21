@@ -188,7 +188,7 @@ const _ScopeDataGrid = (props: ScopeDataGridProps) => {
             background: row.color,
             border: '2px solid rgba(0, 0, 0, 0.2)',
           }}
-          className={`mr-2 h-[10px] w-[10px] min-w-[10px] rounded-xl ${isRowSelected(row.activity) ? 'ml-4' : ''}`}
+          className={`mr-2 h-[10px] w-[10px] min-w-[10px] rounded-xl ${isRowSelected(row.activity) ? 'ml-3' : ''}`}
         />
         {getCategoryChip(row.activity)}
         <div className={`${getTableActivityWidth(row.activity)} truncate`}>{capitalize(row.activity)}</div>
