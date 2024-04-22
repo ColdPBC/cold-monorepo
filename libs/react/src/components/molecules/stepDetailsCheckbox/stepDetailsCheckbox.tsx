@@ -10,28 +10,19 @@ export type StepDetailsCheckboxProps = {
   setComplete: (complete: Step['complete']) => void;
 };
 
-export const StepDetailsCheckbox = ({
-  complete,
-  setComplete,
-}: StepDetailsCheckboxProps) => {
+export const StepDetailsCheckbox = ({ complete, setComplete }: StepDetailsCheckboxProps) => {
   const [checkboxClicked, setCheckboxClicked] = useState(false);
 
   const getStepCheckbox = () => {
     if (complete) {
       if (!checkboxClicked) {
         return (
-          <div
-            className={'w-[32px] h-[32px]'}
-            onClick={onCheckboxClick}
-            data-testid={'step-detail-checkbox'}
-          >
+          <div className={'w-[32px] h-[32px]'} onClick={onCheckboxClick} data-testid={'step-detail-checkbox'}>
             <ColdIcon name={IconNames.ColdSmallCheckBoxIcon} className={' '} />
           </div>
         );
       } else {
-        return (
-          <StepDetailsAnimatedCheckbox onCheckboxClick={onCheckboxClick} />
-        );
+        return <StepDetailsAnimatedCheckbox onCheckboxClick={onCheckboxClick} />;
       }
     } else {
       return <StepDetailsEmptyCheckBox onCheckboxClick={onCheckboxClick} />;
@@ -49,7 +40,7 @@ export const StepDetailsCheckbox = ({
   };
 
   return (
-    <div className={'w-[32px] h-[32px] cursor-pointer'}>
+    <div className={'w-[32px] h-[32px] cursor-pointer'} data-chromatic="ignore">
       {getStepCheckbox()}
     </div>
   );

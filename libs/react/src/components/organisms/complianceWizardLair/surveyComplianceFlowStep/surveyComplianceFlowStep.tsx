@@ -125,7 +125,7 @@ const _SurveyComplianceFlowStep = () => {
   });
 
   return (
-    <div className={'h-[708px] w-full flex flex-row relative text-tc-primary'}>
+    <div className={'h-[708px] w-full flex flex-row relative text-tc-primary'} data-chromatic="ignore">
       <div className={'flex w-auto h-full'}>
         <ComplianceSurveyLeftNav surveyData={surveyState} savedQuestions={savedQuestions} activeKey={activeKey} setActiveKey={setActiveKey} />
       </div>

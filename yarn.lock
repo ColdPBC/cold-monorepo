@@ -14364,6 +14364,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/regression@npm:^2.0.6":
+  version: 2.0.6
+  resolution: "@types/regression@npm:2.0.6"
+  checksum: 10/c412ddd924efd53395f0011b38a6b1dbc94fc71adfa80efcb6657f0f1b6123fb27c101798dda8d0aa638c925900b4b4a9c5c03504a0d1255edd160e3090a5ce9
+  languageName: node
+  linkType: hard
+
 "@types/request@npm:^2.48.8":
   version: 2.48.12
   resolution: "@types/request@npm:2.48.12"
@@ -19121,6 +19128,7 @@ __metadata:
     "@types/react-router-dom": "npm:5.3.3"
     "@types/react-test-renderer": "npm:18.0.6"
     "@types/react-transition-group": "npm:^4.4.9"
+    "@types/regression": "npm:^2.0.6"
     "@types/rollup-plugin-peer-deps-external": "npm:^2.2.4"
     "@types/source-map-support": "npm:^0.5.10"
     "@types/storybook__addon-info": "npm:^5.2.8"
@@ -19246,6 +19254,7 @@ __metadata:
     react-transition-group: "npm:^4.4.5"
     redis: "npm:^4.6.7"
     reflect-metadata: "npm:^0.1.13"
+    regression: "npm:^2.0.1"
     rollup: "npm:^3.21.0"
     rollup-plugin-dts: "npm:^5.3.0"
     rollup-plugin-peer-deps-external: "npm:^2.2.4"
@@ -38260,6 +38269,13 @@ __metadata:
   bin:
     regjsparser: bin/parser
   checksum: 10/be7757ef76e1db10bf6996001d1021048b5fb12f5cb470a99b8cf7f3ff943f0f0e2291c0dcdbb418b458ddc4ac10e48680a822b69ef487a0284c8b6b77beddc3
+  languageName: node
+  linkType: hard
+
+"regression@npm:^2.0.1":
+  version: 2.0.1
+  resolution: "regression@npm:2.0.1"
+  checksum: 10/d8c902e29d2485dea72e89c39f21cf6e56ca89e556f0547ce73d5098e18817e32dcfa95e8999dfbcebd03c9e4a4d614ee90adaea8cd5204882926566b310b09f
   languageName: node
   linkType: hard
 
