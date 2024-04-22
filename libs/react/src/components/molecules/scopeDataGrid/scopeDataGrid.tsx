@@ -149,9 +149,9 @@ const _ScopeDataGrid = (props: ScopeDataGridProps) => {
 
   const getTableActivityClassName = (activity: string) => {
     if (isRowSelected(activity)) {
-      return `px-0 py-0 pr-3 bg-gray-70 w-full`;
+      return `px-0 py-0 pr-3 bg-gray-70`;
     } else {
-      return 'px-4 py-4 w-full';
+      return 'px-4 py-4';
     }
   };
 
@@ -175,7 +175,7 @@ const _ScopeDataGrid = (props: ScopeDataGridProps) => {
 
   const getTableActivityItem = (row: { activity: string; percentage: string; tCO2e: number; color: string }) => {
     return (
-      <Table.Cell className={`flex items-center font-bold ${getTableActivityClassName(row.activity)}`} theme={darkTableTheme.table?.body?.cell}>
+      <Table.Cell className={`flex items-center font-bold w-[371px] ${getTableActivityClassName(row.activity)}`} theme={darkTableTheme.table?.body?.cell}>
         {isRowSelected(row.activity) && (
           <div
             className="h-[51px] w-[4px]"
@@ -209,7 +209,7 @@ const _ScopeDataGrid = (props: ScopeDataGridProps) => {
       <Table className="text-white" theme={darkTableTheme.table} data-testid={'footprint-detail-chart-table'}>
         <Table.Head className="text-white normal-case">
           {map(tableData.definition, (def, i) => (
-            <Table.HeadCell key={`${def.field}-${i}`} theme={darkTableTheme.table?.head?.cell} className={def.size}>
+            <Table.HeadCell key={`${def.field}-${i}`} theme={darkTableTheme.table?.head?.cell}>
               {def.headerTitle}
             </Table.HeadCell>
           ))}
@@ -219,7 +219,7 @@ const _ScopeDataGrid = (props: ScopeDataGridProps) => {
             <Table.Row
               key={`${row.activity}-${i}`}
               theme={darkTableTheme.table?.row}
-              className={`cursor-pointer`}
+              className={`cursor-pointer w-[742px]`}
               onMouseEnter={() => {
                 setSelectedActivity({ scope: scope_category, activity: row.activity });
               }}
@@ -232,7 +232,7 @@ const _ScopeDataGrid = (props: ScopeDataGridProps) => {
                 }
               }}>
               {getTableActivityItem(row)}
-              <Table.Cell theme={darkTableTheme.table?.body?.cell} className={`${getTableRowClassName(row.activity, row.color)}`}>
+              <Table.Cell theme={darkTableTheme.table?.body?.cell} className={`w-4/12 ${getTableRowClassName(row.activity, row.color)}`}>
                 <div className={'flex flex-row items-center h-full'}>
                   <div className={'min-w-[65px] h-full'}>{row.percentage}</div>
                   <div className={'w-full flex flex-row items-center h-full'}>
@@ -246,7 +246,7 @@ const _ScopeDataGrid = (props: ScopeDataGridProps) => {
                   </div>
                 </div>
               </Table.Cell>
-              <Table.Cell theme={darkTableTheme.table?.body?.cell} className={`${getTableRowClassName(row.activity, row.color)}`}>
+              <Table.Cell theme={darkTableTheme.table?.body?.cell} className={`w-2/12 ${getTableRowClassName(row.activity, row.color)}`}>
                 {formatTonnes(row.tCO2e)}
               </Table.Cell>
             </Table.Row>

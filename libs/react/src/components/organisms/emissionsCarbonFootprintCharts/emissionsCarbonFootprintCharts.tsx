@@ -305,7 +305,7 @@ const _EmissionsCarbonFootprintCharts = () => {
                   </div>
                 </div>
               </div>
-              <div className={'flex flex-col gap-[16px]'}>
+              <div className={'flex flex-col gap-[16px] w-full'}>
                 {uniqueScopes.map(scope => {
                   return (
                     <ScopeDataGrid
