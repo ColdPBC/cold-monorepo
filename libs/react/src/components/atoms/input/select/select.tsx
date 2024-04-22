@@ -10,6 +10,7 @@ export interface SelectProps {
   value?: any;
   onChange: (value: InputOption) => void;
   className?: string;
+  buttonClassName?: string;
 }
 
 function classNames(...classes: string[]) {
@@ -17,7 +18,7 @@ function classNames(...classes: string[]) {
 }
 
 export const Select = (props: SelectProps) => {
-  const { options, name, label, value, onChange, className } = props;
+  const { options, name, label, value, onChange, className, buttonClassName = '' } = props;
 
   const onListBoxChange = (value: InputOption) => {
     onChange(value);
@@ -33,67 +34,29 @@ export const Select = (props: SelectProps) => {
   }
 
   return (
-    <Listbox
-      value={findOption(value, options)}
-      onChange={onListBoxChange}
-      name={name}
-    >
+    <Listbox value={findOption(value, options)} onChange={onListBoxChange} name={name}>
       {({ open }) => (
-        <div className={'relative space-y-2 '+className}>
-          {label && (
-            <Listbox.Label className="block text-left text-eyebrow text-tc-primary">
-              {label}
-            </Listbox.Label>
-          )}
-          <Listbox.Button className="relative w-full cursor-pointer bg-transparent text-tc-primary text-left text-body p-4 border-[1px] border-bgc-accent rounded-lg">
-            <span className="block truncate">
-              {findOption(value, options).name}
-            </span>
+        <div className={'relative space-y-2 ' + className}>
+          {label && <Listbox.Label className="block text-left text-eyebrow text-tc-primary">{label}</Listbox.Label>}
+          <Listbox.Button
+            className={'relative w-full cursor-pointer bg-transparent text-tc-primary text-left text-body p-4 border-[1px] border-bgc-accent rounded-lg ' + buttonClassName}>
+            <span className="block truncate">{findOption(value, options).name}</span>
             <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-              <ChevronDownIcon
-                className="h-5 w-5 text-gray-400"
-                aria-hidden="true"
-              />
+              <ChevronDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
             </span>
           </Listbox.Button>
-          <Transition
-            show={open}
-            as={Fragment}
-            leave="transition ease-in duration-100"
-            leaveFrom="opacity-100"
-            leaveTo="opacity-0"
-          >
+          <Transition show={open} as={Fragment} leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0">
             <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-lg bg-bgc-elevated py-1 text-tc-primary text-body shadow-lg focus:outline-none">
-              {options.map((option) => (
+              {options.map(option => (
                 <Listbox.Option
                   key={option.id}
-                  className={({ active }) =>
-                    classNames(
-                      active ? 'bg-bgc-accent' : 'bg-bgc-elevated',
-                      'relative cursor-pointer select-none p-4 text-body rounded-lg',
-                    )
-                  }
-                  value={option}
-                >
+                  className={({ active }) => classNames(active ? 'bg-bgc-accent' : 'bg-bgc-elevated', 'relative cursor-pointer select-none p-4 text-body rounded-lg')}
+                  value={option}>
                   {({ active }) => (
                     <>
-                      <span
-                        className={classNames(
-                          option.name ? 'font-semibold' : 'font-normal',
-                          'block truncate',
-                        )}
-                      >
-                        {option.name}
-                      </span>
+                      <span className={classNames(option.name ? 'font-semibold' : 'font-normal', 'block truncate')}>{option.name}</span>
 
-                      {option.name ? (
-                        <span
-                          className={classNames(
-                            active ? 'text-white' : 'text-indigo-600',
-                            'absolute inset-y-0 right-0 flex items-center pr-4',
-                          )}
-                        ></span>
-                      ) : null}
+                      {option.name ? <span className={classNames(active ? 'text-white' : 'text-indigo-600', 'absolute inset-y-0 right-0 flex items-center pr-4')}></span> : null}
                     </>
                   )}
                 </Listbox.Option>

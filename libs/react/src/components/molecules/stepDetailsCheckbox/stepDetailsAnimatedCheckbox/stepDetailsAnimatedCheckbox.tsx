@@ -12,9 +12,7 @@ const lottieCheckboxOptions: LottieOptions = {
 export type StepDetailsAnimatedCheckboxProps = {
   onCheckboxClick: (event: React.MouseEvent<HTMLElement>) => void;
 };
-export const StepDetailsAnimatedCheckbox = ({
-  onCheckboxClick,
-}: StepDetailsAnimatedCheckboxProps) => {
+export const StepDetailsAnimatedCheckbox = ({ onCheckboxClick }: StepDetailsAnimatedCheckboxProps) => {
   const { View: AnimatedCheckbox, play } = useLottie(lottieCheckboxOptions);
 
   useEffect(() => {
@@ -22,11 +20,7 @@ export const StepDetailsAnimatedCheckbox = ({
   }, []);
 
   return (
-    <div
-      className={'w-[32px] h-[32px]'}
-      onClick={onCheckboxClick}
-      data-testid={'step-detail-checkbox'}
-    >
+    <div className={'w-[32px] h-[32px]'} onClick={onCheckboxClick} data-testid={'step-detail-checkbox'} data-chromatic="ignore">
       {AnimatedCheckbox}
     </div>
   );

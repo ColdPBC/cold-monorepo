@@ -1,3 +1,39 @@
+# [1.203.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.202.0...v1.203.0) (2024-04-22)
+
+
+### Bug Fixes
+
+* register bar controller for bar chart ([bb88aea](https://github.com/ColdPBC/cold-monorepo/commit/bb88aea7144520d873f21fd4a222e7e1b1dff571))
+
+
+### Features
+
+* add formatting to tonnes and percents ([fb940a5](https://github.com/ColdPBC/cold-monorepo/commit/fb940a59cc2180c4d06bd2d4699ddfaa1cad0eaa))
+* add regression and tooltip to bar chart ([fa8f581](https://github.com/ColdPBC/cold-monorepo/commit/fa8f581053493a7a6dc3500351ccc2cf3f99d51f))
+* add white border to select ([3e9dada](https://github.com/ColdPBC/cold-monorepo/commit/3e9dada25ab8a3cac9cd218d16d80dfdcdcb0044))
+* correct image styling and tootlip handling ([2fbeed0](https://github.com/ColdPBC/cold-monorepo/commit/2fbeed0a8d969a026f710d778c272319b98ce11d))
+* correct regression bar, added tooltip to bar chart ([7a78fab](https://github.com/ColdPBC/cold-monorepo/commit/7a78fab80b5324ee7fa4d00cc94a7cce37371fa2))
+* correct text ([e56cbfa](https://github.com/ColdPBC/cold-monorepo/commit/e56cbfa3438f72b5f10b9bea5f0b93c032d6d955))
+* donut chart hover updates and dropdown with other activities row ([16ca9f9](https://github.com/ColdPBC/cold-monorepo/commit/16ca9f936444b5813b3fad3a2371269242688b57))
+* fix data label issue not appearing sometimes ([54b4811](https://github.com/ColdPBC/cold-monorepo/commit/54b481147bf4f10ace178ce0625b179f8a873681))
+* fix dropdown changes height on hover ([b52ae5f](https://github.com/ColdPBC/cold-monorepo/commit/b52ae5f368c8b932ae96cfec220d4a8291f90a11))
+* fix table width ([1b89ef5](https://github.com/ColdPBC/cold-monorepo/commit/1b89ef571f14c19a05e01763d25dac1df36a7acc))
+* initial changes ([f812d98](https://github.com/ColdPBC/cold-monorepo/commit/f812d98dc8c5306c5d72ef77e0924b2fbbfd2755))
+
+# [1.203.0-COLD-744.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.202.0...v1.203.0-COLD-744.1) (2024-04-22)
+
+
+### Features
+
+* add regression and tooltip to bar chart ([fa8f581](https://github.com/ColdPBC/cold-monorepo/commit/fa8f581053493a7a6dc3500351ccc2cf3f99d51f))
+* add white border to select ([3e9dada](https://github.com/ColdPBC/cold-monorepo/commit/3e9dada25ab8a3cac9cd218d16d80dfdcdcb0044))
+* correct image styling and tootlip handling ([2fbeed0](https://github.com/ColdPBC/cold-monorepo/commit/2fbeed0a8d969a026f710d778c272319b98ce11d))
+* correct regression bar, added tooltip to bar chart ([7a78fab](https://github.com/ColdPBC/cold-monorepo/commit/7a78fab80b5324ee7fa4d00cc94a7cce37371fa2))
+* donut chart hover updates and dropdown with other activities row ([16ca9f9](https://github.com/ColdPBC/cold-monorepo/commit/16ca9f936444b5813b3fad3a2371269242688b57))
+* fix data label issue not appearing sometimes ([54b4811](https://github.com/ColdPBC/cold-monorepo/commit/54b481147bf4f10ace178ce0625b179f8a873681))
+* fix table width ([1b89ef5](https://github.com/ColdPBC/cold-monorepo/commit/1b89ef571f14c19a05e01763d25dac1df36a7acc))
+* initial changes ([f812d98](https://github.com/ColdPBC/cold-monorepo/commit/f812d98dc8c5306c5d72ef77e0924b2fbbfd2755))
+
 # [1.202.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.201.9...v1.202.0) (2024-04-19)
 
 

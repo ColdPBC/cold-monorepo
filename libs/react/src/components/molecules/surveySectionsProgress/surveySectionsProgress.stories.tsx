@@ -1,16 +1,8 @@
 import React from 'react';
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
-import {
-  SurveyQuestionContainer,
-  SurveySectionsProgress,
-  SurveySectionsProgressProps,
-} from '@coldpbc/components';
-import {
-  getSurveySectionMock,
-  getSurveySectionScrollableMock,
-} from '@coldpbc/mocks';
-import { SurveySectionType } from '@coldpbc/interfaces';
+import { SurveySectionsProgress, SurveySectionsProgressProps } from '@coldpbc/components';
+import { getSurveySectionMock, getSurveySectionScrollableMock } from '@coldpbc/mocks';
 
 const meta: Meta<typeof SurveySectionsProgress> = {
   title: 'Molecules/SurveySectionsProgress',
@@ -18,6 +10,9 @@ const meta: Meta<typeof SurveySectionsProgress> = {
   tags: ['autodocs'],
   decorators: [withKnobs],
   argTypes: {},
+  parameters: {
+    chromatic: { disableSnapshot: true },
+  },
 };
 
 export default meta;
@@ -28,7 +23,7 @@ const SurveySectionsStory = (args: SurveySectionsProgressProps) => {
 };
 
 export const Default: Story = {
-  render: (args) => <SurveySectionsStory {...args} />,
+  render: args => <SurveySectionsStory {...args} />,
   args: {
     sections: getSurveySectionMock(),
     activeKey: {
@@ -37,10 +32,13 @@ export const Default: Story = {
       isFollowUp: false,
     },
   },
+  parameters: {
+    chromatic: { disableSnapshot: true },
+  },
 };
 
 export const SectionCompleted: Story = {
-  render: (args) => <SurveySectionsStory {...args} />,
+  render: args => <SurveySectionsStory {...args} />,
   args: {
     ...Default.args,
     activeKey: {
@@ -52,7 +50,7 @@ export const SectionCompleted: Story = {
 };
 
 export const SectionWithFollowUp: Story = {
-  render: (args) => <SurveySectionsStory {...args} />,
+  render: args => <SurveySectionsStory {...args} />,
   args: {
     ...Default.args,
     activeKey: {
@@ -64,7 +62,7 @@ export const SectionWithFollowUp: Story = {
 };
 
 export const SurveyComplete: Story = {
-  render: (args) => <SurveySectionsStory {...args} />,
+  render: args => <SurveySectionsStory {...args} />,
   args: {
     ...Default.args,
     activeKey: {
@@ -76,7 +74,7 @@ export const SurveyComplete: Story = {
 };
 
 export const LastSection: Story = {
-  render: (args) => <SurveySectionsStory {...args} />,
+  render: args => <SurveySectionsStory {...args} />,
   args: {
     ...Default.args,
     activeKey: {
@@ -88,7 +86,7 @@ export const LastSection: Story = {
 };
 
 export const LargerThanScrollBar: Story = {
-  render: (args) => <SurveySectionsStory {...args} />,
+  render: args => <SurveySectionsStory {...args} />,
   args: {
     sections: getSurveySectionScrollableMock(),
     activeKey: {

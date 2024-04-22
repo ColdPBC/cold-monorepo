@@ -21,6 +21,7 @@ export interface EmissionCategory {
   scope: {
     ghg_category: number;
     ghg_subcategory: number;
+    ghg_subcategory_name?: string;
   };
   activities: EmissionActivity[];
 }
