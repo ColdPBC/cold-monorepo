@@ -30,6 +30,13 @@ deploy-api-preview:
 	@echo ${GREEN} DONE! ${NC} ;
 	@echo "" ;
 
+stop-api-preview:
+	@echo ${YELLOW}Stopping API On Preview...${NC} ;
+	@echo ________________________________ ;
+	@for taskarn in $(aws ecs list-tasks --cluster cold-api-fc-vvac0727 --service cold-api-fc-vvac0727 --desired-status RUNNING --output text --query 'taskArns'); do aws ecs stop-task --cluster cold-api-fc-vvac0727 --task $taskarn; done;
+	@echo ${GREEN} DONE! ${NC} ;
+	@echo "" ;
+
 deploy-api-staging:
 	@echo ${YELLOW}Deploying API On Staging...${NC} ;
 	@echo ________________________________ ;
@@ -37,10 +44,25 @@ deploy-api-staging:
 	@echo ${GREEN} DONE! ${NC} ;
 	@echo "" ;
 
+stop-api-staging:
+	@echo ${YELLOW}Stopping API On Staging...${NC} ;
+	@echo ________________________________ ;
+	@for taskarn in $(aws ecs list-tasks --cluster cold-api-fc-me4y0q8d --service cold-api-fc-me4y0q8d --desired-status RUNNING --output text --query 'taskArns'); do aws ecs stop-task --cluster cold-api-fc-me4y0q8d --task $taskarn; done;
+	@echo ${GREEN} DONE! ${NC} ;
+	@echo "" ;
+
 deploy-api-production:
 	@echo ${YELLOW}Deploying API On Production...${NC} ;
 	@echo ________________________________ ;
 	@aws ecs update-service --force-new-deployment --service cold-api-fc-vvac0727 --cluster cold-api-fc-vvac0727
+	@echo ${GREEN} DONE! ${NC} ;
+	@echo "" ;
+
+# Stop API service in PROD
+stop-api-production:
+	@echo ${YELLOW}Stopping API On Preview...${NC} ;
+	@echo ________________________________ ;
+	@for taskarn in $(aws ecs list-tasks --cluster cold-api-fc-vvac0727 --service cold-api-fc-vvac0727 --desired-status RUNNING --output text --query 'taskArns'); do aws ecs stop-task --cluster cold-api-fc-vvac0727 --task $taskarn; done;
 	@echo ${GREEN} DONE! ${NC} ;
 	@echo "" ;
 
@@ -52,10 +74,24 @@ deploy-openai-preview:
 	@echo ${GREEN} DONE! ${NC} ;
 	@echo "" ;
 
+stop-openai-preview:
+	@echo ${YELLOW}Stopping OpenAI On Preview...${NC} ;
+	@echo ________________________________ ;
+	@for taskarn in $(aws ecs list-tasks --cluster cold-platform-openai-h29e0mtq --service cold-platform-openai-h29e0mtq --desired-status RUNNING --output text --query 'taskArns'); do aws ecs stop-task --cluster cold-platform-openai-h29e0mtq --task $taskarn; done;
+	@echo ${GREEN} DONE! ${NC} ;
+	@echo "" ;
+
 deploy-openai-staging:
 	@echo ${YELLOW}Deploying OpenAI On Staging...${NC} ;
 	@echo ________________________________ ;
 	@aws ecs update-service --force-new-deployment --service cold-platform-openai-w71x0as5 --cluster cold-platform-openai-w71x0as5
+	@echo ${GREEN} DONE! ${NC} ;
+	@echo "" ;
+
+stop-openai-staging:
+	@echo ${YELLOW}Stopping OpenAI On Staging...${NC} ;
+	@echo ________________________________ ;
+	@for taskarn in $(aws ecs list-tasks --cluster cold-platform-openai-w71x0as5 --service cold-platform-openai-w71x0as5 --desired-status RUNNING --output text --query 'taskArns'); do aws ecs stop-task --cluster cold-platform-openai-w71x0as5 --task $taskarn; done;
 	@echo ${GREEN} DONE! ${NC} ;
 	@echo "" ;
 
@@ -66,28 +102,55 @@ deploy-openai-production:
 	@echo ${GREEN} DONE! ${NC} ;
 	@echo "" ;
 
+stop-openai-production:
+	@echo ${YELLOW}Stopping OpenAI On Production...${NC} ;
+	@echo ________________________________ ;
+	@for taskarn in $(aws ecs list-tasks --cluster cold-platform-openai-bcx086w --service cold-platform-openai-bcx086w --desired-status RUNNING --output text --query 'taskArns'); do aws ecs stop-task --cluster cold-platform-openai-bcx086w --task $taskarn; done;
+	@echo ${GREEN} DONE! ${NC} ;
+	@echo "" ;
+
 # Bayou Energy
 deploy-bayou-preview:
 	@echo ${YELLOW}Deploying Bayou On Preview...${NC} ;
 	@echo ________________________________ ;
-	@aws ecs update-service --force-new-deployment --service cold-api-fc-vvac0727 --cluster cold-api-fc-vvac0727
+	@aws ecs update-service --force-new-deployment --service cold-platform-bayou-ty600xyq --cluster cold-platform-bayou-ty600xyq
+	@echo ${GREEN} DONE! ${NC} ;
+	@echo "" ;
+
+stop-bayou-preview:
+	@echo ${YELLOW}Stopping Bayou On Preview...${NC} ;
+	@echo ________________________________ ;
+	@for taskarn in $(aws ecs list-tasks --cluster cold-platform-bayou-ty600xyq --service cold-platform-bayou-ty600xyq --desired-status RUNNING --output text --query 'taskArns'); do aws ecs stop-task --cluster cold-platform-bayou-ty600xyq --task $taskarn; done;
 	@echo ${GREEN} DONE! ${NC} ;
 	@echo "" ;
 
 deploy-bayou-staging:
 	@echo ${YELLOW}Deploying Bayou On Staging...${NC} ;
 	@echo ________________________________ ;
-	@aws ecs update-service --force-new-deployment --service cold-api-fc-vvac0727 --cluster cold-api-fc-vvac0727
+	@aws ecs update-service --force-new-deployment --service cold-platform-bayou-ty600xyq --cluster cold-platform-bayou-ty600xyq
+	@echo ${GREEN} DONE! ${NC} ;
+	@echo "" ;
+
+stop-bayou-staging:
+	@echo ${YELLOW}Stopping Bayou On Staging...${NC} ;
+	@echo ________________________________ ;
+	@for taskarn in $(aws ecs list-tasks --cluster cold-platform-bayou-ty600xyq  --service cold-platform-bayou-ty600xyq  --desired-status RUNNING --output text --query 'taskArns'); do aws ecs stop-task --cluster cold-platform-bayou-ty600xyq --task $taskarn; done;
 	@echo ${GREEN} DONE! ${NC} ;
 	@echo "" ;
 
 deploy-bayou-production:
 	@echo ${YELLOW}Deploying Bayou On Production...${NC} ;
 	@echo ________________________________ ;
-	@aws ecs update-service --force-new-deployment --service cold-api-fc-vvac0727 --cluster cold-api-fc-vvac0727
+	@aws ecs update-service --force-new-deployment --service cold-platform-bayou-ex2b1zot --cluster cold-platform-bayou-ex2b1zot
 	@echo ${GREEN} DONE! ${NC} ;
 	@echo "" ;
 
+stop-bayou-production:
+	@echo ${YELLOW}Stopping Bayou On Production...${NC} ;
+	@echo ________________________________ ;
+	@for taskarn in $(aws ecs list-tasks --cluster cold-platform-bayou-ex2b1zot --service cold-platform-bayou-ex2b1zot --desired-status RUNNING --output text --query 'taskArns'); do aws ecs stop-task --cluster cold-platform-bayou-ex2b1zot --task $taskarn; done;
+	@echo ${GREEN} DONE! ${NC} ;
+	@echo "" ;
 
 # Climatiq
 deploy-climatiq-preview:
