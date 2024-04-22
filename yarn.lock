@@ -19240,6 +19240,7 @@ __metadata:
     prop-types: "npm:^15.8.1"
     react: "npm:^18.2.0"
     react-chartjs-2: "npm:^5.2.0"
+    react-circle: "npm:^1.1.1"
     react-collapse: "npm:^5.1.1"
     react-cookie: "npm:^4.1.1"
     react-docgen-typescript-loader: "npm:^3.7.2"
@@ -37234,6 +37235,15 @@ __metadata:
     chart.js: ^4.1.1
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
   checksum: 10/0a70b60e1a0d1f0cecdd69d70d9ac1c191618c1033d8f942d4728f5eb84c893c82c9e3318be8a3158eb3a7186c0251a8fe0356c9610ea0f0f3f2d4a9c4a0b388
+  languageName: node
+  linkType: hard
+
+"react-circle@npm:^1.1.1":
+  version: 1.1.1
+  resolution: "react-circle@npm:1.1.1"
+  peerDependencies:
+    react: ^16.2.0
+  checksum: 10/00053d4b944861b606b14e438d1f0ff15a09946a24cb8ccde76224dc7457002cb1a045e2f866cf3a45d504b5c3b2bfd51692dfda77ac5aca83e75043dc737df9
   languageName: node
   linkType: hard
 

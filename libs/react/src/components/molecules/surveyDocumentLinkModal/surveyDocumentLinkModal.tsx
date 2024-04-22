@@ -5,7 +5,7 @@ import { ButtonTypes, IconNames } from '@coldpbc/enums';
 export interface SurveyDocumentLinkModalProps {
   show: boolean;
   setShowModal: (show: boolean) => void;
-  surveyDocumentLink: string | undefined;
+  surveyDocumentLink: string | undefined | null;
   questionKey: string;
   saveSurveyDocumentLink: (key: string, value: any) => void;
 }
