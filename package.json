@@ -180,7 +180,7 @@
     "rxjs": "^7.8.0",
     "safe-stable-stringify": "^2.4.3",
     "streamifier": "^0.1.1",
-    "swagger-ui-express": "^4.6.3",
+    "swagger-ui-express": "^5.0.0",
     "swagger2openapi": "^7.0.8",
     "swr": "^2.1.5",
     "tailwind-merge": "^1.14.0",
