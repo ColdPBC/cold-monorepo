@@ -117,7 +117,20 @@ export class CrawlerConsumer extends BaseWorker implements OnModuleInit {
           }),
         ),
       );
-      await this.pc.chunkedUpsert(index, vectors, job?.data?.organization?.name);
+
+      try {
+        await index.namespace(job.data.organization.name).upsert(vectors);
+        this.metrics.increment('pinecone.index.upsert', 1, {
+          namespace: job.data.organization.name,
+          status: 'completed',
+        });
+      } catch (e) {
+        this.logger.error('Error upserting chunk', { error: e, namespace: job.data.organization.name });
+        this.metrics.increment('pinecone.index.upsert', 1, { namespace: job.data.organization.name, status: 'failed' });
+        throw e;
+      }
+
+      ///await this.pc.chunkedUpsert(index, vectors, job?.data?.organization?.name);
 
       // Cache the checksum of the page
       await this.cache.set(`crawler:${job.data.organization.name}:${checksum}`, {
