@@ -1,6 +1,7 @@
 import { Card, ErrorFallback } from '@coldpbc/components';
 import { find, forEach, forOwn, get, isArray, map, reduce, set } from 'lodash';
 import {
+  BarController,
   BarElement,
   BubbleDataPoint,
   CategoryScale,
@@ -308,7 +309,7 @@ const _EmissionsYearlyCarbonFootprintChart = () => {
     selectedYear,
   };
 
-  ChartJS.register(CategoryScale, LinearScale, BarElement, Title, PointElement, LineElement, LineController, Tooltip);
+  ChartJS.register(CategoryScale, LinearScale, BarElement, Title, PointElement, LineElement, LineController, BarController, Tooltip);
 
   const barPlugins: PluginType[] = [ChartDataLabels];
 
