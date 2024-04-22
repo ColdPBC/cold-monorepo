@@ -166,22 +166,23 @@ model policy_data {
 /// @zod.import(["import { SurveyDefinitionSchema } from '../../custom'"])
 model survey_definitions {
   /// @zod.custom.use(z.string().uuid())
-  id          String        @id @default(uuid())
-  name        String        @unique
+  id            String          @id @default(uuid())
+  name          String          @unique
   /// @z.enum()
-  type        survey_types
-  description String
+  type          survey_types
+  description   String
   /// @DtoUpdateHidden
   /// @zod.custom.use(z.date().optional())
-  created_at  DateTime      @default(now())
+  created_at    DateTime        @default(now())
   /// @DtoUpdateHidden
   /// @DtoCreateHidden
   /// @DtoReadOnly
   /// @zod.custom.use(z.date().optional())
-  updated_at  DateTime      @updatedAt
+  updated_at    DateTime        @updatedAt
   /// @zod.custom.use(SurveyDefinitionSchema)
-  definition  Json
-  survey_data survey_data[]
+  definition    Json
+  survey_data   survey_data[]
+  survey_status survey_status[]
 }
 
 /// @namespace Surveys
@@ -206,8 +207,27 @@ model survey_data {
   survey_definition_id String
   organizations        organizations      @relation(fields: [organization_id], references: [id], onDelete: Cascade)
   survey_definition    survey_definitions @relation(fields: [survey_definition_id], references: [id], onDelete: Cascade)
+  survey_status        survey_status[]
 
   @@unique([organization_id, survey_definition_id], name: "orgSurveyKey")
+}
+
+/// @namespace Survey Status
+/// @erd survey_status
+model survey_status {
+  /// @zod.custom.use(z.string().uuid())
+  id                String              @id @default(uuid())
+  survey_id         String
+  survey_name       String              @unique
+  survey_data_id    String
+  organization_id   String
+  status            survey_status_types
+  email             String
+  created_at        DateTime            @default(now())
+  updated_at        DateTime            @updatedAt
+  survey_data       survey_data         @relation(fields: [survey_data_id], references: [id], onDelete: Cascade)
+  organization      organizations       @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+  survey_definition survey_definitions  @relation(fields: [survey_id], references: [id], onDelete: Cascade)
 }
 
 /// @namespace Categories
@@ -291,6 +311,7 @@ model organizations {
   survey_data              survey_data[]
   utility_bills            utility_bills[]
   vector_records           vector_records[]
+  survey_status            survey_status[]
 }
 
 /// @namespace Organization_Facilities
@@ -545,6 +566,12 @@ enum survey_types {
   SOLUTION
   TEST
   COMPLIANCE
+}
+
+enum survey_status_types {
+  user_submitted
+  cold_submitted
+  draft
 }
 
 enum component_definition_types {

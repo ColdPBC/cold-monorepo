@@ -97,6 +97,39 @@
                         ]
                     }
                 ]
+            },
+            "delete": {
+                "operationId": "DeleteOrg",
+                "summary": "Delete Organization",
+                "description": "Deletes specified organization",
+                "parameters": [
+                    {
+                        "name": "bpc",
+                        "required": false,
+                        "in": "query",
+                        "description": "Bypass Cache",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Organizations"
+                ],
+                "security": [
+                    {
+                        "oauth2": [
+                            "openid",
+                            "email",
+                            "profile"
+                        ]
+                    }
+                ]
             }
         },
         "/organizations/{orgId}": {
@@ -2192,7 +2225,7 @@
         "/compliance_definitions/{name}/organizations/{orgId}": {
             "put": {
                 "operationId": "ActivateOrganziationComplianceAutomation",
-                "summary": "Activate Compliance Automation For Organization",
+                "summary": "Activate Ai Automation For Compliance Set",
                 "parameters": [
                     {
                         "name": "name",
@@ -2298,6 +2331,80 @@
                         }
                     }
                 ],
+                "requestBody": {
+                    "required": true,
+                    "description": "overrides the survey array in the compliance definition",
+                    "content": {
+                        "application/json": {
+                            "examples": {
+                                "Surveys Override": {
+                                    "value": {
+                                        "surveys_override": [
+                                            "survey_name_1",
+                                            "survey_name_2"
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Compliance Definitions"
+                ],
+                "security": [
+                    {
+                        "oauth2": [
+                            "openid"
+                        ]
+                    }
+                ]
+            },
+            "patch": {
+                "operationId": "ComplianceController_upsertOrgCompliance",
+                "parameters": [
+                    {
+                        "name": "orgId",
+                        "required": true,
+                        "in": "path",
+                        "example": "{{test_organization_id}}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "required": true,
+                        "in": "path",
+                        "example": "{{compliance_definition_name}}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "description": "overrides the survey array in the compliance definition",
+                    "content": {
+                        "application/json": {
+                            "examples": {
+                                "Surveys Override": {
+                                    "value": {
+                                        "surveys_override": [
+                                            "survey_name_1",
+                                            "survey_name_2"
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
                 "responses": {
                     "201": {
                         "description": ""
@@ -3203,40 +3310,6 @@
                     }
                 }
             },
-            "patch": {
-                "operationId": "FootprintsController_update",
-                "parameters": [
-                    {
-                        "name": "orgId",
-                        "required": true,
-                        "in": "path",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "facId",
-                        "required": true,
-                        "in": "path",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "id",
-                        "required": true,
-                        "in": "path",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": ""
-                    }
-                }
-            },
             "delete": {
                 "operationId": "FootprintsController_remove",
                 "parameters": [
@@ -3270,6 +3343,69 @@
                         "description": ""
                     }
                 }
+            }
+        },
+        "/organizations/{orgId}/surveys/{surveyName}/status": {
+            "post": {
+                "operationId": "CreateSurveyStatus",
+                "summary": "Create Survey Status",
+                "parameters": [
+                    {
+                        "name": "orgId",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "surveyName",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "bpc",
+                        "required": false,
+                        "in": "query",
+                        "description": "Bypass Cache",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "example": {
+                                    "status": "draft"
+                                },
+                                "$ref": "#/components/schemas/CreateOrganizationDto"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Organizations"
+                ],
+                "security": [
+                    {
+                        "oauth2": [
+                            "openid",
+                            "email",
+                            "profile"
+                        ]
+                    }
+                ]
             }
         }
     },
@@ -3319,7 +3455,7 @@
             },
             "openId": {
                 "type": "openIdConnect",
-                "openIdConnectUrl": "https://dev-6qt527e13qyo4ls6.us.auth0.com/.well-known/openid-configuration"
+                "openIdConnectUrl": "https://undefined/.well-known/openid-configuration"
             }
         },
         "schemas": {
