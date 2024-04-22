@@ -19186,7 +19186,7 @@ __metadata:
     flowbite: "npm:^1.6.5"
     flowbite-react: "npm:^0.7.0"
     framer-motion: "npm:^10.16.4"
-    freeplay: "npm:^0.2.44"
+    freeplay: "npm:^0.2.46"
     global: "npm:^4.4.0"
     got: "npm:^14.0.0"
     hex-color-opacity: "npm:^0.4.2"
@@ -24502,9 +24502,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"freeplay@npm:^0.2.44":
-  version: 0.2.45
-  resolution: "freeplay@npm:0.2.45"
+"freeplay@npm:^0.2.46":
+  version: 0.2.46
+  resolution: "freeplay@npm:0.2.46"
   dependencies:
     "@anthropic-ai/sdk": "npm:^0.19.0"
     axios: "npm:^0.26.1"
@@ -24512,7 +24512,7 @@ __metadata:
     mustache: "npm:^4.2.0"
     openai: "npm:^4.0.0"
     uuid: "npm:^9.0.0"
-  checksum: 10/7251d13639dee80f66bb6a757cd15619ce0f30f9fd778c6807956421e2c88f8bc8c3ce5a6adfe43c9d705f5ef5d84274a846051e8dbe084f961ee8b97fcb9f9d
+  checksum: 10/85f638d4efd35901513d54d72a94edecae03e2acd3193ac762951b25b7d7e1b85a0dfaf2067ec02c9297e1c9ba1a0748e79c8d1336f3ebac77327443d340c65b
   languageName: node
   linkType: hard
 
