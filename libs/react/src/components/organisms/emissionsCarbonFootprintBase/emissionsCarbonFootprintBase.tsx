@@ -63,7 +63,8 @@ export const EmissionsCarbonFootprintBase = () => {
             setSelectedYear(input);
           }}
           name={'Year'}
-          className={`w-[218px] ${selectedYear.value !== 'all' ? '' : 'border-white'}`}
+          className={`w-[218px]`}
+          buttonClassName={selectedYear.value !== 'all' ? 'border-white' : ''}
         />
       );
     }
@@ -81,7 +82,8 @@ export const EmissionsCarbonFootprintBase = () => {
               setSelectedFacility(input);
             }}
             name={'Facility'}
-            className={`w-[218px] ${selectedFacility.value !== 'all' ? '' : 'border-white'}`}
+            className={`w-[218px]`}
+            buttonClassName={selectedFacility.value !== 'all' ? 'border-white' : ''}
           />
           {getFilters()}
         </div>
