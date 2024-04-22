@@ -64,7 +64,7 @@ const _ComplianceSetOverviewCard = ({ name }: { name: string }) => {
   }
 
   const getComplianceLogo = () => {
-    const img = <img className={'w-[50px] h-[50px]'} src={complianceSet.logo_url} alt={`${complianceSet.name}-logo`}></img>;
+    const img = <img src={complianceSet.logo_url} alt={`${complianceSet.name}-logo`}></img>;
     if (!isNotActive) {
       return <div className={'rounded-full min-w-[80px] min-h-[80px] max-w-[80px] max-h-[80px] bg-gray-50 flex justify-center items-center'}>{img}</div>;
     } else {
