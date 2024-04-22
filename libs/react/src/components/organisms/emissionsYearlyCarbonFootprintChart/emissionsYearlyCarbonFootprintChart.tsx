@@ -398,7 +398,7 @@ const _EmissionsYearlyCarbonFootprintChart = () => {
   };
 
   return (
-    <Card title={'Emissions'} glow={false} className={'w-auto'}>
+    <Card title={'Emissions'} glow={false} className={'w-full'}>
       <div className={'flex flex-col space-y-4'}>
         <div className={'w-full flex flex-row justify-between'}>
           <div className={'text-left text-caption'}>Tonnes of carbon dioxide equivalents (tCO2e) per year</div>
@@ -408,7 +408,7 @@ const _EmissionsYearlyCarbonFootprintChart = () => {
             {getScopeLegend(3)}
           </div>
         </div>
-        <Chart type={'bar'} className={'w-full'} ref={chartRef} plugins={barPlugins} options={chartOptions} data={yearsChartData} width={'1123px'} height={'400px'} />
+        <Chart type={'bar'} className={'w-full'} ref={chartRef} plugins={barPlugins} options={chartOptions} data={yearsChartData} width={'1076px'} height={'400px'} />
       </div>
     </Card>
   );

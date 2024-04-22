@@ -205,7 +205,7 @@ const _ScopeDataGrid = (props: ScopeDataGridProps) => {
   };
 
   return (
-    <div className={'w-auto h-auto'}>
+    <div className={'w-[663px]'}>
       <Table className="text-white" theme={darkTableTheme.table} data-testid={'footprint-detail-chart-table'}>
         <Table.Head className="text-white normal-case">
           {map(tableData.definition, (def, i) => (

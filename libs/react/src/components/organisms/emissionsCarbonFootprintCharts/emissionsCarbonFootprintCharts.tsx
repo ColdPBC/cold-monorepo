@@ -298,7 +298,7 @@ const _EmissionsCarbonFootprintCharts = () => {
   });
 
   return (
-    <div className={'flex flex-col space-y-[35px] w-full'}>
+    <div className={'flex flex-col space-y-[35px] w-auto'}>
       <div className={'flex flex-row'}>
         <Card glow={false} className={'w-full text-tc-primary'}>
           <div className={'w-full flex flex-col gap-[40px]'}>
