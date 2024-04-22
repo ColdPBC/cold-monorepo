@@ -16,6 +16,7 @@ import { MembersModule } from './members/members.module';
 import { OrgRolesModule } from './roles/roles.module';
 import { OrganizationFilesModule } from './files/organization.files.module';
 import { FootprintsModule } from './facilities/footprints/footprints.module';
+import { OrgSurveysModule } from './surveys/orgSurveys.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { FootprintsModule } from './facilities/footprints/footprints.module';
     OrgRolesModule,
     OrganizationFilesModule,
     FootprintsModule,
+    OrgSurveysModule,
   ],
   controllers: [OrganizationController, OrganizationFilesController],
   providers: [OrganizationService, CacheService, OrganizationHelper],
