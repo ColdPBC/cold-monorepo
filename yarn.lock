@@ -5722,15 +5722,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@langchain/pinecone@npm:^0.0.3":
-  version: 0.0.3
-  resolution: "@langchain/pinecone@npm:0.0.3"
+"@langchain/pinecone@npm:^0.0.4":
+  version: 0.0.4
+  resolution: "@langchain/pinecone@npm:0.0.4"
   dependencies:
     "@langchain/core": "npm:~0.1"
-    "@pinecone-database/pinecone": "npm:^2.0.0"
+    "@pinecone-database/pinecone": "npm:^2.2.0"
     flat: "npm:^5.0.2"
     uuid: "npm:^9.0.0"
-  checksum: 10/fbfdc65be63479cc7f618d97c1ce7bd4a72d2236afff7c69a5220d9ee67d6086430ef8d8e9991595b17d432f5ee8f220db608e215831d89353260078064b5600
+  checksum: 10/3922bd6e10e9817bfc20e3dc5b0fa42b0afadaf7008fc07bbdd8929fdb91a5ed854316f28b870f908baca9b258e7fe35a45e58697d5c330ff9b21a2672d7659f
   languageName: node
   linkType: hard
 
@@ -7833,7 +7833,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@pinecone-database/pinecone@npm:^2.0.0, @pinecone-database/pinecone@npm:^2.1.0":
+"@pinecone-database/pinecone@npm:^2.1.0, @pinecone-database/pinecone@npm:^2.2.0":
   version: 2.2.0
   resolution: "@pinecone-database/pinecone@npm:2.2.0"
   dependencies:
@@ -19005,7 +19005,7 @@ __metadata:
     "@golevelup/ts-jest": "npm:^0.4.0"
     "@headlessui/react": "npm:^1.7.15"
     "@heroicons/react": "npm:^2.0.16"
-    "@langchain/pinecone": "npm:^0.0.3"
+    "@langchain/pinecone": "npm:^0.0.4"
     "@launchdarkly/node-server-sdk": "npm:^8.1.0"
     "@mdx-js/rollup": "npm:^2.3.0"
     "@mui/icons-material": "npm:^5.11.11"
