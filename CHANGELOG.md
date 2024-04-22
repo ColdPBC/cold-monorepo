@@ -1,3 +1,10 @@
+# [1.206.0-cold-743.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.205.0...v1.206.0-cold-743.1) (2024-04-22)
+
+
+### Features
+
+* add subcategory_labels to emission scopes ([3fb468e](https://github.com/ColdPBC/cold-monorepo/commit/3fb468eb43a0a18e423aa8163986cb72996f26de))
+
 # [1.205.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.204.0...v1.205.0) (2024-04-22)
 
 
