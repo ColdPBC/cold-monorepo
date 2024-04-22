@@ -458,7 +458,7 @@ model organization_files {
   checksum            String?
   integration         integrations?    @relation(fields: [integration_id], references: [id], onDelete: Cascade)
   organization        organizations    @relation(fields: [organization_id], references: [id], onDelete: Cascade)
-  vector_record       vector_records[]
+  vector_records      vector_records[]
 
   @@unique([organization_id, id], name: "orgFileId")
   @@unique([organization_id, openai_file_id], name: "openaiFileId")
@@ -480,6 +480,7 @@ model organization_compliances {
   id                    String                 @id @default(cuid())
   organization_id       String
   compliance_id         String
+  surveys_override      Json?
   created_at            DateTime               @default(now())
   updated_at            DateTime               @updatedAt
   compliance_definition compliance_definitions @relation(fields: [compliance_id], references: [id], onDelete: Cascade)
@@ -489,14 +490,18 @@ model organization_compliances {
 }
 
 model vector_records {
-  id                   String             @id @default(cuid())
+  id                   String              @id @default(cuid())
   metadata             Json
-  created_at           DateTime           @default(now())
-  updated_at           DateTime           @updatedAt
-  organization_file_id String
+  created_at           DateTime            @default(now())
+  updated_at           DateTime            @updatedAt
+  url                  String?
+  values               Json
+  index_name           String
+  namespace            String
+  organization_file_id String?
   organization_id      String
-  organization_file    organization_files @relation(fields: [organization_file_id], references: [id], onDelete: Cascade)
-  organization         organizations      @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+  organization_file    organization_files? @relation(fields: [organization_file_id], references: [id], onDelete: Cascade)
+  organization         organizations       @relation(fields: [organization_id], references: [id], onDelete: Cascade)
 }
 
 model emission_scopes {

@@ -56,7 +56,7 @@ export class OrganizationFilesController implements OnModuleInit {
       user: IAuthenticatedUser;
     },
   ) {
-    return this.orgFiles.deleteFile(req, orgId, fileId);
+    return this.orgFiles.deleteFile(req, orgId, Array.isArray(fileId) ? fileId : [fileId]);
   }
 
   @Post(':orgId/files')

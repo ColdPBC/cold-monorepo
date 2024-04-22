@@ -1,4 +1,4 @@
-import { BadRequestException, ConflictException, Global, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Global, Injectable, NotFoundException } from '@nestjs/common';
 import { Span } from 'nestjs-ddtrace';
 import { BaseWorker, CacheService, Cuid2Generator, DarklyService, MqttService, PrismaService } from '@coldpbc/nest';
 import { ComplianceDefinition, OrgCompliance } from './compliance_definition_schema';
@@ -60,7 +60,12 @@ export class ComplianceDefinitionService extends BaseWorker {
       throw new NotFoundException(`${compliance_name} compliance does not exist for ${orgId}`);
     }
 
-    const surveyNames = compliance.compliance_definition.surveys as string[];
+    let surveyNames: string[];
+    if (Array.isArray(compliance.surveys_override) && compliance.surveys_override.length > 0) {
+      surveyNames = compliance.surveys_override as string[];
+    } else {
+      surveyNames = compliance.compliance_definition.surveys as string[];
+    }
 
     const surveys: any[] = [];
 
@@ -72,10 +77,13 @@ export class ComplianceDefinitionService extends BaseWorker {
       });
       if (survey) {
         surveys.push(survey);
+      } else {
+        this.logger.error(`Survey ${name} referenced in ${Array.isArray(compliance.surveys_override) ? 'surveys_override' : 'surveys'} array not found for ${compliance_name}`);
+        throw new NotFoundException(
+          `Survey ${name} referenced in ${Array.isArray(compliance.surveys_override) ? 'surveys_override' : 'surveys'} array not found for ${compliance_name}`,
+        );
       }
     }
-
-    //const routingKey = get(this.openAI_definition, 'definition.rabbitMQ.publishOptions.routing_key', 'dead_letter');
 
     await this.event.sendIntegrationEvent(
       false,
@@ -89,13 +97,6 @@ export class ComplianceDefinitionService extends BaseWorker {
       user,
       orgId,
     );
-    /* await this.event.sendAsyncEvent(routingKey, 'compliance_automation.enabled', {
-       user,
-       on_update_url: `/organizations/${orgId}/surveys/${compliance_name}`,
-       surveys,
-       service: this.openAI_definition,
-       compliance,
-     });*/
 
     this.mqtt.publishMQTT('public', {
       swr_key: url,
@@ -159,7 +160,7 @@ export class ComplianceDefinitionService extends BaseWorker {
   }
 
   /***
-   * This action activates a new compliance for org
+   * This action creates/updates a compliance for org
    * @param req
    * @param name
    * @param orgId
@@ -173,27 +174,25 @@ export class ComplianceDefinitionService extends BaseWorker {
 
       const definition = await this.findOne(name, req, bpc);
 
-      let compliance = await this.prisma.organization_compliances.findFirst({
-        where: {
-          organization_id: orgId,
-          compliance_id: definition.id,
-        },
-        include: {
-          organization: true,
-          compliance_definition: true,
-        },
-      });
+      const data = {
+        organization_id: orgId,
+        compliance_id: definition.id,
+      };
 
-      if (compliance) {
-        throw new ConflictException(`${name} is already created for ${orgId}`);
+      if (req.body.surveys_override) {
+        data['surveys_override'] = req.body.surveys_override;
       }
 
-      compliance = await this.prisma.organization_compliances.create({
-        data: {
-          id: new Cuid2Generator('orgcomp').scopedId,
-          organization_id: orgId,
-          compliance_id: definition.id,
+      const compliance = await this.prisma.organization_compliances.upsert({
+        where: {
+          orgKeyCompKey: {
+            organization_id: orgId,
+            compliance_id: definition.id,
+          },
         },
+        update: { ...data },
+        create: { ...data },
+
         include: {
           organization: true,
           compliance_definition: true,

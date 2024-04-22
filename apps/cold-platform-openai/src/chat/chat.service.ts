@@ -528,7 +528,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
       // If the index does not exist, create it
       if (!idx) {
         this.logger.warn(`Index ${organization.name} not found; creating...`);
-        await this.pc.createIndex(organization.name);
+        await this.pc.getIndexDetails(organization.name);
 
         // Clear existing vectors since the index was just created
         const vectors = await this.prisma.vector_records.findMany({ where: { organization_id: organization.id } });

@@ -28,10 +28,10 @@ export class LangchainLoaderService extends BaseWorker implements OnModuleInit {
     console.log('LangchainLoaderService initialized');
 
     this.chunkSize = await this.darkly.getNumberFlag('dynamic-langchain-chunkSize', 1000);
-    this.overlapSize = await this.darkly.getNumberFlag('dynamic-langchain-overlapSize', 200);
+    this.overlapSize = await this.darkly.getNumberFlag('dynamic-langchain-overlap-size', 200);
   }
 
-  async getDocContent(file: any, user: AuthenticatedUser) {
+  async getDocContent(file: any, user: AuthenticatedUser | { coldclimate_claims: { email: string } }) {
     const bucket = `cold-api-uploaded-files`;
 
     const extension = file.key.split('.').pop();

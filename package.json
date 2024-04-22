@@ -1,7 +1,7 @@
 {
   "name": "cold-monorepo-nx",
   "packageManager": "yarn@4.1.1",
-  "version": "1.201.0",
+  "version": "1.202.0",
   "license": "MIT",
   "engines": {
     "node": ">=20.9.0",
@@ -118,6 +118,7 @@
     "clsx": "^2.0.0",
     "concurrently": "^8.2.2",
     "corepack": "^0.23.0",
+    "d3-dsv": "2",
     "date-fns": "^2.30.0",
     "dd-trace": "^5.10.0",
     "deep-object-diff": "^1.1.9",
