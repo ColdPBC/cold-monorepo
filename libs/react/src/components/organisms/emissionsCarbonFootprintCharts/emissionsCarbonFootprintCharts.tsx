@@ -277,26 +277,6 @@ const _EmissionsCarbonFootprintCharts = () => {
     }
   }, [selectedActivity]);
 
-  logBrowser('EmissionsCarbonFootprintCharts', 'info', {
-    byActivity,
-    selectedActivity,
-    totalEmissions,
-    uniqueScopes,
-    emissions,
-    allScopeActivities,
-    scopeColors,
-    emissionsDataSet,
-    allEmissions,
-    otherActivities,
-    maxEmissions,
-    sortedEmissions,
-    spacerValue,
-    hoverColorArray,
-    activeSegment,
-    chartPlugins,
-    chartOptions,
-  });
-
   return (
     <div className={'flex flex-col space-y-[35px] w-auto'}>
       <Card glow={false} className={'w-full text-tc-primary'}>
