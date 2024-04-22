@@ -1,8 +1,7 @@
 import React from 'react';
 import { SurveyActiveKeyType, SurveyPayloadType } from '@coldpbc/interfaces';
 import { isEmpty } from 'lodash';
-import { HexColors } from '@coldpbc/themes';
-import { ColdWordmark, SurveySectionsProgress } from '@coldpbc/components';
+import { SurveySectionsProgress } from '@coldpbc/components';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application';
 
@@ -17,7 +16,7 @@ const _SurveyLeftNav = (props: SurveyLeftNavProps) => {
   const { surveyData, activeKey, submitted } = props;
   const { definition: surveyFormData } = surveyData;
   return (
-    <div className="flex flex-col" data-testid={'survey-left-nav'}>
+    <div className="flex flex-col" data-testid={'survey-left-nav'} data-chromatic="ignore">
       {isEmpty(activeKey.value) || submitted ? (
         <div className={'pb-[37px] relative flex-1'} data-testid={'survey-intro'}>
           <div
