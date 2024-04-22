@@ -5,7 +5,7 @@ export function getComplianceMock(): Compliance[] {
     {
       id: 'compdef_n90xd3j15im42aqr',
       name: 'b_corp_2024',
-      logo_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/Certified_B_Corporation.svg',
+      logo_url: 'https://cold-public-assets.s3.amazonaws.com/3rdPartyLogos/compliance_svgs/bcorp_logo.svg',
       surveys: ['b_corp_2024'],
       created_at: '2024-03-19T16:22:59.959Z',
       updated_at: '2024-04-10T20:44:44.763Z',
@@ -14,7 +14,7 @@ export function getComplianceMock(): Compliance[] {
     {
       id: 'compdef_s4h9rd5wuorvhthy',
       name: 'rei_pia_2024',
-      logo_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/rei-logo-1.svg',
+      logo_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/compliance_svgs/rei_logo.svg',
       surveys: ['rei_pia_2024'],
       created_at: '2024-03-01T19:51:37.808Z',
       updated_at: '2024-03-06T05:05:43.546Z',
@@ -23,7 +23,7 @@ export function getComplianceMock(): Compliance[] {
     {
       id: 'compdef_q8ctv3dxn00s3bic',
       name: 'one_percent_for_planet_DEMO',
-      logo_url: 'https://cold-public-assets.s3.amazonaws.com/images%2F1percent_for_planet_logo.png',
+      logo_url: 'https://cold-public-assets.s3.amazonaws.com/3rdPartyLogos/compliance_svgs/1_percent_for_the_planet_logo.svg',
       surveys: ['one_percent_for_planet_DEMO'],
       created_at: '2024-03-18T16:42:54.309Z',
       updated_at: '2024-03-18T16:42:54.309Z',
@@ -32,7 +32,7 @@ export function getComplianceMock(): Compliance[] {
     {
       id: 'compdef_q4si19qzwqh0h03g',
       name: 'oia_climate_report_2023',
-      logo_url: 'https://cold-public-assets.s3.amazonaws.com/images%2Foia_logo.png',
+      logo_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/compliance_svgs/oia_logo.svg',
       surveys: ['oia_climate_report_2023'],
       created_at: '2024-03-18T15:55:36.193Z',
       updated_at: '2024-03-26T19:09:13.312Z',
@@ -89,7 +89,7 @@ export function getOrganizationComplianceMock(): OrgCompliance[] {
       compliance_definition: {
         id: 'compdef_n90xd3j15im42aqr',
         name: 'b_corp_2024',
-        logo_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/Certified_B_Corporation.svg',
+        logo_url: 'https://cold-public-assets.s3.amazonaws.com/3rdPartyLogos/compliance_svgs/bcorp_logo.svg',
         surveys: ['b_corp_2024'],
         created_at: '2024-03-19T16:22:59.959Z',
         updated_at: '2024-04-10T20:44:44.763Z',
@@ -133,7 +133,7 @@ export function getOrganizationComplianceMock(): OrgCompliance[] {
       compliance_definition: {
         id: 'compdef_s4h9rd5wuorvhthy',
         name: 'rei_pia_2024',
-        logo_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/rei-logo-1.svg',
+        logo_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/compliance_svgs/rei_logo.svg',
         surveys: ['rei_pia_2024'],
         created_at: '2024-03-01T19:51:37.808Z',
         updated_at: '2024-03-06T05:05:43.546Z',
@@ -177,7 +177,7 @@ export function getOrganizationComplianceMock(): OrgCompliance[] {
       compliance_definition: {
         id: 'compdef_q4si19qzwqh0h03g',
         name: 'oia_climate_report_2023',
-        logo_url: 'https://cold-public-assets.s3.amazonaws.com/images%2Foia_logo.png',
+        logo_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/compliance_svgs/oia_logo.svg',
         surveys: ['oia_climate_report_2023'],
         created_at: '2024-03-18T15:55:36.193Z',
         updated_at: '2024-03-26T19:09:13.312Z',
@@ -221,7 +221,7 @@ export function getOrganizationComplianceMock(): OrgCompliance[] {
       compliance_definition: {
         id: 'compdef_q8ctv3dxn00s3bic',
         name: 'one_percent_for_planet_DEMO',
-        logo_url: 'https://cold-public-assets.s3.amazonaws.com/images%2F1percent_for_planet_logo.png',
+        logo_url: 'https://cold-public-assets.s3.amazonaws.com/3rdPartyLogos/compliance_svgs/1_percent_for_the_planet_logo.svg',
         surveys: ['one_percent_for_planet_DEMO'],
         created_at: '2024-03-18T16:42:54.309Z',
         updated_at: '2024-03-18T16:42:54.309Z',
@@ -290,7 +290,7 @@ export function getAssessmentsComplianceMock(): OrgCompliance[] {
       compliance_definition: {
         id: 'compdef_s4h9rd5wuorvhthy',
         name: 'rei_pia_2024',
-        logo_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/rei-logo-1.svg',
+        logo_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/compliance_svgs/rei_logo.svg',
         surveys: ['rei_pia_2024_2'],
         created_at: '2024-03-01T19:51:37.808Z',
         updated_at: '2024-03-06T05:05:43.546Z',
@@ -327,7 +327,7 @@ export function getAssessmentsComplianceMock(): OrgCompliance[] {
       compliance_definition: {
         id: 'compdef_obu8yu9fbhex3inz',
         name: 'amazon',
-        logo_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/Amazon_icon.svg',
+        logo_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/compliance_svgs/amazon_logo.svg',
         surveys: ['rei_pia_2024'],
         created_at: '2024-02-05T19:28:02.001Z',
         updated_at: '2024-02-05T20:36:23.025Z',
