@@ -82,7 +82,7 @@ export class RabbitService extends BaseWorker {
   async handleAsyncMessages(msg: RabbitMessagePayload): Promise<void | Nack> {
     try {
       msg.data = typeof msg.data == 'string' ? JSON.parse(msg.data) : msg.data;
-      this.logger.info(`received async ${msg.event} request from ${msg.from}`, { ...msg });
+      this.logger.info(`received async ${msg.event} request from ${msg.from}`);
 
       this.processAsyncMessage(msg.event, msg.from, msg.data);
 
@@ -95,7 +95,7 @@ export class RabbitService extends BaseWorker {
 
   async processRPCMessage(event: string, from: string, parsed: any) {
     try {
-      this.logger.info(`Processing ${event} event triggered by ${parsed.user?.coldclimate_claims?.email} from ${from}`, { parsed });
+      this.logger.info(`Processing ${event} event triggered by ${parsed.user?.coldclimate_claims?.email} from ${from}`);
 
       switch (event) {
         case 'organization.created': {
@@ -113,8 +113,18 @@ export class RabbitService extends BaseWorker {
           return response;
         }
         case 'organization.deleted': {
-          const response = await this.appService.deleteAssistant(parsed);
-          return response;
+          let assistant, pinecone;
+          try {
+            assistant = await this.appService.deleteAssistant(parsed);
+          } catch (e) {
+            this.logger.error(e.message, { ...e });
+          }
+          try {
+            pinecone = await this.pc.deleteIndex(parsed.organization.name);
+          } catch (e) {
+            this.logger.error(e.message, { ...e });
+          }
+          return { assistant, pinecone };
         }
         case 'file.uploaded': {
           const uploader = new FileService(this.config, this.appService, this.prisma, this.s3);
@@ -141,7 +151,7 @@ export class RabbitService extends BaseWorker {
     switch (event) {
       case 'organization.created': {
         try {
-          const pcResponse = await this.pc.createIndex(parsed.organization.name);
+          const pcResponse = await this.pc.getIndexDetails(parsed.organization.name);
           const response = await this.appService.createAssistant(parsed);
           if (parsed.organization.website) {
             let url = parsed.organization.website;
@@ -166,18 +176,18 @@ export class RabbitService extends BaseWorker {
       }
       case 'organization.deleted': {
         let pcResponse, response;
-        try {
-          response = await this.appService.deleteAssistant(parsed);
-          this.logger.info('OpenAI Assistant deleted', response);
-        } catch (e) {
-          this.logger.error('Failed to delete OpenAI Assistant', e);
-        }
 
         try {
           pcResponse = await this.pc.deleteIndex(parsed.organization.name);
           this.logger.info('Pinecone index deleted', pcResponse);
         } catch (e) {
           this.logger.error('Failed to delete Pinecone index', e);
+        }
+        try {
+          response = await this.appService.deleteAssistant(parsed);
+          this.logger.info('OpenAI Assistant deleted', response);
+        } catch (e) {
+          this.logger.error('Failed to delete OpenAI Assistant', e);
         }
 
         return { assistant: response, pinecone: pcResponse };
@@ -225,7 +235,7 @@ export class RabbitService extends BaseWorker {
         break;
       case 'file.uploaded':
         return await this.queue.add(event, parsed, {
-          removeOnFail: true,
+          removeOnFail: false,
           removeOnComplete: true,
           backoff: { type: BackOffStrategies.EXPONENTIAL },
         });

@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post, Put, Query, Req, UseFilters, UseGuards } from '@nestjs/common';
-import { ApiOAuth2, ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiOAuth2, ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Span } from 'nestjs-ddtrace';
 import { ResourceValidationPipe } from '../../../pipes/resource.pipe';
 import { BaseWorker, HttpExceptionFilter, IAuthenticatedUser, JwtAuthGuard, Role, Roles, RolesGuard, SurveyResponseSchema } from '@coldpbc/nest';
@@ -113,7 +113,7 @@ export class ComplianceController extends BaseWorker {
   }
 
   @ApiOperation({
-    summary: 'Activate Compliance Automation For Organization',
+    summary: 'Activate Ai Automation For Compliance Set',
     operationId: 'ActivateOrganziationComplianceAutomation',
   })
   @Put('compliance_definitions/:name/organizations/:orgId')
@@ -193,6 +193,7 @@ export class ComplianceController extends BaseWorker {
     return this.complianceService.deactivate(name, orgId, req);
   }
 
+  //TODO: Deprecated
   @Post('compliance_definitions/:name/organizations/:orgId')
   @HttpCode(201)
   @ApiParam({
@@ -207,13 +208,68 @@ export class ComplianceController extends BaseWorker {
     type: 'string',
     example: '{{test_organization_id}}',
   })
+  @ApiBody({
+    description: 'overrides the survey array in the compliance definition',
+    required: true,
+    type: 'object',
+    examples: {
+      'Surveys Override': {
+        value: {
+          surveys_override: ['survey_name_1', 'survey_name_2'],
+        },
+      },
+    },
+    isArray: true,
+  })
   @Roles(...allRoles)
   createOrgCompliance(
     @Param('orgId') orgId: string,
     @Param('name') name: string,
     @Req()
     req: {
-      body: any;
+      body: { surveys_override?: string[] };
+      headers: any;
+      query: any;
+      user: IAuthenticatedUser;
+    },
+  ) {
+    return this.complianceService.createOrgCompliance(req, name, orgId);
+  }
+
+  @Patch('compliance_definitions/:name/organizations/:orgId')
+  @HttpCode(201)
+  @ApiParam({
+    name: 'name',
+    required: true,
+    type: 'string',
+    example: '{{compliance_definition_name}}',
+  })
+  @ApiParam({
+    name: 'orgId',
+    required: true,
+    type: 'string',
+    example: '{{test_organization_id}}',
+  })
+  @ApiBody({
+    description: 'overrides the survey array in the compliance definition',
+    required: true,
+    type: 'object',
+    examples: {
+      'Surveys Override': {
+        value: {
+          surveys_override: ['survey_name_1', 'survey_name_2'],
+        },
+      },
+    },
+    isArray: true,
+  })
+  @Roles(...allRoles)
+  upsertOrgCompliance(
+    @Param('orgId') orgId: string,
+    @Param('name') name: string,
+    @Req()
+    req: {
+      body: { surveys_override?: string[] };
       headers: any;
       query: any;
       user: IAuthenticatedUser;

@@ -15,6 +15,12 @@ async function bootstrap(instance) {
     logger: instance,
   });
 
+  const httpAdapter = app.getHttpAdapter();
+  const server = httpAdapter.getHttpServer();
+
+  server.keepAliveTimeout = 61000;
+  server.headersTimeout = 65000;
+
   app.use(json({ limit: '50mb' }));
   app.use(urlencoded({ extended: true, limit: '50mb' }));
 
