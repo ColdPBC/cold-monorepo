@@ -1,3 +1,16 @@
+# [1.205.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.204.0...v1.205.0) (2024-04-22)
+
+
+### Bug Fixes
+
+* add statuses to response ([96505bd](https://github.com/ColdPBC/cold-monorepo/commit/96505bdfc4d016dc67317d60bc59ea757d921f64))
+
+
+### Features
+
+* add new orgSurveyStatus route ([463d7a8](https://github.com/ColdPBC/cold-monorepo/commit/463d7a808d806cb939750e5ef512e68fa71b1851))
+* add new orgSurveyStatus route ([#403](https://github.com/ColdPBC/cold-monorepo/issues/403)) ([f4fa4c3](https://github.com/ColdPBC/cold-monorepo/commit/f4fa4c3212b5c34f9490522b19efeba577394a76))
+
 # [1.204.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.203.0...v1.204.0) (2024-04-22)
 
 
