@@ -302,7 +302,7 @@ const _EmissionsCarbonFootprintCharts = () => {
       <Card glow={false} className={'w-full text-tc-primary'}>
         <div className={'w-full flex flex-col gap-[40px]'}>
           <div className={'w-full flex flex-row justify-between'}>
-            <div className={'text-h2 text-start'}>Emissions by {byActivity ? 'Activity' : 'Category'}</div>
+            <div className={'text-h2 text-start'}>Emissions By {byActivity ? 'Activity' : 'Category'}</div>
             <div className={'w-auto flex flex-row bg-bgc-accent border-[1px] border-gray-70 rounded-[8px] p-[8px]'}>
               <div className={`rounded-[8px] cursor-pointer p-[8px] text-button ${byActivity ? 'bg-bgc-accent' : 'bg-primary-300'}`} onClick={() => onEmissionTypeClick(false)}>
                 Category

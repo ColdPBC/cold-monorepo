@@ -387,7 +387,7 @@ const _EmissionsYearlyCarbonFootprintChart = () => {
     <Card glow={false} className={'w-full'}>
       <div className={'w-full flex flex-col gap-[16px]'}>
         <div className={'w-full flex flex-row justify-between'}>
-          <div className={'text-h2 text-start'}>Emissions over Time</div>
+          <div className={'text-h2 text-start'}>Emissions Over Time</div>
         </div>
         <div className={'flex flex-col space-y-4'}>
           <div className={'w-full flex flex-row justify-between'}>
