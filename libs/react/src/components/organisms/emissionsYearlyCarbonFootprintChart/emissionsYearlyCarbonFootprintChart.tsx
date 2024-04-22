@@ -260,11 +260,6 @@ const _EmissionsYearlyCarbonFootprintChart = () => {
               lastDataSetIndex = index;
             }
           });
-          console.log({
-            dataSetArray,
-            total,
-            lastDataSetIndex,
-          });
           if (context.datasetIndex === lastDataSetIndex) {
             return Math.round(total * 100) / 100;
           } else {
@@ -401,11 +396,6 @@ const _EmissionsYearlyCarbonFootprintChart = () => {
       </div>
     );
   };
-
-  console.log({
-    yearsChartData,
-    yearsData,
-  });
 
   return (
     <Card title={'Emissions'} glow={false} className={'w-auto'}>
