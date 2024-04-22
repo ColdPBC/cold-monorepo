@@ -4,14 +4,13 @@ import { ColdEmissionsContext } from '@coldpbc/context';
 import { withErrorBoundary } from 'react-error-boundary';
 import { findIndex, forEach, get, includes, isArray, set, sortBy } from 'lodash';
 import { ChartData, ChartOptions } from 'chart.js';
-import { useActiveSegment, useColdContext } from '@coldpbc/hooks';
+import { useActiveSegment } from '@coldpbc/hooks';
 import { Chart } from 'react-chartjs-2';
 import { Plugin as PluginType } from 'chart.js/dist/types';
 import { getSchemeForColor, HexColors } from '@coldpbc/themes';
 import { EmissionsScope3Categories, ScopeColors } from '@coldpbc/enums';
 
 const _EmissionsCarbonFootprintCharts = () => {
-  const { logBrowser } = useColdContext();
   const [byActivity, setByActivity] = React.useState(true);
   const [selectedActivity, setSelectedActivity] = React.useState<{
     scope: number;

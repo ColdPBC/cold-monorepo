@@ -372,8 +372,6 @@ const _EmissionsYearlyCarbonFootprintChart = () => {
     }
   });
 
-  logBrowser('EmissionsYearlyCarbonFootprintChart', 'info', { yearsChartData, chartOptions });
-
   const getScopeLegend = (scope: number) => {
     return (
       <div className={'flex flex-row gap-2'}>
