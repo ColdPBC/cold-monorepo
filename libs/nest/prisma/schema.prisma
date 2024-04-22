@@ -303,7 +303,6 @@ model organizations {
   isTest                   Boolean                    @default(false)
   actions                  actions[]
   category_data            category_data[]
-  emission_scopes          emission_scopes[]
   integrations             integrations[]
   organization_compliances organization_compliances[]
   facilities               organization_facilities[]
@@ -526,16 +525,14 @@ model vector_records {
 }
 
 model emission_scopes {
-  id                String         @id @default(cuid())
+  id                String   @id @default(cuid())
   label             String
-  created_at        DateTime       @default(now())
-  updated_at        DateTime       @updatedAt
+  created_at        DateTime @default(now())
+  updated_at        DateTime @updatedAt
   ghg_subcategory   Int?
   ghg_category      Int
   subcategory_label String?
   name              String
-  organization_id   String?
-  organization      organizations? @relation(fields: [organization_id], references: [id], onDelete: Cascade)
 
   @@unique([ghg_category, ghg_subcategory, name], name: "ghgCategoryName")
   @@unique([ghg_category, ghg_subcategory, label], name: "ghgCategoryLabel")

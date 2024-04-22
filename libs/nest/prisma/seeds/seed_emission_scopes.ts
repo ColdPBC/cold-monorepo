@@ -369,5 +369,32 @@ export async function seedScopes() {
 
   console.log(`${count} Scopes seeded!`);
 
+  console.log('migrating existing data to new scopes...');
+  const footprints = await prisma.facility_footprints.findMany();
+  for (const footprint of footprints) {
+    if (!footprint.emissions) continue;
+    for (const emission of footprint.emissions as any[]) {
+      if (emission.scope?.ghg_subcategory && emission.scope?.ghg_subcategory > 0) {
+        const emission_scope = await prisma.emission_scopes.findFirst({
+          where: {
+            ghg_subcategory: emission.scope.ghg_subcategory,
+          },
+        });
+        if (emission_scope) {
+          emission.scope.subcategory_label = emission_scope.subcategory_label || '';
+        }
+      }
+    }
+    await prisma.facility_footprints.update({
+      where: {
+        id: footprint.id,
+      },
+      data: {
+        emissions: footprint.emissions,
+      },
+    });
+  }
+  console.log('migration complete!');
+
   await prisma.$disconnect();
 }
