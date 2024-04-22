@@ -1,9 +1,9 @@
 import { BadRequestException, Global, HttpException, Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
-import { organizations, survey_types } from '@prisma/client';
+import { organizations, survey_status_types, survey_types } from '@prisma/client';
 import { ConfigService } from '@nestjs/config';
 import { isUUID } from 'class-validator';
 import { diff } from 'deep-object-diff';
-import { filter, find, map, merge, omit } from 'lodash';
+import { filter, find, map, merge, omit, set } from 'lodash';
 import { Span } from 'nestjs-ddtrace';
 import { v4 } from 'uuid';
 import { BaseWorker, CacheService, DarklyService, MqttService, PrismaService, SurveyDefinitionsEntity, UpdateSurveyDefinitionsDto, ZodSurveyResponseDto } from '@coldpbc/nest';
@@ -373,6 +373,23 @@ export class SurveysService extends BaseWorker {
 
       const scored = await this.filterService.filterDependencies(this.scoreService.scoreSurvey(def));
 
+      const statuses = await this.prisma.survey_status.findMany({
+        where: { survey_name: name, organization_id: organization.id },
+        orderBy: {
+          created_at: 'desc',
+        },
+      });
+
+      if (statuses.length < 1) {
+        set(scored, 'survey_statuses', [{ name: survey_status_types.draft, datetime: new Date() }]);
+      } else {
+        set(
+          scored,
+          'survey_statuses',
+          statuses.map(survey_status => ({ name: survey_status.status, datetime: survey_status.created_at })),
+        );
+      }
+
       return scored;
     } catch (e) {
       this.logger.error(e.message, { error: e });
@@ -435,8 +452,17 @@ export class SurveysService extends BaseWorker {
     });
 
     try {
+      const surveyStatuses = await this.prisma.survey_status.findMany({
+        where: { survey_name: name, organization_id: orgId },
+        orderBy: {
+          created_at: 'desc',
+        },
+      });
+
       const def = await this.prisma.survey_definitions.findUnique({
-        where: { name: name },
+        where: {
+          name: name,
+        },
       });
 
       this.setTags({ survey_name: name, survey_definition_id: def?.id });
@@ -446,7 +472,7 @@ export class SurveysService extends BaseWorker {
       }
 
       const difference = omit(diff(def.definition as any, submission.definition), ['id', 'created_at', 'updated_at', 'survey_definition_id', 'organization_id']);
-      const existing = (await this.prisma.survey_data.findFirst({
+      let existing = (await this.prisma.survey_data.findFirst({
         where: {
           survey_definition_id: def.id,
           organization_id: org.id,
@@ -454,61 +480,73 @@ export class SurveysService extends BaseWorker {
       })) as any;
 
       if (existing) {
-        this.setTags({ submission_id: existing.id, name: existing.name });
-
-        existing.data = merge(existing.data, difference);
-
+        this.setTags({ submission_id: existing?.id, name: existing.name });
+        existing.data = merge(existing?.data, difference);
         await this.prisma.survey_data.update({
           where: {
             id: existing.id,
           },
           data: existing,
         });
-
-        if (!find(this.exclude_orgs, { id: org.id })) {
-          if (submission?.definition?.submitted) {
-            this.setTags({ status: 'completed' });
-
-            this.metrics.event(
-              `${existing?.name} survey for ${org?.display_name} was completed`,
-              `${user.coldclimate_claims.email} completed ${existing?.name} survey for ${org?.display_name}`,
-              {
-                alert_type: 'success',
-                date_happened: new Date(),
-                source_type_name: 'cold-api',
-                priority: 'normal',
-              },
-              this.tags,
-            );
-
-            this.metrics.increment('cold.api.surveys.submission', this.tags);
-            this.logger.info('completed survey submission', difference);
-          } else {
-            this.setTags({ status: 'updated' });
-            this.logger.info('updated survey submission', { name: name, org });
-          }
-        }
       } else {
-        const response = {
-          id: v4(),
-          created_at: new Date(),
-          organization_id: org.id,
-          survey_definition_id: def.id,
-          data: difference,
-        };
-
-        await this.prisma.survey_data.create({
-          data: response,
+        existing = await this.prisma.survey_data.create({
+          data: {
+            id: v4(),
+            created_at: new Date(),
+            organization_id: org.id,
+            survey_definition_id: def.id,
+            data: difference,
+          },
         });
+      }
 
-        if (!find(this.exclude_orgs, { id: org.id })) {
-          this.setTags({ status: 'created' });
+      if (surveyStatuses.length < 1) {
+        const id = v4();
+
+        await this.prisma.survey_status.create({
+          data: {
+            id: id,
+            survey_data_id: existing.id,
+            survey_id: def.id,
+            survey_name: name,
+            organization_id: orgId,
+            status: survey_status_types.draft,
+            email: user.coldclimate_claims.email,
+          },
+        });
+      } else if (surveyStatuses[0].status === survey_status_types.user_submitted || surveyStatuses[0].status === survey_status_types.cold_submitted) {
+        this.logger.error(`Survey ${name} is locked and cannot be updated`, { survey_status: surveyStatuses[0].status });
+        throw new UnprocessableEntityException(`Survey ${name} is locked and cannot be updated`);
+      }
+
+      if (!find(this.exclude_orgs, { id: org.id })) {
+        if (submission?.definition?.submitted) {
+          this.setTags({ status: 'completed' });
+
+          this.metrics.event(
+            `${existing?.name} survey for ${org?.display_name} was completed`,
+            `${user.coldclimate_claims.email} completed ${existing?.name} survey for ${org?.display_name}`,
+            {
+              alert_type: 'success',
+              date_happened: new Date(),
+              source_type_name: 'cold-api',
+              priority: 'normal',
+            },
+            this.tags,
+          );
 
           this.metrics.increment('cold.api.surveys.submission', this.tags);
+          this.logger.info('completed survey submission', difference);
+        } else {
+          this.setTags({ status: 'updated' });
+          this.logger.info('updated survey submission', { name: name, org });
         }
-
-        this.logger.info('created survey submission', response);
       }
+
+      this.setTags({ status: 'created' });
+
+      this.metrics.increment('cold.api.surveys.submission', this.tags);
+      this.logger.info('created survey submission', existing);
 
       this.mqtt.publishMQTT('ui', {
         org_id: orgId,

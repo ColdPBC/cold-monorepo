@@ -56,6 +56,7 @@ export const SurveyResponseSchema = extendApi(
       type: Survey_typesSchema,
       definition: SurveyDefinitionSchema,
       description: z.string().optional().nullable(),
+      submission_statuses: z.array(z.string()).optional().nullable(),
       created_at: z.date(),
       updated_at: z.date().optional(),
     })
