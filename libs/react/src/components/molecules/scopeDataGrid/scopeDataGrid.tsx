@@ -149,7 +149,7 @@ const _ScopeDataGrid = (props: ScopeDataGridProps) => {
 
   const getTableActivityClassName = (activity: string) => {
     if (isRowSelected(activity)) {
-      return `px-0 py-0 pr-3 bg-gray-70`;
+      return `px-0 py-0 pr-4 bg-gray-70`;
     } else {
       return 'px-4 py-4';
     }
@@ -195,7 +195,7 @@ const _ScopeDataGrid = (props: ScopeDataGridProps) => {
         {
           // show 'Other Activities' row only for scope 3 and by activity
           scope_category === 3 && byActivity && row.activity === 'Other Activities' && (
-            <div className={'w-[24px] h-[24px] p-[8px]'}>
+            <div className={'w-[8px] h-[8px]'}>
               <ColdIcon name={showOtherActivities ? IconNames.ColdChevronDownIcon : IconNames.ColdChevronUpIcon} />
             </div>
           )
