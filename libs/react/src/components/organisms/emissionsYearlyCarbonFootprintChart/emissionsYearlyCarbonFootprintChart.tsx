@@ -3,7 +3,6 @@ import { find, forEach, forOwn, get, isArray, map, reduce, set } from 'lodash';
 import {
   BarController,
   BarElement,
-  BubbleDataPoint,
   CategoryScale,
   Chart as ChartJS,
   ChartData,
@@ -13,12 +12,10 @@ import {
   LinearScale,
   LineController,
   LineElement,
-  Point,
   PointElement,
   Title,
   Tooltip,
   TooltipItem,
-  TooltipModel,
 } from 'chart.js';
 import { Chart } from 'react-chartjs-2';
 import React, { useContext } from 'react';
@@ -30,6 +27,7 @@ import { Plugin as PluginType } from 'chart.js/dist/types';
 import { useColdContext } from '@coldpbc/hooks';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import regression, { DataPoint } from 'regression';
+import numeral from 'numeral';
 
 const _EmissionsYearlyCarbonFootprintChart = () => {
   const chartRef = React.useRef(null);
@@ -186,19 +184,6 @@ const _EmissionsYearlyCarbonFootprintChart = () => {
     });
   }
 
-  const getExternalTooltip = (context: {
-    chart: ChartJS<keyof ChartTypeRegistry, (number | [number, number] | Point | BubbleDataPoint | null)[], unknown>;
-    tooltip: TooltipModel<keyof ChartTypeRegistry>;
-  }) => {
-    const { chart, tooltip } = context;
-    let tooltipEl = chart.canvas.parentNode?.querySelector('div');
-    if (!tooltipEl) {
-      tooltipEl = document.createElement('div');
-      tooltipEl.className = 'w-[50px] h-[50px] bg-gray-100 border-[1px] border-bgc-accent';
-      chart.canvas.parentNode?.appendChild(tooltipEl);
-    }
-  };
-
   const chartOptions: ChartOptions = {
     responsive: true,
     backgroundColor: 'transparent',
@@ -262,7 +247,7 @@ const _EmissionsYearlyCarbonFootprintChart = () => {
             }
           });
           if (context.datasetIndex === lastDataSetIndex) {
-            return Math.round(total * 100) / 100;
+            return numeral(total).format('0,0');
           } else {
             return '';
           }
@@ -399,17 +384,22 @@ const _EmissionsYearlyCarbonFootprintChart = () => {
   };
 
   return (
-    <Card title={'Emissions'} glow={false} className={'w-full'}>
-      <div className={'flex flex-col space-y-4'}>
+    <Card glow={false} className={'w-full'}>
+      <div className={'w-full flex flex-col gap-[16px]'}>
         <div className={'w-full flex flex-row justify-between'}>
-          <div className={'text-left text-caption'}>Tonnes of carbon dioxide equivalents (tCO2e) per year</div>
-          <div className={'w-auto flex flex-row gap-[24px]'}>
-            {getScopeLegend(1)}
-            {getScopeLegend(2)}
-            {getScopeLegend(3)}
-          </div>
+          <div className={'text-h2 text-start'}>Emissions over Time</div>
         </div>
-        <Chart type={'bar'} className={'w-full'} ref={chartRef} plugins={barPlugins} options={chartOptions} data={yearsChartData} width={'1076px'} height={'400px'} />
+        <div className={'flex flex-col space-y-4'}>
+          <div className={'w-full flex flex-row justify-between'}>
+            <div className={'text-left text-caption'}>Tonnes of carbon dioxide equivalents (tCO2e) per year</div>
+            <div className={'w-auto flex flex-row gap-[24px]'}>
+              {getScopeLegend(1)}
+              {getScopeLegend(2)}
+              {getScopeLegend(3)}
+            </div>
+          </div>
+          <Chart type={'bar'} className={'w-full'} ref={chartRef} plugins={barPlugins} options={chartOptions} data={yearsChartData} width={'1076px'} height={'400px'} />
+        </div>
       </div>
     </Card>
   );

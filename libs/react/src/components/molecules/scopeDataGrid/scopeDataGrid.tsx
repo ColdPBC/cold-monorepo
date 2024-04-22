@@ -3,9 +3,9 @@ import { capitalize, forEach, map, orderBy, sortBy } from 'lodash';
 import { ColdIcon, ErrorFallback } from '@coldpbc/components';
 import { Table } from 'flowbite-react';
 import { darkTableTheme } from '@coldpbc/themes';
-import { formatTonnes } from '@coldpbc/lib';
 import { EmissionsScope3Categories, IconNames } from '@coldpbc/enums';
 import { withErrorBoundary } from 'react-error-boundary';
+import numeral from 'numeral';
 
 export interface ScopeDataGridProps {
   scope_category: number;
@@ -75,7 +75,7 @@ const _ScopeDataGrid = (props: ScopeDataGridProps) => {
 
   if (byActivity) {
     forEach(sortedActivities, (activity, index) => {
-      const percentage = ((activity.emissions / totalEmissions) * 100).toFixed(2) + '%';
+      const percentage = ((activity.emissions / totalEmissions) * 100).toFixed(1) + '%';
       tableData.data.push({
         activity: activity.activity,
         percentage: percentage,
@@ -85,7 +85,7 @@ const _ScopeDataGrid = (props: ScopeDataGridProps) => {
     });
   } else {
     forEach(sortedActivities, activity => {
-      const percentage = ((activity.emissions / totalEmissions) * 100).toFixed(2) + '%';
+      const percentage = ((activity.emissions / totalEmissions) * 100).toFixed(1) + '%';
       if (scope_category === 3) {
         tableData.data.push({
           activity: activity.activity,
@@ -116,7 +116,7 @@ const _ScopeDataGrid = (props: ScopeDataGridProps) => {
     if (showOtherActivities) {
       const sortedOtherActivities = orderBy(otherActivities, ['emissions', 'activity'], ['desc', 'asc']);
       forEach(sortedOtherActivities, activity => {
-        const percentage = ((activity.emissions / totalEmissions) * 100).toFixed(2) + '%';
+        const percentage = ((activity.emissions / totalEmissions) * 100).toFixed(1) + '%';
         tableData.data.push({
           activity: activity.activity,
           percentage: percentage,
@@ -247,7 +247,7 @@ const _ScopeDataGrid = (props: ScopeDataGridProps) => {
                 </div>
               </Table.Cell>
               <Table.Cell theme={darkTableTheme.table?.body?.cell} className={`w-2/12 ${getTableRowClassName(row.activity, row.color)}`}>
-                {formatTonnes(row.tCO2e)}
+                {numeral(row.tCO2e).format('0,0,0')}
               </Table.Cell>
             </Table.Row>
           ))}

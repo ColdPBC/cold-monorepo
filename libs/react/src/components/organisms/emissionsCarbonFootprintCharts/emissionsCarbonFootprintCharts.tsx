@@ -299,55 +299,53 @@ const _EmissionsCarbonFootprintCharts = () => {
 
   return (
     <div className={'flex flex-col space-y-[35px] w-auto'}>
-      <div className={'flex flex-row'}>
-        <Card glow={false} className={'w-full text-tc-primary'}>
-          <div className={'w-full flex flex-col gap-[40px]'}>
-            <div className={'w-full flex flex-row justify-between'}>
-              <div className={'text-h2 text-start'}>Emissions by {byActivity ? 'Activity' : 'Category'}</div>
-              <div className={'w-auto flex flex-row bg-bgc-accent border-[1px] border-gray-70 rounded-[8px] p-[8px]'}>
-                <div className={`rounded-[8px] cursor-pointer p-[8px] text-button ${byActivity ? 'bg-bgc-accent' : 'bg-primary-300'}`} onClick={() => onEmissionTypeClick(false)}>
-                  Category
-                </div>
-                <div className={`rounded-[8px] cursor-pointer p-[8px] text-button ${byActivity ? 'bg-primary-300' : 'bg-bgc-accent'}`} onClick={() => onEmissionTypeClick(true)}>
-                  Activity
-                </div>
+      <Card glow={false} className={'w-full text-tc-primary'}>
+        <div className={'w-full flex flex-col gap-[40px]'}>
+          <div className={'w-full flex flex-row justify-between'}>
+            <div className={'text-h2 text-start'}>Emissions by {byActivity ? 'Activity' : 'Category'}</div>
+            <div className={'w-auto flex flex-row bg-bgc-accent border-[1px] border-gray-70 rounded-[8px] p-[8px]'}>
+              <div className={`rounded-[8px] cursor-pointer p-[8px] text-button ${byActivity ? 'bg-bgc-accent' : 'bg-primary-300'}`} onClick={() => onEmissionTypeClick(false)}>
+                Category
               </div>
-            </div>
-            <div className={'flex flex-row gap-[32px]'}>
-              <div className={'flex flex-col justify-between w-[347px] gap-[32px]'}>
-                <div className={'w-[347px] h-[347px] relative'}>
-                  <CarbonFootprintDetailChip emissions={totalEmissions} center />
-                  <Chart options={chartOptions} type="doughnut" data={emissionsDataSet} plugins={chartPlugins} data-chromatic="ignore" />
-                </div>
-                <div className={'w-full h-[77px] flex flex-row gap-[16px]'}>
-                  <img src={'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/Change+Climate+Logo.png'} alt={'Change Climate logo'} className={'w-[77px]'} />
-                  <div className={'text-caption text-tc-disabled whitespace-pre-wrap'}>
-                    Emissions factors and methodology powered by The Change Climate Project, the leading independent emissions accounting & certification nonprofit.
-                  </div>
-                </div>
-              </div>
-              <div className={'flex flex-col gap-[16px] w-full'}>
-                {uniqueScopes.map(scope => {
-                  return (
-                    <ScopeDataGrid
-                      scope_category={scope}
-                      key={scope}
-                      byActivity={byActivity}
-                      allEmissions={sortedEmissions}
-                      otherActivities={otherActivities}
-                      maxEmissions={maxEmissions}
-                      totalEmissions={totalEmissions}
-                      setSelectedActivity={setSelectedActivity}
-                      selectedActivity={selectedActivity}
-                      getActivityFromSegment={getActivityFromSegment}
-                    />
-                  );
-                })}
+              <div className={`rounded-[8px] cursor-pointer p-[8px] text-button ${byActivity ? 'bg-primary-300' : 'bg-bgc-accent'}`} onClick={() => onEmissionTypeClick(true)}>
+                Activity
               </div>
             </div>
           </div>
-        </Card>
-      </div>
+          <div className={'flex flex-row gap-[32px]'}>
+            <div className={'flex flex-col justify-between w-[347px] gap-[32px]'}>
+              <div className={'w-[347px] h-[347px] relative'}>
+                <CarbonFootprintDetailChip emissions={totalEmissions} center />
+                <Chart options={chartOptions} type="doughnut" data={emissionsDataSet} plugins={chartPlugins} data-chromatic="ignore" />
+              </div>
+              <div className={'w-full h-[77px] flex flex-row gap-[16px]'}>
+                <img src={'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/Change+Climate+Logo.png'} alt={'Change Climate logo'} className={'w-[77px]'} />
+                <div className={'text-caption text-tc-disabled whitespace-pre-wrap'}>
+                  Emissions factors and methodology powered by The Change Climate Project, the leading independent emissions accounting & certification nonprofit.
+                </div>
+              </div>
+            </div>
+            <div className={'flex flex-col gap-[16px] w-full'}>
+              {uniqueScopes.map(scope => {
+                return (
+                  <ScopeDataGrid
+                    scope_category={scope}
+                    key={scope}
+                    byActivity={byActivity}
+                    allEmissions={sortedEmissions}
+                    otherActivities={otherActivities}
+                    maxEmissions={maxEmissions}
+                    totalEmissions={totalEmissions}
+                    setSelectedActivity={setSelectedActivity}
+                    selectedActivity={selectedActivity}
+                    getActivityFromSegment={getActivityFromSegment}
+                  />
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </Card>
     </div>
   );
 };
