@@ -1,3 +1,12 @@
+# [1.204.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.203.0...v1.204.0) (2024-04-22)
+
+
+### Features
+
+* create new compliance page ([5c4fd2c](https://github.com/ColdPBC/cold-monorepo/commit/5c4fd2c50aae27cc52ca08017e5ddbdf8dfdae29))
+* initial changes ([4fbf0c0](https://github.com/ColdPBC/cold-monorepo/commit/4fbf0c0ad77553e729f69cb0e51cf826995ceee1))
+* remove height setting for image ([665a5a2](https://github.com/ColdPBC/cold-monorepo/commit/665a5a2298fd7311be7b332d6edf46f467f84fd1))
+
 # [1.203.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.202.0...v1.203.0) (2024-04-22)
 
 
