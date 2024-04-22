@@ -71,8 +71,8 @@ export const EmissionsCarbonFootprintBase = () => {
   };
 
   return (
-    <div className="w-screen relative flex flex-col justify-start gap-6">
-      <div className={'flex flex-row justify-between py-[36px] pr-[25px] pl-[52px] fixed top-0 shadow-2xl bg-bgc-main z-10 w-[1207px]'}>
+    <div className="w-full relative flex flex-col justify-start gap-6">
+      <div className={'flex flex-row justify-between py-[36px] pl-[52px] fixed top-0 shadow-2xl bg-bgc-main z-10 w-[1128px]'}>
         <div className={'text-h1 text-tc-primary'}>Carbon Footprint</div>
         <div className={'flex flex-row gap-[5px]'}>
           <Select
@@ -88,7 +88,7 @@ export const EmissionsCarbonFootprintBase = () => {
           {getFilters()}
         </div>
       </div>
-      <div className={'flex flex-col space-y-[35px] pl-[52px] pt-[136px] justify-start w-[1207px]'}>
+      <div className={'flex flex-col space-y-[35px] pl-[52px] pt-[136px] justify-start w-full'}>
         {!isSingleYear && <EmissionsYearlyCarbonFootprintChart />}
         <EmissionsCarbonFootprintCharts />
       </div>
