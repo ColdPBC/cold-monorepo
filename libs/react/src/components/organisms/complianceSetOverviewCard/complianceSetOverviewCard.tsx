@@ -150,7 +150,7 @@ const _ComplianceSetOverviewCard = ({ name }: { name: string }) => {
         const isDueInLessThan7Days = dueInDays < 7;
 
         return (
-          <div className={'flex flex-col min-w-[166px] text-right'}>
+          <div className={'flex flex-col min-w-[166px] text-right'} data-chromatic="ignore">
             <div className={`text-h5 w-full ${complianceStatus === ComplianceStatus.inActive ? 'text-tc-disabled' : 'text-tc-primary'}`}>{dateString}</div>
             <div
               className={`text-body w-full ${
@@ -164,7 +164,7 @@ const _ComplianceSetOverviewCard = ({ name }: { name: string }) => {
         );
       } else {
         return (
-          <div className={'flex flex-col min-w-[166px] text-right'}>
+          <div className={'flex flex-col min-w-[166px] text-right'} data-chromatic="ignore">
             <div className={`text-h5 w-full ${complianceStatus === ComplianceStatus.inActive ? 'text-tc-disabled' : 'text-tc-primary'}`}>No Deadline</div>
             <div className={'text-body w-full text-tc-secondary'}>Submit at any time</div>
           </div>
