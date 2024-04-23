@@ -1,3 +1,11 @@
+## [1.207.1-cold-759.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.207.0...v1.207.1-cold-759.1) (2024-04-23)
+
+
+### Bug Fixes
+
+* org compliances bug ([cb616ed](https://github.com/ColdPBC/cold-monorepo/commit/cb616ed04bec5b6eb9e83e323cf1adbbbd3d690d))
+* survey status bug ([45c3074](https://github.com/ColdPBC/cold-monorepo/commit/45c3074eb240afd11cd2cbcc7eca4196bc084c4b))
+
 # [1.207.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.206.0...v1.207.0) (2024-04-23)
 
 
