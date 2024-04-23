@@ -17,7 +17,7 @@ type Story = StoryObj<typeof meta>;
 export const DocumentsUploadStep: Story = {
   render: args => {
     return (
-      <StoryMockProvider memoryRouterProps={{ initialEntries: ['/wizard/compliance/rei2/documents'] }}>
+      <StoryMockProvider memoryRouterProps={{ initialEntries: ['/wizard/compliance/rei_pia_2024/documents'] }}>
         <Routes>
           <Route path={'/compliance'} element={<div className={'text-tc-primary'}>Compliance Home</div>} />
           {WizardRoutes()}
@@ -31,7 +31,7 @@ export const DocumentsUploadStep: Story = {
 export const AutomateStep: Story = {
   render: args => {
     return (
-      <StoryMockProvider memoryRouterProps={{ initialEntries: ['/wizard/compliance/rei2/automate'] }}>
+      <StoryMockProvider memoryRouterProps={{ initialEntries: ['/wizard/compliance/rei_pia_2024/automate'] }}>
         <Routes>
           <Route path={'/compliance'} element={<div className={'text-tc-primary'}>Compliance Home</div>} />
           {WizardRoutes()}
@@ -45,7 +45,7 @@ export const AutomateStep: Story = {
 export const ProcessingStep: Story = {
   render: args => {
     return (
-      <StoryMockProvider memoryRouterProps={{ initialEntries: ['/wizard/compliance/rei2/processing'] }} handlers={getComplianceWizardFlowHandler.processing}>
+      <StoryMockProvider memoryRouterProps={{ initialEntries: ['/wizard/compliance/rei_pia_2024/processing'] }} handlers={getComplianceWizardFlowHandler.processing}>
         <Routes>
           <Route path={'/compliance'} element={<div className={'text-tc-primary'}>Compliance Home</div>} />
           {WizardRoutes()}
@@ -59,7 +59,7 @@ export const ProcessingStep: Story = {
 export const QuestionnaireStep: Story = {
   render: args => {
     return (
-      <StoryMockProvider memoryRouterProps={{ initialEntries: ['/wizard/compliance/rei2/questionnaire'] }}>
+      <StoryMockProvider memoryRouterProps={{ initialEntries: ['/wizard/compliance/rei_pia_2024/questionnaire'] }}>
         <Routes>
           <Route path={'/compliance'} element={<div className={'text-tc-primary'}>Compliance Home</div>} />
           {WizardRoutes()}
