@@ -12,6 +12,7 @@ export type emissions_data = {
     ghg_category: number;
     ghg_subcategory?: number;
     label: string;
+    subcategory_label?: string;
   };
   activities: Array<{ name: string; tco2e: number }>;
 };

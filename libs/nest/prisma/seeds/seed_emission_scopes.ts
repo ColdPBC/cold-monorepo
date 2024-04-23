@@ -288,6 +288,18 @@ const seeds = {
     'Air transport services',
   ],
 };
+
+const subcategoryLables = {
+  1: 'Purchased Goods and Services',
+  2: 'Capital Goods',
+  3: 'Fuel and Energy Related Activities',
+  4: 'Upstream Transportation and Distribution',
+  5: 'Waste Generated in Operations',
+  6: 'Business Travel',
+  7: 'Employee Commuting',
+  8: 'Upstream Leased Assets',
+  9: 'Downstream Transportation and Distribution',
+};
 // Add new form_definition row data to the seeds array
 const createEmissionScopes = (key: string, labels: Array<string>): Array<emission_scope> => {
   const parts = key.split('.');
@@ -300,6 +312,7 @@ const createEmissionScopes = (key: string, labels: Array<string>): Array<emissio
       ghg_category: scope,
       ghg_subcategory: sub_scope,
       label,
+      subcategory_label: subcategoryLables[sub_scope],
       name: kebabCase(label.toLowerCase()),
     };
   });
@@ -313,6 +326,7 @@ type emission_scope = {
   ghg_subcategory: number;
   organization_id?: string;
   label: string;
+  subcategory_label?: string;
   name: string;
   created_at?: string;
   updated_at?: string;
@@ -342,6 +356,7 @@ export async function seedScopes() {
           ghg_category: scope.ghg_category,
           ghg_subcategory: scope.ghg_subcategory,
           label: scope.label,
+          subcategory_label: scope.subcategory_label,
           name: scope.name,
         },
         create: scope,
@@ -353,6 +368,33 @@ export async function seedScopes() {
   }
 
   console.log(`${count} Scopes seeded!`);
+
+  console.log('migrating existing data to new scopes...');
+  const footprints = await prisma.facility_footprints.findMany();
+  for (const footprint of footprints) {
+    if (!footprint.emissions) continue;
+    for (const emission of footprint.emissions as any[]) {
+      if (emission.scope?.ghg_subcategory && emission.scope?.ghg_subcategory > 0) {
+        const emission_scope = await prisma.emission_scopes.findFirst({
+          where: {
+            ghg_subcategory: emission.scope.ghg_subcategory,
+          },
+        });
+        if (emission_scope) {
+          emission.scope.subcategory_label = emission_scope.subcategory_label || '';
+        }
+      }
+    }
+    await prisma.facility_footprints.update({
+      where: {
+        id: footprint.id,
+      },
+      data: {
+        emissions: footprint.emissions,
+      },
+    });
+  }
+  console.log('migration complete!');
 
   await prisma.$disconnect();
 }

@@ -2,7 +2,7 @@ import { number } from 'zod';
 import { Role } from '@coldpbc/nest';
 import { testOrgIdExample } from './global.examples';
 
-export const allRoles = [Role.ColdAdmin, Role.CompanyOwner, Role.CompanyAdmin, Role.CompanyMember];
+export const allRoles = [Role.ColdAdmin, Role.CompanyOwner, Role.CompanyAdmin, Role.CompanyMember, Role.Default];
 export const coldAdminOnly = [Role.ColdAdmin];
 export const coldAndCompanyAdmins = [Role.ColdAdmin, Role.CompanyOwner, Role.CompanyAdmin];
 export const companyRoles = [Role.CompanyOwner, Role.CompanyAdmin, Role.CompanyMember];
