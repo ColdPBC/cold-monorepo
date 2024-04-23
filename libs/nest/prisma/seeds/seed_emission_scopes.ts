@@ -299,6 +299,12 @@ const subcategoryLables = {
   7: 'Employee Commuting',
   8: 'Upstream Leased Assets',
   9: 'Downstream Transportation and Distribution',
+  10: 'Downstream Transportation and Distribution',
+  11: 'Processing of Sold Products',
+  12: 'Use of Sold Products',
+  13: 'End-of-Life Treatment of Sold Products',
+  14: 'Franchises',
+  15: 'Investments',
 };
 // Add new form_definition row data to the seeds array
 const createEmissionScopes = (key: string, labels: Array<string>): Array<emission_scope> => {

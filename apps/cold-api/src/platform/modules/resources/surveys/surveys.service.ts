@@ -9,6 +9,7 @@ import { v4 } from 'uuid';
 import { BaseWorker, CacheService, DarklyService, MqttService, PrismaService, SurveyDefinitionsEntity, UpdateSurveyDefinitionsDto, ZodSurveyResponseDto } from '@coldpbc/nest';
 import { SurveyFilterService } from './filter/survey.filter.service';
 import { ScoringService } from './scoring/scoring.service';
+import { OrgSurveysService } from '../organizations/surveys/orgSurveys.service';
 
 @Span()
 @Global()
@@ -24,6 +25,7 @@ export class SurveysService extends BaseWorker {
     private readonly mqtt: MqttService,
     private readonly filterService: SurveyFilterService,
     private readonly scoreService: ScoringService,
+    private readonly surveyStatus: OrgSurveysService,
   ) {
     super('SurveysService');
   }
@@ -373,22 +375,13 @@ export class SurveysService extends BaseWorker {
 
       const scored = await this.filterService.filterDependencies(this.scoreService.scoreSurvey(def));
 
-      const statuses = await this.prisma.survey_status.findMany({
-        where: { survey_name: name, organization_id: organization.id },
-        orderBy: {
-          created_at: 'desc',
-        },
-      });
+      const statuses = await this.surveyStatus.createSurveyStatus(def.name, organization.id, survey_status_types.draft, user);
 
-      if (statuses.length < 1) {
-        set(scored, 'survey_statuses', [{ name: survey_status_types.draft, datetime: new Date() }]);
-      } else {
-        set(
-          scored,
-          'survey_statuses',
-          statuses.map(survey_status => ({ name: survey_status.status, datetime: survey_status.created_at })),
-        );
-      }
+      set(
+        scored,
+        'survey_statuses',
+        statuses.map(survey_status => ({ name: survey_status.status, datetime: survey_status.created_at })),
+      );
 
       return scored;
     } catch (e) {
@@ -452,12 +445,7 @@ export class SurveysService extends BaseWorker {
     });
 
     try {
-      const surveyStatuses = await this.prisma.survey_status.findMany({
-        where: { survey_name: name, organization_id: orgId },
-        orderBy: {
-          created_at: 'desc',
-        },
-      });
+      await this.surveyStatus.createSurveyStatus(name, orgId, survey_status_types.draft, user);
 
       const def = await this.prisma.survey_definitions.findUnique({
         where: {
@@ -498,25 +486,6 @@ export class SurveysService extends BaseWorker {
             data: difference,
           },
         });
-      }
-
-      if (surveyStatuses.length < 1) {
-        const id = v4();
-
-        await this.prisma.survey_status.create({
-          data: {
-            id: id,
-            survey_data_id: existing.id,
-            survey_id: def.id,
-            survey_name: name,
-            organization_id: orgId,
-            status: survey_status_types.draft,
-            email: user.coldclimate_claims.email,
-          },
-        });
-      } else if (surveyStatuses[0].status === survey_status_types.user_submitted || surveyStatuses[0].status === survey_status_types.cold_submitted) {
-        this.logger.error(`Survey ${name} is locked and cannot be updated`, { survey_status: surveyStatuses[0].status });
-        throw new UnprocessableEntityException(`Survey ${name} is locked and cannot be updated`);
       }
 
       if (!find(this.exclude_orgs, { id: org.id })) {

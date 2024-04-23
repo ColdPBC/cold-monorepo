@@ -218,7 +218,7 @@ model survey_status {
   /// @zod.custom.use(z.string().uuid())
   id                String              @id @default(uuid())
   survey_id         String
-  survey_name       String              @unique
+  survey_name       String
   survey_data_id    String
   organization_id   String
   status            survey_status_types
