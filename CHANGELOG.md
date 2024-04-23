@@ -1,16 +1,10 @@
-# [1.206.0-cold-743.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.206.0-cold-743.1...v1.206.0-cold-743.2) (2024-04-22)
+# [1.206.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.205.0...v1.206.0) (2024-04-23)
 
 
 ### Features
 
-* add subcategory_labels to emission scopes ([8142328](https://github.com/ColdPBC/cold-monorepo/commit/81423289f70adb8a02fde2fae9c2e6642463a307))
-
-# [1.206.0-cold-743.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.205.0...v1.206.0-cold-743.1) (2024-04-22)
-
-
-### Features
-
-* add subcategory_labels to emission scopes ([3fb468e](https://github.com/ColdPBC/cold-monorepo/commit/3fb468eb43a0a18e423aa8163986cb72996f26de))
+* format tooltip tonnes label and added tco2e to the end of each item ([6fbf2d0](https://github.com/ColdPBC/cold-monorepo/commit/6fbf2d039c72c60d7e8d4c2dac16857d85177cfa))
+* remove tc02e from the tooltip ([cd8d835](https://github.com/ColdPBC/cold-monorepo/commit/cd8d83539ef2bad3c9d8d4bd3e769400afa5504a))
 
 # [1.205.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.204.0...v1.205.0) (2024-04-22)
 

@@ -127,7 +127,9 @@ const _ComplianceSetOverviewCard = ({ name }: { name: string }) => {
         <div className={'h-full flex flex-col justify-center relative'}>
           <ComplianceStatusChip status={complianceStatus} percentage={surveyData.data.progress.percentage} />
           {complianceStatus === ComplianceStatus.submittedByCold && status && (
-            <div className={'absolute w-full top-full text-label text-gray-100 flex flex-row justify-center'}>Submitted {format(new Date(status[0].date), 'MMMM dd, yyyy')}</div>
+            <div className={'absolute w-full top-full text-label text-gray-100 flex flex-row justify-center'} data-chromatic="ignore">
+              Submitted {format(new Date(status[0].date), 'MMMM dd, yyyy')}
+            </div>
           )}
         </div>
       );
@@ -150,7 +152,7 @@ const _ComplianceSetOverviewCard = ({ name }: { name: string }) => {
         const isDueInLessThan7Days = dueInDays < 7;
 
         return (
-          <div className={'flex flex-col min-w-[166px] text-right'}>
+          <div className={'flex flex-col min-w-[166px] text-right'} data-chromatic="ignore">
             <div className={`text-h5 w-full ${complianceStatus === ComplianceStatus.inActive ? 'text-tc-disabled' : 'text-tc-primary'}`}>{dateString}</div>
             <div
               className={`text-body w-full ${
@@ -164,7 +166,7 @@ const _ComplianceSetOverviewCard = ({ name }: { name: string }) => {
         );
       } else {
         return (
-          <div className={'flex flex-col min-w-[166px] text-right'}>
+          <div className={'flex flex-col min-w-[166px] text-right'} data-chromatic="ignore">
             <div className={`text-h5 w-full ${complianceStatus === ComplianceStatus.inActive ? 'text-tc-disabled' : 'text-tc-primary'}`}>No Deadline</div>
             <div className={'text-body w-full text-tc-secondary'}>Submit at any time</div>
           </div>
