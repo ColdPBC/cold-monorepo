@@ -205,6 +205,9 @@ const _EmissionsYearlyCarbonFootprintChart = () => {
             // return the title for the tooltip 'Year: 2020'
             return `Year: ${tooltipItems[0].label}`;
           },
+          label: function (context) {
+            return context.dataset.label + ': ' + numeral(context.parsed.y).format('0,0') + ' tCO2e';
+          },
         },
       },
       datalabels: {
