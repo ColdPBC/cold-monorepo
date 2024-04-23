@@ -127,7 +127,9 @@ const _ComplianceSetOverviewCard = ({ name }: { name: string }) => {
         <div className={'h-full flex flex-col justify-center relative'}>
           <ComplianceStatusChip status={complianceStatus} percentage={surveyData.data.progress.percentage} />
           {complianceStatus === ComplianceStatus.submittedByCold && status && (
-            <div className={'absolute w-full top-full text-label text-gray-100 flex flex-row justify-center'}>Submitted {format(new Date(status[0].date), 'MMMM dd, yyyy')}</div>
+            <div className={'absolute w-full top-full text-label text-gray-100 flex flex-row justify-center'} data-chromatic="ignore">
+              Submitted {format(new Date(status[0].date), 'MMMM dd, yyyy')}
+            </div>
           )}
         </div>
       );
