@@ -1,3 +1,10 @@
+# [1.208.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.207.1...v1.208.0) (2024-04-23)
+
+
+### Features
+
+* add gray background for logo ([3107b47](https://github.com/ColdPBC/cold-monorepo/commit/3107b47b7e77373965699d980dc75d005cadd978))
+
 ## [1.207.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.207.0...v1.207.1) (2024-04-23)
 
 
