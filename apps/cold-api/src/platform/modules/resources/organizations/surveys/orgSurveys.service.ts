@@ -69,7 +69,7 @@ export class OrgSurveysService extends BaseWorker {
 
     const surveyId = surveyDef.id;
 
-    const surveyData = await this.prisma.survey_data.findFirst({
+    let surveyData = await this.prisma.survey_data.findFirst({
       where: {
         survey_definition_id: surveyDef.id,
         organization_id: orgId,
@@ -80,19 +80,28 @@ export class OrgSurveysService extends BaseWorker {
     });
 
     if (!surveyData) {
-      this.logger.error(`${surveyName} data for ${organization.name} not found`, {
+      this.logger.warn(`${surveyName} data for ${organization.name} not found`, {
         organization,
         user,
         survey: pick(surveyDef, ['id', 'name']),
       });
 
-      throw new NotFoundException(`${surveyName} data for ${organization.name} not found`);
+      surveyData = await this.prisma.survey_data.create({
+        data: {
+          id: new Cuid2Generator('sdata').scopedId,
+          survey_definition_id: surveyDef.id,
+          organization_id: orgId,
+          data: {},
+        },
+      });
+
+      //return [{ name: survey_status_types.draft, email: user.coldclimate_claims.email, created_at: new Date() }];
     }
 
     try {
       await this.prisma.survey_status.create({
         data: {
-          id: new Cuid2Generator('sustat').scopedId,
+          id: new Cuid2Generator('sstatus').scopedId,
           survey_id: surveyId,
           survey_name: surveyName,
           survey_data_id: surveyData.id,

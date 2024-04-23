@@ -359,6 +359,8 @@ export class SurveysService extends BaseWorker {
         throw new NotFoundException(`Unable to find survey definition by ${isID ? 'id' : 'name'}: ${name}`);
       }
 
+      //TODO: WE NEED TO MAKE SURVEYS REQUIRE ORG COMPLIANCE SET
+
       // Get Submission Results
       if ((user.isColdAdmin && impersonateOrg) || !user.isColdAdmin) {
         const submission = await this.prisma.survey_data.findFirst({
@@ -380,7 +382,11 @@ export class SurveysService extends BaseWorker {
       set(
         scored,
         'survey_statuses',
-        statuses.map(survey_status => ({ name: survey_status.status, datetime: survey_status.created_at })),
+        statuses.map(survey_status => ({
+          name: survey_status.status,
+          datetime: survey_status.created_at,
+          email: survey_status.email,
+        })),
       );
 
       return scored;
