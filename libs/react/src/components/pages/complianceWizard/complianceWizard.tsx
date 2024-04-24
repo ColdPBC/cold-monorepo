@@ -21,6 +21,13 @@ const _ComplianceWizard = () => {
 
   const getSurveyURL = () => {
     if (name && compliances.data) {
+
+      if (orgCompliances.data) {
+        const orgCompliance = orgCompliances.data.find(orgCompliance => orgCompliance.compliance_definition.name === name);
+        if (orgCompliance?.surveys_override) {
+          return [`/surveys/${orgCompliance?.surveys_override[0]}`, 'GET'];
+        }
+      }
       const compliance = compliances.data.find(compliance => compliance.name === name);
       return [`/surveys/${compliance?.surveys[0]}`, 'GET'];
     } else {

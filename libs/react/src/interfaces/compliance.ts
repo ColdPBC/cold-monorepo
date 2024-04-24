@@ -15,6 +15,7 @@ export type OrgCompliance = {
   created_at: string;
   updated_at: string;
   organization: any;
+  surveys_override: string[] | null;
   compliance_definition: Compliance;
 };
 

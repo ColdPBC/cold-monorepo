@@ -23,6 +23,9 @@ const _ComplianceSetOverviewCard = ({ name }: { name: string }) => {
   const orgComplianceSet = orgComplianceSets.find(orgComplianceSet => orgComplianceSet.compliance_definition.name === name);
 
   const getSurveyUrl = () => {
+    if (orgComplianceSet?.surveys_override) {
+      return [`/surveys/${orgComplianceSet?.surveys_override[0]}`, 'GET'];
+    }
     const compliance = complianceSets.find(compliance => compliance.name === name);
     if (!compliance) {
       return null;
