@@ -1,3 +1,10 @@
+## [1.209.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.209.0...v1.209.1) (2024-04-24)
+
+
+### Bug Fixes
+
+* return 404 when survey name is not found ([27c4b87](https://github.com/ColdPBC/cold-monorepo/commit/27c4b875d9692ad4fd6bf729c2fd7a6d09be073b))
+
 # [1.209.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.208.3...v1.209.0) (2024-04-24)
 
 
