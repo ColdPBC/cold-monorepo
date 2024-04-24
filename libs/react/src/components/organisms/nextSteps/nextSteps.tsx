@@ -86,8 +86,8 @@ const _NextSteps = () => {
       const progress = getSurveyProgress(survey);
       return {
         compliance: find(compliances, compliance => {
-          //if (compliance.surveys_override)
-            //return includes(compliance.surveys_override, survey.name);
+          if (compliance.surveys_override)
+            return includes(compliance.surveys_override, survey.name);
           return includes(compliance.compliance_definition.surveys, survey.name);
         }),
         name: survey.name,
