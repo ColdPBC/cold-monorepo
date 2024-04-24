@@ -354,6 +354,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
       });
 
       this.metrics.increment('openai.questions.answered', 1, { section: session?.customMetadata?.survey });
+
       if (!session) {
         return ai_response;
       }
@@ -803,7 +804,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
             }
 
             this.logger.info(`Processing Question | ${section}.${item}.additional_context: ${follow_up.prompt}`);
-            const additionalValue = await this.askSurveyQuestion(follow_up, organization.name, job.data.user, session, follow_up['additional_context']);
+            const additionalValue = await this.askSurveyQuestion(follow_up, organization.name, job.data.user, session, vectorSession, follow_up['additional_context']);
 
             if (additionalValue) {
               definition.sections[section].follow_up[item].additional_context.ai_response = additionalValue;
