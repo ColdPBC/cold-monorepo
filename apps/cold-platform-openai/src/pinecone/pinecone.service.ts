@@ -120,26 +120,29 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
         apiKey: this.config.getOrThrow('PINECONE_API_KEY'),
       });
 
-      const orgs = await this.prisma.organizations.findMany({
-        select: {
-          id: true,
-          name: true,
-        },
-      });
-
-      for (const org of orgs) {
-        await this.syncOrgFiles(
-          {
-            coldclimate_claims: {
-              id: 'system',
-              email: 'system',
-              org_id: org.id,
-              roles: ['cold:admin'],
-            },
+      const automateInjestion = this.darkly.getBooleanFlag('config-enable-automated-pinecone-injestion', false);
+      if (automateInjestion) {
+        const orgs = await this.prisma.organizations.findMany({
+          select: {
+            id: true,
+            name: true,
           },
-          org.id,
-          60000 * 4,
-        );
+        });
+
+        for (const org of orgs) {
+          await this.syncOrgFiles(
+            {
+              coldclimate_claims: {
+                id: 'system',
+                email: 'system',
+                org_id: org.id,
+                roles: ['cold:admin'],
+              },
+            },
+            org.id,
+            60000 * 4,
+          );
+        }
       }
     } catch (error) {
       console.log('error', error);
