@@ -1,3 +1,14 @@
+# [1.209.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.208.3...v1.209.0) (2024-04-24)
+
+
+### Bug Fixes
+
+* bug where a session might not be available ([f32d1d4](https://github.com/ColdPBC/cold-monorepo/commit/f32d1d43467428d056bae88ddb845fe96bed36d9))
+
+
+### Features
+
+* freeplay improvements ([d40c921](https://github.com/ColdPBC/cold-monorepo/commit/d40c921a2dd8e6b468839535ac32d9035a6fe3b9))
 
 ## [1.208.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.208.2...v1.208.3) (2024-04-24)
 
