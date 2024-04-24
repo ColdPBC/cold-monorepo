@@ -1,9 +1,26 @@
-## [1.207.1-cold-759.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.207.0...v1.207.1-cold-759.1) (2024-04-23)
+
+## [1.208.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.208.0...v1.208.1) (2024-04-23)
+
 
 
 ### Bug Fixes
 
 * org compliances bug ([cb616ed](https://github.com/ColdPBC/cold-monorepo/commit/cb616ed04bec5b6eb9e83e323cf1adbbbd3d690d))
+
+* org compliances bug ([#407](https://github.com/ColdPBC/cold-monorepo/issues/407)) ([6cc3dad](https://github.com/ColdPBC/cold-monorepo/commit/6cc3dad9248f5aa530d44cb21a3057a32f509cf4))
+
+# [1.208.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.207.1...v1.208.0) (2024-04-23)
+
+
+### Features
+
+* add gray background for logo ([3107b47](https://github.com/ColdPBC/cold-monorepo/commit/3107b47b7e77373965699d980dc75d005cadd978))
+
+## [1.207.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.207.0...v1.207.1) (2024-04-23)
+
+
+### Bug Fixes
+
 * survey status bug ([45c3074](https://github.com/ColdPBC/cold-monorepo/commit/45c3074eb240afd11cd2cbcc7eca4196bc084c4b))
 
 # [1.207.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.206.0...v1.207.0) (2024-04-23)
