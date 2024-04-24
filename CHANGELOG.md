@@ -1,3 +1,12 @@
+# [1.210.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.209.1...v1.210.0) (2024-04-24)
+
+
+### Features
+
+* increase svg size in compliance wizard ([0bca7e6](https://github.com/ColdPBC/cold-monorepo/commit/0bca7e6756429153b31b35cc847a84cef7b57b67))
+* put logo background color behind feature flag ([250eaa1](https://github.com/ColdPBC/cold-monorepo/commit/250eaa1f3bb77f1c2ae0f75025bfac3ea7fa3cc5))
+* set logo size to 120 px ([a33db91](https://github.com/ColdPBC/cold-monorepo/commit/a33db91f439907b1a03f4bcca591ae3561a553ef))
+
 # [1.210.0-COLD-762.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.209.1...v1.210.0-COLD-762.1) (2024-04-24)
 
 
