@@ -10,6 +10,13 @@ const meta: Meta<typeof ComplianceWizard> = {
   component: ComplianceWizard,
   tags: ['autodocs'],
   decorators: [withKnobs],
+  parameters: {
+    launchdarkly: {
+      flags: {
+        showNewCompliancePageHomeCold671: true,
+      },
+    },
+  },
 };
 
 export default meta;
