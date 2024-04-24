@@ -111,6 +111,10 @@ export class SurveysService extends BaseWorker {
         def = await this.cache.get(`survey_definitions:name:${name}`);
       }
 
+      if (!def) {
+        throw new NotFoundException(`Unable to find survey definition with name: ${name}`);
+      }
+
       return def;
     } catch (e) {
       this.logger.error(e.message, { error: e });
