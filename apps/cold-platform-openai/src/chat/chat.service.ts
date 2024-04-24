@@ -5,7 +5,7 @@ import { ConfigService } from '@nestjs/config';
 import { PromptsService } from '../prompts/prompts.service';
 import { Job, Queue } from 'bull';
 import { InjectQueue } from '@nestjs/bull';
-import { find, set } from 'lodash';
+import { set } from 'lodash';
 import OpenAI from 'openai';
 import { ChatCompletionMessageParam } from 'openai/resources/chat/completions';
 import { RecordMetadata, ScoredPineconeRecord } from '@pinecone-database/pinecone';
@@ -236,13 +236,14 @@ export class ChatService extends BaseWorker implements OnModuleInit {
 
   /**
    * Ask a question to the AI model
-   * @param indexName
    * @param question
    * @param company_name
    * @param user
    * @param session
+   * @param vectorSession
+   * @param additional_context
    */
-  async askSurveyQuestion(question: any, company_name: string, user: AuthenticatedUser, session?: FPSession, additional_context?: any): Promise<any> {
+  async askSurveyQuestion(question: any, company_name: string, user: AuthenticatedUser, session?: FPSession, vectorSession?: FPSession, additional_context?: any): Promise<any> {
     const start = new Date();
     try {
       // Get Chat History
@@ -258,7 +259,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
         apiKey: this.config.getOrThrow('OPENAI_API_KEY'),
       });
 
-      const { rephrased_question, docs } = await this.getDocumentContent(messages, question, company_name, user, context, session, additional_context);
+      const { rephrased_question, docs } = await this.getDocumentContent(messages, question, company_name, user, context, vectorSession, additional_context);
 
       const vars = {
         component_prompt: (await this.prompts.getComponentPrompt(question)) || '',
@@ -374,11 +375,10 @@ export class ChatService extends BaseWorker implements OnModuleInit {
    * Get the document content from the Pinecone index
    * @param messages
    * @param question
-   * @param openai
    * @param indexName
    * @param user
    * @param context
-   * @param session
+   * @param vectorSession
    * @param additional_context
    * @private
    */
@@ -388,7 +388,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
     indexName: string,
     user: AuthenticatedUser,
     context: any,
-    session?: FPSession,
+    vectorSession?: FPSession,
     additional_context?,
   ) {
     const openai = new OpenAI({
@@ -409,14 +409,6 @@ export class ChatService extends BaseWorker implements OnModuleInit {
       if (typeof prevMessage !== 'string') {
         lastMessage = JSON.stringify(prevMessage);
       }
-    }
-
-    let vectorSession;
-    if (session) {
-      // create vector session
-      vectorSession = (await this.fp.createSession({
-        ...session.customMetadata,
-      })) as FPSession;
     }
 
     let vars: any;
@@ -456,12 +448,6 @@ export class ChatService extends BaseWorker implements OnModuleInit {
 
     condense_prompt.allMessages(message);
 
-    if (session) {
-      const recording = await this.fp.recordCompletion(vectorSession, vars, condense_prompt, condenseResponse, start, end);
-
-      this.logger.info(`Sending ${condense_prompt.promptInfo.templateName} run stats to FreePlay `, recording);
-    }
-
     if (condenseResponse.choices[0].message.content) {
       rephrased_question = condenseResponse.choices[0].message.content;
 
@@ -489,6 +475,13 @@ export class ChatService extends BaseWorker implements OnModuleInit {
 
     if (content) {
       context.push(content);
+    }
+
+    if (vectorSession) {
+      vectorSession.customMetadata = { ...vectorSession.customMetadata, snippets: content };
+      const recording = await this.fp.recordCompletion(vectorSession, vars, condense_prompt, condenseResponse, start, end);
+
+      this.logger.info(`Sending ${condense_prompt.promptInfo.templateName} run stats to FreePlay `, recording);
     }
 
     return { rephrased_question, docs };
@@ -523,7 +516,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
       });
 
       // Find the index for the organization
-      const idx = find(index, { name: organization.name });
+      const idx = await this.pc.getIndex(organization.name);
 
       // If the index does not exist, create it
       if (!idx) {
@@ -553,7 +546,6 @@ export class ChatService extends BaseWorker implements OnModuleInit {
           for (const file of files) {
             const cacheKey = this.pc.getCacheKey(file);
             await this.cache.delete(cacheKey);
-            await this.pc.ingestData(user, organization, file, organization.name);
           }
         }
       }
@@ -608,11 +600,18 @@ export class ChatService extends BaseWorker implements OnModuleInit {
           section: section,
         })) as FPSession;
 
+        const vectorSession = (await this.fp.createSession({
+          survey: survey.name,
+          organization: organization.name,
+          user: user.coldclimate_claims.email,
+          section: section,
+        })) as FPSession;
+
         // Log the creation of the session
         this.logger.info(`Session created for survey ${survey.name}`, session);
 
         // Create a new thread for each section run
-        reqs.push(this.processSection(job, section, sdx, sections, definition, integration, organization, category_context, user, session));
+        reqs.push(this.processSection(job, section, sdx, sections, definition, integration, organization, category_context, user, session, vectorSession));
       }
 
       // Wait for all the sections to be processed
@@ -700,7 +699,19 @@ export class ChatService extends BaseWorker implements OnModuleInit {
    * @param user
    * @param session
    */
-  public async processSection(job: Job, section: string, sdx: number, sections: string[], definition, integration, organization, category_context, user, session: FPSession) {
+  public async processSection(
+    job: Job,
+    section: string,
+    sdx: number,
+    sections: string[],
+    definition,
+    integration,
+    organization,
+    category_context,
+    user,
+    session: FPSession,
+    vectorSession: FPSession,
+  ) {
     const start = new Date();
 
     try {
@@ -746,7 +757,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
           });
 
           // create a new run for each followup item
-          const value = await this.askSurveyQuestion(follow_up, organization.name, job.data.user, session);
+          const value = await this.askSurveyQuestion(follow_up, organization.name, job.data.user, session, vectorSession);
 
           // update the survey with the response
           if (value) {
