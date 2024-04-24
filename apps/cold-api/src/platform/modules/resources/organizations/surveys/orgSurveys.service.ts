@@ -22,12 +22,12 @@ export class OrgSurveysService extends BaseWorker {
 
     if (latest?.status === survey_status_types.cold_submitted) {
       this.logger.error(`Survey ${surveyName} for ${orgId} already submitted`, { user, surveyName, orgId });
-      return latest;
+      throw new UnprocessableEntityException(`Unable to set status on ${surveyName}; already submitted by cold`);
     }
 
     if (latest?.status === survey_status_types.user_submitted && !user.isColdAdmin) {
       this.logger.error(`Survey ${surveyName} for ${orgId} already submitted by user`, { user, surveyName, orgId });
-      return latest;
+      throw new UnprocessableEntityException(`Unable to set status on ${surveyName}; already submitted by user`);
     }
 
     if (latest?.status === status) {
