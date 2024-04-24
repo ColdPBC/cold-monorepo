@@ -67,7 +67,7 @@ export const ComplianceWizardLair = (props: PropsWithChildren<ComplianceWizardLa
       <div className={'flex flex-row justify-between w-full'}>
         <div
           className={twMerge('w-[138px] h-[138px] flex justify-center items-center rounded-2xl', ldFlags.showNewCompliancePageHomeCold671 ? 'bg-gray-30' : 'bg-cold-starkWhite')}>
-          <img src={`${compliance?.logo_url}`} className={'w-[80px] h-[80px]'} alt="compliance" />
+          <img src={`${compliance?.logo_url}`} className={'w-[100px] h-[100px]'} alt="compliance" />
         </div>
         <div className={'flex flex-row justify-end items-center gap-x-4'}>
           <BaseButton
