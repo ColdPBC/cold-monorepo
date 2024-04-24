@@ -1,9 +1,12 @@
+
 ## [1.208.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.208.0...v1.208.1) (2024-04-23)
+
 
 
 ### Bug Fixes
 
 * org compliances bug ([cb616ed](https://github.com/ColdPBC/cold-monorepo/commit/cb616ed04bec5b6eb9e83e323cf1adbbbd3d690d))
+
 * org compliances bug ([#407](https://github.com/ColdPBC/cold-monorepo/issues/407)) ([6cc3dad](https://github.com/ColdPBC/cold-monorepo/commit/6cc3dad9248f5aa530d44cb21a3057a32f509cf4))
 
 # [1.208.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.207.1...v1.208.0) (2024-04-23)

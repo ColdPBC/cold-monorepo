@@ -377,7 +377,15 @@ export class SurveysService extends BaseWorker {
 
       const scored = await this.filterService.filterDependencies(this.scoreService.scoreSurvey(def));
 
-      const statuses = await this.surveyStatus.createSurveyStatus(def.name, organization.id, survey_status_types.draft, user);
+      const statuses = await this.prisma.survey_status.findMany({
+        where: {
+          survey_name: name,
+          organization_id: organization.id,
+        },
+        orderBy: {
+          created_at: 'desc',
+        },
+      });
 
       set(
         scored,
