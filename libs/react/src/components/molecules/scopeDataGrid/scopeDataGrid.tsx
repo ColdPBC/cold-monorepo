@@ -196,7 +196,7 @@ const _ScopeDataGrid = (props: ScopeDataGridProps) => {
           // show 'Other Activities' row only for scope 3 and by activity
           scope_category === 3 && byActivity && row.activity === 'Other Activities' && (
             <div className={'w-[8px] h-[8px]'}>
-              <ColdIcon name={showOtherActivities ? IconNames.ColdChevronDownIcon : IconNames.ColdChevronUpIcon} />
+              <ColdIcon name={showOtherActivities ? IconNames.ColdChevronUpIcon : IconNames.ColdChevronDownIcon} />
             </div>
           )
         }
