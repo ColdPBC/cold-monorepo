@@ -58,13 +58,13 @@ const _OrganizationSelector = ({ sidebarExpanded }: { sidebarExpanded?: boolean 
       <Dropdown
         inline={true}
         label={
-          <span className={'w-full p-4 text-tc-primary text-start text-xs flex items-center border border-bgc-accent rounded-lg'}>
+          <span className={'w-full p-4 text-tc-primary text-start text-xs flex items-center border border-bgc-accent rounded-lg truncate'}>
             {selectedOrg.display_name} <ChevronDownIcon className="w-[18px] ml-2" />
           </span>
         }
         arrowIcon={false}
         theme={flowbiteThemeOverride.dropdown}
-        className={'w-[175px] h-fit max-h-[200px] overflow-y-auto'}>
+        className={'w-[175px] h-fit max-h-[200px] overflow-y-auto truncate'}>
         {data.map((org: any) => (
           <Dropdown.Item
             key={org.id}
@@ -72,7 +72,7 @@ const _OrganizationSelector = ({ sidebarExpanded }: { sidebarExpanded?: boolean 
               onOrgSelect(org);
             }}
             theme={flowbiteThemeOverride.dropdown.floating.item}
-            className={'text-start text-xs'}>
+            className={'text-start text-xs truncate'}>
             {org.display_name}
           </Dropdown.Item>
         ))}
