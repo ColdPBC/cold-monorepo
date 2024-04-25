@@ -1,3 +1,10 @@
+## [1.210.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.210.1...v1.210.2) (2024-04-25)
+
+
+### Bug Fixes
+
+* keep 80px image when feature flag is off ([b350ae7](https://github.com/ColdPBC/cold-monorepo/commit/b350ae71a243c8cdb7295512bef1be406bf12489))
+
 ## [1.210.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.210.0...v1.210.1) (2024-04-25)
 
 
