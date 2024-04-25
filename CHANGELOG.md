@@ -1,3 +1,10 @@
+## [1.210.4-COLD-764.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.210.3...v1.210.4-COLD-764.1) (2024-04-25)
+
+
+### Bug Fixes
+
+* correct percent answered in compliance page ([1646d02](https://github.com/ColdPBC/cold-monorepo/commit/1646d02a08ed70d78439f181f8ea67e4681b59a4))
+
 ## [1.210.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.210.2...v1.210.3) (2024-04-25)
 
 
