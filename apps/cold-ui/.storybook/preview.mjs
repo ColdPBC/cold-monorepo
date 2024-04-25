@@ -107,6 +107,7 @@ export default {
         showNewCarbonFootprintModuleCold634: false,
         showNewCompliancePageHomeCold671: false,
         swrKeepPreviousData: true,
+        showNewNavigationCold698: false,
       },
     },
   },

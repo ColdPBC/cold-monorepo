@@ -41,7 +41,7 @@ export const NoActions: Story = {
   },
 };
 
-export const REIComplianceMVP: Story = {
+export const NewSideBar: Story = {
   render: args => {
     return (
       <StoryMockProvider>
@@ -52,9 +52,12 @@ export const REIComplianceMVP: Story = {
   parameters: {
     launchdarkly: {
       flags: {
-        showReiComplianceMvpSidebarCold506: true,
+        showNewNavigationCold698: true,
       },
     },
+  },
+  args: {
+    defaultExpanded: true,
   },
 };
 

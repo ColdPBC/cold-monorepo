@@ -3,6 +3,7 @@ import { matchRoutes, useLocation } from 'react-router-dom';
 import { GuidanceButton } from '../../molecules';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import { SWRConfig } from 'swr';
+import { twMerge } from 'tailwind-merge';
 
 export const Application = () => {
   const location = useLocation();
@@ -22,7 +23,7 @@ export const Application = () => {
       value={{
         keepPreviousData: ldFlags.swrKeepPreviousData,
       }}>
-      <div className="max-w-[1440px] overflow-x-clip">
+      <div className={twMerge('max-w-[1440px] overflow-x-clip', ldFlags.showNewNavigationCold698 ? '' : 'm-auto')}>
         <ColdRoutes />
         {shouldRenderGuidanceButton() && <GuidanceButton />}
       </div>

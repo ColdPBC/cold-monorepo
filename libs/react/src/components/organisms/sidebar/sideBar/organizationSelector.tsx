@@ -9,8 +9,10 @@ import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import { flowbiteThemeOverride } from '@coldpbc/themes';
 import { Dropdown } from 'flowbite-react';
 import { find } from 'lodash';
+import { useFlags } from 'launchdarkly-react-client-sdk';
 
 const _OrganizationSelector = ({ sidebarExpanded }: { sidebarExpanded?: boolean }) => {
+  const ldFlags = useFlags();
   const { data, error, isLoading } = useSWR<any, any, any>(['/organizations', 'GET'], axiosFetcher);
   const { logError, setImpersonatingOrg, impersonatingOrg, logBrowser } = useColdContext();
   const unselectedOrg = {
@@ -53,7 +55,7 @@ const _OrganizationSelector = ({ sidebarExpanded }: { sidebarExpanded?: boolean 
 
   logBrowser('Organizations data for organization selector loaded', 'info', { data, selectedOrg });
 
-  if (sidebarExpanded) {
+  if (sidebarExpanded || !ldFlags.showNewNavigationCold698) {
     return (
       <Dropdown
         inline={true}
