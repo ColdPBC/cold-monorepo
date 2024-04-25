@@ -111,6 +111,10 @@ export class SurveysService extends BaseWorker {
         def = await this.cache.get(`survey_definitions:name:${name}`);
       }
 
+      if (!def) {
+        throw new NotFoundException(`Unable to find survey definition with name: ${name}`);
+      }
+
       return def;
     } catch (e) {
       this.logger.error(e.message, { error: e });
@@ -359,6 +363,8 @@ export class SurveysService extends BaseWorker {
         throw new NotFoundException(`Unable to find survey definition by ${isID ? 'id' : 'name'}: ${name}`);
       }
 
+      //TODO: WE NEED TO MAKE SURVEYS REQUIRE ORG COMPLIANCE SET
+
       // Get Submission Results
       if ((user.isColdAdmin && impersonateOrg) || !user.isColdAdmin) {
         const submission = await this.prisma.survey_data.findFirst({
@@ -375,12 +381,24 @@ export class SurveysService extends BaseWorker {
 
       const scored = await this.filterService.filterDependencies(this.scoreService.scoreSurvey(def));
 
-      const statuses = await this.surveyStatus.createSurveyStatus(def.name, organization.id, survey_status_types.draft, user);
+      const statuses = await this.prisma.survey_status.findMany({
+        where: {
+          survey_name: name,
+          organization_id: organization.id,
+        },
+        orderBy: {
+          created_at: 'desc',
+        },
+      });
 
       set(
         scored,
         'survey_statuses',
-        statuses.map(survey_status => ({ name: survey_status.status, datetime: survey_status.created_at })),
+        statuses.map(survey_status => ({
+          name: survey_status.status,
+          datetime: survey_status.created_at,
+          email: survey_status.email,
+        })),
       );
 
       return scored;

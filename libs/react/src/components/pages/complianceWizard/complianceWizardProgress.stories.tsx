@@ -10,6 +10,13 @@ const meta: Meta<typeof ComplianceWizard> = {
   component: ComplianceWizard,
   tags: ['autodocs'],
   decorators: [withKnobs],
+  parameters: {
+    launchdarkly: {
+      flags: {
+        showNewCompliancePageHomeCold671: true,
+      },
+    },
+  },
 };
 
 export default meta;
@@ -18,7 +25,7 @@ type Story = StoryObj<typeof meta>;
 export const ProgressNoUploadedDocuments: Story = {
   render: args => {
     return (
-      <StoryMockProvider memoryRouterProps={{ initialEntries: ['/wizard/compliance/rei2'] }} handlers={getComplianceWizardFlowHandler.documentUpload}>
+      <StoryMockProvider memoryRouterProps={{ initialEntries: ['/wizard/compliance/rei_pia_2024'] }} handlers={getComplianceWizardFlowHandler.documentUpload}>
         <Routes>
           <Route path={'/compliance'} element={<div className={'text-tc-primary'}>Compliance Home</div>} />
           {WizardRoutes()}
@@ -32,21 +39,7 @@ export const ProgressNoUploadedDocuments: Story = {
 export const ProgressHasUploadedDocuments: Story = {
   render: args => {
     return (
-      <StoryMockProvider memoryRouterProps={{ initialEntries: ['/wizard/compliance/rei2'] }} handlers={getComplianceWizardFlowHandler.automate}>
-        <Routes>
-          <Route path={'/compliance'} element={<div className={'text-tc-primary'}>Compliance Home</div>} />
-          {WizardRoutes()}
-          <Route path={'/assessments'} element={<div className={'text-tc-primary'}>Assessments</div>} />
-        </Routes>
-      </StoryMockProvider>
-    );
-  },
-};
-
-export const ProgressAutomationNotComplete: Story = {
-  render: args => {
-    return (
-      <StoryMockProvider memoryRouterProps={{ initialEntries: ['/wizard/compliance/rei2'] }} handlers={getComplianceWizardFlowHandler.processing}>
+      <StoryMockProvider memoryRouterProps={{ initialEntries: ['/wizard/compliance/rei_pia_2024'] }} handlers={getComplianceWizardFlowHandler.automate}>
         <Routes>
           <Route path={'/compliance'} element={<div className={'text-tc-primary'}>Compliance Home</div>} />
           {WizardRoutes()}
@@ -60,7 +53,7 @@ export const ProgressAutomationNotComplete: Story = {
 export const ProgressAutomationComplete: Story = {
   render: args => {
     return (
-      <StoryMockProvider memoryRouterProps={{ initialEntries: ['/wizard/compliance/rei2'] }} handlers={getComplianceWizardFlowHandler.questionnaire}>
+      <StoryMockProvider memoryRouterProps={{ initialEntries: ['/wizard/compliance/rei_pia_2024'] }} handlers={getComplianceWizardFlowHandler.questionnaire}>
         <Routes>
           <Route path={'/compliance'} element={<div className={'text-tc-primary'}>Compliance Home</div>} />
           {WizardRoutes()}

@@ -38,7 +38,7 @@ export const ComplianceStatusChip = (props: ComplianceStatusChipProps) => {
       case ComplianceStatus.inActive:
         return 'Not Active';
       case ComplianceStatus.inProgress:
-        return `${percentage}% Answered`;
+        return `${percentage.toFixed(0)}% Answered`;
       case ComplianceStatus.submissionInProgress:
         return 'Submission in Progress';
       case ComplianceStatus.submittedByCold:

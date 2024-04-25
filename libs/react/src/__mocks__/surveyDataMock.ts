@@ -9169,7 +9169,7 @@ export function getSurveysMock(): Array<SurveyPayloadType | ComplianceSurveyPayl
       total_review: 0,
       question_count: 216,
       percentage: 50,
-      questions_answered: 2,
+      questions_answered: 108,
       sections: [
         {
           section_score: 0,
@@ -11060,7 +11060,7 @@ export function getSurveysMock(): Array<SurveyPayloadType | ComplianceSurveyPayl
       total_review: 0,
       question_count: 32,
       percentage: 20,
-      questions_answered: 0,
+      questions_answered: 6,
       sections: [
         {
           section_score: 0,

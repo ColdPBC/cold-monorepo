@@ -777,7 +777,7 @@ export const getComplianceSetOverviewHandler = {
           ...survey,
           progress: {
             ...survey.progress,
-            percentage: 0,
+            questions_answered: 0,
           },
         }),
       );
@@ -796,6 +796,8 @@ export const getComplianceSetOverviewHandler = {
           progress: {
             ...survey.progress,
             percentage: 50,
+            questions_answered: 108,
+            question_count: 216,
           },
         }),
       );
@@ -813,7 +815,7 @@ export const getComplianceSetOverviewHandler = {
           ...survey,
           progress: {
             ...survey.progress,
-            percentage: 100,
+            questions_answered: survey.progress.question_count,
           },
         }),
       );
@@ -826,13 +828,16 @@ export const getComplianceSetOverviewHandler = {
     }),
     rest.get(getApiUrl('/organizations/:orgId/surveys/:name'), (req, res, ctx) => {
       const survey = getSurveyFormDataByName('b_corp_2024') as ComplianceSurveyPayloadType;
-      set(survey, 'definition.submitted', true);
+      set(survey, 'status.0', {
+        name: 'user_submitted',
+        date: '2024-01-17T17:36:53.231Z',
+      });
       return res(
         ctx.json({
           ...survey,
           progress: {
             ...survey.progress,
-            percentage: 100,
+            questions_answered: survey.progress.question_count,
           },
         }),
       );
@@ -854,7 +859,7 @@ export const getComplianceSetOverviewHandler = {
           ...survey,
           progress: {
             ...survey.progress,
-            percentage: 100,
+            questions_answered: survey.progress.question_count,
           },
         }),
       );
@@ -873,7 +878,7 @@ export const getComplianceSetOverviewHandler = {
           ...survey,
           progress: {
             ...survey.progress,
-            percentage: 100,
+            questions_answered: survey.progress.question_count,
           },
         }),
       );
@@ -892,7 +897,7 @@ export const getComplianceSetOverviewHandler = {
           ...survey,
           progress: {
             ...survey.progress,
-            percentage: 100,
+            questions_answered: survey.progress.question_count,
           },
         }),
       );
