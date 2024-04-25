@@ -1,3 +1,10 @@
+## [1.210.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.210.0...v1.210.1) (2024-04-25)
+
+
+### Bug Fixes
+
+* add overridden surveys to compliance_definition ([5852655](https://github.com/ColdPBC/cold-monorepo/commit/5852655c39cd2159d95956890992f3e043491121))
+
 # [1.210.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.209.1...v1.210.0) (2024-04-24)
 
 
