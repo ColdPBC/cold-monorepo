@@ -22,7 +22,7 @@ export const Application = () => {
       value={{
         keepPreviousData: ldFlags.swrKeepPreviousData,
       }}>
-      <div className="max-w-[1440px] m-auto overflow-x-clip">
+      <div className="max-w-[1440px] overflow-x-clip">
         <ColdRoutes />
         {shouldRenderGuidanceButton() && <GuidanceButton />}
       </div>

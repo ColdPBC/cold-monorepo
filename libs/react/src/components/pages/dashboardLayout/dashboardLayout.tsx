@@ -4,9 +4,11 @@ import { SideBar } from '../../organisms';
 
 export const DashboardLayout = (props: PropsWithChildren<any>) => {
   return (
-    <div className="flex p-10 gap-6">
+    <div className="flex flex-row gap-6 relative justify-start w-full">
       <SideBar />
-      <Outlet />
+      <div className="px-[100px]">
+        <Outlet />
+      </div>
     </div>
   );
 };

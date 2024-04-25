@@ -2,9 +2,7 @@ import React from 'react';
 import { SideBar } from './sideBar';
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
-import { BrowserRouter } from 'react-router-dom';
-import { StoryMockProvider } from '@coldpbc/mocks';
-import { Popover } from '@coldpbc/components';
+import { auth0UserMock, StoryMockProvider } from '@coldpbc/mocks';
 
 const meta: Meta<typeof SideBar> = {
   title: 'Organisms/Sidebar',
@@ -55,6 +53,32 @@ export const REIComplianceMVP: Story = {
     launchdarkly: {
       flags: {
         showReiComplianceMvpSidebarCold506: true,
+      },
+    },
+  },
+};
+
+export const ColdAdmin: Story = {
+  render: args => {
+    return (
+      <StoryMockProvider>
+        <SideBar />
+      </StoryMockProvider>
+    );
+  },
+  parameters: {
+    launchdarkly: {
+      flags: {
+        showActions261: false,
+      },
+    },
+    auth0AddOn: {
+      user: {
+        ...auth0UserMock,
+        coldclimate_claims: {
+          ...auth0UserMock.coldclimate_claims,
+          roles: ['cold:admin'],
+        },
       },
     },
   },

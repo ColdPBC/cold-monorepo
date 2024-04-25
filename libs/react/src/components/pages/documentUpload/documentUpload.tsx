@@ -1,7 +1,7 @@
 import React from 'react';
 import { withErrorBoundary } from 'react-error-boundary';
 import { isArray } from 'lodash';
-import { AppContent, Card, Datagrid, DocumentUploadButton, ErrorFallback, Spinner } from '@coldpbc/components';
+import { Card, Datagrid, DocumentUploadButton, ErrorFallback, MainContent, Spinner } from '@coldpbc/components';
 import { ButtonTypes, ErrorType } from '@coldpbc/enums';
 import { useColdContext, useOrgSWR } from '@coldpbc/hooks';
 import { axiosFetcher } from '@coldpbc/fetchers';
@@ -47,7 +47,7 @@ export const _DocumentUpload = () => {
   logBrowser('Fetched files successfully', 'info');
 
   return (
-    <AppContent title="Documents">
+    <MainContent title="Documents">
       <Card title={'Documents List'} className={'w-full px-4'} data-testid={'documents-list-card'}>
         <DocumentUploadButton
           buttonProps={{
@@ -63,7 +63,7 @@ export const _DocumentUpload = () => {
           </Card>
         )}
       </Card>
-    </AppContent>
+    </MainContent>
   );
 };
 

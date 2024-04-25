@@ -1,8 +1,8 @@
 import { withErrorBoundary } from 'react-error-boundary';
-import { ErrorFallback, Spinner } from '@coldpbc/components';
+import { ColdIcon, ErrorFallback, Spinner } from '@coldpbc/components';
 import { useColdContext } from '@coldpbc/hooks';
 import { axiosFetcher } from '@coldpbc/fetchers';
-import { ErrorType } from '@coldpbc/enums';
+import { ErrorType, IconNames } from '@coldpbc/enums';
 import React, { useEffect, useState } from 'react';
 import useSWR from 'swr';
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
@@ -10,7 +10,7 @@ import { flowbiteThemeOverride } from '@coldpbc/themes';
 import { Dropdown } from 'flowbite-react';
 import { find } from 'lodash';
 
-const _OrganizationSelector = () => {
+const _OrganizationSelector = ({ sidebarExpanded }: { sidebarExpanded?: boolean }) => {
   const { data, error, isLoading } = useSWR<any, any, any>(['/organizations', 'GET'], axiosFetcher);
   const { logError, setImpersonatingOrg, impersonatingOrg, logBrowser } = useColdContext();
   const unselectedOrg = {
@@ -38,7 +38,11 @@ const _OrganizationSelector = () => {
   }, [data]);
 
   if (isLoading) {
-    return <Spinner />;
+    return (
+      <div className={'w-[48px] h-[48px]'}>
+        <Spinner />
+      </div>
+    );
   }
 
   if (error) {
@@ -49,8 +53,8 @@ const _OrganizationSelector = () => {
 
   logBrowser('Organizations data for organization selector loaded', 'info', { data, selectedOrg });
 
-  return (
-    <div className={'w-full p-4'}>
+  if (sidebarExpanded) {
+    return (
       <Dropdown
         inline={true}
         label={
@@ -73,8 +77,10 @@ const _OrganizationSelector = () => {
           </Dropdown.Item>
         ))}
       </Dropdown>
-    </div>
-  );
+    );
+  } else {
+    return <ColdIcon name={IconNames.ColdSwitchIcon} color={'white'} />;
+  }
 };
 
 export const OrganizationSelector = withErrorBoundary(_OrganizationSelector, {
