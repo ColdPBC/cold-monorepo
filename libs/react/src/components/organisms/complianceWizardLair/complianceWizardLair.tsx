@@ -6,6 +6,8 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { getComplianceProgressForSurvey } from '@coldpbc/lib';
 import { isArray } from 'lodash';
 import { useColdContext } from '@coldpbc/hooks';
+import { useFlags } from 'launchdarkly-react-client-sdk';
+import { twMerge } from 'tailwind-merge';
 
 export interface ComplianceWizardLairProps {
   name: string;
@@ -15,6 +17,7 @@ export const ComplianceWizardLair = (props: PropsWithChildren<ComplianceWizardLa
   const { children, name } = props;
   const navigate = useNavigate();
   const location = useLocation();
+  const ldFlags = useFlags();
   const { logBrowser } = useColdContext();
   const { setCurrentStep, data } = useContext(WizardContext);
   const { surveyData, files, baseURL } = data;
@@ -62,8 +65,9 @@ export const ComplianceWizardLair = (props: PropsWithChildren<ComplianceWizardLa
   return (
     <div className={'text-tc-primary flex flex-col space-y-10 justify-center items-center w-full'}>
       <div className={'flex flex-row justify-between w-full'}>
-        <div className={'w-[138px] h-[138px] flex justify-center items-center bg-white rounded-2xl'}>
-          <img src={`${compliance?.logo_url}`} className={'max-w-[105px] max-h-[88px]'} alt="compliance" />
+        <div
+          className={twMerge('w-[138px] h-[138px] flex justify-center items-center rounded-2xl', ldFlags.showNewCompliancePageHomeCold671 ? 'bg-gray-30' : 'bg-cold-starkWhite')}>
+          <img src={`${compliance?.logo_url}`} className={ldFlags.showNewCompliancePageHomeCold671 ? 'w-[120px] h-[120px]' : 'w-[80px] h-[80px]'} alt="compliance" />
         </div>
         <div className={'flex flex-row justify-end items-center gap-x-4'}>
           <BaseButton

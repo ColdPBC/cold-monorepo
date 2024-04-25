@@ -287,6 +287,11 @@ export class ComplianceDefinitionService extends BaseWorker {
       return [];
     }
 
+    orgCompliances.map((compliance: OrgCompliance) => {
+      if (compliance['surveys_override']) {
+        compliance['compliance_definition'].surveys = compliance['surveys_override'];
+      }
+    });
     await this.cache.set(`compliance_definitions:org:${orgId}`, orgCompliances, { update: true });
 
     return orgCompliances;

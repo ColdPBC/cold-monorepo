@@ -48,6 +48,11 @@ export class FreeplayService extends BaseWorker implements OnModuleInit {
   }
 
   async recordCompletion(session: any, promptVars: any, prompt: any, openAIResponse, start: Date, end: Date) {
+    const sessionId = session?.sessionId;
+    if (!sessionId) {
+      this.logger.error('Session ID not found', { session });
+      return;
+    }
     const recording = await this.client.recordings.create({
       allMessages: prompt.allMessages(openAIResponse.choices[0].message),
       inputs: promptVars,

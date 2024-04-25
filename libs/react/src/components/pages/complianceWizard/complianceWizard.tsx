@@ -20,8 +20,8 @@ const _ComplianceWizard = () => {
   const orgCompliances = useSWR<OrgCompliance[], any, any>([`/compliance_definitions/organizations/${orgId}`, 'GET'], axiosFetcher);
 
   const getSurveyURL = () => {
-    if (name && compliances.data) {
-      const compliance = compliances.data.find(compliance => compliance.name === name);
+    if (name && compliances.data && orgCompliances.data) {
+      const compliance = orgCompliances.data.find(orgCompliance => orgCompliance.compliance_definition.name === name)?.compliance_definition;
       return [`/surveys/${compliance?.surveys[0]}`, 'GET'];
     } else {
       return null;

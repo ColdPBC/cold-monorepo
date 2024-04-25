@@ -1,10 +1,105 @@
-# [1.208.0-COLD-698.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.207.1...v1.208.0-COLD-698.1) (2024-04-25)
+## [1.210.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.210.3...v1.210.4) (2024-04-25)
+
+
+### Bug Fixes
+
+* correct percent answered in compliance page ([1646d02](https://github.com/ColdPBC/cold-monorepo/commit/1646d02a08ed70d78439f181f8ea67e4681b59a4))
+
+## [1.210.4-COLD-764.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.210.3...v1.210.4-COLD-764.1) (2024-04-25)
+
+
+### Bug Fixes
+
+* correct percent answered in compliance page ([1646d02](https://github.com/ColdPBC/cold-monorepo/commit/1646d02a08ed70d78439f181f8ea67e4681b59a4))
+
+## [1.210.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.210.2...v1.210.3) (2024-04-25)
+
+
+### Bug Fixes
+
+* make sure to use org compliances when available ([5e66c8d](https://github.com/ColdPBC/cold-monorepo/commit/5e66c8d09dabe83ae994c4f6233469577d0f26f5))
+
+## [1.210.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.210.1...v1.210.2) (2024-04-25)
+
+
+### Bug Fixes
+
+* keep 80px image when feature flag is off ([b350ae7](https://github.com/ColdPBC/cold-monorepo/commit/b350ae71a243c8cdb7295512bef1be406bf12489))
+
+## [1.210.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.210.0...v1.210.1) (2024-04-25)
+
+
+### Bug Fixes
+
+* add overridden surveys to compliance_definition ([5852655](https://github.com/ColdPBC/cold-monorepo/commit/5852655c39cd2159d95956890992f3e043491121))
+
+# [1.210.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.209.1...v1.210.0) (2024-04-24)
 
 
 ### Features
 
-* initial changes to the sidebar and application layout ([5d34714](https://github.com/ColdPBC/cold-monorepo/commit/5d347149c0e26742598e473d6760bac87f2bdd8a))
-* truncate the dropdown for the nav bar ([2544c86](https://github.com/ColdPBC/cold-monorepo/commit/2544c86d4e33f362a7707c84e1431799e6b96684))
+* increase svg size in compliance wizard ([0bca7e6](https://github.com/ColdPBC/cold-monorepo/commit/0bca7e6756429153b31b35cc847a84cef7b57b67))
+* put logo background color behind feature flag ([250eaa1](https://github.com/ColdPBC/cold-monorepo/commit/250eaa1f3bb77f1c2ae0f75025bfac3ea7fa3cc5))
+* set logo size to 120 px ([a33db91](https://github.com/ColdPBC/cold-monorepo/commit/a33db91f439907b1a03f4bcca591ae3561a553ef))
+
+# [1.210.0-COLD-762.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.209.1...v1.210.0-COLD-762.1) (2024-04-24)
+
+
+### Features
+
+* increase svg size in compliance wizard ([0bca7e6](https://github.com/ColdPBC/cold-monorepo/commit/0bca7e6756429153b31b35cc847a84cef7b57b67))
+* put logo background color behind feature flag ([250eaa1](https://github.com/ColdPBC/cold-monorepo/commit/250eaa1f3bb77f1c2ae0f75025bfac3ea7fa3cc5))
+
+## [1.209.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.209.0...v1.209.1) (2024-04-24)
+
+
+### Bug Fixes
+
+* return 404 when survey name is not found ([27c4b87](https://github.com/ColdPBC/cold-monorepo/commit/27c4b875d9692ad4fd6bf729c2fd7a6d09be073b))
+
+# [1.209.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.208.3...v1.209.0) (2024-04-24)
+
+
+### Bug Fixes
+
+* bug where a session might not be available ([f32d1d4](https://github.com/ColdPBC/cold-monorepo/commit/f32d1d43467428d056bae88ddb845fe96bed36d9))
+
+
+### Features
+
+* freeplay improvements ([d40c921](https://github.com/ColdPBC/cold-monorepo/commit/d40c921a2dd8e6b468839535ac32d9035a6fe3b9))
+
+## [1.208.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.208.2...v1.208.3) (2024-04-24)
+
+
+### Bug Fixes
+
+* org compliances bug ([c126461](https://github.com/ColdPBC/cold-monorepo/commit/c1264619364618c144bc86b2dda14d99c102bf3f))
+
+
+## [1.208.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.208.1...v1.208.2) (2024-04-24)
+
+
+### Bug Fixes
+
+* org compliances bug ([ac0f4e6](https://github.com/ColdPBC/cold-monorepo/commit/ac0f4e6864badd839ec3cc985593383c82d94b82))
+
+## [1.208.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.208.0...v1.208.1) (2024-04-23)
+
+
+
+### Bug Fixes
+
+* org compliances bug ([cb616ed](https://github.com/ColdPBC/cold-monorepo/commit/cb616ed04bec5b6eb9e83e323cf1adbbbd3d690d))
+
+* org compliances bug ([#407](https://github.com/ColdPBC/cold-monorepo/issues/407)) ([6cc3dad](https://github.com/ColdPBC/cold-monorepo/commit/6cc3dad9248f5aa530d44cb21a3057a32f509cf4))
+
+# [1.208.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.207.1...v1.208.0) (2024-04-23)
+
+
+### Features
+
+* add gray background for logo ([3107b47](https://github.com/ColdPBC/cold-monorepo/commit/3107b47b7e77373965699d980dc75d005cadd978))
 
 ## [1.207.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.207.0...v1.207.1) (2024-04-23)
 

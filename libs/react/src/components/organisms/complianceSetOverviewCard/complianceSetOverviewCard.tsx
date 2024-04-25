@@ -23,7 +23,10 @@ const _ComplianceSetOverviewCard = ({ name }: { name: string }) => {
   const orgComplianceSet = orgComplianceSets.find(orgComplianceSet => orgComplianceSet.compliance_definition.name === name);
 
   const getSurveyUrl = () => {
-    const compliance = complianceSets.find(compliance => compliance.name === name);
+    let compliance = complianceSets.find(compliance => compliance.name === name);
+    if (orgComplianceSet) {
+      compliance = orgComplianceSet.compliance_definition;
+    }
     if (!compliance) {
       return null;
     }
@@ -123,9 +126,12 @@ const _ComplianceSetOverviewCard = ({ name }: { name: string }) => {
 
   const getComplianceStatusChip = () => {
     if (surveyData.data) {
+      const { questions_answered, question_count } = surveyData.data.progress;
+      const percentage = question_count === 0 ? 0 : (questions_answered / question_count) * 100;
+
       return (
         <div className={'h-full flex flex-col justify-center relative'}>
-          <ComplianceStatusChip status={complianceStatus} percentage={surveyData.data.progress.percentage} />
+          <ComplianceStatusChip status={complianceStatus} percentage={percentage} />
           {complianceStatus === ComplianceStatus.submittedByCold && status && (
             <div className={'absolute w-full top-full text-label text-gray-100 flex flex-row justify-center'} data-chromatic="ignore">
               Submitted {format(new Date(status[0].date), 'MMMM dd, yyyy')}
