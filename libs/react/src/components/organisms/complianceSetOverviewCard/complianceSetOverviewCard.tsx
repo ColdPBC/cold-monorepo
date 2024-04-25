@@ -23,10 +23,14 @@ const _ComplianceSetOverviewCard = ({ name }: { name: string }) => {
   const orgComplianceSet = orgComplianceSets.find(orgComplianceSet => orgComplianceSet.compliance_definition.name === name);
 
   const getSurveyUrl = () => {
-    if (!complianceSet) {
+    let compliance = complianceSets.find(compliance => compliance.name === name);
+    if (orgComplianceSet) {
+      compliance = orgComplianceSet.compliance_definition;
+    }
+    if (!compliance) {
       return null;
     }
-    return [`/surveys/${complianceSet.surveys[0]}`, 'GET'];
+    return [`/surveys/${compliance.surveys[0]}`, 'GET'];
   };
 
   const surveyData = useOrgSWR<ComplianceSurveyPayloadType>(getSurveyUrl(), axiosFetcher);
