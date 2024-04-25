@@ -1,3 +1,10 @@
+# [1.211.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.210.4...v1.211.0) (2024-04-25)
+
+
+### Features
+
+* show up icon when showing activities ([b0398d7](https://github.com/ColdPBC/cold-monorepo/commit/b0398d71f4dc9f551954e95032331ead8a33a904))
+
 ## [1.210.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.210.3...v1.210.4) (2024-04-25)
 
 
