@@ -1,3 +1,11 @@
+# [1.208.0-COLD-698.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.207.1...v1.208.0-COLD-698.1) (2024-04-25)
+
+
+### Features
+
+* initial changes to the sidebar and application layout ([5d34714](https://github.com/ColdPBC/cold-monorepo/commit/5d347149c0e26742598e473d6760bac87f2bdd8a))
+* truncate the dropdown for the nav bar ([2544c86](https://github.com/ColdPBC/cold-monorepo/commit/2544c86d4e33f362a7707c84e1431799e6b96684))
+
 ## [1.207.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.207.0...v1.207.1) (2024-04-23)
 
 
