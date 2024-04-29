@@ -1,15 +1,12 @@
 import { organizations, Prisma } from '@prisma/client';
 
 export class CreateOrganizationDto implements Partial<organizations> {
-  branding: Prisma.JsonObject | null;
-  city: string | null;
-  created_at: Date | undefined;
+  branding?: Prisma.JsonObject;
+  created_at?: Date;
   display_name: string;
-  email: string | null;
+  email?: string;
   name: string;
-  phone: string | null;
-  state: string | null;
-  street_address: string | null;
-  updated_at: Date;
-  zip: string | null;
+  phone?: string;
+  website?: string;
+  updated_at?: Date;
 }

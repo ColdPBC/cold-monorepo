@@ -294,6 +294,50 @@ export class OrganizationService extends BaseWorker {
     }
   }
 
+  async updateOrganization(orgId: string, org: Partial<CreateOrganizationDto>, req: any): Promise<organizations> {
+    const { user, url, organization } = req;
+    try {
+      this.logger.info('updating organization', { org, user });
+      this.options = await this.utilService.init();
+
+      // update org cache by name
+      await this.cache.delete(`organizations:${organization.name}`);
+      // update org cache by id
+      await this.cache.delete(`organizations:${organization.id}`);
+
+      const updated = await this.prisma.organizations.update({
+        where: {
+          id: orgId,
+        },
+        data: org,
+      });
+      // update org list cache
+      await this.getOrganizations(true);
+
+      this.mqtt.publishMQTT('cold', {
+        swr_key: url,
+        action: 'update',
+        status: 'complete',
+        data: {
+          organization: updated,
+        },
+      });
+
+      if (this.openAI) {
+        await this.events.sendAsyncEvent(get(this.openAI, 'definition.rabbitMQ.publishOptions.routing_key', 'deadletter'), 'organization.updated', {
+          organization: updated,
+          service: this.openAI,
+        });
+      } else {
+        this.logger.error('OpenAI service definition not found; website crawling will not run');
+      }
+      return updated;
+    } catch (e) {
+      this.logger.error(e);
+      throw e;
+    }
+  }
+
   /***
    * Create an organization in Auth0
    * @param org
@@ -420,25 +464,6 @@ export class OrganizationService extends BaseWorker {
         existing = await this.prisma.organizations.create({
           data: org as any,
         });
-
-        if (org.street_address && org.city && org.state && org.zip) {
-          const facility = await this.prisma.organization_facilities.create({
-            data: {
-              name: 'Default',
-              organization_id: existing.id,
-              address: org.street_address,
-              city: org.city,
-              state: org.state,
-              postal_code: org.zip,
-              country: 'US',
-            },
-          });
-
-          await this.cache.set(`organizations:${existing.id}:facilities`, facility, {
-            ttl: 60 * 60 * 24 * 7,
-            update: true,
-          });
-        }
 
         await this.cache.set(`organizations:${auth0Org.id}`, auth0Org, {
           update: true,
