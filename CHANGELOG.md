@@ -1,3 +1,10 @@
+## [1.211.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.211.1...v1.211.2) (2024-04-29)
+
+
+### Bug Fixes
+
+* add shadow db env variable ([dc87dda](https://github.com/ColdPBC/cold-monorepo/commit/dc87dda8730cc0bc60f79e6cb33e966adc463801))
+
 ## [1.211.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.211.0...v1.211.1) (2024-04-29)
 
 
