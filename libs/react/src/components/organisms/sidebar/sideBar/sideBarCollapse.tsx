@@ -7,6 +7,7 @@ import { Sidebar } from 'flowbite-react';
 import { flowbiteThemeOverride } from '@coldpbc/themes';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import { Link } from 'react-router-dom';
+import { forEach } from 'lodash';
 
 export interface SideBarCollapseProps {
   item: NavbarItem;
@@ -24,19 +25,29 @@ export const SideBarCollapse = (props: SideBarCollapseProps) => {
     return !!item.items?.find((sub_item: NavbarItem) => sub_item.key === activeItem?.key);
   };
 
+  const getSubItemsHeight = () => {
+    let height = 0;
+    if (item.items === undefined) return height;
+    forEach(item.items, (sub_item: NavbarItem, index) => {
+      height += 48;
+    });
+    // also add 8px gap between items
+    height += 8 * (item.items.length - 1);
+    return height;
+  };
+
   useEffect(() => {
-    if (ifSubItemIsActive()) {
-      setCollapseIsOpen(true);
-    } else {
-      setCollapseIsOpen(false);
-    }
-  }, [item, activeItem, setActiveItem]);
+    if (!expanded) setCollapseIsOpen(false);
+  }, [expanded]);
 
   if (ldFlags.showNewNavigationCold698) {
     return expanded ? (
       <div className={'w-full flex flex-col gap-[8px] transition-height duration-200'}>
         <div
-          className={'flex flex-row justify-start items-center gap-[8px] w-full cursor-pointer h-[48px] border-l-[2px] border-transparent hover:bg-gray-50 pl-[18px] pr-[8px]'}
+          className={twMerge(
+            'flex flex-row justify-start items-center gap-[8px] w-full cursor-pointer h-[48px] border-l-[2px] border-transparent hover:bg-gray-50 pl-[16px] pr-[8px]',
+            ifSubItemIsActive() ? 'border-primary-300 bg-gray-50 text-tc-primary' : 'text-tc-secondary',
+          )}
           onClick={() => {
             setCollapseIsOpen(!collapseIsOpen);
           }}>
@@ -48,25 +59,32 @@ export const SideBarCollapse = (props: SideBarCollapseProps) => {
             <ColdIcon name={collapseIsOpen ? IconNames.ColdChevronUpIcon : IconNames.ColdChevronDownIcon} color={'white'} />
           </div>
         </div>
-        {collapseIsOpen &&
-          item.items?.map((sub_item: NavbarItem, index: number) => {
-            return (
-              <Link
-                to={sub_item.route}
-                className={twMerge(
-                  'flex flex-row justify-start items-center gap-[8px] w-full cursor-pointer h-[48px] border-l-[2px] border-transparent pl-12 hover:bg-gray-50 ' +
-                    'transition-all duration-200',
-                  activeItem?.key === sub_item.key ? 'border-primary-300 bg-gray-50' : '',
-                )}>
-                <span className={'text-body font-bold w-full truncate'}>{sub_item.label}</span>
-              </Link>
-            );
-          })}
+        {collapseIsOpen && (
+          <div
+            className={'flex flex-col gap-[8px] w-full transition-height duration-200 overflow-hidden'}
+            style={{
+              height: collapseIsOpen ? getSubItemsHeight() + 'px' : '0px',
+            }}>
+            {item.items?.map((sub_item: NavbarItem, index: number) => {
+              return (
+                <Link
+                  to={sub_item.route}
+                  className={twMerge(
+                    'flex flex-row justify-start items-center gap-[8px] w-full cursor-pointer h-[48px] border-l-[2px] border-transparent hover:bg-gray-50 ',
+                    activeItem?.key === sub_item.key ? 'pl-8 text-tc-primary font-bold' : 'pl-12 text-tc-secondary',
+                  )}>
+                  {activeItem?.key === sub_item.key && <div className={'w-[8px] h-[8px] rounded-full bg-primary-300'}></div>}
+                  <span className={'w-full truncate'}>{sub_item.label}</span>
+                </Link>
+              );
+            })}
+          </div>
+        )}
       </div>
     ) : (
       <div
         className={twMerge(
-          'w-full flex justify-center items-center h-[48px] border-l-[2px] border-transparent px-[8px]',
+          'w-full flex justify-start items-center h-[48px] border-l-[2px] border-transparent px-[16px]',
           ifSubItemIsActive() ? 'border-primary-300 bg-gray-50' : '',
         )}>
         <ColdIcon name={item.icon?.name} color={'white'} />

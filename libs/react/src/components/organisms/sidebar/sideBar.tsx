@@ -10,11 +10,11 @@ import { ActionPayload } from '@coldpbc/interfaces';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application/errors/errorFallback';
 import { useAuth0Wrapper, useColdContext, useOrgSWR } from '@coldpbc/hooks';
-import { ColdLogoNames, ErrorType, IconNames } from '@coldpbc/enums';
+import { ErrorType } from '@coldpbc/enums';
 import { ColdWordmark, OrganizationSelector, SideBarCollapse, SideBarItem } from '@coldpbc/components';
-import { ColdIcon, ColdLogos } from '../../atoms';
 import { flowbiteThemeOverride, HexColors } from '@coldpbc/themes';
 import { Sidebar as FBSidebar } from 'flowbite-react';
+import { ColdLogoAnimation } from '../../atoms/coldLogoAnimation/coldLogoAnimation';
 
 const _SideBar = ({ defaultExpanded }: { defaultExpanded?: boolean }): JSX.Element => {
   const ldFlags = useFlags();
@@ -68,23 +68,7 @@ const _SideBar = ({ defaultExpanded }: { defaultExpanded?: boolean }): JSX.Eleme
   };
 
   const getSidebarLogo = () => {
-    if (expanded) {
-      return (
-        <div className="h-[24px] flex items-center justify-start px-[16px] w-full">
-          <ColdLogos name={ColdLogoNames.ColdWordmark} color={'white'} height={'24'} />
-        </div>
-      );
-    } else {
-      return (
-        <div className="h-[24px] flex items-center justify-center w-full">
-          <ColdIcon name={IconNames.ColdScoreIcon} color={'white'} />
-        </div>
-      );
-    }
-  };
-
-  const navigateTo = (route: string) => {
-    navigate(route);
+    return <ColdLogoAnimation expanded={expanded} />;
   };
 
   useEffect(() => {
@@ -144,8 +128,8 @@ const _SideBar = ({ defaultExpanded }: { defaultExpanded?: boolean }): JSX.Eleme
         <div
           data-testid={'sidebar'}
           className={
-            'text-tc-primary fixed left-0 top-0 h-[100vh] justify-between w-[51px] flex flex-col items-center ' +
-            'py-[24px] bg-bgc-elevated transition-all duration-200 hover:w-[208px] z-20 ' +
+            'text-tc-primary fixed left-0 top-0 h-[100vh] justify-between w-[58px] flex flex-col items-center ' +
+            'py-[24px] bg-bgc-elevated transition-width ease-in duration-200 hover:w-[208px] z-20 ' +
             'hover:shadow-[0px_8px_12px_4px_rgba(0,0,0,0.85)]'
           }
           onMouseEnter={() => setExpanded(true)}

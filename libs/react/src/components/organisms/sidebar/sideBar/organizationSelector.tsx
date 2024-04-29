@@ -66,7 +66,7 @@ const _OrganizationSelector = ({ sidebarExpanded }: { sidebarExpanded?: boolean 
         }
         arrowIcon={false}
         theme={flowbiteThemeOverride.dropdown}
-        className={'w-[175px] h-fit max-h-[200px] overflow-y-auto truncate'}>
+        className={'w-[175px] h-fit max-h-[200px] overflow-y-auto truncate transition-none duration-0'}>
         {data.map((org: any) => (
           <Dropdown.Item
             key={org.id}

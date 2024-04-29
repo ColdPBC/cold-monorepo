@@ -30,14 +30,14 @@ export const SideBarItem = (props: SideBarItemProps) => {
         )}
         to={item.route}>
         {expanded ? (
-          <div className={'flex flex-row justify-start items-center gap-[8px] w-full h-full pl-[18px]'}>
+          <div className={'flex flex-row justify-start items-center gap-[8px] w-full h-full pl-[16px] pr-[8px]'}>
             <div className={'w-[24px] h-[24px] flex items-center justify-center'}>
               <ColdIcon name={item.icon?.name} color={'white'} />
             </div>
             <span className={'text-body font-bold w-full truncate'}>{item.label}</span>
           </div>
         ) : (
-          <div className={'flex justify-center items-center w-full h-full px-[8px]'}>
+          <div className={'flex justify-start items-center w-full h-full px-[16px]'}>
             <ColdIcon name={item.icon?.name} color={'white'} />
           </div>
         )}
