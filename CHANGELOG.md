@@ -1,3 +1,15 @@
+# [1.212.0-cold-770.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.211.1...v1.212.0-cold-770.1) (2024-04-29)
+
+
+### Bug Fixes
+
+* add shadow db env variable ([dc87dda](https://github.com/ColdPBC/cold-monorepo/commit/dc87dda8730cc0bc60f79e6cb33e966adc463801))
+
+
+### Features
+
+* add new compliance models ([575cbf7](https://github.com/ColdPBC/cold-monorepo/commit/575cbf76920178798add09b3cb742b6a12827845))
+
 ## [1.211.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.211.0...v1.211.1) (2024-04-29)
 
 
