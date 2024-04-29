@@ -1,3 +1,13 @@
+# [1.212.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.211.2...v1.212.0) (2024-04-29)
+
+
+### Features
+
+* added feature flag toggling to go back to old design and fixed issue with linking for sidebar not navigating on click ([2e9f07a](https://github.com/ColdPBC/cold-monorepo/commit/2e9f07afd0328a1849c80c88691fdc1013587797))
+* handle transitions and when sub menu item is selected ([8267d8f](https://github.com/ColdPBC/cold-monorepo/commit/8267d8f8f97c36560af5216959e53035ac04ace8))
+* initial changes to the sidebar and application layout ([5d34714](https://github.com/ColdPBC/cold-monorepo/commit/5d347149c0e26742598e473d6760bac87f2bdd8a))
+* truncate the dropdown for the nav bar ([2544c86](https://github.com/ColdPBC/cold-monorepo/commit/2544c86d4e33f362a7707c84e1431799e6b96684))
+
 ## [1.211.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.211.1...v1.211.2) (2024-04-29)
 
 
