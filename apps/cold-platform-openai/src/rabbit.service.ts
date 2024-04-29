@@ -149,6 +149,25 @@ export class RabbitService extends BaseWorker {
     });
 
     switch (event) {
+      case 'organization.updated': {
+        if (parsed.organization.website) {
+          let url = parsed.organization.website;
+          if (url.indexOf('/') === url.length - 1) {
+            url = url.slice(0, -1);
+          }
+          await this.crawlerQueue.add(
+            event,
+            {
+              url: parsed.organization.website,
+              depth: 0,
+              ...parsed,
+            },
+            { removeOnFail: false, removeOnComplete: false },
+          );
+          this.logger.info(`Crawling ${url}`);
+        }
+        return { message: 'Organization updated' };
+      }
       case 'organization.created': {
         try {
           const pcResponse = await this.pc.getIndexDetails(parsed.organization.name);
