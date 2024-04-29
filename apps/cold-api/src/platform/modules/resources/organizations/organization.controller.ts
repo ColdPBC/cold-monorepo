@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpCode, NotFoundException, Param, Post, Query, Req, UseFilters, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, NotFoundException, Param, Patch, Post, Query, Req, UseFilters, UseGuards } from '@nestjs/common';
 import { Span } from 'nestjs-ddtrace';
 import { ResourceValidationPipe } from '../../../pipes/resource.pipe';
 import { allRoles, bpcDecoratorOptions, coldAdminOnly, orgIdDecoratorOptions } from '../_global/global.params';
@@ -53,6 +53,42 @@ export class OrganizationController extends BaseWorker {
     },
   ) {
     return this.orgService.createColdOrg(createOrganizationDTO, req);
+  }
+
+  /***
+   * Update organization
+   * @param query
+   * @param createOrganizationDTO
+   * @param req
+   * @param orgId
+   * @param bpc
+   */
+  @ApiOperation({
+    summary: 'Update Organization',
+    operationId: 'UpdateOrganization',
+  })
+  @Patch('organizations/:orgId')
+  @Roles(...coldAdminOnly)
+  @ApiQuery(bpcDecoratorOptions)
+  @ApiBody({
+    type: CreateOrganizationDto,
+    schema: {
+      example: postOrganizationExample,
+    },
+  })
+  @HttpCode(200)
+  async updateOrganization(
+    @Param('orgId') orgId: string,
+    @Body(new ResourceValidationPipe(OrganizationsSchema.partial(), 'PATCH')) createOrganizationDTO: Partial<CreateOrganizationDto>,
+    @Req()
+    req: {
+      body: any;
+      headers: any;
+      query: any;
+      user: IAuthenticatedUser;
+    },
+  ) {
+    return this.orgService.updateOrganization(orgId, createOrganizationDTO, req);
   }
 
   /***

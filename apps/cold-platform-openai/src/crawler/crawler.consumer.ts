@@ -27,6 +27,11 @@ export class CrawlerConsumer extends BaseWorker implements OnModuleInit {
     this.chunkSize = await this.darkly.getNumberFlag('dynamic-langchain-chunkSize', 1000);
   }
 
+  @Process('organization.updated')
+  async addUpdatedCrawlJob(job: any) {
+    await this.crawler.addCrawlPageJob(job.data);
+  }
+
   @Process('organization.created')
   async addCrawlJob(job: any) {
     await this.crawler.addCrawlPageJob(job.data);
@@ -44,6 +49,9 @@ export class CrawlerConsumer extends BaseWorker implements OnModuleInit {
       this.logger.info('Crawler killed in darkly', job.data.organization.name);
       return {};
     }
+
+    // delete existing vectors before crawling website
+    await this.pc.removeWebVectors(job.data.organization);
 
     const htmlSplitter = RecursiveCharacterTextSplitter.fromLanguage('html', {
       chunkSize: Number(1000),
@@ -133,11 +141,15 @@ export class CrawlerConsumer extends BaseWorker implements OnModuleInit {
       ///await this.pc.chunkedUpsert(index, vectors, job?.data?.organization?.name);
 
       // Cache the checksum of the page
-      await this.cache.set(`crawler:${job.data.organization.name}:${checksum}`, {
-        organization: job.data.organization.name,
-        type: 'webpage',
-        url: job.data.url,
-      });
+      await this.cache.set(
+        `crawler:${job.data.organization.name}:${checksum}`,
+        {
+          organization: job.data.organization.name,
+          type: 'webpage',
+          url: job.data.url,
+        },
+        { ttl: 60 },
+      );
 
       this.logger.info('indexed page', job.data?.url);
       this.metrics.increment('crawler.jobs', 1, { organization_name: job.data.organization.name, status: 'completed' });

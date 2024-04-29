@@ -5,7 +5,7 @@ import { ConfigService } from '@nestjs/config';
 import { Document } from '@langchain/core/documents';
 import OpenAI from 'openai';
 import { LangchainLoaderService } from '../langchain/langchain.loader.service';
-import { organization_files } from '@prisma/client';
+import { organization_files, organizations } from '@prisma/client';
 import { InjectQueue } from '@nestjs/bull';
 import { Queue } from 'bull';
 
@@ -120,7 +120,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
         apiKey: this.config.getOrThrow('PINECONE_API_KEY'),
       });
 
-      const automateInjestion = this.darkly.getBooleanFlag('config-enable-automated-pinecone-injestion', false);
+      const automateInjestion = await this.darkly.getBooleanFlag('config-enable-automated-pinecone-injestion', false);
       if (automateInjestion) {
         const orgs = await this.prisma.organizations.findMany({
           select: {
@@ -185,12 +185,6 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
 
   // The function `getMatchesFromEmbeddings` is used to retrieve matches for the given embeddings
   async getMatchesFromEmbeddings(embeddings: number[], topK: number, namespace: string, indexName: string): Promise<ScoredPineconeRecord<PineconeMetadata>[]> {
-    const config = await this.darkly.getJSONFlag('config-embedding-model', {
-      kind: 'organization',
-      key: indexName,
-      name: indexName,
-    });
-
     // Obtain a client for Pinecone
     const pinecone = new Pinecone({
       apiKey: this.config.getOrThrow('PINECONE_API_KEY'),
@@ -488,6 +482,30 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
       this.logger.error(error.message, { ...error });
       throw error;
     }
+  }
+
+  async removeWebVectors(org: organizations) {
+    const webVectors = await this.prisma.vector_records.findMany({
+      where: {
+        organization_id: org.id,
+        url: org.website,
+      },
+    });
+
+    const webVectorIds = webVectors.map(v => v.id);
+
+    const details = await this.getIndexDetails(org.name);
+    const index = await this.getIndex(details.indexName);
+    // delete from pinecone
+    await index.namespace(org.name).deleteMany(webVectorIds);
+    // delete from db
+    await this.prisma.vector_records.deleteMany({
+      where: {
+        id: {
+          in: webVectorIds,
+        },
+      },
+    });
   }
 
   getCacheKey(filePayload: any) {
