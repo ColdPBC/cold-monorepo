@@ -567,14 +567,14 @@ model organization_compliance {
 model compliance_definitions {
   id                        String                      @id @default(cuid())
   name                      String                      @unique
-  order                     Int
-  version                   Int
+  order                     Int?
+  version                   Int?
   title                     String
-  image_url                 String
+  image_url                 String?
   logo_url                  String
   surveys                   Json
-  metadata                  Json
-  custom                    Boolean
+  metadata                  Json?
+  visible                   Boolean                     @default(false) // if true, this compliance definition will be shown in the UI
   created_at                DateTime                    @default(now())
   updated_at                DateTime                    @updatedAt
   sections                  compliance_sections[]
