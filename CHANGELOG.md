@@ -1,3 +1,10 @@
+# [1.212.0-cold-770.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.212.0-cold-770.1...v1.212.0-cold-770.2) (2024-04-29)
+
+
+### Bug Fixes
+
+* some minor compliance model changes ([2aef043](https://github.com/ColdPBC/cold-monorepo/commit/2aef043b8143b6f10665344b803f3fec467b0e53))
+
 # [1.212.0-cold-770.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.211.1...v1.212.0-cold-770.1) (2024-04-29)
 
 
