@@ -1,3 +1,10 @@
+## [1.211.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.211.0...v1.211.1) (2024-04-29)
+
+
+### Bug Fixes
+
+* add patch route for organizations ([130ea99](https://github.com/ColdPBC/cold-monorepo/commit/130ea99924f023fb4866a8aa9d2afd37ee5ba5e6))
+
 # [1.211.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.210.4...v1.211.0) (2024-04-25)
 
 
