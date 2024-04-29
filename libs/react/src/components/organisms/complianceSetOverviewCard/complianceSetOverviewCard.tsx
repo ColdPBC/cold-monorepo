@@ -9,9 +9,12 @@ import { differenceInDays, format, intlFormatDistance } from 'date-fns';
 import { isAxiosError } from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { withErrorBoundary } from 'react-error-boundary';
+import { useFlags } from 'launchdarkly-react-client-sdk';
+import { getCorrectComplianceLogo } from '@coldpbc/lib';
 
 const _ComplianceSetOverviewCard = ({ name }: { name: string }) => {
   const navigate = useNavigate();
+  const ldFlags = useFlags();
   const { orgId } = useAuth0Wrapper();
   const { logError } = useColdContext();
   const { addToastMessage } = useAddToastMessage();
@@ -67,7 +70,8 @@ const _ComplianceSetOverviewCard = ({ name }: { name: string }) => {
   }
 
   const getComplianceLogo = () => {
-    const img = <img src={complianceSet.logo_url} alt={`${complianceSet.name}-logo`}></img>;
+    const newLogoUrl = getCorrectComplianceLogo(complianceSet.logo_url, ldFlags);
+    const img = <img src={newLogoUrl} alt={`${complianceSet.name}-logo`}></img>;
     if (!isNotActive) {
       return <div className={'rounded-full min-w-[80px] min-h-[80px] max-w-[80px] max-h-[80px] bg-gray-50 flex justify-center items-center'}>{img}</div>;
     } else {

@@ -6,6 +6,8 @@ import { ButtonTypes, ErrorType, GlobalSizes } from '@coldpbc/enums';
 import { useAddToastMessage, useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
 import { isAxiosError } from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { useFlags } from 'launchdarkly-react-client-sdk';
+import { getCorrectComplianceLogo } from '@coldpbc/lib';
 
 export interface ComplianceOverviewProps {
   complianceData: Compliance;
@@ -19,6 +21,7 @@ export const ComplianceOverview = (props: ComplianceOverviewProps) => {
   const { orgId } = useAuth0Wrapper();
   const navigate = useNavigate();
   const { logError } = useColdContext();
+  const ldFlags = useFlags();
 
   const getCTAOnClick = async () => {
     if (orgComplianceData !== undefined) {
@@ -63,14 +66,7 @@ export const ComplianceOverview = (props: ComplianceOverviewProps) => {
     }
   };
 
-  return (
-    <ComplianceOverviewCard
-      complianceData={undefined}
-      isOverview={true}
-      onOverviewPage={true}
-      ctas={[getCTAButton()]}
-      title={complianceData.title}
-      logo_url={complianceData.logo_url}
-    />
-  );
+  const logoUrl = getCorrectComplianceLogo(complianceData.logo_url, ldFlags);
+
+  return <ComplianceOverviewCard complianceData={undefined} isOverview={true} onOverviewPage={true} ctas={[getCTAButton()]} title={complianceData.title} logo_url={logoUrl} />;
 };
