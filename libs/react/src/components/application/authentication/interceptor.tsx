@@ -7,10 +7,10 @@ export const Interceptor = () => {
   const actionId = params.get('actionId');
 
   return (
-    <div>
+    <>
       <Outlet />
       {actionId && <ActionDetail id={actionId} />}
       {surveyName && <Survey surveyName={surveyName} />}
-    </div>
+    </>
   );
 };
