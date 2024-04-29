@@ -133,6 +133,66 @@
             }
         },
         "/organizations/{orgId}": {
+            "patch": {
+                "operationId": "UpdateOrganization",
+                "summary": "Update Organization",
+                "parameters": [
+                    {
+                        "name": "orgId",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "bpc",
+                        "required": false,
+                        "in": "query",
+                        "description": "Bypass Cache",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "example": {
+                                    "display_name": "Test API Organization {{$randomAlphaNumeric}}{{$randomAlphaNumeric}}",
+                                    "branding": {},
+                                    "city": "Minneapolis",
+                                    "email": "info@example.com",
+                                    "phone": "18005551212",
+                                    "state": "MN",
+                                    "street_address": "404 Washington Avenue North",
+                                    "zip": "55401"
+                                },
+                                "$ref": "#/components/schemas/CreateOrganizationDto"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Organizations"
+                ],
+                "security": [
+                    {
+                        "oauth2": [
+                            "openid",
+                            "email",
+                            "profile"
+                        ]
+                    }
+                ]
+            },
             "get": {
                 "operationId": "GetOrganization",
                 "summary": "Get Organization",
@@ -2336,6 +2396,12 @@
                     "description": "overrides the survey array in the compliance definition",
                     "content": {
                         "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            },
                             "examples": {
                                 "Surveys Override": {
                                     "value": {
@@ -2392,6 +2458,12 @@
                     "description": "overrides the survey array in the compliance definition",
                     "content": {
                         "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            },
                             "examples": {
                                 "Surveys Override": {
                                     "value": {
