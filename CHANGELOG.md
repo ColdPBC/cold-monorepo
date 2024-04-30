@@ -1,21 +1,27 @@
-# [1.212.0-cold-770.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.212.0-cold-770.1...v1.212.0-cold-770.2) (2024-04-29)
+## [1.212.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.212.0...v1.212.1) (2024-04-30)
+
 
 
 ### Bug Fixes
 
-* some minor compliance model changes ([2aef043](https://github.com/ColdPBC/cold-monorepo/commit/2aef043b8143b6f10665344b803f3fec467b0e53))
+* some minor freeplay bugs ([25b48ce](https://github.com/ColdPBC/cold-monorepo/commit/25b48ce3d4f8961bd568376267f9d569364e4d4a))
 
-# [1.212.0-cold-770.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.211.1...v1.212.0-cold-770.1) (2024-04-29)
+# [1.212.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.211.2...v1.212.0) (2024-04-29)
+
+
+### Features
+
+* added feature flag toggling to go back to old design and fixed issue with linking for sidebar not navigating on click ([2e9f07a](https://github.com/ColdPBC/cold-monorepo/commit/2e9f07afd0328a1849c80c88691fdc1013587797))
+* handle transitions and when sub menu item is selected ([8267d8f](https://github.com/ColdPBC/cold-monorepo/commit/8267d8f8f97c36560af5216959e53035ac04ace8))
+* initial changes to the sidebar and application layout ([5d34714](https://github.com/ColdPBC/cold-monorepo/commit/5d347149c0e26742598e473d6760bac87f2bdd8a))
+* truncate the dropdown for the nav bar ([2544c86](https://github.com/ColdPBC/cold-monorepo/commit/2544c86d4e33f362a7707c84e1431799e6b96684))
+
+## [1.211.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.211.1...v1.211.2) (2024-04-29)
 
 
 ### Bug Fixes
 
 * add shadow db env variable ([dc87dda](https://github.com/ColdPBC/cold-monorepo/commit/dc87dda8730cc0bc60f79e6cb33e966adc463801))
-
-
-### Features
-
-* add new compliance models ([575cbf7](https://github.com/ColdPBC/cold-monorepo/commit/575cbf76920178798add09b3cb742b6a12827845))
 
 ## [1.211.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.211.0...v1.211.1) (2024-04-29)
 

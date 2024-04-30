@@ -1,16 +1,18 @@
 import { withErrorBoundary } from 'react-error-boundary';
-import { ErrorFallback, Spinner } from '@coldpbc/components';
+import { ColdIcon, ErrorFallback, Spinner } from '@coldpbc/components';
 import { useColdContext } from '@coldpbc/hooks';
 import { axiosFetcher } from '@coldpbc/fetchers';
-import { ErrorType } from '@coldpbc/enums';
+import { ErrorType, IconNames } from '@coldpbc/enums';
 import React, { useEffect, useState } from 'react';
 import useSWR from 'swr';
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import { flowbiteThemeOverride } from '@coldpbc/themes';
 import { Dropdown } from 'flowbite-react';
 import { find } from 'lodash';
+import { useFlags } from 'launchdarkly-react-client-sdk';
 
-const _OrganizationSelector = () => {
+const _OrganizationSelector = ({ sidebarExpanded }: { sidebarExpanded?: boolean }) => {
+  const ldFlags = useFlags();
   const { data, error, isLoading } = useSWR<any, any, any>(['/organizations', 'GET'], axiosFetcher);
   const { logError, setImpersonatingOrg, impersonatingOrg, logBrowser } = useColdContext();
   const unselectedOrg = {
@@ -38,7 +40,11 @@ const _OrganizationSelector = () => {
   }, [data]);
 
   if (isLoading) {
-    return <Spinner />;
+    return (
+      <div className={'w-[48px] h-[48px]'}>
+        <Spinner />
+      </div>
+    );
   }
 
   if (error) {
@@ -49,18 +55,18 @@ const _OrganizationSelector = () => {
 
   logBrowser('Organizations data for organization selector loaded', 'info', { data, selectedOrg });
 
-  return (
-    <div className={'w-full p-4'}>
+  if (sidebarExpanded || !ldFlags.showNewNavigationCold698) {
+    return (
       <Dropdown
         inline={true}
         label={
-          <span className={'w-full p-4 text-tc-primary text-start text-xs flex items-center border border-bgc-accent rounded-lg'}>
+          <span className={'w-full p-4 text-tc-primary text-start text-xs flex items-center border border-bgc-accent rounded-lg truncate'}>
             {selectedOrg.display_name} <ChevronDownIcon className="w-[18px] ml-2" />
           </span>
         }
         arrowIcon={false}
         theme={flowbiteThemeOverride.dropdown}
-        className={'w-[175px] h-fit max-h-[200px] overflow-y-auto'}>
+        className={'w-[175px] h-fit max-h-[200px] overflow-y-auto truncate transition-none duration-0'}>
         {data.map((org: any) => (
           <Dropdown.Item
             key={org.id}
@@ -68,13 +74,15 @@ const _OrganizationSelector = () => {
               onOrgSelect(org);
             }}
             theme={flowbiteThemeOverride.dropdown.floating.item}
-            className={'text-start text-xs'}>
+            className={'text-start text-xs truncate'}>
             {org.display_name}
           </Dropdown.Item>
         ))}
       </Dropdown>
-    </div>
-  );
+    );
+  } else {
+    return <ColdIcon name={IconNames.ColdSwitchIcon} color={'white'} />;
+  }
 };
 
 export const OrganizationSelector = withErrorBoundary(_OrganizationSelector, {
