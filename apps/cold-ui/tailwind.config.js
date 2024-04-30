@@ -6,10 +6,7 @@ const defaultTheme = require('tailwindcss/defaultTheme');
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
-    join(
-      __dirname,
-      '{src,pages,components,app}/**/*!(*.stories|*.spec).{ts,tsx,html}',
-    ),
+    join(__dirname, '{src,pages,components,app}/**/*!(*.stories|*.spec).{ts,tsx,html}'),
     ...createGlobPatternsForDependencies(__dirname),
     './libs/react/src/**/*.{html,js}',
     './libs/react/src/pages/**/*.{js,ts,jsx,tsx}',
@@ -142,16 +139,16 @@ module.exports = {
         },
       },
     },
-    minHeight: (theme) => ({
+    minHeight: theme => ({
       ...theme('spacing'),
     }),
-    minWidth: (theme) => ({
+    minWidth: theme => ({
       ...theme('spacing'),
     }),
+    transitionProperty: {
+      height: 'height',
+      width: 'width',
+    },
   },
-  plugins: [
-    require('flowbite/plugin'),
-    require('@tailwindcss/forms'),
-    require('@tailwindcss/typography'),
-  ],
+  plugins: [require('flowbite/plugin'), require('@tailwindcss/forms'), require('@tailwindcss/typography')],
 };

@@ -71,7 +71,7 @@ export const EmissionsCarbonFootprintBase = () => {
   };
 
   return (
-    <div className="ml-[52px] w-[1076px] relative flex flex-col justify-start gap-6">
+    <div className="w-[1076px] relative flex flex-col justify-start gap-6">
       <div className={'flex flex-row justify-between py-[36px] fixed top-0 shadow-2xl bg-bgc-main z-10 w-[1076px]'}>
         <div className={'text-h1 text-tc-primary'}>Carbon Footprint</div>
         <div className={'flex flex-row gap-[5px]'}>
