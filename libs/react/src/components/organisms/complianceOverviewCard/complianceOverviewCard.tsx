@@ -32,7 +32,11 @@ export const ComplianceOverviewCard = (props: ComplianceOverviewCardProps) => {
       shades.push({ color: HexColors.primary.DEFAULT, percentage: complianceData.percentageAnswered, type: 'answered' });
     }
     if (complianceData.aiAnsweredQuestions > 0) {
-      shades.push({ color: HexColors.primary['100'], percentage: complianceData.percentageAIAnswered, type: 'aiAnswered' });
+      shades.push({
+        color: HexColors.primary['100'],
+        percentage: complianceData.percentageAIAnswered,
+        type: 'aiAnswered',
+      });
     }
     return shades;
   };
