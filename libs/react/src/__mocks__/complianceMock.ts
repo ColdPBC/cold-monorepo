@@ -5,7 +5,7 @@ export function getComplianceMock(): Compliance[] {
     {
       id: 'compdef_n90xd3j15im42aqr',
       name: 'b_corp_2024',
-      logo_url: 'https://cold-public-assets.s3.amazonaws.com/3rdPartyLogos/compliance_svgs/bcorp_logo.svg',
+      logo_url: 'https://cold-public-assets.s3.amazonaws.com/3rdPartyLogos/compliance_svgs/b_corp_logo.svg',
       surveys: ['b_corp_2024'],
       created_at: '2024-03-19T16:22:59.959Z',
       updated_at: '2024-04-10T20:44:44.763Z',
