@@ -66,9 +66,8 @@ export const ComplianceWizardLair = (props: PropsWithChildren<ComplianceWizardLa
     let className = 'w-[120px] h-[120px]';
     if (ldFlags.showNewCompliancePageHomeCold671) {
       className += ' invert';
-    } else {
-      className += '';
     }
+
     return <img src={compliance?.logo_url} className={className} alt="compliance" />;
   };
 

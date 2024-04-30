@@ -72,8 +72,6 @@ const _ComplianceSetOverviewCard = ({ name }: { name: string }) => {
     let imageClassName = 'max-w-[60px] max-h-[60px]';
     if (ldFlags.showNewCompliancePageHomeCold671) {
       imageClassName += ' invert';
-    } else {
-      imageClassName += ' ';
     }
     const img = <img src={complianceSet.logo_url} alt={`${complianceSet.name}-logo`} className={imageClassName}></img>;
     if (!isNotActive) {
