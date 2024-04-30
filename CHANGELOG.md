@@ -1,3 +1,10 @@
+# [1.214.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.213.0...v1.214.0) (2024-04-30)
+
+
+### Features
+
+* update org selector styling ([22a84ff](https://github.com/ColdPBC/cold-monorepo/commit/22a84fffcfcdd5e4dd69fb25b31596ab14db513d))
+
 # [1.213.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.212.1...v1.213.0) (2024-04-30)
 
 
