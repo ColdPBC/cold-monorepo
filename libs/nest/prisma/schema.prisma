@@ -550,7 +550,7 @@ model organization_compliance {
   id                                String                                       @id
   description                       String
   compliance_definition_name        String
-  metadata                          Json
+  metadata                          Json?
   created_at                        DateTime                                     @default(now())
   updated_at                        DateTime                                     @updatedAt
   organization_id                   String
@@ -593,22 +593,26 @@ model compliance_section_groups {
   updated_at                 DateTime               @updatedAt
   compliance_definition      compliance_definitions @relation(fields: [compliance_definition_name], references: [name])
   compliance_sections        compliance_sections[]
+
+  @@unique([compliance_definition_name, title], name: "compDefNameTitle")
 }
 
 model compliance_sections {
   id                          String                    @id
   key                         String
   title                       String
-  dependency                  Json
-  category_idx                Int
+  dependency_expression       String?
+  order                       Int
   metadata                    Json?
   created_at                  DateTime                  @default(now())
   updated_at                  DateTime                  @updatedAt
   compliance_section_group_id String
   section_group               compliance_section_groups @relation(fields: [compliance_section_group_id], references: [id])
   compliance_questions        compliance_questions[]
-  compliance_definition       compliance_definitions?   @relation(fields: [compliance_definitions_id], references: [id])
-  compliance_definitions_id   String?
+  compliance_definition       compliance_definitions    @relation(fields: [compliance_definition_name], references: [name])
+  compliance_definition_name  String
+
+  @@unique([compliance_section_group_id, key], name: "compSecGroupKey")
 }
 
 model compliance_questions {
@@ -617,15 +621,14 @@ model compliance_questions {
   order                                Int
   prompt                               String
   component                            String
-  tooltip                              String
-  placeholder                          String
-  rubric                               Json
-  options                              Json
-  operator                             String
-  comparison                           String
-  dependency_expression                String
-  question_summary                     String
-  additional_context                   Json
+  tooltip                              String?
+  placeholder                          String?
+  rubric                               Json?
+  options                              Json?
+  dependency_expression                String?
+  question_summary                     String?
+  coresponding_question                String?
+  additional_context                   Json?
   created_at                           DateTime                                     @default(now())
   updated_at                           DateTime                                     @updatedAt
   compliance_section_id                String
@@ -634,6 +637,8 @@ model compliance_questions {
   question_bookmarks                   organization_compliance_question_bookmarks[]
   responses                            organization_compliance_responses[]
   organization_compliance_ai_responses organization_compliance_ai_responses[]
+
+  @@unique([compliance_section_id, key], name: "compSecKey")
 }
 
 model organization_compliance_statuses {
