@@ -1,6 +1,5 @@
 import { SurveyPayloadType } from '@coldpbc/interfaces';
 import { forOwn, isUndefined } from 'lodash';
-import { LDFlagSet } from '@launchdarkly/node-server-sdk';
 
 export const getComplianceProgressForSurvey = (survey: SurveyPayloadType) => {
   let totalQuestions = 0;
@@ -30,19 +29,4 @@ export const getComplianceProgressForSurvey = (survey: SurveyPayloadType) => {
     percentageAnswered: Math.round((answeredQuestions / totalQuestions) * 100),
     percentageAIAnswered: Math.round((aiAnsweredQuestions / totalQuestions) * 100),
   };
-};
-
-export const getCorrectComplianceLogo = (logoUrl: string | undefined, flags: LDFlagSet) => {
-  if (!logoUrl) return logoUrl;
-  let newImageName = '';
-  const imageUrl = logoUrl;
-  const imageSeparated = imageUrl.split('/');
-  const imageName = imageSeparated[imageSeparated.length - 1];
-  if (flags.showNewCompliancePageHomeCold671) {
-    newImageName = imageName.replace('dark', 'light');
-  } else {
-    newImageName = imageName.replace('light', 'dark');
-  }
-
-  return imageUrl.replace(imageName, newImageName);
 };

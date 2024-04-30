@@ -5,7 +5,7 @@ export function getComplianceMock(): Compliance[] {
     {
       id: 'compdef_n90xd3j15im42aqr',
       name: 'b_corp_2024',
-      logo_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/compliance_svgs/b_corp/light.svg',
+      logo_url: 'https://cold-public-assets.s3.amazonaws.com/3rdPartyLogos/compliance_svgs/b_corp_logo.svg',
       surveys: ['b_corp_2024'],
       created_at: '2024-03-19T16:22:59.959Z',
       updated_at: '2024-04-10T20:44:44.763Z',
@@ -14,7 +14,7 @@ export function getComplianceMock(): Compliance[] {
     {
       id: 'compdef_s4h9rd5wuorvhthy',
       name: 'rei_pia_2024',
-      logo_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/compliance_svgs/rei/light.svg',
+      logo_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/compliance_svgs/rei_logo.svg',
       surveys: ['rei_pia_2024'],
       created_at: '2024-03-01T19:51:37.808Z',
       updated_at: '2024-03-06T05:05:43.546Z',

@@ -3,7 +3,7 @@ import { PropsWithChildren, useContext, useEffect } from 'react';
 import { Compliance } from '@coldpbc/interfaces';
 import { ButtonTypes } from '@coldpbc/enums';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { getComplianceProgressForSurvey, getCorrectComplianceLogo } from '@coldpbc/lib';
+import { getComplianceProgressForSurvey } from '@coldpbc/lib';
 import { isArray } from 'lodash';
 import { useColdContext } from '@coldpbc/hooks';
 import { useFlags } from 'launchdarkly-react-client-sdk';
@@ -63,14 +63,13 @@ export const ComplianceWizardLair = (props: PropsWithChildren<ComplianceWizardLa
   const compliance = data['compliances'].find((compliance: Compliance) => compliance.name === name);
 
   const getComplianceLogo = () => {
-    let className = 'w-[80px] h-[80px]';
+    let className = 'w-[120px] h-[120px]';
     if (ldFlags.showNewCompliancePageHomeCold671) {
-      className = 'w-[120px] h-[120px]';
+      className += ' invert';
     } else {
-      className = 'w-[80px] h-[80px]';
+      className += '';
     }
-    const newImageUrl = getCorrectComplianceLogo(compliance?.logo_url, ldFlags);
-    return <img src={newImageUrl} className={className} alt="compliance" />;
+    return <img src={compliance?.logo_url} className={className} alt="compliance" />;
   };
 
   return (

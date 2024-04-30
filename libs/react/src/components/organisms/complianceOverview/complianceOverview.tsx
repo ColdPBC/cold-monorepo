@@ -7,7 +7,6 @@ import { useAddToastMessage, useAuth0Wrapper, useColdContext } from '@coldpbc/ho
 import { isAxiosError } from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useFlags } from 'launchdarkly-react-client-sdk';
-import { getCorrectComplianceLogo } from '@coldpbc/lib';
 
 export interface ComplianceOverviewProps {
   complianceData: Compliance;
@@ -66,7 +65,14 @@ export const ComplianceOverview = (props: ComplianceOverviewProps) => {
     }
   };
 
-  const logoUrl = getCorrectComplianceLogo(complianceData.logo_url, ldFlags);
-
-  return <ComplianceOverviewCard complianceData={undefined} isOverview={true} onOverviewPage={true} ctas={[getCTAButton()]} title={complianceData.title} logo_url={logoUrl} />;
+  return (
+    <ComplianceOverviewCard
+      complianceData={undefined}
+      isOverview={true}
+      onOverviewPage={true}
+      ctas={[getCTAButton()]}
+      title={complianceData.title}
+      logo_url={complianceData.logo_url}
+    />
+  );
 };
