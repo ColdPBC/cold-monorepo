@@ -1,3 +1,10 @@
+## [1.212.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.212.0...v1.212.1) (2024-04-30)
+
+
+### Bug Fixes
+
+* some minor freeplay bugs ([25b48ce](https://github.com/ColdPBC/cold-monorepo/commit/25b48ce3d4f8961bd568376267f9d569364e4d4a))
+
 # [1.212.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.211.2...v1.212.0) (2024-04-29)
 
 
