@@ -1,27 +1,26 @@
 import React, { useEffect, useState } from 'react';
-import { ColdWordmark } from '../../atoms/logos/coldWordmark';
-import { Sidebar as FBSidebar } from 'flowbite-react';
 import useSWR from 'swr';
 import { axiosFetcher } from '../../../fetchers/axiosFetcher';
-import { SideBarItem } from './sideBar/sideBarItem';
-import { flowbiteThemeOverride } from '../../../themes/flowbiteThemeOverride';
-import { SideBarCollapse } from './sideBar/sideBarCollapse';
 import { NavbarItem } from '../../../interfaces/sideBar';
 import { Spinner } from '../../atoms/spinner/spinner';
-import { HexColors } from '../../../themes/cold_theme';
 import { clone, remove } from 'lodash';
 import { useFlags } from 'launchdarkly-react-client-sdk';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { ActionPayload } from '@coldpbc/interfaces';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application/errors/errorFallback';
 import { useAuth0Wrapper, useColdContext, useOrgSWR } from '@coldpbc/hooks';
 import { ErrorType } from '@coldpbc/enums';
-import { OrganizationSelector } from './sideBar/organizationSelector';
+import { ColdWordmark, OrganizationSelector, SideBarCollapse, SideBarItem } from '@coldpbc/components';
+import { flowbiteThemeOverride, HexColors } from '@coldpbc/themes';
+import { Sidebar as FBSidebar } from 'flowbite-react';
+import { ColdLogoAnimation } from '../../atoms/coldLogoAnimation/coldLogoAnimation';
 
-const _SideBar = (): JSX.Element => {
+const _SideBar = ({ defaultExpanded }: { defaultExpanded?: boolean }): JSX.Element => {
   const ldFlags = useFlags();
-
+  const navigate = useNavigate();
+  const [expanded, setExpanded] = useState(false);
+  const [activeItem, setActiveItem] = useState<NavbarItem | null>(null);
   const {
     data,
     error,
@@ -58,28 +57,30 @@ const _SideBar = (): JSX.Element => {
 
   const location = useLocation();
 
-  const [activeChild, setActiveChild] = useState('');
-
   const { logError } = useColdContext();
 
   const getOrgSelector = () => {
     if (auth0.user && auth0.user.coldclimate_claims.roles[0] === 'cold:admin') {
-      return <OrganizationSelector />;
+      return <OrganizationSelector sidebarExpanded={expanded || !ldFlags.showNewNavigationCold698} />;
     } else {
       return null;
     }
   };
 
+  const getSidebarLogo = () => {
+    return <ColdLogoAnimation expanded={expanded} />;
+  };
+
   useEffect(() => {
     if (data) {
       data.definition.items.forEach((item: NavbarItem) => {
-        if (location.pathname === item.route && activeChild !== item.key) {
-          setActiveChild(item.key);
+        if (location.pathname === item.route && activeItem?.key !== item.key) {
+          setActiveItem(item);
         }
         if (item.items) {
           item.items.forEach((subItem: NavbarItem) => {
-            if (location.pathname === subItem.route && activeChild !== subItem.key) {
-              setActiveChild(subItem.key);
+            if (location.pathname === subItem.route && activeItem?.key !== subItem.key) {
+              setActiveItem(subItem);
             }
           });
         }
@@ -122,38 +123,69 @@ const _SideBar = (): JSX.Element => {
       return item.placement && item.placement === 'bottom';
     });
 
-    return (
-      <FBSidebar theme={flowbiteThemeOverride.sidebar} data-testid={'sidebar'}>
-        <div className="flex px-4 self-stretch items-center">
-          <div className="h-6 w-[76px]">
-            <ColdWordmark color={HexColors.white} />
+    if (ldFlags.showNewNavigationCold698) {
+      return (
+        <div
+          data-testid={'sidebar'}
+          className={
+            'text-tc-primary fixed left-0 top-0 h-[100vh] justify-between w-[58px] flex flex-col items-center ' +
+            'py-[24px] bg-bgc-elevated transition-width ease-in duration-200 hover:w-[208px] z-20 ' +
+            'hover:shadow-[0px_8px_12px_4px_rgba(0,0,0,0.85)]'
+          }
+          onMouseEnter={() => setExpanded(true)}
+          onMouseLeave={() => setExpanded(false)}>
+          <div className={'flex flex-col gap-[24px] w-full'}>
+            {getSidebarLogo()}
+            <div className={'w-full flex flex-col gap-[8px]'}>
+              {topItems.map((item: NavbarItem, index: number) => {
+                return item.items ? (
+                  <SideBarCollapse key={index} item={item} activeItem={activeItem} setActiveItem={setActiveItem} expanded={expanded} />
+                ) : (
+                  <SideBarItem key={index} item={item} activeItem={activeItem} setActiveItem={setActiveItem} expanded={expanded} />
+                );
+              })}
+            </div>
           </div>
+          {/* put org selector at the bottom of the nav bar */}
+          <div className={'flex px-[18px] items-center justify-center w-full'}>{getOrgSelector()}</div>
         </div>
-        <FBSidebar.Items className="gap-2 mb-auto">
-          <FBSidebar.ItemGroup className="space-y-2 border-t pt-8 first:mt-0 first:border-t-0 first:pt-0 mt-0 overflow-visible flex-grow">
-            {topItems.map((item: NavbarItem, index: number) => {
-              if (item.items) {
-                return <SideBarCollapse setActiveChild={setActiveChild} activeChild={activeChild} item={item} key={item.key} />;
-              } else {
-                return <SideBarItem setActiveChild={setActiveChild} activeChild={activeChild} item={item} key={item.key} />;
-              }
-            })}
-          </FBSidebar.ItemGroup>
-        </FBSidebar.Items>
-        <FBSidebar.Items className="gap-2">
-          <FBSidebar.ItemGroup className="mt-0 border-t-0 overflow-visible">
-            <div id={'orgSelector'}>{getOrgSelector()}</div>
-            {bottomItems.map((item: NavbarItem, index: number) => {
-              if (item.items) {
-                return <SideBarCollapse setActiveChild={setActiveChild} activeChild={activeChild} item={item} key={item.key} />;
-              } else {
-                return <SideBarItem setActiveChild={setActiveChild} activeChild={activeChild} item={item} key={item.key} />;
-              }
-            })}
-          </FBSidebar.ItemGroup>
-        </FBSidebar.Items>
-      </FBSidebar>
-    );
+      );
+    } else {
+      return (
+        <FBSidebar theme={flowbiteThemeOverride.sidebar} data-testid={'sidebar'}>
+          <div className="flex px-4 self-stretch items-center">
+            <div className="h-6 w-[76px]">
+              <ColdWordmark color={HexColors.white} />
+            </div>
+          </div>
+          <FBSidebar.Items className="gap-2 mb-auto">
+            <FBSidebar.ItemGroup className="space-y-2 border-t pt-8 first:mt-0 first:border-t-0 first:pt-0 mt-0 overflow-visible flex-grow">
+              {topItems.map((item: NavbarItem, index: number) => {
+                if (item.items) {
+                  return <SideBarCollapse setActiveItem={setActiveItem} activeItem={activeItem} item={item} key={item.key} expanded={expanded} />;
+                } else {
+                  return <SideBarItem setActiveItem={setActiveItem} activeItem={activeItem} item={item} key={item.key} expanded={expanded} />;
+                }
+              })}
+            </FBSidebar.ItemGroup>
+          </FBSidebar.Items>
+          <FBSidebar.Items className="gap-2">
+            <FBSidebar.ItemGroup className="mt-0 border-t-0 overflow-visible">
+              <div id={'orgSelector'} className={'w-full p-4'}>
+                {getOrgSelector()}
+              </div>
+              {bottomItems.map((item: NavbarItem, index: number) => {
+                if (item.items) {
+                  return <SideBarCollapse setActiveItem={setActiveItem} activeItem={activeItem} item={item} key={item.key} expanded={expanded} />;
+                } else {
+                  return <SideBarItem setActiveItem={setActiveItem} activeItem={activeItem} item={item} key={item.key} expanded={expanded} />;
+                }
+              })}
+            </FBSidebar.ItemGroup>
+          </FBSidebar.Items>
+        </FBSidebar>
+      );
+    }
   } else {
     return <div></div>;
   }

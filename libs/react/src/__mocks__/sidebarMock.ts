@@ -74,7 +74,7 @@ export function getSidebarMock() {
             {
               key: 'settings_user_key',
               label: 'Users',
-              route: '/settings/user',
+              route: '/settings/users',
             },
           ],
           label: 'Settings',

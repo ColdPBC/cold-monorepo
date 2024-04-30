@@ -27,6 +27,7 @@ import {
   ColdScoreIcon,
   ColdSettingsIcon,
   ColdSmallCheckBoxIcon,
+  ColdSwitchIcon,
   ColdTeamMembersIcon,
   PlusIcon,
   SubtractIcon,
@@ -93,6 +94,8 @@ export const ColdIcon = (props: IconProps) => {
       return <ColdFilledDocumentUploadIcon {...props} />;
     case IconNames.ColdInvertedCheckmarkIcon:
       return <ColdInvertedCheckmarkIcon {...props} />;
+    case IconNames.ColdSwitchIcon:
+      return <ColdSwitchIcon {...props} />;
     default:
     case IconNames.ColdSettingsIcon:
       return <ColdSettingsIcon {...props} />;

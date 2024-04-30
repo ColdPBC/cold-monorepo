@@ -162,7 +162,23 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
     // Filter out the matches that have a score lower than the minimum score
     const qualifyingDocs = matches.filter(m => m.score && m.score > minScore);
 
-    this.logger.info('Retrieved docs from index', qualifyingDocs);
+    if (!qualifyingDocs) {
+      this.logger.info('No qualifying docs found', {
+        message,
+        docs: qualifyingDocs,
+        topk: 5,
+        namespace,
+        index: indexDetails.indexName,
+      });
+    } else {
+      this.logger.info('Retrieved docs from index', {
+        message,
+        docs: qualifyingDocs,
+        topK: 5,
+        namespace,
+        index: indexDetails.indexName,
+      });
+    }
 
     if (!getOnlyText) {
       return qualifyingDocs;
