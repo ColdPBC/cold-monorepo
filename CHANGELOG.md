@@ -1,3 +1,10 @@
+# [1.213.0-cold-771.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.212.1...v1.213.0-cold-771.1) (2024-04-30)
+
+
+### Features
+
+* Update compliance database schema and seeds ([0ac9390](https://github.com/ColdPBC/cold-monorepo/commit/0ac9390e506ca9e65522e112e32d8a6d5d08b70d))
+
 ## [1.212.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.212.0...v1.212.1) (2024-04-30)
 
 
