@@ -120,18 +120,23 @@ export class ChatService extends BaseWorker implements OnModuleInit {
     });
     this.prompts = await new PromptsService(this.darkly, 'chat', organization, this.prisma).initialize();
 
-    if (typeof question !== 'string') {
-      return await this.askSurveyQuestion(question, company_name, user);
-    }
-
-    const start = new Date();
-
     const session = (await this.fp.createSession({
-      question: question,
       organization: company_name,
       user: user.coldclimate_claims.email,
       survey: 'chat',
     })) as FPSession;
+
+    const vectorSess = (await this.fp.createSession({
+      organization: company_name,
+      user: user.coldclimate_claims.email,
+      survey: 'chat',
+    })) as FPSession;
+
+    if (typeof question !== 'string') {
+      return await this.askSurveyQuestion(question, company_name, user, session, vectorSess);
+    }
+
+    const start = new Date();
 
     let messages = (await this.cache.get(`openai:thread:${company_name}:${user.coldclimate_claims.email}`)) as ChatCompletionMessageParam[];
 
@@ -217,7 +222,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
     // Save the thread to the cache
     await this.cache.set(`openai:thread:${company_name}:${user.coldclimate_claims.email}`, messages, { ttl: 60 * 60 * 24 });
 
-    this.logger.info(`${ai_response.answer !== 'undefined' ? '✅ Answered' : '❌ Did NOT Answer'}`, {
+    this.logger.info(`${ai_response.answer !== undefined ? '✅ Answered' : '❌ Did NOT Answer'}`, {
       pinecone_query: rephrased_question,
       document_content: context,
       prompt: question,
