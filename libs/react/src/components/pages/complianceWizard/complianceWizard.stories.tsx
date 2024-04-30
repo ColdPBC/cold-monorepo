@@ -12,7 +12,7 @@ const meta: Meta<typeof ComplianceWizard> = {
   parameters: {
     launchdarkly: {
       flags: {
-        showNewCompliancePageHomeCold671: false,
+        showNewCompliancePageHomeCold671: true,
       },
     },
   },
