@@ -3,6 +3,7 @@ import { Span } from 'nestjs-ddtrace';
 import { BaseWorker, CacheService, Cuid2Generator, DarklyService, MqttService, PrismaService } from '@coldpbc/nest';
 import { ComplianceDefinition, OrgCompliance } from './compliance_definition_schema';
 import { EventService } from '../../utilities/events/event.service';
+import { compliance_definitions } from '@prisma/client';
 
 @Span()
 @Global()
@@ -129,7 +130,9 @@ export class ComplianceDefinitionService extends BaseWorker {
       }
 
       complianceDefinition.id = new Cuid2Generator('compdef').scopedId;
+
       const response = await this.prisma.compliance_definitions.create({
+        // @ts-expect-error - version, order and urls are in the schema
         data: complianceDefinition,
       });
 
@@ -142,7 +145,7 @@ export class ComplianceDefinitionService extends BaseWorker {
 
       this.logger.info('created compliance definition', response);
 
-      return response as ComplianceDefinition;
+      return response as unknown as ComplianceDefinition;
     } catch (e) {
       this.metrics.increment('cold.api.surveys.create', this.tags);
       this.mqtt.publishMQTT('public', {
@@ -239,7 +242,7 @@ export class ComplianceDefinitionService extends BaseWorker {
    * This action returns all compliance definitions
    * @param bpc
    */
-  async findAll(bpc?: boolean): Promise<ComplianceDefinition[]> {
+  async findAll(bpc?: boolean): Promise<compliance_definitions[]> {
     if (!bpc) {
       /*const cached = await this.cache.get('compliance_definitions');
       if (cached) {
@@ -247,7 +250,7 @@ export class ComplianceDefinitionService extends BaseWorker {
       }*/
     }
 
-    const definitions = (await this.prisma.compliance_definitions.findMany()) as ComplianceDefinition[];
+    const definitions = await this.prisma.compliance_definitions.findMany();
 
     if (!definitions || definitions.length == 0) {
       throw new NotFoundException(`Unable to find any compliance definitions`);
