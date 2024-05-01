@@ -1,3 +1,16 @@
+# [1.215.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.214.0...v1.215.0) (2024-05-01)
+
+
+### Bug Fixes
+
+* some minor compliance model changes ([2aef043](https://github.com/ColdPBC/cold-monorepo/commit/2aef043b8143b6f10665344b803f3fec467b0e53))
+* Update compliance schema and related migrations ([c0977b4](https://github.com/ColdPBC/cold-monorepo/commit/c0977b42edfb4f3bb97688fe43442c10b339d1e8))
+
+
+### Features
+
+* add new compliance models ([575cbf7](https://github.com/ColdPBC/cold-monorepo/commit/575cbf76920178798add09b3cb742b6a12827845))
+
 # [1.214.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.213.0...v1.214.0) (2024-04-30)
 
 

@@ -93,7 +93,7 @@ This library was generated with [﻿Nx](https://nx.dev/)
 
 New Compliance Model
 
-![Compliance Model](undefined "Compliance Model")
+![Compliance Model](/.eraser/CzeWUNz6DAOtIieYA2FN___GrwOoj6dUzMlRteWLWVhtaKTBL12___---figure---uVtaW1jVIMVmwwZgjE7XM---figure---lWQ-c1aJ_Gw-1wnpOFfkfQ.png "Compliance Model")
 
 
 
