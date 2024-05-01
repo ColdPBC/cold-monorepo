@@ -1,19 +1,11 @@
-/*
-  Warnings:
 
-  - Added the required column `custom` to the `compliance_definitions` table without a default value. This is not possible if the table is not empty.
-  - Added the required column `image_url` to the `compliance_definitions` table without a default value. This is not possible if the table is not empty.
-  - Added the required column `metadata` to the `compliance_definitions` table without a default value. This is not possible if the table is not empty.
-  - Added the required column `order` to the `compliance_definitions` table without a default value. This is not possible if the table is not empty.
-  - Added the required column `version` to the `compliance_definitions` table without a default value. This is not possible if the table is not empty.
-
-*/
 -- AlterTable
-ALTER TABLE "compliance_definitions" ADD COLUMN     "custom" BOOLEAN NOT NULL,
-ADD COLUMN     "image_url" TEXT NOT NULL,
-ADD COLUMN     "metadata" JSONB NOT NULL,
-ADD COLUMN     "order" INTEGER NOT NULL,
-ADD COLUMN     "version" INTEGER NOT NULL;
+ALTER TABLE "compliance_definitions"
+ADD COLUMN     "custom" BOOLEAN NULL,
+ADD COLUMN     "image_url" TEXT NULL,
+ADD COLUMN     "metadata" JSONB NULL,
+ADD COLUMN     "order" INTEGER NULL,
+ADD COLUMN     "version" INTEGER NULL;
 
 -- CreateTable
 CREATE TABLE "organization_compliance" (
