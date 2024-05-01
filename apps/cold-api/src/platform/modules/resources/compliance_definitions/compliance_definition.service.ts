@@ -46,7 +46,7 @@ export class ComplianceDefinitionService extends BaseWorker {
       throw new NotFoundException(`${compliance_name} compliance definition does not exist`);
     }
 
-    const compliance = await this.prisma.organization_compliances.findFirst({
+    const compliance = await this.prisma.organization_compliances_old.findFirst({
       where: {
         organization_id: orgId,
         compliance_id: compliance_definition.id,
@@ -132,7 +132,6 @@ export class ComplianceDefinitionService extends BaseWorker {
       complianceDefinition.id = new Cuid2Generator('compdef').scopedId;
 
       const response = await this.prisma.compliance_definitions.create({
-        // @ts-expect-error - version, order and urls are in the schema
         data: complianceDefinition,
       });
 
@@ -186,7 +185,7 @@ export class ComplianceDefinitionService extends BaseWorker {
         data['surveys_override'] = req.body.surveys_override;
       }
 
-      const compliance = await this.prisma.organization_compliances.upsert({
+      const compliance = await this.prisma.organization_compliances_old.upsert({
         where: {
           orgKeyCompKey: {
             organization_id: orgId,
@@ -276,7 +275,7 @@ export class ComplianceDefinitionService extends BaseWorker {
       }*/
     }
 
-    const orgCompliances = (await this.prisma.organization_compliances.findMany({
+    const orgCompliances = (await this.prisma.organization_compliances_old.findMany({
       where: {
         organization_id: orgId,
       },
@@ -458,7 +457,7 @@ export class ComplianceDefinitionService extends BaseWorker {
     try {
       const def = await this.findOne(name, req, bpc);
 
-      compliance = (await this.prisma.organization_compliances.findFirst({
+      compliance = (await this.prisma.organization_compliances_old.findFirst({
         where: {
           organization_id: orgId,
           compliance_id: def.id,
@@ -469,7 +468,7 @@ export class ComplianceDefinitionService extends BaseWorker {
         throw new NotFoundException(`Unable to find compliance definition with name: ${name} and org: ${orgId}`);
       }
 
-      await this.prisma.organization_compliances.delete({ where: { id: compliance.id } });
+      await this.prisma.organization_compliances_old.delete({ where: { id: compliance.id } });
 
       this.mqtt.publishMQTT('public', {
         swr_key: url,

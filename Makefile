@@ -6,10 +6,31 @@ NC='\033[0m' # No Color
 YELLOW='\033[33;5m'
 GREEN='\033[0;32m'
 
+DB_USER=postgres
+DB_PASSWORD=postgres
+DB_NAME=colddb
+DB_HOST=localhost
+DB_PORT=5432
+OUTPUT_FILE=development_data.sql
 # This single command does everything to get the environment up and running
 # WILL DELETE ALL REPOS AND RECREATE THEM; DO NOT RUN UNLESS YOU HAVE NO CHANGES TO PUSH
 initialize: build
 
+backupDB:
+	@echo ${YELLOW}Backing up DB...${NC} ;
+	@echo ________________________________ ;
+	@export PGPASSWORD=$(DB_PASSWORD) ;
+	@pg_dump -h $(DB_HOST) -U $(DB_USER) -d $(DB_NAME) -f $(OUTPUT_FILE) --data-only -T _prisma_migrations -T category_definitions -T component_definitions -T emission_scopes -T news -T policy_definitions ;
+	@echo ${GREEN} DONE! ${NC} ;
+	@echo "" ;
+
+restoreDB:
+	@echo ${YELLOW}Restoring DB...${NC} ;
+	@echo ________________________________ ;
+	@export PGPASSWORD=$(DB_PASSWORD) ;
+	@psql -h $(DB_HOST) -U $(DB_USER) -d $(DB_NAME) -f $(OUTPUT_FILE) ;
+	@echo ${GREEN} DONE! ${NC} ;
+	@echo "" ;
 
 # Builds Docker Containers
 login:
