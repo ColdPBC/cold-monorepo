@@ -62,12 +62,21 @@ export const ComplianceWizardLair = (props: PropsWithChildren<ComplianceWizardLa
 
   const compliance = data['compliances'].find((compliance: Compliance) => compliance.name === name);
 
+  const getComplianceLogo = () => {
+    let className = 'w-[120px] h-[120px]';
+    if (ldFlags.showNewCompliancePageHomeCold671) {
+      className += ' invert';
+    }
+
+    return <img src={compliance?.logo_url} className={className} alt="compliance" />;
+  };
+
   return (
     <div className={'text-tc-primary flex flex-col space-y-10 justify-center items-center w-full'}>
       <div className={'flex flex-row justify-between w-full'}>
         <div
           className={twMerge('w-[138px] h-[138px] flex justify-center items-center rounded-2xl', ldFlags.showNewCompliancePageHomeCold671 ? 'bg-gray-30' : 'bg-cold-starkWhite')}>
-          <img src={`${compliance?.logo_url}`} className={ldFlags.showNewCompliancePageHomeCold671 ? 'w-[120px] h-[120px]' : 'w-[80px] h-[80px]'} alt="compliance" />
+          {getComplianceLogo()}
         </div>
         <div className={'flex flex-row justify-end items-center gap-x-4'}>
           <BaseButton

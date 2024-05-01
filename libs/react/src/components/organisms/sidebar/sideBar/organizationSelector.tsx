@@ -5,11 +5,11 @@ import { axiosFetcher } from '@coldpbc/fetchers';
 import { ErrorType, IconNames } from '@coldpbc/enums';
 import React, { useEffect, useState } from 'react';
 import useSWR from 'swr';
-import { ChevronDownIcon } from '@heroicons/react/20/solid';
-import { flowbiteThemeOverride } from '@coldpbc/themes';
-import { Dropdown } from 'flowbite-react';
 import { find } from 'lodash';
 import { useFlags } from 'launchdarkly-react-client-sdk';
+import { Dropdown } from 'flowbite-react';
+import { flowbiteThemeOverride } from '@coldpbc/themes';
+import { ChevronDownIcon } from '@heroicons/react/20/solid';
 
 const _OrganizationSelector = ({ sidebarExpanded }: { sidebarExpanded?: boolean }) => {
   const ldFlags = useFlags();
@@ -60,13 +60,14 @@ const _OrganizationSelector = ({ sidebarExpanded }: { sidebarExpanded?: boolean 
       <Dropdown
         inline={true}
         label={
-          <span className={'w-full p-4 text-tc-primary text-start text-xs flex items-center border border-bgc-accent rounded-lg truncate'}>
-            {selectedOrg.display_name} <ChevronDownIcon className="w-[18px] ml-2" />
+          <span className={'w-full p-4 flex flex-row justify-between items-center border border-bgc-accent rounded-lg'}>
+            <div className={'w-auto text-tc-primary text-start text-xs truncate'}>{selectedOrg.display_name}</div>
+            <ChevronDownIcon className="w-[18px] ml-2 text-tc-primary" />
           </span>
         }
         arrowIcon={false}
         theme={flowbiteThemeOverride.dropdown}
-        className={'w-[175px] h-fit max-h-[200px] overflow-y-auto truncate transition-none duration-0'}>
+        className={'h-fit max-h-[200px] overflow-y-auto scrollbar-hide overflow-x-visible text-ellipsis transition-none duration-0'}>
         {data.map((org: any) => (
           <Dropdown.Item
             key={org.id}
@@ -74,7 +75,7 @@ const _OrganizationSelector = ({ sidebarExpanded }: { sidebarExpanded?: boolean 
               onOrgSelect(org);
             }}
             theme={flowbiteThemeOverride.dropdown.floating.item}
-            className={'text-start text-xs truncate'}>
+            className={'text-start text-xs text-ellipsis'}>
             {org.display_name}
           </Dropdown.Item>
         ))}
