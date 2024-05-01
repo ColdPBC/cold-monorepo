@@ -33,7 +33,7 @@ export class Cuid2Generator {
   }
 
   setPrefix(prefix: string) {
-    if (prefix.length < 3) throw new Error('Prefix must at least 3 characters');
+    if (prefix.length < 2) throw new Error('Prefix must at least 3 characters');
     this.prefix = prefix;
     this.generate(this.prefix);
 
