@@ -1,11 +1,36 @@
-# [1.213.0-cold-771.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.212.1...v1.213.0-cold-771.1) (2024-04-30)
+
+# [1.215.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.214.0...v1.215.0) (2024-05-01)
+
+
+### Bug Fixes
+
+* some minor compliance model changes ([2aef043](https://github.com/ColdPBC/cold-monorepo/commit/2aef043b8143b6f10665344b803f3fec467b0e53))
+* Update compliance schema and related migrations ([c0977b4](https://github.com/ColdPBC/cold-monorepo/commit/c0977b42edfb4f3bb97688fe43442c10b339d1e8))
 
 
 ### Features
 
-* Update compliance database schema and seeds ([0ac9390](https://github.com/ColdPBC/cold-monorepo/commit/0ac9390e506ca9e65522e112e32d8a6d5d08b70d))
+* add new compliance models ([575cbf7](https://github.com/ColdPBC/cold-monorepo/commit/575cbf76920178798add09b3cb742b6a12827845))
+
+# [1.214.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.213.0...v1.214.0) (2024-04-30)
+
+
+### Features
+
+* update org selector styling ([22a84ff](https://github.com/ColdPBC/cold-monorepo/commit/22a84fffcfcdd5e4dd69fb25b31596ab14db513d))
+
+# [1.213.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.212.1...v1.213.0) (2024-04-30)
+
+
+### Features
+
+* change to light when flag is turned on ([ffc5dea](https://github.com/ColdPBC/cold-monorepo/commit/ffc5dea2c9cdc61a2403d4281f1c0adffe68a2e4))
+* remove elses ([88ebd3d](https://github.com/ColdPBC/cold-monorepo/commit/88ebd3dff1ca5d9a7f4947d3402bc89788f22a9a))
+* use new dark and light compliance logos ([3f839f7](https://github.com/ColdPBC/cold-monorepo/commit/3f839f7141c90d153ffa187c6189d976394419bc))
+
 
 ## [1.212.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.212.0...v1.212.1) (2024-04-30)
+
 
 
 ### Bug Fixes
