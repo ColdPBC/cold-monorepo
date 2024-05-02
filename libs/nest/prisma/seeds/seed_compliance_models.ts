@@ -134,7 +134,7 @@ export async function seedComplianceModels() {
               placeholder: questionValue.placeholder,
               rubric: questionValue.rubric,
               options: questionValue.options,
-              corresponding_question: questionValue.corresponding_question,
+              coresponding_question: questionValue.coresponding_question,
               dependency_expression: questionValue?.dependency?.expression,
               question_summary: questionValue.question_summary,
               additional_context: questionValue.additional_context,
@@ -171,7 +171,7 @@ export async function seedComplianceModels() {
 
   console.log('Getting Organization Compliances...');
 
-  const org_compliances = await prisma.organization_compliances.findMany();
+  const org_compliances = await prisma.organization_compliances_old.findMany();
   for (const org_compliance of org_compliances) {
     const compliance_def = await prisma.compliance_definitions.findUnique({
       where: {
