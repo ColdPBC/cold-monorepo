@@ -147,7 +147,7 @@ model policy_data {
   /// @zod.custom.use(z.string().email())
   email             String
   /// @zod.custom.use(z.number().int().positive())
-  id                Int
+  id                Int                @id
   /// @DtoUpdateHidden
   /// @zod.custom.use(z.date().optional())
   created_at        DateTime           @default(now())
@@ -284,35 +284,35 @@ model category_data {
 /// @actions
 model organizations {
   /// @zod.custom.use(z.string().uuid())
-  id                       String                         @id
-  name                     String                         @unique
-  enabled_connections      Json
-  display_name             String
-  branding                 Json?
-  phone                    String?
-  website                  String?
+  id                           String                         @id
+  name                         String                         @unique
+  enabled_connections          Json
+  display_name                 String
+  branding                     Json?
+  phone                        String?
+  website                      String?
   /// @zod.custom.use(z.string().email())
-  email                    String?
+  email                        String?
   /// @DtoUpdateHidden
   /// @zod.custom.use(z.date().optional())
-  created_at               DateTime                       @default(now())
+  created_at                   DateTime                       @default(now())
   /// @DtoUpdateHidden
   /// @DtoCreateHidden
   /// @DtoReadOnly
   /// @zod.custom.use(z.date().optional())
-  updated_at               DateTime                       @updatedAt
-  isTest                   Boolean                        @default(false)
-  actions                  actions[]
-  category_data            category_data[]
-  integrations             integrations[]
-  facilities               organization_facilities[]
-  organization_files       organization_files[]
-  survey_data              survey_data[]
-  utility_bills            utility_bills[]
-  vector_records           vector_records[]
-  survey_status            survey_status[]
-  organization_compliance  organization_compliance[]
-  organization_compliances organization_compliances_old[] // remove this after migrations
+  updated_at                   DateTime                       @updatedAt
+  isTest                       Boolean                        @default(false)
+  actions                      actions[]
+  category_data                category_data[]
+  integrations                 integrations[]
+  facilities                   organization_facilities[]
+  organization_files           organization_files[]
+  survey_data                  survey_data[]
+  utility_bills                utility_bills[]
+  vector_records               vector_records[]
+  survey_status                survey_status[]
+  organization_compliance      organization_compliance[]
+  organization_compliances_old organization_compliances_old[] // remove this after migrations
 }
 
 /// @namespace Organization_Facilities
@@ -591,7 +591,7 @@ model compliance_section_groups {
   metadata                   Json?
   created_at                 DateTime               @default(now())
   updated_at                 DateTime               @updatedAt
-  compliance_definition      compliance_definitions @relation(fields: [compliance_definition_name], references: [name])
+  compliance_definition      compliance_definitions @relation(fields: [compliance_definition_name], references: [name], onDelete: Cascade)
   compliance_sections        compliance_sections[]
 
   @@unique([compliance_definition_name, title], name: "compDefNameTitle")
@@ -607,9 +607,9 @@ model compliance_sections {
   created_at                  DateTime                  @default(now())
   updated_at                  DateTime                  @updatedAt
   compliance_section_group_id String
-  section_group               compliance_section_groups @relation(fields: [compliance_section_group_id], references: [id])
+  section_group               compliance_section_groups @relation(fields: [compliance_section_group_id], references: [id], onDelete: Cascade)
   compliance_questions        compliance_questions[]
-  compliance_definition       compliance_definitions    @relation(fields: [compliance_definition_name], references: [name])
+  compliance_definition       compliance_definitions    @relation(fields: [compliance_definition_name], references: [name], onDelete: Cascade)
   compliance_definition_name  String
 
   @@unique([compliance_section_group_id, key], name: "compSecGroupKey")
@@ -632,7 +632,7 @@ model compliance_questions {
   created_at                           DateTime                                     @default(now())
   updated_at                           DateTime                                     @updatedAt
   compliance_section_id                String
-  compliance_section                   compliance_sections                          @relation(fields: [compliance_section_id], references: [id])
+  compliance_section                   compliance_sections                          @relation(fields: [compliance_section_id], references: [id], onDelete: Cascade)
   notes                                organization_compliance_notes[]
   question_bookmarks                   organization_compliance_question_bookmarks[]
   responses                            organization_compliance_responses[]
