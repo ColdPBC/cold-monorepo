@@ -1,3 +1,30 @@
+# [1.217.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.216.1...v1.217.0) (2024-05-02)
+
+
+### Bug Fixes
+
+* add ComplianceDefinition entity in compliance_definitions module ([27fc40a](https://github.com/ColdPBC/cold-monorepo/commit/27fc40a2b93f8654739687ecc6e6206bd3417fb9))
+* enhance MQTT service and add MQTT consumer ([087dce5](https://github.com/ColdPBC/cold-monorepo/commit/087dce5dc9fa6d006e4dbf524cb486d63dccb654))
+* update logo URL for 'b_corp_2024' in compliance definitions ([d8026dc](https://github.com/ColdPBC/cold-monorepo/commit/d8026dcbbbff75b386253a84e2b34da65a449a9a))
+
+
+### Features
+
+* add compliance data retrieval for organizations ([4c05575](https://github.com/ColdPBC/cold-monorepo/commit/4c055754dabb5a04f3884c8eb813ddc7ea90af53))
+* add compliance sections components to API ([2c16396](https://github.com/ColdPBC/cold-monorepo/commit/2c16396a6ff6e01fc0f9e8e58992c70846725b68))
+* add compliance_questions module ([779e879](https://github.com/ColdPBC/cold-monorepo/commit/779e879cda55d16ef6bb046e11366c2bf642778d))
+* add compliance_section_groups module, service, controller and entity. ([3d47fd4](https://github.com/ColdPBC/cold-monorepo/commit/3d47fd49ab14dbd0854300599b0b5d2f19c5fd99))
+* add organization compliance module, service, and entity ([5a3c282](https://github.com/ColdPBC/cold-monorepo/commit/5a3c282314ba20e126e1e86850bab6268071000e))
+* add organization_compliance_ai_responses module, service, and controller ([1737b65](https://github.com/ColdPBC/cold-monorepo/commit/1737b65d68d7ccfe1e28e8530f829fd7a6774ee6))
+* add organization_compliance_ai_responses module, service, and controller ([ddd7112](https://github.com/ColdPBC/cold-monorepo/commit/ddd7112ba2b992ef0d896d08831153470738acd5))
+* add organization_compliance_bookmarks module, service, entity and controller ([c31e1e0](https://github.com/ColdPBC/cold-monorepo/commit/c31e1e04b72b0239641f0f1a15775c5ebd0461a8))
+* add organization_compliance_note_link module, controller, service, and entity ([861de65](https://github.com/ColdPBC/cold-monorepo/commit/861de650c248c32e883202a454c7e06ad347f263))
+* add organization_compliance_notes module, service, entity and controller ([3952bbe](https://github.com/ColdPBC/cold-monorepo/commit/3952bbef0f219a560fc96e33f8afd8c6a4752c92))
+* add organization_compliance_notes module, service, entity and controller ([b94dd72](https://github.com/ColdPBC/cold-monorepo/commit/b94dd72df500141a0baa5b8ee3a590b55088f691))
+* add organization_compliance_response module, service, entity and controller ([cadb453](https://github.com/ColdPBC/cold-monorepo/commit/cadb45378528f52a58554206b90a29aaff699833))
+* add organization_compliance_statuses module, controller, service, and entity ([44d642f](https://github.com/ColdPBC/cold-monorepo/commit/44d642fb6f185e020bbab78bf0eebf5557278296))
+* add survey injection to compliance service ([ca920bc](https://github.com/ColdPBC/cold-monorepo/commit/ca920bc5e472352d1974dd48c0c73cf9134f4bfa))
+
 ## [1.216.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.216.0...v1.216.1) (2024-05-02)
 
 
