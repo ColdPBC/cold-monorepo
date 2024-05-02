@@ -17,7 +17,7 @@ const complianceDefSeeds = [
   },
   {
     name: 'b_corp_2024',
-    logo_url: 'https://cold-public-assets.s3.amazonaws.com/3rdPartyLogos/compliance_svgs/bcorp_logo.svg',
+    logo_url: ' https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/compliance_svgs/b_corp_logo.svg',
     surveys: ['b_corp_2024'],
     title: 'B Corp',
     metadata: {},
