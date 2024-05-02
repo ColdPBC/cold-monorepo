@@ -109,6 +109,169 @@ export class ComplianceDefinitionService extends BaseWorker {
     });
   }
 
+  async injectSurvey(req, id, survey) {
+    const compliance = await this.prisma.compliance_definitions.findUnique({
+      where: {
+        id: id,
+      },
+    });
+
+    if (!compliance) {
+      throw new NotFoundException(`Compliance with id ${id} does not exist`);
+    }
+
+    if (survey.sections) {
+      for (const [key, value] of Object.entries(survey.sections)) {
+        const sectionKey = key;
+        const sectionValue: any = value;
+
+        const compliance_section_group = await this.prisma.compliance_section_groups.upsert({
+          where: {
+            compDefNameTitle: {
+              compliance_definition_name: compliance.name,
+              title: sectionValue.section_type || compliance.name,
+            },
+          },
+          create: {
+            id: new Cuid2Generator(`csg`).scopedId,
+            order: 0,
+            title: sectionValue.section_type || compliance.name,
+            compliance_definition_name: compliance.name,
+          },
+          update: {
+            title: sectionValue.section_type || compliance.name,
+            compliance_definition_name: compliance.name,
+          },
+        });
+
+        this.logger.log(`created compliance section group: ${sectionValue.title} for ${compliance.name}`, {
+          section_group: compliance_section_group,
+          compliance_definition: compliance,
+        });
+
+        const comp_section = await this.prisma.compliance_sections.upsert({
+          where: {
+            compSecGroupKey: {
+              compliance_section_group_id: compliance_section_group.id,
+              key: sectionKey,
+            },
+          },
+          create: {
+            id: new Cuid2Generator(`cs`).scopedId,
+            key: sectionKey,
+            title: sectionValue.title,
+            order: sectionValue.category_idx as number,
+            dependency_expression: sectionValue?.dependency?.expression,
+            compliance_definition_name: compliance.name,
+            compliance_section_group_id: compliance_section_group.id,
+          },
+          update: {
+            title: sectionValue.title,
+            order: sectionValue.category_idx as number,
+            dependency_expression: sectionValue?.dependency?.expression,
+            compliance_definition_name: compliance.name,
+          },
+        });
+
+        this.logger.log(`created new compliance section: ${key}:${sectionValue.title} for ${compliance.name}`, {
+          section: comp_section,
+          section_group: compliance_section_group,
+          compliance_definition: compliance,
+        });
+
+        for (const [qkey, qvalue] of Object.entries(sectionValue.follow_up)) {
+          const questionKey = qkey;
+          const questionValue: any = qvalue;
+          const questionData = {
+            key: questionKey,
+            order: questionValue.idx as number,
+            prompt: questionValue.prompt,
+            component: questionValue.component,
+            tooltip: questionValue.tooltip,
+            placeholder: questionValue.placeholder,
+            rubric: questionValue.rubric,
+            options: questionValue.options,
+            coresponding_question: questionValue.coresponding_question,
+            dependency_expression: questionValue?.dependency?.expression,
+            question_summary: questionValue.question_summary,
+            additional_context: questionValue.additional_context,
+            compliance_section_id: comp_section.id,
+          };
+
+          if (!Array.isArray(questionValue.options) || questionValue.options.length < 1) {
+            delete questionData.options;
+          }
+
+          const existing_question = await this.prisma.compliance_questions.upsert({
+            where: {
+              compSecKey: {
+                key: questionKey,
+                compliance_section_id: comp_section.id,
+              },
+            },
+            create: {
+              id: new Cuid2Generator(`cq`).scopedId,
+              ...questionData,
+            },
+            update: {
+              ...questionData,
+            },
+          });
+
+          this.logger.log(`created new compliance question: ${questionKey} under ${key} for ${compliance.name}`, {
+            question: existing_question,
+            section: comp_section,
+            section_group: compliance_section_group,
+            compliance_definition: compliance,
+          });
+        }
+      }
+      return this.prisma.compliance_definitions.findUnique({
+        where: {
+          id: id,
+        },
+        include: {
+          compliance_section_groups: {
+            select: {
+              id: true,
+              title: true,
+              order: true,
+              compliance_sections: {
+                select: {
+                  id: true,
+                  key: true,
+                  title: true,
+                  order: true,
+                  dependency_expression: true,
+                  compliance_definition_name: true,
+                  compliance_section_group_id: true,
+                  compliance_questions: {
+                    select: {
+                      id: true,
+                      key: true,
+                      order: true,
+                      prompt: true,
+                      component: true,
+                      tooltip: true,
+                      placeholder: true,
+                      rubric: true,
+                      options: true,
+                      coresponding_question: true,
+                      dependency_expression: true,
+                      question_summary: true,
+                      additional_context: true,
+                      compliance_section_id: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      });
+    }
+  }
+
   /***
    * This action creates a new compliance definition
    * @param req
