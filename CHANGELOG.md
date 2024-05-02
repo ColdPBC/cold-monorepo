@@ -1,3 +1,10 @@
+## [1.216.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.216.0...v1.216.1) (2024-05-02)
+
+
+### Bug Fixes
+
+* Corrected spelling mistake and updated database reference ([0a19962](https://github.com/ColdPBC/cold-monorepo/commit/0a19962d51a95b74fb2b489fb32ab98bc3c3beeb))
+
 # [1.216.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.215.0...v1.216.0) (2024-05-01)
 
 
