@@ -14,6 +14,7 @@ import { FacilitiesModule } from './resources/organizations/facilities/facilitie
 import { ComplianceDefinitionModule } from './resources/compliance_definitions/compliance_definition.module';
 import { OrganizationModule } from './resources/organizations/organization.module';
 import { EventsModule } from './utilities/events/events.module';
+import { ComplianceGateway } from './resources/mqtt/mqtt.consumer';
 
 @Module({})
 export class AppModule {
@@ -43,7 +44,7 @@ export class AppModule {
         FacilitiesModule,
         ComplianceDefinitionModule,
       ],
-      providers: [],
+      providers: [ComplianceGateway],
       exports: [],
     };
   }
