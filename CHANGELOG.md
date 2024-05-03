@@ -1,3 +1,11 @@
+# [1.213.0-COLD-711.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.212.0...v1.213.0-COLD-711.1) (2024-05-03)
+
+
+### Features
+
+* initial work for compliance manager page ([910001e](https://github.com/ColdPBC/cold-monorepo/commit/910001e817292c86a73b30e8ec22cd6296631e27))
+* remove old survey code ([e2a4538](https://github.com/ColdPBC/cold-monorepo/commit/e2a45384bce0a9007da88ee556010cfafff116d1))
+
 # [1.212.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.211.2...v1.212.0) (2024-04-29)
 
 
