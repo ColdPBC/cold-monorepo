@@ -124,7 +124,7 @@ export class Policy_definitionsService extends BaseWorker {
     const { user, url } = req;
     try {
       const policyData: CreatePolicyDataDto = {
-        id: id,
+        policy_id: id,
         email: user?.coldclimate_claims?.email,
         created_at: new Date(),
       };

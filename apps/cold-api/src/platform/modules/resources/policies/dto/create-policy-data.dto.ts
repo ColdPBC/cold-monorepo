@@ -1,5 +1,5 @@
 export class CreatePolicyDataDto {
   email: string;
-  id: number;
+  policy_id: number;
   created_at: Date;
 }

@@ -144,10 +144,11 @@ model policy_definitions {
 /// @describe Policy Definitions are a set of content policies (ie: Privacy & ToS)
 /// @erd policy_definitions
 model policy_data {
+  id                Int                @id @default(autoincrement())
   /// @zod.custom.use(z.string().email())
   email             String
   /// @zod.custom.use(z.number().int().positive())
-  id                Int                @id
+  policy_id         Int
   /// @DtoUpdateHidden
   /// @zod.custom.use(z.date().optional())
   created_at        DateTime           @default(now())
@@ -156,7 +157,7 @@ model policy_data {
   /// @DtoReadOnly
   /// @zod.custom.use(z.date().optional())
   updated_at        DateTime           @updatedAt
-  policy_definition policy_definitions @relation(fields: [id], references: [id], onDelete: Cascade)
+  policy_definition policy_definitions @relation(fields: [policy_id], references: [id], onDelete: Cascade)
 
   @@unique([email, id])
 }
