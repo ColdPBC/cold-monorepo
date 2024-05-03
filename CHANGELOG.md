@@ -1,3 +1,10 @@
+## [1.217.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.217.0...v1.217.1) (2024-05-03)
+
+
+### Bug Fixes
+
+* update `policy_data` table structure and related code changes ([6563a4b](https://github.com/ColdPBC/cold-monorepo/commit/6563a4b0137b9528f85b7469e4ef6f3ceb080960))
+
 # [1.217.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.216.1...v1.217.0) (2024-05-02)
 
 
