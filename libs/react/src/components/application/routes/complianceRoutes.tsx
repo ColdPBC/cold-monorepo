@@ -1,10 +1,6 @@
 import { Route } from 'react-router-dom';
-import { CompliancePage } from '@coldpbc/components';
+import { ComplianceManager } from '@coldpbc/components';
 
 export const ComplianceRoutes = () => {
-  return (
-    <Route path={'/compliance'}>
-      <Route index element={<CompliancePage />} />
-    </Route>
-  );
+  return <Route path={'/compliance/:name'} element={<ComplianceManager />} />;
 };

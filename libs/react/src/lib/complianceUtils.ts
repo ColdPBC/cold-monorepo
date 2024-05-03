@@ -1,5 +1,6 @@
 import { SurveyPayloadType } from '@coldpbc/interfaces';
 import { forOwn, isUndefined } from 'lodash';
+import { HexColors } from '@coldpbc/themes';
 
 export const getComplianceProgressForSurvey = (survey: SurveyPayloadType) => {
   let totalQuestions = 0;
@@ -29,4 +30,11 @@ export const getComplianceProgressForSurvey = (survey: SurveyPayloadType) => {
     percentageAnswered: Math.round((answeredQuestions / totalQuestions) * 100),
     percentageAIAnswered: Math.round((aiAnsweredQuestions / totalQuestions) * 100),
   };
+};
+
+export const ComplianceProgressStatusColor = {
+  not_started: HexColors.gray['50'],
+  needs_review: HexColors.yellow['200'],
+  bookmarked: HexColors.lightblue['200'],
+  complete: HexColors.green['200'],
 };

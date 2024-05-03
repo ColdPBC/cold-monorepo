@@ -12,3 +12,19 @@ export enum CompliancePageFilter {
   active = 'Active',
   notActive = 'Not Active',
 }
+
+export enum ComplianceManagerStatus {
+  notActivated = 'notActivated',
+  activated = 'activated',
+  upload = 'upload',
+  startedAi = 'startedAI',
+  completedQuestions = 'completedQuestions',
+  submitted = 'submitted',
+}
+
+export enum ComplianceProgressStatus {
+  not_started = 'not_started',
+  needs_review = 'needs_review',
+  bookmarked = 'bookmarked',
+  complete = 'complete',
+}

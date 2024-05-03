@@ -1145,7 +1145,7 @@ export const flowbiteThemeOverride: FlowbiteTheme = {
     },
   },
   tooltip: {
-    target: 'w-fit',
+    target: 'w-full',
     animation: 'transition-opacity',
     arrow: {
       base: 'absolute z-10 h-2 w-2 rotate-45',

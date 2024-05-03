@@ -1,6 +1,7 @@
 import { ComplianceSurveyPayloadType, ComplianceSurveyProgressQuestionType, ComplianceSurveySectionProgressType, SurveyPayloadType, SurveySectionType } from '@coldpbc/interfaces';
 import { forEach, forOwn } from 'lodash';
 import { addDays } from 'date-fns';
+import { ComplianceProgressStatus } from '@coldpbc/enums';
 
 export const getSurveyFormDataByName = (name: string): SurveyPayloadType | ComplianceSurveyPayloadType | undefined => {
   const surveys = getSurveysMock();
@@ -15225,4 +15226,88 @@ export function getAssessmentSurveyWithProgressMock(name: string): ComplianceSur
         },
       };
   }
+}
+
+export function getComplianceManagerSectionGroupMock() {
+  return {
+    title: 'Practices',
+    sections: [
+      {
+        title: 'Flame Retardant (FR) Chemicals',
+        questions: [
+          {
+            prompt: 'Did your company advocate and/or engage in climate action in 2023?',
+            status: ComplianceProgressStatus.not_started,
+          },
+          {
+            prompt: 'What actions did your company take to advocate and/or engage?',
+            status: ComplianceProgressStatus.complete,
+          },
+          {
+            prompt: "Indicate your company's public exposure on climate action",
+            status: ComplianceProgressStatus.needs_review,
+          },
+          {
+            prompt: "Do you have any additional details to share publicly about your company's efforts to\naddress climate change?",
+            status: ComplianceProgressStatus.needs_review,
+          },
+          {
+            prompt: 'Please share any information on the types of climate policy and advocacy information\nand/or support that would be helpful for your organization:',
+            status: ComplianceProgressStatus.bookmarked,
+          },
+        ],
+      },
+      {
+        title: 'Brand Information',
+        questions: [
+          {
+            prompt: 'Please share the following contact information: Name, Company, Email Address, Title',
+            status: ComplianceProgressStatus.complete,
+          },
+          {
+            prompt: 'Please describe your company type.',
+            status: ComplianceProgressStatus.complete,
+          },
+          {
+            prompt: 'Please select product categories in which your company competes.',
+            status: ComplianceProgressStatus.complete,
+          },
+        ],
+      },
+      {
+        title: 'Emissions Footprint',
+        questions: [
+          {
+            prompt: 'Please indicate your progress in measuring 2023 scope 1 and scope 2 emissions.',
+            status: ComplianceProgressStatus.not_started,
+          },
+          {
+            prompt: 'Please indicate your progress in measuring 2023 scope 3 emissions.',
+            status: ComplianceProgressStatus.complete,
+          },
+          {
+            prompt: 'How does your company verify GHG measurements?',
+            status: ComplianceProgressStatus.needs_review,
+          },
+          {
+            prompt:
+              "Please indicate whether your company uses spend-based or material-based emissions factors for GHG emissions related to your company's products (and materials)",
+            status: ComplianceProgressStatus.needs_review,
+          },
+          {
+            prompt: 'Our company’s most recent quantified GHG measurement for Scope 1 Emissions:',
+            status: ComplianceProgressStatus.not_started,
+          },
+          {
+            prompt: 'Our company’s most recent quantified GHG measurement for Scope 2 Emissions:',
+            status: ComplianceProgressStatus.bookmarked,
+          },
+          {
+            prompt: 'Our company’s most recent quantified GHG measurement for Scope 3 Emissions:',
+            status: ComplianceProgressStatus.not_started,
+          },
+        ],
+      },
+    ],
+  };
 }
