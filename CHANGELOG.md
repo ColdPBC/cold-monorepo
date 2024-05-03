@@ -1,3 +1,10 @@
+## [1.217.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.217.1...v1.217.2) (2024-05-03)
+
+
+### Bug Fixes
+
+* Remove `created_at` and `updated_at` from seed_compliance_definitions ([2c03df1](https://github.com/ColdPBC/cold-monorepo/commit/2c03df1d5933f09dd25a791e6208f297e360484b))
+
 ## [1.217.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.217.0...v1.217.1) (2024-05-03)
 
 
