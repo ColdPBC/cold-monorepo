@@ -1,3 +1,10 @@
+# [1.218.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.217.2...v1.218.0) (2024-05-07)
+
+
+### Features
+
+* removed change climate disclaimer ([03b51b1](https://github.com/ColdPBC/cold-monorepo/commit/03b51b19d332533ad506f5818319ffeec1fdbb5a))
+
 ## [1.217.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.217.1...v1.217.2) (2024-05-03)
 
 
