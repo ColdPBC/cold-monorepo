@@ -11,7 +11,7 @@ export class RoleService extends BaseWorker {
   options: AxiosRequestConfig<any>;
   httpService: HttpService;
 
-  constructor(readonly cache: CacheService, readonly utilService: Auth0TokenService, private readonly mqtt: MqttService) {
+  constructor(readonly cache: CacheService, readonly utilService: Auth0TokenService, readonly mqtt: MqttService) {
     super('Auth0OrganizationService');
     this.httpService = new HttpService();
 
