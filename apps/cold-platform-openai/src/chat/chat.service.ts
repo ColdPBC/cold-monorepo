@@ -18,14 +18,14 @@ export class ChatService extends BaseWorker implements OnModuleInit {
   prompts: PromptsService;
 
   constructor(
-    private readonly config: ConfigService,
-    private readonly pc: PineconeService,
-    private readonly prisma: PrismaService,
-    private readonly darkly: DarklyService,
-    private cache: CacheService,
-    @InjectQueue('openai') private queue: Queue,
-    private rabbit: ColdRabbitService,
-    private fp: FreeplayService,
+    readonly config: ConfigService,
+    readonly pc: PineconeService,
+    readonly prisma: PrismaService,
+    readonly darkly: DarklyService,
+    readonly cache: CacheService,
+    @InjectQueue('openai') readonly queue: Queue,
+    readonly rabbit: ColdRabbitService,
+    readonly fp: FreeplayService,
   ) {
     super(ChatService.name);
     this.openAIapiKey = this.config.getOrThrow('OPENAI_API_KEY');
