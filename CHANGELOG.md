@@ -1,3 +1,10 @@
+# [1.219.0-cold-789.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.219.0-cold-789.1...v1.219.0-cold-789.2) (2024-05-08)
+
+
+### Features
+
+* Update service exports and remove MQTT Consumer ([10786ef](https://github.com/ColdPBC/cold-monorepo/commit/10786ef6b29e2a0a9bb7eaf7ad93dc4dae2c9e9b))
+
 # [1.219.0-cold-789.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.218.0...v1.219.0-cold-789.1) (2024-05-08)
 
 
