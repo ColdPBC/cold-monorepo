@@ -21,15 +21,15 @@ import { PineconeService } from './pinecone/pinecone.service';
 @Injectable()
 export class RabbitService extends BaseWorker {
   constructor(
-    @InjectQueue('openai') private queue: Queue,
-    @InjectQueue('openai_crawler') private crawlerQueue: Queue,
-    private readonly config: ConfigService,
-    private readonly appService: AppService,
-    private readonly prisma: PrismaService,
-    private readonly s3: S3Service,
-    private readonly files: FileService,
-    private readonly cache: CacheService,
-    private readonly pc: PineconeService,
+    @InjectQueue('openai') readonly queue: Queue,
+    @InjectQueue('openai_crawler') readonly crawlerQueue: Queue,
+    readonly config: ConfigService,
+    readonly appService: AppService,
+    readonly prisma: PrismaService,
+    readonly s3: S3Service,
+    readonly files: FileService,
+    readonly cache: CacheService,
+    readonly pc: PineconeService,
   ) {
     super(RabbitService.name);
   }
