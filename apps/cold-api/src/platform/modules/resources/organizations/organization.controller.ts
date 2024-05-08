@@ -15,7 +15,7 @@ import { CreateOrganizationDto } from './dto/organization.dto';
 @UseFilters(new HttpExceptionFilter(OrganizationController.name))
 @Controller()
 export class OrganizationController extends BaseWorker {
-  constructor(private readonly orgService: OrganizationService) {
+  constructor(readonly orgService: OrganizationService) {
     super('OrganizationController');
   }
 
@@ -102,9 +102,7 @@ export class OrganizationController extends BaseWorker {
       query: any;
       user: IAuthenticatedUser;
     },
-  ) {
-    return this.orgService.getOrgComplianceData(orgId, req);
-  }
+  ) {}
 
   /***
    * **Internal Use Only** : Get all organizations from Auth0
