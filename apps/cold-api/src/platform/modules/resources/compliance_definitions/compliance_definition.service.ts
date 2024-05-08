@@ -12,13 +12,7 @@ export class ComplianceDefinitionService extends BaseWorker {
   exclude_orgs: Array<{ id: string; name: string; display_name: string }>;
   openAI_definition: any;
 
-  constructor(
-    readonly darkly: DarklyService,
-    private prisma: PrismaService,
-    private readonly cache: CacheService,
-    private readonly mqtt: MqttService,
-    private readonly event: EventService,
-  ) {
+  constructor(readonly darkly: DarklyService, readonly prisma: PrismaService, readonly cache: CacheService, readonly mqtt: MqttService, readonly event: EventService) {
     super('ComplianceDefinitionService');
   }
 
@@ -191,6 +185,7 @@ export class ComplianceDefinitionService extends BaseWorker {
             placeholder: questionValue.placeholder,
             rubric: questionValue.rubric,
             options: questionValue.options,
+            compliance_definition_name: compliance.name,
             coresponding_question: questionValue.coresponding_question,
             dependency_expression: questionValue?.dependency?.expression,
             question_summary: questionValue.question_summary,
