@@ -30,104 +30,42 @@ export class OrganizationService extends BaseWorker {
     this.httpService = new HttpService();
   }
 
-  async getOrgComplianceData(orgId: string, req: any) {
-    const response = await this.prisma.organizations.findMany({
-      select: {
-        display_name: true,
-        organization_compliance: {
-          select: {
-            compliance_definition_name: true,
-            compliance_definition: {
-              select: {
-                image_url: true,
-                logo_url: true,
-                name: true,
-                order: true,
-                compliance_section_groups: {
-                  select: {
-                    id: true,
-                    order: true,
-                    title: true,
-                    compliance_sections: {
-                      select: {
-                        id: true,
-                        key: true,
-                        order: true,
-                        title: true,
-                        dependency_expression: true,
-                        compliance_questions: {
-                          select: {
-                            additional_context: true,
-                            component: true,
-                            coresponding_question: true,
-                            created_at: true,
-                            dependency_expression: true,
-                            id: true,
-                            key: true,
-                            options: true,
-                            order: true,
-                            placeholder: true,
-                            prompt: true,
-                            question_summary: true,
-                            rubric: true,
-                            tooltip: true,
-                          },
-                          orderBy: {
-                            order: 'desc',
-                          },
-                        },
-                      },
-                      orderBy: {
-                        order: 'desc',
-                      },
-                    },
-                  },
-                  orderBy: {
-                    order: 'desc',
-                  },
-                },
-              },
-            },
-          },
-        },
-      },
-    });
-
-    return response;
-  }
-
   private async syncOpenAIAssistants(org) {
-    let existing = await this.prisma.organizations.findUnique({
-      where: {
-        id: org.id,
-      },
-    });
-
-    if (!existing) {
-      existing = await this.prisma.organizations.create({
-        data: {
+    if (!this.openAI) {
+      this.logger.error('OpenAI service definition not found');
+    } else {
+      let existing = await this.prisma.organizations.findUnique({
+        where: {
           id: org.id,
-          name: org.name,
-          display_name: org.display_name,
-          enabled_connections: {},
-          branding: org.branding,
-          created_at: new Date(),
         },
       });
-    }
 
-    const openAIAsst = await this.prisma.integrations.findFirst({
-      where: {
-        organization_id: org.id,
-        service_definition_id: this.openAI?.id,
-      },
-    });
+      if (!existing) {
+        existing = await this.prisma.organizations.create({
+          data: {
+            id: org.id,
+            name: org.name,
+            display_name: org.display_name,
+            enabled_connections: {},
+            branding: org.branding,
+            created_at: new Date(),
+          },
+        });
+      }
 
-    if (this.openAI && !openAIAsst) {
-      await this.events.sendAsyncEvent(get(this.openAI, 'definition.rabbitMQ.publishOptions.routing_key', 'deadletter'), 'organization.created', {
-        organization: existing,
-        service: this.openAI,
+      const openAIAsst = await this.prisma.integrations.findFirst({
+        where: {
+          organization_id: org.id,
+          service_definition_id: this.openAI?.id,
+        },
       });
+
+      if (this.openAI && !openAIAsst) {
+        await this.events.sendAsyncEvent(get(this.openAI, 'definition.rabbitMQ.publishOptions.routing_key', 'deadletter'), 'organization.created', {
+          organization: existing,
+          service: this.openAI,
+        });
+      }
     }
   }
 
@@ -146,46 +84,42 @@ export class OrganizationService extends BaseWorker {
       },
     });
 
-    if (!this.openAI) {
-      this.logger.error('OpenAI service definition not found');
-    } else {
-      let orgs = (await this.getOrganizations(true)) as Array<Auth0Organization>;
+    let orgs = (await this.getOrganizations(true)) as Array<Auth0Organization>;
 
-      if (!orgs || orgs.length === 0) {
-        this.options = await this.utilService.init();
+    if (!orgs || orgs.length === 0) {
+      this.options = await this.utilService.init();
 
-        // since no orgs exist in DB get any organizations from Auth0
-        const response = await this.httpService.axiosRef.get(`/organizations`, this.options);
-        orgs = response.data;
-      }
+      // since no orgs exist in DB get any organizations from Auth0
+      const response = await this.httpService.axiosRef.get(`/organizations`, this.options);
+      orgs = response.data;
+    }
 
-      const connections = await this.getConnections();
+    const connections = await this.getConnections();
 
-      for (const org of orgs) {
-        const orgData = {
+    for (const org of orgs) {
+      const orgData = {
+        id: org.id,
+        name: org.name,
+        enabled_connections: connections.map(con => {
+          return {
+            connection_id: con.id,
+            assign_membership_on_login: false,
+          };
+        }),
+        display_name: org.display_name,
+        isTest: process.env['NODE_ENV'] === 'production' ? false : true,
+        created_at: new Date(),
+      };
+
+      this.prisma.organizations.upsert({
+        where: {
           id: org.id,
-          name: org.name,
-          enabled_connections: connections.map(con => {
-            return {
-              connection_id: con.id,
-              assign_membership_on_login: false,
-            };
-          }),
-          display_name: org.display_name,
-          isTest: process.env['NODE_ENV'] === 'production' ? false : true,
-          created_at: new Date(),
-        };
+        },
+        create: orgData,
+        update: orgData,
+      });
 
-        this.prisma.organizations.upsert({
-          where: {
-            id: org.id,
-          },
-          create: orgData,
-          update: orgData,
-        });
-
-        this.syncOpenAIAssistants(org);
-      }
+      this.syncOpenAIAssistants(org);
     }
   }
 
