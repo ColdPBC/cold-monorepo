@@ -8,13 +8,13 @@ import { OrganizationHelper } from '../helpers/organization.helper';
 @Injectable()
 export class OrganizationIntegrationsService extends BaseWorker {
   constructor(
-    private readonly cache: CacheService,
-    private readonly facilities: FacilitiesService,
-    private readonly mqtt: MqttService,
-    private readonly helper: OrganizationHelper,
-    private readonly prisma: PrismaService,
-    private readonly rabbit: ColdRabbitService,
-    private readonly broadcast: EventService,
+    readonly cache: CacheService,
+    readonly facilities: FacilitiesService,
+    readonly mqtt: MqttService,
+    readonly helper: OrganizationHelper,
+    readonly prisma: PrismaService,
+    readonly rabbit: ColdRabbitService,
+    readonly broadcast: EventService,
   ) {
     super(OrganizationIntegrationsService.name);
   }
