@@ -66,7 +66,7 @@ export class ComplianceRepository extends BaseWorker {
     return set(compliance_data.compliance_definition, 'compliance_section_groups', sectionGroups);
   }
 
-  async complianceSectionListByOrgIdCompNameKey({ compliance_section_group_id }: MqttAPIComplianceSectionPayload) {
+  async complianceSectionListSectionGroupId({ compliance_section_group_id }: MqttAPIComplianceSectionPayload) {
     const response = await this.prisma.compliance_sections.findMany({
       where: {
         compliance_section_group_id: compliance_section_group_id,
@@ -94,7 +94,7 @@ export class ComplianceRepository extends BaseWorker {
                                                                     cq.prompt,
                                                                     cq.order,
                                                                     cq.key,
-                                                                    cr.organization_id,
+                                                                    oc.organization_id,
                                                                     CASE
                                                                       WHEN ocair.answer IS NULL AND ocr.value IS NULL
                                                                         THEN TRUE
@@ -117,15 +117,15 @@ export class ComplianceRepository extends BaseWorker {
                                                                     LEFT JOIN compliance_sections cs
                                                                               ON cq.compliance_section_id = cs.id
                                                                     LEFT JOIN compliance_section_groups csg ON cs.compliance_section_group_id = csg.id
-
-                                                             WHERE cr.organization_id = ${org_id}
-                                                               AND cr.compliance_definition_name = ${compliance_set_name}
+                                                                    LEFT JOIN organization_compliance oc
+                                                                              ON csg.compliance_definition_name = oc.compliance_definition_name
+                                                             WHERE oc.organization_id = ${org_id}
+                                                               AND oc.compliance_definition_name = ${compliance_set_name}
                                                                AND csg.id = ${compliance_section_group_id}
                                                                AND cs.id = ${compliance_section_id}
 
                                                              GROUP BY cq.id, ocair.answer, ocr.value,
-                                                                      ocr.organization_compliance_id,
-                                                                      cr.organization_id`)) as any;
+                                                                      oc.id`)) as any;
 
     return response;
   }
