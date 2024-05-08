@@ -7,7 +7,7 @@ export class LangchainService extends BaseWorker implements OnModuleInit {
   openAIapiKey: string = '';
   returnSourceDocuments: boolean = true;
 
-  constructor(private readonly config: ConfigService, private readonly darkly: DarklyService) {
+  constructor(readonly config: ConfigService, readonly darkly: DarklyService) {
     super(LangchainService.name);
   }
 
