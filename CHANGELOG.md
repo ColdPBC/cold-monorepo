@@ -1,3 +1,10 @@
+# [1.219.0-cold-789.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.219.0-cold-789.2...v1.219.0-cold-789.3) (2024-05-08)
+
+
+### Bug Fixes
+
+* change queries in the compliance repository for MQTT API ([ede5951](https://github.com/ColdPBC/cold-monorepo/commit/ede5951369c0e7956adb4ca703dcdae78dd5969c))
+
 # [1.219.0-cold-789.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.219.0-cold-789.1...v1.219.0-cold-789.2) (2024-05-08)
 
 
