@@ -37,7 +37,6 @@ export class ComplianceRepository extends BaseWorker {
                                                                         LEFT JOIN
                                                                       organization_compliance_question_bookmarks ocqb
                                                                       ON cq.id = ocqb.compliance_question_id
-
                                                                  WHERE oc.compliance_definition_name = ${compliance_set_name}
                                                                    AND oc.organization_id = ${org_id}
                                                                  GROUP BY csg.id, csg.order
@@ -50,11 +49,22 @@ export class ComplianceRepository extends BaseWorker {
         },
       },
       select: {
+        statuses: {
+          take: 1,
+          select: {
+            id: true,
+            type: true,
+            updated_at: true,
+            created_at: true,
+          },
+          orderBy: {
+            created_at: 'desc',
+          },
+        },
         compliance_definition: {
           select: {
             name: true,
             title: true,
-            metadata: true,
             version: true,
             logo_url: true,
             image_url: true,
@@ -63,7 +73,8 @@ export class ComplianceRepository extends BaseWorker {
       },
     });
     // @ts-expect-error - compliance_data is not null
-    return set(compliance_data.compliance_definition, 'compliance_section_groups', sectionGroups);
+    set(compliance_data.compliance_definition, 'compliance_section_groups', sectionGroups);
+    return compliance_data;
   }
 
   async complianceSectionListSectionGroupId({ compliance_section_group_id }: MqttAPIComplianceSectionPayload) {
