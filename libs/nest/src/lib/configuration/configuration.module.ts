@@ -31,17 +31,18 @@ export class ConfigurationModule {
     return ssoCreds;
   }
 
-  static async forRootAsync() {
+  static async loadSecrets() {
     const config = new ConfigService();
+
     const configSecrets: any = [];
     const aws = await ConfigurationModule.getAWSCredentials();
     const secrets = {};
 
-    if (!aws.credentials?.accessKeyId) {
+    if (!aws.credentials?.accessKeyId && !aws.accessKeyId) {
       throw new Error('Unable to locate AWS Credentials!');
     }
 
-    if (!aws.credentials?.sessionToken) {
+    if (!aws.credentials?.sessionToken && !aws.sessionToken) {
       unset(aws.credentials, 'SessionToken');
     }
 
@@ -70,20 +71,43 @@ export class ConfigurationModule {
       merge(secrets, serviceSecrets);
     }
 
+    const mqtt = {
+      wsOptions: {
+        headers: {
+          'x-auth0-domain': secrets['AUTH0_DOMAIN'],
+          'x-amz-customauthorizer-name': 'mqtt_authorizer',
+          'x-cold-env': `${process.env['NODE_ENV']}`,
+        },
+      },
+      host: secrets['MQTT_HOST'],
+      port: 8883,
+      clientId: `${secrets['DD_SERVICE']}_${new Date().getTime()}`,
+      protocol: 'mqtts',
+      protocolVersion: 5,
+      key: Buffer.from(secrets['MQTT_PRIVATE_KEY'], 'base64'),
+      cert: Buffer.from(secrets['MQTT_PRIVATE_KEY'], 'base64'),
+      ca: [`${Buffer.from(secrets['MQTT_CA_ROOT_1'], 'base64')}`, `${Buffer.from(secrets['MQTT_CA_ROOT_3'], 'base64')}`],
+    };
+    return { configSecrets, secrets, mqtt };
+  }
+
+  static async forRootAsync() {
+    const configs = await ConfigurationModule.loadSecrets();
+
     /**
      * Imports Array
      */
     const imports: any = [
       ConfigModule.forRoot({
         isGlobal: true,
-        load: configSecrets,
+        load: [() => configs, () => configs.mqtt],
       }),
     ];
 
     return {
       module: ConfigurationModule,
       imports,
-      providers: [{ provide: 'SERVICE_SECRETS', useValue: secrets }, S3ConfigurationService, ConfigService],
+      providers: [{ provide: 'SERVICE_SECRETS', useValue: configs }, S3ConfigurationService, ConfigService],
       exports: [ConfigModule, 'SERVICE_SECRETS', S3ConfigurationService, ConfigService],
     };
   }
