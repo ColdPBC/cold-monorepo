@@ -17,14 +17,14 @@ export class JobConsumer extends BaseWorker {
   started: Date;
 
   constructor(
-    private readonly config: ConfigService,
-    private readonly appService: AppService,
-    private readonly assistant: AssistantService,
-    private readonly fileService: FileService,
-    private readonly cache: CacheService,
-    private readonly loader: PineconeService,
-    private readonly darkly: DarklyService,
-    private readonly chat: ChatService,
+    readonly config: ConfigService,
+    readonly appService: AppService,
+    readonly assistant: AssistantService,
+    readonly fileService: FileService,
+    readonly cache: CacheService,
+    readonly loader: PineconeService,
+    readonly darkly: DarklyService,
+    readonly chat: ChatService,
   ) {
     super(JobConsumer.name);
     this.client = new OpenAI({
