@@ -1,3 +1,10 @@
+# [1.219.0-cold-789.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.219.0-cold-789.3...v1.219.0-cold-789.4) (2024-05-08)
+
+
+### Features
+
+* include organization_compliance_status in getOrgComplianceStatusGroups() ([acf2857](https://github.com/ColdPBC/cold-monorepo/commit/acf2857578ce9c58c936922ea430759524150137))
+
 # [1.219.0-cold-789.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.219.0-cold-789.2...v1.219.0-cold-789.3) (2024-05-08)
 
 
