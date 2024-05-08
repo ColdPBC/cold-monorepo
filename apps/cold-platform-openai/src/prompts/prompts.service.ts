@@ -28,7 +28,7 @@ export class PromptsService extends BaseWorker {
 
   condense_template: string;
 
-  constructor(private readonly darkly: DarklyService, compliance_set: string, organization: any, private readonly prisma: PrismaService) {
+  constructor(readonly darkly: DarklyService, compliance_set: string, organization: any, readonly prisma: PrismaService) {
     super(PromptsService.name);
 
     this.compliance_set = compliance_set;
