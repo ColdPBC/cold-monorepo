@@ -45,7 +45,7 @@ export class OpenapiModule {
       .build();
 
     const document = SwaggerModule.createDocument(app, customOptions, {
-      deepScanRoutes: true,
+      deepScanRoutes: false,
     });
 
     patchNestjsSwagger();
