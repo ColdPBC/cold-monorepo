@@ -17,12 +17,12 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
   model: string;
 
   constructor(
-    private readonly config: ConfigService,
-    private readonly prisma: PrismaService,
-    private rabbit: ColdRabbitService,
-    private cache: CacheService,
-    private readonly darkly: DarklyService,
-    @InjectQueue('openai') private queue: Queue,
+    readonly config: ConfigService,
+    readonly prisma: PrismaService,
+    readonly rabbit: ColdRabbitService,
+    readonly cache: CacheService,
+    readonly darkly: DarklyService,
+    @InjectQueue('openai') readonly queue: Queue,
   ) {
     super(AssistantService.name);
     this.client = new OpenAI({
