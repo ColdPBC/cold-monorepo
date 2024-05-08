@@ -5,5 +5,6 @@ import { OrganizationComplianceAiResponsesController } from './organization_comp
 @Module({
   controllers: [OrganizationComplianceAiResponsesController],
   providers: [OrganizationComplianceAiResponsesService],
+  exports: [OrganizationComplianceAiResponsesService],
 })
 export class OrganizationComplianceAiResponsesModule {}

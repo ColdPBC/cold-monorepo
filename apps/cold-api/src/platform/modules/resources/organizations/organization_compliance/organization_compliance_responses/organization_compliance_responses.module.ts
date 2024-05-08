@@ -8,5 +8,6 @@ import { OrganizationComplianceAiResponseFilesModule } from './organization_comp
   controllers: [OrganizationComplianceResponsesController],
   providers: [OrganizationComplianceResponsesService],
   imports: [OrganizationComplianceAiResponsesModule, OrganizationComplianceAiResponseFilesModule],
+  exports: [OrganizationComplianceResponsesService],
 })
 export class OrganizationComplianceResponsesModule {}
