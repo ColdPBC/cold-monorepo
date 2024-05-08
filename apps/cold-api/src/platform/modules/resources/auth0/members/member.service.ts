@@ -12,7 +12,7 @@ export class MemberService extends BaseWorker {
 
   private httpService: HttpService;
 
-  constructor(private readonly utilService: Auth0TokenService, readonly cacheService: CacheService, private readonly mqtt: MqttService) {
+  constructor(readonly utilService: Auth0TokenService, readonly cacheService: CacheService, readonly mqtt: MqttService) {
     super('MemberService');
     this.httpService = new HttpService();
   }
