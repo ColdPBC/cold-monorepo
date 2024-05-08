@@ -5,7 +5,7 @@ import { pick } from 'lodash';
 
 @Injectable()
 export class OrgSurveysService extends BaseWorker {
-  constructor(private readonly prisma: PrismaService) {
+  constructor(readonly prisma: PrismaService) {
     super(OrgSurveysService.name);
   }
 
