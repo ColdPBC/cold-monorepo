@@ -5,7 +5,7 @@ import { UpdateOrganizationComplianceDto } from './dto/update-organization_compl
 
 @Controller('organization-compliance')
 export class OrganizationComplianceController {
-  constructor(private readonly organizationComplianceService: OrganizationComplianceService) {}
+  constructor(readonly organizationComplianceService: OrganizationComplianceService) {}
 
   @Post()
   create(@Body() createOrganizationComplianceDto: CreateOrganizationComplianceDto) {
