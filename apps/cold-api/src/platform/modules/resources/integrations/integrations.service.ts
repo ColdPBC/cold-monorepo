@@ -5,7 +5,7 @@ import { BaseWorker, CacheService, PrismaService } from '@coldpbc/nest';
 @Span()
 @Injectable()
 export class IntegrationsService extends BaseWorker {
-  constructor(private prisma: PrismaService, private readonly cache: CacheService) {
+  constructor(readonly prisma: PrismaService, readonly cache: CacheService) {
     super('PolicyContentService');
   }
 
