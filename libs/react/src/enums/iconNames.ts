@@ -29,4 +29,12 @@ export enum IconNames {
   ColdFilledDocumentUploadIcon = 'ColdFilledDocumentUploadIcon',
   ColdInvertedCheckmarkIcon = 'ColdInvertedCheckmarkIcon',
   ColdSwitchIcon = 'ColdSwitchIcon',
+  ColdCalendarDaysIcon = 'ColdCalendarDaysIcon',
+  ColdCalendarEventIcon = 'ColdCalendarEventIcon',
+  ColdClockIcon = 'ColdClockIcon',
+  ColdInfoIcon = 'ColdInfoIcon',
+  ColdInvertedBookmarkIcon = 'ColdInvertedBookmarkIcon',
+  ColdLeftArrowIcon = 'ColdLeftArrowIcon',
+  ColdSupportNotFilledInIcon = 'ColdSupportNotFilledInIcon',
+  ColdInvertedAIIcon = 'ColdInvertedAIIcon',
 }

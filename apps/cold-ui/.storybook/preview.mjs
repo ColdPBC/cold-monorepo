@@ -108,6 +108,7 @@ export default {
         showNewCompliancePageHomeCold671: false,
         swrKeepPreviousData: true,
         showNewNavigationCold698: false,
+        showNewComplianceManagerCold711: false,
       },
     },
   },

@@ -8,9 +8,10 @@ export interface ComplianceProgressItemProps {
   type: ComplianceProgressStatus;
 }
 
-export const ComplianceProgressItem = ({ type }: ComplianceProgressItemProps) => {
+export const ComplianceProgressStatusItem = ({ type }: ComplianceProgressItemProps) => {
   const { data } = useContext(ColdComplianceManagerContext);
-  const { complianceSet } = data;
+  const { mqttComplianceSet } = data;
+
   const currentProgressData = {
     type: type,
     count: 0,
@@ -18,18 +19,25 @@ export const ComplianceProgressItem = ({ type }: ComplianceProgressItemProps) =>
   };
 
   let totalQuestions = 0;
-  forEach(complianceSet?.compliance_section_groups, group => {
-    forEach(group.sections, section => {
-      forEach(section.questions, question => {
-        totalQuestions++;
-        if (question.status === type) {
-          currentProgressData.count++;
-        }
-      });
-    });
+  forEach(mqttComplianceSet?.compliance_section_groups, group => {
+    totalQuestions += group.question_count;
+    switch (type) {
+      case ComplianceProgressStatus.not_started:
+        currentProgressData.count += group.not_started_count;
+        break;
+      case ComplianceProgressStatus.needs_review:
+        currentProgressData.count += group.ai_answered_count;
+        break;
+      case ComplianceProgressStatus.bookmarked:
+        currentProgressData.count += group.bookmarked_count;
+        break;
+      case ComplianceProgressStatus.complete:
+        currentProgressData.count += group.user_answered_count;
+        break;
+    }
   });
 
-  currentProgressData.percentage = currentProgressData.count / totalQuestions;
+  currentProgressData.percentage = totalQuestions !== 0 ? currentProgressData.count / totalQuestions : 0;
 
   let text = '';
   switch (type) {

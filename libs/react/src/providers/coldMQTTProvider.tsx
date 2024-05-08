@@ -1,15 +1,18 @@
 import React, { PropsWithChildren, useEffect, useRef } from 'react';
 import mqtt from 'mqtt';
 import { useSWRConfig } from 'swr';
-import { forEach } from 'lodash';
+import { forEach, set } from 'lodash';
 import { useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
 import { useFlags } from 'launchdarkly-react-client-sdk';
+import { SWRSubscription } from 'swr/subscription';
+import ColdMQTTContext from '../context/coldMQTTContext';
 
 export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
   const { logBrowser } = useColdContext();
   const { user, orgId, getAccessTokenSilently, isAuthenticated } = useAuth0Wrapper();
   const client = useRef<mqtt.MqttClient | null>(null);
   const [connectionStatus, setConnectionStatus] = React.useState(false);
+  const [token, setToken] = React.useState<string>('');
   const { mutate } = useSWRConfig();
   const flags = useFlags();
   useEffect(() => {
@@ -29,19 +32,33 @@ export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
         const authorizer = 'mqtt_authorizer';
         const org_id = orgId;
         const token = await getToken();
+        setToken(token);
         const env = import.meta.env.VITE_DD_ENV;
         const url = `${
           import.meta.env.VITE_MQTT_URL
         }/mqtt?x-auth0-domain=${auth0_domain}&x-amz-customauthorizer-name=${authorizer}&x-cold-org=${org_id}&x-cold-env=${env}&token=${token}`;
 
-        client.current = mqtt.connect(url, { clientId: `${org_id}-${Math.floor(Math.random() * 1000)}` });
+        // client.current = mqtt.connect(url, { clientId: `${org_id}-${Math.floor(Math.random() * 1000)}` });
 
-        client.current.on('connect', () => {
+        // do not connect if the client id is the same. this is to prevent duplicate client ids
+        const options = client.current?.options;
+        if (options && options.clientId === `${env}-${org_id}-${user.email}`) {
+        } else {
+          client.current = mqtt.connect(url, {
+            clientId: `${org_id}-${Math.floor(Math.random() * 1000)}`,
+            clean: false,
+            properties: {
+              sessionExpiryInterval: 24 * 60 * 60,
+            },
+          });
+        }
+
+        client.current?.on('connect', () => {
           logBrowser('Connected to IOT', 'info');
           setConnectionStatus(true);
 
           const topics = [`ui/${env}/${org_id}/#`, `system/${env}/public/#`];
-
+          console.log('Subscribing to topics', topics);
           forEach(topics, topic => {
             subscribeToTopic(topic, client.current);
           });
@@ -51,7 +68,7 @@ export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
           }
         });
 
-        client.current.on('message', async (topic, payload, packet) => {
+        client.current?.on('message', async (topic, payload, packet) => {
           const payloadString = packet.payload.toString();
           logBrowser('Received message from IOT', 'info', { topic });
           try {
@@ -86,14 +103,21 @@ export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
           }
         });
 
-        client.current.on('close', () => {
+        client.current?.on('close', () => {
           setConnectionStatus(false);
           logBrowser('Connection to IOT closed', 'info');
+          console.log('Connection to IOT closed');
         });
       }
     };
 
     connectToIOT();
+
+    return () => {
+      if (client.current) {
+        client.current?.end(true);
+      }
+    };
   }, [user, orgId, getAccessTokenSilently, isAuthenticated]);
 
   const subscribeToTopic = (topic: string, client: mqtt.MqttClient | null) => {
@@ -108,5 +132,50 @@ export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
     }
   };
 
-  return children;
+  const subscribeSWR: SWRSubscription<string, number, Error> = (key: string | null, { next }) => {
+    if (!key) {
+      return () => {};
+    }
+    client.current?.subscribe(key, async (err, granted) => {
+      if (err) {
+        logBrowser('Error subscribing to topic ' + key, 'error', { err }, err);
+      }
+      client.current?.on('message', async (topic, payload, packet) => {
+        next(err, prev => {
+          // console.log({ topic, key, payload: JSON.parse(payload.toString()) });
+          if (topic !== key) {
+            return prev;
+          } else {
+            return JSON.parse(payload.toString());
+          }
+        });
+      });
+    });
+    return () => {
+      client.current?.unsubscribe(key);
+    };
+  };
+
+  const publishMessage = (topic: string, message: string) => {
+    if (client.current) {
+      const newMessage = JSON.parse(message);
+      set(newMessage, 'user', user);
+      set(newMessage, 'org_id', orgId);
+      set(newMessage, 'token', token);
+      // console.log('Publishing message to IOT', { topic, newMessage });
+      client.current.publish(topic, JSON.stringify(newMessage));
+    }
+  };
+
+  return (
+    <ColdMQTTContext.Provider
+      value={{
+        subscribeSWR,
+        publishMessage,
+        connectionStatus,
+        client,
+      }}>
+      {children}
+    </ColdMQTTContext.Provider>
+  );
 };

@@ -1,10 +1,12 @@
-import { ComplianceManager, OrgComplianceManager } from '@coldpbc/interfaces';
+import { ComplianceManager, MQTTComplianceManagerPayload, OrgComplianceManager } from '@coldpbc/interfaces';
 import { ComplianceManagerStatus } from '@coldpbc/enums';
 import { createContext } from 'react';
 
 export interface ComplianceManagerData {
   complianceSet: ComplianceManager | undefined;
   orgComplianceSet: OrgComplianceManager | undefined;
+  mqttComplianceSet: MQTTComplianceManagerPayload | undefined;
+  name: string;
 }
 
 export interface ComplianceManagerContextType {
@@ -17,6 +19,8 @@ export const ColdComplianceManagerContext = createContext<ComplianceManagerConte
   data: {
     complianceSet: undefined,
     orgComplianceSet: undefined,
+    mqttComplianceSet: undefined,
+    name: '',
   },
   status: ComplianceManagerStatus.notActivated,
   setStatus: () => {},

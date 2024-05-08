@@ -1,4 +1,11 @@
-import { ComplianceSurveyPayloadType, ComplianceSurveyProgressQuestionType, ComplianceSurveySectionProgressType, SurveyPayloadType, SurveySectionType } from '@coldpbc/interfaces';
+import {
+  ComplianceManagerSectionGroup,
+  ComplianceSurveyPayloadType,
+  ComplianceSurveyProgressQuestionType,
+  ComplianceSurveySectionProgressType,
+  SurveyPayloadType,
+  SurveySectionType,
+} from '@coldpbc/interfaces';
 import { forEach, forOwn } from 'lodash';
 import { addDays } from 'date-fns';
 import { ComplianceProgressStatus } from '@coldpbc/enums';
@@ -15228,81 +15235,113 @@ export function getAssessmentSurveyWithProgressMock(name: string): ComplianceSur
   }
 }
 
-export function getComplianceManagerSectionGroupMock() {
+export function getComplianceManagerSectionGroupMock(): ComplianceManagerSectionGroup {
   return {
+    id: '1',
+    order: 0,
     title: 'Practices',
     sections: [
       {
+        id: '1',
+        order: 0,
         title: 'Flame Retardant (FR) Chemicals',
+        _count: {
+          compliance_questions: 5,
+        },
         questions: [
           {
+            order: 0,
             prompt: 'Did your company advocate and/or engage in climate action in 2023?',
             status: ComplianceProgressStatus.not_started,
           },
           {
+            order: 1,
             prompt: 'What actions did your company take to advocate and/or engage?',
             status: ComplianceProgressStatus.complete,
           },
           {
+            order: 2,
             prompt: "Indicate your company's public exposure on climate action",
             status: ComplianceProgressStatus.needs_review,
           },
           {
+            order: 3,
             prompt: "Do you have any additional details to share publicly about your company's efforts to\naddress climate change?",
             status: ComplianceProgressStatus.needs_review,
           },
           {
+            order: 4,
             prompt: 'Please share any information on the types of climate policy and advocacy information\nand/or support that would be helpful for your organization:',
             status: ComplianceProgressStatus.bookmarked,
           },
         ],
       },
       {
+        id: '2',
+        order: 1,
         title: 'Brand Information',
+        _count: {
+          compliance_questions: 3,
+        },
         questions: [
           {
+            order: 0,
             prompt: 'Please share the following contact information: Name, Company, Email Address, Title',
             status: ComplianceProgressStatus.complete,
           },
           {
+            order: 1,
             prompt: 'Please describe your company type.',
             status: ComplianceProgressStatus.complete,
           },
           {
+            order: 2,
             prompt: 'Please select product categories in which your company competes.',
             status: ComplianceProgressStatus.complete,
           },
         ],
       },
       {
+        id: '3',
+        order: 2,
         title: 'Emissions Footprint',
+        _count: {
+          compliance_questions: 7,
+        },
         questions: [
           {
+            order: 0,
             prompt: 'Please indicate your progress in measuring 2023 scope 1 and scope 2 emissions.',
             status: ComplianceProgressStatus.not_started,
           },
           {
+            order: 1,
             prompt: 'Please indicate your progress in measuring 2023 scope 3 emissions.',
             status: ComplianceProgressStatus.complete,
           },
           {
+            order: 2,
             prompt: 'How does your company verify GHG measurements?',
             status: ComplianceProgressStatus.needs_review,
           },
           {
+            order: 3,
             prompt:
               "Please indicate whether your company uses spend-based or material-based emissions factors for GHG emissions related to your company's products (and materials)",
             status: ComplianceProgressStatus.needs_review,
           },
           {
+            order: 4,
             prompt: 'Our company’s most recent quantified GHG measurement for Scope 1 Emissions:',
             status: ComplianceProgressStatus.not_started,
           },
           {
+            order: 5,
             prompt: 'Our company’s most recent quantified GHG measurement for Scope 2 Emissions:',
             status: ComplianceProgressStatus.bookmarked,
           },
           {
+            order: 6,
             prompt: 'Our company’s most recent quantified GHG measurement for Scope 3 Emissions:',
             status: ComplianceProgressStatus.not_started,
           },

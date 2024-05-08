@@ -6,14 +6,13 @@ import { ColdIcon } from '@coldpbc/components';
 import { ComplianceProgressStatusColor } from '@coldpbc/lib';
 
 export const ComplianceManagerOverviewStatusCard = () => {
-  const { data } = useContext(ColdComplianceManagerContext);
-
-  const { complianceSet, orgComplianceSet } = data;
+  const { status: managerStatus, data } = useContext(ColdComplianceManagerContext);
+  const { mqttComplianceSet } = data;
 
   const getStatusIcon = (status: ComplianceManagerStatus) => {
     switch (status) {
       case ComplianceManagerStatus.activated:
-        if (orgComplianceSet) {
+        if (managerStatus === ComplianceManagerStatus.activated) {
           return (
             <div className={'absolute top-[3px] left-0 w-[12px] h-[12px]'}>
               <ColdIcon name={IconNames.ColdInvertedCheckmarkIcon} color={ComplianceProgressStatusColor.complete} width={12} height={12} />
@@ -36,7 +35,7 @@ export const ComplianceManagerOverviewStatusCard = () => {
 
     switch (status) {
       case ComplianceManagerStatus.activated:
-        text = `Activate ${complianceSet?.title}`;
+        text = `Activate ${mqttComplianceSet?.title}`;
         break;
       case ComplianceManagerStatus.upload:
         text = 'Upload Documents';
@@ -55,7 +54,7 @@ export const ComplianceManagerOverviewStatusCard = () => {
     }
 
     return (
-      <div className={'w-full flex flex-row pl-[28px] relative'}>
+      <div className={'w-full flex flex-row pl-[28px] relative'} key={status}>
         {status !== ComplianceManagerStatus.submitted && <div data-testid={'compliance'} className={'absolute h-[calc(100%+22px)] w-[1px] bg-bgc-menu left-[6px] top-[6px]'}></div>}
         {getStatusIcon(status)}
         <div className={'text-tc-primary text-body w-full'}>{text}</div>

@@ -4,8 +4,7 @@ import {
   ActionsOverview,
   ApplicationToaster,
   CarbonFootprint,
-  ComplianceManager,
-  CompliancePage,
+  ComplianceRoutes,
   DashboardLayout,
   DocumentUpload,
   Footprint,
@@ -29,8 +28,7 @@ export const ColdRoutes = () => {
         <Route path={'/'} element={<Home />} />
         <Route path={'/home'} element={<Home />} />
         <Route path={'/assessments'} element={<Journey />} />
-        <Route path={'/compliance'} element={<CompliancePage />} />
-        <Route path={'/compliance/:name'} element={<ComplianceManager />} />
+        {ComplianceRoutes()}
         {ldFlags.showActions261 && <Route path="/actions" element={<ActionsOverview />} />}
         <Route path={'/reports/carbon_footprint'} element={ldFlags.showNewCarbonFootprintModuleCold634 ? <CarbonFootprint /> : <Footprint />} />
         {ldFlags.showDocumentsUploadModuleCold492 && <Route path="/documents" element={<DocumentUpload />} />}

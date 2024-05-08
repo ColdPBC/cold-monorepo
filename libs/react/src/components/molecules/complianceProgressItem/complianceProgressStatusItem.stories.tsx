@@ -1,11 +1,11 @@
 import { Meta, StoryObj } from '@storybook/react';
-import { ComplianceProgressItem } from '@coldpbc/components';
+import { ComplianceProgressStatusItem } from '@coldpbc/components';
 import { withKnobs } from '@storybook/addon-knobs';
 import { ComplianceProgressStatus } from '@coldpbc/enums';
 
-const meta: Meta<typeof ComplianceProgressItem> = {
+const meta: Meta<typeof ComplianceProgressStatusItem> = {
   title: 'Molecules/ComplianceProgressItem',
-  component: ComplianceProgressItem,
+  component: ComplianceProgressStatusItem,
   tags: ['autodocs'],
   decorators: [withKnobs],
 };
@@ -17,7 +17,7 @@ export const NotStarted: Story = {
   render: args => {
     return (
       <div className="w-[300px]">
-        <ComplianceProgressItem {...args} />
+        <ComplianceProgressStatusItem {...args} />
       </div>
     );
   },
@@ -30,7 +30,7 @@ export const NeedsReview: Story = {
   render: args => {
     return (
       <div className="w-[300px]">
-        <ComplianceProgressItem {...args} />
+        <ComplianceProgressStatusItem {...args} />
       </div>
     );
   },
@@ -43,7 +43,7 @@ export const Bookmarked: Story = {
   render: args => {
     return (
       <div className="w-[300px]">
-        <ComplianceProgressItem {...args} />
+        <ComplianceProgressStatusItem {...args} />
       </div>
     );
   },
@@ -56,7 +56,7 @@ export const Complete: Story = {
   render: args => {
     return (
       <div className="w-[300px]">
-        <ComplianceProgressItem {...args} />
+        <ComplianceProgressStatusItem {...args} />
       </div>
     );
   },

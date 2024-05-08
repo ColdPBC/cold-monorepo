@@ -7,9 +7,12 @@ import {
   ColdAiIcon,
   ColdBillingIcon,
   ColdBookmarkIcon,
+  ColdCalendarDaysIcon,
+  ColdCalendarEventIcon,
   ColdCheckIcon,
   ColdChevronDownIcon,
   ColdChevronUpIcon,
+  ColdClockIcon,
   ColdComplianceIcon,
   ColdComplianceSurveyCheckBoxIcon,
   ColdDocumentsIcon,
@@ -20,13 +23,18 @@ import {
   ColdFootprintIcon,
   ColdFootprintIconTwo,
   ColdHomeIcon,
+  ColdInfoIcon,
+  ColdInvertedAIIcon,
+  ColdInvertedBookmarkIcon,
   ColdInvertedCheckmarkIcon,
   ColdJourneyIcon,
+  ColdLeftArrowIcon,
   ColdReportIcon,
   ColdRightArrowIcon,
   ColdScoreIcon,
   ColdSettingsIcon,
   ColdSmallCheckBoxIcon,
+  ColdSupportNotFilledInIcon,
   ColdSwitchIcon,
   ColdTeamMembersIcon,
   PlusIcon,
@@ -96,6 +104,22 @@ export const ColdIcon = (props: IconProps) => {
       return <ColdInvertedCheckmarkIcon {...props} />;
     case IconNames.ColdSwitchIcon:
       return <ColdSwitchIcon {...props} />;
+    case IconNames.ColdCalendarDaysIcon:
+      return <ColdCalendarDaysIcon {...props} />;
+    case IconNames.ColdCalendarEventIcon:
+      return <ColdCalendarEventIcon {...props} />;
+    case IconNames.ColdClockIcon:
+      return <ColdClockIcon {...props} />;
+    case IconNames.ColdInfoIcon:
+      return <ColdInfoIcon {...props} />;
+    case IconNames.ColdInvertedBookmarkIcon:
+      return <ColdInvertedBookmarkIcon {...props} />;
+    case IconNames.ColdLeftArrowIcon:
+      return <ColdLeftArrowIcon {...props} />;
+    case IconNames.ColdSupportNotFilledInIcon:
+      return <ColdSupportNotFilledInIcon {...props} />;
+    case IconNames.ColdInvertedAIIcon:
+      return <ColdInvertedAIIcon {...props} />;
     default:
     case IconNames.ColdSettingsIcon:
       return <ColdSettingsIcon {...props} />;

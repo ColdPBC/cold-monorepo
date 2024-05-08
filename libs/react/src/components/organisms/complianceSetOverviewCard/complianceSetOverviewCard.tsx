@@ -9,9 +9,11 @@ import { differenceInDays, format, intlFormatDistance } from 'date-fns';
 import { isAxiosError } from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { withErrorBoundary } from 'react-error-boundary';
+import { useFlags } from 'launchdarkly-react-client-sdk';
 
 const _ComplianceSetOverviewCard = ({ name }: { name: string }) => {
   const navigate = useNavigate();
+  const ldFlags = useFlags();
   const { orgId } = useAuth0Wrapper();
   const { logError } = useColdContext();
   const { addToastMessage } = useAddToastMessage();
@@ -182,16 +184,20 @@ const _ComplianceSetOverviewCard = ({ name }: { name: string }) => {
   };
 
   const onCardClick = async () => {
-    if (orgComplianceSet !== undefined) {
-      navigate(`/wizard/compliance/${orgComplianceSet.compliance_definition.name}`);
+    if (ldFlags.showNewComplianceManagerCold711) {
+      navigate(`/compliance/${complianceSet.name}`);
     } else {
-      const response = await axiosFetcher([`/compliance_definitions/${complianceSet.name}/organizations/${orgId}`, 'POST']);
-      if (isAxiosError(response)) {
-        await addToastMessage({ message: 'Compliance could not be added', type: ToastMessage.FAILURE });
-        logError(response.message, ErrorType.AxiosError, response);
+      if (orgComplianceSet !== undefined) {
+        navigate(`/wizard/compliance/${orgComplianceSet.compliance_definition.name}`);
       } else {
-        await addToastMessage({ message: 'Compliance activated', type: ToastMessage.SUCCESS });
-        navigate(`/wizard/compliance/${complianceSet.name}`);
+        const response = await axiosFetcher([`/compliance_definitions/${complianceSet.name}/organizations/${orgId}`, 'POST']);
+        if (isAxiosError(response)) {
+          await addToastMessage({ message: 'Compliance could not be added', type: ToastMessage.FAILURE });
+          logError(response.message, ErrorType.AxiosError, response);
+        } else {
+          await addToastMessage({ message: 'Compliance activated', type: ToastMessage.SUCCESS });
+          navigate(`/wizard/compliance/${complianceSet.name}`);
+        }
       }
     }
   };
