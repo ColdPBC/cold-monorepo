@@ -1,3 +1,30 @@
+# [1.219.0-cold-789.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.218.0...v1.219.0-cold-789.1) (2024-05-08)
+
+
+### Bug Fixes
+
+* Add auto-increment function to "compliance_responses" table in Prisma migration ([aa399b6](https://github.com/ColdPBC/cold-monorepo/commit/aa399b6fd4d8deed76f74fdf0cbc64e6f0a97fa1))
+* Alter table to change 'answer' column type to JSONB in 'organization_compliance_ai_responses' ([3d5bee7](https://github.com/ColdPBC/cold-monorepo/commit/3d5bee74962a1f0a41cd1e748f92a94fa1d7156b))
+* Make 'answer' column in 'organization_compliance_ai_responses' table nullable ([b85df35](https://github.com/ColdPBC/cold-monorepo/commit/b85df350b6ff598ca26b42e86b7ff7ef34e569f6))
+* Make AI response ID optional in organization compliance responses table ([c6f35ec](https://github.com/ColdPBC/cold-monorepo/commit/c6f35ecb5d69c3419fb765e0b2b01d33fac08e99))
+* Removed invalid unique key from compliance responses database table ([4678d9c](https://github.com/ColdPBC/cold-monorepo/commit/4678d9c22d9820d8a98476b362bcd57e258712fd))
+* set 'references' and 'sources' columns in 'organization_compliance_ai_responses' table to optional ([3b8939e](https://github.com/ColdPBC/cold-monorepo/commit/3b8939e64bf5c82d66d3938921023dab6c41d377))
+* update Amazon surveys list in seed_compliance_definitions.ts ([da5cb96](https://github.com/ColdPBC/cold-monorepo/commit/da5cb968da8e45c5fefe6c8f422d94e3097d1206))
+
+
+### Features
+
+* Add compliance_responses table with necessary fields, indices, and foreign key constraints. Added column to organization_compliance_responses table. ([dea7845](https://github.com/ColdPBC/cold-monorepo/commit/dea78456af0d52a7cba9646d0dba01a736d67f39))
+* Add MQTT (socket API) service and RabbitMQ service to organizations module ([c359f5b](https://github.com/ColdPBC/cold-monorepo/commit/c359f5b19e0da45154daea12e5a7500bbcc8abc0))
+* Add unique composite key to organization_compliance_ai_response_files table ([e42ad95](https://github.com/ColdPBC/cold-monorepo/commit/e42ad95651039d3f9f3f0036c1c61eda84ad80ca))
+* Add unique constraint to compliance_questions table in Prisma migration ([7b07d15](https://github.com/ColdPBC/cold-monorepo/commit/7b07d1503b34e0f474fcd1392ccc3e285b5ece1b))
+* add unique constraint to organization_compliance_responses in prisma migrations ([7536133](https://github.com/ColdPBC/cold-monorepo/commit/75361338e2217a7af358b2a5102ce789d265e20e))
+* Add unique key to organization compliance AI responses table ([513747b](https://github.com/ColdPBC/cold-monorepo/commit/513747b8cdf9a8e63c245e196dcad0194f34287a))
+* Added models for compliance responses and AI responses in schema.prisma ([dc92c25](https://github.com/ColdPBC/cold-monorepo/commit/dc92c25c0527370fcfc35d52c525501708058d65))
+* Enhance MQTT service with replyTo function and packet details in onMessage callback ([5042c78](https://github.com/ColdPBC/cold-monorepo/commit/5042c78f9b52e36fbbbe007810af24d91d7ac3f3))
+* Extend MQTT validator schemas and create new compliance schemas for various payload types ([b5270e2](https://github.com/ColdPBC/cold-monorepo/commit/b5270e24d19cfd7bf23cae41d2f04e87aabd34fd))
+* Implement ComplianceRepository with methods for compliance data retrieval ([72c179d](https://github.com/ColdPBC/cold-monorepo/commit/72c179d3103cd1df71ff37f24226a6c28279f1e6))
+
 # [1.218.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.217.2...v1.218.0) (2024-05-07)
 
 
