@@ -5,7 +5,7 @@ import { Injectable, NotFoundException, UnprocessableEntityException } from '@ne
 export class FacilitiesService extends BaseWorker {
   cuid2 = new Cuid2Generator().setPrefix('ofac');
 
-  constructor(private readonly prisma: PrismaService, private readonly mqtt: MqttService) {
+  constructor(readonly prisma: PrismaService, readonly mqtt: MqttService) {
     super(FacilitiesService.name);
 
     if (!this.cuid2.prefix) {
