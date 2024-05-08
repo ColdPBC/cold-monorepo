@@ -20,7 +20,7 @@ export interface IFPSession {
 export class FreeplayService extends BaseWorker implements OnModuleInit {
   public client: Freeplay;
 
-  constructor(private readonly config: ConfigService) {
+  constructor(readonly config: ConfigService) {
     super(FreeplayService.name);
 
     this.client = new Freeplay({
