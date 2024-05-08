@@ -172,6 +172,31 @@ export async function seedComplianceModels() {
     });
 
     console.log(`🌱 updated Organization Compliance: ${existing_org_compliance.compliance_definition_name} 🌱`, existing_org_compliance);
+    if (existing_org_compliance) {
+      const existing = await prisma.organization_compliance_statuses.findFirst({
+        where: {
+          organization_compliance_id: org_compliance.id,
+        },
+        orderBy: {
+          created_at: 'desc',
+        },
+      });
+
+      if (!existing) {
+        const status_data = {
+          id: new Cuid2Generator(`ocs`).scopedId,
+          organization_compliance_id: org_compliance.id,
+          type: 'draft',
+          email: 'unknown',
+        };
+
+        const status_record = await prisma.organization_compliance_statuses.create({
+          data: status_data,
+        });
+
+        console.log(`🌱 updated Organization Compliance Status: ${'draft'} 🌱`, status_record);
+      }
+    }
   }
 
   const compliance_definitions = await prisma.compliance_definitions.findMany();
@@ -246,6 +271,31 @@ export async function seedComplianceModels() {
       continue;
     }
 
+    const status = data.data.submitted ? 'submitted' : 'draft';
+    const existing = await prisma.organization_compliance_statuses.findFirst({
+      where: {
+        organization_compliance_id: org_compliance.id,
+      },
+      orderBy: {
+        created_at: 'desc',
+      },
+    });
+
+    if (!existing || existing?.type !== status) {
+      const status_data = {
+        id: new Cuid2Generator(`ocs`).scopedId,
+        organization_compliance_id: org_compliance.id,
+        type: status,
+        email: 'unknown',
+      };
+
+      const status_record = await prisma.organization_compliance_statuses.create({
+        data: status_data,
+      });
+
+      console.log(`🌱 updated Organization Compliance Status: ${status} 🌱`, status_record);
+    }
+
     const sections = Object.keys(data.data.sections);
     // Iterate over each section
     for (const sectionKey of sections) {
@@ -302,10 +352,12 @@ export async function seedComplianceModels() {
           qData.ai_response.references.map((ref: any) => {
             let parsed;
             if (typeof ref.text === 'string') {
+              ref.text = ref.text.replace(/\r/g, ' ');
               try {
-                parsed = JSON.parse(ref.text);
-              } catch (e) {
-                console.warn(`🚨 Error Parsing Reference Text: ${ref.text} 🚨`);
+                parsed = JSON.parse(ref.text.replace(/\r/g, ' '));
+              } catch (e: any) {
+                console.warn(`🚨 Error Parsing Reference Text: ${ref.text} 🚨`, { error: e.message, stack: e.stack });
+                console.log(`${ref.text}`);
               }
             }
             if (parsed) {
