@@ -1,3 +1,10 @@
+# [1.213.0-COLD-711.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.213.0-COLD-711.1...v1.213.0-COLD-711.2) (2024-05-08)
+
+
+### Features
+
+* handle section groups, sections and questions using MQTT ([60b7f9f](https://github.com/ColdPBC/cold-monorepo/commit/60b7f9fa13b9f71ca6b55ac2b0b9b376fc32ded6))
+
 # [1.213.0-COLD-711.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.212.0...v1.213.0-COLD-711.1) (2024-05-03)
 
 
