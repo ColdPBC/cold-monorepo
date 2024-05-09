@@ -1,3 +1,10 @@
+# [1.213.0-COLD-711.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.213.0-COLD-711.2...v1.213.0-COLD-711.3) (2024-05-09)
+
+
+### Features
+
+* update application layout for the new management page ([87501d9](https://github.com/ColdPBC/cold-monorepo/commit/87501d91654cfc4dd72da8e435eef685f0d217d4))
+
 # [1.213.0-COLD-711.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.213.0-COLD-711.1...v1.213.0-COLD-711.2) (2024-05-08)
 
 
