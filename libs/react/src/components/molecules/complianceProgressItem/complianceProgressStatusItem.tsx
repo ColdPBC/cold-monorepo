@@ -19,7 +19,7 @@ export const ComplianceProgressStatusItem = ({ type }: ComplianceProgressItemPro
   };
 
   let totalQuestions = 0;
-  forEach(mqttComplianceSet?.compliance_section_groups, group => {
+  forEach(mqttComplianceSet?.compliance_definition.compliance_section_groups, group => {
     totalQuestions += group.question_count;
     switch (type) {
       case ComplianceProgressStatus.not_started:

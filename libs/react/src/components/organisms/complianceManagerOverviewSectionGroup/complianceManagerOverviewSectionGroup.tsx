@@ -8,6 +8,7 @@ import ColdMQTTContext from '../../../context/coldMQTTContext';
 import { ColdComplianceManagerContext } from '@coldpbc/context';
 import { Transition } from '@headlessui/react';
 import useSWRSubscription from 'swr/subscription';
+import { resolveNodeEnv } from '@coldpbc/fetchers';
 
 export interface ComplianceManagerOverviewSectionGroupProps {
   sectionGroup: MQTTComplianceManagerPayloadComplianceSectionGroup;
@@ -21,11 +22,8 @@ export const ComplianceManagerOverviewSectionGroup = ({ sectionGroup }: Complian
   const { name } = context.data;
 
   const getComplianceSectionListTopic = () => {
-    return `ui/${import.meta.env.VITE_DD_ENV}/cmp/${orgId}/cmp_def/${name}/sg/${sectionGroup.id}`;
+    return `ui/${resolveNodeEnv()}/${orgId}/${name}/${sectionGroup.id}`;
   };
-
-  // const data = Array<MQTTComplianceManagerPayloadComplianceSection>();
-  // const error = null;
 
   const { data, error } = useSWRSubscription(getComplianceSectionListTopic(), subscribeSWR) as {
     data: MQTTComplianceManagerPayloadComplianceSection[] | undefined;
@@ -35,9 +33,9 @@ export const ComplianceManagerOverviewSectionGroup = ({ sectionGroup }: Complian
   useEffect(() => {
     if (client?.current && connectionStatus) {
       publishMessage(
-        `platform/${import.meta.env.VITE_DD_ENV}/compliance/getComplianceSectionList`,
+        `platform/${resolveNodeEnv()}/compliance/getComplianceSectionList`,
         JSON.stringify({
-          reply_to: `ui/${import.meta.env.VITE_DD_ENV}/cmp/${orgId}/cmp_def/${name}/sg/${sectionGroup.id}`,
+          reply_to: getComplianceSectionListTopic(),
           resource: 'complianceSectionList',
           method: 'GET',
           compliance_set_name: name,
@@ -47,11 +45,11 @@ export const ComplianceManagerOverviewSectionGroup = ({ sectionGroup }: Complian
     }
   }, [connectionStatus, name, publishMessage, client]);
 
-  console.log({
-    type: 'compliance section list',
-    data,
-    error,
-  });
+  // console.log({
+  //   type: 'compliance section list',
+  //   data,
+  //   error,
+  // });
 
   const sectionStatuses = [
     {
@@ -133,24 +131,22 @@ export const ComplianceManagerOverviewSectionGroup = ({ sectionGroup }: Complian
           </div>
         </div>
       </div>
-      <div className={'w-full h-auto flex flex-col gap-[36px] bg-transparent overflow-hidden'}>
-        <Transition
-          className={'w-full flex flex-col gap-[36px] bg-transparent'}
-          show={collapseOpen}
-          // // transition fly in from top
-          // enter={'transform transition duration-300'}
-          // enterFrom={'opacity-0 translate-y-[-100%]'}
-          // enterTo={'opacity-100 translate-y-0'}
-          // // transition fly out to top
-          // leave={'transform transition duration-300'}
-          // leaveFrom={'opacity-100 translate-y-0'}
-          // leaveTo={'opacity-0 translate-y-[-100%]'}
-        >
-          {map(orderBy(data, ['order'], ['asc']), (section, index) => {
-            return <ComplianceManagerOverviewSection key={`${section.id}-${index}`} section={section} groupId={sectionGroup.id} />;
-          })}
-        </Transition>
-      </div>
+      <Transition
+        className={'w-full flex flex-col gap-[36px] bg-transparent'}
+        show={collapseOpen}
+        // // transition fly in from top
+        // enter={'transform transition duration-300'}
+        // enterFrom={'opacity-0 translate-y-[-100%]'}
+        // enterTo={'opacity-100 translate-y-0'}
+        // // transition fly out to top
+        // leave={'transform transition duration-300'}
+        // leaveFrom={'opacity-100 translate-y-0'}
+        // leaveTo={'opacity-0 translate-y-[-100%]'}
+      >
+        {map(orderBy(data, ['order'], ['asc']), (section, index) => {
+          return <ComplianceManagerOverviewSection key={`${section.id}-${index}`} section={section} groupId={sectionGroup.id} />;
+        })}
+      </Transition>
     </div>
   );
 };

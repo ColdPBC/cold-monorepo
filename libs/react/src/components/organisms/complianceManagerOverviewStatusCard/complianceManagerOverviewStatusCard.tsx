@@ -35,7 +35,7 @@ export const ComplianceManagerOverviewStatusCard = () => {
 
     switch (status) {
       case ComplianceManagerStatus.activated:
-        text = `Activate ${mqttComplianceSet?.title}`;
+        text = `Activate ${mqttComplianceSet?.compliance_definition.title}`;
         break;
       case ComplianceManagerStatus.upload:
         text = 'Upload Documents';

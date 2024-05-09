@@ -8,7 +8,7 @@ export const ComplianceManagerOverviewSectionGroups = () => {
 
   const { mqttComplianceSet } = data;
 
-  const sectionGroups = mqttComplianceSet?.compliance_section_groups;
+  const sectionGroups = mqttComplianceSet?.compliance_definition.compliance_section_groups;
 
   return (
     <div className={'w-full flex flex-col gap-[36px]'}>

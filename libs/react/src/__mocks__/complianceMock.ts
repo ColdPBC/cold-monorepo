@@ -1,5 +1,4 @@
-import { Compliance, ComplianceManager, OrgCompliance, OrgComplianceManager } from '@coldpbc/interfaces';
-import { getComplianceManagerSectionGroupMock } from './surveyDataMock';
+import { Compliance, OrgCompliance } from '@coldpbc/interfaces';
 
 export function getComplianceMock(): Compliance[] {
   return [
@@ -343,89 +342,6 @@ export function getAssessmentsComplianceMock(): OrgCompliance[] {
       updated_at: '2020-03-03T23:50:31.000Z',
       organization: {},
       compliance_definition: getComplianceMockByName('b_corp_2024'),
-    },
-  ];
-}
-
-export function getAllComplianceManagerMock(): Array<ComplianceManager> {
-  return [
-    {
-      id: 'compdef_s4h9rd5wuorvhthy',
-      name: 'rei_pia_2024',
-      order: 0,
-      version: 2024,
-      title: 'REI 2024 Product Impact Assessment',
-      image_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/complianceBackgroundImages/rei.png',
-      logo_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/compliance_svgs/rei_logo.svg',
-      metadata: {
-        due_date: '2024-10-01T19:51:37.808Z',
-        term: '3_year_term',
-      },
-      visible: true,
-      created_at: '2024-03-01T19:51:37.808Z',
-      updated_at: '2024-05-02T01:09:03.925Z',
-      compliance_section_groups: [getComplianceManagerSectionGroupMock()],
-    },
-  ];
-}
-
-export function getSingleComplianceManagerMock(): ComplianceManager {
-  return {
-    id: 'compdef_s4h9rd5wuorvhthy',
-    name: 'rei_pia_2024',
-    order: 0,
-    version: 2024,
-    title: 'REI 2024 Product Impact Assessment',
-    image_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/complianceBackgroundImages/rei.png',
-    logo_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/compliance_svgs/rei_logo.svg',
-    metadata: {
-      due_date: '2024-10-01T19:51:37.808Z',
-      term: '3_year_term',
-    },
-    visible: true,
-    created_at: '2024-03-01T19:51:37.808Z',
-    updated_at: '2024-05-02T01:09:03.925Z',
-    compliance_section_groups: [getComplianceManagerSectionGroupMock()],
-  };
-}
-
-export function getOrganizationComplianceManagerMock(): Array<OrgComplianceManager> {
-  return [
-    {
-      id: 'orgcomp_uqt18enywdj4ncg8',
-      organization_id: 'org_g2zzR5rwTKVAIwCn',
-      compliance_id: 'compdef_s4h9rd5wuorvhthy',
-      created_at: '2024-03-06T21:05:28.097Z',
-      updated_at: '2024-03-06T21:05:28.097Z',
-      organization: {
-        id: 'org_g2zzR5rwTKVAIwCn',
-        name: 'cold-climate-staging',
-        enabled_connections: [
-          {
-            connection_id: 'con_7DptYmJNrY0PYCrx',
-            assign_membership_on_login: false,
-          },
-          {
-            connection_id: 'con_kYFtdnBxyBdYzTtK',
-            assign_membership_on_login: false,
-          },
-        ],
-        display_name: 'Cold Climate',
-        branding: {
-          colors: {
-            primary: '#2892D7',
-            page_background: '#0A1C2B',
-          },
-          logo_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/cold-climate-logo/black/Asset+2.svg',
-        },
-        phone: null,
-        website: null,
-        email: null,
-        created_at: '2023-08-10T21:48:11.103Z',
-        updated_at: '2023-08-10T21:48:11.106Z',
-        isTest: false,
-      },
-      compliance_definition: getSingleComplianceManagerMock(),
     },
   ];
 }

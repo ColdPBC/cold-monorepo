@@ -15,7 +15,7 @@ export const ComplianceManagerAssessmentPreview = () => {
   // todo: change this to show the actual assessment percentage and not amount of answered/amount of questions
   let totalQuestions = 0;
   let answeredQuestions = 0;
-  forEach(mqttComplianceSet?.compliance_section_groups, sectionGroup => {
+  forEach(mqttComplianceSet?.compliance_definition.compliance_section_groups, sectionGroup => {
     totalQuestions += sectionGroup.question_count;
     answeredQuestions += sectionGroup.user_answered_count;
   });

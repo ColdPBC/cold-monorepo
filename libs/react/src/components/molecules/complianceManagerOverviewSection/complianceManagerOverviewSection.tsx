@@ -7,6 +7,7 @@ import { ColdComplianceManagerContext } from '@coldpbc/context';
 import useSWRSubscription from 'swr/subscription';
 import { ComplianceManagerSectionProgressBar } from '@coldpbc/components';
 import { ComplianceManagerStatus } from '@coldpbc/enums';
+import { resolveNodeEnv } from '@coldpbc/fetchers';
 
 export const ComplianceManagerOverviewSection = ({ section, groupId }: { section: MQTTComplianceManagerPayloadComplianceSection; groupId: string }) => {
   const { orgId } = useAuth0Wrapper();
@@ -15,20 +16,19 @@ export const ComplianceManagerOverviewSection = ({ section, groupId }: { section
   const { status } = context;
   const { name } = context.data;
 
-  // const data = Array<MQTTComplianceManagerPayloadComplianceQuestion>();
-  // const error = null;
+  const sectionTopic = `ui/${resolveNodeEnv()}/${orgId}/${name}/${groupId}/${section.id}`;
 
-  const { data, error } = useSWRSubscription(`ui/${import.meta.env.VITE_DD_ENV}/${orgId}/cd/${name}/sc/${section.id}`, subscribeSWR) as {
+  const { data, error } = useSWRSubscription(sectionTopic, subscribeSWR) as {
     data: MQTTComplianceManagerPayloadComplianceQuestion[] | undefined;
-    error: any;
+    error: unknown;
   };
 
   useEffect(() => {
     if (client?.current && connectionStatus) {
       publishMessage(
-        `platform/${import.meta.env.VITE_DD_ENV}/compliance/getComplianceQuestionList`,
+        `platform/${resolveNodeEnv()}/compliance/getComplianceQuestionList`,
         JSON.stringify({
-          reply_to: `ui/${import.meta.env.VITE_DD_ENV}/${orgId}/cd/${name}/sc/${section.id}`,
+          reply_to: sectionTopic,
           resource: 'complianceQuestionList',
           method: 'GET',
           compliance_set_name: name,

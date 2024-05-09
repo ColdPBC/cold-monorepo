@@ -71,6 +71,7 @@ export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
         client.current?.on('message', async (topic, payload, packet) => {
           const payloadString = packet.payload.toString();
           logBrowser('Received message from IOT', 'info', { topic });
+          console.log('Received message from IOT', { topic, payloadString });
           try {
             const parsedPayload = JSON.parse(payloadString);
             logBrowser('Parsed payload from IOT', 'info', {
@@ -140,9 +141,9 @@ export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
       if (err) {
         logBrowser('Error subscribing to topic ' + key, 'error', { err }, err);
       }
+      console.log({ key, granted });
       client.current?.on('message', async (topic, payload, packet) => {
         next(err, prev => {
-          // console.log({ topic, key, payload: JSON.parse(payload.toString()) });
           if (topic !== key) {
             return prev;
           } else {
@@ -162,7 +163,7 @@ export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
       set(newMessage, 'user', user);
       set(newMessage, 'org_id', orgId);
       set(newMessage, 'token', token);
-      // console.log('Publishing message to IOT', { topic, newMessage });
+      console.log('Publishing message to IOT', { topic, newMessage });
       client.current.publish(topic, JSON.stringify(newMessage));
     }
   };

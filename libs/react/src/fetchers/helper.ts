@@ -1,4 +1,4 @@
-import { get } from 'lodash';
+import {get} from 'lodash';
 
 /**
  * Helper function to resolve URL based on where the app is running.
@@ -9,4 +9,8 @@ export const resolveAPIUrl = (): string => {
   // If storybook is running then use STORYBOOK_API_URL.
   // Otherwise when running locally and other environments use VITE_API_BASE_URL.
   return import.meta.env.STORYBOOK_API_URL || get(import.meta.env, 'VITE_API_BASE_URL', 'http://localhost:7001');
+};
+
+export const resolveNodeEnv = (): string => {
+  return get(import.meta.env, 'VITE_DD_ENV', 'development');
 };

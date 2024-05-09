@@ -1,5 +1,3 @@
-import { ComplianceProgressStatus } from '@coldpbc/enums';
-
 export type Compliance = {
   id: string;
   name: string;
@@ -32,62 +30,23 @@ export type ComplianceProgress = {
   percentageAIAnswered: number;
 };
 
-export type OrgComplianceManager = {
-  id: string;
-  organization_id: string;
-  compliance_id: string;
-  created_at: string;
-  updated_at: string;
-  organization: any;
-  compliance_definition: ComplianceManager;
-};
-
-export type ComplianceManager = {
-  id: string;
-  name: string;
-  order: number;
-  version: number;
-  title: string;
-  image_url: undefined | string;
-  logo_url: string;
-  metadata: any;
-  visible: boolean;
-  created_at: string;
-  updated_at: string;
-  compliance_section_groups: Array<ComplianceManagerSectionGroup>;
-};
-
-export type ComplianceManagerSectionGroup = {
-  id: string;
-  order: number;
-  title: string;
-  sections: Array<ComplianceManagerSection>;
-};
-
-export type ComplianceManagerSection = {
-  id: string;
-  order: number;
-  title: string;
-  _count: {
-    compliance_questions: number;
-  };
-  questions: Array<ComplianceManagerQuestion>;
-};
-
-export type ComplianceManagerQuestion = {
-  order: number;
-  prompt: string;
-  status: ComplianceProgressStatus;
-};
-
 export type MQTTComplianceManagerPayload = {
-  compliance_section_groups: Array<MQTTComplianceManagerPayloadComplianceSectionGroup>;
-  image_url: string;
-  logo_url: string;
-  metadata: any;
-  name: string;
-  title: string;
-  version: number;
+  compliance_definition: {
+    compliance_section_groups: Array<MQTTComplianceManagerPayloadComplianceSectionGroup>;
+    image_url: string;
+    logo_url: string;
+    metadata: any;
+    name: string;
+    title: string;
+    version: number;
+  };
+  statuses: {
+    id: string;
+    email: string;
+    type: string;
+    created_at: string;
+    updated_at: string;
+  }[];
 };
 
 export type MQTTComplianceManagerPayloadComplianceSectionGroup = {

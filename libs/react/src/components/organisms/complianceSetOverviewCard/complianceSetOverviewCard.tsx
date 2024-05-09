@@ -10,6 +10,7 @@ import { isAxiosError } from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { withErrorBoundary } from 'react-error-boundary';
 import { useFlags } from 'launchdarkly-react-client-sdk';
+import { get } from 'lodash';
 
 const _ComplianceSetOverviewCard = ({ name }: { name: string }) => {
   const navigate = useNavigate();
@@ -23,6 +24,8 @@ const _ComplianceSetOverviewCard = ({ name }: { name: string }) => {
 
   const complianceSet = complianceSets.find(complianceSet => complianceSet.name === name) || complianceSets[0];
   const orgComplianceSet = orgComplianceSets.find(orgComplianceSet => orgComplianceSet.compliance_definition.name === name);
+  const dueDate = get(complianceSet, 'metadata.due_date', undefined);
+  const term = get(complianceSet, 'metadata.term', undefined);
 
   const getSurveyUrl = () => {
     let compliance = complianceSets.find(compliance => compliance.name === name);
@@ -48,7 +51,7 @@ const _ComplianceSetOverviewCard = ({ name }: { name: string }) => {
 
   if (!surveyPayload) return null;
 
-  const { definition, progress, status } = surveyPayload;
+  const { status } = surveyPayload;
 
   let complianceStatus = ComplianceStatus.inActive;
 
@@ -87,22 +90,23 @@ const _ComplianceSetOverviewCard = ({ name }: { name: string }) => {
 
   const getComplianceSetTitle = () => {
     if (surveyData.data) {
-      const dueDateYear = surveyData.data.definition.due_date ? new Date(surveyData.data.definition.due_date).getFullYear() : undefined;
-      const term = surveyData.data.definition.term;
+      const dueDateYear = dueDate ? new Date(dueDate).getFullYear() : undefined;
       let termString = '';
-      switch (term) {
-        case 'annual':
-          termString = 'Annual';
-          break;
-        case 'quarterly':
-          termString = 'Quarterly';
-          break;
-        case 'every_three_years':
-          termString = '3-Year Term';
-          break;
-        default:
-          termString = '';
-          break;
+      if (term) {
+        switch (term) {
+          case 'annual':
+            termString = 'Annual';
+            break;
+          case 'quarterly':
+            termString = 'Quarterly';
+            break;
+          case 'every_three_years':
+            termString = '3-Year Term';
+            break;
+          default:
+            termString = '';
+            break;
+        }
       }
 
       const dueDateAndTerm = () => {
@@ -132,8 +136,12 @@ const _ComplianceSetOverviewCard = ({ name }: { name: string }) => {
 
   const getComplianceStatusChip = () => {
     if (surveyData.data) {
-      const { questions_answered, question_count } = surveyData.data.progress;
-      const percentage = question_count === 0 ? 0 : (questions_answered / question_count) * 100;
+      const data = surveyData.data;
+      let percentage = 0;
+      if (data.progress) {
+        const { questions_answered, question_count } = data.progress;
+        percentage = question_count === 0 ? 0 : (questions_answered / question_count) * 100;
+      }
 
       return (
         <div className={'h-full flex flex-col justify-center relative'}>
@@ -151,14 +159,14 @@ const _ComplianceSetOverviewCard = ({ name }: { name: string }) => {
   const getComplianceDueDate = () => {
     if (surveyData.data) {
       // format due date to MM DD, YYYY
-      if (surveyData.data.definition.due_date) {
-        const dateString = surveyData.data.definition.due_date ? format(new Date(surveyData.data.definition.due_date), 'MMMM dd, yyyy') : undefined;
-        const dueInDays = differenceInDays(new Date(surveyData.data.definition.due_date), new Date());
+      if (dueDate) {
+        const dateString = dueDate ? format(new Date(dueDate), 'MMMM dd, yyyy') : undefined;
+        const dueInDays = differenceInDays(new Date(dueDate), new Date());
         let dueInDaysString = '';
         if (dueInDays < 0) {
           dueInDaysString = 'Deadline Passed';
         } else {
-          const format = intlFormatDistance(new Date(surveyData.data.definition.due_date).valueOf(), new Date());
+          const format = intlFormatDistance(new Date(dueDate).valueOf(), new Date());
           dueInDaysString = `Due ${format}`;
         }
         const isDueInLessThan7Days = dueInDays < 7;
@@ -212,12 +220,12 @@ const _ComplianceSetOverviewCard = ({ name }: { name: string }) => {
         return true;
       case 'Upcoming':
         if (!surveyData.data) return false;
-        if (!surveyData.data.definition.due_date) return false;
-        return differenceInDays(new Date(surveyData.data.definition.due_date), new Date()) >= 0;
+        if (!dueDate) return false;
+        return differenceInDays(new Date(dueDate), new Date()) >= 0;
       case 'Passed':
         if (!surveyData.data) return false;
-        if (!surveyData.data.definition.due_date) return false;
-        return differenceInDays(new Date(surveyData.data.definition.due_date), new Date()) < 0;
+        if (!dueDate) return false;
+        return differenceInDays(new Date(dueDate), new Date()) < 0;
       case 'Active':
         return !isNotActive;
       case 'Not Active':

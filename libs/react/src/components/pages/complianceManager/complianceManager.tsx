@@ -11,7 +11,7 @@ import ColdMQTTContext from '../../../context/coldMQTTContext';
 import { MQTTComplianceManagerPayload, OrgCompliance } from '@coldpbc/interfaces';
 import useSWRSubscription from 'swr/subscription';
 import useSWR from 'swr';
-import { axiosFetcher } from '@coldpbc/fetchers';
+import { axiosFetcher, resolveNodeEnv } from '@coldpbc/fetchers';
 
 const _ComplianceManager = () => {
   const { name } = useParams();
@@ -23,12 +23,9 @@ const _ComplianceManager = () => {
 
   const orgCompliances = useSWR<OrgCompliance[], any, any>(orgId ? [`/compliance_definitions/organizations/${orgId}`, 'GET'] : null, axiosFetcher);
 
-  const { data, error } = useSWRSubscription(`ui/${import.meta.env.VITE_DD_ENV}/${orgId}/compliance/${name}`, subscribeSWR) as {
-    data:
-      | {
-          compliance_definition: MQTTComplianceManagerPayload;
-        }
-      | undefined;
+  const topic = `ui/${resolveNodeEnv()}/${orgId}/${name}`;
+  const { data, error } = useSWRSubscription(topic, subscribeSWR) as {
+    data: MQTTComplianceManagerPayload | undefined;
     error: any;
   };
   const compliance = data?.compliance_definition;
@@ -36,9 +33,9 @@ const _ComplianceManager = () => {
   useEffect(() => {
     if (client?.current && connectionStatus) {
       publishMessage(
-        `platform/${import.meta.env.VITE_DD_ENV}/compliance/getComplianceSectionGroupList`,
+        `platform/${resolveNodeEnv()}/compliance/getComplianceSectionGroupList`,
         JSON.stringify({
-          reply_to: `ui/${import.meta.env.VITE_DD_ENV}/${orgId}/compliance/${name}`,
+          reply_to: topic,
           resource: 'complianceSectionGroupListByOrgIdCompNameKey',
           method: 'GET',
           compliance_set_name: name,
@@ -57,26 +54,18 @@ const _ComplianceManager = () => {
     }
   }, [orgCompliances]);
 
-  // const compliances = getAllComplianceManagerMock();
-  // const orgCompliances = getOrganizationComplianceManagerMock();
-  // const orgCompliance = find(orgCompliances, compliance => compliance.compliance_definition.name === name);
-  // const compliance = find(compliances, { name });
-  console.log({
-    // orgCompliances,
-    // orgCompliance,
-    // compliance,
-    // topic: `platform/${import.meta.env.VITE_DD_ENV}/compliance/${orgId}/compliance_definition/${name}`,
-    type: 'compliance definition',
-    data,
-    error,
-  });
+  // console.log({
+  //   type: 'compliance definition',
+  //   data,
+  //   error,
+  // });
 
   if (!data) {
     return <Spinner />;
   }
 
-  const term = get(data, 'compliance.metadata.term', undefined);
-  const due_date = get(data, 'compliance.metadata.due_date', undefined);
+  const term = get(data, 'compliance_definition.metadata.term', undefined);
+  const due_date = get(data, 'compliance_definition.metadata.due_date', undefined);
   let termString = '';
   if (term) {
     switch (term) {
@@ -86,7 +75,7 @@ const _ComplianceManager = () => {
       case 'quarterly':
         termString = 'Quarterly';
         break;
-      case '3_year_term':
+      case 'every_three_years':
         termString = '3 Year Term';
         break;
       default:
@@ -105,9 +94,7 @@ const _ComplianceManager = () => {
     <ColdComplianceManagerContext.Provider
       value={{
         data: {
-          complianceSet: undefined,
-          orgComplianceSet: undefined,
-          mqttComplianceSet: compliance,
+          mqttComplianceSet: data,
           name: name || '',
         },
         status: status,
@@ -137,7 +124,7 @@ const _ComplianceManager = () => {
                     <div className={'text-body text-tc-secondary'}>{new Date(due_date).getFullYear()} Compliance Set</div>
                   </div>
                 )}
-                {term && (
+                {termString.length > 0 && (
                   <div className={'flex flex-row gap-[4px] items-center'}>
                     <ColdIcon name={IconNames.ColdClockIcon} className={'w-[24px] h-[24px]'} />
                     <div className={'text-body text-tc-secondary'}>{termString}</div>
