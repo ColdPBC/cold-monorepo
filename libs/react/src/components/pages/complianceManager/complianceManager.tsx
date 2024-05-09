@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth0Wrapper } from '@coldpbc/hooks';
-import { find } from 'lodash';
+import { find, get } from 'lodash';
 import { ColdIcon, ColdLeftArrowIcon, ComplianceManagerOverview, ErrorFallback, Spinner } from '@coldpbc/components';
 import React, { useContext, useEffect, useState } from 'react';
 import { ColdComplianceManagerContext } from '@coldpbc/context';
@@ -24,9 +24,14 @@ const _ComplianceManager = () => {
   const orgCompliances = useSWR<OrgCompliance[], any, any>(orgId ? [`/compliance_definitions/organizations/${orgId}`, 'GET'] : null, axiosFetcher);
 
   const { data, error } = useSWRSubscription(`ui/${import.meta.env.VITE_DD_ENV}/${orgId}/compliance/${name}`, subscribeSWR) as {
-    data: MQTTComplianceManagerPayload | undefined;
+    data:
+      | {
+          compliance_definition: MQTTComplianceManagerPayload;
+        }
+      | undefined;
     error: any;
   };
+  const compliance = data?.compliance_definition;
 
   useEffect(() => {
     if (client?.current && connectionStatus) {
@@ -70,24 +75,23 @@ const _ComplianceManager = () => {
     return <Spinner />;
   }
 
-  const { term, due_date } = data?.metadata as {
-    term: string;
-    due_date: string;
-  };
-
+  const term = get(data, 'compliance.metadata.term', undefined);
+  const due_date = get(data, 'compliance.metadata.due_date', undefined);
   let termString = '';
-  switch (term) {
-    case 'annual':
-      termString = 'Annual';
-      break;
-    case 'quarterly':
-      termString = 'Quarterly';
-      break;
-    case '3_year_term':
-      termString = '3 Year Term';
-      break;
-    default:
-      termString = '';
+  if (term) {
+    switch (term) {
+      case 'annual':
+        termString = 'Annual';
+        break;
+      case 'quarterly':
+        termString = 'Quarterly';
+        break;
+      case '3_year_term':
+        termString = '3 Year Term';
+        break;
+      default:
+        termString = '';
+    }
   }
 
   const getActiveTabElement = (tab: string) => {
@@ -96,14 +100,14 @@ const _ComplianceManager = () => {
         return <ComplianceManagerOverview />;
     }
   };
-  const complianceDefinition = data;
+
   return (
     <ColdComplianceManagerContext.Provider
       value={{
         data: {
           complianceSet: undefined,
           orgComplianceSet: undefined,
-          mqttComplianceSet: data,
+          mqttComplianceSet: compliance,
           name: name || '',
         },
         status: status,
@@ -111,7 +115,7 @@ const _ComplianceManager = () => {
       }}>
       <div className={'flex flex-col w-full gap-[48px] justify-center relative'}>
         <div className={'absolute top-0 w-full h-[179px]'}>
-          <img className={'w-full h-full object-cover'} src={data?.image_url} alt={complianceDefinition?.name} />
+          <img className={'w-full h-full object-cover'} src={compliance?.image_url} alt={compliance?.name} />
         </div>
         <div className={'w-full h-[281px] flex flex-col gap-[47px] justify-between relative'} data-testid={'compliance-manager-header'}>
           <div
@@ -122,10 +126,10 @@ const _ComplianceManager = () => {
           </div>
           <div className={'flex flex-row gap-[10px] px-[70px] items-end w-full'}>
             <div className={'h-[194px] w-[194px] rounded-full bg-gray-50 flex items-center justify-center'}>
-              <img className={'w-[120px] h-[120px] invert'} src={complianceDefinition?.logo_url} alt={complianceDefinition?.name} />
+              <img className={'w-[120px] h-[120px] invert'} src={compliance?.logo_url} alt={compliance?.name} />
             </div>
             <div className={'flex flex-col justify-start'}>
-              <div className={'text-[40px] font-bold leading-[60px] text-tc-primary'}>{complianceDefinition?.title}</div>
+              <div className={'text-[40px] font-bold leading-[60px] text-tc-primary'}>{compliance?.title}</div>
               <div className={'flex flex-row gap-[32px]'}>
                 {due_date && (
                   <div className={'flex flex-row gap-[4px] items-center'}>
