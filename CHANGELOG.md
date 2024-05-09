@@ -1,3 +1,10 @@
+# [1.219.0-COLD-711.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.219.0-COLD-711.1...v1.219.0-COLD-711.2) (2024-05-09)
+
+
+### Features
+
+* handle mqtt mocks in storybook ([5777583](https://github.com/ColdPBC/cold-monorepo/commit/57775834de11512548b434732c0c04fab03f90a9))
+
 # [1.219.0-COLD-711.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.218.0...v1.219.0-COLD-711.1) (2024-05-09)
 
 
