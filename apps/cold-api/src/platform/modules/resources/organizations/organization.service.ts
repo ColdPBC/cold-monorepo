@@ -30,6 +30,72 @@ export class OrganizationService extends BaseWorker {
     this.httpService = new HttpService();
   }
 
+  async getOrgComplianceData(orgId: string, req: any) {
+    const response = await this.prisma.organizations.findMany({
+      select: {
+        display_name: true,
+        organization_compliance: {
+          select: {
+            compliance_definition_name: true,
+            compliance_definition: {
+              select: {
+                image_url: true,
+                logo_url: true,
+                name: true,
+                order: true,
+                compliance_section_groups: {
+                  select: {
+                    id: true,
+                    order: true,
+                    title: true,
+                    compliance_sections: {
+                      select: {
+                        id: true,
+                        key: true,
+                        order: true,
+                        title: true,
+                        dependency_expression: true,
+                        compliance_questions: {
+                          select: {
+                            additional_context: true,
+                            component: true,
+                            coresponding_question: true,
+                            created_at: true,
+                            dependency_expression: true,
+                            id: true,
+                            key: true,
+                            options: true,
+                            order: true,
+                            placeholder: true,
+                            prompt: true,
+                            question_summary: true,
+                            rubric: true,
+                            tooltip: true,
+                          },
+                          orderBy: {
+                            order: 'desc',
+                          },
+                        },
+                      },
+                      orderBy: {
+                        order: 'desc',
+                      },
+                    },
+                  },
+                  orderBy: {
+                    order: 'desc',
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+
+    return response;
+  }
+
   private async syncOpenAIAssistants(org) {
     let existing = await this.prisma.organizations.findUnique({
       where: {

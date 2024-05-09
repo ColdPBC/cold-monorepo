@@ -9,6 +9,13 @@ const meta = {
   component: ComplianceSetOverviewCard,
   tags: ['autodocs'],
   decorators: [withKnobs],
+  parameters: {
+    launchdarkly: {
+      flags: {
+        showNewCompliancePageHomeCold671: true,
+      },
+    },
+  },
 } satisfies Meta<typeof ComplianceSetOverviewCard>;
 
 export default meta;

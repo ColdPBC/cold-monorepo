@@ -34,6 +34,26 @@ export class ComplianceController extends BaseWorker {
     return this.complianceService.create(req, definition);
   }
 
+  @Post('compliance_definitions/:id/survey')
+  @HttpCode(201)
+  @Roles(...coldAdminOnly)
+  injectSurvey(
+    @Param('id') id: string,
+    @Req()
+    req: {
+      body: any;
+      headers: any;
+      query: any;
+      user: IAuthenticatedUser;
+    },
+    @Body()
+    definition: {
+      sections: { [key: string]: { follow_up: any } };
+    },
+  ) {
+    return this.complianceService.injectSurvey(req, id, definition);
+  }
+
   @Get('compliance_definitions')
   @Roles(...allRoles)
   @ApiQuery(bpcDecoratorOptions)

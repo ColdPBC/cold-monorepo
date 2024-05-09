@@ -292,16 +292,10 @@ const _EmissionsCarbonFootprintCharts = () => {
             </div>
           </div>
           <div className={'flex flex-row gap-[32px]'}>
-            <div className={'flex flex-col justify-between w-[347px] gap-[32px]'}>
+            <div className={'flex flex-col justify-start w-[347px] gap-[32px]'}>
               <div className={'w-[347px] h-[347px] relative'}>
                 <CarbonFootprintDetailChip emissions={totalEmissions} center />
                 <Chart options={chartOptions} type="doughnut" data={emissionsDataSet} plugins={chartPlugins} data-chromatic="ignore" />
-              </div>
-              <div className={'w-full h-[77px] flex flex-row gap-[16px]'}>
-                <img src={'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/Change+Climate+Logo.png'} alt={'Change Climate logo'} className={'w-[77px]'} />
-                <div className={'text-caption text-tc-disabled whitespace-pre-wrap'}>
-                  Emissions factors and methodology powered by The Change Climate Project, the leading independent emissions accounting & certification nonprofit.
-                </div>
               </div>
             </div>
             <div className={'flex flex-col gap-[16px] w-full'}>

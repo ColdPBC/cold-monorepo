@@ -1,17 +1,102 @@
-# [1.213.0-COLD-711.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.213.0-COLD-711.1...v1.213.0-COLD-711.2) (2024-05-08)
+# [1.218.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.217.2...v1.218.0) (2024-05-07)
 
 
 ### Features
 
-* handle section groups, sections and questions using MQTT ([60b7f9f](https://github.com/ColdPBC/cold-monorepo/commit/60b7f9fa13b9f71ca6b55ac2b0b9b376fc32ded6))
+* removed change climate disclaimer ([03b51b1](https://github.com/ColdPBC/cold-monorepo/commit/03b51b19d332533ad506f5818319ffeec1fdbb5a))
 
-# [1.213.0-COLD-711.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.212.0...v1.213.0-COLD-711.1) (2024-05-03)
+## [1.217.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.217.1...v1.217.2) (2024-05-03)
+
+
+### Bug Fixes
+
+* Remove `created_at` and `updated_at` from seed_compliance_definitions ([2c03df1](https://github.com/ColdPBC/cold-monorepo/commit/2c03df1d5933f09dd25a791e6208f297e360484b))
+
+## [1.217.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.217.0...v1.217.1) (2024-05-03)
+
+
+### Bug Fixes
+
+* update `policy_data` table structure and related code changes ([6563a4b](https://github.com/ColdPBC/cold-monorepo/commit/6563a4b0137b9528f85b7469e4ef6f3ceb080960))
+
+# [1.217.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.216.1...v1.217.0) (2024-05-02)
+
+
+### Bug Fixes
+
+* add ComplianceDefinition entity in compliance_definitions module ([27fc40a](https://github.com/ColdPBC/cold-monorepo/commit/27fc40a2b93f8654739687ecc6e6206bd3417fb9))
+* enhance MQTT service and add MQTT consumer ([087dce5](https://github.com/ColdPBC/cold-monorepo/commit/087dce5dc9fa6d006e4dbf524cb486d63dccb654))
+* update logo URL for 'b_corp_2024' in compliance definitions ([d8026dc](https://github.com/ColdPBC/cold-monorepo/commit/d8026dcbbbff75b386253a84e2b34da65a449a9a))
 
 
 ### Features
 
-* initial work for compliance manager page ([910001e](https://github.com/ColdPBC/cold-monorepo/commit/910001e817292c86a73b30e8ec22cd6296631e27))
-* remove old survey code ([e2a4538](https://github.com/ColdPBC/cold-monorepo/commit/e2a45384bce0a9007da88ee556010cfafff116d1))
+* add compliance data retrieval for organizations ([4c05575](https://github.com/ColdPBC/cold-monorepo/commit/4c055754dabb5a04f3884c8eb813ddc7ea90af53))
+* add compliance sections components to API ([2c16396](https://github.com/ColdPBC/cold-monorepo/commit/2c16396a6ff6e01fc0f9e8e58992c70846725b68))
+* add compliance_questions module ([779e879](https://github.com/ColdPBC/cold-monorepo/commit/779e879cda55d16ef6bb046e11366c2bf642778d))
+* add compliance_section_groups module, service, controller and entity. ([3d47fd4](https://github.com/ColdPBC/cold-monorepo/commit/3d47fd49ab14dbd0854300599b0b5d2f19c5fd99))
+* add organization compliance module, service, and entity ([5a3c282](https://github.com/ColdPBC/cold-monorepo/commit/5a3c282314ba20e126e1e86850bab6268071000e))
+* add organization_compliance_ai_responses module, service, and controller ([1737b65](https://github.com/ColdPBC/cold-monorepo/commit/1737b65d68d7ccfe1e28e8530f829fd7a6774ee6))
+* add organization_compliance_ai_responses module, service, and controller ([ddd7112](https://github.com/ColdPBC/cold-monorepo/commit/ddd7112ba2b992ef0d896d08831153470738acd5))
+* add organization_compliance_bookmarks module, service, entity and controller ([c31e1e0](https://github.com/ColdPBC/cold-monorepo/commit/c31e1e04b72b0239641f0f1a15775c5ebd0461a8))
+* add organization_compliance_note_link module, controller, service, and entity ([861de65](https://github.com/ColdPBC/cold-monorepo/commit/861de650c248c32e883202a454c7e06ad347f263))
+* add organization_compliance_notes module, service, entity and controller ([3952bbe](https://github.com/ColdPBC/cold-monorepo/commit/3952bbef0f219a560fc96e33f8afd8c6a4752c92))
+* add organization_compliance_notes module, service, entity and controller ([b94dd72](https://github.com/ColdPBC/cold-monorepo/commit/b94dd72df500141a0baa5b8ee3a590b55088f691))
+* add organization_compliance_response module, service, entity and controller ([cadb453](https://github.com/ColdPBC/cold-monorepo/commit/cadb45378528f52a58554206b90a29aaff699833))
+* add organization_compliance_statuses module, controller, service, and entity ([44d642f](https://github.com/ColdPBC/cold-monorepo/commit/44d642fb6f185e020bbab78bf0eebf5557278296))
+* add survey injection to compliance service ([ca920bc](https://github.com/ColdPBC/cold-monorepo/commit/ca920bc5e472352d1974dd48c0c73cf9134f4bfa))
+
+## [1.216.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.216.0...v1.216.1) (2024-05-02)
+
+
+### Bug Fixes
+
+* Corrected spelling mistake and updated database reference ([0a19962](https://github.com/ColdPBC/cold-monorepo/commit/0a19962d51a95b74fb2b489fb32ab98bc3c3beeb))
+
+# [1.216.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.215.0...v1.216.0) (2024-05-01)
+
+
+### Features
+
+* Update compliance database schema and seeds ([0ac9390](https://github.com/ColdPBC/cold-monorepo/commit/0ac9390e506ca9e65522e112e32d8a6d5d08b70d))
+
+# [1.215.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.214.0...v1.215.0) (2024-05-01)
+
+
+### Bug Fixes
+
+* some minor compliance model changes ([2aef043](https://github.com/ColdPBC/cold-monorepo/commit/2aef043b8143b6f10665344b803f3fec467b0e53))
+* Update compliance schema and related migrations ([c0977b4](https://github.com/ColdPBC/cold-monorepo/commit/c0977b42edfb4f3bb97688fe43442c10b339d1e8))
+
+
+### Features
+
+* add new compliance models ([575cbf7](https://github.com/ColdPBC/cold-monorepo/commit/575cbf76920178798add09b3cb742b6a12827845))
+
+# [1.214.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.213.0...v1.214.0) (2024-04-30)
+
+
+### Features
+
+* update org selector styling ([22a84ff](https://github.com/ColdPBC/cold-monorepo/commit/22a84fffcfcdd5e4dd69fb25b31596ab14db513d))
+
+# [1.213.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.212.1...v1.213.0) (2024-04-30)
+
+
+### Features
+
+* change to light when flag is turned on ([ffc5dea](https://github.com/ColdPBC/cold-monorepo/commit/ffc5dea2c9cdc61a2403d4281f1c0adffe68a2e4))
+* remove elses ([88ebd3d](https://github.com/ColdPBC/cold-monorepo/commit/88ebd3dff1ca5d9a7f4947d3402bc89788f22a9a))
+* use new dark and light compliance logos ([3f839f7](https://github.com/ColdPBC/cold-monorepo/commit/3f839f7141c90d153ffa187c6189d976394419bc))
+
+
+## [1.212.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.212.0...v1.212.1) (2024-04-30)
+
+
+
+### Bug Fixes
+
+* some minor freeplay bugs ([25b48ce](https://github.com/ColdPBC/cold-monorepo/commit/25b48ce3d4f8961bd568376267f9d569364e4d4a))
 
 # [1.212.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.211.2...v1.212.0) (2024-04-29)
 

@@ -91,6 +91,21 @@ export class OrganizationController extends BaseWorker {
     return this.orgService.updateOrganization(orgId, createOrganizationDTO, req);
   }
 
+  @Get('organizations/:orgId/compliance')
+  @Roles(...coldAdminOnly)
+  getOrgData(
+    @Param('orgId') orgId: string,
+    @Req()
+    req: {
+      body: any;
+      headers: any;
+      query: any;
+      user: IAuthenticatedUser;
+    },
+  ) {
+    return this.orgService.getOrgComplianceData(orgId, req);
+  }
+
   /***
    * **Internal Use Only** : Get all organizations from Auth0
    */

@@ -434,7 +434,7 @@ export const flowbiteThemeOverride: FlowbiteTheme = {
       },
       target: 'w-fit',
     },
-    inlineWrapper: 'flex items-center',
+    inlineWrapper: 'flex items-center w-full',
   },
   fileInput: {
     root: {

@@ -17,6 +17,8 @@ import { OrgRolesModule } from './roles/roles.module';
 import { OrganizationFilesModule } from './files/organization.files.module';
 import { FootprintsModule } from './facilities/footprints/footprints.module';
 import { OrgSurveysModule } from './surveys/orgSurveys.module';
+import { OrganizationComplianceNoteFilesModule } from './organization_compliance/organization_compliance_notes/organization_compliance_note_files/organization_compliance_note_files.module';
+import { OrganizationComplianceModule } from './organization_compliance/organization_compliance.module';
 
 @Module({
   imports: [
@@ -34,6 +36,8 @@ import { OrgSurveysModule } from './surveys/orgSurveys.module';
     OrganizationFilesModule,
     FootprintsModule,
     OrgSurveysModule,
+    OrganizationComplianceNoteFilesModule,
+    OrganizationComplianceModule,
   ],
   controllers: [OrganizationController, OrganizationFilesController],
   providers: [OrganizationService, CacheService, OrganizationHelper],
