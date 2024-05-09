@@ -7,8 +7,9 @@ export type Compliance = {
   surveys: string[] | never[];
   created_at: string;
   updated_at: string;
-  due_date?: string;
-  term?: string;
+  metadata: {
+    [key: string]: any;
+  };
 };
 
 export type OrgCompliance = {

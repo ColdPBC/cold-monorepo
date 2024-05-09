@@ -1,6 +1,5 @@
 import { ComplianceSurveyPayloadType, ComplianceSurveyProgressQuestionType, ComplianceSurveySectionProgressType, SurveyPayloadType, SurveySectionType } from '@coldpbc/interfaces';
 import { forEach, forOwn } from 'lodash';
-import { addDays } from 'date-fns';
 
 export const getSurveyFormDataByName = (name: string): SurveyPayloadType | ComplianceSurveyPayloadType | undefined => {
   const surveys = getSurveysMock();
@@ -5097,8 +5096,6 @@ export function getSurveysMock(): Array<SurveyPayloadType | ComplianceSurveyPayl
       },
       image_url: 'https://cold-public-assets.s3.amazonaws.com/images%2FReduce%20Packaging%20Footprint.png',
       intro_markdown: '',
-      due_date: addDays(new Date(), 28).toISOString(),
-      term: 'annual',
     },
     progress: {
       total_score: 1,
@@ -9161,7 +9158,6 @@ export function getSurveysMock(): Array<SurveyPayloadType | ComplianceSurveyPayl
       intro_markdown: '',
       target_score: 80,
       compliance_type: 'target_score',
-      term: 'every_three_years',
     },
     progress: {
       total_score: 10,
@@ -11052,7 +11048,6 @@ export function getSurveysMock(): Array<SurveyPayloadType | ComplianceSurveyPayl
       },
       image_url: 'https://cold-public-assets.s3.amazonaws.com/images%2FReduce%20Packaging%20Footprint.png',
       intro_markdown: '',
-      term: 'annual',
     },
     progress: {
       total_score: 0,
@@ -11784,8 +11779,6 @@ export function getSurveysMock(): Array<SurveyPayloadType | ComplianceSurveyPayl
       image_url: 'https://cold-public-assets.s3.amazonaws.com/images%2FReduce%20Packaging%20Footprint.png',
       intro_markdown: '',
       submitted: true,
-      term: 'annual',
-      due_date: addDays(new Date(), 6).toISOString(),
     },
     progress: {
       total_score: 0,

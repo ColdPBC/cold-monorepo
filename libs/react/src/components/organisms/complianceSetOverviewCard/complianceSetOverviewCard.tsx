@@ -169,7 +169,7 @@ const _ComplianceSetOverviewCard = ({ name }: { name: string }) => {
           const format = intlFormatDistance(new Date(dueDate).valueOf(), new Date());
           dueInDaysString = `Due ${format}`;
         }
-        const isDueInLessThan7Days = dueInDays < 7;
+        const isDueInLessThan7Days = dueInDays < 7 && dueInDays >= 0;
 
         return (
           <div className={'flex flex-col min-w-[166px] text-right'} data-chromatic="ignore">
