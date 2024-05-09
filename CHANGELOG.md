@@ -1,3 +1,13 @@
+# [1.219.0-COLD-711.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.218.0...v1.219.0-COLD-711.1) (2024-05-09)
+
+
+### Features
+
+* handle section groups, sections and questions using MQTT ([60b7f9f](https://github.com/ColdPBC/cold-monorepo/commit/60b7f9fa13b9f71ca6b55ac2b0b9b376fc32ded6))
+* initial work for compliance manager page ([910001e](https://github.com/ColdPBC/cold-monorepo/commit/910001e817292c86a73b30e8ec22cd6296631e27))
+* remove old survey code ([e2a4538](https://github.com/ColdPBC/cold-monorepo/commit/e2a45384bce0a9007da88ee556010cfafff116d1))
+* update application layout for the new management page ([87501d9](https://github.com/ColdPBC/cold-monorepo/commit/87501d91654cfc4dd72da8e435eef685f0d217d4))
+
 # [1.213.0-COLD-711.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.213.0-COLD-711.2...v1.213.0-COLD-711.3) (2024-05-09)
 
 
