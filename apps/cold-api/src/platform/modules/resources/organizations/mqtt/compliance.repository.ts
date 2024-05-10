@@ -14,20 +14,24 @@ export class ComplianceRepository extends BaseWorker {
                                                                         csg.title,
                                                                         csg.metadata,
                                                                         csg.compliance_definition_name,
-                                                                        CAST(COUNT(cq.id) as INT)                                                           AS question_count,
-                                                                        CAST(COUNT(CASE WHEN ocair.answer IS NOT NULL THEN 1 END) as INT)                   AS ai_answered_count,
-                                                                        CAST(COUNT(CASE WHEN ocr.value IS NOT NULL THEN 1 END) as INT)                      AS user_answered_count,
-                                                                        CAST(COUNT(CASE WHEN ocqb.id IS NOT NULL THEN 1 END) as INT)                        AS bookmarked_count,
-                                                                        CAST(COUNT(CASE WHEN ocair.answer IS NULL AND ocr.value IS NULL THEN 1 END) as INT) AS not_started_count
+                                                                        CAST(COUNT(cq.id) as INT)                                                             AS question_count,
+                                                                        CAST(SUM(CASE WHEN ocair.answer IS NOT NULL AND ocr.value IS NULL THEN 1 END) as INT) AS ai_answered_count,
+                                                                        CAST(SUM(CASE WHEN ocr.value IS NOT NULL AND ocair.answer IS NULL THEN 1 END) as INT) AS user_answered_count,
+                                                                        CAST(SUM(CASE WHEN ocqb.id IS NOT NULL THEN 1 END) as INT)                            AS bookmarked_count,
+                                                                        CAST(SUM(CASE WHEN ocair.answer IS NULL AND ocr.value IS NULL THEN 1 END) as INT)     AS not_started_count
                                                                  FROM compliance_sections cs
                                                                         JOIN
-                                                                      compliance_section_groups csg ON cs.compliance_section_group_id = csg.id
+                                                                      compliance_section_groups csg ON
+                                                                        cs.compliance_section_group_id = csg.id
                                                                         JOIN
-                                                                      compliance_definitions cd ON csg.compliance_definition_name = cd.name
+                                                                      compliance_definitions cd ON
+                                                                        csg.compliance_definition_name = cd.name
                                                                         JOIN
-                                                                      organization_compliance oc ON cd.name = oc.compliance_definition_name
+                                                                      organization_compliance oc ON
+                                                                        cd.name = oc.compliance_definition_name
                                                                         LEFT JOIN
-                                                                      compliance_questions cq ON cs.id = cq.compliance_section_id
+                                                                      compliance_questions cq ON
+                                                                        cs.id = cq.compliance_section_id
                                                                         LEFT JOIN
                                                                       organization_compliance_ai_responses ocair
                                                                       ON cq.id = ocair.compliance_question_id
@@ -37,7 +41,8 @@ export class ComplianceRepository extends BaseWorker {
                                                                         LEFT JOIN
                                                                       organization_compliance_question_bookmarks ocqb
                                                                       ON cq.id = ocqb.compliance_question_id
-                                                                 WHERE oc.compliance_definition_name = ${compliance_set_name}
+                                                                 WHERE oc.compliance_definition_name =
+                                                                       ${compliance_set_name}
                                                                    AND oc.organization_id = ${org_id}
                                                                  GROUP BY csg.id, csg.order
                                                                  ORDER BY csg.order`);
@@ -67,6 +72,7 @@ export class ComplianceRepository extends BaseWorker {
             title: true,
             version: true,
             logo_url: true,
+            metadata: true,
             image_url: true,
           },
         },
@@ -110,8 +116,14 @@ export class ComplianceRepository extends BaseWorker {
                                                                       WHEN ocair.answer IS NULL AND ocr.value IS NULL
                                                                         THEN TRUE
                                                                       ELSE FALSE END                                                   AS not_started,
-                                                                    CASE WHEN ocair.answer IS NOT NULL THEN TRUE ELSE FALSE END        AS ai_answered,
-                                                                    CASE WHEN ocr.value IS NOT NULL THEN TRUE ELSE FALSE END           AS user_answered,
+                                                                    CASE
+                                                                      WHEN ocair.answer IS NOT NULL AND ocr.value IS NULL
+                                                                        THEN TRUE
+                                                                      ELSE FALSE END                                                   AS ai_answered,
+                                                                    CASE
+                                                                      WHEN ocr.value IS NOT NULL AND ocair.answer IS NULL
+                                                                        THEN TRUE
+                                                                      ELSE FALSE END                                                   AS user_answered,
                                                                     CASE WHEN CAST(COUNT(ocqb.id) as INT) > 1 THEN TRUE ELSE FALSE END AS bookmarked
                                                              FROM compliance_questions cq
                                                                     LEFT JOIN
