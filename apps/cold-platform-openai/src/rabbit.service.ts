@@ -211,6 +211,25 @@ export class RabbitService extends BaseWorker {
 
         return { assistant: response, pinecone: pcResponse };
       }
+      case 'compliance_flow.enabled': {
+        const complianceJob = await this.queue.add(
+          'compliance_flow.enabled',
+          {
+            user,
+            payload: parsed.payload,
+            organization: parsed.organization,
+            integration: parsed.integration,
+          },
+          { backoff: { type: BackOffStrategies.EXPONENTIAL }, removeOnComplete: true },
+        );
+
+        this.logger.info(`Compliance flow job created: ${complianceJob.id}`, {
+          user,
+          compliance: parsed.payload?.compliance?.name | parsed.payload?.compliance?.compliance_definition_name,
+          organization: parsed.organization,
+        });
+        break;
+      }
       case 'compliance_automation.enabled':
         {
           let surveys;
