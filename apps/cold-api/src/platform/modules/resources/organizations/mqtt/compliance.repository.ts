@@ -13,12 +13,13 @@ export class ComplianceRepository extends BaseWorker {
     const sectionGroups = await this.prisma.$queryRaw(Prisma.sql`SELECT csg.id,
                                                                         csg.title,
                                                                         csg.metadata,
+                                                                        csg.order,
                                                                         csg.compliance_definition_name,
-                                                                        CAST(COUNT(cq.id) as INT)                                                             AS question_count,
-                                                                        CAST(SUM(CASE WHEN ocair.answer IS NOT NULL AND ocr.value IS NULL THEN 1 END) as INT) AS ai_answered_count,
-                                                                        CAST(SUM(CASE WHEN ocr.value IS NOT NULL AND ocair.answer IS NULL THEN 1 END) as INT) AS user_answered_count,
-                                                                        CAST(SUM(CASE WHEN ocqb.id IS NOT NULL THEN 1 END) as INT)                            AS bookmarked_count,
-                                                                        CAST(SUM(CASE WHEN ocair.answer IS NULL AND ocr.value IS NULL THEN 1 END) as INT)     AS not_started_count
+                                                                        CAST(COUNT(cq.id) as INT)                                                                    AS question_count,
+                                                                        CAST(SUM(CASE WHEN ocair.answer IS NOT NULL AND ocr.value IS NULL THEN 1 ELSE 0 END) as INT) AS ai_answered_count,
+                                                                        CAST(SUM(CASE WHEN ocr.value IS NOT NULL AND ocair.answer IS NULL THEN 1 ELSE 0 END) as INT) AS user_answered_count,
+                                                                        CAST(SUM(CASE WHEN ocqb.id IS NOT NULL THEN 1 ELSE 0 END) as INT)                            AS bookmarked_count,
+                                                                        CAST(SUM(CASE WHEN ocair.answer IS NULL AND ocr.value IS NULL THEN 1 ELSE 0 END) as INT)     AS not_started_count
                                                                  FROM compliance_sections cs
                                                                         JOIN
                                                                       compliance_section_groups csg ON
@@ -106,7 +107,7 @@ export class ComplianceRepository extends BaseWorker {
     return response;
   }
 
-  async complianceQuestionListByOrgIdCompNameKey({ org_id, compliance_set_name, compliance_section_group_id, compliance_section_id }: MqttAPIComplianceSectionPayload) {
+  async complianceQuestionListByOrgIdCompNameKey({ compliance_section_id }: MqttAPIComplianceSectionPayload) {
     const response = (await this.prisma.$queryRaw(Prisma.sql`SELECT cq.id,
                                                                     cq.prompt,
                                                                     cq.order,
@@ -142,10 +143,7 @@ export class ComplianceRepository extends BaseWorker {
                                                                     LEFT JOIN compliance_section_groups csg ON cs.compliance_section_group_id = csg.id
                                                                     LEFT JOIN organization_compliance oc
                                                                               ON csg.compliance_definition_name = oc.compliance_definition_name
-                                                             WHERE oc.organization_id = ${org_id}
-                                                               AND oc.compliance_definition_name = ${compliance_set_name}
-                                                               AND csg.id = ${compliance_section_group_id}
-                                                               AND cs.id = ${compliance_section_id}
+                                                             WHERE cs.id = ${compliance_section_id}
 
                                                              GROUP BY cq.id, ocair.answer, ocr.value,
                                                                       oc.id`)) as any;
