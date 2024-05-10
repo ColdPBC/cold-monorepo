@@ -6,11 +6,13 @@ import { useContext } from 'react';
 import { ColdComplianceManagerContext } from '@coldpbc/context';
 import { forEach } from 'lodash';
 import { ComplianceManagerStatus } from '@coldpbc/enums';
+import { useColdContext } from '@coldpbc/hooks';
 
 export const ComplianceManagerAssessmentPreview = () => {
   const context = useContext(ColdComplianceManagerContext);
   const { status } = context;
   const { mqttComplianceSet } = context.data;
+  const { logBrowser } = useColdContext();
 
   // todo: change this to show the actual assessment percentage and not amount of answered/amount of questions
   let totalQuestions = 0;
@@ -20,6 +22,8 @@ export const ComplianceManagerAssessmentPreview = () => {
     answeredQuestions += sectionGroup.user_answered_count;
   });
   const percentage = totalQuestions !== 0 ? ((answeredQuestions / totalQuestions) * 100).toFixed(0) : 0;
+
+  logBrowser('Compliance Manager Assessment Preview', 'info', { status, mqttComplianceSet, percentage, totalQuestions, answeredQuestions });
 
   return (
     <Card className={'w-fit flex flex-col justify-between overflow-visible'} glow={false}>

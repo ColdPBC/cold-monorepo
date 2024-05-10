@@ -1,14 +1,9 @@
-import { ComplianceSurveyPayloadType } from '@coldpbc/interfaces';
 import {
   ComplianceManagerAssessmentPreview,
   ComplianceManagerOverviewSectionGroups,
   ComplianceManagerOverviewStatusCard,
   ComplianceManagerQuestionnaireProgress,
 } from '@coldpbc/components';
-
-export interface ComplianceManagerOverviewProps {
-  survey: ComplianceSurveyPayloadType;
-}
 
 export const ComplianceManagerOverview = () => {
   return (

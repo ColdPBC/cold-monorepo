@@ -1,6 +1,6 @@
 import { ArrowRightIcon } from '@heroicons/react/20/solid';
 import { MQTTComplianceManagerPayloadComplianceQuestion, MQTTComplianceManagerPayloadComplianceSection } from '@coldpbc/interfaces';
-import { useAuth0Wrapper } from '@coldpbc/hooks';
+import { useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
 import { useContext, useEffect } from 'react';
 import ColdMQTTContext from '../../../context/coldMQTTContext';
 import { ColdComplianceManagerContext } from '@coldpbc/context';
@@ -15,6 +15,7 @@ export const ComplianceManagerOverviewSection = ({ section, groupId }: { section
   const context = useContext(ColdComplianceManagerContext);
   const { status } = context;
   const { name } = context.data;
+  const { logBrowser } = useColdContext();
 
   const sectionTopic = `ui/${resolveNodeEnv()}/${orgId}/${name}/${groupId}/${section.id}`;
 
@@ -39,9 +40,18 @@ export const ComplianceManagerOverviewSection = ({ section, groupId }: { section
     }
   }, [connectionStatus, name, publishMessage, client]);
 
-  console.log({ type: 'compliance question list', data, error, groupId, section });
-
   const numberOfQuestions = section._count.compliance_questions;
+
+  if (section._count.compliance_questions === 0) {
+    return null;
+  }
+
+  logBrowser('Compliance Manager Overview Section', 'info', {
+    section,
+    groupId,
+    data,
+    error,
+  });
 
   return (
     <div

@@ -4,10 +4,12 @@ import { useContext } from 'react';
 import { ColdComplianceManagerContext } from '@coldpbc/context';
 import { ColdIcon } from '@coldpbc/components';
 import { ComplianceProgressStatusColor } from '@coldpbc/lib';
+import { useColdContext } from '@coldpbc/hooks';
 
 export const ComplianceManagerOverviewStatusCard = () => {
   const { status: managerStatus, data } = useContext(ColdComplianceManagerContext);
   const { mqttComplianceSet } = data;
+  const { logBrowser } = useColdContext();
 
   const getStatusIcon = (status: ComplianceManagerStatus) => {
     switch (status) {
@@ -61,6 +63,10 @@ export const ComplianceManagerOverviewStatusCard = () => {
       </div>
     );
   };
+
+  logBrowser('ComplianceManagerOverviewStatusCard', 'info', {
+    managerStatus,
+  });
 
   return (
     <div className={'w-[347px] h-auto p-[24px] flex flex-col gap-[22px] bg-bgc-elevated rounded-[16px]'} data-testid={'compliance-overview-statuses'}>

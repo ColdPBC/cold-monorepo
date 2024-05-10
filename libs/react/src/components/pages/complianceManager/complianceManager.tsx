@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from 'react-router-dom';
-import { useAuth0Wrapper } from '@coldpbc/hooks';
+import { useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
 import { find, get } from 'lodash';
 import { ColdIcon, ColdLeftArrowIcon, ComplianceManagerOverview, ErrorFallback, Spinner } from '@coldpbc/components';
 import React, { useContext, useEffect, useState } from 'react';
@@ -20,6 +20,7 @@ const _ComplianceManager = () => {
   const navigate = useNavigate();
   const [managementView, setManagementView] = useState<string>('Overview');
   const [status, setStatus] = useState<ComplianceManagerStatus>(ComplianceManagerStatus.notActivated);
+  const { logBrowser } = useColdContext();
 
   const orgCompliances = useSWR<OrgCompliance[], any, any>(orgId ? [`/compliance_definitions/organizations/${orgId}`, 'GET'] : null, axiosFetcher);
 
@@ -54,11 +55,7 @@ const _ComplianceManager = () => {
     }
   }, [orgCompliances]);
 
-  // console.log({
-  //   type: 'compliance definition',
-  //   data,
-  //   error,
-  // });
+  logBrowser('Compliance Definition', 'info', { name, data, error, orgId, compliance, status, managementView, orgCompliances, topic });
 
   if (!data) {
     return <Spinner />;
@@ -100,7 +97,7 @@ const _ComplianceManager = () => {
         status: status,
         setStatus: setStatus,
       }}>
-      <div className={'flex flex-col w-full gap-[48px] justify-center relative'}>
+      <div className={'flex flex-col w-full gap-[48px] justify-center relative mb-[40px]'}>
         <div className={'absolute top-0 w-full h-[179px]'}>
           <img className={'w-full h-full object-cover'} src={compliance?.image_url} alt={compliance?.name} />
         </div>

@@ -3,6 +3,7 @@ import { forEach } from 'lodash';
 import { useContext } from 'react';
 import { ColdComplianceManagerContext } from '@coldpbc/context';
 import { ComplianceProgressStatusIcon } from '@coldpbc/components';
+import { useColdContext } from '@coldpbc/hooks';
 
 export interface ComplianceProgressItemProps {
   type: ComplianceProgressStatus;
@@ -11,6 +12,7 @@ export interface ComplianceProgressItemProps {
 export const ComplianceProgressStatusItem = ({ type }: ComplianceProgressItemProps) => {
   const { data } = useContext(ColdComplianceManagerContext);
   const { mqttComplianceSet } = data;
+  const { logBrowser } = useColdContext();
 
   const currentProgressData = {
     type: type,
@@ -99,6 +101,12 @@ export const ComplianceProgressStatusItem = ({ type }: ComplianceProgressItemPro
     const percentage = `${(currentProgressData.percentage * 100).toFixed(0)}%`;
     return <div className={'text-tc-primary text-label py-[4px] px-[8px] rounded-[16px] bg-bgc-accent'}>{percentage}</div>;
   };
+
+  logBrowser('currentProgressData', 'info', {
+    ...currentProgressData,
+    totalQuestions,
+    sectionGroups: mqttComplianceSet?.compliance_definition.compliance_section_groups,
+  });
 
   return (
     <div className={'w-full flex flex-col p-[8px] bg-gray-50 rounded-[8px] border-[1px] border-gray-60'}>

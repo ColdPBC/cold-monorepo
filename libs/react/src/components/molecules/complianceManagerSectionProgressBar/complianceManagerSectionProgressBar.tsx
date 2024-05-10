@@ -7,6 +7,7 @@ import { ComplianceProgressStatusIcon, Spinner } from '@coldpbc/components';
 import { MQTTComplianceManagerPayloadComplianceQuestion } from '@coldpbc/interfaces';
 import { useContext } from 'react';
 import { ColdComplianceManagerContext } from '@coldpbc/context';
+import { useColdContext } from '@coldpbc/hooks';
 
 export interface ComplianceManagerSectionProgressBarProps {
   questions: MQTTComplianceManagerPayloadComplianceQuestion[] | undefined;
@@ -14,7 +15,7 @@ export interface ComplianceManagerSectionProgressBarProps {
 
 export const ComplianceManagerSectionProgressBar = ({ questions }: ComplianceManagerSectionProgressBarProps) => {
   const { status: managerStatus } = useContext(ColdComplianceManagerContext);
-
+  const { logBrowser } = useColdContext();
   const getProgressTooltipIcon = (status: ComplianceProgressStatus) => {
     return (
       <div className={'w-[12px] h-[12px] flex items-center justify-center'}>
@@ -86,12 +87,19 @@ export const ComplianceManagerSectionProgressBar = ({ questions }: ComplianceMan
     );
   };
 
+  const orderedData = orderBy(questions, ['order'], ['asc']);
+
+  logBrowser('Compliance Question List', 'info', {
+    orderedData,
+    managerStatus,
+  });
+
   if (!questions) {
     return <Spinner />;
   } else {
     return (
       <div className={'flex flex-row justify-start w-full'}>
-        {map(orderBy(questions, ['order'], ['asc']), (question, index) => {
+        {map(orderedData, (question, index) => {
           const percentWidth = 100 / questions.length;
           return (
             <div

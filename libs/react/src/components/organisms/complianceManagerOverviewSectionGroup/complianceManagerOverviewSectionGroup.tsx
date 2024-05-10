@@ -3,7 +3,7 @@ import { map, orderBy } from 'lodash';
 import { ColdIcon, ComplianceManagerOverviewSection, ComplianceProgressStatusIcon } from '@coldpbc/components';
 import { MQTTComplianceManagerPayloadComplianceSection, MQTTComplianceManagerPayloadComplianceSectionGroup } from '@coldpbc/interfaces';
 import { useContext, useEffect, useState } from 'react';
-import { useAuth0Wrapper } from '@coldpbc/hooks';
+import { useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
 import ColdMQTTContext from '../../../context/coldMQTTContext';
 import { ColdComplianceManagerContext } from '@coldpbc/context';
 import { Transition } from '@headlessui/react';
@@ -12,14 +12,16 @@ import { resolveNodeEnv } from '@coldpbc/fetchers';
 
 export interface ComplianceManagerOverviewSectionGroupProps {
   sectionGroup: MQTTComplianceManagerPayloadComplianceSectionGroup;
+  position: number;
 }
 
-export const ComplianceManagerOverviewSectionGroup = ({ sectionGroup }: ComplianceManagerOverviewSectionGroupProps) => {
+export const ComplianceManagerOverviewSectionGroup = ({ sectionGroup, position }: ComplianceManagerOverviewSectionGroupProps) => {
   const [collapseOpen, setCollapseOpen] = useState(false);
   const { orgId } = useAuth0Wrapper();
   const { subscribeSWR, publishMessage, connectionStatus, client } = useContext(ColdMQTTContext);
   const context = useContext(ColdComplianceManagerContext);
   const { name } = context.data;
+  const { logBrowser } = useColdContext();
 
   const getComplianceSectionListTopic = () => {
     return `ui/${resolveNodeEnv()}/${orgId}/${name}/${sectionGroup.id}`;
@@ -45,11 +47,22 @@ export const ComplianceManagerOverviewSectionGroup = ({ sectionGroup }: Complian
     }
   }, [connectionStatus, name, publishMessage, client]);
 
-  // console.log({
-  //   type: 'compliance section list',
-  //   data,
-  //   error,
-  // });
+  useEffect(() => {
+    // open the first section group by default on load
+    if (position === 0) {
+      setCollapseOpen(true);
+    }
+  }, []);
+
+  const orderedData = orderBy(data, ['order'], ['asc']);
+
+  logBrowser('Compliance Manager Overview Section Group', 'info', {
+    data,
+    error,
+    orderedData,
+    collapseOpen,
+    orgId,
+  });
 
   const sectionStatuses = [
     {
@@ -100,7 +113,9 @@ export const ComplianceManagerOverviewSectionGroup = ({ sectionGroup }: Complian
   const getSectionStatusElements = () => {
     return map(sectionStatuses, status => {
       return (
-        <div className={'rounded-[8px] border-[1px] border-gray-60 bg-gray-50 py-[4px] pl-[4px] pr-[8px] flex flex-row gap-[4px] items-center'} key={status.status}>
+        <div
+          className={'rounded-[8px] border-[1px] border-gray-60 bg-gray-50 py-[4px] pl-[4px] pr-[8px] flex flex-row gap-[4px] items-center w-[68px] justify-start'}
+          key={status.status}>
           {getProgressIcon(status.status)}
           <div className={'text-tc-primary text-body font-bold'}>{status.count}</div>
         </div>
@@ -109,11 +124,7 @@ export const ComplianceManagerOverviewSectionGroup = ({ sectionGroup }: Complian
   };
 
   return (
-    <div
-      className={'flex flex-col w-full gap-[36px] bg-transparent'}
-      onClick={() => {
-        // todo: navigate to section in questionnaire
-      }}>
+    <div className={'flex flex-col w-full gap-[36px] bg-transparent'}>
       <div className={'w-full flex flex-row justify-between items-center gap-[36px] cursor-pointer'} onClick={() => setCollapseOpen(!collapseOpen)}>
         <div className={'text-h3 text-tc-primary'}>{sectionGroupData.title}</div>
         <div className={'w-auto flex flex-row justify-between items-center gap-[36px]'}>
@@ -131,19 +142,8 @@ export const ComplianceManagerOverviewSectionGroup = ({ sectionGroup }: Complian
           </div>
         </div>
       </div>
-      <Transition
-        className={'w-full flex flex-col gap-[36px] bg-transparent'}
-        show={collapseOpen}
-        // // transition fly in from top
-        // enter={'transform transition duration-300'}
-        // enterFrom={'opacity-0 translate-y-[-100%]'}
-        // enterTo={'opacity-100 translate-y-0'}
-        // // transition fly out to top
-        // leave={'transform transition duration-300'}
-        // leaveFrom={'opacity-100 translate-y-0'}
-        // leaveTo={'opacity-0 translate-y-[-100%]'}
-      >
-        {map(orderBy(data, ['order'], ['asc']), (section, index) => {
+      <Transition className={'w-full flex flex-col gap-[36px] bg-transparent'} show={collapseOpen}>
+        {map(orderedData, (section, index) => {
           return <ComplianceManagerOverviewSection key={`${section.id}-${index}`} section={section} groupId={sectionGroup.id} />;
         })}
       </Transition>

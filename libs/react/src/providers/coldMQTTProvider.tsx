@@ -15,6 +15,8 @@ export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
   const [token, setToken] = React.useState<string>('');
   const { mutate } = useSWRConfig();
   const flags = useFlags();
+  const [excludeTopics, setExcludeTopics] = React.useState<string[]>([]);
+
   useEffect(() => {
     const getToken = async () => {
       const audience = import.meta.env.VITE_COLD_API_AUDIENCE as string;
@@ -38,12 +40,7 @@ export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
           import.meta.env.VITE_MQTT_URL
         }/mqtt?x-auth0-domain=${auth0_domain}&x-amz-customauthorizer-name=${authorizer}&x-cold-org=${org_id}&x-cold-env=${env}&token=${token}`;
 
-        // client.current = mqtt.connect(url, { clientId: `${org_id}-${Math.floor(Math.random() * 1000)}` });
-
-        // do not connect if the client id is the same. this is to prevent duplicate client ids
-        const options = client.current?.options;
-        if (options && options.clientId === `${env}-${org_id}-${user.email}`) {
-        } else {
+        if (client.current === null) {
           client.current = mqtt.connect(url, {
             clientId: `${org_id}-${Math.floor(Math.random() * 1000)}`,
             clean: false,
@@ -51,6 +48,8 @@ export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
               sessionExpiryInterval: 24 * 60 * 60,
             },
           });
+        } else {
+          client.current.reconnect();
         }
 
         client.current?.on('connect', () => {
@@ -58,7 +57,6 @@ export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
           setConnectionStatus(true);
 
           const topics = [`ui/${env}/${org_id}/#`, `system/${env}/public/#`];
-          console.log('Subscribing to topics', topics);
           forEach(topics, topic => {
             subscribeToTopic(topic, client.current);
           });
@@ -71,7 +69,6 @@ export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
         client.current?.on('message', async (topic, payload, packet) => {
           const payloadString = packet.payload.toString();
           logBrowser('Received message from IOT', 'info', { topic });
-          console.log('Received message from IOT', { topic, payloadString });
           try {
             const parsedPayload = JSON.parse(payloadString);
             logBrowser('Parsed payload from IOT', 'info', {
@@ -107,7 +104,6 @@ export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
         client.current?.on('close', () => {
           setConnectionStatus(false);
           logBrowser('Connection to IOT closed', 'info');
-          console.log('Connection to IOT closed');
         });
       }
     };
@@ -138,15 +134,22 @@ export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
       return () => {};
     }
     client.current?.subscribe(key, async (err, granted) => {
-      if (err) {
-        logBrowser('Error subscribing to topic ' + key, 'error', { err }, err);
-      }
-      console.log({ key, granted });
+      logBrowser('Subscribed to topic ' + key, 'info', { err, key, granted });
       client.current?.on('message', async (topic, payload, packet) => {
         next(err, prev => {
           if (topic !== key) {
+            logBrowser('Received message from IOT for SWR for different topic', 'info', {
+              key,
+              topic,
+              payload: JSON.parse(payload.toString()),
+            });
             return prev;
           } else {
+            logBrowser('Received message from IOT for SWR', 'info', {
+              key,
+              topic,
+              payload: JSON.parse(payload.toString()),
+            });
             return JSON.parse(payload.toString());
           }
         });
@@ -163,7 +166,7 @@ export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
       set(newMessage, 'user', user);
       set(newMessage, 'org_id', orgId);
       set(newMessage, 'token', token);
-      console.log('Publishing message to IOT', { topic, newMessage });
+      logBrowser('Publishing message to IOT', 'info', { topic, newMessage });
       client.current.publish(topic, JSON.stringify(newMessage));
     }
   };
