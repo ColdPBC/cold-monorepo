@@ -5,6 +5,6 @@ import { ComplianceRepository } from './compliance.repository';
 @Module({
   imports: [],
   providers: [ComplianceMQTT, ComplianceRepository],
-  exports: [],
+  exports: [ComplianceRepository],
 })
 export class MqttModule {}
