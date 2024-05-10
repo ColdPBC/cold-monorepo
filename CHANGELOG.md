@@ -1,3 +1,10 @@
+# [1.219.0-COLD-711.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.219.0-COLD-711.2...v1.219.0-COLD-711.3) (2024-05-09)
+
+
+### Features
+
+* update handling of due date and term in compliance definition and not survey definition ([fab5aea](https://github.com/ColdPBC/cold-monorepo/commit/fab5aead5226e7887335173890300a3ff04698c0))
+
 # [1.219.0-COLD-711.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.219.0-COLD-711.1...v1.219.0-COLD-711.2) (2024-05-09)
 
 
