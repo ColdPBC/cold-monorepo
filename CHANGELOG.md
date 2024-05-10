@@ -1,3 +1,26 @@
+# [1.219.0-cold-789.5](https://github.com/ColdPBC/cold-monorepo/compare/v1.219.0-cold-789.4...v1.219.0-cold-789.5) (2024-05-10)
+
+
+### Bug Fixes
+
+* fix issue where complianceQuestionListByOrgIdCompNameKey failed to return questions ([95bdd33](https://github.com/ColdPBC/cold-monorepo/commit/95bdd33d72bbda2ef284c2b5650afef9fa0f8d34))
+
+
+### Features
+
+* Add additional context field to organization_compliance_responses and organization_compliance_ai_responses in Prisma schema ([5d7776d](https://github.com/ColdPBC/cold-monorepo/commit/5d7776d85e4ad1cd74e4a4e3229c462c74ba223b))
+* Add compliance flow handling in Rabbit service ([b6edc6d](https://github.com/ColdPBC/cold-monorepo/commit/b6edc6d99e637814195d2d0d40ae943da5415485))
+* Add compliance processing to chat service in cold platform openai ([fc6a3a0](https://github.com/ColdPBC/cold-monorepo/commit/fc6a3a0c2c77621c02bed06824fec9161b4b2028))
+* Add createComplianceSession method and ICFPSession interface to freeplay service ([76e1b95](https://github.com/ColdPBC/cold-monorepo/commit/76e1b955608ff5563b68035137fa2c0ee9d7ff4a))
+* Add createComplianceSession method and ICFPSession interface to freeplay service ([8068bc4](https://github.com/ColdPBC/cold-monorepo/commit/8068bc40e4f517a0285850427040742e207a73aa))
+* Add MqttModule and MqttService to ChatModule ([562bc2e](https://github.com/ColdPBC/cold-monorepo/commit/562bc2ee9b7a64d3f5f85e67e397263da99bc07f))
+* Add optional survey_definition to ComplianceDefinition schema ([9753054](https://github.com/ColdPBC/cold-monorepo/commit/9753054137457e4a5b9a0ac258c76cf9dbe077ca))
+* Add optional survey_definition to ComplianceDefinition schema ([3ac4cae](https://github.com/ColdPBC/cold-monorepo/commit/3ac4cae2ec8e452e253b3529af98c8f536507c8e))
+* Add OrganizationComplianceResponseRabbit and MqttModule to OrganizationComplianceResponsesModule ([5578539](https://github.com/ColdPBC/cold-monorepo/commit/557853911b937cbdaf891120bd663a306fca2f09))
+* Add OrganizationComplianceResponseRabbit for organization compliance response message handling ([90f89a1](https://github.com/ColdPBC/cold-monorepo/commit/90f89a1e6be33d83b3bdbe727ee30365718ebbad))
+* Enable ComplianceRepository export in MqttModule ([5098ecc](https://github.com/ColdPBC/cold-monorepo/commit/5098eccb03e7aab4ac642808f0991629616d9b2c))
+* migration script to add additional_context column to compliance_response models ([19d843a](https://github.com/ColdPBC/cold-monorepo/commit/19d843a140829ec8a8e7b797f7cfc09d5c29b8d3))
+
 # [1.219.0-cold-789.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.219.0-cold-789.3...v1.219.0-cold-789.4) (2024-05-08)
 
 
