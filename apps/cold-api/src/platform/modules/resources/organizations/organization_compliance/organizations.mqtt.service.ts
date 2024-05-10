@@ -1,7 +1,6 @@
 import { Controller, UseGuards } from '@nestjs/common';
 import { Cuid2Generator, JwtAuthGuard, MqttService, PrismaService } from '@coldpbc/nest';
 import { ConfigService } from '@nestjs/config';
-import { MessagePattern } from '@nestjs/microservices';
 import process from 'process';
 import { ApiExcludeController } from '@nestjs/swagger';
 
@@ -109,7 +108,6 @@ export class MqttController {
     return response;
   }
 
-  @MessagePattern('platform/development/api/organizations/getComplianceSetManagementData')
   handleMyTopic(payload: any) {
     console.log(`Received message on topic my_topic: ${payload}`);
   }
