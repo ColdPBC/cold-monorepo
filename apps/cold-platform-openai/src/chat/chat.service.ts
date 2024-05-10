@@ -1,5 +1,5 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
-import { AuthenticatedUser, BaseWorker, CacheService, ColdRabbitService, DarklyService, PrismaService } from '@coldpbc/nest';
+import { AuthenticatedUser, BaseWorker, CacheService, ColdRabbitService, Cuid2Generator, DarklyService, MqttService, PrismaService } from '@coldpbc/nest';
 import { PineconeService } from '../pinecone/pinecone.service';
 import { ConfigService } from '@nestjs/config';
 import { PromptsService } from '../prompts/prompts.service';
@@ -25,6 +25,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
     readonly cache: CacheService,
     @InjectQueue('openai') readonly queue: Queue,
     readonly rabbit: ColdRabbitService,
+    readonly mqtt: MqttService,
     readonly fp: FreeplayService,
   ) {
     super(ChatService.name);
@@ -32,6 +33,8 @@ export class ChatService extends BaseWorker implements OnModuleInit {
   }
 
   async onModuleInit() {}
+
+  async resetAIComplianceResponses(user, organization_compliance, organization) {}
 
   /**
    * Reset the AI responses when re-processing a survey
@@ -233,8 +236,8 @@ export class ChatService extends BaseWorker implements OnModuleInit {
     });
 
     const end = new Date();
-    const recording = await this.fp.recordCompletion(session, vars, sanitized_base, response, start, end);
-    this.logger.info(`Sending ${sanitized_base.promptInfo.templateName} run stats to FreePlay`, recording);
+    //const recording = await this.fp.recordCompletion(session, vars, sanitized_base, response, start, end);
+    //this.logger.info(`Sending ${sanitized_base.promptInfo.templateName} run stats to FreePlay`, recording);
 
     return ai_response;
   }
@@ -365,9 +368,9 @@ export class ChatService extends BaseWorker implements OnModuleInit {
       }
 
       const end = new Date();
-      const recording = await this.fp.recordCompletion(session, vars, sanitized_base, response, start, end);
+      // const recording = await this.fp.recordCompletion(session, vars, sanitized_base, response, start, end);
 
-      this.logger.info(`Sending ${sanitized_base.promptInfo.templateName} run stats to FreePlay`, recording);
+      //this.logger.info(`Sending ${sanitized_base.promptInfo.templateName} run stats to FreePlay`, recording);
 
       return ai_response;
     } catch (error) {
@@ -485,12 +488,171 @@ export class ChatService extends BaseWorker implements OnModuleInit {
 
     if (vectorSession) {
       vectorSession.customMetadata = { ...vectorSession.customMetadata, snippets: content };
-      const recording = await this.fp.recordCompletion(vectorSession, vars, condense_prompt, condenseResponse, start, end);
+      //const recording = await this.fp.recordCompletion(vectorSession, vars, condense_prompt, condenseResponse, start, end);
 
-      this.logger.info(`Sending ${condense_prompt.promptInfo.templateName} run stats to FreePlay `, recording);
+      //this.logger.info(`Sending ${condense_prompt.promptInfo.templateName} run stats to FreePlay `, recording);
     }
 
     return { rephrased_question, docs };
+  }
+
+  async process_compliance(job: Job) {
+    const start = new Date();
+    try {
+      // Destructure the necessary data from the job
+      const { user, payload, integration, organization } = job.data;
+      const { compliance, base_update_topic } = payload;
+      // Log the start of the survey processing
+      this.logger.info(`✅ Started processing compliance set ${compliance.compliance_definition_name} for ${organization.name}`, {
+        user,
+        compliance: compliance.compliance_definition_name,
+        integration,
+        organization,
+      });
+
+      // Find the index for the organization
+      const idx = await this.pc.getIndex(organization.name);
+
+      // If the index does not exist, create it
+      if (!idx) {
+        this.logger.warn(`Index ${organization.name} not found; creating...`);
+        await this.pc.getIndexDetails(organization.name);
+
+        // Clear existing vectors since the index was just created
+        const vectors = await this.prisma.vector_records.findMany({ where: { organization_id: organization.id } });
+        if (Array.isArray(vectors)) {
+          for (const vector of vectors) {
+            try {
+              await this.prisma.vector_records.delete({ where: { id: vector.id } });
+            } catch (e) {
+              this.logger.error(`Error deleting vector ${vector.id}`, e);
+            }
+          }
+        }
+
+        // Get the files for the organization
+        const files = await this.prisma.organization_files.findMany({ where: { organization_id: organization.id } });
+
+        // If no files are found, log a warning
+        if (!files || files.length === 0) {
+          this.logger.warn(`No files found for organization ${organization.name}`);
+        } else if (files.length > 0) {
+          // If files are found, ingest the data for each file
+          for (const file of files) {
+            const cacheKey = this.pc.getCacheKey(file);
+            await this.cache.delete(cacheKey);
+          }
+        }
+      }
+
+      // Set the tags for the survey
+      this.setTags({
+        compliance_set: compliance.compliance_definition_name,
+        base_update_topic,
+        organization: {
+          name: organization.name,
+          id: organization.id,
+        },
+        user: {
+          email: user.coldclimate_claims.email,
+          id: user.id || user.coldclimate_claims.id,
+        },
+      });
+
+      // Initialize the category context
+
+      // Get the sections of the survey
+      const sections = await this.prisma.compliance_sections.findMany({
+        where: { compliance_definition_name: compliance.compliance_definition_name },
+        select: {
+          id: true,
+          key: true,
+          title: true,
+          compliance_section_group_id: true,
+          order: true,
+          dependency_expression: true,
+          compliance_questions: {
+            select: {
+              id: true,
+              key: true,
+              prompt: true,
+              component: true,
+              tooltip: true,
+              placeholder: true,
+              rubric: true,
+              options: true,
+              dependency_expression: true,
+              question_summary: true,
+              additional_context: true,
+              order: true,
+              compliance_section_id: true,
+            },
+            orderBy: {
+              order: 'asc',
+            },
+          },
+        },
+      });
+
+      // Initialize the prompts service with the survey name so that it has the correct context for darkly
+      this.prompts = await new PromptsService(this.darkly, compliance.compliance_definition_name, organization, this.prisma).initialize();
+
+      job.data.totalJobs = sections.length + 1;
+      job.update(job.data);
+
+      job.progress(1 / job.data.totalJobs);
+
+      // Initialize the requests array
+      const reqs: any[] = [];
+
+      // Iterate over each section
+      for (const section of sections) {
+        // Create a session for the survey
+        const session = (await this.fp.createComplianceSession({
+          compliance_set: compliance.compliance_definition_name,
+          organization: organization.name,
+          user: user.coldclimate_claims.email,
+          section: section,
+        })) as FPSession;
+
+        // Log the creation of the session
+        this.logger.info(`Session created for compliance_set: ${compliance.compliance_definition_name} section: ${section.key}`, {
+          section_key: section.key,
+          section_id: section.id,
+          section_title: section.title,
+          organization: organization.name,
+          user: user.coldclimate_claims.email,
+          compliance_set: compliance.compliance_definition_name,
+        });
+
+        try {
+          //const jobCount = 0;
+          // let jobs = (await (this.cache.get(`compliance_jobs:${organization.id}:parent:${job.id}`) as any)) || ({} as any);
+
+          /* if (!jobs[section.key]) {
+             jobs = set(jobs, `${section.key}`, 'processing');
+             await this.cache.set(`compliance_jobs:${organization.id}:parent:${job.id}`, jobs);
+           }*/
+
+          reqs.push(this.processComplianceSection(job, section as any, organization, user, session));
+        } catch (e) {
+          this.logger.error(`Error processing survey ${job.data.survey.name}`, e);
+        }
+      }
+
+      await Promise.all(reqs);
+    } catch (e) {
+      this.sendMetrics('survey', 'failed', {
+        start,
+        sendEvent: true,
+        tags: {
+          survey: job.data.survey?.name,
+          organization: job.data.organization?.name,
+          user: job.data.user?.coldclimate_claims?.email,
+          error: e.message,
+        },
+      });
+    }
   }
 
   /**
@@ -504,9 +666,6 @@ export class ChatService extends BaseWorker implements OnModuleInit {
     try {
       // Destructure the necessary data from the job
       const { survey, user, compliance, integration, organization, on_update_url } = job.data;
-
-      // Get the list of indexes
-      const index = await this.pc.listIndexes();
 
       // Reset the AI responses for the survey
       await this.resetAIResponses(user, survey, organization);
@@ -685,7 +844,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
 
       this.metrics.event(
         `openai.survey.${status}`,
-        `${resource} ${status} processing: ${options.tags.survey.name} ${options.tags.error ? ' | ' + options.tags.error.message : ''}`,
+        `${resource} ${status} processing: ${options.tags?.survey?.name || options.tags?.compliance_set} ${options.tags.error ? ' | ' + options.tags.error.message : ''}`,
         { alert_type: alert_type },
         tags,
       );
@@ -890,6 +1049,256 @@ export class ChatService extends BaseWorker implements OnModuleInit {
         tags: {
           section: section,
           survey: job.data.survey.name,
+          organization: job.data.organization.name,
+          user: job.data.user.coldclimate_claims.email,
+          error: e,
+        },
+      });
+
+      throw e;
+    }
+  }
+
+  /**
+   * Process the section
+   * @param job
+   * @param section
+   * @param sdx
+   * @param sections
+   * @param definition
+   * @param integration
+   * @param organization
+   * @param category_context
+   * @param user
+   * @param session
+   */
+  public async processComplianceSection(job: Job, section: any, organization, user, session: FPSession) {
+    const start = new Date();
+
+    try {
+      await job.log(`Section | ${section} : ${job.data.totalJobs.length}`);
+      this.logger.info(`Processing ${section}: ${section.title}`, { section });
+
+      // get the followup items for the section
+      const items = section.compliance_questions;
+
+      // iterate over each followup item
+      for (const item of items) {
+        try {
+          /* if (await this.isDuplicateOrCanceled(organization, job, section, item)) {
+             //continue;
+           }*/
+
+          await job.log(`Question | section: ${section} question: ${item} (${items.indexOf(item)} of ${items.length})`);
+
+          if (item?.ai_response?.value) {
+            this.logger.info(`Skipping ${section}.${item}: ${item.prompt}; it has already been answered`, {
+              section: section,
+              key: item,
+              question: item.prompt,
+              answer: item.value,
+              ai_answer: item.ai_response.answer,
+              justification: item.ai_response.justification,
+              organization,
+              user: user.coldclimate_claims.email,
+            });
+            continue;
+          }
+
+          this.logger.info(`Processing Question | ${section.key}.${item.key}`, {
+            section: section,
+            key: item,
+          });
+
+          // create a new run for each followup item
+          const response = await this.askSurveyQuestion(item, organization.name, job.data.user, session);
+
+          // update the survey with the response
+          if (response) {
+            item.ai_response = response;
+
+            this.logger.info(`Ai responded: ${section.key}.${item.key}`, {
+              compliance_set: job.data.payload?.compliance?.compliance_definition_name,
+              section: section.title,
+              key: item.key,
+              question: item.prompt,
+              organization: organization.name,
+              answer: item.value,
+              user: user.coldclimate_claims.email,
+              ai_response: response,
+            });
+
+            this.sendMetrics('survey.question', 'completed', {
+              sendEvent: true,
+              start,
+              tags: {
+                section: section.title,
+                key: item.key,
+                ai_answered: typeof response.answer !== 'undefined',
+                organization: organization.name,
+                user: user.coldclimate_claims.email,
+              },
+            });
+          }
+
+          // if there is additional context, create a new run for it
+          if (item['additional_context']) {
+            if (item.additional_context.value) {
+              this.logger.info(`Skipping ${section.key}.${item.key}.additional_context; it has already been answered`, {
+                section: section,
+                key: item,
+                additional_context: item.additional_context,
+              });
+              continue;
+            }
+
+            this.logger.info(`Processing Question | ${section.key}.${item.key}.additional_context: ${item.prompt}`);
+            const additionalValue = await this.askSurveyQuestion(item, organization.name, job.data.user, session, item['additional_context']);
+
+            if (additionalValue) {
+              item.additional_context.ai_response = additionalValue;
+              item.additional_context.ai_answered = typeof additionalValue.answer !== 'undefined';
+
+              this.logger.info(`Ai responded: ${section.key}.${item.key}`, {
+                compliance_set: job.data.payload?.compliance?.compliance_definition_name,
+                section: section.title,
+                key: item.key,
+                question: item.prompt,
+                organization: organization.name,
+                answer: item.value,
+                user: user.coldclimate_claims.email,
+                isAdditionalContext: true,
+                ai_response: additionalValue,
+              });
+
+              this.sendMetrics('survey.question', 'completed', {
+                sendEvent: true,
+                start,
+                tags: {
+                  compliance_set: job.data.payload?.compliance?.compliance_definition_name,
+                  section: section.title,
+                  key: item.key,
+                  question: item.prompt,
+                  organization: organization.name,
+                  answer: item.value,
+                  user: user.coldclimate_claims.email,
+                  isAdditionalContext: true,
+                },
+              });
+            }
+
+            item.additional_context.ai_response = additionalValue;
+            item.additional_context.ai_attempted = true;
+          }
+
+          const ai_response = await this.prisma.organization_compliance_ai_responses.upsert({
+            where: {
+              orgCompQuestId: {
+                organization_compliance_id: job.data.payload?.compliance?.id,
+                compliance_question_id: item.id,
+              },
+            },
+            create: {
+              id: new Cuid2Generator('ocair').scopedId,
+              justification: response.justification,
+              answer: response.answer,
+              references: response.references,
+              sources: response.sources || response.source,
+              compliance_question_id: item.id,
+              additional_context: item.additional_context,
+              organization_id: organization.id,
+              organization_compliance_id: job.data.payload.compliance.id,
+            },
+            update: {
+              justification: response.justification,
+              answer: response.answer,
+              references: response.references,
+              sources: response.sources || response.source,
+              additional_context: item.additional_context,
+            },
+          });
+
+          await this.prisma.compliance_responses.upsert({
+            where: {
+              orgCompQuestId: {
+                organization_compliance_id: job.data.payload?.compliance?.id,
+                compliance_question_id: item.id,
+              },
+            },
+            create: {
+              compliance_question_id: item.id,
+              compliance_section_id: section.id,
+              compliance_section_group_id: section.compliance_section_group_id,
+              organization_id: organization.id,
+              compliance_definition_name: job.data.payload?.compliance?.compliance_definition_name,
+              organization_compliance_id: job.data.payload.compliance.id,
+              organization_compliance_ai_response_id: ai_response.id,
+            },
+            update: {
+              compliance_question_id: item.id,
+              compliance_section_id: section.id,
+              compliance_section_group_id: section.compliance_section_group_id,
+              organization_id: organization.id,
+              compliance_definition_name: job.data.payload?.compliance?.compliance_definition_name,
+              organization_compliance_id: job.data.payload.compliance.id,
+              organization_compliance_ai_response_id: ai_response.id,
+            },
+          });
+
+          const payload = {
+            reply_to: `ui/${process.env.NODE_ENV}/${organization.id}/${job.data?.payload?.compliance?.compliance_definition_name}/${section.compliance_section_group_id}/${section.id}`,
+            resource: '',
+            compliance_section_group_id: `${section.compliance_section_group_id}`,
+            compliance_section_id: `${section.compliance_section_id}`,
+            method: 'GET',
+            compliance_set_name: 'b_corp_2024',
+            user: user,
+            org_id: `${job.data.payload?.compliance.compliance_definition_name}`,
+            token: job.data?.payload?.token,
+          };
+
+          //this.mqtt.replyTo(payload.reply_to, payload);
+
+          // publish the response to the rabbit queue
+          await this.rabbit.publish(`cold.core.api.compliance_responses`, {
+            event: 'ai_response.updated',
+            data: {
+              compliance_section_group_id: `${section.compliance_section_group_id}`,
+              compliance_section_id: `${section.id}`,
+              organization: { id: organization.id },
+              user: user,
+              compliance_set: job.data.payload?.compliance.compliance_definition_name,
+              token: job.data?.payload?.token,
+              reply_to: payload.reply_to,
+            },
+            from: 'cold.platform.openai',
+          });
+
+          // await job.progress(idx / items.length);
+        } catch (error) {
+          this.sendMetrics('survey.question', `failed`, {
+            start,
+            sendEvent: true,
+            tags: {
+              section: section,
+              question: item,
+              organization: job.data.organization.name,
+              user: job.data.user?.coldclimate_claims?.email,
+              error: error,
+            },
+          });
+          this.logger.error(`Error processing ${section.key}.${item.key}: ${error.message}`, error);
+        }
+      }
+
+      this.logger.info(`✅ Finished processing ${section.key}: ${section.title}`, { section });
+      return true;
+    } catch (e) {
+      this.sendMetrics('survey.section', 'failed', {
+        start,
+        sendEvent: true,
+        tags: {
+          section: section.key,
           organization: job.data.organization.name,
           user: job.data.user.coldclimate_claims.email,
           error: e,
