@@ -17,9 +17,10 @@ import { DatadogTraceModule } from 'nestjs-ddtrace';
 import { S3Module, S3Service, SecretsModule, SecretsService } from './aws';
 import { RedisServiceConfig } from './utility';
 import { MqttModule } from './mqtt';
+import { ComplianceModule } from './compliance/compliance.module';
 
 @Module({
-  imports: [MqttModule],
+  imports: [MqttModule, ComplianceModule],
 })
 export class NestModule {
   static async forRootAsync() {
