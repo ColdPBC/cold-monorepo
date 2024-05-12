@@ -1,8 +1,159 @@
 import { compliance_definitions, PrismaClient } from '@prisma/client';
 import { Cuid2Generator } from '../../src/lib/utility/cuid2-generator.service';
+import { get } from 'lodash';
 
 const prisma = new PrismaClient();
 console.log('ENVIRONMENT:', process.env['NODE_ENV']);
+
+type dependency_chain_data = {
+  dependency_expression: string;
+  compliance_question_id: string;
+  compliance_question_key: string;
+  compliance_section_key: string;
+  compliance_section_group_id: string;
+  compliance_definition_name: string;
+  dependent_values: any[];
+};
+
+export async function buildDependencyChains() {
+  await prisma.$connect();
+  const complianceDefinitions = await prisma.compliance_definitions.findMany();
+
+  for (const complianceDefinition of complianceDefinitions) {
+    const complianceQuestions = await prisma.compliance_questions.findMany({
+      where: {
+        compliance_definition_name: complianceDefinition.name,
+        dependency_expression: {
+          not: null,
+        },
+      },
+      select: {
+        id: true,
+        key: true,
+        dependency_expression: true,
+        compliance_definition_name: true,
+        compliance_section: {
+          select: {
+            id: true,
+            key: true,
+            compliance_section_group_id: true,
+          },
+        },
+      },
+    });
+
+    const seen: any[] = [];
+    for (const question of complianceQuestions) {
+      await buildDependencyTree(question, seen);
+      console.log(`🌱 seeded compliance dependency chain: ${question.key} 🌱`, { question, seen });
+    }
+  }
+
+  await prisma.$disconnect();
+}
+
+async function buildDependencyTree(question: any, seen: any[]): Promise<dependency_chain_data[]> {
+  const chains: dependency_chain_data[] = [];
+
+  if (question.dependency_expression) {
+    const split_expression = question.dependency_expression.split('and $');
+    for (const part of split_expression) {
+      const expression = part.startsWith('lookup') ? `$${part}` : part;
+      const regex =
+        /(?:(?<booleanValue>true|false) in \$map\(\$lookup\(definition\.sections\.\*\.follow_up, '(?<questionKeyMap>.+?)'\)\.value, function\(\$v\) { \$v in (?<valuesMap>.+?)(?= \}\) and|\}\)\$|$)|\$lookup\(definition\.sections\.\*\.follow_up, '(?<questionKey>.+?)'\)\.value = (?<values>true|false))/g;
+
+      const matches = [...expression.matchAll(regex)];
+      if (!matches || matches.length === 0) {
+        continue;
+      }
+      for (const match of matches) {
+        const tree: dependency_chain_data = {
+          dependency_expression: question.dependency_expression,
+          compliance_question_id: question.id,
+          compliance_question_key: question.key,
+          compliance_section_key: question.compliance_section.key,
+          compliance_section_group_id: question.compliance_section.compliance_section_group_id,
+          compliance_definition_name: question.compliance_definition_name,
+          dependent_values: JSON.parse(
+            get(match, 'groups.valuesMap', `[${get(match, 'groups.values', '')}]`)
+              .replace(' })', '')
+              .replaceAll("'", '"'),
+          ),
+        } as dependency_chain_data;
+
+        chains.push(tree);
+
+        const dependent_question = await prisma.compliance_questions.findUnique({
+          where: {
+            compDefNameKey: {
+              compliance_definition_name: question.compliance_definition_name,
+              key: get(match, 'groups.questionKey', get(match, 'groups.questionKeyMap', '')),
+            },
+          },
+          select: {
+            id: true,
+            key: true,
+            dependency_expression: true,
+            compliance_definition_name: true,
+            compliance_section: {
+              select: {
+                id: true,
+                key: true,
+                compliance_section_group_id: true,
+              },
+            },
+          },
+        });
+
+        if (!dependent_question) {
+          console.warn(`🚨 Missing Question: ${get(match, 'groups.questionKey', get(match, 'groups.questionKeyMap', ''))} 🚨`, {
+            match,
+            question,
+          });
+          return chains;
+        }
+        if (seen.includes(question)) {
+          console.warn(`🚨 Circular Dependency Detected: ${question.key} 🚨`, { question, seen });
+          return chains;
+        }
+
+        seen.push(question);
+        if (dependent_question.dependency_expression) {
+          return await buildDependencyTree(dependent_question, seen);
+        }
+      }
+    }
+
+    await prisma.compliance_dependency_chains.upsert({
+      where: {
+        compliance_question_id: question.id,
+      },
+      create: {
+        id: new Cuid2Generator(`cdc`).scopedId,
+        dependency_chain: chains,
+        compliance_question_id: question.id,
+        compliance_question_key: question.key,
+        compliance_section_id: question.compliance_section.id,
+        compliance_section_key: question.compliance_section.key,
+        compliance_section_group_id: question.compliance_section.compliance_section_group_id,
+        compliance_definition_name: question.compliance_definition_name,
+        dependency_expression: question.dependency_expression,
+      },
+      update: {
+        dependency_chain: chains,
+        compliance_question_id: question.id,
+        compliance_question_key: question.key,
+        compliance_section_id: question.compliance_section.id,
+        compliance_section_key: question.compliance_section.key,
+        compliance_section_group_id: question.compliance_section.compliance_section_group_id,
+        compliance_definition_name: question.compliance_definition_name,
+        dependency_expression: question.dependency_expression,
+      },
+    });
+  }
+
+  return chains;
+}
 
 export async function seedComplianceModels() {
   await prisma.$connect();
@@ -175,7 +326,7 @@ export async function seedComplianceModels() {
     if (existing_org_compliance) {
       const existing = await prisma.organization_compliance_statuses.findFirst({
         where: {
-          organization_compliance_id: org_compliance.id,
+          organization_compliance_id: existing_org_compliance.id,
         },
         orderBy: {
           created_at: 'desc',
@@ -185,7 +336,7 @@ export async function seedComplianceModels() {
       if (!existing) {
         const status_data = {
           id: new Cuid2Generator(`ocs`).scopedId,
-          organization_compliance_id: org_compliance.id,
+          organization_compliance_id: existing_org_compliance.id,
           type: 'draft',
           email: 'unknown',
         };
