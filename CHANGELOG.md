@@ -1,3 +1,10 @@
+# [1.219.0-cold-789.6](https://github.com/ColdPBC/cold-monorepo/compare/v1.219.0-cold-789.5...v1.219.0-cold-789.6) (2024-05-12)
+
+
+### Features
+
+* Add ComplianceModule with repositories for managing compliance data ([981ac5a](https://github.com/ColdPBC/cold-monorepo/commit/981ac5afa160a997b117e747a5135546d9e00e8f))
+
 # [1.219.0-cold-789.5](https://github.com/ColdPBC/cold-monorepo/compare/v1.219.0-cold-789.4...v1.219.0-cold-789.5) (2024-05-10)
 
 
