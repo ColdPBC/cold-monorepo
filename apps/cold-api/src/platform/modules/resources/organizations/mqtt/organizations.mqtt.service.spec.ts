@@ -1,15 +1,15 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { OrganizationsMqttService } from './organizations.mqtt.service';
+import { ComplianceMQTT } from './organizations.mqtt.service';
 
 describe('OrganizationMqttService', () => {
-  let service: OrganizationsMqttService;
+  let service: ComplianceMQTT;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [OrganizationsMqttService],
+      providers: [ComplianceMQTT],
     }).compile();
 
-    service = module.get<OrganizationsMqttService>(OrganizationsMqttService);
+    service = module.get<ComplianceMQTT>(ComplianceMQTT);
   });
 
   it('should be defined', () => {
