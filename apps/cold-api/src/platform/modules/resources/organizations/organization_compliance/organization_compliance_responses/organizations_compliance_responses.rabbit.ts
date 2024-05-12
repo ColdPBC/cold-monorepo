@@ -1,11 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { BaseWorker, MqttService } from '@coldpbc/nest';
+import { BaseWorker, ComplianceQuestionsRepository, ComplianceSectionGroupsRepository, MqttService } from '@coldpbc/nest';
 import { RabbitRPC } from '@golevelup/nestjs-rabbitmq';
-import { ComplianceRepository } from '../../mqtt/compliance.repository';
 
 @Injectable()
 export class OrganizationComplianceResponseRabbit extends BaseWorker {
-  constructor(readonly repository: ComplianceRepository, readonly mqtt: MqttService) {
+  constructor(readonly repository: ComplianceQuestionsRepository, readonly groupList: ComplianceSectionGroupsRepository, readonly mqtt: MqttService) {
     super(OrganizationComplianceResponseRabbit.name);
   }
 
@@ -17,18 +16,13 @@ export class OrganizationComplianceResponseRabbit extends BaseWorker {
   })
   async processRPCMessages(msg): Promise<any> {
     const data = msg.data as any;
-    // @ts-expect-error - data is any
-    const groups = await this.repository.complianceSectionGroupListByOrgIdCompNameKey({
+    const groups = await this.groupList.getSectionGroupList({
       org_id: data.organization.id,
       compliance_set_name: data.compliance_set,
     });
     this.mqtt.replyTo(`ui/${process.env.NODE_ENV}/${data.organization.id}/${data.compliance_set}`, groups);
 
-    // @ts-expect-error - data is any
-    const sections = await this.repository.complianceQuestionListByOrgIdCompNameKey({
-      org_id: data.organization.id,
-      compliance_set_name: data.compliance_set,
-      compliance_section_group_id: data.compliance_section_group_id,
+    const sections = await this.repository.getQuestionList({
       compliance_section_id: data.compliance_section_id,
     });
 
