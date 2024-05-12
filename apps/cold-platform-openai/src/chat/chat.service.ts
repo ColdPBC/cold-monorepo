@@ -236,8 +236,8 @@ export class ChatService extends BaseWorker implements OnModuleInit {
     });
 
     const end = new Date();
-    //const recording = await this.fp.recordCompletion(session, vars, sanitized_base, response, start, end);
-    //this.logger.info(`Sending ${sanitized_base.promptInfo.templateName} run stats to FreePlay`, recording);
+    this.logger.info(`Sending ${sanitized_base.promptInfo.templateName} run stats to FreePlay`);
+    this.fp.recordCompletion(session, vars, sanitized_base, response, start, end);
 
     return ai_response;
   }
@@ -368,9 +368,8 @@ export class ChatService extends BaseWorker implements OnModuleInit {
       }
 
       const end = new Date();
-      // const recording = await this.fp.recordCompletion(session, vars, sanitized_base, response, start, end);
-
-      //this.logger.info(`Sending ${sanitized_base.promptInfo.templateName} run stats to FreePlay`, recording);
+      this.logger.info(`Sending ${sanitized_base.promptInfo.templateName} run stats to FreePlay`);
+      this.fp.recordCompletion(session, vars, sanitized_base, response, start, end);
 
       return ai_response;
     } catch (error) {
@@ -488,9 +487,8 @@ export class ChatService extends BaseWorker implements OnModuleInit {
 
     if (vectorSession) {
       vectorSession.customMetadata = { ...vectorSession.customMetadata, snippets: content };
-      //const recording = await this.fp.recordCompletion(vectorSession, vars, condense_prompt, condenseResponse, start, end);
-
-      //this.logger.info(`Sending ${condense_prompt.promptInfo.templateName} run stats to FreePlay `, recording);
+      this.logger.info(`Sending ${condense_prompt.promptInfo.templateName} run stats to FreePlay `);
+      this.fp.recordCompletion(vectorSession, vars, condense_prompt, condenseResponse, start, end);
     }
 
     return { rephrased_question, docs };
