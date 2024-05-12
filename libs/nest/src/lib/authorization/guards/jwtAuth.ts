@@ -13,7 +13,7 @@ import { isRabbitContext } from '@golevelup/nestjs-rabbitmq';
 export class JwtAuthGuard extends AuthGuard('jwt') {
   logger: WorkerLogger;
 
-  constructor(private tracer: TraceService, private reflector: Reflector, private moduleRef: ModuleRef, private config: ConfigService) {
+  constructor(readonly tracer: TraceService, readonly reflector: Reflector, readonly moduleRef: ModuleRef, readonly config: ConfigService) {
     super({
       passReqToCallback: true,
     });

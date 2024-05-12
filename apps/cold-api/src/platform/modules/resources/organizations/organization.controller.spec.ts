@@ -15,16 +15,12 @@ describe('Organization Controller', () => {
   let service: OrganizationService;
   const mock: CreateOrganizationDto = {
     branding: {},
-    city: 'undefined',
     created_at: new Date(),
     display_name: '',
     email: 'undefined',
     name: '',
     phone: 'undefined',
-    state: 'undefined',
-    street_address: 'undefined',
     updated_at: new Date(),
-    zip: 'undefined',
   };
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({

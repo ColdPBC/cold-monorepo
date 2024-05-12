@@ -19,13 +19,7 @@ export class AppService extends BaseWorker implements OnModuleInit {
   service: service_definitions;
   topic: string = '';
 
-  constructor(
-    private readonly config: ConfigService,
-    private readonly prisma: PrismaService,
-    private rabbit: ColdRabbitService,
-    private darkly: DarklyService,
-    private tools: Tools,
-  ) {
+  constructor(readonly config: ConfigService, readonly prisma: PrismaService, readonly rabbit: ColdRabbitService, readonly darkly: DarklyService, readonly tools: Tools) {
     super(AppService.name);
     this.client = new OpenAI({
       organization: config.getOrThrow('OPENAI_ORG_ID'),

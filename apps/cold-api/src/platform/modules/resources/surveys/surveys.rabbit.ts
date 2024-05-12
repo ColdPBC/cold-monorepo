@@ -6,7 +6,7 @@ import { omit } from 'lodash';
 
 @Injectable()
 export class SurveysRabbitService extends BaseWorker {
-  constructor(private readonly surveys: SurveysService, private mqtt: MqttService) {
+  constructor(readonly surveys: SurveysService, mqtt: MqttService) {
     super(SurveysRabbitService.name);
   }
 

@@ -5,12 +5,12 @@ import { StatsD } from 'hot-shots';
 import * as path from 'path';
 import { get, merge } from 'lodash';
 import { cpus, freemem, hostname, loadavg, NetworkInterfaceInfo, totalmem } from 'os';
-import * as process from 'process';
 import { IWorkerDetails, Tags } from '../primitives';
 import { RedactorService } from '../redactor';
 import { WorkerLogger } from './worker.log.service';
 import { TraceService } from 'nestjs-ddtrace';
 import { ConfigService } from '@nestjs/config';
+import process from 'process';
 
 @Injectable()
 @Global()
@@ -23,9 +23,8 @@ export class BaseWorker extends RedactorService implements OnModuleInit {
 
   tracer: TraceService;
 
-  constructor(className: string) {
+  constructor(readonly className: string) {
     super();
-
     const config = new ConfigService();
 
     this.details = {
@@ -84,7 +83,7 @@ export class BaseWorker extends RedactorService implements OnModuleInit {
       port: 8126,
     });
 
-    this.logger = new WorkerLogger(className);
+    this.logger = new WorkerLogger(this.className);
     const pkg = JSON.parse(BaseWorker.getJSON('package.json'));
     if (pkg) {
       if (!pkg.name) {
@@ -101,9 +100,7 @@ export class BaseWorker extends RedactorService implements OnModuleInit {
     }
   }
 
-  async onModuleInit() {
-    // Override in child class
-  }
+  async onModuleInit() {}
 
   public setTags(tags: Tags) {
     this.tags = merge(this.tags, tags);

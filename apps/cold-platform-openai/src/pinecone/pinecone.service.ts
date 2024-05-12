@@ -23,12 +23,12 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
   idGenerator = new Cuid2Generator('vector');
 
   constructor(
-    private readonly config: ConfigService,
-    private readonly cache: CacheService,
-    private readonly darkly: DarklyService,
-    private readonly lc: LangchainLoaderService,
-    private readonly prisma: PrismaService,
-    @InjectQueue('pinecone') private readonly queue: Queue,
+    readonly config: ConfigService,
+    readonly cache: CacheService,
+    readonly darkly: DarklyService,
+    readonly lc: LangchainLoaderService,
+    readonly prisma: PrismaService,
+    @InjectQueue('pinecone') readonly queue: Queue,
   ) {
     super(PineconeService.name);
     this.openai = new OpenAI({

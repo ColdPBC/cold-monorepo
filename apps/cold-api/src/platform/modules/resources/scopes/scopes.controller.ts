@@ -19,7 +19,7 @@ const _bodySchema = {
 
 @Controller('emission_scopes')
 export class ScopesController {
-  constructor(private readonly scopesService: ScopesService) {}
+  constructor(readonly scopesService: ScopesService) {}
 
   @Post()
   @ApiBody(_bodySchema)

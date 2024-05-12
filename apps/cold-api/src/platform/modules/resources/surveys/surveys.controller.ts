@@ -27,7 +27,7 @@ import { UpdateSurveyDefinitionDto } from './dto/update-survey-definition.dto';
 @UseFilters(new HttpExceptionFilter(SurveysController.name))
 @Controller()
 export class SurveysController extends BaseWorker {
-  constructor(private readonly surveyService: SurveysService) {
+  constructor(readonly surveyService: SurveysService) {
     super(SurveysController.name);
   }
 

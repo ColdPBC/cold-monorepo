@@ -8,6 +8,14 @@ export interface FPSession {
   customMetadata?: IFPSession;
 }
 
+export interface ICFPSession {
+  compliance_set: string;
+  organization: string;
+  user: string;
+
+  [key: string]: any;
+}
+
 export interface IFPSession {
   survey: string;
   organization: string;
@@ -20,7 +28,7 @@ export interface IFPSession {
 export class FreeplayService extends BaseWorker implements OnModuleInit {
   public client: Freeplay;
 
-  constructor(private readonly config: ConfigService) {
+  constructor(readonly config: ConfigService) {
     super(FreeplayService.name);
 
     this.client = new Freeplay({
@@ -30,6 +38,10 @@ export class FreeplayService extends BaseWorker implements OnModuleInit {
   }
 
   async onModuleInit() {}
+
+  async createComplianceSession(metadata: ICFPSession) {
+    return this.client.sessions.create({ customMetadata: metadata });
+  }
 
   async createSession(metadata: IFPSession) {
     return this.client.sessions.create({ customMetadata: metadata });

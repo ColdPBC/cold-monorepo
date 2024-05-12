@@ -19,13 +19,13 @@ export class SurveysService extends BaseWorker {
 
   constructor(
     readonly darkly: DarklyService,
-    private config: ConfigService,
-    private prisma: PrismaService,
-    private readonly cache: CacheService,
-    private readonly mqtt: MqttService,
-    private readonly filterService: SurveyFilterService,
-    private readonly scoreService: ScoringService,
-    private readonly surveyStatus: OrgSurveysService,
+    readonly config: ConfigService,
+    readonly prisma: PrismaService,
+    readonly cache: CacheService,
+    readonly mqtt: MqttService,
+    readonly filterService: SurveyFilterService,
+    readonly scoreService: ScoringService,
+    readonly surveyStatus: OrgSurveysService,
   ) {
     super('SurveysService');
   }

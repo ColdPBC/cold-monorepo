@@ -10,7 +10,7 @@ import { filterItemsByRole } from './component-definitions.utils';
 export class ComponentDefinitionsService extends BaseWorker implements OnModuleInit {
   private test_orgs: any;
 
-  constructor(readonly darkly: DarklyService, private prisma: PrismaService, private readonly cache: CacheService, private readonly mqtt: MqttService) {
+  constructor(readonly darkly: DarklyService, readonly prisma: PrismaService, readonly cache: CacheService, readonly mqtt: MqttService) {
     super('ComponentDefinitionsService');
   }
 

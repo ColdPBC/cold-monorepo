@@ -14,15 +14,15 @@ export class InvitationsService extends BaseWorker implements OnModuleInit {
   test_orgs: Array<{ id: string; name: string; display_name: string }>;
 
   constructor(
-    private readonly prisma: PrismaService,
-    private readonly config: ConfigService,
-    private readonly roleService: RoleService,
-    private readonly cache: CacheService,
-    private readonly helper: OrganizationHelper,
-    private readonly utilService: Auth0TokenService,
-    private readonly darkly: DarklyService,
-    private readonly httpService: HttpService,
-    private readonly mqtt: MqttService,
+    readonly prisma: PrismaService,
+    readonly config: ConfigService,
+    readonly roleService: RoleService,
+    readonly cache: CacheService,
+    readonly helper: OrganizationHelper,
+    readonly utilService: Auth0TokenService,
+    readonly darkly: DarklyService,
+    readonly httpService: HttpService,
+    readonly mqtt: MqttService,
   ) {
     super(InvitationsService.name);
   }

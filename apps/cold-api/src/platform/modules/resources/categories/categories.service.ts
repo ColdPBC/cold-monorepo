@@ -3,11 +3,11 @@ import {
   ConflictException,
   Injectable,
   NotFoundException,
-  UnprocessableEntityException
+  UnprocessableEntityException,
 } from '@nestjs/common';
-import {detailedDiff, diff} from 'deep-object-diff';
-import {isEmpty, isUUID} from 'class-validator';
-import {Span} from 'nestjs-ddtrace';
+import { detailedDiff, diff } from 'deep-object-diff';
+import { isEmpty, isUUID } from 'class-validator';
+import { Span } from 'nestjs-ddtrace';
 import {
   BaseWorker,
   CacheService,
@@ -16,10 +16,10 @@ import {
   ObjectUtils,
   PrismaService,
   Tags,
-  ZodCategoryDefinitionItemDto
+  ZodCategoryDefinitionItemDto,
 } from '@coldpbc/nest';
-import {v4} from 'uuid';
-import {find, get, merge, omit} from 'lodash';
+import { v4 } from 'uuid';
+import { find, get, merge, omit } from 'lodash';
 
 /**
  * @description This service is responsible for managing category definitions
@@ -30,7 +30,7 @@ export class CategoriesService extends BaseWorker {
   test_orgs: Array<{ id: string; name: string; display_name: string }>;
   objectUtils = new ObjectUtils();
 
-  constructor(readonly darkly: DarklyService, private prisma: PrismaService, private readonly cache: CacheService, private readonly mqtt: MqttService) {
+  constructor(readonly darkly: DarklyService, readonly prisma: PrismaService, readonly cache: CacheService, readonly mqtt: MqttService) {
     super('CategoriesService');
   }
 

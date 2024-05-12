@@ -5,7 +5,7 @@ import { groupBy, map } from 'lodash';
 
 @Injectable()
 export class FootprintsService extends BaseWorker {
-  constructor(private readonly prisma: PrismaService) {
+  constructor(readonly prisma: PrismaService) {
     super(FootprintsService.name);
   }
 

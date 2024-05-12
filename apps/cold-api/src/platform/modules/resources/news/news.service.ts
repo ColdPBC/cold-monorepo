@@ -7,7 +7,7 @@ import { CreateArticleDto } from './dto/news-article.dto';
 @Span()
 @Injectable()
 export class NewsService extends BaseWorker {
-  constructor(private prisma: PrismaService, private readonly cache: CacheService, private readonly mqtt: MqttService) {
+  constructor(readonly prisma: PrismaService, readonly cache: CacheService, readonly mqtt: MqttService) {
     super('PolicyContentService');
   }
 

@@ -33,7 +33,7 @@ const complianceDefSeeds = [
   {
     name: 'amazon',
     logo_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/compliance_svgs/amazon_logo.svg',
-    surveys: ['bcorp_demo_1', 'bcorp_demo_2', 'bcorp_demo_3'],
+    surveys: ['b_corp_2024'],
     title: 'Amazon',
     image_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/complianceBackgroundImages/rei.png',
     metadata: {

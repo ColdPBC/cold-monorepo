@@ -14,15 +14,15 @@ export class MembersService extends BaseWorker implements OnModuleInit {
   options: any;
 
   constructor(
-    private readonly cache: CacheService,
-    private readonly utilService: Auth0TokenService,
-    private readonly httpService: HttpService,
-    private readonly helper: OrganizationHelper,
-    private readonly mqtt: MqttService,
-    private readonly roleService: RoleService,
-    private readonly memberService: MemberService,
-    private readonly orgRoles: OrgRolesService,
-    private readonly invitations: InvitationsService,
+    readonly cache: CacheService,
+    readonly utilService: Auth0TokenService,
+    readonly httpService: HttpService,
+    readonly helper: OrganizationHelper,
+    readonly mqtt: MqttService,
+    readonly roleService: RoleService,
+    readonly memberService: MemberService,
+    readonly orgRoles: OrgRolesService,
+    readonly invitations: InvitationsService,
   ) {
     super(MembersService.name);
   }

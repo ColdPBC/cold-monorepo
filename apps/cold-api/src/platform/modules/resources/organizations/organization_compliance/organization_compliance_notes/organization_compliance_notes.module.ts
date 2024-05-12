@@ -8,5 +8,6 @@ import { OrganizationComplianceNoteLinksModule } from './organization_compliance
   imports: [OrganizationComplianceNoteFilesModule, OrganizationComplianceNoteLinksModule],
   controllers: [OrganizationComplianceNotesController],
   providers: [OrganizationComplianceNotesService],
+  exports: [OrganizationComplianceNotesService],
 })
 export class OrganizationComplianceNotesModule {}

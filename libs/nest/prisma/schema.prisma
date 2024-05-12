@@ -285,35 +285,37 @@ model category_data {
 /// @actions
 model organizations {
   /// @zod.custom.use(z.string().uuid())
-  id                           String                         @id
-  name                         String                         @unique
-  enabled_connections          Json
-  display_name                 String
-  branding                     Json?
-  phone                        String?
-  website                      String?
+  id                                        String                                      @id
+  name                                      String                                      @unique
+  enabled_connections                       Json
+  display_name                              String
+  branding                                  Json?
+  phone                                     String?
+  website                                   String?
   /// @zod.custom.use(z.string().email())
-  email                        String?
+  email                                     String?
   /// @DtoUpdateHidden
   /// @zod.custom.use(z.date().optional())
-  created_at                   DateTime                       @default(now())
+  created_at                                DateTime                                    @default(now())
   /// @DtoUpdateHidden
   /// @DtoCreateHidden
   /// @DtoReadOnly
   /// @zod.custom.use(z.date().optional())
-  updated_at                   DateTime                       @updatedAt
-  isTest                       Boolean                        @default(false)
-  actions                      actions[]
-  category_data                category_data[]
-  integrations                 integrations[]
-  facilities                   organization_facilities[]
-  organization_files           organization_files[]
-  survey_data                  survey_data[]
-  utility_bills                utility_bills[]
-  vector_records               vector_records[]
-  survey_status                survey_status[]
-  organization_compliance      organization_compliance[]
-  organization_compliances_old organization_compliances_old[] // remove this after migrations
+  updated_at                                DateTime                                    @updatedAt
+  isTest                                    Boolean                                     @default(false)
+  actions                                   actions[]
+  category_data                             category_data[]
+  integrations                              integrations[]
+  facilities                                organization_facilities[]
+  organization_files                        organization_files[]
+  survey_data                               survey_data[]
+  utility_bills                             utility_bills[]
+  vector_records                            vector_records[]
+  survey_status                             survey_status[]
+  organization_compliance                   organization_compliance[]
+  organization_compliances_old              organization_compliances_old[] // remove this after migrations
+  organization_compliance_ai_responses      organization_compliance_ai_responses[]
+  organization_compliance_ai_response_files organization_compliance_ai_response_files[]
 }
 
 /// @namespace Organization_Facilities
@@ -548,21 +550,47 @@ model facility_footprints {
 // NEW COMPLIANCE MODELS
 
 model organization_compliance {
-  id                                String                                       @id
-  description                       String
-  compliance_definition_name        String
-  metadata                          Json?
-  created_at                        DateTime                                     @default(now())
-  updated_at                        DateTime                                     @updatedAt
-  organization_id                   String
-  organization                      organizations                                @relation(fields: [organization_id], references: [id])
-  compliance_definition             compliance_definitions                       @relation(fields: [compliance_definition_name], references: [name])
-  statuses                          organization_compliance_statuses[]
-  notes                             organization_compliance_notes[]
-  question_bookmarks                organization_compliance_question_bookmarks[]
-  organization_compliance_responses organization_compliance_responses[]
+  id                                        String                                       @id
+  description                               String
+  compliance_definition_name                String
+  metadata                                  Json?
+  created_at                                DateTime                                     @default(now())
+  updated_at                                DateTime                                     @updatedAt
+  organization_id                           String
+  organization                              organizations                                @relation(fields: [organization_id], references: [id])
+  compliance_definition                     compliance_definitions                       @relation(fields: [compliance_definition_name], references: [name])
+  statuses                                  organization_compliance_statuses[]
+  notes                                     organization_compliance_notes[]
+  question_bookmarks                        organization_compliance_question_bookmarks[]
+  organization_compliance_responses         organization_compliance_responses[]
+  organization_compliance_ai_responses      organization_compliance_ai_responses[]
+  organization_compliance_ai_response_files organization_compliance_ai_response_files[]
+  compliance_responses                      compliance_responses[]
 
   @@unique([organization_id, compliance_definition_name], name: "orgIdCompNameKey")
+}
+
+model compliance_responses {
+  id                                     Int                                   @id @default(autoincrement())
+  created_at                             DateTime                              @default(now())
+  updated_at                             DateTime                              @updatedAt
+  compliance_question_id                 String
+  compliance_section_id                  String
+  compliance_section_group_id            String
+  organization_id                        String
+  compliance_definition_name             String
+  organization_compliance_id             String
+  organization_compliance_ai_response_id String?
+  organization_compliance_response_id    String?
+  ai_response                            organization_compliance_ai_responses? @relation(fields: [organization_compliance_ai_response_id], references: [id], map: "ai_response_id")
+  org_response                           organization_compliance_responses?    @relation(fields: [organization_compliance_response_id], references: [id], map: "org_response_id")
+  compliance_section                     compliance_sections                   @relation(fields: [compliance_section_id], references: [id])
+  compliance_section_group               compliance_section_groups             @relation(fields: [compliance_section_group_id], references: [id])
+  compliance_question                    compliance_questions                  @relation(fields: [compliance_question_id], references: [id])
+  organization_compliance                organization_compliance               @relation(fields: [organization_compliance_id], references: [id])
+  compliance_definition                  compliance_definitions                @relation(fields: [compliance_definition_name], references: [name])
+
+  @@unique([organization_compliance_id, compliance_question_id], name: "orgCompQuestId")
 }
 
 model compliance_definitions {
@@ -582,6 +610,8 @@ model compliance_definitions {
   compliance_section_groups compliance_section_groups[]
   organization_compliances  organization_compliances_old[]
   organization_compliance   organization_compliance[]
+  compliance_questions      compliance_questions[]
+  compliance_responses      compliance_responses[]
 }
 
 model compliance_section_groups {
@@ -594,6 +624,7 @@ model compliance_section_groups {
   updated_at                 DateTime               @updatedAt
   compliance_definition      compliance_definitions @relation(fields: [compliance_definition_name], references: [name], onDelete: Cascade)
   compliance_sections        compliance_sections[]
+  compliance_responses       compliance_responses[]
 
   @@unique([compliance_definition_name, title], name: "compDefNameTitle")
 }
@@ -612,6 +643,7 @@ model compliance_sections {
   compliance_questions        compliance_questions[]
   compliance_definition       compliance_definitions    @relation(fields: [compliance_definition_name], references: [name], onDelete: Cascade)
   compliance_definition_name  String
+  compliance_responses        compliance_responses[]
 
   @@unique([compliance_section_group_id, key], name: "compSecGroupKey")
 }
@@ -633,12 +665,16 @@ model compliance_questions {
   created_at                           DateTime                                     @default(now())
   updated_at                           DateTime                                     @updatedAt
   compliance_section_id                String
+  compliance_definition_name           String
+  compliance_definition                compliance_definitions                       @relation(fields: [compliance_definition_name], references: [name], onDelete: Cascade)
   compliance_section                   compliance_sections                          @relation(fields: [compliance_section_id], references: [id], onDelete: Cascade)
   notes                                organization_compliance_notes[]
   question_bookmarks                   organization_compliance_question_bookmarks[]
   responses                            organization_compliance_responses[]
   organization_compliance_ai_responses organization_compliance_ai_responses[]
+  compliance_responses                 compliance_responses[]
 
+  @@unique([compliance_definition_name, key], name: "compDefNameKey")
   @@unique([compliance_section_id, key], name: "compSecKey")
 }
 
@@ -702,34 +738,53 @@ model organization_compliance_responses {
   updated_at                             DateTime                              @updatedAt
   compliance_question_id                 String
   organization_compliance_id             String
-  organization_compliance_ai_response_id String
+  organization_compliance_ai_response_id String?
+  additional_context                     Json?
   ai_response                            organization_compliance_ai_responses? @relation(fields: [organization_compliance_ai_response_id], references: [id], map: "ai_response_id")
   compliance_question                    compliance_questions                  @relation(fields: [compliance_question_id], references: [id])
   organization_compliance                organization_compliance               @relation(fields: [organization_compliance_id], references: [id])
+  compliance_responsesId                 Int?
+  compliance_responses                   compliance_responses[]
+
+  @@unique([organization_compliance_id, compliance_question_id], name: "orgCompQuestId")
 }
 
 model organization_compliance_ai_responses {
   id                                String                                      @id
-  answer                            String?
+  answer                            Json?
   justification                     String
-  references                        Json
-  sources                           Json
+  references                        Json?
+  sources                           Json?
+  additional_context                Json?
+  organization_id                   String
+  organization_compliance_id        String
   created_at                        DateTime                                    @default(now())
   updated_at                        DateTime                                    @updatedAt
   files                             organization_compliance_ai_response_files[]
-  compliance_question               compliance_questions                        @relation(fields: [compliance_question_id], references: [id])
-  compliance_question_id            String
   organization_compliance_responses organization_compliance_responses[]
+  compliance_question_id            String
+  organization_compliance           organization_compliance                     @relation(fields: [organization_compliance_id], references: [id])
+  organization                      organizations                               @relation(fields: [organization_id], references: [id])
+  compliance_questions              compliance_questions?                       @relation(fields: [compliance_question_id], references: [id])
+  compliance_responses              compliance_responses[]
+
+  @@unique([organization_compliance_id, compliance_question_id], name: "orgCompQuestId")
 }
 
 model organization_compliance_ai_response_files {
   id                                     String                               @id
   created_at                             DateTime                             @default(now())
   updated_at                             DateTime                             @updatedAt
+  organization_id                        String
+  organization_compliance_id             String
   organization_files_id                  String
+  organization                           organizations                        @relation(fields: [organization_id], references: [id])
   file                                   organization_files                   @relation(fields: [organization_files_id], references: [id])
   organization_compliance_ai_response_id String
-  organization_compliance_ai_response    organization_compliance_ai_responses @relation(fields: [organization_compliance_ai_response_id], references: [id])
+  ai_response                            organization_compliance_ai_responses @relation(fields: [organization_compliance_ai_response_id], references: [id], map: "org_comp_ai_response")
+  organization_compliance                organization_compliance?             @relation(fields: [organization_compliance_id], references: [id])
+
+  @@unique([organization_compliance_id, organization_files_id], name: "orgCompFileId")
 }
 
 enum integration_service_type {

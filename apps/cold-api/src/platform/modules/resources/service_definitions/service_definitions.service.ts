@@ -7,7 +7,7 @@ import { allRoles } from '../_global/global.params';
 @Span()
 @Injectable()
 export class ServiceDefinitionsService extends BaseWorker {
-  constructor(private prisma: PrismaService) {
+  constructor(readonly prisma: PrismaService) {
     super('ServiceDefinitionsService');
   }
 

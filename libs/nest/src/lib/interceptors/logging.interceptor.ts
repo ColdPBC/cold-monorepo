@@ -16,7 +16,7 @@ export class LoggingInterceptor implements NestInterceptor, OnModuleInit {
   darkly: DarklyService = new DarklyService(this.config);
   enableHealthLogs: boolean = false;
 
-  constructor(private config: ConfigService) {
+  constructor(readonly config: ConfigService) {
     this.logger = new WorkerLogger(LoggingInterceptor.name, { version: config.get('DD_VERSION') || BaseWorker.getPkgVersion() });
     //this.logger = new WorkerLogger(LoggingInterceptor.name, { version: process.env['DD_VERSION'] });
   }

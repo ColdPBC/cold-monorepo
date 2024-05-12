@@ -5,5 +5,6 @@ import { OrganizationComplianceBookmarksController } from './organization_compli
 @Module({
   controllers: [OrganizationComplianceBookmarksController],
   providers: [OrganizationComplianceBookmarksService],
+  exports: [OrganizationComplianceBookmarksService],
 })
 export class OrganizationComplianceBookmarksModule {}
