@@ -1,3 +1,11 @@
+# [1.219.0-cold-790.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.219.0-cold-790.1...v1.219.0-cold-790.2) (2024-05-12)
+
+
+### Features
+
+* Add ComplianceModule to OrganizationComplianceResponsesModule imports ([3369515](https://github.com/ColdPBC/cold-monorepo/commit/336951517eb0f8d5f3046298d4e67b0d2e6ad460))
+* Add dependencies filtering to getQuestionList function ([10ae00d](https://github.com/ColdPBC/cold-monorepo/commit/10ae00da7bdb94b726fa986f3fc6e1aaca460799))
+
 # [1.219.0-cold-790.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.218.0...v1.219.0-cold-790.1) (2024-05-12)
 
 
