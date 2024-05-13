@@ -15,7 +15,7 @@ export class FileService extends BaseWorker implements OnModuleInit {
   service: any;
   mqtt: MqttService;
 
-  constructor(private readonly config: ConfigService, private readonly appService: AppService, private readonly prisma: PrismaService, private readonly s3: S3Service) {
+  constructor(readonly config: ConfigService, readonly appService: AppService, readonly prisma: PrismaService, readonly s3: S3Service) {
     super(FileService.name);
     this.client = new OpenAI({
       organization: this.config.getOrThrow('OPENAI_ORG_ID'),

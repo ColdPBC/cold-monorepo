@@ -17,14 +17,14 @@ export class JobConsumer extends BaseWorker {
   started: Date;
 
   constructor(
-    private readonly config: ConfigService,
-    private readonly appService: AppService,
-    private readonly assistant: AssistantService,
-    private readonly fileService: FileService,
-    private readonly cache: CacheService,
-    private readonly loader: PineconeService,
-    private readonly darkly: DarklyService,
-    private readonly chat: ChatService,
+    readonly config: ConfigService,
+    readonly appService: AppService,
+    readonly assistant: AssistantService,
+    readonly fileService: FileService,
+    readonly cache: CacheService,
+    readonly loader: PineconeService,
+    readonly darkly: DarklyService,
+    readonly chat: ChatService,
   ) {
     super(JobConsumer.name);
     this.client = new OpenAI({
@@ -81,15 +81,28 @@ export class JobConsumer extends BaseWorker {
     return this.fileService.deleteFile(job.data.user, job.data.integration.id, job.data.payload.key);
   }
 
+  @Process('compliance_flow.enabled')
+  async processComplianceFlow(job: Job) {
+    try {
+      this.logger.info(`Received ${job.name} job: ${job.id} `);
+      await this.chat.process_compliance(job);
+    } catch (e) {
+      this.logger.error(e.message, e);
+      throw e;
+    }
+  }
+
   @Process('compliance_automation.enabled')
   async processCompliance(job: Job) {
     try {
       this.logger.info(`Received ${job.name} job: ${job.id} `);
+
       const useRag = await this.darkly.getBooleanFlag('dynamic-enable-rag-processing', false, {
         kind: 'org-compliance-set',
         key: job.data.organization.name,
         name: job.data.payload.compliance.compliance_definition.name,
       });
+
       if (useRag) {
         await this.chat.process_survey(job);
       } else {

@@ -16,7 +16,7 @@ export class CrawlerService extends BaseWorker {
   maxDepth: number;
   maxPages: number;
 
-  constructor(@InjectQueue('openai_crawler') private crawlerQueue: Queue) {
+  constructor(@InjectQueue('openai_crawler') readonly crawlerQueue: Queue) {
     super(CrawlerService.name);
     this.maxDepth = 10;
     this.maxPages = 10;

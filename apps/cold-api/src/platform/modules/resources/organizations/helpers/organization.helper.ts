@@ -4,7 +4,7 @@ import { organizations } from '@prisma/client';
 
 @Injectable()
 export class OrganizationHelper extends BaseWorker {
-  constructor(private readonly prisma: PrismaService, private readonly cache: CacheService) {
+  constructor(readonly prisma: PrismaService, private readonly cache: CacheService) {
     super(OrganizationHelper.name);
   }
 

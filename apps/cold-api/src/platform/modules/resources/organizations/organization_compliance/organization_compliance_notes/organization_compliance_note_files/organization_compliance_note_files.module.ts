@@ -5,5 +5,6 @@ import { OrganizationComplianceNoteFilesController } from './organization_compli
 @Module({
   controllers: [OrganizationComplianceNoteFilesController],
   providers: [OrganizationComplianceNoteFilesService],
+  exports: [OrganizationComplianceNoteFilesService],
 })
 export class OrganizationComplianceNoteFilesModule {}

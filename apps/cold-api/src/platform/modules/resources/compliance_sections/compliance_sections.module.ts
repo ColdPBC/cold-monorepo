@@ -5,5 +5,6 @@ import { ComplianceSectionsController } from './compliance_sections.controller';
 @Module({
   controllers: [ComplianceSectionsController],
   providers: [ComplianceSectionsService],
+  exports: [ComplianceSectionsService],
 })
 export class ComplianceSectionsModule {}

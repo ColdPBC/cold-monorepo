@@ -11,7 +11,7 @@ export class EventService extends BaseWorker {
    * @param {PrismaService} prisma - The PrismaService instance for database operations.
    * @param {ColdRabbitService} rabbit - The ColdRabbitService instance for RabbitMQ operations.
    */
-  constructor(private readonly prisma: PrismaService, private readonly rabbit: ColdRabbitService) {
+  constructor(readonly prisma: PrismaService, readonly rabbit: ColdRabbitService) {
     super(EventService.name);
   }
 

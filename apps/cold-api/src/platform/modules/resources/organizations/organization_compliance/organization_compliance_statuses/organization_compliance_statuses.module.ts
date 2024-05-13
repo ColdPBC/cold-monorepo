@@ -5,5 +5,6 @@ import { OrganizationComplianceStatusesController } from './organization_complia
 @Module({
   controllers: [OrganizationComplianceStatusesController],
   providers: [OrganizationComplianceStatusesService],
+  exports: [OrganizationComplianceStatusesService],
 })
 export class OrganizationComplianceStatusesModule {}

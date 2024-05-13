@@ -5,7 +5,7 @@ import { BaseWorker, PrismaService } from '@coldpbc/nest';
 
 @Injectable()
 export class ComplianceSectionGroupsService extends BaseWorker {
-  constructor(private readonly prisma: PrismaService) {
+  constructor(readonly prisma: PrismaService) {
     super(ComplianceSectionGroupsService.name);
   }
 

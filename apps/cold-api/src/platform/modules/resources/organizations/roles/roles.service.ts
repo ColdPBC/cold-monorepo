@@ -10,12 +10,12 @@ export class OrgRolesService extends BaseWorker implements OnModuleInit {
   options: any;
 
   constructor(
-    private readonly roleService: RoleService,
-    private readonly coldRabbit: ColdRabbitService,
-    private readonly cache: CacheService,
-    private readonly utilService: Auth0TokenService,
-    private readonly httpService: HttpService,
-    private readonly mqtt: MqttService,
+    readonly roleService: RoleService,
+    readonly coldRabbit: ColdRabbitService,
+    readonly cache: CacheService,
+    readonly utilService: Auth0TokenService,
+    readonly httpService: HttpService,
+    readonly mqtt: MqttService,
   ) {
     super(OrgRolesService.name);
   }

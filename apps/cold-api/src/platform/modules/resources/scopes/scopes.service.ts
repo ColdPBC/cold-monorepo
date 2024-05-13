@@ -5,7 +5,7 @@ import { BaseWorker, Cuid2Generator, PrismaService } from '@coldpbc/nest';
 
 @Injectable()
 export class ScopesService extends BaseWorker {
-  constructor(private readonly prisma: PrismaService) {
+  constructor(readonly prisma: PrismaService) {
     super(ScopesService.name);
   }
 

@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class Tools extends BaseWorker {
-  constructor(private readonly darkly: DarklyService) {
+  constructor(readonly darkly: DarklyService) {
     super(Tools.name);
   }
 

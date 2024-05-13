@@ -10,7 +10,7 @@ import { Policy_definitionsService } from './policy_definitions.service';
 @UseFilters(new HttpExceptionFilter(Policy_definitionsController.name))
 @Controller('policies')
 export class Policy_definitionsController extends BaseWorker {
-  constructor(private readonly policyDefinitionsService: Policy_definitionsService) {
+  constructor(readonly policyDefinitionsService: Policy_definitionsService) {
     super(Policy_definitionsService.name);
   }
 

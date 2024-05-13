@@ -4,6 +4,7 @@ import { BaseWorker, CacheService, Cuid2Generator, DarklyService, MqttService, P
 import { ComplianceDefinition, OrgCompliance } from './compliance_definition_schema';
 import { EventService } from '../../utilities/events/event.service';
 import { compliance_definitions } from '@prisma/client';
+import { omit } from 'lodash';
 
 @Span()
 @Global()
@@ -12,13 +13,7 @@ export class ComplianceDefinitionService extends BaseWorker {
   exclude_orgs: Array<{ id: string; name: string; display_name: string }>;
   openAI_definition: any;
 
-  constructor(
-    readonly darkly: DarklyService,
-    private prisma: PrismaService,
-    private readonly cache: CacheService,
-    private readonly mqtt: MqttService,
-    private readonly event: EventService,
-  ) {
+  constructor(readonly darkly: DarklyService, readonly prisma: PrismaService, readonly cache: CacheService, readonly mqtt: MqttService, readonly event: EventService) {
     super('ComplianceDefinitionService');
   }
 
@@ -35,7 +30,7 @@ export class ComplianceDefinitionService extends BaseWorker {
   }
 
   async activate(orgId: string, req: any, compliance_name: string): Promise<any> {
-    const { user, url } = req;
+    const { user, url, headers } = req;
     const compliance_definition = await this.prisma.compliance_definitions.findUnique({
       where: {
         name: compliance_name,
@@ -46,67 +41,149 @@ export class ComplianceDefinitionService extends BaseWorker {
       throw new NotFoundException(`${compliance_name} compliance definition does not exist`);
     }
 
-    const compliance = await this.prisma.organization_compliances_old.findFirst({
+    // try the new way first....
+    let compliance: any = await this.prisma.organization_compliance.findUnique({
       where: {
-        organization_id: orgId,
-        compliance_id: compliance_definition.id,
+        orgIdCompNameKey: {
+          organization_id: orgId,
+          compliance_definition_name: compliance_name,
+        },
       },
-      include: {
+      select: {
+        id: true,
+        compliance_definition_name: true,
         organization: true,
-        compliance_definition: true,
+        compliance_definition: {
+          select: {
+            id: true,
+            name: true,
+            title: true,
+            version: true,
+            compliance_section_groups: {
+              select: {
+                id: true,
+                title: true,
+                order: true,
+                compliance_sections: {
+                  select: {
+                    id: true,
+                    key: true,
+                    title: true,
+                    order: true,
+                    dependency_expression: true,
+                    compliance_questions: {
+                      select: {
+                        id: true,
+                        key: true,
+                        order: true,
+                        prompt: true,
+                        component: true,
+                        tooltip: true,
+                        placeholder: true,
+                        rubric: true,
+                        options: true,
+                        coresponding_question: true,
+                        dependency_expression: true,
+                        question_summary: true,
+                        additional_context: true,
+                        compliance_section_id: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
       },
     });
+    if (compliance) {
+      await this.event.sendIntegrationEvent(
+        false,
+        'compliance_flow.enabled',
+        {
+          base_update_topic: `ui/${process.env.NODE_ENV}/${orgId}/${compliance_name}`,
+          service: this.openAI_definition,
+          compliance,
+          token: headers['authorization'].replace('Bearer ', ''),
+        },
+        user,
+        orgId,
+      );
 
-    if (!compliance) {
-      throw new NotFoundException(`${compliance_name} compliance does not exist for ${orgId}`);
-    }
-
-    let surveyNames: string[];
-    if (Array.isArray(compliance.surveys_override) && compliance.surveys_override.length > 0) {
-      surveyNames = compliance.surveys_override as string[];
-    } else {
-      surveyNames = compliance.compliance_definition.surveys as string[];
-    }
-
-    const surveys: any[] = [];
-
-    for (const name of surveyNames) {
-      const survey = await this.prisma.survey_definitions.findFirst({
-        where: {
-          name: name,
+      this.mqtt.publishMQTT('public', {
+        swr_key: url,
+        action: 'create',
+        status: 'complete',
+        data: {
+          event: 'compliance_flow.enabled',
+          base_update_topic: `ui/${process.env.NODE_ENV}/${orgId}/${compliance_name}`,
+          service: this.openAI_definition,
         },
       });
-      if (survey) {
-        surveys.push(survey);
-      } else {
-        this.logger.error(`Survey ${name} referenced in ${Array.isArray(compliance.surveys_override) ? 'surveys_override' : 'surveys'} array not found for ${compliance_name}`);
-        throw new NotFoundException(
-          `Survey ${name} referenced in ${Array.isArray(compliance.surveys_override) ? 'surveys_override' : 'surveys'} array not found for ${compliance_name}`,
-        );
+    } else {
+      // then try the old way
+      compliance = await this.prisma.organization_compliances_old.findFirst({
+        where: {
+          organization_id: orgId,
+          compliance_id: compliance_definition.id,
+        },
+        include: {
+          compliance_definition: true,
+        },
+      });
+
+      if (!compliance) {
+        throw new NotFoundException(`Compliance ${compliance_name} not found for org ${orgId}`);
       }
+
+      let surveyNames: string[];
+      if (Array.isArray(compliance.surveys_override) && compliance.surveys_override.length > 0) {
+        surveyNames = compliance.surveys_override as string[];
+      } else {
+        surveyNames = compliance.compliance_definition.surveys as string[];
+      }
+
+      const surveys: any[] = [];
+
+      for (const name of surveyNames) {
+        const survey = await this.prisma.survey_definitions.findFirst({
+          where: {
+            name: name,
+          },
+        });
+        if (survey) {
+          surveys.push(survey);
+        } else {
+          this.logger.error(`Survey ${name} referenced in ${Array.isArray(compliance.surveys_override) ? 'surveys_override' : 'surveys'} array not found for ${compliance_name}`);
+          throw new NotFoundException(
+            `Survey ${name} referenced in ${Array.isArray(compliance.surveys_override) ? 'surveys_override' : 'surveys'} array not found for ${compliance_name}`,
+          );
+        }
+      }
+
+      await this.event.sendIntegrationEvent(
+        false,
+        'compliance_automation.enabled',
+        {
+          on_update_url: `/organizations/${orgId}/surveys/${compliance_name}`,
+          surveys,
+          service: this.openAI_definition,
+          compliance,
+        },
+        user,
+        orgId,
+      );
+
+      this.mqtt.publishMQTT('public', {
+        swr_key: url,
+        action: 'create',
+        status: 'complete',
+        data: {
+          compliance,
+        },
+      });
     }
-
-    await this.event.sendIntegrationEvent(
-      false,
-      'compliance_automation.enabled',
-      {
-        on_update_url: `/organizations/${orgId}/surveys/${compliance_name}`,
-        surveys,
-        service: this.openAI_definition,
-        compliance,
-      },
-      user,
-      orgId,
-    );
-
-    this.mqtt.publishMQTT('public', {
-      swr_key: url,
-      action: 'create',
-      status: 'complete',
-      data: {
-        compliance,
-      },
-    });
   }
 
   async injectSurvey(req, id, survey) {
@@ -120,7 +197,68 @@ export class ComplianceDefinitionService extends BaseWorker {
       throw new NotFoundException(`Compliance with id ${id} does not exist`);
     }
 
-    if (survey.sections) {
+    await this.importSurveyStructure(Object.assign({ ...compliance, survey_definition: survey }));
+  }
+
+  /***
+   * This action creates a new compliance definition
+   * @param req
+   * @param complianceDefinition
+   */
+  async create(req: any, complianceDefinition: ComplianceDefinition): Promise<ComplianceDefinition> {
+    const { user, url } = req;
+    this.setTags({ user: user.coldclimate_claims, compliance_definition: complianceDefinition });
+
+    try {
+      const existing = await this.prisma.compliance_definitions.findUnique({
+        where: {
+          name: complianceDefinition.name,
+        },
+      });
+
+      if (existing) {
+        throw new BadRequestException(`A compliance definition with the name ${complianceDefinition.name} already exists`);
+      }
+
+      complianceDefinition.id = new Cuid2Generator('compdef').scopedId;
+
+      const response = await this.prisma.compliance_definitions.create({
+        data: omit(complianceDefinition, ['survey_definition']),
+      });
+
+      if (complianceDefinition.survey_definition) {
+        await this.importSurveyStructure(complianceDefinition);
+      }
+
+      this.mqtt.publishMQTT('public', {
+        swr_key: url,
+        action: 'create',
+        status: 'complete',
+        data: response,
+      });
+
+      this.logger.info('created compliance definition', response);
+
+      return response as unknown as ComplianceDefinition;
+    } catch (e) {
+      this.metrics.increment('cold.api.surveys.create', this.tags);
+      this.mqtt.publishMQTT('public', {
+        swr_key: url,
+        action: 'create',
+        status: 'failed',
+        data: {
+          definition: complianceDefinition,
+          error: e.message,
+        },
+      });
+
+      throw e;
+    }
+  }
+
+  async importSurveyStructure(compliance: any) {
+    if (compliance?.survey_definition?.sections) {
+      const survey = compliance.survey_definition;
       for (const [key, value] of Object.entries(survey.sections)) {
         const sectionKey = key;
         const sectionValue: any = value;
@@ -191,6 +329,7 @@ export class ComplianceDefinitionService extends BaseWorker {
             placeholder: questionValue.placeholder,
             rubric: questionValue.rubric,
             options: questionValue.options,
+            compliance_definition_name: compliance.name,
             coresponding_question: questionValue.coresponding_question,
             dependency_expression: questionValue?.dependency?.expression,
             question_summary: questionValue.question_summary,
@@ -202,7 +341,7 @@ export class ComplianceDefinitionService extends BaseWorker {
             delete questionData.options;
           }
 
-          const existing_question = await this.prisma.compliance_questions.upsert({
+          await this.prisma.compliance_questions.upsert({
             where: {
               compSecKey: {
                 key: questionKey,
@@ -219,16 +358,17 @@ export class ComplianceDefinitionService extends BaseWorker {
           });
 
           this.logger.log(`created new compliance question: ${questionKey} under ${key} for ${compliance.name}`, {
-            question: existing_question,
+            question: questionData,
             section: comp_section,
             section_group: compliance_section_group,
             compliance_definition: compliance,
           });
         }
       }
+
       return this.prisma.compliance_definitions.findUnique({
         where: {
-          id: id,
+          id: compliance.id,
         },
         include: {
           compliance_section_groups: {
@@ -273,58 +413,6 @@ export class ComplianceDefinitionService extends BaseWorker {
   }
 
   /***
-   * This action creates a new compliance definition
-   * @param req
-   * @param complianceDefinition
-   */
-  async create(req: any, complianceDefinition: ComplianceDefinition): Promise<ComplianceDefinition> {
-    const { user, url } = req;
-    this.setTags({ user: user.coldclimate_claims, compliance_definition: complianceDefinition });
-
-    try {
-      const existing = await this.prisma.compliance_definitions.findUnique({
-        where: {
-          name: complianceDefinition.name,
-        },
-      });
-
-      if (existing) {
-        throw new BadRequestException(`A compliance definition with the name ${complianceDefinition.name} already exists`);
-      }
-
-      complianceDefinition.id = new Cuid2Generator('compdef').scopedId;
-
-      const response = await this.prisma.compliance_definitions.create({
-        data: complianceDefinition,
-      });
-
-      this.mqtt.publishMQTT('public', {
-        swr_key: url,
-        action: 'create',
-        status: 'complete',
-        data: response,
-      });
-
-      this.logger.info('created compliance definition', response);
-
-      return response as unknown as ComplianceDefinition;
-    } catch (e) {
-      this.metrics.increment('cold.api.surveys.create', this.tags);
-      this.mqtt.publishMQTT('public', {
-        swr_key: url,
-        action: 'create',
-        status: 'failed',
-        data: {
-          definition: complianceDefinition,
-          error: e.message,
-        },
-      });
-
-      throw e;
-    }
-  }
-
-  /***
    * This action creates/updates a compliance for org
    * @param req
    * @param name
@@ -348,7 +436,27 @@ export class ComplianceDefinitionService extends BaseWorker {
         data['surveys_override'] = req.body.surveys_override;
       }
 
-      const compliance = await this.prisma.organization_compliances_old.upsert({
+      const compliance = await this.prisma.organization_compliance.upsert({
+        where: {
+          orgIdCompNameKey: {
+            organization_id: orgId,
+            compliance_definition_name: name,
+          },
+        },
+        create: {
+          id: new Cuid2Generator('oc').scopedId,
+          description: definition.title,
+          compliance_definition_name: definition.name,
+          organization_id: orgId,
+        },
+        update: {
+          description: definition.title,
+          compliance_definition_name: definition.name,
+          organization_id: orgId,
+        },
+      });
+
+      await this.prisma.organization_compliances_old.upsert({
         where: {
           orgKeyCompKey: {
             organization_id: orgId,
@@ -382,7 +490,7 @@ export class ComplianceDefinitionService extends BaseWorker {
         },
       });
 
-      return compliance as OrgCompliance;
+      return compliance as any;
     } catch (e) {
       this.logger.error(e.message, { error: e });
 

@@ -12,7 +12,7 @@ import { allRoles, bpcDecoratorOptions, nameDecoratorOptions } from '../_global/
 @UseFilters(new HttpExceptionFilter(ServiceDefinitionsController.name))
 @Controller('service_definitions')
 export class ServiceDefinitionsController extends BaseWorker {
-  constructor(private readonly serviceDefinitions: ServiceDefinitionsService) {
+  constructor(readonly serviceDefinitions: ServiceDefinitionsService) {
     super(ServiceDefinitionsService.name);
   }
 

@@ -16,7 +16,7 @@ export class MqttService extends BaseWorker implements OnModuleInit {
   private readonly clientId: string;
   mqttClient: mqtt.MqttClient | undefined;
 
-  constructor(private config: ConfigService) {
+  constructor(readonly config: ConfigService) {
     super(MqttService.name);
     const parts = config.getOrThrow('DD_SERVICE').split('-');
     if (parts.length < 2) throw new Error('Invalid DD_SERVICE');
@@ -95,10 +95,10 @@ export class MqttService extends BaseWorker implements OnModuleInit {
     }
   }
 
-  onMessage(callback: (topic: string, message: string) => void): void {
+  onMessage(callback: (topic: string, message: string, packet: any) => void): void {
     if (this.mqttClient) {
-      this.mqttClient.on('message', (topic, message) => {
-        callback(topic, message.toString());
+      this.mqttClient.on('message', (topic, message, packet) => {
+        callback(topic, message.toString(), packet);
       });
     } else {
       this.logger.error('MQTT client is not connected');
@@ -120,6 +120,25 @@ export class MqttService extends BaseWorker implements OnModuleInit {
       this.publishMQTT('ui', payload, topic);
     } else {
       this.logger.error('MQTT client is not connected');
+    }
+  }
+
+  /**
+   * Publish MQTT Message
+   * @param responseTopic | The topic to reply to
+   * @param payload
+   */
+  replyTo(responseTopic: string, payload: any): void {
+    try {
+      if (this.mqttClient && responseTopic) {
+        this.mqttClient.publish(responseTopic, JSON.stringify(payload), { qos: 0, retain: false });
+
+        this.logger.log(`Published to topic: ${responseTopic}`, payload);
+      } else {
+        this.logger.error('MQTT client is not connected');
+      }
+    } catch (e: any) {
+      this.logger.error(e.message, e);
     }
   }
 

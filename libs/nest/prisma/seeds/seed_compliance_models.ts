@@ -1,8 +1,158 @@
 import { compliance_definitions, PrismaClient } from '@prisma/client';
 import { Cuid2Generator } from '../../src/lib/utility/cuid2-generator.service';
+import { get } from 'lodash';
 
 const prisma = new PrismaClient();
 console.log('ENVIRONMENT:', process.env['NODE_ENV']);
+
+type dependency_chain_data = {
+  dependency_expression: string;
+  dependent_question_id: string;
+  dependent_question_key: string;
+  dependent_section_key: string;
+  dependent_section_group_id: string;
+  dependent_definition_name: string;
+  dependent_question_values: any[];
+};
+
+export async function buildDependencyChains() {
+  await prisma.$connect();
+  const complianceDefinitions = await prisma.compliance_definitions.findMany();
+
+  for (const complianceDefinition of complianceDefinitions) {
+    const complianceQuestions = await prisma.compliance_questions.findMany({
+      where: {
+        compliance_definition_name: complianceDefinition.name,
+        dependency_expression: {
+          not: null,
+        },
+      },
+      select: {
+        id: true,
+        key: true,
+        dependency_expression: true,
+        compliance_definition_name: true,
+        compliance_section: {
+          select: {
+            id: true,
+            key: true,
+            compliance_section_group_id: true,
+          },
+        },
+      },
+    });
+
+    const seen: any[] = [];
+
+    for (const question of complianceQuestions) {
+      const chains = await buildDependencyTree(question, seen, []);
+      await prisma.compliance_dependency_chains.upsert({
+        where: {
+          compliance_question_id: question.id,
+        },
+        create: {
+          id: new Cuid2Generator(`cdc`).scopedId,
+          dependency_chain: chains,
+          compliance_question_id: question.id,
+          compliance_question_key: question.key,
+          compliance_section_id: question.compliance_section.id,
+          compliance_section_key: question.compliance_section.key,
+          compliance_section_group_id: question.compliance_section.compliance_section_group_id,
+          compliance_definition_name: question.compliance_definition_name,
+          dependency_expression: question.dependency_expression ? question.dependency_expression : '',
+        },
+        update: {
+          dependency_chain: chains,
+          compliance_question_id: question.id,
+          compliance_question_key: question.key,
+          compliance_section_id: question.compliance_section.id,
+          compliance_section_key: question.compliance_section.key,
+          compliance_section_group_id: question.compliance_section.compliance_section_group_id,
+          compliance_definition_name: question.compliance_definition_name,
+          dependency_expression: question.dependency_expression ? question.dependency_expression : '',
+        },
+      });
+      console.log(`🌱 seeded compliance dependency chain: ${question.key} 🌱`, { question, seen });
+    }
+  }
+
+  await prisma.$disconnect();
+}
+
+async function buildDependencyTree(question: any, seen: any[], chains: dependency_chain_data[]): Promise<dependency_chain_data[]> {
+  if (question.dependency_expression) {
+    const split_expression = question.dependency_expression.split('and $');
+    for (const part of split_expression) {
+      const expression = part.startsWith('lookup') ? `$${part}` : part;
+      const regex =
+        /(?:(?<booleanValue>true|false) in \$map\(\$lookup\(definition\.sections\.\*\.follow_up, '(?<questionKeyMap>.+?)'\)\.value, function\(\$v\) { \$v in (?<valuesMap>.+?)(?= \}\) and|\}\)\$|$)|\$lookup\(definition\.sections\.\*\.follow_up, '(?<questionKey>.+?)'\)\.value = (?<values>true|false))/g;
+
+      const matches = [...expression.matchAll(regex)];
+      if (!matches || matches.length === 0) {
+        continue;
+      }
+      for (const match of matches) {
+        const dependent_question = await prisma.compliance_questions.findUnique({
+          where: {
+            compDefNameKey: {
+              compliance_definition_name: question.compliance_definition_name,
+              key: get(match, 'groups.questionKey', get(match, 'groups.questionKeyMap', '')),
+            },
+          },
+          select: {
+            id: true,
+            key: true,
+            dependency_expression: true,
+            compliance_definition_name: true,
+            compliance_section: {
+              select: {
+                id: true,
+                key: true,
+                compliance_section_group_id: true,
+              },
+            },
+          },
+        });
+
+        if (!dependent_question) {
+          console.warn(`🚨 Missing Question: ${get(match, 'groups.questionKey', get(match, 'groups.questionKeyMap', ''))} 🚨`, {
+            match,
+            question,
+          });
+          return chains;
+        }
+
+        const chainData: dependency_chain_data = {
+          dependency_expression: dependent_question.dependency_expression,
+          dependent_question_id: dependent_question.id,
+          dependent_question_key: dependent_question.key,
+          dependent_section_key: dependent_question.compliance_section.key,
+          dependent_section_group_id: dependent_question.compliance_section.compliance_section_group_id,
+          dependent_definition_name: dependent_question.compliance_definition_name,
+          dependent_question_values: JSON.parse(
+            get(match, 'groups.valuesMap', `[${get(match, 'groups.values', '')}]`)
+              .replace(' })', '')
+              .replaceAll("'", '"'),
+          ),
+        } as dependency_chain_data;
+
+        chains.push(chainData);
+
+        if (seen.includes(question)) {
+          console.warn(`🚨 Circular Dependency Detected: ${question.key} 🚨`, { question, seen });
+          return chains;
+        }
+
+        seen.push(question);
+        if (dependent_question.dependency_expression) {
+          return await buildDependencyTree(dependent_question, seen, chains);
+        }
+      }
+    }
+  }
+
+  return chains;
+}
 
 export async function seedComplianceModels() {
   await prisma.$connect();
@@ -26,7 +176,7 @@ export async function seedComplianceModels() {
 
         if (!survey_def) {
           console.warn('🚨 No Compliance Survey Definitions Found 🚨');
-          return;
+          continue;
         }
         if (survey_def.definition) {
           console.log(`Processing ${survey_def.name}...`);
@@ -100,6 +250,7 @@ export async function seedComplianceModels() {
                   placeholder: questionValue.placeholder,
                   rubric: questionValue.rubric,
                   options: questionValue.options,
+                  compliance_definition_name: complianceDef.name,
                   coresponding_question: questionValue.coresponding_question,
                   dependency_expression: questionValue?.dependency?.expression,
                   question_summary: questionValue.question_summary,
@@ -171,6 +322,31 @@ export async function seedComplianceModels() {
     });
 
     console.log(`🌱 updated Organization Compliance: ${existing_org_compliance.compliance_definition_name} 🌱`, existing_org_compliance);
+    if (existing_org_compliance) {
+      const existing = await prisma.organization_compliance_statuses.findFirst({
+        where: {
+          organization_compliance_id: existing_org_compliance.id,
+        },
+        orderBy: {
+          created_at: 'desc',
+        },
+      });
+
+      if (!existing) {
+        const status_data = {
+          id: new Cuid2Generator(`ocs`).scopedId,
+          organization_compliance_id: existing_org_compliance.id,
+          type: 'draft',
+          email: 'unknown',
+        };
+
+        const status_record = await prisma.organization_compliance_statuses.create({
+          data: status_data,
+        });
+
+        console.log(`🌱 updated Organization Compliance Status: ${'draft'} 🌱`, status_record);
+      }
+    }
   }
 
   const compliance_definitions = await prisma.compliance_definitions.findMany();
@@ -205,6 +381,259 @@ export async function seedComplianceModels() {
     }
   }
   console.log(`${comp_def_count} Compliance Definitions seeded!`);
+
+  console.log('Migrating Compliance Data Table...');
+  const survey_data = (await prisma.survey_data.findMany()) as any[];
+  for (const data of survey_data) {
+    const survey_def = await prisma.survey_definitions.findUnique({
+      where: {
+        id: data.survey_definition_id,
+      },
+    });
+
+    if (!survey_def) {
+      console.warn(`🚨 Missing Survey Definition: ${data.survey_definition_id} 🚨`);
+      continue;
+    }
+
+    const comp_def = await prisma.compliance_definitions.findUnique({
+      where: {
+        name: survey_def.name,
+      },
+    });
+
+    if (!comp_def) {
+      console.warn(`🚨 Missing Compliance Definition for Survey Definition ID: ${data.survey_definition_id} 🚨`);
+      continue;
+    }
+
+    const org_compliance = await prisma.organization_compliance.findUnique({
+      where: {
+        orgIdCompNameKey: {
+          organization_id: data.organization_id,
+          compliance_definition_name: comp_def.name,
+        },
+      },
+    });
+
+    if (!org_compliance) {
+      console.warn(`🚨 Missing Organization Compliance: ${data.organization_id} - ${comp_def.name} 🚨`);
+      continue;
+    }
+
+    const status = data.data.submitted ? 'submitted' : 'draft';
+    const existing = await prisma.organization_compliance_statuses.findFirst({
+      where: {
+        organization_compliance_id: org_compliance.id,
+      },
+      orderBy: {
+        created_at: 'desc',
+      },
+    });
+
+    if (!existing || existing?.type !== status) {
+      const status_data = {
+        id: new Cuid2Generator(`ocs`).scopedId,
+        organization_compliance_id: org_compliance.id,
+        type: status,
+        email: 'unknown',
+      };
+
+      const status_record = await prisma.organization_compliance_statuses.create({
+        data: status_data,
+      });
+
+      console.log(`🌱 updated Organization Compliance Status: ${status} 🌱`, status_record);
+    }
+
+    if (!data?.data?.sections) {
+      console.warn(`🚨 Missing Section Data: ${data.id} 🚨`, data?.data);
+      continue;
+    }
+    const sections = Object.keys(data.data.sections);
+    // Iterate over each section
+    for (const sectionKey of sections) {
+      const section = await prisma.compliance_sections.findFirst({
+        where: {
+          key: sectionKey,
+          compliance_definition_name: comp_def.name,
+        },
+      });
+
+      if (!section) {
+        console.warn(`🚨 Missing Compliance Section: ${sectionKey} 🚨`);
+        continue;
+      }
+      if (!data.data.sections[`${sectionKey}`].follow_up) {
+        console.warn(`🚨 Missing Follow Up Data: ${sectionKey} 🚨`, data.data.sections[`${sectionKey}`]);
+        continue;
+      }
+      const followUP = Object.keys(data.data.sections[`${sectionKey}`].follow_up);
+      // Iterate over each follow_up question
+      for (const questionKey of followUP) {
+        const question = await prisma.compliance_questions.findUniqueOrThrow({
+          where: {
+            compSecKey: {
+              key: questionKey,
+              compliance_section_id: section.id,
+            },
+          },
+        });
+
+        const qData = data.data.sections[`${sectionKey}`].follow_up[`${questionKey}`] as any;
+        // Check if the question has an ai_response property
+        let response: any;
+        if (qData.value) {
+          response = await prisma.organization_compliance_responses.upsert({
+            where: {
+              orgCompQuestId: {
+                compliance_question_id: question.id,
+                organization_compliance_id: org_compliance.id,
+              },
+            },
+            create: {
+              id: new Cuid2Generator(`ocr`).scopedId,
+              organization_compliance_id: org_compliance.id,
+              compliance_question_id: question.id,
+              value: qData.value.toString(),
+            },
+            update: {
+              value: qData.value.toString(),
+            },
+          });
+
+          console.log(`🌱 updated Org Response 🌱`, { response });
+        }
+        if (qData.ai_response) {
+          // Insert a new ai_response object
+
+          if (Array.isArray(qData.ai_response.references)) {
+            qData.ai_response.references.map((ref: any) => {
+              let parsed;
+              if (typeof ref?.text === 'string') {
+                ref.text = ref.text.replace(/\r/g, ' ');
+                try {
+                  parsed = JSON.parse(ref.text.replace(/\r/g, ' '));
+                } catch (e: any) {
+                  console.warn(`🚨 Error Parsing Reference Text: ${ref.text} 🚨`, { error: e.message, stack: e.stack });
+                  console.log(`${ref.text}`);
+                }
+              }
+              if (parsed) {
+                ref.text = parsed;
+              }
+            });
+          }
+
+          if (!qData?.ai_response?.justification) {
+            console.warn(`🚨 Warning Justification is empty 🚨`, { ...qData?.ai_response });
+            continue;
+          }
+
+          const ai_response = await prisma.organization_compliance_ai_responses.upsert({
+            where: {
+              orgCompQuestId: {
+                compliance_question_id: question.id,
+                organization_compliance_id: org_compliance.id,
+              },
+            },
+            create: {
+              id: new Cuid2Generator(`ocair`).scopedId,
+              organization_compliance_id: org_compliance.id,
+              compliance_question_id: question.id,
+              organization_id: data.organization_id,
+              answer: qData?.ai_response?.answer,
+              justification: qData?.ai_response?.justification,
+              references: qData?.ai_response?.references,
+              sources: qData?.ai_response?.source,
+            },
+            update: {
+              answer: qData?.ai_response?.answer,
+              justification: qData?.ai_response?.justification,
+              references: qData?.ai_response?.references,
+              sources: qData?.ai_response?.source,
+            },
+          });
+
+          console.log(`🌱 Upserted AI Response 🌱`, { ai_response });
+
+          const comp_responses_data = {
+            compliance_question_id: question.id,
+            compliance_section_id: section.id,
+            compliance_section_group_id: section.compliance_section_group_id,
+            organization_id: data.organization_id,
+            compliance_definition_name: comp_def.name,
+            organization_compliance_id: org_compliance.id,
+            organization_compliance_ai_response_id: ai_response?.id,
+            organization_compliance_response_id: response?.id,
+          };
+
+          if (!response?.id) {
+            delete comp_responses_data.organization_compliance_response_id;
+          }
+
+          const comp_responses = await prisma.compliance_responses.upsert({
+            where: {
+              orgCompQuestId: {
+                compliance_question_id: question.id,
+                organization_compliance_id: org_compliance.id,
+              },
+            },
+            create: {
+              ...comp_responses_data,
+            },
+            update: {
+              ...comp_responses_data,
+            },
+          });
+
+          console.log(`🌱 Upserted Compliance Response Join 🌱`, { comp_responses });
+
+          if (!qData?.ai_response?.source || !Array.isArray(qData.ai_response.source)) {
+            console.warn(`🚨 Missing AI Response Source: ${questionKey} 🚨`);
+            continue;
+          } else {
+            console.log(`updating AI Response ${ai_response.id} files:`, { source: qData.ai_response.source });
+            for (const filename of qData.ai_response.source) {
+              const file = await prisma.organization_files.findFirst({
+                where: {
+                  original_name: filename,
+                  organization_id: data.organization_id,
+                },
+              });
+
+              if (!file) {
+                console.warn(`🚨 Missing AI Response File: ${filename} 🚨`);
+                continue;
+              }
+
+              const ai_response_file = await prisma.organization_compliance_ai_response_files.upsert({
+                where: {
+                  orgCompFileId: {
+                    organization_compliance_id: org_compliance.id,
+                    organization_files_id: file.id,
+                  },
+                },
+                create: {
+                  id: new Cuid2Generator(`ocairf`).scopedId,
+                  organization_compliance_ai_response_id: ai_response.id,
+                  organization_files_id: file.id,
+                  organization_id: data.organization_id,
+                  organization_compliance_id: org_compliance.id,
+                },
+                update: {
+                  organization_files_id: file.id,
+                },
+              });
+              console.log(`🌱 updated AI Response file: ${filename} 🌱`, { ai_response, ai_response_file });
+            }
+          }
+        }
+      }
+    }
+  }
+
+  console.log(`🌱 seeding done!  🌱`);
 
   await prisma.$disconnect();
 }

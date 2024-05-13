@@ -8,7 +8,7 @@ import { SurveysService } from '../surveys/surveys.service';
 @Span()
 @Injectable()
 export class ActionsService extends BaseWorker {
-  constructor(private readonly prisma: PrismaService, private readonly cacheService: CacheService, private readonly surveys: SurveysService, private readonly mqtt: MqttService) {
+  constructor(readonly prisma: PrismaService, readonly cacheService: CacheService, readonly surveys: SurveysService, readonly mqtt: MqttService) {
     super(ActionsService.name);
   }
 

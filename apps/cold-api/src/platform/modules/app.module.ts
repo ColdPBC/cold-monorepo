@@ -12,9 +12,8 @@ import { ActionsModule } from './resources/actions/actions.module';
 import { IntegrationsModule } from './resources/integrations/integrations.module';
 import { FacilitiesModule } from './resources/organizations/facilities/facilities.module';
 import { ComplianceDefinitionModule } from './resources/compliance_definitions/compliance_definition.module';
-import { OrganizationModule } from './resources/organizations/organization.module';
 import { EventsModule } from './utilities/events/events.module';
-import { ComplianceGateway } from './resources/mqtt/mqtt.consumer';
+import { OrganizationModule } from './resources/organizations/organization.module';
 
 @Module({})
 export class AppModule {
@@ -44,7 +43,7 @@ export class AppModule {
         FacilitiesModule,
         ComplianceDefinitionModule,
       ],
-      providers: [ComplianceGateway],
+      providers: [],
       exports: [],
     };
   }

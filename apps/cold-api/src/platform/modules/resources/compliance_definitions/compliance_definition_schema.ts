@@ -11,6 +11,7 @@ export const ComplianceDefinitionSchema = z.object({
   version: z.number().nullable(),
   logo_url: z.string().url(),
   surveys: z.array(z.string()),
+  survey_definition: z.any().optional(),
 });
 
 export type ComplianceDefinition = z.infer<typeof ComplianceDefinitionSchema>;

@@ -19,6 +19,8 @@ import { FootprintsModule } from './facilities/footprints/footprints.module';
 import { OrgSurveysModule } from './surveys/orgSurveys.module';
 import { OrganizationComplianceNoteFilesModule } from './organization_compliance/organization_compliance_notes/organization_compliance_note_files/organization_compliance_note_files.module';
 import { OrganizationComplianceModule } from './organization_compliance/organization_compliance.module';
+import { OrganizationsRabbitService } from './organizations.rabbit';
+import { MqttModule } from './mqtt/mqtt.module';
 
 @Module({
   imports: [
@@ -38,9 +40,10 @@ import { OrganizationComplianceModule } from './organization_compliance/organiza
     OrgSurveysModule,
     OrganizationComplianceNoteFilesModule,
     OrganizationComplianceModule,
+    MqttModule,
   ],
   controllers: [OrganizationController, OrganizationFilesController],
-  providers: [OrganizationService, CacheService, OrganizationHelper],
+  providers: [OrganizationService, CacheService, OrganizationHelper, OrganizationsRabbitService],
   exports: [OrganizationHelper],
 })
 export class OrganizationModule {}
