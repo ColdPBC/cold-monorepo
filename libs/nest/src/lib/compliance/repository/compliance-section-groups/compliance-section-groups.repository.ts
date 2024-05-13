@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { BaseWorker } from '../../../worker';
 import { PrismaService } from '../../../prisma';
-import { MqttSocketAPIPayload } from '@coldpbc/nest';
 import { set } from 'lodash';
 import { Prisma } from '@prisma/client';
 
@@ -26,7 +25,7 @@ export class ComplianceSectionGroupsRepository extends BaseWorker {
    * @returns {Promise<object>} - A Promise that resolves to an object containing compliance section group data.
    * @throws {Error} - Throws an error if the compliance definition is not found.
    */
-  async getSectionGroupList({ org_id, compliance_set_name }: MqttSocketAPIPayload) {
+  async getSectionGroupList({ org_id, compliance_set_name }: { org_id: string; compliance_set_name: string }): Promise<object> {
     const compliance_data = await this.prisma.organization_compliance.findUnique({
       where: {
         orgIdCompNameKey: {

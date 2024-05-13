@@ -1,10 +1,23 @@
-import { BaseWorker, Cuid2Generator, MqttAPIComplianceSectionPayload, MqttService, MqttSocketAPIPayload } from '@coldpbc/nest';
+import {
+  BaseWorker,
+  ComplianceQuestionsRepository,
+  ComplianceSectionGroupsRepository,
+  ComplianceSectionsRepository,
+  Cuid2Generator,
+  MqttAPIComplianceSectionPayload,
+  MqttService,
+  MqttSocketAPIPayload,
+} from '@coldpbc/nest';
 import { Injectable, OnModuleInit, UnprocessableEntityException } from '@nestjs/common';
-import { ComplianceRepository } from './compliance.repository';
 
 @Injectable()
 export class ComplianceMQTT extends BaseWorker implements OnModuleInit {
-  constructor(readonly mqttService: MqttService, readonly repository: ComplianceRepository) {
+  constructor(
+    readonly mqttService: MqttService,
+    readonly groupRepository: ComplianceSectionGroupsRepository,
+    readonly questionRepository: ComplianceQuestionsRepository,
+    readonly sectionRepository: ComplianceSectionsRepository,
+  ) {
     super(ComplianceMQTT.name);
   }
 
@@ -27,17 +40,17 @@ export class ComplianceMQTT extends BaseWorker implements OnModuleInit {
       switch (action) {
         case `getComplianceSectionGroupList`: {
           payload = JSON.parse(message) as MqttSocketAPIPayload;
-          response = await this.repository.complianceSectionGroupListByOrgIdCompNameKey(payload);
+          response = await this.groupRepository.getSectionGroupList(payload);
           break;
         }
         case `getComplianceSectionList`: {
           payload = JSON.parse(message) as MqttAPIComplianceSectionPayload;
-          response = await this.repository.complianceSectionListSectionGroupId(payload);
+          response = await this.sectionRepository.getSectionList(payload);
           break;
         }
         case `getComplianceQuestionList`: {
           payload = JSON.parse(message) as MqttAPIComplianceSectionPayload;
-          response = await this.repository.complianceQuestionListByOrgIdCompNameKey(payload);
+          response = await this.questionRepository.getQuestionList(payload);
           break;
         }
         default: {

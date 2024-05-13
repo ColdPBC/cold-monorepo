@@ -1,3 +1,4 @@
+
 # [1.219.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.218.0...v1.219.0) (2024-05-12)
 
 
@@ -6,6 +7,7 @@
 * Add auto-increment function to "compliance_responses" table in Prisma migration ([aa399b6](https://github.com/ColdPBC/cold-monorepo/commit/aa399b6fd4d8deed76f74fdf0cbc64e6f0a97fa1))
 * Alter table to change 'answer' column type to JSONB in 'organization_compliance_ai_responses' ([3d5bee7](https://github.com/ColdPBC/cold-monorepo/commit/3d5bee74962a1f0a41cd1e748f92a94fa1d7156b))
 * change queries in the compliance repository for MQTT API ([ede5951](https://github.com/ColdPBC/cold-monorepo/commit/ede5951369c0e7956adb4ca703dcdae78dd5969c))
+* correct typo in compliance_definition_name column in compliance_dependency_chains table ([90aa02b](https://github.com/ColdPBC/cold-monorepo/commit/90aa02b034c006ead06f10c2cc32b1b73fb070b8))
 * fix issue where complianceQuestionListByOrgIdCompNameKey failed to return questions ([95bdd33](https://github.com/ColdPBC/cold-monorepo/commit/95bdd33d72bbda2ef284c2b5650afef9fa0f8d34))
 * Make 'answer' column in 'organization_compliance_ai_responses' table nullable ([b85df35](https://github.com/ColdPBC/cold-monorepo/commit/b85df350b6ff598ca26b42e86b7ff7ef34e569f6))
 * Make AI response ID optional in organization compliance responses table ([c6f35ec](https://github.com/ColdPBC/cold-monorepo/commit/c6f35ecb5d69c3419fb765e0b2b01d33fac08e99))
@@ -19,6 +21,7 @@
 * Add additional context field to organization_compliance_responses and organization_compliance_ai_responses in Prisma schema ([5d7776d](https://github.com/ColdPBC/cold-monorepo/commit/5d7776d85e4ad1cd74e4a4e3229c462c74ba223b))
 * Add compliance flow handling in Rabbit service ([b6edc6d](https://github.com/ColdPBC/cold-monorepo/commit/b6edc6d99e637814195d2d0d40ae943da5415485))
 * Add compliance processing to chat service in cold platform openai ([fc6a3a0](https://github.com/ColdPBC/cold-monorepo/commit/fc6a3a0c2c77621c02bed06824fec9161b4b2028))
+* Add compliance_dependency_chains model to Prisma schema and integrate it with existing models ([69e6406](https://github.com/ColdPBC/cold-monorepo/commit/69e640643be3f14386df04ab2ef3e5ea41b55523))
 * Add compliance_responses table with necessary fields, indices, and foreign key constraints. Added column to organization_compliance_responses table. ([dea7845](https://github.com/ColdPBC/cold-monorepo/commit/dea78456af0d52a7cba9646d0dba01a736d67f39))
 * Add ComplianceModule with repositories for managing compliance data ([981ac5a](https://github.com/ColdPBC/cold-monorepo/commit/981ac5afa160a997b117e747a5135546d9e00e8f))
 * Add createComplianceSession method and ICFPSession interface to freeplay service ([76e1b95](https://github.com/ColdPBC/cold-monorepo/commit/76e1b955608ff5563b68035137fa2c0ee9d7ff4a))
@@ -33,10 +36,12 @@
 * Add unique constraint to compliance_questions table in Prisma migration ([7b07d15](https://github.com/ColdPBC/cold-monorepo/commit/7b07d1503b34e0f474fcd1392ccc3e285b5ece1b))
 * add unique constraint to organization_compliance_responses in prisma migrations ([7536133](https://github.com/ColdPBC/cold-monorepo/commit/75361338e2217a7af358b2a5102ce789d265e20e))
 * Add unique key to organization compliance AI responses table ([513747b](https://github.com/ColdPBC/cold-monorepo/commit/513747b8cdf9a8e63c245e196dcad0194f34287a))
+* Added compliance dependency chain models in database migration ([5c4976e](https://github.com/ColdPBC/cold-monorepo/commit/5c4976eec9b0f6df7275c93f45df1c7f9b488153))
 * Added models for compliance responses and AI responses in schema.prisma ([dc92c25](https://github.com/ColdPBC/cold-monorepo/commit/dc92c25c0527370fcfc35d52c525501708058d65))
 * Enable ComplianceRepository export in MqttModule ([5098ecc](https://github.com/ColdPBC/cold-monorepo/commit/5098eccb03e7aab4ac642808f0991629616d9b2c))
 * Enhance MQTT service with replyTo function and packet details in onMessage callback ([5042c78](https://github.com/ColdPBC/cold-monorepo/commit/5042c78f9b52e36fbbbe007810af24d91d7ac3f3))
 * Extend MQTT validator schemas and create new compliance schemas for various payload types ([b5270e2](https://github.com/ColdPBC/cold-monorepo/commit/b5270e24d19cfd7bf23cae41d2f04e87aabd34fd))
+* Implement building of dependency chains in compliance model seeding ([2d7e611](https://github.com/ColdPBC/cold-monorepo/commit/2d7e611d7c4e3a24e84c3d16919fc2dc586b1809))
 * Implement ComplianceRepository with methods for compliance data retrieval ([72c179d](https://github.com/ColdPBC/cold-monorepo/commit/72c179d3103cd1df71ff37f24226a6c28279f1e6))
 * include organization_compliance_status in getOrgComplianceStatusGroups() ([acf2857](https://github.com/ColdPBC/cold-monorepo/commit/acf2857578ce9c58c936922ea430759524150137))
 * migration script to add additional_context column to compliance_response models ([19d843a](https://github.com/ColdPBC/cold-monorepo/commit/19d843a140829ec8a8e7b797f7cfc09d5c29b8d3))

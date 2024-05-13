@@ -645,7 +645,11 @@ model compliance_sections {
   compliance_definition_name  String
   compliance_responses        compliance_responses[]
 
+  compliance_dependency_chain_id String?
+  compliance_dependency_chain    compliance_dependency_chains? @relation(fields: [compliance_dependency_chain_id], references: [id], onDelete: Cascade)
+
   @@unique([compliance_section_group_id, key], name: "compSecGroupKey")
+  @@unique([compliance_definition_name, key], name: "compDefNameSectionKey")
 }
 
 model compliance_questions {
@@ -659,6 +663,7 @@ model compliance_questions {
   rubric                               Json?
   options                              Json?
   dependency_expression                String?
+  dependencies                         Json?
   question_summary                     String?
   coresponding_question                String?
   additional_context                   Json?
@@ -674,8 +679,30 @@ model compliance_questions {
   organization_compliance_ai_responses organization_compliance_ai_responses[]
   compliance_responses                 compliance_responses[]
 
+  compliance_dependency_chain_id String?
+  compliance_dependency_chain    compliance_dependency_chains? @relation(fields: [compliance_dependency_chain_id], references: [id], onDelete: SetNull)
+
   @@unique([compliance_definition_name, key], name: "compDefNameKey")
   @@unique([compliance_section_id, key], name: "compSecKey")
+}
+
+model compliance_dependency_chains {
+  id                          String                 @id() @default(cuid())
+  dependency_chain            Json
+  compliance_question_id      String                 @unique
+  compliance_question_key     String
+  compliance_section_id       String
+  compliance_section_key      String
+  compliance_section_group_id String
+  compliance_definition_name  String
+  dependency_expression       String
+  created_at                  DateTime               @default(now())
+  updated_at                  DateTime               @updatedAt
+  compliance_sections         compliance_sections[]
+  compliance_questions        compliance_questions[]
+
+  @@unique([compliance_section_id, compliance_question_key, compliance_definition_name], name: "defNameSecIdQuestKey")
+  @@unique([compliance_section_key, compliance_question_key, compliance_definition_name], name: "defNameSecKeyQuestKey")
 }
 
 model organization_compliance_statuses {
