@@ -12,6 +12,7 @@ import { MQTTComplianceManagerPayload, OrgCompliance } from '@coldpbc/interfaces
 import useSWRSubscription from 'swr/subscription';
 import useSWR from 'swr';
 import { axiosFetcher, resolveNodeEnv } from '@coldpbc/fetchers';
+import { getTermString } from '@coldpbc/lib';
 
 const _ComplianceManager = () => {
   const { name } = useParams();
@@ -55,7 +56,17 @@ const _ComplianceManager = () => {
     }
   }, [orgCompliances]);
 
-  logBrowser('Compliance Definition', 'info', { name, data, error, orgId, compliance, status, managementView, orgCompliances, topic });
+  logBrowser('Compliance Definition', 'info', {
+    name,
+    data,
+    error,
+    orgId,
+    compliance,
+    status,
+    managementView,
+    orgCompliances,
+    topic,
+  });
 
   if (!data) {
     return <Spinner />;
@@ -65,19 +76,7 @@ const _ComplianceManager = () => {
   const due_date = get(data, 'compliance_definition.metadata.due_date', undefined);
   let termString = '';
   if (term) {
-    switch (term) {
-      case 'annual':
-        termString = 'Annual';
-        break;
-      case 'quarterly':
-        termString = 'Quarterly';
-        break;
-      case 'every_three_years':
-        termString = '3 Year Term';
-        break;
-      default:
-        termString = '';
-    }
+    termString = getTermString(term);
   }
 
   const getActiveTabElement = (tab: string) => {

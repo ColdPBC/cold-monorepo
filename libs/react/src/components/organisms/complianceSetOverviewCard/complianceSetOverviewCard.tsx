@@ -11,6 +11,7 @@ import { useNavigate } from 'react-router-dom';
 import { withErrorBoundary } from 'react-error-boundary';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import { get } from 'lodash';
+import { getTermString } from '@coldpbc/lib';
 
 const _ComplianceSetOverviewCard = ({ name }: { name: string }) => {
   const navigate = useNavigate();
@@ -93,20 +94,7 @@ const _ComplianceSetOverviewCard = ({ name }: { name: string }) => {
       const dueDateYear = dueDate ? new Date(dueDate).getFullYear() : undefined;
       let termString = '';
       if (term) {
-        switch (term) {
-          case 'annual':
-            termString = 'Annual';
-            break;
-          case 'quarterly':
-            termString = 'Quarterly';
-            break;
-          case 'every_three_years':
-            termString = '3-Year Term';
-            break;
-          default:
-            termString = '';
-            break;
-        }
+        termString = getTermString(term);
       }
 
       const dueDateAndTerm = () => {

@@ -38,3 +38,16 @@ export const ComplianceProgressStatusColor = {
   bookmarked: HexColors.lightblue['200'],
   complete: HexColors.green['200'],
 };
+
+export const getTermString = (term: string) => {
+  switch (term) {
+    case 'annual':
+      return 'Annual';
+    case 'quarterly':
+      return 'Quarterly';
+    case 'every_three_years':
+      return 'Every Three Years';
+    default:
+      return '';
+  }
+};
