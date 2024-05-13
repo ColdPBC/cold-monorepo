@@ -1,12 +1,5 @@
-# [1.219.0-cold-790.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.219.0-cold-790.1...v1.219.0-cold-790.2) (2024-05-12)
 
-
-### Features
-
-* Add ComplianceModule to OrganizationComplianceResponsesModule imports ([3369515](https://github.com/ColdPBC/cold-monorepo/commit/336951517eb0f8d5f3046298d4e67b0d2e6ad460))
-* Add dependencies filtering to getQuestionList function ([10ae00d](https://github.com/ColdPBC/cold-monorepo/commit/10ae00da7bdb94b726fa986f3fc6e1aaca460799))
-
-# [1.219.0-cold-790.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.218.0...v1.219.0-cold-790.1) (2024-05-12)
+# [1.219.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.218.0...v1.219.0) (2024-05-12)
 
 
 ### Bug Fixes
@@ -53,6 +46,13 @@
 * include organization_compliance_status in getOrgComplianceStatusGroups() ([acf2857](https://github.com/ColdPBC/cold-monorepo/commit/acf2857578ce9c58c936922ea430759524150137))
 * migration script to add additional_context column to compliance_response models ([19d843a](https://github.com/ColdPBC/cold-monorepo/commit/19d843a140829ec8a8e7b797f7cfc09d5c29b8d3))
 * Update service exports and remove MQTT Consumer ([10786ef](https://github.com/ColdPBC/cold-monorepo/commit/10786ef6b29e2a0a9bb7eaf7ad93dc4dae2c9e9b))
+
+# [1.219.0-cold-789.6](https://github.com/ColdPBC/cold-monorepo/compare/v1.219.0-cold-789.5...v1.219.0-cold-789.6) (2024-05-12)
+
+
+### Features
+
+* Add ComplianceModule with repositories for managing compliance data ([981ac5a](https://github.com/ColdPBC/cold-monorepo/commit/981ac5afa160a997b117e747a5135546d9e00e8f))
 
 # [1.219.0-cold-789.5](https://github.com/ColdPBC/cold-monorepo/compare/v1.219.0-cold-789.4...v1.219.0-cold-789.5) (2024-05-10)
 
