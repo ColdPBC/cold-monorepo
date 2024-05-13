@@ -59,7 +59,7 @@ export const ComplianceStatusChip = (props: ComplianceStatusChipProps) => {
       case ComplianceStatus.submissionInProgress:
         return <ProgressCircle color={color} percentage={100} radius={6} />;
       case ComplianceStatus.submittedByCold:
-        return <ColdIcon name={IconNames.ColdInvertedCheckmarkIcon} color={color} />;
+        return <ColdIcon name={IconNames.ColdCheckIcon} color={color} inverted={true} />;
       default:
       case ComplianceStatus.inActive:
         return <div className={'w-[12px] h-[12px] bg-gray-60 rounded-full'}></div>;

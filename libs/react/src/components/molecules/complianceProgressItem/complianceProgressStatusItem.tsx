@@ -60,9 +60,10 @@ export const ComplianceProgressStatusItem = ({ type }: ComplianceProgressItemPro
   const getProgressIcon = (type: ComplianceProgressStatus) => {
     switch (type) {
       case ComplianceProgressStatus.not_started:
+      case ComplianceProgressStatus.complete:
         return (
           <div className={'w-[24px] h-[24px] flex items-center justify-center'}>
-            <ComplianceProgressStatusIcon type={ComplianceProgressStatus.not_started} />
+            <ComplianceProgressStatusIcon type={type} />
           </div>
         );
       case ComplianceProgressStatus.needs_review:
@@ -75,12 +76,6 @@ export const ComplianceProgressStatusItem = ({ type }: ComplianceProgressItemPro
         return (
           <div className={'w-[24px] h-[24px] flex items-center justify-center'}>
             <ComplianceProgressStatusIcon type={ComplianceProgressStatus.bookmarked} iconProps={{ height: 15 }} />
-          </div>
-        );
-      case ComplianceProgressStatus.complete:
-        return (
-          <div className={'w-[24px] h-[24px] flex items-center justify-center'}>
-            <ComplianceProgressStatusIcon type={ComplianceProgressStatus.complete} />
           </div>
         );
     }
