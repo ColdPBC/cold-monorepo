@@ -446,6 +446,10 @@ export async function seedComplianceModels() {
       console.log(`🌱 updated Organization Compliance Status: ${status} 🌱`, status_record);
     }
 
+    if (!data?.data?.sections) {
+      console.warn(`🚨 Missing Section Data: ${data.id} 🚨`, data?.data);
+      continue;
+    }
     const sections = Object.keys(data.data.sections);
     // Iterate over each section
     for (const sectionKey of sections) {
@@ -458,6 +462,10 @@ export async function seedComplianceModels() {
 
       if (!section) {
         console.warn(`🚨 Missing Compliance Section: ${sectionKey} 🚨`);
+        continue;
+      }
+      if (!data.data.sections[`${sectionKey}`].follow_up) {
+        console.warn(`🚨 Missing Follow Up Data: ${sectionKey} 🚨`, data.data.sections[`${sectionKey}`]);
         continue;
       }
       const followUP = Object.keys(data.data.sections[`${sectionKey}`].follow_up);
@@ -487,10 +495,10 @@ export async function seedComplianceModels() {
               id: new Cuid2Generator(`ocr`).scopedId,
               organization_compliance_id: org_compliance.id,
               compliance_question_id: question.id,
-              value: qData.value,
+              value: qData.value.toString(),
             },
             update: {
-              value: qData.value,
+              value: qData.value.toString(),
             },
           });
 
@@ -499,21 +507,28 @@ export async function seedComplianceModels() {
         if (qData.ai_response) {
           // Insert a new ai_response object
 
-          qData.ai_response.references.map((ref: any) => {
-            let parsed;
-            if (typeof ref.text === 'string') {
-              ref.text = ref.text.replace(/\r/g, ' ');
-              try {
-                parsed = JSON.parse(ref.text.replace(/\r/g, ' '));
-              } catch (e: any) {
-                console.warn(`🚨 Error Parsing Reference Text: ${ref.text} 🚨`, { error: e.message, stack: e.stack });
-                console.log(`${ref.text}`);
+          if (Array.isArray(qData.ai_response.references)) {
+            qData.ai_response.references.map((ref: any) => {
+              let parsed;
+              if (typeof ref?.text === 'string') {
+                ref.text = ref.text.replace(/\r/g, ' ');
+                try {
+                  parsed = JSON.parse(ref.text.replace(/\r/g, ' '));
+                } catch (e: any) {
+                  console.warn(`🚨 Error Parsing Reference Text: ${ref.text} 🚨`, { error: e.message, stack: e.stack });
+                  console.log(`${ref.text}`);
+                }
               }
-            }
-            if (parsed) {
-              ref.text = parsed;
-            }
-          });
+              if (parsed) {
+                ref.text = parsed;
+              }
+            });
+          }
+
+          if (!qData?.ai_response?.justification) {
+            console.warn(`🚨 Warning Justification is empty 🚨`, { ...qData?.ai_response });
+            continue;
+          }
 
           const ai_response = await prisma.organization_compliance_ai_responses.upsert({
             where: {
