@@ -5,7 +5,9 @@ import { seedUtilities } from './seed_supported_utilites';
 import { seedComponentDefinitions } from './seed_component_definitions';
 import { seedScopes } from './seed_emission_scopes';
 import { seedComplianceDefinitions } from './seed_compliance_definitions';
-import { buildDependencyChains, seedComplianceModels } from './seed_compliance_models';
+import { seedComplianceModels } from './seed_compliance_models';
+import { buildQuestionDependencyChains } from './seed_compliance_question_dependencies';
+import { buildSectionDependencyChains } from './seed_compliance_section_dependencies';
 
 export const seedDB = async () => {
   /**
@@ -19,7 +21,8 @@ export const seedDB = async () => {
   await seedScopes();
   await seedComplianceDefinitions();
   await seedComplianceModels();
-  await buildDependencyChains();
+  await buildQuestionDependencyChains();
+  await buildSectionDependencyChains();
   /**
    * Repeat the pattern above for any other tables you want to seed.
    */
