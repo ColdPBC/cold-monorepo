@@ -65,17 +65,21 @@ export class FreeplayService extends BaseWorker implements OnModuleInit {
       this.logger.error('Session ID not found', { session });
       return;
     }
-    const recording = await this.client.recordings.create({
-      allMessages: prompt.allMessages(openAIResponse.choices[0].message),
-      inputs: promptVars,
-      sessionInfo: getSessionInfo(session),
-      promptInfo: prompt.promptInfo,
-      callInfo: getCallInfo(prompt?.promptInfo, start, end),
-      responseInfo: {
-        isComplete: 'stop_sequence' === openAIResponse?.choices[0]?.stop,
-      },
-    });
+    try {
+      const recording = await this.client.recordings.create({
+        allMessages: prompt.allMessages(openAIResponse.choices[0].message),
+        inputs: promptVars,
+        sessionInfo: getSessionInfo(session),
+        promptInfo: prompt.promptInfo,
+        callInfo: getCallInfo(prompt?.promptInfo, start, end),
+        responseInfo: {
+          isComplete: 'stop_sequence' === openAIResponse?.choices[0]?.stop,
+        },
+      });
 
-    return recording;
+      return recording;
+    } catch (error) {
+      this.logger.error('Failed to record completion', { session, promptVars, prompt, openAIResponse, start, end });
+    }
   }
 }

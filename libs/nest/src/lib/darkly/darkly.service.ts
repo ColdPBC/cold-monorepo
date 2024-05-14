@@ -247,7 +247,7 @@ export class DarklyService extends BaseWorker {
     if (!context) context = this.context;
     // Register a callback to be invoked when specified boolean feature flag changes
     this.client.on(`update:${key}`, async (flag: any) => {
-      callback(await this.getBooleanFlag(flag.key, this.context));
+      callback(await this.getBooleanFlag(flag.key, context));
     });
   }
 

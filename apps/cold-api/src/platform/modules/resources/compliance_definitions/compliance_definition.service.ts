@@ -41,52 +41,60 @@ export class ComplianceDefinitionService extends BaseWorker {
       throw new NotFoundException(`${compliance_name} compliance definition does not exist`);
     }
 
-    // try the new way first....
-    let compliance: any = await this.prisma.organization_compliance.findUnique({
-      where: {
-        orgIdCompNameKey: {
-          organization_id: orgId,
-          compliance_definition_name: compliance_name,
+    const useComplianceFlow = await this.darkly.getBooleanFlag('dynamic-enable-compliance-flow', false, {
+      kind: 'org-compliance-set',
+      key: orgId,
+      name: compliance_name,
+    });
+
+    if (useComplianceFlow) {
+      // try the new way first....
+      const compliance: any = await this.prisma.organization_compliance.findUnique({
+        where: {
+          orgIdCompNameKey: {
+            organization_id: orgId,
+            compliance_definition_name: compliance_name,
+          },
         },
-      },
-      select: {
-        id: true,
-        compliance_definition_name: true,
-        organization: true,
-        compliance_definition: {
-          select: {
-            id: true,
-            name: true,
-            title: true,
-            version: true,
-            compliance_section_groups: {
-              select: {
-                id: true,
-                title: true,
-                order: true,
-                compliance_sections: {
-                  select: {
-                    id: true,
-                    key: true,
-                    title: true,
-                    order: true,
-                    dependency_expression: true,
-                    compliance_questions: {
-                      select: {
-                        id: true,
-                        key: true,
-                        order: true,
-                        prompt: true,
-                        component: true,
-                        tooltip: true,
-                        placeholder: true,
-                        rubric: true,
-                        options: true,
-                        coresponding_question: true,
-                        dependency_expression: true,
-                        question_summary: true,
-                        additional_context: true,
-                        compliance_section_id: true,
+        select: {
+          id: true,
+          compliance_definition_name: true,
+          organization: true,
+          compliance_definition: {
+            select: {
+              id: true,
+              name: true,
+              title: true,
+              version: true,
+              compliance_section_groups: {
+                select: {
+                  id: true,
+                  title: true,
+                  order: true,
+                  compliance_sections: {
+                    select: {
+                      id: true,
+                      key: true,
+                      title: true,
+                      order: true,
+                      dependency_expression: true,
+                      compliance_questions: {
+                        select: {
+                          id: true,
+                          key: true,
+                          order: true,
+                          prompt: true,
+                          component: true,
+                          tooltip: true,
+                          placeholder: true,
+                          rubric: true,
+                          options: true,
+                          coresponding_question: true,
+                          dependency_expression: true,
+                          question_summary: true,
+                          additional_context: true,
+                          compliance_section_id: true,
+                        },
                       },
                     },
                   },
@@ -95,9 +103,12 @@ export class ComplianceDefinitionService extends BaseWorker {
             },
           },
         },
-      },
-    });
-    if (compliance) {
+      });
+
+      if (!compliance) {
+        throw new NotFoundException(`Compliance ${compliance_name} not found for org ${orgId}`);
+      }
+
       await this.event.sendIntegrationEvent(
         false,
         'compliance_flow.enabled',
@@ -123,7 +134,7 @@ export class ComplianceDefinitionService extends BaseWorker {
       });
     } else {
       // then try the old way
-      compliance = await this.prisma.organization_compliances_old.findFirst({
+      const compliance = await this.prisma.organization_compliances_old.findFirst({
         where: {
           organization_id: orgId,
           compliance_id: compliance_definition.id,
