@@ -16,6 +16,7 @@ export interface CardProps {
   className?: string;
   'data-testid'?: string;
   onClick?: () => void;
+  glowColor?: string;
 }
 
 export function Card(props: PropsWithChildren<CardProps>) {
@@ -29,7 +30,14 @@ export function Card(props: PropsWithChildren<CardProps>) {
       onClick={props.onClick}>
       {glow && (
         <div className="w-[400px] h-20 justify-center flex items-center absolute top-[-40px] left-1/2 -translate-x-1/2 pointer-events-none">
-          <div className="w-[400px] h-20 shrink-0 rounded-[200px] opacity-50 blur-[120px] bg-gradient-to-l from-primary via-primary via-[36.46%] to-bgc-accent" />
+          <div
+            className="w-[400px] h-20 shrink-0 rounded-[200px]"
+            style={{
+              filter: 'blur(120px)',
+              opacity: 0.5,
+              background: `linear-gradient(to left, ${props.glowColor || '#485CEA'} 0%, ${props.glowColor || '#485CEA'} 36.46%, #282C3E 100%)`,
+            }}
+          />
         </div>
       )}
       {showHeader && (

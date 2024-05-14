@@ -23,7 +23,21 @@ export const ComplianceManagerAssessmentPreview = () => {
   });
   const percentage = totalQuestions !== 0 ? ((answeredQuestions / totalQuestions) * 100).toFixed(0) : 0;
 
-  logBrowser('Compliance Manager Assessment Preview', 'info', { status, mqttComplianceSet, percentage, totalQuestions, answeredQuestions });
+  logBrowser('Compliance Manager Assessment Preview', 'info', {
+    status,
+    mqttComplianceSet,
+    percentage,
+    totalQuestions,
+    answeredQuestions,
+  });
+
+  const getPercentage = () => {
+    if (status in [ComplianceManagerStatus.activated, ComplianceManagerStatus.uploadedDocuments]) {
+      return '--';
+    } else {
+      return percentage + '%';
+    }
+  };
 
   return (
     <Card className={'w-fit flex flex-col justify-between overflow-visible'} glow={false}>
@@ -33,7 +47,7 @@ export const ComplianceManagerAssessmentPreview = () => {
         arrow={false}>
         <div className={'bg-gray-50 relative rounded-[16px] p-[24px] w-[155px] text-tc-primary flex flex-col border-[1px] border-gray-60'}>
           <div className={'w-full text-body text-center'}>Estimated Assessment</div>
-          <div className={'w-full text-h1 text-center'}>{percentage}%</div>
+          <div className={'w-full text-h1 text-center'}>{getPercentage()}</div>
           <div className={'absolute top-[8px] right-[8px]'}>
             <ColdInfoIcon color={HexColors.tc.disabled} />
           </div>

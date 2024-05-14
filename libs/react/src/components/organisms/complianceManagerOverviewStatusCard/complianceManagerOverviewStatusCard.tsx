@@ -29,7 +29,7 @@ export const ComplianceManagerOverviewStatusCard = () => {
   };
 
   const getComplianceSetStatusElement = (status: ComplianceManagerStatus) => {
-    if (status === ComplianceManagerStatus.notActivated) {
+    if ([ComplianceManagerStatus.notActivated, ComplianceManagerStatus.startedAi, ComplianceManagerStatus.startedQuestions].includes(status)) {
       return null;
     }
 
@@ -39,10 +39,10 @@ export const ComplianceManagerOverviewStatusCard = () => {
       case ComplianceManagerStatus.activated:
         text = `Activate ${mqttComplianceSet?.compliance_definition.title}`;
         break;
-      case ComplianceManagerStatus.upload:
+      case ComplianceManagerStatus.uploadedDocuments:
         text = 'Upload Documents';
         break;
-      case ComplianceManagerStatus.startedAi:
+      case ComplianceManagerStatus.completedAi:
         text = 'Start ✨Cold AI';
         break;
       case ComplianceManagerStatus.completedQuestions:
