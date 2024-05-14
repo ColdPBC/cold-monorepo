@@ -1,3 +1,18 @@
+# [1.219.0-cold-790.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.219.0-cold-790.2...v1.219.0-cold-790.3) (2024-05-14)
+
+
+### Features
+
+* Add additional data checks and error handling in compliance model seeding ([240e4b9](https://github.com/ColdPBC/cold-monorepo/commit/240e4b9432a824e28fe20fa39decee3672a956ef))
+* Add code to create compliance question dependency chains. ([90a6e30](https://github.com/ColdPBC/cold-monorepo/commit/90a6e30629a1c729486c58e209ba45c5768a0cdb))
+* Add code to create compliance question dependency chains. ([ab5e3b8](https://github.com/ColdPBC/cold-monorepo/commit/ab5e3b818c43020e044ca83392e19ea50d23b035))
+* Add compliance export to nest library index ([00cd102](https://github.com/ColdPBC/cold-monorepo/commit/00cd1022cbf3c00006794d65a66425d03b2a07e6))
+* Add dependency filter to compliance sections repository ([3774964](https://github.com/ColdPBC/cold-monorepo/commit/377496450180bf58eade28d6ee1c24d564afb5d6))
+* Modify 'value' column in 'organization_compliance_responses' to JSONB type ([6a44ee4](https://github.com/ColdPBC/cold-monorepo/commit/6a44ee4bbd71f8bbe12a89184d1676899162969e))
+* refactor dependency chain relations for compliance sections and questions ([bdbcd4d](https://github.com/ColdPBC/cold-monorepo/commit/bdbcd4d8b16e6e1997cef31bb733837087d08317))
+* Split compliance dependency chains into distinct tables ([73593d2](https://github.com/ColdPBC/cold-monorepo/commit/73593d2d467073a825aba487236e023d84f80e52))
+* Update ComplianceQuestionsRepository to include calculation of metrics ([a95b1ed](https://github.com/ColdPBC/cold-monorepo/commit/a95b1ed7fd68321409d2137a9c2af78246b36ddd))
+
 # [1.219.0-cold-790.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.219.0-cold-790.1...v1.219.0-cold-790.2) (2024-05-12)
 
 
