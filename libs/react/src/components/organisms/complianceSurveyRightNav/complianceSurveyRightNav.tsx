@@ -90,7 +90,7 @@ const _ComplianceSurveyRightNav = (props: ComplianceSurveyRightNavProps) => {
         key={key}
         className={`h-[34px] flex flex-row space-x-2 items-center hover:underline cursor-pointer ${hasDocumentLink ? 'pl-[38px]' : 'pl-[72px]'}`}
         onClick={() => onClick(key)}>
-        {hasDocumentLink && <ColdIcon name={IconNames.ColdFilledDocumentUploadIcon} />}
+        {hasDocumentLink && <ColdIcon name={IconNames.ColdDocumentUploadIcon} inverted={true} />}
         {getQuestionItemIcon(key, inSavedQuestions)}
         <div className={'w-full text-body line-clamp-1'}>
           {index}. {prompt}

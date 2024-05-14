@@ -152,8 +152,6 @@ export interface ComplianceSurveyPayloadType {
       [key: string]: ComplianceSurveySectionType;
     };
     submitted?: boolean;
-    due_date?: string;
-    term?: string;
     target_score?: number;
     compliance_type?: string;
   };

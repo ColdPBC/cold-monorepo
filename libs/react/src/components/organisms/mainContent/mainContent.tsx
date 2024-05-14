@@ -1,6 +1,8 @@
 import React, { PropsWithChildren, ReactNode } from 'react';
 import { Spinner } from '@coldpbc/components';
 import { GlobalSizes } from '@coldpbc/enums';
+import { twMerge } from 'tailwind-merge';
+import { useFlags } from 'launchdarkly-react-client-sdk';
 
 export interface MainContentProps {
   title?: string;
@@ -9,8 +11,9 @@ export interface MainContentProps {
 }
 
 export function MainContent(props: PropsWithChildren<MainContentProps>) {
+  const ldFlags = useFlags();
   return (
-    <div className="w-[1129px] flex flex-col items-center gap-6">
+    <div className={twMerge('w-[1129px] flex flex-col items-center gap-6', ldFlags.showNewNavigationCold698 ? 'py-[40px] ml-[50px]' : '')}>
       <div className={'w-full flex flex-row justify-between'}>
         {
           // show title if we have one

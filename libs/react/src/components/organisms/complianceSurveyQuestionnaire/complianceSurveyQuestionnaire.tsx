@@ -634,9 +634,7 @@ const _ComplianceSurveyQuestionnaire = (props: ComplianceSurveyQuestionnaireProp
               {activeKey.category}
               {question.props.question_summary ? ' > ' + surveyData.definition.sections[activeKey.section].title : ''}
             </div>
-            <div className={'text-h2'}>
-              {question.props.question_summary ? question.props.question_summary : surveyData.definition.sections[activeKey.section].title}
-            </div>
+            <div className={'text-h2'}>{question.props.question_summary ? question.props.question_summary : surveyData.definition.sections[activeKey.section].title}</div>
             <div className={'text-caption'}>
               ( Question {questionIndex}
               {' of '}
@@ -650,11 +648,7 @@ const _ComplianceSurveyQuestionnaire = (props: ComplianceSurveyQuestionnaireProp
                 onClick={() => {
                   setDocumentLinkModalOpen(!documentLinkModalOpen);
                 }}>
-                {activeSection.follow_up[activeKey.value].document_link ? (
-                  <ColdIcon name={IconNames.ColdFilledDocumentUploadIcon} />
-                ) : (
-                  <ColdIcon name={IconNames.ColdDocumentUploadIcon} />
-                )}
+                <ColdIcon name={IconNames.ColdDocumentUploadIcon} inverted={!!activeSection.follow_up[activeKey.value].document_link} />
               </div>
               <div className={'absolute top-full z-10'}>
                 {documentLinkModalOpen && (
@@ -669,7 +663,7 @@ const _ComplianceSurveyQuestionnaire = (props: ComplianceSurveyQuestionnaireProp
               </div>
             </div>
             <div className={'h-full w-[60px] rounded-lg flex justify-center items-center bg-transparent cursor-pointer hover:bg-bgc-accent'} onClick={bookMarkQuestion}>
-              {bookmarked ? <ColdIcon name={IconNames.ColdFilledBookMarkIcon} color={'white'} /> : <ColdIcon name={IconNames.ColdBookmarkIcon} color={'white'} />}
+              <ColdIcon name={IconNames.ColdBookmarkIcon} color={'white'} filled={bookmarked} />
             </div>
             <div className={'h-full w-[60px] rounded-lg flex justify-center items-center bg-transparent cursor-pointer hover:bg-bgc-accent'} onClick={submitSurvey}>
               <ColdIcon name={IconNames.CloseModalIcon} />

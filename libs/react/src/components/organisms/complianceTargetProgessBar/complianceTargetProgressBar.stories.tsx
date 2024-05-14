@@ -39,6 +39,7 @@ export const Default: Story = {
                   created_at: '2024-03-19T16:22:59.959Z',
                   updated_at: '2024-03-28T03:41:32.878Z',
                   title: 'B Corp',
+                  metadata: {},
                 },
               },
               section_types: {

@@ -1,16 +1,14 @@
 import { Outlet, useSearchParams } from 'react-router-dom';
-import { ActionDetail, Survey } from '@coldpbc/components';
+import { ActionDetail } from '@coldpbc/components';
 
 export const Interceptor = () => {
   const [params] = useSearchParams();
-  const surveyName = params.get('surveyName');
   const actionId = params.get('actionId');
 
   return (
     <>
       <Outlet />
       {actionId && <ActionDetail id={actionId} />}
-      {surveyName && <Survey surveyName={surveyName} />}
     </>
   );
 };

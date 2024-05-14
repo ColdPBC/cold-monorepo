@@ -7,26 +7,29 @@ import {
   ColdAiIcon,
   ColdBillingIcon,
   ColdBookmarkIcon,
+  ColdCalendarDaysIcon,
+  ColdCalendarEventIcon,
   ColdCheckIcon,
   ColdChevronDownIcon,
   ColdChevronUpIcon,
+  ColdClockIcon,
   ColdComplianceIcon,
   ColdComplianceSurveyCheckBoxIcon,
   ColdDocumentsIcon,
   ColdDocumentUploadIcon,
   ColdEmptyCheckboxIcon,
-  ColdFilledBookMarkIcon,
-  ColdFilledDocumentUploadIcon,
   ColdFootprintIcon,
   ColdFootprintIconTwo,
   ColdHomeIcon,
-  ColdInvertedCheckmarkIcon,
+  ColdInfoIcon,
   ColdJourneyIcon,
+  ColdLeftArrowIcon,
   ColdReportIcon,
   ColdRightArrowIcon,
   ColdScoreIcon,
   ColdSettingsIcon,
   ColdSmallCheckBoxIcon,
+  ColdSupportNotFilledInIcon,
   ColdSwitchIcon,
   ColdTeamMembersIcon,
   PlusIcon,
@@ -86,16 +89,22 @@ export const ColdIcon = (props: IconProps) => {
       return <ColdAiIcon {...props} />;
     case IconNames.ColdBookmarkIcon:
       return <ColdBookmarkIcon {...props} />;
-    case IconNames.ColdFilledBookMarkIcon:
-      return <ColdFilledBookMarkIcon {...props} />;
     case IconNames.ColdDocumentUploadIcon:
       return <ColdDocumentUploadIcon {...props} />;
-    case IconNames.ColdFilledDocumentUploadIcon:
-      return <ColdFilledDocumentUploadIcon {...props} />;
-    case IconNames.ColdInvertedCheckmarkIcon:
-      return <ColdInvertedCheckmarkIcon {...props} />;
     case IconNames.ColdSwitchIcon:
       return <ColdSwitchIcon {...props} />;
+    case IconNames.ColdCalendarDaysIcon:
+      return <ColdCalendarDaysIcon {...props} />;
+    case IconNames.ColdCalendarEventIcon:
+      return <ColdCalendarEventIcon {...props} />;
+    case IconNames.ColdClockIcon:
+      return <ColdClockIcon {...props} />;
+    case IconNames.ColdInfoIcon:
+      return <ColdInfoIcon {...props} />;
+    case IconNames.ColdLeftArrowIcon:
+      return <ColdLeftArrowIcon {...props} />;
+    case IconNames.ColdSupportNotFilledInIcon:
+      return <ColdSupportNotFilledInIcon {...props} />;
     default:
     case IconNames.ColdSettingsIcon:
       return <ColdSettingsIcon {...props} />;

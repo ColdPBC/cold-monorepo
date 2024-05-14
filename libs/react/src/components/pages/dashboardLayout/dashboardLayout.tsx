@@ -7,7 +7,7 @@ import { twMerge } from 'tailwind-merge';
 export const DashboardLayout = (props: PropsWithChildren<any>) => {
   const ldFlags = useFlags();
   return (
-    <div className={twMerge('flex gap-6', ldFlags.showNewNavigationCold698 ? 'flex-row relative justify-start w-full px-[100px] py-[40px]' : 'p-10')}>
+    <div className={twMerge('flex gap-6', ldFlags.showNewNavigationCold698 ? 'flex-row relative justify-start w-full pl-[58px]' : 'p-10')}>
       <SideBar />
       <Outlet />
     </div>

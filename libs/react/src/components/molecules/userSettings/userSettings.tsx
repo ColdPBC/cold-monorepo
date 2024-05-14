@@ -1,17 +1,19 @@
 import { useAuth0, User } from '@auth0/auth0-react';
 import { ButtonTypes } from '@coldpbc/enums';
 import { axiosFetcher } from '@coldpbc/fetchers';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { BaseButton, Input } from '../../atoms';
 import { Card } from '../card';
 import { Modal } from '../modal';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application';
 import { useColdContext } from '@coldpbc/hooks';
+import ColdMQTTContext from '../../../context/coldMQTTContext';
 
 const _UserSettings = () => {
   const { logBrowser } = useColdContext();
   const { logout: auth0Logout, user } = useAuth0();
+  const { client } = useContext(ColdMQTTContext);
 
   const [updatedUser, setUpdatedUser] = useState(user ?? null);
 
@@ -39,6 +41,7 @@ const _UserSettings = () => {
     });
     localStorage.clear();
     sessionStorage.clear();
+    client?.current.end();
     auth0Logout({
       logoutParams: {
         returnTo: window.location.origin,
