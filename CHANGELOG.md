@@ -1,3 +1,10 @@
+## [1.220.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.220.0...v1.220.1) (2024-05-14)
+
+
+### Bug Fixes
+
+* place new compliance flow behind feature flag ([2c26d71](https://github.com/ColdPBC/cold-monorepo/commit/2c26d7126d14fd8cd02cc6f1c8a724aa28c3b61e))
+
 # [1.220.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.219.0...v1.220.0) (2024-05-13)
 
 
