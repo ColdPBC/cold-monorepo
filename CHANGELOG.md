@@ -1,3 +1,17 @@
+# [1.221.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.220.1...v1.221.0) (2024-05-14)
+
+
+### Features
+
+* add util to get term string ([6fd5076](https://github.com/ColdPBC/cold-monorepo/commit/6fd507647076a6c20b12a8769f1428017d395022))
+* handle mqtt mocks in storybook ([5777583](https://github.com/ColdPBC/cold-monorepo/commit/57775834de11512548b434732c0c04fab03f90a9))
+* handle section groups, sections and questions using MQTT ([60b7f9f](https://github.com/ColdPBC/cold-monorepo/commit/60b7f9fa13b9f71ca6b55ac2b0b9b376fc32ded6))
+* initial work for compliance manager page ([910001e](https://github.com/ColdPBC/cold-monorepo/commit/910001e817292c86a73b30e8ec22cd6296631e27))
+* remove and update inverted and filed icons ([d57a4b7](https://github.com/ColdPBC/cold-monorepo/commit/d57a4b75651d4f2ad2775d5b2f1d60adbf7aca5d))
+* remove old survey code ([e2a4538](https://github.com/ColdPBC/cold-monorepo/commit/e2a45384bce0a9007da88ee556010cfafff116d1))
+* update application layout for the new management page ([87501d9](https://github.com/ColdPBC/cold-monorepo/commit/87501d91654cfc4dd72da8e435eef685f0d217d4))
+* update handling of due date and term in compliance definition and not survey definition ([fab5aea](https://github.com/ColdPBC/cold-monorepo/commit/fab5aead5226e7887335173890300a3ff04698c0))
+
 ## [1.220.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.220.0...v1.220.1) (2024-05-14)
 
 
