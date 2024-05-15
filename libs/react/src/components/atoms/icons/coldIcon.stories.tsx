@@ -18,6 +18,14 @@ const meta: Meta<typeof ColdIcon> = {
       control: 'select',
       options: DefaultHexColors,
     },
+    inverted: {
+      control: 'boolean',
+      defaultValue: false,
+    },
+    filled: {
+      control: 'boolean',
+      defaultValue: false,
+    },
   },
 };
 

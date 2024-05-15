@@ -1,17 +1,18 @@
 import { createContext } from 'react';
-import { Auth0ProviderOptions } from '@auth0/auth0-react';
-import { ErrorType } from '../enums/errors';
+import { SWRSubscription } from 'swr/subscription';
 
 export type ColdMQTTContextType = {
-  subscribe: (topic: string) => void;
-  publish: (topic: string, message: string) => void;
-  messages: string[];
+  subscribeSWR: SWRSubscription<string | null, number, Error>;
+  publishMessage: (topic: string, message: string) => void;
+  connectionStatus: boolean;
+  client: any | null;
 };
 
 const ColdMQTTContext = createContext({
-  subscribe: (topic: string) => {},
-  publish: (topic: string, message: string) => {},
-  messages: [] as string[],
+  subscribeSWR: (key, { next }) => {},
+  publishMessage: (topic: string, message: string) => {},
+  connectionStatus: false,
+  client: null,
 } as ColdMQTTContextType);
 
 export default ColdMQTTContext;

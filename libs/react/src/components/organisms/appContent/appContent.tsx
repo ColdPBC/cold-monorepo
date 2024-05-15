@@ -1,6 +1,8 @@
 import React, { PropsWithChildren } from 'react';
 import { Spinner } from '../../atoms';
 import { GlobalSizes } from '@coldpbc/enums';
+import { useFlags } from 'launchdarkly-react-client-sdk';
+import { twMerge } from 'tailwind-merge';
 
 export interface AppContentProps {
   title?: string;
@@ -8,8 +10,10 @@ export interface AppContentProps {
 }
 
 export function AppContent(props: PropsWithChildren<AppContentProps>) {
+  const ldFlags = useFlags();
+
   return (
-    <div className="w-full">
+    <div className={twMerge('w-[1129px]', ldFlags.showNewNavigationCold698 ? 'py-[40px] ml-[50px]' : '')}>
       {
         // show title if we have one
         props.title && <div className="text-h1 self-stretch text-tc-primary mb-4">{props.title}</div>

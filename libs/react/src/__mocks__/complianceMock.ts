@@ -10,6 +10,9 @@ export function getComplianceMock(): Compliance[] {
       created_at: '2024-03-19T16:22:59.959Z',
       updated_at: '2024-04-10T20:44:44.763Z',
       title: 'B Corp',
+      metadata: {
+        term: 'every_three_years',
+      },
     },
     {
       id: 'compdef_s4h9rd5wuorvhthy',
@@ -19,6 +22,10 @@ export function getComplianceMock(): Compliance[] {
       created_at: '2024-03-01T19:51:37.808Z',
       updated_at: '2024-03-06T05:05:43.546Z',
       title: 'REI Product Impact Assessment 2024',
+      metadata: {
+        term: 'annual',
+        due_date: '2024-03-09T00:00:00.00',
+      },
     },
     {
       id: 'compdef_q8ctv3dxn00s3bic',
@@ -28,6 +35,9 @@ export function getComplianceMock(): Compliance[] {
       created_at: '2024-03-18T16:42:54.309Z',
       updated_at: '2024-03-18T16:42:54.309Z',
       title: '1% for the Planet',
+      metadata: {
+        term: 'annual',
+      },
     },
     {
       id: 'compdef_q4si19qzwqh0h03g',
@@ -37,6 +47,9 @@ export function getComplianceMock(): Compliance[] {
       created_at: '2024-03-18T15:55:36.193Z',
       updated_at: '2024-03-26T19:09:13.312Z',
       title: 'Climate Action Corps Progress Report 2023',
+      metadata: {
+        term: 'annual',
+      },
     },
   ];
 }
@@ -94,6 +107,9 @@ export function getOrganizationComplianceMock(): OrgCompliance[] {
         created_at: '2024-03-19T16:22:59.959Z',
         updated_at: '2024-04-10T20:44:44.763Z',
         title: 'B Corp',
+        metadata: {
+          term: 'every_three_years',
+        },
       },
     },
     {
@@ -138,6 +154,10 @@ export function getOrganizationComplianceMock(): OrgCompliance[] {
         created_at: '2024-03-01T19:51:37.808Z',
         updated_at: '2024-03-06T05:05:43.546Z',
         title: 'REI Product Impact Assessment 2024',
+        metadata: {
+          term: 'annual',
+          due_date: '2024-03-09T00:00:00.00',
+        },
       },
     },
     {
@@ -182,6 +202,9 @@ export function getOrganizationComplianceMock(): OrgCompliance[] {
         created_at: '2024-03-18T15:55:36.193Z',
         updated_at: '2024-03-26T19:09:13.312Z',
         title: 'Climate Action Corps Progress Report 2023',
+        metadata: {
+          term: 'annual',
+        },
       },
     },
     {
@@ -226,6 +249,9 @@ export function getOrganizationComplianceMock(): OrgCompliance[] {
         created_at: '2024-03-18T16:42:54.309Z',
         updated_at: '2024-03-18T16:42:54.309Z',
         title: '1% for the Planet',
+        metadata: {
+          term: 'annual',
+        },
       },
     },
   ];
@@ -295,6 +321,10 @@ export function getAssessmentsComplianceMock(): OrgCompliance[] {
         created_at: '2024-03-01T19:51:37.808Z',
         updated_at: '2024-03-06T05:05:43.546Z',
         title: 'REI Product Impact Assessment 2024',
+        metadata: {
+          term: 'annual',
+          due_date: '2024-03-09T00:00:00.00',
+        },
       },
     },
     {
@@ -332,6 +362,9 @@ export function getAssessmentsComplianceMock(): OrgCompliance[] {
         created_at: '2024-02-05T19:28:02.001Z',
         updated_at: '2024-02-05T20:36:23.025Z',
         title: 'Amazon',
+        metadata: {
+          term: 'annual',
+        },
       },
     },
     {

@@ -428,11 +428,7 @@ const _ComplianceSurveySavedQuestionnaire = (props: ComplianceSurveySavedQuestio
                 onClick={() => {
                   setDocumentLinkModalOpen(!documentLinkModalOpen);
                 }}>
-                {activeSection.follow_up[activeKey.value].document_link ? (
-                  <ColdIcon name={IconNames.ColdFilledDocumentUploadIcon} />
-                ) : (
-                  <ColdIcon name={IconNames.ColdDocumentUploadIcon} />
-                )}
+                <ColdIcon name={IconNames.ColdDocumentUploadIcon} inverted={!!activeSection.follow_up[activeKey.value].document_link} />
               </div>
               <div className={'absolute top-full z-10'}>
                 {documentLinkModalOpen && (
@@ -447,7 +443,7 @@ const _ComplianceSurveySavedQuestionnaire = (props: ComplianceSurveySavedQuestio
               </div>
             </div>
             <div className={'h-full w-[60px] rounded-lg flex justify-center items-center bg-transparent cursor-pointer hover:bg-bgc-accent'} onClick={unBookMarkQuestion}>
-              {bookmarkedForQuestion ? <ColdIcon name={IconNames.ColdFilledBookMarkIcon} color={'white'} /> : <ColdIcon name={IconNames.ColdBookmarkIcon} color={'white'} />}
+              <ColdIcon name={IconNames.ColdBookmarkIcon} color={'white'} filled={bookmarkedForQuestion} />
             </div>
             <div className={'h-full w-[60px] rounded-lg flex justify-center items-center bg-transparent cursor-pointer hover:bg-bgc-accent'} onClick={submitSurvey}>
               <ColdIcon name={IconNames.CloseModalIcon} />

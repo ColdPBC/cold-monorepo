@@ -11,6 +11,7 @@ export interface ComplianceSurveyLeftNavProps {
   activeKey: ComplianceSurveyActiveKeyType;
   setActiveKey: (activeKey: ComplianceSurveyActiveKeyType) => void;
 }
+
 const _ComplianceSurveyLeftNav = (props: ComplianceSurveyLeftNavProps) => {
   const { surveyData, activeKey, setActiveKey, savedQuestions } = props;
 
@@ -60,7 +61,7 @@ const _ComplianceSurveyLeftNav = (props: ComplianceSurveyLeftNavProps) => {
             <div
               className={`text-h3 text-tc-primary cursor-pointer flex flex-row space-x-3 items-center pl-1 ${activeKey.section === 'savedQuestions' ? 'bg-bgc-accent' : ''}`}
               onClick={openSavedQuestions}>
-              <ColdIcon name={IconNames.ColdFilledBookMarkIcon} />
+              <ColdIcon name={IconNames.ColdBookmarkIcon} filled={true} />
               <div className={`text-left whitespace-normal`}>Saved Questions</div>
             </div>
           </div>

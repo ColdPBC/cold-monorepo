@@ -18,6 +18,7 @@ import { getOrganizationMembersMock } from './datagridMock';
 import {
   getActivateOrgCompliancePageMock,
   getAssessmentsComplianceMock,
+  getComplianceMock,
   getDefaultCompliancePageMock,
   getDefaultOrgCompliancePageMock,
   getOrganizationComplianceMock,
@@ -866,13 +867,19 @@ export const getComplianceSetOverviewHandler = {
     }),
   ],
   withDueDate: [
-    rest.get(getApiUrl('/compliance_definitions/organizations/:orgId'), (req, res, ctx) => {
-      const complianceSets = getOrganizationComplianceMock();
+    rest.get(getApiUrl('/compliance_definitions'), (req, res, ctx) => {
+      const complianceSets = getComplianceMock();
+      // find rei_pia_2024 compliance set and set due date to 30 days from now
+      const reiPia2024 = complianceSets.find(c => c.name === 'rei_pia_2024');
+      if (reiPia2024) {
+        set(reiPia2024, 'metadata.due_date', addDays(new Date(), 30).toString());
+        const index = complianceSets.findIndex(c => c.name === 'rei_pia_2024');
+        complianceSets[index] = reiPia2024;
+      }
       return res(ctx.json(complianceSets));
     }),
     rest.get(getApiUrl('/organizations/:orgId/surveys/:name'), (req, res, ctx) => {
       const survey = getSurveyFormDataByName('b_corp_2024') as ComplianceSurveyPayloadType;
-      set(survey, 'definition.due_date', addDays(new Date(), 30).toString());
       return res(
         ctx.json({
           ...survey,
@@ -885,13 +892,19 @@ export const getComplianceSetOverviewHandler = {
     }),
   ],
   withNearDueDate: [
-    rest.get(getApiUrl('/compliance_definitions/organizations/:orgId'), (req, res, ctx) => {
-      const complianceSets = getOrganizationComplianceMock();
+    rest.get(getApiUrl('/compliance_definitions'), (req, res, ctx) => {
+      const complianceSets = getComplianceMock();
+      // find rei_pia_2024 compliance set and set due date to 30 days from now
+      const reiPia2024 = complianceSets.find(c => c.name === 'rei_pia_2024');
+      if (reiPia2024) {
+        set(reiPia2024, 'metadata.due_date', addDays(new Date(), 5).toString());
+        const index = complianceSets.findIndex(c => c.name === 'rei_pia_2024');
+        complianceSets[index] = reiPia2024;
+      }
       return res(ctx.json(complianceSets));
     }),
     rest.get(getApiUrl('/organizations/:orgId/surveys/:name'), (req, res, ctx) => {
       const survey = getSurveyFormDataByName('b_corp_2024') as ComplianceSurveyPayloadType;
-      set(survey, 'definition.due_date', addDays(new Date(), 5).toString());
       return res(
         ctx.json({
           ...survey,
@@ -904,13 +917,18 @@ export const getComplianceSetOverviewHandler = {
     }),
   ],
   withNearDueDateButSubmitted: [
-    rest.get(getApiUrl('/compliance_definitions/organizations/:orgId'), (req, res, ctx) => {
-      const complianceSets = getOrganizationComplianceMock();
+    rest.get(getApiUrl('/compliance_definitions'), (req, res, ctx) => {
+      const complianceSets = getComplianceMock();
+      const reiPia2024 = complianceSets.find(c => c.name === 'rei_pia_2024');
+      if (reiPia2024) {
+        set(reiPia2024, 'metadata.due_date', addDays(new Date(), 5).toString());
+        const index = complianceSets.findIndex(c => c.name === 'rei_pia_2024');
+        complianceSets[index] = reiPia2024;
+      }
       return res(ctx.json(complianceSets));
     }),
     rest.get(getApiUrl('/organizations/:orgId/surveys/:name'), (req, res, ctx) => {
       const survey = getSurveyFormDataByName('b_corp_2024') as ComplianceSurveyPayloadType;
-      set(survey, 'definition.due_date', addDays(new Date(), 5).toString());
       set(survey, 'status.0', {
         name: 'cold_submitted',
         date: '2024-01-17T17:36:53.231Z',
