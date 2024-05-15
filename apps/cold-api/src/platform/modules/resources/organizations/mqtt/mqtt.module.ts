@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { ComplianceMQTT } from './organizations.mqtt.service';
-import { ComplianceModule } from '@coldpbc/nest';
+import { ComplianceRepositoryModule } from '@coldpbc/nest';
 
 @Module({
-  imports: [ComplianceModule],
+  imports: [ComplianceRepositoryModule],
   providers: [ComplianceMQTT],
   exports: [ComplianceMQTT],
 })
