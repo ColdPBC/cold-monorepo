@@ -1,11 +1,32 @@
 import { Module } from '@nestjs/common';
-import { PrismaService } from '../prisma';
-import { ComplianceSectionsRepository } from './repository/compliance-sections/compliance-sections.repository';
-import { ComplianceSectionGroupsRepository } from './repository/compliance-section-groups/compliance-section-groups.repository';
-import { ComplianceQuestionsRepository } from './repository/compliance-questions/compliance-questions.repository';
+import { PrismaModule, PrismaService } from '../prisma';
+import {
+  ComplianceAiResponsesRepository,
+  ComplianceQuestionsRepository,
+  ComplianceResponsesRepository,
+  ComplianceSectionGroupsRepository,
+  ComplianceSectionsRepository,
+} from './repository';
+import { CacheService, ColdCacheModule } from '../cache';
 
 @Module({
-  providers: [PrismaService, ComplianceSectionsRepository, ComplianceSectionGroupsRepository, ComplianceQuestionsRepository],
-  exports: [PrismaService, ComplianceSectionsRepository, ComplianceSectionGroupsRepository, ComplianceQuestionsRepository],
+  imports: [PrismaModule, ColdCacheModule.forRootAsync()],
+  providers: [
+    PrismaService,
+    ComplianceSectionsRepository,
+    ComplianceSectionGroupsRepository,
+    ComplianceQuestionsRepository,
+    ComplianceAiResponsesRepository,
+    ComplianceResponsesRepository,
+    CacheService,
+  ],
+  exports: [
+    PrismaService,
+    ComplianceSectionsRepository,
+    ComplianceSectionGroupsRepository,
+    ComplianceQuestionsRepository,
+    ComplianceAiResponsesRepository,
+    ComplianceResponsesRepository,
+  ],
 })
 export class ComplianceModule {}
