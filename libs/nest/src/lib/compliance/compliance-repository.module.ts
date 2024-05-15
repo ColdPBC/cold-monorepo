@@ -5,6 +5,7 @@ import {
   ComplianceQuestionsRepository,
   ComplianceResponsesRepository,
   ComplianceSectionGroupsRepository,
+  ComplianceSectionsCacheRepository,
   ComplianceSectionsRepository,
 } from './repository';
 import { CacheService, ColdCacheModule } from '../cache';
@@ -18,6 +19,7 @@ import { CacheService, ColdCacheModule } from '../cache';
     ComplianceQuestionsRepository,
     ComplianceAiResponsesRepository,
     ComplianceResponsesRepository,
+    ComplianceSectionsCacheRepository,
     CacheService,
   ],
   exports: [
@@ -27,6 +29,7 @@ import { CacheService, ColdCacheModule } from '../cache';
     ComplianceQuestionsRepository,
     ComplianceAiResponsesRepository,
     ComplianceResponsesRepository,
+    ComplianceSectionsCacheRepository,
   ],
 })
-export class ComplianceModule {}
+export class ComplianceRepositoryModule {}
