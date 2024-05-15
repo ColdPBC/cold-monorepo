@@ -18,7 +18,7 @@ export class CacheService extends BaseWorker {
   defaultTTL: number;
   initialized: boolean = false;
 
-  constructor(@Inject(CACHE_MANAGER) private readonly cacheManager: RedisCache, private readonly config: ConfigService) {
+  constructor(@Inject(CACHE_MANAGER) readonly cacheManager: RedisCache, readonly config: ConfigService) {
     super('CacheService');
     this.store = this.cacheManager.store;
     this.defaultTTL = parseInt(this.config.get('CACHE_TTL', `${1000 * 60 * 60}`));

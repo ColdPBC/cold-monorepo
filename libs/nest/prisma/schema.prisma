@@ -645,48 +645,65 @@ model compliance_sections {
   compliance_definition_name  String
   compliance_responses        compliance_responses[]
 
-  compliance_dependency_chain_id String?
-  compliance_dependency_chain    compliance_dependency_chains? @relation(fields: [compliance_dependency_chain_id], references: [id], onDelete: Cascade)
+  compliance_section_dependency_chains   compliance_section_dependency_chains? @relation(fields: [compliance_section_dependency_chain_id], references: [id])
+  compliance_section_dependency_chain_id String?
 
   @@unique([compliance_section_group_id, key], name: "compSecGroupKey")
   @@unique([compliance_definition_name, key], name: "compDefNameSectionKey")
 }
 
 model compliance_questions {
-  id                                   String                                       @id
-  key                                  String
-  order                                Int
-  prompt                               String
-  component                            String
-  tooltip                              String?
-  placeholder                          String?
-  rubric                               Json?
-  options                              Json?
-  dependency_expression                String?
-  dependencies                         Json?
-  question_summary                     String?
-  coresponding_question                String?
-  additional_context                   Json?
-  created_at                           DateTime                                     @default(now())
-  updated_at                           DateTime                                     @updatedAt
-  compliance_section_id                String
-  compliance_definition_name           String
-  compliance_definition                compliance_definitions                       @relation(fields: [compliance_definition_name], references: [name], onDelete: Cascade)
-  compliance_section                   compliance_sections                          @relation(fields: [compliance_section_id], references: [id], onDelete: Cascade)
-  notes                                organization_compliance_notes[]
-  question_bookmarks                   organization_compliance_question_bookmarks[]
-  responses                            organization_compliance_responses[]
-  organization_compliance_ai_responses organization_compliance_ai_responses[]
-  compliance_responses                 compliance_responses[]
-
-  compliance_dependency_chain_id String?
-  compliance_dependency_chain    compliance_dependency_chains? @relation(fields: [compliance_dependency_chain_id], references: [id], onDelete: SetNull)
+  id                                      String                                       @id
+  key                                     String
+  order                                   Int
+  prompt                                  String
+  component                               String
+  tooltip                                 String?
+  placeholder                             String?
+  rubric                                  Json?
+  options                                 Json?
+  dependency_expression                   String?
+  dependencies                            Json?
+  question_summary                        String?
+  coresponding_question                   String?
+  additional_context                      Json?
+  created_at                              DateTime                                     @default(now())
+  updated_at                              DateTime                                     @updatedAt
+  compliance_section_id                   String
+  compliance_definition_name              String
+  compliance_definition                   compliance_definitions                       @relation(fields: [compliance_definition_name], references: [name], onDelete: Cascade)
+  compliance_section                      compliance_sections                          @relation(fields: [compliance_section_id], references: [id], onDelete: Cascade)
+  notes                                   organization_compliance_notes[]
+  question_bookmarks                      organization_compliance_question_bookmarks[]
+  responses                               organization_compliance_responses[]
+  organization_compliance_ai_responses    organization_compliance_ai_responses[]
+  compliance_responses                    compliance_responses[]
+  compliance_question_dependency_chain_id String?
+  compliance_question_dependency_chain    compliance_question_dependency_chains?       @relation(fields: [compliance_question_dependency_chain_id], references: [id], onDelete: SetNull)
 
   @@unique([compliance_definition_name, key], name: "compDefNameKey")
   @@unique([compliance_section_id, key], name: "compSecKey")
 }
 
-model compliance_dependency_chains {
+model compliance_section_dependency_chains {
+  id                          String                @id() @default(cuid())
+  dependency_chain            Json
+  compliance_question_id      String                @unique
+  compliance_question_key     String
+  compliance_section_id       String
+  compliance_section_key      String
+  compliance_section_group_id String
+  compliance_definition_name  String
+  dependency_expression       String
+  created_at                  DateTime              @default(now())
+  updated_at                  DateTime              @updatedAt
+  compliance_sections         compliance_sections[]
+
+  @@unique([compliance_section_id, compliance_question_key, compliance_definition_name], name: "defNameSecIdQuestKey")
+  @@unique([compliance_section_key, compliance_question_key, compliance_definition_name], name: "defNameSecKeyQuestKey")
+}
+
+model compliance_question_dependency_chains {
   id                          String                 @id() @default(cuid())
   dependency_chain            Json
   compliance_question_id      String                 @unique
@@ -698,7 +715,6 @@ model compliance_dependency_chains {
   dependency_expression       String
   created_at                  DateTime               @default(now())
   updated_at                  DateTime               @updatedAt
-  compliance_sections         compliance_sections[]
   compliance_questions        compliance_questions[]
 
   @@unique([compliance_section_id, compliance_question_key, compliance_definition_name], name: "defNameSecIdQuestKey")
@@ -760,7 +776,7 @@ model organization_compliance_question_bookmarks {
 
 model organization_compliance_responses {
   id                                     String                                @id
-  value                                  String?
+  value                                  Json?
   created_at                             DateTime                              @default(now())
   updated_at                             DateTime                              @updatedAt
   compliance_question_id                 String
@@ -770,7 +786,6 @@ model organization_compliance_responses {
   ai_response                            organization_compliance_ai_responses? @relation(fields: [organization_compliance_ai_response_id], references: [id], map: "ai_response_id")
   compliance_question                    compliance_questions                  @relation(fields: [compliance_question_id], references: [id])
   organization_compliance                organization_compliance               @relation(fields: [organization_compliance_id], references: [id])
-  compliance_responsesId                 Int?
   compliance_responses                   compliance_responses[]
 
   @@unique([organization_compliance_id, compliance_question_id], name: "orgCompQuestId")

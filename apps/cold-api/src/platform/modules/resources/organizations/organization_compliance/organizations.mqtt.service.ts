@@ -28,8 +28,8 @@ export class MqttController {
 
     switch (topic) {
       case `platform/${process.env['NODE_ENV']}/api/organizations/getComplianceSetManagementData`:
-        //this.logger.log(`Received message on topic ${topic}: ${message}`);
-        return await this.getOrgComplianceData(JSON.parse(message));
+      //this.logger.log(`Received message on topic ${topic}: ${message}`);
+      // return await this.getOrgComplianceData(JSON.parse(message));
       case `platform/${process.env['NODE_ENV']}/api/query`: {
         //this.logger.log(`Received message on topic ${topic}: ${message}`);
         break;
@@ -37,75 +37,6 @@ export class MqttController {
       default:
       // this.logger.error(`Unknown topic ${topic}`);
     }
-  }
-
-  async getOrgComplianceData({ orgId }) {
-    const response = await this.prisma.organizations.findMany({
-      where: {
-        id: orgId,
-      },
-      select: {
-        display_name: true,
-        organization_compliance: {
-          select: {
-            compliance_definition_name: true,
-            compliance_definition: {
-              select: {
-                image_url: true,
-                logo_url: true,
-                name: true,
-                order: true,
-                compliance_section_groups: {
-                  select: {
-                    id: true,
-                    order: true,
-                    title: true,
-                    compliance_sections: {
-                      select: {
-                        id: true,
-                        key: true,
-                        order: true,
-                        title: true,
-                        dependency_expression: true,
-                        compliance_questions: {
-                          select: {
-                            additional_context: true,
-                            component: true,
-                            coresponding_question: true,
-                            created_at: true,
-                            dependency_expression: true,
-                            id: true,
-                            key: true,
-                            options: true,
-                            order: true,
-                            placeholder: true,
-                            prompt: true,
-                            question_summary: true,
-                            rubric: true,
-                            tooltip: true,
-                          },
-                          orderBy: {
-                            order: 'desc',
-                          },
-                        },
-                      },
-                      orderBy: {
-                        order: 'desc',
-                      },
-                    },
-                  },
-                  orderBy: {
-                    order: 'desc',
-                  },
-                },
-              },
-            },
-          },
-        },
-      },
-    });
-
-    return response;
   }
 
   handleMyTopic(payload: any) {

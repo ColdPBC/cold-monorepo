@@ -1,14 +1,20 @@
 import { Global, Module } from '@nestjs/common';
+import { SecretsService } from '../aws';
+import { CacheService } from './cache.service';
 import { CacheModule } from '@nestjs/cache-manager';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { redisStore } from 'cache-manager-redis-yet';
 
-import { CacheService } from './cache.service';
-
 @Global()
 @Module({})
 export class ColdCacheModule {
-  static async forRootAsync(secrets: any) {
+  static async forRootAsync(secrets?: any) {
+    if (!secrets) {
+      const sm = new SecretsService();
+      await sm.onModuleInit();
+      secrets = await sm.getRootSecrets('core');
+    }
+
     return {
       module: ColdCacheModule,
       imports: [

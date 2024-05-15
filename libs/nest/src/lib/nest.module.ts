@@ -17,7 +17,7 @@ import { DatadogTraceModule } from 'nestjs-ddtrace';
 import { S3Module, S3Service, SecretsModule, SecretsService } from './aws';
 import { RedisServiceConfig } from './utility';
 import { MqttModule } from './mqtt';
-import { ComplianceModule } from './compliance/compliance.module';
+import { ComplianceModule } from './compliance';
 
 @Module({
   imports: [MqttModule, ComplianceModule],
@@ -62,6 +62,7 @@ export class NestModule {
       BullModule.forRoot(await new RedisServiceConfig(secrets).getQueueConfig(type, project)),
       HttpModule,
       MqttModule,
+      ComplianceModule,
     ];
 
     /**
