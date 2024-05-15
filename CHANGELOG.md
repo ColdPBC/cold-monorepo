@@ -1,3 +1,12 @@
+# [1.223.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.222.0...v1.223.0) (2024-05-15)
+
+
+### Features
+
+* Add ComplianceSectionsCacheRepository and implement getFilteredSectionList in organizations.mqtt.service ([2219c30](https://github.com/ColdPBC/cold-monorepo/commit/2219c30463c54e21515a48f4b98f8ab331fefd24))
+* Add methods to create, update compliance questions in repository ([a85e31d](https://github.com/ColdPBC/cold-monorepo/commit/a85e31d74ef57bf7411b093a878acb123beba315))
+* Added a ComplianceSectionsCacheRepository to manage compliance sections data ([d49e3ce](https://github.com/ColdPBC/cold-monorepo/commit/d49e3ceb025e73b7238db2f04178a4d2f7af163a))
+
 # [1.222.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.221.0...v1.222.0) (2024-05-15)
 
 
