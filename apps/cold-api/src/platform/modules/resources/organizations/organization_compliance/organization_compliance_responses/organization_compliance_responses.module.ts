@@ -5,12 +5,12 @@ import { OrganizationComplianceAiResponsesModule } from './organization_complian
 import { OrganizationComplianceAiResponseFilesModule } from './organization_compliance_ai_response_files/organization_compliance_ai_response_files.module';
 import { OrganizationComplianceResponseRabbit } from './organizations_compliance_responses.rabbit';
 import { MqttModule } from '../../mqtt/mqtt.module';
-import { ComplianceModule } from '@coldpbc/nest';
+import { ComplianceRepositoryModule } from '@coldpbc/nest';
 
 @Module({
   controllers: [OrganizationComplianceResponsesController],
   providers: [OrganizationComplianceResponsesService, OrganizationComplianceResponseRabbit],
-  imports: [OrganizationComplianceAiResponsesModule, OrganizationComplianceAiResponseFilesModule, MqttModule, ComplianceModule],
+  imports: [OrganizationComplianceAiResponsesModule, OrganizationComplianceAiResponseFilesModule, MqttModule, ComplianceRepositoryModule],
   exports: [OrganizationComplianceResponsesService],
 })
 export class OrganizationComplianceResponsesModule {}
