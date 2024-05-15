@@ -4,7 +4,15 @@ import { PineconeModule } from '../pinecone/pinecone.module';
 import { LangchainModule } from '../langchain/langchain.module';
 import { LangchainService } from '../langchain/langchain.service';
 import { BullModule } from '@nestjs/bull';
-import { ColdRabbitModule, MqttModule, MqttService } from '@coldpbc/nest';
+import {
+  ColdRabbitModule,
+  ComplianceAiResponsesRepository,
+  ComplianceModule,
+  ComplianceResponsesRepository,
+  ComplianceSectionsRepository,
+  MqttModule,
+  MqttService,
+} from '@coldpbc/nest';
 import { FreeplayModule } from '../freeplay/freeplay.module';
 import { FreeplayService } from '../freeplay/freeplay.service';
 import { ChatController } from './chat.controller';
@@ -19,8 +27,9 @@ import { ChatController } from './chat.controller';
     LangchainModule,
     FreeplayModule,
     MqttModule,
+    ComplianceModule,
   ],
   controllers: [ChatController],
-  providers: [ChatService, LangchainService, FreeplayService, MqttService],
+  providers: [ChatService, LangchainService, FreeplayService, MqttService, ComplianceSectionsRepository, ComplianceAiResponsesRepository, ComplianceResponsesRepository],
 })
 export class ChatModule {}

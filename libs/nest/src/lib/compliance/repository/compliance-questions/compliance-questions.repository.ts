@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { BaseWorker } from '../../../worker';
 import { PrismaService } from '../../../prisma';
 import { Prisma } from '@prisma/client';
-import { difference, unset } from 'lodash';
+import { difference, sumBy, unset } from 'lodash';
 
 interface Question {
   id: string;
@@ -77,7 +77,7 @@ export class ComplianceQuestionsRepository extends BaseWorker {
                         LEFT JOIN compliance_section_groups csg ON cs.compliance_section_group_id = csg.id
                         LEFT JOIN organization_compliance oc
                                   ON csg.compliance_definition_name = oc.compliance_definition_name
-                        LEFT OUTER JOIN compliance_dependency_chains cdc ON cq.id = cdc.compliance_question_id
+                        LEFT OUTER JOIN compliance_question_dependency_chains cdc ON cq.id = cdc.compliance_question_id
                  WHERE cs.id = ${compliance_section_id}
 
                  GROUP BY cq.id, ocair.answer, ocr.value,
@@ -91,13 +91,28 @@ export class ComplianceQuestionsRepository extends BaseWorker {
     const end = new Date().getTime();
     const diff = difference(questions, response);
 
+    const metrics = {
+      total: response.length,
+      not_started: sumBy(response, (item: any) => {
+        return item.not_started ? 1 : 0;
+      }),
+      ai_answered: sumBy(response, (item: any) => {
+        return item.ai_answered ? 1 : 0;
+      }),
+      user_answered: sumBy(response, (item: any) => {
+        return item.user_answered ? 1 : 0;
+      }),
+      bookmarked: sumBy(response, (item: any) => {
+        return item.bookmarked ? 1 : 0;
+      }),
+    };
     console.log(`Filtering questions took ${end - start}ms`, {
-      orginalCount: questions.length,
+      originalCount: questions.length,
       filteredCount: response.length,
       diff,
     });
 
-    return response;
+    return { compliance_questions: response, counts: metrics };
   }
 
   /**

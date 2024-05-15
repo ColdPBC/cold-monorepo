@@ -1,5 +1,16 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
-import { AuthenticatedUser, BaseWorker, CacheService, ColdRabbitService, Cuid2Generator, DarklyService, MqttService, PrismaService } from '@coldpbc/nest';
+import {
+  AuthenticatedUser,
+  BaseWorker,
+  CacheService,
+  ColdRabbitService,
+  ComplianceResponsesRepository,
+  ComplianceSectionsRepository,
+  Cuid2Generator,
+  DarklyService,
+  MqttService,
+  PrismaService,
+} from '@coldpbc/nest';
 import { PineconeService } from '../pinecone/pinecone.service';
 import { ConfigService } from '@nestjs/config';
 import { PromptsService } from '../prompts/prompts.service';
@@ -11,6 +22,7 @@ import { ChatCompletionMessageParam } from 'openai/resources/chat/completions';
 import { RecordMetadata, ScoredPineconeRecord } from '@pinecone-database/pinecone';
 import { FPSession, FreeplayService } from '../freeplay/freeplay.service';
 import { FormattedPrompt } from 'freeplay/thin';
+import { compliance_sections, organization_compliance } from '@prisma/client';
 
 @Injectable()
 export class ChatService extends BaseWorker implements OnModuleInit {
@@ -27,6 +39,8 @@ export class ChatService extends BaseWorker implements OnModuleInit {
     readonly rabbit: ColdRabbitService,
     readonly mqtt: MqttService,
     readonly fp: FreeplayService,
+    readonly complianceSectionsRepository: ComplianceSectionsRepository,
+    readonly complianceResponsesRepository: ComplianceResponsesRepository,
   ) {
     super(ChatService.name);
     this.openAIapiKey = this.config.getOrThrow('OPENAI_API_KEY');
@@ -34,7 +48,20 @@ export class ChatService extends BaseWorker implements OnModuleInit {
 
   async onModuleInit() {}
 
-  async resetAIComplianceResponses(user, organization_compliance, organization) {}
+  /**
+   * Reset the AI responses when re-processing a survey
+   */
+  async resetComplianceAIResponses(user, compliance: organization_compliance, organization: any) {
+    this.logger.info(`Clearing previous ai_responses for ${organization.name}: ${compliance.compliance_definition_name}`, {
+      user,
+      ...compliance,
+      organization: { id: organization.id, name: organization.name, display_name: organization.display_name },
+    });
+
+    await this.prisma.organization_compliance_ai_responses.deleteMany({
+      where: { organization_id: organization.id, organization_compliance_id: compliance.id },
+    });
+  }
 
   /**
    * Reset the AI responses when re-processing a survey
@@ -76,6 +103,14 @@ export class ChatService extends BaseWorker implements OnModuleInit {
     await this.prisma.survey_data.update({
       where: { id: surveyData.id },
       data: { data: surveyData.data },
+    });
+
+    const compliance = await this.prisma.organization_compliance.findFirst({
+      where: { compliance_definition_name: survey.name },
+    });
+
+    await this.prisma.organization_compliance_ai_responses.deleteMany({
+      where: { organization_id: organization.id, organization_compliance_id: compliance.id },
     });
   }
 
@@ -500,6 +535,9 @@ export class ChatService extends BaseWorker implements OnModuleInit {
       // Destructure the necessary data from the job
       const { user, payload, integration, organization } = job.data;
       const { compliance, base_update_topic } = payload;
+      // Reset the AI responses for the survey
+      await this.complianceResponsesRepository.deleteComplianceResponses(organization, compliance, user);
+
       // Log the start of the survey processing
       this.logger.info(`✅ Started processing compliance set ${compliance.compliance_definition_name} for ${organization.name}`, {
         user,
@@ -604,13 +642,13 @@ export class ChatService extends BaseWorker implements OnModuleInit {
       const reqs: any[] = [];
 
       // Iterate over each section
-      for (const section of sections) {
+      for (const section of sections as unknown as compliance_sections[]) {
         // Create a session for the survey
         const session = (await this.fp.createComplianceSession({
           compliance_set: compliance.compliance_definition_name,
           organization: organization.name,
           user: user.coldclimate_claims.email,
-          section: section,
+          section: section.key,
         })) as FPSession;
 
         // Log the creation of the session
@@ -624,21 +662,30 @@ export class ChatService extends BaseWorker implements OnModuleInit {
         });
 
         try {
-          //const jobCount = 0;
-          // let jobs = (await (this.cache.get(`compliance_jobs:${organization.id}:parent:${job.id}`) as any)) || ({} as any);
-
-          /* if (!jobs[section.key]) {
-             jobs = set(jobs, `${section.key}`, 'processing');
-             await this.cache.set(`compliance_jobs:${organization.id}:parent:${job.id}`, jobs);
-           }*/
-
-          reqs.push(this.processComplianceSection(job, section as any, organization, user, session));
+          reqs.push(this.processComplianceSection(job, section, organization, user, session));
         } catch (e) {
           this.logger.error(`Error processing survey ${job.data.survey.name}`, e);
         }
       }
 
       await Promise.all(reqs);
+
+      await this.complianceSectionsRepository.clearCachedActiveSections(organization, job);
+
+      this.sendMetrics('compliance', 'completed', {
+        sendEvent: true,
+        start,
+        tags: { compliance_name: compliance.compliance_definition_name, organization: organization.name, user: user.coldclimate_claims.email },
+      });
+
+      // Log the end of the survey processing
+      this.logger.info(`✅ Finished processing survey ${compliance.compliance_definition_name}`, {
+        compliance_name: compliance.compliance_definition_name,
+        user,
+        compliance,
+        integration,
+        organization,
+      });
     } catch (e) {
       this.sendMetrics('survey', 'failed', {
         start,
@@ -1083,31 +1130,17 @@ export class ChatService extends BaseWorker implements OnModuleInit {
       // iterate over each followup item
       for (const item of items) {
         try {
-          /* if (await this.isDuplicateOrCanceled(organization, job, section, item)) {
-             //continue;
-           }*/
+          if (await this.isDuplicateOrCanceled(organization, job, section, item)) {
+            //continue;
+          }
 
           await job.log(`Question | section: ${section} question: ${item} (${items.indexOf(item)} of ${items.length})`);
-
-          if (item?.ai_response?.value) {
-            this.logger.info(`Skipping ${section}.${item}: ${item.prompt}; it has already been answered`, {
-              section: section,
-              key: item,
-              question: item.prompt,
-              answer: item.value,
-              ai_answer: item.ai_response.answer,
-              justification: item.ai_response.justification,
-              organization,
-              user: user.coldclimate_claims.email,
-            });
-            continue;
-          }
 
           this.logger.info(`Processing Question | ${section.key}.${item.key}`, {
             section: section,
             key: item,
           });
-
+          await this.complianceSectionsRepository.setCachedActiveQuestion(item, section, organization, job);
           // create a new run for each followup item
           const response = await this.askSurveyQuestion(item, organization.name, job.data.user, session);
 
@@ -1271,7 +1304,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
             },
             from: 'cold.platform.openai',
           });
-
+          await this.complianceSectionsRepository.deleteCachedActiveQuestion(item, section, organization, job);
           // await job.progress(idx / items.length);
         } catch (error) {
           this.sendMetrics('survey.question', `failed`, {
@@ -1286,12 +1319,16 @@ export class ChatService extends BaseWorker implements OnModuleInit {
             },
           });
           this.logger.error(`Error processing ${section.key}.${item.key}: ${error.message}`, error);
+          await this.complianceSectionsRepository.deleteCachedActiveQuestion(item, section, organization, job);
         }
       }
+      await this.complianceSectionsRepository.deleteCachedActiveSection(section, organization, job);
 
       this.logger.info(`✅ Finished processing ${section.key}: ${section.title}`, { section });
       return true;
     } catch (e) {
+      await this.complianceSectionsRepository.deleteCachedActiveSection(section, organization, job);
+
       this.sendMetrics('survey.section', 'failed', {
         start,
         sendEvent: true,

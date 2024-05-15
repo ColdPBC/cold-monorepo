@@ -1,4 +1,71 @@
-# [1.221.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.220.1...v1.221.0) (2024-05-14)
+# [1.222.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.221.0...v1.222.0) (2024-05-15)
+
+
+### Bug Fixes
+
+* place new compliance flow behind feature flag ([c49173d](https://github.com/ColdPBC/cold-monorepo/commit/c49173d2ec77d1b38cc7a5ebf81774461c70f550))
+
+
+### Features
+
+* Add code to create compliance question dependency chains. ([90a6e30](https://github.com/ColdPBC/cold-monorepo/commit/90a6e30629a1c729486c58e209ba45c5768a0cdb))
+* Add code to create compliance question dependency chains. ([ab5e3b8](https://github.com/ColdPBC/cold-monorepo/commit/ab5e3b818c43020e044ca83392e19ea50d23b035))
+* Add compliance export to nest library index ([00cd102](https://github.com/ColdPBC/cold-monorepo/commit/00cd1022cbf3c00006794d65a66425d03b2a07e6))
+* Add compliance services and repositories to chat module ([ca87b5e](https://github.com/ColdPBC/cold-monorepo/commit/ca87b5e2222cfa4c52ca0291e01c005133c639a7))
+* Add ComplianceAiResponsesRepository and its spec test ([bc109b8](https://github.com/ColdPBC/cold-monorepo/commit/bc109b87db00f6c1f370164122ef806991f77040))
+* add ComplianceModule to app.module in cold-platform-openai ([9ca5299](https://github.com/ColdPBC/cold-monorepo/commit/9ca52995f1f6c5e8261b66f8ea4951108f63ee9b))
+* Add ComplianceResponsesRepository and associated spec file ([d423126](https://github.com/ColdPBC/cold-monorepo/commit/d423126fd1824febd2fb5b1e17142f9e9244b9db))
+* Add ComplianceSectionService and corresponding unit test ([4ccc638](https://github.com/ColdPBC/cold-monorepo/commit/4ccc6382ec46403ff410f2c1c846ef52f5e0ce23))
+* Add dependency filter to compliance sections repository ([3774964](https://github.com/ColdPBC/cold-monorepo/commit/377496450180bf58eade28d6ee1c24d564afb5d6))
+* Add new types for compliance responses in the compliance repository ([c6d434c](https://github.com/ColdPBC/cold-monorepo/commit/c6d434c5941fc11227bfdfd2f3e25c25815ea803))
+* Add optional secrets parameter in ColdCacheModule forRootAsync method and fallback to using SecretsService if not provided ([b821e5d](https://github.com/ColdPBC/cold-monorepo/commit/b821e5ddce85f21dbf2ccafdf97891a0795dd716))
+* Added new type definition for compliance status handling ([702aefb](https://github.com/ColdPBC/cold-monorepo/commit/702aefb2bc3364c8537bc263b19c60fc4bdf24b4))
+* Extend compliance module for new features. Add PrismaModule, ColdCacheModule, ComplianceAiResponsesRepository and ComplianceResponsesRepository to ComplianceModule. ([bbd7dec](https://github.com/ColdPBC/cold-monorepo/commit/bbd7dec0c0f3727136c1a1a555786ceaa348f0b5))
+* Implemented compliance sections and responses repositories in chat service ([002cbde](https://github.com/ColdPBC/cold-monorepo/commit/002cbde1180793b6e0ee2a1d04c8bdbfd9235124))
+* Modify 'value' column in 'organization_compliance_responses' to JSONB type ([6a44ee4](https://github.com/ColdPBC/cold-monorepo/commit/6a44ee4bbd71f8bbe12a89184d1676899162969e))
+* refactor dependency chain relations for compliance sections and questions ([bdbcd4d](https://github.com/ColdPBC/cold-monorepo/commit/bdbcd4d8b16e6e1997cef31bb733837087d08317))
+* Split compliance dependency chains into distinct tables ([73593d2](https://github.com/ColdPBC/cold-monorepo/commit/73593d2d467073a825aba487236e023d84f80e52))
+* Update ComplianceQuestionsRepository to include calculation of metrics ([a95b1ed](https://github.com/ColdPBC/cold-monorepo/commit/a95b1ed7fd68321409d2137a9c2af78246b36ddd))
+* Upgrade ComplianceSectionsRepository with caching functionality ([41c9ec3](https://github.com/ColdPBC/cold-monorepo/commit/41c9ec3414eeef8fe19e79814aa646789ed237cf))
+
+# [1.219.0-cold-790.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.219.0-cold-790.3...v1.219.0-cold-790.4) (2024-05-15)
+
+
+### Bug Fixes
+
+* place new compliance flow behind feature flag ([c49173d](https://github.com/ColdPBC/cold-monorepo/commit/c49173d2ec77d1b38cc7a5ebf81774461c70f550))
+
+
+### Features
+
+* Add compliance services and repositories to chat module ([ca87b5e](https://github.com/ColdPBC/cold-monorepo/commit/ca87b5e2222cfa4c52ca0291e01c005133c639a7))
+* Add ComplianceAiResponsesRepository and its spec test ([bc109b8](https://github.com/ColdPBC/cold-monorepo/commit/bc109b87db00f6c1f370164122ef806991f77040))
+* add ComplianceModule to app.module in cold-platform-openai ([9ca5299](https://github.com/ColdPBC/cold-monorepo/commit/9ca52995f1f6c5e8261b66f8ea4951108f63ee9b))
+* Add ComplianceResponsesRepository and associated spec file ([d423126](https://github.com/ColdPBC/cold-monorepo/commit/d423126fd1824febd2fb5b1e17142f9e9244b9db))
+* Add ComplianceSectionService and corresponding unit test ([4ccc638](https://github.com/ColdPBC/cold-monorepo/commit/4ccc6382ec46403ff410f2c1c846ef52f5e0ce23))
+* Add new types for compliance responses in the compliance repository ([c6d434c](https://github.com/ColdPBC/cold-monorepo/commit/c6d434c5941fc11227bfdfd2f3e25c25815ea803))
+* Add optional secrets parameter in ColdCacheModule forRootAsync method and fallback to using SecretsService if not provided ([b821e5d](https://github.com/ColdPBC/cold-monorepo/commit/b821e5ddce85f21dbf2ccafdf97891a0795dd716))
+* Added new type definition for compliance status handling ([702aefb](https://github.com/ColdPBC/cold-monorepo/commit/702aefb2bc3364c8537bc263b19c60fc4bdf24b4))
+* Extend compliance module for new features. Add PrismaModule, ColdCacheModule, ComplianceAiResponsesRepository and ComplianceResponsesRepository to ComplianceModule. ([bbd7dec](https://github.com/ColdPBC/cold-monorepo/commit/bbd7dec0c0f3727136c1a1a555786ceaa348f0b5))
+* Implemented compliance sections and responses repositories in chat service ([002cbde](https://github.com/ColdPBC/cold-monorepo/commit/002cbde1180793b6e0ee2a1d04c8bdbfd9235124))
+* Upgrade ComplianceSectionsRepository with caching functionality ([41c9ec3](https://github.com/ColdPBC/cold-monorepo/commit/41c9ec3414eeef8fe19e79814aa646789ed237cf))
+
+# [1.219.0-cold-790.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.219.0-cold-790.2...v1.219.0-cold-790.3) (2024-05-14)
+
+
+### Features
+
+* Add additional data checks and error handling in compliance model seeding ([240e4b9](https://github.com/ColdPBC/cold-monorepo/commit/240e4b9432a824e28fe20fa39decee3672a956ef))
+* Add code to create compliance question dependency chains. ([90a6e30](https://github.com/ColdPBC/cold-monorepo/commit/90a6e30629a1c729486c58e209ba45c5768a0cdb))
+* Add code to create compliance question dependency chains. ([ab5e3b8](https://github.com/ColdPBC/cold-monorepo/commit/ab5e3b818c43020e044ca83392e19ea50d23b035))
+* Add compliance export to nest library index ([00cd102](https://github.com/ColdPBC/cold-monorepo/commit/00cd1022cbf3c00006794d65a66425d03b2a07e6))
+* Add dependency filter to compliance sections repository ([3774964](https://github.com/ColdPBC/cold-monorepo/commit/377496450180bf58eade28d6ee1c24d564afb5d6))
+* Modify 'value' column in 'organization_compliance_responses' to JSONB type ([6a44ee4](https://github.com/ColdPBC/cold-monorepo/commit/6a44ee4bbd71f8bbe12a89184d1676899162969e))
+* refactor dependency chain relations for compliance sections and questions ([bdbcd4d](https://github.com/ColdPBC/cold-monorepo/commit/bdbcd4d8b16e6e1997cef31bb733837087d08317))
+* Split compliance dependency chains into distinct tables ([73593d2](https://github.com/ColdPBC/cold-monorepo/commit/73593d2d467073a825aba487236e023d84f80e52))
+* Update ComplianceQuestionsRepository to include calculation of metrics ([a95b1ed](https://github.com/ColdPBC/cold-monorepo/commit/a95b1ed7fd68321409d2137a9c2af78246b36ddd))
+
+# [1.219.0-cold-790.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.219.0-cold-790.1...v1.219.0-cold-790.2) (2024-05-12)
 
 
 ### Features
