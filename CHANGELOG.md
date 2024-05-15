@@ -98,7 +98,7 @@
 
 * Add additional data checks and error handling in compliance model seeding ([240e4b9](https://github.com/ColdPBC/cold-monorepo/commit/240e4b9432a824e28fe20fa39decee3672a956ef))
 * Add compliance_dependency_chains model to Prisma schema and integrate it with existing models ([69e6406](https://github.com/ColdPBC/cold-monorepo/commit/69e640643be3f14386df04ab2ef3e5ea41b55523))
-* Add ComplianceModule to OrganizationComplianceResponsesModule imports ([3369515](https://github.com/ColdPBC/cold-monorepo/commit/336951517eb0f8d5f3046298d4e67b0d2e6ad460))
+* Add ComplianceRepositoryModule to OrganizationComplianceResponsesModule imports ([3369515](https://github.com/ColdPBC/cold-monorepo/commit/336951517eb0f8d5f3046298d4e67b0d2e6ad460))
 * Add dependencies filtering to getQuestionList function ([10ae00d](https://github.com/ColdPBC/cold-monorepo/commit/10ae00da7bdb94b726fa986f3fc6e1aaca460799))
 * Added compliance dependency chain models in database migration ([5c4976e](https://github.com/ColdPBC/cold-monorepo/commit/5c4976eec9b0f6df7275c93f45df1c7f9b488153))
 * Implement building of dependency chains in compliance model seeding ([2d7e611](https://github.com/ColdPBC/cold-monorepo/commit/2d7e611d7c4e3a24e84c3d16919fc2dc586b1809))
@@ -127,7 +127,7 @@
 * Add compliance processing to chat service in cold platform openai ([fc6a3a0](https://github.com/ColdPBC/cold-monorepo/commit/fc6a3a0c2c77621c02bed06824fec9161b4b2028))
 * Add compliance_dependency_chains model to Prisma schema and integrate it with existing models ([69e6406](https://github.com/ColdPBC/cold-monorepo/commit/69e640643be3f14386df04ab2ef3e5ea41b55523))
 * Add compliance_responses table with necessary fields, indices, and foreign key constraints. Added column to organization_compliance_responses table. ([dea7845](https://github.com/ColdPBC/cold-monorepo/commit/dea78456af0d52a7cba9646d0dba01a736d67f39))
-* Add ComplianceModule with repositories for managing compliance data ([981ac5a](https://github.com/ColdPBC/cold-monorepo/commit/981ac5afa160a997b117e747a5135546d9e00e8f))
+* Add ComplianceRepositoryModule with repositories for managing compliance data ([981ac5a](https://github.com/ColdPBC/cold-monorepo/commit/981ac5afa160a997b117e747a5135546d9e00e8f))
 * Add createComplianceSession method and ICFPSession interface to freeplay service ([76e1b95](https://github.com/ColdPBC/cold-monorepo/commit/76e1b955608ff5563b68035137fa2c0ee9d7ff4a))
 * Add createComplianceSession method and ICFPSession interface to freeplay service ([8068bc4](https://github.com/ColdPBC/cold-monorepo/commit/8068bc40e4f517a0285850427040742e207a73aa))
 * Add MQTT (socket API) service and RabbitMQ service to organizations module ([c359f5b](https://github.com/ColdPBC/cold-monorepo/commit/c359f5b19e0da45154daea12e5a7500bbcc8abc0))
