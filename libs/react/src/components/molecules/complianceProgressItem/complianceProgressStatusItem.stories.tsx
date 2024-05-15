@@ -35,7 +35,7 @@ export const NeedsReview: Story = {
     );
   },
   args: {
-    type: ComplianceProgressStatus.needs_review,
+    type: ComplianceProgressStatus.ai_answered,
   },
 };
 
@@ -61,6 +61,6 @@ export const Complete: Story = {
     );
   },
   args: {
-    type: ComplianceProgressStatus.complete,
+    type: ComplianceProgressStatus.user_answered,
   },
 };

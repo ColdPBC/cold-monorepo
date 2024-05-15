@@ -21,6 +21,12 @@ const _ComplianceManager = () => {
   const navigate = useNavigate();
   const [managementView, setManagementView] = useState<string>('Overview');
   const [status, setStatus] = useState<ComplianceManagerStatus>(ComplianceManagerStatus.notActivated);
+  const [complianceCounts, setComplianceCounts] = useState({
+    not_started: 0,
+    ai_answered: 0,
+    user_answered: 0,
+    bookmarked: 0,
+  });
   const { logBrowser } = useColdContext();
 
   const orgCompliances = useSWR<OrgCompliance[], any, any>(orgId ? [`/compliance_definitions/organizations/${orgId}`, 'GET'] : null, axiosFetcher);
@@ -95,6 +101,8 @@ const _ComplianceManager = () => {
         },
         status: status,
         setStatus: setStatus,
+        complianceCounts: complianceCounts,
+        setComplianceCounts: setComplianceCounts,
       }}>
       <div className={'flex flex-col w-full gap-[48px] justify-center relative mb-[40px]'}>
         <div className={'absolute top-0 w-full h-[179px]'}>

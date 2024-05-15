@@ -36,11 +36,11 @@ export const ComplianceManagerSectionProgressBar = ({ questions }: ComplianceMan
     const question = questions[index];
     let status = ComplianceProgressStatus.not_started;
     if (question.user_answered) {
-      status = ComplianceProgressStatus.complete;
+      status = ComplianceProgressStatus.user_answered;
     } else if (question.bookmarked) {
       status = ComplianceProgressStatus.bookmarked;
     } else if (question.ai_answered) {
-      status = ComplianceProgressStatus.needs_review;
+      status = ComplianceProgressStatus.ai_answered;
     }
 
     const isLast = index === totalQuestions - 1;

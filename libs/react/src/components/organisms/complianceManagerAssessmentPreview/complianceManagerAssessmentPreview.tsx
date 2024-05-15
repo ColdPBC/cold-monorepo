@@ -10,16 +10,15 @@ import { useColdContext } from '@coldpbc/hooks';
 
 export const ComplianceManagerAssessmentPreview = () => {
   const context = useContext(ColdComplianceManagerContext);
-  const { status } = context;
+  const { status, complianceCounts } = context;
   const { mqttComplianceSet } = context.data;
   const { logBrowser } = useColdContext();
 
   // todo: change this to show the actual assessment percentage and not amount of answered/amount of questions
   let totalQuestions = 0;
-  let answeredQuestions = 0;
-  forEach(mqttComplianceSet?.compliance_definition.compliance_section_groups, sectionGroup => {
-    totalQuestions += sectionGroup.question_count;
-    answeredQuestions += sectionGroup.user_answered_count;
+  const answeredQuestions = complianceCounts.user_answered;
+  forEach(complianceCounts, (count, key) => {
+    totalQuestions += count;
   });
   const percentage = totalQuestions !== 0 ? ((answeredQuestions / totalQuestions) * 100).toFixed(0) : 0;
 
@@ -32,7 +31,7 @@ export const ComplianceManagerAssessmentPreview = () => {
   });
 
   const getPercentage = () => {
-    if (status in [ComplianceManagerStatus.activated, ComplianceManagerStatus.uploadedDocuments]) {
+    if ([ComplianceManagerStatus.notActivated, ComplianceManagerStatus.activated, ComplianceManagerStatus.uploadedDocuments, ComplianceManagerStatus.startedAi].includes(status)) {
       return '--';
     } else {
       return percentage + '%';
