@@ -7,8 +7,9 @@ import { BullModule } from '@nestjs/bull';
 import {
   ColdRabbitModule,
   ComplianceAiResponsesRepository,
-  ComplianceModule,
+  ComplianceRepositoryModule,
   ComplianceResponsesRepository,
+  ComplianceSectionsCacheRepository,
   ComplianceSectionsRepository,
   MqttModule,
   MqttService,
@@ -27,9 +28,18 @@ import { ChatController } from './chat.controller';
     LangchainModule,
     FreeplayModule,
     MqttModule,
-    ComplianceModule,
+    ComplianceRepositoryModule,
   ],
   controllers: [ChatController],
-  providers: [ChatService, LangchainService, FreeplayService, MqttService, ComplianceSectionsRepository, ComplianceAiResponsesRepository, ComplianceResponsesRepository],
+  providers: [
+    ChatService,
+    LangchainService,
+    FreeplayService,
+    MqttService,
+    ComplianceSectionsRepository,
+    ComplianceAiResponsesRepository,
+    ComplianceResponsesRepository,
+    ComplianceSectionsCacheRepository,
+  ],
 })
 export class ChatModule {}
