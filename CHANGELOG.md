@@ -1,3 +1,25 @@
+# [1.219.0-cold-790.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.219.0-cold-790.3...v1.219.0-cold-790.4) (2024-05-15)
+
+
+### Bug Fixes
+
+* place new compliance flow behind feature flag ([c49173d](https://github.com/ColdPBC/cold-monorepo/commit/c49173d2ec77d1b38cc7a5ebf81774461c70f550))
+
+
+### Features
+
+* Add compliance services and repositories to chat module ([ca87b5e](https://github.com/ColdPBC/cold-monorepo/commit/ca87b5e2222cfa4c52ca0291e01c005133c639a7))
+* Add ComplianceAiResponsesRepository and its spec test ([bc109b8](https://github.com/ColdPBC/cold-monorepo/commit/bc109b87db00f6c1f370164122ef806991f77040))
+* add ComplianceModule to app.module in cold-platform-openai ([9ca5299](https://github.com/ColdPBC/cold-monorepo/commit/9ca52995f1f6c5e8261b66f8ea4951108f63ee9b))
+* Add ComplianceResponsesRepository and associated spec file ([d423126](https://github.com/ColdPBC/cold-monorepo/commit/d423126fd1824febd2fb5b1e17142f9e9244b9db))
+* Add ComplianceSectionService and corresponding unit test ([4ccc638](https://github.com/ColdPBC/cold-monorepo/commit/4ccc6382ec46403ff410f2c1c846ef52f5e0ce23))
+* Add new types for compliance responses in the compliance repository ([c6d434c](https://github.com/ColdPBC/cold-monorepo/commit/c6d434c5941fc11227bfdfd2f3e25c25815ea803))
+* Add optional secrets parameter in ColdCacheModule forRootAsync method and fallback to using SecretsService if not provided ([b821e5d](https://github.com/ColdPBC/cold-monorepo/commit/b821e5ddce85f21dbf2ccafdf97891a0795dd716))
+* Added new type definition for compliance status handling ([702aefb](https://github.com/ColdPBC/cold-monorepo/commit/702aefb2bc3364c8537bc263b19c60fc4bdf24b4))
+* Extend compliance module for new features. Add PrismaModule, ColdCacheModule, ComplianceAiResponsesRepository and ComplianceResponsesRepository to ComplianceModule. ([bbd7dec](https://github.com/ColdPBC/cold-monorepo/commit/bbd7dec0c0f3727136c1a1a555786ceaa348f0b5))
+* Implemented compliance sections and responses repositories in chat service ([002cbde](https://github.com/ColdPBC/cold-monorepo/commit/002cbde1180793b6e0ee2a1d04c8bdbfd9235124))
+* Upgrade ComplianceSectionsRepository with caching functionality ([41c9ec3](https://github.com/ColdPBC/cold-monorepo/commit/41c9ec3414eeef8fe19e79814aa646789ed237cf))
+
 # [1.219.0-cold-790.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.219.0-cold-790.2...v1.219.0-cold-790.3) (2024-05-14)
 
 
