@@ -1,8 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { BaseWorker } from '../../../worker';
 import { PrismaService } from '../../../prisma';
-import { Prisma } from '@prisma/client';
+import { compliance_questions, Prisma } from '@prisma/client';
 import { difference, sumBy, unset } from 'lodash';
+import { Cuid2Generator } from '../../../utility';
+import { ComplianceSectionsCacheRepository } from '../compliance-sections';
 
 interface Question {
   id: string;
@@ -31,7 +33,7 @@ interface Dependency {
  */
 @Injectable()
 export class ComplianceQuestionsRepository extends BaseWorker {
-  constructor(readonly prisma: PrismaService) {
+  constructor(readonly prisma: PrismaService, readonly complianceSectionsCacheRepository: ComplianceSectionsCacheRepository) {
     super(ComplianceQuestionsRepository.name);
   }
 
@@ -113,6 +115,74 @@ export class ComplianceQuestionsRepository extends BaseWorker {
     });
 
     return { compliance_questions: response, counts: metrics };
+  }
+
+  /**
+   * Create a list of compliance questions.
+   * @param {compliance_questions[]} questions - An array of questions to filter.
+   */
+  async createQuestions(questions: compliance_questions[]): Promise<any> {
+    try {
+      questions.forEach(q => (q.id = new Cuid2Generator('cq').scopedId));
+
+      const createdQuestions = await this.prisma.compliance_questions.createMany({
+        data: questions as any,
+        skipDuplicates: true,
+      });
+
+      return createdQuestions;
+    } catch (e: any) {
+      this.logger.error(`Error creating questions`, { ...e, questions });
+      throw e;
+    }
+  }
+
+  /**
+   * Creates a new compliance question.
+   *
+   * @param {compliance_questions} question - The question to be created.
+   * @return {Promise<compliance_questions>} - A Promise that resolves to the created question.
+   * @throws {Error} - If an error occurs while creating the question.
+   */
+  async createQuestion(question: compliance_questions): Promise<compliance_questions> {
+    try {
+      question.id = new Cuid2Generator('cq').scopedId;
+      const created = await this.prisma.compliance_questions.create({
+        data: {
+          ...(question as any),
+        },
+      });
+
+      this.logger.info(`Created question for compliance ${question.compliance_definition_name}`, { created });
+      return created;
+    } catch (e: any) {
+      this.logger.error(`Error creating question for compliance ${question.compliance_definition_name}`, { ...e, question });
+      throw e;
+    }
+  }
+
+  /**
+   * Updates a compliance question.
+   *
+   * @param {compliance_questions} question - The compliance question object to update.
+   * @returns {Promise<compliance_questions>} - The updated compliance question object.
+   * @throws Throws an error if there is an issue updating the question.
+   */
+  async updateQuestion(question: compliance_questions): Promise<compliance_questions> {
+    try {
+      const updated = await this.prisma.compliance_questions.update({
+        where: { id: question.id },
+        data: {
+          ...(question as any),
+        },
+      });
+
+      this.logger.info(`Updated question for compliance ${question.compliance_definition_name}`, { updated });
+      return updated;
+    } catch (e: any) {
+      this.logger.error(`Error updating question for compliance ${question.compliance_definition_name}`, { ...e, question });
+      throw e;
+    }
   }
 
   /**
