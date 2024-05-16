@@ -1,5 +1,5 @@
 import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { ComplianceQuestion } from '../../../../../compliance_questions/entities/compliance_question.entity';
+import { ComplianceQuestion } from '../../../../../compliance/compliance_questions/entities/compliance-question.entity';
 import { OrganizationComplianceResponse } from '../../entities/organization_compliance_response.entity';
 
 @Entity('organization_compliance_ai_responses')

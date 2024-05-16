@@ -8,7 +8,7 @@ export class ComplianceAiResponsesRepository extends BaseWorker {
     super(ComplianceAiResponsesRepository.name);
   }
 
-  async deleteAiResponses(organization, compliance, user) {
+  async deleteAiResponses(organization: { name: any; id: any; display_name: any }, compliance: { compliance_definition_name: any; id: any }, user: any) {
     this.logger.info(`Clearing previous ai_responses for ${organization.name}: ${compliance.compliance_definition_name}`, {
       user,
       ...compliance,
