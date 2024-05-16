@@ -22,7 +22,7 @@ export class OrganizationComplianceResponseRabbit extends BaseWorker {
     });
     this.mqtt.replyTo(`ui/${process.env.NODE_ENV}/${data.organization.id}/${data.compliance_set}`, groups);
 
-    const sections = await this.repository.getQuestionList({
+    const sections = await this.repository.getFilteredQuestionList({
       compliance_section_id: data.compliance_section_id,
       organization_id: data.organization.id,
     });
