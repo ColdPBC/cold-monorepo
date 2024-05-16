@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ComplianceQuestionsController } from './compliance_questions.controller';
-import { ComplianceQuestionsService } from './compliance_questions.service';
+import { ComplianceQuestionsController } from './compliance-questions.controller';
+import { ComplianceQuestionsService } from './compliance-questions.service';
 
 describe('ComplianceQuestionsController', () => {
   let controller: ComplianceQuestionsController;

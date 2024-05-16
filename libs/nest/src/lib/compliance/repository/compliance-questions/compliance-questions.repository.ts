@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { BaseWorker } from '../../../worker';
 import { PrismaService } from '../../../prisma';
 import { compliance_questions, Prisma } from '@prisma/client';
@@ -86,7 +86,7 @@ export class ComplianceQuestionsRepository extends BaseWorker {
                  GROUP BY cq.id, cr.organization_id, ocair.answer, ocr.value, cdc.dependency_chain, cr.compliance_definition_name`,
     )) as any;
 
-    this.logger.info('Retrieved question list', { questions });
+    this.logger.info('Retrieved filtered question list', { questions, organization_id, compliance_section_id });
 
     const start = new Date().getTime();
 
@@ -119,10 +119,75 @@ export class ComplianceQuestionsRepository extends BaseWorker {
   }
 
   /**
-   * Create a list of compliance questions.
-   * @param {compliance_questions[]} questions - An array of questions to filter.
+   * Retrieves a compliance question by its ID.
+   *
+   * @param {string} id - The ID of the question to retrieve.
+   * @returns {Promise<compliance_questions>} - The retrieved question.
+   * @throws {NotFoundException} - If the question with the specified ID is not found.
+   * @throws {Error} - If an error occurs while retrieving the question.
    */
-  async createQuestions(questions: compliance_questions[]): Promise<any> {
+  async getQuestion(id: string): Promise<compliance_questions> {
+    try {
+      const question = await this.prisma.compliance_questions.findUnique({
+        where: {
+          id,
+        },
+      });
+
+      if (!question) {
+        throw new NotFoundException(`Question not found for id ${id}`);
+      }
+
+      return question;
+    } catch (e: any) {
+      this.logger.error(`Error creating questions`, { ...e, id });
+      throw e;
+    }
+  }
+
+  /**
+   * Retrieves a question based on the compliance definition name and key.
+   *
+   * @param {Object} params - The parameters for retrieving the question.
+   * @param {string} params.compliance_definition_name - The name of the compliance definition.
+   * @param {string} params.key - The key of the question within the compliance definition.
+   *
+   * @returns {Promise<compliance_questions>} - A promise that resolves to the retrieved question.
+   * @throws {NotFoundException} - If no question is found for the given compliance definition name and key.
+   * @throws {Error} - If an error occurs while retrieving the question.
+   */
+  async getQuestionByKeyAndComplianceName({ compliance_definition_name, key }: { compliance_definition_name: string; key: string }): Promise<compliance_questions> {
+    try {
+      const question = await this.prisma.compliance_questions.findUnique({
+        where: {
+          compDefNameKey: {
+            compliance_definition_name,
+            key,
+          },
+        },
+      });
+
+      if (!question) {
+        throw new NotFoundException(`Question not found for compliance ${compliance_definition_name} and key ${key}`);
+      }
+
+      return question;
+    } catch (e: any) {
+      this.logger.error(`Error creating questions`, { ...e, compliance_definition_name, key });
+      throw e;
+    }
+  }
+
+  /**
+   * Creates multiple compliance questions in the database.
+   *
+   * @param {compliance_questions[]} questions - An array of compliance questions to be created.
+   *
+   * @return {Promise<Prisma.BatchPayload>} - A promise that resolves when the questions are created successfully.
+   *
+   * @throws {Error} - If an error occurs while creating the questions.
+   */
+  async createQuestions(questions: compliance_questions[]): Promise<Prisma.BatchPayload> {
     try {
       questions.forEach(q => (q.id = new Cuid2Generator('cq').scopedId));
 
@@ -170,9 +235,23 @@ export class ComplianceQuestionsRepository extends BaseWorker {
    * @throws Throws an error if there is an issue updating the question.
    */
   async updateQuestion(question: compliance_questions): Promise<compliance_questions> {
+    let where: any;
+
+    // If the question has an ID, use that to update the question. Otherwise, use the compliance definition name and key.
+    if (question.id) {
+      where = { id: question.id };
+    } else {
+      where = {
+        compDefNameKey: {
+          compliance_definition_name: question.compliance_definition_name,
+          key: question.key,
+        },
+      };
+    }
+
     try {
       const updated = await this.prisma.compliance_questions.update({
-        where: { id: question.id },
+        where: where,
         data: {
           ...(question as any),
         },
@@ -238,6 +317,19 @@ export class ComplianceQuestionsRepository extends BaseWorker {
     } catch (e: any) {
       this.logger.error(`Error evaluating jsonata expression: ${e.message}`, { ...e });
       return questions;
+    }
+  }
+
+  async deleteQuestion(id: string): Promise<void> {
+    try {
+      this.prisma.compliance_questions.delete({
+        where: {
+          id,
+        },
+      });
+    } catch (e: any) {
+      this.logger.error(`Error deleting question`, { ...e, id });
+      throw e;
     }
   }
 }
