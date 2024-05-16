@@ -1,6 +1,6 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { ComplianceSectionGroup } from '../../compliance_section_groups/entities/compliance_section_group.entity';
-import { OrganizationCompliance } from '../../organizations/organization_compliance/entities/organization_compliance.entity';
+import { ComplianceSectionGroup } from '../../compliance-section-groups/entities/compliance-section-group.entity';
+import { OrganizationCompliance } from '../../../organizations/organization_compliance/entities/organization_compliance.entity';
 
 @Entity('compliance_definitions')
 export class ComplianceDefinition {

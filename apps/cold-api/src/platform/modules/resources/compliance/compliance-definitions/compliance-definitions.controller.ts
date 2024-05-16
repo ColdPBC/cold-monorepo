@@ -1,21 +1,21 @@
 import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post, Put, Query, Req, UseFilters, UseGuards } from '@nestjs/common';
 import { ApiBody, ApiOAuth2, ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Span } from 'nestjs-ddtrace';
-import { ResourceValidationPipe } from '../../../pipes/resource.pipe';
+import { ResourceValidationPipe } from '../../../../pipes/resource.pipe';
 import { BaseWorker, HttpExceptionFilter, IAuthenticatedUser, JwtAuthGuard, Role, Roles, RolesGuard, SurveyResponseSchema } from '@coldpbc/nest';
-import { allRoles, bpcDecoratorOptions, coldAdminOnly } from '../_global/global.params';
-import { ComplianceDefinitionService } from './compliance_definition.service';
-import { ComplianceDefinition, ComplianceDefinitionSchema } from './compliance_definition_schema';
+import { allRoles, bpcDecoratorOptions, coldAdminOnly } from '../../_global/global.params';
+import { ComplianceDefinitionService } from './compliance-definitions.service';
+import { ComplianceDefinition, ComplianceDefinitionSchema } from './compliance-definitions.schema';
 
 @Span()
 @UseGuards(JwtAuthGuard, RolesGuard)
-@UseFilters(new HttpExceptionFilter(ComplianceController.name))
+@UseFilters(new HttpExceptionFilter(ComplianceDefinitionsController.name))
 @ApiOAuth2(['openid'])
 @ApiTags('Compliance Definitions')
 @Controller()
-export class ComplianceController extends BaseWorker {
+export class ComplianceDefinitionsController extends BaseWorker {
   constructor(private readonly complianceService: ComplianceDefinitionService) {
-    super(ComplianceController.name);
+    super(ComplianceDefinitionsController.name);
   }
 
   @Post('compliance_definitions')

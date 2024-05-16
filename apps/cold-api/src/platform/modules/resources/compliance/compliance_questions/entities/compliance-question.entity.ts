@@ -1,8 +1,8 @@
 import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
-import { ComplianceSection } from '../../compliance_sections/entities/compliance_section.entity';
-import { OrganizationComplianceResponse } from '../../organizations/organization_compliance/organization_compliance_responses/entities/organization_compliance_response.entity';
-import { OrganizationComplianceAiResponse } from '../../organizations/organization_compliance/organization_compliance_responses/organization_compliance_ai_responses/entities/organization_compliance_ai_response.entity';
-import { OrganizationComplianceQuestionBookmarks } from '../../organizations/organization_compliance/organization_compliance_bookmarks/entities/organization_compliance_bookmark.entity';
+import { ComplianceSection } from '../../compliance_sections/entities/compliance-section.entity';
+import { OrganizationComplianceResponse } from '../../../organizations/organization_compliance/organization_compliance_responses/entities/organization_compliance_response.entity';
+import { OrganizationComplianceAiResponse } from '../../../organizations/organization_compliance/organization_compliance_responses/organization_compliance_ai_responses/entities/organization_compliance_ai_response.entity';
+import { OrganizationComplianceQuestionBookmarks } from '../../../organizations/organization_compliance/organization_compliance_bookmarks/entities/organization_compliance_bookmark.entity';
 
 @Entity('compliance_questions')
 export class ComplianceQuestion {
