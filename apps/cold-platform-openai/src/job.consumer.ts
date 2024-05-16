@@ -4,7 +4,7 @@ import { Job } from 'bull';
 import OpenAI, { UnprocessableEntityError } from 'openai';
 import { AppService } from './app.service';
 import { AssistantService } from './assistant/assistant.service';
-import { BaseWorker, CacheService, DarklyService } from '@coldpbc/nest';
+import { BaseWorker, CacheService, ComplianceSectionsCacheRepository, DarklyService, MqttService } from '@coldpbc/nest';
 import { FileService } from './assistant/files/file.service';
 import { ConfigService } from '@nestjs/config';
 import { ChatService } from './chat/chat.service';
@@ -25,6 +25,8 @@ export class JobConsumer extends BaseWorker {
     readonly loader: PineconeService,
     readonly darkly: DarklyService,
     readonly chat: ChatService,
+    readonly mqtt: MqttService,
+    readonly complianceSectionsCacheRepository: ComplianceSectionsCacheRepository,
   ) {
     super(JobConsumer.name);
     this.client = new OpenAI({
