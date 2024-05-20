@@ -10,6 +10,9 @@ export type Compliance = {
   metadata: {
     [key: string]: any;
   };
+  visible: boolean;
+  order: number;
+  version: number;
 };
 
 export type OrgCompliance = {
