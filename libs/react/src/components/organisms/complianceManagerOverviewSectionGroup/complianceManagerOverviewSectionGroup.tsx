@@ -171,7 +171,7 @@ export const ComplianceManagerOverviewSectionGroup = ({ sectionGroup, position }
   };
 
   return (
-    <div className={'flex flex-col w-full gap-[36px] bg-transparent'}>
+    <div className={`flex flex-col w-full bg-transparent ${collapseOpen && 'gap-[36px]'}`}>
       <div className={'w-full flex flex-row justify-between items-center gap-[36px] cursor-pointer'} onClick={() => setCollapseOpen(!collapseOpen)}>
         <div className={'text-h3 text-tc-primary'}>{sectionGroupData.title}</div>
         <div className={'w-auto flex flex-row justify-between items-center gap-[36px]'}>

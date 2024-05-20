@@ -44,13 +44,31 @@ export const StoryMockProvider = (
     } as Auth0ProviderOptions,
     launchDarklyClientSideId: '',
     logError: (error: any, type: ErrorType, context?: object) => {},
-    logBrowser: (message: string, type: any, context?: any, error?: any) => {},
+    logBrowser: (message: string, type: any, context?: any, error?: any) => {
+      console.log({
+        message,
+        type,
+        context,
+        error,
+      });
+    },
     impersonatingOrg: impersonatingOrg,
     setImpersonatingOrg: setImpersonatingOrg,
   };
 
   const mqttTopics = props.mqttTopics ? props.mqttTopics : defaultMqttTopics;
   const mqttContextValue = mockMQTTContext(defaultMqttDataHandler, mqttTopics);
+
+  const [complianceCounts, setComplianceCounts] = React.useState<{
+    [key: string]: {
+      not_started: number;
+      ai_answered: number;
+      user_answered: number;
+      bookmarked: number;
+    };
+  }>(props.complianceManagerContext?.complianceCounts || {});
+  const [status, setStatus] = React.useState<ComplianceManagerStatus>(props.complianceManagerContext?.status || ComplianceManagerStatus.notActivated);
+  const [showOverviewModal, setShowOverviewModal] = React.useState<boolean>(props.complianceManagerContext?.showOverviewModal || false);
 
   const complianceManagerContextValue: ComplianceManagerContextType = {
     data: {
@@ -62,17 +80,13 @@ export const StoryMockProvider = (
       currentAIStatus: undefined,
       orgCompliances: undefined,
     },
-    complianceCounts: {},
-    setComplianceCounts: () => {},
-    showOverviewModal: false,
-    setShowOverviewModal: () => {},
     ...props.complianceManagerContext,
-    status: complianceManagerStatus,
-    setStatus:
-      props.complianceManagerContext?.setStatus ??
-      (status => {
-        setComplianceManagerStatus(status);
-      }),
+    status,
+    setStatus: props.complianceManagerContext?.setStatus || setStatus,
+    complianceCounts,
+    setComplianceCounts: props.complianceManagerContext?.setComplianceCounts || setComplianceCounts,
+    showOverviewModal,
+    setShowOverviewModal: props.complianceManagerContext?.setShowOverviewModal || setShowOverviewModal,
   };
 
   return (

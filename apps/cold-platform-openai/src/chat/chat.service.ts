@@ -4,7 +4,9 @@ import {
   BaseWorker,
   CacheService,
   ColdRabbitService,
+  ComplianceAiResponsesRepository,
   ComplianceResponsesRepository,
+  ComplianceSectionsCacheRepository,
   ComplianceSectionsRepository,
   Cuid2Generator,
   DarklyService,
@@ -22,7 +24,7 @@ import { ChatCompletionMessageParam } from 'openai/resources/chat/completions';
 import { RecordMetadata, ScoredPineconeRecord } from '@pinecone-database/pinecone';
 import { FPSession, FreeplayService } from '../freeplay/freeplay.service';
 import { FormattedPrompt } from 'freeplay/thin';
-import { compliance_sections, organization_compliance } from '@prisma/client';
+import { compliance_sections } from '@prisma/client';
 
 @Injectable()
 export class ChatService extends BaseWorker implements OnModuleInit {
@@ -40,28 +42,15 @@ export class ChatService extends BaseWorker implements OnModuleInit {
     readonly mqtt: MqttService,
     readonly fp: FreeplayService,
     readonly complianceSectionsRepository: ComplianceSectionsRepository,
+    readonly complianceSectionsCacheRepository: ComplianceSectionsCacheRepository,
     readonly complianceResponsesRepository: ComplianceResponsesRepository,
+    readonly complianceAiResponsesRepository: ComplianceAiResponsesRepository,
   ) {
     super(ChatService.name);
     this.openAIapiKey = this.config.getOrThrow('OPENAI_API_KEY');
   }
 
   async onModuleInit() {}
-
-  /**
-   * Reset the AI responses when re-processing a survey
-   */
-  async resetComplianceAIResponses(user, compliance: organization_compliance, organization: any) {
-    this.logger.info(`Clearing previous ai_responses for ${organization.name}: ${compliance.compliance_definition_name}`, {
-      user,
-      ...compliance,
-      organization: { id: organization.id, name: organization.name, display_name: organization.display_name },
-    });
-
-    await this.prisma.organization_compliance_ai_responses.deleteMany({
-      where: { organization_id: organization.id, organization_compliance_id: compliance.id },
-    });
-  }
 
   /**
    * Reset the AI responses when re-processing a survey
@@ -109,9 +98,9 @@ export class ChatService extends BaseWorker implements OnModuleInit {
       where: { compliance_definition_name: survey.name },
     });
 
-    await this.prisma.organization_compliance_ai_responses.deleteMany({
-      where: { organization_id: organization.id, organization_compliance_id: compliance.id },
-    });
+    if (compliance) {
+      await this.complianceAiResponsesRepository.deleteAiResponses(organization, compliance, user);
+    }
   }
 
   /**
@@ -670,7 +659,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
 
       await Promise.all(reqs);
 
-      await this.complianceSectionsRepository.clearCachedActiveSections(organization, job);
+      await this.complianceSectionsCacheRepository.clearCachedActiveSections(organization, job);
 
       this.sendMetrics('compliance', 'completed', {
         sendEvent: true,
@@ -1140,7 +1129,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
             section: section,
             key: item,
           });
-          await this.complianceSectionsRepository.setCachedActiveQuestion(item, section, organization, job);
+          await this.complianceSectionsCacheRepository.setCachedActiveQuestion(item, section, organization, job);
           // create a new run for each followup item
           const response = await this.askSurveyQuestion(item, organization.name, job.data.user, session);
 
@@ -1304,7 +1293,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
             },
             from: 'cold.platform.openai',
           });
-          await this.complianceSectionsRepository.deleteCachedActiveQuestion(item, section, organization, job);
+          await this.complianceSectionsCacheRepository.deleteCachedActiveQuestion(item, section, organization, job);
           // await job.progress(idx / items.length);
         } catch (error) {
           this.sendMetrics('survey.question', `failed`, {
@@ -1319,15 +1308,15 @@ export class ChatService extends BaseWorker implements OnModuleInit {
             },
           });
           this.logger.error(`Error processing ${section.key}.${item.key}: ${error.message}`, error);
-          await this.complianceSectionsRepository.deleteCachedActiveQuestion(item, section, organization, job);
+          await this.complianceSectionsCacheRepository.deleteCachedActiveQuestion(item, section, organization, job);
         }
       }
-      await this.complianceSectionsRepository.deleteCachedActiveSection(section, organization, job);
+      await this.complianceSectionsCacheRepository.deleteCachedActiveSection(section, organization, job);
 
       this.logger.info(`✅ Finished processing ${section.key}: ${section.title}`, { section });
       return true;
     } catch (e) {
-      await this.complianceSectionsRepository.deleteCachedActiveSection(section, organization, job);
+      await this.complianceSectionsCacheRepository.deleteCachedActiveSection(section, organization, job);
 
       this.sendMetrics('survey.section', 'failed', {
         start,

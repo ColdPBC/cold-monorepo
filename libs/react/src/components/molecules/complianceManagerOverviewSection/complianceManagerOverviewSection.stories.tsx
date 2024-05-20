@@ -25,8 +25,8 @@ export const NotActivated: Story = {
   ),
   args: {
     ...getComplianceManagerOverviewSectionsMock(),
-    setGroupCounts: () => {},
     collapseOpen: true,
+    setGroupCounts: () => {},
   },
 };
 
@@ -44,7 +44,7 @@ export const ColdAIRunning: Story = {
   ),
   args: {
     ...getComplianceManagerOverviewSectionsMock(),
-    setGroupCounts: () => {},
     collapseOpen: true,
+    setGroupCounts: () => {},
   },
 };

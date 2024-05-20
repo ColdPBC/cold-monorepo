@@ -2,6 +2,7 @@ import {
   BaseWorker,
   ComplianceQuestionsRepository,
   ComplianceSectionGroupsRepository,
+  ComplianceSectionsCacheRepository,
   ComplianceSectionsRepository,
   Cuid2Generator,
   MqttAPIComplianceSectionPayload,
@@ -17,6 +18,7 @@ export class ComplianceMQTT extends BaseWorker implements OnModuleInit {
     readonly groupRepository: ComplianceSectionGroupsRepository,
     readonly questionRepository: ComplianceQuestionsRepository,
     readonly sectionRepository: ComplianceSectionsRepository,
+    readonly sectionCacheRepository: ComplianceSectionsCacheRepository,
   ) {
     super(ComplianceMQTT.name);
   }
@@ -45,7 +47,7 @@ export class ComplianceMQTT extends BaseWorker implements OnModuleInit {
         }
         case `getComplianceSectionList`: {
           payload = JSON.parse(message) as MqttAPIComplianceSectionPayload;
-          response = await this.sectionRepository.getSectionList(payload);
+          response = await this.sectionRepository.getFilteredSectionList(payload);
           break;
         }
         case `getComplianceQuestionList`: {

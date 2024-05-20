@@ -58,7 +58,7 @@ export const ComplianceManagerOverviewSection = ({
         }),
       );
     }
-  }, [connectionStatus, name, publishMessage, client]);
+  }, [connectionStatus, name, publishMessage, client, collapseOpen]);
 
   useEffect(() => {
     const counts = data?.counts;
@@ -99,6 +99,10 @@ export const ComplianceManagerOverviewSection = ({
     }
   };
 
+  if (!collapseOpen) {
+    return <></>;
+  }
+
   if (section._count.compliance_questions === 0) {
     return null;
   }
@@ -109,10 +113,6 @@ export const ComplianceManagerOverviewSection = ({
     data,
     error,
   });
-
-  if (!collapseOpen) {
-    return <></>;
-  }
 
   const backgroundColor = isAIRunning() ? 'bg-gray-60' : 'bg-bgc-accent';
   const textColor = isAIRunning() ? 'text-tc-disabled' : 'text-tc-primary';
