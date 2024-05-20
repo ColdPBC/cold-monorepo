@@ -15,7 +15,17 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   render: args => (
-    <StoryMockProvider>
+    <StoryMockProvider
+      complianceManagerContext={{
+        complianceCounts: {
+          test: {
+            not_started: 25,
+            ai_answered: 25,
+            bookmarked: 25,
+            user_answered: 25,
+          },
+        },
+      }}>
       <ComplianceManagerQuestionnaireProgress />
     </StoryMockProvider>
   ),

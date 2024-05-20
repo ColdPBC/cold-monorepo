@@ -6,6 +6,7 @@ import { useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import { SWRSubscription } from 'swr/subscription';
 import ColdMQTTContext from '../context/coldMQTTContext';
+import { resolveNodeEnv } from '@coldpbc/fetchers';
 
 export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
   const { logBrowser } = useColdContext();
@@ -35,7 +36,7 @@ export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
         const org_id = orgId;
         const token = await getToken();
         setToken(token);
-        const env = import.meta.env.VITE_DD_ENV;
+        const env = resolveNodeEnv();
         const url = `${
           import.meta.env.VITE_MQTT_URL
         }/mqtt?x-auth0-domain=${auth0_domain}&x-amz-customauthorizer-name=${authorizer}&x-cold-org=${org_id}&x-cold-env=${env}&token=${token}`;

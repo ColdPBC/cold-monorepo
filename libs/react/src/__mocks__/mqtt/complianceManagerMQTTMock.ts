@@ -1,5 +1,5 @@
-import { find, get } from 'lodash';
-import { MQTTComplianceManagerPayload } from '@coldpbc/interfaces';
+import { filter, find, get } from 'lodash';
+import { MQTTComplianceManagerPayload, MQTTComplianceManagerPayloadComplianceQuestionList } from '@coldpbc/interfaces';
 
 export const getSectionGroupList = (args: any): MQTTComplianceManagerPayload => {
   const name = get(args, 'name', '');
@@ -19,11 +19,6 @@ export const getSectionGroupList = (args: any): MQTTComplianceManagerPayload => 
             title: 'Materials',
             metadata: null,
             compliance_definition_name: 'rei_pia_2024',
-            question_count: 23,
-            ai_answered_count: 0,
-            user_answered_count: 0,
-            bookmarked_count: 0,
-            not_started_count: 23,
           },
           {
             id: 'csg_u52xp76tclba5djc',
@@ -31,11 +26,6 @@ export const getSectionGroupList = (args: any): MQTTComplianceManagerPayload => 
             title: 'D & I',
             metadata: null,
             compliance_definition_name: 'rei_pia_2024',
-            question_count: 18,
-            ai_answered_count: 0,
-            user_answered_count: 0,
-            bookmarked_count: 0,
-            not_started_count: 18,
           },
           {
             id: 'csg_mnjg81nrtfgsphp4',
@@ -43,11 +33,6 @@ export const getSectionGroupList = (args: any): MQTTComplianceManagerPayload => 
             title: 'Practices',
             metadata: null,
             compliance_definition_name: 'rei_pia_2024',
-            question_count: 32,
-            ai_answered_count: 0,
-            user_answered_count: 0,
-            bookmarked_count: 0,
-            not_started_count: 32,
           },
           {
             id: 'csg_xcv2gzlmrrucrzr5',
@@ -55,11 +40,6 @@ export const getSectionGroupList = (args: any): MQTTComplianceManagerPayload => 
             title: 'Environment',
             metadata: null,
             compliance_definition_name: 'rei_pia_2024',
-            question_count: 20,
-            ai_answered_count: 0,
-            user_answered_count: 0,
-            bookmarked_count: 0,
-            not_started_count: 20,
           },
           {
             id: 'csg_gnawsv7bv67xumws',
@@ -67,11 +47,6 @@ export const getSectionGroupList = (args: any): MQTTComplianceManagerPayload => 
             title: 'Product',
             metadata: null,
             compliance_definition_name: 'rei_pia_2024',
-            question_count: 20,
-            ai_answered_count: 0,
-            user_answered_count: 0,
-            bookmarked_count: 0,
-            not_started_count: 20,
           },
         ],
         metadata: {
@@ -404,7 +379,7 @@ export const getSectionList = (args: any) => {
   return sectionGroupData.sections;
 };
 
-export const getQuestionList = (args: any) => {
+export const getQuestionList = (args: any): MQTTComplianceManagerPayloadComplianceQuestionList | undefined => {
   const name = get(args, 'name', '');
   const sectionGroupId = get(args, 'sectionGroupId', '');
   const sectionId = get(args, 'sectionId', '');
@@ -1518,12 +1493,22 @@ export const getQuestionList = (args: any) => {
 
   // get the questions by compliance_definition_name, compliance_section_group_id, and section_id
   const complianceData = find(mockData, item => item.name === name);
-  if (!complianceData) return [];
+  if (!complianceData) return undefined;
   const sectionGroupData = find(complianceData.section_groups, group => group.sectionGroupId === sectionGroupId);
-  if (!sectionGroupData) return [];
+  if (!sectionGroupData) return undefined;
   const sectionData = find(sectionGroupData.sections, section => section.id === sectionId);
-  if (!sectionData) return [];
-  return sectionData.questions;
+  if (!sectionData) return undefined;
+
+  return {
+    counts: {
+      total: sectionData.questions.length,
+      user_answered: filter(sectionData.questions, question => question.user_answered).length,
+      ai_answered: filter(sectionData.questions, question => question.ai_answered).length,
+      bookmarked: filter(sectionData.questions, question => question.bookmarked).length,
+      not_started: filter(sectionData.questions, question => question.not_started).length,
+    },
+    compliance_questions: sectionData.questions,
+  };
 };
 
 export const getComplianceSectionProgressBarQuestionsMock = () => {

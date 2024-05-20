@@ -19,7 +19,7 @@ export const StoryMockProvider = (
     coldContext?: ColdContextType;
     wizardContext?: WizardContextType;
     mqttTopics?: { [key: string]: (args: any) => any };
-    complianceManagerContext?: ComplianceManagerContextType;
+    complianceManagerContext?: Partial<ComplianceManagerContextType>;
   }>,
 ) => {
   const [impersonatingOrg, setImpersonatingOrg] = React.useState<string | undefined>(undefined);
@@ -42,7 +42,14 @@ export const StoryMockProvider = (
     } as Auth0ProviderOptions,
     launchDarklyClientSideId: '',
     logError: (error: any, type: ErrorType, context?: object) => {},
-    logBrowser: (message: string, type: any, context?: any, error?: any) => {},
+    logBrowser: (message: string, type: any, context?: any, error?: any) => {
+      console.log({
+        message,
+        type,
+        context,
+        error,
+      });
+    },
     impersonatingOrg: impersonatingOrg,
     setImpersonatingOrg: setImpersonatingOrg,
   };
@@ -50,15 +57,28 @@ export const StoryMockProvider = (
   const mqttTopics = props.mqttTopics ? props.mqttTopics : defaultMqttTopics;
   const mqttContextValue = mockMQTTContext(defaultMqttDataHandler, mqttTopics);
 
-  const complianceManagerContextValue = props.complianceManagerContext ?? {
+  const [complianceCounts, setComplianceCounts] = React.useState<{
+    [key: string]: {
+      not_started: number;
+      ai_answered: number;
+      user_answered: number;
+      bookmarked: number;
+    };
+  }>(props.complianceManagerContext?.complianceCounts || {});
+  const [status, setStatus] = React.useState<ComplianceManagerStatus>(props.complianceManagerContext?.status || ComplianceManagerStatus.notActivated);
+
+  const complianceManagerContextValue = {
     data: {
       mqttComplianceSet: getSectionGroupList({
         name: 'rei_pia_2024',
       }),
       name: 'rei_pia_2024',
     },
-    status: ComplianceManagerStatus.notActivated,
-    setStatus: () => {},
+    ...props.complianceManagerContext,
+    status,
+    setStatus: props.complianceManagerContext?.setStatus || setStatus,
+    complianceCounts,
+    setComplianceCounts: props.complianceManagerContext?.setComplianceCounts || setComplianceCounts,
   };
 
   return (

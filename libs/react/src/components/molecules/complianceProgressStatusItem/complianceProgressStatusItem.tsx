@@ -1,5 +1,5 @@
 import { ComplianceProgressStatus } from '@coldpbc/enums';
-import { forEach } from 'lodash';
+import { forOwn } from 'lodash';
 import { useContext } from 'react';
 import { ColdComplianceManagerContext } from '@coldpbc/context';
 import { ComplianceProgressStatusIcon } from '@coldpbc/components';
@@ -10,7 +10,7 @@ export interface ComplianceProgressItemProps {
 }
 
 export const ComplianceProgressStatusItem = ({ type }: ComplianceProgressItemProps) => {
-  const { data } = useContext(ColdComplianceManagerContext);
+  const { data, complianceCounts } = useContext(ColdComplianceManagerContext);
   const { mqttComplianceSet } = data;
   const { logBrowser } = useColdContext();
 
@@ -21,22 +21,24 @@ export const ComplianceProgressStatusItem = ({ type }: ComplianceProgressItemPro
   };
 
   let totalQuestions = 0;
-  forEach(mqttComplianceSet?.compliance_definition.compliance_section_groups, group => {
-    totalQuestions += group.question_count;
+  forOwn(complianceCounts, (value, key) => {
     switch (type) {
       case ComplianceProgressStatus.not_started:
-        currentProgressData.count += group.not_started_count;
+        currentProgressData.count += value.not_started;
         break;
-      case ComplianceProgressStatus.needs_review:
-        currentProgressData.count += group.ai_answered_count;
+      case ComplianceProgressStatus.ai_answered:
+        currentProgressData.count += value.ai_answered;
         break;
       case ComplianceProgressStatus.bookmarked:
-        currentProgressData.count += group.bookmarked_count;
+        currentProgressData.count += value.bookmarked;
         break;
-      case ComplianceProgressStatus.complete:
-        currentProgressData.count += group.user_answered_count;
+      case ComplianceProgressStatus.user_answered:
+        currentProgressData.count += value.user_answered;
         break;
     }
+    forOwn(value, count => {
+      totalQuestions += count;
+    });
   });
 
   currentProgressData.percentage = totalQuestions !== 0 ? currentProgressData.count / totalQuestions : 0;
@@ -46,13 +48,13 @@ export const ComplianceProgressStatusItem = ({ type }: ComplianceProgressItemPro
     case ComplianceProgressStatus.not_started:
       text = 'Not Started';
       break;
-    case ComplianceProgressStatus.needs_review:
+    case ComplianceProgressStatus.ai_answered:
       text = 'AI Needs Review';
       break;
     case ComplianceProgressStatus.bookmarked:
       text = 'Bookmarked';
       break;
-    case ComplianceProgressStatus.complete:
+    case ComplianceProgressStatus.user_answered:
       text = 'Complete';
       break;
   }
@@ -60,16 +62,16 @@ export const ComplianceProgressStatusItem = ({ type }: ComplianceProgressItemPro
   const getProgressIcon = (type: ComplianceProgressStatus) => {
     switch (type) {
       case ComplianceProgressStatus.not_started:
-      case ComplianceProgressStatus.complete:
+      case ComplianceProgressStatus.user_answered:
         return (
           <div className={'w-[24px] h-[24px] flex items-center justify-center'}>
             <ComplianceProgressStatusIcon type={type} />
           </div>
         );
-      case ComplianceProgressStatus.needs_review:
+      case ComplianceProgressStatus.ai_answered:
         return (
           <div className={'w-[24px] h-[24px] flex items-center justify-center'}>
-            <ComplianceProgressStatusIcon type={ComplianceProgressStatus.needs_review} iconProps={{ width: 15, height: 15 }} />
+            <ComplianceProgressStatusIcon type={ComplianceProgressStatus.ai_answered} iconProps={{ width: 15, height: 15 }} />
           </div>
         );
       case ComplianceProgressStatus.bookmarked:

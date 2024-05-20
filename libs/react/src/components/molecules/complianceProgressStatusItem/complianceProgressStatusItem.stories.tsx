@@ -2,9 +2,10 @@ import { Meta, StoryObj } from '@storybook/react';
 import { ComplianceProgressStatusItem } from '@coldpbc/components';
 import { withKnobs } from '@storybook/addon-knobs';
 import { ComplianceProgressStatus } from '@coldpbc/enums';
+import { StoryMockProvider } from '@coldpbc/mocks';
 
 const meta: Meta<typeof ComplianceProgressStatusItem> = {
-  title: 'Molecules/ComplianceProgressItem',
+  title: 'Molecules/ComplianceProgressStatusItem',
   component: ComplianceProgressStatusItem,
   tags: ['autodocs'],
   decorators: [withKnobs],
@@ -16,9 +17,11 @@ type Story = StoryObj<typeof meta>;
 export const NotStarted: Story = {
   render: args => {
     return (
-      <div className="w-[300px]">
-        <ComplianceProgressStatusItem {...args} />
-      </div>
+      <StoryMockProvider>
+        <div className="w-[300px]">
+          <ComplianceProgressStatusItem {...args} />
+        </div>
+      </StoryMockProvider>
     );
   },
   args: {
@@ -29,22 +32,26 @@ export const NotStarted: Story = {
 export const NeedsReview: Story = {
   render: args => {
     return (
-      <div className="w-[300px]">
-        <ComplianceProgressStatusItem {...args} />
-      </div>
+      <StoryMockProvider>
+        <div className="w-[300px]">
+          <ComplianceProgressStatusItem {...args} />
+        </div>
+      </StoryMockProvider>
     );
   },
   args: {
-    type: ComplianceProgressStatus.needs_review,
+    type: ComplianceProgressStatus.ai_answered,
   },
 };
 
 export const Bookmarked: Story = {
   render: args => {
     return (
-      <div className="w-[300px]">
-        <ComplianceProgressStatusItem {...args} />
-      </div>
+      <StoryMockProvider>
+        <div className="w-[300px]">
+          <ComplianceProgressStatusItem {...args} />
+        </div>
+      </StoryMockProvider>
     );
   },
   args: {
@@ -55,12 +62,14 @@ export const Bookmarked: Story = {
 export const Complete: Story = {
   render: args => {
     return (
-      <div className="w-[300px]">
-        <ComplianceProgressStatusItem {...args} />
-      </div>
+      <StoryMockProvider>
+        <div className="w-[300px]">
+          <ComplianceProgressStatusItem {...args} />
+        </div>
+      </StoryMockProvider>
     );
   },
   args: {
-    type: ComplianceProgressStatus.complete,
+    type: ComplianceProgressStatus.user_answered,
   },
 };

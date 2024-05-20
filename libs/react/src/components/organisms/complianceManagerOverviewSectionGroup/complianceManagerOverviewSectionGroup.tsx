@@ -1,12 +1,11 @@
 import { ComplianceProgressStatus, IconNames } from '@coldpbc/enums';
-import { map, orderBy } from 'lodash';
+import { forOwn, map, orderBy } from 'lodash';
 import { ColdIcon, ComplianceManagerOverviewSection, ComplianceProgressStatusIcon } from '@coldpbc/components';
 import { MQTTComplianceManagerPayloadComplianceSection, MQTTComplianceManagerPayloadComplianceSectionGroup } from '@coldpbc/interfaces';
 import { useContext, useEffect, useState } from 'react';
 import { useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
 import ColdMQTTContext from '../../../context/coldMQTTContext';
 import { ColdComplianceManagerContext } from '@coldpbc/context';
-import { Transition } from '@headlessui/react';
 import useSWRSubscription from 'swr/subscription';
 import { resolveNodeEnv } from '@coldpbc/fetchers';
 
@@ -17,9 +16,18 @@ export interface ComplianceManagerOverviewSectionGroupProps {
 
 export const ComplianceManagerOverviewSectionGroup = ({ sectionGroup, position }: ComplianceManagerOverviewSectionGroupProps) => {
   const [collapseOpen, setCollapseOpen] = useState(false);
+  const [groupCounts, setGroupCounts] = useState<{
+    [key: string]: {
+      not_started: number;
+      ai_answered: number;
+      user_answered: number;
+      bookmarked: number;
+    };
+  }>({});
   const { orgId } = useAuth0Wrapper();
   const { subscribeSWR, publishMessage, connectionStatus, client } = useContext(ColdMQTTContext);
   const context = useContext(ColdComplianceManagerContext);
+  const { setComplianceCounts } = context;
   const { name } = context.data;
   const { logBrowser } = useColdContext();
 
@@ -30,6 +38,33 @@ export const ComplianceManagerOverviewSectionGroup = ({ sectionGroup, position }
   const { data, error } = useSWRSubscription(getComplianceSectionListTopic(), subscribeSWR) as {
     data: MQTTComplianceManagerPayloadComplianceSection[] | undefined;
     error: any;
+  };
+
+  const getGroupCounts = (groupCounts: {
+    [p: string]: {
+      not_started: number;
+      ai_answered: number;
+      user_answered: number;
+      bookmarked: number;
+    };
+  }) => {
+    let not_started = 0;
+    let ai_answered = 0;
+    let user_answered = 0;
+    let bookmarked = 0;
+    forOwn(groupCounts, (value, key) => {
+      not_started += value.not_started;
+      ai_answered += value.ai_answered;
+      user_answered += value.user_answered;
+      bookmarked += value.bookmarked;
+    });
+
+    return {
+      not_started,
+      ai_answered,
+      user_answered,
+      bookmarked,
+    };
   };
 
   useEffect(() => {
@@ -54,6 +89,16 @@ export const ComplianceManagerOverviewSectionGroup = ({ sectionGroup, position }
     }
   }, []);
 
+  useEffect(() => {
+    const counts = getGroupCounts(groupCounts);
+    setComplianceCounts(prev => {
+      return {
+        ...prev,
+        [sectionGroup.id]: counts,
+      };
+    });
+  }, [groupCounts]);
+
   const orderedData = orderBy(data, ['order'], ['asc']);
 
   logBrowser('Compliance Manager Overview Section Group', 'info', {
@@ -64,22 +109,24 @@ export const ComplianceManagerOverviewSectionGroup = ({ sectionGroup, position }
     orgId,
   });
 
+  const sectionGroupCounts = getGroupCounts(groupCounts);
+
   const sectionStatuses = [
     {
       status: ComplianceProgressStatus.not_started,
-      count: sectionGroup.not_started_count,
+      count: sectionGroupCounts.not_started,
     },
     {
-      status: ComplianceProgressStatus.needs_review,
-      count: sectionGroup.ai_answered_count,
+      status: ComplianceProgressStatus.ai_answered,
+      count: sectionGroupCounts.ai_answered,
     },
     {
-      status: ComplianceProgressStatus.complete,
-      count: sectionGroup.user_answered_count,
+      status: ComplianceProgressStatus.user_answered,
+      count: sectionGroupCounts.user_answered,
     },
     {
       status: ComplianceProgressStatus.bookmarked,
-      count: sectionGroup.bookmarked_count,
+      count: sectionGroupCounts.bookmarked,
     },
   ];
 
@@ -87,14 +134,14 @@ export const ComplianceManagerOverviewSectionGroup = ({ sectionGroup, position }
 
   const getProgressIcon = (type: ComplianceProgressStatus) => {
     switch (type) {
-      case ComplianceProgressStatus.complete:
+      case ComplianceProgressStatus.user_answered:
       case ComplianceProgressStatus.not_started:
         return (
           <div className={'w-[24px] h-[24px] flex items-center justify-center'}>
             <ComplianceProgressStatusIcon type={type} />
           </div>
         );
-      case ComplianceProgressStatus.needs_review:
+      case ComplianceProgressStatus.ai_answered:
       case ComplianceProgressStatus.bookmarked:
         return (
           <div className={'w-[24px] h-[24px] flex items-center justify-center'}>
@@ -142,11 +189,19 @@ export const ComplianceManagerOverviewSectionGroup = ({ sectionGroup, position }
           </div>
         </div>
       </div>
-      <Transition className={'w-full flex flex-col gap-[36px] bg-transparent'} show={collapseOpen}>
+      <div className={'w-full flex flex-col gap-[36px] bg-transparent'}>
         {map(orderedData, (section, index) => {
-          return <ComplianceManagerOverviewSection key={`${section.id}-${index}`} section={section} groupId={sectionGroup.id} />;
+          return (
+            <ComplianceManagerOverviewSection
+              key={`${section.id}-${index}`}
+              section={section}
+              groupId={sectionGroup.id}
+              setGroupCounts={setGroupCounts}
+              collapseOpen={collapseOpen}
+            />
+          );
         })}
-      </Transition>
+      </div>
     </div>
   );
 };
