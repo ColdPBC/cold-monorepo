@@ -17,7 +17,17 @@ type Story = StoryObj<typeof meta>;
 export const NotStarted: Story = {
   render: args => {
     return (
-      <StoryMockProvider>
+      <StoryMockProvider
+        complianceManagerContext={{
+          complianceCounts: {
+            test: {
+              not_started: 25,
+              ai_answered: 25,
+              user_answered: 25,
+              bookmarked: 25,
+            },
+          },
+        }}>
         <div className="w-[300px]">
           <ComplianceProgressStatusItem {...args} />
         </div>
@@ -32,7 +42,17 @@ export const NotStarted: Story = {
 export const NeedsReview: Story = {
   render: args => {
     return (
-      <StoryMockProvider>
+      <StoryMockProvider
+        complianceManagerContext={{
+          complianceCounts: {
+            test: {
+              not_started: 25,
+              ai_answered: 25,
+              user_answered: 25,
+              bookmarked: 25,
+            },
+          },
+        }}>
         <div className="w-[300px]">
           <ComplianceProgressStatusItem {...args} />
         </div>
@@ -47,7 +67,17 @@ export const NeedsReview: Story = {
 export const Bookmarked: Story = {
   render: args => {
     return (
-      <StoryMockProvider>
+      <StoryMockProvider
+        complianceManagerContext={{
+          complianceCounts: {
+            test: {
+              not_started: 25,
+              ai_answered: 25,
+              user_answered: 25,
+              bookmarked: 25,
+            },
+          },
+        }}>
         <div className="w-[300px]">
           <ComplianceProgressStatusItem {...args} />
         </div>
@@ -62,7 +92,17 @@ export const Bookmarked: Story = {
 export const Complete: Story = {
   render: args => {
     return (
-      <StoryMockProvider>
+      <StoryMockProvider
+        complianceManagerContext={{
+          complianceCounts: {
+            test: {
+              not_started: 25,
+              ai_answered: 25,
+              user_answered: 25,
+              bookmarked: 25,
+            },
+          },
+        }}>
         <div className="w-[300px]">
           <ComplianceProgressStatusItem {...args} />
         </div>

@@ -58,7 +58,7 @@ export const ComplianceManagerOverviewSection = ({
         }),
       );
     }
-  }, [connectionStatus, name, publishMessage, client]);
+  }, [connectionStatus, name, publishMessage, client, collapseOpen]);
 
   useEffect(() => {
     const counts = data?.counts;
