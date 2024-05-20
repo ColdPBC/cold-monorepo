@@ -250,7 +250,7 @@
     "@storybook/core-server": "7.5.3",
     "@storybook/jest": "0.2.3",
     "@storybook/react": "7.5.3",
-    "@storybook/react-vite": "7.5.3",
+    "@storybook/react-vite": "8.1.1",
     "@storybook/test-runner": "0.11.0",
     "@storybook/testing-library": "^0.2.2",
     "@storybook/testing-react": "^2.0.1",
