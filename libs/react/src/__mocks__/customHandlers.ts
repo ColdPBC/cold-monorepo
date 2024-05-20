@@ -245,7 +245,8 @@ export const getActionHandler = {
 export const getCompliancePageHandler = {
   default: [
     rest.get(getApiUrl('/compliance_definitions'), (req, res, ctx) => {
-      const { name } = req.params;
+      const list = getDefaultCompliancePageMock();
+      console.log('list', list);
       return res(ctx.json(getDefaultCompliancePageMock()));
     }),
     rest.get(getApiUrl('/compliance_definitions/organizations/:orgId'), (req, res, ctx) => {

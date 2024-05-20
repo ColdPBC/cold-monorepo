@@ -35,9 +35,9 @@ const _CompliancePage = () => {
     return null;
   }
 
-  if (compliances.data && orgCompliances.data) {
-    logBrowser('Compliance data loaded', 'info', { compliances, orgCompliances });
+  logBrowser('Compliance data loaded', 'info', { compliances, orgCompliances });
 
+  if (compliances.data && orgCompliances.data) {
     if (ldFlags.showNewCompliancePageHomeCold671) {
       return (
         <ColdComplianceSetsProvider>
@@ -48,14 +48,18 @@ const _CompliancePage = () => {
       return (
         <CenterColumnContent title="Compliance">
           <div className={'w-full space-y-10'}>
-            {compliances.data.map((compliance, index) => {
-              const complianceFound = find(orgCompliances.data, { compliance_id: compliance.id });
-              return (
-                <div key={'compliance_' + index} data-testid={`compliance-${compliance.id}`}>
-                  <ComplianceOverview complianceData={compliance} orgComplianceData={complianceFound} />
-                </div>
-              );
-            })}
+            {compliances.data
+              .filter(comp => {
+                return comp.visible;
+              })
+              .map((compliance, index) => {
+                const complianceFound = find(orgCompliances.data, { compliance_id: compliance.id });
+                return (
+                  <div key={'compliance_' + index} data-testid={`compliance-${compliance.id}`}>
+                    <ComplianceOverview complianceData={compliance} orgComplianceData={complianceFound} />
+                  </div>
+                );
+              })}
           </div>
         </CenterColumnContent>
       );
