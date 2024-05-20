@@ -2,7 +2,7 @@ import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { ComplianceManagerFlowGuide } from '@coldpbc/components';
 import { getSectionGroupList, StoryMockProvider } from '@coldpbc/mocks';
-import { ComplianceManagerStatus } from '@coldpbc/enums';
+import { ComplianceManagerFlowGuideStatus, ComplianceManagerStatus } from '@coldpbc/enums';
 
 const meta: Meta<typeof ComplianceManagerFlowGuide> = {
   title: 'Organisms/ComplianceManagerFlowGuide',
@@ -23,13 +23,22 @@ export const NotActivated: Story = {
           mqttComplianceSet: getSectionGroupList({
             name: 'rei_pia_2024',
           }),
+          files: undefined,
+          orgCompliances: undefined,
+          currentAIStatus: undefined,
         },
         status: ComplianceManagerStatus.notActivated,
         setStatus: () => {},
       }}>
-      <ComplianceManagerFlowGuide />
+      <ComplianceManagerFlowGuide {...args} />
     </StoryMockProvider>
   ),
+  args: {
+    showModal: false,
+    setShowModal: () => {},
+    flowGuideStatus: ComplianceManagerFlowGuideStatus.activate,
+    setFlowGuideStatus: () => {},
+  },
 };
 
 export const Activated: Story = {
@@ -41,13 +50,22 @@ export const Activated: Story = {
           mqttComplianceSet: getSectionGroupList({
             name: 'rei_pia_2024',
           }),
+          files: undefined,
+          orgCompliances: undefined,
+          currentAIStatus: undefined,
         },
         status: ComplianceManagerStatus.activated,
         setStatus: () => {},
       }}>
-      <ComplianceManagerFlowGuide />
+      <ComplianceManagerFlowGuide {...args} />
     </StoryMockProvider>
   ),
+  args: {
+    showModal: false,
+    setShowModal: () => {},
+    flowGuideStatus: ComplianceManagerFlowGuideStatus.activate,
+    setFlowGuideStatus: () => {},
+  },
 };
 
 export const UploadedDocuments: Story = {
@@ -59,13 +77,22 @@ export const UploadedDocuments: Story = {
           mqttComplianceSet: getSectionGroupList({
             name: 'rei_pia_2024',
           }),
+          files: undefined,
+          orgCompliances: undefined,
+          currentAIStatus: undefined,
         },
         status: ComplianceManagerStatus.uploadedDocuments,
         setStatus: () => {},
       }}>
-      <ComplianceManagerFlowGuide />
+      <ComplianceManagerFlowGuide {...args} />
     </StoryMockProvider>
   ),
+  args: {
+    showModal: false,
+    setShowModal: () => {},
+    flowGuideStatus: ComplianceManagerFlowGuideStatus.activate,
+    setFlowGuideStatus: () => {},
+  },
 };
 
 export const StartedColdAI: Story = {
@@ -77,13 +104,22 @@ export const StartedColdAI: Story = {
           mqttComplianceSet: getSectionGroupList({
             name: 'rei_pia_2024',
           }),
+          files: undefined,
+          orgCompliances: undefined,
+          currentAIStatus: undefined,
         },
         status: ComplianceManagerStatus.startedAi,
         setStatus: () => {},
       }}>
-      <ComplianceManagerFlowGuide />
+      <ComplianceManagerFlowGuide {...args} />
     </StoryMockProvider>
   ),
+  args: {
+    showModal: false,
+    setShowModal: () => {},
+    flowGuideStatus: ComplianceManagerFlowGuideStatus.activate,
+    setFlowGuideStatus: () => {},
+  },
 };
 
 export const CompletedAI: Story = {
@@ -95,13 +131,22 @@ export const CompletedAI: Story = {
           mqttComplianceSet: getSectionGroupList({
             name: 'rei_pia_2024',
           }),
+          files: undefined,
+          orgCompliances: undefined,
+          currentAIStatus: undefined,
         },
         status: ComplianceManagerStatus.completedAi,
         setStatus: () => {},
       }}>
-      <ComplianceManagerFlowGuide />
+      <ComplianceManagerFlowGuide {...args} />
     </StoryMockProvider>
   ),
+  args: {
+    showModal: false,
+    setShowModal: () => {},
+    flowGuideStatus: ComplianceManagerFlowGuideStatus.activate,
+    setFlowGuideStatus: () => {},
+  },
 };
 
 export const StartedQuestions: Story = {
@@ -113,13 +158,22 @@ export const StartedQuestions: Story = {
           mqttComplianceSet: getSectionGroupList({
             name: 'rei_pia_2024',
           }),
+          files: undefined,
+          orgCompliances: undefined,
+          currentAIStatus: undefined,
         },
         status: ComplianceManagerStatus.startedQuestions,
         setStatus: () => {},
       }}>
-      <ComplianceManagerFlowGuide />
+      <ComplianceManagerFlowGuide {...args} />
     </StoryMockProvider>
   ),
+  args: {
+    showModal: false,
+    setShowModal: () => {},
+    flowGuideStatus: ComplianceManagerFlowGuideStatus.activate,
+    setFlowGuideStatus: () => {},
+  },
 };
 
 export const CompletedQuestions: Story = {
@@ -131,13 +185,22 @@ export const CompletedQuestions: Story = {
           mqttComplianceSet: getSectionGroupList({
             name: 'rei_pia_2024',
           }),
+          files: undefined,
+          orgCompliances: undefined,
+          currentAIStatus: undefined,
         },
         status: ComplianceManagerStatus.completedQuestions,
         setStatus: () => {},
       }}>
-      <ComplianceManagerFlowGuide />
+      <ComplianceManagerFlowGuide {...args} />
     </StoryMockProvider>
   ),
+  args: {
+    showModal: false,
+    setShowModal: () => {},
+    flowGuideStatus: ComplianceManagerFlowGuideStatus.activate,
+    setFlowGuideStatus: () => {},
+  },
 };
 
 export const Submitted: Story = {
@@ -149,11 +212,20 @@ export const Submitted: Story = {
           mqttComplianceSet: getSectionGroupList({
             name: 'rei_pia_2024',
           }),
+          files: undefined,
+          orgCompliances: undefined,
+          currentAIStatus: undefined,
         },
         status: ComplianceManagerStatus.submitted,
         setStatus: () => {},
       }}>
-      <ComplianceManagerFlowGuide />
+      <ComplianceManagerFlowGuide {...args} />
     </StoryMockProvider>
   ),
+  args: {
+    showModal: false,
+    setShowModal: () => {},
+    flowGuideStatus: ComplianceManagerFlowGuideStatus.activate,
+    setFlowGuideStatus: () => {},
+  },
 };

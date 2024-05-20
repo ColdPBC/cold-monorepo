@@ -149,6 +149,16 @@ module.exports = {
       height: 'height',
       width: 'width',
     },
+    keyframes: {
+      progressBar: {
+        '0%': { width: '0%' },
+        '50%': { width: '50%' },
+        '100%': { width: '100%' },
+      },
+    },
+    animation: {
+      progressBar: 'progressBar 0.5s linear infinite',
+    },
   },
   plugins: [require('flowbite/plugin'), require('@tailwindcss/forms'), require('@tailwindcss/typography')],
 };

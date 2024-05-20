@@ -24,9 +24,24 @@ export enum ComplianceManagerStatus {
   submitted = 'submitted',
 }
 
+export enum ComplianceManagerFlowGuideStatus {
+  activate = 'activate',
+  upload = 'upload',
+  startAI = 'startAI',
+  startedAI = 'startedAI',
+  restartAI = 'restartAI',
+  submitted = 'submitted',
+}
+
 export enum ComplianceProgressStatus {
   not_started = 'not_started',
   ai_answered = 'ai_answered',
   bookmarked = 'bookmarked',
   user_answered = 'user_answered',
+}
+
+export enum ComplianceOverviewModalStep {
+  activation = 'activation',
+  upload = 'upload',
+  startAI = 'startAI',
 }

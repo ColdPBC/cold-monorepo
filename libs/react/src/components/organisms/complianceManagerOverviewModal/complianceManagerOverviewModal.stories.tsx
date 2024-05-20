@@ -1,7 +1,9 @@
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
-import { ComplianceManagerOverviewModal } from '@coldpbc/components';
+import { ComplianceManagerOverviewModal, ComplianceManagerOverviewModalProps } from '@coldpbc/components';
 import { StoryMockProvider } from '@coldpbc/mocks';
+import { useState } from 'react';
+import { ComplianceManagerFlowGuideStatus, ComplianceManagerStatus } from '@coldpbc/enums';
 
 const meta: Meta<typeof ComplianceManagerOverviewModal> = {
   title: 'Organisms/ComplianceManagerOverviewModal',
@@ -13,14 +15,45 @@ const meta: Meta<typeof ComplianceManagerOverviewModal> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
-  render: args => (
-    <StoryMockProvider>
-      <ComplianceManagerOverviewModal {...args} />
-    </StoryMockProvider>
-  ),
+export const ActivateCompliance: Story = {
+  render: args => <ModalStory status={undefined} props={args} />,
   args: {
     show: true,
     setShowModal: () => {},
+    flowGuideStatus: ComplianceManagerFlowGuideStatus.activate,
+    setFlowGuideStatus: () => {},
+  },
+};
+
+const ModalStory = ({ status = ComplianceManagerStatus.notActivated, props }: { status?: ComplianceManagerStatus; props: ComplianceManagerOverviewModalProps }) => {
+  const [show, setShowModal] = useState(true);
+  const [flowGuideStatus, setFlowGuideStatus] = useState<ComplianceManagerFlowGuideStatus>(props.flowGuideStatus || ComplianceManagerFlowGuideStatus.activate);
+  return (
+    <StoryMockProvider
+      complianceManagerContext={{
+        status,
+      }}>
+      <ComplianceManagerOverviewModal {...props} setShowModal={setShowModal} show={show} flowGuideStatus={flowGuideStatus} setFlowGuideStatus={setFlowGuideStatus} />
+    </StoryMockProvider>
+  );
+};
+
+export const UploadDocuments: Story = {
+  render: args => <ModalStory status={ComplianceManagerStatus.uploadedDocuments} props={args} />,
+  args: {
+    show: true,
+    setShowModal: () => {},
+    flowGuideStatus: ComplianceManagerFlowGuideStatus.upload,
+    setFlowGuideStatus: () => {},
+  },
+};
+
+export const StartAI: Story = {
+  render: args => <ModalStory props={args} />,
+  args: {
+    show: true,
+    setShowModal: () => {},
+    flowGuideStatus: ComplianceManagerFlowGuideStatus.startAI,
+    setFlowGuideStatus: () => {},
   },
 };

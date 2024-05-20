@@ -1,5 +1,5 @@
 import { ComplianceProgressStatus, IconNames } from '@coldpbc/enums';
-import { map, orderBy } from 'lodash';
+import { forOwn, map, orderBy } from 'lodash';
 import { ColdIcon, ComplianceManagerOverviewSection, ComplianceProgressStatusIcon } from '@coldpbc/components';
 import { MQTTComplianceManagerPayloadComplianceSection, MQTTComplianceManagerPayloadComplianceSectionGroup } from '@coldpbc/interfaces';
 import { useContext, useEffect, useState } from 'react';
@@ -16,12 +16,14 @@ export interface ComplianceManagerOverviewSectionGroupProps {
 
 export const ComplianceManagerOverviewSectionGroup = ({ sectionGroup, position }: ComplianceManagerOverviewSectionGroupProps) => {
   const [collapseOpen, setCollapseOpen] = useState(false);
-  const [groupCounts, setGroupCounts] = useState({
-    not_started: 0,
-    ai_answered: 0,
-    user_answered: 0,
-    bookmarked: 0,
-  });
+  const [groupCounts, setGroupCounts] = useState<{
+    [key: string]: {
+      not_started: number;
+      ai_answered: number;
+      user_answered: number;
+      bookmarked: number;
+    };
+  }>({});
   const { orgId } = useAuth0Wrapper();
   const { subscribeSWR, publishMessage, connectionStatus, client } = useContext(ColdMQTTContext);
   const context = useContext(ColdComplianceManagerContext);
@@ -36,6 +38,33 @@ export const ComplianceManagerOverviewSectionGroup = ({ sectionGroup, position }
   const { data, error } = useSWRSubscription(getComplianceSectionListTopic(), subscribeSWR) as {
     data: MQTTComplianceManagerPayloadComplianceSection[] | undefined;
     error: any;
+  };
+
+  const getGroupCounts = (groupCounts: {
+    [p: string]: {
+      not_started: number;
+      ai_answered: number;
+      user_answered: number;
+      bookmarked: number;
+    };
+  }) => {
+    let not_started = 0;
+    let ai_answered = 0;
+    let user_answered = 0;
+    let bookmarked = 0;
+    forOwn(groupCounts, (value, key) => {
+      not_started += value.not_started;
+      ai_answered += value.ai_answered;
+      user_answered += value.user_answered;
+      bookmarked += value.bookmarked;
+    });
+
+    return {
+      not_started,
+      ai_answered,
+      user_answered,
+      bookmarked,
+    };
   };
 
   useEffect(() => {
@@ -61,12 +90,11 @@ export const ComplianceManagerOverviewSectionGroup = ({ sectionGroup, position }
   }, []);
 
   useEffect(() => {
+    const counts = getGroupCounts(groupCounts);
     setComplianceCounts(prev => {
       return {
-        not_started: prev.not_started + groupCounts.not_started,
-        ai_answered: prev.ai_answered + groupCounts.ai_answered,
-        user_answered: prev.user_answered + groupCounts.user_answered,
-        bookmarked: prev.bookmarked + groupCounts.bookmarked,
+        ...prev,
+        [sectionGroup.id]: counts,
       };
     });
   }, [groupCounts]);
@@ -81,22 +109,24 @@ export const ComplianceManagerOverviewSectionGroup = ({ sectionGroup, position }
     orgId,
   });
 
+  const sectionGroupCounts = getGroupCounts(groupCounts);
+
   const sectionStatuses = [
     {
       status: ComplianceProgressStatus.not_started,
-      count: groupCounts.not_started,
+      count: sectionGroupCounts.not_started,
     },
     {
       status: ComplianceProgressStatus.ai_answered,
-      count: groupCounts.ai_answered,
+      count: sectionGroupCounts.ai_answered,
     },
     {
       status: ComplianceProgressStatus.user_answered,
-      count: groupCounts.user_answered,
+      count: sectionGroupCounts.user_answered,
     },
     {
       status: ComplianceProgressStatus.bookmarked,
-      count: groupCounts.bookmarked,
+      count: sectionGroupCounts.bookmarked,
     },
   ];
 

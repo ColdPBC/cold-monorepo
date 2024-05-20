@@ -19,10 +19,12 @@ export const ComplianceManagerOverviewSection = ({
   groupId: string;
   setGroupCounts: React.Dispatch<
     React.SetStateAction<{
-      not_started: number;
-      ai_answered: number;
-      user_answered: number;
-      bookmarked: number;
+      [p: string]: {
+        not_started: number;
+        ai_answered: number;
+        user_answered: number;
+        bookmarked: number;
+      };
     }>
   >;
   collapseOpen: boolean;
@@ -32,7 +34,7 @@ export const ComplianceManagerOverviewSection = ({
   const totalQuestions = useRef(0);
   const context = useContext(ColdComplianceManagerContext);
   const { status } = context;
-  const { name } = context.data;
+  const { name, currentAIStatus } = context.data;
   const { logBrowser } = useColdContext();
 
   const sectionTopic = `ui/${resolveNodeEnv()}/${orgId}/${name}/${groupId}/${section.id}`;
@@ -62,23 +64,40 @@ export const ComplianceManagerOverviewSection = ({
     const counts = data?.counts;
     if (counts) {
       totalQuestions.current = counts.total;
-      console.log(counts);
       setGroupCounts(prev => {
         return {
-          not_started: prev.not_started + counts.not_started,
-          ai_answered: prev.ai_answered + counts.ai_answered,
-          user_answered: prev.user_answered + counts.user_answered,
-          bookmarked: prev.bookmarked + counts.bookmarked,
+          ...prev,
+          [section.id]: {
+            not_started: counts.not_started,
+            ai_answered: counts.ai_answered,
+            user_answered: counts.user_answered,
+            bookmarked: counts.bookmarked,
+          },
         };
       });
-      // {
-      //   not_started: counts.not_started + groupCounts.not_started,
-      //     needs_review: counts.ai_answered + groupCounts.needs_review,
-      //   complete: counts.user_answered + groupCounts.complete,
-      //   bookmarked: counts.bookmarked + groupCounts.bookmarked,
-      // }
     }
   }, [data]);
+
+  const isAIRunning = () => {
+    if (status === ComplianceManagerStatus.startedAi) {
+      if (currentAIStatus === undefined) {
+        return true;
+      } else {
+        // todo: look for section in currentAIStatus. if found return true, else return false
+        return false;
+      }
+    } else {
+      return false;
+    }
+  };
+
+  const canNavigateToQuestionnaire = () => {
+    if (isAIRunning() || status === ComplianceManagerStatus.notActivated || status === ComplianceManagerStatus.submitted) {
+      return false;
+    } else {
+      return true;
+    }
+  };
 
   if (section._count.compliance_questions === 0) {
     return null;
@@ -95,22 +114,26 @@ export const ComplianceManagerOverviewSection = ({
     return <></>;
   }
 
+  const backgroundColor = isAIRunning() ? 'bg-gray-60' : 'bg-bgc-accent';
+  const textColor = isAIRunning() ? 'text-tc-disabled' : 'text-tc-primary';
+
   return (
     <div
-      className={`flex flex-col w-full rounded-[8px] py-[16px] px-[24px] gap-[30px] bg-bgc-accent ${
-        status === ComplianceManagerStatus.notActivated ? 'cursor-default' : 'cursor-pointer'
-      }`}
+      className={`flex flex-col w-full rounded-[8px] py-[16px] px-[24px] gap-[30px] ${!canNavigateToQuestionnaire() ? 'cursor-default' : 'cursor-pointer'} ${backgroundColor}`}
       onClick={() => {
-        if (status === ComplianceManagerStatus.notActivated) {
+        if (!canNavigateToQuestionnaire()) {
           return;
         }
         // todo: navigate to section in questionnaire
       }}
       key={`${groupId}-${section.id}`}>
       <div className={'w-full flex flex-row justify-between items-center'}>
-        <div className={'text-h4 text-tc-primary'}>{section.title}</div>
+        <div className={'flex flex-row gap-[16px] justify-start items-center'}>
+          <div className={`text-h4 ${textColor}`}>{section.title}</div>
+          {status === ComplianceManagerStatus.startedAi && <div className={'text-body text-tc-disabled'}>Cold AI Running</div>}
+        </div>
         <div className={'flex flex-row gap-[8px] items-center'}>
-          <div className={'w-[105px] h-full flex items-center text-body text-start text-tc-secondary'}>{totalQuestions.current} Questions</div>
+          <div className={`w-[105px] h-full flex items-center text-body text-start ${textColor}`}>{totalQuestions.current} Questions</div>
           <ArrowRightIcon className={'w-[24px] h-[24px] text-tc-primary'} />
         </div>
       </div>

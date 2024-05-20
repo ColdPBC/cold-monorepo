@@ -1,53 +1,63 @@
-import { flowbiteThemeOverride } from '@coldpbc/themes';
-import { Modal as FBModal } from 'flowbite-react';
-import { BaseButton, Card, ColdSparkleIcon } from '@coldpbc/components';
-import { useContext } from 'react';
+import { ActivationCompleteModalBody, BaseButton, Card, ColdSparkleIcon, StartAIComplianceModal, UploadComplianceDocumentsModal } from '@coldpbc/components';
+import { MouseEvent, useContext, useEffect, useRef, useState } from 'react';
 import { ColdComplianceManagerContext } from '@coldpbc/context';
-import { ComplianceManagerStatus, IconNames } from '@coldpbc/enums';
+import { ComplianceManagerFlowGuideStatus, ComplianceManagerStatus, IconNames } from '@coldpbc/enums';
 import { ArrowUpIcon } from '@heroicons/react/24/solid';
-import { ActivationCompleteModalBody } from './activationCompleteModalBody';
+import { startComplianceAI } from '@coldpbc/lib';
+import { useAuth0Wrapper } from '@coldpbc/hooks';
 
 export interface ComplianceManagerOverviewModalProps {
   show: boolean;
   setShowModal: (show: boolean) => void;
+  flowGuideStatus: ComplianceManagerFlowGuideStatus;
+  setFlowGuideStatus: (status: ComplianceManagerFlowGuideStatus) => void;
 }
 
 export const ComplianceManagerOverviewModal = (props: ComplianceManagerOverviewModalProps) => {
-  const { show, setShowModal } = props;
-  const { status, data } = useContext(ColdComplianceManagerContext);
+  const { show, setShowModal, flowGuideStatus, setFlowGuideStatus } = props;
+  const { orgId } = useAuth0Wrapper();
+  const { data, status, setStatus } = useContext(ColdComplianceManagerContext);
+  const [buttonDisabled, setButtonDisabled] = useState<boolean>(false);
+  const modalRef = useRef<HTMLDivElement>(null);
 
-  const { mqttComplianceSet } = data;
+  useEffect(() => {
+    console.log(modalRef.current?.clientHeight);
+    console.log(modalRef.current?.clientWidth);
+  }, [modalRef.current]);
+
+  const { mqttComplianceSet, files, name } = data;
 
   const complianceDefinition = mqttComplianceSet?.compliance_definition;
 
   const getModalHeaderIcon = () => {
-    if (status === ComplianceManagerStatus.notActivated) {
+    if (flowGuideStatus === ComplianceManagerFlowGuideStatus.activate) {
       return null;
     }
 
-    switch (status) {
-      case ComplianceManagerStatus.activated:
+    switch (flowGuideStatus) {
+      case ComplianceManagerFlowGuideStatus.upload:
         return <ArrowUpIcon className={'w-[40px] h-[40px]'} />;
-      case ComplianceManagerStatus.uploadedDocuments:
+      case ComplianceManagerFlowGuideStatus.startAI:
         return <ColdSparkleIcon />;
     }
   };
 
   const getModalHeader = () => {
     let titleText = '';
-    switch (status) {
-      case ComplianceManagerStatus.notActivated:
+    switch (flowGuideStatus) {
+      case ComplianceManagerFlowGuideStatus.activate:
         titleText = 'Activation Complete';
         break;
-      case ComplianceManagerStatus.activated:
+      case ComplianceManagerFlowGuideStatus.upload:
         titleText = 'Upload Documents';
         break;
-      case ComplianceManagerStatus.uploadedDocuments:
+      case ComplianceManagerFlowGuideStatus.startAI:
+      case ComplianceManagerFlowGuideStatus.restartAI:
         titleText = 'Start ✨Cold AI';
         break;
     }
     return (
-      <div className={'absolute top-0 left-0 bg-gray-30 px-[24px] w-full flex flex-row justify-start items-center gap-[16px] min-h-[104px]'}>
+      <div className={'absolute z-20 top-0 left-0 bg-gray-30 px-[24px] w-full flex flex-row justify-between items-center gap-[16px] min-h-[104px]'}>
         <div className={'flex flex-row gap-[16px] justify-start items-center'}>
           <div className={'w-[80px] h-[80px] flex items-center justify-center rounded-full bg-gray-50'}>
             <img src={complianceDefinition?.logo_url} className={'w-[60px] h-[60px] invert'} alt={'Compliance Logo'} />
@@ -61,24 +71,32 @@ export const ComplianceManagerOverviewModal = (props: ComplianceManagerOverviewM
 
   const getModalBody = () => {
     let component = null;
-    switch (status) {
-      case ComplianceManagerStatus.notActivated:
-        component = <ActivationCompleteModalBody />;
-      case ComplianceManagerStatus.activated:
+    switch (flowGuideStatus) {
+      case ComplianceManagerFlowGuideStatus.activate:
+        component = <ActivationCompleteModalBody setButtonDisabled={setButtonDisabled} />;
+        break;
+      case ComplianceManagerFlowGuideStatus.upload:
+        component = <UploadComplianceDocumentsModal setButtonDisabled={setButtonDisabled} />;
+        break;
+      case ComplianceManagerFlowGuideStatus.startAI:
+      case ComplianceManagerFlowGuideStatus.restartAI:
+        component = <StartAIComplianceModal />;
+        break;
     }
-    return <div className={'w-full h-auto flex justify-center items-center'}>{component}</div>;
+    return <div className={'h-full w-full z-20'}>{component}</div>;
   };
 
   const getUpNextText = () => {
     let text = '';
-    switch (status) {
-      case ComplianceManagerStatus.notActivated:
+    switch (flowGuideStatus) {
+      case ComplianceManagerFlowGuideStatus.activate:
         text = 'Up next: Upload Documents';
         break;
-      case ComplianceManagerStatus.activated:
+      case ComplianceManagerFlowGuideStatus.upload:
         text = 'Up next: Start ✨Cold AI';
         break;
-      case ComplianceManagerStatus.uploadedDocuments:
+      case ComplianceManagerFlowGuideStatus.startAI:
+      case ComplianceManagerFlowGuideStatus.restartAI:
         text = '';
         break;
     }
@@ -87,23 +105,48 @@ export const ComplianceManagerOverviewModal = (props: ComplianceManagerOverviewM
 
   const getFooterButton = () => {
     let label = '';
-    const onClick = () => {};
-    const iconRight = false;
+    let onClick = () => {};
+    let iconRight = false;
 
-    switch (status) {
-      case ComplianceManagerStatus.notActivated:
-      case ComplianceManagerStatus.activated:
+    switch (flowGuideStatus) {
+      case ComplianceManagerFlowGuideStatus.activate:
         label = 'Continue';
-      case ComplianceManagerStatus.uploadedDocuments:
+        iconRight = true;
+        onClick = () => {
+          setFlowGuideStatus(ComplianceManagerFlowGuideStatus.upload);
+        };
+        break;
+      case ComplianceManagerFlowGuideStatus.upload:
+        label = 'Continue';
+        iconRight = true;
+        onClick = async () => {
+          setFlowGuideStatus(ComplianceManagerFlowGuideStatus.startAI);
+          await files?.mutate();
+          setStatus(ComplianceManagerStatus.uploadedDocuments);
+        };
+        break;
+      case ComplianceManagerFlowGuideStatus.startAI:
+      case ComplianceManagerFlowGuideStatus.restartAI:
         label = 'Start Automation';
+        onClick = async () => {
+          if (orgId) {
+            setButtonDisabled(true);
+            await startComplianceAI(name, orgId);
+            setButtonDisabled(false);
+            setFlowGuideStatus(ComplianceManagerFlowGuideStatus.startedAI);
+            setStatus(ComplianceManagerStatus.startedAi);
+            setShowModal(false);
+          }
+        };
+        break;
     }
 
-    return <BaseButton onClick={onClick} label={label} iconRight={iconRight ? IconNames.ColdRightArrowIcon : undefined} />;
+    return <BaseButton onClick={onClick} disabled={buttonDisabled} label={label} iconRight={iconRight ? IconNames.ColdRightArrowIcon : undefined} />;
   };
 
   const getModalFooter = () => {
     return (
-      <div className={'absolute bottom-0 left-0 w-full min-h-[98px] p-[24px] flex flex-row justify-between items-center'}>
+      <div className={'absolute z-20 bottom-0 left-0 w-full min-h-[98px] p-[24px] flex flex-row justify-between items-center'}>
         <div
           className={'cursor-pointer text-button'}
           onClick={() => {
@@ -119,22 +162,35 @@ export const ComplianceManagerOverviewModal = (props: ComplianceManagerOverviewM
     );
   };
 
-  return (
-    <FBModal
-      dismissible
-      show={show}
-      onClose={() => props.setShowModal(false)}
-      theme={flowbiteThemeOverride.modal}
-      style={{
-        boxShadow: '0px 8px 32px 8px rgba(0, 0, 0, 0.70)',
-      }}
-      size={'4xl'}>
-      <Card className="p-0 h-full w-full flex flex-col relative pt-[104px] pb-[98px]" glow={false}>
-        <img src={complianceDefinition?.image_url} className={'absolute top-0 left-0 object-contain'} alt={'Compliance Background'} />
-        {getModalHeader()}
-        {getModalBody()}
-        {getModalFooter()}
-      </Card>
-    </FBModal>
-  );
+  const closeModal = (event: MouseEvent<HTMLDivElement>) => {
+    // make sure the modal is not closed when the user clicks on the modal itself
+    if (modalRef.current?.contains(event.target as Node)) {
+      return;
+    }
+    setShowModal(false);
+  };
+
+  if (show) {
+    return (
+      <div
+        className={'h-screen w-screen fixed p-[100px] top-0 left-0 z-50 flex flex-col justify-center items-center justify-items-center bg-bgc-backdrop bg-opacity-90'}
+        onClick={event => closeModal(event)}>
+        <Card className="p-0 h-full w-full flex flex-col relative pb-[98px] pt-[104px]" glow={false} innerRef={modalRef}>
+          <div
+            // src={complianceDefinition?.image_url}
+            className={'absolute top-0 left-0 w-full h-full'}
+            // alt={'Compliance Background'}
+            style={{
+              background: `url(${complianceDefinition?.image_url}) center / cover no-repeat`,
+            }}></div>
+          <div className={'absolute top-0 left-0 h-full w-full bg-opacity-50 bg-gradient-to-t from-gray-30 to-gray-5'}></div>
+          {getModalHeader()}
+          {getModalBody()}
+          {getModalFooter()}
+        </Card>
+      </div>
+    );
+  } else {
+    return null;
+  }
 };

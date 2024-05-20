@@ -1,7 +1,7 @@
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { ComplianceManagerOverviewStatusCard } from '@coldpbc/components';
-import { getSectionGroupList, StoryMockProvider } from '@coldpbc/mocks';
+import { StoryMockProvider } from '@coldpbc/mocks';
 import { ComplianceManagerStatus } from '@coldpbc/enums';
 
 const meta: Meta<typeof ComplianceManagerOverviewStatusCard> = {
@@ -14,9 +14,12 @@ const meta: Meta<typeof ComplianceManagerOverviewStatusCard> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
+export const NotActivated: Story = {
   render: args => (
-    <StoryMockProvider>
+    <StoryMockProvider
+      complianceManagerContext={{
+        status: ComplianceManagerStatus.notActivated,
+      }}>
       <ComplianceManagerOverviewStatusCard />
     </StoryMockProvider>
   ),
@@ -27,13 +30,72 @@ export const Activated: Story = {
     <StoryMockProvider
       complianceManagerContext={{
         status: ComplianceManagerStatus.activated,
-        setStatus: () => {},
-        data: {
-          mqttComplianceSet: getSectionGroupList({
-            name: 'rei_pia_2024',
-          }),
-          name: 'rei_pia_2024',
-        },
+      }}>
+      <ComplianceManagerOverviewStatusCard />
+    </StoryMockProvider>
+  ),
+};
+
+export const Uploaded: Story = {
+  render: args => (
+    <StoryMockProvider
+      complianceManagerContext={{
+        status: ComplianceManagerStatus.uploadedDocuments,
+      }}>
+      <ComplianceManagerOverviewStatusCard />
+    </StoryMockProvider>
+  ),
+};
+
+export const StartedAI: Story = {
+  render: args => (
+    <StoryMockProvider
+      complianceManagerContext={{
+        status: ComplianceManagerStatus.startedAi,
+      }}>
+      <ComplianceManagerOverviewStatusCard />
+    </StoryMockProvider>
+  ),
+};
+
+export const CompletedAI: Story = {
+  render: args => (
+    <StoryMockProvider
+      complianceManagerContext={{
+        status: ComplianceManagerStatus.completedAi,
+      }}>
+      <ComplianceManagerOverviewStatusCard />
+    </StoryMockProvider>
+  ),
+};
+
+export const StartedQuestions: Story = {
+  render: args => (
+    <StoryMockProvider
+      complianceManagerContext={{
+        status: ComplianceManagerStatus.startedQuestions,
+      }}>
+      <ComplianceManagerOverviewStatusCard />
+    </StoryMockProvider>
+  ),
+};
+
+export const CompletedQuestions: Story = {
+  render: args => (
+    <StoryMockProvider
+      complianceManagerContext={{
+        status: ComplianceManagerStatus.completedQuestions,
+      }}>
+      <ComplianceManagerOverviewStatusCard />
+    </StoryMockProvider>
+  ),
+};
+
+export const Submitted: Story = {
+  render: args => (
+    <StoryMockProvider
+      complianceManagerContext={{
+        status: ComplianceManagerStatus.submitted,
       }}>
       <ComplianceManagerOverviewStatusCard />
     </StoryMockProvider>

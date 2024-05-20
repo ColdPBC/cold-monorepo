@@ -4,7 +4,7 @@ import { HexColors } from '@coldpbc/themes';
 import { Tooltip } from 'flowbite-react';
 import { useContext } from 'react';
 import { ColdComplianceManagerContext } from '@coldpbc/context';
-import { forEach } from 'lodash';
+import { forEach, forOwn } from 'lodash';
 import { ComplianceManagerStatus } from '@coldpbc/enums';
 import { useColdContext } from '@coldpbc/hooks';
 
@@ -16,9 +16,12 @@ export const ComplianceManagerAssessmentPreview = () => {
 
   // todo: change this to show the actual assessment percentage and not amount of answered/amount of questions
   let totalQuestions = 0;
-  const answeredQuestions = complianceCounts.user_answered;
+  let answeredQuestions = 0;
   forEach(complianceCounts, (count, key) => {
-    totalQuestions += count;
+    answeredQuestions += count.user_answered;
+    forOwn(count, count => {
+      totalQuestions += count;
+    });
   });
   const percentage = totalQuestions !== 0 ? ((answeredQuestions / totalQuestions) * 100).toFixed(0) : 0;
 

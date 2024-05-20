@@ -12,5 +12,6 @@ export const resolveAPIUrl = (): string => {
 };
 
 export const resolveNodeEnv = (): string => {
+  return 'qaalib';
   return get(import.meta.env, 'VITE_DD_ENV', 'development');
 };

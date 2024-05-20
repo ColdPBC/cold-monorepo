@@ -21,27 +21,27 @@ export const ComplianceProgressStatusItem = ({ type }: ComplianceProgressItemPro
   };
 
   let totalQuestions = 0;
-
   forOwn(complianceCounts, (value, key) => {
-    totalQuestions += value;
+    switch (type) {
+      case ComplianceProgressStatus.not_started:
+        currentProgressData.count += value.not_started;
+        break;
+      case ComplianceProgressStatus.ai_answered:
+        currentProgressData.count += value.ai_answered;
+        break;
+      case ComplianceProgressStatus.bookmarked:
+        currentProgressData.count += value.bookmarked;
+        break;
+      case ComplianceProgressStatus.user_answered:
+        currentProgressData.count += value.user_answered;
+        break;
+    }
+    forOwn(value, count => {
+      totalQuestions += count;
+    });
   });
 
   currentProgressData.percentage = totalQuestions !== 0 ? currentProgressData.count / totalQuestions : 0;
-
-  switch (type) {
-    case ComplianceProgressStatus.not_started:
-      currentProgressData.count = complianceCounts.not_started;
-      break;
-    case ComplianceProgressStatus.ai_answered:
-      currentProgressData.count = complianceCounts.ai_answered;
-      break;
-    case ComplianceProgressStatus.bookmarked:
-      currentProgressData.count = complianceCounts.bookmarked;
-      break;
-    case ComplianceProgressStatus.user_answered:
-      currentProgressData.count = complianceCounts.user_answered;
-      break;
-  }
 
   let text = '';
   switch (type) {

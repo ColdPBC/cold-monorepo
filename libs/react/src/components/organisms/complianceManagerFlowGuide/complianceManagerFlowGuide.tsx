@@ -1,34 +1,62 @@
 import { BaseButton, Card, CompletedBanner, Spinner } from '@coldpbc/components';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { ColdComplianceManagerContext } from '@coldpbc/context';
-import { ComplianceManagerStatus, GlobalSizes, IconNames } from '@coldpbc/enums';
+import { ComplianceManagerFlowGuideStatus, ComplianceManagerStatus, GlobalSizes, IconNames } from '@coldpbc/enums';
 import { HexColors } from '@coldpbc/themes';
 
-export const ComplianceManagerFlowGuide = () => {
-  const { status } = useContext(ColdComplianceManagerContext);
+interface ComplianceManagerFlowGuideProps {
+  showModal: boolean;
+  setShowModal: (show: boolean) => void;
+  flowGuideStatus: ComplianceManagerFlowGuideStatus;
+  setFlowGuideStatus: (status: ComplianceManagerFlowGuideStatus) => void;
+}
 
-  const getHeaderText = () => {
-    let text = '';
-    switch (status) {
+export const ComplianceManagerFlowGuide = ({ showModal, setShowModal, flowGuideStatus, setFlowGuideStatus }: ComplianceManagerFlowGuideProps) => {
+  const { status: managerStatus } = useContext(ColdComplianceManagerContext);
+
+  useEffect(() => {
+    switch (managerStatus) {
       case ComplianceManagerStatus.activated:
-        text = 'Start Uploading Documents';
-        break;
       case ComplianceManagerStatus.uploadedDocuments:
-        text = 'Start ✨Cold AI';
+        setFlowGuideStatus(ComplianceManagerFlowGuideStatus.upload);
         break;
       case ComplianceManagerStatus.startedAi:
-        text = '✨Cold AI in progress';
+        setFlowGuideStatus(ComplianceManagerFlowGuideStatus.startedAI);
         break;
       case ComplianceManagerStatus.completedAi:
       case ComplianceManagerStatus.startedQuestions:
       case ComplianceManagerStatus.completedQuestions:
-        text = 'Re-run ✨Cold AI';
+        setFlowGuideStatus(ComplianceManagerFlowGuideStatus.restartAI);
         break;
       case ComplianceManagerStatus.submitted:
-        text = 'Congrats! We’ll submit this on your behalf.';
+        setFlowGuideStatus(ComplianceManagerFlowGuideStatus.submitted);
         break;
       default:
       case ComplianceManagerStatus.notActivated:
+        setFlowGuideStatus(ComplianceManagerFlowGuideStatus.activate);
+    }
+  }, []);
+
+  const getHeaderText = () => {
+    let text = '';
+    switch (flowGuideStatus) {
+      case ComplianceManagerFlowGuideStatus.upload:
+        text = 'Start Uploading Documents';
+        break;
+      case ComplianceManagerFlowGuideStatus.startAI:
+        text = 'Start ✨Cold AI';
+        break;
+      case ComplianceManagerFlowGuideStatus.startedAI:
+        text = '✨Cold AI in progress';
+        break;
+      case ComplianceManagerFlowGuideStatus.restartAI:
+        text = 'Re-run ✨Cold AI';
+        break;
+      case ComplianceManagerFlowGuideStatus.submitted:
+        text = 'Congrats! We’ll submit this on your behalf.';
+        break;
+      default:
+      case ComplianceManagerFlowGuideStatus.activate:
         text = 'Want to start this assessment?';
     }
     return <div className={'w-full text-h4'}>{text}</div>;
@@ -36,53 +64,88 @@ export const ComplianceManagerFlowGuide = () => {
 
   const getSubText = () => {
     let text = '';
-    switch (status) {
-      case ComplianceManagerStatus.activated:
+    switch (flowGuideStatus) {
+      case ComplianceManagerFlowGuideStatus.upload:
         text = 'You can fill in the questionnaire now if you like, but we recommend uploading documents and using ✨Cold AI to help get you started.';
         break;
-      case ComplianceManagerStatus.uploadedDocuments:
+      case ComplianceManagerFlowGuideStatus.startAI:
         text = 'Once you start the AI, Cold will start answering questions for your organization. Start reviewing these generated answers once a section is complete. ';
         break;
-      case ComplianceManagerStatus.startedAi:
+      case ComplianceManagerFlowGuideStatus.startedAI:
         text = 'Start reviewing these generated answers once a section is complete. Remember, you can always edit or remove an AI response.';
         break;
-      case ComplianceManagerStatus.completedAi:
-      case ComplianceManagerStatus.startedQuestions:
-      case ComplianceManagerStatus.completedQuestions:
+      case ComplianceManagerFlowGuideStatus.restartAI:
         text = 'Run the AI automation again to see your answers update.';
         break;
-      case ComplianceManagerStatus.submitted:
+      case ComplianceManagerFlowGuideStatus.submitted:
         text = 'We have submitted this assessment on your behalf';
         break;
       default:
-      case ComplianceManagerStatus.notActivated:
+      case ComplianceManagerFlowGuideStatus.activate:
         text = 'You can browse the questions now if you like, but once you activate you can start answering use ✨Cold AI to help.';
     }
     return <div className={'w-full text-body'}>{text}</div>;
   };
 
   const getGuideAction = () => {
-    // dont wrap the words in the button. use 1 line
     const buttonClassName = 'text-nowrap';
-    switch (status) {
-      case ComplianceManagerStatus.notActivated:
-        return <BaseButton onClick={() => {}} label={'Activate'} iconRight={IconNames.ColdRightArrowIcon} className={buttonClassName} />;
-      case ComplianceManagerStatus.activated:
-        return <BaseButton onClick={() => {}} label={'Upload'} iconRight={IconNames.ColdRightArrowIcon} className={buttonClassName} />;
-      case ComplianceManagerStatus.uploadedDocuments:
-        return <BaseButton onClick={() => {}} label={'Start ✨Cold AI'} iconRight={IconNames.ColdRightArrowIcon} className={buttonClassName} />;
-      case ComplianceManagerStatus.startedAi:
+    switch (flowGuideStatus) {
+      case ComplianceManagerFlowGuideStatus.activate:
+        return (
+          <BaseButton
+            onClick={() => {
+              setFlowGuideStatus(ComplianceManagerFlowGuideStatus.activate);
+              setShowModal(true);
+            }}
+            label={'Activate'}
+            iconRight={IconNames.ColdRightArrowIcon}
+            className={buttonClassName}
+          />
+        );
+      case ComplianceManagerFlowGuideStatus.upload:
+        return (
+          <BaseButton
+            onClick={() => {
+              setFlowGuideStatus(ComplianceManagerFlowGuideStatus.upload);
+              setShowModal(true);
+            }}
+            label={'Upload'}
+            iconRight={IconNames.ColdRightArrowIcon}
+            className={buttonClassName}
+          />
+        );
+      case ComplianceManagerFlowGuideStatus.startAI:
+        return (
+          <BaseButton
+            onClick={() => {
+              setFlowGuideStatus(ComplianceManagerFlowGuideStatus.startAI);
+              setShowModal(true);
+            }}
+            label={'Start ✨Cold AI'}
+            iconRight={IconNames.ColdRightArrowIcon}
+            className={buttonClassName}
+          />
+        );
+      case ComplianceManagerFlowGuideStatus.startedAI:
         return <Spinner size={GlobalSizes.large} />;
-      case ComplianceManagerStatus.completedAi:
-      case ComplianceManagerStatus.startedQuestions:
-      case ComplianceManagerStatus.completedQuestions:
-        return <BaseButton onClick={() => {}} label={'Re-Start ✨Cold AI'} iconRight={IconNames.ColdRightArrowIcon} className={buttonClassName} />;
+      case ComplianceManagerFlowGuideStatus.restartAI:
+        return (
+          <BaseButton
+            onClick={() => {
+              setFlowGuideStatus(ComplianceManagerFlowGuideStatus.restartAI);
+              setShowModal(true);
+            }}
+            label={'Re-Start ✨Cold AI'}
+            iconRight={IconNames.ColdRightArrowIcon}
+            className={buttonClassName}
+          />
+        );
       default:
         return null;
     }
   };
 
-  if (status === ComplianceManagerStatus.submitted) {
+  if (flowGuideStatus === ComplianceManagerFlowGuideStatus.submitted) {
     return (
       <CompletedBanner className={'h-auto p-4'}>
         {getHeaderText()}
@@ -92,14 +155,10 @@ export const ComplianceManagerFlowGuide = () => {
   }
 
   const getGlowColor = () => {
-    // if the status is uploadedDocuments, startedAi, completedAi, startedQuestions, completedQuestions then return yellow
-    // if not return undefined
-    switch (status) {
-      case ComplianceManagerStatus.uploadedDocuments:
-      case ComplianceManagerStatus.startedAi:
-      case ComplianceManagerStatus.completedAi:
-      case ComplianceManagerStatus.startedQuestions:
-      case ComplianceManagerStatus.completedQuestions:
+    switch (flowGuideStatus) {
+      case ComplianceManagerFlowGuideStatus.startAI:
+      case ComplianceManagerFlowGuideStatus.startedAI:
+      case ComplianceManagerFlowGuideStatus.restartAI:
         return HexColors.yellow.DEFAULT;
       default:
         return undefined;

@@ -19,11 +19,13 @@ export const StoryMockProvider = (
     coldContext?: ColdContextType;
     wizardContext?: WizardContextType;
     mqttTopics?: { [key: string]: (args: any) => any };
-    complianceManagerContext?: ComplianceManagerContextType;
+    complianceManagerContext?: Partial<ComplianceManagerContextType>;
   }>,
 ) => {
   const [impersonatingOrg, setImpersonatingOrg] = React.useState<string | undefined>(undefined);
-
+  const [complianceManagerStatus, setComplianceManagerStatus] = React.useState<ComplianceManagerStatus>(
+    props.complianceManagerContext?.status ?? ComplianceManagerStatus.notActivated,
+  );
   useEffect(() => {
     worker && worker.use(...(props.handlers ?? []));
     return () => {
@@ -50,15 +52,27 @@ export const StoryMockProvider = (
   const mqttTopics = props.mqttTopics ? props.mqttTopics : defaultMqttTopics;
   const mqttContextValue = mockMQTTContext(defaultMqttDataHandler, mqttTopics);
 
-  const complianceManagerContextValue = props.complianceManagerContext ?? {
+  const complianceManagerContextValue: ComplianceManagerContextType = {
     data: {
       mqttComplianceSet: getSectionGroupList({
         name: 'rei_pia_2024',
       }),
       name: 'rei_pia_2024',
+      files: undefined,
+      currentAIStatus: undefined,
+      orgCompliances: undefined,
     },
-    status: ComplianceManagerStatus.notActivated,
-    setStatus: () => {},
+    complianceCounts: {},
+    setComplianceCounts: () => {},
+    showOverviewModal: false,
+    setShowOverviewModal: () => {},
+    ...props.complianceManagerContext,
+    status: complianceManagerStatus,
+    setStatus:
+      props.complianceManagerContext?.setStatus ??
+      (status => {
+        setComplianceManagerStatus(status);
+      }),
   };
 
   return (

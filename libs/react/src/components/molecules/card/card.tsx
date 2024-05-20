@@ -17,6 +17,7 @@ export interface CardProps {
   'data-testid'?: string;
   onClick?: () => void;
   glowColor?: string;
+  innerRef?: React.Ref<HTMLDivElement>;
 }
 
 export function Card(props: PropsWithChildren<CardProps>) {
@@ -27,7 +28,8 @@ export function Card(props: PropsWithChildren<CardProps>) {
     <div
       className={twMerge('flex flex-col p-4 items-start gap-6 self-stretch bg-bgc-elevated rounded-2xl text-tc-primary relative overflow-hidden', props.className)}
       data-testid={props['data-testid']}
-      onClick={props.onClick}>
+      onClick={props.onClick}
+      ref={props.innerRef}>
       {glow && (
         <div className="w-[400px] h-20 justify-center flex items-center absolute top-[-40px] left-1/2 -translate-x-1/2 pointer-events-none">
           <div

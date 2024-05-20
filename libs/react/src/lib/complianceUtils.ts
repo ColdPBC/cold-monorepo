@@ -1,6 +1,8 @@
 import { SurveyPayloadType } from '@coldpbc/interfaces';
 import { forOwn, isUndefined } from 'lodash';
 import { HexColors } from '@coldpbc/themes';
+import { axiosFetcher } from '@coldpbc/fetchers';
+import { ComplianceManagerStatus } from '@coldpbc/enums';
 
 export const getComplianceProgressForSurvey = (survey: SurveyPayloadType) => {
   let totalQuestions = 0;
@@ -50,4 +52,20 @@ export const getTermString = (term: string) => {
     default:
       return '';
   }
+};
+
+export const startComplianceAI = async (name: string, orgId: string) => {
+  return await axiosFetcher([`/compliance_definitions/${name}/organizations/${orgId}`, 'PUT']);
+};
+
+export const isComplianceStatusPassed = (state: ComplianceManagerStatus, managerStatus: ComplianceManagerStatus) => {
+  const enumArray = Object.values(ComplianceManagerStatus);
+  // check if the state is either the same or before the managerStatus
+  return enumArray.indexOf(state) < enumArray.indexOf(managerStatus);
+};
+
+export const isComplianceStatusReached = (state: ComplianceManagerStatus, managerStatus: ComplianceManagerStatus) => {
+  const enumArray = Object.values(ComplianceManagerStatus);
+  // check if the state is either the same or before the managerStatus
+  return enumArray.indexOf(state) <= enumArray.indexOf(managerStatus);
 };

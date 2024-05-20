@@ -135,7 +135,6 @@ export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
   const subscribeToTopic = (topic: string, client: mqtt.MqttClient | null) => {
     if (client) {
       client.subscribe(topic, (err, granted) => {
-        console.log('Subscribed to topic', topic, err, granted);
         if (err) {
           logBrowser('Error subscribing to topic ' + topic, 'error', { err }, err);
         } else {
@@ -166,11 +165,11 @@ export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
               topic,
               payload: JSON.parse(payload.toString()),
             });
-            console.log({
-              key,
-              topic,
-              payload: JSON.parse(payload.toString()),
-            });
+            // console.log({
+            //   key,
+            //   topic,
+            //   payload: JSON.parse(payload.toString()),
+            // });
             return JSON.parse(payload.toString());
           }
         });
