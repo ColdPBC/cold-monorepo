@@ -17,7 +17,7 @@ import { DatadogTraceModule } from 'nestjs-ddtrace';
 import { S3Module, S3Service, SecretsModule, SecretsService } from './aws';
 import { RedisServiceConfig } from './utility';
 import { MqttModule } from './mqtt';
-import { ComplianceRepositoryModule } from './compliance';
+import { ComplianceRepositoryModule } from './repositories';
 
 @Module({
   imports: [MqttModule, ComplianceRepositoryModule],
