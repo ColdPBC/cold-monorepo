@@ -5,7 +5,7 @@ import { BaseWorker, IAuthenticatedUser, Roles } from '@coldpbc/nest';
 import { IntegrationBodySchema } from '../../integrations/examples/integration_examples';
 import { OrganizationIntegrationsService } from './organization.integrations.service';
 
-@Controller()
+@Controller('organizations/:orgId')
 export class OrganizationIntegrationsController extends BaseWorker {
   constructor(private readonly orgIntegrationsService: OrganizationIntegrationsService) {
     super(OrganizationIntegrationsController.name);
@@ -20,7 +20,7 @@ export class OrganizationIntegrationsController extends BaseWorker {
   @ApiParam(orgIdDecoratorOptions)
   @Roles(...coldAndCompanyAdmins)
   @HttpCode(200)
-  @Get('organizations/:orgId/integrations')
+  @Get('integrations')
   getOrganizationIntegrations(
     @Param('orgId') orgId: string,
     @Req()
@@ -44,7 +44,7 @@ export class OrganizationIntegrationsController extends BaseWorker {
   @ApiQuery(bpcDecoratorOptions)
   @ApiParam(orgIdDecoratorOptions)
   @ApiBody(IntegrationBodySchema)
-  @Post('organizations/:orgId/integrations')
+  @Post('integrations')
   @HttpCode(201)
   createIntegration(
     @Param('orgId') orgId: string,
@@ -72,7 +72,7 @@ export class OrganizationIntegrationsController extends BaseWorker {
   @ApiQuery(bpcDecoratorOptions)
   @ApiParam(orgIdDecoratorOptions)
   @ApiBody(IntegrationBodySchema)
-  @Put('organizations/:orgId/integrations')
+  @Put('integrations')
   @HttpCode(201)
   activateIntegration(
     @Param('orgId') orgId: string,
@@ -100,7 +100,7 @@ export class OrganizationIntegrationsController extends BaseWorker {
   @ApiQuery(bpcDecoratorOptions)
   @ApiParam(orgIdDecoratorOptions)
   @ApiBody(IntegrationBodySchema)
-  @Post('organizations/:orgId/facilities/:facId/integrations')
+  @Post('facilities/:facId/integrations')
   @HttpCode(201)
   createFacilityIntegration(
     @Param('orgId') orgId: string,
