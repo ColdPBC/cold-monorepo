@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ComplianceSectionGroupsService } from './compliance_section_groups.service';
+import { ComplianceSectionGroupsService } from './compliance-section-groups.service';
 
 describe('ComplianceSectionGroupsService', () => {
   let service: ComplianceSectionGroupsService;

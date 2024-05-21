@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ComplianceSectionGroupsController } from './compliance_section_groups.controller';
-import { ComplianceSectionGroupsService } from './compliance_section_groups.service';
+import { ComplianceSectionGroupsController } from './compliance-section-groups.controller';
+import { ComplianceSectionGroupsService } from './compliance-section-groups.service';
 
 describe('ComplianceSectionGroupsController', () => {
   let controller: ComplianceSectionGroupsController;

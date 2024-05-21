@@ -36,12 +36,19 @@ export class ComplianceQuestionsService extends BaseWorker {
    * @param {string} compliance_definition_name - The name of the compliance definition.
    *
    * @param compliance_section_id<string>
-   * @param filter<boolean>
    * @returns {Promise<Array<Question>>} - A promise that resolves to an array of Question objects representing the compliance questions found.
    */
-  findAll({ compliance_definition_name, compliance_section_id, filter }: { compliance_definition_name?: string; compliance_section_id?: string; filter?: boolean }) {
+  findAll({
+    compliance_definition_name,
+    compliance_section_id,
+    compliance_section_group_id,
+  }: {
+    compliance_definition_name?: string;
+    compliance_section_id?: string;
+    compliance_section_group_id?: string;
+  }) {
     if (!compliance_definition_name && !compliance_section_id) throw new BadRequestException('you must provide either compliance_definition_name or compliance_section_id');
-    return this.complianceQuestionsRepository.getQuestionList({ compliance_definition_name, compliance_section_id, filter });
+    return this.complianceQuestionsRepository.getQuestionList({ compliance_section_id, compliance_section_group_id, compliance_definition_name });
   }
 
   /**
