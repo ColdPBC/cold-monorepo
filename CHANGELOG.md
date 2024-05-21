@@ -1,3 +1,10 @@
+## [1.223.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.223.0...v1.223.1) (2024-05-21)
+
+
+### Bug Fixes
+
+* getQuestionList was not filtering on orgId in joins ([501fc20](https://github.com/ColdPBC/cold-monorepo/commit/501fc205ab62300f9e9727f753bd797000f717d3))
+
 # [1.223.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.222.0...v1.223.0) (2024-05-15)
 
 
