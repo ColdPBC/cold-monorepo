@@ -63,7 +63,6 @@ export class ComplianceResponsesRepository extends BaseWorker {
           id: new Cuid2Generator('ocr').scopedId,
           organization_compliance_id: compliance.id,
           compliance_question_id: org_response.compliance_question_id,
-          organization_compliance_ai_response_id: aiResponseEntity.id,
           value: org_response.value,
         },
         update: {
