@@ -7,7 +7,7 @@ import {
   ComplianceSectionGroupsRepository,
   ComplianceSectionsCacheRepository,
   ComplianceSectionsRepository,
-} from './repository';
+} from './compliance';
 import { CacheService, ColdCacheModule } from '../cache';
 
 @Module({
