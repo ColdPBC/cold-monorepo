@@ -11,7 +11,7 @@ import { AnyFilesInterceptor } from '@nestjs/platform-express';
 @ApiOAuth2(['openid', 'email', 'profile'])
 @ApiTags('Organizations')
 @UseFilters(new HttpExceptionFilter(OrganizationFilesController.name))
-@Controller('organizations')
+@Controller('organizations/:orgId/files')
 export class OrganizationFilesController implements OnModuleInit {
   multerConfig: any;
 
@@ -40,13 +40,13 @@ export class OrganizationFilesController implements OnModuleInit {
     };
   }
 
-  @Get(':orgId/files')
+  @Get()
   @Roles(...allRoles)
   async getFiles(@Param('orgId') orgId: string, @Req() req: { user: IAuthenticatedUser }, @Query('bpc') bpc: boolean) {
     return this.orgFiles.getFiles(req, orgId, bpc);
   }
 
-  @Delete(':orgId/files/:id')
+  @Delete(':id')
   @Roles(...coldAndCompanyAdmins)
   async deleteFile(
     @Param('orgId') orgId: string,
@@ -59,7 +59,7 @@ export class OrganizationFilesController implements OnModuleInit {
     return this.orgFiles.deleteFile(req, orgId, Array.isArray(fileId) ? fileId : [fileId]);
   }
 
-  @Post(':orgId/files')
+  @Post()
   @Roles(...allRoles)
   @UseInterceptors(AnyFilesInterceptor())
   async uploadFile(
