@@ -1,3 +1,10 @@
+## [1.225.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.225.1...v1.225.2) (2024-05-21)
+
+
+### Bug Fixes
+
+* final issue with incorrect counts ([#437](https://github.com/ColdPBC/cold-monorepo/issues/437)) ([1cd1d0b](https://github.com/ColdPBC/cold-monorepo/commit/1cd1d0b2874761f4c0c957372c4a352e32395849))
+* properly process array values in dependency filter ([581d8a9](https://github.com/ColdPBC/cold-monorepo/commit/581d8a9a6100043e17cdfbec962c1c5fe467fd4a))
 
 ## [1.225.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.225.0...v1.225.1) (2024-05-21)
 
