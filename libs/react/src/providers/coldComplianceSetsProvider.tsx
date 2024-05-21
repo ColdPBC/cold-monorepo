@@ -26,7 +26,7 @@ export const ColdComplianceSetsProvider = ({ children }: PropsWithChildren) => {
       <ColdCompliancePageContext.Provider
         value={{
           data: {
-            complianceSets: complianceSets.data,
+            complianceSets: complianceSets.data.filter(compliance => compliance.visible),
             orgComplianceSets: orgCompliances.data,
           },
           filter,

@@ -43,12 +43,7 @@ export const StoryMockProvider = (
     launchDarklyClientSideId: '',
     logError: (error: any, type: ErrorType, context?: object) => {},
     logBrowser: (message: string, type: any, context?: any, error?: any) => {
-      console.log({
-        message,
-        type,
-        context,
-        error,
-      });
+      console.log({ message, type, context, error });
     },
     impersonatingOrg: impersonatingOrg,
     setImpersonatingOrg: setImpersonatingOrg,
