@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { BaseWorker } from '../../../worker';
 import { PrismaService } from '../../../prisma';
 import { compliance_questions, Prisma } from '@prisma/client';
@@ -38,12 +38,13 @@ export class ComplianceQuestionsRepository extends BaseWorker {
   }
 
   /**
-   * Retrieves a list of questions for a given compliance section.
+   * Retrieves a list of questions with responses for a given compliance section.
    *
    * @param payload - The payload containing the compliance section ID.
    * @return {Promise<any>} - A promise that resolves to the list of questions.
+   * @param filter
    */
-  async getQuestionList({ compliance_section_id, organization_id }): Promise<any> {
+  async getFilteredQuestionList({ compliance_section_id, organization_id }, filter?: boolean): Promise<any> {
     const questions = (await this.prisma.$queryRaw(
       Prisma.sql`SELECT cq.id,
                         cq.prompt,
@@ -90,7 +91,8 @@ export class ComplianceQuestionsRepository extends BaseWorker {
 
     const start = new Date().getTime();
 
-    const response = await this.filterQuestions(questions);
+    const response = filter ? await this.filterQuestions(questions) : questions;
+
     const end = new Date().getTime();
     const diff = difference(questions, response);
 
@@ -109,13 +111,63 @@ export class ComplianceQuestionsRepository extends BaseWorker {
         return item.bookmarked ? 1 : 0;
       }),
     };
-    console.log(`Filtering questions took ${end - start}ms`, {
-      originalCount: questions.length,
-      filteredCount: response.length,
-      diff,
-    });
+
+    if (filter)
+      console.log(`Filtering questions took ${end - start}ms`, {
+        originalCount: questions.length,
+        filteredCount: response.length,
+        diff,
+      });
 
     return { compliance_questions: response, counts: metrics };
+  }
+
+  /**
+   * Retrieves a list of questions for a given compliance section.
+   *
+   * @param payload - The payload containing the compliance section ID.
+   * @return {Promise<any>} - A promise that resolves to the list of questions.
+   * @param filter
+   */
+  async getQuestionList({ compliance_section_id, compliance_section_group_id, compliance_definition_name }): Promise<any> {
+    const questions = await this.prisma.compliance_questions.findMany({
+      where: {
+        compliance_section_id,
+        compliance_definition_name,
+      },
+      select: {
+        id: true,
+        prompt: true,
+        order: true,
+        key: true,
+        compliance_question_dependency_chain: true,
+        compliance_section: {
+          select: {
+            id: true,
+            key: true,
+            title: true,
+            metadata: true,
+            order: true,
+            compliance_definition_name: true,
+            dependency_expression: true,
+            compliance_section_dependency_chains: true,
+            section_group: {
+              select: {
+                id: true,
+                order: true,
+                title: true,
+                compliance_definition_name: true,
+                metadata: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    this.logger.info('Retrieved filtered question list', { questions, compliance_section_id });
+
+    return { compliance_questions: questions };
   }
 
   /**
