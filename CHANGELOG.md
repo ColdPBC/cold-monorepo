@@ -1,3 +1,11 @@
+# [1.225.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.224.0...v1.225.0) (2024-05-21)
+
+
+### Features
+
+* add visible filter to compliance page ([0f20977](https://github.com/ColdPBC/cold-monorepo/commit/0f209771d0e6acf10340c994a7a0adbc5fc26cc5))
+* also filter on new compliance page ([a43e8c7](https://github.com/ColdPBC/cold-monorepo/commit/a43e8c7880822cac781d0c8da2283d77123837ac))
+
 # [1.224.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.223.1...v1.224.0) (2024-05-21)
 
 
