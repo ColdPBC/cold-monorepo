@@ -4,7 +4,7 @@ import { postInviteOwnerExample } from '../examples/organization.examples';
 import { ApiBody, ApiOperation, ApiParam, ApiQuery } from '@nestjs/swagger';
 import { InvitationsService } from './invitations.service';
 
-@Controller('organizations')
+@Controller('organizations/:orgId')
 export class InvitationsController extends BaseWorker {
   constructor(private readonly inviteService: InvitationsService) {
     super(InvitationsController.name);
@@ -18,7 +18,7 @@ export class InvitationsController extends BaseWorker {
    * @param inviteUserDto
    * @param suppressEmail
    */
-  @Post(`:orgId/invitation`)
+  @Post('invitation')
   @Roles(...coldAndCompanyAdmins)
   @ApiOperation({
     summary: 'Invite User',
@@ -61,7 +61,7 @@ export class InvitationsController extends BaseWorker {
    * @param req
    * @param bpc
    */
-  @Delete(':orgId/invitations/:invId')
+  @Delete('invitations/:invId')
   @ApiParam(orgIdDecoratorOptions)
   @ApiParam(invIdDecoratorOptions)
   @ApiQuery(bpcDecoratorOptions)
