@@ -19,15 +19,24 @@ export class ComplianceSectionsRepository extends BaseWorker implements OnModule
   }
 
   /**
-   * Retrieves an unfiltered list of sections based on the provided compliance_section_group_id.
+   * Retrieves a compliance section based on the provided compliance definition name and section key.
    *
-   * @param compliance_section_group_id - The ID of the compliance section group.
-   * @returns Promise{Array} - An array of section objects that match the provided compliance_section_group_id.
+   * @param groupId
+   * @param {string} compliance_definition_name - The name of the compliance definition used to filter the sections.
+   *
+   * @param key
+   * @param filter
+   * @param questions
+   * @returns {Promise<Array<Object>>} - A Promise that resolves to an array of compliance section objects.
    */
-  async getSectionList({ compliance_section_group_id }): Promise<Array<any>> {
-    const sections = (await this.prisma.compliance_sections.findMany({
+  async getSectionByComplianceAndKey(compliance_definition_name: string, groupId: string, key: string, filter?: boolean, questions?: boolean): Promise<compliance_sections> {
+    const sections = this.prisma.compliance_sections.findUnique({
       where: {
-        compliance_section_group_id: compliance_section_group_id,
+        compliance_section_group_id: groupId,
+        compDefNameSectionKey: {
+          compliance_definition_name: compliance_definition_name,
+          key: key,
+        },
       },
       select: {
         id: true,
@@ -38,15 +47,116 @@ export class ComplianceSectionsRepository extends BaseWorker implements OnModule
         compliance_section_group_id: true,
         compliance_definition_name: true,
         compliance_section_dependency_chains: true,
+        compliance_questions: questions
+          ? {
+              select: {
+                id: true,
+                key: true,
+                order: true,
+                prompt: true,
+                component: true,
+                tooltip: true,
+                placeholder: true,
+                rubric: true,
+                options: true,
+                question_summary: true,
+                coresponding_question: true,
+                compliance_question_dependency_chain: true,
+              },
+            }
+          : false,
         _count: {
           select: {
             compliance_questions: true,
           },
         },
       },
-    })) as unknown as compliance_sections[];
+    }) as unknown as compliance_sections;
+
+    if (filter) {
+      return this.filterSections([sections])[0];
+    }
 
     return sections;
+  }
+
+  async getSectionByComplianceAndId(compliance_definition_name: string, groupId: string, id: string, filter?: boolean, questions?: boolean): Promise<compliance_sections> {
+    const sections = this.prisma.compliance_sections.findUnique({
+      where: {
+        compliance_section_group_id: groupId,
+        compliance_definition_name: compliance_definition_name,
+        id: id,
+      },
+      select: {
+        id: true,
+        key: true,
+        title: true,
+        metadata: true,
+        order: true,
+        compliance_section_group_id: true,
+        compliance_definition_name: true,
+        compliance_section_dependency_chains: true,
+        compliance_questions: questions
+          ? {
+              select: {
+                id: true,
+                key: true,
+                order: true,
+                prompt: true,
+                component: true,
+                tooltip: true,
+                placeholder: true,
+                rubric: true,
+                options: true,
+                question_summary: true,
+                coresponding_question: true,
+                compliance_question_dependency_chain: true,
+              },
+            }
+          : false,
+        _count: {
+          select: {
+            compliance_questions: true,
+          },
+        },
+      },
+    }) as unknown as compliance_sections;
+
+    if (filter) {
+      return this.filterSections([sections])[0];
+    }
+
+    return sections;
+  }
+
+  /**
+   * Retrieves a list of compliance sections based on the provided compliance definition name.
+   *
+   *
+   * @returns {Promise<Array<Object>>} - A Promise that resolves to an array of compliance section objects.
+   * @param name
+   * @param filter
+   * @param questions
+   */
+  async getSectionListByCompliance(name: string, filter?: boolean, questions?: boolean): Promise<Array<any>> {
+    return this.getSectionList({ compliance_definition_name: name }, filter, questions);
+  }
+
+  /**
+   * Retrieves an unfiltered list of sections based on the provided compliance_section_group_id.
+   *
+   * @param compliance_definition_name
+   * @param compliance_section_group_id - The ID of the compliance section group.
+   * @param filter
+   * @param questions
+   * @returns Promise{Array} - An array of section objects that match the provided compliance_section_group_id.
+   */
+  async getSectionListByGroup({ compliance_definition_name, compliance_section_group_id }, filter?: boolean, questions?: boolean): Promise<Array<any>> {
+    return this.getSectionList({ compliance_definition_name, compliance_section_group_id }, filter, questions);
+  }
+
+  async getSectionListByComplianceAndGroup(name: string, groupId: string, filter?: boolean, questions?: boolean): Promise<Array<any>> {
+    return this.getSectionList({ compliance_definition_name: name, compliance_section_group_id: groupId }, filter, questions);
   }
 
   /**
@@ -54,32 +164,12 @@ export class ComplianceSectionsRepository extends BaseWorker implements OnModule
    *
    * @param compliance_section_group_id - The ID of the compliance section group.
    *
+   * @param filter
+   * @param questions
    * @returns Promise{Array} - An array of section objects that match the provided compliance_section_group_id.
    */
-  async getFilteredSectionList({ compliance_section_group_id }): Promise<Array<any>> {
-    const sections = (await this.prisma.compliance_sections.findMany({
-      where: {
-        compliance_section_group_id: compliance_section_group_id,
-      },
-      select: {
-        id: true,
-        key: true,
-        title: true,
-        metadata: true,
-        order: true,
-        compliance_section_group_id: true,
-        compliance_definition_name: true,
-        compliance_section_dependency_chains: true,
-        _count: {
-          select: {
-            compliance_questions: true,
-          },
-        },
-      },
-    })) as unknown as compliance_sections[];
-
-    const filtered = await this.filterSections(sections);
-    return filtered;
+  async getFilteredSectionList({ compliance_section_group_id }, filter = true, questions?: boolean): Promise<Array<any>> {
+    return this.getSectionList({ compliance_section_group_id }, filter, questions);
   }
 
   /**
@@ -105,6 +195,7 @@ export class ComplianceSectionsRepository extends BaseWorker implements OnModule
               value: true,
             },
           }) as any;
+
           if (!dependentQuestion) {
             return false;
           }
@@ -118,5 +209,60 @@ export class ComplianceSectionsRepository extends BaseWorker implements OnModule
     ]);
 
     return response;
+  }
+
+  /**
+   * Retrieves a list of sections based on the specified condition.
+   *
+   * @param {object} where - The condition to filter sections.
+   * @param {boolean} [filter] - Optional parameter to specify whether to filter sections or not.
+   * @param questions
+   * @returns {Promise<Array<object>>} - An array of section objects.
+   *
+   * @private
+   */
+  private async getSectionList(where: any, filter?: boolean, questions?: boolean): Promise<Array<any>> {
+    const sections = (await this.prisma.compliance_sections.findMany({
+      where: { ...where },
+      select: {
+        id: true,
+        key: true,
+        title: true,
+        metadata: true,
+        order: true,
+        compliance_section_group_id: true,
+        compliance_definition_name: true,
+        compliance_section_dependency_chains: true,
+        compliance_questions: questions
+          ? {
+              select: {
+                id: true,
+                key: true,
+                order: true,
+                prompt: true,
+                component: true,
+                tooltip: true,
+                placeholder: true,
+                rubric: true,
+                options: true,
+                question_summary: true,
+                coresponding_question: true,
+                compliance_question_dependency_chain: true,
+              },
+            }
+          : false,
+        _count: {
+          select: {
+            compliance_questions: true,
+          },
+        },
+      },
+    })) as unknown as compliance_sections[];
+
+    if (filter) {
+      return this.filterSections(sections);
+    }
+
+    return sections;
   }
 }
