@@ -194,19 +194,27 @@ export class ComplianceQuestionsRepository extends BaseWorker {
    */
   async filterQuestions(questions: Question[]): Promise<Question[]> {
     const dependenciesMet = function (question: Question): boolean {
+      unset(question, 'ai_answer');
+
       if (!question.dependency_chain || !question.dependency_chain.length) {
+        unset(question, 'dependency_chain');
+
         return true;
       }
 
       for (const dependency of question.dependency_chain) {
         const dependentQuestion = questions.find(q => q.id === dependency.dependent_question_id);
+
         if (!dependentQuestion) {
           return false;
         }
+
         const dependentAnswer = dependentQuestion.user_answer;
+
         if (!dependentAnswer) {
           return false;
         }
+
         if (Array.isArray(dependentAnswer)) {
           for (const answer of dependentAnswer) {
             if (!dependency?.dependent_question_values?.includes(answer)) {
@@ -219,7 +227,7 @@ export class ComplianceQuestionsRepository extends BaseWorker {
           }
         }
       }
-      unset(question, 'ai_answer');
+
       unset(question, 'dependency_chain');
       return true;
     };
