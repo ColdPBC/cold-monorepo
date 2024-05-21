@@ -119,6 +119,7 @@ const _ComplianceManager = () => {
     managementView,
     orgCompliances,
     topic,
+    currentAIStatus,
   });
 
   if (!data) {

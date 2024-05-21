@@ -9,7 +9,6 @@ export const UploadComplianceDocumentsModal = ({ setButtonDisabled }: { setButto
   const { mqttComplianceSet } = data;
   const uploadedDocuments = data?.files?.data || [];
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [files, setFiles] = useState(uploadedDocuments);
   const [newFiles, setNewFiles] = useState<
     {
       uploaded: boolean;
@@ -19,7 +18,15 @@ export const UploadComplianceDocumentsModal = ({ setButtonDisabled }: { setButto
 
   const handleChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const newFiles = Array.from(event.target.files || []);
-    setFiles(prevFiles => [...prevFiles, ...newFiles]);
+    setNewFiles(prevFiles => [
+      ...prevFiles,
+      ...map(newFiles, file => {
+        return {
+          uploaded: false,
+          contents: file,
+        };
+      }),
+    ]);
   };
 
   const uploadButton = async () => {
@@ -41,12 +48,12 @@ export const UploadComplianceDocumentsModal = ({ setButtonDisabled }: { setButto
   };
 
   useEffect(() => {
-    if (files.length > 0 || newFiles.length > 0) {
+    if (uploadedDocuments.length > 0 || newFiles.length > 0) {
       setButtonDisabled(false);
     } else {
       setButtonDisabled(true);
     }
-  }, [files, newFiles]);
+  }, [uploadedDocuments, newFiles]);
 
   return (
     <div className={'flex flex-row w-full h-full p-[24px] self-stretch items-stretch'}>
@@ -89,7 +96,7 @@ export const UploadComplianceDocumentsModal = ({ setButtonDisabled }: { setButto
               />
             );
           })}
-          {map(files, file => {
+          {map(uploadedDocuments, file => {
             return (
               <ComplianceOverviewFileUploaderItem
                 file={{

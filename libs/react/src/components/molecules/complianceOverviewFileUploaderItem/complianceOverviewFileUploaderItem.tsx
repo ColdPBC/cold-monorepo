@@ -1,12 +1,11 @@
+import React, { useEffect } from 'react';
 import { useAuth0Wrapper } from '@coldpbc/hooks';
 import { format } from 'date-fns';
-import { ColdIcon } from '@coldpbc/components';
+import { ColdIcon, ErrorFallback } from '@coldpbc/components';
 import { IconNames } from '@coldpbc/enums';
-import React, { useEffect } from 'react';
-import { forEach } from 'lodash';
 import { AxiosRequestConfig, isAxiosError } from 'axios';
 import { axiosFetcher } from '@coldpbc/fetchers';
-import { files } from '@storybook/addon-knobs';
+import { withErrorBoundary } from 'react-error-boundary';
 
 export interface ComplianceOverviewFileUploaderItemProps {
   file: {
@@ -16,7 +15,7 @@ export interface ComplianceOverviewFileUploaderItemProps {
   };
 }
 
-export const ComplianceOverviewFileUploaderItem = ({ file }: ComplianceOverviewFileUploaderItemProps) => {
+const _ComplianceOverviewFileUploaderItem = ({ file }: ComplianceOverviewFileUploaderItemProps) => {
   const { orgId } = useAuth0Wrapper();
   const [uploading, setUploading] = React.useState(!file.uploaded);
   const name = file.new ? file.contents.name : file.contents.original_name;
@@ -25,12 +24,10 @@ export const ComplianceOverviewFileUploaderItem = ({ file }: ComplianceOverviewF
 
   useEffect(() => {
     const uploadFile = async () => {
-      if (!uploaded && orgId) {
+      if (!uploaded && orgId && file.new && !uploaded) {
         const fileToUpload = file.contents as File;
         const formData = new FormData();
-        forEach(files, file => {
-          formData.append('file', fileToUpload);
-        });
+        formData.append('file', fileToUpload);
         const config = JSON.stringify({
           headers: {
             'Content-Type': 'multipart/form-data',
@@ -44,7 +41,7 @@ export const ComplianceOverviewFileUploaderItem = ({ file }: ComplianceOverviewF
       }
     };
     uploadFile();
-  }, [uploaded, orgId]);
+  }, [uploaded, orgId, file]);
 
   return (
     <div className={'text-tc-primary text-eyebrow w-full bg-gray-30 rounded-[8px] p-[8px] flex flex-row gap-[8px] items-center border-[1px] border-gray-50'}>
@@ -66,3 +63,10 @@ export const ComplianceOverviewFileUploaderItem = ({ file }: ComplianceOverviewF
     </div>
   );
 };
+
+export const ComplianceOverviewFileUploaderItem = withErrorBoundary(_ComplianceOverviewFileUploaderItem, {
+  FallbackComponent: props => <ErrorFallback {...props} />,
+  onError: (error, info) => {
+    console.error('Error occurred in ComplianceOverviewFileUploaderItem: ', error);
+  },
+});

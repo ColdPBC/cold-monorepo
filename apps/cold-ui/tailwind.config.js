@@ -157,7 +157,7 @@ module.exports = {
       },
     },
     animation: {
-      progressBar: 'progressBar 0.5s linear infinite',
+      progressBar: 'progressBar 2s linear infinite',
     },
   },
   plugins: [require('flowbite/plugin'), require('@tailwindcss/forms'), require('@tailwindcss/typography')],

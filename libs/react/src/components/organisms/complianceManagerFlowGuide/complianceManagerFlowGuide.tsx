@@ -35,7 +35,7 @@ export const ComplianceManagerFlowGuide = ({ showModal, setShowModal, flowGuideS
       case ComplianceManagerStatus.notActivated:
         setFlowGuideStatus(ComplianceManagerFlowGuideStatus.activate);
     }
-  }, []);
+  }, [managerStatus]);
 
   const getHeaderText = () => {
     let text = '';
