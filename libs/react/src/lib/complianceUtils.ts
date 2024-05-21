@@ -34,9 +34,9 @@ export const getComplianceProgressForSurvey = (survey: SurveyPayloadType) => {
 
 export const ComplianceProgressStatusColor = {
   not_started: HexColors.gray['50'],
-  needs_review: HexColors.yellow['200'],
+  ai_answered: HexColors.yellow['200'],
   bookmarked: HexColors.lightblue['200'],
-  complete: HexColors.green['200'],
+  user_answered: HexColors.green['200'],
 };
 
 export const getTermString = (term: string) => {

@@ -12,7 +12,7 @@ export const ComplianceManagerOverviewSectionGroups = () => {
 
   const sectionGroups = mqttComplianceSet?.compliance_definition.compliance_section_groups;
 
-  const orderedSectionGroups = orderBy(sectionGroups, ['order'], ['asc']);
+  const orderedSectionGroups = orderBy(sectionGroups, ['order', 'title'], ['asc', 'asc']);
 
   logBrowser('Compliance Manager Overview Section Groups', 'info', { orderedSectionGroups });
 

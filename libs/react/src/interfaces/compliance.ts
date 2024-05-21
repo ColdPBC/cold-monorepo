@@ -10,6 +10,9 @@ export type Compliance = {
   metadata: {
     [key: string]: any;
   };
+  visible: boolean;
+  order: number;
+  version: number;
 };
 
 export type OrgCompliance = {
@@ -56,11 +59,6 @@ export type MQTTComplianceManagerPayloadComplianceSectionGroup = {
   title: string;
   metadata: any;
   compliance_definition_name: string;
-  question_count: number;
-  ai_answered_count: number;
-  user_answered_count: number;
-  bookmarked_count: number;
-  not_started_count: number;
 };
 
 export type MQTTComplianceManagerPayloadComplianceSection = {
@@ -73,6 +71,17 @@ export type MQTTComplianceManagerPayloadComplianceSection = {
   compliance_definition_name: string;
   _count: {
     compliance_questions: number;
+  };
+};
+
+export type MQTTComplianceManagerPayloadComplianceQuestionList = {
+  compliance_questions: Array<MQTTComplianceManagerPayloadComplianceQuestion>;
+  counts: {
+    total: number;
+    not_started: number;
+    ai_answered: number;
+    user_answered: number;
+    bookmarked: number;
   };
 };
 

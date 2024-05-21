@@ -13,6 +13,9 @@ export function getComplianceMock(): Compliance[] {
       metadata: {
         term: 'every_three_years',
       },
+      visible: true,
+      order: 1,
+      version: 1,
     },
     {
       id: 'compdef_s4h9rd5wuorvhthy',
@@ -26,6 +29,9 @@ export function getComplianceMock(): Compliance[] {
         term: 'annual',
         due_date: '2024-03-09T00:00:00.00',
       },
+      visible: true,
+      order: 2,
+      version: 1,
     },
     {
       id: 'compdef_q8ctv3dxn00s3bic',
@@ -38,6 +44,9 @@ export function getComplianceMock(): Compliance[] {
       metadata: {
         term: 'annual',
       },
+      visible: true,
+      order: 3,
+      version: 1,
     },
     {
       id: 'compdef_q4si19qzwqh0h03g',
@@ -50,6 +59,9 @@ export function getComplianceMock(): Compliance[] {
       metadata: {
         term: 'annual',
       },
+      visible: true,
+      order: 4,
+      version: 1,
     },
   ];
 }
@@ -110,6 +122,9 @@ export function getOrganizationComplianceMock(): OrgCompliance[] {
         metadata: {
           term: 'every_three_years',
         },
+        visible: true,
+        order: 1,
+        version: 1,
       },
     },
     {
@@ -158,6 +173,9 @@ export function getOrganizationComplianceMock(): OrgCompliance[] {
           term: 'annual',
           due_date: '2024-03-09T00:00:00.00',
         },
+        visible: true,
+        order: 2,
+        version: 1,
       },
     },
     {
@@ -205,12 +223,15 @@ export function getOrganizationComplianceMock(): OrgCompliance[] {
         metadata: {
           term: 'annual',
         },
+        visible: true,
+        order: 4,
+        version: 1,
       },
     },
     {
       id: 'orgcomp_2',
       organization_id: 'org_g2zzR5rwTKVAIwCn',
-      compliance_id: 'compdef_q4si19qzwqh0h03g',
+      compliance_id: 'compdef_q8ctv3dxn00s3bic',
       created_at: '2024-03-18T15:55:43.345Z',
       updated_at: '2024-03-18T15:55:43.345Z',
       organization: {
@@ -252,6 +273,9 @@ export function getOrganizationComplianceMock(): OrgCompliance[] {
         metadata: {
           term: 'annual',
         },
+        visible: true,
+        order: 3,
+        version: 1,
       },
     },
   ];
@@ -269,7 +293,40 @@ export function getOrganizationComplianceMockByName(name: string): OrgCompliance
 }
 
 export function getDefaultCompliancePageMock(): Compliance[] {
-  return getComplianceMock();
+  return [
+    ...getComplianceMock(),
+    {
+      id: 'compdef_s4h9rd5wuorvhthy',
+      name: 'rei_pia_2024_test',
+      logo_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/compliance_svgs/rei_logo.svg',
+      surveys: ['rei_pia_2024'],
+      created_at: '2024-03-01T19:51:37.808Z',
+      updated_at: '2024-03-06T05:05:43.546Z',
+      title: 'REI Product Impact Assessment 2024 Test',
+      metadata: {
+        term: 'annual',
+        due_date: '2024-03-09T00:00:00.00',
+      },
+      visible: false,
+      order: 2,
+      version: 1,
+    },
+    {
+      id: 'compdef_q8ctv3dxn00s3bic',
+      name: 'one_percent_for_planet_DEMO_test',
+      logo_url: 'https://cold-public-assets.s3.amazonaws.com/3rdPartyLogos/compliance_svgs/1_percent_for_the_planet_logo.svg',
+      surveys: ['one_percent_for_planet_DEMO'],
+      created_at: '2024-03-18T16:42:54.309Z',
+      updated_at: '2024-03-18T16:42:54.309Z',
+      title: '1% for the Planet Test',
+      metadata: {
+        term: 'annual',
+      },
+      visible: false,
+      order: 3,
+      version: 1,
+    },
+  ];
 }
 
 export function getActivateCompliancePageMock(): Compliance[] {
@@ -325,6 +382,9 @@ export function getAssessmentsComplianceMock(): OrgCompliance[] {
           term: 'annual',
           due_date: '2024-03-09T00:00:00.00',
         },
+        visible: true,
+        order: 2,
+        version: 1,
       },
     },
     {
@@ -365,6 +425,9 @@ export function getAssessmentsComplianceMock(): OrgCompliance[] {
         metadata: {
           term: 'annual',
         },
+        visible: true,
+        order: 1,
+        version: 1,
       },
     },
     {
