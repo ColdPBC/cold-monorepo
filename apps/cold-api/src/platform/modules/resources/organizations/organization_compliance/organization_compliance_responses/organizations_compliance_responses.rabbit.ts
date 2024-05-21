@@ -24,6 +24,7 @@ export class OrganizationComplianceResponseRabbit extends BaseWorker {
 
     const sections = await this.repository.getQuestionList({
       compliance_section_id: data.compliance_section_id,
+      organization_id: data.organization.id,
     });
 
     this.mqtt.replyTo(msg.data.reply_to, sections);
