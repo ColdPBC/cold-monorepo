@@ -781,9 +781,7 @@ model organization_compliance_responses {
   updated_at                             DateTime                              @updatedAt
   compliance_question_id                 String
   organization_compliance_id             String
-  organization_compliance_ai_response_id String?
   additional_context                     Json?
-  ai_response                            organization_compliance_ai_responses? @relation(fields: [organization_compliance_ai_response_id], references: [id], map: "ai_response_id")
   compliance_question                    compliance_questions                  @relation(fields: [compliance_question_id], references: [id])
   organization_compliance                organization_compliance               @relation(fields: [organization_compliance_id], references: [id])
   compliance_responses                   compliance_responses[]
@@ -803,7 +801,6 @@ model organization_compliance_ai_responses {
   created_at                        DateTime                                    @default(now())
   updated_at                        DateTime                                    @updatedAt
   files                             organization_compliance_ai_response_files[]
-  organization_compliance_responses organization_compliance_responses[]
   compliance_question_id            String
   organization_compliance           organization_compliance                     @relation(fields: [organization_compliance_id], references: [id])
   organization                      organizations                               @relation(fields: [organization_id], references: [id])
