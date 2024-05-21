@@ -1,3 +1,10 @@
+## [1.225.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.225.0...v1.225.1) (2024-05-21)
+
+
+### Bug Fixes
+
+* issue causing inaccurate results from being returned ([99b7330](https://github.com/ColdPBC/cold-monorepo/commit/99b733019c7644ab451ad318308147643ca1fd83))
+
 # [1.225.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.224.0...v1.225.0) (2024-05-21)
 
 
