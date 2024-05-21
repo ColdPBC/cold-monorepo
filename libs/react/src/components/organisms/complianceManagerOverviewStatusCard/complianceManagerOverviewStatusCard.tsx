@@ -17,7 +17,7 @@ export const ComplianceManagerOverviewStatusCard = () => {
         if (managerStatus === ComplianceManagerStatus.activated) {
           return (
             <div className={'absolute top-[3px] left-0 w-[12px] h-[12px]'}>
-              <ColdIcon name={IconNames.ColdCheckIcon} color={ComplianceProgressStatusColor.complete} width={12} height={12} inverted={true} />
+              <ColdIcon name={IconNames.ColdCheckIcon} color={ComplianceProgressStatusColor.user_answered} width={12} height={12} inverted={true} />
             </div>
           );
         } else {
