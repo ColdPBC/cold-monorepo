@@ -153,14 +153,8 @@ export class ChatService extends BaseWorker implements OnModuleInit {
       survey: 'chat',
     })) as FPSession;
 
-    const vectorSess = (await this.fp.createSession({
-      organization: company_name,
-      user: user.coldclimate_claims.email,
-      survey: 'chat',
-    })) as FPSession;
-
     if (typeof question !== 'string') {
-      return await this.askSurveyQuestion(question, company_name, user, session, vectorSess);
+      return await this.askSurveyQuestion(question, company_name, user, session);
     }
 
     const start = new Date();
@@ -275,7 +269,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
    * @param vectorSession
    * @param additional_context
    */
-  async askSurveyQuestion(question: any, company_name: string, user: AuthenticatedUser, session?: FPSession, vectorSession?: FPSession, additional_context?: any): Promise<any> {
+  async askSurveyQuestion(question: any, company_name: string, user: AuthenticatedUser, session?: FPSession, additional_context?: any): Promise<any> {
     const start = new Date();
     try {
       // Get Chat History
@@ -291,7 +285,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
         apiKey: this.config.getOrThrow('OPENAI_API_KEY'),
       });
 
-      const { rephrased_question, docs } = await this.getDocumentContent(messages, question, company_name, user, context, vectorSession, additional_context);
+      const { rephrased_question, docs } = await this.getDocumentContent(messages, question, company_name, user, context, session, additional_context);
 
       const vars = {
         component_prompt: (await this.prompts.getComponentPrompt(question)) || '',
@@ -622,10 +616,10 @@ export class ChatService extends BaseWorker implements OnModuleInit {
       // Initialize the prompts service with the survey name so that it has the correct context for darkly
       this.prompts = await new PromptsService(this.darkly, compliance.compliance_definition_name, organization, this.prisma).initialize();
 
-      job.data.totalJobs = sections.length + 1;
-      job.update(job.data);
+      job.data.totalJobs = sections.map(section => section.compliance_questions.length).reduce((a, b) => a + b, 0);
+      job.data.currentJob = 0;
 
-      job.progress(1 / job.data.totalJobs);
+      job.update(job.data);
 
       // Initialize the requests array
       const reqs: any[] = [];
@@ -799,18 +793,11 @@ export class ChatService extends BaseWorker implements OnModuleInit {
           section: section,
         })) as FPSession;
 
-        const vectorSession = (await this.fp.createSession({
-          survey: survey.name,
-          organization: organization.name,
-          user: user.coldclimate_claims.email,
-          section: section,
-        })) as FPSession;
-
         // Log the creation of the session
         this.logger.info(`Session created for survey ${survey.name}`, session);
 
         // Create a new thread for each section run
-        reqs.push(this.processSection(job, section, sdx, sections, definition, integration, organization, category_context, user, session, vectorSession));
+        reqs.push(this.processSection(job, section, sdx, sections, definition, integration, organization, category_context, user, session));
       }
 
       // Wait for all the sections to be processed
@@ -898,19 +885,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
    * @param user
    * @param session
    */
-  public async processSection(
-    job: Job,
-    section: string,
-    sdx: number,
-    sections: string[],
-    definition,
-    integration,
-    organization,
-    category_context,
-    user,
-    session: FPSession,
-    vectorSession: FPSession,
-  ) {
+  public async processSection(job: Job, section: string, sdx: number, sections: string[], definition, integration, organization, category_context, user, session: FPSession) {
     const start = new Date();
 
     try {
@@ -956,7 +931,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
           });
 
           // create a new run for each followup item
-          const value = await this.askSurveyQuestion(follow_up, organization.name, job.data.user, session, vectorSession);
+          const value = await this.askSurveyQuestion(follow_up, organization.name, job.data.user, session);
 
           // update the survey with the response
           if (value) {
@@ -1002,7 +977,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
             }
 
             this.logger.info(`Processing Question | ${section}.${item}.additional_context: ${follow_up.prompt}`);
-            const additionalValue = await this.askSurveyQuestion(follow_up, organization.name, job.data.user, session, vectorSession, follow_up['additional_context']);
+            const additionalValue = await this.askSurveyQuestion(follow_up, organization.name, job.data.user, session, follow_up['additional_context']);
 
             if (additionalValue) {
               definition.sections[section].follow_up[item].additional_context.ai_response = additionalValue;
@@ -1293,8 +1268,14 @@ export class ChatService extends BaseWorker implements OnModuleInit {
             },
             from: 'cold.platform.openai',
           });
+
+          // report the progress of the job
+          job.data.currentJob = job.data.currentJob + 1;
+          await job.update(job.data);
+          await job.progress(job.data.currentJob / job.data.totalJobs);
+
+          // delete the question from the cache since it's been processed
           await this.complianceSectionsCacheRepository.deleteCachedActiveQuestion(item, section, organization, job);
-          // await job.progress(idx / items.length);
         } catch (error) {
           this.sendMetrics('survey.question', `failed`, {
             start,
@@ -1311,6 +1292,8 @@ export class ChatService extends BaseWorker implements OnModuleInit {
           await this.complianceSectionsCacheRepository.deleteCachedActiveQuestion(item, section, organization, job);
         }
       }
+
+      // delete the entire section from the cache since it's been processed
       await this.complianceSectionsCacheRepository.deleteCachedActiveSection(section, organization, job);
 
       this.logger.info(`✅ Finished processing ${section.key}: ${section.title}`, { section });
