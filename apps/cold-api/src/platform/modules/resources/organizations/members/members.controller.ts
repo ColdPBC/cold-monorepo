@@ -15,7 +15,7 @@ import { ApiBody, ApiOperation, ApiParam, ApiQuery } from '@nestjs/swagger';
 import { MembersService } from './members.service';
 import { OrgRolesService } from '../roles/roles.service';
 
-@Controller('organizations')
+@Controller('organizations/:orgId/members')
 export class MembersController extends BaseWorker {
   constructor(private readonly members: MembersService, private readonly roles: OrgRolesService) {
     super(MembersController.name);
@@ -31,7 +31,7 @@ export class MembersController extends BaseWorker {
     summary: 'Get Organization Members',
     operationId: 'GetOrganizationMembers',
   })
-  @Get(':orgId/members')
+  @Get()
   @Roles(...allRoles)
   @ApiParam(orgIdDecoratorOptions)
   @ApiQuery(bpcDecoratorOptions)
@@ -58,7 +58,7 @@ export class MembersController extends BaseWorker {
     operationId: 'GetOrgMemberRoles',
     description: 'Returns all the organization roles for a member',
   })
-  @Get(':orgId/members/:userId/roles')
+  @Get(':userId/roles')
   @ApiQuery(bpcDecoratorOptions)
   @ApiParam(orgIdDecoratorOptions)
   @ApiParam(userIdDecoratorOptions)
@@ -86,7 +86,7 @@ export class MembersController extends BaseWorker {
     operationId: 'AddMemberByID',
     description: 'Add an existing member to the organization',
   })
-  @Put(':orgId/members/:userId/roles/:roleName')
+  @Put(':userId/roles/:roleName')
   @ApiQuery(bpcDecoratorOptions)
   @ApiParam(orgIdDecoratorOptions)
   @ApiParam(roleNameDecoratorOptions)
@@ -127,7 +127,7 @@ export class MembersController extends BaseWorker {
     operationId: 'DeleteOrgMembers',
     description: 'Deletes specified member ids from organization',
   })
-  @Delete(':orgId/members')
+  @Delete()
   @ApiBody({
     schema: {
       type: 'object',
