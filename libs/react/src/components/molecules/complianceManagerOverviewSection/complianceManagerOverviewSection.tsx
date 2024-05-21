@@ -5,11 +5,12 @@ import React, { useContext, useEffect, useRef } from 'react';
 import ColdMQTTContext from '../../../context/coldMQTTContext';
 import { ColdComplianceManagerContext } from '@coldpbc/context';
 import useSWRSubscription from 'swr/subscription';
-import { ComplianceManagerSectionProgressBar } from '@coldpbc/components';
+import { ComplianceManagerSectionProgressBar, ErrorFallback } from '@coldpbc/components';
 import { ComplianceManagerStatus } from '@coldpbc/enums';
 import { resolveNodeEnv } from '@coldpbc/fetchers';
+import { withErrorBoundary } from 'react-error-boundary';
 
-export const ComplianceManagerOverviewSection = ({
+const _ComplianceManagerOverviewSection = ({
   section,
   groupId,
   setGroupCounts,
@@ -115,6 +116,10 @@ export const ComplianceManagerOverviewSection = ({
     error,
   });
 
+  if (data?.compliance_questions === undefined || data?.compliance_questions.length === 0) {
+    return null;
+  }
+
   const backgroundColor = isAIRunning() ? 'bg-gray-60' : 'bg-bgc-accent';
   const textColor = isAIRunning() ? 'text-tc-disabled' : 'text-tc-primary';
 
@@ -142,3 +147,10 @@ export const ComplianceManagerOverviewSection = ({
     </div>
   );
 };
+
+export const ComplianceManagerOverviewSection = withErrorBoundary(_ComplianceManagerOverviewSection, {
+  FallbackComponent: props => <ErrorFallback {...props} />,
+  onError: (error, info) => {
+    console.error('Error occurred in ComplianceManagerOverviewSection: ', error);
+  },
+});

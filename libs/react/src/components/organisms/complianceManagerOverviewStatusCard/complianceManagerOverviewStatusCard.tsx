@@ -1,12 +1,13 @@
 import { forOwn, map } from 'lodash';
 import { ComplianceManagerStatus, IconNames } from '@coldpbc/enums';
-import { useContext } from 'react';
+import React, { useContext } from 'react';
 import { ColdComplianceManagerContext } from '@coldpbc/context';
-import { ColdIcon, ProgressCircle } from '@coldpbc/components';
+import { ColdIcon, ErrorFallback, ProgressCircle } from '@coldpbc/components';
 import { ComplianceProgressStatusColor, isComplianceStatusPassed, isComplianceStatusReached } from '@coldpbc/lib';
+import { withErrorBoundary } from 'react-error-boundary';
 import { HexColors } from '@coldpbc/themes';
 
-export const ComplianceManagerOverviewStatusCard = () => {
+const _ComplianceManagerOverviewStatusCard = () => {
   const { data, status: managerStatus, complianceCounts } = useContext(ColdComplianceManagerContext);
   const { mqttComplianceSet } = data;
 
@@ -142,3 +143,10 @@ export const ComplianceManagerOverviewStatusCard = () => {
     </div>
   );
 };
+
+export const ComplianceManagerOverviewStatusCard = withErrorBoundary(_ComplianceManagerOverviewStatusCard, {
+  FallbackComponent: props => <ErrorFallback {...props} />,
+  onError: (error, info) => {
+    console.error('Error occurred in ComplianceManagerOverviewStatusCard: ', error);
+  },
+});

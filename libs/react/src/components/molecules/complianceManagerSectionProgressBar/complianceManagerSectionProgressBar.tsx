@@ -3,17 +3,18 @@ import { Tooltip } from 'flowbite-react';
 import { ComplianceProgressStatusColor } from '@coldpbc/lib';
 import { get, map, orderBy } from 'lodash';
 import { flowbiteThemeOverride, HexColors } from '@coldpbc/themes';
-import { ComplianceProgressStatusIcon, Spinner } from '@coldpbc/components';
+import { ComplianceProgressStatusIcon, ErrorFallback, Spinner } from '@coldpbc/components';
 import { MQTTComplianceManagerPayloadComplianceQuestion } from '@coldpbc/interfaces';
-import { useContext } from 'react';
+import React, { useContext } from 'react';
 import { ColdComplianceManagerContext } from '@coldpbc/context';
 import { useColdContext } from '@coldpbc/hooks';
+import { withErrorBoundary } from 'react-error-boundary';
 
 export interface ComplianceManagerSectionProgressBarProps {
   questions: MQTTComplianceManagerPayloadComplianceQuestion[] | undefined;
 }
 
-export const ComplianceManagerSectionProgressBar = ({ questions }: ComplianceManagerSectionProgressBarProps) => {
+const _ComplianceManagerSectionProgressBar = ({ questions }: ComplianceManagerSectionProgressBarProps) => {
   const { status: managerStatus } = useContext(ColdComplianceManagerContext);
   const { logBrowser } = useColdContext();
   const getProgressTooltipIcon = (status: ComplianceProgressStatus) => {
@@ -115,3 +116,10 @@ export const ComplianceManagerSectionProgressBar = ({ questions }: ComplianceMan
     );
   }
 };
+
+export const ComplianceManagerSectionProgressBar = withErrorBoundary(_ComplianceManagerSectionProgressBar, {
+  FallbackComponent: props => <ErrorFallback {...props} />,
+  onError: (error, info) => {
+    console.error('Error occurred in ComplianceManagerSectionProgressBar: ', error);
+  },
+});
