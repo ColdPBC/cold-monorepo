@@ -235,7 +235,6 @@ export const handlers = [
   }),
 
   rest.get(getApiUrl('/compliance_definitions'), (req, res, ctx) => {
-    const { name } = req.params;
     return res(ctx.json(getComplianceMock()));
   }),
 

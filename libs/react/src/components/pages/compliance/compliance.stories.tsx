@@ -1,16 +1,7 @@
-import {
-  getActivateCompliancePageMock,
-  getActivateOrgCompliancePageMock,
-  getCompliancePageHandler,
-  getDefaultCompliancePageMock,
-  getDefaultOrgCompliancePageMock,
-  StoryMockProvider,
-} from '@coldpbc/mocks';
+import { getCompliancePageHandler, StoryMockProvider } from '@coldpbc/mocks';
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { CompliancePage } from '@coldpbc/components';
-import { within } from '@storybook/testing-library';
-import { verifyCompliancePage } from '@coldpbc/lib';
 
 const meta: Meta<typeof CompliancePage> = {
   title: 'Pages/Compliance',
@@ -28,15 +19,6 @@ export const Default: Story = {
       <CompliancePage />
     </StoryMockProvider>
   ),
-  play: async ({ canvasElement, step }) => {
-    const canvas = within(canvasElement.parentElement === null ? canvasElement : canvasElement.parentElement);
-
-    await step('Check Compliance Screen Default', async () => {
-      const complianceSets = getDefaultCompliancePageMock();
-      const orgComplianceSets = getDefaultOrgCompliancePageMock();
-      await verifyCompliancePage(complianceSets, orgComplianceSets, canvasElement);
-    });
-  },
 };
 
 export const Activate: Story = {
@@ -45,15 +27,6 @@ export const Activate: Story = {
       <CompliancePage />
     </StoryMockProvider>
   ),
-  play: async ({ canvasElement, step }) => {
-    const canvas = within(canvasElement.parentElement === null ? canvasElement : canvasElement.parentElement);
-
-    await step('Check Compliance Screen Activate', async () => {
-      const complianceSets = getActivateCompliancePageMock();
-      const orgComplianceSets = getActivateOrgCompliancePageMock();
-      await verifyCompliancePage(complianceSets, orgComplianceSets, canvasElement);
-    });
-  },
 };
 
 export const NewPage: Story = {

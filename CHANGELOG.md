@@ -1,3 +1,27 @@
+# [1.225.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.224.0...v1.225.0) (2024-05-21)
+
+
+### Features
+
+* add visible filter to compliance page ([0f20977](https://github.com/ColdPBC/cold-monorepo/commit/0f209771d0e6acf10340c994a7a0adbc5fc26cc5))
+* also filter on new compliance page ([a43e8c7](https://github.com/ColdPBC/cold-monorepo/commit/a43e8c7880822cac781d0c8da2283d77123837ac))
+
+# [1.224.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.223.1...v1.224.0) (2024-05-21)
+
+
+### Features
+
+* handle new api data structures ([1114ff5](https://github.com/ColdPBC/cold-monorepo/commit/1114ff5f9d7e4fe7981ace0b9e41afec81da5d60))
+* handle spacing when section group collapse is closed ([c2ff708](https://github.com/ColdPBC/cold-monorepo/commit/c2ff7088a7470e8871ef6da9868e372ed1b2a63e))
+* pass in organization id to question list for filtering ([25b387b](https://github.com/ColdPBC/cold-monorepo/commit/25b387b542fae1898beffb563b8c9cf77885f631))
+
+## [1.223.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.223.0...v1.223.1) (2024-05-21)
+
+
+### Bug Fixes
+
+* getQuestionList was not filtering on orgId in joins ([501fc20](https://github.com/ColdPBC/cold-monorepo/commit/501fc205ab62300f9e9727f753bd797000f717d3))
+
 # [1.223.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.222.0...v1.223.0) (2024-05-15)
 
 
