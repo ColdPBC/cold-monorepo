@@ -1,12 +1,13 @@
 import { map } from 'lodash';
 import { ComplianceManagerStatus, IconNames } from '@coldpbc/enums';
-import { useContext } from 'react';
+import React, { useContext } from 'react';
 import { ColdComplianceManagerContext } from '@coldpbc/context';
-import { ColdIcon } from '@coldpbc/components';
+import { ColdIcon, ErrorFallback } from '@coldpbc/components';
 import { ComplianceProgressStatusColor } from '@coldpbc/lib';
 import { useColdContext } from '@coldpbc/hooks';
+import { withErrorBoundary } from 'react-error-boundary';
 
-export const ComplianceManagerOverviewStatusCard = () => {
+const _ComplianceManagerOverviewStatusCard = () => {
   const { status: managerStatus, data } = useContext(ColdComplianceManagerContext);
   const { mqttComplianceSet } = data;
   const { logBrowser } = useColdContext();
@@ -76,3 +77,10 @@ export const ComplianceManagerOverviewStatusCard = () => {
     </div>
   );
 };
+
+export const ComplianceManagerOverviewStatusCard = withErrorBoundary(_ComplianceManagerOverviewStatusCard, {
+  FallbackComponent: props => <ErrorFallback {...props} />,
+  onError: (error, info) => {
+    console.error('Error occurred in ComplianceManagerOverviewStatusCard: ', error);
+  },
+});

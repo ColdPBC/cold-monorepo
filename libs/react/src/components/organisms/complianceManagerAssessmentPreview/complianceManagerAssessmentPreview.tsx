@@ -1,14 +1,14 @@
-import { BaseButton, Card } from '@coldpbc/components';
-import { ColdInfoIcon } from '../../atoms/icons/coldInfoIcon';
+import { BaseButton, Card, ColdInfoIcon, ErrorFallback } from '@coldpbc/components';
 import { HexColors } from '@coldpbc/themes';
 import { Tooltip } from 'flowbite-react';
-import { useContext } from 'react';
+import React, { useContext } from 'react';
 import { ColdComplianceManagerContext } from '@coldpbc/context';
 import { forOwn } from 'lodash';
 import { ComplianceManagerStatus } from '@coldpbc/enums';
 import { useColdContext } from '@coldpbc/hooks';
+import { withErrorBoundary } from 'react-error-boundary';
 
-export const ComplianceManagerAssessmentPreview = () => {
+const _ComplianceManagerAssessmentPreview = () => {
   const context = useContext(ColdComplianceManagerContext);
   const { status, complianceCounts } = context;
   const { mqttComplianceSet } = context.data;
@@ -53,3 +53,10 @@ export const ComplianceManagerAssessmentPreview = () => {
     </Card>
   );
 };
+
+export const ComplianceManagerAssessmentPreview = withErrorBoundary(_ComplianceManagerAssessmentPreview, {
+  FallbackComponent: props => <ErrorFallback {...props} />,
+  onError: (error, info) => {
+    console.error('Error occurred in ComplianceManagerAssessmentPreview: ', error);
+  },
+});

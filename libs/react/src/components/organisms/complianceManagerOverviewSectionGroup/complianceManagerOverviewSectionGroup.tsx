@@ -1,20 +1,21 @@
 import { ComplianceProgressStatus, IconNames } from '@coldpbc/enums';
 import { forOwn, map, orderBy } from 'lodash';
-import { ColdIcon, ComplianceManagerOverviewSection, ComplianceProgressStatusIcon } from '@coldpbc/components';
+import { ColdIcon, ComplianceManagerOverviewSection, ComplianceProgressStatusIcon, ErrorFallback } from '@coldpbc/components';
 import { MQTTComplianceManagerPayloadComplianceSection, MQTTComplianceManagerPayloadComplianceSectionGroup } from '@coldpbc/interfaces';
-import { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
 import ColdMQTTContext from '../../../context/coldMQTTContext';
 import { ColdComplianceManagerContext } from '@coldpbc/context';
 import useSWRSubscription from 'swr/subscription';
 import { resolveNodeEnv } from '@coldpbc/fetchers';
+import { withErrorBoundary } from 'react-error-boundary';
 
 export interface ComplianceManagerOverviewSectionGroupProps {
   sectionGroup: MQTTComplianceManagerPayloadComplianceSectionGroup;
   position: number;
 }
 
-export const ComplianceManagerOverviewSectionGroup = ({ sectionGroup, position }: ComplianceManagerOverviewSectionGroupProps) => {
+const _ComplianceManagerOverviewSectionGroup = ({ sectionGroup, position }: ComplianceManagerOverviewSectionGroupProps) => {
   const [collapseOpen, setCollapseOpen] = useState(false);
   const [groupCounts, setGroupCounts] = useState<{
     [key: string]: {
@@ -205,3 +206,10 @@ export const ComplianceManagerOverviewSectionGroup = ({ sectionGroup, position }
     </div>
   );
 };
+
+export const ComplianceManagerOverviewSectionGroup = withErrorBoundary(_ComplianceManagerOverviewSectionGroup, {
+  FallbackComponent: props => <ErrorFallback {...props} />,
+  onError: (error, info) => {
+    console.error('Error occurred in ComplianceManagerOverviewSectionGroup: ', error);
+  },
+});

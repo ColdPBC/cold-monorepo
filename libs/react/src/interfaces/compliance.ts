@@ -72,7 +72,7 @@ export type MQTTComplianceManagerPayloadComplianceSection = {
 };
 
 export type MQTTComplianceManagerPayloadComplianceQuestionList = {
-  compliance_questions: Array<MQTTComplianceManagerPayloadComplianceQuestion>;
+  compliance_questions: Array<MQTTComplianceManagerPayloadComplianceQuestion> | undefined;
   counts: {
     total: number;
     not_started: number;
