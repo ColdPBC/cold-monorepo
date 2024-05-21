@@ -43,7 +43,7 @@ export class ComplianceQuestionsRepository extends BaseWorker {
    * @param payload - The payload containing the compliance section ID.
    * @return {Promise<any>} - A promise that resolves to the list of questions.
    */
-  async getQuestionList({ compliance_section_id }): Promise<any> {
+  async getQuestionList({ compliance_section_id, organization_id }): Promise<any> {
     const questions = (await this.prisma.$queryRaw(
       Prisma.sql`SELECT cq.id,
                         cq.prompt,
@@ -67,21 +67,26 @@ export class ComplianceQuestionsRepository extends BaseWorker {
                           ELSE FALSE END                                                   AS user_answered,
                         CASE WHEN CAST(COUNT(ocqb.id) as INT) > 1 THEN TRUE ELSE FALSE END AS bookmarked
                  FROM compliance_questions cq
+                        LEFT JOIN organization_compliance oc
+                             ON cq.compliance_definition_name = oc.compliance_definition_name
+                        LEFT JOIN compliance_sections cs ON cq.compliance_section_id = cs.id
                         LEFT JOIN organization_compliance_ai_responses ocair
                                   ON cq.id = ocair.compliance_question_id
                         LEFT JOIN organization_compliance_responses ocr
                                   ON cq.id = ocr.compliance_question_id
-                        LEFT JOIN compliance_responses cr ON cq.id = cr.compliance_question_id
                         LEFT JOIN organization_compliance_question_bookmarks ocqb
                                   ON cq.id = ocqb.compliance_question_id
-                        LEFT JOIN compliance_sections cs
-                                  ON cq.compliance_section_id = cs.id
-                        LEFT JOIN compliance_section_groups csg ON cs.compliance_section_group_id = csg.id
-                        LEFT JOIN organization_compliance oc
-                                  ON csg.compliance_definition_name = oc.compliance_definition_name
-                        LEFT OUTER JOIN compliance_question_dependency_chains cdc ON cq.id = cdc.compliance_question_id
-                 WHERE cs.id = ${compliance_section_id}
-
+                        LEFT JOIN compliance_question_dependency_chains cdc ON cq.id = cdc.compliance_question_id
+                 WHERE
+                   oc.organization_id = ${organization_id}
+                   AND
+                   cs.id = cq.compliance_section_id
+                   AND
+                   cq.compliance_section_id = ${compliance_section_id}
+                   AND
+                   ocair.organization_id = ${organization_id}
+                   AND
+                   ocr.organization_compliance_id = oc.id
                  GROUP BY cq.id, ocair.answer, ocr.value,
                           oc.id, cdc.dependency_chain`,
     )) as any;
@@ -89,6 +94,7 @@ export class ComplianceQuestionsRepository extends BaseWorker {
     this.logger.info('Retrieved question list', { questions });
 
     const start = new Date().getTime();
+
     const response = await this.filterQuestions(questions);
     const end = new Date().getTime();
     const diff = difference(questions, response);
