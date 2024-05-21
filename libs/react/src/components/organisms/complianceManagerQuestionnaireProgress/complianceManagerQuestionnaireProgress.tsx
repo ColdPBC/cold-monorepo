@@ -9,7 +9,7 @@ export const ComplianceManagerQuestionnaireProgress = () => {
           <ComplianceProgressStatusItem type={ComplianceProgressStatus.not_started} />
         </div>
         <div className={'w-1/2'}>
-          <ComplianceProgressStatusItem type={ComplianceProgressStatus.needs_review} />
+          <ComplianceProgressStatusItem type={ComplianceProgressStatus.ai_answered} />
         </div>
       </div>
       <div className={'w-full flex flex-row gap-[16px]'}>
@@ -17,7 +17,7 @@ export const ComplianceManagerQuestionnaireProgress = () => {
           <ComplianceProgressStatusItem type={ComplianceProgressStatus.bookmarked} />
         </div>
         <div className={'w-1/2'}>
-          <ComplianceProgressStatusItem type={ComplianceProgressStatus.complete} />
+          <ComplianceProgressStatusItem type={ComplianceProgressStatus.user_answered} />
         </div>
       </div>
     </Card>

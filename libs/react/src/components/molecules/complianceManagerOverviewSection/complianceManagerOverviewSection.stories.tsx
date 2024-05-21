@@ -21,5 +21,7 @@ export const Default: Story = {
   ),
   args: {
     ...getComplianceManagerOverviewSectionsMock(),
+    collapseOpen: true,
+    setGroupCounts: () => {},
   },
 };

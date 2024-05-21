@@ -13,11 +13,11 @@ export const ComplianceProgressStatusIcon = ({ type, inverted, iconProps }: Comp
   switch (type) {
     case ComplianceProgressStatus.not_started:
       return <ColdIcon name={IconNames.ColdSupportNotFilledInIcon} color={HexColors.gray['90']} inverted={inverted} {...iconProps} />;
-    case ComplianceProgressStatus.needs_review:
+    case ComplianceProgressStatus.ai_answered:
       return <ColdIcon name={IconNames.ColdAiIcon} color={HexColors.yellow['200']} inverted={inverted} {...iconProps} />;
     case ComplianceProgressStatus.bookmarked:
       return <ColdIcon name={IconNames.ColdBookmarkIcon} color={HexColors.lightblue['200']} inverted={inverted} {...iconProps} />;
-    case ComplianceProgressStatus.complete:
+    case ComplianceProgressStatus.user_answered:
       return <ColdIcon name={IconNames.ColdCheckIcon} color={HexColors.green['200']} inverted={inverted} {...iconProps} />;
   }
 };

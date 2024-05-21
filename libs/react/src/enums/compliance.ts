@@ -24,7 +24,7 @@ export enum ComplianceManagerStatus {
 
 export enum ComplianceProgressStatus {
   not_started = 'not_started',
-  needs_review = 'needs_review',
+  ai_answered = 'ai_answered',
   bookmarked = 'bookmarked',
-  complete = 'complete',
+  user_answered = 'user_answered',
 }
