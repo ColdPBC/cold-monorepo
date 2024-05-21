@@ -9,18 +9,18 @@ import { FacilityBodyExample } from './examples/facility_example';
 @UseGuards(JwtAuthGuard, RolesGuard)
 @UseInterceptors(OrgUserInterceptor)
 @ApiOAuth2(['openid'])
-@Controller('organizations')
+@Controller('organizations/:orgId/facilities')
 export class FacilitiesController extends BaseWorker {
   constructor(private readonly facilitiesService: FacilitiesService) {
     super(FacilitiesController.name);
   }
 
-  @Get('/:orgId/facilities')
+  @Get()
   getFacilities(@Req() req: any, @Param('orgId') orgId: string) {
     return this.facilitiesService.getOrganizationFacilities(req, orgId);
   }
 
-  @Post('/:orgId/facilities')
+  @Post()
   @ApiOperation({
     summary: 'Create Organization Facility',
     operationId: 'createFacility',
