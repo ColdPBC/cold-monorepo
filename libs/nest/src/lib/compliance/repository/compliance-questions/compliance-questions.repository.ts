@@ -49,7 +49,8 @@ export class ComplianceQuestionsRepository extends BaseWorker {
                         cq.prompt,
                         cq.order,
                         cq.key,
-                        oc.organization_id,
+                        cr.compliance_definition_name,
+                        cr.organization_id,
                         ocair.answer                                                       as ai_answer,
                         ocr.value                                                          as user_answer,
                         cdc.dependency_chain                                               as dependency_chain,
@@ -58,37 +59,31 @@ export class ComplianceQuestionsRepository extends BaseWorker {
                             THEN TRUE
                           ELSE FALSE END                                                   AS not_started,
                         CASE
-                          WHEN ocair.answer IS NOT NULL AND ocr.value IS NULL
+                          WHEN ocair.answer IS NOT NULL
                             THEN TRUE
                           ELSE FALSE END                                                   AS ai_answered,
                         CASE
-                          WHEN ocr.value IS NOT NULL AND ocair.answer IS NULL
+                          WHEN ocr.value IS NOT NULL
                             THEN TRUE
                           ELSE FALSE END                                                   AS user_answered,
                         CASE WHEN CAST(COUNT(ocqb.id) as INT) > 1 THEN TRUE ELSE FALSE END AS bookmarked
-                 FROM compliance_questions cq
-                        LEFT JOIN organization_compliance oc
-                             ON cq.compliance_definition_name = oc.compliance_definition_name
-                        LEFT JOIN compliance_sections cs ON cq.compliance_section_id = cs.id
-                        LEFT JOIN organization_compliance_ai_responses ocair
-                                  ON cq.id = ocair.compliance_question_id
-                        LEFT JOIN organization_compliance_responses ocr
-                                  ON cq.id = ocr.compliance_question_id
+                 FROM organization_compliance oc
+                        JOIN compliance_responses cr
+                             ON oc.id = cr.organization_compliance_id
+                        JOIN compliance_sections cs ON cr.compliance_section_id = cs.id
+                        JOIN organization_compliance_ai_responses ocair
+                             ON cr.organization_compliance_ai_response_id = ocair.id
+                        JOIN organization_compliance_responses ocr
+                             ON cr.organization_compliance_response_id = ocr.id
+                        JOIN compliance_questions cq
+                             ON cr.compliance_question_id = cq.id
                         LEFT JOIN organization_compliance_question_bookmarks ocqb
-                                  ON cq.id = ocqb.compliance_question_id
-                        LEFT JOIN compliance_question_dependency_chains cdc ON cq.id = cdc.compliance_question_id
+                                  ON cr.compliance_question_id = ocqb.compliance_question_id
+                        LEFT JOIN compliance_question_dependency_chains cdc ON cr.compliance_question_id = cdc.compliance_question_id
                  WHERE
-                   oc.organization_id = ${organization_id}
-                   AND
-                   cs.id = cq.compliance_section_id
-                   AND
-                   cq.compliance_section_id = ${compliance_section_id}
-                   AND
-                   ocair.organization_id = ${organization_id}
-                   AND
-                   ocr.organization_compliance_id = oc.id
-                 GROUP BY cq.id, ocair.answer, ocr.value,
-                          oc.id, cdc.dependency_chain`,
+                   cr.organization_id = ${organization_id} AND
+                   cs.id = ${compliance_section_id}
+                 GROUP BY cq.id, cr.organization_id, ocair.answer, ocr.value, cdc.dependency_chain, cr.compliance_definition_name`,
     )) as any;
 
     this.logger.info('Retrieved question list', { questions });
@@ -201,7 +196,6 @@ export class ComplianceQuestionsRepository extends BaseWorker {
     const dependenciesMet = function (question: Question): boolean {
       if (!question.dependency_chain || !question.dependency_chain.length) {
         unset(question, 'dependency_chain');
-        unset(question, 'user_answer');
         unset(question, 'ai_answer');
 
         return true;
@@ -216,8 +210,6 @@ export class ComplianceQuestionsRepository extends BaseWorker {
           return false;
         }
       }
-      unset(question, 'dependency_chain');
-      unset(question, 'user_answer');
       unset(question, 'ai_answer');
       return true;
     };
