@@ -34,14 +34,14 @@ export class OrganizationService extends BaseWorker {
     if (!this.openAI) {
       this.logger.error('OpenAI service definition not found');
     } else {
-      let existing = await this.prisma.organizations.findUnique({
+      let existing = await this.prisma.extended.organizations.findUnique({
         where: {
           id: org.id,
         },
       });
 
       if (!existing) {
-        existing = await this.prisma.organizations.create({
+        existing = await this.prisma.extended.organizations.create({
           data: {
             id: org.id,
             name: org.name,
@@ -53,7 +53,7 @@ export class OrganizationService extends BaseWorker {
         });
       }
 
-      const openAIAsst = await this.prisma.integrations.findFirst({
+      const openAIAsst = await this.prisma.extended.integrations.findFirst({
         where: {
           organization_id: org.id,
           service_definition_id: this.openAI?.id,
@@ -78,7 +78,7 @@ export class OrganizationService extends BaseWorker {
 
     this.options = await this.utilService.init();
     // insure openai service is enabled for all organizations
-    this.openAI = await this.prisma.service_definitions.findUnique({
+    this.openAI = await this.prisma.extended.service_definitions.findUnique({
       where: {
         name: 'cold-platform-openai',
       },
@@ -111,7 +111,7 @@ export class OrganizationService extends BaseWorker {
         created_at: new Date(),
       };
 
-      this.prisma.organizations.upsert({
+      this.prisma.extended.organizations.upsert({
         where: {
           id: org.id,
         },
@@ -189,7 +189,7 @@ export class OrganizationService extends BaseWorker {
           set(queryOptions, 'where', { ...filters });
         }
 
-        orgs = await this.prisma.organizations.findMany(queryOptions);
+        orgs = await this.prisma.extended.organizations.findMany(queryOptions);
 
         if (!orgs) {
           throw new NotFoundException(`No Organizations found`);
@@ -255,7 +255,7 @@ export class OrganizationService extends BaseWorker {
       } else {
         const filter = nameOrId.startsWith('org_') ? { id: nameOrId } : { name: nameOrId };
 
-        let org = (await this.prisma.organizations.findUnique({
+        let org = (await this.prisma.extended.organizations.findUnique({
           where: filter,
           include: {
             facilities: true,
@@ -305,7 +305,7 @@ export class OrganizationService extends BaseWorker {
       // update org cache by id
       await this.cache.delete(`organizations:${organization.id}`);
 
-      const updated = await this.prisma.organizations.update({
+      const updated = await this.prisma.extended.organizations.update({
         where: {
           id: orgId,
         },
@@ -407,7 +407,7 @@ export class OrganizationService extends BaseWorker {
       let existing: any | null;
 
       // search for existing organization by name
-      await this.prisma.organizations.findUnique({
+      await this.prisma.extended.organizations.findUnique({
         where: { name: org.name },
       });
 
@@ -461,7 +461,7 @@ export class OrganizationService extends BaseWorker {
         // create organization in database
         org.created_at = new Date();
 
-        existing = await this.prisma.organizations.create({
+        existing = await this.prisma.extended.organizations.create({
           data: org as any,
         });
 
@@ -495,7 +495,7 @@ export class OrganizationService extends BaseWorker {
         },
       });
 
-      return (await this.prisma.organizations.findUnique({
+      return (await this.prisma.extended.organizations.findUnique({
         where: {
           id: existing.id,
         },
@@ -613,7 +613,7 @@ export class OrganizationService extends BaseWorker {
       if (org) {
         try {
           // delete org from db
-          await this.prisma.organizations.delete({
+          await this.prisma.extended.organizations.delete({
             where: {
               id: org.id,
             },
