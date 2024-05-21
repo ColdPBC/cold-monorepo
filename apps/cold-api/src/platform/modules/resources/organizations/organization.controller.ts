@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpCode, NotFoundException, Param, Patch, Post, Query, Req, UseFilters, UseGuards } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, Get, HttpCode, NotFoundException, Param, Patch, Post, Query, Req, UseFilters, UseGuards } from '@nestjs/common';
 import { Span } from 'nestjs-ddtrace';
 import { ResourceValidationPipe } from '../../../pipes/resource.pipe';
 import { allRoles, bpcDecoratorOptions, coldAdminOnly, orgIdDecoratorOptions } from '../_global/global.params';
@@ -7,15 +7,16 @@ import { OrganizationService } from './organization.service';
 import { ApiBody, ApiOAuth2, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { BaseWorker, HttpExceptionFilter, IAuthenticatedUser, JwtAuthGuard, OrganizationsSchema, Roles, RolesGuard } from '@coldpbc/nest';
 import { CreateOrganizationDto } from './dto/organization.dto';
+import { FootprintsService } from './facilities/footprints/footprints.service';
 
 @Span()
 @UseGuards(JwtAuthGuard, RolesGuard)
 @ApiOAuth2(['openid', 'email', 'profile'])
 @ApiTags('Organizations')
 @UseFilters(new HttpExceptionFilter(OrganizationController.name))
-@Controller()
+@Controller('organizations')
 export class OrganizationController extends BaseWorker {
-  constructor(readonly orgService: OrganizationService) {
+  constructor(readonly orgService: OrganizationService, readonly footprintsService: FootprintsService) {
     super('OrganizationController');
   }
 
@@ -31,7 +32,7 @@ export class OrganizationController extends BaseWorker {
     summary: 'Create Organization',
     operationId: 'CreateOrganization',
   })
-  @Post('organizations')
+  @Post()
   @Roles(...coldAdminOnly)
   @ApiQuery(bpcDecoratorOptions)
   @ApiBody({
@@ -67,7 +68,7 @@ export class OrganizationController extends BaseWorker {
     summary: 'Update Organization',
     operationId: 'UpdateOrganization',
   })
-  @Patch('organizations/:orgId')
+  @Patch(':orgId')
   @Roles(...coldAdminOnly)
   @ApiQuery(bpcDecoratorOptions)
   @ApiBody({
@@ -91,7 +92,7 @@ export class OrganizationController extends BaseWorker {
     return this.orgService.updateOrganization(orgId, createOrganizationDTO, req);
   }
 
-  @Get('organizations/:orgId/compliance')
+  @Get(':orgId/compliance')
   @Roles(...coldAdminOnly)
   getOrgData(
     @Param('orgId') orgId: string,
@@ -111,7 +112,7 @@ export class OrganizationController extends BaseWorker {
     summary: 'Get Organizations',
     operationId: 'GetOrganizations',
   })
-  @Get('organizations')
+  @Get()
   @Roles(...coldAdminOnly)
   @ApiQuery(bpcDecoratorOptions)
   @ApiQuery({
@@ -133,7 +134,7 @@ export class OrganizationController extends BaseWorker {
     operationId: 'GetOrganization',
     description: 'Get Organization by Name or ID',
   })
-  @Get('organizations/:orgId')
+  @Get(':orgId')
   @ApiQuery(bpcDecoratorOptions)
   @ApiParam(orgIdDecoratorOptions)
   @Roles(...allRoles)
@@ -153,6 +154,12 @@ export class OrganizationController extends BaseWorker {
     return await this.orgService.getOrganization(orgId, req, bpc);
   }
 
+  @Get(':orgId/footprints')
+  @Roles(...allRoles)
+  findAllByOrg(@Param('orgId') orgId: string) {
+    return this.footprintsService.findAllByOrg(orgId);
+  }
+
   /***
    * **Internal Use Only** : Delete an organization by ID
    * @param res
@@ -165,7 +172,7 @@ export class OrganizationController extends BaseWorker {
     operationId: 'DeleteOrg',
     description: 'Deletes specified organization',
   })
-  @Delete('organizations/:orgId')
+  @Delete(':orgId')
   @ApiQuery(bpcDecoratorOptions)
   @ApiParam(orgIdDecoratorOptions)
   @Roles(...coldAdminOnly)
@@ -200,7 +207,7 @@ export class OrganizationController extends BaseWorker {
     operationId: 'DeleteOrg',
     description: 'Deletes specified organization',
   })
-  @Delete('organizations')
+  @Delete()
   @ApiQuery(bpcDecoratorOptions)
   @Roles(...coldAdminOnly)
   @HttpCode(204)
@@ -214,6 +221,9 @@ export class OrganizationController extends BaseWorker {
     },
   ) {
     const { organizations } = req.body;
+    if (!Array.isArray(organizations)) {
+      throw new BadRequestException('array of organization ids is required');
+    }
     for (const orgId of organizations) {
       try {
         const org = await this.orgService.getOrganization(orgId, req);
