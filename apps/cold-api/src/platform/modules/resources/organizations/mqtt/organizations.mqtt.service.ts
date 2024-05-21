@@ -42,7 +42,7 @@ export class ComplianceMQTT extends BaseWorker implements OnModuleInit {
       switch (action) {
         case `getComplianceSectionGroupList`: {
           payload = JSON.parse(message) as MqttSocketAPIPayload;
-          response = await this.groupRepository.getSectionGroupList(payload);
+          response = await this.groupRepository.getSectionGroupListByOrgCompliance(payload);
           break;
         }
         case `getComplianceSectionList`: {
@@ -52,7 +52,7 @@ export class ComplianceMQTT extends BaseWorker implements OnModuleInit {
         }
         case `getComplianceQuestionList`: {
           payload = JSON.parse(message) as MqttAPIComplianceSectionPayload;
-          response = await this.questionRepository.getQuestionList(payload);
+          response = await this.questionRepository.getFilteredQuestionList(payload);
           break;
         }
         default: {
