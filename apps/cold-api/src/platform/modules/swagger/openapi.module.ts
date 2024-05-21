@@ -65,6 +65,8 @@ export class OpenapiModule {
               clientSecret: config.get('AUTH0_CLIENT_SECRET') || '',
             },
           },
+          yamlDocumentUrl: 'v1/yaml',
+          jsonDocumentUrl: 'v1/json',
         }),
       ],
       exports: [SwaggerModule],
