@@ -45,7 +45,7 @@ export const ComplianceManagerOverviewSection = ({
   };
 
   useEffect(() => {
-    if (client?.current && connectionStatus) {
+    if (client?.current && connectionStatus && orgId) {
       publishMessage(
         `platform/${resolveNodeEnv()}/compliance/getComplianceQuestionList`,
         JSON.stringify({
@@ -55,10 +55,11 @@ export const ComplianceManagerOverviewSection = ({
           compliance_set_name: name,
           compliance_section_group_id: groupId,
           compliance_section_id: section.id,
+          organization_id: orgId,
         }),
       );
     }
-  }, [connectionStatus, name, publishMessage, client, collapseOpen]);
+  }, [connectionStatus, name, publishMessage, client, collapseOpen, orgId]);
 
   useEffect(() => {
     const counts = data?.counts;
