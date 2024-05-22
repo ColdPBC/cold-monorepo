@@ -1,13 +1,10 @@
-# [1.226.0-COLD-758.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.225.1...v1.226.0-COLD-758.1) (2024-05-21)
+## [1.225.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.225.1...v1.225.2) (2024-05-21)
 
 
-### Features
+### Bug Fixes
 
-* add error boundary to compliance manager components ([b969f1d](https://github.com/ColdPBC/cold-monorepo/commit/b969f1d57b9abbf0827f53445061c081f1e3a6f8))
-* changes to handle different flow guide and manager states ([21becc0](https://github.com/ColdPBC/cold-monorepo/commit/21becc0bb7d8e0ae84840e9add8a12d9be71c845))
-* handle document upload ([bda8d4b](https://github.com/ColdPBC/cold-monorepo/commit/bda8d4b5baacc87a8e2b999347ac28c6a23dd9a7))
-* handle new compliance MQTT data ([baf5a57](https://github.com/ColdPBC/cold-monorepo/commit/baf5a57566e649395337cdd3aecaafad06625b5f))
-* initial changes ([e157f6e](https://github.com/ColdPBC/cold-monorepo/commit/e157f6ee4d632e2cc71079837829a0b46b466c0e))
+* final issue with incorrect counts ([#437](https://github.com/ColdPBC/cold-monorepo/issues/437)) ([1cd1d0b](https://github.com/ColdPBC/cold-monorepo/commit/1cd1d0b2874761f4c0c957372c4a352e32395849))
+* properly process array values in dependency filter ([581d8a9](https://github.com/ColdPBC/cold-monorepo/commit/581d8a9a6100043e17cdfbec962c1c5fe467fd4a))
 
 ## [1.225.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.225.0...v1.225.1) (2024-05-21)
 
