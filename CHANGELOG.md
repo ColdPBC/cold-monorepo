@@ -1,3 +1,11 @@
+# [1.226.0-COLD-758.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.226.0-COLD-758.1...v1.226.0-COLD-758.2) (2024-05-22)
+
+
+### Features
+
+* changes to handle ai status updates ([bebe404](https://github.com/ColdPBC/cold-monorepo/commit/bebe4040c97262ff97b9bf156ab1cea7dda2ee43))
+* update api reply topic to send to correct one ([b791fa1](https://github.com/ColdPBC/cold-monorepo/commit/b791fa10653477061d719a4df01204a5e13b0e4b))
+
 # [1.226.0-COLD-758.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.225.1...v1.226.0-COLD-758.1) (2024-05-21)
 
 
