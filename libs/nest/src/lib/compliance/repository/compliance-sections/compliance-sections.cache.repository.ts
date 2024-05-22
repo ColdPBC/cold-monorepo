@@ -91,7 +91,7 @@ export class ComplianceSectionsCacheRepository extends CacheService implements O
       data.push(cacheItem);
     }
 
-    this.mqtt.replyTo(`ui/${process.env['NODE_ENV']}/${this.getOrgId(organization, job)}/${section}/currentAiStatus`, data);
+    this.mqtt.replyTo(`ui/${process.env['NODE_ENV']}/${this.getOrgId(organization, job)}/${job.data.payload.compliance.compliance_definition_name}/currentAiStatus`, data);
   }
 
   /**
