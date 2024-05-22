@@ -11,17 +11,6 @@ const _ComplianceManagerOverviewStatusCard = () => {
   const { data, status: managerStatus, complianceCounts } = useContext(ColdComplianceManagerContext);
   const { mqttComplianceSet } = data;
 
-  const isProgressBarGradientPercentageBased = (status: ComplianceManagerStatus) => {
-    if (
-      (managerStatus === ComplianceManagerStatus.startedAi && status === ComplianceManagerStatus.completedAi) ||
-      (managerStatus === ComplianceManagerStatus.startedQuestions && status === ComplianceManagerStatus.completedQuestions)
-    ) {
-      return true;
-    } else {
-      return false;
-    }
-  };
-
   const showProgressBarGradient = (status: ComplianceManagerStatus) => {
     if (status === managerStatus) {
       return true;
@@ -31,10 +20,7 @@ const _ComplianceManagerOverviewStatusCard = () => {
   };
 
   const getStatusIcon = (status: ComplianceManagerStatus) => {
-    if (
-      (managerStatus === ComplianceManagerStatus.startedAi && status === ComplianceManagerStatus.completedAi) ||
-      (managerStatus === ComplianceManagerStatus.startedQuestions && status === ComplianceManagerStatus.completedQuestions)
-    ) {
+    if (managerStatus === ComplianceManagerStatus.startedQuestions && status === ComplianceManagerStatus.completedQuestions) {
       let percentage = 0;
       if (managerStatus === ComplianceManagerStatus.startedQuestions && status === ComplianceManagerStatus.completedQuestions) {
         let totalQuestions = 0;
@@ -44,8 +30,6 @@ const _ComplianceManagerOverviewStatusCard = () => {
           answeredQuestions += value.user_answered;
         });
         percentage = (answeredQuestions / totalQuestions) * 100;
-      } else {
-        percentage = 50;
       }
 
       return (
@@ -71,27 +55,15 @@ const _ComplianceManagerOverviewStatusCard = () => {
       return null;
     }
     if (showProgressBarGradient(status)) {
-      if (isProgressBarGradientPercentageBased(status)) {
-        const percentage = 70;
-        return (
-          <div
-            data-testid={'compliance'}
-            className={`absolute h-[calc(100%+22px)] w-[1px] left-[6px] top-[6px]`}
-            style={{
-              backgroundImage: `linear-gradient(to bottom, ${ComplianceProgressStatusColor.user_answered} 0%, ${ComplianceProgressStatusColor.user_answered} ${percentage}%, ${HexColors.bgc.menu} ${percentage}%, ${HexColors.bgc.menu} 100%)`,
-            }}></div>
-        );
-      } else {
-        return (
-          <div
-            data-testid={'compliance'}
-            className={`absolute h-[calc(100%+22px)] w-[1px] left-[6px] top-[6px]`}
-            style={{
-              // have gradient color from 0% to amount of percentage to 100%
-              backgroundImage: `linear-gradient(to bottom, ${ComplianceProgressStatusColor.user_answered} 0%, ${HexColors.bgc.menu} 100%)`,
-            }}></div>
-        );
-      }
+      return (
+        <div
+          data-testid={'compliance'}
+          className={`absolute h-[calc(100%+22px)] w-[1px] left-[6px] top-[6px]`}
+          style={{
+            // have gradient color from 0% to amount of percentage to 100%
+            backgroundImage: `linear-gradient(to bottom, ${ComplianceProgressStatusColor.user_answered} 0%, ${HexColors.bgc.menu} 100%)`,
+          }}></div>
+      );
     }
 
     const progressBarColor = isComplianceStatusPassed(status, managerStatus) ? 'bg-green-200' : 'bg-bgc-menu';

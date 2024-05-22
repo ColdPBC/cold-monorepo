@@ -1,11 +1,16 @@
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { ColdComplianceManagerContext } from '@coldpbc/context';
+import { orderBy } from 'lodash';
 
 export const StartAIComplianceModal = () => {
   const { data } = useContext(ColdComplianceManagerContext);
   const { files } = data;
 
-  const fileData = files?.data || [];
+  const fileData = orderBy(files?.data || [], ['original_name'], ['asc']);
+
+  useEffect(() => {
+    files?.mutate();
+  }, []);
 
   return (
     <div className={'h-full w-full p-[24px]'}>

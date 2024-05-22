@@ -2,7 +2,7 @@ import React, { PropsWithChildren, useEffect } from 'react';
 import ColdContext, { ColdContextType } from '../context/coldContext';
 import { worker } from './browser';
 import { DefaultBodyType, MockedRequest, RestHandler } from 'msw';
-import { SWRConfig } from 'swr';
+import { SWRConfig, SWRResponse } from 'swr';
 import { MemoryRouter, MemoryRouterProps } from 'react-router-dom';
 import { Auth0ProviderOptions } from '@auth0/auth0-react';
 import { ComplianceManagerStatus, ErrorType } from '@coldpbc/enums';
@@ -10,22 +10,44 @@ import { WizardContext, WizardContextType } from '@coldpbc/components';
 import ColdMQTTContext from '../context/coldMQTTContext';
 import { mockMQTTContext } from './mqtt/mockMQTTContext';
 import { defaultMqttDataHandler, defaultMqttTopics, getSectionGroupList } from './mqtt';
-import { ColdComplianceManagerContext, ComplianceManagerContextType } from '@coldpbc/context';
+import { ColdComplianceManagerContext, ComplianceManagerContextType, ComplianceManagerData } from '@coldpbc/context';
+import { getAllFilesMock } from './filesMock';
 
-export const StoryMockProvider = (
-  props: PropsWithChildren<{
-    handlers?: RestHandler<MockedRequest<DefaultBodyType>>[];
-    memoryRouterProps?: MemoryRouterProps;
-    coldContext?: ColdContextType;
-    wizardContext?: WizardContextType;
-    mqttTopics?: { [key: string]: (args: any) => any };
-    complianceManagerContext?: Partial<ComplianceManagerContextType>;
-  }>,
-) => {
+export interface StoryMockProviderProps {
+  handlers?: RestHandler<MockedRequest<DefaultBodyType>>[];
+  memoryRouterProps?: MemoryRouterProps;
+  coldContext?: ColdContextType;
+  wizardContext?: WizardContextType;
+  mqttTopics?: { [key: string]: (args: any) => any };
+  complianceManagerContext?: Partial<{
+    data: Partial<ComplianceManagerData>;
+    status: ComplianceManagerStatus;
+    setStatus: (status: ComplianceManagerStatus) => void;
+    complianceCounts: {
+      [key: string]: {
+        not_started: number;
+        ai_answered: number;
+        user_answered: number;
+        bookmarked: number;
+      };
+    };
+    setComplianceCounts: React.Dispatch<
+      React.SetStateAction<{
+        [key: string]: {
+          not_started: number;
+          ai_answered: number;
+          user_answered: number;
+          bookmarked: number;
+        };
+      }>
+    >;
+    showOverviewModal: boolean;
+    setShowOverviewModal: React.Dispatch<React.SetStateAction<boolean>>;
+  }>;
+}
+
+export const StoryMockProvider = (props: PropsWithChildren<StoryMockProviderProps>) => {
   const [impersonatingOrg, setImpersonatingOrg] = React.useState<string | undefined>(undefined);
-  const [complianceManagerStatus, setComplianceManagerStatus] = React.useState<ComplianceManagerStatus>(
-    props.complianceManagerContext?.status ?? ComplianceManagerStatus.notActivated,
-  );
   useEffect(() => {
     worker && worker.use(...(props.handlers ?? []));
     return () => {
@@ -65,17 +87,27 @@ export const StoryMockProvider = (
   const [status, setStatus] = React.useState<ComplianceManagerStatus>(props.complianceManagerContext?.status || ComplianceManagerStatus.notActivated);
   const [showOverviewModal, setShowOverviewModal] = React.useState<boolean>(props.complianceManagerContext?.showOverviewModal || false);
 
-  const complianceManagerContextValue: ComplianceManagerContextType = {
-    data: {
-      mqttComplianceSet: getSectionGroupList({
-        name: 'rei_pia_2024',
-      }),
+  const complianceManagerContextData: ComplianceManagerData = {
+    mqttComplianceSet: getSectionGroupList({
       name: 'rei_pia_2024',
-      files: undefined,
-      currentAIStatus: undefined,
-      orgCompliances: undefined,
-    },
+    }),
+    name: 'rei_pia_2024',
+    files: {
+      data: getAllFilesMock(),
+      error: undefined,
+      revalidate: () => {},
+      isValidating: false,
+      isLoading: false,
+      mutate: () => Promise.resolve(),
+    } as SWRResponse<any[], any, any>,
+    currentAIStatus: undefined,
+    orgCompliances: undefined,
+    ...props.complianceManagerContext?.data,
+  };
+
+  const complianceManagerContextValue: ComplianceManagerContextType = {
     ...props.complianceManagerContext,
+    data: complianceManagerContextData,
     status,
     setStatus: props.complianceManagerContext?.setStatus || setStatus,
     complianceCounts,

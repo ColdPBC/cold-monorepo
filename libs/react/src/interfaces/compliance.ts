@@ -96,3 +96,10 @@ export type MQTTComplianceManagerPayloadComplianceQuestion = {
   bookmarked: boolean;
   not_started: boolean;
 };
+
+export type CurrentAIStatusPayload = CurrentAIStatusSection[];
+
+export type CurrentAIStatusSection = {
+  section: string;
+  questions: string[];
+};

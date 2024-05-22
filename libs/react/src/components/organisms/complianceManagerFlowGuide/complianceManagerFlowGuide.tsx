@@ -1,17 +1,18 @@
-import { BaseButton, Card, CompletedBanner, Spinner } from '@coldpbc/components';
-import { useContext, useEffect } from 'react';
+import { BaseButton, Card, CompletedBanner, ErrorFallback, Spinner } from '@coldpbc/components';
+import React, { useContext, useEffect } from 'react';
 import { ColdComplianceManagerContext } from '@coldpbc/context';
 import { ComplianceManagerFlowGuideStatus, ComplianceManagerStatus, GlobalSizes, IconNames } from '@coldpbc/enums';
 import { HexColors } from '@coldpbc/themes';
+import { withErrorBoundary } from 'react-error-boundary';
 
-interface ComplianceManagerFlowGuideProps {
+export interface ComplianceManagerFlowGuideProps {
   showModal: boolean;
   setShowModal: (show: boolean) => void;
   flowGuideStatus: ComplianceManagerFlowGuideStatus;
   setFlowGuideStatus: (status: ComplianceManagerFlowGuideStatus) => void;
 }
 
-export const ComplianceManagerFlowGuide = ({ showModal, setShowModal, flowGuideStatus, setFlowGuideStatus }: ComplianceManagerFlowGuideProps) => {
+const _ComplianceManagerFlowGuide = ({ showModal, setShowModal, flowGuideStatus, setFlowGuideStatus }: ComplianceManagerFlowGuideProps) => {
   const { status: managerStatus } = useContext(ColdComplianceManagerContext);
 
   useEffect(() => {
@@ -175,3 +176,10 @@ export const ComplianceManagerFlowGuide = ({ showModal, setShowModal, flowGuideS
     </Card>
   );
 };
+
+export const ComplianceManagerFlowGuide = withErrorBoundary(_ComplianceManagerFlowGuide, {
+  FallbackComponent: props => <ErrorFallback {...props} />,
+  onError: (error, info) => {
+    console.error('Error occurred in ComplianceManagerFlowGuide: ', error);
+  },
+});

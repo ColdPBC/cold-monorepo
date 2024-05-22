@@ -5,11 +5,13 @@ import {
   ComplianceManagerOverviewSectionGroups,
   ComplianceManagerOverviewStatusCard,
   ComplianceManagerQuestionnaireProgress,
+  ErrorFallback,
 } from '@coldpbc/components';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { ComplianceManagerFlowGuideStatus } from '@coldpbc/enums';
+import { withErrorBoundary } from 'react-error-boundary';
 
-export const ComplianceManagerOverview = () => {
+const _ComplianceManagerOverview = () => {
   const [showModal, setShowModal] = useState(false);
   const [flowGuideStatus, setFlowGuideStatus] = useState<ComplianceManagerFlowGuideStatus>(ComplianceManagerFlowGuideStatus.activate);
   return (
@@ -25,3 +27,10 @@ export const ComplianceManagerOverview = () => {
     </div>
   );
 };
+
+export const ComplianceManagerOverview = withErrorBoundary(_ComplianceManagerOverview, {
+  FallbackComponent: props => <ErrorFallback {...props} />,
+  onError: (error, info) => {
+    console.error('Error occurred in ComplianceManagerOverview: ', error);
+  },
+});

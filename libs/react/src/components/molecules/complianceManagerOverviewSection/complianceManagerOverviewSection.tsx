@@ -45,6 +45,8 @@ const _ComplianceManagerOverviewSection = ({
     error: unknown;
   };
 
+  const sectionAIStatus = currentAIStatus?.find(s => s.section === section.key);
+
   useEffect(() => {
     if (client?.current && connectionStatus && orgId) {
       publishMessage(
@@ -82,12 +84,8 @@ const _ComplianceManagerOverviewSection = ({
 
   const isAIRunning = () => {
     if (status === ComplianceManagerStatus.startedAi) {
-      if (currentAIStatus === undefined) {
-        return true;
-      } else {
-        // todo: look for section in currentAIStatus. if found return true, else return false
-        return false;
-      }
+      // check if the currentAIStatus has the section
+      return !!sectionAIStatus;
     } else {
       return false;
     }
@@ -116,10 +114,6 @@ const _ComplianceManagerOverviewSection = ({
     error,
   });
 
-  if (data?.compliance_questions === undefined || data?.compliance_questions.length === 0) {
-    return null;
-  }
-
   const backgroundColor = isAIRunning() ? 'bg-gray-60' : 'bg-bgc-accent';
   const textColor = isAIRunning() ? 'text-tc-disabled' : 'text-tc-primary';
 
@@ -136,14 +130,14 @@ const _ComplianceManagerOverviewSection = ({
       <div className={'w-full flex flex-row justify-between items-center'}>
         <div className={'flex flex-row gap-[16px] justify-start items-center'}>
           <div className={`text-h4 ${textColor}`}>{section.title}</div>
-          {status === ComplianceManagerStatus.startedAi && <div className={'text-body text-tc-disabled'}>Cold AI Running</div>}
+          {isAIRunning() && <div className={'text-body text-tc-disabled'}>Cold AI Running</div>}
         </div>
         <div className={'flex flex-row gap-[8px] items-center'}>
           <div className={`w-[105px] h-full flex items-center text-body text-start ${textColor}`}>{totalQuestions.current} Questions</div>
           <ArrowRightIcon className={'w-[24px] h-[24px] text-tc-primary'} />
         </div>
       </div>
-      <ComplianceManagerSectionProgressBar questions={data?.compliance_questions} />
+      <ComplianceManagerSectionProgressBar sectionAIStatus={sectionAIStatus} questions={data?.compliance_questions} />
     </div>
   );
 };

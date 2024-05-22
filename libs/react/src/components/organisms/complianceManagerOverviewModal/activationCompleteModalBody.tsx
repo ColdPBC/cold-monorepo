@@ -43,9 +43,6 @@ export const ActivationCompleteModalBody = ({ setButtonDisabled }: { setButtonDi
       if (orgId && name) {
         setButtonDisabled(true);
         const response = await axiosFetcher([`/compliance_definitions/${name}/organizations/${orgId}`, 'POST']);
-        console.log({
-          response,
-        });
         if (!isAxiosError(response)) {
           setStatus(ComplianceManagerStatus.activated);
         }

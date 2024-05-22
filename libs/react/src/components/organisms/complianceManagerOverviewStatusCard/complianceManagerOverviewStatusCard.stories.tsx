@@ -74,6 +74,14 @@ export const StartedQuestions: Story = {
     <StoryMockProvider
       complianceManagerContext={{
         status: ComplianceManagerStatus.startedQuestions,
+        complianceCounts: {
+          all: {
+            not_started: 100,
+            ai_answered: 100,
+            user_answered: 150,
+            bookmarked: 0,
+          },
+        },
       }}>
       <ComplianceManagerOverviewStatusCard />
     </StoryMockProvider>

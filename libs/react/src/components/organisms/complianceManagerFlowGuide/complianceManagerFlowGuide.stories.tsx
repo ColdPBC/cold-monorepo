@@ -1,8 +1,9 @@
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
-import { ComplianceManagerFlowGuide } from '@coldpbc/components';
-import { getSectionGroupList, StoryMockProvider } from '@coldpbc/mocks';
+import { ComplianceManagerFlowGuide, ComplianceManagerFlowGuideProps } from '@coldpbc/components';
+import { StoryMockProvider, StoryMockProviderProps } from '@coldpbc/mocks';
 import { ComplianceManagerFlowGuideStatus, ComplianceManagerStatus } from '@coldpbc/enums';
+import { useState } from 'react';
 
 const meta: Meta<typeof ComplianceManagerFlowGuide> = {
   title: 'Organisms/ComplianceManagerFlowGuide',
@@ -14,24 +15,17 @@ const meta: Meta<typeof ComplianceManagerFlowGuide> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const NotActivated: Story = {
+export const Activate: Story = {
   render: args => (
-    <StoryMockProvider
-      complianceManagerContext={{
-        data: {
-          name: 'name',
-          mqttComplianceSet: getSectionGroupList({
-            name: 'rei_pia_2024',
-          }),
-          files: undefined,
-          orgCompliances: undefined,
-          currentAIStatus: undefined,
+    <ComplianceFlowGuideStory
+      args={args}
+      storyMockProps={{
+        complianceManagerContext: {
+          status: ComplianceManagerStatus.notActivated,
+          setStatus: () => {},
         },
-        status: ComplianceManagerStatus.notActivated,
-        setStatus: () => {},
-      }}>
-      <ComplianceManagerFlowGuide {...args} />
-    </StoryMockProvider>
+      }}
+    />
   ),
   args: {
     showModal: false,
@@ -41,24 +35,17 @@ export const NotActivated: Story = {
   },
 };
 
-export const Activated: Story = {
+export const Upload: Story = {
   render: args => (
-    <StoryMockProvider
-      complianceManagerContext={{
-        data: {
-          name: 'name',
-          mqttComplianceSet: getSectionGroupList({
-            name: 'rei_pia_2024',
-          }),
-          files: undefined,
-          orgCompliances: undefined,
-          currentAIStatus: undefined,
+    <ComplianceFlowGuideStory
+      args={args}
+      storyMockProps={{
+        complianceManagerContext: {
+          status: ComplianceManagerStatus.activated,
+          setStatus: () => {},
         },
-        status: ComplianceManagerStatus.activated,
-        setStatus: () => {},
-      }}>
-      <ComplianceManagerFlowGuide {...args} />
-    </StoryMockProvider>
+      }}
+    />
   ),
   args: {
     showModal: false,
@@ -68,24 +55,17 @@ export const Activated: Story = {
   },
 };
 
-export const UploadedDocuments: Story = {
+export const StartedAI: Story = {
   render: args => (
-    <StoryMockProvider
-      complianceManagerContext={{
-        data: {
-          name: 'name',
-          mqttComplianceSet: getSectionGroupList({
-            name: 'rei_pia_2024',
-          }),
-          files: undefined,
-          orgCompliances: undefined,
-          currentAIStatus: undefined,
+    <ComplianceFlowGuideStory
+      args={args}
+      storyMockProps={{
+        complianceManagerContext: {
+          status: ComplianceManagerStatus.startedAi,
+          setStatus: () => {},
         },
-        status: ComplianceManagerStatus.uploadedDocuments,
-        setStatus: () => {},
-      }}>
-      <ComplianceManagerFlowGuide {...args} />
-    </StoryMockProvider>
+      }}
+    />
   ),
   args: {
     showModal: false,
@@ -95,105 +75,17 @@ export const UploadedDocuments: Story = {
   },
 };
 
-export const StartedColdAI: Story = {
+export const RestartAI: Story = {
   render: args => (
-    <StoryMockProvider
-      complianceManagerContext={{
-        data: {
-          name: 'name',
-          mqttComplianceSet: getSectionGroupList({
-            name: 'rei_pia_2024',
-          }),
-          files: undefined,
-          orgCompliances: undefined,
-          currentAIStatus: undefined,
+    <ComplianceFlowGuideStory
+      args={args}
+      storyMockProps={{
+        complianceManagerContext: {
+          status: ComplianceManagerStatus.completedAi,
+          setStatus: () => {},
         },
-        status: ComplianceManagerStatus.startedAi,
-        setStatus: () => {},
-      }}>
-      <ComplianceManagerFlowGuide {...args} />
-    </StoryMockProvider>
-  ),
-  args: {
-    showModal: false,
-    setShowModal: () => {},
-    flowGuideStatus: ComplianceManagerFlowGuideStatus.activate,
-    setFlowGuideStatus: () => {},
-  },
-};
-
-export const CompletedAI: Story = {
-  render: args => (
-    <StoryMockProvider
-      complianceManagerContext={{
-        data: {
-          name: 'name',
-          mqttComplianceSet: getSectionGroupList({
-            name: 'rei_pia_2024',
-          }),
-          files: undefined,
-          orgCompliances: undefined,
-          currentAIStatus: undefined,
-        },
-        status: ComplianceManagerStatus.completedAi,
-        setStatus: () => {},
-      }}>
-      <ComplianceManagerFlowGuide {...args} />
-    </StoryMockProvider>
-  ),
-  args: {
-    showModal: false,
-    setShowModal: () => {},
-    flowGuideStatus: ComplianceManagerFlowGuideStatus.activate,
-    setFlowGuideStatus: () => {},
-  },
-};
-
-export const StartedQuestions: Story = {
-  render: args => (
-    <StoryMockProvider
-      complianceManagerContext={{
-        data: {
-          name: 'name',
-          mqttComplianceSet: getSectionGroupList({
-            name: 'rei_pia_2024',
-          }),
-          files: undefined,
-          orgCompliances: undefined,
-          currentAIStatus: undefined,
-        },
-        status: ComplianceManagerStatus.startedQuestions,
-        setStatus: () => {},
-      }}>
-      <ComplianceManagerFlowGuide {...args} />
-    </StoryMockProvider>
-  ),
-  args: {
-    showModal: false,
-    setShowModal: () => {},
-    flowGuideStatus: ComplianceManagerFlowGuideStatus.activate,
-    setFlowGuideStatus: () => {},
-  },
-};
-
-export const CompletedQuestions: Story = {
-  render: args => (
-    <StoryMockProvider
-      complianceManagerContext={{
-        data: {
-          name: 'name',
-          mqttComplianceSet: getSectionGroupList({
-            name: 'rei_pia_2024',
-          }),
-          files: undefined,
-          orgCompliances: undefined,
-          currentAIStatus: undefined,
-        },
-        status: ComplianceManagerStatus.completedQuestions,
-        setStatus: () => {},
-      }}>
-      <ComplianceManagerFlowGuide {...args} />
-    </StoryMockProvider>
+      }}
+    />
   ),
   args: {
     showModal: false,
@@ -205,22 +97,15 @@ export const CompletedQuestions: Story = {
 
 export const Submitted: Story = {
   render: args => (
-    <StoryMockProvider
-      complianceManagerContext={{
-        data: {
-          name: 'name',
-          mqttComplianceSet: getSectionGroupList({
-            name: 'rei_pia_2024',
-          }),
-          files: undefined,
-          orgCompliances: undefined,
-          currentAIStatus: undefined,
+    <ComplianceFlowGuideStory
+      args={args}
+      storyMockProps={{
+        complianceManagerContext: {
+          status: ComplianceManagerStatus.submitted,
+          setStatus: () => {},
         },
-        status: ComplianceManagerStatus.submitted,
-        setStatus: () => {},
-      }}>
-      <ComplianceManagerFlowGuide {...args} />
-    </StoryMockProvider>
+      }}
+    />
   ),
   args: {
     showModal: false,
@@ -228,4 +113,14 @@ export const Submitted: Story = {
     flowGuideStatus: ComplianceManagerFlowGuideStatus.activate,
     setFlowGuideStatus: () => {},
   },
+};
+
+const ComplianceFlowGuideStory = ({ args, storyMockProps }: { args: ComplianceManagerFlowGuideProps; storyMockProps: StoryMockProviderProps }) => {
+  const [flowGuideStatus, setFlowGuideStatus] = useState(args.flowGuideStatus);
+
+  return (
+    <StoryMockProvider {...storyMockProps}>
+      <ComplianceManagerFlowGuide {...args} setFlowGuideStatus={setFlowGuideStatus} flowGuideStatus={flowGuideStatus} />
+    </StoryMockProvider>
+  );
 };

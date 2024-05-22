@@ -1,5 +1,5 @@
 import { ActivationCompleteModalBody, BaseButton, Card, ColdSparkleIcon, StartAIComplianceModal, UploadComplianceDocumentsModal } from '@coldpbc/components';
-import { MouseEvent, useContext, useEffect, useRef, useState } from 'react';
+import { MouseEvent, useContext, useRef, useState } from 'react';
 import { ColdComplianceManagerContext } from '@coldpbc/context';
 import { ComplianceManagerFlowGuideStatus, ComplianceManagerStatus, IconNames } from '@coldpbc/enums';
 import { ArrowUpIcon } from '@heroicons/react/24/solid';
@@ -19,11 +19,6 @@ export const ComplianceManagerOverviewModal = (props: ComplianceManagerOverviewM
   const { data, status, setStatus } = useContext(ColdComplianceManagerContext);
   const [buttonDisabled, setButtonDisabled] = useState<boolean>(false);
   const modalRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    console.log(modalRef.current?.clientHeight);
-    console.log(modalRef.current?.clientWidth);
-  }, [modalRef.current]);
 
   const { mqttComplianceSet, files, name } = data;
 
@@ -121,8 +116,8 @@ export const ComplianceManagerOverviewModal = (props: ComplianceManagerOverviewM
         iconRight = true;
         onClick = async () => {
           setFlowGuideStatus(ComplianceManagerFlowGuideStatus.startAI);
-          await files?.mutate();
           setStatus(ComplianceManagerStatus.uploadedDocuments);
+          await files?.mutate();
         };
         break;
       case ComplianceManagerFlowGuideStatus.startAI:
@@ -132,16 +127,15 @@ export const ComplianceManagerOverviewModal = (props: ComplianceManagerOverviewM
           if (orgId) {
             setButtonDisabled(true);
             await startComplianceAI(name, orgId);
-            setButtonDisabled(false);
             setFlowGuideStatus(ComplianceManagerFlowGuideStatus.startedAI);
-            setStatus(ComplianceManagerStatus.startedAi);
+            setButtonDisabled(false);
             setShowModal(false);
           }
         };
         break;
     }
 
-    return <BaseButton onClick={onClick} disabled={buttonDisabled} label={label} iconRight={iconRight ? IconNames.ColdRightArrowIcon : undefined} />;
+    return <BaseButton onClick={onClick} disabled={buttonDisabled} loading={buttonDisabled} label={label} iconRight={iconRight ? IconNames.ColdRightArrowIcon : undefined} />;
   };
 
   const getModalFooter = () => {
@@ -172,10 +166,8 @@ export const ComplianceManagerOverviewModal = (props: ComplianceManagerOverviewM
 
   if (show) {
     return (
-      <div
-        className={'h-screen w-screen fixed p-[100px] top-0 left-0 z-50 flex flex-col justify-center items-center justify-items-center bg-bgc-backdrop bg-opacity-90'}
-        onClick={event => closeModal(event)}>
-        <Card className="p-0 h-full w-full flex flex-col relative pb-[98px] pt-[104px]" glow={false} innerRef={modalRef}>
+      <div className={'h-screen w-screen fixed p-[100px] top-0 left-0 z-50 flex bg-bgc-backdrop bg-opacity-90 overflow-auto'} onClick={event => closeModal(event)}>
+        <Card className="relative p-0 h-full w-full min-w-[1100px] min-h-[750px] flex flex-col pb-[98px] pt-[104px]" glow={false} innerRef={modalRef}>
           <div
             // src={complianceDefinition?.image_url}
             className={'absolute top-0 left-0 w-full h-full'}

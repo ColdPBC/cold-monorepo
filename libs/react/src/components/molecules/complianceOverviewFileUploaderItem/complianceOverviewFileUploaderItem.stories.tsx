@@ -1,7 +1,8 @@
 import { Meta, StoryObj } from '@storybook/react';
-import { ComplianceOverviewFileUploaderItem } from '@coldpbc/components';
+import { ComplianceOverviewFileUploaderItem, ComplianceOverviewFileUploaderItemProps } from '@coldpbc/components';
 import { withKnobs } from '@storybook/addon-knobs';
 import { StoryMockProvider } from '@coldpbc/mocks';
+import { useState } from 'react';
 
 const meta: Meta<typeof ComplianceOverviewFileUploaderItem> = {
   title: 'Molecules/ComplianceOverviewFileUploaderItem',
@@ -14,15 +15,7 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const NewFile: Story = {
-  render: args => {
-    return (
-      <StoryMockProvider>
-        <div className="w-[620px]">
-          <ComplianceOverviewFileUploaderItem {...args} />
-        </div>
-      </StoryMockProvider>
-    );
-  },
+  render: args => <FileUploaderStory {...args} />,
   args: {
     file: {
       uploaded: false,
@@ -35,15 +28,7 @@ export const NewFile: Story = {
 };
 
 export const OldFile: Story = {
-  render: args => {
-    return (
-      <StoryMockProvider>
-        <div className="w-[620px]">
-          <ComplianceOverviewFileUploaderItem {...args} />
-        </div>
-      </StoryMockProvider>
-    );
-  },
+  render: args => <FileUploaderStory {...args} />,
   args: {
     file: {
       uploaded: true,
@@ -54,4 +39,26 @@ export const OldFile: Story = {
       },
     },
   },
+};
+
+const FileUploaderStory = (args: ComplianceOverviewFileUploaderItemProps) => {
+  const [uploaded, setUploaded] = useState(args.file.uploaded);
+  const onFileUpload = () => {
+    setUploaded(true);
+  };
+  return (
+    <StoryMockProvider>
+      <div className="w-[620px]">
+        <ComplianceOverviewFileUploaderItem
+          {...args}
+          file={{
+            uploaded: uploaded,
+            new: args.file.new,
+            contents: args.file.contents,
+          }}
+          onFileUpload={onFileUpload}
+        />
+      </div>
+    </StoryMockProvider>
+  );
 };

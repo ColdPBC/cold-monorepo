@@ -13,18 +13,18 @@ export interface ComplianceOverviewFileUploaderItemProps {
     new: boolean;
     contents: any;
   };
+  onFileUpload?: () => void;
 }
 
-const _ComplianceOverviewFileUploaderItem = ({ file }: ComplianceOverviewFileUploaderItemProps) => {
+const _ComplianceOverviewFileUploaderItem = ({ file, onFileUpload }: ComplianceOverviewFileUploaderItemProps) => {
   const { orgId } = useAuth0Wrapper();
-  const [uploading, setUploading] = React.useState(!file.uploaded);
   const name = file.new ? file.contents.name : file.contents.original_name;
   const uploaded = file.uploaded;
   const dateString = file.new ? 'Just now' : format(new Date(file.contents.updated_at), 'MM/dd/yy');
 
   useEffect(() => {
     const uploadFile = async () => {
-      if (!uploaded && orgId && file.new && !uploaded) {
+      if (!uploaded && orgId) {
         const fileToUpload = file.contents as File;
         const formData = new FormData();
         formData.append('file', fileToUpload);
@@ -36,7 +36,7 @@ const _ComplianceOverviewFileUploaderItem = ({ file }: ComplianceOverviewFileUpl
         } as AxiosRequestConfig);
         const response = await axiosFetcher([`/organizations/${orgId}/files`, 'POST', formData, config]);
         if (!isAxiosError(response)) {
-          setUploading(false);
+          onFileUpload && onFileUpload();
         }
       }
     };
@@ -46,10 +46,10 @@ const _ComplianceOverviewFileUploaderItem = ({ file }: ComplianceOverviewFileUpl
   return (
     <div className={'text-tc-primary text-eyebrow w-full bg-gray-30 rounded-[8px] p-[8px] flex flex-row gap-[8px] items-center border-[1px] border-gray-50'}>
       <div className={'w-1/2'}>{name}</div>
-      <div className={'w-1/2 flex flex-row gap-[8px] items-center text-tc-disabled justify-between'}>
-        {uploading ? (
-          <div className={'w-full p-[2px] rounded-[8px] h-[8x] bg-bgc-accent'}>
-            <div className={'h-full w-full bg-blue-300 rounded-[8px] animate-progressBar'}></div>
+      <div className={'w-1/2 flex flex-row gap-[8px] items-center text-tc-disabled justify-between'} data-chromatic={'ignore'}>
+        {!uploaded ? (
+          <div className={'h-[8px] w-full p-[2px] rounded-[8px] bg-bgc-accent'}>
+            <div className={'h-full w-full bg-primary-300 rounded-[8px] animate-progressBar'}></div>
           </div>
         ) : (
           <>

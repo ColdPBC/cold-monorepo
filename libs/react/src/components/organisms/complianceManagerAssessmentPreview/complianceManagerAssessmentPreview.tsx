@@ -3,7 +3,7 @@ import { HexColors } from '@coldpbc/themes';
 import { Tooltip } from 'flowbite-react';
 import React, { useContext } from 'react';
 import { ColdComplianceManagerContext } from '@coldpbc/context';
-import { forOwn } from 'lodash';
+import { forOwn, includes } from 'lodash';
 import { ComplianceManagerStatus } from '@coldpbc/enums';
 import { useColdContext } from '@coldpbc/hooks';
 import { withErrorBoundary } from 'react-error-boundary';
@@ -41,6 +41,19 @@ const _ComplianceManagerAssessmentPreview = () => {
     }
   };
 
+  const isButtonDisabled = () => {
+    return includes(
+      [
+        ComplianceManagerStatus.notActivated,
+        ComplianceManagerStatus.activated,
+        ComplianceManagerStatus.uploadedDocuments,
+        ComplianceManagerStatus.startedAi,
+        ComplianceManagerStatus.submitted,
+      ],
+      status,
+    );
+  };
+
   return (
     <Card className={'w-fit flex flex-col justify-between overflow-visible'} glow={false}>
       <Tooltip
@@ -55,7 +68,7 @@ const _ComplianceManagerAssessmentPreview = () => {
           </div>
         </div>
       </Tooltip>
-      <BaseButton className={'w-full'} disabled={status === ComplianceManagerStatus.notActivated}>
+      <BaseButton className={'w-full'} disabled={isButtonDisabled()}>
         Submit
       </BaseButton>
     </Card>

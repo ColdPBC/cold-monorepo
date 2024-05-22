@@ -8,13 +8,12 @@ import { ComplianceManagerStatus, IconNames } from '@coldpbc/enums';
 import { format } from 'date-fns';
 import { withErrorBoundary } from 'react-error-boundary';
 import ColdMQTTContext from '../../../context/coldMQTTContext';
-import { MQTTComplianceManagerPayload, OrgCompliance } from '@coldpbc/interfaces';
+import { CurrentAIStatusPayload, MQTTComplianceManagerPayload, OrgCompliance } from '@coldpbc/interfaces';
 import useSWRSubscription from 'swr/subscription';
 import useSWR from 'swr';
 import { axiosFetcher, resolveNodeEnv } from '@coldpbc/fetchers';
 import { getTermString } from '@coldpbc/lib';
 
-// todo: test upload documents
 // todo: test run against AI
 // todo: handle user submission. need status data
 
@@ -52,7 +51,7 @@ const _ComplianceManager = () => {
     }
   };
   const currentAIStatus = useSWRSubscription(getCurrentAIStatusTopic(), subscribeSWR) as {
-    data: unknown | undefined;
+    data: CurrentAIStatusPayload | undefined;
     error: any;
   };
 
@@ -80,7 +79,7 @@ const _ComplianceManager = () => {
         setStatus(ComplianceManagerStatus.activated);
         if (files.data && files.data.length > 0) {
           setStatus(ComplianceManagerStatus.uploadedDocuments);
-          if (currentAIStatus?.data) {
+          if (currentAIStatus?.data && currentAIStatus.data.length > 0) {
             setStatus(ComplianceManagerStatus.startedAi);
           } else {
             // check the compliance counts to see if the AI has been run
@@ -94,20 +93,22 @@ const _ComplianceManager = () => {
             });
             // if the ai answers are greater than 0 then the AI has been run
             // but how do we tell difference between first ai run and subsequent ai runs
-            if (aiAnswered > 0 && userAnswered === 0) {
-              setStatus(ComplianceManagerStatus.completedAi);
-            } else if (aiAnswered > 0 && userAnswered > 0) {
-              setStatus(ComplianceManagerStatus.startedQuestions);
-            }
+            if (totalQuestions > 0) {
+              if (aiAnswered > 0 && userAnswered === 0) {
+                setStatus(ComplianceManagerStatus.completedAi);
+              } else if (aiAnswered > 0 && userAnswered > 0) {
+                setStatus(ComplianceManagerStatus.startedQuestions);
+              }
 
-            if (totalQuestions === userAnswered) {
-              setStatus(ComplianceManagerStatus.completedQuestions);
+              if (totalQuestions === userAnswered) {
+                setStatus(ComplianceManagerStatus.completedQuestions);
+              }
             }
           }
         }
       }
     }
-  }, [orgCompliances, files, currentAIStatus, complianceCounts]);
+  }, [orgCompliances, files, currentAIStatus, complianceCounts, name]);
 
   logBrowser('Compliance Definition', 'info', {
     name,
@@ -119,7 +120,8 @@ const _ComplianceManager = () => {
     managementView,
     orgCompliances,
     topic,
-    currentAIStatus,
+    currentAIStatus: currentAIStatus.data,
+    files: files.data,
   });
 
   if (!data) {

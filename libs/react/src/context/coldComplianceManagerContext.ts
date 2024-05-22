@@ -1,4 +1,4 @@
-import { MQTTComplianceManagerPayload, OrgCompliance } from '@coldpbc/interfaces';
+import { CurrentAIStatusPayload, MQTTComplianceManagerPayload, OrgCompliance } from '@coldpbc/interfaces';
 import { ComplianceManagerStatus } from '@coldpbc/enums';
 import React, { createContext } from 'react';
 import { SWRResponse } from 'swr';
@@ -7,7 +7,7 @@ export interface ComplianceManagerData {
   orgCompliances: OrgCompliance[] | undefined;
   mqttComplianceSet: MQTTComplianceManagerPayload | undefined;
   files: SWRResponse<any[], any, any> | undefined;
-  currentAIStatus: unknown | undefined;
+  currentAIStatus: CurrentAIStatusPayload | undefined;
   name: string;
 }
 

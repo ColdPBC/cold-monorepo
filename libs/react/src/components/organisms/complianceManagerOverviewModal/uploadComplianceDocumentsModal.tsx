@@ -1,29 +1,34 @@
 import { BaseButton, ComplianceOverviewFileUploaderItem, Markdown } from '@coldpbc/components';
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { map } from 'lodash';
+import { filter, map, orderBy, set } from 'lodash';
 import { ColdComplianceManagerContext } from '@coldpbc/context';
 import { ButtonTypes } from '@coldpbc/enums';
 
 export const UploadComplianceDocumentsModal = ({ setButtonDisabled }: { setButtonDisabled: (loading: boolean) => void }) => {
   const { data } = useContext(ColdComplianceManagerContext);
-  const { mqttComplianceSet } = data;
-  const uploadedDocuments = data?.files?.data || [];
+  const { mqttComplianceSet, files } = data;
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [newFiles, setNewFiles] = useState<
     {
       uploaded: boolean;
+      new: boolean;
       contents: File;
     }[]
   >([]);
+  const uploadedDocuments = filter(orderBy(files?.data || [], ['original_name', 'updated_at'], ['asc', 'desc']), document => {
+    return !newFiles.some(file => file.contents.name === document.original_name);
+  });
 
   const handleChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const newFiles = Array.from(event.target.files || []);
     setNewFiles(prevFiles => [
       ...prevFiles,
       ...map(newFiles, file => {
+        set(file, 'uploadTime', new Date().toISOString());
         return {
           uploaded: false,
           contents: file,
+          new: true,
         };
       }),
     ]);
@@ -38,13 +43,24 @@ export const UploadComplianceDocumentsModal = ({ setButtonDisabled }: { setButto
     const droppedFiles = event.dataTransfer.files;
     if (droppedFiles.length > 0) {
       const newFiles = map(Array.from(droppedFiles), file => {
+        set(file, 'uploadTime', new Date().toISOString());
         return {
           uploaded: false,
           contents: file,
+          new: true,
         };
       });
       setNewFiles(prevFiles => [...newFiles, ...prevFiles]);
     }
+  };
+
+  const onNewFileUpload = (index: number) => {
+    // set the new file to uploaded
+    setNewFiles(prevFiles => {
+      const newFiles = [...prevFiles];
+      newFiles[index].uploaded = true;
+      return newFiles;
+    });
   };
 
   useEffect(() => {
@@ -86,12 +102,12 @@ export const UploadComplianceDocumentsModal = ({ setButtonDisabled }: { setButto
           </div>
         </div>
         <div className={'h-auto max-h-[200px] min-h-0 w-full overflow-x-auto flex flex-col gap-[8px]'}>
-          {map(newFiles, (file, index) => {
+          {map(orderBy(newFiles, ['contents.uploadTime', 'name'], ['desc', 'asc']), (file, index) => {
             return (
               <ComplianceOverviewFileUploaderItem
-                file={{
-                  ...file,
-                  new: true,
+                file={file}
+                onFileUpload={() => {
+                  onNewFileUpload(index);
                 }}
               />
             );
