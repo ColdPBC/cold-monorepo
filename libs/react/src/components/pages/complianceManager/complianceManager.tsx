@@ -104,11 +104,19 @@ const _ComplianceManager = () => {
                 setStatus(ComplianceManagerStatus.completedQuestions);
               }
             }
+
+            const statuses = data?.statuses;
+            if (statuses && statuses.length > 0) {
+              const recentStatus = statuses[0];
+              if (recentStatus.type === 'user_submitted') {
+                setStatus(ComplianceManagerStatus.submitted);
+              }
+            }
           }
         }
       }
     }
-  }, [orgCompliances, files, currentAIStatus, complianceCounts, name]);
+  }, [orgCompliances, files, currentAIStatus, complianceCounts, name, data]);
 
   logBrowser('Compliance Definition', 'info', {
     name,
