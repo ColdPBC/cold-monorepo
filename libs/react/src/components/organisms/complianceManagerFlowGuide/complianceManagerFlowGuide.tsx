@@ -4,6 +4,7 @@ import { ColdComplianceManagerContext } from '@coldpbc/context';
 import { ComplianceManagerFlowGuideStatus, ComplianceManagerStatus, GlobalSizes, IconNames } from '@coldpbc/enums';
 import { HexColors } from '@coldpbc/themes';
 import { withErrorBoundary } from 'react-error-boundary';
+import { useColdContext } from '@coldpbc/hooks';
 
 export interface ComplianceManagerFlowGuideProps {
   showModal: boolean;
@@ -13,7 +14,9 @@ export interface ComplianceManagerFlowGuideProps {
 }
 
 const _ComplianceManagerFlowGuide = ({ showModal, setShowModal, flowGuideStatus, setFlowGuideStatus }: ComplianceManagerFlowGuideProps) => {
-  const { status: managerStatus } = useContext(ColdComplianceManagerContext);
+  const { status: managerStatus, data } = useContext(ColdComplianceManagerContext);
+  const { name } = data;
+  const { logBrowser } = useColdContext();
 
   useEffect(() => {
     switch (managerStatus) {
@@ -96,6 +99,10 @@ const _ComplianceManagerFlowGuide = ({ showModal, setShowModal, flowGuideStatus,
           <BaseButton
             onClick={() => {
               setFlowGuideStatus(ComplianceManagerFlowGuideStatus.activate);
+              logBrowser(`Open activate flow guide step for ${name}`, 'info', {
+                flowGuideStatus,
+                managerStatus,
+              });
               setShowModal(true);
             }}
             label={'Activate'}
@@ -108,6 +115,10 @@ const _ComplianceManagerFlowGuide = ({ showModal, setShowModal, flowGuideStatus,
           <BaseButton
             onClick={() => {
               setFlowGuideStatus(ComplianceManagerFlowGuideStatus.upload);
+              logBrowser(`Open document upload modal for ${name}`, 'info', {
+                flowGuideStatus,
+                managerStatus,
+              });
               setShowModal(true);
             }}
             label={'Upload'}
@@ -119,6 +130,10 @@ const _ComplianceManagerFlowGuide = ({ showModal, setShowModal, flowGuideStatus,
         return (
           <BaseButton
             onClick={() => {
+              logBrowser(`Open start AI modal for ${name}`, 'info', {
+                flowGuideStatus,
+                managerStatus,
+              });
               setFlowGuideStatus(ComplianceManagerFlowGuideStatus.startAI);
               setShowModal(true);
             }}
@@ -133,6 +148,10 @@ const _ComplianceManagerFlowGuide = ({ showModal, setShowModal, flowGuideStatus,
         return (
           <BaseButton
             onClick={() => {
+              logBrowser(`Open restart AI modal for ${name}`, 'info', {
+                flowGuideStatus,
+                managerStatus,
+              });
               setFlowGuideStatus(ComplianceManagerFlowGuideStatus.restartAI);
               setShowModal(true);
             }}

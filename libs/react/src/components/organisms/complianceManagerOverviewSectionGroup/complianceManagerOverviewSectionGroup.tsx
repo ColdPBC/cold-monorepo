@@ -92,6 +92,11 @@ const _ComplianceManagerOverviewSectionGroup = ({ sectionGroup, position }: Comp
 
   useEffect(() => {
     const counts = getGroupCounts(groupCounts);
+    logBrowser(`Compliance Manager Overview Section Group Counts Update For ${sectionGroup.title}`, 'info', {
+      groupCounts,
+      counts,
+      sectionGroup,
+    });
     setComplianceCounts(prev => {
       return {
         ...prev,

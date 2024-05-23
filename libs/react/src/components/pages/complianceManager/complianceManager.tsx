@@ -14,9 +14,6 @@ import useSWR from 'swr';
 import { axiosFetcher, resolveNodeEnv } from '@coldpbc/fetchers';
 import { getTermString } from '@coldpbc/lib';
 
-// todo: test run against AI
-// todo: handle user submission. need status data
-
 const _ComplianceManager = () => {
   const { name } = useParams();
   const { orgId } = useAuth0Wrapper();
@@ -76,10 +73,13 @@ const _ComplianceManager = () => {
       // check to see is the compliance is in the orgCompliances
       const orgCompliance = find(orgCompliances.data, { compliance_definition: { name } });
       if (orgCompliance) {
+        logBrowser(`Setting ${name} compliance manager status to activated`, 'info', { name, orgCompliance });
         setStatus(ComplianceManagerStatus.activated);
         if (files.data && files.data.length > 0) {
+          logBrowser(`Setting ${name} compliance manager status to uploaded documents`, 'info', { name, files });
           setStatus(ComplianceManagerStatus.uploadedDocuments);
           if (currentAIStatus?.data && currentAIStatus.data.length > 0) {
+            logBrowser(`Setting ${name} compliance manager status to started AI`, 'info', { name, currentAIStatus });
             setStatus(ComplianceManagerStatus.startedAi);
           } else {
             // check the compliance counts to see if the AI has been run
@@ -91,16 +91,35 @@ const _ComplianceManager = () => {
               userAnswered += value.user_answered;
               totalQuestions += value.not_started + value.ai_answered + value.user_answered + value.bookmarked;
             });
-            // if the ai answers are greater than 0 then the AI has been run
-            // but how do we tell difference between first ai run and subsequent ai runs
             if (totalQuestions > 0) {
               if (aiAnswered > 0 && userAnswered === 0) {
+                logBrowser(`Setting ${name} compliance manager status to completed AI`, 'info', {
+                  name,
+                  complianceCounts,
+                  aiAnswered,
+                  totalQuestions,
+                  userAnswered,
+                });
                 setStatus(ComplianceManagerStatus.completedAi);
               } else if (aiAnswered > 0 && userAnswered > 0) {
+                logBrowser(`Setting ${name} compliance manager status to started questions`, 'info', {
+                  name,
+                  complianceCounts,
+                  aiAnswered,
+                  totalQuestions,
+                  userAnswered,
+                });
                 setStatus(ComplianceManagerStatus.startedQuestions);
               }
 
               if (totalQuestions === userAnswered) {
+                logBrowser(`Setting ${name} compliance manager status to completed questions`, 'info', {
+                  name,
+                  complianceCounts,
+                  aiAnswered,
+                  totalQuestions,
+                  userAnswered,
+                });
                 setStatus(ComplianceManagerStatus.completedQuestions);
               }
             }
@@ -109,6 +128,7 @@ const _ComplianceManager = () => {
             if (statuses && statuses.length > 0) {
               const recentStatus = statuses[0];
               if (recentStatus.type === 'user_submitted') {
+                logBrowser(`Setting ${name} compliance manager status to submitted`, 'info', { name, recentStatus });
                 setStatus(ComplianceManagerStatus.submitted);
               }
             }

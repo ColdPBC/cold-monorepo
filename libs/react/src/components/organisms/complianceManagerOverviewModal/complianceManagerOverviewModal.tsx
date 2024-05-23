@@ -4,7 +4,7 @@ import { ColdComplianceManagerContext } from '@coldpbc/context';
 import { ComplianceManagerFlowGuideStatus, ComplianceManagerStatus, IconNames } from '@coldpbc/enums';
 import { ArrowUpIcon } from '@heroicons/react/24/solid';
 import { startComplianceAI } from '@coldpbc/lib';
-import { useAuth0Wrapper } from '@coldpbc/hooks';
+import { useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
 
 export interface ComplianceManagerOverviewModalProps {
   show: boolean;
@@ -16,9 +16,10 @@ export interface ComplianceManagerOverviewModalProps {
 export const ComplianceManagerOverviewModal = (props: ComplianceManagerOverviewModalProps) => {
   const { show, setShowModal, flowGuideStatus, setFlowGuideStatus } = props;
   const { orgId } = useAuth0Wrapper();
-  const { data, status, setStatus } = useContext(ColdComplianceManagerContext);
+  const { data, setStatus } = useContext(ColdComplianceManagerContext);
   const [buttonDisabled, setButtonDisabled] = useState<boolean>(false);
   const modalRef = useRef<HTMLDivElement>(null);
+  const { logBrowser } = useColdContext();
 
   const { mqttComplianceSet, files, name } = data;
 
@@ -108,6 +109,11 @@ export const ComplianceManagerOverviewModal = (props: ComplianceManagerOverviewM
         label = 'Continue';
         iconRight = true;
         onClick = () => {
+          logBrowser(`Compliance ${name} Manager Activation Complete. Moving to upload`, 'info', {
+            orgId,
+            name,
+            flowGuideStatus,
+          });
           setFlowGuideStatus(ComplianceManagerFlowGuideStatus.upload);
         };
         break;
@@ -115,6 +121,11 @@ export const ComplianceManagerOverviewModal = (props: ComplianceManagerOverviewM
         label = 'Continue';
         iconRight = true;
         onClick = async () => {
+          logBrowser(`Compliance ${name} Manager Documents Uploaded. Moving to start AI`, 'info', {
+            orgId,
+            name,
+            flowGuideStatus,
+          });
           setFlowGuideStatus(ComplianceManagerFlowGuideStatus.startAI);
           setStatus(ComplianceManagerStatus.uploadedDocuments);
           await files?.mutate();
@@ -126,7 +137,8 @@ export const ComplianceManagerOverviewModal = (props: ComplianceManagerOverviewM
         onClick = async () => {
           if (orgId) {
             setButtonDisabled(true);
-            await startComplianceAI(name, orgId);
+            const response = await startComplianceAI(name, orgId);
+            logBrowser(`Compliance Manager AI Started for ${name}`, 'info', { orgId, name, response });
             setFlowGuideStatus(ComplianceManagerFlowGuideStatus.startedAI);
             setButtonDisabled(false);
             setShowModal(false);
@@ -169,9 +181,7 @@ export const ComplianceManagerOverviewModal = (props: ComplianceManagerOverviewM
       <div className={'h-screen w-screen fixed p-[100px] top-0 left-0 z-50 flex bg-bgc-backdrop bg-opacity-90 overflow-auto'} onClick={event => closeModal(event)}>
         <Card className="relative p-0 h-full w-full min-w-[1100px] min-h-[750px] flex flex-col pb-[98px] pt-[104px]" glow={false} innerRef={modalRef}>
           <div
-            // src={complianceDefinition?.image_url}
             className={'absolute top-0 left-0 w-full h-full'}
-            // alt={'Compliance Background'}
             style={{
               background: `url(${complianceDefinition?.image_url}) center / cover no-repeat`,
             }}></div>

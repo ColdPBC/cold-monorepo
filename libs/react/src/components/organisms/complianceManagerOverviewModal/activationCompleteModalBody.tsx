@@ -2,7 +2,7 @@ import { ArrowUpIcon } from '@heroicons/react/24/solid';
 import { ColdIcon, ColdSparkleIcon } from '@coldpbc/components';
 import { ComplianceManagerStatus, IconNames } from '@coldpbc/enums';
 import { useContext, useEffect } from 'react';
-import { useAuth0Wrapper } from '@coldpbc/hooks';
+import { useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { ColdComplianceManagerContext } from '@coldpbc/context';
 import { isAxiosError } from 'axios';
@@ -11,6 +11,7 @@ export const ActivationCompleteModalBody = ({ setButtonDisabled }: { setButtonDi
   const { data, status, setStatus } = useContext(ColdComplianceManagerContext);
   const { name } = data;
   const { orgId } = useAuth0Wrapper();
+  const { logBrowser } = useColdContext();
 
   const getActivationGuide = (step: string) => {
     let text = '';
@@ -44,7 +45,10 @@ export const ActivationCompleteModalBody = ({ setButtonDisabled }: { setButtonDi
         setButtonDisabled(true);
         const response = await axiosFetcher([`/compliance_definitions/${name}/organizations/${orgId}`, 'POST']);
         if (!isAxiosError(response)) {
+          logBrowser(`${name} compliance activated`, 'info', { orgId, name });
           setStatus(ComplianceManagerStatus.activated);
+        } else {
+          logBrowser(`${name} compliance activation failed`, 'error', { orgId, name, response });
         }
         setButtonDisabled(false);
       }

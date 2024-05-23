@@ -3,10 +3,12 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import { filter, map, orderBy, set } from 'lodash';
 import { ColdComplianceManagerContext } from '@coldpbc/context';
 import { ButtonTypes } from '@coldpbc/enums';
+import { useColdContext } from '@coldpbc/hooks';
 
 export const UploadComplianceDocumentsModal = ({ setButtonDisabled }: { setButtonDisabled: (loading: boolean) => void }) => {
   const { data } = useContext(ColdComplianceManagerContext);
-  const { mqttComplianceSet, files } = data;
+  const { mqttComplianceSet, files, name } = data;
+  const { logBrowser } = useColdContext();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [newFiles, setNewFiles] = useState<
     {
@@ -21,6 +23,7 @@ export const UploadComplianceDocumentsModal = ({ setButtonDisabled }: { setButto
 
   const handleChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const newFiles = Array.from(event.target.files || []);
+    logBrowser('New files uploaded', 'info', { newFiles });
     setNewFiles(prevFiles => [
       ...prevFiles,
       ...map(newFiles, file => {
@@ -50,6 +53,7 @@ export const UploadComplianceDocumentsModal = ({ setButtonDisabled }: { setButto
           new: true,
         };
       });
+      logBrowser('New files dropped', 'info', { newFiles });
       setNewFiles(prevFiles => [...newFiles, ...prevFiles]);
     }
   };

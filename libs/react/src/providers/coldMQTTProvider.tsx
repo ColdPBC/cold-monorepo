@@ -79,10 +79,9 @@ export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
 
         client.current?.on('message', async (topic, payload, packet) => {
           const payloadString = packet.payload.toString();
-          logBrowser('Received message from IOT', 'info', { topic });
           try {
             const parsedPayload = JSON.parse(payloadString);
-            logBrowser('Parsed payload from IOT', 'info', {
+            logBrowser(`Parsed payload from IOT for topic ${topic}`, 'info', {
               topic,
               swr_key: parsedPayload.swr_key,
               payload: parsedPayload,
@@ -115,7 +114,6 @@ export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
 
         client.current?.on('close', () => {
           setConnectionStatus(false);
-          console.log('Connection to IOT closed');
           logBrowser('Connection to IOT closed', 'info');
         });
       }
