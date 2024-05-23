@@ -103,6 +103,7 @@ export const ComplianceManagerOverviewModal = (props: ComplianceManagerOverviewM
     let label = '';
     let onClick = () => {};
     let iconRight = false;
+    let loading = false;
 
     switch (flowGuideStatus) {
       case ComplianceManagerFlowGuideStatus.activate:
@@ -116,6 +117,7 @@ export const ComplianceManagerOverviewModal = (props: ComplianceManagerOverviewM
           });
           setFlowGuideStatus(ComplianceManagerFlowGuideStatus.upload);
         };
+        loading = buttonDisabled;
         break;
       case ComplianceManagerFlowGuideStatus.upload:
         label = 'Continue';
@@ -144,10 +146,11 @@ export const ComplianceManagerOverviewModal = (props: ComplianceManagerOverviewM
             setShowModal(false);
           }
         };
+        loading = buttonDisabled;
         break;
     }
 
-    return <BaseButton onClick={onClick} disabled={buttonDisabled} loading={buttonDisabled} label={label} iconRight={iconRight ? IconNames.ColdRightArrowIcon : undefined} />;
+    return <BaseButton onClick={onClick} disabled={buttonDisabled} loading={loading} label={label} iconRight={iconRight ? IconNames.ColdRightArrowIcon : undefined} />;
   };
 
   const getModalFooter = () => {
