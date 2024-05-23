@@ -1,3 +1,22 @@
+# [1.226.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.225.2...v1.226.0) (2024-05-23)
+
+
+### Bug Fixes
+
+* fix loader incorrectly appearing when no documents are uploaded ([0323477](https://github.com/ColdPBC/cold-monorepo/commit/0323477066d229702eead7dd7a0d134292cf1fed))
+
+
+### Features
+
+* add error boundary to compliance manager components ([b969f1d](https://github.com/ColdPBC/cold-monorepo/commit/b969f1d57b9abbf0827f53445061c081f1e3a6f8))
+* changes to handle ai status updates ([bebe404](https://github.com/ColdPBC/cold-monorepo/commit/bebe4040c97262ff97b9bf156ab1cea7dda2ee43))
+* changes to handle different flow guide and manager states ([21becc0](https://github.com/ColdPBC/cold-monorepo/commit/21becc0bb7d8e0ae84840e9add8a12d9be71c845))
+* handle document upload ([bda8d4b](https://github.com/ColdPBC/cold-monorepo/commit/bda8d4b5baacc87a8e2b999347ac28c6a23dd9a7))
+* handle new compliance MQTT data ([baf5a57](https://github.com/ColdPBC/cold-monorepo/commit/baf5a57566e649395337cdd3aecaafad06625b5f))
+* handle user submitted status ([95b421a](https://github.com/ColdPBC/cold-monorepo/commit/95b421a26fc2432d2cf17a031a2f4851cf8de7d6))
+* initial changes ([e157f6e](https://github.com/ColdPBC/cold-monorepo/commit/e157f6ee4d632e2cc71079837829a0b46b466c0e))
+* update api reply topic to send to correct one ([b791fa1](https://github.com/ColdPBC/cold-monorepo/commit/b791fa10653477061d719a4df01204a5e13b0e4b))
+
 ## [1.225.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.225.1...v1.225.2) (2024-05-21)
 
 
