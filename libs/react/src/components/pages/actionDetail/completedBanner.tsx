@@ -1,11 +1,17 @@
-export const CompletedBanner = () => {
+import React, { PropsWithChildren } from 'react';
+import { twMerge } from 'tailwind-merge';
+
+export interface CompletedBannerProps {
+  className?: string;
+}
+
+export const CompletedBanner = (props: PropsWithChildren<CompletedBannerProps>) => {
   return (
-    <div className="flex flex-col justify-center bg-primary-300 px-4 h-[120px] relative rounded-2xl text-white overflow-hidden" data-testid={'action-completed-banner'}>
+    <div
+      className={twMerge('flex flex-col justify-center bg-primary-300 px-4 h-[120px] relative rounded-2xl text-white overflow-hidden', props.className)}
+      data-testid={'action-completed-banner'}>
       <div className="w-[857px] h-[845px] absolute left-[-67px] bottom-[-363px] bg-primary-200 blur-[150px] z-10" />
-      <div className="z-20">
-        <div className="font-bold text-xl leading-normal mb-2">Keep it up!</div>
-        <div className="font-medium leading-normal text-sm">You've done everything you can here for now.</div>
-      </div>
+      <div className="z-20">{props.children}</div>
       <svg className="absolute right-[0]" width="899" height="120" viewBox="0 0 899 120" fill="none" xmlns="http://www.w3.org/2000/svg">
         <circle cx="817.669" cy="100.669" r="11.6688" fill="#ADFFF7" />
         <circle cx="677.524" cy="22.5102" r="5.83439" fill="#66C8FF" />

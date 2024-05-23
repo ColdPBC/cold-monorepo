@@ -16,9 +16,20 @@ export enum CompliancePageFilter {
 export enum ComplianceManagerStatus {
   notActivated = 'notActivated',
   activated = 'activated',
-  upload = 'upload',
+  uploadedDocuments = 'uploadedDocuments',
   startedAi = 'startedAI',
+  completedAi = 'completedAI',
+  startedQuestions = 'startedQuestions',
   completedQuestions = 'completedQuestions',
+  submitted = 'submitted',
+}
+
+export enum ComplianceManagerFlowGuideStatus {
+  activate = 'activate',
+  upload = 'upload',
+  startAI = 'startAI',
+  startedAI = 'startedAI',
+  restartAI = 'restartAI',
   submitted = 'submitted',
 }
 
@@ -27,4 +38,10 @@ export enum ComplianceProgressStatus {
   ai_answered = 'ai_answered',
   bookmarked = 'bookmarked',
   user_answered = 'user_answered',
+}
+
+export enum ComplianceOverviewModalStep {
+  activation = 'activation',
+  upload = 'upload',
+  startAI = 'startAI',
 }

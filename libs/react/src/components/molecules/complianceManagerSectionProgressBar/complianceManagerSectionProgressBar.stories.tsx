@@ -27,3 +27,22 @@ export const Default: Story = {
     questions: getComplianceSectionProgressBarQuestionsMock(),
   },
 };
+
+export const QuestionsProcessing: Story = {
+  render: args => {
+    return (
+      <StoryMockProvider>
+        <div className="w-[620px]">
+          <ComplianceManagerSectionProgressBar {...args} />
+        </div>
+      </StoryMockProvider>
+    );
+  },
+  args: {
+    questions: getComplianceSectionProgressBarQuestionsMock(),
+    sectionAIStatus: {
+      questions: ['APK-1', 'APK-2'],
+      section: 'APK',
+    },
+  },
+};

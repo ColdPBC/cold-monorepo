@@ -3,19 +3,22 @@ import { Tooltip } from 'flowbite-react';
 import { ComplianceProgressStatusColor } from '@coldpbc/lib';
 import { get, map, orderBy } from 'lodash';
 import { flowbiteThemeOverride, HexColors } from '@coldpbc/themes';
-import { ComplianceProgressStatusIcon, Spinner } from '@coldpbc/components';
-import { MQTTComplianceManagerPayloadComplianceQuestion } from '@coldpbc/interfaces';
-import { useContext } from 'react';
+import { ComplianceProgressStatusIcon, ErrorFallback, Spinner } from '@coldpbc/components';
+import { CurrentAIStatusSection, MQTTComplianceManagerPayloadComplianceQuestion } from '@coldpbc/interfaces';
+import React, { useContext } from 'react';
 import { ColdComplianceManagerContext } from '@coldpbc/context';
 import { useColdContext } from '@coldpbc/hooks';
+import { withErrorBoundary } from 'react-error-boundary';
 
 export interface ComplianceManagerSectionProgressBarProps {
+  sectionAIStatus: CurrentAIStatusSection | undefined;
   questions: MQTTComplianceManagerPayloadComplianceQuestion[] | undefined;
 }
 
-export const ComplianceManagerSectionProgressBar = ({ questions }: ComplianceManagerSectionProgressBarProps) => {
+const _ComplianceManagerSectionProgressBar = ({ questions, sectionAIStatus }: ComplianceManagerSectionProgressBarProps) => {
   const { status: managerStatus } = useContext(ColdComplianceManagerContext);
   const { logBrowser } = useColdContext();
+
   const getProgressTooltipIcon = (status: ComplianceProgressStatus) => {
     return (
       <div className={'w-[12px] h-[12px] flex items-center justify-center'}>
@@ -56,34 +59,37 @@ export const ComplianceManagerSectionProgressBar = ({ questions }: ComplianceMan
       </div>
     );
 
+    const isQuestionBeingProcessed = sectionAIStatus?.questions.some(q => q === question.key);
+
+    const color = isQuestionBeingProcessed ? ComplianceProgressStatusColor.ai_answered : get(ComplianceProgressStatusColor, status);
+
     // todo: add onclick to questionnaire
-    const color = get(ComplianceProgressStatusColor, status);
     return (
-      <div
-        className={`h-[8px] w-full cursor-pointer transition ease-in-out hover:scale-110 duration-300`}
-        style={{
-          backgroundColor: color,
-          borderTopLeftRadius: isFirst ? 4 : 0,
-          borderBottomLeftRadius: isFirst ? 4 : 0,
-          borderTopRightRadius: isLast ? 4 : 0,
-          borderBottomRightRadius: isLast ? 4 : 0,
-          borderLeft: isFirst ? 'none' : `2px solid ${HexColors.bgc.accent}`,
-          borderRight: isLast ? 'none' : `2px solid ${HexColors.bgc.accent}`,
-        }}
-        onClick={() => {
-          if (managerStatus === ComplianceManagerStatus.notActivated) {
-            return;
-          }
-        }}>
-        <Tooltip
-          className={'w-[455px] p-[8px] rounded-[8px] border-[1px] border-gray-60 bg-gray-30 shadow-[0_8px_16px_0px_rgba(0,0,0,0)] flex flex-col justify-start transition-none'}
-          content={tooltipContent}
-          arrow={false}
-          theme={flowbiteThemeOverride.tooltip}
-          animation={false}>
-          <div className={'w-full h-[8px]'}></div>
-        </Tooltip>
-      </div>
+      <Tooltip
+        className={
+          'w-[455px] p-[8px] rounded-[8px] border-[1px] border-gray-60 bg-gray-30 shadow-[0_8px_16px_0px_rgba(0,0,0,0)] flex flex-col justify-start transition-none animate-none'
+        }
+        content={tooltipContent}
+        arrow={false}
+        theme={flowbiteThemeOverride.tooltip}
+        animation={false}>
+        <div
+          className={`h-[8px] w-full cursor-pointer transition ease-in-out hover:scale-110 duration-300 ${isQuestionBeingProcessed && 'animate-pulse'}`}
+          style={{
+            backgroundColor: color,
+            borderTopLeftRadius: isFirst ? 4 : 0,
+            borderBottomLeftRadius: isFirst ? 4 : 0,
+            borderTopRightRadius: isLast ? 4 : 0,
+            borderBottomRightRadius: isLast ? 4 : 0,
+            borderLeft: isFirst ? 'none' : `2px solid ${HexColors.bgc.accent}`,
+            borderRight: isLast ? 'none' : `2px solid ${HexColors.bgc.accent}`,
+          }}
+          onClick={() => {
+            if (managerStatus === ComplianceManagerStatus.notActivated) {
+              return;
+            }
+          }}></div>
+      </Tooltip>
     );
   };
 
@@ -115,3 +121,10 @@ export const ComplianceManagerSectionProgressBar = ({ questions }: ComplianceMan
     );
   }
 };
+
+export const ComplianceManagerSectionProgressBar = withErrorBoundary(_ComplianceManagerSectionProgressBar, {
+  FallbackComponent: props => <ErrorFallback {...props} />,
+  onError: (error, info) => {
+    console.error('Error occurred in ComplianceManagerSectionProgressBar: ', error);
+  },
+});

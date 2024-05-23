@@ -145,7 +145,12 @@ const _ActionDetail = ({ id }: Props) => {
       data-testid={'action-detail'}>
       <div className="flex gap-6 my-6">
         <div className="grid gap-6 flex-1 flex flex-col">
-          {isActionComplete && <CompletedBanner />}
+          {isActionComplete && (
+            <CompletedBanner>
+              <div className="font-bold text-xl leading-normal mb-2">Keep it up!</div>
+              <div className="font-medium leading-normal text-sm">You've done everything you can here for now.</div>
+            </CompletedBanner>
+          )}
           <Card title="About this action" glow className="gap-0" data-testid={'action-detail-overview-card'}>
             <div className="flex h-full">
               <div>

@@ -1,10 +1,12 @@
 import { ComplianceManagerOverviewSectionGroup } from '../complianceManagerOverviewSectionGroup';
-import { useContext } from 'react';
+import React, { useContext } from 'react';
 import { ColdComplianceManagerContext } from '@coldpbc/context';
 import { map, orderBy } from 'lodash';
 import { useColdContext } from '@coldpbc/hooks';
+import { withErrorBoundary } from 'react-error-boundary';
+import { ErrorFallback } from '../../application';
 
-export const ComplianceManagerOverviewSectionGroups = () => {
+const _ComplianceManagerOverviewSectionGroups = () => {
   const { data } = useContext(ColdComplianceManagerContext);
   const { logBrowser } = useColdContext();
 
@@ -24,3 +26,10 @@ export const ComplianceManagerOverviewSectionGroups = () => {
     </div>
   );
 };
+
+export const ComplianceManagerOverviewSectionGroups = withErrorBoundary(_ComplianceManagerOverviewSectionGroups, {
+  FallbackComponent: props => <ErrorFallback {...props} />,
+  onError: (error, info) => {
+    console.error('Error occurred in ComplianceManagerOverviewSectionGroups: ', error);
+  },
+});

@@ -3,7 +3,6 @@ export function getAllFilesMock() {
     {
       id: 'clrl1562j0009mgk60trjvcyy',
       object: 'assistant.file',
-      created_at: {},
       assistant_id: 'asst_kWVC0fO9mkS8skjOZFXu0tBd',
       bucket: 'cold-api-uploaded-files',
       key: 'staging/org_cAD7FM8ONewFumnY/qaalib.farah@coldclimate.com/wordpress-pdf-invoice-plugin-sample.pdf',
@@ -12,7 +11,6 @@ export function getAllFilesMock() {
       organization_id: 'org_cAD7FM8ONewFumnY',
       openai_assistant_id: 'asst_kWVC0fO9mkS8skjOZFXu0tBd',
       openai_file_id: 'file-ARQyPWCo7Li29GPbPL2bpJcf',
-      updated_at: {},
       integration_id: 'asst_kWVC0fO9mkS8skjOZFXu0tBd',
       mimetype: 'application/pdf',
       size: 43627,
@@ -22,11 +20,12 @@ export function getAllFilesMock() {
       fieldname: 'file',
       location: 'https://cold-api-uploaded-files.s3.us-east-1.amazonaws.com/staging/org_cAD7FM8ONewFumnY/qaalib.farah%40coldclimate.com/wordpress-pdf-invoice-plugin-sample.pdf',
       versionId: 'pJ2fIdrMpb7lgZecDuLg2z2vfiHX249n',
+      updated_at: '2024-05-01T20:00:00.000Z',
+      created_at: '2024-05-01T20:00:00.000Z',
     },
     {
       id: 'clrl0wzkr0007mgk6uncv7u8k',
       object: 'assistant.file',
-      created_at: {},
       assistant_id: 'asst_kWVC0fO9mkS8skjOZFXu0tBd',
       bucket: 'cold-api-uploaded-files',
       key: 'staging/org_cAD7FM8ONewFumnY/qaalib.farah@coldclimate.com/sample.pdf',
@@ -35,7 +34,6 @@ export function getAllFilesMock() {
       organization_id: 'org_cAD7FM8ONewFumnY',
       openai_assistant_id: 'asst_kWVC0fO9mkS8skjOZFXu0tBd',
       openai_file_id: 'file-OUw0zSDm8d6KDWwxXWESU7tn',
-      updated_at: {},
       integration_id: 'asst_kWVC0fO9mkS8skjOZFXu0tBd',
       mimetype: 'application/pdf',
       size: 357602,
@@ -45,6 +43,8 @@ export function getAllFilesMock() {
       fieldname: 'file',
       location: 'https://cold-api-uploaded-files.s3.us-east-1.amazonaws.com/staging/org_cAD7FM8ONewFumnY/qaalib.farah%40coldclimate.com/sample.pdf',
       versionId: '3PF2iN17HgJuD4.o5RCT3xWmVO2rMKCa',
+      updated_at: '2024-04-29T20:00:00.000Z',
+      created_at: '2024-04-29T20:00:00.000Z',
     },
   ];
 }

@@ -42,6 +42,11 @@ export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
         }/mqtt?x-auth0-domain=${auth0_domain}&x-amz-customauthorizer-name=${authorizer}&x-cold-org=${org_id}&x-cold-env=${env}&token=${token}`;
 
         if (client.current === null) {
+          logBrowser('Connecting to IOT', 'info', {
+            url,
+            org_id,
+            env,
+          });
           client.current = mqtt.connect(url, {
             clientId: `${org_id}-${Math.floor(Math.random() * 1000)}`,
             clean: false,
@@ -50,6 +55,11 @@ export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
             },
           });
         } else {
+          logBrowser('Reconnecting to IOT', 'info', {
+            url,
+            org_id,
+            env,
+          });
           client.current.reconnect();
         }
 
@@ -69,12 +79,12 @@ export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
 
         client.current?.on('message', async (topic, payload, packet) => {
           const payloadString = packet.payload.toString();
-          logBrowser('Received message from IOT', 'info', { topic });
           try {
             const parsedPayload = JSON.parse(payloadString);
-            logBrowser('Parsed payload from IOT', 'info', {
+            logBrowser(`Parsed payload from IOT for topic ${topic}`, 'info', {
               topic,
               swr_key: parsedPayload.swr_key,
+              payload: parsedPayload,
             });
             if (parsedPayload.swr_key) {
               if (flags.throttleSwrMutateCalls) {
@@ -139,14 +149,14 @@ export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
       client.current?.on('message', async (topic, payload, packet) => {
         next(err, prev => {
           if (topic !== key) {
-            logBrowser('Received message from IOT for SWR for different topic', 'info', {
+            logBrowser(`Received different message from IOT for ${key} to ${topic}`, 'info', {
               key,
               topic,
               payload: JSON.parse(payload.toString()),
             });
             return prev;
           } else {
-            logBrowser('Received message from IOT for SWR', 'info', {
+            logBrowser(`Received message from IOT for ${key}`, 'info', {
               key,
               topic,
               payload: JSON.parse(payload.toString()),
@@ -167,7 +177,7 @@ export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
       set(newMessage, 'user', user);
       set(newMessage, 'org_id', orgId);
       set(newMessage, 'token', token);
-      logBrowser('Publishing message to IOT', 'info', { topic, newMessage });
+      logBrowser(`Publishing message to ${topic}`, 'info', { topic, newMessage });
       client.current.publish(topic, JSON.stringify(newMessage));
     }
   };

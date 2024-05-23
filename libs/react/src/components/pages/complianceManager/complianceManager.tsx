@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from 'react-router-dom';
-import { useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
-import { find, get } from 'lodash';
+import { useAuth0Wrapper, useColdContext, useOrgSWR } from '@coldpbc/hooks';
+import { find, forOwn, get } from 'lodash';
 import { ColdIcon, ColdLeftArrowIcon, ComplianceManagerOverview, ErrorFallback, Spinner } from '@coldpbc/components';
 import React, { useContext, useEffect, useState } from 'react';
 import { ColdComplianceManagerContext } from '@coldpbc/context';
@@ -8,7 +8,7 @@ import { ComplianceManagerStatus, IconNames } from '@coldpbc/enums';
 import { format } from 'date-fns';
 import { withErrorBoundary } from 'react-error-boundary';
 import ColdMQTTContext from '../../../context/coldMQTTContext';
-import { MQTTComplianceManagerPayload, OrgCompliance } from '@coldpbc/interfaces';
+import { CurrentAIStatusPayload, MQTTComplianceManagerPayload, OrgCompliance } from '@coldpbc/interfaces';
 import useSWRSubscription from 'swr/subscription';
 import useSWR from 'swr';
 import { axiosFetcher, resolveNodeEnv } from '@coldpbc/fetchers';
@@ -19,9 +19,9 @@ const _ComplianceManager = () => {
   const { orgId } = useAuth0Wrapper();
   const { subscribeSWR, publishMessage, connectionStatus, client } = useContext(ColdMQTTContext);
   const navigate = useNavigate();
+  const [showOverviewModal, setShowOverviewModal] = useState<boolean>(false);
   const [managementView, setManagementView] = useState<string>('Overview');
   const [status, setStatus] = useState<ComplianceManagerStatus>(ComplianceManagerStatus.notActivated);
-  const { logBrowser } = useColdContext();
   const [complianceCounts, setComplianceCounts] = useState<{
     [key: string]: {
       not_started: number;
@@ -30,14 +30,28 @@ const _ComplianceManager = () => {
       bookmarked: number;
     };
   }>({});
+  const { logBrowser } = useColdContext();
 
   const orgCompliances = useSWR<OrgCompliance[], any, any>(orgId ? [`/compliance_definitions/organizations/${orgId}`, 'GET'] : null, axiosFetcher);
+  const files = useOrgSWR<any[], any>([`/files`, 'GET'], axiosFetcher);
 
   const topic = `ui/${resolveNodeEnv()}/${orgId}/${name}`;
   const { data, error } = useSWRSubscription(topic, subscribeSWR) as {
     data: MQTTComplianceManagerPayload | undefined;
     error: any;
   };
+  const getCurrentAIStatusTopic = () => {
+    if (orgId) {
+      return `ui/${resolveNodeEnv()}/${orgId}/${name}/currentAiStatus`;
+    } else {
+      return ``;
+    }
+  };
+  const currentAIStatus = useSWRSubscription(getCurrentAIStatusTopic(), subscribeSWR) as {
+    data: CurrentAIStatusPayload | undefined;
+    error: any;
+  };
+
   const compliance = data?.compliance_definition;
 
   useEffect(() => {
@@ -59,10 +73,70 @@ const _ComplianceManager = () => {
       // check to see is the compliance is in the orgCompliances
       const orgCompliance = find(orgCompliances.data, { compliance_definition: { name } });
       if (orgCompliance) {
+        logBrowser(`Setting ${name} compliance manager status to activated`, 'info', { name, orgCompliance });
         setStatus(ComplianceManagerStatus.activated);
+        if (files.data && files.data.length > 0) {
+          logBrowser(`Setting ${name} compliance manager status to uploaded documents`, 'info', { name, files });
+          setStatus(ComplianceManagerStatus.uploadedDocuments);
+          if (currentAIStatus?.data && currentAIStatus.data.length > 0) {
+            logBrowser(`Setting ${name} compliance manager status to started AI`, 'info', { name, currentAIStatus });
+            setStatus(ComplianceManagerStatus.startedAi);
+          } else {
+            // check the compliance counts to see if the AI has been run
+            let aiAnswered = 0;
+            let userAnswered = 0;
+            let totalQuestions = 0;
+            forOwn(complianceCounts, (value, key) => {
+              aiAnswered += value.ai_answered;
+              userAnswered += value.user_answered;
+              totalQuestions += value.not_started + value.ai_answered + value.user_answered + value.bookmarked;
+            });
+            if (totalQuestions > 0) {
+              if (aiAnswered > 0 && userAnswered === 0) {
+                logBrowser(`Setting ${name} compliance manager status to completed AI`, 'info', {
+                  name,
+                  complianceCounts,
+                  aiAnswered,
+                  totalQuestions,
+                  userAnswered,
+                });
+                setStatus(ComplianceManagerStatus.completedAi);
+              } else if (aiAnswered > 0 && userAnswered > 0) {
+                logBrowser(`Setting ${name} compliance manager status to started questions`, 'info', {
+                  name,
+                  complianceCounts,
+                  aiAnswered,
+                  totalQuestions,
+                  userAnswered,
+                });
+                setStatus(ComplianceManagerStatus.startedQuestions);
+              }
+
+              if (totalQuestions === userAnswered) {
+                logBrowser(`Setting ${name} compliance manager status to completed questions`, 'info', {
+                  name,
+                  complianceCounts,
+                  aiAnswered,
+                  totalQuestions,
+                  userAnswered,
+                });
+                setStatus(ComplianceManagerStatus.completedQuestions);
+              }
+            }
+
+            const statuses = data?.statuses;
+            if (statuses && statuses.length > 0) {
+              const recentStatus = statuses[0];
+              if (recentStatus.type === 'user_submitted') {
+                logBrowser(`Setting ${name} compliance manager status to submitted`, 'info', { name, recentStatus });
+                setStatus(ComplianceManagerStatus.submitted);
+              }
+            }
+          }
+        }
       }
     }
-  }, [orgCompliances]);
+  }, [orgCompliances, files, currentAIStatus, complianceCounts, name, data]);
 
   logBrowser('Compliance Definition', 'info', {
     name,
@@ -74,6 +148,8 @@ const _ComplianceManager = () => {
     managementView,
     orgCompliances,
     topic,
+    currentAIStatus: currentAIStatus.data,
+    files: files.data,
   });
 
   if (!data) {
@@ -99,12 +175,17 @@ const _ComplianceManager = () => {
       value={{
         data: {
           mqttComplianceSet: data,
+          files: files,
           name: name || '',
+          currentAIStatus: currentAIStatus?.data,
+          orgCompliances: orgCompliances?.data,
         },
         status: status,
         setStatus: setStatus,
         complianceCounts: complianceCounts,
         setComplianceCounts: setComplianceCounts,
+        showOverviewModal: showOverviewModal,
+        setShowOverviewModal: setShowOverviewModal,
       }}>
       <div className={'flex flex-col w-full gap-[48px] justify-center relative mb-[40px]'}>
         <div className={'absolute top-0 w-full h-[179px]'}>

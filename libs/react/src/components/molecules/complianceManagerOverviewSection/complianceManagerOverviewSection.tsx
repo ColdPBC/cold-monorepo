@@ -5,11 +5,12 @@ import React, { useContext, useEffect, useRef } from 'react';
 import ColdMQTTContext from '../../../context/coldMQTTContext';
 import { ColdComplianceManagerContext } from '@coldpbc/context';
 import useSWRSubscription from 'swr/subscription';
-import { ComplianceManagerSectionProgressBar } from '@coldpbc/components';
+import { ComplianceManagerSectionProgressBar, ErrorFallback } from '@coldpbc/components';
 import { ComplianceManagerStatus } from '@coldpbc/enums';
 import { resolveNodeEnv } from '@coldpbc/fetchers';
+import { withErrorBoundary } from 'react-error-boundary';
 
-export const ComplianceManagerOverviewSection = ({
+const _ComplianceManagerOverviewSection = ({
   section,
   groupId,
   setGroupCounts,
@@ -31,11 +32,11 @@ export const ComplianceManagerOverviewSection = ({
 }) => {
   const { orgId } = useAuth0Wrapper();
   const { subscribeSWR, publishMessage, connectionStatus, client } = useContext(ColdMQTTContext);
+  const totalQuestions = useRef(0);
   const context = useContext(ColdComplianceManagerContext);
   const { status } = context;
-  const { name } = context.data;
+  const { name, currentAIStatus } = context.data;
   const { logBrowser } = useColdContext();
-  const totalQuestions = useRef(0);
 
   const sectionTopic = `ui/${resolveNodeEnv()}/${orgId}/${name}/${groupId}/${section.id}`;
 
@@ -43,6 +44,8 @@ export const ComplianceManagerOverviewSection = ({
     data: MQTTComplianceManagerPayloadComplianceQuestionList | undefined;
     error: unknown;
   };
+
+  const sectionAIStatus = currentAIStatus?.find(s => s.section === section.key);
 
   useEffect(() => {
     if (client?.current && connectionStatus && orgId) {
@@ -79,6 +82,23 @@ export const ComplianceManagerOverviewSection = ({
     }
   }, [data]);
 
+  const isAIRunning = () => {
+    if (status === ComplianceManagerStatus.startedAi) {
+      // check if the currentAIStatus has the section
+      return !!sectionAIStatus;
+    } else {
+      return false;
+    }
+  };
+
+  const canNavigateToQuestionnaire = () => {
+    if (isAIRunning() || status === ComplianceManagerStatus.notActivated || status === ComplianceManagerStatus.submitted) {
+      return false;
+    } else {
+      return true;
+    }
+  };
+
   if (!collapseOpen) {
     return <></>;
   }
@@ -94,26 +114,37 @@ export const ComplianceManagerOverviewSection = ({
     error,
   });
 
+  const backgroundColor = isAIRunning() ? 'bg-gray-60' : 'bg-bgc-accent';
+  const textColor = isAIRunning() ? 'text-tc-disabled' : 'text-tc-primary';
+
   return (
     <div
-      className={`flex flex-col w-full rounded-[8px] py-[16px] px-[24px] gap-[30px] bg-bgc-accent ${
-        status === ComplianceManagerStatus.notActivated ? 'cursor-default' : 'cursor-pointer'
-      }`}
+      className={`flex flex-col w-full rounded-[8px] py-[16px] px-[24px] gap-[30px] ${!canNavigateToQuestionnaire() ? 'cursor-default' : 'cursor-pointer'} ${backgroundColor}`}
       onClick={() => {
-        if (status === ComplianceManagerStatus.notActivated) {
+        if (!canNavigateToQuestionnaire()) {
           return;
         }
         // todo: navigate to section in questionnaire
       }}
       key={`${groupId}-${section.id}`}>
       <div className={'w-full flex flex-row justify-between items-center'}>
-        <div className={'text-h4 text-tc-primary'}>{section.title}</div>
+        <div className={'flex flex-row gap-[16px] justify-start items-center'}>
+          <div className={`text-h4 ${textColor}`}>{section.title}</div>
+          {isAIRunning() && <div className={'text-body text-tc-disabled'}>Cold AI Running</div>}
+        </div>
         <div className={'flex flex-row gap-[8px] items-center'}>
-          <div className={'w-[105px] h-full flex items-center text-body text-start text-tc-secondary'}>{totalQuestions.current} Questions</div>
+          <div className={`w-[105px] h-full flex items-center text-body text-start ${textColor}`}>{totalQuestions.current} Questions</div>
           <ArrowRightIcon className={'w-[24px] h-[24px] text-tc-primary'} />
         </div>
       </div>
-      <ComplianceManagerSectionProgressBar questions={data?.compliance_questions} />
+      <ComplianceManagerSectionProgressBar sectionAIStatus={sectionAIStatus} questions={data?.compliance_questions} />
     </div>
   );
 };
+
+export const ComplianceManagerOverviewSection = withErrorBoundary(_ComplianceManagerOverviewSection, {
+  FallbackComponent: props => <ErrorFallback {...props} />,
+  onError: (error, info) => {
+    console.error('Error occurred in ComplianceManagerOverviewSection: ', error);
+  },
+});
