@@ -144,9 +144,16 @@ module.exports = {
           '50%': { width: '50%' },
           '100%': { width: '100%' },
         },
+        pulsate: {
+          // use opacity ahd brightness
+          '0%': { opacity: '1', filter: 'brightness(100%)' },
+          '50%': { opacity: '0.5', filter: 'brightness(150%)' },
+          '100%': { opacity: '1', filter: 'brightness(100%)' },
+        },
       },
       animation: {
         progressBar: 'progressBar 2s linear infinite',
+        pulsate: 'pulsate 2s linear infinite',
       },
     },
     minHeight: theme => ({
