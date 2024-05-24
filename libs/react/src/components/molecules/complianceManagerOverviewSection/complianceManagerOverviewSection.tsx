@@ -71,7 +71,7 @@ const _ComplianceManagerOverviewSection = ({
       setGroupCounts(prev => {
         return {
           ...prev,
-          [section.id]: {
+          [section.key]: {
             not_started: counts.not_started,
             ai_answered: counts.ai_answered,
             user_answered: counts.user_answered,

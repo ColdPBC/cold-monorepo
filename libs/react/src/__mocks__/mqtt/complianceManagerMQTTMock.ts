@@ -1,5 +1,5 @@
 import { filter, find, get } from 'lodash';
-import { MQTTComplianceManagerPayload, MQTTComplianceManagerPayloadComplianceQuestionList } from '@coldpbc/interfaces';
+import { CurrentAIStatusPayload, MQTTComplianceManagerPayload, MQTTComplianceManagerPayloadComplianceQuestionList } from '@coldpbc/interfaces';
 
 export const getSectionGroupList = (args: any): MQTTComplianceManagerPayload => {
   const name = get(args, 'name', '');
@@ -2002,4 +2002,41 @@ export const getComplianceManagerOverviewSectionQuestionListActivatedMock = (arg
       },
     ],
   };
+};
+
+export const getComplianceManagerOverviewAIProgressPercentageMock = (): CurrentAIStatusPayload => {
+  return [
+    {
+      section: 'GEN',
+      questions: [],
+    },
+    {
+      section: 'CRP',
+      questions: [],
+    },
+    {
+      section: 'WL',
+      questions: [],
+    },
+    {
+      section: 'FR',
+      questions: [],
+    },
+    {
+      section: 'CHEM',
+      questions: [],
+    },
+    {
+      section: 'MFG',
+      questions: [],
+    },
+    {
+      section: 'GHG',
+      questions: [],
+    },
+    {
+      section: 'PRD',
+      questions: [],
+    },
+  ];
 };

@@ -100,7 +100,7 @@ const _ComplianceManagerOverviewSectionGroup = ({ sectionGroup, position }: Comp
     setComplianceCounts(prev => {
       return {
         ...prev,
-        [sectionGroup.id]: counts,
+        ...groupCounts,
       };
     });
   }, [groupCounts]);

@@ -19,6 +19,10 @@ const _ComplianceManagerFlowGuide = ({ showModal, setShowModal, flowGuideStatus,
   const { logBrowser } = useColdContext();
 
   useEffect(() => {
+    // prevent the modal from going to upload step if the modal is already open after activation
+    if (showModal && flowGuideStatus === ComplianceManagerFlowGuideStatus.activate) {
+      return;
+    }
     switch (managerStatus) {
       case ComplianceManagerStatus.activated:
       case ComplianceManagerStatus.uploadedDocuments:
