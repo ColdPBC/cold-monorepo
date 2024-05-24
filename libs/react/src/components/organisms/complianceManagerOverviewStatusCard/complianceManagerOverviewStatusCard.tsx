@@ -9,7 +9,7 @@ import { HexColors } from '@coldpbc/themes';
 
 const _ComplianceManagerOverviewStatusCard = () => {
   const { data, status: managerStatus, complianceCounts } = useContext(ColdComplianceManagerContext);
-  const { mqttComplianceSet } = data;
+  const { mqttComplianceSet, currentAIStatus } = data;
 
   const showProgressBarGradient = (status: ComplianceManagerStatus) => {
     if (status === managerStatus) {
@@ -20,7 +20,10 @@ const _ComplianceManagerOverviewStatusCard = () => {
   };
 
   const getStatusIcon = (status: ComplianceManagerStatus) => {
-    if (managerStatus === ComplianceManagerStatus.startedQuestions && status === ComplianceManagerStatus.completedQuestions) {
+    if (
+      (managerStatus === ComplianceManagerStatus.startedQuestions && status === ComplianceManagerStatus.completedQuestions) ||
+      (managerStatus === ComplianceManagerStatus.startedAi && status === ComplianceManagerStatus.completedAi)
+    ) {
       let percentage = 0;
       if (managerStatus === ComplianceManagerStatus.startedQuestions && status === ComplianceManagerStatus.completedQuestions) {
         let totalQuestions = 0;
@@ -30,6 +33,13 @@ const _ComplianceManagerOverviewStatusCard = () => {
           answeredQuestions += value.user_answered;
         });
         percentage = (answeredQuestions / totalQuestions) * 100;
+      } else if (managerStatus === ComplianceManagerStatus.startedAi && status === ComplianceManagerStatus.completedAi) {
+        const sectionKeys = complianceCounts ? Object.keys(complianceCounts) : [];
+        const currentAiStatusSections = currentAIStatus?.filter(s => sectionKeys.includes(s.section));
+        const currentAiStatusSectionKeys = currentAiStatusSections ? currentAiStatusSections.map(s => s.section) : [];
+        // all the sections that have been answered by AI are not in the currentAIStatusSectionKeys. The ones in the currentAIStatusSectionKeys are the ones that have not been answered by AI yet
+        const answeredSections = sectionKeys.filter(s => !currentAiStatusSectionKeys.includes(s));
+        percentage = (answeredSections.length / sectionKeys.length) * 100;
       }
 
       return (

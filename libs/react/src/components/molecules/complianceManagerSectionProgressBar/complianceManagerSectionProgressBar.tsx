@@ -74,7 +74,7 @@ const _ComplianceManagerSectionProgressBar = ({ questions, sectionAIStatus }: Co
         theme={flowbiteThemeOverride.tooltip}
         animation={false}>
         <div
-          className={`h-[8px] w-full cursor-pointer transition ease-in-out hover:scale-110 duration-300 ${isQuestionBeingProcessed && 'animate-pulse'}`}
+          className={`h-[8px] w-full cursor-pointer transition ease-in-out hover:scale-110 duration-300 ${isQuestionBeingProcessed && 'animate-pulsate'}`}
           style={{
             backgroundColor: color,
             borderTopLeftRadius: isFirst ? 4 : 0,

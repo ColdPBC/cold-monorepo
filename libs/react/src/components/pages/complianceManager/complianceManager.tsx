@@ -150,6 +150,7 @@ const _ComplianceManager = () => {
     topic,
     currentAIStatus: currentAIStatus.data,
     files: files.data,
+    complianceCounts,
   });
 
   if (!data) {
