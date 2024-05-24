@@ -1,3 +1,12 @@
+# [1.227.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.226.1...v1.227.0) (2024-05-24)
+
+
+### Features
+
+* add opacity and brigthness animation to ai question processing ([ec9945f](https://github.com/ColdPBC/cold-monorepo/commit/ec9945f81224174ed10d26b419dba01f9cae901c))
+* dont change status when overview modal is open and handle AI progress when running ([acd13ef](https://github.com/ColdPBC/cold-monorepo/commit/acd13ef158ceae96ca94f65777e99a62df3db5cc))
+* send publish method to get new questions when ai has updates ([8d236e5](https://github.com/ColdPBC/cold-monorepo/commit/8d236e5406a35446c7c621274bc7e0a55618175e))
+
 ## [1.226.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.226.0...v1.226.1) (2024-05-24)
 
 
