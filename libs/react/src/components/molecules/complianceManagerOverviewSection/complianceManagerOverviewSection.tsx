@@ -62,7 +62,7 @@ const _ComplianceManagerOverviewSection = ({
         }),
       );
     }
-  }, [connectionStatus, name, publishMessage, client, collapseOpen, orgId]);
+  }, [connectionStatus, name, publishMessage, client, collapseOpen, orgId, currentAIStatus]);
 
   useEffect(() => {
     const counts = data?.counts;
@@ -112,6 +112,7 @@ const _ComplianceManagerOverviewSection = ({
     groupId,
     data,
     error,
+    currentAIStatus,
   });
 
   const backgroundColor = isAIRunning() ? 'bg-gray-60' : 'bg-bgc-accent';
