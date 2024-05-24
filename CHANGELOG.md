@@ -1,3 +1,10 @@
+## [1.226.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.226.0...v1.226.1) (2024-05-24)
+
+
+### Bug Fixes
+
+* question joins ([9162413](https://github.com/ColdPBC/cold-monorepo/commit/91624130bca19d495d1462fd3d0cbbd3b41fbbcb))
+
 # [1.226.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.225.2...v1.226.0) (2024-05-23)
 
 
