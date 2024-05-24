@@ -71,9 +71,9 @@ export class ComplianceQuestionsRepository extends BaseWorker {
                         JOIN compliance_responses cr
                              ON oc.id = cr.organization_compliance_id
                         JOIN compliance_sections cs ON cr.compliance_section_id = cs.id
-                        JOIN organization_compliance_ai_responses ocair
+                        LEFT JOIN organization_compliance_ai_responses ocair
                              ON cr.organization_compliance_ai_response_id = ocair.id
-                        JOIN organization_compliance_responses ocr
+                        LEFT JOIN organization_compliance_responses ocr
                              ON cr.organization_compliance_response_id = ocr.id
                         JOIN compliance_questions cq
                              ON cr.compliance_question_id = cq.id
