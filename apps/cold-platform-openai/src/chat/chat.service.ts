@@ -32,12 +32,12 @@ export class ChatService extends BaseWorker implements OnModuleInit {
   prompts: PromptsService;
 
   constructor(
+    @InjectQueue('openai') readonly queue: Queue,
     readonly config: ConfigService,
     readonly pc: PineconeService,
     readonly prisma: PrismaService,
     readonly darkly: DarklyService,
     readonly cache: CacheService,
-    @InjectQueue('openai') readonly queue: Queue,
     readonly rabbit: ColdRabbitService,
     readonly mqtt: MqttService,
     readonly fp: FreeplayService,
@@ -184,6 +184,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
     for (const message of messages) {
       context.push(message);
     }
+
     const { rephrased_question, docs } = await this.getDocumentContent(messages, { prompt: question }, company_name, user, context);
 
     const vars = {
@@ -224,12 +225,15 @@ export class ChatService extends BaseWorker implements OnModuleInit {
         text: doc.metadata.chunk,
         score: doc.score,
       };
+
       if (doc.metadata['file_name']) {
         set(metadata, 'file', doc.metadata['file_name']);
       }
+
       if (doc.metadata['url']) {
         set(metadata, 'url', doc.metadata['url']);
       }
+
       return metadata;
     });
 
@@ -714,10 +718,12 @@ export class ChatService extends BaseWorker implements OnModuleInit {
       // If the index does not exist, create it
       if (!idx) {
         this.logger.warn(`Index ${organization.name} not found; creating...`);
+
         await this.pc.getIndexDetails(organization.name);
 
         // Clear existing vectors since the index was just created
         const vectors = await this.prisma.vector_records.findMany({ where: { organization_id: organization.id } });
+
         if (Array.isArray(vectors)) {
           for (const vector of vectors) {
             try {
@@ -1250,9 +1256,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
             user: user,
             org_id: `${job.data.payload?.compliance.compliance_definition_name}`,
             token: job.data?.payload?.token,
-          };
-
-          //this.mqtt.replyTo(payload.reply_to, payload);
+          }; //this.mqtt.replyTo(payload.reply_to, payload);
 
           // publish the response to the rabbit queue
           await this.rabbit.publish(`cold.core.api.compliance_responses`, {
