@@ -1,6 +1,5 @@
 import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { BaseWorker, CacheService, ColdRabbitService, MqttService, PrismaService } from '@coldpbc/nest';
-import { FacilitiesService } from '../facilities/facilities.service';
 import { get } from 'lodash';
 import { EventService } from '../../../utilities/events/event.service';
 import { OrganizationHelper } from '../helpers/organization.helper';
@@ -9,7 +8,6 @@ import { OrganizationHelper } from '../helpers/organization.helper';
 export class OrganizationIntegrationsService extends BaseWorker {
   constructor(
     readonly cache: CacheService,
-    readonly facilities: FacilitiesService,
     readonly mqtt: MqttService,
     readonly helper: OrganizationHelper,
     readonly prisma: PrismaService,
@@ -39,7 +37,7 @@ export class OrganizationIntegrationsService extends BaseWorker {
         }
       }
 
-      const integrations = await this.prisma.integrations.findMany({
+      const integrations = await this.prisma.extended.integrations.findMany({
         where: {
           organization_id: bpc && user.isColdAdmin ? orgId : user.coldclimate_claims.org_id,
         },
@@ -73,7 +71,7 @@ export class OrganizationIntegrationsService extends BaseWorker {
   ): Promise<any> {
     const { user, url } = req;
     try {
-      const service = await this.prisma.service_definitions.findUnique({
+      const service = await this.prisma.extended.service_definitions.findUnique({
         where: {
           name: 'cold-platform-bayou',
         },
@@ -83,7 +81,7 @@ export class OrganizationIntegrationsService extends BaseWorker {
         throw new UnprocessableEntityException(`Service definition ${body.service_definition_id} not found.`);
       }
 
-      const org = await this.prisma.organizations.findUnique({
+      const org = await this.prisma.extended.organizations.findUnique({
         where: {
           id: user.isColdAdmin ? orgId : user.coldclimate_claims.org_id,
         },
@@ -106,7 +104,7 @@ export class OrganizationIntegrationsService extends BaseWorker {
       }
 
       if (!facility) {
-        facility = await this.facilities.createOrganizationFacility(user, orgId, body.metadata);
+        throw new UnprocessableEntityException(`Facility not found for ${orgId}.`);
       }
 
       await this.rabbit.publish(
@@ -172,7 +170,7 @@ export class OrganizationIntegrationsService extends BaseWorker {
   ): Promise<any> {
     const { user, url } = req;
     try {
-      const service = await this.prisma.service_definitions.findUnique({
+      const service = await this.prisma.extended.service_definitions.findUnique({
         where: {
           id: body.service_definition_id,
         },
@@ -251,7 +249,7 @@ export class OrganizationIntegrationsService extends BaseWorker {
   ): Promise<any> {
     const { user, url } = req;
     try {
-      const service = await this.prisma.service_definitions.findUnique({
+      const service = await this.prisma.extended.service_definitions.findUnique({
         where: {
           id: body.service_definition_id,
         },
