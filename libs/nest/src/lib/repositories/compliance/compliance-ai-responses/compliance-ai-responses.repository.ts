@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { BaseWorker } from '../../../worker';
 import { PrismaService } from '../../../prisma';
 
@@ -8,30 +8,184 @@ export class ComplianceAiResponsesRepository extends BaseWorker {
     super(ComplianceAiResponsesRepository.name);
   }
 
-  async createAiResponses(organization: { name: any; id: any; display_name: any }, compliance: { compliance_definition_name: any; id: any }, aiResponses: any, user: any) {
-    this.logger.info(`Creating ai_responses for ${organization.name}: ${compliance.compliance_definition_name}`, {
+  async createAiResponses(orgId: string, complianceName: string, responseData: any, user: any) {
+    this.logger.info(`Creating ai_responses for ${orgId}: ${complianceName}`, {
       user,
-      ...compliance,
-      organization: { id: organization.id, name: organization.name, display_name: organization.display_name },
+      responseData,
+      organization: { id: orgId },
     });
 
-    await this.prisma.organization_compliance_ai_responses.createMany({
-      data: aiResponses.map((aiResponse: any) => ({
-        organization_id: organization.id,
-        organization_compliance_id: compliance.id,
-        ...aiResponse,
-      })),
+    await this.prisma.extended.organization_compliance_ai_responses.create({
+      data: {
+        organization_id: orgId,
+        organization_compliance_id: complianceName,
+        ...responseData,
+      },
     });
   }
-  async deleteAiResponses(organization: { name: any; id: any; display_name: any }, compliance: { compliance_definition_name: any; id: any }, user: any) {
-    this.logger.info(`Clearing previous ai_responses for ${organization.name}: ${compliance.compliance_definition_name}`, {
+
+  async updateAiResponse(orgId: string, complianceName: string, id: string, responseData: any, user: any) {
+    this.logger.info(`Updating ai_response for ${orgId}: ${complianceName}`, {
       user,
-      ...compliance,
-      organization: { id: organization.id, name: organization.name, display_name: organization.display_name },
+      id,
+      responseData,
+      organization: { id: orgId },
     });
 
-    await this.prisma.organization_compliance_ai_responses.deleteMany({
-      where: { organization_id: organization.id, organization_compliance_id: compliance.id },
+    const compliance = await this.prisma.extended.organization_compliance.findUnique({
+      where: {
+        orgIdCompNameKey: {
+          organization_id: orgId,
+          compliance_definition_name: complianceName,
+        },
+      },
+    });
+
+    if (!compliance) {
+      throw new NotFoundException(
+        {
+          user,
+          compliance: { name: complianceName },
+          organization: { id: orgId },
+        },
+        `Compliance not found for ${orgId}: ${complianceName}`,
+      );
+    }
+
+    await this.prisma.extended.organization_compliance_ai_responses.update({
+      where: { id, organization_id: orgId, organization_compliance_id: compliance.id },
+      data: responseData,
+    });
+  }
+  async getAiResponse(orgId: string, complianceName: string, id: string, user: any) {
+    this.logger.info(`Fetching ai_response for ${orgId}: ${complianceName}`, {
+      user,
+      id,
+      compliance: { name: complianceName },
+      organization: { id: orgId },
+    });
+
+    const compliance = await this.prisma.extended.organization_compliance.findUnique({
+      where: {
+        orgIdCompNameKey: {
+          organization_id: orgId,
+          compliance_definition_name: complianceName,
+        },
+      },
+    });
+
+    if (!compliance) {
+      throw new NotFoundException(
+        {
+          user,
+          compliance: { name: complianceName },
+          organization: { id: orgId },
+        },
+        `Compliance not found for ${orgId}: ${complianceName}`,
+      );
+    }
+
+    return this.prisma.extended.organization_compliance_ai_responses.findUnique({
+      where: { id, organization_id: orgId, organization_compliance_id: compliance.id },
+    });
+  }
+  async getAiResponses(orgId: string, complianceName: string, user: any) {
+    this.logger.info(`Fetching ai_responses for ${orgId}: ${complianceName}`, {
+      user,
+      compliance: { name: complianceName },
+      organization: { id: orgId },
+    });
+
+    const compliance = await this.prisma.extended.organization_compliance.findUnique({
+      where: {
+        orgIdCompNameKey: {
+          organization_id: orgId,
+          compliance_definition_name: complianceName,
+        },
+      },
+    });
+
+    if (!compliance) {
+      throw new NotFoundException(
+        {
+          user,
+          compliance: { name: complianceName },
+          organization: { id: orgId },
+        },
+        `Compliance not found for ${orgId}: ${complianceName}`,
+      );
+    }
+
+    return this.prisma.extended.organization_compliance_ai_responses.findMany({
+      where: { organization_id: orgId, organization_compliance_id: compliance.id },
+    });
+  }
+  async deleteAiResponses(orgId: string, complianceName: string, user: any) {
+    this.logger.info(`Clearing previous ai_responses for ${orgId}: ${complianceName}`, {
+      user,
+      compliance: { name: complianceName },
+      organization: { id: orgId },
+    });
+
+    const compliance = await this.prisma.extended.organization_compliance.findUnique({
+      where: {
+        orgIdCompNameKey: {
+          organization_id: orgId,
+          compliance_definition_name: complianceName,
+        },
+      },
+    });
+
+    if (!compliance) {
+      throw new NotFoundException(
+        {
+          user,
+          compliance: { name: complianceName },
+          organization: { id: orgId },
+        },
+        `Compliance not found for ${orgId}: ${complianceName}`,
+      );
+    }
+
+    await this.prisma.extended.organization_compliance_ai_responses.deleteMany({
+      where: { organization_id: orgId, organization_compliance_id: compliance.id },
+    });
+  }
+
+  async deleteAiResponse(orgId: string, complianceName: string, id: string, user: any) {
+    this.logger.info(`Clearing ai_response for ${orgId}: ${complianceName}`, {
+      user,
+      id,
+      compliance: { name: complianceName },
+      organization: { id: orgId },
+    });
+
+    const compliance = await this.prisma.extended.organization_compliance.findUnique({
+      where: {
+        orgIdCompNameKey: {
+          organization_id: orgId,
+          compliance_definition_name: complianceName,
+        },
+      },
+    });
+
+    if (!compliance) {
+      throw new NotFoundException(
+        {
+          user,
+          compliance: { name: complianceName },
+          organization: { id: orgId },
+        },
+        `Compliance not found for ${orgId}: ${complianceName}`,
+      );
+    }
+
+    await this.prisma.extended.organization_compliance_ai_responses.delete({
+      where: {
+        id,
+        organization_id: orgId,
+        organization_compliance_id: compliance.id,
+      },
     });
   }
 }
