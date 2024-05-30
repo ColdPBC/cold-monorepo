@@ -52,7 +52,7 @@ export class FreeplayService extends BaseWorker implements OnModuleInit {
       return await this.client.prompts.getFormatted({
         projectId: 'f98682e7-7dec-4d9c-a74b-28819dca3e3a',
         templateName: template_name,
-        environment: process.env['NODE_ENV'] === 'development' ? 'latest' : process.env['NODE_ENV'],
+        environment: process.env['NODE_ENV'] === 'development' ? 'latest' : process.env['NODE_ENV'] || 'unknown environment',
         variables: variables,
       });
 
