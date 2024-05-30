@@ -11,6 +11,7 @@ export class PrismaService extends ExtendedPrismaClient implements OnModuleInit 
   async onModuleInit() {
     await this.$connect();
   }
+
   async enableShutdownHooks(app: INestApplication) {
     const eventType = 'beforeExit';
     // @ts-expect-error Shutdown hooks
