@@ -82,10 +82,20 @@ export class ComplianceQuestionsRepository extends BaseWorker {
                                   ON cr.compliance_question_id = ocqb.compliance_question_id
                         LEFT JOIN compliance_question_dependency_chains cdc ON cr.compliance_question_id = cdc.compliance_question_id
                  WHERE
+                   cq.deleted = false AND
+                   cr.deleted = false AND
+                   ocair.deleted = false AND
+                   ocr.deleted = false AND
+                   cdc.deleted = false AND
+                   cs.deleted = false AND
                    cr.organization_id = ${organization_id} AND
                    cs.id = ${compliance_section_id}
                  GROUP BY cq.id, cr.organization_id, ocair.answer, ocr.value, cdc.dependency_chain, cr.compliance_definition_name`,
     )) as any;
+
+    if (!questions.length) {
+      return { compliance_questions: [], counts: { total: 0, not_started: 0, ai_answered: 0, user_answered: 0, bookmarked: 0 } };
+    }
 
     this.logger.info('Retrieved filtered question list', { questions, organization_id, compliance_section_id });
 
@@ -130,34 +140,32 @@ export class ComplianceQuestionsRepository extends BaseWorker {
    * @param filter
    */
   async getQuestionList({ compliance_section_id, compliance_section_group_id, compliance_definition_name }): Promise<any> {
-    const questions = await this.prisma.compliance_questions.findMany({
+    const questions = await this.prisma.extended.compliance_definitions.findUnique({
       where: {
-        compliance_section_id,
-        compliance_definition_name,
+        name: compliance_definition_name,
       },
-      select: {
-        id: true,
-        prompt: true,
-        order: true,
-        key: true,
-        compliance_question_dependency_chain: true,
-        compliance_section: {
-          select: {
-            id: true,
-            key: true,
-            title: true,
-            metadata: true,
-            order: true,
-            compliance_definition_name: true,
-            dependency_expression: true,
-            compliance_section_dependency_chains: true,
-            section_group: {
-              select: {
-                id: true,
-                order: true,
-                title: true,
-                compliance_definition_name: true,
-                metadata: true,
+      include: {
+        compliance_section_groups: {
+          where: {
+            id: compliance_section_group_id,
+          },
+          orderBy: {
+            order: 'asc',
+          },
+          include: {
+            compliance_sections: {
+              where: {
+                id: compliance_section_id,
+              },
+              orderBy: {
+                order: 'asc',
+              },
+              include: {
+                compliance_questions: {
+                  orderBy: {
+                    order: 'asc',
+                  },
+                },
               },
             },
           },
@@ -165,9 +173,15 @@ export class ComplianceQuestionsRepository extends BaseWorker {
       },
     });
 
-    this.logger.info('Retrieved filtered question list', { questions, compliance_section_id });
+    if (!questions) {
+      throw new NotFoundException(`No questions found for group: ${compliance_section_group_id} & section: ${compliance_section_id}}`);
+    }
 
-    return { compliance_questions: questions };
+    this.logger.info(`Retrieved ${compliance_definition_name} question list for group: ${compliance_section_group_id} & section: ${compliance_section_id}}`, {
+      ...questions,
+    });
+
+    return questions;
   }
 
   /**
@@ -180,7 +194,7 @@ export class ComplianceQuestionsRepository extends BaseWorker {
    */
   async getQuestion(id: string): Promise<compliance_questions> {
     try {
-      const question = await this.prisma.compliance_questions.findUnique({
+      const question = await this.prisma.extended.compliance_questions.findUnique({
         where: {
           id,
         },
@@ -210,7 +224,7 @@ export class ComplianceQuestionsRepository extends BaseWorker {
    */
   async getQuestionByKeyAndComplianceName({ compliance_definition_name, key }: { compliance_definition_name: string; key: string }): Promise<compliance_questions> {
     try {
-      const question = await this.prisma.compliance_questions.findUnique({
+      const question = await this.prisma.extended.compliance_questions.findUnique({
         where: {
           compDefNameKey: {
             compliance_definition_name,
@@ -243,7 +257,7 @@ export class ComplianceQuestionsRepository extends BaseWorker {
     try {
       questions.forEach(q => (q.id = new Cuid2Generator('cq').scopedId));
 
-      const createdQuestions = await this.prisma.compliance_questions.createMany({
+      const createdQuestions = await this.prisma.extended.compliance_questions.createMany({
         data: questions as any,
         skipDuplicates: true,
       });
@@ -265,7 +279,7 @@ export class ComplianceQuestionsRepository extends BaseWorker {
   async createQuestion(question: compliance_questions): Promise<compliance_questions> {
     try {
       question.id = new Cuid2Generator('cq').scopedId;
-      const created = await this.prisma.compliance_questions.create({
+      const created = await this.prisma.extended.compliance_questions.create({
         data: {
           ...(question as any),
         },
@@ -302,7 +316,7 @@ export class ComplianceQuestionsRepository extends BaseWorker {
     }
 
     try {
-      const updated = await this.prisma.compliance_questions.update({
+      const updated = await this.prisma.extended.compliance_questions.update({
         where: where,
         data: {
           ...(question as any),
@@ -374,7 +388,7 @@ export class ComplianceQuestionsRepository extends BaseWorker {
 
   async deleteQuestion(id: string): Promise<void> {
     try {
-      this.prisma.compliance_questions.delete({
+      this.prisma.extended.compliance_questions.delete({
         where: {
           id,
         },
