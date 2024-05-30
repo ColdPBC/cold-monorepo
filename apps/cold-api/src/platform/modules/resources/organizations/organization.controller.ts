@@ -2,10 +2,9 @@ import { BadRequestException, Body, Controller, Delete, Get, HttpCode, NotFoundE
 import { Span } from 'nestjs-ddtrace';
 import { ResourceValidationPipe } from '../../../pipes/resource.pipe';
 import { allRoles, bpcDecoratorOptions, coldAdminOnly, orgIdDecoratorOptions } from '../_global/global.params';
-import { postOrganizationExample } from './examples/organization.examples';
 import { OrganizationService } from './organization.service';
 import { ApiBody, ApiOAuth2, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { BaseWorker, HttpExceptionFilter, IAuthenticatedUser, JwtAuthGuard, OrganizationsSchema, Roles, RolesGuard } from '@coldpbc/nest';
+import { BaseWorker, genOrganization, HttpExceptionFilter, IAuthenticatedUser, JwtAuthGuard, OrganizationsSchema, Roles, RolesGuard } from '@coldpbc/nest';
 import { CreateOrganizationDto } from './dto/organization.dto';
 import { FootprintsService } from './facilities/footprints/footprints.service';
 
@@ -36,9 +35,9 @@ export class OrganizationController extends BaseWorker {
   @Roles(...coldAdminOnly)
   @ApiQuery(bpcDecoratorOptions)
   @ApiBody({
-    type: CreateOrganizationDto,
+    type: 'object',
     schema: {
-      example: postOrganizationExample,
+      example: genOrganization(),
     },
   })
   @HttpCode(201)
@@ -72,9 +71,9 @@ export class OrganizationController extends BaseWorker {
   @Roles(...coldAdminOnly)
   @ApiQuery(bpcDecoratorOptions)
   @ApiBody({
-    type: CreateOrganizationDto,
+    type: 'object',
     schema: {
-      example: postOrganizationExample,
+      example: genOrganization(),
     },
   })
   @HttpCode(200)
@@ -91,19 +90,6 @@ export class OrganizationController extends BaseWorker {
   ) {
     return this.orgService.updateOrganization(orgId, createOrganizationDTO, req);
   }
-
-  @Get(':orgId/compliance')
-  @Roles(...coldAdminOnly)
-  getOrgData(
-    @Param('orgId') orgId: string,
-    @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
-  ) {}
 
   /***
    * **Internal Use Only** : Get all organizations from Auth0
@@ -122,8 +108,8 @@ export class OrganizationController extends BaseWorker {
     description: 'Optional: provide either tha name or the id to filter results',
     example: { name: '{{test_company_name}}', id: '{{test_company_id}}' },
   })
-  getOrganizations(@Query('bpc') bpc?: boolean, @Query('filter') filter?: { name: string; id: string }) {
-    return this.orgService.getOrganizations(bpc, filter);
+  getOrganizations(@Req() req: any, @Query('bpc') bpc?: boolean, @Query('filter') filter?: { name: string; id: string }) {
+    return this.orgService.getOrganizations(bpc, req, filter);
   }
 
   /***
