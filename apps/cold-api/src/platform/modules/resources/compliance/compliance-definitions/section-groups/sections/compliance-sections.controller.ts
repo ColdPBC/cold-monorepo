@@ -79,7 +79,7 @@ export class ComplianceSectionsController {
       throw new BadRequestException('sId does not match section id in body');
     }
 
-    return this.complianceSectionsService.update(id, sectionData, user);
+    return this.complianceSectionsService.update(name, groupId, id, sectionData, user);
   }
 
   @Delete(':sId')
