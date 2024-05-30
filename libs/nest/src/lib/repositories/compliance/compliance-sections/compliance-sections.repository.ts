@@ -258,7 +258,7 @@ export class ComplianceSectionsRepository extends BaseWorker implements OnModule
     }
   }
 
-  async updateSection(name: string, sgId: string, id: string, data: any) {
+  async updateSection(name: string, sgId: string, id: string, data: any, user: IAuthenticatedUser) {
     try {
       compliance_sectionsSchema.parse(data);
       return this.prisma.extended.compliance_sections.update({
