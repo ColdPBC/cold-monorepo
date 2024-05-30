@@ -14,7 +14,7 @@ import { Injectable } from '@nestjs/common';
 export const extendedClient = (client: PrismaClient) => {
   const logger = new WorkerLogger('PrismaService');
 
-  return client
+  client
     .$extends({
       query: {
         async $allOperations({ operation, model, args, query }) {
@@ -55,6 +55,8 @@ export const extendedClient = (client: PrismaClient) => {
         },
       }),
     );
+
+  return client;
 };
 
 /**
