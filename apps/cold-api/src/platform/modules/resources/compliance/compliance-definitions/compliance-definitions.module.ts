@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { ComplianceDefinitionsController } from './compliance-definitions.controller';
 import { ComplianceDefinitionService } from './compliance-definitions.service';
-import { DarklyModule } from '@coldpbc/nest';
+import { ComplianceRepositoryModule, DarklyModule } from '@coldpbc/nest';
 
 @Module({
-  imports: [DarklyModule.forRoot()],
+  imports: [DarklyModule.forRoot(), ComplianceRepositoryModule],
   controllers: [ComplianceDefinitionsController],
   providers: [ComplianceDefinitionService],
   exports: [ComplianceDefinitionService],
