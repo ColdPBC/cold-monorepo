@@ -1,6 +1,8 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
+    "declaration": true,
+    "esModuleInterop": true,
     "outDir": "../../dist/out-tsc",
     "module": "commonjs",
     "types": ["node"],
@@ -11,6 +13,12 @@
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
     "incremental": true,
+
+    "strictNullChecks": true,
+    "noImplicitAny": false,
+    "strictBindCallApply": false,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
     "skipLibCheck": true
   },
   "exclude": ["jest.config.ts", "src/**/*.spec.ts", "src/**/*.test.ts"],
