@@ -47,7 +47,7 @@ export class ComplianceMQTT extends BaseWorker implements OnModuleInit {
         }
         case `getComplianceSectionList`: {
           payload = JSON.parse(message) as MqttAPIComplianceSectionPayload;
-          response = await this.sectionRepository.getFilteredSectionList(payload);
+          response = await this.sectionRepository.getFilteredSectionList(payload, payload.user);
           break;
         }
         case `getComplianceQuestionList`: {
