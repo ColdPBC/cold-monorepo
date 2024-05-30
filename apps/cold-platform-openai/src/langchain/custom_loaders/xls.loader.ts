@@ -17,7 +17,7 @@ export class XlsLoader extends BaseWorker {
     const documents: any = [];
 
     for (const sheet of sheets) {
-      const jsonData = xlsx.utils.sheet_to_json(workbook.Sheets[sheet]);
+      const jsonData = xlsx.utils.sheet_to_json(workbook.Sheets[sheet]) as any[];
       for (const row in jsonData) {
         const keys = Object.keys(jsonData[row]);
         const content = JSON.stringify(jsonData[row]);
