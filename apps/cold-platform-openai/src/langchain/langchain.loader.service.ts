@@ -37,6 +37,10 @@ export class LangchainLoaderService extends BaseWorker implements OnModuleInit {
     const extension = file.key.split('.').pop();
     const s3File = await this.s3.getObject(user, bucket, file.key);
 
+    if (!s3File.Body) {
+      throw new Error(`File not found: ${file.key}`);
+    }
+
     const textSplitter = RecursiveCharacterTextSplitter.fromLanguage('html', {
       chunkSize: Number(this.chunkSize),
       chunkOverlap: Number(this.overlapSize),
@@ -53,7 +57,7 @@ export class LangchainLoaderService extends BaseWorker implements OnModuleInit {
         return await textSplitter.splitDocuments(documents);
       }
       case 'pdf': {
-        const loader = new PDFLoader(new Blob([await s3File.Body.transformToByteArray()]), { splitPages: false });
+        const loader = new PDFLoader(new Blob([await s3File?.Body.transformToByteArray()]), { splitPages: false });
         const documents = await loader.load();
         return await textSplitter.splitDocuments(documents);
       }
