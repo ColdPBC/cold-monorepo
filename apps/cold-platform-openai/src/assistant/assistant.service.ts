@@ -43,11 +43,11 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
     } catch (e) {
       this.logger.error(e.message, e);
       try {
-        this.service = await this.prisma.service_definitions.findUnique({
+        this.service = (await this.prisma.service_definitions.findUnique({
           where: {
             name: pkg.name,
           },
-        });
+        })) as service_definitions;
 
         this.logger.warn('Unable to register service with RabbitMQ, retrieved service definition from database.');
       } catch (e) {
@@ -380,6 +380,10 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
   }
 
   getTimerString(job: Job) {
+    if (!job.processedOn) {
+      return 'Waiting to process';
+    }
+
     if (job.finishedOn) {
       return `Duration: ${this.getDuration(job)} seconds`;
     } else {
@@ -388,6 +392,10 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
   }
 
   getDuration(job: Job) {
+    if (!job.finishedOn || !job.processedOn) {
+      return 0;
+    }
+
     return (job.finishedOn - job.processedOn) / 1000;
   }
 }
