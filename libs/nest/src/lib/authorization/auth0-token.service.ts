@@ -67,7 +67,7 @@ export class Auth0TokenService extends BaseWorker implements OnModuleInit {
         let token: any = await this.cache.get(`auth0-management-token-${process.env['NODE_ENV']}`);
 
         if (!token || token['data']['expiresAt'] < new Date().getMilliseconds() / 1000) {
-          this.logger.error('Token Expired');
+          this.logger.error('Token Expired', { token, compared_to: new Date().getMilliseconds() / 1000 });
           token = await this.getManagementToken();
         }
 
@@ -109,7 +109,7 @@ export class Auth0TokenService extends BaseWorker implements OnModuleInit {
           `auth0-management-token-${process.env['NODE_ENV']}`,
           { data: tokenResponse.data },
           {
-            ttl: 1000 * 60 * 60 * 20,
+            ttl: 1000 * 60 * 60 * 5,
             update: true,
           },
         );
