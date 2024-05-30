@@ -1,10 +1,15 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, Req, UseFilters, UseGuards } from '@nestjs/common';
 import { ComplianceSectionGroupsService } from './compliance-section-groups.service';
-import { CreateComplianceSectionGroupDto } from './dto/create-compliance-section-group.dto';
-import { UpdateComplianceSectionGroupDto } from './dto/update-compliance-section-group.dto';
 import { ComplianceQuestionsService } from './sections/questions/compliance-questions.service';
 import { ComplianceSectionsService } from './sections/compliance-sections.service';
+import { ComplianceSectionGroupsExtendedDto, genComplianceSectionGroup, HttpExceptionFilter, JwtAuthGuard, Roles, RolesGuard } from '@coldpbc/nest';
+import { coldAdminOnly } from '../../../_global/global.params';
+import { ApiBody, ApiTags } from '@nestjs/swagger';
 
+@UseGuards(JwtAuthGuard, RolesGuard)
+@Roles(...coldAdminOnly)
+@ApiTags('Compliance', 'Section Groups')
+@UseFilters(new HttpExceptionFilter(ComplianceSectionGroupsController.name))
 @Controller('compliance_definitions/:name/section_groups')
 export class ComplianceSectionGroupsController {
   constructor(
@@ -14,8 +19,14 @@ export class ComplianceSectionGroupsController {
   ) {}
 
   @Post()
-  create(@Param('name') name: string, @Body() createComplianceSectionGroupDto: CreateComplianceSectionGroupDto) {
-    return this.complianceSectionGroupsService.create(createComplianceSectionGroupDto);
+  @ApiBody({
+    type: 'object',
+    schema: {
+      example: genComplianceSectionGroup(),
+    },
+  })
+  create(@Param('name') name: string, @Body() sectionGroup: ComplianceSectionGroupsExtendedDto) {
+    return this.complianceSectionGroupsService.create(sectionGroup);
   }
 
   @Get()
@@ -23,34 +34,30 @@ export class ComplianceSectionGroupsController {
     return this.complianceSectionGroupsService.findAll(name, filter, questions);
   }
 
-  @Get(':sectionGroupId/sections')
-  findAllSections(@Param('name') name: string, @Param('sectionGroupId') id: string, @Query('fq') filter: boolean, @Query('iq') questions: boolean) {
-    return this.complianceSections.findSectionsByGroup(name, id, filter, questions);
-  }
-
-  @Get(':sectionGroupId/sections/key/:key')
+  @Get(':sgId/sections/key/:key')
   findSectionByKey(
-    @Param('sectionGroupId') groupId: string,
+    @Param('sgId') groupId: string,
     @Param('name') name: string,
     @Param('key') key: string,
+    @Req() req: any,
     @Query('fq') filter: boolean,
     @Query('iq') questions: boolean,
   ) {
-    return this.complianceSections.findOneByKeyAndName(groupId, name, key, filter, questions);
+    return this.complianceSections.findOneByKeyAndName(groupId, name, req.user, key, filter, questions);
   }
 
-  @Get(':sectionGroupId')
-  findOne(@Param('name') name: string, @Param('sectionGroupId') id: string, @Query('fq') filter: boolean, @Query('iq') questions: boolean) {
+  @Get(':sgId')
+  findOne(@Param('name') name: string, @Param('sgId') id: string, @Query('fq') filter: boolean, @Query('iq') questions: boolean) {
     return this.complianceSectionGroupsService.findOne(name, id, filter, questions);
   }
 
-  @Patch(':sectionGroupId')
-  update(@Param('name') name: string, @Param('sectionGroupId') id: string, @Body() updateComplianceSectionGroupDto: UpdateComplianceSectionGroupDto) {
-    return this.complianceSectionGroupsService.update(id, updateComplianceSectionGroupDto);
+  @Patch(':sgId')
+  update(@Param('name') name: string, @Param('sgId') id: string, @Body() data: ComplianceSectionGroupsExtendedDto) {
+    return this.complianceSectionGroupsService.update(name, id, data);
   }
 
-  @Delete(':sectionGroupId')
-  remove(@Param('name') name: string, @Param('sectionGroupId') id: string) {
-    return this.complianceSectionGroupsService.remove(id);
+  @Delete(':sgId')
+  remove(@Param('name') name: string, @Param('sgId') id: string) {
+    return this.complianceSectionGroupsService.remove(name, id);
   }
 }
