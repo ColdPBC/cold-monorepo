@@ -22,16 +22,13 @@
                         "application/json": {
                             "schema": {
                                 "example": {
-                                    "display_name": "Test API Organization {{$randomAlphaNumeric}}{{$randomAlphaNumeric}}",
-                                    "branding": {},
-                                    "city": "Minneapolis",
-                                    "email": "info@example.com",
-                                    "phone": "18005551212",
-                                    "state": "MN",
-                                    "street_address": "404 Washington Avenue North",
-                                    "zip": "55401"
+                                    "id": "org_f6ywft7ylz7qgdki",
+                                    "logo_url": "http://lorempixel.com/640/480",
+                                    "display_name": "Williamson LLC",
+                                    "website": "http://www.clay-brown.net",
+                                    "isTest": true
                                 },
-                                "$ref": "#/components/schemas/CreateOrganizationDto"
+                                "$ref": "#/components/schemas/"
                             }
                         }
                     }
@@ -161,16 +158,13 @@
                         "application/json": {
                             "schema": {
                                 "example": {
-                                    "display_name": "Test API Organization {{$randomAlphaNumeric}}{{$randomAlphaNumeric}}",
-                                    "branding": {},
-                                    "city": "Minneapolis",
-                                    "email": "info@example.com",
-                                    "phone": "18005551212",
-                                    "state": "MN",
-                                    "street_address": "404 Washington Avenue North",
-                                    "zip": "55401"
+                                    "id": "org_rmthgnnrq7lkgzhy",
+                                    "logo_url": "http://lorempixel.com/640/480",
+                                    "display_name": "Littel, Jacobs and Murray LLC",
+                                    "website": "http://www.olivia.org",
+                                    "isTest": true
                                 },
-                                "$ref": "#/components/schemas/CreateOrganizationDto"
+                                "$ref": "#/components/schemas/"
                             }
                         }
                     }
@@ -202,7 +196,7 @@
                         "name": "orgId",
                         "required": true,
                         "in": "path",
-                        "example": "{{test_organization_id}}",
+                        "example": "{{cold_org_id}}",
                         "description": "Id of the Organization",
                         "schema": {
                             "type": "string"
@@ -245,7 +239,7 @@
                         "name": "orgId",
                         "required": true,
                         "in": "path",
-                        "example": "{{test_organization_id}}",
+                        "example": "{{cold_org_id}}",
                         "description": "Id of the Organization",
                         "schema": {
                             "type": "string"
@@ -280,7 +274,39 @@
                 ]
             }
         },
-        "/test": {
+        "/organizations/{orgId}/footprints": {
+            "get": {
+                "operationId": "OrganizationController_findAllByOrg",
+                "parameters": [
+                    {
+                        "name": "orgId",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Organizations"
+                ],
+                "security": [
+                    {
+                        "oauth2": [
+                            "openid",
+                            "email",
+                            "profile"
+                        ]
+                    }
+                ]
+            }
+        },
+        "/organizations/test": {
             "delete": {
                 "operationId": "DeleteTestOrgs",
                 "summary": "Delete Test Organizations",
@@ -945,7 +971,7 @@
                         "name": "orgId",
                         "required": true,
                         "in": "path",
-                        "example": "{{test_organization_id}}",
+                        "example": "{{cold_org_id}}",
                         "description": "Id of the Organization",
                         "schema": {
                             "type": "string"
@@ -1292,7 +1318,7 @@
                         "name": "orgId",
                         "required": true,
                         "in": "path",
-                        "example": "{{test_organization_id}}",
+                        "example": "{{cold_org_id}}",
                         "description": "Id of the Organization",
                         "schema": {
                             "type": "string"
@@ -1340,7 +1366,7 @@
                         "name": "orgId",
                         "required": true,
                         "in": "path",
-                        "example": "{{test_organization_name}}",
+                        "example": "{{test_organization_id}}",
                         "description": "The id of the organization",
                         "schema": {
                             "type": "string"
@@ -1472,7 +1498,7 @@
                         "name": "orgId",
                         "required": true,
                         "in": "path",
-                        "example": "{{test_organization_id}}",
+                        "example": "{{cold_org_id}}",
                         "description": "Id of the Organization",
                         "schema": {
                             "type": "string"
@@ -1505,7 +1531,7 @@
                         "name": "orgId",
                         "required": true,
                         "in": "path",
-                        "example": "{{test_organization_id}}",
+                        "example": "{{cold_org_id}}",
                         "description": "Id of the Organization",
                         "schema": {
                             "type": "string"
@@ -1531,7 +1557,7 @@
                         "name": "orgId",
                         "required": true,
                         "in": "path",
-                        "example": "{{test_organization_id}}",
+                        "example": "{{cold_org_id}}",
                         "description": "Id of the Organization",
                         "schema": {
                             "type": "string"
@@ -2079,7 +2105,7 @@
                         "name": "orgId",
                         "required": true,
                         "in": "path",
-                        "example": "{{test_organization_id}}",
+                        "example": "{{cold_org_id}}",
                         "description": "Id of the Organization",
                         "schema": {
                             "type": "string"
@@ -2131,9 +2157,9 @@
                 ]
             }
         },
-        "/compliance_definitions": {
+        "/compliance": {
             "post": {
-                "operationId": "ComplianceController_create",
+                "operationId": "ComplianceDefinitionsController_createDefinition",
                 "parameters": [],
                 "responses": {
                     "201": {
@@ -2152,7 +2178,7 @@
                 ]
             },
             "get": {
-                "operationId": "ComplianceController_findAll",
+                "operationId": "ComplianceDefinitionsController_findAllComplianceDefinitions",
                 "parameters": [
                     {
                         "name": "bpc",
@@ -2181,7 +2207,615 @@
                 ]
             }
         },
-        "/compliance_definitions/{name}": {
+        "/compliance/{name}/survey": {
+            "post": {
+                "operationId": "ComplianceDefinitionsController_injestComplianceSurvey",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "required": true,
+                        "in": "path",
+                        "example": "{{test_compliance_definition_name}}",
+                        "description": "The name of compliance definition to injest",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "sections": {
+                                        "type": "object",
+                                        "additionalProperties": {
+                                            "type": "object",
+                                            "properties": {
+                                                "follow_up": {
+                                                    "type": "object"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "examples": {
+                                "sample": {
+                                    "summary": "Sample Survey",
+                                    "description": "string",
+                                    "value": {
+                                        "id": "compdef_a2sgulgtrgn054j5",
+                                        "title": "McDermott, Langosh and Wisozk Group Test Survey",
+                                        "version": 2025,
+                                        "sections": {
+                                            "HLS": {
+                                                "title": "et",
+                                                "prompt": "Ipsa eveniet vel doloribus.",
+                                                "component": "",
+                                                "follow_up": {
+                                                    "HLS-0": {
+                                                        "idx": 32,
+                                                        "prompt": "Dicta ut doloremque soluta et in delectus.",
+                                                        "rubric": {
+                                                            "score_map": {
+                                                                "0": 0,
+                                                                "1": 1,
+                                                                "2": 1,
+                                                                "3": 0,
+                                                                "4": 1
+                                                            }
+                                                        },
+                                                        "options": [],
+                                                        "tooltip": "Aut voluptatem ratione.",
+                                                        "component": "number",
+                                                        "placeholder": "Ad quia et."
+                                                    },
+                                                    "HLS-1": {
+                                                        "idx": 75,
+                                                        "prompt": "In nihil aperiam voluptatem iure voluptatem.",
+                                                        "rubric": {
+                                                            "score_map": {
+                                                                "et": 1,
+                                                                "sit": 0,
+                                                                "quo": 0,
+                                                                "Not sure": 0
+                                                            }
+                                                        },
+                                                        "options": [
+                                                            "et",
+                                                            "sit",
+                                                            "quo",
+                                                            "et",
+                                                            "Not sure"
+                                                        ],
+                                                        "tooltip": "Aspernatur architecto et.",
+                                                        "component": "select",
+                                                        "placeholder": "Tempore enim nesciunt velit voluptate placeat omnis quae voluptatibus."
+                                                    },
+                                                    "HLS-2": {
+                                                        "idx": 46,
+                                                        "prompt": "Enim aut excepturi minima est voluptatem ut.",
+                                                        "rubric": {
+                                                            "score_map": {
+                                                                "velit": 0,
+                                                                "distinctio": 0,
+                                                                "et": 1,
+                                                                "Not sure": 0
+                                                            }
+                                                        },
+                                                        "options": [
+                                                            "velit",
+                                                            "distinctio",
+                                                            "et",
+                                                            "velit",
+                                                            "Not sure"
+                                                        ],
+                                                        "tooltip": "Soluta aut provident quo autem id saepe nam aut sapiente.",
+                                                        "component": "select",
+                                                        "placeholder": "Quia neque necessitatibus."
+                                                    },
+                                                    "HLS-3": {
+                                                        "idx": 29,
+                                                        "prompt": "Inventore quod quia harum molestiae temporibus.",
+                                                        "rubric": {
+                                                            "score_map": {
+                                                                "Yes": 0,
+                                                                "No": 0,
+                                                                "Not sure": 0
+                                                            }
+                                                        },
+                                                        "options": [
+                                                            "Yes",
+                                                            "No",
+                                                            "Not sure"
+                                                        ],
+                                                        "tooltip": "Delectus provident repellat modi officiis consequatur vitae sit rem.",
+                                                        "component": "yes_no",
+                                                        "placeholder": "Sunt vitae illo eaque iste vel similique."
+                                                    },
+                                                    "HLS-4": {
+                                                        "idx": 63,
+                                                        "prompt": "Pariatur quo ducimus quo illum dolor aut cupiditate.",
+                                                        "rubric": {
+                                                            "score_map": {
+                                                                "Yes": 1,
+                                                                "No": 0,
+                                                                "Not sure": 0
+                                                            }
+                                                        },
+                                                        "options": [
+                                                            "Yes",
+                                                            "No",
+                                                            "Not sure"
+                                                        ],
+                                                        "tooltip": "Optio ab consequuntur earum voluptatem nihil dolorem qui dicta beatae.",
+                                                        "component": "yes_no",
+                                                        "placeholder": "Omnis qui est adipisci."
+                                                    }
+                                                },
+                                                "image_url": "http://lorempixel.com/640/480",
+                                                "category_idx": 8,
+                                                "section_type": "Advocate",
+                                                "category_description": "Aut est officiis iusto ut aut non animi."
+                                            },
+                                            "BWY": {
+                                                "title": "optio",
+                                                "prompt": "Rerum labore beatae aut et qui.",
+                                                "component": "",
+                                                "follow_up": {
+                                                    "BWY-0": {
+                                                        "idx": 47,
+                                                        "prompt": "Voluptatum consequatur explicabo fugit aliquid officiis ut.",
+                                                        "rubric": {
+                                                            "score_map": {
+                                                                "rerum": 0,
+                                                                "sed": 0,
+                                                                "voluptas": 1,
+                                                                "a": 0,
+                                                                "Not sure": 0
+                                                            }
+                                                        },
+                                                        "options": [
+                                                            "rerum",
+                                                            "sed",
+                                                            "voluptas",
+                                                            "a",
+                                                            "Not sure"
+                                                        ],
+                                                        "tooltip": "Sequi voluptates quod rerum qui dolor.",
+                                                        "component": "multi_select",
+                                                        "placeholder": "Earum odit est ut."
+                                                    },
+                                                    "BWY-1": {
+                                                        "idx": 4,
+                                                        "prompt": "Ab pariatur distinctio autem odio repudiandae minus et illo.",
+                                                        "rubric": {
+                                                            "score_map": {
+                                                                "ipsam": 1,
+                                                                "voluptatem": 1,
+                                                                "illum": 1,
+                                                                "aut": 1,
+                                                                "Not sure": 0
+                                                            }
+                                                        },
+                                                        "options": [
+                                                            "ipsam",
+                                                            "voluptatem",
+                                                            "illum",
+                                                            "aut",
+                                                            "Not sure"
+                                                        ],
+                                                        "tooltip": "Cupiditate quos aut expedita quos.",
+                                                        "component": "select",
+                                                        "placeholder": "Minima iusto facilis expedita ea aliquam quibusdam autem."
+                                                    },
+                                                    "BWY-2": {
+                                                        "idx": 8,
+                                                        "prompt": "Doloremque sequi et cumque blanditiis nihil exercitationem accusantium.",
+                                                        "rubric": {
+                                                            "score_map": {
+                                                                "0": 0,
+                                                                "1": 0,
+                                                                "2": 1,
+                                                                "3": 0,
+                                                                "4": 1
+                                                            }
+                                                        },
+                                                        "options": [],
+                                                        "tooltip": "Natus cumque qui reprehenderit.",
+                                                        "component": "number",
+                                                        "placeholder": "Dignissimos doloribus harum."
+                                                    }
+                                                },
+                                                "image_url": "http://lorempixel.com/640/480",
+                                                "category_idx": 10,
+                                                "section_type": "Reduce",
+                                                "category_description": "Quas est aliquid sint sit error at."
+                                            },
+                                            "WCB": {
+                                                "title": "sunt",
+                                                "prompt": "Ex maiores repellat ullam ea aut id sit in.",
+                                                "component": "",
+                                                "follow_up": {
+                                                    "WCB-0": {
+                                                        "idx": 17,
+                                                        "prompt": "Modi et debitis quia eius vero provident consequatur facilis.",
+                                                        "rubric": {
+                                                            "score_map": {}
+                                                        },
+                                                        "options": [],
+                                                        "tooltip": "Quibusdam sed ab autem expedita non.",
+                                                        "component": "text_area",
+                                                        "placeholder": "Voluptates omnis eaque."
+                                                    },
+                                                    "WCB-1": {
+                                                        "idx": 74,
+                                                        "prompt": "Quia nam sint architecto quos sequi dolores neque consequatur.",
+                                                        "rubric": {
+                                                            "score_map": {}
+                                                        },
+                                                        "options": [],
+                                                        "tooltip": "Quis quaerat et expedita consequatur quaerat quae rerum.",
+                                                        "component": "text_area",
+                                                        "placeholder": "Error ex ex aspernatur."
+                                                    },
+                                                    "WCB-2": {
+                                                        "idx": 1,
+                                                        "prompt": "Tenetur neque aut et laboriosam voluptas.",
+                                                        "rubric": {
+                                                            "score_map": {
+                                                                "rem": 1,
+                                                                "quo": 0,
+                                                                "maxime": 1,
+                                                                "ab": 0,
+                                                                "Not sure": 0
+                                                            }
+                                                        },
+                                                        "options": [
+                                                            "rem",
+                                                            "quo",
+                                                            "maxime",
+                                                            "ab",
+                                                            "Not sure"
+                                                        ],
+                                                        "tooltip": "Eos autem corrupti ut doloremque nulla animi saepe.",
+                                                        "component": "select",
+                                                        "placeholder": "Molestias voluptate eum."
+                                                    },
+                                                    "WCB-3": {
+                                                        "idx": 97,
+                                                        "prompt": "Quod impedit animi iusto velit blanditiis eos asperiores.",
+                                                        "rubric": {
+                                                            "score_map": {
+                                                                "hic": 0,
+                                                                "doloribus": 1,
+                                                                "voluptatum": 0,
+                                                                "dolorum": 0,
+                                                                "Not sure": 0
+                                                            }
+                                                        },
+                                                        "options": [
+                                                            "hic",
+                                                            "doloribus",
+                                                            "voluptatum",
+                                                            "dolorum",
+                                                            "Not sure"
+                                                        ],
+                                                        "tooltip": "Repellat quibusdam molestiae veritatis illum et.",
+                                                        "component": "select",
+                                                        "placeholder": "Minus sit blanditiis voluptates odit sapiente labore saepe laudantium."
+                                                    }
+                                                },
+                                                "image_url": "http://lorempixel.com/640/480",
+                                                "category_idx": 5,
+                                                "section_type": "Reduce",
+                                                "category_description": "Vitae temporibus perferendis rerum voluptas magni."
+                                            },
+                                            "DJN": {
+                                                "title": "perferendis",
+                                                "prompt": "Cupiditate sed mollitia ratione incidunt dolores et ea.",
+                                                "component": "",
+                                                "follow_up": {
+                                                    "DJN-0": {
+                                                        "idx": 27,
+                                                        "prompt": "Adipisci optio vel repudiandae mollitia modi voluptatem.",
+                                                        "rubric": {
+                                                            "score_map": {
+                                                                "aliquam": 1,
+                                                                "praesentium": 1,
+                                                                "cupiditate": 1,
+                                                                "doloribus": 1,
+                                                                "Not sure": 0
+                                                            }
+                                                        },
+                                                        "options": [
+                                                            "aliquam",
+                                                            "praesentium",
+                                                            "cupiditate",
+                                                            "doloribus",
+                                                            "Not sure"
+                                                        ],
+                                                        "tooltip": "Quia tenetur quae accusantium omnis molestiae sit.",
+                                                        "component": "multi_select",
+                                                        "placeholder": "Officia fugit debitis id saepe ut."
+                                                    },
+                                                    "DJN-1": {
+                                                        "idx": 46,
+                                                        "prompt": "Doloremque sed voluptate omnis.",
+                                                        "rubric": {
+                                                            "score_map": {
+                                                                "beatae": 1,
+                                                                "cupiditate": 1,
+                                                                "libero": 0,
+                                                                "rerum": 0,
+                                                                "Not sure": 0
+                                                            }
+                                                        },
+                                                        "options": [
+                                                            "beatae",
+                                                            "cupiditate",
+                                                            "libero",
+                                                            "rerum",
+                                                            "Not sure"
+                                                        ],
+                                                        "tooltip": "Quis sed nam dolore voluptatum dolor qui.",
+                                                        "component": "multi_select",
+                                                        "placeholder": "Id reprehenderit dolore."
+                                                    },
+                                                    "DJN-2": {
+                                                        "idx": 12,
+                                                        "prompt": "Tempora veniam rerum molestias blanditiis numquam inventore voluptatem atque voluptas.",
+                                                        "rubric": {
+                                                            "score_map": {
+                                                                "Yes": 0,
+                                                                "No": 0,
+                                                                "Not sure": 0
+                                                            }
+                                                        },
+                                                        "options": [
+                                                            "Yes",
+                                                            "No",
+                                                            "Not sure"
+                                                        ],
+                                                        "tooltip": "Quae dicta magnam sapiente.",
+                                                        "component": "yes_no",
+                                                        "placeholder": "Excepturi ullam omnis quas similique labore culpa aperiam quaerat."
+                                                    },
+                                                    "DJN-3": {
+                                                        "idx": 99,
+                                                        "prompt": "Ut vel hic voluptatem aut ipsam consequatur ratione est doloribus.",
+                                                        "rubric": {
+                                                            "score_map": {
+                                                                "0": 1,
+                                                                "1": 1,
+                                                                "2": 0,
+                                                                "3": 0,
+                                                                "4": 0
+                                                            }
+                                                        },
+                                                        "options": [],
+                                                        "tooltip": "Voluptatum quasi cupiditate et culpa omnis.",
+                                                        "component": "number",
+                                                        "placeholder": "Consequatur officia placeat incidunt voluptates aut sit doloremque dicta reiciendis."
+                                                    }
+                                                },
+                                                "image_url": "http://lorempixel.com/640/480",
+                                                "category_idx": 7,
+                                                "section_type": "Advocate",
+                                                "category_description": "Consequuntur architecto ut velit sit et."
+                                            },
+                                            "OMZ": {
+                                                "title": "exercitationem",
+                                                "prompt": "Officia minima dignissimos at qui deserunt nostrum sint laudantium.",
+                                                "component": "",
+                                                "follow_up": {
+                                                    "OMZ-0": {
+                                                        "idx": 35,
+                                                        "prompt": "Qui nostrum necessitatibus.",
+                                                        "rubric": {
+                                                            "score_map": {}
+                                                        },
+                                                        "options": [],
+                                                        "tooltip": "Optio voluptas occaecati tempore rerum vitae sed.",
+                                                        "component": "text_area",
+                                                        "placeholder": "Vero perspiciatis eum qui eos quia temporibus quia error."
+                                                    },
+                                                    "OMZ-1": {
+                                                        "idx": 66,
+                                                        "prompt": "Saepe assumenda qui.",
+                                                        "rubric": {
+                                                            "score_map": {
+                                                                "mollitia": 1,
+                                                                "omnis": 0,
+                                                                "aut": 0,
+                                                                "aspernatur": 1,
+                                                                "Not sure": 0
+                                                            }
+                                                        },
+                                                        "options": [
+                                                            "mollitia",
+                                                            "omnis",
+                                                            "aut",
+                                                            "aspernatur",
+                                                            "Not sure"
+                                                        ],
+                                                        "tooltip": "Distinctio corrupti rerum aut quia molestiae.",
+                                                        "component": "select",
+                                                        "placeholder": "Perspiciatis sequi error non."
+                                                    },
+                                                    "OMZ-2": {
+                                                        "idx": 4,
+                                                        "prompt": "Dolorem necessitatibus sequi dolorem eius quas quibusdam ab.",
+                                                        "rubric": {
+                                                            "score_map": {
+                                                                "0": 0,
+                                                                "1": 1,
+                                                                "2": 0,
+                                                                "3": 0,
+                                                                "4": 0
+                                                            }
+                                                        },
+                                                        "options": [],
+                                                        "tooltip": "A fugit et ab necessitatibus eos nam hic placeat laudantium.",
+                                                        "component": "number",
+                                                        "placeholder": "Velit recusandae sit ut ut architecto minus tenetur accusamus."
+                                                    }
+                                                },
+                                                "image_url": "http://lorempixel.com/640/480",
+                                                "category_idx": 0,
+                                                "section_type": "Plan",
+                                                "category_description": "Quidem molestiae optio officiis doloribus ut laboriosam voluptatem autem ab."
+                                            },
+                                            "SPC": {
+                                                "title": "voluptatibus",
+                                                "prompt": "Doloribus quos quis nam nam tempora dolor nihil.",
+                                                "component": "",
+                                                "follow_up": {
+                                                    "SPC-0": {
+                                                        "idx": 5,
+                                                        "prompt": "Sequi dicta minus.",
+                                                        "rubric": {
+                                                            "score_map": {
+                                                                "Yes": 0,
+                                                                "No": 1,
+                                                                "Not sure": 0
+                                                            }
+                                                        },
+                                                        "options": [
+                                                            "Yes",
+                                                            "No",
+                                                            "Not sure"
+                                                        ],
+                                                        "tooltip": "Aut nihil quis in eligendi ut.",
+                                                        "component": "yes_no",
+                                                        "placeholder": "Sed vel sed."
+                                                    },
+                                                    "SPC-1": {
+                                                        "idx": 44,
+                                                        "prompt": "Similique ut molestiae enim harum ut aut commodi quia non.",
+                                                        "rubric": {
+                                                            "score_map": {
+                                                                "harum": 0,
+                                                                "et": 1,
+                                                                "sint": 1,
+                                                                "Not sure": 0
+                                                            }
+                                                        },
+                                                        "options": [
+                                                            "harum",
+                                                            "et",
+                                                            "sint",
+                                                            "et",
+                                                            "Not sure"
+                                                        ],
+                                                        "tooltip": "Ratione est et rem et eos.",
+                                                        "component": "multi_select",
+                                                        "placeholder": "Aspernatur voluptas dignissimos incidunt doloremque optio excepturi et nobis sequi."
+                                                    },
+                                                    "SPC-2": {
+                                                        "idx": 45,
+                                                        "prompt": "Suscipit nisi sint ab placeat saepe architecto occaecati.",
+                                                        "rubric": {
+                                                            "score_map": {
+                                                                "nemo": 1,
+                                                                "in": 1,
+                                                                "atque": 1,
+                                                                "tenetur": 0,
+                                                                "Not sure": 0
+                                                            }
+                                                        },
+                                                        "options": [
+                                                            "nemo",
+                                                            "in",
+                                                            "atque",
+                                                            "tenetur",
+                                                            "Not sure"
+                                                        ],
+                                                        "tooltip": "Aut totam hic corporis delectus veritatis quisquam.",
+                                                        "component": "select",
+                                                        "placeholder": "Iure ut dolorum earum repudiandae hic."
+                                                    },
+                                                    "SPC-3": {
+                                                        "idx": 81,
+                                                        "prompt": "Delectus iure perspiciatis nihil nisi soluta quisquam veritatis labore.",
+                                                        "rubric": {
+                                                            "score_map": {
+                                                                "dolor": 0,
+                                                                "ratione": 1,
+                                                                "neque": 0,
+                                                                "placeat": 1,
+                                                                "Not sure": 0
+                                                            }
+                                                        },
+                                                        "options": [
+                                                            "dolor",
+                                                            "ratione",
+                                                            "neque",
+                                                            "placeat",
+                                                            "Not sure"
+                                                        ],
+                                                        "tooltip": "Minus eos totam tempora.",
+                                                        "component": "select",
+                                                        "placeholder": "Nisi nam aut dolorem reiciendis."
+                                                    },
+                                                    "SPC-4": {
+                                                        "idx": 71,
+                                                        "prompt": "Ipsum rerum maiores.",
+                                                        "rubric": {
+                                                            "score_map": {
+                                                                "iure": 1,
+                                                                "at": 0,
+                                                                "repellat": 1,
+                                                                "occaecati": 0,
+                                                                "Not sure": 0
+                                                            }
+                                                        },
+                                                        "options": [
+                                                            "iure",
+                                                            "at",
+                                                            "repellat",
+                                                            "occaecati",
+                                                            "Not sure"
+                                                        ],
+                                                        "tooltip": "Et ad ea reiciendis laboriosam tempore dolor in dicta possimus.",
+                                                        "component": "select",
+                                                        "placeholder": "Nobis amet voluptatum fuga eum delectus voluptatibus."
+                                                    }
+                                                },
+                                                "image_url": "http://lorempixel.com/640/480",
+                                                "category_idx": 7,
+                                                "section_type": "Plan",
+                                                "category_description": "Ratione aut at suscipit."
+                                            }
+                                        },
+                                        "image_url": "http://lorempixel.com/640/480"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Compliance Definitions"
+                ],
+                "security": [
+                    {
+                        "oauth2": [
+                            "openid"
+                        ]
+                    }
+                ]
+            }
+        },
+        "/compliance/{name}": {
             "get": {
                 "operationId": "GetComplianceDefinitionByName",
                 "summary": "Get by name",
@@ -2208,7 +2842,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Returns all compliance definitions by type"
+                        "description": "Returns all compliance definitions by name"
                     }
                 },
                 "tags": [
@@ -2251,38 +2885,9 @@
                         ]
                     }
                 ]
-            },
-            "delete": {
-                "operationId": "ComplianceController_remove",
-                "parameters": [
-                    {
-                        "name": "name",
-                        "required": true,
-                        "in": "path",
-                        "example": "{{compliance_definition_name}}",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "204": {
-                        "description": ""
-                    }
-                },
-                "tags": [
-                    "Compliance Definitions"
-                ],
-                "security": [
-                    {
-                        "oauth2": [
-                            "openid"
-                        ]
-                    }
-                ]
             }
         },
-        "/compliance_definitions/{name}/organizations/{orgId}": {
+        "/organizations/{orgId}/compliance/{name}": {
             "put": {
                 "operationId": "ActivateOrganziationComplianceAutomation",
                 "summary": "Activate Ai Automation For Compliance Set",
@@ -2291,7 +2896,7 @@
                         "name": "name",
                         "required": true,
                         "in": "path",
-                        "example": "{{compliance_definition_name}}",
+                        "example": "{{test_compliance_definition_name}}",
                         "schema": {
                             "type": "string"
                         }
@@ -2321,9 +2926,112 @@
                         ]
                     }
                 ]
-            },
+            }
+        },
+        "/compliance_definitions/{name}": {
             "delete": {
-                "operationId": "ComplianceController_deactivateCompliance",
+                "operationId": "ComplianceDefinitionsController_remove",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "required": true,
+                        "in": "path",
+                        "example": "b_corp_2024",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Compliance Definitions"
+                ],
+                "security": [
+                    {
+                        "oauth2": [
+                            "openid"
+                        ]
+                    }
+                ]
+            },
+            "get": {
+                "operationId": "GetComplianceDefinitionByName",
+                "summary": "Get by name",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "required": true,
+                        "in": "path",
+                        "example": "{{test_compliance_definition_name}}",
+                        "description": "The name of compliance definition to return",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "bpc",
+                        "required": false,
+                        "in": "query",
+                        "description": "Bypass Cache",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns all compliance definitions by name"
+                    }
+                },
+                "tags": [
+                    "Compliance Definitions"
+                ],
+                "security": [
+                    {
+                        "oauth2": [
+                            "openid"
+                        ]
+                    }
+                ]
+            },
+            "patch": {
+                "operationId": "UpdateComplianceDefinitionByName",
+                "summary": "Update by name",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "required": true,
+                        "in": "path",
+                        "example": "{{test_compliance_definition_name}}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Compliance Definitions"
+                ],
+                "security": [
+                    {
+                        "oauth2": [
+                            "openid"
+                        ]
+                    }
+                ]
+            }
+        },
+        "/compliance_definitions/{name}/organizations/{orgId}": {
+            "delete": {
+                "operationId": "ComplianceDefinitionsController_deactivateCompliance",
                 "parameters": [
                     {
                         "name": "orgId",
@@ -2338,7 +3046,7 @@
                         "name": "name",
                         "required": true,
                         "in": "path",
-                        "example": "{{compliance_definition_name}}",
+                        "example": "b_corp_2024",
                         "schema": {
                             "type": "string"
                         }
@@ -2370,7 +3078,7 @@
                 ]
             },
             "post": {
-                "operationId": "ComplianceController_createOrgCompliance",
+                "operationId": "ComplianceDefinitionsController_createOrgCompliance",
                 "parameters": [
                     {
                         "name": "orgId",
@@ -2385,7 +3093,7 @@
                         "name": "name",
                         "required": true,
                         "in": "path",
-                        "example": "{{compliance_definition_name}}",
+                        "example": "b_corp_2024",
                         "schema": {
                             "type": "string"
                         }
@@ -2400,7 +3108,8 @@
                                 "type": "array",
                                 "items": {
                                     "type": "string"
-                                }
+                                },
+                                "$ref": "#/components/schemas/"
                             },
                             "examples": {
                                 "Surveys Override": {
@@ -2432,7 +3141,7 @@
                 ]
             },
             "patch": {
-                "operationId": "ComplianceController_upsertOrgCompliance",
+                "operationId": "ComplianceDefinitionsController_upsertOrgCompliance",
                 "parameters": [
                     {
                         "name": "orgId",
@@ -2447,7 +3156,7 @@
                         "name": "name",
                         "required": true,
                         "in": "path",
-                        "example": "{{compliance_definition_name}}",
+                        "example": "b_corp_2024",
                         "schema": {
                             "type": "string"
                         }
@@ -2461,7 +3170,7 @@
                             "schema": {
                                 "type": "array",
                                 "items": {
-                                    "type": "string"
+                                    "$ref": "#/components/schemas/"
                                 }
                             },
                             "examples": {
@@ -2492,11 +3201,50 @@
                         ]
                     }
                 ]
+            },
+            "put": {
+                "operationId": "ActivateOrganziationComplianceAutomation",
+                "summary": "Activate Ai Automation For Compliance Set",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "required": true,
+                        "in": "path",
+                        "example": "b_corp_2024",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "orgId",
+                        "required": true,
+                        "in": "path",
+                        "example": "{{test_organization_id}}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Compliance Definitions"
+                ],
+                "security": [
+                    {
+                        "oauth2": [
+                            "openid"
+                        ]
+                    }
+                ]
             }
         },
         "/compliance_definitions/organizations/{orgId}": {
             "get": {
-                "operationId": "ComplianceController_getOrgComp",
+                "operationId": "ComplianceDefinitionsController_getOrgComp",
                 "parameters": [
                     {
                         "name": "orgId",
@@ -2534,6 +3282,86 @@
                 ]
             }
         },
+        "/compliance_definitions": {
+            "post": {
+                "operationId": "ComplianceDefinitionsController_create",
+                "parameters": [],
+                "responses": {
+                    "201": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Compliance Definitions"
+                ],
+                "security": [
+                    {
+                        "oauth2": [
+                            "openid"
+                        ]
+                    }
+                ]
+            },
+            "get": {
+                "operationId": "ComplianceDefinitionsController_findAll",
+                "parameters": [
+                    {
+                        "name": "bpc",
+                        "required": false,
+                        "in": "query",
+                        "description": "Bypass Cache",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns all compliance definitions"
+                    }
+                },
+                "tags": [
+                    "Compliance Definitions"
+                ],
+                "security": [
+                    {
+                        "oauth2": [
+                            "openid"
+                        ]
+                    }
+                ]
+            }
+        },
+        "/compliance_definitions/{id}/survey": {
+            "post": {
+                "operationId": "ComplianceDefinitionsController_injectSurvey",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Compliance Definitions"
+                ],
+                "security": [
+                    {
+                        "oauth2": [
+                            "openid"
+                        ]
+                    }
+                ]
+            }
+        },
         "/organizations/{orgId}/integrations": {
             "get": {
                 "operationId": "getOrganizationIntegrations",
@@ -2543,7 +3371,7 @@
                         "name": "orgId",
                         "required": true,
                         "in": "path",
-                        "example": "{{test_organization_id}}",
+                        "example": "{{cold_org_id}}",
                         "description": "Id of the Organization",
                         "schema": {
                             "type": "string"
@@ -2576,7 +3404,7 @@
                         "name": "orgId",
                         "required": true,
                         "in": "path",
-                        "example": "{{test_organization_id}}",
+                        "example": "{{cold_org_id}}",
                         "description": "Id of the Organization",
                         "schema": {
                             "type": "string"
@@ -2630,7 +3458,7 @@
                         "name": "orgId",
                         "required": true,
                         "in": "path",
-                        "example": "{{test_organization_id}}",
+                        "example": "{{cold_org_id}}",
                         "description": "Id of the Organization",
                         "schema": {
                             "type": "string"
@@ -2686,7 +3514,7 @@
                         "name": "orgId",
                         "required": true,
                         "in": "path",
-                        "example": "{{test_organization_id}}",
+                        "example": "{{cold_org_id}}",
                         "description": "Id of the Organization",
                         "schema": {
                             "type": "string"
@@ -2889,6 +3717,143 @@
                         ]
                     }
                 ]
+            }
+        },
+        "/organizations/{orgId}/facilities/{facId}/footprints": {
+            "get": {
+                "operationId": "FootprintsController_findAllByOrgFacility",
+                "parameters": [
+                    {
+                        "name": "orgId",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "facId",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            },
+            "post": {
+                "operationId": "FootprintsController_create",
+                "parameters": [
+                    {
+                        "name": "orgId",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "facId",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/organizations/{orgId}/facilities/{facId}/footprints/{id}": {
+            "get": {
+                "operationId": "FootprintsController_findOne",
+                "parameters": [
+                    {
+                        "name": "orgId",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "facId",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            },
+            "delete": {
+                "operationId": "FootprintsController_remove",
+                "parameters": [
+                    {
+                        "name": "orgId",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "facId",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
             }
         },
         "/members/{email}": {
@@ -3257,166 +4222,6 @@
                 }
             }
         },
-        "/footprints": {
-            "get": {
-                "operationId": "FootprintsController_findAll",
-                "parameters": [],
-                "responses": {
-                    "200": {
-                        "description": ""
-                    }
-                }
-            }
-        },
-        "/organizations/{orgId}/footprints": {
-            "post": {
-                "operationId": "FootprintsController_create",
-                "parameters": [
-                    {
-                        "name": "orgId",
-                        "required": true,
-                        "in": "path",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "type": "array",
-                                "items": {
-                                    "type": "string"
-                                }
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "201": {
-                        "description": ""
-                    }
-                }
-            },
-            "get": {
-                "operationId": "FootprintsController_findAllByOrg",
-                "parameters": [
-                    {
-                        "name": "orgId",
-                        "required": true,
-                        "in": "path",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": ""
-                    }
-                }
-            }
-        },
-        "/organizations/{orgId}/facilities/{facId}/footprints": {
-            "get": {
-                "operationId": "FootprintsController_findAllByOrgFacility",
-                "parameters": [
-                    {
-                        "name": "orgId",
-                        "required": true,
-                        "in": "path",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "facId",
-                        "required": true,
-                        "in": "path",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": ""
-                    }
-                }
-            }
-        },
-        "/organizations/{orgId}/facilities/{facId}/footprints/{id}": {
-            "get": {
-                "operationId": "FootprintsController_findOne",
-                "parameters": [
-                    {
-                        "name": "orgId",
-                        "required": true,
-                        "in": "path",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "facId",
-                        "required": true,
-                        "in": "path",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "id",
-                        "required": true,
-                        "in": "path",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": ""
-                    }
-                }
-            },
-            "delete": {
-                "operationId": "FootprintsController_remove",
-                "parameters": [
-                    {
-                        "name": "orgId",
-                        "required": true,
-                        "in": "path",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "facId",
-                        "required": true,
-                        "in": "path",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "id",
-                        "required": true,
-                        "in": "path",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": ""
-                    }
-                }
-            }
-        },
         "/organizations/{orgId}/surveys/{surveyName}/status": {
             "post": {
                 "operationId": "CreateSurveyStatus",
@@ -3479,6 +4284,2023 @@
                     }
                 ]
             }
+        },
+        "/organization-compliance-note-files": {
+            "post": {
+                "operationId": "OrganizationComplianceNoteFilesController_create",
+                "parameters": [],
+                "responses": {
+                    "201": {
+                        "description": ""
+                    }
+                }
+            },
+            "get": {
+                "operationId": "OrganizationComplianceNoteFilesController_findAll",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/organization-compliance-note-files/{id}": {
+            "get": {
+                "operationId": "OrganizationComplianceNoteFilesController_findOne",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            },
+            "patch": {
+                "operationId": "OrganizationComplianceNoteFilesController_update",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            },
+            "delete": {
+                "operationId": "OrganizationComplianceNoteFilesController_remove",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/organizations/{orgId}/compliance/sets/{name}": {
+            "post": {
+                "operationId": "OrganizationComplianceController_create",
+                "parameters": [
+                    {
+                        "name": "orgId",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Organization Compliance"
+                ]
+            },
+            "get": {
+                "operationId": "OrganizationComplianceController_findOne",
+                "parameters": [
+                    {
+                        "name": "orgId",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Organization Compliance"
+                ]
+            },
+            "patch": {
+                "operationId": "OrganizationComplianceController_update",
+                "parameters": [
+                    {
+                        "name": "orgId",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Organization Compliance"
+                ]
+            },
+            "delete": {
+                "operationId": "OrganizationComplianceController_remove",
+                "parameters": [
+                    {
+                        "name": "orgId",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Organization Compliance"
+                ]
+            }
+        },
+        "/organizations/{orgId}/compliance/sets": {
+            "get": {
+                "operationId": "OrganizationComplianceController_findAll",
+                "parameters": [
+                    {
+                        "name": "orgId",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Organization Compliance"
+                ]
+            }
+        },
+        "/organizations/{orgId}/compliance/{name}/section_groups/{sgId}/sections/{sId}/questions/{qId}/responses": {
+            "put": {
+                "operationId": "OrganizationComplianceResponsesController_upsertOrgComplianceResponse",
+                "parameters": [
+                    {
+                        "name": "orgId",
+                        "required": true,
+                        "in": "path",
+                        "example": "{{test_organization_id}}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "required": true,
+                        "in": "path",
+                        "example": "b_corp_2024",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sgId",
+                        "required": true,
+                        "in": "path",
+                        "description": "Section Group Id",
+                        "example": "csg_",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sId",
+                        "required": true,
+                        "in": "path",
+                        "description": "Section Id",
+                        "example": "cs_",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "qId",
+                        "required": true,
+                        "in": "path",
+                        "description": "Question Id",
+                        "example": "cq_",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Organization Compliance Response"
+                ]
+            },
+            "get": {
+                "operationId": "OrganizationComplianceResponsesController_findOrgComplianceResponse",
+                "parameters": [
+                    {
+                        "name": "orgId",
+                        "required": true,
+                        "in": "path",
+                        "example": "{{test_organization_id}}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "required": true,
+                        "in": "path",
+                        "example": "b_corp_2024",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sgId",
+                        "required": true,
+                        "in": "path",
+                        "description": "Section Group Id",
+                        "example": "csg_",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sId",
+                        "required": true,
+                        "in": "path",
+                        "description": "Section Id",
+                        "example": "cs_",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "qId",
+                        "required": true,
+                        "in": "path",
+                        "description": "Question Id",
+                        "example": "cq_",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Organization Compliance Response"
+                ]
+            }
+        },
+        "/organizations/{orgId}/compliance/{name}/section_groups/{sgId}/responses": {
+            "get": {
+                "operationId": "OrganizationComplianceResponsesController_findALlByGroupId",
+                "parameters": [
+                    {
+                        "name": "orgId",
+                        "required": true,
+                        "in": "path",
+                        "example": "{{test_organization_id}}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "required": true,
+                        "in": "path",
+                        "example": "b_corp_2024",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sgId",
+                        "required": true,
+                        "in": "path",
+                        "description": "Section Group Id",
+                        "example": "csg_",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Organization Compliance Response"
+                ]
+            }
+        },
+        "/organizations/{orgId}/compliance/{name}/sections/{sId}/responses": {
+            "get": {
+                "operationId": "OrganizationComplianceResponsesController_findAllBySectionId",
+                "parameters": [
+                    {
+                        "name": "orgId",
+                        "required": true,
+                        "in": "path",
+                        "example": "{{test_organization_id}}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "required": true,
+                        "in": "path",
+                        "example": "b_corp_2024",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sId",
+                        "required": true,
+                        "in": "path",
+                        "description": "Section Id",
+                        "example": "cs_",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Organization Compliance Response"
+                ]
+            }
+        },
+        "/organizations/{orgId}/compliance/{name}/questions/{qId}/responses": {
+            "get": {
+                "operationId": "OrganizationComplianceResponsesController_findByQuestionId",
+                "parameters": [
+                    {
+                        "name": "orgId",
+                        "required": true,
+                        "in": "path",
+                        "example": "{{test_organization_id}}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "required": true,
+                        "in": "path",
+                        "example": "b_corp_2024",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "qId",
+                        "required": true,
+                        "in": "path",
+                        "description": "Question Id",
+                        "example": "cq_",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Organization Compliance Response"
+                ]
+            }
+        },
+        "/organizations/{orgId}/compliance/{name}/responses/{id}": {
+            "get": {
+                "operationId": "OrganizationComplianceResponsesController_findById",
+                "parameters": [
+                    {
+                        "name": "orgId",
+                        "required": true,
+                        "in": "path",
+                        "example": "{{test_organization_id}}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "required": true,
+                        "in": "path",
+                        "example": "b_corp_2024",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "required": true,
+                        "in": "path",
+                        "description": "Compliance Response Id",
+                        "example": "cr_",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Organization Compliance Response"
+                ]
+            },
+            "delete": {
+                "operationId": "OrganizationComplianceResponsesController_remove",
+                "parameters": [
+                    {
+                        "name": "orgId",
+                        "required": true,
+                        "in": "path",
+                        "example": "{{test_organization_id}}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "required": true,
+                        "in": "path",
+                        "example": "b_corp_2024",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "required": true,
+                        "in": "path",
+                        "description": "Compliance Response Id",
+                        "example": "cr_",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Organization Compliance Response"
+                ]
+            }
+        },
+        "/organizations/{orgId}/compliance/{name}/ai-responses": {
+            "post": {
+                "operationId": "OrganizationComplianceAiResponsesController_create",
+                "parameters": [
+                    {
+                        "name": "orgId",
+                        "required": true,
+                        "in": "path",
+                        "example": "{{test_organization_id}}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "required": true,
+                        "in": "path",
+                        "example": "b_corp_2024",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Organization Compliance Ai Response"
+                ]
+            },
+            "get": {
+                "operationId": "OrganizationComplianceAiResponsesController_findAllAiResponses",
+                "parameters": [
+                    {
+                        "name": "orgId",
+                        "required": true,
+                        "in": "path",
+                        "example": "{{test_organization_id}}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "required": true,
+                        "in": "path",
+                        "example": "b_corp_2024",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Organization Compliance Ai Response"
+                ]
+            },
+            "delete": {
+                "operationId": "OrganizationComplianceAiResponsesController_removeAllAiResponses",
+                "parameters": [
+                    {
+                        "name": "orgId",
+                        "required": true,
+                        "in": "path",
+                        "example": "{{test_organization_id}}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "required": true,
+                        "in": "path",
+                        "example": "b_corp_2024",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Organization Compliance Ai Response"
+                ]
+            }
+        },
+        "/organizations/{orgId}/compliance/{name}/ai-responses/{id}": {
+            "get": {
+                "operationId": "OrganizationComplianceAiResponsesController_findOneAiResponse",
+                "parameters": [
+                    {
+                        "name": "orgId",
+                        "required": true,
+                        "in": "path",
+                        "example": "{{test_organization_id}}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "required": true,
+                        "in": "path",
+                        "example": "b_corp_2024",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "required": true,
+                        "in": "path",
+                        "description": "Ai Response file Id",
+                        "example": "cairf_",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Organization Compliance Ai Response"
+                ]
+            },
+            "patch": {
+                "operationId": "OrganizationComplianceAiResponsesController_updateAiResponse",
+                "parameters": [
+                    {
+                        "name": "orgId",
+                        "required": true,
+                        "in": "path",
+                        "example": "{{test_organization_id}}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "required": true,
+                        "in": "path",
+                        "example": "b_corp_2024",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "required": true,
+                        "in": "path",
+                        "description": "Ai Response file Id",
+                        "example": "cairf_",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Organization Compliance Ai Response"
+                ]
+            },
+            "delete": {
+                "operationId": "OrganizationComplianceAiResponsesController_removeAiResponse",
+                "parameters": [
+                    {
+                        "name": "orgId",
+                        "required": true,
+                        "in": "path",
+                        "example": "{{test_organization_id}}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "required": true,
+                        "in": "path",
+                        "example": "b_corp_2024",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "required": true,
+                        "in": "path",
+                        "description": "Ai Response file Id",
+                        "example": "cairf_",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Organization Compliance Ai Response"
+                ]
+            }
+        },
+        "/organizations/{orgId}/compliance/{name}/ai-responses/{airId}/files": {
+            "post": {
+                "operationId": "OrganizationComplianceAiResponseFilesController_create",
+                "parameters": [
+                    {
+                        "name": "orgId",
+                        "required": true,
+                        "in": "path",
+                        "example": "{{test_organization_id}}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "required": true,
+                        "in": "path",
+                        "example": "b_corp_2024",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "airId",
+                        "required": true,
+                        "in": "path",
+                        "description": "Ai Response Id",
+                        "example": "cair_",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Organization Compliance Ai Response Files"
+                ]
+            },
+            "get": {
+                "operationId": "OrganizationComplianceAiResponseFilesController_findAll",
+                "parameters": [
+                    {
+                        "name": "orgId",
+                        "required": true,
+                        "in": "path",
+                        "example": "{{test_organization_id}}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "required": true,
+                        "in": "path",
+                        "example": "b_corp_2024",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "airId",
+                        "required": true,
+                        "in": "path",
+                        "description": "Ai Response Id",
+                        "example": "cair_",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Organization Compliance Ai Response Files"
+                ]
+            }
+        },
+        "/organizations/{orgId}/compliance/{name}/ai-responses/{airId}/files/{id}": {
+            "get": {
+                "operationId": "OrganizationComplianceAiResponseFilesController_findOne",
+                "parameters": [
+                    {
+                        "name": "orgId",
+                        "required": true,
+                        "in": "path",
+                        "example": "{{test_organization_id}}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "required": true,
+                        "in": "path",
+                        "example": "b_corp_2024",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "airId",
+                        "required": true,
+                        "in": "path",
+                        "description": "Ai Response Id",
+                        "example": "cair_",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "required": true,
+                        "in": "path",
+                        "description": "Ai Response file Id",
+                        "example": "cairf_",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Organization Compliance Ai Response Files"
+                ]
+            },
+            "patch": {
+                "operationId": "OrganizationComplianceAiResponseFilesController_update",
+                "parameters": [
+                    {
+                        "name": "orgId",
+                        "required": true,
+                        "in": "path",
+                        "example": "{{test_organization_id}}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "required": true,
+                        "in": "path",
+                        "example": "b_corp_2024",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "airId",
+                        "required": true,
+                        "in": "path",
+                        "description": "Ai Response Id",
+                        "example": "cair_",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "required": true,
+                        "in": "path",
+                        "description": "Ai Response file Id",
+                        "example": "cairf_",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Organization Compliance Ai Response Files"
+                ]
+            },
+            "delete": {
+                "operationId": "OrganizationComplianceAiResponseFilesController_remove",
+                "parameters": [
+                    {
+                        "name": "orgId",
+                        "required": true,
+                        "in": "path",
+                        "example": "{{test_organization_id}}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "required": true,
+                        "in": "path",
+                        "example": "b_corp_2024",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "airId",
+                        "required": true,
+                        "in": "path",
+                        "description": "Ai Response Id",
+                        "example": "cair_",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "required": true,
+                        "in": "path",
+                        "description": "Ai Response file Id",
+                        "example": "cairf_",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Organization Compliance Ai Response Files"
+                ]
+            }
+        },
+        "/organization-compliance-bookmarks": {
+            "post": {
+                "operationId": "OrganizationComplianceBookmarksController_create",
+                "parameters": [],
+                "responses": {
+                    "201": {
+                        "description": ""
+                    }
+                }
+            },
+            "get": {
+                "operationId": "OrganizationComplianceBookmarksController_findAll",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/organization-compliance-bookmarks/{id}": {
+            "get": {
+                "operationId": "OrganizationComplianceBookmarksController_findOne",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            },
+            "patch": {
+                "operationId": "OrganizationComplianceBookmarksController_update",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            },
+            "delete": {
+                "operationId": "OrganizationComplianceBookmarksController_remove",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/compliance_definitions/{name}/section_groups/{sgId}/sections/{sId}/questions/batch": {
+            "post": {
+                "operationId": "ComplianceQuestionsController_createMany",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sgId",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sId",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "example": [
+                                    {
+                                        "id": "cq_unzodl1eejlto686",
+                                        "compliance_section_id": "cs_zlu81ljj341mxam2",
+                                        "key": "EWC",
+                                        "order": 17,
+                                        "prompt": "Iure et facere quisquam cumque earum incidunt.",
+                                        "component": "number",
+                                        "options": [],
+                                        "rubric": {
+                                            "score_map": {
+                                                "0": 1,
+                                                "1": 0,
+                                                "2": 1,
+                                                "3": 1,
+                                                "4": 1
+                                            }
+                                        },
+                                        "tooltip": "Maiores sed accusamus dolores eum earum incidunt officiis.",
+                                        "placeholder": "Ipsum dolor modi.",
+                                        "compliance_definition_name": "Wyman, Kris and Huels LLC Test Survey",
+                                        "dependency_expression": "true in $map($lookup(definition.sections.*.follow_up, 'CDE-62').value, function($v) { $v in ['We facilitate or have an allocated budget for external professional development opportunities, (e.g. conference attendance, online trainings)'] })"
+                                    },
+                                    {
+                                        "id": "cq_wxvsd75clebuuws3",
+                                        "compliance_section_id": "cs_d7miq34pto8sb4ts",
+                                        "key": "BIR",
+                                        "order": 2,
+                                        "prompt": "Accusamus assumenda a quos modi dolores.",
+                                        "component": "select",
+                                        "options": [
+                                            "ratione",
+                                            "et",
+                                            "est",
+                                            "id",
+                                            "Not sure"
+                                        ],
+                                        "rubric": {
+                                            "score_map": {
+                                                "ratione": 1,
+                                                "et": 0,
+                                                "est": 1,
+                                                "id": 0,
+                                                "Not sure": 0
+                                            }
+                                        },
+                                        "tooltip": "Et consequatur sed consectetur.",
+                                        "placeholder": "Aut sit ut omnis et quia error omnis aut tempora.",
+                                        "compliance_definition_name": "Turcotte Ltd. Test Survey",
+                                        "dependency_expression": "true in $map($lookup(definition.sections.*.follow_up, 'CDE-62').value, function($v) { $v in ['We facilitate or have an allocated budget for external professional development opportunities, (e.g. conference attendance, online trainings)'] })"
+                                    }
+                                ],
+                                "$ref": "#/components/schemas/"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Compliance Questions"
+                ]
+            }
+        },
+        "/compliance_definitions/{name}/section_groups/{sgId}/sections/{sId}/questions": {
+            "post": {
+                "operationId": "ComplianceQuestionsController_create",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sgId",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sId",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "example": {
+                                    "id": "cq_u6l6pthpm6eo5efs",
+                                    "compliance_section_id": "cs_pyx2i9sckodakmnv",
+                                    "key": "EKS",
+                                    "order": 49,
+                                    "prompt": "Reiciendis rerum veritatis libero iste consectetur quia repellat.",
+                                    "component": "select",
+                                    "options": [
+                                        "et",
+                                        "eius",
+                                        "numquam",
+                                        "nisi",
+                                        "Not sure"
+                                    ],
+                                    "rubric": {
+                                        "score_map": {
+                                            "et": 1,
+                                            "eius": 1,
+                                            "numquam": 0,
+                                            "nisi": 1,
+                                            "Not sure": 0
+                                        }
+                                    },
+                                    "tooltip": "Rem fugit sunt aspernatur rem aut ipsa sed modi enim.",
+                                    "placeholder": "Ullam libero mollitia eligendi aspernatur doloribus et corporis magni.",
+                                    "compliance_definition_name": "Beer LLC Test Survey",
+                                    "dependency_expression": "true in $map($lookup(definition.sections.*.follow_up, 'CDE-62').value, function($v) { $v in ['We facilitate or have an allocated budget for external professional development opportunities, (e.g. conference attendance, online trainings)'] })"
+                                },
+                                "$ref": "#/components/schemas/"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Compliance Questions"
+                ]
+            },
+            "get": {
+                "operationId": "ComplianceQuestionsController_findBySection",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sgId",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sId",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Compliance Questions"
+                ]
+            }
+        },
+        "/compliance_definitions/{name}/section_groups/{sgId}/sections/{sId}/questions/{id}": {
+            "get": {
+                "operationId": "ComplianceQuestionsController_findOne",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sgId",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sId",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Compliance Questions"
+                ]
+            },
+            "patch": {
+                "operationId": "ComplianceQuestionsController_update",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sgId",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sId",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "example": {
+                                    "id": "cq_fzkn6sinezerb9m7",
+                                    "compliance_section_id": "cs_io15i48402ylyd8k",
+                                    "key": "WJG",
+                                    "order": 13,
+                                    "prompt": "Expedita sequi quae quae voluptates magni enim itaque quia.",
+                                    "component": "yes_no",
+                                    "options": [
+                                        "Yes",
+                                        "No",
+                                        "Not sure"
+                                    ],
+                                    "rubric": {
+                                        "score_map": {
+                                            "Yes": 1,
+                                            "No": 1,
+                                            "Not sure": 0
+                                        }
+                                    },
+                                    "tooltip": "Corporis sint nemo.",
+                                    "placeholder": "Est aut quis.",
+                                    "compliance_definition_name": "Windler, Abernathy and Wilderman Corp. Test Survey",
+                                    "dependency_expression": "true in $map($lookup(definition.sections.*.follow_up, 'CDE-62').value, function($v) { $v in ['We facilitate or have an allocated budget for external professional development opportunities, (e.g. conference attendance, online trainings)'] })"
+                                },
+                                "$ref": "#/components/schemas/"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Compliance Questions"
+                ]
+            },
+            "delete": {
+                "operationId": "ComplianceQuestionsController_remove",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sgId",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sId",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Compliance Questions"
+                ]
+            }
+        },
+        "/compliance_definitions/{name}/section_groups/{sgId}/sections/{sId}/questions/key/{key}": {
+            "get": {
+                "operationId": "ComplianceQuestionsController_findByKeyAndName",
+                "parameters": [
+                    {
+                        "name": "sgId",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sId",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "key",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Compliance Questions"
+                ]
+            }
+        },
+        "/compliance_definitions/{name}/section_groups/{sgId}/sections": {
+            "post": {
+                "operationId": "ComplianceSectionsController_create",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sgId",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "example": {
+                                    "id": "cs_fz0vmkgniqr8xyev",
+                                    "key": "WIJ",
+                                    "title": "Ducimus natus sint minima laboriosam et iste.",
+                                    "order": 62,
+                                    "compliance_section_group_id": "csg_n3vut35gubhf2db1",
+                                    "compliance_definition_name": "Rodriguez Inc. Test Survey",
+                                    "dependency_expression": "true in $map($lookup(definition.sections.*.follow_up, 'CDE-62').value, function($v) { $v in ['We facilitate or have an allocated budget for external professional development opportunities, (e.g. conference attendance, online trainings)'] })"
+                                },
+                                "$ref": "#/components/schemas/"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Compliance Sections"
+                ]
+            },
+            "get": {
+                "operationId": "ComplianceSectionsController_findAll",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sgId",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter",
+                        "required": true,
+                        "in": "query",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    {
+                        "name": "questions",
+                        "required": true,
+                        "in": "query",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Compliance Sections"
+                ]
+            }
+        },
+        "/compliance_definitions/{name}/section_groups/{sgId}/sections/{sId}": {
+            "get": {
+                "operationId": "ComplianceSectionsController_findOne",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sId",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sgId",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter",
+                        "required": true,
+                        "in": "query",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    {
+                        "name": "questions",
+                        "required": true,
+                        "in": "query",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Compliance Sections"
+                ]
+            },
+            "patch": {
+                "operationId": "ComplianceSectionsController_update",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sgId",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sId",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "example": {
+                                    "id": "cs_p49k9q0qfnv77jdn",
+                                    "key": "LLM",
+                                    "title": "Iure enim aut.",
+                                    "order": 95,
+                                    "compliance_section_group_id": "csg_v1ybvtcsz567jdlu",
+                                    "compliance_definition_name": "Murray-Cummings Corp. Test Survey",
+                                    "dependency_expression": "true in $map($lookup(definition.sections.*.follow_up, 'CDE-62').value, function($v) { $v in ['We facilitate or have an allocated budget for external professional development opportunities, (e.g. conference attendance, online trainings)'] })"
+                                },
+                                "$ref": "#/components/schemas/"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Compliance Sections"
+                ]
+            },
+            "delete": {
+                "operationId": "ComplianceSectionsController_remove",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sgId",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sId",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Compliance Sections"
+                ]
+            }
+        },
+        "/compliance_definitions/{name}/section_groups/{sgId}/sections/key/{key}": {
+            "get": {
+                "operationId": "ComplianceSectionGroupsController_findSectionByKey",
+                "parameters": [
+                    {
+                        "name": "sgId",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "key",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "fq",
+                        "required": true,
+                        "in": "query",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    {
+                        "name": "iq",
+                        "required": true,
+                        "in": "query",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Compliance",
+                    "Section Groups"
+                ]
+            }
+        },
+        "/compliance_definitions/{name}/section_groups": {
+            "post": {
+                "operationId": "ComplianceSectionGroupsController_create",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "example": {
+                                    "id": "csg_c8uq74od8i91drj4",
+                                    "compliance_definition_name": "Brown LLC Test Survey",
+                                    "title": "Voluptate id deserunt et rerum sapiente.",
+                                    "order": 23
+                                },
+                                "$ref": "#/components/schemas/"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Compliance",
+                    "Section Groups"
+                ]
+            },
+            "get": {
+                "operationId": "ComplianceSectionGroupsController_findAllSectionGroups",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "fq",
+                        "required": true,
+                        "in": "query",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    {
+                        "name": "iq",
+                        "required": true,
+                        "in": "query",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Compliance",
+                    "Section Groups"
+                ]
+            }
+        },
+        "/compliance_definitions/{name}/section_groups/{sgId}": {
+            "get": {
+                "operationId": "ComplianceSectionGroupsController_findOne",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sgId",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "fq",
+                        "required": true,
+                        "in": "query",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    {
+                        "name": "iq",
+                        "required": true,
+                        "in": "query",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Compliance",
+                    "Section Groups"
+                ]
+            },
+            "patch": {
+                "operationId": "ComplianceSectionGroupsController_update",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sgId",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ComplianceSectionGroupsExtendedDto"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Compliance",
+                    "Section Groups"
+                ]
+            },
+            "delete": {
+                "operationId": "ComplianceSectionGroupsController_remove",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sgId",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "tags": [
+                    "Compliance",
+                    "Section Groups"
+                ]
+            }
         }
     },
     "info": {
@@ -3531,10 +6353,6 @@
             }
         },
         "schemas": {
-            "CreateOrganizationDto": {
-                "type": "object",
-                "properties": {}
-            },
             "ComponentDefinitionDto": {
                 "type": "object",
                 "properties": {}
@@ -3544,6 +6362,14 @@
                 "properties": {}
             },
             "CreateArticleDto": {
+                "type": "object",
+                "properties": {}
+            },
+            "CreateOrganizationDto": {
+                "type": "object",
+                "properties": {}
+            },
+            "ComplianceSectionGroupsExtendedDto": {
                 "type": "object",
                 "properties": {}
             }
