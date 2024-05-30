@@ -205,6 +205,10 @@ export class CrawlerConsumer extends BaseWorker implements OnModuleInit {
 
   private async shouldContinueCrawling(jobId: any) {
     const job = await this.crawler.getJob(jobId);
+    if (!job) {
+      return false;
+    }
+
     if (job.data.parent) {
       const parentJob = await this.crawler.getJob(job.data.parent);
       this.logger.info(`Parent job is active: ${await parentJob?.isActive()}`);
@@ -252,6 +256,8 @@ export class CrawlerConsumer extends BaseWorker implements OnModuleInit {
     ) {
       return true;
     }
+
+    return false;
   }
 
   private extractUrls(html: string, baseUrl: string): string[] {
