@@ -1,61 +1,68 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, UseFilters, UseGuards } from '@nestjs/common';
 import { ComplianceQuestionsService } from './compliance-questions.service';
 import { compliance_questions } from '@prisma/client';
-import { HttpExceptionFilter, JwtAuthGuard, Roles, RolesGuard } from '@coldpbc/nest';
-import { ApiOAuth2, ApiTags } from '@nestjs/swagger';
+import { genComplianceQuestion, HttpExceptionFilter, JwtAuthGuard, Roles, RolesGuard } from '@coldpbc/nest';
+import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { Span } from 'nestjs-ddtrace';
 import { coldAdminOnly } from '../../../../../_global/global.params';
 
 @Span()
 @UseGuards(JwtAuthGuard, RolesGuard)
-@ApiOAuth2(['openid'])
+@Roles(...coldAdminOnly)
 @ApiTags('Compliance Questions')
 @UseFilters(new HttpExceptionFilter(ComplianceQuestionsController.name))
-@Controller('complianceDefinitions/:name/sectionGroups/:sectionGroupId/sections/:sectionId')
+@Controller('compliance_definitions/:name/section_groups/:sgId/sections/:sId/questions')
 export class ComplianceQuestionsController {
   constructor(private readonly complianceQuestionsService: ComplianceQuestionsService) {}
 
-  @Post('questions/batch')
-  @Roles(...coldAdminOnly)
-  createMany(
-    @Param('name') name: string,
-    @Param('sectionGroupId') groupId: string,
-    @Param('sectionId') sectionId: string,
-    @Body() createComplianceQuestionDto: compliance_questions[],
-  ) {
+  @Post('batch')
+  @ApiBody({
+    type: 'object',
+    schema: {
+      example: [genComplianceQuestion(), genComplianceQuestion()],
+    },
+  })
+  createMany(@Param('name') name: string, @Param('sgId') groupId: string, @Param('sId') sId: string, @Body() createComplianceQuestionDto: compliance_questions[]) {
     return this.complianceQuestionsService.createMany(createComplianceQuestionDto);
   }
 
-  @Post('questions')
-  @Roles(...coldAdminOnly)
-  create(@Param('name') name: string, @Param('sectionGroupId') groupId: string, @Param('sectionId') sectionId: string, @Body() createComplianceQuestionDto: compliance_questions) {
+  @Post()
+  @ApiBody({
+    type: 'object',
+    schema: {
+      example: genComplianceQuestion(),
+    },
+  })
+  create(@Param('name') name: string, @Param('sgId') groupId: string, @Param('sId') sId: string, @Body() createComplianceQuestionDto: compliance_questions) {
     return this.complianceQuestionsService.create(createComplianceQuestionDto);
   }
 
-  @Get('questions')
-  @Roles(...coldAdminOnly)
-  findBySection(@Param('name') compliance_definition_name: string, @Param('sectionGroupId') groupId: string, @Param('sectionId') sectionId: string) {
-    return this.complianceQuestionsService.findAll({ compliance_definition_name, compliance_section_id: sectionId, compliance_section_group_id: groupId });
+  @Get()
+  findBySection(@Param('name') compliance_definition_name: string, @Param('sgId') groupId: string, @Param('sId') sId: string) {
+    return this.complianceQuestionsService.findAll({ compliance_definition_name, compliance_section_id: sId, compliance_section_group_id: groupId });
   }
 
-  @Get('questions/:id')
-  @Roles(...coldAdminOnly)
-  findOne(@Param('name') name: string, @Param('sectionGroupId') groupId: string, @Param('sectionId') sectionId: string, @Param('id') id: string) {
+  @Get(':id')
+  findOne(@Param('name') name: string, @Param('sgId') groupId: string, @Param('sId') sId: string, @Param('id') id: string) {
     return this.complianceQuestionsService.findOne({ id });
   }
 
-  @Get('questions/key/:key')
-  @Roles(...coldAdminOnly)
-  findByKeyAndName(@Param('sectionGroupId') groupId: string, @Param('sectionId') sectionId: string, @Param('name') compliance_definition_name: string, @Param('key') key: string) {
+  @Get('key/:key')
+  findByKeyAndName(@Param('sgId') groupId: string, @Param('sId') sId: string, @Param('name') compliance_definition_name: string, @Param('key') key: string) {
     return this.complianceQuestionsService.findOne({ compliance_definition_name, key });
   }
 
   @Patch(':id')
-  @Roles(...coldAdminOnly)
+  @ApiBody({
+    type: 'object',
+    schema: {
+      example: genComplianceQuestion(),
+    },
+  })
   update(
     @Param('name') name: string,
-    @Param('sectionGroupId') groupId: string,
-    @Param('sectionId') sectionId: string,
+    @Param('sgId') groupId: string,
+    @Param('sId') sId: string,
     @Param('id') id: string,
     @Body() updateComplianceQuestionDto: compliance_questions,
   ) {
@@ -66,8 +73,7 @@ export class ComplianceQuestionsController {
   }
 
   @Delete(':id')
-  @Roles(...coldAdminOnly)
-  remove(@Param('name') name: string, @Param('sectionGroupId') groupId: string, @Param('sectionId') sectionId: string, @Param('id') id: string) {
+  remove(@Param('name') name: string, @Param('sgId') groupId: string, @Param('sId') sId: string, @Param('id') id: string) {
     return this.complianceQuestionsService.remove(id);
   }
 }
