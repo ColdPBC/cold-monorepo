@@ -1,26 +1,69 @@
 import { Injectable } from '@nestjs/common';
-import { CreateOrganizationComplianceDto } from './dto/create-organization_compliance.dto';
-import { UpdateOrganizationComplianceDto } from './dto/update-organization_compliance.dto';
+import { BaseWorker, OrganizationComplianceRepository } from '@coldpbc/nest';
+import { organization_compliance } from '@prisma/client';
 
 @Injectable()
-export class OrganizationComplianceService {
-  create(createOrganizationComplianceDto: CreateOrganizationComplianceDto) {
-    return createOrganizationComplianceDto;
+export class OrganizationComplianceService extends BaseWorker {
+  constructor(readonly repository: OrganizationComplianceRepository) {
+    super(OrganizationComplianceService.name);
+  }
+  create(orgId: string, name: string, organizationCompliance: organization_compliance, req: any) {
+    try {
+      organizationCompliance.organization_id = orgId;
+      organizationCompliance.compliance_definition_name = name;
+
+      return this.repository.createOrgCompliance(name, orgId, organizationCompliance, req.user);
+    } catch (error) {
+      this.logger.error(`Error creating organization compliance`, { organizationCompliance, error });
+      throw error;
+    }
   }
 
-  findAll() {
-    return `This action returns all organizationCompliance`;
+  findAll(orgId: string, req: any) {
+    try {
+      return this.repository.getOrgComplianceDefinitions(orgId, req.user);
+    } catch (error) {
+      this.logger.error(`Error getting compliance definitions`, { organization: { id: orgId }, error });
+      throw error;
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} organizationCompliance`;
+  findOne(orgId: string, id: string, req: any) {
+    try {
+      return this.repository.getOrgComplianceDefinitionById(orgId, id, req.user);
+    } catch (error) {
+      this.logger.error(`Error getting compliance definition`, { id, error });
+      throw error;
+    }
   }
 
-  update(id: number, updateOrganizationComplianceDto: UpdateOrganizationComplianceDto) {
-    return updateOrganizationComplianceDto;
+  findOneByName(orgId: string, name: string, req: any) {
+    try {
+      return this.repository.getOrgComplianceDefinitionByName(orgId, name, req.user);
+    } catch (error) {
+      this.logger.error(`Error getting compliance definition`, { organization: { id: orgId }, compliance: { name }, error });
+      throw error;
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} organizationCompliance`;
+  update(orgId: string, name: string, orgComplianceData: organization_compliance, req: any) {
+    try {
+      orgComplianceData.compliance_definition_name = name;
+      orgComplianceData.organization_id = orgId;
+
+      return this.repository.updateOrgComplianceDefinition(name, orgId, orgComplianceData, req.user);
+    } catch (error) {
+      this.logger.error(`Error updating organization compliance definition`, { organization: { id: orgId }, compliance: { name }, error });
+      throw error;
+    }
+  }
+
+  remove(orgId: string, name: string, req: any) {
+    try {
+      return this.repository.deleteOrgComplianceDefinition(orgId, name, req.user);
+    } catch (error) {
+      this.logger.error(`Error deleting organization compliance definition`, { organization: { id: orgId }, compliance: { name }, error });
+      throw error;
+    }
   }
 }
