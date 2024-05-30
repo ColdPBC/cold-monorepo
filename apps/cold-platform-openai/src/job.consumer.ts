@@ -74,7 +74,7 @@ export class JobConsumer extends BaseWorker {
     const index = await this.loader.getIndex(job.data.organization.name);
 
     if (Array.isArray(vectors)) {
-      const deleted = [];
+      const deleted: any = [];
       for (const vector of vectors) {
         await index.namespace(job.data.organization.name).deleteOne(vector.id);
         deleted.push(vector.id);
@@ -118,7 +118,7 @@ export class JobConsumer extends BaseWorker {
 
   @OnQueueActive()
   async onActive(job: Job) {
-    const message = `Processing ${job.name} | id: ${job.id} title: ${job.data.survey?.definition?.title} | started: ${new Date(job.processedOn).toUTCString()}`;
+    const message = `Processing ${job.name} | id: ${job.id} title: ${job.data.survey?.definition?.title} | started: ${new Date(job.processedOn || 0).toUTCString()}`;
     await job.log(message);
   }
 
@@ -140,7 +140,7 @@ export class JobConsumer extends BaseWorker {
       await this.cache.set(`jobs:${job.name}:${job.data.organization.id}:${job.data.payload.compliance?.compliance_id}`, jobs, { ttl: 60 * 60 * 24 * 7 });
     }
 
-    await job.log(`${job.name} Job COMPLETED | id: ${job.id} completed_on: ${new Date(job.finishedOn).toUTCString()} | ${this.getTimerString(job)}`);
+    await job.log(`${job.name} Job COMPLETED | id: ${job.id} completed_on: ${new Date(job.finishedOn || 0).toUTCString()} | ${this.getTimerString(job)}`);
   }
 
   @OnQueueProgress()
@@ -152,11 +152,11 @@ export class JobConsumer extends BaseWorker {
     if (job.finishedOn) {
       return `Duration: ${this.getDuration(job)} seconds`;
     } else {
-      return `Elapsed: ${(new Date().getTime() - job.processedOn) / 1000} seconds`;
+      return `Elapsed: ${(new Date().getTime() - (job.processedOn || 0)) / 1000} seconds`;
     }
   }
 
   getDuration(job: Job) {
-    return (job.finishedOn - job.processedOn) / 1000;
+    return (job.finishedOn || 0) - (job.processedOn || 0) / 1000;
   }
 }
