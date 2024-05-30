@@ -3,8 +3,8 @@ import fakerator from 'fakerator';
 import { v4 } from 'uuid';
 
 const fakeDataGenerator = fakerator();
-
-export const testOrgIdExample = '{{test_organization_id}}';
+//TODO: Deprecate this file!
+export const testOrgIdExample = '{{cold_org_id}}';
 export const authenticatedUserExample = {
   company_id: null,
   coldclimate_claims: {
