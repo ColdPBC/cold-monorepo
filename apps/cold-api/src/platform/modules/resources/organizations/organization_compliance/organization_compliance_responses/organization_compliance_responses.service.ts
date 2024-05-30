@@ -1,23 +1,34 @@
 import { Injectable } from '@nestjs/common';
-import { CreateOrganizationComplianceResponseDto } from './dto/create-organization_compliance_response.dto';
-import { UpdateOrganizationComplianceResponseDto } from './dto/update-organization_compliance_response.dto';
+import { BaseWorker, ComplianceResponsesRepository } from '@coldpbc/nest';
 
 @Injectable()
-export class OrganizationComplianceResponsesService {
-  create(createOrganizationComplianceResponseDto: CreateOrganizationComplianceResponseDto) {
-    return 'This action adds a new organizationComplianceResponse';
+export class OrganizationComplianceResponsesService extends BaseWorker {
+  constructor(readonly repository: ComplianceResponsesRepository) {
+    super(OrganizationComplianceResponsesService.name);
   }
 
-  findAll() {
-    return `This action returns all organizationComplianceResponses`;
+  upsert(orgId: string, name: string, sgId: string, sId: string, qId: string, complianceResponseData: any, req: any) {
+    return this.repository.upsertComplianceResponse(orgId, name, sgId, sId, qId, req.user, complianceResponseData);
+  }
+
+  findAllBySectionId(orgId: string, name: string, sId: string) {
+    // return this.repository.getComplianceResponses(orgId, name, sId);
+  }
+
+  findAllByGroupId(orgId: string, name: string, sgId: string) {
+    //return this.repository.getComplianceResponses(orgId, name, sgId);
+  }
+
+  findAllByQuestionId(orgId: string, name: string, qId: string) {
+    //return this.repository.getComplianceResponses(orgId, name, qId);
+  }
+
+  findAll(orgId: string, name: string, sgId: string, sId: string, qId: string, req) {
+    return this.repository.getComplianceResponses(orgId, name, req.user);
   }
 
   findOne(id: number) {
     return `This action returns a #${id} organizationComplianceResponse`;
-  }
-
-  update(id: number, updateOrganizationComplianceResponseDto: UpdateOrganizationComplianceResponseDto) {
-    return `This action updates a #${id} organizationComplianceResponse`;
   }
 
   remove(id: number) {

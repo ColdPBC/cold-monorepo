@@ -1,34 +1,160 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Put, Req, UseFilters, UseGuards } from '@nestjs/common';
 import { OrganizationComplianceResponsesService } from './organization_compliance_responses.service';
-import { CreateOrganizationComplianceResponseDto } from './dto/create-organization_compliance_response.dto';
-import { UpdateOrganizationComplianceResponseDto } from './dto/update-organization_compliance_response.dto';
+import { coldAdminOnly, allRoles, HttpExceptionFilter, JwtAuthGuard, Roles, RolesGuard, testOrgIdExample } from '@coldpbc/nest';
+import { ApiParam, ApiTags } from '@nestjs/swagger';
+import { compliance_responses } from '@prisma/client';
 
-@Controller('organization-compliance-responses')
+@UseGuards(JwtAuthGuard, RolesGuard)
+@UseFilters(new HttpExceptionFilter(OrganizationComplianceResponsesController.name))
+@ApiTags('Organization Compliance Response')
+@ApiParam({
+  name: 'orgId',
+  required: true,
+  type: 'string',
+  example: testOrgIdExample,
+})
+@ApiParam({
+  name: 'name',
+  required: true,
+  type: 'string',
+  example: 'b_corp_2024',
+})
+@Controller('organizations/:orgId/compliance/:name')
 export class OrganizationComplianceResponsesController {
   constructor(private readonly organizationComplianceResponsesService: OrganizationComplianceResponsesService) {}
 
-  @Post()
-  create(@Body() createOrganizationComplianceResponseDto: CreateOrganizationComplianceResponseDto) {
-    return this.organizationComplianceResponsesService.create(createOrganizationComplianceResponseDto);
+  // Use PUT instead of POST since we are upserting the compliance response
+  @Put('section_groups/:sgId/sections/:sId/questions/:qId/responses')
+  @ApiParam({
+    name: 'sgId',
+    required: true,
+    description: 'Section Group Id',
+    type: 'string',
+    example: 'csg_', // Example value
+  })
+  @ApiParam({
+    name: 'sId',
+    required: true,
+    description: 'Section Id',
+    type: 'string',
+    example: 'cs_', // Example value
+  })
+  @ApiParam({
+    name: 'qId',
+    required: true,
+    description: 'Question Id',
+    type: 'string',
+    example: 'cq_', // Example value
+  })
+  @Roles(...coldAdminOnly)
+  upsertOrgComplianceResponse(
+    @Param('orgId') orgId: string,
+    @Param('name') name: string,
+    @Param('sgId') sgId: string,
+    @Param('sId') sId: string,
+    @Param('qId') qId: string,
+    @Body() compliance_response: compliance_responses,
+    @Req() req: any,
+  ) {
+    return this.organizationComplianceResponsesService.upsert(orgId, name, sgId, sId, qId, compliance_response, req.user);
   }
 
-  @Get()
-  findAll() {
-    return this.organizationComplianceResponsesService.findAll();
+  @Get('section_groups/:sgId/sections/:sId/questions/:qId/responses')
+  @ApiParam({
+    name: 'sgId',
+    required: true,
+    description: 'Section Group Id',
+    type: 'string',
+    example: 'csg_', // Example value
+  })
+  @ApiParam({
+    name: 'sId',
+    required: true,
+    description: 'Section Id',
+    type: 'string',
+    example: 'cs_', // Example value
+  })
+  @ApiParam({
+    name: 'qId',
+    required: true,
+    description: 'Question Id',
+    type: 'string',
+    example: 'cq_', // Example value
+  })
+  @Roles(...allRoles)
+  findOrgComplianceResponse(
+    @Param('orgId') orgId: string,
+    @Param('name') name: string,
+    @Param('sgId') sgId: string,
+    @Param('sId') sId: string,
+    @Param('qId') qId: string,
+    @Req() req: any,
+  ) {
+    return this.organizationComplianceResponsesService.findAll(orgId, name, sgId, sId, qId, req.user);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
+  @Get('section_groups/:sgId/responses')
+  @ApiParam({
+    name: 'sgId',
+    required: true,
+    description: 'Section Group Id',
+    type: 'string',
+    example: 'csg_', // Example value
+  })
+  @Roles(...coldAdminOnly)
+  findALlByGroupId(@Param('orgId') orgId: string, @Param('name') name: string, @Param('sgId') sgId: string) {
+    // return this.organizationComplianceResponsesService.findAll(id);
+  }
+
+  @Get('sections/:sId/responses')
+  @ApiParam({
+    name: 'sId',
+    required: true,
+    description: 'Section Id',
+    type: 'string',
+    example: 'cs_', // Example value
+  })
+  @Roles(...coldAdminOnly)
+  findAllBySectionId(@Param('orgId') orgId: string, @Param('name') name: string, @Param('sId') sId: string) {
+    //return this.organizationComplianceResponsesService.findOne();
+  }
+
+  @Get('questions/:qId/responses')
+  @ApiParam({
+    name: 'qId',
+    required: true,
+    description: 'Question Id',
+    type: 'string',
+    example: 'cq_', // Example value
+  })
+  @Roles(...coldAdminOnly)
+  findByQuestionId(@Param('orgId') orgId: string, @Param('name') name: string, @Param('qId') id: string) {
+    //return this.organizationComplianceResponsesService.findOne(+id);
+  }
+
+  @Get('responses/:id')
+  @ApiParam({
+    name: 'id',
+    required: true,
+    description: 'Compliance Response Id',
+    type: 'string',
+    example: 'cr_', // Example value
+  })
+  @Roles(...coldAdminOnly)
+  findById(@Param('orgId') orgId: string, @Param('name') name: string, @Param('id') id: string) {
     return this.organizationComplianceResponsesService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateOrganizationComplianceResponseDto: UpdateOrganizationComplianceResponseDto) {
-    return this.organizationComplianceResponsesService.update(+id, updateOrganizationComplianceResponseDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
+  @Delete('responses/:id')
+  @ApiParam({
+    name: 'id',
+    required: true,
+    description: 'Compliance Response Id',
+    type: 'string',
+    example: 'cr_', // Example value
+  })
+  @Roles(...coldAdminOnly)
+  remove(@Param('orgId') orgId: string, @Param('name') name: string, @Param('id') id: string) {
     return this.organizationComplianceResponsesService.remove(+id);
   }
 }
