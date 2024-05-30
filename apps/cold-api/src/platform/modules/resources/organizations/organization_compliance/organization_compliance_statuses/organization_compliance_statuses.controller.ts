@@ -1,34 +1,32 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Req, UseFilters, UseGuards } from '@nestjs/common';
 import { OrganizationComplianceStatusesService } from './organization_compliance_statuses.service';
-import { CreateOrganizationComplianceStatusDto } from './dto/create-organization_compliance_status.dto';
-import { UpdateOrganizationComplianceStatusDto } from './dto/update-organization_compliance_status.dto';
+import { survey_status_types } from '@prisma/client';
+import { HttpExceptionFilter, JwtAuthGuard, Roles, RolesGuard, allRoles } from '@coldpbc/nest';
+import { ApiTags } from '@nestjs/swagger';
+import { coldAdminOnly } from '../../../_global/global.params';
 
-@Controller('organization-compliance-statuses')
+@UseGuards(JwtAuthGuard, RolesGuard)
+@UseFilters(new HttpExceptionFilter(OrganizationComplianceStatusesController.name))
+@ApiTags('Organization Compliance Status')
+@Controller('organizations/:orgId/compliance/:name/statuses')
 export class OrganizationComplianceStatusesController {
   constructor(private readonly organizationComplianceStatusesService: OrganizationComplianceStatusesService) {}
 
   @Post()
-  create(@Body() createOrganizationComplianceStatusDto: CreateOrganizationComplianceStatusDto) {
-    return this.organizationComplianceStatusesService.create(createOrganizationComplianceStatusDto);
+  @Roles(...coldAdminOnly)
+  create(@Param('orgId') orgId: string, @Param('name') name: string, @Body() statusData: { type: survey_status_types }, @Req() req: any) {
+    return this.organizationComplianceStatusesService.create(orgId, name, statusData.type, req.user);
   }
 
   @Get()
-  findAll() {
-    return this.organizationComplianceStatusesService.findAll();
+  @Roles(...allRoles)
+  findAll(@Param('orgId') orgId: string, @Param('name') name: string, @Req() req: any) {
+    return this.organizationComplianceStatusesService.findByOrgComplianceName(orgId, name, req.user);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.organizationComplianceStatusesService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateOrganizationComplianceStatusDto: UpdateOrganizationComplianceStatusDto) {
-    return this.organizationComplianceStatusesService.update(+id, updateOrganizationComplianceStatusDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.organizationComplianceStatusesService.remove(+id);
+  @Get(':statusId')
+  @Roles(...allRoles)
+  findOne(@Param('orgId') orgId: string, @Param('name') name: string, @Param('statusId') statusId: string, @Req() req: any) {
+    return this.organizationComplianceStatusesService.findOne(orgId, name, statusId, req.user);
   }
 }
