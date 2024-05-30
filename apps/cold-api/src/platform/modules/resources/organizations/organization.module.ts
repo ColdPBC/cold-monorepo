@@ -3,7 +3,7 @@ import { MemberModule } from '../auth0/members/member.module';
 import { OrganizationController } from './organization.controller';
 import { OrganizationService } from './organization.service';
 import { HttpModule } from '@nestjs/axios';
-import { CacheService } from '@coldpbc/nest';
+import { CacheService, OrganizationsRepository, PrismaModule, PrismaService } from '@coldpbc/nest';
 import { RoleModule } from '../auth0/roles/role.module';
 import { OrganizationFilesController } from './files/organization.files.controller';
 import { Auth0Module } from '../auth0/auth0.module';
@@ -41,9 +41,10 @@ import { MqttModule } from './mqtt/mqtt.module';
     OrganizationComplianceNoteFilesModule,
     OrganizationComplianceModule,
     MqttModule,
+    PrismaModule,
   ],
   controllers: [OrganizationController, OrganizationFilesController],
-  providers: [OrganizationService, CacheService, OrganizationHelper, OrganizationsRabbitService],
+  providers: [PrismaService, OrganizationService, CacheService, OrganizationHelper, OrganizationsRabbitService, OrganizationsRepository],
   exports: [OrganizationHelper],
 })
 export class OrganizationModule {}

@@ -1,7 +1,7 @@
 import { HttpService } from '@nestjs/axios';
 import { ConflictException, HttpException, Injectable, NotFoundException, UnauthorizedException, UnprocessableEntityException } from '@nestjs/common';
 import { Span } from 'nestjs-ddtrace'; // eslint-disable-next-line @nx/enforce-module-boundaries
-import { Auth0Organization, Auth0TokenService, BaseWorker, CacheService, DarklyService, MqttService, PrismaService, Tags } from '@coldpbc/nest';
+import { OrganizationsRepository, Auth0Organization, Auth0TokenService, BaseWorker, CacheService, DarklyService, MqttService, PrismaService, Tags } from '@coldpbc/nest';
 import { get, kebabCase, merge, omit, pick, set } from 'lodash';
 import { AxiosRequestConfig } from 'axios';
 import { CreateOrganizationDto } from './dto/organization.dto';
@@ -25,11 +25,13 @@ export class OrganizationService extends BaseWorker {
     readonly integrations: IntegrationsService,
     readonly mqtt: MqttService,
     readonly prisma: PrismaService,
+    readonly repository: OrganizationsRepository,
   ) {
     super('OrganizationService');
     this.httpService = new HttpService();
   }
 
+  //todo: remove this function
   private async syncOpenAIAssistants(org) {
     if (!this.openAI) {
       this.logger.error('OpenAI service definition not found');
@@ -70,13 +72,12 @@ export class OrganizationService extends BaseWorker {
   }
 
   override async onModuleInit() {
-    await this.getOrganizations(true);
-
     this.darkly.subscribeToJsonFlagChanges('dynamic-org-white-list', value => {
       this.test_orgs = value;
     });
 
     this.options = await this.utilService.init();
+
     // insure openai service is enabled for all organizations
     this.openAI = await this.prisma.extended.service_definitions.findUnique({
       where: {
@@ -84,7 +85,7 @@ export class OrganizationService extends BaseWorker {
       },
     });
 
-    let orgs = (await this.getOrganizations(true)) as Array<Auth0Organization>;
+    let orgs = (await this.getOrganizations(true, { user: { coldclimate_claims: { email: 'service_account' } } })) as Array<Auth0Organization>;
 
     if (!orgs || orgs.length === 0) {
       this.options = await this.utilService.init();
@@ -111,14 +112,9 @@ export class OrganizationService extends BaseWorker {
         created_at: new Date(),
       };
 
-      this.prisma.extended.organizations.upsert({
-        where: {
-          id: org.id,
-        },
-        create: orgData,
-        update: orgData,
-      });
+      await this.repository.create(orgData as any, { coldclimate_claims: { org_id: orgData.id, id: 'none', roles: ['cold:admin'], email: 'service_account' } } as any);
 
+      // todo: remove this function
       this.syncOpenAIAssistants(org);
     }
   }
@@ -153,12 +149,14 @@ export class OrganizationService extends BaseWorker {
    */
   async getOrganizations(
     bpc = false,
+    req: any,
     filters?: {
       id?: string;
       name?: string;
       isTest?: boolean;
     } | null,
   ): Promise<Array<Auth0Organization>> {
+    const { user } = req;
     try {
       // if supplied, check filter has required properties
       if (filters && !filters.id && !filters.name && !filters.isTest) {
@@ -177,55 +175,16 @@ export class OrganizationService extends BaseWorker {
       if (!orgs) {
         this.options = await this.utilService.init();
 
+        // orgs = await this.httpService.axiosRef.get(`/organizations`, this.options);
         //const response = await this.httpService.axiosRef.get(`/organizations`, this.options);
-
-        const queryOptions = {
-          include: {
-            facilities: true,
-          },
-        };
-
-        if (filters) {
-          set(queryOptions, 'where', { ...filters });
-        }
-
-        orgs = await this.prisma.extended.organizations.findMany(queryOptions);
-
-        if (!orgs) {
-          throw new NotFoundException(`No Organizations found`);
-        }
-
-        this.cache.set('organizations', orgs, {
-          update: true,
-          wildcard: true,
-        });
       }
+
+      orgs = await this.repository.findAll(user, filters);
 
       if (!orgs) {
         throw new NotFoundException(`No Organizations found`);
       }
 
-      /*
-      // if filter was supplied return org matching filter
-      if (filters && Array.isArray(orgs)) {
-        const found = first(filter(orgs, filters)) as Auth0Organization;
-        const org: Auth0Organization | undefined = found ? found : undefined; //only one should be returned by filter, however if more are returned only return the first
-
-        //no org matches filter
-        if (!org) {
-          throw new NotFoundException(`Organization not found`);
-        }
-
-        this.cache.set(`organizations:${org.id}`, org, { ttl: 1000 * 60 * 60 * 24 * 7, update: true, wildcard: true });
-        this.cache.set(`organizations:${org.name}`, org, {
-          ttl: 1000 * 60 * 60 * 24 * 7,
-          update: true,
-          wildcard: true,
-        });
-
-        return org;
-      }
-*/
       // return all orgs
       return orgs;
     } catch (e) {
@@ -240,7 +199,7 @@ export class OrganizationService extends BaseWorker {
    * @param req
    * @param bypassCache
    */
-  async getOrganization(nameOrId: string, req: any, bypassCache = false): Promise<Auth0Organization> {
+  async getOrganization(nameOrId: string, req: any, bypassCache = false): Promise<organizations> {
     const { user } = req;
     try {
       if (!nameOrId || nameOrId === ':name' || nameOrId === ':orgId') throw new UnprocessableEntityException(`Organization 'name' or 'id' is required`);
@@ -255,19 +214,9 @@ export class OrganizationService extends BaseWorker {
       } else {
         const filter = nameOrId.startsWith('org_') ? { id: nameOrId } : { name: nameOrId };
 
-        let org = (await this.prisma.extended.organizations.findUnique({
-          where: filter,
-          include: {
-            facilities: true,
-          },
-        })) as unknown as Auth0Organization;
-
+        let org = await this.repository.findOne(user, filter);
         if (org) {
           await this.cache.set(`organizations:${org.id}`, org, { ttl: 1000 * 60 * 60 * 24, update: true });
-
-          if (!user.isColdAdmin && org.id !== user.coldclimate_claims.org_id) {
-            throw new UnauthorizedException('You are not permitted to perform actions on this organization');
-          }
         } else {
           // if org not found in db, get from auth0
 
@@ -280,6 +229,13 @@ export class OrganizationService extends BaseWorker {
           }
 
           org = response.data;
+        }
+
+        if (!org) {
+          throw new NotFoundException(`Organization ${nameOrId} not found`);
+        }
+        if (!user.isColdAdmin && org.id !== user.coldclimate_claims.org_id) {
+          throw new UnauthorizedException('You are not permitted to perform actions on this organization');
         }
 
         return org;
@@ -312,7 +268,7 @@ export class OrganizationService extends BaseWorker {
         data: org,
       });
       // update org list cache
-      await this.getOrganizations(true);
+      await this.getOrganizations(user, true);
 
       this.mqtt.publishMQTT('cold', {
         swr_key: url,
@@ -363,7 +319,7 @@ export class OrganizationService extends BaseWorker {
       });
 
       // update org list cache
-      await this.getOrganizations(true);
+      await this.getOrganizations(user, true);
 
       this.mqtt.publishMQTT('cold', {
         swr_key: url,
@@ -407,9 +363,7 @@ export class OrganizationService extends BaseWorker {
       let existing: any | null;
 
       // search for existing organization by name
-      await this.prisma.extended.organizations.findUnique({
-        where: { name: org.name },
-      });
+      existing = await this.repository.findOne(user, { name: orgName });
 
       if (existing) {
         throw new ConflictException(`organization ${existing.name} already exists in db`);
@@ -417,10 +371,11 @@ export class OrganizationService extends BaseWorker {
 
       try {
         // search Auth0 for existing organization by name
-        existing = (await this.getOrganization(<string>org.name, req, true)) as Auth0Organization;
+        const auth0 = await this.httpService.axiosRef.get(`/organizations/name/${orgName}`, this.options);
+        existing = auth0.data;
       } catch (e) {
-        // if org not found in Auth0, continue
-        if (e.status !== 404) {
+        // if any error other than 404 is returned, throw error
+        if (e.response.status !== 404) {
           throw e;
         }
       }
@@ -458,12 +413,8 @@ export class OrganizationService extends BaseWorker {
 
       if (auth0Org.id) {
         tags.org_id = auth0Org.id;
-        // create organization in database
-        org.created_at = new Date();
 
-        existing = await this.prisma.extended.organizations.create({
-          data: org as any,
-        });
+        existing = await this.repository.create(org as any, user);
 
         await this.cache.set(`organizations:${auth0Org.id}`, auth0Org, {
           update: true,
@@ -535,28 +486,23 @@ export class OrganizationService extends BaseWorker {
     const { user, url, organization } = req;
 
     try {
-      /*try {
-        org = (await this.getOrganization(orgId, req, false)) as Auth0Organization;
+      try {
+        org = await this.getOrganization(org.id, req, false);
       } catch (e) {
         if (e.status !== 404) {
           throw e;
         }
-      }*/
+      }
+
+      if (org.name.startsWith('cold-climate')) {
+        throw new UnprocessableEntityException('Cannot delete an organization with name Cold-Climate');
+      }
 
       this.tags = merge(this.tags, {
         organization: omit(org, ['branding', 'phone', 'street_address', 'created_at', 'updated_at']),
         user: user.coldclimate_claims,
         status: 'started',
       });
-
-      if (!org?.id?.includes('org_')) {
-        throw new UnprocessableEntityException(`${org.id} is not a valid organization id`);
-      }
-
-      // don't del cold-climate
-      if (org?.name?.includes('cold-climate')) {
-        throw new HttpException('cannot delete cold-climate org', 422);
-      }
 
       // delete org from auth0
       try {
@@ -647,8 +593,10 @@ export class OrganizationService extends BaseWorker {
           error: e.message,
         },
       });
+
+      throw e;
     }
-    await this.getOrganizations(true);
+    await this.getOrganizations(user, true);
 
     set(this.tags, 'status', 'completed');
 
