@@ -1,12 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import {
-  BackOffStrategies,
-  BaseWorker,
-  CacheService,
-  PrismaService,
-  RabbitMessagePayload,
-  S3Service,
-} from '@coldpbc/nest';
+import { BackOffStrategies, BaseWorker, CacheService, PrismaService, RabbitMessagePayload, S3Service } from '@coldpbc/nest';
 import { Nack, RabbitRPC, RabbitSubscribe } from '@golevelup/nestjs-rabbitmq';
 import { InjectQueue } from '@nestjs/bull';
 import { Queue } from 'bull';
@@ -241,7 +234,7 @@ export class RabbitService extends BaseWorker {
 
           try {
             for (const survey of surveys) {
-              let jobs: number[] = await this.cache.get(`jobs:${event}:${parsed.organization.id}:${parsed.payload.compliance?.compliance_id}`);
+              let jobs: number[] = (await this.cache.get(`jobs:${event}:${parsed.organization.id}:${parsed.payload.compliance?.compliance_id}`)) as number[];
 
               if (typeof jobs === 'string') {
                 jobs = JSON.parse(jobs) as [];
