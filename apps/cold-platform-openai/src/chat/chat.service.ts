@@ -64,17 +64,21 @@ export class ChatService extends BaseWorker implements OnModuleInit {
       survey: survey.name,
       organization: { id: organization.id, name: organization.name, display_name: organization.display_name },
     });
-    const surveyData = await this.prisma.survey_data.findFirst({
+    const surveyData = (await this.prisma.survey_data.findFirst({
       where: { survey_definition_id: survey.id, organization_id: organization.id },
-    });
+    })) as { data: any; id: string };
+
+    if (typeof surveyData?.data === 'string') {
+      surveyData.data = JSON.parse(surveyData.data);
+    }
 
     if (!surveyData) {
       return;
     }
 
     // Iterate over each section
-    for (const sectionKey in surveyData.data['sections']) {
-      const section = surveyData.data['sections'][sectionKey];
+    for (const sectionKey in Object.keys(surveyData.data?.sections)) {
+      const section = surveyData.data?.sections[sectionKey];
 
       // Iterate over each follow_up item in the section
       for (const followUpKey in section.follow_up) {
@@ -99,7 +103,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
     });
 
     if (compliance) {
-      await this.complianceAiResponsesRepository.deleteAiResponses(organization, compliance, user);
+      await this.complianceAiResponsesRepository.deleteAiResponses(organization, compliance.compliance_definition_name, user);
     }
   }
 
@@ -115,25 +119,23 @@ export class ChatService extends BaseWorker implements OnModuleInit {
     // Use a map to deduplicate matches by URL
     const docs = Array.isArray(qualifyingDocs)
       ? qualifyingDocs.map(match => {
+          if (!match.metadata) {
+            return;
+          }
           const item = {
             name: match.metadata['file_name'],
             url: match.metadata['url'],
             text: match.metadata.chunk as string,
           };
           // If the text is a string, try to parse it as JSON
-          if (typeof item.text === 'string') {
-            try {
-              item.text = JSON.stringify(JSON.parse(item.text));
-            } catch (e) {
-              // Do nothing as it is not a JSON string
-            }
-
-            // Return the item: string
-            const page = `"${item.text} (${item.url})"`;
-
-            const file = `"${item.text} (${item.name})"`;
-            return JSON.stringify(item.url ? page : file);
+          try {
+            item.text = JSON.stringify(JSON.parse(item.text));
+          } catch (e) {
+            // Do nothing as it is not a JSON string
           }
+          const page = `"${item.text} (${item.url})"`;
+          const file = `"${item.text} (${item.name})"`;
+          return JSON.stringify(item.url ? page : file);
         })
       : [];
 
@@ -208,6 +210,11 @@ export class ChatService extends BaseWorker implements OnModuleInit {
       user: user.coldclimate_claims.id,
     });
 
+    if (!response.choices[0].message.content) {
+      this.logger.error('No content found in response', { response });
+      return;
+    }
+
     const message = {
       role: response.choices[0].message.role,
       content: response.choices[0].message.content,
@@ -216,11 +223,14 @@ export class ChatService extends BaseWorker implements OnModuleInit {
     sanitized_base.allMessages(message);
 
     let ai_response: any;
-    if (typeof response.choices[0].message.content === 'string') {
-      ai_response = JSON.parse(response.choices[0].message.content);
-    }
+    // eslint-disable-next-line prefer-const
+    ai_response = JSON.parse(response.choices[0].message.content);
 
     const references = docs.map(doc => {
+      if (!doc.metadata) {
+        return;
+      }
+
       const metadata = {
         text: doc.metadata.chunk,
         score: doc.score,
@@ -344,6 +354,10 @@ export class ChatService extends BaseWorker implements OnModuleInit {
       }
 
       const references = docs.map(doc => {
+        if (!doc.metadata) {
+          return;
+        }
+
         const metadata = {
           text: doc.metadata.chunk,
           score: doc.score,
@@ -383,11 +397,15 @@ export class ChatService extends BaseWorker implements OnModuleInit {
         ...session?.customMetadata,
       });
 
-      this.metrics.increment('openai.questions.answered', 1, { section: session?.customMetadata?.survey });
-
       if (!session) {
         return ai_response;
       }
+
+      if (!session?.customMetadata) {
+        session.customMetadata = { survey: '', organization: user.coldclimate_claims.org_id, user: user.coldclimate_claims.email };
+      }
+
+      this.metrics.increment('openai.questions.answered', { section: session.customMetadata.survey });
 
       const end = new Date();
       this.logger.info(`Sending ${sanitized_base.promptInfo.templateName} run stats to FreePlay`);
@@ -420,7 +438,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
     context: any,
     vectorSession?: FPSession,
     additional_context?,
-  ) {
+  ): Promise<{ rephrased_question: string; docs: ScoredPineconeRecord[] }> {
     const openai = new OpenAI({
       organization: this.config.getOrThrow('OPENAI_ORG_ID'),
       apiKey: this.config.getOrThrow('OPENAI_API_KEY'),
@@ -430,7 +448,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
      * This prompt is used to condense the chat history and follow-up question into a single standalone question for the purpose
      * of providing context to the AI model to query the vector index for the most relevant information.
      */
-    let rephrased_question: string;
+    let rephrased_question: string = '';
     let lastMessage: string = '';
 
     // If there are messages, get the last message and include it in the prompt
@@ -471,6 +489,11 @@ export class ChatService extends BaseWorker implements OnModuleInit {
 
     const end = new Date();
 
+    if (!condenseResponse.choices[0].message.content) {
+      this.logger.error('No content found in response', { condenseResponse });
+      return { rephrased_question, docs: [] };
+    }
+
     const message = {
       role: condenseResponse.choices[0].message.role,
       content: condenseResponse.choices[0].message.content,
@@ -508,7 +531,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
     }
 
     if (vectorSession) {
-      vectorSession.customMetadata = { ...vectorSession.customMetadata, snippets: content };
+      vectorSession.customMetadata = Object.assign({}, vectorSession.customMetadata, { snippets: content });
       this.logger.info(`Sending ${condense_prompt.promptInfo.templateName} run stats to FreePlay `);
       this.fp.recordCompletion(vectorSession, vars, condense_prompt, condenseResponse, start, end);
     }
