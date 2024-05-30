@@ -1,14 +1,13 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 import { OrganizationComplianceNoteFilesService } from './organization_compliance_note_files.service';
-import { CreateOrganizationComplianceNoteFileDto } from './dto/create-organization_compliance_note_file.dto';
-import { UpdateOrganizationComplianceNoteFileDto } from './dto/update-organization_compliance_note_file.dto';
+import { organization_compliance_notes } from '@prisma/client';
 
 @Controller('organization-compliance-note-files')
 export class OrganizationComplianceNoteFilesController {
   constructor(private readonly organizationComplianceNoteFilesService: OrganizationComplianceNoteFilesService) {}
 
   @Post()
-  create(@Body() createOrganizationComplianceNoteFileDto: CreateOrganizationComplianceNoteFileDto) {
+  create(@Body() createOrganizationComplianceNoteFileDto: organization_compliance_notes) {
     return this.organizationComplianceNoteFilesService.create(createOrganizationComplianceNoteFileDto);
   }
 
@@ -23,7 +22,7 @@ export class OrganizationComplianceNoteFilesController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateOrganizationComplianceNoteFileDto: UpdateOrganizationComplianceNoteFileDto) {
+  update(@Param('id') id: string, @Body() updateOrganizationComplianceNoteFileDto: organization_compliance_notes) {
     return this.organizationComplianceNoteFilesService.update(+id, updateOrganizationComplianceNoteFileDto);
   }
 

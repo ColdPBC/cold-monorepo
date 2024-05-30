@@ -1,14 +1,13 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 import { OrganizationComplianceBookmarksService } from './organization_compliance_bookmarks.service';
-import { CreateOrganizationComplianceBookmarkDto } from './dto/create-organization_compliance_bookmark.dto';
-import { UpdateOrganizationComplianceBookmarkDto } from './dto/update-organization_compliance_bookmark.dto';
+import { organization_compliance_question_bookmarks } from '@prisma/client';
 
 @Controller('organization-compliance-bookmarks')
 export class OrganizationComplianceBookmarksController {
   constructor(private readonly organizationComplianceBookmarksService: OrganizationComplianceBookmarksService) {}
 
   @Post()
-  create(@Body() createOrganizationComplianceBookmarkDto: CreateOrganizationComplianceBookmarkDto) {
+  create(@Body() createOrganizationComplianceBookmarkDto: organization_compliance_question_bookmarks) {
     return this.organizationComplianceBookmarksService.create(createOrganizationComplianceBookmarkDto);
   }
 
@@ -23,7 +22,7 @@ export class OrganizationComplianceBookmarksController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateOrganizationComplianceBookmarkDto: UpdateOrganizationComplianceBookmarkDto) {
+  update(@Param('id') id: string, @Body() updateOrganizationComplianceBookmarkDto: organization_compliance_question_bookmarks) {
     return this.organizationComplianceBookmarksService.update(+id, updateOrganizationComplianceBookmarkDto);
   }
 

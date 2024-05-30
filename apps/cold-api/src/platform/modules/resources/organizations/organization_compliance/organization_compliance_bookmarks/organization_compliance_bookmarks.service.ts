@@ -1,10 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { CreateOrganizationComplianceBookmarkDto } from './dto/create-organization_compliance_bookmark.dto';
-import { UpdateOrganizationComplianceBookmarkDto } from './dto/update-organization_compliance_bookmark.dto';
 
 @Injectable()
 export class OrganizationComplianceBookmarksService {
-  create(createOrganizationComplianceBookmarkDto: CreateOrganizationComplianceBookmarkDto) {
+  create(createOrganizationComplianceBookmarkDto: any) {
     return 'This action adds a new organizationComplianceBookmark';
   }
 
@@ -16,7 +14,7 @@ export class OrganizationComplianceBookmarksService {
     return `This action returns a #${id} organizationComplianceBookmark`;
   }
 
-  update(id: number, updateOrganizationComplianceBookmarkDto: UpdateOrganizationComplianceBookmarkDto) {
+  update(id: number, updateOrganizationComplianceBookmarkDto: any) {
     return `This action updates a #${id} organizationComplianceBookmark`;
   }
 

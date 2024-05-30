@@ -1,10 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { CreateOrganizationComplianceNoteFileDto } from './dto/create-organization_compliance_note_file.dto';
-import { UpdateOrganizationComplianceNoteFileDto } from './dto/update-organization_compliance_note_file.dto';
 
 @Injectable()
 export class OrganizationComplianceNoteFilesService {
-  create(createOrganizationComplianceNoteFileDto: CreateOrganizationComplianceNoteFileDto) {
+  create(createOrganizationComplianceNoteFileDto: any) {
     return 'This action adds a new organizationComplianceNoteFile';
   }
 
@@ -16,7 +14,7 @@ export class OrganizationComplianceNoteFilesService {
     return `This action returns a #${id} organizationComplianceNoteFile`;
   }
 
-  update(id: number, updateOrganizationComplianceNoteFileDto: UpdateOrganizationComplianceNoteFileDto) {
+  update(id: number, updateOrganizationComplianceNoteFileDto: any) {
     return `This action updates a #${id} organizationComplianceNoteFile`;
   }
 

@@ -1,10 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { CreateOrganizationComplianceNoteLinkDto } from './dto/create-organization_compliance_note_link.dto';
-import { UpdateOrganizationComplianceNoteLinkDto } from './dto/update-organization_compliance_note_link.dto';
+import { organization_compliance_note_links } from '@prisma/client';
 
 @Injectable()
 export class OrganizationComplianceNoteLinksService {
-  create(createOrganizationComplianceNoteLinkDto: CreateOrganizationComplianceNoteLinkDto) {
+  create(compliance_note_links_data: organization_compliance_note_links) {
     return 'This action adds a new organizationComplianceNoteLink';
   }
 
@@ -16,7 +15,7 @@ export class OrganizationComplianceNoteLinksService {
     return `This action returns a #${id} organizationComplianceNoteLink`;
   }
 
-  update(id: number, updateOrganizationComplianceNoteLinkDto: UpdateOrganizationComplianceNoteLinkDto) {
+  update(id: number, compliance_note_links_data: organization_compliance_note_links) {
     return `This action updates a #${id} organizationComplianceNoteLink`;
   }
 

@@ -1,14 +1,12 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 import { OrganizationComplianceNoteLinksService } from './organization_compliance_note_links.service';
-import { CreateOrganizationComplianceNoteLinkDto } from './dto/create-organization_compliance_note_link.dto';
-import { UpdateOrganizationComplianceNoteLinkDto } from './dto/update-organization_compliance_note_link.dto';
 
 @Controller('organization-compliance-note-links')
 export class OrganizationComplianceNoteLinksController {
   constructor(private readonly organizationComplianceNoteLinksService: OrganizationComplianceNoteLinksService) {}
 
   @Post()
-  create(@Body() createOrganizationComplianceNoteLinkDto: CreateOrganizationComplianceNoteLinkDto) {
+  create(@Body() createOrganizationComplianceNoteLinkDto: any) {
     return this.organizationComplianceNoteLinksService.create(createOrganizationComplianceNoteLinkDto);
   }
 
@@ -23,7 +21,7 @@ export class OrganizationComplianceNoteLinksController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateOrganizationComplianceNoteLinkDto: UpdateOrganizationComplianceNoteLinkDto) {
+  update(@Param('id') id: string, @Body() updateOrganizationComplianceNoteLinkDto: any) {
     return this.organizationComplianceNoteLinksService.update(+id, updateOrganizationComplianceNoteLinkDto);
   }
 
