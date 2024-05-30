@@ -80,6 +80,10 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
       },
     });
 
+    if (!org) {
+      throw new Error(`Organization not found: ${orgId}`);
+    }
+
     const details = await this.getIndexDetails(org.name);
 
     for (const file of org.organization_files) {
@@ -160,7 +164,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
     const matches = await this.getMatchesFromEmbeddings(embedding, 5, namespace, indexDetails.indexName);
 
     // Filter out the matches that have a score lower than the minimum score
-    const qualifyingDocs = matches.filter(m => m.score && m.score > minScore);
+    const qualifyingDocs: any = matches.filter(m => m.score && m.score > minScore);
 
     if (!qualifyingDocs) {
       this.logger.info('No qualifying docs found', {
@@ -187,9 +191,12 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
     // Use a map to deduplicate matches by URL
     const docs = matches
       ? qualifyingDocs.map(match => {
+          if (!match?.metadata?.file_name && !match?.metadata?.url) {
+            return '';
+          }
           const item = {
             name: match.metadata['file_name'] || match.metadata['url'],
-            text: match.metadata.chunk,
+            text: match?.metadata?.chunk,
           };
           return JSON.stringify(item);
         })
@@ -285,7 +292,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
             values: embedding,
             namespace: org_name,
             index_name: indexDetails.indexName,
-            metadata: record.metadata,
+            metadata: record.metadata || {},
           },
         });
       } catch (e) {
@@ -455,7 +462,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
     }
 
     const response = await this.pinecone.listIndexes();
-    if (response.indexes.some(item => item.name === targetIndex)) {
+    if (response?.indexes?.some(item => item.name === targetIndex)) {
       return this.pinecone.index(targetIndex);
     }
 
