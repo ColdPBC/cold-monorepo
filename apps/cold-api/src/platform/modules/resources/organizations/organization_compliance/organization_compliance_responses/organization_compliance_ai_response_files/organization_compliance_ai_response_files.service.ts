@@ -1,26 +1,28 @@
 import { Injectable } from '@nestjs/common';
-import { CreateOrganizationComplianceAiResponseFileDto } from './dto/create-organization_compliance_ai_response_file.dto';
-import { UpdateOrganizationComplianceAiResponseFileDto } from './dto/update-organization_compliance_ai_response_file.dto';
+import { BaseWorker, ComplianceAiResponseFilesRepository, IAuthenticatedUser } from '@coldpbc/nest';
 
 @Injectable()
-export class OrganizationComplianceAiResponseFilesService {
-  create(createOrganizationComplianceAiResponseFileDto: CreateOrganizationComplianceAiResponseFileDto) {
-    return 'This action adds a new organizationComplianceAiResponseFile';
+export class OrganizationComplianceAiResponseFilesService extends BaseWorker {
+  constructor(readonly repository: ComplianceAiResponseFilesRepository) {
+    super(OrganizationComplianceAiResponseFilesService.name);
+  }
+  create(orgId: string, complianceName: string, aiResponseId: string, aiResponseFileData: any, user: IAuthenticatedUser) {
+    return this.repository.createAiResponseFile(orgId, complianceName, aiResponseId, aiResponseFileData, user);
   }
 
-  findAll() {
-    return `This action returns all organizationComplianceAiResponseFiles`;
+  findAll(orgId: string, complianceName: string, aiResponseId: string, user: IAuthenticatedUser) {
+    return this.repository.findAllAiResponseFiles(orgId, complianceName, aiResponseId, user);
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} organizationComplianceAiResponseFile`;
+  findOne(orgId: string, complianceName: string, aiResponseId: string, id: string, user: IAuthenticatedUser) {
+    return this.repository.findOneAiResponseFile(orgId, complianceName, aiResponseId, id, user);
   }
 
-  update(id: number, updateOrganizationComplianceAiResponseFileDto: UpdateOrganizationComplianceAiResponseFileDto) {
-    return `This action updates a #${id} organizationComplianceAiResponseFile`;
+  update(orgId: string, complianceName: string, aiResponseId: string, id: string, aiResponseFileData: any, user: IAuthenticatedUser) {
+    return this.repository.updateAiResponseFile(orgId, complianceName, aiResponseId, id, aiResponseFileData, user);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} organizationComplianceAiResponseFile`;
+  remove(orgId: string, complianceName: string, aiResponseId: string, id: string, user: IAuthenticatedUser) {
+    return this.repository.removeAiResponseFile(orgId, complianceName, aiResponseId, id, user);
   }
 }
