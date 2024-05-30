@@ -35,11 +35,11 @@ export class AppService extends BaseWorker implements OnModuleInit {
     } catch (e) {
       this.logger.error(e.message, e);
       try {
-        this.service = await this.prisma.service_definitions.findUnique({
+        this.service = (await this.prisma.service_definitions.findUnique({
           where: {
             name: pkg.name,
           },
-        });
+        })) as service_definitions;
 
         this.logger.warn('Unable to register service with RabbitMQ, retrieved service definition from database.');
       } catch (e) {
@@ -80,6 +80,10 @@ export class AppService extends BaseWorker implements OnModuleInit {
         name: 'cold-platform-openai',
       },
     });
+
+    if (!service) {
+      throw new NotFoundException('OpenAI Service Definition not found');
+    }
 
     const organization: organizations = parsed.organization;
     const user = parsed.user;
