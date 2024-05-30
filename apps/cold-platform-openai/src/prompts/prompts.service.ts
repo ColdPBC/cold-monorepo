@@ -219,6 +219,7 @@ export class PromptsService extends BaseWorker {
         return this.percent_slider_prompt;
       default: {
         this.logger.warn(`Unknown component ${item.component} found in survey section item.`, item);
+        return '';
         break;
       }
     }
@@ -233,6 +234,7 @@ export class PromptsService extends BaseWorker {
     }
 
     const component_prompt = await this.getComponentPrompt(question);
+
     const sanitized_base = this.base_prompt.replace('{component_prompt}', component_prompt).replace('{context}', context);
 
     /**
