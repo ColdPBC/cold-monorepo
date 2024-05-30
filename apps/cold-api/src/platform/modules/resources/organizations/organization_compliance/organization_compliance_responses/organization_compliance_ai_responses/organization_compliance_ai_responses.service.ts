@@ -1,26 +1,33 @@
 import { Injectable } from '@nestjs/common';
-import { CreateOrganizationComplianceAiResponseDto } from './dto/create-organization_compliance_ai_response.dto';
-import { UpdateOrganizationComplianceAiResponseDto } from './dto/update-organization_compliance_ai_response.dto';
+import { organization_compliance_ai_responses } from '@prisma/client';
+import { BaseWorker, ComplianceAiResponsesRepository, IAuthenticatedUser } from '@coldpbc/nest';
 
 @Injectable()
-export class OrganizationComplianceAiResponsesService {
-  create(createOrganizationComplianceAiResponseDto: CreateOrganizationComplianceAiResponseDto) {
-    return 'This action adds a new organizationComplianceAiResponse';
+export class OrganizationComplianceAiResponsesService extends BaseWorker {
+  constructor(readonly complianceAiResponsesRepository: ComplianceAiResponsesRepository) {
+    super(OrganizationComplianceAiResponsesService.name);
+  }
+  createAiResponse(orgId: string, complianceName: string, responseData: organization_compliance_ai_responses, user: IAuthenticatedUser) {
+    return this.complianceAiResponsesRepository.createAiResponses(orgId, complianceName, responseData, user);
   }
 
-  findAll() {
-    return `This action returns all organizationComplianceAiResponses`;
+  findAllAiResponses(orgId: string, complianceName: string, user: IAuthenticatedUser) {
+    return this.complianceAiResponsesRepository.getAiResponses(orgId, complianceName, user);
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} organizationComplianceAiResponse`;
+  findOneAiResponse(orgId: string, complianceName: string, id: string, user: IAuthenticatedUser) {
+    return this.complianceAiResponsesRepository.getAiResponse(orgId, complianceName, id, user);
   }
 
-  update(id: number, updateOrganizationComplianceAiResponseDto: UpdateOrganizationComplianceAiResponseDto) {
-    return `This action updates a #${id} organizationComplianceAiResponse`;
+  updateAiResponse(orgId: string, complianceName: string, id: string, responseData: organization_compliance_ai_responses, user: IAuthenticatedUser) {
+    return this.complianceAiResponsesRepository.updateAiResponse(orgId, complianceName, id, responseData, user);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} organizationComplianceAiResponse`;
+  removeAllAiResponses(orgId: string, complianceName: string, user: IAuthenticatedUser) {
+    return this.complianceAiResponsesRepository.deleteAiResponses(orgId, complianceName, user);
+  }
+
+  removeAiResponse(orgId: string, complianceName: string, id: string, user: IAuthenticatedUser) {
+    return this.complianceAiResponsesRepository.deleteAiResponse(orgId, complianceName, id, user);
   }
 }
