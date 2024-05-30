@@ -1,6 +1,6 @@
 import { BadRequestException, Global, Injectable, NotFoundException } from '@nestjs/common';
 import { Span } from 'nestjs-ddtrace';
-import { BaseWorker, CacheService, Cuid2Generator, DarklyService, MqttService, PrismaService } from '@coldpbc/nest';
+import { BaseWorker, CacheService, ComplianceSectionsRepository, Cuid2Generator, DarklyService, MqttService, PrismaService } from '@coldpbc/nest';
 import { ComplianceDefinition, OrgCompliance } from './compliance-definitions.schema';
 import { compliance_definitions } from '@prisma/client';
 import { omit } from 'lodash';
@@ -13,7 +13,14 @@ export class ComplianceDefinitionService extends BaseWorker {
   exclude_orgs: Array<{ id: string; name: string; display_name: string }>;
   openAI_definition: any;
 
-  constructor(readonly darkly: DarklyService, readonly prisma: PrismaService, readonly cache: CacheService, readonly mqtt: MqttService, readonly event: EventService) {
+  constructor(
+    readonly darkly: DarklyService,
+    readonly prisma: PrismaService,
+    readonly cache: CacheService,
+    readonly mqtt: MqttService,
+    readonly event: EventService,
+    readonly sectionRepository: ComplianceSectionsRepository,
+  ) {
     super('ComplianceDefinitionService');
   }
 
@@ -197,15 +204,15 @@ export class ComplianceDefinitionService extends BaseWorker {
     }
   }
 
-  async injectSurvey(req, id, survey) {
+  async injectSurvey(req: any, name: string, survey: any) {
     const compliance = await this.prisma.compliance_definitions.findUnique({
       where: {
-        id: id,
+        name: name,
       },
     });
 
     if (!compliance) {
-      throw new NotFoundException(`Compliance with id ${id} does not exist`);
+      throw new NotFoundException(`Compliance with name ${name} does not exist`);
     }
 
     await this.importSurveyStructure(Object.assign({ ...compliance, survey_definition: survey }));
@@ -616,6 +623,9 @@ export class ComplianceDefinitionService extends BaseWorker {
     }
   }
 
+  async findSections(name: string, req: any) {
+    return this.sectionRepository.getSectionListByCompliance(name, req.user);
+  }
   /***
    * This action updates a named compliance definition
    * @param name
@@ -739,6 +749,7 @@ export class ComplianceDefinitionService extends BaseWorker {
     try {
       const def = await this.findOne(name, req, bpc);
 
+      // Delete old Org Compliances first
       compliance = (await this.prisma.organization_compliances_old.findFirst({
         where: {
           organization_id: orgId,
@@ -751,6 +762,20 @@ export class ComplianceDefinitionService extends BaseWorker {
       }
 
       await this.prisma.organization_compliances_old.delete({ where: { id: compliance.id } });
+
+      // Delete new Org Compliance record
+      compliance = (await this.prisma.organization_compliance.findUnique({
+        where: {
+          orgIdCompNameKey: {
+            organization_id: orgId,
+            compliance_definition_name: name,
+          },
+        },
+      })) as unknown as OrgCompliance;
+
+      if (compliance) {
+        await this.prisma.organization_compliance.delete({ where: { id: compliance.id } });
+      }
 
       this.mqtt.publishMQTT('public', {
         swr_key: url,
