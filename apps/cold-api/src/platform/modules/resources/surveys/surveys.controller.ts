@@ -14,6 +14,7 @@ import {
   RolesGuard,
   SurveyDefinitionsEntity,
   SurveyResponseSchema,
+  testOrgIdExample,
   UpdateSurveyDefinitionsDto,
   ZodCategoryResponseDto,
 } from '@coldpbc/nest';
@@ -334,7 +335,7 @@ export class SurveysController extends BaseWorker {
   @ApiParam({
     name: 'orgId',
     required: true,
-    example: '{{test_organization_name}}',
+    example: testOrgIdExample,
     description: 'The id of the organization',
   })
   @ApiParam({
@@ -400,7 +401,7 @@ export class SurveysController extends BaseWorker {
     name: 'orgId',
     required: true,
     type: 'string',
-    example: '{{test_organization_id}}',
+    example: testOrgIdExample,
   })
   @HttpCode(204)
   @Roles(Role.ColdAdmin)
