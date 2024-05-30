@@ -84,6 +84,7 @@ export class OpenAIController extends BaseWorker {
     const assts = await this.app.listAssistants(req.user);
 
     const deleteMe = filter(assts, item => {
+      if (!item.name) return false;
       return !protectedAsst.includes(item.name);
     });
 
