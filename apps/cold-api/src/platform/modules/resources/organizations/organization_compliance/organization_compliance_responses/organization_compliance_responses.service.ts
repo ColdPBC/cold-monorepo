@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { BaseWorker, ComplianceResponsesRepository } from '@coldpbc/nest';
+import { BaseWorker, ComplianceResponsesRepository, IAuthenticatedUser } from '@coldpbc/nest';
 
 @Injectable()
 export class OrganizationComplianceResponsesService extends BaseWorker {
@@ -9,6 +9,10 @@ export class OrganizationComplianceResponsesService extends BaseWorker {
 
   upsert(orgId: string, name: string, sgId: string, sId: string, qId: string, complianceResponseData: any, req: any) {
     return this.repository.upsertComplianceResponse(orgId, name, sgId, sId, qId, req.user, complianceResponseData);
+  }
+
+  findAllByCompliance(orgId: string, name: string, user: IAuthenticatedUser) {
+    return this.repository.getComplianceResponses(orgId, name, user);
   }
 
   findAllBySectionId(orgId: string, name: string, sId: string) {
