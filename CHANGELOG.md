@@ -1,3 +1,10 @@
+# [1.229.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.228.0...v1.229.0) (2024-06-02)
+
+
+### Features
+
+* Conditionally run seeding commands in main.ts based on environment variable ([f44e062](https://github.com/ColdPBC/cold-monorepo/commit/f44e062534a09943d6d15889b6d664094a89d1bc))
+
 # [1.228.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.227.0...v1.228.0) (2024-06-02)
 
 
