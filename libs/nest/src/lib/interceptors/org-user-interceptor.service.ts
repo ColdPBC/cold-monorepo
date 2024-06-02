@@ -19,17 +19,27 @@ export class OrgUserInterceptor implements NestInterceptor {
       let org;
       // has orgId in the request
       if (orgId) {
-        // throw if the user isn't a cold admin and the orgId in the request doesn't match the user's orgId
-        if (!user.isColdAdmin && user.coldclimate_claims.org_id !== orgId) {
-          throw new UnauthorizedException('Invalid organization id provided');
+        const byId = orgId.startsWith('org_');
+        let where;
+
+        if (byId) {
+          where = {
+            id: orgId,
+          };
+        } else {
+          where = {
+            name: orgId,
+          };
         }
 
-        // since the user is a cold:admin, get the org from the database matching the orgId
         org = await prisma.organizations.findUnique({
-          where: {
-            id: orgId,
-          },
+          where: where,
         });
+
+        // throw if the user isn't a cold admin and the orgId in the request doesn't match the user's orgId
+        if (!user.isColdAdmin && user.coldclimate_claims.org_id !== org.id) {
+          throw new UnauthorizedException('Invalid organization id provided');
+        }
 
         // Add orgId to the request object
         request.orgId = org?.id;
@@ -53,7 +63,7 @@ export class OrgUserInterceptor implements NestInterceptor {
 
       // check that user org matches orgId specified in the request or that the user is a cold admin
       if (!org) {
-        throw new UnauthorizedException('Invalid organization id provided');
+        throw new UnauthorizedException('Invalid organization id or name provided');
       }
 
       request.organization = org;
