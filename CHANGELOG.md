@@ -1,3 +1,10 @@
+# [1.230.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.229.0...v1.230.0) (2024-06-02)
+
+
+### Features
+
+* Added Prisma extension for soft delete ([c05cd7a](https://github.com/ColdPBC/cold-monorepo/commit/c05cd7a9ef5baf693a4849cf8e0c48a3bc576951))
+
 # [1.229.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.228.0...v1.229.0) (2024-06-02)
 
 
