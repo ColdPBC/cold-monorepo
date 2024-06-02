@@ -119,6 +119,19 @@ export class OrganizationComplianceResponsesController {
     //return this.organizationComplianceResponsesService.findOne();
   }
 
+  @Get('responses')
+  @ApiParam({
+    name: 'sId',
+    required: true,
+    description: 'Section Id',
+    type: 'string',
+    example: 'cs_', // Example value
+  })
+  @Roles(...coldAdminOnly)
+  findAllComplianceResponses(@Param('orgId') orgId: string, @Param('name') name: string, @Req() req: any) {
+    return this.organizationComplianceResponsesService.findAllByCompliance(orgId, name, req.user);
+  }
+
   @Get('questions/:qId/responses')
   @ApiParam({
     name: 'qId',
