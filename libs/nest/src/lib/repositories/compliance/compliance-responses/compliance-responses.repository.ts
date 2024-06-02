@@ -35,8 +35,16 @@ export class ComplianceResponsesRepository extends BaseWorker {
     let organization, compliance;
 
     try {
+      let where;
+      const byId = orgId.startsWith('org_');
+      if (byId) {
+        where = { id: orgId };
+      } else {
+        where = { name: orgId };
+      }
+
       organization = await this.prisma.extended.organizations.findUnique({
-        where: { id: orgId },
+        where: where,
       });
       if (!organization) {
         throw new NotFoundException(`Organization ${orgId} not found`);
@@ -45,7 +53,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
       compliance = await this.prisma.extended.organization_compliance.findUnique({
         where: {
           orgIdCompNameKey: {
-            organization_id: orgId,
+            organization_id: organization.id,
             compliance_definition_name,
           },
         },
@@ -158,9 +166,17 @@ export class ComplianceResponsesRepository extends BaseWorker {
   }
 
   async getComplianceResponses(orgId: string, compliance_definition_name: string, user: IAuthenticatedUser) {
+    let where;
+    const byId = orgId.startsWith('org_');
+    if (byId) {
+      where = { id: orgId };
+    } else {
+      where = { name: orgId };
+    }
+
     try {
       const organization = await this.prisma.extended.organizations.findUnique({
-        where: { name: orgId },
+        where: where,
         select: {
           id: true,
           name: true,
@@ -186,7 +202,6 @@ export class ComplianceResponsesRepository extends BaseWorker {
               },
               compliance_responses: {
                 where: {
-                  organization_id: orgId,
                   compliance_definition_name,
                 },
                 select: {
@@ -263,8 +278,16 @@ export class ComplianceResponsesRepository extends BaseWorker {
 
   async getComplianceResponseById(orgId: string, compliance_definition_name: string, user: IAuthenticatedUser, id: number) {
     try {
+      let where;
+      const byId = orgId.startsWith('org_');
+      if (byId) {
+        where = { id: orgId };
+      } else {
+        where = { name: orgId };
+      }
+
       const organization = await this.prisma.extended.organizations.findUnique({
-        where: { id: orgId },
+        where: where,
         select: {
           id: true,
           name: true,
