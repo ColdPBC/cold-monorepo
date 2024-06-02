@@ -20,9 +20,12 @@ export const seedDB = async () => {
   await seedUtilities();
   await seedScopes();
   await seedComplianceDefinitions();
-  await seedComplianceModels();
-  await buildQuestionDependencyChains();
-  await buildSectionDependencyChains();
+  if (process.env['LOCAL_SERVICE'] === 'seed') {
+    await seedComplianceModels();
+    await buildQuestionDependencyChains();
+    await buildSectionDependencyChains();
+  }
+
   /**
    * Repeat the pattern above for any other tables you want to seed.
    */
