@@ -1,3 +1,11 @@
+# [1.231.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.230.0...v1.231.0) (2024-06-03)
+
+
+### Features
+
+* Add async cache rebuild methods in surveys service ([4f1b91b](https://github.com/ColdPBC/cold-monorepo/commit/4f1b91bcfc19f7d71440976e1bd8c3652395eff8))
+* Update importSurveyStructure method in ComplianceDefinitions service ([13294e8](https://github.com/ColdPBC/cold-monorepo/commit/13294e8b3766f0ad51d3d0a5bbdf509c16f2ee9f))
+
 # [1.230.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.229.0...v1.230.0) (2024-06-02)
 
 
