@@ -69,7 +69,7 @@ export class ComplianceQuestionsRepository extends BaseWorker {
                           ELSE FALSE END                                                   AS user_answered,
                         CASE WHEN CAST(COUNT(ocqb.id) as INT) > 1 THEN TRUE ELSE FALSE END AS bookmarked
                  FROM organization_compliance oc
-                        JOIN compliance_responses cr
+                        LEFT JOIN compliance_responses cr
                              ON oc.id = cr.organization_compliance_id
                         JOIN compliance_sections cs ON cr.compliance_section_id = cs.id
                         LEFT JOIN organization_compliance_ai_responses ocair
@@ -82,15 +82,13 @@ export class ComplianceQuestionsRepository extends BaseWorker {
                                   ON cr.compliance_question_id = ocqb.compliance_question_id
                         LEFT JOIN compliance_question_dependency_chains cdc ON cr.compliance_question_id = cdc.compliance_question_id
                  WHERE
-                   cq.deleted = false AND
-                   cr.deleted = false AND
-                   ocair.deleted = false AND
-                   ocr.deleted = false AND
-                   cdc.deleted = false AND
-                   cs.deleted = false AND
+                   cq.deleted = FALSE AND
+                   cr.deleted = FALSE AND
+                   ocair.deleted = FALSE AND
+                   cs.deleted = FALSE AND
                    cr.organization_id = ${organization_id} AND
                    cs.id = ${compliance_section_id}
-                 GROUP BY cq.id, cr.organization_id, ocair.answer, ocr.value, cdc.dependency_chain, cr.compliance_definition_name`,
+                 GROUP BY cq.id, cr.organization_id, ocair.answer, ocr.value, cdc.dependency_chain, cr.compliance_definition_name, cs.id;`,
     )) as any;
 
     if (!questions.length) {
