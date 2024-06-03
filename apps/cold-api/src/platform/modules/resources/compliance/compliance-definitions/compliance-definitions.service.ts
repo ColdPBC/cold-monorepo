@@ -398,7 +398,7 @@ export class ComplianceDefinitionService extends BaseWorker {
         }
       }
 
-      return this.prisma.compliance_definitions.findUnique({
+      const definition = this.prisma.compliance_definitions.findUnique({
         where: {
           id: compliance.id,
         },
@@ -441,7 +441,15 @@ export class ComplianceDefinitionService extends BaseWorker {
           },
         },
       });
+
+      if (!definition) {
+        throw new NotFoundException(`Unable to find compliance definition with name: ${compliance.name}`);
+      }
+
+      return definition;
     }
+
+    throw new NotFoundException(`Survey definition not found for ${compliance.name}`);
   }
 
   /***
@@ -459,13 +467,13 @@ export class ComplianceDefinitionService extends BaseWorker {
 
       const definition = await this.findOne(name, req, bpc);
 
-      const data = {
+      const data: any = {
         organization_id: orgId,
         compliance_id: definition.id,
       };
 
       if (req.body.surveys_override) {
-        data['surveys_override'] = req.body.surveys_override;
+        data.surveys_override = req.body.surveys_override;
       }
 
       const compliance = await this.prisma.organization_compliance.upsert({
@@ -592,9 +600,9 @@ export class ComplianceDefinitionService extends BaseWorker {
       return [];
     }
 
-    orgCompliances.map((compliance: OrgCompliance) => {
-      if (compliance['surveys_override']) {
-        compliance['compliance_definition'].surveys = compliance['surveys_override'];
+    orgCompliances.map((compliance: any) => {
+      if (compliance.surveys_override) {
+        compliance.compliance_definition.surveys = compliance.surveys_override;
       }
     });
     await this.cache.set(`compliance_definitions:org:${orgId}`, orgCompliances, { update: true });
