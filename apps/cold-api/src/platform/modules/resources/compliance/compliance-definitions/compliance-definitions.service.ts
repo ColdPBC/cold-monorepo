@@ -275,8 +275,22 @@ export class ComplianceDefinitionService extends BaseWorker {
   }
 
   async importSurveyStructure(compliance: any) {
-    if (compliance?.survey_definition?.sections) {
-      const survey = compliance.survey_definition;
+    let survey: any;
+    if (!compliance.survey_definition && compliance.surveys.length > 0) {
+      survey = await this.prisma.survey_definitions.findUnique({
+        where: {
+          name: compliance.surveys[0],
+        },
+      });
+
+      if (!survey) {
+        this.logger.error(`Survey ${compliance.surveys[0]} not found`);
+      }
+    } else if (compliance?.survey_definition?.sections) {
+      survey = compliance.survey_definition;
+    }
+
+    if (survey) {
       for (const [key, value] of Object.entries(survey.sections)) {
         const sectionKey = key;
         const sectionValue: any = value;
