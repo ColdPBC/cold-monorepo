@@ -1,5 +1,5 @@
 import { ConflictException, Injectable, OnModuleInit } from '@nestjs/common';
-import { AuthenticatedUser, BaseWorker, CacheService, Cuid2Generator, DarklyService, PrismaService } from '@coldpbc/nest';
+import { AuthenticatedUser, BaseWorker, CacheService, Cuid2Generator, DarklyService, GuidPrefixes, PrismaService } from '@coldpbc/nest';
 import { Pinecone, PineconeRecord, ScoredPineconeRecord } from '@pinecone-database/pinecone';
 import { ConfigService } from '@nestjs/config';
 import { Document } from '@langchain/core/documents';
@@ -20,7 +20,7 @@ export type PineconeMetadata = {
 export class PineconeService extends BaseWorker implements OnModuleInit {
   public pinecone: Pinecone;
   public openai: OpenAI;
-  idGenerator = new Cuid2Generator('vector');
+  idGenerator = new Cuid2Generator(GuidPrefixes.Vector);
 
   constructor(
     readonly config: ConfigService,
@@ -379,7 +379,6 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
       if (!(await this.darkly.getBooleanFlag('config-enable-pinecone-injestion'))) {
         const message = 'Pinecone ingestion is disabled.  To enable, turn on targeting for `config-enable-pinecone-injestion` flag in launch darkly';
         this.logger.warn(message);
-        return message;
       }
 
       const details = indexDetails || (await this.getIndexDetails(organization.name));

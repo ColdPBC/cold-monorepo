@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Req, UseFilters, UseGuards } from '@nestjs/common';
 import { OrganizationComplianceAiResponseFilesService } from './organization_compliance_ai_response_files.service';
-import { HttpExceptionFilter, JwtAuthGuard, Roles, RolesGuard, testOrgIdExample } from '@coldpbc/nest';
+import { HttpExceptionFilter, JwtAuthGuard, Roles, RolesGuard } from '@coldpbc/nest';
 import { allRoles, coldAdminOnly } from '../../../../_global/global.params';
 import { ApiParam, ApiTags } from '@nestjs/swagger';
 
@@ -16,7 +16,7 @@ export class OrganizationComplianceAiResponseFilesController {
     name: 'orgId',
     required: true,
     type: 'string',
-    example: testOrgIdExample,
+    example: '{{test_organization_id}}',
   })
   @ApiParam({
     name: 'name',
@@ -41,7 +41,7 @@ export class OrganizationComplianceAiResponseFilesController {
     name: 'orgId',
     required: true,
     type: 'string',
-    example: testOrgIdExample,
+    example: '{{test_organization_id}}',
   })
   @ApiParam({
     name: 'name',
@@ -66,7 +66,7 @@ export class OrganizationComplianceAiResponseFilesController {
     name: 'orgId',
     required: true,
     type: 'string',
-    example: testOrgIdExample,
+    example: '{{test_organization_id}}',
   })
   @ApiParam({
     name: 'name',
@@ -98,7 +98,7 @@ export class OrganizationComplianceAiResponseFilesController {
     name: 'orgId',
     required: true,
     type: 'string',
-    example: testOrgIdExample,
+    example: '{{test_organization_id}}',
   })
   @ApiParam({
     name: 'name',
@@ -137,7 +137,7 @@ export class OrganizationComplianceAiResponseFilesController {
     name: 'orgId',
     required: true,
     type: 'string',
-    example: testOrgIdExample,
+    example: '{{test_organization_id}}',
   })
   @ApiParam({
     name: 'name',

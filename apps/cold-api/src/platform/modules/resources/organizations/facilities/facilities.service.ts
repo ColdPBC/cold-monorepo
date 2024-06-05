@@ -1,17 +1,12 @@
-import { BaseWorker, Cuid2Generator, MqttService, organization_facilities, PrismaService } from '@coldpbc/nest';
+import { BaseWorker, Cuid2Generator, GuidPrefixes, MqttService, organization_facilities, PrismaService } from '@coldpbc/nest';
 import { Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
 
 @Injectable()
 export class FacilitiesService extends BaseWorker {
-  cuid2 = new Cuid2Generator().setPrefix('ofac');
+  cuid2 = new Cuid2Generator(GuidPrefixes.OrganizationFacility);
 
   constructor(readonly prisma: PrismaService, readonly mqtt: MqttService) {
     super(FacilitiesService.name);
-
-    if (!this.cuid2.prefix) {
-      this.logger.warn('Cuid2 prefix not set, setting to "ofac"');
-      this.cuid2 = this.cuid2.setPrefix('ofac');
-    }
   }
 
   async getOrganizationFacilities(req: any, orgId: string): Promise<Partial<organization_facilities>[]> {
@@ -60,7 +55,7 @@ export class FacilitiesService extends BaseWorker {
 
       const created = (await this.prisma.extended.organization_facilities.create({
         data: {
-          id: this.cuid2.setId().scopedId,
+          id: this.cuid2.generate().scopedId,
           name: body.name || body.address,
           address: body.address,
           address_line_2: body.address_line_2,

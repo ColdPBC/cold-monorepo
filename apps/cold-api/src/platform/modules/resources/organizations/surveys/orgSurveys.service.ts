@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
-import { AuthenticatedUser, BaseWorker, Cuid2Generator, PrismaService } from '@coldpbc/nest';
+import { AuthenticatedUser, BaseWorker, Cuid2Generator, GuidPrefixes, PrismaService } from '@coldpbc/nest';
 import { survey_status_types } from '@prisma/client';
 import { pick } from 'lodash';
 
@@ -88,7 +88,7 @@ export class OrgSurveysService extends BaseWorker {
 
       surveyData = await this.prisma.survey_data.create({
         data: {
-          id: new Cuid2Generator('sdata').scopedId,
+          id: new Cuid2Generator(GuidPrefixes.SurveyData).scopedId,
           survey_definition_id: surveyDef.id,
           organization_id: orgId,
           data: {},
@@ -101,7 +101,7 @@ export class OrgSurveysService extends BaseWorker {
     try {
       await this.prisma.survey_status.create({
         data: {
-          id: new Cuid2Generator('sstatus').scopedId,
+          id: new Cuid2Generator(GuidPrefixes.SurveyStatus).scopedId,
           survey_id: surveyId,
           survey_name: surveyName,
           survey_data_id: surveyData.id,
