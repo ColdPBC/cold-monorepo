@@ -1,3 +1,10 @@
+# [1.233.0-cold-810.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.232.0...v1.233.0-cold-810.1) (2024-06-05)
+
+
+### Features
+
+* Implement compliance scoring and assessment system ([28bf205](https://github.com/ColdPBC/cold-monorepo/commit/28bf205d6fe2ce6b9a2906403f50fe94515279ad))
+
 # [1.232.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.231.0...v1.232.0) (2024-06-05)
 
 
