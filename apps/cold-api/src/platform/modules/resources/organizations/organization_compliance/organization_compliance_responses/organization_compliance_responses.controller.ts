@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Put, Req, UseFilters, UseGuards } from '@nestjs/common';
 import { OrganizationComplianceResponsesService } from './organization_compliance_responses.service';
-import { coldAdminOnly, allRoles, HttpExceptionFilter, JwtAuthGuard, Roles, RolesGuard } from '@coldpbc/nest';
+import { coldAdminOnly, HttpExceptionFilter, JwtAuthGuard, Roles, RolesGuard } from '@coldpbc/nest';
 import { ApiParam, ApiTags } from '@nestjs/swagger';
 import { compliance_responses } from '@prisma/client';
 
@@ -59,40 +59,6 @@ export class OrganizationComplianceResponsesController {
     return this.organizationComplianceResponsesService.upsert(orgId, name, sgId, sId, qId, compliance_response, req.user);
   }
 
-  @Get('section_groups/:sgId/sections/:sId/questions/:qId/responses')
-  @ApiParam({
-    name: 'sgId',
-    required: true,
-    description: 'Section Group Id',
-    type: 'string',
-    example: 'csg_', // Example value
-  })
-  @ApiParam({
-    name: 'sId',
-    required: true,
-    description: 'Section Id',
-    type: 'string',
-    example: 'cs_', // Example value
-  })
-  @ApiParam({
-    name: 'qId',
-    required: true,
-    description: 'Question Id',
-    type: 'string',
-    example: 'cq_', // Example value
-  })
-  @Roles(...allRoles)
-  findOrgComplianceResponse(
-    @Param('orgId') orgId: string,
-    @Param('name') name: string,
-    @Param('sgId') sgId: string,
-    @Param('sId') sId: string,
-    @Param('qId') qId: string,
-    @Req() req: any,
-  ) {
-    return this.organizationComplianceResponsesService.findAll(orgId, name, sgId, sId, qId, req.user);
-  }
-
   @Get('section_groups/:sgId/responses')
   @ApiParam({
     name: 'sgId',
@@ -102,47 +68,34 @@ export class OrganizationComplianceResponsesController {
     example: 'csg_', // Example value
   })
   @Roles(...coldAdminOnly)
-  findALlByGroupId(@Param('orgId') orgId: string, @Param('name') name: string, @Param('sgId') sgId: string) {
-    // return this.organizationComplianceResponsesService.findAll(id);
+  findALlByGroupId(@Param('orgId') orgId: string, @Param('name') name: string, @Param('sgId') sgId: string, @Req() req: any) {
+    return this.organizationComplianceResponsesService.findAllByGroupId(orgId, name, sgId, req.user);
   }
 
-  @Get('sections/:sId/responses')
+  @Get('section_groups/:csgId/sections/:csId/responses')
   @ApiParam({
-    name: 'sId',
+    name: 'csgId',
+    required: true,
+    description: 'Section Group Id',
+    type: 'string',
+    example: 'csg_', // Example value
+  })
+  @ApiParam({
+    name: 'csId',
     required: true,
     description: 'Section Id',
     type: 'string',
     example: 'cs_', // Example value
   })
   @Roles(...coldAdminOnly)
-  findAllBySectionId(@Param('orgId') orgId: string, @Param('name') name: string, @Param('sId') sId: string) {
-    //return this.organizationComplianceResponsesService.findOne();
+  findAllBySectionId(@Param('orgId') orgId: string, @Param('name') name: string, @Param('csgId') csgId: string, @Param('csId') csId: string, @Req() req: any) {
+    return this.organizationComplianceResponsesService.findAllBySectionId(orgId, name, csgId, csId, req.user);
   }
 
   @Get('responses')
-  @ApiParam({
-    name: 'sId',
-    required: true,
-    description: 'Section Id',
-    type: 'string',
-    example: 'cs_', // Example value
-  })
   @Roles(...coldAdminOnly)
   findAllComplianceResponses(@Param('orgId') orgId: string, @Param('name') name: string, @Req() req: any) {
     return this.organizationComplianceResponsesService.findAllByCompliance(orgId, name, req.user);
-  }
-
-  @Get('questions/:qId/responses')
-  @ApiParam({
-    name: 'qId',
-    required: true,
-    description: 'Question Id',
-    type: 'string',
-    example: 'cq_', // Example value
-  })
-  @Roles(...coldAdminOnly)
-  findByQuestionId(@Param('orgId') orgId: string, @Param('name') name: string, @Param('qId') id: string) {
-    //return this.organizationComplianceResponsesService.findOne(+id);
   }
 
   @Get('responses/:id')

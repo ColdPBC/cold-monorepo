@@ -129,20 +129,20 @@ export class ScoringService extends BaseWorker {
         }
 
         // Set the score for the question
-        question.max_score = maxScore || this.getTopScore(question.rubric);
         question.score = score;
         question.ai_score = aiScore;
+        question.max_score = maxScore || this.getTopScore(question.rubric);
       } else {
         // If the question has no responses, set the ai_score & score to 0
-        question.max_score = question.rubric.max_score || this.getTopScore(question.rubric);
         question.score = 0;
         question.ai_score = 0;
+        question.max_score = question.rubric.max_score || this.getTopScore(question.rubric);
       }
     } else {
       // If the question has no rubric or score map, set the score to
-      question.max_score = 0;
       question.score = 0;
       question.ai_score = 0;
+      question.max_score = 0;
     }
 
     // return the scored survey
