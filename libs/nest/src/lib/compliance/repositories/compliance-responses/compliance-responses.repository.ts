@@ -4,13 +4,11 @@ import { PrismaService } from '../../../prisma';
 import { organization_compliance, organization_compliance_ai_responses, organization_compliance_responses, organizations } from '@prisma/client';
 import { Cuid2Generator, GuidPrefixes } from '../../../utility';
 import { IAuthenticatedUser } from '../../../primitives';
-//import { ScoringService } from '../../scoring';
+import { ScoringService } from '../../scoring';
 
 @Injectable()
 export class ComplianceResponsesRepository extends BaseWorker {
-  constructor(
-    readonly prisma: PrismaService, //readonly scoringService: ScoringService
-  ) {
+  constructor(readonly prisma: PrismaService, readonly scoringService: ScoringService) {
     super(ComplianceResponsesRepository.name);
   }
 
@@ -275,8 +273,8 @@ export class ComplianceResponsesRepository extends BaseWorker {
 
       if (Array.isArray(organization?.organization_compliance) && organization?.organization_compliance.length > 0) {
         const compliance_response = organization?.organization_compliance[0];
-        //const response = await this.scoringService.scoreComplianceResponse(compliance_response?.compliance_definition);
-        this.logger.log(`Scored ${compliance_definition_name} Compliance `, compliance_response);
+        const response = await this.scoringService.scoreComplianceResponse(compliance_response?.compliance_definition);
+        this.logger.log(`Scored ${compliance_definition_name} Compliance `, response);
       }
       return { ...organization };
     } catch (error) {
