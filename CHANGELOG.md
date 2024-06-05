@@ -3,6 +3,14 @@
 
 ### Features
 
+* Add methods to score compliance questions ([f300469](https://github.com/ColdPBC/cold-monorepo/commit/f300469b1c832b67b6100beef80a5a6f21c8e10a))
+* Implement compliance scoring and assessment system ([28bf205](https://github.com/ColdPBC/cold-monorepo/commit/28bf205d6fe2ce6b9a2906403f50fe94515279ad))
+
+# [1.233.0-cold-810.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.232.0...v1.233.0-cold-810.1) (2024-06-05)
+
+
+### Features
+
 * Implement compliance scoring and assessment system ([28bf205](https://github.com/ColdPBC/cold-monorepo/commit/28bf205d6fe2ce6b9a2906403f50fe94515279ad))
 
 # [1.232.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.231.0...v1.232.0) (2024-06-05)
