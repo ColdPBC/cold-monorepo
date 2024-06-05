@@ -2,8 +2,8 @@ import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { BaseWorker } from '../../../worker';
 import { PrismaService } from '../../../prisma';
 import { ComplianceSectionsExtendedDto, ComplianceSectionsRepository } from '../compliance-sections';
-import { Cuid2Generator } from '../../../utility';
-import { compliance_section_groupsSchema, compliance_section_groups } from '../../../../validation/generated/modelSchema/compliance_section_groupsSchema';
+import { Cuid2Generator, GuidPrefixes } from '../../../utility';
+import { compliance_section_groups, compliance_section_groupsSchema } from '../../../../validation/generated/modelSchema/compliance_section_groupsSchema';
 import { ComplianceSectionGroupsExtendedDto } from './dto';
 
 /**
@@ -36,7 +36,7 @@ export class ComplianceSectionGroupsRepository extends BaseWorker {
    */
   async createSectionGroup(sectionGroup: ComplianceSectionGroupsExtendedDto) {
     try {
-      sectionGroup.id = new Cuid2Generator('csg').scopedId;
+      sectionGroup.id = new Cuid2Generator(GuidPrefixes.SectionGroup).scopedId;
 
       const data = compliance_section_groupsSchema
         .partial({

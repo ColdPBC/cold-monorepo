@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { BaseWorker } from '../../../worker';
-import { Cuid2Generator } from '../../../utility';
+import { Cuid2Generator, GuidPrefixes } from '../../../utility';
 import { PrismaService } from '../../../prisma';
 import { IAuthenticatedUser } from '../../../primitives';
 import { OrganizationComplianceRepository } from '../organization-compliance';
@@ -58,7 +58,7 @@ export class OrganizationComplianceStatusesRepository extends BaseWorker {
     return this.prisma.extended.organization_compliance_statuses.create({
       // @ts-expect-error - This is a valid type
       data: {
-        id: new Cuid2Generator('ocs').scopedId,
+        id: new Cuid2Generator(GuidPrefixes.OrganizationComplianceStatus).scopedId,
         type,
         email: user.coldclimate_claims.email,
       },

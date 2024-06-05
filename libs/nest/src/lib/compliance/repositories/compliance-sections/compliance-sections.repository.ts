@@ -6,7 +6,7 @@ import { compliance_sections } from '@prisma/client';
 import { Dependency } from './compliance-sections.types';
 import { BaseWorker } from '../../../worker';
 import { IAuthenticatedUser } from '../../../primitives';
-import { Cuid2Generator } from '../../../utility';
+import { Cuid2Generator, GuidPrefixes } from '../../../utility';
 import { ComplianceSectionsExtendedDto } from './dto';
 import compliance_sectionsSchema from 'libs/nest/src/validation/generated/modelSchema/compliance_sectionsSchema';
 
@@ -248,7 +248,7 @@ export class ComplianceSectionsRepository extends BaseWorker implements OnModule
     try {
       return this.prisma.extended.compliance_sections.create({
         data: {
-          id: new Cuid2Generator('cs').scopedId,
+          id: new Cuid2Generator(GuidPrefixes.ComplianceSection).scopedId,
           ...data,
         },
       });

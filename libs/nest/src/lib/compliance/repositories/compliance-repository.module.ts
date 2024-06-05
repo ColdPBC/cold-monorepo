@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { PrismaModule, PrismaService } from '../../prisma';
+import { PrismaModule } from '../../prisma';
 
 import { CacheService, ColdCacheModule } from '../../cache';
 import { ComplianceSectionsCacheRepository, ComplianceSectionsRepository } from './compliance-sections';
@@ -10,6 +10,7 @@ import { ComplianceAiResponsesRepository } from './compliance-ai-responses';
 import { ComplianceDefinitionsRepository } from './compliance-definitions';
 import { OrganizationComplianceRepository } from './organization-compliance';
 import { OrganizationComplianceStatusesRepository } from './organization-compliance-statuses';
+import { ScoringService } from '../scoring';
 
 @Module({
   imports: [PrismaModule, ColdCacheModule.forRootAsync()],
@@ -24,6 +25,7 @@ import { OrganizationComplianceStatusesRepository } from './organization-complia
     ComplianceDefinitionsRepository,
     OrganizationComplianceRepository,
     OrganizationComplianceStatusesRepository,
+    ScoringService,
   ],
   exports: [
     CacheService,

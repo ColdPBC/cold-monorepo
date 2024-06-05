@@ -3,7 +3,7 @@ import { BaseWorker } from '../../../worker';
 import { PrismaService } from '../../../prisma';
 import { compliance_questions, Prisma } from '@prisma/client';
 import { difference, sumBy, unset } from 'lodash';
-import { Cuid2Generator } from '../../../utility';
+import { Cuid2Generator, GuidPrefixes } from '../../../utility';
 import { ComplianceSectionsCacheRepository } from '../compliance-sections';
 
 interface Question {
@@ -11,6 +11,8 @@ interface Question {
   prompt: string;
   order: number;
   key: string;
+  rubric: any | null;
+  options: any[] | null;
   organization_id: string;
   ai_answer: boolean | null;
   user_answer: boolean | null;
@@ -39,12 +41,11 @@ export class ComplianceQuestionsRepository extends BaseWorker {
 
   /**
    * Retrieves a list of questions with responses for a given compliance section.
-   *
-   * @param payload - The payload containing the compliance section ID.
-   * @return {Promise<any>} - A promise that resolves to the list of questions.
+   * @param compliance_section_id
+   * @param organization_id
    * @param filter
    */
-  async getFilteredQuestionList({ compliance_section_id, organization_id }, filter?: boolean): Promise<any> {
+  async getFilteredQuestionList({ compliance_section_id, organization_id }, filter?: boolean) {
     const questions = (await this.prisma.$queryRaw(
       Prisma.sql`SELECT cq.id,
                         cq.prompt,
@@ -253,7 +254,7 @@ export class ComplianceQuestionsRepository extends BaseWorker {
    */
   async createQuestions(questions: compliance_questions[]): Promise<Prisma.BatchPayload> {
     try {
-      questions.forEach(q => (q.id = new Cuid2Generator('cq').scopedId));
+      questions.forEach(q => (q.id = new Cuid2Generator(GuidPrefixes.ComplianceQuestion).scopedId));
 
       const createdQuestions = await this.prisma.extended.compliance_questions.createMany({
         data: questions as any,
@@ -276,7 +277,7 @@ export class ComplianceQuestionsRepository extends BaseWorker {
    */
   async createQuestion(question: compliance_questions): Promise<compliance_questions> {
     try {
-      question.id = new Cuid2Generator('cq').scopedId;
+      question.id = new Cuid2Generator(GuidPrefixes.ComplianceQuestion).scopedId;
       const created = await this.prisma.extended.compliance_questions.create({
         data: {
           ...(question as any),
