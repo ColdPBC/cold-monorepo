@@ -1,3 +1,10 @@
+# [1.232.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.231.0...v1.232.0) (2024-06-05)
+
+
+### Features
+
+* Updated code to generate CUID2 using GuidPrefixes enum ([19d8dc7](https://github.com/ColdPBC/cold-monorepo/commit/19d8dc73d20cce751e3abceb2eb1fba035a9ff40))
+
 # [1.231.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.230.0...v1.231.0) (2024-06-03)
 
 
