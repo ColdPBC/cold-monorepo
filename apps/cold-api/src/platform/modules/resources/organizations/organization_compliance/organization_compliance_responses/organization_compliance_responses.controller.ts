@@ -6,7 +6,7 @@ import { compliance_responses } from '@prisma/client';
 
 @UseGuards(JwtAuthGuard, RolesGuard)
 @UseFilters(new HttpExceptionFilter(OrganizationComplianceResponsesController.name))
-@ApiTags('Organization Compliance Response')
+@ApiTags('Organizations', 'Compliance', 'Compliance Responses')
 @ApiParam({
   name: 'orgId',
   required: true,
@@ -19,7 +19,7 @@ import { compliance_responses } from '@prisma/client';
   type: 'string',
   example: 'b_corp_2024',
 })
-@Controller('organizations/:orgId/compliance/:name')
+@Controller('compliance/:name/organizations/:orgId')
 export class OrganizationComplianceResponsesController {
   constructor(private readonly organizationComplianceResponsesService: OrganizationComplianceResponsesService) {}
 
@@ -72,7 +72,7 @@ export class OrganizationComplianceResponsesController {
     return this.organizationComplianceResponsesService.findAllByGroupId(orgId, name, sgId, req.user);
   }
 
-  @Get('section_groups/:csgId/sections/:csId/responses')
+  @Get('section_groups/:sgId/sections/:csId/responses')
   @ApiParam({
     name: 'csgId',
     required: true,
@@ -81,14 +81,14 @@ export class OrganizationComplianceResponsesController {
     example: 'csg_', // Example value
   })
   @ApiParam({
-    name: 'csId',
+    name: 'sId',
     required: true,
     description: 'Section Id',
     type: 'string',
     example: 'cs_', // Example value
   })
   @Roles(...coldAdminOnly)
-  findAllBySectionId(@Param('orgId') orgId: string, @Param('name') name: string, @Param('csgId') csgId: string, @Param('csId') csId: string, @Req() req: any) {
+  findAllBySectionId(@Param('orgId') orgId: string, @Param('name') name: string, @Param('sgId') csgId: string, @Param('sId') csId: string, @Req() req: any) {
     return this.organizationComplianceResponsesService.findAllBySectionId(orgId, name, csgId, csId, req.user);
   }
 
