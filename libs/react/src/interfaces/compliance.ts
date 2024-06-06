@@ -103,3 +103,24 @@ export type CurrentAIStatusSection = {
   section: string;
   questions: string[];
 };
+
+export type QuestionnaireQuestion = {
+  id: string;
+  number: number;
+  prompt: string;
+  bookmarked: boolean;
+  ai_answered: boolean;
+  user_answered: boolean;
+  not_started: boolean;
+  answer?: any;
+  options: string[];
+  tooltip?: string;
+  component: string;
+  placeholder: string;
+  addtional_context?: QuestionnaireQuestion;
+  ai_response?: {
+    justification?: string;
+    answer?: string | boolean | number | Array<string>;
+  };
+  isAdditional?: boolean;
+};

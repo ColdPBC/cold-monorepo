@@ -1,4 +1,5 @@
 import { Compliance, OrgCompliance } from '@coldpbc/interfaces';
+import { ComplianceProgressStatus } from '@coldpbc/enums';
 
 export function getComplianceMock(): Compliance[] {
   return [
@@ -438,6 +439,385 @@ export function getAssessmentsComplianceMock(): OrgCompliance[] {
       updated_at: '2020-03-03T23:50:31.000Z',
       organization: {},
       compliance_definition: getComplianceMockByName('b_corp_2024'),
+    },
+  ];
+}
+
+export function getQuestionnaireSidebarComplianceMock() {
+  return [
+    {
+      name: 'Practices',
+      sections: [
+        {
+          name: 'Brand Information',
+          questions: [
+            {
+              id: 'question_1',
+              prompt: 'What is your brand name?',
+              order: 1,
+              status: ComplianceProgressStatus.user_answered,
+            },
+            {
+              id: 'question_2',
+              prompt: 'What is your brand logo?',
+              order: 2,
+              status: ComplianceProgressStatus.user_answered,
+            },
+            {
+              id: 'question_3',
+              prompt: 'What is your brand tagline?',
+              order: 3,
+              status: ComplianceProgressStatus.bookmarked,
+            },
+            {
+              id: 'question_4',
+              prompt: 'What is your brand name?',
+              order: 4,
+              status: ComplianceProgressStatus.not_started,
+            },
+            {
+              id: 'question_5',
+              prompt: 'What is your brand logo?',
+              order: 5,
+              status: ComplianceProgressStatus.ai_answered,
+            },
+            {
+              id: 'question_6',
+              prompt: 'What is your brand tagline?',
+              order: 6,
+              status: ComplianceProgressStatus.ai_answered,
+            },
+            {
+              id: 'question_7',
+              prompt: 'What is your brand name?',
+              order: 7,
+              status: ComplianceProgressStatus.not_started,
+            },
+            {
+              id: 'question_8',
+              prompt: 'What is your brand logo?',
+              order: 8,
+              status: ComplianceProgressStatus.not_started,
+            },
+            {
+              id: 'question_9',
+              prompt: 'What is your brand tagline?',
+              order: 9,
+              status: ComplianceProgressStatus.not_started,
+            },
+            {
+              id: 'question_10',
+              prompt: 'What is your brand name?',
+              order: 10,
+              status: ComplianceProgressStatus.not_started,
+            },
+            {
+              id: 'question_11',
+              prompt: 'What is your brand logo?',
+              order: 11,
+              status: ComplianceProgressStatus.not_started,
+            },
+            {
+              id: 'question_12',
+              prompt: 'What is your brand tagline?',
+              order: 12,
+              status: ComplianceProgressStatus.bookmarked,
+            },
+          ],
+        },
+        {
+          name: 'Manufacturing Code of Conduct',
+          questions: [
+            // 11 questions
+            {
+              id: 'question_13',
+              prompt: 'What is your brand name?',
+              order: 1,
+              status: ComplianceProgressStatus.not_started,
+            },
+            {
+              id: 'question_14',
+              prompt: 'What is your brand logo?',
+              order: 2,
+              status: ComplianceProgressStatus.not_started,
+            },
+            {
+              id: 'question_15',
+              prompt: 'What is your brand tagline?',
+              order: 3,
+              status: ComplianceProgressStatus.not_started,
+            },
+            {
+              id: 'question_16',
+              prompt: 'What is your brand name?',
+              order: 4,
+              status: ComplianceProgressStatus.not_started,
+            },
+            {
+              id: 'question_17',
+              prompt: 'What is your brand logo?',
+              order: 5,
+              status: ComplianceProgressStatus.not_started,
+            },
+            {
+              id: 'question_18',
+              prompt: 'What is your brand tagline?',
+              order: 6,
+              status: ComplianceProgressStatus.not_started,
+            },
+            {
+              id: 'question_19',
+              prompt: 'What is your brand name?',
+              order: 7,
+              status: ComplianceProgressStatus.not_started,
+            },
+            {
+              id: 'question_20',
+              prompt: 'What is your brand logo?',
+              order: 8,
+              status: ComplianceProgressStatus.not_started,
+            },
+            {
+              id: 'question_21',
+              prompt: 'What is your brand tagline?',
+              order: 9,
+              status: ComplianceProgressStatus.not_started,
+            },
+            {
+              id: 'question_22',
+              prompt: 'What is your brand name?',
+              order: 10,
+              status: ComplianceProgressStatus.not_started,
+            },
+            {
+              id: 'question_23',
+              prompt: 'What is your brand logo?',
+              order: 11,
+              status: ComplianceProgressStatus.not_started,
+            },
+            {
+              id: 'question_24',
+              prompt: 'What is your brand tagline?',
+              order: 12,
+              status: ComplianceProgressStatus.not_started,
+            },
+          ],
+        },
+        {
+          name: 'Core Practices',
+          questions: [
+            // 5 questions
+            {
+              id: 'question_25',
+              prompt: 'What is your brand name?',
+              order: 1,
+              status: ComplianceProgressStatus.not_started,
+            },
+            {
+              id: 'question_26',
+              prompt: 'What is your brand logo?',
+              order: 2,
+              status: ComplianceProgressStatus.not_started,
+            },
+            {
+              id: 'question_27',
+              prompt: 'What is your brand tagline?',
+              order: 3,
+              status: ComplianceProgressStatus.not_started,
+            },
+            {
+              id: 'question_28',
+              prompt: 'What is your brand name?',
+              order: 4,
+              status: ComplianceProgressStatus.not_started,
+            },
+            {
+              id: 'question_29',
+              prompt: 'What is your brand logo?',
+              order: 5,
+              status: ComplianceProgressStatus.not_started,
+            },
+          ],
+        },
+      ],
+    },
+    {
+      name: 'Materials',
+      sections: [
+        {
+          name: 'Restricted Substances List & Chemicals Management',
+          questions: [
+            // 1 question
+            {
+              id: 'question_30',
+              prompt: 'What is your brand name?',
+              order: 1,
+              status: ComplianceProgressStatus.not_started,
+            },
+          ],
+        },
+        {
+          name: 'Per- and Polyfluoroalkyl Substances',
+          questions: [
+            // 2 questions
+            {
+              id: 'question_31',
+              prompt: 'What is your brand name?',
+              order: 1,
+              status: ComplianceProgressStatus.not_started,
+            },
+            {
+              id: 'question_32',
+              prompt: 'What is your brand logo?',
+              order: 2,
+              status: ComplianceProgressStatus.not_started,
+            },
+          ],
+        },
+        {
+          name: 'Wool',
+          questions: [
+            // 3 questions
+            {
+              id: 'question_33',
+              prompt: 'What is your brand name?',
+              order: 1,
+              status: ComplianceProgressStatus.not_started,
+            },
+          ],
+        },
+        {
+          name: 'Animal Fur & Exotic Leather',
+          questions: [
+            // 1 question
+            {
+              id: 'question_34',
+              prompt: 'What is your brand name?',
+              order: 1,
+              status: ComplianceProgressStatus.not_started,
+            },
+          ],
+        },
+      ],
+    },
+    {
+      name: 'Environment',
+      sections: [
+        {
+          name: 'GHG Emissions & Climate',
+          questions: [
+            // 18 questions
+            {
+              id: 'question_35',
+              prompt: 'What is your brand name?',
+              order: 1,
+              status: ComplianceProgressStatus.not_started,
+            },
+            {
+              id: 'question_36',
+              prompt: 'What is your brand logo?',
+              order: 2,
+              status: ComplianceProgressStatus.not_started,
+            },
+            {
+              id: 'question_37',
+              prompt: 'What is your brand tagline?',
+              order: 3,
+              status: ComplianceProgressStatus.not_started,
+            },
+            {
+              id: 'question_38',
+              prompt: 'What is your brand name?',
+              order: 4,
+              status: ComplianceProgressStatus.not_started,
+            },
+            {
+              id: 'question_39',
+              prompt: 'What is your brand logo?',
+              order: 5,
+              status: ComplianceProgressStatus.not_started,
+            },
+            {
+              id: 'question_40',
+              prompt: 'What is your brand tagline?',
+              order: 6,
+              status: ComplianceProgressStatus.not_started,
+            },
+            {
+              id: 'question_41',
+              prompt: 'What is your brand name?',
+              order: 7,
+              status: ComplianceProgressStatus.not_started,
+            },
+            {
+              id: 'question_42',
+              prompt: 'What is your brand logo?',
+              order: 8,
+              status: ComplianceProgressStatus.not_started,
+            },
+            {
+              id: 'question_43',
+              prompt: 'What is your brand tagline?',
+              order: 9,
+              status: ComplianceProgressStatus.not_started,
+            },
+            {
+              id: 'question_44',
+              prompt: 'What is your brand name?',
+              order: 10,
+              status: ComplianceProgressStatus.not_started,
+            },
+            {
+              id: 'question_45',
+              prompt: 'What is your brand logo?',
+              order: 11,
+              status: ComplianceProgressStatus.not_started,
+            },
+            {
+              id: 'question_46',
+              prompt: 'What is your brand tagline?',
+              order: 12,
+              status: ComplianceProgressStatus.not_started,
+            },
+            {
+              id: 'question_47',
+              prompt: 'What is your brand name?',
+              order: 13,
+              status: ComplianceProgressStatus.not_started,
+            },
+            {
+              id: 'question_48',
+              prompt: 'What is your brand logo?',
+              order: 14,
+              status: ComplianceProgressStatus.not_started,
+            },
+            {
+              id: 'question_49',
+              prompt: 'What is your brand tagline?',
+              order: 15,
+              status: ComplianceProgressStatus.not_started,
+            },
+            {
+              id: 'question_50',
+              prompt: 'What is your brand name?',
+              order: 16,
+              status: ComplianceProgressStatus.not_started,
+            },
+            {
+              id: 'question_51',
+              prompt: 'What is your brand logo?',
+              order: 17,
+              status: ComplianceProgressStatus.not_started,
+            },
+            {
+              id: 'question_52',
+              prompt: 'What is your brand tagline?',
+              order: 18,
+              status: ComplianceProgressStatus.not_started,
+            },
+          ],
+        },
+      ],
     },
   ];
 }

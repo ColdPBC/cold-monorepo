@@ -10,7 +10,7 @@ import { WizardContext, WizardContextType } from '@coldpbc/components';
 import ColdMQTTContext from '../context/coldMQTTContext';
 import { mockMQTTContext } from './mqtt/mockMQTTContext';
 import { defaultMqttDataHandler, defaultMqttTopics, getSectionGroupList } from './mqtt';
-import { ColdComplianceManagerContext, ComplianceManagerContextType, ComplianceManagerData } from '@coldpbc/context';
+import { ColdComplianceManagerContext, ColdComplianceQuestionnaireContext, ComplianceManagerContextType, ComplianceManagerData } from '@coldpbc/context';
 import { getAllFilesMock } from './filesMock';
 
 export interface StoryMockProviderProps {
@@ -43,6 +43,10 @@ export interface StoryMockProviderProps {
     >;
     showOverviewModal: boolean;
     setShowOverviewModal: React.Dispatch<React.SetStateAction<boolean>>;
+  }>;
+  complianceQuestionnaireContext?: Partial<{
+    activeQuestion: string | null;
+    setActiveQuestion: (questionId: string | null) => void;
   }>;
 }
 
@@ -116,6 +120,15 @@ export const StoryMockProvider = (props: PropsWithChildren<StoryMockProviderProp
     setShowOverviewModal: props.complianceManagerContext?.setShowOverviewModal || setShowOverviewModal,
   };
 
+  const [complianceQuestionnaireActiveQuestion, setComplianceQuestionnaireActiveQuestion] = React.useState<string | null>(
+    props.complianceQuestionnaireContext?.activeQuestion ?? null,
+  );
+
+  const complianceQuestionnaireContextValue = {
+    activeQuestion: complianceQuestionnaireActiveQuestion,
+    setActiveQuestion: props.complianceQuestionnaireContext?.setActiveQuestion ?? setComplianceQuestionnaireActiveQuestion,
+  };
+
   return (
     // so swr doesn't cache between stories
     <ColdContext.Provider value={coldContextValue}>
@@ -142,9 +155,11 @@ export const StoryMockProvider = (props: PropsWithChildren<StoryMockProviderProp
             subscribeSWR: mqttContextValue.subscribeSWR,
           }}>
           <ColdComplianceManagerContext.Provider value={complianceManagerContextValue}>
-            <SWRConfig value={{ provider: () => new Map() }}>
-              <MemoryRouter {...props.memoryRouterProps}>{props.children}</MemoryRouter>
-            </SWRConfig>
+            <ColdComplianceQuestionnaireContext.Provider value={complianceQuestionnaireContextValue}>
+              <SWRConfig value={{ provider: () => new Map() }}>
+                <MemoryRouter {...props.memoryRouterProps}>{props.children}</MemoryRouter>
+              </SWRConfig>
+            </ColdComplianceQuestionnaireContext.Provider>
           </ColdComplianceManagerContext.Provider>
         </ColdMQTTContext.Provider>
       </WizardContext.Provider>
