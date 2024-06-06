@@ -7,26 +7,26 @@ import { coldAdminOnly } from '../../../_global/global.params';
 
 @UseGuards(JwtAuthGuard, RolesGuard)
 @UseFilters(new HttpExceptionFilter(OrganizationComplianceStatusesController.name))
-@ApiTags('Organization Compliance Status')
-@Controller('organizations/:orgId/compliance/:name/statuses')
+@ApiTags('Compliance', 'Organizations')
+@Controller('compliance/:name/organizations/:orgId/statuses')
 export class OrganizationComplianceStatusesController {
   constructor(private readonly organizationComplianceStatusesService: OrganizationComplianceStatusesService) {}
 
   @Post()
   @Roles(...coldAdminOnly)
-  create(@Param('orgId') orgId: string, @Param('name') name: string, @Body() statusData: { type: survey_status_types }, @Req() req: any) {
+  create(@Param('name') name: string, @Param('orgId') orgId: string, @Body() statusData: { type: survey_status_types }, @Req() req: any) {
     return this.organizationComplianceStatusesService.create(orgId, name, statusData.type, req.user);
   }
 
   @Get()
   @Roles(...allRoles)
-  findAll(@Param('orgId') orgId: string, @Param('name') name: string, @Req() req: any) {
-    return this.organizationComplianceStatusesService.findByOrgComplianceName(orgId, name, req.user);
+  findAll(@Param('name') name: string, @Param('orgId') orgId: string, @Req() req: any) {
+    return this.organizationComplianceStatusesService.findByOrgComplianceName(name, req);
   }
 
   @Get(':statusId')
   @Roles(...allRoles)
-  findOne(@Param('orgId') orgId: string, @Param('name') name: string, @Param('statusId') statusId: string, @Req() req: any) {
-    return this.organizationComplianceStatusesService.findOne(orgId, name, statusId, req.user);
+  findOne(@Param('name') name: string, @Param('orgId') orgId: string, @Param('statusId') statusId: string, @Req() req: any) {
+    return this.organizationComplianceStatusesService.findOne(name, statusId, req.user);
   }
 }
