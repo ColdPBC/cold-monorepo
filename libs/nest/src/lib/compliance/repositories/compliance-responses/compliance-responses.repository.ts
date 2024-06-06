@@ -271,11 +271,31 @@ export class ComplianceResponsesRepository extends BaseWorker {
         throw new NotFoundException(`Organization ${orgId} not found`);
       }
 
+      /*
+       * Score the compliance response
+       */
       if (Array.isArray(organization?.organization_compliance) && organization?.organization_compliance.length > 0) {
         const compliance_response = organization?.organization_compliance[0];
         const response = await this.scoringService.scoreComplianceResponse(compliance_response?.compliance_definition);
         this.logger.log(`Scored ${compliance_definition_name} Compliance `, response);
       }
+
+      // Map over the results and add the additional flags
+      /* const complianceResponsesWithFlags = organization.organization_compliance.map(compliance => {
+        const definition = compliance.compliance_definition;
+
+        const aiAnswered = definition.response.ai_response && response.ai_response.answer && response.ai_response.answer.length > 0;
+        const userAnswered = response.org_response && response.org_response.value && response.org_response.value.length > 0;
+        const notAnswered = !aiAnswered && !userAnswered;
+
+        return {
+          ...response,
+          aiAnswered,
+          userAnswered,
+          notAnswered,
+        };
+      });*/
+
       return { ...organization };
     } catch (error) {
       this.logger.error(`Error getting responses for organization: ${orgId}: ${compliance_definition_name}`, {
