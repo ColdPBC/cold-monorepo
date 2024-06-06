@@ -10,9 +10,9 @@ const genService = new GeneratorService();
 
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Roles(...coldAdminOnly)
-@ApiTags('Compliance', 'Section Groups')
+@ApiTags('Compliance')
 @UseFilters(new HttpExceptionFilter(ComplianceSectionGroupsController.name))
-@Controller('compliance_definitions/:name/section_groups')
+@Controller('compliance/:name/section_groups')
 export class ComplianceSectionGroupsController {
   constructor(
     readonly complianceSectionGroupsService: ComplianceSectionGroupsService,
