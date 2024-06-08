@@ -125,6 +125,8 @@ export const StoryMockProvider = (props: PropsWithChildren<StoryMockProviderProp
   );
 
   const complianceQuestionnaireContextValue = {
+    name: 'rei_pia_2024',
+    ...props.complianceQuestionnaireContext,
     activeQuestion: complianceQuestionnaireActiveQuestion,
     setActiveQuestion: props.complianceQuestionnaireContext?.setActiveQuestion ?? setComplianceQuestionnaireActiveQuestion,
   };

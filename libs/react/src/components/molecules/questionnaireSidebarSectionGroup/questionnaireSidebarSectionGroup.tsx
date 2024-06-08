@@ -1,31 +1,30 @@
-import { ComplianceProgressStatus } from '@coldpbc/enums';
 import { QuestionnaireSidebarSection } from '@coldpbc/components';
+import { QuestionnaireQuestion } from '@coldpbc/interfaces';
 
 export const QuestionnaireSidebarSectionGroup = ({
   sectionGroup,
   sideBarExpanded,
-  totalQuestions,
 }: {
   sectionGroup: {
     name: string;
+    key: string;
     sections: {
       name: string;
-      questions: {
-        id: string;
-        prompt: string;
-        order: number;
-        status: ComplianceProgressStatus;
-      }[];
+      key: string;
+      questions: QuestionnaireQuestion[];
     }[];
   };
   sideBarExpanded: boolean;
-  totalQuestions: number;
 }) => {
   let answeredQuestions = 0;
+  let totalQuestions = 0;
+
   sectionGroup.sections.forEach(section => {
-    answeredQuestions += section.questions.filter(question => question.status === ComplianceProgressStatus.user_answered).length;
+    answeredQuestions += section.questions.filter(question => question.user_answered).length;
+    totalQuestions += section.questions.length;
   });
-  const percentage = totalQuestions === 0 ? '0' : (answeredQuestions / totalQuestions).toFixed(0);
+
+  const percentage = totalQuestions === 0 ? '0' : ((answeredQuestions / totalQuestions) * 100).toFixed(0);
 
   if (!sideBarExpanded) return null;
 

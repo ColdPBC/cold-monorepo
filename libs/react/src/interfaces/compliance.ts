@@ -1,3 +1,5 @@
+import { SurveyAdditionalContext } from './survey';
+
 export type Compliance = {
   id: string;
   name: string;
@@ -104,23 +106,31 @@ export type CurrentAIStatusSection = {
   questions: string[];
 };
 
-export type QuestionnaireQuestion = {
-  id: string;
+export interface QuestionnaireQuestionProp extends QuestionnaireQuestion {
   number: number;
+}
+
+export type QuestionnaireQuestion = {
+  key: string;
+  order: number;
   prompt: string;
   bookmarked: boolean;
-  ai_answered: boolean;
   user_answered: boolean;
+  ai_answered: boolean;
   not_started: boolean;
-  answer?: any;
   options: string[];
-  tooltip?: string;
   component: string;
   placeholder: string;
-  addtional_context?: QuestionnaireQuestion;
+  tooltip: string;
+  value?: any;
+  additional_context?: SurveyAdditionalContext;
   ai_response?: {
     justification?: string;
     answer?: string | boolean | number | Array<string>;
   };
-  isAdditional?: boolean;
+  ai_attempted?: boolean;
+  score?: number;
+  max_score?: number;
+  question_summary?: string;
+  corresponding_question?: string;
 };

@@ -1,15 +1,15 @@
-import { ColdLeftArrowIcon, QuestionnaireSidebar, Spinner } from '@coldpbc/components';
+import { ColdLeftArrowIcon, QuestionnaireContainer, QuestionnaireSidebar, Spinner } from '@coldpbc/components';
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import useSWR from 'swr';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { useAuth0Wrapper } from '@coldpbc/hooks';
 import { OrgCompliance } from '@coldpbc/interfaces';
-import { getQuestionnaireSidebarComplianceMock } from '@coldpbc/mocks';
 import { ColdComplianceQuestionnaireContext } from '@coldpbc/context';
 
 export const ComplianceQuestionnaire = () => {
   const [activeQuestion, setActiveQuestion] = React.useState<string | null>(null);
+  const [sidebarExpanded, setSidebarExpanded] = React.useState<boolean>(true);
   const location = useLocation();
   const navigate = useNavigate();
   const { orgId } = useAuth0Wrapper();
@@ -40,6 +40,7 @@ export const ComplianceQuestionnaire = () => {
       value={{
         activeQuestion,
         setActiveQuestion,
+        name: complianceName,
       }}>
       <div className={'w-full h-full flex-col flex'}>
         <div className={'h-[72px] w-full p-[16px] flex justify-between bg-gray-30'} data-testid={'questionnaire-header'}>
@@ -51,8 +52,10 @@ export const ComplianceQuestionnaire = () => {
           </div>
         </div>
         <div className={'w-full h-full flex justify-start'}>
-          <QuestionnaireSidebar sectionGroups={getQuestionnaireSidebarComplianceMock()} />
-          <div className={'w-full h-full pt-[24px]'}></div>
+          <QuestionnaireSidebar sidebarOpen={sidebarExpanded} setSidebarOpen={setSidebarExpanded} />
+          <div className={'w-full h-full pt-[24px]'}>
+            <QuestionnaireContainer sidebarOpen={sidebarExpanded} setSidebarOpen={setSidebarExpanded} />
+          </div>
         </div>
       </div>
     </ColdComplianceQuestionnaireContext.Provider>

@@ -23,7 +23,6 @@ export const Default: Story = {
   },
   args: {
     sectionGroup: getQuestionnaireSidebarComplianceMock()[0],
-    totalQuestions: 200,
     sideBarExpanded: true,
   },
 };

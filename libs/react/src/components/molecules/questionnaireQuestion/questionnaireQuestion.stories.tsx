@@ -20,8 +20,6 @@ export const Bookmarked: Story = {
   args: {
     number: 1,
     question: {
-      id: '1',
-      number: 1,
       prompt: 'Choose your favorite colors',
       bookmarked: true,
       ai_answered: false,
@@ -31,6 +29,8 @@ export const Bookmarked: Story = {
       tooltip: 'This is a tooltip',
       component: 'text',
       placeholder: 'Enter your name',
+      key: '1',
+      order: 1,
     },
   },
 };
@@ -42,8 +42,6 @@ export const NotStarted: Story = {
   args: {
     number: 1,
     question: {
-      id: '1',
-      number: 1,
       prompt: 'Choose your favorite colors',
       bookmarked: false,
       ai_answered: false,
@@ -53,6 +51,8 @@ export const NotStarted: Story = {
       tooltip: 'This is a tooltip',
       component: 'text',
       placeholder: 'Enter your name',
+      key: '1',
+      order: 1,
     },
   },
 };
@@ -64,8 +64,6 @@ export const AiAnswered: Story = {
   args: {
     number: 1,
     question: {
-      id: '1',
-      number: 1,
       prompt: 'What is the name of your company',
       bookmarked: false,
       ai_answered: true,
@@ -79,6 +77,8 @@ export const AiAnswered: Story = {
         justification: 'We chose this answer because of all of these reasons and this one document that supports why we chose this.',
         answer: 'Cold Climate',
       },
+      key: '1',
+      order: 1,
     },
   },
 };
@@ -191,7 +191,7 @@ export const Text: Story = {
       options: [],
       tooltip: 'Enter their name',
       component: 'text',
-      placeholder: '',
+      placeholder: 'Enter here',
     },
   },
 };
@@ -303,5 +303,37 @@ export const MultiText: Story = {
       component: 'multi_text',
       placeholder: '',
     },
+  },
+};
+
+export const AdditionalContext: Story = {
+  render: args => {
+    return <QuestionnaireQuestionItem {...args} />;
+  },
+  args: {
+    number: 1,
+    question: {
+      prompt: 'What is your name?',
+      bookmarked: false,
+      ai_answered: false,
+      user_answered: false,
+      not_started: false,
+      value: true,
+      options: [],
+      tooltip: 'This is a tooltip',
+      component: 'yes_no',
+      placeholder: 'Enter your name',
+      order: 1,
+      key: '1',
+      additional_context: {
+        prompt: 'Please provide the hyperlink.',
+        operator: '==',
+        component: 'textarea',
+        comparison: true,
+        placeholder: '',
+      },
+    },
+    focusQuestion: null,
+    setFocusQuestion: () => {},
   },
 };

@@ -2,19 +2,25 @@ import { BaseButton, Card, ColdIcon, ComplianceProgressStatusIcon, Input, ListIt
 import { ButtonTypes, ComplianceProgressStatus, IconNames, InputTypes } from '@coldpbc/enums';
 import React, { useEffect, useState } from 'react';
 import { isArray, isUndefined, toArray } from 'lodash';
-import { getAIResponseValue, isAIResponseValueValid } from '@coldpbc/lib';
-import { QuestionnaireQuestion } from '@coldpbc/interfaces';
+import { getAIResponseValue, ifAdditionalContextConditionMet, isAIResponseValueValid } from '@coldpbc/lib';
 import { HexColors } from '@coldpbc/themes';
 import { QuestionnaireYesNo } from './questionnaireYesNo';
 import { QuestionnaireSelect } from './questionnaireSelect';
 import { NumericFormat } from 'react-number-format';
+import { QuestionnaireQuestion } from '@coldpbc/interfaces';
 
-export const QuestionnaireQuestionItem = (props: { question: QuestionnaireQuestion; number: number }) => {
-  const { question } = props;
-  const { id, prompt, options, tooltip, component, placeholder, answer, bookmarked, ai_response, user_answered, ai_answered, not_started, isAdditional } = question;
+// todo: add additional context handling
+export const QuestionnaireQuestionItem = (props: {
+  question: QuestionnaireQuestion;
+  number: number;
+  focusQuestion: string | null;
+  setFocusQuestion: (value: string | null) => void;
+}) => {
+  const { question, number, focusQuestion, setFocusQuestion } = props;
+  const { key, prompt, options, tooltip, component, placeholder, value, bookmarked, ai_response, user_answered, ai_answered, not_started, additional_context } = question;
 
   const getDisplayValue = () => {
-    let displayValue = answer;
+    let displayValue = value;
     if (isUndefined(displayValue) && isAIResponseValueValid(question)) {
       displayValue = getAIResponseValue(question);
     }
@@ -36,11 +42,14 @@ export const QuestionnaireQuestionItem = (props: { question: QuestionnaireQuesti
   const [questionAnswerChanged, setAnswerQuestionChanged] = useState<boolean>(false);
   const [questionAnswerSaved, setQuestionAnswerSaved] = useState<boolean>(false);
   const [questionStatus, setQuestionStatus] = useState<ComplianceProgressStatus>(getQuestionStatus());
+  const [additionalContextOpen, setAdditionalContextOpen] = useState<boolean>(false);
+  const [additionalContextInput, setAdditionalContextInput] = useState<any | undefined>(additional_context?.value);
 
   useEffect(() => {
-    if (questionInput !== answer) {
+    if (questionInput !== value) {
       setAnswerQuestionChanged(true);
     }
+    showAdditionalContext(questionInput);
   }, [questionInput]);
 
   const getQuestionStatusIcon = () => {
@@ -75,17 +84,25 @@ export const QuestionnaireQuestionItem = (props: { question: QuestionnaireQuesti
     );
   };
 
-  const inputComponent = () => {
-    const displayValue = questionInput;
-    switch (component) {
+  const inputComponent = (isAdditional?: boolean) => {
+    const displayValue = isAdditional ? additionalContextInput : questionInput;
+    const onFieldChange = (value: any) => {
+      if (isAdditional) {
+        setAdditionalContextInput(value);
+      } else {
+        setQuestionInput(value);
+      }
+    };
+    const displayComponent = isAdditional ? additional_context?.component : component;
+    switch (displayComponent) {
       case 'yes_no':
         return (
           <QuestionnaireYesNo
             onChange={value => {
-              setQuestionInput(value);
+              onFieldChange(value);
             }}
             value={displayValue}
-            data-testid={id + (isAdditional ? '-additional' : '')}
+            data-testid={key + (isAdditional ? '-additional' : '')}
           />
         );
       case 'text':
@@ -93,23 +110,23 @@ export const QuestionnaireQuestionItem = (props: { question: QuestionnaireQuesti
           <Input
             type={InputTypes.Text}
             input_props={{
-              name: id,
+              name: key,
               value: displayValue === undefined ? '' : displayValue,
               onChange: e => {
                 if (e.target.value === '') {
-                  setQuestionInput(undefined);
+                  onFieldChange(undefined);
                 } else {
-                  setQuestionInput(e.target.value);
+                  onFieldChange(e.target.value);
                 }
               },
               onValueChange: value => {
-                setQuestionInput(value);
+                onFieldChange(value);
               },
               className:
                 'text-sm not-italic text-tc-primary font-medium bg-transparent w-full rounded-lg py-6 px-4 border-[1px] border-gray-60 focus:border-[1px] focus:border-gray-60 focus:ring-0',
               placeholder: placeholder,
               title: tooltip,
-              'aria-label': id + (isAdditional ? '-additional' : ''),
+              'aria-label': key + (isAdditional ? '-additional' : ''),
             }}
             container_classname={'w-full'}
           />
@@ -130,28 +147,28 @@ export const QuestionnaireQuestionItem = (props: { question: QuestionnaireQuesti
             <Input
               type={InputTypes.Number}
               input_props={{
-                name: id,
+                name: key,
                 value: displayValue,
                 onValueChange: value => {
-                  setQuestionInput(value);
+                  onFieldChange(value);
                 },
               }}
               numeric_input_props={{
-                name: id,
+                name: key,
                 value: displayValue === undefined ? '' : displayValue,
                 thousandSeparator: ',',
                 onValueChange: values => {
                   if (values.floatValue === undefined) {
-                    setQuestionInput(undefined);
+                    onFieldChange(undefined);
                   } else {
-                    setQuestionInput(values.floatValue);
+                    onFieldChange(values.floatValue);
                   }
                 },
                 placeholder: placeholder,
                 title: tooltip,
                 className:
                   'text-sm not-italic text-tc-primary font-medium bg-transparent w-full rounded-l-none rounded-r-lg h-full pl-0 pr-6 py-6 border-[1px] border-gray-60 focus:border-[1px] focus:border-gray-60 focus:ring-0',
-                'aria-label': id + (isAdditional ? '-additional' : ''),
+                'aria-label': key + (isAdditional ? '-additional' : ''),
               }}
               container_classname={'w-full'}
             />
@@ -162,27 +179,27 @@ export const QuestionnaireQuestionItem = (props: { question: QuestionnaireQuesti
           <Input
             type={InputTypes.Number}
             input_props={{
-              name: id,
+              name: key,
               value: displayValue,
               onValueChange: value => {
-                setQuestionInput(value);
+                onFieldChange(value);
               },
             }}
             numeric_input_props={{
-              name: id,
+              name: key,
               value: displayValue === undefined ? '' : displayValue,
               thousandSeparator: ',',
               onValueChange: values => {
                 if (values.floatValue === undefined) {
-                  setQuestionInput(undefined);
+                  onFieldChange(undefined);
                 } else {
-                  setQuestionInput(values.floatValue);
+                  onFieldChange(values.floatValue);
                 }
               },
               title: tooltip,
               className:
                 'text-sm not-italic text-tc-primary font-medium bg-transparent w-full rounded-lg py-6 px-4 border-[1px] border-gray-60 focus:border-[1px] focus:border-gray-60 focus:ring-0',
-              'aria-label': id + (isAdditional ? '-additional' : ''),
+              'aria-label': key + (isAdditional ? '-additional' : ''),
             }}
             container_classname={'w-full h-full'}
           />
@@ -192,12 +209,12 @@ export const QuestionnaireQuestionItem = (props: { question: QuestionnaireQuesti
           <div className={'w-full flex flex-col items-start gap-[8px] min-w-[56px]'}>
             <div className={'text-eyebrow text-tc-primary'}>Enter %</div>
             <NumericFormat
-              value={displayValue === undefined ? null : displayValue}
+              value={displayValue === undefined ? '' : displayValue}
               onValueChange={values => {
                 if (values.floatValue === undefined) {
-                  setQuestionInput(undefined);
+                  onFieldChange(undefined);
                 } else {
-                  setQuestionInput(values.floatValue);
+                  onFieldChange(values.floatValue);
                 }
               }}
               className={
@@ -215,10 +232,10 @@ export const QuestionnaireQuestionItem = (props: { question: QuestionnaireQuesti
             isMultiSelect={true}
             options={options}
             onChange={value => {
-              setQuestionInput(value);
+              onFieldChange(value);
             }}
             value={displayValue}
-            data-testid={id + (isAdditional ? '-additional' : '')}
+            data-testid={key + (isAdditional ? '-additional' : '')}
           />
         );
       case 'select':
@@ -226,10 +243,10 @@ export const QuestionnaireQuestionItem = (props: { question: QuestionnaireQuesti
           <QuestionnaireSelect
             options={options}
             onChange={value => {
-              setQuestionInput(value);
+              onFieldChange(value);
             }}
             value={displayValue}
-            data-testid={id + (isAdditional ? '-additional' : '')}
+            data-testid={key + (isAdditional ? '-additional' : '')}
           />
         );
       case 'textarea':
@@ -237,10 +254,10 @@ export const QuestionnaireQuestionItem = (props: { question: QuestionnaireQuesti
           <Input
             type={InputTypes.TextArea}
             input_props={{
-              name: id,
-              value: displayValue === null ? undefined : displayValue,
+              name: key,
+              value: displayValue === undefined ? '' : displayValue,
               onValueChange: value => {
-                setQuestionInput(value);
+                onFieldChange(value);
               },
               placeholder: placeholder,
               title: tooltip,
@@ -250,18 +267,18 @@ export const QuestionnaireQuestionItem = (props: { question: QuestionnaireQuesti
               rows: 4,
               onChange: e => {
                 if (e.target.value === '') {
-                  setQuestionInput(null);
+                  onFieldChange(undefined);
                 } else {
-                  setQuestionInput(e.target.value);
+                  onFieldChange(e.target.value);
                 }
               },
-              name: id,
-              value: displayValue === undefined ? null : displayValue,
+              name: key,
+              value: displayValue === undefined ? '' : displayValue,
               className:
                 'text-sm not-italic text-tc-primary font-medium bg-transparent w-full rounded-lg py-6 px-4 border-[1px] border-gray-60 focus:border-[1px] focus:border-gray-60 focus:ring-0 resize-none',
               placeholder: placeholder,
               title: tooltip,
-              'aria-label': id + (isAdditional ? '-additional' : ''),
+              'aria-label': key + (isAdditional ? '-additional' : ''),
             }}
             container_classname={'w-full'}
           />
@@ -272,9 +289,9 @@ export const QuestionnaireQuestionItem = (props: { question: QuestionnaireQuesti
           <ListItem
             value={displayValue === undefined ? null : displayValue}
             onChange={value => {
-              setQuestionInput(value);
+              onFieldChange(value);
             }}
-            data-testid={id + (isAdditional ? '-additional' : '')}
+            data-testid={key + (isAdditional ? '-additional' : '')}
             input_props={{
               placeholder: placeholder,
               className: `border-[1px] border-gray-60 focus:border-[1px] focus:border-gray-60 p-[16px] text-body text-tc-primary focus:border-[1px] focus:border-gray-60 ${
@@ -350,6 +367,7 @@ export const QuestionnaireQuestionItem = (props: { question: QuestionnaireQuesti
       setQuestionAnswerSaved(true);
       setAnswerQuestionChanged(false);
       setQuestionStatus(ComplianceProgressStatus.user_answered);
+      // todo: handle submission to API
     };
     if (questionInput !== undefined && questionInput !== null) {
       // if answer is updated or answer was cleared, but the status is ai answered
@@ -357,7 +375,7 @@ export const QuestionnaireQuestionItem = (props: { question: QuestionnaireQuesti
         disabled = false;
       } else {
         // if answer already exists or answer updated
-        if (answer === questionInput || questionAnswerSaved) {
+        if (value === questionInput || questionAnswerSaved) {
           label = 'Clear Answer';
           disabled = false;
           iconLeftName = IconNames.CloseModalIcon;
@@ -365,6 +383,7 @@ export const QuestionnaireQuestionItem = (props: { question: QuestionnaireQuesti
           onClick = () => {
             setQuestionAnswerSaved(true);
             setQuestionInput(undefined);
+            setAdditionalContextInput(undefined);
             setAnswerQuestionChanged(false);
             if (isAIResponseValueValid(question)) {
               setQuestionStatus(ComplianceProgressStatus.ai_answered);
@@ -402,16 +421,46 @@ export const QuestionnaireQuestionItem = (props: { question: QuestionnaireQuesti
     );
   };
 
+  const showAdditionalContext = (questionInput: any | undefined) => {
+    if (additional_context && ifAdditionalContextConditionMet(questionInput, additional_context)) {
+      setAdditionalContextOpen(true);
+    } else {
+      setAdditionalContextOpen(false);
+    }
+  };
+
+  const additionalContext = () => {
+    if (additionalContextOpen && additional_context) {
+      return (
+        <div className={'w-full flex flex-col justify-center mb-[24px] gap-[16px]'}>
+          <div className={'w-full text-tc-primary text-body'}>{additional_context.prompt}</div>
+          {inputComponent(true)}
+        </div>
+      );
+    }
+  };
+
   return (
-    <div className={`flex flex-col w-full rounded-[16px] bg-gray-30 gap-[16px] ${questionBookmarked ? 'border-[1px] border-lightblue-200 p-[23px]' : ' p-[24px]'}`}>
+    <div
+      className={`flex flex-col w-full rounded-[16px] bg-gray-30 gap-[16px] ${questionBookmarked ? 'border-[1px] border-lightblue-200 p-[23px]' : ' p-[24px]'}
+    ${focusQuestion !== key && focusQuestion !== null ? 'opacity-20' : ''}
+    `}>
       <div className={'flex flex-row gap-[8px] justify-between'}>
         <div className={'flex flex-row gap-[8px] items-center'}>
           {getQuestionStatusIcon()}
-          <div className={'w-full flex justify-start text-gray-120'}>QUESTION {question.number}</div>
+          <div className={'w-full flex justify-start text-gray-120'}>QUESTION {number}</div>
         </div>
         <div className={'flex flex-row gap-[8px] items-center'}>
           {getBookMarkIcon()}
-          <div className={'w-[24px] h-[24px] cursor-pointer'}>
+          <div
+            className={'w-[24px] h-[24px] cursor-pointer'}
+            onClick={() => {
+              if (focusQuestion === key) {
+                setFocusQuestion(null);
+              } else {
+                setFocusQuestion(key);
+              }
+            }}>
             <ColdIcon name={IconNames.ColdRightArrowIcon} />
           </div>
         </div>
@@ -419,6 +468,7 @@ export const QuestionnaireQuestionItem = (props: { question: QuestionnaireQuesti
       {getPrompt()}
       {tooltip && <div className="text-left text-body not-italic font-medium text-tc-primary">{tooltip}</div>}
       <div className="w-full justify-center mb-[24px]">{inputComponent()}</div>
+      {additionalContext()}
       {getAISource()}
       {getSubmitButton()}
     </div>

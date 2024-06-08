@@ -2,6 +2,8 @@ import { ComplianceProgressStatus, IconNames } from '@coldpbc/enums';
 import { useContext, useState } from 'react';
 import { ColdIcon, ComplianceProgressStatusIcon } from '@coldpbc/components';
 import { ColdComplianceQuestionnaireContext } from '@coldpbc/context';
+import { QuestionnaireQuestion } from '@coldpbc/interfaces';
+import { HexColors } from '@coldpbc/themes';
 
 export const QuestionnaireSidebarSection = ({
   section,
@@ -9,20 +11,22 @@ export const QuestionnaireSidebarSection = ({
 }: {
   section: {
     name: string;
-    questions: {
-      id: string;
-      prompt: string;
-      order: number;
-      status: ComplianceProgressStatus;
-    }[];
+    key: string;
+    questions: QuestionnaireQuestion[];
   };
   sideBarExpanded: boolean;
 }) => {
   const { activeQuestion, setActiveQuestion } = useContext(ColdComplianceQuestionnaireContext);
   const [open, setOpen] = useState(false);
-  const answeredQuestions = section.questions.filter(question => question.status === ComplianceProgressStatus.user_answered).length;
+  const answeredQuestions = section.questions.filter(question => question.user_answered).length;
   const questions = section.questions.length;
   const ratio = `${answeredQuestions}/${questions}`;
+
+  const getQuestionStatus = (question: QuestionnaireQuestion) => {
+    if (question.user_answered) return ComplianceProgressStatus.user_answered;
+    if (question.ai_answered) return ComplianceProgressStatus.ai_answered;
+    return ComplianceProgressStatus.not_started;
+  };
 
   if (!sideBarExpanded) return null;
   return (
@@ -37,13 +41,18 @@ export const QuestionnaireSidebarSection = ({
           {section.questions.map((question, index) => {
             const questionNumber = index + 1;
             return (
-              <div className={'flex flex-row w-full gap-[10px] px-[4px] py-[2px] items-center cursor-pointer'} key={index} onClick={() => setActiveQuestion(question.id)}>
+              <div className={'flex flex-row w-full gap-[10px] px-[4px] py-[2px] items-center cursor-pointer'} key={index} onClick={() => setActiveQuestion(question.key)}>
                 <div className={'w-[12px] h-[12px]'}>
-                  <ComplianceProgressStatusIcon type={question.status} inverted={true} />
+                  <ComplianceProgressStatusIcon type={getQuestionStatus(question)} inverted={true} />
                 </div>
                 <div className={'text-tc-secondary text-body truncate w-full'}>
                   {questionNumber}. {question.prompt}
                 </div>
+                {question.bookmarked && (
+                  <div className={'w-[18px] h-[18px] flex items-center justify-center'}>
+                    <ColdIcon name={IconNames.ColdBookmarkIcon} filled={true} color={HexColors.lightblue['200']} height={16} width={14} />
+                  </div>
+                )}
               </div>
             );
           })}

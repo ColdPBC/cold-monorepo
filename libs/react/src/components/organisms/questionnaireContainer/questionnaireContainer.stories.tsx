@@ -1,12 +1,12 @@
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
-import { QuestionnaireSidebar } from '@coldpbc/components';
+import { QuestionnaireContainer } from '@coldpbc/components';
 import { StoryMockProvider } from '@coldpbc/mocks';
 import { useState } from 'react';
 
-const meta: Meta<typeof QuestionnaireSidebar> = {
-  title: 'Organisms/QuestionnaireSidebar',
-  component: QuestionnaireSidebar,
+const meta: Meta<typeof QuestionnaireContainer> = {
+  title: 'Organisms/QuestionnaireContainer',
+  component: QuestionnaireContainer,
   tags: ['autodocs'],
   decorators: [withKnobs],
 };
@@ -16,7 +16,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   render: args => {
-    return <SidebarStory {...args} />;
+    return <QuestionnaireContainerStory {...args} />;
   },
   args: {
     sidebarOpen: true,
@@ -24,12 +24,12 @@ export const Default: Story = {
   },
 };
 
-const SidebarStory = (args: any) => {
+const QuestionnaireContainerStory = (args: any) => {
   const [open, setOpen] = useState(true);
   return (
     <StoryMockProvider>
-      <div className={'w-[407px] h-screen'}>
-        <QuestionnaireSidebar
+      <div className={'w-[982px] h-screen'}>
+        <QuestionnaireContainer
           sidebarOpen={open}
           setSidebarOpen={() => {
             setOpen(!open);

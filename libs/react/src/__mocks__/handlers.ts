@@ -18,7 +18,7 @@ import { auth0UserMock } from './userMock';
 import { getNewsDefault } from './newsMock';
 import { getActionMock, getActionsMock } from './action';
 import { v4 as uuidv4 } from 'uuid';
-import { getComplianceMock, getOrganizationComplianceMock, getOrganizationComplianceMockByName } from './complianceMock';
+import { getComplianceMock, getOrganizationComplianceMock, getOrganizationComplianceMockByName, getQuestionnaireSidebarComplianceMock } from './complianceMock';
 import { getDocumentsListTableMock } from './componentMock';
 import { getAllFilesMock } from './filesMock';
 import { returnUpdatedSurvey } from './helpers';
@@ -266,5 +266,13 @@ export const handlers = [
 
   rest.get(getApiUrl('/organizations/:orgId/footprints'), (req, res, ctx) => {
     return res(ctx.json(getDefaultEmissionMock()));
+  }),
+
+  rest.get(getApiUrl('/compliance_definitions/:name/organizations/:orgId/questionnaireSidebar'), (req, res, ctx) => {
+    return res(ctx.json(getQuestionnaireSidebarComplianceMock()));
+  }),
+
+  rest.get(getApiUrl('/compliance_definitions/:name/organizations/:orgId/questions'), (req, res, ctx) => {
+    return res(ctx.json(getQuestionnaireSidebarComplianceMock()));
   }),
 ];

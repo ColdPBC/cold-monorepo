@@ -411,7 +411,10 @@ export const updateSurveyQuestion = (
   return newSurvey;
 };
 
-export const ifAdditionalContextConditionMet = (value: any, additionalContext: SurveyAdditionalContext) => {
+export const ifAdditionalContextConditionMet = (value: any | undefined, additionalContext: SurveyAdditionalContext) => {
+  if (isUndefined(value)) {
+    return false;
+  }
   switch (additionalContext.operator) {
     case '==':
       // make comparison for arrays if both the value and comparison are arrays
