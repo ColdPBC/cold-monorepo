@@ -1,6 +1,6 @@
 import { BaseButton, Card, ColdIcon, ComplianceProgressStatusIcon, Input, ListItem } from '@coldpbc/components';
 import { ButtonTypes, ComplianceProgressStatus, IconNames, InputTypes } from '@coldpbc/enums';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { isArray, isUndefined, toArray } from 'lodash';
 import { getAIResponseValue, ifAdditionalContextConditionMet, isAIResponseValueValid } from '@coldpbc/lib';
 import { HexColors } from '@coldpbc/themes';
@@ -8,6 +8,7 @@ import { QuestionnaireYesNo } from './questionnaireYesNo';
 import { QuestionnaireSelect } from './questionnaireSelect';
 import { NumericFormat } from 'react-number-format';
 import { QuestionnaireQuestion } from '@coldpbc/interfaces';
+import { ColdComplianceQuestionnaireContext } from '@coldpbc/context';
 
 // todo: add additional context handling
 export const QuestionnaireQuestionItem = (props: {
@@ -16,8 +17,10 @@ export const QuestionnaireQuestionItem = (props: {
   focusQuestion: string | null;
   setFocusQuestion: (value: string | null) => void;
 }) => {
-  const { question, number, focusQuestion, setFocusQuestion } = props;
-  const { key, prompt, options, tooltip, component, placeholder, value, bookmarked, ai_response, user_answered, ai_answered, not_started, additional_context } = question;
+  const { focusQuestion, setFocusQuestion } = useContext(ColdComplianceQuestionnaireContext);
+  const { question, number } = props;
+  const { key, prompt, options, tooltip, component, placeholder, value, bookmarked, ai_response, user_answered, ai_answered, not_started, additional_context, ai_attempted } =
+    question;
 
   const getDisplayValue = () => {
     let displayValue = value;
@@ -51,6 +54,20 @@ export const QuestionnaireQuestionItem = (props: {
     }
     showAdditionalContext(questionInput);
   }, [questionInput]);
+
+  useEffect(() => {
+    setFocusQuestion({
+      key: key,
+      aiDetails: {
+        ai_response: ai_response,
+        ai_answered: ai_answered,
+        ai_attempted: ai_attempted,
+        value: questionInput,
+        questionAnswerSaved: questionAnswerSaved,
+        questionAnswerChanged: questionAnswerChanged,
+      },
+    });
+  }, [questionInput, questionAnswerSaved, questionAnswerChanged]);
 
   const getQuestionStatusIcon = () => {
     let icon = null;
@@ -443,8 +460,7 @@ export const QuestionnaireQuestionItem = (props: {
   return (
     <div
       className={`flex flex-col w-full rounded-[16px] bg-gray-30 gap-[16px] ${questionBookmarked ? 'border-[1px] border-lightblue-200 p-[23px]' : ' p-[24px]'}
-    ${focusQuestion !== key && focusQuestion !== null ? 'opacity-20' : ''}
-    `}>
+    ${focusQuestion !== null && focusQuestion.key !== key ? 'opacity-20' : ''}`}>
       <div className={'flex flex-row gap-[8px] justify-between'}>
         <div className={'flex flex-row gap-[8px] items-center'}>
           {getQuestionStatusIcon()}
@@ -455,10 +471,20 @@ export const QuestionnaireQuestionItem = (props: {
           <div
             className={'w-[24px] h-[24px] cursor-pointer'}
             onClick={() => {
-              if (focusQuestion === key) {
+              if (focusQuestion?.key === key) {
                 setFocusQuestion(null);
               } else {
-                setFocusQuestion(key);
+                setFocusQuestion({
+                  key: key,
+                  aiDetails: {
+                    ai_response: ai_response,
+                    ai_answered: ai_answered,
+                    ai_attempted: ai_attempted,
+                    value: questionInput,
+                    questionAnswerSaved: questionAnswerSaved,
+                    questionAnswerChanged: questionAnswerChanged,
+                  },
+                });
               }
             }}>
             <ColdIcon name={IconNames.ColdRightArrowIcon} />

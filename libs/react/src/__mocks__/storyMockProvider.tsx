@@ -10,7 +10,13 @@ import { WizardContext, WizardContextType } from '@coldpbc/components';
 import ColdMQTTContext from '../context/coldMQTTContext';
 import { mockMQTTContext } from './mqtt/mockMQTTContext';
 import { defaultMqttDataHandler, defaultMqttTopics, getSectionGroupList } from './mqtt';
-import { ColdComplianceManagerContext, ColdComplianceQuestionnaireContext, ComplianceManagerContextType, ComplianceManagerData } from '@coldpbc/context';
+import {
+  ColdComplianceManagerContext,
+  ColdComplianceQuestionnaireContext,
+  ComplianceManagerContextType,
+  ComplianceManagerData,
+  ComplianceQuestionnaireContextType,
+} from '@coldpbc/context';
 import { getAllFilesMock } from './filesMock';
 
 export interface StoryMockProviderProps {
@@ -44,10 +50,7 @@ export interface StoryMockProviderProps {
     showOverviewModal: boolean;
     setShowOverviewModal: React.Dispatch<React.SetStateAction<boolean>>;
   }>;
-  complianceQuestionnaireContext?: Partial<{
-    activeQuestion: string | null;
-    setActiveQuestion: (questionId: string | null) => void;
-  }>;
+  complianceQuestionnaireContext?: Partial<ComplianceQuestionnaireContextType>;
 }
 
 export const StoryMockProvider = (props: PropsWithChildren<StoryMockProviderProps>) => {
@@ -123,12 +126,25 @@ export const StoryMockProvider = (props: PropsWithChildren<StoryMockProviderProp
   const [complianceQuestionnaireActiveQuestion, setComplianceQuestionnaireActiveQuestion] = React.useState<string | null>(
     props.complianceQuestionnaireContext?.activeQuestion ?? null,
   );
+  const [complianceQuestionnaireFocusQuestion, setComplianceQuestionnaireFocusQuestion] = React.useState<{
+    key: string;
+    aiDetails: {
+      ai_response?: any;
+      ai_answered?: boolean;
+      ai_attempted?: boolean;
+      value?: any;
+      questionAnswerSaved: boolean;
+      questionAnswerChanged: boolean;
+    };
+  } | null>(props.complianceQuestionnaireContext?.focusQuestion ?? null);
 
   const complianceQuestionnaireContextValue = {
     name: 'rei_pia_2024',
     ...props.complianceQuestionnaireContext,
     activeQuestion: complianceQuestionnaireActiveQuestion,
     setActiveQuestion: props.complianceQuestionnaireContext?.setActiveQuestion ?? setComplianceQuestionnaireActiveQuestion,
+    focusQuestion: complianceQuestionnaireFocusQuestion,
+    setFocusQuestion: props.complianceQuestionnaireContext?.setFocusQuestion ?? setComplianceQuestionnaireFocusQuestion,
   };
 
   return (

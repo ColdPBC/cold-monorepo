@@ -127,6 +127,12 @@ export type QuestionnaireQuestion = {
   ai_response?: {
     justification?: string;
     answer?: string | boolean | number | Array<string>;
+    references?: {
+      file: string;
+      text: string;
+      score?: number;
+    }[];
+    source?: string[];
   };
   ai_attempted?: boolean;
   score?: number;
@@ -134,3 +140,13 @@ export type QuestionnaireQuestion = {
   question_summary?: string;
   corresponding_question?: string;
 };
+
+export interface ComplianceNotePayload {
+  id: string;
+  note: string;
+  created_at: string;
+  updated_at: string;
+  compliance_question_id: string;
+  organization_compliance_id: string;
+  deleted: string;
+}

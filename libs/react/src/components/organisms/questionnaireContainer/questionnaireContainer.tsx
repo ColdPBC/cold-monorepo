@@ -5,13 +5,14 @@ import { QuestionnaireQuestion } from '@coldpbc/interfaces';
 import useSWR from 'swr';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { useAuth0Wrapper } from '@coldpbc/hooks';
+import { Element, scroller } from 'react-scroll';
+import { useSearchParams } from 'react-router-dom';
 
-export const QuestionnaireContainer = (props: { sidebarOpen: boolean; setSidebarOpen: (open: boolean) => void }) => {
-  const { sidebarOpen, setSidebarOpen } = props;
+export const QuestionnaireContainer = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
   const { orgId } = useAuth0Wrapper();
-  const { activeQuestion, setActiveQuestion, name } = useContext(ColdComplianceQuestionnaireContext);
-  const [focusQuestion, setFocusQuestion] = useState<string | null>(null);
-
+  const { name, activeQuestion } = useContext(ColdComplianceQuestionnaireContext);
+  const [focusQuestionKey, setFocusQuestionKey] = useState<string | null>(null);
   const getQuestionsUrl = () => {
     if (!orgId) return null;
     return [`/compliance_definitions/${name}/organizations/${orgId}/questions`, 'GET'];
@@ -32,12 +33,21 @@ export const QuestionnaireContainer = (props: { sidebarOpen: boolean; setSidebar
   >(getQuestionsUrl(), axiosFetcher);
 
   useEffect(() => {
-    // handle scrolling to question
+    if (activeQuestion === null) return;
+    scroller.scrollTo(activeQuestion, {
+      duration: 200,
+    });
   }, [activeQuestion]);
 
+  // get query params from url
   useEffect(() => {
-    setSidebarOpen(false);
-  }, [focusQuestion]);
+    const sectionKey = searchParams.get('section');
+    if (sectionKey) {
+      scroller.scrollTo(sectionKey, {
+        duration: 200,
+      });
+    }
+  }, []);
 
   if (questionsSWR.isLoading) {
     return <Spinner />;
@@ -51,19 +61,25 @@ export const QuestionnaireContainer = (props: { sidebarOpen: boolean; setSidebar
 
   // todo: add paging capability
   return (
-    <div className={'w-full flex flex-col gap-[40px] overflow-x-auto'}>
+    <div className={'w-full pt-[24px] px-[40px] flex flex-col gap-[40px] overflow-x-auto scrollbar-hide'}>
       {sectionGroups.map((sectionGroup, index) => {
         return (
           <div className={'w-full flex flex-col gap-[40px] items-start'}>
             <div className={'text-h1 text-tc-primary'}>{sectionGroup.name}</div>
             {sectionGroup.sections.map((section, index) => {
               return (
-                <div className={'flex flex-col gap-[40px]'}>
-                  <div className={'text-h2 text-tc-primary'}>{section.name}</div>
-                  {section.questions.map((question, index) => {
-                    return <QuestionnaireQuestionItem number={index + 1} question={question} focusQuestion={focusQuestion} setFocusQuestion={setFocusQuestion} />;
-                  })}
-                </div>
+                <Element name={section.key}>
+                  <div className={'flex flex-col gap-[40px]'}>
+                    <div className={'text-h2 text-tc-primary'}>{section.name}</div>
+                    {section.questions.map((question, index) => {
+                      return (
+                        <Element name={question.key}>
+                          <QuestionnaireQuestionItem number={index + 1} question={question} focusQuestion={focusQuestionKey} setFocusQuestion={setFocusQuestionKey} />
+                        </Element>
+                      );
+                    })}
+                  </div>
+                </Element>
               );
             })}
           </div>

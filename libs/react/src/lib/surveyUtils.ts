@@ -4,6 +4,7 @@ import {
   ComplianceSurveyPayloadType,
   ComplianceSurveySavedQuestionType,
   ComplianceSurveySectionType,
+  QuestionnaireQuestion,
   SurveyActiveKeyType,
   SurveyAdditionalContext,
   SurveyPayloadType,
@@ -650,4 +651,23 @@ export const getAIResponseValue = (followUp: {
     default:
       return ai_response?.answer;
   }
+};
+
+export const getAIOriginalAnswer = (ai_response: QuestionnaireQuestion['ai_response']) => {
+  if (!ai_response) {
+    return null;
+  }
+  let originalAnswer;
+
+  if (ai_response.answer === true) {
+    originalAnswer = 'Yes';
+  } else if (ai_response.answer === false) {
+    originalAnswer = 'No';
+  } else if (Array.isArray(ai_response.answer)) {
+    originalAnswer = ai_response.answer.join(', ');
+  } else {
+    originalAnswer = ai_response.answer;
+  }
+
+  return originalAnswer;
 };
