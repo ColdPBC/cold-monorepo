@@ -6175,9 +6175,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nestjs/common@npm:^10.2.6":
-  version: 10.3.7
-  resolution: "@nestjs/common@npm:10.3.7"
+"@nestjs/common@npm:^10.3.9":
+  version: 10.3.9
+  resolution: "@nestjs/common@npm:10.3.9"
   dependencies:
     iterare: "npm:1.2.1"
     tslib: "npm:2.6.2"
@@ -6192,7 +6192,7 @@ __metadata:
       optional: true
     class-validator:
       optional: true
-  checksum: 10/4bf007140e765d64e50f51e436915bb501e77ba0ad3e4d268d04b5e056df6791c7232a3e641fba0dbd2691627b9c5b3b76c66f7a6d331e0080082cfb9e8cec1c
+  checksum: 10/a4886bf1e99f0f1952731dcb3ed4fa0927c0165285683637a719c85e4ddf3a2f711d554136c60d83862fc9f917541c1bbcb75191510930e503e19da190c2de34
   languageName: node
   linkType: hard
 
@@ -19050,7 +19050,7 @@ __metadata:
     "@nestjs/bull": "npm:^10.0.1"
     "@nestjs/cache-manager": "npm:^2.1.0"
     "@nestjs/cli": "npm:^10.2.1"
-    "@nestjs/common": "npm:^10.2.6"
+    "@nestjs/common": "npm:^10.3.9"
     "@nestjs/config": "npm:^3.1.1"
     "@nestjs/core": "npm:^10.2.6"
     "@nestjs/jwt": "npm:^10.0.3"
