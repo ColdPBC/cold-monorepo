@@ -1,6 +1,5 @@
 import { number } from 'zod';
 import { Role } from '../../primitives';
-import { testOrgIdExample } from './global.examples';
 
 export const allRoles = [Role.ColdAdmin, Role.CompanyOwner, Role.CompanyAdmin, Role.CompanyMember];
 export const coldAdminOnly = [Role.ColdAdmin];
@@ -64,7 +63,7 @@ export const impersonateOrgDecoratorOptions = {
 export const orgIdDecoratorOptions = {
   name: 'orgId',
   type: String,
-  example: testOrgIdExample,
+  example: `{{test_org_id}}`,
   required: true,
   description: 'Id of the Organization',
 };

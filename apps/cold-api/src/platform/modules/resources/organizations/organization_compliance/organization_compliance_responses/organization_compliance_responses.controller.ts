@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Put, Req, UseFilters, UseGuards } from '@nestjs/common';
 import { OrganizationComplianceResponsesService } from './organization_compliance_responses.service';
-import { coldAdminOnly, allRoles, HttpExceptionFilter, JwtAuthGuard, Roles, RolesGuard, testOrgIdExample } from '@coldpbc/nest';
+import { coldAdminOnly, allRoles, HttpExceptionFilter, JwtAuthGuard, Roles, RolesGuard } from '@coldpbc/nest';
 import { ApiParam, ApiTags } from '@nestjs/swagger';
 import { compliance_responses } from '@prisma/client';
 
@@ -11,7 +11,7 @@ import { compliance_responses } from '@prisma/client';
   name: 'orgId',
   required: true,
   type: 'string',
-  example: testOrgIdExample,
+  example: `{{test_organization_id}}`,
 })
 @ApiParam({
   name: 'name',

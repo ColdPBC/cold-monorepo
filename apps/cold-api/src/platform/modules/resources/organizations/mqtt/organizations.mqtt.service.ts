@@ -5,6 +5,7 @@ import {
   ComplianceSectionsCacheRepository,
   ComplianceSectionsRepository,
   Cuid2Generator,
+  GuidPrefixes,
   MqttAPIComplianceSectionPayload,
   MqttService,
   MqttSocketAPIPayload,
@@ -24,7 +25,7 @@ export class ComplianceMQTT extends BaseWorker implements OnModuleInit {
   }
 
   override async onModuleInit() {
-    this.mqttService.connect(ComplianceMQTT.name, new Cuid2Generator('org').scopedId);
+    this.mqttService.connect(ComplianceMQTT.name, new Cuid2Generator(GuidPrefixes.Organization).scopedId);
     this.mqttService.subscribe(`$share/api/platform/${process.env['NODE_ENV']}/#`);
     this.mqttService.onMessage(this.onMessage.bind(this));
   }

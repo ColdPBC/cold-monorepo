@@ -85,5 +85,11 @@ export class OrganizationsRepository extends BaseWorker {
     if (org?.name?.includes('cold-climate')) {
       throw new BadRequestException({ organization: org, user }, 'cannot delete cold-climate org');
     }
+
+    return this.prisma.extended.organizations.delete({
+      where: {
+        id: org.id,
+      },
+    });
   }
 }

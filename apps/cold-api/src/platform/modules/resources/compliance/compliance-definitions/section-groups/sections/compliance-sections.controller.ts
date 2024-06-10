@@ -1,9 +1,11 @@
 import { BadRequestException, Body, Controller, Delete, Get, Param, Patch, Post, Query, Req, UseFilters, UseGuards } from '@nestjs/common';
 import { ComplianceSectionsService } from './compliance-sections.service';
-import { genComplianceSection, HttpExceptionFilter, JwtAuthGuard, Roles, RolesGuard } from '@coldpbc/nest';
+import { GeneratorService, HttpExceptionFilter, JwtAuthGuard, Roles, RolesGuard } from '@coldpbc/nest';
 import { coldAdminOnly } from '../../../../_global/global.params';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { compliance_sections } from '@prisma/client';
+
+const generatorService = new GeneratorService();
 
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Roles(...coldAdminOnly)
@@ -17,7 +19,7 @@ export class ComplianceSectionsController {
   @ApiBody({
     type: 'object',
     schema: {
-      example: genComplianceSection(),
+      example: generatorService.genComplianceSection(),
     },
   })
   create(@Param('name') name: string, @Param('sgId') groupId: string, @Body() sectionData: compliance_sections, @Req() user: any) {
@@ -65,7 +67,7 @@ export class ComplianceSectionsController {
   @ApiBody({
     type: 'object',
     schema: {
-      example: genComplianceSection(),
+      example: generatorService.genComplianceSection(),
     },
   })
   update(@Param('name') name: string, @Param('sgId') groupId: string, @Param('sId') id: string, @Body() sectionData: compliance_sections, @Req() user: any) {

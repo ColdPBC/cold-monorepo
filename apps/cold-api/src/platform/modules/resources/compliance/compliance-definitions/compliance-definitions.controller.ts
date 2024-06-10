@@ -2,21 +2,12 @@ import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post, Put, Query
 import { ApiBody, ApiOAuth2, ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Span } from 'nestjs-ddtrace';
 import { ResourceValidationPipe } from '../../../../pipes/resource.pipe';
-import {
-  BaseWorker,
-  generateSurveyMock,
-  HttpExceptionFilter,
-  IAuthenticatedUser,
-  JwtAuthGuard,
-  Role,
-  Roles,
-  RolesGuard,
-  SurveyResponseSchema,
-  testOrgIdExample,
-} from '@coldpbc/nest';
+import { BaseWorker, HttpExceptionFilter, IAuthenticatedUser, JwtAuthGuard, Role, Roles, RolesGuard, SurveyResponseSchema, GeneratorService } from '@coldpbc/nest';
 import { allRoles, bpcDecoratorOptions, coldAdminOnly } from '../../_global/global.params';
 import { ComplianceDefinitionService } from './compliance-definitions.service';
 import { ComplianceDefinition, ComplianceDefinitionSchema } from './compliance-definitions.schema';
+
+const genService = new GeneratorService();
 
 @Span()
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -75,7 +66,7 @@ export class ComplianceDefinitionsController extends BaseWorker {
       sample: {
         summary: 'Sample Survey',
         description: 'string',
-        value: generateSurveyMock(),
+        value: genService.generateSurveyMock(),
       },
     },
   })
@@ -191,7 +182,7 @@ export class ComplianceDefinitionsController extends BaseWorker {
     name: 'orgId',
     required: true,
     type: 'string',
-    example: testOrgIdExample,
+    example: '{{test_organization_id}}',
   })
   activateComplianceForOrgByName(
     @Param('name') name: string,
@@ -237,7 +228,7 @@ export class ComplianceDefinitionsController extends BaseWorker {
     name: 'orgId',
     required: true,
     type: 'string',
-    example: testOrgIdExample,
+    example: `{{test_organization_id}}`,
   })
   @HttpCode(204)
   @Roles(Role.ColdAdmin)
@@ -268,7 +259,7 @@ export class ComplianceDefinitionsController extends BaseWorker {
     name: 'orgId',
     required: true,
     type: 'string',
-    example: testOrgIdExample,
+    example: `{{test_organization_id}}`,
   })
   @ApiBody({
     description: 'overrides the survey array in the compliance definition',
@@ -315,7 +306,7 @@ export class ComplianceDefinitionsController extends BaseWorker {
     name: 'orgId',
     required: true,
     type: 'string',
-    example: testOrgIdExample,
+    example: '{{test_organization_id}}',
   })
   @ApiBody({
     description: 'overrides the survey array in the compliance definition',
@@ -352,7 +343,7 @@ export class ComplianceDefinitionsController extends BaseWorker {
     name: 'orgId',
     required: true,
     type: 'string',
-    example: testOrgIdExample,
+    example: '{{test_organization_id}}',
   })
   @ApiResponse({
     status: 200,
@@ -384,7 +375,7 @@ export class ComplianceDefinitionsController extends BaseWorker {
     name: 'orgId',
     required: true,
     type: 'string',
-    example: testOrgIdExample,
+    example: '{{test_organization_id}}',
   })
   @ApiQuery(bpcDecoratorOptions)
   @Roles(...allRoles)
@@ -536,7 +527,7 @@ export class ComplianceDefinitionsController extends BaseWorker {
     name: 'orgId',
     required: true,
     type: 'string',
-    example: testOrgIdExample,
+    example: '{{test_organization_id}}',
   })
   activate(
     @Param('name') name: string,
@@ -582,7 +573,7 @@ export class ComplianceDefinitionsController extends BaseWorker {
     name: 'orgId',
     required: true,
     type: 'string',
-    example: testOrgIdExample,
+    example: '{{test_organization_id}}',
   })
   @HttpCode(204)
   @Roles(Role.ColdAdmin)
@@ -613,7 +604,7 @@ export class ComplianceDefinitionsController extends BaseWorker {
     name: 'orgId',
     required: true,
     type: 'string',
-    example: testOrgIdExample,
+    example: '{{test_organization_id}}',
   })
   @ApiBody({
     description: 'overrides the survey array in the compliance definition',
@@ -660,7 +651,7 @@ export class ComplianceDefinitionsController extends BaseWorker {
     name: 'orgId',
     required: true,
     type: 'string',
-    example: testOrgIdExample,
+    example: '{{test_organization_id}}',
   })
   @ApiBody({
     description: 'overrides the survey array in the compliance definition',
@@ -697,7 +688,7 @@ export class ComplianceDefinitionsController extends BaseWorker {
     name: 'orgId',
     required: true,
     type: 'string',
-    example: testOrgIdExample,
+    example: '{{test_organization_id}}',
   })
   @ApiResponse({
     status: 200,
@@ -729,7 +720,7 @@ export class ComplianceDefinitionsController extends BaseWorker {
     name: 'orgId',
     required: true,
     type: 'string',
-    example: testOrgIdExample,
+    example: '{{test_organization_id}}',
   })
   @ApiQuery(bpcDecoratorOptions)
   @Roles(...allRoles)

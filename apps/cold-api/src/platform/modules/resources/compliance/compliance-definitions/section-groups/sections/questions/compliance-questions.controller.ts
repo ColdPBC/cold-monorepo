@@ -1,10 +1,12 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, UseFilters, UseGuards } from '@nestjs/common';
 import { ComplianceQuestionsService } from './compliance-questions.service';
 import { compliance_questions } from '@prisma/client';
-import { genComplianceQuestion, HttpExceptionFilter, JwtAuthGuard, Roles, RolesGuard } from '@coldpbc/nest';
+import { GeneratorService, HttpExceptionFilter, JwtAuthGuard, Roles, RolesGuard } from '@coldpbc/nest';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { Span } from 'nestjs-ddtrace';
 import { coldAdminOnly } from '../../../../../_global/global.params';
+
+const genService = new GeneratorService();
 
 @Span()
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -19,7 +21,7 @@ export class ComplianceQuestionsController {
   @ApiBody({
     type: 'object',
     schema: {
-      example: [genComplianceQuestion(), genComplianceQuestion()],
+      example: [genService.genComplianceQuestion(), genService.genComplianceQuestion()],
     },
   })
   createMany(@Param('name') name: string, @Param('sgId') groupId: string, @Param('sId') sId: string, @Body() createComplianceQuestionDto: compliance_questions[]) {
@@ -30,7 +32,7 @@ export class ComplianceQuestionsController {
   @ApiBody({
     type: 'object',
     schema: {
-      example: genComplianceQuestion(),
+      example: genService.genComplianceQuestion(),
     },
   })
   create(@Param('name') name: string, @Param('sgId') groupId: string, @Param('sId') sId: string, @Body() createComplianceQuestionDto: compliance_questions) {
@@ -56,7 +58,7 @@ export class ComplianceQuestionsController {
   @ApiBody({
     type: 'object',
     schema: {
-      example: genComplianceQuestion(),
+      example: genService.genComplianceQuestion(),
     },
   })
   update(

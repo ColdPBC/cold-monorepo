@@ -1,26 +1,25 @@
 import { Module } from '@nestjs/common';
-import { APP_GUARD } from '@nestjs/core';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { JwtService } from '@nestjs/jwt';
+
 import { HttpModule } from '@nestjs/axios';
 import { HotShotsModule } from 'nestjs-hot-shots';
 import { BullModule } from '@nestjs/bull';
-import { PrismaModule, PrismaService } from './prisma';
-import { HealthController, HealthModule, HealthService } from './health';
+import { PrismaModule } from './prisma';
+import { HealthModule } from './health';
 import { DarklyService } from './darkly';
 import { ColdCacheModule } from './cache';
-import { AuthorizationModule, JwtAuthGuard, JwtStrategy } from './authorization';
+import { AuthorizationModule } from './authorization';
 import { InterceptorModule } from './interceptors';
 import { BaseWorker, WorkerLogger } from './worker';
-import { ColdRabbitModule, ColdRabbitService } from './rabbit'; //import { CronModule, CronService } from './crons';
+import { ColdRabbitModule } from './rabbit'; //import { CronModule, CronService } from './crons';
 import { DatadogTraceModule } from 'nestjs-ddtrace';
-import { S3Module, S3Service, SecretsModule, SecretsService } from './aws';
-import { RedisServiceConfig } from './utility';
+import { S3Module, SecretsModule, SecretsService } from './aws';
+import { RedisServiceConfig, GeneratorsModule } from './utility';
 import { MqttModule } from './mqtt';
-import { ComplianceRepositoryModule } from './repositories';
+import { ComplianceRepositoryModule } from './compliance';
 
 @Module({
-  imports: [MqttModule, ComplianceRepositoryModule],
+  imports: [MqttModule, ComplianceRepositoryModule, GeneratorsModule],
 })
 export class NestModule {
   static async forRootAsync() {
@@ -63,6 +62,7 @@ export class NestModule {
       HttpModule,
       MqttModule,
       ComplianceRepositoryModule,
+      GeneratorsModule,
     ];
 
     /**
@@ -83,8 +83,6 @@ export class NestModule {
     logger.info('Configuring Nest Module...');
 
     imports.push(S3Module);
-    providers.push(S3Service);
-    exports.push(S3Service);
 
     //configure-enable-hot-shots-module
     const enableHotShots = await darkly.getBooleanFlag('static-enable-hot-shots-module');
@@ -142,9 +140,6 @@ export class NestModule {
     const enableHealthModule = await darkly.getBooleanFlag('static-enable-health-module');
     if (enableHealthModule) {
       imports.push(HealthModule);
-      controllers.push(HealthController);
-      providers.push(HealthService);
-      exports.push(HealthService);
     }
 
     /**
@@ -157,13 +152,6 @@ export class NestModule {
       }
 
       imports.push(ColdCacheModule.forRootAsync(secrets), await AuthorizationModule.forFeatureAsync());
-
-      providers.push(JwtStrategy, JwtService, {
-        provide: APP_GUARD,
-        useClass: JwtAuthGuard,
-      });
-
-      exports.push(JwtStrategy, JwtService);
     }
 
     /**
@@ -172,8 +160,6 @@ export class NestModule {
     const enablePrismaModule = await darkly.getBooleanFlag('static-enable-prisma-module');
     if (enablePrismaModule) {
       imports.push(PrismaModule);
-      providers.push(PrismaService);
-      exports.push(PrismaService);
     }
 
     /**
@@ -190,8 +176,6 @@ export class NestModule {
     const enableRabbitModule = await darkly.getBooleanFlag('static-enable-rabbit-module');
     if (enableRabbitModule) {
       imports.push(ColdRabbitModule.forRootAsync());
-      providers.push(ColdRabbitService);
-      exports.push(ColdRabbitService);
     }
 
     return {

@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { BaseWorker, Cuid2Generator, PrismaService } from '@coldpbc/nest';
+import { BaseWorker, Cuid2Generator, GuidPrefixes, PrismaService } from '@coldpbc/nest';
 import { FacilityFootprint } from './entities/footprint.entity';
 import { groupBy, map } from 'lodash';
 
@@ -64,7 +64,7 @@ export class FootprintsService extends BaseWorker {
           },
           update: FacilityFootprint.fromJSON(orgId, period),
           create: {
-            id: new Cuid2Generator('foot').scopedId,
+            id: new Cuid2Generator(GuidPrefixes.OrganizationFootprint).scopedId,
             facility_id: period.facility_id,
             organization_id: orgId,
             updated_at: new Date().toISOString(),

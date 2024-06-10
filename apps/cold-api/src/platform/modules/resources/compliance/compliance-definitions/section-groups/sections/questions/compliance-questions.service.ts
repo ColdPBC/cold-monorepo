@@ -63,9 +63,7 @@ export class ComplianceQuestionsService extends BaseWorker {
    *
    * @throws {Error} - Throws an error if neither id nor compliance_definition_name and key are provided.
    */
-  findOne({ id, compliance_definition_name, key }: { id?: string; compliance_definition_name?: string; key?: string }) {
-    if (!id && !compliance_definition_name && !key) throw new Error('you must provide either id or compliance_definition_name and key');
-
+  findOne({ id, compliance_definition_name, key }: { id?: string; compliance_definition_name?: string; key?: string }): Promise<any> {
     if (id) return this.complianceQuestionsRepository.getQuestion(id);
 
     if (compliance_definition_name && key)
@@ -73,6 +71,8 @@ export class ComplianceQuestionsService extends BaseWorker {
         compliance_definition_name,
         key,
       });
+
+    throw new Error('you must provide either id or compliance_definition_name and key');
   }
 
   /**

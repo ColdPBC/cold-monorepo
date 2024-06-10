@@ -1,6 +1,7 @@
 import { PrismaClient } from '@prisma/client';
-import { Cuid2Generator } from '../../src/lib/utility/cuid2-generator.service';
+import { Cuid2Generator } from '../../src/lib/utility';
 import { kebabCase } from 'lodash';
+import { GuidPrefixes } from '@coldpbc/nest';
 
 const prisma = new PrismaClient();
 console.log('ENVIRONMENT:', process.env['NODE_ENV']);
@@ -289,7 +290,7 @@ const seeds = {
   ],
 };
 
-const subcategoryLables = {
+const subcategoryLabels = {
   1: 'Purchased Goods and Services',
   2: 'Capital Goods',
   3: 'Fuel and Energy Related Activities',
@@ -314,11 +315,11 @@ const createEmissionScopes = (key: string, labels: Array<string>): Array<emissio
 
   const scopes: Array<emission_scope> = labels.map(label => {
     return {
-      id: new Cuid2Generator('scope').generate().scopedId,
+      id: new Cuid2Generator(GuidPrefixes.EmissionScope).generate().scopedId,
       ghg_category: scope,
       ghg_subcategory: sub_scope,
       label,
-      subcategory_label: subcategoryLables[sub_scope],
+      subcategory_label: subcategoryLabels[sub_scope],
       name: kebabCase(label.toLowerCase()),
     };
   });

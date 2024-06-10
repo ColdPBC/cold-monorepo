@@ -1,4 +1,4 @@
-import { Cuid2Generator } from '@coldpbc/nest';
+import { Cuid2Generator, GuidPrefixes } from '@coldpbc/nest';
 
 export type emission_scope = {
   id: string;
@@ -26,7 +26,7 @@ export class FacilityFootprint {
   emissions: Array<emissions_data>;
 
   constructor(data: { period: number; organization_id: string; facility_id: string; id: string; emissions: emissions_data[]; period_type: string }) {
-    this.id = data.id || new Cuid2Generator('foot').scopedId;
+    this.id = data.id || new Cuid2Generator(GuidPrefixes.OrganizationFootprint).scopedId;
     this.type = data.period_type;
     this.value = data.period;
     this.organization_id = data.organization_id;

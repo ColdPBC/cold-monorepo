@@ -2,7 +2,7 @@ import { HttpService } from '@nestjs/axios';
 import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { Span } from 'nestjs-ddtrace';
 // eslint-disable-next-line @nx/enforce-module-boundaries
-import { BaseWorker, CacheService, Cuid2Generator, DarklyService, MqttService, PrismaService, S3Service } from '@coldpbc/nest';
+import { BaseWorker, CacheService, Cuid2Generator, DarklyService, GuidPrefixes, MqttService, PrismaService, S3Service } from '@coldpbc/nest';
 import { IntegrationsService } from '../../integrations/integrations.service';
 import { EventService } from '../../../utilities/events/event.service';
 import { pick } from 'lodash';
@@ -104,7 +104,7 @@ export class OrganizationFilesService extends BaseWorker {
               id: existing.id,
             },
             data: {
-              id: new Cuid2Generator('ofile').scopedId,
+              id: new Cuid2Generator(GuidPrefixes.OrganizationFile).scopedId,
               original_name: file.originalname,
               integration_id: null,
               organization_id: orgId,
@@ -123,7 +123,7 @@ export class OrganizationFilesService extends BaseWorker {
         } else {
           existing = await this.prisma.extended.organization_files.create({
             data: {
-              id: new Cuid2Generator('ofile').scopedId,
+              id: new Cuid2Generator(GuidPrefixes.OrganizationFile).scopedId,
               original_name: file.originalname,
               integration_id: null,
               organization_id: orgId,

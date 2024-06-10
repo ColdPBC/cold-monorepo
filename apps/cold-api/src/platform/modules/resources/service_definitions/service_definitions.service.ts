@@ -1,6 +1,6 @@
 import { Get, Injectable } from '@nestjs/common';
 import { Span } from 'nestjs-ddtrace';
-import { BaseWorker, Cuid2Generator, IAuthenticatedUser, PrismaService, Roles } from '@coldpbc/nest';
+import { BaseWorker, Cuid2Generator, GuidPrefixes, IAuthenticatedUser, PrismaService, Roles } from '@coldpbc/nest';
 import { integration_service_type } from '@prisma/client';
 import { allRoles } from '../_global/global.params';
 
@@ -23,7 +23,7 @@ export class ServiceDefinitionsService extends BaseWorker {
    */
   async registerService(name: string, type: integration_service_type, label: string, definition: any): Promise<any> {
     try {
-      const cuid2 = new Cuid2Generator('sdef');
+      const cuid2 = new Cuid2Generator(GuidPrefixes.ServiceDefinitions);
       const existing = await this.prisma.service_definitions.findFirst({
         where: {
           name: name,

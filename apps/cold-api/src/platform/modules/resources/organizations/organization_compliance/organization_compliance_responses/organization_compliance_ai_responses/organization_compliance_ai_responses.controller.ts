@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Req, UseFilters, UseGuards } from '@nestjs/common';
 import { OrganizationComplianceAiResponsesService } from './organization_compliance_ai_responses.service';
-import { allRoles, HttpExceptionFilter, JwtAuthGuard, Roles, RolesGuard, testOrgIdExample } from '@coldpbc/nest';
+import { allRoles, HttpExceptionFilter, JwtAuthGuard, Roles, RolesGuard } from '@coldpbc/nest';
 import { coldAdminOnly } from '../../../../_global/global.params';
 import { ApiParam, ApiTags } from '@nestjs/swagger';
 import { organization_compliance_ai_responses } from '@prisma/client';
@@ -17,7 +17,7 @@ export class OrganizationComplianceAiResponsesController {
     name: 'orgId',
     required: true,
     type: 'string',
-    example: testOrgIdExample,
+    example: '{{test_organization_id}}',
   })
   @ApiParam({
     name: 'name',
@@ -35,7 +35,7 @@ export class OrganizationComplianceAiResponsesController {
     name: 'orgId',
     required: true,
     type: 'string',
-    example: testOrgIdExample,
+    example: '{{test_organization_id}}',
   })
   @ApiParam({
     name: 'name',
@@ -53,7 +53,7 @@ export class OrganizationComplianceAiResponsesController {
     name: 'orgId',
     required: true,
     type: 'string',
-    example: testOrgIdExample,
+    example: '{{test_organization_id}}',
   })
   @ApiParam({
     name: 'name',
@@ -78,7 +78,7 @@ export class OrganizationComplianceAiResponsesController {
     name: 'orgId',
     required: true,
     type: 'string',
-    example: testOrgIdExample,
+    example: '{{test_organization_id}}',
   })
   @ApiParam({
     name: 'name',
@@ -109,7 +109,7 @@ export class OrganizationComplianceAiResponsesController {
     name: 'orgId',
     required: true,
     type: 'string',
-    example: testOrgIdExample,
+    example: '{{test_organization_id}}',
   })
   @ApiParam({
     name: 'name',
@@ -127,7 +127,7 @@ export class OrganizationComplianceAiResponsesController {
     name: 'orgId',
     required: true,
     type: 'string',
-    example: testOrgIdExample,
+    example: '{{test_organization_id}}',
   })
   @ApiParam({
     name: 'name',

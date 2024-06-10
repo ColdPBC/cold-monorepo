@@ -167,9 +167,9 @@ export class SurveysService extends BaseWorker {
       this.logger.info('created definition', definition);
 
       //rebuild cache async
-      this.findDefinitionByType(req, response.type);
-      this.findDefinitionByName(req, response.name);
-      this.findAllDefinitions(req);
+      this.findDefinitionByType(req, response.type, true);
+      this.findDefinitionByName(req, response.name, true);
+      this.findAllDefinitions(req, true);
 
       this.metrics.increment('cold.api.surveys.create', this.tags);
 

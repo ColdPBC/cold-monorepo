@@ -1,5 +1,4 @@
 import Tracer from 'dd-trace';
-import { Request } from 'express';
 import { get } from 'lodash';
 import { ConfigService } from '@nestjs/config';
 import { BaseWorker } from '@coldpbc/nest';
@@ -36,7 +35,7 @@ const tracer = Tracer.init({
 
 tracer.use('express', {
   hooks: {
-    request: (span, req: Request) => {
+    request: (span, req: any) => {
       if (req?.query?.bpc) {
         span?.setTag('bypass_cache', req.query.bpc);
       }

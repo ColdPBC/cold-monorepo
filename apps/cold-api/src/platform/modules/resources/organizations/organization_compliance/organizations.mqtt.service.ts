@@ -1,5 +1,5 @@
 import { Controller, UseGuards } from '@nestjs/common';
-import { Cuid2Generator, JwtAuthGuard, MqttService, PrismaService } from '@coldpbc/nest';
+import { Cuid2Generator, GuidPrefixes, JwtAuthGuard, MqttService, PrismaService } from '@coldpbc/nest';
 import { ConfigService } from '@nestjs/config';
 import process from 'process';
 import { ApiExcludeController } from '@nestjs/swagger';
@@ -17,7 +17,7 @@ export class MqttController {
     } catch (error) {
       console.error('Failed to connect to MQTT broker:', error);
     }
-    this.mqttService.connect(MqttController.name, new Cuid2Generator('org').scopedId);
+    this.mqttService.connect(MqttController.name, new Cuid2Generator(GuidPrefixes.Organization).scopedId);
     this.mqttService.subscribe(`$share/{ShareName}/platform/${process.env['NODE_ENV']}/api/#`);
     this.mqttService.onMessage(this.onMessage.bind(this));
   }

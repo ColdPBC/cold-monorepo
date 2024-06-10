@@ -4,9 +4,11 @@ import { ResourceValidationPipe } from '../../../pipes/resource.pipe';
 import { allRoles, bpcDecoratorOptions, coldAdminOnly, orgIdDecoratorOptions } from '../_global/global.params';
 import { OrganizationService } from './organization.service';
 import { ApiBody, ApiOAuth2, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { BaseWorker, genOrganization, HttpExceptionFilter, IAuthenticatedUser, JwtAuthGuard, OrganizationsSchema, Roles, RolesGuard } from '@coldpbc/nest';
+import { BaseWorker, HttpExceptionFilter, IAuthenticatedUser, JwtAuthGuard, OrganizationsSchema, Roles, RolesGuard, GeneratorService } from '@coldpbc/nest';
 import { CreateOrganizationDto } from './dto/organization.dto';
 import { FootprintsService } from './facilities/footprints/footprints.service';
+
+const genService = new GeneratorService();
 
 @Span()
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -37,7 +39,7 @@ export class OrganizationController extends BaseWorker {
   @ApiBody({
     type: 'object',
     schema: {
-      example: genOrganization(),
+      example: genService.genOrganization(),
     },
   })
   @HttpCode(201)
@@ -73,7 +75,7 @@ export class OrganizationController extends BaseWorker {
   @ApiBody({
     type: 'object',
     schema: {
-      example: genOrganization(),
+      example: genService.genOrganization(),
     },
   })
   @HttpCode(200)

@@ -1,74 +1,76 @@
 import { init, isCuid } from '@paralleldrive/cuid2';
 import { Injectable } from '@nestjs/common';
 import * as os from 'os';
+import { GuidPrefixes } from './compliance.enums';
 
 /**
  * CUID2 class!
  */
 @Injectable()
 export class Cuid2Generator {
-  id: string | undefined;
-  scopedId: string = '';
   createId: any;
-  prefix: string | undefined;
+  id: string;
+  prefix: GuidPrefixes;
+  scopedId: string;
+  private static prefix: GuidPrefixes;
+  private static id: string;
 
-  constructor(prefix?: string) {
+  constructor(prefix: GuidPrefixes) {
     this.createId = init({
-      length: 16,
-      fingerprint: os.hostname(),
+      length: 24,
     });
-
-    this.setId(prefix);
-
+    this.id = this.createId();
+    this.prefix = prefix;
+    this.scopedId = `${this.prefix}_${this.id}`;
     return this;
   }
 
-  static getProvider(prefix?: string) {
-    const cuid2 = new Cuid2Generator();
+  static getProvider(prefix: GuidPrefixes) {
+    const cuid2 = new Cuid2Generator(prefix);
 
     return {
       provide: 'Cuid2Generator',
-      useExisting: prefix ? cuid2.setPrefix(prefix) : cuid2,
+      useExisting: prefix ? (this.prefix = prefix) : cuid2,
     };
-  }
-
-  setPrefix(prefix: string) {
-    if (prefix.length < 2) throw new Error('Prefix must at least 3 characters');
-    this.prefix = prefix;
-    this.generate(this.prefix);
-
-    return this;
   }
 
   /**
    * Generate a new cuid2
    * @param prefix - Optional scope prefix to prepend to the generated id
    */
-  generate(prefix?: string) {
+  generate() {
     this.id = this.createId();
-    if (prefix || this.prefix) this.scopedId = `${prefix || this.prefix}_${this.id}`;
-
+    this.scopedId = `${this.prefix}_${this.id}`;
     return this;
-  }
-
-  /**
-   * Set the id and scopedId properties
-   */
-  setId(prefix?: string) {
-    if (prefix) return this.setPrefix(prefix);
-    else return this.generate();
   }
 
   /**
    * Check if a string is a cuid2
    * @param id
    */
-  isColdCUID2(id: string) {
-    // If the id is a scoped id, remove the prefix
-    if (id.includes('_')) {
-      return id.split('_')[0].length > 3 && id.split('_')[0].length < 6 && isCuid(id.split('_')[1]);
+  static isColdCuid2(id: string) {
+    let isColdScoped = false;
+
+    for (const guidPrefixesKey in GuidPrefixes) {
+      isColdScoped = id.startsWith(`${GuidPrefixes[guidPrefixesKey]}_`);
+      if (isColdScoped) {
+        break;
+      }
     }
 
+    const idParts = id.split('_');
+    console.log('pfx', idParts[0]);
+    console.log('id', idParts[1]);
+    const isCUID = id.split('_').length == 16 || isCuid(idParts[1]);
+
+    return isColdScoped && isCUID;
+  }
+
+  /**
+   * Check if a string is a cuid2
+   * @param id
+   */
+  static isCUID2(id: string) {
     return isCuid(id);
   }
 }

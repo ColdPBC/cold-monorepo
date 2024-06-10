@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { BaseWorker } from '../../../worker';
-import { Cuid2Generator } from '../../../utility';
+import { Cuid2Generator, GuidPrefixes } from '../../../utility';
 import { PrismaService } from '../../../prisma';
 import { IAuthenticatedUser } from '../../../primitives';
 
@@ -50,6 +50,52 @@ export class OrganizationComplianceRepository extends BaseWorker {
             organization_id: orgId,
           },
         },
+        select: {
+          id: true,
+          organization_id: true,
+          compliance_definition_name: true,
+          compliance_definition: {
+            select: {
+              name: true,
+              sections: {
+                select: {
+                  id: true,
+                  title: true,
+                  key: true,
+                  order: true,
+                  compliance_questions: {
+                    select: {
+                      id: true,
+                      key: true,
+                      prompt: true,
+                      component: true,
+                      options: true,
+                      rubric: true,
+                      order: true,
+                      compliance_responses: {
+                        select: {
+                          id: true,
+                          ai_response: {
+                            select: {
+                              id: true,
+                              answer: true,
+                            },
+                          },
+                          org_response: {
+                            select: {
+                              id: true,
+                              value: true,
+                            },
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
       });
 
       if (!compliance) {
@@ -72,7 +118,7 @@ export class OrganizationComplianceRepository extends BaseWorker {
       data.organization_id = orgId;
 
       return this.prisma.extended.organization_compliance.create({
-        id: new Cuid2Generator('oc').scopedId,
+        id: new Cuid2Generator(GuidPrefixes.OrganizationCompliance).scopedId,
         ...data,
       });
     } catch (error) {

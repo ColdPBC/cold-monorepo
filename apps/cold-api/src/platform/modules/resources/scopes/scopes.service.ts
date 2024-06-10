@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreateScopeDto } from './dto/create-scope.dto';
 import { UpdateScopeDto } from './dto/update-scope.dto';
-import { BaseWorker, Cuid2Generator, PrismaService } from '@coldpbc/nest';
+import { BaseWorker, Cuid2Generator, GuidPrefixes, PrismaService } from '@coldpbc/nest';
 
 @Injectable()
 export class ScopesService extends BaseWorker {
@@ -12,7 +12,7 @@ export class ScopesService extends BaseWorker {
   async create(createScopeDto: CreateScopeDto) {
     const scopes = await this.prisma.emission_scopes.create({
       data: {
-        id: new Cuid2Generator('scope').scopedId,
+        id: new Cuid2Generator(GuidPrefixes.EmissionScope).scopedId,
         ...createScopeDto,
       },
     });
