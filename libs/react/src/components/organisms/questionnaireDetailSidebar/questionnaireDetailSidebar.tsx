@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
-import { ColdIcon, QuestionnaireAIDetail, QuestionnaireNotesDetail } from '@coldpbc/components';
+import { ColdIcon, QuestionnaireAIDetail, QuestionnaireMoreDetail, QuestionnaireNotesDetail } from '@coldpbc/components';
 import { IconNames } from '@coldpbc/enums';
 import { ColdComplianceQuestionnaireContext } from '@coldpbc/context';
 import { HexColors } from '@coldpbc/themes';
@@ -22,7 +22,7 @@ export const QuestionnaireDetailSidebar = () => {
       case 'notes':
         return <QuestionnaireNotesDetail />;
       case 'more':
-        return <div>More</div>;
+        return <QuestionnaireMoreDetail />;
       default:
         return null;
     }

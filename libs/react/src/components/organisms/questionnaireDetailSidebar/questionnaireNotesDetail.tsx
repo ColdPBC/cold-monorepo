@@ -4,7 +4,7 @@ import { ComplianceNotePayload } from '@coldpbc/interfaces';
 import { useAuth0Wrapper } from '@coldpbc/hooks';
 import { ColdComplianceQuestionnaireContext } from '@coldpbc/context';
 import { axiosFetcher } from '@coldpbc/fetchers';
-import { Spinner } from '@coldpbc/components';
+import { BaseButton, Spinner } from '@coldpbc/components';
 
 export const QuestionnaireNotesDetail = () => {
   const [noteText, setNoteText] = useState('');
@@ -24,6 +24,22 @@ export const QuestionnaireNotesDetail = () => {
   useEffect(() => {
     setNoteText(notesSWR.data?.note || '');
   }, [notesSWR.data]);
+
+  const getSaveButton = () => {
+    // want to disable the button if the note is the same as the saved note or is empty
+    const disableButton = noteText === notesSWR.data?.note || noteText === '';
+    return (
+      <div className={'w-full flex flex-row justify-end'}>
+        <BaseButton
+          label={'Save'}
+          onClick={() => {
+            // todo: handle note API submission
+          }}
+          disabled={disableButton}
+        />
+      </div>
+    );
+  };
 
   if (notesSWR.isLoading) {
     return (
@@ -45,6 +61,7 @@ export const QuestionnaireNotesDetail = () => {
         placeholder={'Add a note for yourself here....'}
         rows={2}
       />
+      {getSaveButton()}
     </div>
   );
 };

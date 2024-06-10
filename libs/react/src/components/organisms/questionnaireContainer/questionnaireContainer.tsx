@@ -11,7 +11,7 @@ import { useSearchParams } from 'react-router-dom';
 export const QuestionnaireContainer = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { orgId } = useAuth0Wrapper();
-  const { name, activeQuestion } = useContext(ColdComplianceQuestionnaireContext);
+  const { name, activeQuestion, focusQuestion } = useContext(ColdComplianceQuestionnaireContext);
   const [focusQuestionKey, setFocusQuestionKey] = useState<string | null>(null);
   const getQuestionsUrl = () => {
     if (!orgId) return null;
@@ -61,18 +61,19 @@ export const QuestionnaireContainer = () => {
 
   const sectionGroups = questionsSWR.data;
 
-  // todo: add paging capability
+  // todo: add paging capability. provide section id to API
+  // todo: handle updating question answers and bookmarking
   return (
     <div className={'w-full pt-[24px] px-[40px] flex flex-col gap-[40px] overflow-x-auto scrollbar-hide'} id={'questionnaireContainer'}>
       {sectionGroups.map((sectionGroup, index) => {
         return (
           <div className={'w-full flex flex-col gap-[40px] items-start'}>
-            <div className={'text-h1 text-tc-primary'}>{sectionGroup.name}</div>
+            <div className={`text-h1 text-tc-primary ${focusQuestion !== null && 'opacity-20'}`}>{sectionGroup.name}</div>
             {sectionGroup.sections.map((section, index) => {
               return (
                 <Element name={section.key}>
                   <div className={'flex flex-col gap-[40px]'}>
-                    <div className={'text-h2 text-tc-primary'}>{section.name}</div>
+                    <div className={`text-h2 text-tc-primary ${focusQuestion !== null && 'opacity-20'}`}>{section.name}</div>
                     {section.questions.map((question, index) => {
                       return (
                         <Element name={question.key}>

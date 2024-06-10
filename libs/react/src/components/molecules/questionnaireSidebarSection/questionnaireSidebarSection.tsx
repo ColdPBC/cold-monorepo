@@ -16,7 +16,7 @@ export const QuestionnaireSidebarSection = ({
   };
   sideBarExpanded: boolean;
 }) => {
-  const { activeQuestion, setActiveQuestion } = useContext(ColdComplianceQuestionnaireContext);
+  const { setActiveQuestion } = useContext(ColdComplianceQuestionnaireContext);
   const [open, setOpen] = useState(false);
   const answeredQuestions = section.questions.filter(question => question.user_answered).length;
   const questions = section.questions.length;
@@ -29,6 +29,7 @@ export const QuestionnaireSidebarSection = ({
   };
 
   if (!sideBarExpanded) return null;
+
   return (
     <div className={'w-full flex flex-col gap-[14px]'}>
       <div className={'flex flex-row py-[16px] pl-[40px] pr-[24px] text-tc-primary gap-[8px] cursor-pointer items-center hover:bg-gray-60'} onClick={() => setOpen(!open)}>

@@ -45,8 +45,7 @@ export const ComplianceQuestionnaire = () => {
   }
 
   const selectedCompliance = complianceSWR.data?.find(compliance => compliance.compliance_definition.name === complianceName);
-  // todo: add scrolling to active question and section
-  // todo: handle talking to the API
+
   return (
     <ColdComplianceQuestionnaireContext.Provider
       value={{

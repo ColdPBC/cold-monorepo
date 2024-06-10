@@ -56,6 +56,7 @@ export const QuestionnaireQuestionItem = (props: {
   }, [questionInput]);
 
   useEffect(() => {
+    if (focusQuestion === null) return;
     setFocusQuestion({
       key: key,
       aiDetails: {
@@ -67,12 +68,14 @@ export const QuestionnaireQuestionItem = (props: {
         questionAnswerChanged: questionAnswerChanged,
       },
     });
-  }, [questionInput, questionAnswerSaved, questionAnswerChanged]);
+  }, [focusQuestion, questionInput, questionAnswerSaved, questionAnswerChanged]);
 
   const getQuestionStatusIcon = () => {
-    let icon = null;
-    icon = <ComplianceProgressStatusIcon type={questionStatus} inverted={true} />;
-    return <div className={'w-[12px] h-[12px]'}>{icon}</div>;
+    return (
+      <div className={'w-[12px] h-[12px]'}>
+        <ComplianceProgressStatusIcon type={questionStatus} inverted={true} />
+      </div>
+    );
   };
 
   const getBookMarkIcon = () => {
@@ -361,7 +364,7 @@ export const QuestionnaireQuestionItem = (props: {
         glowColor={HexColors.yellow['200']}
         className={'border-[1px] border-yellow-200 w-full px-[16px] py-[24px] gap-[16px] text-tc-primary'}
         data-testid={'questionnaire-input-ai-response'}>
-        <div className={'w-full flex flex-row justify-start h-[32px] gap-[1px] items-center'}>
+        <div className={'w-full flex flex-row justify-start h-auto gap-[1px] items-stretch'}>
           <div className={'bg-gray-50 rounded-l-[16px] h-full gap-[4px] pl-[4px] py-[4px] pr-[16px] flex flex-row items-center'}>
             <div className={'w-[15px] h-[15px] flex items-center justify-center'}>
               <ColdIcon name={IconNames.ColdAiIcon} color={HexColors.yellow['200']} />
@@ -454,6 +457,8 @@ export const QuestionnaireQuestionItem = (props: {
           {inputComponent(true)}
         </div>
       );
+    } else {
+      return null;
     }
   };
 
