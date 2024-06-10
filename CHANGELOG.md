@@ -1,3 +1,10 @@
+# [1.234.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.233.1...v1.234.0) (2024-06-10)
+
+
+### Features
+
+* update emission ID generation and handle estimate data absence ([56a2de4](https://github.com/ColdPBC/cold-monorepo/commit/56a2de45608a5565bec5d4bd330ec76f26b344d9))
+
 ## [1.233.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.233.0...v1.233.1) (2024-06-10)
 
 
