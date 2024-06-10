@@ -1,3 +1,34 @@
+# [1.233.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.232.0...v1.233.0) (2024-06-10)
+
+
+### Bug Fixes
+
+* ensure non-null and non-empty ai_response answer in survey filter service ([365a693](https://github.com/ColdPBC/cold-monorepo/commit/365a693d9f59d1484ad772754962cc3f2b4935e2))
+
+
+### Features
+
+* Add exception for missing website parameter in crawler controller ([ec96e07](https://github.com/ColdPBC/cold-monorepo/commit/ec96e073bf267e9a108718c93fb5b37dfeaea2e4))
+* Add methods to score compliance questions ([f300469](https://github.com/ColdPBC/cold-monorepo/commit/f300469b1c832b67b6100beef80a5a6f21c8e10a))
+* Add new column to organization_files table ([ec55a5c](https://github.com/ColdPBC/cold-monorepo/commit/ec55a5c95f8475e381a3c9dadff1abb70e70dd24))
+* Add new fields to Prisma schema file ([f14c1df](https://github.com/ColdPBC/cold-monorepo/commit/f14c1dffa3d0bda9b09b809c39913d4cbd16877f))
+* Add openai_vector_file_status column to organization_files ([ea22d86](https://github.com/ColdPBC/cold-monorepo/commit/ea22d86962a49cfb9e5738eae628bdcc80a1ec42))
+* Add scoring to compliance responses and add additional flags ([26730d1](https://github.com/ColdPBC/cold-monorepo/commit/26730d152161659cb8308d75bbc44aa8d420a49f))
+* Enhance OrganizationComplianceNotesController routing and functionality ([c262bfb](https://github.com/ColdPBC/cold-monorepo/commit/c262bfb359a6402ad2bd095aefb71b30df159241))
+* Ignore typescript error and update chat controller ([343d64f](https://github.com/ColdPBC/cold-monorepo/commit/343d64fd2a53d8c4090140302d97c4113a26d647))
+* Implement compliance scoring and assessment system ([28bf205](https://github.com/ColdPBC/cold-monorepo/commit/28bf205d6fe2ce6b9a2906403f50fe94515279ad))
+* Improve chat functionality and context handling in OpenAI ([e23674d](https://github.com/ColdPBC/cold-monorepo/commit/e23674dc58a20ee66aa9d1182f204166040c12fd))
+* integrate ColdRabbitModule and EventsModule in app.module ([f783475](https://github.com/ColdPBC/cold-monorepo/commit/f78347535f9c2aa9d0c2e85354ff3535507f25ad))
+* Reduce getContext proportion in chat.controller ([f760b84](https://github.com/ColdPBC/cold-monorepo/commit/f760b8430c0df7d63a9dfbb1144483b21ad310a0))
+* Update exports in Crawler module ([f181859](https://github.com/ColdPBC/cold-monorepo/commit/f1818594975db85c4653cadb8d959aa8a98044e3))
+* Update minScore default value in getContext function in Pinecone service ([10b9a94](https://github.com/ColdPBC/cold-monorepo/commit/10b9a94cefd2d97891ce9990f6b6f62947f1bee9))
+* Update OpenAI integration to use vector stores ([c7d1633](https://github.com/ColdPBC/cold-monorepo/commit/c7d1633b4a5bf25234ab001b7b50f21de8aa30d0))
+* update Organization Compliance Service to include AI activation ([fe1eb56](https://github.com/ColdPBC/cold-monorepo/commit/fe1eb5649b9e6b76cddf41a17e7dbf228f9ff933))
+* Update reference properties in assistant tools ([5df0d90](https://github.com/ColdPBC/cold-monorepo/commit/5df0d9064db225eb360d4be9fa24690a58692ab0))
+* Update the endpoint for activating AI in organization compliance ([5d3b3b7](https://github.com/ColdPBC/cold-monorepo/commit/5d3b3b7dfd0e6e269ac4f2484ffc3f167ab40b73))
+* Update typescript compile options in tsconfig files ([b3344b6](https://github.com/ColdPBC/cold-monorepo/commit/b3344b66cc1d30c6bd21522e10eabdbddbce9f04))
+* Updated openapi.json with compliance related changes ([843de6a](https://github.com/ColdPBC/cold-monorepo/commit/843de6a47a85ffcef6dcd82b3c5d2daf91009aba))
+
 # [1.233.0-cold-810.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.232.0...v1.233.0-cold-810.1) (2024-06-05)
 
 
