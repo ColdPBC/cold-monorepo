@@ -36,6 +36,7 @@ export const QuestionnaireContainer = () => {
     if (activeQuestion === null) return;
     scroller.scrollTo(activeQuestion, {
       duration: 200,
+      containerId: 'questionnaireContainer',
     });
   }, [activeQuestion]);
 
@@ -45,6 +46,7 @@ export const QuestionnaireContainer = () => {
     if (sectionKey) {
       scroller.scrollTo(sectionKey, {
         duration: 200,
+        containerId: 'questionnaireContainer',
       });
     }
   }, []);
@@ -61,7 +63,7 @@ export const QuestionnaireContainer = () => {
 
   // todo: add paging capability
   return (
-    <div className={'w-full pt-[24px] px-[40px] flex flex-col gap-[40px] overflow-x-auto scrollbar-hide'}>
+    <div className={'w-full pt-[24px] px-[40px] flex flex-col gap-[40px] overflow-x-auto scrollbar-hide'} id={'questionnaireContainer'}>
       {sectionGroups.map((sectionGroup, index) => {
         return (
           <div className={'w-full flex flex-col gap-[40px] items-start'}>
