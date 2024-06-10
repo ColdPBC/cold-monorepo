@@ -10,7 +10,6 @@ import { NumericFormat } from 'react-number-format';
 import { QuestionnaireQuestion } from '@coldpbc/interfaces';
 import { ColdComplianceQuestionnaireContext } from '@coldpbc/context';
 
-// todo: add additional context handling
 export const QuestionnaireQuestionItem = (props: {
   question: QuestionnaireQuestion;
   number: number;
@@ -335,15 +334,9 @@ export const QuestionnaireQuestionItem = (props: {
   };
 
   const getAISource = () => {
-    let justification = '';
+    let justification: string | undefined = '';
     let originalAnswer;
-    if (
-      !isUndefined(ai_response) &&
-      !isUndefined(ai_response.answer) &&
-      ai_response.justification &&
-      isAIResponseValueValid(question) &&
-      questionStatus === ComplianceProgressStatus.ai_answered
-    ) {
+    if (!isUndefined(ai_response) && !isUndefined(ai_response.answer) && isAIResponseValueValid(question) && questionStatus === ComplianceProgressStatus.ai_answered) {
       justification = ai_response.justification;
       if (ai_response.answer === true) {
         originalAnswer = 'Yes';
@@ -364,7 +357,7 @@ export const QuestionnaireQuestionItem = (props: {
         glowColor={HexColors.yellow['200']}
         className={'border-[1px] border-yellow-200 w-full px-[16px] py-[24px] gap-[16px] text-tc-primary'}
         data-testid={'questionnaire-input-ai-response'}>
-        <div className={'w-full flex flex-row justify-start h-auto gap-[1px] items-stretch'}>
+        <div className={'w-full flex flex-row justify-start h-auto gap-[1px] items-stretch z-10'}>
           <div className={'bg-gray-50 rounded-l-[16px] h-full gap-[4px] pl-[4px] py-[4px] pr-[16px] flex flex-row items-center'}>
             <div className={'w-[15px] h-[15px] flex items-center justify-center'}>
               <ColdIcon name={IconNames.ColdAiIcon} color={HexColors.yellow['200']} />
@@ -425,13 +418,7 @@ export const QuestionnaireQuestionItem = (props: {
 
     return (
       <div className={'w-full pb-[24px] flex flex-row justify-end'}>
-        <BaseButton
-          variant={variant}
-          disabled={disabled}
-          onClick={
-            // todo: handle submission to API
-            onClick
-          }>
+        <BaseButton variant={variant} disabled={disabled} onClick={onClick}>
           <div className={'w-full flex flex-row gap-[8px] items-center'}>
             <ColdIcon name={iconLeftName} />
             {label}
