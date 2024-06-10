@@ -1,3 +1,10 @@
+# [1.235.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.234.0...v1.235.0) (2024-06-10)
+
+
+### Features
+
+* Update 'app.module.ts' and 'rabbit.service.ts' and remove unused service configurations ([576be93](https://github.com/ColdPBC/cold-monorepo/commit/576be93d1447408704c47127f86a54e0856c0d62))
+
 # [1.234.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.233.1...v1.234.0) (2024-06-10)
 
 
