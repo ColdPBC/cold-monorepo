@@ -472,6 +472,8 @@ model organization_files {
   original_name                             String
   organization_id                           String
   openai_assistant_id                       String?
+  openai_vector_store_id                    String?
+  openai_vector_file_status                 String?
   openai_file_id                            String?                                     @unique
   created_at                                DateTime                                    @default(now())
   updated_at                                DateTime                                    @updatedAt
