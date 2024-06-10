@@ -1,7 +1,6 @@
 import { PrismaClient } from '@prisma/client';
-import { Cuid2Generator } from '../../src/lib/utility';
+import { Cuid2Generator, GuidPrefixes } from '../../src/lib/utility';
 import { kebabCase } from 'lodash';
-import { GuidPrefixes } from '@coldpbc/nest';
 
 const prisma = new PrismaClient();
 console.log('ENVIRONMENT:', process.env['NODE_ENV']);
