@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 
-import { MqttService, NestModule } from '@coldpbc/nest';
+import { ColdRabbitModule, ColdRabbitService, MqttService, NestModule } from '@coldpbc/nest';
 import { ClimatiqModule } from './climatiq/climatiq.module';
 import { ClimatiqService } from './climatiq/climatiq.service';
 import { AppService } from './app.service';
