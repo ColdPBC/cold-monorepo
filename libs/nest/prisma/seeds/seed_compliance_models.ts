@@ -1,6 +1,5 @@
 import { compliance_definitions, PrismaClient } from '@prisma/client';
-import { Cuid2Generator } from '../../src/lib/utility/cuid2-generator.service';
-import { GuidPrefixes } from '@coldpbc/nest';
+import { Cuid2Generator, GuidPrefixes } from '../../src/lib/utility';
 
 const prisma = new PrismaClient();
 console.log('ENVIRONMENT:', process.env['NODE_ENV']);
