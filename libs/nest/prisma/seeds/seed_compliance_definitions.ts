@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import { Cuid2Generator } from '../../src/lib/utility/cuid2-generator.service';
+import { Cuid2Generator, GuidPrefixes } from '../../src/lib/utility';
 
 const prisma = new PrismaClient();
 console.log('ENVIRONMENT:', process.env['NODE_ENV']);
@@ -141,7 +141,7 @@ export async function seedComplianceDefinitions() {
             ...seed,
           },
           create: {
-            id: new Cuid2Generator('cmpdef').scopedId,
+            id: new Cuid2Generator(GuidPrefixes.ComplianceDefinition).scopedId,
             ...seed,
             updated_at: new Date(),
           },
