@@ -23,7 +23,7 @@ export class OrganizationComplianceController {
     return this.organizationComplianceService.create(name, orgComplianceData, req);
   }
 
-  @Put(':orgId')
+  @Put(':orgId/activate')
   @Roles(...allRoles)
   activateAi(@Param('name') name: string, @Param('orgId') orgId: string, @Req() req: any) {
     return this.organizationComplianceService.activateAi(orgId, name, req);
