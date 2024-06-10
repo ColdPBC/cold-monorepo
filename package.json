@@ -51,7 +51,7 @@
     "@aws-sdk/client-sso": "^3.507.0",
     "@aws-sdk/credential-provider-sso": "^3.507.0",
     "@aws-sdk/lib-storage": "^3.509.0",
-    "@aws-sdk/s3-request-presigner": "^3.509.0",
+    "@aws-sdk/s3-request-presigner": "^3.592.0",
     "@aws-sdk/types": "^3.502.0",
     "@casl/ability": "^6.5.0",
     "@datadog/browser-logs": "^5.12.0",
