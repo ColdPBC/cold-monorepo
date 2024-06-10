@@ -155,7 +155,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
   }
 
   // The function `getContext` is used to retrieve the context of a given message
-  async getContext(message: string, namespace: string, indexName: string, minScore = 0.7, getOnlyText = true): Promise<string | ScoredPineconeRecord[]> {
+  async getContext(message: string, namespace: string, indexName: string, minScore = 0.3, getOnlyText = true): Promise<string | ScoredPineconeRecord[]> {
     const indexDetails = await this.getIndexDetails(indexName);
     // Get the embeddings of the input message
     const embedding = await this.embedString(message, indexName);
