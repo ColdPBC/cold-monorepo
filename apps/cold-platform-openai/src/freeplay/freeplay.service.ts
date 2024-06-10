@@ -59,6 +59,7 @@ export class FreeplayService extends BaseWorker implements OnModuleInit {
     return await this.client.prompts.get(variables);
   }
 
+  // @ts-expect-error - TS6133: 'session' is declared but its value is never read.
   async recordCompletion(session: any, promptVars: any, prompt: any, openAIResponse, start: Date, end: Date) {
     const sessionId = session?.sessionId;
     if (!sessionId) {
