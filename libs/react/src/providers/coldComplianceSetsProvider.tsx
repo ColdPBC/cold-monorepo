@@ -35,5 +35,7 @@ export const ColdComplianceSetsProvider = ({ children }: PropsWithChildren) => {
         {children}
       </ColdCompliancePageContext.Provider>
     );
+  } else {
+    return null;
   }
 };

@@ -16,7 +16,10 @@ const _ComplianceProgressCard = (props: ComplianceProgressCardProps) => {
   const totalNeedsReview = progress.total_review;
   const totalUnanswered = totalQuestions - totalComplete;
 
-  const shades = [];
+  const shades: {
+    color: string;
+    percentage: number;
+  }[] = [];
 
   if (totalComplete > 0) {
     shades.push({
@@ -31,7 +34,7 @@ const _ComplianceProgressCard = (props: ComplianceProgressCardProps) => {
     });
   }
 
-  const textArray = [];
+  const textArray: string[] = [];
   if (totalComplete > 0) {
     textArray.push(`${totalComplete} Complete`);
   }

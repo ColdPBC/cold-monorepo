@@ -32,6 +32,8 @@ export const QuestionnaireYesNo = (props: { onChange: (value: any) => void; valu
           <ColdIcon name={IconNames.ColdCheckIcon} width={24} height={24} color={'white'} />
         </div>
       );
+    } else {
+      return null;
     }
   };
 

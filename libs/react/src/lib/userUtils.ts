@@ -7,5 +7,7 @@ export const getFormattedUserName = (user: User | undefined) => {
     } else {
       return user.name;
     }
+  } else {
+    return '';
   }
 };

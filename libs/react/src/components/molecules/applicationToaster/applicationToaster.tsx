@@ -26,6 +26,8 @@ const _ApplicationToaster = () => {
       return () => {
         return clearTimeout(timeout);
       };
+    } else {
+      return;
     }
   }, [data]);
 
@@ -46,7 +48,7 @@ const _ApplicationToaster = () => {
 };
 
 export const ApplicationToaster = withErrorBoundary(_ApplicationToaster, {
-  FallbackComponent: (props) => <ErrorFallback {...props} />,
+  FallbackComponent: props => <ErrorFallback {...props} />,
   onError: (error, info) => {
     console.error('Error occurred in ApplicationToaster: ', error);
   },

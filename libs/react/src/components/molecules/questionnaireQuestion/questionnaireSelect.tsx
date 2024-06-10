@@ -1,5 +1,5 @@
 import { isArray, isEqual } from 'lodash';
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { IconNames } from '@coldpbc/enums';
 import { ColdIcon } from '@coldpbc/components';
 
@@ -70,7 +70,7 @@ export const QuestionnaireSelect = (props: QuestionnaireSelectProps) => {
 
   const getSelectBox = (index: number) => {
     let className = '';
-    let inner = null;
+    let inner: ReactNode;
 
     if (isMultiSelect) {
       className = 'w-[24px] h-[24px] rounded-[4px]';

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { Toast } from 'flowbite-react';
 import { ToastMessageType } from '@coldpbc/interfaces';
 import { CheckIcon, ExclamationTriangleIcon } from '@heroicons/react/24/solid';
@@ -11,7 +11,7 @@ export const Toaster = (props: ToasterProps) => {
   const { toastMessage } = props;
   const { message, type } = toastMessage;
   const getToastIcon = () => {
-    let icon = null;
+    let icon: ReactNode;
     const className = 'inline-flex min-w-4 rounded-lg items-center justify-center';
 
     switch (type) {

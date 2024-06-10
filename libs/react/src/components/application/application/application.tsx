@@ -9,7 +9,7 @@ export const Application = () => {
   const location = useLocation();
   const ldFlags = useFlags();
   const shouldRenderGuidanceButton = () => {
-    let routes = [];
+    let routes: Array<{ path: string }> = [];
     if (ldFlags.showReiComplianceMvpSidebarCold506) {
       routes = [{ path: '/' }, { path: '/home' }, { path: '/compliance/*' }, { path: '/assessments/*' }, { path: '/actions/*' }, { path: '/reports/*' }, { path: '/documents' }];
     } else {

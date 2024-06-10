@@ -174,6 +174,9 @@ export const hasSurveyBeenStarted = (surveyData: SurveyPayloadType | ComplianceS
         }
       }
     }
+    return false;
+  } else {
+    return false;
   }
 };
 

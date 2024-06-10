@@ -1,7 +1,7 @@
 import { ArrowUpIcon } from '@heroicons/react/24/solid';
 import { ColdIcon, ColdSparkleIcon } from '@coldpbc/components';
 import { ComplianceManagerStatus, IconNames } from '@coldpbc/enums';
-import { useContext, useEffect } from 'react';
+import { ReactNode, useContext, useEffect } from 'react';
 import { useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { ColdComplianceManagerContext } from '@coldpbc/context';
@@ -15,7 +15,7 @@ export const ActivationCompleteModalBody = ({ setButtonDisabled }: { setButtonDi
 
   const getActivationGuide = (step: string) => {
     let text = '';
-    let icon = null;
+    let icon: ReactNode;
     switch (step) {
       case 'upload':
         text = 'You’ll upload relevant documents so our AI can help you fill this in faster.';
