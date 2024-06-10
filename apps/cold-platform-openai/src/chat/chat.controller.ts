@@ -60,6 +60,7 @@ export class ChatController extends BaseWorker {
   // Add methods here
   @Put('organization/:orgId/search')
   @Roles(Role.ColdAdmin)
+  // @ts-expect-error - TS6133: 'session' is declared but its value is never read.
   async search(
     @Param('orgId') orgId: string,
     @Req()
@@ -80,7 +81,7 @@ export class ChatController extends BaseWorker {
     }
 
     if (req.body.prompt) {
-      return await this.chatService.getDocumentContent([], req.body, company.name, req.user, []);
+      return await this.chatService.getDocumentContent([], req.body, company.name, req.user);
     } else if (req.body.query) {
       return await this.pc.getContext(req.body.query, company.name, company.name, 0.8, false);
     }
