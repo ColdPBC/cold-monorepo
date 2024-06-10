@@ -1,4 +1,5 @@
 export enum GuidPrefixes {
+  'UtilityBill' = 'ubill',
   'SectionGroup' = 'csg',
   'ComplianceSection' = 'cs',
   'ComplianceQuestion' = 'cq',
@@ -18,6 +19,7 @@ export enum GuidPrefixes {
   'OrganizationComplianceResponse' = 'ocr',
   'ComplianceDefinition' = 'compdef',
   'EmissionScope' = 'scope',
+  'EmissionSource' = 'emis',
   'ServiceDefinitions' = 'svcdef',
   'OpenAIAssistant' = 'asst',
   'Vector' = 'vector',
