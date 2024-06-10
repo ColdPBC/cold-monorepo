@@ -1,3 +1,10 @@
+## [1.233.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.233.0...v1.233.1) (2024-06-10)
+
+
+### Bug Fixes
+
+* update import path and variable in compliance_definitions ([#445](https://github.com/ColdPBC/cold-monorepo/issues/445)) ([58b86e8](https://github.com/ColdPBC/cold-monorepo/commit/58b86e8d12d4d59230d877776c2c1b844b3de673))
+
 # [1.233.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.232.0...v1.233.0) (2024-06-10)
 
 
