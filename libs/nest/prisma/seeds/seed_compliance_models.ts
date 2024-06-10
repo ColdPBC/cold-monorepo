@@ -1,5 +1,6 @@
 import { compliance_definitions, PrismaClient } from '@prisma/client';
 import { Cuid2Generator } from '../../src/lib/utility/cuid2-generator.service';
+import { GuidPrefixes } from '@coldpbc/nest';
 
 const prisma = new PrismaClient();
 console.log('ENVIRONMENT:', process.env['NODE_ENV']);
@@ -46,7 +47,7 @@ export async function seedComplianceModels() {
                   },
                 },
                 create: {
-                  id: new Cuid2Generator(`csg`).scopedId,
+                  id: new Cuid2Generator(GuidPrefixes.SectionGroup).scopedId,
                   order: 0,
                   title: sectionValue.section_type || complianceDef.name,
                   compliance_definition_name: complianceDef.name,
@@ -68,7 +69,7 @@ export async function seedComplianceModels() {
                   },
                 },
                 create: {
-                  id: new Cuid2Generator(`cs`).scopedId,
+                  id: new Cuid2Generator(GuidPrefixes.ComplianceSection).scopedId,
                   key: sectionKey,
                   title: sectionValue.title,
                   order: sectionValue.category_idx as number,
@@ -120,7 +121,7 @@ export async function seedComplianceModels() {
                     },
                   },
                   create: {
-                    id: new Cuid2Generator(`cq`).scopedId,
+                    id: new Cuid2Generator(GuidPrefixes.ComplianceQuestion).scopedId,
                     ...questionData,
                   },
                   update: {
@@ -160,7 +161,7 @@ export async function seedComplianceModels() {
         },
       },
       create: {
-        id: new Cuid2Generator(`oc`).scopedId,
+        id: new Cuid2Generator(GuidPrefixes.OrganizationCompliance).scopedId,
         organization_id: org_compliance.organization_id,
         compliance_definition_name: compliance_def.name,
         description: compliance_def.title,
@@ -184,7 +185,7 @@ export async function seedComplianceModels() {
 
       if (!existing) {
         const status_data = {
-          id: new Cuid2Generator(`ocs`).scopedId,
+          id: new Cuid2Generator(GuidPrefixes.OrganizationComplianceStatus).scopedId,
           organization_compliance_id: existing_org_compliance.id,
           type: 'draft',
           email: 'unknown',
@@ -216,7 +217,7 @@ export async function seedComplianceModels() {
           },
         },
         create: {
-          id: new Cuid2Generator(`oc`).scopedId,
+          id: new Cuid2Generator(GuidPrefixes.OrganizationCompliance).scopedId,
           organization_id: cold_climate_org.id,
           compliance_definition_name: comp_def.name,
           description: comp_def.title,
@@ -283,7 +284,7 @@ export async function seedComplianceModels() {
 
     if (!existing || existing?.type !== status) {
       const status_data = {
-        id: new Cuid2Generator(`ocs`).scopedId,
+        id: new Cuid2Generator(GuidPrefixes.OrganizationComplianceStatus).scopedId,
         organization_compliance_id: org_compliance.id,
         type: status,
         email: 'unknown',
@@ -342,7 +343,7 @@ export async function seedComplianceModels() {
               },
             },
             create: {
-              id: new Cuid2Generator(`ocr`).scopedId,
+              id: new Cuid2Generator(GuidPrefixes.OrganizationComplianceResponse).scopedId,
               organization_compliance_id: org_compliance.id,
               compliance_question_id: question.id,
               value: Array.isArray(qData.value) ? qData.value : [qData.value],
@@ -388,7 +389,7 @@ export async function seedComplianceModels() {
               },
             },
             create: {
-              id: new Cuid2Generator(`ocair`).scopedId,
+              id: new Cuid2Generator(GuidPrefixes.OrganizationComplianceAIResponse).scopedId,
               organization_compliance_id: org_compliance.id,
               compliance_question_id: question.id,
               organization_id: data.organization_id,
@@ -465,7 +466,7 @@ export async function seedComplianceModels() {
                   },
                 },
                 create: {
-                  id: new Cuid2Generator(`ocairf`).scopedId,
+                  id: new Cuid2Generator(GuidPrefixes.OrganizationComplianceAiResponseFile).scopedId,
                   organization_compliance_ai_response_id: ai_response.id,
                   organization_files_id: file.id,
                   organization_id: data.organization_id,
