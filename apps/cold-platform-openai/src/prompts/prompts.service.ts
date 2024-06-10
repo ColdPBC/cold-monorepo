@@ -69,7 +69,7 @@ export class PromptsService extends BaseWorker {
     if (documentNames && documentNames.length > 0) {
       this.has_docs = true;
       // Embed Component Prompt
-      this.base_prompt = this.base_prompt.replace(`{documents}`, ` based on the following documents: ${documents}.`);
+      this.base_prompt = this.base_prompt.replace(`{{documents}}`, ` based on the following documents: ${documents}.`);
     }
 
     return this;
@@ -77,7 +77,7 @@ export class PromptsService extends BaseWorker {
 
   private async initializeFlagValues() {
     // Retrieve the GPT model, temperature, and other settings
-    this.model = await this.darkly.getStringFlag('dynamic-gpt-assistant-model', 'gpt-3.5-turbo', {
+    this.model = await this.darkly.getStringFlag('dynamic-gpt-assistant-model', 'gpt-4o', {
       kind: 'org-compliance-set',
       key: this.organization.name,
       name: this.compliance_set,
@@ -204,7 +204,7 @@ export class PromptsService extends BaseWorker {
       case 'yes_no':
         return this.yes_no_prompt;
       case 'multi_select':
-        return this.multi_select_prompt.replace('{options}', item.options.join(', '));
+        return this.multi_select_prompt.replace('{{options}}', item.options.join(', '));
       case 'text':
         return this.text_prompt;
       case 'textarea':
@@ -212,7 +212,7 @@ export class PromptsService extends BaseWorker {
       case 'multi_text':
         return this.multi_text_prompt;
       case 'select':
-        return this.select_prompt.replace('{options}', item.options.join(', '));
+        return this.select_prompt.replace('{{options}}', item.options.join(', '));
       case 'number':
         return this.number_prompt;
       case 'percent_slider':
@@ -235,7 +235,7 @@ export class PromptsService extends BaseWorker {
 
     const component_prompt = await this.getComponentPrompt(question);
 
-    const sanitized_base = this.base_prompt.replace('{component_prompt}', component_prompt).replace('{context}', context);
+    const sanitized_base = this.base_prompt.replace('{{component_prompt}}', component_prompt).replace('{{question}}', question.prompt);
 
     /**
      * @description This action retrieves the base prompt for the OpenAI assistant.

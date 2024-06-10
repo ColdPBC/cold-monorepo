@@ -101,7 +101,7 @@ export class SurveyFilterService extends BaseWorker {
                              "max_score": $lookup(definition.sections.*.follow_up, $key).max_score,
                              "score":$lookup(definition.sections.*.follow_up, $key).score,
                              "user_answered": $exists($lookup(definition.sections.*.follow_up, $key).value) and $lookup(definition.sections.*.follow_up, $key).value != null and $lookup(definition.sections.*.follow_up, $key).value != "" and $lookup(definition.sections.*.follow_up, $key).value != "null" ,
-                             "ai_answered": $exists($lookup(definition.sections.*.follow_up, $key).ai_response.answer)
+                             "ai_answered": $exists($lookup(definition.sections.*.follow_up, $key).ai_response.answer) and $lookup(definition.sections.*.follow_up, $key).ai_response.answer != null and $lookup(definition.sections.*.follow_up, $key).ai_response.answer != "" and $lookup(definition.sections.*.follow_up, $key).ai_response.answer != "null"
                          }
                      }
                  };

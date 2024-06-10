@@ -13,12 +13,16 @@ const genService = new GeneratorService();
 @UseGuards(JwtAuthGuard, RolesGuard)
 @UseFilters(new HttpExceptionFilter(ComplianceDefinitionsController.name))
 @ApiOAuth2(['openid'])
-@ApiTags('Compliance Definitions')
+@ApiTags('Compliance')
 @Controller()
 export class ComplianceDefinitionsController extends BaseWorker {
   constructor(private readonly complianceService: ComplianceDefinitionService) {
     super(ComplianceDefinitionsController.name);
   }
+
+  /**
+   * COMPLIANCE DEFINITIONS
+   */
 
   @Post('compliance')
   @HttpCode(201)
@@ -36,7 +40,33 @@ export class ComplianceDefinitionsController extends BaseWorker {
     return this.complianceService.create(req, definition);
   }
 
+  //DEPRECATED Replaced By createDefinition
+  @Post('compliance_definitions')
+  @ApiOperation({
+    deprecated: true,
+  })
+  @HttpCode(201)
+  @Roles(...coldAdminOnly)
+  @ApiTags('Deprecated')
+  create(
+    @Req()
+    req: {
+      body: any;
+      headers: any;
+      query: any;
+      user: IAuthenticatedUser;
+    },
+    @Body(new ResourceValidationPipe(ComplianceDefinitionSchema, 'POST')) definition: ComplianceDefinition,
+  ) {
+    return this.complianceService.create(req, definition);
+  }
+
+  // TODO: Deprecate once new compliance flow is fully in place
   @Post('compliance/:name/survey')
+  @ApiOperation({
+    summary: 'Inject a survey into a compliance framework by name',
+    operationId: 'InjectComplianceSurvey',
+  })
   @HttpCode(201)
   @Roles(...coldAdminOnly)
   @ApiParam({
@@ -70,7 +100,7 @@ export class ComplianceDefinitionsController extends BaseWorker {
       },
     },
   })
-  injestComplianceSurvey(
+  injectComplianceSurvey(
     @Param('name') name: string,
     @Req()
     req: {
@@ -87,14 +117,45 @@ export class ComplianceDefinitionsController extends BaseWorker {
     return this.complianceService.injectSurvey(req, name, definition);
   }
 
+  @Post('compliance_definitions/:id/survey')
+  @ApiOperation({
+    deprecated: true,
+    summary: 'Use POST: compliance/frameworks/:name/survey instead',
+    operationId: 'InjectComplianceSurvey',
+  })
+  @HttpCode(201)
+  @Roles(...coldAdminOnly)
+  @ApiTags('Deprecated')
+  injectSurvey(
+    @Param('id') id: string,
+    @Req()
+    req: {
+      body: any;
+      headers: any;
+      query: any;
+      user: IAuthenticatedUser;
+    },
+    @Body()
+    definition: {
+      sections: { [key: string]: { follow_up: any } };
+    },
+  ) {
+    return this.complianceService.injectSurvey(req, id, definition);
+  }
+
   @Get('compliance')
+  @ApiOperation({
+    deprecated: true,
+    summary: 'Get list of all compliance frameworks',
+    operationId: 'findAllComplianceFrameworks',
+  })
   @Roles(...allRoles)
   @ApiQuery(bpcDecoratorOptions)
   @ApiResponse({
     status: 200,
-    description: 'Returns all compliance definitions',
+    description: 'Returns all compliance frameworks',
   })
-  async findAllComplianceDefinitions(
+  async getAllComplianceFrameworks(
     @Req()
     req: {
       body: any;
@@ -104,12 +165,34 @@ export class ComplianceDefinitionsController extends BaseWorker {
     },
     @Query('bpc') bpc?: boolean,
   ) {
-    return await this.complianceService.findAll(bpc);
+    return await this.complianceService.findAll(req, bpc);
   }
 
-  /**
-   * Get compliance definition by name
-   */
+  @Get('compliance_definitions')
+  @ApiOperation({
+    deprecated: true,
+    summary: 'Replaced by findAllComplianceDefinitions',
+    operationId: 'getAllComplianceDefinitions',
+  })
+  @Roles(...allRoles)
+  @ApiQuery(bpcDecoratorOptions)
+  @ApiResponse({
+    status: 200,
+    description: 'Returns all compliance definitions',
+  })
+  async getAllComplianceDefinitions(
+    @Req()
+    req: {
+      body: any;
+      headers: any;
+      query: any;
+      user: IAuthenticatedUser;
+    },
+    @Query('bpc') bpc?: boolean,
+  ) {
+    return await this.complianceService.findAll(req, bpc);
+  }
+
   @Get('compliance/:name')
   @ApiOperation({
     summary: 'Get by name',
@@ -141,11 +224,44 @@ export class ComplianceDefinitionsController extends BaseWorker {
     return await this.complianceService.findOne(name, req, bpc);
   }
 
+  @Get('compliance_definitions/:name')
+  @ApiOperation({
+    deprecated: true,
+    summary: 'Replaced by getComplianceByName',
+    operationId: 'GetComplianceDefinitionByName',
+  })
+  @Roles(...allRoles)
+  @ApiParam({
+    name: 'name',
+    example: '{{test_compliance_definition_name}}',
+    required: true,
+    description: 'The name of compliance definition to return',
+  })
+  @ApiQuery(bpcDecoratorOptions)
+  @ApiTags('Deprecated')
+  @ApiResponse({
+    status: 200,
+    description: 'Returns all compliance definitions by name',
+  })
+  async findByName(
+    @Req()
+    req: {
+      body: any;
+      headers: any;
+      query: any;
+      user: IAuthenticatedUser;
+    },
+    @Param('name') name: string,
+    @Query('bpc') bpc?: boolean,
+  ) {
+    return await this.complianceService.findOne(name, req, bpc);
+  }
+
+  @Patch('compliance/:name')
   @ApiOperation({
     summary: 'Update by name',
     operationId: 'UpdateComplianceDefinitionByName',
   })
-  @Patch('compliance/:name')
   @Roles(...coldAdminOnly)
   @HttpCode(200)
   @ApiParam({
@@ -165,12 +281,13 @@ export class ComplianceDefinitionsController extends BaseWorker {
     return this.complianceService.update(name, compliance as ComplianceDefinition, req);
   }
 
+  @Patch('compliance_definitions/:name')
+  @ApiTags('Deprecated')
   @ApiOperation({
-    summary: 'Activate Ai Automation For Compliance Set',
-    operationId: 'ActivateOrganziationComplianceAutomation',
+    summary: 'Use compliance/frameworks/:name instead',
+    operationId: 'UpdateComplianceDefinitionByName',
   })
-  @Put('organizations/:orgId/compliance/:name')
-  @Roles(...allRoles)
+  @Roles(...coldAdminOnly)
   @HttpCode(200)
   @ApiParam({
     name: 'name',
@@ -178,24 +295,45 @@ export class ComplianceDefinitionsController extends BaseWorker {
     type: 'string',
     example: '{{test_compliance_definition_name}}',
   })
-  @ApiParam({
-    name: 'orgId',
-    required: true,
-    type: 'string',
-    example: '{{test_organization_id}}',
-  })
-  activateComplianceForOrgByName(
+  update(
     @Param('name') name: string,
-    @Param('orgId') orgId: string,
+    @Body(new ResourceValidationPipe(SurveyResponseSchema, 'PATCH')) compliance: Partial<ComplianceDefinition>,
     @Req()
     req: {
       user: IAuthenticatedUser;
     },
   ) {
-    return this.complianceService.activate(orgId, req, name);
+    return this.complianceService.update(name, compliance as ComplianceDefinition, req);
+  }
+
+  @Delete('compliance/:name')
+  @ApiParam({
+    name: 'name',
+    required: true,
+    type: 'string',
+    example: 'b_corp_2024',
+  })
+  @HttpCode(204)
+  @Roles(Role.ColdAdmin)
+  deleteComplianceByName(
+    @Param('name') name: string,
+    @Req()
+    req: {
+      body: any;
+      headers: any;
+      query: any;
+      user: IAuthenticatedUser;
+    },
+  ) {
+    return this.complianceService.remove(name, req);
   }
 
   @Delete('compliance_definitions/:name')
+  @ApiOperation({
+    summary: 'Use compliance/frameworks/:name instead',
+    deprecated: true,
+  })
+  @ApiTags('Deprecated')
   @ApiParam({
     name: 'name',
     required: true,
@@ -217,37 +355,15 @@ export class ComplianceDefinitionsController extends BaseWorker {
     return this.complianceService.remove(name, req);
   }
 
-  @Delete('compliance_definitions/:name/organizations/:orgId')
-  @ApiParam({
-    name: 'name',
-    required: true,
-    type: 'string',
-    example: 'b_corp_2024',
-  })
-  @ApiParam({
-    name: 'orgId',
-    required: true,
-    type: 'string',
-    example: `{{test_organization_id}}`,
-  })
-  @HttpCode(204)
-  @Roles(Role.ColdAdmin)
-  deleteOrgComplianceByName(
-    @Param('name') name: string,
-    @Param('orgId') orgId: string,
-    @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
-  ) {
-    return this.complianceService.deactivate(name, orgId, req);
-  }
+  /**
+   * ORG SCOPED COMPLIANCE DEFINITION OPERATIONS
+   */
 
-  //TODO: Deprecated
   @Post('compliance_definitions/:name/organizations/:orgId')
+  @ApiTags('Compliance')
+  @ApiOperation({
+    deprecated: true,
+  })
   @HttpCode(201)
   @ApiParam({
     name: 'name',
@@ -280,7 +396,7 @@ export class ComplianceDefinitionsController extends BaseWorker {
     },
   })
   @Roles(...allRoles)
-  createCompliance(
+  createOrganizationCompliance(
     @Param('orgId') orgId: string,
     @Param('name') name: string,
     @Req()
@@ -294,7 +410,74 @@ export class ComplianceDefinitionsController extends BaseWorker {
     return this.complianceService.createOrgCompliance(req, name, orgId);
   }
 
+  @Put('compliance/:name/organizations/:orgId/activate')
+  @ApiOperation({
+    summary: 'Activate Ai Automation For Compliance Set',
+    operationId: 'ActivateOrganziationComplianceAutomation',
+  })
+  @Roles(...allRoles)
+  @HttpCode(200)
+  @ApiParam({
+    name: 'name',
+    required: true,
+    type: 'string',
+    example: '{{test_compliance_definition_name}}',
+  })
+  @ApiParam({
+    name: 'orgId',
+    required: true,
+    type: 'string',
+    example: '{{test_organization_id}}',
+  })
+  activateComplianceForOrgByName(
+    @Param('name') name: string,
+    @Param('orgId') orgId: string,
+    @Req()
+    req: {
+      user: IAuthenticatedUser;
+    },
+  ) {
+    return this.complianceService.activate(orgId, req, name);
+  }
+
+  @Delete('compliance_definitions/:name/organizations/:orgId')
+  @ApiOperation({
+    deprecated: true,
+  })
+  @ApiParam({
+    name: 'name',
+    required: true,
+    type: 'string',
+    example: 'b_corp_2024',
+  })
+  @ApiParam({
+    name: 'orgId',
+    required: true,
+    type: 'string',
+    example: `{{test_organization_id}}`,
+  })
+  @HttpCode(204)
+  @Roles(Role.ColdAdmin)
+  @ApiTags('Organizations')
+  deleteOrgComplianceByName(
+    @Param('name') name: string,
+    @Param('orgId') orgId: string,
+    @Req()
+    req: {
+      body: any;
+      headers: any;
+      query: any;
+      user: IAuthenticatedUser;
+    },
+  ) {
+    return this.complianceService.deactivate(name, orgId, req);
+  }
+
   @Patch('compliance_definitions/:name/organizations/:orgId')
+  @ApiTags('Organizations')
+  @ApiOperation({
+    deprecated: true,
+  })
   @HttpCode(201)
   @ApiParam({
     name: 'name',
@@ -337,6 +520,10 @@ export class ComplianceDefinitionsController extends BaseWorker {
   }
 
   @Get('compliance_definitions/organizations/:orgId')
+  @ApiTags('Organizations')
+  @ApiOperation({
+    deprecated: true,
+  })
   @Roles(...allRoles)
   @ApiQuery(bpcDecoratorOptions)
   @ApiParam({
@@ -350,7 +537,6 @@ export class ComplianceDefinitionsController extends BaseWorker {
     description: 'Returns all activated compliances for an organization',
   })
   async getComp(
-    @Param('orgId') orgId: string,
     @Req()
     req: {
       body: any;
@@ -360,10 +546,14 @@ export class ComplianceDefinitionsController extends BaseWorker {
     },
     @Query('bpc') bpc?: boolean,
   ) {
-    return await this.complianceService.findOrgCompliances(req, orgId, bpc);
+    return await this.complianceService.findOrgCompliances(req, bpc);
   }
 
   @Delete('compliance_definitions/:name/organizations/:orgId')
+  @ApiTags('Organizations')
+  @ApiOperation({
+    deprecated: true,
+  })
   @HttpCode(204)
   @ApiParam({
     name: 'name',
@@ -396,125 +586,15 @@ export class ComplianceDefinitionsController extends BaseWorker {
 
   // TODO DEPRECATE ALL THESE BELOW
 
-  @Post('compliance_definitions')
-  @HttpCode(201)
-  @Roles(...coldAdminOnly)
-  create(
-    @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
-    @Body(new ResourceValidationPipe(ComplianceDefinitionSchema, 'POST')) definition: ComplianceDefinition,
-  ) {
-    return this.complianceService.create(req, definition);
-  }
-
-  @Post('compliance_definitions/:id/survey')
-  @HttpCode(201)
-  @Roles(...coldAdminOnly)
-  injectSurvey(
-    @Param('id') id: string,
-    @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
-    @Body()
-    definition: {
-      sections: { [key: string]: { follow_up: any } };
-    },
-  ) {
-    return this.complianceService.injectSurvey(req, id, definition);
-  }
-
-  @Get('compliance_definitions')
-  @Roles(...allRoles)
-  @ApiQuery(bpcDecoratorOptions)
-  @ApiResponse({
-    status: 200,
-    description: 'Returns all compliance definitions',
-  })
-  async findAll(
-    @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
-    @Query('bpc') bpc?: boolean,
-  ) {
-    return await this.complianceService.findAll(bpc);
-  }
-
-  /**
-   * Get compliance definition by name
-   */
-  @Get('compliance_definitions/:name')
+  @Put('compliance_definitions/:name/organizations/:orgId')
+  @ApiTags('Organizations')
   @ApiOperation({
-    summary: 'Get by name',
-    operationId: 'GetComplianceDefinitionByName',
+    deprecated: true,
   })
-  @Roles(...allRoles)
-  @ApiParam({
-    name: 'name',
-    example: '{{test_compliance_definition_name}}',
-    required: true,
-    description: 'The name of compliance definition to return',
-  })
-  @ApiQuery(bpcDecoratorOptions)
-  @ApiResponse({
-    status: 200,
-    description: 'Returns all compliance definitions by name',
-  })
-  async findByName(
-    @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
-    @Param('name') name: string,
-    @Query('bpc') bpc?: boolean,
-  ) {
-    return await this.complianceService.findOne(name, req, bpc);
-  }
-
-  @ApiOperation({
-    summary: 'Update by name',
-    operationId: 'UpdateComplianceDefinitionByName',
-  })
-  @Patch('compliance_definitions/:name')
-  @Roles(...coldAdminOnly)
-  @HttpCode(200)
-  @ApiParam({
-    name: 'name',
-    required: true,
-    type: 'string',
-    example: '{{test_compliance_definition_name}}',
-  })
-  update(
-    @Param('name') name: string,
-    @Body(new ResourceValidationPipe(SurveyResponseSchema, 'PATCH')) compliance: Partial<ComplianceDefinition>,
-    @Req()
-    req: {
-      user: IAuthenticatedUser;
-    },
-  ) {
-    return this.complianceService.update(name, compliance as ComplianceDefinition, req);
-  }
-
   @ApiOperation({
     summary: 'Activate Ai Automation For Compliance Set',
     operationId: 'ActivateOrganziationComplianceAutomation',
   })
-  @Put('compliance_definitions/:name/organizations/:orgId')
   @Roles(...allRoles)
   @HttpCode(200)
   @ApiParam({
@@ -538,28 +618,6 @@ export class ComplianceDefinitionsController extends BaseWorker {
     },
   ) {
     return this.complianceService.activate(orgId, req, name);
-  }
-
-  @Delete('compliance_definitions/:name')
-  @ApiParam({
-    name: 'name',
-    required: true,
-    type: 'string',
-    example: 'b_corp_2024',
-  })
-  @HttpCode(204)
-  @Roles(Role.ColdAdmin)
-  remove(
-    @Param('name') name: string,
-    @Req()
-    req: {
-      body: any;
-      headers: any;
-      query: any;
-      user: IAuthenticatedUser;
-    },
-  ) {
-    return this.complianceService.remove(name, req);
   }
 
   @Delete('compliance_definitions/:name/organizations/:orgId')
@@ -705,7 +763,7 @@ export class ComplianceDefinitionsController extends BaseWorker {
     },
     @Query('bpc') bpc?: boolean,
   ) {
-    return await this.complianceService.findOrgCompliances(req, orgId, bpc);
+    return await this.complianceService.findOrgCompliances(req, bpc);
   }
 
   @Delete('compliance_definitions/:name/organizations/:orgId')

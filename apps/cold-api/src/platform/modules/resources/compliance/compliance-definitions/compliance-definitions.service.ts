@@ -3,7 +3,7 @@ import { Span } from 'nestjs-ddtrace';
 import { BaseWorker, CacheService, ComplianceSectionsRepository, Cuid2Generator, DarklyService, GuidPrefixes, MqttService, PrismaService } from '@coldpbc/nest';
 import { ComplianceDefinition, OrgCompliance } from './compliance-definitions.schema';
 import { compliance_definitions } from '@prisma/client';
-import { omit } from 'lodash';
+import { omit, pick } from 'lodash';
 import { EventService } from '../../../utilities/events/event.service';
 
 @Span()
@@ -27,12 +27,6 @@ export class ComplianceDefinitionService extends BaseWorker {
   override async onModuleInit() {
     this.darkly.subscribeToJsonFlagChanges('dynamic-org-white-list', value => {
       this.exclude_orgs = value;
-    });
-
-    this.openAI_definition = await this.prisma.service_definitions.findFirst({
-      where: {
-        name: 'cold-platform-openai',
-      },
     });
   }
 
@@ -552,7 +546,7 @@ export class ComplianceDefinitionService extends BaseWorker {
    * This action returns all compliance definitions
    * @param bpc
    */
-  async findAll(bpc?: boolean): Promise<compliance_definitions[]> {
+  async findAll(req: any, bpc?: boolean): Promise<compliance_definitions[]> {
     if (!bpc) {
       /*const cached = await this.cache.get('compliance_definitions');
       if (cached) {
@@ -577,7 +571,7 @@ export class ComplianceDefinitionService extends BaseWorker {
    * @param orgId
    * @param bpc
    */
-  async findOrgCompliances(req: any, orgId: string, bpc?: boolean): Promise<OrgCompliance[]> {
+  async findOrgCompliances(req: any, bpc?: boolean): Promise<OrgCompliance[]> {
     if (!bpc) {
       /*const cached = (await this.cache.get(`compliance_definitions:org:${orgId}`)) as OrgCompliance[];
 
@@ -588,7 +582,7 @@ export class ComplianceDefinitionService extends BaseWorker {
 
     const orgCompliances = (await this.prisma.organization_compliances_old.findMany({
       where: {
-        organization_id: orgId,
+        organization_id: req.organization.id,
       },
       include: {
         organization: true,
@@ -605,7 +599,7 @@ export class ComplianceDefinitionService extends BaseWorker {
         compliance.compliance_definition.surveys = compliance.surveys_override;
       }
     });
-    await this.cache.set(`compliance_definitions:org:${orgId}`, orgCompliances, { update: true });
+    await this.cache.set(`compliance_definitions:org:${req.organization.id}`, orgCompliances, { update: true });
 
     return orgCompliances;
   }
@@ -617,7 +611,7 @@ export class ComplianceDefinitionService extends BaseWorker {
    * @param bypassCache
    */
   async findOne(name: string, req: any, bypassCache?: boolean): Promise<ComplianceDefinition> {
-    const { user } = req;
+    const { user, organization } = req;
     this.setTags({ user: user.coldclimate_claims, bpc: bypassCache });
 
     /*if (!bypassCache) {
@@ -633,14 +627,14 @@ export class ComplianceDefinitionService extends BaseWorker {
       })) as ComplianceDefinition;
 
       if (!def) {
-        throw new NotFoundException(`Unable to find compliance definition with name: ${name}`);
+        throw new NotFoundException({ organization, user }, `Unable to find compliance definition with name: ${name}`);
       }
 
       await this.cache.set(`compliance_definitions:${name}`, def, { update: true });
 
       return def;
     } catch (e) {
-      this.logger.error(e.message, { error: e });
+      this.logger.error(e.message, { error: e, organization, user });
       throw e;
     }
   }
@@ -655,7 +649,7 @@ export class ComplianceDefinitionService extends BaseWorker {
    * @param req
    */
   async update(name: string, complianceDefinition: ComplianceDefinition, req: any): Promise<ComplianceDefinition> {
-    const { user, url } = req;
+    const { user, url, organization, method } = req;
     this.setTags({
       user: user.coldclimate_claims,
       compliance_definition: complianceDefinition,
@@ -667,7 +661,7 @@ export class ComplianceDefinitionService extends BaseWorker {
       const def = await this.findOne(name, req, true);
 
       if (!def) {
-        throw new NotFoundException(`Unable to find compliance definition with name: ${name}`);
+        throw new NotFoundException({ url, method, organization, user }, `Unable to find compliance definition with name: ${name}`);
       }
 
       const definition = await this.prisma.compliance_definitions.update({
@@ -677,7 +671,7 @@ export class ComplianceDefinitionService extends BaseWorker {
 
       this.setTags({ status: 'completed' });
 
-      this.logger.info('updated definition', definition);
+      this.logger.info('updated definition', { organization, user, definition: pick(definition, ['name', 'title', 'version']) });
 
       this.metrics.increment('cold.api.surveys.update', 1, this.tags);
 
@@ -686,13 +680,15 @@ export class ComplianceDefinitionService extends BaseWorker {
         action: 'update',
         status: 'complete',
         data: {
-          ...definition,
+          user,
+          organization,
+          definition: pick(definition, ['name', 'title', 'version']),
         },
       });
 
       return definition as unknown as ComplianceDefinition;
     } catch (e) {
-      this.logger.error(e.message, { error: e });
+      this.logger.error(e.message, { error: e, organization, user });
 
       this.mqtt.publishMQTT('public', {
         swr_key: url,
@@ -700,7 +696,9 @@ export class ComplianceDefinitionService extends BaseWorker {
         status: 'failed',
         data: {
           error: e.message,
-          ...complianceDefinition,
+          organization,
+          user,
+          definition: pick(complianceDefinition, ['name', 'title', 'version']),
         },
       });
 
@@ -714,9 +712,10 @@ export class ComplianceDefinitionService extends BaseWorker {
    * @param req
    */
   async remove(name: string, req: any) {
-    const { user, url } = req;
+    const { user, url, organization } = req;
     this.setTags({
       compliance_definition_name: name,
+      organization,
       user: user.coldclimate_claims,
       ...this.tags,
     });
@@ -736,9 +735,9 @@ export class ComplianceDefinitionService extends BaseWorker {
         data: {},
       });
 
-      this.logger.info(`deleted compliance definition: ${name}`, { id: def.id, name: def.name });
+      this.logger.info(`deleted compliance definition: ${name}`, { id: def.id, name: def.name, organization, user });
     } catch (e) {
-      this.logger.error(e.message, { error: e });
+      this.logger.error(e.message, { error: e, organization, user });
 
       this.mqtt.publishMQTT('public', {
         swr_key: url,
@@ -761,10 +760,11 @@ export class ComplianceDefinitionService extends BaseWorker {
    * @param bpc
    */
   async deactivate(name: string, orgId: string, req: any, bpc?: boolean) {
-    const { user, url } = req;
+    const { user, url, organization } = req;
     this.setTags({
       compliance_definition_name: name,
       user: user.coldclimate_claims,
+      organization,
       ...this.tags,
     });
     let compliance: OrgCompliance;
@@ -774,13 +774,13 @@ export class ComplianceDefinitionService extends BaseWorker {
       // Delete old Org Compliances first
       compliance = (await this.prisma.organization_compliances_old.findFirst({
         where: {
-          organization_id: orgId,
+          organization_id: organization.id,
           compliance_id: def.id,
         },
       })) as OrgCompliance;
 
       if (!compliance) {
-        throw new NotFoundException(`Unable to find compliance definition with name: ${name} and org: ${orgId}`);
+        throw new NotFoundException(`Unable to find compliance definition with name: ${name} and org: ${organization.id}`);
       }
 
       await this.prisma.organization_compliances_old.delete({ where: { id: compliance.id } });
@@ -789,7 +789,7 @@ export class ComplianceDefinitionService extends BaseWorker {
       compliance = (await this.prisma.organization_compliance.findUnique({
         where: {
           orgIdCompNameKey: {
-            organization_id: orgId,
+            organization_id: organization.id,
             compliance_definition_name: name,
           },
         },
@@ -806,9 +806,9 @@ export class ComplianceDefinitionService extends BaseWorker {
         data: {},
       });
 
-      this.logger.info(`deactivated compliance definition: ${name} for org: ${orgId}`, { id: def.id, name: def.name });
+      this.logger.info(`deactivated compliance definition: ${name} for org: ${organization.id}`, { id: def.id, name: def.name, organization, user });
     } catch (e) {
-      this.logger.error(e.message, { error: e });
+      this.logger.error(e.message, { error: e, organization, user });
 
       this.mqtt.publishMQTT('public', {
         swr_key: url,

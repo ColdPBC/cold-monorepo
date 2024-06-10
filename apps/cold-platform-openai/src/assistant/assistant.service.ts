@@ -105,7 +105,7 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
 
         response = status['required_action'].submit_tool_outputs.tool_calls[0].function.arguments;
 
-        response = new OpenAIResponse(response);
+        //response = new OpenAIResponse(response);
 
         // Create an array of tool outputs to submit, matching the schema
         const toolOutputs = toolCalls.map(toolCall => ({
@@ -165,37 +165,28 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
   ): Promise<any> {
     try {
       if (category_context) {
-        category_context = `Consider the following context when answering questions: ${category_context} and `;
+        category_context = `Consider the following context when answering questions: ${category_context} `;
       } else {
         category_context = '';
       }
 
       let message;
-      const files = await this.client.beta.assistants.files.list(integration.id);
-      const fileIds = files.data.map(file => file.id);
-
+      let prompt = await prompts.getPrompt(item);
       if (!isFollowUp) {
         message = await this.client.beta.threads.messages.create(thread.id, {
           role: 'user',
-          content: `${category_context}${await prompts.getComponentPrompt(item)}.  Here is the "question" JSON object: \`\`\`json ${JSON.stringify(item)}\`\`\``,
-          file_ids: fileIds,
+          content: prompt,
         });
-
-        await this.sleep((Math.floor(Math.random() * 8) + 3) * 1000); // sleep for 1-5 seconds to avoid rate limiting
       } else {
         //append category and followup prompt to component prompt
+        prompt = `${category_context} this next question is specifically related to your previous answer. ${prompt}`;
         message = await this.client.beta.threads.messages.create(thread.id, {
           role: 'user',
-          file_ids: fileIds,
-          content: `${category_context} this next JSON question is specifically related to your previous answer. ${await prompts.getComponentPrompt(
-            item,
-          )}.  Here is the "question" JSON object: \`\`\`json ${JSON.stringify(item)}\`\`\``,
+          content: prompt,
         });
-
-        await this.sleep((Math.floor(Math.random() * 8) + 3) * 1000); // sleep for 1-5 seconds to avoid rate limiting
       }
 
-      this.logger.info(`Created message for ${item.prompt}`, { ...item, message });
+      this.logger.info(`Created message for ${item.prompt}`, { ...item, message, prompt });
 
       return await this.send(thread, integration, org, prompts, item);
     } catch (e) {
@@ -238,9 +229,9 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
     // iterate over each section key
     for (const section of sections) {
       // create a new thread for each section run
-      await this.sleep((Math.floor(Math.random() * 3) + 3) * 1000); // sleep for 1-5 seconds to avoid rate limiting
-
       const thread = await this.client.beta.threads.create();
+
+      await this.sleep((Math.floor(Math.random() * 8) + 3) * 2000);
 
       await this.processSection(job, section, sdx, sections, definition, thread, integration, organization, category_context, user, survey, prompts);
       //reqs.push(this.processSection(job, section, sdx, sections, definition, thread, integration, organization, category_context, user, survey, prompts));
@@ -293,6 +284,8 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
 
       this.logger.info(`Creating Message | ${section}.${item}: ${follow_up.prompt}`);
       // create a new run for each followup item
+      //await this.sleep((Math.floor(Math.random() * 8) + 3) * 500);
+
       let value = await this.createMessage(thread, integration, item, follow_up, false, organization, prompts, category_context);
 
       value = this.clearValuesOnError(value);
@@ -300,7 +293,7 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
       if (value) {
         // update the survey with the response
         definition.sections[section].follow_up[item].ai_response = value;
-        definition.sections[section].follow_up[item].ai_answered = has(value, 'answer');
+        //definition.sections[section].follow_up[item].ai_answered = typeof value.answer !== 'undefined';
       }
 
       definition.sections[section].follow_up[item].ai_attempted = true;
@@ -308,6 +301,9 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
       // if there is additional context, create a new run for it
       if (follow_up['additional_context']) {
         this.logger.info(`Creating Message | ${section}.${item}.additional_context: ${follow_up.prompt}`);
+
+        // await this.sleep((Math.floor(Math.random() * 8) + 3) * 1000);
+
         let additionalValue = await this.createMessage(thread, integration, item, follow_up['additional_context'], true, organization, prompts, category_context);
 
         additionalValue = this.clearValuesOnError(additionalValue);
@@ -315,7 +311,7 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
         if (additionalValue) {
           definition.sections[section].follow_up[item].additional_context.ai_response = additionalValue;
 
-          definition.sections[section].follow_up[item].additional_context.ai_answered = has(additionalValue, 'answer');
+          //definition.sections[section].follow_up[item].additional_context.ai_answered = has(additionalValue, 'answer');
         }
 
         definition.sections[section].follow_up[item].additional_context.ai_attempted = true;
@@ -359,6 +355,8 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
       this.logger.warn(`Job ${job.id} no longer found in queue; will not process question ${section}:${item}`);
       return true;
     }
+
+    return false;
   }
 
   clearValuesOnError(value: any) {

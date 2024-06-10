@@ -19258,7 +19258,7 @@ __metadata:
     numeral: "npm:^2.0.6"
     nx: "npm:^17.1.2"
     nx-cloud: "npm:16.5.2"
-    openai: "npm:^4.24.7"
+    openai: "npm:^4.48.3"
     passport: "npm:^0.6.0"
     passport-jwt: "npm:^4.0.1"
     pdf-parse: "npm:^1.1.1"
@@ -34487,7 +34487,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"openai@npm:^4.0.0, openai@npm:^4.24.7, openai@npm:^4.32.1":
+"openai@npm:^4.0.0, openai@npm:^4.32.1":
   version: 4.33.1
   resolution: "openai@npm:4.33.1"
   dependencies:
@@ -34502,6 +34502,24 @@ __metadata:
   bin:
     openai: bin/cli
   checksum: 10/921abbae93c69059fe1318d66141994c500dd534b95ca5e6f68b0ba4b384205c2ae51134ae03152c202253beed677fe9e208cf950ccd321c92c713b51226d2ee
+  languageName: node
+  linkType: hard
+
+"openai@npm:^4.48.3":
+  version: 4.48.3
+  resolution: "openai@npm:4.48.3"
+  dependencies:
+    "@types/node": "npm:^18.11.18"
+    "@types/node-fetch": "npm:^2.6.4"
+    abort-controller: "npm:^3.0.0"
+    agentkeepalive: "npm:^4.2.1"
+    form-data-encoder: "npm:1.7.2"
+    formdata-node: "npm:^4.3.2"
+    node-fetch: "npm:^2.6.7"
+    web-streams-polyfill: "npm:^3.2.1"
+  bin:
+    openai: bin/cli
+  checksum: 10/01e48481a2c273a19eeb8dadfe5255278462cbf0c4c310bbdb7f4369eb7bda886f178fb98af83b67d902190177e3532e0a80221e6da564fc9266ccc36331947a
   languageName: node
   linkType: hard
 

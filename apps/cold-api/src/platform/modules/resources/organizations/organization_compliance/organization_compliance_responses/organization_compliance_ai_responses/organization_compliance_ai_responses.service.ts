@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { organization_compliance_ai_responses } from '@prisma/client';
+import { organization_compliance_ai_responses, organizations } from '@prisma/client';
 import { BaseWorker, ComplianceAiResponsesRepository, IAuthenticatedUser } from '@coldpbc/nest';
 
 @Injectable()
@@ -23,8 +23,8 @@ export class OrganizationComplianceAiResponsesService extends BaseWorker {
     return this.complianceAiResponsesRepository.updateAiResponse(orgId, complianceName, id, responseData, user);
   }
 
-  removeAllAiResponses(orgId: string, complianceName: string, user: IAuthenticatedUser) {
-    return this.complianceAiResponsesRepository.deleteAiResponses(orgId, complianceName, user);
+  removeAllAiResponses(organization: organizations, complianceName: string, user: IAuthenticatedUser) {
+    return this.complianceAiResponsesRepository.deleteAiResponses(organization, complianceName, user);
   }
 
   removeAiResponse(orgId: string, complianceName: string, id: string, user: IAuthenticatedUser) {

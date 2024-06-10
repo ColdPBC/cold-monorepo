@@ -155,7 +155,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
   }
 
   // The function `getContext` is used to retrieve the context of a given message
-  async getContext(message: string, namespace: string, indexName: string, minScore = 0.7, getOnlyText = true): Promise<string | ScoredPineconeRecord[]> {
+  async getContext(message: string, namespace: string, indexName: string, minScore = 0.3, getOnlyText = true): Promise<string | ScoredPineconeRecord[]> {
     const indexDetails = await this.getIndexDetails(indexName);
     // Get the embeddings of the input message
     const embedding = await this.embedString(message, indexName);
@@ -166,7 +166,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
     // Filter out the matches that have a score lower than the minimum score
     const qualifyingDocs: any = matches.filter(m => m.score && m.score > minScore);
 
-    if (!qualifyingDocs) {
+    if (Array.isArray(qualifyingDocs) && qualifyingDocs.length < 1) {
       this.logger.info('No qualifying docs found', {
         message,
         docs: qualifyingDocs,
@@ -519,15 +519,17 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
     const details = await this.getIndexDetails(org.name);
     const index = await this.getIndex(details.indexName);
     // delete from pinecone
-    await index.namespace(org.name).deleteMany(webVectorIds);
-    // delete from db
-    await this.prisma.vector_records.deleteMany({
-      where: {
-        id: {
-          in: webVectorIds,
+    if (webVectorIds.length > 0) {
+      await index.namespace(org.name).deleteMany(webVectorIds);
+      // delete from db
+      await this.prisma.vector_records.deleteMany({
+        where: {
+          id: {
+            in: webVectorIds,
+          },
         },
-      },
-    });
+      });
+    }
   }
 
   getCacheKey(filePayload: any) {

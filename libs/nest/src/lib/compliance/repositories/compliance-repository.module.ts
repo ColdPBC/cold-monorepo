@@ -10,7 +10,7 @@ import { ComplianceAiResponsesRepository } from './compliance-ai-responses';
 import { ComplianceDefinitionsRepository } from './compliance-definitions';
 import { OrganizationComplianceRepository } from './organization-compliance';
 import { OrganizationComplianceStatusesRepository } from './organization-compliance-statuses';
-//import { ScoringService } from '../scoring';
+import { ScoringService } from '../scoring';
 
 @Module({
   imports: [PrismaModule, ColdCacheModule.forRootAsync()],
@@ -25,7 +25,7 @@ import { OrganizationComplianceStatusesRepository } from './organization-complia
     ComplianceDefinitionsRepository,
     OrganizationComplianceRepository,
     OrganizationComplianceStatusesRepository,
-    //ScoringService,
+    ScoringService,
   ],
   exports: [
     CacheService,

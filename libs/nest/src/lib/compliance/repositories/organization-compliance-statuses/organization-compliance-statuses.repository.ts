@@ -4,7 +4,7 @@ import { Cuid2Generator, GuidPrefixes } from '../../../utility';
 import { PrismaService } from '../../../prisma';
 import { IAuthenticatedUser } from '../../../primitives';
 import { OrganizationComplianceRepository } from '../organization-compliance';
-import { survey_status_types } from '@prisma/client';
+import { organizations, survey_status_types } from '@prisma/client';
 
 @Injectable()
 export class OrganizationComplianceStatusesRepository extends BaseWorker {
@@ -12,12 +12,19 @@ export class OrganizationComplianceStatusesRepository extends BaseWorker {
     super(OrganizationComplianceStatusesRepository.name);
   }
 
-  async getAllByOrgAndComplianceName(orgId: string, complianceName: string, user: IAuthenticatedUser) {
+  async getAllByOrgAndComplianceName(complianceName: string, user: IAuthenticatedUser, organization: organizations) {
     try {
-      const orgComp = await this.orgComRepository.getOrgComplianceDefinitionByName(orgId, complianceName, user);
+      const orgComp = await this.orgComRepository.getOrgComplianceDefinitionByName(complianceName, user, organization);
 
       if (!orgComp) {
-        throw new NotFoundException(`Organization Compliance Definition ${complianceName} not found for organization ${orgId}`);
+        throw new NotFoundException(
+          {
+            complianceName,
+            user,
+            organization,
+          },
+          `Organization Compliance Definition ${complianceName} not found for organization ${organization.id}`,
+        );
       }
 
       return this.prisma.extended.organization_compliance_statuses.findMany({
@@ -26,12 +33,12 @@ export class OrganizationComplianceStatusesRepository extends BaseWorker {
         },
       });
     } catch (error) {
-      this.logger.error(`Error getting all organization compliance statuses`, { error, organization: { id: orgId }, compliance: { name: complianceName }, user });
+      this.logger.error(`Error getting all organization compliance statuses`, { error, organization, compliance: { name: complianceName }, user });
       throw error;
     }
   }
 
-  async getOrganizationComplianceStatusById(orgComplianceId: string, statusId: string, user: IAuthenticatedUser) {
+  async getOrganizationComplianceStatusById(orgComplianceId: string, statusId: string, user: IAuthenticatedUser, organization: organizations) {
     const compliance = await this.prisma.extended.organization_compliance.findUnique({
       where: {
         id: 'id',
@@ -48,13 +55,14 @@ export class OrganizationComplianceStatusesRepository extends BaseWorker {
     });
 
     if (!compliance) {
-      throw new NotFoundException({ user, organization_compliance_id: orgComplianceId, status_id: statusId }, `Organization Compliance Status not found`);
+      throw new NotFoundException({ user, organization_compliance_id: orgComplianceId, organization, status_id: statusId }, `Organization Compliance Status not found`);
     }
 
     return compliance;
   }
 
-  async createOrganizationComplianceStatus(org_id: string, name: string, type: string, user: IAuthenticatedUser) {
+  async createOrganizationComplianceStatus(name: string, type: string, user: IAuthenticatedUser, organization: organizations) {
+    this.logger.info(`Creating Compliance Status`, { user, compliance_name: name, organization });
     return this.prisma.extended.organization_compliance_statuses.create({
       // @ts-expect-error - This is a valid type
       data: {
@@ -65,7 +73,7 @@ export class OrganizationComplianceStatusesRepository extends BaseWorker {
     });
   }
 
-  async updateOrganizationComplianceStatus(statusId: string, type: survey_status_types, organization_compliance_id: string, user: IAuthenticatedUser) {
+  async updateOrganizationComplianceStatus(statusId: string, type: survey_status_types, organization_compliance_id: string, user: IAuthenticatedUser, organization: organizations) {
     const status = this.prisma.extended.organization_compliance_statuses.update({
       where: {
         id: statusId,
@@ -78,17 +86,17 @@ export class OrganizationComplianceStatusesRepository extends BaseWorker {
     });
 
     if (!status) {
-      throw new NotFoundException({ user, status_id: statusId }, `Organization Compliance Status not found`);
+      throw new NotFoundException({ organization, user, status_id: statusId }, `Organization Compliance Status not found`);
     }
   }
 
-  async deleteOrganizationComplianceStatus(statusId: string, user: IAuthenticatedUser) {
+  async deleteOrganizationComplianceStatus(statusId: string, user: IAuthenticatedUser, organization: organizations) {
     this.prisma.extended.organization_compliance_statuses.delete({
       where: {
         id: statusId,
       },
     });
 
-    this.logger.info(`Organization Compliance Status deleted`, { user, status_id: statusId });
+    this.logger.info(`Organization Compliance Status deleted`, { user, status_id: statusId, organization });
   }
 }

@@ -141,7 +141,7 @@ export class OpenAIController extends BaseWorker {
       user: IAuthenticatedUser;
     },
   ) {
-    return this.files.linkFileToAssistant(req.user, id, fileId);
+    return this.files.linkFileToVectorStore(req.user, id, fileId);
   }
 
   @Post('files')

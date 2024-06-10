@@ -45,5 +45,7 @@ export class CrawlerController extends BaseWorker {
         user: req.user,
       });
     }
+
+    throw new NotFoundException(`Website not provided`);
   }
 }

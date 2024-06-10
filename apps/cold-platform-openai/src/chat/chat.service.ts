@@ -10,6 +10,7 @@ import {
   ComplianceSectionsRepository,
   Cuid2Generator,
   DarklyService,
+  GuidPrefixes,
   MqttService,
   PrismaService,
 } from '@coldpbc/nest';
@@ -79,7 +80,9 @@ export class ChatService extends BaseWorker implements OnModuleInit {
     // Iterate over each section
     for (const sectionKey in Object.keys(surveyData.data?.sections)) {
       const section = surveyData.data?.sections[sectionKey];
-
+      if (!section?.follow_up) {
+        continue;
+      }
       // Iterate over each follow_up item in the section
       for (const followUpKey in section.follow_up) {
         const followUpItem = section.follow_up[followUpKey];
@@ -293,17 +296,21 @@ export class ChatService extends BaseWorker implements OnModuleInit {
         messages = [] as ChatCompletionMessageParam[];
       }
 
-      const context: any = [];
+      const organization = await this.prisma.organizations.findUnique({
+        where: { name: company_name },
+      });
+
       const openai = new OpenAI({
         organization: this.config.getOrThrow('OPENAI_ORG_ID'),
         apiKey: this.config.getOrThrow('OPENAI_API_KEY'),
       });
 
-      const { rephrased_question, docs } = await this.getDocumentContent(messages, question, company_name, user, context, session, additional_context);
+      const { rephrased_question, docs, context } = await this.getDocumentContent(messages, question, company_name, user, session, additional_context);
 
       const vars = {
         component_prompt: (await this.prompts.getComponentPrompt(question)) || '',
-        context: context[0] || '',
+        context: context[0] || docs,
+        organization_name: organization?.display_name || company_name,
         question: additional_context ? rephrased_question : `${question.prompt} ${question.tooltip || ''}`,
       };
 
@@ -379,10 +386,16 @@ export class ChatService extends BaseWorker implements OnModuleInit {
         delete ai_response.prompt;
       }
 
-      messages.push({
-        role: 'assistant',
-        content: ai_response.answer || ai_response.justification,
-      });
+      messages.push(
+        {
+          role: 'user',
+          content: question.prompt,
+        },
+        {
+          role: 'assistant',
+          content: ai_response.answer || ai_response.justification,
+        },
+      );
 
       // Save the thread to the cache
       await this.cache.set(`openai:thread:${user.coldclimate_claims.email}`, messages, { ttl: 1000 * 60 * 60 * 24 });
@@ -435,10 +448,10 @@ export class ChatService extends BaseWorker implements OnModuleInit {
     question: any,
     indexName: string,
     user: AuthenticatedUser,
-    context: any,
     vectorSession?: FPSession,
     additional_context?,
-  ): Promise<{ rephrased_question: string; docs: ScoredPineconeRecord[] }> {
+  ): Promise<{ rephrased_question: string; docs: ScoredPineconeRecord[]; context: any[] }> {
+    const context = [] as any[];
     const openai = new OpenAI({
       organization: this.config.getOrThrow('OPENAI_ORG_ID'),
       apiKey: this.config.getOrThrow('OPENAI_API_KEY'),
@@ -449,30 +462,31 @@ export class ChatService extends BaseWorker implements OnModuleInit {
      * of providing context to the AI model to query the vector index for the most relevant information.
      */
     let rephrased_question: string = '';
-    let lastMessage: string = '';
+    const lastMessage: string = '';
 
     // If there are messages, get the last message and include it in the prompt
-    if (Array.isArray(messages) && messages.length > 0) {
-      const prevMessage = messages[messages.length - 1].content;
-      if (typeof prevMessage !== 'string') {
-        lastMessage = JSON.stringify(prevMessage);
-      }
-    }
 
     let vars: any;
     if (additional_context) {
       vars = {
-        chat_history: question.prompt ? question.prompt : question,
-        question: additional_context.prompt || '',
+        chat_history: JSON.stringify(messages),
+        question: additional_context.prompt,
       };
     } else {
       vars = {
-        chat_history: lastMessage || '',
-        question: `${question.prompt ? question.prompt : question}. ${question.tooltip ? question.tooltip : ''}`,
+        chat_history: JSON.stringify(messages),
+        question: question.prompt,
       };
     }
 
     const condense_prompt = (await this.fp.getPrompt('vector_query', vars, true)) as FormattedPrompt;
+
+    for (const message of messages) {
+      condense_prompt.allMessages({
+        role: message.role,
+        content: message.content?.toString() || '',
+      });
+    }
 
     const start = new Date();
     const condenseResponse = await openai.chat.completions.create({
@@ -491,7 +505,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
 
     if (!condenseResponse.choices[0].message.content) {
       this.logger.error('No content found in response', { condenseResponse });
-      return { rephrased_question, docs: [] };
+      return { rephrased_question, docs: [], context };
     }
 
     const message = {
@@ -518,16 +532,16 @@ export class ChatService extends BaseWorker implements OnModuleInit {
     }
 
     // Get the context content from the Pinecone index
-    let docs = (await this.pc.getContext(rephrased_question, indexName, indexName, 0.8, false)) as ScoredPineconeRecord[];
+    let docs = (await this.pc.getContext(rephrased_question, indexName, indexName, 0.5, false)) as ScoredPineconeRecord[];
 
     if (docs.length < 1) {
-      docs = (await this.pc.getContext(question.prompt, indexName, indexName, 0.6, false)) as ScoredPineconeRecord[];
+      docs = (await this.pc.getContext(question.prompt, indexName, indexName, 0.3, false)) as ScoredPineconeRecord[];
     }
 
     const content = await this.extractTextFromDocument(docs as ScoredPineconeRecord<RecordMetadata>[]);
 
     if (content) {
-      context.push(content);
+      context.push(content.replace(/"/g, '').replace(/\\n/g, ' '));
     }
 
     if (vectorSession) {
@@ -536,7 +550,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
       this.fp.recordCompletion(vectorSession, vars, condense_prompt, condenseResponse, start, end);
     }
 
-    return { rephrased_question, docs };
+    return { rephrased_question, docs, context };
   }
 
   async process_compliance(job: Job) {
@@ -1223,7 +1237,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
               },
             },
             create: {
-              id: new Cuid2Generator('ocair').scopedId,
+              id: new Cuid2Generator(GuidPrefixes.OrganizationComplianceAIResponse).scopedId,
               justification: response.justification,
               answer: response.answer,
               references: response.references,
@@ -1380,5 +1394,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
       this.logger.warn(`Job ${job.id} no longer found in queue; will not process question ${section}:${item}`);
       return true;
     }
+
+    return false;
   }
 }

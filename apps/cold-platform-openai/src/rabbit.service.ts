@@ -134,6 +134,7 @@ export class RabbitService extends BaseWorker {
     }
   }
 
+  // @ts-expect-error - Fix this later
   async processAsyncMessage(event: string, from: string, parsed: any) {
     const { user } = parsed;
 
