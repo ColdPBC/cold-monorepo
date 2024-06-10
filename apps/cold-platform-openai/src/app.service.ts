@@ -57,7 +57,7 @@ export class AppService extends BaseWorker implements OnModuleInit {
       throw new UnprocessableEntityException(e.message);
     }
   }
-
+  // @ts-expect-error - Fix this later
   async deleteAssistant(parsed: any) {
     const { user, integration } = parsed;
     try {
@@ -96,12 +96,12 @@ export class AppService extends BaseWorker implements OnModuleInit {
         key: organization.name,
       }),
       description: `OpenAI assistant for ${organization.display_name}`,
-      model: await this.darkly.getStringFlag('static-gpt-assistant-model', 'gpt-3.5-turbo', {
+      model: await this.darkly.getStringFlag('static-gpt-assistant-model', 'gpt-4o', {
         kind: 'organization',
         name: organization.display_name,
         key: organization.name,
       }),
-      tools: [{ type: 'retrieval' }, { type: 'code_interpreter' }, await this.tools.answerable(organization), await this.tools.unanswerable(organization)],
+      tools: [{ type: 'file_search' }, await this.tools.answerable(organization), await this.tools.unanswerable(organization)],
     };
 
     try {
@@ -121,8 +121,11 @@ export class AppService extends BaseWorker implements OnModuleInit {
         });
 
         try {
-          const inOpenAi = await this.client.beta.assistants.retrieve(integration.id);
-          if (inOpenAi) {
+          const assistant = await this.client.beta.assistants.retrieve(integration.id);
+
+          let vectorStore;
+
+          if (assistant) {
             this.logger.warn('Integration already exists in openAI for this organization.', {
               integration,
               user,
@@ -130,7 +133,43 @@ export class AppService extends BaseWorker implements OnModuleInit {
               service,
             });
 
-            return Object.assign(integration, inOpenAi);
+            const stores = await this.client.beta.vectorStores.list();
+            vectorStore = stores.data.find(store => store.name === `${organization.name}`);
+
+            if (!vectorStore) {
+              vectorStore = await this.createOpenAiVectorStore(organization, integration);
+            } else {
+              this.logger.warn('Vector Store already exists in OpenAI for this organization.', {
+                integration,
+                user,
+                organization,
+                service,
+              });
+
+              let isVectorStoreInAssistant = false;
+              assistant?.tool_resources?.file_search?.vector_store_ids?.map(id => {
+                if (id === vectorStore.id) {
+                  isVectorStoreInAssistant = true;
+                }
+              });
+
+              if (!isVectorStoreInAssistant) {
+                this.logger.warn('Vector Store does not match in OpenAI.  Updating OpenAI assistant.', {
+                  integration,
+                  user,
+                  organization,
+                  service,
+                });
+
+                await this.client.beta.assistants.update(integration.id, { tool_resources: { file_search: { vector_store_ids: [vectorStore.id] } } });
+              }
+            }
+
+            if (!vectorStore) {
+              throw new NotFoundException({ inOpenAi: assistant, integration, user, organization, service }, 'Vector Store not found in OpenAI');
+            }
+
+            return Object.assign(integration, assistant, vectorStore);
           }
         } catch (e) {
           if (e.status == 404) {
@@ -151,13 +190,15 @@ export class AppService extends BaseWorker implements OnModuleInit {
 
       let metadata: any = {};
 
-      const openAIResponse = await this.client.beta.assistants.create(assistant);
+      const vectorStore = await this.createOpenAiVectorStore(organization);
+
+      const openAIResponse = await this.client.beta.assistants.create({ ...assistant, tool_resources: { file_search: { vector_store_ids: [vectorStore.id] } } });
 
       if (!openAIResponse.id.includes('asst_')) {
         this.logger.error(new Error('OpenAI assistant creation failed.'), openAIResponse);
       }
 
-      metadata = JSON.parse(JSON.stringify(openAIResponse));
+      metadata = JSON.parse(JSON.stringify({ ...openAIResponse, vectorStore }));
 
       this.logger.info(`OpenAI assistant (${openAIResponse.name}) created for ${organization.name}`, {
         organization,
@@ -187,6 +228,52 @@ export class AppService extends BaseWorker implements OnModuleInit {
     }
   }
 
+  private async createOpenAiVectorStore(
+    organization: {
+      id: string;
+      name: string;
+      enabled_connections: any;
+      display_name: string;
+      branding: any;
+      phone: string | null;
+      website: string | null;
+      email: string | null;
+      created_at: Date;
+      updated_at: Date;
+      isTest: boolean;
+      deleted: boolean;
+    },
+    integration?: {
+      id: string;
+      service_definition_id: string;
+      organization_id: string;
+      metadata: any;
+      created_at: Date;
+      updated_at: Date;
+      facility_id: string | null;
+      deleted: boolean;
+    },
+  ) {
+    const vectorStore = await this.client.beta.vectorStores.create({ name: `${organization.name}` });
+
+    if (integration) {
+      await this.prisma.integrations.update({
+        where: {
+          id: integration?.id,
+        },
+        data: {
+          metadata: JSON.stringify({
+            ...integration?.metadata,
+            vectorStore: vectorStore,
+          }),
+        },
+      });
+    }
+
+    return vectorStore;
+  }
+
+  // @ts-expect-error - Fix this later
   async listModels(user: IAuthenticatedUser) {
     try {
       const openAIResponse = await this.client.models.list();
@@ -203,7 +290,7 @@ export class AppService extends BaseWorker implements OnModuleInit {
       });
     }
   }
-
+  // @ts-expect-error - Fix this later
   async listAssistants(user: IAuthenticatedUser) {
     try {
       const openAIResponse = await this.client.beta.assistants.list();
