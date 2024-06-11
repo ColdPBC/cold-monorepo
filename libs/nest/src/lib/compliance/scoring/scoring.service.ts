@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { BaseWorker } from '../../worker';
-import { compliance_questions } from '@prisma/client';
 import { set } from 'lodash';
+import { FilteringService } from '../filtering';
 
 @Injectable()
 export class ScoringService extends BaseWorker {
-  constructor() {
+  constructor(readonly filterService: FilteringService) {
     super(ScoringService.name);
   }
 
@@ -82,27 +82,28 @@ export class ScoringService extends BaseWorker {
     // Get the follow-up questions for the current section
 
     // Check if the question has a rubric and a score map
-    if (question.rubric && question.rubric.score_map) {
-      let score = 0;
-      let aiScore = 0;
 
-      let maxScore = 0;
-      // If the question component is 'multi_select' or 'select' and the value is an array
+    let score = 0;
+    let aiScore = 0;
 
-      if (question.compliance_responses && question.compliance_responses.length > 0) {
-        // Sum up the scores for each selected option
-        for (const response of question.compliance_responses) {
+    let maxScore = 0;
+    // If the question component is 'multi_select' or 'select' and the value is an array
+
+    if (question.compliance_responses && question.compliance_responses.length > 0) {
+      // Sum up the scores for each selected option
+      for (const response of question.compliance_responses) {
+        if (question.rubric && question.rubric?.score_map) {
           /**
            * If the question is multi_select or select, sum up the scores for each selected option
            */
           if (question.component === 'multi_select' || question.component === 'select') {
-            if (response.org_response?.value && Array.isArray(response.org_response.value)) {
+            if (this.filterService.questionHasAnswer(response.org_response, 'value')) {
               response.org_response.value.forEach(value => {
                 score += question.rubric.score_map[value] || 0;
               });
             }
 
-            if (response.ai_response?.answer && Array.isArray(response.ai_response.answer)) {
+            if (this.filterService.questionHasAnswer(response.ai_response, 'answer')) {
               response.ai_response.answer.forEach(answer => {
                 aiScore += question.rubric.score_map[answer] || 0;
               });
@@ -112,37 +113,41 @@ export class ScoringService extends BaseWorker {
             score = question.rubric.score_map[response?.org_response?.value] || 0;
             aiScore = question.rubric.score_map[response?.ai_response?.answer] || 0;
           }
-        }
-
-        if (question.rubric?.max_score) {
-          maxScore = question.rubric.max_score;
-          // If the question has a maximum score, cap the score
-          if (score > question.rubric.max_score) {
-            score = question.rubric.max_score;
-          }
-
-          if (aiScore > question.rubric.max_score) {
-            aiScore = question.rubric.max_score;
-          }
         } else {
-          maxScore = this.getTopScore(question.rubric);
+          // If the question has no rubric or score map, set the score to
+          question.score = 0;
+          question.ai_score = 0;
+          question.max_score = 0;
         }
 
-        // Set the score for the question
-        question.score = score;
-        question.ai_score = aiScore;
-        question.max_score = maxScore || this.getTopScore(question.rubric);
-      } else {
-        // If the question has no responses, set the ai_score & score to 0
-        question.score = 0;
-        question.ai_score = 0;
-        question.max_score = question.rubric.max_score || this.getTopScore(question.rubric);
+        question.ai_answered = this.filterService.questionHasAnswer(response.ai_response, 'answer');
+        question.org_answered = this.filterService.questionHasAnswer(response.org_response, 'value');
+        question.not_started = !question.ai_answered && !question.org_answered;
       }
+
+      if (question.rubric?.max_score) {
+        maxScore = question.rubric.max_score;
+        // If the question has a maximum score, cap the score
+        if (score > question.rubric.max_score) {
+          score = question.rubric.max_score;
+        }
+
+        if (aiScore > question.rubric.max_score) {
+          aiScore = question.rubric.max_score;
+        }
+      } else {
+        maxScore = this.getTopScore(question.rubric);
+      }
+
+      // Set the score for the question
+      question.score = score;
+      question.ai_score = aiScore;
+      question.max_score = maxScore || this.getTopScore(question.rubric);
     } else {
-      // If the question has no rubric or score map, set the score to
+      // If the question has no responses, set the ai_score & score to 0
       question.score = 0;
       question.ai_score = 0;
-      question.max_score = 0;
+      question.max_score = question.rubric.max_score || this.getTopScore(question.rubric);
     }
 
     // return the scored survey

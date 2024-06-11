@@ -5,4 +5,4 @@ import { ScoringService } from './scoring.service';
   providers: [ScoringService],
   exports: [ScoringService],
 })
-export class ComplianceScoringModule {}
+export class ScoringModule {}
