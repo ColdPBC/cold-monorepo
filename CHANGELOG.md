@@ -1,3 +1,12 @@
+# [1.236.0-cold-803.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.235.0...v1.236.0-cold-803.1) (2024-06-11)
+
+
+### Features
+
+* Add new FilteringService and module in compliance lib ([140e7c9](https://github.com/ColdPBC/cold-monorepo/commit/140e7c9bb95d018ecd2f5ee707d2cb3bbbb39b7b))
+* Import and utilize ComplianceDataModule in NestModule ([aa15a97](https://github.com/ColdPBC/cold-monorepo/commit/aa15a970d98190f6bee778b69409efbeb1dde011))
+* Update ComplianceQuestionsRepository ([924a7e5](https://github.com/ColdPBC/cold-monorepo/commit/924a7e518a27685a781c5dd06db7891e722222fa))
+
 # [1.235.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.234.0...v1.235.0) (2024-06-10)
 
 
