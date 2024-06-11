@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { PrismaModule } from '../../prisma';
 
 import { CacheService, ColdCacheModule } from '../../cache';
@@ -10,10 +10,12 @@ import { ComplianceAiResponsesRepository } from './compliance-ai-responses';
 import { ComplianceDefinitionsRepository } from './compliance-definitions';
 import { OrganizationComplianceRepository } from './organization-compliance';
 import { OrganizationComplianceStatusesRepository } from './organization-compliance-statuses';
-import { ScoringService } from '../scoring';
+import { ScoringModule } from '../scoring';
+import { FilteringModule } from '../filtering';
 
+@Global()
 @Module({
-  imports: [PrismaModule, ColdCacheModule.forRootAsync()],
+  imports: [PrismaModule, ColdCacheModule.forRootAsync(), ScoringModule, FilteringModule],
   providers: [
     ComplianceSectionsRepository,
     ComplianceSectionGroupsRepository,
@@ -25,7 +27,6 @@ import { ScoringService } from '../scoring';
     ComplianceDefinitionsRepository,
     OrganizationComplianceRepository,
     OrganizationComplianceStatusesRepository,
-    ScoringService,
   ],
   exports: [
     CacheService,
