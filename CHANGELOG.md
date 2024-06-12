@@ -1,3 +1,13 @@
+# [1.236.0-cold-803.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.236.0-cold-803.2...v1.236.0-cold-803.3) (2024-06-12)
+
+
+### Features
+
+* Add ComplianceQuestionBookmarksRepository in nest lib ([9fd4fee](https://github.com/ColdPBC/cold-monorepo/commit/9fd4feeeb5137de5a50aac8a7a6d9b69a5032388))
+* Added 'responses' parameter to organization compliance responses controller ([c8109ef](https://github.com/ColdPBC/cold-monorepo/commit/c8109ef8f5a44ae39766f0ed427c78ad01c76644))
+* Added ComplianceQuestionBookmarksRepository to compliance-repository.module ([3032920](https://github.com/ColdPBC/cold-monorepo/commit/3032920433d29df1c11f8d50b08b20e3d5950744))
+* Added new enum to compliance ([2dafdc9](https://github.com/ColdPBC/cold-monorepo/commit/2dafdc94dadbe0b1fc3266a4a11ac78aac3b47d1))
+
 # [1.236.0-cold-803.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.236.0-cold-803.1...v1.236.0-cold-803.2) (2024-06-12)
 
 
