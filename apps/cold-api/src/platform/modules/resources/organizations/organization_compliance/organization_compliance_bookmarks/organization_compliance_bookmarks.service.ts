@@ -1,9 +1,20 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
+import { organization_compliance_question_bookmarks } from '@prisma/client';
+import { BaseWorker, ComplianceQuestionBookmarksRepository } from '@coldpbc/nest';
 
 @Injectable()
-export class OrganizationComplianceBookmarksService {
-  create(createOrganizationComplianceBookmarkDto: any) {
-    return 'This action adds a new organizationComplianceBookmark';
+export class OrganizationComplianceBookmarksService extends BaseWorker {
+  constructor(readonly repository: ComplianceQuestionBookmarksRepository) {
+    super(OrganizationComplianceBookmarksService.name);
+  }
+  create(bookmark: organization_compliance_question_bookmarks) {
+    try {
+      return this.repository.upsertComplianceQuestionBookmark(bookmark);
+    } catch (err) {
+      this.logger.error(err);
+      if (err instanceof NotFoundException) throw err;
+      throw new UnprocessableEntityException({ bookmark, description: err.message, cause: err });
+    }
   }
 
   findAll() {
