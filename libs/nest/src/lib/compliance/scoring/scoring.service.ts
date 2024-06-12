@@ -3,20 +3,32 @@ import { BaseWorker } from '../../worker';
 import { set } from 'lodash';
 import { FilteringService } from '../filtering';
 
+export interface ComplianceResponseOptions {
+  references?: boolean;
+  responses?: boolean;
+}
+
 @Injectable()
 export class ScoringService extends BaseWorker {
   constructor(readonly filterService: FilteringService) {
     super(ScoringService.name);
   }
 
-  async scoreComplianceResponse(complianceResponse: any): Promise<any> {
+  async scoreComplianceResponse(complianceResponse: any, options?: ComplianceResponseOptions): Promise<any> {
     let complianceScore = 0;
     let complianceAiScore = 0;
     let complianceMaxScore = 0;
 
     if (Array.isArray(complianceResponse.compliance_section_groups) && complianceResponse.compliance_section_groups.length > 0) {
+      complianceResponse.compliance_section_groups = await this.filterService.filterSectionGroups(complianceResponse.compliance_section_groups, options);
+
+      if (!complianceResponse.compliance_section_groups) {
+        this.logger.warn(`No compliance section groups found for ${complianceResponse.name}`, complianceResponse);
+        complianceResponse.compliance_section_groups = [];
+      }
+
       for (const sectionGroup of complianceResponse.compliance_section_groups) {
-        const scored = await this.scoreSectionGroup(sectionGroup);
+        const scored = await this.scoreSectionGroup(sectionGroup, options);
         complianceScore += scored.score;
         complianceAiScore += scored.ai_score;
         complianceMaxScore += scored.max_score;
@@ -29,14 +41,14 @@ export class ScoringService extends BaseWorker {
     return complianceResponse;
   }
 
-  async scoreSectionGroup(sectionGroup: any): Promise<any> {
+  async scoreSectionGroup(sectionGroup: any, options?: ComplianceResponseOptions): Promise<any> {
     let sectionGroupScore = 0;
     let sectionGroupAiScore = 0;
     let sectionGroupMaxScore = 0;
 
     for (const section of sectionGroup.compliance_sections) {
       // Get the current question
-      const scored = await this.scoreSection(section);
+      const scored = await this.scoreSection(section, options);
       sectionGroupScore += scored.score;
       sectionGroupAiScore += scored.ai_score;
       sectionGroupMaxScore += scored.max_score;
@@ -49,14 +61,14 @@ export class ScoringService extends BaseWorker {
     return sectionGroup;
   }
 
-  async scoreSection(section: any): Promise<{ score: number; ai_score: number; max_score: number }> {
+  async scoreSection(section: any, options?: ComplianceResponseOptions): Promise<{ score: number; ai_score: number; max_score: number }> {
     let sectionScore = 0;
     let sectionAiScore = 0;
     let sectionMaxScore = 0;
 
     for (const question of section.compliance_questions) {
       // Get the current question
-      const scored = await this.scoreQuestion(question);
+      const scored = await this.scoreQuestion(question, options);
       sectionScore += scored.score;
       sectionAiScore += scored.ai_score;
       sectionMaxScore += scored.max_score;
@@ -77,8 +89,9 @@ export class ScoringService extends BaseWorker {
    * score for the question, it sets the score to the max score. Finally, it sets the score for the
    * question and returns the scored survey.
    * @param question
+   * @param options
    */
-  async scoreQuestion(question: any): Promise<{ max_score: number; score: number; ai_score: number }> {
+  async scoreQuestion(question: any, options?: ComplianceResponseOptions): Promise<{ max_score: number; score: number; ai_score: number }> {
     // Get the follow-up questions for the current section
 
     // Check if the question has a rubric and a score map
@@ -89,7 +102,13 @@ export class ScoringService extends BaseWorker {
     let maxScore = 0;
     // If the question component is 'multi_select' or 'select' and the value is an array
 
-    if (question.compliance_responses && question.compliance_responses.length > 0) {
+    if (Array.isArray(question.compliance_responses)) {
+      // If the question has no responses, it's not started
+      if (question.compliance_responses.length < 1) {
+        question.ai_answered = false;
+        question.org_answered = false;
+        question.not_started = true;
+      }
       // Sum up the scores for each selected option
       for (const response of question.compliance_responses) {
         if (question.rubric && question.rubric?.score_map) {
@@ -124,16 +143,22 @@ export class ScoringService extends BaseWorker {
         question.org_answered = this.filterService.questionHasAnswer(response.org_response, 'value');
         question.not_started = !question.ai_answered && !question.org_answered;
       }
+      /**
+       * If the responses aren't needed, remove the compliance_responses array
+       */
+      if (!options?.responses) {
+        delete question.compliance_responses;
+      }
 
       if (question.rubric?.max_score) {
-        maxScore = question.rubric.max_score;
+        maxScore = question.rubric?.max_score;
         // If the question has a maximum score, cap the score
-        if (score > question.rubric.max_score) {
-          score = question.rubric.max_score;
+        if (score > question.rubric?.max_score) {
+          score = question.rubric?.max_score;
         }
 
-        if (aiScore > question.rubric.max_score) {
-          aiScore = question.rubric.max_score;
+        if (aiScore > question.rubric?.max_score) {
+          aiScore = question.rubric?.max_score;
         }
       } else {
         maxScore = this.getTopScore(question.rubric);
@@ -147,7 +172,7 @@ export class ScoringService extends BaseWorker {
       // If the question has no responses, set the ai_score & score to 0
       question.score = 0;
       question.ai_score = 0;
-      question.max_score = question.rubric.max_score || this.getTopScore(question.rubric);
+      question.max_score = question.rubric?.max_score || this.getTopScore(question.rubric);
     }
 
     // return the scored survey
