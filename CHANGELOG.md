@@ -1,3 +1,21 @@
+# [1.236.0-cold-803.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.236.0-cold-803.1...v1.236.0-cold-803.2) (2024-06-12)
+
+
+### Bug Fixes
+
+* Dependency injection issue ([49e89cf](https://github.com/ColdPBC/cold-monorepo/commit/49e89cf5139d8c6286980a1615cc5ee5017d40dc))
+
+
+### Features
+
+* Add FilteringModule to ScoringModule in nest library ([ffd3292](https://github.com/ColdPBC/cold-monorepo/commit/ffd32926557b0da0f3a85abbb530b195abe4d7b1))
+* add options parameter to scoring methods in scoring.service ([09d32ed](https://github.com/ColdPBC/cold-monorepo/commit/09d32ed6b590b9b52fb2807f3071a13c9dd5ff5c))
+* Enhance filtering functionality in Filtering Service ([08ccb82](https://github.com/ColdPBC/cold-monorepo/commit/08ccb826d57a233217e4a96bd68e4bf95d2fee6c))
+* Integrate FilteringService into chat.service.ts ([d0f5d2c](https://github.com/ColdPBC/cold-monorepo/commit/d0f5d2c49b14e154ba6607351475ed3fd18d6e0a))
+* Refactor compliance response repository to use organization object ([94e88fd](https://github.com/ColdPBC/cold-monorepo/commit/94e88fdf5e7781dbe821bb26d6aed01303158b3f))
+* Refactor organization compliance response service ([0fe23d0](https://github.com/ColdPBC/cold-monorepo/commit/0fe23d0c6fc3e4538ffae3510caea99679710a8f))
+* Update organization compliance responses controller ([0fb3772](https://github.com/ColdPBC/cold-monorepo/commit/0fb37726a964b430267403a03466b44639e60c1f))
+
 # [1.236.0-cold-803.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.235.0...v1.236.0-cold-803.1) (2024-06-11)
 
 
