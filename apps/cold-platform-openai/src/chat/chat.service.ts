@@ -10,6 +10,7 @@ import {
   ComplianceSectionsRepository,
   Cuid2Generator,
   DarklyService,
+  FilteringService,
   GuidPrefixes,
   MqttService,
   PrismaService,
@@ -19,7 +20,7 @@ import { ConfigService } from '@nestjs/config';
 import { PromptsService } from '../prompts/prompts.service';
 import { Job, Queue } from 'bull';
 import { InjectQueue } from '@nestjs/bull';
-import { set } from 'lodash';
+import { find, set } from 'lodash';
 import OpenAI from 'openai';
 import { ChatCompletionMessageParam } from 'openai/resources/chat/completions';
 import { RecordMetadata, ScoredPineconeRecord } from '@pinecone-database/pinecone';
@@ -46,6 +47,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
     readonly complianceSectionsCacheRepository: ComplianceSectionsCacheRepository,
     readonly complianceResponsesRepository: ComplianceResponsesRepository,
     readonly complianceAiResponsesRepository: ComplianceAiResponsesRepository,
+    readonly filterService: FilteringService,
   ) {
     super(ChatService.name);
     this.openAIapiKey = this.config.getOrThrow('OPENAI_API_KEY');
@@ -1178,7 +1180,6 @@ export class ChatService extends BaseWorker implements OnModuleInit {
               },
             });
           }
-
           // if there is additional context, create a new run for it
           if (item['additional_context']) {
             if (item.additional_context.value) {
@@ -1229,6 +1230,8 @@ export class ChatService extends BaseWorker implements OnModuleInit {
             item.additional_context.ai_attempted = true;
           }
 
+          const references = await this.filterService.filterReferences(response.references);
+
           const ai_response = await this.prisma.organization_compliance_ai_responses.upsert({
             where: {
               orgCompQuestId: {
@@ -1240,7 +1243,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
               id: new Cuid2Generator(GuidPrefixes.OrganizationComplianceAIResponse).scopedId,
               justification: response.justification,
               answer: response.answer,
-              references: response.references,
+              references: references,
               sources: response.sources || response.source,
               compliance_question_id: item.id,
               additional_context: item.additional_context,
@@ -1250,12 +1253,41 @@ export class ChatService extends BaseWorker implements OnModuleInit {
             update: {
               justification: response.justification,
               answer: response.answer,
-              references: response.references,
+              references: references,
               sources: response.sources || response.source,
               additional_context: item.additional_context,
             },
           });
+          /*
+          for (const file of item.ai_response.references) {
+            if (!file.url) {
+              const orgFile = await this.prisma.organization_files.findUnique({
+                where: {
+                  s3Key: {
+                    organization_id: organization.id,
+                    bucket: 'cold-api-uploaded-files',
+                    key: `${process.env.NODE_ENV}/${organization.name}/${file.file}`,
+                  },
+                },
+              });
 
+              if (!orgFile) {
+                this.logger.error(`File not found for ${file.file}`, { file });
+                continue;
+              }
+
+              await this.prisma.organization_compliance_ai_response_files.create({
+                data: {
+                  id: new Cuid2Generator(GuidPrefixes.OrganizationComplianceAiResponseFile).scopedId,
+                  organization_compliance_ai_response_id: ai_response.id,
+                  organization_files_id: orgFile?.id,
+                  organization_compliance_id: job.data.payload.compliance.id,
+                  organization_id: organization.id,
+                },
+              });
+            }
+          };
+*/
           await this.prisma.compliance_responses.upsert({
             where: {
               orgCompQuestId: {
