@@ -1,3 +1,10 @@
+# [1.236.0-cold-803.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.236.0-cold-803.3...v1.236.0-cold-803.4) (2024-06-12)
+
+
+### Features
+
+* Update OrganizationComplianceBookmarks module and service ([3bebd69](https://github.com/ColdPBC/cold-monorepo/commit/3bebd69a783c7489d6e633472281649e7108c1ba))
+
 # [1.236.0-cold-803.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.236.0-cold-803.2...v1.236.0-cold-803.3) (2024-06-12)
 
 
