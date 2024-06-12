@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { BaseWorker } from '../../../worker';
-import { Cuid2Generator, GuidPrefixes, PrismaService } from '@coldpbc/nest';
+import { Cuid2Generator, GuidPrefixes } from '../../../utility';
+import { PrismaService } from '../../../prisma';
 import { organization_compliance_question_bookmarks } from '@prisma/client';
 
 @Injectable()
