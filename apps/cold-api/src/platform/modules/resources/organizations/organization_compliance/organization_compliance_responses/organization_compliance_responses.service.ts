@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
-import { BaseWorker, ComplianceResponsesRepository } from '@coldpbc/nest';
+import { BaseWorker, ComplianceResponseOptions, ComplianceResponsesRepository } from '@coldpbc/nest';
 
 @Injectable()
 export class OrganizationComplianceResponsesService extends BaseWorker {
@@ -11,7 +11,7 @@ export class OrganizationComplianceResponsesService extends BaseWorker {
     return this.repository.upsertComplianceResponse(req.organization, name, sgId, sId, qId, req.user, complianceResponseData);
   }
 
-  async findAllByCompliance(name: string, req: any, options?: { references?: boolean; take?: number; skip?: number }) {
+  async findAllByCompliance(name: string, req: any, options?: ComplianceResponseOptions) {
     try {
       const response = await this.repository.getScoredComplianceQuestionsByName(req.organization, name, req.user, options);
       return response;
@@ -22,19 +22,19 @@ export class OrganizationComplianceResponsesService extends BaseWorker {
     }
   }
 
-  findAllBySectionId(name: string, csgId: string, csId: string, req: any, options?: { references?: boolean; take?: number; skip?: number }) {
+  findAllBySectionId(name: string, csgId: string, csId: string, req: any, options?: ComplianceResponseOptions) {
     return this.repository.getScoredComplianceQuestionBySection(req.organization, name, csgId, csId, req.user, options);
   }
 
-  findAllByGroupId(name: string, csgId: string, req: any, options?: { references?: boolean; take?: number; skip?: number }) {
+  findAllByGroupId(name: string, csgId: string, req: any, options?: ComplianceResponseOptions) {
     return this.repository.getScoredComplianceQuestionBySectionGroup(req.organization, name, csgId, req.user, options);
   }
 
-  findAll(orgId: string, name: string, sgId: string, sId: string, qId: string, req, options?: { references?: boolean; take?: number; skip?: number }) {
+  findAll(orgId: string, name: string, sgId: string, sId: string, qId: string, req, options?: ComplianceResponseOptions) {
     return this.repository.getComplianceResponses(req.organization, name, req.user, options);
   }
 
-  findOne(name: string, id: number, req: any, options?: { references?: boolean }) {
+  findOne(name: string, id: number, req: any, options?: ComplianceResponseOptions) {
     return this.repository.getComplianceResponseById(req.organizations, name, req.user, id, options);
   }
 
