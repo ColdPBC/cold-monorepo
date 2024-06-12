@@ -242,7 +242,6 @@ describe('ScoringService', () => {
   const scoredSections: any = [];
 
   beforeEach(async () => {
-    service = new ScoringService();
     const response = mockData.organization_compliance[0].compliance_definition; // replace with a valid compliance response
     scoredCompliance = await service.scoreComplianceResponse(response);
     scoredSectionGroup = await service.scoreSectionGroup(response.compliance_section_groups[0]);
