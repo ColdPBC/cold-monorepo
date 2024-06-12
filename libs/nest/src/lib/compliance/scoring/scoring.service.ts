@@ -171,6 +171,7 @@ export class ScoringService extends BaseWorker {
       question.max_score = question.rubric?.max_score || this.getTopScore(question.rubric);
     }
 
+    delete question.rubric;
     // return the scored survey
     return question;
   }
