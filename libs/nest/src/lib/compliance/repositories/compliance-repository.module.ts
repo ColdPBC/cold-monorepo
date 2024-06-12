@@ -12,6 +12,7 @@ import { OrganizationComplianceRepository } from './organization-compliance';
 import { OrganizationComplianceStatusesRepository } from './organization-compliance-statuses';
 import { ScoringModule } from '../scoring';
 import { FilteringModule } from '../filtering';
+import { ComplianceQuestionBookmarksRepository } from './compliance-question-bookmarks/compliance-question-bookmarks.repository';
 
 @Global()
 @Module({
@@ -27,6 +28,7 @@ import { FilteringModule } from '../filtering';
     ComplianceDefinitionsRepository,
     OrganizationComplianceRepository,
     OrganizationComplianceStatusesRepository,
+    ComplianceQuestionBookmarksRepository,
   ],
   exports: [
     CacheService,
