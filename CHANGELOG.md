@@ -1,3 +1,15 @@
+# [1.236.0-cold-803.5](https://github.com/ColdPBC/cold-monorepo/compare/v1.236.0-cold-803.4...v1.236.0-cold-803.5) (2024-06-12)
+
+
+### Features
+
+* Add additional exports to Nest module ([c4d7482](https://github.com/ColdPBC/cold-monorepo/commit/c4d7482e6db924e35403857e5d9886001b8a7601))
+* Add ComplianceQuestionBookmarksRepository to ComplianceRepositoryModule ([58f663c](https://github.com/ColdPBC/cold-monorepo/commit/58f663cd14b8e7d6715c488dfaa9874b579ef56b))
+* Add rubric to compliance responses repository ([6ead069](https://github.com/ColdPBC/cold-monorepo/commit/6ead069cf4238c59c7336ac788a38144fc35352d))
+* Enhance compliance question bookmark repository code ([cf49e82](https://github.com/ColdPBC/cold-monorepo/commit/cf49e82ccdddfdf73ce1be9544af679ef6cc3b24))
+* Refactor organization compliance bookmarks to compliance question bookmarks ([ccfa1c7](https://github.com/ColdPBC/cold-monorepo/commit/ccfa1c7c4663e42e559aa4ec5bc12fba0cfb372f))
+* Update filtering.service in nest lib for compliance filtering ([cdcb17b](https://github.com/ColdPBC/cold-monorepo/commit/cdcb17bd83ccf5ca9a84373ae399c1d8f11891c7))
+
 # [1.236.0-cold-803.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.236.0-cold-803.3...v1.236.0-cold-803.4) (2024-06-12)
 
 
