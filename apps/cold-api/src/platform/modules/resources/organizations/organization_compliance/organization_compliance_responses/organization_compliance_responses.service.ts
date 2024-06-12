@@ -1,5 +1,5 @@
-import { Injectable } from '@nestjs/common';
-import { BaseWorker, ComplianceResponsesRepository, IAuthenticatedUser } from '@coldpbc/nest';
+import { Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
+import { BaseWorker, ComplianceResponsesRepository } from '@coldpbc/nest';
 
 @Injectable()
 export class OrganizationComplianceResponsesService extends BaseWorker {
@@ -7,28 +7,35 @@ export class OrganizationComplianceResponsesService extends BaseWorker {
     super(OrganizationComplianceResponsesService.name);
   }
 
-  upsert(orgId: string, name: string, sgId: string, sId: string, qId: string, complianceResponseData: any, req: any) {
-    return this.repository.upsertComplianceResponse(orgId, name, sgId, sId, qId, req.user, complianceResponseData);
+  upsert(name: string, sgId: string, sId: string, qId: string, complianceResponseData: any, req: any) {
+    return this.repository.upsertComplianceResponse(req.organization, name, sgId, sId, qId, req.user, complianceResponseData);
   }
 
-  findAllByCompliance(orgId: string, name: string, user: IAuthenticatedUser) {
-    return this.repository.getScoredComplianceQuestionByCompliance(orgId, name, user);
+  async findAllByCompliance(name: string, req: any, options?: { references?: boolean; take?: number; skip?: number }) {
+    try {
+      const response = await this.repository.getScoredComplianceQuestionsByName(req.organization, name, req.user, options);
+      return response;
+    } catch (error) {
+      console.log(error);
+      if (error instanceof NotFoundException) throw error;
+      throw new UnprocessableEntityException({ organization: req.org, user: req.user, description: error.message, cause: error });
+    }
   }
 
-  findAllBySectionId(orgId: string, name: string, csgId: string, csId: string, user: IAuthenticatedUser) {
-    return this.repository.getScoredComplianceQuestionBySection(orgId, name, csgId, csId, user);
+  findAllBySectionId(name: string, csgId: string, csId: string, req: any, options?: { references?: boolean; take?: number; skip?: number }) {
+    return this.repository.getScoredComplianceQuestionBySection(req.organization, name, csgId, csId, req.user, options);
   }
 
-  findAllByGroupId(orgId: string, name: string, csgId: string, user: IAuthenticatedUser) {
-    return this.repository.getScoredComplianceQuestionBySectionGroup(orgId, name, csgId, user);
+  findAllByGroupId(name: string, csgId: string, req: any, options?: { references?: boolean; take?: number; skip?: number }) {
+    return this.repository.getScoredComplianceQuestionBySectionGroup(req.organization, name, csgId, req.user, options);
   }
 
-  findAll(orgId: string, name: string, sgId: string, sId: string, qId: string, req) {
-    return this.repository.getComplianceResponses(orgId, name, req.user);
+  findAll(orgId: string, name: string, sgId: string, sId: string, qId: string, req, options?: { references?: boolean; take?: number; skip?: number }) {
+    return this.repository.getComplianceResponses(req.organization, name, req.user, options);
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} organizationComplianceResponse`;
+  findOne(name: string, id: number, req: any, options?: { references?: boolean }) {
+    return this.repository.getComplianceResponseById(req.organizations, name, req.user, id, options);
   }
 
   remove(id: number) {
