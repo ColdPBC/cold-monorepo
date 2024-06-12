@@ -41,6 +41,7 @@ import { ComplianceQuestionBookmarksRepository } from './compliance-question-boo
     ComplianceAiResponsesRepository,
     ComplianceResponsesRepository,
     ComplianceSectionsCacheRepository,
+    ComplianceQuestionBookmarksRepository,
   ],
 })
 export class ComplianceRepositoryModule {}
