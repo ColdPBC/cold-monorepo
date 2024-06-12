@@ -7,6 +7,13 @@ import { IAuthenticatedUser } from '../../../primitives';
 import { ScoringService } from '../../scoring';
 import { pick, set } from 'lodash';
 
+export interface ComplianceResponseOptions {
+  take?: number;
+  skip?: number;
+  references?: boolean;
+  responses?: boolean;
+}
+
 @Injectable()
 export class ComplianceResponsesRepository extends BaseWorker {
   constructor(readonly prisma: PrismaService, readonly scoringService: ScoringService) {
@@ -152,7 +159,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
     }
   }
 
-  async getComplianceResponses(org: organizations, compliance_definition_name: string, user: IAuthenticatedUser, options?: { references?: boolean; take?: number; skip?: number }) {
+  async getComplianceResponses(org: organizations, compliance_definition_name: string, user: IAuthenticatedUser, options?: ComplianceResponseOptions) {
     try {
       const organization = (await this.prisma.extended.organizations.findUnique({
         where: {
@@ -287,12 +294,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
     }
   }
 
-  async getScoredComplianceQuestionsByName(
-    org: organizations,
-    compliance_definition_name: string,
-    user: IAuthenticatedUser,
-    options?: { references?: boolean; take?: number; skip?: number },
-  ) {
+  async getScoredComplianceQuestionsByName(org: organizations, compliance_definition_name: string, user: IAuthenticatedUser, options?: ComplianceResponseOptions) {
     try {
       const response = await this.prisma.extended.organization_compliance.findUnique({
         where: {
@@ -382,7 +384,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
     csgId: string,
     csId: string,
     user: IAuthenticatedUser,
-    options?: { references?: boolean; take?: number; skip?: number },
+    options?: ComplianceResponseOptions,
   ) {
     try {
       const response = await this.prisma.extended.organizations.findUnique({
@@ -481,7 +483,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
     compliance_definition_name: string,
     csgId: string,
     user: IAuthenticatedUser,
-    options?: { references?: boolean },
+    options?: ComplianceResponseOptions,
   ) {
     try {
       const response = await this.prisma.extended.organizations.findUnique({
@@ -570,7 +572,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
     }
   }
 
-  async getComplianceResponseById(org: organizations, compliance_definition_name: string, user: IAuthenticatedUser, id: number, options?: { references?: boolean }) {
+  async getComplianceResponseById(org: organizations, compliance_definition_name: string, user: IAuthenticatedUser, id: number, options?: ComplianceResponseOptions) {
     try {
       const response = await this.prisma.extended.organizations.findUnique({
         where: {
