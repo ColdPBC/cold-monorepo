@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { BaseWorker } from '../../worker';
-import { ComplianceSectionGroupsExtendedDto, ComplianceSectionsExtendedDto, Dependency, Question } from '../repositories';
+import { ComplianceResponseOptions, ComplianceSectionGroupsExtendedDto, ComplianceSectionsExtendedDto, Dependency, Question } from '../repositories';
 import { findIndex, get, unset } from 'lodash';
 import { PrismaService } from '../../prisma';
 
@@ -15,12 +15,12 @@ export class FilteringService extends BaseWorker {
    *
    * @param {any[]} sectionGroups - An array of section groups to filter.
    *
-   * @param references
+   * @param options
    * @private
    *
    * @return {Promise<void>} - A promise that resolves when the filtering is complete.
    */
-  async filterSectionGroups(sectionGroups: ComplianceSectionGroupsExtendedDto[], options?: { references?: boolean }) {
+  async filterSectionGroups(sectionGroups: ComplianceSectionGroupsExtendedDto[], options?: ComplianceResponseOptions) {
     try {
       for (const group of sectionGroups) {
         group.compliance_sections = (await this.filterSectionGroupSections(group, options)) as ComplianceSectionsExtendedDto[];
@@ -43,7 +43,7 @@ export class FilteringService extends BaseWorker {
    *
    * @private
    */
-  async filterSectionGroupSections(sectionGroup: ComplianceSectionGroupsExtendedDto, options?: { references?: boolean }): Promise<ComplianceSectionsExtendedDto[]> {
+  async filterSectionGroupSections(sectionGroup: ComplianceSectionGroupsExtendedDto, options?: ComplianceResponseOptions): Promise<ComplianceSectionsExtendedDto[]> {
     try {
       if (!sectionGroup.compliance_sections) return [];
 
@@ -61,7 +61,7 @@ export class FilteringService extends BaseWorker {
    * @param references
    * @return {Promise<Question[]>} The filtered array of questions.
    */
-  async filterSections(sections: ComplianceSectionsExtendedDto[], options?: { references?: boolean }): Promise<ComplianceSectionsExtendedDto[]> {
+  async filterSections(sections: ComplianceSectionsExtendedDto[], options?: ComplianceResponseOptions): Promise<ComplianceSectionsExtendedDto[]> {
     /**
      * Filter questions based on their dependencies.
      */
@@ -133,7 +133,7 @@ export class FilteringService extends BaseWorker {
    * @param references
    * @return {Promise<Question[]>} The filtered array of questions.
    */
-  async filterQuestions(questions: Question[], references?: boolean): Promise<Question[]> {
+  async filterQuestions(questions: Question[], options?: ComplianceResponseOptions): Promise<Question[]> {
     const dependenciesMet = (question: Question): boolean => {
       unset(question, 'ai_answer');
 
@@ -168,7 +168,7 @@ export class FilteringService extends BaseWorker {
           }
         }
 
-        if (references && Array.isArray(question['references'])) {
+        if (options?.references && Array.isArray(question['references'])) {
           question['references'] = this.filterReferences(question['references']);
         }
       }
