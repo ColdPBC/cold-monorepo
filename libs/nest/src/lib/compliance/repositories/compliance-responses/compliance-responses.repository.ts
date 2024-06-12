@@ -325,6 +325,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
                           key: true,
                           order: true,
                           prompt: true,
+                          rubric: true,
                           compliance_responses: {
                             where: {
                               organization_id: org.id,
