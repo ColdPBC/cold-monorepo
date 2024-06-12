@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { BaseWorker } from '../../worker';
 import { ComplianceResponseOptions, ComplianceSectionGroupsExtendedDto, ComplianceSectionsExtendedDto, Dependency, Question } from '../repositories';
-import { findIndex, get, unset } from 'lodash';
+import { findIndex, get, merge, unset } from 'lodash';
 import { PrismaService } from '../../prisma';
 
 @Injectable()
@@ -58,7 +58,7 @@ export class FilteringService extends BaseWorker {
    * Filter questions based on their dependencies.
    *
    * @param {Section[]} sections - An array of questions to filter.
-   * @param references
+   * @param options
    * @return {Promise<Question[]>} The filtered array of questions.
    */
   async filterSections(sections: ComplianceSectionsExtendedDto[], options?: ComplianceResponseOptions): Promise<ComplianceSectionsExtendedDto[]> {
@@ -68,7 +68,9 @@ export class FilteringService extends BaseWorker {
 
     const filtered = await Promise.all(
       sections.filter(async section => {
-        const dependencies = get(section, 'compliance_section_dependency_chains.dependency_chain', []) as Dependency[];
+        const dependencies = merge([], get(section, 'compliance_section_dependency_chains.dependency_chain', [])) as Dependency[];
+        delete section.compliance_section_dependency_chains;
+
         /**
          * If the question has no dependencies, it is included in the response.
          */
