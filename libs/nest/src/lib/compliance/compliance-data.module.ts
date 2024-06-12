@@ -5,5 +5,7 @@ import { FilteringModule } from './filtering';
 
 @Module({
   imports: [ComplianceRepositoryModule, ScoringModule, FilteringModule],
+  providers: [],
+  exports: [ComplianceRepositoryModule, ScoringModule, FilteringModule],
 })
 export class ComplianceDataModule {}
