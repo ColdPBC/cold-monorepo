@@ -65,9 +65,10 @@ export class OrganizationComplianceResponsesController {
     @Req() req: any,
     @Query('take') take: number,
     @Query('skip') skip: number,
+    @Query('responses', new ParseBoolPipe({ optional: true })) responses: boolean,
     @Query('references', new ParseBoolPipe({ optional: true })) references: boolean,
   ) {
-    return this.organizationComplianceResponsesService.findAllByCompliance(name, req, { references, take, skip });
+    return this.organizationComplianceResponsesService.findAllByCompliance(name, req, { references, responses, take, skip });
   }
 
   @Get('section_groups/:sgId/responses')
@@ -86,8 +87,9 @@ export class OrganizationComplianceResponsesController {
     @Query('take') take: number,
     @Query('skip') skip: number,
     @Query('references', new ParseBoolPipe({ optional: true })) references: boolean,
+    @Query('responses', new ParseBoolPipe({ optional: true })) responses: boolean,
   ) {
-    return this.organizationComplianceResponsesService.findAllByGroupId(name, sgId, req, { references, take, skip });
+    return this.organizationComplianceResponsesService.findAllByGroupId(name, sgId, req, { references, responses, take, skip });
   }
 
   @Get('section_groups/:sgId/sections/:csId/responses')
@@ -114,8 +116,9 @@ export class OrganizationComplianceResponsesController {
     @Query('take') take: number,
     @Query('skip') skip: number,
     @Query('references', new ParseBoolPipe({ optional: true })) references: boolean,
+    @Query('responses', new ParseBoolPipe({ optional: true })) responses: boolean,
   ) {
-    return this.organizationComplianceResponsesService.findAllBySectionId(name, csgId, csId, req, { references, take, skip });
+    return this.organizationComplianceResponsesService.findAllBySectionId(name, csgId, csId, req, { references, responses, take, skip });
   }
 
   @Get('responses')
@@ -126,8 +129,9 @@ export class OrganizationComplianceResponsesController {
     @Query('take') take: number,
     @Query('skip') skip: number,
     @Query('references', new ParseBoolPipe({ optional: true })) references: boolean,
+    @Query('responses', new ParseBoolPipe({ optional: true })) responses: boolean,
   ) {
-    return this.organizationComplianceResponsesService.findAllByCompliance(req, name, { references, take, skip });
+    return this.organizationComplianceResponsesService.findAllByCompliance(req, name, { references, responses, take, skip });
   }
 
   @Get('responses/:id')
@@ -139,8 +143,14 @@ export class OrganizationComplianceResponsesController {
     example: 'cr_', // Example value
   })
   @Roles(...coldAdminOnly)
-  findById(@Param('name') name: string, @Param('id') id: string, @Req() req: any, @Query('references', new ParseBoolPipe({ optional: true })) references: boolean) {
-    return this.organizationComplianceResponsesService.findOne(name, +id, req, { references });
+  findById(
+    @Param('name') name: string,
+    @Param('id') id: string,
+    @Req() req: any,
+    @Query('references', new ParseBoolPipe({ optional: true })) references: boolean,
+    @Query('responses', new ParseBoolPipe({ optional: true })) responses: boolean,
+  ) {
+    return this.organizationComplianceResponsesService.findOne(name, +id, req, { references, responses });
   }
 
   @Delete('responses/:id')
