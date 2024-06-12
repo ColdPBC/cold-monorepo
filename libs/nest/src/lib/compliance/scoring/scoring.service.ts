@@ -2,11 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { BaseWorker } from '../../worker';
 import { set } from 'lodash';
 import { FilteringService } from '../filtering';
-
-export interface ComplianceResponseOptions {
-  references?: boolean;
-  responses?: boolean;
-}
+import { ComplianceResponseOptions } from '../repositories';
 
 @Injectable()
 export class ScoringService extends BaseWorker {
