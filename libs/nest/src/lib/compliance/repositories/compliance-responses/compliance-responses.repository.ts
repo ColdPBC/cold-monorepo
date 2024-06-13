@@ -12,6 +12,7 @@ export interface ComplianceResponseOptions {
   skip?: number;
   references?: boolean;
   responses?: boolean;
+  bookmarks?: boolean;
 }
 
 @Injectable()
@@ -264,7 +265,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
        */
       if (Array.isArray(organization?.organization_compliance) && organization?.organization_compliance.length > 0) {
         const compliance_response = organization?.organization_compliance[0];
-        const response = await this.scoringService.scoreComplianceResponse(compliance_response?.compliance_definition);
+        const response = await this.scoringService.scoreComplianceResponse(compliance_response?.compliance_definition, org, user);
         this.logger.log(`Scored ${compliance_definition_name} Compliance `, response);
       }
 
@@ -369,7 +370,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
 
       set(organization, 'organization_compliance', response);
 
-      return this.scoringService.scoreComplianceResponse(organization.organization_compliance.compliance_definition, options);
+      return this.scoringService.scoreComplianceResponse(organization.organization_compliance.compliance_definition, org, user, options);
     } catch (error) {
       this.logger.error(`Error getting responses for organization: ${org.name}: ${compliance_definition_name}`, {
         user,
@@ -469,7 +470,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
         throw new NotFoundException(`No Compliance Found For ${org.name}`);
       }
 
-      return this.scoringService.scoreComplianceResponse(response.organization_compliance[0].compliance_definition);
+      return this.scoringService.scoreComplianceResponse(response.organization_compliance[0].compliance_definition, org, user);
     } catch (error) {
       this.logger.error(`Error getting responses for organization: ${org.name}: ${compliance_definition_name}`, {
         user,
@@ -562,7 +563,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
         throw new NotFoundException(`No Compliance Found For ${org.name}`);
       }
 
-      return this.scoringService.scoreComplianceResponse(response.organization_compliance[0].compliance_definition);
+      return this.scoringService.scoreComplianceResponse(response.organization_compliance[0].compliance_definition, org, user);
     } catch (error) {
       this.logger.error(`Error getting responses for organization: ${org.name}: ${compliance_definition_name}`, {
         user,
@@ -652,7 +653,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
         throw new NotFoundException(`Compliance responses with the id of ${id} do not belong to ${org.name} not found`);
       }
 
-      return this.scoringService.scoreComplianceResponse(response.organization_compliance[0].compliance_definition);
+      return this.scoringService.scoreComplianceResponse(response.organization_compliance[0].compliance_definition, org, user);
     } catch (error) {
       this.logger.error(`Error getting responses for organization: ${org.id}: ${compliance_definition_name}`, {
         user,
