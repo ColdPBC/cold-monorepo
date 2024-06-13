@@ -1,3 +1,12 @@
+# [1.236.0-cold-803.11](https://github.com/ColdPBC/cold-monorepo/compare/v1.236.0-cold-803.10...v1.236.0-cold-803.11) (2024-06-13)
+
+
+### Features
+
+* Add getQuestionResponseById method and refactor parameters in organization compliance responses service ([38f0725](https://github.com/ColdPBC/cold-monorepo/commit/38f07255fe63d751d16575af8dcbd6b3d875cce4))
+* Add method to get scored compliance question by ID ([adcac13](https://github.com/ColdPBC/cold-monorepo/commit/adcac13c2521121bd238dff14ba8afcdd9cc5dd8))
+* Update organization compliance responses controller ([c0cb6c9](https://github.com/ColdPBC/cold-monorepo/commit/c0cb6c9186e61dff3de54359de21ed713ca7035f))
+
 # [1.236.0-cold-803.10](https://github.com/ColdPBC/cold-monorepo/compare/v1.236.0-cold-803.9...v1.236.0-cold-803.10) (2024-06-13)
 
 
