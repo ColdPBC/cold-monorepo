@@ -22,7 +22,7 @@ export class OrganizationComplianceResponsesService extends BaseWorker {
     }
   }
 
-  findAllBySectionId(name: string, csgId: string, csId: string, req: any, options?: ComplianceResponseOptions) {
+  getQuestionsBySectionId(name: string, csgId: string, csId: string, req: any, options?: ComplianceResponseOptions) {
     return this.repository.getScoredComplianceQuestionBySection(req.organization, name, csgId, csId, req.user, options);
   }
 
