@@ -117,7 +117,7 @@ export class ScoringService extends BaseWorker {
       // If the question has no responses, it's not started
       if (question.compliance_responses.length < 1) {
         question.ai_answered = false;
-        question.org_answered = false;
+        question.user_answered = false;
         question.not_started = true;
         question.bookmarked = await this.isBookmarked(question.id, user);
       }
@@ -152,7 +152,7 @@ export class ScoringService extends BaseWorker {
         }
 
         question.ai_answered = this.filterService.questionHasAnswer(response.ai_response, 'answer');
-        question.org_answered = this.filterService.questionHasAnswer(response.org_response, 'value');
+        question.user_answered = this.filterService.questionHasAnswer(response.org_response, 'value');
         question.not_started = !question.ai_answered && !question.org_answered;
         question.bookmarked = question.bookmarked = await this.isBookmarked(question.id, user);
       }
