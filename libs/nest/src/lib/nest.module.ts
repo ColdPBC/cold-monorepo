@@ -16,10 +16,10 @@ import { DatadogTraceModule } from 'nestjs-ddtrace';
 import { S3Module, SecretsModule, SecretsService } from './aws';
 import { RedisServiceConfig, GeneratorsModule } from './utility';
 import { MqttModule } from './mqtt';
-import { ComplianceDataModule, ComplianceRepositoryModule } from './compliance';
+import { ComplianceDataModule } from './compliance';
 
 @Module({
-  imports: [MqttModule, GeneratorsModule, ComplianceDataModule],
+  imports: [MqttModule, GeneratorsModule],
 })
 export class NestModule {
   static async forRootAsync() {
@@ -61,7 +61,7 @@ export class NestModule {
       BullModule.forRoot(await new RedisServiceConfig(secrets).getQueueConfig(type, project)),
       HttpModule,
       MqttModule,
-      ComplianceRepositoryModule,
+      ComplianceDataModule,
       GeneratorsModule,
     ];
 
@@ -78,7 +78,7 @@ export class NestModule {
     /**
      * Exports Array
      */
-    const exports: any = [HttpModule, ConfigService, ComplianceRepositoryModule, PrismaModule];
+    const exports: any = [HttpModule, ConfigService, ComplianceDataModule, PrismaModule];
 
     logger.info('Configuring Nest Module...');
 
