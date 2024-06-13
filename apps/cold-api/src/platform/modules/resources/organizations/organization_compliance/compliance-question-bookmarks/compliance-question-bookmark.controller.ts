@@ -50,7 +50,7 @@ export class ComplianceQuestionBookmarkController {
     return this.organizationComplianceBookmarksService.upsert(name, qId, bookMark, req);
   }
 
-  @Get('user')
+  @Get()
   @Roles(...allRoles)
   findAll(@Param('name') name: string, @Req() req: any) {
     return this.organizationComplianceBookmarksService.findAll(name, req);
@@ -62,9 +62,9 @@ export class ComplianceQuestionBookmarkController {
     return this.organizationComplianceBookmarksService.findOne(name, id, req);
   }
 
-  @Delete(':id')
+  @Delete()
   @Roles(...allRoles)
-  remove(@Param('name') name: string, @Param('id') id: string, @Req() req: any) {
-    return this.organizationComplianceBookmarksService.remove(name, id, req);
+  remove(@Param('qId') qId: string, @Req() req: any) {
+    return this.organizationComplianceBookmarksService.remove(qId, req);
   }
 }
