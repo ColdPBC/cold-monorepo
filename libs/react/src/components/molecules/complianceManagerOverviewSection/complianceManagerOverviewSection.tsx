@@ -127,7 +127,7 @@ const _ComplianceManagerOverviewSection = ({
         if (!canNavigateToQuestionnaire()) {
           return;
         }
-        navigate(`/questionnnaire/${name}?section=${section.key}`);
+        navigate(`/questionnaire/${name}?section=${section.key}`);
       }}
       key={`${groupId}-${section.id}`}>
       <div className={'w-full flex flex-row justify-between items-center'}>
