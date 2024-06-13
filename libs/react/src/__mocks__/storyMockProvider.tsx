@@ -18,6 +18,7 @@ import {
   ComplianceQuestionnaireContextType,
 } from '@coldpbc/context';
 import { getAllFilesMock } from './filesMock';
+import { getQuestionnaireSidebarComplianceMock } from './complianceMock';
 
 export interface StoryMockProviderProps {
   handlers?: RestHandler<MockedRequest<DefaultBodyType>>[];
@@ -123,9 +124,6 @@ export const StoryMockProvider = (props: PropsWithChildren<StoryMockProviderProp
     setShowOverviewModal: props.complianceManagerContext?.setShowOverviewModal || setShowOverviewModal,
   };
 
-  const [complianceQuestionnaireActiveQuestion, setComplianceQuestionnaireActiveQuestion] = React.useState<string | null>(
-    props.complianceQuestionnaireContext?.activeQuestion ?? null,
-  );
   const [complianceQuestionnaireFocusQuestion, setComplianceQuestionnaireFocusQuestion] = React.useState<{
     key: string;
     aiDetails: {
@@ -138,11 +136,10 @@ export const StoryMockProvider = (props: PropsWithChildren<StoryMockProviderProp
     };
   } | null>(props.complianceQuestionnaireContext?.focusQuestion ?? null);
 
-  const complianceQuestionnaireContextValue = {
+  const complianceQuestionnaireContextValue: ComplianceQuestionnaireContextType = {
     name: 'rei_pia_2024',
+    sectionGroups: getQuestionnaireSidebarComplianceMock(),
     ...props.complianceQuestionnaireContext,
-    activeQuestion: complianceQuestionnaireActiveQuestion,
-    setActiveQuestion: props.complianceQuestionnaireContext?.setActiveQuestion ?? setComplianceQuestionnaireActiveQuestion,
     focusQuestion: complianceQuestionnaireFocusQuestion,
     setFocusQuestion: props.complianceQuestionnaireContext?.setFocusQuestion ?? setComplianceQuestionnaireFocusQuestion,
   };

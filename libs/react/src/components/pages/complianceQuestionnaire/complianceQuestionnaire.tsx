@@ -4,11 +4,13 @@ import { useNavigate, useParams } from 'react-router-dom';
 import useSWR from 'swr';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { useAuth0Wrapper } from '@coldpbc/hooks';
-import { OrgCompliance, QuestionnaireQuestion } from '@coldpbc/interfaces';
+import { ComplianceSidebarPayload, OrgCompliance, QuestionnaireQuestion } from '@coldpbc/interfaces';
 import { ColdComplianceQuestionnaireContext } from '@coldpbc/context';
 
+// todo: add link to questionnaire from compliance set manager
+// todo: add scrolling to question and section
 export const ComplianceQuestionnaire = () => {
-  const [activeQuestion, setActiveQuestion] = React.useState<string | null>(null);
+  const [scrollToQuestion, setScrollToQuestion] = React.useState<string | null>(null);
   const [sidebarExpanded, setSidebarExpanded] = React.useState<boolean>(true);
   const [focusQuestion, setFocusQuestion] = React.useState<{
     key: string;
@@ -25,6 +27,7 @@ export const ComplianceQuestionnaire = () => {
   const { orgId } = useAuth0Wrapper();
   // expected pathname: /questionnaire/:complianceName
   const { complianceName } = useParams();
+
   const getComplianceUrl = () => {
     if (orgId) {
       return [`/compliance_definitions/organizations/${orgId}`, 'GET'];
@@ -34,26 +37,39 @@ export const ComplianceQuestionnaire = () => {
   };
   const complianceSWR = useSWR<OrgCompliance[], any, any>(getComplianceUrl(), axiosFetcher);
 
+  const getSidebarDataUrl = () => {
+    return [`/compliance_definitions/${complianceName}/organizations/${orgId}/sectionGroups`, 'GET'];
+  };
+
+  const sideBarSWR = useSWR<ComplianceSidebarPayload, any, any>(getSidebarDataUrl(), axiosFetcher);
+
   useEffect(() => {
     if (focusQuestion) {
       setSidebarExpanded(false);
     }
   }, [focusQuestion]);
 
-  if (complianceSWR.isLoading) {
+  if (complianceSWR.isLoading || sideBarSWR.isLoading) {
     return <Spinner />;
   }
 
   const selectedCompliance = complianceSWR.data?.find(compliance => compliance.compliance_definition.name === complianceName);
 
+  if (!sideBarSWR.data) {
+    return null;
+  }
+
+  const sectionGroups = sideBarSWR.data;
+
   return (
     <ColdComplianceQuestionnaireContext.Provider
       value={{
         name: complianceName || '',
-        activeQuestion,
-        setActiveQuestion,
+        scrollToQuestion,
+        setScrollToQuestion,
         focusQuestion,
         setFocusQuestion,
+        sectionGroups,
       }}>
       <div className={'w-full h-screen flex-col flex text-tc-primary relative'}>
         <div className={'h-[72px] w-full p-[16px] flex justify-between bg-gray-30'} data-testid={'questionnaire-header'}>

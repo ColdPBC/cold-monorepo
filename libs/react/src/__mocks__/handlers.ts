@@ -18,7 +18,13 @@ import { auth0UserMock } from './userMock';
 import { getNewsDefault } from './newsMock';
 import { getActionMock, getActionsMock } from './action';
 import { v4 as uuidv4 } from 'uuid';
-import { getComplianceMock, getOrganizationComplianceMock, getOrganizationComplianceMockByName, getQuestionnaireSidebarComplianceMock } from './complianceMock';
+import {
+  getComplianceMock,
+  getOrganizationComplianceMock,
+  getOrganizationComplianceMockByName,
+  getQuestionnaireContainerMock,
+  getQuestionnaireSidebarComplianceMock,
+} from './complianceMock';
 import { getDocumentsListTableMock } from './componentMock';
 import { getAllFilesMock } from './filesMock';
 import { returnUpdatedSurvey } from './helpers';
@@ -269,12 +275,21 @@ export const handlers = [
     return res(ctx.json(getDefaultEmissionMock()));
   }),
 
-  rest.get(getApiUrl('/compliance_definitions/:name/organizations/:orgId/questionnaireSidebar'), (req, res, ctx) => {
+  rest.get(getApiUrl('/compliance_definitions/:name/organizations/:orgId/sectionGroups'), (req, res, ctx) => {
     return res(ctx.json(getQuestionnaireSidebarComplianceMock()));
   }),
 
-  rest.get(getApiUrl('/compliance_definitions/:name/organizations/:orgId/questions'), (req, res, ctx) => {
-    return res(ctx.json(getQuestionnaireSidebarComplianceMock()));
+  rest.get(getApiUrl('/compliance_definitions/:name/organizations/:orgId/sectionGroups/:sectionGroupId/sections/:sectionId'), (req, res, ctx) => {
+    // get query params from url
+    const { name, orgId, sectionGroupId, sectionId } = req.params as {
+      name: string;
+      orgId: string;
+      sectionGroupId: string;
+      sectionId: string;
+    };
+    const responses = req.url.searchParams.get('responses') as string;
+    const responsesBool = responses === 'true';
+    return res(ctx.json(getQuestionnaireContainerMock(sectionGroupId, sectionId)));
   }),
 
   rest.get(getApiUrl('/compliance_definitions/:name/organizations/:orgId/questions/:id/notes'), (req, res, ctx) => {

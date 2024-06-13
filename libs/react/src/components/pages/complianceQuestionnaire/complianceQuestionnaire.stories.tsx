@@ -16,16 +16,24 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   render: args => {
-    return <QuestionnaireStory {...args} />;
+    return (
+      <StoryMockProvider memoryRouterProps={{ initialEntries: ['/questionnaire/rei_pia_2024'] }}>
+        <Routes>
+          <Route path={'/questionnaire/:complianceName'} element={<ComplianceQuestionnaire />} />
+        </Routes>
+      </StoryMockProvider>
+    );
   },
 };
 
-const QuestionnaireStory = (args: any) => {
-  return (
-    <StoryMockProvider memoryRouterProps={{ initialEntries: ['/questionnaire/rei_pia_2024'] }}>
-      <Routes>
-        <Route path={'/questionnaire/:complianceName'} element={<ComplianceQuestionnaire />} />
-      </Routes>
-    </StoryMockProvider>
-  );
+export const WithSectionSelection: Story = {
+  render: args => {
+    return (
+      <StoryMockProvider memoryRouterProps={{ initialEntries: ['/questionnaire/rei_pia_2024?section=GHG'] }}>
+        <Routes>
+          <Route path={'/questionnaire/:complianceName'} element={<ComplianceQuestionnaire />} />
+        </Routes>
+      </StoryMockProvider>
+    );
+  },
 };

@@ -106,11 +106,8 @@ export type CurrentAIStatusSection = {
   questions: string[];
 };
 
-export interface QuestionnaireQuestionProp extends QuestionnaireQuestion {
-  number: number;
-}
-
 export type QuestionnaireQuestion = {
+  id: string;
   key: string;
   order: number;
   prompt: string;
@@ -129,7 +126,7 @@ export type QuestionnaireQuestion = {
     answer?: string | boolean | number | Array<string>;
     references?: {
       file: string;
-      text: string;
+      text: string[];
       score?: number;
     }[];
     source?: string[];
@@ -149,4 +146,38 @@ export interface ComplianceNotePayload {
   compliance_question_id: string;
   organization_compliance_id: string;
   deleted: string;
+}
+
+export interface ComplianceSidebarPayload {
+  name: string;
+  compliance_section_groups: ComplianceSidebarSectionGroup[];
+}
+
+export interface ComplianceSidebarSectionGroup {
+  id: string;
+  title: string;
+  order: number;
+  compliance_sections: ComplianceSidebarSection[];
+}
+
+export interface ComplianceSidebarSection {
+  id: string;
+  title: string;
+  key: string;
+  order: number;
+  compliance_questions: ComplianceSidebarQuestion[];
+}
+
+export interface ComplianceSidebarQuestion {
+  id: string;
+  key: string;
+  order: number;
+  prompt: string;
+  score?: number;
+  ai_score?: number;
+  max_score?: number;
+  ai_answered: boolean;
+  user_answered: boolean;
+  not_started: boolean;
+  bookmarked: boolean;
 }

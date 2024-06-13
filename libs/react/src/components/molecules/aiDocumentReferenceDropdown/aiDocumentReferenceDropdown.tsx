@@ -5,7 +5,7 @@ import { IconNames } from '@coldpbc/enums';
 export const AiDocumentReferenceDropdown = (props: {
   reference: {
     file: string;
-    text: string;
+    text: string[];
     score?: number;
   };
 }) => {
@@ -20,7 +20,13 @@ export const AiDocumentReferenceDropdown = (props: {
           <ColdIcon name={open ? IconNames.ColdChevronUpIcon : IconNames.ColdChevronDownIcon} height={8} />
         </div>
       </div>
-      {open && <div className={'w-full text-body italic text-start'}>{text}</div>}
+      {open && (
+        <div className={'w-full flex flex-col gap-[20px] text-body italic text-start'}>
+          {text.map((t, index) => (
+            <div key={index}>{t}...</div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

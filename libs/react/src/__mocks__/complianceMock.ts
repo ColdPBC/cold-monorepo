@@ -1,4 +1,5 @@
-import { Compliance, OrgCompliance, QuestionnaireQuestion } from '@coldpbc/interfaces';
+import { Compliance, ComplianceSidebarPayload, OrgCompliance, QuestionnaireQuestion } from '@coldpbc/interfaces';
+import { forEach } from 'lodash';
 
 export function getComplianceMock(): Compliance[] {
   return [
@@ -442,25 +443,332 @@ export function getAssessmentsComplianceMock(): OrgCompliance[] {
   ];
 }
 
-export function getQuestionnaireSidebarComplianceMock(): {
-  name: string;
-  key: string;
-  sections: {
-    name: string;
-    key: string;
-    questions: QuestionnaireQuestion[];
-  }[];
-}[] {
-  return [
+export function getQuestionnaireSidebarComplianceMock(): ComplianceSidebarPayload {
+  return {
+    name: 'rei_pia_2024',
+    compliance_section_groups: [
+      {
+        id: 'csg_1',
+        order: 1,
+        title: 'Practices',
+        compliance_sections: [
+          {
+            id: 'sec_1',
+            order: 1,
+            title: 'Brand Information',
+            key: 'GEN',
+            compliance_questions: [
+              {
+                id: 'ques_1',
+                order: 9,
+                prompt: 'How many employees, if any, are currently dedicated to product sustainability at your brand?',
+                user_answered: true,
+                bookmarked: true,
+                not_started: false,
+                ai_answered: false,
+                key: 'GEN-1',
+              },
+              {
+                id: 'ques_2',
+                order: 10,
+                prompt:
+                  'Please indicate if your brand has supplied to REI in the past 12 months, or anticipates supplying to REI in the next 12 months, products that fall into any of the following categories.',
+                user_answered: false,
+                bookmarked: true,
+                not_started: true,
+                ai_answered: false,
+                key: 'GEN-2',
+              },
+              {
+                id: 'ques_3',
+                order: 0,
+                prompt: 'What is your REI Vendor ID?',
+                user_answered: true,
+                bookmarked: false,
+                not_started: false,
+                ai_answered: false,
+                key: 'GEN-3',
+              },
+              {
+                id: 'ques_4',
+                order: 1,
+                prompt: 'What is your Vendor Name?',
+                user_answered: true,
+                bookmarked: false,
+                not_started: false,
+                ai_answered: false,
+                key: 'GEN-4',
+              },
+              {
+                id: 'ques_5',
+                order: 2,
+                prompt: 'For which brand(s) are you completing the assessment?',
+                user_answered: true,
+                bookmarked: true,
+                not_started: false,
+                ai_answered: false,
+                key: 'GEN-5',
+              },
+            ],
+          },
+          {
+            id: 'sec_2',
+            order: 2,
+            title: 'Manufacturing Code of Conduct',
+            key: 'MFG',
+            compliance_questions: [
+              {
+                id: 'ques_6',
+                order: 11,
+                prompt: 'Does your brand have in place a code of conduct for factories that manufacture the products you supply to REI?',
+                score: 0,
+                max_score: 1,
+                key: 'MFG-0',
+                user_answered: false,
+                bookmarked: true,
+                not_started: false,
+                ai_answered: false,
+              },
+              {
+                id: 'ques_7',
+                order: 22,
+                prompt: 'Is your brand’s supplier list publicly available?',
+                score: 1,
+                max_score: 1,
+                key: 'MFG-8',
+                user_answered: true,
+                bookmarked: true,
+                not_started: false,
+                ai_answered: false,
+              },
+              {
+                id: 'ques_8',
+                order: 23,
+                prompt: 'Please indicate which tiers of your supply chain are represented on your supplier list.',
+                score: 0.75,
+                max_score: 1,
+                key: 'MFG-9',
+                user_answered: false,
+                bookmarked: false,
+                not_started: false,
+                ai_answered: false,
+              },
+              {
+                id: 'ques_9',
+                order: 24,
+                prompt: 'Does your brand have a formal process for utilizing social and/or environmental performance data in sourcing decisions?',
+                score: 1,
+                max_score: 1,
+                key: 'MFG-10',
+                user_answered: false,
+                bookmarked: true,
+                not_started: false,
+                ai_answered: false,
+              },
+              {
+                id: 'ques_10',
+                order: 25,
+                prompt: 'Does your brand have an ongoing training program(s) for suppliers to promote improved sustainability performance within your supply chain?',
+                score: 0,
+                max_score: 1,
+                key: 'MFG-11',
+                user_answered: false,
+                bookmarked: true,
+                not_started: false,
+                ai_answered: false,
+              },
+            ],
+          },
+          {
+            id: 'sec_3',
+            order: 3,
+            title: 'Core Practices',
+            key: 'CRP',
+            compliance_questions: [
+              {
+                id: 'ques_11',
+                order: 107,
+                prompt: 'Is your brand an active member of or participant in any of the following globally recognized sustainability forums?',
+                score: 0,
+                max_score: 1,
+                ai_answered: true,
+                key: 'CRP-1',
+                user_answered: false,
+                bookmarked: false,
+                not_started: false,
+              },
+              {
+                id: 'ques_12',
+                order: 108,
+                prompt: 'Does your brand have an ongoing commitment to donating a specific portion of your sales or profits to philanthropic causes?',
+                score: 0,
+                max_score: 1,
+                key: 'CRP-2',
+                user_answered: false,
+                bookmarked: false,
+                not_started: false,
+                ai_answered: true,
+              },
+              {
+                id: 'ques_13',
+                order: 109,
+                prompt:
+                  'Does your brand publish regular public-facing updates on your sustainability commitments and progress toward those commitments (e.g., annual sustainability report)?',
+                score: 0,
+                max_score: 1,
+                key: 'CRP-3',
+                user_answered: false,
+                bookmarked: false,
+                not_started: false,
+                ai_answered: true,
+              },
+            ],
+          },
+        ],
+      },
+      {
+        id: 'csg_2',
+        order: 2,
+        title: 'Materials',
+        compliance_sections: [
+          {
+            id: 'sec_4',
+            order: 4,
+            title: 'Restricted Substances List & Chemicals Management',
+            key: 'CHEM',
+            compliance_questions: [
+              {
+                id: 'ques_14',
+                order: 26,
+                prompt:
+                  'As part of the REI Product Impact Standards, REI expects each brand partner to have in place a Restricted Substances List (RSL) that specifies which substances are banned or restricted in products and that meets or exceeds all applicable regulatory requirements.\n\nDoes your brand have an RSL in place for the products you supply to REI?',
+                score: 0,
+                max_score: 1,
+                key: 'CHEM-0',
+                user_answered: false,
+                bookmarked: false,
+                ai_answered: true,
+                not_started: false,
+              },
+            ],
+          },
+        ],
+      },
+      {
+        id: 'csg_3',
+        order: 3,
+        title: 'Environment',
+        compliance_sections: [
+          {
+            id: 'sec_5',
+            order: 5,
+            title: 'GHG Emissions & Climate',
+            key: 'GHG',
+            compliance_questions: [
+              {
+                id: 'ques_15',
+                order: 32,
+                prompt:
+                  'As part of the REI Product Impact Standards, REI expects each brand partner to measure their annual greenhouse gas (GHG) emissions, set a reduction target, and implement an action plan for reducing their emissions. The following section focuses on the steps your brand is taking to address your contribution to climate change.\n\nHas your brand measured its carbon footprint this year or within the last calendar year?',
+                score: 0,
+                max_score: 1,
+                key: 'GHG-1',
+                user_answered: false,
+                bookmarked: false,
+                not_started: false,
+                ai_answered: true,
+              },
+              {
+                id: 'ques_16',
+                order: 39,
+                prompt: 'Has your brand set a quantitative target(s) to reduce your carbon emissions?',
+                score: 1,
+                max_score: 1,
+                key: 'GHG-7',
+                user_answered: false,
+                bookmarked: false,
+                not_started: false,
+                ai_answered: true,
+              },
+              {
+                id: 'ques_17',
+                order: 40,
+                prompt: 'Which components of your carbon footprint are covered by your quantitative reduction target?',
+                score: 0,
+                max_score: 1,
+                key: 'GHG-7A',
+                user_answered: false,
+                bookmarked: false,
+                not_started: false,
+                ai_answered: true,
+              },
+              {
+                id: 'ques_18',
+                order: 41,
+                prompt:
+                  'Please tell us about your quantitative Scope 3 reduction targets.\n\nWhat percent reduction are you aiming to achieve from your baseline year to your target year?',
+                key: 'GHG-7B:1',
+                user_answered: false,
+                bookmarked: false,
+                not_started: false,
+                ai_answered: true,
+              },
+              {
+                id: 'ques_19',
+                order: 42,
+                prompt: 'Please tell us about your quantitative Scope 3 reduction targets.\n\nWhat year are you using as your baseline year?',
+                key: 'GHG-7B:2',
+                user_answered: false,
+                bookmarked: false,
+                not_started: false,
+                ai_answered: true,
+              },
+              {
+                id: 'ques_20',
+                order: 43,
+                prompt: 'Please tell us about your quantitative Scope 3 reduction targets.\n\nWhat year are you using as your target year?',
+                key: 'GHG-7B:3',
+                user_answered: false,
+                bookmarked: false,
+                not_started: false,
+                ai_answered: true,
+              },
+              {
+                id: 'ques_21',
+                order: 44,
+                prompt:
+                  'Please select one of the following to indicate if your target is for absolute emissions reduction (i.e., total carbon emissions) or reduction in emissions intensity (i.e., carbon emissions per unit of product or dollar of revenue):',
+                score: 0,
+                max_score: 1,
+                key: 'GHG-7C',
+                user_answered: false,
+                bookmarked: false,
+                not_started: false,
+                ai_answered: true,
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  };
+}
+
+export function getQuestionnaireContainerMock(sectionGroupId: string, sectionId: string): QuestionnaireQuestion[] {
+  const mock = [
     {
-      name: 'Practices',
-      key: 'PRA',
+      id: 'csg_1',
+      order: 1,
+      title: 'Practices',
       sections: [
         {
-          name: 'Brand Information',
+          id: 'sec_1',
+          order: 1,
+          title: 'Brand Information',
           key: 'GEN',
           questions: [
             {
+              id: 'ques_1',
               order: 9,
               prompt: 'How many employees, if any, are currently dedicated to product sustainability at your brand?',
               options: ['0', '1', '2-5', '6-10', '11-25', '26-50', '51+'],
@@ -476,6 +784,7 @@ export function getQuestionnaireSidebarComplianceMock(): {
               key: 'GEN-1',
             },
             {
+              id: 'ques_2',
               order: 10,
               prompt:
                 'Please indicate if your brand has supplied to REI in the past 12 months, or anticipates supplying to REI in the next 12 months, products that fall into any of the following categories.',
@@ -509,6 +818,7 @@ export function getQuestionnaireSidebarComplianceMock(): {
               key: 'GEN-2',
             },
             {
+              id: 'ques_3',
               order: 0,
               prompt: 'What is your REI Vendor ID?',
               options: [],
@@ -523,6 +833,7 @@ export function getQuestionnaireSidebarComplianceMock(): {
               key: 'GEN-3',
             },
             {
+              id: 'ques_4',
               order: 1,
               prompt: 'What is your Vendor Name?',
               options: [],
@@ -537,6 +848,7 @@ export function getQuestionnaireSidebarComplianceMock(): {
               key: 'GEN-4',
             },
             {
+              id: 'ques_5',
               order: 2,
               prompt: 'For which brand(s) are you completing the assessment?',
               options: [],
@@ -553,10 +865,13 @@ export function getQuestionnaireSidebarComplianceMock(): {
           ],
         },
         {
-          name: 'Manufacturing Code of Conduct',
+          id: 'sec_2',
+          order: 2,
+          title: 'Manufacturing Code of Conduct',
           key: 'MFG',
           questions: [
             {
+              id: 'ques_6',
               order: 11,
               prompt: 'Does your brand have in place a code of conduct for factories that manufacture the products you supply to REI?',
               options: [],
@@ -572,6 +887,7 @@ export function getQuestionnaireSidebarComplianceMock(): {
               ai_answered: false,
             },
             {
+              id: 'ques_7',
               order: 22,
               prompt: 'Is your brand’s supplier list publicly available?',
               options: [],
@@ -595,6 +911,7 @@ export function getQuestionnaireSidebarComplianceMock(): {
               ai_answered: false,
             },
             {
+              id: 'ques_8',
               order: 23,
               prompt: 'Please indicate which tiers of your supply chain are represented on your supplier list.',
               options: [
@@ -615,6 +932,7 @@ export function getQuestionnaireSidebarComplianceMock(): {
               ai_answered: false,
             },
             {
+              id: 'ques_9',
               order: 24,
               prompt: 'Does your brand have a formal process for utilizing social and/or environmental performance data in sourcing decisions?',
               options: [],
@@ -631,6 +949,7 @@ export function getQuestionnaireSidebarComplianceMock(): {
               ai_answered: false,
             },
             {
+              id: 'ques_10',
               order: 25,
               prompt: 'Does your brand have an ongoing training program(s) for suppliers to promote improved sustainability performance within your supply chain?',
               options: [],
@@ -649,10 +968,13 @@ export function getQuestionnaireSidebarComplianceMock(): {
           ],
         },
         {
-          name: 'Core Practices',
+          id: 'sec_3',
+          order: 3,
+          title: 'Core Practices',
           key: 'CRP',
           questions: [
             {
+              id: 'ques_11',
               order: 107,
               prompt: 'Is your brand an active member of or participant in any of the following globally recognized sustainability forums?',
               options: [
@@ -722,6 +1044,7 @@ export function getQuestionnaireSidebarComplianceMock(): {
               not_started: false,
             },
             {
+              id: 'ques_12',
               order: 108,
               prompt: 'Does your brand have an ongoing commitment to donating a specific portion of your sales or profits to philanthropic causes?',
               options: [],
@@ -756,6 +1079,7 @@ export function getQuestionnaireSidebarComplianceMock(): {
               ai_answered: true,
             },
             {
+              id: 'ques_13',
               order: 109,
               prompt:
                 'Does your brand publish regular public-facing updates on your sustainability commitments and progress toward those commitments (e.g., annual sustainability report)?',
@@ -782,6 +1106,17 @@ export function getQuestionnaireSidebarComplianceMock(): {
                 answer: true,
                 justification:
                   'The brand publishes an annual progress report that provides updates on their sustainability commitments and progress. This is indicated by the existence of the 2022 (IN) Progress report found within the files provided.',
+                references: [
+                  {
+                    file: 'Askov Demo Doc.pdf',
+                    text: [
+                      "does your company formally screen for regarding the social or \nenvironmental practices and performance of your suppliers?\nAskov Finlayson Answer:\nCompliance with all local laws and regulations, including those \nrelated to social and environmental performance\nGood governance, including policies related to ethics and corruption\nPositive practices beyond what is required by regulations (e.g. \nenvironmentally-friendly manufacturing process, excellent labor \npractices)\nB Corp Question 91\nCategory: Community - Supply Chain Management - Supplier Evaluation \nPractices\nQuestion:\nWhat methods does your company use to evaluate the social or \nenvironmental impact of your suppliers?\nAskov Finlayson Answer:\nWe share policies or rules with suppliers but we don't have a \n\nverification process in place\nB Corp Question 92\nCategory: Community - Supply Chain Management - Outsourced Staffing \nServices\nQuestion:\nDoes your company outsource support services (staffing) essential to \nthe delivery of your",
+                      "and treatments that pollute \nwater; our other apparel items are made from certified organic pima \ncotton, which is produced without chemical fertilizers/pesticides/\nherbicides/defoliants and is hand-picked; and with the carbon offsets \npurchased at more than we used to produce the product, many positive \nenvironmental outcomes are realized (Google global warming \nexternalities). We’ve committed to investing more money fighting \nclimate change than running our business costs the planet. We call \nthis way of doing business climate positive, and we achieve it by \nmeasuring our annual carbon footprint, converting that amount of \ncarbon into a dollar amount using the social cost of carbon, and then \nGiving 110% of that amount every year to leading-edge organizations \nworking to solve the climate crisis.  #KeepTheNorthCold\nB Corp Question 101\nCategory: Environment - Environment Impact Area Introduction - \nEnvironmental Product or Service Impact\nQuestion:\nIs the environmental impact you've",
+                      'your product/service conserve the \nenvironment?\nPlease select ONE option per product line. You may select an \nadditional option if your product line has two separate environmental \nattributes.\nAskov Finlayson Answer:\nConserves or diverts resources (including energy, water, materials, \netc.)\nReduces or is made of less toxic/hazardous substances (e.g. brownfield \nremediation services, organic certified food, non-toxic cleaners)\nB Corp Question 103\nCategory: Environment - Environment Impact Area Introduction - \nResource Conservation Overview\nQuestion:\nTell us more about how your product or service reduces energy, GHG \nemissions, water and/or waste.\nAskov Finlayson Answer:\nOur outerwear products and hats are made with recycled materials \n(e.g., 100% recycled polyester and nylon), which reduces waste by \nrepurposing existing materials. Our other apparel items (e.g., tees \nand crews) are produced with organic cotton that is hand-picked in \norder to reduce energy consumption and emissions',
+                    ],
+                    score: 0.818098307,
+                  },
+                ],
               },
               ai_attempted: true,
               key: 'CRP-3',
@@ -795,14 +1130,18 @@ export function getQuestionnaireSidebarComplianceMock(): {
       ],
     },
     {
-      name: 'Materials',
-      key: 'MAT',
+      id: 'csg_2',
+      order: 2,
+      title: 'Materials',
       sections: [
         {
-          name: 'Restricted Substances List & Chemicals Management',
+          id: 'sec_4',
+          order: 4,
+          title: 'Restricted Substances List & Chemicals Management',
           key: 'CHEM',
           questions: [
             {
+              id: 'ques_14',
               order: 26,
               prompt:
                 'As part of the REI Product Impact Standards, REI expects each brand partner to have in place a Restricted Substances List (RSL) that specifies which substances are banned or restricted in products and that meets or exceeds all applicable regulatory requirements.\n\nDoes your brand have an RSL in place for the products you supply to REI?',
@@ -843,14 +1182,18 @@ export function getQuestionnaireSidebarComplianceMock(): {
       ],
     },
     {
-      name: 'Environment',
-      key: 'ENV',
+      id: 'csg_3',
+      order: 3,
+      title: 'Environment',
       sections: [
         {
-          name: 'GHG Emissions & Climate',
+          id: 'sec_5',
+          order: 5,
+          title: 'GHG Emissions & Climate',
           key: 'GHG',
           questions: [
             {
+              id: 'ques_15',
               order: 32,
               prompt:
                 'As part of the REI Product Impact Standards, REI expects each brand partner to measure their annual greenhouse gas (GHG) emissions, set a reduction target, and implement an action plan for reducing their emissions. The following section focuses on the steps your brand is taking to address your contribution to climate change.\n\nHas your brand measured its carbon footprint this year or within the last calendar year?',
@@ -874,6 +1217,7 @@ export function getQuestionnaireSidebarComplianceMock(): {
               ai_answered: true,
             },
             {
+              id: 'ques_16',
               order: 39,
               prompt: 'Has your brand set a quantitative target(s) to reduce your carbon emissions?',
               options: [],
@@ -897,6 +1241,7 @@ export function getQuestionnaireSidebarComplianceMock(): {
               ai_answered: true,
             },
             {
+              id: 'ques_17',
               order: 40,
               prompt: 'Which components of your carbon footprint are covered by your quantitative reduction target?',
               options: [
@@ -928,6 +1273,7 @@ export function getQuestionnaireSidebarComplianceMock(): {
               ai_answered: true,
             },
             {
+              id: 'ques_18',
               order: 41,
               prompt:
                 'Please tell us about your quantitative Scope 3 reduction targets.\n\nWhat percent reduction are you aiming to achieve from your baseline year to your target year?',
@@ -947,6 +1293,7 @@ export function getQuestionnaireSidebarComplianceMock(): {
               ai_answered: true,
             },
             {
+              id: 'ques_19',
               order: 42,
               prompt: 'Please tell us about your quantitative Scope 3 reduction targets.\n\nWhat year are you using as your baseline year?',
               options: [],
@@ -965,6 +1312,7 @@ export function getQuestionnaireSidebarComplianceMock(): {
               ai_answered: true,
             },
             {
+              id: 'ques_20',
               order: 43,
               prompt: 'Please tell us about your quantitative Scope 3 reduction targets.\n\nWhat year are you using as your target year?',
               options: [],
@@ -983,6 +1331,7 @@ export function getQuestionnaireSidebarComplianceMock(): {
               ai_answered: true,
             },
             {
+              id: 'ques_21',
               order: 44,
               prompt:
                 'Please select one of the following to indicate if your target is for absolute emissions reduction (i.e., total carbon emissions) or reduction in emissions intensity (i.e., carbon emissions per unit of product or dollar of revenue):',
@@ -1009,18 +1358,31 @@ export function getQuestionnaireSidebarComplianceMock(): {
         },
       ],
     },
-  ];
-}
+  ] as {
+    id: string;
+    order: number;
+    title: string;
+    sections: {
+      id: string;
+      order: number;
+      title: string;
+      key: string;
+      questions: QuestionnaireQuestion[];
+    }[];
+  }[];
 
-export function getQuestionnaireContainerMock(sectionGroupName: string, sectionName: string): QuestionnaireQuestion[] {
-  const mock = getQuestionnaireSidebarComplianceMock();
-  const sectionGroup = mock.find(g => g.name === sectionGroupName);
-  if (!sectionGroup) {
-    return [];
-  }
-  const section = sectionGroup.sections.find(s => s.name === sectionName);
-  if (!section) {
-    return [];
-  }
-  return section.questions;
+  // Find the section in each section group
+  let questions: QuestionnaireQuestion[] | undefined;
+
+  forEach(mock, group => {
+    if (group.id === sectionGroupId) {
+      forEach(group.sections, section => {
+        if (section.id === sectionId) {
+          questions = section.questions;
+        }
+      });
+    }
+  });
+
+  return questions || [];
 }

@@ -12020,7 +12020,7 @@ export function getSurveysMock(): Array<SurveyPayloadType | ComplianceSurveyPayl
 }
 
 export function getCompliancePageSurveysMocksByName(name: string): SurveyPayloadType {
-  const surveys = [];
+  const surveys: SurveyPayloadType[] = [];
   surveys.push({
     id: 'b5a544e8-c87e-48e2-9c92-d9352dcc2d33',
     name: 'rei_mfg_survey',
@@ -12181,7 +12181,6 @@ export function getCompliancePageSurveysMocksByName(name: string): SurveyPayload
                 'Approximately what percentage of your supply chain has undergone, during the last calendar year, a social and/or environmental audit aimed at verifying compliance with your manufacturing code of conduct?',
               options: [],
               tooltip: 'Calculate as an estimated percentage of either (a) total number of active factories or (b) total dollars of first-cost production.',
-              based_on: 'MFG-6',
               component: 'textarea',
               placeholder: '',
               ai_attempted: true,
@@ -12311,7 +12310,6 @@ export function getCompliancePageSurveysMocksByName(name: string): SurveyPayload
               prompt: 'Was your carbon footprint calculated using an internationally recognized greenhouse gas accounting standard (e.g., the GHG Protocol)?',
               options: ['Yes, using the GHG Protocol', 'Yes, using another GHG accounting standard (please indicate below)', 'No'],
               tooltip: 'Note: The term carbon is used here as a generally accepted shorthand for greenhouse gas.',
-              based_on: 'GHG-1',
               component: 'select',
               placeholder: '',
               additional_context: {
@@ -12472,7 +12470,6 @@ export function getCompliancePageSurveysMocksByName(name: string): SurveyPayload
                 'Other',
               ],
               tooltip: 'Select all that apply.',
-              based_on: 'GHG-11',
               component: 'multi_select',
               placeholder: '',
               ai_attempted: true,

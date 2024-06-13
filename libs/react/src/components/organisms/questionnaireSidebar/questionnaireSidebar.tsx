@@ -1,49 +1,16 @@
 import { useContext } from 'react';
 import { ChevronDoubleLeftIcon, ChevronDoubleRightIcon } from '@heroicons/react/24/solid';
 import { HexColors } from '@coldpbc/themes';
-import { QuestionnaireSidebarSectionGroup, Spinner } from '@coldpbc/components';
-import useSWR from 'swr';
-import { QuestionnaireQuestion } from '@coldpbc/interfaces';
-import { axiosFetcher } from '@coldpbc/fetchers';
-import { useAuth0Wrapper } from '@coldpbc/hooks';
+import { QuestionnaireSidebarSectionGroup } from '@coldpbc/components';
 import { ColdComplianceQuestionnaireContext } from '@coldpbc/context';
 
 export const QuestionnaireSidebar = (props: { sidebarOpen: boolean; setSidebarOpen: (open: boolean) => void }) => {
   const { sidebarOpen, setSidebarOpen } = props;
-  const { orgId } = useAuth0Wrapper();
-  const { name } = useContext(ColdComplianceQuestionnaireContext);
-
-  const getSidebarDataUrl = () => {
-    return [`/compliance_definitions/${name}/organizations/${orgId}/questionnaireSidebar`, 'GET'];
-  };
-
-  const sideBarSWR = useSWR<
-    {
-      name: string;
-      key: string;
-      sections: {
-        name: string;
-        key: string;
-        questions: QuestionnaireQuestion[];
-      }[];
-    }[],
-    any,
-    any
-  >(getSidebarDataUrl(), axiosFetcher);
-
-  if (sideBarSWR.isLoading) {
-    return <Spinner />;
-  }
-
-  if (!sideBarSWR.data) {
-    return null;
-  }
-
-  const sectionGroups = sideBarSWR.data;
+  const { sectionGroups } = useContext(ColdComplianceQuestionnaireContext);
 
   return (
     <div
-      className={'h-full flex flex-col gap-[24px] border-gray-70 border-r-[1px] text-ellipsis'}
+      className={'h-full flex flex-col gap-[24px] border-gray-70 border-r-[1px] text-ellipsis pb-[50px]'}
       style={{
         width: sidebarOpen ? '407px' : '72px',
         transition: 'width 0.3s',
@@ -59,9 +26,11 @@ export const QuestionnaireSidebar = (props: { sidebarOpen: boolean; setSidebarOp
         </div>
       )}
       <div className={'w-full h-full flex flex-col gap-[48px] overflow-y-auto scrollbar-hide'}>
-        {sectionGroups.map((item, index) => {
-          return <QuestionnaireSidebarSectionGroup key={index} sectionGroup={item} sideBarExpanded={sidebarOpen} />;
-        })}
+        {sectionGroups.compliance_section_groups
+          .sort((a, b) => a.order - b.order)
+          .map((item, index) => {
+            return <QuestionnaireSidebarSectionGroup key={index} sectionGroup={item} sideBarExpanded={sidebarOpen} />;
+          })}
       </div>
     </div>
   );

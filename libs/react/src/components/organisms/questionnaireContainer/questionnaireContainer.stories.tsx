@@ -18,23 +18,13 @@ export const Default: Story = {
   render: args => {
     return <QuestionnaireContainerStory {...args} />;
   },
-  args: {
-    sidebarOpen: true,
-    setSidebarOpen: () => {},
-  },
 };
 
 const QuestionnaireContainerStory = (args: any) => {
-  const [open, setOpen] = useState(true);
   return (
     <StoryMockProvider>
       <div className={'w-[982px] h-screen'}>
-        <QuestionnaireContainer
-          sidebarOpen={open}
-          setSidebarOpen={() => {
-            setOpen(!open);
-          }}
-        />
+        <QuestionnaireContainer />
       </div>
     </StoryMockProvider>
   );

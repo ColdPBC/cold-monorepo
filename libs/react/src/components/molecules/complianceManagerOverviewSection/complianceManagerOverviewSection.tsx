@@ -9,6 +9,7 @@ import { ComplianceManagerSectionProgressBar, ErrorFallback } from '@coldpbc/com
 import { ComplianceManagerStatus } from '@coldpbc/enums';
 import { resolveNodeEnv } from '@coldpbc/fetchers';
 import { withErrorBoundary } from 'react-error-boundary';
+import { useNavigate } from 'react-router-dom';
 
 const _ComplianceManagerOverviewSection = ({
   section,
@@ -30,6 +31,7 @@ const _ComplianceManagerOverviewSection = ({
   >;
   collapseOpen: boolean;
 }) => {
+  const navigate = useNavigate();
   const { orgId } = useAuth0Wrapper();
   const { subscribeSWR, publishMessage, connectionStatus, client } = useContext(ColdMQTTContext);
   const totalQuestions = useRef(0);
@@ -125,7 +127,7 @@ const _ComplianceManagerOverviewSection = ({
         if (!canNavigateToQuestionnaire()) {
           return;
         }
-        // todo: navigate to section in questionnaire
+        navigate(`/questionnnaire/${name}?section=${section.key}`);
       }}
       key={`${groupId}-${section.id}`}>
       <div className={'w-full flex flex-row justify-between items-center'}>

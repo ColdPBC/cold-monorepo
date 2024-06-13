@@ -22,7 +22,7 @@ export const Default: Story = {
     );
   },
   args: {
-    section: getQuestionnaireSidebarComplianceMock()[0].sections[0],
+    section: getQuestionnaireSidebarComplianceMock()[0].compliance_sections[0],
     sideBarExpanded: true,
   },
 };

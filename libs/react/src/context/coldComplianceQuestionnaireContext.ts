@@ -1,10 +1,10 @@
 import { createContext } from 'react';
-import { QuestionnaireQuestion } from '@coldpbc/interfaces';
+import { ComplianceSidebarPayload, QuestionnaireQuestion } from '@coldpbc/interfaces';
 
 export interface ComplianceQuestionnaireContextType {
   name: string;
-  activeQuestion: string | null;
-  setActiveQuestion: (question: string | null) => void;
+  scrollToQuestion: string | null;
+  setScrollToQuestion: (question: string | null) => void;
   focusQuestion: {
     key: string;
     aiDetails: {
@@ -29,12 +29,17 @@ export interface ComplianceQuestionnaireContextType {
       };
     } | null,
   ) => void;
+  sectionGroups: ComplianceSidebarPayload;
 }
 
 export const ColdComplianceQuestionnaireContext = createContext<ComplianceQuestionnaireContextType>({
-  activeQuestion: null,
-  setActiveQuestion: () => {},
   name: '',
+  scrollToQuestion: null,
+  setScrollToQuestion: () => {},
   focusQuestion: null,
   setFocusQuestion: () => {},
+  sectionGroups: {
+    name: '',
+    compliance_section_groups: [],
+  },
 });

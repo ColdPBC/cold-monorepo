@@ -1,6 +1,6 @@
 import { BaseButton, Card, ColdIcon, ComplianceProgressStatusIcon, Input, ListItem } from '@coldpbc/components';
 import { ButtonTypes, ComplianceProgressStatus, IconNames, InputTypes } from '@coldpbc/enums';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { isArray, isUndefined, toArray } from 'lodash';
 import { getAIResponseValue, ifAdditionalContextConditionMet, isAIResponseValueValid } from '@coldpbc/lib';
 import { HexColors } from '@coldpbc/themes';
@@ -10,16 +10,12 @@ import { NumericFormat } from 'react-number-format';
 import { QuestionnaireQuestion } from '@coldpbc/interfaces';
 import { ColdComplianceQuestionnaireContext } from '@coldpbc/context';
 
-export const QuestionnaireQuestionItem = (props: {
-  question: QuestionnaireQuestion;
-  number: number;
-  focusQuestion: string | null;
-  setFocusQuestion: (value: string | null) => void;
-}) => {
-  const { focusQuestion, setFocusQuestion } = useContext(ColdComplianceQuestionnaireContext);
+export const QuestionnaireQuestionItem = (props: { question: QuestionnaireQuestion; number: number }) => {
+  const { focusQuestion, setFocusQuestion, scrollToQuestion } = useContext(ColdComplianceQuestionnaireContext);
   const { question, number } = props;
-  const { key, prompt, options, tooltip, component, placeholder, value, bookmarked, ai_response, user_answered, ai_answered, not_started, additional_context, ai_attempted } =
+  const { id, key, prompt, options, tooltip, component, placeholder, value, bookmarked, ai_response, user_answered, ai_answered, not_started, additional_context, ai_attempted } =
     question;
+  const ref = useRef<HTMLDivElement>(null);
 
   const getDisplayValue = () => {
     let displayValue = value;
@@ -47,6 +43,15 @@ export const QuestionnaireQuestionItem = (props: {
   const [additionalContextOpen, setAdditionalContextOpen] = useState<boolean>(false);
   const [additionalContextInput, setAdditionalContextInput] = useState<any | undefined>(additional_context?.value);
 
+  // useEffect(() => {
+  //   if (scrollToQuestion === key && ref.current) {
+  //     ref.current.scrollIntoView({
+  //       behavior: 'smooth',
+  //       block: 'start',
+  //     });
+  //   }
+  // }, [scrollToQuestion]);
+
   useEffect(() => {
     if (questionInput !== value) {
       setAnswerQuestionChanged(true);
@@ -67,7 +72,7 @@ export const QuestionnaireQuestionItem = (props: {
         questionAnswerChanged: questionAnswerChanged,
       },
     });
-  }, [focusQuestion, questionInput, questionAnswerSaved, questionAnswerChanged]);
+  }, [questionInput, questionAnswerSaved, questionAnswerChanged]);
 
   const getQuestionStatusIcon = () => {
     return (
@@ -409,13 +414,6 @@ export const QuestionnaireQuestionItem = (props: {
       }
     }
 
-    console.log({
-      questionInput,
-      questionAnswerSaved,
-      questionBookmarked,
-      questionAnswerChanged,
-    });
-
     return (
       <div className={'w-full pb-[24px] flex flex-row justify-end'}>
         <BaseButton variant={variant} disabled={disabled} onClick={onClick}>
@@ -452,7 +450,20 @@ export const QuestionnaireQuestionItem = (props: {
   return (
     <div
       className={`flex flex-col w-full rounded-[16px] bg-gray-30 gap-[16px] ${questionBookmarked ? 'border-[1px] border-lightblue-200 p-[23px]' : ' p-[24px]'}
-    ${focusQuestion !== null && focusQuestion.key !== key ? 'opacity-20' : ''}`}>
+    ${focusQuestion !== null && focusQuestion.key !== id ? 'opacity-20' : ''}`}
+      ref={el => {
+        if (scrollToQuestion === key && el) {
+          console.log({
+            client: el.getBoundingClientRect(),
+            scroll: el.scrollHeight,
+          });
+          el.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start',
+          });
+        }
+      }}
+      id={key}>
       <div className={'flex flex-row gap-[8px] justify-between'}>
         <div className={'flex flex-row gap-[8px] items-center'}>
           {getQuestionStatusIcon()}
@@ -463,11 +474,11 @@ export const QuestionnaireQuestionItem = (props: {
           <div
             className={'w-[24px] h-[24px] cursor-pointer'}
             onClick={() => {
-              if (focusQuestion?.key === key) {
+              if (focusQuestion?.key === id) {
                 setFocusQuestion(null);
               } else {
                 setFocusQuestion({
-                  key: key,
+                  key: id,
                   aiDetails: {
                     ai_response: ai_response,
                     ai_answered: ai_answered,
