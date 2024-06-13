@@ -21,13 +21,69 @@ export class ComplianceResponsesRepository extends BaseWorker {
     super(ComplianceResponsesRepository.name);
   }
 
+  private getBookmarkQuery(email: string) {
+    return {
+      where: {
+        email: email,
+      },
+      select: {
+        id: true,
+        email: true,
+      },
+    };
+  }
+
+  private getQuestionsQuery(options: ComplianceResponseOptions, org: organizations, user: IAuthenticatedUser) {
+    return {
+      take: options?.take,
+      skip: options?.skip,
+      select: {
+        id: true,
+        key: true,
+        order: true,
+        component: true,
+        prompt: true,
+        tooltip: true,
+        placeholder: true,
+        rubric: true,
+        options: true,
+        additional_context: true,
+        question_bookmarks: options?.bookmarks ? this.getBookmarkQuery(user.coldclimate_claims.email) : false,
+        compliance_responses: {
+          where: {
+            organization_id: org.id,
+          },
+          select: {
+            id: true,
+            org_response: {
+              select: {
+                id: true,
+                value: true,
+                deleted: true,
+              },
+            },
+            ai_response: {
+              select: {
+                id: true,
+                answer: true,
+                justification: true,
+                references: options?.references,
+              },
+            },
+            deleted: true,
+          },
+        },
+      },
+    };
+  }
+
   /**
    * Create or Update a compliance response
    * @param orgId
    * @param compliance_definition_name
-   * @param compliance_section_id
-   * @param compliance_section_group_id
-   * @param compliance_question_id
+   * @param sId
+   * @param sgId
+   * @param qId
    * @param user
    * @param user_response
    * @param ai_response
@@ -35,13 +91,19 @@ export class ComplianceResponsesRepository extends BaseWorker {
   async upsertComplianceResponse(
     org: organizations,
     compliance_definition_name: string,
-    compliance_section_group_id: string,
-    compliance_section_id: string,
-    compliance_question_id: string,
+    sgId: string,
+    sId: string,
+    qId: string,
     user: IAuthenticatedUser,
     user_response?: organization_compliance_responses,
     ai_response?: organization_compliance_ai_responses,
   ) {
+    if (!sId) throw new BadRequestException('Compliance Section ID is required');
+    if (!sgId) throw new BadRequestException('Compliance Section Group ID is required');
+    if (!compliance_definition_name) throw new BadRequestException('Compliance Definition Name is required');
+    if (!org) throw new BadRequestException('Organization is required');
+    if (!user) throw new BadRequestException('User is required');
+
     let compliance;
 
     try {
@@ -62,7 +124,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
         throw new BadRequestException(`No User or AI response provided for ${org.name}: ${compliance.compliance_definition_name}, nothing to do`);
       }
 
-      if (!ai_response?.compliance_question_id || (!user_response?.compliance_question_id && !compliance_question_id)) {
+      if (!ai_response?.compliance_question_id || (!user_response?.compliance_question_id && !qId)) {
         throw new BadRequestException(`No compliance question id provided for ${org.name}: ${compliance.compliance_definition_name}`);
       }
 
@@ -88,7 +150,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
             id: new Cuid2Generator(GuidPrefixes.OrganizationComplianceAIResponse).scopedId,
             organization_id: org.id,
             organization_compliance_id: compliance.id,
-            compliance_question_id: compliance_question_id || ai_response.compliance_question_id,
+            compliance_question_id: qId || ai_response.compliance_question_id,
             answer: ai_response.answer as any,
             justification: ai_response.justification,
             sources: ai_response.sources as any,
@@ -110,7 +172,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
           where: {
             orgCompQuestId: {
               organization_compliance_id: compliance.id,
-              compliance_question_id: compliance_question_id || user_response.compliance_question_id,
+              compliance_question_id: qId || user_response.compliance_question_id,
             },
           },
           create: {
@@ -127,9 +189,9 @@ export class ComplianceResponsesRepository extends BaseWorker {
 
       if (orgResponseEntity || aiResponseEntity) {
         const crData = {
-          compliance_question_id: compliance_question_id || ai_response.compliance_question_id,
-          compliance_section_id: compliance_section_id,
-          compliance_section_group_id: compliance_section_group_id,
+          compliance_question_id: qId || ai_response.compliance_question_id,
+          compliance_section_id: sId,
+          compliance_section_group_id: sgId,
           organization_id: org.id,
           compliance_definition_name: compliance.compliance_definition_name,
           organization_compliance_id: compliance.id,
@@ -140,7 +202,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
           where: {
             orgCompQuestId: {
               organization_compliance_id: compliance.id,
-              compliance_question_id: compliance_question_id || ai_response.compliance_question_id,
+              compliance_question_id: qId || ai_response.compliance_question_id,
             },
           },
           create: crData,
@@ -161,6 +223,17 @@ export class ComplianceResponsesRepository extends BaseWorker {
   }
 
   async getComplianceResponses(org: organizations, compliance_definition_name: string, user: IAuthenticatedUser, options?: ComplianceResponseOptions) {
+    if (!compliance_definition_name) throw new BadRequestException('Compliance Definition Name is required');
+    if (!org) throw new BadRequestException('Organization is required');
+    if (!user) throw new BadRequestException('User is required');
+
+    options = {
+      responses: options?.responses ? options.responses : true,
+      bookmarks: options?.references ? options.references : true,
+      take: options?.take ? options.take : 100,
+      skip: options?.skip ? options.skip : 0,
+    };
+
     try {
       const organization = (await this.prisma.extended.organizations.findUnique({
         where: {
@@ -177,14 +250,12 @@ export class ComplianceResponsesRepository extends BaseWorker {
               question_bookmarks: {
                 select: {
                   id: true,
-                  deleted: true,
                 },
               },
               notes: {
                 select: {
                   id: true,
                   note: true,
-                  deleted: true,
                   files: true,
                   links: true,
                 },
@@ -198,59 +269,20 @@ export class ComplianceResponsesRepository extends BaseWorker {
                       id: true,
                       title: true,
                       order: true,
-                      deleted: true,
                       compliance_sections: {
                         select: {
                           id: true,
                           key: true,
                           title: true,
                           order: true,
-                          deleted: true,
                           compliance_section_dependency_chains: true,
-                          compliance_questions: {
-                            select: {
-                              id: true,
-                              key: true,
-                              order: true,
-                              component: true,
-                              tooltip: true,
-                              placeholder: true,
-                              rubric: true,
-                              options: true,
-                              question_summary: true,
-                              coresponding_question: true,
-                              additional_context: true,
-                              deleted: true,
-                              compliance_responses: {
-                                select: {
-                                  id: true,
-                                  org_response: {
-                                    select: {
-                                      id: true,
-                                      value: true,
-                                      deleted: true,
-                                    },
-                                  },
-                                  ai_response: {
-                                    select: {
-                                      id: true,
-                                      answer: true,
-                                      justification: true,
-                                      references: options?.references,
-                                    },
-                                  },
-                                  deleted: true,
-                                },
-                              },
-                            },
-                          },
+                          compliance_questions: this.getQuestionsQuery(options, org, user),
                         },
                       },
                     },
                   },
                 },
               },
-              deleted: true,
             },
           },
         },
@@ -296,6 +328,17 @@ export class ComplianceResponsesRepository extends BaseWorker {
   }
 
   async getScoredComplianceQuestionsByName(org: organizations, compliance_definition_name: string, user: IAuthenticatedUser, options?: ComplianceResponseOptions) {
+    if (!compliance_definition_name) throw new BadRequestException('Compliance Definition Name is required');
+    if (!org) throw new BadRequestException('Organization is required');
+    if (!user) throw new BadRequestException('User is required');
+
+    options = {
+      responses: options?.responses ? options.responses : true,
+      bookmarks: options?.references ? options.references : true,
+      take: options?.take ? options.take : 100,
+      skip: options?.skip ? options.skip : 0,
+    };
+
     try {
       const response = await this.prisma.extended.organization_compliance.findUnique({
         where: {
@@ -320,40 +363,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
                       title: true,
                       order: true,
                       compliance_section_dependency_chains: true,
-                      compliance_questions: {
-                        select: {
-                          id: true,
-                          key: true,
-                          order: true,
-                          prompt: true,
-                          rubric: true,
-                          component: true,
-                          compliance_responses: {
-                            where: {
-                              organization_id: org.id,
-                            },
-                            select: {
-                              id: true,
-                              org_response: {
-                                select: {
-                                  id: true,
-                                  value: true,
-                                  deleted: true,
-                                },
-                              },
-                              ai_response: {
-                                select: {
-                                  id: true,
-                                  answer: true,
-                                  justification: true,
-                                  references: options?.references,
-                                },
-                              },
-                              deleted: true,
-                            },
-                          },
-                        },
-                      },
+                      compliance_questions: this.getQuestionsQuery(options, org, user),
                     },
                   },
                 },
@@ -384,11 +394,24 @@ export class ComplianceResponsesRepository extends BaseWorker {
   async getScoredComplianceQuestionBySection(
     org: organizations,
     compliance_definition_name: string,
-    csgId: string,
-    csId: string,
+    sgId: string,
+    sId: string,
     user: IAuthenticatedUser,
     options?: ComplianceResponseOptions,
   ) {
+    if (!sId) throw new BadRequestException('Compliance Section ID is required');
+    if (!sgId) throw new BadRequestException('Compliance Section Group ID is required');
+    if (!compliance_definition_name) throw new BadRequestException('Compliance Definition Name is required');
+    if (!org) throw new BadRequestException('Organization is required');
+    if (!user) throw new BadRequestException('User is required');
+
+    options = {
+      responses: options?.responses ? options.responses : true,
+      bookmarks: options?.references ? options.references : true,
+      take: options?.take ? options.take : 100,
+      skip: options?.skip ? options.skip : 0,
+    };
+
     try {
       const response = await this.prisma.extended.organizations.findUnique({
         where: {
@@ -404,14 +427,14 @@ export class ComplianceResponsesRepository extends BaseWorker {
                 select: {
                   name: true,
                   compliance_section_groups: {
-                    where: { id: csgId },
+                    where: { id: sgId },
                     select: {
                       id: true,
                       title: true,
                       order: true,
                       compliance_sections: {
                         where: {
-                          id: csId,
+                          id: sId,
                         },
                         select: {
                           id: true,
@@ -419,43 +442,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
                           title: true,
                           order: true,
                           compliance_section_dependency_chains: true,
-                          compliance_questions: {
-                            select: {
-                              id: true,
-                              key: true,
-                              order: true,
-                              component: true,
-                              tooltip: true,
-                              placeholder: true,
-                              rubric: true,
-                              options: true,
-                              additional_context: true,
-                              compliance_responses: {
-                                where: {
-                                  organization_id: org.id,
-                                },
-                                select: {
-                                  id: true,
-                                  org_response: {
-                                    select: {
-                                      id: true,
-                                      value: true,
-                                      deleted: true,
-                                    },
-                                  },
-                                  ai_response: {
-                                    select: {
-                                      id: true,
-                                      answer: true,
-                                      justification: true,
-                                      references: options?.references,
-                                    },
-                                  },
-                                  deleted: true,
-                                },
-                              },
-                            },
-                          },
+                          compliance_questions: this.getQuestionsQuery(options, org, user),
                         },
                       },
                     },
@@ -490,6 +477,14 @@ export class ComplianceResponsesRepository extends BaseWorker {
     user: IAuthenticatedUser,
     options?: ComplianceResponseOptions,
   ) {
+    options = {
+      responses: options?.responses ? options.responses : false,
+      bookmarks: options?.references ? options.references : false,
+      references: options?.references ? options.references : true,
+      take: options?.take ? options.take : 100,
+      skip: options?.skip ? options.skip : 0,
+    };
+
     try {
       const response = await this.prisma.extended.organizations.findUnique({
         where: {
@@ -528,34 +523,22 @@ export class ComplianceResponsesRepository extends BaseWorker {
                               id: true,
                               key: true,
                               order: true,
-                              component: true,
-                              tooltip: true,
-                              placeholder: true,
-                              rubric: true,
-                              options: true,
                               additional_context: true,
+                              question_bookmarks: options.bookmarks ? this.getBookmarkQuery(user.coldclimate_claims.email) : false,
                               compliance_responses: {
                                 where: {
                                   organization_id: org.id,
                                 },
                                 select: {
                                   id: true,
-                                  org_response: {
-                                    select: {
-                                      id: true,
-                                      value: true,
-                                      deleted: true,
-                                    },
-                                  },
                                   ai_response: {
                                     select: {
                                       id: true,
-                                      answer: true,
-                                      justification: true,
+                                      answer: false,
+                                      justification: false,
                                       references: true,
                                     },
                                   },
-                                  deleted: true,
                                 },
                               },
                             },
@@ -592,6 +575,14 @@ export class ComplianceResponsesRepository extends BaseWorker {
     user: IAuthenticatedUser,
     options?: ComplianceResponseOptions,
   ) {
+    options = {
+      responses: options?.responses ? options.responses : false,
+      bookmarks: options?.references ? options.references : true,
+      references: options?.references ? options.references : true,
+      take: options?.take ? options.take : 100,
+      skip: options?.skip ? options.skip : 0,
+    };
+
     try {
       const response = await this.prisma.extended.organizations.findUnique({
         where: {
@@ -619,40 +610,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
                           title: true,
                           order: true,
                           compliance_section_dependency_chains: true,
-                          compliance_questions: {
-                            select: {
-                              id: true,
-                              key: true,
-                              order: true,
-                              component: true,
-                              tooltip: true,
-                              placeholder: true,
-                              rubric: true,
-                              options: true,
-                              additional_context: true,
-                              compliance_responses: {
-                                select: {
-                                  id: true,
-                                  org_response: {
-                                    select: {
-                                      id: true,
-                                      value: true,
-                                      deleted: true,
-                                    },
-                                  },
-                                  ai_response: {
-                                    select: {
-                                      id: true,
-                                      answer: true,
-                                      justification: true,
-                                      references: options?.references,
-                                    },
-                                  },
-                                  deleted: true,
-                                },
-                              },
-                            },
-                          },
+                          compliance_questions: this.getQuestionsQuery(options, org, user),
                         },
                       },
                     },
@@ -680,6 +638,14 @@ export class ComplianceResponsesRepository extends BaseWorker {
   }
 
   async getComplianceResponseById(org: organizations, compliance_definition_name: string, user: IAuthenticatedUser, id: number, options?: ComplianceResponseOptions) {
+    options = {
+      responses: options?.responses ? options.responses : false,
+      bookmarks: options?.references ? options.references : true,
+      references: options?.references ? options.references : true,
+      take: options?.take ? options.take : 100,
+      skip: options?.skip ? options.skip : 0,
+    };
+
     try {
       const response = await this.prisma.extended.organizations.findUnique({
         where: {
@@ -717,6 +683,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
                               rubric: true,
                               options: true,
                               additional_context: true,
+                              question_bookmarks: options.bookmarks ? this.getBookmarkQuery(user.coldclimate_claims.email) : false,
                               compliance_responses: {
                                 where: {
                                   id,
@@ -727,7 +694,6 @@ export class ComplianceResponsesRepository extends BaseWorker {
                                     select: {
                                       id: true,
                                       value: true,
-                                      deleted: true,
                                     },
                                   },
                                   ai_response: {
@@ -738,7 +704,6 @@ export class ComplianceResponsesRepository extends BaseWorker {
                                       references: options?.references,
                                     },
                                   },
-                                  deleted: true,
                                 },
                               },
                             },

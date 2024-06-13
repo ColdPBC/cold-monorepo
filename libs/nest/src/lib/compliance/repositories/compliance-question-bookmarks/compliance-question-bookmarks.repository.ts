@@ -157,8 +157,10 @@ export class ComplianceQuestionBookmarksRepository extends BaseWorker {
 
       return this.prisma.extended.organization_compliance_question_bookmarks.delete({
         where: {
-          id,
-          email: user.coldclimate_claims.email,
+          emailQuestId: {
+            email: user.coldclimate_claims.email,
+            compliance_question_id: id,
+          },
         },
       });
     } catch (err) {

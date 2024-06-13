@@ -194,6 +194,7 @@ export class ComplianceAiResponsesRepository extends BaseWorker {
       return response;
     } catch (error) {
       this.logger.error(`Error fetching ai_responses for ${orgId}: ${complianceName}`, { orgId, complianceName, user, error });
+      if (error instanceof NotFoundException) throw error;
 
       throw new UnprocessableEntityException({ orgId, complianceName, user }, `Error fetching ai_responses for ${orgId}: ${complianceName}`);
     }

@@ -47,7 +47,7 @@ export const extendedClient = (client: PrismaClient) => {
           organization_compliance_notes: true,
           organization_compliance_note_files: true,
           organization_compliance_note_links: true,
-          organization_compliance_question_bookmarks: true,
+          organization_compliance_question_bookmarks: false,
           organization_compliance_statuses: true,
           organization_facilities: true,
           organization_files: true,
