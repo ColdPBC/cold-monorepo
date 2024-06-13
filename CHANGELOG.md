@@ -1,3 +1,55 @@
+# [1.236.0-COLD-710.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.235.0...v1.236.0-COLD-710.1) (2024-06-13)
+
+
+### Bug Fixes
+
+* Dependency injection issue ([49e89cf](https://github.com/ColdPBC/cold-monorepo/commit/49e89cf5139d8c6286980a1615cc5ee5017d40dc))
+
+
+### Features
+
+* add 'bookmarks' field to interface, update scoringService calls ([3a347a1](https://github.com/ColdPBC/cold-monorepo/commit/3a347a127c5fcf6471d0d864874fcda92daac83b))
+* Add additional exports to Nest module ([c4d7482](https://github.com/ColdPBC/cold-monorepo/commit/c4d7482e6db924e35403857e5d9886001b8a7601))
+* Add ComplianceQuestionBookmarksRepository in nest lib ([9fd4fee](https://github.com/ColdPBC/cold-monorepo/commit/9fd4feeeb5137de5a50aac8a7a6d9b69a5032388))
+* Add ComplianceQuestionBookmarksRepository to ComplianceRepositoryModule ([58f663c](https://github.com/ColdPBC/cold-monorepo/commit/58f663cd14b8e7d6715c488dfaa9874b579ef56b))
+* Add FilteringModule to ScoringModule in nest library ([ffd3292](https://github.com/ColdPBC/cold-monorepo/commit/ffd32926557b0da0f3a85abbb530b195abe4d7b1))
+* Add getQuestionResponseById method and refactor parameters in organization compliance responses service ([38f0725](https://github.com/ColdPBC/cold-monorepo/commit/38f07255fe63d751d16575af8dcbd6b3d875cce4))
+* add link to questionnaire from the compliance management page ([adb1276](https://github.com/ColdPBC/cold-monorepo/commit/adb127649ebeedd9453a827924e8a1354faf6554))
+* Add method to get scored compliance question by ID ([adcac13](https://github.com/ColdPBC/cold-monorepo/commit/adcac13c2521121bd238dff14ba8afcdd9cc5dd8))
+* Add new FilteringService and module in compliance lib ([140e7c9](https://github.com/ColdPBC/cold-monorepo/commit/140e7c9bb95d018ecd2f5ee707d2cb3bbbb39b7b))
+* add options parameter to scoring methods in scoring.service ([09d32ed](https://github.com/ColdPBC/cold-monorepo/commit/09d32ed6b590b9b52fb2807f3071a13c9dd5ff5c))
+* Add rubric to compliance responses repository ([6ead069](https://github.com/ColdPBC/cold-monorepo/commit/6ead069cf4238c59c7336ac788a38144fc35352d))
+* Add specific component routing and enhance exception handling ([0bc4728](https://github.com/ColdPBC/cold-monorepo/commit/0bc4728bdea3731d27df6fe6f2080aa705eaf4f3))
+* Added 'responses' parameter to organization compliance responses controller ([c8109ef](https://github.com/ColdPBC/cold-monorepo/commit/c8109ef8f5a44ae39766f0ed427c78ad01c76644))
+* added `forwardRef` in scoring.module.ts ([24b09a4](https://github.com/ColdPBC/cold-monorepo/commit/24b09a4424edb13b6391ae857a91bc43c1981eb3))
+* Added ComplianceQuestionBookmarksRepository to compliance-repository.module ([3032920](https://github.com/ColdPBC/cold-monorepo/commit/3032920433d29df1c11f8d50b08b20e3d5950744))
+* Added component attribute to compliance responses repository ([e704fe8](https://github.com/ColdPBC/cold-monorepo/commit/e704fe806f362bd839e29d886d9a077a5294f93f))
+* added container id to scroll in question container ([ffdffa8](https://github.com/ColdPBC/cold-monorepo/commit/ffdffa8f804898f1f397e92047d81f7eec88d68f))
+* Added new enum to compliance ([2dafdc9](https://github.com/ColdPBC/cold-monorepo/commit/2dafdc94dadbe0b1fc3266a4a11ac78aac3b47d1))
+* Added Qodana configuration file and its output ([f29f287](https://github.com/ColdPBC/cold-monorepo/commit/f29f287c8a1147f4e4df61082906cc00e1c4977b))
+* added save button to notes ([93b0b29](https://github.com/ColdPBC/cold-monorepo/commit/93b0b291179ebd247a02239976e1b75fdc2e1a37))
+* Enhance compliance question bookmark repository code ([cf49e82](https://github.com/ColdPBC/cold-monorepo/commit/cf49e82ccdddfdf73ce1be9544af679ef6cc3b24))
+* Enhance filtering functionality in Filtering Service ([08ccb82](https://github.com/ColdPBC/cold-monorepo/commit/08ccb826d57a233217e4a96bd68e4bf95d2fee6c))
+* enhance scoring service in the compliance module ([e44bdd1](https://github.com/ColdPBC/cold-monorepo/commit/e44bdd11c9b321329f0e4249b652864f8a1c0561))
+* handle glow overlayed on ai justification ([0231bfb](https://github.com/ColdPBC/cold-monorepo/commit/0231bfbeb88a8fa8f418897d5d2cdde3d993fcf0))
+* handle scrolling to section and question ([4ab389c](https://github.com/ColdPBC/cold-monorepo/commit/4ab389c6f8d3c00f0171dd3f751b311491b861c1))
+* Import and utilize ComplianceDataModule in NestModule ([aa15a97](https://github.com/ColdPBC/cold-monorepo/commit/aa15a970d98190f6bee778b69409efbeb1dde011))
+* Integrate FilteringService into chat.service.ts ([d0f5d2c](https://github.com/ColdPBC/cold-monorepo/commit/d0f5d2c49b14e154ba6607351475ed3fd18d6e0a))
+* more styling and code changes ([3d05f9b](https://github.com/ColdPBC/cold-monorepo/commit/3d05f9be74c25ffd5b7fb794ca237408d1ff2b22))
+* questionnaire page, left sidebar and container ([d24d31c](https://github.com/ColdPBC/cold-monorepo/commit/d24d31cbfa66c1197577a0c870e6faa9361893d0))
+* Refactor compliance response repository to use organization object ([94e88fd](https://github.com/ColdPBC/cold-monorepo/commit/94e88fdf5e7781dbe821bb26d6aed01303158b3f))
+* Refactor organization compliance bookmarks to compliance question bookmarks ([ccfa1c7](https://github.com/ColdPBC/cold-monorepo/commit/ccfa1c7c4663e42e559aa4ec5bc12fba0cfb372f))
+* Refactor organization compliance response service ([0fe23d0](https://github.com/ColdPBC/cold-monorepo/commit/0fe23d0c6fc3e4538ffae3510caea99679710a8f))
+* Update ComplianceQuestionsRepository ([924a7e5](https://github.com/ColdPBC/cold-monorepo/commit/924a7e518a27685a781c5dd06db7891e722222fa))
+* Update examples and sections in openapi JSON schema ([f903678](https://github.com/ColdPBC/cold-monorepo/commit/f903678318d0992864c313e53631eb9d0e02f457))
+* Update filtering.service in nest lib for compliance filtering ([cdcb17b](https://github.com/ColdPBC/cold-monorepo/commit/cdcb17bd83ccf5ca9a84373ae399c1d8f11891c7))
+* Update organization compliance responses controller ([c0cb6c9](https://github.com/ColdPBC/cold-monorepo/commit/c0cb6c9186e61dff3de54359de21ed713ca7035f))
+* Update organization compliance responses controller ([0fb3772](https://github.com/ColdPBC/cold-monorepo/commit/0fb37726a964b430267403a03466b44639e60c1f))
+* Update OrganizationComplianceBookmarks module and service ([3bebd69](https://github.com/ColdPBC/cold-monorepo/commit/3bebd69a783c7489d6e633472281649e7108c1ba))
+* update scoring service to include score map and delete rubric [COLD-805] ([5372389](https://github.com/ColdPBC/cold-monorepo/commit/53723898892c70b247a50af6782ca071af838021))
+* updated function name in organization_compliance_responses.service ([b6c1c77](https://github.com/ColdPBC/cold-monorepo/commit/b6c1c77af0d5134368949b908d2c52755d0a7bf5))
+* updates for questionnaire container ([5575f3c](https://github.com/ColdPBC/cold-monorepo/commit/5575f3cf3ec5ffd53897e5104682b9ca66781930))
+
 # [1.236.0-cold-803.11](https://github.com/ColdPBC/cold-monorepo/compare/v1.236.0-cold-803.10...v1.236.0-cold-803.11) (2024-06-13)
 
 
