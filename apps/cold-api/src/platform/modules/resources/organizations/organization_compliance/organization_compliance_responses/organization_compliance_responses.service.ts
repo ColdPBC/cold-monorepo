@@ -22,8 +22,15 @@ export class OrganizationComplianceResponsesService extends BaseWorker {
     }
   }
 
-  getQuestionsBySectionId(name: string, csgId: string, csId: string, req: any, options?: ComplianceResponseOptions) {
-    return this.repository.getScoredComplianceQuestionBySection(req.organization, name, csgId, csId, req.user, options);
+  getQuestionsBySectionId(name: string, sgId: string, sId: string, req: any, options?: ComplianceResponseOptions) {
+    return this.repository.getScoredComplianceQuestionBySection(req.organization, name, sgId, sId, req.user, options);
+  }
+
+  getQuestionResponseById(name: string, sgId: string, sId: string, qId: string, req: any, options?: ComplianceResponseOptions) {
+    if (!options || !options.responses || !options.references || !options.bookmarks) {
+      options = { responses: true, references: true, bookmarks: true };
+    }
+    return this.repository.getScoredComplianceQuestionById(req.organization, name, sgId, sId, qId, req.user, options);
   }
 
   findAllByGroupId(name: string, csgId: string, req: any, options?: ComplianceResponseOptions) {
@@ -35,7 +42,7 @@ export class OrganizationComplianceResponsesService extends BaseWorker {
   }
 
   findOne(name: string, id: number, req: any, options?: ComplianceResponseOptions) {
-    return this.repository.getComplianceResponseById(req.organizations, name, req.user, id, options);
+    return this.repository.getComplianceResponseById(req.organizations, name, req.user, +id, options);
   }
 
   remove(id: number) {
