@@ -1,3 +1,10 @@
+# [1.236.0-cold-803.9](https://github.com/ColdPBC/cold-monorepo/compare/v1.236.0-cold-803.8...v1.236.0-cold-803.9) (2024-06-13)
+
+
+### Features
+
+* Added Qodana configuration file and its output ([f29f287](https://github.com/ColdPBC/cold-monorepo/commit/f29f287c8a1147f4e4df61082906cc00e1c4977b))
+
 # [1.236.0-cold-803.8](https://github.com/ColdPBC/cold-monorepo/compare/v1.236.0-cold-803.7...v1.236.0-cold-803.8) (2024-06-13)
 
 
