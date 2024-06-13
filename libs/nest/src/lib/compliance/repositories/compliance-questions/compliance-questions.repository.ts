@@ -5,7 +5,6 @@ import { compliance_questions, Prisma } from '@prisma/client';
 import { difference, sumBy } from 'lodash';
 import { Cuid2Generator, GuidPrefixes } from '../../../utility';
 import { ComplianceSectionsCacheRepository } from '../compliance-sections';
-import { ScoringService } from '../../scoring';
 import { FilteringService } from '../../filtering';
 
 export interface Question {
@@ -37,12 +36,7 @@ interface Dependency {
  */
 @Injectable()
 export class ComplianceQuestionsRepository extends BaseWorker {
-  constructor(
-    readonly prisma: PrismaService,
-    readonly complianceSectionsCacheRepository: ComplianceSectionsCacheRepository,
-    readonly scoringService: ScoringService,
-    readonly filteringService: FilteringService,
-  ) {
+  constructor(readonly prisma: PrismaService, readonly complianceSectionsCacheRepository: ComplianceSectionsCacheRepository, readonly filteringService: FilteringService) {
     super(ComplianceQuestionsRepository.name);
   }
 
