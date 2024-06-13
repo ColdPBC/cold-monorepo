@@ -132,7 +132,7 @@ export class FilteringService extends BaseWorker {
    * Filter questions based on their dependencies.
    *
    * @param {Question[]} questions - An array of questions to filter.
-   * @param references
+   * @param options
    * @return {Promise<Question[]>} The filtered array of questions.
    */
   async filterQuestions(questions: Question[], options?: ComplianceResponseOptions): Promise<Question[]> {
