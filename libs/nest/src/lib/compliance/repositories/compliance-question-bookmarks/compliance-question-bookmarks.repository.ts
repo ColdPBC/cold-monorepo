@@ -29,7 +29,7 @@ export class ComplianceQuestionBookmarksRepository extends BaseWorker {
       this.logger.error(err, { organization: org, user, compliance: { name } });
       if (err instanceof NotFoundException) throw err;
 
-      throw new BadRequestException({ description: err.message, cause: err });
+      throw new BadRequestException({ organization: org, user }, err.meta);
     }
   }
 
@@ -51,7 +51,7 @@ export class ComplianceQuestionBookmarksRepository extends BaseWorker {
       this.logger.error(err, { organization: org, user, compliance: { name } });
       if (err instanceof NotFoundException) throw err;
 
-      throw new BadRequestException({ description: err.message, cause: err });
+      throw new BadRequestException({ organization: org, user }, err.meta);
     }
   }
 
@@ -66,7 +66,7 @@ export class ComplianceQuestionBookmarksRepository extends BaseWorker {
       this.logger.error(err, { organization: org, user, compliance: { name } });
       if (err instanceof NotFoundException) throw err;
 
-      throw new BadRequestException({ description: err.message, cause: err });
+      throw new BadRequestException({ organization: org, user }, err.meta);
     }
   }
 
@@ -93,7 +93,7 @@ export class ComplianceQuestionBookmarksRepository extends BaseWorker {
       this.logger.error(err, { organization: org, user, compliance: { name } });
       if (err instanceof NotFoundException) throw err;
 
-      throw new BadRequestException({ description: err.message, cause: err });
+      throw new BadRequestException({ organization: org, user }, err.meta);
     }
   }
 
@@ -119,7 +119,7 @@ export class ComplianceQuestionBookmarksRepository extends BaseWorker {
       this.logger.error(err, { organization: org, user, compliance: { id: ocId } });
       if (err instanceof NotFoundException) throw err;
 
-      throw new BadRequestException({ description: err.message, cause: err });
+      throw new BadRequestException({ organization: org, user }, err.meta);
     }
   }
 
@@ -143,31 +143,26 @@ export class ComplianceQuestionBookmarksRepository extends BaseWorker {
       this.logger.error(err, { organization: org, user, qId, compliance: { name } });
       if (err instanceof NotFoundException) throw err;
 
-      throw new BadRequestException({ description: err.message, cause: err });
+      throw new BadRequestException({ organization: org, user }, err.meta);
     }
   }
 
-  async deleteComplianceQuestionBookmark(name: string, id: string, org: organizations, user: IAuthenticatedUser) {
+  async deleteComplianceQuestionBookmark(qId: string, org: organizations, user: IAuthenticatedUser) {
     try {
-      const orgCompliance = await this.getOrganizationCompliance(name, org);
-
-      if (!orgCompliance) {
-        throw new NotFoundException(`Organization Compliance ${name} not found for ${org.name} `);
-      }
-
-      return this.prisma.extended.organization_compliance_question_bookmarks.delete({
+      const deleted = await this.prisma.extended.organization_compliance_question_bookmarks.delete({
         where: {
           emailQuestId: {
             email: user.coldclimate_claims.email,
-            compliance_question_id: id,
+            compliance_question_id: qId,
           },
         },
       });
+      return deleted;
     } catch (err) {
-      this.logger.error(err, { organization: org, user, compliance: { name } });
-      if (err instanceof NotFoundException) throw err;
+      this.logger.error(err.meta.cause, { organization: org, user, question: qId, ...err.meta });
+      if (err.meta?.cause === 'Record to delete does not exist.') throw new NotFoundException({ organization: org, user, question: qId }, err.meta);
 
-      throw new BadRequestException({ description: err.message, cause: err });
+      throw new BadRequestException({ description: err.message, cause: err }, err.meta);
     }
   }
 
