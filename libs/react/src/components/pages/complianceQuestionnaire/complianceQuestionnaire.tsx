@@ -1,4 +1,4 @@
-import { ColdLeftArrowIcon, QuestionnaireContainer, QuestionnaireDetailSidebar, QuestionnaireSidebar, Spinner } from '@coldpbc/components';
+import { ColdLeftArrowIcon, ErrorFallback, QuestionnaireContainer, QuestionnaireDetailSidebar, QuestionnaireSidebar, Spinner } from '@coldpbc/components';
 import React, { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import useSWR from 'swr';
@@ -6,10 +6,11 @@ import { axiosFetcher } from '@coldpbc/fetchers';
 import { useAuth0Wrapper } from '@coldpbc/hooks';
 import { ComplianceSidebarPayload, OrgCompliance, QuestionnaireQuestion } from '@coldpbc/interfaces';
 import { ColdComplianceQuestionnaireContext } from '@coldpbc/context';
+import { withErrorBoundary } from 'react-error-boundary';
 
 // todo: add link to questionnaire from compliance set manager
 // todo: add scrolling to question and section
-export const ComplianceQuestionnaire = () => {
+const _ComplianceQuestionnaire = () => {
   const [scrollToQuestion, setScrollToQuestion] = React.useState<string | null>(null);
   const [sidebarExpanded, setSidebarExpanded] = React.useState<boolean>(true);
   const [focusQuestion, setFocusQuestion] = React.useState<{
@@ -25,7 +26,6 @@ export const ComplianceQuestionnaire = () => {
   } | null>(null);
   const navigate = useNavigate();
   const { orgId } = useAuth0Wrapper();
-  // expected pathname: /questionnaire/:complianceName
   const { complianceName } = useParams();
 
   const getComplianceUrl = () => {
@@ -38,7 +38,7 @@ export const ComplianceQuestionnaire = () => {
   const complianceSWR = useSWR<OrgCompliance[], any, any>(getComplianceUrl(), axiosFetcher);
 
   const getSidebarDataUrl = () => {
-    return [`/compliance_definitions/${complianceName}/organizations/${orgId}/sectionGroups`, 'GET'];
+    return [`/compliance/${complianceName}/organizations/${orgId}/section_groups/responses`, 'GET'];
   };
 
   const sideBarSWR = useSWR<ComplianceSidebarPayload, any, any>(getSidebarDataUrl(), axiosFetcher);
@@ -52,6 +52,10 @@ export const ComplianceQuestionnaire = () => {
   if (complianceSWR.isLoading || sideBarSWR.isLoading) {
     return <Spinner />;
   }
+
+  console.log({
+    data: sideBarSWR.data,
+  });
 
   const selectedCompliance = complianceSWR.data?.find(compliance => compliance.compliance_definition.name === complianceName);
 
@@ -93,3 +97,10 @@ export const ComplianceQuestionnaire = () => {
     </ColdComplianceQuestionnaireContext.Provider>
   );
 };
+
+export const ComplianceQuestionnaire = withErrorBoundary(_ComplianceQuestionnaire, {
+  FallbackComponent: props => <ErrorFallback {...props} />,
+  onError: (error, info) => {
+    console.error('Error occurred in ComplianceQuestionnaire: ', error);
+  },
+});

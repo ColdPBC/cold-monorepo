@@ -19,7 +19,9 @@ export const Default: Story = {
     return (
       <StoryMockProvider memoryRouterProps={{ initialEntries: ['/questionnaire/rei_pia_2024'] }}>
         <Routes>
-          <Route path={'/questionnaire/:complianceName'} element={<ComplianceQuestionnaire />} />
+          <Route path={'/questionnaire'}>
+            <Route path={':complianceName'} element={<ComplianceQuestionnaire />} />
+          </Route>
         </Routes>
       </StoryMockProvider>
     );
@@ -31,7 +33,9 @@ export const WithSectionSelection: Story = {
     return (
       <StoryMockProvider memoryRouterProps={{ initialEntries: ['/questionnaire/rei_pia_2024?section=GHG'] }}>
         <Routes>
-          <Route path={'/questionnaire/:complianceName'} element={<ComplianceQuestionnaire />} />
+          <Route path={'/questionnaire'}>
+            <Route path={':complianceName'} element={<ComplianceQuestionnaire />} />
+          </Route>
         </Routes>
       </StoryMockProvider>
     );

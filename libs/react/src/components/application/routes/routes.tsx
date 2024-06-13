@@ -4,7 +4,6 @@ import {
   ActionsOverview,
   ApplicationToaster,
   CarbonFootprint,
-  ComplianceQuestionnaire,
   ComplianceRoutes,
   DashboardLayout,
   DocumentUpload,
@@ -19,6 +18,7 @@ import {
   WizardRoutes,
 } from '@coldpbc/components';
 import { useFlags } from 'launchdarkly-react-client-sdk';
+import { QuestionnaireRoutes } from './questionnaireRoutes';
 
 export const ColdRoutes = () => {
   const ldFlags = useFlags();
@@ -30,7 +30,7 @@ export const ColdRoutes = () => {
         <Route path={'/home'} element={<Home />} />
         <Route path={'/assessments'} element={<Journey />} />
         {ComplianceRoutes()}
-        {ldFlags.showNewComplianceManagerCold711 && <Route path={'/questionnaire/:complianceName'} element={<ComplianceQuestionnaire />} />}
+        {QuestionnaireRoutes()}
         {ldFlags.showActions261 && <Route path="/actions" element={<ActionsOverview />} />}
         <Route path={'/reports/carbon_footprint'} element={ldFlags.showNewCarbonFootprintModuleCold634 ? <CarbonFootprint /> : <Footprint />} />
         {ldFlags.showDocumentsUploadModuleCold492 && <Route path="/documents" element={<DocumentUpload />} />}

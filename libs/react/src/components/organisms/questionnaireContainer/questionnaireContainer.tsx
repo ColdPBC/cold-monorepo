@@ -1,14 +1,15 @@
-import { useContext, useEffect, useRef } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import { ColdComplianceQuestionnaireContext } from '@coldpbc/context';
-import { QuestionnaireQuestionSection, Spinner } from '@coldpbc/components';
+import { ErrorFallback, QuestionnaireQuestionSection, Spinner } from '@coldpbc/components';
 import { ComplianceSidebarSection, QuestionnaireQuestion } from '@coldpbc/interfaces';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
 import useSWRInfinite from 'swr/infinite';
 import { useInView } from 'react-intersection-observer';
 import { useSearchParams } from 'react-router-dom';
+import { withErrorBoundary } from 'react-error-boundary';
 
-export const QuestionnaireContainer = () => {
+const _QuestionnaireContainer = () => {
   const { logBrowser } = useColdContext();
   const [searchParams, setSearchParams] = useSearchParams();
   const [lowerRef, lowerRefInView] = useInView({
@@ -123,3 +124,10 @@ export const QuestionnaireContainer = () => {
     </div>
   );
 };
+
+export const QuestionnaireContainer = withErrorBoundary(_QuestionnaireContainer, {
+  FallbackComponent: props => <ErrorFallback {...props} />,
+  onError: (error, info) => {
+    console.error('Error occurred in QuestionnaireContainer: ', error);
+  },
+});

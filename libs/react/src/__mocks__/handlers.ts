@@ -275,7 +275,7 @@ export const handlers = [
     return res(ctx.json(getDefaultEmissionMock()));
   }),
 
-  rest.get(getApiUrl('/compliance_definitions/:name/organizations/:orgId/sectionGroups'), (req, res, ctx) => {
+  rest.get(getApiUrl('/compliance/:complianceName/organizations/:orgId/section_groups/responses'), (req, res, ctx) => {
     return res(ctx.json(getQuestionnaireSidebarComplianceMock()));
   }),
 

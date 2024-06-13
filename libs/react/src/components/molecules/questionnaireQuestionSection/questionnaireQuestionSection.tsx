@@ -1,6 +1,6 @@
 import { Element } from 'react-scroll';
 import { QuestionnaireQuestionItem, QuestionnaireQuestionItemPlaceholder } from '@coldpbc/components';
-import { useContext, useRef } from 'react';
+import { useContext, useEffect, useRef } from 'react';
 import { ColdComplianceQuestionnaireContext } from '@coldpbc/context';
 import { ComplianceSidebarSection, QuestionnaireQuestion } from '@coldpbc/interfaces';
 import { useSearchParams } from 'react-router-dom';
@@ -16,6 +16,15 @@ export const QuestionnaireQuestionSection = (props: {
   const ref = useRef<HTMLDivElement>(null);
   const sectionKey = searchParams.get('section');
   const isSectionInQuery = sectionKey === section.key;
+
+  useEffect(() => {
+    // remove search params after a
+    if (isSectionInQuery) {
+      setTimeout(() => {
+        setSearchParams({});
+      }, 2000);
+    }
+  }, [searchParams]);
 
   return (
     <div className={'flex flex-col gap-[40px]'} ref={innerRef}>

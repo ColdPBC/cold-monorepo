@@ -9,6 +9,7 @@ import { QuestionnaireSelect } from './questionnaireSelect';
 import { NumericFormat } from 'react-number-format';
 import { QuestionnaireQuestion } from '@coldpbc/interfaces';
 import { ColdComplianceQuestionnaireContext } from '@coldpbc/context';
+import { Element } from 'react-scroll';
 
 export const QuestionnaireQuestionItem = (props: { question: QuestionnaireQuestion; number: number }) => {
   const { focusQuestion, setFocusQuestion, scrollToQuestion } = useContext(ColdComplianceQuestionnaireContext);
@@ -43,14 +44,13 @@ export const QuestionnaireQuestionItem = (props: { question: QuestionnaireQuesti
   const [additionalContextOpen, setAdditionalContextOpen] = useState<boolean>(false);
   const [additionalContextInput, setAdditionalContextInput] = useState<any | undefined>(additional_context?.value);
 
-  // useEffect(() => {
-  //   if (scrollToQuestion === key && ref.current) {
-  //     ref.current.scrollIntoView({
-  //       behavior: 'smooth',
-  //       block: 'start',
-  //     });
-  //   }
-  // }, [scrollToQuestion]);
+  useEffect(() => {
+    if (scrollToQuestion) {
+      setTimeout(() => {
+        setFocusQuestion(null);
+      }, 2000);
+    }
+  }, [scrollToQuestion]);
 
   useEffect(() => {
     if (questionInput !== value) {
@@ -448,58 +448,60 @@ export const QuestionnaireQuestionItem = (props: { question: QuestionnaireQuesti
   };
 
   return (
-    <div
-      className={`flex flex-col w-full rounded-[16px] bg-gray-30 gap-[16px] ${questionBookmarked ? 'border-[1px] border-lightblue-200 p-[23px]' : ' p-[24px]'}
+    <Element name={key}>
+      <div
+        className={`flex flex-col w-full rounded-[16px] bg-gray-30 gap-[16px] ${questionBookmarked ? 'border-[1px] border-lightblue-200 p-[23px]' : ' p-[24px]'}
     ${focusQuestion !== null && focusQuestion.key !== id ? 'opacity-20' : ''}`}
-      ref={el => {
-        if (scrollToQuestion === key && el) {
-          console.log({
-            client: el.getBoundingClientRect(),
-            scroll: el.scrollHeight,
-          });
-          el.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start',
-          });
-        }
-      }}
-      id={key}>
-      <div className={'flex flex-row gap-[8px] justify-between'}>
-        <div className={'flex flex-row gap-[8px] items-center'}>
-          {getQuestionStatusIcon()}
-          <div className={'w-full flex justify-start text-gray-120'}>QUESTION {number}</div>
-        </div>
-        <div className={'flex flex-row gap-[8px] items-center'}>
-          {getBookMarkIcon()}
-          <div
-            className={'w-[24px] h-[24px] cursor-pointer'}
-            onClick={() => {
-              if (focusQuestion?.key === id) {
-                setFocusQuestion(null);
-              } else {
-                setFocusQuestion({
-                  key: id,
-                  aiDetails: {
-                    ai_response: ai_response,
-                    ai_answered: ai_answered,
-                    ai_attempted: ai_attempted,
-                    value: questionInput,
-                    questionAnswerSaved: questionAnswerSaved,
-                    questionAnswerChanged: questionAnswerChanged,
-                  },
-                });
-              }
-            }}>
-            <ColdIcon name={IconNames.ColdRightArrowIcon} />
+        ref={el => {
+          if (scrollToQuestion === key && el) {
+            console.log({
+              client: el.getBoundingClientRect(),
+              scroll: el.scrollHeight,
+            });
+            el.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start',
+            });
+          }
+        }}
+        id={key}>
+        <div className={'flex flex-row gap-[8px] justify-between'}>
+          <div className={'flex flex-row gap-[8px] items-center'}>
+            {getQuestionStatusIcon()}
+            <div className={'w-full flex justify-start text-gray-120'}>QUESTION {number}</div>
+          </div>
+          <div className={'flex flex-row gap-[8px] items-center'}>
+            {getBookMarkIcon()}
+            <div
+              className={'w-[24px] h-[24px] cursor-pointer'}
+              onClick={() => {
+                if (focusQuestion?.key === id) {
+                  setFocusQuestion(null);
+                } else {
+                  setFocusQuestion({
+                    key: id,
+                    aiDetails: {
+                      ai_response: ai_response,
+                      ai_answered: ai_answered,
+                      ai_attempted: ai_attempted,
+                      value: questionInput,
+                      questionAnswerSaved: questionAnswerSaved,
+                      questionAnswerChanged: questionAnswerChanged,
+                    },
+                  });
+                }
+              }}>
+              <ColdIcon name={IconNames.ColdRightArrowIcon} />
+            </div>
           </div>
         </div>
+        {getPrompt()}
+        {tooltip && <div className="text-left text-body not-italic font-medium text-tc-primary">{tooltip}</div>}
+        <div className="w-full justify-center mb-[24px]">{inputComponent()}</div>
+        {additionalContext()}
+        {getAISource()}
+        {getSubmitButton()}
       </div>
-      {getPrompt()}
-      {tooltip && <div className="text-left text-body not-italic font-medium text-tc-primary">{tooltip}</div>}
-      <div className="w-full justify-center mb-[24px]">{inputComponent()}</div>
-      {additionalContext()}
-      {getAISource()}
-      {getSubmitButton()}
-    </div>
+    </Element>
   );
 };
