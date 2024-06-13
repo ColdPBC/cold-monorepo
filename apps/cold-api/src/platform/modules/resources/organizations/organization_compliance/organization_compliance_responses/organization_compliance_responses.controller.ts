@@ -92,7 +92,7 @@ export class OrganizationComplianceResponsesController {
     return this.organizationComplianceResponsesService.findAllByGroupId(name, sgId, req, { references, responses, take, skip });
   }
 
-  @Get('section_groups/:sgId/sections/:csId/responses')
+  @Get('section_groups/:sgId/sections/:sId/responses')
   @ApiParam({
     name: 'csgId',
     required: true,
