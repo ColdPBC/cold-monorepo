@@ -12,6 +12,9 @@
   ],
   "compilerOptions": {
     "esModuleInterop": true,
-    "target": "ES2021"
+    "target": "ES2021",
+
+    "noImplicitReturns": true,
+    "noImplicitAny": false
   }
 }

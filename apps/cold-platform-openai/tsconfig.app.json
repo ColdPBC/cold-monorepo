@@ -13,9 +13,9 @@
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
     "incremental": true,
-
-    "strictNullChecks": true,
+    "noImplicitReturns": true,
     "noImplicitAny": false,
+    "strictNullChecks": true,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,

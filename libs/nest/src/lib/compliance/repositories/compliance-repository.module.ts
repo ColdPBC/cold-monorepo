@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Global, Module, forwardRef } from '@nestjs/common';
 import { PrismaModule } from '../../prisma';
 
 import { CacheService, ColdCacheModule } from '../../cache';
@@ -10,10 +10,13 @@ import { ComplianceAiResponsesRepository } from './compliance-ai-responses';
 import { ComplianceDefinitionsRepository } from './compliance-definitions';
 import { OrganizationComplianceRepository } from './organization-compliance';
 import { OrganizationComplianceStatusesRepository } from './organization-compliance-statuses';
-//import { ScoringService } from '../scoring';
+import { ScoringModule } from '../scoring';
+import { FilteringModule } from '../filtering';
+import { ComplianceQuestionBookmarksRepository } from './compliance-question-bookmarks/compliance-question-bookmarks.repository';
 
+@Global()
 @Module({
-  imports: [PrismaModule, ColdCacheModule.forRootAsync()],
+  imports: [PrismaModule, ColdCacheModule.forRootAsync(), forwardRef(() => ScoringModule), forwardRef(() => FilteringModule)],
   providers: [
     ComplianceSectionsRepository,
     ComplianceSectionGroupsRepository,
@@ -25,7 +28,7 @@ import { OrganizationComplianceStatusesRepository } from './organization-complia
     ComplianceDefinitionsRepository,
     OrganizationComplianceRepository,
     OrganizationComplianceStatusesRepository,
-    //ScoringService,
+    ComplianceQuestionBookmarksRepository,
   ],
   exports: [
     CacheService,
@@ -38,6 +41,7 @@ import { OrganizationComplianceStatusesRepository } from './organization-complia
     ComplianceAiResponsesRepository,
     ComplianceResponsesRepository,
     ComplianceSectionsCacheRepository,
+    ComplianceQuestionBookmarksRepository,
   ],
 })
 export class ComplianceRepositoryModule {}

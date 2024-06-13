@@ -119,7 +119,7 @@ export class OrganizationComplianceAiResponsesController {
   })
   @Roles(...coldAdminOnly)
   removeAllAiResponses(@Param('orgId') orgId: string, @Param('name') name: string, @Req() req: any) {
-    return this.organizationComplianceAiResponsesService.removeAllAiResponses(orgId, name, req.user);
+    return this.organizationComplianceAiResponsesService.removeAllAiResponses(req.organization, name, req.user);
   }
 
   @Delete(':id')

@@ -5,9 +5,8 @@ import { LangchainModule } from '../langchain/langchain.module';
 import { LangchainService } from '../langchain/langchain.service';
 import { BullModule } from '@nestjs/bull';
 import {
-  ColdRabbitModule,
   ComplianceAiResponsesRepository,
-  ComplianceRepositoryModule,
+  ComplianceDataModule,
   ComplianceResponsesRepository,
   ComplianceSectionsCacheRepository,
   ComplianceSectionsRepository,
@@ -17,18 +16,19 @@ import {
 import { FreeplayModule } from '../freeplay/freeplay.module';
 import { FreeplayService } from '../freeplay/freeplay.service';
 import { ChatController } from './chat.controller';
+import { ScoringModule } from '../../../cold-api/src/platform/modules/resources/surveys/scoring/scoring.module';
 
 @Module({
   imports: [
     BullModule.registerQueue({
       name: 'openai',
     }),
-    ColdRabbitModule.forRootAsync(),
+    ScoringModule,
     PineconeModule,
     LangchainModule,
     FreeplayModule,
     MqttModule,
-    ComplianceRepositoryModule,
+    ComplianceDataModule,
   ],
   controllers: [ChatController],
   providers: [

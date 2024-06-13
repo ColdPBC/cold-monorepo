@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { ComplianceRepositoryModule, NestModule, OrgUserInterceptor, PrismaModule } from '@coldpbc/nest';
+import { ColdRabbitModule, NestModule, OrgUserInterceptor, PrismaModule } from '@coldpbc/nest';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { AppService } from './app.service';
 import { APP_INTERCEPTOR } from '@nestjs/core';
@@ -19,6 +19,7 @@ import { JobConsumer } from './job.consumer';
 import { ChatService } from './chat/chat.service';
 import { FreeplayModule } from './freeplay/freeplay.module';
 import { CrawlerModule } from './crawler/crawler.module';
+import { EventsModule } from '../../cold-api/src/platform/modules/utilities/events/events.module';
 
 @Module({
   imports: [FreeplayModule, CrawlerModule],
@@ -32,6 +33,7 @@ export class AppModule {
       module: AppModule,
       imports: [
         await NestModule.forRootAsync(),
+        await EventsModule.forRootAsync(),
         BullModule.registerQueue({
           name: 'openai',
         }),
@@ -49,24 +51,24 @@ export class AppModule {
           serveRoot: '../../../assets',
         }),
         PrismaModule,
+        await ColdRabbitModule.forRootAsync(),
         AssistantModule,
         PineconeModule,
         LangchainModule,
         LoadersModule,
-        ComplianceRepositoryModule,
-        ChatModule,
         await CrawlerModule.forRootAsync(),
+        ChatModule,
       ],
       controllers: [OpenAIController],
       providers: [
         FileService,
         JobConsumer,
+        RabbitService,
         AppService,
         {
           provide: APP_INTERCEPTOR,
           useClass: OrgUserInterceptor,
         },
-        RabbitService,
         AssistantService,
         ChatService,
         Tools,

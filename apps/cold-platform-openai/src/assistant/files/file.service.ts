@@ -3,9 +3,9 @@ import { Injectable, NotFoundException, OnModuleInit, UnauthorizedException, Unp
 import OpenAI, { toFile } from 'openai';
 import { find, omit, pick } from 'lodash';
 import { AppService } from '../../app.service';
-import { organizations, service_definitions } from '@prisma/client';
 import { APIPromise } from 'openai/core';
 import { Job } from 'bull';
+import { kebabCase } from 'lodash';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()
@@ -30,7 +30,7 @@ export class FileService extends BaseWorker implements OnModuleInit {
     await this.mqtt.onModuleInit();
   }
 
-  handleError(e, meta?) {
+  handleError(e: any, meta?: { user: IAuthenticatedUser; org_id?: string; file_id?: string } | undefined) {
     if (e.status === 404) {
       throw new NotFoundException(e.message);
     }
@@ -39,7 +39,7 @@ export class FileService extends BaseWorker implements OnModuleInit {
       throw new UnprocessableEntityException(e.message);
     }
   }
-
+  // @ts-expect-error - Fix this later
   async listFiles(user: IAuthenticatedUser) {
     try {
       const openAIResponse = await this.client.files.list();
@@ -57,13 +57,20 @@ export class FileService extends BaseWorker implements OnModuleInit {
     }
   }
 
+  // @ts-expect-error - Fix this later
   async deleteFile(user: IAuthenticatedUser, assistantId: string, fileId: string) {
     try {
       const assistant = await this.client.beta.assistants.retrieve(assistantId);
       if (!assistant) {
         this.logger.error(`Assistant ${assistantId} not found`, { user, assistantId });
       }
-      const file = await this.client.beta.assistants.files.del(assistantId, fileId);
+
+      const vectorStoreId = assistant.tool_resources?.file_search?.vector_store_ids?.[0] || '';
+      if (!vectorStoreId) {
+        throw new NotFoundException(`No vector store found for assistant ${assistantId}`);
+      }
+
+      const file = await this.client.beta.vectorStores.files.del(vectorStoreId, fileId);
       this.logger.info(`User ${user.coldclimate_claims.email} deleted file ${fileId}.`, { file, user });
       return file;
     } catch (e) {
@@ -75,6 +82,7 @@ export class FileService extends BaseWorker implements OnModuleInit {
     }
   }
 
+  // @ts-expect-error - Fix this later
   async getAssistantFile(user: IAuthenticatedUser, orgId: string, fileId: string) {
     try {
       const integration = await this.prisma.integrations.findFirstOrThrow({
@@ -85,8 +93,12 @@ export class FileService extends BaseWorker implements OnModuleInit {
       });
 
       const assistantId = integration.id;
-
-      const file = await this.client.beta.assistants.files.retrieve(assistantId, fileId);
+      const assistant = await this.client.beta.assistants.retrieve(assistantId);
+      const vectorStoreId = assistant.tool_resources?.file_search?.vector_store_ids?.[0] || '';
+      if (!vectorStoreId) {
+        throw new NotFoundException(`No vector store found for assistant ${assistantId}`);
+      }
+      const file = await this.client.beta.vectorStores.files.retrieve(vectorStoreId, fileId);
       this.logger.info(`User ${user.coldclimate_claims.email} requested file ${fileId}.`, { file, user });
 
       const content = await this.client.files.content(file.id).withResponse();
@@ -101,6 +113,7 @@ export class FileService extends BaseWorker implements OnModuleInit {
     }
   }
 
+  // @ts-expect-error - Fix this later
   async getFile(user: IAuthenticatedUser, fileId: string) {
     try {
       const file = await this.client.files.retrieve(fileId);
@@ -122,6 +135,8 @@ export class FileService extends BaseWorker implements OnModuleInit {
    * @param user
    * @param orgId
    */
+
+  // @ts-expect-error - Fix this later
   async listAssistantFiles(user: IAuthenticatedUser, orgId: string) {
     try {
       const integration = await this.prisma.integrations.findFirstOrThrow({
@@ -132,7 +147,12 @@ export class FileService extends BaseWorker implements OnModuleInit {
       });
 
       const assistantId = integration.id;
-      const files = await this.client.beta.assistants.files.list(assistantId);
+      const assistant = await this.client.beta.assistants.retrieve(assistantId);
+      const vectorStoreId = assistant.tool_resources?.file_search?.vector_store_ids?.[0] || '';
+      if (!vectorStoreId) {
+        throw new NotFoundException(`No vector store found for assistant ${assistantId}`);
+      }
+      const files = await this.client.beta.vectorStores.files.list(vectorStoreId);
 
       for (const file of files.data) {
         const meta = await this.prisma.organization_files.findUnique({
@@ -164,6 +184,7 @@ export class FileService extends BaseWorker implements OnModuleInit {
    * Upload a file to OpenAI
    * @param job
    */
+  // @ts-expect-error - Fix this later
   async uploadOrgFilesToOpenAI(job: Job) {
     this.logger.info(`Received job ${job.id} of type ${job.name}`, { job: job.data });
     const { payload, user, organization, integration } = job.data;
@@ -202,19 +223,39 @@ export class FileService extends BaseWorker implements OnModuleInit {
         });
       }
 
+      let orgAsstFile = await this.prisma.organization_files.findUnique({
+        where: {
+          openai_file_id: oaiFile.id,
+          openai_vector_store_id: integration.id,
+        },
+      });
+
+      if (orgAsstFile) {
+        this.logger.warn(`File ${payload.original_name} already exists in the database`, {
+          orgAsstFile,
+          user,
+          payload,
+        });
+
+        return orgAsstFile;
+      }
+
       // Link the file to the assistant.
-      const assistant_file = await this.linkFileToAssistant(user, integration.id, oaiFile.id);
+      const assistant_file = await this.linkFileToVectorStore(user, integration.id, oaiFile.id);
 
       // Create or update a record in the `organization_files` table in the database.
-      const persisted = await this.prisma.organization_files.update({
+
+      orgAsstFile = await this.prisma.organization_files.update({
         where: {
           id: payload.id,
         },
         data: {
           original_name: payload.original_name,
           integration_id: integration.id,
-          openai_assistant_id: integration.id,
+          openai_assistant_id: assistant_file.id,
           openai_file_id: assistant_file.id,
+          openai_vector_store_id: assistant_file.vector_store_id,
+          openai_vector_file_status: assistant_file.status,
         },
       });
 
@@ -224,21 +265,24 @@ export class FileService extends BaseWorker implements OnModuleInit {
         organization: organization.id,
         assistant_file: assistant_file,
         organization_file: payload,
+        vector_store: assistant_file.vector_store_id,
+        status: assistant_file.status,
       });
 
-      this.mqtt.publishToUI({
+      /*this.mqtt.publishToUI({
         org_id: organization.id,
         user: user,
         swr_key: `/organizations/${organization.id}/files`,
         action: 'create',
         status: 'complete',
         data: {
-          file: pick(persisted, ['id', 'original_name', 'mimetype', 'size']),
+          file: pick(orgAsstFile, ['id', 'original_name', 'mimetype', 'size']),
         },
-      });
+      });*/
 
       //return the persisted record.
-      return persisted;
+
+      return orgAsstFile;
     } catch (e) {
       this.mqtt.publishToUI({
         org_id: organization.id,
@@ -267,7 +311,7 @@ export class FileService extends BaseWorker implements OnModuleInit {
             readStream.on('error', err => this.handleError(err));
             writeStream.on('error', err => this.handleError(err));
 
-            readStream.on('close', function () {
+            readStream.on('close', () => {
               this.fs.unlink(sourcePath, () => {
                 this.logger.info(`Successfully renamed - AKA moved!`);
               });
@@ -300,11 +344,13 @@ export class FileService extends BaseWorker implements OnModuleInit {
    * @param assistantId
    * @param openAIFileId
    */
-  async linkFileToAssistant(user: IAuthenticatedUser, assistantId: string, openAIFileId: string): Promise<APIPromise<OpenAI.Beta.Assistants.Files.AssistantFile>> {
-    let myAssistantFile: OpenAI.Beta.Assistants.Files.AssistantFile | PromiseLike<OpenAI.Beta.Assistants.Files.AssistantFile>;
-
+  async linkFileToVectorStore(user: IAuthenticatedUser, assistantId: string, openAIFileId: string): Promise<APIPromise<OpenAI.Beta.VectorStores.Files.VectorStoreFile>> {
+    let myAssistantFile: OpenAI.Beta.VectorStores.Files.VectorStoreFile | PromiseLike<OpenAI.Beta.VectorStores.Files.VectorStoreFile>;
+    let vectorStore;
     try {
-      myAssistantFile = await this.client.beta.assistants.files.retrieve(assistantId, openAIFileId);
+      vectorStore = await this.client.beta.vectorStores.retrieve(assistantId);
+
+      myAssistantFile = await this.client.beta.vectorStores.files.retrieve(vectorStore.id, openAIFileId);
     } catch (e) {
       if (e.status !== 404) {
         this.logger.error(e.message, {
@@ -315,17 +361,18 @@ export class FileService extends BaseWorker implements OnModuleInit {
         });
       }
 
-      myAssistantFile = await this.client.beta.assistants.files.create(assistantId, {
-        file_id: openAIFileId,
-      });
-
-      this.logger.info(`Created new assistant file ${myAssistantFile.id} for assistant ${myAssistantFile.assistant_id}`, {
-        user,
-        openai_assistant_id: assistantId,
-        openai_file_id: openAIFileId,
-        assistant_file: myAssistantFile,
-      });
+      vectorStore = await this.client.beta.vectorStores.create({ name: kebabCase(user.coldclimate_claims.org_id) });
     }
+
+    myAssistantFile = await this.client.beta.vectorStores.files.createAndPoll(vectorStore.id, { file_id: openAIFileId });
+
+    this.logger.info(`Created new vectorStore file ${myAssistantFile.id}`, {
+      user,
+      openai_assistant_id: assistantId,
+      openai_file_id: openAIFileId,
+      vectorStore,
+      vector_file: myAssistantFile,
+    });
 
     return myAssistantFile;
   }
@@ -339,6 +386,8 @@ export class FileService extends BaseWorker implements OnModuleInit {
    * @param key
    * @param bucket
    */
+
+  /*
   async linkFile(user: IAuthenticatedUser, org: organizations, openAIFileId: string, filename: string, service_definition: service_definitions, key?: string, bucket?: string) {
     try {
       const integrations = await this.prisma.integrations.findFirst({
@@ -393,5 +442,5 @@ export class FileService extends BaseWorker implements OnModuleInit {
       this.logger.error(e.message, e);
       this.handleError(e, { user, organization: org, openai_file_id: openAIFileId });
     }
-  }
+  }*/
 }

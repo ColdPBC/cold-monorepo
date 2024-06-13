@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Req, UseFilters, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Req, UseFilters, UseGuards } from '@nestjs/common';
 import { OrganizationComplianceService } from './organization_compliance.service';
 import { coldAdminOnly, allRoles, HttpExceptionFilter, JwtAuthGuard, Roles, RolesGuard } from '@coldpbc/nest';
 import { ApiTags } from '@nestjs/swagger';
@@ -6,38 +6,44 @@ import { organization_compliance } from '@prisma/client';
 
 @UseGuards(JwtAuthGuard, RolesGuard)
 @UseFilters(new HttpExceptionFilter(OrganizationComplianceController.name))
-@ApiTags('Organization Compliance')
-@Controller('organizations/:orgId/compliance/sets')
+@ApiTags('Compliance')
+@Controller('compliance/:name/organizations')
 export class OrganizationComplianceController {
   constructor(readonly organizationComplianceService: OrganizationComplianceService) {}
 
-  @Post(':name')
-  @Roles(...coldAdminOnly)
-  create(@Param('orgId') orgId: string, @Param('name') name: string, @Body() orgComplianceData: organization_compliance, @Req() req: any) {
-    return this.organizationComplianceService.create(orgId, name, orgComplianceData, req);
-  }
-
   @Get()
-  @Roles(...allRoles)
-  findAll(@Param('orgId') orgId: string, @Req() req: any) {
-    return this.organizationComplianceService.findAll(orgId, req);
-  }
-
-  @Get(':name')
-  @Roles(...allRoles)
-  findOne(@Param('orgId') orgId: string, @Param('name') name: string, @Req() req: any) {
-    return this.organizationComplianceService.findOneByName(orgId, name, req);
-  }
-
-  @Patch(':name')
   @Roles(...coldAdminOnly)
-  update(@Param('orgId') orgId: string, @Param('name') name: string, @Body() orgComplianceData: organization_compliance, @Req() req: any) {
-    return this.organizationComplianceService.update(orgId, name, orgComplianceData, req);
+  findAll(@Param('name') name: string, @Req() req: any) {
+    return this.organizationComplianceService.findAll(name, req);
   }
 
-  @Delete(':name')
+  @Post(':orgId')
+  @Roles(...allRoles)
+  create(@Param('name') name: string, @Param('orgId') orgId: string, @Body() orgComplianceData: organization_compliance, @Req() req: any) {
+    return this.organizationComplianceService.create(name, orgComplianceData, req);
+  }
+
+  @Put(':orgId/activate')
+  @Roles(...allRoles)
+  activateAi(@Param('name') name: string, @Param('orgId') orgId: string, @Req() req: any) {
+    return this.organizationComplianceService.activateAi(orgId, name, req);
+  }
+
+  @Get(':orgId')
   @Roles(...coldAdminOnly)
-  remove(@Param('orgId') orgId: string, @Param('name') name: string, @Req() req: any) {
-    return this.organizationComplianceService.remove(orgId, name, req);
+  findOne(@Param('name') name: string, @Param('orgId') orgId: string, @Req() req: any) {
+    return this.organizationComplianceService.findOneByName(name, req);
+  }
+
+  @Patch(':orgId')
+  @Roles(...coldAdminOnly)
+  update(@Param('name') name: string, @Param('orgId') orgId: string, @Body() orgComplianceData: organization_compliance, @Req() req: any) {
+    return this.organizationComplianceService.update(name, orgComplianceData, req);
+  }
+
+  @Delete(':orgId')
+  @Roles(...coldAdminOnly)
+  remove(@Param('name') name: string, @Param('orgId') orgId: string, @Req() req: any) {
+    return this.organizationComplianceService.remove(name, req);
   }
 }

@@ -1,6 +1,6 @@
 import { OnQueueActive, OnQueueFailed, Process, Processor } from '@nestjs/bull';
 import { Job } from 'bull';
-import { BaseWorker, PrismaService } from '@coldpbc/nest';
+import { BaseWorker, Cuid2Generator, GuidPrefixes, PrismaService } from '@coldpbc/nest';
 import { ClimatiqService } from '../climatiq/climatiq.service';
 import { emissions } from '../../../../libs/nest/src/validation/generated/modelSchema/emissionsSchema';
 
@@ -29,6 +29,7 @@ export class OutboundQueueProcessor extends BaseWorker {
     const emission = await this.climatiq.getEmissionEstimate(payload);
 
     const insertData: emissions = {
+      id: new Cuid2Generator(GuidPrefixes.EmissionSource).scopedId,
       co2e: emission['co2e'],
       co2e_calculation_origin: emission['co2e_calculation_origin'],
       co2e_unit: emission['co2e_unit'],
@@ -42,11 +43,13 @@ export class OutboundQueueProcessor extends BaseWorker {
       name: emission.emission_factor['name'],
       category: emission.emission_factor['category'],
       region: emission.emission_factor['region'],
+      deleted: false,
     };
 
     await this.prisma.emissions.create({
-      // @ts-expect-error - Prisma type definitions are not up to date
-      data: insertData,
+      data: {
+        ...insertData,
+      },
     });
     this.logger.info(`Emission estimate: ${JSON.stringify(emission)}`, {
       name: job.name,

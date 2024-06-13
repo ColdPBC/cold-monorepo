@@ -30,6 +30,7 @@ export class ClimatiqService extends BaseWorker {
       },
     };
 
+    // @ts-expect-error - Prisma type definitions are not up to date
     this.axiosConfig.headers.Authorization = `Bearer ${this.config.getOrThrow('CLIMATIQ_API_KEY')}`;
 
     this.energyPayload = {
@@ -47,6 +48,10 @@ export class ClimatiqService extends BaseWorker {
 
   async getEmissionEstimate(data: EnergyPayload) {
     const response = await this.axios.post('https://beta4.api.climatiq.io/estimate', data, this.axiosConfig).toPromise();
+
+    if (!response?.data) {
+      return null;
+    }
 
     const emission = response.data;
 

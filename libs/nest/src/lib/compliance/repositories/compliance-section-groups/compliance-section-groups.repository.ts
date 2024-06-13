@@ -1,10 +1,11 @@
 import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { BaseWorker } from '../../../worker';
 import { PrismaService } from '../../../prisma';
-import { ComplianceSectionsExtendedDto, ComplianceSectionsRepository } from '../compliance-sections';
+import { ComplianceSectionsRepository } from '../compliance-sections';
 import { Cuid2Generator, GuidPrefixes } from '../../../utility';
 import { compliance_section_groups, compliance_section_groupsSchema } from '../../../../validation/generated/modelSchema/compliance_section_groupsSchema';
 import { ComplianceSectionGroupsExtendedDto } from './dto';
+import { FilteringService } from '../../filtering';
 
 /**
  * Represents a repository for accessing compliance section groups data.
@@ -13,7 +14,7 @@ import { ComplianceSectionGroupsExtendedDto } from './dto';
  */
 @Injectable()
 export class ComplianceSectionGroupsRepository extends BaseWorker {
-  constructor(readonly prisma: PrismaService, readonly complianceSectionsRepository: ComplianceSectionsRepository) {
+  constructor(readonly prisma: PrismaService, readonly filterService: FilteringService, readonly complianceSectionsRepository: ComplianceSectionsRepository) {
     super(ComplianceSectionGroupsRepository.name);
   }
 
@@ -103,7 +104,7 @@ export class ComplianceSectionGroupsRepository extends BaseWorker {
         if (groupList.length < 1) {
           return [];
         }
-        return await this.filterSectionGroups(groupList);
+        return await this.filterService.filterSectionGroups(groupList);
       }
 
       return groupList;
@@ -161,7 +162,7 @@ export class ComplianceSectionGroupsRepository extends BaseWorker {
       }) as unknown as ComplianceSectionGroupsExtendedDto;
 
       if (filter) {
-        sectionGroup.compliance_sections = await this.filterSectionGroupSections(sectionGroup);
+        sectionGroup.compliance_sections = await this.filterService.filterSectionGroupSections(sectionGroup);
         return sectionGroup;
       }
 
@@ -256,7 +257,7 @@ export class ComplianceSectionGroupsRepository extends BaseWorker {
       }) as any;
 
       if (filter) {
-        orgCompliance.compliance_definition.compliance_section_groups = this.filterSectionGroups(orgCompliance.compliance_definition.compliance_section_groups);
+        orgCompliance.compliance_definition.compliance_section_groups = this.filterService.filterSectionGroups(orgCompliance.compliance_definition.compliance_section_groups);
       }
 
       return orgCompliance;
@@ -301,50 +302,6 @@ export class ComplianceSectionGroupsRepository extends BaseWorker {
       return updated;
     } catch (error) {
       this.logger.error(`Error updating section group`, { where, error });
-      throw error;
-    }
-  }
-
-  // PRIVATE METHODS //
-
-  /**
-   * Filters section groups by applying a filtering function to each group's compliance_sections.
-   *
-   * @param {any[]} sectionGroups - An array of section groups to filter.
-   *
-   * @private
-   *
-   * @return {Promise<void>} - A promise that resolves when the filtering is complete.
-   */
-  private async filterSectionGroups(sectionGroups: ComplianceSectionGroupsExtendedDto[]) {
-    try {
-      for (const group of sectionGroups) {
-        group.compliance_sections = (await this.filterSectionGroupSections(group)) as ComplianceSectionsExtendedDto[];
-      }
-
-      return sectionGroups;
-    } catch (error) {
-      this.logger.error(`Error filtering section groups`, { sectionGroups, error });
-      throw error;
-    }
-  }
-
-  /**
-   * Filters the compliance sections within a section group.
-   *
-   * @param {any} sectionGroup - The section group containing the compliance sections.
-   *
-   * @return {Promise<any>} A promise that resolves to the filtered compliance sections.
-   *
-   * @private
-   */
-  private async filterSectionGroupSections(sectionGroup: ComplianceSectionGroupsExtendedDto): Promise<ComplianceSectionsExtendedDto[]> {
-    try {
-      if (!sectionGroup.compliance_sections) return [];
-
-      return this.complianceSectionsRepository.filterSections(sectionGroup.compliance_sections);
-    } catch (error) {
-      this.logger.error(`Error filtering section group sections`, { sectionGroup, error });
       throw error;
     }
   }

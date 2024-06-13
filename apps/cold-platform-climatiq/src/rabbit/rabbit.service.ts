@@ -1,9 +1,9 @@
-import {Injectable} from '@nestjs/common';
-import {BackOffStrategies, BaseWorker, RabbitMessagePayload} from '@coldpbc/nest';
-import {Nack, RabbitRPC, RabbitSubscribe} from '@golevelup/nestjs-rabbitmq';
-import {InjectQueue} from '@nestjs/bull';
-import {Queue} from 'bull';
-import {ClimatiqService} from '../climatiq/climatiq.service';
+import { Injectable } from '@nestjs/common';
+import { BackOffStrategies, BaseWorker, RabbitMessagePayload } from '@coldpbc/nest';
+import { Nack, RabbitRPC, RabbitSubscribe } from '@golevelup/nestjs-rabbitmq';
+import { InjectQueue } from '@nestjs/bull';
+import { Queue } from 'bull';
+import { ClimatiqService } from '../climatiq/climatiq.service';
 
 /**
  * RabbitService class.
@@ -76,6 +76,7 @@ export class RabbitService extends BaseWorker {
         from: msg.from,
         data: job.data,
       });
+      return job;
     } catch (err) {
       this.logger.error(err.message, { ...msg });
       return new Nack(true);

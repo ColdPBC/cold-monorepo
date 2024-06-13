@@ -1,4 +1,4 @@
-import { Cuid2Generator } from '../../src/lib/utility/cuid2-generator.service';
+import { Cuid2Generator, GuidPrefixes } from '../../src/lib/utility';
 import { PrismaClient } from '@prisma/client';
 import { get } from 'lodash';
 
@@ -54,7 +54,7 @@ export async function buildQuestionDependencyChains() {
           compliance_question_id: question.id,
         },
         create: {
-          id: new Cuid2Generator(`cdc`).scopedId,
+          id: new Cuid2Generator(GuidPrefixes.ComplianceDependencyChain).scopedId,
           dependency_chain: chains,
           compliance_question_id: question.id,
           compliance_question_key: question.key,

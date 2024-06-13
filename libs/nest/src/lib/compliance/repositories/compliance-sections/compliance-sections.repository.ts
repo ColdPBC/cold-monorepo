@@ -1,14 +1,12 @@
 import { Injectable, OnModuleInit, UnprocessableEntityException } from '@nestjs/common';
 import { PrismaService } from '../../../prisma';
 import { MqttService } from '../../../mqtt';
-import { filter, get } from 'lodash';
-import { compliance_sections } from '@prisma/client';
-import { Dependency } from './compliance-sections.types';
 import { BaseWorker } from '../../../worker';
 import { IAuthenticatedUser } from '../../../primitives';
 import { Cuid2Generator, GuidPrefixes } from '../../../utility';
 import { ComplianceSectionsExtendedDto } from './dto';
 import compliance_sectionsSchema from 'libs/nest/src/validation/generated/modelSchema/compliance_sectionsSchema';
+import { FilteringService } from '../../filtering';
 
 /**
  * ComplianceSectionsRepository class is responsible for managing the compliance sections data.
@@ -18,7 +16,7 @@ import compliance_sectionsSchema from 'libs/nest/src/validation/generated/modelS
  */
 @Injectable()
 export class ComplianceSectionsRepository extends BaseWorker implements OnModuleInit {
-  constructor(private readonly prisma: PrismaService, readonly mqtt: MqttService) {
+  constructor(private readonly prisma: PrismaService, readonly mqtt: MqttService, readonly filterService: FilteringService) {
     super(ComplianceSectionsRepository.name);
   }
 
@@ -43,7 +41,7 @@ export class ComplianceSectionsRepository extends BaseWorker implements OnModule
     questions?: boolean,
   ): Promise<ComplianceSectionsExtendedDto> {
     try {
-      const sections = (await this.prisma.extended.compliance_sections.findUnique({
+      const section = (await this.prisma.extended.compliance_sections.findUnique({
         where: {
           compliance_section_group_id: groupId,
           compDefNameSectionKey: {
@@ -87,13 +85,14 @@ export class ComplianceSectionsRepository extends BaseWorker implements OnModule
       })) as ComplianceSectionsExtendedDto;
 
       if (filter) {
-        const filtered = await this.filterSections([sections])[0];
-        this.logger.log(`filtered sections for ${compliance_definition_name}`, { compliance_definition_name, sections: filtered, filter, questions, user });
-        return filtered;
+        const filtered = await this.filterService.filterSections([section]);
+        this.logger.log(`filtered sections for ${compliance_definition_name}`, { compliance_definition_name, section: filtered[0], filter, questions, user });
+        return filtered[0];
       }
 
-      this.logger.log(`retrieved sections for ${compliance_definition_name}`, { compliance_definition_name, sections, filter, questions, user });
-      return sections;
+      this.logger.log(`retrieved sections for ${compliance_definition_name}`, { compliance_definition_name, section, filter, questions, user });
+
+      return section;
     } catch (error) {
       this.logger.error(`Error retrieving section for ${compliance_definition_name}`, { compliance_definition_name, error, user });
       throw error;
@@ -109,7 +108,7 @@ export class ComplianceSectionsRepository extends BaseWorker implements OnModule
     questions?: boolean,
   ): Promise<ComplianceSectionsExtendedDto> {
     try {
-      const sections = (await this.prisma.extended.compliance_sections.findUnique({
+      const section = (await this.prisma.extended.compliance_sections.findUnique({
         where: {
           compliance_section_group_id: groupId,
           compliance_definition_name: compliance_definition_name,
@@ -151,19 +150,20 @@ export class ComplianceSectionsRepository extends BaseWorker implements OnModule
       })) as ComplianceSectionsExtendedDto;
 
       if (filter) {
-        return await this.filterSections([sections])[0];
+        const filtered = await this.filterService.filterSections([section]);
+        return filtered[0];
       }
 
       this.logger.log(`retrieved sections for ${compliance_definition_name}`, {
         compliance_definition_name,
         compliance_section_group_id: groupId,
-        sections,
+        section,
         filter,
         questions,
         user,
       });
 
-      return sections;
+      return section;
     } catch (error) {
       this.logger.error(`Error retrieving section for ${compliance_definition_name}`, { compliance_definition_name, error, user });
       throw error;
@@ -293,62 +293,6 @@ export class ComplianceSectionsRepository extends BaseWorker implements OnModule
   // PRIVATE METHODS //
 
   /**
-   * Filter questions based on their dependencies.
-   *
-   * @param {Section[]} sections - An array of questions to filter.
-   * @return {Promise<Question[]>} The filtered array of questions.
-   */
-  async filterSections(sections: ComplianceSectionsExtendedDto[]): Promise<ComplianceSectionsExtendedDto[]> {
-    /**
-     * Filter questions based on their dependencies.
-     */
-    const [response] = (await Promise.all([
-      filter(sections, (section: compliance_sections) => {
-        const dependencies = get(section, 'compliance_section_dependency_chains.dependency_chain', []) as Dependency[];
-        /**
-         * If the question has no dependencies, it is included in the response.
-         */
-        if (dependencies.length < 1) {
-          return true;
-        }
-
-        for (const dependency of dependencies) {
-          const dependentQuestion = this.prisma.extended.organization_compliance_responses.findUnique({
-            where: {
-              id: dependency.dependent_question_id,
-            },
-            select: {
-              value: true,
-            },
-          }) as any;
-
-          /**
-           * If the dependent question does not exist, the dependency is not met.
-           */
-          if (!dependentQuestion) {
-            return false;
-          }
-
-          /**
-           * If the dependent question has a value that is not in the dependent_question_values array, the dependency is not met.
-           */
-          const dependency_met = dependency.dependent_question_values && dependency.dependent_question_values.includes(dependentQuestion.value);
-          if (!dependency_met) {
-            return false;
-          }
-        }
-
-        /**
-         * If all dependencies are met, the question is included in the response.
-         */
-        return true;
-      }),
-    ])) as ComplianceSectionsExtendedDto[][];
-
-    return response;
-  }
-
-  /**
    * Retrieves a list of sections based on the specified condition.
    *
    * @param {object} where - The condition to filter sections.
@@ -399,7 +343,7 @@ export class ComplianceSectionsRepository extends BaseWorker implements OnModule
 
     this.logger.log(`retrieved sections for ${where.compliance_definition_name}`, { where, sections, filter, questions, user });
     if (filter) {
-      return await this.filterSections(sections);
+      return await this.filterService.filterSections(sections);
     }
 
     return sections;

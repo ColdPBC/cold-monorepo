@@ -32,8 +32,30 @@ export class Tools extends BaseWorker {
                 description: 'a paragraph describing in detail the information you would need to answer the question.',
               },
               reference: {
-                type: 'object',
-                description: 'a JSON object that describes the source material, if any, that you relied upon to answer the question.',
+                type: 'array',
+                description:
+                  'an array of JSON objects each representing a file relied upon for answering the question.  Each object must include the file_name, file_id, vector_store_id, and snippet of the source material that you relied upon to answer the question.',
+                items: {
+                  type: 'object',
+                  properties: {
+                    file_name: {
+                      type: 'string',
+                      description: 'the name of a file used to answer the question',
+                    },
+                    file_id: {
+                      type: 'string',
+                      description: 'the id of a file used to answer the question',
+                    },
+                    vector_store_id: {
+                      type: 'string',
+                      description: 'the id of the vector store in which the file was found',
+                    },
+                    snippet: {
+                      type: 'string',
+                      description: 'the block of source material from the file that was used to answer the question',
+                    },
+                  },
+                },
               },
             },
           },
@@ -73,11 +95,29 @@ export class Tools extends BaseWorker {
               },
               reference: {
                 type: 'array',
-                items: {
-                  type: 'string',
-                },
                 description:
-                  'a string array that that lists the source material that you relied upon to answer the question.  If the answer was sourced from one of the files supplied to you, the array should contain the file name.  If the answer was sourced from web content, the array should contain the URL of the source material.',
+                  'an array of JSON objects each representing a file relied upon for answering the question.  Each object must include the file_name, file_id, vector_store_id, and snippet of the source material that you relied upon to answer the question.',
+                items: {
+                  type: 'object',
+                  properties: {
+                    file_name: {
+                      type: 'string',
+                      description: 'the name of a file used to answer the question',
+                    },
+                    file_id: {
+                      type: 'string',
+                      description: 'the id of a file used to answer the question',
+                    },
+                    vector_store_id: {
+                      type: 'string',
+                      description: 'the id of the vector store in which the file was found',
+                    },
+                    snippet: {
+                      type: 'string',
+                      description: 'the block of source material from the file that was used to answer the question',
+                    },
+                  },
+                },
               },
             },
           },

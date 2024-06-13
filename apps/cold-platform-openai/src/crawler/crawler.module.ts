@@ -24,7 +24,7 @@ export class CrawlerModule {
       ],
       controllers: [CrawlerController],
       providers: [CrawlerService, CrawlerConsumer, PineconeService],
-      exports: [],
+      exports: [CrawlerConsumer, CrawlerService, PineconeService],
     };
   }
 }

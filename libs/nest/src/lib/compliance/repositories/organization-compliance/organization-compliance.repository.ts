@@ -3,6 +3,7 @@ import { BaseWorker } from '../../../worker';
 import { Cuid2Generator, GuidPrefixes } from '../../../utility';
 import { PrismaService } from '../../../prisma';
 import { IAuthenticatedUser } from '../../../primitives';
+import { organizations } from '@prisma/client';
 
 @Injectable()
 export class OrganizationComplianceRepository extends BaseWorker {
@@ -13,47 +14,96 @@ export class OrganizationComplianceRepository extends BaseWorker {
   /**
    * Get all organization compliance definitions
    */
-  async getOrgComplianceDefinitions(orgId: string, user: IAuthenticatedUser) {
+  async getOrgComplianceDefinitions(name: string, user: IAuthenticatedUser, organization: organizations) {
     try {
       return this.prisma.extended.organization_compliance.findMany({
-        where: { organization_id: orgId },
+        where: { compliance_definition_name: name },
         include: {
           compliance_definition: true,
         },
       });
     } catch (error) {
-      this.logger.error(`Error getting compliance definitions`, { organization: { id: orgId }, error, user });
+      this.logger.error(`Error getting compliance definitions`, { organization, error, user });
       throw error;
     }
   }
 
-  async getOrgComplianceDefinitionById(orgId: string, id: string, user: IAuthenticatedUser) {
+  async getOrgComplianceByName(name: string, user: IAuthenticatedUser, organization: organizations) {
     try {
-      return this.prisma.extended.organization_compliance.findUnique({
+      const compliance: any = await this.prisma.organization_compliance.findUnique({
         where: {
-          organization_id: orgId,
-          id,
+          orgIdCompNameKey: {
+            organization_id: organization.id,
+            compliance_definition_name: name,
+          },
+        },
+        select: {
+          id: true,
+          compliance_definition_name: true,
+          organization: true,
+          compliance_definition: {
+            select: {
+              id: true,
+              name: true,
+              title: true,
+              version: true,
+              compliance_section_groups: {
+                select: {
+                  id: true,
+                  title: true,
+                  order: true,
+                  compliance_sections: {
+                    select: {
+                      id: true,
+                      key: true,
+                      title: true,
+                      order: true,
+                      dependency_expression: true,
+                      compliance_questions: {
+                        select: {
+                          id: true,
+                          key: true,
+                          order: true,
+                          prompt: true,
+                          component: true,
+                          tooltip: true,
+                          placeholder: true,
+                          rubric: true,
+                          options: true,
+                          coresponding_question: true,
+                          dependency_expression: true,
+                          question_summary: true,
+                          additional_context: true,
+                          compliance_section_id: true,
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
         },
       });
+
+      return compliance;
     } catch (error) {
-      this.logger.error(`Error getting compliance definition`, { id, error, user });
+      this.logger.error(`Error getting compliance definition`, { organization, compliance: { name }, error, user });
       throw error;
     }
   }
-
-  async getOrgComplianceDefinitionByName(orgId: string, name: string, user: IAuthenticatedUser) {
+  async getOrgComplianceDefinitionByName(name: string, user: IAuthenticatedUser, organization: organizations) {
     try {
       const compliance = await this.prisma.extended.organization_compliance.findUnique({
         where: {
           orgIdCompNameKey: {
             compliance_definition_name: name,
-            organization_id: orgId,
+            organization_id: organization.id,
           },
         },
         select: {
           id: true,
           organization_id: true,
-          compliance_definition_name: true,
           compliance_definition: {
             select: {
               name: true,
@@ -99,35 +149,35 @@ export class OrganizationComplianceRepository extends BaseWorker {
       });
 
       if (!compliance) {
-        throw new NotFoundException({ organization: { id: orgId }, compliance, user }, `Compliance definition not found`);
+        throw new NotFoundException({ organization, compliance, user }, `Compliance definition not found`);
       }
 
-      this.logger.log(`Got compliance definition`, { organization: { id: orgId }, compliance, user });
+      this.logger.log(`Got compliance definition`, { organization, compliance, user });
 
       return compliance;
     } catch (error) {
-      this.logger.error(`Error getting compliance definition`, { organization: { id: orgId }, compliance: { name }, error, user });
+      this.logger.error(`Error getting compliance definition`, { organization, compliance: { name }, error, user });
       throw error;
     }
   }
 
-  async createOrgCompliance(name: string, orgId: string, data: any, user: IAuthenticatedUser) {
+  async createOrgCompliance(name: string, data: any, user: IAuthenticatedUser, organization: organizations) {
     try {
       data.compliance_definition_name = name;
 
-      data.organization_id = orgId;
+      data.organization_id = organization.id;
 
       return this.prisma.extended.organization_compliance.create({
         id: new Cuid2Generator(GuidPrefixes.OrganizationCompliance).scopedId,
         ...data,
       });
     } catch (error) {
-      this.logger.error(`Error creating compliance definition`, { name, organization: { id: orgId }, ...data, error, user });
+      this.logger.error(`Error creating compliance definition`, { name, organization, ...data, error, user });
       throw error;
     }
   }
 
-  async updateOrgComplianceDefinition(name: string, orgId: string, data: any, user: IAuthenticatedUser) {
+  async updateOrgComplianceDefinition(name: string, data: any, user: IAuthenticatedUser, organization: organizations) {
     try {
       const userResponse = await this.prisma.extended.organization_compliance.update({
         where: {
@@ -141,23 +191,23 @@ export class OrganizationComplianceRepository extends BaseWorker {
 
       return userResponse;
     } catch (error) {
-      this.logger.error(`Error updating compliance definition`, { name, organization: { id: orgId }, ...data, error, user });
+      this.logger.error(`Error updating compliance definition`, { name, organization, ...data, error, user });
       throw error;
     }
   }
 
-  async deleteOrgComplianceDefinition(name: string, orgId: string, user: IAuthenticatedUser) {
+  async deleteOrgComplianceDefinition(name: string, user: IAuthenticatedUser, organization: organizations) {
     try {
       return this.prisma.extended.organization_compliance.delete({
         where: {
           orgIdCompNameKey: {
             compliance_definition_name: name,
-            organization_id: orgId,
+            organization_id: organization.id,
           },
         },
       });
     } catch (error) {
-      this.logger.error(`Error deleting compliance definition`, { name, organization: { id: orgId }, error, user });
+      this.logger.error(`Error deleting compliance definition`, { name, organization, error, user });
       throw error;
     }
   }

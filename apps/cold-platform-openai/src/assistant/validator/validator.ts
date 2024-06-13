@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { BaseWorker } from '@coldpbc/nest';
+import { UnprocessableEntityException } from '@nestjs/common';
 
 export type OpenAIResponseType = z.infer<typeof OpenAIResponse.ai_responseSchema>;
 export type OpenAIAnswerType = z.infer<typeof OpenAIResponse.answerSchema>;
@@ -36,7 +37,7 @@ export class OpenAIResponse extends BaseWorker {
     }
 
     if (!this.isValid(response)) {
-      throw new Error('Invalid response');
+      throw new UnprocessableEntityException({ ...response }, 'Invalid response');
     } else {
       return OpenAIResponse.validate(response)['data'];
     }

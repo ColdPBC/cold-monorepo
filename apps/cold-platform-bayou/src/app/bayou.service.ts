@@ -1,5 +1,5 @@
 import { ConflictException, Injectable, OnModuleInit, UnprocessableEntityException } from '@nestjs/common';
-import { BaseWorker, ColdRabbitService, Cuid2Generator, IAuthenticatedUser, Organizations, PrismaService } from '@coldpbc/nest';
+import { BaseWorker, ColdRabbitService, Cuid2Generator, IAuthenticatedUser, Organizations, PrismaService, GuidPrefixes } from '@coldpbc/nest';
 import { InjectQueue } from '@nestjs/bull';
 import { Queue } from 'bull';
 import { get, set } from 'lodash';
@@ -109,7 +109,7 @@ export class BayouService extends BaseWorker implements OnModuleInit {
       }
       const created = await this.prisma.utility_bills.create({
         data: {
-          id: new Cuid2Generator().setPrefix('bill').scopedId,
+          id: new Cuid2Generator(GuidPrefixes.UtilityBill).scopedId,
           organization_id: integration.organization_id,
           facility_id: payload.object['customer_external_id'],
           integration_id: integration.id,

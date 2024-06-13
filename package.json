@@ -1,7 +1,7 @@
 {
   "name": "cold-monorepo-nx",
   "packageManager": "yarn@4.1.1",
-  "version": "1.232.0",
+  "version": "1.236.0-cold-803.8",
   "license": "MIT",
   "engines": {
     "node": ">=20.9.0",
@@ -160,7 +160,7 @@
     "numeral": "^2.0.6",
     "nx": "^17.1.2",
     "nx-cloud": "16.5.2",
-    "openai": "^4.24.7",
+    "openai": "^4.48.3",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.1",
     "pdf-parse": "^1.1.1",
