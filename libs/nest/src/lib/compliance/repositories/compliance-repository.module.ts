@@ -1,4 +1,4 @@
-import { Global, Module } from '@nestjs/common';
+import { Global, Module, forwardRef } from '@nestjs/common';
 import { PrismaModule } from '../../prisma';
 
 import { CacheService, ColdCacheModule } from '../../cache';
@@ -16,7 +16,7 @@ import { ComplianceQuestionBookmarksRepository } from './compliance-question-boo
 
 @Global()
 @Module({
-  imports: [PrismaModule, ColdCacheModule.forRootAsync(), ScoringModule, FilteringModule],
+  imports: [PrismaModule, ColdCacheModule.forRootAsync(), forwardRef(() => ScoringModule), forwardRef(() => FilteringModule)],
   providers: [
     ComplianceSectionsRepository,
     ComplianceSectionGroupsRepository,
