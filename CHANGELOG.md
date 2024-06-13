@@ -1,3 +1,10 @@
+# [1.236.0-cold-803.7](https://github.com/ColdPBC/cold-monorepo/compare/v1.236.0-cold-803.6...v1.236.0-cold-803.7) (2024-06-13)
+
+
+### Features
+
+* Added component attribute to compliance responses repository ([e704fe8](https://github.com/ColdPBC/cold-monorepo/commit/e704fe806f362bd839e29d886d9a077a5294f93f))
+
 # [1.236.0-cold-803.6](https://github.com/ColdPBC/cold-monorepo/compare/v1.236.0-cold-803.5...v1.236.0-cold-803.6) (2024-06-13)
 
 
