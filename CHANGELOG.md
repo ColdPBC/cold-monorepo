@@ -1,3 +1,10 @@
+# [1.236.0-cold-803.10](https://github.com/ColdPBC/cold-monorepo/compare/v1.236.0-cold-803.9...v1.236.0-cold-803.10) (2024-06-13)
+
+
+### Features
+
+* updated function name in organization_compliance_responses.service ([b6c1c77](https://github.com/ColdPBC/cold-monorepo/commit/b6c1c77af0d5134368949b908d2c52755d0a7bf5))
+
 # [1.236.0-cold-803.9](https://github.com/ColdPBC/cold-monorepo/compare/v1.236.0-cold-803.8...v1.236.0-cold-803.9) (2024-06-13)
 
 
