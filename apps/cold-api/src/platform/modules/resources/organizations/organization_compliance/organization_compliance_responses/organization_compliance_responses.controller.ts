@@ -108,30 +108,49 @@ export class OrganizationComplianceResponsesController {
     example: 'cs_', // Example value
   })
   @Roles(...coldAdminOnly)
-  findAllBySectionId(
+  findQuestionsBySectionId(
     @Param('name') name: string,
-    @Param('sgId') csgId: string,
-    @Param('sId') csId: string,
+    @Param('sgId') sgId: string,
+    @Param('sId') sId: string,
     @Req() req: any,
     @Query('take') take: number,
     @Query('skip') skip: number,
-    @Query('references', new ParseBoolPipe({ optional: true })) references: boolean,
-    @Query('responses', new ParseBoolPipe({ optional: true })) responses: boolean,
+    @Query('responses', new ParseBoolPipe({ optional: true })) responses: boolean = true,
   ) {
-    return this.organizationComplianceResponsesService.findAllBySectionId(name, csgId, csId, req, { references, responses, take, skip });
+    return this.organizationComplianceResponsesService.getQuestionsBySectionId(name, sgId, sId, req, { responses, take, skip });
+  }
+
+  @Get('section_groups/:sgId/sections/:sId/questions/:qId/responses')
+  @ApiParam({
+    name: 'sgId',
+    required: true,
+    description: 'Section Group Id',
+    type: 'string',
+    example: 'csg_', // Example value
+  })
+  @ApiParam({
+    name: 'sId',
+    required: true,
+    description: 'Section Id',
+    type: 'string',
+    example: 'cs_', // Example value
+  })
+  @ApiParam({
+    name: 'qId',
+    required: true,
+    description: 'Question Id',
+    type: 'string',
+    example: 'cs_', // Example value
+  })
+  @Roles(...coldAdminOnly)
+  getResponseDetailsById(@Param('name') name: string, @Param('sgId') sgId: string, @Param('sId') sId: string, @Param('qId') qId: string, @Req() req: any) {
+    return this.organizationComplianceResponsesService.getQuestionResponseById(name, sgId, sId, qId, req);
   }
 
   @Get('responses')
   @Roles(...allRoles)
-  findAllComplianceResponses(
-    @Param('name') name: string,
-    @Req() req: any,
-    @Query('take') take: number,
-    @Query('skip') skip: number,
-    @Query('references', new ParseBoolPipe({ optional: true })) references: boolean,
-    @Query('responses', new ParseBoolPipe({ optional: true })) responses: boolean,
-  ) {
-    return this.organizationComplianceResponsesService.findAllByCompliance(req, name, { references, responses, take, skip });
+  findAllComplianceResponses(@Param('name') name: string, @Req() req: any, @Query('take') take: number, @Query('skip') skip: number) {
+    return this.organizationComplianceResponsesService.findAllByCompliance(name, req, { take, skip });
   }
 
   @Get('responses/:id')
@@ -143,14 +162,8 @@ export class OrganizationComplianceResponsesController {
     example: 'cr_', // Example value
   })
   @Roles(...coldAdminOnly)
-  findById(
-    @Param('name') name: string,
-    @Param('id') id: string,
-    @Req() req: any,
-    @Query('references', new ParseBoolPipe({ optional: true })) references: boolean,
-    @Query('responses', new ParseBoolPipe({ optional: true })) responses: boolean,
-  ) {
-    return this.organizationComplianceResponsesService.findOne(name, +id, req, { references, responses });
+  findById(@Param('name') name: string, @Param('id') id: number, @Req() req: any) {
+    return this.organizationComplianceResponsesService.findOne(name, +id, req);
   }
 
   @Delete('responses/:id')

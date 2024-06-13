@@ -188,7 +188,9 @@ export class ScoringService extends BaseWorker {
       question.max_score = question.rubric?.max_score || this.getTopScore(question.rubric);
     }
 
-    question.score_map = Object.assign({}, question.rubric?.score_map);
+    if (question.rubric?.score_map) {
+      question.component_score_map = Object.assign({}, question.rubric?.score_map);
+    }
 
     delete question.rubric;
 

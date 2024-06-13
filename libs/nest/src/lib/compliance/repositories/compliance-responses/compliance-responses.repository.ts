@@ -471,6 +471,110 @@ export class ComplianceResponsesRepository extends BaseWorker {
         throw new NotFoundException(`No Compliance Found For ${org.name}`);
       }
 
+      return this.scoringService.scoreComplianceResponse(response.organization_compliance[0].compliance_definition, org, user, options);
+    } catch (error) {
+      this.logger.error(`Error getting responses for organization: ${org.name}: ${compliance_definition_name}`, {
+        user,
+        error,
+      });
+      throw error;
+    }
+  }
+
+  async getScoredComplianceQuestionById(
+    org: organizations,
+    compliance_definition_name: string,
+    sgId: string,
+    sId: string,
+    qId: string,
+    user: IAuthenticatedUser,
+    options?: ComplianceResponseOptions,
+  ) {
+    try {
+      const response = await this.prisma.extended.organizations.findUnique({
+        where: {
+          id: org.id,
+        },
+        select: {
+          id: true,
+          name: true,
+          organization_compliance: {
+            where: { compliance_definition_name },
+            select: {
+              compliance_definition: {
+                select: {
+                  name: true,
+                  compliance_section_groups: {
+                    where: { id: sgId },
+                    select: {
+                      id: true,
+                      title: true,
+                      order: true,
+                      compliance_sections: {
+                        where: {
+                          id: sId,
+                        },
+                        select: {
+                          id: true,
+                          key: true,
+                          title: true,
+                          order: true,
+                          compliance_section_dependency_chains: true,
+                          compliance_questions: {
+                            where: {
+                              id: qId,
+                            },
+                            select: {
+                              id: true,
+                              key: true,
+                              order: true,
+                              component: true,
+                              tooltip: true,
+                              placeholder: true,
+                              rubric: true,
+                              options: true,
+                              additional_context: true,
+                              compliance_responses: {
+                                where: {
+                                  organization_id: org.id,
+                                },
+                                select: {
+                                  id: true,
+                                  org_response: {
+                                    select: {
+                                      id: true,
+                                      value: true,
+                                      deleted: true,
+                                    },
+                                  },
+                                  ai_response: {
+                                    select: {
+                                      id: true,
+                                      answer: true,
+                                      justification: true,
+                                      references: true,
+                                    },
+                                  },
+                                  deleted: true,
+                                },
+                              },
+                            },
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      });
+
+      if (!response) {
+        throw new NotFoundException(`No Compliance Found For ${org.name}`);
+      }
+
       return this.scoringService.scoreComplianceResponse(response.organization_compliance[0].compliance_definition, org, user);
     } catch (error) {
       this.logger.error(`Error getting responses for organization: ${org.name}: ${compliance_definition_name}`, {
