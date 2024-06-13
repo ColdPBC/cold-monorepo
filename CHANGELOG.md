@@ -1,3 +1,13 @@
+# [1.236.0-cold-803.6](https://github.com/ColdPBC/cold-monorepo/compare/v1.236.0-cold-803.5...v1.236.0-cold-803.6) (2024-06-13)
+
+
+### Features
+
+* add 'bookmarks' field to interface, update scoringService calls ([3a347a1](https://github.com/ColdPBC/cold-monorepo/commit/3a347a127c5fcf6471d0d864874fcda92daac83b))
+* added `forwardRef` in scoring.module.ts ([24b09a4](https://github.com/ColdPBC/cold-monorepo/commit/24b09a4424edb13b6391ae857a91bc43c1981eb3))
+* enhance scoring service in the compliance module ([e44bdd1](https://github.com/ColdPBC/cold-monorepo/commit/e44bdd11c9b321329f0e4249b652864f8a1c0561))
+* Update examples and sections in openapi JSON schema ([f903678](https://github.com/ColdPBC/cold-monorepo/commit/f903678318d0992864c313e53631eb9d0e02f457))
+
 # [1.236.0-cold-803.5](https://github.com/ColdPBC/cold-monorepo/compare/v1.236.0-cold-803.4...v1.236.0-cold-803.5) (2024-06-12)
 
 
