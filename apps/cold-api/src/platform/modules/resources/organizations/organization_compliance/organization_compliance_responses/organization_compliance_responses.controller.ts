@@ -108,7 +108,7 @@ export class OrganizationComplianceResponsesController {
     example: 'cs_', // Example value
   })
   @Roles(...coldAdminOnly)
-  findAllBySectionId(
+  findQuestionsBySectionId(
     @Param('name') name: string,
     @Param('sgId') csgId: string,
     @Param('sId') csId: string,
@@ -118,7 +118,7 @@ export class OrganizationComplianceResponsesController {
     @Query('references', new ParseBoolPipe({ optional: true })) references: boolean,
     @Query('responses', new ParseBoolPipe({ optional: true })) responses: boolean,
   ) {
-    return this.organizationComplianceResponsesService.findAllBySectionId(name, csgId, csId, req, { references, responses, take, skip });
+    return this.organizationComplianceResponsesService.getQuestionsBySectionId(name, csgId, csId, req, { references, responses, take, skip });
   }
 
   @Get('responses')
@@ -131,7 +131,7 @@ export class OrganizationComplianceResponsesController {
     @Query('references', new ParseBoolPipe({ optional: true })) references: boolean,
     @Query('responses', new ParseBoolPipe({ optional: true })) responses: boolean,
   ) {
-    return this.organizationComplianceResponsesService.findAllByCompliance(req, name, { references, responses, take, skip });
+    return this.organizationComplianceResponsesService.findAllByCompliance(name, req, { references, responses, take, skip });
   }
 
   @Get('responses/:id')
