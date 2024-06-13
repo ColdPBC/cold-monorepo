@@ -6,7 +6,7 @@ import { ApiParam, ApiTags } from '@nestjs/swagger';
 
 @UseGuards(JwtAuthGuard, RolesGuard)
 @UseFilters(new HttpExceptionFilter(ComplianceQuestionBookmarkController.name))
-@ApiTags('Organizations', 'Compliance', 'Compliance Responses')
+@ApiTags('Compliance', 'Organization', 'Question', 'Bookmarks')
 @ApiParam({
   name: 'orgId',
   required: true,
