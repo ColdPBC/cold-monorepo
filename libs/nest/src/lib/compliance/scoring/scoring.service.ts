@@ -109,17 +109,17 @@ export class ScoringService extends BaseWorker {
 
     let score = 0;
     let aiScore = 0;
-
     let maxScore = 0;
+
     // If the question component is 'multi_select' or 'select' and the value is an array
 
     if (Array.isArray(question.compliance_responses)) {
+      question.bookmarked = Array.isArray(question.question_bookmarks) && question.question_bookmarks.length > 0;
       // If the question has no responses, it's not started
       if (question.compliance_responses.length < 1) {
         question.ai_answered = false;
         question.user_answered = false;
         question.not_started = true;
-        question.bookmarked = await this.isBookmarked(question.id, user);
       }
       // Sum up the scores for each selected option
       for (const response of question.compliance_responses) {
@@ -154,7 +154,6 @@ export class ScoringService extends BaseWorker {
         question.ai_answered = this.filterService.questionHasAnswer(response.ai_response, 'answer');
         question.user_answered = this.filterService.questionHasAnswer(response.org_response, 'value');
         question.not_started = !question.ai_answered && !question.org_answered;
-        question.bookmarked = question.bookmarked = await this.isBookmarked(question.id, user);
       }
       /**
        * If the responses aren't needed, remove the compliance_responses array
@@ -189,7 +188,7 @@ export class ScoringService extends BaseWorker {
     }
 
     if (question.rubric?.score_map) {
-      question.component_score_map = Object.assign({}, question.rubric?.score_map);
+      question.answer_score_map = Object.assign({}, question.rubric?.score_map);
     }
 
     delete question.rubric;
@@ -208,18 +207,5 @@ export class ScoringService extends BaseWorker {
     }
 
     return maxScore;
-  }
-
-  private async isBookmarked(questionId: string, user: IAuthenticatedUser) {
-    const bookmark = await this.prisma.organization_compliance_question_bookmarks.findFirst({
-      where: {
-        compliance_question_id: questionId,
-        email: user.coldclimate_claims.email,
-      },
-    });
-    if (bookmark?.id) {
-      return true;
-    }
-    return false;
   }
 }
