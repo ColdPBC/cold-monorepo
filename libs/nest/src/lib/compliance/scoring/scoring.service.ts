@@ -3,14 +3,17 @@ import { BaseWorker } from '../../worker';
 import { set } from 'lodash';
 import { FilteringService } from '../filtering';
 import { ComplianceResponseOptions } from '../repositories';
+import { IAuthenticatedUser } from '../../primitives';
+import { organizations } from '@prisma/client';
+import { PrismaService } from '../../prisma';
 
 @Injectable()
 export class ScoringService extends BaseWorker {
-  constructor(readonly filterService: FilteringService) {
+  constructor(readonly filterService: FilteringService, readonly prisma: PrismaService) {
     super(ScoringService.name);
   }
 
-  async scoreComplianceResponse(complianceResponse: any, options?: ComplianceResponseOptions): Promise<any> {
+  async scoreComplianceResponse(complianceResponse: any, org: organizations, user: IAuthenticatedUser, options?: ComplianceResponseOptions): Promise<any> {
     let complianceScore = 0;
     let complianceAiScore = 0;
     let complianceMaxScore = 0;
@@ -24,7 +27,7 @@ export class ScoringService extends BaseWorker {
       }
 
       for (const sectionGroup of complianceResponse.compliance_section_groups) {
-        const scored = await this.scoreSectionGroup(sectionGroup, options);
+        const scored = await this.scoreSectionGroup(sectionGroup, org, user, options);
         complianceScore += scored.score;
         complianceAiScore += scored.ai_score;
         complianceMaxScore += scored.max_score;
@@ -37,14 +40,14 @@ export class ScoringService extends BaseWorker {
     return complianceResponse;
   }
 
-  async scoreSectionGroup(sectionGroup: any, options?: ComplianceResponseOptions): Promise<any> {
+  async scoreSectionGroup(sectionGroup: any, org: organizations, user: IAuthenticatedUser, options?: ComplianceResponseOptions): Promise<any> {
     let sectionGroupScore = 0;
     let sectionGroupAiScore = 0;
     let sectionGroupMaxScore = 0;
 
     for (const section of sectionGroup.compliance_sections) {
       // Get the current question
-      const scored = await this.scoreSection(section, options);
+      const scored = await this.scoreSection(section, org, user, options);
       sectionGroupScore += scored.score;
       sectionGroupAiScore += scored.ai_score;
       sectionGroupMaxScore += scored.max_score;
@@ -57,14 +60,19 @@ export class ScoringService extends BaseWorker {
     return sectionGroup;
   }
 
-  async scoreSection(section: any, options?: ComplianceResponseOptions): Promise<{ score: number; ai_score: number; max_score: number }> {
+  async scoreSection(
+    section: any,
+    org: organizations,
+    user: IAuthenticatedUser,
+    options?: ComplianceResponseOptions,
+  ): Promise<{ score: number; ai_score: number; max_score: number }> {
     let sectionScore = 0;
     let sectionAiScore = 0;
     let sectionMaxScore = 0;
 
     for (const question of section.compliance_questions) {
       // Get the current question
-      const scored = await this.scoreQuestion(question, options);
+      const scored = await this.scoreQuestion(question, org, user, options);
       sectionScore += scored.score;
       sectionAiScore += scored.ai_score;
       sectionMaxScore += scored.max_score;
@@ -85,9 +93,16 @@ export class ScoringService extends BaseWorker {
    * score for the question, it sets the score to the max score. Finally, it sets the score for the
    * question and returns the scored survey.
    * @param question
+   * @param org
+   * @param user
    * @param options
    */
-  async scoreQuestion(question: any, options?: ComplianceResponseOptions): Promise<{ max_score: number; score: number; ai_score: number }> {
+  async scoreQuestion(
+    question: any,
+    org: organizations,
+    user: IAuthenticatedUser,
+    options?: ComplianceResponseOptions,
+  ): Promise<{ max_score: number; score: number; ai_score: number }> {
     // Get the follow-up questions for the current section
 
     // Check if the question has a rubric and a score map
@@ -104,6 +119,7 @@ export class ScoringService extends BaseWorker {
         question.ai_answered = false;
         question.org_answered = false;
         question.not_started = true;
+        question.bookmarked = await this.isBookmarked(question.id, user);
       }
       // Sum up the scores for each selected option
       for (const response of question.compliance_responses) {
@@ -138,6 +154,7 @@ export class ScoringService extends BaseWorker {
         question.ai_answered = this.filterService.questionHasAnswer(response.ai_response, 'answer');
         question.org_answered = this.filterService.questionHasAnswer(response.org_response, 'value');
         question.not_started = !question.ai_answered && !question.org_answered;
+        question.bookmarked = question.bookmarked = await this.isBookmarked(question.id, user);
       }
       /**
        * If the responses aren't needed, remove the compliance_responses array
@@ -186,5 +203,18 @@ export class ScoringService extends BaseWorker {
     }
 
     return maxScore;
+  }
+
+  private async isBookmarked(questionId: string, user: IAuthenticatedUser) {
+    const bookmark = await this.prisma.organization_compliance_question_bookmarks.findFirst({
+      where: {
+        compliance_question_id: questionId,
+        email: user.coldclimate_claims.email,
+      },
+    });
+    if (bookmark?.id) {
+      return true;
+    }
+    return false;
   }
 }
