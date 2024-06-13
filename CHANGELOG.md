@@ -1,3 +1,10 @@
+# [1.236.0-cold-803.8](https://github.com/ColdPBC/cold-monorepo/compare/v1.236.0-cold-803.7...v1.236.0-cold-803.8) (2024-06-13)
+
+
+### Features
+
+* update scoring service to include score map and delete rubric [COLD-805] ([5372389](https://github.com/ColdPBC/cold-monorepo/commit/53723898892c70b247a50af6782ca071af838021))
+
 # [1.236.0-cold-803.7](https://github.com/ColdPBC/cold-monorepo/compare/v1.236.0-cold-803.6...v1.236.0-cold-803.7) (2024-06-13)
 
 
