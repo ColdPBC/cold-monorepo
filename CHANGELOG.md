@@ -1,3 +1,10 @@
+# [1.236.0-cold-803.13](https://github.com/ColdPBC/cold-monorepo/compare/v1.236.0-cold-803.12...v1.236.0-cold-803.13) (2024-06-13)
+
+
+### Features
+
+* Enhance logging configuration for development environment in Prisma extensions ([15c6c10](https://github.com/ColdPBC/cold-monorepo/commit/15c6c107a0848fae58fdb2a88669b3eefa5fc1ce))
+
 # [1.236.0-cold-803.12](https://github.com/ColdPBC/cold-monorepo/compare/v1.236.0-cold-803.11...v1.236.0-cold-803.12) (2024-06-13)
 
 
