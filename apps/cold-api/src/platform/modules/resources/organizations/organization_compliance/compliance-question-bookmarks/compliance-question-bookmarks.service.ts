@@ -26,7 +26,7 @@ export class ComplianceQuestionBookmarkService extends BaseWorker {
     return this.repository.getComplianceQuestionBookmarkById(name, id, req.organization, req.user);
   }
 
-  async remove(name: string, id: string, req: any) {
-    return await this.repository.deleteComplianceQuestionBookmark(name, id, req.organization, req.user);
+  async remove(qId: string, req: any) {
+    return await this.repository.deleteComplianceQuestionBookmark(qId, req.organization, req.user);
   }
 }
