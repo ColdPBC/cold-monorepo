@@ -1,3 +1,15 @@
+# [1.236.0-cold-803.14](https://github.com/ColdPBC/cold-monorepo/compare/v1.236.0-cold-803.13...v1.236.0-cold-803.14) (2024-06-13)
+
+
+### Features
+
+* Add ComplianceNoteFilesRepository ([33d32ca](https://github.com/ColdPBC/cold-monorepo/commit/33d32ca3c27cd6c3d158809d0112573a054d766b))
+* Add ComplianceNotesRepository with CRUD operations ([2ed81fd](https://github.com/ColdPBC/cold-monorepo/commit/2ed81fd8b8ab5c98e6fb7a799fbf88cb7ad107cc))
+* add metadata field to compliance notes table ([ff559f6](https://github.com/ColdPBC/cold-monorepo/commit/ff559f604680767733e697a319ac2b05b7644b3a))
+* Add new compliance note related repositories ([870ec8b](https://github.com/ColdPBC/cold-monorepo/commit/870ec8b29ee3c0b4c2f33e9aea3d75ed6f9033ed))
+* enhance OrganizationComplianceNotesService ([d8f5fe7](https://github.com/ColdPBC/cold-monorepo/commit/d8f5fe7e6da20fe882d4be9437a190522337b398))
+* Update organization compliance notes controller ([a351ba5](https://github.com/ColdPBC/cold-monorepo/commit/a351ba56d13855671daab99f02d935e64ad3edea))
+
 # [1.236.0-cold-803.13](https://github.com/ColdPBC/cold-monorepo/compare/v1.236.0-cold-803.12...v1.236.0-cold-803.13) (2024-06-13)
 
 
