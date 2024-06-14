@@ -2,21 +2,14 @@ import { mutate } from 'swr';
 import { cloneDeep, includes, isEqual } from 'lodash';
 import { formatISO } from 'date-fns';
 
-export const changeUserRoles = (
-  orgId: string,
-  userId: string,
-  roleName: string,
-) => {
+export const changeUserRoles = (orgId: string, userId: string, roleName: string) => {
   return mutate(
     [`/organizations/${orgId}/members`, 'GET'],
-    (memberData) => ({
+    memberData => ({
       ...memberData,
       members: cloneDeep(memberData.members).map((member: any) => {
         if (roleName == 'company:owner') {
-          if (
-            member.roles === 'company:owner' &&
-            !includes(member.identities, userId)
-          ) {
+          if (member.roles === 'company:owner' && !includes(member.identities, userId)) {
             member.roles = 'company:admin';
           }
         }
@@ -32,13 +25,10 @@ export const changeUserRoles = (
   );
 };
 
-export const removeUserFromOrganization = (
-  members: string[],
-  orgId: string,
-) => {
+export const removeUserFromOrganization = (members: string[], orgId: string) => {
   return mutate(
     [`/organizations/${orgId}/members`, 'GET'],
-    (memberData) => ({
+    memberData => ({
       ...memberData,
       members: cloneDeep(memberData.members).filter((member: any) => {
         return !isEqual(members, member.identities);
@@ -53,7 +43,7 @@ export const removeUserFromOrganization = (
 export const deleteUserInvitation = (org_id: string, user_email: string) => {
   mutate(
     [`/organizations/${org_id}/members`, 'GET'],
-    (memberData) => ({
+    memberData => ({
       ...memberData,
       members: cloneDeep(memberData.members).filter((member: any) => {
         return !isEqual(user_email, member.email);
@@ -70,7 +60,7 @@ export const resendInvitation = async (org_id: string, user_email: string) => {
   today.setHours(0, 0, 0, 0);
   return mutate(
     [`/organizations/${org_id}/members`, 'GET'],
-    (memberData) => ({
+    memberData => ({
       ...memberData,
       members: cloneDeep(memberData.members).map((member: any) => {
         if (member.email === user_email) {
@@ -85,12 +75,7 @@ export const resendInvitation = async (org_id: string, user_email: string) => {
   );
 };
 
-export const sendInvitation = async (
-  org_id: string,
-  user_email: string,
-  inviter_name: string,
-  roleId: string,
-) => {
+export const sendInvitation = async (org_id: string, user_email: string, inviter_name: string, roleId: string) => {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   const newMember = {
@@ -106,8 +91,9 @@ export const sendInvitation = async (
   };
   return mutate(
     [`/organizations/${org_id}/members`, 'GET'],
-    (memberData) => ({
+    memberData => ({
       ...memberData,
+      // @ts-ignore
       members: () => {
         if (memberData.members) {
           cloneDeep(memberData.members).concat(newMember);

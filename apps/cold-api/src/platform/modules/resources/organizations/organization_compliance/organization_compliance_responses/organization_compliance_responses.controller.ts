@@ -46,7 +46,7 @@ export class OrganizationComplianceResponsesController {
     type: 'string',
     example: 'cq_', // Example value
   })
-  @Roles(...coldAdminOnly)
+  @Roles(...allRoles)
   upsertOrgComplianceResponse(
     @Param('name') name: string,
     @Param('sgId') sgId: string,
@@ -55,7 +55,7 @@ export class OrganizationComplianceResponsesController {
     @Body() compliance_response: compliance_responses,
     @Req() req: any,
   ) {
-    return this.organizationComplianceResponsesService.upsert(name, sgId, sId, qId, compliance_response, req.user);
+    return this.organizationComplianceResponsesService.upsert(name, sgId, sId, qId, compliance_response, req);
   }
 
   @Get('section_groups/responses')
@@ -68,7 +68,12 @@ export class OrganizationComplianceResponsesController {
     @Query('responses', new ParseBoolPipe({ optional: true })) responses: boolean,
     @Query('references', new ParseBoolPipe({ optional: true })) references: boolean,
   ) {
-    return this.organizationComplianceResponsesService.findAllByCompliance(name, req, { references, responses, take, skip });
+    return this.organizationComplianceResponsesService.findAllByCompliance(name, req, {
+      references,
+      responses,
+      take,
+      skip,
+    });
   }
 
   @Get('section_groups/:sgId/responses')
@@ -89,7 +94,12 @@ export class OrganizationComplianceResponsesController {
     @Query('references', new ParseBoolPipe({ optional: true })) references: boolean,
     @Query('responses', new ParseBoolPipe({ optional: true })) responses: boolean,
   ) {
-    return this.organizationComplianceResponsesService.findAllByGroupId(name, sgId, req, { references, responses, take, skip });
+    return this.organizationComplianceResponsesService.findAllByGroupId(name, sgId, req, {
+      references,
+      responses,
+      take,
+      skip,
+    });
   }
 
   @Get('section_groups/:sgId/sections/:sId/responses')
@@ -117,7 +127,11 @@ export class OrganizationComplianceResponsesController {
     @Query('skip') skip: number,
     @Query('responses', new ParseBoolPipe({ optional: true })) responses: boolean = true,
   ) {
-    return this.organizationComplianceResponsesService.getQuestionsBySectionId(name, sgId, sId, req, { responses, take, skip });
+    return this.organizationComplianceResponsesService.getQuestionsBySectionId(name, sgId, sId, req, {
+      responses,
+      take,
+      skip,
+    });
   }
 
   @Get('section_groups/:sgId/sections/:sId/questions/:qId/responses')

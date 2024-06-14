@@ -124,7 +124,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
         throw new BadRequestException(`No User or AI response provided for ${org.name}: ${compliance.compliance_definition_name}, nothing to do`);
       }
 
-      if (!ai_response?.compliance_question_id || (!user_response?.compliance_question_id && !qId)) {
+      if (!ai_response?.compliance_question_id && !user_response?.compliance_question_id && !qId) {
         throw new BadRequestException(`No compliance question id provided for ${org.name}: ${compliance.compliance_definition_name}`);
       }
 
@@ -178,7 +178,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
           create: {
             id: new Cuid2Generator(GuidPrefixes.OrganizationComplianceResponse).scopedId,
             organization_compliance_id: compliance.id,
-            compliance_question_id: user_response.compliance_question_id,
+            compliance_question_id: qId || user_response.compliance_question_id,
             value: user_response.value,
           },
           update: {
@@ -189,20 +189,20 @@ export class ComplianceResponsesRepository extends BaseWorker {
 
       if (orgResponseEntity || aiResponseEntity) {
         const crData = {
-          compliance_question_id: qId || ai_response.compliance_question_id,
+          compliance_question_id: ai_response?.compliance_question_id || qId,
           compliance_section_id: sId,
           compliance_section_group_id: sgId,
           organization_id: org.id,
           compliance_definition_name: compliance.compliance_definition_name,
           organization_compliance_id: compliance.id,
-          organization_compliance_ai_response_id: aiResponseEntity.id,
+          organization_compliance_ai_response_id: aiResponseEntity?.id,
           organization_compliance_response_id: orgResponseEntity?.id,
         };
         await this.prisma.extended.compliance_responses.upsert({
           where: {
             orgCompQuestId: {
               organization_compliance_id: compliance.id,
-              compliance_question_id: qId || ai_response.compliance_question_id,
+              compliance_question_id: ai_response?.compliance_question_id || qId,
             },
           },
           create: crData,
