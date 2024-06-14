@@ -7,7 +7,7 @@ import { ApiParam, ApiTags } from '@nestjs/swagger';
 @UseGuards(JwtAuthGuard, RolesGuard)
 @UseFilters(new HttpExceptionFilter(OrganizationComplianceAiResponseFilesController.name))
 @ApiTags('Organization Compliance Ai Response Files')
-@Controller('organizations/:orgId/compliance/:name/ai-responses/:airId/files')
+@Controller('compliance/:name/organizations/:orgId/responses/ai/:aiId/files')
 export class OrganizationComplianceAiResponseFilesController {
   constructor(private readonly organizationComplianceAiResponseFilesService: OrganizationComplianceAiResponseFilesService) {}
 
@@ -25,14 +25,14 @@ export class OrganizationComplianceAiResponseFilesController {
     example: 'b_corp_2024',
   })
   @ApiParam({
-    name: 'airId',
+    name: 'aiId',
     description: 'Ai Response Id',
     required: true,
     type: 'string',
     example: 'cair_',
   })
   @Roles(...coldAdminOnly)
-  create(@Param('orgId') orgId: string, @Param('name') complianceName: string, @Param('airId') responseId: string, @Body() aiResponseFileData: any, @Req() req: any) {
+  create(@Param('orgId') orgId: string, @Param('name') complianceName: string, @Param('aiId') responseId: string, @Body() aiResponseFileData: any, @Req() req: any) {
     return this.organizationComplianceAiResponseFilesService.create(orgId, complianceName, responseId, aiResponseFileData, req.user);
   }
 
@@ -50,14 +50,14 @@ export class OrganizationComplianceAiResponseFilesController {
     example: 'b_corp_2024',
   })
   @ApiParam({
-    name: 'airId',
+    name: 'aiId',
     description: 'Ai Response Id',
     required: true,
     type: 'string',
     example: 'cair_',
   })
   @Roles(...allRoles)
-  findAll(@Param('orgId') orgId: string, @Param('name') complianceName: string, @Param('airId') responseId: string, @Req() req: any) {
+  findAll(@Param('orgId') orgId: string, @Param('name') complianceName: string, @Param('aiId') responseId: string, @Req() req: any) {
     return this.organizationComplianceAiResponseFilesService.findAll(orgId, complianceName, responseId, req.user);
   }
 
@@ -75,7 +75,7 @@ export class OrganizationComplianceAiResponseFilesController {
     example: 'b_corp_2024',
   })
   @ApiParam({
-    name: 'airId',
+    name: 'aiId',
     description: 'Ai Response Id',
     required: true,
     type: 'string',
@@ -89,7 +89,7 @@ export class OrganizationComplianceAiResponseFilesController {
     example: 'cairf_',
   })
   @Roles(...allRoles)
-  findOne(@Param('orgId') orgId: string, @Param('name') complianceName: string, @Param('airId') responseId: string, @Param('id') id: string, @Req() req: any) {
+  findOne(@Param('orgId') orgId: string, @Param('name') complianceName: string, @Param('aiId') responseId: string, @Param('id') id: string, @Req() req: any) {
     return this.organizationComplianceAiResponseFilesService.findOne(orgId, complianceName, responseId, id, req.user);
   }
 
@@ -107,7 +107,7 @@ export class OrganizationComplianceAiResponseFilesController {
     example: 'b_corp_2024',
   })
   @ApiParam({
-    name: 'airId',
+    name: 'aiId',
     description: 'Ai Response Id',
     required: true,
     type: 'string',
@@ -124,7 +124,7 @@ export class OrganizationComplianceAiResponseFilesController {
   update(
     @Param('orgId') orgId: string,
     @Param('name') complianceName: string,
-    @Param('airId') responseId: string,
+    @Param('aiId') responseId: string,
     @Param('id') id: string,
     @Body() aiResponseFileData: any,
     @Req() req: any,
@@ -146,7 +146,7 @@ export class OrganizationComplianceAiResponseFilesController {
     example: 'b_corp_2024',
   })
   @ApiParam({
-    name: 'airId',
+    name: 'aiId',
     description: 'Ai Response Id',
     required: true,
     type: 'string',
@@ -160,7 +160,7 @@ export class OrganizationComplianceAiResponseFilesController {
     example: 'cairf_',
   })
   @Roles(...coldAdminOnly)
-  remove(@Param('orgId') orgId: string, @Param('name') complianceName: string, @Param('airId') responseId: string, @Param('id') id: string, @Req() req: any) {
+  remove(@Param('orgId') orgId: string, @Param('name') complianceName: string, @Param('aiId') responseId: string, @Param('id') id: string, @Req() req: any) {
     return this.organizationComplianceAiResponseFilesService.remove(orgId, complianceName, responseId, id, req.user);
   }
 }
