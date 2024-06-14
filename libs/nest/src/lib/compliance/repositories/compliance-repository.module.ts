@@ -12,10 +12,10 @@ import { OrganizationComplianceRepository } from './organization-compliance';
 import { OrganizationComplianceStatusesRepository } from './organization-compliance-statuses';
 import { ScoringModule } from '../scoring';
 import { FilteringModule } from '../filtering';
-import { ComplianceQuestionBookmarksRepository } from './compliance-question-bookmarks/compliance-question-bookmarks.repository';
-import { ComplianceNotesRepository } from './compliance-notes/compliance-notes.repository';
-import { ComplianceNoteLinksRepository } from './compliance-note-links/compliance-note-links.repository';
-import { ComplianceNoteFilesRepository } from './compliance-note-files/compliance-note-files.repository';
+import { ComplianceQuestionBookmarksRepository } from './compliance-question-bookmarks';
+import { ComplianceNotesRepository } from './compliance-notes';
+import { ComplianceNoteLinksRepository } from './compliance-note-links';
+import { ComplianceNoteFilesRepository } from './compliance-note-files';
 
 @Global()
 @Module({
@@ -48,6 +48,9 @@ import { ComplianceNoteFilesRepository } from './compliance-note-files/complianc
     ComplianceResponsesRepository,
     ComplianceSectionsCacheRepository,
     ComplianceQuestionBookmarksRepository,
+    ComplianceNotesRepository,
+    ComplianceNoteLinksRepository,
+    ComplianceNoteFilesRepository,
   ],
 })
 export class ComplianceRepositoryModule {}
