@@ -12,7 +12,10 @@ import { OrganizationComplianceRepository } from './organization-compliance';
 import { OrganizationComplianceStatusesRepository } from './organization-compliance-statuses';
 import { ScoringModule } from '../scoring';
 import { FilteringModule } from '../filtering';
-import { ComplianceQuestionBookmarksRepository } from './compliance-question-bookmarks/compliance-question-bookmarks.repository';
+import { ComplianceQuestionBookmarksRepository } from './compliance-question-bookmarks';
+import { ComplianceNotesRepository } from './compliance-notes';
+import { ComplianceNoteLinksRepository } from './compliance-note-links';
+import { ComplianceNoteFilesRepository } from './compliance-note-files';
 
 @Global()
 @Module({
@@ -29,6 +32,9 @@ import { ComplianceQuestionBookmarksRepository } from './compliance-question-boo
     OrganizationComplianceRepository,
     OrganizationComplianceStatusesRepository,
     ComplianceQuestionBookmarksRepository,
+    ComplianceNotesRepository,
+    ComplianceNoteLinksRepository,
+    ComplianceNoteFilesRepository,
   ],
   exports: [
     CacheService,
@@ -42,6 +48,9 @@ import { ComplianceQuestionBookmarksRepository } from './compliance-question-boo
     ComplianceResponsesRepository,
     ComplianceSectionsCacheRepository,
     ComplianceQuestionBookmarksRepository,
+    ComplianceNotesRepository,
+    ComplianceNoteLinksRepository,
+    ComplianceNoteFilesRepository,
   ],
 })
 export class ComplianceRepositoryModule {}

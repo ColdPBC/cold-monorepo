@@ -8,7 +8,7 @@ import { organization_compliance_ai_responses } from '@prisma/client';
 @UseGuards(JwtAuthGuard, RolesGuard)
 @UseFilters(new HttpExceptionFilter(OrganizationComplianceAiResponsesController.name))
 @ApiTags('Organization Compliance Ai Response')
-@Controller('organizations/:orgId/compliance/:name/ai-responses')
+@Controller('compliance/:name/organizations/:orgId/responses/ai')
 export class OrganizationComplianceAiResponsesController {
   constructor(private readonly organizationComplianceAiResponsesService: OrganizationComplianceAiResponsesService) {}
 
@@ -48,7 +48,7 @@ export class OrganizationComplianceAiResponsesController {
     return this.organizationComplianceAiResponsesService.findAllAiResponses(orgId, name, req.user);
   }
 
-  @Get(':id')
+  @Get(':aiId')
   @ApiParam({
     name: 'orgId',
     required: true,
@@ -62,18 +62,18 @@ export class OrganizationComplianceAiResponsesController {
     example: 'b_corp_2024',
   })
   @ApiParam({
-    name: 'id',
-    description: 'Ai Response file Id',
+    name: 'aiId',
+    description: 'Ai Response Id',
     required: true,
     type: 'string',
-    example: 'cairf_',
+    example: 'cair_',
   })
   @Roles(...allRoles)
-  findOneAiResponse(@Param('orgId') orgId: string, @Param('name') name: string, @Param('id') id: string, @Req() req: any) {
+  findOneAiResponse(@Param('orgId') orgId: string, @Param('name') name: string, @Param('aiId') id: string, @Req() req: any) {
     return this.organizationComplianceAiResponsesService.findOneAiResponse(orgId, name, id, req.user);
   }
 
-  @Patch(':id')
+  @Patch(':aiId')
   @ApiParam({
     name: 'orgId',
     required: true,
@@ -87,17 +87,17 @@ export class OrganizationComplianceAiResponsesController {
     example: 'b_corp_2024',
   })
   @ApiParam({
-    name: 'id',
-    description: 'Ai Response file Id',
+    name: 'aiId',
+    description: 'Ai Response Id',
     required: true,
     type: 'string',
-    example: 'cairf_',
+    example: 'cair_',
   })
   @Roles(...coldAdminOnly)
   updateAiResponse(
     @Param('orgId') orgId: string,
     @Param('name') name: string,
-    @Param('id') id: string,
+    @Param('aiId') id: string,
     @Body() aiResponseData: organization_compliance_ai_responses,
     @Req() req: any,
   ) {
@@ -122,7 +122,7 @@ export class OrganizationComplianceAiResponsesController {
     return this.organizationComplianceAiResponsesService.removeAllAiResponses(req.organization, name, req.user);
   }
 
-  @Delete(':id')
+  @Delete(':aiId')
   @ApiParam({
     name: 'orgId',
     required: true,
@@ -136,14 +136,14 @@ export class OrganizationComplianceAiResponsesController {
     example: 'b_corp_2024',
   })
   @ApiParam({
-    name: 'id',
-    description: 'Ai Response file Id',
+    name: 'aiId',
+    description: 'Ai Response Id',
     required: true,
     type: 'string',
-    example: 'cairf_',
+    example: 'cair_',
   })
   @Roles(...coldAdminOnly)
-  removeAiResponse(@Param('orgId') orgId: string, @Param('name') name: string, @Param('id') id: string, @Req() req: any) {
+  removeAiResponse(@Param('orgId') orgId: string, @Param('name') name: string, @Param('aiId') id: string, @Req() req: any) {
     return this.organizationComplianceAiResponsesService.removeAiResponse(orgId, name, id, req.user);
   }
 }

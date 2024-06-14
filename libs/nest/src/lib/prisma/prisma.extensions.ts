@@ -71,24 +71,27 @@ export class ExtendedPrismaClient extends PrismaClient {
     super({
       datasourceUrl: config['internalConfig']['DATABASE_URL'],
       errorFormat: process.env['NODE_ENV'] === 'development' ? 'pretty' : 'minimal',
-      log: [
-        {
-          emit: 'event',
-          level: 'query',
-        },
-        {
-          emit: 'stdout',
-          level: 'error',
-        },
-        {
-          emit: 'stdout',
-          level: 'info',
-        },
-        {
-          emit: 'stdout',
-          level: 'warn',
-        },
-      ],
+      log:
+        process.env['NODE_ENV'] === 'development'
+          ? [
+              {
+                emit: 'event',
+                level: 'query',
+              },
+              {
+                emit: 'stdout',
+                level: 'error',
+              },
+              {
+                emit: 'stdout',
+                level: 'info',
+              },
+              {
+                emit: 'stdout',
+                level: 'warn',
+              },
+            ]
+          : [],
     });
     this.client = extendedClient(this);
   }
