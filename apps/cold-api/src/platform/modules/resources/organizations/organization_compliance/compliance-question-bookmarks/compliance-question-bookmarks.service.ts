@@ -18,12 +18,16 @@ export class ComplianceQuestionBookmarkService extends BaseWorker {
     }
   }
 
-  findAll(name: string, req: any) {
+  findAllByEmail(name: string, req: any) {
     return this.repository.getComplianceQuestionBookmarksByEmail(name, req.organization, req.user);
   }
 
-  findOne(name: string, id: string, req: any) {
-    return this.repository.getComplianceQuestionBookmarkById(name, id, req.organization, req.user);
+  findByQuestionIdAndEmail(name: string, id: string, req: any) {
+    return this.repository.getComplianceQuestionBookmarksByQuestionId(name, id, req.organization, req.user);
+  }
+
+  findAllOrgBookmarks(name: string, req: any) {
+    return this.repository.getComplianceQuestionBookmarksByOrganizationComplianceId(name, req.organization, req.user);
   }
 
   async remove(qId: string, req: any) {
