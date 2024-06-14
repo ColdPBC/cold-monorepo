@@ -1,3 +1,26 @@
+# [1.236.0-COLD-710.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.236.0-COLD-710.2...v1.236.0-COLD-710.3) (2024-06-14)
+
+
+### Bug Fixes
+
+* update incorrect param name in organization_compliance_responses.controller ([dde738d](https://github.com/ColdPBC/cold-monorepo/commit/dde738da9ca70e09d5090cb501e39b87d8fa9282))
+
+
+### Features
+
+* Add ComplianceNoteFilesRepository ([33d32ca](https://github.com/ColdPBC/cold-monorepo/commit/33d32ca3c27cd6c3d158809d0112573a054d766b))
+* Add ComplianceNoteLinksRepository ([77c3613](https://github.com/ColdPBC/cold-monorepo/commit/77c3613e54246860497d66652f58723aa24468bc))
+* Add ComplianceNotesRepository with CRUD operations ([2ed81fd](https://github.com/ColdPBC/cold-monorepo/commit/2ed81fd8b8ab5c98e6fb7a799fbf88cb7ad107cc))
+* add metadata field to compliance notes table ([ff559f6](https://github.com/ColdPBC/cold-monorepo/commit/ff559f604680767733e697a319ac2b05b7644b3a))
+* Add new compliance note related repositories ([870ec8b](https://github.com/ColdPBC/cold-monorepo/commit/870ec8b29ee3c0b4c2f33e9aea3d75ed6f9033ed))
+* add notes endpoints ([c171eb2](https://github.com/ColdPBC/cold-monorepo/commit/c171eb23a6f8b7ac9d56535686037231ac252c70))
+* Add OrganizationComplianceNotesModule to organization_compliance.module ([50f1bc9](https://github.com/ColdPBC/cold-monorepo/commit/50f1bc93729a8c059278f4380ee382938d5771f7))
+* Enhance logging configuration for development environment in Prisma extensions ([15c6c10](https://github.com/ColdPBC/cold-monorepo/commit/15c6c107a0848fae58fdb2a88669b3eefa5fc1ce))
+* enhance OrganizationComplianceNotesService ([d8f5fe7](https://github.com/ColdPBC/cold-monorepo/commit/d8f5fe7e6da20fe882d4be9437a190522337b398))
+* more changes ([a586945](https://github.com/ColdPBC/cold-monorepo/commit/a586945b1b8f09dea6f4c916522fcbcb74595779))
+* Update methods in compliance-question-bookmarks service ([8af1446](https://github.com/ColdPBC/cold-monorepo/commit/8af14464baf123b68e1e7fa18933f7967989d5d2))
+* Update organization compliance notes controller ([a351ba5](https://github.com/ColdPBC/cold-monorepo/commit/a351ba56d13855671daab99f02d935e64ad3edea))
+
 # [1.236.0-COLD-710.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.236.0-COLD-710.1...v1.236.0-COLD-710.2) (2024-06-14)
 
 
