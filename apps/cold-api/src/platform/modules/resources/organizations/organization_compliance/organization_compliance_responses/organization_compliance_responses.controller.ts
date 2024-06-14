@@ -94,7 +94,7 @@ export class OrganizationComplianceResponsesController {
 
   @Get('section_groups/:sgId/sections/:sId/responses')
   @ApiParam({
-    name: 'csgId',
+    name: 'sgId',
     required: true,
     description: 'Section Group Id',
     type: 'string',
