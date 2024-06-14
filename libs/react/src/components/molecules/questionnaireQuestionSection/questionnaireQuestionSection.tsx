@@ -1,4 +1,3 @@
-import { Element } from 'react-scroll';
 import { QuestionnaireQuestionItem, QuestionnaireQuestionItemPlaceholder } from '@coldpbc/components';
 import { useContext, useEffect } from 'react';
 import { ColdComplianceQuestionnaireContext } from '@coldpbc/context';
@@ -47,22 +46,17 @@ export const QuestionnaireQuestionSection = (props: {
           const pagedQuestionData = pagedSectionData?.find(q => q.key === question.key);
           if (pagedQuestionData) {
             return (
-              <Element name={question.key}>
-                <QuestionnaireQuestionItem
-                  number={index + 1}
-                  question={pagedQuestionData}
-                  sectionId={section.id}
-                  sectionGroupId={sectionGroupId}
-                  questionnaireMutate={questionnaireMutate}
-                />
-              </Element>
+              <QuestionnaireQuestionItem
+                key={question.key}
+                number={index + 1}
+                question={pagedQuestionData}
+                sectionId={section.id}
+                sectionGroupId={sectionGroupId}
+                questionnaireMutate={questionnaireMutate}
+              />
             );
           } else {
-            return (
-              <Element name={question.key}>
-                <QuestionnaireQuestionItemPlaceholder number={index + 1} question={question} />
-              </Element>
-            );
+            return <QuestionnaireQuestionItemPlaceholder key={question.key} number={index + 1} question={question} />;
           }
         })}
     </div>

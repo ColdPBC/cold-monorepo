@@ -14332,15 +14332,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-scroll@npm:^1.8.10":
-  version: 1.8.10
-  resolution: "@types/react-scroll@npm:1.8.10"
-  dependencies:
-    "@types/react": "npm:*"
-  checksum: 10/056625e1a4b0572bf0570bf82fc0bf2db756370e8711167ff41e144c684c177673007a1ae7ba56d202f695489e8f5f5212df38a54e73a8d626adf82699cd436d
-  languageName: node
-  linkType: hard
-
 "@types/react-syntax-highlighter@npm:11.0.4":
   version: 11.0.4
   resolution: "@types/react-syntax-highlighter@npm:11.0.4"
@@ -19165,7 +19156,6 @@ __metadata:
     "@types/react-dom": "npm:^18.2.15"
     "@types/react-lottie": "npm:^1.2.6"
     "@types/react-router-dom": "npm:5.3.3"
-    "@types/react-scroll": "npm:^1.8.10"
     "@types/react-test-renderer": "npm:18.0.6"
     "@types/react-transition-group": "npm:^4.4.9"
     "@types/regression": "npm:^2.0.6"
@@ -19293,7 +19283,6 @@ __metadata:
     react-range: "npm:^1.8.14"
     react-router: "npm:^6.12.1"
     react-router-dom: "npm:^6.16.0"
-    react-scroll: "npm:^1.9.0"
     react-test-renderer: "npm:18.2.0"
     react-transition-group: "npm:^4.4.5"
     redis: "npm:^4.6.7"
@@ -37810,19 +37799,6 @@ __metadata:
   peerDependencies:
     react: ">=16.8"
   checksum: 10/df3948afd6500faf4b82a72375b9177536d878d54cad18e20a175efcbfdd0d94852aac59660d786946636ed325284d94a8f46652d898df304d6a29c9a3932afd
-  languageName: node
-  linkType: hard
-
-"react-scroll@npm:^1.9.0":
-  version: 1.9.0
-  resolution: "react-scroll@npm:1.9.0"
-  dependencies:
-    lodash.throttle: "npm:^4.1.1"
-    prop-types: "npm:^15.7.2"
-  peerDependencies:
-    react: ^15.5.4 || ^16.0.0 || ^17.0.0 || ^18.0.0
-    react-dom: ^15.5.4 || ^16.0.0 || ^17.0.0 || ^18.0.0
-  checksum: 10/d6f6bbd5b17218d2b5e020d1f4ed77047312a82003c9f0eabad387835affb0d99699a91117ab82d33cefbf4802c830d1ec8c724d2713cdb1778643e4443b7af5
   languageName: node
   linkType: hard
 
