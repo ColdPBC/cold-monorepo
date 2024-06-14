@@ -1,7 +1,7 @@
-import React, { useContext, useEffect, useRef } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { ColdComplianceQuestionnaireContext } from '@coldpbc/context';
 import { ErrorFallback, QuestionnaireQuestionSection, Spinner } from '@coldpbc/components';
-import { ComplianceSidebarSection, QuestionnaireQuestion } from '@coldpbc/interfaces';
+import { ComplianceSidebarSection, QuestionnaireComplianceContainerPayLoad, QuestionnaireQuestion } from '@coldpbc/interfaces';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
 import useSWRInfinite from 'swr/infinite';
@@ -16,11 +16,10 @@ const _QuestionnaireContainer = () => {
     // triggerOnce: true,
     rootMargin: '0px 0px',
   });
-  const scrollToSectionRef = useRef<HTMLDivElement>(null);
   const { orgId } = useAuth0Wrapper();
   const { name, focusQuestion, sectionGroups, scrollToQuestion, setScrollToQuestion } = useContext(ColdComplianceQuestionnaireContext);
   const orderedSections = Array<ComplianceSidebarSection>();
-  sectionGroups.compliance_section_groups
+  sectionGroups?.data?.compliance_section_groups
     .sort((a, b) => a.order - b.order)
     .forEach(sectionGroup => {
       sectionGroup.compliance_sections
@@ -31,16 +30,38 @@ const _QuestionnaireContainer = () => {
     });
 
   const getKey = (pageIndex: number, previousPageData: QuestionnaireQuestion[]) => {
-    if (pageIndex >= orderedSections.length || (previousPageData && !previousPageData.length)) return null; // reached the end
+    if (pageIndex >= orderedSections.length) return null; // reached the end
     const section = orderedSections[pageIndex];
-    const sectionGroup = sectionGroups.compliance_section_groups.find(sectionGroup => {
+    const sectionGroup = sectionGroups?.data?.compliance_section_groups.find(sectionGroup => {
       return sectionGroup.compliance_sections.find(s => s.key === section.key);
     });
     const id = section.id;
-    return [`/compliance_definitions/${name}/organizations/${orgId}/sectionGroups/${sectionGroup?.id}/sections/${id}?responses=true`, 'GET']; // SWR key
+    return [`/compliance/${name}/organizations/${orgId}/section_groups/${sectionGroup?.id}/sections/${id}/responses`, 'GET'];
   };
 
-  const { data, error, isLoading, size, setSize } = useSWRInfinite<QuestionnaireQuestion[], any, any>(getKey, axiosFetcher);
+  const { data, error, isLoading, size, setSize, mutate } = useSWRInfinite<QuestionnaireComplianceContainerPayLoad, any, any>(getKey, axiosFetcher, {
+    parallel: true,
+  });
+
+  const getPageSectionData = (pageDataList: QuestionnaireComplianceContainerPayLoad[] | undefined, sectionGroupId: string, sectionId: string) => {
+    // get pageData with the sectionGroupId and sectionId
+    if (!pageDataList) return undefined;
+    // get all the pageData with the sectionGroupId
+    const pageGroupData = pageDataList
+      .filter(pageData => {
+        const complianceSectionGroup = pageData.compliance_section_groups[0];
+        if (!complianceSectionGroup) return false;
+        return complianceSectionGroup.id === sectionGroupId;
+      })
+      .filter(pageData => {
+        // get all the pageData with the sectionId
+        const complianceSection = pageData.compliance_section_groups[0].compliance_sections[0];
+        if (!complianceSection) return false;
+        return complianceSection.id === sectionId;
+      });
+    if (pageGroupData.length === 0) return undefined;
+    return pageGroupData[0].compliance_section_groups[0].compliance_sections[0].compliance_questions;
+  };
 
   useEffect(() => {
     if (scrollToQuestion === null) return;
@@ -57,16 +78,6 @@ const _QuestionnaireContainer = () => {
     if (sectionWithQuestionKeyIndex + 1 > size) {
       setSize(sectionWithQuestionKeyIndex + 1);
     }
-    // else {
-    //   if (size >= sectionWithQuestionKeyIndex + 1 && isLoading === false) {
-    //     scroller.scrollTo(scrollToQuestion, {
-    //       duration: 400,
-    //       containerId: 'questionnaireContainer',
-    //       smooth: true,
-    //       isDynamic: true,
-    //     });
-    //   }
-    // }
   }, [scrollToQuestion, size, isLoading]);
 
   useEffect(() => {
@@ -74,8 +85,6 @@ const _QuestionnaireContainer = () => {
       setSize(size + 1);
     }
   }, [lowerRefInView]);
-
-  // get query params section
 
   useEffect(() => {
     if (searchParams.has('section')) {
@@ -86,6 +95,8 @@ const _QuestionnaireContainer = () => {
         if (sectionIndex >= size) {
           setSize(sectionIndex + 1);
         }
+      } else {
+        setSearchParams({});
       }
     }
   }, [searchParams]);
@@ -95,11 +106,13 @@ const _QuestionnaireContainer = () => {
     data,
     error,
     isLoading,
+    orderedSections,
+    size,
   });
 
   return (
-    <div className={'w-full pt-[24px] px-[40px] flex flex-col gap-[40px] overflow-x-auto scrollbar-hide'} id={'questionnaireContainer'}>
-      {sectionGroups.compliance_section_groups
+    <div className={'w-full h-full pt-[24px] px-[40px] flex flex-col gap-[40px] overflow-y-scroll scrollbar-hide'} id={'questionnaireContainer'}>
+      {sectionGroups?.data?.compliance_section_groups
         .sort((a, b) => a.order - b.order)
         .map((sectionGroup, index) => {
           return (
@@ -110,12 +123,18 @@ const _QuestionnaireContainer = () => {
                 .map((section, index) => {
                   const orderedSectionIndex = orderedSections.findIndex(s => s.key === section.key);
                   const isLastPage = size - 1 === orderedSectionIndex;
-                  const firstQuestion = section.compliance_questions[0];
-                  const pagedSectionData = data?.find(questions => {
-                    return questions.find(q => q.key === firstQuestion.key);
-                  });
+                  const pagedSectionData = getPageSectionData(data, sectionGroup.id, section.id);
                   const lastPageRef = isLastPage ? lowerRef : null;
-                  return <QuestionnaireQuestionSection key={section.key} section={section} pagedSectionData={pagedSectionData} innerRef={lastPageRef} />;
+                  return (
+                    <QuestionnaireQuestionSection
+                      questionnaireMutate={mutate}
+                      key={section.key}
+                      section={section}
+                      sectionGroupId={sectionGroup.id}
+                      pagedSectionData={pagedSectionData}
+                      innerRef={lastPageRef}
+                    />
+                  );
                 })}
               <div>{isLoading && <Spinner />}</div>
             </div>

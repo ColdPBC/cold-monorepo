@@ -3,20 +3,19 @@ import React, { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import useSWR from 'swr';
 import { axiosFetcher } from '@coldpbc/fetchers';
-import { useAuth0Wrapper } from '@coldpbc/hooks';
-import { ComplianceSidebarPayload, OrgCompliance, QuestionnaireQuestion } from '@coldpbc/interfaces';
+import { useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
+import { ComplianceSidebarPayload, OrgCompliance, QuestionnaireQuestionComplianceResponse } from '@coldpbc/interfaces';
 import { ColdComplianceQuestionnaireContext } from '@coldpbc/context';
 import { withErrorBoundary } from 'react-error-boundary';
 
-// todo: add link to questionnaire from compliance set manager
-// todo: add scrolling to question and section
 const _ComplianceQuestionnaire = () => {
+  const { logBrowser } = useColdContext();
   const [scrollToQuestion, setScrollToQuestion] = React.useState<string | null>(null);
   const [sidebarExpanded, setSidebarExpanded] = React.useState<boolean>(true);
   const [focusQuestion, setFocusQuestion] = React.useState<{
     key: string;
     aiDetails: {
-      ai_response?: QuestionnaireQuestion['ai_response'];
+      ai_response: QuestionnaireQuestionComplianceResponse['ai_response'];
       ai_answered?: boolean;
       ai_attempted?: boolean;
       value?: any;
@@ -53,10 +52,6 @@ const _ComplianceQuestionnaire = () => {
     return <Spinner />;
   }
 
-  console.log({
-    data: sideBarSWR.data,
-  });
-
   const selectedCompliance = complianceSWR.data?.find(compliance => compliance.compliance_definition.name === complianceName);
 
   if (!sideBarSWR.data) {
@@ -64,6 +59,15 @@ const _ComplianceQuestionnaire = () => {
   }
 
   const sectionGroups = sideBarSWR.data;
+
+  logBrowser('ComplianceQuestionnaire', 'info', {
+    complianceName,
+    complianceSWR,
+    selectedCompliance,
+    scrollToQuestion,
+    focusQuestion,
+    sectionGroups,
+  });
 
   return (
     <ColdComplianceQuestionnaireContext.Provider
@@ -73,9 +77,9 @@ const _ComplianceQuestionnaire = () => {
         setScrollToQuestion,
         focusQuestion,
         setFocusQuestion,
-        sectionGroups,
+        sectionGroups: sideBarSWR,
       }}>
-      <div className={'w-full h-screen flex-col flex text-tc-primary relative'}>
+      <div className={'w-full h-full flex-col flex text-tc-primary relative overflow-y-clip'}>
         <div className={'h-[72px] w-full p-[16px] flex justify-between bg-gray-30'} data-testid={'questionnaire-header'}>
           <div
             className={'w-full gap-[16px] py-[8px] text-button text-tc-primary flex flex-row items-center cursor-pointer justify-start'}
@@ -85,7 +89,7 @@ const _ComplianceQuestionnaire = () => {
           </div>
         </div>
         {selectedCompliance ? (
-          <div className={'w-full h-full flex justify-start'}>
+          <div className={'w-full h-full flex justify-start relative items-stretch overflow-y-clip'}>
             <QuestionnaireSidebar sidebarOpen={sidebarExpanded} setSidebarOpen={setSidebarExpanded} />
             <QuestionnaireContainer />
             <QuestionnaireDetailSidebar />

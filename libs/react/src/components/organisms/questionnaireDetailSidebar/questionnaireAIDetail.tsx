@@ -1,12 +1,15 @@
-import { QuestionnaireQuestion } from '@coldpbc/interfaces';
+import { QuestionnaireQuestionComplianceResponse } from '@coldpbc/interfaces';
 import { HexColors } from '@coldpbc/themes';
-import { getAIOriginalAnswer } from '@coldpbc/lib';
-import { AiDocumentReferenceDropdown } from '@coldpbc/components';
+import { getAIOriginalAnswer, getComplianceAIResponseValue } from '@coldpbc/lib';
+import { AiDocumentReferenceDropdown, ErrorFallback } from '@coldpbc/components';
+import { isNull } from 'lodash';
+import { withErrorBoundary } from 'react-error-boundary';
+import React from 'react';
 
-export const QuestionnaireAIDetail = (props: {
+const _QuestionnaireAIDetail = (props: {
   aiDetails:
     | {
-        ai_response?: QuestionnaireQuestion['ai_response'];
+        ai_response: QuestionnaireQuestionComplianceResponse['ai_response'];
         ai_answered?: boolean;
         ai_attempted?: boolean;
         value?: any | undefined;
@@ -24,7 +27,7 @@ export const QuestionnaireAIDetail = (props: {
   const getAiTag = () => {
     let text = 'Low Confidence';
     let color = HexColors.bgc.accent;
-    if (!ai_attempted) {
+    if (isNull(getComplianceAIResponseValue)) {
       return null;
     }
 
@@ -67,7 +70,7 @@ export const QuestionnaireAIDetail = (props: {
         {getAiTag()}
       </div>
       <div className={'flex flex-col gap-[24px]'}>
-        {ai_attempted ? (
+        {ai_response ? (
           <>
             <div className={'text-body font-bold w-full text-start'}>Original Answer: {getAIOriginalAnswer(ai_response)}</div>
             <div className={'text-body w-full text-start'}>{ai_response?.justification}</div>
@@ -85,3 +88,10 @@ export const QuestionnaireAIDetail = (props: {
     </div>
   );
 };
+
+export const QuestionnaireAIDetail = withErrorBoundary(_QuestionnaireAIDetail, {
+  FallbackComponent: props => <ErrorFallback {...props} />,
+  onError: (error, info) => {
+    console.error('Error occurred in QuestionnaireAIDetail: ', error);
+  },
+});

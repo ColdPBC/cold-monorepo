@@ -19,6 +19,7 @@ import {
 } from '@coldpbc/context';
 import { getAllFilesMock } from './filesMock';
 import { getQuestionnaireSidebarComplianceMock } from './complianceMock';
+import { QuestionnaireQuestionComplianceResponse } from '@coldpbc/interfaces';
 
 export interface StoryMockProviderProps {
   handlers?: RestHandler<MockedRequest<DefaultBodyType>>[];
@@ -127,7 +128,7 @@ export const StoryMockProvider = (props: PropsWithChildren<StoryMockProviderProp
   const [complianceQuestionnaireFocusQuestion, setComplianceQuestionnaireFocusQuestion] = React.useState<{
     key: string;
     aiDetails: {
-      ai_response?: any;
+      ai_response: QuestionnaireQuestionComplianceResponse['ai_response'];
       ai_answered?: boolean;
       ai_attempted?: boolean;
       value?: any;
@@ -136,10 +137,23 @@ export const StoryMockProvider = (props: PropsWithChildren<StoryMockProviderProp
     };
   } | null>(props.complianceQuestionnaireContext?.focusQuestion ?? null);
 
+  const [complianceQuestionnaireScrollToQuestion, setComplianceQuestionnaireScrollToQuestion] = React.useState<string | null>(
+    props.complianceQuestionnaireContext?.scrollToQuestion ?? null,
+  );
+
   const complianceQuestionnaireContextValue: ComplianceQuestionnaireContextType = {
     name: 'rei_pia_2024',
-    sectionGroups: getQuestionnaireSidebarComplianceMock(),
+    sectionGroups: {
+      data: getQuestionnaireSidebarComplianceMock(),
+      error: undefined,
+      revalidate: () => {},
+      isValidating: false,
+      isLoading: false,
+      mutate: () => Promise.resolve(),
+    } as SWRResponse<any, any, any>,
     ...props.complianceQuestionnaireContext,
+    scrollToQuestion: complianceQuestionnaireScrollToQuestion,
+    setScrollToQuestion: props.complianceQuestionnaireContext?.setScrollToQuestion ?? setComplianceQuestionnaireScrollToQuestion,
     focusQuestion: complianceQuestionnaireFocusQuestion,
     setFocusQuestion: props.complianceQuestionnaireContext?.setFocusQuestion ?? setComplianceQuestionnaireFocusQuestion,
   };

@@ -1,41 +1,58 @@
-import { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import useSWR from 'swr';
 import { ComplianceNotePayload } from '@coldpbc/interfaces';
 import { useAuth0Wrapper } from '@coldpbc/hooks';
 import { ColdComplianceQuestionnaireContext } from '@coldpbc/context';
 import { axiosFetcher } from '@coldpbc/fetchers';
-import { BaseButton, Spinner } from '@coldpbc/components';
+import { BaseButton, ErrorFallback, Spinner } from '@coldpbc/components';
+import { withErrorBoundary } from 'react-error-boundary';
+import { isAxiosError } from 'axios';
 
-export const QuestionnaireNotesDetail = () => {
+const _QuestionnaireNotesDetail = () => {
   const [noteText, setNoteText] = useState('');
+  const [buttonLoading, setButtonLoading] = useState(false);
   const { name, focusQuestion } = useContext(ColdComplianceQuestionnaireContext);
   const { orgId } = useAuth0Wrapper();
 
   const getNotesURL = () => {
-    if (orgId) {
-      return [`/compliance_definitions/${name}/organizations/${orgId}/questions/${focusQuestion?.key}/notes`, 'GET'];
+    if (orgId && focusQuestion) {
+      return [`/compliance/${name}/organizations/${orgId}/questions/${focusQuestion.key}/notes`, 'GET'];
     } else {
       return null;
     }
   };
 
-  const notesSWR = useSWR<ComplianceNotePayload, any, any>(getNotesURL(), axiosFetcher);
+  const notesSWR = useSWR<ComplianceNotePayload[], any, any>(getNotesURL(), axiosFetcher);
+
+  const firstNote = notesSWR.data?.[0];
 
   useEffect(() => {
-    setNoteText(notesSWR.data?.note || '');
-  }, [notesSWR.data]);
+    setNoteText(firstNote?.note || '');
+  }, [firstNote]);
 
   const getSaveButton = () => {
     // want to disable the button if the note is the same as the saved note or is empty
-    const disableButton = noteText === notesSWR.data?.note || noteText === '';
+    const disableButton = noteText === firstNote?.note || noteText === '';
     return (
       <div className={'w-full flex flex-row justify-end'}>
         <BaseButton
           label={'Save'}
-          onClick={() => {
-            // todo: handle note API submission
+          onClick={async () => {
+            // if the note data is empty then create a new note. if not then update the note
+            setButtonLoading(true);
+            let response;
+            if (!firstNote) {
+              response = await axiosFetcher([`/compliance/${name}/organizations/${orgId}/questions/${focusQuestion?.key}/notes`, 'POST', { note: noteText }]);
+            } else {
+              response = await axiosFetcher([`/compliance/${name}/organizations/${orgId}/questions/${focusQuestion?.key}/notes/${firstNote.id}`, 'PATCH', { note: noteText }]);
+            }
+            if (!isAxiosError(response)) {
+              await notesSWR.mutate();
+            }
+            setButtonLoading(false);
           }}
           disabled={disableButton}
+          loading={buttonLoading}
         />
       </div>
     );
@@ -65,3 +82,10 @@ export const QuestionnaireNotesDetail = () => {
     </div>
   );
 };
+
+export const QuestionnaireNotesDetail = withErrorBoundary(_QuestionnaireNotesDetail, {
+  FallbackComponent: props => <ErrorFallback {...props} />,
+  onError: (error, info) => {
+    console.error('Error occurred in QuestionnaireNotesDetail: ', error);
+  },
+});

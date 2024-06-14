@@ -1,27 +1,36 @@
 import { BaseButton, Card, ColdIcon, ComplianceProgressStatusIcon, Input, ListItem } from '@coldpbc/components';
 import { ButtonTypes, ComplianceProgressStatus, IconNames, InputTypes } from '@coldpbc/enums';
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import { isArray, isUndefined, toArray } from 'lodash';
-import { getAIResponseValue, ifAdditionalContextConditionMet, isAIResponseValueValid } from '@coldpbc/lib';
+import React, { useContext, useEffect, useState } from 'react';
+import { isArray, isNull, isUndefined, toArray } from 'lodash';
+import { getComplianceAIResponseValue, ifAdditionalContextConditionMet, isComplianceAIResponseValueValid } from '@coldpbc/lib';
 import { HexColors } from '@coldpbc/themes';
 import { QuestionnaireYesNo } from './questionnaireYesNo';
 import { QuestionnaireSelect } from './questionnaireSelect';
 import { NumericFormat } from 'react-number-format';
 import { QuestionnaireQuestion } from '@coldpbc/interfaces';
 import { ColdComplianceQuestionnaireContext } from '@coldpbc/context';
-import { Element } from 'react-scroll';
+import { axiosFetcher } from '@coldpbc/fetchers';
+import { useAuth0Wrapper } from '@coldpbc/hooks';
+import { isAxiosError } from 'axios';
 
-export const QuestionnaireQuestionItem = (props: { question: QuestionnaireQuestion; number: number }) => {
-  const { focusQuestion, setFocusQuestion, scrollToQuestion } = useContext(ColdComplianceQuestionnaireContext);
-  const { question, number } = props;
-  const { id, key, prompt, options, tooltip, component, placeholder, value, bookmarked, ai_response, user_answered, ai_answered, not_started, additional_context, ai_attempted } =
-    question;
-  const ref = useRef<HTMLDivElement>(null);
+export const QuestionnaireQuestionItem = (props: {
+  question: QuestionnaireQuestion;
+  number: number;
+  sectionId: string;
+  sectionGroupId: string;
+  questionnaireMutate: () => void;
+}) => {
+  const { name, focusQuestion, setFocusQuestion, scrollToQuestion, setScrollToQuestion, sectionGroups } = useContext(ColdComplianceQuestionnaireContext);
+  const { orgId } = useAuth0Wrapper();
+  const { question, number, sectionId, sectionGroupId, questionnaireMutate } = props;
+  const { id, key, prompt, options, tooltip, component, placeholder, bookmarked, user_answered, ai_answered, additional_context, ai_attempted, compliance_responses } = question;
+  const value = compliance_responses[0]?.org_response?.value;
+  const ai_response = compliance_responses[0]?.ai_response;
 
   const getDisplayValue = () => {
     let displayValue = value;
-    if (isUndefined(displayValue) && isAIResponseValueValid(question)) {
-      displayValue = getAIResponseValue(question);
+    if (isUndefined(displayValue) && isComplianceAIResponseValueValid(question)) {
+      displayValue = getComplianceAIResponseValue(question);
     }
     return displayValue;
   };
@@ -43,11 +52,12 @@ export const QuestionnaireQuestionItem = (props: { question: QuestionnaireQuesti
   const [questionStatus, setQuestionStatus] = useState<ComplianceProgressStatus>(getQuestionStatus());
   const [additionalContextOpen, setAdditionalContextOpen] = useState<boolean>(false);
   const [additionalContextInput, setAdditionalContextInput] = useState<any | undefined>(additional_context?.value);
+  const [buttonLoading, setButtonLoading] = useState<boolean>(false);
 
   useEffect(() => {
     if (scrollToQuestion) {
       setTimeout(() => {
-        setFocusQuestion(null);
+        setScrollToQuestion(null);
       }, 2000);
     }
   }, [scrollToQuestion]);
@@ -62,7 +72,7 @@ export const QuestionnaireQuestionItem = (props: { question: QuestionnaireQuesti
   useEffect(() => {
     if (focusQuestion === null) return;
     setFocusQuestion({
-      key: key,
+      key: id,
       aiDetails: {
         ai_response: ai_response,
         ai_answered: ai_answered,
@@ -84,11 +94,7 @@ export const QuestionnaireQuestionItem = (props: { question: QuestionnaireQuesti
 
   const getBookMarkIcon = () => {
     return (
-      <div
-        className={'flex items-center justify-center w-[24px] h-[24px] cursor-pointer'}
-        onClick={() => {
-          setQuestionBookmarked(!questionBookmarked);
-        }}>
+      <div className={'flex items-center justify-center w-[24px] h-[24px] cursor-pointer'} onClick={bookMarkQuestion}>
         <ColdIcon name={IconNames.ColdBookmarkIcon} filled={questionBookmarked} color={questionBookmarked ? HexColors.lightblue['200'] : 'white'} width={15} height={20} />
       </div>
     );
@@ -341,7 +347,7 @@ export const QuestionnaireQuestionItem = (props: { question: QuestionnaireQuesti
   const getAISource = () => {
     let justification: string | undefined = '';
     let originalAnswer;
-    if (!isUndefined(ai_response) && !isUndefined(ai_response.answer) && isAIResponseValueValid(question) && questionStatus === ComplianceProgressStatus.ai_answered) {
+    if (ai_response && !isNull(ai_response.answer) && isComplianceAIResponseValueValid(question) && questionStatus === ComplianceProgressStatus.ai_answered) {
       justification = ai_response.justification;
       if (ai_response.answer === true) {
         originalAnswer = 'Yes';
@@ -381,12 +387,10 @@ export const QuestionnaireQuestionItem = (props: { question: QuestionnaireQuesti
     let disabled = true;
     let iconLeftName = IconNames.ColdCheckIcon;
     let variant = ButtonTypes.primary;
-    let onClick = () => {
-      setQuestionAnswerSaved(true);
-      setAnswerQuestionChanged(false);
-      setQuestionStatus(ComplianceProgressStatus.user_answered);
-      // todo: handle submission to API
+    let onClick = async () => {
+      await updateQuestion(false);
     };
+    const loading = buttonLoading;
     if (questionInput !== undefined && questionInput !== null) {
       // if answer is updated or answer was cleared, but the status is ai answered
       if (questionAnswerChanged || (!questionAnswerChanged && questionStatus === ComplianceProgressStatus.ai_answered)) {
@@ -398,17 +402,8 @@ export const QuestionnaireQuestionItem = (props: { question: QuestionnaireQuesti
           disabled = false;
           iconLeftName = IconNames.CloseModalIcon;
           variant = ButtonTypes.secondary;
-          onClick = () => {
-            setQuestionAnswerSaved(true);
-            setQuestionInput(undefined);
-            setAdditionalContextInput(undefined);
-            setAnswerQuestionChanged(false);
-            if (isAIResponseValueValid(question)) {
-              setQuestionStatus(ComplianceProgressStatus.ai_answered);
-              setQuestionInput(ai_response?.answer);
-            } else {
-              setQuestionStatus(ComplianceProgressStatus.not_started);
-            }
+          onClick = async () => {
+            await updateQuestion(true);
           };
         }
       }
@@ -416,7 +411,7 @@ export const QuestionnaireQuestionItem = (props: { question: QuestionnaireQuesti
 
     return (
       <div className={'w-full pb-[24px] flex flex-row justify-end'}>
-        <BaseButton variant={variant} disabled={disabled} onClick={onClick}>
+        <BaseButton variant={variant} disabled={disabled} onClick={onClick} loading={loading}>
           <div className={'w-full flex flex-row gap-[8px] items-center'}>
             <ColdIcon name={iconLeftName} />
             {label}
@@ -447,61 +442,105 @@ export const QuestionnaireQuestionItem = (props: { question: QuestionnaireQuesti
     }
   };
 
+  const bookMarkQuestion = async () => {
+    setButtonLoading(true);
+    let response;
+    if (questionBookmarked) {
+      response = await axiosFetcher([`compliance/${name}/organizations/${orgId}/questions/${id}/bookmarks`, 'DELETE']);
+    } else {
+      response = await axiosFetcher([`compliance/${name}/organizations/${orgId}/questions/${id}/bookmarks`, 'POST']);
+    }
+    if (!isAxiosError(response)) {
+      await sectionGroups?.mutate();
+      setQuestionBookmarked(!questionBookmarked);
+    }
+    setButtonLoading(false);
+  };
+
+  const updateQuestion = async (isUpdate: boolean) => {
+    setButtonLoading(true);
+
+    const response = await axiosFetcher([
+      `compliance/${name}/organizations/${orgId}/section_groups/${sectionGroupId}/sections/${sectionId}/questions/${id}/responses`,
+      'PUT',
+      {
+        value: questionInput,
+      },
+    ]);
+    if (!isAxiosError(response)) {
+      if (isUpdate) {
+        setQuestionAnswerSaved(true);
+        setQuestionInput(undefined);
+        setAdditionalContextInput(undefined);
+        setAnswerQuestionChanged(false);
+        if (isComplianceAIResponseValueValid(question)) {
+          setQuestionStatus(ComplianceProgressStatus.ai_answered);
+          setQuestionInput(ai_response?.answer);
+        } else {
+          setQuestionStatus(ComplianceProgressStatus.not_started);
+        }
+      } else {
+        setQuestionAnswerSaved(true);
+        setAnswerQuestionChanged(false);
+        setQuestionStatus(ComplianceProgressStatus.user_answered);
+      }
+      // update the sidebar
+      await sectionGroups?.mutate();
+      // update the questionnaire
+      await questionnaireMutate();
+    }
+    setButtonLoading(false);
+  };
+
   return (
-    <Element name={key}>
-      <div
-        className={`flex flex-col w-full rounded-[16px] bg-gray-30 gap-[16px] ${questionBookmarked ? 'border-[1px] border-lightblue-200 p-[23px]' : ' p-[24px]'}
+    <div
+      className={`flex flex-col w-full rounded-[16px] bg-gray-30 gap-[16px] ${questionBookmarked ? 'border-[1px] border-lightblue-200 p-[23px]' : ' p-[24px]'}
     ${focusQuestion !== null && focusQuestion.key !== id ? 'opacity-20' : ''}`}
-        ref={el => {
-          if (scrollToQuestion === key && el) {
-            console.log({
-              client: el.getBoundingClientRect(),
-              scroll: el.scrollHeight,
-            });
-            el.scrollIntoView({
-              behavior: 'smooth',
-              block: 'start',
-            });
-          }
-        }}
-        id={key}>
-        <div className={'flex flex-row gap-[8px] justify-between'}>
-          <div className={'flex flex-row gap-[8px] items-center'}>
-            {getQuestionStatusIcon()}
-            <div className={'w-full flex justify-start text-gray-120'}>QUESTION {number}</div>
-          </div>
-          <div className={'flex flex-row gap-[8px] items-center'}>
-            {getBookMarkIcon()}
-            <div
-              className={'w-[24px] h-[24px] cursor-pointer'}
-              onClick={() => {
-                if (focusQuestion?.key === id) {
-                  setFocusQuestion(null);
-                } else {
-                  setFocusQuestion({
-                    key: id,
-                    aiDetails: {
-                      ai_response: ai_response,
-                      ai_answered: ai_answered,
-                      ai_attempted: ai_attempted,
-                      value: questionInput,
-                      questionAnswerSaved: questionAnswerSaved,
-                      questionAnswerChanged: questionAnswerChanged,
-                    },
-                  });
-                }
-              }}>
-              <ColdIcon name={IconNames.ColdRightArrowIcon} />
-            </div>
+      ref={el => {
+        if (scrollToQuestion === key && el) {
+          el.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start',
+          });
+        }
+      }}
+      id={key}>
+      <div className={'flex flex-row gap-[8px] justify-between'}>
+        <div className={'flex flex-row gap-[8px] items-center'}>
+          {getQuestionStatusIcon()}
+          <div className={'w-full flex justify-start text-gray-120'}>QUESTION {number}</div>
+        </div>
+        <div className={'flex flex-row gap-[8px] items-center'}>
+          {getBookMarkIcon()}
+          <div
+            className={'w-[24px] h-[24px] cursor-pointer'}
+            onClick={() => {
+              if (focusQuestion?.key === id) {
+                setFocusQuestion(null);
+              } else {
+                setFocusQuestion({
+                  key: id,
+                  aiDetails: {
+                    ai_response: ai_response,
+                    ai_answered: ai_answered,
+                    ai_attempted: ai_attempted,
+                    value: questionInput,
+                    questionAnswerSaved: questionAnswerSaved,
+                    questionAnswerChanged: questionAnswerChanged,
+                  },
+                });
+              }
+            }}>
+            <ColdIcon name={IconNames.ColdRightArrowIcon} />
           </div>
         </div>
-        {getPrompt()}
-        {tooltip && <div className="text-left text-body not-italic font-medium text-tc-primary">{tooltip}</div>}
-        <div className="w-full justify-center mb-[24px]">{inputComponent()}</div>
-        {additionalContext()}
-        {getAISource()}
-        {getSubmitButton()}
       </div>
-    </Element>
+      {getPrompt()}
+      {tooltip && <div className="text-left text-body not-italic font-medium text-tc-primary">{tooltip}</div>}
+      <div className="w-full justify-center mb-[24px]">{inputComponent()}</div>
+      {additionalContext()}
+      {getAISource()}
+      {getSubmitButton()}
+    </div>
   );
 };

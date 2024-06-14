@@ -1,10 +1,11 @@
-import { cloneDeep, find, findIndex, forEach, forOwn, get, isArray, isBoolean, isEmpty, isEqual, isNumber, isString, isUndefined, uniq } from 'lodash';
+import { cloneDeep, find, findIndex, forEach, forOwn, get, isArray, isBoolean, isEmpty, isEqual, isNull, isNumber, isString, isUndefined, uniq } from 'lodash';
 import {
   ComplianceSurveyActiveKeyType,
   ComplianceSurveyPayloadType,
   ComplianceSurveySavedQuestionType,
   ComplianceSurveySectionType,
   QuestionnaireQuestion,
+  QuestionnaireQuestionComplianceResponse,
   SurveyActiveKeyType,
   SurveyAdditionalContext,
   SurveyPayloadType,
@@ -656,7 +657,7 @@ export const getAIResponseValue = (followUp: {
   }
 };
 
-export const getAIOriginalAnswer = (ai_response: QuestionnaireQuestion['ai_response']) => {
+export const getAIOriginalAnswer = (ai_response: QuestionnaireQuestionComplianceResponse['ai_response']) => {
   if (!ai_response) {
     return null;
   }
@@ -673,4 +674,87 @@ export const getAIOriginalAnswer = (ai_response: QuestionnaireQuestion['ai_respo
   }
 
   return originalAnswer;
+};
+
+export const isComplianceAIResponseValueValid = (followUp: QuestionnaireQuestion) => {
+  const { compliance_responses, component, options } = followUp;
+  const ai_response = compliance_responses[0].ai_response;
+  let isValid = false;
+  if (isNull(ai_response) || isNull(ai_response.answer)) {
+    return isValid;
+  }
+  switch (component) {
+    case 'yes_no':
+      if (isBoolean(ai_response.answer) || (isString(ai_response.answer) && (ai_response.answer.toLowerCase() === 'yes' || ai_response.answer.toLowerCase() === 'no'))) {
+        isValid = true;
+      }
+      break;
+    case 'textarea':
+    case 'text':
+      if (isString(ai_response.answer)) {
+        isValid = true;
+      }
+      break;
+    case 'currency':
+    case 'number':
+      if (isNumber(ai_response.answer)) {
+        isValid = true;
+      }
+      break;
+    case 'percent_slider':
+      if (isNumber(ai_response.answer) && ai_response.answer >= 0 && ai_response.answer <= 100) {
+        isValid = true;
+      }
+      break;
+    case 'multi_select':
+    case 'select':
+      if (Array.isArray(ai_response.answer) && ai_response.answer.length > 0) {
+        let allStrings = true;
+        let foundOptions = true;
+        if (component === 'select' && ai_response.answer.length !== 1) {
+          return false;
+        }
+        forEach(ai_response.answer, answer => {
+          if (!isString(answer)) {
+            allStrings = false;
+          }
+          if (!find(options, option => option === answer)) {
+            foundOptions = false;
+          }
+        });
+        isValid = allStrings && foundOptions;
+      }
+      break;
+    case 'multi_text':
+      if (Array.isArray(ai_response.answer) && ai_response.answer.length > 0) {
+        let allStrings = true;
+        forEach(ai_response.answer, answer => {
+          if (!isString(answer)) {
+            allStrings = false;
+          }
+        });
+        isValid = allStrings;
+      }
+      break;
+    default:
+  }
+  return isValid;
+};
+
+export const getComplianceAIResponseValue = (followUp: QuestionnaireQuestion) => {
+  const { compliance_responses, component } = followUp;
+  const ai_response = compliance_responses[0].ai_response;
+  switch (component) {
+    case 'yes_no':
+      if (isString(ai_response?.answer)) {
+        if (ai_response?.answer.toLowerCase() === 'yes') {
+          return true;
+        } else if (ai_response?.answer.toLowerCase() === 'no') {
+          return false;
+        }
+      }
+      return ai_response?.answer;
+    default:
+      return ai_response?.answer;
+  }
 };

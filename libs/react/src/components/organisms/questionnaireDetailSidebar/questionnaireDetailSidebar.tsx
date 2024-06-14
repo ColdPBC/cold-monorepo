@@ -1,11 +1,12 @@
-import { useContext, useEffect, useState } from 'react';
-import { ColdIcon, QuestionnaireAIDetail, QuestionnaireMoreDetail, QuestionnaireNotesDetail } from '@coldpbc/components';
+import React, { useContext, useEffect, useState } from 'react';
+import { ColdIcon, ErrorFallback, QuestionnaireAIDetail, QuestionnaireMoreDetail, QuestionnaireNotesDetail } from '@coldpbc/components';
 import { IconNames } from '@coldpbc/enums';
 import { ColdComplianceQuestionnaireContext } from '@coldpbc/context';
 import { HexColors } from '@coldpbc/themes';
 import { useColdContext } from '@coldpbc/hooks';
+import { withErrorBoundary } from 'react-error-boundary';
 
-export const QuestionnaireDetailSidebar = () => {
+const _QuestionnaireDetailSidebar = () => {
   const { logBrowser } = useColdContext();
   const { focusQuestion, setFocusQuestion } = useContext(ColdComplianceQuestionnaireContext);
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
@@ -82,9 +83,10 @@ export const QuestionnaireDetailSidebar = () => {
 
   return (
     <div
-      className={'flex flex-col h-screen'}
+      className={'flex flex-col h-full'}
       style={{
         width: sidebarOpen ? '407px' : '0px',
+        minWidth: sidebarOpen ? '407px' : '0px',
         borderLeft: sidebarOpen ? `1px solid ${HexColors.gray['70']}` : 'none',
         transition: 'width 0.3s',
       }}>
@@ -118,3 +120,10 @@ export const QuestionnaireDetailSidebar = () => {
     </div>
   );
 };
+
+export const QuestionnaireDetailSidebar = withErrorBoundary(_QuestionnaireDetailSidebar, {
+  FallbackComponent: props => <ErrorFallback {...props} />,
+  onError: (error, info) => {
+    console.error('Error occurred in QuestionnaireDetailSidebar: ', error);
+  },
+});

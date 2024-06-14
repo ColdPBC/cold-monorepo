@@ -106,38 +106,6 @@ export type CurrentAIStatusSection = {
   questions: string[];
 };
 
-export type QuestionnaireQuestion = {
-  id: string;
-  key: string;
-  order: number;
-  prompt: string;
-  bookmarked: boolean;
-  user_answered: boolean;
-  ai_answered: boolean;
-  not_started: boolean;
-  options: string[];
-  component: string;
-  placeholder: string;
-  tooltip: string;
-  value?: any;
-  additional_context?: SurveyAdditionalContext;
-  ai_response?: {
-    justification?: string;
-    answer?: string | boolean | number | Array<string>;
-    references?: {
-      file: string;
-      text: string[];
-      score?: number;
-    }[];
-    source?: string[];
-  };
-  ai_attempted?: boolean;
-  score?: number;
-  max_score?: number;
-  question_summary?: string;
-  corresponding_question?: string;
-};
-
 export interface ComplianceNotePayload {
   id: string;
   note: string;
@@ -180,4 +148,58 @@ export interface ComplianceSidebarQuestion {
   user_answered: boolean;
   not_started: boolean;
   bookmarked: boolean;
+}
+
+export interface QuestionnaireQuestion {
+  id: string;
+  key: string;
+  order: number;
+  prompt: string;
+  bookmarked: boolean;
+  user_answered: boolean;
+  ai_answered: boolean;
+  not_started: boolean;
+  options: string[];
+  component: string;
+  placeholder: string;
+  tooltip: string;
+  additional_context?: SurveyAdditionalContext;
+  ai_attempted?: boolean;
+  score?: number;
+  max_score?: number;
+  question_summary?: string;
+  corresponding_question?: string;
+  compliance_responses: QuestionnaireQuestionComplianceResponse[];
+}
+
+export interface QuestionnaireQuestionComplianceResponse {
+  org_response: {
+    value: any;
+  } | null;
+  ai_response: {
+    answer: any | null;
+    justification: string;
+    references:
+      | {
+          file: string;
+          text: string[];
+        }[]
+      | null;
+  } | null;
+}
+
+export interface QuestionnaireComplianceContainerPayLoad {
+  name: string;
+  compliance_section_groups: {
+    id: string;
+    title: string;
+    order: number;
+    compliance_sections: {
+      id: string;
+      title: string;
+      key: string;
+      order: number;
+      compliance_questions: QuestionnaireQuestion[];
+    }[];
+  }[];
 }

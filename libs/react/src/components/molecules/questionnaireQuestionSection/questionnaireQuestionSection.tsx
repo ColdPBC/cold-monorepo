@@ -1,6 +1,6 @@
 import { Element } from 'react-scroll';
 import { QuestionnaireQuestionItem, QuestionnaireQuestionItemPlaceholder } from '@coldpbc/components';
-import { useContext, useEffect, useRef } from 'react';
+import { useContext, useEffect } from 'react';
 import { ColdComplianceQuestionnaireContext } from '@coldpbc/context';
 import { ComplianceSidebarSection, QuestionnaireQuestion } from '@coldpbc/interfaces';
 import { useSearchParams } from 'react-router-dom';
@@ -8,12 +8,13 @@ import { useSearchParams } from 'react-router-dom';
 export const QuestionnaireQuestionSection = (props: {
   innerRef: ((node?: globalThis.Element | null | undefined) => void) | null;
   section: ComplianceSidebarSection;
+  sectionGroupId: string;
   pagedSectionData: QuestionnaireQuestion[] | undefined;
+  questionnaireMutate: () => void;
 }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { focusQuestion } = useContext(ColdComplianceQuestionnaireContext);
-  const { innerRef, section, pagedSectionData } = props;
-  const ref = useRef<HTMLDivElement>(null);
+  const { innerRef, section, pagedSectionData, sectionGroupId, questionnaireMutate } = props;
   const sectionKey = searchParams.get('section');
   const isSectionInQuery = sectionKey === section.key;
 
@@ -47,7 +48,13 @@ export const QuestionnaireQuestionSection = (props: {
           if (pagedQuestionData) {
             return (
               <Element name={question.key}>
-                <QuestionnaireQuestionItem number={index + 1} question={pagedQuestionData} />
+                <QuestionnaireQuestionItem
+                  number={index + 1}
+                  question={pagedQuestionData}
+                  sectionId={section.id}
+                  sectionGroupId={sectionGroupId}
+                  questionnaireMutate={questionnaireMutate}
+                />
               </Element>
             );
           } else {

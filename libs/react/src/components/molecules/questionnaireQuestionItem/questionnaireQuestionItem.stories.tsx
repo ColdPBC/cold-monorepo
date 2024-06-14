@@ -34,6 +34,12 @@ export const Bookmarked: Story = {
       key: '1',
       order: 1,
       id: '1',
+      compliance_responses: [
+        {
+          ai_response: null,
+          org_response: null,
+        },
+      ],
     },
   },
 };
@@ -57,6 +63,12 @@ export const NotStarted: Story = {
       key: '1',
       order: 1,
       id: '1',
+      compliance_responses: [
+        {
+          ai_response: null,
+          org_response: null,
+        },
+      ],
     },
   },
 };
@@ -77,13 +89,19 @@ export const AiAnswered: Story = {
       tooltip: 'This is a tooltip',
       component: 'text',
       placeholder: 'Enter your name',
-      ai_response: {
-        justification: 'We chose this answer because of all of these reasons and this one document that supports why we chose this.',
-        answer: 'Cold Climate',
-      },
       key: '1',
       order: 1,
       id: '1',
+      compliance_responses: [
+        {
+          ai_response: {
+            justification: 'We chose this answer because of all of these reasons and this one document that supports why we chose this.',
+            answer: 'Cold Climate',
+            references: null,
+          },
+          org_response: null,
+        },
+      ],
     },
   },
 };
@@ -104,10 +122,17 @@ export const Complete: Story = {
       options: [],
       tooltip: 'This is a tooltip',
       component: 'text',
-      value: 'Cold Climate',
       placeholder: 'Enter your name',
       key: '1',
       order: 1,
+      compliance_responses: [
+        {
+          ai_response: null,
+          org_response: {
+            value: 'Cold Climate',
+          },
+        },
+      ],
     },
   },
 };
@@ -125,13 +150,18 @@ export const YesNo: Story = {
       ai_answered: false,
       user_answered: false,
       not_started: false,
-      value: true,
       options: [],
       tooltip: 'This is a tooltip',
       component: 'yes_no',
       placeholder: 'Enter your name',
       key: '1',
       order: 1,
+      compliance_responses: [
+        {
+          ai_response: null,
+          org_response: null,
+        },
+      ],
     },
   },
 };
@@ -155,6 +185,12 @@ export const Select: Story = {
       placeholder: 'Enter your name',
       key: '1',
       order: 1,
+      compliance_responses: [
+        {
+          ai_response: null,
+          org_response: null,
+        },
+      ],
     },
   },
 };
@@ -174,11 +210,16 @@ export const MultiSelect: Story = {
       not_started: false,
       options: ['Red', 'Green', 'Blue'],
       tooltip: 'This is a tooltip',
-      value: ['Red'],
       component: 'multi_select',
       placeholder: 'Enter your name',
       key: '1',
       order: 1,
+      compliance_responses: [
+        {
+          ai_response: null,
+          org_response: null,
+        },
+      ],
     },
   },
 };
@@ -202,6 +243,12 @@ export const Text: Story = {
       placeholder: 'Enter here',
       key: '1',
       order: 1,
+      compliance_responses: [
+        {
+          ai_response: null,
+          org_response: null,
+        },
+      ],
     },
   },
 };
@@ -225,6 +272,12 @@ export const Number: Story = {
       placeholder: '',
       key: '1',
       order: 1,
+      compliance_responses: [
+        {
+          ai_response: null,
+          org_response: null,
+        },
+      ],
     },
   },
 };
@@ -248,6 +301,12 @@ export const Currency: Story = {
       placeholder: '',
       key: '1',
       order: 1,
+      compliance_responses: [
+        {
+          ai_response: null,
+          org_response: null,
+        },
+      ],
     },
   },
 };
@@ -271,6 +330,12 @@ export const Percent: Story = {
       placeholder: '',
       key: '1',
       order: 1,
+      compliance_responses: [
+        {
+          ai_response: null,
+          org_response: null,
+        },
+      ],
     },
   },
 };
@@ -294,6 +359,12 @@ export const TextArea: Story = {
       placeholder: '',
       key: '1',
       order: 1,
+      compliance_responses: [
+        {
+          ai_response: null,
+          org_response: null,
+        },
+      ],
     },
   },
 };
@@ -317,6 +388,12 @@ export const MultiText: Story = {
       placeholder: '',
       key: '1',
       order: 1,
+      compliance_responses: [
+        {
+          ai_response: null,
+          org_response: null,
+        },
+      ],
     },
   },
 };
@@ -334,7 +411,6 @@ export const AdditionalContext: Story = {
       ai_answered: false,
       user_answered: false,
       not_started: false,
-      value: true,
       options: [],
       tooltip: 'This is a tooltip',
       component: 'yes_no',
@@ -348,6 +424,14 @@ export const AdditionalContext: Story = {
         comparison: true,
         placeholder: '',
       },
+      compliance_responses: [
+        {
+          ai_response: null,
+          org_response: {
+            value: true,
+          },
+        },
+      ],
     },
   },
 };
@@ -355,7 +439,7 @@ export const AdditionalContext: Story = {
 const QuestionnaireStory = (args: { question: QuestionnaireQuestion; number: number }) => {
   return (
     <StoryMockProvider>
-      <QuestionnaireQuestionItem {...args} />
+      <QuestionnaireQuestionItem {...args} questionnaireMutate={() => {}} sectionId={'1'} sectionGroupId={'1'} />
     </StoryMockProvider>
   );
 };

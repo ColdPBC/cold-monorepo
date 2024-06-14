@@ -1,10 +1,11 @@
-import { useContext } from 'react';
+import React, { useContext } from 'react';
 import { ChevronDoubleLeftIcon, ChevronDoubleRightIcon } from '@heroicons/react/24/solid';
 import { HexColors } from '@coldpbc/themes';
-import { QuestionnaireSidebarSectionGroup } from '@coldpbc/components';
+import { ErrorFallback, QuestionnaireSidebarSectionGroup } from '@coldpbc/components';
 import { ColdComplianceQuestionnaireContext } from '@coldpbc/context';
+import { withErrorBoundary } from 'react-error-boundary';
 
-export const QuestionnaireSidebar = (props: { sidebarOpen: boolean; setSidebarOpen: (open: boolean) => void }) => {
+const _QuestionnaireSidebar = (props: { sidebarOpen: boolean; setSidebarOpen: (open: boolean) => void }) => {
   const { sidebarOpen, setSidebarOpen } = props;
   const { sectionGroups } = useContext(ColdComplianceQuestionnaireContext);
 
@@ -26,7 +27,7 @@ export const QuestionnaireSidebar = (props: { sidebarOpen: boolean; setSidebarOp
         </div>
       )}
       <div className={'w-full h-full flex flex-col gap-[48px] overflow-y-auto scrollbar-hide'}>
-        {sectionGroups.compliance_section_groups
+        {sectionGroups?.data?.compliance_section_groups
           .sort((a, b) => a.order - b.order)
           .map((item, index) => {
             return <QuestionnaireSidebarSectionGroup key={index} sectionGroup={item} sideBarExpanded={sidebarOpen} />;
@@ -35,3 +36,10 @@ export const QuestionnaireSidebar = (props: { sidebarOpen: boolean; setSidebarOp
     </div>
   );
 };
+
+export const QuestionnaireSidebar = withErrorBoundary(_QuestionnaireSidebar, {
+  FallbackComponent: props => <ErrorFallback {...props} />,
+  onError: (error, info) => {
+    console.error('Error occurred in QuestionnaireSidebar: ', error);
+  },
+});

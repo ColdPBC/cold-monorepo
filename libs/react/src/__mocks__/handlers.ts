@@ -279,7 +279,7 @@ export const handlers = [
     return res(ctx.json(getQuestionnaireSidebarComplianceMock()));
   }),
 
-  rest.get(getApiUrl('/compliance_definitions/:name/organizations/:orgId/sectionGroups/:sectionGroupId/sections/:sectionId'), (req, res, ctx) => {
+  rest.get(getApiUrl('/compliance/:name/organizations/:orgId/section_groups/:sectionGroupId/sections/:sectionId/responses'), (req, res, ctx) => {
     // get query params from url
     const { name, orgId, sectionGroupId, sectionId } = req.params as {
       name: string;
@@ -292,9 +292,35 @@ export const handlers = [
     return res(ctx.json(getQuestionnaireContainerMock(sectionGroupId, sectionId)));
   }),
 
-  rest.get(getApiUrl('/compliance_definitions/:name/organizations/:orgId/questions/:id/notes'), (req, res, ctx) => {
+  // delete compliance question bookmark
+  rest.delete(getApiUrl('/compliance/:name/organizations/:orgId/questions/:id/bookmarks'), (req, res, ctx) => {
+    // return 200 status code
+    return res(ctx.status(200));
+  }),
+
+  // create compliance question bookmark
+  rest.post(getApiUrl('/compliance/:name/organizations/:orgId/questions/:id/bookmarks'), (req, res, ctx) => {
+    return res(ctx.status(200));
+  }),
+
+  // answer compliance question in questionnaire
+  rest.put(getApiUrl('/compliance/:name/organizations/:orgId/section_groups/:sectionGroupId/sections/:sectionId/questions/:id/responses'), (req, res, ctx) => {
+    return res(ctx.status(200));
+  }),
+
+  rest.get(getApiUrl('/compliance/:name/organizations/:orgId/questions/:id/notes'), (req, res, ctx) => {
     const { name, orgId, id } = req.params as { name: string; orgId: string; id: string };
 
     return res(ctx.json(getNotesMock(id)));
+  }),
+
+  // POST /compliance/${name}/organizations/${orgId}/questions/${focusQuestion?.key}/notes
+  rest.post(getApiUrl('/compliance/:name/organizations/:orgId/questions/:id/notes'), (req, res, ctx) => {
+    return res(ctx.status(200));
+  }),
+
+  // PATCH /compliance/${name}/organizations/${orgId}/questions/${focusQuestion?.key}/notes/${firstNote.id}
+  rest.patch(getApiUrl('/compliance/:name/organizations/:orgId/questions/:id/notes/:noteId'), (req, res, ctx) => {
+    return res(ctx.status(200));
   }),
 ];
