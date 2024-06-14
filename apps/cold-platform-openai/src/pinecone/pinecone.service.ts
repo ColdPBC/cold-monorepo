@@ -1,5 +1,5 @@
-import { ConflictException, Injectable, OnModuleInit } from '@nestjs/common';
-import { AuthenticatedUser, BaseWorker, CacheService, Cuid2Generator, DarklyService, GuidPrefixes, PrismaService } from '@coldpbc/nest';
+import { ConflictException, Injectable, OnModuleInit, UnauthorizedException } from '@nestjs/common';
+import { AuthenticatedUser, BaseWorker, CacheService, Cuid2Generator, DarklyService, GuidPrefixes, IAuthenticatedUser, PrismaService } from '@coldpbc/nest';
 import { Pinecone, PineconeRecord, ScoredPineconeRecord } from '@pinecone-database/pinecone';
 import { ConfigService } from '@nestjs/config';
 import { Document } from '@langchain/core/documents';
@@ -38,7 +38,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
   }
 
   async getIndexDetails(org_name) {
-    let config = await this.darkly.getJSONFlag(
+    /*let config = await this.darkly.getJSONFlag(
       'config-embedding-model',
 
       {
@@ -46,47 +46,41 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
         key: org_name,
         name: org_name,
       },
-    );
+    );*/
 
-    if (!config) {
+    let config = {
+      dimension: 3072,
+      model: 'text-embedding-3-large',
+      index: 'cold-clients-3-large',
+    };
+
+    if (!config.index || !config) {
       config = {
         dimension: 3072,
         model: 'text-embedding-3-large',
+        index: 'cold-clients-3-large',
       };
     }
 
-    const indexName = `${org_name}-${config.model.split('-').slice(2).join('-')}`;
+    await this.createIndex(config.index, config.dimension);
 
-    await this.createIndex(indexName, config.dimension);
-
-    return { indexName, config };
+    return { indexName: config.index, config };
   }
 
-  async syncOrgFiles(
-    user:
-      | AuthenticatedUser
-      | {
-          coldclimate_claims: { org_id: string; roles: string[]; id: string; email: string };
-        },
-    orgId: string,
-    delay: number = 0,
-  ) {
-    const org = await this.prisma.organizations.findUnique({
-      where: {
-        id: orgId,
-      },
-      include: {
-        organization_files: true,
-      },
-    });
-
+  async syncOrgFiles(user: IAuthenticatedUser, org: any, delay: number = 0) {
     if (!org) {
-      throw new Error(`Organization not found: ${orgId}`);
+      throw new Error(`Organization not found: ${org.id}`);
     }
 
     const details = await this.getIndexDetails(org.name);
 
-    for (const file of org.organization_files) {
+    if (Array.isArray(org['organization_files']) && org['organization_files'].length > 0) {
+      this.logger.info(`rebuilding ${org['organization_files'].length} file emeddings for ${org.name}`);
+    }
+
+    for (const file of org['organization_files']) {
+      this.logger.info(`adding job to sync ${file.original_name} for ${org.name} to queue`);
+
       await this.queue.add(
         'sync_files',
         {
@@ -102,17 +96,45 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
     return { message: 'Syncing org files', org };
   }
 
-  async syncAllOrgFiles(user: AuthenticatedUser) {
+  async syncAllOrgFiles(user: IAuthenticatedUser) {
+    if (!user.isColdAdmin) {
+      throw new UnauthorizedException('You do not have the correct role to execute this action');
+    }
+
+    this.logger.info('rebuilding pinecone data for all orgs...');
+
     await this.darkly.onModuleInit();
-    const orgs = await this.prisma.organizations.findMany({
+    const orgs = (await this.prisma.organizations.findMany({
       select: {
         id: true,
         name: true,
+        organization_files: true,
       },
-    });
+    })) as any[];
+
+    const indexList: any = (await this.pinecone.listIndexes()) as { indexes: any[] };
+
+    if (!indexList && !indexList.indexes) {
+      //throw new NotFoundError('No pinecone indexes found');
+      return;
+    }
+
+    this.logger.info(`deleting ${indexList.indexes.length} indexes in pinecone environment...`);
+
+    for (const index of indexList.indexes as any[]) {
+      this.logger.info(`deleting index ${index.name}`);
+      await this.pinecone.deleteIndex(index.name);
+    }
 
     for (const org of orgs) {
-      this.syncOrgFiles(user, org.id);
+      this.logger.info(`deleting cached vectors for ${org.name}`);
+      await this.prisma.vector_records.deleteMany({
+        where: {
+          organization_id: org.id,
+        },
+      });
+
+      await this.syncOrgFiles(user, org);
     }
 
     return { message: 'Sync jobs created for all files across all orgs', orgs };
@@ -124,14 +146,14 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
         apiKey: this.config.getOrThrow('PINECONE_API_KEY'),
       });
 
-      const automateInjestion = await this.darkly.getBooleanFlag('config-enable-automated-pinecone-injestion', false);
+      /*const automateInjestion = await this.darkly.getBooleanFlag('config-enable-automated-pinecone-injestion', false);
       if (automateInjestion) {
-        const orgs = await this.prisma.organizations.findMany({
+        const orgs = (await this.prisma.organizations.findMany({
           select: {
             id: true,
             name: true,
           },
-        });
+        })) as organizations[];
 
         for (const org of orgs) {
           await this.syncOrgFiles(
@@ -143,11 +165,11 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
                 roles: ['cold:admin'],
               },
             },
-            org.id,
+            org,
             60000 * 4,
           );
         }
-      }
+      }*/
     } catch (error) {
       console.log('error', error);
       throw new Error('Failed to initialize Pinecone Client');
@@ -332,6 +354,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
     try {
       if (filePayload.vector_records && filePayload.vector_records.length > 0) {
         for (const v of filePayload.vector_records) {
+          this.logger.info(`checking if ${v.id} of ${filePayload.original_name} exists in db`);
           const found = await index.namespace(organization.name).query({
             vector: v.values,
             topK: 1,
@@ -341,8 +364,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
             this.logger.info(`upserting missing ${v.id} of ${filePayload.original_name}`);
             const item = { id: v.id, values: v.values, metadata: v.metadata };
             index.namespace(organization.name).upsert([item]);
-          } else {
-            this.logger.info(`${v.id} of ${filePayload.original_name} already injected`);
+            this.logger.info(`upserted ${v.id} of ${filePayload.original_name} to namespace ${organization.name} in index ${index.name}`);
           }
         }
       } else {
@@ -371,20 +393,16 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
         },
     organization: any,
     filePayload: organization_files,
-    namespaceName?: string,
     indexDetails?: any,
   ) {
     const vectors: PineconeRecord[] = [];
     try {
-      if (!(await this.darkly.getBooleanFlag('config-enable-pinecone-injestion'))) {
+      /*if (!(await this.darkly.getBooleanFlag('config-enable-pinecone-injestion'))) {
         const message = 'Pinecone ingestion is disabled.  To enable, turn on targeting for `config-enable-pinecone-injestion` flag in launch darkly';
         this.logger.warn(message);
-      }
+      }*/
 
       const details = indexDetails || (await this.getIndexDetails(organization.name));
-      if (!namespaceName) {
-        namespaceName = organization.name;
-      }
 
       const org_file = await this.prisma.organization_files.findUnique({
         where: {
@@ -394,7 +412,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
           vector_records: {
             where: {
               index_name: details.indexName,
-              namespace: namespaceName,
+              namespace: organization.name,
             },
           },
         },
