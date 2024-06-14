@@ -1,3 +1,10 @@
+# [1.237.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.236.0...v1.237.0) (2024-06-14)
+
+
+### Features
+
+* Update Pinecone service functionality ([9862b2f](https://github.com/ColdPBC/cold-monorepo/commit/9862b2f5a1c441d8e7ec1a93439a6f90c2dc7339))
+
 # [1.236.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.235.0...v1.236.0) (2024-06-14)
 
 
