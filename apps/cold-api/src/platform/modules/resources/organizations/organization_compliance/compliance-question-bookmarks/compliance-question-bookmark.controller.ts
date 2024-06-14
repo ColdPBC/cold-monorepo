@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Post, Req, UseFilters, UseGuards } from '@nestjs/common';
 import { ComplianceQuestionBookmarkService } from './compliance-question-bookmarks.service';
 import { organization_compliance_question_bookmarks } from '@prisma/client';
-import { allRoles, HttpExceptionFilter, JwtAuthGuard, Roles, RolesGuard } from '@coldpbc/nest';
+import { allRoles, coldAdminOnly, HttpExceptionFilter, JwtAuthGuard, Roles, RolesGuard } from '@coldpbc/nest';
 import { ApiParam, ApiTags } from '@nestjs/swagger';
 
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -19,52 +19,51 @@ import { ApiParam, ApiTags } from '@nestjs/swagger';
   type: 'string',
   example: 'b_corp_2024',
 })
-@ApiParam({
-  name: 'sgId',
-  required: true,
-  description: 'Section Group Id',
-  type: 'string',
-  example: 'csg_', // Example value
-})
-@ApiParam({
-  name: 'sId',
-  required: true,
-  description: 'Section Id',
-  type: 'string',
-  example: 'cs_', // Example value
-})
-@ApiParam({
-  name: 'qId',
-  required: true,
-  description: 'Question Id',
-  type: 'string',
-  example: 'cq_', // Example value
-})
-@Controller('compliance/:name/organizations/:orgId/questions/:qId/bookmarks')
+@Controller('compliance/:name/organizations/:orgId')
 export class ComplianceQuestionBookmarkController {
   constructor(private readonly organizationComplianceBookmarksService: ComplianceQuestionBookmarkService) {}
 
-  @Post()
+  @Post(`questions/:qId/bookmarks`)
   @Roles(...allRoles)
-  create(@Param('name') name: string, @Param('qId') qId: string, @Body() bookMark: Partial<organization_compliance_question_bookmarks>, @Req() req: any) {
+  createBookmark(@Param('name') name: string, @Param('qId') qId: string, @Body() bookMark: Partial<organization_compliance_question_bookmarks>, @Req() req: any) {
     return this.organizationComplianceBookmarksService.upsert(name, qId, bookMark, req);
   }
 
-  @Get()
+  @Get('bookmarks')
   @Roles(...allRoles)
-  findAll(@Param('name') name: string, @Req() req: any) {
-    return this.organizationComplianceBookmarksService.findAll(name, req);
+  getBookmarks(@Param('name') name: string, @Req() req: any) {
+    return this.organizationComplianceBookmarksService.findAllByEmail(name, req);
   }
 
-  @Get(':id')
+  @Get('questions/:qId/bookmarks')
+  @ApiParam({
+    name: 'qId',
+    required: true,
+    description: 'Question Id',
+    type: 'string',
+    example: 'cq_', // Example value
+  })
   @Roles(...allRoles)
-  findOne(@Param('name') name: string, @Param('id') id: string, @Req() req: any) {
-    return this.organizationComplianceBookmarksService.findOne(name, id, req);
+  getBookmarkByQuestionId(@Param('name') name: string, @Param('qId') id: string, @Req() req: any) {
+    return this.organizationComplianceBookmarksService.findByQuestionIdAndEmail(name, id, req);
   }
 
-  @Delete()
+  @Get('bookmarks/all')
+  @Roles(...coldAdminOnly)
+  getAllBookmarkByQuestionId(@Param('name') name: string, @Req() req: any) {
+    return this.organizationComplianceBookmarksService.findAllOrgBookmarks(name, req);
+  }
+
+  @Delete('questions/:qId/bookmarks')
+  @ApiParam({
+    name: 'qId',
+    required: true,
+    description: 'Question Id',
+    type: 'string',
+    example: 'cq_', // Example value
+  })
   @Roles(...allRoles)
-  remove(@Param('qId') qId: string, @Req() req: any) {
+  deleteBookmark(@Param('qId') qId: string, @Req() req: any) {
     return this.organizationComplianceBookmarksService.remove(qId, req);
   }
 }
