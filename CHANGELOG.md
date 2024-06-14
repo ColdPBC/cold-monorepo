@@ -1,3 +1,18 @@
+# [1.236.0-COLD-710.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.236.0-COLD-710.1...v1.236.0-COLD-710.2) (2024-06-14)
+
+
+### Bug Fixes
+
+* change organization_compliance_question_bookmarks to false in Prisma extensions ([6de5313](https://github.com/ColdPBC/cold-monorepo/commit/6de5313d48f4a6220154655e68a448e36189687a))
+
+
+### Features
+
+* Add unique constraint to email and compliance_question_id in Prisma schema ([b401d9a](https://github.com/ColdPBC/cold-monorepo/commit/b401d9ac716fc74e0f6d7032e25e71d80fbddae2))
+* Expand compliance responses repository logic ([2daae9a](https://github.com/ColdPBC/cold-monorepo/commit/2daae9ae13b1d90fee705b2d4ff96ca4c393697f))
+* Handle NotFoundException in compliance-ai-responses.repository ([629c5d6](https://github.com/ColdPBC/cold-monorepo/commit/629c5d672d0b7f772c6aecb2a634e144d8199c13))
+* Update deletion criteria in compliance question bookmarks repository ([22d82f9](https://github.com/ColdPBC/cold-monorepo/commit/22d82f9077fa1c5a5e9e9e4e3252c73f934d4da9))
+
 # [1.236.0-COLD-710.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.235.0...v1.236.0-COLD-710.1) (2024-06-13)
 
 
