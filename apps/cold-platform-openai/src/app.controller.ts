@@ -34,7 +34,8 @@ export class OpenAIController extends BaseWorker {
       user: IAuthenticatedUser;
     },
   ) {
-    return this.pc.syncOrgFiles(req.user, orgId);
+    const org = this.prisma.organizations.findUnique({ where: { id: orgId } }) as any;
+    return this.pc.syncOrgFiles(req.user, org);
   }
 
   @Get('files')
