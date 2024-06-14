@@ -1,3 +1,10 @@
+# [1.236.0-COLD-710.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.236.0-COLD-710.3...v1.236.0-COLD-710.4) (2024-06-14)
+
+
+### Features
+
+* Refactor compliance responses handling ([2ee30f4](https://github.com/ColdPBC/cold-monorepo/commit/2ee30f444694fbf9fa2fcd2e926bb72e880be2d6))
+
 # [1.236.0-COLD-710.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.236.0-COLD-710.2...v1.236.0-COLD-710.3) (2024-06-14)
 
 
