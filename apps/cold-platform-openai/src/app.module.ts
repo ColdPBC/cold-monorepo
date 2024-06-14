@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { ColdRabbitModule, ColdRabbitService, ComplianceRepositoryModule, NestModule, OrgUserInterceptor, PrismaModule } from '@coldpbc/nest';
+import { ColdRabbitModule, NestModule, OrgUserInterceptor, PrismaModule } from '@coldpbc/nest';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { AppService } from './app.service';
 import { APP_INTERCEPTOR } from '@nestjs/core';
@@ -56,7 +56,6 @@ export class AppModule {
         PineconeModule,
         LangchainModule,
         LoadersModule,
-        ComplianceRepositoryModule,
         await CrawlerModule.forRootAsync(),
         ChatModule,
       ],

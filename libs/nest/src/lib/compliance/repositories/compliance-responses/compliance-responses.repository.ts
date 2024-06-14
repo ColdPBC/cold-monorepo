@@ -5,6 +5,15 @@ import { organization_compliance, organization_compliance_ai_responses, organiza
 import { Cuid2Generator, GuidPrefixes } from '../../../utility';
 import { IAuthenticatedUser } from '../../../primitives';
 import { ScoringService } from '../../scoring';
+import { pick, set } from 'lodash';
+
+export interface ComplianceResponseOptions {
+  take?: number;
+  skip?: number;
+  references?: boolean;
+  responses?: boolean;
+  bookmarks?: boolean;
+}
 
 @Injectable()
 export class ComplianceResponsesRepository extends BaseWorker {
@@ -12,72 +21,119 @@ export class ComplianceResponsesRepository extends BaseWorker {
     super(ComplianceResponsesRepository.name);
   }
 
+  private getBookmarkQuery(email: string) {
+    return {
+      where: {
+        email: email,
+      },
+      select: {
+        id: true,
+        email: true,
+      },
+    };
+  }
+
+  private getQuestionsQuery(options: ComplianceResponseOptions, org: organizations, user: IAuthenticatedUser) {
+    return {
+      take: options?.take,
+      skip: options?.skip,
+      select: {
+        id: true,
+        key: true,
+        order: true,
+        component: true,
+        prompt: true,
+        tooltip: true,
+        placeholder: true,
+        rubric: true,
+        options: true,
+        additional_context: true,
+        question_bookmarks: options?.bookmarks ? this.getBookmarkQuery(user.coldclimate_claims.email) : false,
+        compliance_responses: {
+          where: {
+            organization_id: org.id,
+          },
+          select: {
+            id: true,
+            org_response: {
+              select: {
+                id: true,
+                value: true,
+                deleted: true,
+              },
+            },
+            ai_response: {
+              select: {
+                id: true,
+                answer: true,
+                justification: true,
+                references: options?.references,
+              },
+            },
+            deleted: true,
+          },
+        },
+      },
+    };
+  }
+
   /**
    * Create or Update a compliance response
    * @param orgId
    * @param compliance_definition_name
-   * @param compliance_section_id
-   * @param compliance_section_group_id
-   * @param compliance_question_id
+   * @param sId
+   * @param sgId
+   * @param qId
    * @param user
    * @param user_response
    * @param ai_response
    */
   async upsertComplianceResponse(
-    orgId: string,
+    org: organizations,
     compliance_definition_name: string,
-    compliance_section_group_id: string,
-    compliance_section_id: string,
-    compliance_question_id: string,
+    sgId: string,
+    sId: string,
+    qId: string,
     user: IAuthenticatedUser,
     user_response?: organization_compliance_responses,
     ai_response?: organization_compliance_ai_responses,
   ) {
-    let organization, compliance;
+    if (!sId) throw new BadRequestException('Compliance Section ID is required');
+    if (!sgId) throw new BadRequestException('Compliance Section Group ID is required');
+    if (!compliance_definition_name) throw new BadRequestException('Compliance Definition Name is required');
+    if (!org) throw new BadRequestException('Organization is required');
+    if (!user) throw new BadRequestException('User is required');
+
+    let compliance;
 
     try {
-      let where;
-      const byId = orgId.startsWith('org_');
-      if (byId) {
-        where = { id: orgId };
-      } else {
-        where = { name: orgId };
-      }
-
-      organization = await this.prisma.extended.organizations.findUnique({
-        where: where,
-      });
-      if (!organization) {
-        throw new NotFoundException(`Organization ${orgId} not found`);
-      }
-
       compliance = await this.prisma.extended.organization_compliance.findUnique({
         where: {
           orgIdCompNameKey: {
-            organization_id: organization.id,
+            organization_id: org.id,
             compliance_definition_name,
           },
         },
       });
 
       if (!compliance) {
-        throw new NotFoundException(`Organization Compliance Definition ${compliance_definition_name} not found for organization ${organization.name}`);
+        throw new NotFoundException(`Organization Compliance Definition ${compliance_definition_name} not found for organization ${org.name}`);
       }
 
       if (!user_response?.value && (!ai_response?.answer || !ai_response?.justification)) {
-        throw new BadRequestException(`No User or AI response provided for ${organization.name}: ${compliance.compliance_definition_name}, nothing to do`);
+        throw new BadRequestException(`No User or AI response provided for ${org.name}: ${compliance.compliance_definition_name}, nothing to do`);
       }
 
-      if (!ai_response?.compliance_question_id || (!user_response?.compliance_question_id && !compliance_question_id)) {
-        throw new BadRequestException(`No compliance question id provided for ${organization.name}: ${compliance.compliance_definition_name}`);
+      if (!ai_response?.compliance_question_id && !user_response?.compliance_question_id && !qId) {
+        throw new BadRequestException(`No compliance question id provided for ${org.name}: ${compliance.compliance_definition_name}`);
       }
 
-      this.logger.info(`Saving response for ${organization.name}: ${compliance.compliance_definition_name}`, {
+      this.logger.info(`Saving response for ${org.name}: ${compliance.compliance_definition_name}`, {
         user,
         user_response: user_response,
         ai_response,
         ...compliance,
-        organization: { id: organization.id, name: organization.name, display_name: organization.display_name },
+        organization: { id: org.id, name: org.name, display_name: org.display_name },
       });
 
       let orgResponseEntity, aiResponseEntity;
@@ -92,9 +148,9 @@ export class ComplianceResponsesRepository extends BaseWorker {
           },
           create: {
             id: new Cuid2Generator(GuidPrefixes.OrganizationComplianceAIResponse).scopedId,
-            organization_id: organization.id,
+            organization_id: org.id,
             organization_compliance_id: compliance.id,
-            compliance_question_id: compliance_question_id || ai_response.compliance_question_id,
+            compliance_question_id: qId || ai_response.compliance_question_id,
             answer: ai_response.answer as any,
             justification: ai_response.justification,
             sources: ai_response.sources as any,
@@ -116,13 +172,13 @@ export class ComplianceResponsesRepository extends BaseWorker {
           where: {
             orgCompQuestId: {
               organization_compliance_id: compliance.id,
-              compliance_question_id: compliance_question_id || user_response.compliance_question_id,
+              compliance_question_id: qId || user_response.compliance_question_id,
             },
           },
           create: {
             id: new Cuid2Generator(GuidPrefixes.OrganizationComplianceResponse).scopedId,
             organization_compliance_id: compliance.id,
-            compliance_question_id: user_response.compliance_question_id,
+            compliance_question_id: qId || user_response.compliance_question_id,
             value: user_response.value,
           },
           update: {
@@ -133,20 +189,20 @@ export class ComplianceResponsesRepository extends BaseWorker {
 
       if (orgResponseEntity || aiResponseEntity) {
         const crData = {
-          compliance_question_id: compliance_question_id || ai_response.compliance_question_id,
-          compliance_section_id: compliance_section_id,
-          compliance_section_group_id: compliance_section_group_id,
-          organization_id: organization.id,
+          compliance_question_id: ai_response?.compliance_question_id || qId,
+          compliance_section_id: sId,
+          compliance_section_group_id: sgId,
+          organization_id: org.id,
           compliance_definition_name: compliance.compliance_definition_name,
           organization_compliance_id: compliance.id,
-          organization_compliance_ai_response_id: aiResponseEntity.id,
+          organization_compliance_ai_response_id: aiResponseEntity?.id,
           organization_compliance_response_id: orgResponseEntity?.id,
         };
         await this.prisma.extended.compliance_responses.upsert({
           where: {
             orgCompQuestId: {
               organization_compliance_id: compliance.id,
-              compliance_question_id: compliance_question_id || ai_response.compliance_question_id,
+              compliance_question_id: ai_response?.compliance_question_id || qId,
             },
           },
           create: crData,
@@ -154,30 +210,35 @@ export class ComplianceResponsesRepository extends BaseWorker {
         });
       }
     } catch (error) {
-      this.logger.error(`Error saving response for ${organization.name}: ${compliance.compliance_definition_name}`, {
+      this.logger.error(`Error saving response for ${org.name}: ${compliance.compliance_definition_name}`, {
         user,
         user_response: user_response,
         ai_response,
         compliance,
-        organization,
+        organization: org,
         error,
       });
       throw error;
     }
   }
 
-  async getComplianceResponses(orgId: string, compliance_definition_name: string, user: IAuthenticatedUser) {
-    let where;
-    const byId = orgId.startsWith(`${GuidPrefixes.Organization}_`);
-    if (byId) {
-      where = { id: orgId };
-    } else {
-      where = { name: orgId };
-    }
+  async getComplianceResponses(org: organizations, compliance_definition_name: string, user: IAuthenticatedUser, options?: ComplianceResponseOptions) {
+    if (!compliance_definition_name) throw new BadRequestException('Compliance Definition Name is required');
+    if (!org) throw new BadRequestException('Organization is required');
+    if (!user) throw new BadRequestException('User is required');
+
+    options = {
+      responses: options?.responses ? options.responses : true,
+      bookmarks: options?.references ? options.references : true,
+      take: options?.take ? options.take : 100,
+      skip: options?.skip ? options.skip : 0,
+    };
 
     try {
       const organization = (await this.prisma.extended.organizations.findUnique({
-        where: where,
+        where: {
+          id: org.id,
+        },
         select: {
           id: true,
           name: true,
@@ -189,14 +250,12 @@ export class ComplianceResponsesRepository extends BaseWorker {
               question_bookmarks: {
                 select: {
                   id: true,
-                  deleted: true,
                 },
               },
               notes: {
                 select: {
                   id: true,
                   note: true,
-                  deleted: true,
                   files: true,
                   links: true,
                 },
@@ -210,65 +269,27 @@ export class ComplianceResponsesRepository extends BaseWorker {
                       id: true,
                       title: true,
                       order: true,
-                      deleted: true,
                       compliance_sections: {
                         select: {
                           id: true,
                           key: true,
                           title: true,
                           order: true,
-                          deleted: true,
                           compliance_section_dependency_chains: true,
-                          compliance_questions: {
-                            select: {
-                              id: true,
-                              key: true,
-                              order: true,
-                              component: true,
-                              tooltip: true,
-                              placeholder: true,
-                              rubric: true,
-                              options: true,
-                              question_summary: true,
-                              coresponding_question: true,
-                              additional_context: true,
-                              deleted: true,
-                              compliance_responses: {
-                                select: {
-                                  id: true,
-                                  org_response: {
-                                    select: {
-                                      id: true,
-                                      value: true,
-                                      deleted: true,
-                                    },
-                                  },
-                                  ai_response: {
-                                    select: {
-                                      id: true,
-                                      answer: true,
-                                      justification: true,
-                                    },
-                                  },
-                                  deleted: true,
-                                },
-                              },
-                            },
-                          },
+                          compliance_questions: this.getQuestionsQuery(options, org, user),
                         },
                       },
                     },
                   },
                 },
               },
-              deleted: true,
             },
           },
         },
       })) as any;
 
       if (!organization) {
-        throw new NotFoundException(`Organization ${orgId} not found`);
+        throw new NotFoundException(`Organization responses for ${org.name} not found`);
       }
 
       /*
@@ -276,7 +297,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
        */
       if (Array.isArray(organization?.organization_compliance) && organization?.organization_compliance.length > 0) {
         const compliance_response = organization?.organization_compliance[0];
-        const response = await this.scoringService.scoreComplianceResponse(compliance_response?.compliance_definition);
+        const response = await this.scoringService.scoreComplianceResponse(compliance_response?.compliance_definition, org, user);
         this.logger.log(`Scored ${compliance_definition_name} Compliance `, response);
       }
 
@@ -298,7 +319,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
 
       return { ...organization };
     } catch (error) {
-      this.logger.error(`Error getting responses for organization: ${orgId}: ${compliance_definition_name}`, {
+      this.logger.error(`Error getting responses for organization: ${org.name}: ${compliance_definition_name}`, {
         user,
         error,
       });
@@ -306,74 +327,43 @@ export class ComplianceResponsesRepository extends BaseWorker {
     }
   }
 
-  async getScoredComplianceQuestionByCompliance(orgId, compliance_definition_name: string, user: IAuthenticatedUser) {
-    let where;
-    const byId = orgId.startsWith('org_');
-    if (byId) {
-      where = { id: orgId };
-    } else {
-      where = { name: orgId };
-    }
+  async getScoredComplianceQuestionsByName(org: organizations, compliance_definition_name: string, user: IAuthenticatedUser, options?: ComplianceResponseOptions) {
+    if (!compliance_definition_name) throw new BadRequestException('Compliance Definition Name is required');
+    if (!org) throw new BadRequestException('Organization is required');
+    if (!user) throw new BadRequestException('User is required');
+
+    options = {
+      responses: options?.responses ? options.responses : true,
+      bookmarks: options?.references ? options.references : true,
+      take: options?.take ? options.take : 100,
+      skip: options?.skip ? options.skip : 0,
+    };
 
     try {
-      const response = await this.prisma.extended.organizations.findUnique({
-        where: where,
+      const response = await this.prisma.extended.organization_compliance.findUnique({
+        where: {
+          orgIdCompNameKey: {
+            organization_id: org.id,
+            compliance_definition_name: compliance_definition_name,
+          },
+        },
         select: {
-          id: true,
-          name: true,
-          organization_compliance: {
-            where: { compliance_definition_name },
+          compliance_definition: {
             select: {
-              compliance_definition: {
+              name: true,
+              compliance_section_groups: {
                 select: {
-                  name: true,
-                  compliance_section_groups: {
+                  id: true,
+                  title: true,
+                  order: true,
+                  compliance_sections: {
                     select: {
                       id: true,
+                      key: true,
                       title: true,
                       order: true,
-                      compliance_sections: {
-                        select: {
-                          id: true,
-                          key: true,
-                          title: true,
-                          order: true,
-                          compliance_section_dependency_chains: true,
-                          compliance_questions: {
-                            select: {
-                              id: true,
-                              key: true,
-                              order: true,
-                              component: true,
-                              tooltip: true,
-                              placeholder: true,
-                              rubric: true,
-                              options: true,
-                              additional_context: true,
-                              compliance_responses: {
-                                select: {
-                                  id: true,
-                                  org_response: {
-                                    select: {
-                                      id: true,
-                                      value: true,
-                                      deleted: true,
-                                    },
-                                  },
-                                  ai_response: {
-                                    select: {
-                                      id: true,
-                                      answer: true,
-                                      justification: true,
-                                    },
-                                  },
-                                  deleted: true,
-                                },
-                              },
-                            },
-                          },
-                        },
-                      },
+                      compliance_section_dependency_chains: true,
+                      compliance_questions: this.getQuestionsQuery(options, org, user),
                     },
                   },
                 },
@@ -384,12 +374,16 @@ export class ComplianceResponsesRepository extends BaseWorker {
       });
 
       if (!response) {
-        throw new NotFoundException(`No Compliance Found For ${orgId}`);
+        throw new NotFoundException(`No Compliance Found For ${org.name}`);
       }
 
-      return this.scoringService.scoreComplianceResponse(response.organization_compliance[0].compliance_definition);
+      const organization = pick(org, ['id', 'name', 'display_name']) as any;
+
+      set(organization, 'organization_compliance', response);
+
+      return this.scoringService.scoreComplianceResponse(organization.organization_compliance.compliance_definition, org, user, options);
     } catch (error) {
-      this.logger.error(`Error getting responses for organization: ${orgId}: ${compliance_definition_name}`, {
+      this.logger.error(`Error getting responses for organization: ${org.name}: ${compliance_definition_name}`, {
         user,
         error,
       });
@@ -397,18 +391,32 @@ export class ComplianceResponsesRepository extends BaseWorker {
     }
   }
 
-  async getScoredComplianceQuestionBySection(orgId: string, compliance_definition_name: string, csgId: string, csId: string, user: IAuthenticatedUser) {
-    let where;
-    const byId = orgId.startsWith('org_');
-    if (byId) {
-      where = { id: orgId };
-    } else {
-      where = { name: orgId };
-    }
+  async getScoredComplianceQuestionBySection(
+    org: organizations,
+    compliance_definition_name: string,
+    sgId: string,
+    sId: string,
+    user: IAuthenticatedUser,
+    options?: ComplianceResponseOptions,
+  ) {
+    if (!sId) throw new BadRequestException('Compliance Section ID is required');
+    if (!sgId) throw new BadRequestException('Compliance Section Group ID is required');
+    if (!compliance_definition_name) throw new BadRequestException('Compliance Definition Name is required');
+    if (!org) throw new BadRequestException('Organization is required');
+    if (!user) throw new BadRequestException('User is required');
+
+    options = {
+      responses: options?.responses ? options.responses : true,
+      bookmarks: options?.references ? options.references : true,
+      take: options?.take ? options.take : 100,
+      skip: options?.skip ? options.skip : 0,
+    };
 
     try {
       const response = await this.prisma.extended.organizations.findUnique({
-        where: where,
+        where: {
+          id: org.id,
+        },
         select: {
           id: true,
           name: true,
@@ -419,14 +427,87 @@ export class ComplianceResponsesRepository extends BaseWorker {
                 select: {
                   name: true,
                   compliance_section_groups: {
-                    where: { id: csgId },
+                    where: { id: sgId },
                     select: {
                       id: true,
                       title: true,
                       order: true,
                       compliance_sections: {
                         where: {
-                          id: csId,
+                          id: sId,
+                        },
+                        select: {
+                          id: true,
+                          key: true,
+                          title: true,
+                          order: true,
+                          compliance_section_dependency_chains: true,
+                          compliance_questions: this.getQuestionsQuery(options, org, user),
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      });
+
+      if (!response) {
+        throw new NotFoundException(`No Compliance Found For ${org.name}`);
+      }
+
+      return this.scoringService.scoreComplianceResponse(response.organization_compliance[0].compliance_definition, org, user, options);
+    } catch (error) {
+      this.logger.error(`Error getting responses for organization: ${org.name}: ${compliance_definition_name}`, {
+        user,
+        error,
+      });
+      throw error;
+    }
+  }
+
+  async getScoredComplianceQuestionById(
+    org: organizations,
+    compliance_definition_name: string,
+    sgId: string,
+    sId: string,
+    qId: string,
+    user: IAuthenticatedUser,
+    options?: ComplianceResponseOptions,
+  ) {
+    options = {
+      responses: options?.responses ? options.responses : false,
+      bookmarks: options?.references ? options.references : false,
+      references: options?.references ? options.references : true,
+      take: options?.take ? options.take : 100,
+      skip: options?.skip ? options.skip : 0,
+    };
+
+    try {
+      const response = await this.prisma.extended.organizations.findUnique({
+        where: {
+          id: org.id,
+        },
+        select: {
+          id: true,
+          name: true,
+          organization_compliance: {
+            where: { compliance_definition_name },
+            select: {
+              compliance_definition: {
+                select: {
+                  name: true,
+                  compliance_section_groups: {
+                    where: { id: sgId },
+                    select: {
+                      id: true,
+                      title: true,
+                      order: true,
+                      compliance_sections: {
+                        where: {
+                          id: sId,
                         },
                         select: {
                           id: true,
@@ -435,34 +516,29 @@ export class ComplianceResponsesRepository extends BaseWorker {
                           order: true,
                           compliance_section_dependency_chains: true,
                           compliance_questions: {
+                            where: {
+                              id: qId,
+                            },
                             select: {
                               id: true,
                               key: true,
                               order: true,
-                              component: true,
-                              tooltip: true,
-                              placeholder: true,
-                              rubric: true,
-                              options: true,
                               additional_context: true,
+                              question_bookmarks: options.bookmarks ? this.getBookmarkQuery(user.coldclimate_claims.email) : false,
                               compliance_responses: {
+                                where: {
+                                  organization_id: org.id,
+                                },
                                 select: {
                                   id: true,
-                                  org_response: {
-                                    select: {
-                                      id: true,
-                                      value: true,
-                                      deleted: true,
-                                    },
-                                  },
                                   ai_response: {
                                     select: {
                                       id: true,
-                                      answer: true,
-                                      justification: true,
+                                      answer: false,
+                                      justification: false,
+                                      references: true,
                                     },
                                   },
-                                  deleted: true,
                                 },
                               },
                             },
@@ -479,12 +555,12 @@ export class ComplianceResponsesRepository extends BaseWorker {
       });
 
       if (!response) {
-        throw new NotFoundException(`No Compliance Found For ${orgId}`);
+        throw new NotFoundException(`No Compliance Found For ${org.name}`);
       }
 
-      return this.scoringService.scoreComplianceResponse(response.organization_compliance[0].compliance_definition);
+      return this.scoringService.scoreComplianceResponse(response.organization_compliance[0].compliance_definition, org, user);
     } catch (error) {
-      this.logger.error(`Error getting responses for organization: ${orgId}: ${compliance_definition_name}`, {
+      this.logger.error(`Error getting responses for organization: ${org.name}: ${compliance_definition_name}`, {
         user,
         error,
       });
@@ -492,18 +568,26 @@ export class ComplianceResponsesRepository extends BaseWorker {
     }
   }
 
-  async getScoredComplianceQuestionBySectionGroup(orgId: string, compliance_definition_name: string, csgId: string, user: IAuthenticatedUser) {
-    let where;
-    const byId = orgId.startsWith('org_');
-    if (byId) {
-      where = { id: orgId };
-    } else {
-      where = { name: orgId };
-    }
+  async getScoredComplianceQuestionBySectionGroup(
+    org: organizations,
+    compliance_definition_name: string,
+    csgId: string,
+    user: IAuthenticatedUser,
+    options?: ComplianceResponseOptions,
+  ) {
+    options = {
+      responses: options?.responses ? options.responses : false,
+      bookmarks: options?.references ? options.references : true,
+      references: options?.references ? options.references : true,
+      take: options?.take ? options.take : 100,
+      skip: options?.skip ? options.skip : 0,
+    };
 
     try {
       const response = await this.prisma.extended.organizations.findUnique({
-        where: where,
+        where: {
+          id: org.id,
+        },
         select: {
           id: true,
           name: true,
@@ -526,6 +610,68 @@ export class ComplianceResponsesRepository extends BaseWorker {
                           title: true,
                           order: true,
                           compliance_section_dependency_chains: true,
+                          compliance_questions: this.getQuestionsQuery(options, org, user),
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      });
+
+      if (!response) {
+        throw new NotFoundException(`No Compliance Found For ${org.name}`);
+      }
+
+      return this.scoringService.scoreComplianceResponse(response.organization_compliance[0].compliance_definition, org, user);
+    } catch (error) {
+      this.logger.error(`Error getting responses for organization: ${org.name}: ${compliance_definition_name}`, {
+        user,
+        error,
+        organization: org,
+      });
+      throw error;
+    }
+  }
+
+  async getComplianceResponseById(org: organizations, compliance_definition_name: string, user: IAuthenticatedUser, id: number, options?: ComplianceResponseOptions) {
+    options = {
+      responses: options?.responses ? options.responses : false,
+      bookmarks: options?.references ? options.references : true,
+      references: options?.references ? options.references : true,
+      take: options?.take ? options.take : 100,
+      skip: options?.skip ? options.skip : 0,
+    };
+
+    try {
+      const response = await this.prisma.extended.organizations.findUnique({
+        where: {
+          id: org.id,
+        },
+        select: {
+          id: true,
+          name: true,
+          organization_compliance: {
+            where: { compliance_definition_name },
+            select: {
+              compliance_definition: {
+                select: {
+                  name: true,
+                  compliance_section_groups: {
+                    select: {
+                      id: true,
+                      title: true,
+                      order: true,
+                      compliance_sections: {
+                        select: {
+                          id: true,
+                          key: true,
+                          title: true,
+                          order: true,
+                          compliance_section_dependency_chains: true,
                           compliance_questions: {
                             select: {
                               id: true,
@@ -537,14 +683,17 @@ export class ComplianceResponsesRepository extends BaseWorker {
                               rubric: true,
                               options: true,
                               additional_context: true,
+                              question_bookmarks: options.bookmarks ? this.getBookmarkQuery(user.coldclimate_claims.email) : false,
                               compliance_responses: {
+                                where: {
+                                  id,
+                                },
                                 select: {
                                   id: true,
                                   org_response: {
                                     select: {
                                       id: true,
                                       value: true,
-                                      deleted: true,
                                     },
                                   },
                                   ai_response: {
@@ -552,9 +701,9 @@ export class ComplianceResponsesRepository extends BaseWorker {
                                       id: true,
                                       answer: true,
                                       justification: true,
+                                      references: options?.references,
                                     },
                                   },
-                                  deleted: true,
                                 },
                               },
                             },
@@ -571,123 +720,12 @@ export class ComplianceResponsesRepository extends BaseWorker {
       });
 
       if (!response) {
-        throw new NotFoundException(`No Compliance Found For ${orgId}`);
+        throw new NotFoundException(`Compliance responses with the id of ${id} do not belong to ${org.name} not found`);
       }
 
-      return this.scoringService.scoreComplianceResponse(response.organization_compliance[0].compliance_definition);
+      return this.scoringService.scoreComplianceResponse(response.organization_compliance[0].compliance_definition, org, user);
     } catch (error) {
-      this.logger.error(`Error getting responses for organization: ${orgId}: ${compliance_definition_name}`, {
-        user,
-        error,
-      });
-      throw error;
-    }
-  }
-
-  async getComplianceResponseById(orgId: string, compliance_definition_name: string, user: IAuthenticatedUser, id: number) {
-    try {
-      let where;
-      const byId = orgId.startsWith('org_');
-      if (byId) {
-        where = { id: orgId };
-      } else {
-        where = { name: orgId };
-      }
-
-      const organization = await this.prisma.extended.organizations.findUnique({
-        where: where,
-        select: {
-          id: true,
-          name: true,
-          display_name: true,
-          organization_compliance: {
-            where: { compliance_definition_name },
-            select: {
-              id: true,
-              question_bookmarks: {
-                select: {
-                  id: true,
-                  deleted: true,
-                },
-              },
-              notes: {
-                select: {
-                  id: true,
-                  note: true,
-                  deleted: true,
-                  files: true,
-                  links: true,
-                },
-              },
-              compliance_responses: {
-                where: {
-                  id,
-                },
-                select: {
-                  id: true,
-                  org_response: true,
-                  ai_response: {
-                    select: {
-                      id: true,
-                      answer: true,
-                      justification: true,
-                      sources: true,
-                      references: true,
-                      additional_context: true,
-                      deleted: true,
-                      files: true,
-                    },
-                  },
-                  compliance_section_group: {
-                    select: {
-                      id: true,
-                      title: true,
-                      order: true,
-                      deleted: true,
-                      compliance_sections: {
-                        select: {
-                          id: true,
-                          key: true,
-                          title: true,
-                          order: true,
-                          deleted: true,
-                          compliance_section_dependency_chains: true,
-                          compliance_questions: {
-                            select: {
-                              id: true,
-                              key: true,
-                              order: true,
-                              component: true,
-                              tooltip: true,
-                              placeholder: true,
-                              rubric: true,
-                              options: true,
-                              question_summary: true,
-                              coresponding_question: true,
-                              additional_context: true,
-                              deleted: true,
-                            },
-                          },
-                        },
-                      },
-                    },
-                  },
-                  deleted: true,
-                },
-              },
-              deleted: true,
-            },
-          },
-        },
-      });
-
-      if (!organization) {
-        throw new NotFoundException(`Organization ${orgId} not found`);
-      }
-
-      return { ...organization };
-    } catch (error) {
-      this.logger.error(`Error getting responses for organization: ${orgId}: ${compliance_definition_name}`, {
+      this.logger.error(`Error getting responses for organization: ${org.id}: ${compliance_definition_name}`, {
         user,
         error,
       });
@@ -700,7 +738,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
       this.logger.info(`Clearing previous responses for ${organization.name}: ${compliance.compliance_definition_name}`, {
         user,
         ...compliance,
-        organization: { id: organization.id, name: organization.name, display_name: organization.display_name },
+        organization,
       });
 
       await this.prisma.extended.compliance_responses.deleteMany({

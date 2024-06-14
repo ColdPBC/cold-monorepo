@@ -12,6 +12,7 @@ export enum GuidPrefixes {
   'OrganizationComplianceStatus' = 'ocs',
   'OrganizationComplianceAIResponse' = 'ocair',
   'OrganizationComplianceAiResponseFile' = 'ocairf',
+  'OrganizationComplianceQuestionBookmark' = 'ocqb',
   'OrganizationComplianceNote' = 'ocn',
   'OrganizationComplianceNoteLink' = 'ocnl',
   'OrganizationComplianceNoteFile' = 'ocnf',

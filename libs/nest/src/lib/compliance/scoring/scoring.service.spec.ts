@@ -1,4 +1,6 @@
+import { organizations } from '@prisma/client';
 import { ScoringService } from './scoring.service';
+import { IAuthenticatedUser } from '@coldpbc/nest';
 
 const mockData = {
   id: 'org_liq0Z0GHUJ044liS',
@@ -242,12 +244,11 @@ describe('ScoringService', () => {
   const scoredSections: any = [];
 
   beforeEach(async () => {
-    service = new ScoringService();
     const response = mockData.organization_compliance[0].compliance_definition; // replace with a valid compliance response
-    scoredCompliance = await service.scoreComplianceResponse(response);
-    scoredSectionGroup = await service.scoreSectionGroup(response.compliance_section_groups[0]);
+    scoredCompliance = await service.scoreComplianceResponse(response, {} as organizations, {} as IAuthenticatedUser);
+    scoredSectionGroup = await service.scoreSectionGroup(response.compliance_section_groups[0], {} as organizations, {} as IAuthenticatedUser);
     for (const section of response.compliance_section_groups[0].compliance_sections) {
-      const scoredSection = await service.scoreSection(section);
+      const scoredSection = await service.scoreSection(section, {} as organizations, {} as IAuthenticatedUser);
       scoredSections.push(scoredSection);
     }
   });
@@ -308,7 +309,7 @@ describe('ScoringService', () => {
   describe('scoreQuestion', () => {
     it('should return a scored question', async () => {
       const question = {}; // replace with a valid question
-      const result = await service.scoreQuestion(question);
+      const result = await service.scoreQuestion(question, {} as organizations, {} as IAuthenticatedUser);
       expect(result).toBeDefined();
       // add more assertions based on your scoring logic
     });

@@ -2,11 +2,11 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { BaseWorker } from '../../../worker';
 import { PrismaService } from '../../../prisma';
 import { compliance_questions, Prisma } from '@prisma/client';
-import { difference, sumBy, unset } from 'lodash';
+import { difference, sumBy } from 'lodash';
 import { Cuid2Generator, GuidPrefixes } from '../../../utility';
-import { ComplianceSectionsCacheRepository } from '../compliance-sections';
+import { FilteringService } from '../../filtering';
 
-interface Question {
+export interface Question {
   id: string;
   prompt: string;
   order: number;
@@ -35,7 +35,7 @@ interface Dependency {
  */
 @Injectable()
 export class ComplianceQuestionsRepository extends BaseWorker {
-  constructor(readonly prisma: PrismaService, readonly complianceSectionsCacheRepository: ComplianceSectionsCacheRepository) {
+  constructor(readonly prisma: PrismaService, readonly filteringService: FilteringService) {
     super(ComplianceQuestionsRepository.name);
   }
 
@@ -100,7 +100,7 @@ export class ComplianceQuestionsRepository extends BaseWorker {
 
     const start = new Date().getTime();
 
-    const response = filter ? await this.filterQuestions(questions) : questions;
+    const response = filter ? await this.filteringService.filterQuestions(questions) : questions;
 
     const end = new Date().getTime();
     const diff = difference(questions, response);
@@ -327,61 +327,6 @@ export class ComplianceQuestionsRepository extends BaseWorker {
     } catch (e: any) {
       this.logger.error(`Error updating question for compliance ${question.compliance_definition_name}`, { ...e, question });
       throw e;
-    }
-  }
-
-  /**
-   * Filter questions based on their dependencies.
-   *
-   * @param {Question[]} questions - An array of questions to filter.
-   * @return {Promise<Question[]>} The filtered array of questions.
-   */
-  async filterQuestions(questions: Question[]): Promise<Question[]> {
-    const dependenciesMet = function (question: Question): boolean {
-      unset(question, 'ai_answer');
-
-      if (!question.dependency_chain || !question.dependency_chain.length) {
-        unset(question, 'dependency_chain');
-
-        return true;
-      }
-
-      for (const dependency of question.dependency_chain) {
-        const dependentQuestion = questions.find(q => q.id === dependency.dependent_question_id);
-
-        if (!dependentQuestion) {
-          return false;
-        }
-
-        const dependentAnswer = dependentQuestion.user_answer;
-
-        if (!dependentAnswer) {
-          return false;
-        }
-
-        if (Array.isArray(dependentAnswer)) {
-          for (const answer of dependentAnswer) {
-            if (!dependency?.dependent_question_values?.includes(answer)) {
-              return false;
-            }
-          }
-        } else {
-          if (dependency.dependent_question_values && !dependency.dependent_question_values.includes(dependentAnswer[0])) {
-            return false;
-          }
-        }
-      }
-
-      unset(question, 'dependency_chain');
-      return true;
-    };
-
-    try {
-      const filteredQuestions = questions.filter(dependenciesMet);
-      return filteredQuestions;
-    } catch (e: any) {
-      this.logger.error(`Error evaluating jsonata expression: ${e.message}`, { ...e });
-      return questions;
     }
   }
 

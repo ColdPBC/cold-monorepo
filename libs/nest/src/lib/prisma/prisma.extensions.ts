@@ -47,7 +47,7 @@ export const extendedClient = (client: PrismaClient) => {
           organization_compliance_notes: true,
           organization_compliance_note_files: true,
           organization_compliance_note_links: true,
-          organization_compliance_question_bookmarks: true,
+          organization_compliance_question_bookmarks: false,
           organization_compliance_statuses: true,
           organization_facilities: true,
           organization_files: true,
@@ -71,24 +71,27 @@ export class ExtendedPrismaClient extends PrismaClient {
     super({
       datasourceUrl: config['internalConfig']['DATABASE_URL'],
       errorFormat: process.env['NODE_ENV'] === 'development' ? 'pretty' : 'minimal',
-      log: [
-        {
-          emit: 'event',
-          level: 'query',
-        },
-        {
-          emit: 'stdout',
-          level: 'error',
-        },
-        {
-          emit: 'stdout',
-          level: 'info',
-        },
-        {
-          emit: 'stdout',
-          level: 'warn',
-        },
-      ],
+      log:
+        process.env['NODE_ENV'] === 'development'
+          ? [
+              {
+                emit: 'event',
+                level: 'query',
+              },
+              {
+                emit: 'stdout',
+                level: 'error',
+              },
+              {
+                emit: 'stdout',
+                level: 'info',
+              },
+              {
+                emit: 'stdout',
+                level: 'warn',
+              },
+            ]
+          : [],
     });
     this.client = extendedClient(this);
   }

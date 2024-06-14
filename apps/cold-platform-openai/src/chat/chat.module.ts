@@ -6,13 +6,12 @@ import { LangchainService } from '../langchain/langchain.service';
 import { BullModule } from '@nestjs/bull';
 import {
   ComplianceAiResponsesRepository,
-  ComplianceRepositoryModule,
+  ComplianceDataModule,
   ComplianceResponsesRepository,
   ComplianceSectionsCacheRepository,
   ComplianceSectionsRepository,
   MqttModule,
   MqttService,
-  ScoringService,
 } from '@coldpbc/nest';
 import { FreeplayModule } from '../freeplay/freeplay.module';
 import { FreeplayService } from '../freeplay/freeplay.service';
@@ -29,7 +28,7 @@ import { ScoringModule } from '../../../cold-api/src/platform/modules/resources/
     LangchainModule,
     FreeplayModule,
     MqttModule,
-    ComplianceRepositoryModule,
+    ComplianceDataModule,
   ],
   controllers: [ChatController],
   providers: [
@@ -41,7 +40,6 @@ import { ScoringModule } from '../../../cold-api/src/platform/modules/resources/
     ComplianceAiResponsesRepository,
     ComplianceResponsesRepository,
     ComplianceSectionsCacheRepository,
-    ScoringService,
   ],
 })
 export class ChatModule {}

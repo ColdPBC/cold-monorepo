@@ -757,6 +757,7 @@ model organization_compliance_notes {
   updated_at                 DateTime                             @updatedAt
   compliance_question_id     String
   organization_compliance_id String
+  metadata                   Json?
   compliance_question        compliance_questions                 @relation(fields: [compliance_question_id], references: [id])
   organization_compliance    organization_compliance              @relation(fields: [organization_compliance_id], references: [id])
   files                      organization_compliance_note_files[]
@@ -795,6 +796,8 @@ model organization_compliance_question_bookmarks {
   compliance_question        compliance_questions    @relation(fields: [compliance_question_id], references: [id])
   organization_compliance    organization_compliance @relation(fields: [organization_compliance_id], references: [id])
   deleted                    Boolean                 @default(false)
+
+  @@unique([email, compliance_question_id], name: "emailQuestId")
 }
 
 model organization_compliance_responses {

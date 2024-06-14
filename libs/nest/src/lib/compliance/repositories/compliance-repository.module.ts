@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Global, Module, forwardRef } from '@nestjs/common';
 import { PrismaModule } from '../../prisma';
 
 import { CacheService, ColdCacheModule } from '../../cache';
@@ -10,10 +10,16 @@ import { ComplianceAiResponsesRepository } from './compliance-ai-responses';
 import { ComplianceDefinitionsRepository } from './compliance-definitions';
 import { OrganizationComplianceRepository } from './organization-compliance';
 import { OrganizationComplianceStatusesRepository } from './organization-compliance-statuses';
-import { ScoringService } from '../scoring';
+import { ScoringModule } from '../scoring';
+import { FilteringModule } from '../filtering';
+import { ComplianceQuestionBookmarksRepository } from './compliance-question-bookmarks';
+import { ComplianceNotesRepository } from './compliance-notes';
+import { ComplianceNoteLinksRepository } from './compliance-note-links';
+import { ComplianceNoteFilesRepository } from './compliance-note-files';
 
+@Global()
 @Module({
-  imports: [PrismaModule, ColdCacheModule.forRootAsync()],
+  imports: [PrismaModule, ColdCacheModule.forRootAsync(), forwardRef(() => ScoringModule), forwardRef(() => FilteringModule)],
   providers: [
     ComplianceSectionsRepository,
     ComplianceSectionGroupsRepository,
@@ -25,7 +31,10 @@ import { ScoringService } from '../scoring';
     ComplianceDefinitionsRepository,
     OrganizationComplianceRepository,
     OrganizationComplianceStatusesRepository,
-    ScoringService,
+    ComplianceQuestionBookmarksRepository,
+    ComplianceNotesRepository,
+    ComplianceNoteLinksRepository,
+    ComplianceNoteFilesRepository,
   ],
   exports: [
     CacheService,
@@ -38,6 +47,10 @@ import { ScoringService } from '../scoring';
     ComplianceAiResponsesRepository,
     ComplianceResponsesRepository,
     ComplianceSectionsCacheRepository,
+    ComplianceQuestionBookmarksRepository,
+    ComplianceNotesRepository,
+    ComplianceNoteLinksRepository,
+    ComplianceNoteFilesRepository,
   ],
 })
 export class ComplianceRepositoryModule {}
