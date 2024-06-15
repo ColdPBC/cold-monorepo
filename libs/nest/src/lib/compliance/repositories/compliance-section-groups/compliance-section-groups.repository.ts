@@ -184,9 +184,9 @@ export class ComplianceSectionGroupsRepository extends BaseWorker {
    * @param questions
    * @throws {Error} - Throws an error if the compliance definition is not found.
    */
-  getSectionGroupListByOrgCompliance({ org_id, compliance_set_name }: { org_id: string; compliance_set_name: string }, filter?: boolean, questions?: boolean) {
+  async getSectionGroupListByOrgCompliance({ org_id, compliance_set_name }: { org_id: string; compliance_set_name: string }, filter?: boolean, questions?: boolean) {
     try {
-      const orgCompliance = this.prisma.extended.organization_compliance.findUnique({
+      const orgCompliance = (await this.prisma.extended.organization_compliance.findUnique({
         where: {
           orgIdCompNameKey: {
             organization_id: org_id,
@@ -254,7 +254,7 @@ export class ComplianceSectionGroupsRepository extends BaseWorker {
             },
           },
         },
-      }) as any;
+      })) as any;
 
       if (filter) {
         orgCompliance.compliance_definition.compliance_section_groups = this.filterService.filterSectionGroups(orgCompliance.compliance_definition.compliance_section_groups);
