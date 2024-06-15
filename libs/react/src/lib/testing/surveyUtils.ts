@@ -64,7 +64,7 @@ export const enterInputValue = async (
 export const verifyAdditionalContext = async (question: SurveySectionFollowUpType | SurveySectionType, followUpName: string, surveyQuestionContainer: HTMLElement) => {
   if (question.additional_context) {
     const id = `${followUpName}-additional`;
-    let questionInput = null;
+    let questionInput: HTMLElement | null = null;
 
     switch (question.additional_context.component) {
       case 'text':

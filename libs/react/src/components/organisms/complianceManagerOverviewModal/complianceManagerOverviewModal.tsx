@@ -1,5 +1,5 @@
 import { ActivationCompleteModalBody, BaseButton, Card, ColdSparkleIcon, StartAIComplianceModal, UploadComplianceDocumentsModal } from '@coldpbc/components';
-import { MouseEvent, useContext, useRef, useState } from 'react';
+import { MouseEvent, ReactNode, useContext, useRef, useState } from 'react';
 import { ColdComplianceManagerContext } from '@coldpbc/context';
 import { ComplianceManagerFlowGuideStatus, ComplianceManagerStatus, IconNames } from '@coldpbc/enums';
 import { ArrowUpIcon } from '@heroicons/react/24/solid';
@@ -33,6 +33,7 @@ export const ComplianceManagerOverviewModal = (props: ComplianceManagerOverviewM
     switch (flowGuideStatus) {
       case ComplianceManagerFlowGuideStatus.upload:
         return <ArrowUpIcon className={'w-[40px] h-[40px]'} />;
+      default:
       case ComplianceManagerFlowGuideStatus.startAI:
         return <ColdSparkleIcon />;
     }
@@ -66,7 +67,7 @@ export const ComplianceManagerOverviewModal = (props: ComplianceManagerOverviewM
   };
 
   const getModalBody = () => {
-    let component = null;
+    let component: ReactNode;
     switch (flowGuideStatus) {
       case ComplianceManagerFlowGuideStatus.activate:
         component = <ActivationCompleteModalBody setButtonDisabled={setButtonDisabled} />;

@@ -90,36 +90,34 @@ const _ComplianceSetOverviewCard = ({ name }: { name: string }) => {
   };
 
   const getComplianceSetTitle = () => {
-    if (surveyData.data) {
-      const dueDateYear = dueDate ? new Date(dueDate).getFullYear() : undefined;
-      let termString = '';
-      if (term) {
-        termString = getTermString(term);
-      }
-
-      const dueDateAndTerm = () => {
-        if (dueDateYear && term) {
-          return `${dueDateYear} | ${termString}`;
-        } else if (term) {
-          return `${termString}`;
-        } else if (dueDateYear) {
-          return `${dueDateYear}`;
-        } else {
-          return '';
-        }
-      };
-
-      return (
-        <div className={'w-full h-full flex flex-col'}>
-          <div className={'text-h3'}>{complianceSet.title}</div>
-          <div
-            className={`text-body
-          ${complianceStatus === ComplianceStatus.inActive ? 'text-tc-disabled' : 'text-tc-secondary'}`}>
-            {dueDateAndTerm()}
-          </div>
-        </div>
-      );
+    const dueDateYear = dueDate ? new Date(dueDate).getFullYear() : undefined;
+    let termString = '';
+    if (term) {
+      termString = getTermString(term);
     }
+
+    const dueDateAndTerm = () => {
+      if (dueDateYear && term) {
+        return `${dueDateYear} | ${termString}`;
+      } else if (term) {
+        return `${termString}`;
+      } else if (dueDateYear) {
+        return `${dueDateYear}`;
+      } else {
+        return '';
+      }
+    };
+
+    return (
+      <div className={'w-full h-full flex flex-col'}>
+        <div className={'text-h3'}>{complianceSet.title}</div>
+        <div
+          className={`text-body
+          ${complianceStatus === ComplianceStatus.inActive ? 'text-tc-disabled' : 'text-tc-secondary'}`}>
+          {dueDateAndTerm()}
+        </div>
+      </div>
+    );
   };
 
   const getComplianceStatusChip = () => {
@@ -141,6 +139,8 @@ const _ComplianceSetOverviewCard = ({ name }: { name: string }) => {
           )}
         </div>
       );
+    } else {
+      return null;
     }
   };
 
@@ -180,6 +180,13 @@ const _ComplianceSetOverviewCard = ({ name }: { name: string }) => {
           </div>
         );
       }
+    } else {
+      return (
+        <div className={'flex flex-col min-w-[166px] text-right'} data-chromatic="ignore">
+          <div className={`text-h5 w-full ${complianceStatus === ComplianceStatus.inActive ? 'text-tc-disabled' : 'text-tc-primary'}`}>No Deadline</div>
+          <div className={'text-body w-full text-tc-secondary'}>Submit at any time</div>
+        </div>
+      );
     }
   };
 
@@ -204,8 +211,6 @@ const _ComplianceSetOverviewCard = ({ name }: { name: string }) => {
 
   const checkFilter = () => {
     switch (filter) {
-      case 'All Records':
-        return true;
       case 'Upcoming':
         if (!surveyData.data) return false;
         if (!dueDate) return false;
@@ -218,6 +223,9 @@ const _ComplianceSetOverviewCard = ({ name }: { name: string }) => {
         return !isNotActive;
       case 'Not Active':
         return isNotActive;
+      default:
+      case 'All Records':
+        return true;
     }
   };
 

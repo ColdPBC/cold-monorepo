@@ -19277,6 +19277,7 @@ __metadata:
     react-docgen-typescript-loader: "npm:^3.7.2"
     react-dom: "npm:^18.2.0"
     react-error-boundary: "npm:^4.0.11"
+    react-intersection-observer: "npm:^9.10.3"
     react-markdown: "npm:^8.0.7"
     react-number-format: "npm:^5.1.4"
     react-range: "npm:^1.8.14"
@@ -37587,6 +37588,19 @@ __metadata:
   peerDependencies:
     react: ^16.8.4 || ^17.0.0 || ^18.0.0
   checksum: 10/5d23ad0f6f920458abd4c01af1b3cbdbe8846c254762fd6cfff4df119c54e08dd98ce8e91acacafb8173c19f07de2066df5b8e6cb19425751c1929a2620cbe77
+  languageName: node
+  linkType: hard
+
+"react-intersection-observer@npm:^9.10.3":
+  version: 9.10.3
+  resolution: "react-intersection-observer@npm:9.10.3"
+  peerDependencies:
+    react: ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+    react-dom: ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+  peerDependenciesMeta:
+    react-dom:
+      optional: true
+  checksum: 10/0c9d1b1aa48bfb9f47396ab8b9428c825a1dce3a9a0319ae36a2113e96c30befbce36a0821d9e0cc6d6727f61b1905652b2a5576192b2675504f1e53b1d101e5
   languageName: node
   linkType: hard
 

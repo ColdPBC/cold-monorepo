@@ -1,3 +1,5 @@
+import { SurveyAdditionalContext } from './survey';
+
 export type Compliance = {
   id: string;
   name: string;
@@ -103,3 +105,101 @@ export type CurrentAIStatusSection = {
   section: string;
   questions: string[];
 };
+
+export interface ComplianceNotePayload {
+  id: string;
+  note: string;
+  created_at: string;
+  updated_at: string;
+  compliance_question_id: string;
+  organization_compliance_id: string;
+  deleted: string;
+}
+
+export interface ComplianceSidebarPayload {
+  name: string;
+  compliance_section_groups: ComplianceSidebarSectionGroup[];
+}
+
+export interface ComplianceSidebarSectionGroup {
+  id: string;
+  title: string;
+  order: number;
+  compliance_sections: ComplianceSidebarSection[];
+}
+
+export interface ComplianceSidebarSection {
+  id: string;
+  title: string;
+  key: string;
+  order: number;
+  compliance_questions: ComplianceSidebarQuestion[];
+}
+
+export interface ComplianceSidebarQuestion {
+  id: string;
+  key: string;
+  order: number;
+  prompt: string;
+  score?: number;
+  ai_score?: number;
+  max_score?: number;
+  ai_answered: boolean;
+  user_answered: boolean;
+  not_started: boolean;
+  bookmarked: boolean;
+}
+
+export interface QuestionnaireQuestion {
+  id: string;
+  key: string;
+  order: number;
+  prompt: string;
+  bookmarked: boolean;
+  user_answered: boolean;
+  ai_answered: boolean;
+  not_started: boolean;
+  options: string[];
+  component: string;
+  placeholder: string;
+  tooltip: string;
+  additional_context?: SurveyAdditionalContext;
+  ai_attempted?: boolean;
+  score?: number;
+  max_score?: number;
+  question_summary?: string;
+  corresponding_question?: string;
+  compliance_responses: QuestionnaireQuestionComplianceResponse[];
+}
+
+export interface QuestionnaireQuestionComplianceResponse {
+  org_response: {
+    value: any;
+  } | null;
+  ai_response: {
+    answer: any | null;
+    justification: string;
+    references:
+      | {
+          file: string;
+          text: string[];
+        }[]
+      | null;
+  } | null;
+}
+
+export interface QuestionnaireComplianceContainerPayLoad {
+  name: string;
+  compliance_section_groups: {
+    id: string;
+    title: string;
+    order: number;
+    compliance_sections: {
+      id: string;
+      title: string;
+      key: string;
+      order: number;
+      compliance_questions: QuestionnaireQuestion[];
+    }[];
+  }[];
+}

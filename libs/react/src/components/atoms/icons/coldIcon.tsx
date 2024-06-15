@@ -4,6 +4,7 @@ import {
   CloseModalIcon,
   ColdActionsCompletedIcon,
   ColdActionsIcon,
+  ColdAddNotesIcon,
   ColdAiIcon,
   ColdBillingIcon,
   ColdBookmarkIcon,
@@ -29,6 +30,7 @@ import {
   ColdScoreIcon,
   ColdSettingsIcon,
   ColdSmallCheckBoxIcon,
+  ColdSparkleIcon,
   ColdSupportNotFilledInIcon,
   ColdSwitchIcon,
   ColdTeamMembersIcon,
@@ -105,6 +107,10 @@ export const ColdIcon = (props: IconProps) => {
       return <ColdLeftArrowIcon {...props} />;
     case IconNames.ColdSupportNotFilledInIcon:
       return <ColdSupportNotFilledInIcon {...props} />;
+    case IconNames.ColdAddNotesIcon:
+      return <ColdAddNotesIcon {...props} />;
+    case IconNames.ColdSparkleIcon:
+      return <ColdSparkleIcon {...props} />;
     default:
     case IconNames.ColdSettingsIcon:
       return <ColdSettingsIcon {...props} />;

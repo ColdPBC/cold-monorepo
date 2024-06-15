@@ -3,6 +3,7 @@ import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { ComplianceTargetProgressBar } from '@coldpbc/components';
 import { AssessmentsContext } from '@coldpbc/context';
+import { getOrganizationComplianceMock } from '@coldpbc/mocks';
 
 const meta: Meta<typeof ComplianceTargetProgressBar> = {
   title: 'Organisms/ComplianceTargetProgressBar',
@@ -24,24 +25,7 @@ export const Default: Story = {
           setCurrentAssessment: () => {},
           data: {
             b_corp_2024: {
-              compliance: {
-                id: '2',
-                organization_id: '3412521521355',
-                compliance_id: 'cmp-2',
-                created_at: '2020-03-03T23:50:31.000Z',
-                updated_at: '2020-03-03T23:50:31.000Z',
-                organization: {},
-                compliance_definition: {
-                  id: 'cmp-2',
-                  name: 'b_corp_2024',
-                  logo_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/Certified_B_Corporation.svg',
-                  surveys: ['b_corp_2024'],
-                  created_at: '2024-03-19T16:22:59.959Z',
-                  updated_at: '2024-03-28T03:41:32.878Z',
-                  title: 'B Corp',
-                  metadata: {},
-                },
-              },
+              compliance: getOrganizationComplianceMock()[0],
               section_types: {
                 Environment: {
                   score: 0,

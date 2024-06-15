@@ -17,9 +17,6 @@ export const Empty: Story = {
   render: args => {
     return <ListItemStory {...args} />;
   },
-  args: {
-    onChange: (value: string[] | null) => {},
-  },
 };
 
 export const WithValues: Story = {
@@ -28,7 +25,6 @@ export const WithValues: Story = {
   },
   args: {
     value: ['Oregon', 'Washington', '11', 'DC'],
-    onChange: (value: string[] | null) => {},
   },
 };
 

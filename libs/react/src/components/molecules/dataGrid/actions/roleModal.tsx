@@ -34,20 +34,17 @@ export const RoleModal = (props: RoleModalProps) => {
     const filteredRoles = ['cold:', 'default:'];
 
     let match = false;
-    filteredRoles.map((roleFilter) => {
+    filteredRoles.map(roleFilter => {
       if (match) return;
       match = includes(role.name, roleFilter);
     });
 
-    filteredRoles.map((roleFilter) => {
+    filteredRoles.map(roleFilter => {
       if (match) return;
       match = isEqual(role.name, actionObject.role);
     });
 
-    if (
-      auth0.user?.coldclimate_claims.roles[0] === 'company:admin' &&
-      role.name === 'company:owner'
-    ) {
+    if (auth0.user?.coldclimate_claims.roles[0] === 'company:admin' && role.name === 'company:owner') {
       if (match) return;
       match = true;
     }
@@ -94,10 +91,7 @@ export const RoleModal = (props: RoleModalProps) => {
         body={
           <div className="text-sm font-medium flex space-x-2 items-center w-full justify-between">
             <div>
-              Update role for{' '}
-              <span className="font-bold">
-                {getFormattedUserName(actionObject)}
-              </span>
+              Update role for <span className="font-bold">{getFormattedUserName(actionObject)}</span>
             </div>
             <div className={'w-40'}>
               <Input
@@ -107,15 +101,13 @@ export const RoleModal = (props: RoleModalProps) => {
                   onValueChange: (value: InputOption) => {
                     setSelectedRole(value);
                   },
-                  options: (data as any[])
-                    .filter(filterRoles)
-                    .map((role: any, index) => {
-                      return {
-                        id: index,
-                        value: role.name,
-                        name: capitalize(role.name?.replace('company:', '')),
-                      };
-                    }),
+                  options: (data as any[]).filter(filterRoles).map((role: any, index) => {
+                    return {
+                      id: index,
+                      value: role.name,
+                      name: capitalize(role.name?.replace('company:', '')),
+                    };
+                  }),
                 }}
                 idx={1}
                 type={InputTypes.Select}
@@ -129,11 +121,7 @@ export const RoleModal = (props: RoleModalProps) => {
             ...modalProps?.footer?.resolveButton,
             onClick: () => {
               // set the action api request call url to change roleName to role
-              props.action.apiRequests[0].url =
-                props.action.apiRequests[0].url.replace(
-                  ':roleName',
-                  selectedRole.value,
-                );
+              props.action.apiRequests[0].url = props.action.apiRequests[0].url.replace(':roleName', selectedRole.value);
               if (modalProps?.footer?.resolveButton?.onClick) {
                 modalProps?.footer?.resolveButton?.onClick();
               }
@@ -142,5 +130,7 @@ export const RoleModal = (props: RoleModalProps) => {
         }}
       />
     );
+  } else {
+    return null;
   }
 };

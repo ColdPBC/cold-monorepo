@@ -1,4 +1,4 @@
-import { PropsWithChildren, useState } from 'react';
+import { PropsWithChildren, ReactNode, useState } from 'react';
 import { Card } from '../card/card';
 import { useNavigate } from 'react-router-dom';
 import { FootprintDetailChart } from '../footprintDetailChart';
@@ -8,7 +8,7 @@ import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application';
 import { useOrgSWR } from '../../../hooks/useOrgSWR';
 import { useColdContext } from '@coldpbc/hooks';
-import { ErrorType } from '@coldpbc/enums';
+import { ButtonTypes, ErrorType } from '@coldpbc/enums';
 import { ActionPayload } from '@coldpbc/interfaces';
 
 export interface FootprintDetailCardProps {
@@ -41,7 +41,12 @@ function _FootprintDetailCard(props: PropsWithChildren<FootprintDetailCardProps>
   const { className, ...rest } = props;
 
   const getCtas = (subcategoryName: string) => {
-    const ctas = [];
+    const ctas: {
+      text?: string;
+      action?: () => void;
+      variant?: ButtonTypes;
+      child?: ReactNode;
+    }[] = [];
     if (ldFlags.showActions261) {
       // if there are no actions for this subcategory, navigate to the /actions page
       if (!actionsData?.some(action => action.action.subcategory === props.subcategory_key)) {

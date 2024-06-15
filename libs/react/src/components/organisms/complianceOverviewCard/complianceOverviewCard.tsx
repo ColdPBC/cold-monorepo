@@ -25,7 +25,11 @@ export const ComplianceOverviewCard = (props: ComplianceOverviewCardProps) => {
   };
 
   const getProgressBarShades = () => {
-    const shades = [];
+    const shades: {
+      color: string;
+      percentage: number;
+      type: 'answered' | 'aiAnswered';
+    }[] = [];
     if (!complianceData) return [];
 
     if (complianceData.answeredQuestions > 0) {

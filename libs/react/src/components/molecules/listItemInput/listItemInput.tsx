@@ -1,17 +1,19 @@
 import React from 'react';
 import { IconNames, InputTypes } from '@coldpbc/enums';
 import { BaseButton, Input } from '@coldpbc/components';
+import { IButtonProps } from '@coldpbc/interfaces';
 
 export interface ListItemInputProps {
   list: Array<string | null>;
   index: number;
   onChange: (value: Array<string | null>) => void;
   input_props?: React.InputHTMLAttributes<HTMLInputElement>;
+  buttonProps?: IButtonProps;
   'data-testid'?: string;
 }
 
 export const ListItemInput = (props: ListItemInputProps) => {
-  const { list, index, onChange, input_props } = props;
+  const { list, index, onChange, input_props, buttonProps } = props;
   const [value, setValue] = React.useState<string | null>(list[index] || null);
 
   const removeFromList = () => {
@@ -49,9 +51,10 @@ export const ListItemInput = (props: ListItemInputProps) => {
       />
       {(list.length > 1 || list[0] !== null) && (
         <BaseButton
-          className={'bg-transparent border border-bgc-accent hover:bg-transparent active:bg-transparent w-[72px]'}
           onClick={() => removeFromList()}
           iconRight={IconNames.CloseModalIcon}
+          className={'bg-transparent border border-bgc-accent hover:bg-transparent active:bg-transparent w-[72px]'}
+          {...buttonProps}
         />
       )}
     </div>

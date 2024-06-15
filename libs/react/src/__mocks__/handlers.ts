@@ -18,12 +18,19 @@ import { auth0UserMock } from './userMock';
 import { getNewsDefault } from './newsMock';
 import { getActionMock, getActionsMock } from './action';
 import { v4 as uuidv4 } from 'uuid';
-import { getComplianceMock, getOrganizationComplianceMock, getOrganizationComplianceMockByName } from './complianceMock';
+import {
+  getComplianceMock,
+  getOrganizationComplianceMock,
+  getOrganizationComplianceMockByName,
+  getQuestionnaireContainerMock,
+  getQuestionnaireSidebarComplianceMock,
+} from './complianceMock';
 import { getDocumentsListTableMock } from './componentMock';
 import { getAllFilesMock } from './filesMock';
 import { returnUpdatedSurvey } from './helpers';
 import { ComplianceSurveyPayloadType } from '@coldpbc/interfaces';
 import { getDefaultEmissionMock } from './emissionMocks';
+import { getNotesMock } from './notesMock';
 
 // Even if this uses vite as a bundler, it still uses the NODE_ENV variable
 export const getApiUrl = (path: string) => {
@@ -266,5 +273,54 @@ export const handlers = [
 
   rest.get(getApiUrl('/organizations/:orgId/footprints'), (req, res, ctx) => {
     return res(ctx.json(getDefaultEmissionMock()));
+  }),
+
+  rest.get(getApiUrl('/compliance/:complianceName/organizations/:orgId/section_groups/responses'), (req, res, ctx) => {
+    return res(ctx.json(getQuestionnaireSidebarComplianceMock()));
+  }),
+
+  rest.get(getApiUrl('/compliance/:name/organizations/:orgId/section_groups/:sectionGroupId/sections/:sectionId/responses'), (req, res, ctx) => {
+    // get query params from url
+    const { name, orgId, sectionGroupId, sectionId } = req.params as {
+      name: string;
+      orgId: string;
+      sectionGroupId: string;
+      sectionId: string;
+    };
+    const responses = req.url.searchParams.get('responses') as string;
+    const responsesBool = responses === 'true';
+    return res(ctx.json(getQuestionnaireContainerMock(sectionGroupId, sectionId)));
+  }),
+
+  // delete compliance question bookmark
+  rest.delete(getApiUrl('/compliance/:name/organizations/:orgId/questions/:id/bookmarks'), (req, res, ctx) => {
+    // return 200 status code
+    return res(ctx.status(200));
+  }),
+
+  // create compliance question bookmark
+  rest.post(getApiUrl('/compliance/:name/organizations/:orgId/questions/:id/bookmarks'), (req, res, ctx) => {
+    return res(ctx.status(200));
+  }),
+
+  // answer compliance question in questionnaire
+  rest.put(getApiUrl('/compliance/:name/organizations/:orgId/section_groups/:sectionGroupId/sections/:sectionId/questions/:id/responses'), (req, res, ctx) => {
+    return res(ctx.status(200));
+  }),
+
+  rest.get(getApiUrl('/compliance/:name/organizations/:orgId/questions/:id/notes'), (req, res, ctx) => {
+    const { name, orgId, id } = req.params as { name: string; orgId: string; id: string };
+
+    return res(ctx.json(getNotesMock(id)));
+  }),
+
+  // POST /compliance/${name}/organizations/${orgId}/questions/${focusQuestion?.key}/notes
+  rest.post(getApiUrl('/compliance/:name/organizations/:orgId/questions/:id/notes'), (req, res, ctx) => {
+    return res(ctx.status(200));
+  }),
+
+  // PATCH /compliance/${name}/organizations/${orgId}/questions/${focusQuestion?.key}/notes/${firstNote.id}
+  rest.patch(getApiUrl('/compliance/:name/organizations/:orgId/questions/:id/notes/:noteId'), (req, res, ctx) => {
+    return res(ctx.status(200));
   }),
 ];

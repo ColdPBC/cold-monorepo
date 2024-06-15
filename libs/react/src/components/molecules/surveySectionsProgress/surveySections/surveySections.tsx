@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { SurveyActiveKeyType, SurveySectionType } from '@coldpbc/interfaces';
-import Lottie, { useLottie } from 'lottie-react';
+import Lottie from 'lottie-react';
 import { ColdIcon } from '../../../atoms';
 import { IconNames } from '@coldpbc/enums';
 import { getCheckboxAnimation } from '@coldpbc/animations';
@@ -45,6 +45,8 @@ export const SurveySections = ({ sections, section, sectionIndex, activeKey, get
           {getSurveySectionDescription(section, index)}
         </div>
       );
+    } else {
+      return null;
     }
   };
 

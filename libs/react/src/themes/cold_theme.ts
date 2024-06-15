@@ -201,44 +201,28 @@ export function hslaToRGBA(h: number, s: number, l: number, a?: number) {
   return { r, g, b, a };
 }
 
-function toString(values: {
-  hsla?: { h: number; s: number; l: number; a?: number };
-  rgba?: { r: number; g: number; b: number; a?: number };
-}) {
+function toString(values: { hsla?: { h: number; s: number; l: number; a?: number }; rgba?: { r: number; g: number; b: number; a?: number } }) {
   const { hsla, rgba } = values;
 
   if (rgba && hsla) {
     return {
-      hslaString: hsla.a
-        ? `hsla(${hsla.h},${hsla.s.toFixed(0)}%,${hsla.l.toFixed(0)}%,${
-            hsla.a
-          })`
-        : `hsla(${hsla.h},${hsla.s.toFixed(0)}%,${hsla.l.toFixed(0)}%`,
-      rgbaString: rgba.a
-        ? `rgba(${rgba.r},${rgba.g},${rgba.b},${rgba.a})`
-        : `rgba(${rgba.r},${rgba.g},${rgba.b})`,
+      hslaString: hsla.a ? `hsla(${hsla.h},${hsla.s.toFixed(0)}%,${hsla.l.toFixed(0)}%,${hsla.a})` : `hsla(${hsla.h},${hsla.s.toFixed(0)}%,${hsla.l.toFixed(0)}%`,
+      rgbaString: rgba.a ? `rgba(${rgba.r},${rgba.g},${rgba.b},${rgba.a})` : `rgba(${rgba.r},${rgba.g},${rgba.b})`,
     };
   }
 
   if (hsla) {
-    return hsla.a
-      ? `hsla(${hsla.h},${hsla.s.toFixed(0)}%,${hsla.l.toFixed(0)}%,${hsla.a})`
-      : `hsla(${hsla.h},${hsla.s.toFixed(0)}%,${hsla.l.toFixed(0)}%`;
+    return hsla.a ? `hsla(${hsla.h},${hsla.s.toFixed(0)}%,${hsla.l.toFixed(0)}%,${hsla.a})` : `hsla(${hsla.h},${hsla.s.toFixed(0)}%,${hsla.l.toFixed(0)}%`;
   }
 
   if (rgba) {
-    return rgba.a
-      ? `rgba(${rgba.r},${rgba.g},${rgba.b},${rgba.a})`
-      : `rgba(${rgba.r},${rgba.g},${rgba.b})`;
+    return rgba.a ? `rgba(${rgba.r},${rgba.g},${rgba.b},${rgba.a})` : `rgba(${rgba.r},${rgba.g},${rgba.b})`;
   }
+
+  return '';
 }
 
-export function rgbaToHex(rgba: {
-  r: number;
-  g: number;
-  b: number;
-  a?: number;
-}) {
+export function rgbaToHex(rgba: { r: number; g: number; b: number; a?: number }) {
   const red = rgba.r.toString(16).padStart(2, '0');
   const green = rgba.g.toString(16).padStart(2, '0');
   const blue = rgba.b.toString(16).padStart(2, '0');
@@ -302,12 +286,7 @@ export function convert(hex: string | DefaultHexColors, addAlpha: boolean) {
  * Returns the color that is most visible when placed on top of the given color
  * @param rgba
  */
-export function getAccessibleColor(rgba: {
-  r: number;
-  g: number;
-  b: number;
-  a?: number;
-}) {
+export function getAccessibleColor(rgba: { r: number; g: number; b: number; a?: number }) {
   const yiq = (rgba.r * 299 + rgba.g * 587 + rgba.b * 114) / 1000;
   return yiq >= 128 ? DefaultHexColors.jetBlack : DefaultHexColors.fadeAwayGray;
 }
@@ -315,11 +294,7 @@ export function getAccessibleColor(rgba: {
 /////////////////////////////////////////////////////////////////////
 // Change hex color into RGB
 /////////////////////////////////////////////////////////////////////
-export function dynamicHsl(
-  h: string | number,
-  s: string | number,
-  l: string | number,
-) {
+export function dynamicHsl(h: string | number, s: string | number, l: string | number) {
   return ({ opacityVariable, opacityValue }: any) => {
     if (opacityValue !== undefined) {
       return `hsla(${h},${s},${l},${opacityValue})`;
@@ -344,10 +319,7 @@ export function generateVariants(hexColor: string, addAlpha = false): any {
   variants.DEFAULT = hexColor;
   variants.a11y = getAccessibleColor(rgba);
 
-  const lightValues = [
-    0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1, 1.2, 1.3, 1.4, 1.5,
-    1.6, 1.7, 1.8, 1.9,
-  ];
+  const lightValues = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9];
 
   // Generate variants by adjusting the lightness property of the color
   lightValues.map((value, idx) => {
@@ -594,18 +566,7 @@ export const fontSizes = (): any => {
 };
 
 export const getSchemeForColor = (scheme: { [key: string]: string }) => {
-  return [
-    scheme['100'],
-    scheme['200'],
-    scheme['300'],
-    scheme['400'],
-    scheme['500'],
-    scheme['600'],
-    scheme['700'],
-    scheme['800'],
-    scheme['900'],
-    scheme['1000'],
-  ];
+  return [scheme['100'], scheme['200'], scheme['300'], scheme['400'], scheme['500'], scheme['600'], scheme['700'], scheme['800'], scheme['900'], scheme['1000']];
 };
 
 export const footprintSubcategoryColors: {

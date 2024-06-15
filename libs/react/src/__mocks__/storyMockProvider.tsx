@@ -10,8 +10,16 @@ import { WizardContext, WizardContextType } from '@coldpbc/components';
 import ColdMQTTContext from '../context/coldMQTTContext';
 import { mockMQTTContext } from './mqtt/mockMQTTContext';
 import { defaultMqttDataHandler, defaultMqttTopics, getSectionGroupList } from './mqtt';
-import { ColdComplianceManagerContext, ComplianceManagerContextType, ComplianceManagerData } from '@coldpbc/context';
+import {
+  ColdComplianceManagerContext,
+  ColdComplianceQuestionnaireContext,
+  ComplianceManagerContextType,
+  ComplianceManagerData,
+  ComplianceQuestionnaireContextType,
+} from '@coldpbc/context';
 import { getAllFilesMock } from './filesMock';
+import { getQuestionnaireSidebarComplianceMock } from './complianceMock';
+import { QuestionnaireQuestionComplianceResponse } from '@coldpbc/interfaces';
 
 export interface StoryMockProviderProps {
   handlers?: RestHandler<MockedRequest<DefaultBodyType>>[];
@@ -44,6 +52,7 @@ export interface StoryMockProviderProps {
     showOverviewModal: boolean;
     setShowOverviewModal: React.Dispatch<React.SetStateAction<boolean>>;
   }>;
+  complianceQuestionnaireContext?: Partial<ComplianceQuestionnaireContextType>;
 }
 
 export const StoryMockProvider = (props: PropsWithChildren<StoryMockProviderProps>) => {
@@ -116,6 +125,39 @@ export const StoryMockProvider = (props: PropsWithChildren<StoryMockProviderProp
     setShowOverviewModal: props.complianceManagerContext?.setShowOverviewModal || setShowOverviewModal,
   };
 
+  const [complianceQuestionnaireFocusQuestion, setComplianceQuestionnaireFocusQuestion] = React.useState<{
+    key: string;
+    aiDetails: {
+      ai_response: QuestionnaireQuestionComplianceResponse['ai_response'];
+      ai_answered?: boolean;
+      ai_attempted?: boolean;
+      value?: any;
+      questionAnswerSaved: boolean;
+      questionAnswerChanged: boolean;
+    };
+  } | null>(props.complianceQuestionnaireContext?.focusQuestion ?? null);
+
+  const [complianceQuestionnaireScrollToQuestion, setComplianceQuestionnaireScrollToQuestion] = React.useState<string | null>(
+    props.complianceQuestionnaireContext?.scrollToQuestion ?? null,
+  );
+
+  const complianceQuestionnaireContextValue: ComplianceQuestionnaireContextType = {
+    name: 'rei_pia_2024',
+    sectionGroups: {
+      data: getQuestionnaireSidebarComplianceMock(),
+      error: undefined,
+      revalidate: () => {},
+      isValidating: false,
+      isLoading: false,
+      mutate: () => Promise.resolve(),
+    } as SWRResponse<any, any, any>,
+    ...props.complianceQuestionnaireContext,
+    scrollToQuestion: complianceQuestionnaireScrollToQuestion,
+    setScrollToQuestion: props.complianceQuestionnaireContext?.setScrollToQuestion ?? setComplianceQuestionnaireScrollToQuestion,
+    focusQuestion: complianceQuestionnaireFocusQuestion,
+    setFocusQuestion: props.complianceQuestionnaireContext?.setFocusQuestion ?? setComplianceQuestionnaireFocusQuestion,
+  };
+
   return (
     // so swr doesn't cache between stories
     <ColdContext.Provider value={coldContextValue}>
@@ -142,9 +184,11 @@ export const StoryMockProvider = (props: PropsWithChildren<StoryMockProviderProp
             subscribeSWR: mqttContextValue.subscribeSWR,
           }}>
           <ColdComplianceManagerContext.Provider value={complianceManagerContextValue}>
-            <SWRConfig value={{ provider: () => new Map() }}>
-              <MemoryRouter {...props.memoryRouterProps}>{props.children}</MemoryRouter>
-            </SWRConfig>
+            <ColdComplianceQuestionnaireContext.Provider value={complianceQuestionnaireContextValue}>
+              <SWRConfig value={{ provider: () => new Map() }}>
+                <MemoryRouter {...props.memoryRouterProps}>{props.children}</MemoryRouter>
+              </SWRConfig>
+            </ColdComplianceQuestionnaireContext.Provider>
           </ColdComplianceManagerContext.Provider>
         </ColdMQTTContext.Provider>
       </WizardContext.Provider>
