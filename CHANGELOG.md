@@ -1,3 +1,20 @@
+# [1.238.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.237.0...v1.238.0) (2024-06-15)
+
+
+### Features
+
+* add link to questionnaire from the compliance management page ([adb1276](https://github.com/ColdPBC/cold-monorepo/commit/adb127649ebeedd9453a827924e8a1354faf6554))
+* Add specific component routing and enhance exception handling ([0bc4728](https://github.com/ColdPBC/cold-monorepo/commit/0bc4728bdea3731d27df6fe6f2080aa705eaf4f3))
+* added container id to scroll in question container ([ffdffa8](https://github.com/ColdPBC/cold-monorepo/commit/ffdffa8f804898f1f397e92047d81f7eec88d68f))
+* added save button to notes ([93b0b29](https://github.com/ColdPBC/cold-monorepo/commit/93b0b291179ebd247a02239976e1b75fdc2e1a37))
+* handle glow overlayed on ai justification ([0231bfb](https://github.com/ColdPBC/cold-monorepo/commit/0231bfbeb88a8fa8f418897d5d2cdde3d993fcf0))
+* handle scrolling to section and question ([4ab389c](https://github.com/ColdPBC/cold-monorepo/commit/4ab389c6f8d3c00f0171dd3f751b311491b861c1))
+* more changes ([a586945](https://github.com/ColdPBC/cold-monorepo/commit/a586945b1b8f09dea6f4c916522fcbcb74595779))
+* more styling and code changes ([3d05f9b](https://github.com/ColdPBC/cold-monorepo/commit/3d05f9be74c25ffd5b7fb794ca237408d1ff2b22))
+* questionnaire page, left sidebar and container ([d24d31c](https://github.com/ColdPBC/cold-monorepo/commit/d24d31cbfa66c1197577a0c870e6faa9361893d0))
+* Remove unused hook, update surveyUtils, improve dashboard layout ([aae1153](https://github.com/ColdPBC/cold-monorepo/commit/aae11530f580a910e3017fce7182f6d1793b40ca))
+* updates for questionnaire container ([5575f3c](https://github.com/ColdPBC/cold-monorepo/commit/5575f3cf3ec5ffd53897e5104682b9ca66781930))
+
 # [1.237.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.236.0...v1.237.0) (2024-06-14)
 
 
