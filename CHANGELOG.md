@@ -1,3 +1,11 @@
+# [1.244.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.243.0...v1.244.0) (2024-06-15)
+
+
+### Features
+
+* Add function to check equality between AI response and compliance answer ([0ece33a](https://github.com/ColdPBC/cold-monorepo/commit/0ece33acdc252976b4310e50656ecbe50da132af))
+* Rename AiDocumentReferenceDropdown and refine its functionality ([e2d7ccd](https://github.com/ColdPBC/cold-monorepo/commit/e2d7ccd443a824b7f4049e59110deb99665920ad))
+
 # [1.243.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.242.0...v1.243.0) (2024-06-15)
 
 
