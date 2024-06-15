@@ -1,3 +1,10 @@
+# [1.243.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.242.0...v1.243.0) (2024-06-15)
+
+
+### Features
+
+* Enhance the validation logic for question answers ([3214518](https://github.com/ColdPBC/cold-monorepo/commit/3214518fa5cbfde8293b4a4b8c229841f1fa95bc))
+
 # [1.242.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.241.0...v1.242.0) (2024-06-15)
 
 
