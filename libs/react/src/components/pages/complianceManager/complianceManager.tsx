@@ -35,7 +35,7 @@ const _ComplianceManager = () => {
   const orgCompliances = useSWR<OrgCompliance[], any, any>(orgId ? [`/compliance_definitions/organizations/${orgId}`, 'GET'] : null, axiosFetcher);
   const files = useOrgSWR<any[], any>([`/files`, 'GET'], axiosFetcher);
 
-  const topic = `ui/${resolveNodeEnv()}/${orgId}/${name}`;
+  const topic = `ui/${resolveNodeEnv()}/${orgId}/${name}/complianceManagementPage`;
   const { data, error } = useSWRSubscription(topic, subscribeSWR) as {
     data: MQTTComplianceManagerPayload | undefined;
     error: any;

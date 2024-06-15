@@ -1,3 +1,10 @@
+# [1.239.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.238.0...v1.239.0) (2024-06-15)
+
+
+### Features
+
+* Update MQTT topic in complianceManager ([b2aeeed](https://github.com/ColdPBC/cold-monorepo/commit/b2aeeeda06ca9c3134b9f10a040248236e5f9371))
+
 # [1.238.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.237.0...v1.238.0) (2024-06-15)
 
 
