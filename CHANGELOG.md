@@ -1,3 +1,10 @@
+# [1.240.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.239.0...v1.240.0) (2024-06-15)
+
+
+### Features
+
+* Add initial creation of organization compliance in compliance-section-groups repository ([fb97713](https://github.com/ColdPBC/cold-monorepo/commit/fb97713951f4b8d6947df0dcd542f2a36ed56157))
+
 # [1.239.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.238.0...v1.239.0) (2024-06-15)
 
 
