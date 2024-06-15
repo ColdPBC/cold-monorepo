@@ -179,13 +179,14 @@ export interface QuestionnaireQuestionComplianceResponse {
   ai_response: {
     answer: any | null;
     justification: string;
-    references:
-      | {
-          file: string;
-          text: string[];
-        }[]
-      | null;
+    references: QuestionnaireQuestionComplianceReference[] | null;
   } | null;
+}
+
+export interface QuestionnaireQuestionComplianceReference {
+  file?: string;
+  url?: string;
+  text?: string[];
 }
 
 export interface QuestionnaireComplianceContainerPayLoad {
