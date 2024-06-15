@@ -2,7 +2,6 @@ import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { QuestionnaireDetailSidebar } from '@coldpbc/components';
 import { StoryMockProvider } from '@coldpbc/mocks';
-import { useState } from 'react';
 
 const meta: Meta<typeof QuestionnaireDetailSidebar> = {
   title: 'Organisms/QuestionnaireDetailSidebar',
@@ -18,14 +17,9 @@ export const Default: Story = {
   render: args => {
     return <SidebarStory {...args} />;
   },
-  args: {
-    sidebarOpen: true,
-    setSidebarOpen: () => {},
-  },
 };
 
-const SidebarStory = (args: any) => {
-  const [open, setOpen] = useState(true);
+const SidebarStory = () => {
   return (
     <StoryMockProvider
       complianceQuestionnaireContext={{
@@ -33,7 +27,6 @@ const SidebarStory = (args: any) => {
           key: 'key',
           aiDetails: {
             ai_response: {
-              id: '1',
               references: [
                 {
                   file: 'Askov Demo Doc.pdf',
@@ -49,7 +42,6 @@ const SidebarStory = (args: any) => {
               answer: 'Yes',
             },
             ai_answered: true,
-            ai_attempted: true,
             value: 'Yes',
             questionAnswerSaved: false,
             questionAnswerChanged: false,

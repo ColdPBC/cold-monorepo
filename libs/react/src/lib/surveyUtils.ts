@@ -758,3 +758,23 @@ export const getComplianceAIResponseValue = (followUp: QuestionnaireQuestion) =>
       return ai_response?.answer;
   }
 };
+
+export const isComplianceAnswerEqualToAIResponse = (aiDetails: {
+  ai_response: QuestionnaireQuestionComplianceResponse['ai_response'];
+  ai_answered?: boolean;
+  ai_attempted?: boolean;
+  value?: any | undefined;
+  questionAnswerSaved: boolean;
+  questionAnswerChanged: boolean;
+}) => {
+  const { ai_response, value } = aiDetails;
+  if (isNull(ai_response)) {
+    return false;
+  }
+  const { answer } = ai_response;
+
+  if (isArray(answer) && isArray(value)) {
+    return isEqual(answer, value);
+  }
+  return answer === value;
+};

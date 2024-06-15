@@ -1,12 +1,12 @@
 import { QuestionnaireQuestionComplianceResponse } from '@coldpbc/interfaces';
 import { HexColors } from '@coldpbc/themes';
-import { getAIOriginalAnswer, getComplianceAIResponseValue } from '@coldpbc/lib';
-import { AiDocumentReferenceDropdown, ErrorFallback } from '@coldpbc/components';
+import { getAIOriginalAnswer, isComplianceAnswerEqualToAIResponse } from '@coldpbc/lib';
+import { AiReferenceDropdown, ErrorFallback } from '@coldpbc/components';
 import { isNull } from 'lodash';
 import { withErrorBoundary } from 'react-error-boundary';
 import React from 'react';
 
-const _QuestionnaireAIDetail = (props: {
+export interface QuestionnaireAIDetailProps {
   aiDetails:
     | {
         ai_response: QuestionnaireQuestionComplianceResponse['ai_response'];
@@ -16,18 +16,21 @@ const _QuestionnaireAIDetail = (props: {
         questionAnswerSaved: boolean;
         questionAnswerChanged: boolean;
       }
-    | undefined;
-}) => {
+    | undefined
+    | null;
+}
+
+const _QuestionnaireAIDetail = (props: QuestionnaireAIDetailProps) => {
   const { aiDetails } = props;
-  if (aiDetails === undefined) {
+  if (aiDetails === undefined || aiDetails === null) {
     return null;
   }
-  const { ai_response, ai_answered, ai_attempted, value, questionAnswerSaved, questionAnswerChanged } = aiDetails;
+  const { ai_response, ai_answered, value, questionAnswerSaved, questionAnswerChanged } = aiDetails;
 
   const getAiTag = () => {
     let text = 'Low Confidence';
     let color = HexColors.bgc.accent;
-    if (isNull(getComplianceAIResponseValue)) {
+    if (isNull(ai_response)) {
       return null;
     }
 
@@ -35,7 +38,7 @@ const _QuestionnaireAIDetail = (props: {
       text = 'Low Confidence';
       color = HexColors.bgc.accent;
     } else {
-      if (value === ai_response?.answer) {
+      if (isComplianceAnswerEqualToAIResponse(aiDetails)) {
         // tell the difference between accepted and ready for review
         if (questionAnswerSaved) {
           text = 'Accepted';
@@ -77,7 +80,7 @@ const _QuestionnaireAIDetail = (props: {
             <div className={'flex flex-col gap-[8px] w-full'}>
               <div className={'text-h5'}>Documents Referenced</div>
               {ai_response?.references?.map((reference, index) => {
-                return <AiDocumentReferenceDropdown key={index} reference={reference} />;
+                return <AiReferenceDropdown key={index} reference={reference} />;
               })}
             </div>
           </>
