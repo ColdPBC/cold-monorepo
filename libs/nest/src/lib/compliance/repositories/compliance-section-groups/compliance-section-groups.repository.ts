@@ -256,6 +256,20 @@ export class ComplianceSectionGroupsRepository extends BaseWorker {
         },
       })) as any;
 
+      // If the organization compliance is not found, create it since they are trying to access the compliance set for the first time
+      if (!orgCompliance) {
+        await this.prisma.extended.organization_compliance.create({
+          data: {
+            id: new Cuid2Generator(GuidPrefixes.OrganizationCompliance).scopedId,
+            organization_id: org_id,
+            compliance_definition_name: compliance_set_name,
+            description: '',
+          },
+        });
+
+        return await this.getSectionGroupListByOrgCompliance({ org_id, compliance_set_name });
+      }
+
       if (filter) {
         orgCompliance.compliance_definition.compliance_section_groups = this.filterService.filterSectionGroups(orgCompliance.compliance_definition.compliance_section_groups);
       }
