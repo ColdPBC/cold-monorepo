@@ -10,7 +10,7 @@ import { NumericFormat } from 'react-number-format';
 import { QuestionnaireQuestion } from '@coldpbc/interfaces';
 import { ColdComplianceQuestionnaireContext } from '@coldpbc/context';
 import { axiosFetcher } from '@coldpbc/fetchers';
-import { useAuth0Wrapper } from '@coldpbc/hooks';
+import { useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
 import { isAxiosError } from 'axios';
 
 export const QuestionnaireQuestionItem = (props: {
@@ -20,12 +20,13 @@ export const QuestionnaireQuestionItem = (props: {
   sectionGroupId: string;
   questionnaireMutate: () => void;
 }) => {
+  const { logBrowser } = useColdContext();
   const { name, focusQuestion, setFocusQuestion, scrollToQuestion, setScrollToQuestion, sectionGroups } = useContext(ColdComplianceQuestionnaireContext);
   const { orgId } = useAuth0Wrapper();
   const { question, number, sectionId, sectionGroupId, questionnaireMutate } = props;
   const { id, key, prompt, options, tooltip, component, placeholder, bookmarked, user_answered, ai_answered, additional_context, ai_attempted, compliance_responses } = question;
-  const value = compliance_responses[0]?.org_response?.value;
-  const ai_response = compliance_responses[0]?.ai_response;
+  const value = compliance_responses.length === 0 ? null : compliance_responses[0]?.org_response?.value;
+  const ai_response = compliance_responses.length === 0 ? null : compliance_responses[0]?.ai_response;
 
   const getDisplayValue = () => {
     let displayValue = value;
@@ -491,6 +492,18 @@ export const QuestionnaireQuestionItem = (props: {
     }
     setButtonLoading(false);
   };
+
+  logBrowser('QuestionnaireQuestionItem rendered', 'info', {
+    question,
+    questionInput,
+    questionBookmarked,
+    questionAnswerChanged,
+    questionAnswerSaved,
+    questionStatus,
+    additionalContextOpen,
+    additionalContextInput,
+    buttonLoading,
+  });
 
   return (
     <div

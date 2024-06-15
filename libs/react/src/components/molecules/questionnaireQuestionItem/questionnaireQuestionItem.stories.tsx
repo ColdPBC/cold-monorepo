@@ -34,12 +34,7 @@ export const Bookmarked: Story = {
       key: '1',
       order: 1,
       id: '1',
-      compliance_responses: [
-        {
-          ai_response: null,
-          org_response: null,
-        },
-      ],
+      compliance_responses: [],
     },
   },
 };
@@ -63,12 +58,7 @@ export const NotStarted: Story = {
       key: '1',
       order: 1,
       id: '1',
-      compliance_responses: [
-        {
-          ai_response: null,
-          org_response: null,
-        },
-      ],
+      compliance_responses: [],
     },
   },
 };
@@ -156,12 +146,7 @@ export const YesNo: Story = {
       placeholder: 'Enter your name',
       key: '1',
       order: 1,
-      compliance_responses: [
-        {
-          ai_response: null,
-          org_response: null,
-        },
-      ],
+      compliance_responses: [],
     },
   },
 };
@@ -185,12 +170,7 @@ export const Select: Story = {
       placeholder: 'Enter your name',
       key: '1',
       order: 1,
-      compliance_responses: [
-        {
-          ai_response: null,
-          org_response: null,
-        },
-      ],
+      compliance_responses: [],
     },
   },
 };
@@ -214,12 +194,7 @@ export const MultiSelect: Story = {
       placeholder: 'Enter your name',
       key: '1',
       order: 1,
-      compliance_responses: [
-        {
-          ai_response: null,
-          org_response: null,
-        },
-      ],
+      compliance_responses: [],
     },
   },
 };
@@ -243,12 +218,7 @@ export const Text: Story = {
       placeholder: 'Enter here',
       key: '1',
       order: 1,
-      compliance_responses: [
-        {
-          ai_response: null,
-          org_response: null,
-        },
-      ],
+      compliance_responses: [],
     },
   },
 };
@@ -272,12 +242,7 @@ export const Number: Story = {
       placeholder: '',
       key: '1',
       order: 1,
-      compliance_responses: [
-        {
-          ai_response: null,
-          org_response: null,
-        },
-      ],
+      compliance_responses: [],
     },
   },
 };
@@ -301,12 +266,7 @@ export const Currency: Story = {
       placeholder: '',
       key: '1',
       order: 1,
-      compliance_responses: [
-        {
-          ai_response: null,
-          org_response: null,
-        },
-      ],
+      compliance_responses: [],
     },
   },
 };
@@ -330,12 +290,7 @@ export const Percent: Story = {
       placeholder: '',
       key: '1',
       order: 1,
-      compliance_responses: [
-        {
-          ai_response: null,
-          org_response: null,
-        },
-      ],
+      compliance_responses: [],
     },
   },
 };
@@ -359,12 +314,7 @@ export const TextArea: Story = {
       placeholder: '',
       key: '1',
       order: 1,
-      compliance_responses: [
-        {
-          ai_response: null,
-          org_response: null,
-        },
-      ],
+      compliance_responses: [],
     },
   },
 };
@@ -388,12 +338,7 @@ export const MultiText: Story = {
       placeholder: '',
       key: '1',
       order: 1,
-      compliance_responses: [
-        {
-          ai_response: null,
-          org_response: null,
-        },
-      ],
+      compliance_responses: [],
     },
   },
 };
