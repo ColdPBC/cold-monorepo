@@ -1,3 +1,10 @@
+# [1.242.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.241.0...v1.242.0) (2024-06-15)
+
+
+### Features
+
+* Handle empty compliance responses in survey utils ([a00dc29](https://github.com/ColdPBC/cold-monorepo/commit/a00dc29e86b3e9b1da1b0d7f29b52303dfe9f06d))
+
 # [1.241.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.240.0...v1.241.0) (2024-06-15)
 
 
