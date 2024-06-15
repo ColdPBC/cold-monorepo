@@ -231,34 +231,72 @@ export class FilteringService extends BaseWorker {
   }
 
   /**
-   * Check if a question has a bookmark.
-   * @param response
-   * @param property
-   */
-  questionHasBookmark(response: any, property: string) {
-    if (response) {
-      if (Object.prototype.hasOwnProperty.call(response, property) && response[property] !== null && response[property] !== '') {
-        if (Array.isArray(response[property]) && response[property].length > 0) {
-          return true;
-        }
-        return true;
-      }
-    }
-    return false;
-  }
-
-  /**
    * Check if a question has an answer or value property.  Handles conditions where answer: false is a valid response.
    * @param response
    * @param property
+   * @param component
    */
-  questionHasAnswer(response: any, property: string) {
+  questionHasValidAnswer(response: any, property: string, component: string): boolean {
     if (response) {
-      if (Object.prototype.hasOwnProperty.call(response, property) && response[property] !== null && response[property] !== '') {
-        if (Array.isArray(response[property]) && response[property].length > 0) {
-          return true;
+      // if the response answer or value is empty or null or undefined return false
+      if (response[property] === null || response[property] === '' || !Object.prototype.hasOwnProperty.call(response, property)) {
+        return false;
+      }
+
+      switch (component) {
+        case 'multi_text':
+        case 'multi_select':
+        case 'select': {
+          if (Array.isArray(response[property]) && response[property].length > 0) {
+            return true;
+          } else {
+            this.logger.error(`answer not correctly formatted`, { response, property, component });
+            return false;
+          }
         }
-        return true;
+        case 'string':
+        case 'number': {
+          if (typeof response[property] == component) {
+            return true;
+          } else {
+            this.logger.error(`answer not correctly formatted`, { response, property, component });
+            return false;
+          }
+        }
+
+        case 'yes_no': {
+          if (typeof response[property] == 'boolean') {
+            return true;
+          } else {
+            if (Array.isArray(response[property]) && typeof response[property][0] === 'boolean') {
+              this.logger.warn(`expected boolean got array`, { response, property, component });
+              return true;
+            }
+
+            this.logger.error(`answer not correctly formatted`, { response, property, component });
+            return false;
+          }
+        }
+        case 'textarea':
+        case 'text': {
+          if (typeof response[property] == 'string' && response[property].length > 0) {
+            return true;
+          } else {
+            this.logger.error(`answer not correctly formatted`, { response, property, component });
+            return false;
+          }
+        }
+        case 'percent_slider': {
+          if (typeof response[property] == 'number' && response[property] >= 0 && response[property] <= 100) {
+            return true;
+          } else {
+            this.logger.error(`answer not correctly formatted`, { response, property, component });
+            return false;
+          }
+        }
+        default:
+          this.logger.error(`answer not correctly formatted`, { response, property, component });
+          return false;
       }
     }
     return false;
