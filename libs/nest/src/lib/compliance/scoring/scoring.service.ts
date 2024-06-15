@@ -128,13 +128,13 @@ export class ScoringService extends BaseWorker {
            * If the question is multi_select or select, sum up the scores for each selected option
            */
           if (question.component === 'multi_select' || question.component === 'select') {
-            if (this.filterService.questionHasAnswer(response.org_response, 'value')) {
+            if (this.filterService.questionHasValidAnswer(response.org_response, 'value', question.component)) {
               response.org_response.value.forEach(value => {
                 score += question.rubric.score_map[value] || 0;
               });
             }
 
-            if (this.filterService.questionHasAnswer(response.ai_response, 'answer')) {
+            if (this.filterService.questionHasValidAnswer(response.ai_response, 'answer', question.component)) {
               response.ai_response.answer.forEach(answer => {
                 aiScore += question.rubric.score_map[answer] || 0;
               });
@@ -151,8 +151,8 @@ export class ScoringService extends BaseWorker {
           question.max_score = 0;
         }
 
-        question.ai_answered = this.filterService.questionHasAnswer(response.ai_response, 'answer');
-        question.user_answered = this.filterService.questionHasAnswer(response.org_response, 'value');
+        question.ai_answered = this.filterService.questionHasValidAnswer(response.ai_response, 'answer', question.component);
+        question.user_answered = this.filterService.questionHasValidAnswer(response.org_response, 'value', question.component);
         question.not_started = !question.ai_answered && !question.org_answered;
       }
       /**

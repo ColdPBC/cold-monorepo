@@ -1,3 +1,17 @@
+# [1.243.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.242.0...v1.243.0) (2024-06-15)
+
+
+### Features
+
+* Enhance the validation logic for question answers ([3214518](https://github.com/ColdPBC/cold-monorepo/commit/3214518fa5cbfde8293b4a4b8c229841f1fa95bc))
+
+# [1.242.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.241.0...v1.242.0) (2024-06-15)
+
+
+### Features
+
+* Handle empty compliance responses in survey utils ([a00dc29](https://github.com/ColdPBC/cold-monorepo/commit/a00dc29e86b3e9b1da1b0d7f29b52303dfe9f06d))
+
 # [1.241.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.240.0...v1.241.0) (2024-06-15)
 
 

@@ -678,6 +678,9 @@ export const getAIOriginalAnswer = (ai_response: QuestionnaireQuestionCompliance
 
 export const isComplianceAIResponseValueValid = (followUp: QuestionnaireQuestion) => {
   const { compliance_responses, component, options } = followUp;
+  if (compliance_responses.length === 0) {
+    return false;
+  }
   const ai_response = compliance_responses[0].ai_response;
   let isValid = false;
   if (isNull(ai_response) || isNull(ai_response.answer)) {
@@ -743,6 +746,9 @@ export const isComplianceAIResponseValueValid = (followUp: QuestionnaireQuestion
 
 export const getComplianceAIResponseValue = (followUp: QuestionnaireQuestion) => {
   const { compliance_responses, component } = followUp;
+  if (compliance_responses.length === 0) {
+    return null;
+  }
   const ai_response = compliance_responses[0].ai_response;
   switch (component) {
     case 'yes_no':
