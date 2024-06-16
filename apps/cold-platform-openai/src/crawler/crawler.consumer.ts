@@ -1,5 +1,5 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
-import { BaseWorker, CacheService, DarklyService } from '@coldpbc/nest';
+import { ConflictException, Injectable, OnModuleInit } from '@nestjs/common';
+import { BaseWorker, CacheService, Cuid2Generator, DarklyService, GuidPrefixes, IAuthenticatedUser, PrismaService, S3Service } from '@coldpbc/nest';
 import cheerio from 'cheerio';
 import { NodeHtmlMarkdown } from 'node-html-markdown';
 import { Process, Processor } from '@nestjs/bull';
@@ -7,7 +7,7 @@ import { Job } from 'bull';
 import { CrawlerService } from './crawler.service';
 import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
 import { PineconeService } from '../pinecone/pinecone.service';
-import { omit } from 'lodash';
+import { omit, pick } from 'lodash';
 
 @Injectable()
 @Processor('openai_crawler')
@@ -17,7 +17,14 @@ export class CrawlerConsumer extends BaseWorker implements OnModuleInit {
 
   chunkSize: number;
 
-  constructor(private readonly crawler: CrawlerService, private readonly pc: PineconeService, private readonly darkly: DarklyService, private readonly cache: CacheService) {
+  constructor(
+    private readonly crawler: CrawlerService,
+    private readonly pc: PineconeService,
+    private readonly darkly: DarklyService,
+    private readonly cache: CacheService,
+    private readonly s3Service: S3Service,
+    private readonly prisma: PrismaService,
+  ) {
     super(CrawlerConsumer.name);
     this.maxDepth = 3;
     this.maxPages = 10;
@@ -74,7 +81,7 @@ export class CrawlerConsumer extends BaseWorker implements OnModuleInit {
       const hostname = urlParts.hostname;
 
       // Fetch the HTML
-      const html = await this.fetchPage(job.data.url);
+      const html = await this.fetchPage(job.data.url, job.data?.organization);
       if (!html) {
         return {};
       }
@@ -127,6 +134,10 @@ export class CrawlerConsumer extends BaseWorker implements OnModuleInit {
       );
 
       try {
+        if (vectors.length < 1) {
+          this.logger.error('No vectors found for page', { url: job.data.url, documents });
+          return {};
+        }
         await index.namespace(job.data.organization.name).upsert(vectors);
         this.metrics.increment('pinecone.index.upsert', 1, {
           namespace: job.data.organization.name,
@@ -156,7 +167,6 @@ export class CrawlerConsumer extends BaseWorker implements OnModuleInit {
     } catch (e) {
       this.logger.error('Failed to crawl pages', e);
       this.metrics.increment('crawler.jobs', 1, { organization_name: job.data.organization.name, status: 'failed' });
-      throw e;
     }
 
     return {};
@@ -218,9 +228,16 @@ export class CrawlerConsumer extends BaseWorker implements OnModuleInit {
     return job?.isActive();
   }
 
-  private async fetchPage(url: string): Promise<string> {
+  private async fetchPage(url: string, org: any): Promise<string | undefined> {
     try {
       const response = await fetch(url);
+      if (new URL(url).pathname.includes('.pdf')) {
+        this.logger.info('Fetched PDF from website', url);
+        await this.pc.loadWebFile(url, org);
+
+        return;
+      }
+
       this.logger.info('Fetched page', url);
 
       return await response.text();
