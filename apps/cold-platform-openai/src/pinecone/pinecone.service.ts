@@ -328,6 +328,28 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
     }
   }
 
+  async embedWebDocument(doc: Document, org: any): Promise<PineconeRecord> {
+    try {
+      // Generate OpenAI embeddings for the document content
+      const embedding = await this.embedString(doc.pageContent, org.name);
+
+      // Return the vector embedding object
+      const record = {
+        id: this.idGenerator.generate().scopedId, // The ID of the vector
+        values: embedding, // The vector values are the OpenAI embeddings
+        metadata: {
+          // The metadata includes details about the document
+          chunk: doc.pageContent, // The chunk of text that the vector represents
+        },
+      } as PineconeRecord;
+
+      return record;
+    } catch (error) {
+      console.log('Error embedding document: ', error);
+      throw error;
+    }
+  }
+
   async embedString(input: string, org_name: string) {
     try {
       if (!input) {
@@ -453,6 +475,19 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
     } catch (error) {
       this.logger.error(error.message, { ...error });
       throw new Error('Error fetching indexes');
+    }
+  }
+
+  async loadWebFile(url: string, org: organizations) {
+    const details = await this.getIndexDetails(org.name);
+    const index = await this.getIndex(details.indexName);
+    const response = await this.lc.getWebFileContent(url);
+    // Get the vector embeddings for the document
+    const embeddings = await Promise.all(response.flat().map(doc => this.embedWebDocument(doc, org)));
+
+    for (const v of embeddings) {
+      const record = { id: v.id, values: v.values, metadata: v.metadata };
+      await index.namespace(org.name).upsert([record]);
     }
   }
 
