@@ -1,3 +1,13 @@
+# [1.245.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.244.0...v1.245.0) (2024-06-16)
+
+
+### Features
+
+* Add functions for embedding and loading web documents ([75ad7f5](https://github.com/ColdPBC/cold-monorepo/commit/75ad7f5afa3356b6c1a768bd232fb90fdcb10727))
+* add getWebFileContent method to LangchainLoaderService ([4cfc143](https://github.com/ColdPBC/cold-monorepo/commit/4cfc14302ae0b55a16000199ebe20a67c4c8cf3f))
+* Extend CrawlerConsumer to handle file persistence and addition of services ([933b903](https://github.com/ColdPBC/cold-monorepo/commit/933b903b722c244fff4a6746e6ed42de55bbd90c))
+* Update crawler controller to fetch website data from company ([5d68093](https://github.com/ColdPBC/cold-monorepo/commit/5d68093dea204a8e6b64036d1cbb3ac81a55ad1b))
+
 # [1.244.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.243.0...v1.244.0) (2024-06-15)
 
 
