@@ -40,7 +40,7 @@ export class CrawlerController extends BaseWorker {
 
     if (req.body.website) {
       return await this.crawler.addCrawlPageJob({
-        url: req.body.website,
+        url: company.website ? company.website : req.body.website,
         organization: company,
         user: req.user,
       });
