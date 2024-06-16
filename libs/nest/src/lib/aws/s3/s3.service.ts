@@ -30,10 +30,14 @@ export class S3Service extends BaseWorker implements OnModuleInit {
   }
 
   static async calculateChecksum(file): Promise<string> {
+    return S3Service.calculateBufferChecksum(file.buffer);
+  }
+
+  static async calculateBufferChecksum(fileBuffer: ArrayBuffer): Promise<string> {
     const hash = crypto.createHash('md5');
     // Create a readable stream from the buffer
     const readStream = new stream.Readable();
-    readStream.push(file.buffer);
+    readStream.push(fileBuffer);
     readStream.push(null);
 
     // Pipe the stream through the hash to calculate checksum
@@ -48,10 +52,6 @@ export class S3Service extends BaseWorker implements OnModuleInit {
     });
 
     return hash.digest('hex');
-  }
-
-  async getMD5Hash(file): Promise<string> {
-    return S3Service.calculateChecksum(file);
   }
 
   async uploadStreamToS3(user: IAuthenticatedUser, org_id: string, file) {
