@@ -8,6 +8,7 @@ import { PDFLoader } from 'langchain/document_loaders/fs/pdf';
 import { CSVLoader } from 'langchain/document_loaders/fs/csv';
 import { JSONLoader } from 'langchain/document_loaders/fs/json';
 import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
+import * as Url from 'node:url';
 
 @Injectable()
 export class LangchainLoaderService extends BaseWorker implements OnModuleInit {
@@ -29,6 +30,23 @@ export class LangchainLoaderService extends BaseWorker implements OnModuleInit {
 
     this.chunkSize = await this.darkly.getNumberFlag('dynamic-langchain-chunkSize', 1000);
     this.overlapSize = await this.darkly.getNumberFlag('dynamic-langchain-overlap-size', 200);
+  }
+
+  async getWebFileContent(url: string) {
+    const isPdf = new URL(url).pathname.endsWith('.pdf');
+    const textSplitter = RecursiveCharacterTextSplitter.fromLanguage('html', {
+      chunkSize: Number(this.chunkSize),
+      chunkOverlap: Number(this.overlapSize),
+    });
+
+    const response = await fetch(url);
+    if (!isPdf) {
+      throw new Error(`File type not supported by getWebFileContent(${url})`);
+    }
+
+    const loader = new PDFLoader(new Blob([await response.arrayBuffer()]), { splitPages: false });
+    const documents = await loader.load();
+    return await textSplitter.splitDocuments(documents);
   }
 
   async getDocContent(file: any, user: AuthenticatedUser | { coldclimate_claims: { email: string } }) {
