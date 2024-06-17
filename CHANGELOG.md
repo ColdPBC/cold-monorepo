@@ -1,3 +1,12 @@
+# [1.247.0-COLD-836.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.246.0...v1.247.0-COLD-836.1) (2024-06-17)
+
+
+### Features
+
+* Add Organizations Repository to Compliance Repository module ([175ab64](https://github.com/ColdPBC/cold-monorepo/commit/175ab646f603864ab35f9366a4d57a94f3f08fba))
+* Grant all roles access to specific organization compliance responses endpoints ([48d5b3b](https://github.com/ColdPBC/cold-monorepo/commit/48d5b3b0fde33d4d50d06fef7bbf3a035788ae20))
+* Update MQTT query getComplianceQuestionsList() to use getScoredComplianceQuestionBySection() ([4de4023](https://github.com/ColdPBC/cold-monorepo/commit/4de40231def919ae98bb699caaab92a9b497293f))
+
 # [1.246.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.245.0...v1.246.0) (2024-06-17)
 
 
