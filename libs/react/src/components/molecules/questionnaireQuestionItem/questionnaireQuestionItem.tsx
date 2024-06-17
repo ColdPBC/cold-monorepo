@@ -458,18 +458,22 @@ export const QuestionnaireQuestionItem = (props: {
     setButtonLoading(false);
   };
 
-  const updateQuestion = async (isUpdate: boolean) => {
+  const updateQuestion = async (isDelete: boolean) => {
     setButtonLoading(true);
+    let valueBeingSent = questionInput;
+    if (isDelete) {
+      valueBeingSent = null;
+    }
 
     const response = await axiosFetcher([
       `compliance/${name}/organizations/${orgId}/section_groups/${sectionGroupId}/sections/${sectionId}/questions/${id}/responses`,
       'PUT',
       {
-        value: questionInput,
+        value: valueBeingSent,
       },
     ]);
     if (!isAxiosError(response)) {
-      if (isUpdate) {
+      if (isDelete) {
         setQuestionAnswerSaved(true);
         setQuestionInput(undefined);
         setAdditionalContextInput(undefined);
