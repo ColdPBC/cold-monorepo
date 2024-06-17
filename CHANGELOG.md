@@ -1,3 +1,10 @@
+# [1.247.0-COLD-836.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.247.0-COLD-836.1...v1.247.0-COLD-836.2) (2024-06-17)
+
+
+### Features
+
+* Enhanced compliance response functionality and indexing ([a9c419a](https://github.com/ColdPBC/cold-monorepo/commit/a9c419ad13ef063edb8c4101cfadce585e1188ed))
+
 # [1.247.0-COLD-836.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.246.0...v1.247.0-COLD-836.1) (2024-06-17)
 
 
