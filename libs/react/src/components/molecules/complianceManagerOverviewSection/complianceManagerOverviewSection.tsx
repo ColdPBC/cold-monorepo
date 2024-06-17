@@ -1,5 +1,5 @@
 import { ArrowRightIcon } from '@heroicons/react/20/solid';
-import { MQTTComplianceManagerPayloadComplianceQuestionList, MQTTComplianceManagerPayloadComplianceSection } from '@coldpbc/interfaces';
+import { ComplianceSidebarPayload, MQTTComplianceManagerPayloadComplianceSection } from '@coldpbc/interfaces';
 import { useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
 import React, { useContext, useEffect, useRef } from 'react';
 import ColdMQTTContext from '../../../context/coldMQTTContext';
@@ -43,7 +43,7 @@ const _ComplianceManagerOverviewSection = ({
   const sectionTopic = `ui/${resolveNodeEnv()}/${orgId}/${name}/${groupId}/${section.id}`;
 
   const { data, error } = useSWRSubscription(sectionTopic, subscribeSWR) as {
-    data: MQTTComplianceManagerPayloadComplianceQuestionList | undefined;
+    data: ComplianceSidebarPayload | undefined;
     error: unknown;
   };
 
@@ -67,17 +67,39 @@ const _ComplianceManagerOverviewSection = ({
   }, [connectionStatus, name, publishMessage, client, collapseOpen, orgId, currentAIStatus]);
 
   useEffect(() => {
-    const counts = data?.counts;
-    if (counts) {
-      totalQuestions.current = counts.total;
+    if (
+      data?.compliance_section_groups &&
+      data.compliance_section_groups.length > 0 &&
+      data.compliance_section_groups[0].compliance_sections &&
+      data.compliance_section_groups[0].compliance_sections.length > 0 &&
+      data.compliance_section_groups[0].compliance_sections[0].compliance_questions &&
+      data.compliance_section_groups[0].compliance_sections[0].compliance_questions.length > 0
+    ) {
+      const questions = data?.compliance_section_groups[0].compliance_sections[0].compliance_questions;
+      totalQuestions.current = questions.length;
+      let not_started = 0;
+      let ai_answered = 0;
+      let user_answered = 0;
+      let bookmarked = 0;
+      questions.forEach(q => {
+        if (q.not_started) {
+          not_started++;
+        } else if (q.ai_answered) {
+          ai_answered++;
+        } else if (q.user_answered) {
+          user_answered++;
+        } else if (q.bookmarked) {
+          bookmarked++;
+        }
+      });
       setGroupCounts(prev => {
         return {
           ...prev,
           [section.key]: {
-            not_started: counts.not_started,
-            ai_answered: counts.ai_answered,
-            user_answered: counts.user_answered,
-            bookmarked: counts.bookmarked,
+            not_started: not_started,
+            ai_answered: ai_answered,
+            user_answered: user_answered,
+            bookmarked: bookmarked,
           },
         };
       });
@@ -108,6 +130,8 @@ const _ComplianceManagerOverviewSection = ({
   if (section._count.compliance_questions === 0) {
     return null;
   }
+
+  const questions = data?.compliance_section_groups[0].compliance_sections[0].compliance_questions;
 
   logBrowser('Compliance Manager Overview Section', 'info', {
     section,
@@ -140,7 +164,7 @@ const _ComplianceManagerOverviewSection = ({
           <ArrowRightIcon className={'w-[24px] h-[24px] text-tc-primary'} />
         </div>
       </div>
-      <ComplianceManagerSectionProgressBar sectionAIStatus={sectionAIStatus} questions={data?.compliance_questions} />
+      <ComplianceManagerSectionProgressBar sectionAIStatus={sectionAIStatus} questions={questions} />
     </div>
   );
 };
