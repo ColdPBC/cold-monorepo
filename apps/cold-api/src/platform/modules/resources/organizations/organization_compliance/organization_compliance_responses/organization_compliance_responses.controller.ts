@@ -117,7 +117,7 @@ export class OrganizationComplianceResponsesController {
     type: 'string',
     example: 'cs_', // Example value
   })
-  @Roles(...coldAdminOnly)
+  @Roles(...allRoles)
   findQuestionsBySectionId(
     @Param('name') name: string,
     @Param('sgId') sgId: string,
@@ -156,7 +156,7 @@ export class OrganizationComplianceResponsesController {
     type: 'string',
     example: 'cs_', // Example value
   })
-  @Roles(...coldAdminOnly)
+  @Roles(...allRoles)
   getResponseDetailsById(@Param('name') name: string, @Param('sgId') sgId: string, @Param('sId') sId: string, @Param('qId') qId: string, @Req() req: any) {
     return this.organizationComplianceResponsesService.getQuestionResponseById(name, sgId, sId, qId, req);
   }
