@@ -67,18 +67,48 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
     return { indexName: config.index, config };
   }
 
-  async syncOrgFiles(user: IAuthenticatedUser, org: any, delay: number = 0) {
+  async syncOrgFiles(user: IAuthenticatedUser, org: any, delay: number = 0, type: 'web' | 'files' | 'all') {
     if (!org) {
       throw new Error(`Organization not found: ${org.id}`);
     }
 
     const details = await this.getIndexDetails(org.name);
 
+    const index = await this.getIndex(details.indexName);
+
+    try {
+      switch (type) {
+        case 'web':
+          await index.namespace(org.name).deleteMany({
+            type: { $eq: 'web' },
+            org_id: { $eq: org.id },
+          });
+          break;
+        case 'files':
+          await index.namespace(org.name).deleteMany({
+            type: { $eq: 'file' },
+            org_id: { $eq: org.id },
+          });
+          break;
+        case 'all':
+          await index.namespace(org.name).deleteAll();
+          break;
+      }
+    } catch (err) {
+      err.statusCode !== 404 && this.logger.error(err.message, { ...err });
+    }
+
     if (Array.isArray(org['organization_files']) && org['organization_files'].length > 0) {
       this.logger.info(`rebuilding ${org['organization_files'].length} file emeddings for ${org.name}`);
     }
 
-    for (const file of org['organization_files']) {
+    const files = await this.prisma.organization_files.findMany({
+      where: {
+        organization_id: org.id,
+      },
+    });
+
+    for (const file of files) {
       this.logger.info(`adding job to sync ${file.original_name} for ${org.name} to queue`);
 
       await this.queue.add(
@@ -91,9 +121,11 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
         },
         { removeOnComplete: true, delay },
       );
+
+      this.logger.info(`Syncing org file ${file.original_name}`, { org, file });
     }
 
-    return { message: 'Syncing org files', org };
+    return;
   }
 
   async syncAllOrgFiles(user: IAuthenticatedUser) {
@@ -134,7 +166,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
         },
       });
 
-      await this.syncOrgFiles(user, org);
+      await this.syncOrgFiles(user, org, 0, 'all');
     }
 
     return { message: 'Sync jobs created for all files across all orgs', orgs };
@@ -338,7 +370,11 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
         id: this.idGenerator.generate().scopedId, // The ID of the vector
         values: embedding, // The vector values are the OpenAI embeddings
         metadata: {
-          // The metadata includes details about the document
+          type: 'web',
+          org_id: org.id,
+          org_name: org.name,
+          year: new Date().getFullYear(),
+          month: new Date().getMonth(),
           chunk: doc.pageContent, // The chunk of text that the vector represents
         },
       } as PineconeRecord;
@@ -485,9 +521,28 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
     // Get the vector embeddings for the document
     const embeddings = await Promise.all(response.flat().map(doc => this.embedWebDocument(doc, org)));
 
+    const urlParts = new URL(url);
+    const parsedUrl = `${urlParts.protocol}//${urlParts.hostname}${urlParts.pathname}`;
+
     for (const v of embeddings) {
-      const record = { id: v.id, values: v.values, metadata: v.metadata };
+      const record = { id: v.id, values: v.values, metadata: { ...v.metadata, url: parsedUrl } };
       await index.namespace(org.name).upsert([record]);
+    }
+
+    try {
+      await this.prisma.vector_records.create({
+        data: {
+          id: new Cuid2Generator(GuidPrefixes.Vector).scopedId,
+          organization_id: org.id,
+          values: embeddings,
+          namespace: org.name,
+          index_name: details.indexName,
+          url: parsedUrl,
+          metadata: { originalUrl: url },
+        },
+      });
+    } catch (e) {
+      this.logger.error(e.message, { ...e });
     }
   }
 
@@ -563,7 +618,9 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
     const webVectors = await this.prisma.vector_records.findMany({
       where: {
         organization_id: org.id,
-        url: org.website,
+        NOT: {
+          url: null,
+        },
       },
     });
 
@@ -573,7 +630,10 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
     const index = await this.getIndex(details.indexName);
     // delete from pinecone
     if (webVectorIds.length > 0) {
-      await index.namespace(org.name).deleteMany(webVectorIds);
+      await index.namespace(org.name).deleteMany({
+        type: { $eq: 'web' },
+        org_id: { $eq: org.id },
+      });
       // delete from db
       await this.prisma.vector_records.deleteMany({
         where: {
