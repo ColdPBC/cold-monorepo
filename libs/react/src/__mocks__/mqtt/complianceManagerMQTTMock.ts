@@ -1,5 +1,5 @@
-import { filter, find, get } from 'lodash';
-import { CurrentAIStatusPayload, MQTTComplianceManagerPayload, MQTTComplianceManagerPayloadComplianceQuestionList } from '@coldpbc/interfaces';
+import { find, get } from 'lodash';
+import { ComplianceSidebarPayload, ComplianceSidebarQuestion, CurrentAIStatusPayload, MQTTComplianceManagerPayload } from '@coldpbc/interfaces';
 
 export const getSectionGroupList = (args: any): MQTTComplianceManagerPayload => {
   const name = get(args, 'name', '');
@@ -379,7 +379,7 @@ export const getSectionList = (args: any) => {
   return sectionGroupData.sections;
 };
 
-export const getQuestionList = (args: any): MQTTComplianceManagerPayloadComplianceQuestionList | undefined => {
+export const getQuestionList = (args: any): ComplianceSidebarPayload | undefined => {
   const name = get(args, 'name', '');
   const sectionGroupId = get(args, 'sectionGroupId', '');
   const sectionId = get(args, 'sectionId', '');
@@ -400,7 +400,6 @@ export const getQuestionList = (args: any): MQTTComplianceManagerPayloadComplian
                   prompt: 'Is the policy/target publicly available?',
                   order: 65,
                   key: 'WL-2',
-                  organization_id: 'org_VWv3Al9pLEI4CaOH',
                   not_started: true,
                   ai_answered: false,
                   user_answered: false,
@@ -412,7 +411,6 @@ export const getQuestionList = (args: any): MQTTComplianceManagerPayloadComplian
                     'The REI Product Impact Standards include the expectation that all products supplied to REI that contain virgin wool meet standards that safeguard the well-being of sheep in the wool supply chain and prohibit mulesing.\n\nDoes your brand have a formal policy/target in place regarding animal welfare in your wool supply chain?',
                   order: 64,
                   key: 'WL-1',
-                  organization_id: 'org_VWv3Al9pLEI4CaOH',
                   not_started: true,
                   ai_answered: false,
                   user_answered: false,
@@ -1738,18 +1736,27 @@ export const getQuestionList = (args: any): MQTTComplianceManagerPayloadComplian
   if (!sectionData) return undefined;
 
   return {
-    counts: {
-      total: sectionData.questions.length,
-      user_answered: filter(sectionData.questions, question => question.user_answered).length,
-      ai_answered: filter(sectionData.questions, question => question.ai_answered).length,
-      bookmarked: filter(sectionData.questions, question => question.bookmarked).length,
-      not_started: filter(sectionData.questions, question => question.not_started).length,
-    },
-    compliance_questions: sectionData.questions,
+    name: name,
+    compliance_section_groups: [
+      {
+        id: sectionGroupData.sectionGroupId,
+        title: 'D & I',
+        order: 0,
+        compliance_sections: [
+          {
+            id: sectionData.id,
+            key: sectionData.key,
+            title: sectionData.title,
+            order: 15,
+            compliance_questions: sectionData.questions,
+          },
+        ],
+      },
+    ],
   };
 };
 
-export const getComplianceSectionProgressBarQuestionsMock = () => {
+export const getComplianceSectionProgressBarQuestionsMock = (): ComplianceSidebarQuestion[] => {
   return [
     {
       id: 'cq_d7yrh6borz2oyvmk',
@@ -1757,7 +1764,6 @@ export const getComplianceSectionProgressBarQuestionsMock = () => {
         'REI’s Vendor Guide indicates that brands shipping non-white apparel items to REI should do so without individual polybags. Brands will be charged a $.01/unit polybag recycling fee for apparel items arriving in individual polybags at an REI receiving location. Please refer to REI’s Vendor Guide (available on the REI Partners Site) for more information.\n\nApproximately what percentage of the apparel product units your brand shipped to REI during the past calendar year were packaged in individual polybags?',
       order: 94,
       key: 'APK-1',
-      organization_id: 'org_VWv3Al9pLEI4CaOH',
       not_started: true,
       ai_answered: false,
       user_answered: false,
@@ -1769,7 +1775,6 @@ export const getComplianceSectionProgressBarQuestionsMock = () => {
         'As of the Spring 2024 product season, have you implemented as your standard practice the shipment of non-white apparel products to REI without the use of individual polybags?',
       order: 98,
       key: 'APK-5',
-      organization_id: 'org_VWv3Al9pLEI4CaOH',
       not_started: false,
       ai_answered: true,
       user_answered: false,
@@ -1781,7 +1786,6 @@ export const getComplianceSectionProgressBarQuestionsMock = () => {
         'Approximately what percentage of the apparel product units your brand shipped to REI during the past calendar year were packaged in a master polybag containing all units in each carton?',
       order: 95,
       key: 'APK-2',
-      organization_id: 'org_VWv3Al9pLEI4CaOH',
       not_started: false,
       ai_answered: false,
       user_answered: true,
@@ -1792,7 +1796,6 @@ export const getComplianceSectionProgressBarQuestionsMock = () => {
       prompt: 'If you ship apparel items to REI without individual polybags, how are they packaged?',
       order: 96,
       key: 'APK-3',
-      organization_id: 'org_VWv3Al9pLEI4CaOH',
       not_started: false,
       ai_answered: false,
       user_answered: true,
@@ -1803,7 +1806,6 @@ export const getComplianceSectionProgressBarQuestionsMock = () => {
       prompt: 'Approximately what percentage of the apparel product units that you ship to REI during the coming year will be packaged in individual polybags?',
       order: 97,
       key: 'APK-4',
-      organization_id: 'org_VWv3Al9pLEI4CaOH',
       not_started: false,
       ai_answered: false,
       user_answered: false,
@@ -1815,7 +1817,6 @@ export const getComplianceSectionProgressBarQuestionsMock = () => {
         'If your brand is unable to ship non-white apparel items to REI without the use of individual polybags, please describe the key factors that prevent you from doing so.',
       order: 99,
       key: 'APK-6',
-      organization_id: 'org_VWv3Al9pLEI4CaOH',
       not_started: false,
       ai_answered: false,
       user_answered: false,
@@ -1842,163 +1843,169 @@ export const getComplianceManagerOverviewSectionsMock = () => {
   };
 };
 
-export const getComplianceManagerOverviewSectionQuestionListMock = (args: any) => {
+export const getComplianceManagerOverviewSectionQuestionListMock = (args: any): ComplianceSidebarPayload => {
   return {
-    counts: {
-      total: 6,
-      not_started: 6,
-      ai_answered: 0,
-      user_answered: 0,
-      bookmarked: 0,
-    },
-    compliance_questions: [
+    name: 'rei_pia_2024',
+    compliance_section_groups: [
       {
-        id: 'cq_d2cmihcr4mwpn2sa',
-        prompt: 'Please specify which third-party RSL(s).',
-        order: 30,
-        key: 'CHEM-3A',
-        organization_id: 'org_VWv3Al9pLEI4CaOH',
-        not_started: true,
-        ai_answered: false,
-        user_answered: false,
-        bookmarked: false,
-      },
-      {
-        id: 'cq_jba9yyibiexy6zx7',
-        prompt: 'Is your brand’s RSL publicly available?',
-        order: 31,
-        key: 'CHEM-4',
-        organization_id: 'org_VWv3Al9pLEI4CaOH',
-        not_started: true,
-        ai_answered: false,
-        user_answered: false,
-        bookmarked: false,
-      },
-      {
-        id: 'cq_pvz2w191snt5jwu4',
-        prompt: 'Does your brand have a means of verifying that products you supply to REI comply with your RSL?',
-        order: 27,
-        key: 'CHEM-1',
-        organization_id: 'org_VWv3Al9pLEI4CaOH',
-        not_started: true,
-        ai_answered: false,
-        user_answered: false,
-        bookmarked: false,
-      },
-      {
-        id: 'cq_v8379scq7pncl3d5',
-        prompt: 'Is your RSL aligned to an internationally recognized third-party RSL?',
-        order: 29,
-        key: 'CHEM-3',
-        organization_id: 'org_VWv3Al9pLEI4CaOH',
-        not_started: true,
-        ai_answered: false,
-        user_answered: false,
-        bookmarked: false,
-      },
-      {
-        id: 'cq_wu2kksbvijpxmyc3',
-        prompt:
-          'As part of the REI Product Impact Standards, REI expects each brand partner to have in place a Restricted Substances List (RSL) that specifies which substances are banned or restricted in products and that meets or exceeds all applicable regulatory requirements.\n\nDoes your brand have an RSL in place for the products you supply to REI?',
-        order: 26,
-        key: 'CHEM-0',
-        organization_id: 'org_VWv3Al9pLEI4CaOH',
-        not_started: true,
-        ai_answered: false,
-        user_answered: false,
-        bookmarked: false,
-      },
-      {
-        id: 'cq_y5ar15bfkrud9ysx',
-        prompt: 'Please indicate whether your brand’s chemicals management program consists of the following components that aid in verifying compliance with your RSL.',
-        order: 28,
-        key: 'CHEM-2',
-        organization_id: 'org_VWv3Al9pLEI4CaOH',
-        not_started: true,
-        ai_answered: false,
-        user_answered: false,
-        bookmarked: false,
+        id: 'csg_k1492a2stgtca0c9',
+        title: 'D & I',
+        order: 0,
+        compliance_sections: [
+          {
+            id: 'cs_e1p1fo2i6mnvv0nn',
+            key: 'CHEM',
+            title: 'Diversity & Inclusion: Inclusive Sizing',
+            order: 15,
+            compliance_questions: [
+              {
+                id: 'cq_d2cmihcr4mwpn2sa',
+                prompt: 'Please specify which third-party RSL(s).',
+                order: 30,
+                key: 'CHEM-3A',
+                not_started: false,
+                ai_answered: true,
+                user_answered: false,
+                bookmarked: false,
+              },
+              {
+                id: 'cq_jba9yyibiexy6zx7',
+                prompt: 'Is your brand’s RSL publicly available?',
+                order: 31,
+                key: 'CHEM-4',
+                not_started: true,
+                ai_answered: false,
+                user_answered: false,
+                bookmarked: false,
+              },
+              {
+                id: 'cq_pvz2w191snt5jwu4',
+                prompt: 'Does your brand have a means of verifying that products you supply to REI comply with your RSL?',
+                order: 27,
+                key: 'CHEM-1',
+                not_started: false,
+                ai_answered: true,
+                user_answered: false,
+                bookmarked: false,
+              },
+              {
+                id: 'cq_v8379scq7pncl3d5',
+                prompt: 'Is your RSL aligned to an internationally recognized third-party RSL?',
+                order: 29,
+                key: 'CHEM-3',
+                not_started: false,
+                ai_answered: false,
+                user_answered: true,
+                bookmarked: false,
+              },
+              {
+                id: 'cq_wu2kksbvijpxmyc3',
+                prompt:
+                  'As part of the REI Product Impact Standards, REI expects each brand partner to have in place a Restricted Substances List (RSL) that specifies which substances are banned or restricted in products and that meets or exceeds all applicable regulatory requirements.\n\nDoes your brand have an RSL in place for the products you supply to REI?',
+                order: 26,
+                key: 'CHEM-0',
+                not_started: false,
+                ai_answered: true,
+                user_answered: false,
+                bookmarked: false,
+              },
+              {
+                id: 'cq_y5ar15bfkrud9ysx',
+                prompt: 'Please indicate whether your brand’s chemicals management program consists of the following components that aid in verifying compliance with your RSL.',
+                order: 28,
+                key: 'CHEM-2',
+                not_started: false,
+                ai_answered: true,
+                user_answered: false,
+                bookmarked: false,
+              },
+            ],
+          },
+        ],
       },
     ],
   };
 };
 
-export const getComplianceManagerOverviewSectionQuestionListActivatedMock = (args: any) => {
+export const getComplianceManagerOverviewSectionQuestionListActivatedMock = (args: any): ComplianceSidebarPayload => {
   return {
-    counts: {
-      total: 6,
-      not_started: 1,
-      ai_answered: 4,
-      user_answered: 1,
-      bookmarked: 0,
-    },
-    compliance_questions: [
+    name: 'rei_pia_2024',
+    compliance_section_groups: [
       {
-        id: 'cq_d2cmihcr4mwpn2sa',
-        prompt: 'Please specify which third-party RSL(s).',
-        order: 30,
-        key: 'CHEM-3A',
-        organization_id: 'org_VWv3Al9pLEI4CaOH',
-        not_started: false,
-        ai_answered: true,
-        user_answered: false,
-        bookmarked: false,
-      },
-      {
-        id: 'cq_jba9yyibiexy6zx7',
-        prompt: 'Is your brand’s RSL publicly available?',
-        order: 31,
-        key: 'CHEM-4',
-        organization_id: 'org_VWv3Al9pLEI4CaOH',
-        not_started: true,
-        ai_answered: false,
-        user_answered: false,
-        bookmarked: false,
-      },
-      {
-        id: 'cq_pvz2w191snt5jwu4',
-        prompt: 'Does your brand have a means of verifying that products you supply to REI comply with your RSL?',
-        order: 27,
-        key: 'CHEM-1',
-        organization_id: 'org_VWv3Al9pLEI4CaOH',
-        not_started: false,
-        ai_answered: true,
-        user_answered: false,
-        bookmarked: false,
-      },
-      {
-        id: 'cq_v8379scq7pncl3d5',
-        prompt: 'Is your RSL aligned to an internationally recognized third-party RSL?',
-        order: 29,
-        key: 'CHEM-3',
-        organization_id: 'org_VWv3Al9pLEI4CaOH',
-        not_started: false,
-        ai_answered: false,
-        user_answered: true,
-        bookmarked: false,
-      },
-      {
-        id: 'cq_wu2kksbvijpxmyc3',
-        prompt:
-          'As part of the REI Product Impact Standards, REI expects each brand partner to have in place a Restricted Substances List (RSL) that specifies which substances are banned or restricted in products and that meets or exceeds all applicable regulatory requirements.\n\nDoes your brand have an RSL in place for the products you supply to REI?',
-        order: 26,
-        key: 'CHEM-0',
-        organization_id: 'org_VWv3Al9pLEI4CaOH',
-        not_started: false,
-        ai_answered: true,
-        user_answered: false,
-        bookmarked: false,
-      },
-      {
-        id: 'cq_y5ar15bfkrud9ysx',
-        prompt: 'Please indicate whether your brand’s chemicals management program consists of the following components that aid in verifying compliance with your RSL.',
-        order: 28,
-        key: 'CHEM-2',
-        organization_id: 'org_VWv3Al9pLEI4CaOH',
-        not_started: false,
-        ai_answered: true,
-        user_answered: false,
-        bookmarked: false,
+        id: 'csg_k1492a2stgtca0c9',
+        title: 'D & I',
+        order: 0,
+        compliance_sections: [
+          {
+            id: 'cs_e1p1fo2i6mnvv0nn',
+            key: 'CHEM',
+            title: 'Diversity & Inclusion: Inclusive Sizing',
+            order: 15,
+            compliance_questions: [
+              {
+                id: 'cq_d2cmihcr4mwpn2sa',
+                prompt: 'Please specify which third-party RSL(s).',
+                order: 30,
+                key: 'CHEM-3A',
+                not_started: false,
+                ai_answered: true,
+                user_answered: false,
+                bookmarked: false,
+              },
+              {
+                id: 'cq_jba9yyibiexy6zx7',
+                prompt: 'Is your brand’s RSL publicly available?',
+                order: 31,
+                key: 'CHEM-4',
+                not_started: true,
+                ai_answered: false,
+                user_answered: false,
+                bookmarked: false,
+              },
+              {
+                id: 'cq_pvz2w191snt5jwu4',
+                prompt: 'Does your brand have a means of verifying that products you supply to REI comply with your RSL?',
+                order: 27,
+                key: 'CHEM-1',
+                not_started: false,
+                ai_answered: true,
+                user_answered: false,
+                bookmarked: false,
+              },
+              {
+                id: 'cq_v8379scq7pncl3d5',
+                prompt: 'Is your RSL aligned to an internationally recognized third-party RSL?',
+                order: 29,
+                key: 'CHEM-3',
+                not_started: false,
+                ai_answered: false,
+                user_answered: true,
+                bookmarked: false,
+              },
+              {
+                id: 'cq_wu2kksbvijpxmyc3',
+                prompt:
+                  'As part of the REI Product Impact Standards, REI expects each brand partner to have in place a Restricted Substances List (RSL) that specifies which substances are banned or restricted in products and that meets or exceeds all applicable regulatory requirements.\n\nDoes your brand have an RSL in place for the products you supply to REI?',
+                order: 26,
+                key: 'CHEM-0',
+                not_started: false,
+                ai_answered: true,
+                user_answered: false,
+                bookmarked: false,
+              },
+              {
+                id: 'cq_y5ar15bfkrud9ysx',
+                prompt: 'Please indicate whether your brand’s chemicals management program consists of the following components that aid in verifying compliance with your RSL.',
+                order: 28,
+                key: 'CHEM-2',
+                not_started: false,
+                ai_answered: true,
+                user_answered: false,
+                bookmarked: false,
+              },
+            ],
+          },
+        ],
       },
     ],
   };
