@@ -784,3 +784,57 @@ export const isComplianceAnswerEqualToAIResponse = (aiDetails: {
   }
   return answer === value;
 };
+
+export const getComplianceOrgResponseAnswer = (component: string, compliance_responses: QuestionnaireQuestionComplianceResponse[]) => {
+  if (compliance_responses.length === 0) {
+    return null;
+  }
+  const org_response = compliance_responses[0].org_response;
+
+  if (isNull(org_response) || isUndefined(org_response)) {
+    return null;
+  }
+
+  if (['yes_no', 'textarea', 'text', 'currency', 'number', 'percent_slider'].includes(component)) {
+    let value = org_response.value;
+    if (isArray(value)) {
+      value = value[0];
+    }
+    if (component === 'percent_slider') {
+      if (value > 100) {
+        value = 100;
+      } else if (value < 0) {
+        value = 0;
+      }
+    }
+    return value;
+  } else {
+    return org_response.value;
+  }
+};
+
+export const getComplianceOrgResponseAdditionalContextAnswer = (additional_context: SurveyAdditionalContext | undefined) => {
+  if (!additional_context) {
+    return null;
+  }
+
+  const { value, component } = additional_context;
+
+  if (['yes_no', 'textarea', 'text', 'currency', 'number', 'percent_slider'].includes(component)) {
+    let returnValue = value;
+    if (isArray(value)) {
+      returnValue = returnValue[0];
+    }
+
+    if (component === 'percent_slider') {
+      if (returnValue > 100) {
+        returnValue = 100;
+      } else if (returnValue < 0) {
+        returnValue = 0;
+      }
+    }
+    return returnValue;
+  } else {
+    return value;
+  }
+};
