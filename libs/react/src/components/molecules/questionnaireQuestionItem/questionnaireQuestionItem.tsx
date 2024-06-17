@@ -2,7 +2,13 @@ import { BaseButton, Card, ColdIcon, ComplianceProgressStatusIcon, ErrorFallback
 import { ButtonTypes, ComplianceProgressStatus, IconNames, InputTypes } from '@coldpbc/enums';
 import React, { useContext, useEffect, useState } from 'react';
 import { isArray, isNull, isUndefined, toArray } from 'lodash';
-import { getComplianceAIResponseValue, ifAdditionalContextConditionMet, isComplianceAIResponseValueValid } from '@coldpbc/lib';
+import {
+  getComplianceAIResponseValue,
+  getComplianceOrgResponseAdditionalContextAnswer,
+  getComplianceOrgResponseAnswer,
+  ifAdditionalContextConditionMet,
+  isComplianceAIResponseValueValid,
+} from '@coldpbc/lib';
 import { HexColors } from '@coldpbc/themes';
 import { QuestionnaireYesNo } from './questionnaireYesNo';
 import { QuestionnaireSelect } from './questionnaireSelect';
@@ -20,7 +26,7 @@ const _QuestionnaireQuestionItem = (props: { question: QuestionnaireQuestion; nu
   const { orgId } = useAuth0Wrapper();
   const { question, number, sectionId, sectionGroupId, questionnaireMutate } = props;
   const { id, key, prompt, options, tooltip, component, placeholder, bookmarked, user_answered, ai_answered, additional_context, ai_attempted, compliance_responses } = question;
-  const value = compliance_responses.length === 0 ? null : compliance_responses[0]?.org_response?.value;
+  const value = getComplianceOrgResponseAnswer(component, compliance_responses);
   const ai_response = compliance_responses.length === 0 ? null : compliance_responses[0]?.ai_response;
 
   const getDisplayValue = () => {
@@ -47,7 +53,7 @@ const _QuestionnaireQuestionItem = (props: { question: QuestionnaireQuestion; nu
   const [questionAnswerSaved, setQuestionAnswerSaved] = useState<boolean>(false);
   const [questionStatus, setQuestionStatus] = useState<ComplianceProgressStatus>(getQuestionStatus());
   const [additionalContextOpen, setAdditionalContextOpen] = useState<boolean>(false);
-  const [additionalContextInput, setAdditionalContextInput] = useState<any | undefined>(additional_context?.value);
+  const [additionalContextInput, setAdditionalContextInput] = useState<any | undefined>(getComplianceOrgResponseAdditionalContextAnswer(additional_context));
   const [buttonLoading, setButtonLoading] = useState<boolean>(false);
 
   useEffect(() => {

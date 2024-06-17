@@ -45,3 +45,15 @@ export enum ComplianceOverviewModalStep {
   upload = 'upload',
   startAI = 'startAI',
 }
+
+export enum ComplianceComponentType {
+  text = 'text',
+  textarea = 'textarea',
+  yes_no = 'yes_no',
+  number = 'number',
+  currency = 'currency',
+  percent_slider = 'percent_slider',
+  select = 'select',
+  multi_select = 'multi_select',
+  multi_text = 'multi_text',
+}
