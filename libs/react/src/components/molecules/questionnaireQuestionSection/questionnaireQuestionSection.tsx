@@ -1,10 +1,11 @@
-import { QuestionnaireQuestionItem, QuestionnaireQuestionItemPlaceholder } from '@coldpbc/components';
-import { useContext, useEffect } from 'react';
+import { ErrorFallback, QuestionnaireQuestionItem, QuestionnaireQuestionItemPlaceholder } from '@coldpbc/components';
+import React, { useContext, useEffect } from 'react';
 import { ColdComplianceQuestionnaireContext } from '@coldpbc/context';
 import { ComplianceSidebarSection, QuestionnaireQuestion } from '@coldpbc/interfaces';
 import { useSearchParams } from 'react-router-dom';
+import { withErrorBoundary } from 'react-error-boundary';
 
-export const QuestionnaireQuestionSection = (props: {
+const _QuestionnaireQuestionSection = (props: {
   innerRef: ((node?: globalThis.Element | null | undefined) => void) | null;
   section: ComplianceSidebarSection;
   sectionGroupId: string;
@@ -22,12 +23,12 @@ export const QuestionnaireQuestionSection = (props: {
     if (isSectionInQuery) {
       setTimeout(() => {
         setSearchParams({});
-      }, 2000);
+      }, 3000);
     }
   }, [searchParams]);
 
   return (
-    <div className={'flex flex-col gap-[40px]'} ref={innerRef}>
+    <div className={'flex flex-col gap-[40px] w-full'} ref={innerRef}>
       <div
         className={`text-h2 text-tc-primary ${focusQuestion !== null && 'opacity-20'}`}
         ref={el => {
@@ -62,3 +63,10 @@ export const QuestionnaireQuestionSection = (props: {
     </div>
   );
 };
+
+export const QuestionnaireQuestionSection = withErrorBoundary(_QuestionnaireQuestionSection, {
+  FallbackComponent: props => <ErrorFallback {...props} />,
+  onError: (error, info) => {
+    console.error('Error occurred in QuestionnaireQuestionSection: ', error);
+  },
+});
