@@ -32,7 +32,7 @@ const _QuestionnaireQuestionSection = (props: {
       <div
         className={`text-h2 text-tc-primary ${focusQuestion !== null && 'opacity-20'}`}
         ref={el => {
-          if (isSectionInQuery && el) {
+          if (isSectionInQuery && el && focusQuestion === null) {
             el.scrollIntoView({
               behavior: 'smooth',
               block: 'start',
