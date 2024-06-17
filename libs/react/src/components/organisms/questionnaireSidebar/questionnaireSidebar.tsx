@@ -4,11 +4,13 @@ import { HexColors } from '@coldpbc/themes';
 import { ErrorFallback, QuestionnaireSidebarSectionGroup } from '@coldpbc/components';
 import { ColdComplianceQuestionnaireContext } from '@coldpbc/context';
 import { withErrorBoundary } from 'react-error-boundary';
+import { orderBy } from 'lodash';
 
 const _QuestionnaireSidebar = (props: { sidebarOpen: boolean; setSidebarOpen: (open: boolean) => void }) => {
   const { sidebarOpen, setSidebarOpen } = props;
   const { sectionGroups } = useContext(ColdComplianceQuestionnaireContext);
 
+  const orderedSectionGroups = orderBy(sectionGroups?.data?.compliance_section_groups, ['order', 'title'], ['asc', 'asc']);
   return (
     <div
       className={'h-full flex flex-col gap-[24px] border-gray-70 border-r-[1px] text-ellipsis pb-[50px]'}
@@ -27,11 +29,9 @@ const _QuestionnaireSidebar = (props: { sidebarOpen: boolean; setSidebarOpen: (o
         </div>
       )}
       <div className={'w-full h-full flex flex-col gap-[48px] overflow-y-auto scrollbar-hide'}>
-        {sectionGroups?.data?.compliance_section_groups
-          .sort((a, b) => a.order - b.order)
-          .map((item, index) => {
-            return <QuestionnaireSidebarSectionGroup key={index} sectionGroup={item} sideBarExpanded={sidebarOpen} />;
-          })}
+        {orderedSectionGroups.map((item, index) => {
+          return <QuestionnaireSidebarSectionGroup key={index} sectionGroup={item} sideBarExpanded={sidebarOpen} />;
+        })}
       </div>
     </div>
   );

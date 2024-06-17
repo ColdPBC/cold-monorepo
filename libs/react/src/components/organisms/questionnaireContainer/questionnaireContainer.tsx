@@ -8,6 +8,7 @@ import useSWRInfinite from 'swr/infinite';
 import { useInView } from 'react-intersection-observer';
 import { useSearchParams } from 'react-router-dom';
 import { withErrorBoundary } from 'react-error-boundary';
+import { orderBy } from 'lodash';
 
 const _QuestionnaireContainer = () => {
   const { logBrowser } = useColdContext();
@@ -110,35 +111,35 @@ const _QuestionnaireContainer = () => {
     size,
   });
 
+  const orderedSectionGroups = orderBy(sectionGroups?.data?.compliance_section_groups, ['order', 'title'], ['asc', 'asc']);
+
   return (
     <div className={'w-full h-full pt-[24px] px-[40px] flex flex-col gap-[40px] overflow-y-scroll scrollbar-hide'} id={'questionnaireContainer'}>
-      {sectionGroups?.data?.compliance_section_groups
-        .sort((a, b) => a.order - b.order)
-        .map((sectionGroup, index) => {
-          return (
-            <div className={'w-full flex flex-col gap-[40px] items-start'}>
-              <div className={`text-h1 text-tc-primary ${focusQuestion !== null && 'opacity-20'}`}>{sectionGroup.title}</div>
-              {sectionGroup.compliance_sections
-                .sort((a, b) => a.order - b.order)
-                .map((section, index) => {
-                  const orderedSectionIndex = orderedSections.findIndex(s => s.key === section.key);
-                  const isLastPage = size - 1 === orderedSectionIndex;
-                  const pagedSectionData = getPageSectionData(data, sectionGroup.id, section.id);
-                  const lastPageRef = isLastPage ? lowerRef : null;
-                  return (
-                    <QuestionnaireQuestionSection
-                      questionnaireMutate={mutate}
-                      key={section.key}
-                      section={section}
-                      sectionGroupId={sectionGroup.id}
-                      pagedSectionData={pagedSectionData}
-                      innerRef={lastPageRef}
-                    />
-                  );
-                })}
-            </div>
-          );
-        })}
+      {orderedSectionGroups.map((sectionGroup, index) => {
+        return (
+          <div className={'w-full flex flex-col gap-[40px] items-start'}>
+            <div className={`text-h1 text-tc-primary ${focusQuestion !== null && 'opacity-20'}`}>{sectionGroup.title}</div>
+            {sectionGroup.compliance_sections
+              .sort((a, b) => a.order - b.order)
+              .map((section, index) => {
+                const orderedSectionIndex = orderedSections.findIndex(s => s.key === section.key);
+                const isLastPage = size - 1 === orderedSectionIndex;
+                const pagedSectionData = getPageSectionData(data, sectionGroup.id, section.id);
+                const lastPageRef = isLastPage ? lowerRef : null;
+                return (
+                  <QuestionnaireQuestionSection
+                    questionnaireMutate={mutate}
+                    key={section.key}
+                    section={section}
+                    sectionGroupId={sectionGroup.id}
+                    pagedSectionData={pagedSectionData}
+                    innerRef={lastPageRef}
+                  />
+                );
+              })}
+          </div>
+        );
+      })}
     </div>
   );
 };
