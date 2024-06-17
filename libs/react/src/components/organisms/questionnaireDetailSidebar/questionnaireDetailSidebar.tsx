@@ -89,7 +89,8 @@ const _QuestionnaireDetailSidebar = () => {
         minWidth: sidebarOpen ? '407px' : '0px',
         borderLeft: sidebarOpen ? `1px solid ${HexColors.gray['70']}` : 'none',
         transition: 'width 0.3s',
-      }}>
+      }}
+      data-chromatic={'ignore'}>
       {sidebarOpen && (
         <>
           <div className={'w-full h-auto flex flex-row gap-[12px] px-[24px] py-[16px] bg-gray-30 justify-between'}>

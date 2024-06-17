@@ -1,8 +1,14 @@
-import { BaseButton, Card, ColdIcon, ComplianceProgressStatusIcon, Input, ListItem } from '@coldpbc/components';
+import { BaseButton, Card, ColdIcon, ComplianceProgressStatusIcon, ErrorFallback, Input, ListItem } from '@coldpbc/components';
 import { ButtonTypes, ComplianceProgressStatus, IconNames, InputTypes } from '@coldpbc/enums';
 import React, { useContext, useEffect, useState } from 'react';
 import { isArray, isNull, isUndefined, toArray } from 'lodash';
-import { getComplianceAIResponseValue, ifAdditionalContextConditionMet, isComplianceAIResponseValueValid } from '@coldpbc/lib';
+import {
+  getComplianceAIResponseValue,
+  getComplianceOrgResponseAdditionalContextAnswer,
+  getComplianceOrgResponseAnswer,
+  ifAdditionalContextConditionMet,
+  isComplianceAIResponseValueValid,
+} from '@coldpbc/lib';
 import { HexColors } from '@coldpbc/themes';
 import { QuestionnaireYesNo } from './questionnaireYesNo';
 import { QuestionnaireSelect } from './questionnaireSelect';
@@ -12,20 +18,15 @@ import { ColdComplianceQuestionnaireContext } from '@coldpbc/context';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
 import { isAxiosError } from 'axios';
+import { withErrorBoundary } from 'react-error-boundary';
 
-export const QuestionnaireQuestionItem = (props: {
-  question: QuestionnaireQuestion;
-  number: number;
-  sectionId: string;
-  sectionGroupId: string;
-  questionnaireMutate: () => void;
-}) => {
+const _QuestionnaireQuestionItem = (props: { question: QuestionnaireQuestion; number: number; sectionId: string; sectionGroupId: string; questionnaireMutate: () => void }) => {
   const { logBrowser } = useColdContext();
   const { name, focusQuestion, setFocusQuestion, scrollToQuestion, setScrollToQuestion, sectionGroups } = useContext(ColdComplianceQuestionnaireContext);
   const { orgId } = useAuth0Wrapper();
   const { question, number, sectionId, sectionGroupId, questionnaireMutate } = props;
   const { id, key, prompt, options, tooltip, component, placeholder, bookmarked, user_answered, ai_answered, additional_context, ai_attempted, compliance_responses } = question;
-  const value = compliance_responses.length === 0 ? null : compliance_responses[0]?.org_response?.value;
+  const value = getComplianceOrgResponseAnswer(component, compliance_responses);
   const ai_response = compliance_responses.length === 0 ? null : compliance_responses[0]?.ai_response;
 
   const getDisplayValue = () => {
@@ -52,7 +53,7 @@ export const QuestionnaireQuestionItem = (props: {
   const [questionAnswerSaved, setQuestionAnswerSaved] = useState<boolean>(false);
   const [questionStatus, setQuestionStatus] = useState<ComplianceProgressStatus>(getQuestionStatus());
   const [additionalContextOpen, setAdditionalContextOpen] = useState<boolean>(false);
-  const [additionalContextInput, setAdditionalContextInput] = useState<any | undefined>(additional_context?.value);
+  const [additionalContextInput, setAdditionalContextInput] = useState<any | undefined>(getComplianceOrgResponseAdditionalContextAnswer(additional_context));
   const [buttonLoading, setButtonLoading] = useState<boolean>(false);
 
   useEffect(() => {
@@ -561,3 +562,10 @@ export const QuestionnaireQuestionItem = (props: {
     </div>
   );
 };
+
+export const QuestionnaireQuestionItem = withErrorBoundary(_QuestionnaireQuestionItem, {
+  FallbackComponent: props => <ErrorFallback {...props} />,
+  onError: (error, info) => {
+    console.error('Error occurred in QuestionnaireQuestionItem: ', error);
+  },
+});

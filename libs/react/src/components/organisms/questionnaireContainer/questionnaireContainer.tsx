@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import { ColdComplianceQuestionnaireContext } from '@coldpbc/context';
-import { ErrorFallback, QuestionnaireQuestionSection, Spinner } from '@coldpbc/components';
+import { ErrorFallback, QuestionnaireQuestionSection } from '@coldpbc/components';
 import { ComplianceSidebarSection, QuestionnaireComplianceContainerPayLoad, QuestionnaireQuestion } from '@coldpbc/interfaces';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
@@ -136,7 +136,6 @@ const _QuestionnaireContainer = () => {
                     />
                   );
                 })}
-              <div>{isLoading && <Spinner />}</div>
             </div>
           );
         })}
