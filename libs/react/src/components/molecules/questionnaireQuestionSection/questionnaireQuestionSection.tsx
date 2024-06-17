@@ -23,7 +23,7 @@ const _QuestionnaireQuestionSection = (props: {
     if (isSectionInQuery) {
       setTimeout(() => {
         setSearchParams({});
-      }, 2000);
+      }, 3000);
     }
   }, [searchParams]);
 
