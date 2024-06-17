@@ -1,6 +1,6 @@
 import {
   BaseWorker,
-  ComplianceQuestionsRepository,
+  ComplianceResponsesRepository,
   ComplianceSectionGroupsRepository,
   ComplianceSectionsCacheRepository,
   ComplianceSectionsRepository,
@@ -9,6 +9,7 @@ import {
   MqttAPIComplianceSectionPayload,
   MqttService,
   MqttSocketAPIPayload,
+  OrganizationsRepository,
 } from '@coldpbc/nest';
 import { Injectable, OnModuleInit, UnprocessableEntityException } from '@nestjs/common';
 
@@ -17,8 +18,9 @@ export class ComplianceMQTT extends BaseWorker implements OnModuleInit {
   constructor(
     readonly mqttService: MqttService,
     readonly groupRepository: ComplianceSectionGroupsRepository,
-    readonly questionRepository: ComplianceQuestionsRepository,
+    readonly orgRepository: OrganizationsRepository,
     readonly sectionRepository: ComplianceSectionsRepository,
+    readonly responsesRepository: ComplianceResponsesRepository,
     readonly sectionCacheRepository: ComplianceSectionsCacheRepository,
   ) {
     super(ComplianceMQTT.name);
@@ -53,7 +55,22 @@ export class ComplianceMQTT extends BaseWorker implements OnModuleInit {
         }
         case `getComplianceQuestionList`: {
           payload = JSON.parse(message) as MqttAPIComplianceSectionPayload;
-          response = await this.questionRepository.getFilteredQuestionList(payload);
+
+          if (!payload.user.coldclimate_claims.roles.includes('cold:admin') && payload.user.coldclimate_claims.org_id !== payload.org_id) {
+            throw new UnprocessableEntityException({
+              description: 'User does not have access to this organization',
+            });
+          }
+
+          const org: any = await this.orgRepository.findOne(payload.user, { id: payload.organization_id });
+
+          response = await this.responsesRepository.getScoredComplianceQuestionBySection(
+            org,
+            payload.compliance_set_name,
+            payload.compliance_section_group_id,
+            payload.compliance_section_id,
+            payload.user,
+          );
           break;
         }
         default: {
