@@ -47,6 +47,8 @@ const _ComplianceManagerOverviewSection = ({
     error: unknown;
   };
 
+  const questions = data?.compliance_section_groups?.[0]?.compliance_sections?.[0]?.compliance_questions;
+
   const sectionAIStatus = currentAIStatus?.find(s => s.section === section.key);
 
   useEffect(() => {
@@ -67,15 +69,7 @@ const _ComplianceManagerOverviewSection = ({
   }, [connectionStatus, name, publishMessage, client, collapseOpen, orgId, currentAIStatus]);
 
   useEffect(() => {
-    if (
-      data?.compliance_section_groups &&
-      data.compliance_section_groups.length > 0 &&
-      data.compliance_section_groups[0].compliance_sections &&
-      data.compliance_section_groups[0].compliance_sections.length > 0 &&
-      data.compliance_section_groups[0].compliance_sections[0].compliance_questions &&
-      data.compliance_section_groups[0].compliance_sections[0].compliance_questions.length > 0
-    ) {
-      const questions = data?.compliance_section_groups[0].compliance_sections[0].compliance_questions;
+    if (questions) {
       totalQuestions.current = questions.length;
       let not_started = 0;
       let ai_answered = 0;
@@ -88,7 +82,8 @@ const _ComplianceManagerOverviewSection = ({
           ai_answered++;
         } else if (q.user_answered) {
           user_answered++;
-        } else if (q.bookmarked) {
+        }
+        if (q.bookmarked) {
           bookmarked++;
         }
       });
@@ -104,7 +99,7 @@ const _ComplianceManagerOverviewSection = ({
         };
       });
     }
-  }, [data]);
+  }, [questions]);
 
   const isAIRunning = () => {
     if (status === ComplianceManagerStatus.startedAi) {
@@ -130,8 +125,6 @@ const _ComplianceManagerOverviewSection = ({
   if (section._count.compliance_questions === 0) {
     return null;
   }
-
-  const questions = data?.compliance_section_groups[0].compliance_sections[0].compliance_questions;
 
   logBrowser('Compliance Manager Overview Section', 'info', {
     section,
