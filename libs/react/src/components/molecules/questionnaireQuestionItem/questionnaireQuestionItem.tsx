@@ -1,4 +1,4 @@
-import { BaseButton, Card, ColdIcon, ComplianceProgressStatusIcon, Input, ListItem } from '@coldpbc/components';
+import { BaseButton, Card, ColdIcon, ComplianceProgressStatusIcon, ErrorFallback, Input, ListItem } from '@coldpbc/components';
 import { ButtonTypes, ComplianceProgressStatus, IconNames, InputTypes } from '@coldpbc/enums';
 import React, { useContext, useEffect, useState } from 'react';
 import { isArray, isNull, isUndefined, toArray } from 'lodash';
@@ -12,14 +12,9 @@ import { ColdComplianceQuestionnaireContext } from '@coldpbc/context';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
 import { isAxiosError } from 'axios';
+import { withErrorBoundary } from 'react-error-boundary';
 
-export const QuestionnaireQuestionItem = (props: {
-  question: QuestionnaireQuestion;
-  number: number;
-  sectionId: string;
-  sectionGroupId: string;
-  questionnaireMutate: () => void;
-}) => {
+const _QuestionnaireQuestionItem = (props: { question: QuestionnaireQuestion; number: number; sectionId: string; sectionGroupId: string; questionnaireMutate: () => void }) => {
   const { logBrowser } = useColdContext();
   const { name, focusQuestion, setFocusQuestion, scrollToQuestion, setScrollToQuestion, sectionGroups } = useContext(ColdComplianceQuestionnaireContext);
   const { orgId } = useAuth0Wrapper();
@@ -557,3 +552,10 @@ export const QuestionnaireQuestionItem = (props: {
     </div>
   );
 };
+
+export const QuestionnaireQuestionItem = withErrorBoundary(_QuestionnaireQuestionItem, {
+  FallbackComponent: props => <ErrorFallback {...props} />,
+  onError: (error, info) => {
+    console.error('Error occurred in QuestionnaireQuestionItem: ', error);
+  },
+});
