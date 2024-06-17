@@ -29,19 +29,3 @@ export const Default: Story = {
     );
   },
 };
-
-export const WithSectionSelection: Story = {
-  render: args => {
-    return (
-      <div className={'h-screen w-screen'}>
-        <StoryMockProvider memoryRouterProps={{ initialEntries: ['/questionnaire/rei_pia_2024?section=GHG'] }}>
-          <Routes>
-            <Route path={'/questionnaire'}>
-              <Route path={':complianceName'} element={<ComplianceQuestionnaire />} />
-            </Route>
-          </Routes>
-        </StoryMockProvider>
-      </div>
-    );
-  },
-};
