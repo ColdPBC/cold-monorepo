@@ -1,3 +1,14 @@
+# [1.246.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.245.0...v1.246.0) (2024-06-17)
+
+
+### Features
+
+* Add error boundaries to questionnaire components ([a0dc8c3](https://github.com/ColdPBC/cold-monorepo/commit/a0dc8c34517581fefa1bd4f49bb07aadb7ca7436))
+* Add survey response handlers and ComplianceComponentType enum ([d290ff4](https://github.com/ColdPBC/cold-monorepo/commit/d290ff448e918d683e3f51b0e979b7f7f9392749))
+* Ignore chromatic in sidebar and remove WithSectionSelection story ([c8cbcff](https://github.com/ColdPBC/cold-monorepo/commit/c8cbcff2736f001c603768b3df98db031972842c))
+* Increase timeout in questionnaireQuestionSection ([75199a0](https://github.com/ColdPBC/cold-monorepo/commit/75199a0b264b66421eca0b109caf36f00af5c062))
+* Update div styling and remove Spinner component ([1e83fcc](https://github.com/ColdPBC/cold-monorepo/commit/1e83fcce3c0de277a9411003554cb91b306bda17))
+
 # [1.245.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.244.0...v1.245.0) (2024-06-16)
 
 
