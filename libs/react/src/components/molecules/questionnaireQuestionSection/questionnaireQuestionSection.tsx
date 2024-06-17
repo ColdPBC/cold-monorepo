@@ -27,7 +27,7 @@ export const QuestionnaireQuestionSection = (props: {
   }, [searchParams]);
 
   return (
-    <div className={'flex flex-col gap-[40px]'} ref={innerRef}>
+    <div className={'flex flex-col gap-[40px] w-full'} ref={innerRef}>
       <div
         className={`text-h2 text-tc-primary ${focusQuestion !== null && 'opacity-20'}`}
         ref={el => {
