@@ -58,7 +58,7 @@ const _ComplianceQuestionnaire = () => {
     return null;
   }
 
-  logBrowser('ComplianceQuestionnaire', 'info', {
+  logBrowser(`ComplianceQuestionnaire loaded for ${selectedCompliance?.compliance_definition.title}`, 'info', {
     complianceName,
     complianceSWR,
     selectedCompliance,

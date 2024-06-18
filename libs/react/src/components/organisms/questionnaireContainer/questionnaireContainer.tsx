@@ -14,7 +14,6 @@ const _QuestionnaireContainer = () => {
   const { logBrowser } = useColdContext();
   const [searchParams, setSearchParams] = useSearchParams();
   const [lowerRef, lowerRefInView] = useInView({
-    // triggerOnce: true,
     rootMargin: '0px 0px',
   });
   const { orgId } = useAuth0Wrapper();
@@ -100,7 +99,7 @@ const _QuestionnaireContainer = () => {
     }
   }, [searchParams]);
 
-  logBrowser('QuestionnaireContainer', 'info', {
+  logBrowser(`QuestionnaireContainer loaded for compliance ${name}`, 'info', {
     data,
     error,
     isLoading,
