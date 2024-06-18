@@ -735,6 +735,43 @@ export class ComplianceResponsesRepository extends BaseWorker {
     }
   }
 
+  async deleteAiResponsesByName(org: organizations, compliance_definition_name: string, user: IAuthenticatedUser) {
+    const compliance = await this.prisma.extended.organization_compliance.findUnique({
+      where: {
+        orgIdCompNameKey: {
+          organization_id: org.id,
+          compliance_definition_name,
+        },
+      },
+    });
+
+    try {
+      if (!compliance) {
+        throw new NotFoundException(`Organization Compliance Definition ${compliance_definition_name} not found for organization ${org.name}`);
+      }
+
+      this.logger.info(`Clearing previous AI responses for ${org.name}: ${compliance_definition_name}`, {
+        user,
+        compliance,
+        organization: org,
+      });
+
+      return await this.prisma.extended.organization_compliance_ai_responses.deleteMany({
+        where: {
+          organization_compliance_id: compliance.id,
+          organization_id: org.id,
+        },
+      });
+    } catch (error) {
+      this.logger.error(`Error clearing previous AI responses for ${org.name}: ${compliance_definition_name}`, {
+        user,
+        compliance,
+        organization: org,
+        error,
+      });
+      throw error;
+    }
+  }
   async deleteComplianceResponses(org: organizations, compliance_definition_name: string, sgId: string, sId: string, qId: string, user: IAuthenticatedUser, type: string) {
     const compliance = await this.prisma.extended.organization_compliance.findUnique({
       where: {

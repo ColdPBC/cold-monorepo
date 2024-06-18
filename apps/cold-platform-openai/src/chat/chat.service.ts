@@ -562,7 +562,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
       const { user, payload, integration, organization } = job.data;
       const { compliance, base_update_topic } = payload;
       // Reset the AI responses for the survey
-      await this.complianceResponsesRepository.deleteComplianceResponses(organization, compliance, user);
+      await this.complianceResponsesRepository.deleteAiResponsesByName(organization, compliance, user);
 
       // Log the start of the survey processing
       this.logger.info(`✅ Started processing compliance set ${compliance.compliance_definition_name} for ${organization.name}`, {
