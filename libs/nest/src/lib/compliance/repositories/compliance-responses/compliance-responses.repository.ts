@@ -230,8 +230,8 @@ export class ComplianceResponsesRepository extends BaseWorker {
     options = {
       responses: options?.responses ? options.responses : true,
       bookmarks: options?.references ? options.references : true,
-      take: options?.take ? options.take : 100,
-      skip: options?.skip ? options.skip : 0,
+      take: options?.take ? +options?.take : 100,
+      skip: options?.skip ? +options?.skip : 0,
     };
 
     try {
@@ -335,8 +335,8 @@ export class ComplianceResponsesRepository extends BaseWorker {
     options = {
       responses: options?.responses ? options.responses : true,
       bookmarks: options?.references ? options.references : true,
-      take: options?.take ? options.take : 100,
-      skip: options?.skip ? options.skip : 0,
+      take: options?.take ? +options?.take : 100,
+      skip: options?.skip ? +options?.skip : 0,
     };
 
     try {
@@ -407,9 +407,9 @@ export class ComplianceResponsesRepository extends BaseWorker {
 
     options = {
       responses: options?.responses ? options.responses : true,
-      bookmarks: options?.references ? options.references : true,
-      take: options?.take ? options.take : 100,
-      skip: options?.skip ? options.skip : 0,
+      bookmarks: options?.bookmarks ? options.bookmarks : true,
+      take: options?.take ? +options?.take : 100,
+      skip: options?.skip ? +options?.skip : 0,
     };
 
     try {
@@ -478,66 +478,65 @@ export class ComplianceResponsesRepository extends BaseWorker {
     options?: ComplianceResponseOptions,
   ) {
     options = {
-      responses: options?.responses ? options.responses : false,
-      bookmarks: options?.references ? options.references : false,
+      responses: options?.responses ? options.responses : true,
+      bookmarks: options?.bookmarks ? options.bookmarks : true,
       references: options?.references ? options.references : true,
-      take: options?.take ? options.take : 100,
-      skip: options?.skip ? options.skip : 0,
+      take: options?.take ? +options?.take : 100,
+      skip: options?.skip ? +options?.skip : 0,
     };
 
-    try {
-      const response = await this.prisma.extended.organizations.findUnique({
-        where: {
-          id: org.id,
-        },
-        select: {
-          id: true,
-          name: true,
-          organization_compliance: {
-            where: { compliance_definition_name },
-            select: {
-              compliance_definition: {
-                select: {
-                  name: true,
-                  compliance_section_groups: {
-                    where: { id: sgId },
-                    select: {
-                      id: true,
-                      title: true,
-                      order: true,
-                      compliance_sections: {
-                        where: {
-                          id: sId,
-                        },
-                        select: {
-                          id: true,
-                          key: true,
-                          title: true,
-                          order: true,
-                          compliance_section_dependency_chains: true,
-                          compliance_questions: {
-                            where: {
-                              id: qId,
-                            },
-                            select: {
-                              id: true,
-                              key: true,
-                              order: true,
-                              additional_context: true,
-                              question_bookmarks: options.bookmarks ? this.getBookmarkQuery(user.coldclimate_claims.email) : false,
-                              compliance_responses: {
-                                where: {
-                                  organization_id: org.id,
-                                },
-                                select: {
-                                  id: true,
-                                  ai_response: {
-                                    select: {
-                                      id: true,
-                                      answer: false,
-                                      justification: false,
-                                      references: true,
-                                    },
+    const query = {
+      where: {
+        id: org.id,
+      },
+      select: {
+        id: true,
+        name: true,
+        organization_compliance: {
+          where: { compliance_definition_name },
+          select: {
+            compliance_definition: {
+              select: {
+                name: true,
+                compliance_section_groups: {
+                  where: { id: sgId },
+                  select: {
+                    id: true,
+                    title: true,
+                    order: true,
+                    compliance_sections: {
+                      where: {
+                        id: sId,
+                      },
+                      select: {
+                        id: true,
+                        key: true,
+                        title: true,
+                        order: true,
+                        compliance_section_dependency_chains: true,
+                        compliance_questions: {
+                          where: {
+                            id: qId,
+                          },
+                          select: {
+                            id: true,
+                            key: true,
+                            order: true,
+                            additional_context: true,
+                            component: true,
+                            question_bookmarks: options.bookmarks ? this.getBookmarkQuery(user.coldclimate_claims.email) : false,
+                            compliance_responses: {
+                              where: {
+                                organization_id: org.id,
+                              },
+                              select: {
+                                id: true,
+                                ai_response: {
+                                  select: {
+                                    id: true,
+                                    answer: true,
+                                    justification: true,
+                                    references: true,
                                   },
                                 },
                               },
@@ -552,7 +551,10 @@ export class ComplianceResponsesRepository extends BaseWorker {
             },
           },
         },
-      });
+      },
+    };
+    try {
+      const response = await this.prisma.extended.organizations.findUnique(query);
 
       if (!response) {
         throw new NotFoundException(`No Compliance Found For ${org.name}`);
@@ -579,8 +581,8 @@ export class ComplianceResponsesRepository extends BaseWorker {
       responses: options?.responses ? options.responses : false,
       bookmarks: options?.references ? options.references : true,
       references: options?.references ? options.references : true,
-      take: options?.take ? options.take : 100,
-      skip: options?.skip ? options.skip : 0,
+      take: options?.take ? +options?.take : 100,
+      skip: options?.skip ? +options?.skip : 0,
     };
 
     try {
@@ -622,7 +624,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
         },
       });
 
-      if (!response) {
+      if (!response || response.organization_compliance?.length < 1) {
         throw new NotFoundException(`No Compliance Found For ${org.name}`);
       }
 
@@ -642,8 +644,8 @@ export class ComplianceResponsesRepository extends BaseWorker {
       responses: options?.responses ? options.responses : false,
       bookmarks: options?.references ? options.references : true,
       references: options?.references ? options.references : true,
-      take: options?.take ? options.take : 100,
-      skip: options?.skip ? options.skip : 0,
+      take: options?.take ? +options?.take : 100,
+      skip: options?.skip ? +options?.skip : 0,
     };
 
     try {
@@ -733,28 +735,89 @@ export class ComplianceResponsesRepository extends BaseWorker {
     }
   }
 
-  async deleteComplianceResponses(organization: organizations, compliance: organization_compliance, user, includeUserResponses = false) {
+  async deleteAiResponsesByName(org: organizations, compliance_definition_name: string, user: IAuthenticatedUser) {
+    const compliance = await this.prisma.extended.organization_compliance.findUnique({
+      where: {
+        orgIdCompNameKey: {
+          organization_id: org.id,
+          compliance_definition_name,
+        },
+      },
+    });
+
     try {
-      this.logger.info(`Clearing previous responses for ${organization.name}: ${compliance.compliance_definition_name}`, {
-        user,
-        ...compliance,
-        organization,
-      });
-
-      await this.prisma.extended.compliance_responses.deleteMany({
-        where: { organization_compliance_id: compliance.id },
-      });
-
-      if (includeUserResponses) {
-        await this.prisma.extended.organization_compliance_responses.deleteMany({
-          where: { organization_compliance_id: compliance.id },
-        });
+      if (!compliance) {
+        throw new NotFoundException(`Organization Compliance Definition ${compliance_definition_name} not found for organization ${org.name}`);
       }
-    } catch (error) {
-      this.logger.error(`Error clearing previous responses for ${organization.name}: ${compliance.compliance_definition_name}`, {
+
+      this.logger.info(`Clearing previous AI responses for ${org.name}: ${compliance_definition_name}`, {
         user,
         compliance,
-        organization,
+        organization: org,
+      });
+
+      return await this.prisma.extended.organization_compliance_ai_responses.deleteMany({
+        where: {
+          organization_compliance_id: compliance.id,
+          organization_id: org.id,
+        },
+      });
+    } catch (error) {
+      this.logger.error(`Error clearing previous AI responses for ${org.name}: ${compliance_definition_name}`, {
+        user,
+        compliance,
+        organization: org,
+        error,
+      });
+      throw error;
+    }
+  }
+  async deleteComplianceResponses(org: organizations, compliance_definition_name: string, sgId: string, sId: string, qId: string, user: IAuthenticatedUser, type: string) {
+    const compliance = await this.prisma.extended.organization_compliance.findUnique({
+      where: {
+        orgIdCompNameKey: {
+          organization_id: org.id,
+          compliance_definition_name,
+        },
+      },
+    });
+
+    try {
+      if (!compliance) {
+        throw new NotFoundException(`Organization Compliance Definition ${compliance_definition_name} not found for organization ${org.name}`);
+      }
+
+      this.logger.info(`Clearing previous responses for ${org.name}: ${compliance_definition_name}`, {
+        user,
+        compliance,
+        options: { compliance_definition_name, sgId, sId, qId, type },
+        org,
+      });
+
+      switch (type) {
+        case 'ai':
+          return await this.prisma.extended.organization_compliance_ai_responses.delete({
+            where: { orgCompQuestId: { organization_compliance_id: compliance.id, compliance_question_id: qId } },
+          });
+        case 'org':
+          return await this.prisma.extended.organization_compliance_responses.deleteMany({
+            where: { organization_compliance_id: compliance.id, compliance_question_id: qId },
+          });
+        case 'all':
+          await this.prisma.extended.organization_compliance_ai_responses.deleteMany({
+            where: { organization_compliance_id: compliance.id },
+          });
+          return await this.prisma.extended.organization_compliance_responses.deleteMany({
+            where: { organization_compliance_id: compliance.id },
+          });
+        default:
+          throw new BadRequestException(`Invalid type ${type} provided`);
+      }
+    } catch (error) {
+      this.logger.error(`Error clearing previous responses for ${org.name}: ${compliance_definition_name}`, {
+        user,
+        compliance,
+        organization: org,
         error,
       });
       throw error;

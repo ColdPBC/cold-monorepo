@@ -52,27 +52,15 @@ export class OrganizationsRepository extends BaseWorker {
   }
 
   findOne(user: IAuthenticatedUser, filters?: { name?: string; id?: string; isTest?: boolean }) {
-    const queryOptions = {
-      include: {
-        facilities: true,
-      },
-    };
-
-    if (filters) {
-      if (filters.name) {
-        set(queryOptions, 'where', {
-          name: filters.name,
-        });
-      }
-      if (filters.id) {
-        set(queryOptions, 'where', {
+    if (filters?.id || filters?.name) {
+      return this.prisma.extended.organizations.findUnique({
+        where: {
           id: filters.id,
-        });
-      }
-
-      return this.prisma.extended.organizations.findFirst(queryOptions);
+          name: filters.name,
+        },
+      });
     } else {
-      throw new UnprocessableEntityException({ filters, user }, `No filters provided`);
+      throw new UnprocessableEntityException({ filters, user }, 'Must provide id or name');
     }
   }
 

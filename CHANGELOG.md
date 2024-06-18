@@ -1,6 +1,5 @@
 # [1.247.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.246.0...v1.247.0) (2024-06-18)
 
-
 ### Features
 
 * Optimize section groups ordering in Questionnaire ([3142636](https://github.com/ColdPBC/cold-monorepo/commit/3142636a8b59c141b61b2671325f455f64067fd5))

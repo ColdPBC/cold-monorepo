@@ -296,7 +296,7 @@ export class FilteringService extends BaseWorker {
         }
         default:
           this.logger.error(`answer not correctly formatted`, { response, property, component });
-          return false;
+          return true;
       }
     }
     return false;

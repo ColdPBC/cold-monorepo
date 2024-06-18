@@ -1,4 +1,4 @@
-import { Controller, Delete, Get, HttpCode, Param, Post, Put, Req, UploadedFile, UseFilters, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Controller, Delete, Get, HttpCode, Param, Post, Put, Query, Req, UploadedFile, UseFilters, UseGuards, UseInterceptors } from '@nestjs/common';
 import { allRoles, BaseWorker, coldAdminOnly, HttpExceptionFilter, IAuthenticatedUser, JwtAuthGuard, OrgUserInterceptor, PrismaService, Roles, RolesGuard } from '@coldpbc/nest';
 import { AppService } from './app.service';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -30,12 +30,12 @@ export class OpenAIController extends BaseWorker {
   syncOrgFiles(
     @Param('orgId') orgId: string,
     @Req()
-    req: {
-      user: IAuthenticatedUser;
-    },
+    req: any,
+    @Query('type') type: 'web' | 'files' | 'all',
   ) {
-    const org = this.prisma.organizations.findUnique({ where: { id: orgId } }) as any;
-    return this.pc.syncOrgFiles(req.user, org);
+    // const org = this.prisma.organizations.findUnique({ where: { id: orgId } }) as any;
+
+    return this.pc.syncOrgFiles(req.user, req.organization, 0, type);
   }
 
   @Get('files')

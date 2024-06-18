@@ -594,8 +594,8 @@ model compliance_responses {
   organization_compliance_id             String
   organization_compliance_ai_response_id String?
   organization_compliance_response_id    String?
-  ai_response                            organization_compliance_ai_responses? @relation(fields: [organization_compliance_ai_response_id], references: [id], map: "ai_response_id")
-  org_response                           organization_compliance_responses?    @relation(fields: [organization_compliance_response_id], references: [id], map: "org_response_id")
+  ai_response                            organization_compliance_ai_responses? @relation(fields: [organization_compliance_ai_response_id], references: [id], onDelete: SetNull)
+  org_response                           organization_compliance_responses?    @relation(fields: [organization_compliance_response_id], references: [id], onDelete: SetNull)
   compliance_section                     compliance_sections                   @relation(fields: [compliance_section_id], references: [id])
   compliance_section_group               compliance_section_groups             @relation(fields: [compliance_section_group_id], references: [id])
   compliance_question                    compliance_questions                  @relation(fields: [compliance_question_id], references: [id])

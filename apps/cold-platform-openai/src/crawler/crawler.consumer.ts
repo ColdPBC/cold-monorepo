@@ -69,7 +69,8 @@ export class CrawlerConsumer extends BaseWorker implements OnModuleInit {
 
       await this.addToSeen(job.data?.organization?.name, job.data.url);
 
-      const index = await this.pc.getIndex(job.data.organization.name);
+      const details = await this.pc.getIndexDetails(job.data.organization.name);
+      const index = await this.pc.getIndex(details.indexName);
 
       // Check if we should continue crawling
       if (this.urlBlocked(job.data.url)) {
@@ -127,7 +128,9 @@ export class CrawlerConsumer extends BaseWorker implements OnModuleInit {
         documents.flat().map(page =>
           this.pc.embedWebContent(page, {
             organization: job.data?.organization?.name,
-            type: 'webpage',
+            type: 'web',
+            year: new Date().getFullYear(),
+            month: new Date().getMonth(),
             url: job?.data?.url,
           }),
         ),
@@ -138,7 +141,33 @@ export class CrawlerConsumer extends BaseWorker implements OnModuleInit {
           this.logger.error('No vectors found for page', { url: job.data.url, documents });
           return {};
         }
+
         await index.namespace(job.data.organization.name).upsert(vectors);
+        try {
+          const parsed = new URL(job.data.url);
+          const parsedUrl = `${parsed.protocol}//${parsed.hostname}${parsed.pathname}`;
+          await this.prisma.vector_records.create({
+            data: {
+              id: new Cuid2Generator(GuidPrefixes.Vector).scopedId,
+              organization_id: job.data?.organization?.id,
+              values: vectors,
+              namespace: job.data?.organization.name,
+              index_name: details.indexName,
+              url: parsedUrl,
+              metadata: {
+                originalUrl: job.data.url,
+                organization: job.data?.organization?.name,
+                type: 'web',
+                year: new Date().getFullYear(),
+                month: new Date().getMonth(),
+                url: parsedUrl,
+              },
+            },
+          });
+        } catch (e) {
+          this.logger.error(e.message, { ...e });
+        }
+
         this.metrics.increment('pinecone.index.upsert', 1, {
           namespace: job.data.organization.name,
           status: 'completed',
@@ -156,7 +185,7 @@ export class CrawlerConsumer extends BaseWorker implements OnModuleInit {
         `crawler:${job.data.organization.name}:${checksum}`,
         {
           organization: job.data.organization.name,
-          type: 'webpage',
+          type: 'web',
           url: job.data.url,
         },
         { ttl: 60 },

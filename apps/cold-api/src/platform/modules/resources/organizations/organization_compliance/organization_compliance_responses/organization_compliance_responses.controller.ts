@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, ParseBoolPipe, Put, Query, Req, UseFilters, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseBoolPipe, ParseIntPipe, Put, Query, Req, UseFilters, UseGuards } from '@nestjs/common';
 import { OrganizationComplianceResponsesService } from './organization_compliance_responses.service';
 import { allRoles, coldAdminOnly, HttpExceptionFilter, JwtAuthGuard, Roles, RolesGuard } from '@coldpbc/nest';
 import { ApiParam, ApiTags } from '@nestjs/swagger';
@@ -63,8 +63,8 @@ export class OrganizationComplianceResponsesController {
   getGroupResponses(
     @Param('name') name: string,
     @Req() req: any,
-    @Query('take') take: number,
-    @Query('skip') skip: number,
+    @Query('take', new ParseIntPipe({ optional: true })) take: number = 100,
+    @Query('skip', new ParseIntPipe({ optional: true })) skip: number = 0,
     @Query('responses', new ParseBoolPipe({ optional: true })) responses: boolean,
     @Query('references', new ParseBoolPipe({ optional: true })) references: boolean,
   ) {
@@ -89,8 +89,8 @@ export class OrganizationComplianceResponsesController {
     @Param('name') name: string,
     @Param('sgId') sgId: string,
     @Req() req: any,
-    @Query('take') take: number,
-    @Query('skip') skip: number,
+    @Query('take', new ParseIntPipe({ optional: true })) take: number = 100,
+    @Query('skip', new ParseIntPipe({ optional: true })) skip: number = 0,
     @Query('references', new ParseBoolPipe({ optional: true })) references: boolean,
     @Query('responses', new ParseBoolPipe({ optional: true })) responses: boolean,
   ) {
@@ -117,14 +117,14 @@ export class OrganizationComplianceResponsesController {
     type: 'string',
     example: 'cs_', // Example value
   })
-  @Roles(...coldAdminOnly)
+  @Roles(...allRoles)
   findQuestionsBySectionId(
     @Param('name') name: string,
     @Param('sgId') sgId: string,
     @Param('sId') sId: string,
     @Req() req: any,
-    @Query('take') take: number,
-    @Query('skip') skip: number,
+    @Query('take', new ParseIntPipe({ optional: true })) take: number = 100,
+    @Query('skip', new ParseIntPipe({ optional: true })) skip: number = 0,
     @Query('responses', new ParseBoolPipe({ optional: true })) responses: boolean = true,
   ) {
     return this.organizationComplianceResponsesService.getQuestionsBySectionId(name, sgId, sId, req, {
@@ -156,9 +156,51 @@ export class OrganizationComplianceResponsesController {
     type: 'string',
     example: 'cs_', // Example value
   })
-  @Roles(...coldAdminOnly)
-  getResponseDetailsById(@Param('name') name: string, @Param('sgId') sgId: string, @Param('sId') sId: string, @Param('qId') qId: string, @Req() req: any) {
-    return this.organizationComplianceResponsesService.getQuestionResponseById(name, sgId, sId, qId, req);
+  @Roles(...allRoles)
+  getResponseDetailsById(
+    @Param('name') name: string,
+    @Param('sgId') sgId: string,
+    @Param('sId') sId: string,
+    @Param('qId') qId: string,
+    @Req() req: any,
+    @Query('responses', new ParseBoolPipe({ optional: true })) responses: boolean = true,
+    @Query('references', new ParseBoolPipe({ optional: true })) references: boolean = true,
+  ) {
+    return this.organizationComplianceResponsesService.getQuestionResponseById(name, sgId, sId, qId, req, { responses, references });
+  }
+
+  @Delete('section_groups/:sgId/sections/:sId/questions/:qId/responses')
+  @ApiParam({
+    name: 'sgId',
+    required: true,
+    description: 'Section Group Id',
+    type: 'string',
+    example: 'csg_', // Example value
+  })
+  @ApiParam({
+    name: 'sId',
+    required: true,
+    description: 'Section Id',
+    type: 'string',
+    example: 'cs_', // Example value
+  })
+  @ApiParam({
+    name: 'qId',
+    required: true,
+    description: 'Question Id',
+    type: 'string',
+    example: 'cs_', // Example value
+  })
+  @Roles(...allRoles)
+  deleteQuestionResponseByType(
+    @Param('name') name: string,
+    @Param('sgId') sgId: string,
+    @Param('sId') sId: string,
+    @Param('qId') qId: string,
+    @Req() req: any,
+    @Query('type') type: 'ai' | 'org' | 'all',
+  ) {
+    return this.organizationComplianceResponsesService.deleteReponseByType(name, sgId, sId, qId, req, type);
   }
 
   @Get('responses')

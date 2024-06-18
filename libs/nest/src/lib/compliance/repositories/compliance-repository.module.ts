@@ -16,11 +16,13 @@ import { ComplianceQuestionBookmarksRepository } from './compliance-question-boo
 import { ComplianceNotesRepository } from './compliance-notes';
 import { ComplianceNoteLinksRepository } from './compliance-note-links';
 import { ComplianceNoteFilesRepository } from './compliance-note-files';
+import { OrganizationsRepository } from '../../organizations';
 
 @Global()
 @Module({
   imports: [PrismaModule, ColdCacheModule.forRootAsync(), forwardRef(() => ScoringModule), forwardRef(() => FilteringModule)],
   providers: [
+    OrganizationsRepository,
     ComplianceSectionsRepository,
     ComplianceSectionGroupsRepository,
     ComplianceQuestionsRepository,
@@ -38,6 +40,7 @@ import { ComplianceNoteFilesRepository } from './compliance-note-files';
   ],
   exports: [
     CacheService,
+    OrganizationsRepository,
     ComplianceDefinitionsRepository,
     OrganizationComplianceRepository,
     OrganizationComplianceStatusesRepository,
