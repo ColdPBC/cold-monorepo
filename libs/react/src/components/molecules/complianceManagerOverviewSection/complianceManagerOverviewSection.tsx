@@ -77,12 +77,12 @@ const _ComplianceManagerOverviewSection = ({
       let user_answered = 0;
       let bookmarked = 0;
       orderedQuestions.forEach(q => {
-        if (q.not_started) {
-          not_started++;
+        if (q.user_answered) {
+          user_answered++;
         } else if (q.ai_answered) {
           ai_answered++;
-        } else if (q.user_answered) {
-          user_answered++;
+        } else if (q.not_started) {
+          not_started++;
         }
         if (q.bookmarked) {
           bookmarked++;

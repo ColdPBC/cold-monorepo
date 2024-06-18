@@ -79,6 +79,25 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
     try {
       switch (type) {
         case 'web':
+          {
+            const vectors = await this.prisma.vector_records.findMany({
+              where: {
+                organization_id: org.id,
+                NOT: {
+                  url: null,
+                },
+              },
+            });
+
+            await index.namespace(org.name).deleteMany(vectors.map(v => v.id));
+            await this.prisma.vector_records.deleteMany({
+              where: {
+                id: {
+                  in: vectors.map(v => v.id),
+                },
+              },
+            });
+          }
           await index.namespace(org.name).deleteMany({
             type: { $eq: 'web' },
             org_id: { $eq: org.id },
@@ -615,33 +634,34 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
   }
 
   async removeWebVectors(org: organizations) {
-    const webVectors = await this.prisma.vector_records.findMany({
-      where: {
-        organization_id: org.id,
-        NOT: {
-          url: null,
-        },
-      },
-    });
-
-    const webVectorIds = webVectors.map(v => v.id);
-
-    const details = await this.getIndexDetails(org.name);
-    const index = await this.getIndex(details.indexName);
-    // delete from pinecone
-    if (webVectorIds.length > 0) {
-      await index.namespace(org.name).deleteMany({
-        type: { $eq: 'web' },
-        org_id: { $eq: org.id },
-      });
-      // delete from db
-      await this.prisma.vector_records.deleteMany({
+    try {
+      const webVectors = await this.prisma.vector_records.findMany({
         where: {
-          id: {
-            in: webVectorIds,
+          organization_id: org.id,
+          NOT: {
+            url: null,
           },
         },
       });
+
+      const webVectorIds = webVectors.map(v => v.id);
+
+      const details = await this.getIndexDetails(org.name);
+      const index = await this.getIndex(details.indexName);
+      // delete from pinecone
+      if (webVectorIds.length > 0) {
+        await index.namespace(org.name).deleteMany(webVectorIds);
+        // delete from db
+        await this.prisma.vector_records.deleteMany({
+          where: {
+            id: {
+              in: webVectorIds,
+            },
+          },
+        });
+      }
+    } catch (e) {
+      this.logger.error(e.message, { ...e });
     }
   }
 

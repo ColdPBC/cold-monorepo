@@ -251,7 +251,7 @@ export class FilteringService extends BaseWorker {
             return true;
           } else {
             this.logger.error(`answer not correctly formatted`, { response, property, component });
-            return false;
+            return true;
           }
         }
         case 'string':
@@ -259,8 +259,8 @@ export class FilteringService extends BaseWorker {
           if (typeof response[property] == component) {
             return true;
           } else {
-            this.logger.error(`answer not correctly formatted`, { response, property, component });
-            return false;
+            this.logger.error(`number/string answer not correctly formatted`, { response, property, component });
+            return true;
           }
         }
 
@@ -273,7 +273,7 @@ export class FilteringService extends BaseWorker {
               return true;
             }
 
-            this.logger.error(`answer not correctly formatted`, { response, property, component });
+            this.logger.error(`yes_no answer not correctly formatted`, { response, property, component });
             return false;
           }
         }
@@ -282,7 +282,11 @@ export class FilteringService extends BaseWorker {
           if (typeof response[property] == 'string' && response[property].length > 0) {
             return true;
           } else {
-            this.logger.error(`answer not correctly formatted`, { response, property, component });
+            if (Array.isArray(response[property]) && typeof response[property][0] === 'boolean') {
+              this.logger.warn(`expected string got array`, { response, property, component });
+              return true;
+            }
+            this.logger.error(`textarea answer not correctly formatted`, { response, property, component });
             return false;
           }
         }
@@ -290,7 +294,11 @@ export class FilteringService extends BaseWorker {
           if (typeof response[property] == 'number' && response[property] >= 0 && response[property] <= 100) {
             return true;
           } else {
-            this.logger.error(`answer not correctly formatted`, { response, property, component });
+            if (Array.isArray(response[property]) && typeof response[property][0] === 'boolean') {
+              this.logger.warn(`expected number got array`, { response, property, component });
+              return true;
+            }
+            this.logger.error(`percent_slider answer not correctly formatted`, { response, property, component });
             return false;
           }
         }
