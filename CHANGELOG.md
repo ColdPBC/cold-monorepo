@@ -1,18 +1,35 @@
-# [1.247.0-COLD-836.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.247.0-COLD-836.1...v1.247.0-COLD-836.2) (2024-06-17)
+# [1.249.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.248.0...v1.249.0) (2024-06-18)
 
 
 ### Features
 
-* Enhanced compliance response functionality and indexing ([a9c419a](https://github.com/ColdPBC/cold-monorepo/commit/a9c419ad13ef063edb8c4101cfadce585e1188ed))
+* Refactor section sorting in questionnaireContainer ([424d948](https://github.com/ColdPBC/cold-monorepo/commit/424d948e20166cee6ca3a193924a416affa81983))
 
-# [1.247.0-COLD-836.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.246.0...v1.247.0-COLD-836.1) (2024-06-17)
+# [1.248.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.247.0...v1.248.0) (2024-06-18)
 
 
 ### Features
 
+* Add AI response deletion and web crawling enhancements ([7d0209e](https://github.com/ColdPBC/cold-monorepo/commit/7d0209e9a407b11da1fe99799e90634a6653a3f1))
 * Add Organizations Repository to Compliance Repository module ([175ab64](https://github.com/ColdPBC/cold-monorepo/commit/175ab646f603864ab35f9366a4d57a94f3f08fba))
+* Enhanced compliance response functionality and indexing ([a9c419a](https://github.com/ColdPBC/cold-monorepo/commit/a9c419ad13ef063edb8c4101cfadce585e1188ed))
 * Grant all roles access to specific organization compliance responses endpoints ([48d5b3b](https://github.com/ColdPBC/cold-monorepo/commit/48d5b3b0fde33d4d50d06fef7bbf3a035788ae20))
+* Refactor complianceManager and questionnaireQuestionItem components ([e2a2805](https://github.com/ColdPBC/cold-monorepo/commit/e2a28053fa767acc5e4648e679a1cc7032608576))
+* Refactor questionnaire update method ([47b650c](https://github.com/ColdPBC/cold-monorepo/commit/47b650cdd7f486f7ce274f43723388375d0660e6))
 * Update MQTT query getComplianceQuestionsList() to use getScoredComplianceQuestionBySection() ([4de4023](https://github.com/ColdPBC/cold-monorepo/commit/4de40231def919ae98bb699caaab92a9b497293f))
+* Update questionnaireQuestionItem component ([89fe672](https://github.com/ColdPBC/cold-monorepo/commit/89fe6729f41ce5cdfa3991d99fbd2450a27523a5))
+
+# [1.247.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.246.0...v1.247.0) (2024-06-18)
+
+### Features
+
+* Optimize section groups ordering in Questionnaire ([3142636](https://github.com/ColdPBC/cold-monorepo/commit/3142636a8b59c141b61b2671325f455f64067fd5))
+* Refactor data retrieval for compliance question count ([7174f18](https://github.com/ColdPBC/cold-monorepo/commit/7174f18559ba1a76b0e8c35be51a787fce966c69))
+* Refine scrolling condition in questionnaire section ([890f602](https://github.com/ColdPBC/cold-monorepo/commit/890f60291b95fc9ee4471fa712ea2e8e95f6d1e5))
+* Update Compliance Manager MQTT Mock ([6400750](https://github.com/ColdPBC/cold-monorepo/commit/64007502a8409115e00bf1fb57cbbe5fa5a65a34))
+* Update handling of undefined states in questionnaire ([9d2372a](https://github.com/ColdPBC/cold-monorepo/commit/9d2372a9c974fc7e9ee681a85e7c64045fdd7d40))
+* Update MQTT topic in mock ([562db85](https://github.com/ColdPBC/cold-monorepo/commit/562db854ea4819fce6a4e69d32efee7deab959a8))
+* Update to use ComplianceSidebarPayload and Questions ([66edc14](https://github.com/ColdPBC/cold-monorepo/commit/66edc146de861dce633580a150427dd907099fa6))
 
 # [1.246.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.245.0...v1.246.0) (2024-06-17)
 

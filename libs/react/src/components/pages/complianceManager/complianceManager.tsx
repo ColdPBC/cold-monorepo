@@ -54,17 +54,21 @@ const _ComplianceManager = () => {
 
   const compliance = data?.compliance_definition;
 
+  const publishSectionGroupMessage = () => {
+    publishMessage(
+      `platform/${resolveNodeEnv()}/compliance/getComplianceSectionGroupList`,
+      JSON.stringify({
+        reply_to: topic,
+        resource: 'complianceSectionGroupListByOrgIdCompNameKey',
+        method: 'GET',
+        compliance_set_name: name,
+      }),
+    );
+  };
+
   useEffect(() => {
     if (client?.current && connectionStatus) {
-      publishMessage(
-        `platform/${resolveNodeEnv()}/compliance/getComplianceSectionGroupList`,
-        JSON.stringify({
-          reply_to: topic,
-          resource: 'complianceSectionGroupListByOrgIdCompNameKey',
-          method: 'GET',
-          compliance_set_name: name,
-        }),
-      );
+      publishSectionGroupMessage();
     }
   }, [connectionStatus, name, publishMessage, client]);
 
@@ -137,6 +141,15 @@ const _ComplianceManager = () => {
       }
     }
   }, [orgCompliances, files, currentAIStatus, complianceCounts, name, data]);
+
+  useEffect(() => {
+    // set a timeout to re publish the message if the data is undefined. just trigger once
+    if (!data) {
+      setTimeout(() => {
+        publishSectionGroupMessage();
+      }, 2000);
+    }
+  }, [data]);
 
   logBrowser('Compliance Definition', 'info', {
     name,

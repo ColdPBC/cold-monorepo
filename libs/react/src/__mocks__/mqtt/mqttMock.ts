@@ -2,7 +2,7 @@ import { get, set } from 'lodash';
 import { getQuestionList, getSectionGroupList, getSectionList } from './complianceManagerMQTTMock';
 
 export const defaultMqttTopics = {
-  'ui/:env/org_123/:name': getSectionGroupList,
+  'ui/:env/org_123/:name/complianceManagementPage': getSectionGroupList,
   'ui/:env/org_123/:name/:sectionGroupId': getSectionList,
   'ui/:env/org_123/:name/:sectionGroupId/:sectionId': getQuestionList,
 };
