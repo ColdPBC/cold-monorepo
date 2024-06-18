@@ -49,10 +49,10 @@ const _ComplianceManagerOverviewSection = ({
   };
 
   const questions = data?.compliance_section_groups?.[0]?.compliance_sections?.[0]?.compliance_questions;
-  const orderedQuestions = orderBy(questions, ['order'], ['asc']);
+  const orderedQuestions = questions ? orderBy(questions, ['order'], ['asc']) : undefined;
   const sectionAIStatus = currentAIStatus?.find(s => s.section === section.key);
 
-  useEffect(() => {
+  const publishMQTTMessage = () => {
     if (client?.current && connectionStatus && orgId) {
       publishMessage(
         `platform/${resolveNodeEnv()}/compliance/getComplianceQuestionList`,
@@ -67,10 +67,14 @@ const _ComplianceManagerOverviewSection = ({
         }),
       );
     }
+  };
+
+  useEffect(() => {
+    publishMQTTMessage();
   }, [connectionStatus, name, publishMessage, client, collapseOpen, orgId, currentAIStatus]);
 
   useEffect(() => {
-    if (orderedQuestions.length > 0) {
+    if (orderedQuestions && orderedQuestions.length > 0) {
       totalQuestions.current = orderedQuestions.length;
       let not_started = 0;
       let ai_answered = 0;
@@ -88,6 +92,13 @@ const _ComplianceManagerOverviewSection = ({
           bookmarked++;
         }
       });
+      logBrowser(`Adding counts for section: ${section.title}`, 'info', {
+        not_started,
+        ai_answered,
+        user_answered,
+        bookmarked,
+      });
+
       setGroupCounts(prev => {
         return {
           ...prev,
@@ -123,17 +134,13 @@ const _ComplianceManagerOverviewSection = ({
     return <></>;
   }
 
-  if (section._count.compliance_questions === 0) {
-    return null;
-  }
-
   logBrowser('Compliance Manager Overview Section', 'info', {
     section,
     groupId,
     data,
     error,
     currentAIStatus,
-    orderedQuestions,
+    topic: sectionTopic,
   });
 
   const backgroundColor = isAIRunning() ? 'bg-gray-60' : 'bg-bgc-accent';
