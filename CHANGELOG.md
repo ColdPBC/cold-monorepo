@@ -1,3 +1,10 @@
+# [1.252.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.251.0...v1.252.0) (2024-06-18)
+
+
+### Features
+
+* Update scoring service and compliance responses repository ([ccc66dd](https://github.com/ColdPBC/cold-monorepo/commit/ccc66ddfc10fa01907639f2d25affd510e469864))
+
 # [1.251.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.250.0...v1.251.0) (2024-06-18)
 
 
