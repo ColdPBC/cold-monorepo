@@ -465,12 +465,8 @@ const _QuestionnaireQuestionItem = (props: { question: QuestionnaireQuestion; nu
     const promiseArray: unknown[] = [];
 
     if (isDelete) {
-      if (additionalContextOpen) {
-        // todo: handle additional context handling
-      }
-      // delete org response
       promiseArray.push(
-        axiosFetcher([`compliance/${name}/organizations/${orgId}/section_groups/${sectionGroupId}/sections/${sectionId}/questions/${id}/responses?type=org`, 'DELETE']),
+        await axiosFetcher([`compliance/${name}/organizations/${orgId}/section_groups/${sectionGroupId}/sections/${sectionId}/questions/${id}/responses?type=org`, 'DELETE']),
       );
     } else {
       promiseArray.push(
