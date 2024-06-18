@@ -78,7 +78,7 @@ const _QuestionnaireAIDetail = (props: QuestionnaireAIDetailProps) => {
             <div className={'text-body font-bold w-full text-start'}>Original Answer: {getAIOriginalAnswer(ai_response)}</div>
             <div className={'text-body w-full text-start'}>{ai_response?.justification}</div>
             <div className={'flex flex-col gap-[8px] w-full'}>
-              <div className={'text-h5'}>Documents Referenced</div>
+              {ai_response?.references && ai_response?.references?.length > 0 && <div className={'text-h5'}>Documents Referenced</div>}
               {ai_response?.references?.map((reference, index) => {
                 return <AiReferenceDropdown key={index} reference={reference} />;
               })}
