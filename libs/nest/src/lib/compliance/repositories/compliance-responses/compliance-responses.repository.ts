@@ -48,6 +48,8 @@ export class ComplianceResponsesRepository extends BaseWorker {
         rubric: true,
         options: true,
         additional_context: true,
+        dependencies: true,
+        dependency_expression: true,
         question_bookmarks: options?.bookmarks ? this.getBookmarkQuery(user.coldclimate_claims.email) : false,
         compliance_responses: {
           where: {
@@ -334,7 +336,8 @@ export class ComplianceResponsesRepository extends BaseWorker {
 
     options = {
       responses: options?.responses ? options.responses : true,
-      bookmarks: options?.references ? options.references : true,
+      bookmarks: options?.bookmarks ? options.bookmarks : true,
+      references: options?.references ? options.references : true,
       take: options?.take ? +options?.take : 100,
       skip: options?.skip ? +options?.skip : 0,
     };
