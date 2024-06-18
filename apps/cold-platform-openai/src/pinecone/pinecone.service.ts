@@ -79,6 +79,25 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
     try {
       switch (type) {
         case 'web':
+          {
+            const vectors = await this.prisma.vector_records.findMany({
+              where: {
+                organization_id: org.id,
+                NOT: {
+                  url: null,
+                },
+              },
+            });
+
+            await index.namespace(org.name).deleteMany(vectors.map(v => v.id));
+            await this.prisma.vector_records.deleteMany({
+              where: {
+                id: {
+                  in: vectors.map(v => v.id),
+                },
+              },
+            });
+          }
           await index.namespace(org.name).deleteMany({
             type: { $eq: 'web' },
             org_id: { $eq: org.id },
