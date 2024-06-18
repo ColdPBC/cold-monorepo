@@ -1,3 +1,10 @@
+# [1.253.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.252.0...v1.253.0) (2024-06-18)
+
+
+### Features
+
+* Pass options parameter to scoreComplianceResponse and add dependencies to return object ([c6fd305](https://github.com/ColdPBC/cold-monorepo/commit/c6fd305b33edd43df2797a4618e7527b2df8ce61))
+
 # [1.252.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.251.0...v1.252.0) (2024-06-18)
 
 
