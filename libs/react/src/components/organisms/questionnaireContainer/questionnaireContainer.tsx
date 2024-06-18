@@ -101,11 +101,9 @@ const _QuestionnaireContainer = () => {
   }, [searchParams]);
 
   logBrowser('QuestionnaireContainer', 'info', {
-    sectionGroups,
     data,
     error,
     isLoading,
-    orderedSections,
     size,
   });
 

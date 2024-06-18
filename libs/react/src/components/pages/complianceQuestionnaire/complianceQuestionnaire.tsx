@@ -58,15 +58,12 @@ const _ComplianceQuestionnaire = () => {
     return null;
   }
 
-  const sectionGroups = sideBarSWR.data;
-
   logBrowser('ComplianceQuestionnaire', 'info', {
     complianceName,
     complianceSWR,
     selectedCompliance,
     scrollToQuestion,
     focusQuestion,
-    sectionGroups,
   });
 
   return (
