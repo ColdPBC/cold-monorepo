@@ -1,3 +1,16 @@
+# [1.247.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.246.0...v1.247.0) (2024-06-18)
+
+
+### Features
+
+* Optimize section groups ordering in Questionnaire ([3142636](https://github.com/ColdPBC/cold-monorepo/commit/3142636a8b59c141b61b2671325f455f64067fd5))
+* Refactor data retrieval for compliance question count ([7174f18](https://github.com/ColdPBC/cold-monorepo/commit/7174f18559ba1a76b0e8c35be51a787fce966c69))
+* Refine scrolling condition in questionnaire section ([890f602](https://github.com/ColdPBC/cold-monorepo/commit/890f60291b95fc9ee4471fa712ea2e8e95f6d1e5))
+* Update Compliance Manager MQTT Mock ([6400750](https://github.com/ColdPBC/cold-monorepo/commit/64007502a8409115e00bf1fb57cbbe5fa5a65a34))
+* Update handling of undefined states in questionnaire ([9d2372a](https://github.com/ColdPBC/cold-monorepo/commit/9d2372a9c974fc7e9ee681a85e7c64045fdd7d40))
+* Update MQTT topic in mock ([562db85](https://github.com/ColdPBC/cold-monorepo/commit/562db854ea4819fce6a4e69d32efee7deab959a8))
+* Update to use ComplianceSidebarPayload and Questions ([66edc14](https://github.com/ColdPBC/cold-monorepo/commit/66edc146de861dce633580a150427dd907099fa6))
+
 # [1.246.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.245.0...v1.246.0) (2024-06-17)
 
 
