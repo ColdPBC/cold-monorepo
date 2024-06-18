@@ -4,7 +4,7 @@ import { ComplianceProgressStatusColor } from '@coldpbc/lib';
 import { get, map, orderBy } from 'lodash';
 import { flowbiteThemeOverride, HexColors } from '@coldpbc/themes';
 import { ComplianceProgressStatusIcon, ErrorFallback, Spinner } from '@coldpbc/components';
-import { CurrentAIStatusSection, MQTTComplianceManagerPayloadComplianceQuestion } from '@coldpbc/interfaces';
+import { ComplianceSidebarQuestion, CurrentAIStatusSection } from '@coldpbc/interfaces';
 import React, { useContext } from 'react';
 import { ColdComplianceManagerContext } from '@coldpbc/context';
 import { useColdContext } from '@coldpbc/hooks';
@@ -12,7 +12,7 @@ import { withErrorBoundary } from 'react-error-boundary';
 
 export interface ComplianceManagerSectionProgressBarProps {
   sectionAIStatus: CurrentAIStatusSection | undefined;
-  questions: MQTTComplianceManagerPayloadComplianceQuestion[] | undefined;
+  questions: ComplianceSidebarQuestion[] | undefined;
 }
 
 const _ComplianceManagerSectionProgressBar = ({ questions, sectionAIStatus }: ComplianceManagerSectionProgressBarProps) => {
@@ -34,7 +34,7 @@ const _ComplianceManagerSectionProgressBar = ({ questions, sectionAIStatus }: Co
     );
   };
 
-  const getProgressBarItem = (questions: MQTTComplianceManagerPayloadComplianceQuestion[], index: number) => {
+  const getProgressBarItem = (questions: ComplianceSidebarQuestion[], index: number) => {
     const totalQuestions = questions.length;
     const question = questions[index];
     let status = ComplianceProgressStatus.not_started;
