@@ -4,6 +4,8 @@ import { ColdComplianceQuestionnaireContext } from '@coldpbc/context';
 import { ComplianceSidebarSection, QuestionnaireQuestion } from '@coldpbc/interfaces';
 import { useSearchParams } from 'react-router-dom';
 import { withErrorBoundary } from 'react-error-boundary';
+import { orderBy } from 'lodash';
+import { useColdContext } from '@coldpbc/hooks';
 
 const _QuestionnaireQuestionSection = (props: {
   innerRef: ((node?: globalThis.Element | null | undefined) => void) | null;
@@ -12,6 +14,7 @@ const _QuestionnaireQuestionSection = (props: {
   pagedSectionData: QuestionnaireQuestion[] | undefined;
   questionnaireMutate: () => void;
 }) => {
+  const { logBrowser } = useColdContext();
   const [searchParams, setSearchParams] = useSearchParams();
   const { focusQuestion } = useContext(ColdComplianceQuestionnaireContext);
   const { innerRef, section, pagedSectionData, sectionGroupId, questionnaireMutate } = props;
@@ -27,6 +30,14 @@ const _QuestionnaireQuestionSection = (props: {
     }
   }, [searchParams]);
 
+  const orderedQuestions = orderBy(pagedSectionData, ['order'], ['asc']);
+
+  logBrowser('QuestionnaireQuestionSection', 'info', {
+    sectionKey,
+    isSectionInQuery,
+    orderedQuestions,
+  });
+
   return (
     <div className={'flex flex-col gap-[40px] w-full'} ref={innerRef}>
       <div
@@ -41,25 +52,23 @@ const _QuestionnaireQuestionSection = (props: {
         }}>
         {section.title}
       </div>
-      {section.compliance_questions
-        .sort((a, b) => a.order - b.order)
-        .map((question, index) => {
-          const pagedQuestionData = pagedSectionData?.find(q => q.key === question.key);
-          if (pagedQuestionData) {
-            return (
-              <QuestionnaireQuestionItem
-                key={question.key}
-                number={index + 1}
-                question={pagedQuestionData}
-                sectionId={section.id}
-                sectionGroupId={sectionGroupId}
-                questionnaireMutate={questionnaireMutate}
-              />
-            );
-          } else {
-            return <QuestionnaireQuestionItemPlaceholder key={question.key} number={index + 1} question={question} />;
-          }
-        })}
+      {orderedQuestions.map((question, index) => {
+        const pagedQuestionData = pagedSectionData?.find(q => q.key === question.key);
+        if (pagedQuestionData) {
+          return (
+            <QuestionnaireQuestionItem
+              key={question.key}
+              number={index + 1}
+              question={pagedQuestionData}
+              sectionId={section.id}
+              sectionGroupId={sectionGroupId}
+              questionnaireMutate={questionnaireMutate}
+            />
+          );
+        } else {
+          return <QuestionnaireQuestionItemPlaceholder key={question.key} number={index + 1} question={question} />;
+        }
+      })}
     </div>
   );
 };

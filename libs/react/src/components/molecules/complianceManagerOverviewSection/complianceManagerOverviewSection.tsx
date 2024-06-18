@@ -10,6 +10,7 @@ import { ComplianceManagerStatus } from '@coldpbc/enums';
 import { resolveNodeEnv } from '@coldpbc/fetchers';
 import { withErrorBoundary } from 'react-error-boundary';
 import { useNavigate } from 'react-router-dom';
+import { orderBy } from 'lodash';
 
 const _ComplianceManagerOverviewSection = ({
   section,
@@ -48,7 +49,7 @@ const _ComplianceManagerOverviewSection = ({
   };
 
   const questions = data?.compliance_section_groups?.[0]?.compliance_sections?.[0]?.compliance_questions;
-
+  const orderedQuestions = orderBy(questions, ['order'], ['asc']);
   const sectionAIStatus = currentAIStatus?.find(s => s.section === section.key);
 
   useEffect(() => {
@@ -69,13 +70,13 @@ const _ComplianceManagerOverviewSection = ({
   }, [connectionStatus, name, publishMessage, client, collapseOpen, orgId, currentAIStatus]);
 
   useEffect(() => {
-    if (questions) {
-      totalQuestions.current = questions.length;
+    if (orderedQuestions.length > 0) {
+      totalQuestions.current = orderedQuestions.length;
       let not_started = 0;
       let ai_answered = 0;
       let user_answered = 0;
       let bookmarked = 0;
-      questions.forEach(q => {
+      orderedQuestions.forEach(q => {
         if (q.not_started) {
           not_started++;
         } else if (q.ai_answered) {
@@ -99,7 +100,7 @@ const _ComplianceManagerOverviewSection = ({
         };
       });
     }
-  }, [questions]);
+  }, [orderedQuestions]);
 
   const isAIRunning = () => {
     if (status === ComplianceManagerStatus.startedAi) {
@@ -132,6 +133,7 @@ const _ComplianceManagerOverviewSection = ({
     data,
     error,
     currentAIStatus,
+    orderedQuestions,
   });
 
   const backgroundColor = isAIRunning() ? 'bg-gray-60' : 'bg-bgc-accent';
@@ -157,7 +159,7 @@ const _ComplianceManagerOverviewSection = ({
           <ArrowRightIcon className={'w-[24px] h-[24px] text-tc-primary'} />
         </div>
       </div>
-      <ComplianceManagerSectionProgressBar sectionAIStatus={sectionAIStatus} questions={questions} />
+      <ComplianceManagerSectionProgressBar sectionAIStatus={sectionAIStatus} questions={orderedQuestions} />
     </div>
   );
 };
