@@ -461,19 +461,31 @@ const _QuestionnaireQuestionItem = (props: { question: QuestionnaireQuestion; nu
 
   const updateQuestion = async (isDelete: boolean) => {
     setButtonLoading(true);
-    let valueBeingSent = questionInput;
+    const valueBeingSent = questionInput;
+    const promiseArray: unknown[] = [];
+
     if (isDelete) {
-      valueBeingSent = null;
+      if (additionalContextOpen) {
+        // todo: handle additional context handling
+      }
+      // delete org response
+      promiseArray.push(
+        axiosFetcher([`compliance/${name}/organizations/${orgId}/section_groups/${sectionGroupId}/sections/${sectionId}/questions/${id}/responses?type=org`, 'DELETE']),
+      );
+    } else {
+      promiseArray.push(
+        await axiosFetcher([
+          `compliance/${name}/organizations/${orgId}/section_groups/${sectionGroupId}/sections/${sectionId}/questions/${id}/responses`,
+          'PUT',
+          {
+            value: valueBeingSent,
+          },
+        ]),
+      );
     }
 
-    const response = await axiosFetcher([
-      `compliance/${name}/organizations/${orgId}/section_groups/${sectionGroupId}/sections/${sectionId}/questions/${id}/responses`,
-      'PUT',
-      {
-        value: valueBeingSent,
-      },
-    ]);
-    if (!isAxiosError(response)) {
+    const promises = await Promise.all(promiseArray);
+    if (promises.every(promise => !isAxiosError(promise))) {
       if (isDelete) {
         setQuestionAnswerSaved(true);
         setQuestionInput(undefined);
