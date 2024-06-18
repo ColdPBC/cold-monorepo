@@ -563,7 +563,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
         throw new NotFoundException(`No Compliance Found For ${org.name}`);
       }
 
-      return this.scoringService.scoreComplianceResponse(response.organization_compliance[0].compliance_definition, org, user);
+      return this.scoringService.scoreComplianceResponse(response.organization_compliance[0].compliance_definition, org, user, options);
     } catch (error) {
       this.logger.error(`Error getting responses for organization: ${org.name}: ${compliance_definition_name}`, {
         user,
@@ -687,6 +687,8 @@ export class ComplianceResponsesRepository extends BaseWorker {
                               placeholder: true,
                               rubric: true,
                               options: true,
+                              dependencies: true,
+                              dependency_expression: true,
                               additional_context: true,
                               question_bookmarks: options.bookmarks ? this.getBookmarkQuery(user.coldclimate_claims.email) : false,
                               compliance_responses: {
