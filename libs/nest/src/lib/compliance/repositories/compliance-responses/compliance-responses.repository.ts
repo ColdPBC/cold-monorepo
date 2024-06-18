@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { BaseWorker } from '../../../worker';
 import { PrismaService } from '../../../prisma';
-import { organization_compliance, organization_compliance_ai_responses, organization_compliance_responses, organizations } from '@prisma/client';
+import { organization_compliance_ai_responses, organization_compliance_responses, organizations } from '@prisma/client';
 import { Cuid2Generator, GuidPrefixes } from '../../../utility';
 import { IAuthenticatedUser } from '../../../primitives';
 import { ScoringService } from '../../scoring';
@@ -735,22 +735,22 @@ export class ComplianceResponsesRepository extends BaseWorker {
     }
   }
 
-  async deleteAiResponsesByName(org: organizations, compliance_definition_name: string, user: IAuthenticatedUser) {
+  async deleteAiResponsesByName(org: organizations, orgComp: any, user: IAuthenticatedUser) {
     const compliance = await this.prisma.extended.organization_compliance.findUnique({
       where: {
         orgIdCompNameKey: {
           organization_id: org.id,
-          compliance_definition_name,
+          compliance_definition_name: orgComp.compliance_definition_name,
         },
       },
     });
 
     try {
       if (!compliance) {
-        throw new NotFoundException(`Organization Compliance Definition ${compliance_definition_name} not found for organization ${org.name}`);
+        throw new NotFoundException(`Organization Compliance Definition ${orgComp.compliance_definition_name} not found for organization ${org.name}`);
       }
 
-      this.logger.info(`Clearing previous AI responses for ${org.name}: ${compliance_definition_name}`, {
+      this.logger.info(`Clearing previous AI responses for ${org.name}: ${orgComp.compliance_definition_name}`, {
         user,
         compliance,
         organization: org,
@@ -763,7 +763,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
         },
       });
     } catch (error) {
-      this.logger.error(`Error clearing previous AI responses for ${org.name}: ${compliance_definition_name}`, {
+      this.logger.error(`Error clearing previous AI responses for ${org.name}: ${orgComp.compliance_definition_name}`, {
         user,
         compliance,
         organization: org,
