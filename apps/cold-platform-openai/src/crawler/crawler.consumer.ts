@@ -1,5 +1,5 @@
-import { ConflictException, Injectable, OnModuleInit } from '@nestjs/common';
-import { BaseWorker, CacheService, Cuid2Generator, DarklyService, GuidPrefixes, IAuthenticatedUser, PrismaService, S3Service } from '@coldpbc/nest';
+import { Injectable, OnModuleInit } from '@nestjs/common';
+import { BaseWorker, CacheService, Cuid2Generator, DarklyService, GuidPrefixes, PrismaService, S3Service } from '@coldpbc/nest';
 import cheerio from 'cheerio';
 import { NodeHtmlMarkdown } from 'node-html-markdown';
 import { Process, Processor } from '@nestjs/bull';
@@ -7,7 +7,7 @@ import { Job } from 'bull';
 import { CrawlerService } from './crawler.service';
 import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
 import { PineconeService } from '../pinecone/pinecone.service';
-import { omit, pick } from 'lodash';
+import { omit } from 'lodash';
 
 @Injectable()
 @Processor('openai_crawler')
@@ -58,7 +58,7 @@ export class CrawlerConsumer extends BaseWorker implements OnModuleInit {
     }
 
     // delete existing vectors before crawling website
-    await this.pc.removeWebVectors(job.data.organization);
+    //await this.pc.removeWebVectors(job.data.organization);
 
     const htmlSplitter = RecursiveCharacterTextSplitter.fromLanguage('html', {
       chunkSize: Number(1000),
