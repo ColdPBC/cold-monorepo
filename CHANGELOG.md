@@ -1,3 +1,10 @@
+# [1.249.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.248.0...v1.249.0) (2024-06-18)
+
+
+### Features
+
+* Refactor section sorting in questionnaireContainer ([424d948](https://github.com/ColdPBC/cold-monorepo/commit/424d948e20166cee6ca3a193924a416affa81983))
+
 # [1.248.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.247.0...v1.248.0) (2024-06-18)
 
 
