@@ -1,3 +1,16 @@
+# [1.250.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.249.0...v1.250.0) (2024-06-18)
+
+
+### Bug Fixes
+
+* update fixes for questionnaire ([#465](https://github.com/ColdPBC/cold-monorepo/issues/465)) ([0d5c63b](https://github.com/ColdPBC/cold-monorepo/commit/0d5c63bdad449ce602c1d6ffb8829e88ed5b895c))
+
+
+### Features
+
+* Update logging and handle exception in removeWebVectors ([1bdf121](https://github.com/ColdPBC/cold-monorepo/commit/1bdf121aa4ed0d0a69c0634fff6724ac7753bc80))
+* Update order of condition checks in complianceManagerOverviewSection ([615a3b2](https://github.com/ColdPBC/cold-monorepo/commit/615a3b20080ad2a4ef2370ec33eee46b7b896b59))
+
 # [1.249.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.248.0...v1.249.0) (2024-06-18)
 
 
