@@ -1,3 +1,10 @@
+# [1.251.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.250.0...v1.251.0) (2024-06-18)
+
+
+### Features
+
+* Add deletion of 'web' type vector records in Pinecone service ([c0d6270](https://github.com/ColdPBC/cold-monorepo/commit/c0d6270b33ade79ac4bfb007c9e13521656f3a29))
+
 # [1.250.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.249.0...v1.250.0) (2024-06-18)
 
 
