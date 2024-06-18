@@ -460,22 +460,34 @@ const _QuestionnaireQuestionItem = (props: { question: QuestionnaireQuestion; nu
     setButtonLoading(false);
   };
 
-  const updateQuestion = async (isUpdate: boolean) => {
+  const updateQuestion = async (isDelete: boolean) => {
     setButtonLoading(true);
+    const valueBeingSent = questionInput;
+    const promiseArray: unknown[] = [];
 
-    const response = await axiosFetcher([
-      `compliance/${name}/organizations/${orgId}/section_groups/${sectionGroupId}/sections/${sectionId}/questions/${id}/responses`,
-      'PUT',
-      {
-        value: questionInput,
-        additional_context: {
-          ...additional_context,
-          value: additionalContextInput,
-        },
-      },
-    ]);
-    if (!isAxiosError(response)) {
-      if (isUpdate) {
+    if (isDelete) {
+      promiseArray.push(
+        await axiosFetcher([`compliance/${name}/organizations/${orgId}/section_groups/${sectionGroupId}/sections/${sectionId}/questions/${id}/responses?type=org`, 'DELETE']),
+      );
+    } else {
+      promiseArray.push(
+        await axiosFetcher([
+          `compliance/${name}/organizations/${orgId}/section_groups/${sectionGroupId}/sections/${sectionId}/questions/${id}/responses`,
+          'PUT',
+          {
+            value: valueBeingSent,
+            additional_context: {
+              ...additional_context,
+              value: additionalContextInput,
+            },
+          },
+        ]),
+      );
+    }
+
+    const promises = await Promise.all(promiseArray);
+    if (promises.every(promise => !isAxiosError(promise))) {
+      if (isDelete) {
         setQuestionAnswerSaved(true);
         setQuestionInput(null);
         setAdditionalContextInput(null);

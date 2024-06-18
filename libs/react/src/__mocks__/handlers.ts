@@ -323,4 +323,9 @@ export const handlers = [
   rest.patch(getApiUrl('/compliance/:name/organizations/:orgId/questions/:id/notes/:noteId'), (req, res, ctx) => {
     return res(ctx.status(200));
   }),
+
+  // delete compliance question response
+  rest.delete(getApiUrl('/compliance/:name/organizations/:orgId/section_groups/:sectionGroupId/sections/:sectionId/questions/:id/responses'), (req, res, ctx) => {
+    return res(ctx.status(200));
+  }),
 ];
