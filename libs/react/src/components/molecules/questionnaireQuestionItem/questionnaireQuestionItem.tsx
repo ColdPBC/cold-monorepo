@@ -1,7 +1,7 @@
 import { BaseButton, Card, ColdIcon, ComplianceProgressStatusIcon, ErrorFallback, Input, ListItem } from '@coldpbc/components';
 import { ButtonTypes, ComplianceProgressStatus, IconNames, InputTypes } from '@coldpbc/enums';
 import React, { useContext, useEffect, useState } from 'react';
-import { isArray, isNull, isUndefined, toArray } from 'lodash';
+import { isArray, isNull, toArray } from 'lodash';
 import {
   getComplianceAIResponseValue,
   getComplianceOrgResponseAdditionalContextAnswer,
@@ -28,10 +28,11 @@ const _QuestionnaireQuestionItem = (props: { question: QuestionnaireQuestion; nu
   const { id, key, prompt, options, tooltip, component, placeholder, bookmarked, user_answered, ai_answered, additional_context, ai_attempted, compliance_responses } = question;
   const value = getComplianceOrgResponseAnswer(component, compliance_responses);
   const ai_response = compliance_responses.length === 0 ? null : compliance_responses[0]?.ai_response;
+  const additionalContextValue = getComplianceOrgResponseAdditionalContextAnswer(additional_context);
 
   const getDisplayValue = () => {
     let displayValue = value;
-    if (isUndefined(displayValue) && isComplianceAIResponseValueValid(question)) {
+    if (isNull(displayValue) && isComplianceAIResponseValueValid(question)) {
       displayValue = getComplianceAIResponseValue(question);
     }
     return displayValue;
@@ -47,13 +48,13 @@ const _QuestionnaireQuestionItem = (props: { question: QuestionnaireQuestion; nu
     }
   };
 
-  const [questionInput, setQuestionInput] = useState<any | undefined>(getDisplayValue());
+  const [questionInput, setQuestionInput] = useState<any>(getDisplayValue());
   const [questionBookmarked, setQuestionBookmarked] = useState<boolean>(bookmarked);
   const [questionAnswerChanged, setAnswerQuestionChanged] = useState<boolean>(false);
   const [questionAnswerSaved, setQuestionAnswerSaved] = useState<boolean>(false);
   const [questionStatus, setQuestionStatus] = useState<ComplianceProgressStatus>(getQuestionStatus());
   const [additionalContextOpen, setAdditionalContextOpen] = useState<boolean>(false);
-  const [additionalContextInput, setAdditionalContextInput] = useState<any | undefined>(getComplianceOrgResponseAdditionalContextAnswer(additional_context));
+  const [additionalContextInput, setAdditionalContextInput] = useState<any | undefined>(additionalContextValue);
   const [buttonLoading, setButtonLoading] = useState<boolean>(false);
 
   useEffect(() => {
@@ -65,11 +66,11 @@ const _QuestionnaireQuestionItem = (props: { question: QuestionnaireQuestion; nu
   }, [scrollToQuestion]);
 
   useEffect(() => {
-    if (questionInput !== value) {
+    if (questionInput !== value || additionalContextInput !== additionalContextValue) {
       setAnswerQuestionChanged(true);
     }
     showAdditionalContext(questionInput);
-  }, [questionInput]);
+  }, [questionInput, additionalContextInput]);
 
   useEffect(() => {
     if (focusQuestion === null) return;
@@ -143,10 +144,10 @@ const _QuestionnaireQuestionItem = (props: { question: QuestionnaireQuestion; nu
             type={InputTypes.Text}
             input_props={{
               name: key,
-              value: displayValue === undefined ? '' : displayValue,
+              value: displayValue === null ? '' : displayValue,
               onChange: e => {
                 if (e.target.value === '') {
-                  onFieldChange(undefined);
+                  onFieldChange(null);
                 } else {
                   onFieldChange(e.target.value);
                 }
@@ -187,11 +188,11 @@ const _QuestionnaireQuestionItem = (props: { question: QuestionnaireQuestion; nu
               }}
               numeric_input_props={{
                 name: key,
-                value: displayValue === undefined ? '' : displayValue,
+                value: displayValue === null ? '' : displayValue,
                 thousandSeparator: ',',
                 onValueChange: values => {
                   if (values.floatValue === undefined) {
-                    onFieldChange(undefined);
+                    onFieldChange(null);
                   } else {
                     onFieldChange(values.floatValue);
                   }
@@ -219,11 +220,11 @@ const _QuestionnaireQuestionItem = (props: { question: QuestionnaireQuestion; nu
             }}
             numeric_input_props={{
               name: key,
-              value: displayValue === undefined ? '' : displayValue,
+              value: displayValue === null ? '' : displayValue,
               thousandSeparator: ',',
               onValueChange: values => {
                 if (values.floatValue === undefined) {
-                  onFieldChange(undefined);
+                  onFieldChange(null);
                 } else {
                   onFieldChange(values.floatValue);
                 }
@@ -241,10 +242,10 @@ const _QuestionnaireQuestionItem = (props: { question: QuestionnaireQuestion; nu
           <div className={'w-full flex flex-col items-start gap-[8px] min-w-[56px]'}>
             <div className={'text-eyebrow text-tc-primary'}>Enter %</div>
             <NumericFormat
-              value={displayValue === undefined ? '' : displayValue}
+              value={displayValue === null ? '' : displayValue}
               onValueChange={values => {
                 if (values.floatValue === undefined) {
-                  onFieldChange(undefined);
+                  onFieldChange(null);
                 } else {
                   onFieldChange(values.floatValue);
                 }
@@ -287,7 +288,7 @@ const _QuestionnaireQuestionItem = (props: { question: QuestionnaireQuestion; nu
             type={InputTypes.TextArea}
             input_props={{
               name: key,
-              value: displayValue === undefined ? '' : displayValue,
+              value: displayValue === null ? '' : displayValue,
               onValueChange: value => {
                 onFieldChange(value);
               },
@@ -299,13 +300,13 @@ const _QuestionnaireQuestionItem = (props: { question: QuestionnaireQuestion; nu
               rows: 4,
               onChange: e => {
                 if (e.target.value === '') {
-                  onFieldChange(undefined);
+                  onFieldChange(null);
                 } else {
                   onFieldChange(e.target.value);
                 }
               },
               name: key,
-              value: displayValue === undefined ? '' : displayValue,
+              value: displayValue === null ? '' : displayValue,
               className:
                 'text-sm not-italic text-tc-primary font-medium bg-transparent w-full rounded-lg py-6 px-4 border-[1px] border-gray-60 focus:border-[1px] focus:border-gray-60 focus:ring-0 resize-none',
               placeholder: placeholder,
@@ -319,7 +320,7 @@ const _QuestionnaireQuestionItem = (props: { question: QuestionnaireQuestion; nu
         const isArrayLengthMoreThanZero = isArray(displayValue) && toArray(displayValue).length > 0;
         return (
           <ListItem
-            value={displayValue === undefined ? null : displayValue}
+            value={displayValue === null ? null : displayValue}
             onChange={value => {
               onFieldChange(value);
             }}
@@ -349,16 +350,16 @@ const _QuestionnaireQuestionItem = (props: { question: QuestionnaireQuestion; nu
   const getAISource = () => {
     let justification: string | undefined = '';
     let originalAnswer;
-    if (ai_response && !isNull(ai_response.answer) && isComplianceAIResponseValueValid(question) && questionStatus === ComplianceProgressStatus.ai_answered) {
-      justification = ai_response.justification;
-      if (ai_response.answer === true) {
+    if (isComplianceAIResponseValueValid(question) && questionStatus === ComplianceProgressStatus.ai_answered) {
+      justification = ai_response?.justification;
+      if (ai_response?.answer === true) {
         originalAnswer = 'Yes';
-      } else if (ai_response.answer === false) {
+      } else if (ai_response?.answer === false) {
         originalAnswer = 'No';
-      } else if (Array.isArray(ai_response.answer)) {
-        originalAnswer = ai_response.answer.join(', ');
+      } else if (Array.isArray(ai_response?.answer)) {
+        originalAnswer = ai_response?.answer.join(', ');
       } else {
-        originalAnswer = ai_response.answer;
+        originalAnswer = ai_response?.answer;
       }
     } else {
       return null;
@@ -393,13 +394,13 @@ const _QuestionnaireQuestionItem = (props: { question: QuestionnaireQuestion; nu
       await updateQuestion(false);
     };
     const loading = buttonLoading;
-    if (questionInput !== undefined && questionInput !== null) {
+    if ((questionInput !== undefined && questionInput !== null) || (additionalContextInput !== undefined && additionalContextInput !== null)) {
       // if answer is updated or answer was cleared, but the status is ai answered
       if (questionAnswerChanged || (!questionAnswerChanged && questionStatus === ComplianceProgressStatus.ai_answered)) {
         disabled = false;
       } else {
-        // if answer already exists or answer updated
-        if (value === questionInput || questionAnswerSaved) {
+        // if answer already exists or answer updated or additional context updated
+        if (value === questionInput || questionAnswerSaved || additionalContextValue === additionalContextInput) {
           label = 'Clear Answer';
           disabled = false;
           iconLeftName = IconNames.CloseModalIcon;
@@ -467,13 +468,17 @@ const _QuestionnaireQuestionItem = (props: { question: QuestionnaireQuestion; nu
       'PUT',
       {
         value: questionInput,
+        additional_context: {
+          ...additional_context,
+          value: additionalContextInput,
+        },
       },
     ]);
     if (!isAxiosError(response)) {
       if (isUpdate) {
         setQuestionAnswerSaved(true);
-        setQuestionInput(undefined);
-        setAdditionalContextInput(undefined);
+        setQuestionInput(null);
+        setAdditionalContextInput(null);
         setAnswerQuestionChanged(false);
         if (isComplianceAIResponseValueValid(question)) {
           setQuestionStatus(ComplianceProgressStatus.ai_answered);
