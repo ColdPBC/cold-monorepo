@@ -1,3 +1,10 @@
+# [1.250.0-COLD-839.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.249.0...v1.250.0-COLD-839.1) (2024-06-18)
+
+
+### Features
+
+* Implement ordering for questionnaire questions ([eba995b](https://github.com/ColdPBC/cold-monorepo/commit/eba995bc01af95c77896374c8e8e4101262bbca6))
+
 # [1.249.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.248.0...v1.249.0) (2024-06-18)
 
 
