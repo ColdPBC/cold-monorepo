@@ -70,6 +70,8 @@ export class ScoringService extends BaseWorker {
     let sectionAiScore = 0;
     let sectionMaxScore = 0;
 
+    section.compliance_questions = await this.filterService.filterQuestions(section.compliance_questions, options);
+
     for (const question of section.compliance_questions) {
       // Get the current question
       const scored = await this.scoreQuestion(question, org, user, options);
