@@ -20,15 +20,13 @@ const _QuestionnaireContainer = () => {
   const { orgId } = useAuth0Wrapper();
   const { name, focusQuestion, sectionGroups, scrollToQuestion, setScrollToQuestion } = useContext(ColdComplianceQuestionnaireContext);
   const orderedSections = Array<ComplianceSidebarSection>();
-  sectionGroups?.data?.compliance_section_groups
-    .sort((a, b) => a.order - b.order)
-    .forEach(sectionGroup => {
-      sectionGroup.compliance_sections
-        .sort((a, b) => a.order - b.order)
-        .forEach(section => {
-          orderedSections.push(section);
-        });
-    });
+  orderBy(sectionGroups?.data?.compliance_section_groups, ['order', 'title'], ['asc', 'asc']).forEach(sectionGroup => {
+    sectionGroup.compliance_sections
+      .sort((a, b) => a.order - b.order)
+      .forEach(section => {
+        orderedSections.push(section);
+      });
+  });
 
   const getKey = (pageIndex: number, previousPageData: QuestionnaireQuestion[]) => {
     if (pageIndex >= orderedSections.length) return null; // reached the end
