@@ -88,6 +88,13 @@ const _ComplianceManagerOverviewSection = ({
           bookmarked++;
         }
       });
+      logBrowser(`Adding counts for section: ${section.title}`, 'info', {
+        not_started,
+        ai_answered,
+        user_answered,
+        bookmarked,
+      });
+
       setGroupCounts(prev => {
         return {
           ...prev,
@@ -127,13 +134,13 @@ const _ComplianceManagerOverviewSection = ({
     return null;
   }
 
-  logBrowser('Compliance Manager Overview Section', 'info', {
+  logBrowser(`Compliance Manager Overview Section: ${section.title}`, 'info', {
     section,
     groupId,
     data,
     error,
     currentAIStatus,
-    orderedQuestions,
+    topic: sectionTopic,
   });
 
   const backgroundColor = isAIRunning() ? 'bg-gray-60' : 'bg-bgc-accent';

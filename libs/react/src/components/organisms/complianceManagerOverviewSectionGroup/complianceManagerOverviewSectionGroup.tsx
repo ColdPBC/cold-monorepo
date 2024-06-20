@@ -92,7 +92,7 @@ const _ComplianceManagerOverviewSectionGroup = ({ sectionGroup, position }: Comp
 
   useEffect(() => {
     const counts = getGroupCounts(groupCounts);
-    logBrowser(`Compliance Manager Overview Section Group Counts Update For ${sectionGroup.title}`, 'info', {
+    logBrowser(`Adding counts for section group: ${sectionGroup.title}`, 'info', {
       groupCounts,
       counts,
       sectionGroup,
@@ -113,6 +113,7 @@ const _ComplianceManagerOverviewSectionGroup = ({ sectionGroup, position }: Comp
     orderedData,
     collapseOpen,
     orgId,
+    topic: getComplianceSectionListTopic(),
   });
 
   const sectionGroupCounts = getGroupCounts(groupCounts);

@@ -1,3 +1,23 @@
+# [1.257.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.256.0...v1.257.0) (2024-06-20)
+
+
+### Features
+
+* Add section title to logBrowser in Compliance Manager Overview ([d48b28a](https://github.com/ColdPBC/cold-monorepo/commit/d48b28a5b0ffab0a4e0513e9b12f60286ce7c960))
+* Optimize complianceManagerOverviewSection component ([3358949](https://github.com/ColdPBC/cold-monorepo/commit/33589491cb3a6bb17b76b869ad1060857d8c7cc9))
+* Refactor compliance manager and section components ([d5faa2e](https://github.com/ColdPBC/cold-monorepo/commit/d5faa2e52d9aa8f31209da17b9e1f20696ced7a4))
+* Remove redundant logging parameters ([9681060](https://github.com/ColdPBC/cold-monorepo/commit/9681060f949bc6b956a75c66f4f9089833018c8a))
+* Remove unnecessary logging and state in coldMQTTProvider ([b733db3](https://github.com/ColdPBC/cold-monorepo/commit/b733db3da7ce0205488b7a8df7a27689a2c3cc53))
+* Update browser log messages in questionnaire components ([c0d6153](https://github.com/ColdPBC/cold-monorepo/commit/c0d61539c37c552eaa2c22815d7974140802431c))
+* Update logging in ComplianceQuestionnaire component ([693d83e](https://github.com/ColdPBC/cold-monorepo/commit/693d83ead1efdcd7ef049b7e8ef17d110fa88c26))
+
+# [1.256.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.255.0...v1.256.0) (2024-06-20)
+
+
+### Features
+
+* Add namespace deletion and URL filtering in crawler ([602731c](https://github.com/ColdPBC/cold-monorepo/commit/602731c434d430fe2d8533068f93283f2ce221cf))
+
 # [1.255.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.254.0...v1.255.0) (2024-06-18)
 
 

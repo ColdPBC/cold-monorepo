@@ -671,4 +671,10 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
     split.push(filePayload.checksum);
     return split.join(':');
   }
+
+  async deleteNamespace(namespace: string) {
+    const details = await this.getIndexDetails(namespace);
+    const index = await this.getIndex(details.indexName);
+    await index.namespace(namespace).deleteAll();
+  }
 }
