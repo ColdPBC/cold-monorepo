@@ -59,7 +59,7 @@ export class DarklyService extends BaseWorker {
 
     const response = await this.client.variation(flag, context || this.context, null);
     this.client.track(flag, this.context);
-    this.logger.log(`JsonFlag: ${flag} called`, {
+    this.logger.debug(`JsonFlag: ${flag} called`, {
       context: context || this.context,
       response,
     });
@@ -80,7 +80,7 @@ export class DarklyService extends BaseWorker {
 
     const response = (await this.client.variation(flag, context || this.context, defaultValue)) as boolean;
 
-    this.logger.log(`[${response ? '✅ Enabled' : '🛑Disabled'}] ${flag}`, {
+    this.logger.debug(`[${response ? '✅ Enabled' : '🛑Disabled'}] ${flag}`, {
       context: context || this.context,
       enabled: response,
     });

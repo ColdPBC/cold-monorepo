@@ -53,7 +53,7 @@ export class CrawlerConsumer extends BaseWorker implements OnModuleInit {
     });
 
     if (killCrawler) {
-      this.logger.info('Crawler killed in darkly', job.data.organization.name);
+      this.logger.debug('Crawler killed in darkly', job.data.organization.name);
       return {};
     }
 
@@ -67,14 +67,19 @@ export class CrawlerConsumer extends BaseWorker implements OnModuleInit {
     try {
       job.data.url = this.cleanURL(job.data.url);
 
-      await this.addToSeen(job.data?.organization?.name, job.data.url);
+      if (await this.isAlreadySeen(job.data?.organization?.name, job.data.url)) {
+        this.logger.debug('skipping url, already seen by crawler', job.data.url);
+        return {};
+      } else {
+        await this.addToSeen(job.data?.organization?.name, job.data.url);
+      }
 
       const details = await this.pc.getIndexDetails(job.data.organization.name);
       const index = await this.pc.getIndex(details.indexName);
 
       // Check if we should continue crawling
       if (this.urlBlocked(job.data.url)) {
-        this.logger.info('URL blocked', job.data.url);
+        this.logger.debug('URL blocked', job.data.url);
         return {};
       }
       // Extract hostname from URL
@@ -100,18 +105,27 @@ export class CrawlerConsumer extends BaseWorker implements OnModuleInit {
         // If the URL is on the same domain, add it to the queue
         const newURLParts = new URL(newURL);
 
-        if (
-          !newURL.includes('blogs') &&
-          !newURL.includes('blog') &&
-          !newURL.includes('pages') &&
-          !newURL.includes('news') &&
-          !newURL.includes('press') &&
-          !newURL.includes('articles')
-        ) {
-          continue;
+        if (!job.data?.force) {
+          if (
+            !newURL.includes('blogs') &&
+            !newURL.includes('blog') &&
+            !newURL.includes('pages') &&
+            !newURL.includes('news') &&
+            !newURL.includes('press') &&
+            !newURL.includes('articles')
+          ) {
+            await this.addToSeen(job.data?.organization?.name, newURL);
+
+            continue;
+          }
         }
 
         if (newURLParts.hostname === hostname) {
+          const counts = await this.crawler.crawlerQueue.getJobCounts();
+          if (counts.active > 1000 || counts.waiting > 1000 || counts.delayed > 1000) {
+            this.logger.debug('Crawler queue full, skipping URL', newURL);
+            continue;
+          }
           const pjob = await this.crawler.addCrawlPageJob({
             url: newURL,
             depth: 0,
@@ -120,8 +134,6 @@ export class CrawlerConsumer extends BaseWorker implements OnModuleInit {
           });
 
           this.logger.info('Added new URL to crawl page queue', { job: pjob.id, url: newURL });
-          // Cache the URL as seen
-          await this.addToSeen(job.data?.organization?.name, newURL);
         }
       }
 
@@ -129,7 +141,41 @@ export class CrawlerConsumer extends BaseWorker implements OnModuleInit {
       const cached = await this.cache.get(`crawler:${job.data.organization.name}:${checksum}`);
 
       if (cached) {
-        this.logger.info('Skipping page, already indexed', job.data.url);
+        this.logger.debug('Skipping page, already indexed', job.data.url);
+        return {};
+      }
+
+      if (
+        !html.toLowerCase().includes('sustainability') &&
+        !html.toLowerCase().includes('sustainable') &&
+        !html.toLowerCase().includes('environment') &&
+        !html.toLowerCase().includes('climate') &&
+        !html.toLowerCase().includes('green') &&
+        !html.toLowerCase().includes('eco') &&
+        !html.toLowerCase().includes('dei') &&
+        !html.toLowerCase().includes('diversity') &&
+        !html.toLowerCase().includes('equity') &&
+        !html.toLowerCase().includes('inclusion') &&
+        !html.toLowerCase().includes('justice') &&
+        !html.toLowerCase().includes('equality') &&
+        !html.toLowerCase().includes('inequality') &&
+        !html.toLowerCase().includes('racism') &&
+        !html.toLowerCase().includes('sexism') &&
+        !html.toLowerCase().includes('discrimination') &&
+        !html.toLowerCase().includes('bias') &&
+        !html.toLowerCase().includes('equity') &&
+        !html.toLowerCase().includes('inclusion') &&
+        !html.toLowerCase().includes('partners') &&
+        !html.toLowerCase().includes('partnerships') &&
+        !html.toLowerCase().includes('community') &&
+        !html.toLowerCase().includes('impact') &&
+        !html.toLowerCase().includes('social') &&
+        !html.toLowerCase().includes('responsibility') &&
+        !html.toLowerCase().includes('esg') &&
+        !html.toLowerCase().includes('csr') &&
+        !html.toLowerCase().includes('pfas')
+      ) {
+        this.logger.debug('Skipping page, no relevant content', job.data.url);
         return {};
       }
       // Parse the HTML and create a Pinecone document
@@ -203,7 +249,7 @@ export class CrawlerConsumer extends BaseWorker implements OnModuleInit {
         { ttl: 60 },
       );
 
-      this.logger.info('indexed page', job.data?.url);
+      this.logger.debug('indexed page', job.data?.url);
       this.metrics.increment('crawler.jobs', 1, { organization_name: job.data.organization.name, status: 'completed' });
     } catch (e) {
       this.logger.error('Failed to crawl pages', e);
@@ -213,14 +259,7 @@ export class CrawlerConsumer extends BaseWorker implements OnModuleInit {
     return {};
   }
 
-  private isTooDeep(depth: number) {
-    return depth > this.maxDepth;
-  }
-
   private cleanURL(url: string) {
-    const parts = new URL(url);
-    url = `${parts.protocol}//${parts.hostname}${parts.pathname}`;
-
     const lastSlash = url.lastIndexOf('#');
     if (lastSlash > -1) {
       url = url.slice(0, lastSlash);
@@ -250,24 +289,9 @@ export class CrawlerConsumer extends BaseWorker implements OnModuleInit {
     const seen = await this.cache.get(`crawler:${company_name}:seen:${url}`);
     if (!seen) {
       await this.cache.set(`crawler:${company_name}:seen:${url}`, [], { ttl: 1000 * 60 * 60 * 72 });
-      this.logger.info(`Added URL to seen list: ${url}`);
+      this.logger.debug(`Added URL to seen list: ${url}`);
       //seen.push(url);
     }
-  }
-
-  private async shouldContinueCrawling(jobId: any) {
-    const job = await this.crawler.getJob(jobId);
-    if (!job) {
-      return false;
-    }
-
-    if (job.data.parent) {
-      const parentJob = await this.crawler.getJob(job.data.parent);
-      this.logger.info(`Parent job is active: ${await parentJob?.isActive()}`);
-      //return await parentJob?.isActive();
-    }
-    this.logger.info(`Job is active: ${await job?.isActive()}`);
-    return job?.isActive();
   }
 
   private async fetchPage(url: string, org: any): Promise<string | undefined> {

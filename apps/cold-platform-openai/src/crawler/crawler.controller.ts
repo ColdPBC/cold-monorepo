@@ -23,7 +23,7 @@ export class CrawlerController extends BaseWorker {
     @Param('orgId') orgId: string,
     @Req()
     req: {
-      body: { website: string };
+      body: { website: string; force?: boolean };
       headers: any;
       query: any;
       user: IAuthenticatedUser;
@@ -41,6 +41,7 @@ export class CrawlerController extends BaseWorker {
     if (req.body.website) {
       return await this.crawler.addCrawlPageJob({
         url: company.website ? company.website : req.body.website,
+        force: req.body.force,
         organization: company,
         user: req.user,
       });
