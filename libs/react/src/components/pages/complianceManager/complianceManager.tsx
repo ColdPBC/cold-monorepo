@@ -159,7 +159,6 @@ const _ComplianceManager = () => {
     compliance,
     status,
     managementView,
-    orgCompliances,
     topic,
     currentAIStatus: currentAIStatus.data,
     files: files.data,
