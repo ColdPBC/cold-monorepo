@@ -134,7 +134,7 @@ const _ComplianceManagerOverviewSection = ({
     return null;
   }
 
-  logBrowser('Compliance Manager Overview Section', 'info', {
+  logBrowser(`Compliance Manager Overview Section: ${section.title}`, 'info', {
     section,
     groupId,
     data,
