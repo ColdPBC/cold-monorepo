@@ -1,3 +1,10 @@
+# [1.258.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.257.0...v1.258.0) (2024-06-20)
+
+
+### Features
+
+* Enhance crawling service with priority settings and logging optimizations ([99bb43b](https://github.com/ColdPBC/cold-monorepo/commit/99bb43b53b8e024c87f02a4ecae0ab94790d8401))
+
 # [1.257.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.256.0...v1.257.0) (2024-06-20)
 
 
