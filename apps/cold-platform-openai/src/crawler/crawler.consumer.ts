@@ -206,6 +206,9 @@ export class CrawlerConsumer extends BaseWorker implements OnModuleInit {
   }
 
   private cleanURL(url: string) {
+    const parts = new URL(url);
+    url = `${parts.protocol}//${parts.hostname}${parts.pathname}`;
+
     const lastSlash = url.lastIndexOf('#');
     if (lastSlash > -1) {
       url = url.slice(0, lastSlash);
@@ -225,21 +228,19 @@ export class CrawlerConsumer extends BaseWorker implements OnModuleInit {
   private async isAlreadySeen(company_name: string, url: string) {
     url = this.cleanURL(url);
 
-    const seen = ((await this.cache.get(`crawler:${company_name}:seen`)) as string[]) || [];
-    const isSeen = seen.indexOf(url) > -1;
-    return isSeen;
+    const seen = await this.cache.get(`crawler:${company_name}:seen:${url}`);
+    return !!seen;
   }
 
   private async addToSeen(company_name: string, url: string) {
     url = this.cleanURL(url);
 
-    const seen = ((await this.cache.get(`crawler:${company_name}:seen`)) as string[]) || [];
-    if (!seen.includes(url)) {
-      seen.push(url);
+    const seen = await this.cache.get(`crawler:${company_name}:seen:${url}`);
+    if (!seen) {
+      await this.cache.set(`crawler:${company_name}:seen:${url}`, [], { ttl: 60 * 60 * 60 * 72 });
       this.logger.info(`Added URL to seen list: ${url}`);
+      //seen.push(url);
     }
-
-    await this.cache.set(`crawler:${company_name}:seen`, seen);
   }
 
   private async shouldContinueCrawling(jobId: any) {
