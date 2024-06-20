@@ -49,10 +49,10 @@ const _ComplianceManagerOverviewSection = ({
   };
 
   const questions = data?.compliance_section_groups?.[0]?.compliance_sections?.[0]?.compliance_questions;
-  const orderedQuestions = questions ? orderBy(questions, ['order'], ['asc']) : undefined;
+  const orderedQuestions = orderBy(questions, ['order'], ['asc']);
   const sectionAIStatus = currentAIStatus?.find(s => s.section === section.key);
 
-  const publishMQTTMessage = () => {
+  useEffect(() => {
     if (client?.current && connectionStatus && orgId) {
       publishMessage(
         `platform/${resolveNodeEnv()}/compliance/getComplianceQuestionList`,
@@ -67,14 +67,10 @@ const _ComplianceManagerOverviewSection = ({
         }),
       );
     }
-  };
-
-  useEffect(() => {
-    publishMQTTMessage();
   }, [connectionStatus, name, publishMessage, client, collapseOpen, orgId, currentAIStatus]);
 
   useEffect(() => {
-    if (orderedQuestions && orderedQuestions.length > 0) {
+    if (orderedQuestions.length > 0) {
       totalQuestions.current = orderedQuestions.length;
       let not_started = 0;
       let ai_answered = 0;
@@ -132,6 +128,10 @@ const _ComplianceManagerOverviewSection = ({
 
   if (!collapseOpen) {
     return <></>;
+  }
+
+  if (section._count.compliance_questions === 0) {
+    return null;
   }
 
   logBrowser('Compliance Manager Overview Section', 'info', {
