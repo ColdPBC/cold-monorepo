@@ -210,4 +210,19 @@ export class OpenAIController extends BaseWorker {
   ) {
     return this.files.listFiles(req.user);
   }
+
+  @Delete('pinecone/namespace/:namespace')
+  @Roles(...coldAdminOnly)
+  async deleteNamespace(
+    @Param('namespace') namespace: string,
+    @Req()
+    req: {
+      body: never;
+      headers: never;
+      query: never;
+      user: IAuthenticatedUser;
+    },
+  ) {
+    return this.pc.deleteNamespace(namespace);
+  }
 }

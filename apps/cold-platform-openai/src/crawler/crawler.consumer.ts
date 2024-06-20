@@ -99,6 +99,18 @@ export class CrawlerConsumer extends BaseWorker implements OnModuleInit {
 
         // If the URL is on the same domain, add it to the queue
         const newURLParts = new URL(newURL);
+
+        if (
+          !newURL.includes('blogs') &&
+          !newURL.includes('blog') &&
+          !newURL.includes('pages') &&
+          !newURL.includes('news') &&
+          !newURL.includes('press') &&
+          !newURL.includes('articles')
+        ) {
+          continue;
+        }
+
         if (newURLParts.hostname === hostname) {
           const pjob = await this.crawler.addCrawlPageJob({
             url: newURL,
@@ -237,7 +249,7 @@ export class CrawlerConsumer extends BaseWorker implements OnModuleInit {
 
     const seen = await this.cache.get(`crawler:${company_name}:seen:${url}`);
     if (!seen) {
-      await this.cache.set(`crawler:${company_name}:seen:${url}`, [], { ttl: 60 * 60 * 60 * 72 });
+      await this.cache.set(`crawler:${company_name}:seen:${url}`, [], { ttl: 1000 * 60 * 60 * 72 });
       this.logger.info(`Added URL to seen list: ${url}`);
       //seen.push(url);
     }
@@ -259,18 +271,20 @@ export class CrawlerConsumer extends BaseWorker implements OnModuleInit {
   }
 
   private async fetchPage(url: string, org: any): Promise<string | undefined> {
+    const pathname = new URL(url).pathname;
+
     try {
-      const response = await fetch(url);
-      if (new URL(url).pathname.includes('.pdf')) {
+      if (pathname.includes('.pdf')) {
         this.logger.info('Fetched PDF from website', url);
         await this.pc.loadWebFile(url, org);
 
         return;
       }
 
+      const response = await fetch(url);
       this.logger.info('Fetched page', url);
 
-      return await response.text();
+      return response.text();
     } catch (error) {
       console.error(`Failed to fetch ${url}: ${error}`);
       return '';
