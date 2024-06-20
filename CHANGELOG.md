@@ -1,3 +1,10 @@
+# [1.256.0-COLD-853.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.255.0...v1.256.0-COLD-853.1) (2024-06-20)
+
+
+### Features
+
+* Update ordering logic for compliance questions ([baa3fe5](https://github.com/ColdPBC/cold-monorepo/commit/baa3fe57358c3b08b2d095a407e76e353fedd812))
+
 # [1.255.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.254.0...v1.255.0) (2024-06-18)
 
 
