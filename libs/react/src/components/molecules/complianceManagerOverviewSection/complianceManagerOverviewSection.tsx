@@ -49,7 +49,7 @@ const _ComplianceManagerOverviewSection = ({
   };
 
   const questions = data?.compliance_section_groups?.[0]?.compliance_sections?.[0]?.compliance_questions;
-  const orderedQuestions = orderBy(questions, ['order'], ['asc']);
+  const orderedQuestions = questions ? orderBy(questions, ['order'], ['asc']) : undefined;
   const sectionAIStatus = currentAIStatus?.find(s => s.section === section.key);
 
   useEffect(() => {
@@ -70,7 +70,7 @@ const _ComplianceManagerOverviewSection = ({
   }, [connectionStatus, name, publishMessage, client, collapseOpen, orgId, currentAIStatus]);
 
   useEffect(() => {
-    if (orderedQuestions.length > 0) {
+    if (orderedQuestions && orderedQuestions.length > 0) {
       totalQuestions.current = orderedQuestions.length;
       let not_started = 0;
       let ai_answered = 0;
