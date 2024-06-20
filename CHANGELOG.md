@@ -1,3 +1,10 @@
+# [1.256.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.255.0...v1.256.0) (2024-06-20)
+
+
+### Features
+
+* Add namespace deletion and URL filtering in crawler ([602731c](https://github.com/ColdPBC/cold-monorepo/commit/602731c434d430fe2d8533068f93283f2ce221cf))
+
 # [1.255.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.254.0...v1.255.0) (2024-06-18)
 
 
