@@ -1,3 +1,10 @@
+# [1.255.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.254.0...v1.255.0) (2024-06-18)
+
+
+### Features
+
+* Improve URL cleaning and handling in crawler ([21a752e](https://github.com/ColdPBC/cold-monorepo/commit/21a752eb7c09271f878fbfba3d38096ca2af55f7))
+
 # [1.254.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.253.0...v1.254.0) (2024-06-18)
 
 
