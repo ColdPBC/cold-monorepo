@@ -58,12 +58,14 @@ const _ComplianceQuestionnaire = () => {
     return null;
   }
 
-  logBrowser(`ComplianceQuestionnaire loaded for ${selectedCompliance?.compliance_definition.title}`, 'info', {
-    complianceName,
-    complianceSWR,
+  logBrowser(`ComplianceQuestionnaire loaded for ${complianceName}`, 'info', {
+    name: complianceName,
+    data: complianceSWR.data,
     selectedCompliance,
     scrollToQuestion,
     focusQuestion,
+    orgId,
+    url: getSidebarDataUrl(),
   });
 
   return (
