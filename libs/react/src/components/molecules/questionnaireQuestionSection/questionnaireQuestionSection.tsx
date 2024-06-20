@@ -25,7 +25,12 @@ const _QuestionnaireQuestionSection = (props: {
     // remove search params after a
     if (isSectionInQuery) {
       setTimeout(() => {
-        setSearchParams({});
+        // delete section key from query params
+        setSearchParams((prevParams: any) => {
+          const params = new URLSearchParams(prevParams);
+          params.delete('section');
+          return params;
+        });
       }, 3000);
     }
   }, [searchParams]);

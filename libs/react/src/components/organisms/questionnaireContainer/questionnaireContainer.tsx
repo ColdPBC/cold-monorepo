@@ -39,7 +39,7 @@ const _QuestionnaireContainer = () => {
   };
 
   const { data, error, isLoading, size, setSize, mutate } = useSWRInfinite<QuestionnaireComplianceContainerPayLoad, any, any>(getKey, axiosFetcher, {
-    parallel: true,
+    parallel: false,
   });
 
   const getPageSectionData = (pageDataList: QuestionnaireComplianceContainerPayLoad[] | undefined, sectionGroupId: string, sectionId: string) => {
