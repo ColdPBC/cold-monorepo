@@ -1,3 +1,18 @@
+# [1.259.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.258.0...v1.259.0) (2024-06-21)
+
+
+### Bug Fixes
+
+* issue with filtering not working ([1905893](https://github.com/ColdPBC/cold-monorepo/commit/19058931a88b6b9e575bdc3abdc72abd3c9a0e66))
+
+
+### Features
+
+* Add access control and refactoring in organizations.mqtt.service ([dbfe001](https://github.com/ColdPBC/cold-monorepo/commit/dbfe001af6255c8ac7bae863e6acb21b2cd8912b))
+* Add compliance responses count endpoint ([f4758d0](https://github.com/ColdPBC/cold-monorepo/commit/f4758d0167239daf8522e2d2e725ddd16d08cc7f))
+* Add onlyCounts option to ComplianceResponsesRepository ([2b240c8](https://github.com/ColdPBC/cold-monorepo/commit/2b240c8416c9aa46ef8998b6b152571054bd7d60))
+* Update ComplianceSectionGroupsRepository with ScoringService and response inclusion ([7d9ca40](https://github.com/ColdPBC/cold-monorepo/commit/7d9ca408c87e82f23d443ae1517b9c7006ee5f28))
+
 # [1.258.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.257.0...v1.258.0) (2024-06-20)
 
 
