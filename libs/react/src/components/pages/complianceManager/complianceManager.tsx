@@ -151,19 +151,21 @@ const _ComplianceManager = () => {
     }
   }, [data]);
 
-  logBrowser('Compliance Definition', 'info', {
-    name,
-    data,
-    error,
-    orgId,
-    compliance,
-    status,
-    managementView,
-    topic,
-    currentAIStatus: currentAIStatus.data,
-    files: files.data,
-    complianceCounts,
-  });
+  useEffect(() => {
+    logBrowser('Compliance Definition', 'info', {
+      name,
+      data,
+      error,
+      orgId,
+      compliance,
+      status,
+      managementView,
+      orgCompliances,
+      topic,
+      currentAIStatus: currentAIStatus.data,
+      files: files.data,
+    });
+  }, [orgCompliances, files, currentAIStatus, name, data, error, orgId, compliance, status, managementView, topic]);
 
   if (!data) {
     return <Spinner />;

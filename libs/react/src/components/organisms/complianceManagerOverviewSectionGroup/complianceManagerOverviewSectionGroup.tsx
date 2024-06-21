@@ -91,12 +91,6 @@ const _ComplianceManagerOverviewSectionGroup = ({ sectionGroup, position }: Comp
   }, []);
 
   useEffect(() => {
-    const counts = getGroupCounts(groupCounts);
-    logBrowser(`Adding counts for section group: ${sectionGroup.title}`, 'info', {
-      groupCounts,
-      counts,
-      sectionGroup,
-    });
     setComplianceCounts(prev => {
       return {
         ...prev,
@@ -107,14 +101,15 @@ const _ComplianceManagerOverviewSectionGroup = ({ sectionGroup, position }: Comp
 
   const orderedData = orderBy(data, ['order'], ['asc']);
 
-  logBrowser('Compliance Manager Overview Section Group', 'info', {
-    data,
-    error,
-    orderedData,
-    collapseOpen,
-    orgId,
-    topic: getComplianceSectionListTopic(),
-  });
+  useEffect(() => {
+    logBrowser(`Compliance Manager Overview Section Group: ${sectionGroup.title}`, 'info', {
+      data,
+      error,
+      orderedData,
+      collapseOpen,
+      orgId,
+    });
+  }, [collapseOpen, data, error, logBrowser, orderedData, orgId, sectionGroup.title]);
 
   const sectionGroupCounts = getGroupCounts(groupCounts);
 

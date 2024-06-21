@@ -52,21 +52,23 @@ const _ComplianceManagerOverviewSection = ({
   const orderedQuestions = questions ? orderBy(questions, ['order'], ['asc']) : undefined;
   const sectionAIStatus = currentAIStatus?.find(s => s.section === section.key);
 
+  const publishQuestionListMessage = () => {
+    publishMessage(
+      `platform/${resolveNodeEnv()}/compliance/getComplianceQuestionList`,
+      JSON.stringify({
+        reply_to: sectionTopic,
+        resource: 'complianceQuestionList',
+        method: 'GET',
+        compliance_set_name: name,
+        compliance_section_group_id: groupId,
+        compliance_section_id: section.id,
+        organization_id: orgId,
+      }),
+    );
+  };
+
   useEffect(() => {
-    if (client?.current && connectionStatus && orgId) {
-      publishMessage(
-        `platform/${resolveNodeEnv()}/compliance/getComplianceQuestionList`,
-        JSON.stringify({
-          reply_to: sectionTopic,
-          resource: 'complianceQuestionList',
-          method: 'GET',
-          compliance_set_name: name,
-          compliance_section_group_id: groupId,
-          compliance_section_id: section.id,
-          organization_id: orgId,
-        }),
-      );
-    }
+    publishQuestionListMessage();
   }, [connectionStatus, name, publishMessage, client, collapseOpen, orgId, currentAIStatus]);
 
   useEffect(() => {
@@ -88,12 +90,6 @@ const _ComplianceManagerOverviewSection = ({
           bookmarked++;
         }
       });
-      logBrowser(`Adding counts for section: ${section.title}`, 'info', {
-        not_started,
-        ai_answered,
-        user_answered,
-        bookmarked,
-      });
 
       setGroupCounts(prev => {
         return {
@@ -108,6 +104,26 @@ const _ComplianceManagerOverviewSection = ({
       });
     }
   }, [orderedQuestions]);
+
+  useEffect(() => {
+    logBrowser(`Compliance Manager Overview Section: ${section.title}`, 'info', {
+      section,
+      groupId,
+      orderedQuestions,
+      error,
+      currentAIStatus,
+      topic: sectionTopic,
+    });
+  }, [collapseOpen, currentAIStatus, orderedQuestions, error, groupId, section, sectionTopic]);
+
+  useEffect(() => {
+    // if data is undefined publish a new message after 1 second
+    if (!data) {
+      setTimeout(() => {
+        publishQuestionListMessage();
+      }, 2000);
+    }
+  }, [data]);
 
   const isAIRunning = () => {
     if (status === ComplianceManagerStatus.startedAi) {
@@ -134,15 +150,6 @@ const _ComplianceManagerOverviewSection = ({
     return null;
   }
 
-  logBrowser(`Compliance Manager Overview Section: ${section.title}`, 'info', {
-    section,
-    groupId,
-    data,
-    error,
-    currentAIStatus,
-    topic: sectionTopic,
-  });
-
   const backgroundColor = isAIRunning() ? 'bg-gray-60' : 'bg-bgc-accent';
   const textColor = isAIRunning() ? 'text-tc-disabled' : 'text-tc-primary';
 
@@ -162,7 +169,7 @@ const _ComplianceManagerOverviewSection = ({
           {isAIRunning() && <div className={'text-body text-tc-disabled'}>Cold AI Running</div>}
         </div>
         <div className={'flex flex-row gap-[8px] items-center'}>
-          <div className={`w-[105px] h-full flex items-center text-body text-start ${textColor}`}>{totalQuestions.current} Questions</div>
+          <div className={`w-[105px] h-full flex items-center text-body text-start ${textColor}`}>{orderedQuestions ? orderedQuestions.length : 0} Questions</div>
           <ArrowRightIcon className={'w-[24px] h-[24px] text-tc-primary'} />
         </div>
       </div>

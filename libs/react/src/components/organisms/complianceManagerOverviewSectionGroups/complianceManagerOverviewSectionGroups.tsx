@@ -1,5 +1,5 @@
 import { ComplianceManagerOverviewSectionGroup } from '../complianceManagerOverviewSectionGroup';
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { ColdComplianceManagerContext } from '@coldpbc/context';
 import { map, orderBy } from 'lodash';
 import { useColdContext } from '@coldpbc/hooks';
@@ -16,7 +16,9 @@ const _ComplianceManagerOverviewSectionGroups = () => {
 
   const orderedSectionGroups = orderBy(sectionGroups, ['order', 'title'], ['asc', 'asc']);
 
-  logBrowser('Compliance Manager Overview Section Groups', 'info', { orderedSectionGroups });
+  useEffect(() => {
+    logBrowser('Compliance Manager Overview Section Groups', 'info', { orderedSectionGroups });
+  }, [logBrowser, orderedSectionGroups]);
 
   return (
     <div className={'w-full flex flex-col gap-[36px]'}>
