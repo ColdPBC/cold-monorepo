@@ -1,3 +1,11 @@
+# [1.258.0-COLD-853.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.257.0...v1.258.0-COLD-853.1) (2024-06-21)
+
+
+### Features
+
+* Refactor logging and question list fetching handling ([ad0f2a8](https://github.com/ColdPBC/cold-monorepo/commit/ad0f2a853199f4f424bfd30a9a79d0f738294188))
+* Update ordering logic for compliance questions ([baa3fe5](https://github.com/ColdPBC/cold-monorepo/commit/baa3fe57358c3b08b2d095a407e76e353fedd812))
+
 # [1.256.0-COLD-853.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.255.0...v1.256.0-COLD-853.1) (2024-06-20)
 
 
