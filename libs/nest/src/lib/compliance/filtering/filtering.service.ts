@@ -66,18 +66,16 @@ export class FilteringService extends BaseWorker {
      * Filter questions based on their dependencies.
      */
 
-    const filtered = await Promise.all(
-      sections.filter(async section => {
-        const dependencies = merge([], get(section, 'compliance_section_dependency_chains.dependency_chain', [])) as Dependency[];
-        delete section.compliance_section_dependency_chains;
+    const filtered: ComplianceSectionsExtendedDto[] = [];
 
-        /**
-         * If the question has no dependencies, it is included in the response.
-         */
-        if (dependencies.length < 1) {
-          return true;
-        }
+    for (const section of sections) {
+      const dependencies = merge([], get(section, 'compliance_section_dependency_chains.dependency_chain', [])) as Dependency[];
+      delete section.compliance_section_dependency_chains;
 
+      /**
+       * If the question has no dependencies, it is included in the response.
+       */
+      if (dependencies.length) {
         for (const dependency of dependencies) {
           const dependentQuestion = await this.prisma.extended.organization_compliance_responses.findUnique({
             where: {
@@ -89,11 +87,11 @@ export class FilteringService extends BaseWorker {
           });
 
           /**
-           * If the dependent question does not exist, the dependency is not met.
+           * If the dependent question does not exist, that question doesn't have a response, therefore the dependency is not met.
            */
           if (!dependentQuestion) {
             this.logger.info(`Dependent question response not found`, { dependency, dependentQuestion });
-            return false;
+            continue;
           }
 
           /**
@@ -102,26 +100,17 @@ export class FilteringService extends BaseWorker {
           const dependency_met = dependency.dependent_question_values && dependency.dependent_question_values.includes(dependentQuestion.value);
           if (!dependency_met) {
             this.logger.info(`Dependency not met`, { dependency, dependentQuestion });
-            return false;
+            continue;
           }
-        }
 
-        /**
-         * If all dependencies are met, the question is included in the response.
-         */
-        return true;
-      }),
-    );
-
-    if (options?.references) {
-      for (const section of filtered) {
-        if (Array.isArray(section.compliance_questions)) {
-          for (const question of section.compliance_questions) {
-            if (Array.isArray(question['references'])) {
-              question['references'] = await this.filterReferences(question['references']);
-            }
-          }
+          /**
+           * If all dependencies are met, the question is included in the response.
+           */
+          filtered.push(section);
         }
+      } else {
+        // If there are no dependencies, the question is included in the response.
+        filtered.push(section);
       }
     }
 
@@ -187,6 +176,10 @@ export class FilteringService extends BaseWorker {
     }
   }
 
+  /**
+   * Filter references to remove duplicate
+   * @param aiReferences
+   */
   async filterReferences(aiReferences: any[]): Promise<any[]> {
     const references: any = [];
 
