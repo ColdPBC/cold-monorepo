@@ -209,6 +209,14 @@ export class OrganizationComplianceResponsesController {
     return this.organizationComplianceResponsesService.findAllByCompliance(name, req, { take, skip });
   }
 
+  @Get('responses/counts')
+  @Roles(...allRoles)
+  async getComplianceResponsesCounts(@Param('name') name: string, @Req() req: any, @Query('take') take: number, @Query('skip') skip: number) {
+    const response = await this.organizationComplianceResponsesService.findAllByCompliance(name, req, { take, skip, onlyCounts: true });
+    // return response.counts;
+    return response;
+  }
+
   @Get('responses/:id')
   @ApiParam({
     name: 'id',
