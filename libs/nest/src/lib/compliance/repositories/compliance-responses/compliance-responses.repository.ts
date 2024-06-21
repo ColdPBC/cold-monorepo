@@ -13,6 +13,7 @@ export interface ComplianceResponseOptions {
   references?: boolean;
   responses?: boolean;
   bookmarks?: boolean;
+  onlyCounts?: boolean;
 }
 
 @Injectable()
@@ -340,6 +341,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
       references: options?.references ? options.references : true,
       take: options?.take ? +options?.take : 100,
       skip: options?.skip ? +options?.skip : 0,
+      onlyCounts: options?.onlyCounts ? options.onlyCounts : false,
     };
 
     try {
