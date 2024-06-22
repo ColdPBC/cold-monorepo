@@ -1,15 +1,17 @@
 import { ComplianceProgressStatus } from '@coldpbc/enums';
-import { forOwn } from 'lodash';
 import { useContext } from 'react';
 import { ColdComplianceManagerContext } from '@coldpbc/context';
 import { ComplianceProgressStatusIcon } from '@coldpbc/components';
+import { useColdContext } from '@coldpbc/hooks';
 
 export interface ComplianceProgressItemProps {
   type: ComplianceProgressStatus;
 }
 
 export const ComplianceProgressStatusItem = ({ type }: ComplianceProgressItemProps) => {
-  const { complianceCounts } = useContext(ColdComplianceManagerContext);
+  const { data } = useContext(ColdComplianceManagerContext);
+  const { mqttComplianceSet, complianceCounts } = data;
+  const { logBrowser } = useColdContext();
 
   const currentProgressData = {
     type: type,
@@ -18,26 +20,24 @@ export const ComplianceProgressStatusItem = ({ type }: ComplianceProgressItemPro
   };
 
   let totalQuestions = 0;
-  forOwn(complianceCounts, (value, key) => {
+  if (complianceCounts?.data) {
+    const counts = complianceCounts.data.counts;
     switch (type) {
       case ComplianceProgressStatus.not_started:
-        currentProgressData.count += value.not_started;
+        currentProgressData.count += counts.not_started;
         break;
       case ComplianceProgressStatus.ai_answered:
-        currentProgressData.count += value.ai_answered;
+        currentProgressData.count += counts.ai_answered;
         break;
       case ComplianceProgressStatus.bookmarked:
-        currentProgressData.count += value.bookmarked;
+        currentProgressData.count += counts.bookmarked;
         break;
       case ComplianceProgressStatus.user_answered:
-        currentProgressData.count += value.user_answered;
+        currentProgressData.count += counts.org_answered;
         break;
     }
-    forOwn(value, count => {
-      totalQuestions += count;
-    });
-  });
-
+    totalQuestions = counts.org_answered + counts.ai_answered + counts.not_started;
+  }
   currentProgressData.percentage = totalQuestions !== 0 ? currentProgressData.count / totalQuestions : 0;
 
   let text = '';
@@ -95,6 +95,12 @@ export const ComplianceProgressStatusItem = ({ type }: ComplianceProgressItemPro
     const percentage = `${(currentProgressData.percentage * 100).toFixed(0)}%`;
     return <div className={'text-tc-primary text-label py-[4px] px-[8px] rounded-[16px] bg-bgc-accent'}>{percentage}</div>;
   };
+
+  logBrowser('currentProgressData', 'info', {
+    ...currentProgressData,
+    totalQuestions,
+    sectionGroups: mqttComplianceSet?.compliance_definition.compliance_section_groups,
+  });
 
   return (
     <div className={'w-full flex flex-col p-[8px] bg-gray-50 rounded-[8px] border-[1px] border-gray-60'}>

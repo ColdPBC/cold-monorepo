@@ -98,6 +98,7 @@ export class RabbitService extends BaseWorker {
               event,
               { url: parsed.organization.website, depth: 0 },
               {
+                priority: 200,
                 removeOnFail: true,
                 removeOnComplete: true,
               },
@@ -154,6 +155,7 @@ export class RabbitService extends BaseWorker {
             {
               url: parsed.organization.website,
               depth: 0,
+              priority: 200,
               ...parsed,
             },
             { removeOnFail: false, removeOnComplete: false },
@@ -176,6 +178,7 @@ export class RabbitService extends BaseWorker {
               {
                 url: parsed.organization.website,
                 depth: 0,
+                priority: 200,
                 ...parsed,
               },
               { removeOnFail: true, removeOnComplete: true },
@@ -214,7 +217,7 @@ export class RabbitService extends BaseWorker {
             organization: parsed.organization,
             integration: parsed.integration,
           },
-          { backoff: { type: BackOffStrategies.EXPONENTIAL }, removeOnComplete: true },
+          { backoff: { type: BackOffStrategies.EXPONENTIAL }, removeOnComplete: true, priority: 10 },
         );
 
         this.logger.info(`Compliance flow job created: ${complianceJob.id}`, {
@@ -253,7 +256,7 @@ export class RabbitService extends BaseWorker {
                   payload: parsed.payload,
                   organization: parsed.organization,
                 },
-                { backoff: { type: BackOffStrategies.EXPONENTIAL }, removeOnComplete: true },
+                { backoff: { type: BackOffStrategies.EXPONENTIAL }, removeOnComplete: true, priority: 10 },
               );
 
               jobs.push(typeof job.id === 'number' ? job.id : parseInt(job.id));
@@ -269,6 +272,7 @@ export class RabbitService extends BaseWorker {
         return await this.queue.add(event, parsed, {
           removeOnFail: false,
           removeOnComplete: true,
+          priority: 5,
           backoff: { type: BackOffStrategies.EXPONENTIAL },
         });
 
@@ -276,6 +280,7 @@ export class RabbitService extends BaseWorker {
         return await this.queue.add(event, parsed, {
           removeOnFail: true,
           removeOnComplete: true,
+          priority: 5,
           backoff: { type: BackOffStrategies.EXPONENTIAL },
         });
 

@@ -138,7 +138,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
           file,
           index_details: details,
         },
-        { removeOnComplete: true, delay },
+        { removeOnComplete: true, delay, priority: 10 },
       );
 
       this.logger.info(`Syncing org file ${file.original_name}`, { org, file });

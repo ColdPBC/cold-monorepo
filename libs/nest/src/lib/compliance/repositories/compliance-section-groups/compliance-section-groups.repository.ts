@@ -6,6 +6,7 @@ import { Cuid2Generator, GuidPrefixes } from '../../../utility';
 import { compliance_section_groups, compliance_section_groupsSchema } from '../../../../validation/generated/modelSchema/compliance_section_groupsSchema';
 import { ComplianceSectionGroupsExtendedDto } from './dto';
 import { FilteringService } from '../../filtering';
+import { ScoringService } from '../../scoring';
 
 /**
  * Represents a repository for accessing compliance section groups data.
@@ -14,7 +15,12 @@ import { FilteringService } from '../../filtering';
  */
 @Injectable()
 export class ComplianceSectionGroupsRepository extends BaseWorker {
-  constructor(readonly prisma: PrismaService, readonly filterService: FilteringService, readonly complianceSectionsRepository: ComplianceSectionsRepository) {
+  constructor(
+    readonly prisma: PrismaService,
+    readonly scoringService: ScoringService,
+    readonly filterService: FilteringService,
+    readonly complianceSectionsRepository: ComplianceSectionsRepository,
+  ) {
     super(ComplianceSectionGroupsRepository.name);
   }
 
@@ -176,20 +182,22 @@ export class ComplianceSectionGroupsRepository extends BaseWorker {
   /**
    * Retrieves a list of section groups for a given organization and compliance set.
    *
-   * @param {object} payload - The payload object containing org_id and compliance_set_name.
    * @param {string} payload.org_id - The ID of the organization.
    * @param {string} payload.compliance_set_name - The name of the compliance set.
    *
+   * @param org
+   * @param compliance_set_name
+   * @param user
    * @param filter
    * @param questions
    * @throws {Error} - Throws an error if the compliance definition is not found.
    */
-  async getSectionGroupListByOrgCompliance({ org_id, compliance_set_name }: { org_id: string; compliance_set_name: string }, filter?: boolean, questions?: boolean) {
+  async getSectionGroupListByOrgCompliance(org, compliance_set_name, user, filter?: boolean, questions?: boolean) {
     try {
       const orgCompliance = (await this.prisma.extended.organization_compliance.findUnique({
         where: {
           orgIdCompNameKey: {
-            organization_id: org_id,
+            organization_id: org.id,
             compliance_definition_name: compliance_set_name,
           },
         },
@@ -229,24 +237,29 @@ export class ComplianceSectionGroupsRepository extends BaseWorker {
                       metadata: true,
                       order: true,
                       compliance_section_dependency_chains: true,
-                      compliance_questions: questions
-                        ? {
+                      compliance_questions: {
+                        select: {
+                          id: true,
+                          key: true,
+                          order: true,
+                          prompt: true,
+                          component: true,
+                          tooltip: true,
+                          placeholder: true,
+                          rubric: true,
+                          options: true,
+                          question_summary: true,
+                          coresponding_question: true,
+                          compliance_responses: {
                             select: {
                               id: true,
-                              key: true,
-                              order: true,
-                              prompt: true,
-                              component: true,
-                              tooltip: true,
-                              placeholder: true,
-                              rubric: true,
-                              options: true,
-                              question_summary: true,
-                              coresponding_question: true,
-                              compliance_question_dependency_chain: true,
+                              ai_response: true,
+                              org_response: true,
                             },
-                          }
-                        : false,
+                          },
+                          compliance_question_dependency_chain: true,
+                        },
+                      },
                     },
                   },
                 },
@@ -261,22 +274,22 @@ export class ComplianceSectionGroupsRepository extends BaseWorker {
         await this.prisma.extended.organization_compliance.create({
           data: {
             id: new Cuid2Generator(GuidPrefixes.OrganizationCompliance).scopedId,
-            organization_id: org_id,
+            organization_id: org.id,
             compliance_definition_name: compliance_set_name,
             description: '',
           },
         });
 
-        return await this.getSectionGroupListByOrgCompliance({ org_id, compliance_set_name });
+        return await this.getSectionGroupListByOrgCompliance(org, compliance_set_name, user, filter, questions);
       }
 
       if (filter) {
-        orgCompliance.compliance_definition.compliance_section_groups = this.filterService.filterSectionGroups(orgCompliance.compliance_definition.compliance_section_groups);
+        await this.scoringService.scoreComplianceResponse(orgCompliance.compliance_definition, org, user);
       }
 
       return orgCompliance;
     } catch (error) {
-      this.logger.error(`Error getting section group list by org and compliance`, { org_id, compliance_set_name, error });
+      this.logger.error(`Error getting section group list by org and compliance`, { org, compliance_set_name, error });
       throw error;
     }
   }

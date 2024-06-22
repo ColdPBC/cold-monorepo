@@ -15,21 +15,10 @@ import { orderBy } from 'lodash';
 const _ComplianceManagerOverviewSection = ({
   section,
   groupId,
-  setGroupCounts,
   collapseOpen,
 }: {
   section: MQTTComplianceManagerPayloadComplianceSection;
   groupId: string;
-  setGroupCounts: React.Dispatch<
-    React.SetStateAction<{
-      [p: string]: {
-        not_started: number;
-        ai_answered: number;
-        user_answered: number;
-        bookmarked: number;
-      };
-    }>
-  >;
   collapseOpen: boolean;
 }) => {
   const navigate = useNavigate();
@@ -70,60 +59,6 @@ const _ComplianceManagerOverviewSection = ({
   useEffect(() => {
     publishQuestionListMessage();
   }, [connectionStatus, name, publishMessage, client, collapseOpen, orgId, currentAIStatus]);
-
-  useEffect(() => {
-    if (orderedQuestions && orderedQuestions.length > 0) {
-      totalQuestions.current = orderedQuestions.length;
-      let not_started = 0;
-      let ai_answered = 0;
-      let user_answered = 0;
-      let bookmarked = 0;
-      orderedQuestions.forEach(q => {
-        if (q.user_answered) {
-          user_answered++;
-        } else if (q.ai_answered) {
-          ai_answered++;
-        } else if (q.not_started) {
-          not_started++;
-        }
-        if (q.bookmarked) {
-          bookmarked++;
-        }
-      });
-
-      setGroupCounts(prev => {
-        return {
-          ...prev,
-          [section.key]: {
-            not_started: not_started,
-            ai_answered: ai_answered,
-            user_answered: user_answered,
-            bookmarked: bookmarked,
-          },
-        };
-      });
-    }
-  }, [orderedQuestions]);
-
-  useEffect(() => {
-    logBrowser(`Compliance Manager Overview Section: ${section.title}`, 'info', {
-      section,
-      groupId,
-      orderedQuestions,
-      error,
-      currentAIStatus,
-      topic: sectionTopic,
-    });
-  }, [collapseOpen, currentAIStatus, orderedQuestions, error, groupId, section, sectionTopic]);
-
-  useEffect(() => {
-    // if data is undefined publish a new message after 1 second
-    if (!data) {
-      setTimeout(() => {
-        publishQuestionListMessage();
-      }, 2000);
-    }
-  }, [data]);
 
   const isAIRunning = () => {
     if (status === ComplianceManagerStatus.startedAi) {

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { BaseWorker } from '../../worker';
-import { set } from 'lodash';
+import { pick, set } from 'lodash';
 import { FilteringService } from '../filtering';
 import { ComplianceResponseOptions } from '../repositories';
 import { IAuthenticatedUser } from '../../primitives';
@@ -17,6 +17,10 @@ export class ScoringService extends BaseWorker {
     let complianceScore = 0;
     let complianceAiScore = 0;
     let complianceMaxScore = 0;
+    let not_started = 0;
+    let org_answered = 0;
+    let ai_answered = 0;
+    let bookmarked = 0;
 
     if (Array.isArray(complianceResponse.compliance_section_groups) && complianceResponse.compliance_section_groups.length > 0) {
       complianceResponse.compliance_section_groups = await this.filterService.filterSectionGroups(complianceResponse.compliance_section_groups, options);
@@ -28,6 +32,13 @@ export class ScoringService extends BaseWorker {
 
       for (const sectionGroup of complianceResponse.compliance_section_groups) {
         const scored = await this.scoreSectionGroup(sectionGroup, org, user, options);
+
+        // increment counters
+        not_started += sectionGroup.counts.not_started;
+        org_answered += sectionGroup.counts.org_answered;
+        ai_answered += sectionGroup.counts.ai_answered;
+        bookmarked += sectionGroup.counts.bookmarked;
+
         complianceScore += scored.score;
         complianceAiScore += scored.ai_score;
         complianceMaxScore += scored.max_score;
@@ -37,6 +48,8 @@ export class ScoringService extends BaseWorker {
     set(complianceResponse, 'ai_score', complianceAiScore);
     set(complianceResponse, 'max_score', complianceMaxScore);
 
+    set(complianceResponse, 'counts', { not_started, org_answered, ai_answered, bookmarked });
+
     return complianceResponse;
   }
 
@@ -45,9 +58,20 @@ export class ScoringService extends BaseWorker {
     let sectionGroupAiScore = 0;
     let sectionGroupMaxScore = 0;
 
+    let not_started = 0;
+    let org_answered = 0;
+    let ai_answered = 0;
+    let bookmarked = 0;
     for (const section of sectionGroup.compliance_sections) {
       // Get the current question
       const scored = await this.scoreSection(section, org, user, options);
+
+      // increment counters
+      not_started += section.counts.not_started;
+      org_answered += section.counts.org_answered;
+      ai_answered += section.counts.ai_answered;
+      bookmarked += section.counts.bookmarked;
+
       sectionGroupScore += scored.score;
       sectionGroupAiScore += scored.ai_score;
       sectionGroupMaxScore += scored.max_score;
@@ -56,6 +80,8 @@ export class ScoringService extends BaseWorker {
     set(sectionGroup, 'score', sectionGroupScore);
     set(sectionGroup, 'ai_score', sectionGroupAiScore);
     set(sectionGroup, 'max_score', sectionGroupMaxScore);
+
+    set(sectionGroup, 'counts', { not_started, org_answered, ai_answered, bookmarked });
     // return the scored survey
     return sectionGroup;
   }
@@ -70,19 +96,36 @@ export class ScoringService extends BaseWorker {
     let sectionAiScore = 0;
     let sectionMaxScore = 0;
 
+    let not_started = 0;
+    let org_answered = 0;
+    let ai_answered = 0;
+    let bookmarked = 0;
+
     section.compliance_questions = await this.filterService.filterQuestions(section.compliance_questions, options);
 
-    for (const question of section.compliance_questions) {
+    for (const idx in section.compliance_questions) {
       // Get the current question
-      const scored = await this.scoreQuestion(question, org, user, options);
-      sectionScore += scored.score;
-      sectionAiScore += scored.ai_score;
-      sectionMaxScore += scored.max_score;
+      section.compliance_questions[idx] = await this.scoreQuestion(section.compliance_questions[idx], org, user, options);
+
+      // increment counters
+      not_started += section.compliance_questions[idx].counts?.not_started;
+      org_answered += section.compliance_questions[idx].counts?.org_answered;
+      ai_answered += section.compliance_questions[idx].counts?.ai_answered;
+      bookmarked += section.compliance_questions[idx].counts?.bookmarked;
+
+      sectionScore += section.compliance_questions[idx].score;
+      sectionAiScore += section.compliance_questions[idx].ai_score;
+      sectionMaxScore += section.compliance_questions[idx].max_score;
+    }
+
+    if (options?.onlyCounts) {
+      delete section.compliance_questions;
     }
 
     set(section, 'score', sectionScore);
     set(section, 'ai_score', sectionAiScore);
     set(section, 'max_score', sectionMaxScore);
+    set(section, 'counts', { not_started, org_answered, ai_answered, bookmarked });
     // return the scored section
     return section;
   }
@@ -131,13 +174,13 @@ export class ScoringService extends BaseWorker {
            */
           if (question.component === 'multi_select' || question.component === 'select') {
             if (this.filterService.questionHasValidAnswer(response.org_response, 'value', question.component)) {
-              response.org_response.value.forEach(value => {
+              await response.org_response.value.forEach(value => {
                 score += question.rubric.score_map[value] || 0;
               });
             }
 
             if (this.filterService.questionHasValidAnswer(response.ai_response, 'answer', question.component)) {
-              response.ai_response.answer.forEach(answer => {
+              await response.ai_response.answer.forEach(answer => {
                 aiScore += question.rubric.score_map[answer] || 0;
               });
             }
@@ -189,8 +232,27 @@ export class ScoringService extends BaseWorker {
       question.max_score = question.rubric?.max_score || this.getTopScore(question.rubric);
     }
 
+    set(question, 'counts', {
+      not_started: question.not_started ? 1 : 0,
+      org_answered: question.user_answered ? 1 : 0,
+      ai_answered: question.ai_answered ? 1 : 0,
+      bookmarked: question.bookmarked ? 1 : 0,
+    });
+
     if (question.rubric?.score_map) {
       question.answer_score_map = Object.assign({}, question.rubric?.score_map);
+    }
+
+    if (options?.onlyCounts) {
+      return pick(question, ['id', 'key', 'order', 'ai_answered', 'bookmarked', 'user_answered', 'not_started', 'counts', 'answer_score_map', 'max_score', 'score', 'ai_score']);
+    }
+
+    if (!options?.references) {
+      delete question?.ai_response?.references;
+    }
+
+    if (!options?.responses) {
+      delete question?.ai_response;
     }
 
     delete question.rubric;

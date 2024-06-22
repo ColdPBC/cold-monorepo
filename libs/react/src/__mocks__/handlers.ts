@@ -19,6 +19,7 @@ import { getNewsDefault } from './newsMock';
 import { getActionMock, getActionsMock } from './action';
 import { v4 as uuidv4 } from 'uuid';
 import {
+  getComplianceCountsMock,
   getComplianceMock,
   getOrganizationComplianceMock,
   getOrganizationComplianceMockByName,
@@ -327,5 +328,9 @@ export const handlers = [
   // delete compliance question response
   rest.delete(getApiUrl('/compliance/:name/organizations/:orgId/section_groups/:sectionGroupId/sections/:sectionId/questions/:id/responses'), (req, res, ctx) => {
     return res(ctx.status(200));
+  }),
+
+  rest.get(getApiUrl('/compliance/:name/organizations/:orgId/responses/counts'), (req, res, ctx) => {
+    return res(ctx.json(getComplianceCountsMock()));
   }),
 ];
