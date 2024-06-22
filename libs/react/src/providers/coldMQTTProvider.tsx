@@ -2,11 +2,11 @@ import React, { PropsWithChildren, useEffect, useRef } from 'react';
 import mqtt from 'mqtt';
 import { useSWRConfig } from 'swr';
 import { forEach, set } from 'lodash';
-import { useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import { SWRSubscription } from 'swr/subscription';
 import ColdMQTTContext from '../context/coldMQTTContext';
 import { resolveNodeEnv } from '@coldpbc/fetchers';
+import { useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
 
 export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
   const { logBrowser } = useColdContext();
