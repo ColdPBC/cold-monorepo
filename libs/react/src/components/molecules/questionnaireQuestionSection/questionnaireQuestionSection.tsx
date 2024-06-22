@@ -37,7 +37,7 @@ const _QuestionnaireQuestionSection = (props: {
 
   const orderedQuestions = orderBy(pagedSectionData, ['order'], ['asc']);
 
-  logBrowser('QuestionnaireQuestionSection', 'info', {
+  logBrowser(`QuestionnaireQuestionSection loaded for section: ${section.title}`, 'info', {
     sectionKey,
     isSectionInQuery,
     orderedQuestions,

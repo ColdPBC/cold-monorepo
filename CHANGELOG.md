@@ -1,3 +1,52 @@
+# [1.259.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.258.0...v1.259.0) (2024-06-21)
+
+
+### Bug Fixes
+
+* issue with filtering not working ([1905893](https://github.com/ColdPBC/cold-monorepo/commit/19058931a88b6b9e575bdc3abdc72abd3c9a0e66))
+
+
+### Features
+
+* Add access control and refactoring in organizations.mqtt.service ([dbfe001](https://github.com/ColdPBC/cold-monorepo/commit/dbfe001af6255c8ac7bae863e6acb21b2cd8912b))
+* Add compliance responses count endpoint ([f4758d0](https://github.com/ColdPBC/cold-monorepo/commit/f4758d0167239daf8522e2d2e725ddd16d08cc7f))
+* Add onlyCounts option to ComplianceResponsesRepository ([2b240c8](https://github.com/ColdPBC/cold-monorepo/commit/2b240c8416c9aa46ef8998b6b152571054bd7d60))
+* Update ComplianceSectionGroupsRepository with ScoringService and response inclusion ([7d9ca40](https://github.com/ColdPBC/cold-monorepo/commit/7d9ca408c87e82f23d443ae1517b9c7006ee5f28))
+
+# [1.258.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.257.0...v1.258.0) (2024-06-20)
+
+
+### Features
+
+* Enhance crawling service with priority settings and logging optimizations ([99bb43b](https://github.com/ColdPBC/cold-monorepo/commit/99bb43b53b8e024c87f02a4ecae0ab94790d8401))
+
+# [1.257.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.256.0...v1.257.0) (2024-06-20)
+
+
+### Features
+
+* Add section title to logBrowser in Compliance Manager Overview ([d48b28a](https://github.com/ColdPBC/cold-monorepo/commit/d48b28a5b0ffab0a4e0513e9b12f60286ce7c960))
+* Optimize complianceManagerOverviewSection component ([3358949](https://github.com/ColdPBC/cold-monorepo/commit/33589491cb3a6bb17b76b869ad1060857d8c7cc9))
+* Refactor compliance manager and section components ([d5faa2e](https://github.com/ColdPBC/cold-monorepo/commit/d5faa2e52d9aa8f31209da17b9e1f20696ced7a4))
+* Remove redundant logging parameters ([9681060](https://github.com/ColdPBC/cold-monorepo/commit/9681060f949bc6b956a75c66f4f9089833018c8a))
+* Remove unnecessary logging and state in coldMQTTProvider ([b733db3](https://github.com/ColdPBC/cold-monorepo/commit/b733db3da7ce0205488b7a8df7a27689a2c3cc53))
+* Update browser log messages in questionnaire components ([c0d6153](https://github.com/ColdPBC/cold-monorepo/commit/c0d61539c37c552eaa2c22815d7974140802431c))
+* Update logging in ComplianceQuestionnaire component ([693d83e](https://github.com/ColdPBC/cold-monorepo/commit/693d83ead1efdcd7ef049b7e8ef17d110fa88c26))
+
+# [1.256.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.255.0...v1.256.0) (2024-06-20)
+
+
+### Features
+
+* Add namespace deletion and URL filtering in crawler ([602731c](https://github.com/ColdPBC/cold-monorepo/commit/602731c434d430fe2d8533068f93283f2ce221cf))
+
+# [1.255.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.254.0...v1.255.0) (2024-06-18)
+
+
+### Features
+
+* Improve URL cleaning and handling in crawler ([21a752e](https://github.com/ColdPBC/cold-monorepo/commit/21a752eb7c09271f878fbfba3d38096ca2af55f7))
+
 # [1.254.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.253.0...v1.254.0) (2024-06-18)
 
 

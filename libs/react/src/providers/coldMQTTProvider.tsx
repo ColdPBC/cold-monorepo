@@ -16,7 +16,6 @@ export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
   const [token, setToken] = React.useState<string>('');
   const { mutate } = useSWRConfig();
   const flags = useFlags();
-  const [excludeTopics, setExcludeTopics] = React.useState<string[]>([]);
 
   useEffect(() => {
     const getToken = async () => {
@@ -149,11 +148,6 @@ export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
       client.current?.on('message', async (topic, payload, packet) => {
         next(err, prev => {
           if (topic !== key) {
-            logBrowser(`Received different message from IOT for ${key} to ${topic}`, 'info', {
-              key,
-              topic,
-              payload: JSON.parse(payload.toString()),
-            });
             return prev;
           } else {
             logBrowser(`Received message from IOT for ${key}`, 'info', {

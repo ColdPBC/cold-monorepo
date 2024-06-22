@@ -138,7 +138,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
           file,
           index_details: details,
         },
-        { removeOnComplete: true, delay },
+        { removeOnComplete: true, delay, priority: 10 },
       );
 
       this.logger.info(`Syncing org file ${file.original_name}`, { org, file });
@@ -670,5 +670,11 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
     split.pop();
     split.push(filePayload.checksum);
     return split.join(':');
+  }
+
+  async deleteNamespace(namespace: string) {
+    const details = await this.getIndexDetails(namespace);
+    const index = await this.getIndex(details.indexName);
+    await index.namespace(namespace).deleteAll();
   }
 }

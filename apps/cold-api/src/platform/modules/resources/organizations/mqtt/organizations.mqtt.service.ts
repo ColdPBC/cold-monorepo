@@ -41,11 +41,21 @@ export class ComplianceMQTT extends BaseWorker implements OnModuleInit {
     let payload: any;
     let response: any;
 
+    payload = JSON.parse(message) as MqttSocketAPIPayload;
+
+    if (!payload.user.coldclimate_claims.roles.includes('cold:admin') && payload.user.coldclimate_claims.org_id !== payload.org_id) {
+      throw new UnprocessableEntityException({
+        description: 'User does not have access to this organization',
+      });
+    }
+
+    const org: any = await this.orgRepository.findOne(payload.user, { id: payload.org_id });
+
     try {
       switch (action) {
         case `getComplianceSectionGroupList`: {
           payload = JSON.parse(message) as MqttSocketAPIPayload;
-          response = await this.groupRepository.getSectionGroupListByOrgCompliance(payload);
+          response = await this.groupRepository.getSectionGroupListByOrgCompliance(org, payload.compliance_set_name, payload.user, true);
           break;
         }
         case `getComplianceSectionList`: {
@@ -55,14 +65,6 @@ export class ComplianceMQTT extends BaseWorker implements OnModuleInit {
         }
         case `getComplianceQuestionList`: {
           payload = JSON.parse(message) as MqttAPIComplianceSectionPayload;
-
-          if (!payload.user.coldclimate_claims.roles.includes('cold:admin') && payload.user.coldclimate_claims.org_id !== payload.org_id) {
-            throw new UnprocessableEntityException({
-              description: 'User does not have access to this organization',
-            });
-          }
-
-          const org: any = await this.orgRepository.findOne(payload.user, { id: payload.organization_id });
 
           response = await this.responsesRepository.getScoredComplianceQuestionBySection(
             org,
