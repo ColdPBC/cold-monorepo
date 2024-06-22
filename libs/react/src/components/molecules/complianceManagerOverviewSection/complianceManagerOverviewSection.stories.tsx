@@ -31,7 +31,6 @@ export const NotActivated: Story = {
   args: {
     ...getComplianceManagerOverviewSectionsMock(),
     collapseOpen: true,
-    setGroupCounts: () => {},
   },
 };
 
@@ -50,7 +49,6 @@ export const Activated: Story = {
   args: {
     ...getComplianceManagerOverviewSectionsMock(),
     collapseOpen: true,
-    setGroupCounts: () => {},
   },
 };
 
@@ -77,6 +75,5 @@ export const ColdAIRunning: Story = {
   args: {
     ...getComplianceManagerOverviewSectionsMock(),
     collapseOpen: true,
-    setGroupCounts: () => {},
   },
 };

@@ -1,4 +1,4 @@
-import { Compliance, ComplianceSidebarPayload, OrgCompliance, QuestionnaireComplianceContainerPayLoad } from '@coldpbc/interfaces';
+import { Compliance, ComplianceManagerCountsPayload, ComplianceSidebarPayload, OrgCompliance, QuestionnaireComplianceContainerPayLoad } from '@coldpbc/interfaces';
 
 export function getComplianceMock(): Compliance[] {
   return [
@@ -1523,4 +1523,147 @@ export function getQuestionnaireContainerMock(sectionGroupId: string, sectionId:
   });
 
   return questions;
+}
+
+export function getComplianceCountsMock(): ComplianceManagerCountsPayload {
+  return {
+    name: 'rei_pia_2024',
+    compliance_section_groups: [
+      {
+        id: 'csg_mnjg81nrtfgsphp4',
+        title: 'Practices',
+        order: 0,
+        compliance_sections: [
+          {
+            id: 'cs_p03di0afkskmd6xs',
+            key: 'GEN',
+            title: 'Brand Information',
+            order: 0,
+            score: 0,
+            ai_score: 0,
+            max_score: 0,
+            counts: {
+              not_started: 11,
+              org_answered: 0,
+              ai_answered: 0,
+              bookmarked: 1,
+            },
+          },
+          {
+            id: 'cs_g3xkxk4vkdwc7fjz',
+            key: 'MFG',
+            title: 'Manufacturing Code of Conduct & Responsible Sourcing',
+            order: 1,
+            score: 0,
+            ai_score: 1,
+            max_score: 4,
+            counts: {
+              not_started: 3,
+              org_answered: 0,
+              ai_answered: 1,
+              bookmarked: 0,
+            },
+          },
+          {
+            id: 'cs_fqiwgmgebqp9il2e',
+            key: 'CRP',
+            title: 'Core Practices',
+            order: 22,
+            score: 0,
+            ai_score: 3,
+            max_score: 3,
+            counts: {
+              not_started: 2,
+              org_answered: 0,
+              ai_answered: 4,
+              bookmarked: 0,
+            },
+          },
+        ],
+        counts: {
+          not_started: 16,
+          org_answered: 0,
+          ai_answered: 5,
+          bookmarked: 1,
+        },
+      },
+      {
+        id: 'csg_u52xp76tclba5djc',
+        title: 'D & I',
+        order: 0,
+        compliance_sections: [
+          {
+            id: 'cs_a243nr32celxvegb',
+            key: 'MKT',
+            title: 'Diversity & Inclusion: Marketing Diversity',
+            order: 12,
+            score: 0,
+            ai_score: 0.5,
+            max_score: 1.5,
+            counts: {
+              not_started: 0,
+              org_answered: 0,
+              ai_answered: 1,
+              bookmarked: 0,
+            },
+          },
+        ],
+        counts: {
+          not_started: 0,
+          org_answered: 0,
+          ai_answered: 1,
+          bookmarked: 0,
+        },
+      },
+      {
+        id: 'csg_gnawsv7bv67xumws',
+        title: 'Product',
+        order: 0,
+        compliance_sections: [
+          {
+            id: 'cs_n7x4kqfvkm0hsw0u',
+            key: 'PRD',
+            title: 'Product Care, Repair, Reuse & End-of-life',
+            order: 21,
+            score: 0,
+            ai_score: 2,
+            max_score: 6,
+            counts: {
+              not_started: 4,
+              org_answered: 0,
+              ai_answered: 2,
+              bookmarked: 0,
+            },
+          },
+          {
+            id: 'cs_knwupnz9o24amkfb',
+            key: 'PSA',
+            title: 'Product Sustainability & Preferred Attributes',
+            order: 18,
+            score: 0,
+            ai_score: 1,
+            max_score: 2,
+            counts: {
+              not_started: 1,
+              org_answered: 0,
+              ai_answered: 1,
+              bookmarked: 0,
+            },
+          },
+        ],
+        counts: {
+          not_started: 5,
+          org_answered: 0,
+          ai_answered: 3,
+          bookmarked: 0,
+        },
+      },
+    ],
+    counts: {
+      not_started: 21,
+      org_answered: 0,
+      ai_answered: 9,
+      bookmarked: 1,
+    },
+  };
 }
