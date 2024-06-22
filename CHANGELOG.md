@@ -1,3 +1,10 @@
+# [1.260.0-COLD-853.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.260.0-COLD-853.1...v1.260.0-COLD-853.2) (2024-06-22)
+
+
+### Features
+
+* Update MQTT logic and improve compliance manager interactions ([7893abf](https://github.com/ColdPBC/cold-monorepo/commit/7893abf6e0bd18e86afd5ad28ebc02c10fbf41e6))
+
 # [1.260.0-COLD-853.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.259.0...v1.260.0-COLD-853.1) (2024-06-22)
 
 
