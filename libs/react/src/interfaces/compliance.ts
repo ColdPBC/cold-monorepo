@@ -204,3 +204,43 @@ export interface QuestionnaireComplianceContainerPayLoad {
     }[];
   }[];
 }
+
+export interface ComplianceManagerCountsPayload {
+  name: string;
+  compliance_section_groups: ComplianceManagerCountsSectionGroup[];
+  counts: {
+    not_started: number;
+    org_answered: number;
+    ai_answered: number;
+    bookmarked: number;
+  };
+}
+
+export interface ComplianceManagerCountsSectionGroup {
+  id: string;
+  title: string;
+  order: number;
+  counts: {
+    not_started: number;
+    org_answered: number;
+    ai_answered: number;
+    bookmarked: number;
+  };
+  compliance_sections: ComplianceManagerCountsSection[];
+}
+
+export interface ComplianceManagerCountsSection {
+  id: string;
+  key: string;
+  title: string;
+  order: number;
+  score: number;
+  ai_score: number;
+  max_score: number;
+  counts: {
+    not_started: number;
+    org_answered: number;
+    ai_answered: number;
+    bookmarked: number;
+  };
+}

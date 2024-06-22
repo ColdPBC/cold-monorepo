@@ -8,8 +8,8 @@ import { withErrorBoundary } from 'react-error-boundary';
 import { HexColors } from '@coldpbc/themes';
 
 const _ComplianceManagerOverviewStatusCard = () => {
-  const { data, status: managerStatus, complianceCounts } = useContext(ColdComplianceManagerContext);
-  const { mqttComplianceSet, currentAIStatus } = data;
+  const { data, status: managerStatus } = useContext(ColdComplianceManagerContext);
+  const { mqttComplianceSet, currentAIStatus, complianceCounts } = data;
 
   const showProgressBarGradient = (status: ComplianceManagerStatus) => {
     if (status === managerStatus) {
@@ -28,10 +28,12 @@ const _ComplianceManagerOverviewStatusCard = () => {
       if (managerStatus === ComplianceManagerStatus.startedQuestions && status === ComplianceManagerStatus.completedQuestions) {
         let totalQuestions = 0;
         let answeredQuestions = 0;
-        forOwn(complianceCounts, (value, key) => {
-          totalQuestions += value.ai_answered + value.user_answered + value.not_started + value.bookmarked;
-          answeredQuestions += value.user_answered;
-        });
+        if (complianceCounts?.data) {
+          forOwn(complianceCounts.data.counts, (value, key) => {
+            totalQuestions += value;
+          });
+          answeredQuestions = complianceCounts.data.counts.org_answered;
+        }
         percentage = (answeredQuestions / totalQuestions) * 100;
       } else if (managerStatus === ComplianceManagerStatus.startedAi && status === ComplianceManagerStatus.completedAi) {
         const sectionKeys = complianceCounts ? Object.keys(complianceCounts) : [];

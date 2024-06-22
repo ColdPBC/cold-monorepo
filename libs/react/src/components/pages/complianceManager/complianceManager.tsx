@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth0Wrapper, useColdContext, useOrgSWR } from '@coldpbc/hooks';
-import { find, forOwn, get } from 'lodash';
+import { find, forEach, get } from 'lodash';
 import { ColdIcon, ColdLeftArrowIcon, ComplianceManagerOverview, ErrorFallback, Spinner } from '@coldpbc/components';
 import React, { useContext, useEffect, useState } from 'react';
 import { ColdComplianceManagerContext } from '@coldpbc/context';
@@ -8,7 +8,7 @@ import { ComplianceManagerStatus, IconNames } from '@coldpbc/enums';
 import { format } from 'date-fns';
 import { withErrorBoundary } from 'react-error-boundary';
 import ColdMQTTContext from '../../../context/coldMQTTContext';
-import { CurrentAIStatusPayload, MQTTComplianceManagerPayload, OrgCompliance } from '@coldpbc/interfaces';
+import { ComplianceManagerCountsPayload, CurrentAIStatusPayload, MQTTComplianceManagerPayload, OrgCompliance } from '@coldpbc/interfaces';
 import useSWRSubscription from 'swr/subscription';
 import useSWR from 'swr';
 import { axiosFetcher, resolveNodeEnv } from '@coldpbc/fetchers';
@@ -22,14 +22,6 @@ const _ComplianceManager = () => {
   const [showOverviewModal, setShowOverviewModal] = useState<boolean>(false);
   const [managementView, setManagementView] = useState<string>('Overview');
   const [status, setStatus] = useState<ComplianceManagerStatus>(ComplianceManagerStatus.notActivated);
-  const [complianceCounts, setComplianceCounts] = useState<{
-    [key: string]: {
-      not_started: number;
-      ai_answered: number;
-      user_answered: number;
-      bookmarked: number;
-    };
-  }>({});
   const { logBrowser } = useColdContext();
 
   const orgCompliances = useSWR<OrgCompliance[], any, any>(orgId ? [`/compliance_definitions/organizations/${orgId}`, 'GET'] : null, axiosFetcher);
@@ -51,6 +43,12 @@ const _ComplianceManager = () => {
     data: CurrentAIStatusPayload | undefined;
     error: any;
   };
+
+  const getCountsDataUrl = () => {
+    return [`/compliance/${name}/organizations/${orgId}/responses/counts`, 'GET'];
+  };
+
+  const countsDataSWR = useSWR<ComplianceManagerCountsPayload, any, any>(getCountsDataUrl(), axiosFetcher);
 
   const compliance = data?.compliance_definition;
 
@@ -87,19 +85,20 @@ const _ComplianceManager = () => {
             setStatus(ComplianceManagerStatus.startedAi);
           } else {
             // check the compliance counts to see if the AI has been run
+            const complianceSectionGroupCounts = countsDataSWR.data?.compliance_section_groups;
             let aiAnswered = 0;
             let userAnswered = 0;
             let totalQuestions = 0;
-            forOwn(complianceCounts, (value, key) => {
-              aiAnswered += value.ai_answered;
-              userAnswered += value.user_answered;
-              totalQuestions += value.not_started + value.ai_answered + value.user_answered + value.bookmarked;
+            forEach(complianceSectionGroupCounts, (value, key) => {
+              aiAnswered += value.counts.ai_answered;
+              userAnswered += value.counts.org_answered;
+              totalQuestions += value.counts.not_started + value.counts.ai_answered + value.counts.org_answered;
             });
             if (totalQuestions > 0) {
               if (aiAnswered > 0 && userAnswered === 0) {
                 logBrowser(`Setting ${name} compliance manager status to completed AI`, 'info', {
                   name,
-                  complianceCounts,
+                  complianceSectionGroupCounts,
                   aiAnswered,
                   totalQuestions,
                   userAnswered,
@@ -108,7 +107,7 @@ const _ComplianceManager = () => {
               } else if (aiAnswered > 0 && userAnswered > 0) {
                 logBrowser(`Setting ${name} compliance manager status to started questions`, 'info', {
                   name,
-                  complianceCounts,
+                  complianceSectionGroupCounts,
                   aiAnswered,
                   totalQuestions,
                   userAnswered,
@@ -119,7 +118,7 @@ const _ComplianceManager = () => {
               if (totalQuestions === userAnswered) {
                 logBrowser(`Setting ${name} compliance manager status to completed questions`, 'info', {
                   name,
-                  complianceCounts,
+                  complianceSectionGroupCounts,
                   aiAnswered,
                   totalQuestions,
                   userAnswered,
@@ -140,15 +139,16 @@ const _ComplianceManager = () => {
         }
       }
     }
-  }, [orgCompliances, files, currentAIStatus, complianceCounts, name, data]);
+  }, [orgCompliances, files, currentAIStatus, countsDataSWR, name, data]);
 
   useEffect(() => {
-    // set a timeout to re publish the message if the data is undefined. just trigger once
-    if (!data) {
-      setTimeout(() => {
+    // set interval to check if data is undefined and if so, publish the message again
+    const interval = setInterval(() => {
+      if (!data) {
         publishSectionGroupMessage();
-      }, 2000);
-    }
+      }
+    }, 1500);
+    return () => clearInterval(interval);
   }, [data]);
 
   logBrowser('Compliance Definition', 'info', {
@@ -162,10 +162,10 @@ const _ComplianceManager = () => {
     topic,
     currentAIStatus: currentAIStatus.data,
     files: files.data,
-    complianceCounts,
+    countsData: countsDataSWR.data,
   });
 
-  if (!data) {
+  if (!data || orgCompliances.isLoading || files.isLoading || countsDataSWR.isLoading) {
     return <Spinner />;
   }
 
@@ -192,11 +192,10 @@ const _ComplianceManager = () => {
           name: name || '',
           currentAIStatus: currentAIStatus?.data,
           orgCompliances: orgCompliances?.data,
+          complianceCounts: countsDataSWR,
         },
         status: status,
         setStatus: setStatus,
-        complianceCounts: complianceCounts,
-        setComplianceCounts: setComplianceCounts,
         showOverviewModal: showOverviewModal,
         setShowOverviewModal: setShowOverviewModal,
       }}>

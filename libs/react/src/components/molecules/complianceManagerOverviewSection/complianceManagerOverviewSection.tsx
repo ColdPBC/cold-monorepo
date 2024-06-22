@@ -15,21 +15,10 @@ import { orderBy } from 'lodash';
 const _ComplianceManagerOverviewSection = ({
   section,
   groupId,
-  setGroupCounts,
   collapseOpen,
 }: {
   section: MQTTComplianceManagerPayloadComplianceSection;
   groupId: string;
-  setGroupCounts: React.Dispatch<
-    React.SetStateAction<{
-      [p: string]: {
-        not_started: number;
-        ai_answered: number;
-        user_answered: number;
-        bookmarked: number;
-      };
-    }>
-  >;
   collapseOpen: boolean;
 }) => {
   const navigate = useNavigate();
@@ -68,46 +57,6 @@ const _ComplianceManagerOverviewSection = ({
       );
     }
   }, [connectionStatus, name, publishMessage, client, collapseOpen, orgId, currentAIStatus]);
-
-  useEffect(() => {
-    if (orderedQuestions.length > 0) {
-      totalQuestions.current = orderedQuestions.length;
-      let not_started = 0;
-      let ai_answered = 0;
-      let user_answered = 0;
-      let bookmarked = 0;
-      orderedQuestions.forEach(q => {
-        if (q.user_answered) {
-          user_answered++;
-        } else if (q.ai_answered) {
-          ai_answered++;
-        } else if (q.not_started) {
-          not_started++;
-        }
-        if (q.bookmarked) {
-          bookmarked++;
-        }
-      });
-      logBrowser(`Adding counts for section: ${section.title}`, 'info', {
-        not_started,
-        ai_answered,
-        user_answered,
-        bookmarked,
-      });
-
-      setGroupCounts(prev => {
-        return {
-          ...prev,
-          [section.key]: {
-            not_started: not_started,
-            ai_answered: ai_answered,
-            user_answered: user_answered,
-            bookmarked: bookmarked,
-          },
-        };
-      });
-    }
-  }, [orderedQuestions]);
 
   const isAIRunning = () => {
     if (status === ComplianceManagerStatus.startedAi) {
@@ -154,7 +103,7 @@ const _ComplianceManagerOverviewSection = ({
           {isAIRunning() && <div className={'text-body text-tc-disabled'}>Cold AI Running</div>}
         </div>
         <div className={'flex flex-row gap-[8px] items-center'}>
-          <div className={`w-[105px] h-full flex items-center text-body text-start ${textColor}`}>{totalQuestions.current} Questions</div>
+          <div className={`w-[105px] h-full flex items-center text-body text-start ${textColor}`}>{orderedQuestions ? orderedQuestions.length : 0} Questions</div>
           <div
             className={`${!canNavigateToQuestionnaire() ? 'cursor-default' : 'cursor-pointer'}`}
             onClick={() => {

@@ -1,5 +1,4 @@
 import { ComplianceProgressStatus } from '@coldpbc/enums';
-import { forOwn } from 'lodash';
 import { useContext } from 'react';
 import { ColdComplianceManagerContext } from '@coldpbc/context';
 import { ComplianceProgressStatusIcon } from '@coldpbc/components';
@@ -10,8 +9,8 @@ export interface ComplianceProgressItemProps {
 }
 
 export const ComplianceProgressStatusItem = ({ type }: ComplianceProgressItemProps) => {
-  const { data, complianceCounts } = useContext(ColdComplianceManagerContext);
-  const { mqttComplianceSet } = data;
+  const { data } = useContext(ColdComplianceManagerContext);
+  const { mqttComplianceSet, complianceCounts } = data;
   const { logBrowser } = useColdContext();
 
   const currentProgressData = {
@@ -21,26 +20,24 @@ export const ComplianceProgressStatusItem = ({ type }: ComplianceProgressItemPro
   };
 
   let totalQuestions = 0;
-  forOwn(complianceCounts, (value, key) => {
+  if (complianceCounts?.data) {
+    const counts = complianceCounts.data.counts;
     switch (type) {
       case ComplianceProgressStatus.not_started:
-        currentProgressData.count += value.not_started;
+        currentProgressData.count += counts.not_started;
         break;
       case ComplianceProgressStatus.ai_answered:
-        currentProgressData.count += value.ai_answered;
+        currentProgressData.count += counts.ai_answered;
         break;
       case ComplianceProgressStatus.bookmarked:
-        currentProgressData.count += value.bookmarked;
+        currentProgressData.count += counts.bookmarked;
         break;
       case ComplianceProgressStatus.user_answered:
-        currentProgressData.count += value.user_answered;
+        currentProgressData.count += counts.org_answered;
         break;
     }
-    forOwn(value, count => {
-      totalQuestions += count;
-    });
-  });
-
+    totalQuestions = counts.org_answered + counts.ai_answered + counts.not_started;
+  }
   currentProgressData.percentage = totalQuestions !== 0 ? currentProgressData.count / totalQuestions : 0;
 
   let text = '';

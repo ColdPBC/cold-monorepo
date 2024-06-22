@@ -3,26 +3,25 @@ import { HexColors } from '@coldpbc/themes';
 import { Tooltip } from 'flowbite-react';
 import React, { useContext } from 'react';
 import { ColdComplianceManagerContext } from '@coldpbc/context';
-import { forOwn, includes } from 'lodash';
+import { includes } from 'lodash';
 import { ComplianceManagerStatus } from '@coldpbc/enums';
 import { useColdContext } from '@coldpbc/hooks';
 import { withErrorBoundary } from 'react-error-boundary';
 
 const _ComplianceManagerAssessmentPreview = () => {
   const context = useContext(ColdComplianceManagerContext);
-  const { status, complianceCounts } = context;
-  const { mqttComplianceSet } = context.data;
+  const { status } = context;
+  const { mqttComplianceSet, complianceCounts } = context.data;
   const { logBrowser } = useColdContext();
 
   // todo: change this to show the actual assessment percentage and not amount of answered/amount of questions
   let totalQuestions = 0;
   let answeredQuestions = 0;
-  forOwn(complianceCounts, (count, key) => {
-    answeredQuestions += count.user_answered;
-    forOwn(count, count => {
-      totalQuestions += count;
-    });
-  });
+  if (complianceCounts?.data) {
+    const counts = complianceCounts.data.counts;
+    totalQuestions = counts.org_answered + counts.ai_answered + counts.not_started;
+    answeredQuestions = counts.org_answered;
+  }
   const percentage = totalQuestions !== 0 ? ((answeredQuestions / totalQuestions) * 100).toFixed(0) : 0;
 
   logBrowser('Compliance Manager Assessment Preview', 'info', {
