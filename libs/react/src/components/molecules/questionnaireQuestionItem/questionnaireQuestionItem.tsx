@@ -58,11 +58,13 @@ const _QuestionnaireQuestionItem = (props: { question: QuestionnaireQuestion; nu
   const [buttonLoading, setButtonLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    if (scrollToQuestion) {
-      setTimeout(() => {
-        setScrollToQuestion(null);
-      }, 2000);
+    let timer: NodeJS.Timeout;
+    if (focusQuestion !== null && focusQuestion.key === id) {
+      timer = setTimeout(() => {
+        setScrollToQuestion(key);
+      }, 500);
     }
+    return () => clearTimeout(timer);
   }, [scrollToQuestion]);
 
   useEffect(() => {

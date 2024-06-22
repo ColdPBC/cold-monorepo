@@ -23,11 +23,13 @@ const _QuestionnaireQuestionSection = (props: {
 
   useEffect(() => {
     // remove search params after a
+    let timer: NodeJS.Timeout;
     if (isSectionInQuery) {
-      setTimeout(() => {
-        setSearchParams({});
-      }, 3000);
+      timer = setTimeout(() => {
+        searchParams.delete('section');
+      }, 1000);
     }
+    return () => clearTimeout(timer);
   }, [searchParams]);
 
   const orderedQuestions = orderBy(pagedSectionData, ['order'], ['asc']);
