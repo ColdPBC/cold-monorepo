@@ -1,4 +1,4 @@
-import { ComplianceManagerStatus, ComplianceProgressStatus } from '@coldpbc/enums';
+import { ComplianceProgressStatus } from '@coldpbc/enums';
 import { Tooltip } from 'flowbite-react';
 import { ComplianceProgressStatusColor } from '@coldpbc/lib';
 import { get, map, orderBy } from 'lodash';
@@ -9,15 +9,19 @@ import React, { useContext } from 'react';
 import { ColdComplianceManagerContext } from '@coldpbc/context';
 import { useColdContext } from '@coldpbc/hooks';
 import { withErrorBoundary } from 'react-error-boundary';
+import { useNavigate } from 'react-router-dom';
 
 export interface ComplianceManagerSectionProgressBarProps {
   sectionAIStatus: CurrentAIStatusSection | undefined;
   questions: ComplianceSidebarQuestion[] | undefined;
+  isNavigable: boolean;
 }
 
-const _ComplianceManagerSectionProgressBar = ({ questions, sectionAIStatus }: ComplianceManagerSectionProgressBarProps) => {
-  const { status: managerStatus } = useContext(ColdComplianceManagerContext);
+const _ComplianceManagerSectionProgressBar = ({ questions, sectionAIStatus, isNavigable }: ComplianceManagerSectionProgressBarProps) => {
+  const { status: managerStatus, data } = useContext(ColdComplianceManagerContext);
+  const { name } = data;
   const { logBrowser } = useColdContext();
+  const navigate = useNavigate();
 
   const getProgressTooltipIcon = (status: ComplianceProgressStatus) => {
     return (
@@ -85,8 +89,8 @@ const _ComplianceManagerSectionProgressBar = ({ questions, sectionAIStatus }: Co
             borderRight: isLast ? 'none' : `2px solid ${HexColors.bgc.accent}`,
           }}
           onClick={() => {
-            if (managerStatus === ComplianceManagerStatus.notActivated) {
-              return;
+            if (isNavigable) {
+              navigate(`/questionnaire/${name}?question=${question.key}`);
             }
           }}></div>
       </Tooltip>

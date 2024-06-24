@@ -1,18 +1,11 @@
-# [1.260.0-COLD-853.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.260.0-COLD-853.1...v1.260.0-COLD-853.2) (2024-06-22)
+# [1.260.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.259.0...v1.260.0) (2024-06-24)
 
 
 ### Features
 
-* Update MQTT logic and improve compliance manager interactions ([7893abf](https://github.com/ColdPBC/cold-monorepo/commit/7893abf6e0bd18e86afd5ad28ebc02c10fbf41e6))
-
-# [1.260.0-COLD-853.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.259.0...v1.260.0-COLD-853.1) (2024-06-22)
-
-
-### Features
-
+* Add condition for 'collapseOpen' in useEffect ([e7e70fc](https://github.com/ColdPBC/cold-monorepo/commit/e7e70fcb17eda2f248bb3ffe33b4e3fef2d9b058))
+* Add spinner to ComplianceProgressStatusItem component ([281b33d](https://github.com/ColdPBC/cold-monorepo/commit/281b33d7723ce1d0bc36ce25347d5eb55547326a))
 * Refactor fetching and handling of compliance counts ([5674539](https://github.com/ColdPBC/cold-monorepo/commit/56745392b4af8dae560a1d238e695e7610481fe3))
-* Refactor logging and question list fetching handling ([ad0f2a8](https://github.com/ColdPBC/cold-monorepo/commit/ad0f2a853199f4f424bfd30a9a79d0f738294188))
-* Update ordering logic for compliance questions ([baa3fe5](https://github.com/ColdPBC/cold-monorepo/commit/baa3fe57358c3b08b2d095a407e76e353fedd812))
 
 # [1.259.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.258.0...v1.259.0) (2024-06-21)
 

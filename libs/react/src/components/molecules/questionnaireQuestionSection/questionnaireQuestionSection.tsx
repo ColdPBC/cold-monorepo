@@ -26,10 +26,17 @@ const _QuestionnaireQuestionSection = (props: {
     let timer: NodeJS.Timeout;
     if (isSectionInQuery) {
       timer = setTimeout(() => {
-        searchParams.delete('section');
-      }, 1000);
+        // delete section key from query params
+        setSearchParams((prevParams: any) => {
+          const params = new URLSearchParams(prevParams);
+          params.delete('section');
+          return params;
+        });
+      }, 3000);
     }
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(timer);
+    };
   }, [searchParams]);
 
   const orderedQuestions = orderBy(pagedSectionData, ['order'], ['asc']);

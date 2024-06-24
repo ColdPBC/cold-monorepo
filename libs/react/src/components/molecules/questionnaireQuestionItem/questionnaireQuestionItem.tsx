@@ -19,6 +19,7 @@ import { axiosFetcher } from '@coldpbc/fetchers';
 import { useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
 import { isAxiosError } from 'axios';
 import { withErrorBoundary } from 'react-error-boundary';
+import { useSearchParams } from 'react-router-dom';
 
 const _QuestionnaireQuestionItem = (props: { question: QuestionnaireQuestion; number: number; sectionId: string; sectionGroupId: string; questionnaireMutate: () => void }) => {
   const { logBrowser } = useColdContext();
@@ -26,6 +27,7 @@ const _QuestionnaireQuestionItem = (props: { question: QuestionnaireQuestion; nu
   const { orgId } = useAuth0Wrapper();
   const { question, number, sectionId, sectionGroupId, questionnaireMutate } = props;
   const { id, key, prompt, options, tooltip, component, placeholder, bookmarked, user_answered, ai_answered, additional_context, ai_attempted, compliance_responses } = question;
+  const [params, setParams] = useSearchParams();
   const value = getComplianceOrgResponseAnswer(component, compliance_responses);
   const ai_response = compliance_responses.length === 0 ? null : compliance_responses[0]?.ai_response;
   const additionalContextValue = getComplianceOrgResponseAdditionalContextAnswer(additional_context);
@@ -59,13 +61,20 @@ const _QuestionnaireQuestionItem = (props: { question: QuestionnaireQuestion; nu
 
   useEffect(() => {
     let timer: NodeJS.Timeout;
-    if (focusQuestion !== null && focusQuestion.key === id) {
+    if (scrollToQuestion || params.get('question') === key) {
       timer = setTimeout(() => {
-        setScrollToQuestion(key);
-      }, 500);
+        setScrollToQuestion(null);
+        setParams((prevParams: any) => {
+          const params = new URLSearchParams(prevParams);
+          params.delete('question');
+          return params;
+        });
+      }, 3000);
     }
-    return () => clearTimeout(timer);
-  }, [scrollToQuestion]);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [scrollToQuestion, params]);
 
   useEffect(() => {
     if (questionInput !== value || additionalContextInput !== additionalContextValue) {
@@ -525,12 +534,15 @@ const _QuestionnaireQuestionItem = (props: { question: QuestionnaireQuestion; nu
     buttonLoading,
   });
 
+  // get question search params
+  const questionParam = params.get('question');
+  const isQuestionInQuery = questionParam !== null && questionParam === key;
   return (
     <div
       className={`flex flex-col w-full rounded-[16px] bg-gray-30 gap-[16px] ${questionBookmarked ? 'border-[1px] border-lightblue-200 p-[23px]' : ' p-[24px]'}
     ${focusQuestion !== null && focusQuestion.key !== id ? 'opacity-20' : ''}`}
       ref={el => {
-        if (scrollToQuestion === key && el) {
+        if ((scrollToQuestion === key || isQuestionInQuery) && el) {
           el.scrollIntoView({
             behavior: 'smooth',
             block: 'start',
