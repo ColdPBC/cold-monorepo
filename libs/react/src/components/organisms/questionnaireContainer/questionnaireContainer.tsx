@@ -38,7 +38,7 @@ const _QuestionnaireContainer = () => {
   };
 
   const { data, error, isLoading, size, setSize, mutate } = useSWRInfinite<QuestionnaireComplianceContainerPayLoad, any, any>(getKey, axiosFetcher, {
-    parallel: true,
+    parallel: false,
   });
 
   const getPageSectionData = (pageDataList: QuestionnaireComplianceContainerPayLoad[] | undefined, sectionGroupId: string, sectionId: string) => {
@@ -94,7 +94,12 @@ const _QuestionnaireContainer = () => {
           setSize(sectionIndex + 1);
         }
       } else {
-        setSearchParams({});
+        // remove section key from query params
+        setSearchParams((prevParams: any) => {
+          const params = new URLSearchParams(prevParams);
+          params.delete('section');
+          return params;
+        });
       }
     }
   }, [searchParams]);

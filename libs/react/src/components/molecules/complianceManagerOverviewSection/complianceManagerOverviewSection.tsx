@@ -96,15 +96,7 @@ const _ComplianceManagerOverviewSection = ({
   const textColor = isAIRunning() ? 'text-tc-disabled' : 'text-tc-primary';
 
   return (
-    <div
-      className={`flex flex-col w-full rounded-[8px] py-[16px] px-[24px] gap-[30px] ${!canNavigateToQuestionnaire() ? 'cursor-default' : 'cursor-pointer'} ${backgroundColor}`}
-      onClick={() => {
-        if (!canNavigateToQuestionnaire()) {
-          return;
-        }
-        navigate(`/questionnaire/${name}?section=${section.key}`);
-      }}
-      key={`${groupId}-${section.id}`}>
+    <div className={`flex flex-col w-full rounded-[8px] py-[16px] px-[24px] gap-[30px] ${backgroundColor}`} key={`${groupId}-${section.id}`}>
       <div className={'w-full flex flex-row justify-between items-center'}>
         <div className={'flex flex-row gap-[16px] justify-start items-center'}>
           <div className={`text-h4 ${textColor}`}>{section.title}</div>
@@ -112,10 +104,19 @@ const _ComplianceManagerOverviewSection = ({
         </div>
         <div className={'flex flex-row gap-[8px] items-center'}>
           <div className={`w-[105px] h-full flex items-center text-body text-start ${textColor}`}>{orderedQuestions ? orderedQuestions.length : 0} Questions</div>
-          <ArrowRightIcon className={'w-[24px] h-[24px] text-tc-primary'} />
+          <div
+            className={`${!canNavigateToQuestionnaire() ? 'cursor-default' : 'cursor-pointer'}`}
+            onClick={() => {
+              if (!canNavigateToQuestionnaire()) {
+                return;
+              }
+              navigate(`/questionnaire/${name}?section=${section.key}`);
+            }}>
+            <ArrowRightIcon className={'w-[24px] h-[24px] text-tc-primary'} />
+          </div>
         </div>
       </div>
-      <ComplianceManagerSectionProgressBar sectionAIStatus={sectionAIStatus} questions={orderedQuestions} />
+      <ComplianceManagerSectionProgressBar sectionAIStatus={sectionAIStatus} questions={orderedQuestions} isNavigable={canNavigateToQuestionnaire()} />
     </div>
   );
 };
