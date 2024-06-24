@@ -55,7 +55,7 @@
     "@aws-sdk/types": "^3.502.0",
     "@casl/ability": "^6.5.0",
     "@datadog/browser-logs": "^5.12.0",
-    "@datadog/browser-rum": "^4.49.0",
+    "@datadog/browser-rum": "^5.21.0",
     "@emotion/react": "11.11.1",
     "@fastify/static": "^6.10.2",
     "@golevelup/nestjs-rabbitmq": "^4.1.0",
