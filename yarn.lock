@@ -10063,38 +10063,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/addon-actions@npm:7.5.3":
-  version: 7.5.3
-  resolution: "@storybook/addon-actions@npm:7.5.3"
-  dependencies:
-    "@storybook/client-logger": "npm:7.5.3"
-    "@storybook/components": "npm:7.5.3"
-    "@storybook/core-events": "npm:7.5.3"
-    "@storybook/global": "npm:^5.0.0"
-    "@storybook/manager-api": "npm:7.5.3"
-    "@storybook/preview-api": "npm:7.5.3"
-    "@storybook/theming": "npm:7.5.3"
-    "@storybook/types": "npm:7.5.3"
-    dequal: "npm:^2.0.2"
-    lodash: "npm:^4.17.21"
-    polished: "npm:^4.2.2"
-    prop-types: "npm:^15.7.2"
-    react-inspector: "npm:^6.0.0"
-    telejson: "npm:^7.2.0"
-    ts-dedent: "npm:^2.0.0"
-    uuid: "npm:^9.0.0"
-  peerDependencies:
-    react: ^16.8.0 || ^17.0.0 || ^18.0.0
-    react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-  peerDependenciesMeta:
-    react:
-      optional: true
-    react-dom:
-      optional: true
-  checksum: 10/c98c63334d7c7bd8668ee5d88320fbd6f7b7a7a61ab873ec7a01b36a8180c43877900a561c2c5e7ee6af74cb41f6704b27829e379fa6f4d0dc65d879753f55fd
-  languageName: node
-  linkType: hard
-
 "@storybook/addon-actions@npm:7.6.5":
   version: 7.6.5
   resolution: "@storybook/addon-actions@npm:7.6.5"
@@ -10106,6 +10074,20 @@ __metadata:
     polished: "npm:^4.2.2"
     uuid: "npm:^9.0.0"
   checksum: 10/e4df00779763b83048a931a60a8e48c34744d097595165480349592a6b62fdea38391cc2828c28b3cf539a95ba01d3e8b2c3b08149a8410d5c336f1dadd08dc9
+  languageName: node
+  linkType: hard
+
+"@storybook/addon-actions@npm:8.1.10":
+  version: 8.1.10
+  resolution: "@storybook/addon-actions@npm:8.1.10"
+  dependencies:
+    "@storybook/core-events": "npm:8.1.10"
+    "@storybook/global": "npm:^5.0.0"
+    "@types/uuid": "npm:^9.0.1"
+    dequal: "npm:^2.0.2"
+    polished: "npm:^4.2.2"
+    uuid: "npm:^9.0.0"
+  checksum: 10/ca25fc9a421aeae425a97318ed10d17d91732d047c35d70df50f3764c274b68bee4fd171231c3c28953c0322386aca58a0f000b45d5abae8a128aabc1d118aa2
   languageName: node
   linkType: hard
 
@@ -11443,6 +11425,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@storybook/core-events@npm:8.1.10":
+  version: 8.1.10
+  resolution: "@storybook/core-events@npm:8.1.10"
+  dependencies:
+    "@storybook/csf": "npm:^0.1.7"
+    ts-dedent: "npm:^2.0.0"
+  checksum: 10/2f8b27f1dc14ba33ee80e629b230ba094537b383c49999ec07cf2e21d524e0a522a59978ce559f7e78c03c41112b90408c17e1e7655c031adcb4e36a4ee550d4
+  languageName: node
+  linkType: hard
+
 "@storybook/core-server@npm:6.5.16":
   version: 6.5.16
   resolution: "@storybook/core-server@npm:6.5.16"
@@ -11747,6 +11739,15 @@ __metadata:
   dependencies:
     type-fest: "npm:^2.19.0"
   checksum: 10/105f3bd748613b775e87454a8470e36733d0ac25b4b88aa9dbebe060f92ff8d5fda1c98289657039d980ecc8d4d59079ef559a42e211568dc97e19d245117156
+  languageName: node
+  linkType: hard
+
+"@storybook/csf@npm:^0.1.7":
+  version: 0.1.8
+  resolution: "@storybook/csf@npm:0.1.8"
+  dependencies:
+    type-fest: "npm:^2.19.0"
+  checksum: 10/0cc01216a8888012bd1b33743cfeab83f16d028ba40ff02d39215a827e899451a39aef6b3a30342cdc4f87567d45f93074cfe05bdb8a34561c636ac7d8a13cfd
   languageName: node
   linkType: hard
 
@@ -19100,7 +19101,7 @@ __metadata:
     "@semantic-release/release-notes-generator": "npm:^11.0.1"
     "@sendgrid/mail": "npm:^7.7.0"
     "@storybook/addon-a11y": "npm:7.5.3"
-    "@storybook/addon-actions": "npm:7.5.3"
+    "@storybook/addon-actions": "npm:8.1.10"
     "@storybook/addon-docs": "npm:7.5.3"
     "@storybook/addon-essentials": "npm:7.6.5"
     "@storybook/addon-info": "npm:^5.3.21"
@@ -37579,15 +37580,6 @@ __metadata:
   peerDependencies:
     react: "*"
   checksum: 10/c4458c643ae32a793ddebc5fa1235c7ec051be1b131205510e8199d15a4c89221a501f95a71fa21c2da93e8dd225290e2e24bb80abd3fb85801e43009e692098
-  languageName: node
-  linkType: hard
-
-"react-inspector@npm:^6.0.0":
-  version: 6.0.2
-  resolution: "react-inspector@npm:6.0.2"
-  peerDependencies:
-    react: ^16.8.4 || ^17.0.0 || ^18.0.0
-  checksum: 10/5d23ad0f6f920458abd4c01af1b3cbdbe8846c254762fd6cfff4df119c54e08dd98ce8e91acacafb8173c19f07de2066df5b8e6cb19425751c1929a2620cbe77
   languageName: node
   linkType: hard
 

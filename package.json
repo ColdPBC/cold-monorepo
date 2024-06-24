@@ -236,7 +236,7 @@
     "@semantic-release/npm": "^10.0.3",
     "@semantic-release/release-notes-generator": "^11.0.1",
     "@storybook/addon-a11y": "7.5.3",
-    "@storybook/addon-actions": "7.5.3",
+    "@storybook/addon-actions": "8.1.10",
     "@storybook/addon-docs": "7.5.3",
     "@storybook/addon-essentials": "7.6.5",
     "@storybook/addon-info": "^5.3.21",
