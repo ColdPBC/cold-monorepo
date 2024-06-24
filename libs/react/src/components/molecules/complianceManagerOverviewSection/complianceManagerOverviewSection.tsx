@@ -42,7 +42,7 @@ const _ComplianceManagerOverviewSection = ({
   const sectionAIStatus = currentAIStatus?.find(s => s.section === section.key);
 
   useEffect(() => {
-    if (client?.current && connectionStatus && orgId) {
+    if (client?.current && connectionStatus && orgId && collapseOpen) {
       publishMessage(
         `platform/${resolveNodeEnv()}/compliance/getComplianceQuestionList`,
         JSON.stringify({
