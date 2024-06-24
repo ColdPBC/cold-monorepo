@@ -121,7 +121,7 @@
     "corepack": "^0.23.0",
     "d3-dsv": "2",
     "date-fns": "^2.30.0",
-    "dd-trace": "^5.10.0",
+    "dd-trace": "^5.17.0",
     "deep-object-diff": "^1.1.9",
     "dotenv": "^16.0.3",
     "eslint-plugin-cypress": "^2.15.1",
