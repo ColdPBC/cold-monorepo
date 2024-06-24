@@ -64,7 +64,11 @@ const _QuestionnaireQuestionItem = (props: { question: QuestionnaireQuestion; nu
     if (scrollToQuestion || params.get('question') === key) {
       timer = setTimeout(() => {
         setScrollToQuestion(null);
-        setParams({});
+        setParams((prevParams: any) => {
+          const params = new URLSearchParams(prevParams);
+          params.delete('question');
+          return params;
+        });
       }, 3000);
     }
     return () => {

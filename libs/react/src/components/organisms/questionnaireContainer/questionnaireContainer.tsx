@@ -94,7 +94,12 @@ const _QuestionnaireContainer = () => {
           setSize(sectionIndex + 1);
         }
       } else {
-        setSearchParams({});
+        // remove section key from query params
+        setSearchParams((prevParams: any) => {
+          const params = new URLSearchParams(prevParams);
+          params.delete('section');
+          return params;
+        });
       }
     }
   }, [searchParams]);
