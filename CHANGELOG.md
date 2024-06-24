@@ -1,3 +1,12 @@
+# [1.260.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.259.0...v1.260.0) (2024-06-24)
+
+
+### Features
+
+* Add condition for 'collapseOpen' in useEffect ([e7e70fc](https://github.com/ColdPBC/cold-monorepo/commit/e7e70fcb17eda2f248bb3ffe33b4e3fef2d9b058))
+* Add spinner to ComplianceProgressStatusItem component ([281b33d](https://github.com/ColdPBC/cold-monorepo/commit/281b33d7723ce1d0bc36ce25347d5eb55547326a))
+* Refactor fetching and handling of compliance counts ([5674539](https://github.com/ColdPBC/cold-monorepo/commit/56745392b4af8dae560a1d238e695e7610481fe3))
+
 # [1.259.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.258.0...v1.259.0) (2024-06-21)
 
 
