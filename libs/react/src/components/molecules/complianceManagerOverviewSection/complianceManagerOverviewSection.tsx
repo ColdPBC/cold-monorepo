@@ -53,7 +53,9 @@ const _ComplianceManagerOverviewSection = ({
   };
 
   useEffect(() => {
-    publishQuestionListMessage();
+    if(collapseOpen){
+      publishQuestionListMessage();
+    }
   }, [connectionStatus, name, publishMessage, client, collapseOpen, orgId, currentAIStatus]);
 
   useEffect(() => {
