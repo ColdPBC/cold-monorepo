@@ -16826,13 +16826,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"auth0@npm:^4.2.0":
-  version: 4.3.1
-  resolution: "auth0@npm:4.3.1"
+"auth0@npm:^4.6.0":
+  version: 4.6.0
+  resolution: "auth0@npm:4.6.0"
   dependencies:
     jose: "npm:^4.13.2"
+    undici-types: "npm:^6.15.0"
     uuid: "npm:^9.0.0"
-  checksum: 10/0fb7073718a376d38ec6e59a7a69e02adcc448b6126b2615104e346241aa4abe15fca8362d0d57497d3020e632fabbce06ccea0c8b1385e0325a312fa92a928b
+  checksum: 10/5f0ce13cb182b2cce82f10899e1c191f68331ae1cc9e80d44d4828560e11193e63f97ceae638bdfb20fac3f30b75d9da99dc91ecf5c3b212aee85edac1d95785
   languageName: node
   linkType: hard
 
@@ -19179,7 +19180,7 @@ __metadata:
     app-root-path: "npm:^3.1.0"
     argon2: "npm:^0.30.3"
     async-mqtt: "npm:^2.6.3"
-    auth0: "npm:^4.2.0"
+    auth0: "npm:^4.6.0"
     auto-changelog: "npm:^2.4.0"
     autoprefixer: "npm:^10.4.14"
     aws-iot-device-sdk: "npm:^2.2.13"
@@ -43016,6 +43017,13 @@ __metadata:
   version: 1.13.6
   resolution: "underscore@npm:1.13.6"
   checksum: 10/58cf5dc42cb0ac99c146ae4064792c0a2cc84f3a3c4ad88f5082e79057dfdff3371d896d1ec20379e9ece2450d94fa78f2ef5bfefc199ba320653e32c009bd66
+  languageName: node
+  linkType: hard
+
+"undici-types@npm:^6.15.0":
+  version: 6.19.2
+  resolution: "undici-types@npm:6.19.2"
+  checksum: 10/7b6ab56ce35083c85a08ab508330587785185ad208c73012bc5de14ef2932507143cf491fd45b2496b3668b42b7f9b3be1c90dc01accbeec0ac111ef63163cb9
   languageName: node
   linkType: hard
 
