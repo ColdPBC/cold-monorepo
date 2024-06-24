@@ -18,8 +18,8 @@ import {
   ComplianceQuestionnaireContextType,
 } from '@coldpbc/context';
 import { getAllFilesMock } from './filesMock';
-import { getQuestionnaireSidebarComplianceMock } from './complianceMock';
-import { QuestionnaireQuestionComplianceResponse } from '@coldpbc/interfaces';
+import { getComplianceCountsMock, getQuestionnaireSidebarComplianceMock } from './complianceMock';
+import { ComplianceManagerCountsPayload, QuestionnaireQuestionComplianceResponse } from '@coldpbc/interfaces';
 
 export interface StoryMockProviderProps {
   handlers?: RestHandler<MockedRequest<DefaultBodyType>>[];
@@ -31,24 +31,6 @@ export interface StoryMockProviderProps {
     data: Partial<ComplianceManagerData>;
     status: ComplianceManagerStatus;
     setStatus: (status: ComplianceManagerStatus) => void;
-    complianceCounts: {
-      [key: string]: {
-        not_started: number;
-        ai_answered: number;
-        user_answered: number;
-        bookmarked: number;
-      };
-    };
-    setComplianceCounts: React.Dispatch<
-      React.SetStateAction<{
-        [key: string]: {
-          not_started: number;
-          ai_answered: number;
-          user_answered: number;
-          bookmarked: number;
-        };
-      }>
-    >;
     showOverviewModal: boolean;
     setShowOverviewModal: React.Dispatch<React.SetStateAction<boolean>>;
   }>;
@@ -85,14 +67,6 @@ export const StoryMockProvider = (props: PropsWithChildren<StoryMockProviderProp
   const mqttTopics = props.mqttTopics ? props.mqttTopics : defaultMqttTopics;
   const mqttContextValue = mockMQTTContext(defaultMqttDataHandler, mqttTopics);
 
-  const [complianceCounts, setComplianceCounts] = React.useState<{
-    [key: string]: {
-      not_started: number;
-      ai_answered: number;
-      user_answered: number;
-      bookmarked: number;
-    };
-  }>(props.complianceManagerContext?.complianceCounts || {});
   const [status, setStatus] = React.useState<ComplianceManagerStatus>(props.complianceManagerContext?.status || ComplianceManagerStatus.notActivated);
   const [showOverviewModal, setShowOverviewModal] = React.useState<boolean>(props.complianceManagerContext?.showOverviewModal || false);
 
@@ -111,6 +85,14 @@ export const StoryMockProvider = (props: PropsWithChildren<StoryMockProviderProp
     } as SWRResponse<any[], any, any>,
     currentAIStatus: undefined,
     orgCompliances: undefined,
+    complianceCounts: {
+      data: getComplianceCountsMock(),
+      error: undefined,
+      revalidate: () => {},
+      isValidating: false,
+      isLoading: false,
+      mutate: () => Promise.resolve(),
+    } as SWRResponse<ComplianceManagerCountsPayload, any, any>,
     ...props.complianceManagerContext?.data,
   };
 
@@ -119,8 +101,6 @@ export const StoryMockProvider = (props: PropsWithChildren<StoryMockProviderProp
     data: complianceManagerContextData,
     status,
     setStatus: props.complianceManagerContext?.setStatus || setStatus,
-    complianceCounts,
-    setComplianceCounts: props.complianceManagerContext?.setComplianceCounts || setComplianceCounts,
     showOverviewModal,
     setShowOverviewModal: props.complianceManagerContext?.setShowOverviewModal || setShowOverviewModal,
   };

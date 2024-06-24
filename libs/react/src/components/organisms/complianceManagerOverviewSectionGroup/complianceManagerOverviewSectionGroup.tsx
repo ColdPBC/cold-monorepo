@@ -1,5 +1,5 @@
 import { ComplianceProgressStatus, IconNames } from '@coldpbc/enums';
-import { forOwn, map, orderBy } from 'lodash';
+import { find, map, orderBy } from 'lodash';
 import { ColdIcon, ComplianceManagerOverviewSection, ComplianceProgressStatusIcon, ErrorFallback } from '@coldpbc/components';
 import { MQTTComplianceManagerPayloadComplianceSection, MQTTComplianceManagerPayloadComplianceSectionGroup } from '@coldpbc/interfaces';
 import React, { useContext, useEffect, useState } from 'react';
@@ -17,19 +17,10 @@ export interface ComplianceManagerOverviewSectionGroupProps {
 
 const _ComplianceManagerOverviewSectionGroup = ({ sectionGroup, position }: ComplianceManagerOverviewSectionGroupProps) => {
   const [collapseOpen, setCollapseOpen] = useState(false);
-  const [groupCounts, setGroupCounts] = useState<{
-    [key: string]: {
-      not_started: number;
-      ai_answered: number;
-      user_answered: number;
-      bookmarked: number;
-    };
-  }>({});
   const { orgId } = useAuth0Wrapper();
   const { subscribeSWR, publishMessage, connectionStatus, client } = useContext(ColdMQTTContext);
   const context = useContext(ColdComplianceManagerContext);
-  const { setComplianceCounts } = context;
-  const { name } = context.data;
+  const { name, complianceCounts } = context.data;
   const { logBrowser } = useColdContext();
 
   const getComplianceSectionListTopic = () => {
@@ -41,30 +32,13 @@ const _ComplianceManagerOverviewSectionGroup = ({ sectionGroup, position }: Comp
     error: any;
   };
 
-  const getGroupCounts = (groupCounts: {
-    [p: string]: {
-      not_started: number;
-      ai_answered: number;
-      user_answered: number;
-      bookmarked: number;
-    };
-  }) => {
-    let not_started = 0;
-    let ai_answered = 0;
-    let user_answered = 0;
-    let bookmarked = 0;
-    forOwn(groupCounts, (value, key) => {
-      not_started += value.not_started;
-      ai_answered += value.ai_answered;
-      user_answered += value.user_answered;
-      bookmarked += value.bookmarked;
-    });
-
+  const getGroupCounts = () => {
+    const sectionGroupCounts = find(complianceCounts?.data?.compliance_section_groups, { id: sectionGroup.id });
     return {
-      not_started,
-      ai_answered,
-      user_answered,
-      bookmarked,
+      not_started: sectionGroupCounts?.counts.not_started,
+      ai_answered: sectionGroupCounts?.counts.ai_answered,
+      user_answered: sectionGroupCounts?.counts.org_answered,
+      bookmarked: sectionGroupCounts?.counts.bookmarked,
     };
   };
 
@@ -90,21 +64,6 @@ const _ComplianceManagerOverviewSectionGroup = ({ sectionGroup, position }: Comp
     }
   }, []);
 
-  useEffect(() => {
-    const counts = getGroupCounts(groupCounts);
-    logBrowser(`Adding counts for section group: ${sectionGroup.title}`, 'info', {
-      groupCounts,
-      counts,
-      sectionGroup,
-    });
-    setComplianceCounts(prev => {
-      return {
-        ...prev,
-        ...groupCounts,
-      };
-    });
-  }, [groupCounts]);
-
   const orderedData = orderBy(data, ['order'], ['asc']);
 
   logBrowser('Compliance Manager Overview Section Group', 'info', {
@@ -116,7 +75,7 @@ const _ComplianceManagerOverviewSectionGroup = ({ sectionGroup, position }: Comp
     topic: getComplianceSectionListTopic(),
   });
 
-  const sectionGroupCounts = getGroupCounts(groupCounts);
+  const sectionGroupCounts = getGroupCounts();
 
   const sectionStatuses = [
     {
@@ -198,15 +157,7 @@ const _ComplianceManagerOverviewSectionGroup = ({ sectionGroup, position }: Comp
       </div>
       <div className={'w-full flex flex-col gap-[36px] bg-transparent'}>
         {map(orderedData, (section, index) => {
-          return (
-            <ComplianceManagerOverviewSection
-              key={`${section.id}-${index}`}
-              section={section}
-              groupId={sectionGroup.id}
-              setGroupCounts={setGroupCounts}
-              collapseOpen={collapseOpen}
-            />
-          );
+          return <ComplianceManagerOverviewSection key={`${section.id}-${index}`} section={section} groupId={sectionGroup.id} collapseOpen={collapseOpen} />;
         })}
       </div>
     </div>
