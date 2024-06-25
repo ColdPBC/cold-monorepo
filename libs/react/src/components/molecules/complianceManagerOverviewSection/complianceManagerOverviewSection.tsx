@@ -53,7 +53,7 @@ const _ComplianceManagerOverviewSection = ({
   };
 
   useEffect(() => {
-    if(collapseOpen){
+    if (collapseOpen) {
       publishQuestionListMessage();
     }
   }, [connectionStatus, name, publishMessage, client, collapseOpen, orgId, currentAIStatus]);
@@ -61,7 +61,7 @@ const _ComplianceManagerOverviewSection = ({
   useEffect(() => {
     // set interval to publish message to get compliance question list every second if questions are undefined
     const interval = setInterval(() => {
-      if (!questions) {
+      if (!orderedQuestions) {
         publishQuestionListMessage();
       }
     }, 1000);

@@ -106,7 +106,7 @@ const _ComplianceManagerOverviewSectionGroup = ({ sectionGroup, position }: Comp
     return () => clearInterval(interval);
   }, [data]);
 
-  const orderedData = orderBy(data, ['order'], ['asc']);
+  const orderedData = data ? orderBy(data, ['order'], ['asc']) : undefined;
 
   useEffect(() => {
     logBrowser(`Compliance Manager Overview Section Group: ${sectionGroup.title}`, 'info', {
@@ -200,17 +200,19 @@ const _ComplianceManagerOverviewSectionGroup = ({ sectionGroup, position }: Comp
         </div>
       </div>
       <div className={'w-full flex flex-col gap-[36px] bg-transparent'}>
-        {map(orderedData, (section, index) => {
-          return (
-            <ComplianceManagerOverviewSection
-              key={`${section.id}-${index}`}
-              section={section}
-              groupId={sectionGroup.id}
-              collapseOpen={collapseOpen}
-              sectionData={sectionsData[section.id]}
-            />
-          );
-        })}
+        {orderedData
+          ? map(orderedData, (section, index) => {
+              return (
+                <ComplianceManagerOverviewSection
+                  key={`${section.id}-${index}`}
+                  section={section}
+                  groupId={sectionGroup.id}
+                  collapseOpen={collapseOpen}
+                  sectionData={sectionsData[section.id]}
+                />
+              );
+            })
+          : collapseOpen && <Spinner />}
       </div>
     </div>
   );

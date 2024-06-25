@@ -1,12 +1,7 @@
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { ComplianceManagerOverviewSection } from '@coldpbc/components';
-import {
-  getComplianceManagerOverviewSectionQuestionListActivatedMock,
-  getComplianceManagerOverviewSectionQuestionListMock,
-  getComplianceManagerOverviewSectionsMock,
-  StoryMockProvider,
-} from '@coldpbc/mocks';
+import { getComplianceManagerOverviewSectionQuestionListMock, getComplianceManagerOverviewSectionsMock, StoryMockProvider } from '@coldpbc/mocks';
 import { ComplianceManagerStatus } from '@coldpbc/enums';
 
 const meta: Meta<typeof ComplianceManagerOverviewSection> = {
@@ -21,25 +16,20 @@ type Story = StoryObj<typeof meta>;
 
 export const NotActivated: Story = {
   render: args => (
-    <StoryMockProvider
-      mqttTopics={{
-        'ui/:env/org_123/:name/:sectionGroupId/:sectionId': getComplianceManagerOverviewSectionQuestionListMock,
-      }}>
+    <StoryMockProvider>
       <ComplianceManagerOverviewSection {...args} />
     </StoryMockProvider>
   ),
   args: {
     ...getComplianceManagerOverviewSectionsMock(),
     collapseOpen: true,
+    sectionData: getComplianceManagerOverviewSectionQuestionListMock(),
   },
 };
 
 export const Activated: Story = {
   render: args => (
     <StoryMockProvider
-      mqttTopics={{
-        'ui/:env/org_123/:name/:sectionGroupId/:sectionId': getComplianceManagerOverviewSectionQuestionListActivatedMock,
-      }}
       complianceManagerContext={{
         status: ComplianceManagerStatus.activated,
       }}>
@@ -49,6 +39,7 @@ export const Activated: Story = {
   args: {
     ...getComplianceManagerOverviewSectionsMock(),
     collapseOpen: true,
+    sectionData: getComplianceManagerOverviewSectionQuestionListMock(),
   },
 };
 
@@ -65,9 +56,6 @@ export const ColdAIRunning: Story = {
             },
           ],
         },
-      }}
-      mqttTopics={{
-        'ui/:env/org_123/:name/:sectionGroupId/:sectionId': getComplianceManagerOverviewSectionQuestionListMock,
       }}>
       <ComplianceManagerOverviewSection {...args} />
     </StoryMockProvider>
@@ -75,5 +63,6 @@ export const ColdAIRunning: Story = {
   args: {
     ...getComplianceManagerOverviewSectionsMock(),
     collapseOpen: true,
+    sectionData: getComplianceManagerOverviewSectionQuestionListMock(),
   },
 };
