@@ -1,3 +1,15 @@
+# [1.262.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.261.0...v1.262.0) (2024-06-25)
+
+
+### Features
+
+* Add spinner to compliance counts during validation ([1f2bb9d](https://github.com/ColdPBC/cold-monorepo/commit/1f2bb9d9c1b4bc184d9ae57452a29c374574b27b))
+* Enhance data validation and modify data fetch interval ([9062e8f](https://github.com/ColdPBC/cold-monorepo/commit/9062e8f62017261dfec2d2e6c2053fb70aea4629))
+* Refactor logging and question list fetching handling ([ad0f2a8](https://github.com/ColdPBC/cold-monorepo/commit/ad0f2a853199f4f424bfd30a9a79d0f738294188))
+* Update handling of undefined data and modify mocks ([efc255f](https://github.com/ColdPBC/cold-monorepo/commit/efc255f2b0dc1eee6647a8d7b42adb96600be289))
+* Update MQTT logic and improve compliance manager interactions ([7893abf](https://github.com/ColdPBC/cold-monorepo/commit/7893abf6e0bd18e86afd5ad28ebc02c10fbf41e6))
+* Update ordering logic for compliance questions ([baa3fe5](https://github.com/ColdPBC/cold-monorepo/commit/baa3fe57358c3b08b2d095a407e76e353fedd812))
+
 # [1.261.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.260.0...v1.261.0) (2024-06-24)
 
 
