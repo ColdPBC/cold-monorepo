@@ -1,3 +1,12 @@
+# [1.261.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.260.0...v1.261.0) (2024-06-24)
+
+
+### Features
+
+* Add timer to clear delay in questionnaire components ([30ffa83](https://github.com/ColdPBC/cold-monorepo/commit/30ffa8330fbebcf9deb8907ae516d4666508b28c))
+* Refactor search parameter removal in Questionnaire components ([957b6dd](https://github.com/ColdPBC/cold-monorepo/commit/957b6ddedf63b9b1c7f4717991fe9ee473d0ca9a))
+* Update navigation and improve progress bar interaction ([07265ee](https://github.com/ColdPBC/cold-monorepo/commit/07265ee2660f8e4a63460eb5ddc2e1df891c677e))
+
 # [1.260.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.259.0...v1.260.0) (2024-06-24)
 
 
