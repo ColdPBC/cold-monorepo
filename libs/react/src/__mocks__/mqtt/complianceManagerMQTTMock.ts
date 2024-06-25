@@ -244,13 +244,12 @@ export const getSectionList = (args: any) => {
   if (!complianceData) return [];
   const sectionGroupData = find(complianceData.section_groups, group => group.sectionGroupId === sectionGroupId);
   if (!sectionGroupData) return [];
-  return sectionGroupData.sections;
+  return [sectionGroupData.sections[0]];
 };
 
 export const getQuestionList = (args: any): ComplianceSidebarPayload | undefined => {
   const name = get(args, 'name', '');
   const sectionGroupId = get(args, 'sectionGroupId', '');
-  const sectionId = get(args, 'sectionId', '');
   const mockData = [
     {
       name: 'rei_pia_2024',
@@ -1042,7 +1041,7 @@ export const getQuestionList = (args: any): ComplianceSidebarPayload | undefined
   if (!complianceData) return undefined;
   const sectionGroupData = find(complianceData.section_groups, group => group.sectionGroupId === sectionGroupId);
   if (!sectionGroupData) return undefined;
-  const sectionData = find(sectionGroupData.sections, section => section.id === sectionId);
+  const sectionData = sectionGroupData.sections[0];
   if (!sectionData) return undefined;
 
   return {
@@ -1138,7 +1137,7 @@ export const getComplianceSectionProgressBarQuestionsMock = (): ComplianceSideba
 export const getComplianceManagerOverviewSectionsMock = () => {
   return {
     section: {
-      id: 'cs_kvyvslvd8k9b6u9l',
+      id: 'cs_e1p1fo2i6mnvv0nn',
       key: 'CHEM',
       title: 'Restricted Substances List & Chemicals Management',
       metadata: null,
@@ -1149,11 +1148,11 @@ export const getComplianceManagerOverviewSectionsMock = () => {
         compliance_questions: 6,
       },
     },
-    groupId: 'csg_ual97c2pos346hkf',
+    groupId: 'csg_u52xp76tclba5djc',
   };
 };
 
-export const getComplianceManagerOverviewSectionQuestionListMock = (args: any): ComplianceSidebarPayload => {
+export const getComplianceManagerOverviewSectionQuestionListMock = (): ComplianceSidebarPayload => {
   return {
     name: 'rei_pia_2024',
     compliance_section_groups: [
@@ -1237,7 +1236,7 @@ export const getComplianceManagerOverviewSectionQuestionListMock = (args: any): 
   };
 };
 
-export const getComplianceManagerOverviewSectionQuestionListActivatedMock = (args: any): ComplianceSidebarPayload => {
+export const getComplianceManagerOverviewSectionQuestionListActivatedMock = (): ComplianceSidebarPayload => {
   return {
     name: 'rei_pia_2024',
     compliance_section_groups: [

@@ -4,7 +4,7 @@ import { getQuestionList, getSectionGroupList, getSectionList } from './complian
 export const defaultMqttTopics = {
   'ui/:env/org_123/:name/complianceManagementPage': getSectionGroupList,
   'ui/:env/org_123/:name/:sectionGroupId': getSectionList,
-  'ui/:env/org_123/:name/:sectionGroupId/:sectionId': getQuestionList,
+  'ui/:env/org_123/:name/:sectionGroupId/#': getQuestionList,
 };
 
 export const defaultMqttDataHandler = (topic: string | null, topicHeaders: { [key: string]: (args: any) => any }) => {

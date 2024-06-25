@@ -99,11 +99,6 @@ const _ComplianceManagerSectionProgressBar = ({ questions, sectionAIStatus, isNa
 
   const orderedData = orderBy(questions, ['order'], ['asc']);
 
-  logBrowser('Compliance Question List', 'info', {
-    orderedData,
-    managerStatus,
-  });
-
   if (!questions) {
     return <Spinner />;
   } else {

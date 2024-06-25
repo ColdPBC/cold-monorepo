@@ -19,7 +19,7 @@ export const mockMQTTContext = (
   };
 
   const publishMessage = (topic: string, message: string) => {
-    console.log('publishMessage', topic, message);
+    console.log({ text: 'publishMessage', topic, message });
   };
 
   return {

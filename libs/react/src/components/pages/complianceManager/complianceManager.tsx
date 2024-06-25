@@ -151,19 +151,21 @@ const _ComplianceManager = () => {
     return () => clearInterval(interval);
   }, [data]);
 
-  logBrowser('Compliance Definition', 'info', {
-    name,
-    data,
-    error,
-    orgId,
-    compliance,
-    status,
-    managementView,
-    topic,
-    currentAIStatus: currentAIStatus.data,
-    files: files.data,
-    countsData: countsDataSWR.data,
-  });
+  useEffect(() => {
+    logBrowser('Compliance Definition', 'info', {
+      name,
+      data,
+      error,
+      orgId,
+      compliance,
+      status,
+      managementView,
+      orgCompliances,
+      topic,
+      currentAIStatus: currentAIStatus.data,
+      files: files.data,
+    });
+  }, [orgCompliances, files, currentAIStatus, name, data, error, orgId, compliance, status, managementView, topic]);
 
   if (!data || orgCompliances.isLoading || files.isLoading || countsDataSWR.isLoading) {
     return <Spinner />;
