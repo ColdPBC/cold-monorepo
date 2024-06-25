@@ -79,7 +79,13 @@ const _ComplianceManagerOverviewSectionGroup = ({ sectionGroup, position }: Comp
   }, []);
 
   useEffect(() => {
-    if (!isUndefined(sectionsSub.data)) {
+    if (
+      !isUndefined(sectionsSub.data) &&
+      sectionsSub.data.compliance_section_groups &&
+      sectionsSub.data.compliance_section_groups.length > 0 &&
+      sectionsSub.data.compliance_section_groups[0].compliance_sections &&
+      sectionsSub.data.compliance_section_groups[0].compliance_sections.length > 0
+    ) {
       const sectionId = sectionsSub.data.compliance_section_groups[0].compliance_sections[0].id;
       setSectionsData(prev => {
         return {
@@ -92,12 +98,12 @@ const _ComplianceManagerOverviewSectionGroup = ({ sectionGroup, position }: Comp
 
   useEffect(() => {
     // if data is undefined publish a new message after 1 second. clear the timeout if the component is unmounted
-    let timeout: NodeJS.Timeout;
-    if (!data) {
-      timeout = setTimeout(() => {
+    const interval = setInterval(() => {
+      if (!data) {
         publishSectionListMessage();
-      }, 1000);
-    }
+      }
+    }, 1500);
+    return () => clearInterval(interval);
   }, [data]);
 
   const orderedData = orderBy(data, ['order'], ['asc']);
