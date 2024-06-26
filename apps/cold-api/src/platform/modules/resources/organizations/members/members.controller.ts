@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpCode, Param, Put, Query, Req } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, Param, Put, Query, Req, UseGuards, UseInterceptors } from '@nestjs/common';
 import {
   allRoles,
   BaseWorker,
@@ -6,15 +6,20 @@ import {
   coldAdminOnly,
   coldAndCompanyAdmins,
   IAuthenticatedUser,
+  JwtAuthGuard,
   orgIdDecoratorOptions,
+  OrgUserInterceptor,
   roleNameDecoratorOptions,
   Roles,
+  RolesGuard,
   userIdDecoratorOptions,
 } from '@coldpbc/nest';
 import { ApiBody, ApiOperation, ApiParam, ApiQuery } from '@nestjs/swagger';
 import { MembersService } from './members.service';
 import { OrgRolesService } from '../roles/roles.service';
 
+@UseGuards(JwtAuthGuard, RolesGuard)
+@UseInterceptors(OrgUserInterceptor)
 @Controller('organizations/:orgId/members')
 export class MembersController extends BaseWorker {
   constructor(private readonly members: MembersService, private readonly roles: OrgRolesService) {
