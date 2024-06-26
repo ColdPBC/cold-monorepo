@@ -127,20 +127,22 @@ const _QuestionnaireContainer = () => {
                 const pagedSectionData = getPageSectionData(data, sectionGroup.id, section.id);
                 const lastPageRef = isLastPage ? lowerRef : null;
                 return (
-                  <QuestionnaireQuestionSection
-                    questionnaireMutate={mutate}
-                    key={section.key}
-                    section={section}
-                    sectionGroupId={sectionGroup.id}
-                    pagedSectionData={pagedSectionData}
-                    innerRef={lastPageRef}
-                  />
+                  <>
+                    <QuestionnaireQuestionSection
+                      questionnaireMutate={mutate}
+                      key={section.key}
+                      section={section}
+                      sectionGroupId={sectionGroup.id}
+                      pagedSectionData={pagedSectionData}
+                      innerRef={lastPageRef}
+                    />
+                    {isLoading && <Spinner />}
+                  </>
                 );
               })}
           </div>
         );
       })}
-      {isLoading && <Spinner />}
     </div>
   );
 };
