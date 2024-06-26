@@ -39,12 +39,14 @@ const _QuestionnaireQuestionSection = (props: {
     };
   }, [searchParams]);
 
-  const orderedQuestions = orderBy(pagedSectionData, ['order'], ['asc']);
+  // use placeholder questions to fill in the gaps if the page data is not loaded yet
+  const orderedPlaceholderQuestions = orderBy(section.compliance_questions, ['order'], ['asc']);
 
   logBrowser(`QuestionnaireQuestionSection loaded for section: ${section.title}`, 'info', {
     sectionKey,
     isSectionInQuery,
-    orderedQuestions,
+    pagedSectionData,
+    orderedPlaceholderQuestions,
   });
 
   return (
@@ -61,7 +63,7 @@ const _QuestionnaireQuestionSection = (props: {
         }}>
         {section.title}
       </div>
-      {orderedQuestions.map((question, index) => {
+      {orderedPlaceholderQuestions.map((question, index) => {
         const pagedQuestionData = pagedSectionData?.find(q => q.key === question.key);
         if (pagedQuestionData) {
           return (
