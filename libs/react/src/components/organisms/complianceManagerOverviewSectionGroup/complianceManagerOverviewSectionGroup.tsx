@@ -1,7 +1,7 @@
 import { ComplianceProgressStatus, IconNames } from '@coldpbc/enums';
-import { find, map, orderBy } from 'lodash';
-import { ColdIcon, ComplianceManagerOverviewSection, ComplianceProgressStatusIcon, ErrorFallback } from '@coldpbc/components';
-import { MQTTComplianceManagerPayloadComplianceSection, MQTTComplianceManagerPayloadComplianceSectionGroup } from '@coldpbc/interfaces';
+import { find, isUndefined, map, orderBy } from 'lodash';
+import { ColdIcon, ComplianceManagerOverviewSection, ComplianceProgressStatusIcon, ErrorFallback, Spinner } from '@coldpbc/components';
+import { ComplianceSidebarPayload, MQTTComplianceManagerPayloadComplianceSection, MQTTComplianceManagerPayloadComplianceSectionGroup } from '@coldpbc/interfaces';
 import React, { useContext, useEffect, useState } from 'react';
 import { useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
 import ColdMQTTContext from '../../../context/coldMQTTContext';
@@ -17,6 +17,9 @@ export interface ComplianceManagerOverviewSectionGroupProps {
 
 const _ComplianceManagerOverviewSectionGroup = ({ sectionGroup, position }: ComplianceManagerOverviewSectionGroupProps) => {
   const [collapseOpen, setCollapseOpen] = useState(false);
+  const [sectionsData, setSectionsData] = useState<{
+    [key: string]: ComplianceSidebarPayload | undefined;
+  }>({});
   const { orgId } = useAuth0Wrapper();
   const { subscribeSWR, publishMessage, connectionStatus, client } = useContext(ColdMQTTContext);
   const context = useContext(ColdComplianceManagerContext);
@@ -32,6 +35,15 @@ const _ComplianceManagerOverviewSectionGroup = ({ sectionGroup, position }: Comp
     error: any;
   };
 
+  const getComplianceSectionGroupTopic = () => {
+    return `ui/${resolveNodeEnv()}/${orgId}/${name}/${sectionGroup.id}/#`;
+  };
+
+  const sectionsSub = useSWRSubscription(getComplianceSectionGroupTopic(), subscribeSWR) as {
+    data: ComplianceSidebarPayload | undefined;
+    error: any;
+  };
+
   const getGroupCounts = () => {
     const sectionGroupCounts = find(complianceCounts?.data?.compliance_section_groups, { id: sectionGroup.id });
     return {
@@ -42,20 +54,22 @@ const _ComplianceManagerOverviewSectionGroup = ({ sectionGroup, position }: Comp
     };
   };
 
+  const publishSectionListMessage = () => {
+    publishMessage(
+      `platform/${resolveNodeEnv()}/compliance/getComplianceSectionList`,
+      JSON.stringify({
+        reply_to: getComplianceSectionListTopic(),
+        resource: 'complianceSectionList',
+        method: 'GET',
+        compliance_set_name: name,
+        compliance_section_group_id: sectionGroup.id,
+      }),
+    );
+  };
+
   useEffect(() => {
-    if (client?.current && connectionStatus) {
-      publishMessage(
-        `platform/${resolveNodeEnv()}/compliance/getComplianceSectionList`,
-        JSON.stringify({
-          reply_to: getComplianceSectionListTopic(),
-          resource: 'complianceSectionList',
-          method: 'GET',
-          compliance_set_name: name,
-          compliance_section_group_id: sectionGroup.id,
-        }),
-      );
-    }
-  }, [connectionStatus, name, publishMessage, client]);
+    publishSectionListMessage();
+  }, [publishMessage, getComplianceSectionListTopic, sectionGroup.id]);
 
   useEffect(() => {
     // open the first section group by default on load
@@ -64,16 +78,46 @@ const _ComplianceManagerOverviewSectionGroup = ({ sectionGroup, position }: Comp
     }
   }, []);
 
-  const orderedData = orderBy(data, ['order'], ['asc']);
+  useEffect(() => {
+    if (
+      !isUndefined(sectionsSub.data) &&
+      sectionsSub.data.compliance_section_groups &&
+      sectionsSub.data.compliance_section_groups.length > 0 &&
+      sectionsSub.data.compliance_section_groups[0].compliance_sections &&
+      sectionsSub.data.compliance_section_groups[0].compliance_sections.length > 0
+    ) {
+      const sectionId = sectionsSub.data.compliance_section_groups[0].compliance_sections[0].id;
+      setSectionsData(prev => {
+        return {
+          ...prev,
+          [sectionId]: sectionsSub.data,
+        };
+      });
+    }
+  }, [sectionsSub.data]);
 
-  logBrowser('Compliance Manager Overview Section Group', 'info', {
-    data,
-    error,
-    orderedData,
-    collapseOpen,
-    orgId,
-    topic: getComplianceSectionListTopic(),
-  });
+  useEffect(() => {
+    // if data is undefined publish a new message after 1 second. clear the timeout if the component is unmounted
+    const interval = setInterval(() => {
+      if (!data) {
+        publishSectionListMessage();
+      }
+    }, 1500);
+    return () => clearInterval(interval);
+  }, [data]);
+
+  const orderedData = data ? orderBy(data, ['order'], ['asc']) : undefined;
+
+  useEffect(() => {
+    logBrowser(`Compliance Manager Overview Section Group: ${sectionGroup.title}`, 'info', {
+      data,
+      error,
+      orderedData,
+      collapseOpen,
+      orgId,
+      sectionGroup,
+    });
+  }, [collapseOpen, data, error, logBrowser, orderedData, orgId, sectionGroup]);
 
   const sectionGroupCounts = getGroupCounts();
 
@@ -130,7 +174,7 @@ const _ComplianceManagerOverviewSectionGroup = ({ sectionGroup, position }: Comp
           className={'rounded-[8px] border-[1px] border-gray-60 bg-gray-50 py-[4px] pl-[4px] pr-[8px] flex flex-row gap-[4px] items-center w-[68px] justify-start'}
           key={status.status}>
           {getProgressIcon(status.status)}
-          <div className={'text-tc-primary text-body font-bold'}>{status.count}</div>
+          {complianceCounts?.isValidating ? <Spinner /> : <div className={'text-tc-primary text-body font-bold'}>{status.count}</div>}
         </div>
       );
     });
@@ -156,9 +200,19 @@ const _ComplianceManagerOverviewSectionGroup = ({ sectionGroup, position }: Comp
         </div>
       </div>
       <div className={'w-full flex flex-col gap-[36px] bg-transparent'}>
-        {map(orderedData, (section, index) => {
-          return <ComplianceManagerOverviewSection key={`${section.id}-${index}`} section={section} groupId={sectionGroup.id} collapseOpen={collapseOpen} />;
-        })}
+        {orderedData
+          ? map(orderedData, (section, index) => {
+              return (
+                <ComplianceManagerOverviewSection
+                  key={`${section.id}-${index}`}
+                  section={section}
+                  groupId={sectionGroup.id}
+                  collapseOpen={collapseOpen}
+                  sectionData={sectionsData[section.id]}
+                />
+              );
+            })
+          : collapseOpen && <Spinner />}
       </div>
     </div>
   );

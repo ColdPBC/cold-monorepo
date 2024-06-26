@@ -4,7 +4,6 @@ import { useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
 import React, { useContext, useEffect, useRef } from 'react';
 import ColdMQTTContext from '../../../context/coldMQTTContext';
 import { ColdComplianceManagerContext } from '@coldpbc/context';
-import useSWRSubscription from 'swr/subscription';
 import { ComplianceManagerSectionProgressBar, ErrorFallback } from '@coldpbc/components';
 import { ComplianceManagerStatus } from '@coldpbc/enums';
 import { resolveNodeEnv } from '@coldpbc/fetchers';
@@ -16,14 +15,16 @@ const _ComplianceManagerOverviewSection = ({
   section,
   groupId,
   collapseOpen,
+  sectionData,
 }: {
   section: MQTTComplianceManagerPayloadComplianceSection;
   groupId: string;
   collapseOpen: boolean;
+  sectionData: ComplianceSidebarPayload | undefined;
 }) => {
   const navigate = useNavigate();
   const { orgId } = useAuth0Wrapper();
-  const { subscribeSWR, publishMessage, connectionStatus, client } = useContext(ColdMQTTContext);
+  const { publishMessage, connectionStatus, client } = useContext(ColdMQTTContext);
   const totalQuestions = useRef(0);
   const context = useContext(ColdComplianceManagerContext);
   const { status } = context;
@@ -32,31 +33,40 @@ const _ComplianceManagerOverviewSection = ({
 
   const sectionTopic = `ui/${resolveNodeEnv()}/${orgId}/${name}/${groupId}/${section.id}`;
 
-  const { data, error } = useSWRSubscription(sectionTopic, subscribeSWR) as {
-    data: ComplianceSidebarPayload | undefined;
-    error: unknown;
-  };
-
-  const questions = data?.compliance_section_groups?.[0]?.compliance_sections?.[0]?.compliance_questions;
-  const orderedQuestions = orderBy(questions, ['order'], ['asc']);
+  const questions = sectionData?.compliance_section_groups?.[0]?.compliance_sections?.[0]?.compliance_questions;
+  const orderedQuestions = questions ? orderBy(questions, ['order'], ['asc']) : undefined;
   const sectionAIStatus = currentAIStatus?.find(s => s.section === section.key);
 
+  const publishQuestionListMessage = () => {
+    publishMessage(
+      `platform/${resolveNodeEnv()}/compliance/getComplianceQuestionList`,
+      JSON.stringify({
+        reply_to: sectionTopic,
+        resource: 'complianceQuestionList',
+        method: 'GET',
+        compliance_set_name: name,
+        compliance_section_group_id: groupId,
+        compliance_section_id: section.id,
+        organization_id: orgId,
+      }),
+    );
+  };
+
   useEffect(() => {
-    if (client?.current && connectionStatus && orgId && collapseOpen) {
-      publishMessage(
-        `platform/${resolveNodeEnv()}/compliance/getComplianceQuestionList`,
-        JSON.stringify({
-          reply_to: sectionTopic,
-          resource: 'complianceQuestionList',
-          method: 'GET',
-          compliance_set_name: name,
-          compliance_section_group_id: groupId,
-          compliance_section_id: section.id,
-          organization_id: orgId,
-        }),
-      );
+    if (collapseOpen) {
+      publishQuestionListMessage();
     }
   }, [connectionStatus, name, publishMessage, client, collapseOpen, orgId, currentAIStatus]);
+
+  useEffect(() => {
+    // set interval to publish message to get compliance question list every second if questions are undefined
+    const interval = setInterval(() => {
+      if (!orderedQuestions) {
+        publishQuestionListMessage();
+      }
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [orderedQuestions]);
 
   const isAIRunning = () => {
     if (status === ComplianceManagerStatus.startedAi) {
@@ -82,15 +92,6 @@ const _ComplianceManagerOverviewSection = ({
   if (section._count.compliance_questions === 0) {
     return null;
   }
-
-  logBrowser(`Compliance Manager Overview Section: ${section.title}`, 'info', {
-    section,
-    groupId,
-    data,
-    error,
-    currentAIStatus,
-    topic: sectionTopic,
-  });
 
   const backgroundColor = isAIRunning() ? 'bg-gray-60' : 'bg-bgc-accent';
   const textColor = isAIRunning() ? 'text-tc-disabled' : 'text-tc-primary';

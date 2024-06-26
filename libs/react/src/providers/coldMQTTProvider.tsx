@@ -2,11 +2,11 @@ import React, { PropsWithChildren, useEffect, useRef } from 'react';
 import mqtt from 'mqtt';
 import { useSWRConfig } from 'swr';
 import { forEach, set } from 'lodash';
-import { useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import { SWRSubscription } from 'swr/subscription';
 import ColdMQTTContext from '../context/coldMQTTContext';
 import { resolveNodeEnv } from '@coldpbc/fetchers';
+import { useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
 
 export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
   const { logBrowser } = useColdContext();
@@ -17,17 +17,17 @@ export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
   const { mutate } = useSWRConfig();
   const flags = useFlags();
 
-  useEffect(() => {
-    const getToken = async () => {
-      const audience = import.meta.env.VITE_COLD_API_AUDIENCE as string;
-      return await getAccessTokenSilently({
-        authorizationParams: {
-          audience: audience,
-          scope: 'offline_access email profile openid',
-        },
-      });
-    };
+  const getToken = async () => {
+    const audience = import.meta.env.VITE_COLD_API_AUDIENCE as string;
+    return await getAccessTokenSilently({
+      authorizationParams: {
+        audience: audience,
+        scope: 'offline_access email profile openid',
+      },
+    });
+  };
 
+  useEffect(() => {
     const connectToIOT = async () => {
       if (user && orgId) {
         const auth0_domain = import.meta.env.VITE_AUTH0_DOMAIN;
@@ -47,7 +47,7 @@ export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
             env,
           });
           client.current = mqtt.connect(url, {
-            clientId: `${org_id}-${Math.floor(Math.random() * 1000)}`,
+            clientId: `${org_id}-${env}-${Math.floor(Math.random() * 1000)}`,
             clean: false,
             properties: {
               sessionExpiryInterval: 24 * 60 * 60,
@@ -115,6 +115,12 @@ export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
           setConnectionStatus(false);
           logBrowser('Connection to IOT closed', 'info');
         });
+
+        client.current.setMaxListeners(Infinity);
+
+        client.current?.on('error', err => {
+          logBrowser('Error connecting to IOT', 'error', { err });
+        });
       }
     };
 
@@ -144,19 +150,36 @@ export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
       return () => {};
     }
     client.current?.subscribe(key, async (err, granted) => {
-      logBrowser('Subscribed to topic ' + key, 'info', { err, key, granted });
+      if (err) {
+        logBrowser('Error subscribing to topic ' + key, 'error', { err }, err);
+      } else {
+        logBrowser('Subscribed to topic ' + key, 'info', { err, key, granted });
+      }
       client.current?.on('message', async (topic, payload, packet) => {
         next(err, prev => {
-          if (topic !== key) {
-            return prev;
-          } else {
+          // if the topic is not the key or is not wildcard topic, return the previous value
+          // wildcard topics are when a # is used in the topic at the end
+          const topicSplit = topic.split('/');
+          const keySplit = key.split('/');
+          const isWildcard = keySplit[keySplit.length - 1] === '#';
+          // return previous if the topic is not the key
+          // but do not return previous if the topic is a wildcard topic and the key is a parent of the topic
+          if (topic === key || (isWildcard && topicSplit.length === keySplit.length)) {
             logBrowser(`Received message from IOT for ${key}`, 'info', {
               key,
               topic,
               payload: JSON.parse(payload.toString()),
             });
             return JSON.parse(payload.toString());
+          } else {
+            logBrowser(`Ignoring message from IOT for ${key}`, 'info', {
+              key,
+              topic,
+              payload: JSON.parse(payload.toString()),
+            });
+            return prev;
           }
+          ``;
         });
       });
     });
