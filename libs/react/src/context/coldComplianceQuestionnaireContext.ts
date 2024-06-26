@@ -1,9 +1,10 @@
 import { createContext } from 'react';
-import { ComplianceSidebarPayload, QuestionnaireQuestionComplianceResponse } from '@coldpbc/interfaces';
+import { Compliance, ComplianceSidebarPayload, QuestionnaireQuestionComplianceResponse } from '@coldpbc/interfaces';
 import { SWRResponse } from 'swr';
 
 export interface ComplianceQuestionnaireContextType {
   name: string;
+  complianceDefinition: Compliance | undefined;
   scrollToQuestion: string | null;
   setScrollToQuestion: (question: string | null) => void;
   focusQuestion: {
@@ -35,6 +36,7 @@ export interface ComplianceQuestionnaireContextType {
 
 export const ColdComplianceQuestionnaireContext = createContext<ComplianceQuestionnaireContextType>({
   name: '',
+  complianceDefinition: undefined,
   scrollToQuestion: null,
   setScrollToQuestion: () => {},
   focusQuestion: null,

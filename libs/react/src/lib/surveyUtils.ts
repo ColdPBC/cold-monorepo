@@ -813,7 +813,7 @@ export const getComplianceOrgResponseAnswer = (component: string, compliance_res
   }
 };
 
-export const getComplianceOrgResponseAdditionalContextAnswer = (additional_context: SurveyAdditionalContext | undefined) => {
+export const getComplianceOrgResponseAdditionalContextAnswer = (additional_context: SurveyAdditionalContext | undefined | null) => {
   if (!additional_context) {
     return null;
   }
@@ -836,5 +836,32 @@ export const getComplianceOrgResponseAdditionalContextAnswer = (additional_conte
     return returnValue;
   } else {
     return value;
+  }
+};
+
+export const getComplianceQuestionnaireQuestionScore = (questionInput: any, question: QuestionnaireQuestion) => {
+  const { answer_score_map, component } = question;
+  if (questionInput === null || questionInput === undefined || answer_score_map === undefined) {
+    return 0;
+  } else {
+    switch (component) {
+      case 'yes_no':
+        const key = questionInput ? 'true' : 'false';
+        return answer_score_map[key] === undefined ? 0 : answer_score_map[key];
+      case 'select':
+        return answer_score_map[questionInput[0]] === undefined ? 0 : answer_score_map[questionInput[0]];
+      case 'multi_select':
+        let score = 0;
+        questionInput.forEach((input: string) => {
+          score += answer_score_map[input];
+        });
+        return score;
+      default:
+        try {
+          return answer_score_map[questionInput] === undefined ? 0 : answer_score_map[questionInput];
+        } catch (e) {
+          return 0;
+        }
+    }
   }
 };

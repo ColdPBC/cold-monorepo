@@ -18,7 +18,7 @@ import {
   ComplianceQuestionnaireContextType,
 } from '@coldpbc/context';
 import { getAllFilesMock } from './filesMock';
-import { getComplianceCountsMock, getQuestionnaireSidebarComplianceMock } from './complianceMock';
+import { getComplianceCountsMock, getComplianceMock, getQuestionnaireSidebarComplianceMock } from './complianceMock';
 import { ComplianceManagerCountsPayload, QuestionnaireQuestionComplianceResponse } from '@coldpbc/interfaces';
 
 export interface StoryMockProviderProps {
@@ -131,6 +131,7 @@ export const StoryMockProvider = (props: PropsWithChildren<StoryMockProviderProp
       isLoading: false,
       mutate: () => Promise.resolve(),
     } as SWRResponse<any, any, any>,
+    complianceDefinition: getComplianceMock().find(compliance => compliance.name === 'rei_pia_2024'),
     ...props.complianceQuestionnaireContext,
     scrollToQuestion: complianceQuestionnaireScrollToQuestion,
     setScrollToQuestion: props.complianceQuestionnaireContext?.setScrollToQuestion ?? setComplianceQuestionnaireScrollToQuestion,

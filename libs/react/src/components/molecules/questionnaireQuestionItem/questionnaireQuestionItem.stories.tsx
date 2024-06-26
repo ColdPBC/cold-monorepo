@@ -3,7 +3,7 @@ import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { QuestionnaireQuestionItem } from '@coldpbc/components';
 import { QuestionnaireQuestion } from '@coldpbc/interfaces';
-import { StoryMockProvider } from '@coldpbc/mocks';
+import { getComplianceMock, StoryMockProvider } from '@coldpbc/mocks';
 
 const meta: Meta<typeof QuestionnaireQuestionItem> = {
   title: 'Molecules/QuestionnaireQuestionItem',
@@ -381,9 +381,104 @@ export const AdditionalContext: Story = {
   },
 };
 
+export const SelectWithPointsInTargetScoreCompliance: Story = {
+  render: args => {
+    return <BCorpQuestionnaire {...args} />;
+  },
+  args: {
+    number: 1,
+    question: {
+      id: 'cq_bf5zjdjlpz01r09j',
+      key: 'GHG-6',
+      order: 37,
+      component: 'select',
+      prompt: 'Does your brand calculate the carbon emissions from individual products you sell?',
+      tooltip: '',
+      placeholder: '',
+      options: [
+        'Yes, we calculate the carbon emissions from every product we sell, including those we sell to REI.',
+        'Yes, we calculate the carbon emissions from a subset of the products we sell, including those we sell to REI.',
+        'Yes, we calculate the carbon emissions from a subset of the products we sell, but not including those we sell to REI.',
+        'No',
+      ],
+      additional_context: null,
+      compliance_responses: [],
+      bookmarked: false,
+      ai_answered: false,
+      user_answered: false,
+      not_started: true,
+      score: 0,
+      max_score: 1.7,
+      answer_score_map: {
+        No: 0,
+        'Yes, we calculate the carbon emissions from every product we sell, including those we sell to REI.': 1,
+        'Yes, we calculate the carbon emissions from a subset of the products we sell, including those we sell to REI.': 0.5,
+        'Yes, we calculate the carbon emissions from a subset of the products we sell, but not including those we sell to REI.': 0.2,
+      },
+    },
+  },
+};
+
+export const SelectWithPointsInTargetScoreComplianceAlreadyAnswered: Story = {
+  render: args => {
+    return <BCorpQuestionnaire {...args} />;
+  },
+  args: {
+    number: 1,
+    question: {
+      id: 'cq_bf5zjdjlpz01r09j',
+      key: 'GHG-6',
+      order: 37,
+      component: 'select',
+      prompt: 'Does your brand calculate the carbon emissions from individual products you sell?',
+      tooltip: '',
+      placeholder: '',
+      options: [
+        'Yes, we calculate the carbon emissions from every product we sell, including those we sell to REI.',
+        'Yes, we calculate the carbon emissions from a subset of the products we sell, including those we sell to REI.',
+        'Yes, we calculate the carbon emissions from a subset of the products we sell, but not including those we sell to REI.',
+        'No',
+      ],
+      additional_context: null,
+      compliance_responses: [
+        {
+          org_response: {
+            value: ['Yes, we calculate the carbon emissions from every product we sell, including those we sell to REI.'],
+          },
+          ai_response: null,
+        },
+      ],
+      bookmarked: false,
+      ai_answered: false,
+      user_answered: true,
+      not_started: false,
+      score: 0,
+      max_score: 1.7,
+      answer_score_map: {
+        No: 0,
+        'Yes, we calculate the carbon emissions from every product we sell, including those we sell to REI.': 1,
+        'Yes, we calculate the carbon emissions from a subset of the products we sell, including those we sell to REI.': 0.5,
+        'Yes, we calculate the carbon emissions from a subset of the products we sell, but not including those we sell to REI.': 0.2,
+      },
+    },
+  },
+};
+
 const QuestionnaireStory = (args: { question: QuestionnaireQuestion; number: number }) => {
   return (
     <StoryMockProvider>
+      <QuestionnaireQuestionItem {...args} questionnaireMutate={() => {}} sectionId={'1'} sectionGroupId={'1'} />
+    </StoryMockProvider>
+  );
+};
+
+const BCorpQuestionnaire = (args: { question: QuestionnaireQuestion; number: number }) => {
+  return (
+    <StoryMockProvider
+      complianceQuestionnaireContext={{
+        name: 'b_corp_2024',
+        complianceDefinition: getComplianceMock().find(compliance => compliance.name === 'b_corp_2024'),
+      }}>
       <QuestionnaireQuestionItem {...args} questionnaireMutate={() => {}} sectionId={'1'} sectionGroupId={'1'} />
     </StoryMockProvider>
   );

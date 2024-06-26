@@ -6,6 +6,7 @@ import {
   getComplianceAIResponseValue,
   getComplianceOrgResponseAdditionalContextAnswer,
   getComplianceOrgResponseAnswer,
+  getComplianceQuestionnaireQuestionScore,
   ifAdditionalContextConditionMet,
   isComplianceAIResponseValueValid,
 } from '@coldpbc/lib';
@@ -20,13 +21,31 @@ import { useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
 import { isAxiosError } from 'axios';
 import { withErrorBoundary } from 'react-error-boundary';
 import { useSearchParams } from 'react-router-dom';
+import { isDefined } from 'class-validator';
 
 const _QuestionnaireQuestionItem = (props: { question: QuestionnaireQuestion; number: number; sectionId: string; sectionGroupId: string; questionnaireMutate: () => void }) => {
   const { logBrowser } = useColdContext();
-  const { name, focusQuestion, setFocusQuestion, scrollToQuestion, setScrollToQuestion, sectionGroups } = useContext(ColdComplianceQuestionnaireContext);
+  const { name, focusQuestion, setFocusQuestion, scrollToQuestion, setScrollToQuestion, sectionGroups, complianceDefinition } = useContext(ColdComplianceQuestionnaireContext);
   const { orgId } = useAuth0Wrapper();
   const { question, number, sectionId, sectionGroupId, questionnaireMutate } = props;
-  const { id, key, prompt, options, tooltip, component, placeholder, bookmarked, user_answered, ai_answered, additional_context, ai_attempted, compliance_responses } = question;
+  const {
+    id,
+    key,
+    prompt,
+    options,
+    tooltip,
+    component,
+    placeholder,
+    bookmarked,
+    user_answered,
+    ai_answered,
+    additional_context,
+    ai_attempted,
+    compliance_responses,
+    max_score,
+    score,
+    answer_score_map,
+  } = question;
   const [params, setParams] = useSearchParams();
   const value = getComplianceOrgResponseAnswer(component, compliance_responses);
   const ai_response = compliance_responses.length === 0 ? null : compliance_responses[0]?.ai_response;
@@ -58,6 +77,7 @@ const _QuestionnaireQuestionItem = (props: { question: QuestionnaireQuestion; nu
   const [additionalContextOpen, setAdditionalContextOpen] = useState<boolean>(false);
   const [additionalContextInput, setAdditionalContextInput] = useState<any | undefined>(additionalContextValue);
   const [buttonLoading, setButtonLoading] = useState<boolean>(false);
+  const [questionScore, setQuestionScore] = useState<number | undefined>(score);
 
   useEffect(() => {
     let timer: NodeJS.Timeout;
@@ -97,6 +117,23 @@ const _QuestionnaireQuestionItem = (props: { question: QuestionnaireQuestion; nu
       },
     });
   }, [questionInput, questionAnswerSaved, questionAnswerChanged]);
+
+  useEffect(() => {
+    console.log({
+      questionAnswerSaved,
+      questionAnswerChanged,
+      questionScore,
+      questionInput,
+      answer_score_map,
+      complianceDefinition,
+      complianceType: complianceDefinition?.metadata?.compliance_type,
+    });
+    if (isDefined(questionInput) && (questionAnswerSaved || (!questionAnswerChanged && !questionAnswerSaved)) && showScore()) {
+      // update the question score using the answer_score_map
+      const newScore = getComplianceQuestionnaireQuestionScore(questionInput, question);
+      setQuestionScore(newScore);
+    }
+  }, [answer_score_map, complianceDefinition, question, questionAnswerSaved, questionAnswerChanged, questionInput, questionScore]);
 
   const getQuestionStatusIcon = () => {
     return (
@@ -396,6 +433,41 @@ const _QuestionnaireQuestionItem = (props: { question: QuestionnaireQuestion; nu
     );
   };
 
+  const showScore = () => {
+    if (
+      questionScore !== undefined &&
+      questionScore !== null &&
+      max_score &&
+      answer_score_map &&
+      complianceDefinition &&
+      complianceDefinition.metadata?.compliance_type === 'target_score'
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  const getFooter = () => {
+    if (showScore()) {
+      return (
+        <div className={'w-full pb-[24px] flex flex-row justify-between items-center'}>
+          {getScore()}
+          {getSubmitButton()}
+        </div>
+      );
+    } else {
+      return <div className={'w-full pb-[24px] flex flex-row justify-end'}>{getSubmitButton()}</div>;
+    }
+  };
+
+  const getScore = () => {
+    const hasScore = questionScore !== undefined && questionScore !== null && questionScore > 0;
+    const scoreText = hasScore ? `${questionScore?.toFixed(2)} of ${max_score?.toFixed(2)} points earned` : `${max_score?.toFixed(1)} points available`;
+    const className = hasScore ? 'text-tc-primary' : 'text-tc-disabled';
+    return <div className={className}>{scoreText}</div>;
+  };
+
   const getSubmitButton = () => {
     let label = 'Complete';
     let disabled = true;
@@ -424,14 +496,12 @@ const _QuestionnaireQuestionItem = (props: { question: QuestionnaireQuestion; nu
     }
 
     return (
-      <div className={'w-full pb-[24px] flex flex-row justify-end'}>
-        <BaseButton variant={variant} disabled={disabled} onClick={onClick} loading={loading}>
-          <div className={'w-full flex flex-row gap-[8px] items-center'}>
-            <ColdIcon name={iconLeftName} />
-            {label}
-          </div>
-        </BaseButton>
-      </div>
+      <BaseButton variant={variant} disabled={disabled} onClick={onClick} loading={loading}>
+        <div className={'w-full flex flex-row gap-[8px] items-center'}>
+          <ColdIcon name={iconLeftName} />
+          {label}
+        </div>
+      </BaseButton>
     );
   };
 
@@ -585,7 +655,7 @@ const _QuestionnaireQuestionItem = (props: { question: QuestionnaireQuestion; nu
       <div className="w-full justify-center mb-[24px]">{inputComponent()}</div>
       {additionalContext()}
       {getAISource()}
-      {getSubmitButton()}
+      {getFooter()}
     </div>
   );
 };

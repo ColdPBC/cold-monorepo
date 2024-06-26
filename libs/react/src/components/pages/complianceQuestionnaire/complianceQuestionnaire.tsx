@@ -72,6 +72,7 @@ const _ComplianceQuestionnaire = () => {
     <ColdComplianceQuestionnaireContext.Provider
       value={{
         name: complianceName || '',
+        complianceDefinition: selectedCompliance?.compliance_definition || undefined,
         scrollToQuestion,
         setScrollToQuestion,
         focusQuestion,
