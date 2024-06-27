@@ -1799,6 +1799,7 @@ export function getQuestionnaireContainerMock(sectionGroupId: string, sectionId:
 export function getComplianceCountsMock(): ComplianceManagerCountsPayload {
   return {
     name: 'rei_pia_2024',
+    statuses: [],
     compliance_section_groups: [
       {
         id: 'csg_m3dt64ix15uiap6e',

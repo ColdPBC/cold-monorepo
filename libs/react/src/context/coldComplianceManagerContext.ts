@@ -1,10 +1,9 @@
-import { Compliance, ComplianceManagerCountsPayload, ComplianceSidebarPayload, CurrentAIStatusPayload, OrgCompliance } from '@coldpbc/interfaces';
+import { Compliance, ComplianceManagerCountsPayload, ComplianceSidebarPayload, CurrentAIStatusPayload } from '@coldpbc/interfaces';
 import { ComplianceManagerStatus } from '@coldpbc/enums';
 import React, { createContext } from 'react';
 import { SWRResponse } from 'swr';
 
 export interface ComplianceManagerData {
-  orgCompliances: OrgCompliance[] | undefined;
   complianceCounts: SWRResponse<ComplianceManagerCountsPayload, any, any> | undefined;
   files: SWRResponse<any[], any, any> | undefined;
   currentAIStatus: CurrentAIStatusPayload | undefined;
@@ -23,7 +22,6 @@ export interface ComplianceManagerContextType {
 
 export const ColdComplianceManagerContext = createContext<ComplianceManagerContextType>({
   data: {
-    orgCompliances: undefined,
     complianceCounts: undefined,
     files: undefined,
     name: '',

@@ -215,6 +215,13 @@ export interface ComplianceManagerCountsPayload {
     ai_answered: number;
     bookmarked: number;
   };
+  statuses: {
+    id: string;
+    email: string;
+    type: string;
+    created_at: string;
+    updated_at: string;
+  }[];
 }
 
 export interface ComplianceManagerCountsSectionGroup {
