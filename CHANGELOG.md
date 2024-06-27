@@ -1,3 +1,10 @@
+# [1.266.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.265.1...v1.266.0) (2024-06-27)
+
+
+### Features
+
+* add cache service in compliance response repository ([d83439d](https://github.com/ColdPBC/cold-monorepo/commit/d83439de285dc8b2aaf8c5e98d5b845dfba4975f))
+
 ## [1.265.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.265.0...v1.265.1) (2024-06-27)
 
 
