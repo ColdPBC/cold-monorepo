@@ -1,3 +1,10 @@
+## [1.265.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.265.0...v1.265.1) (2024-06-27)
+
+
+### Bug Fixes
+
+* error being throw while scoring comliance sets ([d35ee9b](https://github.com/ColdPBC/cold-monorepo/commit/d35ee9b9ac19bedf5c5fc470904a58212b42867c))
+
 # [1.265.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.264.0...v1.265.0) (2024-06-27)
 
 
