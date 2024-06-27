@@ -230,76 +230,86 @@ export class FilteringService extends BaseWorker {
    * @param component
    */
   questionHasValidAnswer(response: any, property: string, component: string): boolean {
-    if (response) {
-      // if the response answer or value is empty or null or undefined return false
-      if (response[property] === null || response[property] === '' || !Object.prototype.hasOwnProperty.call(response, property)) {
-        return false;
+    try {
+      if (response) {
+        // if the response answer or value is empty or null or undefined return false
+        if (response[property] === null || response[property] === '' || !Object.prototype.hasOwnProperty.call(response, property)) {
+          return false;
+        }
+
+        switch (component) {
+          case 'multi_text':
+          case 'multi_select':
+          case 'select': {
+            if (Array.isArray(response[property]) && response[property].length > 0) {
+              return true;
+            } else if (typeof response[property] === 'string') {
+              response[property] = [response[property]];
+              return true;
+            } else {
+              this.logger.error(`answer not correctly formatted; expected array got ${typeof response[property]}`, { response, property, component });
+              return false;
+            }
+          }
+          case 'string':
+          case 'number': {
+            if (Array.isArray(response[property]) && typeof response[property][0] === component) {
+              return true;
+            } else if (typeof response[property] === 'number' || typeof response[property] === 'string') {
+              response[property] = [response[property]];
+              return true;
+            } else {
+              this.logger.error(`number/string answer not correctly formatted; expected string got ${typeof response[property]}`, { response, property, component });
+              return false;
+            }
+          }
+
+          case 'yes_no': {
+            if (Array.isArray(response[property]) && typeof response[property][0] === 'boolean') {
+              return true;
+            } else if (typeof response[property] === 'boolean') {
+              response[property] = [response[property]];
+              return true;
+            } else if (typeof response[property] === 'string') {
+              response[property] = [response[property] === 'true'];
+              return true;
+            } else {
+              this.logger.error(`yes_no answer not correctly formatted; expected boolean got ${typeof response[property]}`, { response, property, component });
+              return false;
+            }
+          }
+          case 'textarea':
+          case 'text': {
+            if (Array.isArray(response[property]) && typeof response[property][0] == 'string') {
+              return true;
+            } else if (typeof response[property] === 'string') {
+              response[property] = [response[property]];
+              return true;
+            } else {
+              this.logger.warn(`text/textarea answer not correctly formatted; expected string got ${typeof response[property]}`, { response, property, component });
+              return false;
+            }
+          }
+          case 'percent_slider': {
+            if (Array.isArray(response[property]) && typeof response[property][0] == 'number' && response[property][0] >= 0 && response[property][0] <= 100) {
+              return true;
+            } else if (typeof response[property] === 'number') {
+              response[property] = [response[property]];
+              return true;
+            } else {
+              this.logger.warn(`percent_slider answer not correctly formatted; expected number got ${typeof response[property]}`, { response, property, component });
+              return false;
+            }
+          }
+          default:
+            this.logger.warn(`unknown component type: ${component}`, { response, property, component });
+            return true;
+        }
       }
-
-      switch (component) {
-        case 'multi_text':
-        case 'multi_select':
-        case 'select': {
-          if (Array.isArray(response[property]) && response[property].length > 0) {
-            return true;
-          } else {
-            this.logger.error(`answer not correctly formatted`, { response, property, component });
-            return true;
-          }
-        }
-        case 'string':
-        case 'number': {
-          if (typeof response[property] == component) {
-            return true;
-          } else {
-            this.logger.error(`number/string answer not correctly formatted`, { response, property, component });
-            return true;
-          }
-        }
-
-        case 'yes_no': {
-          if (typeof response[property] == 'boolean') {
-            return true;
-          } else {
-            if (Array.isArray(response[property]) && typeof response[property][0] === 'boolean') {
-              this.logger.warn(`expected boolean got array`, { response, property, component });
-              return true;
-            }
-
-            this.logger.error(`yes_no answer not correctly formatted`, { response, property, component });
-            return false;
-          }
-        }
-        case 'textarea':
-        case 'text': {
-          if (typeof response[property] == 'string' && response[property].length > 0) {
-            return true;
-          } else {
-            if (Array.isArray(response[property]) && typeof response[property][0] === 'boolean') {
-              this.logger.warn(`expected string got array`, { response, property, component });
-              return true;
-            }
-            this.logger.error(`textarea answer not correctly formatted`, { response, property, component });
-            return false;
-          }
-        }
-        case 'percent_slider': {
-          if (typeof response[property] == 'number' && response[property] >= 0 && response[property] <= 100) {
-            return true;
-          } else {
-            if (Array.isArray(response[property]) && typeof response[property][0] === 'boolean') {
-              this.logger.warn(`expected number got array`, { response, property, component });
-              return true;
-            }
-            this.logger.error(`percent_slider answer not correctly formatted`, { response, property, component });
-            return false;
-          }
-        }
-        default:
-          this.logger.error(`answer not correctly formatted`, { response, property, component });
-          return true;
-      }
+      return false;
+    } catch (error) {
+      this.logger.error(`Error evaluating expression: ${error.message}`, { ...error });
+      return false;
     }
-    return false;
   }
 }
