@@ -7,7 +7,7 @@ import { useColdContext } from '@coldpbc/hooks';
 
 export const UploadComplianceDocumentsModal = ({ setButtonDisabled }: { setButtonDisabled: (loading: boolean) => void }) => {
   const { data } = useContext(ColdComplianceManagerContext);
-  const { mqttComplianceSet, files, name } = data;
+  const { compliance, files, name } = data;
   const { logBrowser } = useColdContext();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [newFiles, setNewFiles] = useState<
@@ -84,7 +84,7 @@ export const UploadComplianceDocumentsModal = ({ setButtonDisabled }: { setButto
             '\n' +
             "You'll always be able to review and edit yourself before submitting anything.\n" +
             '\n' +
-            `You can upload as many or as few documents as you want. We recommend uploading any of the following for ${mqttComplianceSet?.compliance_definition.title}.\n` +
+            `You can upload as many or as few documents as you want. We recommend uploading any of the following for ${compliance?.title}.\n` +
             '\n' +
             '- Other retailer sustainability compliance forms\n' +
             '- Supplier code of conduct\n' +

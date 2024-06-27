@@ -8,7 +8,7 @@ import { ComplianceManagerStatus, IconNames } from '@coldpbc/enums';
 import { format } from 'date-fns';
 import { withErrorBoundary } from 'react-error-boundary';
 import ColdMQTTContext from '../../../context/coldMQTTContext';
-import { ComplianceManagerCountsPayload, ComplianceSidebarPayload, CurrentAIStatusPayload, MQTTComplianceManagerPayload, OrgCompliance } from '@coldpbc/interfaces';
+import { ComplianceManagerCountsPayload, ComplianceSidebarPayload, CurrentAIStatusPayload, OrgCompliance } from '@coldpbc/interfaces';
 import useSWRSubscription from 'swr/subscription';
 import useSWR from 'swr';
 import { axiosFetcher, resolveNodeEnv } from '@coldpbc/fetchers';
@@ -31,12 +31,8 @@ const _ComplianceManager = () => {
   const sectionGroups = useSWR<ComplianceSidebarPayload, any, any>(getSectionGroupDataUrl(), axiosFetcher);
   const orgCompliances = useSWR<OrgCompliance[], any, any>(orgId ? [`/compliance_definitions/organizations/${orgId}`, 'GET'] : null, axiosFetcher);
   const files = useOrgSWR<any[], any>([`/files`, 'GET'], axiosFetcher);
+  const statuses = useSWR<any[], any, any>([`/compliance/${name}/organizations/${orgId}/statuses`, 'GET'], axiosFetcher);
 
-  const topic = `ui/${resolveNodeEnv()}/${orgId}/${name}/complianceManagementPage`;
-  const { data, error } = useSWRSubscription(topic, subscribeSWR) as {
-    data: MQTTComplianceManagerPayload | undefined;
-    error: any;
-  };
   const getCurrentAIStatusTopic = () => {
     if (orgId) {
       return `ui/${resolveNodeEnv()}/${orgId}/${name}/currentAiStatus`;
@@ -55,25 +51,21 @@ const _ComplianceManager = () => {
 
   const countsDataSWR = useSWR<ComplianceManagerCountsPayload, any, any>(getCountsDataUrl(), axiosFetcher);
 
-  const compliance = data?.compliance_definition;
+  const orgCompliance = find(orgCompliances.data, { compliance_definition: { name } });
+
+  const compliance = orgCompliance?.compliance_definition;
 
   const publishSectionGroupMessage = () => {
-    publishMessage(
-      `platform/${resolveNodeEnv()}/compliance/getComplianceSectionGroupList`,
-      JSON.stringify({
-        reply_to: topic,
-        resource: 'complianceSectionGroupListByOrgIdCompNameKey',
-        method: 'GET',
-        compliance_set_name: name,
-      }),
-    );
+    // publishMessage(
+    //   `platform/${resolveNodeEnv()}/compliance/getComplianceSectionGroupList`,
+    //   JSON.stringify({
+    //     reply_to: topic,
+    //     resource: 'complianceSectionGroupListByOrgIdCompNameKey',
+    //     method: 'GET',
+    //     compliance_set_name: name,
+    //   }),
+    // );
   };
-
-  useEffect(() => {
-    if (client?.current && connectionStatus) {
-      publishSectionGroupMessage();
-    }
-  }, [connectionStatus, name, publishMessage, client]);
 
   useEffect(() => {
     if (orgCompliances) {
@@ -132,52 +124,40 @@ const _ComplianceManager = () => {
               }
             }
 
-            const statuses = data?.statuses;
-            if (statuses && statuses.length > 0) {
-              const recentStatus = statuses[0];
-              if (recentStatus.type === 'user_submitted') {
-                logBrowser(`Setting ${name} compliance manager status to submitted`, 'info', { name, recentStatus });
-                setStatus(ComplianceManagerStatus.submitted);
-              }
-            }
+            // const statuses = data?.statuses;
+            // if (statuses && statuses.length > 0) {
+            //   const recentStatus = statuses[0];
+            //   if (recentStatus.type === 'user_submitted') {
+            //     logBrowser(`Setting ${name} compliance manager status to submitted`, 'info', { name, recentStatus });
+            //     setStatus(ComplianceManagerStatus.submitted);
+            //   }
+            // }
           }
         }
       }
     }
-  }, [orgCompliances, files, currentAIStatus, countsDataSWR, name, data]);
-
-  useEffect(() => {
-    // set interval to check if data is undefined and if so, publish the message again
-    const interval = setInterval(() => {
-      if (!data) {
-        publishSectionGroupMessage();
-      }
-    }, 1500);
-    return () => clearInterval(interval);
-  }, [data]);
+  }, [orgCompliances, files, currentAIStatus, countsDataSWR, name]);
 
   useEffect(() => {
     logBrowser('Compliance Definition', 'info', {
       name,
-      data,
-      error,
       orgId,
       compliance,
       status,
       managementView,
       orgCompliances,
-      topic,
       currentAIStatus: currentAIStatus.data,
       files: files.data,
+      statuses: statuses.data,
     });
-  }, [orgCompliances, files, currentAIStatus, name, data, error, orgId, compliance, status, managementView, topic]);
+  }, [orgCompliances, files, currentAIStatus, name, orgId, compliance, status, managementView, statuses]);
 
-  if (!data || orgCompliances.isLoading || files.isLoading || countsDataSWR.isLoading || sectionGroups.isLoading) {
+  if (orgCompliances.isLoading || files.isLoading || countsDataSWR.isLoading || sectionGroups.isLoading) {
     return <Spinner />;
   }
 
-  const term = get(data, 'compliance_definition.metadata.term', undefined);
-  const due_date = get(data, 'compliance_definition.metadata.due_date', undefined);
+  const term = get(compliance, 'metadata.term', undefined);
+  const due_date = get(compliance, 'metadata.due_date', undefined);
   let termString = '';
   if (term) {
     termString = getTermString(term);
@@ -194,7 +174,7 @@ const _ComplianceManager = () => {
     <ColdComplianceManagerContext.Provider
       value={{
         data: {
-          mqttComplianceSet: data,
+          compliance: compliance,
           files: files,
           name: name || '',
           currentAIStatus: currentAIStatus?.data,

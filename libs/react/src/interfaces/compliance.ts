@@ -167,6 +167,7 @@ export interface QuestionnaireQuestion {
   ai_attempted?: boolean;
   score?: number;
   max_score?: number;
+  ai_score?: number;
   question_summary?: string;
   corresponding_question?: string;
   compliance_responses: QuestionnaireQuestionComplianceResponse[];

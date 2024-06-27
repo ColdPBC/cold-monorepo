@@ -21,9 +21,9 @@ export const ComplianceManagerOverviewModal = (props: ComplianceManagerOverviewM
   const modalRef = useRef<HTMLDivElement>(null);
   const { logBrowser } = useColdContext();
 
-  const { mqttComplianceSet, files, name } = data;
+  const { compliance, files, name } = data;
 
-  const complianceDefinition = mqttComplianceSet?.compliance_definition;
+  const complianceDefinition = compliance;
 
   const getModalHeaderIcon = () => {
     if (flowGuideStatus === ComplianceManagerFlowGuideStatus.activate) {
