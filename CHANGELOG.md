@@ -1,3 +1,11 @@
+# [1.265.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.264.0...v1.265.0) (2024-06-27)
+
+
+### Features
+
+* Add placeholder questions to questionnaire section ([a884c53](https://github.com/ColdPBC/cold-monorepo/commit/a884c5393ca907b1df4e051998578d4cca9c3b25))
+* Move loading spinner inside questionnaire section ([e550f8b](https://github.com/ColdPBC/cold-monorepo/commit/e550f8bcc796a6fae6500291cf640ea8a6ecaeee))
+
 # [1.264.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.263.0...v1.264.0) (2024-06-27)
 
 
