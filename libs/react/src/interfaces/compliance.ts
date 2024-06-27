@@ -244,3 +244,13 @@ export interface ComplianceManagerCountsSection {
     bookmarked: number;
   };
 }
+
+export interface AIDetails {
+  ai_response: QuestionnaireQuestionComplianceResponse['ai_response'];
+  ai_answered?: boolean;
+  ai_attempted?: boolean;
+  value?: any;
+  questionAnswerSaved: boolean;
+  questionAnswerChanged: boolean;
+  question: QuestionnaireQuestion;
+}

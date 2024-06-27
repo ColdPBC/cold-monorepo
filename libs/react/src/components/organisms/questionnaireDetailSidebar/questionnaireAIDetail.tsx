@@ -1,23 +1,13 @@
-import { QuestionnaireQuestionComplianceResponse } from '@coldpbc/interfaces';
+import { AIDetails } from '@coldpbc/interfaces';
 import { HexColors } from '@coldpbc/themes';
-import { getAIOriginalAnswer, isComplianceAnswerEqualToAIResponse } from '@coldpbc/lib';
+import { getComplianceAIResponseOriginalAnswer, isComplianceAnswerEqualToAIResponse } from '@coldpbc/lib';
 import { AiReferenceDropdown, ErrorFallback } from '@coldpbc/components';
 import { isNull } from 'lodash';
 import { withErrorBoundary } from 'react-error-boundary';
 import React from 'react';
 
 export interface QuestionnaireAIDetailProps {
-  aiDetails:
-    | {
-        ai_response: QuestionnaireQuestionComplianceResponse['ai_response'];
-        ai_answered?: boolean;
-        ai_attempted?: boolean;
-        value?: any | undefined;
-        questionAnswerSaved: boolean;
-        questionAnswerChanged: boolean;
-      }
-    | undefined
-    | null;
+  aiDetails: AIDetails | undefined | null;
 }
 
 const _QuestionnaireAIDetail = (props: QuestionnaireAIDetailProps) => {
@@ -25,7 +15,7 @@ const _QuestionnaireAIDetail = (props: QuestionnaireAIDetailProps) => {
   if (aiDetails === undefined || aiDetails === null) {
     return null;
   }
-  const { ai_response, ai_answered, value, questionAnswerSaved, questionAnswerChanged } = aiDetails;
+  const { ai_response, ai_answered, value, questionAnswerSaved, questionAnswerChanged, question } = aiDetails;
 
   const getAiTag = () => {
     let text = 'Low Confidence';
@@ -75,7 +65,7 @@ const _QuestionnaireAIDetail = (props: QuestionnaireAIDetailProps) => {
       <div className={'flex flex-col gap-[24px]'}>
         {ai_response ? (
           <>
-            <div className={'text-body font-bold w-full text-start'}>Original Answer: {getAIOriginalAnswer(ai_response)}</div>
+            <div className={'text-body font-bold w-full text-start'}>Original Answer: {getComplianceAIResponseOriginalAnswer(ai_response, question)}</div>
             <div className={'text-body w-full text-start'}>{ai_response?.justification}</div>
             <div className={'flex flex-col gap-[8px] w-full'}>
               {ai_response?.references && ai_response?.references?.length > 0 && <div className={'text-h5'}>Documents Referenced</div>}
