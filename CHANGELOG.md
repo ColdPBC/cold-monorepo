@@ -1,3 +1,10 @@
+# [1.264.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.263.0...v1.264.0) (2024-06-27)
+
+
+### Features
+
+* Update sidebar styles ([d927021](https://github.com/ColdPBC/cold-monorepo/commit/d927021d2aa277ee27ddd0a12ac7df114d0363fd))
+
 # [1.263.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.262.0...v1.263.0) (2024-06-26)
 
 
