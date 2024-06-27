@@ -165,21 +165,20 @@ export const ColdMQTTProvider = ({ children }: PropsWithChildren) => {
           // return previous if the topic is not the key
           // but do not return previous if the topic is a wildcard topic and the key is a parent of the topic
           if (topic === key || (isWildcard && topicSplit.length === keySplit.length)) {
-            logBrowser(`Received message from IOT for ${key}`, 'info', {
+            logBrowser(`Received message from IOT for ${topic}`, 'info', {
               key,
               topic,
               payload: JSON.parse(payload.toString()),
             });
             return JSON.parse(payload.toString());
           } else {
-            logBrowser(`Ignoring message from IOT for ${key}`, 'info', {
+            logBrowser(`Ignoring message from IOT for ${topic}`, 'info', {
               key,
               topic,
               payload: JSON.parse(payload.toString()),
             });
             return prev;
           }
-          ``;
         });
       });
     });
