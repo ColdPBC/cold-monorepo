@@ -7,20 +7,18 @@ import { ComplianceProgressStatusIcon, ErrorFallback, Spinner } from '@coldpbc/c
 import { ComplianceSidebarQuestion, CurrentAIStatusSection } from '@coldpbc/interfaces';
 import React, { useContext } from 'react';
 import { ColdComplianceManagerContext } from '@coldpbc/context';
-import { useColdContext } from '@coldpbc/hooks';
 import { withErrorBoundary } from 'react-error-boundary';
 import { useNavigate } from 'react-router-dom';
 
 export interface ComplianceManagerSectionProgressBarProps {
   sectionAIStatus: CurrentAIStatusSection | undefined;
-  questions: ComplianceSidebarQuestion[] | undefined;
+  questions: ComplianceSidebarQuestion[];
   isNavigable: boolean;
 }
 
 const _ComplianceManagerSectionProgressBar = ({ questions, sectionAIStatus, isNavigable }: ComplianceManagerSectionProgressBarProps) => {
-  const { status: managerStatus, data } = useContext(ColdComplianceManagerContext);
-  const { name } = data;
-  const { logBrowser } = useColdContext();
+  const { data } = useContext(ColdComplianceManagerContext);
+  const { name, sectionGroups } = data;
   const navigate = useNavigate();
 
   const getProgressTooltipIcon = (status: ComplianceProgressStatus) => {
@@ -99,20 +97,20 @@ const _ComplianceManagerSectionProgressBar = ({ questions, sectionAIStatus, isNa
 
   const orderedData = orderBy(questions, ['order'], ['asc']);
 
-  if (!questions) {
+  if (sectionGroups?.isValidating) {
     return <Spinner />;
   } else {
     return (
       <div className={'flex flex-row justify-start w-full'}>
         {map(orderedData, (question, index) => {
-          const percentWidth = 100 / questions.length;
+          const percentWidth = 100 / orderedData.length;
           return (
             <div
               key={index}
               style={{
                 width: `${percentWidth}%`,
               }}>
-              {getProgressBarItem(questions, index)}
+              {getProgressBarItem(orderedData, index)}
             </div>
           );
         })}

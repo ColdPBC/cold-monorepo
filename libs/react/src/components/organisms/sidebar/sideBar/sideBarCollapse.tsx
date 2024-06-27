@@ -71,7 +71,7 @@ export const SideBarCollapse = (props: SideBarCollapseProps) => {
                   to={sub_item.route}
                   className={twMerge(
                     'flex flex-row justify-start items-center gap-[8px] w-full cursor-pointer h-[48px] border-l-[2px] border-transparent hover:bg-gray-50 ',
-                    activeItem?.key === sub_item.key ? 'pl-8 text-tc-primary font-bold' : 'pl-12 text-tc-secondary',
+                    activeItem?.key === sub_item.key ? 'pl-8 text-tc-primary font-bold text-body' : 'pl-12 text-tc-secondary text-body',
                   )}>
                   {activeItem?.key === sub_item.key && <div className={'w-[8px] h-[8px] rounded-full bg-primary-300'}></div>}
                   <span className={'w-full truncate'}>{sub_item.label}</span>

@@ -19,7 +19,7 @@ import {
 } from '@coldpbc/context';
 import { getAllFilesMock } from './filesMock';
 import { getComplianceCountsMock, getQuestionnaireSidebarComplianceMock } from './complianceMock';
-import { AIDetails, ComplianceManagerCountsPayload } from '@coldpbc/interfaces';
+import { AIDetails, ComplianceManagerCountsPayload,  ComplianceSidebarPayload, QuestionnaireQuestionComplianceResponse } from '@coldpbc/interfaces';
 
 export interface StoryMockProviderProps {
   handlers?: RestHandler<MockedRequest<DefaultBodyType>>[];
@@ -93,6 +93,14 @@ export const StoryMockProvider = (props: PropsWithChildren<StoryMockProviderProp
       isLoading: false,
       mutate: () => Promise.resolve(),
     } as SWRResponse<ComplianceManagerCountsPayload, any, any>,
+    sectionGroups: {
+      data: getQuestionnaireSidebarComplianceMock(),
+      error: undefined,
+      revalidate: () => {},
+      isValidating: false,
+      isLoading: false,
+      mutate: () => Promise.resolve(),
+    } as SWRResponse<ComplianceSidebarPayload, any, any>,
     ...props.complianceManagerContext?.data,
   };
 

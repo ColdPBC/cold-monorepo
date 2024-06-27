@@ -1,9 +1,31 @@
-# [1.264.0-COLD-860.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.263.0...v1.264.0-COLD-860.1) (2024-06-27)
+# [1.266.0-COLD-861.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.265.1...v1.266.0-COLD-861.1) (2024-06-27)
 
 
 ### Features
 
-* initial work for handling array ai responses ([4281c11](https://github.com/ColdPBC/cold-monorepo/commit/4281c1173a8209be7bfb865888b4e62b678e3b86))
+* Update logging in coldMQTTProvider ([c1f89a1](https://github.com/ColdPBC/cold-monorepo/commit/c1f89a13a04636e2bde7f062bb0430df34d40972))
+
+## [1.265.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.265.0...v1.265.1) (2024-06-27)
+
+
+### Bug Fixes
+
+* error being throw while scoring comliance sets ([d35ee9b](https://github.com/ColdPBC/cold-monorepo/commit/d35ee9b9ac19bedf5c5fc470904a58212b42867c))
+
+# [1.265.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.264.0...v1.265.0) (2024-06-27)
+
+
+### Features
+
+* Add placeholder questions to questionnaire section ([a884c53](https://github.com/ColdPBC/cold-monorepo/commit/a884c5393ca907b1df4e051998578d4cca9c3b25))
+* Move loading spinner inside questionnaire section ([e550f8b](https://github.com/ColdPBC/cold-monorepo/commit/e550f8bcc796a6fae6500291cf640ea8a6ecaeee))
+
+# [1.264.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.263.0...v1.264.0) (2024-06-27)
+
+
+### Features
+
+* Update sidebar styles ([d927021](https://github.com/ColdPBC/cold-monorepo/commit/d927021d2aa277ee27ddd0a12ac7df114d0363fd))
 
 # [1.263.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.262.0...v1.263.0) (2024-06-26)
 
