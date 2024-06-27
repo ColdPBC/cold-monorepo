@@ -1,3 +1,17 @@
+# [1.263.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.262.0...v1.263.0) (2024-06-26)
+
+
+### Features
+
+* Add authentication and roles guards to controllers ([ec851b7](https://github.com/ColdPBC/cold-monorepo/commit/ec851b711ac950d78545e12fd2e60a1f56f457f1))
+
+# [1.263.0-COLD-858.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.262.0...v1.263.0-COLD-858.1) (2024-06-26)
+
+
+### Features
+
+* Add authentication and roles guards to controllers ([ec851b7](https://github.com/ColdPBC/cold-monorepo/commit/ec851b711ac950d78545e12fd2e60a1f56f457f1))
+
 # [1.262.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.261.0...v1.262.0) (2024-06-25)
 
 
