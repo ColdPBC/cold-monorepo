@@ -8,7 +8,7 @@ import { ComplianceManagerStatus, IconNames } from '@coldpbc/enums';
 import { format } from 'date-fns';
 import { withErrorBoundary } from 'react-error-boundary';
 import ColdMQTTContext from '../../../context/coldMQTTContext';
-import { ComplianceManagerCountsPayload, CurrentAIStatusPayload, MQTTComplianceManagerPayload, OrgCompliance } from '@coldpbc/interfaces';
+import { ComplianceManagerCountsPayload, ComplianceSidebarPayload, CurrentAIStatusPayload, MQTTComplianceManagerPayload, OrgCompliance } from '@coldpbc/interfaces';
 import useSWRSubscription from 'swr/subscription';
 import useSWR from 'swr';
 import { axiosFetcher, resolveNodeEnv } from '@coldpbc/fetchers';
@@ -24,6 +24,11 @@ const _ComplianceManager = () => {
   const [status, setStatus] = useState<ComplianceManagerStatus>(ComplianceManagerStatus.notActivated);
   const { logBrowser } = useColdContext();
 
+  const getSectionGroupDataUrl = () => {
+    return [`/compliance/${name}/organizations/${orgId}/section_groups/responses`, 'GET'];
+  };
+
+  const sectionGroups = useSWR<ComplianceSidebarPayload, any, any>(getSectionGroupDataUrl(), axiosFetcher);
   const orgCompliances = useSWR<OrgCompliance[], any, any>(orgId ? [`/compliance_definitions/organizations/${orgId}`, 'GET'] : null, axiosFetcher);
   const files = useOrgSWR<any[], any>([`/files`, 'GET'], axiosFetcher);
 
@@ -167,7 +172,7 @@ const _ComplianceManager = () => {
     });
   }, [orgCompliances, files, currentAIStatus, name, data, error, orgId, compliance, status, managementView, topic]);
 
-  if (!data || orgCompliances.isLoading || files.isLoading || countsDataSWR.isLoading) {
+  if (!data || orgCompliances.isLoading || files.isLoading || countsDataSWR.isLoading || sectionGroups.isLoading) {
     return <Spinner />;
   }
 
@@ -195,6 +200,7 @@ const _ComplianceManager = () => {
           currentAIStatus: currentAIStatus?.data,
           orgCompliances: orgCompliances?.data,
           complianceCounts: countsDataSWR,
+          sectionGroups: sectionGroups,
         },
         status: status,
         setStatus: setStatus,
