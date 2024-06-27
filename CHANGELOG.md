@@ -1,3 +1,10 @@
+# [1.266.0-COLD-861.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.265.1...v1.266.0-COLD-861.1) (2024-06-27)
+
+
+### Features
+
+* Update logging in coldMQTTProvider ([c1f89a1](https://github.com/ColdPBC/cold-monorepo/commit/c1f89a13a04636e2bde7f062bb0430df34d40972))
+
 ## [1.265.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.265.0...v1.265.1) (2024-06-27)
 
 
