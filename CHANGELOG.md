@@ -1,3 +1,10 @@
+# [1.264.0-COLD-860.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.263.0...v1.264.0-COLD-860.1) (2024-06-27)
+
+
+### Features
+
+* initial work for handling array ai responses ([4281c11](https://github.com/ColdPBC/cold-monorepo/commit/4281c1173a8209be7bfb865888b4e62b678e3b86))
+
 # [1.263.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.262.0...v1.263.0) (2024-06-26)
 
 
