@@ -246,7 +246,6 @@ export interface ComplianceManagerCountsSection {
 }
 
 export interface AIDetails {
-  ai_response: QuestionnaireQuestionComplianceResponse['ai_response'];
   ai_answered?: boolean;
   ai_attempted?: boolean;
   value?: any;

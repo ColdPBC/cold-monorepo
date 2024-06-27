@@ -1,5 +1,6 @@
 import { cloneDeep, find, findIndex, forEach, forOwn, get, isArray, isBoolean, isEmpty, isEqual, isNull, isNumber, isString, isUndefined, uniq } from 'lodash';
 import {
+  AIDetails,
   ComplianceSurveyActiveKeyType,
   ComplianceSurveyPayloadType,
   ComplianceSurveySavedQuestionType,
@@ -658,8 +659,9 @@ export const getAIResponseValue = (followUp: {
   }
 };
 
-export const getComplianceAIResponseOriginalAnswer = (ai_response: QuestionnaireQuestionComplianceResponse['ai_response'], question: QuestionnaireQuestion) => {
+export const getComplianceAIResponseOriginalAnswer = (question: QuestionnaireQuestion) => {
   const { component } = question;
+  const ai_response = get(question, 'compliance_responses[0].ai_response', null);
   if (!isDefined(ai_response) || !isDefined(ai_response.answer) || !isComplianceAIResponseValueValid(question)) {
     return null;
   }
@@ -809,24 +811,18 @@ export const getComplianceAIResponseValue = (question: QuestionnaireQuestion) =>
   }
 };
 
-export const isComplianceAnswerEqualToAIResponse = (aiDetails: {
-  ai_response: QuestionnaireQuestionComplianceResponse['ai_response'];
-  ai_answered?: boolean;
-  ai_attempted?: boolean;
-  value?: any | undefined;
-  questionAnswerSaved: boolean;
-  questionAnswerChanged: boolean;
-}) => {
-  const { ai_response, value } = aiDetails;
-  if (isNull(ai_response)) {
+export const isComplianceAnswerEqualToAIResponse = (aiDetails: AIDetails) => {
+  const { value } = aiDetails;
+  const aiAnswer = getComplianceAIResponseValue(aiDetails.question);
+
+  if (aiAnswer === null || value === null || value === undefined) {
     return false;
   }
-  const { answer } = ai_response;
 
-  if (isArray(answer) && isArray(value)) {
-    return isEqual(answer, value);
+  if (isArray(aiAnswer) && isArray(value)) {
+    return isEqual(aiAnswer, value);
   }
-  return answer === value;
+  return aiAnswer === value;
 };
 
 export const getComplianceOrgResponseAnswer = (component: string, compliance_responses: QuestionnaireQuestionComplianceResponse[]) => {

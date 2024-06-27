@@ -90,7 +90,6 @@ const _QuestionnaireQuestionItem = (props: { question: QuestionnaireQuestion; nu
     setFocusQuestion({
       key: id,
       aiDetails: {
-        ai_response: ai_response,
         ai_answered: ai_answered,
         ai_attempted: ai_attempted,
         value: questionInput,
@@ -366,7 +365,7 @@ const _QuestionnaireQuestionItem = (props: { question: QuestionnaireQuestion; nu
     let originalAnswer;
     if (isComplianceAIResponseValueValid(question) && questionStatus === ComplianceProgressStatus.ai_answered) {
       justification = ai_response?.justification;
-      originalAnswer = getComplianceAIResponseOriginalAnswer(ai_response, question);
+      originalAnswer = getComplianceAIResponseOriginalAnswer(question);
     } else {
       return null;
     }
@@ -561,7 +560,6 @@ const _QuestionnaireQuestionItem = (props: { question: QuestionnaireQuestion; nu
                 setFocusQuestion({
                   key: id,
                   aiDetails: {
-                    ai_response: ai_response,
                     ai_answered: ai_answered,
                     ai_attempted: ai_attempted,
                     value: questionInput,

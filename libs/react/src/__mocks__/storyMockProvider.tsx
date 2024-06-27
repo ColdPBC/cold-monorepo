@@ -19,7 +19,7 @@ import {
 } from '@coldpbc/context';
 import { getAllFilesMock } from './filesMock';
 import { getComplianceCountsMock, getQuestionnaireSidebarComplianceMock } from './complianceMock';
-import { ComplianceManagerCountsPayload, QuestionnaireQuestionComplianceResponse } from '@coldpbc/interfaces';
+import { AIDetails, ComplianceManagerCountsPayload } from '@coldpbc/interfaces';
 
 export interface StoryMockProviderProps {
   handlers?: RestHandler<MockedRequest<DefaultBodyType>>[];
@@ -107,14 +107,7 @@ export const StoryMockProvider = (props: PropsWithChildren<StoryMockProviderProp
 
   const [complianceQuestionnaireFocusQuestion, setComplianceQuestionnaireFocusQuestion] = React.useState<{
     key: string;
-    aiDetails: {
-      ai_response: QuestionnaireQuestionComplianceResponse['ai_response'];
-      ai_answered?: boolean;
-      ai_attempted?: boolean;
-      value?: any;
-      questionAnswerSaved: boolean;
-      questionAnswerChanged: boolean;
-    };
+    aiDetails: AIDetails;
   } | null>(props.complianceQuestionnaireContext?.focusQuestion ?? null);
 
   const [complianceQuestionnaireScrollToQuestion, setComplianceQuestionnaireScrollToQuestion] = React.useState<string | null>(
