@@ -20,7 +20,11 @@ const _ComplianceManagerOverviewSection = ({ section, groupId, collapseOpen }: {
   const sectionAIStatus = currentAIStatus?.find(s => s.section === section.key);
 
   useEffect(() => {
-    logBrowser('ComplianceManagerOverviewSection', 'info', { section, groupId, orderedQuestions });
+    logBrowser(`Compliance Manager Overview Section: ${section.title}`, 'info', {
+      section,
+      groupId,
+      orderedQuestions,
+    });
   }, [section, groupId, orderedQuestions]);
 
   const isAIRunning = () => {

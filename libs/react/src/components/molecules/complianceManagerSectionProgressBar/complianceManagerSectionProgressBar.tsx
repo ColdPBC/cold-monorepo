@@ -7,7 +7,6 @@ import { ComplianceProgressStatusIcon, ErrorFallback, Spinner } from '@coldpbc/c
 import { ComplianceSidebarQuestion, CurrentAIStatusSection } from '@coldpbc/interfaces';
 import React, { useContext } from 'react';
 import { ColdComplianceManagerContext } from '@coldpbc/context';
-import { useColdContext } from '@coldpbc/hooks';
 import { withErrorBoundary } from 'react-error-boundary';
 import { useNavigate } from 'react-router-dom';
 
@@ -18,9 +17,8 @@ export interface ComplianceManagerSectionProgressBarProps {
 }
 
 const _ComplianceManagerSectionProgressBar = ({ questions, sectionAIStatus, isNavigable }: ComplianceManagerSectionProgressBarProps) => {
-  const { status: managerStatus, data } = useContext(ColdComplianceManagerContext);
+  const { data } = useContext(ColdComplianceManagerContext);
   const { name, sectionGroups } = data;
-  const { logBrowser } = useColdContext();
   const navigate = useNavigate();
 
   const getProgressTooltipIcon = (status: ComplianceProgressStatus) => {
