@@ -1,6 +1,6 @@
 import { BadRequestException, Global, Injectable, NotFoundException } from '@nestjs/common';
 import { Span } from 'nestjs-ddtrace';
-import { BaseWorker, CacheService, ComplianceSectionsRepository, Cuid2Generator, DarklyService, GuidPrefixes, MqttService, PrismaService } from '@coldpbc/nest';
+import { BaseWorker, CacheService, ComplianceDefinitionsRepository, Cuid2Generator, DarklyService, GuidPrefixes, MqttService, PrismaService } from '@coldpbc/nest';
 import { ComplianceDefinition, OrgCompliance } from './compliance-definitions.schema';
 import { compliance_definitions } from '@prisma/client';
 import { omit, pick } from 'lodash';
@@ -19,7 +19,7 @@ export class ComplianceDefinitionService extends BaseWorker {
     readonly cache: CacheService,
     readonly mqtt: MqttService,
     readonly event: EventService,
-    readonly sectionRepository: ComplianceSectionsRepository,
+    readonly definitions: ComplianceDefinitionsRepository,
   ) {
     super('ComplianceDefinitionService');
   }
@@ -546,23 +546,14 @@ export class ComplianceDefinitionService extends BaseWorker {
    * This action returns all compliance definitions
    * @param bpc
    */
-  async findAll(req: any, bpc?: boolean): Promise<compliance_definitions[]> {
-    if (!bpc) {
-      /*const cached = await this.cache.get('compliance_definitions');
-      if (cached) {
-        return cached as unknown as ComplianceDefinition[];
-      }*/
-    }
+  async findAll(req: any): Promise<compliance_definitions[]> {
+    const deflist = await this.definitions.getComplianceDefinitionsByOrgId(req.organization.id);
 
-    const definitions = await this.prisma.compliance_definitions.findMany();
-
-    if (!definitions || definitions.length == 0) {
+    if (!Array.isArray(deflist) || deflist.length < 1) {
       throw new NotFoundException(`Unable to find any compliance definitions`);
     }
 
-    await this.cache.set('compliance_definitions', definitions, { update: true });
-
-    return definitions;
+    return deflist;
   }
 
   /***
@@ -639,9 +630,6 @@ export class ComplianceDefinitionService extends BaseWorker {
     }
   }
 
-  async findSections(name: string, req: any) {
-    return this.sectionRepository.getSectionListByCompliance(name, req.user);
-  }
   /***
    * This action updates a named compliance definition
    * @param name
