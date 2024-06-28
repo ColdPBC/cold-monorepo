@@ -1,3 +1,11 @@
+# [1.269.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.268.0...v1.269.0) (2024-06-28)
+
+
+### Features
+
+* initial work for handling array ai responses ([4281c11](https://github.com/ColdPBC/cold-monorepo/commit/4281c1173a8209be7bfb865888b4e62b678e3b86))
+* Refactor AI details handling in Questionnaire ([4aa2798](https://github.com/ColdPBC/cold-monorepo/commit/4aa279816ee507ec62128e08b85271a8d69163b2))
+
 # [1.268.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.267.0...v1.268.0) (2024-06-28)
 
 
