@@ -12,7 +12,7 @@ export class OrganizationComplianceRepository extends BaseWorker {
   }
 
   /**
-   * Get all organization compliance definitions
+   * Get organization compliances by name for all orgs
    */
   async getOrgComplianceDefinitions(name: string, user: IAuthenticatedUser, organization: organizations) {
     try {
@@ -40,6 +40,12 @@ export class OrganizationComplianceRepository extends BaseWorker {
     }
   }
 
+  /**
+   * Get organization compliance by name and Org
+   * @param name
+   * @param user
+   * @param organization
+   */
   async getOrgComplianceByName(name: string, user: IAuthenticatedUser, organization: organizations) {
     try {
       const compliance: any = await this.prisma.organization_compliance.findUnique({
