@@ -1,3 +1,16 @@
+# [1.268.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.267.0...v1.268.0) (2024-06-28)
+
+
+### Features
+
+* Add Interceptors to Organization Compliance Responses Controller ([1758b04](https://github.com/ColdPBC/cold-monorepo/commit/1758b045fa718dbd6ed56ba63af946250ff1d189))
+* Add OrgUserInterceptor decorator to organization compliance controller ([c2621c3](https://github.com/ColdPBC/cold-monorepo/commit/c2621c36e4e1f2507c639a1ab646f11acbeeef19))
+* Add OrgUserInterceptor to organization compliance controller ([de2f4ee](https://github.com/ColdPBC/cold-monorepo/commit/de2f4ee8c66115d7baf11f2b24470a9701405669))
+* Add statuses in organization-compliance repository ([d73d13e](https://github.com/ColdPBC/cold-monorepo/commit/d73d13e6e55a95b612d537b8518a99eae4139c38))
+* Added CacheInterceptor to ComplianceDefinitionsController ([9078fa9](https://github.com/ColdPBC/cold-monorepo/commit/9078fa9c0bcf0272a4a9939a5d5da23a82871c25))
+* Improve error handling in chat service and optimize cache operations ([f1e9e78](https://github.com/ColdPBC/cold-monorepo/commit/f1e9e7892de92c69b2bbc1aec9f216b9fe603cfe))
+* Use interceptor in OrganizationComplianceAiResponseFiles controller ([6dc03d8](https://github.com/ColdPBC/cold-monorepo/commit/6dc03d82b1c0af5930743812f9384e90c3019f3f))
+
 # [1.267.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.266.0...v1.267.0) (2024-06-28)
 
 
