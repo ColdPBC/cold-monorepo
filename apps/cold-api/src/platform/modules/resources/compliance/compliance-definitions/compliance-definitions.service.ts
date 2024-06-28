@@ -547,7 +547,7 @@ export class ComplianceDefinitionService extends BaseWorker {
    * @param bpc
    */
   async findAll(req: any): Promise<compliance_definitions[]> {
-    const deflist = await this.definitions.getComplianceDefinitionsByOrgId(req.organization.id);
+    const deflist = await this.definitions.getComplianceDefinitionsByOrgId(req);
 
     if (!Array.isArray(deflist) || deflist.length < 1) {
       throw new NotFoundException(`Unable to find any compliance definitions`);

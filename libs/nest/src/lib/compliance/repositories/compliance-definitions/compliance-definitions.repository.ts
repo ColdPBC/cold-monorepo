@@ -4,14 +4,15 @@ import { PrismaService } from '../../../prisma';
 import { CacheService } from '../../../cache';
 import { compliance_definitions } from '@prisma/client';
 import { set } from 'lodash';
+import { ComplianceResponsesRepository } from '../compliance-responses';
 
 @Injectable()
 export class ComplianceDefinitionsRepository extends BaseWorker {
-  constructor(readonly prisma: PrismaService, readonly cache: CacheService) {
+  constructor(readonly prisma: PrismaService, readonly cache: CacheService, readonly responses: ComplianceResponsesRepository) {
     super(ComplianceDefinitionsRepository.name);
   }
 
-  async getComplianceDefinitionsByOrgId(orgId: string) {
+  async getComplianceDefinitionsByOrgId(req: any) {
     const definitions = (await this.prisma.extended.compliance_definitions.findMany({
       where: {
         visible: true,
@@ -33,9 +34,20 @@ export class ComplianceDefinitionsRepository extends BaseWorker {
 
     if (Array.isArray(definitions) && definitions.length > 0) {
       for (const def of definitions) {
-        const metrics = (await this.cache.get(`organization:${orgId}:compliance:${def.name}:counts`)) as { counts: { progress: number } };
+        const metrics = (await this.cache.get(`organization:${req.organization.id}:compliance:${def.name}:counts`)) as { counts: { progress: number } };
         if (metrics) {
           set(def, 'progress', metrics.counts.progress);
+        } else {
+          try {
+            const raw = await this.responses.getScoredComplianceQuestionsByName(req.organization, def.name, req.user);
+            if (raw.counts) {
+              set(def, 'progress', raw.counts.progress);
+            }
+          } catch (e) {
+            if (!(e instanceof NotFoundException)) {
+              this.logger.error(e);
+            }
+          }
         }
       }
     } else {

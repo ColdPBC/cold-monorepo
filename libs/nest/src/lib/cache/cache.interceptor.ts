@@ -8,6 +8,9 @@ export class ColdCacheInterceptor extends CacheInterceptor {
     const req = cont.getRequest();
     const parts = req.originalUrl.split('/');
     const key = parts[parts.length - 1];
+    if (!req.user || !req.user?.coldclimate_claims?.email) {
+      throw new Error('User not found in request object.');
+    }
     return `organization:${req.params.orgId}:compliance:${req.params.name}:${key}`;
   }
 }
