@@ -1,3 +1,14 @@
+# [1.267.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.266.0...v1.267.0) (2024-06-28)
+
+
+### Features
+
+* Add 'statuses' to compliance mock and refactor code ([59a4885](https://github.com/ColdPBC/cold-monorepo/commit/59a4885cdfcc2c2033bc677f46f20f96dd2b7d00))
+* Refactor compliance manager overview for better data handling ([87525f3](https://github.com/ColdPBC/cold-monorepo/commit/87525f37ab88533ad6f3e3523580dac808e5e286))
+* Refactor logging and context usage in Compliance Manager components ([f5da2f4](https://github.com/ColdPBC/cold-monorepo/commit/f5da2f4644707f38dc07af68ba60da9f7e09e190))
+* Update compliance document modal and add image URLs to compliance mock ([6400431](https://github.com/ColdPBC/cold-monorepo/commit/64004310fab03312640c350aa0e090d02ac1b37a))
+* Update logging in coldMQTTProvider ([c1f89a1](https://github.com/ColdPBC/cold-monorepo/commit/c1f89a13a04636e2bde7f062bb0430df34d40972))
+
 # [1.266.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.265.1...v1.266.0) (2024-06-27)
 
 
