@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post, Put, Query, Req, UseFilters, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post, Put, Query, Req, UseFilters, UseGuards } from '@nestjs/common';
 import { ApiBody, ApiOAuth2, ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Span } from 'nestjs-ddtrace';
 import { ResourceValidationPipe } from '../../../../pipes/resource.pipe';
@@ -6,7 +6,6 @@ import { BaseWorker, HttpExceptionFilter, IAuthenticatedUser, JwtAuthGuard, Role
 import { allRoles, bpcDecoratorOptions, coldAdminOnly } from '../../_global/global.params';
 import { ComplianceDefinitionService } from './compliance-definitions.service';
 import { ComplianceDefinition, ComplianceDefinitionSchema } from './compliance-definitions.schema';
-import { CacheInterceptor } from '@nestjs/cache-manager';
 
 const genService = new GeneratorService();
 
@@ -15,7 +14,6 @@ const genService = new GeneratorService();
 @UseFilters(new HttpExceptionFilter(ComplianceDefinitionsController.name))
 @ApiOAuth2(['openid'])
 @ApiTags('Compliance')
-@UseInterceptors(CacheInterceptor)
 @Controller()
 export class ComplianceDefinitionsController extends BaseWorker {
   constructor(private readonly complianceService: ComplianceDefinitionService) {
@@ -145,7 +143,7 @@ export class ComplianceDefinitionsController extends BaseWorker {
     return this.complianceService.injectSurvey(req, id, definition);
   }
 
-  @Get('compliance')
+  @Get('compliance/all/organizations/:orgId')
   @ApiOperation({
     deprecated: true,
     summary: 'Get list of all compliance frameworks',
@@ -165,9 +163,8 @@ export class ComplianceDefinitionsController extends BaseWorker {
       query: any;
       user: IAuthenticatedUser;
     },
-    @Query('bpc') bpc?: boolean,
   ) {
-    return await this.complianceService.findAll(req, bpc);
+    return await this.complianceService.findAll(req);
   }
 
   @Get('compliance_definitions')
@@ -190,9 +187,8 @@ export class ComplianceDefinitionsController extends BaseWorker {
       query: any;
       user: IAuthenticatedUser;
     },
-    @Query('bpc') bpc?: boolean,
   ) {
-    return await this.complianceService.findAll(req, bpc);
+    return await this.complianceService.findAll(req);
   }
 
   @Get('compliance/:name')
