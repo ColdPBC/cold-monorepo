@@ -1,3 +1,10 @@
+## [1.270.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.270.0...v1.270.1) (2024-06-28)
+
+
+### Bug Fixes
+
+* update compliance definition list repository to trigger the cached counts if none exist. ([62c3859](https://github.com/ColdPBC/cold-monorepo/commit/62c3859cb761ff344ea073596b93220130a2b954))
+
 # [1.270.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.269.0...v1.270.0) (2024-06-28)
 
 
