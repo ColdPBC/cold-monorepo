@@ -21,6 +21,7 @@ export class ScoringService extends BaseWorker {
     let org_answered = 0;
     let ai_answered = 0;
     let bookmarked = 0;
+    let totalQuestions = 0;
 
     if (Array.isArray(complianceResponse.compliance_section_groups) && complianceResponse.compliance_section_groups.length > 0) {
       complianceResponse.compliance_section_groups = await this.filterService.filterSectionGroups(complianceResponse.compliance_section_groups, options);
@@ -38,6 +39,7 @@ export class ScoringService extends BaseWorker {
         org_answered += sectionGroup.counts.org_answered;
         ai_answered += sectionGroup.counts.ai_answered;
         bookmarked += sectionGroup.counts.bookmarked;
+        totalQuestions += sectionGroup.counts.total;
 
         complianceScore += scored.score;
         complianceAiScore += scored.ai_score;
@@ -48,7 +50,7 @@ export class ScoringService extends BaseWorker {
     set(complianceResponse, 'ai_score', complianceAiScore);
     set(complianceResponse, 'max_score', complianceMaxScore);
 
-    set(complianceResponse, 'counts', { not_started, org_answered, ai_answered, bookmarked });
+    set(complianceResponse, 'counts', { not_started, org_answered, ai_answered, bookmarked, total: totalQuestions, progress: (org_answered / totalQuestions) * 100 });
 
     return complianceResponse;
   }
@@ -62,6 +64,8 @@ export class ScoringService extends BaseWorker {
     let org_answered = 0;
     let ai_answered = 0;
     let bookmarked = 0;
+    let totalQuestions = 0;
+
     for (const section of sectionGroup.compliance_sections) {
       // Get the current question
       const scored = await this.scoreSection(section, org, user, options);
@@ -71,6 +75,7 @@ export class ScoringService extends BaseWorker {
       org_answered += section.counts.org_answered;
       ai_answered += section.counts.ai_answered;
       bookmarked += section.counts.bookmarked;
+      totalQuestions += section.counts.total;
 
       sectionGroupScore += scored.score;
       sectionGroupAiScore += scored.ai_score;
@@ -81,7 +86,7 @@ export class ScoringService extends BaseWorker {
     set(sectionGroup, 'ai_score', sectionGroupAiScore);
     set(sectionGroup, 'max_score', sectionGroupMaxScore);
 
-    set(sectionGroup, 'counts', { not_started, org_answered, ai_answered, bookmarked });
+    set(sectionGroup, 'counts', { not_started, org_answered, ai_answered, bookmarked, total: totalQuestions, progress: (org_answered / totalQuestions) * 100 });
     // return the scored survey
     return sectionGroup;
   }
@@ -102,6 +107,8 @@ export class ScoringService extends BaseWorker {
     let bookmarked = 0;
 
     section.compliance_questions = await this.filterService.filterQuestions(section.compliance_questions, options);
+
+    const totalQuestions = section.compliance_questions.length;
 
     for (const idx in section.compliance_questions) {
       // Get the current question
@@ -125,7 +132,7 @@ export class ScoringService extends BaseWorker {
     set(section, 'score', sectionScore);
     set(section, 'ai_score', sectionAiScore);
     set(section, 'max_score', sectionMaxScore);
-    set(section, 'counts', { not_started, org_answered, ai_answered, bookmarked });
+    set(section, 'counts', { not_started, org_answered, ai_answered, bookmarked, total: totalQuestions, progress: (org_answered / totalQuestions) * 100 });
     // return the scored section
     return section;
   }
@@ -237,6 +244,8 @@ export class ScoringService extends BaseWorker {
       org_answered: question.user_answered ? 1 : 0,
       ai_answered: question.ai_answered ? 1 : 0,
       bookmarked: question.bookmarked ? 1 : 0,
+      total: 1,
+      progress: (question.user_answered / 1) * 100,
     });
 
     if (question.rubric?.score_map) {
