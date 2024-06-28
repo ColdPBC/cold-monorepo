@@ -1,3 +1,17 @@
+# [1.270.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.269.0...v1.270.0) (2024-06-28)
+
+
+### Features
+
+* add ColdCacheInterceptor to cache module and implement trackBy method ([bf1ea9e](https://github.com/ColdPBC/cold-monorepo/commit/bf1ea9e47559e85c316389f2d195c3ca6e366508))
+* Add total questions and progress to scoring service ([5005ee0](https://github.com/ColdPBC/cold-monorepo/commit/5005ee07da3ed4fb046f1668d26ee5a251b8da4f))
+* enhance ComplianceResponsesRepository functions ([08188aa](https://github.com/ColdPBC/cold-monorepo/commit/08188aaeda7856f6900828124bf06787d8b4263d))
+* Expand ComplianceDefinitionsRepository methods ([7c71ccc](https://github.com/ColdPBC/cold-monorepo/commit/7c71ccc5c0d8adf87b345b86e44e3f4c56fa9fd5))
+* Export cache interceptor in cache index ([81bcde7](https://github.com/ColdPBC/cold-monorepo/commit/81bcde71020c20ec715175f606793337862032b8))
+* update compliance-definitions.controller.ts ([ffd5137](https://github.com/ColdPBC/cold-monorepo/commit/ffd513727db8b32cc9f3fdac48d2618d3e719bf6))
+* Update ComplianceDefinitionsService to use DefinitionsRepository ([0b7546a](https://github.com/ColdPBC/cold-monorepo/commit/0b7546a62193b931476ae46d4e67c26d48e49a80))
+* Update methods in Organization Compliance Repository ([2ecc5da](https://github.com/ColdPBC/cold-monorepo/commit/2ecc5dafff6ddb36bdf4296a38aaab5a7f4fa004))
+
 # [1.269.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.268.0...v1.269.0) (2024-06-28)
 
 
