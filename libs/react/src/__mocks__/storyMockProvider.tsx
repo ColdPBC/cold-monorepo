@@ -9,7 +9,7 @@ import { ComplianceManagerStatus, ErrorType } from '@coldpbc/enums';
 import { WizardContext, WizardContextType } from '@coldpbc/components';
 import ColdMQTTContext from '../context/coldMQTTContext';
 import { mockMQTTContext } from './mqtt/mockMQTTContext';
-import { defaultMqttDataHandler, defaultMqttTopics, getSectionGroupList } from './mqtt';
+import { defaultMqttDataHandler, defaultMqttTopics } from './mqtt';
 import {
   ColdComplianceManagerContext,
   ColdComplianceQuestionnaireContext,
@@ -18,8 +18,8 @@ import {
   ComplianceQuestionnaireContextType,
 } from '@coldpbc/context';
 import { getAllFilesMock } from './filesMock';
-import { getComplianceCountsMock, getQuestionnaireSidebarComplianceMock } from './complianceMock';
-import { AIDetails, ComplianceManagerCountsPayload,  ComplianceSidebarPayload, QuestionnaireQuestionComplianceResponse } from '@coldpbc/interfaces';
+import { getComplianceCountsMock, getComplianceMock, getQuestionnaireSidebarComplianceMock } from './complianceMock';
+import { AIDetails, ComplianceManagerCountsPayload, ComplianceSidebarPayload, QuestionnaireQuestionComplianceResponse } from '@coldpbc/interfaces';
 
 export interface StoryMockProviderProps {
   handlers?: RestHandler<MockedRequest<DefaultBodyType>>[];
@@ -71,9 +71,6 @@ export const StoryMockProvider = (props: PropsWithChildren<StoryMockProviderProp
   const [showOverviewModal, setShowOverviewModal] = React.useState<boolean>(props.complianceManagerContext?.showOverviewModal || false);
 
   const complianceManagerContextData: ComplianceManagerData = {
-    mqttComplianceSet: getSectionGroupList({
-      name: 'rei_pia_2024',
-    }),
     name: 'rei_pia_2024',
     files: {
       data: getAllFilesMock(),
@@ -84,7 +81,6 @@ export const StoryMockProvider = (props: PropsWithChildren<StoryMockProviderProp
       mutate: () => Promise.resolve(),
     } as SWRResponse<any[], any, any>,
     currentAIStatus: undefined,
-    orgCompliances: undefined,
     complianceCounts: {
       data: getComplianceCountsMock(),
       error: undefined,
@@ -101,6 +97,7 @@ export const StoryMockProvider = (props: PropsWithChildren<StoryMockProviderProp
       isLoading: false,
       mutate: () => Promise.resolve(),
     } as SWRResponse<ComplianceSidebarPayload, any, any>,
+    compliance: getComplianceMock().find(c => c.name === 'rei_pia_2024'),
     ...props.complianceManagerContext?.data,
   };
 

@@ -11,7 +11,7 @@ import { withErrorBoundary } from 'react-error-boundary';
 const _ComplianceManagerAssessmentPreview = () => {
   const context = useContext(ColdComplianceManagerContext);
   const { status } = context;
-  const { mqttComplianceSet, complianceCounts } = context.data;
+  const { complianceCounts } = context.data;
   const { logBrowser } = useColdContext();
 
   // todo: change this to show the actual assessment percentage and not amount of answered/amount of questions
@@ -26,7 +26,6 @@ const _ComplianceManagerAssessmentPreview = () => {
 
   logBrowser('Compliance Manager Assessment Preview', 'info', {
     status,
-    mqttComplianceSet,
     percentage,
     totalQuestions,
     answeredQuestions,
