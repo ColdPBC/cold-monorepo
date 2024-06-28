@@ -167,6 +167,7 @@ export interface QuestionnaireQuestion {
   ai_attempted?: boolean;
   score?: number;
   max_score?: number;
+  ai_score?: number;
   question_summary?: string;
   corresponding_question?: string;
   compliance_responses: QuestionnaireQuestionComplianceResponse[];
@@ -214,6 +215,13 @@ export interface ComplianceManagerCountsPayload {
     ai_answered: number;
     bookmarked: number;
   };
+  statuses: {
+    id: string;
+    email: string;
+    type: string;
+    created_at: string;
+    updated_at: string;
+  }[];
 }
 
 export interface ComplianceManagerCountsSectionGroup {

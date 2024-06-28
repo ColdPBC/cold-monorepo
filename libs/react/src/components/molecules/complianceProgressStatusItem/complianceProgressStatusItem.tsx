@@ -10,7 +10,7 @@ export interface ComplianceProgressItemProps {
 
 export const ComplianceProgressStatusItem = ({ type }: ComplianceProgressItemProps) => {
   const { data } = useContext(ColdComplianceManagerContext);
-  const { mqttComplianceSet, complianceCounts } = data;
+  const { compliance, complianceCounts } = data;
   const { logBrowser } = useColdContext();
 
   const currentProgressData = {
@@ -99,7 +99,6 @@ export const ComplianceProgressStatusItem = ({ type }: ComplianceProgressItemPro
   logBrowser('currentProgressData', 'info', {
     ...currentProgressData,
     totalQuestions,
-    sectionGroups: mqttComplianceSet?.compliance_definition.compliance_section_groups,
   });
 
   return (

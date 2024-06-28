@@ -1,7 +1,7 @@
 import { ComplianceProgressStatus, IconNames } from '@coldpbc/enums';
-import { find, isUndefined, map, orderBy } from 'lodash';
+import { find, map, orderBy } from 'lodash';
 import { ColdIcon, ComplianceManagerOverviewSection, ComplianceProgressStatusIcon, ErrorFallback, Spinner } from '@coldpbc/components';
-import { ComplianceSidebarPayload, MQTTComplianceManagerPayloadComplianceSection, MQTTComplianceManagerPayloadComplianceSectionGroup } from '@coldpbc/interfaces';
+import { ComplianceSidebarPayload, ComplianceSidebarSectionGroup } from '@coldpbc/interfaces';
 import React, { useContext, useEffect, useState } from 'react';
 import { useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
 import ColdMQTTContext from '../../../context/coldMQTTContext';
@@ -11,7 +11,7 @@ import { resolveNodeEnv } from '@coldpbc/fetchers';
 import { withErrorBoundary } from 'react-error-boundary';
 
 export interface ComplianceManagerOverviewSectionGroupProps {
-  sectionGroup: MQTTComplianceManagerPayloadComplianceSectionGroup;
+  sectionGroup: ComplianceSidebarSectionGroup;
   position: number;
 }
 
@@ -21,19 +21,10 @@ const _ComplianceManagerOverviewSectionGroup = ({ sectionGroup, position }: Comp
     [key: string]: ComplianceSidebarPayload | undefined;
   }>({});
   const { orgId } = useAuth0Wrapper();
-  const { subscribeSWR, publishMessage, connectionStatus, client } = useContext(ColdMQTTContext);
+  const { subscribeSWR } = useContext(ColdMQTTContext);
   const context = useContext(ColdComplianceManagerContext);
   const { name, complianceCounts } = context.data;
   const { logBrowser } = useColdContext();
-
-  const getComplianceSectionListTopic = () => {
-    return `ui/${resolveNodeEnv()}/${orgId}/${name}/${sectionGroup.id}`;
-  };
-
-  const { data, error } = useSWRSubscription(getComplianceSectionListTopic(), subscribeSWR) as {
-    data: MQTTComplianceManagerPayloadComplianceSection[] | undefined;
-    error: any;
-  };
 
   const getComplianceSectionGroupTopic = () => {
     return `ui/${resolveNodeEnv()}/${orgId}/${name}/${sectionGroup.id}/#`;
@@ -54,23 +45,6 @@ const _ComplianceManagerOverviewSectionGroup = ({ sectionGroup, position }: Comp
     };
   };
 
-  const publishSectionListMessage = () => {
-    publishMessage(
-      `platform/${resolveNodeEnv()}/compliance/getComplianceSectionList`,
-      JSON.stringify({
-        reply_to: getComplianceSectionListTopic(),
-        resource: 'complianceSectionList',
-        method: 'GET',
-        compliance_set_name: name,
-        compliance_section_group_id: sectionGroup.id,
-      }),
-    );
-  };
-
-  useEffect(() => {
-    publishSectionListMessage();
-  }, [publishMessage, getComplianceSectionListTopic, sectionGroup.id]);
-
   useEffect(() => {
     // open the first section group by default on load
     if (position === 0) {
@@ -78,46 +52,16 @@ const _ComplianceManagerOverviewSectionGroup = ({ sectionGroup, position }: Comp
     }
   }, []);
 
-  useEffect(() => {
-    if (
-      !isUndefined(sectionsSub.data) &&
-      sectionsSub.data.compliance_section_groups &&
-      sectionsSub.data.compliance_section_groups.length > 0 &&
-      sectionsSub.data.compliance_section_groups[0].compliance_sections &&
-      sectionsSub.data.compliance_section_groups[0].compliance_sections.length > 0
-    ) {
-      const sectionId = sectionsSub.data.compliance_section_groups[0].compliance_sections[0].id;
-      setSectionsData(prev => {
-        return {
-          ...prev,
-          [sectionId]: sectionsSub.data,
-        };
-      });
-    }
-  }, [sectionsSub.data]);
-
-  useEffect(() => {
-    // if data is undefined publish a new message after 1 second. clear the timeout if the component is unmounted
-    const interval = setInterval(() => {
-      if (!data) {
-        publishSectionListMessage();
-      }
-    }, 1500);
-    return () => clearInterval(interval);
-  }, [data]);
-
-  const orderedData = data ? orderBy(data, ['order'], ['asc']) : undefined;
+  const orderedData = sectionGroup ? orderBy(sectionGroup.compliance_sections, ['order'], ['asc']) : undefined;
 
   useEffect(() => {
     logBrowser(`Compliance Manager Overview Section Group: ${sectionGroup.title}`, 'info', {
-      data,
-      error,
       orderedData,
       collapseOpen,
       orgId,
       sectionGroup,
     });
-  }, [collapseOpen, data, error, logBrowser, orderedData, orgId, sectionGroup]);
+  }, [collapseOpen, logBrowser, orderedData, orgId, sectionGroup]);
 
   const sectionGroupCounts = getGroupCounts();
 
@@ -202,15 +146,7 @@ const _ComplianceManagerOverviewSectionGroup = ({ sectionGroup, position }: Comp
       <div className={'w-full flex flex-col gap-[36px] bg-transparent'}>
         {orderedData
           ? map(orderedData, (section, index) => {
-              return (
-                <ComplianceManagerOverviewSection
-                  key={`${section.id}-${index}`}
-                  section={section}
-                  groupId={sectionGroup.id}
-                  collapseOpen={collapseOpen}
-                  sectionData={sectionsData[section.id]}
-                />
-              );
+              return <ComplianceManagerOverviewSection key={`${section.id}-${index}`} section={section} groupId={sectionGroup.id} collapseOpen={collapseOpen} />;
             })
           : collapseOpen && <Spinner />}
       </div>

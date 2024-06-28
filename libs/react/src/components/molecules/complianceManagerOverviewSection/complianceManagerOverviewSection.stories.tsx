@@ -1,7 +1,7 @@
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { ComplianceManagerOverviewSection } from '@coldpbc/components';
-import { getComplianceManagerOverviewSectionQuestionListMock, getComplianceManagerOverviewSectionsMock, StoryMockProvider } from '@coldpbc/mocks';
+import { getComplianceManagerOverviewSectionsMock, StoryMockProvider } from '@coldpbc/mocks';
 import { ComplianceManagerStatus } from '@coldpbc/enums';
 
 const meta: Meta<typeof ComplianceManagerOverviewSection> = {
@@ -21,9 +21,9 @@ export const NotActivated: Story = {
     </StoryMockProvider>
   ),
   args: {
-    ...getComplianceManagerOverviewSectionsMock(),
+    section: getComplianceManagerOverviewSectionsMock(),
+    groupId: 'csg_u52xp76tclba5djc',
     collapseOpen: true,
-    sectionData: getComplianceManagerOverviewSectionQuestionListMock(),
   },
 };
 
@@ -37,9 +37,9 @@ export const Activated: Story = {
     </StoryMockProvider>
   ),
   args: {
-    ...getComplianceManagerOverviewSectionsMock(),
+    section: getComplianceManagerOverviewSectionsMock(),
+    groupId: 'csg_u52xp76tclba5djc',
     collapseOpen: true,
-    sectionData: getComplianceManagerOverviewSectionQuestionListMock(),
   },
 };
 
@@ -61,8 +61,8 @@ export const ColdAIRunning: Story = {
     </StoryMockProvider>
   ),
   args: {
-    ...getComplianceManagerOverviewSectionsMock(),
+    section: getComplianceManagerOverviewSectionsMock(),
+    groupId: 'csg_u52xp76tclba5djc',
     collapseOpen: true,
-    sectionData: getComplianceManagerOverviewSectionQuestionListMock(),
   },
 };
