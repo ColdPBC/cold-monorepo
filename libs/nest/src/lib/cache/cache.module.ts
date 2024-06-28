@@ -4,7 +4,7 @@ import { CacheService } from './cache.service';
 import { CacheModule } from '@nestjs/cache-manager';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { redisStore } from 'cache-manager-redis-yet';
-
+import { ColdCacheInterceptor } from './cache.interceptor';
 @Global()
 @Module({})
 export class ColdCacheModule {
@@ -35,8 +35,8 @@ export class ColdCacheModule {
           isGlobal: true,
         }),
       ],
-      providers: [CacheService],
-      exports: [CacheService],
+      providers: [CacheService, ColdCacheInterceptor],
+      exports: [CacheService, ColdCacheInterceptor],
     };
   }
 }
