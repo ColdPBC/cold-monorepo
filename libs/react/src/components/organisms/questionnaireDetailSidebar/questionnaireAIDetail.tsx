@@ -1,23 +1,13 @@
-import { QuestionnaireQuestionComplianceResponse } from '@coldpbc/interfaces';
+import { AIDetails } from '@coldpbc/interfaces';
 import { HexColors } from '@coldpbc/themes';
-import { getAIOriginalAnswer, isComplianceAnswerEqualToAIResponse } from '@coldpbc/lib';
+import { getComplianceAIResponseOriginalAnswer, isComplianceAnswerEqualToAIResponse } from '@coldpbc/lib';
 import { AiReferenceDropdown, ErrorFallback } from '@coldpbc/components';
-import { isNull } from 'lodash';
+import { get, isNull } from 'lodash';
 import { withErrorBoundary } from 'react-error-boundary';
 import React from 'react';
 
 export interface QuestionnaireAIDetailProps {
-  aiDetails:
-    | {
-        ai_response: QuestionnaireQuestionComplianceResponse['ai_response'];
-        ai_answered?: boolean;
-        ai_attempted?: boolean;
-        value?: any | undefined;
-        questionAnswerSaved: boolean;
-        questionAnswerChanged: boolean;
-      }
-    | undefined
-    | null;
+  aiDetails: AIDetails | undefined | null;
 }
 
 const _QuestionnaireAIDetail = (props: QuestionnaireAIDetailProps) => {
@@ -25,7 +15,10 @@ const _QuestionnaireAIDetail = (props: QuestionnaireAIDetailProps) => {
   if (aiDetails === undefined || aiDetails === null) {
     return null;
   }
-  const { ai_response, ai_answered, value, questionAnswerSaved, questionAnswerChanged } = aiDetails;
+  const { questionAnswerSaved, question } = aiDetails;
+
+  const ai_response = get(question, 'compliance_responses[0].ai_response', null);
+  const ai_answered = question.ai_answered;
 
   const getAiTag = () => {
     let text = 'Low Confidence';
@@ -64,6 +57,14 @@ const _QuestionnaireAIDetail = (props: QuestionnaireAIDetailProps) => {
     );
   };
 
+  const getOriginalAnswer = () => {
+    if (ai_answered) {
+      return <div className={'text-body font-bold w-full text-start'}>Original Answer: {getComplianceAIResponseOriginalAnswer(question)}</div>;
+    } else {
+      return null;
+    }
+  };
+
   return (
     <div className={'w-full h-full flex flex-col p-[24px] gap-[16px] text-tc-primary'}>
       <div className={'w-full flex flex-row gap-[16px] justify-between'}>
@@ -75,7 +76,7 @@ const _QuestionnaireAIDetail = (props: QuestionnaireAIDetailProps) => {
       <div className={'flex flex-col gap-[24px]'}>
         {ai_response ? (
           <>
-            <div className={'text-body font-bold w-full text-start'}>Original Answer: {getAIOriginalAnswer(ai_response)}</div>
+            {getOriginalAnswer()}
             <div className={'text-body w-full text-start'}>{ai_response?.justification}</div>
             <div className={'flex flex-col gap-[8px] w-full'}>
               {ai_response?.references && ai_response?.references?.length > 0 && <div className={'text-h5'}>Documents Referenced</div>}

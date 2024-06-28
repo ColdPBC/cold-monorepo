@@ -1,5 +1,6 @@
 import { cloneDeep, find, findIndex, forEach, forOwn, get, isArray, isBoolean, isEmpty, isEqual, isNull, isNumber, isString, isUndefined, uniq } from 'lodash';
 import {
+  AIDetails,
   ComplianceSurveyActiveKeyType,
   ComplianceSurveyPayloadType,
   ComplianceSurveySavedQuestionType,
@@ -13,6 +14,7 @@ import {
 } from '@coldpbc/interfaces';
 import { SurveyComponentType } from '@coldpbc/enums';
 import { axiosFetcher } from '@coldpbc/fetchers';
+import { isDefined } from 'class-validator';
 
 export const getSectionIndex = (
   sections: {
@@ -657,20 +659,38 @@ export const getAIResponseValue = (followUp: {
   }
 };
 
-export const getAIOriginalAnswer = (ai_response: QuestionnaireQuestionComplianceResponse['ai_response']) => {
-  if (!ai_response) {
+export const getComplianceAIResponseOriginalAnswer = (question: QuestionnaireQuestion) => {
+  const { component } = question;
+  const ai_response = get(question, 'compliance_responses[0].ai_response', null);
+  if (!isDefined(ai_response) || !isDefined(ai_response.answer) || !isComplianceAIResponseValueValid(question)) {
     return null;
   }
+  let aiAnswer = ai_response.answer;
   let originalAnswer;
 
-  if (ai_response.answer === true) {
+  if (isArray(ai_response.answer) && ai_response.answer.length === 1) {
+    aiAnswer = ai_response.answer[0];
+  }
+
+  if (component === 'percent_slider') {
+    const parsedAnswer = parseInt(aiAnswer);
+    if (parsedAnswer > 100) {
+      aiAnswer = 100;
+    } else if (parsedAnswer < 0) {
+      aiAnswer = 0;
+    } else {
+      aiAnswer = parsedAnswer;
+    }
+  }
+
+  if (aiAnswer === true) {
     originalAnswer = 'Yes';
-  } else if (ai_response.answer === false) {
+  } else if (aiAnswer === false) {
     originalAnswer = 'No';
-  } else if (Array.isArray(ai_response.answer)) {
+  } else if (Array.isArray(aiAnswer)) {
     originalAnswer = ai_response.answer.join(', ');
   } else {
-    originalAnswer = ai_response.answer;
+    originalAnswer = aiAnswer;
   }
 
   return originalAnswer;
@@ -683,41 +703,49 @@ export const isComplianceAIResponseValueValid = (followUp: QuestionnaireQuestion
   }
   const ai_response = compliance_responses[0].ai_response;
   let isValid = false;
-  if (isNull(ai_response) || isNull(ai_response.answer)) {
+  if (!isDefined(ai_response) || !isDefined(ai_response.answer)) {
     return isValid;
   }
+  let value = ai_response.answer;
+
+  if (['yes_no', 'textarea', 'text', 'currency', 'number', 'percent_slider'].includes(component)) {
+    if (isArray(value)) {
+      value = value[0];
+    }
+  }
+
   switch (component) {
     case 'yes_no':
-      if (isBoolean(ai_response.answer) || (isString(ai_response.answer) && (ai_response.answer.toLowerCase() === 'yes' || ai_response.answer.toLowerCase() === 'no'))) {
+      if (isBoolean(value) || (isString(value) && (value.toLowerCase() === 'yes' || value.toLowerCase() === 'no'))) {
         isValid = true;
       }
       break;
     case 'textarea':
     case 'text':
-      if (isString(ai_response.answer)) {
+      if (isString(value)) {
         isValid = true;
       }
       break;
     case 'currency':
     case 'number':
-      if (isNumber(ai_response.answer)) {
+      if (isNumber(value)) {
         isValid = true;
       }
       break;
     case 'percent_slider':
-      if (isNumber(ai_response.answer) && ai_response.answer >= 0 && ai_response.answer <= 100) {
+      if (isNumber(value)) {
         isValid = true;
       }
       break;
     case 'multi_select':
     case 'select':
-      if (Array.isArray(ai_response.answer) && ai_response.answer.length > 0) {
+      if (Array.isArray(value) && value.length > 0) {
         let allStrings = true;
         let foundOptions = true;
-        if (component === 'select' && ai_response.answer.length !== 1) {
+        if (component === 'select' && value.length !== 1) {
           return false;
         }
-        forEach(ai_response.answer, answer => {
+        forEach(value, answer => {
           if (!isString(answer)) {
             allStrings = false;
           }
@@ -729,9 +757,9 @@ export const isComplianceAIResponseValueValid = (followUp: QuestionnaireQuestion
       }
       break;
     case 'multi_text':
-      if (Array.isArray(ai_response.answer) && ai_response.answer.length > 0) {
+      if (Array.isArray(value) && value.length > 0) {
         let allStrings = true;
-        forEach(ai_response.answer, answer => {
+        forEach(value, answer => {
           if (!isString(answer)) {
             allStrings = false;
           }
@@ -744,45 +772,57 @@ export const isComplianceAIResponseValueValid = (followUp: QuestionnaireQuestion
   return isValid;
 };
 
-export const getComplianceAIResponseValue = (followUp: QuestionnaireQuestion) => {
-  const { compliance_responses, component } = followUp;
+export const getComplianceAIResponseValue = (question: QuestionnaireQuestion) => {
+  const { compliance_responses, component } = question;
   if (compliance_responses.length === 0) {
     return null;
   }
   const ai_response = compliance_responses[0].ai_response;
+
+  if (!isDefined(ai_response) || !isDefined(ai_response.answer)) {
+    return null;
+  }
+  let aiAnswer = ai_response.answer;
+
+  if (isArray(ai_response.answer) && ai_response.answer.length === 1 && ['yes_no', 'textarea', 'text', 'currency', 'number', 'percent_slider'].includes(component)) {
+    aiAnswer = ai_response.answer[0];
+  }
+
   switch (component) {
     case 'yes_no':
-      if (isString(ai_response?.answer)) {
-        if (ai_response?.answer.toLowerCase() === 'yes') {
+      if (isString(aiAnswer)) {
+        if (aiAnswer.toLowerCase() === 'yes') {
           return true;
-        } else if (ai_response?.answer.toLowerCase() === 'no') {
+        } else if (aiAnswer.toLowerCase() === 'no') {
           return false;
         }
       }
-      return ai_response?.answer;
+      return aiAnswer;
+    case 'percent_slider':
+      if (aiAnswer > 100) {
+        return 100;
+      } else if (aiAnswer < 0) {
+        return 0;
+      } else {
+        return aiAnswer;
+      }
     default:
-      return ai_response?.answer;
+      return aiAnswer;
   }
 };
 
-export const isComplianceAnswerEqualToAIResponse = (aiDetails: {
-  ai_response: QuestionnaireQuestionComplianceResponse['ai_response'];
-  ai_answered?: boolean;
-  ai_attempted?: boolean;
-  value?: any | undefined;
-  questionAnswerSaved: boolean;
-  questionAnswerChanged: boolean;
-}) => {
-  const { ai_response, value } = aiDetails;
-  if (isNull(ai_response)) {
+export const isComplianceAnswerEqualToAIResponse = (aiDetails: AIDetails) => {
+  const { value } = aiDetails;
+  const aiAnswer = getComplianceAIResponseValue(aiDetails.question);
+
+  if (aiAnswer === null || value === null || value === undefined) {
     return false;
   }
-  const { answer } = ai_response;
 
-  if (isArray(answer) && isArray(value)) {
-    return isEqual(answer, value);
+  if (isArray(aiAnswer) && isArray(value)) {
+    return isEqual(aiAnswer, value);
   }
-  return answer === value;
+  return aiAnswer === value;
 };
 
 export const getComplianceOrgResponseAnswer = (component: string, compliance_responses: QuestionnaireQuestionComplianceResponse[]) => {

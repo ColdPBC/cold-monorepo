@@ -1,8 +1,9 @@
 import { BaseButton, Card, ColdIcon, ComplianceProgressStatusIcon, ErrorFallback, Input, ListItem } from '@coldpbc/components';
 import { ButtonTypes, ComplianceProgressStatus, IconNames, InputTypes } from '@coldpbc/enums';
 import React, { useContext, useEffect, useState } from 'react';
-import { isArray, isNull, toArray } from 'lodash';
+import { isArray, toArray } from 'lodash';
 import {
+  getComplianceAIResponseOriginalAnswer,
   getComplianceAIResponseValue,
   getComplianceOrgResponseAdditionalContextAnswer,
   getComplianceOrgResponseAnswer,
@@ -20,6 +21,7 @@ import { useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
 import { isAxiosError } from 'axios';
 import { withErrorBoundary } from 'react-error-boundary';
 import { useSearchParams } from 'react-router-dom';
+import { isDefined } from 'class-validator';
 
 const _QuestionnaireQuestionItem = (props: { question: QuestionnaireQuestion; number: number; sectionId: string; sectionGroupId: string; questionnaireMutate: () => void }) => {
   const { logBrowser } = useColdContext();
@@ -34,7 +36,7 @@ const _QuestionnaireQuestionItem = (props: { question: QuestionnaireQuestion; nu
 
   const getDisplayValue = () => {
     let displayValue = value;
-    if (isNull(displayValue) && isComplianceAIResponseValueValid(question)) {
+    if (!isDefined(displayValue) && isComplianceAIResponseValueValid(question)) {
       displayValue = getComplianceAIResponseValue(question);
     }
     return displayValue;
@@ -88,12 +90,12 @@ const _QuestionnaireQuestionItem = (props: { question: QuestionnaireQuestion; nu
     setFocusQuestion({
       key: id,
       aiDetails: {
-        ai_response: ai_response,
         ai_answered: ai_answered,
         ai_attempted: ai_attempted,
         value: questionInput,
         questionAnswerSaved: questionAnswerSaved,
         questionAnswerChanged: questionAnswerChanged,
+        question: question,
       },
     });
   }, [questionInput, questionAnswerSaved, questionAnswerChanged]);
@@ -363,15 +365,7 @@ const _QuestionnaireQuestionItem = (props: { question: QuestionnaireQuestion; nu
     let originalAnswer;
     if (isComplianceAIResponseValueValid(question) && questionStatus === ComplianceProgressStatus.ai_answered) {
       justification = ai_response?.justification;
-      if (ai_response?.answer === true) {
-        originalAnswer = 'Yes';
-      } else if (ai_response?.answer === false) {
-        originalAnswer = 'No';
-      } else if (Array.isArray(ai_response?.answer)) {
-        originalAnswer = ai_response?.answer.join(', ');
-      } else {
-        originalAnswer = ai_response?.answer;
-      }
+      originalAnswer = getComplianceAIResponseOriginalAnswer(question);
     } else {
       return null;
     }
@@ -566,12 +560,12 @@ const _QuestionnaireQuestionItem = (props: { question: QuestionnaireQuestion; nu
                 setFocusQuestion({
                   key: id,
                   aiDetails: {
-                    ai_response: ai_response,
                     ai_answered: ai_answered,
                     ai_attempted: ai_attempted,
                     value: questionInput,
                     questionAnswerSaved: questionAnswerSaved,
                     questionAnswerChanged: questionAnswerChanged,
+                    question: question,
                   },
                 });
               }
