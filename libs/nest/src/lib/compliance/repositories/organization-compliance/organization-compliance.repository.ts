@@ -20,6 +20,18 @@ export class OrganizationComplianceRepository extends BaseWorker {
         where: { compliance_definition_name: name },
         include: {
           compliance_definition: true,
+          statuses: {
+            take: 1,
+            select: {
+              id: true,
+              type: true,
+              updated_at: true,
+              created_at: true,
+            },
+            orderBy: {
+              created_at: 'desc',
+            },
+          },
         },
       });
     } catch (error) {
@@ -38,6 +50,18 @@ export class OrganizationComplianceRepository extends BaseWorker {
           },
         },
         select: {
+          statuses: {
+            take: 1,
+            select: {
+              id: true,
+              type: true,
+              updated_at: true,
+              created_at: true,
+            },
+            orderBy: {
+              created_at: 'desc',
+            },
+          },
           id: true,
           compliance_definition_name: true,
           organization: true,
@@ -102,6 +126,18 @@ export class OrganizationComplianceRepository extends BaseWorker {
           },
         },
         select: {
+          statuses: {
+            take: 1,
+            select: {
+              id: true,
+              type: true,
+              updated_at: true,
+              created_at: true,
+            },
+            orderBy: {
+              created_at: 'desc',
+            },
+          },
           id: true,
           organization_id: true,
           compliance_definition: {
