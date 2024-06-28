@@ -1,10 +1,11 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Req, UseFilters, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Req, UseFilters, UseGuards, UseInterceptors } from '@nestjs/common';
 import { OrganizationComplianceService } from './organization_compliance.service';
-import { coldAdminOnly, allRoles, HttpExceptionFilter, JwtAuthGuard, Roles, RolesGuard } from '@coldpbc/nest';
+import { coldAdminOnly, allRoles, HttpExceptionFilter, JwtAuthGuard, Roles, RolesGuard, OrgUserInterceptor } from '@coldpbc/nest';
 import { ApiTags } from '@nestjs/swagger';
 import { organization_compliance } from '@prisma/client';
 
 @UseGuards(JwtAuthGuard, RolesGuard)
+@UseInterceptors(OrgUserInterceptor)
 @UseFilters(new HttpExceptionFilter(OrganizationComplianceController.name))
 @ApiTags('Compliance')
 @Controller('compliance/:name/organizations')
