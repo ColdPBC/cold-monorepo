@@ -6,6 +6,7 @@ import { Cuid2Generator, GuidPrefixes } from '../../../utility';
 import { IAuthenticatedUser } from '../../../primitives';
 import { ScoringService } from '../../scoring';
 import { pick, set } from 'lodash';
+import { CacheService } from '../../../cache';
 
 export interface ComplianceResponseOptions {
   take?: number;
@@ -18,7 +19,7 @@ export interface ComplianceResponseOptions {
 
 @Injectable()
 export class ComplianceResponsesRepository extends BaseWorker {
-  constructor(readonly prisma: PrismaService, readonly scoringService: ScoringService) {
+  constructor(readonly prisma: PrismaService, readonly scoringService: ScoringService, readonly cacheService: CacheService) {
     super(ComplianceResponsesRepository.name);
   }
 
@@ -101,6 +102,8 @@ export class ComplianceResponsesRepository extends BaseWorker {
     user_response?: organization_compliance_responses,
     ai_response?: organization_compliance_ai_responses,
   ) {
+    await this.cacheService.delete(`/compliance/${compliance_definition_name}/organizations/${org.id}/responses/counts`);
+
     if (!sId) throw new BadRequestException('Compliance Section ID is required');
     if (!sgId) throw new BadRequestException('Compliance Section Group ID is required');
     if (!compliance_definition_name) throw new BadRequestException('Compliance Definition Name is required');
@@ -212,6 +215,8 @@ export class ComplianceResponsesRepository extends BaseWorker {
           update: crData,
         });
       }
+
+      this.getScoredComplianceQuestionsByName(org, compliance.compliance_definition_name, user);
     } catch (error) {
       this.logger.error(`Error saving response for ${org.name}: ${compliance.compliance_definition_name}`, {
         user,
@@ -221,6 +226,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
         organization: org,
         error,
       });
+
       throw error;
     }
   }
@@ -353,6 +359,18 @@ export class ComplianceResponsesRepository extends BaseWorker {
           },
         },
         select: {
+          statuses: {
+            take: 1,
+            select: {
+              id: true,
+              type: true,
+              updated_at: true,
+              created_at: true,
+            },
+            orderBy: {
+              created_at: 'desc',
+            },
+          },
           compliance_definition: {
             select: {
               name: true,
@@ -386,7 +404,11 @@ export class ComplianceResponsesRepository extends BaseWorker {
 
       set(organization, 'organization_compliance', response);
 
-      return this.scoringService.scoreComplianceResponse(organization.organization_compliance.compliance_definition, org, user, options);
+      const scored = await this.scoringService.scoreComplianceResponse(organization.organization_compliance.compliance_definition, org, user, options);
+
+      await this.cacheService.set(`/compliance/${compliance_definition_name}/organizations/${org.id}/responses/counts`, scored);
+
+      return scored;
     } catch (error) {
       this.logger.error(`Error getting responses for organization: ${org.name}: ${compliance_definition_name}`, {
         user,
