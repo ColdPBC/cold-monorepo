@@ -51,9 +51,7 @@ const _ComplianceManager = () => {
 
   const countsDataSWR = useSWR<ComplianceManagerCountsPayload, any, any>(getCountsDataUrl(), axiosFetcher);
 
-  const orgCompliance = find(orgCompliances.data, { compliance_definition: { name } });
-
-  const compliance = orgCompliance?.compliance_definition;
+  const compliance = complianceSWR.data;
 
   useEffect(() => {
     if (orgCompliances) {
@@ -152,6 +150,8 @@ const _ComplianceManager = () => {
     termString = getTermString(term);
   }
 
+  const imageURL = get(compliance, 'image_url', 'https://cold-public-assets.s3.us-east-2.amazonaws.com/complianceBackgroundImages/rei.png');
+
   const getActiveTabElement = (tab: string) => {
     switch (tab) {
       default:
@@ -177,7 +177,7 @@ const _ComplianceManager = () => {
       }}>
       <div className={'flex flex-col w-full gap-[48px] justify-center relative mb-[40px]'}>
         <div className={'absolute top-0 w-full h-[179px]'}>
-          <img className={'w-full h-full object-cover'} src={compliance?.image_url} alt={compliance?.name} />
+          <img className={'w-full h-full object-cover'} src={imageURL} alt={compliance?.name} />
         </div>
         <div className={'w-full h-[281px] flex flex-col gap-[47px] justify-between relative'} data-testid={'compliance-manager-header'}>
           <div

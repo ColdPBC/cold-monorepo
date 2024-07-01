@@ -1,4 +1,6 @@
-import { Compliance, ComplianceManagerCountsPayload, ComplianceSidebarPayload, OrgCompliance, QuestionnaireComplianceContainerPayLoad } from '@coldpbc/interfaces';
+import { AllCompliance, Compliance, ComplianceManagerCountsPayload, ComplianceSidebarPayload, OrgCompliance, QuestionnaireComplianceContainerPayLoad } from '@coldpbc/interfaces';
+import { ComplianceStatus } from '@coldpbc/enums';
+import { set } from 'lodash';
 
 export function getComplianceMock(): Compliance[] {
   return [
@@ -1938,4 +1940,165 @@ export function getComplianceCountsMock(): ComplianceManagerCountsPayload {
       bookmarked: 1,
     },
   };
+}
+
+export function getAllComplianceMocks(): AllCompliance[] {
+  return [
+    {
+      id: 'compdef_q8ctv3dxn00s3bic',
+      name: 'one_percent_for_planet_DEMO',
+      logo_url: 'https://cold-public-assets.s3.amazonaws.com/3rdPartyLogos/compliance_svgs/1_percent_for_the_planet_logo.svg',
+      title: '1% for the Planet',
+      visible: true,
+      image_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/complianceBackgroundImages/rei.png',
+      metadata: {
+        term: 'annual',
+      },
+      order: 0,
+      version: 2024,
+      progress: 0,
+      statuses: [],
+    },
+    {
+      id: 'compdef_j784gq229ewcabkv',
+      name: 'higg_2024',
+      logo_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/compliance_svgs/higg_logo.svg',
+      title: 'Higg BRM',
+      visible: true,
+      image_url: null,
+      metadata: null,
+      order: 0,
+      version: 2024,
+      progress: null,
+      statuses: [],
+    },
+    {
+      id: 'compdef_sf8ubho9todby39h',
+      name: 'mec_2023',
+      logo_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/compliance_svgs/MEC.svg',
+      title: 'MEC',
+      visible: true,
+      image_url: null,
+      metadata: null,
+      order: 0,
+      version: 2023,
+      progress: 6.741573033707865,
+      statuses: [],
+    },
+    {
+      id: 'compdef_obu8yu9fbhex3inz',
+      name: 'amazon',
+      logo_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/compliance_svgs/amazon_logo.svg',
+      title: 'Amazon',
+      visible: true,
+      image_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/complianceBackgroundImages/rei.png',
+      metadata: {
+        term: 'annual',
+      },
+      order: 2,
+      version: null,
+      progress: 0,
+      statuses: [],
+    },
+    {
+      id: 'compdef_n90xd3j15im42aqr',
+      name: 'b_corp_2024',
+      logo_url: ' https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/compliance_svgs/b_corp_logo.svg',
+      title: 'B Corp',
+      visible: true,
+      image_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/complianceBackgroundImages/rei.png',
+      metadata: {
+        term: 'every_three_years',
+      },
+      order: 3,
+      version: 2024,
+      progress: 0,
+      statuses: [],
+    },
+    {
+      id: 'compdef_q4si19qzwqh0h03g',
+      name: 'oia_climate_report_2023',
+      logo_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/compliance_svgs/oia_logo.svg',
+      title: 'OIA Climate Action Corps Progress Report 2023',
+      visible: true,
+      image_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/complianceBackgroundImages/rei.png',
+      metadata: {
+        term: 'annual',
+      },
+      order: 4,
+      version: 2023,
+      progress: 81.25,
+      statuses: [],
+    },
+    {
+      id: 'compdef_s4h9rd5wuorvhthy',
+      name: 'rei_pia_2024',
+      logo_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/compliance_svgs/rei_logo.svg',
+      title: 'REI Product Impact Assessment 2024',
+      visible: true,
+      image_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/complianceBackgroundImages/rei.png',
+      metadata: {
+        term: 'annual',
+        due_date: '2024-03-29T00:00:00-05:00',
+      },
+      order: 5,
+      version: 2024,
+      progress: 14.942528735632186,
+      statuses: [],
+    },
+  ];
+}
+
+export function getAllComplianceMocksByName(name: string): AllCompliance | undefined {
+  return getAllComplianceMocks().find(compliance => compliance.name === name);
+}
+
+export function getAllComplianceMocksByStatus(status: ComplianceStatus, progress?: number, dueDate?: Date): AllCompliance {
+  const complianceMock = {
+    id: 'compdef_s4h9rd5wuorvhthy',
+    name: 'rei_pia_2024',
+    logo_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/compliance_svgs/rei_logo.svg',
+    title: 'REI Product Impact Assessment 2024',
+    visible: true,
+    image_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/complianceBackgroundImages/rei.png',
+    metadata: {
+      term: 'annual',
+      due_date: '2024-03-29T00:00:00-05:00',
+    },
+    order: 5,
+    version: 2024,
+    progress: 14.942528735632186,
+    statuses: [],
+  };
+
+  set(complianceMock, 'metadata.due_date', dueDate?.toISOString() ?? '2024-03-29T00:00:00-05:00');
+
+  switch (status) {
+    case ComplianceStatus.inActive:
+      set(complianceMock, 'progress', null);
+      break;
+    case ComplianceStatus.inProgress:
+      set(complianceMock, 'progress', progress);
+      break;
+    case ComplianceStatus.submissionInProgress:
+      set(complianceMock, 'statuses', [
+        {
+          type: 'user_submitted',
+          created_at: '2024-01-17T17:36:53.231Z',
+          updated_at: '2024-01-17T17:36:53.231Z',
+        },
+      ]);
+      break;
+    case ComplianceStatus.submittedByCold:
+      set(complianceMock, 'statuses', [
+        {
+          type: 'cold_submitted',
+          created_at: '2024-01-17T17:36:53.231Z',
+          updated_at: '2024-01-17T17:36:53.231Z',
+        },
+      ]);
+      break;
+  }
+
+  return complianceMock;
 }

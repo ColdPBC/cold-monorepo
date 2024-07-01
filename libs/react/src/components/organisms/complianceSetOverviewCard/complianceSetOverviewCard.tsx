@@ -1,6 +1,6 @@
-import { useAddToastMessage, useAuth0Wrapper, useColdContext, useOrgSWR } from '@coldpbc/hooks';
+import { useAddToastMessage, useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
 import { axiosFetcher } from '@coldpbc/fetchers';
-import { ComplianceSurveyPayloadType, ToastMessage } from '@coldpbc/interfaces';
+import { AllCompliance, OrgCompliance, ToastMessage } from '@coldpbc/interfaces';
 import React, { useContext } from 'react';
 import { ColdCompliancePageContext } from '@coldpbc/context';
 import { ComplianceStatus, ErrorType } from '@coldpbc/enums';
@@ -10,67 +10,54 @@ import { isAxiosError } from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { withErrorBoundary } from 'react-error-boundary';
 import { useFlags } from 'launchdarkly-react-client-sdk';
-import { get } from 'lodash';
+import { get, isArray } from 'lodash';
 import { getTermString } from '@coldpbc/lib';
+import { isDefined } from 'class-validator';
+import useSWR from 'swr';
 
-const _ComplianceSetOverviewCard = ({ name }: { name: string }) => {
+const _ComplianceSetOverviewCard = ({ complianceSet }: { complianceSet: AllCompliance }) => {
   const navigate = useNavigate();
   const ldFlags = useFlags();
   const { orgId } = useAuth0Wrapper();
   const { logError } = useColdContext();
   const { addToastMessage } = useAddToastMessage();
-  const { data, filter } = useContext(ColdCompliancePageContext);
+  const { filter } = useContext(ColdCompliancePageContext);
 
-  const { orgComplianceSets, complianceSets } = data;
-
-  const complianceSet = complianceSets.find(complianceSet => complianceSet.name === name) || complianceSets[0];
-  const orgComplianceSet = orgComplianceSets.find(orgComplianceSet => orgComplianceSet.compliance_definition.name === name);
-  const dueDate = get(complianceSet, 'metadata.due_date', undefined);
-  const term = get(complianceSet, 'metadata.term', undefined);
-
-  const getSurveyUrl = () => {
-    let compliance = complianceSets.find(compliance => compliance.name === name);
-    if (orgComplianceSet) {
-      compliance = orgComplianceSet.compliance_definition;
-    }
-    if (!compliance) {
+  const getOrgComplianceURL = () => {
+    if (ldFlags.showNewComplianceManagerCold711) {
       return null;
+    } else {
+      return [`/compliance/${complianceSet.name}/organizations/${orgId}`, 'GET'];
     }
-    return [`/surveys/${compliance.surveys[0]}`, 'GET'];
   };
 
-  const surveyData = useOrgSWR<ComplianceSurveyPayloadType>(getSurveyUrl(), axiosFetcher);
+  const orgComplianceSWR = useSWR<OrgCompliance, any, any>(getOrgComplianceURL(), axiosFetcher);
 
-  if (surveyData.isLoading) {
-    return <Spinner />;
-  }
-
-  if (surveyData.error) {
-    return null;
-  }
-  const { data: surveyPayload } = surveyData;
-
-  if (!surveyPayload) return null;
-
-  const { status } = surveyPayload;
+  const dueDate = get(complianceSet, 'metadata.due_date', undefined);
+  const term = get(complianceSet, 'metadata.term', undefined);
 
   let complianceStatus = ComplianceStatus.inActive;
 
   let isNotActive = true;
 
-  isNotActive = !orgComplianceSets.some(orgCompliance => orgCompliance.compliance_definition.name === name);
+  const progress = get(complianceSet, 'progress', null);
+  const statuses = get(complianceSet, 'statuses', null);
 
-  if (!isNotActive && surveyData.data) {
+  isNotActive = progress === null;
+
+  if (!isNotActive) {
     complianceStatus = ComplianceStatus.inProgress;
-    if (status) {
-      const recentStatus = status[0];
-      if (recentStatus.name === 'user_submitted') {
+    if (statuses && isArray(statuses) && statuses.length > 0) {
+      const recentStatus = statuses[0];
+      if (recentStatus.type === 'user_submitted') {
         complianceStatus = ComplianceStatus.submissionInProgress;
-      } else if (recentStatus.name === 'cold_submitted') {
+      } else if (recentStatus.type === 'cold_submitted') {
         complianceStatus = ComplianceStatus.submittedByCold;
       }
     }
   }
+
+  const orgComplianceSet = orgComplianceSWR.data;
 
   const getComplianceLogo = () => {
     let imageClassName = 'max-w-[60px] max-h-[60px]';
@@ -121,65 +108,50 @@ const _ComplianceSetOverviewCard = ({ name }: { name: string }) => {
   };
 
   const getComplianceStatusChip = () => {
-    if (surveyData.data) {
-      const data = surveyData.data;
-      let percentage = 0;
-      if (data.progress) {
-        const { questions_answered, question_count } = data.progress;
-        percentage = question_count === 0 ? 0 : (questions_answered / question_count) * 100;
-      }
-
-      return (
-        <div className={'h-full flex flex-col justify-center relative'}>
-          <ComplianceStatusChip status={complianceStatus} percentage={percentage} />
-          {complianceStatus === ComplianceStatus.submittedByCold && status && (
-            <div className={'absolute w-full top-full text-label text-gray-100 flex flex-row justify-center'} data-chromatic="ignore">
-              Submitted {format(new Date(status[0].date), 'MMMM dd, yyyy')}
-            </div>
-          )}
-        </div>
-      );
-    } else {
-      return null;
+    let percentage = 0;
+    if (isDefined(progress)) {
+      percentage = progress;
     }
+
+    return (
+      <div className={'h-full flex flex-col justify-center relative'}>
+        <ComplianceStatusChip status={complianceStatus} percentage={percentage} />
+        {complianceStatus === ComplianceStatus.submittedByCold && statuses && (
+          <div className={'absolute w-full top-full text-label text-gray-100 flex flex-row justify-center'} data-chromatic="ignore">
+            Submitted {format(new Date(statuses[0].updated_at), 'MMMM dd, yyyy')}
+          </div>
+        )}
+      </div>
+    );
   };
 
   const getComplianceDueDate = () => {
-    if (surveyData.data) {
-      // format due date to MM DD, YYYY
-      if (dueDate) {
-        const dateString = dueDate ? format(new Date(dueDate), 'MMMM dd, yyyy') : undefined;
-        const dueInDays = differenceInDays(new Date(dueDate), new Date());
-        let dueInDaysString = '';
-        if (dueInDays < 0) {
-          dueInDaysString = 'Deadline Passed';
-        } else {
-          const format = intlFormatDistance(new Date(dueDate).valueOf(), new Date());
-          dueInDaysString = `Due ${format}`;
-        }
-        const isDueInLessThan7Days = dueInDays < 7 && dueInDays >= 0;
-
-        return (
-          <div className={'flex flex-col min-w-[166px] text-right'} data-chromatic="ignore">
-            <div className={`text-h5 w-full ${complianceStatus === ComplianceStatus.inActive ? 'text-tc-disabled' : 'text-tc-primary'}`}>{dateString}</div>
-            <div
-              className={`text-body w-full ${
-                isDueInLessThan7Days && complianceStatus !== ComplianceStatus.submittedByCold && complianceStatus !== ComplianceStatus.submissionInProgress
-                  ? 'text-tc-warning'
-                  : 'text-tc-secondary'
-              }`}>
-              {dueInDaysString}
-            </div>
-          </div>
-        );
+    // format due date to MM DD, YYYY
+    if (dueDate) {
+      const dateString = dueDate ? format(new Date(dueDate), 'MMMM dd, yyyy') : undefined;
+      const dueInDays = differenceInDays(new Date(dueDate), new Date());
+      let dueInDaysString = '';
+      if (dueInDays < 0) {
+        dueInDaysString = 'Deadline Passed';
       } else {
-        return (
-          <div className={'flex flex-col min-w-[166px] text-right'} data-chromatic="ignore">
-            <div className={`text-h5 w-full ${complianceStatus === ComplianceStatus.inActive ? 'text-tc-disabled' : 'text-tc-primary'}`}>No Deadline</div>
-            <div className={'text-body w-full text-tc-secondary'}>Submit at any time</div>
-          </div>
-        );
+        const format = intlFormatDistance(new Date(dueDate).valueOf(), new Date());
+        dueInDaysString = `Due ${format}`;
       }
+      const isDueInLessThan7Days = dueInDays < 7 && dueInDays >= 0;
+
+      return (
+        <div className={'flex flex-col min-w-[166px] text-right'} data-chromatic="ignore">
+          <div className={`text-h5 w-full ${complianceStatus === ComplianceStatus.inActive ? 'text-tc-disabled' : 'text-tc-primary'}`}>{dateString}</div>
+          <div
+            className={`text-body w-full ${
+              isDueInLessThan7Days && complianceStatus !== ComplianceStatus.submittedByCold && complianceStatus !== ComplianceStatus.submissionInProgress
+                ? 'text-tc-warning'
+                : 'text-tc-secondary'
+            }`}>
+            {dueInDaysString}
+          </div>
+        </div>
+      );
     } else {
       return (
         <div className={'flex flex-col min-w-[166px] text-right'} data-chromatic="ignore">
@@ -194,8 +166,8 @@ const _ComplianceSetOverviewCard = ({ name }: { name: string }) => {
     if (ldFlags.showNewComplianceManagerCold711) {
       navigate(`/compliance/${complianceSet.name}`);
     } else {
-      if (orgComplianceSet !== undefined) {
-        navigate(`/wizard/compliance/${orgComplianceSet.compliance_definition.name}`);
+      if (!isAxiosError(orgComplianceSet) && orgComplianceSet !== undefined) {
+        navigate(`/wizard/compliance/${complianceSet.name}`);
       } else {
         const response = await axiosFetcher([`/compliance_definitions/${complianceSet.name}/organizations/${orgId}`, 'POST']);
         if (isAxiosError(response)) {
@@ -212,11 +184,9 @@ const _ComplianceSetOverviewCard = ({ name }: { name: string }) => {
   const checkFilter = () => {
     switch (filter) {
       case 'Upcoming':
-        if (!surveyData.data) return false;
         if (!dueDate) return false;
         return differenceInDays(new Date(dueDate), new Date()) >= 0;
       case 'Passed':
-        if (!surveyData.data) return false;
         if (!dueDate) return false;
         return differenceInDays(new Date(dueDate), new Date()) < 0;
       case 'Active':
@@ -238,10 +208,16 @@ const _ComplianceSetOverviewCard = ({ name }: { name: string }) => {
       className="w-full h-auto border-[1px] border-gray-60 cursor-pointer hover:bg-gray-50 hover:border-[1px] hover:border-white flex flex-row justify-start items-center"
       glow={false}
       onClick={onCardClick}>
-      {getComplianceLogo()}
-      {getComplianceSetTitle()}
-      {getComplianceStatusChip()}
-      {getComplianceDueDate()}
+      {orgComplianceSWR.isLoading ? (
+        <Spinner />
+      ) : (
+        <>
+          {getComplianceLogo()}
+          {getComplianceSetTitle()}
+          {getComplianceStatusChip()}
+          {getComplianceDueDate()}
+        </>
+      )}
     </Card>
   );
 };

@@ -261,3 +261,23 @@ export interface AIDetails {
   questionAnswerChanged: boolean;
   question: QuestionnaireQuestion;
 }
+
+export type AllCompliance = {
+  id: string;
+  name: string;
+  logo_url: string;
+  title: string;
+  visible: boolean;
+  image_url: string | null;
+  metadata: any | null;
+  order: number;
+  version: number | null;
+  progress: number | null;
+  statuses: ComplianceSetStatus[] | null;
+};
+
+export type ComplianceSetStatus = {
+  type: string;
+  created_at: string;
+  updated_at: string;
+};

@@ -1,10 +1,9 @@
-import { Compliance, OrgCompliance } from '@coldpbc/interfaces';
+import { AllCompliance } from '@coldpbc/interfaces';
 import { createContext } from 'react';
 import { CompliancePageFilter } from '@coldpbc/enums';
 
 export interface CompliancePageData {
-  complianceSets: Compliance[];
-  orgComplianceSets: OrgCompliance[];
+  allComplianceSets: AllCompliance[] | undefined;
 }
 
 export interface CompliancePageContextType {
@@ -15,8 +14,7 @@ export interface CompliancePageContextType {
 
 export const ColdCompliancePageContext = createContext<CompliancePageContextType>({
   data: {
-    complianceSets: [],
-    orgComplianceSets: [],
+    allComplianceSets: [],
   },
   filter: CompliancePageFilter.all,
   setFilter: () => {},
