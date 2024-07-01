@@ -1,3 +1,10 @@
+## [1.270.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.270.1...v1.270.2) (2024-07-01)
+
+
+### Bug Fixes
+
+* issue preventing compliance page from rendering ([aa5f6f2](https://github.com/ColdPBC/cold-monorepo/commit/aa5f6f2186b0d81e157e0c72a4a5f535fe7b4c5c))
+
 ## [1.270.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.270.0...v1.270.1) (2024-06-28)
 
 
