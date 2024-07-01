@@ -22,6 +22,7 @@ import {
   getAllComplianceMocks,
   getComplianceCountsMock,
   getComplianceMock,
+  getComplianceMockByName,
   getOrganizationComplianceMock,
   getOrganizationComplianceMockByName,
   getQuestionnaireContainerMock,
@@ -337,5 +338,10 @@ export const handlers = [
 
   rest.get(getApiUrl('/compliance/all/organizations/:orgId'), (req, res, ctx) => {
     return res(ctx.json(getAllComplianceMocks()));
+  }),
+
+  rest.get(getApiUrl('/compliance/:name'), (req, res, ctx) => {
+    const name = req.params.name as string;
+    return res(ctx.json(getComplianceMockByName(name)));
   }),
 ];
