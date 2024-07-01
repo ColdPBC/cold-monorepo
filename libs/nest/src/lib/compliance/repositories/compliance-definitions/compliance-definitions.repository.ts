@@ -25,6 +25,7 @@ export class ComplianceDefinitionsRepository extends BaseWorker {
         name: true,
         logo_url: true,
         title: true,
+        visible: true,
         image_url: true,
         metadata: true,
         order: true,
