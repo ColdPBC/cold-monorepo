@@ -24,7 +24,7 @@ const _CompliancePage = () => {
   };
 
   const getOrgComplianceSetsURL = () => {
-    if (ldFlags.showNewComplianceManagerCold711) {
+    if (ldFlags.showNewCompliancePageHomeCold671) {
       return null;
     } else {
       return [`/compliance_definitions/organizations/${orgId}`, 'GET'];
