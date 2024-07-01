@@ -16907,15 +16907,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"aws-iot-device-sdk@npm:^2.2.13":
-  version: 2.2.13
-  resolution: "aws-iot-device-sdk@npm:2.2.13"
+"aws-iot-device-sdk@npm:^2.2.14":
+  version: 2.2.14
+  resolution: "aws-iot-device-sdk@npm:2.2.14"
   dependencies:
     crypto-js: "npm:4.2.0"
     minimist: "npm:1.2.6"
     mqtt: "npm:4.2.8"
     websocket-stream: "npm:^5.5.2"
-  checksum: 10/54e83099e8c21b477ed018d860c0b8e1577dacf43f5b864f7a5297df86ef7fcc15f45a1b556b59be8d5c175eeda67075ab0e8f5eb1aff63c6eafa9d9042af797
+  checksum: 10/112b28c5c8cc780e509709c423ec25045d240cdc8f8a34e1ee50dc5216ad7b3bc87c05c9d9d0dbaa26f518256ab9e0926cd800b85e88642a366f52c697ae327d
   languageName: node
   linkType: hard
 
@@ -19182,7 +19182,7 @@ __metadata:
     auth0: "npm:^4.2.0"
     auto-changelog: "npm:^2.4.0"
     autoprefixer: "npm:^10.4.14"
-    aws-iot-device-sdk: "npm:^2.2.13"
+    aws-iot-device-sdk: "npm:^2.2.14"
     aws-sdk: "npm:^2.1533.0"
     axios: "npm:^1.4.0"
     babel-loader: "npm:^9.1.2"
