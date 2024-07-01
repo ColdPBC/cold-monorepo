@@ -1,3 +1,13 @@
+# [1.271.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.270.2...v1.271.0) (2024-07-01)
+
+
+### Features
+
+* Add getComplianceMockByName handler ([4d481d9](https://github.com/ColdPBC/cold-monorepo/commit/4d481d9a8dd99d1b8cb42bf253cad679cb9e3b7f))
+* Refactor compliance data fetching and image URL setting ([27ac869](https://github.com/ColdPBC/cold-monorepo/commit/27ac8695d1116eef0144bffdaa6044340124aca4))
+* Update compliance mocking and calls with a new structure ([2485c8a](https://github.com/ColdPBC/cold-monorepo/commit/2485c8aef676f1813629f371d7c4baf830ed6200))
+* Update feature flag in compliance component ([025e4dd](https://github.com/ColdPBC/cold-monorepo/commit/025e4dd41cf694372ceb500a2300a167a009433c))
+
 ## [1.270.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.270.1...v1.270.2) (2024-07-01)
 
 
