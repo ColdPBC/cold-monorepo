@@ -1,7 +1,7 @@
 import { BaseButton, Card, ColdIcon, ComplianceProgressStatusIcon, ErrorFallback, Input, ListItem } from '@coldpbc/components';
 import { ButtonTypes, ComplianceProgressStatus, IconNames, InputTypes } from '@coldpbc/enums';
 import React, { useContext, useEffect, useState } from 'react';
-import { isArray, toArray } from 'lodash';
+import { get, isArray, toArray } from 'lodash';
 import {
   getComplianceAIResponseOriginalAnswer,
   getComplianceAIResponseValue,
@@ -119,23 +119,6 @@ const _QuestionnaireQuestionItem = (props: { question: QuestionnaireQuestion; nu
     });
   }, [questionInput, questionAnswerSaved, questionAnswerChanged]);
 
-  useEffect(() => {
-    console.log({
-      questionAnswerSaved,
-      questionAnswerChanged,
-      questionScore,
-      questionInput,
-      answer_score_map,
-      complianceDefinition,
-      complianceType: complianceDefinition?.metadata?.compliance_type,
-    });
-    if (isDefined(questionInput) && (questionAnswerSaved || (!questionAnswerChanged && !questionAnswerSaved)) && showScore()) {
-      // update the question score using the answer_score_map
-      const newScore = getComplianceQuestionnaireQuestionScore(questionInput, question);
-      setQuestionScore(newScore);
-    }
-  }, [answer_score_map, complianceDefinition, question, questionAnswerSaved, questionAnswerChanged, questionInput, questionScore]);
-
   const getQuestionStatusIcon = () => {
     return (
       <div className={'w-[12px] h-[12px]'}>
@@ -185,6 +168,7 @@ const _QuestionnaireQuestionItem = (props: { question: QuestionnaireQuestion; nu
             }}
             value={displayValue}
             data-testid={key + (isAdditional ? '-additional' : '')}
+            answer_score_map={showScore() ? answer_score_map : undefined}
           />
         );
       case 'text':
@@ -318,6 +302,7 @@ const _QuestionnaireQuestionItem = (props: { question: QuestionnaireQuestion; nu
             }}
             value={displayValue}
             data-testid={key + (isAdditional ? '-additional' : '')}
+            answer_score_map={showScore() ? answer_score_map : undefined}
           />
         );
       case 'select':
@@ -329,6 +314,7 @@ const _QuestionnaireQuestionItem = (props: { question: QuestionnaireQuestion; nu
             }}
             value={displayValue}
             data-testid={key + (isAdditional ? '-additional' : '')}
+            answer_score_map={showScore() ? answer_score_map : undefined}
           />
         );
       case 'textarea':
@@ -433,7 +419,7 @@ const _QuestionnaireQuestionItem = (props: { question: QuestionnaireQuestion; nu
       max_score &&
       answer_score_map &&
       complianceDefinition &&
-      complianceDefinition.metadata?.compliance_type === 'target_score'
+      get(complianceDefinition, 'metadata.compliance_type', undefined) === 'target_score'
     ) {
       return true;
     } else {
@@ -561,6 +547,7 @@ const _QuestionnaireQuestionItem = (props: { question: QuestionnaireQuestion; nu
 
     const promises = await Promise.all(promiseArray);
     if (promises.every(promise => !isAxiosError(promise))) {
+      let newValue = valueBeingSent;
       if (isDelete) {
         setQuestionAnswerSaved(true);
         setQuestionInput(null);
@@ -568,21 +555,37 @@ const _QuestionnaireQuestionItem = (props: { question: QuestionnaireQuestion; nu
         setAnswerQuestionChanged(false);
         if (isComplianceAIResponseValueValid(question)) {
           setQuestionStatus(ComplianceProgressStatus.ai_answered);
-          setQuestionInput(ai_response?.answer);
+          const aiAnswer = getComplianceAIResponseValue(question);
+          setQuestionInput(aiAnswer);
+          newValue = aiAnswer;
         } else {
           setQuestionStatus(ComplianceProgressStatus.not_started);
+          newValue = null;
         }
       } else {
         setQuestionAnswerSaved(true);
         setAnswerQuestionChanged(false);
         setQuestionStatus(ComplianceProgressStatus.user_answered);
       }
+      // update the question score
+      updateQuestionScore(isDelete, newValue);
       // update the sidebar
       await sectionGroups?.mutate();
       // update the questionnaire
       await questionnaireMutate();
     }
     setButtonLoading(false);
+  };
+
+  const updateQuestionScore = (isDelete: boolean, newAnswer: any) => {
+    if (showScore()) {
+      if (!isDelete) {
+        const newScore = getComplianceQuestionnaireQuestionScore(newAnswer, question);
+        setQuestionScore(newScore);
+      } else {
+        setQuestionScore(0);
+      }
+    }
   };
 
   logBrowser('QuestionnaireQuestionItem rendered', 'info', {

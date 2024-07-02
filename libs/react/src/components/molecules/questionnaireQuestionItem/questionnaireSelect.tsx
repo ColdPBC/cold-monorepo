@@ -1,4 +1,4 @@
-import { isArray, isEqual } from 'lodash';
+import { get, isArray, isEqual } from 'lodash';
 import React, { ReactNode } from 'react';
 import { IconNames } from '@coldpbc/enums';
 import { ColdIcon } from '@coldpbc/components';
@@ -9,10 +9,13 @@ export interface QuestionnaireSelectProps {
   value: string[] | null | undefined;
   isMultiSelect?: boolean;
   'data-testid'?: string;
+  answer_score_map?: {
+    [key: string]: number;
+  };
 }
 
 export const QuestionnaireSelect = (props: QuestionnaireSelectProps) => {
-  const { options, onChange, value, isMultiSelect = false } = props;
+  const { options, onChange, value, isMultiSelect = false, answer_score_map } = props;
 
   const onOptionClick = (index: number) => {
     if (isMultiSelect) {
@@ -92,6 +95,23 @@ export const QuestionnaireSelect = (props: QuestionnaireSelectProps) => {
     return <div className={className}>{inner}</div>;
   };
 
+  const getOptionScore = (index: number) => {
+    if (answer_score_map) {
+      const option = get(answer_score_map, options[index], undefined);
+      if (option && option > 0) {
+        return option;
+      } else {
+        return null;
+      }
+    } else {
+      return null;
+    }
+  };
+
+  const showScore = (index: number) => {
+    return getOptionScore(index) !== null;
+  };
+
   return (
     <div className={'w-full'} data-testid={props['data-testid']}>
       <div className={'w-full space-y-4'}>
@@ -99,7 +119,8 @@ export const QuestionnaireSelect = (props: QuestionnaireSelectProps) => {
           return (
             <div key={`select_option_${index}`} className={getClassName(index)} id={index.toString()} onClick={() => onOptionClick(index)}>
               {getSelectBox(index)}
-              {option}
+              <div className={'w-full'}>{option}</div>
+              {showScore(index) && <div className={'w-auto h-full text-body'}>+{getOptionScore(index)?.toFixed(2)}</div>}
             </div>
           );
         })}
