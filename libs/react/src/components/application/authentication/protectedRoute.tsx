@@ -99,23 +99,6 @@ const _ProtectedRoute = () => {
                 });
 
                 await ldClient.identify(newContext);
-
-                // const isContextSet = checkContextValue(currentContext, {
-                //   kind: 'organization',
-                //   key: orgId,
-                // });
-                // if (!isContextSet) {
-                //   const newContext = getUpdatedContext(currentContext, {
-                //     kind: 'organization',
-                //     key: orgId,
-                //   });
-                //   logBrowser('Setting LD context for organization', 'info', {
-                //     isContextSet,
-                //     orgId,
-                //     newContext,
-                //   });
-                //   await ldClient.identify(newContext);
-                // }
               }
               datadogRum.setUser(user?.coldclimate_claims);
               datadogLogs.setUser(user?.coldclimate_claims);
