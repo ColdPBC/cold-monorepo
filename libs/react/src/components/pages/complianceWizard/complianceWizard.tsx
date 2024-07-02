@@ -8,8 +8,6 @@ import { useAuth0Wrapper, useColdContext, useOrgSWR } from '@coldpbc/hooks';
 import { ErrorType } from '@coldpbc/enums';
 import { withErrorBoundary } from 'react-error-boundary';
 import { useLDClient } from 'launchdarkly-react-client-sdk';
-import { LDContext } from '@launchdarkly/node-server-sdk';
-import { checkContextValue, getUpdatedContext } from '@coldpbc/lib';
 
 const _ComplianceWizard = () => {
   const { name } = useParams();
@@ -34,30 +32,7 @@ const _ComplianceWizard = () => {
 
   const filesSWR = useOrgSWR<any, any>(['/files', 'GET'], axiosFetcher);
 
-  const setLDContext = () => {
-    if (ldClient && orgId && name) {
-      const isContextSet = checkContextValue(ldClient.getContext() as LDContext, {
-        kind: 'complianceSet',
-        key: name,
-      });
-      if (!isContextSet) {
-        const newContext = getUpdatedContext(
-          ldClient.getContext() as LDContext,
-          {
-            kind: 'complianceSet',
-            key: name,
-          },
-          true,
-        );
-        logBrowser('Setting new LD context for compliance set', 'info', { newContext, isContextSet, name, orgId });
-        ldClient.identify(newContext);
-      }
-    }
-  };
-
   const { logError } = useColdContext();
-
-  setLDContext();
 
   if (compliances.isLoading || orgCompliances.isLoading || surveyData.isLoading || filesSWR.isLoading) {
     return <Spinner />;

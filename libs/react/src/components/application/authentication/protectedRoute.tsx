@@ -12,7 +12,6 @@ import { get, has, isEmpty } from 'lodash';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorPage } from '../errors/errorPage';
 import { datadogRum } from '@datadog/browser-rum';
-import { checkContextValue, getUpdatedContext } from '@coldpbc/lib';
 import { LDContext } from 'launchdarkly-js-sdk-common';
 import { datadogLogs } from '@datadog/browser-logs';
 
@@ -66,22 +65,57 @@ const _ProtectedRoute = () => {
             if (isAuthenticated) {
               if (ldClient && orgId) {
                 const currentContext = ldClient.getContext() as LDContext;
-                const isContextSet = checkContextValue(currentContext, {
-                  kind: 'organization',
-                  key: orgId,
-                });
-                if (!isContextSet) {
-                  const newContext = getUpdatedContext(currentContext, {
-                    kind: 'organization',
-                    key: orgId,
-                  });
-                  logBrowser('Setting LD context for organization', 'info', {
-                    isContextSet,
-                    orgId,
-                    newContext,
-                  });
-                  await ldClient.identify(newContext);
+                let newContext: LDContext;
+                if (currentContext.anonymous === true) {
+                  newContext = {
+                    kind: 'multi',
+                    organization: {
+                      kind: 'organization',
+                      key: orgId,
+                    },
+                    role: {
+                      kind: 'role',
+                      key: get(user, 'coldclimate_claims.roles[0]', 'company:member'),
+                    },
+                  };
+                } else {
+                  newContext = {
+                    ...currentContext,
+                    kind: 'multi',
+                    organization: {
+                      kind: 'organization',
+                      key: orgId,
+                    },
+                    role: {
+                      kind: 'role',
+                      key: get(user, 'coldclimate_claims.roles[0]', 'company:member'),
+                    },
+                  };
                 }
+
+                logBrowser(`Setting LD context for organization: ${orgId}`, 'info', {
+                  orgId,
+                  newContext,
+                });
+
+                await ldClient.identify(newContext);
+
+                // const isContextSet = checkContextValue(currentContext, {
+                //   kind: 'organization',
+                //   key: orgId,
+                // });
+                // if (!isContextSet) {
+                //   const newContext = getUpdatedContext(currentContext, {
+                //     kind: 'organization',
+                //     key: orgId,
+                //   });
+                //   logBrowser('Setting LD context for organization', 'info', {
+                //     isContextSet,
+                //     orgId,
+                //     newContext,
+                //   });
+                //   await ldClient.identify(newContext);
+                // }
               }
               datadogRum.setUser(user?.coldclimate_claims);
               datadogLogs.setUser(user?.coldclimate_claims);
