@@ -12,11 +12,29 @@ export class ComplianceDefinitionsRepository extends BaseWorker {
     super(ComplianceDefinitionsRepository.name);
   }
 
+  async getComplianceDefinitions() {
+    const definitions = (await this.prisma.extended.compliance_definitions.findMany({
+      orderBy: {
+        order: 'asc',
+      },
+      select: {
+        id: true,
+        name: true,
+        logo_url: true,
+        title: true,
+        visible: true,
+        image_url: true,
+        metadata: true,
+        order: true,
+        version: true,
+      },
+    })) as compliance_definitions[];
+
+    return definitions;
+  }
+
   async getComplianceDefinitionsByOrgId(req: any) {
     const definitions = (await this.prisma.extended.compliance_definitions.findMany({
-      where: {
-        visible: true,
-      },
       orderBy: {
         order: 'asc',
       },
@@ -41,6 +59,12 @@ export class ComplianceDefinitionsRepository extends BaseWorker {
         } else {
           try {
             const raw = await this.responses.getScoredComplianceQuestionsByName(req.organization, def.name, req.user);
+
+            // show hidden definitions if their org_compliance is visible
+            if (!def.visible && raw.visible == true) {
+              def.visible = true;
+            }
+
             if (raw.counts) {
               set(def, 'progress', raw.counts.progress);
             }
@@ -55,7 +79,7 @@ export class ComplianceDefinitionsRepository extends BaseWorker {
       throw new NotFoundException('No compliance definitions found');
     }
 
-    return definitions;
+    return definitions.filter(def => def.visible);
   }
 
   async getComplianceSectionsByComplianceName(name: string) {
