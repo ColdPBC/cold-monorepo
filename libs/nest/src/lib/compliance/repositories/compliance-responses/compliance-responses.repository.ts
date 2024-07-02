@@ -401,6 +401,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
           },
         },
         select: {
+          visible: true,
           statuses: {
             take: 1,
             select: {
@@ -431,6 +432,8 @@ export class ComplianceResponsesRepository extends BaseWorker {
       set(organization, 'organization_compliance', response);
 
       const scored = await this.scoringService.scoreComplianceResponse(organization.organization_compliance.compliance_definition, org, user, options);
+
+      scored.visible = organization.organization_compliance.visible;
 
       await this.cacheService.set(`organization:${org.id}:compliance:${compliance_definition_name}:counts`, scored);
 
