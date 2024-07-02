@@ -163,7 +163,7 @@ export interface QuestionnaireQuestion {
   component: string;
   placeholder: string;
   tooltip: string;
-  additional_context?: SurveyAdditionalContext;
+  additional_context?: SurveyAdditionalContext | null;
   ai_attempted?: boolean;
   score?: number;
   max_score?: number;
@@ -171,6 +171,9 @@ export interface QuestionnaireQuestion {
   question_summary?: string;
   corresponding_question?: string;
   compliance_responses: QuestionnaireQuestionComplianceResponse[];
+  answer_score_map?: {
+    [key: string]: number;
+  };
 }
 
 export interface QuestionnaireQuestionComplianceResponse {

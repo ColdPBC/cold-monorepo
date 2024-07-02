@@ -1,9 +1,17 @@
 import React from 'react';
 import { IconNames } from '@coldpbc/enums';
 import { ColdIcon } from '@coldpbc/components';
+import { get } from 'lodash';
 
-export const QuestionnaireYesNo = (props: { onChange: (value: any) => void; value: any; 'data-testid'?: string }) => {
-  const { onChange, value } = props;
+export const QuestionnaireYesNo = (props: {
+  onChange: (value: any) => void;
+  value: any;
+  'data-testid'?: string;
+  answer_score_map?: {
+    [key: string]: number;
+  };
+}) => {
+  const { onChange, value, answer_score_map } = props;
 
   const onClick = (newValue: any) => {
     if (newValue === value) {
@@ -26,12 +34,28 @@ export const QuestionnaireYesNo = (props: { onChange: (value: any) => void; valu
   };
 
   const getCheckmark = (newValue: boolean) => {
+    const optionScore = getOptionScoreElement(newValue);
     if (newValue === value) {
       return (
-        <div className={'absolute right-[16px]'}>
+        <div className={'absolute right-[16px] flex flex-row gap-x-[4px]'}>
+          {optionScore}
           <ColdIcon name={IconNames.ColdCheckIcon} width={24} height={24} color={'white'} />
         </div>
       );
+    } else {
+      return <div className={'absolute right-[16px] flex flex-row gap-x-[4px]'}>{optionScore}</div>;
+    }
+  };
+
+  const getOptionScoreElement = (value: boolean) => {
+    if (answer_score_map) {
+      const stringValue = value ? 'true' : 'false';
+      const option = get(answer_score_map, stringValue, undefined);
+      if (option && option > 0) {
+        return <div className={'text-body'}>+{option.toFixed(2)}</div>;
+      } else {
+        return null;
+      }
     } else {
       return null;
     }
