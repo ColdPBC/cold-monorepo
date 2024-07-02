@@ -9,7 +9,7 @@ import { HexColors } from '@coldpbc/themes';
 
 const _ComplianceManagerOverviewStatusCard = () => {
   const { data, status: managerStatus } = useContext(ColdComplianceManagerContext);
-  const { mqttComplianceSet, currentAIStatus, complianceCounts } = data;
+  const { compliance, currentAIStatus, complianceCounts } = data;
 
   const showProgressBarGradient = (status: ComplianceManagerStatus) => {
     if (status === managerStatus) {
@@ -92,7 +92,7 @@ const _ComplianceManagerOverviewStatusCard = () => {
 
     switch (status) {
       case ComplianceManagerStatus.activated:
-        text = `Activate ${mqttComplianceSet?.compliance_definition.title}`;
+        text = `Activate ${compliance?.title}`;
         break;
       case ComplianceManagerStatus.uploadedDocuments:
         text = 'Upload Documents';

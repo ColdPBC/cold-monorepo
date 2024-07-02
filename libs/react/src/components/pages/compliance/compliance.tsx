@@ -12,10 +12,27 @@ import { ColdComplianceSetsProvider } from '@coldpbc/providers';
 
 const _CompliancePage = () => {
   const { orgId } = useAuth0Wrapper();
-  const compliances = useSWR<Compliance[], any, any>(['/compliance_definitions', 'GET'], axiosFetcher);
-  const orgCompliances = useSWR<OrgCompliance[], any, any>([`/compliance_definitions/organizations/${orgId}`, 'GET'], axiosFetcher);
   const { logError, logBrowser } = useColdContext();
   const ldFlags = useFlags();
+
+  const getComplianceSetsURL = () => {
+    if (ldFlags.showNewCompliancePageHomeCold671) {
+      return null;
+    } else {
+      return ['/compliance_definitions', 'GET'];
+    }
+  };
+
+  const getOrgComplianceSetsURL = () => {
+    if (ldFlags.showNewCompliancePageHomeCold671) {
+      return null;
+    } else {
+      return [`/compliance_definitions/organizations/${orgId}`, 'GET'];
+    }
+  };
+
+  const compliances = useSWR<Compliance[], any, any>(getComplianceSetsURL(), axiosFetcher);
+  const orgCompliances = useSWR<OrgCompliance[], any, any>(getOrgComplianceSetsURL(), axiosFetcher);
 
   if (compliances.isLoading || orgCompliances.isLoading) {
     return <Spinner />;
@@ -37,35 +54,31 @@ const _CompliancePage = () => {
 
   logBrowser('Compliance data loaded', 'info', { compliances, orgCompliances });
 
-  if (compliances.data && orgCompliances.data) {
-    if (ldFlags.showNewCompliancePageHomeCold671) {
-      return (
-        <ColdComplianceSetsProvider>
-          <CompliancePageWrapper />
-        </ColdComplianceSetsProvider>
-      );
-    } else {
-      return (
-        <CenterColumnContent title="Compliance">
-          <div className={'w-full space-y-10'}>
-            {compliances.data
-              .filter(comp => {
-                return comp.visible;
-              })
-              .map((compliance, index) => {
-                const complianceFound = find(orgCompliances.data, { compliance_id: compliance.id });
-                return (
-                  <div key={'compliance_' + index} data-testid={`compliance-${compliance.id}`}>
-                    <ComplianceOverview complianceData={compliance} orgComplianceData={complianceFound} />
-                  </div>
-                );
-              })}
-          </div>
-        </CenterColumnContent>
-      );
-    }
+  if (ldFlags.showNewCompliancePageHomeCold671) {
+    return (
+      <ColdComplianceSetsProvider>
+        <CompliancePageWrapper />
+      </ColdComplianceSetsProvider>
+    );
   } else {
-    return null;
+    return (
+      <CenterColumnContent title="Compliance">
+        <div className={'w-full space-y-10'}>
+          {compliances.data
+            ?.filter(comp => {
+              return comp.visible;
+            })
+            .map((compliance, index) => {
+              const complianceFound = find(orgCompliances.data, { compliance_id: compliance.id });
+              return (
+                <div key={'compliance_' + index} data-testid={`compliance-${compliance.id}`}>
+                  <ComplianceOverview complianceData={compliance} orgComplianceData={complianceFound} />
+                </div>
+              );
+            })}
+        </div>
+      </CenterColumnContent>
+    );
   }
 };
 

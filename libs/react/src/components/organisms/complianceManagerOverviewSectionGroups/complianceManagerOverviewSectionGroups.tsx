@@ -10,11 +10,11 @@ const _ComplianceManagerOverviewSectionGroups = () => {
   const { data } = useContext(ColdComplianceManagerContext);
   const { logBrowser } = useColdContext();
 
-  const { mqttComplianceSet } = data;
+  const { sectionGroups } = data;
 
-  const sectionGroups = mqttComplianceSet?.compliance_definition.compliance_section_groups;
+  const sectionGroupsData = sectionGroups?.data?.compliance_section_groups;
 
-  const orderedSectionGroups = orderBy(sectionGroups, ['order', 'title'], ['asc', 'asc']);
+  const orderedSectionGroups = orderBy(sectionGroupsData, ['order', 'title'], ['asc', 'asc']);
 
   useEffect(() => {
     logBrowser('Compliance Manager Overview Section Groups', 'info', { orderedSectionGroups });

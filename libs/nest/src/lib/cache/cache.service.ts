@@ -62,7 +62,7 @@ export class CacheService extends BaseWorker {
     return hash.digest('hex');
   }
 
-  async get<T>(key: string): Promise<T | undefined> {
+  async get<T>(key: string, wildcard?: boolean): Promise<T | undefined> {
     if (!(await this.init())) {
       return undefined;
     }

@@ -1,10 +1,11 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Req, UseFilters, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Req, UseFilters, UseGuards, UseInterceptors } from '@nestjs/common';
 import { OrganizationComplianceAiResponseFilesService } from './organization_compliance_ai_response_files.service';
-import { HttpExceptionFilter, JwtAuthGuard, Roles, RolesGuard } from '@coldpbc/nest';
+import { HttpExceptionFilter, JwtAuthGuard, OrgUserInterceptor, Roles, RolesGuard } from '@coldpbc/nest';
 import { allRoles, coldAdminOnly } from '../../../../_global/global.params';
 import { ApiParam, ApiTags } from '@nestjs/swagger';
 
 @UseGuards(JwtAuthGuard, RolesGuard)
+@UseInterceptors(OrgUserInterceptor)
 @UseFilters(new HttpExceptionFilter(OrganizationComplianceAiResponseFilesController.name))
 @ApiTags('Organization Compliance Ai Response Files')
 @Controller('compliance/:name/organizations/:orgId/responses/ai/:aiId/files')

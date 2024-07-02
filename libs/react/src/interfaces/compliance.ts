@@ -167,6 +167,7 @@ export interface QuestionnaireQuestion {
   ai_attempted?: boolean;
   score?: number;
   max_score?: number;
+  ai_score?: number;
   question_summary?: string;
   corresponding_question?: string;
   compliance_responses: QuestionnaireQuestionComplianceResponse[];
@@ -217,6 +218,13 @@ export interface ComplianceManagerCountsPayload {
     ai_answered: number;
     bookmarked: number;
   };
+  statuses: {
+    id: string;
+    email: string;
+    type: string;
+    created_at: string;
+    updated_at: string;
+  }[];
 }
 
 export interface ComplianceManagerCountsSectionGroup {
@@ -247,3 +255,32 @@ export interface ComplianceManagerCountsSection {
     bookmarked: number;
   };
 }
+
+export interface AIDetails {
+  ai_answered?: boolean;
+  ai_attempted?: boolean;
+  value?: any;
+  questionAnswerSaved: boolean;
+  questionAnswerChanged: boolean;
+  question: QuestionnaireQuestion;
+}
+
+export type AllCompliance = {
+  id: string;
+  name: string;
+  logo_url: string;
+  title: string;
+  visible: boolean;
+  image_url: string | null;
+  metadata: any | null;
+  order: number;
+  version: number | null;
+  progress: number | null;
+  statuses: ComplianceSetStatus[] | null;
+};
+
+export type ComplianceSetStatus = {
+  type: string;
+  created_at: string;
+  updated_at: string;
+};

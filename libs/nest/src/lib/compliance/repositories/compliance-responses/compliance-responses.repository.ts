@@ -6,10 +6,17 @@ import { Cuid2Generator, GuidPrefixes } from '../../../utility';
 import { IAuthenticatedUser } from '../../../primitives';
 import { ScoringService } from '../../scoring';
 import { pick, set } from 'lodash';
+import { CacheService } from '../../../cache';
+import { Prisma } from '@prisma/client';
 
 export interface ComplianceResponseOptions {
   take?: number;
   skip?: number;
+  sectionGroupFilter?: { where: { [key: string]: any } };
+  sectionFilter?: { where: { [key in Prisma.Compliance_sectionsScalarFieldEnum]: any } };
+  questionFilter?: { where: { [key in Prisma.Compliance_responsesScalarFieldEnum]: any } };
+  sectionOptions?: { pagination: { take: number; skip: number } };
+  questionOptions?: { pagination: { take: number; skip: number } };
   references?: boolean;
   responses?: boolean;
   bookmarks?: boolean;
@@ -18,7 +25,18 @@ export interface ComplianceResponseOptions {
 
 @Injectable()
 export class ComplianceResponsesRepository extends BaseWorker {
-  constructor(readonly prisma: PrismaService, readonly scoringService: ScoringService) {
+  defaultOptions: ComplianceResponseOptions = {
+    responses: true,
+    bookmarks: true,
+    references: true,
+    questionOptions: { pagination: { take: 100, skip: 0 } },
+    sectionOptions: { pagination: { take: 100, skip: 0 } },
+    onlyCounts: false, // Only return the counts
+    questionFilter: undefined,
+    sectionFilter: undefined,
+  };
+
+  constructor(readonly prisma: PrismaService, readonly scoringService: ScoringService, readonly cacheService: CacheService) {
     super(ComplianceResponsesRepository.name);
   }
 
@@ -34,10 +52,49 @@ export class ComplianceResponsesRepository extends BaseWorker {
     };
   }
 
-  private getQuestionsQuery(options: ComplianceResponseOptions, org: organizations, user: IAuthenticatedUser) {
-    return {
-      take: options?.take,
-      skip: options?.skip,
+  getSectionGroupQuery(org: organizations, user: IAuthenticatedUser, options: ComplianceResponseOptions) {
+    const query = {
+      select: {
+        id: true,
+        title: true,
+        order: true,
+        compliance_sections: this.getSectionQuery(org, user, options),
+      },
+    };
+
+    if (options?.sectionGroupFilter) {
+      query['where'] = options.sectionGroupFilter;
+    }
+
+    return query;
+  }
+
+  getSectionQuery(org: organizations, user: IAuthenticatedUser, options: ComplianceResponseOptions) {
+    const query = {
+      select: {
+        id: true,
+        key: true,
+        title: true,
+        order: true,
+        compliance_section_dependency_chains: true,
+        compliance_questions: this.getQuestionsQuery(org, user, options),
+      },
+    };
+
+    if (options?.sectionOptions) {
+      query['take'] = options.sectionOptions.pagination.take;
+      query['skip'] = options.sectionOptions.pagination.skip;
+    }
+
+    if (options?.sectionFilter) {
+      query['where'] = options.sectionFilter;
+    }
+
+    return query;
+  }
+
+  private getQuestionsQuery(org: organizations, user: IAuthenticatedUser, options?: ComplianceResponseOptions) {
+    const query = {
       select: {
         id: true,
         key: true,
@@ -78,6 +135,17 @@ export class ComplianceResponsesRepository extends BaseWorker {
         },
       },
     };
+
+    if (options?.questionFilter) {
+      query['where'] = options.questionFilter;
+    }
+
+    if (options?.questionOptions?.pagination) {
+      query['take'] = options.questionOptions.pagination.take;
+      query['skip'] = options.questionOptions.pagination.skip;
+    }
+
+    return query;
   }
 
   /**
@@ -101,6 +169,8 @@ export class ComplianceResponsesRepository extends BaseWorker {
     user_response?: organization_compliance_responses,
     ai_response?: organization_compliance_ai_responses,
   ) {
+    await this.cacheService.delete(`organization:${org.id}:compliance:${compliance_definition_name}:counts`);
+
     if (!sId) throw new BadRequestException('Compliance Section ID is required');
     if (!sgId) throw new BadRequestException('Compliance Section Group ID is required');
     if (!compliance_definition_name) throw new BadRequestException('Compliance Definition Name is required');
@@ -212,6 +282,8 @@ export class ComplianceResponsesRepository extends BaseWorker {
           update: crData,
         });
       }
+
+      await this.getScoredComplianceQuestionsByName(org, compliance.compliance_definition_name, user);
     } catch (error) {
       this.logger.error(`Error saving response for ${org.name}: ${compliance.compliance_definition_name}`, {
         user,
@@ -221,6 +293,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
         organization: org,
         error,
       });
+
       throw error;
     }
   }
@@ -229,13 +302,6 @@ export class ComplianceResponsesRepository extends BaseWorker {
     if (!compliance_definition_name) throw new BadRequestException('Compliance Definition Name is required');
     if (!org) throw new BadRequestException('Organization is required');
     if (!user) throw new BadRequestException('User is required');
-
-    options = {
-      responses: options?.responses ? options.responses : true,
-      bookmarks: options?.references ? options.references : true,
-      take: options?.take ? +options?.take : 100,
-      skip: options?.skip ? +options?.skip : 0,
-    };
 
     try {
       const organization = (await this.prisma.extended.organizations.findUnique({
@@ -267,23 +333,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
                 select: {
                   id: true,
                   name: true,
-                  compliance_section_groups: {
-                    select: {
-                      id: true,
-                      title: true,
-                      order: true,
-                      compliance_sections: {
-                        select: {
-                          id: true,
-                          key: true,
-                          title: true,
-                          order: true,
-                          compliance_section_dependency_chains: true,
-                          compliance_questions: this.getQuestionsQuery(options, org, user),
-                        },
-                      },
-                    },
-                  },
+                  compliance_section_groups: this.getSectionGroupQuery(org, user, Object.assign(this.defaultOptions, options)),
                 },
               },
             },
@@ -330,19 +380,17 @@ export class ComplianceResponsesRepository extends BaseWorker {
     }
   }
 
+  /**
+   * Get the scored compliance question responses
+   * @param org
+   * @param compliance_definition_name
+   * @param user
+   * @param options
+   */
   async getScoredComplianceQuestionsByName(org: organizations, compliance_definition_name: string, user: IAuthenticatedUser, options?: ComplianceResponseOptions) {
     if (!compliance_definition_name) throw new BadRequestException('Compliance Definition Name is required');
     if (!org) throw new BadRequestException('Organization is required');
     if (!user) throw new BadRequestException('User is required');
-
-    options = {
-      responses: options?.responses ? options.responses : true,
-      bookmarks: options?.bookmarks ? options.bookmarks : true,
-      references: options?.references ? options.references : true,
-      take: options?.take ? +options?.take : 100,
-      skip: options?.skip ? +options?.skip : 0,
-      onlyCounts: options?.onlyCounts ? options.onlyCounts : false,
-    };
 
     try {
       const response = await this.prisma.extended.organization_compliance.findUnique({
@@ -353,26 +401,22 @@ export class ComplianceResponsesRepository extends BaseWorker {
           },
         },
         select: {
+          statuses: {
+            take: 1,
+            select: {
+              id: true,
+              type: true,
+              updated_at: true,
+              created_at: true,
+            },
+            orderBy: {
+              created_at: 'desc',
+            },
+          },
           compliance_definition: {
             select: {
               name: true,
-              compliance_section_groups: {
-                select: {
-                  id: true,
-                  title: true,
-                  order: true,
-                  compliance_sections: {
-                    select: {
-                      id: true,
-                      key: true,
-                      title: true,
-                      order: true,
-                      compliance_section_dependency_chains: true,
-                      compliance_questions: this.getQuestionsQuery(options, org, user),
-                    },
-                  },
-                },
-              },
+              compliance_section_groups: this.getSectionGroupQuery(org, user, Object.assign(this.defaultOptions, options)),
             },
           },
         },
@@ -386,7 +430,11 @@ export class ComplianceResponsesRepository extends BaseWorker {
 
       set(organization, 'organization_compliance', response);
 
-      return this.scoringService.scoreComplianceResponse(organization.organization_compliance.compliance_definition, org, user, options);
+      const scored = await this.scoringService.scoreComplianceResponse(organization.organization_compliance.compliance_definition, org, user, options);
+
+      await this.cacheService.set(`organization:${org.id}:compliance:${compliance_definition_name}:counts`, scored);
+
+      return scored;
     } catch (error) {
       this.logger.error(`Error getting responses for organization: ${org.name}: ${compliance_definition_name}`, {
         user,
@@ -447,7 +495,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
                           title: true,
                           order: true,
                           compliance_section_dependency_chains: true,
-                          compliance_questions: this.getQuestionsQuery(options, org, user),
+                          compliance_questions: this.getQuestionsQuery(org, user, options),
                         },
                       },
                     },
@@ -617,7 +665,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
                           title: true,
                           order: true,
                           compliance_section_dependency_chains: true,
-                          compliance_questions: this.getQuestionsQuery(options, org, user),
+                          compliance_questions: this.getQuestionsQuery(org, user, options),
                         },
                       },
                     },

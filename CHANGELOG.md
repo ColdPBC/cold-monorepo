@@ -1,3 +1,116 @@
+# [1.271.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.270.2...v1.271.0) (2024-07-01)
+
+
+### Features
+
+* Add getComplianceMockByName handler ([4d481d9](https://github.com/ColdPBC/cold-monorepo/commit/4d481d9a8dd99d1b8cb42bf253cad679cb9e3b7f))
+* Refactor compliance data fetching and image URL setting ([27ac869](https://github.com/ColdPBC/cold-monorepo/commit/27ac8695d1116eef0144bffdaa6044340124aca4))
+* Update compliance mocking and calls with a new structure ([2485c8a](https://github.com/ColdPBC/cold-monorepo/commit/2485c8aef676f1813629f371d7c4baf830ed6200))
+* Update feature flag in compliance component ([025e4dd](https://github.com/ColdPBC/cold-monorepo/commit/025e4dd41cf694372ceb500a2300a167a009433c))
+
+## [1.270.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.270.1...v1.270.2) (2024-07-01)
+
+
+### Bug Fixes
+
+* issue preventing compliance page from rendering ([aa5f6f2](https://github.com/ColdPBC/cold-monorepo/commit/aa5f6f2186b0d81e157e0c72a4a5f535fe7b4c5c))
+
+## [1.270.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.270.0...v1.270.1) (2024-06-28)
+
+
+### Bug Fixes
+
+* update compliance definition list repository to trigger the cached counts if none exist. ([62c3859](https://github.com/ColdPBC/cold-monorepo/commit/62c3859cb761ff344ea073596b93220130a2b954))
+
+# [1.270.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.269.0...v1.270.0) (2024-06-28)
+
+
+### Features
+
+* add ColdCacheInterceptor to cache module and implement trackBy method ([bf1ea9e](https://github.com/ColdPBC/cold-monorepo/commit/bf1ea9e47559e85c316389f2d195c3ca6e366508))
+* Add total questions and progress to scoring service ([5005ee0](https://github.com/ColdPBC/cold-monorepo/commit/5005ee07da3ed4fb046f1668d26ee5a251b8da4f))
+* enhance ComplianceResponsesRepository functions ([08188aa](https://github.com/ColdPBC/cold-monorepo/commit/08188aaeda7856f6900828124bf06787d8b4263d))
+* Expand ComplianceDefinitionsRepository methods ([7c71ccc](https://github.com/ColdPBC/cold-monorepo/commit/7c71ccc5c0d8adf87b345b86e44e3f4c56fa9fd5))
+* Export cache interceptor in cache index ([81bcde7](https://github.com/ColdPBC/cold-monorepo/commit/81bcde71020c20ec715175f606793337862032b8))
+* update compliance-definitions.controller.ts ([ffd5137](https://github.com/ColdPBC/cold-monorepo/commit/ffd513727db8b32cc9f3fdac48d2618d3e719bf6))
+* Update ComplianceDefinitionsService to use DefinitionsRepository ([0b7546a](https://github.com/ColdPBC/cold-monorepo/commit/0b7546a62193b931476ae46d4e67c26d48e49a80))
+* Update methods in Organization Compliance Repository ([2ecc5da](https://github.com/ColdPBC/cold-monorepo/commit/2ecc5dafff6ddb36bdf4296a38aaab5a7f4fa004))
+
+# [1.269.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.268.0...v1.269.0) (2024-06-28)
+
+
+### Features
+
+* initial work for handling array ai responses ([4281c11](https://github.com/ColdPBC/cold-monorepo/commit/4281c1173a8209be7bfb865888b4e62b678e3b86))
+* Refactor AI details handling in Questionnaire ([4aa2798](https://github.com/ColdPBC/cold-monorepo/commit/4aa279816ee507ec62128e08b85271a8d69163b2))
+
+# [1.268.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.267.0...v1.268.0) (2024-06-28)
+
+
+### Features
+
+* Add Interceptors to Organization Compliance Responses Controller ([1758b04](https://github.com/ColdPBC/cold-monorepo/commit/1758b045fa718dbd6ed56ba63af946250ff1d189))
+* Add OrgUserInterceptor decorator to organization compliance controller ([c2621c3](https://github.com/ColdPBC/cold-monorepo/commit/c2621c36e4e1f2507c639a1ab646f11acbeeef19))
+* Add OrgUserInterceptor to organization compliance controller ([de2f4ee](https://github.com/ColdPBC/cold-monorepo/commit/de2f4ee8c66115d7baf11f2b24470a9701405669))
+* Add statuses in organization-compliance repository ([d73d13e](https://github.com/ColdPBC/cold-monorepo/commit/d73d13e6e55a95b612d537b8518a99eae4139c38))
+* Added CacheInterceptor to ComplianceDefinitionsController ([9078fa9](https://github.com/ColdPBC/cold-monorepo/commit/9078fa9c0bcf0272a4a9939a5d5da23a82871c25))
+* Improve error handling in chat service and optimize cache operations ([f1e9e78](https://github.com/ColdPBC/cold-monorepo/commit/f1e9e7892de92c69b2bbc1aec9f216b9fe603cfe))
+* Use interceptor in OrganizationComplianceAiResponseFiles controller ([6dc03d8](https://github.com/ColdPBC/cold-monorepo/commit/6dc03d82b1c0af5930743812f9384e90c3019f3f))
+
+# [1.267.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.266.0...v1.267.0) (2024-06-28)
+
+
+### Features
+
+* Add 'statuses' to compliance mock and refactor code ([59a4885](https://github.com/ColdPBC/cold-monorepo/commit/59a4885cdfcc2c2033bc677f46f20f96dd2b7d00))
+* Refactor compliance manager overview for better data handling ([87525f3](https://github.com/ColdPBC/cold-monorepo/commit/87525f37ab88533ad6f3e3523580dac808e5e286))
+* Refactor logging and context usage in Compliance Manager components ([f5da2f4](https://github.com/ColdPBC/cold-monorepo/commit/f5da2f4644707f38dc07af68ba60da9f7e09e190))
+* Update compliance document modal and add image URLs to compliance mock ([6400431](https://github.com/ColdPBC/cold-monorepo/commit/64004310fab03312640c350aa0e090d02ac1b37a))
+* Update logging in coldMQTTProvider ([c1f89a1](https://github.com/ColdPBC/cold-monorepo/commit/c1f89a13a04636e2bde7f062bb0430df34d40972))
+
+# [1.266.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.265.1...v1.266.0) (2024-06-27)
+
+
+### Features
+
+* add cache service in compliance response repository ([d83439d](https://github.com/ColdPBC/cold-monorepo/commit/d83439de285dc8b2aaf8c5e98d5b845dfba4975f))
+
+## [1.265.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.265.0...v1.265.1) (2024-06-27)
+
+
+### Bug Fixes
+
+* error being throw while scoring comliance sets ([d35ee9b](https://github.com/ColdPBC/cold-monorepo/commit/d35ee9b9ac19bedf5c5fc470904a58212b42867c))
+
+# [1.265.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.264.0...v1.265.0) (2024-06-27)
+
+
+### Features
+
+* Add placeholder questions to questionnaire section ([a884c53](https://github.com/ColdPBC/cold-monorepo/commit/a884c5393ca907b1df4e051998578d4cca9c3b25))
+* Move loading spinner inside questionnaire section ([e550f8b](https://github.com/ColdPBC/cold-monorepo/commit/e550f8bcc796a6fae6500291cf640ea8a6ecaeee))
+
+# [1.264.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.263.0...v1.264.0) (2024-06-27)
+
+
+### Features
+
+* Update sidebar styles ([d927021](https://github.com/ColdPBC/cold-monorepo/commit/d927021d2aa277ee27ddd0a12ac7df114d0363fd))
+
+# [1.263.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.262.0...v1.263.0) (2024-06-26)
+
+
+### Features
+
+* Add authentication and roles guards to controllers ([ec851b7](https://github.com/ColdPBC/cold-monorepo/commit/ec851b711ac950d78545e12fd2e60a1f56f457f1))
+
+# [1.263.0-COLD-858.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.262.0...v1.263.0-COLD-858.1) (2024-06-26)
+
+
+### Features
+
+* Add authentication and roles guards to controllers ([ec851b7](https://github.com/ColdPBC/cold-monorepo/commit/ec851b711ac950d78545e12fd2e60a1f56f457f1))
+
 # [1.262.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.261.0...v1.262.0) (2024-06-25)
 
 

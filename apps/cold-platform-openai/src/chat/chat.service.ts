@@ -202,22 +202,26 @@ export class ChatService extends BaseWorker implements OnModuleInit {
 
     const sanitized_base = (await this.fp.getPrompt('survey_question_prompt', vars, true)) as FormattedPrompt;
 
-    const response = await openai.chat.completions.create({
-      response_format: sanitized_base.promptInfo.model === 'gpt-3.5-turbo-16k-0613' ? undefined : { type: 'json_object' },
-      model: sanitized_base.promptInfo.model,
-      max_tokens: sanitized_base.promptInfo.modelParameters.max_tokens,
-      temperature: sanitized_base.promptInfo.modelParameters.temperature,
-      frequency_penalty: sanitized_base.promptInfo.modelParameters.frequency_penalty,
-      presence_penalty: sanitized_base.promptInfo.modelParameters.presence_penalty,
-      logit_bias: sanitized_base.promptInfo.modelParameters.logit_bias,
-      stop: sanitized_base.promptInfo.modelParameters.stop,
-      messages: sanitized_base.messages as unknown as ChatCompletionMessageParam[],
-      user: user.coldclimate_claims.id,
-    });
-
-    if (!response.choices[0].message.content) {
-      this.logger.error('No content found in response', { response });
-      return;
+    let response: any;
+    try {
+      response = await openai.chat.completions.create({
+        response_format: sanitized_base.promptInfo.model === 'gpt-3.5-turbo-16k-0613' ? undefined : { type: 'json_object' },
+        model: sanitized_base.promptInfo.model,
+        max_tokens: sanitized_base.promptInfo.modelParameters.max_tokens,
+        temperature: sanitized_base.promptInfo.modelParameters.temperature,
+        frequency_penalty: sanitized_base.promptInfo.modelParameters.frequency_penalty,
+        presence_penalty: sanitized_base.promptInfo.modelParameters.presence_penalty,
+        logit_bias: sanitized_base.promptInfo.modelParameters.logit_bias,
+        stop: sanitized_base.promptInfo.modelParameters.stop,
+        messages: sanitized_base.messages as unknown as ChatCompletionMessageParam[],
+        user: user.coldclimate_claims.id,
+      });
+      if (!response.choices[0].message.content) {
+        this.logger.error('No content found in response', { response });
+        return;
+      }
+    } catch (e) {
+      this.logger.error(`Error getting chat response`, e);
     }
 
     const message = {
@@ -313,7 +317,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
         component_prompt: (await this.prompts.getComponentPrompt(question)) || '',
         context: context[0] || docs,
         organization_name: organization?.display_name || company_name,
-        question: additional_context ? rephrased_question : `${question.prompt} ${question.tooltip || ''}`,
+        question: additional_context ? rephrased_question.toString() : `${question.prompt} ${question.tooltip}`,
       };
 
       const sanitized_base = (await this.fp.getPrompt('survey_question_prompt', vars, true)) as FormattedPrompt;
@@ -491,17 +495,22 @@ export class ChatService extends BaseWorker implements OnModuleInit {
     }
 
     const start = new Date();
-    const condenseResponse = await openai.chat.completions.create({
-      model: condense_prompt.promptInfo.model,
-      max_tokens: condense_prompt.promptInfo.modelParameters.max_tokens,
-      temperature: condense_prompt.promptInfo.modelParameters.temperature,
-      frequency_penalty: condense_prompt.promptInfo.modelParameters.frequency_penalty,
-      presence_penalty: condense_prompt.promptInfo.modelParameters.presence_penalty,
-      logit_bias: condense_prompt.promptInfo.modelParameters.logit_bias,
-      stop: condense_prompt.promptInfo.modelParameters.stop,
-      messages: condense_prompt.messages as unknown as ChatCompletionMessageParam[],
-      user: user.coldclimate_claims.id,
-    });
+    let condenseResponse: any;
+    try {
+      condenseResponse = await openai.chat.completions.create({
+        model: condense_prompt.promptInfo.model,
+        max_tokens: condense_prompt.promptInfo.modelParameters.max_tokens,
+        temperature: condense_prompt.promptInfo.modelParameters.temperature,
+        frequency_penalty: condense_prompt.promptInfo.modelParameters.frequency_penalty,
+        presence_penalty: condense_prompt.promptInfo.modelParameters.presence_penalty,
+        logit_bias: condense_prompt.promptInfo.modelParameters.logit_bias,
+        stop: condense_prompt.promptInfo.modelParameters.stop,
+        messages: condense_prompt.messages as unknown as ChatCompletionMessageParam[],
+        user: user.coldclimate_claims.id,
+      });
+    } catch (e) {
+      this.logger.error(`Error getting condensed response`, e);
+    }
 
     const end = new Date();
 
@@ -1232,6 +1241,8 @@ export class ChatService extends BaseWorker implements OnModuleInit {
 
           const references = await this.filterService.filterReferences(response.references);
 
+          await this.cache.delete(`/compliance/${job.data.payload?.compliance?.compliance_definition_name}/organizations/${organization.id}/responses/counts`);
+
           const ai_response = await this.prisma.organization_compliance_ai_responses.upsert({
             where: {
               orgCompQuestId: {
@@ -1370,7 +1381,6 @@ export class ChatService extends BaseWorker implements OnModuleInit {
       await this.complianceSectionsCacheRepository.deleteCachedActiveSection(section, organization, job);
 
       this.logger.info(`✅ Finished processing ${section.key}: ${section.title}`, { section });
-      return true;
     } catch (e) {
       await this.complianceSectionsCacheRepository.deleteCachedActiveSection(section, organization, job);
 
@@ -1387,6 +1397,10 @@ export class ChatService extends BaseWorker implements OnModuleInit {
 
       throw e;
     }
+
+    await this.complianceResponsesRepository.getScoredComplianceQuestionsByName(organization, job.data.payload?.compliance?.compliance_definition_name, user, { onlyCounts: true });
+
+    return true;
   }
 
   /**

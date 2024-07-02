@@ -1,10 +1,12 @@
-import { Body, Controller, Delete, Get, Param, ParseBoolPipe, ParseIntPipe, Put, Query, Req, UseFilters, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseBoolPipe, ParseIntPipe, Put, Query, Req, UseFilters, UseGuards, UseInterceptors } from '@nestjs/common';
 import { OrganizationComplianceResponsesService } from './organization_compliance_responses.service';
-import { allRoles, coldAdminOnly, HttpExceptionFilter, JwtAuthGuard, Roles, RolesGuard } from '@coldpbc/nest';
+import { ColdCacheInterceptor, allRoles, coldAdminOnly, HttpExceptionFilter, JwtAuthGuard, OrgUserInterceptor, Roles, RolesGuard } from '@coldpbc/nest';
 import { ApiParam, ApiTags } from '@nestjs/swagger';
 import { compliance_responses } from '@prisma/client';
+import { CacheTTL } from '@nestjs/cache-manager';
 
 @UseGuards(JwtAuthGuard, RolesGuard)
+@UseInterceptors(OrgUserInterceptor)
 @UseFilters(new HttpExceptionFilter(OrganizationComplianceResponsesController.name))
 @ApiTags('Organizations', 'Compliance', 'Compliance Responses')
 @ApiParam({
@@ -209,10 +211,12 @@ export class OrganizationComplianceResponsesController {
     return this.organizationComplianceResponsesService.findAllByCompliance(name, req, { take, skip });
   }
 
+  @UseInterceptors(ColdCacheInterceptor)
+  @CacheTTL(0)
   @Get('responses/counts')
   @Roles(...allRoles)
-  async getComplianceResponsesCounts(@Param('name') name: string, @Req() req: any, @Query('take') take: number, @Query('skip') skip: number) {
-    const response = await this.organizationComplianceResponsesService.findAllByCompliance(name, req, { take, skip, onlyCounts: true });
+  async getComplianceResponsesCounts(@Param('name') name: string, @Req() req: any) {
+    const response = await this.organizationComplianceResponsesService.findAllByCompliance(name, req, { onlyCounts: true });
     // return response.counts;
     return response;
   }

@@ -1,8 +1,10 @@
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { ComplianceSetOverviewCard } from '@coldpbc/components';
-import { getComplianceSetOverviewHandler, StoryMockProvider } from '@coldpbc/mocks';
-import { ColdComplianceSetsProvider } from '../../../providers/coldComplianceSetsProvider';
+import { getAllComplianceMocksByStatus, StoryMockProvider } from '@coldpbc/mocks';
+import { ColdComplianceSetsProvider } from '@coldpbc/providers';
+import { ComplianceStatus } from '@coldpbc/enums';
+import { addDays } from 'date-fns';
 
 const meta = {
   title: 'Organisms/ComplianceSetOverviewCard',
@@ -24,7 +26,7 @@ type Story = StoryObj<typeof meta>;
 export const NotActive: Story = {
   render: args => {
     return (
-      <StoryMockProvider handlers={getComplianceSetOverviewHandler.notActive}>
+      <StoryMockProvider>
         <ColdComplianceSetsProvider>
           <ComplianceSetOverviewCard {...args} />
         </ColdComplianceSetsProvider>
@@ -32,14 +34,14 @@ export const NotActive: Story = {
     );
   },
   args: {
-    name: 'b_corp_2024',
+    complianceSet: getAllComplianceMocksByStatus(ComplianceStatus.inActive),
   },
 };
 
 export const InProgress0Percent: Story = {
   render: args => {
     return (
-      <StoryMockProvider handlers={getComplianceSetOverviewHandler.inProgress}>
+      <StoryMockProvider>
         <ColdComplianceSetsProvider>
           <ComplianceSetOverviewCard {...args} />
         </ColdComplianceSetsProvider>
@@ -47,14 +49,14 @@ export const InProgress0Percent: Story = {
     );
   },
   args: {
-    name: 'b_corp_2024',
+    complianceSet: getAllComplianceMocksByStatus(ComplianceStatus.inProgress, 0),
   },
 };
 
 export const InProgress50Percent: Story = {
   render: args => {
     return (
-      <StoryMockProvider handlers={getComplianceSetOverviewHandler.inProgress50Percent}>
+      <StoryMockProvider>
         <ColdComplianceSetsProvider>
           <ComplianceSetOverviewCard {...args} />
         </ColdComplianceSetsProvider>
@@ -62,14 +64,14 @@ export const InProgress50Percent: Story = {
     );
   },
   args: {
-    name: 'b_corp_2024',
+    complianceSet: getAllComplianceMocksByStatus(ComplianceStatus.inProgress, 50),
   },
 };
 
 export const InProgress100Percent: Story = {
   render: args => {
     return (
-      <StoryMockProvider handlers={getComplianceSetOverviewHandler.inProgress100Percent}>
+      <StoryMockProvider>
         <ColdComplianceSetsProvider>
           <ComplianceSetOverviewCard {...args} />
         </ColdComplianceSetsProvider>
@@ -77,14 +79,14 @@ export const InProgress100Percent: Story = {
     );
   },
   args: {
-    name: 'b_corp_2024',
+    complianceSet: getAllComplianceMocksByStatus(ComplianceStatus.inProgress, 100),
   },
 };
 
 export const SubmittedByUser: Story = {
   render: args => {
     return (
-      <StoryMockProvider handlers={getComplianceSetOverviewHandler.submittedByUser}>
+      <StoryMockProvider>
         <ColdComplianceSetsProvider>
           <ComplianceSetOverviewCard {...args} />
         </ColdComplianceSetsProvider>
@@ -92,14 +94,14 @@ export const SubmittedByUser: Story = {
     );
   },
   args: {
-    name: 'b_corp_2024',
+    complianceSet: getAllComplianceMocksByStatus(ComplianceStatus.submissionInProgress, 0),
   },
 };
 
 export const SubmittedByCold: Story = {
   render: args => {
     return (
-      <StoryMockProvider handlers={getComplianceSetOverviewHandler.submittedByCold}>
+      <StoryMockProvider>
         <ColdComplianceSetsProvider>
           <ComplianceSetOverviewCard {...args} />
         </ColdComplianceSetsProvider>
@@ -107,14 +109,14 @@ export const SubmittedByCold: Story = {
     );
   },
   args: {
-    name: 'b_corp_2024',
+    complianceSet: getAllComplianceMocksByStatus(ComplianceStatus.submittedByCold, 0),
   },
 };
 
 export const WithDueDate: Story = {
   render: args => {
     return (
-      <StoryMockProvider handlers={getComplianceSetOverviewHandler.withDueDate}>
+      <StoryMockProvider>
         <ColdComplianceSetsProvider>
           <ComplianceSetOverviewCard {...args} />
         </ColdComplianceSetsProvider>
@@ -122,14 +124,14 @@ export const WithDueDate: Story = {
     );
   },
   args: {
-    name: 'rei_pia_2024',
+    complianceSet: getAllComplianceMocksByStatus(ComplianceStatus.inProgress, 0, addDays(new Date(), 30)),
   },
 };
 
 export const WithNearDueDate: Story = {
   render: args => {
     return (
-      <StoryMockProvider handlers={getComplianceSetOverviewHandler.withNearDueDate}>
+      <StoryMockProvider>
         <ColdComplianceSetsProvider>
           <ComplianceSetOverviewCard {...args} />
         </ColdComplianceSetsProvider>
@@ -137,14 +139,14 @@ export const WithNearDueDate: Story = {
     );
   },
   args: {
-    name: 'rei_pia_2024',
+    complianceSet: getAllComplianceMocksByStatus(ComplianceStatus.inProgress, 0, addDays(new Date(), 5)),
   },
 };
 
 export const WithNearDueDateButSubmitted: Story = {
   render: args => {
     return (
-      <StoryMockProvider handlers={getComplianceSetOverviewHandler.withNearDueDateButSubmitted}>
+      <StoryMockProvider>
         <ColdComplianceSetsProvider>
           <ComplianceSetOverviewCard {...args} />
         </ColdComplianceSetsProvider>
@@ -152,6 +154,6 @@ export const WithNearDueDateButSubmitted: Story = {
     );
   },
   args: {
-    name: 'rei_pia_2024',
+    complianceSet: getAllComplianceMocksByStatus(ComplianceStatus.submittedByCold, 0, addDays(new Date(), 5)),
   },
 };

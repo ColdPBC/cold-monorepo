@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import useSWR from 'swr';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
-import { ComplianceSidebarPayload, OrgCompliance, QuestionnaireQuestionComplianceResponse } from '@coldpbc/interfaces';
+import { AIDetails, ComplianceSidebarPayload, OrgCompliance } from '@coldpbc/interfaces';
 import { ColdComplianceQuestionnaireContext } from '@coldpbc/context';
 import { withErrorBoundary } from 'react-error-boundary';
 
@@ -14,14 +14,7 @@ const _ComplianceQuestionnaire = () => {
   const [sidebarExpanded, setSidebarExpanded] = React.useState<boolean>(true);
   const [focusQuestion, setFocusQuestion] = React.useState<{
     key: string;
-    aiDetails: {
-      ai_response: QuestionnaireQuestionComplianceResponse['ai_response'];
-      ai_answered?: boolean;
-      ai_attempted?: boolean;
-      value?: any;
-      questionAnswerSaved: boolean;
-      questionAnswerChanged: boolean;
-    };
+    aiDetails: AIDetails;
   } | null>(null);
   const navigate = useNavigate();
   const { orgId } = useAuth0Wrapper();

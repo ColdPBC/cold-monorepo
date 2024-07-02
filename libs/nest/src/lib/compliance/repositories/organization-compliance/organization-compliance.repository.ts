@@ -12,7 +12,7 @@ export class OrganizationComplianceRepository extends BaseWorker {
   }
 
   /**
-   * Get all organization compliance definitions
+   * Get organization compliances by name for all orgs
    */
   async getOrgComplianceDefinitions(name: string, user: IAuthenticatedUser, organization: organizations) {
     try {
@@ -20,6 +20,18 @@ export class OrganizationComplianceRepository extends BaseWorker {
         where: { compliance_definition_name: name },
         include: {
           compliance_definition: true,
+          statuses: {
+            take: 1,
+            select: {
+              id: true,
+              type: true,
+              updated_at: true,
+              created_at: true,
+            },
+            orderBy: {
+              created_at: 'desc',
+            },
+          },
         },
       });
     } catch (error) {
@@ -28,6 +40,12 @@ export class OrganizationComplianceRepository extends BaseWorker {
     }
   }
 
+  /**
+   * Get organization compliance by name and Org
+   * @param name
+   * @param user
+   * @param organization
+   */
   async getOrgComplianceByName(name: string, user: IAuthenticatedUser, organization: organizations) {
     try {
       const compliance: any = await this.prisma.organization_compliance.findUnique({
@@ -38,6 +56,18 @@ export class OrganizationComplianceRepository extends BaseWorker {
           },
         },
         select: {
+          statuses: {
+            take: 1,
+            select: {
+              id: true,
+              type: true,
+              updated_at: true,
+              created_at: true,
+            },
+            orderBy: {
+              created_at: 'desc',
+            },
+          },
           id: true,
           compliance_definition_name: true,
           organization: true,
@@ -102,6 +132,18 @@ export class OrganizationComplianceRepository extends BaseWorker {
           },
         },
         select: {
+          statuses: {
+            take: 1,
+            select: {
+              id: true,
+              type: true,
+              updated_at: true,
+              created_at: true,
+            },
+            orderBy: {
+              created_at: 'desc',
+            },
+          },
           id: true,
           organization_id: true,
           compliance_definition: {

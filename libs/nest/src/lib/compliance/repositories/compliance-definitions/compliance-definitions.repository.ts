@@ -1,12 +1,61 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { BaseWorker } from '../../../worker';
-import { Cuid2Generator } from '../../../utility';
 import { PrismaService } from '../../../prisma';
+import { CacheService } from '../../../cache';
+import { compliance_definitions } from '@prisma/client';
+import { set } from 'lodash';
+import { ComplianceResponsesRepository } from '../compliance-responses';
 
 @Injectable()
 export class ComplianceDefinitionsRepository extends BaseWorker {
-  constructor(readonly prisma: PrismaService) {
+  constructor(readonly prisma: PrismaService, readonly cache: CacheService, readonly responses: ComplianceResponsesRepository) {
     super(ComplianceDefinitionsRepository.name);
+  }
+
+  async getComplianceDefinitionsByOrgId(req: any) {
+    const definitions = (await this.prisma.extended.compliance_definitions.findMany({
+      where: {
+        visible: true,
+      },
+      orderBy: {
+        order: 'asc',
+      },
+      select: {
+        id: true,
+        name: true,
+        logo_url: true,
+        title: true,
+        visible: true,
+        image_url: true,
+        metadata: true,
+        order: true,
+        version: true,
+      },
+    })) as compliance_definitions[];
+
+    if (Array.isArray(definitions) && definitions.length > 0) {
+      for (const def of definitions) {
+        const metrics = (await this.cache.get(`organization:${req.organization.id}:compliance:${def.name}:counts`)) as { counts: { progress: number } };
+        if (metrics) {
+          set(def, 'progress', metrics.counts.progress);
+        } else {
+          try {
+            const raw = await this.responses.getScoredComplianceQuestionsByName(req.organization, def.name, req.user);
+            if (raw.counts) {
+              set(def, 'progress', raw.counts.progress);
+            }
+          } catch (e) {
+            if (!(e instanceof NotFoundException)) {
+              this.logger.error(e);
+            }
+          }
+        }
+      }
+    } else {
+      throw new NotFoundException('No compliance definitions found');
+    }
+
+    return definitions;
   }
 
   async getComplianceSectionsByComplianceName(name: string) {

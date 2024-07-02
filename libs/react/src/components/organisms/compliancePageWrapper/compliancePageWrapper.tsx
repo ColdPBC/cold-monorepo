@@ -6,7 +6,7 @@ import { ColdCompliancePageContext } from '@coldpbc/context';
 
 export const CompliancePageWrapper = () => {
   const { data, filter, setFilter } = useContext(ColdCompliancePageContext);
-  const { complianceSets } = data;
+  const { allComplianceSets } = data;
   const getFilter = () => {
     const filterOptions: InputOption[] = [
       { id: 0, value: CompliancePageFilter.all, name: 'All Records' },
@@ -32,10 +32,10 @@ export const CompliancePageWrapper = () => {
   return (
     <MainContent title="Compliance" headerElement={getFilter()}>
       <div className={'w-full space-y-[24px]'}>
-        {complianceSets.map((compliance, index) => {
+        {allComplianceSets?.map((compliance, index) => {
           return (
             <div key={'compliance_' + index} data-testid={`compliance-${compliance.id}`}>
-              <ComplianceSetOverviewCard name={compliance.name} />
+              <ComplianceSetOverviewCard complianceSet={compliance} />
             </div>
           );
         })}

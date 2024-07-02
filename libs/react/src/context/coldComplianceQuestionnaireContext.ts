@@ -1,5 +1,5 @@
 import { createContext } from 'react';
-import { Compliance, ComplianceSidebarPayload, QuestionnaireQuestionComplianceResponse } from '@coldpbc/interfaces';
+import { Compliance, ComplianceSidebarPayload, AIDetails } from '@coldpbc/interfaces';
 import { SWRResponse } from 'swr';
 
 export interface ComplianceQuestionnaireContextType {
@@ -9,26 +9,12 @@ export interface ComplianceQuestionnaireContextType {
   setScrollToQuestion: (question: string | null) => void;
   focusQuestion: {
     key: string;
-    aiDetails: {
-      ai_response: QuestionnaireQuestionComplianceResponse['ai_response'];
-      ai_answered?: boolean;
-      ai_attempted?: boolean;
-      value?: any;
-      questionAnswerSaved: boolean;
-      questionAnswerChanged: boolean;
-    };
+    aiDetails: AIDetails;
   } | null;
   setFocusQuestion: (
     question: {
       key: string;
-      aiDetails: {
-        ai_response: QuestionnaireQuestionComplianceResponse['ai_response'];
-        ai_answered?: boolean;
-        ai_attempted?: boolean;
-        value?: any;
-        questionAnswerSaved: boolean;
-        questionAnswerChanged: boolean;
-      };
+      aiDetails: AIDetails;
     } | null,
   ) => void;
   sectionGroups: SWRResponse<ComplianceSidebarPayload, any, any> | undefined;

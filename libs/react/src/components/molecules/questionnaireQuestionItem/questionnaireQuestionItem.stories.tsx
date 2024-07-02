@@ -77,7 +77,7 @@ export const AiAnswered: Story = {
       not_started: false,
       options: [],
       tooltip: 'This is a tooltip',
-      component: 'text',
+      component: 'percent_slider',
       placeholder: 'Enter your name',
       key: '1',
       order: 1,
@@ -86,7 +86,7 @@ export const AiAnswered: Story = {
         {
           ai_response: {
             justification: 'We chose this answer because of all of these reasons and this one document that supports why we chose this.',
-            answer: 'Cold Climate',
+            answer: [102],
             references: null,
           },
           org_response: null,

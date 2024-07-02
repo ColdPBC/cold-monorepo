@@ -1,9 +1,22 @@
-import { BaseWorker, bpcDecoratorOptions, coldAndCompanyAdmins, IAuthenticatedUser, invIdDecoratorOptions, orgIdDecoratorOptions, Roles } from '@coldpbc/nest';
-import { Body, Controller, Delete, HttpCode, Param, Post, Query, Req } from '@nestjs/common';
+import {
+  BaseWorker,
+  bpcDecoratorOptions,
+  coldAndCompanyAdmins,
+  IAuthenticatedUser,
+  invIdDecoratorOptions,
+  JwtAuthGuard,
+  orgIdDecoratorOptions,
+  OrgUserInterceptor,
+  Roles,
+  RolesGuard,
+} from '@coldpbc/nest';
+import { Body, Controller, Delete, HttpCode, Param, Post, Query, Req, UseGuards, UseInterceptors } from '@nestjs/common';
 import { postInviteOwnerExample } from '../examples/organization.examples';
 import { ApiBody, ApiOperation, ApiParam, ApiQuery } from '@nestjs/swagger';
 import { InvitationsService } from './invitations.service';
 
+@UseGuards(JwtAuthGuard, RolesGuard)
+@UseInterceptors(OrgUserInterceptor)
 @Controller('organizations/:orgId')
 export class InvitationsController extends BaseWorker {
   constructor(private readonly inviteService: InvitationsService) {
