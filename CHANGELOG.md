@@ -1,3 +1,10 @@
+# [1.274.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.273.0...v1.274.0) (2024-07-02)
+
+
+### Features
+
+* Add visible column to organization_compliance table ([39c24b4](https://github.com/ColdPBC/cold-monorepo/commit/39c24b459e266dd254a7365456e220f266453819))
+
 # [1.273.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.272.0...v1.273.0) (2024-07-02)
 
 
