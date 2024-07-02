@@ -495,7 +495,7 @@ export const YesNoWithScoring: Story = {
         true: 1,
         false: 0,
       },
-      score: 0,
+      score: 1,
       max_score: 1,
     },
   },
