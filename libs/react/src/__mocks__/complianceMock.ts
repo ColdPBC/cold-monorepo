@@ -15,6 +15,7 @@ export function getComplianceMock(): Compliance[] {
       title: 'B Corp',
       metadata: {
         term: 'every_three_years',
+        compliance_type: 'target_score',
       },
       visible: true,
       order: 1,
@@ -32,6 +33,7 @@ export function getComplianceMock(): Compliance[] {
       metadata: {
         term: 'annual',
         due_date: '2024-03-09T00:00:00.00',
+        compliance_type: 'impact_score',
       },
       visible: true,
       order: 2,

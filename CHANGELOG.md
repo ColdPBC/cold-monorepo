@@ -1,3 +1,11 @@
+# [1.272.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.271.0...v1.272.0) (2024-07-02)
+
+
+### Features
+
+* Add scoring function to compliance questionnaire ([a71a702](https://github.com/ColdPBC/cold-monorepo/commit/a71a702d51577e0cc79eedfd606d0cf02caee0b5))
+* Add scoring functionality to questionnaire components ([09b1276](https://github.com/ColdPBC/cold-monorepo/commit/09b1276ccfafd93f04093f2265d8c60b572f339e))
+
 # [1.271.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.270.2...v1.271.0) (2024-07-01)
 
 

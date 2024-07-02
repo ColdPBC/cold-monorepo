@@ -1,12 +1,13 @@
 import { BaseButton, Card, ColdIcon, ComplianceProgressStatusIcon, ErrorFallback, Input, ListItem } from '@coldpbc/components';
 import { ButtonTypes, ComplianceProgressStatus, IconNames, InputTypes } from '@coldpbc/enums';
 import React, { useContext, useEffect, useState } from 'react';
-import { isArray, toArray } from 'lodash';
+import { get, isArray, toArray } from 'lodash';
 import {
   getComplianceAIResponseOriginalAnswer,
   getComplianceAIResponseValue,
   getComplianceOrgResponseAdditionalContextAnswer,
   getComplianceOrgResponseAnswer,
+  getComplianceQuestionnaireQuestionScore,
   ifAdditionalContextConditionMet,
   isComplianceAIResponseValueValid,
 } from '@coldpbc/lib';
@@ -25,10 +26,27 @@ import { isDefined } from 'class-validator';
 
 const _QuestionnaireQuestionItem = (props: { question: QuestionnaireQuestion; number: number; sectionId: string; sectionGroupId: string; questionnaireMutate: () => void }) => {
   const { logBrowser } = useColdContext();
-  const { name, focusQuestion, setFocusQuestion, scrollToQuestion, setScrollToQuestion, sectionGroups } = useContext(ColdComplianceQuestionnaireContext);
+  const { name, focusQuestion, setFocusQuestion, scrollToQuestion, setScrollToQuestion, sectionGroups, complianceDefinition } = useContext(ColdComplianceQuestionnaireContext);
   const { orgId } = useAuth0Wrapper();
   const { question, number, sectionId, sectionGroupId, questionnaireMutate } = props;
-  const { id, key, prompt, options, tooltip, component, placeholder, bookmarked, user_answered, ai_answered, additional_context, ai_attempted, compliance_responses } = question;
+  const {
+    id,
+    key,
+    prompt,
+    options,
+    tooltip,
+    component,
+    placeholder,
+    bookmarked,
+    user_answered,
+    ai_answered,
+    additional_context,
+    ai_attempted,
+    compliance_responses,
+    max_score,
+    score,
+    answer_score_map,
+  } = question;
   const [params, setParams] = useSearchParams();
   const value = getComplianceOrgResponseAnswer(component, compliance_responses);
   const ai_response = compliance_responses.length === 0 ? null : compliance_responses[0]?.ai_response;
@@ -60,6 +78,7 @@ const _QuestionnaireQuestionItem = (props: { question: QuestionnaireQuestion; nu
   const [additionalContextOpen, setAdditionalContextOpen] = useState<boolean>(false);
   const [additionalContextInput, setAdditionalContextInput] = useState<any | undefined>(additionalContextValue);
   const [buttonLoading, setButtonLoading] = useState<boolean>(false);
+  const [questionScore, setQuestionScore] = useState<number | undefined>(score);
 
   useEffect(() => {
     let timer: NodeJS.Timeout;
@@ -149,6 +168,7 @@ const _QuestionnaireQuestionItem = (props: { question: QuestionnaireQuestion; nu
             }}
             value={displayValue}
             data-testid={key + (isAdditional ? '-additional' : '')}
+            answer_score_map={showScore() ? answer_score_map : undefined}
           />
         );
       case 'text':
@@ -282,6 +302,7 @@ const _QuestionnaireQuestionItem = (props: { question: QuestionnaireQuestion; nu
             }}
             value={displayValue}
             data-testid={key + (isAdditional ? '-additional' : '')}
+            answer_score_map={showScore() ? answer_score_map : undefined}
           />
         );
       case 'select':
@@ -293,6 +314,7 @@ const _QuestionnaireQuestionItem = (props: { question: QuestionnaireQuestion; nu
             }}
             value={displayValue}
             data-testid={key + (isAdditional ? '-additional' : '')}
+            answer_score_map={showScore() ? answer_score_map : undefined}
           />
         );
       case 'textarea':
@@ -390,6 +412,41 @@ const _QuestionnaireQuestionItem = (props: { question: QuestionnaireQuestion; nu
     );
   };
 
+  const showScore = () => {
+    if (
+      questionScore !== undefined &&
+      questionScore !== null &&
+      max_score &&
+      answer_score_map &&
+      complianceDefinition &&
+      get(complianceDefinition, 'metadata.compliance_type', undefined) === 'target_score'
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  const getFooter = () => {
+    if (showScore()) {
+      return (
+        <div className={'w-full pb-[24px] flex flex-row justify-between items-center'}>
+          {getScore()}
+          {getSubmitButton()}
+        </div>
+      );
+    } else {
+      return <div className={'w-full pb-[24px] flex flex-row justify-end'}>{getSubmitButton()}</div>;
+    }
+  };
+
+  const getScore = () => {
+    const hasScore = questionScore !== undefined && questionScore !== null && questionScore > 0;
+    const scoreText = hasScore ? `${questionScore?.toFixed(2)} of ${max_score?.toFixed(2)} points earned` : `${max_score?.toFixed(1)} points available`;
+    const className = hasScore ? 'text-tc-primary' : 'text-tc-disabled';
+    return <div className={className}>{scoreText}</div>;
+  };
+
   const getSubmitButton = () => {
     let label = 'Complete';
     let disabled = true;
@@ -418,14 +475,12 @@ const _QuestionnaireQuestionItem = (props: { question: QuestionnaireQuestion; nu
     }
 
     return (
-      <div className={'w-full pb-[24px] flex flex-row justify-end'}>
-        <BaseButton variant={variant} disabled={disabled} onClick={onClick} loading={loading}>
-          <div className={'w-full flex flex-row gap-[8px] items-center'}>
-            <ColdIcon name={iconLeftName} />
-            {label}
-          </div>
-        </BaseButton>
-      </div>
+      <BaseButton variant={variant} disabled={disabled} onClick={onClick} loading={loading}>
+        <div className={'w-full flex flex-row gap-[8px] items-center'}>
+          <ColdIcon name={iconLeftName} />
+          {label}
+        </div>
+      </BaseButton>
     );
   };
 
@@ -492,6 +547,7 @@ const _QuestionnaireQuestionItem = (props: { question: QuestionnaireQuestion; nu
 
     const promises = await Promise.all(promiseArray);
     if (promises.every(promise => !isAxiosError(promise))) {
+      let newValue = valueBeingSent;
       if (isDelete) {
         setQuestionAnswerSaved(true);
         setQuestionInput(null);
@@ -499,21 +555,37 @@ const _QuestionnaireQuestionItem = (props: { question: QuestionnaireQuestion; nu
         setAnswerQuestionChanged(false);
         if (isComplianceAIResponseValueValid(question)) {
           setQuestionStatus(ComplianceProgressStatus.ai_answered);
-          setQuestionInput(ai_response?.answer);
+          const aiAnswer = getComplianceAIResponseValue(question);
+          setQuestionInput(aiAnswer);
+          newValue = aiAnswer;
         } else {
           setQuestionStatus(ComplianceProgressStatus.not_started);
+          newValue = null;
         }
       } else {
         setQuestionAnswerSaved(true);
         setAnswerQuestionChanged(false);
         setQuestionStatus(ComplianceProgressStatus.user_answered);
       }
+      // update the question score
+      updateQuestionScore(isDelete, newValue);
       // update the sidebar
       await sectionGroups?.mutate();
       // update the questionnaire
       await questionnaireMutate();
     }
     setButtonLoading(false);
+  };
+
+  const updateQuestionScore = (isDelete: boolean, newAnswer: any) => {
+    if (showScore()) {
+      if (!isDelete) {
+        const newScore = getComplianceQuestionnaireQuestionScore(newAnswer, question);
+        setQuestionScore(newScore);
+      } else {
+        setQuestionScore(0);
+      }
+    }
   };
 
   logBrowser('QuestionnaireQuestionItem rendered', 'info', {
@@ -579,7 +651,7 @@ const _QuestionnaireQuestionItem = (props: { question: QuestionnaireQuestion; nu
       <div className="w-full justify-center mb-[24px]">{inputComponent()}</div>
       {additionalContext()}
       {getAISource()}
-      {getSubmitButton()}
+      {getFooter()}
     </div>
   );
 };
