@@ -747,7 +747,7 @@ model organization_compliance_statuses {
   updated_at                 DateTime                @updatedAt
   email                      String
   organization_compliance_id String
-  organization_compliance    organization_compliance @relation(fields: [organization_compliance_id], references: [id])
+  organization_compliance    organization_compliance @relation(fields: [organization_compliance_id], references: [id], onDelete: Cascade)
   deleted                    Boolean                 @default(false)
 }
 
@@ -760,7 +760,7 @@ model organization_compliance_notes {
   organization_compliance_id String
   metadata                   Json?
   compliance_question        compliance_questions                 @relation(fields: [compliance_question_id], references: [id])
-  organization_compliance    organization_compliance              @relation(fields: [organization_compliance_id], references: [id])
+  organization_compliance    organization_compliance              @relation(fields: [organization_compliance_id], references: [id], onDelete: Cascade)
   files                      organization_compliance_note_files[]
   links                      organization_compliance_note_links[]
   deleted                    Boolean                              @default(false)
@@ -810,7 +810,7 @@ model organization_compliance_responses {
   organization_compliance_id             String
   additional_context                     Json?
   compliance_question                    compliance_questions                  @relation(fields: [compliance_question_id], references: [id])
-  organization_compliance                organization_compliance               @relation(fields: [organization_compliance_id], references: [id])
+  organization_compliance                organization_compliance               @relation(fields: [organization_compliance_id], references: [id], onDelete: Cascade)
   compliance_responses                   compliance_responses[]
   deleted                                Boolean                               @default(false)
 
@@ -830,7 +830,7 @@ model organization_compliance_ai_responses {
   updated_at                        DateTime                                    @updatedAt
   files                             organization_compliance_ai_response_files[]
   compliance_question_id            String
-  organization_compliance           organization_compliance                     @relation(fields: [organization_compliance_id], references: [id])
+  organization_compliance           organization_compliance                     @relation(fields: [organization_compliance_id], references: [id], onDelete: Cascade)
   organization                      organizations                               @relation(fields: [organization_id], references: [id])
   compliance_questions              compliance_questions?                       @relation(fields: [compliance_question_id], references: [id])
   compliance_responses              compliance_responses[]
@@ -847,10 +847,10 @@ model organization_compliance_ai_response_files {
   organization_compliance_id             String
   organization_files_id                  String
   organization                           organizations                        @relation(fields: [organization_id], references: [id])
-  file                                   organization_files                   @relation(fields: [organization_files_id], references: [id])
+  file                                   organization_files                   @relation(fields: [organization_files_id], references: [id], onDelete: Cascade)
   organization_compliance_ai_response_id String
   ai_response                            organization_compliance_ai_responses @relation(fields: [organization_compliance_ai_response_id], references: [id], map: "org_comp_ai_response")
-  organization_compliance                organization_compliance?             @relation(fields: [organization_compliance_id], references: [id])
+  organization_compliance                organization_compliance?             @relation(fields: [organization_compliance_id], references: [id], onDelete: Cascade)
   deleted                                Boolean                              @default(false)
 
   @@unique([organization_compliance_id, organization_files_id], name: "orgCompFileId")
