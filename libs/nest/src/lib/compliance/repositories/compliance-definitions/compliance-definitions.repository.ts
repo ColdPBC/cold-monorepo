@@ -34,7 +34,15 @@ export class ComplianceDefinitionsRepository extends BaseWorker {
     return definitions;
   }
 
-  async getComplianceDefinitionsByOrgId(req: any) {
+  async getComplianceDefinitionsByOrgId(req: any, bpc: boolean) {
+    const start = new Date();
+    const list = await this.cache.get(`organization:${req.organization.id}:compliance:list`);
+
+    if (list) {
+      if (!bpc) {
+        return list;
+      }
+    }
     const definitions = (await this.prisma.extended.compliance_definitions.findMany({
       orderBy: {
         order: 'asc',
@@ -54,39 +62,34 @@ export class ComplianceDefinitionsRepository extends BaseWorker {
 
     if (Array.isArray(definitions) && definitions.length > 0) {
       for (const def of definitions) {
-        let metrics;
-        if (await this.darkly.getBooleanFlag('dynamic-disable-compliance-count-cache', false, { kind: 'organization', key: req.organization.id, name: req.organization.name })) {
-          metrics = (await this.cache.get(`organization:${req.organization.id}:compliance:${def.name}:counts`)) as { counts: { progress: number } };
+        let raw;
+        try {
+          raw = await this.responses.getScoredComplianceQuestionsByName(req.organization, def.name, req.user, undefined, bpc);
+        } catch (e) {
+          if (!(e instanceof NotFoundException)) {
+            this.logger.error(e);
+          }
+          continue;
         }
 
-        if (metrics) {
-          set(def, 'progress', metrics.counts.progress);
-        } else {
-          let raw;
-          try {
-            raw = await this.responses.getScoredComplianceQuestionsByName(req.organization, def.name, req.user);
-          } catch (e) {
-            if (!(e instanceof NotFoundException)) {
-              this.logger.error(e);
-            }
+        // show hidden definitions if their org_compliance is visible
+        if (!def.visible && raw.visible == true) {
+          def.visible = true;
+        }
 
-            continue;
-          }
-          // show hidden definitions if their org_compliance is visible
-          if (!def.visible && raw.visible == true) {
-            def.visible = true;
-          }
-
-          if (raw.counts) {
-            set(def, 'progress', raw.counts.progress);
-          }
+        if (raw.counts) {
+          set(def, 'progress', raw.counts.progress);
         }
       }
-    } else {
-      throw new NotFoundException('No compliance definitions found');
     }
 
-    return definitions.filter(def => def.visible);
+    const end = new Date();
+    this.logger.info(`getComplianceDefinitionsByOrgId completed for ${req.organization.name} in ${end.getTime() - start.getTime()}ms`);
+
+    const filtered = definitions.filter(def => def.visible);
+    await this.cache.set(`organization:${req.organization.id}:compliance:list`, filtered);
+
+    return filtered;
   }
 
   async getComplianceSectionsByComplianceName(name: string) {
