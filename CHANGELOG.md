@@ -1,3 +1,10 @@
+# [1.277.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.276.0...v1.277.0) (2024-07-03)
+
+
+### Features
+
+* Update Prisma schema to cascade delete on organization compliance relations ([4fd4176](https://github.com/ColdPBC/cold-monorepo/commit/4fd417648138bf50deb6e9eb90fcd41893634098))
+
 # [1.276.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.275.0...v1.276.0) (2024-07-03)
 
 
