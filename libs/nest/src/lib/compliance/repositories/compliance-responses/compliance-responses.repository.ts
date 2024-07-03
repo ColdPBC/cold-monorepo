@@ -439,10 +439,13 @@ export class ComplianceResponsesRepository extends BaseWorker {
 
       return scored;
     } catch (error) {
-      this.logger.error(`Error getting responses for organization: ${org.name}: ${compliance_definition_name}`, {
-        user,
-        error,
-      });
+      if (!(error instanceof NotFoundException)) {
+        this.logger.error(`Error getting responses for organization: ${org.name}: ${compliance_definition_name}`, {
+          user,
+          error,
+        });
+      }
+
       throw error;
     }
   }
