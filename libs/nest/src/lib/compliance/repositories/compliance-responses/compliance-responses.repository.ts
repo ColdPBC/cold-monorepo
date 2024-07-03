@@ -104,7 +104,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
         tooltip: true,
         placeholder: true,
         rubric: true,
-        options: true,
+        options: false,
         additional_context: true,
         dependencies: true,
         dependency_expression: true,
@@ -386,13 +386,45 @@ export class ComplianceResponsesRepository extends BaseWorker {
    * @param compliance_definition_name
    * @param user
    * @param options
+   * @param bpc
    */
-  async getScoredComplianceQuestionsByName(org: organizations, compliance_definition_name: string, user: IAuthenticatedUser, options?: ComplianceResponseOptions) {
+  async getScoredComplianceQuestionsByName(org: organizations, compliance_definition_name: string, user: IAuthenticatedUser, options?: ComplianceResponseOptions, bpc?: boolean) {
+    const start = new Date();
+    const counts = await this.cacheService.get(`organization:${org.id}:compliance:${compliance_definition_name}:counts`);
+    // invalidate cache if it exists
+    if (counts) {
+      if (!bpc) {
+        const end = new Date();
+        this.logger.info(`Cache hit for ${org.name}: ${compliance_definition_name} in ${end.getTime() - start.getTime()}ms`, { compliance_definition_name });
+        return counts;
+      }
+
+      await this.cacheService.delete(`organization:${org.id}:compliance:${compliance_definition_name}:counts`);
+    }
+
     if (!compliance_definition_name) throw new BadRequestException('Compliance Definition Name is required');
     if (!org) throw new BadRequestException('Organization is required');
     if (!user) throw new BadRequestException('User is required');
 
     try {
+      const orgComp = await this.prisma.extended.organization_compliance.findUnique({
+        where: {
+          orgIdCompNameKey: {
+            organization_id: org.id,
+            compliance_definition_name: compliance_definition_name,
+          },
+        },
+        select: {
+          organization_id: true,
+          compliance_definition_name: true,
+          visible: true,
+        },
+      });
+
+      if (!orgComp) {
+        throw new NotFoundException(`Organization Compliance Definition ${compliance_definition_name} not found for organization ${org.name}`);
+      }
+
       const response = await this.prisma.extended.organization_compliance.findUnique({
         where: {
           orgIdCompNameKey: {
@@ -402,18 +434,6 @@ export class ComplianceResponsesRepository extends BaseWorker {
         },
         select: {
           visible: true,
-          statuses: {
-            take: 1,
-            select: {
-              id: true,
-              type: true,
-              updated_at: true,
-              created_at: true,
-            },
-            orderBy: {
-              created_at: 'desc',
-            },
-          },
           compliance_definition: {
             select: {
               name: true,
@@ -435,7 +455,12 @@ export class ComplianceResponsesRepository extends BaseWorker {
 
       scored.visible = organization.organization_compliance.visible;
 
-      await this.cacheService.set(`organization:${org.id}:compliance:${compliance_definition_name}:counts`, scored);
+      this.cacheService.set(`organization:${org.id}:compliance:${compliance_definition_name}:counts`, scored);
+
+      const end = new Date();
+      this.logger.info(`getScoredComplianceQuestionsByName completed for ${org.name}: ${compliance_definition_name} in ${end.getTime() - start.getTime()}ms`, {
+        compliance_definition_name,
+      });
 
       return scored;
     } catch (error) {
@@ -445,6 +470,11 @@ export class ComplianceResponsesRepository extends BaseWorker {
           error,
         });
       }
+
+      const end = new Date();
+      this.logger.info(`getScoredComplianceQuestionsByName completed with error for ${org.name}: ${compliance_definition_name} in ${end.getTime() - start.getTime()}ms`, {
+        compliance_definition_name,
+      });
 
       throw error;
     }
