@@ -1,3 +1,13 @@
+# [1.276.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.275.0...v1.276.0) (2024-07-03)
+
+
+### Features
+
+* add bpc parameter to getAllByOrg method in compliance-definitions service ([41b43e2](https://github.com/ColdPBC/cold-monorepo/commit/41b43e2769d512229a69d40a504727b81d27c3ea))
+* add bpc query parameter to allow for forcing cache to refresh ([c34f2b2](https://github.com/ColdPBC/cold-monorepo/commit/c34f2b20a830200bdd6fcb69c3212487517016e7))
+* add caching and timing to compliance response repository ([3f19a09](https://github.com/ColdPBC/cold-monorepo/commit/3f19a09dfb50d61d3a8da31c59a9bde0c3f6b942))
+* Update getComplianceDefinitionsByOrgId function in compliance-definitions repository ([eaa6fe3](https://github.com/ColdPBC/cold-monorepo/commit/eaa6fe3cbd0dab42f003cdcbe201953a0b918e6e))
+
 # [1.275.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.274.0...v1.275.0) (2024-07-03)
 
 
