@@ -179,8 +179,9 @@ export class ComplianceDefinitionsController extends BaseWorker {
       query: any;
       user: IAuthenticatedUser;
     },
+    @Query('bpc') bpc: boolean,
   ) {
-    return await this.complianceService.getAllByOrg(req);
+    return await this.complianceService.getAllByOrg(req, bpc);
   }
 
   @Get('compliance_definitions')
@@ -203,8 +204,9 @@ export class ComplianceDefinitionsController extends BaseWorker {
       query: any;
       user: IAuthenticatedUser;
     },
+    @Query('bpc') bpc: boolean,
   ) {
-    return await this.complianceService.getAllByOrg(req);
+    return await this.complianceService.getAllByOrg(req, bpc);
   }
 
   @Get('compliance/:name')
