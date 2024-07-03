@@ -1,3 +1,10 @@
+# [1.278.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.277.0...v1.278.0) (2024-07-03)
+
+
+### Features
+
+* Updated options attribute in compliance-responses.repository ([efafee6](https://github.com/ColdPBC/cold-monorepo/commit/efafee6c62a233b65ee5b1bd7c1b4a0ad6d89ca5))
+
 # [1.277.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.276.0...v1.277.0) (2024-07-03)
 
 
