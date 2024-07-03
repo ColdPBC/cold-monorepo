@@ -5,10 +5,11 @@ import { CacheService } from '../../../cache';
 import { compliance_definitions } from '@prisma/client';
 import { set } from 'lodash';
 import { ComplianceResponsesRepository } from '../compliance-responses';
+import { DarklyService } from '../../../darkly';
 
 @Injectable()
 export class ComplianceDefinitionsRepository extends BaseWorker {
-  constructor(readonly prisma: PrismaService, readonly cache: CacheService, readonly responses: ComplianceResponsesRepository) {
+  constructor(readonly prisma: PrismaService, readonly cache: CacheService, readonly responses: ComplianceResponsesRepository, readonly darkly: DarklyService) {
     super(ComplianceDefinitionsRepository.name);
   }
 
@@ -53,25 +54,31 @@ export class ComplianceDefinitionsRepository extends BaseWorker {
 
     if (Array.isArray(definitions) && definitions.length > 0) {
       for (const def of definitions) {
-        const metrics = (await this.cache.get(`organization:${req.organization.id}:compliance:${def.name}:counts`)) as { counts: { progress: number } };
+        let metrics;
+        if (await this.darkly.getBooleanFlag('dynamic-disable-compliance-count-cache', false, { kind: 'organization', key: req.organization.id, name: req.organization.name })) {
+          metrics = (await this.cache.get(`organization:${req.organization.id}:compliance:${def.name}:counts`)) as { counts: { progress: number } };
+        }
+
         if (metrics) {
           set(def, 'progress', metrics.counts.progress);
         } else {
+          let raw;
           try {
-            const raw = await this.responses.getScoredComplianceQuestionsByName(req.organization, def.name, req.user);
-
-            // show hidden definitions if their org_compliance is visible
-            if (!def.visible && raw.visible == true) {
-              def.visible = true;
-            }
-
-            if (raw.counts) {
-              set(def, 'progress', raw.counts.progress);
-            }
+            raw = await this.responses.getScoredComplianceQuestionsByName(req.organization, def.name, req.user);
           } catch (e) {
             if (!(e instanceof NotFoundException)) {
               this.logger.error(e);
             }
+
+            continue;
+          }
+          // show hidden definitions if their org_compliance is visible
+          if (!def.visible && raw.visible == true) {
+            def.visible = true;
+          }
+
+          if (raw.counts) {
+            set(def, 'progress', raw.counts.progress);
           }
         }
       }
