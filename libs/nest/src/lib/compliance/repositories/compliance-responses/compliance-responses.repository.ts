@@ -104,7 +104,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
         tooltip: true,
         placeholder: true,
         rubric: true,
-        options: false,
+        options: true,
         additional_context: true,
         dependencies: true,
         dependency_expression: true,
