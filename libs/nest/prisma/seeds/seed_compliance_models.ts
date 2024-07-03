@@ -1,10 +1,23 @@
 import { compliance_definitions, PrismaClient } from '@prisma/client';
 import { Cuid2Generator, GuidPrefixes } from '../../src/lib/utility';
+import * as fs from 'fs';
 
 const prisma = new PrismaClient();
 console.log('ENVIRONMENT:', process.env['NODE_ENV']);
 
-export async function seedComplianceModels() {
+async function writeErrorFile(errorName: string, errorPath: string, data: any) {
+  if (!fs.existsSync(errorPath)) {
+    fs.mkdirSync(errorPath, { recursive: true });
+  }
+
+  if (!fs.existsSync(`${errorPath}/${errorName}.json`)) {
+    await fs.writeFileSync(`${errorPath}/${errorName}`, JSON.stringify(data), 'utf-8');
+  } else {
+    await fs.appendFileSync(`${errorPath}/${errorName}`, JSON.stringify(data), 'utf-8');
+  }
+}
+
+export async function seedComplianceModels(this: any) {
   await prisma.$connect();
 
   const comp_def_count = 0;
@@ -200,6 +213,7 @@ export async function seedComplianceModels() {
   }
 
   const compliance_definitions = await prisma.compliance_definitions.findMany();
+
   const cold_climate_org = await prisma.organizations.findUnique({
     where: {
       name: `cold-climate-development`,
@@ -230,6 +244,7 @@ export async function seedComplianceModels() {
       console.log(`🌱 updated Organization Compliance: ${existing_org_compliance.compliance_definition_name} 🌱`, existing_org_compliance);
     }
   }
+
   console.log(`${comp_def_count} Compliance Definitions seeded!`);
 
   console.log('Migrating Compliance Data Table...');
@@ -243,6 +258,9 @@ export async function seedComplianceModels() {
 
     if (!survey_def) {
       console.warn(`🚨 Missing Survey Definition: ${data.survey_definition_id} 🚨`);
+      const errorPath = `./errors/${process.env['NODE_ENV']}/${data.data.name}/${data.organization_id}`;
+      await writeErrorFile.call(this, 'missing_survey_definition', errorPath, data.data);
+
       continue;
     }
 
@@ -298,6 +316,9 @@ export async function seedComplianceModels() {
 
     if (!data?.data?.sections) {
       console.warn(`🚨 Missing Section Data: ${data.id} 🚨`, data?.data);
+      const errorPath = `./errors/${process.env['NODE_ENV']}/${comp_def.name}/${data.organization_id}`;
+      await writeErrorFile.call(this, 'missing_section_data', errorPath, data?.data);
+
       continue;
     }
     const sections = Object.keys(data.data.sections);
@@ -312,10 +333,16 @@ export async function seedComplianceModels() {
 
       if (!section) {
         console.warn(`🚨 Missing Compliance Section: ${sectionKey} 🚨`);
+        const errorPath = `./errors/${process.env['NODE_ENV']}/${comp_def.name}/${data.organization_id}/sections/${sectionKey}`;
+        await writeErrorFile.call(this, 'missing_compliance_section', errorPath, data?.data);
+
         continue;
       }
       if (!data.data.sections[`${sectionKey}`].follow_up) {
         console.warn(`🚨 Missing Follow Up Data: ${sectionKey} 🚨`, data.data.sections[`${sectionKey}`]);
+        const errorPath = `./errors/${process.env['NODE_ENV']}/${comp_def.name}/${data.organization_id}/sections/${sectionKey}/follow_up`;
+        await writeErrorFile.call(this, 'missing_followup_questions', errorPath, data.data);
+
         continue;
       }
       const followUP = Object.keys(data.data.sections[`${sectionKey}`].follow_up);
@@ -365,8 +392,20 @@ export async function seedComplianceModels() {
                 try {
                   parsed = JSON.parse(ref.text.replace(/\r/g, ' '));
                 } catch (e: any) {
-                  console.warn(`🚨 Error Parsing Reference Text: ${ref.text} 🚨`, { error: e.message, stack: e.stack });
-                  console.log(`${ref.text}`);
+                  if (e.message.includes('Unterminated string')) {
+                    ref.text = ref.text + '"}"';
+                    try {
+                      parsed = JSON.parse(ref.text.replace(/\r/g, ' '));
+                    } catch (err: any) {
+                      console.warn(`🚨 Error Parsing Reference Text: ${ref.text} 🚨`, { error: err.message, stack: err.stack });
+                      const errorPath = `./errors/${process.env['NODE_ENV']}/${comp_def.name}/${data.organization_id}`;
+                      writeErrorFile.call(this, 'failed_parsing_reference_data', errorPath, ref);
+                    }
+                  } else {
+                    console.warn(`🚨 Error Parsing Reference Text: ${ref.text} 🚨`, { error: e.message, stack: e.stack });
+                    const errorPath = `./errors/${process.env['NODE_ENV']}/${comp_def.name}/${data.organization_id}`;
+                    writeErrorFile.call(this, 'failed_parsing_reference_data', errorPath, ref);
+                  }
                 }
               }
               if (parsed) {
@@ -377,6 +416,8 @@ export async function seedComplianceModels() {
 
           if (!qData?.ai_response?.justification) {
             console.warn(`🚨 Warning Justification is empty 🚨`, { ...qData?.ai_response });
+            const errorPath = `./errors/${process.env['NODE_ENV']}/${comp_def.name}/${data.organization_id}`;
+            await writeErrorFile.call(this, 'missing_ai_justification', errorPath, qData);
             continue;
           }
 
@@ -439,21 +480,38 @@ export async function seedComplianceModels() {
 
           console.log(`🌱 Upserted Compliance Response Join 🌱`, { comp_responses });
 
-          if (!qData?.ai_response?.source || !Array.isArray(qData.ai_response.source)) {
-            console.warn(`🚨 Missing AI Response Source: ${questionKey} 🚨`);
+          if (!qData?.ai_response?.references || !Array.isArray(qData.ai_response.references)) {
+            console.warn(`🚨 Missing AI Response References: ${questionKey} 🚨`);
+            const errorPath = `./errors/${process.env['NODE_ENV']}/${comp_def.name}/${org_compliance.organization_id}`;
+            await writeErrorFile.call(this, 'missing_ai_response_references', errorPath, data);
+
             continue;
           } else {
             console.log(`updating AI Response ${ai_response.id} files:`, { source: qData.ai_response.source });
-            for (const filename of qData.ai_response.source) {
+            for (const filename of qData.ai_response.references) {
+              if (!filename) {
+                console.warn(`🚨 Missing AI Response File: ${filename} 🚨`, filename);
+                const errorPath = `./errors/${process.env['NODE_ENV']}/${comp_def.name}/${org_compliance.organization_id}`;
+                await writeErrorFile.call(this, 'missing_ai_response_files', errorPath, data);
+                continue;
+              }
+              if (filename?.url) {
+                console.log(`🚨 Skipping URL: ${filename.url} 🚨`);
+                continue;
+              }
+
               const file = await prisma.organization_files.findFirst({
                 where: {
-                  original_name: filename,
+                  original_name: filename.file,
                   organization_id: data.organization_id,
                 },
               });
 
               if (!file) {
                 console.warn(`🚨 Missing AI Response File: ${filename} 🚨`);
+                const errorPath = `./errors/${process.env['NODE_ENV']}/${comp_def.name}/${data.organization_id}`;
+                await writeErrorFile.call(this, 'missing_ai_response_files', errorPath, data);
+
                 continue;
               }
 

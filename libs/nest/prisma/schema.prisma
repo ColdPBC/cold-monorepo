@@ -570,6 +570,7 @@ model organization_compliance {
   organization_id                           String
   organization                              organizations                                @relation(fields: [organization_id], references: [id])
   compliance_definition                     compliance_definitions                       @relation(fields: [compliance_definition_name], references: [name])
+  visible                                   Boolean                                      @default(true)
   statuses                                  organization_compliance_statuses[]
   notes                                     organization_compliance_notes[]
   question_bookmarks                        organization_compliance_question_bookmarks[]

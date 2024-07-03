@@ -56,6 +56,7 @@ export class OrganizationComplianceRepository extends BaseWorker {
           },
         },
         select: {
+          visible: true,
           statuses: {
             take: 1,
             select: {
@@ -144,6 +145,7 @@ export class OrganizationComplianceRepository extends BaseWorker {
               created_at: 'desc',
             },
           },
+          visible: true,
           id: true,
           organization_id: true,
           compliance_definition: {

@@ -5,7 +5,7 @@ import { BaseWorker } from '../../../worker';
 import { IAuthenticatedUser } from '../../../primitives';
 import { Cuid2Generator, GuidPrefixes } from '../../../utility';
 import { ComplianceSectionsExtendedDto } from './dto';
-import compliance_sectionsSchema from 'libs/nest/src/validation/generated/modelSchema/compliance_sectionsSchema';
+import compliance_sectionsSchema from '../../../../validation/generated/modelSchema/compliance_sectionsSchema';
 import { FilteringService } from '../../filtering';
 
 /**

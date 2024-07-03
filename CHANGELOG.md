@@ -1,3 +1,45 @@
+# [1.276.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.275.0...v1.276.0) (2024-07-03)
+
+
+### Features
+
+* add bpc parameter to getAllByOrg method in compliance-definitions service ([41b43e2](https://github.com/ColdPBC/cold-monorepo/commit/41b43e2769d512229a69d40a504727b81d27c3ea))
+* add bpc query parameter to allow for forcing cache to refresh ([c34f2b2](https://github.com/ColdPBC/cold-monorepo/commit/c34f2b20a830200bdd6fcb69c3212487517016e7))
+* add caching and timing to compliance response repository ([3f19a09](https://github.com/ColdPBC/cold-monorepo/commit/3f19a09dfb50d61d3a8da31c59a9bde0c3f6b942))
+* Update getComplianceDefinitionsByOrgId function in compliance-definitions repository ([eaa6fe3](https://github.com/ColdPBC/cold-monorepo/commit/eaa6fe3cbd0dab42f003cdcbe201953a0b918e6e))
+
+# [1.275.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.274.0...v1.275.0) (2024-07-03)
+
+
+### Bug Fixes
+
+* update error logging condition in compliance-responses repository ([40fe499](https://github.com/ColdPBC/cold-monorepo/commit/40fe4994a570fa2139a18842cb2cb0baaf011a1a))
+
+
+### Features
+
+* Add dynamic compliance count cache disabling ([30ae6a7](https://github.com/ColdPBC/cold-monorepo/commit/30ae6a7a65d53005e1145828cf708dea8e1267ab))
+
+# [1.274.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.273.0...v1.274.0) (2024-07-02)
+
+
+### Features
+
+* Add visible column to organization_compliance table ([39c24b4](https://github.com/ColdPBC/cold-monorepo/commit/39c24b459e266dd254a7365456e220f266453819))
+
+# [1.273.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.272.0...v1.273.0) (2024-07-02)
+
+
+### Features
+
+* Add error logging to seedComplianceModels function in Prisma ([43c89e7](https://github.com/ColdPBC/cold-monorepo/commit/43c89e78db8c6394f69f726fef7b7d69854c22ad))
+* add getAll() function to compliance-definitions controller ([818f111](https://github.com/ColdPBC/cold-monorepo/commit/818f111c28a7d2ca40f99ab0107c4939d5fd6085))
+* Add new function to getComplianceDefinitions and update visibility ([f331aed](https://github.com/ColdPBC/cold-monorepo/commit/f331aedf12d224cef128310766e1a9311545a8e1))
+* Add new getAll compliance method and rename old method ([967be5c](https://github.com/ColdPBC/cold-monorepo/commit/967be5cc119906516057893ffa348c2b4bb2844e))
+* Add visibility filter to organization-compliance repository ([f9930de](https://github.com/ColdPBC/cold-monorepo/commit/f9930de75612ae65b9917e7b5175c8f3a9a79865))
+* Add visibility to compliance responses ([943a358](https://github.com/ColdPBC/cold-monorepo/commit/943a358e1f9135878e5f2eefdd140f06d0f7e9eb))
+* Add visible field to schema in Prisma ([1caf715](https://github.com/ColdPBC/cold-monorepo/commit/1caf715f6a11efcf81d45b9031919b1f43945bec))
+
 # [1.272.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.271.0...v1.272.0) (2024-07-02)
 
 

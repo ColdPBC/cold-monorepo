@@ -143,11 +143,27 @@ export class ComplianceDefinitionsController extends BaseWorker {
     return this.complianceService.injectSurvey(req, id, definition);
   }
 
+  @Get('compliance')
+  @ApiOperation({
+    deprecated: true,
+    summary: 'Get list of all compliance frameworks including invisible ones',
+    operationId: 'findAllComplianceFrameworks',
+  })
+  @Roles(...coldAdminOnly)
+  @ApiQuery(bpcDecoratorOptions)
+  @ApiResponse({
+    status: 200,
+    description: 'Returns all compliance frameworks',
+  })
+  async getAll() {
+    return await this.complianceService.getAll();
+  }
+
   @Get('compliance/all/organizations/:orgId')
   @ApiOperation({
     deprecated: true,
     summary: 'Get list of all compliance frameworks',
-    operationId: 'findAllComplianceFrameworks',
+    operationId: 'findAllOrgComplianceFrameworks',
   })
   @Roles(...allRoles)
   @ApiQuery(bpcDecoratorOptions)
@@ -163,8 +179,9 @@ export class ComplianceDefinitionsController extends BaseWorker {
       query: any;
       user: IAuthenticatedUser;
     },
+    @Query('bpc') bpc: boolean,
   ) {
-    return await this.complianceService.findAll(req);
+    return await this.complianceService.getAllByOrg(req, bpc);
   }
 
   @Get('compliance_definitions')
@@ -187,8 +204,9 @@ export class ComplianceDefinitionsController extends BaseWorker {
       query: any;
       user: IAuthenticatedUser;
     },
+    @Query('bpc') bpc: boolean,
   ) {
-    return await this.complianceService.findAll(req);
+    return await this.complianceService.getAllByOrg(req, bpc);
   }
 
   @Get('compliance/:name')
