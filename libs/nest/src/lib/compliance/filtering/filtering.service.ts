@@ -26,7 +26,7 @@ export class FilteringService extends BaseWorker {
         group.compliance_sections = (await this.filterSectionGroupSections(group, options)) as ComplianceSectionsExtendedDto[];
       }
 
-      return sectionGroups;
+      return sectionGroups.filter(group => group?.compliance_sections && group.compliance_sections.length > 0);
     } catch (error) {
       this.logger.error(`Error filtering section groups`, { sectionGroups, error });
       throw error;
@@ -106,11 +106,19 @@ export class FilteringService extends BaseWorker {
           /**
            * If all dependencies are met, the question is included in the response.
            */
-          filtered.push(section);
+          if (section?.compliance_questions && section.compliance_questions.length > 0) {
+            filtered.push(section);
+          } else {
+            this.logger.warn(`No questions found for section`, { section });
+          }
         }
       } else {
         // If there are no dependencies, the question is included in the response.
-        filtered.push(section);
+        if (section?.compliance_questions && section.compliance_questions.length > 0) {
+          filtered.push(section);
+        } else {
+          this.logger.warn(`No questions found for section`, { section });
+        }
       }
     }
 
