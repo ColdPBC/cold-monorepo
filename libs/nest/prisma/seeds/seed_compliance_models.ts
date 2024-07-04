@@ -154,10 +154,17 @@ export async function seedComplianceModels(this: any) {
 
   const org_compliances = await prisma.organization_compliances_old.findMany();
   for (const org_compliance of org_compliances) {
+    let filter: any = {
+      id: org_compliance.compliance_id,
+    };
+    if (org_compliance?.surveys_override && org_compliance?.surveys_override['length'] > 0) {
+      filter = {
+        name: org_compliance?.surveys_override[0],
+      };
+    }
+
     const compliance_def = await prisma.compliance_definitions.findUnique({
-      where: {
-        id: org_compliance.compliance_id,
-      },
+      where: filter,
     });
 
     if (!compliance_def) {
