@@ -1,3 +1,10 @@
+# [1.279.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.278.0...v1.279.0) (2024-07-04)
+
+
+### Features
+
+* Add support for survey override in compliance model seeding ([33133da](https://github.com/ColdPBC/cold-monorepo/commit/33133da4460cbda75fe69bc99623dbb669b67795))
+
 # [1.278.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.277.0...v1.278.0) (2024-07-03)
 
 
