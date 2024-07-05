@@ -217,7 +217,7 @@ const _ComplianceManager = () => {
           <div className={'flex flex-col justify-center relative w-full max-w-[1400px]'} data-testid={'compliance-manager-tabs'}>
             <div className={'absolute bottom-0 left-0 h-[2px] bg-gray-90 w-full'}></div>
             <div className={'flex flex-row w-full justify-start'} data-testid={'compliance-manager-tabs'}>
-              {['Overview', 'Documents', 'Preview'].map(tab => (
+              {['Overview', 'Preview'].map(tab => (
                 <div
                   className={`px-[16px] py-[8px] text-h5 cursor-pointer relative ` + (managementView === tab ? 'text-tc-primary' : 'text-tc-disabled')}
                   onClick={() => setManagementView(tab)}
