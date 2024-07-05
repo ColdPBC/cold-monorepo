@@ -21,6 +21,7 @@ export interface ComplianceResponseOptions {
   responses?: boolean;
   bookmarks?: boolean;
   onlyCounts?: boolean;
+  bpc?: boolean;
 }
 
 @Injectable()
@@ -388,12 +389,12 @@ export class ComplianceResponsesRepository extends BaseWorker {
    * @param options
    * @param bpc
    */
-  async getScoredComplianceQuestionsByName(org: organizations, compliance_definition_name: string, user: IAuthenticatedUser, options?: ComplianceResponseOptions, bpc?: boolean) {
+  async getScoredComplianceQuestionsByName(org: organizations, compliance_definition_name: string, user: IAuthenticatedUser, options?: ComplianceResponseOptions) {
     const start = new Date();
     const counts = await this.cacheService.get(`organization:${org.id}:compliance:${compliance_definition_name}:counts`);
     // invalidate cache if it exists
     if (counts) {
-      if (!bpc) {
+      if (!options?.bpc) {
         const end = new Date();
         this.logger.info(`Cache hit for ${org.name}: ${compliance_definition_name} in ${end.getTime() - start.getTime()}ms`, { compliance_definition_name });
         return counts;
