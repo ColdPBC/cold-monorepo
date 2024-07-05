@@ -20,135 +20,133 @@ async function writeErrorFile(errorName: string, errorPath: string, data: any) {
 export async function seedComplianceModels(this: any) {
   await prisma.$connect();
 
-  const comp_def_count = 0;
   let comp_secg_count = 0;
   let comp_sec_count = 0;
 
   console.log('Getting Compliance Definitions...');
   const compliance_defs = (await prisma.compliance_definitions.findMany()) as compliance_definitions[];
 
-  for (const complianceDef of compliance_defs)
+  for (const complianceDef of compliance_defs) {
     if (Array.isArray(complianceDef.surveys) && complianceDef.surveys.length > 0) {
-      for (const survey of complianceDef.surveys as string[]) {
-        console.log('Getting Compliance Survey Definitions...');
-        const survey_def = await prisma.survey_definitions.findFirst({
-          where: {
-            name: survey,
-          },
-        });
+      console.log('Getting Compliance Survey Definitions...');
+      const survey_def = await prisma.survey_definitions.findFirst({
+        where: {
+          name: complianceDef.name,
+        },
+      });
 
-        if (!survey_def) {
-          console.warn('🚨 No Compliance Survey Definitions Found 🚨');
-          continue;
-        }
-        if (survey_def.definition) {
-          console.log(`Processing ${survey_def.name}...`);
+      if (!survey_def) {
+        console.warn('🚨 No Compliance Survey Definitions Found 🚨');
+        continue;
+      }
+      if (survey_def.definition) {
+        console.log(`Processing ${survey_def.name}...`);
 
-          const surveyDef = survey_def.definition as any;
+        const surveyDef = survey_def.definition as any;
 
-          if (surveyDef.sections) {
-            for (const [key, value] of Object.entries(surveyDef.sections)) {
-              const sectionKey = key;
-              const sectionValue: any = value;
+        if (surveyDef.sections) {
+          for (const [key, value] of Object.entries(surveyDef.sections)) {
+            const sectionKey = key;
+            const sectionValue: any = value;
 
-              const compliance_section_group = await prisma.compliance_section_groups.upsert({
-                where: {
-                  compDefNameTitle: {
-                    compliance_definition_name: complianceDef.name,
-                    title: sectionValue.section_type || complianceDef.name,
-                  },
-                },
-                create: {
-                  id: new Cuid2Generator(GuidPrefixes.SectionGroup).scopedId,
-                  order: 0,
+            const compliance_section_group = await prisma.compliance_section_groups.upsert({
+              where: {
+                compDefNameTitle: {
+                  compliance_definition_name: complianceDef.name,
                   title: sectionValue.section_type || complianceDef.name,
-                  compliance_definition_name: complianceDef.name,
                 },
-                update: {
-                  title: sectionValue.section_type || complianceDef.name,
-                  compliance_definition_name: complianceDef.name,
-                },
-              });
+              },
+              create: {
+                id: new Cuid2Generator(GuidPrefixes.SectionGroup).scopedId,
+                order: 0,
+                title: sectionValue.section_type || complianceDef.name,
+                compliance_definition_name: complianceDef.name,
+              },
+              update: {
+                title: sectionValue.section_type || complianceDef.name,
+                compliance_definition_name: complianceDef.name,
+              },
+            });
 
-              comp_secg_count++;
-              console.log(`🌱 seeded ${comp_secg_count} Compliance Section Groups: ${sectionValue.title} 🌱`, compliance_section_group);
+            comp_secg_count++;
+            console.log(`🌱 seeded ${comp_secg_count} Compliance Section Groups: ${sectionValue.title} 🌱`, compliance_section_group);
 
-              const comp_section = await prisma.compliance_sections.upsert({
-                where: {
-                  compSecGroupKey: {
-                    compliance_section_group_id: compliance_section_group.id,
-                    key: sectionKey,
-                  },
-                },
-                create: {
-                  id: new Cuid2Generator(GuidPrefixes.ComplianceSection).scopedId,
-                  key: sectionKey,
-                  title: sectionValue.title,
-                  order: sectionValue.category_idx as number,
-                  dependency_expression: sectionValue?.dependency?.expression,
-                  compliance_definition_name: complianceDef.name,
+            const comp_section = await prisma.compliance_sections.upsert({
+              where: {
+                compSecGroupKey: {
                   compliance_section_group_id: compliance_section_group.id,
+                  key: sectionKey,
+                },
+              },
+              create: {
+                id: new Cuid2Generator(GuidPrefixes.ComplianceSection).scopedId,
+                key: sectionKey,
+                title: sectionValue.title,
+                order: sectionValue.category_idx as number,
+                dependency_expression: sectionValue?.dependency?.expression,
+                compliance_definition_name: complianceDef.name,
+                compliance_section_group_id: compliance_section_group.id,
+              },
+              update: {
+                title: sectionValue.title,
+                order: sectionValue.category_idx as number,
+                dependency_expression: sectionValue?.dependency?.expression,
+                compliance_definition_name: complianceDef.name,
+              },
+            });
+
+            comp_sec_count++;
+            console.log(`🌱 seeded (${comp_sec_count} of ${Object.entries(surveyDef.sections).length}) Compliance Section: ${sectionValue.title} 🌱`, comp_section);
+
+            let comp_quest_count = 0;
+            for (const [qkey, qvalue] of Object.entries(sectionValue.follow_up)) {
+              const questionKey = qkey;
+              const questionValue: any = qvalue;
+              const questionData = {
+                key: questionKey,
+                order: questionValue.idx as number,
+                prompt: questionValue.prompt,
+                component: questionValue.component,
+                tooltip: questionValue.tooltip,
+                placeholder: questionValue.placeholder,
+                rubric: questionValue.rubric,
+                options: questionValue.options,
+                compliance_definition_name: complianceDef.name,
+                coresponding_question: questionValue.coresponding_question,
+                dependency_expression: questionValue?.dependency?.expression,
+                question_summary: questionValue.question_summary,
+                additional_context: questionValue.additional_context,
+                compliance_section_id: comp_section.id,
+              };
+
+              if (!Array.isArray(questionValue.options) || questionValue.options.length < 1) {
+                delete questionData.options;
+              }
+
+              const existing_question = await prisma.compliance_questions.upsert({
+                where: {
+                  compSecKey: {
+                    key: questionKey,
+                    compliance_section_id: comp_section.id,
+                  },
+                },
+                create: {
+                  id: new Cuid2Generator(GuidPrefixes.ComplianceQuestion).scopedId,
+                  ...questionData,
                 },
                 update: {
-                  title: sectionValue.title,
-                  order: sectionValue.category_idx as number,
-                  dependency_expression: sectionValue?.dependency?.expression,
-                  compliance_definition_name: complianceDef.name,
+                  ...questionData,
                 },
               });
 
-              comp_sec_count++;
-              console.log(`🌱 seeded (${comp_sec_count} of ${Object.entries(surveyDef.sections).length}) Compliance Section: ${sectionValue.title} 🌱`, comp_section);
-
-              let comp_quest_count = 0;
-              for (const [qkey, qvalue] of Object.entries(sectionValue.follow_up)) {
-                const questionKey = qkey;
-                const questionValue: any = qvalue;
-                const questionData = {
-                  key: questionKey,
-                  order: questionValue.idx as number,
-                  prompt: questionValue.prompt,
-                  component: questionValue.component,
-                  tooltip: questionValue.tooltip,
-                  placeholder: questionValue.placeholder,
-                  rubric: questionValue.rubric,
-                  options: questionValue.options,
-                  compliance_definition_name: complianceDef.name,
-                  coresponding_question: questionValue.coresponding_question,
-                  dependency_expression: questionValue?.dependency?.expression,
-                  question_summary: questionValue.question_summary,
-                  additional_context: questionValue.additional_context,
-                  compliance_section_id: comp_section.id,
-                };
-
-                if (!Array.isArray(questionValue.options) || questionValue.options.length < 1) {
-                  delete questionData.options;
-                }
-
-                const existing_question = await prisma.compliance_questions.upsert({
-                  where: {
-                    compSecKey: {
-                      key: questionKey,
-                      compliance_section_id: comp_section.id,
-                    },
-                  },
-                  create: {
-                    id: new Cuid2Generator(GuidPrefixes.ComplianceQuestion).scopedId,
-                    ...questionData,
-                  },
-                  update: {
-                    ...questionData,
-                  },
-                });
-
-                comp_quest_count++;
-                console.log(`🌱 seeded (${comp_quest_count} of ${Object.entries(sectionValue.follow_up).length}) Compliance Question: ${questionKey} 🌱`, existing_question);
-              }
+              comp_quest_count++;
+              console.log(`🌱 seeded (${comp_quest_count} of ${Object.entries(sectionValue.follow_up).length}) Compliance Question: ${questionKey} 🌱`, existing_question);
             }
           }
         }
       }
     }
+  }
 
   console.log('Getting Organization Compliances...');
 
@@ -252,14 +250,13 @@ export async function seedComplianceModels(this: any) {
     }
   }
 
-  console.log(`${comp_def_count} Compliance Definitions seeded!`);
-
   console.log('Migrating Compliance Data Table...');
   const survey_data = (await prisma.survey_data.findMany()) as any[];
   for (const data of survey_data) {
     const survey_def = await prisma.survey_definitions.findUnique({
       where: {
         id: data.survey_definition_id,
+        type: 'COMPLIANCE',
       },
     });
 
@@ -367,7 +364,7 @@ export async function seedComplianceModels(this: any) {
         const qData = data.data.sections[`${sectionKey}`].follow_up[`${questionKey}`] as any;
         // Check if the question has an ai_response property
         let response: any;
-        if (qData.value) {
+        if (Object.prototype.hasOwnProperty.call(qData, 'value')) {
           response = await prisma.organization_compliance_responses.upsert({
             where: {
               orgCompQuestId: {
@@ -387,6 +384,37 @@ export async function seedComplianceModels(this: any) {
           });
 
           console.log(`🌱 updated Org Response 🌱`, { response });
+
+          const comp_responses_data = {
+            compliance_question_id: question.id,
+            compliance_section_id: section.id,
+            compliance_section_group_id: section.compliance_section_group_id,
+            organization_id: data.organization_id,
+            compliance_definition_name: comp_def.name,
+            organization_compliance_id: org_compliance.id,
+            organization_compliance_response_id: response?.id,
+          };
+
+          if (!response?.id) {
+            delete comp_responses_data.organization_compliance_response_id;
+          }
+
+          const comp_responses = await prisma.compliance_responses.upsert({
+            where: {
+              orgCompQuestId: {
+                compliance_question_id: question.id,
+                organization_compliance_id: org_compliance.id,
+              },
+            },
+            create: {
+              ...comp_responses_data,
+            },
+            update: {
+              ...comp_responses_data,
+            },
+          });
+
+          console.log(`🌱 Upserted Compliance Response Join 🌱`, { comp_responses });
         }
         if (qData.ai_response) {
           // Insert a new ai_response object
@@ -396,24 +424,6 @@ export async function seedComplianceModels(this: any) {
               let parsed;
               if (typeof ref?.text === 'string') {
                 ref.text = ref.text.replace(/\r/g, ' ');
-                try {
-                  parsed = JSON.parse(ref.text.replace(/\r/g, ' '));
-                } catch (e: any) {
-                  if (e.message.includes('Unterminated string')) {
-                    ref.text = ref.text + '"}"';
-                    try {
-                      parsed = JSON.parse(ref.text.replace(/\r/g, ' '));
-                    } catch (err: any) {
-                      console.warn(`🚨 Error Parsing Reference Text: ${ref.text} 🚨`, { error: err.message, stack: err.stack });
-                      const errorPath = `./errors/${process.env['NODE_ENV']}/${comp_def.name}/${data.organization_id}`;
-                      writeErrorFile.call(this, 'failed_parsing_reference_data', errorPath, ref);
-                    }
-                  } else {
-                    console.warn(`🚨 Error Parsing Reference Text: ${ref.text} 🚨`, { error: e.message, stack: e.stack });
-                    const errorPath = `./errors/${process.env['NODE_ENV']}/${comp_def.name}/${data.organization_id}`;
-                    writeErrorFile.call(this, 'failed_parsing_reference_data', errorPath, ref);
-                  }
-                }
               }
               if (parsed) {
                 ref.text = parsed;
@@ -491,8 +501,6 @@ export async function seedComplianceModels(this: any) {
             console.warn(`🚨 Missing AI Response References: ${questionKey} 🚨`);
             const errorPath = `./errors/${process.env['NODE_ENV']}/${comp_def.name}/${org_compliance.organization_id}`;
             await writeErrorFile.call(this, 'missing_ai_response_references', errorPath, data);
-
-            continue;
           } else {
             console.log(`updating AI Response ${ai_response.id} files:`, { source: qData.ai_response.source });
             for (const filename of qData.ai_response.references) {
