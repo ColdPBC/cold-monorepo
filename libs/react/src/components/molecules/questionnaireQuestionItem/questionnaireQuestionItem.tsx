@@ -115,6 +115,8 @@ const _QuestionnaireQuestionItem = (props: { question: QuestionnaireQuestion; nu
         questionAnswerSaved: questionAnswerSaved,
         questionAnswerChanged: questionAnswerChanged,
         question: question,
+        sectionGroupId: sectionGroupId,
+        sectionId: sectionId,
       },
     });
   }, [questionInput, questionAnswerSaved, questionAnswerChanged]);
@@ -638,6 +640,8 @@ const _QuestionnaireQuestionItem = (props: { question: QuestionnaireQuestion; nu
                     questionAnswerSaved: questionAnswerSaved,
                     questionAnswerChanged: questionAnswerChanged,
                     question: question,
+                    sectionGroupId: sectionGroupId,
+                    sectionId: sectionId,
                   },
                 });
               }

@@ -1,10 +1,15 @@
-import { AIDetails } from '@coldpbc/interfaces';
+import { AIDetails, QuestionnaireComplianceContainerPayLoad, QuestionnaireQuestionComplianceReference } from '@coldpbc/interfaces';
 import { HexColors } from '@coldpbc/themes';
 import { getComplianceAIResponseOriginalAnswer, isComplianceAnswerEqualToAIResponse } from '@coldpbc/lib';
-import { AiReferenceDropdown, ErrorFallback } from '@coldpbc/components';
+import { AiReferenceDropdown, ErrorFallback, Spinner } from '@coldpbc/components';
 import { get, isNull } from 'lodash';
 import { withErrorBoundary } from 'react-error-boundary';
-import React from 'react';
+import React, { useContext } from 'react';
+import useSWR from 'swr';
+import { axiosFetcher } from '@coldpbc/fetchers';
+import { useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
+import { ColdComplianceQuestionnaireContext } from '@coldpbc/context';
+import { isDefined } from 'class-validator';
 
 export interface QuestionnaireAIDetailProps {
   aiDetails: AIDetails | undefined | null;
@@ -12,9 +17,25 @@ export interface QuestionnaireAIDetailProps {
 
 const _QuestionnaireAIDetail = (props: QuestionnaireAIDetailProps) => {
   const { aiDetails } = props;
+  const { orgId } = useAuth0Wrapper();
+  const { name } = useContext(ColdComplianceQuestionnaireContext);
+
+  const { logBrowser } = useColdContext();
+
+  const questionDetailsSWR = useSWR<QuestionnaireComplianceContainerPayLoad, any, any>(
+    isDefined(aiDetails)
+      ? [
+          `/compliance/${name}/organizations/${orgId}/section_groups/${aiDetails.sectionGroupId}/sections/${aiDetails.sectionId}/questions/${aiDetails.question.id}/responses`,
+          'GET',
+        ]
+      : null,
+    axiosFetcher,
+  );
+
   if (aiDetails === undefined || aiDetails === null) {
     return null;
   }
+
   const { questionAnswerSaved, question } = aiDetails;
 
   const ai_response = get(question, 'compliance_responses[0].ai_response', null);
@@ -65,6 +86,24 @@ const _QuestionnaireAIDetail = (props: QuestionnaireAIDetailProps) => {
     }
   };
 
+  logBrowser('QuestionnaireAIDetail rendered', 'info', {
+    aiDetails,
+    ai_response,
+    ai_answered,
+    questionAnswerSaved,
+    data: questionDetailsSWR.data,
+  });
+
+  if (questionDetailsSWR.isLoading) {
+    return <Spinner />;
+  }
+
+  let references: QuestionnaireQuestionComplianceReference[] = [];
+
+  if (questionDetailsSWR.data) {
+    references = get(questionDetailsSWR.data, 'compliance_section_groups[0].compliance_sections[0].compliance_questions[0].compliance_responses[0].ai_response.references', []);
+  }
+
   return (
     <div className={'w-full h-full flex flex-col p-[24px] gap-[16px] text-tc-primary'}>
       <div className={'w-full flex flex-row gap-[16px] justify-between'}>
@@ -79,8 +118,8 @@ const _QuestionnaireAIDetail = (props: QuestionnaireAIDetailProps) => {
             {getOriginalAnswer()}
             <div className={'text-body w-full text-start'}>{ai_response?.justification}</div>
             <div className={'flex flex-col gap-[8px] w-full'}>
-              {ai_response?.references && ai_response?.references?.length > 0 && <div className={'text-h5'}>Documents Referenced</div>}
-              {ai_response?.references?.map((reference, index) => {
+              {references.length > 0 && <div className={'text-h5'}>Documents Referenced</div>}
+              {references.map((reference, index) => {
                 return <AiReferenceDropdown key={index} reference={reference} />;
               })}
             </div>
