@@ -595,12 +595,12 @@ model compliance_responses {
   organization_compliance_id             String
   organization_compliance_ai_response_id String?
   organization_compliance_response_id    String?
-  ai_response                            organization_compliance_ai_responses? @relation(fields: [organization_compliance_ai_response_id], references: [id], onDelete: SetNull)
-  org_response                           organization_compliance_responses?    @relation(fields: [organization_compliance_response_id], references: [id], onDelete: SetNull)
-  compliance_section                     compliance_sections                   @relation(fields: [compliance_section_id], references: [id])
-  compliance_section_group               compliance_section_groups             @relation(fields: [compliance_section_group_id], references: [id])
-  compliance_question                    compliance_questions                  @relation(fields: [compliance_question_id], references: [id])
-  organization_compliance                organization_compliance               @relation(fields: [organization_compliance_id], references: [id])
+  ai_response                            organization_compliance_ai_responses? @relation(fields: [organization_compliance_ai_response_id], references: [id], onDelete: Cascade)
+  org_response                           organization_compliance_responses?    @relation(fields: [organization_compliance_response_id], references: [id], onDelete: Cascade)
+  compliance_section                     compliance_sections                   @relation(fields: [compliance_section_id], references: [id], onDelete: Cascade)
+  compliance_section_group               compliance_section_groups             @relation(fields: [compliance_section_group_id], references: [id], onDelete: Cascade)
+  compliance_question                    compliance_questions                  @relation(fields: [compliance_question_id], references: [id], onDelete: Cascade)
+  organization_compliance                organization_compliance               @relation(fields: [organization_compliance_id], references: [id], onDelete: Cascade)
   compliance_definition                  compliance_definitions                @relation(fields: [compliance_definition_name], references: [name])
   deleted                                Boolean                               @default(false)
 
@@ -809,7 +809,7 @@ model organization_compliance_responses {
   compliance_question_id                 String
   organization_compliance_id             String
   additional_context                     Json?
-  compliance_question                    compliance_questions                  @relation(fields: [compliance_question_id], references: [id])
+  compliance_question                    compliance_questions                  @relation(fields: [compliance_question_id], references: [id], onDelete: Cascade)
   organization_compliance                organization_compliance               @relation(fields: [organization_compliance_id], references: [id], onDelete: Cascade)
   compliance_responses                   compliance_responses[]
   deleted                                Boolean                               @default(false)
@@ -831,8 +831,8 @@ model organization_compliance_ai_responses {
   files                             organization_compliance_ai_response_files[]
   compliance_question_id            String
   organization_compliance           organization_compliance                     @relation(fields: [organization_compliance_id], references: [id], onDelete: Cascade)
-  organization                      organizations                               @relation(fields: [organization_id], references: [id])
-  compliance_questions              compliance_questions?                       @relation(fields: [compliance_question_id], references: [id])
+  organization                      organizations                               @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+  compliance_questions              compliance_questions?                       @relation(fields: [compliance_question_id], references: [id], onDelete: Cascade)
   compliance_responses              compliance_responses[]
   deleted                           Boolean                                     @default(false)
 
