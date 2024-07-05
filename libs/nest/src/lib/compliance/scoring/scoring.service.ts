@@ -240,7 +240,7 @@ export class ScoringService extends BaseWorker {
     }
 
     set(question, 'counts', {
-      not_started: question.not_started ? 1 : 0,
+      not_started: !question.user_answered && !question.ai_answered ? 1 : 0,
       org_answered: question.user_answered ? 1 : 0,
       ai_answered: question.ai_answered ? 1 : 0,
       bookmarked: question.bookmarked ? 1 : 0,
