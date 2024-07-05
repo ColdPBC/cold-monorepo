@@ -1,3 +1,11 @@
+# [1.281.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.280.0...v1.281.0) (2024-07-05)
+
+
+### Features
+
+* Add mock data for Compliance Questionnaire ([272e808](https://github.com/ColdPBC/cold-monorepo/commit/272e80888434408d656f7a67c59848f1c865f83f))
+* Remove spinner from compliance components ([100ac8c](https://github.com/ColdPBC/cold-monorepo/commit/100ac8ca263689aa37676a740d1c1c893e3f013a))
+
 # [1.280.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.279.0...v1.280.0) (2024-07-05)
 
 
