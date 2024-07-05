@@ -207,8 +207,8 @@ export class OrganizationComplianceResponsesController {
 
   @Get('responses')
   @Roles(...allRoles)
-  findAllComplianceResponses(@Param('name') name: string, @Req() req: any, @Query('take') take: number, @Query('skip') skip: number) {
-    return this.organizationComplianceResponsesService.findAllByCompliance(name, req, { take, skip });
+  findAllComplianceResponses(@Param('name') name: string, @Req() req: any, @Query('take') take: number, @Query('skip') skip: number, @Query('bpc') bpc: boolean) {
+    return this.organizationComplianceResponsesService.findAllByCompliance(name, req, { take, skip, bpc });
   }
 
   @UseInterceptors(ColdCacheInterceptor)
