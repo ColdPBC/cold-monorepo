@@ -1,3 +1,12 @@
+# [1.280.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.279.0...v1.280.0) (2024-07-05)
+
+
+### Features
+
+* Remove 'Documents' tab from Compliance Manager ([0470413](https://github.com/ColdPBC/cold-monorepo/commit/04704133db008b1c64057e2ab84d2745983d3ba3))
+* Remove 'Preview' tab from Compliance Manager ([6775cba](https://github.com/ColdPBC/cold-monorepo/commit/6775cbac453b28686dfabd81ccb3ef041914a40b))
+* Remove GuidanceButton component ([10ff81a](https://github.com/ColdPBC/cold-monorepo/commit/10ff81abc3c7419e36a49cbde13cb933acf3ca7c))
+
 # [1.279.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.278.0...v1.279.0) (2024-07-04)
 
 
