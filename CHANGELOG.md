@@ -1,3 +1,15 @@
+# [1.282.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.281.0...v1.282.0) (2024-07-05)
+
+
+### Features
+
+* Add bpc option to ComplianceResponseOptions ([78653bb](https://github.com/ColdPBC/cold-monorepo/commit/78653bb1558faf41b29eacfa36be9e5c6006047a))
+* Added 'bpc' query param to findAllComplianceResponses in organization_compliance_responses.controller ([213456f](https://github.com/ColdPBC/cold-monorepo/commit/213456fa09a0e84d93149814779bc8e27fab42c4))
+* Increase default data retrieval limit in Compliance Response service ([8ab0e72](https://github.com/ColdPBC/cold-monorepo/commit/8ab0e7277f2f64e3d94f388e7b345cb59f3f3db7))
+* toggle compliance definition visibility ([8d6380b](https://github.com/ColdPBC/cold-monorepo/commit/8d6380b33b62624e2626ff4522067f98187c1622))
+* update 'not_started' count calculation in scoring.service ([020dd8c](https://github.com/ColdPBC/cold-monorepo/commit/020dd8c1eaed22052588ddccfe13d3caecfda49b))
+* Update relations in prisma schema to cascade on delete ([3989fcf](https://github.com/ColdPBC/cold-monorepo/commit/3989fcfd50b6a47c3aa13be065d051cf1fa297f4))
+
 # [1.281.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.280.0...v1.281.0) (2024-07-05)
 
 
