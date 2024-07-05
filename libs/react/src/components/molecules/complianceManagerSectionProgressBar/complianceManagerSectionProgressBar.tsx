@@ -3,7 +3,7 @@ import { Tooltip } from 'flowbite-react';
 import { ComplianceProgressStatusColor } from '@coldpbc/lib';
 import { get, map, orderBy } from 'lodash';
 import { flowbiteThemeOverride, HexColors } from '@coldpbc/themes';
-import { ComplianceProgressStatusIcon, ErrorFallback, Spinner } from '@coldpbc/components';
+import { ComplianceProgressStatusIcon, ErrorFallback } from '@coldpbc/components';
 import { ComplianceSidebarQuestion, CurrentAIStatusSection } from '@coldpbc/interfaces';
 import React, { useContext } from 'react';
 import { ColdComplianceManagerContext } from '@coldpbc/context';
@@ -97,26 +97,22 @@ const _ComplianceManagerSectionProgressBar = ({ questions, sectionAIStatus, isNa
 
   const orderedData = orderBy(questions, ['order'], ['asc']);
 
-  if (sectionGroups?.isValidating) {
-    return <Spinner />;
-  } else {
-    return (
-      <div className={'flex flex-row justify-start w-full'}>
-        {map(orderedData, (question, index) => {
-          const percentWidth = 100 / orderedData.length;
-          return (
-            <div
-              key={index}
-              style={{
-                width: `${percentWidth}%`,
-              }}>
-              {getProgressBarItem(orderedData, index)}
-            </div>
-          );
-        })}
-      </div>
-    );
-  }
+  return (
+    <div className={'flex flex-row justify-start w-full'}>
+      {map(orderedData, (question, index) => {
+        const percentWidth = 100 / orderedData.length;
+        return (
+          <div
+            key={index}
+            style={{
+              width: `${percentWidth}%`,
+            }}>
+            {getProgressBarItem(orderedData, index)}
+          </div>
+        );
+      })}
+    </div>
+  );
 };
 
 export const ComplianceManagerSectionProgressBar = withErrorBoundary(_ComplianceManagerSectionProgressBar, {
