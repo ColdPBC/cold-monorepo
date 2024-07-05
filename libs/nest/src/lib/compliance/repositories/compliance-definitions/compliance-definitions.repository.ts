@@ -64,7 +64,7 @@ export class ComplianceDefinitionsRepository extends BaseWorker {
       for (const def of definitions) {
         let raw;
         try {
-          raw = await this.responses.getScoredComplianceQuestionsByName(req.organization, def.name, req.user, undefined, bpc);
+          raw = await this.responses.getScoredComplianceQuestionsByName(req.organization, def.name, req.user, { bpc });
         } catch (e) {
           if (!(e instanceof NotFoundException)) {
             this.logger.error(e);
