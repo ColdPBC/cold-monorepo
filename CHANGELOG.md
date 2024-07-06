@@ -1,3 +1,12 @@
+## [1.282.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.282.0...v1.282.1) (2024-07-06)
+
+
+### Bug Fixes
+
+* bug causing dependency chain seeds to fail ([95ef041](https://github.com/ColdPBC/cold-monorepo/commit/95ef04143a54342eb1f9bad94187f3e80494a343))
+* modified user_answered property in scoring.service.ts ([80f8819](https://github.com/ColdPBC/cold-monorepo/commit/80f88198f5fb56d51104959dad8695410eefb4d4))
+* Update prisma seed files for compliance section and question ([c6c3856](https://github.com/ColdPBC/cold-monorepo/commit/c6c3856f3aa4f2fac87e860f58ab9630b255e5f5))
+
 # [1.282.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.281.0...v1.282.0) (2024-07-05)
 
 
