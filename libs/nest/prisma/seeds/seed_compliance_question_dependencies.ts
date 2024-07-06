@@ -49,41 +49,50 @@ export async function buildQuestionDependencyChains() {
         console.log(`No chains found for question: ${question.key}`, { question, seen });
       }
 
-      const qDep = await prisma.compliance_question_dependency_chains.upsert({
-        where: {
-          compliance_question_id: question.id,
-        },
-        create: {
-          id: new Cuid2Generator(GuidPrefixes.ComplianceDependencyChain).scopedId,
-          dependency_chain: chains,
-          compliance_question_id: question.id,
-          compliance_question_key: question.key,
-          compliance_section_id: question.compliance_section.id,
-          compliance_section_key: question.compliance_section.key,
-          compliance_section_group_id: question.compliance_section.compliance_section_group_id,
-          compliance_definition_name: question.compliance_definition_name,
-          dependency_expression: question.dependency_expression ? question.dependency_expression : '',
-        },
-        update: {
-          dependency_chain: chains,
-          compliance_question_id: question.id,
-          compliance_question_key: question.key,
-          compliance_section_id: question.compliance_section.id,
-          compliance_section_key: question.compliance_section.key,
-          compliance_section_group_id: question.compliance_section.compliance_section_group_id,
-          compliance_definition_name: question.compliance_definition_name,
-          dependency_expression: question.dependency_expression ? question.dependency_expression : '',
-        },
-      });
+      try {
+        const qDep = await prisma.compliance_question_dependency_chains.upsert({
+          where: {
+            defNameSecKeyQuestKey: {
+              compliance_question_key: question.key,
+              compliance_section_key: question.compliance_section.key,
+              compliance_definition_name: question.compliance_definition_name,
+            },
+          },
+          create: {
+            id: new Cuid2Generator(GuidPrefixes.ComplianceDependencyChain).scopedId,
+            dependency_chain: chains,
+            compliance_question_id: question.id,
+            compliance_question_key: question.key,
+            compliance_section_id: question.compliance_section.id,
+            compliance_section_key: question.compliance_section.key,
+            compliance_section_group_id: question.compliance_section.compliance_section_group_id,
+            compliance_definition_name: question.compliance_definition_name,
+            dependency_expression: question.dependency_expression ? question.dependency_expression : '',
+          },
+          update: {
+            dependency_chain: chains,
+            compliance_question_id: question.id,
+            compliance_question_key: question.key,
+            compliance_section_id: question.compliance_section.id,
+            compliance_section_key: question.compliance_section.key,
+            compliance_section_group_id: question.compliance_section.compliance_section_group_id,
+            compliance_definition_name: question.compliance_definition_name,
+            dependency_expression: question.dependency_expression ? question.dependency_expression : '',
+          },
+        });
 
-      await prisma.compliance_questions.update({
-        where: {
-          id: question.id,
-        },
-        data: {
-          compliance_question_dependency_chain_id: qDep.id,
-        },
-      });
+        await prisma.compliance_questions.update({
+          where: {
+            id: question.id,
+          },
+          data: {
+            compliance_question_dependency_chain_id: qDep.id,
+          },
+        });
+      } catch (e) {
+        console.error(e);
+      }
+
       console.log(`🌱 seeded compliance dependency chain: ${question.key} 🌱`, { question, seen });
     }
   }
