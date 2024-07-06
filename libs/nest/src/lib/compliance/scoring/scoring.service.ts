@@ -204,7 +204,7 @@ export class ScoringService extends BaseWorker {
         }
 
         question.ai_answered = this.filterService.questionHasValidAnswer(response.ai_response, 'answer', question.component);
-        question.user_answered = this.filterService.questionHasValidAnswer(response.org_response, 'value', question.component);
+        question.user_answered = response.org_response ? Object.prototype.hasOwnProperty.call(response.org_response, 'value') : false;
         question.not_started = !question.ai_answered && !question.org_answered;
       }
       /**
