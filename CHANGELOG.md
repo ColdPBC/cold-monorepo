@@ -1,3 +1,10 @@
+## [1.282.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.282.1...v1.282.2) (2024-07-06)
+
+
+### Bug Fixes
+
+* update scoring service answer logic ([bbacb4b](https://github.com/ColdPBC/cold-monorepo/commit/bbacb4b8caf542de052031bde2b7ba8b01ef8b21))
+
 ## [1.282.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.282.0...v1.282.1) (2024-07-06)
 
 
