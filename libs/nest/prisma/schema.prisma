@@ -705,8 +705,6 @@ model compliance_questions {
 model compliance_section_dependency_chains {
   id                          String                @id() @default(cuid())
   dependency_chain            Json
-  compliance_question_id      String                @unique
-  compliance_question_key     String
   compliance_section_id       String
   compliance_section_key      String
   compliance_section_group_id String
@@ -717,8 +715,8 @@ model compliance_section_dependency_chains {
   compliance_sections         compliance_sections[]
   deleted                     Boolean               @default(false)
 
-  @@unique([compliance_section_id, compliance_question_key, compliance_definition_name], name: "defNameSecIdQuestKey")
-  @@unique([compliance_section_key, compliance_question_key, compliance_definition_name], name: "defNameSecKeyQuestKey")
+  @@unique([compliance_section_group_id, compliance_section_id, compliance_definition_name], map: "defNameSecIdGrpId")
+  @@unique([compliance_section_group_id, compliance_section_key, compliance_definition_name], name: "defNameSecKeyGrpId")
 }
 
 model compliance_question_dependency_chains {
