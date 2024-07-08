@@ -11,7 +11,7 @@ const generatorService = new GeneratorService();
 @Roles(...coldAdminOnly)
 @ApiTags('Compliance Sections')
 @UseFilters(new HttpExceptionFilter(ComplianceSectionsController.name))
-@Controller('compliance_definitions/:name/section_groups/:sgId/sections')
+@Controller('compliance/:name/section_groups/:sgId/sections')
 export class ComplianceSectionsController {
   constructor(readonly complianceSectionsService: ComplianceSectionsService) {}
 

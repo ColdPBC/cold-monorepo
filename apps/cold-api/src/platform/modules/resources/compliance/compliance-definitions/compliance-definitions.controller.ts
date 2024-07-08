@@ -179,6 +179,7 @@ export class ComplianceDefinitionsController extends BaseWorker {
       query: any;
       user: IAuthenticatedUser;
     },
+    @Param('orgId') orgId: string,
     @Query('bpc') bpc: boolean,
   ) {
     return await this.complianceService.getAllByOrg(req, bpc);
