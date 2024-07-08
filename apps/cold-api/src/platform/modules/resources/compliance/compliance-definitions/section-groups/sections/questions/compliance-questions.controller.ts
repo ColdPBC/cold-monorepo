@@ -13,7 +13,7 @@ const genService = new GeneratorService();
 @Roles(...coldAdminOnly)
 @ApiTags('Compliance Questions')
 @UseFilters(new HttpExceptionFilter(ComplianceQuestionsController.name))
-@Controller('compliance_definitions/:name/section_groups/:sgId/sections/:sId/questions')
+@Controller('compliance/:name/section_groups/:sgId/sections/:sId/questions')
 export class ComplianceQuestionsController {
   constructor(private readonly complianceQuestionsService: ComplianceQuestionsService) {}
 
