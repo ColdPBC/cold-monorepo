@@ -1,3 +1,10 @@
+## [1.282.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.282.2...v1.282.3) (2024-07-09)
+
+
+### Bug Fixes
+
+* add auto-creation of organization compliance in repository ([a40aa87](https://github.com/ColdPBC/cold-monorepo/commit/a40aa872f401df47353affb14c114ae87c8c2033))
+
 ## [1.282.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.282.1...v1.282.2) (2024-07-06)
 
 
