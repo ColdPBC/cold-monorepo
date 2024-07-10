@@ -1,3 +1,14 @@
+# [1.283.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.282.3...v1.283.0) (2024-07-10)
+
+
+### Features
+
+* Add scoring and target functionality to Compliance Manager ([c4b1f4f](https://github.com/ColdPBC/cold-monorepo/commit/c4b1f4f06b6beb4846459f99c725cac1e54ce4d2))
+* Enforce integer display for scores in compliance manager components ([b3682c9](https://github.com/ColdPBC/cold-monorepo/commit/b3682c9817fc904bfc5255c66dc1d59df700f4b8))
+* Return null for empty SpiderChart ([62e0801](https://github.com/ColdPBC/cold-monorepo/commit/62e0801ecd0f59ddd8f842828dee122feb3e2d30))
+* Update conditions to display JourneyOverviewCard ([a76c73b](https://github.com/ColdPBC/cold-monorepo/commit/a76c73b502df54629ac184be726c5c7778e841c2))
+* Update sidebar and compliance manager components ([2fa8625](https://github.com/ColdPBC/cold-monorepo/commit/2fa8625f108ec9e0893ad9f96ff3c49602c62f6b))
+
 ## [1.282.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.282.2...v1.282.3) (2024-07-09)
 
 

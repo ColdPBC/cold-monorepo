@@ -109,6 +109,7 @@ export default {
         swrKeepPreviousData: true,
         showNewNavigationCold698: false,
         showNewComplianceManagerCold711: false,
+        showNewComplianceManagerPreviewCold713: true,
       },
     },
   },

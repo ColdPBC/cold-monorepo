@@ -28,7 +28,7 @@ export const ColdRoutes = () => {
       <>
         <Route path={'/'} element={<Home />} />
         <Route path={'/home'} element={<Home />} />
-        <Route path={'/assessments'} element={<Journey />} />
+        {!ldFlags.showNewComplianceManagerPreviewCold713 && <Route path={'/assessments'} element={<Journey />} />}
         {ComplianceRoutes()}
         {QuestionnaireRoutes()}
         {ldFlags.showActions261 && <Route path="/actions" element={<ActionsOverview />} />}

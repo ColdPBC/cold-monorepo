@@ -5,20 +5,18 @@ import { NavbarItem } from '../../../interfaces/sideBar';
 import { Spinner } from '../../atoms/spinner/spinner';
 import { clone, remove } from 'lodash';
 import { useFlags } from 'launchdarkly-react-client-sdk';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { ActionPayload } from '@coldpbc/interfaces';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application/errors/errorFallback';
 import { useAuth0Wrapper, useColdContext, useOrgSWR } from '@coldpbc/hooks';
 import { ErrorType } from '@coldpbc/enums';
-import { ColdWordmark, OrganizationSelector, SideBarCollapse, SideBarItem } from '@coldpbc/components';
+import { ColdLogoAnimation, ColdWordmark, OrganizationSelector, SideBarCollapse, SideBarItem } from '@coldpbc/components';
 import { flowbiteThemeOverride, HexColors } from '@coldpbc/themes';
 import { Sidebar as FBSidebar } from 'flowbite-react';
-import { ColdLogoAnimation } from '../../atoms/coldLogoAnimation/coldLogoAnimation';
 
 const _SideBar = ({ defaultExpanded }: { defaultExpanded?: boolean }): JSX.Element => {
   const ldFlags = useFlags();
-  const navigate = useNavigate();
   const [expanded, setExpanded] = useState(false);
   const [activeItem, setActiveItem] = useState<NavbarItem | null>(null);
   const {
@@ -50,6 +48,8 @@ const _SideBar = ({ defaultExpanded }: { defaultExpanded?: boolean }): JSX.Eleme
       // TODO: Delete this once we replace the journey page completely
       item.label = 'Gaps';
       return true;
+    } else if (item.key === 'assessments_key') {
+      return !ldFlags.showNewComplianceManagerPreviewCold713;
     } else {
       return true;
     }
