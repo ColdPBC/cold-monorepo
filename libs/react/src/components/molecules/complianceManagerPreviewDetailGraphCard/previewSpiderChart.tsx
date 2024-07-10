@@ -18,7 +18,7 @@ import {
   Tooltip,
   TooltipItem,
 } from 'chart.js';
-import { createGradient, defaultChartData, EmptyChart, ErrorFallback } from '@coldpbc/components';
+import { createGradient, defaultChartData, ErrorFallback } from '@coldpbc/components';
 import { forEach, get } from 'lodash';
 import { HexColors } from '@coldpbc/themes';
 import { Chart } from 'react-chartjs-2';
@@ -225,7 +225,7 @@ const _PreviewSpiderChart = (props: { selectedRow: null | string; setSelectedRow
   }, [selectedRow]);
 
   if (isEmpty) {
-    return <EmptyChart />;
+    return null;
   }
 
   const handleResize = (chart: ChartJS) => {
