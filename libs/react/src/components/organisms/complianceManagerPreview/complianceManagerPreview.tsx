@@ -1,9 +1,10 @@
-import { Card, ComplianceManagerPreviewDetailGraphCard, ComplianceManagerPreviewOverallGraphCard } from '@coldpbc/components';
-import { useContext } from 'react';
+import { Card, ComplianceManagerPreviewDetailGraphCard, ComplianceManagerPreviewOverallGraphCard, ErrorFallback } from '@coldpbc/components';
+import React, { useContext } from 'react';
 import { ColdComplianceManagerContext } from '@coldpbc/context';
 import { get } from 'lodash';
+import { withErrorBoundary } from 'react-error-boundary';
 
-export const ComplianceManagerPreview = () => {
+const _ComplianceManagerPreview = () => {
   const { data } = useContext(ColdComplianceManagerContext);
   const { complianceCounts } = data;
   const AI_TOTAL = get(complianceCounts, 'data.counts.ai_answered', 0);
@@ -32,3 +33,10 @@ export const ComplianceManagerPreview = () => {
     </div>
   );
 };
+
+export const ComplianceManagerPreview = withErrorBoundary(_ComplianceManagerPreview, {
+  FallbackComponent: props => <ErrorFallback {...props} />,
+  onError: (error, info) => {
+    console.error('Error occurred in ComplianceManagerPreview: ', error);
+  },
+});

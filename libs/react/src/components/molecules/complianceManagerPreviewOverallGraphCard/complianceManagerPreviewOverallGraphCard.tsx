@@ -1,4 +1,4 @@
-import { Card, ColdInfoIcon } from '@coldpbc/components';
+import { Card, ColdInfoIcon, ErrorFallback } from '@coldpbc/components';
 import { get } from 'lodash';
 import React, { useContext } from 'react';
 import { ColdComplianceManagerContext } from '@coldpbc/context';
@@ -6,49 +6,15 @@ import { motion } from 'framer-motion';
 import { HexColors } from '@coldpbc/themes';
 import opacity from 'hex-color-opacity';
 import { Tooltip } from 'flowbite-react';
+import { withErrorBoundary } from 'react-error-boundary';
 
-export const ComplianceManagerPreviewOverallGraphCard = () => {
+const _ComplianceManagerPreviewOverallGraphCard = () => {
   const { data } = useContext(ColdComplianceManagerContext);
   const { complianceCounts, compliance } = data;
   const AI_SCORE = get(complianceCounts, 'data.ai_score', 0);
   const ORG_SCORE = get(complianceCounts, 'data.score', 0);
   const MAX_SCORE = get(complianceCounts, 'data.max_score', 0);
   const TARGET_SCORE = get(compliance, 'metadata.target_score', undefined);
-
-  const getFormattedOrgScore = () => {
-    if (ORG_SCORE === 0) {
-      return 'None';
-    } else {
-      return ORG_SCORE.toFixed(0);
-    }
-  };
-
-  const getFormattedAIScore = () => {
-    if (AI_SCORE === 0) {
-      return 'None';
-    } else {
-      // todo: how to handle when org score is higher, equal to or both are zero
-      const difference = AI_SCORE - ORG_SCORE;
-      return `+${difference.toFixed(0)}`;
-    }
-  };
-
-  const getFormattedTotalPoints = () => {
-    // total is ai score if ai score is more than org score. Otherwise, total is org score
-    if (AI_SCORE === 0 && ORG_SCORE === 0) {
-      return 'None';
-    } else if (AI_SCORE === 0) {
-      return ORG_SCORE;
-    } else if (ORG_SCORE === 0) {
-      return AI_SCORE;
-    } else {
-      return ORG_SCORE > AI_SCORE ? ORG_SCORE : AI_SCORE;
-    }
-  };
-
-  const getFormattedMaximumPoints = () => {
-    return `Total Points (of ${MAX_SCORE} Possible)`;
-  };
 
   const getOrgScoreBarChart = () => {
     const percentageWidth = (ORG_SCORE / MAX_SCORE) * 100;
@@ -172,3 +138,10 @@ export const ComplianceManagerPreviewOverallGraphCard = () => {
     </Card>
   );
 };
+
+export const ComplianceManagerPreviewOverallGraphCard = withErrorBoundary(_ComplianceManagerPreviewOverallGraphCard, {
+  FallbackComponent: props => <ErrorFallback {...props} />,
+  onError: (error, info) => {
+    console.error('Error occurred in ComplianceManagerPreviewOverallGraphCard: ', error);
+  },
+});

@@ -1,11 +1,12 @@
 import React, { useContext, useState } from 'react';
 import { ColdComplianceManagerContext } from '@coldpbc/context';
-import { Card, PreviewDetailDatagridCollapse, PreviewSpiderChart } from '@coldpbc/components';
+import { Card, ErrorFallback, PreviewDetailDatagridCollapse, PreviewSpiderChart } from '@coldpbc/components';
 import { Table } from 'flowbite-react';
 import { darkTableTheme } from '@coldpbc/themes';
 import { forEach, get, map, sortBy } from 'lodash';
+import { withErrorBoundary } from 'react-error-boundary';
 
-export const ComplianceManagerPreviewDetailGraphCard = () => {
+const _ComplianceManagerPreviewDetailGraphCard = () => {
   const [selectedRow, setSelectedRow] = useState<null | string>(null);
   const { data } = useContext(ColdComplianceManagerContext);
   const { complianceCounts } = data;
@@ -93,3 +94,10 @@ export const ComplianceManagerPreviewDetailGraphCard = () => {
     </Card>
   );
 };
+
+export const ComplianceManagerPreviewDetailGraphCard = withErrorBoundary(_ComplianceManagerPreviewDetailGraphCard, {
+  FallbackComponent: props => <ErrorFallback {...props} />,
+  onError: (error, info) => {
+    console.error('Error occurred in ComplianceManagerPreviewDetailGraphCard: ', error);
+  },
+});

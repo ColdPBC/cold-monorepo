@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { ColdComplianceManagerContext } from '@coldpbc/context';
 import {
   ActiveElement,
@@ -18,15 +18,16 @@ import {
   Tooltip,
   TooltipItem,
 } from 'chart.js';
-import { createGradient, defaultChartData, EmptyChart } from '@coldpbc/components';
+import { createGradient, defaultChartData, EmptyChart, ErrorFallback } from '@coldpbc/components';
 import { forEach, get } from 'lodash';
 import { HexColors } from '@coldpbc/themes';
 import { Chart } from 'react-chartjs-2';
 import opacity from 'hex-color-opacity';
 import { Plugin as PluginType } from 'chart.js/dist/types';
 import numeral from 'numeral';
+import { withErrorBoundary } from 'react-error-boundary';
 
-export const PreviewSpiderChart = (props: { selectedRow: null | string; setSelectedRow: (selectedRow: null | string) => void }) => {
+const _PreviewSpiderChart = (props: { selectedRow: null | string; setSelectedRow: (selectedRow: null | string) => void }) => {
   const { selectedRow, setSelectedRow } = props;
   const { data } = useContext(ColdComplianceManagerContext);
   const { complianceCounts } = data;
@@ -261,3 +262,10 @@ export const PreviewSpiderChart = (props: { selectedRow: null | string; setSelec
     </div>
   );
 };
+
+export const PreviewSpiderChart = withErrorBoundary(_PreviewSpiderChart, {
+  FallbackComponent: props => <ErrorFallback {...props} />,
+  onError: (error, info) => {
+    console.error('Error occurred in PreviewSpiderChart: ', error);
+  },
+});
