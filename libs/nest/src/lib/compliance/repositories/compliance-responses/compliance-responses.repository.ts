@@ -411,15 +411,13 @@ export class ComplianceResponsesRepository extends BaseWorker {
    */
   async getScoredComplianceQuestionsByName(org: organizations, compliance_definition_name: string, user: IAuthenticatedUser, options?: ComplianceResponseOptions) {
     const start = new Date();
-    const counts = await this.cacheService.get(`organization:${org.id}:compliance:${compliance_definition_name}:counts`);
     // invalidate cache if it exists
-    if (counts) {
-      if (!options?.bpc) {
-        const end = new Date();
-        this.logger.info(`Cache hit for ${org.name}: ${compliance_definition_name} in ${end.getTime() - start.getTime()}ms`, { compliance_definition_name });
-        return counts;
-      }
-
+    if (!options?.bpc) {
+      const counts = await this.cacheService.get(`organization:${org.id}:compliance:${compliance_definition_name}:counts`);
+      const end = new Date();
+      this.logger.info(`Cache hit for ${org.name}: ${compliance_definition_name} in ${end.getTime() - start.getTime()}ms`, { compliance_definition_name });
+      return counts;
+    } else {
       await this.cacheService.delete(`organization:${org.id}:compliance:${compliance_definition_name}:counts`);
     }
 

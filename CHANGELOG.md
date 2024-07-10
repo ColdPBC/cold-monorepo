@@ -1,3 +1,10 @@
+# [1.284.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.283.0...v1.284.0) (2024-07-10)
+
+
+### Features
+
+* Add 'bpc' query parameter to organization_compliance_responses controller ([bb3bd8c](https://github.com/ColdPBC/cold-monorepo/commit/bb3bd8c1088447e8a6128b77e0f7a9b836aa39a9))
+
 # [1.283.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.282.3...v1.283.0) (2024-07-10)
 
 
