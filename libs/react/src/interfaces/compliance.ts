@@ -217,6 +217,7 @@ export interface ComplianceManagerCountsPayload {
     org_answered: number;
     ai_answered: number;
     bookmarked: number;
+    total: number;
   };
   statuses: {
     id: string;
@@ -225,6 +226,9 @@ export interface ComplianceManagerCountsPayload {
     created_at: string;
     updated_at: string;
   }[];
+  score: number;
+  ai_score: number;
+  max_score: number;
 }
 
 export interface ComplianceManagerCountsSectionGroup {
@@ -238,6 +242,9 @@ export interface ComplianceManagerCountsSectionGroup {
     bookmarked: number;
   };
   compliance_sections: ComplianceManagerCountsSection[];
+  score: number;
+  ai_score: number;
+  max_score: number;
 }
 
 export interface ComplianceManagerCountsSection {

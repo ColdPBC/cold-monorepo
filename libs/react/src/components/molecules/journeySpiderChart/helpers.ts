@@ -4,8 +4,9 @@ import { ChartArea } from 'chart.js';
 const cache = new Map();
 let width: number;
 let height: number;
-export function createGradient(ctx: CanvasRenderingContext2D, chartArea: ChartArea, colorStart: string, colorEnd: string) {
-  if (!chartArea) {
+
+export function createGradient(ctx: CanvasRenderingContext2D | undefined, chartArea: ChartArea | undefined, colorStart: string, colorEnd: string) {
+  if (!chartArea || !ctx) {
     // This case happens on initial chart load
     return;
   }
@@ -38,6 +39,7 @@ export function createGradient(ctx: CanvasRenderingContext2D, chartArea: ChartAr
 
   return gradient;
 }
+
 // Convenience function for getting a value along a gradient
 export function pickGradientValue(hexColor1: string, hexColor2: string, percent: number) {
   const w2 = percent;
