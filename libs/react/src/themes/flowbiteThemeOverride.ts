@@ -7,7 +7,7 @@ export const darkTableTheme: CustomFlowbiteTheme = {
     root: {
       base: 'w-full text-left text-sm text-gray-500 dark:text-gray-400',
       shadow: '',
-      wrapper: 'relative border-gray-50 border border-solid rounded-lg bg-gray-50 flex-1 w-full',
+      wrapper: 'relative border-gray-50 border border-solid rounded-lg bg-gray-50 flex-1 w-full h-auto',
     },
     body: {
       base: 'group/body',

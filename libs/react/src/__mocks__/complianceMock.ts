@@ -16,6 +16,7 @@ export function getComplianceMock(): Compliance[] {
       metadata: {
         term: 'every_three_years',
         compliance_type: 'target_score',
+        target_score: 80,
       },
       visible: true,
       order: 1,
@@ -130,6 +131,8 @@ export function getOrganizationComplianceMock(): OrgCompliance[] {
         title: 'B Corp',
         metadata: {
           term: 'every_three_years',
+          compliance_type: 'target_score',
+          target_score: 80,
         },
         visible: true,
         order: 1,
@@ -1862,6 +1865,9 @@ export function getComplianceCountsMock(): ComplianceManagerCountsPayload {
           ai_answered: 5,
           bookmarked: 1,
         },
+        score: 0,
+        ai_score: 5,
+        max_score: 10,
       },
       {
         id: 'csg_j8gp3cqg1en67qor',
@@ -1890,6 +1896,9 @@ export function getComplianceCountsMock(): ComplianceManagerCountsPayload {
           ai_answered: 1,
           bookmarked: 0,
         },
+        score: 0,
+        ai_score: 5,
+        max_score: 10,
       },
       {
         id: 'csg_pukqrndkcvtxnz6y',
@@ -1933,6 +1942,9 @@ export function getComplianceCountsMock(): ComplianceManagerCountsPayload {
           ai_answered: 3,
           bookmarked: 0,
         },
+        score: 0,
+        ai_score: 5,
+        max_score: 10,
       },
     ],
     counts: {
@@ -1940,7 +1952,11 @@ export function getComplianceCountsMock(): ComplianceManagerCountsPayload {
       org_answered: 0,
       ai_answered: 9,
       bookmarked: 1,
+      total: 30,
     },
+    ai_score: 7.5,
+    score: 0,
+    max_score: 16.5,
   };
 }
 
@@ -2011,6 +2027,8 @@ export function getAllComplianceMocks(): AllCompliance[] {
       image_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/complianceBackgroundImages/rei.png',
       metadata: {
         term: 'every_three_years',
+        compliance_type: 'target_score',
+        target_score: 80,
       },
       order: 3,
       version: 2024,
@@ -2104,7 +2122,6 @@ export function getAllComplianceMocksByStatus(status: ComplianceStatus, progress
 
   return complianceMock;
 }
-
 export function getQuestionAIDetailsMock(sectionGroupId: string, sectionId: string, questionId: string): QuestionnaireComplianceContainerPayLoad | undefined {
   const mock: QuestionnaireComplianceContainerPayLoad = {
     name: 'rei_pia_2024',
@@ -3129,5 +3146,162 @@ export function getQuestionAIDetailsStoryMock(): QuestionnaireComplianceContaine
         ],
       },
     ],
+  };
+}
+
+export function getComplianceCountsMockWithOrgScore(): ComplianceManagerCountsPayload {
+  return {
+    name: 'rei_pia_2024',
+    statuses: [],
+    compliance_section_groups: [
+      {
+        id: 'csg_m3dt64ix15uiap6e',
+        title: 'Practices',
+        order: 0,
+        compliance_sections: [
+          {
+            id: 'cs_p03di0afkskmd6xs',
+            key: 'GEN',
+            title: 'Brand Information',
+            order: 0,
+            score: 8,
+            ai_score: 7,
+            max_score: 10,
+            counts: {
+              not_started: 11,
+              org_answered: 0,
+              ai_answered: 0,
+              bookmarked: 1,
+            },
+          },
+          {
+            id: 'cs_g3xkxk4vkdwc7fjz',
+            key: 'MFG',
+            title: 'Manufacturing Code of Conduct & Responsible Sourcing',
+            order: 1,
+            score: 7,
+            ai_score: 4,
+            max_score: 10,
+            counts: {
+              not_started: 3,
+              org_answered: 0,
+              ai_answered: 1,
+              bookmarked: 0,
+            },
+          },
+          {
+            id: 'cs_fqiwgmgebqp9il2e',
+            key: 'CRP',
+            title: 'Core Practices',
+            order: 22,
+            score: 8,
+            ai_score: 5,
+            max_score: 10,
+            counts: {
+              not_started: 2,
+              org_answered: 0,
+              ai_answered: 4,
+              bookmarked: 0,
+            },
+          },
+        ],
+        counts: {
+          not_started: 16,
+          org_answered: 0,
+          ai_answered: 5,
+          bookmarked: 1,
+        },
+        score: 23,
+        ai_score: 16,
+        max_score: 30,
+      },
+      {
+        id: 'csg_j8gp3cqg1en67qor',
+        title: 'D & I',
+        order: 0,
+        compliance_sections: [
+          {
+            id: 'cs_a243nr32celxvegb',
+            key: 'MKT',
+            title: 'Diversity & Inclusion: Marketing Diversity',
+            order: 12,
+            score: 9,
+            ai_score: 7,
+            max_score: 10,
+            counts: {
+              not_started: 0,
+              org_answered: 0,
+              ai_answered: 1,
+              bookmarked: 0,
+            },
+          },
+        ],
+        counts: {
+          not_started: 0,
+          org_answered: 0,
+          ai_answered: 1,
+          bookmarked: 0,
+        },
+        score: 9,
+        ai_score: 7,
+        max_score: 10,
+      },
+      {
+        id: 'csg_pukqrndkcvtxnz6y',
+        title: 'Product',
+        order: 0,
+        compliance_sections: [
+          {
+            id: 'cs_n7x4kqfvkm0hsw0u',
+            key: 'PRD',
+            title: 'Product Care, Repair, Reuse & End-of-life',
+            order: 21,
+            score: 5,
+            ai_score: 5,
+            max_score: 10,
+            counts: {
+              not_started: 4,
+              org_answered: 0,
+              ai_answered: 2,
+              bookmarked: 0,
+            },
+          },
+          {
+            id: 'cs_knwupnz9o24amkfb',
+            key: 'PSA',
+            title: 'Product Sustainability & Preferred Attributes',
+            order: 18,
+            score: 8,
+            ai_score: 7,
+            max_score: 10,
+            counts: {
+              not_started: 1,
+              org_answered: 0,
+              ai_answered: 1,
+              bookmarked: 0,
+            },
+          },
+        ],
+        counts: {
+          not_started: 5,
+          org_answered: 0,
+          ai_answered: 3,
+          bookmarked: 0,
+        },
+        score: 13,
+        ai_score: 12,
+        max_score: 20,
+      },
+    ],
+    counts: {
+      not_started: 21,
+      org_answered: 0,
+      ai_answered: 9,
+      bookmarked: 1,
+      total: 30,
+    },
+    ai_score: 45,
+    score: 40,
+    max_score: 100,
   };
 }
