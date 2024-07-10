@@ -29,7 +29,7 @@ function _Home() {
         <CenterColumnContent>
           {ldFlags.showNextStepsCard && <NextSteps />}
           {ldFlags.showNewCarbonFootprintModuleCold634 ? <EmissionsOverviewCard /> : <FootprintOverviewCard chartVariant={EmissionsDonutChartVariants.horizontal} />}
-          {ldFlags.showComplianceModule && (
+          {ldFlags.showComplianceModule && !ldFlags.showNewComplianceManagerPreviewCold713 && (
             <ColdAssessmentsProvider>
               <JourneyOverviewCard />
             </ColdAssessmentsProvider>
