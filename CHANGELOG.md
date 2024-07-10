@@ -1,3 +1,12 @@
+# [1.285.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.284.0...v1.285.0) (2024-07-10)
+
+
+### Features
+
+* Add overflow auto property to div elements ([422002b](https://github.com/ColdPBC/cold-monorepo/commit/422002b27074b06c2e801be38c7cba046b1b7095))
+* Update CSS classes in questionnaire components ([80b7306](https://github.com/ColdPBC/cold-monorepo/commit/80b73065b0f8cebcbf08290c8675a5d482354b91))
+* Update padding in QuestionnaireContainer ([b3901f5](https://github.com/ColdPBC/cold-monorepo/commit/b3901f588e2f40cb4fe5ab5a818485d90e50edd8))
+
 # [1.284.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.283.0...v1.284.0) (2024-07-10)
 
 
