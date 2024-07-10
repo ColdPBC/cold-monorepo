@@ -38,7 +38,7 @@ const _QuestionnaireContainer = () => {
   };
 
   const { data, error, isLoading, size, setSize, mutate } = useSWRInfinite<QuestionnaireComplianceContainerPayLoad, any, any>(getKey, axiosFetcher, {
-    parallel: false,
+    parallel: true,
   });
 
   const getPageSectionData = (pageDataList: QuestionnaireComplianceContainerPayLoad[] | undefined, sectionGroupId: string, sectionId: string) => {
@@ -134,7 +134,11 @@ const _QuestionnaireContainer = () => {
                       section={section}
                       sectionGroupId={sectionGroup.id}
                       pagedSectionData={pagedSectionData}
-                      innerRef={lastPageRef}
+                      updateSize={() => {
+                        if (orderedSectionIndex + 1 > size) {
+                          setSize(orderedSectionIndex + 1);
+                        }
+                      }}
                     />
                     {isLoading && <Spinner />}
                   </>

@@ -602,21 +602,10 @@ const _QuestionnaireQuestionItem = (props: { question: QuestionnaireQuestion; nu
     buttonLoading,
   });
 
-  // get question search params
-  const questionParam = params.get('question');
-  const isQuestionInQuery = questionParam !== null && questionParam === key;
   return (
     <div
       className={`flex flex-col w-full rounded-[16px] bg-gray-30 gap-[16px] ${questionBookmarked ? 'border-[1px] border-lightblue-200 p-[23px]' : ' p-[24px]'}
     ${focusQuestion !== null && focusQuestion.key !== id ? 'opacity-20' : ''}`}
-      ref={el => {
-        if ((scrollToQuestion === key || isQuestionInQuery) && el) {
-          el.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start',
-          });
-        }
-      }}
       id={key}>
       <div className={'flex flex-row gap-[8px] justify-between'}>
         <div className={'flex flex-row gap-[8px] items-center'}>

@@ -6,7 +6,7 @@ import { ColdIcon, ComplianceProgressStatusIcon } from '@coldpbc/components';
 import { HexColors } from '@coldpbc/themes';
 
 export const QuestionnaireQuestionItemPlaceholder = (props: { question: ComplianceSidebarQuestion; number: number }) => {
-  const { focusQuestion } = useContext(ColdComplianceQuestionnaireContext);
+  const { focusQuestion, scrollToQuestion } = useContext(ColdComplianceQuestionnaireContext);
   const { question, number } = props;
   const { id, prompt, bookmarked, user_answered, ai_answered } = question;
 

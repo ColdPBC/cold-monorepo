@@ -1,25 +1,29 @@
 import { ErrorFallback, QuestionnaireQuestionItem, QuestionnaireQuestionItemPlaceholder } from '@coldpbc/components';
-import React, { useContext, useEffect } from 'react';
+import React, { ReactNode, useContext, useEffect } from 'react';
 import { ColdComplianceQuestionnaireContext } from '@coldpbc/context';
 import { ComplianceSidebarSection, QuestionnaireQuestion } from '@coldpbc/interfaces';
 import { useSearchParams } from 'react-router-dom';
 import { withErrorBoundary } from 'react-error-boundary';
 import { orderBy } from 'lodash';
 import { useColdContext } from '@coldpbc/hooks';
+import { useInView } from 'react-intersection-observer';
 
 const _QuestionnaireQuestionSection = (props: {
-  innerRef: ((node?: globalThis.Element | null | undefined) => void) | null;
   section: ComplianceSidebarSection;
   sectionGroupId: string;
   pagedSectionData: QuestionnaireQuestion[] | undefined;
   questionnaireMutate: () => void;
+  updateSize: () => void;
 }) => {
   const { logBrowser } = useColdContext();
   const [searchParams, setSearchParams] = useSearchParams();
-  const { focusQuestion } = useContext(ColdComplianceQuestionnaireContext);
-  const { innerRef, section, pagedSectionData, sectionGroupId, questionnaireMutate } = props;
+  const { focusQuestion, scrollToQuestion } = useContext(ColdComplianceQuestionnaireContext);
+  const { updateSize, section, pagedSectionData, sectionGroupId, questionnaireMutate } = props;
   const sectionKey = searchParams.get('section');
   const isSectionInQuery = sectionKey === section.key;
+  const [sectionRef, sectionInView] = useInView({
+    rootMargin: '0px 0px',
+  });
 
   useEffect(() => {
     // remove search params after a
@@ -39,6 +43,12 @@ const _QuestionnaireQuestionSection = (props: {
     };
   }, [searchParams]);
 
+  useEffect(() => {
+    if (sectionInView) {
+      updateSize();
+    }
+  }, [sectionInView]);
+
   // use placeholder questions to fill in the gaps if the page data is not loaded yet
   const orderedPlaceholderQuestions = orderBy(section.compliance_questions, ['order'], ['asc']);
 
@@ -50,7 +60,7 @@ const _QuestionnaireQuestionSection = (props: {
   });
 
   return (
-    <div className={'flex flex-col gap-[40px] w-full'} ref={innerRef}>
+    <div className={'flex flex-col gap-[40px] w-full'} ref={sectionRef}>
       <div
         className={`text-h2 text-tc-primary ${focusQuestion !== null && 'opacity-20'}`}
         ref={el => {
@@ -65,8 +75,12 @@ const _QuestionnaireQuestionSection = (props: {
       </div>
       {orderedPlaceholderQuestions.map((question, index) => {
         const pagedQuestionData = pagedSectionData?.find(q => q.key === question.key);
+        let element: ReactNode = null;
+        // get question search params
+        const questionParam = searchParams.get('question');
+        const isQuestionInQuery = questionParam === question.key;
         if (pagedQuestionData) {
-          return (
+          element = (
             <QuestionnaireQuestionItem
               key={question.key}
               number={index + 1}
@@ -77,8 +91,21 @@ const _QuestionnaireQuestionSection = (props: {
             />
           );
         } else {
-          return <QuestionnaireQuestionItemPlaceholder key={question.key} number={index + 1} question={question} />;
+          element = <QuestionnaireQuestionItemPlaceholder key={question.key} number={index + 1} question={question} />;
         }
+        return (
+          <div
+            ref={el => {
+              if ((scrollToQuestion === question.key || isQuestionInQuery) && el) {
+                el.scrollIntoView({
+                  behavior: 'smooth',
+                  block: 'start',
+                });
+              }
+            }}>
+            {element}
+          </div>
+        );
       })}
     </div>
   );
