@@ -13,7 +13,7 @@ const _QuestionnaireSidebar = (props: { sidebarOpen: boolean; setSidebarOpen: (o
   const orderedSectionGroups = orderBy(sectionGroups?.data?.compliance_section_groups, ['order', 'title'], ['asc', 'asc']);
   return (
     <div
-      className={'h-full flex flex-col gap-[24px] border-gray-70 border-r-[1px] text-ellipsis pb-[50px]'}
+      className={'h-full flex flex-col gap-[24px] border-gray-70 border-r-[1px] text-ellipsis'}
       style={{
         width: sidebarOpen ? '407px' : '72px',
         transition: 'width 0.3s',
@@ -28,7 +28,7 @@ const _QuestionnaireSidebar = (props: { sidebarOpen: boolean; setSidebarOpen: (o
           <ChevronDoubleRightIcon width={'24'} height={'24'} color={HexColors.gray['90']} />
         </div>
       )}
-      <div className={'w-full h-full flex flex-col gap-[48px] overflow-y-auto scrollbar-hide'}>
+      <div className={'w-full h-full flex flex-col gap-[48px] overflow-y-auto scrollbar-hide pb-[100px]'}>
         {orderedSectionGroups.map((item, index) => {
           return <QuestionnaireSidebarSectionGroup key={index} sectionGroup={item} sideBarExpanded={sidebarOpen} />;
         })}

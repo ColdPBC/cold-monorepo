@@ -82,7 +82,7 @@ const _ComplianceQuestionnaire = () => {
           </div>
         </div>
         {selectedCompliance ? (
-          <div className={'w-full h-full flex justify-start relative items-stretch overflow-y-clip'}>
+          <div className={'w-full h-full flex justify-start relative overflow-y-clip'}>
             <QuestionnaireSidebar sidebarOpen={sidebarExpanded} setSidebarOpen={setSidebarExpanded} />
             <QuestionnaireContainer />
             <QuestionnaireDetailSidebar />

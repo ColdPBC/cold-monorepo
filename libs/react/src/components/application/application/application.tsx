@@ -11,7 +11,7 @@ export const Application = () => {
       value={{
         keepPreviousData: ldFlags.swrKeepPreviousData,
       }}>
-      <div className={twMerge('h-full w-full', ldFlags.showNewNavigationCold698 ? '' : 'overflow-x-auto max-w-[1440px] m-auto')}>
+      <div className={twMerge('h-full w-full overflow-y-auto', ldFlags.showNewNavigationCold698 ? '' : 'overflow-x-auto max-w-[1440px] m-auto')}>
         <ColdRoutes />
       </div>
     </SWRConfig>
