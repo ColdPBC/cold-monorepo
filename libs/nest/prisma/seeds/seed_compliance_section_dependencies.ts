@@ -48,13 +48,15 @@ export async function buildSectionDependencyChains() {
       }
       const sectionDep = await prisma.compliance_section_dependency_chains.upsert({
         where: {
-          compliance_question_id: section.id,
+          defNameSecKeyGrpId: {
+            compliance_section_group_id: section.section_group.id,
+            compliance_section_key: section.key,
+            compliance_definition_name: section.compliance_definition_name,
+          },
         },
         create: {
           id: new Cuid2Generator(GuidPrefixes.ComplianceDependencyChain).scopedId,
           dependency_chain: chains,
-          compliance_question_id: section.id,
-          compliance_question_key: section.key,
           compliance_section_id: section.id,
           compliance_section_key: section.key,
           compliance_section_group_id: section.section_group.id,
@@ -63,8 +65,6 @@ export async function buildSectionDependencyChains() {
         },
         update: {
           dependency_chain: chains,
-          compliance_question_id: section.id,
-          compliance_question_key: section.key,
           compliance_section_id: section.id,
           compliance_section_key: section.key,
           compliance_section_group_id: section.section_group.id,

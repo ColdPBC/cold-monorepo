@@ -14,7 +14,7 @@ export class OrganizationComplianceResponsesService extends BaseWorker {
   async findAllByCompliance(name: string, req: any, options?: ComplianceResponseOptions) {
     try {
       if (options) {
-        options.take = options.take || 100;
+        options.take = options.take || 400;
         options.skip = options.skip || 0;
       }
       const response = await this.repository.getScoredComplianceQuestionsByName(req.organization, name, req.user, options);

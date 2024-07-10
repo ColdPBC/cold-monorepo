@@ -13,9 +13,15 @@ export const AiReferenceDropdown = (props: { reference: QuestionnaireQuestionCom
     if (file) {
       return file;
     }
-    if (url) {
+    let navigateToUrl = url;
+    // check url has http or https. if not add https
+    if (splitUrl && splitUrl[0] !== 'http:' && splitUrl[0] !== 'https:') {
+      navigateToUrl = `https://${url}`;
+    }
+
+    if (navigateToUrl) {
       return (
-        <a href={url} target={'_blank'} rel={'noreferrer'} className={'text-primary underline'} onClick={e => e.stopPropagation()}>
+        <a href={navigateToUrl} target={'_blank'} rel={'noreferrer'} className={'text-primary underline'} onClick={e => e.stopPropagation()}>
           {link}
         </a>
       );

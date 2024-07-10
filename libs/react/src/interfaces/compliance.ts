@@ -270,6 +270,8 @@ export interface AIDetails {
   questionAnswerSaved: boolean;
   questionAnswerChanged: boolean;
   question: QuestionnaireQuestion;
+  sectionId: string;
+  sectionGroupId: string;
 }
 
 export type AllCompliance = {

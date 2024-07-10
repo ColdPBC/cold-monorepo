@@ -118,7 +118,7 @@ const _ComplianceManagerOverviewSectionGroup = ({ sectionGroup, position }: Comp
           className={'rounded-[8px] border-[1px] border-gray-60 bg-gray-50 py-[4px] pl-[4px] pr-[8px] flex flex-row gap-[4px] items-center w-[68px] justify-start'}
           key={status.status}>
           {getProgressIcon(status.status)}
-          {complianceCounts?.isValidating ? <Spinner /> : <div className={'text-tc-primary text-body font-bold'}>{status.count}</div>}
+          <div className={'text-tc-primary text-body font-bold'}>{status.count}</div>
         </div>
       );
     });

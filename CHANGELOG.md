@@ -1,3 +1,46 @@
+## [1.282.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.282.2...v1.282.3) (2024-07-09)
+
+
+### Bug Fixes
+
+* add auto-creation of organization compliance in repository ([a40aa87](https://github.com/ColdPBC/cold-monorepo/commit/a40aa872f401df47353affb14c114ae87c8c2033))
+
+## [1.282.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.282.1...v1.282.2) (2024-07-06)
+
+
+### Bug Fixes
+
+* update scoring service answer logic ([bbacb4b](https://github.com/ColdPBC/cold-monorepo/commit/bbacb4b8caf542de052031bde2b7ba8b01ef8b21))
+
+## [1.282.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.282.0...v1.282.1) (2024-07-06)
+
+
+### Bug Fixes
+
+* bug causing dependency chain seeds to fail ([95ef041](https://github.com/ColdPBC/cold-monorepo/commit/95ef04143a54342eb1f9bad94187f3e80494a343))
+* modified user_answered property in scoring.service.ts ([80f8819](https://github.com/ColdPBC/cold-monorepo/commit/80f88198f5fb56d51104959dad8695410eefb4d4))
+* Update prisma seed files for compliance section and question ([c6c3856](https://github.com/ColdPBC/cold-monorepo/commit/c6c3856f3aa4f2fac87e860f58ab9630b255e5f5))
+
+# [1.282.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.281.0...v1.282.0) (2024-07-05)
+
+
+### Features
+
+* Add bpc option to ComplianceResponseOptions ([78653bb](https://github.com/ColdPBC/cold-monorepo/commit/78653bb1558faf41b29eacfa36be9e5c6006047a))
+* Added 'bpc' query param to findAllComplianceResponses in organization_compliance_responses.controller ([213456f](https://github.com/ColdPBC/cold-monorepo/commit/213456fa09a0e84d93149814779bc8e27fab42c4))
+* Increase default data retrieval limit in Compliance Response service ([8ab0e72](https://github.com/ColdPBC/cold-monorepo/commit/8ab0e7277f2f64e3d94f388e7b345cb59f3f3db7))
+* toggle compliance definition visibility ([8d6380b](https://github.com/ColdPBC/cold-monorepo/commit/8d6380b33b62624e2626ff4522067f98187c1622))
+* update 'not_started' count calculation in scoring.service ([020dd8c](https://github.com/ColdPBC/cold-monorepo/commit/020dd8c1eaed22052588ddccfe13d3caecfda49b))
+* Update relations in prisma schema to cascade on delete ([3989fcf](https://github.com/ColdPBC/cold-monorepo/commit/3989fcfd50b6a47c3aa13be065d051cf1fa297f4))
+
+# [1.281.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.280.0...v1.281.0) (2024-07-05)
+
+
+### Features
+
+* Add mock data for Compliance Questionnaire ([272e808](https://github.com/ColdPBC/cold-monorepo/commit/272e80888434408d656f7a67c59848f1c865f83f))
+* Remove spinner from compliance components ([100ac8c](https://github.com/ColdPBC/cold-monorepo/commit/100ac8ca263689aa37676a740d1c1c893e3f013a))
+
 # [1.280.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.279.0...v1.280.0) (2024-07-05)
 
 

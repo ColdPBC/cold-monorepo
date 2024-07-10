@@ -1,7 +1,7 @@
 import { ComplianceProgressStatus } from '@coldpbc/enums';
 import { useContext } from 'react';
 import { ColdComplianceManagerContext } from '@coldpbc/context';
-import { ComplianceProgressStatusIcon, Spinner } from '@coldpbc/components';
+import { ComplianceProgressStatusIcon } from '@coldpbc/components';
 import { useColdContext } from '@coldpbc/hooks';
 
 export interface ComplianceProgressItemProps {
@@ -108,14 +108,8 @@ export const ComplianceProgressStatusItem = ({ type }: ComplianceProgressItemPro
         {getProgressIcon(type)}
       </div>
       <div className={'w-full flex flex-row justify-between items-center'}>
-        {complianceCounts?.isValidating ? (
-          <Spinner />
-        ) : (
-          <>
-            {getCount()}
-            {getPercentage()}
-          </>
-        )}
+        {getCount()}
+        {getPercentage()}
       </div>
     </div>
   );

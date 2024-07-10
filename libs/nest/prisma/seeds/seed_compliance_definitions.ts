@@ -78,7 +78,7 @@ const prodSeeds = [
     image_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/complianceBackgroundImages/rei.png',
     metadata: {},
     order: 1,
-    visible: true,
+    visible: false,
   },
   {
     name: 'oia_climate_report_2023',
