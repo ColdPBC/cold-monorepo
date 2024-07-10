@@ -69,12 +69,14 @@ export class OrganizationComplianceResponsesController {
     @Query('skip', new ParseIntPipe({ optional: true })) skip: number = 0,
     @Query('responses', new ParseBoolPipe({ optional: true })) responses: boolean,
     @Query('references', new ParseBoolPipe({ optional: true })) references: boolean,
+    @Query('bpc', new ParseBoolPipe({ optional: true })) bpc: boolean,
   ) {
     return this.organizationComplianceResponsesService.findAllByCompliance(name, req, {
       references,
       responses,
       take,
       skip,
+      bpc,
     });
   }
 
