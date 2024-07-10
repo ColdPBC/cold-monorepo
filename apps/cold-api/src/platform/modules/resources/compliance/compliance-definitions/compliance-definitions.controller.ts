@@ -13,7 +13,6 @@ const genService = new GeneratorService();
 @UseGuards(JwtAuthGuard, RolesGuard)
 @UseFilters(new HttpExceptionFilter(ComplianceDefinitionsController.name))
 @ApiOAuth2(['openid'])
-@ApiTags('Compliance')
 @Controller()
 export class ComplianceDefinitionsController extends BaseWorker {
   constructor(private readonly complianceService: ComplianceDefinitionService) {
@@ -25,6 +24,7 @@ export class ComplianceDefinitionsController extends BaseWorker {
    */
 
   @Post('compliance')
+  @ApiTags('Compliance')
   @HttpCode(201)
   @Roles(...coldAdminOnly)
   createDefinition(
@@ -42,6 +42,7 @@ export class ComplianceDefinitionsController extends BaseWorker {
 
   //DEPRECATED Replaced By createDefinition
   @Post('compliance_definitions')
+  @ApiTags('Deprecated')
   @ApiOperation({
     deprecated: true,
   })
@@ -66,6 +67,10 @@ export class ComplianceDefinitionsController extends BaseWorker {
   @ApiOperation({
     summary: 'Inject a survey into a compliance framework by name',
     operationId: 'InjectComplianceSurvey',
+  })
+  @ApiTags('Deprecated')
+  @ApiOperation({
+    deprecated: true,
   })
   @HttpCode(201)
   @Roles(...coldAdminOnly)
@@ -123,6 +128,7 @@ export class ComplianceDefinitionsController extends BaseWorker {
     summary: 'Use POST: compliance/frameworks/:name/survey instead',
     operationId: 'InjectComplianceSurvey',
   })
+  @ApiTags('Deprecated')
   @HttpCode(201)
   @Roles(...coldAdminOnly)
   @ApiTags('Deprecated')
@@ -145,10 +151,11 @@ export class ComplianceDefinitionsController extends BaseWorker {
 
   @Get('compliance')
   @ApiOperation({
-    deprecated: true,
+    deprecated: false,
     summary: 'Get list of all compliance frameworks including invisible ones',
     operationId: 'findAllComplianceFrameworks',
   })
+  @ApiTags('Compliance')
   @Roles(...coldAdminOnly)
   @ApiQuery(bpcDecoratorOptions)
   @ApiResponse({
@@ -161,7 +168,6 @@ export class ComplianceDefinitionsController extends BaseWorker {
 
   @Get('compliance/all/organizations/:orgId')
   @ApiOperation({
-    deprecated: true,
     summary: 'Get list of all compliance frameworks',
     operationId: 'findAllOrgComplianceFrameworks',
   })
@@ -191,6 +197,7 @@ export class ComplianceDefinitionsController extends BaseWorker {
     summary: 'Replaced by findAllComplianceDefinitions',
     operationId: 'getAllComplianceDefinitions',
   })
+  @ApiTags('Deprecated')
   @Roles(...allRoles)
   @ApiQuery(bpcDecoratorOptions)
   @ApiResponse({
@@ -215,6 +222,7 @@ export class ComplianceDefinitionsController extends BaseWorker {
     summary: 'Get by name',
     operationId: 'GetComplianceDefinitionByName',
   })
+  @ApiTags('Compliance')
   @Roles(...allRoles)
   @ApiParam({
     name: 'name',
@@ -247,6 +255,7 @@ export class ComplianceDefinitionsController extends BaseWorker {
     summary: 'Replaced by getComplianceByName',
     operationId: 'GetComplianceDefinitionByName',
   })
+  @ApiTags('Deprecated')
   @Roles(...allRoles)
   @ApiParam({
     name: 'name',
@@ -279,6 +288,7 @@ export class ComplianceDefinitionsController extends BaseWorker {
     summary: 'Update by name',
     operationId: 'UpdateComplianceDefinitionByName',
   })
+  @ApiTags('Compliance')
   @Roles(...coldAdminOnly)
   @HttpCode(200)
   @ApiParam({
@@ -330,6 +340,7 @@ export class ComplianceDefinitionsController extends BaseWorker {
     type: 'string',
     example: 'b_corp_2024',
   })
+  @ApiTags('Compliance')
   @HttpCode(204)
   @Roles(Role.ColdAdmin)
   deleteComplianceByName(
@@ -377,7 +388,7 @@ export class ComplianceDefinitionsController extends BaseWorker {
    */
 
   @Post('compliance_definitions/:name/organizations/:orgId')
-  @ApiTags('Compliance')
+  @ApiTags('Deprecated')
   @ApiOperation({
     deprecated: true,
   })
@@ -446,6 +457,7 @@ export class ComplianceDefinitionsController extends BaseWorker {
     type: 'string',
     example: '{{test_organization_id}}',
   })
+  @ApiTags('Compliance')
   activateComplianceForOrgByName(
     @Param('name') name: string,
     @Param('orgId') orgId: string,
@@ -461,6 +473,7 @@ export class ComplianceDefinitionsController extends BaseWorker {
   @ApiOperation({
     deprecated: true,
   })
+  @ApiTags('Deprecated')
   @ApiParam({
     name: 'name',
     required: true,
@@ -475,7 +488,6 @@ export class ComplianceDefinitionsController extends BaseWorker {
   })
   @HttpCode(204)
   @Roles(Role.ColdAdmin)
-  @ApiTags('Organizations')
   deleteOrgComplianceByName(
     @Param('name') name: string,
     @Param('orgId') orgId: string,
@@ -495,6 +507,7 @@ export class ComplianceDefinitionsController extends BaseWorker {
   @ApiOperation({
     deprecated: true,
   })
+  @ApiTags('Deprecated')
   @HttpCode(201)
   @ApiParam({
     name: 'name',
@@ -537,7 +550,7 @@ export class ComplianceDefinitionsController extends BaseWorker {
   }
 
   @Get('compliance_definitions/organizations/:orgId')
-  @ApiTags('Organizations')
+  @ApiTags('Deprecated')
   @ApiOperation({
     deprecated: true,
   })
@@ -567,7 +580,7 @@ export class ComplianceDefinitionsController extends BaseWorker {
   }
 
   @Delete('compliance_definitions/:name/organizations/:orgId')
-  @ApiTags('Organizations')
+  @ApiTags('Deprecated')
   @ApiOperation({
     deprecated: true,
   })
@@ -604,7 +617,7 @@ export class ComplianceDefinitionsController extends BaseWorker {
   // TODO DEPRECATE ALL THESE BELOW
 
   @Put('compliance_definitions/:name/organizations/:orgId')
-  @ApiTags('Organizations')
+  @ApiTags('Deprecated')
   @ApiOperation({
     deprecated: true,
   })
@@ -650,6 +663,7 @@ export class ComplianceDefinitionsController extends BaseWorker {
     type: 'string',
     example: '{{test_organization_id}}',
   })
+  @ApiTags('Deprecated')
   @HttpCode(204)
   @Roles(Role.ColdAdmin)
   deleteOrgCompliance(
@@ -675,6 +689,7 @@ export class ComplianceDefinitionsController extends BaseWorker {
     type: 'string',
     example: 'b_corp_2024',
   })
+  @ApiTags('Deprecated')
   @ApiParam({
     name: 'orgId',
     required: true,
@@ -722,6 +737,7 @@ export class ComplianceDefinitionsController extends BaseWorker {
     type: 'string',
     example: 'b_corp_2024',
   })
+  @ApiTags('Deprecated')
   @ApiParam({
     name: 'orgId',
     required: true,
@@ -758,6 +774,7 @@ export class ComplianceDefinitionsController extends BaseWorker {
 
   @Get('compliance_definitions/organizations/:orgId')
   @Roles(...allRoles)
+  @ApiTags('Deprecated')
   @ApiQuery(bpcDecoratorOptions)
   @ApiParam({
     name: 'orgId',
@@ -797,6 +814,7 @@ export class ComplianceDefinitionsController extends BaseWorker {
     type: 'string',
     example: '{{test_organization_id}}',
   })
+  @ApiTags('Deprecated')
   @ApiQuery(bpcDecoratorOptions)
   @Roles(...allRoles)
   deactivateCompliance(
