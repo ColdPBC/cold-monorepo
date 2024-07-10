@@ -1,3 +1,11 @@
+# [1.286.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.285.0...v1.286.0) (2024-07-10)
+
+
+### Features
+
+* Implement smooth scrolling for questionnaire questions ([58a2b60](https://github.com/ColdPBC/cold-monorepo/commit/58a2b6040b90f13f5818eb7bb9867fb8322d3f0f))
+* Remove unused intersection observer in questionnaire container ([a93741d](https://github.com/ColdPBC/cold-monorepo/commit/a93741db589cef745718da268fd512923df080b8))
+
 # [1.285.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.284.0...v1.285.0) (2024-07-10)
 
 
