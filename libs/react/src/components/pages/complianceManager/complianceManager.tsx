@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth0Wrapper, useColdContext, useOrgSWR } from '@coldpbc/hooks';
 import { find, forEach, get } from 'lodash';
-import { ColdIcon, ColdLeftArrowIcon, ComplianceManagerOverview, ErrorFallback, Spinner } from '@coldpbc/components';
+import { ColdIcon, ColdLeftArrowIcon, ComplianceManagerOverview, ComplianceManagerPreview, ErrorFallback, Spinner } from '@coldpbc/components';
 import React, { useContext, useEffect, useState } from 'react';
 import { ColdComplianceManagerContext } from '@coldpbc/context';
 import { ComplianceManagerStatus, IconNames } from '@coldpbc/enums';
@@ -13,6 +13,7 @@ import useSWRSubscription from 'swr/subscription';
 import useSWR from 'swr';
 import { axiosFetcher, resolveNodeEnv } from '@coldpbc/fetchers';
 import { getTermString } from '@coldpbc/lib';
+import { useFlags } from 'launchdarkly-react-client-sdk';
 
 const _ComplianceManager = () => {
   const { name } = useParams();
@@ -23,6 +24,7 @@ const _ComplianceManager = () => {
   const [managementView, setManagementView] = useState<string>('Overview');
   const [status, setStatus] = useState<ComplianceManagerStatus>(ComplianceManagerStatus.notActivated);
   const { logBrowser } = useColdContext();
+  const ldFlags = useFlags();
 
   const getSectionGroupDataUrl = () => {
     return [`/compliance/${name}/organizations/${orgId}/section_groups/responses`, 'GET'];
@@ -154,10 +156,18 @@ const _ComplianceManager = () => {
 
   const getActiveTabElement = (tab: string) => {
     switch (tab) {
+      case 'Preview':
+        return <ComplianceManagerPreview />;
       default:
         return <ComplianceManagerOverview />;
     }
   };
+
+  const tabs: string[] = ['Overview'];
+
+  if (ldFlags.showNewComplianceManagerPreviewCold713) {
+    tabs.push('Preview');
+  }
 
   return (
     <ColdComplianceManagerContext.Provider
@@ -217,7 +227,7 @@ const _ComplianceManager = () => {
           <div className={'flex flex-col justify-center relative w-full max-w-[1400px]'} data-testid={'compliance-manager-tabs'}>
             <div className={'absolute bottom-0 left-0 h-[2px] bg-gray-90 w-full'}></div>
             <div className={'flex flex-row w-full justify-start'} data-testid={'compliance-manager-tabs'}>
-              {['Overview'].map(tab => (
+              {tabs.map(tab => (
                 <div
                   className={`px-[16px] py-[8px] text-h5 cursor-pointer relative ` + (managementView === tab ? 'text-tc-primary' : 'text-tc-disabled')}
                   onClick={() => setManagementView(tab)}
