@@ -34,7 +34,7 @@ const _ComplianceManagerPreviewOverallGraphCard = () => {
             }}
           />
         )}
-        <div className={'text-label text-green-200'}>Complete ({ORG_SCORE})</div>
+        <div className={'text-label text-green-200'}>Complete ({ORG_SCORE.toFixed(0)})</div>
       </div>
     );
   };
@@ -55,7 +55,7 @@ const _ComplianceManagerPreviewOverallGraphCard = () => {
             }}
           />
         )}
-        <div className={'text-label text-yellow-200'}>Cold AI ({AI_SCORE})</div>
+        <div className={'text-label text-yellow-200'}>Cold AI ({AI_SCORE.toFixed(0)})</div>
       </div>
     );
   };
@@ -102,7 +102,7 @@ const _ComplianceManagerPreviewOverallGraphCard = () => {
           top: '-62px',
         }}>
         <div className={'h-[62px] w-[2px] rounded-[16px] bg-white'}></div>
-        <div className={'text-nowrap absolute -right-[25px]'}>Target ({TARGET_SCORE})</div>
+        <div className={'text-nowrap absolute -right-[25px]'}>Target ({TARGET_SCORE.toFixed(0)})</div>
       </div>
     );
   };

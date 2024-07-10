@@ -151,24 +151,26 @@ const _PreviewSpiderChart = (props: { selectedRow: null | string; setSelectedRow
                 // return the title percentage of the first data set data over the section group max score
                 // i.e. 80% compliant 4 of 5
                 const sectionGroupIndex = tooltipItems[0].dataIndex;
-                const score = sectionGroups[sectionGroupIndex].score;
-                const maxScore = sectionGroups[sectionGroupIndex].max_score;
+                const sectionGroup = sectionGroups[sectionGroupIndex];
+                const score = get(sectionGroup, 'score', 0);
+                const maxScore = get(sectionGroup, 'max_score', 0);
                 const compliancePercentage = numeral((score / maxScore) * 100).format('0.0');
-                return `${compliancePercentage}% compliant\t${score} of ${maxScore}`;
+                return `${compliancePercentage}% compliant\t${score.toFixed(0)} of ${maxScore.toFixed(0)}`;
               },
               label: function (context) {
                 // if AI data set, return the AI score ex: 2 points from AI Responses
                 // if the data set is the data set, return the score ex: 2 points from Completed Answers
                 const sectionGroupIndex = context.dataIndex;
-                const score = sectionGroups[sectionGroupIndex].score;
-                const aiScore = sectionGroups[sectionGroupIndex].ai_score;
-                const maxScore = sectionGroups[sectionGroupIndex].max_score;
+                const sectionGroup = sectionGroups[sectionGroupIndex];
+                const score = get(sectionGroup, 'score', 0);
+                const aiScore = get(sectionGroup, 'ai_score', 0);
+                const maxScore = get(sectionGroup, 'max_score', 0);
                 if (context.datasetIndex === 0) {
-                  return ` ${score} points from Completed Answers`;
+                  return ` ${score.toFixed(0)} points from Completed Answers`;
                 } else if (context.datasetIndex === 1) {
-                  return ` ${aiScore} points from AI Responses`;
+                  return ` ${aiScore.toFixed(0)} points from AI Responses`;
                 } else {
-                  return ` ${maxScore} points possible`;
+                  return ` ${maxScore.toFixed(0)} points possible`;
                 }
               },
               labelColor: function (context) {

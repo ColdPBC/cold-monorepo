@@ -75,7 +75,7 @@ const _ComplianceManagerPreviewDetailGraphCard = () => {
           </div>
         </div>
       </div>
-      <div className={'w-1/2 h-full flex flex-col justify-start'}>
+      <div className={'w-1/2 h-auto flex flex-col justify-start'}>
         <Table className="text-white h-auto" theme={darkTableTheme.table} data-testid={'footprint-detail-chart-table'}>
           <Table.Head className="text-white normal-case">
             {map(tableData.definition, (def, i) => (

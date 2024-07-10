@@ -43,7 +43,7 @@ export const PreviewDetailDatagridCollapse = ({
       score = data.sections[index].score;
       max_score = data.sections[index].max_score;
     }
-    const ratio = `${score}/${max_score}`;
+    const ratio = `${score.toFixed(0)}/${max_score.toFixed(0)}`;
     return (
       <Table.Cell theme={darkTableTheme.table?.body?.cell} className={getCellClassName(index, 'points')}>
         <div className={'w-full flex flex-row items-center'}>
