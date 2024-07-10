@@ -114,7 +114,7 @@ const _QuestionnaireContainer = () => {
   const orderedSectionGroups = orderBy(sectionGroups?.data?.compliance_section_groups, ['order', 'title'], ['asc', 'asc']);
 
   return (
-    <div className={'w-full h-full pt-[24px] px-[40px] flex flex-col gap-[40px] overflow-y-scroll scrollbar-hide'} id={'questionnaireContainer'}>
+    <div className={'w-full h-full pt-[24px] px-[40px] flex flex-col gap-[40px] overflow-y-scroll scrollbar-hide pb-[100px]'} id={'questionnaireContainer'}>
       {orderedSectionGroups.map((sectionGroup, index) => {
         return (
           <div className={'w-full flex flex-col gap-[40px] items-start'}>
