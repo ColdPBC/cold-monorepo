@@ -5,7 +5,6 @@ import { ComplianceSidebarSection, QuestionnaireComplianceContainerPayLoad, Ques
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
 import useSWRInfinite from 'swr/infinite';
-import { useInView } from 'react-intersection-observer';
 import { useSearchParams } from 'react-router-dom';
 import { withErrorBoundary } from 'react-error-boundary';
 import { orderBy } from 'lodash';
@@ -13,9 +12,6 @@ import { orderBy } from 'lodash';
 const _QuestionnaireContainer = () => {
   const { logBrowser } = useColdContext();
   const [searchParams, setSearchParams] = useSearchParams();
-  const [lowerRef, lowerRefInView] = useInView({
-    rootMargin: '0px 0px',
-  });
   const { orgId } = useAuth0Wrapper();
   const { name, focusQuestion, sectionGroups, scrollToQuestion, setScrollToQuestion } = useContext(ColdComplianceQuestionnaireContext);
   const orderedSections = Array<ComplianceSidebarSection>();
@@ -79,12 +75,6 @@ const _QuestionnaireContainer = () => {
   }, [scrollToQuestion, size, isLoading]);
 
   useEffect(() => {
-    if (lowerRefInView && size < orderedSections.length) {
-      setSize(size + 1);
-    }
-  }, [lowerRefInView]);
-
-  useEffect(() => {
     if (searchParams.has('section')) {
       const sectionKey = searchParams.get('section');
       const section = orderedSections.find(s => s.key === sectionKey);
@@ -123,9 +113,7 @@ const _QuestionnaireContainer = () => {
               .sort((a, b) => a.order - b.order)
               .map((section, index) => {
                 const orderedSectionIndex = orderedSections.findIndex(s => s.key === section.key);
-                const isLastPage = size - 1 === orderedSectionIndex;
                 const pagedSectionData = getPageSectionData(data, sectionGroup.id, section.id);
-                const lastPageRef = isLastPage ? lowerRef : null;
                 return (
                   <>
                     <QuestionnaireQuestionSection
