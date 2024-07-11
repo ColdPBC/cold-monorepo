@@ -170,7 +170,9 @@ export class ComplianceResponsesRepository extends BaseWorker {
     user_response?: organization_compliance_responses,
     ai_response?: organization_compliance_ai_responses,
   ) {
-    await this.cacheService.delete(`organization:${org.id}:compliance:${compliance_definition_name}:counts`);
+    this.cacheService.delete(`organization:${org.id}:compliance:${compliance_definition_name}:counts`);
+
+    const tstart = new Date();
 
     if (!sId) throw new BadRequestException('Compliance Section ID is required');
     if (!sgId) throw new BadRequestException('Compliance Section Group ID is required');
@@ -181,6 +183,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
     let compliance;
 
     try {
+      let start = new Date();
       compliance = await this.prisma.extended.organization_compliance.findUnique({
         where: {
           orgIdCompNameKey: {
@@ -194,7 +197,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
         throw new NotFoundException(`Organization Compliance Definition ${compliance_definition_name} not found for organization ${org.name}`);
       }
 
-      if (!user_response?.value && (!ai_response?.answer || !ai_response?.justification)) {
+      if (!Object.prototype.hasOwnProperty.call(user_response, 'value') && (!Object.prototype.hasOwnProperty.call(ai_response, 'answer') || !ai_response?.justification)) {
         throw new BadRequestException(`No User or AI response provided for ${org.name}: ${compliance.compliance_definition_name}, nothing to do`);
       }
 
@@ -208,11 +211,13 @@ export class ComplianceResponsesRepository extends BaseWorker {
         ai_response,
         ...compliance,
         organization: { id: org.id, name: org.name, display_name: org.display_name },
+        duration: new Date().getTime() - start.getTime(),
       });
 
       let orgResponseEntity, aiResponseEntity;
 
-      if (ai_response?.answer || ai_response?.justification) {
+      if (ai_response && (Object.prototype.hasOwnProperty.call(ai_response, 'answer') || ai_response?.justification)) {
+        start = new Date();
         aiResponseEntity = await this.prisma.extended.organization_compliance_ai_responses.upsert({
           where: {
             orgCompQuestId: {
@@ -239,29 +244,47 @@ export class ComplianceResponsesRepository extends BaseWorker {
             additional_context: ai_response.additional_context as any,
           },
         });
+        this.logger.info(`Saved AI response for ${org.name}: ${compliance.compliance_definition_name}`, {
+          user,
+          ai_response,
+          organization: org,
+          duration: new Date().getTime() - start.getTime(),
+        });
       }
 
-      if (user_response?.value) {
+      if (user_response && Object.prototype.hasOwnProperty.call(user_response, 'value')) {
+        start = new Date();
+
         orgResponseEntity = await this.prisma.extended.organization_compliance_responses.upsert({
           where: {
             orgCompQuestId: {
               organization_compliance_id: compliance.id,
-              compliance_question_id: qId || user_response.compliance_question_id,
+              compliance_question_id: qId || user_response?.compliance_question_id,
             },
           },
           create: {
             id: new Cuid2Generator(GuidPrefixes.OrganizationComplianceResponse).scopedId,
             organization_compliance_id: compliance.id,
-            compliance_question_id: qId || user_response.compliance_question_id,
+            compliance_question_id: qId || user_response?.compliance_question_id,
+            // @ts-expect-error - This is a valid value
             value: user_response.value,
           },
           update: {
+            // @ts-expect-error - This is a valid value
             value: user_response.value,
           },
+        });
+
+        this.logger.info(`Saved User response for ${org.name}: ${compliance.compliance_definition_name}`, {
+          user,
+          user_response,
+          organization: org,
+          duration: new Date().getTime() - start.getTime(),
         });
       }
 
       if (orgResponseEntity || aiResponseEntity) {
+        start = new Date();
         const crData = {
           compliance_question_id: ai_response?.compliance_question_id || qId,
           compliance_section_id: sId,
@@ -282,9 +305,33 @@ export class ComplianceResponsesRepository extends BaseWorker {
           create: crData,
           update: crData,
         });
+
+        this.logger.info(`Saved Compliance response for ${org.name}: ${compliance.compliance_definition_name}`, {
+          user,
+          user_response,
+          ai_response,
+          organization: org,
+          duration: new Date().getTime() - start.getTime(),
+        });
       }
 
-      await this.getScoredComplianceQuestionsByName(org, compliance.compliance_definition_name, user);
+      //this.getScoredComplianceQuestionsByName(org, compliance.compliance_definition_name, user);
+
+      this.logger.info(`Upserted response for ${org.name}: ${compliance.compliance_definition_name}`, {
+        user,
+        user_response,
+        ai_response,
+        organization: org,
+        duration: new Date().getTime() - tstart.getTime(),
+      });
+
+      if (orgResponseEntity) {
+        return orgResponseEntity;
+      }
+
+      if (aiResponseEntity) {
+        return aiResponseEntity;
+      }
     } catch (error) {
       this.logger.error(`Error saving response for ${org.name}: ${compliance.compliance_definition_name}`, {
         user,
