@@ -3,7 +3,7 @@ import { HexColors } from '@coldpbc/themes';
 import { Tooltip } from 'flowbite-react';
 import React, { useContext } from 'react';
 import { ColdComplianceManagerContext } from '@coldpbc/context';
-import { includes } from 'lodash';
+import { get, includes } from 'lodash';
 import { ComplianceManagerStatus } from '@coldpbc/enums';
 import { useColdContext } from '@coldpbc/hooks';
 import { withErrorBoundary } from 'react-error-boundary';
@@ -17,11 +17,13 @@ const _ComplianceManagerAssessmentPreview = () => {
   // todo: change this to show the actual assessment percentage and not amount of answered/amount of questions
   let totalQuestions = 0;
   let answeredQuestions = 0;
-  if (complianceCounts?.data) {
-    const counts = complianceCounts.data.counts;
-    totalQuestions = counts.org_answered + counts.ai_answered + counts.not_started;
-    answeredQuestions = counts.org_answered;
-  }
+  const counts = get(complianceCounts, 'data.counts', {
+    org_answered: 0,
+    ai_answered: 0,
+    not_started: 0,
+  });
+  totalQuestions = counts.org_answered + counts.ai_answered + counts.not_started;
+  answeredQuestions = counts.org_answered;
   const percentage = totalQuestions !== 0 ? ((answeredQuestions / totalQuestions) * 100).toFixed(0) : 0;
 
   logBrowser('Compliance Manager Assessment Preview', 'info', {

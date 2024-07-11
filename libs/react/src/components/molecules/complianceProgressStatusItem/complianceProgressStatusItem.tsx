@@ -3,6 +3,7 @@ import { useContext } from 'react';
 import { ColdComplianceManagerContext } from '@coldpbc/context';
 import { ComplianceProgressStatusIcon } from '@coldpbc/components';
 import { useColdContext } from '@coldpbc/hooks';
+import { get } from 'lodash';
 
 export interface ComplianceProgressItemProps {
   type: ComplianceProgressStatus;
@@ -10,7 +11,7 @@ export interface ComplianceProgressItemProps {
 
 export const ComplianceProgressStatusItem = ({ type }: ComplianceProgressItemProps) => {
   const { data } = useContext(ColdComplianceManagerContext);
-  const { compliance, complianceCounts } = data;
+  const { complianceCounts } = data;
   const { logBrowser } = useColdContext();
 
   const currentProgressData = {
@@ -21,7 +22,12 @@ export const ComplianceProgressStatusItem = ({ type }: ComplianceProgressItemPro
 
   let totalQuestions = 0;
   if (complianceCounts?.data) {
-    const counts = complianceCounts.data.counts;
+    const counts = get(complianceCounts, 'data.counts', {
+      org_answered: 0,
+      ai_answered: 0,
+      not_started: 0,
+      bookmarked: 0,
+    });
     switch (type) {
       case ComplianceProgressStatus.not_started:
         currentProgressData.count += counts.not_started;

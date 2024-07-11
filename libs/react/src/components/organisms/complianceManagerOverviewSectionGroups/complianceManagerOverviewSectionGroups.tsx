@@ -1,7 +1,7 @@
 import { ComplianceManagerOverviewSectionGroup } from '../complianceManagerOverviewSectionGroup';
 import React, { useContext, useEffect } from 'react';
 import { ColdComplianceManagerContext } from '@coldpbc/context';
-import { map, orderBy } from 'lodash';
+import { get, map, orderBy } from 'lodash';
 import { useColdContext } from '@coldpbc/hooks';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application';
@@ -12,7 +12,7 @@ const _ComplianceManagerOverviewSectionGroups = () => {
 
   const { sectionGroups } = data;
 
-  const sectionGroupsData = sectionGroups?.data?.compliance_section_groups;
+  const sectionGroupsData = get(sectionGroups, 'data.compliance_section_groups', []);
 
   const orderedSectionGroups = orderBy(sectionGroupsData, ['order', 'title'], ['asc', 'asc']);
 
