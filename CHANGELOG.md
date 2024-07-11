@@ -1,3 +1,15 @@
+# [1.287.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.286.0...v1.287.0) (2024-07-11)
+
+
+### Bug Fixes
+
+* not storing answer if false ([0f935f5](https://github.com/ColdPBC/cold-monorepo/commit/0f935f5e15a1b3e4ccfdb718729bf32a4fd17d4a))
+
+
+### Features
+
+* Add NotFoundException for non-existing compliance questions ([a1eafe5](https://github.com/ColdPBC/cold-monorepo/commit/a1eafe5b5681d0102dd231d7432e7bd9a00141dc))
+
 # [1.286.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.285.0...v1.286.0) (2024-07-10)
 
 
