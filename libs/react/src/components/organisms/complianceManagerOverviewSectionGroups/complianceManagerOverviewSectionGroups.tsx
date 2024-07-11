@@ -5,6 +5,7 @@ import { get, map, orderBy } from 'lodash';
 import { useColdContext } from '@coldpbc/hooks';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application';
+import { isAxiosError } from 'axios';
 
 const _ComplianceManagerOverviewSectionGroups = () => {
   const { data } = useContext(ColdComplianceManagerContext);
@@ -19,6 +20,14 @@ const _ComplianceManagerOverviewSectionGroups = () => {
   useEffect(() => {
     logBrowser('Compliance Manager Overview Section Groups', 'info', { orderedSectionGroups });
   }, [logBrowser, orderedSectionGroups]);
+
+  if (isAxiosError(sectionGroups?.data)) {
+    return (
+      <div className={'w-full flex flex-col gap-[36px] text-tc-primary'}>
+        <div>There was an error loading the questionnaire.</div>
+      </div>
+    );
+  }
 
   return (
     <div className={'w-full flex flex-col gap-[36px]'}>

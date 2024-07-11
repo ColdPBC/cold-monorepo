@@ -5,6 +5,7 @@ import { Table } from 'flowbite-react';
 import { darkTableTheme } from '@coldpbc/themes';
 import { forEach, get, map, sortBy } from 'lodash';
 import { withErrorBoundary } from 'react-error-boundary';
+import { isAxiosError } from 'axios';
 
 const _ComplianceManagerPreviewDetailGraphCard = () => {
   const [selectedRow, setSelectedRow] = useState<null | string>(null);
@@ -59,6 +60,10 @@ const _ComplianceManagerPreviewDetailGraphCard = () => {
       max_score: value.max_score,
     });
   });
+
+  if (isAxiosError(complianceCounts?.data)) {
+    return null;
+  }
 
   return (
     <Card className={'bg-bgc-elevated flex flex-row h-auto w-full gap-[0px] justify-between'} glow={false}>
