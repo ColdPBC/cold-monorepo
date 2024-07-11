@@ -37,7 +37,10 @@ const _PreviewSpiderChart = (props: { selectedRow: null | string; setSelectedRow
   const [chartOptions, setChartOptions] = useState<ChartOptions>({});
   const [chartData, setChartData] = useState<ChartData>(defaultChartData);
 
-  const sectionGroups = get(complianceCounts, 'data.compliance_section_groups', []);
+  const sectionGroups = get(complianceCounts, 'data.compliance_section_groups', [])
+    .filter(group => group.max_score !== 0)
+    .sort((a, b) => a.order - b.order)
+    .sort((a, b) => a.title.localeCompare(b.title));
 
   // Handle empty state
   const isEmpty = sectionGroups.length === 0;
@@ -52,10 +55,12 @@ const _PreviewSpiderChart = (props: { selectedRow: null | string; setSelectedRow
 
       // Transform chart data
       forEach(sectionGroups, group => {
-        newLabels.push(group.title);
-        newData.push((group.score / group.max_score) * 100);
-        aiData.push((group.ai_score / group.max_score) * 100);
-        maxData.push(100);
+        if (group.max_score !== 0) {
+          newLabels.push(group.title);
+          newData.push((group.score / group.max_score) * 100);
+          aiData.push((group.ai_score / group.max_score) * 100);
+          maxData.push(100);
+        }
       });
 
       const chart = chartRef.current;
@@ -117,6 +122,7 @@ const _PreviewSpiderChart = (props: { selectedRow: null | string; setSelectedRow
             animate: true,
             max: 100,
             min: 0,
+            suggestedMin: 1,
             ticks: {
               display: false,
               count: 4,
@@ -155,7 +161,7 @@ const _PreviewSpiderChart = (props: { selectedRow: null | string; setSelectedRow
                 const score = get(sectionGroup, 'score', 0);
                 const maxScore = get(sectionGroup, 'max_score', 0);
                 const compliancePercentage = numeral((score / maxScore) * 100).format('0.0');
-                return `${compliancePercentage}% compliant\t${score.toFixed(0)} of ${maxScore.toFixed(0)}`;
+                return `${compliancePercentage}% compliant\t${score.toFixed(1)} of ${maxScore.toFixed(1)}`;
               },
               label: function (context) {
                 // if AI data set, return the AI score ex: 2 points from AI Responses
@@ -166,11 +172,11 @@ const _PreviewSpiderChart = (props: { selectedRow: null | string; setSelectedRow
                 const aiScore = get(sectionGroup, 'ai_score', 0);
                 const maxScore = get(sectionGroup, 'max_score', 0);
                 if (context.datasetIndex === 0) {
-                  return ` ${score.toFixed(0)} points from Completed Answers`;
+                  return ` ${score.toFixed(1)} points from Completed Answers`;
                 } else if (context.datasetIndex === 1) {
-                  return ` ${aiScore.toFixed(0)} points from AI Responses`;
+                  return ` ${aiScore.toFixed(1)} points from AI Responses`;
                 } else {
-                  return ` ${maxScore.toFixed(0)} points possible`;
+                  return ` ${maxScore.toFixed(1)} points possible`;
                 }
               },
               labelColor: function (context) {
@@ -189,7 +195,7 @@ const _PreviewSpiderChart = (props: { selectedRow: null | string; setSelectedRow
       setChartOptions(newChartOptions);
       setChartData(newChartData);
     }
-  }, [complianceCounts, chartRef.current]);
+  }, [chartRef.current, complianceCounts?.data]);
 
   useEffect(() => {
     // check if selectedRow is not null and if it is a section group title
@@ -200,8 +206,8 @@ const _PreviewSpiderChart = (props: { selectedRow: null | string; setSelectedRow
       const dateSetIndex = aiScore > score ? 1 : 0;
       chartRef.current?.tooltip?.setActiveElements(
         [
-          { datasetIndex: dateSetIndex, index: sectionGroupIndex },
-          { datasetIndex: dateSetIndex === 0 ? 1 : 0, index: sectionGroupIndex },
+          { datasetIndex: 0, index: sectionGroupIndex },
+          { datasetIndex: 1, index: sectionGroupIndex },
           { datasetIndex: 2, index: sectionGroupIndex },
         ],
         {
@@ -249,7 +255,7 @@ const _PreviewSpiderChart = (props: { selectedRow: null | string; setSelectedRow
   ChartJS.register(CategoryScale, LinearScale, BarElement, Title, PointElement, LineElement, LineController, BarController, Tooltip);
 
   return (
-    <div className="relative h-[400px] w-full" data-chromatic="ignore" data-testid={'journey-spider-chart'}>
+    <div className="relative h-[500px] w-full flex flex-row justify-center" data-chromatic="ignore" data-testid={'journey-spider-chart'}>
       <Chart
         ref={chartRef}
         options={{

@@ -35,7 +35,6 @@ export const PreviewDetailDatagridCollapse = ({
   const getScoreTableCell = (index: number) => {
     let score = 0;
     let max_score = 0;
-    let ai_score = 0;
     if (index === -1) {
       score = data.score;
       max_score = data.max_score;
@@ -43,11 +42,11 @@ export const PreviewDetailDatagridCollapse = ({
       score = data.sections[index].score;
       max_score = data.sections[index].max_score;
     }
-    const ratio = `${score.toFixed(0)}/${max_score.toFixed(0)}`;
+    const ratio = `${score.toFixed(1)}/${max_score.toFixed(1)}`;
     return (
       <Table.Cell theme={darkTableTheme.table?.body?.cell} className={getCellClassName(index, 'points')}>
         <div className={'w-full flex flex-row items-center'}>
-          <div className={'min-w-[65px] max-w-[65px]'}>{ratio}</div>
+          <div className={'min-w-[80px] max-w-[80px]'}>{ratio}</div>
           {score > 0 && (
             <div className={'w-full flex items-center'}>
               <div
@@ -105,6 +104,11 @@ export const PreviewDetailDatagridCollapse = ({
     );
   };
 
+  // if the data.max_score is 0, return null
+  if (data.max_score === 0) {
+    return null;
+  }
+
   return (
     <>
       <Table.Row theme={darkTableTheme.table?.row} onMouseEnter={() => setSelectedRow(data.title)} onMouseLeave={() => setSelectedRow(null)} onClick={() => setIsOpen(!isOpen)}>
@@ -112,14 +116,19 @@ export const PreviewDetailDatagridCollapse = ({
         {getScoreTableCell(-1)}
       </Table.Row>
       {isOpen &&
-        data.sections.map((section, index) => {
-          return (
-            <Table.Row className={'w-full'} theme={darkTableTheme.table?.row} onMouseEnter={() => setSelectedRow(section.title)} onMouseLeave={() => setSelectedRow(null)}>
-              {getTopicAreaCell(index)}
-              {getScoreTableCell(index)}
-            </Table.Row>
-          );
-        })}
+        data.sections
+          .filter(
+            // remove sections with max_score 0
+            section => section.max_score > 0,
+          )
+          .map((section, index) => {
+            return (
+              <Table.Row className={'w-full'} theme={darkTableTheme.table?.row} onMouseEnter={() => setSelectedRow(section.title)} onMouseLeave={() => setSelectedRow(null)}>
+                {getTopicAreaCell(index)}
+                {getScoreTableCell(index)}
+              </Table.Row>
+            );
+          })}
     </>
   );
 };

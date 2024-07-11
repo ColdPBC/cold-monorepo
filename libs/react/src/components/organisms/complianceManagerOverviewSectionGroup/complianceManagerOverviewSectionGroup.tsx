@@ -1,13 +1,10 @@
 import { ComplianceProgressStatus, IconNames } from '@coldpbc/enums';
-import { find, map, orderBy } from 'lodash';
+import { find, get, map, orderBy } from 'lodash';
 import { ColdIcon, ComplianceManagerOverviewSection, ComplianceProgressStatusIcon, ErrorFallback, Spinner } from '@coldpbc/components';
-import { ComplianceSidebarPayload, ComplianceSidebarSectionGroup } from '@coldpbc/interfaces';
+import { ComplianceSidebarSectionGroup } from '@coldpbc/interfaces';
 import React, { useContext, useEffect, useState } from 'react';
 import { useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
-import ColdMQTTContext from '../../../context/coldMQTTContext';
 import { ColdComplianceManagerContext } from '@coldpbc/context';
-import useSWRSubscription from 'swr/subscription';
-import { resolveNodeEnv } from '@coldpbc/fetchers';
 import { withErrorBoundary } from 'react-error-boundary';
 
 export interface ComplianceManagerOverviewSectionGroupProps {
@@ -17,31 +14,24 @@ export interface ComplianceManagerOverviewSectionGroupProps {
 
 const _ComplianceManagerOverviewSectionGroup = ({ sectionGroup, position }: ComplianceManagerOverviewSectionGroupProps) => {
   const [collapseOpen, setCollapseOpen] = useState(false);
-  const [sectionsData, setSectionsData] = useState<{
-    [key: string]: ComplianceSidebarPayload | undefined;
-  }>({});
   const { orgId } = useAuth0Wrapper();
-  const { subscribeSWR } = useContext(ColdMQTTContext);
   const context = useContext(ColdComplianceManagerContext);
-  const { name, complianceCounts } = context.data;
+  const { complianceCounts } = context.data;
   const { logBrowser } = useColdContext();
 
-  const getComplianceSectionGroupTopic = () => {
-    return `ui/${resolveNodeEnv()}/${orgId}/${name}/${sectionGroup.id}/#`;
-  };
-
-  const sectionsSub = useSWRSubscription(getComplianceSectionGroupTopic(), subscribeSWR) as {
-    data: ComplianceSidebarPayload | undefined;
-    error: any;
-  };
-
   const getGroupCounts = () => {
-    const sectionGroupCounts = find(complianceCounts?.data?.compliance_section_groups, { id: sectionGroup.id });
+    const sectionGroupInCounts = find(get(complianceCounts, 'data.compliance_section_groups', []), { id: sectionGroup.id });
+    const counts = get(sectionGroupInCounts, 'counts', {
+      not_started: 0,
+      ai_answered: 0,
+      org_answered: 0,
+      bookmarked: 0,
+    });
     return {
-      not_started: sectionGroupCounts?.counts.not_started,
-      ai_answered: sectionGroupCounts?.counts.ai_answered,
-      user_answered: sectionGroupCounts?.counts.org_answered,
-      bookmarked: sectionGroupCounts?.counts.bookmarked,
+      not_started: counts.not_started,
+      ai_answered: counts.ai_answered,
+      user_answered: counts.org_answered,
+      bookmarked: counts.bookmarked,
     };
   };
 

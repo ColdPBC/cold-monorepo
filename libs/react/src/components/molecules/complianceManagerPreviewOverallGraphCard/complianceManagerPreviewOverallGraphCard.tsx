@@ -7,6 +7,7 @@ import { HexColors } from '@coldpbc/themes';
 import opacity from 'hex-color-opacity';
 import { Tooltip } from 'flowbite-react';
 import { withErrorBoundary } from 'react-error-boundary';
+import { isAxiosError } from 'axios';
 
 const _ComplianceManagerPreviewOverallGraphCard = () => {
   const { data } = useContext(ColdComplianceManagerContext);
@@ -106,6 +107,10 @@ const _ComplianceManagerPreviewOverallGraphCard = () => {
       </div>
     );
   };
+
+  if (isAxiosError(complianceCounts?.data)) {
+    return null;
+  }
 
   return (
     <Card className={'flex flex-row space-x-[25px] bg-bgc-elevated'} glow={false}>

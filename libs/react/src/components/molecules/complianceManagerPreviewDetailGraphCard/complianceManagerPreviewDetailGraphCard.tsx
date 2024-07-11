@@ -5,6 +5,7 @@ import { Table } from 'flowbite-react';
 import { darkTableTheme } from '@coldpbc/themes';
 import { forEach, get, map, sortBy } from 'lodash';
 import { withErrorBoundary } from 'react-error-boundary';
+import { isAxiosError } from 'axios';
 
 const _ComplianceManagerPreviewDetailGraphCard = () => {
   const [selectedRow, setSelectedRow] = useState<null | string>(null);
@@ -60,9 +61,13 @@ const _ComplianceManagerPreviewDetailGraphCard = () => {
     });
   });
 
+  if (isAxiosError(complianceCounts?.data)) {
+    return null;
+  }
+
   return (
     <Card className={'bg-bgc-elevated flex flex-row h-auto w-full gap-[0px] justify-between'} glow={false}>
-      <div className={'flex flex-col w-1/2 h-full gap-[40px] justify-center'}>
+      <div className={'flex flex-col w-1/2 h-full gap-[40px] justify-start'}>
         <PreviewSpiderChart selectedRow={selectedRow} setSelectedRow={setSelectedRow} />
         <div className={'flex flex-col items-start gap-[6px] p-[16px] w-full'}>
           <div className={'flex flex-row justify-start text-eyebrow text-gray-130 gap-[12px] items-center w-auto'}>

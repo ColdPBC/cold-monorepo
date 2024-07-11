@@ -1,4 +1,4 @@
-import { forOwn, map } from 'lodash';
+import { forOwn, get, map } from 'lodash';
 import { ComplianceManagerStatus, IconNames } from '@coldpbc/enums';
 import React, { useContext } from 'react';
 import { ColdComplianceManagerContext } from '@coldpbc/context';
@@ -19,7 +19,7 @@ const _ComplianceManagerOverviewStatusCard = () => {
     return false;
   };
 
-  const getStatusIcon = (status: ComplianceManagerStatus) => {
+  const getStatusIcon = (status: ComplianceManagerStatus, managerStatus: ComplianceManagerStatus) => {
     if (
       (managerStatus === ComplianceManagerStatus.startedQuestions && status === ComplianceManagerStatus.completedQuestions) ||
       (managerStatus === ComplianceManagerStatus.startedAi && status === ComplianceManagerStatus.completedAi)
@@ -28,20 +28,29 @@ const _ComplianceManagerOverviewStatusCard = () => {
       if (managerStatus === ComplianceManagerStatus.startedQuestions && status === ComplianceManagerStatus.completedQuestions) {
         let totalQuestions = 0;
         let answeredQuestions = 0;
-        if (complianceCounts?.data) {
-          forOwn(complianceCounts.data.counts, (value, key) => {
-            totalQuestions += value;
-          });
-          answeredQuestions = complianceCounts.data.counts.org_answered;
-        }
+        const counts = get(complianceCounts, 'data.counts', {
+          org_answered: 0,
+        });
+        forOwn(counts, (value, key) => {
+          totalQuestions += value;
+        });
+        answeredQuestions = counts.org_answered;
         percentage = (answeredQuestions / totalQuestions) * 100;
       } else if (managerStatus === ComplianceManagerStatus.startedAi && status === ComplianceManagerStatus.completedAi) {
-        const sectionKeys = complianceCounts ? Object.keys(complianceCounts) : [];
+        const sectionGroups = get(complianceCounts, 'data.compliance_section_groups', []);
+        // go through each section group and get the sections that have been answered by AI
+        let sectionKeys: string[] = [];
+        sectionGroups.forEach(group => {
+          const sections = get(group, 'compliance_sections', []);
+          const keys = sections.map(s => s.key);
+          sectionKeys = [...sectionKeys, ...keys];
+        });
+
         const currentAiStatusSections = currentAIStatus?.filter(s => sectionKeys.includes(s.section));
         const currentAiStatusSectionKeys = currentAiStatusSections ? currentAiStatusSections.map(s => s.section) : [];
         // all the sections that have been answered by AI are not in the currentAIStatusSectionKeys. The ones in the currentAIStatusSectionKeys are the ones that have not been answered by AI yet
         const answeredSections = sectionKeys.filter(s => !currentAiStatusSectionKeys.includes(s));
-        percentage = (answeredSections.length / sectionKeys.length) * 100;
+        percentage = sectionKeys.length === 0 ? 0 : (answeredSections.length / sectionKeys.length) * 100;
       }
 
       return (
@@ -113,7 +122,7 @@ const _ComplianceManagerOverviewStatusCard = () => {
     return (
       <div className={'w-full flex flex-row pl-[28px] relative'} key={status}>
         {getComplianceStatusProgressBar(status)}
-        {getStatusIcon(status)}
+        {getStatusIcon(status, managerStatus)}
         <div className={'text-tc-primary text-body w-full'}>{text}</div>
       </div>
     );

@@ -1,8 +1,9 @@
-import { StoryMockProvider } from '@coldpbc/mocks';
+import { getApiUrl, StoryMockProvider } from '@coldpbc/mocks';
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { ComplianceManager, ComplianceRoutes } from '@coldpbc/components';
 import { Routes } from 'react-router-dom';
+import { rest } from 'msw';
 
 const meta: Meta<typeof ComplianceManager> = {
   title: 'Pages/ComplianceManager',
@@ -27,6 +28,27 @@ export const Default: Story = {
       memoryRouterProps={{
         initialEntries: ['/compliance/rei_pia_2024'],
       }}>
+      <Routes>{ComplianceRoutes()}</Routes>
+    </StoryMockProvider>
+  ),
+};
+
+export const Error: Story = {
+  render: args => (
+    <StoryMockProvider
+      memoryRouterProps={{
+        initialEntries: ['/compliance/rei_pia_2024'],
+      }}
+      handlers={[
+        rest.get(getApiUrl('/compliance/:name/organizations/:orgId/responses/counts'), (req, res, ctx) => {
+          // return 500 server error
+          return res(ctx.status(500));
+        }),
+        rest.get(getApiUrl('/compliance/:name/organizations/:orgId/section_groups/responses'), (req, res, ctx) => {
+          // return 500 server error
+          return res(ctx.status(500));
+        }),
+      ]}>
       <Routes>{ComplianceRoutes()}</Routes>
     </StoryMockProvider>
   ),
