@@ -412,14 +412,16 @@ export class ComplianceResponsesRepository extends BaseWorker {
   async getScoredComplianceQuestionsByName(org: organizations, compliance_definition_name: string, user: IAuthenticatedUser, options?: ComplianceResponseOptions) {
     const start = new Date();
     // invalidate cache if it exists
-    if (!options?.bpc) {
+    /*if (!options?.bpc) {
       const counts = await this.cacheService.get(`organization:${org.id}:compliance:${compliance_definition_name}:counts`);
       const end = new Date();
       this.logger.info(`Cache hit for ${org.name}: ${compliance_definition_name} in ${end.getTime() - start.getTime()}ms`, { compliance_definition_name });
+      options ? (options.bpc = true) : (options = { bpc: true });
+      this.getScoredComplianceQuestionsByName(org, compliance_definition_name, user, options);
       return counts;
     } else {
       await this.cacheService.delete(`organization:${org.id}:compliance:${compliance_definition_name}:counts`);
-    }
+    }*/
 
     if (!compliance_definition_name) throw new BadRequestException('Compliance Definition Name is required');
     if (!org) throw new BadRequestException('Organization is required');
@@ -482,7 +484,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
 
       scored.visible = organization.organization_compliance.visible;
 
-      this.cacheService.set(`organization:${org.id}:compliance:${compliance_definition_name}:counts`, scored);
+      //this.cacheService.set(`organization:${org.id}:compliance:${compliance_definition_name}:counts`, scored);
 
       const end = new Date();
       this.logger.info(`getScoredComplianceQuestionsByName completed for ${org.name}: ${compliance_definition_name} in ${end.getTime() - start.getTime()}ms`, {
