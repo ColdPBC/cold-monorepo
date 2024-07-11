@@ -1,9 +1,8 @@
 import { Body, Controller, Delete, Get, Param, ParseBoolPipe, ParseIntPipe, Put, Query, Req, UseFilters, UseGuards, UseInterceptors } from '@nestjs/common';
 import { OrganizationComplianceResponsesService } from './organization_compliance_responses.service';
-import { ColdCacheInterceptor, allRoles, coldAdminOnly, HttpExceptionFilter, JwtAuthGuard, OrgUserInterceptor, Roles, RolesGuard } from '@coldpbc/nest';
+import { allRoles, coldAdminOnly, HttpExceptionFilter, JwtAuthGuard, OrgUserInterceptor, Roles, RolesGuard } from '@coldpbc/nest';
 import { ApiParam, ApiTags } from '@nestjs/swagger';
 import { compliance_responses } from '@prisma/client';
-import { CacheTTL } from '@nestjs/cache-manager';
 
 @UseGuards(JwtAuthGuard, RolesGuard)
 @UseInterceptors(OrgUserInterceptor)
@@ -213,8 +212,8 @@ export class OrganizationComplianceResponsesController {
     return this.organizationComplianceResponsesService.findAllByCompliance(name, req, { take, skip, bpc });
   }
 
-  @UseInterceptors(ColdCacheInterceptor)
-  @CacheTTL(0)
+  //@UseInterceptors(ColdCacheInterceptor)
+  //@CacheTTL(50)
   @Get('responses/counts')
   @Roles(...allRoles)
   async getComplianceResponsesCounts(@Param('name') name: string, @Req() req: any) {
