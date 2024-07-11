@@ -1,7 +1,7 @@
 import { withKnobs } from '@storybook/addon-knobs';
 import { Meta, StoryObj } from '@storybook/react';
 import { ComplianceManagerOverviewStatusCard } from '@coldpbc/components';
-import { StoryMockProvider } from '@coldpbc/mocks';
+import { getComplianceManagerOverviewAIProgressPercentageMock, StoryMockProvider } from '@coldpbc/mocks';
 import { ComplianceManagerStatus } from '@coldpbc/enums';
 
 const meta: Meta<typeof ComplianceManagerOverviewStatusCard> = {
@@ -52,6 +52,9 @@ export const StartedAI: Story = {
     <StoryMockProvider
       complianceManagerContext={{
         status: ComplianceManagerStatus.startedAi,
+        data: {
+          currentAIStatus: getComplianceManagerOverviewAIProgressPercentageMock(),
+        },
       }}>
       <ComplianceManagerOverviewStatusCard />
     </StoryMockProvider>

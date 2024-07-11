@@ -23,8 +23,8 @@ const _ComplianceManagerOverviewSectionGroups = () => {
 
   if (isAxiosError(sectionGroups?.data)) {
     return (
-      <div className={'w-full flex flex-col gap-[36px] text-tc-primary'}>
-        <div>There was an error loading the questionnaire.</div>
+      <div className={'w-full flex flex-col gap-[36px] justify-center text-tc-primary'}>
+        <span className={'text-tc-primary'}>There was an error loading the questionnaire.</span>
       </div>
     );
   }
