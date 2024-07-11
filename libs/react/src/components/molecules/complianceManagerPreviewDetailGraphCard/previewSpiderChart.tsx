@@ -53,8 +53,8 @@ const _PreviewSpiderChart = (props: { selectedRow: null | string; setSelectedRow
       // Transform chart data
       forEach(sectionGroups, group => {
         newLabels.push(group.title);
-        newData.push((group.score / group.max_score) * 100);
-        aiData.push((group.ai_score / group.max_score) * 100);
+        newData.push(group.max_score !== 0 ? (group.score / group.max_score) * 100 : 1);
+        aiData.push(group.max_score !== 0 ? (group.ai_score / group.max_score) * 100 : 1);
         maxData.push(100);
       });
 
@@ -117,6 +117,7 @@ const _PreviewSpiderChart = (props: { selectedRow: null | string; setSelectedRow
             animate: true,
             max: 100,
             min: 0,
+            suggestedMin: 1,
             ticks: {
               display: false,
               count: 4,
@@ -200,8 +201,8 @@ const _PreviewSpiderChart = (props: { selectedRow: null | string; setSelectedRow
       const dateSetIndex = aiScore > score ? 1 : 0;
       chartRef.current?.tooltip?.setActiveElements(
         [
-          { datasetIndex: dateSetIndex, index: sectionGroupIndex },
-          { datasetIndex: dateSetIndex === 0 ? 1 : 0, index: sectionGroupIndex },
+          { datasetIndex: 0, index: sectionGroupIndex },
+          { datasetIndex: 1, index: sectionGroupIndex },
           { datasetIndex: 2, index: sectionGroupIndex },
         ],
         {
