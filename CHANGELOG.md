@@ -1,3 +1,10 @@
+# [1.288.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.287.0...v1.288.0) (2024-07-11)
+
+
+### Features
+
+* Implement cascade deletion and enforce non-empty check ([b7bf58d](https://github.com/ColdPBC/cold-monorepo/commit/b7bf58d98b8f2b2dae0c05dead294bb3d4e3607c))
+
 # [1.287.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.286.0...v1.287.0) (2024-07-11)
 
 
