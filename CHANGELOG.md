@@ -1,3 +1,19 @@
+# [1.289.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.288.0...v1.289.0) (2024-07-11)
+
+
+### Features
+
+* Add error handling for Axios requests in components ([723d992](https://github.com/ColdPBC/cold-monorepo/commit/723d992312328c7af92dc10dbbda57516b690752))
+* Exclude compliance sections and section groups with max_score of 0 ([a59b74f](https://github.com/ColdPBC/cold-monorepo/commit/a59b74fae1094b126a38d69411887d922f32fdbc))
+* Increase minimum and maximum width of ratio div ([80f5497](https://github.com/ColdPBC/cold-monorepo/commit/80f5497f9a234b4720aebf59f279201c7a933e76))
+* Refactor compliance manager components and improve error handling ([5ecb022](https://github.com/ColdPBC/cold-monorepo/commit/5ecb022b05f35638cdfa82daeecf49bbf996aa53))
+* Update alignment in complianceManagerPreviewDetailGraphCard ([0bc525a](https://github.com/ColdPBC/cold-monorepo/commit/0bc525af674fcd08b181bc5a5439af0d2622415d))
+* Update calculation and tooltip display in SpiderChart ([1ee89c8](https://github.com/ColdPBC/cold-monorepo/commit/1ee89c8c3a5e0992ec5a7f442ac4af8cb4ea902d))
+* Update lodash utilization and numeric formatting ([7aa378a](https://github.com/ColdPBC/cold-monorepo/commit/7aa378a00af6ec6f7c262c8bf69e3aade812bb46))
+* Update score formatting in SpiderChart component ([7916641](https://github.com/ColdPBC/cold-monorepo/commit/79166410ceb8d820493e405381b3090c9d8d6a9c))
+* Update spider chart component in compliance manager ([2f7ea79](https://github.com/ColdPBC/cold-monorepo/commit/2f7ea793b43a39c65efe3b1c09d882830b299df6))
+* Update text class in questionnaire components ([3a784ca](https://github.com/ColdPBC/cold-monorepo/commit/3a784ca8a5207063593746684b9f759d2d83281a))
+
 # [1.288.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.287.0...v1.288.0) (2024-07-11)
 
 
