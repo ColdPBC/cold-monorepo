@@ -325,6 +325,9 @@ export class ComplianceQuestionsRepository extends BaseWorker {
       this.logger.info(`Updated question for compliance ${question.compliance_definition_name}`, { updated });
       return updated;
     } catch (e: any) {
+      if (e.meta.cause === 'Record to update not found.') {
+        throw new NotFoundException(`Question not found for compliance ${question.compliance_definition_name} and id ${question.id}`);
+      }
       this.logger.error(`Error updating question for compliance ${question.compliance_definition_name}`, { ...e, question });
       throw e;
     }
