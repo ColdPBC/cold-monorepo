@@ -1,3 +1,10 @@
+# [1.290.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.289.0...v1.290.0) (2024-07-11)
+
+
+### Features
+
+* Update cache settings in organization_compliance_responses controller ([1af1ff0](https://github.com/ColdPBC/cold-monorepo/commit/1af1ff0dadf221f56ccdd656f6b38c93e08aefde))
+
 # [1.289.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.288.0...v1.289.0) (2024-07-11)
 
 
