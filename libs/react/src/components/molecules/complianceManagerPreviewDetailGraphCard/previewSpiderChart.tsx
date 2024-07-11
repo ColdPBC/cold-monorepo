@@ -37,7 +37,10 @@ const _PreviewSpiderChart = (props: { selectedRow: null | string; setSelectedRow
   const [chartOptions, setChartOptions] = useState<ChartOptions>({});
   const [chartData, setChartData] = useState<ChartData>(defaultChartData);
 
-  const sectionGroups = get(complianceCounts, 'data.compliance_section_groups', []).filter(group => group.max_score !== 0);
+  const sectionGroups = get(complianceCounts, 'data.compliance_section_groups', [])
+    .filter(group => group.max_score !== 0)
+    .sort((a, b) => a.order - b.order)
+    .sort((a, b) => a.title.localeCompare(b.title));
 
   // Handle empty state
   const isEmpty = sectionGroups.length === 0;
@@ -192,7 +195,7 @@ const _PreviewSpiderChart = (props: { selectedRow: null | string; setSelectedRow
       setChartOptions(newChartOptions);
       setChartData(newChartData);
     }
-  }, [complianceCounts, chartRef.current]);
+  }, [chartRef.current, complianceCounts?.data]);
 
   useEffect(() => {
     // check if selectedRow is not null and if it is a section group title
@@ -252,7 +255,7 @@ const _PreviewSpiderChart = (props: { selectedRow: null | string; setSelectedRow
   ChartJS.register(CategoryScale, LinearScale, BarElement, Title, PointElement, LineElement, LineController, BarController, Tooltip);
 
   return (
-    <div className="relative h-[400px] w-full" data-chromatic="ignore" data-testid={'journey-spider-chart'}>
+    <div className="relative h-[500px] w-full flex flex-row justify-center" data-chromatic="ignore" data-testid={'journey-spider-chart'}>
       <Chart
         ref={chartRef}
         options={{
