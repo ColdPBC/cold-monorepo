@@ -46,7 +46,7 @@ export const PreviewDetailDatagridCollapse = ({
     return (
       <Table.Cell theme={darkTableTheme.table?.body?.cell} className={getCellClassName(index, 'points')}>
         <div className={'w-full flex flex-row items-center'}>
-          <div className={'min-w-[65px] max-w-[65px]'}>{ratio}</div>
+          <div className={'min-w-[80px] max-w-[80px]'}>{ratio}</div>
           {score > 0 && (
             <div className={'w-full flex items-center'}>
               <div
