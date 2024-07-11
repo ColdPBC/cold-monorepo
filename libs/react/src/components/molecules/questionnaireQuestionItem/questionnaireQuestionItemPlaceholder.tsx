@@ -44,7 +44,7 @@ export const QuestionnaireQuestionItemPlaceholder = (props: { question: Complian
   };
 
   const getPrompt = () => {
-    const className = 'text-left text-h3 text-tc-primary';
+    const className = 'text-left text-h5 text-tc-primary';
 
     const promptWithLinebreaks = prompt.split('\n');
 
