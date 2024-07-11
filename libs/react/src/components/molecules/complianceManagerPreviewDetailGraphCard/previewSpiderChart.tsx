@@ -37,7 +37,7 @@ const _PreviewSpiderChart = (props: { selectedRow: null | string; setSelectedRow
   const [chartOptions, setChartOptions] = useState<ChartOptions>({});
   const [chartData, setChartData] = useState<ChartData>(defaultChartData);
 
-  const sectionGroups = get(complianceCounts, 'data.compliance_section_groups', []);
+  const sectionGroups = get(complianceCounts, 'data.compliance_section_groups', []).filter(group => group.max_score !== 0);
 
   // Handle empty state
   const isEmpty = sectionGroups.length === 0;
@@ -52,10 +52,12 @@ const _PreviewSpiderChart = (props: { selectedRow: null | string; setSelectedRow
 
       // Transform chart data
       forEach(sectionGroups, group => {
-        newLabels.push(group.title);
-        newData.push(group.max_score !== 0 ? (group.score / group.max_score) * 100 : 1);
-        aiData.push(group.max_score !== 0 ? (group.ai_score / group.max_score) * 100 : 1);
-        maxData.push(100);
+        if (group.max_score !== 0) {
+          newLabels.push(group.title);
+          newData.push((group.score / group.max_score) * 100);
+          aiData.push((group.ai_score / group.max_score) * 100);
+          maxData.push(100);
+        }
       });
 
       const chart = chartRef.current;

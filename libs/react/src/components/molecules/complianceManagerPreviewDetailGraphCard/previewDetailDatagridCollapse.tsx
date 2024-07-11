@@ -105,6 +105,11 @@ export const PreviewDetailDatagridCollapse = ({
     );
   };
 
+  // if the data.max_score is 0, return null
+  if (data.max_score === 0) {
+    return null;
+  }
+
   return (
     <>
       <Table.Row theme={darkTableTheme.table?.row} onMouseEnter={() => setSelectedRow(data.title)} onMouseLeave={() => setSelectedRow(null)} onClick={() => setIsOpen(!isOpen)}>
@@ -112,14 +117,19 @@ export const PreviewDetailDatagridCollapse = ({
         {getScoreTableCell(-1)}
       </Table.Row>
       {isOpen &&
-        data.sections.map((section, index) => {
-          return (
-            <Table.Row className={'w-full'} theme={darkTableTheme.table?.row} onMouseEnter={() => setSelectedRow(section.title)} onMouseLeave={() => setSelectedRow(null)}>
-              {getTopicAreaCell(index)}
-              {getScoreTableCell(index)}
-            </Table.Row>
-          );
-        })}
+        data.sections
+          .filter(
+            // remove sections with max_score 0
+            section => section.max_score > 0,
+          )
+          .map((section, index) => {
+            return (
+              <Table.Row className={'w-full'} theme={darkTableTheme.table?.row} onMouseEnter={() => setSelectedRow(section.title)} onMouseLeave={() => setSelectedRow(null)}>
+                {getTopicAreaCell(index)}
+                {getScoreTableCell(index)}
+              </Table.Row>
+            );
+          })}
     </>
   );
 };
