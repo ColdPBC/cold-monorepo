@@ -847,7 +847,7 @@ model organization_compliance_ai_response_files {
   organization                           organizations                        @relation(fields: [organization_id], references: [id])
   file                                   organization_files                   @relation(fields: [organization_files_id], references: [id], onDelete: Cascade)
   organization_compliance_ai_response_id String
-  ai_response                            organization_compliance_ai_responses @relation(fields: [organization_compliance_ai_response_id], references: [id], map: "org_comp_ai_response")
+  ai_response                            organization_compliance_ai_responses @relation(fields: [organization_compliance_ai_response_id], references: [id], onDelete: Cascade, map: "org_comp_ai_response")
   organization_compliance                organization_compliance?             @relation(fields: [organization_compliance_id], references: [id], onDelete: Cascade)
   deleted                                Boolean                              @default(false)
 
