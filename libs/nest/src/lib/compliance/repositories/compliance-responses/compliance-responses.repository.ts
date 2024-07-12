@@ -1,13 +1,12 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { BaseWorker } from '../../../worker';
 import { PrismaService } from '../../../prisma';
-import { organization_compliance_ai_responses, organization_compliance_responses, organizations } from '@prisma/client';
+import { organization_compliance_ai_responses, organization_compliance_responses, organizations, Prisma } from '@prisma/client';
 import { Cuid2Generator, GuidPrefixes } from '../../../utility';
 import { IAuthenticatedUser } from '../../../primitives';
 import { ScoringService } from '../../scoring';
 import { pick, set } from 'lodash';
 import { CacheService } from '../../../cache';
-import { Prisma } from '@prisma/client';
 
 export interface ComplianceResponseOptions {
   take?: number;
@@ -134,6 +133,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
             deleted: true,
           },
         },
+        question_summary: true,
       },
     };
 
@@ -939,6 +939,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
       throw error;
     }
   }
+
   async deleteComplianceResponses(org: organizations, compliance_definition_name: string, sgId: string, sId: string, qId: string, user: IAuthenticatedUser, type: string) {
     const compliance = await this.prisma.extended.organization_compliance.findUnique({
       where: {

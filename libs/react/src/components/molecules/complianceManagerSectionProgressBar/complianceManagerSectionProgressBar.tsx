@@ -9,6 +9,7 @@ import React, { useContext } from 'react';
 import { ColdComplianceManagerContext } from '@coldpbc/context';
 import { withErrorBoundary } from 'react-error-boundary';
 import { useNavigate } from 'react-router-dom';
+import capitalize from 'lodash/capitalize';
 
 export interface ComplianceManagerSectionProgressBarProps {
   sectionAIStatus: CurrentAIStatusSection | undefined;
@@ -55,7 +56,7 @@ const _ComplianceManagerSectionProgressBar = ({ questions, sectionAIStatus, isNa
       <div className={'flex flex-col w-full justify-start transition-none'}>
         <div className={'flex flex-row gap-[4px] items-center'}>
           {getProgressTooltipIcon(status)}
-          <div className={'text-label text-tc-primary'}>Question {index + 1}</div>
+          <div className={'text-label text-tc-primary'}>{question.question_summary ? `${capitalize(question.question_summary)}` : `Question ${index + 1}`}</div>
         </div>
         <div className={'w-full text-tc-primary text-body'}>{question.prompt}</div>
       </div>
