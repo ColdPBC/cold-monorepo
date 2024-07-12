@@ -101,7 +101,8 @@ const _QuestionnaireDetailSidebar = () => {
                     className={`flex flex-row items-center gap-[24px] cursor-pointer ${tab === tabName ? 'text-tc-primary' : 'text-tc-disabled'}`}
                     onClick={() => {
                       setTab(tabName as 'ai' | 'notes' | 'more');
-                    }}>
+                    }}
+                    key={tabName}>
                     {getTabHeader(tabName)}
                   </div>
                 );

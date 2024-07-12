@@ -141,6 +141,7 @@ export interface ComplianceSidebarQuestion {
   key: string;
   order: number;
   prompt: string;
+  question_summary?: string;
   score?: number;
   ai_score?: number;
   max_score?: number;

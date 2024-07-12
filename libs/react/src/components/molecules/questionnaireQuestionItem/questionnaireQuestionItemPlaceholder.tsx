@@ -4,11 +4,12 @@ import { ColdComplianceQuestionnaireContext } from '@coldpbc/context';
 import { ComplianceProgressStatus, IconNames } from '@coldpbc/enums';
 import { ColdIcon, ComplianceProgressStatusIcon } from '@coldpbc/components';
 import { HexColors } from '@coldpbc/themes';
+import { upperCase } from 'lodash';
 
 export const QuestionnaireQuestionItemPlaceholder = (props: { question: ComplianceSidebarQuestion; number: number }) => {
-  const { focusQuestion, scrollToQuestion } = useContext(ColdComplianceQuestionnaireContext);
+  const { focusQuestion } = useContext(ColdComplianceQuestionnaireContext);
   const { question, number } = props;
-  const { id, prompt, bookmarked, user_answered, ai_answered } = question;
+  const { id, prompt, bookmarked, user_answered, ai_answered, question_summary } = question;
 
   const getQuestionStatus = () => {
     if (user_answered) {
@@ -64,7 +65,7 @@ export const QuestionnaireQuestionItemPlaceholder = (props: { question: Complian
       <div className={'flex flex-row gap-[8px] justify-between'}>
         <div className={'flex flex-row gap-[8px] items-center'}>
           {getQuestionStatusIcon()}
-          <div className={'w-full flex justify-start text-gray-120'}>QUESTION {number}</div>
+          <div className={'w-full flex justify-start text-gray-120'}>{question_summary ? upperCase(question_summary) : `QUESTION ${number}`}</div>
         </div>
         <div className={'flex flex-row gap-[8px] items-center'}>
           {getBookMarkIcon()}

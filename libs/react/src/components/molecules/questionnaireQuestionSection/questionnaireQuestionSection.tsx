@@ -52,12 +52,14 @@ const _QuestionnaireQuestionSection = (props: {
   // use placeholder questions to fill in the gaps if the page data is not loaded yet
   const orderedPlaceholderQuestions = orderBy(section.compliance_questions, ['order'], ['asc']);
 
-  logBrowser(`QuestionnaireQuestionSection loaded for section: ${section.title}`, 'info', {
-    sectionKey,
-    isSectionInQuery,
-    pagedSectionData,
-    orderedPlaceholderQuestions,
-  });
+  useEffect(() => {
+    logBrowser(`QuestionnaireQuestionSection loaded for section: ${section.title}`, 'info', {
+      sectionKey,
+      isSectionInQuery,
+      pagedSectionData,
+      orderedPlaceholderQuestions,
+    });
+  }, [isSectionInQuery, orderedPlaceholderQuestions, pagedSectionData, section.title, sectionKey]);
 
   return (
     <div className={'flex flex-col gap-[40px] w-full'} ref={sectionRef}>
@@ -66,7 +68,7 @@ const _QuestionnaireQuestionSection = (props: {
         ref={el => {
           if (isSectionInQuery && el && focusQuestion === null) {
             el.scrollIntoView({
-              behavior: 'smooth',
+              behavior: 'instant',
               block: 'start',
             });
           }
@@ -98,7 +100,7 @@ const _QuestionnaireQuestionSection = (props: {
             ref={el => {
               if ((scrollToQuestion === question.key || isQuestionInQuery) && el) {
                 el.scrollIntoView({
-                  behavior: 'smooth',
+                  behavior: 'instant',
                   block: 'start',
                 });
               }

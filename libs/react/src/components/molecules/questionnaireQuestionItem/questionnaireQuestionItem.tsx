@@ -1,7 +1,7 @@
 import { BaseButton, Card, ColdIcon, ComplianceProgressStatusIcon, ErrorFallback, Input, ListItem } from '@coldpbc/components';
 import { ButtonTypes, ComplianceProgressStatus, IconNames, InputTypes } from '@coldpbc/enums';
 import React, { useContext, useEffect, useState } from 'react';
-import { get, isArray, toArray } from 'lodash';
+import { get, isArray, toArray, upperCase } from 'lodash';
 import {
   getComplianceAIResponseOriginalAnswer,
   getComplianceAIResponseValue,
@@ -46,6 +46,7 @@ const _QuestionnaireQuestionItem = (props: { question: QuestionnaireQuestion; nu
     max_score,
     score,
     answer_score_map,
+    question_summary,
   } = question;
   const [params, setParams] = useSearchParams();
   const value = getComplianceOrgResponseAnswer(component, compliance_responses);
@@ -518,6 +519,26 @@ const _QuestionnaireQuestionItem = (props: { question: QuestionnaireQuestion; nu
     if (!isAxiosError(response)) {
       await sectionGroups?.mutate();
       setQuestionBookmarked(!questionBookmarked);
+      logBrowser(`Bookmarking question succeeded for question: ${question.key}`, 'info', {
+        error: response,
+        question,
+        name,
+        focusQuestion,
+        scrollToQuestion,
+      });
+    } else {
+      logBrowser(
+        `Bookmarking question failed for question: ${question.key}`,
+        'error',
+        {
+          error: response,
+          question,
+          name,
+          focusQuestion,
+          scrollToQuestion,
+        },
+        response,
+      );
     }
     setButtonLoading(false);
   };
@@ -549,6 +570,13 @@ const _QuestionnaireQuestionItem = (props: { question: QuestionnaireQuestion; nu
 
     const promises = await Promise.all(promiseArray);
     if (promises.every(promise => !isAxiosError(promise))) {
+      logBrowser(`Updating question succeded for question: ${question.key}`, 'info', {
+        errors: promises,
+        question,
+        name,
+        focusQuestion,
+        scrollToQuestion,
+      });
       let newValue = valueBeingSent;
       if (isDelete) {
         setQuestionAnswerSaved(true);
@@ -575,6 +603,14 @@ const _QuestionnaireQuestionItem = (props: { question: QuestionnaireQuestion; nu
       await sectionGroups?.mutate();
       // update the questionnaire
       await questionnaireMutate();
+    } else {
+      logBrowser(`Updating question failed for question: ${question.key}`, 'error', {
+        errors: promises,
+        question,
+        name,
+        focusQuestion,
+        scrollToQuestion,
+      });
     }
     setButtonLoading(false);
   };
@@ -590,18 +626,6 @@ const _QuestionnaireQuestionItem = (props: { question: QuestionnaireQuestion; nu
     }
   };
 
-  logBrowser('QuestionnaireQuestionItem rendered', 'info', {
-    question,
-    questionInput,
-    questionBookmarked,
-    questionAnswerChanged,
-    questionAnswerSaved,
-    questionStatus,
-    additionalContextOpen,
-    additionalContextInput,
-    buttonLoading,
-  });
-
   return (
     <div
       className={`flex flex-col w-full rounded-[16px] bg-gray-30 gap-[16px] ${questionBookmarked ? 'border-[1px] border-lightblue-200 p-[23px]' : ' p-[24px]'}
@@ -610,7 +634,7 @@ const _QuestionnaireQuestionItem = (props: { question: QuestionnaireQuestion; nu
       <div className={'flex flex-row gap-[8px] justify-between'}>
         <div className={'flex flex-row gap-[8px] items-center'}>
           {getQuestionStatusIcon()}
-          <div className={'w-full flex justify-start text-gray-120'}>QUESTION {number}</div>
+          <div className={'w-full flex justify-start text-gray-120'}>{question_summary ? upperCase(question_summary) : `QUESTION ${number}`}</div>
         </div>
         <div className={'flex flex-row gap-[8px] items-center'}>
           {getBookMarkIcon()}

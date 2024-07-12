@@ -4,6 +4,7 @@ import { ColdIcon, ComplianceProgressStatusIcon } from '@coldpbc/components';
 import { ComplianceSidebarQuestion, ComplianceSidebarSection } from '@coldpbc/interfaces';
 import { HexColors } from '@coldpbc/themes';
 import { ColdComplianceQuestionnaireContext } from '@coldpbc/context';
+import capitalize from 'lodash/capitalize';
 
 export const QuestionnaireSidebarSection = ({ section, sideBarExpanded }: { section: ComplianceSidebarSection; sideBarExpanded: boolean }) => {
   const [open, setOpen] = useState(false);
@@ -44,7 +45,7 @@ export const QuestionnaireSidebarSection = ({ section, sideBarExpanded }: { sect
                     <ComplianceProgressStatusIcon type={getQuestionStatus(question)} inverted={true} />
                   </div>
                   <div className={'text-tc-secondary text-body truncate w-full'}>
-                    {questionNumber}. {question.prompt}
+                    {question.question_summary ? `${questionNumber}. ${capitalize(question.question_summary)}` : `${questionNumber}. ${question.prompt}`}
                   </div>
                   {question.bookmarked && (
                     <div className={'w-[18px] h-[18px] flex items-center justify-center'}>
