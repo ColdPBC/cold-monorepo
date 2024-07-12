@@ -518,6 +518,26 @@ const _QuestionnaireQuestionItem = (props: { question: QuestionnaireQuestion; nu
     if (!isAxiosError(response)) {
       await sectionGroups?.mutate();
       setQuestionBookmarked(!questionBookmarked);
+      logBrowser(`Bookmarking question succeeded for question: ${question.key}`, 'info', {
+        error: response,
+        question,
+        name,
+        focusQuestion,
+        scrollToQuestion,
+      });
+    } else {
+      logBrowser(
+        `Bookmarking question failed for question: ${question.key}`,
+        'error',
+        {
+          error: response,
+          question,
+          name,
+          focusQuestion,
+          scrollToQuestion,
+        },
+        response,
+      );
     }
     setButtonLoading(false);
   };
@@ -549,6 +569,13 @@ const _QuestionnaireQuestionItem = (props: { question: QuestionnaireQuestion; nu
 
     const promises = await Promise.all(promiseArray);
     if (promises.every(promise => !isAxiosError(promise))) {
+      logBrowser(`Updating question succeded for question: ${question.key}`, 'info', {
+        errors: promises,
+        question,
+        name,
+        focusQuestion,
+        scrollToQuestion,
+      });
       let newValue = valueBeingSent;
       if (isDelete) {
         setQuestionAnswerSaved(true);
@@ -575,6 +602,14 @@ const _QuestionnaireQuestionItem = (props: { question: QuestionnaireQuestion; nu
       await sectionGroups?.mutate();
       // update the questionnaire
       await questionnaireMutate();
+    } else {
+      logBrowser(`Updating question failed for question: ${question.key}`, 'error', {
+        errors: promises,
+        question,
+        name,
+        focusQuestion,
+        scrollToQuestion,
+      });
     }
     setButtonLoading(false);
   };
@@ -589,18 +624,6 @@ const _QuestionnaireQuestionItem = (props: { question: QuestionnaireQuestion; nu
       }
     }
   };
-
-  logBrowser('QuestionnaireQuestionItem rendered', 'info', {
-    question,
-    questionInput,
-    questionBookmarked,
-    questionAnswerChanged,
-    questionAnswerSaved,
-    questionStatus,
-    additionalContextOpen,
-    additionalContextInput,
-    buttonLoading,
-  });
 
   return (
     <div

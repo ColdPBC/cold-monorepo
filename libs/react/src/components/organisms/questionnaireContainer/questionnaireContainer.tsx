@@ -94,13 +94,6 @@ const _QuestionnaireContainer = () => {
     }
   }, [searchParams]);
 
-  logBrowser(`QuestionnaireContainer loaded for compliance ${name}`, 'info', {
-    data,
-    error,
-    isLoading,
-    size,
-  });
-
   const orderedSectionGroups = orderBy(sectionGroups?.data?.compliance_section_groups, ['order', 'title'], ['asc', 'asc']);
 
   return (
