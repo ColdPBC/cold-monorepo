@@ -14,6 +14,7 @@ import useSWR from 'swr';
 import { axiosFetcher, resolveNodeEnv } from '@coldpbc/fetchers';
 import { getTermString } from '@coldpbc/lib';
 import { useFlags } from 'launchdarkly-react-client-sdk';
+import { isDefined } from 'class-validator';
 
 const _ComplianceManager = () => {
   const { name } = useParams();
@@ -152,7 +153,11 @@ const _ComplianceManager = () => {
     termString = getTermString(term);
   }
 
-  const imageURL = get(compliance, 'image_url', 'https://cold-public-assets.s3.us-east-2.amazonaws.com/complianceBackgroundImages/rei.png');
+  let imageURL = get(compliance, 'image_url', undefined);
+
+  if (!isDefined(imageURL)) {
+    imageURL = 'https://cold-public-assets.s3.us-east-2.amazonaws.com/complianceBackgroundImages/rei.png';
+  }
 
   const getActiveTabElement = (tab: string) => {
     switch (tab) {
