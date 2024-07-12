@@ -1,3 +1,19 @@
+# [1.291.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.290.0...v1.291.0) (2024-07-12)
+
+
+### Bug Fixes
+
+* Add unique key to SideBarCollapse items ([8a05a83](https://github.com/ColdPBC/cold-monorepo/commit/8a05a83592bcbf995e34b0e69b3a95ac2e3c4065))
+
+
+### Features
+
+* Add class-validator to complianceManager ([fd3daa6](https://github.com/ColdPBC/cold-monorepo/commit/fd3daa664cda64e72e405c2fcda2dee3b848cc6d))
+* Add key prop to tab in QuestionnaireDetailSidebar ([0e92ef0](https://github.com/ColdPBC/cold-monorepo/commit/0e92ef05e3419c5fdb413bb333eeda4a9a01c332))
+* Add summary field to compliance questions ([43d3461](https://github.com/ColdPBC/cold-monorepo/commit/43d3461140c10db59c19586b69df80339a2722a7))
+* Change scrolling behavior to 'instant' in questionnaire ([cd3b52f](https://github.com/ColdPBC/cold-monorepo/commit/cd3b52f4378259a71fbbf96744e7c1dd18fc8bff))
+* Update logging placement and conditions in questionnaire components ([2d1344b](https://github.com/ColdPBC/cold-monorepo/commit/2d1344bd3aaebc3d386514deda5796a1c3391050))
+
 # [1.290.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.289.0...v1.290.0) (2024-07-11)
 
 
