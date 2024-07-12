@@ -68,7 +68,7 @@ const _QuestionnaireQuestionSection = (props: {
         ref={el => {
           if (isSectionInQuery && el && focusQuestion === null) {
             el.scrollIntoView({
-              behavior: 'smooth',
+              behavior: 'instant',
               block: 'start',
             });
           }
@@ -100,7 +100,7 @@ const _QuestionnaireQuestionSection = (props: {
             ref={el => {
               if ((scrollToQuestion === question.key || isQuestionInQuery) && el) {
                 el.scrollIntoView({
-                  behavior: 'smooth',
+                  behavior: 'instant',
                   block: 'start',
                 });
               }
