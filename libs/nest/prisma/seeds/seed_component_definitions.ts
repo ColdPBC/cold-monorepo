@@ -127,6 +127,14 @@ const seeds: Array<{
           route: '/compliance',
         },
         {
+          key: 'suppliers_key',
+          icon: {
+            name: 'ColdSuppliersNavIcon',
+          },
+          label: 'Suppliers',
+          route: '/suppliers',
+        },
+        {
           key: 'assessments_key',
           icon: {
             name: 'ColdJourneyIcon',
@@ -147,7 +155,6 @@ const seeds: Array<{
           icon: {
             name: 'ColdReportIcon',
           },
-          label: 'Reports',
           items: [
             {
               key: 'reports_carbon_footprint_key',
@@ -155,6 +162,7 @@ const seeds: Array<{
               route: '/reports/carbon_footprint',
             },
           ],
+          label: 'Reports',
         },
         {
           key: 'documents_key',
