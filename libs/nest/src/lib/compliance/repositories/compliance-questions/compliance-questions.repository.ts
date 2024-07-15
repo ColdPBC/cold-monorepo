@@ -1,10 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { BaseWorker } from '../../../worker';
 import { PrismaService } from '../../../prisma';
-import { compliance_questions, Prisma } from '@prisma/client';
+import { compliance_questions, organizations, Prisma } from '@prisma/client';
 import { difference, sumBy } from 'lodash';
 import { Cuid2Generator, GuidPrefixes } from '../../../utility';
 import { FilteringService } from '../../filtering';
+import { CacheService } from '../../../cache';
+import { IAuthenticatedUser } from '../../../primitives';
 
 export interface Question {
   id: string;
@@ -35,8 +37,12 @@ interface Dependency {
  */
 @Injectable()
 export class ComplianceQuestionsRepository extends BaseWorker {
-  constructor(readonly prisma: PrismaService, readonly filteringService: FilteringService) {
+  constructor(readonly prisma: PrismaService, readonly filteringService: FilteringService, readonly cache: CacheService) {
     super(ComplianceQuestionsRepository.name);
+  }
+
+  private getCacheKey(org: organizations, name: string) {
+    return `organizations:${org.id}:compliance:${name}:questions`;
   }
 
   /**
@@ -254,6 +260,8 @@ export class ComplianceQuestionsRepository extends BaseWorker {
    */
   async createQuestions(questions: compliance_questions[]): Promise<Prisma.BatchPayload> {
     try {
+      await this.cache.delete('organizations', true);
+
       questions.forEach(q => (q.id = new Cuid2Generator(GuidPrefixes.ComplianceQuestion).scopedId));
 
       const createdQuestions = await this.prisma.extended.compliance_questions.createMany({
@@ -277,6 +285,8 @@ export class ComplianceQuestionsRepository extends BaseWorker {
    */
   async createQuestion(question: compliance_questions): Promise<compliance_questions> {
     try {
+      await this.cache.delete(`organizations`, true);
+
       question.id = new Cuid2Generator(GuidPrefixes.ComplianceQuestion).scopedId;
       const created = await this.prisma.extended.compliance_questions.create({
         data: {
@@ -300,6 +310,8 @@ export class ComplianceQuestionsRepository extends BaseWorker {
    * @throws Throws an error if there is an issue updating the question.
    */
   async updateQuestion(question: compliance_questions): Promise<compliance_questions> {
+    await this.cache.delete('organizations', true);
+
     let where: any;
 
     // If the question has an ID, use that to update the question. Otherwise, use the compliance definition name and key.
@@ -334,15 +346,24 @@ export class ComplianceQuestionsRepository extends BaseWorker {
   }
 
   async deleteQuestion(id: string): Promise<void> {
-    try {
-      this.prisma.extended.compliance_questions.delete({
-        where: {
-          id,
-        },
-      });
-    } catch (e: any) {
-      this.logger.error(`Error deleting question`, { ...e, id });
-      throw e;
+    await this.cache.delete('organizations', true);
+
+    const question = await this.prisma.extended.compliance_questions.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!question) {
+      throw new NotFoundException(`Question not found for id ${id}`);
     }
+
+    await this.cache.delete(`compliance:${question?.compliance_definition_name}`, true);
+
+    this.prisma.extended.compliance_questions.delete({
+      where: {
+        id,
+      },
+    });
   }
 }

@@ -2,14 +2,21 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 import { BaseWorker } from '../../../worker';
 import { Cuid2Generator, GuidPrefixes } from '../../../utility';
 import { PrismaService } from '../../../prisma/prisma.service';
+import { CacheService } from '../../../cache';
 
 @Injectable()
 export class ComplianceNotesRepository extends BaseWorker {
-  constructor(readonly prisma: PrismaService) {
+  constructor(readonly prisma: PrismaService, readonly cacheService: CacheService) {
     super(ComplianceNotesRepository.name);
   }
 
+  private getCacheKey(orgId: string, name: string) {
+    return `organizations:${orgId}:compliance:${name}:notes`;
+  }
+
   async createNote(name: string, qId: string, note: string, org: any, user: any) {
+    await this.cacheService.delete(this.getCacheKey(org.id, name), true);
+
     const orgCompliance = await this.validate(qId, name, org, user);
 
     if (!note) throw new BadRequestException('Note is required');
@@ -40,10 +47,13 @@ export class ComplianceNotesRepository extends BaseWorker {
 
     this.logger.debug(`Found ${notes.length} notes for ${name} question (${qId})`);
 
+    this.cacheService.set(`${this.getCacheKey(org.id, name)}:questions:${qId}`, notes, { ttl: 60 * 60 * 24 * 7 });
     return notes;
   }
 
   async updateNote(name: string, qId: string, id: string, note: string, org: any, user: any) {
+    await this.cacheService.delete(`${this.getCacheKey(org.id, name)}:${id}`, true);
+
     const orgCompliance = await this.validate(qId, name, org, user);
 
     if (!note) throw new BadRequestException('Note is required');
@@ -62,6 +72,8 @@ export class ComplianceNotesRepository extends BaseWorker {
   }
 
   async remove(name: string, qId: string, id: string, org: any, user: any) {
+    await this.cacheService.delete(`${this.getCacheKey(org.id, name)}:${id}`, true);
+
     const orgCompliance = await this.validate(qId, name, org, user);
 
     if (!id) throw new BadRequestException('Note ID is required');

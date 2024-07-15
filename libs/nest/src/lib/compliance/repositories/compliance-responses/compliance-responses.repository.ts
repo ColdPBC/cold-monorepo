@@ -40,6 +40,12 @@ export class ComplianceResponsesRepository extends BaseWorker {
     super(ComplianceResponsesRepository.name);
   }
 
+  private getCacheKey(org: organizations, name: string, options?: ComplianceResponseOptions) {
+    return options
+      ? `organizations:${org.id}:compliance:${name}:responses:${options.responses}:references:${options.references}:bookmarks:${options.bookmarks}:take:${options.take}:skip:${options.skip}`
+      : `organizations:${org.id}:compliance:${name}:responses`;
+  }
+
   private getBookmarkQuery(email: string) {
     return {
       where: {
@@ -160,7 +166,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
    * @param user_response
    * @param ai_response
    */
-  async upsertComplianceResponse(
+  async updateComplianceResponse(
     org: organizations,
     compliance_definition_name: string,
     sgId: string,
@@ -170,7 +176,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
     user_response?: organization_compliance_responses,
     ai_response?: organization_compliance_ai_responses,
   ) {
-    this.cacheService.delete(`organization:${org.id}:compliance:${compliance_definition_name}:counts`);
+    await this.cacheService.delete(this.getCacheKey(org, compliance_definition_name), true);
 
     const tstart = new Date();
 
@@ -217,105 +223,20 @@ export class ComplianceResponsesRepository extends BaseWorker {
       let orgResponseEntity, aiResponseEntity;
 
       if (ai_response && (Object.prototype.hasOwnProperty.call(ai_response, 'answer') || ai_response?.justification)) {
-        start = new Date();
-        aiResponseEntity = await this.prisma.extended.organization_compliance_ai_responses.upsert({
-          where: {
-            orgCompQuestId: {
-              compliance_question_id: ai_response.compliance_question_id,
-              organization_compliance_id: compliance.id,
-            },
-          },
-          create: {
-            id: new Cuid2Generator(GuidPrefixes.OrganizationComplianceAIResponse).scopedId,
-            organization_id: org.id,
-            organization_compliance_id: compliance.id,
-            compliance_question_id: qId || ai_response.compliance_question_id,
-            answer: ai_response.answer as any,
-            justification: ai_response.justification,
-            sources: ai_response.sources as any,
-            references: ai_response.references as any,
-            additional_context: ai_response.additional_context as any,
-          },
-          update: {
-            answer: ai_response.answer as any,
-            justification: ai_response.justification,
-            sources: ai_response.sources as any,
-            references: ai_response.references as any,
-            additional_context: ai_response.additional_context as any,
-          },
-        });
-        this.logger.info(`Saved AI response for ${org.name}: ${compliance.compliance_definition_name}`, {
-          user,
-          ai_response,
-          organization: org,
-          duration: new Date().getTime() - start.getTime(),
-        });
+        const aiResponse = await this.upsertAIResponse(start, aiResponseEntity, ai_response, compliance, org, qId, user);
+        start = aiResponse.start;
+        aiResponseEntity = aiResponse.aiResponseEntity;
       }
 
       if (user_response && Object.prototype.hasOwnProperty.call(user_response, 'value')) {
-        start = new Date();
-
-        orgResponseEntity = await this.prisma.extended.organization_compliance_responses.upsert({
-          where: {
-            orgCompQuestId: {
-              organization_compliance_id: compliance.id,
-              compliance_question_id: qId || user_response?.compliance_question_id,
-            },
-          },
-          create: {
-            id: new Cuid2Generator(GuidPrefixes.OrganizationComplianceResponse).scopedId,
-            organization_compliance_id: compliance.id,
-            compliance_question_id: qId || user_response?.compliance_question_id,
-            // @ts-expect-error - This is a valid value
-            value: user_response.value,
-          },
-          update: {
-            // @ts-expect-error - This is a valid value
-            value: user_response.value,
-          },
-        });
-
-        this.logger.info(`Saved User response for ${org.name}: ${compliance.compliance_definition_name}`, {
-          user,
-          user_response,
-          organization: org,
-          duration: new Date().getTime() - start.getTime(),
-        });
+        const orgResponse = await this.upsertOrgResponse(start, orgResponseEntity, compliance, qId, user_response, org, user);
+        start = orgResponse.start;
+        orgResponseEntity = orgResponse.orgResponseEntity;
       }
 
       if (orgResponseEntity || aiResponseEntity) {
-        start = new Date();
-        const crData = {
-          compliance_question_id: ai_response?.compliance_question_id || qId,
-          compliance_section_id: sId,
-          compliance_section_group_id: sgId,
-          organization_id: org.id,
-          compliance_definition_name: compliance.compliance_definition_name,
-          organization_compliance_id: compliance.id,
-          organization_compliance_ai_response_id: aiResponseEntity?.id,
-          organization_compliance_response_id: orgResponseEntity?.id,
-        };
-        await this.prisma.extended.compliance_responses.upsert({
-          where: {
-            orgCompQuestId: {
-              organization_compliance_id: compliance.id,
-              compliance_question_id: ai_response?.compliance_question_id || qId,
-            },
-          },
-          create: crData,
-          update: crData,
-        });
-
-        this.logger.info(`Saved Compliance response for ${org.name}: ${compliance.compliance_definition_name}`, {
-          user,
-          user_response,
-          ai_response,
-          organization: org,
-          duration: new Date().getTime() - start.getTime(),
-        });
+        await this.upsertComplianceResponse(start, ai_response, qId, sId, sgId, org, compliance, aiResponseEntity, orgResponseEntity, user, user_response);
       }
-
-      //this.getScoredComplianceQuestionsByName(org, compliance.compliance_definition_name, user);
 
       this.logger.info(`Upserted response for ${org.name}: ${compliance.compliance_definition_name}`, {
         user,
@@ -324,14 +245,6 @@ export class ComplianceResponsesRepository extends BaseWorker {
         organization: org,
         duration: new Date().getTime() - tstart.getTime(),
       });
-
-      if (orgResponseEntity) {
-        return orgResponseEntity;
-      }
-
-      if (aiResponseEntity) {
-        return aiResponseEntity;
-      }
     } catch (error) {
       this.logger.error(`Error saving response for ${org.name}: ${compliance.compliance_definition_name}`, {
         user,
@@ -458,17 +371,15 @@ export class ComplianceResponsesRepository extends BaseWorker {
    */
   async getScoredComplianceQuestionsByName(org: organizations, compliance_definition_name: string, user: IAuthenticatedUser, options?: ComplianceResponseOptions) {
     const start = new Date();
-    // invalidate cache if it exists
-    /*if (!options?.bpc) {
-      const counts = await this.cacheService.get(`organization:${org.id}:compliance:${compliance_definition_name}:counts`);
-      const end = new Date();
-      this.logger.info(`Cache hit for ${org.name}: ${compliance_definition_name} in ${end.getTime() - start.getTime()}ms`, { compliance_definition_name });
-      options ? (options.bpc = true) : (options = { bpc: true });
-      this.getScoredComplianceQuestionsByName(org, compliance_definition_name, user, options);
-      return counts;
+
+    if (options?.bpc) {
+      await this.cacheService.delete(this.getCacheKey(org, compliance_definition_name), true);
     } else {
-      await this.cacheService.delete(`organization:${org.id}:compliance:${compliance_definition_name}:counts`);
-    }*/
+      const scoredCompliance = await this.cacheService.get(this.getCacheKey(org, compliance_definition_name, options));
+      this.logger.info(`Cache hit for ${org.name}: ${compliance_definition_name} in ${new Date().getTime() - start.getTime()}ms`, { compliance_definition_name });
+
+      return scoredCompliance;
+    }
 
     if (!compliance_definition_name) throw new BadRequestException('Compliance Definition Name is required');
     if (!org) throw new BadRequestException('Organization is required');
@@ -531,12 +442,12 @@ export class ComplianceResponsesRepository extends BaseWorker {
 
       scored.visible = organization.organization_compliance.visible;
 
-      //this.cacheService.set(`organization:${org.id}:compliance:${compliance_definition_name}:counts`, scored);
-
       const end = new Date();
       this.logger.info(`getScoredComplianceQuestionsByName completed for ${org.name}: ${compliance_definition_name} in ${end.getTime() - start.getTime()}ms`, {
         compliance_definition_name,
       });
+
+      this.cacheService.set(this.getCacheKey(org, compliance_definition_name, options), scored, { ttl: 60 * 60 * 24 });
 
       return scored;
     } catch (error) {
@@ -902,7 +813,9 @@ export class ComplianceResponsesRepository extends BaseWorker {
     }
   }
 
-  async deleteAiResponsesByName(org: organizations, orgComp: any, user: IAuthenticatedUser) {
+  async deleteAllAiResponsesByName(org: organizations, orgComp: any, user: IAuthenticatedUser) {
+    await this.cacheService.delete(this.getCacheKey(org, orgComp.compliance_definition_name), true);
+
     const compliance = await this.prisma.extended.organization_compliance.findUnique({
       where: {
         orgIdCompNameKey: {
@@ -940,7 +853,10 @@ export class ComplianceResponsesRepository extends BaseWorker {
     }
   }
 
-  async deleteComplianceResponses(org: organizations, compliance_definition_name: string, sgId: string, sId: string, qId: string, user: IAuthenticatedUser, type: string) {
+
+  async deleteComplianceResponse(org: organizations, compliance_definition_name: string, sgId: string, sId: string, qId: string, user: IAuthenticatedUser, type: string = 'ai') {
+    await this.cacheService.delete(this.getCacheKey(org, compliance_definition_name), true);
+
     const compliance = await this.prisma.extended.organization_compliance.findUnique({
       where: {
         orgIdCompNameKey: {
@@ -990,5 +906,215 @@ export class ComplianceResponsesRepository extends BaseWorker {
       });
       throw error;
     }
+  }
+
+  private async upsertComplianceResponse(
+    start: Date,
+    ai_response:
+      | undefined
+      | {
+          id: string;
+          answer: Prisma.JsonValue | null;
+          justification: string;
+          references: Prisma.JsonValue | null;
+          sources: Prisma.JsonValue | null;
+          additional_context: Prisma.JsonValue | null;
+          organization_id: string;
+          organization_compliance_id: string;
+          created_at: Date;
+          updated_at: Date;
+          compliance_question_id: string;
+          deleted: boolean;
+        },
+    qId: string,
+    sId: string,
+    sgId: string,
+    org: {
+      id: string;
+      name: string;
+      enabled_connections: Prisma.JsonValue;
+      display_name: string;
+      branding: Prisma.JsonValue | null;
+      phone: string | null;
+      website: string | null;
+      email: string | null;
+      created_at: Date;
+      updated_at: Date;
+      isTest: boolean;
+      deleted: boolean;
+    },
+    compliance,
+    aiResponseEntity,
+    orgResponseEntity,
+    user: IAuthenticatedUser,
+    user_response:
+      | undefined
+      | {
+          id: string;
+          value: Prisma.JsonValue | null;
+          created_at: Date;
+          updated_at: Date;
+          compliance_question_id: string;
+          organization_compliance_id: string;
+          additional_context: Prisma.JsonValue | null;
+          deleted: boolean;
+        },
+  ) {
+    start = new Date();
+
+    await this.cacheService.delete(this.getCacheKey(org, compliance.compliance_definition_name), true);
+
+    const crData = {
+      compliance_question_id: ai_response?.compliance_question_id || qId,
+      compliance_section_id: sId,
+      compliance_section_group_id: sgId,
+      organization_id: org.id,
+      compliance_definition_name: compliance.compliance_definition_name,
+      organization_compliance_id: compliance.id,
+      organization_compliance_ai_response_id: aiResponseEntity?.id,
+      organization_compliance_response_id: orgResponseEntity?.id,
+    };
+    await this.prisma.extended.compliance_responses.upsert({
+      where: {
+        orgCompQuestId: {
+          organization_compliance_id: compliance.id,
+          compliance_question_id: ai_response?.compliance_question_id || qId,
+        },
+      },
+      create: crData,
+      update: crData,
+    });
+
+    this.logger.info(`Saved Compliance response for ${org.name}: ${compliance.compliance_definition_name}`, {
+      user,
+      user_response,
+      ai_response,
+      organization: org,
+      duration: new Date().getTime() - start.getTime(),
+    });
+  }
+
+  private async upsertOrgResponse(
+    start: Date,
+    orgResponseEntity,
+    compliance,
+    qId: string,
+    user_response: {
+      id: string;
+      value: Prisma.JsonValue | null;
+      created_at: Date;
+      updated_at: Date;
+      compliance_question_id: string;
+      organization_compliance_id: string;
+      additional_context: Prisma.JsonValue | null;
+      deleted: boolean;
+    },
+    org: {
+      id: string;
+      name: string;
+      enabled_connections: Prisma.JsonValue;
+      display_name: string;
+      branding: Prisma.JsonValue | null;
+      phone: string | null;
+      website: string | null;
+      email: string | null;
+      created_at: Date;
+      updated_at: Date;
+      isTest: boolean;
+      deleted: boolean;
+    },
+    user: IAuthenticatedUser,
+  ) {
+    start = new Date();
+    await this.cacheService.delete(this.getCacheKey(org, compliance.compliance_definition_name), true);
+
+    orgResponseEntity = await this.prisma.extended.organization_compliance_responses.upsert({
+      where: {
+        orgCompQuestId: {
+          organization_compliance_id: compliance.id,
+          compliance_question_id: qId || user_response?.compliance_question_id,
+        },
+      },
+      create: {
+        id: new Cuid2Generator(GuidPrefixes.OrganizationComplianceResponse).scopedId,
+        organization_compliance_id: compliance.id,
+        compliance_question_id: qId || user_response?.compliance_question_id,
+        // @ts-expect-error - This is a valid value
+        value: user_response.value,
+      },
+      update: {
+        // @ts-expect-error - This is a valid value
+        value: user_response.value,
+      },
+    });
+
+    this.logger.info(`Saved User response for ${org.name}: ${compliance.compliance_definition_name}`, {
+      user,
+      user_response,
+      organization: org,
+      duration: new Date().getTime() - start.getTime(),
+    });
+
+    return { start, orgResponseEntity };
+  }
+
+  private async upsertAIResponse(
+    start: Date,
+    aiResponseEntity,
+    ai_response: {
+      id: string;
+      answer: Prisma.JsonValue | null;
+      justification: string;
+      references: Prisma.JsonValue | null;
+      sources: Prisma.JsonValue | null;
+      additional_context: Prisma.JsonValue | null;
+      organization_id: string;
+      organization_compliance_id: string;
+      created_at: Date;
+      updated_at: Date;
+      compliance_question_id: string;
+      deleted: boolean;
+    },
+    compliance,
+    org: organizations,
+    qId: string,
+    user: IAuthenticatedUser,
+  ) {
+    start = new Date();
+    await this.cacheService.delete(this.getCacheKey(org, compliance.compliance_definition_name), true);
+
+    aiResponseEntity = await this.prisma.extended.organization_compliance_ai_responses.upsert({
+      where: {
+        orgCompQuestId: {
+          compliance_question_id: ai_response.compliance_question_id,
+          organization_compliance_id: compliance.id,
+        },
+      },
+      create: {
+        id: new Cuid2Generator(GuidPrefixes.OrganizationComplianceAIResponse).scopedId,
+        organization_id: org.id,
+        organization_compliance_id: compliance.id,
+        compliance_question_id: qId || ai_response.compliance_question_id,
+        answer: ai_response.answer as any,
+        justification: ai_response.justification,
+        sources: ai_response.sources as any,
+        references: ai_response.references as any,
+        additional_context: ai_response.additional_context as any,
+      },
+      update: {
+        answer: ai_response.answer as any,
+        justification: ai_response.justification,
+        sources: ai_response.sources as any,
+        references: ai_response.references as any,
+        additional_context: ai_response.additional_context as any,
+      },
+    });
+    this.logger.info(`Saved AI response for ${org.name}: ${compliance.compliance_definition_name}`, {
+      user,
+      ai_response,
+      organization: org,
+      duration: new Date().getTime() - start.getTime(),
+    });
+    return { start, aiResponseEntity };
   }
 }
