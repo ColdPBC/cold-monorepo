@@ -31,6 +31,7 @@ import {
   ColdSettingsIcon,
   ColdSmallCheckBoxIcon,
   ColdSparkleIcon,
+  ColdSuppliersNavIcon,
   ColdSupportNotFilledInIcon,
   ColdSwitchIcon,
   ColdTeamMembersIcon,
@@ -111,6 +112,8 @@ export const ColdIcon = (props: IconProps) => {
       return <ColdAddNotesIcon {...props} />;
     case IconNames.ColdSparkleIcon:
       return <ColdSparkleIcon {...props} />;
+    case IconNames.ColdSuppliersNavIcon:
+      return <ColdSuppliersNavIcon {...props} />;
     default:
     case IconNames.ColdSettingsIcon:
       return <ColdSettingsIcon {...props} />;

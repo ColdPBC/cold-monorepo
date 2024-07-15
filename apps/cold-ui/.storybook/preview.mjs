@@ -110,6 +110,7 @@ export default {
         showNewNavigationCold698: false,
         showNewComplianceManagerCold711: false,
         showNewComplianceManagerPreviewCold713: true,
+        showSuppliersPageCold890: true,
       },
     },
   },
