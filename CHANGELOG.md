@@ -1,3 +1,12 @@
+# [1.292.0-cold-0000.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.291.0...v1.292.0-cold-0000.1) (2024-07-15)
+
+
+### Features
+
+* Add initial supplier product certification models ([9fc9093](https://github.com/ColdPBC/cold-monorepo/commit/9fc9093bfe352114f373d56ada1b912f62dc3442))
+* Adjust getContext sensitivity in chat controller ([1ff2cbe](https://github.com/ColdPBC/cold-monorepo/commit/1ff2cbe54fb0cdefa76792d00a5636b965c2a101))
+* Improve chat service error handling and question retrievals ([178eaed](https://github.com/ColdPBC/cold-monorepo/commit/178eaed939ce639924e75d0a69574eda71c2644c))
+
 # [1.291.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.290.0...v1.291.0) (2024-07-12)
 
 
