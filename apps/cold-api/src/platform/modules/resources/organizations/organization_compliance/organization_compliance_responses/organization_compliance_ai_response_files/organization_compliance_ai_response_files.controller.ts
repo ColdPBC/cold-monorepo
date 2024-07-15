@@ -34,7 +34,7 @@ export class OrganizationComplianceAiResponseFilesController {
   })
   @Roles(...coldAdminOnly)
   create(@Param('orgId') orgId: string, @Param('name') complianceName: string, @Param('aiId') responseId: string, @Body() aiResponseFileData: any, @Req() req: any) {
-    return this.organizationComplianceAiResponseFilesService.create(orgId, complianceName, responseId, aiResponseFileData, req.user);
+    return this.organizationComplianceAiResponseFilesService.create(req.org, complianceName, responseId, aiResponseFileData, req.user);
   }
 
   @Get()
@@ -59,7 +59,7 @@ export class OrganizationComplianceAiResponseFilesController {
   })
   @Roles(...allRoles)
   findAll(@Param('orgId') orgId: string, @Param('name') complianceName: string, @Param('aiId') responseId: string, @Req() req: any) {
-    return this.organizationComplianceAiResponseFilesService.findAll(orgId, complianceName, responseId, req.user);
+    return this.organizationComplianceAiResponseFilesService.findAll(req.org, complianceName, responseId, req.user);
   }
 
   @Get(':id')
@@ -91,7 +91,7 @@ export class OrganizationComplianceAiResponseFilesController {
   })
   @Roles(...allRoles)
   findOne(@Param('orgId') orgId: string, @Param('name') complianceName: string, @Param('aiId') responseId: string, @Param('id') id: string, @Req() req: any) {
-    return this.organizationComplianceAiResponseFilesService.findOne(orgId, complianceName, responseId, id, req.user);
+    return this.organizationComplianceAiResponseFilesService.findOne(req.org, complianceName, responseId, id, req.user);
   }
 
   @Patch(':id')
@@ -130,7 +130,7 @@ export class OrganizationComplianceAiResponseFilesController {
     @Body() aiResponseFileData: any,
     @Req() req: any,
   ) {
-    return this.organizationComplianceAiResponseFilesService.update(orgId, complianceName, responseId, id, aiResponseFileData, req.user);
+    return this.organizationComplianceAiResponseFilesService.update(req.org, complianceName, responseId, id, aiResponseFileData, req.user);
   }
 
   @Delete(':id')
@@ -162,6 +162,6 @@ export class OrganizationComplianceAiResponseFilesController {
   })
   @Roles(...coldAdminOnly)
   remove(@Param('orgId') orgId: string, @Param('name') complianceName: string, @Param('aiId') responseId: string, @Param('id') id: string, @Req() req: any) {
-    return this.organizationComplianceAiResponseFilesService.remove(orgId, complianceName, responseId, id, req.user);
+    return this.organizationComplianceAiResponseFilesService.remove(req.org, complianceName, responseId, id, req.user);
   }
 }

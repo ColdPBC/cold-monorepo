@@ -24,7 +24,7 @@ import { compliance_responses } from '@prisma/client';
 export class OrganizationComplianceResponsesController {
   constructor(private readonly organizationComplianceResponsesService: OrganizationComplianceResponsesService) {}
 
-  // Use PUT instead of POST since we are upserting the compliance response
+  // Use PUT instead of POST since we are upserting the org response
   @Put('section_groups/:sgId/sections/:sId/questions/:qId/responses')
   @ApiParam({
     name: 'sgId',
