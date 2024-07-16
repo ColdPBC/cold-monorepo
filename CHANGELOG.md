@@ -1,21 +1,22 @@
-# [1.292.0-cold-00000.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.292.0-cold-00000.1...v1.292.0-cold-00000.2) (2024-07-16)
 
+# [1.293.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.292.0...v1.293.0) (2024-07-16)
 
-### Features
-
-* add bpc query parameter to getComplianceResponsesCounts ([e37ebb6](https://github.com/ColdPBC/cold-monorepo/commit/e37ebb67cc96458713b20fe2434703d7a817a184))
-* Add new SQL view for compliance response ([5b3f8f3](https://github.com/ColdPBC/cold-monorepo/commit/5b3f8f3b4be041856af4641f01aef6181793ea43))
-* Add supplier boolean to organization_facilities table ([0190a3c](https://github.com/ColdPBC/cold-monorepo/commit/0190a3caa657361385bea090c0df8ae1dda56c98))
-* Drop compliance_responses table in Prisma ([176a3c5](https://github.com/ColdPBC/cold-monorepo/commit/176a3c531daf42ab81165f8b8d587489baedf858))
-
-# [1.292.0-cold-00000.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.291.0...v1.292.0-cold-00000.1) (2024-07-15)
 
 
 ### Features
 
 * Add initial supplier product certification models ([9fc9093](https://github.com/ColdPBC/cold-monorepo/commit/9fc9093bfe352114f373d56ada1b912f62dc3442))
-* Adjust getContext sensitivity in chat controller ([1ff2cbe](https://github.com/ColdPBC/cold-monorepo/commit/1ff2cbe54fb0cdefa76792d00a5636b965c2a101))
-* Improve chat service error handling and question retrievals ([178eaed](https://github.com/ColdPBC/cold-monorepo/commit/178eaed939ce639924e75d0a69574eda71c2644c))
+
+# [1.292.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.291.0...v1.292.0) (2024-07-15)
+
+
+
+### Features
+
+* Add 'Suppliers' component to seed definitions ([b8509f1](https://github.com/ColdPBC/cold-monorepo/commit/b8509f159ce7f82cdee25160dd82f28504e526b9))
+* Add Suppliers page and associated icon ([c79d01f](https://github.com/ColdPBC/cold-monorepo/commit/c79d01f1db9a178b94d2c30eb8480072c42d9462))
+
+
 
 # [1.291.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.290.0...v1.291.0) (2024-07-12)
 

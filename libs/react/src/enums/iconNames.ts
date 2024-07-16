@@ -34,4 +34,5 @@ export enum IconNames {
   ColdSupportNotFilledInIcon = 'ColdSupportNotFilledInIcon',
   ColdAddNotesIcon = 'ColdAddNotesIcon',
   ColdSparkleIcon = 'ColdSparkleIcon',
+  ColdSuppliersNavIcon = 'ColdSuppliersNavIcon',
 }
