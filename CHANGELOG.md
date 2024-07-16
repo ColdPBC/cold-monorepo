@@ -1,3 +1,9 @@
+# [1.293.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.292.0...v1.293.0) (2024-07-16)
+
+
+### Features
+
+* Add initial supplier product certification models ([9fc9093](https://github.com/ColdPBC/cold-monorepo/commit/9fc9093bfe352114f373d56ada1b912f62dc3442))
 
 # [1.292.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.291.0...v1.292.0) (2024-07-15)
 
