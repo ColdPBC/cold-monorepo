@@ -1,3 +1,4 @@
+
 # [1.292.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.291.0...v1.292.0) (2024-07-15)
 
 
@@ -5,6 +6,7 @@
 
 * Add 'Suppliers' component to seed definitions ([b8509f1](https://github.com/ColdPBC/cold-monorepo/commit/b8509f159ce7f82cdee25160dd82f28504e526b9))
 * Add Suppliers page and associated icon ([c79d01f](https://github.com/ColdPBC/cold-monorepo/commit/c79d01f1db9a178b94d2c30eb8480072c42d9462))
+
 
 # [1.291.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.290.0...v1.291.0) (2024-07-12)
 

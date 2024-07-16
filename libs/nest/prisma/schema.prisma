@@ -307,6 +307,7 @@ model organizations {
   category_data                             category_data[]
   integrations                              integrations[]
   facilities                                organization_facilities[]
+  suppliers                                 organization_suppliers[]
   organization_files                        organization_files[]
   survey_data                               survey_data[]
   utility_bills                             utility_bills[]
@@ -316,7 +317,8 @@ model organizations {
   organization_compliances_old              organization_compliances_old[] // remove this after migrations
   organization_compliance_ai_responses      organization_compliance_ai_responses[]
   organization_compliance_ai_response_files organization_compliance_ai_response_files[]
-  deleted                                   Boolean                                      @default(false)
+  deleted                                   Boolean                                     @default(false)
+  products                                  products[]
 }
 
 /// @namespace Organization_Facilities
@@ -327,22 +329,106 @@ model organizations {
 /// @zod.import(["import { organization_facilitiesSchema } from '../../custom'"])
 /// @actions
 model organization_facilities {
-  id              String          @id @default(cuid())
-  organization_id String
-  name            String?
-  address         String
-  city            String
-  state           String
-  country         String          @default("US")
-  created_at      DateTime        @default(now())
-  updated_at      DateTime        @updatedAt
-  address_line_2  String?
-  postal_code     String
-  emissions       emissions[]
-  integrations    integrations[]
-  organizations   organizations   @relation(fields: [organization_id], references: [id], onDelete: Cascade)
-  utility_bills   utility_bills[]
-  deleted         Boolean         @default(false)
+  id                   String                 @id @default(cuid())
+  organization_id      String
+  name                 String
+  address_line_1       String?
+  city                 String?
+  state_province       String?
+  country              String                 @default("US")
+  created_at           DateTime               @default(now())
+  updated_at           DateTime               @updatedAt
+  address_line_2       String?
+  postal_code          String?
+  metadata             Json?
+  emissions            emissions[]
+  integrations         integrations[]
+  organizations        organizations          @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+  utility_bills        utility_bills[]
+  deleted              Boolean                @default(false)
+  certification_claims certification_claims[]
+}
+
+model certifications {
+  id                   String                 @id @default(cuid())
+  name                 String
+  type                 String
+  logo_url             String
+  document_url         String
+  website              String
+  created_at           DateTime               @default(now())
+  updated_at           DateTime               @updatedAt
+  deleted              Boolean                @default(false)
+  certification_claims certification_claims[]
+}
+
+model certification_claims {
+  id                       String                   @id @default(cuid())
+  certification_id         String
+  supplier_facility_id     String?
+  organization_facility_id String?
+  organization_file_id     String
+  issued_date              DateTime
+  expiration_date          DateTime
+  effective_date           DateTime
+  issuer                   String
+  certification_level      certification_level
+  certification            certifications           @relation(fields: [certification_id], references: [id], onDelete: Cascade)
+  organization_file        organization_files       @relation(fields: [organization_file_id], references: [id], onDelete: Cascade)
+  supplier_facility        supplier_facilities?     @relation(fields: [supplier_facility_id], references: [id], onDelete: Cascade)
+  organization_facility    organization_facilities? @relation(fields: [organization_facility_id], references: [id], onDelete: Cascade)
+  created_at               DateTime                 @default(now())
+  updated_at               DateTime                 @updatedAt
+  deleted                  Boolean                  @default(false)
+}
+
+model organization_suppliers {
+  id                  String                @id @default(cuid())
+  name                String
+  organization_id     String
+  metadata            Json
+  created_at          DateTime              @default(now())
+  updated_at          DateTime              @updatedAt
+  deleted             Boolean               @default(false)
+  organization        organizations?        @relation(fields: [organization_id], references: [id])
+  supplier_facilities supplier_facilities[]
+}
+
+model supplier_facilities {
+  id                       String                 @id @default(cuid())
+  organization_supplier_id String
+  name                     String
+  address_line_1           String?
+  address_line_2           String?
+  city                     String?
+  state_province           String?
+  postal_code              String?
+  supplier                 organization_suppliers @relation(fields: [organization_supplier_id], references: [id], onDelete: Cascade)
+  country                  String                 @default("US")
+  metadata                 Json
+  created_at               DateTime               @default(now())
+  updated_at               DateTime               @updatedAt
+  certification_claims     certification_claims[]
+  product_facilities       product_facilities[]
+}
+
+model products {
+  id                 String               @id @default(cuid())
+  name               String               @unique
+  organization_id    String
+  created_at         DateTime             @default(now())
+  updated_at         DateTime             @updatedAt
+  deleted            Boolean              @default(false)
+  product_facilities product_facilities[]
+  organization       organizations        @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+}
+
+model product_facilities {
+  id                   String              @id @default(cuid())
+  product_id           String
+  supplier_facility_id String
+  product              products            @relation(fields: [product_id], references: [id], onDelete: Cascade)
+  supplier_facility    supplier_facilities @relation(fields: [supplier_facility_id], references: [id], onDelete: Cascade)
 }
 
 model service_definitions {
@@ -493,7 +579,9 @@ model organization_files {
   vector_records                            vector_records[]
   organization_compliance_note_files        organization_compliance_note_files[]
   organization_compliance_ai_response_files organization_compliance_ai_response_files[]
-  deleted                                   Boolean                                      @default(false)
+  deleted                                   Boolean                                     @default(false)
+  certification_claim                       certification_claims[]
+  type                                      file_types                          @default(OTHER)
 
   @@unique([organization_id, id], name: "orgFileId")
   @@unique([organization_id, openai_file_id], name: "openaiFileId")
@@ -800,39 +888,39 @@ model organization_compliance_question_bookmarks {
 }
 
 model organization_compliance_responses {
-  id                                     String                                @id
-  value                                  Json?
-  created_at                             DateTime                              @default(now())
-  updated_at                             DateTime                              @updatedAt
-  compliance_question_id                 String
-  organization_compliance_id             String
-  additional_context                     Json?
-  compliance_question                    compliance_questions                  @relation(fields: [compliance_question_id], references: [id], onDelete: Cascade)
-  organization_compliance                organization_compliance               @relation(fields: [organization_compliance_id], references: [id], onDelete: Cascade)
-  compliance_responses                   compliance_responses[]
-  deleted                                Boolean                               @default(false)
+  id                         String                  @id
+  value                      Json?
+  created_at                 DateTime                @default(now())
+  updated_at                 DateTime                @updatedAt
+  compliance_question_id     String
+  organization_compliance_id String
+  additional_context         Json?
+  compliance_question        compliance_questions    @relation(fields: [compliance_question_id], references: [id], onDelete: Cascade)
+  organization_compliance    organization_compliance @relation(fields: [organization_compliance_id], references: [id], onDelete: Cascade)
+  compliance_responses       compliance_responses[]
+  deleted                    Boolean                 @default(false)
 
   @@unique([organization_compliance_id, compliance_question_id], name: "orgCompQuestId")
 }
 
 model organization_compliance_ai_responses {
-  id                                String                                      @id
-  answer                            Json?
-  justification                     String
-  references                        Json?
-  sources                           Json?
-  additional_context                Json?
-  organization_id                   String
-  organization_compliance_id        String
-  created_at                        DateTime                                    @default(now())
-  updated_at                        DateTime                                    @updatedAt
-  files                             organization_compliance_ai_response_files[]
-  compliance_question_id            String
-  organization_compliance           organization_compliance                     @relation(fields: [organization_compliance_id], references: [id], onDelete: Cascade)
-  organization                      organizations                               @relation(fields: [organization_id], references: [id], onDelete: Cascade)
-  compliance_questions              compliance_questions?                       @relation(fields: [compliance_question_id], references: [id], onDelete: Cascade)
-  compliance_responses              compliance_responses[]
-  deleted                           Boolean                                     @default(false)
+  id                         String                                      @id
+  answer                     Json?
+  justification              String
+  references                 Json?
+  sources                    Json?
+  additional_context         Json?
+  organization_id            String
+  organization_compliance_id String
+  created_at                 DateTime                                    @default(now())
+  updated_at                 DateTime                                    @updatedAt
+  files                      organization_compliance_ai_response_files[]
+  compliance_question_id     String
+  organization_compliance    organization_compliance                     @relation(fields: [organization_compliance_id], references: [id], onDelete: Cascade)
+  organization               organizations                               @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+  compliance_questions       compliance_questions?                       @relation(fields: [compliance_question_id], references: [id], onDelete: Cascade)
+  compliance_responses       compliance_responses[]
+  deleted                    Boolean                                     @default(false)
 
   @@unique([organization_compliance_id, compliance_question_id], name: "orgCompQuestId")
 }
@@ -852,6 +940,15 @@ model organization_compliance_ai_response_files {
   deleted                                Boolean                              @default(false)
 
   @@unique([organization_compliance_id, organization_files_id], name: "orgCompFileId")
+}
+
+enum facility_types {
+  OFFICE
+  LOCATION
+  WAREHOUSE
+  DISTRIBUTION_CENTER
+  MANUFACTURING
+  OTHER
 }
 
 enum integration_service_type {
@@ -883,6 +980,22 @@ enum component_definition_types {
   NAVIGATION_FOOTER
   DATAGRID
   TEST
+}
+
+enum certification_level {
+  Organization
+  Supplier
+  Product
+  Material
+}
+
+enum file_types {
+  CERTIFICATE
+  TEST_RESULTS
+  STATEMENT
+  ASSESSMENT
+  POLICY
+  OTHER
 }
 
 enum emissions_categories {
