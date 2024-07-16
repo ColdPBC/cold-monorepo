@@ -13,6 +13,10 @@ export class ComplianceDefinitionsRepository extends BaseWorker {
     super(ComplianceDefinitionsRepository.name);
   }
 
+  private getCacheKey(orgId: string) {
+    return `organizations:${orgId}:compliance:list`;
+  }
+
   async getComplianceDefinitions() {
     const definitions = (await this.prisma.extended.compliance_definitions.findMany({
       orderBy: {
@@ -36,7 +40,7 @@ export class ComplianceDefinitionsRepository extends BaseWorker {
 
   async getComplianceDefinitionsByOrgId(req: any, bpc: boolean) {
     const start = new Date();
-    const list = await this.cache.get(`organization:${req.organization.id}:compliance:list`);
+    const list = await this.cache.get(this.getCacheKey(req.organization.id));
 
     if (list) {
       if (!bpc) {
@@ -87,29 +91,8 @@ export class ComplianceDefinitionsRepository extends BaseWorker {
     this.logger.info(`getComplianceDefinitionsByOrgId completed for ${req.organization.name} in ${end.getTime() - start.getTime()}ms`);
 
     const filtered = definitions.filter(def => def.visible);
-    await this.cache.set(`organization:${req.organization.id}:compliance:list`, filtered);
+    await this.cache.set(this.getCacheKey(req.organization.id), filtered, { ttl: 60 * 60 * 24 * 7 });
 
     return filtered;
-  }
-
-  async getComplianceSectionsByComplianceName(name: string) {
-    return this.prisma.extended.compliance_definitions.findUnique({
-      where: {
-        name,
-      },
-      include: {
-        compliance_section_groups: {
-          include: {
-            compliance_sections: true,
-          },
-        },
-      },
-    });
-  }
-
-  async deleteComplianceDefinition(name: string, orgId: string) {
-    return this.prisma.extended.compliance_definitions.delete({
-      where: { name },
-    });
   }
 }

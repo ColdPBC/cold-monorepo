@@ -4,11 +4,12 @@ import { Cuid2Generator, GuidPrefixes } from '../../../utility';
 import { PrismaService } from '../../../prisma';
 import { IAuthenticatedUser } from '../../../primitives';
 import { OrganizationComplianceRepository } from '../organization-compliance';
-import { organizations, survey_status_types } from '@prisma/client';
+import { organizations } from '@prisma/client';
+import { CacheService } from '../../../cache';
 
 @Injectable()
 export class OrganizationComplianceStatusesRepository extends BaseWorker {
-  constructor(readonly prisma: PrismaService, readonly orgComRepository: OrganizationComplianceRepository) {
+  constructor(readonly prisma: PrismaService, readonly orgComRepository: OrganizationComplianceRepository, readonly cache: CacheService) {
     super(OrganizationComplianceStatusesRepository.name);
   }
 
@@ -62,6 +63,8 @@ export class OrganizationComplianceStatusesRepository extends BaseWorker {
   }
 
   async createOrganizationComplianceStatus(name: string, type: string, user: IAuthenticatedUser, organization: organizations) {
+    await this.cache.delete(`organizations:${organization.id}:compliance:${name}:status`, true);
+
     this.logger.info(`Creating Compliance Status`, { user, compliance_name: name, organization });
     return this.prisma.extended.organization_compliance_statuses.create({
       // @ts-expect-error - This is a valid type
@@ -71,32 +74,5 @@ export class OrganizationComplianceStatusesRepository extends BaseWorker {
         email: user.coldclimate_claims.email,
       },
     });
-  }
-
-  async updateOrganizationComplianceStatus(statusId: string, type: survey_status_types, organization_compliance_id: string, user: IAuthenticatedUser, organization: organizations) {
-    const status = this.prisma.extended.organization_compliance_statuses.update({
-      where: {
-        id: statusId,
-      },
-      data: {
-        type,
-        email: user.coldclimate_claims.email,
-        organization_compliance_id,
-      },
-    });
-
-    if (!status) {
-      throw new NotFoundException({ organization, user, status_id: statusId }, `Organization Compliance Status not found`);
-    }
-  }
-
-  async deleteOrganizationComplianceStatus(statusId: string, user: IAuthenticatedUser, organization: organizations) {
-    this.prisma.extended.organization_compliance_statuses.delete({
-      where: {
-        id: statusId,
-      },
-    });
-
-    this.logger.info(`Organization Compliance Status deleted`, { user, status_id: statusId, organization });
   }
 }

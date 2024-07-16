@@ -252,7 +252,6 @@ export class ComplianceSectionGroupsRepository extends BaseWorker {
                           coresponding_question: true,
                           compliance_responses: {
                             select: {
-                              id: true,
                               ai_response: true,
                               org_response: true,
                             },

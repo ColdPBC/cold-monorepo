@@ -4,10 +4,11 @@ import { Cuid2Generator, GuidPrefixes } from '../../../utility';
 import { PrismaService } from '../../../prisma';
 import { IAuthenticatedUser } from '../../../primitives';
 import { organizations } from '@prisma/client';
+import { CacheService } from '../../../cache';
 
 @Injectable()
 export class OrganizationComplianceRepository extends BaseWorker {
-  constructor(readonly prisma: PrismaService) {
+  constructor(readonly prisma: PrismaService, readonly cacheService: CacheService) {
     super(OrganizationComplianceRepository.name);
   }
 
@@ -168,7 +169,6 @@ export class OrganizationComplianceRepository extends BaseWorker {
                       order: true,
                       compliance_responses: {
                         select: {
-                          id: true,
                           ai_response: {
                             select: {
                               id: true,
@@ -207,6 +207,8 @@ export class OrganizationComplianceRepository extends BaseWorker {
 
   async createOrgCompliance(name: string, data: any, user: IAuthenticatedUser, organization: organizations) {
     try {
+      await this.cacheService.delete(`organizations:${organization.id}:compliance:${name}`, true);
+
       data.compliance_definition_name = name;
 
       data.organization_id = organization.id;
@@ -223,6 +225,8 @@ export class OrganizationComplianceRepository extends BaseWorker {
 
   async updateOrgComplianceDefinition(name: string, data: any, user: IAuthenticatedUser, organization: organizations) {
     try {
+      await this.cacheService.delete(`organizations:${organization.id}:compliance:${name}`, true);
+
       const userResponse = await this.prisma.extended.organization_compliance.update({
         where: {
           orgIdCompNameKey: {
@@ -242,6 +246,8 @@ export class OrganizationComplianceRepository extends BaseWorker {
 
   async deleteOrgComplianceDefinition(name: string, user: IAuthenticatedUser, organization: organizations) {
     try {
+      await this.cacheService.delete(`organizations:${organization.id}:compliance:${name}`, true);
+
       return this.prisma.extended.organization_compliance.delete({
         where: {
           orgIdCompNameKey: {

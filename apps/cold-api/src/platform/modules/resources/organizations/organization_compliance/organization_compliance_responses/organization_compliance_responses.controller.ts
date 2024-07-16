@@ -216,8 +216,8 @@ export class OrganizationComplianceResponsesController {
   //@CacheTTL(50)
   @Get('responses/counts')
   @Roles(...allRoles)
-  async getComplianceResponsesCounts(@Param('name') name: string, @Req() req: any) {
-    const response = await this.organizationComplianceResponsesService.findAllByCompliance(name, req, { onlyCounts: true });
+  async getComplianceResponsesCounts(@Param('name') name: string, @Req() req: any, @Query('bpc') bpc: boolean) {
+    const response = await this.organizationComplianceResponsesService.findAllByCompliance(name, req, { onlyCounts: true, bpc });
     // return response.counts;
     return response;
   }

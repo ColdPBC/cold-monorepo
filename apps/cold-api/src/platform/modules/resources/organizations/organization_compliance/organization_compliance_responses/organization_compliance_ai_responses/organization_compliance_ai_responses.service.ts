@@ -7,27 +7,27 @@ export class OrganizationComplianceAiResponsesService extends BaseWorker {
   constructor(readonly complianceAiResponsesRepository: ComplianceAiResponsesRepository) {
     super(OrganizationComplianceAiResponsesService.name);
   }
-  createAiResponse(orgId: string, complianceName: string, responseData: organization_compliance_ai_responses, user: IAuthenticatedUser) {
-    return this.complianceAiResponsesRepository.createAiResponses(orgId, complianceName, responseData, user);
+  createAiResponse(org: organizations, complianceName: string, responseData: organization_compliance_ai_responses, user: IAuthenticatedUser) {
+    return this.complianceAiResponsesRepository.createAiResponses(org, complianceName, responseData, user);
   }
 
-  findAllAiResponses(orgId: string, complianceName: string, user: IAuthenticatedUser) {
-    return this.complianceAiResponsesRepository.getAiResponses(orgId, complianceName, user);
+  findAllAiResponses(org: organizations, complianceName: string, user: IAuthenticatedUser) {
+    return this.complianceAiResponsesRepository.getAiResponses(org, complianceName, user);
   }
 
-  findOneAiResponse(orgId: string, complianceName: string, id: string, user: IAuthenticatedUser) {
-    return this.complianceAiResponsesRepository.getAiResponse(orgId, complianceName, id, user);
+  findOneAiResponse(org: organizations, complianceName: string, id: string, user: IAuthenticatedUser) {
+    return this.complianceAiResponsesRepository.getAiResponse(org, complianceName, id, user);
   }
 
-  updateAiResponse(orgId: string, complianceName: string, id: string, responseData: organization_compliance_ai_responses, user: IAuthenticatedUser) {
-    return this.complianceAiResponsesRepository.updateAiResponse(orgId, complianceName, id, responseData, user);
+  updateAiResponse(org: organizations, complianceName: string, id: string, responseData: organization_compliance_ai_responses, user: IAuthenticatedUser) {
+    return this.complianceAiResponsesRepository.updateAiResponse(org, complianceName, id, responseData, user);
   }
 
   removeAllAiResponses(organization: organizations, complianceName: string, user: IAuthenticatedUser) {
     return this.complianceAiResponsesRepository.deleteAiResponses(organization, complianceName, user);
   }
 
-  removeAiResponse(orgId: string, complianceName: string, id: string, user: IAuthenticatedUser) {
-    return this.complianceAiResponsesRepository.deleteAiResponse(orgId, complianceName, id, user);
+  removeAiResponse(org: organizations, complianceName: string, id: string, user: IAuthenticatedUser) {
+    return this.complianceAiResponsesRepository.deleteAiResponse(org, complianceName, id, user);
   }
 }

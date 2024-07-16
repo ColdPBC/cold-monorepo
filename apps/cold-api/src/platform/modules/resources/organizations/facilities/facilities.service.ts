@@ -9,20 +9,20 @@ export class FacilitiesService extends BaseWorker {
     super(FacilitiesService.name);
   }
 
-  async getOrganizationFacilities(req: any, orgId: string): Promise<Partial<organization_facilities>[]> {
+  async getOrganizationFacilities(req: any, orgId: string): Promise<organization_facilities[]> {
     const { user } = req;
     try {
       if (!user.isColdAdmin && user.coldclimate_claims.org_id !== orgId)
         throw new UnprocessableEntityException(`${user.coldclimate_claims.email} is ${user.isColdAdmin ? 'Cold:Admin' : 'not Cold:Admin'} bug is attempting to access ${orgId}.`);
 
-      const facilities = await this.prisma.extended.organization_facilities.findMany({
+      const facilities = (await this.prisma.extended.organization_facilities.findMany({
         where: {
           organization_id: orgId,
         },
         include: {
-          organizations: true,
+          organization: true,
         },
-      });
+      })) as unknown as organization_facilities[];
 
       if (!facilities) throw new NotFoundException(`Facilities not found for ${orgId}`);
 
@@ -66,7 +66,7 @@ export class FacilitiesService extends BaseWorker {
           country: body.country || 'US',
         },
         include: {
-          organizations: true,
+          organization: true,
         },
       })) as unknown as organization_facilities;
 
