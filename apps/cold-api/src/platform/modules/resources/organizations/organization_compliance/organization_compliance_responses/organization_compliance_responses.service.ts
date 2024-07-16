@@ -8,7 +8,7 @@ export class OrganizationComplianceResponsesService extends BaseWorker {
   }
 
   upsert(name: string, sgId: string, sId: string, qId: string, complianceResponseData: any, req: any) {
-    return this.repository.upsertComplianceResponse(req.organization, name, sgId, sId, qId, req.user, complianceResponseData);
+    return this.repository.updateComplianceResponse(req.organization, name, sgId, sId, qId, req.user, complianceResponseData);
   }
 
   async findAllByCompliance(name: string, req: any, options?: ComplianceResponseOptions) {
@@ -79,7 +79,7 @@ export class OrganizationComplianceResponsesService extends BaseWorker {
   }
 
   deleteReponseByType(name: string, sgId: string, sId: string, qId: string, req: any, type) {
-    return this.repository.deleteComplianceResponses(req.organization, name, sgId, sId, qId, req.user, type);
+    return this.repository.deleteComplianceResponse(req.organization, name, sgId, sId, qId, req.user, type);
   }
   remove(id: number) {
     return `This action removes a #${id} organizationComplianceResponse`;
