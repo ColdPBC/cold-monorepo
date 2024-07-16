@@ -1,3 +1,10 @@
+## [1.294.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.294.0...v1.294.1) (2024-07-16)
+
+
+### Bug Fixes
+
+* Deprecate compliance-definitions.findOrgCompliances() method and comment out cache set functionality ([2b30bd4](https://github.com/ColdPBC/cold-monorepo/commit/2b30bd4b2abdb418a79aacb8ac8fa8af94b3722c))
+
 # [1.294.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.293.0...v1.294.0) (2024-07-16)
 
 
