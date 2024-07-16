@@ -120,7 +120,6 @@ export class ComplianceResponsesRepository extends BaseWorker {
             organization_id: org.id,
           },
           select: {
-            id: true,
             org_response: {
               select: {
                 id: true,
@@ -136,7 +135,6 @@ export class ComplianceResponsesRepository extends BaseWorker {
                 references: options?.references,
               },
             },
-            deleted: true,
           },
         },
         question_summary: true,
@@ -375,7 +373,14 @@ export class ComplianceResponsesRepository extends BaseWorker {
     if (options?.bpc) {
       await this.cacheService.delete(this.getCacheKey(org, compliance_definition_name), true);
     } else {
-      const scoredCompliance = await this.cacheService.get(this.getCacheKey(org, compliance_definition_name, options));
+      const key = this.getCacheKey(org, compliance_definition_name, options);
+      const scoredCompliance = await this.cacheService.get(key);
+
+      if (!scoredCompliance) {
+        options ? (options.bpc = true) : (options = { bpc: true });
+        return this.getScoredComplianceQuestionsByName(org, compliance_definition_name, user, options);
+      }
+
       this.logger.info(`Cache hit for ${org.name}: ${compliance_definition_name} in ${new Date().getTime() - start.getTime()}ms`, { compliance_definition_name });
 
       return scoredCompliance;
@@ -412,7 +417,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
         });
       }
 
-      const response = await this.prisma.extended.organization_compliance.findUnique({
+      const query = {
         where: {
           orgIdCompNameKey: {
             organization_id: org.id,
@@ -428,7 +433,8 @@ export class ComplianceResponsesRepository extends BaseWorker {
             },
           },
         },
-      });
+      };
+      const response = await this.prisma.extended.organization_compliance.findUnique(query);
 
       if (!response) {
         throw new NotFoundException(`No Compliance Found For ${org.name}`);
@@ -447,7 +453,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
         compliance_definition_name,
       });
 
-      this.cacheService.set(this.getCacheKey(org, compliance_definition_name, options), scored, { ttl: 60 * 60 * 24 });
+      await this.cacheService.set(this.getCacheKey(org, compliance_definition_name, options), scored, { ttl: 60 * 60 * 24 });
 
       return scored;
     } catch (error) {
@@ -606,7 +612,6 @@ export class ComplianceResponsesRepository extends BaseWorker {
                                 organization_id: org.id,
                               },
                               select: {
-                                id: true,
                                 ai_response: {
                                   select: {
                                     id: true,
@@ -765,11 +770,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
                               additional_context: true,
                               question_bookmarks: options.bookmarks ? this.getBookmarkQuery(user.coldclimate_claims.email) : false,
                               compliance_responses: {
-                                where: {
-                                  id,
-                                },
                                 select: {
-                                  id: true,
                                   org_response: {
                                     select: {
                                       id: true,
@@ -852,7 +853,6 @@ export class ComplianceResponsesRepository extends BaseWorker {
       throw error;
     }
   }
-
 
   async deleteComplianceResponse(org: organizations, compliance_definition_name: string, sgId: string, sId: string, qId: string, user: IAuthenticatedUser, type: string = 'ai') {
     await this.cacheService.delete(this.getCacheKey(org, compliance_definition_name), true);
