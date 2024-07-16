@@ -23,6 +23,14 @@ export function getSidebarMock() {
           route: '/compliance',
         },
         {
+          key: 'suppliers_key',
+          icon: {
+            name: 'ColdSuppliersNavIcon',
+          },
+          label: 'Suppliers',
+          route: '/suppliers',
+        },
+        {
           key: 'assessments_key',
           icon: {
             name: 'ColdJourneyIcon',
@@ -43,7 +51,6 @@ export function getSidebarMock() {
           icon: {
             name: 'ColdReportIcon',
           },
-          label: 'Reports',
           items: [
             {
               key: 'reports_carbon_footprint_key',
@@ -51,6 +58,7 @@ export function getSidebarMock() {
               route: '/reports/carbon_footprint',
             },
           ],
+          label: 'Reports',
         },
         {
           key: 'documents_key',
@@ -84,6 +92,6 @@ export function getSidebarMock() {
       ],
     },
     created_at: '2023-09-11T17:17:02.295Z',
-    updated_at: '2024-02-12T10:49:58.323Z',
+    updated_at: '2024-03-18T17:45:23.188Z',
   };
 }
