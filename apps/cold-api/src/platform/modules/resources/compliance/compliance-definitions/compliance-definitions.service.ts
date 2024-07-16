@@ -587,6 +587,8 @@ export class ComplianceDefinitionService extends BaseWorker {
       }*/
     }
 
+    this.logger.warn('compliance-definitions.findOrgCompliances() IS DEPRECATED', { organization: req.organization, user: req.user });
+
     const orgCompliances = (await this.prisma.organization_compliances_old.findMany({
       where: {
         organization_id: req.organization.id,
@@ -606,7 +608,7 @@ export class ComplianceDefinitionService extends BaseWorker {
         compliance.compliance_definition.surveys = compliance.surveys_override;
       }
     });
-    await this.cache.set(`organizations:${req.organization.id}:compliance:${name}:legacy_org_compliance`, orgCompliances, { update: true });
+    //await this.cache.set(`organizations:${req.organization.id}:compliance:${name}:legacy_org_compliance`, orgCompliances, { update: true });
 
     return orgCompliances;
   }
