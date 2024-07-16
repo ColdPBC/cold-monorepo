@@ -1,3 +1,13 @@
+# [1.292.0-cold-00000.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.292.0-cold-00000.1...v1.292.0-cold-00000.2) (2024-07-16)
+
+
+### Features
+
+* add bpc query parameter to getComplianceResponsesCounts ([e37ebb6](https://github.com/ColdPBC/cold-monorepo/commit/e37ebb67cc96458713b20fe2434703d7a817a184))
+* Add new SQL view for compliance response ([5b3f8f3](https://github.com/ColdPBC/cold-monorepo/commit/5b3f8f3b4be041856af4641f01aef6181793ea43))
+* Add supplier boolean to organization_facilities table ([0190a3c](https://github.com/ColdPBC/cold-monorepo/commit/0190a3caa657361385bea090c0df8ae1dda56c98))
+* Drop compliance_responses table in Prisma ([176a3c5](https://github.com/ColdPBC/cold-monorepo/commit/176a3c531daf42ab81165f8b8d587489baedf858))
+
 # [1.292.0-cold-00000.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.291.0...v1.292.0-cold-00000.1) (2024-07-15)
 
 
