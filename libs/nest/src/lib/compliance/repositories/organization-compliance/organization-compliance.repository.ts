@@ -169,7 +169,6 @@ export class OrganizationComplianceRepository extends BaseWorker {
                       order: true,
                       compliance_responses: {
                         select: {
-                          id: true,
                           ai_response: {
                             select: {
                               id: true,
