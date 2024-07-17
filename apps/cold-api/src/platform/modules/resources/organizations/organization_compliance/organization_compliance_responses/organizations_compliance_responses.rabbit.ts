@@ -1,10 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import { BaseWorker, ComplianceQuestionsRepository, ComplianceSectionGroupsRepository, MqttService } from '@coldpbc/nest';
+import { BaseWorker, ComplianceQuestionsRepository, ComplianceResponsesRepository, ComplianceSectionGroupsRepository, MqttService } from '@coldpbc/nest';
 import { RabbitRPC } from '@golevelup/nestjs-rabbitmq';
 
 @Injectable()
 export class OrganizationComplianceResponseRabbit extends BaseWorker {
-  constructor(readonly repository: ComplianceQuestionsRepository, readonly groupList: ComplianceSectionGroupsRepository, readonly mqtt: MqttService) {
+  constructor(
+    readonly repository: ComplianceQuestionsRepository,
+    readonly responseRepository: ComplianceResponsesRepository,
+    readonly groupList: ComplianceSectionGroupsRepository,
+    readonly mqtt: MqttService,
+  ) {
     super(OrganizationComplianceResponseRabbit.name);
   }
 
@@ -25,7 +30,8 @@ export class OrganizationComplianceResponseRabbit extends BaseWorker {
       compliance_section_id: data.compliance_section_id,
       organization_id: data.organization.id,
     });
-
-    this.mqtt.replyTo(msg.data.reply_to, sections);*/
+*/
+    const response = await this.responseRepository.getScoredComplianceQuestionsByName(data.organization, data.compliance_set, data.user, { bpc: true });
+    this.mqtt.replyTo(msg.data.reply_to, response);
   }
 }
