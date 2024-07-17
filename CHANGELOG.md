@@ -1,3 +1,10 @@
+# [1.295.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.294.1...v1.295.0) (2024-07-17)
+
+
+### Features
+
+* Update organization compliance response Rabbit processing ([19bf2d6](https://github.com/ColdPBC/cold-monorepo/commit/19bf2d64d19cfb176c5b0a8f47af6ac554b19a54))
+
 ## [1.294.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.294.0...v1.294.1) (2024-07-16)
 
 
