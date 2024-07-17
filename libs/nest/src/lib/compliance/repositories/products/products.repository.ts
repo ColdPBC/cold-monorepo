@@ -1,11 +1,12 @@
-import { BadRequestException, Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
-import { BaseWorker } from '../../worker';
-import { PrismaService } from '../../prisma';
-import { IAuthenticatedUser } from '../../primitives';
+import { BadRequestException, Global, Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
+import { BaseWorker } from '../../../worker';
+import { PrismaService } from '../../../prisma';
+import { IAuthenticatedUser } from '../../../primitives';
 import { organizations } from '@prisma/client';
 import { Cuid2Generator, GuidPrefixes } from '@coldpbc/nest';
 
 @Injectable()
+@Global()
 export class ProductsRepository extends BaseWorker {
   constructor(readonly prisma: PrismaService) {
     super(ProductsRepository.name);
@@ -41,7 +42,7 @@ export class ProductsRepository extends BaseWorker {
     data.id = new Cuid2Generator(GuidPrefixes.OrganizationProduct).scopedId;
     data.organization_id = org.id;
 
-    const product = this.prisma.extended.organization_products.create({
+    const product = this.prisma.organization_products.create({
       data: data,
     });
 
@@ -56,7 +57,7 @@ export class ProductsRepository extends BaseWorker {
       d.organization_id = org.id;
       return d;
     });
-    const products = this.prisma.extended.organization_products.createMany({
+    const products = this.prisma.organization_products.createMany({
       data: data,
     });
     this.logger.log(`Organization products created`, { organization: org, user, products });
@@ -65,7 +66,7 @@ export class ProductsRepository extends BaseWorker {
   }
 
   async updateProduct(org: organizations, user: IAuthenticatedUser, filters: { id?: string; name?: string }, data: any) {
-    const product = this.prisma.extended.organization_products.update({
+    const product = this.prisma.organization_products.update({
       where: {
         organization_id: org.id,
         id: filters.id,
@@ -114,7 +115,7 @@ export class ProductsRepository extends BaseWorker {
       throw new BadRequestException('Must provide id or name');
     }
 
-    return this.prisma.extended.organization_products.delete({
+    return this.prisma.organization_products.delete({
       where: {
         id: filters.id,
         name: filters.name,
