@@ -16,16 +16,16 @@ export class OrganizationComplianceResponseRabbit extends BaseWorker {
   })
   async processRPCMessages(msg): Promise<any> {
     const data = msg.data as any;
-    const groups = await this.groupList.getSectionGroupListByOrgCompliance(data.organization, data.compliance_set, data.user);
+    //const groups = await this.groupList.getSectionGroupListByOrgCompliance(data.organization, data.compliance_set, data.user);
 
-    this.mqtt.replyTo(`ui/${process.env.NODE_ENV}/${data.organization.id}/${data.compliance_set}`, groups);
+    // this.mqtt.replyTo(`ui/${process.env.NODE_ENV}/${data.organization.id}/${data.compliance_set}`, groups);
 
     //TODO: Deprecate this
-    const sections = await this.repository.getFilteredQuestionList({
+    /* const sections = await this.repository.getFilteredQuestionList({
       compliance_section_id: data.compliance_section_id,
       organization_id: data.organization.id,
     });
 
-    this.mqtt.replyTo(msg.data.reply_to, sections);
+    this.mqtt.replyTo(msg.data.reply_to, sections);*/
   }
 }

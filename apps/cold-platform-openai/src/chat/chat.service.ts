@@ -1411,7 +1411,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
     const sectionKey = typeof section === 'string' ? section : section['key'];
     const itemKey = typeof item === 'string' ? item : item['key'];
 
-    if (!exists || !exists.data.survey) {
+    if (!exists || !exists.data.payload.compliance) {
       this.logger.warn(`Job ${job.id} no longer found in queue; will not process question ${sectionKey}:${itemKey}`);
       //await this.cache.delete(`jobs:${job.name}:${organization.id}:${job.data.payload.compliance.compliance_id}`);
       return true;

@@ -246,7 +246,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
       this.logger.info(`No qualifying docs found with score greater than ${minScore}`, {
         message,
         minScore,
-        docs: matches,
+        docs: matches.length,
         topk: 5,
         namespace,
         index: indexDetails.indexName,
@@ -254,7 +254,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
     } else {
       this.logger.info('Retrieved docs from index', {
         message,
-        docs: qualifyingDocs,
+        docs: qualifyingDocs.length,
         topK: 5,
         namespace,
         index: indexDetails.indexName,
