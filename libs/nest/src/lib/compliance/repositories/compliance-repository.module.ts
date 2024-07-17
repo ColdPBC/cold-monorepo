@@ -17,12 +17,14 @@ import { ComplianceNotesRepository } from './compliance-notes';
 import { ComplianceNoteLinksRepository } from './compliance-note-links';
 import { ComplianceNoteFilesRepository } from './compliance-note-files';
 import { OrganizationsRepository } from '../../organizations';
+import { ProductsRepository } from './products';
 
 @Global()
 @Module({
   imports: [PrismaModule, ColdCacheModule.forRootAsync(), forwardRef(() => ScoringModule), forwardRef(() => FilteringModule)],
   providers: [
     OrganizationsRepository,
+    ProductsRepository,
     ComplianceSectionsRepository,
     ComplianceSectionGroupsRepository,
     ComplianceQuestionsRepository,
@@ -54,6 +56,7 @@ import { OrganizationsRepository } from '../../organizations';
     ComplianceNotesRepository,
     ComplianceNoteLinksRepository,
     ComplianceNoteFilesRepository,
+    ProductsRepository,
   ],
 })
 export class ComplianceRepositoryModule {}

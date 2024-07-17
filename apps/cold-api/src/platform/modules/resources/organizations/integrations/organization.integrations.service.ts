@@ -100,7 +100,7 @@ export class OrganizationIntegrationsService extends BaseWorker {
       if (locId) {
         facility = org.facilities.find(l => l.id === locId);
       } else {
-        facility = org.facilities.find(l => l.address === body.metadata?.address);
+        facility = org.facilities.find(l => l.address_line_1 === body.metadata?.address);
       }
 
       if (!facility) {

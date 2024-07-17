@@ -57,10 +57,10 @@ export class FacilitiesService extends BaseWorker {
         data: {
           id: this.cuid2.generate().scopedId,
           name: body.name || body.address,
-          address: body.address,
+          address_line_1: body.address,
           address_line_2: body.address_line_2,
           city: body.city,
-          state: body.state,
+          state_province: body.state,
           postal_code: body.postal_code,
           organization_id: orgId,
           country: body.country || 'US',

@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+import process from 'process';
 import { Cuid2Generator, GuidPrefixes } from '../../src/lib/utility';
 
 const prisma = new PrismaClient();
@@ -12,9 +13,6 @@ const complianceDefSeeds = [
     surveys: ['one_percent_for_planet_DEMO'],
     title: '1% for the Planet',
     image_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/complianceBackgroundImages/rei.png',
-    metadata: {
-      term: 'annual',
-    },
     order: 0,
     visible: true,
   },
@@ -24,9 +22,6 @@ const complianceDefSeeds = [
     surveys: ['b_corp_2024'],
     title: 'B Corp',
     image_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/complianceBackgroundImages/rei.png',
-    metadata: {
-      term: 'every_three_years',
-    },
     order: 3,
     visible: true,
   },
@@ -36,9 +31,6 @@ const complianceDefSeeds = [
     surveys: ['b_corp_2024'],
     title: 'Amazon',
     image_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/complianceBackgroundImages/rei.png',
-    metadata: {
-      term: 'annual',
-    },
     order: 2,
     visible: true,
   },
@@ -47,9 +39,6 @@ const complianceDefSeeds = [
     logo_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/compliance_svgs/oia_logo.svg',
     surveys: ['oia_climate_report_2023'],
     title: 'OIA Climate Action Corps Progress Report 2023',
-    metadata: {
-      term: 'annual',
-    },
     image_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/complianceBackgroundImages/rei.png',
     order: 4,
     visible: true,
@@ -60,10 +49,6 @@ const complianceDefSeeds = [
     surveys: ['rei_pia_2024'],
     title: 'REI Product Impact Assessment 2024',
     image_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/complianceBackgroundImages/rei.png',
-    metadata: {
-      term: 'annual',
-      due_date: '2024-03-29T00:00:00-05:00',
-    },
     order: 5,
     visible: true,
   },
@@ -76,7 +61,6 @@ const prodSeeds = [
     surveys: ['b_corp_2024'],
     title: 'B Corp',
     image_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/complianceBackgroundImages/rei.png',
-    metadata: {},
     order: 1,
     visible: false,
   },
@@ -87,7 +71,6 @@ const prodSeeds = [
     title: 'OIA Climate Action Corps Progress Report 2023',
     image_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/complianceBackgroundImages/rei.png',
     order: 2,
-    metadata: {},
     visible: true,
   },
   {
@@ -97,10 +80,6 @@ const prodSeeds = [
     title: 'REI Product Impact Assessment 2024',
     image_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/complianceBackgroundImages/rei.png',
     order: 3,
-    metadata: {
-      term: 'annual',
-      due_date: 'March 29th 2024',
-    },
     visible: true,
   },
 ];
@@ -119,8 +98,9 @@ export async function seedComplianceDefinitions() {
           where: {
             name: seed.name,
           },
-          update: {},
+          update: { ...seed },
           create: {
+            id: new Cuid2Generator(GuidPrefixes.ComplianceDefinition).scopedId,
             ...seed,
             updated_at: new Date(),
           },
@@ -137,9 +117,7 @@ export async function seedComplianceDefinitions() {
           where: {
             name: seed.name,
           },
-          update: {
-            ...seed,
-          },
+          update: { ...seed },
           create: {
             id: new Cuid2Generator(GuidPrefixes.ComplianceDefinition).scopedId,
             ...seed,
