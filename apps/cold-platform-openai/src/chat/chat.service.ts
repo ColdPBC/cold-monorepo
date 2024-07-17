@@ -1246,9 +1246,9 @@ export class ChatService extends BaseWorker implements OnModuleInit {
 
           const references = await this.filterService.filterReferences(response.references);
 
-          await this.cache.delete(`/compliance/${job.data.payload?.compliance?.compliance_definition_name}/organizations/${organization.id}/responses/counts`);
+          await this.cache.delete(this.complianceResponsesRepository.getCacheKey(organization, job.data.payload?.compliance?.compliance_definition_name), true);
 
-          const ai_response = await this.prisma.organization_compliance_ai_responses.upsert({
+          await this.prisma.organization_compliance_ai_responses.upsert({
             where: {
               orgCompQuestId: {
                 organization_compliance_id: job.data.payload?.compliance?.id,
@@ -1304,7 +1304,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
             }
           };
 */
-          await this.prisma.compliance_responses.upsert({
+          /*await this.prisma.compliance_responses.upsert({
             where: {
               orgCompQuestId: {
                 organization_compliance_id: job.data.payload?.compliance?.id,
@@ -1329,19 +1329,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
               organization_compliance_id: job.data.payload.compliance.id,
               organization_compliance_ai_response_id: ai_response.id,
             },
-          });
-
-          const payload = {
-            reply_to: `ui/${process.env.NODE_ENV}/${organization.id}/${job.data?.payload?.compliance?.compliance_definition_name}/${section.compliance_section_group_id}/${section.id}`,
-            resource: '',
-            compliance_section_group_id: `${section.compliance_section_group_id}`,
-            compliance_section_id: `${section.compliance_section_id}`,
-            method: 'GET',
-            compliance_set_name: 'b_corp_2024',
-            user: user,
-            org_id: `${job.data.payload?.compliance.compliance_definition_name}`,
-            token: job.data?.payload?.token,
-          }; //this.mqtt.replyTo(payload.reply_to, payload);
+          });*/
 
           // publish the response to the rabbit queue
           await this.rabbit.publish(`cold.core.api.compliance_responses`, {
@@ -1353,7 +1341,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
               user: user,
               compliance_set: job.data.payload?.compliance.compliance_definition_name,
               token: job.data?.payload?.token,
-              reply_to: payload.reply_to,
+              reply_to: `ui/${process.env.NODE_ENV}/${organization.id}/${job.data?.payload?.compliance?.compliance_definition_name}/${section.compliance_section_group_id}/${section.id}`,
             },
             from: 'cold.platform.openai',
           });

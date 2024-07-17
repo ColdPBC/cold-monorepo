@@ -40,7 +40,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
     super(ComplianceResponsesRepository.name);
   }
 
-  private getCacheKey(org: organizations, name: string, options?: ComplianceResponseOptions) {
+  getCacheKey(org: organizations, name: string, options?: ComplianceResponseOptions) {
     return options
       ? `organizations:${org.id}:compliance:${name}:responses:${options.responses}:references:${options.references}:bookmarks:${options.bookmarks}:take:${options.take}:skip:${options.skip}`
       : `organizations:${org.id}:compliance:${name}:responses`;
@@ -233,7 +233,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
       }
 
       if (orgResponseEntity || aiResponseEntity) {
-        await this.upsertComplianceResponse(start, ai_response, qId, sId, sgId, org, compliance, aiResponseEntity, orgResponseEntity, user, user_response);
+        //await this.upsertComplianceResponse(start, ai_response, qId, sId, sgId, org, compliance, aiResponseEntity, orgResponseEntity, user, user_response);
       }
 
       this.logger.info(`Upserted response for ${org.name}: ${compliance.compliance_definition_name}`, {
