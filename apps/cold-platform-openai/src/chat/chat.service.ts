@@ -26,7 +26,7 @@ import { ChatCompletionMessageParam } from 'openai/resources/chat/completions';
 import { RecordMetadata, ScoredPineconeRecord } from '@pinecone-database/pinecone';
 import { FPSession, FreeplayService } from '../freeplay/freeplay.service';
 import { FormattedPrompt } from 'freeplay/thin';
-import { compliance_sections } from '@prisma/client';
+import { compliance_sections, organizations } from '@prisma/client';
 
 @Injectable()
 export class ChatService extends BaseWorker implements OnModuleInit {
@@ -1406,15 +1406,18 @@ export class ChatService extends BaseWorker implements OnModuleInit {
    * @param item
    * @private
    */
-  private async isDuplicateOrCanceled(organization, job: Job, section: string, item: string) {
+  private async isDuplicateOrCanceled(organization: organizations, job: Job, section: any, item: any) {
     const exists = await this.queue.getJob(job.id);
+    const sectionKey = typeof section === 'string' ? section : section['key'];
+    const itemKey = typeof item === 'string' ? item : item['key'];
+
     if (!exists || !exists.data.survey) {
-      //this.logger.warn(`Job ${job.id} no longer found in queue; will not process question ${section}:${item}`);
+      this.logger.warn(`Job ${job.id} no longer found in queue; will not process question ${sectionKey}:${itemKey}`);
       //await this.cache.delete(`jobs:${job.name}:${organization.id}:${job.data.payload.compliance.compliance_id}`);
       return true;
     }
 
-    const jobs = (await this.cache.get(`organizations:${job.data.organization.id}:jobs:${job.name}:${job.data.payload.compliance.compliance_id}`)) as number[];
+    const jobs = (await this.cache.get(`organizations:${organization.id}:jobs:${job.name}:${job.data.payload.compliance.compliance_id}`)) as number[];
 
     if (!jobs) {
       return false;
@@ -1432,7 +1435,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
 
     const currentJob = await this.queue.getJob(job.id);
     if (!currentJob) {
-      this.logger.warn(`Job ${job.id} n'o longer found in queue; will not process question ${section}:${item}`);
+      this.logger.warn(`Job ${job.id} no longer found in queue; will not process question ${section}:${item}`);
       return true;
     }
 
