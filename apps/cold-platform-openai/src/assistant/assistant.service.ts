@@ -334,7 +334,7 @@ export class AssistantService extends BaseWorker implements OnModuleInit {
   }
 
   private async isDuplicateOrCanceled(organization, job: Job, section: string, item: string) {
-    const jobs = (await this.cache.get(`jobs:${job.name}:${organization.id}:${job.data.payload.compliance.compliance_id}`)) as number[];
+    const jobs = (await this.cache.get(`organizations:${job.data.organization.id}:jobs:${job.name}:${job.data.payload.compliance.compliance_id}`)) as number[];
 
     if (!jobs) {
       return false;

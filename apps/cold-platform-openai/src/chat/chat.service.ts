@@ -1409,12 +1409,12 @@ export class ChatService extends BaseWorker implements OnModuleInit {
   private async isDuplicateOrCanceled(organization, job: Job, section: string, item: string) {
     const exists = await this.queue.getJob(job.id);
     if (!exists || !exists.data.survey) {
-      this.logger.warn(`Job ${job.id} no longer found in queue; will not process question ${section}:${item}`);
-      await this.cache.delete(`jobs:${job.name}:${organization.id}:${job.data.payload.compliance.compliance_id}`);
+      //this.logger.warn(`Job ${job.id} no longer found in queue; will not process question ${section}:${item}`);
+      //await this.cache.delete(`jobs:${job.name}:${organization.id}:${job.data.payload.compliance.compliance_id}`);
       return true;
     }
 
-    const jobs = (await this.cache.get(`jobs:${job.name}:${organization.id}:${job.data.payload.compliance.compliance_id}`)) as number[];
+    const jobs = (await this.cache.get(`organizations:${job.data.organization.id}:jobs:${job.name}:${job.data.payload.compliance.compliance_id}`)) as number[];
 
     if (!jobs) {
       return false;
@@ -1432,7 +1432,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
 
     const currentJob = await this.queue.getJob(job.id);
     if (!currentJob) {
-      this.logger.warn(`Job ${job.id} no longer found in queue; will not process question ${section}:${item}`);
+      this.logger.warn(`Job ${job.id} n'o longer found in queue; will not process question ${section}:${item}`);
       return true;
     }
 
