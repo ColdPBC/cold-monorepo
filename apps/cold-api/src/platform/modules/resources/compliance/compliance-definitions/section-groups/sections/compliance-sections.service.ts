@@ -36,7 +36,6 @@ export class ComplianceSectionsService {
   update(name: string, groupId: string, id: string, sectionData: compliance_sections, user: IAuthenticatedUser) {
     // Set sectionData properties to the provided values
     sectionData.compliance_definition_name = name;
-    sectionData.compliance_section_group_id = groupId;
     sectionData.id = id;
 
     return this.repository.updateSection(name, groupId, id, sectionData, user);

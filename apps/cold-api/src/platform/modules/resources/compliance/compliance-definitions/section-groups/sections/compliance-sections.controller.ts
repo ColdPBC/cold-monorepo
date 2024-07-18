@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Delete, Get, Param, Patch, Post, Query, Req, UseFilters, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, Req, UseFilters, UseGuards } from '@nestjs/common';
 import { ComplianceSectionsService } from './compliance-sections.service';
 import { GeneratorService, HttpExceptionFilter, JwtAuthGuard, Roles, RolesGuard } from '@coldpbc/nest';
 import { coldAdminOnly } from '../../../../_global/global.params';
@@ -72,13 +72,13 @@ export class ComplianceSectionsController {
   })
   update(@Param('name') name: string, @Param('sgId') groupId: string, @Param('sId') id: string, @Body() sectionData: compliance_sections, @Req() user: any) {
     if (sectionData.compliance_section_group_id !== groupId) {
-      throw new BadRequestException('sgId does not match compliance_section_group_id in body');
+      //throw new BadRequestException('sgId does not match compliance_section_group_id in body');
     }
     if (sectionData.compliance_definition_name !== name) {
-      throw new BadRequestException('name does not match compliance_definition_name in body');
+      //throw new BadRequestException('name does not match compliance_definition_name in body');
     }
     if (sectionData.id !== id) {
-      throw new BadRequestException('sId does not match section id in body');
+      //throw new BadRequestException('sId does not match section id in body');
     }
 
     return this.complianceSectionsService.update(name, groupId, id, sectionData, user);
