@@ -4,6 +4,7 @@ import { Home } from './app/home';
 import { ColdContextProvider } from '@coldpbc/providers';
 import { datadogRum } from '@datadog/browser-rum';
 import { datadogLogs } from '@datadog/browser-logs';
+import { StyledEngineProvider } from '@mui/material';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 
@@ -54,7 +55,9 @@ root.render(
         },
       }}
       launchDarklyClientSideId={launchDarklyClientSideId}>
-      <Home />
+      <StyledEngineProvider injectFirst>
+        <Home />
+      </StyledEngineProvider>
     </ColdContextProvider>
   </StrictMode>,
 );
