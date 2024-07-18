@@ -36,6 +36,8 @@ export class ComplianceQuestionsController {
     },
   })
   create(@Param('name') name: string, @Param('sgId') groupId: string, @Param('sId') sId: string, @Body() createComplianceQuestionDto: compliance_questions) {
+    createComplianceQuestionDto.compliance_definition_name = name;
+    createComplianceQuestionDto.compliance_section_id = sId;
     return this.complianceQuestionsService.create(createComplianceQuestionDto);
   }
 
