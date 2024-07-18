@@ -1,201 +1,18 @@
-import {
-  DataGrid,
-  GridColDef,
-  GridColumnMenuContainer,
-  GridColumnMenuFilterItem,
-  GridColumnMenuProps,
-  GridColumnMenuSortItem,
-  GridRenderCellParams,
-  GridTreeNodeWithRender,
-  GridValidRowModel,
-} from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridRenderCellParams, GridTreeNodeWithRender, GridValidRowModel } from '@mui/x-data-grid';
 import { HexColors } from '@coldpbc/themes';
-import { addDays, differenceInDays, subDays } from 'date-fns';
+import { differenceInDays } from 'date-fns';
 import { IconNames } from '@coldpbc/enums';
 import { ColdIcon } from '@coldpbc/components';
 import { createTheme, ThemeProvider } from '@mui/material';
 import { get } from 'lodash';
-import { OwnerState } from '@mui/x-data-grid/components/containers/GridRootStyles';
+import { getClaimsMock, getSupplierMock } from '@coldpbc/mocks';
 
 export const SuppliersDataGrid = () => {
   const certificationStatuses = ['InActive', 'Active', 'Expired', 'Expiring Soon'];
 
-  const supplierData = [
-    {
-      id: 1,
-      name: 'VietWear Garments Co., Ltd.',
-      country: 'Vietnam',
-      certificate_claims: {
-        pfas: {
-          expiration_date: addDays(new Date(), 5).toISOString(),
-        },
-        lead: {
-          expiration_date: null,
-        },
-        phthalate: {
-          expiration_date: null,
-        },
-        bluesign: {
-          expiration_date: addDays(new Date(), 5).toISOString(),
-        },
-      },
-    },
-    {
-      id: 2,
-      name: 'Pritt, Inc.',
-      country: 'China',
-      certificate_claims: {
-        pfas: {
-          expiration_date: addDays(new Date(), 5).toISOString(),
-        },
-        lead: {},
-        phthalate: {
-          expiration_date: addDays(new Date(), 5).toISOString(),
-        },
-        bluesign: {},
-      },
-    },
-    {
-      id: 3,
-      name: 'Smotherman, Inc.',
-      country: 'Vietnam',
-      certificate_claims: {
-        pfas: {
-          expiration_date: addDays(new Date(), 10).toISOString(),
-        },
-        lead: {
-          expiration_date: addDays(new Date(), 70).toISOString(),
-        },
-      },
-    },
-    {
-      id: 4,
-      name: 'Menzie, Inc.',
-      country: 'Vietnam',
-      certificate_claims: {
-        pfas: {
-          expiration_date: addDays(new Date(), 30).toISOString(),
-        },
-        bluesign: {
-          expiration_date: addDays(new Date(), 70).toISOString(),
-        },
-      },
-    },
-    {
-      id: 5,
-      name: 'Want, Inc.',
-      country: 'Vietnam',
-      certificate_claims: {
-        pfas: {
-          expiration_date: addDays(new Date(), 70).toISOString(),
-        },
-        // lead: {
-        //   expiration_date: addDays(new Date(), 5).toISOString(),
-        // },
-        // phthalate: {
-        //   expiration_date: addDays(new Date(), 70).toISOString(),
-        // },
-        bluesign: {
-          expiration_date: subDays(new Date(), 3).toISOString(),
-        },
-      },
-    },
-    {
-      id: 6,
-      name: 'Tattershall, Inc.',
-      country: 'Vietnam',
-      certificate_claims: {
-        // pfas: {
-        //   expiration_date: addDays(new Date(), 5).toISOString(),
-        // },
-        lead: {
-          expiration_date: subDays(new Date(), 30).toISOString(),
-        },
-        phthalate: {
-          expiration_date: subDays(new Date(), 3).toISOString(),
-        },
-        // bluesign: {
-        //   expiration_date: addDays(new Date(), 22).toISOString(),
-        // },
-      },
-    },
-    {
-      id: 7,
-      name: 'Panek, Inc.',
-      country: 'Vietnam',
-      certificate_claims: {
-        pfas: {
-          expiration_date: addDays(new Date(), 60).toISOString(),
-        },
-        lead: {
-          expiration_date: addDays(new Date(), 30).toISOString(),
-        },
-        // phthalate: {
-        //   expiration_date: addDays(new Date(), 5).toISOString(),
-        // },
-        bluesign: {
-          expiration_date: addDays(new Date(), 70).toISOString(),
-        },
-      },
-    },
-    {
-      id: 8,
-      name: 'Faul, Inc.',
-      country: 'Vietnam',
-      certificate_claims: {
-        pfas: {
-          expiration_date: addDays(new Date(), 5).toISOString(),
-        },
-        lead: {
-          expiration_date: addDays(new Date(), 5).toISOString(),
-        },
-        phthalate: {
-          // expiration_date: addDays(new Date(), 5).toISOString(),
-        },
-        bluesign: {
-          expiration_date: addDays(new Date(), 70).toISOString(),
-        },
-      },
-    },
-    {
-      id: 9,
-      name: 'Hushon, Inc.',
-      country: 'Vietnam',
-      certificate_claims: {
-        pfas: {
-          expiration_date: addDays(new Date(), 70).toISOString(),
-        },
-        lead: {
-          expiration_date: addDays(new Date(), 5).toISOString(),
-        },
-        phthalate: {
-          expiration_date: addDays(new Date(), 5).toISOString(),
-        },
-        bluesign: {
-          expiration_date: addDays(new Date(), 70).toISOString(),
-        },
-      },
-    },
-  ];
+  const supplierData = getSupplierMock();
 
-  const certificateClaims = [
-    {
-      name: 'pfas',
-      label: 'PFAS-Test',
-    },
-    {
-      name: 'lead',
-      label: 'Lead-Test',
-    },
-    {
-      name: 'phthalate',
-      label: 'Phthalate-Test',
-    },
-    {
-      name: 'bluesign',
-      label: 'Bluesign',
-    },
-  ];
+  const certificateClaims = getClaimsMock();
 
   const renderCell = (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
     // if the value is null return null
@@ -318,48 +135,6 @@ export const SuppliersDataGrid = () => {
       fontFamily: ['Inter'].join(','),
     },
   });
-
-  const CustomColumnMenuComponent = (props: GridColumnMenuProps & OwnerState) => {
-    const { hideMenu, colDef, color, ...other } = props;
-    return (
-      <GridColumnMenuContainer hideMenu={hideMenu} colDef={colDef} {...other}>
-        <GridColumnMenuSortItem onClick={hideMenu} colDef={colDef!} />
-        <GridColumnMenuFilterItem onClick={hideMenu} colDef={colDef!} />
-      </GridColumnMenuContainer>
-    );
-    // }
-    // if (colDef.field === 'stars') {
-    //   return (
-    //     <StyledGridColumnMenuContainer
-    //       hideMenu={hideMenu}
-    //       colDef={colDef}
-    //       ownerState={{ color }}
-    //       {...other}
-    //     >
-    //       <Box
-    //         sx={{
-    //           width: 127,
-    //           height: 160,
-    //           display: 'flex',
-    //           justifyContent: 'center',
-    //           flexDirection: 'column',
-    //           alignItems: 'center',
-    //         }}
-    //       >
-    //         <StarOutlineIcon sx={{ fontSize: 80 }} />
-    //       </Box>
-    //     </StyledGridColumnMenuContainer>
-    //   );
-    // }
-    // return (
-    //   <StyledGridColumnMenu
-    //     hideMenu={hideMenu}
-    //     colDef={colDef}
-    //     ownerState={{ color }}
-    //     {...other}
-    //   />
-    // );
-  };
 
   return (
     <ThemeProvider theme={darkTheme}>
