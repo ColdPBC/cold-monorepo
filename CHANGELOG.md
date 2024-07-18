@@ -1,3 +1,10 @@
+# [1.297.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.296.0...v1.297.0) (2024-07-18)
+
+
+### Features
+
+* Sort compliance sets by title ([f7fcc5c](https://github.com/ColdPBC/cold-monorepo/commit/f7fcc5c1d53c7ac7f252e4376a9ac0b856a3926f))
+
 # [1.296.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.295.0...v1.296.0) (2024-07-17)
 
 
