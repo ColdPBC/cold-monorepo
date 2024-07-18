@@ -1,3 +1,10 @@
+# [1.298.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.297.0...v1.298.0) (2024-07-18)
+
+
+### Features
+
+* Replace home route with compliance route ([1e984f5](https://github.com/ColdPBC/cold-monorepo/commit/1e984f54f5537e363c0c07313ee0178af63b6f3d))
+
 # [1.297.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.296.0...v1.297.0) (2024-07-18)
 
 
