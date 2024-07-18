@@ -66,7 +66,19 @@ export class ComplianceDefinitionsRepository extends BaseWorker {
 
     if (Array.isArray(definitions) && definitions.length > 0) {
       for (const def of definitions) {
+        const orgComp = await this.prisma.extended.organization_compliance.findFirst({
+          where: {
+            organization_id: req.organization.id,
+            compliance_definition_name: def.name,
+          },
+        });
+
+        if (!orgComp) {
+          continue;
+        }
+
         let raw;
+
         try {
           raw = await this.responses.getScoredComplianceQuestionsByName(req.organization, def.name, req.user, { bpc });
         } catch (e) {
