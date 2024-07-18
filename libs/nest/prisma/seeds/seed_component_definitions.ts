@@ -111,14 +111,6 @@ const seeds: Array<{
     definition: {
       items: [
         {
-          key: 'home_key',
-          icon: {
-            name: 'ColdHomeIcon',
-          },
-          label: 'Home',
-          route: '/home',
-        },
-        {
           key: 'compliance_key',
           icon: {
             name: 'ColdComplianceIcon',
