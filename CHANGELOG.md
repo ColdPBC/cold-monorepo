@@ -1,3 +1,11 @@
+## [1.298.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.298.1...v1.298.2) (2024-07-18)
+
+
+### Bug Fixes
+
+* add checking for organization compliance in compliance-definitions repository ([5c19b12](https://github.com/ColdPBC/cold-monorepo/commit/5c19b12969500a04e8617b03839bf92760bbe304))
+* add checking for organization compliance in compliance-definitions repository ([#503](https://github.com/ColdPBC/cold-monorepo/issues/503)) ([37bf7eb](https://github.com/ColdPBC/cold-monorepo/commit/37bf7eb264a94b8661d72b19fbe7ca9ca65923bd))
+
 ## [1.298.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.298.0...v1.298.1) (2024-07-18)
 
 
