@@ -1,3 +1,10 @@
+## [1.298.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.298.0...v1.298.1) (2024-07-18)
+
+
+### Bug Fixes
+
+* create question / dependency chain flow ([e90c89b](https://github.com/ColdPBC/cold-monorepo/commit/e90c89bcc7d06bb882ea38674a60d7100b927fef))
+
 # [1.298.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.297.0...v1.298.0) (2024-07-18)
 
 
