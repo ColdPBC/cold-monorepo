@@ -1,3 +1,27 @@
+# [1.296.0-cold-903.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.295.0...v1.296.0-cold-903.1) (2024-07-18)
+
+
+### Features
+
+* Add Certification entity ([52cc105](https://github.com/ColdPBC/cold-monorepo/commit/52cc1051e7f773b9a29a31d22372da233f87bfe5))
+* Add Certifications controller ([9c6cce3](https://github.com/ColdPBC/cold-monorepo/commit/9c6cce35e9e8bfb5fa3ef295a970a9e6ee3d8ffa))
+* Add Certifications module ([9dd715c](https://github.com/ColdPBC/cold-monorepo/commit/9dd715c4de9f3823dded021aae9f74a6ea696e6b))
+* Add Certifications Repository in Nest Library ([640fa29](https://github.com/ColdPBC/cold-monorepo/commit/640fa29894db8a8f6484ea766e3014b585b38096))
+* add CertificationsService to handle certifications ([7d6ca57](https://github.com/ColdPBC/cold-monorepo/commit/7d6ca57ab1acde15a80b5ac39f6a79d3c24de017))
+* Add CreateProductDto class ([1f5f96c](https://github.com/ColdPBC/cold-monorepo/commit/1f5f96c011ecf5b12882d633f62e0b65e51f54e8))
+* Add new Product entity file ([8b1622f](https://github.com/ColdPBC/cold-monorepo/commit/8b1622fdc1027661832e3a2b23630945fe273e24))
+* add ProductsController in the organizations module ([04be8ca](https://github.com/ColdPBC/cold-monorepo/commit/04be8ca7b480b8e361f7c5a5debcf638711e5750))
+* Add ProductsRepository in organizations ([ae326c6](https://github.com/ColdPBC/cold-monorepo/commit/ae326c65511e92163988dfd8d870438e936c30af))
+* add ProductsService to platform modules ([3f92816](https://github.com/ColdPBC/cold-monorepo/commit/3f9281677290e267f93dff51fa36e579178490da))
+* Add UpdateProductDto in products module ([d295e32](https://github.com/ColdPBC/cold-monorepo/commit/d295e32c2c493037c99e9d131a1cf1fa52a75102))
+* Added DTOs for creating and updating Certifications ([3e0c98a](https://github.com/ColdPBC/cold-monorepo/commit/3e0c98a44721a8939dcb3387adf484f36e761bb6))
+* Added new compliance types to utility enums ([83d8f77](https://github.com/ColdPBC/cold-monorepo/commit/83d8f77d511a7ec065ca96c6139c2c97f1838b1c))
+* Added new Products module ([2ac4207](https://github.com/ColdPBC/cold-monorepo/commit/2ac42075d4dc1696150fdb7cbe9795ebd2b1278a))
+* Extend PrismaClient and enhance PrismaService ([43b3eea](https://github.com/ColdPBC/cold-monorepo/commit/43b3eea1fa552be07a56bb6e51c19ee06b6d10ff))
+* Migrate organization suppliers to view ([e4a8c06](https://github.com/ColdPBC/cold-monorepo/commit/e4a8c06614ba9a976a82324f7429f38c63d674f7))
+* Moved ProductsRepository under compliance module ([40e813a](https://github.com/ColdPBC/cold-monorepo/commit/40e813a3e8718cac1334b5062c77b8f24ccae75b))
+* Update Prisma migration to remove organization suppliers and related columns ([301f9b5](https://github.com/ColdPBC/cold-monorepo/commit/301f9b5384b4935616eb732f0e4de6d5efc5b761))
+
 # [1.296.0-cold-902.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.295.0...v1.296.0-cold-902.1) (2024-07-17)
 
 
