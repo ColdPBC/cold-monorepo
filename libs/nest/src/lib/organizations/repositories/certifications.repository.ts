@@ -3,7 +3,7 @@ import { BaseWorker } from '../../worker';
 import { PrismaService } from '../../prisma';
 import { IAuthenticatedUser } from '../../primitives';
 import { certifications, organizations } from '@prisma/client';
-import { Cuid2Generator, GuidPrefixes } from '@coldpbc/nest';
+import { Cuid2Generator, GuidPrefixes } from '../../utility';
 
 @Injectable()
 export class CertificationsRepository extends BaseWorker {

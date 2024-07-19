@@ -1,6 +1,6 @@
 import { CallHandler, ExecutionContext, Injectable, NestInterceptor, UnauthorizedException } from '@nestjs/common';
 import { Observable } from 'rxjs';
-import { IAuthenticatedUser } from '@coldpbc/nest';
+import { IAuthenticatedUser } from '../primitives';
 
 @Injectable()
 export class RabbitMetadataInterceptor implements NestInterceptor {

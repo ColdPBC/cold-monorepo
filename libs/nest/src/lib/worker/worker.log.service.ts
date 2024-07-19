@@ -159,4 +159,19 @@ export class WorkerLogger implements LoggerService {
     }
     this.logger.info(typeof message === 'string' ? message : this.redactor.redact(message), this.redactor.redact({ meta: optionalParams, ...this.tags }));
   }
+
+  trace(message: any, optionalParams?: any | any[]): void {
+    const span = tracer.scope().active();
+    const time = new Date().toISOString();
+    const record = { time, message };
+
+    if (span) {
+      tracer.inject(span.context(), formats.LOG, record);
+    }
+
+    if (!optionalParams) {
+      this.logger.data(message, this.context, { ...this.tags });
+    }
+    this.logger.data(typeof message === 'string' ? message : this.redactor.redact(message), this.redactor.redact({ meta: optionalParams, ...this.tags }));
+  }
 }

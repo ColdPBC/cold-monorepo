@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import { createSoftDeleteExtension } from 'prisma-extension-soft-delete';
-import { WorkerLogger } from '@coldpbc/nest';
+import { WorkerLogger } from '../worker';
 import util from 'node:util';
 import { ConfigService } from '@nestjs/config';
 import { INestApplication, Injectable, OnModuleInit } from '@nestjs/common';
@@ -69,7 +69,7 @@ export class ExtendedPrismaClient extends PrismaClient implements OnModuleInit {
 
   constructor(readonly config: ConfigService) {
     super({
-      datasourceUrl: `${config['internalConfig']['DATABASE_URL']}?schema=public&connection_limit=1`,
+      datasourceUrl: `${config['internalConfig']['DATABASE_URL'] ? config['internalConfig']['DATABASE_URL'] : process.env['DATABASE_URL']}?schema=public&connection_limit=1`,
       errorFormat: process.env['NODE_ENV'] === 'development' ? 'pretty' : 'minimal',
       log:
         process.env['NODE_ENV'] === 'development'
