@@ -21,6 +21,7 @@ export class CertificationsController {
     return this.certificationsService.create(req.organization, req.user, createCertificationDto);
   }
 
+  @Roles(...coldAdminOnly)
   @Patch(':id')
   update(@Req() req: any, @Param('id') id: string, @Body() updateCertificationDto: certifications) {
     updateCertificationDto.id = id;
@@ -42,6 +43,7 @@ export class CertificationsController {
     return this.certificationsService.findById(req.organization, req.user, name);
   }
 
+  @Roles(...coldAdminOnly)
   @Delete(':id')
   remove(@Req() req: any, @Param('id') id: string) {
     return this.certificationsService.remove(req.organization, req.user, id);
