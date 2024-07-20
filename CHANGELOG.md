@@ -1,3 +1,21 @@
+# [1.296.0-cold-903.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.296.0-cold-903.1...v1.296.0-cold-903.2) (2024-07-20)
+
+
+### Bug Fixes
+
+* add null check for additional_context in chat service ([35dd286](https://github.com/ColdPBC/cold-monorepo/commit/35dd286f847c6fec16ddfd9cec7ca8a9d00b4ece))
+
+
+### Features
+
+* add '[@ogma](https://github.com/ogma)' packages and update related config files ([1172994](https://github.com/ColdPBC/cold-monorepo/commit/1172994e3f83982330721fb88d83f9c53fab0f7f))
+* Add CertificationsModule to AppModule ([37c7078](https://github.com/ColdPBC/cold-monorepo/commit/37c7078ad16ed578d5ab7def12ec6b296c21c812))
+* Add dev mode to worker log service ([521a1c7](https://github.com/ColdPBC/cold-monorepo/commit/521a1c7e7384a220df537797fbb088670336f819))
+* Added guards, interceptors, and decorators in certifications controller ([f6dc566](https://github.com/ColdPBC/cold-monorepo/commit/f6dc566ba54b61fbf6502ab7e939d677fcfed4d2))
+* Modify certifications schema and add unique migration ([a5b454a](https://github.com/ColdPBC/cold-monorepo/commit/a5b454a37827a0bd317cb49cab1252afb78e44c5))
+* Refactor CertificationsService to use CertificationRepository ([edee10a](https://github.com/ColdPBC/cold-monorepo/commit/edee10a57682b5c7b0d5d2e3ca1825146e96e0b3))
+* Update certifications module in cold-api ([69e1181](https://github.com/ColdPBC/cold-monorepo/commit/69e11819c63cdd94fdfd2707a3c9928815be0176))
+
 # [1.296.0-cold-903.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.295.0...v1.296.0-cold-903.1) (2024-07-18)
 
 
