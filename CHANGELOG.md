@@ -1,3 +1,15 @@
+# [1.296.0-cold-903.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.296.0-cold-903.2...v1.296.0-cold-903.3) (2024-07-20)
+
+
+### Bug Fixes
+
+* Update certifications.repository.ts to improve error handling ([433e822](https://github.com/ColdPBC/cold-monorepo/commit/433e822fcb0ea41d0f7df2549adb2101ee7b652c))
+
+
+### Features
+
+* Add SuppliersRepository in nest lib ([ae8aba0](https://github.com/ColdPBC/cold-monorepo/commit/ae8aba0ab4500594a3827c0221dc45ed9bc239da))
+
 # [1.296.0-cold-903.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.296.0-cold-903.1...v1.296.0-cold-903.2) (2024-07-20)
 
 
