@@ -11,7 +11,7 @@ export class CertificationsRepository extends BaseWorker {
     super(CertificationsRepository.name);
   }
 
-  async createCertification(data: certifications) {
+  async createCertification(org: organizations, user: IAuthenticatedUser, data: certifications) {
     data.id = new Cuid2Generator(GuidPrefixes.Certifications).scopedId;
 
     if (!data.name) {
@@ -33,7 +33,7 @@ export class CertificationsRepository extends BaseWorker {
     return certification;
   }
 
-  async createCertifications(data: certifications[]) {
+  async createCertifications(org: organizations, user: IAuthenticatedUser, data: certifications[]) {
     data = data.map(d => {
       if (!d.name) {
         throw new BadRequestException('Certification name is required');
@@ -56,7 +56,7 @@ export class CertificationsRepository extends BaseWorker {
     return certifications;
   }
 
-  async updateCertification(data: certifications) {
+  async updateCertification(org: organizations, user: IAuthenticatedUser, data: certifications) {
     const certification = this.prisma.extended.certifications.update({
       where: {
         id: data.id,
@@ -81,76 +81,34 @@ export class CertificationsRepository extends BaseWorker {
     return product;
   }
 
-  async findAll(
-    filters?: {
-      id?: string;
-      name?: string;
-    } | null,
-  ) {
+  async findAll() {
     const queryOptions = {
-      where: {
-        ...filters,
-      },
-      select: {
-        id: true,
-        name: true,
-        type: true,
-        logo_url: true,
-        document_url: true,
-        website: true,
-        created_at: true,
-        updated_at: true,
-        certification_claims: {
-          select: {
-            id: true,
-            organization_id: true,
-            certification_id: true,
-            issued_date: true,
-            expiration_date: true,
-            effective_date: true,
-            created_at: true,
-            updated_at: true,
-            deleted: true,
-          },
-        },
+      include: {
+        certification_claims: true,
       },
     };
     const certifications = await this.prisma.extended.certifications.findMany(queryOptions);
 
     if (!certifications) {
-      throw new NotFoundException({ filters }, `No Certifications found`);
+      throw new NotFoundException(`No Certifications found`);
     }
 
     return certifications;
   }
 
-  findOne(user: IAuthenticatedUser, filters?: { name?: string; id?: string; isTest?: boolean }) {
+  findOne(org: organizations, user: IAuthenticatedUser, filters?: { name?: string; id?: string; isTest?: boolean }) {
     if (filters?.id || filters?.name) {
-      return this.prisma.extended.organizations.findUnique({
+      return this.prisma.extended.certifications.findUnique({
         where: {
           id: filters.id,
           name: filters.name,
+        },
+        include: {
+          certification_claims: true,
         },
       });
     } else {
       throw new UnprocessableEntityException({ filters, user }, 'Must provide id or name');
     }
-  }
-
-  remove(org: any, user: IAuthenticatedUser) {
-    if (!org?.id?.includes('org_')) {
-      throw new UnprocessableEntityException({ organization: org, user }, `${org.id} is not a valid organization id`);
-    }
-
-    // don't del cold-climate
-    if (org?.name?.includes('cold-climate')) {
-      throw new BadRequestException({ organization: org, user }, 'cannot delete cold-climate org');
-    }
-
-    return this.prisma.extended.organizations.delete({
-      where: {
-        id: org.id,
-      },
-    });
   }
 }
