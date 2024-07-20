@@ -90,7 +90,7 @@ export class FilteringService extends BaseWorker {
            * If the dependent question does not exist, that question doesn't have a response, therefore the dependency is not met.
            */
           if (!dependentQuestion) {
-            this.logger.info(`Dependent question response not found`, { dependency, dependentQuestion });
+            //this.logger.info(`Dependent question response not found`, { dependency, dependentQuestion });
             continue;
           }
 
