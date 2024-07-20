@@ -1,26 +1,34 @@
 import { Injectable } from '@nestjs/common';
-import { CreateCertificationDto } from './dto/create-certification.dto';
-import { UpdateCertificationDto } from './dto/update-certification.dto';
+import { BaseWorker, IAuthenticatedUser, CertificationsRepository } from '@coldpbc/nest';
+import { certifications, organizations } from '@prisma/client';
 
 @Injectable()
-export class CertificationsService {
-  create(createCertificationDto: CreateCertificationDto) {
-    return 'This action adds a new certification';
+export class CertificationsService extends BaseWorker {
+  constructor(private readonly certificationRepository: CertificationsRepository) {
+    super(CertificationsService.name);
+  }
+
+  create(org: organizations, user: IAuthenticatedUser, createCertificationDto: certifications) {
+    return this.certificationRepository.createCertification(org, user, createCertificationDto);
+  }
+
+  update(org: organizations, user: IAuthenticatedUser, updateCertificationDto: certifications) {
+    return this.certificationRepository.updateCertification(org, user, updateCertificationDto);
   }
 
   findAll() {
-    return `This action returns all certifications`;
+    return this.certificationRepository.findAll();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} certification`;
+  findById(org: organizations, user: IAuthenticatedUser, id: string) {
+    return this.certificationRepository.findOne(org, user, { id });
   }
 
-  update(id: number, updateCertificationDto: UpdateCertificationDto) {
-    return `This action updates a #${id} certification`;
+  findByName(org: organizations, user: IAuthenticatedUser, name: string) {
+    return this.certificationRepository.findOne(org, user, { name });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} certification`;
+  remove(org: organizations, user: IAuthenticatedUser, id: string) {
+    return this.certificationRepository.deleteCertification(org, user, id);
   }
 }
