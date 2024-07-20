@@ -1,15 +1,30 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, UseInterceptors, UseFilters, Req } from '@nestjs/common';
 import { CertificationsService } from './certifications.service';
-import { CreateCertificationDto } from './dto/create-certification.dto';
-import { UpdateCertificationDto } from './dto/update-certification.dto';
+import { coldAdminOnly, HttpExceptionFilter, JwtAuthGuard, OrgUserInterceptor, Roles, RolesGuard } from '@coldpbc/nest';
+import { Span } from 'nestjs-ddtrace';
+import { ApiOAuth2, ApiTags } from '@nestjs/swagger';
+import { certifications } from '@prisma/client';
 
+@Span()
+@UseGuards(JwtAuthGuard, RolesGuard)
+@UseInterceptors(OrgUserInterceptor)
+@ApiOAuth2(['openid', 'email', 'profile'])
+@ApiTags('Certifications')
+@UseFilters(new HttpExceptionFilter(CertificationsController.name))
 @Controller('certifications')
 export class CertificationsController {
   constructor(private readonly certificationsService: CertificationsService) {}
 
+  @Roles(...coldAdminOnly)
   @Post()
-  create(@Body() createCertificationDto: CreateCertificationDto) {
-    return this.certificationsService.create(createCertificationDto);
+  create(@Req() req: any, @Body() createCertificationDto: certifications) {
+    return this.certificationsService.create(req.organization, req.user, createCertificationDto);
+  }
+
+  @Patch(':id')
+  update(@Req() req: any, @Param('id') id: string, @Body() updateCertificationDto: certifications) {
+    updateCertificationDto.id = id;
+    return this.certificationsService.update(req.org, req.user, updateCertificationDto);
   }
 
   @Get()
@@ -18,17 +33,17 @@ export class CertificationsController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.certificationsService.findOne(+id);
+  findById(@Req() req: any, @Param('id') id: string) {
+    return this.certificationsService.findById(req.organization, req.user, id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCertificationDto: UpdateCertificationDto) {
-    return this.certificationsService.update(+id, updateCertificationDto);
+  @Get(':name')
+  findByName(@Req() req: any, @Param('name') name: string) {
+    return this.certificationsService.findById(req.organization, req.user, name);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.certificationsService.remove(+id);
+  remove(@Req() req: any, @Param('id') id: string) {
+    return this.certificationsService.remove(req.organization, req.user, id);
   }
 }
