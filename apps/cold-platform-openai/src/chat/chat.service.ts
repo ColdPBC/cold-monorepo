@@ -1195,7 +1195,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
             });
           }
           // if there is additional context, create a new run for it
-          if (Object.keys(item.additional_context).length > 0) {
+          if (item.additional_context && Object.keys(item.additional_context).length > 0) {
             if (item.additional_context.value) {
               this.logger.info(`Skipping ${section.key}.${item.key}.additional_context; it has already been answered`, {
                 section: section,
