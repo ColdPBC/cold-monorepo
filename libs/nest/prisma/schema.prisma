@@ -353,11 +353,12 @@ model organization_facilities {
 
 model certifications {
   id                   String                 @id @default(cuid())
-  name                 String
+  name                 String                 @unique
   type                 String
   logo_url             String
   document_url         String?
   website              String?
+  level                certification_level
   created_at           DateTime               @default(now())
   updated_at           DateTime               @updatedAt
   deleted              Boolean                @default(false)
@@ -373,7 +374,6 @@ model certification_claims {
   expiration_date          DateTime
   effective_date           DateTime
   issuer                   String
-  certification_level      certification_level
   created_at               DateTime                @default(now())
   updated_at               DateTime                @updatedAt
   deleted                  Boolean                 @default(false)
