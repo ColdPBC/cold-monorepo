@@ -89,16 +89,16 @@ export class CertificationsRepository extends BaseWorker {
     };
     const certifications = await this.prisma.extended.certifications.findMany(queryOptions);
 
-    if (!certifications) {
+    if (!certifications || certifications.length === 0) {
       throw new NotFoundException(`No Certifications found`);
     }
 
     return certifications;
   }
 
-  findOne(org: organizations, user: IAuthenticatedUser, filters?: { name?: string; id?: string; isTest?: boolean }) {
+  async findOne(org: organizations, user: IAuthenticatedUser, filters?: { name?: string; id?: string }) {
     if (filters?.id || filters?.name) {
-      return this.prisma.extended.certifications.findUnique({
+      const certification = await this.prisma.extended.certifications.findUnique({
         where: {
           id: filters.id,
           name: filters.name,
@@ -107,6 +107,12 @@ export class CertificationsRepository extends BaseWorker {
           certification_claims: true,
         },
       });
+
+      if (!certification) {
+        throw new NotFoundException({ filters, user }, `No Certification found`);
+      }
+
+      return certification;
     } else {
       throw new UnprocessableEntityException({ filters, user }, 'Must provide id or name');
     }
