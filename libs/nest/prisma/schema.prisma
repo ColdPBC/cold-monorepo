@@ -355,9 +355,6 @@ model certifications {
   id                   String                 @id @default(cuid())
   name                 String                 @unique
   type                 String
-  logo_url             String
-  document_url         String?
-  website              String?
   level                certification_level
   created_at           DateTime               @default(now())
   updated_at           DateTime               @updatedAt
@@ -373,7 +370,6 @@ model certification_claims {
   issued_date              DateTime
   expiration_date          DateTime
   effective_date           DateTime
-  issuer                   String
   created_at               DateTime                @default(now())
   updated_at               DateTime                @updatedAt
   deleted                  Boolean                 @default(false)
