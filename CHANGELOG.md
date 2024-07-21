@@ -1,3 +1,16 @@
+# [1.296.0-cold-903.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.296.0-cold-903.3...v1.296.0-cold-903.4) (2024-07-21)
+
+
+### Bug Fixes
+
+* add role restrictions to update and remove certifications ([81c2ccd](https://github.com/ColdPBC/cold-monorepo/commit/81c2ccd83035824d397771ac8463babb8cb3bb5a))
+
+
+### Features
+
+* Add ClaimsModule to CertificationsModule ([fecb181](https://github.com/ColdPBC/cold-monorepo/commit/fecb18117d4674b045fe8641a75eb3a8d78a083b))
+* Remove unnecessary fields from schema and migration ([4756c94](https://github.com/ColdPBC/cold-monorepo/commit/4756c940a054e53a902fa5826962c842753947d7))
+
 # [1.296.0-cold-903.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.296.0-cold-903.2...v1.296.0-cold-903.3) (2024-07-20)
 
 
