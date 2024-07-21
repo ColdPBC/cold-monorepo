@@ -16,6 +16,7 @@ export enum GuidPrefixes {
   'OrganizationComplianceNote' = 'ocn',
   'OrganizationProduct' = 'op',
   'Certifications' = 'cert',
+  'Claims' = 'claim',
   'OrganizationComplianceNoteLink' = 'ocnl',
   'OrganizationComplianceNoteFile' = 'ocnf',
   'ComplianceDependencyChain' = 'cdc',
