@@ -1,19 +1,19 @@
 import { Injectable } from '@nestjs/common';
-import { BaseWorker, IAuthenticatedUser, CertificationsRepository } from '@coldpbc/nest';
+import { BaseWorker, ComplianceCertificationRepository, IAuthenticatedUser } from '@coldpbc/nest';
 import { certifications, organizations } from '@prisma/client';
 
 @Injectable()
 export class CertificationsService extends BaseWorker {
-  constructor(private readonly certificationRepository: CertificationsRepository) {
+  constructor(private readonly certificationRepository: ComplianceCertificationRepository) {
     super(CertificationsService.name);
   }
 
   create(org: organizations, user: IAuthenticatedUser, createCertificationDto: certifications) {
-    return this.certificationRepository.createCertification(org, user, createCertificationDto);
+    return this.certificationRepository.createComplianceCertification(org, user, createCertificationDto);
   }
 
   update(org: organizations, user: IAuthenticatedUser, updateCertificationDto: certifications) {
-    return this.certificationRepository.updateCertification(org, user, updateCertificationDto);
+    return this.certificationRepository.updateComplianceCertification(org, user, updateCertificationDto);
   }
 
   findAll() {
@@ -29,6 +29,6 @@ export class CertificationsService extends BaseWorker {
   }
 
   remove(org: organizations, user: IAuthenticatedUser, id: string) {
-    return this.certificationRepository.deleteCertification(org, user, id);
+    return this.certificationRepository.deleteComplianceCertification(org, user, id);
   }
 }
