@@ -1,3 +1,12 @@
+# [1.296.0-cold-903.6](https://github.com/ColdPBC/cold-monorepo/compare/v1.296.0-cold-903.5...v1.296.0-cold-903.6) (2024-07-21)
+
+
+### Features
+
+* Add 'Claims' to compliance enums ([122eace](https://github.com/ColdPBC/cold-monorepo/commit/122eace3b41b703d94f1db3fccfde771e86a20a6))
+* Add Compliance Certification Repository for Nest App ([9fd1745](https://github.com/ColdPBC/cold-monorepo/commit/9fd17455aadfb605b5a6d0af4218be2952b58dd7))
+* Add ComplianceCertificationClaimsRepository ([2340f8a](https://github.com/ColdPBC/cold-monorepo/commit/2340f8a69fb0950bdd0ab08d91e6203e698154f0))
+
 # [1.296.0-cold-903.5](https://github.com/ColdPBC/cold-monorepo/compare/v1.296.0-cold-903.4...v1.296.0-cold-903.5) (2024-07-21)
 
 
