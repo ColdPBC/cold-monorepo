@@ -1,3 +1,18 @@
+# [1.296.0-cold-903.5](https://github.com/ColdPBC/cold-monorepo/compare/v1.296.0-cold-903.4...v1.296.0-cold-903.5) (2024-07-21)
+
+
+### Features
+
+* Add claims service in certifications module ([459c1a1](https://github.com/ColdPBC/cold-monorepo/commit/459c1a13bbd32e7b9c1708f199480f587b4e7348))
+* Add ClaimsModule in certifications ([d5c387a](https://github.com/ColdPBC/cold-monorepo/commit/d5c387a540c07ce67ec3956db2dec6a900e96b0f))
+* Add logging exports to nest lib index ([14edbcd](https://github.com/ColdPBC/cold-monorepo/commit/14edbcd1d7f41d8f892a351806cbd2537704090b))
+* Add new claims controller in certifications module ([74de42b](https://github.com/ColdPBC/cold-monorepo/commit/74de42bca8d888d9465deb273a323d93f0006c16))
+* Add SuppliersModule in resources ([60e56f2](https://github.com/ColdPBC/cold-monorepo/commit/60e56f2465cb939f8f58d4044b545df7fecb4b07))
+* Add SuppliersModule to Organization module ([cb5a5e4](https://github.com/ColdPBC/cold-monorepo/commit/cb5a5e4d60dbfbe6dd4684e3a19aa7328c318d16))
+* Added new SuppliersController for organization suppliers ([2724ea9](https://github.com/ColdPBC/cold-monorepo/commit/2724ea95fe98ad8e73f1736009af05b5bc592e61))
+* Create new Suppliers Service in organizations module ([4b3ba06](https://github.com/ColdPBC/cold-monorepo/commit/4b3ba06f4eb6d2da22ddafbd61ef1a2e68eb938f))
+* Update prisma schema and migrations for claim dates and data types ([daf88bf](https://github.com/ColdPBC/cold-monorepo/commit/daf88bf985e586a5b47885c1fdc30fb51bd596de))
+
 # [1.296.0-cold-903.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.296.0-cold-903.3...v1.296.0-cold-903.4) (2024-07-21)
 
 
