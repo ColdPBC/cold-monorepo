@@ -20,19 +20,16 @@ export class SuppliersRepository extends BaseWorker {
       select: {
         id: true,
         certification_id: true,
-        issued_at: true,
         expiration_date: true,
         effective_date: true,
-        issuer: true,
         organization_file: {
           select: {
             id: true,
             original_name: true,
-            file_url: true,
             bucket: true,
             key: true,
             openai_file_id: true,
-            mime_type: true,
+            mimetype: true,
             size: true,
             checksum: true,
           },
