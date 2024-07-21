@@ -1,26 +1,30 @@
 import { Injectable } from '@nestjs/common';
-import { CreateClaimDto } from './dto/create-claim.dto';
-import { UpdateClaimDto } from './dto/update-claim.dto';
+import { BaseWorker, IAuthenticatedUser } from '@coldpbc/nest';
+import { ComplianceCertificationClaimsRepository } from '@coldpbc/nest';
+import { certification_claims, organizations } from '@prisma/client';
 
 @Injectable()
-export class ClaimsService {
-  create(createClaimDto: CreateClaimDto) {
-    return 'This action adds a new claim';
+export class ClaimsService extends BaseWorker {
+  constructor(readonly claimsRepository: ComplianceCertificationClaimsRepository) {
+    super(ClaimsService.name);
+  }
+  create(org: organizations, user: IAuthenticatedUser, createClaimDto: certification_claims) {
+    return this.claimsRepository.createClaim(org, user, createClaimDto);
   }
 
-  findAll() {
-    return `This action returns all claims`;
+  findAll(org: organizations, user: IAuthenticatedUser) {
+    return this.claimsRepository.findAll(org);
   }
 
-  findByName(name: string) {
-    return `This action returns a #${name} claim`;
+  findByName(org: organizations, user: IAuthenticatedUser, name: string) {
+    return this.claimsRepository.findOne(org, user, { name });
   }
 
-  update(id: number, updateClaimDto: UpdateClaimDto) {
-    return `This action updates a #${id} claim`;
+  update(org: organizations, user: IAuthenticatedUser, id: string, updateClaimDto: certification_claims) {
+    return this.claimsRepository.updateClaim(org, user, id, updateClaimDto);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} claim`;
+  remove(org: organizations, user: IAuthenticatedUser, id: string) {
+    return this.claimsRepository.deleteClaim(org, user, id);
   }
 }
