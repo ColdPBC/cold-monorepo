@@ -22,6 +22,7 @@ import { OrganizationComplianceModule } from './organization_compliance/organiza
 import { OrganizationsRabbitService } from './organizations.rabbit';
 import { MqttModule } from './mqtt/mqtt.module';
 import { ProductsModule } from './products/products.module';
+import { SuppliersModule } from './suppliers/suppliers.module';
 
 @Module({
   imports: [
@@ -44,6 +45,7 @@ import { ProductsModule } from './products/products.module';
     MqttModule,
     PrismaModule,
     ProductsModule,
+    SuppliersModule,
   ],
   controllers: [OrganizationController, OrganizationFilesController],
   providers: [PrismaService, OrganizationService, CacheService, OrganizationHelper, OrganizationsRabbitService, OrganizationsRepository],
