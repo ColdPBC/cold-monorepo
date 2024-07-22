@@ -1,3 +1,47 @@
+# [1.300.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.299.0...v1.300.0) (2024-07-22)
+
+
+### Bug Fixes
+
+* add null check for additional_context in chat service ([35dd286](https://github.com/ColdPBC/cold-monorepo/commit/35dd286f847c6fec16ddfd9cec7ca8a9d00b4ece))
+* add role restrictions to update and remove certifications ([81c2ccd](https://github.com/ColdPBC/cold-monorepo/commit/81c2ccd83035824d397771ac8463babb8cb3bb5a))
+* Update certifications.repository.ts to improve error handling ([433e822](https://github.com/ColdPBC/cold-monorepo/commit/433e822fcb0ea41d0f7df2549adb2101ee7b652c))
+
+
+### Features
+
+* add '[@ogma](https://github.com/ogma)' packages and update related config files ([1172994](https://github.com/ColdPBC/cold-monorepo/commit/1172994e3f83982330721fb88d83f9c53fab0f7f))
+* Add 'Claims' to compliance enums ([122eace](https://github.com/ColdPBC/cold-monorepo/commit/122eace3b41b703d94f1db3fccfde771e86a20a6))
+* Add Certification entity ([52cc105](https://github.com/ColdPBC/cold-monorepo/commit/52cc1051e7f773b9a29a31d22372da233f87bfe5))
+* Add Certifications controller ([9c6cce3](https://github.com/ColdPBC/cold-monorepo/commit/9c6cce35e9e8bfb5fa3ef295a970a9e6ee3d8ffa))
+* Add Certifications module ([9dd715c](https://github.com/ColdPBC/cold-monorepo/commit/9dd715c4de9f3823dded021aae9f74a6ea696e6b))
+* Add Certifications Repository in Nest Library ([640fa29](https://github.com/ColdPBC/cold-monorepo/commit/640fa29894db8a8f6484ea766e3014b585b38096))
+* Add CertificationsModule to AppModule ([37c7078](https://github.com/ColdPBC/cold-monorepo/commit/37c7078ad16ed578d5ab7def12ec6b296c21c812))
+* add CertificationsService to handle certifications ([7d6ca57](https://github.com/ColdPBC/cold-monorepo/commit/7d6ca57ab1acde15a80b5ac39f6a79d3c24de017))
+* Add claims service in certifications module ([459c1a1](https://github.com/ColdPBC/cold-monorepo/commit/459c1a13bbd32e7b9c1708f199480f587b4e7348))
+* Add ClaimsModule in certifications ([d5c387a](https://github.com/ColdPBC/cold-monorepo/commit/d5c387a540c07ce67ec3956db2dec6a900e96b0f))
+* Add ClaimsModule to CertificationsModule ([fecb181](https://github.com/ColdPBC/cold-monorepo/commit/fecb18117d4674b045fe8641a75eb3a8d78a083b))
+* Add Compliance Certification Repository for Nest App ([9fd1745](https://github.com/ColdPBC/cold-monorepo/commit/9fd17455aadfb605b5a6d0af4218be2952b58dd7))
+* Add ComplianceCertificationClaimsRepository ([2340f8a](https://github.com/ColdPBC/cold-monorepo/commit/2340f8a69fb0950bdd0ab08d91e6203e698154f0))
+* Add dev mode to worker log service ([521a1c7](https://github.com/ColdPBC/cold-monorepo/commit/521a1c7e7384a220df537797fbb088670336f819))
+* Add logging exports to nest lib index ([14edbcd](https://github.com/ColdPBC/cold-monorepo/commit/14edbcd1d7f41d8f892a351806cbd2537704090b))
+* Add new claims controller in certifications module ([74de42b](https://github.com/ColdPBC/cold-monorepo/commit/74de42bca8d888d9465deb273a323d93f0006c16))
+* Add SuppliersModule in resources ([60e56f2](https://github.com/ColdPBC/cold-monorepo/commit/60e56f2465cb939f8f58d4044b545df7fecb4b07))
+* Add SuppliersModule to Organization module ([cb5a5e4](https://github.com/ColdPBC/cold-monorepo/commit/cb5a5e4d60dbfbe6dd4684e3a19aa7328c318d16))
+* Add SuppliersRepository in nest lib ([ae8aba0](https://github.com/ColdPBC/cold-monorepo/commit/ae8aba0ab4500594a3827c0221dc45ed9bc239da))
+* Added DTOs for creating and updating Certifications ([3e0c98a](https://github.com/ColdPBC/cold-monorepo/commit/3e0c98a44721a8939dcb3387adf484f36e761bb6))
+* Added guards, interceptors, and decorators in certifications controller ([f6dc566](https://github.com/ColdPBC/cold-monorepo/commit/f6dc566ba54b61fbf6502ab7e939d677fcfed4d2))
+* Added new SuppliersController for organization suppliers ([2724ea9](https://github.com/ColdPBC/cold-monorepo/commit/2724ea95fe98ad8e73f1736009af05b5bc592e61))
+* Create new Suppliers Service in organizations module ([4b3ba06](https://github.com/ColdPBC/cold-monorepo/commit/4b3ba06f4eb6d2da22ddafbd61ef1a2e68eb938f))
+* Enhance claims controller with guards, interceptors, filters, and role permissions ([a08b055](https://github.com/ColdPBC/cold-monorepo/commit/a08b055e7d5e680f08fccbf7967515dfd5f0bbd2))
+* Modify certifications schema and add unique migration ([a5b454a](https://github.com/ColdPBC/cold-monorepo/commit/a5b454a37827a0bd317cb49cab1252afb78e44c5))
+* Refactor CertificationsService to use CertificationRepository ([edee10a](https://github.com/ColdPBC/cold-monorepo/commit/edee10a57682b5c7b0d5d2e3ca1825146e96e0b3))
+* Remove certification-related entities and DTOs ([3b0d864](https://github.com/ColdPBC/cold-monorepo/commit/3b0d8644b6c2eac4ab91a880049a134d2c34880b))
+* Remove unnecessary fields from schema and migration ([4756c94](https://github.com/ColdPBC/cold-monorepo/commit/4756c940a054e53a902fa5826962c842753947d7))
+* Update certifications module in cold-api ([69e1181](https://github.com/ColdPBC/cold-monorepo/commit/69e11819c63cdd94fdfd2707a3c9928815be0176))
+* update claims service operations ([1ed9f95](https://github.com/ColdPBC/cold-monorepo/commit/1ed9f95c3c62f5a79769a7aa6a45fb6e1e7807d8))
+* Update prisma schema and migrations for claim dates and data types ([daf88bf](https://github.com/ColdPBC/cold-monorepo/commit/daf88bf985e586a5b47885c1fdc30fb51bd596de))
+* Update roles in certifications.controller ([d04e6ee](https://github.com/ColdPBC/cold-monorepo/commit/d04e6ee3878bf9f9d5e29e59c8ea58d0d02fdcb3))
 
 # [1.299.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.298.2...v1.299.0) (2024-07-18)
 
