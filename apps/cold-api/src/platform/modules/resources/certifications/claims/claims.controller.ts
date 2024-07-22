@@ -18,37 +18,37 @@ export class ClaimsController {
 
   @Roles(...allRoles)
   @Post()
-  create(@Req() req: any, @Body() createClaimDto: certification_claims) {
+  create(@Req() req: any, @Param('cId') cId: string, @Param('orgId') orgId: string, @Body() createClaimDto: certification_claims) {
     return this.claimsService.create(req.organization, req.user, createClaimDto);
   }
 
   @Roles(...allRoles)
   @Get()
-  findAll(@Req() req: any) {
+  findAll(@Req() req: any, @Param('cId') cId: string, @Param('orgId') orgId: string) {
     return this.claimsService.findAll(req.organization, req.user);
   }
 
   @Roles(...allRoles)
   @Get(':id')
-  findById(@Req() req: any, @Param('id') id: string) {
+  findById(@Req() req: any, @Param('cId') cId: string, @Param('orgId') orgId: string, @Param('id') id: string) {
     return this.claimsService.findByName(req.organization, req.user, id);
   }
 
   @Roles(...allRoles)
   @Get('name/:name')
-  findByName(@Req() req: any, @Param('name') name: string) {
+  findByName(@Req() req: any, @Param('cId') cId: string, @Param('orgId') orgId: string, @Param('name') name: string) {
     return this.claimsService.findByName(req.organization, req.user, name);
   }
 
   @Roles(...allRoles)
   @Patch(':id')
-  update(@Req() req: any, @Param('id') id: string, @Body() updateClaimDto: certification_claims) {
+  update(@Req() req: any, @Param('cId') cId: string, @Param('orgId') orgId: string, @Param('id') id: string, @Body() updateClaimDto: certification_claims) {
     return this.claimsService.update(req.organization, req.user, id, updateClaimDto);
   }
 
   @Roles(...allRoles)
   @Delete(':id')
-  remove(@Req() req: any, @Param('id') id: string) {
+  remove(@Req() req: any, @Param('cId') cId: string, @Param('orgId') orgId: string, @Param('id') id: string) {
     return this.claimsService.remove(req.organization, req.user, id);
   }
 }

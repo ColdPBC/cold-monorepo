@@ -24,7 +24,7 @@ export class SuppliersController {
     return this.suppliersService.findById(req.organization, req.user, id);
   }
 
-  @Get(':name')
+  @Get('name/:name')
   findByName(@Req() req: any, @Param('orgId') orgId: string, @Param('name') name: string) {
     return this.suppliersService.findByName(req.organization, req.user, name);
   }
