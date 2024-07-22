@@ -1,3 +1,10 @@
+## [1.301.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.301.0...v1.301.1) (2024-07-22)
+
+
+### Bug Fixes
+
+* issues with OpenAPI spec ([a14a215](https://github.com/ColdPBC/cold-monorepo/commit/a14a215a535ce533c9826a09ccbaa48e80fc6ea8))
+
 # [1.301.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.300.0...v1.301.0) (2024-07-22)
 
 
