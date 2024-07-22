@@ -12,7 +12,7 @@ import { ApiOAuth2, ApiTags } from '@nestjs/swagger';
 @ApiOAuth2(['openid', 'email', 'profile'])
 @ApiTags('Certifications', 'Claims')
 @UseFilters(new HttpExceptionFilter(CertificationsController.name))
-@Controller('certifications/name/:name/organization/:orgId/claims')
+@Controller('certifications/:cId/organization/:orgId/claims')
 export class ClaimsController {
   constructor(private readonly claimsService: ClaimsService) {}
 
