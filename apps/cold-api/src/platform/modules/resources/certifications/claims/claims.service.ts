@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { BaseWorker, IAuthenticatedUser } from '@coldpbc/nest';
 import { ComplianceCertificationClaimsRepository } from '@coldpbc/nest';
 import { certification_claims, organizations } from '@prisma/client';
+import { unset } from 'lodash';
 
 @Injectable()
 export class ClaimsService extends BaseWorker {
@@ -9,6 +10,8 @@ export class ClaimsService extends BaseWorker {
     super(ClaimsService.name);
   }
   create(org: organizations, user: IAuthenticatedUser, createClaimDto: certification_claims) {
+    unset(createClaimDto, 'id');
+
     return this.claimsRepository.createClaim(org, user, createClaimDto);
   }
 
@@ -21,6 +24,7 @@ export class ClaimsService extends BaseWorker {
   }
 
   update(org: organizations, user: IAuthenticatedUser, id: string, updateClaimDto: certification_claims) {
+    updateClaimDto.id = id;
     return this.claimsRepository.updateClaim(org, user, id, updateClaimDto);
   }
 
