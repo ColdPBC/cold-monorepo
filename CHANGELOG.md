@@ -1,3 +1,15 @@
+# [1.302.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.301.1...v1.302.0) (2024-07-22)
+
+
+### Bug Fixes
+
+* commonJS error in running seed scripts ([7dcb677](https://github.com/ColdPBC/cold-monorepo/commit/7dcb67748b7214a588e83357ce01e7c1340ec27c))
+
+
+### Features
+
+* Update `esbuild` packages to v0.20.2 ([a702ad0](https://github.com/ColdPBC/cold-monorepo/commit/a702ad0a9ad2f555804d22e312015481e3de5fb7))
+
 ## [1.301.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.301.0...v1.301.1) (2024-07-22)
 
 
