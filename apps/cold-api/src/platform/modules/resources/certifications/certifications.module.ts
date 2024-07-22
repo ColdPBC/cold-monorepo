@@ -5,9 +5,9 @@ import { ComplianceCertificationClaimsRepository, ComplianceCertificationReposit
 import { ClaimsModule } from './claims/claims.module';
 
 @Module({
-  controllers: [CertificationsController, ClaimsModule],
+  imports: [ClaimsModule],
+  controllers: [CertificationsController],
   providers: [CertificationsService, ComplianceCertificationClaimsRepository, ComplianceCertificationRepository],
   exports: [],
-  imports: [ClaimsModule],
 })
 export class CertificationsModule {}
