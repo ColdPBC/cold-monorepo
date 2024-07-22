@@ -1,3 +1,15 @@
+# [1.301.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.300.0...v1.301.0) (2024-07-22)
+
+
+### Bug Fixes
+
+* incorrect entry in controller array ([5b92440](https://github.com/ColdPBC/cold-monorepo/commit/5b92440bb8db6c36c2d58439d158cafaf175db4f))
+
+
+### Features
+
+* Update providers and exports in ClaimsModule ([f1a3cfc](https://github.com/ColdPBC/cold-monorepo/commit/f1a3cfc9999c8395e4bca69c80e622781522b48f))
+
 # [1.300.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.299.0...v1.300.0) (2024-07-22)
 
 
