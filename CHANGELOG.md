@@ -1,4 +1,6 @@
+
 # [1.299.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.298.2...v1.299.0) (2024-07-18)
+
 
 
 ### Features
@@ -6,6 +8,7 @@
 * Update code for handling compliance section updates ([49fbccf](https://github.com/ColdPBC/cold-monorepo/commit/49fbccfb87cb273df6d209a1b7cad0707a796564))
 
 ## [1.298.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.298.1...v1.298.2) (2024-07-18)
+
 
 
 ### Bug Fixes

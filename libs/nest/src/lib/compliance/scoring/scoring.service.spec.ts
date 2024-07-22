@@ -1,6 +1,6 @@
 import { organizations } from '@prisma/client';
 import { ScoringService } from './scoring.service';
-import { IAuthenticatedUser } from '@coldpbc/nest';
+import { IAuthenticatedUser } from '../../primitives';
 
 const mockData = {
   id: 'org_liq0Z0GHUJ044liS',

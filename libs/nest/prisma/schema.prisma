@@ -319,6 +319,7 @@ model organizations {
   survey_status                             survey_status[]
   utility_bills                             utility_bills[]
   vector_records                            vector_records[]
+  certification_claims                      certification_claims[]
 }
 
 /// @namespace Organization_Facilities
@@ -353,11 +354,9 @@ model organization_facilities {
 
 model certifications {
   id                   String                 @id @default(cuid())
-  name                 String
-  type                 String
-  logo_url             String
-  document_url         String?
-  website              String?
+  name                 String                 @unique
+  type                 certification_types
+  level                certification_level
   created_at           DateTime               @default(now())
   updated_at           DateTime               @updatedAt
   deleted              Boolean                @default(false)
@@ -366,20 +365,19 @@ model certifications {
 
 model certification_claims {
   id                       String                  @id @default(cuid())
+  organization_name        String
   certification_id         String
   organization_facility_id String
   organization_file_id     String
-  issued_date              DateTime
-  expiration_date          DateTime
-  effective_date           DateTime
-  issuer                   String
-  certification_level      certification_level
+  issued_date              DateTime                @default(now())
+  effective_date           DateTime                @default(now())
   created_at               DateTime                @default(now())
   updated_at               DateTime                @updatedAt
   deleted                  Boolean                 @default(false)
   certification            certifications          @relation(fields: [certification_id], references: [id], onDelete: Cascade)
   facility                 organization_facilities @relation(fields: [organization_facility_id], references: [id])
   organization_file        organization_files      @relation(fields: [organization_file_id], references: [id], onDelete: Cascade)
+  organization             organizations           @relation(fields: [organization_name], references: [name], onDelete: Cascade)
 }
 
 model organization_products {
@@ -552,6 +550,7 @@ model organization_files {
   integration                               integrations?                               @relation(fields: [integration_id], references: [id], onDelete: Cascade)
   organization                              organizations                               @relation(fields: [organization_id], references: [id], onDelete: Cascade)
   vector_records                            vector_records[]
+  expires_at                                DateTime?
 
   @@unique([organization_id, id], name: "orgFileId")
   @@unique([organization_id, openai_file_id], name: "openaiFileId")
@@ -962,6 +961,12 @@ enum file_types {
   ASSESSMENT
   POLICY
   OTHER
+}
+
+enum certification_types {
+  THIRD_PARTY
+  INTERNAL
+  TEST
 }
 
 enum emissions_categories {
