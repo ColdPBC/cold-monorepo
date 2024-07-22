@@ -10321,9 +10321,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/addon-knobs@npm:^7.0.2":
-  version: 7.0.2
-  resolution: "@storybook/addon-knobs@npm:7.0.2"
+"@storybook/addon-knobs@npm:^8.0.1":
+  version: 8.0.1
+  resolution: "@storybook/addon-knobs@npm:8.0.1"
   dependencies:
     copy-to-clipboard: "npm:^3.3.3"
     core-js: "npm:^3.29.0"
@@ -10337,11 +10337,10 @@ __metadata:
     react-lifecycles-compat: "npm:^3.0.4"
     react-select: "npm:^5.7.0"
   peerDependencies:
-    "@storybook/addons": ^7.0.0
-    "@storybook/api": ^7.0.0
-    "@storybook/components": ^7.0.0
-    "@storybook/core-events": ^7.0.0
-    "@storybook/theming": ^7.0.0
+    "@storybook/components": ^8.0.0
+    "@storybook/core-events": ^8.0.0
+    "@storybook/manager-api": ^8.0.0
+    "@storybook/theming": ^8.0.0
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
   peerDependenciesMeta:
@@ -10349,7 +10348,7 @@ __metadata:
       optional: true
     react-dom:
       optional: true
-  checksum: 10/6fdd170e35a39db61c9365170cf84f5e5f40214b854dfa57509d3c712b7aef7f3c3e036272c089c3a484268528f305a50ebd9288338aa03342767d764e515eb5
+  checksum: 10/6fee86850ccf7d0be23fc83a7583d0357585fe4f75fc587a848fef1c8874f29f3ee3a53de798d8412791c85bb4131326e4fbd9c9832234b0758e458a2df0ea3d
   languageName: node
   linkType: hard
 
@@ -19105,7 +19104,7 @@ __metadata:
     "@storybook/addon-essentials": "npm:7.6.5"
     "@storybook/addon-info": "npm:^5.3.21"
     "@storybook/addon-interactions": "npm:^7.6.0"
-    "@storybook/addon-knobs": "npm:^7.0.2"
+    "@storybook/addon-knobs": "npm:^8.0.1"
     "@storybook/addon-links": "npm:7.5.3"
     "@storybook/addon-mdx-gfm": "npm:7.5.3"
     "@storybook/addon-notes": "npm:^5.3.21"

@@ -241,7 +241,7 @@
     "@storybook/addon-essentials": "7.6.5",
     "@storybook/addon-info": "^5.3.21",
     "@storybook/addon-interactions": "^7.6.0",
-    "@storybook/addon-knobs": "^7.0.2",
+    "@storybook/addon-knobs": "^8.0.1",
     "@storybook/addon-links": "7.5.3",
     "@storybook/addon-mdx-gfm": "7.5.3",
     "@storybook/addon-notes": "^5.3.21",
