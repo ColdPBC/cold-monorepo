@@ -32,13 +32,17 @@ export const CompliancePageWrapper = () => {
   return (
     <MainContent title="Compliance" headerElement={getFilter()}>
       <div className={'w-full space-y-[24px]'}>
-        {allComplianceSets?.map((compliance, index) => {
-          return (
-            <div key={'compliance_' + index} data-testid={`compliance-${compliance.id}`}>
-              <ComplianceSetOverviewCard complianceSet={compliance} />
-            </div>
-          );
-        })}
+        {allComplianceSets
+          ?.sort((a, b) => {
+            return a.title.localeCompare(b.title);
+          })
+          .map((compliance, index) => {
+            return (
+              <div key={'compliance_' + index} data-testid={`compliance-${compliance.id}`}>
+                <ComplianceSetOverviewCard complianceSet={compliance} />
+              </div>
+            );
+          })}
       </div>
     </MainContent>
   );

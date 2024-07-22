@@ -1,12 +1,21 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
 import { BaseWorker } from '../../../worker';
 import { PrismaService } from '../../../prisma';
-import { compliance_questions, organizations, Prisma } from '@prisma/client';
-import { difference, sumBy } from 'lodash';
+import { compliance_questions, compliance_sections, organizations, Prisma } from '@prisma/client';
+import { difference, get, sumBy } from 'lodash';
 import { Cuid2Generator, GuidPrefixes } from '../../../utility';
 import { FilteringService } from '../../filtering';
 import { CacheService } from '../../../cache';
-import { IAuthenticatedUser } from '../../../primitives';
+
+export type dependency_chain_data = {
+  dependency_expression: string;
+  dependent_question_id: string;
+  dependent_question_key: string;
+  dependent_section_key: string;
+  dependent_section_group_id: string;
+  dependent_definition_name: string;
+  dependent_question_values: any[];
+};
 
 export interface Question {
   id: string;
@@ -90,7 +99,6 @@ export class ComplianceQuestionsRepository extends BaseWorker {
                         LEFT JOIN compliance_question_dependency_chains cdc ON cr.compliance_question_id = cdc.compliance_question_id
                  WHERE
                    cq.deleted = FALSE AND
-                   cr.deleted = FALSE AND
                    ocair.deleted = FALSE AND
                    cs.deleted = FALSE AND
                    cr.organization_id = ${organization_id} AND
@@ -288,16 +296,34 @@ export class ComplianceQuestionsRepository extends BaseWorker {
       await this.cache.delete(`organizations`, true);
 
       question.id = new Cuid2Generator(GuidPrefixes.ComplianceQuestion).scopedId;
+      const section = await this.prisma.extended.compliance_sections.findUnique({
+        where: {
+          id: question.compliance_section_id,
+        },
+      });
+
+      if (!section) {
+        throw new NotFoundException(`Section not found for id ${question.compliance_section_id}`);
+      }
+
       const created = await this.prisma.extended.compliance_questions.create({
         data: {
           ...(question as any),
         },
       });
 
+      if (question.dependency_expression) {
+        await this.transformDependencyExpression(question, section);
+      }
+
       this.logger.info(`Created question for compliance ${question.compliance_definition_name}`, { created });
       return created;
     } catch (e: any) {
       this.logger.error(`Error creating question for compliance ${question.compliance_definition_name}`, { ...e, question });
+      if (e.code === 'P2002') {
+        throw new ConflictException(`Question with key ${question.key} already exists for compliance ${question.compliance_definition_name}`);
+      }
+
       throw e;
     }
   }
@@ -334,6 +360,10 @@ export class ComplianceQuestionsRepository extends BaseWorker {
         },
       });
 
+      if (question.dependency_expression) {
+        await this.transformDependencyExpression(question);
+      }
+
       this.logger.info(`Updated question for compliance ${question.compliance_definition_name}`, { updated });
       return updated;
     } catch (e: any) {
@@ -365,5 +395,149 @@ export class ComplianceQuestionsRepository extends BaseWorker {
         id,
       },
     });
+  }
+
+  async transformDependencyExpression(question: compliance_questions, section?: compliance_sections) {
+    const seen: any[] = [];
+
+    if (!section) {
+      const existing = await this.prisma.compliance_sections.findUnique({
+        where: {
+          id: question.compliance_section_id,
+        },
+      });
+
+      if (!existing) {
+        throw new NotFoundException(`Section not found for id ${question.compliance_section_id}`);
+      } else {
+        section = existing;
+      }
+    }
+    const chains = await this.buildDependencyChain(question, seen, []);
+
+    if (chains.length < 1) {
+      console.log(`No chains found for question: ${question.key}`, { question, seen });
+    }
+
+    try {
+      const qDep = await this.prisma.compliance_question_dependency_chains.upsert({
+        where: {
+          defNameSecKeyQuestKey: {
+            compliance_question_key: question.key,
+            compliance_section_key: section.key,
+            compliance_definition_name: question.compliance_definition_name,
+          },
+        },
+        create: {
+          id: new Cuid2Generator(GuidPrefixes.ComplianceDependencyChain).scopedId,
+          dependency_chain: chains,
+          compliance_question_id: question.id,
+          compliance_question_key: question.key,
+          compliance_section_id: section.id,
+          compliance_section_key: section.key,
+          compliance_section_group_id: section.compliance_section_group_id,
+          compliance_definition_name: question.compliance_definition_name,
+          dependency_expression: question.dependency_expression ? question.dependency_expression : '',
+        },
+        update: {
+          dependency_chain: chains,
+          compliance_question_id: question.id,
+          compliance_question_key: question.key,
+          compliance_section_id: section.id,
+          compliance_section_key: section.key,
+          compliance_section_group_id: section.compliance_section_group_id,
+          compliance_definition_name: question.compliance_definition_name,
+          dependency_expression: question.dependency_expression ? question.dependency_expression : '',
+        },
+      });
+
+      await this.prisma.compliance_questions.update({
+        where: {
+          id: question.id,
+        },
+        data: {
+          compliance_question_dependency_chain_id: qDep.id,
+        },
+      });
+    } catch (e) {
+      this.logger.error(e.message, { question, error: e.message, stack: e.stack });
+
+      throw new UnprocessableEntityException({ question, error: e.message, stack: e.stack }, 'Error building dependency chains');
+    }
+  }
+
+  async buildDependencyChain(question: any, seen: any[], chains: dependency_chain_data[]): Promise<dependency_chain_data[]> {
+    if (question.dependency_expression) {
+      const split_expression = question.dependency_expression.split('and $');
+      for (const part of split_expression) {
+        const expression = part.startsWith('lookup') ? `$${part}` : part;
+        const regex =
+          /(?:(?<booleanValue>true|false) in \$map\(\$lookup\(definition\.sections\.\*\.follow_up, '(?<questionKeyMap>.+?)'\)\.value, function\(\$v\) { \$v in (?<valuesMap>.+?)(?= \}\) and|\}\)\$|$)|\$lookup\(definition\.sections\.\*\.follow_up, '(?<questionKey>.+?)'\)\.value = (?<values>true|false))/g;
+
+        const matches = [...expression.matchAll(regex)];
+        if (!matches || matches.length === 0) {
+          continue;
+        }
+        for (const match of matches) {
+          const dependent_question = await this.prisma.compliance_questions.findUnique({
+            where: {
+              compDefNameKey: {
+                compliance_definition_name: question.compliance_definition_name,
+                key: get(match, 'groups.questionKey', get(match, 'groups.questionKeyMap', '')),
+              },
+            },
+            select: {
+              id: true,
+              key: true,
+              dependency_expression: true,
+              compliance_definition_name: true,
+              compliance_section: {
+                select: {
+                  id: true,
+                  key: true,
+                  compliance_section_group_id: true,
+                },
+              },
+            },
+          });
+
+          if (!dependent_question) {
+            console.warn(`🚨 Missing Question: ${get(match, 'groups.questionKey', get(match, 'groups.questionKeyMap', ''))} 🚨`, {
+              match,
+              question,
+            });
+            return chains;
+          }
+
+          const chainData: dependency_chain_data = {
+            dependency_expression: dependent_question.dependency_expression,
+            dependent_question_id: dependent_question.id,
+            dependent_question_key: dependent_question.key,
+            dependent_section_key: dependent_question.compliance_section.key,
+            dependent_section_group_id: dependent_question.compliance_section.compliance_section_group_id,
+            dependent_definition_name: dependent_question.compliance_definition_name,
+            dependent_question_values: JSON.parse(
+              get(match, 'groups.valuesMap', `[${get(match, 'groups.values', '')}]`)
+                .replace(' })', '')
+                .replaceAll("'", '"'),
+            ),
+          } as dependency_chain_data;
+
+          chains.push(chainData);
+
+          if (seen.includes(question)) {
+            console.warn(`🚨 Circular Dependency Detected: ${question.key} 🚨`, { question, seen });
+            return chains;
+          }
+
+          seen.push(question);
+          if (dependent_question.dependency_expression) {
+            return await this.buildDependencyChain(dependent_question, seen, chains);
+          }
+        }
+      }
+    }
+
+    return chains;
   }
 }
