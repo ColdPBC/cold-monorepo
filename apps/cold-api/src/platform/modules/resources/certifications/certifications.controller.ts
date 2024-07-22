@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, UseInterceptors, UseFilters, Req } from '@nestjs/common';
 import { CertificationsService } from './certifications.service';
-import { coldAdminOnly, HttpExceptionFilter, JwtAuthGuard, OrgUserInterceptor, Roles, RolesGuard } from '@coldpbc/nest';
+import { allRoles, coldAdminOnly, HttpExceptionFilter, JwtAuthGuard, OrgUserInterceptor, Roles, RolesGuard } from '@coldpbc/nest';
 import { Span } from 'nestjs-ddtrace';
 import { ApiOAuth2, ApiTags } from '@nestjs/swagger';
 import { certifications } from '@prisma/client';
@@ -28,17 +28,20 @@ export class CertificationsController {
     return this.certificationsService.update(req.org, req.user, updateCertificationDto);
   }
 
+  @Roles(...allRoles)
   @Get()
   findAll() {
     return this.certificationsService.findAll();
   }
 
+  @Roles(...allRoles)
   @Get(':id')
   findById(@Req() req: any, @Param('id') id: string) {
     return this.certificationsService.findById(req.organization, req.user, id);
   }
 
-  @Get(':name')
+  @Roles(...allRoles)
+  @Get('name/:name')
   findByName(@Req() req: any, @Param('name') name: string) {
     return this.certificationsService.findById(req.organization, req.user, name);
   }
