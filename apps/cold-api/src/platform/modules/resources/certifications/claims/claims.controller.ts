@@ -1,39 +1,54 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Req, UseGuards, UseInterceptors, UseFilters } from '@nestjs/common';
 import { ClaimsService } from './claims.service';
-import { CreateClaimDto } from './dto/create-claim.dto';
-import { UpdateClaimDto } from './dto/update-claim.dto';
+import { certification_claims } from '@prisma/client';
+import { allRoles, HttpExceptionFilter, JwtAuthGuard, OrgUserInterceptor, Roles, RolesGuard } from '@coldpbc/nest';
+import { Span } from 'nestjs-ddtrace';
+import { CertificationsController } from '../certifications.controller';
+import { ApiOAuth2, ApiTags } from '@nestjs/swagger';
 
-@Controller('organization/:orgId/certifications/claims')
+@Span()
+@UseGuards(JwtAuthGuard, RolesGuard)
+@UseInterceptors(OrgUserInterceptor)
+@ApiOAuth2(['openid', 'email', 'profile'])
+@ApiTags('Certifications', 'Claims')
+@UseFilters(new HttpExceptionFilter(CertificationsController.name))
+@Controller('certifications/:cId/organization/:orgId/claims')
 export class ClaimsController {
   constructor(private readonly claimsService: ClaimsService) {}
 
+  @Roles(...allRoles)
   @Post()
-  create(@Req() req: any, @Body() createClaimDto: CreateClaimDto) {
-    return this.claimsService.create(createClaimDto);
+  create(@Req() req: any, @Body() createClaimDto: certification_claims) {
+    return this.claimsService.create(req.organization, req.user, createClaimDto);
   }
 
+  @Roles(...allRoles)
   @Get()
-  findAll() {
-    return this.claimsService.findAll();
+  findAll(@Req() req: any) {
+    return this.claimsService.findAll(req.organization, req.user);
   }
 
+  @Roles(...allRoles)
   @Get(':id')
-  findById(@Param('id') id: string) {
-    return this.claimsService.findByName(id);
+  findById(@Req() req: any, @Param('id') id: string) {
+    return this.claimsService.findByName(req.organization, req.user, id);
   }
 
-  @Get(':name')
-  findByName(@Param('name') name: string) {
-    return this.claimsService.findByName(name);
+  @Roles(...allRoles)
+  @Get('name/:name')
+  findByName(@Req() req: any, @Param('name') name: string) {
+    return this.claimsService.findByName(req.organization, req.user, name);
   }
 
+  @Roles(...allRoles)
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateClaimDto: UpdateClaimDto) {
-    return this.claimsService.update(+id, updateClaimDto);
+  update(@Req() req: any, @Param('id') id: string, @Body() updateClaimDto: certification_claims) {
+    return this.claimsService.update(req.organization, req.user, id, updateClaimDto);
   }
 
+  @Roles(...allRoles)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.claimsService.remove(+id);
+  remove(@Req() req: any, @Param('id') id: string) {
+    return this.claimsService.remove(req.organization, req.user, id);
   }
 }
