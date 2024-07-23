@@ -13,8 +13,12 @@ export class ComplianceDefinitionsRepository extends BaseWorker {
     super(ComplianceDefinitionsRepository.name);
   }
 
+  private getCacheKey(orgId: string) {
+    return `organizations:${orgId}:compliance:list`;
+  }
+
   async getComplianceDefinitions() {
-    const definitions = (await this.prisma.extended.compliance_definitions.findMany({
+    const definitions = (await this.prisma.compliance_definitions.findMany({
       orderBy: {
         order: 'asc',
       },
@@ -36,14 +40,18 @@ export class ComplianceDefinitionsRepository extends BaseWorker {
 
   async getComplianceDefinitionsByOrgId(req: any, bpc: boolean) {
     const start = new Date();
-    const list = await this.cache.get(`organization:${req.organization.id}:compliance:list`);
 
-    if (list) {
-      if (!bpc) {
+    if (bpc) {
+      await this.cache.delete(this.getCacheKey(req.organization.id));
+    } else {
+      const list = await this.cache.get(this.getCacheKey(req.organization.id));
+
+      if (list) {
         return list;
       }
     }
-    const definitions = (await this.prisma.extended.compliance_definitions.findMany({
+
+    const definitions = (await this.prisma.compliance_definitions.findMany({
       orderBy: {
         order: 'asc',
       },
@@ -60,26 +68,20 @@ export class ComplianceDefinitionsRepository extends BaseWorker {
       },
     })) as compliance_definitions[];
 
-    if (Array.isArray(definitions) && definitions.length > 0) {
-      for (const def of definitions) {
-        let raw;
-        try {
-          raw = await this.responses.getScoredComplianceQuestionsByName(req.organization, def.name, req.user, { bpc });
-        } catch (e) {
-          if (!(e instanceof NotFoundException)) {
-            this.logger.error(e);
-          }
-          continue;
-        }
+    if (definitions.length < 1) {
+      throw new NotFoundException('No compliance definitions found.');
+    }
 
-        // show hidden definitions if their org_compliance is visible
-        if (!def.visible && raw.visible == true) {
-          def.visible = true;
-        }
+    for (let def of definitions) {
+      const orgComp = await this.prisma.organization_compliance.findFirst({
+        where: {
+          organization_id: req.organization.id,
+          compliance_definition_name: def.name,
+        },
+      });
 
-        if (raw.counts) {
-          set(def, 'progress', raw.counts.progress);
-        }
+      if (orgComp) {
+        def = await this.processOrgCompliance(req, def, bpc);
       }
     }
 
@@ -87,29 +89,33 @@ export class ComplianceDefinitionsRepository extends BaseWorker {
     this.logger.info(`getComplianceDefinitionsByOrgId completed for ${req.organization.name} in ${end.getTime() - start.getTime()}ms`);
 
     const filtered = definitions.filter(def => def.visible);
-    await this.cache.set(`organization:${req.organization.id}:compliance:list`, filtered);
+    await this.cache.set(this.getCacheKey(req.organization.id), filtered, { ttl: 60 * 60 * 5 });
 
     return filtered;
   }
 
-  async getComplianceSectionsByComplianceName(name: string) {
-    return this.prisma.extended.compliance_definitions.findUnique({
-      where: {
-        name,
-      },
-      include: {
-        compliance_section_groups: {
-          include: {
-            compliance_sections: true,
-          },
-        },
-      },
-    });
-  }
+  private async processOrgCompliance(req: any, def: compliance_definitions, bpc: boolean) {
+    let raw;
 
-  async deleteComplianceDefinition(name: string, orgId: string) {
-    return this.prisma.extended.compliance_definitions.delete({
-      where: { name },
-    });
+    try {
+      raw = await this.responses.getScoredComplianceQuestionsByName(req.organization, def.name, req.user, { bpc });
+    } catch (e) {
+      if (!(e instanceof NotFoundException)) {
+        this.logger.error(e);
+      }
+
+      return def;
+    }
+
+    // show hidden definitions if their org_compliance is visible
+    if (!def.visible && raw.visible == true) {
+      def.visible = true;
+    }
+
+    if (raw.counts) {
+      set(def, 'progress', raw.counts.progress);
+    }
+
+    return def;
   }
 }

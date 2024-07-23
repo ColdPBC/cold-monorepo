@@ -9,20 +9,20 @@ export class FacilitiesService extends BaseWorker {
     super(FacilitiesService.name);
   }
 
-  async getOrganizationFacilities(req: any, orgId: string): Promise<Partial<organization_facilities>[]> {
+  async getOrganizationFacilities(req: any, orgId: string): Promise<organization_facilities[]> {
     const { user } = req;
     try {
       if (!user.isColdAdmin && user.coldclimate_claims.org_id !== orgId)
         throw new UnprocessableEntityException(`${user.coldclimate_claims.email} is ${user.isColdAdmin ? 'Cold:Admin' : 'not Cold:Admin'} bug is attempting to access ${orgId}.`);
 
-      const facilities = await this.prisma.extended.organization_facilities.findMany({
+      const facilities = (await this.prisma.organization_facilities.findMany({
         where: {
           organization_id: orgId,
         },
         include: {
-          organizations: true,
+          organization: true,
         },
-      });
+      })) as unknown as organization_facilities[];
 
       if (!facilities) throw new NotFoundException(`Facilities not found for ${orgId}`);
 
@@ -38,35 +38,37 @@ export class FacilitiesService extends BaseWorker {
     orgId: string,
     body: {
       city: string;
-      state: string;
+      state_province: string;
       postal_code: string;
-      address: string;
+      address_line_1: string;
       address_line_2: string;
       country: string;
       name: string;
+      supplier: boolean;
     },
   ): Promise<organization_facilities> {
     const { user, url } = req;
     try {
       //if (!user.isColdAdmin && user.coldclimate_claims.org_id !== orgId) throw new UnprocessableEntityException(`Organization ${orgId} is invalid.`);
 
-      if (!body.address && !body.city && !body.state && !body.postal_code)
+      if (!body.address_line_1 && !body.city && !body.state_province && !body.postal_code)
         throw new UnprocessableEntityException(`Facility not found for ${orgId} and address, city, state, zip not provided in metadata.`);
 
-      const created = (await this.prisma.extended.organization_facilities.create({
+      const created = (await this.prisma.organization_facilities.create({
         data: {
           id: this.cuid2.generate().scopedId,
-          name: body.name || body.address,
-          address: body.address,
+          name: body.name || body.address_line_1,
+          address_line_1: body.address_line_1,
           address_line_2: body.address_line_2,
           city: body.city,
-          state: body.state,
+          state_province: body.state_province,
           postal_code: body.postal_code,
           organization_id: orgId,
           country: body.country || 'US',
+          supplier: body.supplier === true,
         },
         include: {
-          organizations: true,
+          organization: true,
         },
       })) as unknown as organization_facilities;
 

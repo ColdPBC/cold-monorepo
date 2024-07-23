@@ -20,13 +20,13 @@ import { ConfigService } from '@nestjs/config';
 import { PromptsService } from '../prompts/prompts.service';
 import { Job, Queue } from 'bull';
 import { InjectQueue } from '@nestjs/bull';
-import { find, set } from 'lodash';
+import { set } from 'lodash';
 import OpenAI from 'openai';
 import { ChatCompletionMessageParam } from 'openai/resources/chat/completions';
 import { RecordMetadata, ScoredPineconeRecord } from '@pinecone-database/pinecone';
 import { FPSession, FreeplayService } from '../freeplay/freeplay.service';
 import { FormattedPrompt } from 'freeplay/thin';
-import { compliance_sections } from '@prisma/client';
+import { compliance_sections, organizations } from '@prisma/client';
 
 @Injectable()
 export class ChatService extends BaseWorker implements OnModuleInit {
@@ -296,7 +296,9 @@ export class ChatService extends BaseWorker implements OnModuleInit {
     const start = new Date();
     try {
       // Get Chat History
-      let messages = (await this.cache.get(`openai:thread:${user.coldclimate_claims.email}`)) as ChatCompletionMessageParam[];
+      let messages = (await this.cache.get(
+        `openai:organizations:${company_name}:chat:sessions:${session?.sessionId}:question:${question.key}:thread`,
+      )) as ChatCompletionMessageParam[];
 
       if (!messages) {
         messages = [] as ChatCompletionMessageParam[];
@@ -317,7 +319,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
         component_prompt: (await this.prompts.getComponentPrompt(question)) || '',
         context: context[0] || docs,
         organization_name: organization?.display_name || company_name,
-        question: additional_context ? rephrased_question.toString() : `${question.prompt} ${question.tooltip}`,
+        question: additional_context ? `${rephrased_question.toString()} ${question.tooltip}` : `${question.prompt} ${question.tooltip}`,
       };
 
       const sanitized_base = (await this.fp.getPrompt('survey_question_prompt', vars, true)) as FormattedPrompt;
@@ -404,7 +406,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
       );
 
       // Save the thread to the cache
-      await this.cache.set(`openai:thread:${user.coldclimate_claims.email}`, messages, { ttl: 1000 * 60 * 60 * 24 });
+      await this.cache.set(`openai:organizations:${company_name}:chat:sessions:${session?.sessionId}:question:${question.key}:thread`, messages, { ttl: 1000 * 60 * 60 });
 
       this.logger.info(`${ai_response.answer !== 'undefined' ? '✅ Answered' : '❌ Did NOT Answer'} ${question.idx ? question.idx : 'additional_context'}`, {
         pinecone_query: rephrased_question,
@@ -432,7 +434,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
 
       return ai_response;
     } catch (error) {
-      this.logger.error(`Error asking question ${question.prompt}`, { error, ...session });
+      this.logger.error(`Error asking question ${question.prompt}`, { error: error.message, stack: error.stack, ...session });
 
       throw error;
     }
@@ -509,7 +511,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
         user: user.coldclimate_claims.id,
       });
     } catch (e) {
-      this.logger.error(`Error getting condensed response`, e);
+      this.logger.error(`Error getting condensed response`, { error: e.message, stack: e.stack });
     }
 
     const end = new Date();
@@ -543,10 +545,10 @@ export class ChatService extends BaseWorker implements OnModuleInit {
     }
 
     // Get the context content from the Pinecone index
-    let docs = (await this.pc.getContext(rephrased_question, indexName, indexName, 0.5, false)) as ScoredPineconeRecord[];
+    let docs = (await this.pc.getContext(rephrased_question, indexName, indexName, 0.2, false)) as ScoredPineconeRecord[];
 
     if (docs.length < 1) {
-      docs = (await this.pc.getContext(question.prompt, indexName, indexName, 0.3, false)) as ScoredPineconeRecord[];
+      docs = (await this.pc.getContext(question.prompt, indexName, indexName, 0.2, false)) as ScoredPineconeRecord[];
     }
 
     const content = await this.extractTextFromDocument(docs as ScoredPineconeRecord<RecordMetadata>[]);
@@ -571,7 +573,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
       const { user, payload, integration, organization } = job.data;
       const { compliance, base_update_topic } = payload;
       // Reset the AI responses for the survey
-      await this.complianceResponsesRepository.deleteAiResponsesByName(organization, compliance, user);
+      await this.complianceResponsesRepository.deleteAllAiResponsesByName(organization, compliance, user);
 
       // Log the start of the survey processing
       this.logger.info(`✅ Started processing compliance set ${compliance.compliance_definition_name} for ${organization.name}`, {
@@ -596,7 +598,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
             try {
               await this.prisma.vector_records.delete({ where: { id: vector.id } });
             } catch (e) {
-              this.logger.error(`Error deleting vector ${vector.id}`, e);
+              this.logger.error(`Error deleting vector ${vector.id}`, { error: e.message, stack: e.stack, job: job.id });
             }
           }
         }
@@ -699,7 +701,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
         try {
           reqs.push(this.processComplianceSection(job, section, organization, user, session));
         } catch (e) {
-          this.logger.error(`Error processing survey ${job.data.survey.name}`, e);
+          this.logger.error(`Error processing survey ${job.data.survey.name}`, { error: e.message, stack: e.stack, job: job.id });
         }
       }
 
@@ -722,6 +724,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
         organization,
       });
     } catch (e) {
+      this.logger.error(`Error processing survey ${job.data.survey.name}`, { error: e.message, stack: e.stack, job: job.id });
       this.sendMetrics('survey', 'failed', {
         start,
         sendEvent: true,
@@ -873,7 +876,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
         on_update_url,
       });
     } catch (e) {
-      this.logger.error(`Error processing survey ${job.data.survey.name}`, e);
+      this.logger.error(`Error processing survey ${job.data.survey.name}`, { error: e.message, stack: e.stack, job: job.id });
 
       this.sendMetrics('survey', 'failed', {
         start,
@@ -1090,7 +1093,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
               error: error,
             },
           });
-          this.logger.error(`Error processing ${section}.${item}: ${error.message}`, error);
+          this.logger.error(`Error processing ${section}.${item}: ${error.message}`, { error: error.message, stack: error.stack, job: job.id });
         }
       }
       this.sendMetrics('survey.section', 'completed', {
@@ -1106,6 +1109,8 @@ export class ChatService extends BaseWorker implements OnModuleInit {
 
       this.logger.info(`✅ Finished processing ${section}: ${definition.sections[section].title}`, { section });
     } catch (e) {
+      this.logger.error(`Error processing ${section}: ${e.message}`, { error: e.message, stack: e.stack, job: job.id });
+
       this.sendMetrics('survey.section', 'failed', {
         start,
         sendEvent: true,
@@ -1149,7 +1154,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
       for (const item of items) {
         try {
           if (await this.isDuplicateOrCanceled(organization, job, section, item)) {
-            //continue;
+            continue;
           }
 
           await job.log(`Question | section: ${section} question: ${item} (${items.indexOf(item)} of ${items.length})`);
@@ -1190,7 +1195,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
             });
           }
           // if there is additional context, create a new run for it
-          if (Object.keys(item.additional_context).length > 0) {
+          if (item.additional_context && Object.keys(item.additional_context).length > 0) {
             if (item.additional_context.value) {
               this.logger.info(`Skipping ${section.key}.${item.key}.additional_context; it has already been answered`, {
                 section: section,
@@ -1241,9 +1246,9 @@ export class ChatService extends BaseWorker implements OnModuleInit {
 
           const references = await this.filterService.filterReferences(response.references);
 
-          await this.cache.delete(`/compliance/${job.data.payload?.compliance?.compliance_definition_name}/organizations/${organization.id}/responses/counts`);
+          await this.cache.delete(this.complianceResponsesRepository.getCacheKey(organization, job.data.payload?.compliance?.compliance_definition_name), true);
 
-          const ai_response = await this.prisma.organization_compliance_ai_responses.upsert({
+          await this.prisma.organization_compliance_ai_responses.upsert({
             where: {
               orgCompQuestId: {
                 organization_compliance_id: job.data.payload?.compliance?.id,
@@ -1299,7 +1304,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
             }
           };
 */
-          await this.prisma.compliance_responses.upsert({
+          /*await this.prisma.compliance_responses.upsert({
             where: {
               orgCompQuestId: {
                 organization_compliance_id: job.data.payload?.compliance?.id,
@@ -1324,19 +1329,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
               organization_compliance_id: job.data.payload.compliance.id,
               organization_compliance_ai_response_id: ai_response.id,
             },
-          });
-
-          const payload = {
-            reply_to: `ui/${process.env.NODE_ENV}/${organization.id}/${job.data?.payload?.compliance?.compliance_definition_name}/${section.compliance_section_group_id}/${section.id}`,
-            resource: '',
-            compliance_section_group_id: `${section.compliance_section_group_id}`,
-            compliance_section_id: `${section.compliance_section_id}`,
-            method: 'GET',
-            compliance_set_name: 'b_corp_2024',
-            user: user,
-            org_id: `${job.data.payload?.compliance.compliance_definition_name}`,
-            token: job.data?.payload?.token,
-          }; //this.mqtt.replyTo(payload.reply_to, payload);
+          });*/
 
           // publish the response to the rabbit queue
           await this.rabbit.publish(`cold.core.api.compliance_responses`, {
@@ -1348,7 +1341,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
               user: user,
               compliance_set: job.data.payload?.compliance.compliance_definition_name,
               token: job.data?.payload?.token,
-              reply_to: payload.reply_to,
+              reply_to: `ui/${process.env.NODE_ENV}/${organization.id}/${job.data?.payload?.compliance?.compliance_definition_name}/${section.compliance_section_group_id}/${section.id}`,
             },
             from: 'cold.platform.openai',
           });
@@ -1372,7 +1365,8 @@ export class ChatService extends BaseWorker implements OnModuleInit {
               error: error,
             },
           });
-          this.logger.error(`Error processing ${section.key}.${item.key}: ${error.message}`, error);
+
+          this.logger.error(`Error processing ${section.key}.${item.key}: ${error.message}`, { message: error.message, stack: error.stack, job: job.id });
           await this.complianceSectionsCacheRepository.deleteCachedActiveQuestion(item, section, organization, job);
         }
       }
@@ -1395,6 +1389,7 @@ export class ChatService extends BaseWorker implements OnModuleInit {
         },
       });
 
+      this.logger.error(`Error processing ${section.key}: ${e.message}`, { error: e.message, stack: e.stack, job: job.id });
       throw e;
     }
 
@@ -1411,15 +1406,18 @@ export class ChatService extends BaseWorker implements OnModuleInit {
    * @param item
    * @private
    */
-  private async isDuplicateOrCanceled(organization, job: Job, section: string, item: string) {
+  private async isDuplicateOrCanceled(organization: organizations, job: Job, section: any, item: any) {
     const exists = await this.queue.getJob(job.id);
-    if (!exists || !exists.data.survey) {
-      this.logger.warn(`Job ${job.id} no longer found in queue; will not process question ${section}:${item}`);
-      await this.cache.delete(`jobs:${job.name}:${organization.id}:${job.data.payload.compliance.compliance_id}`);
+    const sectionKey = typeof section === 'string' ? section : section['key'];
+    const itemKey = typeof item === 'string' ? item : item['key'];
+
+    if (!exists || !exists.data.payload.compliance) {
+      this.logger.warn(`Job ${job.id} no longer found in queue; will not process question ${sectionKey}:${itemKey}`);
+      //await this.cache.delete(`jobs:${job.name}:${organization.id}:${job.data.payload.compliance.compliance_id}`);
       return true;
     }
 
-    const jobs = (await this.cache.get(`jobs:${job.name}:${organization.id}:${job.data.payload.compliance.compliance_id}`)) as number[];
+    const jobs = (await this.cache.get(`organizations:${organization.id}:jobs:${job.name}:${job.data.payload.compliance.compliance_id}`)) as number[];
 
     if (!jobs) {
       return false;

@@ -10,7 +10,7 @@ export class ComplianceQuestionBookmarkService extends BaseWorker {
 
   upsert(name, qId, bookmark: Partial<organization_compliance_question_bookmarks>, req: any) {
     try {
-      return this.repository.upsertComplianceQuestionBookmark(name, qId, req.organization, req.user);
+      return this.repository.createComplianceQuestionBookmark(name, qId, req.organization, req.user);
     } catch (err) {
       this.logger.error(err);
       if (err instanceof NotFoundException) throw err;

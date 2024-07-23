@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import {
   AccountSettingsPage,
   ActionsOverview,
@@ -8,7 +8,6 @@ import {
   DashboardLayout,
   DocumentUpload,
   Footprint,
-  Home,
   Interceptor,
   Journey,
   ProtectedRoute,
@@ -27,8 +26,7 @@ export const ColdRoutes = () => {
   const getFilteredRoutes = () => {
     return (
       <>
-        <Route path={'/'} element={<Home />} />
-        <Route path={'/home'} element={<Home />} />
+        <Route index element={<Navigate to="/compliance" replace={true} />} />
         {!ldFlags.showNewComplianceManagerPreviewCold713 && <Route path={'/assessments'} element={<Journey />} />}
         {ComplianceRoutes()}
         {QuestionnaireRoutes()}

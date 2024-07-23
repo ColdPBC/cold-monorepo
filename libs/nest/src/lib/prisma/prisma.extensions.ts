@@ -1,9 +1,9 @@
 import { PrismaClient } from '@prisma/client';
 import { createSoftDeleteExtension } from 'prisma-extension-soft-delete';
-import { WorkerLogger } from '@coldpbc/nest';
+import { WorkerLogger } from '../worker';
 import util from 'node:util';
 import { ConfigService } from '@nestjs/config';
-import { Injectable } from '@nestjs/common';
+import { INestApplication, Injectable, OnModuleInit } from '@nestjs/common';
 
 /**
  * Extends the given Prisma client with additional functionality.
@@ -64,12 +64,12 @@ export const extendedClient = (client: PrismaClient) => {
  * Uses a custom configuration and provides additional functionality through the 'extended' property.
  */
 @Injectable()
-export class ExtendedPrismaClient extends PrismaClient {
+export class ExtendedPrismaClient extends PrismaClient implements OnModuleInit {
   client: CustomPrismaClient;
 
   constructor(readonly config: ConfigService) {
     super({
-      datasourceUrl: config['internalConfig']['DATABASE_URL'],
+      datasourceUrl: `${config['internalConfig']['DATABASE_URL'] ? config['internalConfig']['DATABASE_URL'] : process.env['DATABASE_URL']}?schema=public&connection_limit=1`,
       errorFormat: process.env['NODE_ENV'] === 'development' ? 'pretty' : 'minimal',
       log:
         process.env['NODE_ENV'] === 'development'
@@ -100,6 +100,18 @@ export class ExtendedPrismaClient extends PrismaClient {
     if (!this.client) this.client = extendedClient(this);
 
     return this.client;
+  }
+
+  async onModuleInit() {
+    await this.$connect();
+  }
+
+  async enableShutdownHooks(app: INestApplication) {
+    const eventType = 'beforeExit';
+    // @ts-expect-error Shutdown hooks
+    this.$on(eventType, async () => {
+      await app.close();
+    });
   }
 }
 

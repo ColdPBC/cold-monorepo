@@ -15,7 +15,7 @@ export class OrganizationHelper extends BaseWorker {
     }
 
     if (!orgs) {
-      orgs = (await this.prisma.extended.organizations.findMany()) as Array<organizations>;
+      orgs = (await this.prisma.organizations.findMany()) as Array<organizations>;
       if (!orgs) {
         throw new NotFoundException('no organizations found in DB, Cache, or Auth0');
       }
@@ -33,7 +33,7 @@ export class OrganizationHelper extends BaseWorker {
       const orgs = await this.getOrganizations(bpc);
       org = orgs.find(o => o.id === id) as organizations;
     } else {
-      org = (await this.prisma.extended.organizations.findUnique({
+      org = (await this.prisma.organizations.findUnique({
         where: {
           id: id,
         },

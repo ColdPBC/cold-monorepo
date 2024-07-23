@@ -1,10 +1,195 @@
+# [1.302.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.301.1...v1.302.0) (2024-07-22)
+
+
+### Bug Fixes
+
+* commonJS error in running seed scripts ([7dcb677](https://github.com/ColdPBC/cold-monorepo/commit/7dcb67748b7214a588e83357ce01e7c1340ec27c))
+
+
+### Features
+
+* Update `esbuild` packages to v0.20.2 ([a702ad0](https://github.com/ColdPBC/cold-monorepo/commit/a702ad0a9ad2f555804d22e312015481e3de5fb7))
+
+## [1.301.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.301.0...v1.301.1) (2024-07-22)
+
+
+### Bug Fixes
+
+* issues with OpenAPI spec ([a14a215](https://github.com/ColdPBC/cold-monorepo/commit/a14a215a535ce533c9826a09ccbaa48e80fc6ea8))
+
+# [1.301.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.300.0...v1.301.0) (2024-07-22)
+
+
+### Bug Fixes
+
+* incorrect entry in controller array ([5b92440](https://github.com/ColdPBC/cold-monorepo/commit/5b92440bb8db6c36c2d58439d158cafaf175db4f))
+
+
+### Features
+
+* Update providers and exports in ClaimsModule ([f1a3cfc](https://github.com/ColdPBC/cold-monorepo/commit/f1a3cfc9999c8395e4bca69c80e622781522b48f))
+
+# [1.300.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.299.0...v1.300.0) (2024-07-22)
+
+
+### Bug Fixes
+
+* add null check for additional_context in chat service ([35dd286](https://github.com/ColdPBC/cold-monorepo/commit/35dd286f847c6fec16ddfd9cec7ca8a9d00b4ece))
+* add role restrictions to update and remove certifications ([81c2ccd](https://github.com/ColdPBC/cold-monorepo/commit/81c2ccd83035824d397771ac8463babb8cb3bb5a))
+* Update certifications.repository.ts to improve error handling ([433e822](https://github.com/ColdPBC/cold-monorepo/commit/433e822fcb0ea41d0f7df2549adb2101ee7b652c))
+
+
+### Features
+
+* add '[@ogma](https://github.com/ogma)' packages and update related config files ([1172994](https://github.com/ColdPBC/cold-monorepo/commit/1172994e3f83982330721fb88d83f9c53fab0f7f))
+* Add 'Claims' to compliance enums ([122eace](https://github.com/ColdPBC/cold-monorepo/commit/122eace3b41b703d94f1db3fccfde771e86a20a6))
+* Add Certification entity ([52cc105](https://github.com/ColdPBC/cold-monorepo/commit/52cc1051e7f773b9a29a31d22372da233f87bfe5))
+* Add Certifications controller ([9c6cce3](https://github.com/ColdPBC/cold-monorepo/commit/9c6cce35e9e8bfb5fa3ef295a970a9e6ee3d8ffa))
+* Add Certifications module ([9dd715c](https://github.com/ColdPBC/cold-monorepo/commit/9dd715c4de9f3823dded021aae9f74a6ea696e6b))
+* Add Certifications Repository in Nest Library ([640fa29](https://github.com/ColdPBC/cold-monorepo/commit/640fa29894db8a8f6484ea766e3014b585b38096))
+* Add CertificationsModule to AppModule ([37c7078](https://github.com/ColdPBC/cold-monorepo/commit/37c7078ad16ed578d5ab7def12ec6b296c21c812))
+* add CertificationsService to handle certifications ([7d6ca57](https://github.com/ColdPBC/cold-monorepo/commit/7d6ca57ab1acde15a80b5ac39f6a79d3c24de017))
+* Add claims service in certifications module ([459c1a1](https://github.com/ColdPBC/cold-monorepo/commit/459c1a13bbd32e7b9c1708f199480f587b4e7348))
+* Add ClaimsModule in certifications ([d5c387a](https://github.com/ColdPBC/cold-monorepo/commit/d5c387a540c07ce67ec3956db2dec6a900e96b0f))
+* Add ClaimsModule to CertificationsModule ([fecb181](https://github.com/ColdPBC/cold-monorepo/commit/fecb18117d4674b045fe8641a75eb3a8d78a083b))
+* Add Compliance Certification Repository for Nest App ([9fd1745](https://github.com/ColdPBC/cold-monorepo/commit/9fd17455aadfb605b5a6d0af4218be2952b58dd7))
+* Add ComplianceCertificationClaimsRepository ([2340f8a](https://github.com/ColdPBC/cold-monorepo/commit/2340f8a69fb0950bdd0ab08d91e6203e698154f0))
+* Add dev mode to worker log service ([521a1c7](https://github.com/ColdPBC/cold-monorepo/commit/521a1c7e7384a220df537797fbb088670336f819))
+* Add logging exports to nest lib index ([14edbcd](https://github.com/ColdPBC/cold-monorepo/commit/14edbcd1d7f41d8f892a351806cbd2537704090b))
+* Add new claims controller in certifications module ([74de42b](https://github.com/ColdPBC/cold-monorepo/commit/74de42bca8d888d9465deb273a323d93f0006c16))
+* Add SuppliersModule in resources ([60e56f2](https://github.com/ColdPBC/cold-monorepo/commit/60e56f2465cb939f8f58d4044b545df7fecb4b07))
+* Add SuppliersModule to Organization module ([cb5a5e4](https://github.com/ColdPBC/cold-monorepo/commit/cb5a5e4d60dbfbe6dd4684e3a19aa7328c318d16))
+* Add SuppliersRepository in nest lib ([ae8aba0](https://github.com/ColdPBC/cold-monorepo/commit/ae8aba0ab4500594a3827c0221dc45ed9bc239da))
+* Added DTOs for creating and updating Certifications ([3e0c98a](https://github.com/ColdPBC/cold-monorepo/commit/3e0c98a44721a8939dcb3387adf484f36e761bb6))
+* Added guards, interceptors, and decorators in certifications controller ([f6dc566](https://github.com/ColdPBC/cold-monorepo/commit/f6dc566ba54b61fbf6502ab7e939d677fcfed4d2))
+* Added new SuppliersController for organization suppliers ([2724ea9](https://github.com/ColdPBC/cold-monorepo/commit/2724ea95fe98ad8e73f1736009af05b5bc592e61))
+* Create new Suppliers Service in organizations module ([4b3ba06](https://github.com/ColdPBC/cold-monorepo/commit/4b3ba06f4eb6d2da22ddafbd61ef1a2e68eb938f))
+* Enhance claims controller with guards, interceptors, filters, and role permissions ([a08b055](https://github.com/ColdPBC/cold-monorepo/commit/a08b055e7d5e680f08fccbf7967515dfd5f0bbd2))
+* Modify certifications schema and add unique migration ([a5b454a](https://github.com/ColdPBC/cold-monorepo/commit/a5b454a37827a0bd317cb49cab1252afb78e44c5))
+* Refactor CertificationsService to use CertificationRepository ([edee10a](https://github.com/ColdPBC/cold-monorepo/commit/edee10a57682b5c7b0d5d2e3ca1825146e96e0b3))
+* Remove certification-related entities and DTOs ([3b0d864](https://github.com/ColdPBC/cold-monorepo/commit/3b0d8644b6c2eac4ab91a880049a134d2c34880b))
+* Remove unnecessary fields from schema and migration ([4756c94](https://github.com/ColdPBC/cold-monorepo/commit/4756c940a054e53a902fa5826962c842753947d7))
+* Update certifications module in cold-api ([69e1181](https://github.com/ColdPBC/cold-monorepo/commit/69e11819c63cdd94fdfd2707a3c9928815be0176))
+* update claims service operations ([1ed9f95](https://github.com/ColdPBC/cold-monorepo/commit/1ed9f95c3c62f5a79769a7aa6a45fb6e1e7807d8))
+* Update prisma schema and migrations for claim dates and data types ([daf88bf](https://github.com/ColdPBC/cold-monorepo/commit/daf88bf985e586a5b47885c1fdc30fb51bd596de))
+* Update roles in certifications.controller ([d04e6ee](https://github.com/ColdPBC/cold-monorepo/commit/d04e6ee3878bf9f9d5e29e59c8ea58d0d02fdcb3))
+
+# [1.299.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.298.2...v1.299.0) (2024-07-18)
+
+
+
+### Features
+
+* Update code for handling compliance section updates ([49fbccf](https://github.com/ColdPBC/cold-monorepo/commit/49fbccfb87cb273df6d209a1b7cad0707a796564))
+
+## [1.298.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.298.1...v1.298.2) (2024-07-18)
+
+
+
+### Bug Fixes
+
+* add checking for organization compliance in compliance-definitions repository ([5c19b12](https://github.com/ColdPBC/cold-monorepo/commit/5c19b12969500a04e8617b03839bf92760bbe304))
+* add checking for organization compliance in compliance-definitions repository ([#503](https://github.com/ColdPBC/cold-monorepo/issues/503)) ([37bf7eb](https://github.com/ColdPBC/cold-monorepo/commit/37bf7eb264a94b8661d72b19fbe7ca9ca65923bd))
+
+## [1.298.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.298.0...v1.298.1) (2024-07-18)
+
+
+### Bug Fixes
+
+* create question / dependency chain flow ([e90c89b](https://github.com/ColdPBC/cold-monorepo/commit/e90c89bcc7d06bb882ea38674a60d7100b927fef))
+
+# [1.298.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.297.0...v1.298.0) (2024-07-18)
+
+
+### Features
+
+* Replace home route with compliance route ([1e984f5](https://github.com/ColdPBC/cold-monorepo/commit/1e984f54f5537e363c0c07313ee0178af63b6f3d))
+
+# [1.297.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.296.0...v1.297.0) (2024-07-18)
+
+
+### Features
+
+* Sort compliance sets by title ([f7fcc5c](https://github.com/ColdPBC/cold-monorepo/commit/f7fcc5c1d53c7ac7f252e4376a9ac0b856a3926f))
+
+# [1.296.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.295.0...v1.296.0) (2024-07-17)
+
+
+### Features
+
+* Add CreateProductDto class ([1f5f96c](https://github.com/ColdPBC/cold-monorepo/commit/1f5f96c011ecf5b12882d633f62e0b65e51f54e8))
+* Add new Product entity file ([8b1622f](https://github.com/ColdPBC/cold-monorepo/commit/8b1622fdc1027661832e3a2b23630945fe273e24))
+* add ProductsController in the organizations module ([04be8ca](https://github.com/ColdPBC/cold-monorepo/commit/04be8ca7b480b8e361f7c5a5debcf638711e5750))
+* Add ProductsRepository in organizations ([ae326c6](https://github.com/ColdPBC/cold-monorepo/commit/ae326c65511e92163988dfd8d870438e936c30af))
+* add ProductsService to platform modules ([3f92816](https://github.com/ColdPBC/cold-monorepo/commit/3f9281677290e267f93dff51fa36e579178490da))
+* Add UpdateProductDto in products module ([d295e32](https://github.com/ColdPBC/cold-monorepo/commit/d295e32c2c493037c99e9d131a1cf1fa52a75102))
+* Added new compliance types to utility enums ([83d8f77](https://github.com/ColdPBC/cold-monorepo/commit/83d8f77d511a7ec065ca96c6139c2c97f1838b1c))
+* Added new Products module ([2ac4207](https://github.com/ColdPBC/cold-monorepo/commit/2ac42075d4dc1696150fdb7cbe9795ebd2b1278a))
+* Extend PrismaClient and enhance PrismaService ([43b3eea](https://github.com/ColdPBC/cold-monorepo/commit/43b3eea1fa552be07a56bb6e51c19ee06b6d10ff))
+* Migrate organization suppliers to view ([e4a8c06](https://github.com/ColdPBC/cold-monorepo/commit/e4a8c06614ba9a976a82324f7429f38c63d674f7))
+* Moved ProductsRepository under compliance module ([40e813a](https://github.com/ColdPBC/cold-monorepo/commit/40e813a3e8718cac1334b5062c77b8f24ccae75b))
+* Update Prisma migration to remove organization suppliers and related columns ([301f9b5](https://github.com/ColdPBC/cold-monorepo/commit/301f9b5384b4935616eb732f0e4de6d5efc5b761))
+
+# [1.296.0-cold-902.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.295.0...v1.296.0-cold-902.1) (2024-07-17)
+
+
+### Features
+
+* Add CreateProductDto class ([1f5f96c](https://github.com/ColdPBC/cold-monorepo/commit/1f5f96c011ecf5b12882d633f62e0b65e51f54e8))
+* Add new Product entity file ([8b1622f](https://github.com/ColdPBC/cold-monorepo/commit/8b1622fdc1027661832e3a2b23630945fe273e24))
+* add ProductsController in the organizations module ([04be8ca](https://github.com/ColdPBC/cold-monorepo/commit/04be8ca7b480b8e361f7c5a5debcf638711e5750))
+* Add ProductsRepository in organizations ([ae326c6](https://github.com/ColdPBC/cold-monorepo/commit/ae326c65511e92163988dfd8d870438e936c30af))
+* add ProductsService to platform modules ([3f92816](https://github.com/ColdPBC/cold-monorepo/commit/3f9281677290e267f93dff51fa36e579178490da))
+* Add UpdateProductDto in products module ([d295e32](https://github.com/ColdPBC/cold-monorepo/commit/d295e32c2c493037c99e9d131a1cf1fa52a75102))
+* Added new compliance types to utility enums ([83d8f77](https://github.com/ColdPBC/cold-monorepo/commit/83d8f77d511a7ec065ca96c6139c2c97f1838b1c))
+* Added new Products module ([2ac4207](https://github.com/ColdPBC/cold-monorepo/commit/2ac42075d4dc1696150fdb7cbe9795ebd2b1278a))
+* Migrate organization suppliers to view ([e4a8c06](https://github.com/ColdPBC/cold-monorepo/commit/e4a8c06614ba9a976a82324f7429f38c63d674f7))
+* Update Prisma migration to remove organization suppliers and related columns ([301f9b5](https://github.com/ColdPBC/cold-monorepo/commit/301f9b5384b4935616eb732f0e4de6d5efc5b761))
+
+# [1.295.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.294.1...v1.295.0) (2024-07-17)
+
+
+### Features
+
+* Update organization compliance response Rabbit processing ([19bf2d6](https://github.com/ColdPBC/cold-monorepo/commit/19bf2d64d19cfb176c5b0a8f47af6ac554b19a54))
+
+## [1.294.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.294.0...v1.294.1) (2024-07-16)
+
+
+### Bug Fixes
+
+* Deprecate compliance-definitions.findOrgCompliances() method and comment out cache set functionality ([2b30bd4](https://github.com/ColdPBC/cold-monorepo/commit/2b30bd4b2abdb418a79aacb8ac8fa8af94b3722c))
+
+# [1.294.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.293.0...v1.294.0) (2024-07-16)
+
+
+### Features
+
+* add bpc query parameter to getComplianceResponsesCounts ([e37ebb6](https://github.com/ColdPBC/cold-monorepo/commit/e37ebb67cc96458713b20fe2434703d7a817a184))
+* Add new SQL view for compliance response ([5b3f8f3](https://github.com/ColdPBC/cold-monorepo/commit/5b3f8f3b4be041856af4641f01aef6181793ea43))
+* Add supplier boolean to organization_facilities table ([0190a3c](https://github.com/ColdPBC/cold-monorepo/commit/0190a3caa657361385bea090c0df8ae1dda56c98))
+* Adjust getContext sensitivity in chat controller ([1ff2cbe](https://github.com/ColdPBC/cold-monorepo/commit/1ff2cbe54fb0cdefa76792d00a5636b965c2a101))
+* Drop compliance_responses table in Prisma ([176a3c5](https://github.com/ColdPBC/cold-monorepo/commit/176a3c531daf42ab81165f8b8d587489baedf858))
+* Improve chat service error handling and question retrievals ([178eaed](https://github.com/ColdPBC/cold-monorepo/commit/178eaed939ce639924e75d0a69574eda71c2644c))
+
+# [1.293.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.292.0...v1.293.0) (2024-07-16)
+
+
+
+### Features
+
+* Add initial supplier product certification models ([9fc9093](https://github.com/ColdPBC/cold-monorepo/commit/9fc9093bfe352114f373d56ada1b912f62dc3442))
+
 # [1.292.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.291.0...v1.292.0) (2024-07-15)
+
 
 
 ### Features
 
 * Add 'Suppliers' component to seed definitions ([b8509f1](https://github.com/ColdPBC/cold-monorepo/commit/b8509f159ce7f82cdee25160dd82f28504e526b9))
 * Add Suppliers page and associated icon ([c79d01f](https://github.com/ColdPBC/cold-monorepo/commit/c79d01f1db9a178b94d2c30eb8480072c42d9462))
+
+
 
 # [1.291.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.290.0...v1.291.0) (2024-07-12)
 

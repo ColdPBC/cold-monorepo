@@ -31,7 +31,7 @@ export class ComplianceQuestionsService extends BaseWorker {
   }
 
   /**
-   * Finds all compliance questions based on the provided compliance definition name.
+   * Finds all compliance questions based on the provided compliance definition name, section_id, and section_group_id.
    *
    * @param {string} compliance_definition_name - The name of the compliance definition.
    *

@@ -24,7 +24,7 @@ import { compliance_responses } from '@prisma/client';
 export class OrganizationComplianceResponsesController {
   constructor(private readonly organizationComplianceResponsesService: OrganizationComplianceResponsesService) {}
 
-  // Use PUT instead of POST since we are upserting the compliance response
+  // Use PUT instead of POST since we are upserting the org response
   @Put('section_groups/:sgId/sections/:sId/questions/:qId/responses')
   @ApiParam({
     name: 'sgId',
@@ -216,8 +216,8 @@ export class OrganizationComplianceResponsesController {
   //@CacheTTL(50)
   @Get('responses/counts')
   @Roles(...allRoles)
-  async getComplianceResponsesCounts(@Param('name') name: string, @Req() req: any) {
-    const response = await this.organizationComplianceResponsesService.findAllByCompliance(name, req, { onlyCounts: true });
+  async getComplianceResponsesCounts(@Param('name') name: string, @Req() req: any, @Query('bpc') bpc: boolean) {
+    const response = await this.organizationComplianceResponsesService.findAllByCompliance(name, req, { onlyCounts: true, bpc });
     // return response.counts;
     return response;
   }

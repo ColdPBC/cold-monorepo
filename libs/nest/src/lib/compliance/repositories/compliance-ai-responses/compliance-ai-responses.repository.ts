@@ -2,45 +2,29 @@ import { Injectable, NotFoundException, UnprocessableEntityException } from '@ne
 import { BaseWorker } from '../../../worker';
 import { PrismaService } from '../../../prisma';
 import { organizations } from '@prisma/client';
+import { CacheService } from '../../../cache';
 
 @Injectable()
 export class ComplianceAiResponsesRepository extends BaseWorker {
-  constructor(readonly prisma: PrismaService) {
+  constructor(readonly prisma: PrismaService, readonly cache: CacheService) {
     super(ComplianceAiResponsesRepository.name);
   }
 
-  private async getOrg(idOrName) {
-    let where;
-
-    const byId = idOrName.startsWith('org_');
-    if (byId) {
-      where = { id: idOrName };
-    } else {
-      where = { name: idOrName };
-    }
-
-    const org = this.prisma.extended.organizations.findUnique({
-      where,
-    });
-
-    if (!org) {
-      throw new NotFoundException({ ...where }, `Organization not found: ${idOrName}`);
-    }
-
-    return org;
+  private getCacheKey(org: organizations, complianceName: string) {
+    return `organizations:${org.id}:compliance:${complianceName}:responses:ai_responses`;
   }
 
-  async createAiResponses(orgId: string, complianceName: string, responseData: any, user: any) {
-    this.logger.info(`Creating ai_responses for ${orgId}: ${complianceName}`, {
+  async createAiResponses(org: organizations, complianceName: string, responseData: any, user: any) {
+    await this.cache.delete(this.getCacheKey(org, complianceName), true);
+
+    this.logger.info(`Creating ai_responses for ${org.name}: ${complianceName}`, {
       user,
       responseData,
-      organization: { id: orgId },
+      organization: org,
     });
 
     try {
-      const org = await this.getOrg(orgId);
-
-      await this.prisma.extended.organization_compliance_ai_responses.create({
+      await this.prisma.organization_compliance_ai_responses.create({
         data: {
           organization_id: org?.id,
           organization_compliance_id: complianceName,
@@ -48,30 +32,26 @@ export class ComplianceAiResponsesRepository extends BaseWorker {
         },
       });
     } catch (error) {
-      this.logger.error(`Error creating ai_responses for ${orgId}: ${complianceName}`, { orgId, complianceName, user, error });
+      this.logger.error(`Error creating ai_responses for ${org.name}: ${complianceName}`, { organization: org, complianceName, user, error });
 
-      throw new UnprocessableEntityException({ orgId, complianceName, user }, `Error creating ai_responses for ${orgId}: ${complianceName}`);
+      throw new UnprocessableEntityException({ org, complianceName, user }, `Error creating ai_responses for ${org.name}: ${complianceName}`);
     }
   }
 
-  async updateAiResponse(orgId: string, complianceName: string, id: string, responseData: any, user: any) {
-    this.logger.info(`Updating ai_response for ${orgId}: ${complianceName}`, {
+  async updateAiResponse(org: organizations, complianceName: string, id: string, responseData: any, user: any) {
+    await this.cache.delete(this.getCacheKey(org, complianceName), true);
+
+    this.logger.info(`Updating ai_response for ${org.name}: ${complianceName}`, {
       user,
       id,
       responseData,
-      organization: { id: orgId },
+      organization: org,
     });
     try {
-      const org = await this.getOrg(orgId);
-
-      if (!org) {
-        throw new NotFoundException({ user, organization: orgId }, `Organization not found: ${orgId}`);
-      }
-
-      const compliance = await this.prisma.extended.organization_compliance.findUnique({
+      const compliance = await this.prisma.organization_compliance.findUnique({
         where: {
           orgIdCompNameKey: {
-            organization_id: orgId,
+            organization_id: org.id,
             compliance_definition_name: complianceName,
           },
         },
@@ -84,37 +64,33 @@ export class ComplianceAiResponsesRepository extends BaseWorker {
             compliance: { name: complianceName },
             organization: { id: org?.id },
           },
-          `Compliance not found for ${orgId}: ${complianceName}`,
+          `Compliance not found for ${org.name}: ${complianceName}`,
         );
       }
 
-      await this.prisma.extended.organization_compliance_ai_responses.update({
+      await this.prisma.organization_compliance_ai_responses.update({
         where: { id, organization_id: org.id, organization_compliance_id: compliance.id },
         data: responseData,
       });
-    } catch (error) {
-      this.logger.error(`Error updating ai_response for ${orgId}: ${complianceName}`, { orgId, complianceName, user, error });
 
-      throw new UnprocessableEntityException({ orgId, complianceName, user }, `Error updating ai_response for ${orgId}: ${complianceName}`);
+      return this.getAiResponse(org, complianceName, id, user);
+    } catch (error) {
+      this.logger.error(`Error updating ai_response for ${org.name}: ${complianceName}`, { organization: org, complianceName, user, error });
+
+      throw new UnprocessableEntityException({ organization: org, complianceName, user }, `Error updating ai_response for ${org.name}: ${complianceName}`);
     }
   }
 
-  async getAiResponse(orgId: string, complianceName: string, id: string, user: any) {
-    this.logger.info(`Fetching ai_response for ${orgId}: ${complianceName}`, {
+  async getAiResponse(org: organizations, complianceName: string, id: string, user: any) {
+    this.logger.info(`Fetching ai_response for ${org.name}: ${complianceName}`, {
       user,
       id,
       compliance: { name: complianceName },
-      organization: { id: orgId },
+      organization: org,
     });
 
     try {
-      const org = await this.getOrg(orgId);
-
-      if (!org) {
-        throw new NotFoundException({ user, organization: orgId }, `Organization not found: ${orgId}`);
-      }
-
-      const compliance = await this.prisma.extended.organization_compliance.findUnique({
+      const compliance = await this.prisma.organization_compliance.findUnique({
         where: {
           orgIdCompNameKey: {
             organization_id: org.id,
@@ -130,11 +106,11 @@ export class ComplianceAiResponsesRepository extends BaseWorker {
             compliance: { name: complianceName },
             organization: { id: org.id },
           },
-          `Compliance not found for ${orgId}: ${complianceName}`,
+          `Compliance not found for ${org.name}: ${complianceName}`,
         );
       }
 
-      return this.prisma.extended.organization_compliance_ai_responses.findUnique({
+      const aiResponse = await this.prisma.organization_compliance_ai_responses.findUnique({
         where: { id, organization_id: org.id, organization_compliance_id: compliance.id },
         include: {
           compliance_questions: true,
@@ -145,26 +121,25 @@ export class ComplianceAiResponsesRepository extends BaseWorker {
           },
         },
       });
-    } catch (error) {
-      this.logger.error(`Error fetching ai_response for ${orgId}: ${complianceName}`, { orgId, complianceName, user, error });
 
-      throw new UnprocessableEntityException({ orgId, complianceName, user }, `Error fetching ai_response for ${orgId}: ${complianceName}`);
+      this.cache.set(`${this.getCacheKey(org, complianceName)}:${id}`, aiResponse);
+
+      return aiResponse;
+    } catch (error) {
+      this.logger.error(`Error fetching ai_response for ${org.name}: ${complianceName}`, { organizations: org, complianceName, user, error });
+
+      throw new UnprocessableEntityException({ organizations: org, complianceName, user }, `Error fetching ai_response for ${org.name}: ${complianceName}`);
     }
   }
 
-  async getAiResponses(orgId: string, complianceName: string, user: any) {
-    this.logger.info(`Fetching ai_responses for ${orgId}: ${complianceName}`, {
+  async getAiResponses(org: organizations, complianceName: string, user: any) {
+    this.logger.info(`Fetching ai_responses for ${org.name}: ${complianceName}`, {
       user,
       compliance: { name: complianceName },
-      organization: { id: orgId },
+      organization: org,
     });
     try {
-      const org = await this.getOrg(orgId);
-
-      if (!org) {
-        throw new NotFoundException({ user, organization: orgId }, `Organization not found: ${orgId}`);
-      }
-      const compliance = await this.prisma.extended.organization_compliance.findUnique({
+      const compliance = await this.prisma.organization_compliance.findUnique({
         where: {
           orgIdCompNameKey: {
             organization_id: org.id,
@@ -178,38 +153,44 @@ export class ComplianceAiResponsesRepository extends BaseWorker {
           {
             user,
             compliance: { name: complianceName },
-            organization: { id: org.id },
+            organization: org,
           },
-          `Compliance not found for ${orgId}: ${complianceName}`,
+          `Compliance not found for ${org.name}: ${complianceName}`,
         );
       }
 
-      const response = this.prisma.extended.organization_compliance_ai_responses.findMany({
+      const responses = this.prisma.organization_compliance_ai_responses.findMany({
         where: { organization_id: org.id, organization_compliance_id: compliance.id },
         include: {
           compliance_questions: true,
           files: true,
         },
       });
-      return response;
+
+      this.cache.set(this.getCacheKey(org, complianceName), responses);
+
+      return responses;
     } catch (error) {
-      this.logger.error(`Error fetching ai_responses for ${orgId}: ${complianceName}`, { orgId, complianceName, user, error });
+      this.logger.error(`Error fetching ai_responses for ${org.name}: ${complianceName}`, { organizations: org, complianceName, user, error });
       if (error instanceof NotFoundException) throw error;
 
-      throw new UnprocessableEntityException({ orgId, complianceName, user }, `Error fetching ai_responses for ${orgId}: ${complianceName}`);
+      throw new UnprocessableEntityException({ organizations: org, complianceName, user }, `Error fetching ai_responses for ${org.name}: ${complianceName}`);
     }
   }
-  async deleteAiResponses(organization: organizations, complianceName: string, user: any) {
-    this.logger.info(`Clearing previous ai_responses for ${organization.id}: ${complianceName}`, {
+
+  async deleteAiResponses(org: organizations, complianceName: string, user: any) {
+    await this.cache.delete(this.getCacheKey(org, complianceName), true);
+
+    this.logger.info(`Clearing previous ai_responses for ${org.name}: ${complianceName}`, {
       user,
       compliance: { name: complianceName },
-      organization: organization,
+      organization: org,
     });
     try {
-      const compliance = await this.prisma.extended.organization_compliance.findUnique({
+      const compliance = await this.prisma.organization_compliance.findUnique({
         where: {
           orgIdCompNameKey: {
-            organization_id: organization.id,
+            organization_id: org.id,
             compliance_definition_name: complianceName,
           },
         },
@@ -220,37 +201,33 @@ export class ComplianceAiResponsesRepository extends BaseWorker {
           {
             user,
             compliance: { name: complianceName },
-            organization: organization,
+            organization: org,
           },
-          `Compliance not found for ${organization.id}: ${complianceName}`,
+          `Compliance not found for ${org.name}: ${complianceName}`,
         );
       }
 
-      await this.prisma.extended.organization_compliance_ai_responses.deleteMany({
-        where: { organization_id: organization.id, organization_compliance_id: compliance.id },
+      await this.prisma.organization_compliance_ai_responses.deleteMany({
+        where: { organization_id: org.id, organization_compliance_id: compliance.id },
       });
     } catch (error) {
-      this.logger.error(`Error clearing ai_responses for ${organization.id}: ${complianceName}`, { organization, complianceName, user, error });
+      this.logger.error(`Error clearing ai_responses for ${org.id}: ${complianceName}`, { organizations: org, complianceName, user, error });
 
-      throw new UnprocessableEntityException({ organization, complianceName, user }, `Error clearing ai_responses for ${organization.id}: ${complianceName}`);
+      throw new UnprocessableEntityException({ organizations: org, complianceName, user }, `Error clearing ai_responses for ${org.name}: ${complianceName}`);
     }
   }
 
-  async deleteAiResponse(orgId: string, complianceName: string, id: string, user: any) {
-    this.logger.info(`Clearing ai_response for ${orgId}: ${complianceName}`, {
+  async deleteAiResponse(org: organizations, complianceName: string, id: string, user: any) {
+    await this.cache.delete(`${this.getCacheKey(org, complianceName)}:${id}`, true);
+
+    this.logger.info(`Clearing ai_response for ${org.name}: ${complianceName}`, {
       user,
       id,
       compliance: { name: complianceName },
-      organization: { id: orgId },
+      organization: org,
     });
     try {
-      const org = await this.getOrg(orgId);
-
-      if (!org) {
-        throw new NotFoundException({ user, organization: orgId }, `Organization not found: ${orgId}`);
-      }
-
-      const compliance = await this.prisma.extended.organization_compliance.findUnique({
+      const compliance = await this.prisma.organization_compliance.findUnique({
         where: {
           orgIdCompNameKey: {
             organization_id: org.id,
@@ -266,11 +243,11 @@ export class ComplianceAiResponsesRepository extends BaseWorker {
             compliance: { name: complianceName },
             organization: { id: org.id },
           },
-          `Compliance not found for ${orgId}: ${complianceName}`,
+          `Compliance not found for ${org.name}: ${complianceName}`,
         );
       }
 
-      await this.prisma.extended.organization_compliance_ai_responses.delete({
+      await this.prisma.organization_compliance_ai_responses.delete({
         where: {
           id,
           organization_id: org.id,
@@ -278,9 +255,9 @@ export class ComplianceAiResponsesRepository extends BaseWorker {
         },
       });
     } catch (error) {
-      this.logger.error(`Error clearing ai_response for ${orgId}: ${complianceName}`, { orgId, complianceName, user, error });
+      this.logger.error(`Error clearing ai_response for ${org.name}: ${complianceName}`, { organizations: org, complianceName, user, error });
 
-      throw new UnprocessableEntityException({ orgId, complianceName, user }, `Error clearing ai_response for ${orgId}: ${complianceName}`);
+      throw new UnprocessableEntityException({ organizations: org, complianceName, user }, `Error clearing ai_response for ${org.name}: ${complianceName}`);
     }
   }
 }

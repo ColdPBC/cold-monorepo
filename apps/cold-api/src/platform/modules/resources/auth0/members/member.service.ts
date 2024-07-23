@@ -46,10 +46,10 @@ export class MemberService extends BaseWorker {
         throw new NotFoundException(`User with email ${email} not found`);
       }
 
-      await this.cacheService.delete(`auth0:organizations:${user.coldclimate_claims.org_id}:members:${email}`);
-      await this.cacheService.delete(`auth0:organizations:${user.coldclimate_claims.org_id}:members`);
+      await this.cacheService.delete(`organizations:${user.coldclimate_claims.org_id}:members:${email}`);
+      await this.cacheService.delete(`organizations:${user.coldclimate_claims.org_id}:members`);
 
-      await this.cacheService.set(`auth0:organizations:${user.coldclimate_claims.org_id}:members:${email}`, results.data[0], {
+      await this.cacheService.set(`organizations:${user.coldclimate_claims.org_id}:members:${email}`, results.data[0], {
         ttl: 1000 * 60 * 60 * 24 * 7,
         update: true,
       });

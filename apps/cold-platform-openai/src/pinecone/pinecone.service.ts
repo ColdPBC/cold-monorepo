@@ -114,7 +114,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
           break;
       }
     } catch (err) {
-      err.statusCode !== 404 && this.logger.error(err.message, { ...err });
+      err.statusCode !== 404 && this.logger.error(err.message, { stack: err.stack, message: err.message });
     }
 
     if (Array.isArray(org['organization_files']) && org['organization_files'].length > 0) {
@@ -227,8 +227,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
     }
   }
 
-  // The function `getContext` is used to retrieve the context of a given message
-  async getContext(message: string, namespace: string, indexName: string, minScore = 0.3, getOnlyText = true): Promise<string | ScoredPineconeRecord[]> {
+  async getContext(message: string, namespace: string, indexName: string, minScore = 0.0, getOnlyText = true): Promise<string | ScoredPineconeRecord[]> {
     const indexDetails = await this.getIndexDetails(indexName);
     // Get the embeddings of the input message
     const embedding = await this.embedString(message, indexName);
@@ -236,13 +235,18 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
     // Retrieve the matches for the embeddings from the specified namespace
     const matches = await this.getMatchesFromEmbeddings(embedding, 5, namespace, indexDetails.indexName);
 
+    if (!matches || matches.length < 1) {
+      this.logger.warn('No documents matched embedding', { message, namespace, index: indexDetails.indexName });
+      return [];
+    }
     // Filter out the matches that have a score lower than the minimum score
     const qualifyingDocs: any = matches.filter(m => m.score && m.score > minScore);
 
     if (Array.isArray(qualifyingDocs) && qualifyingDocs.length < 1) {
-      this.logger.info('No qualifying docs found', {
+      this.logger.info(`No qualifying docs found with score greater than ${minScore}`, {
         message,
-        docs: qualifyingDocs,
+        minScore,
+        docs: matches.length,
         topk: 5,
         namespace,
         index: indexDetails.indexName,
@@ -250,7 +254,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
     } else {
       this.logger.info('Retrieved docs from index', {
         message,
-        docs: qualifyingDocs,
+        docs: qualifyingDocs.length,
         topK: 5,
         namespace,
         index: indexDetails.indexName,
@@ -308,7 +312,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
       return queryResult.matches || [];
     } catch (e) {
       // Log the error and throw it
-      this.logger.log(`Error querying embeddings: ${e.message}`, { ...e });
+      this.logger.log(`Error querying embeddings: ${e.message}`, { stack: e.stack, message: e.message });
       throw new Error(`Error querying embeddings: ${e}`);
     }
   }
@@ -369,7 +373,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
           },
         });
       } catch (e) {
-        this.logger.error(e.message, { ...e });
+        this.logger.error(e.message, { stack: e.stack, message: e.message });
       }
 
       return record;
@@ -528,7 +532,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
 
       return indexes.indexes;
     } catch (error) {
-      this.logger.error(error.message, { ...error });
+      this.logger.error(error.message, { stack: error.stack, message: error.message });
       throw new Error('Error fetching indexes');
     }
   }
@@ -561,7 +565,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
         },
       });
     } catch (e) {
-      this.logger.error(e.message, { ...e });
+      this.logger.error(e.message, { stack: e.stack, message: e.message });
     }
   }
 
@@ -577,7 +581,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
 
       return index;
     } catch (error) {
-      this.logger.error(error.message, { ...error });
+      this.logger.error(error.message, { stack: error.stack, message: error.message });
       throw error;
     }
   }
@@ -612,7 +616,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
     } catch (e) {
       this.metrics.increment('pinecone.index', 1, { index: targetIndex, status: 'failed' });
       if (e.statusCode !== 404) {
-        this.logger.error(e.message, { ...e });
+        this.logger.error(e.message, { stack: e.stack, message: e.message });
       }
     }
   }
@@ -628,7 +632,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
 
       return { message: 'Index deleted successfully.' };
     } catch (error) {
-      this.logger.error(error.message, { ...error });
+      this.logger.error(error.message, { stack: error.stack, message: error.message });
       throw error;
     }
   }
@@ -661,7 +665,7 @@ export class PineconeService extends BaseWorker implements OnModuleInit {
         });
       }
     } catch (e) {
-      this.logger.error(e.message, { ...e });
+      this.logger.error(e.message, { stack: e.stack, message: e.message });
     }
   }
 

@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "certification_claims" ALTER COLUMN "issued_date" SET DEFAULT CURRENT_TIMESTAMP,
+ALTER COLUMN "effective_date" SET DEFAULT CURRENT_TIMESTAMP;

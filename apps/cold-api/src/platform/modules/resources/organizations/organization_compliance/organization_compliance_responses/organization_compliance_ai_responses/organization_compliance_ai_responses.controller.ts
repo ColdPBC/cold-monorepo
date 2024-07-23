@@ -28,7 +28,7 @@ export class OrganizationComplianceAiResponsesController {
   })
   @Roles(...coldAdminOnly)
   create(@Param('orgId') orgId: string, @Param('name') name: string, @Body() aiResponseData: organization_compliance_ai_responses, @Req() req: any) {
-    return this.organizationComplianceAiResponsesService.createAiResponse(orgId, name, aiResponseData, req.user);
+    return this.organizationComplianceAiResponsesService.createAiResponse(req.organization, name, aiResponseData, req.user);
   }
 
   @Get()
@@ -46,7 +46,7 @@ export class OrganizationComplianceAiResponsesController {
   })
   @Roles(...allRoles)
   findAllAiResponses(@Param('orgId') orgId: string, @Param('name') name: string, @Req() req: any) {
-    return this.organizationComplianceAiResponsesService.findAllAiResponses(orgId, name, req.user);
+    return this.organizationComplianceAiResponsesService.findAllAiResponses(req.organization, name, req.user);
   }
 
   @Get(':aiId')
@@ -71,7 +71,7 @@ export class OrganizationComplianceAiResponsesController {
   })
   @Roles(...allRoles)
   findOneAiResponse(@Param('orgId') orgId: string, @Param('name') name: string, @Param('aiId') id: string, @Req() req: any) {
-    return this.organizationComplianceAiResponsesService.findOneAiResponse(orgId, name, id, req.user);
+    return this.organizationComplianceAiResponsesService.findOneAiResponse(req.organization, name, id, req.user);
   }
 
   @Patch(':aiId')
@@ -102,7 +102,7 @@ export class OrganizationComplianceAiResponsesController {
     @Body() aiResponseData: organization_compliance_ai_responses,
     @Req() req: any,
   ) {
-    return this.organizationComplianceAiResponsesService.updateAiResponse(orgId, name, id, aiResponseData, req.user);
+    return this.organizationComplianceAiResponsesService.updateAiResponse(req.organization, name, id, aiResponseData, req.user);
   }
 
   @Delete()
@@ -145,6 +145,6 @@ export class OrganizationComplianceAiResponsesController {
   })
   @Roles(...coldAdminOnly)
   removeAiResponse(@Param('orgId') orgId: string, @Param('name') name: string, @Param('aiId') id: string, @Req() req: any) {
-    return this.organizationComplianceAiResponsesService.removeAiResponse(orgId, name, id, req.user);
+    return this.organizationComplianceAiResponsesService.removeAiResponse(req.organization, name, id, req.user);
   }
 }

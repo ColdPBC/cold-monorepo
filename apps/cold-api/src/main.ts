@@ -4,17 +4,16 @@ import * as dotenv from 'dotenv';
 import { AppModule } from './platform/modules/app.module';
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import { patchNestjsSwagger } from '@anatine/zod-nestjs';
-import { WorkerLogger } from '@coldpbc/nest';
 import { json, urlencoded } from 'express';
 import { OpenapiModule } from './platform/modules/swagger/openapi.module';
 
 dotenv.config();
 
-async function bootstrap(instance) {
+async function bootstrap() {
   const app = await NestFactory.create(AppModule.forRootAsync(), {
-    logger: instance,
+    logger: false,
+    bufferLogs: true,
   });
-
   const httpAdapter = app.getHttpAdapter();
   const server = httpAdapter.getHttpServer();
 
@@ -43,8 +42,7 @@ async function bootstrap(instance) {
 }
 
 async function init() {
-  const instance = new WorkerLogger('main');
-  await bootstrap(instance);
+  await bootstrap();
 }
 
 init();

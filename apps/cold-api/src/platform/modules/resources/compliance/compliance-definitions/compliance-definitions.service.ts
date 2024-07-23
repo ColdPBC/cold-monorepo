@@ -218,6 +218,8 @@ export class ComplianceDefinitionService extends BaseWorker {
    * @param complianceDefinition
    */
   async create(req: any, complianceDefinition: ComplianceDefinition): Promise<ComplianceDefinition> {
+    //await this.cache.delete(`compliance:${complianceDefinition.name}:organizations:${req.organization.id}`, true);
+
     const { user, url } = req;
     this.setTags({ user: user.coldclimate_claims, compliance_definition: complianceDefinition });
 
@@ -457,7 +459,7 @@ export class ComplianceDefinitionService extends BaseWorker {
     const { user, url } = req;
     this.setTags({ user: user.coldclimate_claims });
     try {
-      await this.cache.delete(`compliance_definitions:name:${name}:org:${orgId}`);
+      await this.cache.delete(`organizations:${orgId}:compliance:${name}:legacy_org_compliance`);
 
       const definition = await this.findOne(name, req, bpc);
 
@@ -506,7 +508,7 @@ export class ComplianceDefinitionService extends BaseWorker {
         },
       });
 
-      await this.cache.set(`compliance_definitions:name:${name}:org:${orgId}`, compliance, { update: true });
+      await this.cache.set(`organizations:${orgId}:compliance:${name}:legacy_org_compliance`, compliance, { update: true });
 
       this.logger.info(`created ${name} compliance for ${orgId}`, {
         compliance_definition: name,
@@ -585,6 +587,8 @@ export class ComplianceDefinitionService extends BaseWorker {
       }*/
     }
 
+    this.logger.warn('compliance-definitions.findOrgCompliances() IS DEPRECATED', { organization: req.organization, user: req.user });
+
     const orgCompliances = (await this.prisma.organization_compliances_old.findMany({
       where: {
         organization_id: req.organization.id,
@@ -604,7 +608,7 @@ export class ComplianceDefinitionService extends BaseWorker {
         compliance.compliance_definition.surveys = compliance.surveys_override;
       }
     });
-    await this.cache.set(`compliance_definitions:org:${req.organization.id}`, orgCompliances, { update: true });
+    //await this.cache.set(`organizations:${req.organization.id}:compliance:${name}:legacy_org_compliance`, orgCompliances, { update: true });
 
     return orgCompliances;
   }
@@ -635,7 +639,7 @@ export class ComplianceDefinitionService extends BaseWorker {
         throw new NotFoundException({ organization, user }, `Unable to find compliance definition with name: ${name}`);
       }
 
-      await this.cache.set(`compliance_definitions:${name}`, def, { update: true });
+      await this.cache.set(`compliance:${name}`, def, { update: true });
 
       return def;
     } catch (e) {
@@ -658,7 +662,7 @@ export class ComplianceDefinitionService extends BaseWorker {
     });
 
     try {
-      await this.cache.delete(`compliance_definition:${name}`);
+      await this.cache.delete(`compliance:${name}`, true);
 
       const def = await this.findOne(name, req, true);
 
@@ -723,10 +727,7 @@ export class ComplianceDefinitionService extends BaseWorker {
     });
 
     try {
-      const def = await this.findOne(name, req);
-      if (def) {
-        await this.cache.delete(`compliance_definition:name:${def.name}`);
-      }
+      await this.cache.delete(`compliance:${name}`, true);
 
       await this.prisma.compliance_definitions.delete({ where: { name: name } });
 
@@ -737,7 +738,7 @@ export class ComplianceDefinitionService extends BaseWorker {
         data: {},
       });
 
-      this.logger.info(`deleted compliance definition: ${name}`, { id: def.id, name: def.name, organization, user });
+      this.logger.info(`deleted compliance definition: ${name}`, { compliance_name: name, organization, user });
     } catch (e) {
       this.logger.error(e.message, { error: e, organization, user });
 

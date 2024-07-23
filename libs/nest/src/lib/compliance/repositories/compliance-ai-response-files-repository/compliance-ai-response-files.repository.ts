@@ -2,39 +2,24 @@ import { Injectable, NotFoundException, UnprocessableEntityException } from '@ne
 import { BaseWorker } from '../../../worker';
 import { IAuthenticatedUser } from '../../../primitives';
 import { PrismaService } from '../../../prisma';
+import { CacheService } from '../../../cache';
+import { organizations } from '@prisma/client';
 
 @Injectable()
 export class ComplianceAiResponseFilesRepository extends BaseWorker {
-  constructor(readonly prisma: PrismaService) {
+  constructor(readonly prisma: PrismaService, readonly cache: CacheService) {
     super(ComplianceAiResponseFilesRepository.name);
   }
 
-  private async getOrg(idOrName) {
-    let where;
-
-    const byId = idOrName.startsWith('org_');
-    if (byId) {
-      where = { id: idOrName };
-    } else {
-      where = { name: idOrName };
-    }
-
-    const org = this.prisma.extended.organizations.findUnique({
-      where,
-    });
-
-    if (!org) {
-      throw new NotFoundException({ ...where }, `Organization not found: ${idOrName}`);
-    }
-
-    return org;
+  private getCacheKey(org: organizations, complianceName: string) {
+    return `organizations:${org.id}:compliance:${complianceName}:responses:ai_responses:files`;
   }
 
-  async createAiResponseFile(orgId: string, complianceName: string, aiResponseId: string, aiResponseFileData: any, user: IAuthenticatedUser) {
+  async createAiResponseFile(org: organizations, complianceName: string, aiResponseId: string, aiResponseFileData: any, user: IAuthenticatedUser) {
     try {
-      const org = await this.getOrg(orgId);
+      await this.cache.delete(this.getCacheKey(org, complianceName), true);
 
-      return this.prisma.extended.organization_compliance_ai_response_files.create({
+      return this.prisma.organization_compliance_ai_response_files.create({
         data: {
           organization_compliance_ai_response: {
             connect: {
@@ -51,17 +36,15 @@ export class ComplianceAiResponseFilesRepository extends BaseWorker {
         },
       });
     } catch (error) {
-      this.logger.error(`Error creating file for compliance response ${aiResponseId}`, { orgId, complianceName, aiResponseId, user, error });
+      this.logger.error(`Error creating file for compliance response ${aiResponseId}`, { org, complianceName, aiResponseId, user, error });
 
-      throw new UnprocessableEntityException({ orgId, complianceName, aiResponseId, user }, `Error creating file for compliance response ${aiResponseId}`);
+      throw new UnprocessableEntityException({ org, complianceName, aiResponseId, user }, `Error creating file for compliance response ${aiResponseId}`);
     }
   }
 
-  async findAllAiResponseFiles(orgId: string, complianceName: string, aiResponseId: string, user: IAuthenticatedUser) {
+  async findAllAiResponseFiles(org: organizations, complianceName: string, aiResponseId: string, user: IAuthenticatedUser) {
     try {
-      const org = await this.getOrg(orgId);
-
-      const files = await this.prisma.extended.organization_compliance_ai_response_files.findMany({
+      const files = await this.prisma.organization_compliance_ai_response_files.findMany({
         where: {
           organization_compliance_ai_response_id: aiResponseId,
           organization_compliance: {
@@ -71,20 +54,21 @@ export class ComplianceAiResponseFilesRepository extends BaseWorker {
         },
       });
 
-      this.logger.info(`Found ${files.length} files for compliance response ${aiResponseId}`, { orgId, complianceName, aiResponseId, user });
+      this.logger.info(`Found ${files.length} files for compliance response ${aiResponseId}`, { org, complianceName, aiResponseId, user });
+
+      this.cache.set(this.getCacheKey(org, complianceName), files);
 
       return files;
     } catch (error) {
-      this.logger.error(`Error creating file for compliance response ${aiResponseId}`, { orgId, complianceName, aiResponseId, user, error });
+      this.logger.error(`Error creating file for compliance response ${aiResponseId}`, { org, complianceName, aiResponseId, user, error });
 
-      throw new UnprocessableEntityException({ orgId, complianceName, aiResponseId, user }, `Error creating file for compliance response ${aiResponseId}`);
+      throw new UnprocessableEntityException({ org, complianceName, aiResponseId, user }, `Error creating file for compliance response ${aiResponseId}`);
     }
   }
 
-  async findOneAiResponseFile(orgId: string, complianceName: string, aiResponseId: string, id: string, user: IAuthenticatedUser) {
+  async findOneAiResponseFile(org: organizations, complianceName: string, aiResponseId: string, id: string, user: IAuthenticatedUser) {
     try {
-      const org = await this.getOrg(orgId);
-      const file = await this.prisma.extended.organization_compliance_ai_response_files.findUnique({
+      const file = await this.prisma.organization_compliance_ai_response_files.findUnique({
         where: {
           organization_compliance_ai_response_id: aiResponseId,
           organization_compliance: {
@@ -95,21 +79,22 @@ export class ComplianceAiResponseFilesRepository extends BaseWorker {
         },
       });
 
-      this.logger.info(`Found file ${id} for compliance response ${aiResponseId}`, { orgId, complianceName, aiResponseId, id, user });
+      this.logger.info(`Found file ${id} for compliance response ${aiResponseId}`, { org, complianceName, aiResponseId, id, user });
 
+      this.cache.set(`${this.getCacheKey(org, complianceName)}:${id}`, file);
       return file;
     } catch (error) {
-      this.logger.error(`Error finding file ${id} for compliance response ${aiResponseId}`, { orgId, complianceName, aiResponseId, id, user, error });
+      this.logger.error(`Error finding file ${id} for compliance response ${aiResponseId}`, { org, complianceName, aiResponseId, id, user, error });
 
-      throw new UnprocessableEntityException({ orgId, complianceName, aiResponseId, id, user }, `Error finding file ${id} for compliance response ${aiResponseId}`);
+      throw new UnprocessableEntityException({ org, complianceName, aiResponseId, id, user }, `Error finding file ${id} for compliance response ${aiResponseId}`);
     }
   }
 
-  async updateAiResponseFile(orgId: string, complianceName: string, aiResponseId: string, id: string, aiResponseFileData: any, user: IAuthenticatedUser) {
+  async updateAiResponseFile(org: organizations, complianceName: string, aiResponseId: string, id: string, aiResponseFileData: any, user: IAuthenticatedUser) {
     try {
-      const org = await this.getOrg(orgId);
+      await this.cache.delete(this.getCacheKey(org, complianceName), true);
 
-      const file = await this.prisma.extended.organization_compliance_ai_response_files.update({
+      const file = await this.prisma.organization_compliance_ai_response_files.update({
         where: {
           organization_compliance_ai_response_id: aiResponseId,
           organization_compliance: {
@@ -121,21 +106,21 @@ export class ComplianceAiResponseFilesRepository extends BaseWorker {
         data: aiResponseFileData,
       });
 
-      this.logger.info(`Updated file ${id} for compliance response ${aiResponseId}`, { orgId, complianceName, aiResponseId, id, user });
+      this.logger.info(`Updated file ${id} for compliance response ${aiResponseId}`, { org, complianceName, aiResponseId, id, user });
 
-      return file;
+      return await this.findOneAiResponseFile(org, complianceName, aiResponseId, id, user);
     } catch (error) {
-      this.logger.error(`Error finding file ${id} for compliance response ${aiResponseId}`, { orgId, complianceName, aiResponseId, id, user, error });
+      this.logger.error(`Error finding file ${id} for compliance response ${aiResponseId}`, { org, complianceName, aiResponseId, id, user, error: { ...error } });
 
-      throw new UnprocessableEntityException({ orgId, complianceName, aiResponseId, id, user }, `Error finding file ${id} for compliance response ${aiResponseId}`);
+      throw new UnprocessableEntityException({ org, complianceName, aiResponseId, id, user }, `Error finding file ${id} for compliance response ${aiResponseId}`);
     }
   }
 
-  async removeAiResponseFile(orgId: string, complianceName: string, aiResponseId: string, id: string, user: IAuthenticatedUser) {
+  async removeAiResponseFile(org: organizations, complianceName: string, aiResponseId: string, id: string, user: IAuthenticatedUser) {
     try {
-      const org = await this.getOrg(orgId);
+      await this.cache.delete(this.getCacheKey(org, complianceName), true);
 
-      const file = await this.prisma.extended.organization_compliance_ai_response_files.delete({
+      const file = await this.prisma.organization_compliance_ai_response_files.delete({
         where: {
           organization_compliance_ai_response_id: aiResponseId,
           organization_compliance: {
@@ -146,13 +131,13 @@ export class ComplianceAiResponseFilesRepository extends BaseWorker {
         },
       });
 
-      this.logger.info(`Deleted file ${id} for compliance response ${aiResponseId}`, { orgId, complianceName, aiResponseId, id, user });
+      this.logger.info(`Deleted file ${id} for compliance response ${aiResponseId}`, { org, complianceName, aiResponseId, id, user });
 
       return file;
     } catch (error) {
-      this.logger.error(`Error finding file ${id} for compliance response ${aiResponseId}`, { orgId, complianceName, aiResponseId, id, user, error });
+      this.logger.error(`Error finding file ${id} for compliance response ${aiResponseId}`, { org, complianceName, aiResponseId, id, user, ...error });
 
-      throw new UnprocessableEntityException({ orgId, complianceName, aiResponseId, id, user }, `Error finding file ${id} for compliance response ${aiResponseId}`);
+      throw new UnprocessableEntityException({ org, complianceName, aiResponseId, id, user }, `Error finding file ${id} for compliance response ${aiResponseId}`);
     }
   }
 }
