@@ -12,6 +12,7 @@ import {
   Journey,
   ProtectedRoute,
   Signup,
+  SupplierDetail,
   Suppliers,
   Terms,
   UserSettingsPage,
@@ -38,6 +39,7 @@ export const ColdRoutes = () => {
         <Route path="*" element={<div className={'text-tc-primary'}>Pending...</div>} />
         {WizardRoutes()}
         {ldFlags.showSuppliersPageCold890 && <Route path={'/suppliers'} element={<Suppliers />} />}
+        {ldFlags.showSuppliersPageCold890 && <Route path={'/suppliers/:id'} element={<SupplierDetail />} />}
       </>
     );
   };

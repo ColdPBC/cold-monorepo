@@ -1,33 +1,37 @@
 import { DataGrid, GridColDef, GridRenderCellParams, GridTreeNodeWithRender, GridValidRowModel } from '@mui/x-data-grid';
 import { HexColors } from '@coldpbc/themes';
-import { differenceInDays } from 'date-fns';
-import { IconNames } from '@coldpbc/enums';
-import { ColdIcon } from '@coldpbc/components';
 import { createTheme, ThemeProvider } from '@mui/material';
-import { get } from 'lodash';
 import { getClaimsMock, getSupplierMock } from '@coldpbc/mocks';
-import { useNavigate } from 'react-router-dom';
+import { isDefined } from 'class-validator';
+import { ColdIcon } from '@coldpbc/components';
+import { IconNames } from '@coldpbc/enums';
+import { differenceInDays, format } from 'date-fns';
+import { ChevronRightIcon } from '@heroicons/react/16/solid';
+import { find, forEach, forOwn } from 'lodash';
+import { getDateActiveStatus } from '@coldpbc/lib';
 
-export const SuppliersDataGrid = () => {
-  const navigate = useNavigate();
-
+export const SupplierDetailDocumentsTable = (props: {
+  documents: {
+    name: string;
+    expirationDate: string | null;
+    status: string;
+    type: string;
+  }[];
+}) => {
+  const { documents } = props;
   const certificationStatuses = ['InActive', 'Active', 'Expired', 'Expiring Soon'];
 
-  const supplierData = getSupplierMock();
-
-  const certificateClaims = getClaimsMock();
-
-  const renderCell = (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
+  const renderStatus = (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
     // if the value is null return null
-    const expirationDate: string | null = get(supplierData[params.row.id - 1], `certificate_claims.${params.field}.expiration_date`, null);
+    const expirationDate: string | null = params.row.expiration_date;
     let diff = 0;
 
     switch (params.value) {
       case 'Expired':
         return (
           <div className={'text-body w-full h-full flex flex-row justify-start items-center gap-[0px]'}>
-            <ColdIcon name={IconNames.ColdDangerIcon} color={HexColors.red['100']} />
-            <span className={'text-red-100'}>Expired</span>
+            <ColdIcon name={IconNames.ColdDangerIcon} color={HexColors.tc.disabled} />
+            <span className={'text-tc-disabled'}>Expired</span>
           </div>
         );
       case 'Expiring Soon':
@@ -59,73 +63,71 @@ export const SuppliersDataGrid = () => {
     }
   };
 
+  const renderDocumentType = (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
+    return (
+      <div className={'h-full w-full flex flex-row items-center justify-between'}>
+        <div className={'px-[8px] py-[2px] border-[1px] border-primary rounded-[30px] text-body'}>{params.value}</div>
+      </div>
+    );
+  };
+
+  const renderDate = (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
+    let dateString = '--';
+    if (params.value.getTime() !== new Date(0).getTime()) {
+      dateString = format(new Date(params.value), 'MM/d/yy');
+    }
+    return <div className={'w-full h-full flex flex-row justify-start items-center'}>{dateString}</div>;
+  };
+
   const columns: GridColDef[] = [
     {
       field: 'name',
       headerName: 'Name',
       headerClassName: 'bg-gray-30 h-[37px] text-body',
+      // minWidth: 260,
       flex: 1,
-      minWidth: 230,
       renderCell: params => {
-        return <div className={'h-full flex items-center text-body text-tc-primary font-bold truncate'}>{params.value}</div>;
+        return <div className={'h-full w-full flex items-center text-body text-tc-primary font-bold truncate'}>{params.value}</div>;
       },
     },
     {
-      field: 'country',
-      headerName: 'Country',
+      field: 'expiration_date',
+      headerName: 'Expiration',
       headerClassName: 'bg-gray-30 h-[37px] text-body',
       flex: 1,
-      minWidth: 180,
+      type: 'date',
+      renderCell: renderDate,
+    },
+    {
+      field: 'status',
+      headerName: 'Status',
+      headerClassName: 'bg-gray-30 h-[37px] text-body',
+      flex: 1,
+      type: 'singleSelect',
+      valueOptions: certificationStatuses,
+      renderCell: renderStatus,
+    },
+    {
+      field: 'document_type',
+      headerName: 'Type',
+      headerClassName: 'bg-gray-30 h-[37px] text-body',
+      flex: 1,
+      type: 'singleSelect',
+      valueOptions: ['Certificate', 'Test', 'Policy', 'Other'],
+      renderCell: renderDocumentType,
     },
   ];
 
-  certificateClaims.forEach((claim, index) => {
-    columns.push({
-      field: claim.name,
-      headerName: claim.label,
-      headerClassName: 'bg-gray-30 h-[37px] text-body',
-      flex: 1,
-      renderCell: params => {
-        return renderCell(params);
-      },
-      type: 'singleSelect',
-      valueOptions: certificationStatuses,
-    });
-  });
-
   let newRows: GridValidRowModel[] = [];
-  supplierData.forEach((supplier, index) => {
-    const row = {
-      id: index + 1,
-      name: supplier.name,
-      country: supplier.country,
-    };
 
-    columns.forEach(column => {
-      if (column.field !== 'name' && column.field !== 'country') {
-        row[column.field] = 'InActive';
-      }
+  forEach(documents, (document, index) => {
+    newRows.push({
+      id: index,
+      name: document.name,
+      expiration_date: document.expirationDate !== null ? new Date(document.expirationDate) : new Date(0),
+      status: getDateActiveStatus(document.expirationDate),
+      document_type: document.type,
     });
-
-    certificateClaims.forEach(claim => {
-      const expirationDate: string | null = get(supplier, `certificate_claims.${claim.name}.expiration_date`, null);
-      // if the expiration date is null, set the value to InActive
-      if (expirationDate === null || expirationDate === undefined) {
-        row[claim.name] = 'InActive';
-      } else {
-        // get the difference between the current date and the date in the cell
-        const diff = differenceInDays(new Date(expirationDate), new Date());
-        if (diff < 0) {
-          row[claim.name] = 'Expired';
-        } else if (diff < 60) {
-          row[claim.name] = 'Expiring Soon';
-        } else {
-          row[claim.name] = 'Active';
-        }
-      }
-    });
-
-    newRows.push(row);
   });
 
   const rows: GridValidRowModel[] = newRows;
@@ -139,6 +141,10 @@ export const SuppliersDataGrid = () => {
     },
   });
 
+  const onRowClick = (params: any) => {
+    // todo: to be implemented
+  };
+
   return (
     <ThemeProvider theme={darkTheme}>
       <DataGrid
@@ -146,16 +152,16 @@ export const SuppliersDataGrid = () => {
         columns={columns}
         rowHeight={37}
         getRowClassName={() => {
-          return 'text-tc-primary';
+          return 'text-tc-primary cursor-pointer';
         }}
-        className={'text-tc-primary border-[2px] rounded-[2px] border-gray-30 bg-transparent w-full h-auto'}
+        className={'text-tc-primary border-[2px] rounded-[2px] border-gray-50 bg-transparent w-full h-auto'}
         sx={{
-          '--DataGrid-rowBorderColor': HexColors.gray[30],
+          '--DataGrid-rowBorderColor': HexColors.gray[50],
           '& .MuiTablePagination-root': {
             color: HexColors.tc.primary,
           },
           '& .MuiDataGrid-withBorderColor': {
-            borderColor: HexColors.gray[30],
+            borderColor: HexColors.gray[50],
           },
           '& .MuiDataGrid-columnHeaderTitle': {
             fontWeight: 'bold',
@@ -191,7 +197,7 @@ export const SuppliersDataGrid = () => {
         }}
         columnHeaderHeight={40}
         onRowClick={params => {
-          navigate(`/suppliers/${params.row.id}`);
+          onRowClick(params);
         }}
       />
     </ThemeProvider>
