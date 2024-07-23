@@ -212,6 +212,7 @@ export const SuppliersDataGrid = () => {
         },
       }}
       columnHeaderHeight={40}
+      autoHeight={true}
     />
   );
 };
