@@ -1,3 +1,5 @@
+import { Certifications } from '@coldpbc/interfaces';
+
 export const getClaimsMock = () => {
   return [
     {
@@ -15,6 +17,35 @@ export const getClaimsMock = () => {
     {
       name: 'bluesign',
       label: 'Bluesign',
+    },
+  ];
+};
+
+export const getCertificationsMock = (): Certifications[] => {
+  return [
+    {
+      id: '1',
+      name: 'PFAS-Test',
+      level: 'Supplier',
+      type: 'TEST',
+    },
+    {
+      id: '2',
+      name: 'Lead-Test',
+      level: 'Supplier',
+      type: 'TEST',
+    },
+    {
+      id: '3',
+      name: 'phthalate',
+      level: 'Supplier',
+      type: 'TEST',
+    },
+    {
+      id: '4',
+      name: 'bluesign',
+      level: 'Supplier',
+      type: 'TEST',
     },
   ];
 };
