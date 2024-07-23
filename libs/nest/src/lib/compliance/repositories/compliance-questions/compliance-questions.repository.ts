@@ -153,7 +153,7 @@ export class ComplianceQuestionsRepository extends BaseWorker {
    * @param filter
    */
   async getQuestionList({ compliance_section_id, compliance_section_group_id, compliance_definition_name }): Promise<any> {
-    const questions = await this.prisma.extended.compliance_definitions.findUnique({
+    const questions = await this.prisma.compliance_definitions.findUnique({
       where: {
         name: compliance_definition_name,
       },
@@ -207,7 +207,7 @@ export class ComplianceQuestionsRepository extends BaseWorker {
    */
   async getQuestion(id: string): Promise<compliance_questions> {
     try {
-      const question = await this.prisma.extended.compliance_questions.findUnique({
+      const question = await this.prisma.compliance_questions.findUnique({
         where: {
           id,
         },
@@ -237,7 +237,7 @@ export class ComplianceQuestionsRepository extends BaseWorker {
    */
   async getQuestionByKeyAndComplianceName({ compliance_definition_name, key }: { compliance_definition_name: string; key: string }): Promise<compliance_questions> {
     try {
-      const question = await this.prisma.extended.compliance_questions.findUnique({
+      const question = await this.prisma.compliance_questions.findUnique({
         where: {
           compDefNameKey: {
             compliance_definition_name,
@@ -272,7 +272,7 @@ export class ComplianceQuestionsRepository extends BaseWorker {
 
       questions.forEach(q => (q.id = new Cuid2Generator(GuidPrefixes.ComplianceQuestion).scopedId));
 
-      const createdQuestions = await this.prisma.extended.compliance_questions.createMany({
+      const createdQuestions = await this.prisma.compliance_questions.createMany({
         data: questions as any,
         skipDuplicates: true,
       });
@@ -296,7 +296,7 @@ export class ComplianceQuestionsRepository extends BaseWorker {
       await this.cache.delete(`organizations`, true);
 
       question.id = new Cuid2Generator(GuidPrefixes.ComplianceQuestion).scopedId;
-      const section = await this.prisma.extended.compliance_sections.findUnique({
+      const section = await this.prisma.compliance_sections.findUnique({
         where: {
           id: question.compliance_section_id,
         },
@@ -306,7 +306,7 @@ export class ComplianceQuestionsRepository extends BaseWorker {
         throw new NotFoundException(`Section not found for id ${question.compliance_section_id}`);
       }
 
-      const created = await this.prisma.extended.compliance_questions.create({
+      const created = await this.prisma.compliance_questions.create({
         data: {
           ...(question as any),
         },
@@ -353,7 +353,7 @@ export class ComplianceQuestionsRepository extends BaseWorker {
     }
 
     try {
-      const updated = await this.prisma.extended.compliance_questions.update({
+      const updated = await this.prisma.compliance_questions.update({
         where: where,
         data: {
           ...(question as any),
@@ -378,7 +378,7 @@ export class ComplianceQuestionsRepository extends BaseWorker {
   async deleteQuestion(id: string): Promise<void> {
     await this.cache.delete('organizations', true);
 
-    const question = await this.prisma.extended.compliance_questions.findUnique({
+    const question = await this.prisma.compliance_questions.findUnique({
       where: {
         id,
       },
@@ -390,7 +390,7 @@ export class ComplianceQuestionsRepository extends BaseWorker {
 
     await this.cache.delete(`compliance:${question?.compliance_definition_name}`, true);
 
-    this.prisma.extended.compliance_questions.delete({
+    this.prisma.compliance_questions.delete({
       where: {
         id,
       },

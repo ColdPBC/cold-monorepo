@@ -15,7 +15,7 @@ export class FacilitiesService extends BaseWorker {
       if (!user.isColdAdmin && user.coldclimate_claims.org_id !== orgId)
         throw new UnprocessableEntityException(`${user.coldclimate_claims.email} is ${user.isColdAdmin ? 'Cold:Admin' : 'not Cold:Admin'} bug is attempting to access ${orgId}.`);
 
-      const facilities = (await this.prisma.extended.organization_facilities.findMany({
+      const facilities = (await this.prisma.organization_facilities.findMany({
         where: {
           organization_id: orgId,
         },
@@ -54,7 +54,7 @@ export class FacilitiesService extends BaseWorker {
       if (!body.address_line_1 && !body.city && !body.state_province && !body.postal_code)
         throw new UnprocessableEntityException(`Facility not found for ${orgId} and address, city, state, zip not provided in metadata.`);
 
-      const created = (await this.prisma.extended.organization_facilities.create({
+      const created = (await this.prisma.organization_facilities.create({
         data: {
           id: this.cuid2.generate().scopedId,
           name: body.name || body.address_line_1,

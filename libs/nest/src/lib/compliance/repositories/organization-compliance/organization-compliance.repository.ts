@@ -17,7 +17,7 @@ export class OrganizationComplianceRepository extends BaseWorker {
    */
   async getOrgComplianceDefinitions(name: string, user: IAuthenticatedUser, organization: organizations) {
     try {
-      return this.prisma.extended.organization_compliance.findMany({
+      return this.prisma.organization_compliance.findMany({
         where: { compliance_definition_name: name },
         include: {
           compliance_definition: true,
@@ -126,7 +126,7 @@ export class OrganizationComplianceRepository extends BaseWorker {
   }
   async getOrgComplianceDefinitionByName(name: string, user: IAuthenticatedUser, organization: organizations) {
     try {
-      const compliance = await this.prisma.extended.organization_compliance.findUnique({
+      const compliance = await this.prisma.organization_compliance.findUnique({
         where: {
           orgIdCompNameKey: {
             compliance_definition_name: name,
@@ -212,10 +212,11 @@ export class OrganizationComplianceRepository extends BaseWorker {
       data.compliance_definition_name = name;
 
       data.organization_id = organization.id;
+      data.id = new Cuid2Generator(GuidPrefixes.OrganizationCompliance).scopedId;
+      data.description = '';
 
-      return this.prisma.extended.organization_compliance.create({
-        id: new Cuid2Generator(GuidPrefixes.OrganizationCompliance).scopedId,
-        ...data,
+      return this.prisma.organization_compliance.create({
+        data,
       });
     } catch (error) {
       this.logger.error(`Error creating compliance definition`, { name, organization, ...data, error, user });
@@ -227,7 +228,7 @@ export class OrganizationComplianceRepository extends BaseWorker {
     try {
       await this.cacheService.delete(`organizations:${organization.id}:compliance:${name}`, true);
 
-      const userResponse = await this.prisma.extended.organization_compliance.update({
+      const userResponse = await this.prisma.organization_compliance.update({
         where: {
           orgIdCompNameKey: {
             compliance_definition_name: name,
@@ -248,7 +249,7 @@ export class OrganizationComplianceRepository extends BaseWorker {
     try {
       await this.cacheService.delete(`organizations:${organization.id}:compliance:${name}`, true);
 
-      return this.prisma.extended.organization_compliance.delete({
+      return this.prisma.organization_compliance.delete({
         where: {
           orgIdCompNameKey: {
             compliance_definition_name: name,

@@ -368,7 +368,7 @@ model certification_claims {
   organization_name        String
   certification_id         String
   organization_facility_id String
-  organization_file_id     String
+  organization_file_id     String                  @unique
   issued_date              DateTime                @default(now())
   effective_date           DateTime                @default(now())
   created_at               DateTime                @default(now())
@@ -825,8 +825,8 @@ model organization_compliance_question_bookmarks {
   compliance_question_id     String
   organization_compliance_id String
   deleted                    Boolean                 @default(false)
-  compliance_question        compliance_questions    @relation(fields: [compliance_question_id], references: [id])
-  organization_compliance    organization_compliance @relation(fields: [organization_compliance_id], references: [id])
+  compliance_question        compliance_questions    @relation(fields: [compliance_question_id], references: [id], onDelete: Cascade)
+  organization_compliance    organization_compliance @relation(fields: [organization_compliance_id], references: [id], onDelete: Cascade)
 
   @@unique([email, compliance_question_id], name: "emailQuestId")
 }

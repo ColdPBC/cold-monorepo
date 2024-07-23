@@ -18,7 +18,7 @@ export class OrganizationComplianceService extends BaseWorker {
   async activateAi(orgId: string, req: any, compliance_name: string): Promise<any> {
     const { user, url, headers } = req;
 
-    const openAI_definition = await this.prisma.extended.service_definitions.findFirst({
+    const openAI_definition = await this.prisma.service_definitions.findFirst({
       where: {
         name: 'cold-platform-openai',
       },
@@ -67,7 +67,7 @@ export class OrganizationComplianceService extends BaseWorker {
         },
       });
     } else {
-      const compliance_definition = await this.prisma.extended.compliance_definitions.findFirst({
+      const compliance_definition = await this.prisma.compliance_definitions.findFirst({
         where: {
           name: compliance_name,
         },

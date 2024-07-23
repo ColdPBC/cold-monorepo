@@ -17,7 +17,7 @@ export class FootprintsService extends BaseWorker {
       periods: Array<FacilityFootprint>;
     }>,
   ) {
-    const existing = await this.prisma.extended.organizations.findUnique({
+    const existing = await this.prisma.organizations.findUnique({
       where: {
         id: orgId,
       },
@@ -44,7 +44,7 @@ export class FootprintsService extends BaseWorker {
 
         for (const emission of period.emissions) {
           if (emission.scope?.ghg_subcategory && emission.scope?.ghg_subcategory > 0) {
-            const emission_scope = await this.prisma.extended.emission_scopes.findFirst({
+            const emission_scope = await this.prisma.emission_scopes.findFirst({
               where: {
                 ghg_subcategory: period.emissions[0].scope.ghg_subcategory,
               },
@@ -54,7 +54,7 @@ export class FootprintsService extends BaseWorker {
             }
           }
         }
-        const footprint = await this.prisma.extended.facility_footprints.upsert({
+        const footprint = await this.prisma.facility_footprints.upsert({
           where: {
             facilityFootprintKey: {
               facility_id: exfac.id,
@@ -84,7 +84,7 @@ export class FootprintsService extends BaseWorker {
       }
 
       // Update the facility name in the database
-      await this.prisma.extended.organization_facilities.update({
+      await this.prisma.organization_facilities.update({
         where: { id: exfac.id },
         data: {
           name: facility.facility_name,
@@ -96,7 +96,7 @@ export class FootprintsService extends BaseWorker {
   }
 
   async getAllFacilityFootprintsByPeriod(orgId: string) {
-    const footprints = await this.prisma.extended.facility_footprints.findMany({
+    const footprints = await this.prisma.facility_footprints.findMany({
       where: {
         organization_id: orgId,
       },
@@ -104,7 +104,7 @@ export class FootprintsService extends BaseWorker {
 
     const groupedByFacility = groupBy(footprints, 'facility_id');
     const facMap = map(groupedByFacility, async (facilityFootprints, facilityId) => {
-      const current = await this.prisma.extended.organization_facilities.findUnique({
+      const current = await this.prisma.organization_facilities.findUnique({
         where: {
           id: facilityId,
         },
@@ -121,7 +121,7 @@ export class FootprintsService extends BaseWorker {
   }
 
   async findAll() {
-    return this.prisma.extended.facility_footprints.findMany();
+    return this.prisma.facility_footprints.findMany();
   }
 
   async findAllByOrg(orgId: string) {
@@ -130,7 +130,7 @@ export class FootprintsService extends BaseWorker {
 
   async findAllByOrgFacility(orgId: string, facId: string) {
     return {
-      periods: await this.prisma.extended.facility_footprints.findMany({
+      periods: await this.prisma.facility_footprints.findMany({
         where: {
           organization_id: orgId,
           facility_id: facId,
@@ -140,7 +140,7 @@ export class FootprintsService extends BaseWorker {
   }
 
   findOne(orgId: string, facId: string, id: string) {
-    return this.prisma.extended.facility_footprints.findMany({
+    return this.prisma.facility_footprints.findMany({
       where: {
         organization_id: orgId,
         facility_id: facId,
@@ -150,7 +150,7 @@ export class FootprintsService extends BaseWorker {
   }
 
   remove(orgId: string, facId: string, id: string) {
-    return this.prisma.extended.facility_footprints.delete({
+    return this.prisma.facility_footprints.delete({
       where: {
         organization_id: orgId,
         facility_id: facId,

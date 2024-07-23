@@ -24,7 +24,7 @@ export class ComplianceQuestionBookmarksRepository extends BaseWorker {
         throw new NotFoundException(`Organization Compliance ${name} not found for ${org.name} `);
       }
 
-      const bookmark = await this.prisma.extended.organization_compliance_question_bookmarks.findUnique({
+      const bookmark = await this.prisma.organization_compliance_question_bookmarks.findUnique({
         where: {
           id,
           email: user.coldclimate_claims.email,
@@ -51,7 +51,7 @@ export class ComplianceQuestionBookmarksRepository extends BaseWorker {
         throw new NotFoundException(`Organization Compliance ${name} not found for ${org.name} `);
       }
 
-      const bookmarks = await this.prisma.extended.organization_compliance_question_bookmarks.findMany({
+      const bookmarks = await this.prisma.organization_compliance_question_bookmarks.findMany({
         where: {
           organization_compliance_id: orgCompliance.id,
           email: user?.coldclimate_claims?.email,
@@ -77,7 +77,7 @@ export class ComplianceQuestionBookmarksRepository extends BaseWorker {
         throw new NotFoundException(`Organization Compliance or question not found for ${name} : ${org.name} `);
       }
 
-      const bookmarks = await this.prisma.extended.organization_compliance_question_bookmarks.findMany({
+      const bookmarks = await this.prisma.organization_compliance_question_bookmarks.findMany({
         where: {
           organization_compliance_id: orgCompliance.id,
           compliance_question_id: qId,
@@ -98,7 +98,7 @@ export class ComplianceQuestionBookmarksRepository extends BaseWorker {
 
   async getComplianceQuestionBookmarksByOrganizationComplianceId(ocId: string, org: organizations, user: IAuthenticatedUser) {
     try {
-      const orgCompliance = await this.prisma.extended.organization_compliance.findUnique({
+      const orgCompliance = await this.prisma.organization_compliance.findUnique({
         where: {
           organization_id: org.id,
           id: ocId,
@@ -128,7 +128,7 @@ export class ComplianceQuestionBookmarksRepository extends BaseWorker {
         throw new NotFoundException(`Organization Compliance or question not found for ${name}: ${org.name} `);
       }
 
-      const response = await this.prisma.extended.organization_compliance_question_bookmarks.create({
+      const response = await this.prisma.organization_compliance_question_bookmarks.create({
         data: {
           id: new Cuid2Generator(GuidPrefixes.OrganizationComplianceQuestionBookmark).scopedId,
           organization_compliance_id: orgCompliance.id,
@@ -165,7 +165,7 @@ export class ComplianceQuestionBookmarksRepository extends BaseWorker {
 
       this.cache.delete(`${this.getCacheKey(org, question.compliance_definition_name, user)}`, true);
 
-      const deleted = await this.prisma.extended.organization_compliance_question_bookmarks.delete({
+      const deleted = await this.prisma.organization_compliance_question_bookmarks.delete({
         where: {
           emailQuestId: {
             email: user.coldclimate_claims.email,
@@ -185,7 +185,7 @@ export class ComplianceQuestionBookmarksRepository extends BaseWorker {
 
   private async getOrganizationCompliance(name: string, org: organizations, qid?: string) {
     const questionFilter = qid ? { id: qid } : {};
-    return this.prisma.extended.organization_compliance.findUnique({
+    return this.prisma.organization_compliance.findUnique({
       where: {
         orgIdCompNameKey: {
           organization_id: org.id,

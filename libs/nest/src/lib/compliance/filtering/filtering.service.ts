@@ -77,7 +77,7 @@ export class FilteringService extends BaseWorker {
        */
       if (dependencies.length) {
         for (const dependency of dependencies) {
-          const dependentQuestion = await this.prisma.extended.organization_compliance_responses.findUnique({
+          const dependentQuestion = await this.prisma.organization_compliance_responses.findUnique({
             where: {
               id: dependency.dependent_question_id,
             },

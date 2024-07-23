@@ -37,7 +37,7 @@ export class OrganizationIntegrationsService extends BaseWorker {
         }
       }
 
-      const integrations = await this.prisma.extended.integrations.findMany({
+      const integrations = await this.prisma.integrations.findMany({
         where: {
           organization_id: bpc && user.isColdAdmin ? orgId : user.coldclimate_claims.org_id,
         },
@@ -71,7 +71,7 @@ export class OrganizationIntegrationsService extends BaseWorker {
   ): Promise<any> {
     const { user, url } = req;
     try {
-      const service = await this.prisma.extended.service_definitions.findUnique({
+      const service = await this.prisma.service_definitions.findUnique({
         where: {
           name: 'cold-platform-bayou',
         },
@@ -81,7 +81,7 @@ export class OrganizationIntegrationsService extends BaseWorker {
         throw new UnprocessableEntityException(`Service definition ${body.service_definition_id} not found.`);
       }
 
-      const org = await this.prisma.extended.organizations.findUnique({
+      const org = await this.prisma.organizations.findUnique({
         where: {
           id: user.isColdAdmin ? orgId : user.coldclimate_claims.org_id,
         },
@@ -170,7 +170,7 @@ export class OrganizationIntegrationsService extends BaseWorker {
   ): Promise<any> {
     const { user, url } = req;
     try {
-      const service = await this.prisma.extended.service_definitions.findUnique({
+      const service = await this.prisma.service_definitions.findUnique({
         where: {
           id: body.service_definition_id,
         },
@@ -249,7 +249,7 @@ export class OrganizationIntegrationsService extends BaseWorker {
   ): Promise<any> {
     const { user, url } = req;
     try {
-      const service = await this.prisma.extended.service_definitions.findUnique({
+      const service = await this.prisma.service_definitions.findUnique({
         where: {
           id: body.service_definition_id,
         },

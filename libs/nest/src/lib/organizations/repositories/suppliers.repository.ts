@@ -58,7 +58,7 @@ export class SuppliersRepository extends BaseWorker {
       select: this.base_query,
     };
 
-    const certifications = await this.prisma.extended.organization_facilities.findMany(queryOptions);
+    const certifications = await this.prisma.organization_facilities.findMany(queryOptions);
 
     if (!certifications || certifications.length === 0) {
       throw new NotFoundException(`No Certifications found`);
@@ -69,7 +69,7 @@ export class SuppliersRepository extends BaseWorker {
 
   async findOne(org: organizations, user: IAuthenticatedUser, filters?: { name?: string; id?: string }) {
     if (filters?.id || filters?.name) {
-      const certification = await this.prisma.extended.organization_facilities.findUnique({
+      const certification = await this.prisma.organization_facilities.findUnique({
         where: {
           id: filters.id,
           name: filters.name,

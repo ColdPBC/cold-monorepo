@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, UseInterceptors, UseFilters, Req } from '@nestjs/common';
 import { CertificationsService } from './certifications.service';
-import { allRoles, coldAdminOnly, HttpExceptionFilter, JwtAuthGuard, OrgUserInterceptor, Roles, RolesGuard } from '@coldpbc/nest';
+import { allRoles, coldAdminOnly, HttpExceptionFilter, JwtAuthGuard, OrgUserInterceptor, Role, Roles, RolesGuard } from '@coldpbc/nest';
 import { Span } from 'nestjs-ddtrace';
 import { ApiOAuth2, ApiTags } from '@nestjs/swagger';
 import { certifications } from '@prisma/client';
@@ -15,13 +15,13 @@ import { certifications } from '@prisma/client';
 export class CertificationsController {
   constructor(private readonly certificationsService: CertificationsService) {}
 
-  @Roles(...coldAdminOnly)
+  @Roles(Role.ColdAdmin)
   @Post()
   create(@Req() req: any, @Body() createCertificationDto: certifications) {
     return this.certificationsService.create(req.organization, req.user, createCertificationDto);
   }
 
-  @Roles(...coldAdminOnly)
+  @Roles(Role.ColdAdmin)
   @Patch(':id')
   update(@Req() req: any, @Param('id') id: string, @Body() updateCertificationDto: certifications) {
     updateCertificationDto.id = id;
@@ -43,7 +43,7 @@ export class CertificationsController {
   @Roles(...allRoles)
   @Get('name/:name')
   findByName(@Req() req: any, @Param('name') name: string) {
-    return this.certificationsService.findById(req.organization, req.user, name);
+    return this.certificationsService.findByName(req.organization, req.user, name);
   }
 
   @Roles(...coldAdminOnly)

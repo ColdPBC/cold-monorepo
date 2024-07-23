@@ -81,7 +81,7 @@ export class ProductsRepository extends BaseWorker {
   }
 
   async findAll(org: organizations, user: IAuthenticatedUser) {
-    const products = await this.prisma.extended.organization_products.findMany({
+    const products = await this.prisma.organization_products.findMany({
       where: {
         organization_id: org.id,
       },
@@ -97,7 +97,7 @@ export class ProductsRepository extends BaseWorker {
 
   findOne(org: organizations, user: IAuthenticatedUser, filters: { name?: string; id?: string }) {
     if (filters?.id || filters?.name) {
-      return this.prisma.extended.organization_products.findUnique({
+      return this.prisma.organization_products.findUnique({
         where: {
           id: filters.id,
           name: filters.name,

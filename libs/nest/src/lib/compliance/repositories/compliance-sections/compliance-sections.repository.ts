@@ -43,7 +43,7 @@ export class ComplianceSectionsRepository extends BaseWorker implements OnModule
     questions?: boolean,
   ): Promise<ComplianceSectionsExtendedDto> {
     try {
-      const section = (await this.prisma.extended.compliance_sections.findUnique({
+      const section = (await this.prisma.compliance_sections.findUnique({
         where: {
           compliance_section_group_id: groupId,
           compDefNameSectionKey: {
@@ -110,7 +110,7 @@ export class ComplianceSectionsRepository extends BaseWorker implements OnModule
     questions?: boolean,
   ): Promise<ComplianceSectionsExtendedDto> {
     try {
-      const section = (await this.prisma.extended.compliance_sections.findUnique({
+      const section = (await this.prisma.compliance_sections.findUnique({
         where: {
           compliance_section_group_id: groupId,
           compliance_definition_name: compliance_definition_name,
@@ -250,7 +250,7 @@ export class ComplianceSectionsRepository extends BaseWorker implements OnModule
     try {
       compliance_sectionsSchema.parse(data);
 
-      const section = await this.prisma.extended.compliance_sections.create({
+      const section = await this.prisma.compliance_sections.create({
         data: {
           id: new Cuid2Generator(GuidPrefixes.ComplianceSection).scopedId,
           ...data,
@@ -284,7 +284,7 @@ export class ComplianceSectionsRepository extends BaseWorker implements OnModule
         }
       }
 
-      return await this.prisma.extended.compliance_sections.update({
+      return await this.prisma.compliance_sections.update({
         where: {
           id,
           compliance_definition_name: name,
@@ -341,7 +341,7 @@ export class ComplianceSectionsRepository extends BaseWorker implements OnModule
 
   async deleteSection(name: string, sgId: string, id: string, user: IAuthenticatedUser) {
     try {
-      return this.prisma.extended.compliance_sections.delete({
+      return this.prisma.compliance_sections.delete({
         where: {
           id,
           compliance_definition_name: name,
@@ -368,7 +368,7 @@ export class ComplianceSectionsRepository extends BaseWorker implements OnModule
    * @private
    */
   private async getSectionList(where: any, user: IAuthenticatedUser, filter?: boolean, questions?: boolean): Promise<Array<any>> {
-    const sections = (await this.prisma.extended.compliance_sections.findMany({
+    const sections = (await this.prisma.compliance_sections.findMany({
       where: { ...where },
       select: {
         id: true,

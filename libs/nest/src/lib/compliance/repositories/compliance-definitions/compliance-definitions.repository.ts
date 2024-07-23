@@ -18,7 +18,7 @@ export class ComplianceDefinitionsRepository extends BaseWorker {
   }
 
   async getComplianceDefinitions() {
-    const definitions = (await this.prisma.extended.compliance_definitions.findMany({
+    const definitions = (await this.prisma.compliance_definitions.findMany({
       orderBy: {
         order: 'asc',
       },
@@ -51,7 +51,7 @@ export class ComplianceDefinitionsRepository extends BaseWorker {
       }
     }
 
-    const definitions = (await this.prisma.extended.compliance_definitions.findMany({
+    const definitions = (await this.prisma.compliance_definitions.findMany({
       orderBy: {
         order: 'asc',
       },
@@ -73,7 +73,7 @@ export class ComplianceDefinitionsRepository extends BaseWorker {
     }
 
     for (let def of definitions) {
-      const orgComp = await this.prisma.extended.organization_compliance.findFirst({
+      const orgComp = await this.prisma.organization_compliance.findFirst({
         where: {
           organization_id: req.organization.id,
           compliance_definition_name: def.name,

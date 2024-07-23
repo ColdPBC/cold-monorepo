@@ -21,7 +21,7 @@ export class ComplianceCertificationRepository extends BaseWorker {
       throw new BadRequestException('Certification type is required');
     }
 
-    const certification = this.prisma.extended.certifications.create({
+    const certification = this.prisma.certifications.create({
       data: data,
     });
 
@@ -45,7 +45,7 @@ export class ComplianceCertificationRepository extends BaseWorker {
       return d;
     });
 
-    const policies = this.prisma.extended.certifications.createMany({
+    const policies = this.prisma.certifications.createMany({
       data: data,
     });
 
@@ -55,7 +55,7 @@ export class ComplianceCertificationRepository extends BaseWorker {
   }
 
   async updateComplianceCertification(org: organizations, user: IAuthenticatedUser, data: certifications) {
-    const policy = this.prisma.extended.certifications.update({
+    const policy = this.prisma.certifications.update({
       where: {
         id: data.id,
       },
@@ -68,7 +68,7 @@ export class ComplianceCertificationRepository extends BaseWorker {
   }
 
   async deleteComplianceCertification(org: organizations, user: IAuthenticatedUser, id: string) {
-    const policy = this.prisma.extended.certifications.delete({
+    const policy = this.prisma.certifications.delete({
       where: {
         id: id,
       },
@@ -90,7 +90,7 @@ export class ComplianceCertificationRepository extends BaseWorker {
       },
     };
 
-    const certifications = await this.prisma.extended.certifications.findMany(queryOptions);
+    const certifications = await this.prisma.certifications.findMany(queryOptions);
 
     if (!certifications || certifications.length === 0) {
       throw new NotFoundException(`No Certifications found`);
@@ -113,7 +113,7 @@ export class ComplianceCertificationRepository extends BaseWorker {
       },
     };
 
-    const certifications = await this.prisma.extended.certifications.findMany(queryOptions);
+    const certifications = await this.prisma.certifications.findMany(queryOptions);
 
     if (!certifications || certifications.length === 0) {
       throw new NotFoundException(`No Certifications found`);
@@ -124,7 +124,7 @@ export class ComplianceCertificationRepository extends BaseWorker {
 
   async findOne(org: organizations, user: IAuthenticatedUser, filters?: { name?: string; id?: string }) {
     if (filters?.id || filters?.name) {
-      const certification = await this.prisma.extended.certifications.findUnique({
+      const certification = await this.prisma.certifications.findUnique({
         where: {
           id: filters.id,
           name: filters.name,
