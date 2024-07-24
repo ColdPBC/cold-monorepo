@@ -1,3 +1,10 @@
+# [1.307.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.306.0...v1.307.0) (2024-07-24)
+
+
+### Features
+
+* add organization_file_type to suppliers repository ([5d57e76](https://github.com/ColdPBC/cold-monorepo/commit/5d57e765815fb072b64675f89046d9bafba0c598))
+
 # [1.306.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.305.1...v1.306.0) (2024-07-24)
 
 
