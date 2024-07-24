@@ -1,3 +1,10 @@
+## [1.305.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.305.0...v1.305.1) (2024-07-24)
+
+
+### Bug Fixes
+
+* improve error handling and add new field to supplier query ([010aec2](https://github.com/ColdPBC/cold-monorepo/commit/010aec2f263491bb1383d6fb3dec835d07b3f685))
+
 # [1.305.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.304.0...v1.305.0) (2024-07-24)
 
 
