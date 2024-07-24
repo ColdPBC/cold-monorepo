@@ -19,6 +19,7 @@ export class ClaimsController {
   @Roles(...allRoles)
   @Post()
   create(@Req() req: any, @Param('cId') cId: string, @Param('orgId') orgId: string, @Body() createClaimDto: certification_claims) {
+    createClaimDto.certification_id = cId;
     return this.claimsService.create(req.organization, req.user, createClaimDto);
   }
 
