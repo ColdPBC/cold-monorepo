@@ -10,9 +10,11 @@ import { useFlags } from 'launchdarkly-react-client-sdk';
 import { Dropdown } from 'flowbite-react';
 import { flowbiteThemeOverride } from '@coldpbc/themes';
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
+import { useNavigate } from 'react-router-dom';
 
 const _OrganizationSelector = ({ sidebarExpanded }: { sidebarExpanded?: boolean }) => {
   const ldFlags = useFlags();
+  const navigate = useNavigate();
   const { data, error, isLoading } = useSWR<any, any, any>(['/organizations', 'GET'], axiosFetcher);
   const { logError, setImpersonatingOrg, impersonatingOrg, logBrowser } = useColdContext();
   const unselectedOrg = {
@@ -25,6 +27,7 @@ const _OrganizationSelector = ({ sidebarExpanded }: { sidebarExpanded?: boolean 
 
   const onOrgSelect = (org: any) => {
     logBrowser(`New impersonating organization selected: ${org.display_name}`, 'info', { org: org });
+    navigate('/');
     setSelectedOrg(org);
     if (org.name === 'unselected') {
       setImpersonatingOrg(undefined);
