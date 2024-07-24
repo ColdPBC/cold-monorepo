@@ -19,13 +19,18 @@ export class SuppliersController {
     return this.suppliersService.findAll(req.organization, req.user);
   }
 
+  @Get('claims/names')
+  getClaimNames(@Req() req: any, @Param('orgId') orgId: string) {
+    return this.suppliersService.getClaimNames(req.organization, req.user);
+  }
+
+  @Get('claims')
+  getClaimList(@Req() req: any, @Param('orgId') orgId: string) {
+    return this.suppliersService.getClaimList(req.organization, req.user);
+  }
+
   @Get(':id')
   findOne(@Req() req: any, @Param('orgId') orgId: string, @Param('id') id: string) {
     return this.suppliersService.findById(req.organization, req.user, id);
-  }
-
-  @Get('name/:name')
-  findByName(@Req() req: any, @Param('orgId') orgId: string, @Param('name') name: string) {
-    return this.suppliersService.findByName(req.organization, req.user, name);
   }
 }

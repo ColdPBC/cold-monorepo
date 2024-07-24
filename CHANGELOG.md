@@ -1,3 +1,31 @@
+# [1.305.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.304.0...v1.305.0) (2024-07-24)
+
+
+### Features
+
+* add effective date fields to supplier repository ([4969236](https://github.com/ColdPBC/cold-monorepo/commit/49692369ec04811b5d9cd419c53fea16f55e6594))
+* extend organization files service to include effective dates ([807b242](https://github.com/ColdPBC/cold-monorepo/commit/807b242e3876ad77170a70f98d017b1aceb3503e))
+
+# [1.304.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.303.0...v1.304.0) (2024-07-24)
+
+
+### Features
+
+* Add effective start and end dates to organization_files ([93642b1](https://github.com/ColdPBC/cold-monorepo/commit/93642b129cf04d98c4a2b94a171bf51d9fda99d9))
+* Add extended file details to organization files API ([46af359](https://github.com/ColdPBC/cold-monorepo/commit/46af359a28bdc93347bce7e496bfda4db011b6a0))
+
+# [1.303.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.302.0...v1.303.0) (2024-07-24)
+
+
+### Features
+
+* Add certification id to claims controller ([71987e9](https://github.com/ColdPBC/cold-monorepo/commit/71987e902571cdfe53f8ee4a4f1afa68bfa147db))
+* Add file validation and handling conflict exceptions in ComplianceCertificationsClaimsRepository ([48a5ad8](https://github.com/ColdPBC/cold-monorepo/commit/48a5ad83b1366f9acd85e340e3cf2a5e7431bcfc))
+* Add file validation and handling conflict exceptions in ComplianceCertificationsClaimsRepository ([0ce4db3](https://github.com/ColdPBC/cold-monorepo/commit/0ce4db3267832d38e6fad2e1e09a7a75918da895))
+* Add getClaimNames and getClaimList methods in suppliers.controller ([37e307d](https://github.com/ColdPBC/cold-monorepo/commit/37e307dadd320e98cd4e4a5784c9713f78b1db20))
+* Add SQL views and modify prisma schema ([8196715](https://github.com/ColdPBC/cold-monorepo/commit/8196715a5be0504688f5e2a49ce091b3946cda99))
+* Enhance suppliers.repository and suppliers.service ([f5ab365](https://github.com/ColdPBC/cold-monorepo/commit/f5ab3652c0bc0734340d143e4c22bc62b34f1331))
+
 # [1.302.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.301.1...v1.302.0) (2024-07-22)
 
 

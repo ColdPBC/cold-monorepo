@@ -49,11 +49,6 @@ export class FacilitiesService extends BaseWorker {
   ): Promise<organization_facilities> {
     const { user, url } = req;
     try {
-      //if (!user.isColdAdmin && user.coldclimate_claims.org_id !== orgId) throw new UnprocessableEntityException(`Organization ${orgId} is invalid.`);
-
-      if (!body.address_line_1 && !body.city && !body.state_province && !body.postal_code)
-        throw new UnprocessableEntityException(`Facility not found for ${orgId} and address, city, state, zip not provided in metadata.`);
-
       const created = (await this.prisma.organization_facilities.create({
         data: {
           id: this.cuid2.generate().scopedId,

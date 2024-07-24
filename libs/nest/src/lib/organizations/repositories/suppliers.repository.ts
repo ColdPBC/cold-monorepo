@@ -20,14 +20,17 @@ export class SuppliersRepository extends BaseWorker {
       select: {
         id: true,
         certification_id: true,
-        expiration_date: true,
         effective_date: true,
+        issued_date: true,
         organization_file: {
           select: {
             id: true,
             original_name: true,
             bucket: true,
             key: true,
+            expires_at: true,
+            effective_start_date: true,
+            effective_end_date: true,
             openai_file_id: true,
             mimetype: true,
             size: true,
@@ -69,15 +72,21 @@ export class SuppliersRepository extends BaseWorker {
 
   async findOne(org: organizations, user: IAuthenticatedUser, filters?: { name?: string; id?: string }) {
     if (filters?.id || filters?.name) {
-      const certification = await this.prisma.organization_facilities.findUnique({
+      const query = {
         where: {
           id: filters.id,
-          name: filters.name,
           supplier: true,
           organization_id: org.id,
         },
         select: this.base_query,
-      });
+      };
+
+      if (filters.name) {
+        delete query.where['id'];
+        query.where['name'] = filters.name;
+      }
+
+      const certification = await this.prisma.organization_facilities.findUnique(query);
 
       if (!certification) {
         throw new NotFoundException({ filters, user }, `No Certification found`);
@@ -86,6 +95,76 @@ export class SuppliersRepository extends BaseWorker {
       return certification;
     } else {
       throw new UnprocessableEntityException({ filters, user }, 'Must provide id or name');
+    }
+  }
+
+  async getSupplierClaimNames(org: organizations, user: IAuthenticatedUser) {
+    try {
+      const list = await this.prisma.organization_claims_view.findMany({
+        distinct: ['claim_name'],
+        where: {
+          organization_name: org.name,
+          supplier: true,
+        },
+        select: {
+          claim_name: true,
+        },
+      });
+
+      if (!list || list.length === 0) {
+        throw new NotFoundException(`No Claims found`);
+      }
+
+      return list;
+    } catch (e) {
+      if (e.code == 'P2025') {
+        throw new NotFoundException(`No Claims found`);
+      }
+      console.error(e.message, { stack: e.stack, organization: org, user });
+      throw e;
+    }
+  }
+
+  async getOrgClaimList(org: organizations, user: IAuthenticatedUser) {
+    try {
+      const list = await this.prisma.organization_claims_view.findMany({
+        where: {
+          organization_name: org.name,
+          supplier: true,
+        },
+        select: {
+          facility_id: true,
+          facility_name: true,
+          address_line_1: true,
+          address_line_2: true,
+          city: true,
+          state_province: true,
+          postal_code: true,
+          country: true,
+          claim_id: true,
+          claim_name: true,
+          claim_level: true,
+          claim_type: true,
+          organization_file_id: true,
+          organization_file_name: true,
+          mimetype: true,
+          expires_at: true,
+          effective_start_date: true,
+          effective_end_date: true,
+        },
+      });
+
+      if (!list || list.length === 0) {
+        throw new NotFoundException(`No Claims found`);
+      }
+
+      return list;
+    } catch (e) {
+      if (e.code == 'P2025') {
+        throw new NotFoundException(`No Claims found`);
+      }
+      console.error(e.message, { stack: e.stack, organization: org, user });
+      throw e;
     }
   }
 }

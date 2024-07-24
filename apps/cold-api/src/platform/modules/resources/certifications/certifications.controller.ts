@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, UseInterceptors, UseFilters, Req } from '@nestjs/common';
 import { CertificationsService } from './certifications.service';
-import { allRoles, coldAdminOnly, HttpExceptionFilter, JwtAuthGuard, OrgUserInterceptor, Role, Roles, RolesGuard } from '@coldpbc/nest';
+import { HttpExceptionFilter, JwtAuthGuard, OrgUserInterceptor, Role, Roles, RolesGuard } from '@coldpbc/nest';
 import { Span } from 'nestjs-ddtrace';
 import { ApiOAuth2, ApiTags } from '@nestjs/swagger';
 import { certifications } from '@prisma/client';
@@ -15,39 +15,39 @@ import { certifications } from '@prisma/client';
 export class CertificationsController {
   constructor(private readonly certificationsService: CertificationsService) {}
 
-  @Roles(Role.ColdAdmin)
   @Post()
+  @Roles(Role.ColdAdmin)
   create(@Req() req: any, @Body() createCertificationDto: certifications) {
     return this.certificationsService.create(req.organization, req.user, createCertificationDto);
   }
 
-  @Roles(Role.ColdAdmin)
   @Patch(':id')
+  @Roles(Role.ColdAdmin)
   update(@Req() req: any, @Param('id') id: string, @Body() updateCertificationDto: certifications) {
     updateCertificationDto.id = id;
     return this.certificationsService.update(req.org, req.user, updateCertificationDto);
   }
 
-  @Roles(...allRoles)
   @Get()
+  @Roles(Role.ColdAdmin, Role.CompanyOwner, Role.CompanyAdmin, Role.CompanyMember)
   findAll() {
     return this.certificationsService.findAll();
   }
 
-  @Roles(...allRoles)
   @Get(':id')
+  @Roles(Role.ColdAdmin, Role.CompanyOwner, Role.CompanyAdmin, Role.CompanyMember)
   findById(@Req() req: any, @Param('id') id: string) {
     return this.certificationsService.findById(req.organization, req.user, id);
   }
 
-  @Roles(...allRoles)
   @Get('name/:name')
+  @Roles(Role.ColdAdmin, Role.CompanyOwner, Role.CompanyAdmin, Role.CompanyMember)
   findByName(@Req() req: any, @Param('name') name: string) {
     return this.certificationsService.findByName(req.organization, req.user, name);
   }
 
-  @Roles(...coldAdminOnly)
   @Delete(':id')
+  @Roles(Role.ColdAdmin, Role.CompanyOwner, Role.CompanyAdmin, Role.CompanyMember)
   remove(@Req() req: any, @Param('id') id: string) {
     return this.certificationsService.remove(req.organization, req.user, id);
   }

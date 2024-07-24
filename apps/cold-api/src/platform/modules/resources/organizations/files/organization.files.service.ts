@@ -57,6 +57,24 @@ export class OrganizationFilesService extends BaseWorker {
         where: {
           organization_id: orgId,
         },
+        select: {
+          id: true,
+          original_name: true,
+          bucket: true,
+          key: true,
+          mimetype: true,
+          size: true,
+          checksum: true,
+          type: true,
+          expires_at: true,
+          effective_start_date: true,
+          effective_end_date: true,
+          certification_claim: {
+            include: {
+              certification: true,
+            },
+          },
+        },
       });
 
       //const response = await this.events.sendEvent(true, 'organization_files.get', { organization: org }, user, orgId);
