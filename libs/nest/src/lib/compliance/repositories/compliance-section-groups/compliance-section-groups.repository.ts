@@ -53,7 +53,7 @@ export class ComplianceSectionGroupsRepository extends BaseWorker {
         })
         .parse(sectionGroup);
 
-      return this.prisma.extended.compliance_section_groups.create({
+      return this.prisma.compliance_section_groups.create({
         data: data,
       });
     } catch (error: any) {
@@ -67,7 +67,7 @@ export class ComplianceSectionGroupsRepository extends BaseWorker {
    */
   async getSectionGroupList(where: { compliance_definition_name?: string; title?: string }, filter?: boolean, questions?: boolean) {
     try {
-      const groupList = (await this.prisma.extended.compliance_section_groups.findMany({
+      const groupList = (await this.prisma.compliance_section_groups.findMany({
         where: where,
         select: {
           id: true,
@@ -126,7 +126,7 @@ export class ComplianceSectionGroupsRepository extends BaseWorker {
     questions?: boolean,
   ) {
     try {
-      const sectionGroup = this.prisma.extended.compliance_section_groups.findUnique({
+      const sectionGroup = this.prisma.compliance_section_groups.findUnique({
         where: {
           ...where,
         },
@@ -194,7 +194,7 @@ export class ComplianceSectionGroupsRepository extends BaseWorker {
    */
   async getSectionGroupListByOrgCompliance(org, compliance_set_name, user, filter?: boolean, questions?: boolean) {
     try {
-      const orgCompliance = (await this.prisma.extended.organization_compliance.findUnique({
+      const orgCompliance = (await this.prisma.organization_compliance.findUnique({
         where: {
           orgIdCompNameKey: {
             organization_id: org.id,
@@ -270,7 +270,7 @@ export class ComplianceSectionGroupsRepository extends BaseWorker {
 
       // If the organization compliance is not found, create it since they are trying to access the compliance set for the first time
       if (!orgCompliance) {
-        await this.prisma.extended.organization_compliance.create({
+        await this.prisma.organization_compliance.create({
           data: {
             id: new Cuid2Generator(GuidPrefixes.OrganizationCompliance).scopedId,
             organization_id: org.id,
@@ -302,7 +302,7 @@ export class ComplianceSectionGroupsRepository extends BaseWorker {
    */
   async deleteSectionGroup(where: { compliance_definition_name: string; id: string }) {
     try {
-      const deleted = this.prisma.extended.compliance_section_groups.delete({
+      const deleted = this.prisma.compliance_section_groups.delete({
         where: where,
       });
 
@@ -320,7 +320,7 @@ export class ComplianceSectionGroupsRepository extends BaseWorker {
     try {
       compliance_section_groupsSchema.partial().parse(data);
 
-      const updated = this.prisma.extended.compliance_section_groups.update({
+      const updated = this.prisma.compliance_section_groups.update({
         where: where,
         data: data,
       });

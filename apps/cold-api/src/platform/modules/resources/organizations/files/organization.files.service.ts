@@ -34,7 +34,7 @@ export class OrganizationFilesService extends BaseWorker {
       this.test_orgs = value;
     });
 
-    this.openAI = await this.prisma.extended.service_definitions.findUnique({
+    this.openAI = await this.prisma.service_definitions.findUnique({
       where: {
         name: 'cold-platform-openai',
       },
@@ -53,9 +53,27 @@ export class OrganizationFilesService extends BaseWorker {
         throw new NotFoundException(`Organization ${orgId} not found`);
       }
 
-      const files = await this.prisma.extended.organization_files.findMany({
+      const files = await this.prisma.organization_files.findMany({
         where: {
           organization_id: orgId,
+        },
+        select: {
+          id: true,
+          original_name: true,
+          bucket: true,
+          key: true,
+          mimetype: true,
+          size: true,
+          checksum: true,
+          type: true,
+          expires_at: true,
+          effective_start_date: true,
+          effective_end_date: true,
+          certification_claim: {
+            include: {
+              certification: true,
+            },
+          },
         },
       });
 
@@ -83,7 +101,7 @@ export class OrganizationFilesService extends BaseWorker {
 
         const response = await this.s3.uploadStreamToS3(user, org.name, file);
 
-        let existing = await this.prisma.extended.organization_files.findUnique({
+        let existing = await this.prisma.organization_files.findUnique({
           where: {
             s3Key: {
               key: response.key,
@@ -99,7 +117,7 @@ export class OrganizationFilesService extends BaseWorker {
             throw new ConflictException(`file ${file.originalname} already exists in db for org ${org.name}`);
           }
 
-          await this.prisma.extended.organization_files.update({
+          await this.prisma.organization_files.update({
             where: {
               id: existing.id,
             },
@@ -118,10 +136,11 @@ export class OrganizationFilesService extends BaseWorker {
               contentType: file.mimetype,
               location: file.destination,
               checksum: hash,
+              type: 'OTHER',
             },
           });
         } else {
-          existing = await this.prisma.extended.organization_files.create({
+          existing = await this.prisma.organization_files.create({
             data: {
               id: new Cuid2Generator(GuidPrefixes.OrganizationFile).scopedId,
               original_name: file.originalname,
@@ -137,6 +156,7 @@ export class OrganizationFilesService extends BaseWorker {
               contentType: file.mimetype,
               location: file.destination,
               checksum: hash,
+              type: 'OTHER',
             },
           });
         }
@@ -179,7 +199,7 @@ export class OrganizationFilesService extends BaseWorker {
       }
 
       for (const fileId of fileIds) {
-        const file = await this.prisma.extended.organization_files.findUnique({
+        const file = await this.prisma.organization_files.findUnique({
           where: {
             id: fileId,
             organization_id: orgId,
@@ -190,7 +210,7 @@ export class OrganizationFilesService extends BaseWorker {
           throw new NotFoundException(`File ${fileId} not found`);
         }
 
-        const vectors = await this.prisma.extended.vector_records.findMany({
+        const vectors = await this.prisma.vector_records.findMany({
           where: {
             organization_file_id: fileId,
           },
@@ -198,7 +218,7 @@ export class OrganizationFilesService extends BaseWorker {
 
         await this.events.sendIntegrationEvent(false, 'file.deleted', { file, vectors }, user, orgId);
 
-        await this.prisma.extended.organization_files.delete({
+        await this.prisma.organization_files.delete({
           where: {
             id: fileId,
           },

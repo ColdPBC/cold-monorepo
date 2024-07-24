@@ -15,6 +15,7 @@ import { ComplianceDefinitionModule } from './resources/compliance/compliance-de
 import { EventsModule } from './utilities/events/events.module';
 import { OrganizationModule } from './resources/organizations/organization.module';
 import { ComplianceSetModule } from './resources/compliance/compliance-set.module';
+import { CertificationsModule } from './resources/certifications/certifications.module';
 
 @Module({})
 export class AppModule {
@@ -44,6 +45,7 @@ export class AppModule {
         FacilitiesModule,
         ComplianceDefinitionModule,
         ComplianceSetModule,
+        CertificationsModule,
       ],
       providers: [],
       exports: [],

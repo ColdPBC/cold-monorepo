@@ -2,7 +2,8 @@
 import { CallHandler, ExecutionContext, Injectable, NestInterceptor, Scope, UnauthorizedException } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { IAuthenticatedUser, PrismaService } from '@coldpbc/nest';
+import { IAuthenticatedUser } from '../primitives';
+import { PrismaService } from '../prisma';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable({ scope: Scope.REQUEST })

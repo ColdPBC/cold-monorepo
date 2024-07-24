@@ -13,7 +13,7 @@ import {
   ProtectedRoute,
   Signup,
   SupplierDetail,
-  Suppliers,
+  SuppliersPage,
   Terms,
   UserSettingsPage,
   WizardRoutes,
@@ -38,7 +38,7 @@ export const ColdRoutes = () => {
         <Route path={'/settings/users'} element={<UserSettingsPage />} />
         <Route path="*" element={<div className={'text-tc-primary'}>Pending...</div>} />
         {WizardRoutes()}
-        {ldFlags.showSuppliersPageCold890 && <Route path={'/suppliers'} element={<Suppliers />} />}
+        {ldFlags.showSuppliersPageCold890 && <Route path={'/suppliers'} element={<SuppliersPage />} />}
         {ldFlags.showSuppliersPageCold890 && <Route path={'/suppliers/:id'} element={<SupplierDetail />} />}
       </>
     );

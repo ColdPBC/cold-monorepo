@@ -1,3 +1,150 @@
+# [1.306.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.305.1...v1.306.0) (2024-07-24)
+
+
+### Features
+
+* Add autoHeight property to suppliersDataGrid ([7c14838](https://github.com/ColdPBC/cold-monorepo/commit/7c14838dbdcb03b9837fb785cd07713079e1226d))
+* Add custom no-rows overlay to MUI DataGrid ([f7c961b](https://github.com/ColdPBC/cold-monorepo/commit/f7c961b46ded8d35f1bf05f0730245870eb79475))
+* Add Suppliers interface and update SuppliersDataGrid ([59f388f](https://github.com/ColdPBC/cold-monorepo/commit/59f388f9ad083cbfa4c40c7513a04f9609e25bae))
+* Refactor supplier components and update certification handling ([a30bcd2](https://github.com/ColdPBC/cold-monorepo/commit/a30bcd2c6fa6f62e0256117978feef6d1442141a))
+* Refactor suppliersDataGrid to use mock data ([535f8b5](https://github.com/ColdPBC/cold-monorepo/commit/535f8b5a04d3a48fdbd3e45484f3c5a0cb87c115))
+* Update UI with new icons and MUI integration ([6fa8ea7](https://github.com/ColdPBC/cold-monorepo/commit/6fa8ea7be9d03a791bc0f72bbeeb82ea8b1848e3))
+
+## [1.305.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.305.0...v1.305.1) (2024-07-24)
+
+
+### Bug Fixes
+
+* improve error handling and add new field to supplier query ([010aec2](https://github.com/ColdPBC/cold-monorepo/commit/010aec2f263491bb1383d6fb3dec835d07b3f685))
+
+# [1.305.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.304.0...v1.305.0) (2024-07-24)
+
+
+### Features
+
+* add effective date fields to supplier repository ([4969236](https://github.com/ColdPBC/cold-monorepo/commit/49692369ec04811b5d9cd419c53fea16f55e6594))
+* extend organization files service to include effective dates ([807b242](https://github.com/ColdPBC/cold-monorepo/commit/807b242e3876ad77170a70f98d017b1aceb3503e))
+
+# [1.304.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.303.0...v1.304.0) (2024-07-24)
+
+
+### Features
+
+* Add effective start and end dates to organization_files ([93642b1](https://github.com/ColdPBC/cold-monorepo/commit/93642b129cf04d98c4a2b94a171bf51d9fda99d9))
+* Add extended file details to organization files API ([46af359](https://github.com/ColdPBC/cold-monorepo/commit/46af359a28bdc93347bce7e496bfda4db011b6a0))
+
+# [1.303.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.302.0...v1.303.0) (2024-07-24)
+
+
+### Features
+
+* Add certification id to claims controller ([71987e9](https://github.com/ColdPBC/cold-monorepo/commit/71987e902571cdfe53f8ee4a4f1afa68bfa147db))
+* Add file validation and handling conflict exceptions in ComplianceCertificationsClaimsRepository ([48a5ad8](https://github.com/ColdPBC/cold-monorepo/commit/48a5ad83b1366f9acd85e340e3cf2a5e7431bcfc))
+* Add file validation and handling conflict exceptions in ComplianceCertificationsClaimsRepository ([0ce4db3](https://github.com/ColdPBC/cold-monorepo/commit/0ce4db3267832d38e6fad2e1e09a7a75918da895))
+* Add getClaimNames and getClaimList methods in suppliers.controller ([37e307d](https://github.com/ColdPBC/cold-monorepo/commit/37e307dadd320e98cd4e4a5784c9713f78b1db20))
+* Add SQL views and modify prisma schema ([8196715](https://github.com/ColdPBC/cold-monorepo/commit/8196715a5be0504688f5e2a49ce091b3946cda99))
+* Enhance suppliers.repository and suppliers.service ([f5ab365](https://github.com/ColdPBC/cold-monorepo/commit/f5ab3652c0bc0734340d143e4c22bc62b34f1331))
+
+# [1.302.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.301.1...v1.302.0) (2024-07-22)
+
+
+### Bug Fixes
+
+* commonJS error in running seed scripts ([7dcb677](https://github.com/ColdPBC/cold-monorepo/commit/7dcb67748b7214a588e83357ce01e7c1340ec27c))
+
+
+### Features
+
+* Update `esbuild` packages to v0.20.2 ([a702ad0](https://github.com/ColdPBC/cold-monorepo/commit/a702ad0a9ad2f555804d22e312015481e3de5fb7))
+
+## [1.301.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.301.0...v1.301.1) (2024-07-22)
+
+
+### Bug Fixes
+
+* issues with OpenAPI spec ([a14a215](https://github.com/ColdPBC/cold-monorepo/commit/a14a215a535ce533c9826a09ccbaa48e80fc6ea8))
+
+# [1.301.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.300.0...v1.301.0) (2024-07-22)
+
+
+### Bug Fixes
+
+* incorrect entry in controller array ([5b92440](https://github.com/ColdPBC/cold-monorepo/commit/5b92440bb8db6c36c2d58439d158cafaf175db4f))
+
+
+### Features
+
+* Update providers and exports in ClaimsModule ([f1a3cfc](https://github.com/ColdPBC/cold-monorepo/commit/f1a3cfc9999c8395e4bca69c80e622781522b48f))
+
+# [1.300.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.299.0...v1.300.0) (2024-07-22)
+
+
+### Bug Fixes
+
+* add null check for additional_context in chat service ([35dd286](https://github.com/ColdPBC/cold-monorepo/commit/35dd286f847c6fec16ddfd9cec7ca8a9d00b4ece))
+* add role restrictions to update and remove certifications ([81c2ccd](https://github.com/ColdPBC/cold-monorepo/commit/81c2ccd83035824d397771ac8463babb8cb3bb5a))
+* Update certifications.repository.ts to improve error handling ([433e822](https://github.com/ColdPBC/cold-monorepo/commit/433e822fcb0ea41d0f7df2549adb2101ee7b652c))
+
+
+### Features
+
+* add '[@ogma](https://github.com/ogma)' packages and update related config files ([1172994](https://github.com/ColdPBC/cold-monorepo/commit/1172994e3f83982330721fb88d83f9c53fab0f7f))
+* Add 'Claims' to compliance enums ([122eace](https://github.com/ColdPBC/cold-monorepo/commit/122eace3b41b703d94f1db3fccfde771e86a20a6))
+* Add Certification entity ([52cc105](https://github.com/ColdPBC/cold-monorepo/commit/52cc1051e7f773b9a29a31d22372da233f87bfe5))
+* Add Certifications controller ([9c6cce3](https://github.com/ColdPBC/cold-monorepo/commit/9c6cce35e9e8bfb5fa3ef295a970a9e6ee3d8ffa))
+* Add Certifications module ([9dd715c](https://github.com/ColdPBC/cold-monorepo/commit/9dd715c4de9f3823dded021aae9f74a6ea696e6b))
+* Add Certifications Repository in Nest Library ([640fa29](https://github.com/ColdPBC/cold-monorepo/commit/640fa29894db8a8f6484ea766e3014b585b38096))
+* Add CertificationsModule to AppModule ([37c7078](https://github.com/ColdPBC/cold-monorepo/commit/37c7078ad16ed578d5ab7def12ec6b296c21c812))
+* add CertificationsService to handle certifications ([7d6ca57](https://github.com/ColdPBC/cold-monorepo/commit/7d6ca57ab1acde15a80b5ac39f6a79d3c24de017))
+* Add claims service in certifications module ([459c1a1](https://github.com/ColdPBC/cold-monorepo/commit/459c1a13bbd32e7b9c1708f199480f587b4e7348))
+* Add ClaimsModule in certifications ([d5c387a](https://github.com/ColdPBC/cold-monorepo/commit/d5c387a540c07ce67ec3956db2dec6a900e96b0f))
+* Add ClaimsModule to CertificationsModule ([fecb181](https://github.com/ColdPBC/cold-monorepo/commit/fecb18117d4674b045fe8641a75eb3a8d78a083b))
+* Add Compliance Certification Repository for Nest App ([9fd1745](https://github.com/ColdPBC/cold-monorepo/commit/9fd17455aadfb605b5a6d0af4218be2952b58dd7))
+* Add ComplianceCertificationClaimsRepository ([2340f8a](https://github.com/ColdPBC/cold-monorepo/commit/2340f8a69fb0950bdd0ab08d91e6203e698154f0))
+* Add dev mode to worker log service ([521a1c7](https://github.com/ColdPBC/cold-monorepo/commit/521a1c7e7384a220df537797fbb088670336f819))
+* Add logging exports to nest lib index ([14edbcd](https://github.com/ColdPBC/cold-monorepo/commit/14edbcd1d7f41d8f892a351806cbd2537704090b))
+* Add new claims controller in certifications module ([74de42b](https://github.com/ColdPBC/cold-monorepo/commit/74de42bca8d888d9465deb273a323d93f0006c16))
+* Add SuppliersModule in resources ([60e56f2](https://github.com/ColdPBC/cold-monorepo/commit/60e56f2465cb939f8f58d4044b545df7fecb4b07))
+* Add SuppliersModule to Organization module ([cb5a5e4](https://github.com/ColdPBC/cold-monorepo/commit/cb5a5e4d60dbfbe6dd4684e3a19aa7328c318d16))
+* Add SuppliersRepository in nest lib ([ae8aba0](https://github.com/ColdPBC/cold-monorepo/commit/ae8aba0ab4500594a3827c0221dc45ed9bc239da))
+* Added DTOs for creating and updating Certifications ([3e0c98a](https://github.com/ColdPBC/cold-monorepo/commit/3e0c98a44721a8939dcb3387adf484f36e761bb6))
+* Added guards, interceptors, and decorators in certifications controller ([f6dc566](https://github.com/ColdPBC/cold-monorepo/commit/f6dc566ba54b61fbf6502ab7e939d677fcfed4d2))
+* Added new SuppliersController for organization suppliers ([2724ea9](https://github.com/ColdPBC/cold-monorepo/commit/2724ea95fe98ad8e73f1736009af05b5bc592e61))
+* Create new Suppliers Service in organizations module ([4b3ba06](https://github.com/ColdPBC/cold-monorepo/commit/4b3ba06f4eb6d2da22ddafbd61ef1a2e68eb938f))
+* Enhance claims controller with guards, interceptors, filters, and role permissions ([a08b055](https://github.com/ColdPBC/cold-monorepo/commit/a08b055e7d5e680f08fccbf7967515dfd5f0bbd2))
+* Modify certifications schema and add unique migration ([a5b454a](https://github.com/ColdPBC/cold-monorepo/commit/a5b454a37827a0bd317cb49cab1252afb78e44c5))
+* Refactor CertificationsService to use CertificationRepository ([edee10a](https://github.com/ColdPBC/cold-monorepo/commit/edee10a57682b5c7b0d5d2e3ca1825146e96e0b3))
+* Remove certification-related entities and DTOs ([3b0d864](https://github.com/ColdPBC/cold-monorepo/commit/3b0d8644b6c2eac4ab91a880049a134d2c34880b))
+* Remove unnecessary fields from schema and migration ([4756c94](https://github.com/ColdPBC/cold-monorepo/commit/4756c940a054e53a902fa5826962c842753947d7))
+* Update certifications module in cold-api ([69e1181](https://github.com/ColdPBC/cold-monorepo/commit/69e11819c63cdd94fdfd2707a3c9928815be0176))
+* update claims service operations ([1ed9f95](https://github.com/ColdPBC/cold-monorepo/commit/1ed9f95c3c62f5a79769a7aa6a45fb6e1e7807d8))
+* Update prisma schema and migrations for claim dates and data types ([daf88bf](https://github.com/ColdPBC/cold-monorepo/commit/daf88bf985e586a5b47885c1fdc30fb51bd596de))
+* Update roles in certifications.controller ([d04e6ee](https://github.com/ColdPBC/cold-monorepo/commit/d04e6ee3878bf9f9d5e29e59c8ea58d0d02fdcb3))
+
+# [1.299.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.298.2...v1.299.0) (2024-07-18)
+
+
+
+### Features
+
+* Update code for handling compliance section updates ([49fbccf](https://github.com/ColdPBC/cold-monorepo/commit/49fbccfb87cb273df6d209a1b7cad0707a796564))
+
+## [1.298.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.298.1...v1.298.2) (2024-07-18)
+
+
+
+### Bug Fixes
+
+* add checking for organization compliance in compliance-definitions repository ([5c19b12](https://github.com/ColdPBC/cold-monorepo/commit/5c19b12969500a04e8617b03839bf92760bbe304))
+* add checking for organization compliance in compliance-definitions repository ([#503](https://github.com/ColdPBC/cold-monorepo/issues/503)) ([37bf7eb](https://github.com/ColdPBC/cold-monorepo/commit/37bf7eb264a94b8661d72b19fbe7ca9ca65923bd))
+
+## [1.298.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.298.0...v1.298.1) (2024-07-18)
+
+
+### Bug Fixes
+
+* create question / dependency chain flow ([e90c89b](https://github.com/ColdPBC/cold-monorepo/commit/e90c89bcc7d06bb882ea38674a60d7100b927fef))
+
 # [1.298.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.297.0...v1.298.0) (2024-07-18)
 
 

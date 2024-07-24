@@ -2,7 +2,8 @@ import documentationTemplate from './documentationTemplate.mdx';
 import '../src/styles.css';
 import 'flowbite';
 import {auth0UserMock, worker} from '../../../libs/react/src';
-import {StyledEngineProvider} from "@mui/material";
+import {StyledEngineProvider, ThemeProvider} from "@mui/material";
+import {muiTheme} from "../../../libs/react/src/themes/muiTheme";
 
 // Storybook executes this module in both bootstap phase (Node)
 // and a story's runtime (browser). However, we cannot call `setupWorker`
@@ -117,8 +118,8 @@ export default {
     Story => {
       return StyledEngineProvider({
         injectFirst: true,
-        children: Story(),
-      });
+        children: ThemeProvider({theme: muiTheme, children: Story()})
+      })
     },
   ],
 };

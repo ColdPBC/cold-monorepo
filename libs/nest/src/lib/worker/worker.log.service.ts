@@ -17,6 +17,7 @@ export class WorkerLogger implements LoggerService {
   logger: winston.Logger;
   context: string;
   config: ConfigService;
+  isDev: boolean;
 
   /**
    * Creates an instance of WorkerLogger.
@@ -31,6 +32,7 @@ export class WorkerLogger implements LoggerService {
       meta,
     });
 
+    this.isDev = this.config.get('NODE_ENV') !== 'production' && this.config.get('NODE_ENV') !== 'staging';
     const pkg = BaseWorker.getParsedJSON('package.json');
 
     this.tags = {
@@ -94,7 +96,7 @@ export class WorkerLogger implements LoggerService {
       this.logger.warn(typeof message === 'string' ? message : this.redactor.redact(message), this.context, { ...this.tags });
     }
 
-    this.logger.warn(typeof message === 'string' ? message : this.redactor.redact(message), this.redactor.redact({ meta: optionalParams, ...this.tags }));
+    this.logger.warn(typeof message === 'string' ? message : this.redactor.redact(message), this.isDev ? null : this.redactor.redact({ meta: optionalParams, ...this.tags }));
   }
 
   info(message: string, optionalParams?: any | any[]): void {
@@ -110,7 +112,7 @@ export class WorkerLogger implements LoggerService {
       this.logger.info(typeof message === 'string' ? message : this.redactor.redact(message), this.context, { ...this.tags });
     }
 
-    this.logger.info(typeof message === 'string' ? message : this.redactor.redact(message), this.redactor.redact({ meta: optionalParams, ...this.tags }));
+    this.logger.info(typeof message === 'string' ? message : this.redactor.redact(message), this.isDev ? null : this.redactor.redact({ meta: optionalParams, ...this.tags }));
   }
 
   verbose(message: string, optionalParams?: any | any[]): void {
@@ -126,7 +128,7 @@ export class WorkerLogger implements LoggerService {
       this.logger.verbose(typeof message === 'string' ? message : this.redactor.redact(message), this.context, { ...this.tags });
     }
 
-    this.logger.verbose(typeof message === 'string' ? message : this.redactor.redact(message), this.redactor.redact({ meta: optionalParams, ...this.tags }));
+    this.logger.verbose(typeof message === 'string' ? message : this.redactor.redact(message), this.isDev ? null : this.redactor.redact({ meta: optionalParams, ...this.tags }));
   }
 
   debug(message: any, optionalParams?: any | any[]): void {
@@ -142,7 +144,7 @@ export class WorkerLogger implements LoggerService {
       this.logger.debug(typeof message === 'string' ? message : this.redactor.redact(message), this.context, { ...this.tags });
     }
 
-    this.logger.debug(typeof message === 'string' ? message : this.redactor.redact(message), this.redactor.redact({ meta: optionalParams, ...this.tags }));
+    this.logger.debug(typeof message === 'string' ? message : this.redactor.redact(message), this.isDev ? null : this.redactor.redact({ meta: optionalParams, ...this.tags }));
   }
 
   log(message: any, optionalParams?: any | any[]): void {
@@ -157,6 +159,21 @@ export class WorkerLogger implements LoggerService {
     if (!optionalParams) {
       this.logger.info(message, this.context, { ...this.tags });
     }
-    this.logger.info(typeof message === 'string' ? message : this.redactor.redact(message), this.redactor.redact({ meta: optionalParams, ...this.tags }));
+    this.logger.info(typeof message === 'string' ? message : this.redactor.redact(message), this.isDev ? null : this.redactor.redact({ meta: optionalParams, ...this.tags }));
+  }
+
+  trace(message: any, optionalParams?: any | any[]): void {
+    const span = tracer.scope().active();
+    const time = new Date().toISOString();
+    const record = { time, message };
+
+    if (span) {
+      tracer.inject(span.context(), formats.LOG, record);
+    }
+
+    if (!optionalParams) {
+      this.logger.data(message, this.context, { ...this.tags });
+    }
+    this.logger.data(typeof message === 'string' ? message : this.redactor.redact(message), this.isDev ? null : this.redactor.redact({ meta: optionalParams, ...this.tags }));
   }
 }

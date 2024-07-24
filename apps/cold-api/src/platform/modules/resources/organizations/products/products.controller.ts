@@ -18,55 +18,55 @@ export class ProductsController {
 
   @Post()
   @Roles(...allRoles)
-  createOne(@Req() req: any, @Body() createProductDto: CreateProductDto) {
+  createOne(@Req() req: any, @Param('orgId') orgId: string, @Body() createProductDto: CreateProductDto) {
     return this.productsService.create(req, createProductDto);
   }
 
   @Post('batch')
   @Roles(...allRoles)
-  createMany(@Req() req: any, @Body() createProductDto: CreateProductDto[]) {
+  createMany(@Req() req: any, @Param('orgId') orgId: string, @Body() createProductDto: CreateProductDto[]) {
     return this.productsService.createMany(req, createProductDto);
   }
 
   @Get()
   @Roles(...allRoles)
-  findAll(@Req() req: any) {
+  findAll(@Req() req: any, @Param('orgId') orgId: string) {
     return this.productsService.findAll(req);
   }
 
   @Get(':id')
   @Roles(...allRoles)
-  findOneById(@Req() req: any, @Param('id') id: string) {
+  findOneById(@Req() req: any, @Param('orgId') orgId: string, @Param('id') id: string) {
     return this.productsService.findOne(req, { id });
   }
 
   @Get('name/:name')
   @Roles(...allRoles)
-  findOneByName(@Req() req: any, @Param('name') name: string) {
+  findOneByName(@Req() req: any, @Param('orgId') orgId: string, @Param('name') name: string) {
     return this.productsService.findOne(req, { name });
   }
 
   @Patch(':id')
   @Roles(...allRoles)
-  updateById(@Req() req: any, @Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {
+  updateById(@Req() req: any, @Param('orgId') orgId: string, @Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {
     return this.productsService.update(req, { id }, updateProductDto);
   }
 
   @Patch('name/:name')
   @Roles(...allRoles)
-  updateByName(@Req() req: any, @Param('name') name: string, @Body() updateProductDto: UpdateProductDto) {
+  updateByName(@Req() req: any, @Param('orgId') orgId: string, @Param('name') name: string, @Body() updateProductDto: UpdateProductDto) {
     return this.productsService.update(req, { name }, updateProductDto);
   }
 
   @Delete(':id')
   @Roles(...allRoles)
-  removeById(@Req() req: any, @Param('id') id: string) {
+  removeById(@Req() req: any, @Param('orgId') orgId: string, @Param('id') id: string) {
     return this.productsService.remove(req, { id });
   }
 
   @Delete('name/:name')
   @Roles(...allRoles)
-  removeByName(@Req() req: any, @Param('name') name: string) {
+  removeByName(@Req() req: any, @Param('orgId') orgId: string, @Param('name') name: string) {
     return this.productsService.remove(req, { name });
   }
 }

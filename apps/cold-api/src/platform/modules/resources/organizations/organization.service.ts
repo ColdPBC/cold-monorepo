@@ -36,14 +36,14 @@ export class OrganizationService extends BaseWorker {
     if (!this.openAI) {
       this.logger.error('OpenAI service definition not found');
     } else {
-      let existing = await this.prisma.extended.organizations.findUnique({
+      let existing = await this.prisma.organizations.findUnique({
         where: {
           id: org.id,
         },
       });
 
       if (!existing) {
-        existing = await this.prisma.extended.organizations.create({
+        existing = await this.prisma.organizations.create({
           data: {
             id: org.id,
             name: org.name,
@@ -55,7 +55,7 @@ export class OrganizationService extends BaseWorker {
         });
       }
 
-      const openAIAsst = await this.prisma.extended.integrations.findFirst({
+      const openAIAsst = await this.prisma.integrations.findFirst({
         where: {
           organization_id: org.id,
           service_definition_id: this.openAI?.id,
@@ -79,7 +79,7 @@ export class OrganizationService extends BaseWorker {
     this.options = await this.utilService.init();
 
     // insure openai service is enabled for all organizations
-    this.openAI = await this.prisma.extended.service_definitions.findUnique({
+    this.openAI = await this.prisma.service_definitions.findUnique({
       where: {
         name: 'cold-platform-openai',
       },
@@ -261,7 +261,7 @@ export class OrganizationService extends BaseWorker {
       // update org cache by id
       await this.cache.delete(`organizations:${organization.id}`);
 
-      const updated = await this.prisma.extended.organizations.update({
+      const updated = await this.prisma.organizations.update({
         where: {
           id: orgId,
         },
@@ -446,7 +446,7 @@ export class OrganizationService extends BaseWorker {
         },
       });
 
-      return (await this.prisma.extended.organizations.findUnique({
+      return (await this.prisma.organizations.findUnique({
         where: {
           id: existing.id,
         },
@@ -559,7 +559,7 @@ export class OrganizationService extends BaseWorker {
       if (org) {
         try {
           // delete org from db
-          await this.prisma.extended.organizations.delete({
+          await this.prisma.organizations.delete({
             where: {
               id: org.id,
             },

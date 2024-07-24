@@ -188,7 +188,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
 
     try {
       let start = new Date();
-      compliance = await this.prisma.extended.organization_compliance.findUnique({
+      compliance = await this.prisma.organization_compliance.findUnique({
         where: {
           orgIdCompNameKey: {
             organization_id: org.id,
@@ -263,7 +263,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
     if (!user) throw new BadRequestException('User is required');
 
     try {
-      const orgCompliance = await this.prisma.extended.organization_compliance.findUnique({
+      const orgCompliance = await this.prisma.organization_compliance.findUnique({
         where: {
           orgIdCompNameKey: {
             organization_id: org.id,
@@ -273,7 +273,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
       });
       // If the organization compliance is not found, create it since they are trying to access the compliance set for the first time
       if (!orgCompliance) {
-        await this.prisma.extended.organization_compliance.create({
+        await this.prisma.organization_compliance.create({
           data: {
             id: new Cuid2Generator(GuidPrefixes.OrganizationCompliance).scopedId,
             organization_id: org.id,
@@ -283,7 +283,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
         });
       }
 
-      const organization = (await this.prisma.extended.organizations.findUnique({
+      const organization = (await this.prisma.organizations.findUnique({
         where: {
           id: org.id,
         },
@@ -391,7 +391,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
     if (!user) throw new BadRequestException('User is required');
 
     try {
-      const orgComp = await this.prisma.extended.organization_compliance.findUnique({
+      const orgComp = await this.prisma.organization_compliance.findUnique({
         where: {
           orgIdCompNameKey: {
             organization_id: org.id,
@@ -407,7 +407,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
 
       if (!orgComp) {
         // If the organization compliance is not found, create it since they are trying to access the compliance set for the first time
-        await this.prisma.extended.organization_compliance.create({
+        await this.prisma.organization_compliance.create({
           data: {
             id: new Cuid2Generator(GuidPrefixes.OrganizationCompliance).scopedId,
             organization_id: org.id,
@@ -434,7 +434,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
           },
         },
       };
-      const response = await this.prisma.extended.organization_compliance.findUnique(query);
+      const response = await this.prisma.organization_compliance.findUnique(query);
 
       if (!response) {
         throw new NotFoundException(`No Compliance Found For ${org.name}`);
@@ -495,7 +495,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
     };
 
     try {
-      const response = await this.prisma.extended.organizations.findUnique({
+      const response = await this.prisma.organizations.findUnique({
         where: {
           id: org.id,
         },
@@ -635,7 +635,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
       },
     };
     try {
-      const response = await this.prisma.extended.organizations.findUnique(query);
+      const response = await this.prisma.organizations.findUnique(query);
 
       if (!response) {
         throw new NotFoundException(`No Compliance Found For ${org.name}`);
@@ -667,7 +667,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
     };
 
     try {
-      const response = await this.prisma.extended.organizations.findUnique({
+      const response = await this.prisma.organizations.findUnique({
         where: {
           id: org.id,
         },
@@ -730,7 +730,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
     };
 
     try {
-      const response = await this.prisma.extended.organizations.findUnique({
+      const response = await this.prisma.organizations.findUnique({
         where: {
           id: org.id,
         },
@@ -817,7 +817,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
   async deleteAllAiResponsesByName(org: organizations, orgComp: any, user: IAuthenticatedUser) {
     await this.cacheService.delete(this.getCacheKey(org, orgComp.compliance_definition_name), true);
 
-    const compliance = await this.prisma.extended.organization_compliance.findUnique({
+    const compliance = await this.prisma.organization_compliance.findUnique({
       where: {
         orgIdCompNameKey: {
           organization_id: org.id,
@@ -837,7 +837,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
         organization: org,
       });
 
-      return await this.prisma.extended.organization_compliance_ai_responses.deleteMany({
+      return await this.prisma.organization_compliance_ai_responses.deleteMany({
         where: {
           organization_compliance_id: compliance.id,
           organization_id: org.id,
@@ -857,7 +857,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
   async deleteComplianceResponse(org: organizations, compliance_definition_name: string, sgId: string, sId: string, qId: string, user: IAuthenticatedUser, type: string = 'ai') {
     await this.cacheService.delete(this.getCacheKey(org, compliance_definition_name), true);
 
-    const compliance = await this.prisma.extended.organization_compliance.findUnique({
+    const compliance = await this.prisma.organization_compliance.findUnique({
       where: {
         orgIdCompNameKey: {
           organization_id: org.id,
@@ -880,18 +880,18 @@ export class ComplianceResponsesRepository extends BaseWorker {
 
       switch (type) {
         case 'ai':
-          return await this.prisma.extended.organization_compliance_ai_responses.delete({
+          return await this.prisma.organization_compliance_ai_responses.delete({
             where: { orgCompQuestId: { organization_compliance_id: compliance.id, compliance_question_id: qId } },
           });
         case 'org':
-          return await this.prisma.extended.organization_compliance_responses.deleteMany({
+          return await this.prisma.organization_compliance_responses.deleteMany({
             where: { organization_compliance_id: compliance.id, compliance_question_id: qId },
           });
         case 'all':
-          await this.prisma.extended.organization_compliance_ai_responses.deleteMany({
+          await this.prisma.organization_compliance_ai_responses.deleteMany({
             where: { organization_compliance_id: compliance.id },
           });
-          return await this.prisma.extended.organization_compliance_responses.deleteMany({
+          return await this.prisma.organization_compliance_responses.deleteMany({
             where: { organization_compliance_id: compliance.id },
           });
         default:
@@ -974,7 +974,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
       organization_compliance_ai_response_id: aiResponseEntity?.id,
       organization_compliance_response_id: orgResponseEntity?.id,
     };
-    await this.prisma.extended.compliance_responses.upsert({
+    await this.prisma.compliance_responses.upsert({
       where: {
         orgCompQuestId: {
           organization_compliance_id: compliance.id,
@@ -1028,7 +1028,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
     start = new Date();
     await this.cacheService.delete(this.getCacheKey(org, compliance.compliance_definition_name), true);
 
-    orgResponseEntity = await this.prisma.extended.organization_compliance_responses.upsert({
+    orgResponseEntity = await this.prisma.organization_compliance_responses.upsert({
       where: {
         orgCompQuestId: {
           organization_compliance_id: compliance.id,
@@ -1083,7 +1083,7 @@ export class ComplianceResponsesRepository extends BaseWorker {
     start = new Date();
     await this.cacheService.delete(this.getCacheKey(org, compliance.compliance_definition_name), true);
 
-    aiResponseEntity = await this.prisma.extended.organization_compliance_ai_responses.upsert({
+    aiResponseEntity = await this.prisma.organization_compliance_ai_responses.upsert({
       where: {
         orgCompQuestId: {
           compliance_question_id: ai_response.compliance_question_id,

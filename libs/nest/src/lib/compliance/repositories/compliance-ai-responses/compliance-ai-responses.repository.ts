@@ -24,7 +24,7 @@ export class ComplianceAiResponsesRepository extends BaseWorker {
     });
 
     try {
-      await this.prisma.extended.organization_compliance_ai_responses.create({
+      await this.prisma.organization_compliance_ai_responses.create({
         data: {
           organization_id: org?.id,
           organization_compliance_id: complianceName,
@@ -48,7 +48,7 @@ export class ComplianceAiResponsesRepository extends BaseWorker {
       organization: org,
     });
     try {
-      const compliance = await this.prisma.extended.organization_compliance.findUnique({
+      const compliance = await this.prisma.organization_compliance.findUnique({
         where: {
           orgIdCompNameKey: {
             organization_id: org.id,
@@ -68,7 +68,7 @@ export class ComplianceAiResponsesRepository extends BaseWorker {
         );
       }
 
-      await this.prisma.extended.organization_compliance_ai_responses.update({
+      await this.prisma.organization_compliance_ai_responses.update({
         where: { id, organization_id: org.id, organization_compliance_id: compliance.id },
         data: responseData,
       });
@@ -90,7 +90,7 @@ export class ComplianceAiResponsesRepository extends BaseWorker {
     });
 
     try {
-      const compliance = await this.prisma.extended.organization_compliance.findUnique({
+      const compliance = await this.prisma.organization_compliance.findUnique({
         where: {
           orgIdCompNameKey: {
             organization_id: org.id,
@@ -110,7 +110,7 @@ export class ComplianceAiResponsesRepository extends BaseWorker {
         );
       }
 
-      const aiResponse = await this.prisma.extended.organization_compliance_ai_responses.findUnique({
+      const aiResponse = await this.prisma.organization_compliance_ai_responses.findUnique({
         where: { id, organization_id: org.id, organization_compliance_id: compliance.id },
         include: {
           compliance_questions: true,
@@ -139,7 +139,7 @@ export class ComplianceAiResponsesRepository extends BaseWorker {
       organization: org,
     });
     try {
-      const compliance = await this.prisma.extended.organization_compliance.findUnique({
+      const compliance = await this.prisma.organization_compliance.findUnique({
         where: {
           orgIdCompNameKey: {
             organization_id: org.id,
@@ -159,7 +159,7 @@ export class ComplianceAiResponsesRepository extends BaseWorker {
         );
       }
 
-      const responses = this.prisma.extended.organization_compliance_ai_responses.findMany({
+      const responses = this.prisma.organization_compliance_ai_responses.findMany({
         where: { organization_id: org.id, organization_compliance_id: compliance.id },
         include: {
           compliance_questions: true,
@@ -187,7 +187,7 @@ export class ComplianceAiResponsesRepository extends BaseWorker {
       organization: org,
     });
     try {
-      const compliance = await this.prisma.extended.organization_compliance.findUnique({
+      const compliance = await this.prisma.organization_compliance.findUnique({
         where: {
           orgIdCompNameKey: {
             organization_id: org.id,
@@ -207,7 +207,7 @@ export class ComplianceAiResponsesRepository extends BaseWorker {
         );
       }
 
-      await this.prisma.extended.organization_compliance_ai_responses.deleteMany({
+      await this.prisma.organization_compliance_ai_responses.deleteMany({
         where: { organization_id: org.id, organization_compliance_id: compliance.id },
       });
     } catch (error) {
@@ -227,7 +227,7 @@ export class ComplianceAiResponsesRepository extends BaseWorker {
       organization: org,
     });
     try {
-      const compliance = await this.prisma.extended.organization_compliance.findUnique({
+      const compliance = await this.prisma.organization_compliance.findUnique({
         where: {
           orgIdCompNameKey: {
             organization_id: org.id,
@@ -247,7 +247,7 @@ export class ComplianceAiResponsesRepository extends BaseWorker {
         );
       }
 
-      await this.prisma.extended.organization_compliance_ai_responses.delete({
+      await this.prisma.organization_compliance_ai_responses.delete({
         where: {
           id,
           organization_id: org.id,

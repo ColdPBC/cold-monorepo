@@ -1,20 +1,42 @@
-export const getClaimsMock = () => {
+import { Certifications, SuppliersClaimNamesPayload } from '@coldpbc/interfaces';
+
+export const getSupplierClaimsMock = (): SuppliersClaimNamesPayload[] => {
+  return getCertificationsMock()
+    .filter(cert => {
+      return cert.level === 'Supplier';
+    })
+    .map(certification => {
+      return {
+        claim_name: certification.name,
+      };
+    });
+};
+
+export const getCertificationsMock = (): Certifications[] => {
   return [
     {
-      name: 'pfas',
-      label: 'PFAS-Test',
+      id: '1',
+      name: 'PFAS-Test',
+      level: 'Supplier',
+      type: 'TEST',
     },
     {
-      name: 'lead',
-      label: 'Lead-Test',
+      id: '2',
+      name: 'Lead-Test',
+      level: 'Supplier',
+      type: 'TEST',
     },
     {
+      id: '3',
       name: 'phthalate',
-      label: 'Phthalate-Test',
+      level: 'Supplier',
+      type: 'TEST',
     },
     {
+      id: '4',
       name: 'bluesign',
-      label: 'Bluesign',
+      level: 'Supplier',
+      type: 'TEST',
     },
   ];
 };

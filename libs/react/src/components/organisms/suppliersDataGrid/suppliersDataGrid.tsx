@@ -2,24 +2,65 @@ import { DataGrid, GridColDef, GridRenderCellParams, GridTreeNodeWithRender, Gri
 import { HexColors } from '@coldpbc/themes';
 import { differenceInDays } from 'date-fns';
 import { IconNames } from '@coldpbc/enums';
-import { ColdIcon } from '@coldpbc/components';
-import { createTheme, ThemeProvider } from '@mui/material';
-import { get } from 'lodash';
-import { getClaimsMock, getSupplierMock } from '@coldpbc/mocks';
+import { ColdIcon, MUIDataGridNoRowsOverlay, Spinner } from '@coldpbc/components';
+import useSWR from 'swr';
+import { axiosFetcher } from '@coldpbc/fetchers';
+import { useEffect, useState } from 'react';
+import { Suppliers, SuppliersClaimNames, SuppliersClaimNamesPayload } from '@coldpbc/interfaces';
+import { isAxiosError } from 'axios';
+import { useAuth0Wrapper } from '@coldpbc/hooks';
 import { useNavigate } from 'react-router-dom';
 
 export const SuppliersDataGrid = () => {
   const navigate = useNavigate();
 
+  const [certifications, setCertifications] = useState<SuppliersClaimNames[]>([]);
+  const [suppliers, setSuppliers] = useState<Suppliers[]>([]);
+  const { orgId } = useAuth0Wrapper();
+  const certificateSWR = useSWR<SuppliersClaimNamesPayload[], any, any>([`/organizations/${orgId}/suppliers/claims/names`, 'GET'], axiosFetcher);
+  const suppliersSWR = useSWR<Suppliers[], any, any>([`/organizations/${orgId}/suppliers`, 'GET'], axiosFetcher);
+
+  useEffect(() => {
+    if (certificateSWR.data) {
+      if (isAxiosError(certificateSWR.data)) {
+        // handle no claims 404, set state to empty array
+        if (certificateSWR.data?.response?.status === 404) {
+          setCertifications([]);
+        }
+      } else {
+        setCertifications(
+          certificateSWR.data.filter(certification => {
+            return certification.claim_name !== null;
+          }) as SuppliersClaimNames[],
+        );
+      }
+    }
+  }, [certificateSWR.data]);
+
+  useEffect(() => {
+    if (suppliersSWR.data) {
+      if (isAxiosError(suppliersSWR.data)) {
+        // handle no suppliers 404, set state to empty array
+        if (isAxiosError(suppliersSWR.data) && suppliersSWR.data?.response?.status === 404) {
+          setSuppliers([]);
+        }
+      } else {
+        setSuppliers(suppliersSWR.data);
+      }
+    }
+  }, [suppliersSWR.data]);
+
+  if (certificateSWR.isLoading || suppliersSWR.isLoading) {
+    return <Spinner />;
+  }
+
   const certificationStatuses = ['InActive', 'Active', 'Expired', 'Expiring Soon'];
-
-  const supplierData = getSupplierMock();
-
-  const certificateClaims = getClaimsMock();
 
   const renderCell = (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
     // if the value is null return null
-    const expirationDate: string | null = get(supplierData[params.row.id - 1], `certificate_claims.${params.field}.expiration_date`, null);
+    const expirationDate: string | undefined | null = suppliers
+      .find(supplier => supplier.id === params.row.id)
+      ?.certification_claims.find(certificateClaim => certificateClaim.certification?.name === params.field)?.organization_file.effective_end_date;
     let diff = 0;
 
     switch (params.value) {
@@ -79,10 +120,10 @@ export const SuppliersDataGrid = () => {
     },
   ];
 
-  certificateClaims.forEach((claim, index) => {
+  certifications.forEach((claim, index) => {
     columns.push({
-      field: claim.name,
-      headerName: claim.label,
+      field: claim.claim_name,
+      headerName: claim.claim_name,
       headerClassName: 'bg-gray-30 h-[37px] text-body',
       flex: 1,
       renderCell: params => {
@@ -94,9 +135,10 @@ export const SuppliersDataGrid = () => {
   });
 
   let newRows: GridValidRowModel[] = [];
-  supplierData.forEach((supplier, index) => {
+
+  suppliers.forEach((supplier, index) => {
     const row = {
-      id: index + 1,
+      id: supplier.id,
       name: supplier.name,
       country: supplier.country,
     };
@@ -107,20 +149,36 @@ export const SuppliersDataGrid = () => {
       }
     });
 
-    certificateClaims.forEach(claim => {
-      const expirationDate: string | null = get(supplier, `certificate_claims.${claim.name}.expiration_date`, null);
+    certifications.forEach(claim => {
+      const certificateClaims = supplier.certification_claims
+        .filter(certificateClaim => certificateClaim.certification?.name === claim.claim_name)
+        .filter(
+          // filter out the null expiration dates
+          certificateClaim => certificateClaim.organization_file.effective_end_date !== null,
+        )
+        .sort((a, b) => {
+          // check if the expiration date is null
+          if (a.organization_file.effective_end_date === null || b.organization_file.effective_end_date === null) {
+            return 1;
+          } else {
+            // sort by descending order
+            return new Date(b.organization_file.effective_end_date).getTime() - new Date(a.organization_file.effective_end_date).getTime();
+          }
+        });
+
+      const expirationDate: string | undefined | null = certificateClaims[0]?.organization_file.effective_end_date;
       // if the expiration date is null, set the value to InActive
       if (expirationDate === null || expirationDate === undefined) {
-        row[claim.name] = 'InActive';
+        row[claim.claim_name] = 'InActive';
       } else {
         // get the difference between the current date and the date in the cell
         const diff = differenceInDays(new Date(expirationDate), new Date());
         if (diff < 0) {
-          row[claim.name] = 'Expired';
+          row[claim.claim_name] = 'Expired';
         } else if (diff < 60) {
-          row[claim.name] = 'Expiring Soon';
+          row[claim.claim_name] = 'Expiring Soon';
         } else {
-          row[claim.name] = 'Active';
+          row[claim.claim_name] = 'Active';
         }
       }
     });
@@ -130,70 +188,64 @@ export const SuppliersDataGrid = () => {
 
   const rows: GridValidRowModel[] = newRows;
 
-  const darkTheme = createTheme({
-    palette: {
-      mode: 'dark',
-    },
-    typography: {
-      fontFamily: ['Inter'].join(','),
-    },
-  });
-
   return (
-    <ThemeProvider theme={darkTheme}>
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        rowHeight={37}
-        getRowClassName={() => {
-          return 'text-tc-primary';
-        }}
-        className={'text-tc-primary border-[2px] rounded-[2px] border-gray-30 bg-transparent w-full h-auto'}
-        sx={{
-          '--DataGrid-rowBorderColor': HexColors.gray[30],
-          '& .MuiTablePagination-root': {
-            color: HexColors.tc.primary,
-          },
-          '& .MuiDataGrid-withBorderColor': {
-            borderColor: HexColors.gray[30],
-          },
-          '& .MuiDataGrid-columnHeaderTitle': {
-            fontWeight: 'bold',
-          },
-          '& .MuiDataGrid-cell:focus': {
-            outline: 'none',
-          },
-          '& .MuiDataGrid-cell:focus-within': {
-            outline: 'none',
-          },
-          '& .MuiDataGrid-columnHeader:focus': {
-            outline: 'none',
-          },
-          '& .MuiDataGrid-columnHeader:focus-within': {
-            outline: 'none',
-          },
-        }}
-        slotProps={{
-          filterPanel: {
-            sx: {
-              '& .MuiInput-input': {
-                backgroundColor: 'transparent',
-                fontFamily: 'Inter',
-                fontSize: '14px',
-                padding: '4px 0px 5px',
-                height: '32px',
-              },
-              '& .MuiDataGrid-filterFormColumnInput': {
-                backgroundColor: 'transparent',
-              },
+    <DataGrid
+      rows={rows}
+      columns={columns}
+      rowHeight={37}
+      getRowClassName={() => {
+        return 'text-tc-primary cursor-pointer';
+      }}
+      className={'text-tc-primary border-[2px] rounded-[2px] border-gray-30 bg-transparent w-full h-auto'}
+      sx={{
+        '--DataGrid-overlayHeight': '300px',
+        '--DataGrid-rowBorderColor': HexColors.gray[30],
+        '& .MuiTablePagination-root': {
+          color: HexColors.tc.primary,
+        },
+        '& .MuiDataGrid-withBorderColor': {
+          borderColor: HexColors.gray[30],
+        },
+        '& .MuiDataGrid-columnHeaderTitle': {
+          fontWeight: 'bold',
+        },
+        '& .MuiDataGrid-cell:focus': {
+          outline: 'none',
+        },
+        '& .MuiDataGrid-cell:focus-within': {
+          outline: 'none',
+        },
+        '& .MuiDataGrid-columnHeader:focus': {
+          outline: 'none',
+        },
+        '& .MuiDataGrid-columnHeader:focus-within': {
+          outline: 'none',
+        },
+      }}
+      slotProps={{
+        filterPanel: {
+          sx: {
+            '& .MuiInput-input': {
+              backgroundColor: 'transparent',
+              fontFamily: 'Inter',
+              fontSize: '14px',
+              padding: '4px 0px 5px',
+              height: '32px',
+            },
+            '& .MuiDataGrid-filterFormColumnInput': {
+              backgroundColor: 'transparent',
             },
           },
-        }}
-        columnHeaderHeight={40}
-        onRowClick={params => {
-          navigate(`/suppliers/${params.row.id}`);
-        }}
-      />
-    </ThemeProvider>
+        },
+      }}
+      columnHeaderHeight={40}
+      autoHeight={true}
+      slots={{
+        noRowsOverlay: MUIDataGridNoRowsOverlay,
+      }}
+      onRowClick={params => {
+        navigate(`/suppliers/${params.row.id}`);
+      }}
+    />
   );
 };
