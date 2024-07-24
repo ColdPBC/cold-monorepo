@@ -2,7 +2,7 @@ import { DataGrid, GridColDef, GridRenderCellParams, GridTreeNodeWithRender, Gri
 import { HexColors } from '@coldpbc/themes';
 import { differenceInDays } from 'date-fns';
 import { IconNames } from '@coldpbc/enums';
-import { ColdIcon, Spinner } from '@coldpbc/components';
+import { ColdIcon, MUIDataGridNoRowsOverlay, Spinner } from '@coldpbc/components';
 import useSWR from 'swr';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { useEffect, useState } from 'react';
@@ -18,12 +18,19 @@ export const SuppliersDataGrid = () => {
   const suppliersSWR = useSWR<Suppliers[], any, any>([`/organizations/${orgId}/suppliers`, 'GET'], axiosFetcher);
 
   useEffect(() => {
-    if (certificateSWR.data && !isAxiosError(certificateSWR.data)) {
-      setCertifications(
-        certificateSWR.data.filter(certification => {
-          return certification.claim_name !== null;
-        }) as SuppliersClaimNames[],
-      );
+    if (certificateSWR.data) {
+      if (isAxiosError(certificateSWR.data)) {
+        // handle no claims 404, set state to empty array
+        if (certificateSWR.data?.response?.status === 404) {
+          setCertifications([]);
+        }
+      } else {
+        setCertifications(
+          certificateSWR.data.filter(certification => {
+            return certification.claim_name !== null;
+          }) as SuppliersClaimNames[],
+        );
+      }
     }
   }, [certificateSWR.data]);
 
@@ -40,7 +47,7 @@ export const SuppliersDataGrid = () => {
     }
   }, [suppliersSWR.data]);
 
-  if (certificateSWR.isLoading) {
+  if (certificateSWR.isLoading || suppliersSWR.isLoading) {
     return <Spinner />;
   }
 
@@ -188,6 +195,7 @@ export const SuppliersDataGrid = () => {
       }}
       className={'text-tc-primary border-[2px] rounded-[2px] border-gray-30 bg-transparent w-full h-auto'}
       sx={{
+        '--DataGrid-overlayHeight': '300px',
         '--DataGrid-rowBorderColor': HexColors.gray[30],
         '& .MuiTablePagination-root': {
           color: HexColors.tc.primary,
@@ -229,6 +237,9 @@ export const SuppliersDataGrid = () => {
       }}
       columnHeaderHeight={40}
       autoHeight={true}
+      slots={{
+        noRowsOverlay: MUIDataGridNoRowsOverlay,
+      }}
     />
   );
 };
