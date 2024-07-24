@@ -68,17 +68,19 @@ const _OrganizationSelector = ({ sidebarExpanded }: { sidebarExpanded?: boolean 
         arrowIcon={false}
         theme={flowbiteThemeOverride.dropdown}
         className={'h-fit max-h-[200px] overflow-y-auto scrollbar-hide overflow-x-visible text-ellipsis transition-none duration-0'}>
-        {data.map((org: any) => (
-          <Dropdown.Item
-            key={org.id}
-            onClick={() => {
-              onOrgSelect(org);
-            }}
-            theme={flowbiteThemeOverride.dropdown.floating.item}
-            className={'text-start text-xs text-ellipsis'}>
-            {org.display_name}
-          </Dropdown.Item>
-        ))}
+        {data
+          .sort((a: any, b: any) => a.display_name.localeCompare(b.display_name))
+          .map((org: any) => (
+            <Dropdown.Item
+              key={org.id}
+              onClick={() => {
+                onOrgSelect(org);
+              }}
+              theme={flowbiteThemeOverride.dropdown.floating.item}
+              className={'text-start text-xs text-ellipsis'}>
+              {org.display_name}
+            </Dropdown.Item>
+          ))}
       </Dropdown>
     );
   } else {
