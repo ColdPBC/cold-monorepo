@@ -29,6 +29,8 @@ export class SuppliersRepository extends BaseWorker {
             bucket: true,
             key: true,
             expires_at: true,
+            effective_start_date: true,
+            effective_end_date: true,
             openai_file_id: true,
             mimetype: true,
             size: true,
@@ -147,6 +149,8 @@ export class SuppliersRepository extends BaseWorker {
           organization_file_name: true,
           mimetype: true,
           expires_at: true,
+          effective_start_date: true,
+          effective_end_date: true,
         },
       });
 
