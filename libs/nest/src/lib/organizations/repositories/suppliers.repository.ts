@@ -117,10 +117,12 @@ export class SuppliersRepository extends BaseWorker {
 
       return list;
     } catch (e) {
-      if (e.code == 'P2025') {
-        throw new NotFoundException(`No Claims found`);
-      }
       console.error(e.message, { stack: e.stack, organization: org, user });
+
+      if (e.code == 'P2025') {
+        throw new NotFoundException({ organization: org, user }, e.message);
+      }
+
       throw e;
     }
   }
@@ -147,6 +149,7 @@ export class SuppliersRepository extends BaseWorker {
           claim_type: true,
           organization_file_id: true,
           organization_file_name: true,
+          organization_file_type: true,
           mimetype: true,
           expires_at: true,
           effective_start_date: true,
@@ -160,10 +163,12 @@ export class SuppliersRepository extends BaseWorker {
 
       return list;
     } catch (e) {
-      if (e.code == 'P2025') {
-        throw new NotFoundException(`No Claims found`);
-      }
       console.error(e.message, { stack: e.stack, organization: org, user });
+
+      if (e.code == 'P2025') {
+        throw new NotFoundException({ organization: org, user }, e.message);
+      }
+
       throw e;
     }
   }
