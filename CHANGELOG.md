@@ -1,3 +1,15 @@
+# [1.306.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.305.1...v1.306.0) (2024-07-24)
+
+
+### Features
+
+* Add autoHeight property to suppliersDataGrid ([7c14838](https://github.com/ColdPBC/cold-monorepo/commit/7c14838dbdcb03b9837fb785cd07713079e1226d))
+* Add custom no-rows overlay to MUI DataGrid ([f7c961b](https://github.com/ColdPBC/cold-monorepo/commit/f7c961b46ded8d35f1bf05f0730245870eb79475))
+* Add Suppliers interface and update SuppliersDataGrid ([59f388f](https://github.com/ColdPBC/cold-monorepo/commit/59f388f9ad083cbfa4c40c7513a04f9609e25bae))
+* Refactor supplier components and update certification handling ([a30bcd2](https://github.com/ColdPBC/cold-monorepo/commit/a30bcd2c6fa6f62e0256117978feef6d1442141a))
+* Refactor suppliersDataGrid to use mock data ([535f8b5](https://github.com/ColdPBC/cold-monorepo/commit/535f8b5a04d3a48fdbd3e45484f3c5a0cb87c115))
+* Update UI with new icons and MUI integration ([6fa8ea7](https://github.com/ColdPBC/cold-monorepo/commit/6fa8ea7be9d03a791bc0f72bbeeb82ea8b1848e3))
+
 ## [1.305.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.305.0...v1.305.1) (2024-07-24)
 
 
