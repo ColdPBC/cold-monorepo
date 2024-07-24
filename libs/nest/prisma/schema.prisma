@@ -546,6 +546,8 @@ model organization_files {
   openai_vector_store_id                    String?
   openai_vector_file_status                 String?
   type                                      file_types                                  @default(OTHER)
+  effective_start_date                      DateTime?
+  effective_end_date                        DateTime?
   expires_at                                DateTime?
   certification_claim                       certification_claims[]
   organization_compliance_ai_response_files organization_compliance_ai_response_files[]
