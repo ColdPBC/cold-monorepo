@@ -12,11 +12,15 @@ export class SuppliersService extends BaseWorker {
     return this.supRepo.findAll(org, user);
   }
 
-  findByName(org: organizations, user: IAuthenticatedUser, name: string) {
-    return this.supRepo.findOne(org, user, { name });
-  }
-
   findById(org: organizations, user: IAuthenticatedUser, id: string) {
     return this.supRepo.findOne(org, user, { id });
+  }
+
+  getClaimNames(org: organizations, user: IAuthenticatedUser) {
+    return this.supRepo.getSupplierClaimNames(org, user);
+  }
+
+  getClaimList(org: organizations, user: IAuthenticatedUser) {
+    return this.supRepo.getOrgClaimList(org, user);
   }
 }
