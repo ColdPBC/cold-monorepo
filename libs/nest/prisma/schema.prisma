@@ -7,20 +7,20 @@ generator client {
 generator zod {
   provider                         = "zod-prisma-types"
   output                           = "../src/validation/generated"
-  useDefaultValidators             = "false"
-  addInputTypeValidation           = "false"
-  validateWhereUniqueInput         = "false"
-  createOptionalDefaultValuesTypes = "false"
-  createPartialTypes               = "false"
+  createInputTypes                 = "false"
   addSelectType                    = "false"
-  addIncludeType                   = "false"
-  writeBarrelFiles                 = "false"
+  addInputTypeValidation           = "false"
   useMultipleFiles                 = "true"
-  writeNullishInModelTypes         = "false"
-  coerceDate                       = "false"
   createRelationValuesTypes        = "false"
   createModelTypes                 = "true"
-  createInputTypes                 = "false"
+  validateWhereUniqueInput         = "false"
+  createPartialTypes               = "false"
+  createOptionalDefaultValuesTypes = "false"
+  addIncludeType                   = "false"
+  writeNullishInModelTypes         = "false"
+  useDefaultValidators             = "false"
+  coerceDate                       = "false"
+  writeBarrelFiles                 = "false"
 }
 
 datasource db {
@@ -546,9 +546,9 @@ model organization_files {
   openai_vector_store_id                    String?
   openai_vector_file_status                 String?
   type                                      file_types                                  @default(OTHER)
-  effective_start_date                      DateTime?
-  effective_end_date                        DateTime?
   expires_at                                DateTime?
+  effective_end_date                        DateTime?
+  effective_start_date                      DateTime?
   certification_claim                       certification_claims[]
   organization_compliance_ai_response_files organization_compliance_ai_response_files[]
   organization_compliance_note_files        organization_compliance_note_files[]
@@ -928,6 +928,8 @@ view organization_claims_view {
   organization_file_name String?
   organization_file_type file_types?
   mimetype               String?
+  effective_start_date   DateTime?
+  effective_end_date     DateTime?
   expires_at             DateTime?
   organization_name      String
 }
