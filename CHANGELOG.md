@@ -1,3 +1,10 @@
+## [1.307.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.307.0...v1.307.1) (2024-07-24)
+
+
+### Bug Fixes
+
+* **suppliers.repository.ts:** correct property name from organization_file_type to type ([04e2560](https://github.com/ColdPBC/cold-monorepo/commit/04e25603125c0e2309b77a061afe59ff6ad3eec0))
+
 # [1.307.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.306.0...v1.307.0) (2024-07-24)
 
 
