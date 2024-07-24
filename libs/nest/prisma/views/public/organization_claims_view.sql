@@ -16,6 +16,8 @@ SELECT
   of.original_name AS organization_file_name,
   of.type AS organization_file_type,
   of.mimetype,
+  of.effective_start_date,
+  of.effective_end_date,
   of.expires_at,
   o.name AS organization_name
 FROM
@@ -38,6 +40,8 @@ GROUP BY
   c.id,
   c.name,
   of.expires_at,
+  of.effective_start_date,
+  of.effective_end_date,
   c.level,
   c.type,
   of.id,
