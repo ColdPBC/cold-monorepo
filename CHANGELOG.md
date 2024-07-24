@@ -1,3 +1,15 @@
+# [1.303.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.302.0...v1.303.0) (2024-07-24)
+
+
+### Features
+
+* Add certification id to claims controller ([71987e9](https://github.com/ColdPBC/cold-monorepo/commit/71987e902571cdfe53f8ee4a4f1afa68bfa147db))
+* Add file validation and handling conflict exceptions in ComplianceCertificationsClaimsRepository ([48a5ad8](https://github.com/ColdPBC/cold-monorepo/commit/48a5ad83b1366f9acd85e340e3cf2a5e7431bcfc))
+* Add file validation and handling conflict exceptions in ComplianceCertificationsClaimsRepository ([0ce4db3](https://github.com/ColdPBC/cold-monorepo/commit/0ce4db3267832d38e6fad2e1e09a7a75918da895))
+* Add getClaimNames and getClaimList methods in suppliers.controller ([37e307d](https://github.com/ColdPBC/cold-monorepo/commit/37e307dadd320e98cd4e4a5784c9713f78b1db20))
+* Add SQL views and modify prisma schema ([8196715](https://github.com/ColdPBC/cold-monorepo/commit/8196715a5be0504688f5e2a49ce091b3946cda99))
+* Enhance suppliers.repository and suppliers.service ([f5ab365](https://github.com/ColdPBC/cold-monorepo/commit/f5ab3652c0bc0734340d143e4c22bc62b34f1331))
+
 # [1.302.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.301.1...v1.302.0) (2024-07-22)
 
 
