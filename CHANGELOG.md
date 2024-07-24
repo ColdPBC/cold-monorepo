@@ -1,3 +1,11 @@
+# [1.304.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.303.0...v1.304.0) (2024-07-24)
+
+
+### Features
+
+* Add effective start and end dates to organization_files ([93642b1](https://github.com/ColdPBC/cold-monorepo/commit/93642b129cf04d98c4a2b94a171bf51d9fda99d9))
+* Add extended file details to organization files API ([46af359](https://github.com/ColdPBC/cold-monorepo/commit/46af359a28bdc93347bce7e496bfda4db011b6a0))
+
 # [1.303.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.302.0...v1.303.0) (2024-07-24)
 
 
