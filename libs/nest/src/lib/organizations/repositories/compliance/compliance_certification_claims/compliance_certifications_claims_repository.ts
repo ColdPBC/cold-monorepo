@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
 import { BaseWorker } from '../../../../worker';
 import { PrismaService } from '../../../../prisma';
 import { IAuthenticatedUser } from '../../../../primitives';
@@ -20,24 +20,40 @@ export class ComplianceCertificationClaimsRepository extends BaseWorker {
       throw new BadRequestException('Organization Facility ID is required');
     }
 
+    const file = await this.prisma.organization_files.findUnique({
+      where: {
+        id: data.organization_file_id,
+        organization_id: org.id,
+      },
+    });
+
+    if (!file) {
+      throw new NotFoundException(`File with id ${data.organization_file_id} not found`);
+    }
+
     unset(data, 'id');
     data.organization_name = org.name;
 
-    const certification = this.prisma.certification_claims.upsert({
-      where: {
-        organization_name: org.name,
-        organization_file_id: data.organization_file_id,
-      },
-      create: {
-        id: new Cuid2Generator(GuidPrefixes.Claims).scopedId,
-        ...data,
-      },
-      update: data,
-    });
+    try {
+      const certification = await this.prisma.certification_claims.create({
+        data: {
+          id: new Cuid2Generator(GuidPrefixes.Claims).scopedId,
+          ...data,
+        },
+      });
 
-    this.logger.log(`Certification claim ${data.id} created`, { certification });
+      this.logger.log(`Certification claim ${data.id} created`, { certification });
 
-    return certification;
+      return certification;
+    } catch (e) {
+      if (e.code === 'P2002') {
+        throw new ConflictException(
+          `${org.name} already has a claim for: certification: ${data.certification_id}, facility: ${data.organization_facility_id} and file: ${data.organization_file_id}`,
+        );
+      }
+      this.logger.error(e);
+      throw new BadRequestException('Failed to create certification claim');
+    }
   }
 
   async updateClaim(org: organizations, user: IAuthenticatedUser, id: string, data: certification_claims) {
