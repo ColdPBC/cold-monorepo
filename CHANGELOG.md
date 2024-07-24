@@ -1,3 +1,11 @@
+# [1.305.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.304.0...v1.305.0) (2024-07-24)
+
+
+### Features
+
+* add effective date fields to supplier repository ([4969236](https://github.com/ColdPBC/cold-monorepo/commit/49692369ec04811b5d9cd419c53fea16f55e6594))
+* extend organization files service to include effective dates ([807b242](https://github.com/ColdPBC/cold-monorepo/commit/807b242e3876ad77170a70f98d017b1aceb3503e))
+
 # [1.304.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.303.0...v1.304.0) (2024-07-24)
 
 
