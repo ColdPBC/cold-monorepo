@@ -32,7 +32,7 @@ export class SuppliersRepository extends BaseWorker {
             effective_start_date: true,
             effective_end_date: true,
             openai_file_id: true,
-            organization_file_type: true,
+            type: true,
             mimetype: true,
             size: true,
             checksum: true,
