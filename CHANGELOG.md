@@ -1,3 +1,11 @@
+## [1.308.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.308.0...v1.308.1) (2024-07-25)
+
+
+### Bug Fixes
+
+* **compliance:** comment out schema validation in create and update methods ([9d03874](https://github.com/ColdPBC/cold-monorepo/commit/9d038747161f297051fe17e32c713c9e3b095fc0))
+* enhance validation and error handling in createCertificationClaim method ([4f12d82](https://github.com/ColdPBC/cold-monorepo/commit/4f12d8268e82966d268d65b299abaae55cef6a99))
+
 # [1.308.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.307.1...v1.308.0) (2024-07-25)
 
 
