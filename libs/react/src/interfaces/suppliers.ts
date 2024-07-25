@@ -8,11 +8,13 @@ export interface Suppliers {
   city: string;
   country: string;
   certification_claims: {
-    certification: Certifications | undefined;
+    id: string;
+    certification: Certifications;
     organization_file: {
       original_name: string;
       effective_start_date: string | null;
       effective_end_date: string | null;
+      type: string;
     };
   }[];
 }

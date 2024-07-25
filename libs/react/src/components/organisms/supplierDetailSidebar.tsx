@@ -1,8 +1,7 @@
 import { HexColors } from '@coldpbc/themes';
-import { BaseButton, ColdIcon } from '@coldpbc/components';
-import { ButtonTypes, IconNames } from '@coldpbc/enums';
+import { ColdIcon, SupplierDetailDocumentsTable } from '@coldpbc/components';
+import { IconNames } from '@coldpbc/enums';
 import React, { ReactNode } from 'react';
-import { SupplierDetailDocumentsTable } from './supplierDetailDocumentsTable/supplierDetailDocumentsTable';
 
 export const SupplierDetailSidebar = (props: {
   selectedClaim: {
@@ -21,9 +20,10 @@ export const SupplierDetailSidebar = (props: {
       type: string;
     }[];
   } | null;
-  setSelectedClaim: (claim: string | null) => void;
+  closeSidebar: () => void;
+  innerRef: React.RefObject<HTMLDivElement>;
 }) => {
-  const { selectedClaim, setSelectedClaim } = props;
+  const { selectedClaim, closeSidebar, innerRef } = props;
 
   const getDocumentTable = (
     documents: {
@@ -44,22 +44,21 @@ export const SupplierDetailSidebar = (props: {
         minWidth: selectedClaim ? '588px' : '0px',
         transition: 'width 0.3s',
         backgroundColor: HexColors.gray['30'],
-        // shadow to the left
         boxShadow: selectedClaim ? '0px 8px 32px 8px rgba(0, 0, 0, 0.70)' : 'none',
         padding: selectedClaim ? '40px' : '0px',
       }}
-      data-chromatic={'ignore'}>
+      data-chromatic={'ignore'}
+      ref={innerRef}>
       {selectedClaim !== null && (
         <div className={'w-full h-full flex flex-col gap-[16px]'}>
           <div className={'w-full flex flex-row justify-between mb-[16px]'}>
             <div className={'text-h3'}>{selectedClaim.label}</div>
-            <div className={'flex flex-row items-center justify-center cursor-pointer'} onClick={() => setSelectedClaim(null)}>
-              <ColdIcon name={IconNames.CloseModalIcon} />
+            <div className={'flex flex-row items-center justify-center cursor-pointer'} onClick={() => closeSidebar()}>
+              <ColdIcon name={IconNames.CloseModalIcon} width={24} height={24} />
             </div>
           </div>
           <div className={'w-full flex flex-row justify-between mb-[16px] pb-[16px] border-b-[1px] border-gray-90'}>
             <div className={'text-h4'}>Documents</div>
-            <BaseButton className={'h-auto'} label={'Add'} variant={ButtonTypes.primary} />
           </div>
           <div className={'w-full flex flex-col gap-[40px]'}>
             {selectedClaim.activeDocuments.length > 0 && (

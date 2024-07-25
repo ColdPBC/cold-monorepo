@@ -40,3 +40,7 @@ export const getCertificationsMock = (): Certifications[] => {
     },
   ];
 };
+
+export const getCertificationMockByName = (name: string): Certifications => {
+  return getCertificationsMock().find(cert => cert.name === name) || getCertificationsMock()[0];
+};

@@ -1,13 +1,9 @@
 import { DataGrid, GridColDef, GridRenderCellParams, GridTreeNodeWithRender, GridValidRowModel } from '@mui/x-data-grid';
 import { HexColors } from '@coldpbc/themes';
-import { createTheme, ThemeProvider } from '@mui/material';
-import { getClaimsMock, getSupplierMock } from '@coldpbc/mocks';
-import { isDefined } from 'class-validator';
-import { ColdIcon } from '@coldpbc/components';
+import { ColdIcon, MUIDataGridNoRowsOverlay } from '@coldpbc/components';
 import { IconNames } from '@coldpbc/enums';
 import { differenceInDays, format } from 'date-fns';
-import { ChevronRightIcon } from '@heroicons/react/16/solid';
-import { find, forEach, forOwn } from 'lodash';
+import { forEach } from 'lodash';
 import { getDateActiveStatus } from '@coldpbc/lib';
 
 export const SupplierDetailDocumentsTable = (props: {
@@ -84,11 +80,7 @@ export const SupplierDetailDocumentsTable = (props: {
       field: 'name',
       headerName: 'Name',
       headerClassName: 'bg-gray-30 h-[37px] text-body',
-      // minWidth: 260,
       flex: 1,
-      renderCell: params => {
-        return <div className={'h-full w-full flex items-center text-body text-tc-primary font-bold truncate'}>{params.value}</div>;
-      },
     },
     {
       field: 'expiration_date',
@@ -132,74 +124,68 @@ export const SupplierDetailDocumentsTable = (props: {
 
   const rows: GridValidRowModel[] = newRows;
 
-  const darkTheme = createTheme({
-    palette: {
-      mode: 'dark',
-    },
-    typography: {
-      fontFamily: ['Inter'].join(','),
-    },
-  });
-
   const onRowClick = (params: any) => {
     // todo: to be implemented
   };
 
   return (
-    <ThemeProvider theme={darkTheme}>
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        rowHeight={37}
-        getRowClassName={() => {
-          return 'text-tc-primary cursor-pointer';
-        }}
-        className={'text-tc-primary border-[2px] rounded-[2px] border-gray-50 bg-transparent w-full h-auto'}
-        sx={{
-          '--DataGrid-rowBorderColor': HexColors.gray[50],
-          '& .MuiTablePagination-root': {
-            color: HexColors.tc.primary,
-          },
-          '& .MuiDataGrid-withBorderColor': {
-            borderColor: HexColors.gray[50],
-          },
-          '& .MuiDataGrid-columnHeaderTitle': {
-            fontWeight: 'bold',
-          },
-          '& .MuiDataGrid-cell:focus': {
-            outline: 'none',
-          },
-          '& .MuiDataGrid-cell:focus-within': {
-            outline: 'none',
-          },
-          '& .MuiDataGrid-columnHeader:focus': {
-            outline: 'none',
-          },
-          '& .MuiDataGrid-columnHeader:focus-within': {
-            outline: 'none',
-          },
-        }}
-        slotProps={{
-          filterPanel: {
-            sx: {
-              '& .MuiInput-input': {
-                backgroundColor: 'transparent',
-                fontFamily: 'Inter',
-                fontSize: '14px',
-                padding: '4px 0px 5px',
-                height: '32px',
-              },
-              '& .MuiDataGrid-filterFormColumnInput': {
-                backgroundColor: 'transparent',
-              },
+    <DataGrid
+      rows={rows}
+      columns={columns}
+      rowHeight={37}
+      getRowClassName={() => {
+        return 'text-tc-primary cursor-pointer';
+      }}
+      className={'text-tc-primary border-[2px] rounded-[2px] border-gray-50 bg-transparent w-full h-auto'}
+      sx={{
+        '--DataGrid-overlayHeight': '300px',
+        '--DataGrid-rowBorderColor': HexColors.gray[50],
+        '& .MuiTablePagination-root': {
+          color: HexColors.tc.primary,
+        },
+        '& .MuiDataGrid-withBorderColor': {
+          borderColor: HexColors.gray[50],
+        },
+        '& .MuiDataGrid-columnHeaderTitle': {
+          fontWeight: 'bold',
+        },
+        '& .MuiDataGrid-cell:focus': {
+          outline: 'none',
+        },
+        '& .MuiDataGrid-cell:focus-within': {
+          outline: 'none',
+        },
+        '& .MuiDataGrid-columnHeader:focus': {
+          outline: 'none',
+        },
+        '& .MuiDataGrid-columnHeader:focus-within': {
+          outline: 'none',
+        },
+      }}
+      slotProps={{
+        filterPanel: {
+          sx: {
+            '& .MuiInput-input': {
+              backgroundColor: 'transparent',
+              fontFamily: 'Inter',
+              fontSize: '14px',
+              padding: '4px 0px 5px',
+              height: '32px',
+            },
+            '& .MuiDataGrid-filterFormColumnInput': {
+              backgroundColor: 'transparent',
             },
           },
-        }}
-        columnHeaderHeight={40}
-        onRowClick={params => {
-          onRowClick(params);
-        }}
-      />
-    </ThemeProvider>
+        },
+      }}
+      columnHeaderHeight={40}
+      onRowClick={params => {
+        onRowClick(params);
+      }}
+      autoHeight={true}
+      slots={{
+        noRowsOverlay: MUIDataGridNoRowsOverlay,
+      }}
+    />
   );
 };
