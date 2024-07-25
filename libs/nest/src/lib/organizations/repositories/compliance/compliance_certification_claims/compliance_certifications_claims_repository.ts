@@ -20,6 +20,27 @@ export class ComplianceCertificationClaimsRepository extends BaseWorker {
       throw new BadRequestException('Organization Facility ID is required');
     }
 
+    const cert = await this.prisma.certifications.findUnique({
+      where: {
+        id: data.certification_id,
+      },
+    });
+
+    if (!cert) {
+      throw new NotFoundException(`Certification with id ${data.certification_id} not found`);
+    }
+
+    const facility = await this.prisma.organization_facilities.findUnique({
+      where: {
+        id: data.organization_facility_id,
+        organization_id: org.id,
+      },
+    });
+
+    if (!facility) {
+      throw new NotFoundException(`Facility with id ${data.organization_facility_id} not found`);
+    }
+
     const file = await this.prisma.organization_files.findUnique({
       where: {
         id: data.organization_file_id,
@@ -42,7 +63,7 @@ export class ComplianceCertificationClaimsRepository extends BaseWorker {
         },
       });
 
-      this.logger.log(`Certification claim ${data.id} created`, { certification });
+      this.logger.log(`${cert.name} claim created for `, { certification });
 
       return certification;
     } catch (e) {
@@ -52,7 +73,7 @@ export class ComplianceCertificationClaimsRepository extends BaseWorker {
         );
       }
       this.logger.error(e);
-      throw new BadRequestException('Failed to create certification claim');
+      throw new BadRequestException({ ...data }, e.message);
     }
   }
 
