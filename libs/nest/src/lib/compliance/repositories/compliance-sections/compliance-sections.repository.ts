@@ -248,7 +248,7 @@ export class ComplianceSectionsRepository extends BaseWorker implements OnModule
 
   async createSection(data: any, user: IAuthenticatedUser) {
     try {
-      compliance_sectionsSchema.parse(data);
+      //compliance_sectionsSchema.parse(data);
 
       const section = await this.prisma.compliance_sections.create({
         data: {
@@ -272,7 +272,7 @@ export class ComplianceSectionsRepository extends BaseWorker implements OnModule
 
   async updateSection(name: string, sgId: string, id: string, data: any, user: IAuthenticatedUser) {
     try {
-      compliance_sectionsSchema.parse(data);
+      //compliance_sectionsSchema.parse(data);
 
       if (data.dependency_expression) {
         const chains = await this.buildDependencyChain(data, [], []);
