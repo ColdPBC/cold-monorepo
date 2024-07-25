@@ -1,3 +1,11 @@
+# [1.308.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.307.1...v1.308.0) (2024-07-25)
+
+
+### Features
+
+* Navigate to home on organization selection ([c05e4b0](https://github.com/ColdPBC/cold-monorepo/commit/c05e4b0dffd19f22d8574e43b2bca057f1f2bf62))
+* Sort organizations alphabetically in selector ([6bf52d1](https://github.com/ColdPBC/cold-monorepo/commit/6bf52d1a1505ad5b25f00d3344135b72d49635c7))
+
 ## [1.307.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.307.0...v1.307.1) (2024-07-24)
 
 
