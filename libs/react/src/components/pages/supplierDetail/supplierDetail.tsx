@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from 'react-router-dom';
-import { Input, Spinner, SupplierClaimsTable, SupplierDetailSidebar } from '@coldpbc/components';
+import { ErrorFallback, Input, Spinner, SupplierClaimsTable, SupplierDetailSidebar } from '@coldpbc/components';
 import { CertificationStatus } from '@coldpbc/enums';
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import opacity from 'hex-color-opacity';
 import { HexColors } from '@coldpbc/themes';
 import { getDateActiveStatus } from '@coldpbc/lib';
@@ -11,8 +11,9 @@ import { useAuth0Wrapper } from '@coldpbc/hooks';
 import { Certifications, Suppliers } from '@coldpbc/interfaces';
 import { isAxiosError } from 'axios';
 import capitalize from 'lodash/capitalize';
+import { withErrorBoundary } from 'react-error-boundary';
 
-export const SupplierDetail = () => {
+export const _SupplierDetail = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const { orgId } = useAuth0Wrapper();
@@ -277,3 +278,10 @@ export const SupplierDetail = () => {
     </div>
   );
 };
+
+export const SupplierDetail = withErrorBoundary(_SupplierDetail, {
+  FallbackComponent: props => <ErrorFallback {...props} />,
+  onError: (error, info) => {
+    console.error('Error occurred in SupplierDetail: ', error);
+  },
+});
