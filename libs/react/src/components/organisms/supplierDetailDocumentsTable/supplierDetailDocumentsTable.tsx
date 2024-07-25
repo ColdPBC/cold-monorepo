@@ -186,6 +186,7 @@ export const SupplierDetailDocumentsTable = (props: {
       slots={{
         noRowsOverlay: MUIDataGridNoRowsOverlay,
       }}
+      disableColumnMenu={true}
     />
   );
 };
