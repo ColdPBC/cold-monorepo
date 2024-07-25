@@ -62,7 +62,7 @@ export const SupplierDetailSidebar = (props: {
           </div>
           <div className={'w-full flex flex-col gap-[40px]'}>
             {selectedClaim.activeDocuments.length > 0 && (
-              <div className={'w-full flex flex-col gap-[16px]'}>
+              <div className={'w-full flex flex-col py-[16px] gap-[16px]'}>
                 <div className={'w-full text-h5'}>Active Documents</div>
                 {getDocumentTable(selectedClaim.activeDocuments)}
               </div>
