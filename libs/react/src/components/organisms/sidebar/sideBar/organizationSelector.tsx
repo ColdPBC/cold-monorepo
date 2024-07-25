@@ -10,9 +10,11 @@ import { useFlags } from 'launchdarkly-react-client-sdk';
 import { Dropdown } from 'flowbite-react';
 import { flowbiteThemeOverride } from '@coldpbc/themes';
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
+import { useNavigate } from 'react-router-dom';
 
 const _OrganizationSelector = ({ sidebarExpanded }: { sidebarExpanded?: boolean }) => {
   const ldFlags = useFlags();
+  const navigate = useNavigate();
   const { data, error, isLoading } = useSWR<any, any, any>(['/organizations', 'GET'], axiosFetcher);
   const { logError, setImpersonatingOrg, impersonatingOrg, logBrowser } = useColdContext();
   const unselectedOrg = {
@@ -25,6 +27,7 @@ const _OrganizationSelector = ({ sidebarExpanded }: { sidebarExpanded?: boolean 
 
   const onOrgSelect = (org: any) => {
     logBrowser(`New impersonating organization selected: ${org.display_name}`, 'info', { org: org });
+    navigate('/');
     setSelectedOrg(org);
     if (org.name === 'unselected') {
       setImpersonatingOrg(undefined);
@@ -68,17 +71,19 @@ const _OrganizationSelector = ({ sidebarExpanded }: { sidebarExpanded?: boolean 
         arrowIcon={false}
         theme={flowbiteThemeOverride.dropdown}
         className={'h-fit max-h-[200px] overflow-y-auto scrollbar-hide overflow-x-visible text-ellipsis transition-none duration-0'}>
-        {data.map((org: any) => (
-          <Dropdown.Item
-            key={org.id}
-            onClick={() => {
-              onOrgSelect(org);
-            }}
-            theme={flowbiteThemeOverride.dropdown.floating.item}
-            className={'text-start text-xs text-ellipsis'}>
-            {org.display_name}
-          </Dropdown.Item>
-        ))}
+        {data
+          .sort((a: any, b: any) => a.display_name.localeCompare(b.display_name))
+          .map((org: any) => (
+            <Dropdown.Item
+              key={org.id}
+              onClick={() => {
+                onOrgSelect(org);
+              }}
+              theme={flowbiteThemeOverride.dropdown.floating.item}
+              className={'text-start text-xs text-ellipsis'}>
+              {org.display_name}
+            </Dropdown.Item>
+          ))}
       </Dropdown>
     );
   } else {

@@ -1,3 +1,25 @@
+# [1.308.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.307.1...v1.308.0) (2024-07-25)
+
+
+### Features
+
+* Navigate to home on organization selection ([c05e4b0](https://github.com/ColdPBC/cold-monorepo/commit/c05e4b0dffd19f22d8574e43b2bca057f1f2bf62))
+* Sort organizations alphabetically in selector ([6bf52d1](https://github.com/ColdPBC/cold-monorepo/commit/6bf52d1a1505ad5b25f00d3344135b72d49635c7))
+
+## [1.307.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.307.0...v1.307.1) (2024-07-24)
+
+
+### Bug Fixes
+
+* **suppliers.repository.ts:** correct property name from organization_file_type to type ([04e2560](https://github.com/ColdPBC/cold-monorepo/commit/04e25603125c0e2309b77a061afe59ff6ad3eec0))
+
+# [1.307.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.306.0...v1.307.0) (2024-07-24)
+
+
+### Features
+
+* add organization_file_type to suppliers repository ([5d57e76](https://github.com/ColdPBC/cold-monorepo/commit/5d57e765815fb072b64675f89046d9bafba0c598))
+
 # [1.306.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.305.1...v1.306.0) (2024-07-24)
 
 
