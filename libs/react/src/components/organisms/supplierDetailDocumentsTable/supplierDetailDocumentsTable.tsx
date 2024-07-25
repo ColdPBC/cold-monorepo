@@ -124,10 +124,6 @@ export const SupplierDetailDocumentsTable = (props: {
 
   const rows: GridValidRowModel[] = newRows;
 
-  const onRowClick = (params: any) => {
-    // todo: to be implemented
-  };
-
   return (
     <DataGrid
       rows={rows}
@@ -179,9 +175,6 @@ export const SupplierDetailDocumentsTable = (props: {
         },
       }}
       columnHeaderHeight={40}
-      onRowClick={params => {
-        onRowClick(params);
-      }}
       autoHeight={true}
       slots={{
         noRowsOverlay: MUIDataGridNoRowsOverlay,
