@@ -63,20 +63,22 @@ export async function seedComplianceDefinitions() {
 
   await Promise.all(
     complianceDefSeeds.map(async (seed: any) => {
-      const result = await prisma.compliance_definitions.upsert({
-        where: {
-          name: seed.name,
-        },
-        update: { ...seed },
-        create: {
-          id: new Cuid2Generator(GuidPrefixes.ComplianceDefinition).scopedId,
-          ...seed,
-          updated_at: new Date(),
-        },
-      });
+      if (process.env.NODE_ENV === 'development') {
+        const result = await prisma.compliance_definitions.upsert({
+          where: {
+            name: seed.name,
+          },
+          update: { ...seed },
+          create: {
+            id: new Cuid2Generator(GuidPrefixes.ComplianceDefinition).scopedId,
+            ...seed,
+            updated_at: new Date(),
+          },
+        });
 
-      count++;
-      console.log(`🌱 seeded (${count} of ${complianceDefSeeds.length}) Compliance Definitions: ${seed.title} 🌱`, result);
+        count++;
+        console.log(`🌱 seeded (${count} of ${complianceDefSeeds.length}) Compliance Definitions: ${seed.title} 🌱`, result);
+      }
     }),
   );
 
