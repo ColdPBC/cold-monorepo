@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import {
   AccountSettingsPage,
   ActionsOverview,
@@ -8,12 +8,12 @@ import {
   DashboardLayout,
   DocumentUpload,
   Footprint,
-  Home,
   Interceptor,
   Journey,
   ProtectedRoute,
   Signup,
-  Suppliers,
+  SupplierDetail,
+  SuppliersPage,
   Terms,
   UserSettingsPage,
   WizardRoutes,
@@ -27,8 +27,7 @@ export const ColdRoutes = () => {
   const getFilteredRoutes = () => {
     return (
       <>
-        <Route path={'/'} element={<Home />} />
-        <Route path={'/home'} element={<Home />} />
+        <Route index element={<Navigate to="/compliance" replace={true} />} />
         {!ldFlags.showNewComplianceManagerPreviewCold713 && <Route path={'/assessments'} element={<Journey />} />}
         {ComplianceRoutes()}
         {QuestionnaireRoutes()}
@@ -39,7 +38,8 @@ export const ColdRoutes = () => {
         <Route path={'/settings/users'} element={<UserSettingsPage />} />
         <Route path="*" element={<div className={'text-tc-primary'}>Pending...</div>} />
         {WizardRoutes()}
-        {ldFlags.showSuppliersPageCold890 && <Route path={'/suppliers'} element={<Suppliers />} />}
+        {ldFlags.showSuppliersPageCold890 && <Route path={'/suppliers'} element={<SuppliersPage />} />}
+        {ldFlags.showSuppliersPageCold890 && <Route path={'/suppliers/:id'} element={<SupplierDetail />} />}
       </>
     );
   };

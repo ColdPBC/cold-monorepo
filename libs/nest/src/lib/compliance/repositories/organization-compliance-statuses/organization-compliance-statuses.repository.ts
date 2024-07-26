@@ -28,7 +28,7 @@ export class OrganizationComplianceStatusesRepository extends BaseWorker {
         );
       }
 
-      return this.prisma.extended.organization_compliance_statuses.findMany({
+      return this.prisma.organization_compliance_statuses.findMany({
         where: {
           organization_compliance_id: orgComp.id,
         },
@@ -40,7 +40,7 @@ export class OrganizationComplianceStatusesRepository extends BaseWorker {
   }
 
   async getOrganizationComplianceStatusById(orgComplianceId: string, statusId: string, user: IAuthenticatedUser, organization: organizations) {
-    const compliance = await this.prisma.extended.organization_compliance.findUnique({
+    const compliance = await this.prisma.organization_compliance.findUnique({
       where: {
         id: 'id',
       },
@@ -66,7 +66,7 @@ export class OrganizationComplianceStatusesRepository extends BaseWorker {
     await this.cache.delete(`organizations:${organization.id}:compliance:${name}:status`, true);
 
     this.logger.info(`Creating Compliance Status`, { user, compliance_name: name, organization });
-    return this.prisma.extended.organization_compliance_statuses.create({
+    return this.prisma.organization_compliance_statuses.create({
       // @ts-expect-error - This is a valid type
       data: {
         id: new Cuid2Generator(GuidPrefixes.OrganizationComplianceStatus).scopedId,

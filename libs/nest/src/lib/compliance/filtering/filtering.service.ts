@@ -77,7 +77,7 @@ export class FilteringService extends BaseWorker {
        */
       if (dependencies.length) {
         for (const dependency of dependencies) {
-          const dependentQuestion = await this.prisma.extended.organization_compliance_responses.findUnique({
+          const dependentQuestion = await this.prisma.organization_compliance_responses.findUnique({
             where: {
               id: dependency.dependent_question_id,
             },
@@ -90,7 +90,7 @@ export class FilteringService extends BaseWorker {
            * If the dependent question does not exist, that question doesn't have a response, therefore the dependency is not met.
            */
           if (!dependentQuestion) {
-            this.logger.info(`Dependent question response not found`, { dependency, dependentQuestion });
+            //this.logger.info(`Dependent question response not found`, { dependency, dependentQuestion });
             continue;
           }
 

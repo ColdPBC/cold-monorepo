@@ -7,20 +7,20 @@ generator client {
 generator zod {
   provider                         = "zod-prisma-types"
   output                           = "../src/validation/generated"
-  addInputTypeValidation           = "false"
-  createPartialTypes               = "false"
-  coerceDate                       = "false"
-  useMultipleFiles                 = "true"
-  validateWhereUniqueInput         = "false"
   createInputTypes                 = "false"
-  writeNullishInModelTypes         = "false"
-  createModelTypes                 = "true"
-  addIncludeType                   = "false"
-  createRelationValuesTypes        = "false"
   addSelectType                    = "false"
-  writeBarrelFiles                 = "false"
+  addInputTypeValidation           = "false"
+  useMultipleFiles                 = "true"
+  createRelationValuesTypes        = "false"
+  createModelTypes                 = "true"
+  validateWhereUniqueInput         = "false"
+  createPartialTypes               = "false"
   createOptionalDefaultValuesTypes = "false"
+  addIncludeType                   = "false"
+  writeNullishInModelTypes         = "false"
   useDefaultValidators             = "false"
+  coerceDate                       = "false"
+  writeBarrelFiles                 = "false"
 }
 
 datasource db {
@@ -307,6 +307,7 @@ model organizations {
   deleted                                   Boolean                                     @default(false)
   actions                                   actions[]
   category_data                             category_data[]
+  certification_claims                      certification_claims[]
   integrations                              integrations[]
   organization_compliance                   organization_compliance[]
   organization_compliance_ai_response_files organization_compliance_ai_response_files[]
@@ -353,14 +354,12 @@ model organization_facilities {
 
 model certifications {
   id                   String                 @id @default(cuid())
-  name                 String
-  type                 String
-  logo_url             String
-  document_url         String?
-  website              String?
+  name                 String                 @unique
   created_at           DateTime               @default(now())
   updated_at           DateTime               @updatedAt
   deleted              Boolean                @default(false)
+  level                certification_level
+  type                 certification_types
   certification_claims certification_claims[]
 }
 
@@ -369,17 +368,18 @@ model certification_claims {
   certification_id         String
   organization_facility_id String
   organization_file_id     String
-  issued_date              DateTime
-  expiration_date          DateTime
-  effective_date           DateTime
-  issuer                   String
-  certification_level      certification_level
+  issued_date              DateTime                @default(now())
+  effective_date           DateTime                @default(now())
   created_at               DateTime                @default(now())
   updated_at               DateTime                @updatedAt
   deleted                  Boolean                 @default(false)
+  organization_name        String
   certification            certifications          @relation(fields: [certification_id], references: [id], onDelete: Cascade)
   facility                 organization_facilities @relation(fields: [organization_facility_id], references: [id])
   organization_file        organization_files      @relation(fields: [organization_file_id], references: [id], onDelete: Cascade)
+  organization             organizations           @relation(fields: [organization_name], references: [name], onDelete: Cascade)
+
+  @@unique([organization_name, organization_file_id, certification_id, organization_facility_id], name: "orgFacilityCertFile")
 }
 
 model organization_products {
@@ -546,6 +546,9 @@ model organization_files {
   openai_vector_store_id                    String?
   openai_vector_file_status                 String?
   type                                      file_types                                  @default(OTHER)
+  expires_at                                DateTime?
+  effective_end_date                        DateTime?
+  effective_start_date                      DateTime?
   certification_claim                       certification_claims[]
   organization_compliance_ai_response_files organization_compliance_ai_response_files[]
   organization_compliance_note_files        organization_compliance_note_files[]
@@ -627,7 +630,6 @@ model organization_compliance {
   organization_id                           String
   deleted                                   Boolean                                      @default(false)
   visible                                   Boolean                                      @default(true)
-  compliance_responses                      compliance_responses[]
   compliance_definition                     compliance_definitions                       @relation(fields: [compliance_definition_name], references: [name])
   organization                              organizations                                @relation(fields: [organization_id], references: [id])
   organization_compliance_ai_response_files organization_compliance_ai_response_files[]
@@ -636,6 +638,7 @@ model organization_compliance {
   question_bookmarks                        organization_compliance_question_bookmarks[]
   organization_compliance_responses         organization_compliance_responses[]
   statuses                                  organization_compliance_statuses[]
+  compliance_responses                      compliance_responses[]
 
   @@unique([organization_id, compliance_definition_name], name: "orgIdCompNameKey")
 }
@@ -655,11 +658,11 @@ model compliance_definitions {
   visible                   Boolean                        @default(false)
   deleted                   Boolean                        @default(false)
   compliance_questions      compliance_questions[]
-  compliance_responses      compliance_responses[]
   compliance_section_groups compliance_section_groups[]
   sections                  compliance_sections[]
   organization_compliance   organization_compliance[]
   organization_compliances  organization_compliances_old[]
+  compliance_responses      compliance_responses[]
 }
 
 model compliance_section_groups {
@@ -671,9 +674,9 @@ model compliance_section_groups {
   created_at                 DateTime               @default(now())
   updated_at                 DateTime               @updatedAt
   deleted                    Boolean                @default(false)
-  compliance_responses       compliance_responses[]
   compliance_definition      compliance_definitions @relation(fields: [compliance_definition_name], references: [name], onDelete: Cascade)
   compliance_sections        compliance_sections[]
+  compliance_responses       compliance_responses[]
 
   @@unique([compliance_definition_name, title], name: "compDefNameTitle")
 }
@@ -692,10 +695,10 @@ model compliance_sections {
   compliance_section_dependency_chain_id String?
   deleted                                Boolean                               @default(false)
   compliance_questions                   compliance_questions[]
-  compliance_responses                   compliance_responses[]
   compliance_definition                  compliance_definitions                @relation(fields: [compliance_definition_name], references: [name], onDelete: Cascade)
   compliance_section_dependency_chains   compliance_section_dependency_chains? @relation(fields: [compliance_section_dependency_chain_id], references: [id])
   section_group                          compliance_section_groups             @relation(fields: [compliance_section_group_id], references: [id], onDelete: Cascade)
+  compliance_responses                   compliance_responses[]
 
   @@unique([compliance_section_group_id, key], name: "compSecGroupKey")
   @@unique([compliance_definition_name, key], name: "compDefNameSectionKey")
@@ -725,11 +728,11 @@ model compliance_questions {
   compliance_definition                   compliance_definitions                       @relation(fields: [compliance_definition_name], references: [name], onDelete: Cascade)
   compliance_question_dependency_chain    compliance_question_dependency_chains?       @relation(fields: [compliance_question_dependency_chain_id], references: [id])
   compliance_section                      compliance_sections                          @relation(fields: [compliance_section_id], references: [id], onDelete: Cascade)
-  compliance_responses                    compliance_responses[]
   organization_compliance_ai_responses    organization_compliance_ai_responses[]
   notes                                   organization_compliance_notes[]
   question_bookmarks                      organization_compliance_question_bookmarks[]
   responses                               organization_compliance_responses[]
+  compliance_responses                    compliance_responses[]
 
   @@unique([compliance_definition_name, key], name: "compDefNameKey")
   @@unique([compliance_section_id, key], name: "compSecKey")
@@ -826,8 +829,8 @@ model organization_compliance_question_bookmarks {
   compliance_question_id     String
   organization_compliance_id String
   deleted                    Boolean                 @default(false)
-  compliance_question        compliance_questions    @relation(fields: [compliance_question_id], references: [id])
-  organization_compliance    organization_compliance @relation(fields: [organization_compliance_id], references: [id])
+  compliance_question        compliance_questions    @relation(fields: [compliance_question_id], references: [id], onDelete: Cascade)
+  organization_compliance    organization_compliance @relation(fields: [organization_compliance_id], references: [id], onDelete: Cascade)
 
   @@unique([email, compliance_question_id], name: "emailQuestId")
 }
@@ -841,9 +844,9 @@ model organization_compliance_responses {
   additional_context         Json?
   value                      Json?
   deleted                    Boolean                 @default(false)
-  compliance_responses       compliance_responses[]
   compliance_question        compliance_questions    @relation(fields: [compliance_question_id], references: [id], onDelete: Cascade)
   organization_compliance    organization_compliance @relation(fields: [organization_compliance_id], references: [id], onDelete: Cascade)
+  compliance_responses       compliance_responses[]
 
   @@unique([organization_compliance_id, compliance_question_id], name: "orgCompQuestId")
 }
@@ -861,11 +864,11 @@ model organization_compliance_ai_responses {
   answer                     Json?
   additional_context         Json?
   deleted                    Boolean                                     @default(false)
-  compliance_responses       compliance_responses[]
   files                      organization_compliance_ai_response_files[]
   compliance_questions       compliance_questions                        @relation(fields: [compliance_question_id], references: [id], onDelete: Cascade)
   organization_compliance    organization_compliance                     @relation(fields: [organization_compliance_id], references: [id], onDelete: Cascade)
   organization               organizations                               @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+  compliance_responses       compliance_responses[]
 
   @@unique([organization_compliance_id, compliance_question_id], name: "orgCompQuestId")
 }
@@ -888,15 +891,14 @@ model organization_compliance_ai_response_files {
 }
 
 view compliance_responses {
-  compliance_question_id                 String                                @id
   organization_compliance_id             String?
   organization_id                        String?
+  compliance_question_id                 String                                @id
   compliance_section_id                  String?
   compliance_section_group_id            String?
   compliance_definition_name             String?
   organization_compliance_ai_response_id String?
   organization_compliance_response_id    String?
-  organization_compliance_ai_responsesId String?
   ai_response                            organization_compliance_ai_responses? @relation(fields: [organization_compliance_ai_response_id], references: [id], onDelete: Cascade)
   org_response                           organization_compliance_responses?    @relation(fields: [organization_compliance_response_id], references: [id], onDelete: Cascade)
   organization_compliance                organization_compliance?              @relation(fields: [organization_compliance_id], references: [id])
@@ -906,6 +908,30 @@ view compliance_responses {
   compliance_questions                   compliance_questions?                 @relation(fields: [compliance_question_id], references: [id])
 
   @@unique([organization_compliance_id, compliance_question_id], name: "orgCompQuestId")
+}
+
+view organization_claims_view {
+  facility_id            String               @id
+  facility_name          String?
+  address_line_1         String?
+  address_line_2         String?
+  city                   String?
+  state_province         String?
+  postal_code            String?
+  country                String?
+  supplier               Boolean
+  claim_id               String?
+  claim_name             String?
+  claim_level            certification_level?
+  claim_type             certification_types?
+  organization_file_id   String?
+  organization_file_name String?
+  organization_file_type file_types?
+  mimetype               String?
+  effective_start_date   DateTime?
+  effective_end_date     DateTime?
+  expires_at             DateTime?
+  organization_name      String
 }
 
 enum facility_types {
@@ -962,6 +988,12 @@ enum file_types {
   ASSESSMENT
   POLICY
   OTHER
+}
+
+enum certification_types {
+  THIRD_PARTY
+  INTERNAL
+  TEST
 }
 
 enum emissions_categories {

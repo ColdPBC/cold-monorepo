@@ -1,7 +1,6 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { get, map } from 'lodash';
-import { SecretsManager } from 'aws-sdk';
-import { GetSecretValueResponse } from 'aws-sdk/clients/secretsmanager';
+import { GetSecretValueResponse, SecretsManager } from '@aws-sdk/client-secrets-manager';
 import { BaseWorker } from '../../worker';
 import process from 'process';
 import { fromSSO } from '@aws-sdk/credential-provider-sso';
@@ -75,7 +74,7 @@ export class SecretsService extends BaseWorker implements OnModuleInit {
   async getSecrets(name: string): Promise<any> {
     const secretName = `${get(process.env, 'NODE_ENV', 'development')}/${name}`;
     try {
-      const result: GetSecretValueResponse = await this.client.getSecretValue({ SecretId: secretName }).promise();
+      const result: GetSecretValueResponse = await this.client.getSecretValue({ SecretId: secretName });
       let secret: any = {};
       if (result.SecretString) {
         secret = JSON.parse(result.SecretString);

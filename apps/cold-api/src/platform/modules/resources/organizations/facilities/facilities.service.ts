@@ -15,7 +15,7 @@ export class FacilitiesService extends BaseWorker {
       if (!user.isColdAdmin && user.coldclimate_claims.org_id !== orgId)
         throw new UnprocessableEntityException(`${user.coldclimate_claims.email} is ${user.isColdAdmin ? 'Cold:Admin' : 'not Cold:Admin'} bug is attempting to access ${orgId}.`);
 
-      const facilities = (await this.prisma.extended.organization_facilities.findMany({
+      const facilities = (await this.prisma.organization_facilities.findMany({
         where: {
           organization_id: orgId,
         },
@@ -38,32 +38,29 @@ export class FacilitiesService extends BaseWorker {
     orgId: string,
     body: {
       city: string;
-      state: string;
+      state_province: string;
       postal_code: string;
-      address: string;
+      address_line_1: string;
       address_line_2: string;
       country: string;
       name: string;
+      supplier: boolean;
     },
   ): Promise<organization_facilities> {
     const { user, url } = req;
     try {
-      //if (!user.isColdAdmin && user.coldclimate_claims.org_id !== orgId) throw new UnprocessableEntityException(`Organization ${orgId} is invalid.`);
-
-      if (!body.address && !body.city && !body.state && !body.postal_code)
-        throw new UnprocessableEntityException(`Facility not found for ${orgId} and address, city, state, zip not provided in metadata.`);
-
-      const created = (await this.prisma.extended.organization_facilities.create({
+      const created = (await this.prisma.organization_facilities.create({
         data: {
           id: this.cuid2.generate().scopedId,
-          name: body.name || body.address,
-          address_line_1: body.address,
+          name: body.name || body.address_line_1,
+          address_line_1: body.address_line_1,
           address_line_2: body.address_line_2,
           city: body.city,
-          state_province: body.state,
+          state_province: body.state_province,
           postal_code: body.postal_code,
           organization_id: orgId,
           country: body.country || 'US',
+          supplier: body.supplier === true,
         },
         include: {
           organization: true,
@@ -97,5 +94,31 @@ export class FacilitiesService extends BaseWorker {
 
       throw new UnprocessableEntityException(e);
     }
+  }
+
+  async update(req: any, facilityId: string, data: any) {
+    data.organization_id = req.organization.id;
+    data.id = facilityId;
+    data.deleted = false;
+
+    delete data.created_at;
+    delete data.updated_at;
+
+    return this.prisma.organization_facilities.update({
+      where: {
+        id: facilityId,
+        organization_id: req.organization.id,
+      },
+      data,
+    });
+  }
+
+  async deleteOrganizationFacility(req: any, facilityId: string) {
+    return this.prisma.organization_facilities.delete({
+      where: {
+        id: facilityId,
+        organization_id: req.organization.id,
+      },
+    });
   }
 }

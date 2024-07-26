@@ -1,4 +1,4 @@
-import { Controller, Delete, Get, OnModuleInit, Param, Post, Query, Req, UploadedFiles, UseFilters, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, OnModuleInit, Param, Patch, Post, Query, Req, UploadedFiles, UseFilters, UseGuards, UseInterceptors } from '@nestjs/common';
 import multerS3 from 'multer-s3';
 import { allRoles, coldAndCompanyAdmins, HttpExceptionFilter, IAuthenticatedUser, JwtAuthGuard, Roles, RolesGuard, S3Service } from '@coldpbc/nest';
 import { Span } from 'nestjs-ddtrace';
@@ -81,5 +81,23 @@ export class OrganizationFilesController implements OnModuleInit {
       console.error('Error uploading file:', error.message);
       throw new Error('Failed to process the uploaded file.');
     }
+  }
+
+  @Patch()
+  @Roles(...allRoles)
+  @UseInterceptors(AnyFilesInterceptor())
+  async updateFile(
+    @Param('orgId') orgId: string,
+    @Param('fileId') fileId: string,
+    @Body() data: { effective_end_date?: string; effective_start_date?: string; type?: string },
+    @Req()
+    req: {
+      body: never;
+      headers: never;
+      query: never;
+      user: IAuthenticatedUser;
+    },
+  ) {
+    return this.orgFiles.update(req, fileId, data);
   }
 }

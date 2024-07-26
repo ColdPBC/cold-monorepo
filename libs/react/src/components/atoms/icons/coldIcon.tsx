@@ -16,9 +16,11 @@ import {
   ColdClockIcon,
   ColdComplianceIcon,
   ColdComplianceSurveyCheckBoxIcon,
+  ColdDangerIcon,
   ColdDocumentsIcon,
   ColdDocumentUploadIcon,
   ColdEmptyCheckboxIcon,
+  ColdExpiringIcon,
   ColdFootprintIcon,
   ColdFootprintIconTwo,
   ColdHomeIcon,
@@ -114,6 +116,10 @@ export const ColdIcon = (props: IconProps) => {
       return <ColdSparkleIcon {...props} />;
     case IconNames.ColdSuppliersNavIcon:
       return <ColdSuppliersNavIcon {...props} />;
+    case IconNames.ColdExpiringIcon:
+      return <ColdExpiringIcon {...props} />;
+    case IconNames.ColdDangerIcon:
+      return <ColdDangerIcon {...props} />;
     default:
     case IconNames.ColdSettingsIcon:
       return <ColdSettingsIcon {...props} />;

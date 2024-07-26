@@ -4,6 +4,8 @@ import { Home } from './app/home';
 import { ColdContextProvider } from '@coldpbc/providers';
 import { datadogRum } from '@datadog/browser-rum';
 import { datadogLogs } from '@datadog/browser-logs';
+import { StyledEngineProvider, ThemeProvider } from '@mui/material';
+import { muiTheme } from '../../../libs/react/src/themes/muiTheme';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 
@@ -54,7 +56,11 @@ root.render(
         },
       }}
       launchDarklyClientSideId={launchDarklyClientSideId}>
-      <Home />
+      <StyledEngineProvider injectFirst>
+        <ThemeProvider theme={muiTheme}>
+          <Home />
+        </ThemeProvider>
+      </StyledEngineProvider>
     </ColdContextProvider>
   </StrictMode>,
 );

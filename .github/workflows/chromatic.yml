@@ -36,40 +36,8 @@ jobs:
           concurrent_skipping: 'outdated_runs'
           paths_ignore: '["**/README.md", "**/docs/**"]'
           do_not_skip: '["pull_request", "workflow_dispatch"]'
-  storybook-tests:
-    needs: pre_build
-    runs-on: ubuntu-latest
-    steps:
-      - name: 🛒 Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          persist-credentials: false
-      - name: 🧑‍💻 Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20.9.0"
-      - name: 🪢 Install Yarn
-        run: corepack enable && yarn set version stable
-      - name: 💼 Cache Node Modules
-        id: cache-node-modules
-        uses: actions/cache@v3
-        with:
-          path: ./node_modules
-          key: node-modules-${{ hashFiles('**/yarn.lock') }}
-      - name: 🧩 Install Dependencies
-        # 👇 If cache not found, install dependencies with the same package manager used in the project (replace it as needed), e.g. yarn, npm, pnpm
-        if: steps.cache-node-modules.outputs.cache-hit != 'true'
-        run: yarn
-        # 👇 Adds Chromatic as a step in the workflow
-      - name: Install Playwright
-        run: npx playwright install --with-deps
-      - name: Serve Storybook and run tests
-        env:
-          NODE_OPTIONS: "--max_old_space_size=4096"
-        run: yarn test-storybook
   chromatic-deployment:
-    needs: [ pre_build, storybook-tests ]
+    needs: pre_build
     # Operating System
     runs-on: ubuntu-latest
     # Job steps

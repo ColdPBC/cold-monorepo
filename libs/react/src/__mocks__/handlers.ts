@@ -35,6 +35,8 @@ import { returnUpdatedSurvey } from './helpers';
 import { ComplianceSurveyPayloadType } from '@coldpbc/interfaces';
 import { getDefaultEmissionMock } from './emissionMocks';
 import { getNotesMock } from './notesMock';
+import { getCertificationsMock, getSupplierClaimsMock } from './claimsMock';
+import { getSupplierMockById, getSupplierMockByName, getSupplierWithCertificationClaimsMock } from './suppliersMock';
 
 // Even if this uses vite as a bundler, it still uses the NODE_ENV variable
 export const getApiUrl = (path: string) => {
@@ -355,5 +357,22 @@ export const handlers = [
       questionId: string;
     };
     return res(ctx.json(getQuestionAIDetailsMock(sectionGroupId, sectionId, questionId)));
+  }),
+
+  rest.get(getApiUrl('/certifications'), (req, res, ctx) => {
+    return res(ctx.json(getCertificationsMock()));
+  }),
+
+  rest.get(getApiUrl('/organizations/:orgId/suppliers'), (req, res, ctx) => {
+    return res(ctx.json(getSupplierWithCertificationClaimsMock()));
+  }),
+
+  rest.get(getApiUrl('/organizations/:orgId/suppliers/claims/names'), (req, res, ctx) => {
+    return res(ctx.json(getSupplierClaimsMock()));
+  }),
+
+  rest.get(getApiUrl('/organizations/:orgId/suppliers/:id'), (req, res, ctx) => {
+    const { orgId, id } = req.params as { orgId: string; id: string };
+    return res(ctx.json(getSupplierMockById(id)));
   }),
 ];

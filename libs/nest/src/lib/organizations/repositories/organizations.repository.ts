@@ -12,7 +12,7 @@ export class OrganizationsRepository extends BaseWorker {
   }
 
   async create(org: organizations, user: IAuthenticatedUser) {
-    const existing = this.prisma.extended.organizations.upsert({
+    const existing = this.prisma.organizations.upsert({
       where: {
         name: org.name,
       },
@@ -42,7 +42,7 @@ export class OrganizationsRepository extends BaseWorker {
       set(queryOptions, 'where', { ...filters });
     }
 
-    const orgs = await this.prisma.extended.organizations.findMany(queryOptions);
+    const orgs = await this.prisma.organizations.findMany(queryOptions);
 
     if (!orgs) {
       throw new NotFoundException({ filters, user }, `No Organizations found`);
@@ -53,7 +53,7 @@ export class OrganizationsRepository extends BaseWorker {
 
   findOne(user: IAuthenticatedUser, filters?: { name?: string; id?: string; isTest?: boolean }) {
     if (filters?.id || filters?.name) {
-      return this.prisma.extended.organizations.findUnique({
+      return this.prisma.organizations.findUnique({
         where: {
           id: filters.id,
           name: filters.name,
@@ -74,7 +74,7 @@ export class OrganizationsRepository extends BaseWorker {
       throw new BadRequestException({ organization: org, user }, 'cannot delete cold-climate org');
     }
 
-    return this.prisma.extended.organizations.delete({
+    return this.prisma.organizations.delete({
       where: {
         id: org.id,
       },

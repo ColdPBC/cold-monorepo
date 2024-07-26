@@ -19,7 +19,7 @@ export class ComplianceAiResponseFilesRepository extends BaseWorker {
     try {
       await this.cache.delete(this.getCacheKey(org, complianceName), true);
 
-      return this.prisma.extended.organization_compliance_ai_response_files.create({
+      return this.prisma.organization_compliance_ai_response_files.create({
         data: {
           organization_compliance_ai_response: {
             connect: {
@@ -44,7 +44,7 @@ export class ComplianceAiResponseFilesRepository extends BaseWorker {
 
   async findAllAiResponseFiles(org: organizations, complianceName: string, aiResponseId: string, user: IAuthenticatedUser) {
     try {
-      const files = await this.prisma.extended.organization_compliance_ai_response_files.findMany({
+      const files = await this.prisma.organization_compliance_ai_response_files.findMany({
         where: {
           organization_compliance_ai_response_id: aiResponseId,
           organization_compliance: {
@@ -68,7 +68,7 @@ export class ComplianceAiResponseFilesRepository extends BaseWorker {
 
   async findOneAiResponseFile(org: organizations, complianceName: string, aiResponseId: string, id: string, user: IAuthenticatedUser) {
     try {
-      const file = await this.prisma.extended.organization_compliance_ai_response_files.findUnique({
+      const file = await this.prisma.organization_compliance_ai_response_files.findUnique({
         where: {
           organization_compliance_ai_response_id: aiResponseId,
           organization_compliance: {
@@ -94,7 +94,7 @@ export class ComplianceAiResponseFilesRepository extends BaseWorker {
     try {
       await this.cache.delete(this.getCacheKey(org, complianceName), true);
 
-      const file = await this.prisma.extended.organization_compliance_ai_response_files.update({
+      const file = await this.prisma.organization_compliance_ai_response_files.update({
         where: {
           organization_compliance_ai_response_id: aiResponseId,
           organization_compliance: {
@@ -120,7 +120,7 @@ export class ComplianceAiResponseFilesRepository extends BaseWorker {
     try {
       await this.cache.delete(this.getCacheKey(org, complianceName), true);
 
-      const file = await this.prisma.extended.organization_compliance_ai_response_files.delete({
+      const file = await this.prisma.organization_compliance_ai_response_files.delete({
         where: {
           organization_compliance_ai_response_id: aiResponseId,
           organization_compliance: {

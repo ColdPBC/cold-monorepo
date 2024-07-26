@@ -18,7 +18,7 @@ const complianceDefSeeds = [
   },
   {
     name: 'b_corp_2024',
-    logo_url: ' https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/compliance_svgs/b_corp_logo.svg',
+    logo_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/compliance_svgs/b_corp_logo.svg',
     surveys: ['b_corp_2024'],
     title: 'B Corp',
     image_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/complianceBackgroundImages/rei.png',
@@ -54,36 +54,6 @@ const complianceDefSeeds = [
   },
 ];
 
-const prodSeeds = [
-  {
-    name: 'b_corp_2024',
-    logo_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/compliance_svgs/rei_logo.svg',
-    surveys: ['b_corp_2024'],
-    title: 'B Corp',
-    image_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/complianceBackgroundImages/rei.png',
-    order: 1,
-    visible: false,
-  },
-  {
-    name: 'oia_climate_report_2023',
-    logo_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/compliance_svgs/oia_logo.svg',
-    surveys: ['oia_climate_report_2023'],
-    title: 'OIA Climate Action Corps Progress Report 2023',
-    image_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/complianceBackgroundImages/rei.png',
-    order: 2,
-    visible: true,
-  },
-  {
-    name: 'rei_pia_2024',
-    logo_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/3rdPartyLogos/compliance_svgs/b_corp_logo.svg',
-    surveys: ['rei_pia_2024'],
-    title: 'REI Product Impact Assessment 2024',
-    image_url: 'https://cold-public-assets.s3.us-east-2.amazonaws.com/complianceBackgroundImages/rei.png',
-    order: 3,
-    visible: true,
-  },
-];
-
 export async function seedComplianceDefinitions() {
   await prisma.$connect();
 
@@ -91,28 +61,9 @@ export async function seedComplianceDefinitions() {
 
   let count = 0;
 
-  if (process.env['NODE_ENV'] === 'production') {
-    await Promise.all(
-      prodSeeds.map(async (seed: any) => {
-        const result = await prisma.compliance_definitions.upsert({
-          where: {
-            name: seed.name,
-          },
-          update: { ...seed },
-          create: {
-            id: new Cuid2Generator(GuidPrefixes.ComplianceDefinition).scopedId,
-            ...seed,
-            updated_at: new Date(),
-          },
-        });
-
-        count++;
-        console.log(`🌱 seeded (${count} of ${prodSeeds.length}) Compliance Definitions: ${seed.title} 🌱`, result);
-      }),
-    );
-  } else {
-    await Promise.all(
-      complianceDefSeeds.map(async (seed: any) => {
+  await Promise.all(
+    complianceDefSeeds.map(async (seed: any) => {
+      if (process.env.NODE_ENV === 'development') {
         const result = await prisma.compliance_definitions.upsert({
           where: {
             name: seed.name,
@@ -127,9 +78,9 @@ export async function seedComplianceDefinitions() {
 
         count++;
         console.log(`🌱 seeded (${count} of ${complianceDefSeeds.length}) Compliance Definitions: ${seed.title} 🌱`, result);
-      }),
-    );
-  }
+      }
+    }),
+  );
 
   console.log(`${count} Compliance Definitions seeded!`);
 
