@@ -1,3 +1,19 @@
+# [1.310.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.309.1...v1.310.0) (2024-07-26)
+
+
+### Features
+
+* Add error boundary to SupplierDetail component ([6c41258](https://github.com/ColdPBC/cold-monorepo/commit/6c412585aef37630f823b48dad11a7e53c13e44a))
+* Add padding to supplier detail sidebar ([b39a6fa](https://github.com/ColdPBC/cold-monorepo/commit/b39a6fa8363de6705457ab529f5ac9f6ff7f9bc3))
+* Add Storybook story for SupplierDetailSidebar component ([56a9bf6](https://github.com/ColdPBC/cold-monorepo/commit/56a9bf6b8fd40d611701c540c0b16b604f21854a))
+* Add supplier detail page and data grid components ([75f3f77](https://github.com/ColdPBC/cold-monorepo/commit/75f3f77548a78c0dfd85374d2d85bf6ba6136300))
+* Disable column menu in supplier documents table ([1c15f94](https://github.com/ColdPBC/cold-monorepo/commit/1c15f94f038ff41c27b2c53a199f1aace227b165))
+* Fix enum reference for CertificationStatus and add Storybook ([4d9e70b](https://github.com/ColdPBC/cold-monorepo/commit/4d9e70bea5c2b9d3d29a560263ff8c262f0ceeba))
+* Refactor Supplier Components and Implement New Logic ([4fd44ef](https://github.com/ColdPBC/cold-monorepo/commit/4fd44effc03a846cc87a390471b32281c83da3a2))
+* Remove deprecated ClaimType enum ([5e9c02d](https://github.com/ColdPBC/cold-monorepo/commit/5e9c02de267209638a5959d32186402ad93f6f71))
+* Remove unimplemented onRowClick handler ([ffaceb0](https://github.com/ColdPBC/cold-monorepo/commit/ffaceb03280b1672c3b4bcb01db789cdc02c21da))
+* Rename and style supplierDetailSidebar component ([849cc3e](https://github.com/ColdPBC/cold-monorepo/commit/849cc3e28e48da0aff3e1b0c45ec904a8ca70025))
+
 ## [1.309.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.309.0...v1.309.1) (2024-07-26)
 
 
