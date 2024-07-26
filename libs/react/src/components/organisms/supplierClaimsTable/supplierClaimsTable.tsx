@@ -1,17 +1,15 @@
 import { BaseButton, ColdIcon, MUIDataGridNoRowsOverlay } from '@coldpbc/components';
-import { ButtonTypes, IconNames } from '@coldpbc/enums';
+import { ButtonTypes, CertificationStatus, IconNames } from '@coldpbc/enums';
 import { DataGrid, GridColDef, GridRenderCellParams, GridTreeNodeWithRender, GridValidRowModel } from '@mui/x-data-grid';
 import { HexColors } from '@coldpbc/themes';
-import { forEach, orderBy, uniq } from 'lodash';
+import { forEach, orderBy, toArray, uniq } from 'lodash';
 import { differenceInDays } from 'date-fns';
 import { getDateActiveStatus } from '@coldpbc/lib';
-import React, { ReactNode, Ref } from 'react';
+import React, { ReactNode } from 'react';
 import { Suppliers } from '@coldpbc/interfaces';
 
 export const SupplierClaimsTable = (props: { supplier: Suppliers; showSupplierCertificateDetails: (id: string) => void; innerRef: React.RefObject<HTMLDivElement> }) => {
   const { supplier, showSupplierCertificateDetails, innerRef } = props;
-
-  const certificationStatuses = ['InActive', 'Active', 'Expired', 'Expiring Soon'];
 
   const orderedCertificateClaims = orderBy(supplier.certification_claims, ['certification.name', 'organization_file.effective_end_date'], ['desc', 'desc']);
   // get list of unique claim names from the supplier. filter out undefined values
@@ -23,7 +21,7 @@ export const SupplierClaimsTable = (props: { supplier: Suppliers; showSupplierCe
     let diff = 0;
     let statusElement: ReactNode | null = null;
     switch (params.value) {
-      case 'Expired':
+      case CertificationStatus.Expired:
         statusElement = (
           <div className={'text-body h-full flex flex-row justify-start items-center gap-[0px]'}>
             <ColdIcon name={IconNames.ColdDangerIcon} color={HexColors.red['100']} />
@@ -31,7 +29,7 @@ export const SupplierClaimsTable = (props: { supplier: Suppliers; showSupplierCe
           </div>
         );
         break;
-      case 'Expiring Soon':
+      case CertificationStatus.ExpiringSoon:
         if (expirationDate) {
           diff = differenceInDays(new Date(expirationDate), new Date());
         }
@@ -42,7 +40,7 @@ export const SupplierClaimsTable = (props: { supplier: Suppliers; showSupplierCe
           </div>
         );
         break;
-      case 'Active':
+      case CertificationStatus.Active:
         statusElement = (
           <div className={'text-body h-full flex flex-row justify-start items-center gap-[0px]'}>
             <ColdIcon name={IconNames.ColdCheckIcon} color={HexColors.green['200']} />
@@ -51,7 +49,7 @@ export const SupplierClaimsTable = (props: { supplier: Suppliers; showSupplierCe
         );
         break;
       default:
-      case 'InActive':
+      case CertificationStatus.Inactive:
         statusElement = (
           <div className={'h-full flex flex-row justify-start items-center'}>
             <div className={'w-[24px] h-[24px] flex flex-row justify-center items-center'}>
@@ -95,7 +93,7 @@ export const SupplierClaimsTable = (props: { supplier: Suppliers; showSupplierCe
       maxWidth: 100,
       flex: 1,
       type: 'singleSelect',
-      valueOptions: certificationStatuses,
+      valueOptions: toArray(CertificationStatus),
       renderCell: renderStatus,
     },
   ];

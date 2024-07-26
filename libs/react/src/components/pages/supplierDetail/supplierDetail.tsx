@@ -121,7 +121,7 @@ export const _SupplierDetail = () => {
           return {
             name: claim.organization_file.original_name,
             expirationDate: null,
-            status: CertificationStatus.InActive,
+            status: CertificationStatus.Inactive,
             type: capitalize(claim.organization_file.type),
           };
         });

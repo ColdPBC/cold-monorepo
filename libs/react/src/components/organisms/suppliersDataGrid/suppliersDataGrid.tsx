@@ -1,7 +1,7 @@
 import { DataGrid, GridColDef, GridRenderCellParams, GridTreeNodeWithRender, GridValidRowModel } from '@mui/x-data-grid';
 import { HexColors } from '@coldpbc/themes';
 import { differenceInDays } from 'date-fns';
-import { IconNames } from '@coldpbc/enums';
+import { CertificationStatus, IconNames } from '@coldpbc/enums';
 import { ColdIcon, MUIDataGridNoRowsOverlay, Spinner } from '@coldpbc/components';
 import useSWR from 'swr';
 import { axiosFetcher } from '@coldpbc/fetchers';
@@ -10,6 +10,7 @@ import { Suppliers, SuppliersClaimNames, SuppliersClaimNamesPayload } from '@col
 import { isAxiosError } from 'axios';
 import { useAuth0Wrapper } from '@coldpbc/hooks';
 import { useNavigate } from 'react-router-dom';
+import { toArray } from 'lodash';
 
 export const SuppliersDataGrid = () => {
   const navigate = useNavigate();
@@ -54,8 +55,6 @@ export const SuppliersDataGrid = () => {
     return <Spinner />;
   }
 
-  const certificationStatuses = ['InActive', 'Active', 'Expired', 'Expiring Soon'];
-
   const renderCell = (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
     // if the value is null return null
     const expirationDate: string | undefined | null = suppliers
@@ -64,14 +63,14 @@ export const SuppliersDataGrid = () => {
     let diff = 0;
 
     switch (params.value) {
-      case 'Expired':
+      case CertificationStatus.Expired:
         return (
           <div className={'text-body w-full h-full flex flex-row justify-start items-center gap-[0px]'}>
             <ColdIcon name={IconNames.ColdDangerIcon} color={HexColors.red['100']} />
             <span className={'text-red-100'}>Expired</span>
           </div>
         );
-      case 'Expiring Soon':
+      case CertificationStatus.ExpiringSoon:
         if (expirationDate) {
           diff = differenceInDays(new Date(expirationDate), new Date());
         }
@@ -81,7 +80,7 @@ export const SuppliersDataGrid = () => {
             <span className={'text-yellow-200'}>{diff} days</span>
           </div>
         );
-      case 'Active':
+      case CertificationStatus.Active:
         return (
           <div className={'text-body w-full h-full flex flex-row justify-start items-center gap-[0px]'}>
             <ColdIcon name={IconNames.ColdCheckIcon} color={HexColors.green['200']} />
@@ -89,7 +88,7 @@ export const SuppliersDataGrid = () => {
           </div>
         );
       default:
-      case 'InActive':
+      case CertificationStatus.Inactive:
         return (
           <div className={'w-full h-full flex flex-row justify-start items-center'}>
             <div className={'w-[24px] h-[24px] flex flex-row justify-center items-center'}>
@@ -130,7 +129,7 @@ export const SuppliersDataGrid = () => {
         return renderCell(params);
       },
       type: 'singleSelect',
-      valueOptions: certificationStatuses,
+      valueOptions: toArray(CertificationStatus),
     });
   });
 
@@ -145,7 +144,7 @@ export const SuppliersDataGrid = () => {
 
     columns.forEach(column => {
       if (column.field !== 'name' && column.field !== 'country') {
-        row[column.field] = 'InActive';
+        row[column.field] = CertificationStatus.Inactive;
       }
     });
 
@@ -169,16 +168,16 @@ export const SuppliersDataGrid = () => {
       const expirationDate: string | undefined | null = certificateClaims[0]?.organization_file.effective_end_date;
       // if the expiration date is null, set the value to InActive
       if (expirationDate === null || expirationDate === undefined) {
-        row[claim.claim_name] = 'InActive';
+        row[claim.claim_name] = CertificationStatus.Inactive;
       } else {
         // get the difference between the current date and the date in the cell
         const diff = differenceInDays(new Date(expirationDate), new Date());
         if (diff < 0) {
-          row[claim.claim_name] = 'Expired';
+          row[claim.claim_name] = CertificationStatus.Expired;
         } else if (diff < 60) {
-          row[claim.claim_name] = 'Expiring Soon';
+          row[claim.claim_name] = CertificationStatus.ExpiringSoon;
         } else {
-          row[claim.claim_name] = 'Active';
+          row[claim.claim_name] = CertificationStatus.Active;
         }
       }
     });

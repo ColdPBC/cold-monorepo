@@ -1,5 +1,5 @@
 export enum CertificationStatus {
-  InActive = 'InActive',
+  Inactive = 'Inactive',
   Active = 'Active',
   Expired = 'Expired',
   ExpiringSoon = 'Expiring Soon',
