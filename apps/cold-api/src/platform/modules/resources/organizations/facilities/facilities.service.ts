@@ -95,4 +95,30 @@ export class FacilitiesService extends BaseWorker {
       throw new UnprocessableEntityException(e);
     }
   }
+
+  async update(req: any, facilityId: string, data: any) {
+    data.organization_id = req.organization.id;
+    data.id = facilityId;
+    data.deleted = false;
+
+    delete data.created_at;
+    delete data.updated_at;
+
+    return this.prisma.organization_facilities.update({
+      where: {
+        id: facilityId,
+        organization_id: req.organization.id,
+      },
+      data,
+    });
+  }
+
+  async deleteOrganizationFacility(req: any, facilityId: string) {
+    return this.prisma.organization_facilities.delete({
+      where: {
+        id: facilityId,
+        organization_id: req.organization.id,
+      },
+    });
+  }
 }
