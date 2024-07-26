@@ -1,3 +1,19 @@
+## [1.309.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.309.0...v1.309.1) (2024-07-26)
+
+
+### Bug Fixes
+
+* **seeds:** conditionally upsert compliance definitions based on environment ([842fbc8](https://github.com/ColdPBC/cold-monorepo/commit/842fbc8fe1e15d4a5ba17a63f5a9f82649bfe956))
+
+# [1.309.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.308.1...v1.309.0) (2024-07-26)
+
+
+### Features
+
+* add facility delete and patch endpoints to openapi.json and update sample survey schema examples ([5786261](https://github.com/ColdPBC/cold-monorepo/commit/5786261f86891dc1acf9355d83f2842b1a3099ed))
+* add update and delete methods to facilities service ([4086956](https://github.com/ColdPBC/cold-monorepo/commit/4086956103b9e1e02b0c26cbd1da5a8e14fc9051))
+* enhance FacilitiesController with delete and update actions ([a24abb1](https://github.com/ColdPBC/cold-monorepo/commit/a24abb174e8c6b9b948b327d0573812a775b5c8d))
+
 ## [1.308.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.308.0...v1.308.1) (2024-07-25)
 
 
