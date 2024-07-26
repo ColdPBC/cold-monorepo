@@ -1,3 +1,10 @@
+# [1.311.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.310.0...v1.311.0) (2024-07-26)
+
+
+### Features
+
+* add file update functionality in organization files module ([cc0f9f9](https://github.com/ColdPBC/cold-monorepo/commit/cc0f9f976d64b12c69ed7195d654c5d059360f58))
+
 # [1.310.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.309.1...v1.310.0) (2024-07-26)
 
 
