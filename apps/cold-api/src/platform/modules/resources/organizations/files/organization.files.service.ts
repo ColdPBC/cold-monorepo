@@ -1,6 +1,7 @@
 import { HttpService } from '@nestjs/axios';
 import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { Span } from 'nestjs-ddtrace';
+import * as z from 'zod';
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import { BaseWorker, CacheService, Cuid2Generator, DarklyService, GuidPrefixes, MqttService, PrismaService, S3Service } from '@coldpbc/nest';
 import { IntegrationsService } from '../../integrations/integrations.service';
@@ -84,6 +85,24 @@ export class OrganizationFilesService extends BaseWorker {
       this.logger.error(e);
       throw e;
     }
+  }
+
+  async update(req: any, file_id: string, data: any) {
+    z.object({
+      effective_end_date: z.string().optional(),
+      effective_start_date: z.string().optional(),
+      type: z.string().optional(),
+    })
+      .strip()
+      .parse(data);
+
+    this.prisma.organization_files.update({
+      where: {
+        id: file_id,
+        organization_id: req.organization.id,
+      },
+      data,
+    });
   }
 
   async uploadFile(req: any, orgId: string, files: Array<Express.Multer.File>, bpc?: boolean) {
