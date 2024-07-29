@@ -1,7 +1,6 @@
-import React, { ReactNode } from 'react';
-import { Toast } from 'flowbite-react';
+import React, { useEffect } from 'react';
 import { ToastMessageType } from '@coldpbc/interfaces';
-import { CheckIcon, ExclamationTriangleIcon } from '@heroicons/react/24/solid';
+import { KeyedMutator } from 'swr';
 
 export interface ToasterProps {
   toastMessage: ToastMessageType;
@@ -10,32 +9,30 @@ export interface ToasterProps {
 export const Toaster = (props: ToasterProps) => {
   const { toastMessage } = props;
   const { message, type } = toastMessage;
-  const getToastIcon = () => {
-    let icon: ReactNode;
-    const className = 'inline-flex min-w-4 rounded-lg items-center justify-center';
 
+  const getHighlightClassName = () => {
+    let className = '';
     switch (type) {
       default:
       case 'success':
-        icon = <CheckIcon className="h-5 w-5" aria-hidden="true" />;
+        className = 'border-[1px] border-tc-success';
         break;
       case 'failure':
-        icon = <ExclamationTriangleIcon className="h-5 w-5" aria-hidden="true" />;
+        className = 'border-[1px] border-red-500';
         break;
       case 'info':
+        className = 'border-[1px] border-blue-500';
         break;
     }
 
-    return <div className={className}>{icon}</div>;
+    return className;
   };
 
   return (
-    <div className="fixed w-full bottom-0 flex justify-center pb-6 z-30">
-      <Toast className={'max-w-md bg-bgc-accent text-tc-primary'}>
-        {getToastIcon()}
+    <div className={'fixed w-full top-[40px] flex justify-center pb-6 z-30'}>
+      <div className={'w-auto rounded-[16px] p-[24px] bg-bgc-accent text-tc-primary ' + getHighlightClassName()}>
         <div className="ml-3 text-sm font-normal">{message}</div>
-        <Toast.Toggle className={'bg-bgc-accent'} />
-      </Toast>
+      </div>
     </div>
   );
 };
