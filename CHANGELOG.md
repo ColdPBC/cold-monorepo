@@ -1,3 +1,10 @@
+# [1.312.0-COLD-904.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.311.0...v1.312.0-COLD-904.1) (2024-07-26)
+
+
+### Features
+
+* Refactor compliance data fetching in ComplianceQuestionnaire ([d2d8dac](https://github.com/ColdPBC/cold-monorepo/commit/d2d8dac156692ee9ae16ee96f9f504ccc246f17a))
+
 # [1.311.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.310.0...v1.311.0) (2024-07-26)
 
 
