@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from 'react-router-dom';
-import { BaseButton, ErrorFallback, Input, MainContent, Spinner, SupplierClaimsTable, SupplierDetailSidebar } from '@coldpbc/components';
-import { CertificationStatus } from '@coldpbc/enums';
+import { BaseButton, ErrorFallback, Input, MainContent, Modal, Spinner, SupplierClaimsTable, SupplierDetailSidebar } from '@coldpbc/components';
+import { ButtonTypes, CertificationStatus } from '@coldpbc/enums';
 import React, { ReactNode, useEffect, useState } from 'react';
 import opacity from 'hex-color-opacity';
 import { HexColors } from '@coldpbc/themes';
@@ -41,6 +41,8 @@ export const _SupplierDetail = () => {
   } | null>(null);
   const [saveButtonDisabled, setSaveButtonDisabled] = useState(false);
   const [saveButtonLoading, setSaveButtonLoading] = useState(false);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [deleteButtonLoading, setDeleteButtonLoading] = useState(false);
 
   useEffect(() => {
     if (supplierSWR.data) {
@@ -216,8 +218,31 @@ export const _SupplierDetail = () => {
     setSaveButtonLoading(false);
   };
 
+  const deleteSupplier = async () => {
+    if (supplier === undefined) return;
+
+    const response = await axiosFetcher([`/organizations/${orgId}/facilities/${id}`, 'DELETE']);
+
+    if (isAxiosError(response)) {
+      logBrowser('SupplierDetail delete error', 'error', { response });
+      await addToastMessage({ message: 'Error deleting supplier', type: ToastMessage.FAILURE, timeout: 2000 });
+    } else {
+      await addToastMessage({ message: 'Supplier deleted successfully', type: ToastMessage.SUCCESS, timeout: 2000 });
+      navigate('/suppliers');
+    }
+  };
+
   const getPageButtons = () => {
     const buttons: ReactNode[] = [];
+    buttons.push(
+      <BaseButton
+        label={'Delete'}
+        onClick={() => {
+          setDeleteModalOpen(true);
+        }}
+        variant={ButtonTypes.warning}
+      />,
+    );
     buttons.push(<BaseButton label={'Save'} onClick={saveSupplier} disabled={saveButtonDisabled || saveButtonLoading} loading={saveButtonLoading} />);
     return <div className={'flex flex-row gap-[16px] h-[40px]'}>{buttons}</div>;
   };
@@ -321,6 +346,35 @@ export const _SupplierDetail = () => {
         />
       </MainContent>
       <SupplierDetailSidebar selectedClaim={selectedClaim} closeSidebar={() => setSelectedClaim(null)} innerRef={ref} />
+      <Modal
+        show={deleteModalOpen}
+        setShowModal={setDeleteModalOpen}
+        header={{
+          title: `Are you sure you want to delete ${supplier.name}?`,
+          cardProps: {
+            glow: false,
+          },
+        }}
+        body={<div>This cannot be undone.</div>}
+        footer={{
+          rejectButton: {
+            label: 'Cancel',
+            onClick: () => setDeleteModalOpen(false),
+            variant: ButtonTypes.secondary,
+          },
+          resolveButton: {
+            label: 'Yes, Delete',
+            onClick: async () => {
+              setDeleteButtonLoading(true);
+              await deleteSupplier();
+              setDeleteButtonLoading(false);
+            },
+            disabled: deleteButtonLoading,
+            loading: deleteButtonLoading,
+            variant: ButtonTypes.warning,
+          },
+        }}
+      />
     </div>
   );
 };
