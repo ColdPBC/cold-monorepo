@@ -375,4 +375,8 @@ export const handlers = [
     const { orgId, id } = req.params as { orgId: string; id: string };
     return res(ctx.json(getSupplierMockById(id)));
   }),
+
+  rest.post(getApiUrl('/compliance/:complianceName/organizations/:orgId'), (req, res, ctx) => {
+    return res(ctx.status(200));
+  }),
 ];
