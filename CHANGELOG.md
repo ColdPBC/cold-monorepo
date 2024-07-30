@@ -1,3 +1,10 @@
+# [1.313.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.312.0...v1.313.0) (2024-07-30)
+
+
+### Features
+
+* Add delete supplier functionality ([38c6aa4](https://github.com/ColdPBC/cold-monorepo/commit/38c6aa4c0515fae6bcad5a82a5013f99e0d13223))
+
 # [1.312.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.311.1...v1.312.0) (2024-07-30)
 
 
