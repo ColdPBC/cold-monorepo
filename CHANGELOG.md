@@ -1,3 +1,10 @@
+## [1.313.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.313.2...v1.313.3) (2024-07-30)
+
+
+### Bug Fixes
+
+* **scoring:** correct score calculation logic for AI and org responses ([2598a70](https://github.com/ColdPBC/cold-monorepo/commit/2598a703e0c62858de050b61aca9cea82487e1f6))
+
 ## [1.313.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.313.1...v1.313.2) (2024-07-30)
 
 
