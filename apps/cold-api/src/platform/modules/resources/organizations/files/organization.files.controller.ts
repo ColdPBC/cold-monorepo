@@ -83,7 +83,7 @@ export class OrganizationFilesController implements OnModuleInit {
     }
   }
 
-  @Patch()
+  @Patch(`:fileId`)
   @Roles(...allRoles)
   @UseInterceptors(AnyFilesInterceptor())
   async updateFile(
