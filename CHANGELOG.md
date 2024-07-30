@@ -1,3 +1,11 @@
+# [1.312.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.311.1...v1.312.0) (2024-07-30)
+
+
+### Features
+
+* Add save functionality to supplier details page ([674e7f7](https://github.com/ColdPBC/cold-monorepo/commit/674e7f78c4f1ce13bfa179e6a4b57337d87f1d29))
+* Refactor toaster component implementation and usage. ([591c553](https://github.com/ColdPBC/cold-monorepo/commit/591c55311550c44a9f9fb4179ea95d7f73723bb8))
+
 ## [1.311.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.311.0...v1.311.1) (2024-07-30)
 
 
