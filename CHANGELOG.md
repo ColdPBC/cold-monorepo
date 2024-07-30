@@ -1,3 +1,10 @@
+## [1.313.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.313.3...v1.313.4) (2024-07-30)
+
+
+### Bug Fixes
+
+* add estimated_score to compliance responses ([fd80249](https://github.com/ColdPBC/cold-monorepo/commit/fd8024985724037ee38adce6161ed6691efcdd05))
+
 ## [1.313.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.313.2...v1.313.3) (2024-07-30)
 
 
