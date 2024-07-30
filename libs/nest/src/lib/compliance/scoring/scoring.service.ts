@@ -49,7 +49,7 @@ export class ScoringService extends BaseWorker {
     set(complianceResponse, 'score', complianceScore);
     set(complianceResponse, 'ai_score', complianceAiScore);
     set(complianceResponse, 'max_score', complianceMaxScore);
-
+    set(complianceResponse, 'estimated_score', complianceScore + complianceAiScore);
     set(complianceResponse, 'counts', { not_started, org_answered, ai_answered, bookmarked, total: totalQuestions, progress: (org_answered / totalQuestions) * 100 });
 
     return complianceResponse;
@@ -84,6 +84,7 @@ export class ScoringService extends BaseWorker {
 
     set(sectionGroup, 'score', sectionGroupScore);
     set(sectionGroup, 'ai_score', sectionGroupAiScore);
+    set(sectionGroup, 'estimated_score', sectionGroupScore + sectionGroupAiScore);
     set(sectionGroup, 'max_score', sectionGroupMaxScore);
 
     set(sectionGroup, 'counts', { not_started, org_answered, ai_answered, bookmarked, total: totalQuestions, progress: (org_answered / totalQuestions) * 100 });
@@ -131,6 +132,7 @@ export class ScoringService extends BaseWorker {
 
     set(section, 'score', sectionScore);
     set(section, 'ai_score', sectionAiScore);
+    set(section, 'estimated_score', sectionScore + sectionAiScore);
     set(section, 'max_score', sectionMaxScore);
     set(section, 'counts', { not_started, org_answered, ai_answered, bookmarked, total: totalQuestions, progress: (org_answered / totalQuestions) * 100 });
     // return the scored section
