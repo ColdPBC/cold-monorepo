@@ -1,3 +1,10 @@
+## [1.311.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.311.0...v1.311.1) (2024-07-30)
+
+
+### Bug Fixes
+
+* **prisma.service:** enhance error logging with Datadog integration and remove redundant log handlers ([4e48aa1](https://github.com/ColdPBC/cold-monorepo/commit/4e48aa15439654b3a9ae35ce9c963544a7e3324b))
+
 # [1.311.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.310.0...v1.311.0) (2024-07-26)
 
 
