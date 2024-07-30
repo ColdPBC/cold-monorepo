@@ -6,6 +6,7 @@ import { datadogRum } from '@datadog/browser-rum';
 import { datadogLogs } from '@datadog/browser-logs';
 import { StyledEngineProvider, ThemeProvider } from '@mui/material';
 import { muiTheme } from '../../../libs/react/src/themes/muiTheme';
+import { SWRConfig } from 'swr';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 
@@ -57,9 +58,11 @@ root.render(
       }}
       launchDarklyClientSideId={launchDarklyClientSideId}>
       <StyledEngineProvider injectFirst>
-        <ThemeProvider theme={muiTheme}>
-          <Home />
-        </ThemeProvider>
+        <SWRConfig>
+          <ThemeProvider theme={muiTheme}>
+            <Home />
+          </ThemeProvider>
+        </SWRConfig>
       </StyledEngineProvider>
     </ColdContextProvider>
   </StrictMode>,

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import useSWR, { mutate } from 'swr';
+import useSWR from 'swr';
 import { Toaster } from '../../atoms';
 import { withErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../application';
@@ -7,7 +7,7 @@ import { useColdContext } from '@coldpbc/hooks';
 import { ErrorType } from '@coldpbc/enums';
 
 const _ApplicationToaster = () => {
-  const { data, error, isLoading } = useSWR('messages', {
+  const { data, error, isLoading, mutate } = useSWR('messages', {
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
   });
@@ -18,7 +18,7 @@ const _ApplicationToaster = () => {
       // clear timeout if it exists
       const timeout = setTimeout(
         () => {
-          mutate('messages', undefined);
+          mutate(null);
         },
         data.timeout ? data.timeout : 3000,
       );

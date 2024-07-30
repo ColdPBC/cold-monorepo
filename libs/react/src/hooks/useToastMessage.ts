@@ -5,7 +5,7 @@ export function useAddToastMessage() {
   const { mutate } = useSWRConfig();
 
   const addToastMessage = function (message: ToastMessageType) {
-    return mutate('messages', message, false);
+    return mutate('messages', message);
   };
 
   return { addToastMessage };
