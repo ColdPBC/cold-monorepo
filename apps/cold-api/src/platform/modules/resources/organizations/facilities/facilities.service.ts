@@ -59,7 +59,7 @@ export class FacilitiesService extends BaseWorker {
           state_province: body.state_province,
           postal_code: body.postal_code,
           organization_id: orgId,
-          country: body.country || 'US',
+          country: body.country,
           supplier: body.supplier === true,
         },
         include: {
