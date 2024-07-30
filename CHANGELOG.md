@@ -1,3 +1,10 @@
+## [1.313.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.313.1...v1.313.2) (2024-07-30)
+
+
+### Bug Fixes
+
+* update file patch endpoint to include file ID ([2d8cdd3](https://github.com/ColdPBC/cold-monorepo/commit/2d8cdd37616e39609e2c0e27bbe9699ecfe51a9e))
+
 ## [1.313.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.313.0...v1.313.1) (2024-07-30)
 
 
