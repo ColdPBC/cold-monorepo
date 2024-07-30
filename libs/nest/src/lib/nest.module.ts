@@ -78,7 +78,7 @@ export class NestModule {
     /**
      * Exports Array
      */
-    const exports: any = [HttpModule, ConfigService, ComplianceDataModule, PrismaModule];
+    const exports: any = [HttpModule, ConfigService, ComplianceDataModule];
 
     logger.info('Configuring Nest Module...');
 
