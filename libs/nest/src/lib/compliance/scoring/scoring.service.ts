@@ -184,17 +184,22 @@ export class ScoringService extends BaseWorker {
               await response.org_response.value.forEach(value => {
                 score += question.rubric.score_map[value] || 0;
               });
-            }
-
-            if (this.filterService.questionHasValidAnswer(response.ai_response, 'answer', question.component)) {
-              await response.ai_response.answer.forEach(answer => {
-                aiScore += question.rubric.score_map[answer] || 0;
-              });
+            } else {
+              if (this.filterService.questionHasValidAnswer(response.ai_response, 'answer', question.component)) {
+                await response.ai_response.answer.forEach(answer => {
+                  aiScore += question.rubric.score_map[answer] || 0;
+                });
+              }
             }
           } else {
             // For other component types, just map the answer to a score
-            score = question.rubric.score_map[response?.org_response?.value] || 0;
-            aiScore = question.rubric.score_map[response?.ai_response?.answer] || 0;
+            if (question.rubric.score_map[response?.org_response?.value] > 0) {
+              score = question.rubric.score_map[response?.org_response?.value];
+              aiScore = 0;
+            } else {
+              score = 0;
+              aiScore = question.rubric.score_map[response?.ai_response?.answer] || 0;
+            }
           }
         } else {
           // If the question has no rubric or score map, set the score to
