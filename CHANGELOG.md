@@ -1,3 +1,10 @@
+## [1.313.1-cold-913.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.313.0...v1.313.1-cold-913.1) (2024-07-30)
+
+
+### Bug Fixes
+
+* update SQL view for compliance responses ([5f689a5](https://github.com/ColdPBC/cold-monorepo/commit/5f689a5b6b4552a8b85095bbeffa827b390a0c18))
+
 # [1.313.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.312.0...v1.313.0) (2024-07-30)
 
 
