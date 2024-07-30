@@ -1,3 +1,10 @@
+## [1.313.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.313.0...v1.313.1) (2024-07-30)
+
+
+### Bug Fixes
+
+* make 'country' field optional in organization_facilities ([df86033](https://github.com/ColdPBC/cold-monorepo/commit/df86033bf3eb3ca3f03a344ee52745642c44a1f1))
+
 # [1.313.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.312.0...v1.313.0) (2024-07-30)
 
 
