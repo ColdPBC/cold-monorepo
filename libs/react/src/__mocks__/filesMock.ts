@@ -1,3 +1,8 @@
+import { Files } from '@coldpbc/interfaces';
+import { addDays } from 'date-fns';
+import FilesType from '@storybook/addon-knobs/dist/components/types/Files';
+import { FileTypes } from '@coldpbc/enums';
+
 export function getAllFilesMock() {
   return [
     {
@@ -45,6 +50,59 @@ export function getAllFilesMock() {
       versionId: '3PF2iN17HgJuD4.o5RCT3xWmVO2rMKCa',
       updated_at: '2024-04-29T20:00:00.000Z',
       created_at: '2024-04-29T20:00:00.000Z',
+    },
+  ];
+}
+
+export function getFilesWithCertificateClaimsMock(): Files[] {
+  return [
+    {
+      id: 'clrl1562j0009mgk60trjvcyy',
+      original_name: 'PFAS-Test Certificate',
+      effective_start_date: addDays(new Date(), 5).toISOString(),
+      effective_end_date: addDays(new Date(), 5).toISOString(),
+      type: FileTypes.CERTIFICATE,
+      certification_claim: [],
+    },
+    {
+      id: 'clrl0wzkr0007mgk6uncv7u8k',
+      original_name: 'Lead-Test Certificate',
+      effective_start_date: null,
+      effective_end_date: null,
+      type: FileTypes.CERTIFICATE,
+      certification_claim: [],
+    },
+    {
+      id: 'clrl0wzkr0007mgk6uncv7u8k',
+      original_name: 'phthalate Certificate',
+      effective_start_date: null,
+      effective_end_date: null,
+      type: FileTypes.CERTIFICATE,
+      certification_claim: [],
+    },
+    {
+      id: 'clrl0wzkr0007mgk6uncv7u8k',
+      original_name: 'bluesign Certificate without date',
+      effective_start_date: null,
+      effective_end_date: null,
+      type: FileTypes.CERTIFICATE,
+      certification_claim: [],
+    },
+    {
+      id: 'clrl0wzkr0007mgk6uncv7u8k',
+      original_name: 'bluesign Certificate expiring soon',
+      effective_start_date: addDays(new Date(), 5).toISOString(),
+      effective_end_date: addDays(new Date(), 5).toISOString(),
+      type: FileTypes.CERTIFICATE,
+      certification_claim: [],
+    },
+    {
+      id: 'clrl0wzkr0007mgk6uncv7u8k',
+      original_name: 'PFAS-Test Certificate Want, Inc.',
+      effective_start_date: addDays(new Date(), 70).toISOString(),
+      effective_end_date: addDays(new Date(), 70).toISOString(),
+      type: FileTypes.CERTIFICATE,
+      certification_claim: [],
     },
   ];
 }

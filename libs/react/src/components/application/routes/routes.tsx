@@ -6,6 +6,7 @@ import {
   CarbonFootprint,
   ComplianceRoutes,
   DashboardLayout,
+  DocumentsPage,
   DocumentUpload,
   Footprint,
   Interceptor,
@@ -33,7 +34,7 @@ export const ColdRoutes = () => {
         {QuestionnaireRoutes()}
         {ldFlags.showActions261 && <Route path="/actions" element={<ActionsOverview />} />}
         <Route path={'/reports/carbon_footprint'} element={ldFlags.showNewCarbonFootprintModuleCold634 ? <CarbonFootprint /> : <Footprint />} />
-        {ldFlags.showDocumentsUploadModuleCold492 && <Route path="/documents" element={<DocumentUpload />} />}
+        <Route path="/documents" element={<DocumentsPage />} />
         <Route path={'/settings/account'} element={<AccountSettingsPage />} />
         <Route path={'/settings/users'} element={<UserSettingsPage />} />
         <Route path="*" element={<div className={'text-tc-primary'}>Pending...</div>} />

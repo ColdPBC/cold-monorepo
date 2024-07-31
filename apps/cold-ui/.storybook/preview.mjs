@@ -4,6 +4,8 @@ import 'flowbite';
 import {auth0UserMock, worker} from '../../../libs/react/src';
 import {StyledEngineProvider, ThemeProvider} from "@mui/material";
 import {muiTheme} from "../../../libs/react/src/themes/muiTheme";
+import {LocalizationProvider} from "@mui/x-date-pickers";
+import {AdapterDateFns} from "@mui/x-date-pickers/AdapterDateFns";
 
 // Storybook executes this module in both bootstap phase (Node)
 // and a story's runtime (browser). However, we cannot call `setupWorker`
@@ -116,10 +118,13 @@ export default {
   },
   decorators: [
     Story => {
-      return StyledEngineProvider({
-        injectFirst: true,
-        children: ThemeProvider({theme: muiTheme, children: Story()})
-      })
+      return LocalizationProvider({
+        dateAdapter: AdapterDateFns,
+        children: StyledEngineProvider({
+          injectFirst: true,
+          children: ThemeProvider({theme: muiTheme, children: Story()})
+        })
+      });
     },
   ],
 };

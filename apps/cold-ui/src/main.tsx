@@ -5,7 +5,9 @@ import { ColdContextProvider } from '@coldpbc/providers';
 import { datadogRum } from '@datadog/browser-rum';
 import { datadogLogs } from '@datadog/browser-logs';
 import { StyledEngineProvider, ThemeProvider } from '@mui/material';
-import { muiTheme } from '../../../libs/react/src/themes/muiTheme';
+import { muiTheme } from '@coldpbc/themes';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { LocalizationProvider } from '@mui/x-date-pickers';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 
@@ -56,11 +58,13 @@ root.render(
         },
       }}
       launchDarklyClientSideId={launchDarklyClientSideId}>
-      <StyledEngineProvider injectFirst>
-        <ThemeProvider theme={muiTheme}>
-          <Home />
-        </ThemeProvider>
-      </StyledEngineProvider>
+      <LocalizationProvider dateAdapter={AdapterDateFns}>
+        <StyledEngineProvider injectFirst>
+          <ThemeProvider theme={muiTheme}>
+            <Home />
+          </ThemeProvider>
+        </StyledEngineProvider>
+      </LocalizationProvider>
     </ColdContextProvider>
   </StrictMode>,
 );
