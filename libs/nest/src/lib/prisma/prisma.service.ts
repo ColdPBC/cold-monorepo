@@ -58,6 +58,11 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
           query: e.query,
           params: e.params,
           duration: e.duration,
+          dd: {
+            service: process.env['DD_SERVICE'],
+            version: process.env['DD_VERSION'],
+            env: process.env['NODE_ENV'],
+          },
         });
       } else {
         console.info({
@@ -76,14 +81,6 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
           },
         });
       }
-    });
-    // @ts-expect-error Prisma event
-    this.$on('info', (e: LogEvent) => {
-      logger.info(e.message, { timestamp: e.timestamp, target: e.target });
-    });
-    // @ts-expect-error Prisma event
-    this.$on('warn', (e: LogEvent) => {
-      logger.warn(e.message, { timestamp: e.timestamp, target: e.target });
     });
     // @ts-expect-error Prisma event
     this.$on('error', (e: LogEvent) => {

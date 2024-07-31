@@ -57,7 +57,6 @@ export const ColdRoutes = () => {
           </Route>
         </Route>
       </Routes>
-      <ApplicationToaster />
     </>
   );
 };

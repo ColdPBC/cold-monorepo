@@ -49,7 +49,7 @@ export class ScoringService extends BaseWorker {
     set(complianceResponse, 'score', complianceScore);
     set(complianceResponse, 'ai_score', complianceAiScore);
     set(complianceResponse, 'max_score', complianceMaxScore);
-
+    set(complianceResponse, 'estimated_score', complianceScore + complianceAiScore);
     set(complianceResponse, 'counts', { not_started, org_answered, ai_answered, bookmarked, total: totalQuestions, progress: (org_answered / totalQuestions) * 100 });
 
     return complianceResponse;
@@ -84,6 +84,7 @@ export class ScoringService extends BaseWorker {
 
     set(sectionGroup, 'score', sectionGroupScore);
     set(sectionGroup, 'ai_score', sectionGroupAiScore);
+    set(sectionGroup, 'estimated_score', sectionGroupScore + sectionGroupAiScore);
     set(sectionGroup, 'max_score', sectionGroupMaxScore);
 
     set(sectionGroup, 'counts', { not_started, org_answered, ai_answered, bookmarked, total: totalQuestions, progress: (org_answered / totalQuestions) * 100 });
@@ -131,6 +132,7 @@ export class ScoringService extends BaseWorker {
 
     set(section, 'score', sectionScore);
     set(section, 'ai_score', sectionAiScore);
+    set(section, 'estimated_score', sectionScore + sectionAiScore);
     set(section, 'max_score', sectionMaxScore);
     set(section, 'counts', { not_started, org_answered, ai_answered, bookmarked, total: totalQuestions, progress: (org_answered / totalQuestions) * 100 });
     // return the scored section
@@ -184,17 +186,22 @@ export class ScoringService extends BaseWorker {
               await response.org_response.value.forEach(value => {
                 score += question.rubric.score_map[value] || 0;
               });
-            }
-
-            if (this.filterService.questionHasValidAnswer(response.ai_response, 'answer', question.component)) {
-              await response.ai_response.answer.forEach(answer => {
-                aiScore += question.rubric.score_map[answer] || 0;
-              });
+            } else {
+              if (this.filterService.questionHasValidAnswer(response.ai_response, 'answer', question.component)) {
+                await response.ai_response.answer.forEach(answer => {
+                  aiScore += question.rubric.score_map[answer] || 0;
+                });
+              }
             }
           } else {
             // For other component types, just map the answer to a score
-            score = question.rubric.score_map[response?.org_response?.value] || 0;
-            aiScore = question.rubric.score_map[response?.ai_response?.answer] || 0;
+            if (question.rubric.score_map[response?.org_response?.value] > 0) {
+              score = question.rubric.score_map[response?.org_response?.value];
+              aiScore = 0;
+            } else {
+              score = 0;
+              aiScore = question.rubric.score_map[response?.ai_response?.answer] || 0;
+            }
           }
         } else {
           // If the question has no rubric or score map, set the score to

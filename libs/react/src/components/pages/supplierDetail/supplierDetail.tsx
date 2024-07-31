@@ -1,20 +1,22 @@
 import { useNavigate, useParams } from 'react-router-dom';
-import { ErrorFallback, Input, Spinner, SupplierClaimsTable, SupplierDetailSidebar } from '@coldpbc/components';
-import { CertificationStatus } from '@coldpbc/enums';
-import React, { useEffect, useState } from 'react';
+import { BaseButton, ErrorFallback, Input, MainContent, Modal, Spinner, SupplierClaimsTable, SupplierDetailSidebar } from '@coldpbc/components';
+import { ButtonTypes, CertificationStatus } from '@coldpbc/enums';
+import React, { ReactNode, useEffect, useState } from 'react';
 import opacity from 'hex-color-opacity';
 import { HexColors } from '@coldpbc/themes';
 import { getDateActiveStatus } from '@coldpbc/lib';
 import useSWR from 'swr';
 import { axiosFetcher } from '@coldpbc/fetchers';
-import { useAuth0Wrapper } from '@coldpbc/hooks';
-import { Certifications, Suppliers } from '@coldpbc/interfaces';
+import { useAddToastMessage, useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
+import { Certifications, Suppliers, ToastMessage } from '@coldpbc/interfaces';
 import { isAxiosError } from 'axios';
 import capitalize from 'lodash/capitalize';
 import { withErrorBoundary } from 'react-error-boundary';
 
 export const _SupplierDetail = () => {
+  const { addToastMessage } = useAddToastMessage();
   const navigate = useNavigate();
+  const { logBrowser } = useColdContext();
   const { id } = useParams();
   const { orgId } = useAuth0Wrapper();
   const supplierSWR = useSWR<Suppliers, any, any>([`/organizations/${orgId}/suppliers/${id}`, 'GET'], axiosFetcher);
@@ -37,6 +39,10 @@ export const _SupplierDetail = () => {
       type: string;
     }[];
   } | null>(null);
+  const [saveButtonDisabled, setSaveButtonDisabled] = useState(false);
+  const [saveButtonLoading, setSaveButtonLoading] = useState(false);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [deleteButtonLoading, setDeleteButtonLoading] = useState(false);
 
   useEffect(() => {
     if (supplierSWR.data) {
@@ -64,6 +70,23 @@ export const _SupplierDetail = () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [ref, tableRef, selectedClaim]);
+
+  useEffect(() => {
+    // check if the supplier has been modified
+    if (supplierSWR.data && supplier) {
+      if (
+        supplierSWR.data.name === supplier.name &&
+        supplierSWR.data.address_line_1 === supplier.address_line_1 &&
+        supplierSWR.data.address_line_2 === supplier.address_line_2 &&
+        supplierSWR.data.city === supplier.city &&
+        supplierSWR.data.country === supplier.country
+      ) {
+        setSaveButtonDisabled(true);
+      } else {
+        setSaveButtonDisabled(false);
+      }
+    }
+  }, [supplier]);
 
   const handleRowClick = (claimName: string) => {
     // get the claim data
@@ -166,6 +189,64 @@ export const _SupplierDetail = () => {
     }
   };
 
+  const saveSupplier = async () => {
+    if (supplier === undefined) return;
+
+    setSaveButtonLoading(true);
+
+    const response = await axiosFetcher([
+      `/organizations/${orgId}/facilities/${id}`,
+      'PATCH',
+      {
+        name: supplier.name,
+        address_line_1: supplier.address_line_1,
+        address_line_2: supplier.address_line_2,
+        city: supplier.city,
+        country: supplier.country,
+      },
+    ]);
+
+    if (isAxiosError(response)) {
+      logBrowser('SupplierDetail update error', 'error', { response });
+      await addToastMessage({ message: 'Error saving supplier', type: ToastMessage.FAILURE, timeout: 2000 });
+    } else {
+      await supplierSWR.mutate();
+      logBrowser('SupplierDetail update saved', 'info', { response });
+      await addToastMessage({ message: 'Supplier saved successfully', type: ToastMessage.SUCCESS, timeout: 2000 });
+    }
+
+    setSaveButtonLoading(false);
+  };
+
+  const deleteSupplier = async () => {
+    if (supplier === undefined) return;
+
+    const response = await axiosFetcher([`/organizations/${orgId}/facilities/${id}`, 'DELETE']);
+
+    if (isAxiosError(response)) {
+      logBrowser('SupplierDetail delete error', 'error', { response });
+      await addToastMessage({ message: 'Error deleting supplier', type: ToastMessage.FAILURE, timeout: 2000 });
+    } else {
+      await addToastMessage({ message: 'Supplier deleted successfully', type: ToastMessage.SUCCESS, timeout: 2000 });
+      navigate('/suppliers');
+    }
+  };
+
+  const getPageButtons = () => {
+    const buttons: ReactNode[] = [];
+    buttons.push(
+      <BaseButton
+        label={'Delete'}
+        onClick={() => {
+          setDeleteModalOpen(true);
+        }}
+        variant={ButtonTypes.warning}
+      />,
+    );
+    buttons.push(<BaseButton label={'Save'} onClick={saveSupplier} disabled={saveButtonDisabled || saveButtonLoading} loading={saveButtonLoading} />);
+    return <div className={'flex flex-row gap-[16px] h-[40px]'}>{buttons}</div>;
+  };
+
   if (supplierSWR.isLoading) {
     return <Spinner />;
   }
@@ -191,12 +272,9 @@ export const _SupplierDetail = () => {
           Suppliers{' '}
         </div>
         <span className={'w-[24px] h-[24px] flex items-center justify-center'}>{'>'}</span>
-        <span>{supplier.name}</span>
+        <span>{supplierSWR.data?.name}</span>
       </div>
-      <div className={'w-[1199px] flex flex-col gap-[40px] px-[64px]'}>
-        <div className={'w-full flex flex-row justify-between items-center'}>
-          <div className={'text-h2 w-full'}>{supplier.name}</div>
-        </div>
+      <MainContent className={'flex flex-col gap-[40px] px-[64px]'} title={supplierSWR.data?.name} headerElement={getPageButtons()}>
         <div className={'w-full mb-[40px] flex flex-col gap-[12px]'}>
           <Input
             input_label={'Name'}
@@ -205,8 +283,7 @@ export const _SupplierDetail = () => {
               value: supplier.name,
               onChange: e => setSupplier({ ...supplier, name: e.target.value }),
               onValueChange: e => setSupplier({ ...supplier, name: e.value }),
-              className: 'py-2 rounded-[8px] text-tc-disabled',
-              disabled: true,
+              className: 'py-2 rounded-[8px]',
             }}
             input_label_props={{ className: 'w-[77px] flex items-center' }}
             container_classname={'gap-[10px] flex flex-row w-full justify-between'}
@@ -218,8 +295,7 @@ export const _SupplierDetail = () => {
               value: supplier.address_line_1 || '',
               onChange: e => setSupplier({ ...supplier, address_line_1: e.target.value }),
               onValueChange: e => setSupplier({ ...supplier, address_line_1: e.value }),
-              className: 'py-2 rounded-[8px] text-tc-disabled',
-              disabled: true,
+              className: 'py-2 rounded-[8px]',
             }}
             input_label_props={{ className: 'w-[77px] flex items-center' }}
             container_classname={'gap-[10px] flex flex-row w-full justify-between'}
@@ -231,8 +307,7 @@ export const _SupplierDetail = () => {
               value: supplier.address_line_2,
               onChange: e => setSupplier({ ...supplier, address_line_2: e.target.value }),
               onValueChange: e => setSupplier({ ...supplier, address_line_2: e.value }),
-              className: 'py-2 rounded-[8px] text-tc-disabled',
-              disabled: true,
+              className: 'py-2 rounded-[8px]',
             }}
             input_label_props={{ className: 'w-[77px] flex items-center' }}
             container_classname={'gap-[10px] flex flex-row w-full justify-between'}
@@ -244,8 +319,7 @@ export const _SupplierDetail = () => {
               value: supplier.city,
               onChange: e => setSupplier({ ...supplier, city: e.target.value }),
               onValueChange: e => setSupplier({ ...supplier, city: e.value }),
-              className: 'py-2 rounded-[8px] text-tc-disabled',
-              disabled: true,
+              className: 'py-2 rounded-[8px]',
             }}
             input_label_props={{ className: 'w-[77px] flex items-center' }}
             container_classname={'gap-[10px] flex flex-row w-full justify-between'}
@@ -257,24 +331,50 @@ export const _SupplierDetail = () => {
               value: supplier.country,
               onChange: e => setSupplier({ ...supplier, country: e.target.value }),
               onValueChange: e => setSupplier({ ...supplier, country: e.value }),
-              className: 'py-2 rounded-[8px] text-tc-disabled',
-              disabled: true,
+              className: 'py-2 rounded-[8px]',
             }}
             input_label_props={{ className: 'w-[77px] flex items-center' }}
             container_classname={'gap-[10px] flex flex-row w-full justify-between'}
           />
         </div>
-        <div>
-          <SupplierClaimsTable
-            supplier={supplier}
-            showSupplierCertificateDetails={claim => {
-              handleRowClick(claim);
-            }}
-            innerRef={tableRef}
-          />
-        </div>
-      </div>
+        <SupplierClaimsTable
+          supplier={supplier}
+          showSupplierCertificateDetails={claim => {
+            handleRowClick(claim);
+          }}
+          innerRef={tableRef}
+        />
+      </MainContent>
       <SupplierDetailSidebar selectedClaim={selectedClaim} closeSidebar={() => setSelectedClaim(null)} innerRef={ref} />
+      <Modal
+        show={deleteModalOpen}
+        setShowModal={setDeleteModalOpen}
+        header={{
+          title: `Are you sure you want to delete ${supplier.name}?`,
+          cardProps: {
+            glow: false,
+          },
+        }}
+        body={<div>This cannot be undone.</div>}
+        footer={{
+          rejectButton: {
+            label: 'Cancel',
+            onClick: () => setDeleteModalOpen(false),
+            variant: ButtonTypes.secondary,
+          },
+          resolveButton: {
+            label: 'Yes, Delete',
+            onClick: async () => {
+              setDeleteButtonLoading(true);
+              await deleteSupplier();
+              setDeleteButtonLoading(false);
+            },
+            disabled: deleteButtonLoading,
+            loading: deleteButtonLoading,
+            variant: ButtonTypes.warning,
+          },
+        }}
+      />
     </div>
   );
 };

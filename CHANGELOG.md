@@ -1,3 +1,53 @@
+## [1.313.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.313.3...v1.313.4) (2024-07-30)
+
+
+### Bug Fixes
+
+* add estimated_score to compliance responses ([fd80249](https://github.com/ColdPBC/cold-monorepo/commit/fd8024985724037ee38adce6161ed6691efcdd05))
+
+## [1.313.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.313.2...v1.313.3) (2024-07-30)
+
+
+### Bug Fixes
+
+* **scoring:** correct score calculation logic for AI and org responses ([2598a70](https://github.com/ColdPBC/cold-monorepo/commit/2598a703e0c62858de050b61aca9cea82487e1f6))
+
+## [1.313.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.313.1...v1.313.2) (2024-07-30)
+
+
+### Bug Fixes
+
+* update file patch endpoint to include file ID ([2d8cdd3](https://github.com/ColdPBC/cold-monorepo/commit/2d8cdd37616e39609e2c0e27bbe9699ecfe51a9e))
+
+## [1.313.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.313.0...v1.313.1) (2024-07-30)
+
+
+### Bug Fixes
+
+* make 'country' field optional in organization_facilities ([df86033](https://github.com/ColdPBC/cold-monorepo/commit/df86033bf3eb3ca3f03a344ee52745642c44a1f1))
+
+# [1.313.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.312.0...v1.313.0) (2024-07-30)
+
+
+### Features
+
+* Add delete supplier functionality ([38c6aa4](https://github.com/ColdPBC/cold-monorepo/commit/38c6aa4c0515fae6bcad5a82a5013f99e0d13223))
+
+# [1.312.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.311.1...v1.312.0) (2024-07-30)
+
+
+### Features
+
+* Add save functionality to supplier details page ([674e7f7](https://github.com/ColdPBC/cold-monorepo/commit/674e7f78c4f1ce13bfa179e6a4b57337d87f1d29))
+* Refactor toaster component implementation and usage. ([591c553](https://github.com/ColdPBC/cold-monorepo/commit/591c55311550c44a9f9fb4179ea95d7f73723bb8))
+
+## [1.311.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.311.0...v1.311.1) (2024-07-30)
+
+
+### Bug Fixes
+
+* **prisma.service:** enhance error logging with Datadog integration and remove redundant log handlers ([4e48aa1](https://github.com/ColdPBC/cold-monorepo/commit/4e48aa15439654b3a9ae35ce9c963544a7e3324b))
+
 # [1.311.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.310.0...v1.311.0) (2024-07-26)
 
 
