@@ -1,3 +1,11 @@
+# [1.314.0-cold-919.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.313.4...v1.314.0-cold-919.1) (2024-07-31)
+
+
+### Features
+
+* include additional fields in supplier repository select ([59068d7](https://github.com/ColdPBC/cold-monorepo/commit/59068d7ef31b1e648815a809385869a9d2ef5a46))
+* update product and material models ([b887ce6](https://github.com/ColdPBC/cold-monorepo/commit/b887ce6dc4af8d381744aa52933e30b9343e9efe))
+
 ## [1.313.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.313.3...v1.313.4) (2024-07-30)
 
 
