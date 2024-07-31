@@ -7,20 +7,20 @@ generator client {
 generator zod {
   provider                         = "zod-prisma-types"
   output                           = "../src/validation/generated"
-  createInputTypes                 = "false"
-  addSelectType                    = "false"
   addInputTypeValidation           = "false"
-  useMultipleFiles                 = "true"
-  createRelationValuesTypes        = "false"
+  useDefaultValidators             = "false"
+  addSelectType                    = "false"
+  writeBarrelFiles                 = "false"
   createModelTypes                 = "true"
+  createRelationValuesTypes        = "false"
+  createOptionalDefaultValuesTypes = "false"
   validateWhereUniqueInput         = "false"
   createPartialTypes               = "false"
-  createOptionalDefaultValuesTypes = "false"
-  addIncludeType                   = "false"
-  writeNullishInModelTypes         = "false"
-  useDefaultValidators             = "false"
   coerceDate                       = "false"
-  writeBarrelFiles                 = "false"
+  addIncludeType                   = "false"
+  createInputTypes                 = "false"
+  useMultipleFiles                 = "true"
+  writeNullishInModelTypes         = "false"
 }
 
 datasource db {
@@ -286,25 +286,26 @@ model category_data {
 /// @actions
 model organizations {
   /// @zod.custom.use(z.string().uuid())
-  id                                        String                                      @id
-  name                                      String                                      @unique
-  enabled_connections                       Json
-  display_name                              String
-  branding                                  Json?
-  phone                                     String?
+  id                  String   @id
+  name                String   @unique
+  enabled_connections Json
+  display_name        String
+  branding            Json?
+  phone               String?
   /// @zod.custom.use(z.string().email())
-  email                                     String?
+  email               String?
   /// @DtoUpdateHidden
   /// @zod.custom.use(z.date().optional())
-  created_at                                DateTime                                    @default(now())
+  created_at          DateTime @default(now())
   /// @DtoUpdateHidden
   /// @DtoCreateHidden
   /// @DtoReadOnly
   /// @zod.custom.use(z.date().optional())
-  updated_at                                DateTime                                    @updatedAt
-  isTest                                    Boolean                                     @default(false)
-  website                                   String?
-  deleted                                   Boolean                                     @default(false)
+  updated_at          DateTime @updatedAt
+  isTest              Boolean  @default(false)
+  website             String?
+  deleted             Boolean  @default(false)
+
   actions                                   actions[]
   category_data                             category_data[]
   certification_claims                      certification_claims[]
@@ -315,7 +316,8 @@ model organizations {
   organization_compliances_old              organization_compliances_old[]
   facilities                                organization_facilities[]
   organization_files                        organization_files[]
-  products                                  organization_products[]
+  products                                  products[]
+  materials                                 materials[]
   survey_data                               survey_data[]
   survey_status                             survey_status[]
   utility_bills                             utility_bills[]
@@ -330,25 +332,26 @@ model organizations {
 /// @zod.import(["import { organization_facilitiesSchema } from '../../custom'"])
 /// @actions
 model organization_facilities {
-  id                   String                 @id @default(cuid())
-  organization_id      String
-  name                 String
-  city                 String?
-  country              String?
-  created_at           DateTime               @default(now())
-  updated_at           DateTime               @updatedAt
-  address_line_2       String?
-  postal_code          String?
-  deleted              Boolean                @default(false)
-  metadata             Json?
-  state_province       String?
-  address_line_1       String?
-  supplier             Boolean                @default(false)
+  id              String        @id @default(cuid())
+  organization_id String
+  name            String
+  city            String?
+  country         String?
+  created_at      DateTime      @default(now())
+  updated_at      DateTime      @updatedAt
+  address_line_2  String?
+  postal_code     String?
+  deleted         Boolean       @default(false)
+  metadata        Json?
+  state_province  String?
+  address_line_1  String?
+  supplier        Boolean       @default(false)
+  organization    organizations @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+
   certification_claims certification_claims[]
   emissions            emissions[]
   integrations         integrations[]
-  organization         organizations          @relation(fields: [organization_id], references: [id], onDelete: Cascade)
-  product_facilities   product_facilities[]
+  product_suppliers    suppliers_view[]
   utility_bills        utility_bills[]
 }
 
@@ -364,41 +367,72 @@ model certifications {
 }
 
 model certification_claims {
-  id                       String                  @id @default(cuid())
+  id                       String                   @id @default(cuid())
   certification_id         String
-  organization_facility_id String
+  organization_facility_id String?
   organization_file_id     String
-  issued_date              DateTime                @default(now())
-  effective_date           DateTime                @default(now())
-  created_at               DateTime                @default(now())
-  updated_at               DateTime                @updatedAt
-  deleted                  Boolean                 @default(false)
+  issued_date              DateTime                 @default(now())
+  effective_date           DateTime                 @default(now())
+  created_at               DateTime                 @default(now())
+  updated_at               DateTime                 @updatedAt
+  deleted                  Boolean                  @default(false)
   organization_name        String
-  certification            certifications          @relation(fields: [certification_id], references: [id], onDelete: Cascade)
-  facility                 organization_facilities @relation(fields: [organization_facility_id], references: [id])
-  organization_file        organization_files      @relation(fields: [organization_file_id], references: [id], onDelete: Cascade)
-  organization             organizations           @relation(fields: [organization_name], references: [name], onDelete: Cascade)
-
-  @@unique([organization_name, organization_file_id, certification_id, organization_facility_id], name: "orgFacilityCertFile")
+  material_id              String?
+  product_id               String?
+  certification            certifications           @relation(fields: [certification_id], references: [id], onDelete: Cascade)
+  organization_file        organization_files       @relation(fields: [organization_file_id], references: [id], onDelete: Cascade)
+  organization             organizations            @relation(fields: [organization_name], references: [name], onDelete: Cascade)
+  facility                 organization_facilities? @relation(fields: [organization_facility_id], references: [id])
+  product                  products?                @relation(fields: [product_id], references: [id])
+  material                 materials?               @relation(fields: [material_id], references: [id])
 }
 
-model organization_products {
-  id                 String               @id @default(cuid())
-  name               String               @unique
-  organization_id    String
-  created_at         DateTime             @default(now())
-  updated_at         DateTime             @updatedAt
-  deleted            Boolean              @default(false)
-  organization       organizations        @relation(fields: [organization_id], references: [id], onDelete: Cascade)
-  product_facilities product_facilities[]
+model products {
+  id                   String                 @id @default(cuid())
+  name                 String                 @unique
+  organization_name    String
+  created_at           DateTime               @default(now())
+  updated_at           DateTime               @updatedAt
+  deleted              Boolean                @default(false)
+  organization         organizations          @relation(fields: [organization_name], references: [name], onDelete: Cascade)
+  product_materials    product_materials[]
+  certification_claims certification_claims[]
 }
 
-model product_facilities {
-  id                       String                  @id @default(cuid())
-  product_id               String
-  organization_facility_id String
-  product_facility         organization_facilities @relation(fields: [organization_facility_id], references: [id], onDelete: Cascade)
-  product                  organization_products   @relation(fields: [product_id], references: [id], onDelete: Cascade)
+model materials {
+  id                String   @id @default(cuid())
+  name              String   @unique
+  organization_name String
+  created_at        DateTime @default(now())
+  updated_at        DateTime @updatedAt
+  deleted           Boolean  @default(false)
+
+  organization organizations @relation(fields: [organization_name], references: [id], onDelete: Cascade)
+
+  material_suppliers   material_suppliers[]
+  product_materials    product_materials[]
+  certification_claims certification_claims[]
+}
+
+model material_suppliers {
+  id          String         @id @default(cuid())
+  material_id String
+  supplier_id String
+  created_at  DateTime       @default(now())
+  updated_at  DateTime       @updatedAt
+  supplier    suppliers_view @relation(fields: [supplier_id], references: [id], onDelete: Cascade)
+  material    materials      @relation(fields: [material_id], references: [id], onDelete: Cascade)
+}
+
+model product_materials {
+  id                   String    @id @default(cuid())
+  product_id           String
+  material_id          String
+  material_supplier_id String
+  created_at           DateTime  @default(now())
+  updated_at           DateTime  @updatedAt
+  material             materials @relation(fields: [material_id], references: [id], onDelete: Cascade)
+  product              products  @relation(fields: [product_id], references: [id], onDelete: Cascade)
 }
 
 model service_definitions {
@@ -932,6 +966,22 @@ view organization_claims_view {
   effective_end_date     DateTime?
   expires_at             DateTime?
   organization_name      String
+}
+
+view suppliers_view {
+  id                      String                   @id
+  organization_name       String?
+  organization_id         String?
+  name                    String?
+  address_line_1          String?
+  address_line_2          String?
+  city                    String?
+  state_province          String?
+  postal_code             String?
+  metadata                Json?
+  supplier                Boolean?
+  organization_facilities organization_facilities? @relation(fields: [id], references: [id])
+  material_suppliers      material_suppliers[]
 }
 
 enum facility_types {
