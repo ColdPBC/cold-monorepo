@@ -89,14 +89,14 @@ export class OrganizationFilesService extends BaseWorker {
 
   async update(req: any, file_id: string, data: any) {
     z.object({
-      effective_end_date: z.string().optional(),
-      effective_start_date: z.string().optional(),
+      effective_end_date: z.string().optional().nullable(),
+      effective_start_date: z.string().optional().nullable(),
       type: z.string().optional(),
     })
       .strip()
       .parse(data);
 
-    this.prisma.organization_files.update({
+    return this.prisma.organization_files.update({
       where: {
         id: file_id,
         organization_id: req.organization.id,

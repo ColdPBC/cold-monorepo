@@ -29,7 +29,7 @@ const _DocumentDetailsSidebar = (props: {
 
   return (
     <div
-      className={'flex flex-col h-screen absolute top-0 right-0 bottom-0 overflow-y-auto text-tc-primary bg-gray-30'}
+      className={'flex flex-col h-screen fixed top-0 right-0 bottom-0 overflow-y-scroll text-tc-primary bg-gray-30'}
       style={{
         width: file ? '588px' : '0px',
         minWidth: file ? '588px' : '0px',
@@ -113,6 +113,7 @@ const _DocumentDetailsSidebar = (props: {
                   '& .MuiOutlinedInput-notchedOutline': {
                     borderRadius: '8px',
                     borderColor: HexColors.gray['90'],
+                    borderWidth: '1.5px',
                   },
                   '&  .MuiOutlinedInput-root': {
                     borderRadius: '8px',
@@ -170,6 +171,7 @@ const _DocumentDetailsSidebar = (props: {
                   '& .MuiOutlinedInput-notchedOutline': {
                     borderRadius: '8px',
                     borderColor: HexColors.gray['90'],
+                    borderWidth: '1.5px',
                   },
                   '&  .MuiOutlinedInput-root': {
                     borderRadius: '8px',

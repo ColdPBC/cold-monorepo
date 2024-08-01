@@ -1,7 +1,7 @@
 import { useAddToastMessage, useAuth0Wrapper, useColdContext, useOrgSWR } from '@coldpbc/hooks';
 import { ColdIcon, DocumentDetailsSidebar, ErrorFallback, MainContent, MUIDataGridNoRowsOverlay, Spinner } from '@coldpbc/components';
 import { HexColors } from '@coldpbc/themes';
-import { DataGrid, GridActionsCellItem, GridColDef, GridRenderCellParams, GridTreeNodeWithRender } from '@mui/x-data-grid';
+import { DataGrid, GridActionsCellItem, GridCallbackDetails, GridColDef, GridRenderCellParams, GridRowParams, GridTreeNodeWithRender, MuiEvent } from '@mui/x-data-grid';
 import React, { useEffect } from 'react';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { Files, ToastMessage } from '@coldpbc/interfaces';
@@ -14,7 +14,6 @@ import capitalize from 'lodash/capitalize';
 import { withErrorBoundary } from 'react-error-boundary';
 
 const _DocumentsPage = () => {
-  const [selectedDocumentId, setSelectedDocumentId] = React.useState<string | null>(null);
   const [selectedDocument, setSelectedDocument] = React.useState<Files | undefined>(undefined);
   const [files, setFiles] = React.useState<Files[]>([]);
   const { orgId } = useAuth0Wrapper();
@@ -112,6 +111,7 @@ const _DocumentsPage = () => {
           type: ToastMessage.SUCCESS,
         });
       }
+      await filesSWR.mutate();
     }
   };
 
@@ -133,6 +133,24 @@ const _DocumentsPage = () => {
     setSelectedDocument(undefined);
     if (checkIfFileChanged(selectedDocument)) {
       updateFile(selectedDocument);
+    }
+  };
+
+  const onRowClick = (params: GridRowParams, event: MuiEvent<React.MouseEvent>, details: GridCallbackDetails) => {
+    // check if the row is selected then close the sidebar
+    // if a document is selected then check if the file has changed and update the file
+    // if the row is not selected then select the document
+    if (selectedDocument) {
+      if (selectedDocument.id === params.row.id) {
+        setSelectedDocument(undefined);
+      } else {
+        selectDocument(params.row.id);
+      }
+      if (checkIfFileChanged(selectedDocument)) {
+        updateFile(selectedDocument);
+      }
+    } else {
+      selectDocument(params.row.id);
     }
   };
 
@@ -206,11 +224,12 @@ const _DocumentsPage = () => {
       end: file.effective_end_date ? new Date(file.effective_end_date) : new Date(0),
       status: getDateActiveStatus(file.effective_end_date),
       type: file.type,
+      expiration_date: file.effective_end_date,
     };
   });
 
   return (
-    <div className="relative">
+    <div className="relative overflow-y-hidden h-full w-full">
       <MainContent title="Documents">
         <DataGrid
           rows={rows}
@@ -262,9 +281,7 @@ const _DocumentsPage = () => {
             },
           }}
           columnHeaderHeight={40}
-          onRowClick={params => {
-            selectDocument(params.row.id as string);
-          }}
+          onRowClick={onRowClick}
           autoHeight={true}
           slots={{
             noRowsOverlay: MUIDataGridNoRowsOverlay,
