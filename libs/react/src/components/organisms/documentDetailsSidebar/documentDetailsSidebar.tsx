@@ -1,16 +1,21 @@
 import React, { useEffect, useRef } from 'react';
 import { Files, InputOption } from '@coldpbc/interfaces';
-import { ColdIcon, ErrorFallback, Input, Select } from '@coldpbc/components';
+import { ColdIcon, ErrorFallback, Input, Select, DocumentDetailsMenu } from '@coldpbc/components';
 import { FileTypes, IconNames, InputTypes } from '@coldpbc/enums';
 import { isEqual, toArray } from 'lodash';
 import capitalize from 'lodash/capitalize';
 import { DesktopDatePicker } from '@mui/x-date-pickers';
 import { withErrorBoundary } from 'react-error-boundary';
 import { HexColors } from '@coldpbc/themes';
-import { EllipsisVerticalIcon } from '@heroicons/react/24/solid';
 
-const _DocumentDetailsSidebar = (props: { file: Files | undefined; updateFile: (file: Files) => void; closeSidebar: () => void; innerRef: React.RefObject<HTMLDivElement> }) => {
-  const { file, closeSidebar, innerRef, updateFile } = props;
+const _DocumentDetailsSidebar = (props: {
+  file: Files | undefined;
+  updateFile: (file: Files) => void;
+  closeSidebar: () => void;
+  innerRef: React.RefObject<HTMLDivElement>;
+  deleteFile: (file: Files) => void;
+}) => {
+  const { file, closeSidebar, innerRef, updateFile, deleteFile } = props;
 
   const documentTypeOptions: InputOption[] = toArray(FileTypes).map((type, index) => {
     const name = capitalize(type.replace(/_/g, ' '));
@@ -40,9 +45,13 @@ const _DocumentDetailsSidebar = (props: { file: Files | undefined; updateFile: (
               <ColdIcon name={IconNames.CloseModalIcon} width={16} height={16} />
             </div>
             <span className={'w-full text-h5 text-wrap break-all'}>{file.original_name}</span>
-            <div className={'cursor-pointer w-[30px]'}>
-              <EllipsisVerticalIcon />
-            </div>
+            <DocumentDetailsMenu
+              onMenuClick={item => {
+                if (item === 'delete') {
+                  deleteFile(file);
+                }
+              }}
+            />
           </div>
           <div className={'w-full flex flex-col gap-[20px]'}>
             <div className={'w-full flex flex-col gap-[8px]'}>

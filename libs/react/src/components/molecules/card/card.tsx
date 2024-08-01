@@ -43,7 +43,7 @@ export function Card(props: PropsWithChildren<CardProps>) {
         </div>
       )}
       {showHeader && (
-        <div className="flex justify-end items-center gap-2 self-stretch h-[40px]">
+        <div className="flex justify-end items-center gap-2 self-stretch min-h-[40px] h-fit">
           {
             // show title if we have one
             props.title && <div className="text-h4 flex-1">{props.title}</div>
