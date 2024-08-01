@@ -36,11 +36,11 @@ const _DocumentDetailsSidebar = (props: { file: Files | undefined; updateFile: (
       {file !== undefined && (
         <div className={'w-full h-full flex flex-col gap-[24px]'}>
           <div className={'w-full flex flex-row mb-[16px] gap-[16px] justify-between items-start'}>
-            <div className={'cursor-pointer w-[24px] mt-[5px]'} onClick={() => closeSidebar()}>
-              <ColdIcon name={IconNames.CloseModalIcon} width={24} height={24} />
+            <div className={'cursor-pointer w-[16px] mt-[4px]'} onClick={() => closeSidebar()}>
+              <ColdIcon name={IconNames.CloseModalIcon} width={16} height={16} />
             </div>
             <span className={'w-full text-h5 text-wrap break-all'}>{file.original_name}</span>
-            <div className={'cursor-pointer w-[40px] mt-[2px]'}>
+            <div className={'cursor-pointer w-[30px]'}>
               <EllipsisVerticalIcon />
             </div>
           </div>
