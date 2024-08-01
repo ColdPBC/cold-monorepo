@@ -84,6 +84,9 @@ const _DocumentDetailsSidebar = (props: {
                       }
                     },
                   },
+                  popper: {
+                    container: innerRef.current,
+                  },
                 }}
                 sx={{
                   '& .MuiInputBase-input': {
@@ -147,6 +150,10 @@ const _DocumentDetailsSidebar = (props: {
                         updateFile({ ...file, effective_end_date: null });
                       }
                     },
+                  },
+                  popper: {
+                    // tie the popper to the scroll container
+                    container: innerRef.current,
                   },
                 }}
                 sx={{
