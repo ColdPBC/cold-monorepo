@@ -1,5 +1,5 @@
 import { useAddToastMessage, useAuth0Wrapper, useColdContext, useOrgSWR } from '@coldpbc/hooks';
-import { ColdIcon, DocumentDetailsSidebar, ErrorFallback, MainContent, MUIDataGridNoRowsOverlay, Spinner } from '@coldpbc/components';
+import { BaseButton, ColdIcon, DocumentDetailsSidebar, DocumentUploadButton, ErrorFallback, MainContent, MUIDataGridNoRowsOverlay, Spinner } from '@coldpbc/components';
 import { HexColors } from '@coldpbc/themes';
 import {
   DataGrid,
@@ -240,9 +240,23 @@ const _DocumentsPage = () => {
 
   const tableRows: GridValidRowModel[] = rows;
 
+  const getPageButtons = () => {
+    return (
+      <div className={'h-auto'}>
+        <DocumentUploadButton
+          buttonProps={{
+            label: 'Add New',
+            iconLeft: IconNames.PlusIcon,
+          }}
+          mutateFunction={filesSWR.mutate}
+        />
+      </div>
+    );
+  };
+
   return (
     <div className="relative overflow-y-hidden h-full w-full">
-      <MainContent title="Documents">
+      <MainContent title="Documents" headerElement={getPageButtons()}>
         <DataGrid
           rows={tableRows}
           columns={columns}
