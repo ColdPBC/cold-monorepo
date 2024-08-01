@@ -1,7 +1,17 @@
 import { useAddToastMessage, useAuth0Wrapper, useColdContext, useOrgSWR } from '@coldpbc/hooks';
 import { ColdIcon, DocumentDetailsSidebar, ErrorFallback, MainContent, MUIDataGridNoRowsOverlay, Spinner } from '@coldpbc/components';
 import { HexColors } from '@coldpbc/themes';
-import { DataGrid, GridActionsCellItem, GridCallbackDetails, GridColDef, GridRenderCellParams, GridRowParams, GridTreeNodeWithRender, MuiEvent } from '@mui/x-data-grid';
+import {
+  DataGrid,
+  GridActionsCellItem,
+  GridCallbackDetails,
+  GridColDef,
+  GridRenderCellParams,
+  GridRowParams,
+  GridTreeNodeWithRender,
+  GridValidRowModel,
+  MuiEvent,
+} from '@mui/x-data-grid';
 import React, { useEffect } from 'react';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { Files, ToastMessage } from '@coldpbc/interfaces';
@@ -228,11 +238,13 @@ const _DocumentsPage = () => {
     };
   });
 
+  const tableRows: GridValidRowModel[] = rows;
+
   return (
     <div className="relative overflow-y-hidden h-full w-full">
       <MainContent title="Documents">
         <DataGrid
-          rows={rows}
+          rows={tableRows}
           columns={columns}
           rowHeight={37}
           getRowClassName={() => {
@@ -289,15 +301,7 @@ const _DocumentsPage = () => {
           ref={tableRef}
         />
       </MainContent>
-      <DocumentDetailsSidebar
-        file={selectedDocument}
-        updateFile={setSelectedDocument}
-        closeSidebar={onSidebarClose}
-        innerRef={ref}
-        refreshFiles={() => {
-          filesSWR.mutate();
-        }}
-      />
+      <DocumentDetailsSidebar file={selectedDocument} updateFile={setSelectedDocument} closeSidebar={onSidebarClose} innerRef={ref} />
     </div>
   );
 };

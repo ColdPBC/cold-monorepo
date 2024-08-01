@@ -28,16 +28,15 @@ export const ColdRoutes = () => {
   const getFilteredRoutes = () => {
     return (
       <>
-        <Route index element={<Navigate to="/compliance" replace={true} />} />
-        {!ldFlags.showNewComplianceManagerPreviewCold713 && <Route path={'/assessments'} element={<Journey />} />}
+        <Route index element={<Navigate to={'/compliance'} replace={true} />} />
         {ComplianceRoutes()}
         {QuestionnaireRoutes()}
-        {ldFlags.showActions261 && <Route path="/actions" element={<ActionsOverview />} />}
+        {ldFlags.showActions261 && <Route path={'/actions'} element={<ActionsOverview />} />}
         <Route path={'/reports/carbon_footprint'} element={ldFlags.showNewCarbonFootprintModuleCold634 ? <CarbonFootprint /> : <Footprint />} />
-        <Route path="/documents" element={ldFlags.showNewDocumentPage ? <DocumentsPage /> : <DocumentUpload />} />
+        <Route path={'/documents'} element={ldFlags.showNewDocumentsPage ? <DocumentsPage /> : <DocumentUpload />} />
         <Route path={'/settings/account'} element={<AccountSettingsPage />} />
         <Route path={'/settings/users'} element={<UserSettingsPage />} />
-        <Route path="*" element={<div className={'text-tc-primary'}>Pending...</div>} />
+        <Route path="*" element={<Navigate to={'/compliance'} replace={true} />} />
         {WizardRoutes()}
         {ldFlags.showSuppliersPageCold890 && <Route path={'/suppliers'} element={<SuppliersPage />} />}
         {ldFlags.showSuppliersPageCold890 && <Route path={'/suppliers/:id'} element={<SupplierDetail />} />}

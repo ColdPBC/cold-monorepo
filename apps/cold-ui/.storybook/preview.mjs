@@ -107,24 +107,25 @@ export default {
         complianceSetFlowMarkdown:
           "#Automate your REI Consolidated Form \n Upload company policies, documents, or other resources and Cold Climate will autofill the form. Cold Climate uses AI to pre-fill each question based on your information. \n\nYou'll always be able to review and edit yourself before submitting anything. \n\nYou can upload as many or as few documents as you want. We recommend uploading any of the following for REI. \n1. Your previous year REI PIA Compliance completed answers and impact assessment documents \n2. Other retailer sustainability compliance forms \n3. Supplier code of conduct \n4. Climate or environmental impact statements or documents \n5. Sustainability Certifications \n6. Diversity and Inclusion policies",
         showNewCarbonFootprintModuleCold634: true,
-        showNewCompliancePageHomeCold671: false,
+        showNewCompliancePageHomeCold671: true,
         swrKeepPreviousData: true,
-        showNewNavigationCold698: false,
-        showNewComplianceManagerCold711: false,
+        showNewNavigationCold698: true,
+        showNewComplianceManagerCold711: true,
         showNewComplianceManagerPreviewCold713: true,
         showSuppliersPageCold890: true,
+        showNewDocumentsPage: true,
       },
     },
   },
   decorators: [
     Story => {
-      return LocalizationProvider({
-        dateAdapter: AdapterDateFns,
-        children: StyledEngineProvider({
-          injectFirst: true,
+      return StyledEngineProvider({
+        injectFirst: true,
+        children: LocalizationProvider({
+          dateAdapter: AdapterDateFns,
           children: ThemeProvider({theme: muiTheme, children: Story()})
         })
-      });
+      })
     },
   ],
 };

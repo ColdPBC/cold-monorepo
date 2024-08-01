@@ -9,14 +9,8 @@ import { withErrorBoundary } from 'react-error-boundary';
 import { HexColors } from '@coldpbc/themes';
 import { EllipsisVerticalIcon } from '@heroicons/react/24/solid';
 
-const _DocumentDetailsSidebar = (props: {
-  file: Files | undefined;
-  updateFile: (file: Files) => void;
-  closeSidebar: () => void;
-  innerRef: React.RefObject<HTMLDivElement>;
-  refreshFiles: () => void;
-}) => {
-  const { file, closeSidebar, innerRef, refreshFiles, updateFile } = props;
+const _DocumentDetailsSidebar = (props: { file: Files | undefined; updateFile: (file: Files) => void; closeSidebar: () => void; innerRef: React.RefObject<HTMLDivElement> }) => {
+  const { file, closeSidebar, innerRef, updateFile } = props;
 
   const documentTypeOptions: InputOption[] = toArray(FileTypes).map((type, index) => {
     const name = capitalize(type.replace(/_/g, ' '));

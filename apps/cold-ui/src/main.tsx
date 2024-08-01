@@ -47,27 +47,27 @@ datadogLogs.init({
 root.render(
   <StrictMode>
     <SWRConfig>
-    <ColdContextProvider
-      auth0Options={{
-        domain: domain,
-        clientId: clientId,
-        authorizationParams: {
-          redirect_uri: window.location.origin + '/callback',
-          audience: audience,
-          invitation: urlParams.get('invitation') || undefined,
-          organization: urlParams.get('organization') || undefined,
-          organization_name: urlParams.get('organization_name') || undefined,
-        },
-      }}
-      launchDarklyClientSideId={launchDarklyClientSideId}>
-      <LocalizationProvider dateAdapter={AdapterDateFns}>
-      <StyledEngineProvider injectFirst>
-        <ThemeProvider theme={muiTheme}>
-          <Home />
-        </ThemeProvider>
-      </StyledEngineProvider>
-      </LocalizationProvider>
-    </ColdContextProvider>
+      <ColdContextProvider
+        auth0Options={{
+          domain: domain,
+          clientId: clientId,
+          authorizationParams: {
+            redirect_uri: window.location.origin + '/callback',
+            audience: audience,
+            invitation: urlParams.get('invitation') || undefined,
+            organization: urlParams.get('organization') || undefined,
+            organization_name: urlParams.get('organization_name') || undefined,
+          },
+        }}
+        launchDarklyClientSideId={launchDarklyClientSideId}>
+        <StyledEngineProvider injectFirst>
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <ThemeProvider theme={muiTheme}>
+              <Home />
+            </ThemeProvider>
+          </LocalizationProvider>
+        </StyledEngineProvider>
+      </ColdContextProvider>
     </SWRConfig>
   </StrictMode>,
 );
