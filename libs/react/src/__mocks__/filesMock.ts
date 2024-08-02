@@ -1,3 +1,8 @@
+import { Files } from '@coldpbc/interfaces';
+import { addDays } from 'date-fns';
+import FilesType from '@storybook/addon-knobs/dist/components/types/Files';
+import { FileTypes } from '@coldpbc/enums';
+
 export function getAllFilesMock() {
   return [
     {
@@ -45,6 +50,59 @@ export function getAllFilesMock() {
       versionId: '3PF2iN17HgJuD4.o5RCT3xWmVO2rMKCa',
       updated_at: '2024-04-29T20:00:00.000Z',
       created_at: '2024-04-29T20:00:00.000Z',
+    },
+  ];
+}
+
+export function getFilesWithCertificateClaimsMock(): Files[] {
+  return [
+    {
+      id: '1',
+      original_name: 'PFAS-Test Certificate.pdf',
+      effective_start_date: addDays(new Date(), 5).toISOString(),
+      effective_end_date: addDays(new Date(), 5).toISOString(),
+      type: FileTypes.CERTIFICATE,
+      certification_claim: [],
+    },
+    {
+      id: '2',
+      original_name: 'Lead-Test Certificate.pdf',
+      effective_start_date: null,
+      effective_end_date: null,
+      type: FileTypes.CERTIFICATE,
+      certification_claim: [],
+    },
+    {
+      id: '3',
+      original_name: 'phthalate Certificate.pdf',
+      effective_start_date: null,
+      effective_end_date: null,
+      type: FileTypes.CERTIFICATE,
+      certification_claim: [],
+    },
+    {
+      id: '4',
+      original_name: 'bluesign Certificate without date.pdf',
+      effective_start_date: null,
+      effective_end_date: null,
+      type: FileTypes.CERTIFICATE,
+      certification_claim: [],
+    },
+    {
+      id: '5',
+      original_name: 'bluesign Certificate expiring soon.pdf',
+      effective_start_date: addDays(new Date(), 5).toISOString(),
+      effective_end_date: addDays(new Date(), 5).toISOString(),
+      type: FileTypes.CERTIFICATE,
+      certification_claim: [],
+    },
+    {
+      id: '6',
+      original_name: 'PFAS-Test Certificate Want, Inc.pdf',
+      effective_start_date: addDays(new Date(), 70).toISOString(),
+      effective_end_date: addDays(new Date(), 70).toISOString(),
+      type: FileTypes.CERTIFICATE,
+      certification_claim: [],
     },
   ];
 }

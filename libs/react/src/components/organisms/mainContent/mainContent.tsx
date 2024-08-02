@@ -14,7 +14,7 @@ export interface MainContentProps {
 export function MainContent(props: PropsWithChildren<MainContentProps>) {
   const ldFlags = useFlags();
   return (
-    <div className={twMerge('w-[1129px] flex flex-col items-center gap-6', ldFlags.showNewNavigationCold698 ? 'py-[40px] ml-[50px]' : '', props.className)}>
+    <div className={twMerge('w-[1129px] flex flex-col items-center gap-6 text-tc-primary', ldFlags.showNewNavigationCold698 ? 'py-[40px] ml-[50px]' : '', props.className)}>
       <div className={'w-full flex flex-row justify-between'}>
         {
           // show title if we have one
