@@ -12,7 +12,7 @@ import { isAxiosError } from 'axios';
 const _ComplianceManagerPreviewOverallGraphCard = () => {
   const { data } = useContext(ColdComplianceManagerContext);
   const { complianceCounts, compliance } = data;
-  const AI_SCORE = get(complianceCounts, 'data.ai_score', 0);
+  const AI_SCORE = get(complianceCounts, 'data.estimated_score', 0);
   const ORG_SCORE = get(complianceCounts, 'data.score', 0);
   const MAX_SCORE = get(complianceCounts, 'data.max_score', 0);
   const TARGET_SCORE = get(compliance, 'metadata.target_score', undefined);

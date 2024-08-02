@@ -230,6 +230,7 @@ export interface ComplianceManagerCountsPayload {
   score: number;
   ai_score: number;
   max_score: number;
+  estimated_score: number;
 }
 
 export interface ComplianceManagerCountsSectionGroup {
@@ -246,6 +247,7 @@ export interface ComplianceManagerCountsSectionGroup {
   score: number;
   ai_score: number;
   max_score: number;
+  estimated_score: number;
 }
 
 export interface ComplianceManagerCountsSection {
@@ -256,6 +258,7 @@ export interface ComplianceManagerCountsSection {
   score: number;
   ai_score: number;
   max_score: number;
+  estimated_score: number;
   counts: {
     not_started: number;
     org_answered: number;
