@@ -2,6 +2,7 @@ import { Listbox, Transition } from '@headlessui/react';
 import React, { Fragment } from 'react';
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import { InputOption } from '../../../../interfaces/input';
+import { twMerge } from 'tailwind-merge';
 
 export interface SelectProps {
   options?: Array<InputOption>;
@@ -36,13 +37,13 @@ export const Select = (props: SelectProps) => {
   return (
     <Listbox value={findOption(value, options)} onChange={onListBoxChange} name={name}>
       {({ open }) => (
-        <div className={'relative space-y-2 ' + className}>
+        <div className={twMerge('relative space-y-2', className)}>
           {label && <Listbox.Label className="block text-left text-eyebrow text-tc-primary">{label}</Listbox.Label>}
           <Listbox.Button
-            className={'relative w-full cursor-pointer bg-transparent text-tc-primary text-left text-body p-4 border-[1px] border-bgc-accent rounded-lg ' + buttonClassName}>
+            className={twMerge('relative w-full cursor-pointer bg-transparent text-tc-primary text-left text-body p-4 border-[1px] border-bgc-accent rounded-lg', buttonClassName)}>
             <span className="block truncate">{findOption(value, options).name}</span>
             <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-              <ChevronDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+              <ChevronDownIcon className="h-5 w-5" aria-hidden="true" />
             </span>
           </Listbox.Button>
           <Transition show={open} as={Fragment} leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0">

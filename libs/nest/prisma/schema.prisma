@@ -334,7 +334,7 @@ model organization_facilities {
   organization_id      String
   name                 String
   city                 String?
-  country              String                 @default("US")
+  country              String?
   created_at           DateTime               @default(now())
   updated_at           DateTime               @updatedAt
   address_line_2       String?

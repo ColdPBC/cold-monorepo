@@ -1,9 +1,32 @@
-## [1.313.1-cold-913.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.313.0...v1.313.1-cold-913.1) (2024-07-30)
+
+## [1.313.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.313.3...v1.313.4) (2024-07-30)
+
 
 
 ### Bug Fixes
 
-* update SQL view for compliance responses ([5f689a5](https://github.com/ColdPBC/cold-monorepo/commit/5f689a5b6b4552a8b85095bbeffa827b390a0c18))
+* add estimated_score to compliance responses ([fd80249](https://github.com/ColdPBC/cold-monorepo/commit/fd8024985724037ee38adce6161ed6691efcdd05))
+
+## [1.313.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.313.2...v1.313.3) (2024-07-30)
+
+
+### Bug Fixes
+
+* **scoring:** correct score calculation logic for AI and org responses ([2598a70](https://github.com/ColdPBC/cold-monorepo/commit/2598a703e0c62858de050b61aca9cea82487e1f6))
+
+## [1.313.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.313.1...v1.313.2) (2024-07-30)
+
+
+### Bug Fixes
+
+* update file patch endpoint to include file ID ([2d8cdd3](https://github.com/ColdPBC/cold-monorepo/commit/2d8cdd37616e39609e2c0e27bbe9699ecfe51a9e))
+
+## [1.313.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.313.0...v1.313.1) (2024-07-30)
+
+
+### Bug Fixes
+
+* make 'country' field optional in organization_facilities ([df86033](https://github.com/ColdPBC/cold-monorepo/commit/df86033bf3eb3ca3f03a344ee52745642c44a1f1))
 
 # [1.313.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.312.0...v1.313.0) (2024-07-30)
 
