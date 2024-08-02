@@ -6,6 +6,7 @@ import {
   CarbonFootprint,
   ComplianceRoutes,
   DashboardLayout,
+  DocumentsPage,
   DocumentUpload,
   Footprint,
   Interceptor,
@@ -27,16 +28,15 @@ export const ColdRoutes = () => {
   const getFilteredRoutes = () => {
     return (
       <>
-        <Route index element={<Navigate to="/compliance" replace={true} />} />
-        {!ldFlags.showNewComplianceManagerPreviewCold713 && <Route path={'/assessments'} element={<Journey />} />}
+        <Route index element={<Navigate to={'/compliance'} replace={true} />} />
         {ComplianceRoutes()}
         {QuestionnaireRoutes()}
-        {ldFlags.showActions261 && <Route path="/actions" element={<ActionsOverview />} />}
+        {ldFlags.showActions261 && <Route path={'/actions'} element={<ActionsOverview />} />}
         <Route path={'/reports/carbon_footprint'} element={ldFlags.showNewCarbonFootprintModuleCold634 ? <CarbonFootprint /> : <Footprint />} />
-        {ldFlags.showDocumentsUploadModuleCold492 && <Route path="/documents" element={<DocumentUpload />} />}
+        <Route path={'/documents'} element={ldFlags.showNewDocumentsPage ? <DocumentsPage /> : <DocumentUpload />} />
         <Route path={'/settings/account'} element={<AccountSettingsPage />} />
         <Route path={'/settings/users'} element={<UserSettingsPage />} />
-        <Route path="*" element={<div className={'text-tc-primary'}>Pending...</div>} />
+        <Route path="*" element={<Navigate to={'/compliance'} replace={true} />} />
         {WizardRoutes()}
         {ldFlags.showSuppliersPageCold890 && <Route path={'/suppliers'} element={<SuppliersPage />} />}
         {ldFlags.showSuppliersPageCold890 && <Route path={'/suppliers/:id'} element={<SupplierDetail />} />}
@@ -45,18 +45,15 @@ export const ColdRoutes = () => {
   };
 
   return (
-    <>
-      <Routes>
-        <Route path={'/signup'} element={<Signup />} />
-        <Route path={'/privacy'} element={<Terms type={'privacy'} />} />
-        <Route path={'/terms'} element={<Terms type={'tos'} />} />
-        <Route element={<ProtectedRoute />}>
-          <Route element={<Interceptor />}>
-            <Route element={<DashboardLayout />}>{getFilteredRoutes()}</Route>
-          </Route>
+    <Routes>
+      <Route path={'/signup'} element={<Signup />} />
+      <Route path={'/privacy'} element={<Terms type={'privacy'} />} />
+      <Route path={'/terms'} element={<Terms type={'tos'} />} />
+      <Route element={<ProtectedRoute />}>
+        <Route element={<Interceptor />}>
+          <Route element={<DashboardLayout />}>{getFilteredRoutes()}</Route>
         </Route>
-      </Routes>
-      <ApplicationToaster />
-    </>
+      </Route>
+    </Routes>
   );
 };

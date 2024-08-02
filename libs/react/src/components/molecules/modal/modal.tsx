@@ -3,12 +3,13 @@ import { Modal as FBModal } from 'flowbite-react';
 import { BaseButton } from '../../atoms/button/button';
 import { IButtonProps } from '../../../interfaces/buttons/baseButton';
 import { flowbiteThemeOverride } from '@coldpbc/themes';
-import { Card } from '../card';
+import { Card, CardProps } from '../card';
 import { XMarkIcon } from '@heroicons/react/20/solid';
 import clsx from 'clsx';
 
 export interface ModalHeader {
   title: string;
+  cardProps?: CardProps;
 }
 
 export interface ModalFooter {
@@ -52,19 +53,17 @@ export const Modal = (props: IModalProps) => {
       theme={flowbiteThemeOverride.modal}
       style={{
         boxShadow: '0px 8px 32px 8px rgba(0, 0, 0, 0.70)',
-      }}
-    >
-      <Card title={header.title} className="relative p-6 overflow-visible">
+      }}>
+      <Card title={header.title} className="relative p-6 overflow-visible" {...header.cardProps}>
         <div className="flex flex-col w-full">
           <div className="">{getModelBody()}</div>
           {footer && getModalFooter()}
         </div>
         <button
           className="w-[20px] h-[20px] absolute right-[24px] top-[24px]"
-          onClick={(e) => {
+          onClick={e => {
             props.setShowModal(false);
-          }}
-        >
+          }}>
           <XMarkIcon />
         </button>
       </Card>

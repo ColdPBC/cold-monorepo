@@ -1,17 +1,70 @@
-# [1.312.0-COLD-904.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.312.0-COLD-904.1...v1.312.0-COLD-904.2) (2024-07-29)
+# [1.314.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.313.4...v1.314.0) (2024-08-02)
+
+
+### Bug Fixes
+
+* update SQL view for compliance responses ([5f689a5](https://github.com/ColdPBC/cold-monorepo/commit/5f689a5b6b4552a8b85095bbeffa827b390a0c18))
 
 
 ### Features
 
-* Delete complianceOverview components and redundant logic ([07248e7](https://github.com/ColdPBC/cold-monorepo/commit/07248e782f29bb71e5b0461a473843579dca8617))
-* Remove compliance wizard lair and related components ([3b9e4f9](https://github.com/ColdPBC/cold-monorepo/commit/3b9e4f92eaf80613ef4c35ac32046b4ecb992b99))
+* Enhance popper behavior in DocumentDetailsSidebar ([2095f96](https://github.com/ColdPBC/cold-monorepo/commit/2095f96cc8d220709e50d4f28cc72a6ace342009))
+* Refactor route structure and add feature toggle for documents ([4367af9](https://github.com/ColdPBC/cold-monorepo/commit/4367af9bcb8c2aae35a6596c279757032916233b))
+* Refactor routes and document handling, update layouts ([19674fa](https://github.com/ColdPBC/cold-monorepo/commit/19674fa4e3d33cf5ba481dc229a2af2fb481e59c))
+* Shrink close and ellipsis icons in sidebar. ([7207100](https://github.com/ColdPBC/cold-monorepo/commit/72071002e7e26c9de44053e1aae0f18601933f64))
+* Update dashboard layout, organization files, and document page ([40d7895](https://github.com/ColdPBC/cold-monorepo/commit/40d7895e6f73ce5a41f922b94516621d6da3a101))
+* Update documents routing and add MUI date picker ([ac6e03b](https://github.com/ColdPBC/cold-monorepo/commit/ac6e03b89f9f88516bad735e7bd85f79ac204a5e))
 
-# [1.312.0-COLD-904.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.311.0...v1.312.0-COLD-904.1) (2024-07-26)
+## [1.313.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.313.3...v1.313.4) (2024-07-30)
+
+
+
+### Bug Fixes
+
+* add estimated_score to compliance responses ([fd80249](https://github.com/ColdPBC/cold-monorepo/commit/fd8024985724037ee38adce6161ed6691efcdd05))
+
+## [1.313.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.313.2...v1.313.3) (2024-07-30)
+
+
+### Bug Fixes
+
+* **scoring:** correct score calculation logic for AI and org responses ([2598a70](https://github.com/ColdPBC/cold-monorepo/commit/2598a703e0c62858de050b61aca9cea82487e1f6))
+
+## [1.313.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.313.1...v1.313.2) (2024-07-30)
+
+
+### Bug Fixes
+
+* update file patch endpoint to include file ID ([2d8cdd3](https://github.com/ColdPBC/cold-monorepo/commit/2d8cdd37616e39609e2c0e27bbe9699ecfe51a9e))
+
+## [1.313.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.313.0...v1.313.1) (2024-07-30)
+
+
+### Bug Fixes
+
+* make 'country' field optional in organization_facilities ([df86033](https://github.com/ColdPBC/cold-monorepo/commit/df86033bf3eb3ca3f03a344ee52745642c44a1f1))
+
+# [1.313.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.312.0...v1.313.0) (2024-07-30)
 
 
 ### Features
 
-* Refactor compliance data fetching in ComplianceQuestionnaire ([d2d8dac](https://github.com/ColdPBC/cold-monorepo/commit/d2d8dac156692ee9ae16ee96f9f504ccc246f17a))
+* Add delete supplier functionality ([38c6aa4](https://github.com/ColdPBC/cold-monorepo/commit/38c6aa4c0515fae6bcad5a82a5013f99e0d13223))
+
+# [1.312.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.311.1...v1.312.0) (2024-07-30)
+
+
+### Features
+
+* Add save functionality to supplier details page ([674e7f7](https://github.com/ColdPBC/cold-monorepo/commit/674e7f78c4f1ce13bfa179e6a4b57337d87f1d29))
+* Refactor toaster component implementation and usage. ([591c553](https://github.com/ColdPBC/cold-monorepo/commit/591c55311550c44a9f9fb4179ea95d7f73723bb8))
+
+## [1.311.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.311.0...v1.311.1) (2024-07-30)
+
+
+### Bug Fixes
+
+* **prisma.service:** enhance error logging with Datadog integration and remove redundant log handlers ([4e48aa1](https://github.com/ColdPBC/cold-monorepo/commit/4e48aa15439654b3a9ae35ce9c963544a7e3324b))
 
 # [1.311.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.310.0...v1.311.0) (2024-07-26)
 

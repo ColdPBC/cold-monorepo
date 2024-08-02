@@ -3,7 +3,7 @@ import { getApiUrl } from './handlers';
 import { getComplianceMock, getOrganizationComplianceMock } from './complianceMock';
 import { getSurveyFormDataByName } from './surveyDataMock';
 import { forOwn } from 'lodash';
-import { getAllFilesMock } from './filesMock';
+import { getAllFilesMock, getFilesWithCertificateClaimsMock } from './filesMock';
 
 export const getComplianceWizardFlowHandler = {
   documentUpload: [
@@ -39,7 +39,7 @@ export const getComplianceWizardFlowHandler = {
   ],
   automate: [
     rest.get(getApiUrl('/organizations/:orgId/files'), (req, res, ctx) => {
-      return res(ctx.json(getAllFilesMock()));
+      return res(ctx.json(getFilesWithCertificateClaimsMock()));
     }),
     rest.post(getApiUrl('/organizations/:orgId/files'), (req, res, ctx) => {
       return res(ctx.json({}), ctx.status(201));
