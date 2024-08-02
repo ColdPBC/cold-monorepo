@@ -30,7 +30,7 @@ import {
   getQuestionnaireSidebarComplianceMock,
 } from './complianceMock';
 import { getDocumentsListTableMock } from './componentMock';
-import { getAllFilesMock } from './filesMock';
+import { getAllFilesMock, getFilesWithCertificateClaimsMock } from './filesMock';
 import { returnUpdatedSurvey } from './helpers';
 import { ComplianceSurveyPayloadType } from '@coldpbc/interfaces';
 import { getDefaultEmissionMock } from './emissionMocks';
@@ -270,7 +270,7 @@ export const handlers = [
   }),
 
   rest.get(getApiUrl('/organizations/:orgId/files'), (req, res, ctx) => {
-    return res(ctx.json(getAllFilesMock()));
+    return res(ctx.json(getFilesWithCertificateClaimsMock()));
   }),
 
   rest.post(getApiUrl('/organizations/:orgId/files'), (req, res, ctx) => {
@@ -374,6 +374,10 @@ export const handlers = [
   rest.get(getApiUrl('/organizations/:orgId/suppliers/:id'), (req, res, ctx) => {
     const { orgId, id } = req.params as { orgId: string; id: string };
     return res(ctx.json(getSupplierMockById(id)));
+  }),
+
+  rest.patch(getApiUrl('/organizations/:orgId/files/:fileId'), (req, res, ctx) => {
+    return res(ctx.status(200));
   }),
 
   rest.post(getApiUrl('/compliance/:name/organizations/:orgId'), (req, res, ctx) => {
