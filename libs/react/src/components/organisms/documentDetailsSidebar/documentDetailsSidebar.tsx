@@ -7,6 +7,7 @@ import capitalize from 'lodash/capitalize';
 import { DesktopDatePicker } from '@mui/x-date-pickers';
 import { withErrorBoundary } from 'react-error-boundary';
 import { HexColors } from '@coldpbc/themes';
+import { purple } from '@mui/material/colors';
 
 const _DocumentDetailsSidebar = (props: {
   file: Files | undefined;
@@ -100,22 +101,6 @@ const _DocumentDetailsSidebar = (props: {
                     borderBottomLeftRadius: '8px',
                     borderTopLeftRadius: '8px',
                   },
-                  '& .MuiInputBase-root': {
-                    borderRadius: '8px',
-                  },
-                  '& .MuiInputBase-root:hover': {
-                    outline: 'none',
-                    ring: 'none',
-                    borderWidth: '0px',
-                    boxShadow: 'none',
-                  },
-                  '& .MuiInputBase-input:hover': {
-                    borderColor: 'transparent',
-                  },
-                  '& .MuiInput-input:focus': {
-                    outline: 'none',
-                    ring: 'none',
-                  },
                   '& .MuiOutlinedInput-notchedOutline': {
                     borderRadius: '8px',
                     borderColor: HexColors.gray['90'],
@@ -123,12 +108,16 @@ const _DocumentDetailsSidebar = (props: {
                   },
                   '&  .MuiOutlinedInput-root': {
                     borderRadius: '8px',
+                    '&:hover fieldset': {
+                      borderColor: HexColors.gray['90'],
+                      borderWidth: '1.5px',
+                    },
+                    '&:focus-within fieldset': {
+                      borderColor: HexColors.gray['90'],
+                      borderWidth: '1.5px',
+                    },
                   },
                   '& .MuiOutlinedInput-input:focus': {
-                    outline: 'none',
-                    boxShadow: 'none',
-                  },
-                  '&  .MuiOutlinedInput-root:focus-visible': {
                     outline: 'none',
                     boxShadow: 'none',
                   },
@@ -155,7 +144,6 @@ const _DocumentDetailsSidebar = (props: {
                     },
                   },
                   popper: {
-                    // tie the popper to the scroll container
                     container: innerRef.current,
                   },
                 }}
@@ -165,18 +153,8 @@ const _DocumentDetailsSidebar = (props: {
                     fontFamily: 'Inter',
                     fontSize: '14px',
                     padding: '16px',
-                  },
-                  '& .MuiInputBase-input:hover': {
-                    borderColor: 'transparent',
-                  },
-                  '& .MuiInput-input:focus': {
-                    outline: 'none',
-                  },
-                  '& .MuiTextField-root': {
-                    borderRadius: '8px',
-                  },
-                  '& .MuiTextField-root:hover': {
-                    outline: 'none',
+                    borderBottomLeftRadius: '8px',
+                    borderTopLeftRadius: '8px',
                   },
                   '& .MuiOutlinedInput-notchedOutline': {
                     borderRadius: '8px',
@@ -185,6 +163,14 @@ const _DocumentDetailsSidebar = (props: {
                   },
                   '&  .MuiOutlinedInput-root': {
                     borderRadius: '8px',
+                    '&:hover fieldset': {
+                      borderColor: HexColors.gray['90'],
+                      borderWidth: '1.5px',
+                    },
+                    '&:focus-within fieldset': {
+                      borderColor: HexColors.gray['90'],
+                      borderWidth: '1.5px',
+                    },
                   },
                   '& .MuiOutlinedInput-input:focus': {
                     outline: 'none',

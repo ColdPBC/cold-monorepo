@@ -76,7 +76,7 @@ const SidebarStory = (props: {
   key?: Key | null | undefined;
   closeSidebar: () => void;
 }) => {
-  const { file, innerRef } = props;
+  const { file } = props;
   const [selectedFile, setSelectedFile] = React.useState<Files | undefined>(file);
   return (
     <DocumentDetailsSidebar
