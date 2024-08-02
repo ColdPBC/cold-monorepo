@@ -1,3 +1,11 @@
+# [1.312.0-COLD-904.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.312.0-COLD-904.1...v1.312.0-COLD-904.2) (2024-07-29)
+
+
+### Features
+
+* Delete complianceOverview components and redundant logic ([07248e7](https://github.com/ColdPBC/cold-monorepo/commit/07248e782f29bb71e5b0461a473843579dca8617))
+* Remove compliance wizard lair and related components ([3b9e4f9](https://github.com/ColdPBC/cold-monorepo/commit/3b9e4f92eaf80613ef4c35ac32046b4ecb992b99))
+
 # [1.312.0-COLD-904.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.311.0...v1.312.0-COLD-904.1) (2024-07-26)
 
 
