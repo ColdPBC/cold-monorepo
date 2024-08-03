@@ -250,6 +250,20 @@ export class ComplianceSectionsRepository extends BaseWorker implements OnModule
     try {
       //compliance_sectionsSchema.parse(data);
 
+      if (data.compliance_definition_name && !data.compliance_definition_id) {
+        const definition = await this.prisma.compliance_definitions.findUnique({
+          where: {
+            name: data.compliance_definition_name,
+          },
+        });
+
+        if (!definition) {
+          throw new NotFoundException(`Compliance Definition not found: ${data.compliance_definition_name}`);
+        }
+
+        data.compliance_definition_id = definition.id;
+      }
+
       const section = await this.prisma.compliance_sections.create({
         data: {
           id: new Cuid2Generator(GuidPrefixes.ComplianceSection).scopedId,
