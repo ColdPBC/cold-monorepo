@@ -24,7 +24,7 @@ import {
   getOrganizationComplianceMock,
   getOrganizationComplianceMockByName,
 } from './complianceMock';
-import { getAllFilesMock } from './filesMock';
+import { getAllFilesMock, getFilesWithCertificateClaimsMock } from './filesMock';
 import { getApiUrl } from './handlers';
 import { getAssessmentSurveyWithProgressMock, getSurveyFormDataByName } from './surveyDataMock';
 import { getSingleYearsEmissionMock } from './emissionMocks';
@@ -676,7 +676,7 @@ export const getComplianceDetailPageHandler = {
 export const getDocumentListHandler = {
   default: [
     rest.get(getApiUrl('/organizations/:orgId/files'), (req, res, ctx) => {
-      return res(ctx.json(getAllFilesMock()));
+      return res(ctx.json(getFilesWithCertificateClaimsMock()));
     }),
 
     rest.post(getApiUrl('/organizations/:orgId/files'), (req, res, ctx) => {

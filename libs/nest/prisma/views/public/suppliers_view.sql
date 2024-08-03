@@ -13,7 +13,7 @@ SELECT
 FROM
   (
     organization_facilities of
-    JOIN organizations o ON ((of.organization_id = o.id))
+    JOIN organizations o ON (of.organization_id = o.id)
   )
 WHERE
   (of.supplier IS TRUE);
