@@ -4,6 +4,8 @@ import 'flowbite';
 import {auth0UserMock, worker} from '../../../libs/react/src';
 import {StyledEngineProvider, ThemeProvider} from "@mui/material";
 import {muiTheme} from "../../../libs/react/src/themes/muiTheme";
+import {LocalizationProvider} from "@mui/x-date-pickers";
+import {AdapterDateFns} from "@mui/x-date-pickers/AdapterDateFns";
 
 // Storybook executes this module in both bootstap phase (Node)
 // and a story's runtime (browser). However, we cannot call `setupWorker`
@@ -105,12 +107,13 @@ export default {
         complianceSetFlowMarkdown:
           "#Automate your REI Consolidated Form \n Upload company policies, documents, or other resources and Cold Climate will autofill the form. Cold Climate uses AI to pre-fill each question based on your information. \n\nYou'll always be able to review and edit yourself before submitting anything. \n\nYou can upload as many or as few documents as you want. We recommend uploading any of the following for REI. \n1. Your previous year REI PIA Compliance completed answers and impact assessment documents \n2. Other retailer sustainability compliance forms \n3. Supplier code of conduct \n4. Climate or environmental impact statements or documents \n5. Sustainability Certifications \n6. Diversity and Inclusion policies",
         showNewCarbonFootprintModuleCold634: true,
-        showNewCompliancePageHomeCold671: false,
+        showNewCompliancePageHomeCold671: true,
         swrKeepPreviousData: true,
-        showNewNavigationCold698: false,
-        showNewComplianceManagerCold711: false,
+        showNewNavigationCold698: true,
+        showNewComplianceManagerCold711: true,
         showNewComplianceManagerPreviewCold713: true,
         showSuppliersPageCold890: true,
+        showNewDocumentsPage: true,
       },
     },
   },
@@ -118,7 +121,10 @@ export default {
     Story => {
       return StyledEngineProvider({
         injectFirst: true,
-        children: ThemeProvider({theme: muiTheme, children: Story()})
+        children: LocalizationProvider({
+          dateAdapter: AdapterDateFns,
+          children: ThemeProvider({theme: muiTheme, children: Story()})
+        })
       })
     },
   ],

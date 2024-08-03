@@ -1,10 +1,10 @@
-# [1.314.0-cold-919.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.314.0-cold-919.2...v1.314.0-cold-919.3) (2024-08-03)
+
+# [1.314.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.313.4...v1.314.0) (2024-08-02)
 
 
 ### Bug Fixes
 
-* correct import path for ProductsRepository ([a8cd156](https://github.com/ColdPBC/cold-monorepo/commit/a8cd1565fa32d2050008a0b0b4e523748636337a))
-* remove unnecessary check for Organization Facility ID ([87b0292](https://github.com/ColdPBC/cold-monorepo/commit/87b02928bdd9123ae0defbb19e39c5e369546b0d))
+* update SQL view for compliance responses ([5f689a5](https://github.com/ColdPBC/cold-monorepo/commit/5f689a5b6b4552a8b85095bbeffa827b390a0c18))
 
 
 ### Features
@@ -40,13 +40,15 @@
 
 # [1.314.0-cold-919.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.313.4...v1.314.0-cold-919.1) (2024-07-31)
 
-
-### Features
-
-* include additional fields in supplier repository select ([59068d7](https://github.com/ColdPBC/cold-monorepo/commit/59068d7ef31b1e648815a809385869a9d2ef5a46))
-* update product and material models ([b887ce6](https://github.com/ColdPBC/cold-monorepo/commit/b887ce6dc4af8d381744aa52933e30b9343e9efe))
+* Enhance popper behavior in DocumentDetailsSidebar ([2095f96](https://github.com/ColdPBC/cold-monorepo/commit/2095f96cc8d220709e50d4f28cc72a6ace342009))
+* Refactor route structure and add feature toggle for documents ([4367af9](https://github.com/ColdPBC/cold-monorepo/commit/4367af9bcb8c2aae35a6596c279757032916233b))
+* Refactor routes and document handling, update layouts ([19674fa](https://github.com/ColdPBC/cold-monorepo/commit/19674fa4e3d33cf5ba481dc229a2af2fb481e59c))
+* Shrink close and ellipsis icons in sidebar. ([7207100](https://github.com/ColdPBC/cold-monorepo/commit/72071002e7e26c9de44053e1aae0f18601933f64))
+* Update dashboard layout, organization files, and document page ([40d7895](https://github.com/ColdPBC/cold-monorepo/commit/40d7895e6f73ce5a41f922b94516621d6da3a101))
+* Update documents routing and add MUI date picker ([ac6e03b](https://github.com/ColdPBC/cold-monorepo/commit/ac6e03b89f9f88516bad735e7bd85f79ac204a5e))
 
 ## [1.313.4](https://github.com/ColdPBC/cold-monorepo/compare/v1.313.3...v1.313.4) (2024-07-30)
+
 
 
 ### Bug Fixes

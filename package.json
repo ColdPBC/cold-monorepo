@@ -1,7 +1,7 @@
 {
   "name": "cold-monorepo-nx",
   "packageManager": "yarn@4.1.1",
-  "version": "1.314.0-cold-919.3",
+  "version": "1.314.0",
   "license": "MIT",
   "engines": {
     "node": ">=20.9.0",
@@ -68,6 +68,7 @@
     "@mui/icons-material": "^5.11.11",
     "@mui/material": "^5.16.1",
     "@mui/x-data-grid": "^7.10.0",
+    "@mui/x-date-pickers": "^7.11.1",
     "@nestjs/axios": "^3.0.0",
     "@nestjs/bull": "^10.0.1",
     "@nestjs/cache-manager": "^2.1.0",

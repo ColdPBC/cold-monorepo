@@ -5,8 +5,10 @@ import { ColdContextProvider } from '@coldpbc/providers';
 import { datadogRum } from '@datadog/browser-rum';
 import { datadogLogs } from '@datadog/browser-logs';
 import { StyledEngineProvider, ThemeProvider } from '@mui/material';
-import { muiTheme } from '../../../libs/react/src/themes/muiTheme';
 import { SWRConfig } from 'swr';
+import { muiTheme } from '@coldpbc/themes';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { LocalizationProvider } from '@mui/x-date-pickers';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 
@@ -44,26 +46,28 @@ datadogLogs.init({
 
 root.render(
   <StrictMode>
-    <ColdContextProvider
-      auth0Options={{
-        domain: domain,
-        clientId: clientId,
-        authorizationParams: {
-          redirect_uri: window.location.origin + '/callback',
-          audience: audience,
-          invitation: urlParams.get('invitation') || undefined,
-          organization: urlParams.get('organization') || undefined,
-          organization_name: urlParams.get('organization_name') || undefined,
-        },
-      }}
-      launchDarklyClientSideId={launchDarklyClientSideId}>
-      <StyledEngineProvider injectFirst>
-        <SWRConfig>
-          <ThemeProvider theme={muiTheme}>
-            <Home />
-          </ThemeProvider>
-        </SWRConfig>
-      </StyledEngineProvider>
-    </ColdContextProvider>
+    <SWRConfig>
+      <ColdContextProvider
+        auth0Options={{
+          domain: domain,
+          clientId: clientId,
+          authorizationParams: {
+            redirect_uri: window.location.origin + '/callback',
+            audience: audience,
+            invitation: urlParams.get('invitation') || undefined,
+            organization: urlParams.get('organization') || undefined,
+            organization_name: urlParams.get('organization_name') || undefined,
+          },
+        }}
+        launchDarklyClientSideId={launchDarklyClientSideId}>
+        <StyledEngineProvider injectFirst>
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <ThemeProvider theme={muiTheme}>
+              <Home />
+            </ThemeProvider>
+          </LocalizationProvider>
+        </StyledEngineProvider>
+      </ColdContextProvider>
+    </SWRConfig>
   </StrictMode>,
 );
