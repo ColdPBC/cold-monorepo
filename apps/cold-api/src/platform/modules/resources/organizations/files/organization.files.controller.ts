@@ -46,6 +46,19 @@ export class OrganizationFilesController implements OnModuleInit {
     return this.orgFiles.getFiles(req, orgId, bpc);
   }
 
+  @Get(':id/url')
+  @Roles(...allRoles)
+  async getUrl(
+    @Param('orgId') orgId: string,
+    @Param('id') fileId: string,
+    @Req()
+    req: {
+      user: IAuthenticatedUser;
+    },
+  ) {
+    return this.orgFiles.getUrl(req, fileId);
+  }
+
   @Delete(':id')
   @Roles(...coldAndCompanyAdmins)
   async deleteFile(
