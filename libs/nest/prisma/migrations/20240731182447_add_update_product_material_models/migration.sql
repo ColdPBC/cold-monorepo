@@ -1,4 +1,14 @@
+/*
+  Warnings:
+
+  - The values [Organization,Supplier,Product,Material] on the enum `certification_level` will be removed. If these variants are still used in the database, this will fail.
+  - You are about to drop the `organization_products` table. If the table is not empty, all the data it contains will be lost.
+  - You are about to drop the `product_facilities` table. If the table is not empty, all the data it contains will be lost.
+
+*/
+-- AlterEnum
 BEGIN;
+
 CREATE or replace VIEW SUPPLIERS_VIEW as
 SELECT of.id, o.name as organization_name, of.organization_id, of.name, of.address_line_1, of.address_line_2, of.city, of.state_province, of.postal_code, of.metadata, of.supplier
 FROM organization_facilities of
