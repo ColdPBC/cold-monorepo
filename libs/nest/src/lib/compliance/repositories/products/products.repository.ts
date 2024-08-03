@@ -68,7 +68,7 @@ export class ProductsRepository extends BaseWorker {
   async updateProduct(org: organizations, user: IAuthenticatedUser, filters: { id?: string; name?: string }, data: any) {
     const product = this.prisma.products.update({
       where: {
-        organization_name: org.id,
+        organization_id: org.id,
         id: filters.id,
         name: filters.name,
       },
@@ -83,7 +83,7 @@ export class ProductsRepository extends BaseWorker {
   async findAll(org: organizations, user: IAuthenticatedUser) {
     const products = await this.prisma.products.findMany({
       where: {
-        organization_name: org.name,
+        organization_id: org.id,
       },
       select: this.product_query,
     });
@@ -101,7 +101,7 @@ export class ProductsRepository extends BaseWorker {
         where: {
           id: filters.id,
           name: filters.name,
-          organization_name: org.name,
+          organization_id: org.id,
         },
         select: this.product_query,
       });
@@ -119,7 +119,7 @@ export class ProductsRepository extends BaseWorker {
       where: {
         id: filters.id,
         name: filters.name,
-        organization_name: org.name,
+        organization_id: org.id,
       },
     });
   }
