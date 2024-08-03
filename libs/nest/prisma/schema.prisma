@@ -357,7 +357,6 @@ model organization_facilities {
   utility_bills        utility_bills[]
   product_suppliers    suppliers_view[]
 
-  @@index([organization_id])
   @@index([organization_id], map: "organization_facilities_organization_id_idx1")
 }
 
@@ -392,16 +391,11 @@ model certification_claims {
   organization             organizations            @relation(fields: [organization_id], references: [id], onDelete: Cascade)
   product                  products?                @relation(fields: [product_id], references: [id])
 
-  @@index([certification_id])
   @@index([certification_id], map: "certification_claims_certification_id_idx1")
-  @@index([material_id])
   @@index([material_id], map: "certification_claims_material_id_idx1")
   @@index([organization_facility_id])
-  @@index([organization_file_id])
   @@index([organization_file_id], map: "certification_claims_organization_file_id_idx1")
-  @@index([organization_id])
   @@index([organization_id], map: "certification_claims_organization_id_idx1")
-  @@index([product_id])
   @@index([product_id], map: "certification_claims_product_id_idx1")
 }
 
@@ -416,7 +410,6 @@ model products {
   product_materials    product_materials[]
   organization         organizations          @relation(fields: [organization_id], references: [id], onDelete: Cascade)
 
-  @@index([organization_id])
   @@index([organization_id], map: "products_organization_id_idx1")
 }
 
@@ -432,7 +425,6 @@ model materials {
   organization         organizations          @relation(fields: [organization_id], references: [id], onDelete: Cascade)
   product_materials    product_materials[]
 
-  @@index([organization_id])
   @@index([organization_id], map: "materials_organization_id_idx1")
 }
 
@@ -445,7 +437,6 @@ model material_suppliers {
   material    materials      @relation(fields: [material_id], references: [id], onDelete: Cascade)
   supplier    suppliers_view @relation(fields: [supplier_id], references: [id], onDelete: Cascade)
 
-  @@index([material_id])
   @@index([material_id], map: "material_suppliers_material_id_idx1")
 }
 
@@ -459,9 +450,7 @@ model product_materials {
   material             materials @relation(fields: [material_id], references: [id], onDelete: Cascade)
   product              products  @relation(fields: [product_id], references: [id], onDelete: Cascade)
 
-  @@index([material_id])
   @@index([material_id], map: "product_materials_material_id_idx1")
-  @@index([product_id])
   @@index([product_id], map: "product_materials_product_id_idx1")
 }
 
@@ -505,7 +494,6 @@ model integrations {
   unility_bills         utility_bills[]
 
   @@unique([service_definition_id, facility_id], name: "integrationKey")
-  @@index([organization_id])
   @@index([organization_id], map: "integrations_organization_id_idx1")
 }
 
@@ -625,7 +613,6 @@ model organization_files {
   @@unique([organization_id, id], name: "orgFileId")
   @@unique([organization_id, openai_file_id], name: "openaiFileId")
   @@unique([organization_id, bucket, key], name: "s3Key")
-  @@index([integration_id])
   @@index([integration_id], map: "organization_files_integration_id_idx1")
 }
 
@@ -642,7 +629,6 @@ model organization_compliances_old {
 
   @@unique([organization_id, compliance_id], name: "orgKeyCompKey")
   @@unique([organization_id, compliance_id], map: "organization_compliances_old_organization_id_compliance_id_idx")
-  @@index([compliance_id])
   @@index([compliance_id], map: "organization_compliances_old_compliance_id_idx1")
 }
 
@@ -660,9 +646,7 @@ model vector_records {
   organization_file    organization_files? @relation(fields: [organization_file_id], references: [id], onDelete: Cascade)
   organization         organizations       @relation(fields: [organization_id], references: [id], onDelete: Cascade)
 
-  @@index([organization_file_id])
   @@index([organization_file_id], map: "vector_records_organization_file_id_idx1")
-  @@index([organization_id])
   @@index([organization_id], map: "vector_records_organization_id_idx1")
 }
 
@@ -717,7 +701,6 @@ model organization_compliance {
   compliance_responses                      compliance_responses[]
 
   @@unique([organization_id, compliance_definition_name], name: "orgIdCompNameKey")
-  @@index([compliance_definition_id])
   @@index([compliance_definition_id], map: "organization_compliance_compliance_definition_id_idx1")
 }
 
@@ -758,7 +741,6 @@ model compliance_section_groups {
   compliance_responses       compliance_responses[]
 
   @@unique([compliance_definition_name, title], name: "compDefNameTitle")
-  @@index([compliance_definition_id])
   @@index([compliance_definition_id], map: "compliance_section_groups_compliance_definition_id_idx1")
 }
 
@@ -784,9 +766,7 @@ model compliance_sections {
 
   @@unique([compliance_section_group_id, key], name: "compSecGroupKey")
   @@unique([compliance_definition_name, key], name: "compDefNameSectionKey")
-  @@index([compliance_definition_id])
   @@index([compliance_definition_id], map: "compliance_sections_compliance_definition_id_idx1")
-  @@index([compliance_section_dependency_chain_id])
   @@index([compliance_section_dependency_chain_id], map: "compliance_sections_compliance_section_dependency_chain_id_idx1")
 }
 
@@ -823,10 +803,8 @@ model compliance_questions {
 
   @@unique([compliance_definition_name, key], name: "compDefNameKey")
   @@unique([compliance_section_id, key], name: "compSecKey")
-  @@index([compliance_definition_id])
   @@index([compliance_definition_id], map: "compliance_questions_compliance_definition_id_idx1")
   @@index([compliance_question_dependency_chain_id], map: "compliance_questions_compliance_question_dependency_chain__idx1")
-  @@index([compliance_question_dependency_chain_id])
 }
 
 model compliance_section_dependency_chains {
@@ -863,6 +841,15 @@ model compliance_question_dependency_chains {
 
   @@unique([compliance_section_id, compliance_question_key, compliance_definition_name], name: "defNameSecIdQuestKey")
   @@unique([compliance_section_key, compliance_question_key, compliance_definition_name], name: "defNameSecKeyQuestKey")
+
+  @@index([compliance_question_id])
+  @@index([compliance_question_key])
+  @@index([compliance_section_id])
+  @@index([compliance_section_key])
+  @@index([compliance_section_group_id])
+  @@index([compliance_definition_name])
+  @@index([compliance_section_id, compliance_question_key, compliance_definition_name], map: "section_question_definition_name_idx1")
+  @@index([compliance_section_key, compliance_question_key, compliance_definition_name], map: "section_key_question_key_definition_name_idx1")
 }
 
 model organization_compliance_statuses {
@@ -876,7 +863,6 @@ model organization_compliance_statuses {
   organization_compliance    organization_compliance @relation(fields: [organization_compliance_id], references: [id], onDelete: Cascade)
 
   @@index([organization_compliance_id], map: "organization_compliance_statuse_organization_compliance_id_idx1")
-  @@index([organization_compliance_id])
 }
 
 model organization_compliance_notes {
@@ -893,9 +879,7 @@ model organization_compliance_notes {
   compliance_question        compliance_questions                 @relation(fields: [compliance_question_id], references: [id])
   organization_compliance    organization_compliance              @relation(fields: [organization_compliance_id], references: [id], onDelete: Cascade)
 
-  @@index([compliance_question_id])
   @@index([compliance_question_id], map: "organization_compliance_notes_compliance_question_id_idx1")
-  @@index([organization_compliance_id])
   @@index([organization_compliance_id], map: "organization_compliance_notes_organization_compliance_id_idx1")
 }
 
@@ -910,8 +894,6 @@ model organization_compliance_note_files {
   organization_files              organization_files            @relation(fields: [organization_files_id], references: [id])
 
   @@index([organization_compliance_note_id], map: "organization_compliance_note__organization_compliance_note__idx")
-  @@index([organization_compliance_note_id], map: "organization_compliance_note__organization_compliance_note_idx2")
-  @@index([organization_files_id])
   @@index([organization_files_id], map: "organization_compliance_note_files_organization_files_id_idx1")
 }
 
@@ -925,7 +907,6 @@ model organization_compliance_note_links {
   note                            organization_compliance_notes @relation(fields: [organization_compliance_note_id], references: [id])
 
   @@index([organization_compliance_note_id], map: "organization_compliance_note__organization_compliance_note_idx1")
-  @@index([organization_compliance_note_id], map: "organization_compliance_note__organization_compliance_note_idx3")
 }
 
 model organization_compliance_question_bookmarks {
@@ -940,8 +921,6 @@ model organization_compliance_question_bookmarks {
   organization_compliance    organization_compliance @relation(fields: [organization_compliance_id], references: [id], onDelete: Cascade)
 
   @@unique([email, compliance_question_id], name: "emailQuestId")
-  @@index([organization_compliance_id], map: "organization_compliance_questio_organization_compliance_id_idx1")
-  @@index([compliance_question_id], map: "organization_compliance_question_bo_compliance_question_id_idx1")
   @@index([compliance_question_id], map: "organization_compliance_question_boo_compliance_question_id_idx")
   @@index([organization_compliance_id], map: "organization_compliance_question_organization_compliance_id_idx")
 }
@@ -960,7 +939,6 @@ model organization_compliance_responses {
   compliance_responses       compliance_responses[]
 
   @@unique([organization_compliance_id, compliance_question_id], name: "orgCompQuestId")
-  @@index([compliance_question_id])
   @@index([compliance_question_id], map: "organization_compliance_responses_compliance_question_id_idx1")
 }
 
@@ -985,8 +963,6 @@ model organization_compliance_ai_responses {
 
   @@unique([organization_compliance_id, compliance_question_id], name: "orgCompQuestId")
   @@index([compliance_question_id], map: "organization_compliance_ai_response_compliance_question_id_idx1")
-  @@index([compliance_question_id])
-  @@index([organization_id])
   @@index([organization_id], map: "organization_compliance_ai_responses_organization_id_idx1")
 }
 
@@ -1006,10 +982,7 @@ model organization_compliance_ai_response_files {
 
   @@unique([organization_compliance_id, organization_files_id], name: "orgCompFileId")
   @@index([organization_compliance_ai_response_id], map: "organization_compliance_ai_re_organization_compliance_ai_r_idx1")
-  @@index([organization_compliance_ai_response_id], map: "organization_compliance_ai_re_organization_compliance_ai_re_idx")
   @@index([organization_files_id], map: "organization_compliance_ai_response__organization_files_id_idx1")
-  @@index([organization_files_id], map: "organization_compliance_ai_response_f_organization_files_id_idx")
-  @@index([organization_id])
   @@index([organization_id], map: "organization_compliance_ai_response_files_organization_id_idx1")
 }
 
@@ -1030,6 +1003,15 @@ view compliance_responses {
   compliance_sections                    compliance_sections?                  @relation(fields: [compliance_section_id], references: [id])
   compliance_questions                   compliance_questions?                 @relation(fields: [compliance_question_id], references: [id])
 
+  @@index([organization_id])
+  @@index([organization_compliance_id])
+  @@index([compliance_definition_name])
+  @@index([compliance_question_id])
+  @@index([compliance_section_id])
+  @@index([compliance_section_group_id])
+  @@index([organization_compliance_ai_response_id])
+  @@index([organization_compliance_response_id])
+  @@index([organization_id, compliance_question_id, compliance_section_id, compliance_section_group_id, compliance_definition_name, organization_compliance_ai_response_id, organization_compliance_response_id], name: "orgCompFullIDX")
   @@unique([organization_compliance_id, compliance_question_id], name: "orgCompQuestId")
 }
 
