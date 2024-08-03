@@ -110,7 +110,7 @@ export class S3Service extends BaseWorker implements OnModuleInit {
 
   async getSignedURL(user: IAuthenticatedUser, bucket: string, key: string, expires: number = 3600): Promise<string> {
     this.logger.info(`Generating signed URL for ${key} in bucket ${bucket}`);
-    const command = new PutObjectCommand({ Bucket: bucket, Key: key });
+    const command = new GetObjectCommand({ Bucket: bucket, Key: key });
     const url = await getSignedUrl(this.client, command, { expiresIn: expires });
 
     this.logger.info(`${user.coldclimate_claims.email} generated a signed URL for file: ${key}`, { url, user });
