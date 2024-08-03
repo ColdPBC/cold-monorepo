@@ -1,3 +1,18 @@
+# [1.314.0-cold-919.3](https://github.com/ColdPBC/cold-monorepo/compare/v1.314.0-cold-919.2...v1.314.0-cold-919.3) (2024-08-03)
+
+
+### Bug Fixes
+
+* correct import path for ProductsRepository ([a8cd156](https://github.com/ColdPBC/cold-monorepo/commit/a8cd1565fa32d2050008a0b0b4e523748636337a))
+* remove unnecessary check for Organization Facility ID ([87b0292](https://github.com/ColdPBC/cold-monorepo/commit/87b02928bdd9123ae0defbb19e39c5e369546b0d))
+
+
+### Features
+
+* add materials repository and module ([0079e87](https://github.com/ColdPBC/cold-monorepo/commit/0079e87367c6724af8d6945ef74acc53a9ca3ad8))
+* add MaterialsModule to organization module ([b90388d](https://github.com/ColdPBC/cold-monorepo/commit/b90388d0ea1f41a11417c3ab59102509e3a6a930))
+* add new Material and MaterialSupplier enums to compliance enums list ([e860df3](https://github.com/ColdPBC/cold-monorepo/commit/e860df3ea1d1d9028a6da03a7eb3228e9ee99394))
+
 # [1.314.0-cold-919.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.314.0-cold-919.1...v1.314.0-cold-919.2) (2024-08-03)
 
 
