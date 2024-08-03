@@ -274,4 +274,19 @@ export class OrganizationFilesService extends BaseWorker {
       return e;
     }
   }
+
+  async getUrl(req: any, fileId: string) {
+    const file = await this.prisma.organization_files.findUnique({
+      where: {
+        id: fileId,
+        organization_id: req.organization.id,
+      },
+    });
+
+    if (!file || !file.bucket || !file.key) {
+      throw new NotFoundException(`File ${fileId} not found`);
+    }
+
+    return this.s3.getSignedURL(req.user, file.bucket, file.key, 120);
+  }
 }

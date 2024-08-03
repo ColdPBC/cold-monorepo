@@ -6,9 +6,8 @@ import { organizations } from '@prisma/client';
 import { Cuid2Generator, GuidPrefixes } from '../../../utility';
 
 @Injectable()
-@Global()
 export class MaterialsRepository extends BaseWorker {
-  constructor(readonly prisma: PrismaService) {
+  constructor(private readonly prisma: PrismaService) {
     super(MaterialsRepository.name);
   }
 
