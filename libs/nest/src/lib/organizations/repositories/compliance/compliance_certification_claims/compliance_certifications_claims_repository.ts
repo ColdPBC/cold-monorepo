@@ -86,7 +86,7 @@ export class ComplianceCertificationClaimsRepository extends BaseWorker {
     }
     const policy = this.prisma.certification_claims.update({
       where: {
-        organization_name: org.name,
+        organization_id: org.id,
         id: data.id,
       },
       data: data,
@@ -98,7 +98,7 @@ export class ComplianceCertificationClaimsRepository extends BaseWorker {
   async deleteClaim(org: organizations, user: IAuthenticatedUser, id: string) {
     const policy = this.prisma.certification_claims.delete({
       where: {
-        organization_name: org.name,
+        organization_id: org.id,
         id: id,
       },
     });
@@ -111,7 +111,7 @@ export class ComplianceCertificationClaimsRepository extends BaseWorker {
   async findAll(org: organizations) {
     const queryOptions = {
       where: {
-        organization_name: org.name,
+        organization_id: org.id,
       },
       select: {
         id: true,
@@ -135,7 +135,7 @@ export class ComplianceCertificationClaimsRepository extends BaseWorker {
     const queryOptions = {
       where: {
         type: type,
-        organization_name: org.name,
+        organization_id: org.id,
       },
       select: {
         id: true,
@@ -160,7 +160,7 @@ export class ComplianceCertificationClaimsRepository extends BaseWorker {
       const certification = await this.prisma.certification_claims.findUnique({
         where: {
           id: filters.id,
-          organization_name: org.name,
+          organization_id: org.id,
         },
         select: {
           id: true,
