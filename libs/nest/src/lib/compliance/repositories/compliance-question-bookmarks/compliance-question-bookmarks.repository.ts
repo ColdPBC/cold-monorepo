@@ -73,7 +73,7 @@ export class ComplianceQuestionBookmarksRepository extends BaseWorker {
     try {
       const orgCompliance = await this.getOrganizationCompliance(name, org, qId);
 
-      if (!orgCompliance || orgCompliance.compliance_definition.compliance_questions.length < 1) {
+      if (!orgCompliance?.compliance_definition?.compliance_questions || orgCompliance.compliance_definition.compliance_questions.length < 1) {
         throw new NotFoundException(`Organization Compliance or question not found for ${name} : ${org.name} `);
       }
 
@@ -124,7 +124,7 @@ export class ComplianceQuestionBookmarksRepository extends BaseWorker {
 
       const orgCompliance = await this.getOrganizationCompliance(name, org, qId);
 
-      if (!orgCompliance || orgCompliance.compliance_definition.compliance_questions.length < 1) {
+      if (!orgCompliance?.compliance_definition?.compliance_questions || orgCompliance?.compliance_definition?.compliance_questions?.length < 1) {
         throw new NotFoundException(`Organization Compliance or question not found for ${name}: ${org.name} `);
       }
 
