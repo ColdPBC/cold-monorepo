@@ -376,12 +376,12 @@ model certification_claims {
   created_at               DateTime                 @default(now())
   updated_at               DateTime                 @updatedAt
   deleted                  Boolean                  @default(false)
-  organization_name        String
+  organization_id          String
   material_id              String?
   product_id               String?
   certification            certifications           @relation(fields: [certification_id], references: [id], onDelete: Cascade)
   organization_file        organization_files       @relation(fields: [organization_file_id], references: [id], onDelete: Cascade)
-  organization             organizations            @relation(fields: [organization_name], references: [name], onDelete: Cascade)
+  organization             organizations            @relation(fields: [organization_id], references: [id], onDelete: Cascade)
   facility                 organization_facilities? @relation(fields: [organization_facility_id], references: [id])
   product                  products?                @relation(fields: [product_id], references: [id])
   material                 materials?               @relation(fields: [material_id], references: [id])
@@ -390,24 +390,24 @@ model certification_claims {
 model products {
   id                   String                 @id @default(cuid())
   name                 String                 @unique
-  organization_name    String
+  organization_id      String
   created_at           DateTime               @default(now())
   updated_at           DateTime               @updatedAt
   deleted              Boolean                @default(false)
-  organization         organizations          @relation(fields: [organization_name], references: [name], onDelete: Cascade)
+  organization         organizations          @relation(fields: [organization_id], references: [id], onDelete: Cascade)
   product_materials    product_materials[]
   certification_claims certification_claims[]
 }
 
 model materials {
-  id                String   @id @default(cuid())
-  name              String   @unique
-  organization_name String
-  created_at        DateTime @default(now())
-  updated_at        DateTime @updatedAt
-  deleted           Boolean  @default(false)
+  id              String   @id @default(cuid())
+  name            String   @unique
+  organization_id String
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+  deleted         Boolean  @default(false)
 
-  organization organizations @relation(fields: [organization_name], references: [id], onDelete: Cascade)
+  organization organizations @relation(fields: [organization_id], references: [id], onDelete: Cascade)
 
   material_suppliers   material_suppliers[]
   product_materials    product_materials[]
@@ -658,13 +658,14 @@ model organization_compliance {
   id                                        String                                       @id
   description                               String
   compliance_definition_name                String
+  compliance_definition_id                  String?
   metadata                                  Json?
   created_at                                DateTime                                     @default(now())
   updated_at                                DateTime                                     @updatedAt
   organization_id                           String
   deleted                                   Boolean                                      @default(false)
   visible                                   Boolean                                      @default(true)
-  compliance_definition                     compliance_definitions                       @relation(fields: [compliance_definition_name], references: [name])
+  compliance_definition                     compliance_definitions?                       @relation(fields: [compliance_definition_id], references: [id])
   organization                              organizations                                @relation(fields: [organization_id], references: [id])
   organization_compliance_ai_response_files organization_compliance_ai_response_files[]
   organization_compliance_ai_responses      organization_compliance_ai_responses[]
@@ -704,11 +705,12 @@ model compliance_section_groups {
   order                      Int
   title                      String
   compliance_definition_name String
+  compliance_definition_id   String?
   metadata                   Json?
   created_at                 DateTime               @default(now())
   updated_at                 DateTime               @updatedAt
   deleted                    Boolean                @default(false)
-  compliance_definition      compliance_definitions @relation(fields: [compliance_definition_name], references: [name], onDelete: Cascade)
+  compliance_definition      compliance_definitions? @relation(fields: [compliance_definition_id], references: [id], onDelete: Cascade)
   compliance_sections        compliance_sections[]
   compliance_responses       compliance_responses[]
 
@@ -725,11 +727,12 @@ model compliance_sections {
   compliance_section_group_id            String
   order                                  Int
   compliance_definition_name             String
+  compliance_definition_id   String?
   dependency_expression                  String?
   compliance_section_dependency_chain_id String?
   deleted                                Boolean                               @default(false)
   compliance_questions                   compliance_questions[]
-  compliance_definition                  compliance_definitions                @relation(fields: [compliance_definition_name], references: [name], onDelete: Cascade)
+  compliance_definition                  compliance_definitions?                @relation(fields: [compliance_definition_id], references: [id], onDelete: Cascade)
   compliance_section_dependency_chains   compliance_section_dependency_chains? @relation(fields: [compliance_section_dependency_chain_id], references: [id])
   section_group                          compliance_section_groups             @relation(fields: [compliance_section_group_id], references: [id], onDelete: Cascade)
   compliance_responses                   compliance_responses[]
@@ -756,10 +759,11 @@ model compliance_questions {
   compliance_section_id                   String
   coresponding_question                   String?
   compliance_definition_name              String
+  compliance_definition_id   String?
   dependencies                            Json?
   compliance_question_dependency_chain_id String?
   deleted                                 Boolean                                      @default(false)
-  compliance_definition                   compliance_definitions                       @relation(fields: [compliance_definition_name], references: [name], onDelete: Cascade)
+  compliance_definition                   compliance_definitions?                       @relation(fields: [compliance_definition_id], references: [id], onDelete: Cascade)
   compliance_question_dependency_chain    compliance_question_dependency_chains?       @relation(fields: [compliance_question_dependency_chain_id], references: [id])
   compliance_section                      compliance_sections                          @relation(fields: [compliance_section_id], references: [id], onDelete: Cascade)
   organization_compliance_ai_responses    organization_compliance_ai_responses[]
