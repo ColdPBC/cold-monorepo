@@ -1,3 +1,20 @@
+# [1.316.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.315.0...v1.316.0) (2024-08-03)
+
+
+### Bug Fixes
+
+* correct command used for generating signed URL in S3 service ([d895698](https://github.com/ColdPBC/cold-monorepo/commit/d895698e7d47ce36f3a3a1e63bc0e2f6e1398da5))
+* update API tags in organization.files.controller.ts ([a0d5622](https://github.com/ColdPBC/cold-monorepo/commit/a0d5622def0c0c638d3b82020be252895f63fdf6))
+
+
+### Features
+
+* add customizable expiration time for signed URL generation ([32c473d](https://github.com/ColdPBC/cold-monorepo/commit/32c473d10c71ccb85f1bfb0f22417d73052f2b58))
+* add endpoint to get file URL in organization files controller ([bd6a5d1](https://github.com/ColdPBC/cold-monorepo/commit/bd6a5d1b32177f0ef338f90c6a3947890c9273d2))
+* add getUrl method to organization.files.service ([e8e946d](https://github.com/ColdPBC/cold-monorepo/commit/e8e946df96e550802f792af32021d0ec33a20115))
+* add MaterialsRepository to MaterialsModule ([9a52663](https://github.com/ColdPBC/cold-monorepo/commit/9a52663690c6287cd6dabb1b0dc174550a74bc9e))
+* **materials:** update controller to handle organization and supplier contexts ([465a240](https://github.com/ColdPBC/cold-monorepo/commit/465a240ae8b19c84dc650fdfddf144e9ded7d174))
+
 # [1.315.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.314.0...v1.315.0) (2024-08-03)
 
 
