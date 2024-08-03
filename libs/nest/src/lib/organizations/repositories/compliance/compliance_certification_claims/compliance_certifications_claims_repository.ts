@@ -81,9 +81,7 @@ export class ComplianceCertificationClaimsRepository extends BaseWorker {
     if (!data.certification_id) {
       throw new BadRequestException('Certification ID is required');
     }
-    if (!data.organization_facility_id) {
-      throw new BadRequestException('Organization Facility ID is required');
-    }
+
     const policy = this.prisma.certification_claims.update({
       where: {
         organization_id: org.id,
