@@ -16,7 +16,7 @@
 # [1.314.0-cold-919.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.314.0-cold-919.1...v1.314.0-cold-919.2) (2024-08-03)
 
 
-### Bug Fixes
+## Bug Fixes
 
 * add validation for compliance definition during organization compliance creation ([ca6d310](https://github.com/ColdPBC/cold-monorepo/commit/ca6d31083499c33c9446503287a33bad87f670e6))
 * allow nullable dates in organization files update method ([940b230](https://github.com/ColdPBC/cold-monorepo/commit/940b230188179fdc8814ac11e6d97ec7084ebf67))
