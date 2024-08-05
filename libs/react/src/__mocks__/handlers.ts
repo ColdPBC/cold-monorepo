@@ -383,4 +383,9 @@ export const handlers = [
   rest.delete(getApiUrl('/organizations/:orgId/files/:fileId'), (req, res, ctx) => {
     return res(ctx.status(200));
   }),
+  
+  rest.post(getApiUrl('/compliance/:name/organizations/:orgId'), (req, res, ctx) => {
+    return res(ctx.status(200));
+  }),
+
 ];
