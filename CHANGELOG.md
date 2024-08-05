@@ -1,3 +1,11 @@
+# [1.320.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.319.0...v1.320.0) (2024-08-05)
+
+
+### Features
+
+* Add estimated_score to compliance mock and interfaces ([47d793a](https://github.com/ColdPBC/cold-monorepo/commit/47d793ac412a5ef54dbd7a7bfa1f5ae6818b95a5))
+* Update ai_score to estimated_score in SpiderChart ([68054d8](https://github.com/ColdPBC/cold-monorepo/commit/68054d8871306b0fda9eb0a95727607cc13d0014))
+
 # [1.319.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.318.0...v1.319.0) (2024-08-05)
 
 
