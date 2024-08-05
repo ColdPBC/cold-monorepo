@@ -1820,6 +1820,7 @@ export function getComplianceCountsMock(): ComplianceManagerCountsPayload {
             order: 0,
             score: 0,
             ai_score: 0,
+            estimated_score: 0,
             max_score: 0,
             counts: {
               not_started: 11,
@@ -1835,6 +1836,7 @@ export function getComplianceCountsMock(): ComplianceManagerCountsPayload {
             order: 1,
             score: 0,
             ai_score: 1,
+            estimated_score: 1,
             max_score: 4,
             counts: {
               not_started: 3,
@@ -1851,6 +1853,7 @@ export function getComplianceCountsMock(): ComplianceManagerCountsPayload {
             score: 0,
             ai_score: 3,
             max_score: 3,
+            estimated_score: 3,
             counts: {
               not_started: 2,
               org_answered: 0,
@@ -1868,6 +1871,7 @@ export function getComplianceCountsMock(): ComplianceManagerCountsPayload {
         score: 0,
         ai_score: 5,
         max_score: 10,
+        estimated_score: 5,
       },
       {
         id: 'csg_j8gp3cqg1en67qor',
@@ -1881,6 +1885,7 @@ export function getComplianceCountsMock(): ComplianceManagerCountsPayload {
             order: 12,
             score: 0,
             ai_score: 0.5,
+            estimated_score: 0.5,
             max_score: 1.5,
             counts: {
               not_started: 0,
@@ -1899,6 +1904,7 @@ export function getComplianceCountsMock(): ComplianceManagerCountsPayload {
         score: 0,
         ai_score: 5,
         max_score: 10,
+        estimated_score: 5,
       },
       {
         id: 'csg_pukqrndkcvtxnz6y',
@@ -1913,6 +1919,7 @@ export function getComplianceCountsMock(): ComplianceManagerCountsPayload {
             score: 0,
             ai_score: 2,
             max_score: 6,
+            estimated_score: 2,
             counts: {
               not_started: 4,
               org_answered: 0,
@@ -1927,6 +1934,7 @@ export function getComplianceCountsMock(): ComplianceManagerCountsPayload {
             order: 18,
             score: 0,
             ai_score: 1,
+            estimated_score: 1,
             max_score: 2,
             counts: {
               not_started: 1,
@@ -1945,6 +1953,7 @@ export function getComplianceCountsMock(): ComplianceManagerCountsPayload {
         score: 0,
         ai_score: 5,
         max_score: 10,
+        estimated_score: 5,
       },
     ],
     counts: {
@@ -1957,6 +1966,7 @@ export function getComplianceCountsMock(): ComplianceManagerCountsPayload {
     ai_score: 7.5,
     score: 0,
     max_score: 16.5,
+    estimated_score: 7.5,
   };
 }
 
@@ -2122,6 +2132,7 @@ export function getAllComplianceMocksByStatus(status: ComplianceStatus, progress
 
   return complianceMock;
 }
+
 export function getQuestionAIDetailsMock(sectionGroupId: string, sectionId: string, questionId: string): QuestionnaireComplianceContainerPayLoad | undefined {
   const mock: QuestionnaireComplianceContainerPayLoad = {
     name: 'rei_pia_2024',
@@ -3166,6 +3177,7 @@ export function getComplianceCountsMockWithOrgScore(): ComplianceManagerCountsPa
             order: 0,
             score: 8,
             ai_score: 7,
+            estimated_score: 15,
             max_score: 10,
             counts: {
               not_started: 11,
@@ -3182,6 +3194,7 @@ export function getComplianceCountsMockWithOrgScore(): ComplianceManagerCountsPa
             score: 7,
             ai_score: 4,
             max_score: 10,
+            estimated_score: 7,
             counts: {
               not_started: 3,
               org_answered: 0,
@@ -3197,6 +3210,7 @@ export function getComplianceCountsMockWithOrgScore(): ComplianceManagerCountsPa
             score: 8,
             ai_score: 5,
             max_score: 10,
+            estimated_score: 8,
             counts: {
               not_started: 2,
               org_answered: 0,
@@ -3214,6 +3228,7 @@ export function getComplianceCountsMockWithOrgScore(): ComplianceManagerCountsPa
         score: 23,
         ai_score: 16,
         max_score: 30,
+        estimated_score: 25,
       },
       {
         id: 'csg_j8gp3cqg1en67qor',
@@ -3228,6 +3243,7 @@ export function getComplianceCountsMockWithOrgScore(): ComplianceManagerCountsPa
             score: 9,
             ai_score: 7,
             max_score: 10,
+            estimated_score: 9,
             counts: {
               not_started: 0,
               org_answered: 0,
@@ -3245,6 +3261,7 @@ export function getComplianceCountsMockWithOrgScore(): ComplianceManagerCountsPa
         score: 9,
         ai_score: 7,
         max_score: 10,
+        estimated_score: 9,
       },
       {
         id: 'csg_pukqrndkcvtxnz6y',
@@ -3259,6 +3276,7 @@ export function getComplianceCountsMockWithOrgScore(): ComplianceManagerCountsPa
             score: 5,
             ai_score: 5,
             max_score: 10,
+            estimated_score: 5,
             counts: {
               not_started: 4,
               org_answered: 0,
@@ -3274,6 +3292,7 @@ export function getComplianceCountsMockWithOrgScore(): ComplianceManagerCountsPa
             score: 8,
             ai_score: 7,
             max_score: 10,
+            estimated_score: 8,
             counts: {
               not_started: 1,
               org_answered: 0,
@@ -3291,6 +3310,7 @@ export function getComplianceCountsMockWithOrgScore(): ComplianceManagerCountsPa
         score: 13,
         ai_score: 12,
         max_score: 20,
+        estimated_score: 13,
       },
     ],
     counts: {
@@ -3303,5 +3323,6 @@ export function getComplianceCountsMockWithOrgScore(): ComplianceManagerCountsPa
     ai_score: 45,
     score: 40,
     max_score: 100,
+    estimated_score: 47,
   };
 }

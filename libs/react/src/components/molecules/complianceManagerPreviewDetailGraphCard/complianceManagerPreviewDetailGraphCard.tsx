@@ -52,11 +52,11 @@ const _ComplianceManagerPreviewDetailGraphCard = () => {
       sections: sortBy(value.compliance_sections, ['order', 'title'], ['asc', 'asc']).map(section => ({
         title: section.title,
         score: section.score,
-        ai_score: section.ai_score,
+        ai_score: section.estimated_score,
         max_score: section.max_score,
       })),
       score: value.score,
-      ai_score: value.ai_score,
+      ai_score: value.estimated_score,
       max_score: value.max_score,
     });
   });
