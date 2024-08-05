@@ -295,6 +295,20 @@ export class ComplianceQuestionsRepository extends BaseWorker {
     try {
       await this.cache.delete(`organizations`, true);
 
+      if (question.compliance_definition_name && !question.compliance_definition_id) {
+        const definition = await this.prisma.compliance_definitions.findUnique({
+          where: {
+            name: question.compliance_definition_name,
+          },
+        });
+
+        if (!definition) {
+          throw new NotFoundException(`Compliance Definition not found: ${question.compliance_definition_name}`);
+        }
+
+        question.compliance_definition_id = definition.id;
+      }
+
       question.id = new Cuid2Generator(GuidPrefixes.ComplianceQuestion).scopedId;
       const section = await this.prisma.compliance_sections.findUnique({
         where: {
@@ -350,6 +364,20 @@ export class ComplianceQuestionsRepository extends BaseWorker {
           key: question.key,
         },
       };
+    }
+
+    if (question.compliance_definition_name && !question.compliance_definition_id) {
+      const definition = await this.prisma.compliance_definitions.findUnique({
+        where: {
+          name: question.compliance_definition_name,
+        },
+      });
+
+      if (!definition) {
+        throw new NotFoundException(`Compliance Definition not found: ${question.compliance_definition_name}`);
+      }
+
+      question.compliance_definition_id = definition.id;
     }
 
     try {
