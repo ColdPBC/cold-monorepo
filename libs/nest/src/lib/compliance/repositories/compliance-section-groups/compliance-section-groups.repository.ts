@@ -1,4 +1,4 @@
-import { Injectable, UnprocessableEntityException } from '@nestjs/common';
+import { Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
 import { BaseWorker } from '../../../worker';
 import { PrismaService } from '../../../prisma';
 import { ComplianceSectionsRepository } from '../compliance-sections';
@@ -52,6 +52,20 @@ export class ComplianceSectionGroupsRepository extends BaseWorker {
           deleted: true,
         })
         .parse(sectionGroup);
+
+      if (data.compliance_definition_name && !data.compliance_definition_id) {
+        const definition = await this.prisma.compliance_definitions.findUnique({
+          where: {
+            name: data.compliance_definition_name,
+          },
+        });
+
+        if (!definition) {
+          throw new NotFoundException(`Compliance Definition not found: ${data.compliance_definition_name}`);
+        }
+
+        data.compliance_definition_id = definition.id;
+      }
 
       return this.prisma.compliance_section_groups.create({
         data: data,
