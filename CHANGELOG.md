@@ -1,3 +1,10 @@
+# [1.319.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.318.0...v1.319.0) (2024-08-05)
+
+
+### Features
+
+* Add compliance activation and loading state handling ([be9fe74](https://github.com/ColdPBC/cold-monorepo/commit/be9fe74d18ed8a5ca8ad7bfe0d12e97751440f5a))
+
 # [1.318.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.317.0...v1.318.0) (2024-08-05)
 
 
