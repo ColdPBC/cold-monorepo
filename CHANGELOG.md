@@ -1,3 +1,10 @@
+# [1.322.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.321.0...v1.322.0) (2024-08-05)
+
+
+### Features
+
+* create views for organization claims, suppliers, and compliance responses ([aed4677](https://github.com/ColdPBC/cold-monorepo/commit/aed46771d22f18624f0536e5bf2044c774667549))
+
 # [1.321.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.320.0...v1.321.0) (2024-08-05)
 
 
