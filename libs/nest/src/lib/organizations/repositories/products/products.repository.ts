@@ -42,7 +42,7 @@ export class ProductsRepository extends BaseWorker {
     data.id = new Cuid2Generator(GuidPrefixes.OrganizationProduct).scopedId;
     data.organization_id = org.id;
 
-    const product = this.prisma.organization_products.create({
+    const product = this.prisma.products.create({
       data: data,
     });
 
@@ -57,7 +57,7 @@ export class ProductsRepository extends BaseWorker {
       d.organization_id = org.id;
       return d;
     });
-    const products = this.prisma.organization_products.createMany({
+    const products = this.prisma.products.createMany({
       data: data,
     });
     this.logger.log(`Organization products created`, { organization: org, user, products });
@@ -66,7 +66,7 @@ export class ProductsRepository extends BaseWorker {
   }
 
   async updateProduct(org: organizations, user: IAuthenticatedUser, filters: { id?: string; name?: string }, data: any) {
-    const product = this.prisma.organization_products.update({
+    const product = this.prisma.products.update({
       where: {
         organization_id: org.id,
         id: filters.id,
@@ -81,7 +81,7 @@ export class ProductsRepository extends BaseWorker {
   }
 
   async findAll(org: organizations, user: IAuthenticatedUser) {
-    const products = await this.prisma.organization_products.findMany({
+    const products = await this.prisma.products.findMany({
       where: {
         organization_id: org.id,
       },
@@ -97,7 +97,7 @@ export class ProductsRepository extends BaseWorker {
 
   findOne(org: organizations, user: IAuthenticatedUser, filters: { name?: string; id?: string }) {
     if (filters?.id || filters?.name) {
-      return this.prisma.organization_products.findUnique({
+      return this.prisma.products.findUnique({
         where: {
           id: filters.id,
           name: filters.name,
@@ -115,7 +115,7 @@ export class ProductsRepository extends BaseWorker {
       throw new BadRequestException('Must provide id or name');
     }
 
-    return this.prisma.organization_products.delete({
+    return this.prisma.products.delete({
       where: {
         id: filters.id,
         name: filters.name,

@@ -22,6 +22,9 @@ export class SuppliersRepository extends BaseWorker {
         certification_id: true,
         effective_date: true,
         issued_date: true,
+        material: true,
+        product: true,
+        facility: true,
         organization_file: {
           select: {
             id: true,

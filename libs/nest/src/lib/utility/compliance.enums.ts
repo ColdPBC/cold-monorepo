@@ -5,6 +5,8 @@ export enum GuidPrefixes {
   'ComplianceQuestion' = 'cq',
   'ComplianceResponse' = 'cr',
   'Organization' = 'org',
+  'Material' = 'mat',
+  'MaterialSupplier' = 'msup',
   'OrganizationFacility' = 'ofac',
   'OrganizationFile' = 'ofile',
   'OrganizationFootprint' = 'foot',

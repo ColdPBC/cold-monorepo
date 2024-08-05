@@ -273,11 +273,22 @@ export class ComplianceResponsesRepository extends BaseWorker {
       });
       // If the organization compliance is not found, create it since they are trying to access the compliance set for the first time
       if (!orgCompliance) {
+        const compliance = await this.prisma.compliance_definitions.findUnique({
+          where: {
+            name: compliance_definition_name,
+          },
+        });
+
+        if (!compliance || !compliance.id) {
+          throw new NotFoundException(`Compliance Definition ${compliance_definition_name} not found`);
+        }
+
         await this.prisma.organization_compliance.create({
           data: {
             id: new Cuid2Generator(GuidPrefixes.OrganizationCompliance).scopedId,
             organization_id: org.id,
             compliance_definition_name: compliance_definition_name,
+            compliance_definition_id: compliance.id,
             description: '',
           },
         });
@@ -406,12 +417,22 @@ export class ComplianceResponsesRepository extends BaseWorker {
       });
 
       if (!orgComp) {
+        const compliance = await this.prisma.compliance_definitions.findUnique({
+          where: {
+            name: compliance_definition_name,
+          },
+        });
+
+        if (!compliance || !compliance.id) {
+          throw new NotFoundException(`Compliance Definition ${compliance_definition_name} not found`);
+        }
         // If the organization compliance is not found, create it since they are trying to access the compliance set for the first time
         await this.prisma.organization_compliance.create({
           data: {
             id: new Cuid2Generator(GuidPrefixes.OrganizationCompliance).scopedId,
             organization_id: org.id,
             compliance_definition_name: compliance_definition_name,
+            compliance_definition_id: compliance.id,
             description: '',
           },
         });
