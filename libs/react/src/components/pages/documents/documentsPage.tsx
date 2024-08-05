@@ -15,7 +15,7 @@ import {
 import React, { useEffect } from 'react';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { Files, ToastMessage } from '@coldpbc/interfaces';
-import { toArray } from 'lodash';
+import { set, toArray } from 'lodash';
 import { ButtonTypes, CertificationStatus, FileTypes, IconNames } from '@coldpbc/enums';
 import { differenceInDays, format } from 'date-fns';
 import { isAxiosError } from 'axios';
@@ -28,10 +28,12 @@ const _DocumentsPage = () => {
   const [documentToDelete, setDocumentToDelete] = React.useState<Files | undefined>(undefined);
   const [deleteButtonLoading, setDeleteButtonLoading] = React.useState(false);
   const [files, setFiles] = React.useState<Files[]>([]);
+  const [selectedDocumentURL, setSelectedDocumentURL] = React.useState<string | undefined>(undefined);
   const { orgId } = useAuth0Wrapper();
   const { logBrowser } = useColdContext();
   const { addToastMessage } = useAddToastMessage();
   const filesSWR = useOrgSWR<Files[], any>([`/files`, 'GET'], axiosFetcher);
+  const selectedFileURLSWR = useOrgSWR<string>([`/files/${selectedDocument?.id}/url`, 'GET'], axiosFetcher);
   const ref = React.useRef<HTMLDivElement>(null);
   const tableRef = React.useRef<HTMLDivElement>(null);
 
@@ -172,6 +174,12 @@ const _DocumentsPage = () => {
     }
   }, [filesSWR.data]);
 
+  useEffect(() => {
+    if (selectedFileURLSWR.data && !isAxiosError(selectedFileURLSWR.data)) {
+      setSelectedDocumentURL(selectedFileURLSWR.data);
+    }
+  }, [selectedFileURLSWR]);
+
   if (filesSWR.error) {
     logBrowser('Error fetching files', 'error', { ...filesSWR.error }, filesSWR.error);
   }
@@ -285,6 +293,19 @@ const _DocumentsPage = () => {
     setDocumentToDelete(file);
   };
 
+  const onDocumentDownload = async (fileURL: string | undefined) => {
+    // open signedURL
+    if (fileURL) {
+      // window.open(fileURL, '_blank');
+      // try downloading the image in the same window
+      window.location.href = fileURL;
+      addToastMessage({
+        message: 'Downloaded file',
+        type: ToastMessage.SUCCESS,
+      });
+    }
+  };
+
   return (
     <div className="relative overflow-y-hidden h-full w-full">
       <MainContent title="Documents" headerElement={getPageButtons()}>
@@ -346,7 +367,16 @@ const _DocumentsPage = () => {
           ref={tableRef}
         />
       </MainContent>
-      <DocumentDetailsSidebar file={selectedDocument} updateFile={setSelectedDocument} closeSidebar={onSidebarClose} innerRef={ref} deleteFile={onDeleteClick} />
+      <DocumentDetailsSidebar
+        file={selectedDocument}
+        updateFile={setSelectedDocument}
+        closeSidebar={onSidebarClose}
+        innerRef={ref}
+        deleteFile={onDeleteClick}
+        isLoading={selectedFileURLSWR.isLoading}
+        downloadFile={onDocumentDownload}
+        signedUrl={selectedDocumentURL}
+      />
       <Modal
         show={documentToDelete !== undefined}
         setShowModal={() => {
