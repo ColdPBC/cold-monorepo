@@ -17,7 +17,7 @@ import { ComplianceNotesRepository } from './compliance-notes';
 import { ComplianceNoteLinksRepository } from './compliance-note-links';
 import { ComplianceNoteFilesRepository } from './compliance-note-files';
 import { OrganizationsRepository } from '../../organizations';
-import { ProductsRepository } from './products';
+import { ProductsRepository } from '../../organizations';
 
 @Global()
 @Module({

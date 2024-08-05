@@ -23,6 +23,7 @@ import { OrganizationsRabbitService } from './organizations.rabbit';
 import { MqttModule } from './mqtt/mqtt.module';
 import { ProductsModule } from './products/products.module';
 import { SuppliersModule } from './suppliers/suppliers.module';
+import { MaterialsModule } from './materials/materials.module';
 
 @Module({
   imports: [
@@ -45,6 +46,7 @@ import { SuppliersModule } from './suppliers/suppliers.module';
     MqttModule,
     ProductsModule,
     SuppliersModule,
+    MaterialsModule,
   ],
   controllers: [OrganizationController, OrganizationFilesController],
   providers: [OrganizationService, CacheService, OrganizationHelper, OrganizationsRabbitService, OrganizationsRepository],
