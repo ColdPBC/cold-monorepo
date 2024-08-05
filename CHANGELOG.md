@@ -1,3 +1,10 @@
+# [1.317.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.316.0...v1.317.0) (2024-08-05)
+
+
+### Features
+
+* Add document upload button to Documents page ([265428a](https://github.com/ColdPBC/cold-monorepo/commit/265428afc0a5371d3d0ac5d4c15ce0fa19b7c6c6))
+
 # [1.316.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.315.0...v1.316.0) (2024-08-03)
 
 
