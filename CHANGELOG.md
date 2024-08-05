@@ -1,3 +1,10 @@
+# [1.321.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.320.0...v1.321.0) (2024-08-05)
+
+
+### Features
+
+* Add document download functionality ([9ec05a3](https://github.com/ColdPBC/cold-monorepo/commit/9ec05a3c65af177fd14dbd1d569086f46ff19a1d))
+
 # [1.320.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.319.0...v1.320.0) (2024-08-05)
 
 
