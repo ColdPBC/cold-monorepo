@@ -1,3 +1,13 @@
+# [1.318.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.317.0...v1.318.0) (2024-08-05)
+
+
+### Features
+
+* Add delete document functionality ([ff82d33](https://github.com/ColdPBC/cold-monorepo/commit/ff82d337588ba43edd4c7b6baeac8fa1fb66a172))
+* Add deleteFile prop to DocumentDetailsSidebar ([4528ad6](https://github.com/ColdPBC/cold-monorepo/commit/4528ad622f1d53fd148f64c5d35f34674d2f34f6))
+* Add DocumentDetailsMenu component to document details sidebar ([0b605e7](https://github.com/ColdPBC/cold-monorepo/commit/0b605e78f3dde474e96ed19dd48f0f9da8a6fbd9))
+* Refactor sidebar focus and hover styles. ([a3b4686](https://github.com/ColdPBC/cold-monorepo/commit/a3b468679504d62b8e42dd919a2d4d69bcd75b30))
+
 # [1.317.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.316.0...v1.317.0) (2024-08-05)
 
 
