@@ -1,3 +1,18 @@
+# [1.324.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.323.0...v1.324.0) (2024-08-06)
+
+
+### Bug Fixes
+
+* add missing createSupplierMaterial method in materials.service ([b4a752b](https://github.com/ColdPBC/cold-monorepo/commit/b4a752b26bbffb9d5727d1af65aa811c1a62527d))
+* enhance materials controller with authentication, roles, and error handling ([a7f7fd1](https://github.com/ColdPBC/cold-monorepo/commit/a7f7fd19d04f429027dbb26549d5405a38616c65))
+* update route parameter name for file update endpoint ([2a7e9b7](https://github.com/ColdPBC/cold-monorepo/commit/2a7e9b7123fd61ab4e56d8d6b0d2798fbe248518))
+* validate material and supplier existence before creating material_suppliers ([e594d81](https://github.com/ColdPBC/cold-monorepo/commit/e594d814039857d48bd5aaa17ba0a5331e541b19))
+
+
+### Features
+
+* update OpenAPI schema examples and add new paths for organization files ([18ada17](https://github.com/ColdPBC/cold-monorepo/commit/18ada178fbf4a07dbc498552cc0be4d049ea6d42))
+
 # [1.323.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.322.1...v1.323.0) (2024-08-06)
 
 
