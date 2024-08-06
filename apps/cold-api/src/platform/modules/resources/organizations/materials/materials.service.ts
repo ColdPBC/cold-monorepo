@@ -11,6 +11,15 @@ export class MaterialsService extends BaseWorker {
     return this.repository.createMaterial(req.organization, req.user, createMaterialDto);
   }
 
+  createSupplierMaterial(req: any, id: string, supplierId: string) {
+    const data = {
+      material_id: id,
+      supplier_id: supplierId,
+    };
+
+    return this.repository.createSupplierMaterial(req.organization, req.user, data);
+  }
+
   createMany(req: any, createMaterialsDto: any[]) {
     return this.repository.createMaterials(req.organization, req.user, createMaterialsDto);
   }
