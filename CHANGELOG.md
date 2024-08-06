@@ -1,3 +1,10 @@
+## [1.322.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.322.0...v1.322.1) (2024-08-06)
+
+
+### Bug Fixes
+
+* include 'facility' in organization files service ([e364ff1](https://github.com/ColdPBC/cold-monorepo/commit/e364ff10c42ff74b431d993c09bddd0ee37f4e48))
+
 # [1.322.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.321.0...v1.322.0) (2024-08-05)
 
 
