@@ -1,3 +1,10 @@
+## [1.324.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.324.1...v1.324.2) (2024-08-06)
+
+
+### Bug Fixes
+
+* update material repository and schema to handle supplier relations and errors ([c5cf196](https://github.com/ColdPBC/cold-monorepo/commit/c5cf196e548c87a4ca39a41eff49db558285030f))
+
 ## [1.324.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.324.0...v1.324.1) (2024-08-06)
 
 
