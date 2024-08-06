@@ -73,6 +73,7 @@ export class OrganizationFilesService extends BaseWorker {
           certification_claim: {
             include: {
               certification: true,
+              facility: true,
             },
           },
         },
