@@ -1,3 +1,10 @@
+## [1.324.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.324.0...v1.324.1) (2024-08-06)
+
+
+### Bug Fixes
+
+* enhance materials repository to include detailed supplier and material selection ([d4dafde](https://github.com/ColdPBC/cold-monorepo/commit/d4dafde9dbc15fe20a3d3e2a0936207685efaf36))
+
 # [1.324.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.323.0...v1.324.0) (2024-08-06)
 
 
