@@ -15,6 +15,7 @@ export class MaterialsRepository extends BaseWorker {
     id: true,
     name: true,
     organization: true,
+    material_suppliers: true,
     created_at: true,
     updated_at: true,
   };
@@ -65,6 +66,26 @@ export class MaterialsRepository extends BaseWorker {
     data.id = new Cuid2Generator(GuidPrefixes.MaterialSupplier).scopedId;
     data.organization_id = org.id;
 
+    const material = await this.prisma.materials.findUnique({
+      where: {
+        id: data.material_id,
+      },
+    });
+
+    if (!material) {
+      throw new NotFoundException({ organization: org, user, data }, 'Material not found');
+    }
+
+    const supplier = await this.prisma.organization_facilities.findUnique({
+      where: {
+        id: data.supplier_id,
+      },
+    });
+
+    if (!supplier) {
+      throw new NotFoundException({ organization: org, user, data }, 'Supplier not found');
+    }
+
     const result = this.prisma.material_suppliers.create({
       data: data,
     });
@@ -75,18 +96,18 @@ export class MaterialsRepository extends BaseWorker {
   }
 
   async findAll(org: organizations, user: IAuthenticatedUser) {
-    const products = await this.prisma.materials.findMany({
+    const materials = await this.prisma.materials.findMany({
       where: {
         organization_id: org.id,
       },
       select: this.material_query,
     });
 
-    if (!products || products.length === 0) {
+    if (!materials || materials.length === 0) {
       throw new NotFoundException({ organization: org, user }, `No products found`);
     }
 
-    return products;
+    return materials;
   }
 
   findOne(org: organizations, user: IAuthenticatedUser, filters: { name?: string; id?: string }) {
