@@ -1,20 +1,28 @@
-import { AllCompliance } from '@coldpbc/interfaces';
+import { useAddToastMessage, useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
+import { axiosFetcher } from '@coldpbc/fetchers';
+import { AllCompliance, OrgCompliance, ToastMessage } from '@coldpbc/interfaces';
 import React, { useContext } from 'react';
 import { ColdCompliancePageContext } from '@coldpbc/context';
-import { ComplianceStatus } from '@coldpbc/enums';
-import { Card, ComplianceStatusChip, ErrorFallback } from '@coldpbc/components';
+import { ComplianceStatus, ErrorType } from '@coldpbc/enums';
+import { Card, ComplianceStatusChip, ErrorFallback, Spinner } from '@coldpbc/components';
 import { differenceInDays, format, intlFormatDistance } from 'date-fns';
+import { isAxiosError } from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { withErrorBoundary } from 'react-error-boundary';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import { get, isArray } from 'lodash';
 import { getTermString } from '@coldpbc/lib';
 import { isDefined } from 'class-validator';
+import useSWR from 'swr';
 
 const _ComplianceSetOverviewCard = ({ complianceSet }: { complianceSet: AllCompliance }) => {
   const navigate = useNavigate();
   const ldFlags = useFlags();
+  const { orgId } = useAuth0Wrapper();
+  const { logError } = useColdContext();
+  const { addToastMessage } = useAddToastMessage();
   const { filter } = useContext(ColdCompliancePageContext);
+  const [complianceSetLoading, setComplianceSetLoading] = React.useState<boolean>(false);
 
   const dueDate = get(complianceSet, 'metadata.due_date', undefined);
   const term = get(complianceSet, 'metadata.term', undefined);
@@ -144,7 +152,18 @@ const _ComplianceSetOverviewCard = ({ complianceSet }: { complianceSet: AllCompl
   };
 
   const onCardClick = async () => {
-    navigate(`/compliance/${complianceSet.name}`);
+      if (!isAxiosError(orgComplianceSet) && orgComplianceSet !== undefined) {
+        navigate(`/wizard/compliance/${complianceSet.name}`);
+      } else {
+        const response = await axiosFetcher([`/compliance_definitions/${complianceSet.name}/organizations/${orgId}`, 'POST']);
+        if (isAxiosError(response)) {
+          await addToastMessage({ message: 'Compliance could not be added', type: ToastMessage.FAILURE });
+          logError(response.message, ErrorType.AxiosError, response);
+        } else {
+          await addToastMessage({ message: 'Compliance activated', type: ToastMessage.SUCCESS });
+          navigate(`/wizard/compliance/${complianceSet.name}`);
+        }
+      }
   };
 
   const checkFilter = () => {
@@ -165,19 +184,33 @@ const _ComplianceSetOverviewCard = ({ complianceSet }: { complianceSet: AllCompl
     }
   };
 
+  const complianceSetLoadingBackground = () => {
+    // return an overlay with transparent background and spinner to put over the card
+    // put the spinner in the center of the card
+    return (
+      <div className={'absolute left-0 top-0 w-full h-full bg-bgc-accent bg-opacity-50 flex justify-center items-center'}>
+        <Spinner size={GlobalSizes.xLarge} />
+      </div>
+    );
+  };
+
   const shouldRender = checkFilter();
 
   if (!shouldRender) return null;
 
   return (
     <Card
-      className="w-full h-auto border-[1px] border-gray-60 cursor-pointer hover:bg-gray-50 hover:border-[1px] hover:border-white flex flex-row justify-start items-center"
+      className={
+        'w-full h-auto border-[1px] border-gray-60 flex flex-row justify-start items-center relative ' +
+        (complianceSetLoading ? '' : ' cursor-pointer hover:bg-gray-50 hover:border-[1px] hover:border-white')
+      }
       glow={false}
       onClick={onCardClick}>
       {getComplianceLogo()}
       {getComplianceSetTitle()}
       {getComplianceStatusChip()}
       {getComplianceDueDate()}
+      {complianceSetLoading && complianceSetLoadingBackground()}
     </Card>
   );
 };

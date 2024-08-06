@@ -6,14 +6,15 @@ import { AxiosRequestConfig, isAxiosError } from 'axios';
 import { IButtonProps, ToastMessage } from '@coldpbc/interfaces';
 import { ErrorType } from '@coldpbc/enums';
 import { BaseButton } from '@coldpbc/components';
-import { useSWRConfig } from 'swr';
+import { KeyedMutator, useSWRConfig } from 'swr';
 
 export interface DocumentUploadButtonProps {
   buttonProps: IButtonProps;
+  mutateFunction?: KeyedMutator<any>;
 }
 
 export const DocumentUploadButton = (props: DocumentUploadButtonProps) => {
-  const { buttonProps } = props;
+  const { buttonProps, mutateFunction } = props;
   const [sending, setSending] = React.useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { orgId } = useAuth0Wrapper();
@@ -48,9 +49,10 @@ export const DocumentUploadButton = (props: DocumentUploadButtonProps) => {
         type: ToastMessage.SUCCESS,
       });
       logBrowser('File Upload successful', 'info', { orgId, formData: { ...formData } });
-      await mutate(
-        [`/organizations/${orgId}/files`, 'GET'],
-        (cachedData: any) => {
+      if (mutateFunction) {
+        await mutateFunction();
+      } else {
+        await mutate([`/organizations/${orgId}/files`, 'GET'], (cachedData: any) => {
           const newFiles: Array<any> = [];
           if (cachedData !== undefined) newFiles.push(...cachedData);
           forEach(files, file => {
@@ -59,11 +61,9 @@ export const DocumentUploadButton = (props: DocumentUploadButtonProps) => {
             });
           });
           return newFiles;
-        },
-        {
-          revalidate: false,
-        },
-      );
+        });
+      }
+
       props.buttonProps?.onClick && props.buttonProps?.onClick();
       setSending(false);
     }

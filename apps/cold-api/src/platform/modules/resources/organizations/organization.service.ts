@@ -72,9 +72,9 @@ export class OrganizationService extends BaseWorker {
   }
 
   override async onModuleInit() {
-    this.darkly.subscribeToJsonFlagChanges('dynamic-org-white-list', value => {
+    /*this.darkly.subscribeToJsonFlagChanges('dynamic-org-white-list', value => {
       this.test_orgs = value;
-    });
+    });*/
 
     this.options = await this.utilService.init();
 
@@ -93,29 +93,29 @@ export class OrganizationService extends BaseWorker {
       // since no orgs exist in DB get any organizations from Auth0
       const response = await this.httpService.axiosRef.get(`/organizations`, this.options);
       orgs = response.data;
-    }
 
-    const connections = await this.getConnections();
+      const connections = await this.getConnections();
 
-    for (const org of orgs) {
-      const orgData = {
-        id: org.id,
-        name: org.name,
-        enabled_connections: connections.map(con => {
-          return {
-            connection_id: con.id,
-            assign_membership_on_login: false,
-          };
-        }),
-        display_name: org.display_name,
-        isTest: process.env['NODE_ENV'] === 'production' ? false : true,
-        created_at: new Date(),
-      };
+      for (const org of orgs) {
+        const orgData = {
+          id: org.id,
+          name: org.name,
+          enabled_connections: connections.map(con => {
+            return {
+              connection_id: con.id,
+              assign_membership_on_login: false,
+            };
+          }),
+          display_name: org.display_name,
+          isTest: process.env['NODE_ENV'] !== 'production',
+          created_at: new Date(),
+        };
 
-      await this.repository.create(orgData as any, { coldclimate_claims: { org_id: orgData.id, id: 'none', roles: ['cold:admin'], email: 'service_account' } } as any);
+        await this.repository.create(orgData as any, { coldclimate_claims: { org_id: orgData.id, id: 'none', roles: ['cold:admin'], email: 'service_account' } } as any);
 
-      // todo: remove this function
-      this.syncOpenAIAssistants(org);
+        // todo: remove this function
+        //this.syncOpenAIAssistants(org);
+      }
     }
   }
 

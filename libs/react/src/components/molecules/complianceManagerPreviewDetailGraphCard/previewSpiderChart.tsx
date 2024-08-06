@@ -58,7 +58,7 @@ const _PreviewSpiderChart = (props: { selectedRow: null | string; setSelectedRow
         if (group.max_score !== 0) {
           newLabels.push(group.title);
           newData.push((group.score / group.max_score) * 100);
-          aiData.push((group.ai_score / group.max_score) * 100);
+          aiData.push((group.estimated_score / group.max_score) * 100);
           maxData.push(100);
         }
       });
@@ -169,7 +169,7 @@ const _PreviewSpiderChart = (props: { selectedRow: null | string; setSelectedRow
                 const sectionGroupIndex = context.dataIndex;
                 const sectionGroup = sectionGroups[sectionGroupIndex];
                 const score = get(sectionGroup, 'score', 0);
-                const aiScore = get(sectionGroup, 'ai_score', 0);
+                const aiScore = get(sectionGroup, 'estimated_score', 0);
                 const maxScore = get(sectionGroup, 'max_score', 0);
                 if (context.datasetIndex === 0) {
                   return ` ${score.toFixed(1)} points from Completed Answers`;
@@ -201,7 +201,7 @@ const _PreviewSpiderChart = (props: { selectedRow: null | string; setSelectedRow
     // check if selectedRow is not null and if it is a section group title
     if (selectedRow && sectionGroups.find(group => group.title === selectedRow)) {
       const sectionGroupIndex = sectionGroups.findIndex(group => group.title === selectedRow);
-      const aiScore = sectionGroups[sectionGroupIndex].ai_score;
+      const aiScore = sectionGroups[sectionGroupIndex].estimated_score;
       const score = sectionGroups[sectionGroupIndex].score;
       const dateSetIndex = aiScore > score ? 1 : 0;
       chartRef.current?.tooltip?.setActiveElements(

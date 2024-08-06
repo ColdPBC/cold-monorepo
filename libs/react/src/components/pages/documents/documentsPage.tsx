@@ -1,5 +1,5 @@
 import { useAddToastMessage, useAuth0Wrapper, useColdContext, useOrgSWR } from '@coldpbc/hooks';
-import { ColdIcon, DocumentDetailsSidebar, ErrorFallback, MainContent, MUIDataGridNoRowsOverlay, Spinner } from '@coldpbc/components';
+import { BaseButton, ColdIcon, DocumentDetailsSidebar, DocumentUploadButton, ErrorFallback, MainContent, Modal, MUIDataGridNoRowsOverlay, Spinner } from '@coldpbc/components';
 import { HexColors } from '@coldpbc/themes';
 import {
   DataGrid,
@@ -15,8 +15,8 @@ import {
 import React, { useEffect } from 'react';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { Files, ToastMessage } from '@coldpbc/interfaces';
-import { toArray } from 'lodash';
-import { CertificationStatus, FileTypes, IconNames } from '@coldpbc/enums';
+import { set, toArray } from 'lodash';
+import { ButtonTypes, CertificationStatus, FileTypes, IconNames } from '@coldpbc/enums';
 import { differenceInDays, format } from 'date-fns';
 import { isAxiosError } from 'axios';
 import { getDateActiveStatus } from '@coldpbc/lib';
@@ -25,11 +25,15 @@ import { withErrorBoundary } from 'react-error-boundary';
 
 const _DocumentsPage = () => {
   const [selectedDocument, setSelectedDocument] = React.useState<Files | undefined>(undefined);
+  const [documentToDelete, setDocumentToDelete] = React.useState<Files | undefined>(undefined);
+  const [deleteButtonLoading, setDeleteButtonLoading] = React.useState(false);
   const [files, setFiles] = React.useState<Files[]>([]);
+  const [selectedDocumentURL, setSelectedDocumentURL] = React.useState<string | undefined>(undefined);
   const { orgId } = useAuth0Wrapper();
   const { logBrowser } = useColdContext();
   const { addToastMessage } = useAddToastMessage();
   const filesSWR = useOrgSWR<Files[], any>([`/files`, 'GET'], axiosFetcher);
+  const selectedFileURLSWR = useOrgSWR<string>([`/files/${selectedDocument?.id}/url`, 'GET'], axiosFetcher);
   const ref = React.useRef<HTMLDivElement>(null);
   const tableRef = React.useRef<HTMLDivElement>(null);
 
@@ -170,6 +174,12 @@ const _DocumentsPage = () => {
     }
   }, [filesSWR.data]);
 
+  useEffect(() => {
+    if (selectedFileURLSWR.data && !isAxiosError(selectedFileURLSWR.data)) {
+      setSelectedDocumentURL(selectedFileURLSWR.data);
+    }
+  }, [selectedFileURLSWR]);
+
   if (filesSWR.error) {
     logBrowser('Error fetching files', 'error', { ...filesSWR.error }, filesSWR.error);
   }
@@ -226,23 +236,79 @@ const _DocumentsPage = () => {
     },
   ];
 
-  const rows = files.map(file => {
-    return {
-      id: file.id,
-      document: file.original_name,
-      start: file.effective_start_date ? new Date(file.effective_start_date) : new Date(0),
-      end: file.effective_end_date ? new Date(file.effective_end_date) : new Date(0),
-      status: getDateActiveStatus(file.effective_end_date),
-      type: file.type,
-      expiration_date: file.effective_end_date,
-    };
-  });
+  const rows = files
+    .map(file => {
+      return {
+        id: file.id,
+        document: file.original_name,
+        start: file.effective_start_date ? new Date(file.effective_start_date) : new Date(0),
+        end: file.effective_end_date ? new Date(file.effective_end_date) : new Date(0),
+        status: getDateActiveStatus(file.effective_end_date),
+        type: file.type,
+        expiration_date: file.effective_end_date,
+      };
+    })
+    .sort((a, b) => {
+      return a.id.localeCompare(b.id);
+    });
 
   const tableRows: GridValidRowModel[] = rows;
 
+  const getPageButtons = () => {
+    return (
+      <div className={'h-auto'}>
+        <DocumentUploadButton
+          buttonProps={{
+            label: 'Add New',
+            iconLeft: IconNames.PlusIcon,
+          }}
+          mutateFunction={filesSWR.mutate}
+        />
+      </div>
+    );
+  };
+
+  const deleteDocument = async (documentToDelete: Files) => {
+    setDeleteButtonLoading(true);
+    const response = await axiosFetcher([`/organizations/${orgId}/files/${documentToDelete.id}`, 'DELETE']);
+    await filesSWR.mutate();
+    if (isAxiosError(response)) {
+      logBrowser('Error deleting file', 'error', { ...response }, response);
+      addToastMessage({
+        message: 'Error deleting file',
+        type: ToastMessage.FAILURE,
+      });
+    } else {
+      addToastMessage({
+        message: 'File deleted successfully',
+        type: ToastMessage.SUCCESS,
+      });
+    }
+    setDeleteButtonLoading(false);
+    setDocumentToDelete(undefined);
+  };
+
+  const onDeleteClick = (file: Files) => {
+    setSelectedDocument(undefined);
+    setDocumentToDelete(file);
+  };
+
+  const onDocumentDownload = async (fileURL: string | undefined) => {
+    // open signedURL
+    if (fileURL) {
+      // window.open(fileURL, '_blank');
+      // try downloading the image in the same window
+      window.location.href = fileURL;
+      addToastMessage({
+        message: 'Downloaded file',
+        type: ToastMessage.SUCCESS,
+      });
+    }
+  };
+
   return (
     <div className="relative overflow-y-hidden h-full w-full">
-      <MainContent title="Documents">
+      <MainContent title="Documents" headerElement={getPageButtons()}>
         <DataGrid
           rows={tableRows}
           columns={columns}
@@ -301,7 +367,51 @@ const _DocumentsPage = () => {
           ref={tableRef}
         />
       </MainContent>
-      <DocumentDetailsSidebar file={selectedDocument} updateFile={setSelectedDocument} closeSidebar={onSidebarClose} innerRef={ref} />
+      <DocumentDetailsSidebar
+        file={selectedDocument}
+        updateFile={setSelectedDocument}
+        closeSidebar={onSidebarClose}
+        innerRef={ref}
+        deleteFile={onDeleteClick}
+        isLoading={selectedFileURLSWR.isLoading}
+        downloadFile={onDocumentDownload}
+        signedUrl={selectedDocumentURL}
+      />
+      <Modal
+        show={documentToDelete !== undefined}
+        setShowModal={() => {
+          setDocumentToDelete(undefined);
+        }}
+        header={{
+          title: `Are you sure you want to delete ${documentToDelete?.original_name}?`,
+          cardProps: {
+            glow: false,
+          },
+        }}
+        body={
+          <div className={'text-body text-tc-primary'}>
+            Once you delete, this document will be removed from Cold and no longer used in any assessments or reporting. This cannot be undone.
+          </div>
+        }
+        footer={{
+          rejectButton: {
+            label: 'Cancel',
+            onClick: () => setDocumentToDelete(undefined),
+            variant: ButtonTypes.secondary,
+          },
+          resolveButton: {
+            label: 'Yes, Delete',
+            onClick: async () => {
+              if (documentToDelete) {
+                await deleteDocument(documentToDelete);
+              }
+            },
+            disabled: deleteButtonLoading,
+            loading: deleteButtonLoading,
+            variant: ButtonTypes.warning,
+          },
+        }}
+      />
     </div>
   );
 };

@@ -1,12 +1,97 @@
-# [1.315.0-COLD-904.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.314.0...v1.315.0-COLD-904.1) (2024-08-02)
+# [1.322.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.321.0...v1.322.0) (2024-08-05)
 
 
 ### Features
 
-* Delete complianceOverview components and redundant logic ([07248e7](https://github.com/ColdPBC/cold-monorepo/commit/07248e782f29bb71e5b0461a473843579dca8617))
-* Refactor compliance data fetching in ComplianceQuestionnaire ([d2d8dac](https://github.com/ColdPBC/cold-monorepo/commit/d2d8dac156692ee9ae16ee96f9f504ccc246f17a))
-* Refactor compliance-related components to streamline data retrieval ([146ad7f](https://github.com/ColdPBC/cold-monorepo/commit/146ad7fa09bd7b315677c82abe7cc3a3b85bf1cb))
-* Remove compliance wizard lair and related components ([3b9e4f9](https://github.com/ColdPBC/cold-monorepo/commit/3b9e4f92eaf80613ef4c35ac32046b4ecb992b99))
+* create views for organization claims, suppliers, and compliance responses ([aed4677](https://github.com/ColdPBC/cold-monorepo/commit/aed46771d22f18624f0536e5bf2044c774667549))
+
+# [1.321.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.320.0...v1.321.0) (2024-08-05)
+
+
+### Features
+
+* Add document download functionality ([9ec05a3](https://github.com/ColdPBC/cold-monorepo/commit/9ec05a3c65af177fd14dbd1d569086f46ff19a1d))
+
+# [1.320.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.319.0...v1.320.0) (2024-08-05)
+
+
+### Features
+
+* Add estimated_score to compliance mock and interfaces ([47d793a](https://github.com/ColdPBC/cold-monorepo/commit/47d793ac412a5ef54dbd7a7bfa1f5ae6818b95a5))
+* Update ai_score to estimated_score in SpiderChart ([68054d8](https://github.com/ColdPBC/cold-monorepo/commit/68054d8871306b0fda9eb0a95727607cc13d0014))
+
+# [1.319.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.318.0...v1.319.0) (2024-08-05)
+
+
+### Features
+
+* Add compliance activation and loading state handling ([be9fe74](https://github.com/ColdPBC/cold-monorepo/commit/be9fe74d18ed8a5ca8ad7bfe0d12e97751440f5a))
+
+# [1.318.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.317.0...v1.318.0) (2024-08-05)
+
+
+### Features
+
+* Add delete document functionality ([ff82d33](https://github.com/ColdPBC/cold-monorepo/commit/ff82d337588ba43edd4c7b6baeac8fa1fb66a172))
+* Add deleteFile prop to DocumentDetailsSidebar ([4528ad6](https://github.com/ColdPBC/cold-monorepo/commit/4528ad622f1d53fd148f64c5d35f34674d2f34f6))
+* Add DocumentDetailsMenu component to document details sidebar ([0b605e7](https://github.com/ColdPBC/cold-monorepo/commit/0b605e78f3dde474e96ed19dd48f0f9da8a6fbd9))
+* Refactor sidebar focus and hover styles. ([a3b4686](https://github.com/ColdPBC/cold-monorepo/commit/a3b468679504d62b8e42dd919a2d4d69bcd75b30))
+
+# [1.317.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.316.0...v1.317.0) (2024-08-05)
+
+
+### Features
+
+* Add document upload button to Documents page ([265428a](https://github.com/ColdPBC/cold-monorepo/commit/265428afc0a5371d3d0ac5d4c15ce0fa19b7c6c6))
+
+# [1.316.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.315.0...v1.316.0) (2024-08-03)
+
+
+### Bug Fixes
+
+* correct command used for generating signed URL in S3 service ([d895698](https://github.com/ColdPBC/cold-monorepo/commit/d895698e7d47ce36f3a3a1e63bc0e2f6e1398da5))
+* update API tags in organization.files.controller.ts ([a0d5622](https://github.com/ColdPBC/cold-monorepo/commit/a0d5622def0c0c638d3b82020be252895f63fdf6))
+
+
+### Features
+
+* add customizable expiration time for signed URL generation ([32c473d](https://github.com/ColdPBC/cold-monorepo/commit/32c473d10c71ccb85f1bfb0f22417d73052f2b58))
+* add endpoint to get file URL in organization files controller ([bd6a5d1](https://github.com/ColdPBC/cold-monorepo/commit/bd6a5d1b32177f0ef338f90c6a3947890c9273d2))
+* add getUrl method to organization.files.service ([e8e946d](https://github.com/ColdPBC/cold-monorepo/commit/e8e946df96e550802f792af32021d0ec33a20115))
+* add MaterialsRepository to MaterialsModule ([9a52663](https://github.com/ColdPBC/cold-monorepo/commit/9a52663690c6287cd6dabb1b0dc174550a74bc9e))
+* **materials:** update controller to handle organization and supplier contexts ([465a240](https://github.com/ColdPBC/cold-monorepo/commit/465a240ae8b19c84dc650fdfddf144e9ded7d174))
+
+# [1.315.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.314.0...v1.315.0) (2024-08-03)
+
+
+### Bug Fixes
+
+* add validation for compliance definition during organization compliance creation ([ca6d310](https://github.com/ColdPBC/cold-monorepo/commit/ca6d31083499c33c9446503287a33bad87f670e6))
+* allow nullable dates in organization files update method ([940b230](https://github.com/ColdPBC/cold-monorepo/commit/940b230188179fdc8814ac11e6d97ec7084ebf67))
+* **compliance-question-bookmarks:** add null checks for compliance questions ([d374b15](https://github.com/ColdPBC/cold-monorepo/commit/d374b151507b83d143ee404bde131cfb24f5599d))
+* correct import path for ProductsRepository ([a8cd156](https://github.com/ColdPBC/cold-monorepo/commit/a8cd1565fa32d2050008a0b0b4e523748636337a))
+* handle missing compliance definition name in section groups creation ([513693d](https://github.com/ColdPBC/cold-monorepo/commit/513693d6927947d11336dea7363b6ad38a507271))
+* handle missing compliance_definition_id in questions ([0529cea](https://github.com/ColdPBC/cold-monorepo/commit/0529cea136f48060700cba6f2487537bc3bdba02))
+* **organization.service:** disable dynamic-org-white-list synchronization ([2decdef](https://github.com/ColdPBC/cold-monorepo/commit/2decdef2cce9bfe73bdf21727eff4e1d66d88d3d))
+* **products.repository:** correct organization field used in queries ([40d7c6f](https://github.com/ColdPBC/cold-monorepo/commit/40d7c6f900fb575542e8e75adbe8aa199eceee83))
+* remove unnecessary check for Organization Facility ID ([87b0292](https://github.com/ColdPBC/cold-monorepo/commit/87b02928bdd9123ae0defbb19e39c5e369546b0d))
+* resolve compliance definition ID from name if not provided ([5cf949d](https://github.com/ColdPBC/cold-monorepo/commit/5cf949d2f212b7b6ca83f6576916afcf998d3142))
+* update compliance claims repository to use organization_id instead of organization_name ([666498f](https://github.com/ColdPBC/cold-monorepo/commit/666498fd4286d6ffe24e468badf67cf6ddea2c22))
+* update compliance claims repository to use organization_id instead of organization_name ([8e7ed60](https://github.com/ColdPBC/cold-monorepo/commit/8e7ed60ec0a121db6b717c20102bb26827070287))
+* update Prisma schema with optimized indices and model relationships ([1d2a898](https://github.com/ColdPBC/cold-monorepo/commit/1d2a898c558be474ac5c1e71853603900098d5dd))
+
+
+### Features
+
+* add materials repository and module ([0079e87](https://github.com/ColdPBC/cold-monorepo/commit/0079e87367c6724af8d6945ef74acc53a9ca3ad8))
+* add MaterialsModule to organization module ([b90388d](https://github.com/ColdPBC/cold-monorepo/commit/b90388d0ea1f41a11417c3ab59102509e3a6a930))
+* add multiple indexes to enhance query performance in various tables ([85be564](https://github.com/ColdPBC/cold-monorepo/commit/85be5647ff15f62162ba507eb10c64f3db98d46b))
+* add new Material and MaterialSupplier enums to compliance enums list ([e860df3](https://github.com/ColdPBC/cold-monorepo/commit/e860df3ea1d1d9028a6da03a7eb3228e9ee99394))
+* include additional fields in supplier repository select ([59068d7](https://github.com/ColdPBC/cold-monorepo/commit/59068d7ef31b1e648815a809385869a9d2ef5a46))
+* update database schema for GraphQL compliance ([c397b6f](https://github.com/ColdPBC/cold-monorepo/commit/c397b6fdcb1b93f9261aec858ac098584e01417b))
+* update product and material models ([c84b4f0](https://github.com/ColdPBC/cold-monorepo/commit/c84b4f009f14bfc34ad310fdd6465c1d221131bd))
+* update product and material models ([b887ce6](https://github.com/ColdPBC/cold-monorepo/commit/b887ce6dc4af8d381744aa52933e30b9343e9efe))
+* update schema to support GraphQL implementation ([41c2272](https://github.com/ColdPBC/cold-monorepo/commit/41c2272fa4975368df5ddd53c40e72b3263437f9))
 
 # [1.314.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.313.4...v1.314.0) (2024-08-02)
 
@@ -17,6 +102,37 @@
 
 
 ### Features
+
+* add materials repository and module ([0079e87](https://github.com/ColdPBC/cold-monorepo/commit/0079e87367c6724af8d6945ef74acc53a9ca3ad8))
+* add MaterialsModule to organization module ([b90388d](https://github.com/ColdPBC/cold-monorepo/commit/b90388d0ea1f41a11417c3ab59102509e3a6a930))
+* add new Material and MaterialSupplier enums to compliance enums list ([e860df3](https://github.com/ColdPBC/cold-monorepo/commit/e860df3ea1d1d9028a6da03a7eb3228e9ee99394))
+
+# [1.314.0-cold-919.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.314.0-cold-919.1...v1.314.0-cold-919.2) (2024-08-03)
+
+
+## Bug Fixes
+
+* add validation for compliance definition during organization compliance creation ([ca6d310](https://github.com/ColdPBC/cold-monorepo/commit/ca6d31083499c33c9446503287a33bad87f670e6))
+* allow nullable dates in organization files update method ([940b230](https://github.com/ColdPBC/cold-monorepo/commit/940b230188179fdc8814ac11e6d97ec7084ebf67))
+* **compliance-question-bookmarks:** add null checks for compliance questions ([d374b15](https://github.com/ColdPBC/cold-monorepo/commit/d374b151507b83d143ee404bde131cfb24f5599d))
+* handle missing compliance definition name in section groups creation ([513693d](https://github.com/ColdPBC/cold-monorepo/commit/513693d6927947d11336dea7363b6ad38a507271))
+* handle missing compliance_definition_id in questions ([0529cea](https://github.com/ColdPBC/cold-monorepo/commit/0529cea136f48060700cba6f2487537bc3bdba02))
+* **organization.service:** disable dynamic-org-white-list synchronization ([2decdef](https://github.com/ColdPBC/cold-monorepo/commit/2decdef2cce9bfe73bdf21727eff4e1d66d88d3d))
+* **products.repository:** correct organization field used in queries ([40d7c6f](https://github.com/ColdPBC/cold-monorepo/commit/40d7c6f900fb575542e8e75adbe8aa199eceee83))
+* resolve compliance definition ID from name if not provided ([5cf949d](https://github.com/ColdPBC/cold-monorepo/commit/5cf949d2f212b7b6ca83f6576916afcf998d3142))
+* update compliance claims repository to use organization_id instead of organization_name ([666498f](https://github.com/ColdPBC/cold-monorepo/commit/666498fd4286d6ffe24e468badf67cf6ddea2c22))
+* update compliance claims repository to use organization_id instead of organization_name ([8e7ed60](https://github.com/ColdPBC/cold-monorepo/commit/8e7ed60ec0a121db6b717c20102bb26827070287))
+* update Prisma schema with optimized indices and model relationships ([1d2a898](https://github.com/ColdPBC/cold-monorepo/commit/1d2a898c558be474ac5c1e71853603900098d5dd))
+
+
+### Features
+
+* add multiple indexes to enhance query performance in various tables ([85be564](https://github.com/ColdPBC/cold-monorepo/commit/85be5647ff15f62162ba507eb10c64f3db98d46b))
+* update database schema for GraphQL compliance ([c397b6f](https://github.com/ColdPBC/cold-monorepo/commit/c397b6fdcb1b93f9261aec858ac098584e01417b))
+* update product and material models ([c84b4f0](https://github.com/ColdPBC/cold-monorepo/commit/c84b4f009f14bfc34ad310fdd6465c1d221131bd))
+* update schema to support GraphQL implementation ([41c2272](https://github.com/ColdPBC/cold-monorepo/commit/41c2272fa4975368df5ddd53c40e72b3263437f9))
+
+# [1.314.0-cold-919.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.313.4...v1.314.0-cold-919.1) (2024-07-31)
 
 * Enhance popper behavior in DocumentDetailsSidebar ([2095f96](https://github.com/ColdPBC/cold-monorepo/commit/2095f96cc8d220709e50d4f28cc72a6ace342009))
 * Refactor route structure and add feature toggle for documents ([4367af9](https://github.com/ColdPBC/cold-monorepo/commit/4367af9bcb8c2aae35a6596c279757032916233b))
