@@ -15,7 +15,24 @@ export class MaterialsRepository extends BaseWorker {
     id: true,
     name: true,
     organization: true,
-    material_suppliers: true,
+    material_suppliers: {
+      select: {
+        supplier: {
+          select: {
+            id: true,
+            name: true,
+            organization: true,
+          },
+        },
+        material: {
+          select: {
+            id: true,
+            name: true,
+            organization: true,
+          },
+        },
+      },
+    },
     created_at: true,
     updated_at: true,
   };
