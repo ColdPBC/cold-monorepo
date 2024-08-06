@@ -72,6 +72,8 @@ export class OrganizationFilesService extends BaseWorker {
           effective_end_date: true,
           certification_claim: {
             include: {
+              material: true,
+              product: true,
               certification: true,
               facility: true,
             },
