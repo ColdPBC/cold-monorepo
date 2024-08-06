@@ -1,11 +1,10 @@
 import React from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
-import { FootprintOverviewCard, JourneyOverviewCard, NewsCard, NextActionsCard } from '../../molecules';
+import { FootprintOverviewCard, NewsCard, NextActionsCard } from '../../molecules';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import { AppContent, CenterColumnContent, EmissionsDonutChartVariants, ErrorFallback, RightColumnContent, Spinner } from '@coldpbc/components';
 import { withErrorBoundary } from 'react-error-boundary';
 import { EmissionsOverviewCard, NextSteps } from '../../organisms';
-import { ColdAssessmentsProvider } from '@coldpbc/providers';
 import { useColdContext } from '@coldpbc/hooks';
 
 function _Home() {
@@ -29,11 +28,6 @@ function _Home() {
         <CenterColumnContent>
           {ldFlags.showNextStepsCard && <NextSteps />}
           {ldFlags.showNewCarbonFootprintModuleCold634 ? <EmissionsOverviewCard /> : <FootprintOverviewCard chartVariant={EmissionsDonutChartVariants.horizontal} />}
-          {ldFlags.showComplianceModule && !ldFlags.showNewComplianceManagerPreviewCold713 && (
-            <ColdAssessmentsProvider>
-              <JourneyOverviewCard />
-            </ColdAssessmentsProvider>
-          )}
           {ldFlags.showNewsModuleCold310 && <NewsCard />}
         </CenterColumnContent>
         <RightColumnContent>{ldFlags.showActions261 && <NextActionsCard />}</RightColumnContent>

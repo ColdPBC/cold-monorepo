@@ -2,7 +2,6 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import {
   AccountSettingsPage,
   ActionsOverview,
-  ApplicationToaster,
   CarbonFootprint,
   ComplianceRoutes,
   DashboardLayout,
@@ -10,7 +9,6 @@ import {
   DocumentUpload,
   Footprint,
   Interceptor,
-  Journey,
   ProtectedRoute,
   Signup,
   SupplierDetail,

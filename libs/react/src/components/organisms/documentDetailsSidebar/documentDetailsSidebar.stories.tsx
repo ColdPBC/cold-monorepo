@@ -22,6 +22,8 @@ export const Default: Story = {
   args: {
     file: getFilesWithCertificateClaimsMock()[0],
     innerRef: React.createRef(),
+    isLoading: false,
+    signedUrl: '',
   },
 };
 
@@ -36,6 +38,8 @@ export const NoDates: Story = {
       effective_start_date: null,
     },
     innerRef: React.createRef(),
+    isLoading: false,
+    signedUrl: '',
   },
 };
 
@@ -51,6 +55,8 @@ export const LongName: Story = {
       effective_start_date: null,
     },
     innerRef: React.createRef(),
+    isLoading: false,
+    signedUrl: '',
   },
 };
 
@@ -66,6 +72,8 @@ export const LongNameNoSpaces: Story = {
       effective_start_date: null,
     },
     innerRef: React.createRef(),
+    isLoading: false,
+    signedUrl: '',
   },
 };
 
@@ -75,8 +83,10 @@ const SidebarStory = (props: {
   ref?: LegacyRef<any> | undefined;
   key?: Key | null | undefined;
   closeSidebar: () => void;
+  isLoading: boolean;
+  signedUrl: string | undefined;
 }) => {
-  const { file, innerRef } = props;
+  const { file, innerRef, isLoading, signedUrl } = props;
   const [selectedFile, setSelectedFile] = React.useState<Files | undefined>(file);
   return (
     <DocumentDetailsSidebar
@@ -87,6 +97,9 @@ const SidebarStory = (props: {
       deleteFile={() => {
         setSelectedFile(undefined);
       }}
+      downloadFile={url => {}}
+      isLoading={isLoading}
+      signedUrl={signedUrl}
     />
   );
 };

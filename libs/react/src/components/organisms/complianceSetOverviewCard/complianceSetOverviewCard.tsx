@@ -3,7 +3,7 @@ import { axiosFetcher } from '@coldpbc/fetchers';
 import { AllCompliance, OrgCompliance, ToastMessage } from '@coldpbc/interfaces';
 import React, { useContext } from 'react';
 import { ColdCompliancePageContext } from '@coldpbc/context';
-import { ComplianceStatus, ErrorType } from '@coldpbc/enums';
+import { ComplianceStatus, ErrorType, GlobalSizes } from '@coldpbc/enums';
 import { Card, ComplianceStatusChip, ErrorFallback, Spinner } from '@coldpbc/components';
 import { differenceInDays, format, intlFormatDistance } from 'date-fns';
 import { isAxiosError } from 'axios';
@@ -152,18 +152,21 @@ const _ComplianceSetOverviewCard = ({ complianceSet }: { complianceSet: AllCompl
   };
 
   const onCardClick = async () => {
-      if (!isAxiosError(orgComplianceSet) && orgComplianceSet !== undefined) {
-        navigate(`/wizard/compliance/${complianceSet.name}`);
+    if (complianceStatus === ComplianceStatus.inActive) {
+      // post to compliance/{complianceSet.name}/organizations/{orgId}
+      setComplianceSetLoading(true);
+      const response = await axiosFetcher([`/compliance/${complianceSet.name}/organizations/${orgId}`, 'POST']);
+      if (isAxiosError(response)) {
+        await addToastMessage({ message: 'Compliance could not be added', type: ToastMessage.FAILURE });
+        logError(response.message, ErrorType.AxiosError, response);
       } else {
-        const response = await axiosFetcher([`/compliance_definitions/${complianceSet.name}/organizations/${orgId}`, 'POST']);
-        if (isAxiosError(response)) {
-          await addToastMessage({ message: 'Compliance could not be added', type: ToastMessage.FAILURE });
-          logError(response.message, ErrorType.AxiosError, response);
-        } else {
-          await addToastMessage({ message: 'Compliance activated', type: ToastMessage.SUCCESS });
-          navigate(`/wizard/compliance/${complianceSet.name}`);
-        }
+        await addToastMessage({ message: 'Compliance activated', type: ToastMessage.SUCCESS });
+        navigate(`/compliance/${complianceSet.name}`);
       }
+      setComplianceSetLoading(false);
+    } else {
+      navigate(`/compliance/${complianceSet.name}`);
+    }
   };
 
   const checkFilter = () => {
