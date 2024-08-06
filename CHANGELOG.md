@@ -1,3 +1,10 @@
+# [1.323.0-COLD-924.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.322.1...v1.323.0-COLD-924.1) (2024-08-06)
+
+
+### Features
+
+* enhance organization file service to include materials and products ([119d4a3](https://github.com/ColdPBC/cold-monorepo/commit/119d4a3bd2b38297352b0954a1ac38ac6ccb3659))
+
 ## [1.322.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.322.0...v1.322.1) (2024-08-06)
 
 
