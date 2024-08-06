@@ -96,12 +96,12 @@ export class OrganizationFilesController implements OnModuleInit {
     }
   }
 
-  @Patch(`:fileId`)
+  @Patch(`:id`)
   @Roles(...allRoles)
   @UseInterceptors(AnyFilesInterceptor())
   async updateFile(
     @Param('orgId') orgId: string,
-    @Param('fileId') fileId: string,
+    @Param('id') fileId: string,
     @Body() data: { effective_end_date?: string; effective_start_date?: string; type?: string },
     @Req()
     req: {
