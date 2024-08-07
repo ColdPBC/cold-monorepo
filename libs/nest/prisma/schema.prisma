@@ -312,7 +312,7 @@ model organizations {
   deleted                                   Boolean                                     @default(false)
   actions                                   actions[]
   category_data                             category_data[]
-  certification_claims                      certification_claims[]
+  certification_claims                      organization_claims[]
   integrations                              integrations[]
   materials                                 materials[]
   organization_compliance                   organization_compliance[]
@@ -350,7 +350,7 @@ model organization_facilities {
   state_province       String?
   address_line_1       String?
   supplier             Boolean?               @default(false)
-  certification_claims certification_claims[]
+  certification_claims organization_claims[]
   emissions            emissions[]
   integrations         integrations[]
   organization         organizations          @relation(fields: [organization_id], references: [id], onDelete: Cascade)
@@ -361,18 +361,21 @@ model organization_facilities {
   @@index([organization_id], map: "organization_facilities_organization_id_idx1")
 }
 
-model certifications {
+model claims {
   id                   String                 @id @default(cuid())
-  name                 String                 @unique
+  organization_id      String?
+  name                 String
   created_at           DateTime               @default(now())
   updated_at           DateTime               @updatedAt
   deleted              Boolean                @default(false)
   level                certification_level
   type                 certification_types
-  certification_claims certification_claims[]
+  certification_claims organization_claims[]
+
+  @@unique([organization_id, name], name: "orgIdName")
 }
 
-model certification_claims {
+model organization_claims {
   id                       String                   @id @default(cuid())
   certification_id         String
   organization_facility_id String?
@@ -385,7 +388,7 @@ model certification_claims {
   material_id              String?
   product_id               String?
   organization_id          String
-  certification            certifications           @relation(fields: [certification_id], references: [id], onDelete: Cascade)
+  certification            claims           @relation(fields: [certification_id], references: [id], onDelete: Cascade)
   material                 materials?               @relation(fields: [material_id], references: [id])
   facility                 organization_facilities? @relation(fields: [organization_facility_id], references: [id])
   organization_file        organization_files       @relation(fields: [organization_file_id], references: [id], onDelete: Cascade)
@@ -407,7 +410,7 @@ model products {
   updated_at           DateTime               @updatedAt
   deleted              Boolean                @default(false)
   organization_id      String
-  certification_claims certification_claims[]
+  certification_claims organization_claims[]
   product_materials    product_materials[]
   organization         organizations          @relation(fields: [organization_id], references: [id], onDelete: Cascade)
 
@@ -421,7 +424,7 @@ model materials {
   updated_at           DateTime               @updatedAt
   deleted              Boolean                @default(false)
   organization_id      String
-  certification_claims certification_claims[]
+  certification_claims organization_claims[]
   material_suppliers   material_suppliers[]
   organization         organizations          @relation(fields: [organization_id], references: [id], onDelete: Cascade)
   product_materials    product_materials[]
@@ -604,7 +607,7 @@ model organization_files {
   expires_at                                DateTime?
   effective_end_date                        DateTime?
   effective_start_date                      DateTime?
-  certification_claim                       certification_claims[]
+  certification_claim                       organization_claims[]
   organization_compliance_ai_response_files organization_compliance_ai_response_files[]
   organization_compliance_note_files        organization_compliance_note_files[]
   integration                               integrations?                               @relation(fields: [integration_id], references: [id], onDelete: Cascade)
