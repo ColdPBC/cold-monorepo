@@ -349,13 +349,14 @@ model organization_facilities {
   metadata             Json?
   state_province       String?
   address_line_1       String?
-  supplier             Boolean                @default(false)
+  supplier             Boolean?               @default(false)
   certification_claims certification_claims[]
   emissions            emissions[]
   integrations         integrations[]
   organization         organizations          @relation(fields: [organization_id], references: [id], onDelete: Cascade)
   utility_bills        utility_bills[]
   product_suppliers    suppliers_view[]
+  material_suppliers   material_suppliers[]
 
   @@index([organization_id], map: "organization_facilities_organization_id_idx1")
 }
@@ -429,13 +430,13 @@ model materials {
 }
 
 model material_suppliers {
-  id          String         @id @default(cuid())
-  material_id String
-  supplier_id String
-  created_at  DateTime       @default(now())
-  updated_at  DateTime       @updatedAt
-  material    materials      @relation(fields: [material_id], references: [id], onDelete: Cascade)
-  supplier    suppliers_view @relation(fields: [supplier_id], references: [id], onDelete: Cascade)
+  id               String                  @id @default(cuid())
+  material_id      String
+  supplier_id      String
+  created_at       DateTime                @default(now())
+  updated_at       DateTime                @updatedAt
+  material         materials               @relation(fields: [material_id], references: [id], onDelete: Cascade)
+  supplier         organization_facilities @relation(fields: [supplier_id], references: [id], onDelete: Cascade)
 
   @@index([material_id], map: "material_suppliers_material_id_idx1")
 }
@@ -841,7 +842,6 @@ model compliance_question_dependency_chains {
 
   @@unique([compliance_section_id, compliance_question_key, compliance_definition_name], name: "defNameSecIdQuestKey")
   @@unique([compliance_section_key, compliance_question_key, compliance_definition_name], name: "defNameSecKeyQuestKey")
-
   @@index([compliance_question_id])
   @@index([compliance_question_key])
   @@index([compliance_section_id])
@@ -1003,6 +1003,7 @@ view compliance_responses {
   compliance_sections                    compliance_sections?                  @relation(fields: [compliance_section_id], references: [id])
   compliance_questions                   compliance_questions?                 @relation(fields: [compliance_question_id], references: [id])
 
+  @@unique([organization_compliance_id, compliance_question_id], name: "orgCompQuestId")
   @@index([organization_id])
   @@index([organization_compliance_id])
   @@index([compliance_definition_name])
@@ -1012,7 +1013,6 @@ view compliance_responses {
   @@index([organization_compliance_ai_response_id])
   @@index([organization_compliance_response_id])
   @@index([organization_id, compliance_question_id, compliance_section_id, compliance_section_group_id, compliance_definition_name, organization_compliance_ai_response_id, organization_compliance_response_id], name: "orgCompFullIDX")
-  @@unique([organization_compliance_id, compliance_question_id], name: "orgCompQuestId")
 }
 
 view organization_claims_view {
@@ -1052,7 +1052,6 @@ view suppliers_view {
   metadata                Json?
   supplier                Boolean?
   organization_facilities organization_facilities? @relation(fields: [id], references: [id])
-  material_suppliers      material_suppliers[]
 }
 
 enum facility_types {
