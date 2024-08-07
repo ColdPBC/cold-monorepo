@@ -35,7 +35,16 @@ const _DocumentDetailsSidebar = (props: {
     }),
   );
 
-  claims.push('Fair Trade', 'Organic', 'Recycled', 'Recyclable', 'Biodegradable');
+  claims.push(
+    'Fair',
+    'Trade',
+    'Organic',
+    'Recycled',
+    'Recyclable',
+    'Biodegradable',
+    'Biodegradable Biodegradable Biodegradable Fair Trade Organic Recycled Recyclable Biodegradable',
+    'BiodegradableBiodegradableBiodegradableFairTradeOrganicRecycledRecyclableBiodegradable',
+  );
 
   const records = file?.certification_claim.map(claim => claim);
 

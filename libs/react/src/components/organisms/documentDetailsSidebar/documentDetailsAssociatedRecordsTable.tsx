@@ -3,10 +3,10 @@ import { HexColors } from '@coldpbc/themes';
 import { MUIDataGridNoRowsOverlay } from '@coldpbc/components';
 import { DataGrid, GridColDef, GridValidRowModel } from '@mui/x-data-grid';
 import React from 'react';
+import { get } from 'lodash';
 
 export const DocumentDetailsAssociatedRecordsTable = (props: { records: Files['certification_claim'] | undefined }) => {
   const { records } = props;
-  // check if records have any product, material. This will be used to show the columns
 
   if (records === undefined || (records && records.length === 0)) {
     return null;
@@ -25,9 +25,6 @@ export const DocumentDetailsAssociatedRecordsTable = (props: { records: Files['c
       headerName: 'Product',
       headerClassName: 'bg-transparent h-[37px] text-body',
       flex: 1,
-      renderCell: params => {
-        return <div className={'h-full flex items-center text-body text-tc-primary font-bold truncate'}>{params.value}</div>;
-      },
     });
   }
 
@@ -38,9 +35,6 @@ export const DocumentDetailsAssociatedRecordsTable = (props: { records: Files['c
       headerName: 'Material',
       headerClassName: 'bg-transparent h-[37px] text-body',
       flex: 1,
-      renderCell: params => {
-        return <div className={'h-full flex items-center text-body text-tc-primary font-bold truncate'}>{params.value}</div>;
-      },
     });
   }
 
@@ -50,9 +44,6 @@ export const DocumentDetailsAssociatedRecordsTable = (props: { records: Files['c
       headerName: 'Supplier',
       headerClassName: 'bg-gray-30 h-[37px] text-body',
       flex: 1,
-      renderCell: params => {
-        return <div className={'h-full flex items-center text-body text-tc-primary font-bold truncate'}>{params.value}</div>;
-      },
     });
   }
 
@@ -61,9 +52,9 @@ export const DocumentDetailsAssociatedRecordsTable = (props: { records: Files['c
   records.forEach((record, index) => {
     const row = {
       id: record.id,
-      material: record.material?.name || '',
-      product: record.product?.name || '',
-      supplier: record.facility?.name || '',
+      material: get(record, 'material.name', ''),
+      product: get(record, 'product.name', ''),
+      supplier: get(record, 'facility.name', ''),
     };
     newRows.push(row);
   });
