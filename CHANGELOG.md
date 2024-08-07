@@ -1,3 +1,10 @@
+# [1.325.0-COLD-924.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.324.1-COLD-924.1...v1.325.0-COLD-924.1) (2024-08-07)
+
+
+### Features
+
+* Add materials interface and update document details sidebar ([357512c](https://github.com/ColdPBC/cold-monorepo/commit/357512c0382b7dd6c37abc48810c426d8c9057d5))
+
 ## [1.324.1-COLD-924.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.324.0...v1.324.1-COLD-924.1) (2024-08-06)
 
 
