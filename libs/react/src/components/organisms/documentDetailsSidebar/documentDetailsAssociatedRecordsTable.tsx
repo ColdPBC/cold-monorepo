@@ -3,7 +3,7 @@ import { HexColors } from '@coldpbc/themes';
 import { MUIDataGridNoRowsOverlay } from '@coldpbc/components';
 import { DataGrid, GridColDef, GridValidRowModel } from '@mui/x-data-grid';
 import React from 'react';
-import { get } from 'lodash';
+import { get, isEqual, uniqWith } from 'lodash';
 
 export const DocumentDetailsAssociatedRecordsTable = (props: { records: Files['certification_claim'] | undefined }) => {
   const { records } = props;
@@ -12,9 +12,33 @@ export const DocumentDetailsAssociatedRecordsTable = (props: { records: Files['c
     return null;
   }
 
-  const hasAnyProducts = records.some(record => record.product !== null);
-  const hasAnyMaterials = records.some(record => record.material !== null);
-  const hasAnyFacilities = records.some(record => record.facility !== null);
+  let newRows: GridValidRowModel[] = [];
+
+  const productMaterialSupplierCombinations = uniqWith(
+    records.map(record => {
+      return {
+        product: get(record, 'product.name', '--'),
+        material: get(record, 'material.name', '--'),
+        supplier: get(record, 'facility.name', '--'),
+      };
+    }),
+    isEqual,
+  );
+  // get unique product, material, supplier combinations
+
+  productMaterialSupplierCombinations.forEach((combination, index) => {
+    const row = {
+      id: index.toString(),
+      material: combination.material,
+      product: combination.product,
+      supplier: combination.supplier,
+    };
+    newRows.push(row);
+  });
+
+  const hasAnyProducts = productMaterialSupplierCombinations.some(combo => combo.product !== '--');
+  const hasAnyMaterials = productMaterialSupplierCombinations.some(combo => combo.material !== '--');
+  const hasAnyFacilities = productMaterialSupplierCombinations.some(combo => combo.supplier !== '--');
 
   const columns: GridColDef[] = [];
 
@@ -23,7 +47,7 @@ export const DocumentDetailsAssociatedRecordsTable = (props: { records: Files['c
     columns.push({
       field: 'product',
       headerName: 'Product',
-      headerClassName: 'bg-transparent h-[37px] text-body',
+      headerClassName: 'bg-gray-30 h-[37px] text-body',
       flex: 1,
     });
   }
@@ -33,7 +57,7 @@ export const DocumentDetailsAssociatedRecordsTable = (props: { records: Files['c
     columns.push({
       field: 'material',
       headerName: 'Material',
-      headerClassName: 'bg-transparent h-[37px] text-body',
+      headerClassName: 'bg-gray-30 h-[37px] text-body',
       flex: 1,
     });
   }
@@ -46,18 +70,6 @@ export const DocumentDetailsAssociatedRecordsTable = (props: { records: Files['c
       flex: 1,
     });
   }
-
-  let newRows: GridValidRowModel[] = [];
-
-  records.forEach((record, index) => {
-    const row = {
-      id: record.id,
-      material: get(record, 'material.name', ''),
-      product: get(record, 'product.name', ''),
-      supplier: get(record, 'facility.name', ''),
-    };
-    newRows.push(row);
-  });
 
   const rows: GridValidRowModel[] = newRows;
 
