@@ -22,6 +22,8 @@ export const Default: Story = {
   args: {
     file: getFilesWithCertificateClaimsMock()[0],
     innerRef: React.createRef(),
+    isLoading: false,
+    signedUrl: '',
   },
 };
 
@@ -36,6 +38,8 @@ export const NoDates: Story = {
       effective_start_date: null,
     },
     innerRef: React.createRef(),
+    isLoading: false,
+    signedUrl: '',
   },
 };
 
@@ -51,6 +55,8 @@ export const LongName: Story = {
       effective_start_date: null,
     },
     innerRef: React.createRef(),
+    isLoading: false,
+    signedUrl: '',
   },
 };
 
@@ -66,6 +72,8 @@ export const LongNameNoSpaces: Story = {
       effective_start_date: null,
     },
     innerRef: React.createRef(),
+    isLoading: false,
+    signedUrl: '',
   },
 };
 
@@ -87,6 +95,9 @@ const SidebarStory = (props: {
       deleteFile={() => {
         setSelectedFile(undefined);
       }}
+      downloadFile={() => {}}
+      signedUrl={''}
+      isLoading={false}
     />
   );
 };
