@@ -1,3 +1,14 @@
+# [1.326.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.325.0...v1.326.0) (2024-08-08)
+
+
+### Features
+
+* Add custom comparator and filter operators for DataGrid ([2fbe814](https://github.com/ColdPBC/cold-monorepo/commit/2fbe81434a711030a2bb60721164f9adb5766b05))
+* Add materials page with data grid and related components ([5f23586](https://github.com/ColdPBC/cold-monorepo/commit/5f23586ecca101ff87c3086990128c92578568e0))
+* Enable Materials Page with Feature Toggle ([e44bb91](https://github.com/ColdPBC/cold-monorepo/commit/e44bb919e9092696fa7ca97f08aa16d378226bc3))
+* Rename supplier comparator and adjust DataGrid styling. ([726bb8e](https://github.com/ColdPBC/cold-monorepo/commit/726bb8e8d017d4f761194a295fc915580f82318a))
+* Update documentsPage component to ignore Chromatic UI testing ([7561339](https://github.com/ColdPBC/cold-monorepo/commit/7561339dde793bf75a8c52fb95e4e41089f26d5d))
+
 # [1.325.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.324.2...v1.325.0) (2024-08-07)
 
 
