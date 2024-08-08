@@ -6,10 +6,10 @@ describe('ClaimsService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [Organization_claimsService],
+      providers: [OrganizationClaimsService],
     }).compile();
 
-    service = module.get<Organization_claimsService>(Organization_claimsService);
+    service = module.get<OrganizationClaimsService>(OrganizationClaimsService);
   });
 
   it('should be defined', () => {
