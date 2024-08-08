@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ClaimsService } from './organization_claims_service';
+import { OrganizationClaimsService } from './organization_claims_service';
 
 describe('ClaimsService', () => {
-  let service: Organization_claimsService;
+  let service: OrganizationClaimsService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
