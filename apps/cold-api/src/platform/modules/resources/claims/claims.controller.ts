@@ -17,7 +17,7 @@ export class ClaimsController {
 
   @Post()
   @Roles(Role.ColdAdmin)
-  create(@Req() req: any, @Body() createCertificationDto: claims) {
+  create(@Req() req: any, @Body() createClaimDto: claims) {
     return this.certificationsService.create(req.organization, req.user, createCertificationDto);
   }
 
