@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
 import { ClaimsController } from './claims.controller';
-import { CertificationsService } from './claims.service';
-import { OrganizationClaimsRepository, ComplianceCertificationRepository } from '@coldpbc/nest';
-import { ClaimsModule } from './organization_claims/organization_claims.module';
+import { ClaimsService } from './claims.service';
+import { ClaimsRepository, OrganizationClaimsRepository } from '@coldpbc/nest';
+import { OrganizationClaimsModule } from '../organizations/organization_claims/organization_claims_module';
 
 @Module({
-  imports: [ClaimsModule],
+  imports: [OrganizationClaimsModule],
   controllers: [ClaimsController],
-  providers: [CertificationsService, OrganizationClaimsRepository, ComplianceCertificationRepository],
+  providers: [ClaimsService, OrganizationClaimsRepository, ClaimsRepository],
   exports: [],
 })
 export class ClaimsModule {}
