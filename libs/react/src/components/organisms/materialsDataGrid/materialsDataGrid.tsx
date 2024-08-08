@@ -199,8 +199,6 @@ const _MaterialsDataGrid = () => {
     newRows.push(row);
   });
 
-  console.log('newRows', newRows);
-
   const rows: GridValidRowModel[] = newRows;
 
   return (
