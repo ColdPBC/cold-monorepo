@@ -1,11 +1,20 @@
-# [1.325.0-COLD-924.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.324.1-COLD-924.1...v1.325.0-COLD-924.1) (2024-08-07)
+# [1.325.0](https://github.com/ColdPBC/cold-monorepo/compare/v1.324.2...v1.325.0) (2024-08-07)
 
 
 ### Features
 
 * Add materials interface and update document details sidebar ([357512c](https://github.com/ColdPBC/cold-monorepo/commit/357512c0382b7dd6c37abc48810c426d8c9057d5))
+* Refactor and add claims to document details sidebar ([c6a3501](https://github.com/ColdPBC/cold-monorepo/commit/c6a35019d815a52676ab5df9b2db13e7c994fd9f))
+* Refactor and update document details components. ([cfc180e](https://github.com/ColdPBC/cold-monorepo/commit/cfc180e1ed8a2c6e1c982ed3f287ce13808bddb8))
 
-## [1.324.1-COLD-924.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.324.0...v1.324.1-COLD-924.1) (2024-08-06)
+## [1.324.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.324.1...v1.324.2) (2024-08-06)
+
+
+### Bug Fixes
+
+* update material repository and schema to handle supplier relations and errors ([c5cf196](https://github.com/ColdPBC/cold-monorepo/commit/c5cf196e548c87a4ca39a41eff49db558285030f))
+
+## [1.324.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.324.0...v1.324.1) (2024-08-06)
 
 
 ### Bug Fixes
