@@ -312,7 +312,7 @@ model organizations {
   deleted                                   Boolean                                     @default(false)
   actions                                   actions[]
   category_data                             category_data[]
-  certification_claims                      organization_claims[]
+  organization_claims                       organization_claims[]
   integrations                              integrations[]
   materials                                 materials[]
   organization_compliance                   organization_compliance[]
@@ -350,7 +350,7 @@ model organization_facilities {
   state_province       String?
   address_line_1       String?
   supplier             Boolean?               @default(false)
-  certification_claims organization_claims[]
+  organization_claims organization_claims[]
   emissions            emissions[]
   integrations         integrations[]
   organization         organizations          @relation(fields: [organization_id], references: [id], onDelete: Cascade)
@@ -370,7 +370,7 @@ model claims {
   deleted              Boolean                @default(false)
   level                claim_level
   type                 claim_types
-  certification_claims organization_claims[]
+  organization_claims organization_claims[]
 
   @@unique([organization_id, name], name: "orgIdName")
 }
