@@ -22,6 +22,8 @@ export const Default: Story = {
   args: {
     file: getFilesWithCertificateClaimsMock()[0],
     innerRef: React.createRef(),
+    isLoading: false,
+    signedUrl: '',
   },
 };
 
@@ -36,6 +38,8 @@ export const NoDates: Story = {
       effective_start_date: null,
     },
     innerRef: React.createRef(),
+    isLoading: false,
+    signedUrl: '',
   },
 };
 
@@ -51,6 +55,8 @@ export const LongName: Story = {
       effective_start_date: null,
     },
     innerRef: React.createRef(),
+    isLoading: false,
+    signedUrl: '',
   },
 };
 
@@ -66,6 +72,141 @@ export const LongNameNoSpaces: Story = {
       effective_start_date: null,
     },
     innerRef: React.createRef(),
+    isLoading: false,
+    signedUrl: '',
+  },
+};
+
+export const WithClaims: Story = {
+  render: args => {
+    return <SidebarStory {...args} />;
+  },
+  args: {
+    file: {
+      ...getFilesWithCertificateClaimsMock()[0],
+      certification_claim: [
+        {
+          id: 'claim_cov42be44dd54mb6y90ef5fq',
+          certification_id: 'cert_n081cl70wmqsl1uydmkgmxke',
+          organization_file_id: 'ofile_cq5j3hvdxdnceh46wyw056qo',
+          material: null,
+          product: null,
+          certification: {
+            id: 'cert_n081cl70wmqsl1uydmkgmxke',
+            name: 'WRAP Certified',
+            level: 'Supplier',
+            type: 'TEST',
+          },
+          facility: {
+            id: 'ofac_nhfgwti6s91duov4okyf0b6z',
+            name: 'KNK',
+          },
+        },
+        {
+          id: 'claim_cov42be44dd54mb6y90ef',
+          certification_id: 'cert_n081cl70wmqsl1uydmkgmx',
+          organization_file_id: 'ofile_cq5j3hvdxdnceh46wyw056qo',
+          material: {
+            id: 'mat_n081cl70wmqsl1uydmkgmxke',
+            name: 'Spandex 1',
+          },
+          product: null,
+          certification: {
+            id: 'cert_n081cl70wmqsl1uydmkgmxke',
+            name: 'Pfas Test',
+            level: 'Supplier',
+            type: 'TEST',
+          },
+          facility: {
+            id: 'ofac_nhfgwti6s91duov4okyf0b6z',
+            name: 'KNK',
+          },
+        },
+        {
+          id: 'claim_cov42be44dd54mb6y90ef',
+          certification_id: 'cert_n081cl70wmqsl1uydmkgmx',
+          organization_file_id: 'ofile_cq5j3hvdxdnceh46wyw056qo',
+          material: {
+            id: 'mat_n081cl70wmqsl1uydmkgmxke',
+            name: 'Spandex 2',
+          },
+          product: null,
+          certification: {
+            id: 'cert_n081cl70wmqsl1uydmkgmxke',
+            name: 'Pfas Test',
+            level: 'Supplier',
+            type: 'TEST',
+          },
+          facility: {
+            id: 'ofac_nhfgwti6s91duov4okyf0b6z',
+            name: 'KNK',
+          },
+        },
+        {
+          id: 'claim_cov42be44dd54mb6y90ef',
+          certification_id: 'cert_n081cl70wmqsl1uydmkgmx',
+          organization_file_id: 'ofile_cq5j3hvdxdnceh46wyw056qo',
+          material: {
+            id: 'mat_n081cl70wmqsl1uydmkgmxke',
+            name: 'Spandex 2',
+          },
+          product: null,
+          certification: {
+            id: 'cert_n081cl70wmqsl1uydmkgmxke',
+            name: 'bluesign',
+            level: 'Supplier',
+            type: 'TEST',
+          },
+          facility: {
+            id: 'ofac_nhfgwti6s91duov4okyf0b6z',
+            name: 'KNK',
+          },
+        },
+        {
+          id: 'claim_cov42be44dd54mb6y90ef',
+          certification_id: 'cert_n081cl70wmqsl1uydmkgmx',
+          organization_file_id: 'ofile_cq5j3hvdxdnceh46wyw056qo',
+          material: {
+            id: 'mat_n081cl70wmqsl1uydmkgmxke',
+            name: 'Spandex 2',
+          },
+          product: null,
+          certification: {
+            id: 'cert_n081cl70wmqsl1uydmkgmxke',
+            name: 'rsl',
+            level: 'Supplier',
+            type: 'TEST',
+          },
+          facility: {
+            id: 'ofac_nhfgwti6s91duov4okyf0b6z',
+            name: 'KNK',
+          },
+        },
+        {
+          id: 'claim_cov42be44dd54mb6y90ef',
+          certification_id: 'cert_n081cl70wmqsl1uydmkgmx',
+          organization_file_id: 'ofile_cq5j3hvdxdnceh46wyw056qo',
+          material: {
+            id: 'mat_n081cl70wmqsl1uydmkgmxke',
+            name: 'Spandex 2',
+          },
+          product: null,
+          certification: {
+            id: 'cert_n081cl70wmqsl1uydmkgmxke',
+            name: 'Supplier COC',
+            level: 'Supplier',
+            type: 'TEST',
+          },
+          facility: {
+            id: 'ofac_nhfgwti6s91duov4okyf0b6z',
+            name: 'KNK',
+          },
+        },
+      ],
+    },
+    innerRef: React.createRef(),
+    isLoading: false,
+    signedUrl: '',
   },
 };
 
@@ -87,6 +228,9 @@ const SidebarStory = (props: {
       deleteFile={() => {
         setSelectedFile(undefined);
       }}
+      downloadFile={() => {}}
+      signedUrl={''}
+      isLoading={false}
     />
   );
 };

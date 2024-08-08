@@ -1,6 +1,5 @@
 import { Files } from '@coldpbc/interfaces';
 import { addDays } from 'date-fns';
-import FilesType from '@storybook/addon-knobs/dist/components/types/Files';
 import { FileTypes } from '@coldpbc/enums';
 
 export function getAllFilesMock() {

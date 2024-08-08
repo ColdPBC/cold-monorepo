@@ -1,8 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 import { Files, InputOption } from '@coldpbc/interfaces';
-import { ColdIcon, ErrorFallback, Select, DocumentDetailsMenu, Spinner } from '@coldpbc/components';
+import { ColdIcon, ErrorFallback, Select, DocumentDetailsMenu, Spinner, DocumentDetailsAssociatedRecordsTable } from '@coldpbc/components';
 import { FileTypes, IconNames } from '@coldpbc/enums';
-import { toArray } from 'lodash';
+import { toArray, uniq } from 'lodash';
 import capitalize from 'lodash/capitalize';
 import { DesktopDatePicker } from '@mui/x-date-pickers';
 import { withErrorBoundary } from 'react-error-boundary';
@@ -29,6 +29,14 @@ const _DocumentDetailsSidebar = (props: {
     };
   });
 
+  const claims: string[] = uniq(
+    file?.certification_claim.map(claim => {
+      return claim.certification.name;
+    }),
+  );
+
+  const records = file?.certification_claim.map(claim => claim);
+
   return (
     <div
       className={'flex flex-col h-screen fixed top-0 right-0 bottom-0 overflow-y-scroll text-tc-primary bg-gray-30'}
@@ -42,7 +50,7 @@ const _DocumentDetailsSidebar = (props: {
       data-chromatic={'ignore'}
       ref={innerRef}>
       {file !== undefined && (
-        <div className={'w-full h-full flex flex-col gap-[24px]'}>
+        <div className={'w-full h-full flex flex-col gap-[24px] pb-[40px]'}>
           <div className={'w-full flex flex-row mb-[16px] gap-[16px] justify-between items-start'}>
             <div className={'cursor-pointer w-[16px] mt-[4px]'} onClick={() => closeSidebar()}>
               <ColdIcon name={IconNames.CloseModalIcon} width={16} height={16} />
@@ -186,6 +194,19 @@ const _DocumentDetailsSidebar = (props: {
                   }}
                 />
               </div>
+              {claims.length > 0 && (
+                <div className={'w-full flex flex-col gap-[8px]'}>
+                  <div className={'w-full text-tc-primary text-eyebrow'}>Sustainability Attributes</div>
+                  <div className={'w-full rounded-[8px] border-[1.5px] border-gray-90 p-[16px] flex-wrap scrollbar-hide flex flex-row gap-[10px]'}>
+                    {claims.map((claim, index) => (
+                        <div key={index} className={'rounded-[32px] border-[1px] border-primary px-[12px] w-auto whitespace-nowrap truncate'}>
+                          <span className={'text-body'}>{claim}</span>
+                        </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+              <DocumentDetailsAssociatedRecordsTable records={records} />
             </div>
           )}
         </div>
