@@ -15,8 +15,44 @@ export class OrganizationClaimsRepository extends BaseWorker {
     if (!data.claim_id) {
       throw new BadRequestException('Certification ID is required');
     }
-    if (!data.organization_facility_id) {
-      throw new BadRequestException('Organization Facility ID is required');
+
+    if (data.organization_facility_id) {
+      const facility = await this.prisma.organization_facilities.findUnique({
+        where: {
+          id: data.organization_facility_id,
+          organization_id: org.id,
+        },
+      });
+
+      if (!facility) {
+        throw new NotFoundException(`Facility with id ${data.organization_facility_id} not found`);
+      }
+    }
+
+    if (data.material_id) {
+      const material = await this.prisma.materials.findUnique({
+        where: {
+          id: data.material_id,
+          organization_id: org.id,
+        },
+      });
+
+      if (!material) {
+        throw new NotFoundException(`Material with id ${data.organization_facility_id} not found`);
+      }
+    }
+
+    if (data.product_id) {
+      const product = await this.prisma.products.findUnique({
+        where: {
+          id: data.product_id,
+          organization_id: org.id,
+        },
+      });
+
+      if (!product) {
+        throw new NotFoundException(`Material with id ${data.organization_facility_id} not found`);
+      }
     }
 
     const claim = await this.prisma.claims.findUnique({
@@ -26,18 +62,7 @@ export class OrganizationClaimsRepository extends BaseWorker {
     });
 
     if (!claim) {
-      throw new NotFoundException(`Certification with id ${data.claim_id} not found`);
-    }
-
-    const facility = await this.prisma.organization_facilities.findUnique({
-      where: {
-        id: data.organization_facility_id,
-        organization_id: org.id,
-      },
-    });
-
-    if (!facility) {
-      throw new NotFoundException(`Facility with id ${data.organization_facility_id} not found`);
+      throw new NotFoundException(`Claim with id ${data.claim_id} not found`);
     }
 
     const file = await this.prisma.organization_files.findUnique({
