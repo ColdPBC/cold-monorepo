@@ -10,7 +10,7 @@ import { HexColors } from '@coldpbc/themes';
 import { differenceInDays } from 'date-fns';
 import { find, forEach, isEqual, toArray, uniq, uniqWith } from 'lodash';
 import { withErrorBoundary } from 'react-error-boundary';
-import { tagsFilterOperators, supplierSortComparator } from '@coldpbc/lib';
+import { listFilterOperators, listSortComparator } from '@coldpbc/lib';
 
 const _MaterialsDataGrid = () => {
   const [materials, setMaterials] = useState<MaterialsWithCertifications[]>([]);
@@ -96,10 +96,10 @@ const _MaterialsDataGrid = () => {
   const renderSupplierCell = (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
     // loop through the array of suppliers and return the suppliers
     return (
-      <div className={'h-full flex items-center text-body text-tc-primary font-bold gap-[10px]'}>
+      <div className={'h-full flex items-center text-body text-tc-primary font-bold gap-[10px] truncate'}>
         {params.value.map((supplier: string, index: number) => {
           return (
-            <div key={index} className={'rounded-[32px] border-[1px] border-primary px-[12px] w-auto whitespace-nowrap truncate'}>
+            <div key={index} className={'rounded-[32px] border-[1px] border-primary px-[12px] w-auto whitespace-nowrap'}>
               <span className={'text-body'}>{supplier}</span>
             </div>
           );
@@ -124,12 +124,12 @@ const _MaterialsDataGrid = () => {
       headerName: 'Supplier',
       headerClassName: 'bg-gray-30 h-[37px] text-body',
       flex: 1,
-      minWidth: 180,
+      minWidth: 300,
       type: 'singleSelect',
       valueOptions: uniqSuppliers,
       renderCell: renderSupplierCell,
-      sortComparator: supplierSortComparator,
-      filterOperators: tagsFilterOperators,
+      sortComparator: listSortComparator,
+      filterOperators: listFilterOperators,
     },
   ];
 
@@ -138,7 +138,7 @@ const _MaterialsDataGrid = () => {
       field: claim.claim_name,
       headerName: claim.claim_name,
       headerClassName: 'bg-gray-30 h-[37px] text-body',
-      flex: 1,
+      width: 170,
       renderCell: params => {
         return renderCell(params);
       },
