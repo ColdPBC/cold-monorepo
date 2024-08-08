@@ -7,6 +7,9 @@ export interface Suppliers {
   address_line_2: string;
   city: string;
   country: string;
+}
+
+export interface SuppliersWithCertifications extends Suppliers {
   certification_claims: {
     id: string;
     certification: Certifications;

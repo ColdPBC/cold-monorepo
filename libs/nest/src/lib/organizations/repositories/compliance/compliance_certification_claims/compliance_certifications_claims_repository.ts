@@ -53,8 +53,7 @@ export class ComplianceCertificationClaimsRepository extends BaseWorker {
     }
 
     unset(data, 'id');
-    data.organization_name = org.name;
-
+    data.organization_id = org.id;
     try {
       const certification = await this.prisma.certification_claims.create({
         data: {

@@ -109,6 +109,8 @@ export const WithClaims: Story = {
           material: {
             id: 'mat_n081cl70wmqsl1uydmkgmxke',
             name: 'Spandex 1',
+            material_suppliers: [],
+            certification_claims: [],
           },
           product: null,
           certification: {
@@ -129,6 +131,8 @@ export const WithClaims: Story = {
           material: {
             id: 'mat_n081cl70wmqsl1uydmkgmxke',
             name: 'Spandex 2',
+            material_suppliers: [],
+            certification_claims: [],
           },
           product: null,
           certification: {
@@ -149,6 +153,8 @@ export const WithClaims: Story = {
           material: {
             id: 'mat_n081cl70wmqsl1uydmkgmxke',
             name: 'Spandex 2',
+            material_suppliers: [],
+            certification_claims: [],
           },
           product: null,
           certification: {
@@ -169,6 +175,8 @@ export const WithClaims: Story = {
           material: {
             id: 'mat_n081cl70wmqsl1uydmkgmxke',
             name: 'Spandex 2',
+            material_suppliers: [],
+            certification_claims: [],
           },
           product: null,
           certification: {
@@ -189,6 +197,8 @@ export const WithClaims: Story = {
           material: {
             id: 'mat_n081cl70wmqsl1uydmkgmxke',
             name: 'Spandex 2',
+            material_suppliers: [],
+            certification_claims: [],
           },
           product: null,
           certification: {
