@@ -23,7 +23,7 @@ export class ClaimsController {
 
   @Patch(':id')
   @Roles(Role.ColdAdmin)
-  update(@Req() req: any, @Param('id') id: string, @Body() updateCertificationDto: claims) {
+  update(@Req() req: any, @Param('id') id: string, @Body() updateClaimDto: claims) {
     updateCertificationDto.id = id;
     return this.certificationsService.update(req.org, req.user, updateCertificationDto);
   }
