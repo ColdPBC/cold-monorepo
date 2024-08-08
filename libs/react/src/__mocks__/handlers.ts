@@ -389,7 +389,7 @@ export const handlers = [
     return res(ctx.status(200));
   }),
 
-  rest.get(getApiUrl('organizations/:orgId/materials'), (req, res, ctx) => {
+  rest.get(getApiUrl('/organizations/:orgId/materials'), (req, res, ctx) => {
     return res(ctx.json(getMaterialsMock()));
   }),
 ];

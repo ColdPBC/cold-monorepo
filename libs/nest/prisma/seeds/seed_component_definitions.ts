@@ -119,6 +119,14 @@ const seeds: Array<{
           route: '/compliance',
         },
         {
+          key: 'materials_key',
+          icon: {
+            name: 'ColdMaterialsIcon',
+          },
+          label: 'Materials',
+          route: '/materials',
+        },
+        {
           key: 'suppliers_key',
           icon: {
             name: 'ColdSuppliersNavIcon',

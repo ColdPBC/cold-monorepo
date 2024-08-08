@@ -3,33 +3,18 @@ import { MaterialsWithCertifications } from '@coldpbc/interfaces';
 import { useOrgSWR } from '@coldpbc/hooks';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { isAxiosError } from 'axios';
-import { ColdIcon, MUIDataGridNoRowsOverlay, Spinner } from '@coldpbc/components';
+import { ColdIcon, ErrorFallback, MUIDataGridNoRowsOverlay, Spinner } from '@coldpbc/components';
 import { DataGrid, GridColDef, GridRenderCellParams, GridTreeNodeWithRender, GridValidRowModel } from '@mui/x-data-grid';
 import { CertificationStatus, IconNames } from '@coldpbc/enums';
 import { HexColors } from '@coldpbc/themes';
 import { differenceInDays } from 'date-fns';
-import { forEach, isEqual, toArray, uniq, uniqWith } from 'lodash';
+import { find, forEach, isEqual, toArray, uniq, uniqWith } from 'lodash';
+import { withErrorBoundary } from 'react-error-boundary';
+import { tagsFilterOperators, supplierSortComparator } from '@coldpbc/lib';
 
-export const MaterialsDataGrid = () => {
+const _MaterialsDataGrid = () => {
   const [materials, setMaterials] = useState<MaterialsWithCertifications[]>([]);
   const materialsSWR = useOrgSWR<MaterialsWithCertifications[], any>([`/materials`, 'GET'], axiosFetcher);
-
-  // useEffect(() => {
-  //   if (certificateSWR.data) {
-  //     if (isAxiosError(certificateSWR.data)) {
-  //       // handle no claims 404, set state to empty array
-  //       if (certificateSWR.data?.response?.status === 404) {
-  //         setCertifications([]);
-  //       }
-  //     } else {
-  //       setCertifications(
-  //         certificateSWR.data.filter(certification => {
-  //           return certification.claim_name !== null;
-  //         }) as SuppliersClaimNames[],
-  //       );
-  //     }
-  //   }
-  // }, [certificateSWR.data]);
 
   useEffect(() => {
     if (materialsSWR.data) {
@@ -67,7 +52,8 @@ export const MaterialsDataGrid = () => {
     // get the expiration date using the params.row.id
     const expirationDate: string | undefined | null = materials
       .find(material => material.id === params.row.id)
-      ?.certification_claims.find(certificateClaim => certificateClaim.certification?.name === params.field)?.organization_file.effective_end_date;
+      ?.certification_claims.filter(certificateClaim => certificateClaim.organization_file.effective_end_date !== null)
+      .find(certificateClaim => certificateClaim.certification?.name === params.field)?.organization_file.effective_end_date;
     let diff = 0;
 
     switch (params.value) {
@@ -142,6 +128,8 @@ export const MaterialsDataGrid = () => {
       type: 'singleSelect',
       valueOptions: uniqSuppliers,
       renderCell: renderSupplierCell,
+      sortComparator: supplierSortComparator,
+      filterOperators: tagsFilterOperators,
     },
   ];
 
@@ -211,6 +199,8 @@ export const MaterialsDataGrid = () => {
     newRows.push(row);
   });
 
+  console.log('newRows', newRows);
+
   const rows: GridValidRowModel[] = newRows;
 
   return (
@@ -274,3 +264,7 @@ export const MaterialsDataGrid = () => {
     />
   );
 };
+
+export const MaterialsDataGrid = withErrorBoundary(_MaterialsDataGrid, {
+  FallbackComponent: props => <ErrorFallback {...props} />,
+});
