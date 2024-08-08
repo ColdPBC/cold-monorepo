@@ -1,3 +1,18 @@
+# [1.325.0-cold-934.2](https://github.com/ColdPBC/cold-monorepo/compare/v1.325.0-cold-934.1...v1.325.0-cold-934.2) (2024-08-08)
+
+
+### Bug Fixes
+
+* **claims_repository:** correct id prefix and error messages for createClaim method ([7aca483](https://github.com/ColdPBC/cold-monorepo/commit/7aca483432aef03e95cbebc0c2ede39d300b451d))
+* improve validation for optional fields in organization claims ([3855b52](https://github.com/ColdPBC/cold-monorepo/commit/3855b52da1160a4f244fa4f86c2ab13fa4ecca54))
+* rename certification_claim to organization_claims to correct schema field name ([bd92159](https://github.com/ColdPBC/cold-monorepo/commit/bd9215934e8c60588a13140d5c1b9404068388db))
+* update organization claims endpoint path ([2447cbc](https://github.com/ColdPBC/cold-monorepo/commit/2447cbcf143f312aa1e747797bc8eff41cce848e))
+
+
+### Features
+
+* update OpenAPI examples and survey structure ([5252586](https://github.com/ColdPBC/cold-monorepo/commit/525258655d14757171668ccc6b234b459a1410cd))
+
 # [1.325.0-cold-934.1](https://github.com/ColdPBC/cold-monorepo/compare/v1.324.1...v1.325.0-cold-934.1) (2024-08-08)
 
 
