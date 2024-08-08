@@ -6,9 +6,13 @@ import { forEach, orderBy, toArray, uniq } from 'lodash';
 import { differenceInDays } from 'date-fns';
 import { getDateActiveStatus } from '@coldpbc/lib';
 import React, { ReactNode } from 'react';
-import { Suppliers } from '@coldpbc/interfaces';
+import { Suppliers, SuppliersWithCertifications } from '@coldpbc/interfaces';
 
-export const SupplierClaimsTable = (props: { supplier: Suppliers; showSupplierCertificateDetails: (id: string) => void; innerRef: React.RefObject<HTMLDivElement> }) => {
+export const SupplierClaimsTable = (props: {
+  supplier: SuppliersWithCertifications;
+  showSupplierCertificateDetails: (id: string) => void;
+  innerRef: React.RefObject<HTMLDivElement>;
+}) => {
   const { supplier, showSupplierCertificateDetails, innerRef } = props;
 
   const orderedCertificateClaims = orderBy(supplier.certification_claims, ['certification.name', 'organization_file.effective_end_date'], ['desc', 'desc']);
@@ -98,7 +102,7 @@ export const SupplierClaimsTable = (props: { supplier: Suppliers; showSupplierCe
     },
   ];
 
-  let newRows: GridValidRowModel[] = [];
+  const newRows: GridValidRowModel[] = [];
 
   forEach(uniqueClaimNames, (value, index) => {
     const claimCertifications = orderedCertificateClaims.filter(claim => claim.certification?.name === value);

@@ -1,8 +1,8 @@
 import { addDays, subDays } from 'date-fns';
 import { getCertificationMockByName, getCertificationsMock } from './claimsMock';
-import { Suppliers } from '@coldpbc/interfaces';
+import { SuppliersWithCertifications } from '@coldpbc/interfaces';
 
-export const getSupplierWithCertificationClaimsMock = (): Suppliers[] => {
+export const getSupplierWithCertificationClaimsMock = (): SuppliersWithCertifications[] => {
   const certifications = getCertificationsMock();
   return [
     {
