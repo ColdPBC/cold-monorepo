@@ -607,7 +607,7 @@ model organization_files {
   expires_at                                DateTime?
   effective_end_date                        DateTime?
   effective_start_date                      DateTime?
-  certification_claim                       organization_claims[]
+  organization_claims                       organization_claims[]
   organization_compliance_ai_response_files organization_compliance_ai_response_files[]
   organization_compliance_note_files        organization_compliance_note_files[]
   integration                               integrations?                               @relation(fields: [integration_id], references: [id], onDelete: Cascade)
