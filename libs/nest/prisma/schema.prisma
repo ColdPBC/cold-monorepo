@@ -368,8 +368,8 @@ model claims {
   created_at           DateTime               @default(now())
   updated_at           DateTime               @updatedAt
   deleted              Boolean                @default(false)
-  level                certification_level
-  type                 certification_types
+  level                claim_level
+  type                 claim_types
   certification_claims organization_claims[]
 
   @@unique([organization_id, name], name: "orgIdName")
@@ -377,7 +377,7 @@ model claims {
 
 model organization_claims {
   id                       String                   @id @default(cuid())
-  certification_id         String
+  claim_id         String
   organization_facility_id String?
   organization_file_id     String
   issued_date              DateTime                 @default(now())
@@ -388,19 +388,19 @@ model organization_claims {
   material_id              String?
   product_id               String?
   organization_id          String
-  certification            claims           @relation(fields: [certification_id], references: [id], onDelete: Cascade)
+  claim            claims           @relation(fields: [claim_id], references: [id], onDelete: Cascade)
   material                 materials?               @relation(fields: [material_id], references: [id])
   facility                 organization_facilities? @relation(fields: [organization_facility_id], references: [id])
   organization_file        organization_files       @relation(fields: [organization_file_id], references: [id], onDelete: Cascade)
   organization             organizations            @relation(fields: [organization_id], references: [id], onDelete: Cascade)
   product                  products?                @relation(fields: [product_id], references: [id])
 
-  @@index([certification_id], map: "certification_claims_certification_id_idx1")
-  @@index([material_id], map: "certification_claims_material_id_idx1")
+  @@index([claim_id], map: "organization_claims_claim_id_idx1")
+  @@index([material_id], map: "organization_claims_material_id_idx1")
   @@index([organization_facility_id])
-  @@index([organization_file_id], map: "certification_claims_organization_file_id_idx1")
-  @@index([organization_id], map: "certification_claims_organization_id_idx1")
-  @@index([product_id], map: "certification_claims_product_id_idx1")
+  @@index([organization_file_id], map: "organization_claims_organization_file_id_idx1")
+  @@index([organization_id], map: "organization_claims_organization_id_idx1")
+  @@index([product_id], map: "organization_claims_product_id_idx1")
 }
 
 model products {
@@ -1030,8 +1030,8 @@ view organization_claims_view {
   supplier               Boolean
   claim_id               String?
   claim_name             String?
-  claim_level            certification_level?
-  claim_type             certification_types?
+  claim_level            claim_level?
+  claim_type             claim_types?
   organization_file_id   String?
   organization_file_name String?
   organization_file_type file_types?
@@ -1097,7 +1097,7 @@ enum component_definition_types {
   TEST
 }
 
-enum certification_level {
+enum claim_level {
   Organization
   Supplier
   Product
@@ -1113,7 +1113,7 @@ enum file_types {
   OTHER
 }
 
-enum certification_types {
+enum claim_types {
   THIRD_PARTY
   INTERNAL
   TEST
