@@ -41,26 +41,6 @@ export const NoActions: Story = {
   },
 };
 
-export const NewSideBar: Story = {
-  render: args => {
-    return (
-      <StoryMockProvider>
-        <SideBar />
-      </StoryMockProvider>
-    );
-  },
-  parameters: {
-    launchdarkly: {
-      flags: {
-        showNewNavigationCold698: true,
-      },
-    },
-  },
-  args: {
-    defaultExpanded: true,
-  },
-};
-
 export const ColdAdmin: Story = {
   render: args => {
     return (
@@ -70,11 +50,6 @@ export const ColdAdmin: Story = {
     );
   },
   parameters: {
-    launchdarkly: {
-      flags: {
-        showActions261: false,
-      },
-    },
     auth0AddOn: {
       user: {
         ...auth0UserMock,
