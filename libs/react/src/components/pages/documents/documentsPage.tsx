@@ -92,7 +92,11 @@ const _DocumentsPage = () => {
     if (params.value.getTime() !== new Date(0).getTime()) {
       dateString = format(new Date(params.value), 'MM/d/yy');
     }
-    return <div className={'w-full h-full flex flex-row justify-start items-center text-tc-secondary'}>{dateString}</div>;
+    return (
+      <div data-chromatic="ignore" className={'w-full h-full flex flex-row justify-start items-center text-tc-secondary'}>
+        {dateString}
+      </div>
+    );
   };
 
   const selectDocument = (id: string) => {
