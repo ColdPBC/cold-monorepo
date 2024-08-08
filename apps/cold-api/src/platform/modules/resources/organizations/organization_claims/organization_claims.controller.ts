@@ -11,7 +11,7 @@ import { OrganizationClaimsService } from './organization_claims_service';
 @ApiOAuth2(['openid', 'email', 'profile'])
 @ApiTags('Organization', 'Claims')
 @UseFilters(new HttpExceptionFilter(OrganizationClaimsController.name))
-@Controller('claims/:cId/a/:orgId/claims')
+@Controller('claims/:cId/organizations/:orgId/assertions')
 export class OrganizationClaimsController {
   constructor(private readonly organizationClaimsService: OrganizationClaimsService) {}
 
