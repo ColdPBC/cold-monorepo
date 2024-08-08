@@ -22,10 +22,10 @@
                         "application/json": {
                             "schema": {
                                 "example": {
-                                    "id": "org_i13ax4slwtfycqqqw6n0urfb",
+                                    "id": "org_cag5abh0yd8hygh9fftg21ri",
                                     "logo_url": "http://lorempixel.com/640/480",
-                                    "display_name": "Bergnaum-Murazik Group",
-                                    "website": "https://jamie-romaguera.com",
+                                    "display_name": "McKenzie, Borer and Bernhard Group",
+                                    "website": "http://www.catherine-lindgren.com",
                                     "isTest": true
                                 },
                                 "$ref": "#/components/schemas/"
@@ -158,10 +158,10 @@
                         "application/json": {
                             "schema": {
                                 "example": {
-                                    "id": "org_di99ak7afkc0wb1qvm4ygz9n",
+                                    "id": "org_s5rdkkfp3dr1z6zj759bea8c",
                                     "logo_url": "http://lorempixel.com/640/480",
-                                    "display_name": "Bahringer, Ratke and Bashirian Ltd.",
-                                    "website": "https://hugh.org",
+                                    "display_name": "Carroll Ltd.",
+                                    "website": "https://whitneyullrich.biz",
                                     "isTest": true
                                 },
                                 "$ref": "#/components/schemas/"
@@ -2465,183 +2465,58 @@
                                     "summary": "Sample Survey",
                                     "description": "string",
                                     "value": {
-                                        "id": "compdef_hyr9l3y6xslj27v8s1yx49y7",
-                                        "title": "Cassin, Herzog and Marks Ltd. Test Survey",
+                                        "id": "compdef_n60tifmb4xk3lebu7akjb78c",
+                                        "title": "Veum, Armstrong and Moen LLC Test Survey",
                                         "version": 2025,
                                         "sections": {
-                                            "KXH": {
-                                                "title": "accusamus",
-                                                "prompt": "Quia impedit vitae animi asperiores repellat itaque voluptatem ipsa quia.",
+                                            "COF": {
+                                                "title": "eveniet",
+                                                "prompt": "Mollitia ut a sed fugiat sit explicabo sapiente nam neque.",
                                                 "component": "",
                                                 "follow_up": {
-                                                    "KXH-0": {
-                                                        "idx": 38,
-                                                        "prompt": "Aspernatur voluptatum et enim rem excepturi temporibus aut.",
-                                                        "rubric": {
-                                                            "score_map": {}
-                                                        },
-                                                        "options": [],
-                                                        "tooltip": "Autem ex sunt sit.",
-                                                        "component": "text_area",
-                                                        "placeholder": "Veniam eaque qui sapiente atque sit facilis voluptatem."
-                                                    },
-                                                    "KXH-1": {
-                                                        "idx": 99,
-                                                        "prompt": "Rem sed id ut ipsum.",
-                                                        "rubric": {
-                                                            "score_map": {
-                                                                "0": 1,
-                                                                "1": 0,
-                                                                "2": 1,
-                                                                "3": 1,
-                                                                "4": 1
-                                                            }
-                                                        },
-                                                        "options": [],
-                                                        "tooltip": "Vitae ut dolorum neque qui in maxime omnis amet odit.",
-                                                        "component": "number",
-                                                        "placeholder": "Quaerat rerum laborum ut odit voluptatum."
-                                                    },
-                                                    "KXH-2": {
-                                                        "idx": 78,
-                                                        "prompt": "Aliquid corrupti assumenda ut.",
-                                                        "rubric": {
-                                                            "score_map": {
-                                                                "et": 0,
-                                                                "voluptatem": 1,
-                                                                "quis": 0,
-                                                                "voluptate": 0,
-                                                                "Not sure": 0
-                                                            }
-                                                        },
-                                                        "options": [
-                                                            "et",
-                                                            "voluptatem",
-                                                            "quis",
-                                                            "voluptate",
-                                                            "Not sure"
-                                                        ],
-                                                        "tooltip": "Totam commodi asperiores dolores voluptatem et dolore hic dignissimos.",
-                                                        "component": "select",
-                                                        "placeholder": "Enim corrupti repellendus nemo fugiat natus."
-                                                    }
-                                                },
-                                                "image_url": "http://lorempixel.com/640/480",
-                                                "category_idx": 0,
-                                                "section_type": "Advocate",
-                                                "category_description": "Sit sed laudantium velit sit doloremque et libero esse similique."
-                                            },
-                                            "GPT": {
-                                                "title": "veritatis",
-                                                "prompt": "Accusantium perspiciatis vel ea.",
-                                                "component": "",
-                                                "follow_up": {
-                                                    "GPT-0": {
-                                                        "idx": 16,
-                                                        "prompt": "Dignissimos quisquam ab recusandae deleniti dolor quasi in.",
+                                                    "COF-0": {
+                                                        "idx": 59,
+                                                        "prompt": "Fugit ea rerum earum voluptas ad.",
                                                         "rubric": {
                                                             "score_map": {
                                                                 "0": 1,
                                                                 "1": 1,
-                                                                "2": 1,
+                                                                "2": 0,
                                                                 "3": 1,
                                                                 "4": 0
                                                             }
                                                         },
                                                         "options": [],
-                                                        "tooltip": "Placeat et ut ullam molestiae eos omnis.",
+                                                        "tooltip": "Nam inventore dignissimos laborum iusto temporibus.",
                                                         "component": "number",
-                                                        "placeholder": "Iste voluptas ut non incidunt."
+                                                        "placeholder": "Aliquam temporibus rem."
                                                     },
-                                                    "GPT-1": {
-                                                        "idx": 18,
-                                                        "prompt": "Provident esse ratione aut dolorum quia sed dolores consequatur.",
+                                                    "COF-1": {
+                                                        "idx": 50,
+                                                        "prompt": "Voluptatem voluptatem modi iure iusto labore.",
                                                         "rubric": {
                                                             "score_map": {
-                                                                "Yes": 1,
-                                                                "No": 0,
+                                                                "harum": 1,
+                                                                "rerum": 0,
+                                                                "deleniti": 1,
+                                                                "tenetur": 0,
                                                                 "Not sure": 0
                                                             }
                                                         },
                                                         "options": [
-                                                            "Yes",
-                                                            "No",
+                                                            "harum",
+                                                            "rerum",
+                                                            "deleniti",
+                                                            "tenetur",
                                                             "Not sure"
                                                         ],
-                                                        "tooltip": "Ratione exercitationem aut.",
-                                                        "component": "yes_no",
-                                                        "placeholder": "Nostrum adipisci aut omnis voluptas ut eum eum."
-                                                    },
-                                                    "GPT-2": {
-                                                        "idx": 93,
-                                                        "prompt": "Beatae accusantium nam.",
-                                                        "rubric": {
-                                                            "score_map": {
-                                                                "est": 0,
-                                                                "perspiciatis": 1,
-                                                                "iure": 0,
-                                                                "illo": 0,
-                                                                "Not sure": 0
-                                                            }
-                                                        },
-                                                        "options": [
-                                                            "est",
-                                                            "perspiciatis",
-                                                            "iure",
-                                                            "illo",
-                                                            "Not sure"
-                                                        ],
-                                                        "tooltip": "Magnam ex odio soluta saepe.",
+                                                        "tooltip": "Necessitatibus eum adipisci commodi laborum quaerat at sit odit repudiandae.",
                                                         "component": "multi_select",
-                                                        "placeholder": "Molestiae delectus est qui aut et molestiae."
+                                                        "placeholder": "Ut itaque qui odit et."
                                                     },
-                                                    "GPT-3": {
-                                                        "idx": 98,
-                                                        "prompt": "Doloribus sed aliquid facilis aut enim rerum.",
-                                                        "rubric": {
-                                                            "score_map": {}
-                                                        },
-                                                        "options": [],
-                                                        "tooltip": "Eum rerum illum quae natus explicabo ipsum rerum.",
-                                                        "component": "text_area",
-                                                        "placeholder": "Quisquam accusamus dolor labore sit accusantium nisi ut non."
-                                                    }
-                                                },
-                                                "image_url": "http://lorempixel.com/640/480",
-                                                "category_idx": 3,
-                                                "section_type": "General",
-                                                "category_description": "Eligendi sapiente rerum."
-                                            },
-                                            "IDK": {
-                                                "title": "dignissimos",
-                                                "prompt": "Magni quo qui.",
-                                                "component": "",
-                                                "follow_up": {
-                                                    "IDK-0": {
-                                                        "idx": 11,
-                                                        "prompt": "Amet suscipit dolores reiciendis sit beatae saepe accusamus aut.",
-                                                        "rubric": {
-                                                            "score_map": {
-                                                                "non": 1,
-                                                                "sunt": 0,
-                                                                "et": 0,
-                                                                "Not sure": 0
-                                                            }
-                                                        },
-                                                        "options": [
-                                                            "non",
-                                                            "sunt",
-                                                            "et",
-                                                            "et",
-                                                            "Not sure"
-                                                        ],
-                                                        "tooltip": "Exercitationem enim autem sint quis voluptates distinctio quis nisi.",
-                                                        "component": "select",
-                                                        "placeholder": "Et aperiam aut asperiores unde sint sunt error tempora."
-                                                    },
-                                                    "IDK-1": {
-                                                        "idx": 4,
-                                                        "prompt": "Quia adipisci distinctio est earum est.",
+                                                    "COF-2": {
+                                                        "idx": 66,
+                                                        "prompt": "Officia quos ut quasi molestias omnis et odit consequatur eum.",
                                                         "rubric": {
                                                             "score_map": {
                                                                 "Yes": 0,
@@ -2654,294 +2529,137 @@
                                                             "No",
                                                             "Not sure"
                                                         ],
-                                                        "tooltip": "Quo beatae facilis iste quasi expedita sint molestias veniam odit.",
+                                                        "tooltip": "Aut voluptas voluptas aut.",
                                                         "component": "yes_no",
-                                                        "placeholder": "Aut aut et error cumque totam quaerat sit suscipit."
-                                                    },
-                                                    "IDK-2": {
-                                                        "idx": 50,
-                                                        "prompt": "Illo ipsum mollitia quo eum maiores consequatur tempore veniam.",
-                                                        "rubric": {
-                                                            "score_map": {
-                                                                "Yes": 0,
-                                                                "No": 0,
-                                                                "Not sure": 0
-                                                            }
-                                                        },
-                                                        "options": [
-                                                            "Yes",
-                                                            "No",
-                                                            "Not sure"
-                                                        ],
-                                                        "tooltip": "Ut asperiores molestias repellat voluptatem.",
-                                                        "component": "yes_no",
-                                                        "placeholder": "Illum autem repellat."
-                                                    },
-                                                    "IDK-3": {
-                                                        "idx": 6,
-                                                        "prompt": "Dolores molestiae voluptatem.",
-                                                        "rubric": {
-                                                            "score_map": {
-                                                                "Yes": 1,
-                                                                "No": 0,
-                                                                "Not sure": 0
-                                                            }
-                                                        },
-                                                        "options": [
-                                                            "Yes",
-                                                            "No",
-                                                            "Not sure"
-                                                        ],
-                                                        "tooltip": "Doloribus natus tempore enim autem animi dolorum.",
-                                                        "component": "yes_no",
-                                                        "placeholder": "Sunt exercitationem accusantium corporis et ipsa earum dolor."
-                                                    },
-                                                    "IDK-4": {
-                                                        "idx": 86,
-                                                        "prompt": "Doloremque sed libero.",
-                                                        "rubric": {
-                                                            "score_map": {}
-                                                        },
-                                                        "options": [],
-                                                        "tooltip": "Quis eos est aut voluptatum.",
-                                                        "component": "text_area",
-                                                        "placeholder": "Ut ipsam nihil ut ad ut numquam."
-                                                    }
-                                                },
-                                                "image_url": "http://lorempixel.com/640/480",
-                                                "category_idx": 2,
-                                                "section_type": "Advocate",
-                                                "category_description": "Nesciunt officia nostrum voluptates numquam quibusdam facilis odit tempore modi."
-                                            },
-                                            "ZXX": {
-                                                "title": "pariatur",
-                                                "prompt": "Veniam magnam molestiae quia est impedit blanditiis provident.",
-                                                "component": "",
-                                                "follow_up": {
-                                                    "ZXX-0": {
-                                                        "idx": 49,
-                                                        "prompt": "Qui asperiores eos deserunt sapiente ab aut.",
-                                                        "rubric": {
-                                                            "score_map": {
-                                                                "0": 0,
-                                                                "1": 0,
-                                                                "2": 1,
-                                                                "3": 0,
-                                                                "4": 0
-                                                            }
-                                                        },
-                                                        "options": [],
-                                                        "tooltip": "Commodi omnis iste eligendi animi velit.",
-                                                        "component": "number",
-                                                        "placeholder": "Ex sint placeat et et adipisci."
-                                                    },
-                                                    "ZXX-1": {
-                                                        "idx": 26,
-                                                        "prompt": "Temporibus soluta delectus voluptatem tenetur commodi facere.",
-                                                        "rubric": {
-                                                            "score_map": {
-                                                                "omnis": 1,
-                                                                "dignissimos": 0,
-                                                                "voluptate": 1,
-                                                                "deserunt": 1,
-                                                                "Not sure": 0
-                                                            }
-                                                        },
-                                                        "options": [
-                                                            "omnis",
-                                                            "dignissimos",
-                                                            "voluptate",
-                                                            "deserunt",
-                                                            "Not sure"
-                                                        ],
-                                                        "tooltip": "Cumque aspernatur consequuntur consectetur ad provident blanditiis labore recusandae.",
-                                                        "component": "multi_select",
-                                                        "placeholder": "Provident dolore atque pariatur qui praesentium dicta."
+                                                        "placeholder": "Quaerat est dolore tenetur quis vel sunt."
                                                     }
                                                 },
                                                 "image_url": "http://lorempixel.com/640/480",
                                                 "category_idx": 10,
                                                 "section_type": "Advocate",
-                                                "category_description": "Praesentium non minus veritatis maxime praesentium vel."
+                                                "category_description": "Eaque praesentium molestiae omnis adipisci cumque consequatur."
                                             },
-                                            "VEF": {
-                                                "title": "quo",
-                                                "prompt": "Suscipit dolorem aut sed enim similique sunt sed nostrum.",
+                                            "MSR": {
+                                                "title": "dolorem",
+                                                "prompt": "Similique dolorem qui possimus.",
                                                 "component": "",
                                                 "follow_up": {
-                                                    "VEF-0": {
-                                                        "idx": 6,
-                                                        "prompt": "Vitae dolores occaecati id sint delectus sed tenetur.",
+                                                    "MSR-0": {
+                                                        "idx": 75,
+                                                        "prompt": "Occaecati itaque neque est id dolorum et velit accusantium ad.",
+                                                        "rubric": {
+                                                            "score_map": {}
+                                                        },
+                                                        "options": [],
+                                                        "tooltip": "Tempora blanditiis aut aperiam quasi.",
+                                                        "component": "text_area",
+                                                        "placeholder": "Autem molestiae ducimus facere incidunt libero deserunt."
+                                                    },
+                                                    "MSR-1": {
+                                                        "idx": 27,
+                                                        "prompt": "Sed temporibus aperiam ullam.",
                                                         "rubric": {
                                                             "score_map": {
-                                                                "maxime": 1,
-                                                                "quod": 0,
-                                                                "voluptas": 0,
-                                                                "dignissimos": 1,
+                                                                "eos": 0,
+                                                                "unde": 0,
+                                                                "quod": 1,
+                                                                "commodi": 1,
                                                                 "Not sure": 0
                                                             }
                                                         },
                                                         "options": [
-                                                            "maxime",
+                                                            "eos",
+                                                            "unde",
                                                             "quod",
-                                                            "voluptas",
-                                                            "dignissimos",
+                                                            "commodi",
                                                             "Not sure"
                                                         ],
-                                                        "tooltip": "Molestiae voluptatum beatae non blanditiis provident ab sit laborum.",
+                                                        "tooltip": "Minus asperiores placeat repellendus quia quod nesciunt.",
                                                         "component": "select",
-                                                        "placeholder": "Eveniet deserunt et totam enim."
+                                                        "placeholder": "Possimus maiores et veritatis voluptatem non."
                                                     },
-                                                    "VEF-1": {
+                                                    "MSR-2": {
+                                                        "idx": 39,
+                                                        "prompt": "Facere impedit qui.",
+                                                        "rubric": {
+                                                            "score_map": {}
+                                                        },
+                                                        "options": [],
+                                                        "tooltip": "Placeat non quo sit deleniti expedita unde.",
+                                                        "component": "text_area",
+                                                        "placeholder": "Perspiciatis repellendus architecto."
+                                                    },
+                                                    "MSR-3": {
+                                                        "idx": 23,
+                                                        "prompt": "Illum commodi omnis quae cum nihil deserunt nihil saepe.",
+                                                        "rubric": {
+                                                            "score_map": {}
+                                                        },
+                                                        "options": [],
+                                                        "tooltip": "Nihil aut atque nobis eos architecto at.",
+                                                        "component": "text_area",
+                                                        "placeholder": "Placeat quis fugit totam sed quam non dolor consequatur."
+                                                    }
+                                                },
+                                                "image_url": "http://lorempixel.com/640/480",
+                                                "category_idx": 4,
+                                                "section_type": "Advocate",
+                                                "category_description": "Deleniti neque error."
+                                            },
+                                            "FFG": {
+                                                "title": "autem",
+                                                "prompt": "Consequatur odio consequatur est.",
+                                                "component": "",
+                                                "follow_up": {
+                                                    "FFG-0": {
                                                         "idx": 82,
-                                                        "prompt": "Minus nam dolorem.",
+                                                        "prompt": "Ab minus ducimus voluptatibus placeat aut maxime mollitia quo est.",
                                                         "rubric": {
                                                             "score_map": {
-                                                                "vel": 0,
-                                                                "nihil": 1,
-                                                                "quos": 0,
-                                                                "itaque": 0,
+                                                                "vel": 1,
+                                                                "nam": 1,
+                                                                "aut": 0,
+                                                                "sit": 1,
                                                                 "Not sure": 0
                                                             }
                                                         },
                                                         "options": [
                                                             "vel",
-                                                            "nihil",
-                                                            "quos",
-                                                            "itaque",
+                                                            "nam",
+                                                            "aut",
+                                                            "sit",
                                                             "Not sure"
                                                         ],
-                                                        "tooltip": "Blanditiis vero eos.",
+                                                        "tooltip": "Eum id fuga sunt error tenetur porro libero esse.",
+                                                        "component": "select",
+                                                        "placeholder": "Nobis quis provident rerum dolores velit facere a quisquam accusamus."
+                                                    },
+                                                    "FFG-1": {
+                                                        "idx": 8,
+                                                        "prompt": "Minus voluptas qui delectus tempora ipsum explicabo.",
+                                                        "rubric": {
+                                                            "score_map": {
+                                                                "veniam": 1,
+                                                                "laborum": 0,
+                                                                "perferendis": 0,
+                                                                "voluptate": 0,
+                                                                "Not sure": 0
+                                                            }
+                                                        },
+                                                        "options": [
+                                                            "veniam",
+                                                            "laborum",
+                                                            "perferendis",
+                                                            "voluptate",
+                                                            "Not sure"
+                                                        ],
+                                                        "tooltip": "Voluptatibus aut corrupti.",
                                                         "component": "multi_select",
-                                                        "placeholder": "Vitae velit minima voluptatem maxime exercitationem et aliquid ut beatae."
+                                                        "placeholder": "Perspiciatis inventore deserunt pariatur doloribus praesentium sunt."
                                                     },
-                                                    "VEF-2": {
-                                                        "idx": 3,
-                                                        "prompt": "Quia est at mollitia et voluptas unde sint.",
-                                                        "rubric": {
-                                                            "score_map": {
-                                                                "dolorem": 1,
-                                                                "excepturi": 1,
-                                                                "quo": 0,
-                                                                "eveniet": 1,
-                                                                "Not sure": 0
-                                                            }
-                                                        },
-                                                        "options": [
-                                                            "dolorem",
-                                                            "excepturi",
-                                                            "quo",
-                                                            "eveniet",
-                                                            "Not sure"
-                                                        ],
-                                                        "tooltip": "Voluptates rerum non neque tempore sint.",
-                                                        "component": "multi_select",
-                                                        "placeholder": "Vel est ipsa incidunt odio."
-                                                    },
-                                                    "VEF-3": {
-                                                        "idx": 83,
-                                                        "prompt": "Fuga sed impedit beatae rerum accusamus quae velit.",
-                                                        "rubric": {
-                                                            "score_map": {
-                                                                "Yes": 1,
-                                                                "No": 1,
-                                                                "Not sure": 0
-                                                            }
-                                                        },
-                                                        "options": [
-                                                            "Yes",
-                                                            "No",
-                                                            "Not sure"
-                                                        ],
-                                                        "tooltip": "Mollitia est ut et aliquam.",
-                                                        "component": "yes_no",
-                                                        "placeholder": "Ipsa voluptas est voluptatem."
-                                                    },
-                                                    "VEF-4": {
-                                                        "idx": 18,
-                                                        "prompt": "Ea rerum voluptatibus architecto.",
-                                                        "rubric": {
-                                                            "score_map": {
-                                                                "Yes": 0,
-                                                                "No": 1,
-                                                                "Not sure": 0
-                                                            }
-                                                        },
-                                                        "options": [
-                                                            "Yes",
-                                                            "No",
-                                                            "Not sure"
-                                                        ],
-                                                        "tooltip": "Dolores aliquam repellat omnis corporis blanditiis et et.",
-                                                        "component": "yes_no",
-                                                        "placeholder": "Et et in ex reprehenderit voluptatem sunt."
-                                                    },
-                                                    "VEF-5": {
-                                                        "idx": 92,
-                                                        "prompt": "Quae amet deserunt eos commodi quia ipsa placeat magni.",
-                                                        "rubric": {
-                                                            "score_map": {}
-                                                        },
-                                                        "options": [],
-                                                        "tooltip": "Ea voluptatem assumenda cupiditate quia quaerat tempora et.",
-                                                        "component": "text_area",
-                                                        "placeholder": "Facilis ut est debitis numquam cumque cumque repudiandae in."
-                                                    }
-                                                },
-                                                "image_url": "http://lorempixel.com/640/480",
-                                                "category_idx": 0,
-                                                "section_type": "Measure",
-                                                "category_description": "Quo odio officia temporibus."
-                                            },
-                                            "LBX": {
-                                                "title": "modi",
-                                                "prompt": "Deleniti vero est incidunt asperiores nihil vitae non.",
-                                                "component": "",
-                                                "follow_up": {
-                                                    "LBX-0": {
-                                                        "idx": 49,
-                                                        "prompt": "Rem ducimus accusamus quidem enim eos ut quo qui.",
-                                                        "rubric": {
-                                                            "score_map": {
-                                                                "Yes": 0,
-                                                                "No": 1,
-                                                                "Not sure": 0
-                                                            }
-                                                        },
-                                                        "options": [
-                                                            "Yes",
-                                                            "No",
-                                                            "Not sure"
-                                                        ],
-                                                        "tooltip": "Ab aut voluptatem est consequatur molestiae eaque temporibus.",
-                                                        "component": "yes_no",
-                                                        "placeholder": "Doloremque quia placeat voluptates."
-                                                    },
-                                                    "LBX-1": {
-                                                        "idx": 44,
-                                                        "prompt": "Maiores vero voluptas molestias voluptatem suscipit quas illo ex dolores.",
-                                                        "rubric": {
-                                                            "score_map": {}
-                                                        },
-                                                        "options": [],
-                                                        "tooltip": "Quia libero et facere.",
-                                                        "component": "text_area",
-                                                        "placeholder": "Expedita eveniet aut est quis autem dolorem aperiam quos."
-                                                    },
-                                                    "LBX-2": {
-                                                        "idx": 94,
-                                                        "prompt": "Id esse autem nihil et dolores.",
-                                                        "rubric": {
-                                                            "score_map": {}
-                                                        },
-                                                        "options": [],
-                                                        "tooltip": "Est consectetur aut vero molestiae.",
-                                                        "component": "text_area",
-                                                        "placeholder": "Cupiditate est dicta."
-                                                    },
-                                                    "LBX-3": {
-                                                        "idx": 92,
-                                                        "prompt": "Animi molestiae eum.",
+                                                    "FFG-2": {
+                                                        "idx": 23,
+                                                        "prompt": "Tenetur expedita cum.",
                                                         "rubric": {
                                                             "score_map": {
                                                                 "Yes": 0,
@@ -2954,92 +2672,252 @@
                                                             "No",
                                                             "Not sure"
                                                         ],
-                                                        "tooltip": "Ipsam voluptates error qui enim aliquid rerum.",
+                                                        "tooltip": "Ut et blanditiis quos fugit aspernatur in qui.",
                                                         "component": "yes_no",
-                                                        "placeholder": "Iste aut quas doloribus laudantium."
+                                                        "placeholder": "Cumque atque aut nobis minus unde doloremque."
                                                     },
-                                                    "LBX-4": {
-                                                        "idx": 81,
-                                                        "prompt": "Aspernatur ut perspiciatis qui natus qui porro sequi voluptatem voluptatem.",
-                                                        "rubric": {
-                                                            "score_map": {}
-                                                        },
-                                                        "options": [],
-                                                        "tooltip": "Aut et itaque aliquid sit magni quae dolores enim repellat.",
-                                                        "component": "text_area",
-                                                        "placeholder": "In mollitia doloremque nisi quam veritatis blanditiis quia eum doloribus."
-                                                    },
-                                                    "LBX-5": {
-                                                        "idx": 84,
-                                                        "prompt": "Ex ducimus et in ex excepturi.",
+                                                    "FFG-3": {
+                                                        "idx": 5,
+                                                        "prompt": "Dicta praesentium aliquid debitis totam ut nulla magni rerum.",
                                                         "rubric": {
                                                             "score_map": {
-                                                                "eaque": 1,
-                                                                "consequatur": 1,
-                                                                "praesentium": 1,
-                                                                "veniam": 0,
+                                                                "Yes": 0,
+                                                                "No": 1,
                                                                 "Not sure": 0
                                                             }
                                                         },
                                                         "options": [
-                                                            "eaque",
-                                                            "consequatur",
-                                                            "praesentium",
-                                                            "veniam",
+                                                            "Yes",
+                                                            "No",
                                                             "Not sure"
                                                         ],
-                                                        "tooltip": "Odit voluptates et vel.",
+                                                        "tooltip": "Odio consectetur qui ea eaque dolorum.",
+                                                        "component": "yes_no",
+                                                        "placeholder": "Voluptatem dolorem eos et eos ullam."
+                                                    },
+                                                    "FFG-4": {
+                                                        "idx": 44,
+                                                        "prompt": "Eligendi ut et ullam ducimus enim maiores atque.",
+                                                        "rubric": {
+                                                            "score_map": {
+                                                                "expedita": 0,
+                                                                "sapiente": 0,
+                                                                "reprehenderit": 1,
+                                                                "aspernatur": 1,
+                                                                "Not sure": 0
+                                                            }
+                                                        },
+                                                        "options": [
+                                                            "expedita",
+                                                            "sapiente",
+                                                            "reprehenderit",
+                                                            "aspernatur",
+                                                            "Not sure"
+                                                        ],
+                                                        "tooltip": "Temporibus totam occaecati maxime similique qui rem impedit.",
+                                                        "component": "select",
+                                                        "placeholder": "Ratione fugit voluptas vel quos assumenda."
+                                                    },
+                                                    "FFG-5": {
+                                                        "idx": 59,
+                                                        "prompt": "Fugiat et in tenetur.",
+                                                        "rubric": {
+                                                            "score_map": {
+                                                                "velit": 1,
+                                                                "natus": 0,
+                                                                "explicabo": 1,
+                                                                "aspernatur": 1,
+                                                                "Not sure": 0
+                                                            }
+                                                        },
+                                                        "options": [
+                                                            "velit",
+                                                            "natus",
+                                                            "explicabo",
+                                                            "aspernatur",
+                                                            "Not sure"
+                                                        ],
+                                                        "tooltip": "Molestiae iusto iste id suscipit nemo ipsum sapiente aliquam illum.",
                                                         "component": "multi_select",
-                                                        "placeholder": "Deserunt sed et itaque cum sed fuga."
+                                                        "placeholder": "Animi aut modi id occaecati neque possimus neque."
                                                     }
                                                 },
                                                 "image_url": "http://lorempixel.com/640/480",
-                                                "category_idx": 2,
-                                                "section_type": "Plan",
-                                                "category_description": "Aut dolor id dicta."
+                                                "category_idx": 8,
+                                                "section_type": "Measure",
+                                                "category_description": "Laudantium quia soluta praesentium voluptas porro voluptatum doloremque."
                                             },
-                                            "NEF": {
-                                                "title": "sit",
-                                                "prompt": "Rerum temporibus amet amet necessitatibus sequi.",
+                                            "HYG": {
+                                                "title": "sunt",
+                                                "prompt": "Et rem eos aperiam veritatis.",
                                                 "component": "",
                                                 "follow_up": {
-                                                    "NEF-0": {
-                                                        "idx": 19,
-                                                        "prompt": "Nulla rerum nihil quia sapiente.",
+                                                    "HYG-0": {
+                                                        "idx": 47,
+                                                        "prompt": "Ea quaerat rerum veniam.",
                                                         "rubric": {
                                                             "score_map": {
-                                                                "facere": 0,
-                                                                "veniam": 0,
-                                                                "corporis": 0,
-                                                                "occaecati": 0,
+                                                                "0": 1,
+                                                                "1": 1,
+                                                                "2": 0,
+                                                                "3": 0,
+                                                                "4": 0
+                                                            }
+                                                        },
+                                                        "options": [],
+                                                        "tooltip": "Consectetur accusantium nostrum.",
+                                                        "component": "number",
+                                                        "placeholder": "Voluptatem quidem at inventore voluptates quisquam dolores dolorem."
+                                                    },
+                                                    "HYG-1": {
+                                                        "idx": 88,
+                                                        "prompt": "Qui omnis quidem pariatur atque quibusdam.",
+                                                        "rubric": {
+                                                            "score_map": {
+                                                                "Yes": 0,
+                                                                "No": 0,
                                                                 "Not sure": 0
                                                             }
                                                         },
                                                         "options": [
-                                                            "facere",
-                                                            "veniam",
-                                                            "corporis",
-                                                            "occaecati",
+                                                            "Yes",
+                                                            "No",
                                                             "Not sure"
                                                         ],
-                                                        "tooltip": "Quisquam neque dolorem omnis et sint laboriosam soluta.",
-                                                        "component": "multi_select",
-                                                        "placeholder": "Sit sapiente facilis modi illum."
+                                                        "tooltip": "Ullam eligendi consequatur ut.",
+                                                        "component": "yes_no",
+                                                        "placeholder": "Dolorem nobis necessitatibus."
                                                     },
-                                                    "NEF-1": {
-                                                        "idx": 62,
-                                                        "prompt": "Est ab in reprehenderit minima.",
+                                                    "HYG-2": {
+                                                        "idx": 89,
+                                                        "prompt": "Cumque nisi aut repellat ab nihil quis et.",
                                                         "rubric": {
-                                                            "score_map": {}
+                                                            "score_map": {
+                                                                "Yes": 1,
+                                                                "No": 0,
+                                                                "Not sure": 0
+                                                            }
+                                                        },
+                                                        "options": [
+                                                            "Yes",
+                                                            "No",
+                                                            "Not sure"
+                                                        ],
+                                                        "tooltip": "Velit cupiditate consectetur expedita provident voluptatem.",
+                                                        "component": "yes_no",
+                                                        "placeholder": "Explicabo sed ab modi at perspiciatis."
+                                                    }
+                                                },
+                                                "image_url": "http://lorempixel.com/640/480",
+                                                "category_idx": 9,
+                                                "section_type": "Plan",
+                                                "category_description": "Minus odit itaque quaerat fugit officiis et sint quae architecto."
+                                            },
+                                            "UTL": {
+                                                "title": "nemo",
+                                                "prompt": "Enim molestiae voluptatem quis et qui magni iure aut et.",
+                                                "component": "",
+                                                "follow_up": {
+                                                    "UTL-0": {
+                                                        "idx": 52,
+                                                        "prompt": "Repellat voluptatem repudiandae praesentium enim dolore laboriosam cum.",
+                                                        "rubric": {
+                                                            "score_map": {
+                                                                "Yes": 1,
+                                                                "No": 0,
+                                                                "Not sure": 0
+                                                            }
+                                                        },
+                                                        "options": [
+                                                            "Yes",
+                                                            "No",
+                                                            "Not sure"
+                                                        ],
+                                                        "tooltip": "Quasi magni minus suscipit nobis.",
+                                                        "component": "yes_no",
+                                                        "placeholder": "Harum error inventore in reiciendis quam qui."
+                                                    },
+                                                    "UTL-1": {
+                                                        "idx": 0,
+                                                        "prompt": "Quaerat nesciunt eos ut voluptatem qui ipsam praesentium rerum.",
+                                                        "rubric": {
+                                                            "score_map": {
+                                                                "natus": 0,
+                                                                "vitae": 0,
+                                                                "labore": 0,
+                                                                "facere": 0,
+                                                                "Not sure": 0
+                                                            }
+                                                        },
+                                                        "options": [
+                                                            "natus",
+                                                            "vitae",
+                                                            "labore",
+                                                            "facere",
+                                                            "Not sure"
+                                                        ],
+                                                        "tooltip": "Qui modi modi quos voluptatem dolorum ullam quisquam aut ab.",
+                                                        "component": "select",
+                                                        "placeholder": "Vero et neque natus possimus praesentium enim sed."
+                                                    },
+                                                    "UTL-2": {
+                                                        "idx": 89,
+                                                        "prompt": "Harum ducimus officiis tenetur dolor.",
+                                                        "rubric": {
+                                                            "score_map": {
+                                                                "Yes": 0,
+                                                                "No": 1,
+                                                                "Not sure": 0
+                                                            }
+                                                        },
+                                                        "options": [
+                                                            "Yes",
+                                                            "No",
+                                                            "Not sure"
+                                                        ],
+                                                        "tooltip": "Porro perferendis quia et voluptas labore.",
+                                                        "component": "yes_no",
+                                                        "placeholder": "Amet et maiores ducimus."
+                                                    },
+                                                    "UTL-3": {
+                                                        "idx": 4,
+                                                        "prompt": "Nihil totam dolor quod doloremque possimus nam optio et molestiae.",
+                                                        "rubric": {
+                                                            "score_map": {
+                                                                "0": 0,
+                                                                "1": 0,
+                                                                "2": 0,
+                                                                "3": 1,
+                                                                "4": 1
+                                                            }
                                                         },
                                                         "options": [],
-                                                        "tooltip": "Qui laudantium quis repellat incidunt.",
-                                                        "component": "text_area",
-                                                        "placeholder": "Earum consequatur vero est magni deserunt consequatur qui."
+                                                        "tooltip": "Sed molestiae laboriosam explicabo sunt quis deleniti.",
+                                                        "component": "number",
+                                                        "placeholder": "Ut impedit quia labore tempora doloremque aut."
                                                     },
-                                                    "NEF-2": {
-                                                        "idx": 20,
-                                                        "prompt": "Est qui deleniti nemo vel eligendi.",
+                                                    "UTL-4": {
+                                                        "idx": 69,
+                                                        "prompt": "Mollitia velit provident a quibusdam non consequatur.",
+                                                        "rubric": {
+                                                            "score_map": {
+                                                                "Yes": 0,
+                                                                "No": 0,
+                                                                "Not sure": 0
+                                                            }
+                                                        },
+                                                        "options": [
+                                                            "Yes",
+                                                            "No",
+                                                            "Not sure"
+                                                        ],
+                                                        "tooltip": "Reprehenderit sequi quasi perferendis sit harum.",
+                                                        "component": "yes_no",
+                                                        "placeholder": "Dignissimos fugit sit officia iure officiis consequatur ab qui."
+                                                    },
+                                                    "UTL-5": {
+                                                        "idx": 1,
+                                                        "prompt": "Ullam possimus quisquam qui eos voluptatem voluptatem perferendis commodi.",
                                                         "rubric": {
                                                             "score_map": {
                                                                 "Yes": 1,
@@ -3052,105 +2930,85 @@
                                                             "No",
                                                             "Not sure"
                                                         ],
-                                                        "tooltip": "Aut ut eius.",
+                                                        "tooltip": "Temporibus rerum cupiditate.",
                                                         "component": "yes_no",
-                                                        "placeholder": "Deleniti velit deserunt est dolores enim voluptatibus et."
+                                                        "placeholder": "Voluptatem nulla assumenda necessitatibus voluptas sit culpa quo."
                                                     },
-                                                    "NEF-3": {
-                                                        "idx": 0,
-                                                        "prompt": "Ut dolor consequatur voluptatem.",
+                                                    "UTL-6": {
+                                                        "idx": 42,
+                                                        "prompt": "Quia in aperiam doloribus explicabo architecto eaque reprehenderit reiciendis.",
                                                         "rubric": {
                                                             "score_map": {
-                                                                "velit": 1,
-                                                                "officiis": 0,
-                                                                "aut": 1,
-                                                                "nesciunt": 1,
-                                                                "Not sure": 0
+                                                                "0": 0,
+                                                                "1": 0,
+                                                                "2": 0,
+                                                                "3": 1,
+                                                                "4": 1
                                                             }
                                                         },
-                                                        "options": [
-                                                            "velit",
-                                                            "officiis",
-                                                            "aut",
-                                                            "nesciunt",
-                                                            "Not sure"
-                                                        ],
-                                                        "tooltip": "Cupiditate non pariatur ut rerum hic.",
-                                                        "component": "select",
-                                                        "placeholder": "Totam sint deleniti veniam voluptatem aut amet."
-                                                    }
-                                                },
-                                                "image_url": "http://lorempixel.com/640/480",
-                                                "category_idx": 4,
-                                                "section_type": "Measure",
-                                                "category_description": "Harum ut ducimus et laudantium id."
-                                            },
-                                            "TBP": {
-                                                "title": "nulla",
-                                                "prompt": "Facere in et aut ratione tempora dolor.",
-                                                "component": "",
-                                                "follow_up": {
-                                                    "TBP-0": {
-                                                        "idx": 12,
-                                                        "prompt": "Facilis officia eum necessitatibus et nobis totam quis.",
-                                                        "rubric": {
-                                                            "score_map": {}
-                                                        },
                                                         "options": [],
-                                                        "tooltip": "Recusandae dolorem numquam saepe illum labore non totam.",
-                                                        "component": "text_area",
-                                                        "placeholder": "Et distinctio debitis ratione cumque itaque nobis minima."
-                                                    },
-                                                    "TBP-1": {
-                                                        "idx": 66,
-                                                        "prompt": "Dolore non dolores odio sed perspiciatis quia.",
-                                                        "rubric": {
-                                                            "score_map": {
-                                                                "voluptatem": 1,
-                                                                "autem": 0,
-                                                                "rerum": 0,
-                                                                "dolor": 1,
-                                                                "Not sure": 0
-                                                            }
-                                                        },
-                                                        "options": [
-                                                            "voluptatem",
-                                                            "autem",
-                                                            "rerum",
-                                                            "dolor",
-                                                            "Not sure"
-                                                        ],
-                                                        "tooltip": "Qui voluptatem aut.",
-                                                        "component": "select",
-                                                        "placeholder": "Tempora dolore ipsam ipsum."
-                                                    },
-                                                    "TBP-2": {
-                                                        "idx": 93,
-                                                        "prompt": "Consequatur suscipit adipisci.",
-                                                        "rubric": {
-                                                            "score_map": {}
-                                                        },
-                                                        "options": [],
-                                                        "tooltip": "Suscipit placeat voluptatem voluptatibus itaque nihil accusantium est quae recusandae.",
-                                                        "component": "text_area",
-                                                        "placeholder": "Ut ut sapiente dolorem aut aliquam accusantium."
-                                                    },
-                                                    "TBP-3": {
-                                                        "idx": 13,
-                                                        "prompt": "Cum consequatur consequatur.",
-                                                        "rubric": {
-                                                            "score_map": {}
-                                                        },
-                                                        "options": [],
-                                                        "tooltip": "Enim beatae ut doloribus et aliquam ab magnam fugit.",
-                                                        "component": "text_area",
-                                                        "placeholder": "Adipisci quae sed quaerat repudiandae impedit facere itaque tempora."
+                                                        "tooltip": "Enim voluptas beatae aut error dolorum.",
+                                                        "component": "number",
+                                                        "placeholder": "Facere quis et optio soluta provident ut harum."
                                                     }
                                                 },
                                                 "image_url": "http://lorempixel.com/640/480",
                                                 "category_idx": 10,
-                                                "section_type": "Advocate",
-                                                "category_description": "Consequatur est autem aut iusto delectus."
+                                                "section_type": "General",
+                                                "category_description": "Totam ab est aliquid porro id soluta corrupti."
+                                            },
+                                            "DNI": {
+                                                "title": "dignissimos",
+                                                "prompt": "Recusandae eius corrupti accusamus praesentium porro est fugit fugiat ea.",
+                                                "component": "",
+                                                "follow_up": {
+                                                    "DNI-0": {
+                                                        "idx": 100,
+                                                        "prompt": "Quia rerum ut optio ducimus.",
+                                                        "rubric": {
+                                                            "score_map": {
+                                                                "fugiat": 0,
+                                                                "perspiciatis": 1,
+                                                                "quas": 1,
+                                                                "aut": 0,
+                                                                "Not sure": 0
+                                                            }
+                                                        },
+                                                        "options": [
+                                                            "fugiat",
+                                                            "perspiciatis",
+                                                            "quas",
+                                                            "aut",
+                                                            "Not sure"
+                                                        ],
+                                                        "tooltip": "Dolores aut ullam aspernatur.",
+                                                        "component": "select",
+                                                        "placeholder": "Ducimus velit temporibus quisquam."
+                                                    },
+                                                    "DNI-1": {
+                                                        "idx": 0,
+                                                        "prompt": "Dolores id voluptas.",
+                                                        "rubric": {
+                                                            "score_map": {
+                                                                "Yes": 0,
+                                                                "No": 1,
+                                                                "Not sure": 0
+                                                            }
+                                                        },
+                                                        "options": [
+                                                            "Yes",
+                                                            "No",
+                                                            "Not sure"
+                                                        ],
+                                                        "tooltip": "Commodi et sed quibusdam aut minima tenetur.",
+                                                        "component": "yes_no",
+                                                        "placeholder": "Rerum aut numquam eum consequatur minima ipsum nostrum recusandae."
+                                                    }
+                                                },
+                                                "image_url": "http://lorempixel.com/640/480",
+                                                "category_idx": 6,
+                                                "section_type": "Measure",
+                                                "category_description": "Illo officia error non exercitationem."
                                             }
                                         },
                                         "image_url": "http://lorempixel.com/640/480"
@@ -3738,9 +3596,9 @@
                 ]
             }
         },
-        "/certifications": {
+        "/claims": {
             "post": {
-                "operationId": "CertificationsController_create",
+                "operationId": "ClaimsController_create",
                 "parameters": [],
                 "responses": {
                     "201": {
@@ -3748,7 +3606,7 @@
                     }
                 },
                 "tags": [
-                    "Certifications"
+                    "Claims"
                 ],
                 "security": [
                     {
@@ -3761,7 +3619,7 @@
                 ]
             },
             "get": {
-                "operationId": "CertificationsController_findAll",
+                "operationId": "ClaimsController_findAll",
                 "parameters": [],
                 "responses": {
                     "200": {
@@ -3769,7 +3627,7 @@
                     }
                 },
                 "tags": [
-                    "Certifications"
+                    "Claims"
                 ],
                 "security": [
                     {
@@ -3782,9 +3640,9 @@
                 ]
             }
         },
-        "/certifications/{id}": {
+        "/claims/{id}": {
             "patch": {
-                "operationId": "CertificationsController_update",
+                "operationId": "ClaimsController_update",
                 "parameters": [
                     {
                         "name": "id",
@@ -3801,7 +3659,7 @@
                     }
                 },
                 "tags": [
-                    "Certifications"
+                    "Claims"
                 ],
                 "security": [
                     {
@@ -3814,7 +3672,7 @@
                 ]
             },
             "get": {
-                "operationId": "CertificationsController_findById",
+                "operationId": "ClaimsController_findById",
                 "parameters": [
                     {
                         "name": "id",
@@ -3831,7 +3689,7 @@
                     }
                 },
                 "tags": [
-                    "Certifications"
+                    "Claims"
                 ],
                 "security": [
                     {
@@ -3844,7 +3702,7 @@
                 ]
             },
             "delete": {
-                "operationId": "CertificationsController_remove",
+                "operationId": "ClaimsController_remove",
                 "parameters": [
                     {
                         "name": "id",
@@ -3861,7 +3719,7 @@
                     }
                 },
                 "tags": [
-                    "Certifications"
+                    "Claims"
                 ],
                 "security": [
                     {
@@ -3874,9 +3732,9 @@
                 ]
             }
         },
-        "/certifications/name/{name}": {
+        "/claims/name/{name}": {
             "get": {
-                "operationId": "CertificationsController_findByName",
+                "operationId": "ClaimsController_findByName",
                 "parameters": [
                     {
                         "name": "name",
@@ -3893,7 +3751,7 @@
                     }
                 },
                 "tags": [
-                    "Certifications"
+                    "Claims"
                 ],
                 "security": [
                     {
@@ -3904,17 +3762,6 @@
                         ]
                     }
                 ]
-            }
-        },
-        "/health": {
-            "get": {
-                "operationId": "HealthController_health",
-                "parameters": [],
-                "responses": {
-                    "200": {
-                        "description": ""
-                    }
-                }
             }
         },
         "/organizations/{orgId}/integrations": {
@@ -7352,41 +7199,59 @@
                             "schema": {
                                 "example": [
                                     {
-                                        "id": "cq_bf4vkwame4vnf1ogddkmmcop",
-                                        "compliance_section_id": "cs_wjvbl71ccqd7st2ever7iwyw",
-                                        "key": "JGR",
-                                        "order": 22,
-                                        "prompt": "Cum illum officiis eaque distinctio qui earum.",
-                                        "component": "text_area",
-                                        "options": [],
+                                        "id": "cq_knqmo28lk6qsigzjx7oh77bw",
+                                        "compliance_section_id": "cs_vttu1wbjp9pjefad5k5jz6j7",
+                                        "key": "YTF",
+                                        "order": 3,
+                                        "prompt": "Quos animi aliquam sint modi cumque nihil illum.",
+                                        "component": "select",
+                                        "options": [
+                                            "perspiciatis",
+                                            "in",
+                                            "veritatis",
+                                            "recusandae",
+                                            "Not sure"
+                                        ],
                                         "rubric": {
-                                            "score_map": {}
+                                            "score_map": {
+                                                "perspiciatis": 0,
+                                                "in": 1,
+                                                "veritatis": 1,
+                                                "recusandae": 1,
+                                                "Not sure": 0
+                                            }
                                         },
-                                        "tooltip": "Vitae incidunt est voluptas omnis placeat.",
-                                        "placeholder": "Quia dolorem nemo asperiores culpa.",
-                                        "compliance_definition_name": "Wisoky Ltd. Test Survey",
+                                        "tooltip": "Earum quia et magnam.",
+                                        "placeholder": "Quisquam nisi incidunt et.",
+                                        "compliance_definition_name": "Wolff LLC Test Survey",
                                         "dependency_expression": "true in $map($lookup(definition.sections.*.follow_up, 'CDE-62').value, function($v) { $v in ['We facilitate or have an allocated budget for external professional development opportunities, (e.g. conference attendance, online trainings)'] })"
                                     },
                                     {
-                                        "id": "cq_zpzyh5adm5oicev44b3i0eyo",
-                                        "compliance_section_id": "cs_tlucnehjahsd7yoh0je71qy6",
-                                        "key": "DOO",
-                                        "order": 0,
-                                        "prompt": "Numquam autem voluptatum vel illo iste.",
-                                        "component": "number",
-                                        "options": [],
+                                        "id": "cq_phx8ihhvs6kv15gz7dp54t4c",
+                                        "compliance_section_id": "cs_eedmbsbx70u562ih0y14mwal",
+                                        "key": "FOR",
+                                        "order": 8,
+                                        "prompt": "Numquam et repellendus molestiae quam.",
+                                        "component": "multi_select",
+                                        "options": [
+                                            "explicabo",
+                                            "sit",
+                                            "qui",
+                                            "fugiat",
+                                            "Not sure"
+                                        ],
                                         "rubric": {
                                             "score_map": {
-                                                "0": 1,
-                                                "1": 1,
-                                                "2": 1,
-                                                "3": 1,
-                                                "4": 1
+                                                "explicabo": 1,
+                                                "sit": 1,
+                                                "qui": 0,
+                                                "fugiat": 0,
+                                                "Not sure": 0
                                             }
                                         },
-                                        "tooltip": "Consequatur dolor deserunt sit rerum dolorum maxime nihil.",
-                                        "placeholder": "Aut a ratione dicta eligendi.",
-                                        "compliance_definition_name": "Mills, Rutherford and Quigley Corp. Test Survey",
+                                        "tooltip": "Ad eius ut facilis veritatis.",
+                                        "placeholder": "Quasi asperiores cum dolores dolor.",
+                                        "compliance_definition_name": "Conn Ltd. Test Survey",
                                         "dependency_expression": "true in $map($lookup(definition.sections.*.follow_up, 'CDE-62').value, function($v) { $v in ['We facilitate or have an allocated budget for external professional development opportunities, (e.g. conference attendance, online trainings)'] })"
                                     }
                                 ],
@@ -7440,31 +7305,25 @@
                         "application/json": {
                             "schema": {
                                 "example": {
-                                    "id": "cq_yv9w5wb6jqa4w4dvxluqs9qs",
-                                    "compliance_section_id": "cs_zqn5jxi4zwrg34r9kfbdobet",
-                                    "key": "BCZ",
-                                    "order": 9,
-                                    "prompt": "Explicabo odit recusandae similique sunt autem ab.",
-                                    "component": "multi_select",
-                                    "options": [
-                                        "aperiam",
-                                        "esse",
-                                        "vel",
-                                        "incidunt",
-                                        "Not sure"
-                                    ],
+                                    "id": "cq_ewof3xmai6yo1rkc5xadqq0t",
+                                    "compliance_section_id": "cs_x7r2vu58ndkc8cyajy1ai375",
+                                    "key": "KXP",
+                                    "order": 0,
+                                    "prompt": "Ratione quia fuga ea voluptatem voluptatem esse.",
+                                    "component": "number",
+                                    "options": [],
                                     "rubric": {
                                         "score_map": {
-                                            "aperiam": 1,
-                                            "esse": 0,
-                                            "vel": 0,
-                                            "incidunt": 1,
-                                            "Not sure": 0
+                                            "0": 1,
+                                            "1": 0,
+                                            "2": 1,
+                                            "3": 0,
+                                            "4": 0
                                         }
                                     },
-                                    "tooltip": "Repellendus amet ipsam magnam omnis.",
-                                    "placeholder": "Dolor veniam ut explicabo minus quis et eos sint.",
-                                    "compliance_definition_name": "Shanahan, Hyatt and Schroeder Ltd. Test Survey",
+                                    "tooltip": "Itaque dolorum adipisci.",
+                                    "placeholder": "Maiores explicabo at sit.",
+                                    "compliance_definition_name": "Rath, Gutkowski and Schaden Group Test Survey",
                                     "dependency_expression": "true in $map($lookup(definition.sections.*.follow_up, 'CDE-62').value, function($v) { $v in ['We facilitate or have an allocated budget for external professional development opportunities, (e.g. conference attendance, online trainings)'] })"
                                 },
                                 "$ref": "#/components/schemas/"
@@ -7607,31 +7466,27 @@
                         "application/json": {
                             "schema": {
                                 "example": {
-                                    "id": "cq_guy3u5et6an7lx38yxtpjamw",
-                                    "compliance_section_id": "cs_pnlu45zzahx55j8d2pjwpgpm",
-                                    "key": "KEH",
-                                    "order": 75,
-                                    "prompt": "Quod explicabo distinctio.",
-                                    "component": "select",
+                                    "id": "cq_r85ipra0hjydrt78f49o1wrw",
+                                    "compliance_section_id": "cs_b1rq7tzs6ubirn7uyilm9rkk",
+                                    "key": "BMX",
+                                    "order": 85,
+                                    "prompt": "Ad voluptatum fugit.",
+                                    "component": "yes_no",
                                     "options": [
-                                        "molestiae",
-                                        "est",
-                                        "hic",
-                                        "dolorem",
+                                        "Yes",
+                                        "No",
                                         "Not sure"
                                     ],
                                     "rubric": {
                                         "score_map": {
-                                            "molestiae": 1,
-                                            "est": 1,
-                                            "hic": 0,
-                                            "dolorem": 0,
+                                            "Yes": 1,
+                                            "No": 1,
                                             "Not sure": 0
                                         }
                                     },
-                                    "tooltip": "Voluptates beatae necessitatibus odit suscipit eos nam eum veritatis non.",
-                                    "placeholder": "Corrupti impedit dolorem minus qui doloremque quisquam earum velit ut.",
-                                    "compliance_definition_name": "Jacobi-Eichmann Group Test Survey",
+                                    "tooltip": "Provident recusandae aliquam est esse id repudiandae harum.",
+                                    "placeholder": "Quo cupiditate autem aut nostrum et et est.",
+                                    "compliance_definition_name": "Dibbert, Leuschke and Reichel Inc. Test Survey",
                                     "dependency_expression": "true in $map($lookup(definition.sections.*.follow_up, 'CDE-62').value, function($v) { $v in ['We facilitate or have an allocated budget for external professional development opportunities, (e.g. conference attendance, online trainings)'] })"
                                 },
                                 "$ref": "#/components/schemas/"
@@ -7768,12 +7623,12 @@
                         "application/json": {
                             "schema": {
                                 "example": {
-                                    "id": "cs_jsj2i20udh8lpnc4kv9ohpgc",
-                                    "key": "HYN",
-                                    "title": "Ducimus et dignissimos voluptatem fugiat officiis consectetur.",
-                                    "order": 57,
-                                    "compliance_section_group_id": "csg_x7gusu2kvky74taefy8qsl1d",
-                                    "compliance_definition_name": "Walker Inc. Test Survey",
+                                    "id": "cs_mfp8afm9v6q409j6oeok7ome",
+                                    "key": "EKO",
+                                    "title": "Aut harum quia quas nesciunt et voluptate.",
+                                    "order": 31,
+                                    "compliance_section_group_id": "csg_z5hn68m3eyot38vcqt0ueo91",
+                                    "compliance_definition_name": "Hegmann, Greenholt and Willms LLC Test Survey",
                                     "dependency_expression": "true in $map($lookup(definition.sections.*.follow_up, 'CDE-62').value, function($v) { $v in ['We facilitate or have an allocated budget for external professional development opportunities, (e.g. conference attendance, online trainings)'] })"
                                 },
                                 "$ref": "#/components/schemas/"
@@ -7924,12 +7779,12 @@
                         "application/json": {
                             "schema": {
                                 "example": {
-                                    "id": "cs_yc3mkqgzm41ouvhjkpb3xr95",
-                                    "key": "FSZ",
-                                    "title": "Similique dicta suscipit necessitatibus.",
-                                    "order": 63,
-                                    "compliance_section_group_id": "csg_eq29ps9y0v66gpw1ayxasgv0",
-                                    "compliance_definition_name": "Lowe-D'Amore Ltd. Test Survey",
+                                    "id": "cs_upsne2148webrwqwgj3fuvpt",
+                                    "key": "OVA",
+                                    "title": "Dicta soluta voluptatibus.",
+                                    "order": 4,
+                                    "compliance_section_group_id": "csg_bfsh1isnlqm3s640s6pmq49g",
+                                    "compliance_definition_name": "Jaskolski-Reilly LLC Test Survey",
                                     "dependency_expression": "true in $map($lookup(definition.sections.*.follow_up, 'CDE-62').value, function($v) { $v in ['We facilitate or have an allocated budget for external professional development opportunities, (e.g. conference attendance, online trainings)'] })"
                                 },
                                 "$ref": "#/components/schemas/"
@@ -8058,10 +7913,10 @@
                         "application/json": {
                             "schema": {
                                 "example": {
-                                    "id": "csg_ri5sv51rer7iuj7uy5rkq9zq",
-                                    "compliance_definition_name": "Baumbach-Hand Ltd. Test Survey",
-                                    "title": "Harum quam beatae tempora quod et iste.",
-                                    "order": 81
+                                    "id": "csg_hqk8i2nuisunrl7yer8fmwgj",
+                                    "compliance_definition_name": "Schmitt, Quigley and Runolfsson Corp. Test Survey",
+                                    "title": "Possimus provident suscipit accusamus temporibus.",
+                                    "order": 7
                                 },
                                 "$ref": "#/components/schemas/"
                             }
@@ -8230,9 +8085,9 @@
                 ]
             }
         },
-        "/certifications/{cId}/organization/{orgId}/claims": {
+        "/claims/{cId}/a/{orgId}/claims": {
             "post": {
-                "operationId": "ClaimsController_create",
+                "operationId": "OrganizationClaimsController_create",
                 "parameters": [
                     {
                         "name": "cId",
@@ -8257,7 +8112,7 @@
                     }
                 },
                 "tags": [
-                    "Certifications",
+                    "Organization",
                     "Claims"
                 ],
                 "security": [
@@ -8271,7 +8126,7 @@
                 ]
             },
             "get": {
-                "operationId": "ClaimsController_findAll",
+                "operationId": "OrganizationClaimsController_findAll",
                 "parameters": [
                     {
                         "name": "cId",
@@ -8296,7 +8151,7 @@
                     }
                 },
                 "tags": [
-                    "Certifications",
+                    "Organization",
                     "Claims"
                 ],
                 "security": [
@@ -8310,9 +8165,9 @@
                 ]
             }
         },
-        "/certifications/{cId}/organization/{orgId}/claims/{id}": {
+        "/claims/{cId}/a/{orgId}/claims/{id}": {
             "get": {
-                "operationId": "ClaimsController_findById",
+                "operationId": "OrganizationClaimsController_findById",
                 "parameters": [
                     {
                         "name": "cId",
@@ -8345,7 +8200,7 @@
                     }
                 },
                 "tags": [
-                    "Certifications",
+                    "Organization",
                     "Claims"
                 ],
                 "security": [
@@ -8359,7 +8214,7 @@
                 ]
             },
             "patch": {
-                "operationId": "ClaimsController_update",
+                "operationId": "OrganizationClaimsController_update",
                 "parameters": [
                     {
                         "name": "cId",
@@ -8392,7 +8247,7 @@
                     }
                 },
                 "tags": [
-                    "Certifications",
+                    "Organization",
                     "Claims"
                 ],
                 "security": [
@@ -8406,7 +8261,7 @@
                 ]
             },
             "delete": {
-                "operationId": "ClaimsController_remove",
+                "operationId": "OrganizationClaimsController_remove",
                 "parameters": [
                     {
                         "name": "cId",
@@ -8439,7 +8294,7 @@
                     }
                 },
                 "tags": [
-                    "Certifications",
+                    "Organization",
                     "Claims"
                 ],
                 "security": [
@@ -8453,9 +8308,9 @@
                 ]
             }
         },
-        "/certifications/{cId}/organization/{orgId}/claims/name/{name}": {
+        "/claims/{cId}/a/{orgId}/claims/name/{name}": {
             "get": {
-                "operationId": "ClaimsController_findByName",
+                "operationId": "OrganizationClaimsController_findByName",
                 "parameters": [
                     {
                         "name": "cId",
@@ -8488,7 +8343,7 @@
                     }
                 },
                 "tags": [
-                    "Certifications",
+                    "Organization",
                     "Claims"
                 ],
                 "security": [
