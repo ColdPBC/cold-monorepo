@@ -1,10 +1,9 @@
-import { BadRequestException, ConflictException, Global, Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
 import { BaseWorker } from '../../../worker';
 import { PrismaService } from '../../../prisma';
 import { IAuthenticatedUser } from '../../../primitives';
 import { organizations } from '@prisma/client';
 import { Cuid2Generator, GuidPrefixes } from '../../../utility';
-import { omit } from 'lodash';
 
 @Injectable()
 export class MaterialsRepository extends BaseWorker {
@@ -19,6 +18,41 @@ export class MaterialsRepository extends BaseWorker {
       include: {
         supplier: true,
         material: true,
+      },
+    },
+    certification_claims: {
+      select: {
+        id: true,
+        certification_id: true,
+        effective_date: true,
+        issued_date: true,
+        material: true,
+        product: true,
+        facility: true,
+        organization_file: {
+          select: {
+            id: true,
+            original_name: true,
+            bucket: true,
+            key: true,
+            expires_at: true,
+            effective_start_date: true,
+            effective_end_date: true,
+            openai_file_id: true,
+            type: true,
+            mimetype: true,
+            size: true,
+            checksum: true,
+          },
+        },
+        certification: {
+          select: {
+            id: true,
+            name: true,
+            type: true,
+            level: true,
+          },
+        },
       },
     },
     created_at: true,
@@ -41,7 +75,12 @@ export class MaterialsRepository extends BaseWorker {
       if (e.code === 'P2002') {
         throw new ConflictException({ organization: org, user, data }, { cause: `Material ${data.name} already exists` });
       }
-      this.logger.error(`Organization material ${data.name} failed to create`, { organization: org, user, data, error: e });
+      this.logger.error(`Organization material ${data.name} failed to create`, {
+        organization: org,
+        user,
+        data,
+        error: e,
+      });
       throw e;
     }
   }
@@ -60,7 +99,15 @@ export class MaterialsRepository extends BaseWorker {
     return materials;
   }
 
-  async updateMaterials(org: organizations, user: IAuthenticatedUser, filters: { id?: string; name?: string }, data: any) {
+  async updateMaterials(
+    org: organizations,
+    user: IAuthenticatedUser,
+    filters: {
+      id?: string;
+      name?: string;
+    },
+    data: any,
+  ) {
     const product = this.prisma.products.update({
       where: {
         organization_id: org.id,

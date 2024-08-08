@@ -1,64 +1,72 @@
+import React, { useEffect, useState } from 'react';
+import { MaterialsWithCertifications } from '@coldpbc/interfaces';
+import { useOrgSWR } from '@coldpbc/hooks';
+import { axiosFetcher } from '@coldpbc/fetchers';
+import { isAxiosError } from 'axios';
+import { ColdIcon, MUIDataGridNoRowsOverlay, Spinner } from '@coldpbc/components';
 import { DataGrid, GridColDef, GridRenderCellParams, GridTreeNodeWithRender, GridValidRowModel } from '@mui/x-data-grid';
+import { CertificationStatus, IconNames } from '@coldpbc/enums';
 import { HexColors } from '@coldpbc/themes';
 import { differenceInDays } from 'date-fns';
-import { CertificationStatus, IconNames } from '@coldpbc/enums';
-import { ColdIcon, MUIDataGridNoRowsOverlay, Spinner } from '@coldpbc/components';
-import useSWR from 'swr';
-import { axiosFetcher } from '@coldpbc/fetchers';
-import { useEffect, useState } from 'react';
-import { Suppliers, SuppliersClaimNames, SuppliersClaimNamesPayload, SuppliersWithCertifications } from '@coldpbc/interfaces';
-import { isAxiosError } from 'axios';
-import { useAuth0Wrapper } from '@coldpbc/hooks';
-import { useNavigate } from 'react-router-dom';
-import { toArray } from 'lodash';
+import { forEach, isEqual, toArray, uniq, uniqWith } from 'lodash';
 
-export const SuppliersDataGrid = () => {
-  const navigate = useNavigate();
+export const MaterialsDataGrid = () => {
+  const [materials, setMaterials] = useState<MaterialsWithCertifications[]>([]);
+  const materialsSWR = useOrgSWR<MaterialsWithCertifications[], any>([`/materials`, 'GET'], axiosFetcher);
 
-  const [certifications, setCertifications] = useState<SuppliersClaimNames[]>([]);
-  const [suppliers, setSuppliers] = useState<SuppliersWithCertifications[]>([]);
-  const { orgId } = useAuth0Wrapper();
-  const certificateSWR = useSWR<SuppliersClaimNamesPayload[], any, any>([`/organizations/${orgId}/suppliers/claims/names`, 'GET'], axiosFetcher);
-  const suppliersSWR = useSWR<SuppliersWithCertifications[], any, any>([`/organizations/${orgId}/suppliers`, 'GET'], axiosFetcher);
-
-  useEffect(() => {
-    if (certificateSWR.data) {
-      if (isAxiosError(certificateSWR.data)) {
-        // handle no claims 404, set state to empty array
-        if (certificateSWR.data?.response?.status === 404) {
-          setCertifications([]);
-        }
-      } else {
-        setCertifications(
-          certificateSWR.data.filter(certification => {
-            return certification.claim_name !== null;
-          }) as SuppliersClaimNames[],
-        );
-      }
-    }
-  }, [certificateSWR.data]);
+  // useEffect(() => {
+  //   if (certificateSWR.data) {
+  //     if (isAxiosError(certificateSWR.data)) {
+  //       // handle no claims 404, set state to empty array
+  //       if (certificateSWR.data?.response?.status === 404) {
+  //         setCertifications([]);
+  //       }
+  //     } else {
+  //       setCertifications(
+  //         certificateSWR.data.filter(certification => {
+  //           return certification.claim_name !== null;
+  //         }) as SuppliersClaimNames[],
+  //       );
+  //     }
+  //   }
+  // }, [certificateSWR.data]);
 
   useEffect(() => {
-    if (suppliersSWR.data) {
-      if (isAxiosError(suppliersSWR.data)) {
+    if (materialsSWR.data) {
+      if (isAxiosError(materialsSWR.data)) {
         // handle no suppliers 404, set state to empty array
-        if (isAxiosError(suppliersSWR.data) && suppliersSWR.data?.response?.status === 404) {
-          setSuppliers([]);
+        if (isAxiosError(materialsSWR.data) && materialsSWR.data?.response?.status === 404) {
+          setMaterials([]);
         }
       } else {
-        setSuppliers(suppliersSWR.data);
+        setMaterials(materialsSWR.data);
       }
     }
-  }, [suppliersSWR.data]);
+  }, [materialsSWR.data]);
 
-  if (certificateSWR.isLoading || suppliersSWR.isLoading) {
+  const uniqSuppliers = uniq(materials.map(material => material.material_suppliers.map(supplier => supplier.supplier.name)).flat());
+  const uniqCertifications = uniqWith(
+    materials
+      .map(material =>
+        material.certification_claims.map(claim => {
+          return {
+            claim_name: claim.certification?.name,
+            claim_id: claim.certification?.id,
+          };
+        }),
+      )
+      .flat(),
+    isEqual,
+  );
+
+  if (materialsSWR.isLoading) {
     return <Spinner />;
   }
 
   const renderCell = (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
-    // if the value is null return null
-    const expirationDate: string | undefined | null = suppliers
-      .find(supplier => supplier.id === params.row.id)
+    // get the expiration date using the params.row.id
+    const expirationDate: string | undefined | null = materials
+      .find(material => material.id === params.row.id)
       ?.certification_claims.find(certificateClaim => certificateClaim.certification?.name === params.field)?.organization_file.effective_end_date;
     let diff = 0;
 
@@ -99,6 +107,21 @@ export const SuppliersDataGrid = () => {
     }
   };
 
+  const renderSupplierCell = (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
+    // loop through the array of suppliers and return the suppliers
+    return (
+      <div className={'h-full flex items-center text-body text-tc-primary font-bold gap-[10px]'}>
+        {params.value.map((supplier: string, index: number) => {
+          return (
+            <div key={index} className={'rounded-[32px] border-[1px] border-primary px-[12px] w-auto whitespace-nowrap truncate'}>
+              <span className={'text-body'}>{supplier}</span>
+            </div>
+          );
+        })}
+      </div>
+    );
+  };
+
   const columns: GridColDef[] = [
     {
       field: 'name',
@@ -111,15 +134,18 @@ export const SuppliersDataGrid = () => {
       },
     },
     {
-      field: 'country',
-      headerName: 'Country',
+      field: 'supplier',
+      headerName: 'Supplier',
       headerClassName: 'bg-gray-30 h-[37px] text-body',
       flex: 1,
       minWidth: 180,
+      type: 'singleSelect',
+      valueOptions: uniqSuppliers,
+      renderCell: renderSupplierCell,
     },
   ];
 
-  certifications.forEach((claim, index) => {
+  uniqCertifications.forEach((claim, index) => {
     columns.push({
       field: claim.claim_name,
       headerName: claim.claim_name,
@@ -135,21 +161,21 @@ export const SuppliersDataGrid = () => {
 
   const newRows: GridValidRowModel[] = [];
 
-  suppliers.forEach((supplier, index) => {
+  forEach(materials, material => {
     const row = {
-      id: supplier.id,
-      name: supplier.name,
-      country: supplier.country,
+      id: material.id,
+      name: material.name,
+      supplier: material.material_suppliers.map(supplier => supplier.supplier.name),
     };
 
     columns.forEach(column => {
-      if (column.field !== 'name' && column.field !== 'country') {
+      if (column.field !== 'name' && column.field !== 'supplier') {
         row[column.field] = CertificationStatus.Inactive;
       }
     });
 
-    certifications.forEach(claim => {
-      const certificateClaims = supplier.certification_claims
+    uniqCertifications.forEach(claim => {
+      const certificateClaims = material.certification_claims
         .filter(certificateClaim => certificateClaim.certification?.name === claim.claim_name)
         .filter(
           // filter out the null expiration dates
@@ -243,7 +269,7 @@ export const SuppliersDataGrid = () => {
         noRowsOverlay: MUIDataGridNoRowsOverlay,
       }}
       onRowClick={params => {
-        navigate(`/suppliers/${params.row.id}`);
+        // todo: navigate to the material page
       }}
     />
   );

@@ -52,6 +52,8 @@ const _SideBar = ({ defaultExpanded }: { defaultExpanded?: boolean }): JSX.Eleme
       return !ldFlags.showNewComplianceManagerPreviewCold713;
     } else if (item.key === 'suppliers_key') {
       return ldFlags.showSuppliersPageCold890;
+    } else if (item.key === 'materials_key') {
+      return ldFlags.showMaterialsPageCold912;
     } else {
       return true;
     }

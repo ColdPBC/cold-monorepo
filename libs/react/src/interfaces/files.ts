@@ -1,6 +1,6 @@
 import { Certifications } from './certifications';
 import { FileTypes } from '@coldpbc/enums';
-import { Materials } from './materials';
+import { MaterialsWithCertifications } from './materials';
 
 export interface Files {
   id: string;
@@ -13,7 +13,7 @@ export interface Files {
     certification_id: string;
     organization_file_id: string;
     certification: Certifications;
-    material: null | Materials;
+    material: null | MaterialsWithCertifications;
     product: null | any;
     facility: null | any;
   }[];

@@ -8,7 +8,7 @@ import { getDateActiveStatus } from '@coldpbc/lib';
 import useSWR from 'swr';
 import { axiosFetcher } from '@coldpbc/fetchers';
 import { useAddToastMessage, useAuth0Wrapper, useColdContext } from '@coldpbc/hooks';
-import { Certifications, Suppliers, ToastMessage } from '@coldpbc/interfaces';
+import { Certifications, Suppliers, SuppliersWithCertifications, ToastMessage } from '@coldpbc/interfaces';
 import { isAxiosError } from 'axios';
 import capitalize from 'lodash/capitalize';
 import { withErrorBoundary } from 'react-error-boundary';
@@ -19,10 +19,10 @@ export const _SupplierDetail = () => {
   const { logBrowser } = useColdContext();
   const { id } = useParams();
   const { orgId } = useAuth0Wrapper();
-  const supplierSWR = useSWR<Suppliers, any, any>([`/organizations/${orgId}/suppliers/${id}`, 'GET'], axiosFetcher);
+  const supplierSWR = useSWR<SuppliersWithCertifications, any, any>([`/organizations/${orgId}/suppliers/${id}`, 'GET'], axiosFetcher);
   const ref = React.useRef<HTMLDivElement>(null);
   const tableRef = React.useRef<HTMLDivElement>(null);
-  const [supplier, setSupplier] = useState<Suppliers | undefined>(undefined);
+  const [supplier, setSupplier] = useState<SuppliersWithCertifications | undefined>(undefined);
   const [selectedClaim, setSelectedClaim] = useState<{
     name: string;
     label: string;

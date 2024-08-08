@@ -30,13 +30,14 @@ import {
   getQuestionnaireSidebarComplianceMock,
 } from './complianceMock';
 import { getDocumentsListTableMock } from './componentMock';
-import { getAllFilesMock, getFilesWithCertificateClaimsMock } from './filesMock';
+import { getFilesWithCertificateClaimsMock } from './filesMock';
 import { returnUpdatedSurvey } from './helpers';
 import { ComplianceSurveyPayloadType } from '@coldpbc/interfaces';
 import { getDefaultEmissionMock } from './emissionMocks';
 import { getNotesMock } from './notesMock';
 import { getCertificationsMock, getSupplierClaimsMock } from './claimsMock';
-import { getSupplierMockById, getSupplierMockByName, getSupplierWithCertificationClaimsMock } from './suppliersMock';
+import { getSupplierMockById, getSupplierWithCertificationClaimsMock } from './suppliersMock';
+import { getMaterialsMock } from './materialsMock';
 
 // Even if this uses vite as a bundler, it still uses the NODE_ENV variable
 export const getApiUrl = (path: string) => {
@@ -383,9 +384,12 @@ export const handlers = [
   rest.delete(getApiUrl('/organizations/:orgId/files/:fileId'), (req, res, ctx) => {
     return res(ctx.status(200));
   }),
-  
+
   rest.post(getApiUrl('/compliance/:name/organizations/:orgId'), (req, res, ctx) => {
     return res(ctx.status(200));
   }),
 
+  rest.get(getApiUrl('organizations/:orgId/materials'), (req, res, ctx) => {
+    return res(ctx.json(getMaterialsMock()));
+  }),
 ];
