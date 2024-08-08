@@ -12,13 +12,13 @@ export class ClaimsRepository extends BaseWorker {
   }
 
   async createClaim(org: organizations, user: IAuthenticatedUser, data: claims) {
-    data.id = new Cuid2Generator(GuidPrefixes.Certifications).scopedId;
+    data.id = new Cuid2Generator(GuidPrefixes.Claims).scopedId;
 
     if (!data.name) {
-      throw new BadRequestException('Certification name is required');
+      throw new BadRequestException('Claim name is required');
     }
     if (!data.type) {
-      throw new BadRequestException('Certification type is required');
+      data.type = claim_types.INTERNAL;
     }
 
     const certification = this.prisma.claims.create({
