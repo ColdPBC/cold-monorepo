@@ -33,10 +33,10 @@ const _MaterialsDataGrid = () => {
   const uniqCertifications = uniqWith(
     materials
       .map(material =>
-        material.certification_claims.map(claim => {
+        material.organization_claims.map(claim => {
           return {
-            claim_name: claim.certification?.name,
-            claim_id: claim.certification?.id,
+            claim_name: claim.claim?.name,
+            claim_id: claim.claim?.id,
           };
         }),
       )
@@ -52,8 +52,8 @@ const _MaterialsDataGrid = () => {
     // get the expiration date using the params.row.id
     const expirationDate: string | undefined | null = materials
       .find(material => material.id === params.row.id)
-      ?.certification_claims.filter(certificateClaim => certificateClaim.organization_file.effective_end_date !== null)
-      .find(certificateClaim => certificateClaim.certification?.name === params.field)?.organization_file.effective_end_date;
+      ?.organization_claims.filter(certificateClaim => certificateClaim.organization_file.effective_end_date !== null)
+      .find(certificateClaim => certificateClaim.claim?.name === params.field)?.organization_file.effective_end_date;
     let diff = 0;
 
     switch (params.value) {
@@ -163,8 +163,8 @@ const _MaterialsDataGrid = () => {
     });
 
     uniqCertifications.forEach(claim => {
-      const certificateClaims = material.certification_claims
-        .filter(certificateClaim => certificateClaim.certification?.name === claim.claim_name)
+      const certificateClaims = material.organization_claims
+        .filter(certificateClaim => certificateClaim.claim?.name === claim.claim_name)
         .filter(
           // filter out the null expiration dates
           certificateClaim => certificateClaim.organization_file.effective_end_date !== null,

@@ -15,9 +15,9 @@ export const SupplierClaimsTable = (props: {
 }) => {
   const { supplier, showSupplierCertificateDetails, innerRef } = props;
 
-  const orderedCertificateClaims = orderBy(supplier.certification_claims, ['certification.name', 'organization_file.effective_end_date'], ['desc', 'desc']);
+  const orderedCertificateClaims = orderBy(supplier.organization_claims, ['certification.name', 'organization_file.effective_end_date'], ['desc', 'desc']);
   // get list of unique claim names from the supplier. filter out undefined values
-  const uniqueClaimNames = uniq(orderedCertificateClaims.map(claim => claim.certification?.name));
+  const uniqueClaimNames = uniq(orderedCertificateClaims.map(claim => claim.claim?.name));
 
   const renderStatus = (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
     // if the value is null return null
@@ -105,7 +105,7 @@ export const SupplierClaimsTable = (props: {
   const newRows: GridValidRowModel[] = [];
 
   forEach(uniqueClaimNames, (value, index) => {
-    const claimCertifications = orderedCertificateClaims.filter(claim => claim.certification?.name === value);
+    const claimCertifications = orderedCertificateClaims.filter(claim => claim.claim?.name === value);
     if (claimCertifications.length > 0) {
       // get the first claim certification without effective end date being null
       const claimCertsWithEndDate = claimCertifications

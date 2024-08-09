@@ -1,5 +1,5 @@
 import { Suppliers } from './suppliers';
-import { Certifications } from './certifications';
+import { Claims } from './claims';
 
 export interface Materials {
   id: string;
@@ -8,9 +8,9 @@ export interface Materials {
 
 export interface MaterialsWithCertifications extends Materials {
   material_suppliers: MaterialSuppliers[];
-  certification_claims: {
+  organization_claims: {
     id: string;
-    certification: Certifications;
+    claim: Claims;
     organization_file: {
       original_name: string;
       effective_start_date: string | null;

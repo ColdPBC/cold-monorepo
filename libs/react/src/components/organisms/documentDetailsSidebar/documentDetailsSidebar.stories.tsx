@@ -84,14 +84,14 @@ export const WithClaims: Story = {
   args: {
     file: {
       ...getFilesWithCertificateClaimsMock()[0],
-      certification_claim: [
+      organization_claims: [
         {
           id: 'claim_cov42be44dd54mb6y90ef5fq',
-          certification_id: 'cert_n081cl70wmqsl1uydmkgmxke',
+          claim_id: 'cert_n081cl70wmqsl1uydmkgmxke',
           organization_file_id: 'ofile_cq5j3hvdxdnceh46wyw056qo',
           material: null,
           product: null,
-          certification: {
+          claim: {
             id: 'cert_n081cl70wmqsl1uydmkgmxke',
             name: 'WRAP Certified',
             level: 'Supplier',
@@ -104,16 +104,16 @@ export const WithClaims: Story = {
         },
         {
           id: 'claim_cov42be44dd54mb6y90ef',
-          certification_id: 'cert_n081cl70wmqsl1uydmkgmx',
+          claim_id: 'cert_n081cl70wmqsl1uydmkgmx',
           organization_file_id: 'ofile_cq5j3hvdxdnceh46wyw056qo',
           material: {
             id: 'mat_n081cl70wmqsl1uydmkgmxke',
             name: 'Spandex 1',
             material_suppliers: [],
-            certification_claims: [],
+            organization_claims: [],
           },
           product: null,
-          certification: {
+          claim: {
             id: 'cert_n081cl70wmqsl1uydmkgmxke',
             name: 'Pfas Test',
             level: 'Supplier',
@@ -126,16 +126,16 @@ export const WithClaims: Story = {
         },
         {
           id: 'claim_cov42be44dd54mb6y90ef',
-          certification_id: 'cert_n081cl70wmqsl1uydmkgmx',
+          claim_id: 'cert_n081cl70wmqsl1uydmkgmx',
           organization_file_id: 'ofile_cq5j3hvdxdnceh46wyw056qo',
           material: {
             id: 'mat_n081cl70wmqsl1uydmkgmxke',
             name: 'Spandex 2',
             material_suppliers: [],
-            certification_claims: [],
+            organization_claims: [],
           },
           product: null,
-          certification: {
+          claim: {
             id: 'cert_n081cl70wmqsl1uydmkgmxke',
             name: 'Pfas Test',
             level: 'Supplier',
@@ -148,16 +148,16 @@ export const WithClaims: Story = {
         },
         {
           id: 'claim_cov42be44dd54mb6y90ef',
-          certification_id: 'cert_n081cl70wmqsl1uydmkgmx',
+          claim_id: 'cert_n081cl70wmqsl1uydmkgmx',
           organization_file_id: 'ofile_cq5j3hvdxdnceh46wyw056qo',
           material: {
             id: 'mat_n081cl70wmqsl1uydmkgmxke',
             name: 'Spandex 2',
             material_suppliers: [],
-            certification_claims: [],
+            organization_claims: [],
           },
           product: null,
-          certification: {
+          claim: {
             id: 'cert_n081cl70wmqsl1uydmkgmxke',
             name: 'bluesign',
             level: 'Supplier',
@@ -170,16 +170,16 @@ export const WithClaims: Story = {
         },
         {
           id: 'claim_cov42be44dd54mb6y90ef',
-          certification_id: 'cert_n081cl70wmqsl1uydmkgmx',
+          claim_id: 'cert_n081cl70wmqsl1uydmkgmx',
           organization_file_id: 'ofile_cq5j3hvdxdnceh46wyw056qo',
           material: {
             id: 'mat_n081cl70wmqsl1uydmkgmxke',
             name: 'Spandex 2',
             material_suppliers: [],
-            certification_claims: [],
+            organization_claims: [],
           },
           product: null,
-          certification: {
+          claim: {
             id: 'cert_n081cl70wmqsl1uydmkgmxke',
             name: 'rsl',
             level: 'Supplier',
@@ -192,16 +192,16 @@ export const WithClaims: Story = {
         },
         {
           id: 'claim_cov42be44dd54mb6y90ef',
-          certification_id: 'cert_n081cl70wmqsl1uydmkgmx',
+          claim_id: 'cert_n081cl70wmqsl1uydmkgmx',
           organization_file_id: 'ofile_cq5j3hvdxdnceh46wyw056qo',
           material: {
             id: 'mat_n081cl70wmqsl1uydmkgmxke',
             name: 'Spandex 2',
             material_suppliers: [],
-            certification_claims: [],
+            organization_claims: [],
           },
           product: null,
-          certification: {
+          claim: {
             id: 'cert_n081cl70wmqsl1uydmkgmxke',
             name: 'Supplier COC',
             level: 'Supplier',

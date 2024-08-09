@@ -35,7 +35,7 @@ import { returnUpdatedSurvey } from './helpers';
 import { ComplianceSurveyPayloadType } from '@coldpbc/interfaces';
 import { getDefaultEmissionMock } from './emissionMocks';
 import { getNotesMock } from './notesMock';
-import { getCertificationsMock, getSupplierClaimsMock } from './claimsMock';
+import { getClaimsMock, getSupplierClaimsMock } from './claimsMock';
 import { getSupplierMockById, getSupplierWithCertificationClaimsMock } from './suppliersMock';
 import { getMaterialsMock } from './materialsMock';
 
@@ -360,8 +360,8 @@ export const handlers = [
     return res(ctx.json(getQuestionAIDetailsMock(sectionGroupId, sectionId, questionId)));
   }),
 
-  rest.get(getApiUrl('/certifications'), (req, res, ctx) => {
-    return res(ctx.json(getCertificationsMock()));
+  rest.get(getApiUrl('/claims'), (req, res, ctx) => {
+    return res(ctx.json(getClaimsMock()));
   }),
 
   rest.get(getApiUrl('/organizations/:orgId/suppliers'), (req, res, ctx) => {

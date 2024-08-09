@@ -59,7 +59,7 @@ export const SuppliersDataGrid = () => {
     // if the value is null return null
     const expirationDate: string | undefined | null = suppliers
       .find(supplier => supplier.id === params.row.id)
-      ?.certification_claims.find(certificateClaim => certificateClaim.certification?.name === params.field)?.organization_file.effective_end_date;
+      ?.organization_claims.find(certificateClaim => certificateClaim.claim?.name === params.field)?.organization_file.effective_end_date;
     let diff = 0;
 
     switch (params.value) {
@@ -149,8 +149,8 @@ export const SuppliersDataGrid = () => {
     });
 
     certifications.forEach(claim => {
-      const certificateClaims = supplier.certification_claims
-        .filter(certificateClaim => certificateClaim.certification?.name === claim.claim_name)
+      const certificateClaims = supplier.organization_claims
+        .filter(certificateClaim => certificateClaim.claim?.name === claim.claim_name)
         .filter(
           // filter out the null expiration dates
           certificateClaim => certificateClaim.organization_file.effective_end_date !== null,
