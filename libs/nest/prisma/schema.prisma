@@ -410,7 +410,7 @@ model products {
   updated_at           DateTime               @updatedAt
   deleted              Boolean                @default(false)
   organization_id      String
-  certification_claims organization_claims[]
+  organization_claims organization_claims[]
   product_materials    product_materials[]
   organization         organizations          @relation(fields: [organization_id], references: [id], onDelete: Cascade)
 
@@ -424,7 +424,7 @@ model materials {
   updated_at           DateTime               @updatedAt
   deleted              Boolean                @default(false)
   organization_id      String
-  certification_claims organization_claims[]
+  organization_claims organization_claims[]
   material_suppliers   material_suppliers[]
   organization         organizations          @relation(fields: [organization_id], references: [id], onDelete: Cascade)
   product_materials    product_materials[]
