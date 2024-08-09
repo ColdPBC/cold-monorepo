@@ -42,7 +42,8 @@ export const ColdRoutes = () => {
         {WizardRoutes()}
         {ldFlags.showSuppliersPageCold890 && <Route path={'/suppliers'} element={<SuppliersPage />} />}
         {ldFlags.showSuppliersPageCold890 && <Route path={'/suppliers/:id'} element={<SupplierDetail />} />}
-        {ldFlags.showMaterialsPageCold912 && <Route path={'/materials'} element={<MaterialsPage />} />}
+        {/*{ldFlags.showMaterialsPageCold912 && <Route path={'/materials'} element={<MaterialsPage />} />}*/}
+        <Route path={'/materials'} element={<MaterialsPage />} />
       </>
     );
   };
