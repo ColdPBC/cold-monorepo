@@ -13,6 +13,7 @@
 
 
 ### Features
+
 * Add materials interface and update document details sidebar ([357512c](https://github.com/ColdPBC/cold-monorepo/commit/357512c0382b7dd6c37abc48810c426d8c9057d5))
 * Refactor and add claims to document details sidebar ([c6a3501](https://github.com/ColdPBC/cold-monorepo/commit/c6a35019d815a52676ab5df9b2db13e7c994fd9f))
 * Refactor and update document details components. ([cfc180e](https://github.com/ColdPBC/cold-monorepo/commit/cfc180e1ed8a2c6e1c982ed3f287ce13808bddb8))
