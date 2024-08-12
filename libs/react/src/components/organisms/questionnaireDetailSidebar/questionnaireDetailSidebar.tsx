@@ -83,11 +83,6 @@ const _QuestionnaireDetailSidebar = () => {
 
   const tabs = ['ai', 'notes'];
 
-  // add more tab if the name of compliance contains 'b_corp_2024'
-  if (name.includes('b_corp_2024')) {
-    tabs.push('more');
-  }
-
   return (
     <div
       className={'flex flex-col h-full'}
